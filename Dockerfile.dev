@@ -1,0 +1,18 @@
+FROM elixir:1.10.4
+
+WORKDIR /workspace
+
+ENV NODE_MAJOR 12
+
+RUN set -x &&\
+    mix local.hex --force &&\
+    mix local.rebar --force &&\
+    curl -sL https://deb.nodesource.com/setup_$NODE_MAJOR.x | bash - &&\
+    apt-get install -y nodejs inotify-tools
+
+RUN apt-get install -y python3-pip
+RUN pip3 install gigalixir
+
+RUN mix archive.install --force hex phx_new 1.5.5    
+
+COPY . .

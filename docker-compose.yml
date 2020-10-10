@@ -1,0 +1,65 @@
+version: "3.7"
+services:
+  link-app:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    ports:
+      - 4000:4000
+    volumes:
+      - "tmp:/workspace/tmp"
+      - "node_modules:/workspace/assets/node_modules"
+      - "build:/workspace/_build"
+      - "elixir-ls:/workspace/.elixir_ls"
+      - ".netrc:/root/.netrc"
+    depends_on:
+      - db
+      - testdb
+
+  db:
+    build:
+      dockerfile: testing.postgresql.Dockerfile
+      context: .
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: link_dev
+    volumes:
+      - "./postgres-data:/var/lib/postgresql/data:delegated"
+
+  ci:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    command: "mix ci"
+    environment:
+      MIX_ENV: test
+    volumes:
+      - "tmp:/workspace/tmp"
+      - "node_modules:/workspace/assets/node_modules"
+      - "build:/workspace/_build"
+    depends_on:
+      - testdb
+
+  testdb:
+    build:
+      dockerfile: testing.postgresql.Dockerfile
+      context: .
+
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: link_test
+    volumes:
+      - "testdb:/var/lib/postgresql/data"
+
+volumes:
+  tmp:
+  node_modules:
+  build:
+  elixir-ls:
+  testdb:

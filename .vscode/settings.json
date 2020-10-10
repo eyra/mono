@@ -1,0 +1,15 @@
+{
+    "files.exclude": {
+        "_build": true,
+        ".elixir_ls": true,
+        "assets/node_modules": true,
+        "deps": true,
+        "postgres-data": true
+    },
+    "files.watcherExclude": {
+        "_build": true,
+        ".elixir_ls": true,
+        "deps": true,
+        "postgres-data": true
+    }
+}
