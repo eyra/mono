@@ -6,7 +6,13 @@ defmodule LinkWeb.Router do
     plug :fetch_session
     plug :fetch_flash
     plug :protect_from_forgery
-    plug :put_secure_browser_headers
+
+    # Documentation on the `put_secure_browser_headers` plug function
+    # can be found here:
+    # https://hexdocs.pm/phoenix/Phoenix.Controller.html#put_secure_browser_headers/2
+    # Information about the content-security-policy can be found at:
+    # https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+    plug :put_secure_browser_headers, %{"content-security-policy" => "default-src 'self'"}
   end
 
   pipeline :api do
