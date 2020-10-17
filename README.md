@@ -2,7 +2,7 @@
 
 This is primary documentation for the Link application.
 
-# Development 
+# Development
 
 ## Setup
 
