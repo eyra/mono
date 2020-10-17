@@ -1,5 +1,6 @@
 defmodule LinkWeb.Router do
   use LinkWeb, :router
+  use Pow.Phoenix.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -21,8 +22,12 @@ defmodule LinkWeb.Router do
 
   scope "/", LinkWeb do
     pipe_through :browser
-
     get "/", PageController, :index
+  end
+
+  scope "/" do
+    pipe_through :browser
+    pow_routes()
   end
 
   # Other scopes may use custom stacks.

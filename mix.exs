@@ -45,6 +45,7 @@ defmodule Link.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
+      {:pow, "~> 1.0.21"},
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.8", only: [:dev, :test]}
     ]
@@ -58,12 +59,7 @@ defmodule Link.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: [
-        "deps.get",
-        "ecto.setup",
-        "cmd npm install --prefix assets",
-        "cmd pre-commit install"
-      ],
+      setup: ["deps.get", "ecto.setup", "build_js"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
