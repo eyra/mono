@@ -11,8 +11,8 @@ RUN set -x &&\
     apt-get install -y nodejs inotify-tools
 
 RUN apt-get install -y python3-pip
-RUN pip3 install gigalixir
+RUN pip3 install gigalixir pre-commit
 
-RUN mix archive.install --force hex phx_new 1.5.5    
+RUN mix archive.install --force hex phx_new 1.5.5
 
 COPY . .
