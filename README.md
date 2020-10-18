@@ -39,7 +39,7 @@ is in [the documentation for Gigalixir](https://gigalixir.readthedocs.io/en/late
 
 To manually deploy a version run:
 
-    git push gigalixir main:master
+    git push gigalixir master
 
 ## Continous Deployment
 
@@ -66,5 +66,5 @@ Run the following command to enable the key in Gigalixir.
 
 ## GitHub branch protections
 
-Enable branch protection on the `main` branch. This ensures that deployments
+Enable branch protection on the `master` branch. This ensures that deployments
 work (the deployment does not do a force push to Gigalixir).
