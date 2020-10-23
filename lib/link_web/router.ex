@@ -13,7 +13,10 @@ defmodule LinkWeb.Router do
     # https://hexdocs.pm/phoenix/Phoenix.Controller.html#put_secure_browser_headers/2
     # Information about the content-security-policy can be found at:
     # https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
-    plug :put_secure_browser_headers, %{"content-security-policy" => "default-src 'self'"}
+    plug :put_secure_browser_headers, %{
+      "content-security-policy" =>
+        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:; font-src 'self' data:"
+    }
   end
 
   pipeline :api do
