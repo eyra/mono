@@ -20,3 +20,6 @@ config :link, LinkWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+# Reduce password hashing impact on test duration
+config :pow, Pow.Ecto.Schema.Password, iterations: 1

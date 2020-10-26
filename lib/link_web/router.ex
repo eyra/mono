@@ -19,6 +19,11 @@ defmodule LinkWeb.Router do
     }
   end
 
+  pipeline :protected do
+    plug Pow.Plug.RequireAuthenticated,
+      error_handler: Pow.Phoenix.PlugErrorHandler
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -31,6 +36,11 @@ defmodule LinkWeb.Router do
   scope "/" do
     pipe_through :browser
     pow_routes()
+  end
+
+  scope "/", LinkWeb do
+    pipe_through [:browser, :protected]
+    resources "/studies", StudyController
   end
 
   # Other scopes may use custom stacks.

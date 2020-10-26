@@ -1,0 +1,18 @@
+<h1>Show Study</h1>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @study.title %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @study.description %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.study_path(@conn, :edit, @study) %></span>
+<span><%= link "Back", to: Routes.study_path(@conn, :index) %></span>
