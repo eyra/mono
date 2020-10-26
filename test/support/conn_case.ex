@@ -24,6 +24,7 @@ defmodule LinkWeb.ConnCase do
       import Phoenix.ConnTest
       import LinkWeb.ConnCase
 
+      import Link.TestHelpers
       alias LinkWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing

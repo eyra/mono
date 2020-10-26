@@ -47,7 +47,8 @@ defmodule Link.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:pow, "~> 1.0.21"},
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
-      {:sobelow, "~> 0.8", only: [:dev, :test]}
+      {:sobelow, "~> 0.8", only: [:dev, :test]},
+      {:faker, "~> 0.16", only: :test}
     ]
   end
 
