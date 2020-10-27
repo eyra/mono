@@ -25,8 +25,8 @@
             <% end %>
           </ul>
         </nav>
-        <a href="https://phoenixframework.org/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/phoenix.png") %>" alt="Phoenix Framework Logo"/>
+        <a href="http://eyra.co" class="phx-logo">
+          <img src="<%= Routes.static_path(@conn, "/images/eyra-link-logo.png") %>" alt="Eyra Link Logo"/>
         </a>
       </section>
     </header>
