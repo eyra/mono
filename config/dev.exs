@@ -74,3 +74,13 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+# Registration of google oauth provider
+config :link, :pow_assent,
+  providers: [
+    google: [
+      client_id: "921548238010-egr9u89cgrg0k4fss3j26pp2suk3gl4k.apps.googleusercontent.com",
+      client_secret: "VsQkTNpCB50wWdF1MHcslUYk",
+      strategy: Assent.Strategy.Google
+    ]
+  ]

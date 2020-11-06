@@ -1,13 +1,15 @@
 defmodule LinkWeb.Router do
   use LinkWeb, :router
   use Pow.Phoenix.Router
+  use PowAssent.Phoenix.Router
 
-  pipeline :browser do
+  pipeline :browser_base do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
-    plug :protect_from_forgery
+  end
 
+  pipeline :browser_secure do
     # Documentation on the `put_secure_browser_headers` plug function
     # can be found here:
     # https://hexdocs.pm/phoenix/Phoenix.Controller.html#put_secure_browser_headers/2
@@ -17,6 +19,17 @@ defmodule LinkWeb.Router do
       "content-security-policy" =>
         "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:; font-src 'self' data:"
     }
+  end
+
+  pipeline :browser do
+    plug :browser_base
+    plug :protect_from_forgery
+    plug :browser_secure
+  end
+
+  pipeline :browser_unprotected do
+    plug :browser_base
+    plug :browser_secure
   end
 
   pipeline :protected do
@@ -34,8 +47,14 @@ defmodule LinkWeb.Router do
   end
 
   scope "/" do
+    pipe_through :browser_unprotected
+    pow_assent_authorization_post_callback_routes()
+  end
+
+  scope "/" do
     pipe_through :browser
     pow_routes()
+    pow_assent_routes()
   end
 
   scope "/", LinkWeb do

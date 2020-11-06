@@ -46,6 +46,9 @@ defmodule Link.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:pow, "~> 1.0.21"},
+      {:pow_assent, "~> 0.4.9"},
+      {:certifi, "~> 2.4"},     # Optional, but recommended for SSL validation with :httpc adapter
+      {:ssl_verify_fun, "~> 1.1"},     # Optional, but recommended for SSL validation with :httpc adapter
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.8", only: [:dev, :test]},
       {:faker, "~> 0.16", only: :test}
