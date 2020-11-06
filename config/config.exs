@@ -7,6 +7,8 @@
 # General application configuration
 use Mix.Config
 
+import_config "config.secret.exs"
+
 config :link,
   ecto_repos: [Link.Repo]
 
@@ -30,16 +32,6 @@ config :link, :pow,
   user: Link.Users.User,
   repo: Link.Repo,
   web_module: LinkWeb
-
-# Registration of oauth providers is done in env specific config, here is an examle
-# config :link, :pow_assent,
-#   providers: [
-#     google: [
-#       client_id: "921548238010-bgv2ts6b3ih0q5d837nq4uh8rnrc3r6p.apps.googleusercontent.com",
-#       client_secret: "SAEest9ls0F_WOsyL0w5ShLv",
-#       strategy: Assent.Strategy.Google
-#     ]
-#   ]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

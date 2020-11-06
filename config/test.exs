@@ -23,13 +23,3 @@ config :logger, level: :warn
 
 # Reduce password hashing impact on test duration
 config :pow, Pow.Ecto.Schema.Password, iterations: 1
-
-# Registration of google oauth provider
-config :link, :pow_assent,
-  providers: [
-    google: [
-      client_id: "921548238010-bgv2ts6b3ih0q5d837nq4uh8rnrc3r6p.apps.googleusercontent.com",
-      client_secret: "SAEest9ls0F_WOsyL0w5ShLv",
-      strategy: Assent.Strategy.Google
-    ]
-  ]

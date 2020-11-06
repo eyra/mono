@@ -8,7 +8,8 @@ RUN set -x &&\
     mix local.hex --force &&\
     mix local.rebar --force &&\
     curl -sL https://deb.nodesource.com/setup_$NODE_MAJOR.x | bash - &&\
-    apt-get install -y nodejs inotify-tools
+    apt-get install -y nodejs inotify-tools &&\
+    apt-get install -y postgresql-client
 
 RUN apt-get install -y python3-pip
 RUN pip3 install gigalixir pre-commit
