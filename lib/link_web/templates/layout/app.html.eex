@@ -24,7 +24,7 @@
             <% end %>
           </ul>
         </nav>
-        <a href="/" class="phx-logo">
+        <a href="http://eyra.co" class="phx-logo">
           <img src="<%= Routes.static_path(@conn, "/images/eyra-link-logo.png") %>" alt="Eyra Link Logo"/>
         </a>
       </section>
