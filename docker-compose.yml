@@ -12,7 +12,9 @@ services:
       - "build:/workspace/_build"
       - "elixir-ls:/workspace/.elixir_ls"
       - ".netrc:/root/.netrc"
-    env_file: .devcontainer/devcontainer.env
+    environment:
+      GOOGLE_AUTH_CLIENT_ID: ${GOOGLE_AUTH_CLIENT_ID}
+      GOOGLE_AUTH_CLIENT_SECRET: ${GOOGLE_AUTH_CLIENT_SECRET}
     depends_on:
       - db
       - testdb
