@@ -5,7 +5,7 @@
     <tr>
       <th>Title</th>
       <th>Description</th>
-
+      <th>Owner</th>
       <th></th>
     </tr>
   </thead>
@@ -14,7 +14,7 @@
     <tr>
       <td><%= study.title %></td>
       <td><%= study.description %></td>
-
+      <td><%= study.researcher.email %></td>
       <td>
         <span><%= link "Show", to: Routes.study_path(@conn, :show, study) %></span>
         <span><%= link "Edit", to: Routes.study_path(@conn, :edit, study) %></span>
