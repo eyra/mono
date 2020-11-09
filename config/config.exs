@@ -7,6 +7,8 @@
 # General application configuration
 use Mix.Config
 
+import_config "config.secret.exs"
+
 config :link,
   ecto_repos: [Link.Repo]
 
@@ -28,7 +30,9 @@ config :phoenix, :json_library, Jason
 
 config :link, :pow,
   user: Link.Users.User,
-  repo: Link.Repo
+  repo: Link.Repo,
+  web_module: LinkWeb,
+  routes_backend: LinkWeb.Pow.Routes
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

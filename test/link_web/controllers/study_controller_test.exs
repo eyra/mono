@@ -22,7 +22,7 @@ defmodule LinkWeb.StudyControllerTest do
   describe "index" do
     test "lists all studies", %{conn: conn} do
       conn = get(conn, Routes.study_path(conn, :index))
-      assert html_response(conn, 200) =~ "Listing Studies"
+      assert html_response(conn, 200) =~ "Study Overview"
     end
   end
 

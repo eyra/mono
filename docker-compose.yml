@@ -12,6 +12,9 @@ services:
       - "build:/workspace/_build"
       - "elixir-ls:/workspace/.elixir_ls"
       - ".netrc:/root/.netrc"
+    environment:
+      GOOGLE_AUTH_CLIENT_ID: ${GOOGLE_AUTH_CLIENT_ID}
+      GOOGLE_AUTH_CLIENT_SECRET: ${GOOGLE_AUTH_CLIENT_SECRET}
     depends_on:
       - db
       - testdb
@@ -37,6 +40,8 @@ services:
     command: "mix ci"
     environment:
       MIX_ENV: test
+      GOOGLE_AUTH_CLIENT_ID: ${GOOGLE_AUTH_CLIENT_ID}
+      GOOGLE_AUTH_CLIENT_SECRET: ${GOOGLE_AUTH_CLIENT_SECRET}
     volumes:
       - "tmp:/workspace/tmp"
       - "node_modules:/workspace/assets/node_modules"
