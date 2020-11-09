@@ -1,4 +1,7 @@
 defmodule LinkWeb.Pow.Routes do
+  @moduledoc """
+  Contains implementation for specific pow callbacks
+  """
   use Pow.Phoenix.Routes
   alias LinkWeb.Router.Helpers, as: Routes
 
