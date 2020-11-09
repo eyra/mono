@@ -20,4 +20,4 @@
 
 <% end %>
 
-<div><%= link "Register", to: Routes.pow_registration_path(@conn, :new) %></div>
+<div><%= button "Register", class: "button-clear", method: :get, to: Routes.pow_registration_path(@conn, :new) %></div>

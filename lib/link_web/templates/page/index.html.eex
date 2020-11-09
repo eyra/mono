@@ -1,4 +1,7 @@
 <section class="phx-hero">
   <h1><%= gettext "Welcome to %{name}!", name: "Link" %></h1>
   <p>Recruitment Platform for Research Participants</p>
+  <%= if Pow.Plug.current_user(@conn) do %>
+    <span><%= button "Go to study overview", class: "button-clear", method: :get, to: Routes.study_path(@conn, :index) %></span>
+  <% end %>
 </section>

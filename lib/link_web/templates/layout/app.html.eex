@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Link · Phoenix Framework</title>
+    <title>Link</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
@@ -15,16 +15,16 @@
           <ul>
             <%= if Pow.Plug.current_user(@conn) do %>
             <li><%= @current_user.email %></li>
-            <li><%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete %></li>
+            <li><%= button "Sign out", class: "button-clear", to: Routes.pow_session_path(@conn, :delete), method: :delete %></li>
             <% else %>
-            <li><%= link "Sign in", to: Routes.pow_session_path(@conn, :new) %></li>
+            <li><%= button "Sign in", class: "button-clear", method: :get, to: Routes.pow_session_path(@conn, :new) %></li>
             <% end %>
             <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
               <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
             <% end %>
           </ul>
         </nav>
-        <a href="http://eyra.co" class="phx-logo">
+        <a href="https://test.link.eyra.co" class="phx-logo">
           <img src="<%= Routes.static_path(@conn, "/images/eyra-link-logo.png") %>" alt="Eyra Link Logo"/>
         </a>
       </section>

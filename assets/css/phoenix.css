@@ -51,8 +51,8 @@
    font-weight: 700;
    height: 3.8rem;
    letter-spacing: .1rem;
-   line-height: 3.8rem;
-   padding: 0 3.0rem;
+   line-height: 2.0rem;
+   padding: 0 2.0rem;
    text-align: center;
    text-decoration: none;
    text-transform: uppercase;
@@ -135,7 +135,7 @@
    border-color: inherit;
    color: #090729
  }
- 
+
  .button.button-clear,
  button.button-clear,
  input[type='button'].button-clear,
@@ -143,7 +143,8 @@
  input[type='submit'].button-clear {
    background-color: transparent;
    border-color: transparent;
-   color: #090729
+   color: #777777;
+   padding: 0
  }
  
  .button.button-clear:focus,
