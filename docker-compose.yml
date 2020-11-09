@@ -12,9 +12,7 @@ services:
       - "build:/workspace/_build"
       - "elixir-ls:/workspace/.elixir_ls"
       - ".netrc:/root/.netrc"
-    environment:
-      GOOGLE_AUTH_CLIENT_ID: "921548238010-egr9u89cgrg0k4fss3j26pp2suk3gl4k.apps.googleusercontent.com"
-      GOOGLE_AUTH_CLIENT_SECRET: "VsQkTNpCB50wWdF1MHcslUYk"
+    env_file: .devcontainer/devcontainer.env
     depends_on:
       - db
       - testdb
@@ -40,8 +38,8 @@ services:
     command: "mix ci"
     environment:
       MIX_ENV: test
-      GOOGLE_AUTH_CLIENT_ID: "921548238010-egr9u89cgrg0k4fss3j26pp2suk3gl4k.apps.googleusercontent.com"
-      GOOGLE_AUTH_CLIENT_SECRET: "VsQkTNpCB50wWdF1MHcslUYk"
+      GOOGLE_AUTH_CLIENT_ID: ${GOOGLE_AUTH_CLIENT_ID}
+      GOOGLE_AUTH_CLIENT_SECRET: ${GOOGLE_AUTH_CLIENT_SECRET}
     volumes:
       - "tmp:/workspace/tmp"
       - "node_modules:/workspace/assets/node_modules"

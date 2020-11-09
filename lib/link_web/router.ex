@@ -3,6 +3,7 @@ defmodule LinkWeb.Router do
   use Pow.Phoenix.Router
   use PowAssent.Phoenix.Router
 
+
   pipeline :browser_base do
     plug :accepts, ["html"]
     plug :fetch_session
