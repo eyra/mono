@@ -17,8 +17,13 @@
       <td><%= study.researcher.email %></td>
       <td>
         <span><%= button "Show", class: "button-clear", method: :get, to: Routes.study_path(@conn, :show, study) %></span>
+        <%= if can?(@conn, study, LinkWeb.StudyController, :edit) do %>
         <span><%= button "Edit", class: "button-clear", method: :get, to: Routes.study_path(@conn, :edit, study) %></span>
-        <span><%= button "Delete", class: "button-clear", to: Routes.study_path(@conn, :delete, study), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <% end %>
+        <span><%= button "Delete",
+                  class: "button-clear",
+                  to: Routes.study_path(@conn, :delete, study),
+                  method: :delete, data: [confirm: "Are you sure?"] %></span>
       </td>
     </tr>
 <% end %>

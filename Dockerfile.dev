@@ -13,6 +13,8 @@ RUN set -x &&\
 RUN apt-get install -y python3-pip
 RUN pip3 install gigalixir pre-commit
 
+RUN apt-get install -y postgresql-client-11
+
 RUN mix archive.install --force hex phx_new 1.5.5
 
 COPY . .

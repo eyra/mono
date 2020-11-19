@@ -24,6 +24,10 @@ defmodule LinkWeb do
       import Plug.Conn
       import LinkWeb.Gettext
       alias LinkWeb.Router.Helpers, as: Routes
+
+      use GreenLight.Loaders
+      use GreenLight.Plug, Link.Authorization
+      alias LinkWeb.Loaders
     end
   end
 
@@ -39,6 +43,8 @@ defmodule LinkWeb do
 
       # Include shared imports and aliases for views
       unquote(view_helpers())
+
+      # use Link.Authorization.Controller, :view
     end
   end
 
@@ -69,6 +75,8 @@ defmodule LinkWeb do
       import LinkWeb.ErrorHelpers
       import LinkWeb.Gettext
       alias LinkWeb.Router.Helpers, as: Routes
+
+      import Link.Authorization, only: [can?: 4]
     end
   end
 
