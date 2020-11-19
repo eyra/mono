@@ -1,0 +1,25 @@
+name: Docs
+
+on:
+  push:
+    branches-ignore:
+      - master
+
+jobs:
+  docs:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Create docs folder
+        run: mkdir doc
+
+      - name: Generate the docs
+        run: docker-compose run docs
+
+      - name: Publish documentation
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./doc/output

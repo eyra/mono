@@ -8,9 +8,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-20.04
-    env:
-      GOOGLE_AUTH_CLIENT_ID: ${{ secrets.GOOGLE_AUTH_CLIENT_ID }}
-      GOOGLE_AUTH_CLIENT_SECRET: ${{ secrets.GOOGLE_AUTH_CLIENT_SECRET }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2

@@ -6,6 +6,8 @@ defmodule Link.Studies.Study do
   import Ecto.Changeset
   alias Link.Users.User
 
+  # grant_access([:member])
+
   schema "studies" do
     belongs_to :researcher, User
     field :description, :string

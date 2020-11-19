@@ -3,7 +3,6 @@ defmodule LinkWeb.Router do
   use Pow.Phoenix.Router
   use PowAssent.Phoenix.Router
 
-
   pipeline :browser_base do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -60,7 +59,10 @@ defmodule LinkWeb.Router do
 
   scope "/", LinkWeb do
     pipe_through [:browser, :protected]
-    resources "/studies", StudyController
+
+    resources "/studies", StudyController do
+      resources "/survey-tools", SurveyToolController
+    end
   end
 
   # Other scopes may use custom stacks.
