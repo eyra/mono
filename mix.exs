@@ -20,7 +20,7 @@ defmodule Link.MixProject do
   def application do
     [
       mod: {Link.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :set_locale]
     ]
   end
 
@@ -51,7 +51,9 @@ defmodule Link.MixProject do
       {:ssl_verify_fun, "~> 1.1"},     # Optional, but recommended for SSL validation with :httpc adapter
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.8", only: [:dev, :test]},
-      {:faker, "~> 0.16", only: :test}
+      {:faker, "~> 0.16", only: :test},
+      {:navigation_history, "~> 0.3"},
+      {:set_locale, "~> 0.2.1"}
     ]
   end
 

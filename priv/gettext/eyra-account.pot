@@ -1,0 +1,70 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:27
+msgid "apple.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:16
+#: lib/link_web/templates/pow/registration/new.html.eex:22 lib/link_web/templates/pow/session/new.html.eex:47
+msgid "email.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:32
+msgid "eyra.signin.message.external"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:12
+msgid "eyra.signin.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:18
+msgid "google.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:30
+#: lib/link_web/templates/pow/registration/new.html.eex:34 lib/link_web/templates/pow/session/new.html.eex:60
+msgid "password.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:42
+#: lib/link_web/templates/pow/session/new.html.eex:72
+msgid "signin.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:39
+#: lib/link_web/templates/pow/registration/new.html.eex:44
+msgid "signup.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:12
+msgid "signup.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:51
+msgid "signin.link"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:79
+msgid "signup.link"
+msgstr ""

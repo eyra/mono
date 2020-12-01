@@ -1,0 +1,71 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:27
+msgid "apple.button"
+msgstr "Log in met Apple"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:16
+#: lib/link_web/templates/pow/registration/new.html.eex:22 lib/link_web/templates/pow/session/new.html.eex:47
+msgid "email.label"
+msgstr "E-mail"
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:32
+msgid "eyra.signin.message.external"
+msgstr "We delen geen gegevens met derden. Je Google of Apple account wordt enkel gebruikt om gemakkelijk in te loggen."
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:12
+msgid "eyra.signin.title"
+msgstr "Log in"
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:18
+msgid "google.button"
+msgstr "Log in met Google"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:30
+#: lib/link_web/templates/pow/registration/new.html.eex:34 lib/link_web/templates/pow/session/new.html.eex:60
+msgid "password.label"
+msgstr "Wachtwoord"
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:42
+#: lib/link_web/templates/pow/session/new.html.eex:72
+msgid "signin.button"
+msgstr "Inloggen"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:39
+#: lib/link_web/templates/pow/registration/new.html.eex:44
+msgid "signup.button"
+msgstr "Registreren"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:12
+msgid "signup.title"
+msgstr "Registreer"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:51
+msgid "signin.link"
+msgstr "Log in"
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:79
+msgid "signup.link"
+msgstr "Registreren"

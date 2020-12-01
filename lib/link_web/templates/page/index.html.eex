@@ -1,7 +1,20 @@
-<section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Link" %></h1>
-  <p>Recruitment Platform for Research Participants</p>
-  <%= if Pow.Plug.current_user(@conn) do %>
-    <span><%= button "Go to study overview", class: "button-clear", method: :get, to: Routes.study_path(@conn, :index) %></span>
-  <% end %>
-</section>
+<div class="w-full h-full">
+  <div class="">
+    <div class="flex h-header-sm md:h-header-md lg:h-header-lg bg-primary text-white">
+      <div class="flex-grow mr-20">
+        <div class="text-2xl font-black md:text-4xl lg:text-6xl ml-20 mt-20 mb-5">
+          <%= dgettext "eyra-link", "welcome.title" %>
+        </div>
+        <div class="text-xl font-normal md:text-xl lg:text-3xl ml-20 mr-10">
+          <%= dgettext "eyra-link", "welcome.message" %>
+        </div>
+        <div class="ml-20 mt-5">
+          <%= button dgettext("eyra-link", "signin-button"), class: "inline-block py-3 px-6 mt-0 leading-none font-bold text-md text-white bg-grey1 hover:bg-white hover:text-primary rounded", method: :get, to: Routes.pow_session_path(@conn, :new) %>
+        </div>
+      </div>
+      <div class="flex-wrap w-hero-sm md:w-hero-md lg:w-hero-lg flex-shrink-0">
+        <img src="<%= Routes.static_path(@conn, "/images/illustration.svg") %>" alt="Eyra Link Logo"/>
+      </div>
+    </div>
+  </div>
+</div>

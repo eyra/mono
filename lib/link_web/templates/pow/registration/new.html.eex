@@ -1,28 +1,56 @@
-<h1>Register</h1>
-
-<%= form_for @changeset, @action, [as: :user], fn f -> %>
-  <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
-  <% end %>
-
-  <%= label f, Pow.Ecto.Schema.user_id_field(@changeset) %>
-  <%= text_input f, Pow.Ecto.Schema.user_id_field(@changeset) %>
-  <%= error_tag f, Pow.Ecto.Schema.user_id_field(@changeset) %>
-
-  <%= label f, :password %>
-  <%= password_input f, :password %>
-  <%= error_tag f, :password %>
-
-  <%= label f, :password_confirmation %>
-  <%= password_input f, :password_confirmation %>
-  <%= error_tag f, :password_confirmation %>
-
-  <div>
-    <%= submit "Register" %>
+<div class="w-full">
+  <div class="ml-10 mt-6">
+    <a href="<%= NavigationHistory.last_path(@conn, 1) %>" class="flex inline-flex items-center">
+        <div class="-mt-px mr-3">
+            <img class="justify-center" src="<%= Routes.static_path(@conn, "/images/back.svg") %>" alt="Terug"/>
+        </div>
+        <div class="font-bold text-button hover:text-primary ">Terug</div>
+    </a>
   </div>
+  <div class="flex justify-center">
+    <div class="w-form mt-10">
+      <div class="mb-6 text-title2 font-black"><%= dgettext "eyra-account", "signup.title" %></div>
+      <div>
+        <%= form_for @changeset, "/"<>@locale<>@action, [as: :user], fn f -> %>
+          <%= if @changeset.action do %>
+            <div class="mb-5 text-warning font-medium font-caption bg-warning bg-opacity-20 text-center leading-none rounded">
+              <p class="inline-block mt-4 mb-4"><%= dgettext "eyra-ux", "%{action}.failed", action: dgettext "eyra-account", "signup.button" %></p>
+            </div>
+          <% end %>
 
-<% end %>
+          <div x-data="{ focus: false, warning: <%= has_error? f, Pow.Ecto.Schema.user_id_field(@changeset) %> }" class="flex flex-col mb-6">
+            <div :class="{ 'text-grey1': !focus && !warning, 'text-warning': warning, 'text-primary': focus }" class="mb-2 font-bold text-title6" ><%= dgettext "eyra-account", "email.label" %></div>
+            <input @focus="focus = true, warning = false" @focusout="focus = false" :class="{  'border-warning': warning === true, 'border-grey3': warning === false }" class="text-grey1 text-bodymedium font-normal pl-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-44px" id="user_email" name="user[email]" type="text" value="">
+            <%= if has_error? f, Pow.Ecto.Schema.user_id_field(@changeset) do %>
+              <div x-show="warning" class="text-warning font-medium font-caption mt-2">
+                <%= dgettext "eyra-account", "email.label" %> <%= error_tag f, Pow.Ecto.Schema.user_id_field(@changeset) %>
+              </div>
+            <% end %>
+          </div>
+          <div class="mb-1">
+          </div>
 
-<span><%= button "Sign in", class: "button-clear", method: :get, to: Routes.pow_session_path(@conn, :new) %></span>
+          <div x-data="{ focus: false, warning: <%= has_error? f, :password %> }" class="mb-8 flex flex-col">
+            <div :class="{ 'text-grey1': !focus && !warning, 'text-warning': warning, 'text-primary': focus }" class="mb-2 font-bold text-title6" ><%= dgettext "eyra-account", "password.label" %></div>
+            <input @focus="focus = true, warning = false" @focusout="focus = false" :class="{  'border-warning': warning === true, 'border-grey3': warning === false }" class="text-grey1 text-bodymedium font-normal pl-3 w-full border-2 border-solid focus:outline-none focus:border-primary rounded h-44px" id="user_password" name="user[password]" type="password">
+
+            <div x-show="warning" class="text-warning font-medium font-caption mt-2">
+              <%= dgettext "eyra-account", "password.label" %> <%= error_tag f, :password %>
+            </div>
+          </div>
+
+          <div class="mb-8">
+            <button class="w-full h-48px leading-none font-bold text-button text-white bg-grey1 focus:outline-none hover:bg-opacity-80 rounded" type="submit">
+              <%= dgettext "eyra-account", "signup.button" %>
+            </button>
+          </div>
+        <% end %>
+
+        <div>
+        <button class="button underline text-primary hover:text-black" data-method="get" data-to= <%= Routes.pow_session_path(@conn, :new) %> >
+          <%= dgettext "eyra-account", "signin.link" %>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
