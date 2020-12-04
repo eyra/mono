@@ -7,4 +7,5 @@ defmodule LinkWeb.Pow.Routes do
 
   @impl true
   def after_sign_in_path(conn), do: Routes.study_path(conn, :index)
+  def after_sign_out_path(conn), do: Routes.static_path(conn, "/")
 end

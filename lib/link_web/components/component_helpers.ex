@@ -57,15 +57,20 @@ defmodule LinkWeb.Components.ComponentHelpers do
 
   def password_field(form, field)  do
     type = "password"
-    confirmation = field === :password_confirmation
-
-    id = if confirmation do "user_password_confirmation" else "user_password" end
-    name = if confirmation do "user[password_confirmation]" else "user[password]" end
-    label = if confirmation do dgettext("eyra-account", "password.confirmation.label") else dgettext("eyra-account", "password.label") end
     warning = error_tag(form, field) |> Enum.at(0)
+
+    id = "user_#{field}"
+    name = "user[#{field}]"
+
+    label = cond do
+      field === :password_confirmation -> dgettext("eyra-account", "password.confirmation.label")
+      field === :current_password -> dgettext("eyra-account", "password.current.label")
+      true -> dgettext("eyra-account", "password.label")
+    end
 
     c(:form_field, :input, [warning: warning, label: label, type: type, id: id, name: name])
   end
+
 
   def primary_button(label, path, color \\ "grey1") do
     bg_color = "bg-" <> color
@@ -91,7 +96,7 @@ defmodule LinkWeb.Components.ComponentHelpers do
   end
 
   def warning(message) do
-    c(:custom_button, :warning, [message: message])
+    c(:message, :warning, [message: message])
   end
 
   defp view(name) do

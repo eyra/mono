@@ -12,12 +12,13 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/link_web/templates/pow/session/new.html.eex:7
+#: lib/link_web/components/custom_button/templates/back.html.eex:3
+#: lib/link_web/components/custom_button/templates/back.html.eex:5
 msgid "eyra.btn.back"
 msgstr "Back"
 
 #, elixir-format
-#: lib/link_web/templates/pow/registration/new.html.eex:46
-#: lib/link_web/templates/pow/session/new.html.eex:39
+#: lib/link_web/templates/pow/registration/edit.html.eex:19
+#: lib/link_web/templates/pow/registration/new.html.eex:18 lib/link_web/templates/pow/session/new.html.eex:27
 msgid "%{action}.failed"
 msgstr "%{action} failed"

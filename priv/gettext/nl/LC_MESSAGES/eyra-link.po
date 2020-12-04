@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:12
+#: lib/link_web/templates/page/index.html.eex:15
 msgid "signin-button"
 msgstr "Aanmelden"
 
@@ -25,3 +25,8 @@ msgstr "Help wetenschappers om de wereld van morgen te ontdekken!"
 #: lib/link_web/templates/page/index.html.eex:6
 msgid "welcome.title"
 msgstr "Eyra Link"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:13
+msgid "dashboard-button"
+msgstr "Ga naar het study overzicht"
