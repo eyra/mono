@@ -38,7 +38,6 @@ defmodule Link.MixProject do
       {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.2"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
@@ -47,8 +46,16 @@ defmodule Link.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:pow, "~> 1.0.21"},
       {:pow_assent, "~> 0.4.9"},
-      {:certifi, "~> 2.4"},     # Optional, but recommended for SSL validation with :httpc adapter
-      {:ssl_verify_fun, "~> 1.1"},     # Optional, but recommended for SSL validation with :httpc adapter
+      # Optional, but recommended for SSL validation with :httpc adapter
+      {:certifi, "~> 2.4"},
+      # Optional, but recommended for SSL validation with :httpc adapter
+      {:ssl_verify_fun, "~> 1.1"},
+      # i18n
+      {:ex_cldr, "~> 2.18"},
+      {:ex_cldr_numbers, "~> 2.16"},
+      {:ex_cldr_dates_times, "~> 2.6"},
+      # Dev and test deps
+      {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.8", only: [:dev, :test]},
       {:faker, "~> 0.16", only: :test}
@@ -67,7 +74,10 @@ defmodule Link.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      ci: ["setup", "sobelow", "test", "credo"]
+      ci: ["setup", "sobelow", "test", "credo"],
+      i18n: [
+        "gettext.extract --merge priv/gettext"
+      ]
     ]
   end
 end
