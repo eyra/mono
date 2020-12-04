@@ -2,33 +2,16 @@
   <div class="flex-grow">
     <div class="w-full">
       <div class="ml-10 mt-6">
-          <div onclick="window.history.back()" class="flex inline-flex items-center">
-            <div class="-mt-px mr-3">
-                <img class="justify-center" src="<%= Routes.static_path(@conn, "/images/back.svg") %>" alt="<%= dgettext "eyra-ux", "eyra.btn.back" %>"/>
-            </div>
-            <div class="font-bold text-button hover:text-primary "><%= dgettext "eyra-ux", "eyra.btn.back" %></div>
-          </div>
+          <%= back_button @conn %>
       </div>
       <div class="flex justify-center">
           <div class="w-form mt-10">
             <div class="mb-6 text-title2 font-black"><%= dgettext "eyra-account", "eyra.signin.title" %></div>
             <div class="mb-6">
-                <%= button(method: :get,
-                  to: Routes.pow_registration_path(@conn, :new, @locale), class: "flex items-center justify-center leading-none w-full h-48px bg-google focus:outline-none hover:bg-opacity-80 rounded") do
-                  [
-                    img_tag(Routes.static_path(@conn, "/images/google.svg"), class: "mr-3 -mt-1"),
-                    content_tag(:text, class: "font-bold text-white text-button") do dgettext("eyra-account", "google.button") end
-                  ]
-                  end %>
+                <%= primary_icon_button dgettext("eyra-account", "google.button"), Routes.static_path(@conn, "/images/google.svg"), Routes.pow_registration_path(@conn, :new, @locale), "google" %>
             </div>
             <div class="mb-6">
-                <%= button(method: :get,
-                  to: Routes.pow_registration_path(@conn, :new, @locale), class: "flex items-center justify-center leading-none w-full h-48px bg-apple focus:outline-none hover:bg-opacity-80 rounded") do
-                  [
-                    img_tag(Routes.static_path(@conn, "/images/apple.svg"), class: "mr-3 -mt-1"),
-                    content_tag(:text, class: "font-bold text-white text-button") do dgettext("eyra-account", "apple.button") end
-                  ]
-                  end %>
+                <%= primary_icon_button dgettext("eyra-account", "apple.button"), Routes.static_path(@conn, "/images/apple.svg"), Routes.pow_registration_path(@conn, :new, @locale), "apple" %>
             </div>
             <div class="mb-5 pl-4 pr-4 text-grey3 text-center mb-6 text-caption">
                 <%= dgettext "eyra-account", "eyra.signin.message.external" %>
@@ -41,20 +24,15 @@
                 <%= password_field f, :password %>
 
                 <%= if @changeset.action do %>
-                <div class="mb-5 text-warning font-medium font-caption bg-warning bg-opacity-20 text-center leading-none rounded">
-                  <p class="inline-block mt-4 mb-4"><%= dgettext "eyra-ux", "%{action}.failed", action: dgettext "eyra-account", "signin.button" %></p>
-                </div>
+                  <%= warning dgettext("eyra-ux", "%{action}.failed", action: dgettext("eyra-account", "signin.button")) %>
                 <% end %>
+
                 <div class="mb-8">
-                  <button class="w-full h-48px leading-none font-bold text-button text-white bg-grey1 focus:outline-none hover:bg-opacity-80 rounded" type="submit">
-                  <%= dgettext "eyra-account", "signin.button" %>
-                  </button>
+                  <%= submit_button dgettext("eyra-account", "signin.button") %>
                 </div>
                 <% end %>
                 <div>
-                  <button class="button underline text-primary hover:text-black" data-method="get" data-to= <%= Routes.pow_registration_path(@conn, :new, @locale) %> >
-                  <%= dgettext "eyra-account", "signup.link" %>
-                  </button>
+                  <%= link_button dgettext("eyra-account", "signup.link"), Routes.pow_registration_path(@conn, :new, @locale) %>
                 </div>
             </div>
           </div>

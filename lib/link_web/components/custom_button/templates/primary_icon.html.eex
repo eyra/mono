@@ -1,0 +1,11 @@
+<%= button(
+    method: :get,
+    to: @path,
+    class: "flex items-center justify-center leading-none w-full bg_google h-48px focus:outline-none hover:bg-opacity-80 rounded " <> @color)
+    do
+    [
+        img_tag(@icon, class: "mr-3 -mt-1"),
+        content_tag(:text, class: "font-bold text-white text-button") do @label end
+    ]
+    end
+%>

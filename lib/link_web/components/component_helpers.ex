@@ -67,6 +67,33 @@ defmodule LinkWeb.Components.ComponentHelpers do
     c(:form_field, :input, [warning: warning, label: label, type: type, id: id, name: name])
   end
 
+  def primary_button(label, path, color \\ "grey1") do
+    bg_color = "bg-" <> color
+    c(:custom_button, :primary, [label: label, path: path, color: bg_color])
+  end
+
+  def primary_icon_button(label, icon, path, color \\ "grey1") do
+    bg_color = "bg-" <> color
+    c(:custom_button, :primary_icon, [label: label, icon: icon, path: path, color: bg_color])
+  end
+
+  def submit_button(label, color \\ "grey1") do
+    bg_color = "bg-" <> color
+    c(:custom_button, :submit, [label: label, color: bg_color])
+  end
+
+  def link_button(label, path) do
+    c(:custom_button, :link, [label: label, path: path])
+  end
+
+  def back_button(conn) do
+    c(:custom_button, :back, [conn: conn])
+  end
+
+  def warning(message) do
+    c(:custom_button, :warning, [message: message])
+  end
+
   defp view(name) do
     module_name = Naming.camelize("#{name}") <> "View"
     Module.concat(Components, module_name)

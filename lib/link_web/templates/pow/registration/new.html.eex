@@ -2,36 +2,27 @@
   <div class="flex-grow">
     <div class="w-full">
       <div class="ml-10 mt-6">
-          <div onclick="window.history.back()" class="flex inline-flex items-center">
-            <div class="-mt-px mr-3">
-                <img class="justify-center" src="<%= Routes.static_path(@conn, "/images/back.svg") %>" alt="<%= dgettext "eyra-ux", "eyra.btn.back" %>"/>
-            </div>
-            <div class="font-bold text-button hover:text-primary "><%= dgettext "eyra-ux", "eyra.btn.back" %></div>
-          </div>
+          <%= back_button @conn %>
       </div>
       <div class="flex justify-center">
           <div class="w-form mt-10">
             <div class="mb-6 text-title2 font-black"><%= dgettext "eyra-account", "signup.title" %></div>
             <div>
                 <%= form_for @changeset, "/"<>@locale<>@action, [as: :user], fn f -> %>
-                <%= email_field f, Pow.Ecto.Schema.user_id_field(@changeset) %>
-                <%= password_field f, :password %>
-                <%= password_field f, :password_confirmation %>
-                <%= if @changeset.action do %>
-                <div class="mb-5 text-warning font-medium font-caption bg-warning bg-opacity-20 text-center leading-none rounded">
-                  <p class="inline-block mt-4 mb-4"><%= dgettext "eyra-ux", "%{action}.failed", action: dgettext "eyra-account", "signup.button" %></p>
-                </div>
-                <% end %>
+
+                  <%= email_field f, Pow.Ecto.Schema.user_id_field(@changeset) %>
+                  <%= password_field f, :password %>
+                  <%= password_field f, :password_confirmation %>
+
+                  <%= if @changeset.action do %>
+                    <%= warning dgettext("eyra-ux", "%{action}.failed", action: dgettext("eyra-account", "signup.button")) %>
+                  <% end %>
                 <div class="mb-8">
-                  <button class="w-full h-48px leading-none font-bold text-button text-white bg-grey1 focus:outline-none hover:bg-opacity-80 rounded" type="submit">
-                  <%= dgettext "eyra-account", "signup.button" %>
-                  </button>
+                  <%= submit_button dgettext("eyra-account", "signup.button") %>
                 </div>
                 <% end %>
                 <div>
-                  <button class="button underline text-primary hover:text-black" data-method="get" data-to= <%= Routes.pow_session_path(@conn, :new, @locale) %> >
-                  <%= dgettext "eyra-account", "signin.link" %>
-                  </button>
+                  <%= link_button dgettext("eyra-account", "signin.link"), Routes.pow_session_path(@conn, :new, @locale) %>
                 </div>
             </div>
           </div>
