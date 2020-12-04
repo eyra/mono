@@ -52,7 +52,6 @@ defmodule Link.MixProject do
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.8", only: [:dev, :test]},
       {:faker, "~> 0.16", only: :test},
-      {:navigation_history, "~> 0.3"},
       {:set_locale, "~> 0.2.1"}
     ]
   end

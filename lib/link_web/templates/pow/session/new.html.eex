@@ -1,81 +1,65 @@
-<div class="w-full">
-  <div class="ml-10 mt-6">
-    <a href="<%= NavigationHistory.last_path(@conn, 1) %>" class="flex inline-flex items-center">
-        <div class="-mt-px mr-3">
-            <img class="justify-center" src="<%= Routes.static_path(@conn, "/images/back.svg") %>" alt="Terug"/>
-        </div>
-        <div class="font-bold text-button hover:text-primary "><%= dgettext "eyra-ux", "eyra.btn.back" %></div>
-    </a>
-  </div>
-  <div class="flex justify-center">
-    <div class="w-form mt-10">
-      <div class="mb-6 text-title2 font-black"><%= dgettext "eyra-account", "eyra.signin.title" %></div>
-      <div class="mb-6">
-        <%= button(method: :get,
-          to: Routes.pow_registration_path(@conn, :new), class: "flex items-center justify-center leading-none w-full h-48px bg-google focus:outline-none hover:bg-opacity-80 rounded") do
-          [
-            img_tag(Routes.static_path(@conn, "/images/google.svg"), class: "mr-3 -mt-1"),
-            content_tag(:text, class: "font-bold text-white text-button") do dgettext("eyra-account", "google.button") end
-          ]
-        end %>
-      </div>
-      <div class="mb-6">
-        <%= button(method: :get,
-          to: Routes.pow_registration_path(@conn, :new), class: "flex items-center justify-center leading-none w-full h-48px bg-apple focus:outline-none hover:bg-opacity-80 rounded") do
-          [
-            img_tag(Routes.static_path(@conn, "/images/apple.svg"), class: "mr-3 -mt-1"),
-            content_tag(:text, class: "font-bold text-white text-button") do dgettext("eyra-account", "apple.button") end
-          ]
-        end %>
-      </div>
-      <div class="mb-5 pl-4 pr-4 text-grey3 text-center mb-6 text-caption">
-        <%= dgettext "eyra-account", "eyra.signin.message.external" %>
-      </div>
-      <div class="mb-7 bg-grey4 h-px"></div>
-      <div>
-        <%= form_for @changeset, "/"<>@locale<>@action, [as: :user], fn f -> %>
-          <%= if @changeset.action do %>
-            <div class="text-warning">
-              <p><%= dgettext "eyra-ux", "%{action}.failed", action: dgettext "eyra-account", "signin.button" %></p>
+<div class="flex w-full">
+  <div class="flex-grow">
+    <div class="w-full">
+      <div class="ml-10 mt-6">
+          <div onclick="window.history.back()" class="flex inline-flex items-center">
+            <div class="-mt-px mr-3">
+                <img class="justify-center" src="<%= Routes.static_path(@conn, "/images/back.svg") %>" alt="<%= dgettext "eyra-ux", "eyra.btn.back" %>"/>
             </div>
-          <% end %>
-
-          <div class="flex flex-col">
-            <div :class="{  'text-primary': hover === true }" class="mb-2 font-bold text-title6" ><%= dgettext "eyra-account", "email.label" %></div>
-            <%= text_input f, Pow.Ecto.Schema.user_id_field(@changeset) ,
-              class: "text-grey1 text-bodymedium font-normal pl-3 mb-6 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary hover:border-grey1 rounded h-44px"
-            %>
-            <%= error_tag f, Pow.Ecto.Schema.user_id_field(@changeset) %>
+            <div class="font-bold text-button hover:text-primary "><%= dgettext "eyra-ux", "eyra.btn.back" %></div>
           </div>
-          <div class="mb-1">
-          </div>
-
-          <div x-data="{ hover: false, focus: false, warning: false }" x-on:mouseover="hover = true" x-on:mouseleave="hover = false" class="mb-8 flex flex-col">
-            <div
-              :class="{  'text-primary': hover === true }"
-              class="mb-2 font-bold text-title6">
-              <%= dgettext "eyra-account", "password.label" %>
+      </div>
+      <div class="flex justify-center">
+          <div class="w-form mt-10">
+            <div class="mb-6 text-title2 font-black"><%= dgettext "eyra-account", "eyra.signin.title" %></div>
+            <div class="mb-6">
+                <%= button(method: :get,
+                  to: Routes.pow_registration_path(@conn, :new, @locale), class: "flex items-center justify-center leading-none w-full h-48px bg-google focus:outline-none hover:bg-opacity-80 rounded") do
+                  [
+                    img_tag(Routes.static_path(@conn, "/images/google.svg"), class: "mr-3 -mt-1"),
+                    content_tag(:text, class: "font-bold text-white text-button") do dgettext("eyra-account", "google.button") end
+                  ]
+                  end %>
             </div>
-            <input
-              :class="{  'border-primary': hover === true, 'border-grey3': hover === false }"
-              class="text-grey1 text-bodymedium font-normal pl-3 w-full border-2 border-solid focus:outline-none focus:border-primary rounded h-44px"
-              id="user_password"
-              name="user[password]"
-              type="password">
-          </div>
+            <div class="mb-6">
+                <%= button(method: :get,
+                  to: Routes.pow_registration_path(@conn, :new, @locale), class: "flex items-center justify-center leading-none w-full h-48px bg-apple focus:outline-none hover:bg-opacity-80 rounded") do
+                  [
+                    img_tag(Routes.static_path(@conn, "/images/apple.svg"), class: "mr-3 -mt-1"),
+                    content_tag(:text, class: "font-bold text-white text-button") do dgettext("eyra-account", "apple.button") end
+                  ]
+                  end %>
+            </div>
+            <div class="mb-5 pl-4 pr-4 text-grey3 text-center mb-6 text-caption">
+                <%= dgettext "eyra-account", "eyra.signin.message.external" %>
+            </div>
+            <div class="mb-7 bg-grey4 h-px"></div>
+            <div>
+                <%= form_for @changeset, "/"<>@locale<>@action, [as: :user], fn f -> %>
 
-          <div class="mb-8">
-            <button class="w-full h-48px leading-none font-bold text-button text-white bg-grey1 focus:outline-none hover:bg-opacity-80 rounded" type="submit">
-              <%= dgettext "eyra-account", "signin.button" %>
-            </button>
-          </div>
-        <% end %>
+                <%= email_field f, Pow.Ecto.Schema.user_id_field(@changeset) %>
+                <%= password_field f, :password %>
 
-        <div>
-        <button class="button underline text-primary hover:text-black" data-method="get" data-to= <%= Routes.pow_registration_path(@conn, :new) %> >
-          <%= dgettext "eyra-account", "signup.link" %>
-        </button>
+                <%= if @changeset.action do %>
+                <div class="mb-5 text-warning font-medium font-caption bg-warning bg-opacity-20 text-center leading-none rounded">
+                  <p class="inline-block mt-4 mb-4"><%= dgettext "eyra-ux", "%{action}.failed", action: dgettext "eyra-account", "signin.button" %></p>
+                </div>
+                <% end %>
+                <div class="mb-8">
+                  <button class="w-full h-48px leading-none font-bold text-button text-white bg-grey1 focus:outline-none hover:bg-opacity-80 rounded" type="submit">
+                  <%= dgettext "eyra-account", "signin.button" %>
+                  </button>
+                </div>
+                <% end %>
+                <div>
+                  <button class="button underline text-primary hover:text-black" data-method="get" data-to= <%= Routes.pow_registration_path(@conn, :new, @locale) %> >
+                  <%= dgettext "eyra-account", "signup.link" %>
+                  </button>
+                </div>
+            </div>
+          </div>
       </div>
     </div>
   </div>
+  <div class="flex-wrap w-0 md:w-sidebar"></div>
 </div>

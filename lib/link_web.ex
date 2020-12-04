@@ -27,11 +27,11 @@ defmodule LinkWeb do
     end
   end
 
-  def view do
+  def view(opts \\
+        [root: "lib/link_web/templates",
+         namespace: LinkWeb]) do
     quote do
-      use Phoenix.View,
-        root: "lib/link_web/templates",
-        namespace: LinkWeb
+      use Phoenix.View, unquote(opts)
 
       # Import convenience functions from controllers
       import Phoenix.Controller,
@@ -68,6 +68,7 @@ defmodule LinkWeb do
 
       import LinkWeb.ErrorHelpers
       import LinkWeb.Gettext
+      import LinkWeb.Components.ComponentHelpers
       alias LinkWeb.Router.Helpers, as: Routes
     end
   end
@@ -78,4 +79,12 @@ defmodule LinkWeb do
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])
   end
+
+  @doc """
+  When used, dispatch to the appropriate controller/view/etc applying given opts.
+  """
+  defmacro __using__({which, opts}) when is_atom(which) do
+    apply(__MODULE__, which, [opts])
+  end
+
 end

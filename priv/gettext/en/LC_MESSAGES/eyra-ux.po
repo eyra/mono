@@ -17,7 +17,7 @@ msgid "eyra.btn.back"
 msgstr "Back"
 
 #, elixir-format
-#: lib/link_web/templates/pow/registration/new.html.eex:39
-#: lib/link_web/templates/pow/session/new.html.eex:42
+#: lib/link_web/templates/pow/registration/new.html.eex:46
+#: lib/link_web/templates/pow/session/new.html.eex:39
 msgid "%{action}.failed"
 msgstr "%{action} failed"

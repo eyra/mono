@@ -20,16 +20,16 @@
              </div>
             <nav class="flex items-center h-topbar">
               <div class="flex-grow pl-4 md:pl-0">
-                  <a href="https://test.link.eyra.co">
+                  <a href="/">
                     <img src="<%= Routes.static_path(@conn, "/images/eyra-logo.svg") %>" alt="Eyra Link Logo"/>
                   </a>
               </div>
               <%= if Pow.Plug.current_user(@conn) do %>
                 <div class="flex-none p-4">
                   <%= button "Uitloggen",
-                    class: "inline-block py-3 px-6 mt-0 leading-none font-bold text-md text-white bg-grey1 hover:bg-secondary hover:text-grey1 rounded",
+                    class: "inline-block py-3 px-6 mt-0 leading-none font-bold text-md text-white bg-grey1 hover:bg-opacity-80 rounded",
                     method: :delete,
-                    to: Routes.pow_session_path(@conn, :delete) %>
+                    to: Routes.pow_session_path(@conn, :delete, @locale) %>
                 </div>
               <% end %>
             </nav>
@@ -42,7 +42,6 @@
               <%= @inner_content %>
             </main>
           </div>
-          <div class="flex-wrap w-0 md:w-sidebar"></div>
         </div>
       </div>
     </div>

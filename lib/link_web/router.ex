@@ -26,14 +26,12 @@ defmodule LinkWeb.Router do
     plug :browser_base
     plug :protect_from_forgery
     plug :browser_secure
-    plug NavigationHistory.Tracker
     plug SetLocale, gettext: LinkWeb.Gettext, default_locale: "nl"
   end
 
   pipeline :browser_unprotected do
     plug :browser_base
     plug :browser_secure
-    plug NavigationHistory.Tracker
     plug SetLocale, gettext: LinkWeb.Gettext, default_locale: "nl"
   end
 
