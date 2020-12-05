@@ -3,17 +3,8 @@
 
 use Mix.Config
 
-google_auth_client_id =
-  System.get_env("GOOGLE_AUTH_CLIENT_ID") ||
-    raise """
-    environment variable GOOGLE_AUTH_CLIENT_ID is missing.
-    """
-
-google_auth_client_secret =
-  System.get_env("GOOGLE_AUTH_CLIENT_SECRET") ||
-    raise """
-    environment variable GOOGLE_AUTH_CLIENT_SECRET is missing.
-    """
+google_auth_client_id = System.get_env("GOOGLE_AUTH_CLIENT_ID", "")
+google_auth_client_secret = System.get_env("GOOGLE_AUTH_CLIENT_SECRET", "")
 
 # Registration of oauth providers
 config :link, :pow_assent,

@@ -2,10 +2,24 @@
 
 ## Setup
 
-1. Install Visual Studio Code
+For Windows; first install [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10) and the [Windows Terminal](https://docs.microsoft.com/nl-nl/windows/terminal/). Run all steps in the WSl2 environment.
+
+1. Install Visual Studio Code (or another editor)
 2. Checkout out the code locally
-3. Open the folder with Visual Studio Code
-4. Answer *yes* when it asks to "Reopen folder to develop in a container ..."
+3. [Install ASDF](https://asdf-vm.com/#/core-manage-asdf?id=install)
+4. Go to the checkout folder and run: `./setup.sh`
+
+This will setup all required dependencies.
+
+## Database
+
+To start the database run:
+
+    pg_ctl -D db start
+
+Migrations (to setup the tables) can be run with:
+
+    mix ecto.migrate
 
 ## Phoenix
 

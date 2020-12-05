@@ -82,7 +82,7 @@ defmodule Link.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      ci: ["setup", "sobelow", "test", "credo"],
+      ci: ["setup", "sobelow -i Config.CSRF,Config.Headers", "test", "credo"],
       makedocs: ["deps.get", "docs -o doc/output"]
     ]
   end

@@ -1,3 +1,4 @@
+/db/
 postgres-data
 .netrc
 *.key
@@ -39,3 +40,4 @@ npm-debug.log
 /priv/static/
 /.devcontainer/devcontainer.env
 .env
+logfile
