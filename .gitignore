@@ -40,6 +40,6 @@ npm-debug.log
 /priv/static/
 /.devcontainer/devcontainer.env
 logfile
-/.env
+.env
 .DS_Store
 
