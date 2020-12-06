@@ -72,14 +72,14 @@ defmodule LinkWeb.Components.ComponentHelpers do
   end
 
 
-  def primary_button(label, path, color \\ "grey1") do
+  def primary_button(label, path, method \\ :get, color \\ "grey1") do
     bg_color = "bg-" <> color
-    c(:custom_button, :primary, [label: label, path: path, color: bg_color])
+    c(:custom_button, :primary, [label: label, method: method, path: path, color: bg_color])
   end
 
   def primary_icon_button(label, icon, path, color \\ "grey1") do
     bg_color = "bg-" <> color
-    c(:custom_button, :primary_icon, [label: label, icon: icon, path: path, color: bg_color])
+    c(:custom_button, :primary_icon, [label: label, method: :get, icon: icon, path: path, color: bg_color])
   end
 
   def submit_button(label, color \\ "grey1") do

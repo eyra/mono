@@ -88,3 +88,8 @@ msgstr "Log in met Apple"
 #: lib/link_web/templates/pow/registration/edit.html.eex:9
 msgid "update.title"
 msgstr "Aanpassen"
+
+#, elixir-format
+#: lib/link_web/templates/layout/app.html.eex:29
+msgid "signout.button"
+msgstr "Uitloggen"

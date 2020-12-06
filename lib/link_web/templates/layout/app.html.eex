@@ -26,10 +26,7 @@
               </div>
               <%= if Pow.Plug.current_user(@conn) do %>
                 <div class="flex-none p-4">
-                  <%= button "Uitloggen",
-                    class: "inline-block py-3 px-6 mt-0 leading-none font-bold text-md text-white bg-grey1 hover:bg-opacity-80 rounded",
-                    method: :delete,
-                    to: Routes.pow_session_path(@conn, :delete, @locale) %>
+                  <%= primary_button dgettext("eyra-account", "signout.button"), Routes.pow_session_path(@conn, :delete, @locale), :delete %>
                 </div>
               <% end %>
             </nav>
