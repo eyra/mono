@@ -30,6 +30,13 @@
       </section>
     </header>
     <main role="main" class="container">
+
+      <div>
+        <%= gettext("Switch to:") %>&nbsp;
+        <%= for {locale, name} <- supported_languages() do %>
+        <%= link name, to: Routes.language_switch_path(@conn, :index, locale, redir: @conn.request_path) %>
+        <% end %>
+      </div>
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= @inner_content %>

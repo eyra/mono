@@ -75,8 +75,17 @@ defmodule LinkWeb do
       import LinkWeb.ErrorHelpers
       import LinkWeb.Gettext
       alias LinkWeb.Router.Helpers, as: Routes
-
       import Link.Authorization, only: [can?: 4]
+
+      def supported_languages do
+        current_locale = Gettext.get_locale()
+
+        [
+          {"en", gettext("English")},
+          {"nl", gettext("Dutch")}
+        ]
+        |> Enum.reject(fn {locale, _} -> current_locale == locale end)
+      end
     end
   end
 

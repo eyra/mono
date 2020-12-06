@@ -18,6 +18,14 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Learn more about Phoenix by visiting the [official website](https://www.phoenixframework.org/)
 
+## i18n
+
+This project makes use of `Gettext` and `Cldr` for internationalization. The
+`PO` files can be found at `priv/gettext/*/LC_MESSAGES/*.po`. To extract new
+translation strings or to compile the `PO` files run:
+
+    mix i18n
+
 ## Linting & Style
 
 Several linting tools are available to ensure code quality. They are:
