@@ -67,7 +67,10 @@ defmodule LinkWeb.Router do
 
   scope "/", LinkWeb do
     pipe_through [:browser, :protected]
-    resources "/studies", StudyController
+
+    resources "/studies", StudyController do
+      resources "/survey-tools", SurveyToolController
+    end
   end
 
   # Other scopes may use custom stacks.

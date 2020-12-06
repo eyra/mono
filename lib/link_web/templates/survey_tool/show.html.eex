@@ -1,0 +1,13 @@
+<h1>Show Survey tool</h1>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @survey_tool.title %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.study_survey_tool_path(@conn, :edit, @study, @survey_tool) %></span>
+<span><%= link "Back", to: Routes.study_survey_tool_path(@conn, :index, @study) %></span>

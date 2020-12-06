@@ -5,6 +5,7 @@ defmodule Link.Studies do
 
   import Ecto.Query, warn: false
   alias Link.Repo
+  alias Link.Authorization
 
   alias Link.Studies.Study
 
@@ -45,6 +46,7 @@ defmodule Link.Studies do
     |> Study.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:researcher, researcher)
     |> Repo.insert()
+    |> Authorization.assign_role(researcher, :researcher)
   end
 
   @doc """

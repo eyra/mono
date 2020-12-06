@@ -10,7 +10,18 @@ defmodule Link.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      # The main page in the docs
+      docs: [
+        main: "readme",
+        logo: "assets/static/images/eyra-link-logo.png",
+        extras: [
+          "README.md",
+          "guides/development_setup.md",
+          "guides/authorization.md",
+          "guides/green_light.md"
+        ]
+      ]
     ]
   end
 
@@ -58,7 +69,9 @@ defmodule Link.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.8", only: [:dev, :test]},
-      {:faker, "~> 0.16", only: :test}
+      {:faker, "~> 0.16", only: :test},
+      {:ex_doc, "~> 0.22", only: :dev, runtime: false},
+      {:table_rex, "~> 3.0.0"}
     ]
   end
 
@@ -77,7 +90,8 @@ defmodule Link.MixProject do
       ci: ["setup", "sobelow", "test", "credo"],
       i18n: [
         "gettext.extract --merge priv/gettext"
-      ]
+      ],
+      makedocs: ["deps.get", "docs -o doc/output"]
     ]
   end
 end

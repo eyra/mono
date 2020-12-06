@@ -4,6 +4,8 @@ defmodule LinkWeb.StudyController do
   alias Link.Studies
   alias Link.Studies.Study
 
+  entity_loader(&LinkWeb.Loaders.study!/3)
+
   def index(conn, _params) do
     studies = Studies.list_studies()
     render(conn, "index.html", studies: studies)
@@ -28,20 +30,16 @@ defmodule LinkWeb.StudyController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    study = Studies.get_study!(id)
+  def show(%{assigns: %{study: study}} = conn, _) do
     render(conn, "show.html", study: study)
   end
 
-  def edit(conn, %{"id" => id}) do
-    study = Studies.get_study!(id)
+  def edit(%{assigns: %{study: study}} = conn, _) do
     changeset = Studies.change_study(study)
     render(conn, "edit.html", study: study, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "study" => study_params}) do
-    study = Studies.get_study!(id)
-
+  def update(%{assigns: %{study: study}} = conn, %{"study" => study_params}) do
     case Studies.update_study(study, study_params) do
       {:ok, study} ->
         conn
@@ -53,8 +51,7 @@ defmodule LinkWeb.StudyController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    study = Studies.get_study!(id)
+  def delete(%{assigns: %{study: study}} = conn, _) do
     {:ok, _study} = Studies.delete_study(study)
 
     conn

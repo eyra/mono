@@ -1,0 +1,28 @@
+<h1>Listing Survey tools</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for survey_tool <- @survey_tools do %>
+    <tr>
+      <td><%= survey_tool.title %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.study_survey_tool_path(@conn, :show, @study, survey_tool) %></span>
+        <%= if can?(@conn, [@study, survey_tool], LinkWeb.SurveyToolController, :edit) do %>
+        <span><%= link "Edit", to: Routes.study_survey_tool_path(@conn, :edit, @study, survey_tool) %></span>
+        <% end %>
+        <span><%= link "Delete", to: Routes.study_survey_tool_path(@conn, :delete, @study, survey_tool), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Survey tool", to: Routes.study_survey_tool_path(@conn, :new, @study) %></span>
