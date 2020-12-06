@@ -11,13 +11,8 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:13
+#: lib/link_web/templates/page/index.html.eex:26
 msgid "signin-button"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/templates/page/index.html.eex:7
-msgid "welcome.message"
 msgstr ""
 
 #, elixir-format
@@ -26,6 +21,21 @@ msgid "welcome.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:11
+#: lib/link_web/templates/page/index.html.eex:24
 msgid "dashboard-button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:7
+msgid "welcome.subtitle"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:20
+msgid "link.message"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:17
+msgid "link.title"
 msgstr ""

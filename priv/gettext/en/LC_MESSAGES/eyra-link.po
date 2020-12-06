@@ -12,21 +12,31 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:13
+#: lib/link_web/templates/page/index.html.eex:26
 msgid "signin-button"
 msgstr "Join"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:7
-msgid "welcome.message"
-msgstr "Collaborate with scientists to discover the future!"
-
-#, elixir-format
 #: lib/link_web/templates/page/index.html.eex:4
 msgid "welcome.title"
+msgstr "Welcome to"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:24
+msgid "dashboard-button"
+msgstr "Go to study overview"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:7
+msgid "welcome.subtitle"
 msgstr "Eyra Link"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:11
-msgid "dashboard-button"
-msgstr "Go to study overview"
+#: lib/link_web/templates/page/index.html.eex:20
+msgid "link.message"
+msgstr "Citizens can help scientists with their important work."
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:17
+msgid "link.title"
+msgstr "Empower Science"
