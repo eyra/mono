@@ -26,13 +26,11 @@ defmodule LinkWeb.Router do
     plug :browser_base
     plug :protect_from_forgery
     plug :browser_secure
-    plug SetLocale, gettext: LinkWeb.Gettext, default_locale: "nl"
   end
 
   pipeline :browser_unprotected do
     plug :browser_base
     plug :browser_secure
-    plug SetLocale, gettext: LinkWeb.Gettext, default_locale: "nl"
   end
 
   pipeline :protected do
@@ -45,11 +43,6 @@ defmodule LinkWeb.Router do
   end
 
   scope "/", LinkWeb do
-    pipe_through :browser
-    get "/", PageController, :dummy
-  end
-
-  scope "/:locale", LinkWeb do
     pipe_through :browser
     get "/", PageController, :index
   end
@@ -65,18 +58,7 @@ defmodule LinkWeb.Router do
     pow_assent_routes()
   end
 
-  scope "/:locale" do
-    pipe_through :browser
-    pow_routes()
-    pow_assent_routes()
-  end
-
   scope "/", LinkWeb do
-    pipe_through [:browser, :protected]
-    resources "/studies", StudyController
-  end
-
-  scope "/:locale", LinkWeb do
     pipe_through [:browser, :protected]
     resources "/studies", StudyController
   end

@@ -8,7 +8,7 @@
           <div class="w-form mt-10">
             <div class="mb-6 text-title2 font-black"><%= dgettext "eyra-account", "signup.title" %></div>
             <div>
-                <%= form_for @changeset, "/"<>@locale<>@action, [as: :user], fn f -> %>
+                <%= form_for @changeset, @action, [as: :user], fn f -> %>
 
                   <%= email_field f, Pow.Ecto.Schema.user_id_field(@changeset) %>
                   <%= password_field f, :password %>
@@ -22,7 +22,7 @@
                 </div>
                 <% end %>
                 <div>
-                  <%= link_button dgettext("eyra-account", "signin.link"), Routes.pow_session_path(@conn, :new, @locale) %>
+                  <%= link_button dgettext("eyra-account", "signin.link"), Routes.pow_session_path(@conn, :new) %>
                 </div>
             </div>
           </div>

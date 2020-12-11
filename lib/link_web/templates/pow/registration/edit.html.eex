@@ -8,7 +8,7 @@
           <div class="w-form mt-10">
             <div class="mb-6 text-title2 font-black"><%= dgettext "eyra-account", "update.title" %></div>
             <div>
-              <%= form_for @changeset, "/"<>@locale<>@action, [as: :user], fn f -> %>
+              <%= form_for @changeset, @action, [as: :user], fn f -> %>
 
                 <%= password_field f, :current_password %>
                 <%= email_field f, Pow.Ecto.Schema.user_id_field(@changeset) %>

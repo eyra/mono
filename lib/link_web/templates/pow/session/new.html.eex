@@ -8,17 +8,17 @@
           <div class="w-form mt-10">
             <div class="mb-6 text-title2 font-black"><%= dgettext "eyra-account", "eyra.signin.title" %></div>
             <div class="mb-6">
-                <%= primary_icon_button dgettext("eyra-account", "google.button"), Routes.static_path(@conn, "/images/google.svg"), Routes.pow_registration_path(@conn, :new, @locale), "google" %>
+                <%= primary_icon_button dgettext("eyra-account", "google.button"), Routes.static_path(@conn, "/images/google.svg"), Routes.pow_registration_path(@conn, :new), "google" %>
             </div>
             <div class="mb-6">
-                <%= primary_icon_button dgettext("eyra-account", "apple.button"), Routes.static_path(@conn, "/images/apple.svg"), Routes.pow_registration_path(@conn, :new, @locale), "apple" %>
+                <%= primary_icon_button dgettext("eyra-account", "apple.button"), Routes.static_path(@conn, "/images/apple.svg"), Routes.pow_registration_path(@conn, :new), "apple" %>
             </div>
             <div class="mb-5 pl-4 pr-4 text-grey3 text-center mb-6 text-caption">
                 <%= dgettext "eyra-account", "eyra.signin.message.external" %>
             </div>
             <div class="mb-7 bg-grey4 h-px"></div>
             <div>
-                <%= form_for @changeset, "/"<>@locale<>@action, [as: :user], fn f -> %>
+                <%= form_for @changeset, @action, [as: :user], fn f -> %>
 
                 <%= email_field f, Pow.Ecto.Schema.user_id_field(@changeset) %>
                 <%= password_field f, :password %>
@@ -32,7 +32,7 @@
                 </div>
                 <% end %>
                 <div>
-                  <%= link_button dgettext("eyra-account", "signup.link"), Routes.pow_registration_path(@conn, :new, @locale) %>
+                  <%= link_button dgettext("eyra-account", "signup.link"), Routes.pow_registration_path(@conn, :new) %>
                 </div>
             </div>
           </div>

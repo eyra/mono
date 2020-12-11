@@ -23,9 +23,9 @@
         </div>
         <div class="ml-20 mt-10">
           <%= if Pow.Plug.current_user(@conn) do %>
-            <%= button dgettext("eyra-link", "dashboard-button"), class: "inline-block py-3 px-6 mt-0 leading-none font-bold text-md text-white bg-grey1 hover:bg-white hover:text-primary rounded", method: :get, to: Routes.study_path(@conn, :index, @locale) %>
+            <%= button dgettext("eyra-link", "dashboard-button"), class: "inline-block py-3 px-6 mt-0 leading-none font-bold text-md text-white bg-grey1 hover:bg-white hover:text-primary rounded", method: :get, to: Routes.study_path(@conn, :index) %>
           <% else %>
-            <%= button dgettext("eyra-link", "signin-button"), class: "inline-block py-3 px-6 mt-0 leading-none font-bold text-md text-white bg-grey1 hover:bg-white hover:text-primary rounded", method: :get, to: Routes.pow_session_path(@conn, :new, @locale) %>
+            <%= button dgettext("eyra-link", "signin-button"), class: "inline-block py-3 px-6 mt-0 leading-none font-bold text-md text-white bg-grey1 hover:bg-white hover:text-primary rounded", method: :get, to: Routes.pow_session_path(@conn, :new) %>
           <% end %>
         </div>
       </div>

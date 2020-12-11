@@ -20,7 +20,7 @@ defmodule Link.MixProject do
   def application do
     [
       mod: {Link.Application, []},
-      extra_applications: [:logger, :runtime_tools, :set_locale]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
@@ -52,7 +52,6 @@ defmodule Link.MixProject do
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.8", only: [:dev, :test]},
       {:faker, "~> 0.16", only: :test},
-      {:set_locale, "~> 0.2.1"}
     ]
   end
 

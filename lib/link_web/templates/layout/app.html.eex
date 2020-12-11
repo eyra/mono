@@ -26,7 +26,7 @@
               </div>
               <%= if Pow.Plug.current_user(@conn) do %>
                 <div class="flex-none p-4">
-                  <%= primary_button dgettext("eyra-account", "signout.button"), Routes.pow_session_path(@conn, :delete, @locale), :delete %>
+                  <%= primary_button dgettext("eyra-account", "signout.button"), Routes.pow_session_path(@conn, :delete), :delete %>
                 </div>
               <% end %>
             </nav>
