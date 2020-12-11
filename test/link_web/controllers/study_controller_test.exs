@@ -79,7 +79,7 @@ defmodule LinkWeb.StudyControllerTest do
   describe "delete study" do
     setup [:create_study]
 
-    test "deletes chosen study", %{conn: conn, study: study, user: user} do
+    test "deletes chosen study", %{conn: conn, study: study, user: _user} do
       delete_conn = delete(conn, Routes.study_path(conn, :delete, study))
       assert redirected_to(delete_conn) == Routes.study_path(delete_conn, :index)
 
