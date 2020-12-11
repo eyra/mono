@@ -47,5 +47,5 @@ msgid "English"
 msgstr "Engels"
 
 #: lib/link_web/templates/layout/app.html.eex:35
-msgid "Switch to:"
-msgstr "Wissel naar:"
+msgid "Switch to"
+msgstr "Wissel naar"

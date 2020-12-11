@@ -38,5 +38,5 @@ msgstr ""
 
 #, elixir-format
 #: lib/link_web/templates/layout/app.html.eex:35
-msgid "Switch to:"
+msgid "Switch to"
 msgstr ""
