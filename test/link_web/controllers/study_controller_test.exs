@@ -7,11 +7,6 @@ defmodule LinkWeb.StudyControllerTest do
   @update_attrs %{description: "some updated description", title: "some updated title"}
   @invalid_attrs %{description: nil, title: nil}
 
-  def fixture(:study) do
-    {:ok, study} = Studies.create_study(@create_attrs, user_fixture())
-    study
-  end
-
   setup %{conn: conn} do
     user = user_fixture()
     conn = Pow.Plug.assign_current_user(conn, user, otp_app: :link_web)
@@ -57,6 +52,16 @@ defmodule LinkWeb.StudyControllerTest do
       conn = get(conn, Routes.study_path(conn, :edit, study))
       assert html_response(conn, 200) =~ "Edit Study"
     end
+
+    test "deny editing a non-owned study", %{conn: conn} do
+      # Setup a study owned by a different user
+      {:ok, study: study} = create_study(%{user: user_fixture()})
+      # Now try to load that study
+      conn = get(conn, Routes.study_path(conn, :edit, study))
+      # The result should be an access denied error
+      assert response(conn, 401) =~
+               "The current principal does not have permission: invoke/link_web/study_controller@edit"
+    end
   end
 
   describe "update study" do
@@ -79,7 +84,7 @@ defmodule LinkWeb.StudyControllerTest do
   describe "delete study" do
     setup [:create_study]
 
-    test "deletes chosen study", %{conn: conn, study: study, user: _user} do
+    test "deletes chosen study", %{conn: conn, study: study} do
       delete_conn = delete(conn, Routes.study_path(conn, :delete, study))
       assert redirected_to(delete_conn) == Routes.study_path(delete_conn, :index)
 
@@ -89,8 +94,8 @@ defmodule LinkWeb.StudyControllerTest do
     end
   end
 
-  defp create_study(_) do
-    study = fixture(:study)
-    %{study: study}
+  defp create_study(%{user: user}) do
+    {:ok, study} = Studies.create_study(@create_attrs, user)
+    {:ok, study: study}
   end
 end

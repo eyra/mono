@@ -1,23 +1,31 @@
 version: "3.7"
+x-app: &default-app
+  build:
+    dockerfile: Dockerfile.dev
+    context: .
+
+  volumes:
+    - "tmp:/workspace/tmp"
+    - "deps:/workspace/deps"
+    - "node_modules:/workspace/assets/node_modules"
+    - "build:/workspace/_build"
+    - "elixir-ls:/workspace/.elixir_ls"
+    - ".netrc:/root/.netrc"
+x-test-env: &test-env
+  GOOGLE_AUTH_CLIENT_ID: test
+  GOOGLE_AUTH_CLIENT_SECRET: test-secret
+
 services:
   link-app:
-    build:
-      dockerfile: Dockerfile.dev
-      context: .
-    ports:
-      - 4000:4000
-    volumes:
-      - "tmp:/workspace/tmp"
-      - "node_modules:/workspace/assets/node_modules"
-      - "build:/workspace/_build"
-      - "elixir-ls:/workspace/.elixir_ls"
-      - ".netrc:/root/.netrc"
-    environment:
-      GOOGLE_AUTH_CLIENT_ID: 921548238010-egr9u89cgrg0k4fss3j26pp2suk3gl4k.apps.googleusercontent.com
-      GOOGLE_AUTH_CLIENT_SECRET: GOOGLE_AUTH_CLIENT_SECRET=VsQkTNpCB50wWdF1MHcslUYk
+    <<: *default-app
     depends_on:
       - db
       - testdb
+    ports:
+      - 4000:4000
+    environment:
+      GOOGLE_AUTH_CLIENT_ID: 921548238010-egr9u89cgrg0k4fss3j26pp2suk3gl4k.apps.googleusercontent.com
+      GOOGLE_AUTH_CLIENT_SECRET: GOOGLE_AUTH_CLIENT_SECRET=VsQkTNpCB50wWdF1MHcslUYk
 
   db:
     build:
@@ -34,20 +42,19 @@ services:
       - "./postgres-data:/var/lib/postgresql/data:delegated"
 
   ci:
-    build:
-      dockerfile: Dockerfile.dev
-      context: .
-    command: "mix ci"
+    <<: *default-app
     environment:
+      <<: *test-env
       MIX_ENV: test
-      GOOGLE_AUTH_CLIENT_ID: ${GOOGLE_AUTH_CLIENT_ID}
-      GOOGLE_AUTH_CLIENT_SECRET: ${GOOGLE_AUTH_CLIENT_SECRET}
-    volumes:
-      - "tmp:/workspace/tmp"
-      - "node_modules:/workspace/assets/node_modules"
-      - "build:/workspace/_build"
+    command: "mix ci"
     depends_on:
       - testdb
+  docs:
+
+    <<: *default-app
+    environment:
+      <<: *test-env
+    command: "mix makedocs"
 
   testdb:
     build:
@@ -64,6 +71,7 @@ services:
 
 volumes:
   tmp:
+  deps:
   node_modules:
   build:
   elixir-ls:

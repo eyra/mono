@@ -24,6 +24,10 @@ defmodule LinkWeb do
       import Plug.Conn
       import LinkWeb.Gettext
       alias LinkWeb.Router.Helpers, as: Routes
+
+      use GreenLight.Loaders
+      use GreenLight.Plug, Link.Authorization
+      alias LinkWeb.Loaders
     end
   end
 
@@ -39,6 +43,8 @@ defmodule LinkWeb do
 
       # Include shared imports and aliases for views
       unquote(view_helpers())
+
+      # use Link.Authorization.Controller, :view
     end
   end
 
@@ -70,6 +76,17 @@ defmodule LinkWeb do
       import LinkWeb.Gettext
       import LinkWeb.Components.ComponentHelpers
       alias LinkWeb.Router.Helpers, as: Routes
+      import Link.Authorization, only: [can?: 4]
+
+      def supported_languages do
+        current_locale = Gettext.get_locale()
+
+        [
+          {"en", gettext("English")},
+          {"nl", gettext("Dutch")}
+        ]
+        |> Enum.reject(fn {locale, _} -> current_locale == locale end)
+      end
     end
   end
 

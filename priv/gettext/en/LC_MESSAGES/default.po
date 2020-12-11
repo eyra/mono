@@ -1,0 +1,43 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:2
+msgid "Welcome to %{name}!"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:3
+msgid "Recruitment Platform for Research Participants"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/views/error_view.ex:2 lib/link_web/views/layout_view.ex:2
+#: lib/link_web/views/page_view.ex:2 lib/link_web/views/pow/registration_view.ex:2
+#: lib/link_web/views/pow/session_view.ex:2 lib/link_web/views/pow_assent/registration_view.ex:2
+#: lib/link_web/views/study_view.ex:2
+msgid "Dutch"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/views/error_view.ex:2 lib/link_web/views/layout_view.ex:2
+#: lib/link_web/views/page_view.ex:2 lib/link_web/views/pow/registration_view.ex:2
+#: lib/link_web/views/pow/session_view.ex:2 lib/link_web/views/pow_assent/registration_view.ex:2
+#: lib/link_web/views/study_view.ex:2
+msgid "English"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/layout/app.html.eex:35
+msgid "Switch to:"
+msgstr ""

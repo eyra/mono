@@ -2,11 +2,17 @@ defmodule LinkWeb.Router do
   use LinkWeb, :router
   use Pow.Phoenix.Router
   use PowAssent.Phoenix.Router
-
+  require LinkWeb.Cldr
 
   pipeline :browser_base do
     plug :accepts, ["html"]
     plug :fetch_session
+
+    plug Cldr.Plug.SetLocale,
+      apps: [cldr: LinkWeb.Cldr, gettext: :global],
+      from: [:query, :cookie, :accept_language],
+      param: "locale"
+
     plug :fetch_flash
   end
 
@@ -45,6 +51,7 @@ defmodule LinkWeb.Router do
   scope "/", LinkWeb do
     pipe_through :browser
     get "/", PageController, :index
+    get "/switch-language/:locale", LanguageSwitchController, :index
   end
 
   scope "/" do
@@ -60,7 +67,10 @@ defmodule LinkWeb.Router do
 
   scope "/", LinkWeb do
     pipe_through [:browser, :protected]
-    resources "/studies", StudyController
+
+    resources "/studies", StudyController do
+      resources "/survey-tools", SurveyToolController
+    end
   end
 
   # Other scopes may use custom stacks.
