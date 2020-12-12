@@ -3,36 +3,9 @@ defmodule LinkWeb.Loaders do
   The loaders for the Link application. They integrate with the GreenLight
   framework.
   """
+  import GreenLight.Loaders, only: [defloader: 2]
 
-  def study!(_conn, params, as_parent) do
-    study =
-      case {as_parent, params} do
-        {true, %{"study_id" => study_id}} ->
-          Link.Studies.get_study!(study_id |> String.to_integer())
-
-        {false, %{"id" => study_id}} ->
-          Link.Studies.get_study!(study_id |> String.to_integer())
-
-        _ ->
-          nil
-      end
-
-    {:study, study}
-  end
-
-  def survey_tool!(_conn, params, as_parent) do
-    survey_tool =
-      case {as_parent, params} do
-        {true, %{"survey_tool_id" => survey_tool_id}} ->
-          Link.SurveyTools.get_survey_tool!(survey_tool_id |> String.to_integer())
-
-        {false, %{"id" => survey_tool_id}} ->
-          Link.SurveyTools.get_survey_tool!(survey_tool_id |> String.to_integer())
-
-        _ ->
-          nil
-      end
-
-    {:survey_tool, survey_tool}
-  end
+  defloader(:study, &Link.Studies.get_study!/1)
+  defloader(:survey_tool, &Link.SurveyTools.get_survey_tool!/1)
+  defloader(:user_profile, &Link.Users.get_profile/1)
 end

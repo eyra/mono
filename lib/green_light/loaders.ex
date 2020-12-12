@@ -57,6 +57,44 @@ defmodule GreenLight.Loaders do
   end
 
   @doc false
+
+  @doc """
+  Create a loader function using common Phoenix patterns. It assumes that the
+  parameter is named `id` and when used as part of a nested resource setup it
+  will be `key`_id.
+
+  It can thus be used like this:
+
+    defloader(:study, &Link.Studies.get_study!/1)
+
+  """
+  defmacro defloader(key, callback) do
+    path_param = "id"
+    parent_path_param = "#{key |> Atom.to_string()}_#{path_param}"
+
+    quote do
+      def unquote(:"#{key}!")(_conn, params, as_parent) do
+        entity_id =
+          case {as_parent, params} do
+            {true, %{unquote(parent_path_param) => id}} ->
+              id
+
+            {false, %{unquote(path_param) => id}} ->
+              id
+
+            _ ->
+              nil
+          end
+
+        if is_nil(entity_id) do
+          {unquote(key), nil}
+        else
+          {unquote(key), apply(unquote(callback), [entity_id])}
+        end
+      end
+    end
+  end
+
   defmacro __using__([]) do
     quote do
       import unquote(__MODULE__), only: [entity_loader: 1, entity_loader: 2]
