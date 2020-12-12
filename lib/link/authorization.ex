@@ -25,6 +25,16 @@ defmodule Link.Authorization do
     delete: [:researcher]
   })
 
+  grant_actions(LinkWeb.ParticipantController, %{
+    index: [:researcher],
+    show: [:researcher, :participant],
+    new: [:member],
+    create: [:member],
+    edit: [:researcher],
+    update: [:researcher],
+    delete: [:researcher]
+  })
+
   grant_actions(LinkWeb.SurveyToolController, %{
     index: [:researcher],
     show: [:researcher, :participant],

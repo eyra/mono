@@ -7,7 +7,8 @@ defmodule Link.Studies do
   alias Link.Repo
   alias Link.Authorization
 
-  alias Link.Studies.Study
+  alias Link.Studies.{Study, Participant}
+  alias Link.Users.User
 
   @doc """
   Returns the list of studies.
@@ -94,5 +95,24 @@ defmodule Link.Studies do
   """
   def change_study(%Study{} = study, attrs \\ %{}) do
     Study.changeset(study, attrs)
+  end
+
+  def apply_participant(%Study{} = study, %User{} = user) do
+    %Participant{status: :applied}
+    |> Participant.changeset()
+    |> Ecto.Changeset.put_assoc(:study, study)
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Repo.insert()
+  end
+
+  def applied?(%Study{} = study, %User{} = user) do
+    from(p in Participant,
+      select: true,
+      where:
+        p.user_id == ^user.id and
+          p.study_id ==
+            ^study.id
+    )
+    |> Repo.exists?()
   end
 end

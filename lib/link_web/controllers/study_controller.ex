@@ -31,7 +31,8 @@ defmodule LinkWeb.StudyController do
   end
 
   def show(%{assigns: %{study: study}} = conn, _) do
-    render(conn, "show.html", study: study)
+    user = Pow.Plug.current_user(conn)
+    render(conn, "show.html", study: study, applied?: Studies.applied?(study, user))
   end
 
   def edit(%{assigns: %{study: study}} = conn, _) do

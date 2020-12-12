@@ -14,6 +14,11 @@
 
 </ul>
 
+<%= if @applied? do %>
+<span>You are applied for this study.</span>
+<% else %>
+<span><%= link "Apply as a participant", to: Routes.participant_path(@conn, :new, @study) %></span>
+<% end %>
 <span><%= button "Survey Tools",  method: :get, to: Routes.study_survey_tool_path(@conn, :index, @study) %></span>
 
 <hr>
