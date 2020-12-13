@@ -25,7 +25,8 @@
 		"stkb.rewrap",
 		"jakebecker.elixir-ls",
 		"ms-azuretools.vscode-docker",
-		"redhat.vscode-yaml"
+		"redhat.vscode-yaml",
+		"ouven.vscode-yab-for-eex-leex"
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
