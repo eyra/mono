@@ -7,7 +7,8 @@ defmodule Link.Studies do
   alias Link.Repo
   alias Link.Authorization
 
-  alias Link.Studies.Study
+  alias Link.Studies.{Study, Participant}
+  alias Link.Users.User
 
   @doc """
   Returns the list of studies.
@@ -94,5 +95,49 @@ defmodule Link.Studies do
   """
   def change_study(%Study{} = study, attrs \\ %{}) do
     Study.changeset(study, attrs)
+  end
+
+  def apply_participant(%Study{} = study, %User{} = user) do
+    %Participant{status: :applied}
+    |> Participant.changeset()
+    |> Ecto.Changeset.put_assoc(:study, study)
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Repo.insert()
+  end
+
+  def update_participant_status(%Study{} = study, %User{} = user, status) do
+    {update_count, _} =
+      from(p in Participant,
+        where: p.study_id == ^study.id and p.user_id == ^user.id,
+        update: [set: [status: ^status]]
+      )
+      |> Repo.update_all([])
+
+    if update_count == 1 do
+      :ok
+    else
+      :error
+    end
+  end
+
+  def application_status(%Study{} = study, %User{} = user) do
+    from(p in Participant,
+      select: p.status,
+      where:
+        p.user_id == ^user.id and
+          p.study_id ==
+            ^study.id
+    )
+    |> Repo.one()
+  end
+
+  def list_participants(%Study{} = study) do
+    from(p in Participant,
+      select: [p.user_id, p.status],
+      where: p.study_id == ^study.id,
+      order_by: :status
+    )
+    |> Repo.all()
+    |> Enum.map(fn [user_id, status] -> %{user_id: user_id, status: status} end)
   end
 end

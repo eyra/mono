@@ -1,0 +1,3 @@
+<div class="mb-5 text-warning font-medium font-caption bg-warning bg-opacity-20 text-center leading-none rounded">
+    <p class="inline-block mt-4 mb-4"><%= @message %></p>
+</div>

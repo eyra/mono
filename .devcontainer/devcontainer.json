@@ -7,9 +7,6 @@
 		"../docker-compose.yml",
 		"docker-compose.yml"
 	],
-	"runArgs": [
-		"--env-file","devcontainer.env"
-	],
 	// The 'service' property is the name of the service for the container that VS Code should
 	// use. Update this value and .devcontainer/docker-compose.yml to the real service name.
 	"service": "link-app",
@@ -25,7 +22,8 @@
 		"stkb.rewrap",
 		"jakebecker.elixir-ls",
 		"ms-azuretools.vscode-docker",
-		"redhat.vscode-yaml"
+		"redhat.vscode-yaml",
+		"ouven.vscode-yab-for-eex-leex"
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],

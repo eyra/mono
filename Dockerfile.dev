@@ -10,8 +10,9 @@ RUN set -x &&\
     curl -sL https://deb.nodesource.com/setup_$NODE_MAJOR.x | bash - &&\
     apt-get install -y nodejs inotify-tools postgresql-client
 
-RUN apt-get install -y python3-pip
+RUN apt-get install -y python3-pip ruby
 RUN pip3 install gigalixir pre-commit
+RUN gem install htmlbeautifier
 
 RUN apt-get install -y postgresql-client-11
 

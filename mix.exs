@@ -14,7 +14,7 @@ defmodule Link.MixProject do
       # The main page in the docs
       docs: [
         main: "readme",
-        logo: "assets/static/images/eyra-link-logo.png",
+        logo: "assets/static/images/eyra-logo.svg",
         extras: [
           "README.md",
           "guides/development_setup.md",

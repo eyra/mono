@@ -11,5 +11,8 @@
         ".elixir_ls": true,
         "deps": true,
         "postgres-data": true
-    }
+    },
+    "css.validate": false,
+    "less.validate": false,
+    "scss.validate": false
 }

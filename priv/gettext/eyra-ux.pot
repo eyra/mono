@@ -1,0 +1,23 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/components/custom_button/templates/back.html.eex:3
+#: lib/link_web/components/custom_button/templates/back.html.eex:5
+msgid "eyra.btn.back"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/edit.html.eex:19
+#: lib/link_web/templates/pow/registration/new.html.eex:18 lib/link_web/templates/pow/session/new.html.eex:27
+msgid "%{action}.failed"
+msgstr ""

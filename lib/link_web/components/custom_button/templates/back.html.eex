@@ -1,0 +1,6 @@
+<div onclick="window.history.back()" class="flex inline-flex items-center">
+    <div class="-mt-px mr-3">
+        <img class="justify-center" src="<%= Routes.static_path(@conn, "/images/back.svg") %>" alt="<%= dgettext "eyra-ux", "eyra.btn.back" %>"/>
+    </div>
+    <div class="font-bold text-button hover:text-primary "><%= dgettext "eyra-ux", "eyra.btn.back" %></div>
+</div>

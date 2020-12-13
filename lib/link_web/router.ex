@@ -74,6 +74,11 @@ defmodule LinkWeb.Router do
     resources "/studies", StudyController do
       resources "/survey-tools", SurveyToolController
     end
+
+    get "/studies/:id/participate", ParticipantController, :new
+    post "/studies/:id/participate", ParticipantController, :create
+    get "/studies/:id/participants", ParticipantController, :index
+    patch "/studies/:id/participants", ParticipantController, :update
   end
 
   # Other scopes may use custom stacks.

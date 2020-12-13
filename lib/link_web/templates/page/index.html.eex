@@ -1,7 +1,34 @@
-<section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Link" %></h1>
-  <p><%= gettext "Recruitment Platform for Research Participants" %></p>
-  <%= if Pow.Plug.current_user(@conn) do %>
-    <span><%= button "Go to study overview", class: "button-clear", method: :get, to: Routes.study_path(@conn, :index) %></span>
-  <% end %>
-</section>
+    <div class="flex h-header-sm md:h-header-md lg:h-header-lg bg-primary text-white">
+      <div class="flex-grow mr-20 h-full">
+        <div class="flex flex-col h-full justify-center">
+          <div class="text-title1 md:text-title1-md lg:text-title1-lg font-black ml-20 mb-5">
+            <%= dgettext "eyra-link", "welcome.title" %>
+          </div>
+          <div class="text-title1 md:text-title1-md lg:text-title1-lg font-black -mt-14 ml-20 mb-5">
+            <%= dgettext "eyra-link", "welcome.subtitle" %>
+          </div>
+        </div>
+      </div>
+      <div class="flex-wrap w-hero-sm md:w-hero-md lg:w-hero-lg flex-shrink-0">
+        <img src="<%= Routes.static_path(@conn, "/images/illustration.svg") %>" alt="Eyra Link Logo"/>
+      </div>
+    </div>
+    <div class="flex w-full">
+      <div class="flex-grow">
+        <div class="text-title1 font-black ml-20 mt-28">
+          <%= dgettext "eyra-link", "link.title" %>
+        </div>
+        <div class="text-intro font-normal ml-20 mr-10">
+          <%= dgettext "eyra-link", "link.message" %>
+        </div>
+        <div class="ml-20 mt-10">
+          <%= if Pow.Plug.current_user(@conn) do %>
+            <%= button dgettext("eyra-link", "dashboard-button"), class: "inline-block py-3 px-6 mt-0 leading-none font-bold text-md text-white bg-grey1 hover:bg-white hover:text-primary rounded", method: :get, to: Routes.study_path(@conn, :index) %>
+          <% else %>
+            <%= button dgettext("eyra-link", "signin-button"), class: "inline-block py-3 px-6 mt-0 leading-none font-bold text-md text-white bg-grey1 hover:bg-white hover:text-primary rounded", method: :get, to: Routes.pow_session_path(@conn, :new) %>
+          <% end %>
+        </div>
+      </div>
+      <div class="flex-wrap w-0 md:w-sidebar"></div>
+    </div>
+</div>

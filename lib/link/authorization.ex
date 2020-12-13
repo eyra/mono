@@ -17,12 +17,22 @@ defmodule Link.Authorization do
 
   grant_actions(LinkWeb.UserProfileController, %{
     edit: [:member],
-    update: [:member],
+    update: [:member]
   })
 
   grant_actions(LinkWeb.StudyController, %{
     index: [:visitor, :member],
     show: [:visitor, :member],
+    new: [:member],
+    create: [:member],
+    edit: [:researcher],
+    update: [:researcher],
+    delete: [:researcher]
+  })
+
+  grant_actions(LinkWeb.ParticipantController, %{
+    index: [:researcher],
+    show: [:researcher, :participant],
     new: [:member],
     create: [:member],
     edit: [:researcher],
