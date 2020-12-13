@@ -68,6 +68,9 @@ defmodule LinkWeb.Router do
   scope "/", LinkWeb do
     pipe_through [:browser, :protected]
 
+    get "/user-profile", UserProfileController, :edit
+    put "/user-profile", UserProfileController, :update
+
     resources "/studies", StudyController do
       resources "/survey-tools", SurveyToolController
     end

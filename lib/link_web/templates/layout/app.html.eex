@@ -14,24 +14,25 @@
       <div class="flex-grow w-full">
         <div>
           <header class="" >
-              <div>
-                <%= gettext("Switch to:") %>&nbsp;
-                <%= for {locale, name} <- supported_languages() do %>
+            <div>
+              <%= gettext("Switch to:") %>&nbsp;
+              <%= for {locale, name} <- supported_languages() do %>
                 <%= link name, to: Routes.language_switch_path(@conn, :index, locale, redir: @conn.request_path) %>
-                <% end %>
-              </div>
-              <div class="text-center text-warning">
-                <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-                <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
-             </div>
+              <% end %>
+            </div>
+            <div class="text-center text-warning">
+              <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+              <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+            </div>
             <nav class="flex items-center h-topbar">
               <div class="flex-grow pl-4 md:pl-0">
-                  <a href="/">
-                    <img src="<%= Routes.static_path(@conn, "/images/eyra-logo.svg") %>" alt="Eyra Link Logo"/>
-                  </a>
+                <a href="/">
+                  <img src="<%= Routes.static_path(@conn, "/images/eyra-logo.svg") %>" alt="Eyra Link Logo"/>
+                </a>
               </div>
               <%= if Pow.Plug.current_user(@conn) do %>
                 <div class="flex-none p-4">
+                  <%= link "Edit Profile", class: "button-clear", to: Routes.user_profile_path(@conn, :edit) %>
                   <%= primary_button dgettext("eyra-account", "signout.button"), Routes.pow_session_path(@conn, :delete), :delete %>
                 </div>
               <% end %>
