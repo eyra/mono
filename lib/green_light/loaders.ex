@@ -56,8 +56,6 @@ defmodule GreenLight.Loaders do
     end
   end
 
-  @doc false
-
   @doc """
   Create a loader function using common Phoenix patterns. It assumes that the
   parameter is named `id` and when used as part of a nested resource setup it

@@ -1,4 +1,7 @@
 defmodule Link.Users.Profile do
+  @moduledoc """
+  This schema contains profile related data for members.
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
