@@ -28,10 +28,10 @@ defmodule LinkWeb.ParticipantController do
   end
 
   def update(%{assigns: %{study: study}} = conn, %{"participation" => participation}) do
-    with "entered" <- Map.get(participation, "status"),
+    with status <- Map.get(participation, "status"),
          user_id <- Map.get(participation, "user_id"),
          user <- Users.get_by(id: user_id),
-         :ok <- Studies.enter_participant(study, user) do
+         :ok <- Studies.update_participant_status(study, user, status) do
       conn
       |> put_flash(:info, "Participant accepted")
       |> redirect(to: Routes.participant_path(conn, :index, study))

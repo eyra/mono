@@ -13,11 +13,11 @@
         <td><%= participant.user_id %></td>
         <td><%= participant.status %></td>
         <td>
-          <%= if participant.status == "applied" do %>
+          <%= if participant.status == :applied do %>
             <%= form_for @conn, Routes.participant_path(@conn, :update, @study), [method: :patch, as: :participation], fn f -> %>
             <%= hidden_input f, :user_id, value: participant.user_id %>
-            <%= hidden_input f, :status, value: :entered %>
-            <%= submit "Accept" %>
+            <%= select f, :status, ["Enter": "entered", "Reject": "rejected"] %>
+            <%= submit "Apply" %>
           <% end %>
         <% end %>
       </tr>

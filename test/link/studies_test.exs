@@ -90,11 +90,11 @@ defmodule Link.StudiesTest do
       assert Studies.application_status(study, member) == :applied
     end
 
-    test "enter_particpant/2 accepts a participant into the study" do
+    test "update_participant_status/3 alters the status of a participant" do
       study = study_fixture()
       member = researcher_fixture(email: Faker.Internet.email())
       Studies.apply_participant(study, member)
-      assert :ok = Studies.enter_participant(study, member)
+      assert :ok = Studies.update_participant_status(study, member, "entered")
       assert Studies.application_status(study, member) == :entered
     end
 
@@ -105,11 +105,15 @@ defmodule Link.StudiesTest do
       Studies.apply_participant(study, applied_participant)
       accepted_participant = researcher_fixture(email: Faker.Internet.email())
       Studies.apply_participant(study, accepted_participant)
-      Studies.enter_participant(study, accepted_participant)
+      Studies.update_participant_status(study, accepted_participant, "entered")
+      rejected_participant = researcher_fixture(email: Faker.Internet.email())
+      Studies.apply_participant(study, rejected_participant)
+      Studies.update_participant_status(study, rejected_participant, "rejected")
       # Both members that applied should be listed with their corresponding status.
       assert Studies.list_participants(study) == [
                %{status: :applied, user_id: applied_participant.id},
-               %{status: :entered, user_id: accepted_participant.id}
+               %{status: :entered, user_id: accepted_participant.id},
+               %{status: :rejected, user_id: rejected_participant.id}
              ]
     end
   end

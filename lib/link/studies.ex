@@ -105,11 +105,11 @@ defmodule Link.Studies do
     |> Repo.insert()
   end
 
-  def enter_participant(%Study{} = study, %User{} = user) do
+  def update_participant_status(%Study{} = study, %User{} = user, status) do
     {update_count, _} =
       from(p in Participant,
         where: p.study_id == ^study.id and p.user_id == ^user.id,
-        update: [set: [status: :entered]]
+        update: [set: [status: ^status]]
       )
       |> Repo.update_all([])
 
