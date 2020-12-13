@@ -78,12 +78,13 @@ defmodule GreenLight do
 
       def assign_role({:error, _} = result, _principal, _role), do: result
 
-      def can?(principal, entity_or_entities, permission) do
+      def can?(%GreenLight.Principal{} = principal, entity_or_entities, module, action) do
+        roles = list_roles(principal, entity_or_entities)
+
         GreenLight.Access.can?(
-          __MODULE__,
-          principal,
-          entity_or_entities,
-          permission
+          permission_map(),
+          roles,
+          GreenLight.Permissions.action_permission(module, action)
         )
       end
     end

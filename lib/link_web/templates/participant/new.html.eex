@@ -1,0 +1,11 @@
+<h1>Apply to participate</h1>
+
+
+<h2>Are you sure?</h2>
+<p>Some info about the terms for application.</p>
+<div>
+<%= button "Apply to this study", to: Routes.participant_path(@conn, :create, @study), method: :post %>
+</div>
+
+
+<span><%= link "Back", to: Routes.study_path(@conn, :show, @study) %></span>
