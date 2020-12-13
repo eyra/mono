@@ -60,6 +60,7 @@ defmodule GreenLight do
       def list_roles(%GreenLight.Principal{} = principal, entities) do
         unquote(repo)
         |> GreenLight.Ecto.Query.list_roles(unquote(schema), principal, entities)
+        |> Enum.concat(principal.roles)
       end
 
       def assign_role!(%GreenLight.Principal{} = principal, entity, role) do
