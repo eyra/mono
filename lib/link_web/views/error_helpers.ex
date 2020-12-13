@@ -6,6 +6,15 @@ defmodule LinkWeb.ErrorHelpers do
   use Phoenix.HTML
 
   @doc """
+  Checkss if there are errors.
+  """
+  def has_error?(form, field) do
+    form.errors
+    |> Keyword.get_values(field)
+    |> length > 0
+  end
+
+  @doc """
   Generates tag for inlined form input errors.
   """
   def error_tag(form, field) do

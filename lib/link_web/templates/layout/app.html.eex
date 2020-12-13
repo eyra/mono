@@ -8,38 +8,45 @@
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
-  <body>
-    <header>
-      <section class="container">
-        <nav role="navigation">
-          <ul>
-            <%= if Pow.Plug.current_user(@conn) do %>
-            <li><%= @current_user.email %></li>
-            <li><%= button "Sign out", class: "button-clear", to: Routes.pow_session_path(@conn, :delete), method: :delete %></li>
-            <% else %>
-            <li><%= button "Sign in", class: "button-clear", method: :get, to: Routes.pow_session_path(@conn, :new) %></li>
-            <% end %>
-            <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-              <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
-            <% end %>
-          </ul>
-        </nav>
-        <a href="https://test.link.eyra.co" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/eyra-link-logo.png") %>" alt="Eyra Link Logo"/>
-        </a>
-      </section>
-    </header>
-    <main role="main" class="container">
-
-      <div>
-        <%= gettext("Switch to:") %>&nbsp;
-        <%= for {locale, name} <- supported_languages() do %>
-        <%= link name, to: Routes.language_switch_path(@conn, :index, locale, redir: @conn.request_path) %>
-        <% end %>
+  <body class="font-sans bg-grey5">
+    <div class="flex min-h-screen">
+      <div class="flex-wrap w-0 md:w-sidebar"></div>
+      <div class="flex-grow w-full">
+        <div>
+          <header class="" >
+              <div>
+                <%= gettext("Switch to:") %>&nbsp;
+                <%= for {locale, name} <- supported_languages() do %>
+                <%= link name, to: Routes.language_switch_path(@conn, :index, locale, redir: @conn.request_path) %>
+                <% end %>
+              </div>
+              <div class="text-center text-warning">
+                <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+                <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+             </div>
+            <nav class="flex items-center h-topbar">
+              <div class="flex-grow pl-4 md:pl-0">
+                  <a href="/">
+                    <img src="<%= Routes.static_path(@conn, "/images/eyra-logo.svg") %>" alt="Eyra Link Logo"/>
+                  </a>
+              </div>
+              <%= if Pow.Plug.current_user(@conn) do %>
+                <div class="flex-none p-4">
+                  <%= primary_button dgettext("eyra-account", "signout.button"), Routes.pow_session_path(@conn, :delete), :delete %>
+                </div>
+              <% end %>
+            </nav>
+          </header>
+        </div>
+        <div class="flex h-full bg-white">
+          <div class="flex-wrap"></div>
+          <div class="flex-grow h-full">
+            <main role="main" class="h-full w-full">
+              <%= @inner_content %>
+            </main>
+          </div>
+        </div>
       </div>
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
-      <%= @inner_content %>
-    </main>
+    </div>
   </body>
 </html>

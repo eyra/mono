@@ -1,0 +1,3 @@
+<button class="button underline text-primary hover:text-black focus:outline-none" data-method="get" data-to= <%= @path %> >
+    <%= @label %>
+</button>

@@ -1,0 +1,24 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/link_web/components/custom_button/templates/back.html.eex:3
+#: lib/link_web/components/custom_button/templates/back.html.eex:5
+msgid "eyra.btn.back"
+msgstr "Back"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/edit.html.eex:19
+#: lib/link_web/templates/pow/registration/new.html.eex:18 lib/link_web/templates/pow/session/new.html.eex:27
+msgid "%{action}.failed"
+msgstr "%{action} failed"

@@ -1,0 +1,95 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:14
+msgid "apple.button"
+msgstr "Sign in with Apple"
+
+#, elixir-format
+#: lib/link_web/components/component_helpers.ex:52
+msgid "email.label"
+msgstr "Email"
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:17
+msgid "eyra.signin.message.external"
+msgstr "We don't share information with third parties. Your Google or Apple account is only used for signing in."
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:9
+msgid "eyra.signin.title"
+msgstr "Sign in"
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:11
+msgid "google.button"
+msgstr "Sign in with Google"
+
+#, elixir-format
+#: lib/link_web/components/component_helpers.ex:68
+msgid "password.label"
+msgstr "Password"
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:27
+#: lib/link_web/templates/pow/session/new.html.eex:31
+msgid "signin.button"
+msgstr "Sign in"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:18
+#: lib/link_web/templates/pow/registration/new.html.eex:21
+msgid "signup.button"
+msgstr "Sign up"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:9
+msgid "signup.title"
+msgstr "Sign up"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:25
+msgid "signin.link"
+msgstr "Sign in"
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:35
+msgid "signup.link"
+msgstr "Sign up"
+
+#, elixir-format
+#: lib/link_web/components/component_helpers.ex:66
+msgid "password.confirmation.label"
+msgstr "Confirm password"
+
+#, elixir-format
+#: lib/link_web/components/component_helpers.ex:67
+msgid "password.current.label"
+msgstr "Password"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/edit.html.eex:19
+#: lib/link_web/templates/pow/registration/edit.html.eex:23
+msgid "update.button"
+msgstr "Sign in with Apple"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/edit.html.eex:9
+msgid "update.title"
+msgstr "Update"
+
+#, elixir-format
+#: lib/link_web/templates/layout/app.html.eex:29
+msgid "signout.button"
+msgstr "Sign out"
