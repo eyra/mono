@@ -25,74 +25,57 @@ defmodule LinkWeb.ParticipantControllerTest do
       assert redirected_to(conn) == Routes.study_path(conn, :show, study.id)
 
       # The user has now been registered as applied
-      assert Studies.applied?(study, user)
+      assert Studies.application_status(study, user) == :applied
     end
   end
 
-  # describe "index" do
-  #   test "lists all participants", %{conn: conn} do
-  #     conn = get(conn, Routes.participant_path(conn, :index))
-  #     assert html_response(conn, 200) =~ "Listing Participants"
-  #   end
-  # end
+  describe "index" do
+    test "deny listing participants to non-researcher", %{conn: conn} do
+      # Create a new study with a different researcher
+      different_researcher = user_fixture()
 
-  # describe "create participant" do
-  #   test "redirects to show when data is valid", %{conn: conn} do
-  #     conn = post(conn, Routes.participant_path(conn, :create), participant: @create_attrs)
+      {:ok, study} =
+        Studies.create_study(%{title: "Test", description: "Testing"}, different_researcher)
 
-  #     assert %{id: id} = redirected_params(conn)
-  #     assert redirected_to(conn) == Routes.participant_path(conn, :show, id)
+      # Our currently authenticated user should not be allowed access
+      conn = get(conn, Routes.participant_path(conn, :index, study))
+      assert response(conn, 401)
+    end
 
-  #     conn = get(conn, Routes.participant_path(conn, :show, id))
-  #     assert html_response(conn, 200) =~ "Show Participant"
-  #   end
+    test "lists all participants", %{conn: conn, study: study} do
+      # Setup different members
+      non_participant = user_fixture()
+      applied_participant = user_fixture()
+      Studies.apply_participant(study, applied_participant)
+      accepted_participant = user_fixture()
+      Studies.apply_participant(study, accepted_participant)
+      Studies.enter_participant(study, accepted_participant)
+      # Now verify the (non)existence of them as participants
+      conn = get(conn, Routes.participant_path(conn, :index, study))
+      body = html_response(conn, 200)
+      refute body =~ "<td>#{non_participant.id}</td>"
+      assert body =~ "<td>#{applied_participant.id}</td>"
+      assert body =~ "<td>#{accepted_participant.id}</td>"
+    end
+  end
 
-  #   test "renders errors when data is invalid", %{conn: conn} do
-  #     conn = post(conn, Routes.participant_path(conn, :create), participant: @invalid_attrs)
-  #     assert html_response(conn, 200) =~ "New Participant"
-  #   end
-  # end
+  describe "manage participants" do
+    test "enter a study applicant", %{conn: conn, user: user, study: study} do
+      participant = user_fixture()
+      Studies.apply_participant(study, participant)
 
-  # describe "edit participant" do
-  #   setup [:create_participant]
+      conn =
+        patch(conn, Routes.participant_path(conn, :update, study), %{
+          "participation" => %{
+            "user_id" => participant.id,
+            "status" => "entered"
+          }
+        })
 
-  #   test "renders form for editing chosen participant", %{conn: conn, participant: participant} do
-  #     conn = get(conn, Routes.participant_path(conn, :edit, participant))
-  #     assert html_response(conn, 200) =~ "Edit Participant"
-  #   end
-  # end
-
-  # describe "update participant" do
-  #   setup [:create_participant]
-
-  #   test "redirects when data is valid", %{conn: conn, participant: participant} do
-  #     conn =
-  #       put(conn, Routes.participant_path(conn, :update, participant), participant: @update_attrs)
-
-  #     assert redirected_to(conn) == Routes.participant_path(conn, :show, participant)
-
-  #     conn = get(conn, Routes.participant_path(conn, :show, participant))
-  #     assert html_response(conn, 200)
-  #   end
-
-  #   test "renders errors when data is invalid", %{conn: conn, participant: participant} do
-  #     conn =
-  #       put(conn, Routes.participant_path(conn, :update, participant), participant: @invalid_attrs)
-
-  #     assert html_response(conn, 200) =~ "Edit Participant"
-  #   end
-  # end
-
-  # describe "delete participant" do
-  #   setup [:create_participant]
-
-  #   test "deletes chosen participant", %{conn: conn, participant: participant} do
-  #     conn = delete(conn, Routes.participant_path(conn, :delete, participant))
-  #     assert redirected_to(conn) == Routes.participant_path(conn, :index)
-
-  #     assert_error_sent 404, fn ->
-  #       get(conn, Routes.participant_path(conn, :show, participant))
-  #     end
-  #   end
-  # end
+      # The member has now been registered as entered
+      assert Studies.list_participants(study) == [
+               %{status: :entered, user_id: participant.id}
+             ]
+    end
+  end
 end

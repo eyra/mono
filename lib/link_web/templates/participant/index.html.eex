@@ -1,24 +1,27 @@
 <h1>Listing Participants</h1>
-
 <table>
   <thead>
     <tr>
-
-      <th></th>
+      <th>User</th>
+      <th>Status</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
-<%= for participant <- @participants do %>
-    <tr>
-
-      <td>
-        <span><%= link "Show", to: Routes.participant_path(@conn, :show, participant) %></span>
-        <span><%= link "Edit", to: Routes.participant_path(@conn, :edit, participant) %></span>
-        <span><%= link "Delete", to: Routes.participant_path(@conn, :delete, participant), method: :delete, data: [confirm: "Are you sure?"] %></span>
-      </td>
-    </tr>
-<% end %>
+    <%= for participant <- @participants do %>
+      <tr>
+        <td><%= participant.user_id %></td>
+        <td><%= participant.status %></td>
+        <td>
+          <%= if participant.status == "applied" do %>
+            <%= form_for @conn, Routes.participant_path(@conn, :update, @study), [method: :patch, as: :participation], fn f -> %>
+            <%= hidden_input f, :user_id, value: participant.user_id %>
+            <%= hidden_input f, :status, value: :entered %>
+            <%= submit "Accept" %>
+          <% end %>
+        <% end %>
+      </tr>
+    <% end %>
   </tbody>
 </table>
-
-<span><%= link "New Participant", to: Routes.participant_path(@conn, :new) %></span>
+<span><%= link "Back", to: Routes.study_path(@conn, :show, @study) %></span>

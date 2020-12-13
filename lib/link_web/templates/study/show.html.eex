@@ -1,26 +1,23 @@
 <h1>Show Study</h1>
-
+<%= if can?(@conn, @study, LinkWeb.ParticipantController, :index) do %>
+  <%= link "List participants", to: Routes.participant_path(@conn, :index, @study)  %>
+<% end %>
 <ul>
-
   <li>
     <strong>Title:</strong>
     <%= @study.title %>
   </li>
-
   <li>
     <strong>Description:</strong>
     <%= @study.description %>
   </li>
-
 </ul>
-
-<%= if @applied? do %>
-<span>You are applied for this study.</span>
+<%= if is_nil(@application_status) do %>
+  <span><%= link "Apply as a participant", to: Routes.participant_path(@conn, :new, @study) %></span>
 <% else %>
-<span><%= link "Apply as a participant", to: Routes.participant_path(@conn, :new, @study) %></span>
+  <span>You are applied for this study.</span>
 <% end %>
 <span><%= button "Survey Tools",  method: :get, to: Routes.study_survey_tool_path(@conn, :index, @study) %></span>
-
 <hr>
 <span><%= button "Edit", class: "button-clear", method: :get, to: Routes.study_path(@conn, :edit, @study) %></span>
 <span><%= button "Back", class: "button-clear",  method: :get, to: Routes.study_path(@conn, :index) %></span>

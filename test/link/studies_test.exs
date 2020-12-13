@@ -75,5 +75,42 @@ defmodule Link.StudiesTest do
       study = study_fixture()
       assert %Ecto.Changeset{} = Studies.change_study(study)
     end
+
+    test "apply_participant/2 creates application" do
+      study = study_fixture()
+      member = researcher_fixture(email: Faker.Internet.email())
+      assert {:ok, _} = Studies.apply_participant(study, member)
+    end
+
+    test "application_status/2 informs if a member has applied to a study" do
+      study = study_fixture()
+      member = researcher_fixture(email: Faker.Internet.email())
+      assert Studies.application_status(study, member) |> is_nil
+      Studies.apply_participant(study, member)
+      assert Studies.application_status(study, member) == :applied
+    end
+
+    test "enter_particpant/2 accepts a participant into the study" do
+      study = study_fixture()
+      member = researcher_fixture(email: Faker.Internet.email())
+      Studies.apply_participant(study, member)
+      assert :ok = Studies.enter_participant(study, member)
+      assert Studies.application_status(study, member) == :entered
+    end
+
+    test "list_participants/1 lists all participants" do
+      study = study_fixture()
+      _non_particpant = researcher_fixture(email: Faker.Internet.email())
+      applied_participant = researcher_fixture(email: Faker.Internet.email())
+      Studies.apply_participant(study, applied_participant)
+      accepted_participant = researcher_fixture(email: Faker.Internet.email())
+      Studies.apply_participant(study, accepted_participant)
+      Studies.enter_participant(study, accepted_participant)
+      # Both members that applied should be listed with their corresponding status.
+      assert Studies.list_participants(study) == [
+               %{status: :applied, user_id: applied_participant.id},
+               %{status: :entered, user_id: accepted_participant.id}
+             ]
+    end
   end
 end

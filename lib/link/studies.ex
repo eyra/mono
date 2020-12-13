@@ -105,14 +105,39 @@ defmodule Link.Studies do
     |> Repo.insert()
   end
 
-  def applied?(%Study{} = study, %User{} = user) do
+  def enter_participant(%Study{} = study, %User{} = user) do
+    {update_count, _} =
+      from(p in Participant,
+        where: p.study_id == ^study.id and p.user_id == ^user.id,
+        update: [set: [status: :entered]]
+      )
+      |> Repo.update_all([])
+
+    if update_count == 1 do
+      :ok
+    else
+      :error
+    end
+  end
+
+  def application_status(%Study{} = study, %User{} = user) do
     from(p in Participant,
-      select: true,
+      select: p.status,
       where:
         p.user_id == ^user.id and
           p.study_id ==
             ^study.id
     )
-    |> Repo.exists?()
+    |> Repo.one()
+  end
+
+  def list_participants(%Study{} = study) do
+    from(p in Participant,
+      select: [p.user_id, p.status],
+      where: p.study_id == ^study.id,
+      order_by: :status
+    )
+    |> Repo.all()
+    |> Enum.map(fn [user_id, status] -> %{user_id: user_id, status: status} end)
   end
 end
