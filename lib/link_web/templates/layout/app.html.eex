@@ -32,13 +32,18 @@
                   <%= link name, to: Routes.language_switch_path(@conn, :index, locale, redir: @conn.request_path) %>
                 <% end %>
               </div>
-              <div class="flex-none p-4">
               <%= if Pow.Plug.current_user(@conn) do %>
-                  <%= primary_button dgettext("eyra-account", "signout.button"), Routes.pow_session_path(@conn, :delete), :delete %>
+                  <div class="flex-none p-4">
+                    <%= link "Edit Profile", class: "button-clear", to: Routes.user_profile_path(@conn, :edit) %>
+                  </div>
+                  <div class="flex-none p-4">
+                    <%= primary_button dgettext("eyra-account", "signout.button"), Routes.pow_session_path(@conn, :delete), :delete %>
+                  </div>
               <% else %>
-                  <%= primary_button dgettext("eyra-account", "signin.button"), Routes.pow_session_path(@conn, :new), :get %>
+                  <div class="flex-none p-4">
+                    <%= primary_button dgettext("eyra-account", "signin.button"), Routes.pow_session_path(@conn, :new), :get %>
+                  </div>
               <% end %>
-              </div>
             </nav>
           </header>
         </div>
