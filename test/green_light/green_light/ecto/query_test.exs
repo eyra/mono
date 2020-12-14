@@ -17,8 +17,8 @@ defmodule Link.Authorization.DBTest do
   #   test "returns the roles that have been assigned" do
   #     principal = %User{id: 1}
   #     entity = %TestEntity{id: 2}
-  #     DB.assign_role!(principal, entity, :researcher)
-  #     assert DB.list_roles(principal, entity) == MapSet.new([:researcher])
+  #     DB.assign_role!(principal, entity, :owner)
+  #     assert DB.list_roles(principal, entity) == MapSet.new([:owner])
   #   end
   # end
 end

@@ -1,5 +1,4 @@
 <h1>Study Overview</h1>
-
 <table>
   <thead>
     <tr>
@@ -10,24 +9,25 @@
     </tr>
   </thead>
   <tbody>
-<%= for study <- @studies do %>
-    <tr>
-      <td><%= study.title %></td>
-      <td><%= study.description %></td>
-      <td><%= study.researcher.email %></td>
-      <td>
-        <span><%= button "Show", class: "button-clear", method: :get, to: Routes.study_path(@conn, :show, study) %></span>
-        <%= if can?(@conn, study, LinkWeb.StudyController, :edit) do %>
-        <span><%= button "Edit", class: "button-clear", method: :get, to: Routes.study_path(@conn, :edit, study) %></span>
-        <% end %>
-        <span><%= button "Delete",
+    <%= for study <- @studies do %>
+      <tr>
+        <td><%= study.title %></td>
+        <td><%= study.description %></td>
+        <td><%= study.researcher.email %></td>
+        <td>
+          <span><%= button "Show", class: "button-clear", method: :get, to: Routes.study_path(@conn, :show, study) %></span>
+          <%= if can?(@conn, study, LinkWeb.StudyController, :edit) do %>
+            <span><%= button "Edit", class: "button-clear", method: :get, to: Routes.study_path(@conn, :edit, study) %></span>
+          <% end %>
+          <span><%= button "Delete",
                   class: "button-clear",
                   to: Routes.study_path(@conn, :delete, study),
                   method: :delete, data: [confirm: "Are you sure?"] %></span>
-      </td>
-    </tr>
-<% end %>
+        </td>
+      </tr>
+    <% end %>
   </tbody>
 </table>
-
-<span><%= button "New Study", method: :get, to: Routes.study_path(@conn, :new) %></span>
+<%= if can?(@conn, nil, LinkWeb.StudyController, :new) do %>
+  <span><%= button "New Study", method: :get, to: Routes.study_path(@conn, :new) %></span>
+<% end %>

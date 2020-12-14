@@ -19,13 +19,20 @@ defmodule Link.Factories do
   end
 
   def get_or_create_researcher(attrs \\ []) do
-    attrs
-    |> Enum.into(email: @researcher_email)
-    |> get_or_create_user()
+    user =
+      attrs
+      |> Keyword.merge(email: @researcher_email)
+      |> get_or_create_user()
+
+    user
+    |> Users.get_profile()
+    |> Users.update_profile(%{researcher: true, fullname: "Grace Hopper"})
+
+    user
   end
 
   def create_study(attrs \\ []) do
-    {researcher, study_attrs} = Keyword.pop(attrs, :researcher)
+    {researcher, study_attrs} = Keyword.pop(attrs, :owner)
     researcher = researcher || get_or_create_researcher()
 
     {:ok, study} =

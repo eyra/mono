@@ -1,7 +1,7 @@
 defmodule LinkWeb.StudyControllerTest do
   use LinkWeb.ConnCase
 
-  alias Link.Studies
+  alias Link.{Studies, Users}
 
   @create_attrs %{description: "some description", title: "some title"}
   @update_attrs %{description: "some updated description", title: "some updated title"}
@@ -9,6 +9,11 @@ defmodule LinkWeb.StudyControllerTest do
 
   setup %{conn: conn} do
     user = user_fixture()
+
+    user
+    |> Users.get_profile()
+    |> Users.update_profile(%{researcher: true, fullname: "Grace Hopper"})
+
     conn = Pow.Plug.assign_current_user(conn, user, otp_app: :link_web)
 
     {:ok, conn: conn, user: user}
