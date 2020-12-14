@@ -7,13 +7,14 @@ defmodule Link.Authorization do
   """
   use GreenLight,
     repo: Link.Repo,
-    roles: [:visitor, :member, :researcher],
+    roles: [:visitor, :member, :researcher, :owner],
     role_assignment_schema: Link.Users.RoleAssignment
 
   alias GreenLight.Principal
+  alias Link.Users
 
   grant_access(Link.Studies.Study, [:visitor, :member])
-  grant_access(Link.SurveyTools.SurveyTool, [:researcher])
+  grant_access(Link.SurveyTools.SurveyTool, [:owner])
 
   grant_actions(LinkWeb.UserProfileController, %{
     edit: [:member],
@@ -23,31 +24,31 @@ defmodule Link.Authorization do
   grant_actions(LinkWeb.StudyController, %{
     index: [:visitor, :member],
     show: [:visitor, :member],
-    new: [:member],
-    create: [:member],
-    edit: [:researcher],
-    update: [:researcher],
-    delete: [:researcher]
+    new: [:researcher],
+    create: [:researcher],
+    edit: [:owner],
+    update: [:owner],
+    delete: [:owner]
   })
 
   grant_actions(LinkWeb.ParticipantController, %{
-    index: [:researcher],
-    show: [:researcher, :participant],
+    index: [:owner],
+    show: [:owner, :participant],
     new: [:member],
     create: [:member],
-    edit: [:researcher],
-    update: [:researcher],
-    delete: [:researcher]
+    edit: [:owner],
+    update: [:owner],
+    delete: [:owner]
   })
 
   grant_actions(LinkWeb.SurveyToolController, %{
-    index: [:researcher],
-    show: [:researcher, :participant],
-    new: [:researcher],
-    create: [:researcher],
-    edit: [:researcher],
-    update: [:researcher],
-    delete: [:researcher]
+    index: [:owner],
+    show: [:owner, :participant],
+    new: [:owner],
+    create: [:owner],
+    edit: [:owner],
+    update: [:owner],
+    delete: [:owner]
   })
 
   grant_actions(LinkWeb.PageController, %{
@@ -64,7 +65,11 @@ defmodule Link.Authorization do
   end
 
   def principal(%Link.Users.User{} = user) do
-    %Principal{id: user.id, roles: MapSet.new([:member])}
+    roles =
+      [:member | if(Users.get_profile(user).researcher, do: [:researcher], else: [])]
+      |> MapSet.new()
+
+    %Principal{id: user.id, roles: roles}
   end
 
   def assign_role!(%Link.Users.User{} = user, entity, role) do
@@ -74,11 +79,4 @@ defmodule Link.Authorization do
   def can?(%Plug.Conn{} = conn, entity, module, action) do
     conn |> principal() |> can?(entity, module, action)
   end
-
-  # entity_loader(
-  #   &Loaders.survey_tool!/3,
-  #   parents: [
-  #     &Loaders.study!/3
-  #   ]
-  # )
 end

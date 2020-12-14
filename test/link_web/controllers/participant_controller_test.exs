@@ -60,17 +60,16 @@ defmodule LinkWeb.ParticipantControllerTest do
   end
 
   describe "manage participants" do
-    test "enter a study applicant", %{conn: conn, user: user, study: study} do
+    test "enter a study applicant", %{conn: conn, study: study} do
       participant = user_fixture()
       Studies.apply_participant(study, participant)
 
-      conn =
-        patch(conn, Routes.participant_path(conn, :update, study), %{
-          "participation" => %{
-            "user_id" => participant.id,
-            "status" => "entered"
-          }
-        })
+      patch(conn, Routes.participant_path(conn, :update, study), %{
+        "participation" => %{
+          "user_id" => participant.id,
+          "status" => "entered"
+        }
+      })
 
       # The member has now been registered as entered
       assert Studies.list_participants(study) == [

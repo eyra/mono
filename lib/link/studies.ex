@@ -20,7 +20,7 @@ defmodule Link.Studies do
 
   """
   def list_studies() do
-    Study |> Repo.all() |> Repo.preload(:researcher)
+    Study |> Repo.all()
   end
 
   @doc """
@@ -45,9 +45,8 @@ defmodule Link.Studies do
   def create_study(attrs, researcher) do
     %Study{}
     |> Study.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:researcher, researcher)
     |> Repo.insert()
-    |> Authorization.assign_role(researcher, :researcher)
+    |> Authorization.assign_role(researcher, :owner)
   end
 
   @doc """
