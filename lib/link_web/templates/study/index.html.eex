@@ -13,7 +13,6 @@
       <tr>
         <td><%= study.title %></td>
         <td><%= study.description %></td>
-        <td><%= study.researcher.email %></td>
         <td>
           <span><%= button "Show", class: "button-clear", method: :get, to: Routes.study_path(@conn, :show, study) %></span>
           <%= if can?(@conn, study, LinkWeb.StudyController, :edit) do %>

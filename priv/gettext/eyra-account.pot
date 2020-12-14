@@ -41,8 +41,8 @@ msgid "password.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/pow/session/new.html.eex:27
-#: lib/link_web/templates/pow/session/new.html.eex:31
+#: lib/link_web/templates/layout/app.html.eex:39
+#: lib/link_web/templates/pow/session/new.html.eex:27 lib/link_web/templates/pow/session/new.html.eex:31
 msgid "signin.button"
 msgstr ""
 
@@ -63,6 +63,7 @@ msgid "signin.link"
 msgstr ""
 
 #, elixir-format
+#: lib/link_web/templates/page/index.html.eex:34
 #: lib/link_web/templates/pow/session/new.html.eex:35
 msgid "signup.link"
 msgstr ""
@@ -89,6 +90,6 @@ msgid "update.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:29
+#: lib/link_web/templates/layout/app.html.eex:37
 msgid "signout.button"
 msgstr ""

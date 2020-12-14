@@ -16,6 +16,10 @@ defmodule Link.Authorization do
   grant_access(Link.Studies.Study, [:visitor, :member])
   grant_access(Link.SurveyTools.SurveyTool, [:owner])
 
+  grant_actions(LinkWeb.LanguageSwitchController, %{
+    index: [:visitor, :member]
+  })
+
   grant_actions(LinkWeb.UserProfileController, %{
     edit: [:member],
     update: [:member]
