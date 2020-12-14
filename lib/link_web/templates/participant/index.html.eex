@@ -1,0 +1,27 @@
+<h1>Listing Participants</h1>
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for participant <- @participants do %>
+      <tr>
+        <td><%= participant.user_id %></td>
+        <td><%= participant.status %></td>
+        <td>
+          <%= if participant.status == :applied do %>
+            <%= form_for @conn, Routes.participant_path(@conn, :update, @study), [method: :patch, as: :participation], fn f -> %>
+            <%= hidden_input f, :user_id, value: participant.user_id %>
+            <%= select f, :status, ["Enter": "entered", "Reject": "rejected"] %>
+            <%= submit "Apply" %>
+          <% end %>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<span><%= link "Back", to: Routes.study_path(@conn, :show, @study) %></span>

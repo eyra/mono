@@ -71,6 +71,7 @@ defmodule LinkWeb.Components.ComponentHelpers do
     c(:form_field, :input, [warning: warning, label: label, type: type, id: id, name: name])
   end
 
+
   def primary_button(label, path, method \\ :get, color \\ "grey1") do
     bg_color = "bg-" <> color
     c(:custom_button, :primary, [label: label, method: method, path: path, color: bg_color])
