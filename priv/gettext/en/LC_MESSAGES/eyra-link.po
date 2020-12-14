@@ -12,31 +12,51 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:26
-msgid "signin-button"
-msgstr "Join"
-
-#, elixir-format
 #: lib/link_web/templates/page/index.html.eex:4
 msgid "welcome.title"
 msgstr "Welcome to"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:24
+#: lib/link_web/templates/page/index.html.eex:30
 msgid "dashboard-button"
 msgstr "Go to study overview"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:7
+#: lib/link_web/templates/page/index.html.eex:4
 msgid "welcome.subtitle"
 msgstr "Eyra Link"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:20
+#: lib/link_web/templates/page/index.html.eex:19
 msgid "link.message"
-msgstr "Citizens can help scientists with their important work."
+msgstr "Short description about this page lorem ipsum dolor sit amet consectetuer. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:17
+#: lib/link_web/templates/page/index.html.eex:16
 msgid "link.title"
 msgstr "Empower Science"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:22
+msgid "usp1.label"
+msgstr "First unique selling point"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:23
+msgid "usp2.label"
+msgstr "Second unique selling point"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:24
+msgid "usp3.label"
+msgstr "Third and last unique selling point"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:34
+msgid "signup.card.title"
+msgstr "Sign up and become a member for free"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:30
+msgid "member.card.title"
+msgstr "You are already logged in as a member"

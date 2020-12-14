@@ -71,7 +71,6 @@ defmodule LinkWeb.Components.ComponentHelpers do
     c(:form_field, :input, [warning: warning, label: label, type: type, id: id, name: name])
   end
 
-
   def primary_button(label, path, method \\ :get, color \\ "grey1") do
     bg_color = "bg-" <> color
     c(:custom_button, :primary, [label: label, method: method, path: path, color: bg_color])
@@ -102,6 +101,17 @@ defmodule LinkWeb.Components.ComponentHelpers do
   defp view(name) do
     module_name = Naming.camelize("#{name}") <> "View"
     Module.concat(Components, module_name)
+  end
+
+  def primary_bullit(conn, label) do
+    c(:bullit, :primary, [conn: conn, label: label])
+  end
+
+  def primary_cta(title, button_label, button_path) do
+    bg_color = "bg-grey1"
+    button_bg_color = "bg-white"
+    button_text_color = "text-primary"
+    c(:card, :cta, [title: title, button_label: button_label, button_path: button_path, bg_color: bg_color, button_bg_color: button_bg_color, button_text_color: button_text_color])
   end
 
   defp template(name) when is_atom(name) do

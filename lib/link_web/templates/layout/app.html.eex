@@ -10,16 +10,16 @@
   </head>
   <body class="font-sans bg-grey5">
     <div class="flex min-h-screen">
-      <div class="flex-wrap w-0 md:w-sidebar"></div>
+      <div class="flex-wrap w-0 lg:w-sidebar"></div>
       <div class="flex-grow w-full">
         <div>
-          <header class="" >
+          <header>
               <div class="text-center text-warning">
                 <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
                 <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
              </div>
-            <nav class="flex items-center h-topbar">
-              <div class="flex-grow pl-4 md:pl-0">
+            <nav class="flex items-center h-topbar lg:h-topbar-lg">
+              <div class="flex-grow pl-4 lg:pl-0">
                   <a href="/">
                     <img src="<%= Routes.static_path(@conn, "/images/eyra-logo.svg") %>" alt="Eyra Link Logo"/>
                   </a>
@@ -32,11 +32,13 @@
                   <%= link name, to: Routes.language_switch_path(@conn, :index, locale, redir: @conn.request_path) %>
                 <% end %>
               </div>
+              <div class="flex-none p-4">
               <%= if Pow.Plug.current_user(@conn) do %>
-                <div class="flex-none p-4">
                   <%= primary_button dgettext("eyra-account", "signout.button"), Routes.pow_session_path(@conn, :delete), :delete %>
-                </div>
+              <% else %>
+                  <%= primary_button dgettext("eyra-account", "signin.button"), Routes.pow_session_path(@conn, :new), :get %>
               <% end %>
+              </div>
             </nav>
           </header>
         </div>

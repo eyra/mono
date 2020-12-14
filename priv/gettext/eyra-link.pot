@@ -11,31 +11,51 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:26
-msgid "signin-button"
-msgstr ""
-
-#, elixir-format
 #: lib/link_web/templates/page/index.html.eex:4
 msgid "welcome.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:24
+#: lib/link_web/templates/page/index.html.eex:30
 msgid "dashboard-button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:7
+#: lib/link_web/templates/page/index.html.eex:4
 msgid "welcome.subtitle"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:20
+#: lib/link_web/templates/page/index.html.eex:19
 msgid "link.message"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:17
+#: lib/link_web/templates/page/index.html.eex:16
 msgid "link.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:22
+msgid "usp1.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:23
+msgid "usp2.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:24
+msgid "usp3.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:34
+msgid "signup.card.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:30
+msgid "member.card.title"
 msgstr ""
