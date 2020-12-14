@@ -26,7 +26,9 @@ msgstr ""
 #: lib/link_web/components/form_field/form_field.ex:3 lib/link_web/components/message/message.ex:3
 #: lib/link_web/views/error_view.ex:2 lib/link_web/views/layout_view.ex:2 lib/link_web/views/page_view.ex:2
 #: lib/link_web/views/pow/registration_view.ex:2 lib/link_web/views/pow/session_view.ex:2
-#: lib/link_web/views/pow_assent/registration_view.ex:2 lib/link_web/views/study_view.ex:2 lib/link_web/views/survey_tool_view.ex:2
+#: lib/link_web/views/pow_assent/registration_view.ex:2 lib/link_web/views/study_participant_view.ex:2
+#: lib/link_web/views/study_view.ex:2 lib/link_web/views/survey_tool_view.ex:2
+#: lib/link_web/views/user_profile_view.ex:2
 msgid "Dutch"
 msgstr "Nederlands"
 
@@ -36,7 +38,9 @@ msgstr "Nederlands"
 #: lib/link_web/components/form_field/form_field.ex:3 lib/link_web/components/message/message.ex:3
 #: lib/link_web/views/error_view.ex:2 lib/link_web/views/layout_view.ex:2 lib/link_web/views/page_view.ex:2
 #: lib/link_web/views/pow/registration_view.ex:2 lib/link_web/views/pow/session_view.ex:2
-#: lib/link_web/views/pow_assent/registration_view.ex:2 lib/link_web/views/study_view.ex:2 lib/link_web/views/survey_tool_view.ex:2
+#: lib/link_web/views/pow_assent/registration_view.ex:2 lib/link_web/views/study_participant_view.ex:2
+#: lib/link_web/views/study_view.ex:2 lib/link_web/views/survey_tool_view.ex:2
+#: lib/link_web/views/user_profile_view.ex:2
 msgid "English"
 msgstr "Engels"
 
