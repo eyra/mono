@@ -79,7 +79,7 @@ The application has a deeply integrated authorization system. It is described in
 detail in `guides/authorization.md`. To list the permission that and their role
 assignments run:
 
-    mix permissions
+    mix grlt.perms
 
 ## Documentation
 
