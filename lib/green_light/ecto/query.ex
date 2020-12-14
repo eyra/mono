@@ -58,4 +58,27 @@ defmodule GreenLight.Ecto.Query do
     })
     |> repo.insert!()
   end
+
+  def query_role_assignments(role_assignment_schema, opts \\ []) do
+    filters =
+      opts
+      |> Enum.reduce([], fn {option, value}, filters ->
+        filter =
+          case option do
+            :role -> {:role, value}
+            :entity_type -> {:entity_type, value |> to_string}
+            :entity_id -> {:entity_id, value}
+            :principal -> {:principal_id, value.id}
+          end
+
+        [filter | filters]
+      end)
+
+    Ecto.Query.from(ra in role_assignment_schema, where: ^filters)
+  end
+
+  def query_entity_ids(role_assignment_schema, opts \\ []) do
+    query = query_role_assignments(role_assignment_schema, opts)
+    Ecto.Query.from(ra in query, select: ra.entity_id)
+  end
 end

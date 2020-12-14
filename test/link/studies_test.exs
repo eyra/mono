@@ -5,7 +5,7 @@ defmodule Link.StudiesTest do
 
   describe "studies" do
     alias Link.Studies.Study
-    alias Link.Users
+    alias Link.{Users, Factories}
 
     @researcher %{
       email: Faker.Internet.email(),
@@ -32,9 +32,22 @@ defmodule Link.StudiesTest do
       study
     end
 
-    test "list_studies/0 returns all studies" do
+    test "list_studies/1 returns all studies" do
       study = study_fixture()
       assert Studies.list_studies() == [study]
+    end
+
+    test "list_studies/1 allows excluding a list of ids" do
+      studies = 0..3 |> Enum.map(fn _ -> Factories.create_study() end)
+      {excluded_study, expected_result} = List.pop_at(studies, 1)
+      assert Studies.list_studies(exclude: [excluded_study.id]) == expected_result
+    end
+
+    test "list_owned_studies/1 returns only studies that are owned by the user" do
+      _not_owned = Factories.create_study()
+      researcher = Factories.get_or_create_researcher(email: "someone@example.com")
+      owned = Factories.create_study(owner: researcher)
+      assert Studies.list_owned_studies(researcher) == [owned]
     end
 
     test "get_study!/1 returns the study with given id" do
@@ -115,6 +128,16 @@ defmodule Link.StudiesTest do
                %{status: :entered, user_id: accepted_participant.id},
                %{status: :rejected, user_id: rejected_participant.id}
              ]
+    end
+
+    test "list_participations/1 list all studies a user is a part of" do
+      study = Factories.create_study()
+      member = Factories.get_or_create_user()
+      # Listing without any participation should return an empty list
+      assert Studies.list_participations(member) == []
+      # The listing should contain the study after an application has been made
+      Studies.apply_participant(study, member)
+      assert Studies.list_participations(member) == [study]
     end
   end
 end

@@ -21,6 +21,7 @@ defmodule GreenLight do
       unquote(__MODULE__).__register_permission_map()
       unquote(__MODULE__).__register_schema_and_roles(unquote(config))
       unquote(__MODULE__).__register_authorization_functions(unquote(config))
+      unquote(__MODULE__).__register_query_functions(unquote(config))
     end
   end
 
@@ -87,6 +88,16 @@ defmodule GreenLight do
           roles,
           GreenLight.Permissions.action_permission(module, action)
         )
+      end
+    end
+  end
+
+  defmacro __register_query_functions(config) do
+    schema = Config.role_assignment_schema!(config)
+
+    quote do
+      def query_entity_ids(opts \\ []) do
+        GreenLight.Ecto.Query.query_entity_ids(unquote(schema), opts)
       end
     end
   end
