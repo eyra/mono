@@ -1,12 +1,9 @@
 <div class="flex w-full">
   <div class="flex-grow">
     <div class="w-full">
-      <div class="ml-10 mt-6">
-          <%= back_button @conn %>
-      </div>
-      <div class="flex justify-center">
-          <div class="w-form mt-10">
-            <div class="mb-6 text-title2 font-black"><%= dgettext "eyra-account", "eyra.signin.title" %></div>
+      <div class="flex justify-center w-full">
+          <div class="max-w-form lg:w-form ml-6 mr-6 lg:m-0 mt-6 sm:mt-16 lg:mt-24">
+            <div class="mb-6 text-title5 lg:text-title2 font-black"><%= dgettext "eyra-account", "eyra.signin.title" %></div>
             <div class="mb-6">
                 <%= primary_icon_button dgettext("eyra-account", "google.button"), Routes.static_path(@conn, "/images/google.svg"), Routes.pow_registration_path(@conn, :new), "google" %>
             </div>
@@ -39,5 +36,5 @@
       </div>
     </div>
   </div>
-  <div class="flex-wrap w-0 md:w-sidebar"></div>
+  <div class="flex-wrap w-0 lg:w-sidebar"></div>
 </div>

@@ -1,11 +1,8 @@
 <div class="flex w-full">
   <div class="flex-grow">
     <div class="w-full">
-      <div class="ml-10 mt-6">
-          <%= back_button @conn %>
-      </div>
       <div class="flex justify-center">
-          <div class="w-form mt-10">
+          <div class="w-form mt-24">
             <div class="mb-6 text-title2 font-black"><%= dgettext "eyra-account", "update.title" %></div>
             <div>
               <%= form_for @changeset, @action, [as: :user], fn f -> %>

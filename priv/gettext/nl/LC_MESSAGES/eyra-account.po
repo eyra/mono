@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/link_web/templates/pow/session/new.html.eex:14
+#: lib/link_web/templates/pow/session/new.html.eex:11
 msgid "apple.button"
 msgstr "Log in met Apple"
 
@@ -22,17 +22,17 @@ msgid "email.label"
 msgstr "E-mail"
 
 #, elixir-format
-#: lib/link_web/templates/pow/session/new.html.eex:17
+#: lib/link_web/templates/pow/session/new.html.eex:14
 msgid "eyra.signin.message.external"
 msgstr "We delen geen gegevens met derden. Je Google of Apple account wordt enkel gebruikt om gemakkelijk in te loggen."
 
 #, elixir-format
-#: lib/link_web/templates/pow/session/new.html.eex:9
+#: lib/link_web/templates/pow/session/new.html.eex:6
 msgid "eyra.signin.title"
 msgstr "Log in"
 
 #, elixir-format
-#: lib/link_web/templates/pow/session/new.html.eex:11
+#: lib/link_web/templates/pow/session/new.html.eex:8
 msgid "google.button"
 msgstr "Log in met Google"
 
@@ -42,30 +42,30 @@ msgid "password.label"
 msgstr "Wachtwoord"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:39
-#: lib/link_web/templates/pow/session/new.html.eex:27 lib/link_web/templates/pow/session/new.html.eex:31
+#: lib/link_web/templates/layout/app.html.eex:36
+#: lib/link_web/templates/pow/session/new.html.eex:24 lib/link_web/templates/pow/session/new.html.eex:28
 msgid "signin.button"
 msgstr "Inloggen"
 
 #, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:15
 #: lib/link_web/templates/pow/registration/new.html.eex:18
-#: lib/link_web/templates/pow/registration/new.html.eex:21
 msgid "signup.button"
 msgstr "Registreren"
 
 #, elixir-format
-#: lib/link_web/templates/pow/registration/new.html.eex:9
+#: lib/link_web/templates/pow/registration/new.html.eex:6
 msgid "signup.title"
 msgstr "Registreer"
 
 #, elixir-format
-#: lib/link_web/templates/pow/registration/new.html.eex:25
+#: lib/link_web/templates/pow/registration/new.html.eex:22
 msgid "signin.link"
 msgstr "Log in"
 
 #, elixir-format
 #: lib/link_web/templates/page/index.html.eex:34
-#: lib/link_web/templates/pow/session/new.html.eex:35
+#: lib/link_web/templates/pow/session/new.html.eex:32
 msgid "signup.link"
 msgstr "Registreren"
 
@@ -80,17 +80,22 @@ msgid "password.current.label"
 msgstr "Wachtwoord"
 
 #, elixir-format
-#: lib/link_web/templates/pow/registration/edit.html.eex:19
-#: lib/link_web/templates/pow/registration/edit.html.eex:23
+#: lib/link_web/templates/pow/registration/edit.html.eex:16
+#: lib/link_web/templates/pow/registration/edit.html.eex:20
 msgid "update.button"
 msgstr "Log in met Apple"
 
 #, elixir-format
-#: lib/link_web/templates/pow/registration/edit.html.eex:9
+#: lib/link_web/templates/pow/registration/edit.html.eex:6
 msgid "update.title"
 msgstr "Aanpassen"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:37
+#: lib/link_web/templates/layout/app.html.eex:32
 msgid "signout.button"
 msgstr "Uitloggen"
+
+#, elixir-format, fuzzy
+#: lib/link_web/templates/layout/app.html.eex:29
+msgid "profile.button"
+msgstr "Mijn profiel"
