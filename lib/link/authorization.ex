@@ -16,6 +16,14 @@ defmodule Link.Authorization do
   grant_access(Link.Studies.Study, [:visitor, :member])
   grant_access(Link.SurveyTools.SurveyTool, [:owner])
 
+  grant_actions(LinkWeb.SessionController, %{
+    new: [:visitor]
+  })
+
+  grant_actions(LinkWeb.RegistrationController, %{
+    new: [:visitor]
+  })
+
   grant_actions(LinkWeb.LanguageSwitchController, %{
     index: [:visitor, :member]
   })

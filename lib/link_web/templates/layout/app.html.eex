@@ -18,32 +18,31 @@
                 <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
                 <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
              </div>
-            <nav class="flex items-center h-topbar lg:h-topbar-lg">
+            <nav class="flex items-center h-topbar sm:h-topbar-sm lg:h-topbar-lg">
               <div class="flex-grow pl-4 lg:pl-0">
                   <a href="/">
-                    <img src="<%= Routes.static_path(@conn, "/images/eyra-logo.svg") %>" alt="Eyra Link Logo"/>
+                    <img class="h-logo sm:h-logo-sm" src="<%= Routes.static_path(@conn, "/images/eyra-logo.svg") %>" alt="Eyra Link Logo"/>
                   </a>
               </div>
-              <div class="flex-wrap font-labels font-normal">
-                  <%= gettext("Switch to") %>&nbsp;
-              </div>
-              <div class="flex-wrap pr-4 font-button font-bold">
+              <%= if !!!assigns[:hide_account_menu] do %>
+                <%= if Pow.Plug.current_user(@conn) do %>
+                    <div class="flex-none p-4 text-button font-bold">
+                      <%= link dgettext("eyra-account", "profile.button"), class: "button-clear", to: Routes.user_profile_path(@conn, :edit) %>
+                    </div>
+                    <div class="flex-none pr-4">
+                      <%= link dgettext("eyra-account", "signout.button"), class: "p-6 text-button font-bold", to: Routes.pow_session_path(@conn, :delete), method: :delete %>
+                    </div>
+                <% else %>
+                    <div class="flex-none">
+                      <%= link dgettext("eyra-account", "signin.button"), class: "p-6 text-button font-bold", to: Routes.pow_session_path(@conn, :new) %>
+                    </div>
+                <% end %>
+              <% end %>
+              <div class="flex-wrap pr-10 font-button font-bold">
                 <%= for {locale, name} <- supported_languages() do %>
                   <%= link name, to: Routes.language_switch_path(@conn, :index, locale, redir: @conn.request_path) %>
                 <% end %>
               </div>
-              <%= if Pow.Plug.current_user(@conn) do %>
-                  <div class="flex-none p-4">
-                    <%= link "Edit Profile", class: "button-clear", to: Routes.user_profile_path(@conn, :edit) %>
-                  </div>
-                  <div class="flex-none p-4">
-                    <%= primary_button dgettext("eyra-account", "signout.button"), Routes.pow_session_path(@conn, :delete), :delete %>
-                  </div>
-              <% else %>
-                  <div class="flex-none p-4">
-                    <%= primary_button dgettext("eyra-account", "signin.button"), Routes.pow_session_path(@conn, :new), :get %>
-                  </div>
-              <% end %>
             </nav>
           </header>
         </div>

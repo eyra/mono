@@ -1,12 +1,9 @@
 <div class="flex w-full">
   <div class="flex-grow">
     <div class="w-full">
-      <div class="ml-10 mt-6">
-          <%= back_button @conn %>
-      </div>
       <div class="flex justify-center">
-          <div class="w-form mt-10">
-            <div class="mb-6 text-title2 font-black"><%= dgettext "eyra-account", "signup.title" %></div>
+          <div class="flex-grow max-w-form ml-6 mr-6 lg:m-0 mt-6 sm:mt-16 lg:mt-24">
+            <div class="mb-6 text-title5 lg:text-title2 font-black"><%= dgettext "eyra-account", "signup.title" %></div>
             <div>
                 <%= form_for @changeset, @action, [as: :user], fn f -> %>
 
@@ -17,9 +14,9 @@
                   <%= if @changeset.action do %>
                     <%= warning dgettext("eyra-ux", "%{action}.failed", action: dgettext("eyra-account", "signup.button")) %>
                   <% end %>
-                <div class="mb-8">
-                  <%= submit_button dgettext("eyra-account", "signup.button") %>
-                </div>
+                  <div class="mb-8">
+                    <%= submit_button dgettext("eyra-account", "signup.button") %>
+                  </div>
                 <% end %>
                 <div>
                   <%= link_button dgettext("eyra-account", "signin.link"), Routes.pow_session_path(@conn, :new) %>
@@ -29,5 +26,5 @@
         </div>
       </div>
     </div>
-  <div class="flex-wrap w-0 md:w-sidebar"></div>
+  <div class="flex-wrap w-0 lg:w-sidebar"></div>
 </div>
