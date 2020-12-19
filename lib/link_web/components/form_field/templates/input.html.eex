@@ -10,7 +10,7 @@
         type="<%= @type %>"
     >
 
-    <div x-show="warning" class="text-warning font-medium font-caption mt-2">
+    <div x-show="warning" class="text-warning font-medium font-caption mt-1">
         <%= @label %> <%= @warning %>
     </div>
 </div>

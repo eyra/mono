@@ -39,9 +39,13 @@ defmodule LinkWeb.Router do
     plug :browser_secure
   end
 
-  pipeline :protected do
+  pipeline :require_authenticated do
     plug Pow.Plug.RequireAuthenticated,
       error_handler: Pow.Phoenix.PlugErrorHandler
+  end
+
+  pipeline :authentication_flow do
+    plug LinkWeb.Plug.HideAccountMenu
   end
 
   pipeline :api do
@@ -60,13 +64,17 @@ defmodule LinkWeb.Router do
   end
 
   scope "/" do
-    pipe_through :browser
+    pipe_through [:browser, :authentication_flow]
     pow_routes()
     pow_assent_routes()
   end
 
   scope "/", LinkWeb do
-    pipe_through [:browser, :protected]
+    pipe_through :browser
+  end
+
+  scope "/", LinkWeb do
+    pipe_through [:browser, :require_authenticated]
 
     get "/my-stuff", MemberFrontpageController, :index
 

@@ -34,8 +34,3 @@ msgstr ""
 #: lib/link_web/views/user_profile_view.ex:2
 msgid "English"
 msgstr ""
-
-#, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:28
-msgid "Switch to"
-msgstr ""

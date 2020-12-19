@@ -30,7 +30,8 @@ module.exports = {
       width: {
         "sidebar" : "68px",
         "main-left" : "56px",
-        "logo" : "48px",
+        "logo" : "23px",
+        "logo-sm" : "48px",
         "hero" : "188px",
         "hero-sm" : "320px",
         "hero-md" : "398px",
@@ -39,13 +40,15 @@ module.exports = {
         "card": "376px"
       },
         height: {
-        "topbar" : "96px",
+        "topbar" : "64px",
+        "topbar-sm" : "96px",
         "topbar-lg" : "128px",
         "header" : "100px",
         "header-sm" : "170px",
         "header-md" : "212px",
         "header-lg" : "370px",
-        "logo" : "48px",
+        "logo" : "32px",
+        "logo-sm" : "48px",
         "48px" : "48px",
         "44px" : "44px",
       },
@@ -71,7 +74,8 @@ module.exports = {
         "bodylink": ['16px', '24px'],
       },
       maxWidth: {
-        "card": "376px"
+        "card": "376px",
+        "form": "400px"
       },
     },  
   },

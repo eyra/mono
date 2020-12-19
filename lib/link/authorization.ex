@@ -20,6 +20,14 @@ defmodule Link.Authorization do
     index: [:member]
   })
 
+  grant_actions(LinkWeb.SessionController, %{
+    new: [:visitor]
+  })
+
+  grant_actions(LinkWeb.RegistrationController, %{
+    new: [:visitor]
+  })
+
   grant_actions(LinkWeb.LanguageSwitchController, %{
     index: [:visitor, :member]
   })
@@ -27,10 +35,6 @@ defmodule Link.Authorization do
   grant_actions(LinkWeb.UserProfileController, %{
     edit: [:member],
     update: [:member]
-  })
-
-  grant_actions(LinkWeb.ParticipationController, %{
-    index: [:member]
   })
 
   grant_actions(LinkWeb.StudyController, %{
