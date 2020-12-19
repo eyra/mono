@@ -5,11 +5,21 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Finador';
-  src: url('../static/fonts/Finador-Regular/font.woff2') format('woff2'), url('../static/fonts/Finador-Regular/font.woff') format('woff');
+  font-family: 'Finador-Regular';
+  src: url('../static/fonts/Finador-Regular.woff2') format('woff2'), url('../static/fonts/Finador-Regular.woff') format('woff');
 }
 
 @font-face {
-  font-family: 'Finador';
-  src: url('../static/fonts/Finador-RegularOblique/font.woff2') format('woff2'), url('../static/fonts/Finador-RegularOblique/font.woff') format('woff');
+  font-family: 'Finador-RegularOblique';
+  src: url('../static/fonts/Finador-RegularOblique.woff2') format('woff2'), url('../static/fonts/Finador-RegularOblique.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Finador-Bold';
+  src: url('../static/fonts/Finador-Bold.woff2') format('woff2'), url('../static/fonts/Finador-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Finador-BoldOblique';
+  src: url('../static/fonts/Finador-BoldOblique.woff2') format('woff2'), url('../static/fonts/Finador-BoldOblique.woff') format('woff');
 }
