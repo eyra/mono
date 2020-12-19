@@ -1,6 +1,6 @@
 defmodule Link.Users do
   @moduledoc """
-  The Ssers context.
+  The Users context.
   """
   use Pow.Ecto.Context,
     repo: Link.Repo,

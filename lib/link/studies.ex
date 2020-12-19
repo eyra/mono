@@ -19,8 +19,27 @@ defmodule Link.Studies do
       [%Study{}, ...]
 
   """
-  def list_studies() do
-    Study |> Repo.all()
+  def list_studies(opts \\ []) do
+    exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
+
+    from(s in Study,
+      where: s.id not in ^exclude
+    )
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of studies that are owned by the user.
+  """
+  def list_owned_studies(user) do
+    entity_ids =
+      Authorization.query_entity_ids(
+        entity_type: Study,
+        role: :owner,
+        principal: Authorization.principal(user)
+      )
+
+    from(s in Study, where: s.id in subquery(entity_ids)) |> Repo.all()
   end
 
   @doc """
@@ -138,5 +157,10 @@ defmodule Link.Studies do
     )
     |> Repo.all()
     |> Enum.map(fn [user_id, status] -> %{user_id: user_id, status: status} end)
+  end
+
+  def list_participations(%User{} = user) do
+    from(s in Study, join: p in Participant, on: s.id == p.study_id, where: p.user_id == ^user.id)
+    |> Repo.all()
   end
 end
