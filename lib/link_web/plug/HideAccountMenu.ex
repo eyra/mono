@@ -6,7 +6,7 @@ defmodule LinkWeb.Plug.HideAccountMenu do
 
   def init(default), do: default
 
-  def call(conn, default) do
-    conn = assign(conn, :hide_account_menu, true)
+  def call(conn, _params) do
+    assign(conn, :hide_account_menu, true)
   end
 end

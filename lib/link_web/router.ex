@@ -71,11 +71,12 @@ defmodule LinkWeb.Router do
 
   scope "/", LinkWeb do
     pipe_through :browser
-
   end
 
   scope "/", LinkWeb do
     pipe_through [:browser, :require_authenticated]
+
+    get "/my-stuff", DashboardController, :index
 
     get "/user-profile", UserProfileController, :edit
     put "/user-profile", UserProfileController, :update

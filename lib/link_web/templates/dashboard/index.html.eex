@@ -1,0 +1,33 @@
+<h1>Overzicht studies</h1>
+Korte beschrijving ...
+<h2>Mijn studies:</h2>
+Filter:
+<div x-data="{ tab: '<%= @selected_studies_tab %>' }">
+  <%= for {tab, _} <- @selected_studies do %>
+    <button :class="{ 'active': tab ==  '<%= tab %>'}" @click="tab = '<%= tab %>'">
+      <%= tab %>
+    </button>
+  <% end %>
+  <%= for {tab, studies} <- @selected_studies do %>
+    <div x-show="tab == '<%= tab %>'">
+      <%= for study <- studies do %>
+        <div>
+          <h3><%= study.title %></h3>
+          <%= study.description %>
+          <%= link "Bekijken", to: Routes.study_path(@conn, :show, study.id) %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+<h2>Beschikbare studies:</h2>
+<div>
+  <%= for study <- @available_studies do %>
+    <div>
+      <h3><%= study.title %></h3>
+      <div>Topic</div>
+      <%= study.description %>
+      <%= link "Bekijken", to: Routes.study_path(@conn, :show, study.id) %>
+    </div>
+  <% end %>
+</div>
