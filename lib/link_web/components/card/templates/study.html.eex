@@ -1,7 +1,7 @@
 <div class="<%= @bg_color %> max-w-card rounded-md">
     <div class="p-6 lg:pl-8 lg:pr-8 lg:pt-10 lg:pb-10">
         <div class="text-white text-title5 lg:text-title4 font-bold">
-            <h3><%= @study.title %></h3>
+            <%= @study.title %>
         </div>
         <div class="text-grey4 text-bodysmall lg:text-bodymedium font-normal">
             <%= @study.description %>

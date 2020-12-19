@@ -5,97 +5,11 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Finador-Thin';
-  src: url('../static/fonts/Finador-Thin/font.woff2') format('woff2'), url('../static/fonts/Finador-Thin/font.woff') format('woff');
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Finador-ThinOblique';
-  src: url('../static/fonts/Finador-ThinOblique/font.woff2') format('woff2'), url('../static/fonts/Finador-ThinOblique/font.woff') format('woff');
-  font-style: italic;
-}
-  
-@font-face {
-  font-family: 'Finador-ExtraLight';
-  src: url('../static/fonts/Finador-ExtraLight/font.woff2') format('woff2'), url('../static/fonts/Finador-ExtraLight/font.woff') format('woff');
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Finador-ExtraLightOblique';
-  src: url('../static/fonts/Finador-ExtraLightOblique/font.woff2') format('woff2'), url('../static/fonts/Finador-ExtraLightOblique/font.woff') format('woff');
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Finador-Light';
-  src: url('../static/fonts/Finador-Light/font.woff2') format('woff2'), url('../static/fonts/Finador-Light/font.woff') format('woff');
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Finador-LightOblique';
-  src: url('../static/fonts/Finador-LightOblique/font.woff2') format('woff2'), url('../static/fonts/Finador-LightOblique/font.woff') format('woff');
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Finador-Regular';
+  font-family: 'Finador';
   src: url('../static/fonts/Finador-Regular/font.woff2') format('woff2'), url('../static/fonts/Finador-Regular/font.woff') format('woff');
-  font-style: normal;
 }
 
 @font-face {
-  font-family: 'Finador-RegularOblique';
+  font-family: 'Finador';
   src: url('../static/fonts/Finador-RegularOblique/font.woff2') format('woff2'), url('../static/fonts/Finador-RegularOblique/font.woff') format('woff');
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Finador-Medium';
-  src: url('../static/fonts/Finador-Medium/font.woff2') format('woff2'), url('../static/fonts/Finador-Medium/font.woff') format('woff');
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Finador-MediumOblique';
-  src: url('../static/fonts/Finador-MediumOblique/font.woff2') format('woff2'),z url('../static/fonts/Finador-MediumOblique/font.woff') format('woff');
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Finador-Heavy';
-  src: url('../static/fonts/Finador-Heavy/font.woff2') format('woff2'), url('../static/fonts/Finador-Heavy/font.woff') format('woff');
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Finador-HeavyOblique';
-  font-weight: black;
-  font-style: italic;
-  src: url('../static/fonts/Finador-HeavyOblique/font.woff2') format('woff2'), url('../static/fonts/Finador-HeavyOblique/font.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Finador-Bold';
-  src: url('../static/fonts/Finador-Bold/font.woff2') format('woff2'), url('../static/fonts/Finador-Bold/font.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Finador-BoldOblique';
-  src: url('../static/fonts/Finador-BoldOblique/font.woff2') format('woff2'), url('../static/fonts/Finador-BoldOblique/font.woff') format('woff');
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Finador-Black';
-  src: url('../static/fonts/Finador-Black/font.woff2') format('woff2'), url('../static/fonts/Finador-Black/font.woff') format('woff');
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Finador-BlackOblique';
-  src: url('../static/fonts/Finador-BlackOblique/font.woff2') format('woff2'), url('../static/fonts/Finador-BlackOblique/font.woff') format('woff');
-  font-style: italic;
 }
