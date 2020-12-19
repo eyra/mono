@@ -1,4 +1,4 @@
-defmodule LinkWeb.MemberFrontpageControllerTest do
+defmodule LinkWeb.DashboardControllerTest do
   use LinkWeb.ConnCase
 
   alias Link.Factories
@@ -14,7 +14,7 @@ defmodule LinkWeb.MemberFrontpageControllerTest do
     test "list all available studies", %{conn: conn} do
       titles = ["Analytical Engine", "FLOW-MATIC"]
       titles |> Enum.map(&Factories.create_study(title: &1))
-      conn = get(conn, Routes.member_frontpage_path(conn, :index))
+      conn = get(conn, Routes.dashboard_path(conn, :index))
 
       for title <- titles do
         assert html_response(conn, 200) =~ title

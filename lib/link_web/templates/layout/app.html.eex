@@ -27,7 +27,7 @@
               <%= if !!!assigns[:hide_account_menu] do %>
                 <%= if Pow.Plug.current_user(@conn) do %>
                   <div class="flex-none p-4 text-button font-bold">
-                    <%= link "List Studies", class: "button-clear", to: Routes.member_frontpage_path(@conn, :index) %>
+                    <%= link "Dashboard", class: "button-clear", to: Routes.dashboard_path(@conn, :index) %>
                   </div>
                   <div class="flex-none p-4 text-button font-bold">
                     <%= link dgettext("eyra-account", "profile.button"), class: "button-clear", to: Routes.user_profile_path(@conn, :edit) %>

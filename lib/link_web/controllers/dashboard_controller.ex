@@ -1,4 +1,4 @@
-defmodule LinkWeb.MemberFrontpageController do
+defmodule LinkWeb.DashboardController do
   use LinkWeb, :controller
 
   alias Link.Studies
