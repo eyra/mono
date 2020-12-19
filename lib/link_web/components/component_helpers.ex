@@ -2,6 +2,7 @@
 defmodule LinkWeb.Components.ComponentHelpers do
   alias Phoenix.Naming
   alias LinkWeb.Components
+  alias LinkWeb.Router.Helpers, as: Routes
 
   @moduledoc """
   Conveniences for reusable UI components
@@ -138,6 +139,14 @@ defmodule LinkWeb.Components.ComponentHelpers do
     button_bg_color = "bg-white"
     button_text_color = "text-primary"
     c(:card, :cta, [title: title, button_label: button_label, button_path: button_path, bg_color: bg_color, button_bg_color: button_bg_color, button_text_color: button_text_color])
+  end
+
+  def primary_study_card(conn, study, button_label) do
+    button_path = Routes.study_path(conn, :show, study.id)
+    bg_color = "bg-grey1"
+    button_bg_color = "bg-white"
+    button_text_color = "text-primary"
+    c(:card, :study, [study: study, button_label: button_label, button_path: button_path, bg_color: bg_color, button_bg_color: button_bg_color, button_text_color: button_text_color])
   end
 
   defp template(name) when is_atom(name) do

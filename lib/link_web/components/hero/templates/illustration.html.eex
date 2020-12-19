@@ -1,6 +1,6 @@
 <div class="flex items-center h-header sm:h-header-sm lg:h-header-lg <%= @text_color %> <%= @bg_color %>">
   <div class="flex-grow flex-shrink-0">
-    <p class="h-full text-title5 sm:text-title2 lg:text-title1 font-black ml-6 mr-6 lg:ml-14">
+    <p class="h-full text-title5 sm:text-title2 lg:text-title1 font-extrabold ml-6 mr-6 lg:ml-14">
       <%= @title %><br><%= @subtitle %>
     </p>
   </div>

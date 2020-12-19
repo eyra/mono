@@ -3,7 +3,7 @@
     <div class="w-full">
       <div class="flex justify-center">
           <div class="flex-grow max-w-form ml-6 mr-6 lg:m-0 mt-6 sm:mt-16 lg:mt-24">
-            <div class="mb-6 text-title5 lg:text-title2 font-black"><%= dgettext "eyra-account", "profile.title" %></div>
+            <div class="mb-6 text-title5 lg:text-title2 font-extrabold"><%= dgettext "eyra-account", "profile.title" %></div>
             <div>
               <%= form_for @changeset, Routes.user_profile_path(@conn, :update), fn f -> %>
 

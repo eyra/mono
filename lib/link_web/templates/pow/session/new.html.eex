@@ -3,7 +3,7 @@
     <div class="w-full">
       <div class="flex justify-center w-full">
           <div class="max-w-form lg:w-form ml-6 mr-6 lg:m-0 mt-6 sm:mt-16 lg:mt-24">
-            <div class="mb-6 text-title5 lg:text-title2 font-black"><%= dgettext "eyra-account", "eyra.signin.title" %></div>
+            <div class="mb-6 text-title5 lg:text-title2 font-extrabold"><%= dgettext "eyra-account", "eyra.signin.title" %></div>
             <div class="mb-6">
                 <%= primary_icon_button dgettext("eyra-account", "google.button"), Routes.static_path(@conn, "/images/google.svg"), Routes.pow_registration_path(@conn, :new), "google" %>
             </div>

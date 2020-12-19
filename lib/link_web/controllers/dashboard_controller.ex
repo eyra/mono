@@ -16,11 +16,11 @@ defmodule LinkWeb.DashboardController do
 
     available_studies = Studies.list_studies(exclude: exclusion_list)
 
-    selected_studies = [{"owned", owned_studies}, {"participations", study_participations}]
+    highlighted_studies = [{"owned", owned_studies}, {"participations", study_participations}]
 
     render(conn, "index.html",
-      selected_studies_tab: "owned",
-      selected_studies: selected_studies,
+      active_tab: "owned",
+      highlighted_studies: highlighted_studies,
       available_studies: available_studies
     )
   end

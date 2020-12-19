@@ -44,10 +44,6 @@ defmodule LinkWeb.Router do
       error_handler: Pow.Phoenix.PlugErrorHandler
   end
 
-  pipeline :authentication_flow do
-    plug LinkWeb.Plug.HideAccountMenu
-  end
-
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -77,7 +73,7 @@ defmodule LinkWeb.Router do
   scope "/", LinkWeb do
     pipe_through [:browser, :require_authenticated]
 
-    get "/my-stuff", DashboardController, :index
+    get "/dashboard", DashboardController, :index
 
     get "/user-profile", UserProfileController, :edit
     put "/user-profile", UserProfileController, :update

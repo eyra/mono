@@ -1,33 +1,34 @@
-<h1>Overzicht studies</h1>
-Korte beschrijving ...
-<h2>Mijn studies:</h2>
-Filter:
-<div x-data="{ tab: '<%= @selected_studies_tab %>' }">
-  <%= for {tab, _} <- @selected_studies do %>
-    <button :class="{ 'active': tab ==  '<%= tab %>'}" @click="tab = '<%= tab %>'">
-      <%= tab %>
-    </button>
-  <% end %>
-  <%= for {tab, studies} <- @selected_studies do %>
-    <div x-show="tab == '<%= tab %>'">
-      <%= for study <- studies do %>
-        <div>
-          <h3><%= study.title %></h3>
-          <%= study.description %>
-          <%= link "Bekijken", to: Routes.study_path(@conn, :show, study.id) %>
+<%= hero_illustration dgettext("eyra-study", "study.index.title"),
+  dgettext("eyra-study", "study.index.subtitle"),
+  Routes.static_path(@conn, "/images/illustration.svg")
+%>
+<div class="flex w-full">
+  <div class="flex-grow ml-6 mr-6 lg:ml-14 lg:mr-14">
+    <div class="flex flex-col">
+      <div class="flex-wrap">
+        <div class="text-title5 lg:text-title2 font-extrabold mt-9 lg:mt-24 mb-7 lg:mb-9">
+          <%= dgettext "eyra-study", "study.highlighted.title" %>
         </div>
-      <% end %>
+        <div>
+          <%= for {_tab, studies} <- @highlighted_studies do %>
+            <%= for study <- studies do %>
+              <%= primary_study_card @conn, study, "Bekijken" %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+      <div class="flex-wrap">
+        <div class="text-title5 lg:text-title2 font-extrabold mt-9 lg:mt-24 mb-7 lg:mb-9">
+          <%= dgettext "eyra-study", "study.all.title" %>
+        </div>
+        <div>
+          <%= for study <- @available_studies do %>
+            <%= primary_study_card @conn, study, "Bekijken" %>
+          <% end %>
+        </div>
+      </div>
     </div>
-  <% end %>
-</div>
-<h2>Beschikbare studies:</h2>
-<div>
-  <%= for study <- @available_studies do %>
-    <div>
-      <h3><%= study.title %></h3>
-      <div>Topic</div>
-      <%= study.description %>
-      <%= link "Bekijken", to: Routes.study_path(@conn, :show, study.id) %>
-    </div>
-  <% end %>
+  </div>
+  <div class="flex-wrap flex-shrink-0 w-0 lg:w-sidebar">
+  </div>
 </div>

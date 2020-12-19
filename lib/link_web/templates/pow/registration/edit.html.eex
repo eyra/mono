@@ -3,7 +3,7 @@
     <div class="w-full">
       <div class="flex justify-center">
           <div class="w-form mt-24">
-            <div class="mb-6 text-title2 font-black"><%= dgettext "eyra-account", "update.title" %></div>
+            <div class="mb-6 text-title2 font-extrabold"><%= dgettext "eyra-account", "update.title" %></div>
             <div>
               <%= form_for @changeset, @action, [as: :user], fn f -> %>
 

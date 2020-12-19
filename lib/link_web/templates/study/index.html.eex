@@ -6,7 +6,7 @@
   <div class="flex-grow ml-6 mr-6 lg:ml-14 lg:mr-14">
     <div class="flex flex-col lg:flex-row">
       <div class="flex-wrap">
-        <div class="text-title3 lg:text-title1 font-black mt-9 lg:mt-24 mb-7 lg:mb-9">
+        <div class="text-title3 lg:text-title1 font-extrabold mt-9 lg:mt-24 mb-7 lg:mb-9">
           <%= dgettext "eyra-study", "study.index.all.title" %>
         </div>
       </div>
