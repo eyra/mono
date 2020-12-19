@@ -14,5 +14,6 @@ msgstr ""
 #, elixir-format
 #: lib/link_web/templates/pow/registration/edit.html.eex:16
 #: lib/link_web/templates/pow/registration/new.html.eex:15 lib/link_web/templates/pow/session/new.html.eex:24
+#: lib/link_web/templates/user_profile/edit.html.eex:15
 msgid "%{action}.failed"
 msgstr "%{action} is helaas niet gelukt"

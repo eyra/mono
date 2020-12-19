@@ -71,6 +71,21 @@ defmodule LinkWeb.Components.ComponentHelpers do
     c(:form_field, :input, [warning: warning, label: label, type: type, id: id, name: name])
   end
 
+  def checkbox_field(form, field, text \\ "checkbox")  do
+    c(:form_field, :checkbox, [form: form, field: field, text: text])
+  end
+
+  def text_field(form, field, text \\ "text")  do
+    warning = error_tag(form, field) |> Enum.at(0)
+
+    c(:form_field, :text, [form: form, field: field, text: text, warning: warning])
+  end
+
+  def hero_illustration(title, subtitle, illustration, bg_color \\ "primary", text_color \\ "white") do
+    bg_color = "bg-" <> bg_color
+    text_color = "text-" <> text_color
+    c(:hero, :illustration, [title: title, subtitle: subtitle, illustration: illustration, bg_color: bg_color, text_color: text_color])
+  end
 
   def primary_button(label, path, method \\ :get, color \\ "grey1") do
     bg_color = "bg-" <> color
@@ -87,8 +102,18 @@ defmodule LinkWeb.Components.ComponentHelpers do
     c(:custom_button, :submit, [label: label, color: bg_color])
   end
 
-  def link_button(label, path) do
-    c(:custom_button, :link, [label: label, path: path])
+  def link_button(label, path, method \\ :delete) do
+    csrf_token = Plug.CSRFProtection.get_csrf_token_for(path)
+    c(:custom_button, :link, [label: label, path: path, method: method, csrf_token: csrf_token])
+  end
+
+  def menu_button(label, path, method \\ "get") do
+    csrf_token = Plug.CSRFProtection.get_csrf_token_for(path)
+    c(:custom_button, :menu, [label: label, path: path, method: method, csrf_token: csrf_token])
+  end
+
+  def language_button(conn, locale) do
+    c(:custom_button, :language, [conn: conn, locale: locale])
   end
 
   def back_button(conn) do

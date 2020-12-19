@@ -1,5 +1,5 @@
 <div x-data="{ focus: false, warning: <%= assigns[:warning] !== nil %> }" class="mb-8 flex flex-col">
-    <div :class="{ 'text-grey1': !focus && !warning, 'text-warning': warning, 'text-primary': focus }" class="mb-2 font-bold text-title6" ><%= @label %></div>
+    <label for="<%= @id %>" :class="{ 'text-grey1': !focus && !warning, 'text-warning': warning, 'text-primary': focus }" class="mb-2 font-bold text-title6" ><%= @label %></label>
 
     <input
         @focus="focus = true, warning = false" @focusout="focus = false"

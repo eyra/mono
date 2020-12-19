@@ -12,51 +12,51 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:4
+#: lib/link_web/templates/page/index.html.eex:1
 msgid "welcome.title"
 msgstr "Welkom bij"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:30
+#: lib/link_web/templates/page/index.html.eex:24
 msgid "dashboard-button"
 msgstr "Naar studie overzicht"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:4
+#: lib/link_web/templates/page/index.html.eex:2
 msgid "welcome.subtitle"
 msgstr "Eyra Link"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:19
+#: lib/link_web/templates/page/index.html.eex:13
 msgid "link.message"
 msgstr "Korte beschrijving over deze pagina lorem ipsum dolor sit amet consectetuer. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:16
+#: lib/link_web/templates/page/index.html.eex:10
 msgid "link.title"
 msgstr "Versterk de wetenschap"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:22
+#: lib/link_web/templates/page/index.html.eex:16
 msgid "usp1.label"
 msgstr "Eerste onderscheidend kenmerk"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:23
+#: lib/link_web/templates/page/index.html.eex:17
 msgid "usp2.label"
 msgstr "Tweede onderscheidend kenmerk"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:24
+#: lib/link_web/templates/page/index.html.eex:18
 msgid "usp3.label"
 msgstr "Derde onderscheidend kenmerk"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:34
+#: lib/link_web/templates/page/index.html.eex:28
 msgid "signup.card.title"
 msgstr "Maak een gratis account aan"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:30
+#: lib/link_web/templates/page/index.html.eex:24
 msgid "member.card.title"
 msgstr "Je bent al ingelogd"

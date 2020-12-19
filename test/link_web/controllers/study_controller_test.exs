@@ -12,7 +12,7 @@ defmodule LinkWeb.StudyControllerTest do
 
     user
     |> Users.get_profile()
-    |> Users.update_profile(%{researcher: true, fullname: "Grace Hopper"})
+    |> Users.update_profile(%{researcher: true, fullname: "Grace Hopper", displayname: "Grace"})
 
     conn = Pow.Plug.assign_current_user(conn, user, otp_app: :link_web)
 
@@ -22,7 +22,7 @@ defmodule LinkWeb.StudyControllerTest do
   describe "index" do
     test "lists all studies", %{conn: conn} do
       conn = get(conn, Routes.study_path(conn, :index))
-      assert html_response(conn, 200) =~ "Study Overview"
+      assert html_response(conn, 200) =~ "Overview"
     end
   end
 

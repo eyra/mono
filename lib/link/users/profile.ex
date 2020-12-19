@@ -8,6 +8,7 @@ defmodule Link.Users.Profile do
 
   schema "user_profiles" do
     field :fullname, :string
+    field :displayname, :string
     field :researcher, :boolean
     belongs_to :user, User
     timestamps()
@@ -16,7 +17,7 @@ defmodule Link.Users.Profile do
   @doc false
   def changeset(profile, attrs) do
     profile
-    |> cast(attrs, [:fullname, :researcher])
-    |> validate_required([:fullname])
+    |> cast(attrs, [:fullname, :displayname, :researcher])
+    |> validate_required([:fullname, :displayname])
   end
 end
