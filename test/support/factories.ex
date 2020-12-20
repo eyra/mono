@@ -21,7 +21,7 @@ defmodule Link.Factories do
 
     user
     |> Users.get_profile()
-    |> Users.update_profile(%{researcher: true, fullname: Faker.Person.last_name()})
+    |> Users.update_profile(%{researcher: true, fullname: Faker.Person.last_name(), displayname: Faker.Person.last_name()})
 
     user
   end

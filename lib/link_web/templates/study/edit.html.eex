@@ -2,4 +2,4 @@
 
 <%= render "form.html", Map.put(assigns, :action, Routes.study_path(@conn, :update, @study)) %>
 
-<span><%= link "Back", to: Routes.study_path(@conn, :index) %></span>
+<span><%= link "Back", to: Routes.dashboard_path(@conn, :index) %></span>

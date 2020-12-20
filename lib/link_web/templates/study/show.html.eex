@@ -20,4 +20,4 @@
 <span><%= button "Survey Tools",  method: :get, to: Routes.study_survey_tool_path(@conn, :index, @study) %></span>
 <hr>
 <span><%= button "Edit", class: "button-clear", method: :get, to: Routes.study_path(@conn, :edit, @study) %></span>
-<span><%= button "Back", class: "button-clear",  method: :get, to: Routes.study_path(@conn, :index) %></span>
+<span><%= button "Back", class: "button-clear",  method: :get, to: Routes.dashboard_path(@conn, :index) %></span>

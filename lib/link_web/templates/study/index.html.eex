@@ -1,4 +1,21 @@
-<h1>Study Overview</h1>
+<%= hero_illustration dgettext("eyra-study", "study.index.title"),
+  dgettext("eyra-study", "study.index.subtitle"),
+  Routes.static_path(@conn, "/images/illustration.svg")
+%>
+<div class="flex w-full">
+  <div class="flex-grow ml-6 mr-6 lg:ml-14 lg:mr-14">
+    <div class="flex flex-col lg:flex-row">
+      <div class="flex-wrap">
+        <div class="text-title3 font-title3 lg:text-title1 ls:font-title1 mt-9 lg:mt-24 mb-7 lg:mb-9">
+          <%= dgettext "eyra-study", "study.index.all.title" %>
+        </div>
+      </div>
+=    </div>
+  </div>
+  <div class="flex-wrap flex-shrink-0 w-0 lg:w-sidebar">
+  </div>
+</div>
+
 <table>
   <thead>
     <tr>

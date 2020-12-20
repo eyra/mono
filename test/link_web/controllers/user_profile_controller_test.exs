@@ -3,8 +3,8 @@ defmodule LinkWeb.UserProfileControllerTest do
 
   alias Link.Factories
 
-  @update_attrs %{fullname: "Ada Lovelace"}
-  @invalid_attrs %{fullname: nil}
+  @update_attrs %{fullname: "Ada Lovelace", displayname: "Ada"}
+  @invalid_attrs %{fullname: nil, displayname: nil}
 
   setup %{conn: conn} do
     user = Factories.get_or_create_user()
@@ -16,7 +16,7 @@ defmodule LinkWeb.UserProfileControllerTest do
   describe "edit a profile" do
     test "renders form for editing chosen study", %{conn: conn} do
       conn = get(conn, Routes.user_profile_path(conn, :edit))
-      assert html_response(conn, 200) =~ "Edit Profile"
+      assert html_response(conn, 200)
     end
   end
 
@@ -32,7 +32,7 @@ defmodule LinkWeb.UserProfileControllerTest do
 
     test "renders errors when data is invalid", %{conn: conn} do
       conn = put(conn, Routes.user_profile_path(conn, :update), profile: @invalid_attrs)
-      assert html_response(conn, 200) =~ "Edit Profile"
+      assert html_response(conn, 200)
     end
   end
 end

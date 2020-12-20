@@ -14,10 +14,10 @@ msgstr ""
 #, elixir-format
 #: lib/link_web/templates/pow/session/new.html.eex:11
 msgid "apple.button"
-msgstr "Log in met Apple"
+msgstr "Meld je aan met Apple"
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:52
+#: lib/link_web/components/component_helpers.ex:53
 msgid "email.label"
 msgstr "E-mail"
 
@@ -34,15 +34,15 @@ msgstr "Log in"
 #, elixir-format
 #: lib/link_web/templates/pow/session/new.html.eex:8
 msgid "google.button"
-msgstr "Log in met Google"
+msgstr "Meld je aan met Google"
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:68
+#: lib/link_web/components/component_helpers.ex:69
 msgid "password.label"
 msgstr "Wachtwoord"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:36
+#: lib/link_web/templates/layout/app.html.eex:40
 #: lib/link_web/templates/pow/session/new.html.eex:24 lib/link_web/templates/pow/session/new.html.eex:28
 msgid "signin.button"
 msgstr "Inloggen"
@@ -70,12 +70,12 @@ msgid "signup.link"
 msgstr "Registreren"
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:66
+#: lib/link_web/components/component_helpers.ex:67
 msgid "password.confirmation.label"
 msgstr "Herhaal wachtwoord"
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:67
+#: lib/link_web/components/component_helpers.ex:68
 msgid "password.current.label"
 msgstr "Wachtwoord"
 
@@ -83,7 +83,7 @@ msgstr "Wachtwoord"
 #: lib/link_web/templates/pow/registration/edit.html.eex:16
 #: lib/link_web/templates/pow/registration/edit.html.eex:20
 msgid "update.button"
-msgstr "Log in met Apple"
+msgstr "Save"
 
 #, elixir-format
 #: lib/link_web/templates/pow/registration/edit.html.eex:6
@@ -91,11 +91,37 @@ msgid "update.title"
 msgstr "Aanpassen"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:32
+#: lib/link_web/templates/user_profile/edit.html.eex:23
 msgid "signout.button"
 msgstr "Uitloggen"
 
-#, elixir-format, fuzzy
-#: lib/link_web/templates/layout/app.html.eex:29
+#, elixir-format
+#: lib/link_web/templates/layout/app.html.eex:35
 msgid "profile.button"
 msgstr "Mijn profiel"
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:11
+msgid "fullname.label"
+msgstr "Volledige naam"
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:15
+#: lib/link_web/templates/user_profile/edit.html.eex:19
+msgid "profile.save.button"
+msgstr "Opslaan"
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:6
+msgid "profile.title"
+msgstr "Mijn profiel"
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:10
+msgid "researcher.label"
+msgstr "ik ben een onderzoeker"
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:12
+msgid "displayname.label"
+msgstr "Schermnaam"

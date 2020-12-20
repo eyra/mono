@@ -1,0 +1,54 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/link_web/templates/dashboard/index.html.eex:2
+#: lib/link_web/templates/study/index.html.eex:2
+msgid "study.index.subtitle"
+msgstr "Studies"
+
+#, elixir-format
+#: lib/link_web/templates/dashboard/index.html.eex:1
+#: lib/link_web/templates/study/index.html.eex:1
+msgid "study.index.title"
+msgstr "Overzicht"
+
+#, elixir-format
+#: lib/link_web/templates/study/index.html.eex:10
+msgid "study.index.all.title"
+msgstr "Beschikbare studies"
+
+#, elixir-format
+#: lib/link_web/templates/layout/app.html.eex:32
+msgid "dashboard.button"
+msgstr "Overzicht"
+
+#, elixir-format
+#: lib/link_web/templates/dashboard/index.html.eex:26
+msgid "study.all.title"
+msgstr "Beschikbare studies:"
+
+#, elixir-format
+#: lib/link_web/templates/dashboard/index.html.eex:14
+msgid "study.highlighted.title"
+msgstr "Mijn studies:"
+
+#, elixir-format
+#: lib/link_web/templates/layout/app.html.eex:29
+msgid "new.button"
+msgstr "Nieuwe studie"
+
+#, elixir-format
+#: lib/link_web/templates/dashboard/index.html.eex:9
+msgid "dashboard.page.description"
+msgstr "Korte beschrijving over deze pagina lorem ipsum dolor sit amet consectetuer. Lorem ipsum dolor sit amet consectetuer."

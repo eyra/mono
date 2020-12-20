@@ -8,42 +8,41 @@
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
-  <body class="font-sans bg-grey5">
+  <body class="font-body bg-grey5">
     <div class="flex min-h-screen">
       <div class="flex-wrap w-0 lg:w-sidebar"></div>
       <div class="flex-grow w-full">
         <div>
           <header>
-            <div class="text-center text-warning">
+            <div class="fixed text-warning">
               <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
               <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
             </div>
             <nav class="flex items-center h-topbar sm:h-topbar-sm lg:h-topbar-lg">
-              <div class="flex-grow pl-4 lg:pl-0">
-                <a href="/">
-                  <img class="h-logo sm:h-logo-sm" src="<%= Routes.static_path(@conn, "/images/eyra-logo.svg") %>" alt="Eyra Link Logo"/>
-                </a>
+              <div class="flex-none pl-4 lg:pl-0">
+                  <a href="/">
+                    <img class="h-logo sm:h-logo-sm" src="<%= Routes.static_path(@conn, "/images/eyra-logo.svg") %>" alt="Eyra Link Logo"/>
+                  </a>
               </div>
-              <%= if !!!assigns[:hide_account_menu] do %>
-                <%= if Pow.Plug.current_user(@conn) do %>
-                  <div class="flex-none p-4 text-button font-bold">
-                    <%= link "Dashboard", class: "button-clear", to: Routes.dashboard_path(@conn, :index) %>
+              <%= if Pow.Plug.current_user(@conn) do %>
+                  <div class="flex-none ml-2 lg:ml-6 lg:pr-4 text-button font-button">
+                    <%= menu_button dgettext("eyra-study", "new.button"), Routes.study_path(@conn, :new) %>
                   </div>
-                  <div class="flex-none p-4 text-button font-bold">
-                    <%= link dgettext("eyra-account", "profile.button"), class: "button-clear", to: Routes.user_profile_path(@conn, :edit) %>
+                  <div class="flex-grow lg:pr-4 text-button font-button">
+                    <%= menu_button dgettext("eyra-study", "dashboard.button"), Routes.dashboard_path(@conn, :index) %>
                   </div>
-                  <div class="flex-none pr-4">
-                    <%= link dgettext("eyra-account", "signout.button"), class: "p-6 text-button font-bold", to: Routes.pow_session_path(@conn, :delete), method: :delete %>
+                  <div class="flex-none lg:pr-4 text-button font-button">
+                    <%= menu_button dgettext("eyra-account", "profile.button"), Routes.user_profile_path(@conn, :edit) %>
                   </div>
-                <% else %>
-                  <div class="flex-none">
-                    <%= link dgettext("eyra-account", "signin.button"), class: "p-6 text-button font-bold", to: Routes.pow_session_path(@conn, :new) %>
+              <% else %>
+                  <div class="flex-grow"></div>
+                  <div class="flex-none pr-1 lg:pr-4">
+                    <%= menu_button dgettext("eyra-account", "signin.button"), Routes.pow_session_path(@conn, :new) %>
                   </div>
-                <% end %>
               <% end %>
-              <div class="flex-wrap pr-10 font-button font-bold">
-                <%= for {locale, name} <- supported_languages() do %>
-                  <%= link name, to: Routes.language_switch_path(@conn, :index, locale, redir: @conn.request_path) %>
+              <div class="flex-none pl-1 pr-3 lg:pr-6 lg:pl-6 lg:pr-16 -mt-0.5">
+                <%= for {locale, _name} <- supported_languages() do %>
+                    <%= language_button @conn, locale %>
                 <% end %>
               </div>
             </nav>

@@ -14,10 +14,10 @@ msgstr ""
 #, elixir-format
 #: lib/link_web/templates/pow/session/new.html.eex:11
 msgid "apple.button"
-msgstr "Sign in with Apple"
+msgstr "Contine with Apple"
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:52
+#: lib/link_web/components/component_helpers.ex:53
 msgid "email.label"
 msgstr "Email"
 
@@ -34,15 +34,15 @@ msgstr "Sign in"
 #, elixir-format
 #: lib/link_web/templates/pow/session/new.html.eex:8
 msgid "google.button"
-msgstr "Sign in with Google"
+msgstr "Continue with Google"
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:68
+#: lib/link_web/components/component_helpers.ex:69
 msgid "password.label"
 msgstr "Password"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:36
+#: lib/link_web/templates/layout/app.html.eex:40
 #: lib/link_web/templates/pow/session/new.html.eex:24 lib/link_web/templates/pow/session/new.html.eex:28
 msgid "signin.button"
 msgstr "Sign in"
@@ -70,12 +70,12 @@ msgid "signup.link"
 msgstr "Sign up"
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:66
+#: lib/link_web/components/component_helpers.ex:67
 msgid "password.confirmation.label"
 msgstr "Confirm password"
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:67
+#: lib/link_web/components/component_helpers.ex:68
 msgid "password.current.label"
 msgstr "Password"
 
@@ -83,7 +83,7 @@ msgstr "Password"
 #: lib/link_web/templates/pow/registration/edit.html.eex:16
 #: lib/link_web/templates/pow/registration/edit.html.eex:20
 msgid "update.button"
-msgstr "Sign in with Apple"
+msgstr "Save"
 
 #, elixir-format
 #: lib/link_web/templates/pow/registration/edit.html.eex:6
@@ -91,11 +91,37 @@ msgid "update.title"
 msgstr "Update"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:32
+#: lib/link_web/templates/user_profile/edit.html.eex:23
 msgid "signout.button"
 msgstr "Sign out"
 
-#, elixir-format, fuzzy
-#: lib/link_web/templates/layout/app.html.eex:29
+#, elixir-format
+#: lib/link_web/templates/layout/app.html.eex:35
 msgid "profile.button"
 msgstr "My profile"
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:11
+msgid "fullname.label"
+msgstr "Full name"
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:15
+#: lib/link_web/templates/user_profile/edit.html.eex:19
+msgid "profile.save.button"
+msgstr "Save"
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:6
+msgid "profile.title"
+msgstr "My profile"
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:10
+msgid "researcher.label"
+msgstr "I'm a researcher"
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:12
+msgid "displayname.label"
+msgstr "Display name"

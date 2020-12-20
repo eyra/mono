@@ -16,7 +16,7 @@ msgid "apple.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:52
+#: lib/link_web/components/component_helpers.ex:53
 msgid "email.label"
 msgstr ""
 
@@ -36,12 +36,12 @@ msgid "google.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:68
+#: lib/link_web/components/component_helpers.ex:69
 msgid "password.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:36
+#: lib/link_web/templates/layout/app.html.eex:40
 #: lib/link_web/templates/pow/session/new.html.eex:24 lib/link_web/templates/pow/session/new.html.eex:28
 msgid "signin.button"
 msgstr ""
@@ -69,12 +69,12 @@ msgid "signup.link"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:66
+#: lib/link_web/components/component_helpers.ex:67
 msgid "password.confirmation.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:67
+#: lib/link_web/components/component_helpers.ex:68
 msgid "password.current.label"
 msgstr ""
 
@@ -90,11 +90,37 @@ msgid "update.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:32
+#: lib/link_web/templates/user_profile/edit.html.eex:23
 msgid "signout.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:29
+#: lib/link_web/templates/layout/app.html.eex:35
 msgid "profile.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:11
+msgid "fullname.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:15
+#: lib/link_web/templates/user_profile/edit.html.eex:19
+msgid "profile.save.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:6
+msgid "profile.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:10
+msgid "researcher.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:12
+msgid "displayname.label"
 msgstr ""

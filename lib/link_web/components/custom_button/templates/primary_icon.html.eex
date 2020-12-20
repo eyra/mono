@@ -5,7 +5,7 @@
     do
     [
         img_tag(@icon, class: "mr-3 -mt-1"),
-        content_tag(:text, class: "font-bold text-white text-button") do @label end
+        content_tag(:text, class: "font-button text-white text-button") do @label end
     ]
     end
 %>
