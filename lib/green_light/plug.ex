@@ -86,5 +86,5 @@ defmodule GreenLight.Plug do
   end
 
   ## User callbacks
-  @callback load_entities(conn :: Plug.Conn.t()) :: {Plug.Conn.t(), list(any())}
+  @callback load_entities(conn :: Plug.Conn.t()) :: {list(any()), Plug.Conn.t()}
 end
