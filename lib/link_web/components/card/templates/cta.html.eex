@@ -1,1 +1,14 @@
-
+<div class="<%= @bg_color %> w-full rounded-md">
+    <div class="p-6 lg:pl-8 lg:pr-8 lg:pt-10 lg:pb-10">
+        <div class="text-white text-title5 font-title5 lg:text-title3 lg:font-title3">
+            <%= @title %>
+        </div>
+        <div class="mt-6 lg:mt-8">
+            <%= button @button_label,
+                class: "inline-block pl-4 pr-4 h-48px focus:outline-none hover:bg-opacity-80 font-button text-button text-primary tracker-widest rounded " <> @button_bg_color,
+                method: :get,
+                to: @button_path
+            %>
+        </div>
+    </div>
+</div>

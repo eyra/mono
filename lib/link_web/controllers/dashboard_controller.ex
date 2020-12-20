@@ -15,13 +15,17 @@ defmodule LinkWeb.DashboardController do
       |> Enum.into(MapSet.new())
 
     available_studies = Studies.list_studies(exclude: exclusion_list)
+    available_count = Enum.count(available_studies)
 
     highlighted_studies = [{"owned", owned_studies}, {"participations", study_participations}]
+    highlighted_count = Enum.count(exclusion_list)
 
     render(conn, "index.html",
       active_tab: "owned",
       highlighted_studies: highlighted_studies,
-      available_studies: available_studies
+      highlighted_count: highlighted_count,
+      available_studies: available_studies,
+      available_count: available_count
     )
   end
 end

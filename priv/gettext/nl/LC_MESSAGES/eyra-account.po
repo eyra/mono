@@ -17,7 +17,7 @@ msgid "apple.button"
 msgstr "Meld je aan met Apple"
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:52
+#: lib/link_web/components/component_helpers.ex:53
 msgid "email.label"
 msgstr "E-mail"
 
@@ -37,7 +37,7 @@ msgid "google.button"
 msgstr "Meld je aan met Google"
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:68
+#: lib/link_web/components/component_helpers.ex:69
 msgid "password.label"
 msgstr "Wachtwoord"
 
@@ -64,18 +64,18 @@ msgid "signin.link"
 msgstr "Log in"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:28
+#: lib/link_web/templates/page/index.html.eex:34
 #: lib/link_web/templates/pow/session/new.html.eex:32
 msgid "signup.link"
 msgstr "Registreren"
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:66
+#: lib/link_web/components/component_helpers.ex:67
 msgid "password.confirmation.label"
 msgstr "Herhaal wachtwoord"
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:67
+#: lib/link_web/components/component_helpers.ex:68
 msgid "password.current.label"
 msgstr "Wachtwoord"
 

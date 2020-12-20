@@ -1,14 +1,14 @@
-<div class="<%= @bg_color %> max-w-card rounded-md">
+<div class="<%= @bg_color %> rounded-md">
     <div class="p-6 lg:pl-8 lg:pr-8 lg:pt-10 lg:pb-10">
-        <div class="text-white text-title5 lg:text-title4 font-bold">
+        <div class="text-title5 font-title5 lg:text-title4 lg:font-title4 mb-4 lg:mb-6 <%= @title_color %>">
             <%= @study.title %>
         </div>
-        <div class="text-grey4 text-bodysmall lg:text-bodymedium font-normal">
+        <div class="text-bodysmall lg:text-bodymedium font-body mb-5 lg:mb-7 <%= @description_color %>">
             <%= @study.description %>
         </div>
-        <div class="mt-6 lg:mt-8">
+        <div class="">
             <%= button @button_label,
-                class: "inline-block pl-4 pr-4 h-48px focus:outline-none hover:bg-opacity-80 font-bold text-button text-primary rounded " <> @button_bg_color,
+                class: "inline-block pl-4 pr-4 h-48px focus:outline-none hover:bg-opacity-80 font-button text-button text-primary tracking-wider rounded #{@button_bg_color} #{@button_text_color}",
                 method: :get,
                 to: @button_path
             %>

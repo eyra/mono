@@ -143,10 +143,22 @@ defmodule LinkWeb.Components.ComponentHelpers do
 
   def primary_study_card(conn, study, button_label) do
     button_path = Routes.study_path(conn, :show, study.id)
+    title_color = "text-white"
+    description_color = "text-grey4"
     bg_color = "bg-grey1"
     button_bg_color = "bg-white"
     button_text_color = "text-primary"
-    c(:card, :study, [study: study, button_label: button_label, button_path: button_path, bg_color: bg_color, button_bg_color: button_bg_color, button_text_color: button_text_color])
+    c(:card, :study, [study: study, button_label: button_label, button_path: button_path, bg_color: bg_color, button_bg_color: button_bg_color, button_text_color: button_text_color, title_color: title_color, description_color: description_color])
+  end
+
+  def secondary_study_card(conn, study, button_label) do
+    button_path = Routes.study_path(conn, :show, study.id)
+    title_color = "text-grey1"
+    description_color = "text-grey2"
+    bg_color = "bg-grey6"
+    button_bg_color = "bg-grey1"
+    button_text_color = "text-white"
+    c(:card, :study, [study: study, button_label: button_label, button_path: button_path, bg_color: bg_color, button_bg_color: button_bg_color, button_text_color: button_text_color, title_color: title_color, description_color: description_color])
   end
 
   defp template(name) when is_atom(name) do

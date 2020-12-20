@@ -34,16 +34,21 @@ msgid "dashboard.button"
 msgstr "Overview"
 
 #, elixir-format
-#: lib/link_web/templates/dashboard/index.html.eex:28
+#: lib/link_web/templates/dashboard/index.html.eex:26
 msgid "study.all.title"
-msgstr "Available studies"
+msgstr "Available studies:"
 
 #, elixir-format
-#: lib/link_web/templates/dashboard/index.html.eex:10
+#: lib/link_web/templates/dashboard/index.html.eex:14
 msgid "study.highlighted.title"
-msgstr "My studies"
+msgstr "My studies:"
 
 #, elixir-format
 #: lib/link_web/templates/layout/app.html.eex:29
 msgid "new.button"
 msgstr "Start study"
+
+#, elixir-format
+#: lib/link_web/templates/dashboard/index.html.eex:9
+msgid "dashboard.page.description"
+msgstr "Short description of this page lorem ipsum dolor sit amet consectetuer. Lorem ipsum dolor sit amet consectetuer."

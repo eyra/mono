@@ -33,16 +33,21 @@ msgid "dashboard.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/dashboard/index.html.eex:28
+#: lib/link_web/templates/dashboard/index.html.eex:26
 msgid "study.all.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/dashboard/index.html.eex:10
+#: lib/link_web/templates/dashboard/index.html.eex:14
 msgid "study.highlighted.title"
 msgstr ""
 
 #, elixir-format
 #: lib/link_web/templates/layout/app.html.eex:29
 msgid "new.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/dashboard/index.html.eex:9
+msgid "dashboard.page.description"
 msgstr ""

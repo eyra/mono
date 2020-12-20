@@ -16,7 +16,7 @@ msgid "welcome.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:24
+#: lib/link_web/templates/page/index.html.eex:29
 msgid "dashboard-button"
 msgstr ""
 
@@ -51,11 +51,16 @@ msgid "usp3.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:28
+#: lib/link_web/templates/page/index.html.eex:34
 msgid "signup.card.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:24
+#: lib/link_web/templates/page/index.html.eex:27
 msgid "member.card.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:26
+msgid "member.profile.card.title"
 msgstr ""

@@ -2,4 +2,4 @@
 
 <%= render "form.html", Map.put(assigns, :action, Routes.study_path(@conn, :create)) %>
 
-<span><%= button "Back", class: "button-clear", method: :get, to: Routes.study_path(@conn, :index) %></span>
+<span><%= button "Back", class: "button-clear", method: :get, to: Routes.dashboard_path(@conn, :index) %></span>
