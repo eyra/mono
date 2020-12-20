@@ -33,12 +33,12 @@ msgid "dashboard.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/dashboard/index.html.eex:26
+#: lib/link_web/templates/dashboard/index.html.eex:25
 msgid "study.all.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/dashboard/index.html.eex:14
+#: lib/link_web/templates/dashboard/index.html.eex:13
 msgid "study.highlighted.title"
 msgstr ""
 
@@ -50,4 +50,31 @@ msgstr ""
 #, elixir-format
 #: lib/link_web/templates/dashboard/index.html.eex:9
 msgid "dashboard.page.description"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/study/edit.html.eex:1
+#: lib/link_web/templates/study/show.html.eex:1
+msgid "study.edit.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/study/edit.html.eex:10
+msgid "study.edit.subtitle"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/study/edit.html.eex:16
+msgid "description.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/study/edit.html.eex:19
+#: lib/link_web/templates/study/edit.html.eex:23
+msgid "save.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/study/edit.html.eex:15
+msgid "title.label"
 msgstr ""

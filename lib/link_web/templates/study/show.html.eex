@@ -1,4 +1,7 @@
-<h1>Show Study</h1>
+<%= hero_small dgettext("eyra-study", "study.edit.title"),
+  Routes.static_path(@conn, "/images/illustration.svg")
+%>
+
 <%= if can?(@conn, @study, LinkWeb.ParticipantController, :index) do %>
   <%= link "List participants", to: Routes.participant_path(@conn, :index, @study)  %>
 <% end %>

@@ -17,7 +17,7 @@
                 <% end %>
 
                 <div>
-                  <%= submit_button dgettext("eyra-account", "update.button") %>
+                  <%= submit_button_wide dgettext("eyra-account", "update.button") %>
                 </div>
               <% end %>
             </div>
