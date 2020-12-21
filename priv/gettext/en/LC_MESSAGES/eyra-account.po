@@ -130,7 +130,7 @@ msgstr "Display name"
 msgid "signup.label"
 msgstr "No account yet?"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/link_web/templates/pow/registration/new.html.eex:22
 msgid "signin.label"
 msgstr "Already an account?"

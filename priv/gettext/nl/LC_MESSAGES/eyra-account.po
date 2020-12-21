@@ -130,7 +130,7 @@ msgstr "Schermnaam"
 msgid "signup.label"
 msgstr "Nog geen account?"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/link_web/templates/pow/registration/new.html.eex:22
 msgid "signin.label"
 msgstr "Heb je al een account?"

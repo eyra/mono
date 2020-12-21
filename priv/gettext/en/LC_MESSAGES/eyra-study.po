@@ -104,3 +104,8 @@ msgstr "Set up a new study"
 #: lib/link_web/templates/study/new.html.eex:1
 msgid "study.new.title"
 msgstr "Study"
+
+#, elixir-format
+#: lib/link_web/templates/study/show.html.eex:13
+msgid "owner.label"
+msgstr "By:"

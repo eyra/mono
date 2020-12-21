@@ -10,7 +10,7 @@
           <%= @study.title %>
         </div>
         <div class="text-subhead font-subhead tracking-widest mb-7 lg:mb-8 text-grey2">
-          Door: Emiel van der Veen
+          <%= dgettext("eyra-study", "owner.label") %> <%= if @owner != nil do @owner.fullname end %>
         </div>
         <div class="text-bodymedium font-body lg:text-bodylarge mb-7 lg:mb-9">
           <%= @study.description %>
