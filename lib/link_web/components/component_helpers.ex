@@ -122,7 +122,7 @@ defmodule LinkWeb.Components.ComponentHelpers do
     c(:custom_button, :submit, [label: label, color: bg_color, width: width])
   end
 
-  def link_button(label, path, method \\ :delete) do
+  def link_button(label, path, method \\ :get) do
     csrf_token = Plug.CSRFProtection.get_csrf_token_for(path)
     c(:custom_button, :link, [label: label, path: path, method: method, csrf_token: csrf_token])
   end
