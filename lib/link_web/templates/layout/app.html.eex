@@ -24,28 +24,32 @@
                     <img class="h-logo sm:h-logo-sm" src="<%= Routes.static_path(@conn, "/images/eyra-logo.svg") %>" alt="Eyra Link Logo"/>
                   </a>
               </div>
-              <%= if Pow.Plug.current_user(@conn) do %>
-                  <div class="flex-none ml-2 lg:ml-6 lg:pr-4 text-button font-button">
+              <div class="flex-grow ml-2 lg:ml-6">
+                <div class="flex items-center">
+                  <%= if Pow.Plug.current_user(@conn) do %>
                     <%= if can?(@conn, nil, LinkWeb.StudyController, :new) do %>
-                      <%= menu_button dgettext("eyra-study", "new.button"), Routes.study_path(@conn, :new) %>
+                      <div class="flex-none lg:pr-4 text-button font-button">
+                        <%= menu_button dgettext("eyra-study", "new.button"), Routes.study_path(@conn, :new) %>
+                      </div>
                     <% end %>
+                    <div class="flex-grow lg:pr-4 text-button font-button">
+                      <%= menu_button dgettext("eyra-study", "dashboard.button"), Routes.dashboard_path(@conn, :index) %>
+                    </div>
+                    <div class="flex-none lg:pr-4 text-button font-button">
+                      <%= menu_button dgettext("eyra-account", "profile.button"), Routes.user_profile_path(@conn, :edit) %>
+                    </div>
+                  <% else %>
+                    <div class="flex-grow"></div>
+                    <div class="flex-none pr-1 lg:pr-4">
+                      <%= menu_button dgettext("eyra-account", "signin.button"), Routes.pow_session_path(@conn, :new) %>
+                    </div>
+                  <% end %>
+                  <div class="flex-none pl-1 pr-3 lg:pr-6 lg:pl-6 lg:pr-16 -mt-0.5">
+                   <%= for {locale, _name} <- supported_languages() do %>
+                      <%= language_button @conn, locale %>
+                   <% end %>
                   </div>
-                  <div class="flex-grow lg:pr-4 text-button font-button">
-                    <%= menu_button dgettext("eyra-study", "dashboard.button"), Routes.dashboard_path(@conn, :index) %>
-                  </div>
-                  <div class="flex-none lg:pr-4 text-button font-button">
-                    <%= menu_button dgettext("eyra-account", "profile.button"), Routes.user_profile_path(@conn, :edit) %>
-                  </div>
-              <% else %>
-                  <div class="flex-grow"></div>
-                  <div class="flex-none pr-1 lg:pr-4">
-                    <%= menu_button dgettext("eyra-account", "signin.button"), Routes.pow_session_path(@conn, :new) %>
-                  </div>
-              <% end %>
-              <div class="flex-none pl-1 pr-3 lg:pr-6 lg:pl-6 lg:pr-16 -mt-0.5">
-                <%= for {locale, _name} <- supported_languages() do %>
-                    <%= language_button @conn, locale %>
-                <% end %>
+                </div>
               </div>
             </nav>
           </header>
