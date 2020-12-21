@@ -19,17 +19,10 @@ defmodule LinkWeb.StudyControllerTest do
     {:ok, conn: conn, user: user}
   end
 
-  describe "index" do
-    test "lists all studies", %{conn: conn} do
-      conn = get(conn, Routes.study_path(conn, :index))
-      assert html_response(conn, 200) =~ "Overview"
-    end
-  end
-
   describe "new study" do
     test "renders form", %{conn: conn} do
       conn = get(conn, Routes.study_path(conn, :new))
-      assert html_response(conn, 200) =~ "New Study"
+      assert html_response(conn, 200) =~ "Study"
     end
   end
 
@@ -46,7 +39,7 @@ defmodule LinkWeb.StudyControllerTest do
 
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, Routes.study_path(conn, :create), study: @invalid_attrs)
-      assert html_response(conn, 200) =~ "New Study"
+      assert html_response(conn, 200) =~ "Study"
     end
   end
 
@@ -91,7 +84,7 @@ defmodule LinkWeb.StudyControllerTest do
 
     test "deletes chosen study", %{conn: conn, study: study} do
       delete_conn = delete(conn, Routes.study_path(conn, :delete, study))
-      assert redirected_to(delete_conn) == Routes.study_path(delete_conn, :index)
+      assert redirected_to(delete_conn) == Routes.dashboard_path(delete_conn, :index)
 
       assert_error_sent 404, fn ->
         get(conn, Routes.study_path(conn, :show, study))
