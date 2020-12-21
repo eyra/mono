@@ -10,7 +10,7 @@
           <%= @study.title %>
         </div>
         <div class="text-subhead font-subhead tracking-widest mb-7 lg:mb-8 text-grey2">
-          <%= dgettext("eyra-study", "owner.label") %> <%= if @owner != nil do @owner.fullname end %>
+          <%= dgettext("eyra-study", "owner.label") %> <%= if @owner_profile != nil do @owner_profile.fullname end %>
         </div>
         <div class="text-bodymedium font-body lg:text-bodylarge mb-7 lg:mb-9">
           <%= @study.description %>
@@ -21,7 +21,7 @@
               <%= primary_button dgettext("eyra-study", "study.edit.button"), Routes.study_path(@conn, :edit, @study) %>
             </div>
             <div class="mr-4">
-              <%= primary_button dgettext("eyra-link", "participant.list.button"), Routes.participant_path(@conn, :index, @study), :get, "primary" %>
+              <%= primary_button dgettext("eyra-link", "participant.list.button"), Routes.participant_path(@conn, :index, @study), :get, "bg-primary" %>
             </div>
             <div class="mr-4">
               <%= menu_button dgettext("eyra-link", "survey.tools.button"), Routes.study_survey_tool_path(@conn, :index, @study) %>

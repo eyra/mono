@@ -1,6 +1,7 @@
 defmodule LinkWeb.StudyController do
   use LinkWeb, :controller
 
+  alias Link.Users
   alias Link.Studies
   alias Link.Studies.Study
 
@@ -33,10 +34,11 @@ defmodule LinkWeb.StudyController do
   def show(%{assigns: %{study: study}} = conn, _) do
     user = Pow.Plug.current_user(conn)
 
-    owner =
+    owner_profile =
       study
-      |> Studies.get_owner()
+      |> Studies.list_owners()
       |> Enum.at(0)
+      |> Users.get_profile()
 
     application_status = Studies.application_status(study, user)
     can_participate = application_status === nil
@@ -44,7 +46,7 @@ defmodule LinkWeb.StudyController do
     render(conn, "show.html",
       study: study,
       can_participate: can_participate,
-      owner: owner
+      owner_profile: owner_profile
     )
   end
 
