@@ -180,6 +180,18 @@ defmodule LinkWeb.Components.ComponentHelpers do
     c(:card, :study, [study: study, button_label: button_label, button_path: button_path, bg_color: bg_color, button_bg_color: button_bg_color, button_text_color: button_text_color, title_color: title_color, description_color: description_color])
   end
 
+  def usp_card(title, description, opts \\ []) do
+    opts =
+      opts
+      |> Keyword.put_new(:title, title)
+      |> Keyword.put_new(:description, description)
+      |> Keyword.put_new(:title_color, "text-grey1")
+      |> Keyword.put_new(:description_color, "text-grey2")
+      |> Keyword.put_new(:bg_color, "bg-grey6")
+
+    c(:card, :usp, opts)
+  end
+
   defp template(name) when is_atom(name) do
     "#{name}.html"
   end

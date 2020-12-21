@@ -16,7 +16,7 @@ msgid "welcome.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:29
+#: lib/link_web/templates/page/index.html.eex:24
 msgid "dashboard-button"
 msgstr ""
 
@@ -36,41 +36,61 @@ msgid "link.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:16
-msgid "usp1.label"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/templates/page/index.html.eex:17
-msgid "usp2.label"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/templates/page/index.html.eex:18
-msgid "usp3.label"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/templates/page/index.html.eex:34
+#: lib/link_web/templates/page/index.html.eex:29
 msgid "signup.card.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:27
+#: lib/link_web/templates/page/index.html.eex:22
 msgid "member.card.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:26
+#: lib/link_web/templates/page/index.html.eex:21
 msgid "member.profile.card.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:24
+#: lib/link_web/templates/study/show.html.eex:27
 msgid "survey.tools.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:27
+#: lib/link_web/templates/study/show.html.eex:24
 msgid "participant.list.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:29
+msgid "signup.card.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:36
+msgid "usp1.description"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:36
+msgid "usp1.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:39
+msgid "usp2.description"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:39
+msgid "usp2.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:42
+msgid "usp3.description"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:42
+msgid "usp3.title"
 msgstr ""

@@ -94,7 +94,7 @@ msgstr "Studie"
 msgid "study.edit.button"
 msgstr "Aanpassen"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/link_web/templates/study/show.html.eex:30
 msgid "share.button"
 msgstr "Delen"
