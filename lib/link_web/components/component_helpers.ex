@@ -88,11 +88,11 @@ defmodule LinkWeb.Components.ComponentHelpers do
     c(:form_field, :textarea, [form: form, field: field, text: text, warning: warning, height: height])
   end
 
-  def hero_large(title, subtitle, illustration, bg_color \\ "bg-primary", text_color \\ "bg-white") do
+  def hero_large(title, subtitle, illustration, bg_color \\ "bg-primary", text_color \\ "text-white") do
     c(:hero, :large, [title: title, subtitle: subtitle, illustration: illustration, bg_color: bg_color, text_color: text_color])
   end
 
-  def hero_small(title, illustration, bg_color \\ "bg-primary", text_color \\ "bg-white") do
+  def hero_small(title, illustration, bg_color \\ "bg-primary", text_color \\ "text-white") do
     c(:hero, :small, [title: title, illustration: illustration, bg_color: bg_color, text_color: text_color])
   end
 
