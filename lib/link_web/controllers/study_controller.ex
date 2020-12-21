@@ -40,11 +40,17 @@ defmodule LinkWeb.StudyController do
       |> Enum.at(0)
       |> Users.get_profile()
 
+    participants =
+        study
+        |> Studies.list_participants()
+        |> Enum.map(fn %{user_id: user_id} -> Users.get_display_label(user_id) end)
+
     application_status = Studies.application_status(study, user)
     can_participate = application_status === nil
 
     render(conn, "show.html",
       study: study,
+      participants: participants,
       can_participate: can_participate,
       owner_profile: owner_profile
     )

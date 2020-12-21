@@ -51,12 +51,12 @@ msgid "member.profile.card.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:27
+#: lib/link_web/templates/study/show.html.eex:30
 msgid "survey.tools.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:24
+#: lib/link_web/templates/study/show.html.eex:27
 msgid "participant.list.button"
 msgstr ""
 

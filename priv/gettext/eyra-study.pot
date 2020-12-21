@@ -75,7 +75,7 @@ msgid "title.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:34
+#: lib/link_web/templates/study/show.html.eex:37
 msgid "study.participate.button"
 msgstr ""
 
@@ -85,12 +85,12 @@ msgid "study.show.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:21
+#: lib/link_web/templates/study/show.html.eex:24
 msgid "study.edit.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:30
+#: lib/link_web/templates/study/show.html.eex:33
 msgid "share.button"
 msgstr ""
 
@@ -105,6 +105,11 @@ msgid "study.new.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:13
+#: lib/link_web/templates/study/show.html.eex:16
 msgid "owner.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/study/show.html.eex:44
+msgid "participants.subtitle"
 msgstr ""

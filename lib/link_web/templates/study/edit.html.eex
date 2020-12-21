@@ -24,7 +24,7 @@
                 </div>
                 <div>
                 <%= if can?(@conn, @study, LinkWeb.StudyController, :delete) do %>
-                  <%= primary_button "Delete", Routes.study_path(@conn, :delete, @study), :delete, "delete"  %>
+                  <%= primary_button "Delete", Routes.study_path(@conn, :delete, @study), :delete, "bg-delete"  %>
                 <% end %>
               <div>
             <% end %>
@@ -35,4 +35,3 @@
   <div class="flex-wrap flex-shrink-0 w-0 lg:w-sidebar">
   </div>
 </div>
-

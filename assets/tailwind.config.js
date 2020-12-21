@@ -55,6 +55,7 @@ module.exports = {
         "logo-sm" : "48px",
         "48px" : "48px",
         "44px" : "44px",
+        "1px" : "1px",
       },
       fontFamily: {
         'title1': ['Finador-Black', 'sans-serif'],
