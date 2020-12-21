@@ -42,7 +42,7 @@ msgid "password.label"
 msgstr "Wachtwoord"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:40
+#: lib/link_web/templates/layout/app.html.eex:44
 #: lib/link_web/templates/pow/session/new.html.eex:24 lib/link_web/templates/pow/session/new.html.eex:28
 msgid "signin.button"
 msgstr "Inloggen"
@@ -95,7 +95,7 @@ msgid "signout.button"
 msgstr "Uitloggen"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:35
+#: lib/link_web/templates/layout/app.html.eex:39
 msgid "profile.button"
 msgstr "Mijn profiel"
 

@@ -28,7 +28,7 @@ msgid "study.index.all.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:32
+#: lib/link_web/templates/layout/app.html.eex:36
 msgid "dashboard.button"
 msgstr ""
 
@@ -43,7 +43,7 @@ msgid "study.highlighted.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:29
+#: lib/link_web/templates/layout/app.html.eex:32
 msgid "new.button"
 msgstr ""
 
@@ -64,17 +64,20 @@ msgstr ""
 
 #, elixir-format
 #: lib/link_web/templates/study/edit.html.eex:15
+#: lib/link_web/templates/study/new.html.eex:15
 msgid "description.label"
 msgstr ""
 
 #, elixir-format
 #: lib/link_web/templates/study/edit.html.eex:18
-#: lib/link_web/templates/study/edit.html.eex:22
+#: lib/link_web/templates/study/edit.html.eex:23 lib/link_web/templates/study/new.html.eex:18
+#: lib/link_web/templates/study/new.html.eex:22
 msgid "save.button"
 msgstr ""
 
 #, elixir-format
 #: lib/link_web/templates/study/edit.html.eex:14
+#: lib/link_web/templates/study/new.html.eex:14
 msgid "title.label"
 msgstr ""
 
@@ -96,4 +99,14 @@ msgstr ""
 #, elixir-format
 #: lib/link_web/templates/study/show.html.eex:30
 msgid "share.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/study/new.html.eex:9
+msgid "study.new.subtitle"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/study/new.html.eex:1
+msgid "study.new.title"
 msgstr ""

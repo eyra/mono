@@ -29,7 +29,7 @@ msgid "study.index.all.title"
 msgstr "Available studies"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:32
+#: lib/link_web/templates/layout/app.html.eex:36
 msgid "dashboard.button"
 msgstr "Overview"
 
@@ -44,9 +44,9 @@ msgid "study.highlighted.title"
 msgstr "My studies:"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:29
+#: lib/link_web/templates/layout/app.html.eex:32
 msgid "new.button"
-msgstr "Start study"
+msgstr "New study"
 
 #, elixir-format
 #: lib/link_web/templates/dashboard/index.html.eex:9
@@ -65,17 +65,20 @@ msgstr "Edit"
 
 #, elixir-format
 #: lib/link_web/templates/study/edit.html.eex:15
+#: lib/link_web/templates/study/new.html.eex:15
 msgid "description.label"
 msgstr "Description"
 
 #, elixir-format
 #: lib/link_web/templates/study/edit.html.eex:18
-#: lib/link_web/templates/study/edit.html.eex:22
+#: lib/link_web/templates/study/edit.html.eex:23 lib/link_web/templates/study/new.html.eex:18
+#: lib/link_web/templates/study/new.html.eex:22
 msgid "save.button"
 msgstr "Save"
 
 #, elixir-format
 #: lib/link_web/templates/study/edit.html.eex:14
+#: lib/link_web/templates/study/new.html.eex:14
 msgid "title.label"
 msgstr "Title"
 
@@ -98,3 +101,13 @@ msgstr "Edit"
 #: lib/link_web/templates/study/show.html.eex:30
 msgid "share.button"
 msgstr "Share"
+
+#, elixir-format, fuzzy
+#: lib/link_web/templates/study/new.html.eex:9
+msgid "study.new.subtitle"
+msgstr "Set up a new study"
+
+#, elixir-format, fuzzy
+#: lib/link_web/templates/study/new.html.eex:1
+msgid "study.new.title"
+msgstr "Study"

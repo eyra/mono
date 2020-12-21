@@ -67,31 +67,31 @@ msgid "signup.card.button"
 msgstr "Meld je gratis aan"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:36
+#: lib/link_web/templates/page/index.html.eex:34
 msgid "usp1.description"
 msgstr "Op zoek naar een studie om aan mee te doen? Bij Science NL vind je een overzicht van studies die op zoek zijn naar jou."
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:36
+#: lib/link_web/templates/page/index.html.eex:34
 msgid "usp1.title"
 msgstr "Marktplaats voor onderzoek"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:39
+#: lib/link_web/templates/page/index.html.eex:37
 msgid "usp2.description"
 msgstr "Heb je moeite om voldoende participanten te vinden voor je onderzoek in Nederland? Stel je studie dan beschikbaar op Science NL en begin met het werven van participanten."
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:39
+#: lib/link_web/templates/page/index.html.eex:37
 msgid "usp2.title"
 msgstr "Onderzoek in Nederland"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:42
+#: lib/link_web/templates/page/index.html.eex:40
 msgid "usp3.description"
 msgstr "Mis je iets dat jou zou motiveren om vaker mee te doen? Of kunnen we het makkelijker maken om een studie op te zetten op Science NL. Laat het ons weten!"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:42
+#: lib/link_web/templates/page/index.html.eex:40
 msgid "usp3.title"
 msgstr "Samen voor de wetenschap"
