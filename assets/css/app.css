@@ -4,6 +4,27 @@
 
 @tailwind utilities;
 
+.max-lines-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+ 
+.max-lines-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+ 
+.max-lines-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
 @font-face {
   font-family: 'Finador-Thin';
   src: url('../static/fonts/Finador-Thin.woff2') format('woff2'), url('../static/fonts/Finador-Thin.woff') format('woff');
