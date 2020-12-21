@@ -13,7 +13,7 @@
   </li>
 </ul>
 <%= if is_nil(@application_status) do %>
-  <span><%= link "Apply as a participant", to: Routes.participant_path(@conn, :new, @study) %></span>
+  <span><%= button "Apply as a participant", to: Routes.participant_path(@conn, :create, @study) %></span>
 <% else %>
   <span>You are applied for this study.</span>
 <% end %>
