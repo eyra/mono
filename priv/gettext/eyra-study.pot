@@ -12,19 +12,12 @@ msgstr ""
 
 #, elixir-format
 #: lib/link_web/templates/dashboard/index.html.eex:2
-#: lib/link_web/templates/study/index.html.eex:2
 msgid "study.index.subtitle"
 msgstr ""
 
 #, elixir-format
 #: lib/link_web/templates/dashboard/index.html.eex:1
-#: lib/link_web/templates/study/index.html.eex:1
 msgid "study.index.title"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/templates/study/index.html.eex:10
-msgid "study.index.all.title"
 msgstr ""
 
 #, elixir-format

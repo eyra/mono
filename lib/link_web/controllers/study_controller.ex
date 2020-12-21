@@ -64,6 +64,6 @@ defmodule LinkWeb.StudyController do
 
     conn
     |> put_flash(:info, "Study deleted successfully.")
-    |> redirect(to: Routes.study_path(conn, :index))
+    |> redirect(to: Routes.dashboard_path(conn, :index))
   end
 end

@@ -29,7 +29,7 @@
                 </div>
                 <% end %>
                 <div>
-                  <%= link_button dgettext("eyra-account", "signup.link"), Routes.pow_registration_path(@conn, :new) %>
+                  <%= dgettext("eyra-account", "signup.label") %> <%= link_button dgettext("eyra-account", "signup.link"), Routes.pow_registration_path(@conn, :new) %>
                 </div>
             </div>
           </div>

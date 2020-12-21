@@ -61,12 +61,12 @@ msgstr "Sign up"
 #, elixir-format
 #: lib/link_web/templates/pow/registration/new.html.eex:22
 msgid "signin.link"
-msgstr "Sign in"
+msgstr "Sign in here"
 
 #, elixir-format
 #: lib/link_web/templates/pow/session/new.html.eex:32
 msgid "signup.link"
-msgstr "Sign up"
+msgstr "Create one here"
 
 #, elixir-format
 #: lib/link_web/components/component_helpers.ex:67
@@ -124,3 +124,13 @@ msgstr "I'm a researcher"
 #: lib/link_web/templates/user_profile/edit.html.eex:12
 msgid "displayname.label"
 msgstr "Display name"
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:32
+msgid "signup.label"
+msgstr "No account yet?"
+
+#, elixir-format, fuzzy
+#: lib/link_web/templates/pow/registration/new.html.eex:22
+msgid "signin.label"
+msgstr "Already an account?"

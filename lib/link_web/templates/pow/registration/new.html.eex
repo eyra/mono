@@ -19,7 +19,7 @@
                   </div>
                 <% end %>
                 <div>
-                  <%= link_button dgettext("eyra-account", "signin.link"), Routes.pow_session_path(@conn, :new) %>
+                  <%= dgettext("eyra-account", "signin.label") %> <%= link_button dgettext("eyra-account", "signin.link"), Routes.pow_session_path(@conn, :new) %>
                 </div>
             </div>
           </div>

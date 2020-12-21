@@ -123,3 +123,13 @@ msgstr ""
 #: lib/link_web/templates/user_profile/edit.html.eex:12
 msgid "displayname.label"
 msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:32
+msgid "signup.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:22
+msgid "signin.label"
+msgstr ""
