@@ -21,7 +21,11 @@ defmodule Link.Factories do
 
     user
     |> Users.get_profile()
-    |> Users.update_profile(%{researcher: true, fullname: Faker.Person.last_name(), displayname: Faker.Person.last_name()})
+    |> Users.update_profile(%{
+      researcher: true,
+      fullname: Faker.Person.last_name(),
+      displayname: Faker.Person.last_name()
+    })
 
     user
   end
@@ -32,7 +36,7 @@ defmodule Link.Factories do
 
     {:ok, study} =
       study_attrs
-      |> Enum.into(%{description: Faker.Lorem.sentence(), title: Faker.Lorem.sentence()})
+      |> Enum.into(%{description: Faker.Lorem.paragraph(), title: Faker.Lorem.sentence()})
       |> Studies.create_study(researcher)
 
     study

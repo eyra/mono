@@ -67,7 +67,6 @@ defmodule LinkWeb.Router do
 
   scope "/", LinkWeb do
     pipe_through :browser
-
   end
 
   scope "/", LinkWeb do
@@ -80,6 +79,9 @@ defmodule LinkWeb.Router do
 
     resources "/studies", StudyController do
       resources "/survey-tools", SurveyToolController
+      get "/permissions", Studies.PermissionsController, :show
+      patch "/permissions", Studies.PermissionsController, :change
+      post "/permissions", Studies.PermissionsController, :create
     end
 
     get "/studies/:id/participate", ParticipantController, :new
@@ -105,7 +107,7 @@ defmodule LinkWeb.Router do
 
     scope "/" do
       pipe_through :browser
-      live_dashboard "/live_dashboard", metrics: LinkWeb.Telemetry
+      live_dashboard "/phoenix-dashboard", metrics: LinkWeb.Telemetry
     end
   end
 end

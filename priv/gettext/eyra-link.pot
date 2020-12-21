@@ -94,3 +94,13 @@ msgstr ""
 #: lib/link_web/templates/page/index.html.eex:42
 msgid "usp3.title"
 msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/study/show.html.eex:24
+msgid "survey.tools.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/study/show.html.eex:27
+msgid "participant.list.button"
+msgstr ""
