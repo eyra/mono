@@ -11,16 +11,22 @@
         <div>
             <%= form_for @changeset, Routes.study_path(@conn, :update, @study), fn f -> %>
 
-            <%= textarea_field f, :title, dgettext("eyra-study", "title.label"), "h-20" %>
-            <%= textarea_field f, :description, dgettext("eyra-study", "description.label"), "h-48" %>
+              <%= textarea_field f, :title, dgettext("eyra-study", "title.label"), "h-20" %>
+              <%= textarea_field f, :description, dgettext("eyra-study", "description.label"), "h-48" %>
 
-            <%= if @changeset.action do %>
-                <%= warning dgettext("eyra-ux", "%{action}.failed", action: dgettext("eyra-study", "save.button")) %>
-            <% end %>
+              <%= if @changeset.action do %>
+                  <%= warning dgettext("eyra-ux", "%{action}.failed", action: dgettext("eyra-study", "save.button")) %>
+              <% end %>
 
-            <div class="mb-8">
-                <%= submit_button_small dgettext("eyra-study", "save.button") %>
-            </div>
+              <div class="flex">
+                <div class="mb-8 mr-4">
+                    <%= submit_button_small dgettext("eyra-study", "save.button") %>
+                </div>
+                <div>
+                <%= if can?(@conn, @study, LinkWeb.StudyController, :delete) do %>
+                  <%= primary_button "Delete", Routes.study_path(@conn, :delete, @study), :delete, "delete"  %>
+                <% end %>
+              <div>
             <% end %>
         </div>
       </div>
