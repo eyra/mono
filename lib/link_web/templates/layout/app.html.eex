@@ -31,7 +31,7 @@
                       <%= menu_button dgettext("eyra-study", "dashboard.button"), Routes.dashboard_path(@conn, :index) %>
                     </div>
                     <%= if can?(@conn, nil, LinkWeb.StudyController, :new) do %>
-                      <div class="invisible sm:visible flex-none lg:pr-4 text-button font-button">
+                      <div class="hidden sm:block flex-none lg:pr-4 text-button font-button">
                         <%= menu_button dgettext("eyra-study", "new.button"), Routes.study_path(@conn, :new) %>
                       </div>
                     <% end %>
