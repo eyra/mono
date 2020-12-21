@@ -84,6 +84,14 @@ defmodule Link.StudiesTest do
       assert_raise Ecto.NoResultsError, fn -> Studies.get_study!(study.id) end
     end
 
+    test "delete_study/1 deletes the study even with participations attached" do
+      study = Factories.create_study()
+      participant = Factories.get_or_create_user()
+      Studies.apply_participant(study, participant)
+      assert {:ok, %Study{}} = Studies.delete_study(study)
+      assert_raise Ecto.NoResultsError, fn -> Studies.get_study!(study.id) end
+    end
+
     test "change_study/1 returns a study changeset" do
       study = study_fixture()
       assert %Ecto.Changeset{} = Studies.change_study(study)

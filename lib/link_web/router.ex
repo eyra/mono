@@ -107,7 +107,7 @@ defmodule LinkWeb.Router do
 
     scope "/" do
       pipe_through :browser
-      live_dashboard "/live_dashboard", metrics: LinkWeb.Telemetry
+      live_dashboard "/phoenix-dashboard", metrics: LinkWeb.Telemetry
     end
   end
 end
