@@ -27,14 +27,15 @@
               <div class="flex-grow ml-2 lg:ml-6">
                 <div class="flex items-center">
                   <%= if Pow.Plug.current_user(@conn) do %>
+                    <div class="flex-none lg:pr-4 text-button font-button">
+                      <%= menu_button dgettext("eyra-study", "dashboard.button"), Routes.dashboard_path(@conn, :index) %>
+                    </div>
                     <%= if can?(@conn, nil, LinkWeb.StudyController, :new) do %>
-                      <div class="flex-none lg:pr-4 text-button font-button">
+                      <div class="invisible sm:visible flex-none lg:pr-4 text-button font-button">
                         <%= menu_button dgettext("eyra-study", "new.button"), Routes.study_path(@conn, :new) %>
                       </div>
                     <% end %>
-                    <div class="flex-grow lg:pr-4 text-button font-button">
-                      <%= menu_button dgettext("eyra-study", "dashboard.button"), Routes.dashboard_path(@conn, :index) %>
-                    </div>
+                    <div class="flex-grow"></div>
                     <div class="flex-none lg:pr-4 text-button font-button">
                       <%= menu_button dgettext("eyra-account", "profile.button"), Routes.user_profile_path(@conn, :edit) %>
                     </div>
