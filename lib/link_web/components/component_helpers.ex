@@ -82,10 +82,22 @@ defmodule LinkWeb.Components.ComponentHelpers do
     c(:form_field, :text, [form: form, field: field, text: text, warning: warning])
   end
 
-  def hero_illustration(title, subtitle, illustration, bg_color \\ "primary", text_color \\ "white") do
+  def textarea_field(form, field, text, height)  do
+    warning = error_tag(form, field) |> Enum.at(0)
+
+    c(:form_field, :textarea, [form: form, field: field, text: text, warning: warning, height: height])
+  end
+
+  def hero_large(title, subtitle, illustration, bg_color \\ "primary", text_color \\ "white") do
     bg_color = "bg-" <> bg_color
     text_color = "text-" <> text_color
-    c(:hero, :illustration, [title: title, subtitle: subtitle, illustration: illustration, bg_color: bg_color, text_color: text_color])
+    c(:hero, :large, [title: title, subtitle: subtitle, illustration: illustration, bg_color: bg_color, text_color: text_color])
+  end
+
+  def hero_small(title, illustration, bg_color \\ "primary", text_color \\ "white") do
+    bg_color = "bg-" <> bg_color
+    text_color = "text-" <> text_color
+    c(:hero, :small, [title: title, illustration: illustration, bg_color: bg_color, text_color: text_color])
   end
 
   def primary_button(label, path, method \\ :get, color \\ "grey1") do
@@ -98,9 +110,16 @@ defmodule LinkWeb.Components.ComponentHelpers do
     c(:custom_button, :primary_icon, [label: label, method: :get, icon: icon, path: path, color: bg_color])
   end
 
-  def submit_button(label, color \\ "grey1") do
+  def submit_button_wide(label, color \\ "grey1") do
     bg_color = "bg-" <> color
-    c(:custom_button, :submit, [label: label, color: bg_color])
+    width = "w-full"
+    c(:custom_button, :submit, [label: label, color: bg_color, width: width])
+  end
+
+  def submit_button_small(label, color \\ "grey1") do
+    bg_color = "bg-" <> color
+    width = "p-4"
+    c(:custom_button, :submit, [label: label, color: bg_color, width: width])
   end
 
   def link_button(label, path, method \\ :delete) do

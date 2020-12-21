@@ -1,4 +1,4 @@
-<%= hero_illustration dgettext("eyra-study", "study.index.title"),
+<%= hero_large dgettext("eyra-study", "study.index.title"),
   dgettext("eyra-study", "study.index.subtitle"),
   Routes.static_path(@conn, "/images/illustration.svg")
 %>

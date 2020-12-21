@@ -15,7 +15,7 @@
                     <%= warning dgettext("eyra-ux", "%{action}.failed", action: dgettext("eyra-account", "signup.button")) %>
                   <% end %>
                   <div class="mb-8">
-                    <%= submit_button dgettext("eyra-account", "signup.button") %>
+                    <%= submit_button_wide dgettext("eyra-account", "signup.button") %>
                   </div>
                 <% end %>
                 <div>

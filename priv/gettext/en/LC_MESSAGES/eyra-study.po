@@ -34,12 +34,12 @@ msgid "dashboard.button"
 msgstr "Overview"
 
 #, elixir-format
-#: lib/link_web/templates/dashboard/index.html.eex:26
+#: lib/link_web/templates/dashboard/index.html.eex:25
 msgid "study.all.title"
 msgstr "Available studies:"
 
 #, elixir-format
-#: lib/link_web/templates/dashboard/index.html.eex:14
+#: lib/link_web/templates/dashboard/index.html.eex:13
 msgid "study.highlighted.title"
 msgstr "My studies:"
 
@@ -52,3 +52,30 @@ msgstr "Start study"
 #: lib/link_web/templates/dashboard/index.html.eex:9
 msgid "dashboard.page.description"
 msgstr "Short description of this page lorem ipsum dolor sit amet consectetuer. Lorem ipsum dolor sit amet consectetuer."
+
+#, elixir-format
+#: lib/link_web/templates/study/edit.html.eex:1
+#: lib/link_web/templates/study/show.html.eex:1
+msgid "study.edit.title"
+msgstr "Study"
+
+#, elixir-format
+#: lib/link_web/templates/study/edit.html.eex:10
+msgid "study.edit.subtitle"
+msgstr "Edit"
+
+#, elixir-format
+#: lib/link_web/templates/study/edit.html.eex:16
+msgid "description.label"
+msgstr "Description"
+
+#, elixir-format, fuzzy
+#: lib/link_web/templates/study/edit.html.eex:19
+#: lib/link_web/templates/study/edit.html.eex:23
+msgid "save.button"
+msgstr "Save"
+
+#, elixir-format
+#: lib/link_web/templates/study/edit.html.eex:15
+msgid "title.label"
+msgstr "Title"

@@ -1,5 +1,37 @@
-<h1>Edit Study</h1>
+<%= hero_small dgettext("eyra-study", "study.edit.title"),
+  Routes.static_path(@conn, "/images/illustration.svg")
+%>
+<div class="flex w-full">
+  <div class="flex-grow ml-6 mr-6 lg:ml-14 lg:mr-14">
+    <div class="flex flex-col lg:flex-row">
+      <div class="flex-grow">
+        <div class="text-title3 font-title3 lg:text-title1 ls:font-title1 mt-9 lg:mt-24 mb-7 lg:mb-9">
+          <%= dgettext "eyra-study", "study.edit.subtitle" %>
+        </div>
+        <div>
+            <%= form_for @changeset, Routes.study_path(@conn, :update, @study), fn f -> %>
 
-<%= render "form.html", Map.put(assigns, :action, Routes.study_path(@conn, :update, @study)) %>
+              <%= textarea_field f, :title, dgettext("eyra-study", "title.label"), "h-20" %>
+              <%= textarea_field f, :description, dgettext("eyra-study", "description.label"), "h-48" %>
 
-<span><%= link "Back", to: Routes.dashboard_path(@conn, :index) %></span>
+              <%= if @changeset.action do %>
+                  <%= warning dgettext("eyra-ux", "%{action}.failed", action: dgettext("eyra-study", "save.button")) %>
+              <% end %>
+
+              <div class="flex">
+                <div class="mb-8 mr-4">
+                    <%= submit_button_small dgettext("eyra-study", "save.button") %>
+                </div>
+                <div>
+                <%= if can?(@conn, @study, LinkWeb.StudyController, :delete) do %>
+                  <%= primary_button "Delete", Routes.study_path(@conn, :delete, @study), :delete, "delete"  %>
+                <% end %>
+              <div>
+            <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex-wrap flex-shrink-0 w-0 lg:w-sidebar">
+  </div>
+</div>
