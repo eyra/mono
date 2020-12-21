@@ -1,4 +1,4 @@
-<div class="<%= @bg_color %> rounded-md">
+<div class="<%= @bg_color %> rounded-md h-full">
     <div class="p-6 lg:pl-8 lg:pr-8 lg:pt-10 lg:pb-10">
         <div class="text-title5 font-title5 lg:text-title4 lg:font-title4 mb-4 lg:mb-6 <%= @title_color %>">
             <%= @study.title %>
