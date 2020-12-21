@@ -31,7 +31,7 @@
             </div>
           <% else %>
             <%= if @can_participate do %>
-                <%= primary_button dgettext("eyra-study", "study.participate.button"), Routes.participant_path(@conn, :new, @study), :get, "primary" %>
+                <%= primary_button dgettext("eyra-study", "study.participate.button"), Routes.participant_path(@conn, :create, @study), :get, "primary" %>
             <% end %>
           <% end %>
         </div>
