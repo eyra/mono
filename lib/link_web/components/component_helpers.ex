@@ -88,36 +88,28 @@ defmodule LinkWeb.Components.ComponentHelpers do
     c(:form_field, :textarea, [form: form, field: field, text: text, warning: warning, height: height])
   end
 
-  def hero_large(title, subtitle, illustration, bg_color \\ "primary", text_color \\ "white") do
-    bg_color = "bg-" <> bg_color
-    text_color = "text-" <> text_color
+  def hero_large(title, subtitle, illustration, bg_color \\ "bg-primary", text_color \\ "bg-white") do
     c(:hero, :large, [title: title, subtitle: subtitle, illustration: illustration, bg_color: bg_color, text_color: text_color])
   end
 
-  def hero_small(title, illustration, bg_color \\ "primary", text_color \\ "white") do
-    bg_color = "bg-" <> bg_color
-    text_color = "text-" <> text_color
+  def hero_small(title, illustration, bg_color \\ "bg-primary", text_color \\ "bg-white") do
     c(:hero, :small, [title: title, illustration: illustration, bg_color: bg_color, text_color: text_color])
   end
 
-  def primary_button(label, path, method \\ :get, color \\ "grey1") do
-    bg_color = "bg-" <> color
+  def primary_button(label, path, method \\ :get, bg_color \\ "bg-grey1") do
     c(:custom_button, :primary, [label: label, method: method, path: path, color: bg_color])
   end
 
-  def primary_icon_button(label, icon, path, color \\ "grey1") do
-    bg_color = "bg-" <> color
+  def primary_icon_button(label, icon, path, bg_color \\ "bg-grey1") do
     c(:custom_button, :primary_icon, [label: label, method: :get, icon: icon, path: path, color: bg_color])
   end
 
-  def submit_button_wide(label, color \\ "grey1") do
-    bg_color = "bg-" <> color
+  def submit_button_wide(label, bg_color \\ "bg-grey1") do
     width = "w-full"
     c(:custom_button, :submit, [label: label, color: bg_color, width: width])
   end
 
-  def submit_button_small(label, color \\ "grey1") do
-    bg_color = "bg-" <> color
+  def submit_button_small(label, bg_color \\ "bg-grey1") do
     width = "p-4"
     c(:custom_button, :submit, [label: label, color: bg_color, width: width])
   end

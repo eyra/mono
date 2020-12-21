@@ -3,6 +3,7 @@ module.exports = {
     "../**/*.html.eex",
     "../**/*.html.leex",
     "../**/views/**/*.ex",
+    "../**/components/**/*.ex",
     "../**/live/**/*.ex",
     "./js/**/*.js",
   ],
