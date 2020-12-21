@@ -10,7 +10,7 @@ module.exports = {
   theme: {
     colors: {
       primary: '#4272EF',
-      primarylight: '#ECF1FD',
+      primarylight: '#E3EAFD',
       secondary: '#FF5E5E',
       tertiary: '#FFCF60',
       success: '#6FCA37',
