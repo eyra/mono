@@ -5,7 +5,7 @@
   <div class="flex-grow ml-6 mr-6 lg:ml-14 lg:mr-14">
     <div class="flex flex-col lg:flex-row">
       <div class="flex-grow">
-        <div class="text-title3 font-title3 lg:text-title1 ls:font-title1 mt-9 lg:mt-24 mb-7 lg:mb-9">
+        <div class="text-title3 font-title3 lg:text-title1 lg:font-title1 mt-9 lg:mt-24 mb-7 lg:mb-9">
           <%= dgettext "eyra-study", "study.edit.subtitle" %>
         </div>
         <div>

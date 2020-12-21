@@ -33,9 +33,12 @@ defmodule LinkWeb.StudyController do
   def show(%{assigns: %{study: study}} = conn, _) do
     user = Pow.Plug.current_user(conn)
 
+    application_status = Studies.application_status(study, user)
+    can_participate = application_status === nil
+
     render(conn, "show.html",
       study: study,
-      application_status: Studies.application_status(study, user)
+      can_participate: can_participate
     )
   end
 

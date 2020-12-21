@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="flex-wrap mt-0">
-        <div class="text-title5 font-title5 sm:text-title3 sm:font-title3 lg:text-title2 ls:font-title2 mt-9 lg:mt-16 mb-7 lg:mb-9">
+        <div class="text-title5 font-title5 sm:text-title3 sm:font-title3 lg:text-title2 lg:font-title2 mt-12 lg:mt-16 mb-7 lg:mb-9">
           <%= dgettext "eyra-study", "study.all.title" %><span class="text-primary"> <%= @available_count %></span>
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
