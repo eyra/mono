@@ -1,7 +1,7 @@
 <%= button(
     method: @method,
     to: @path,
-    class: "flex items-center justify-center leading-none bg_google pl-4 pr-4 h-48px focus:outline-none hover:bg-opacity-80 rounded " <> @color)
+    class: "flex items-center justify-center leading-none pl-4 pr-4 h-48px focus:outline-none hover:bg-opacity-80 rounded " <> @color)
     do
     [
         content_tag(:text, class: "text-white text-button font-button tracking-wide") do @label end

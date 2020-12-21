@@ -54,27 +54,46 @@ msgstr ""
 
 #, elixir-format
 #: lib/link_web/templates/study/edit.html.eex:1
-#: lib/link_web/templates/study/show.html.eex:1
 msgid "study.edit.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/edit.html.eex:10
+#: lib/link_web/templates/study/edit.html.eex:9
 msgid "study.edit.subtitle"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/edit.html.eex:16
+#: lib/link_web/templates/study/edit.html.eex:15
 msgid "description.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/edit.html.eex:19
-#: lib/link_web/templates/study/edit.html.eex:23
+#: lib/link_web/templates/study/edit.html.eex:18
+#: lib/link_web/templates/study/edit.html.eex:22
 msgid "save.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/edit.html.eex:15
+#: lib/link_web/templates/study/edit.html.eex:14
 msgid "title.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/study/show.html.eex:34
+msgid "study.participate.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/study/show.html.eex:1
+msgid "study.show.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/study/show.html.eex:21
+msgid "study.edit.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/study/show.html.eex:30
+msgid "share.button"
 msgstr ""
