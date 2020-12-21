@@ -15,7 +15,7 @@
       </div>
       <div class="mt-0 md:mt-9 lg:mt-24">
         <%= if Pow.Plug.current_user(@conn) do %>
-          <div class="max-w-card lg:w-card">
+          <div class="">
             <%=
               cta_title = cond do
                 @profile != nil -> dgettext("eyra-link", "member.profile.card.title", user: @profile.displayname)
