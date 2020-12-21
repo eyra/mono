@@ -139,5 +139,38 @@ defmodule Link.StudiesTest do
       Studies.apply_participant(study, member)
       assert Studies.list_participations(member) == [study]
     end
+
+    test "add_owner!/2 grants a user ownership over a study" do
+      researcher_1 = Factories.get_or_create_researcher()
+      researcher_2 = Factories.get_or_create_researcher()
+      study = Factories.create_study(owner: researcher_1)
+      # The second researcher is not the owner of the study
+      assert Studies.list_owned_studies(researcher_2) == []
+      Studies.add_owner!(study, researcher_2)
+      # The second researcher is now an owner of the study
+      assert Studies.list_owned_studies(researcher_2) == [study]
+    end
+
+    test "assign_owners/2 adds or removes a users ownership of a study" do
+      researcher_1 = Factories.get_or_create_researcher()
+      researcher_2 = Factories.get_or_create_researcher()
+      study = Factories.create_study(owner: researcher_1)
+      # The second researcher is not the owner of the study
+      assert Studies.list_owned_studies(researcher_2) == []
+      Studies.assign_owners(study, [researcher_2])
+      # The second researcher is now an owner of the study
+      assert Studies.list_owned_studies(researcher_2) == [study]
+      # The original owner can no longer claim ownership
+      assert Studies.list_owned_studies(researcher_1) == []
+    end
+
+    test "list_owners/1 returns all users with ownership permission on the study" do
+      researcher_1 = Factories.get_or_create_researcher()
+      researcher_2 = Factories.get_or_create_researcher()
+      study = Factories.create_study(owner: researcher_1)
+      assert Studies.list_owners(study) == [researcher_1]
+      Studies.assign_owners(study, [researcher_2])
+      assert Studies.list_owners(study) == [researcher_2]
+    end
   end
 end

@@ -80,6 +80,9 @@ defmodule LinkWeb.Router do
 
     resources "/studies", StudyController do
       resources "/survey-tools", SurveyToolController
+      get "/permissions", Studies.PermissionsController, :show
+      patch "/permissions", Studies.PermissionsController, :change
+      post "/permissions", Studies.PermissionsController, :create
     end
 
     get "/studies/:id/participate", ParticipantController, :new
