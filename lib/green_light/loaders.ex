@@ -49,7 +49,7 @@ defmodule GreenLight.Loaders do
         @entity_loaders {parent_loader, true}
       end
 
-      @entity_loaders {unquote(loader), false}
+      @entity_loaders {unquote(loader), unquote(Keyword.get(opts, :is_nested, false))}
 
       def load_entities(%Plug.Conn{path_params: path_params} = conn),
         do: unquote(__MODULE__).load_entities(@entity_loaders, conn)

@@ -47,6 +47,12 @@ defmodule Link.Authorization do
     delete: [:owner]
   })
 
+  grant_actions(LinkWeb.Studies.PermissionsController, %{
+    show: [:owner],
+    change: [:owner],
+    create: [:owner]
+  })
+
   grant_actions(LinkWeb.ParticipantController, %{
     index: [:owner],
     show: [:owner, :participant],

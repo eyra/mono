@@ -1,0 +1,21 @@
+<div class="ml-8 mr-8">
+  <h1 class="text-title5 sm:text-title2 lg:text-title1 font-black mt-8 mb-4">Permissions</h1>
+  <div class="mb-4">
+    <%= form_for @conn, Routes.study_permissions_path(@conn, :create, @study), fn f -> %>
+    <%= label f, :email, "E-mail:" %>
+    <%= text_input f, :email, class: "border ml-2 mr-2" %>
+    <%= submit "Add Owner", class: "p-1 pl-4 pr-4 bg-warning text-white"  %>
+  <% end %>
+</div>
+<%= form_for @conn, Routes.study_permissions_path(@conn, :change, @study), [method: :patch], fn f -> %>
+<table>
+  <%= for owner <- @owners do %>
+    <tr>
+      <td class="p-2"><%= checkbox f, "owners[]", checked_value: owner.id, hidden_input: false, disabled: owner.id == @current_user.id %></td>
+      <td><%= owner.email %></td>
+    </tr>
+  <% end %>
+</table>
+<%= submit "Delete", class: "p-1 pl-4 pr-4 bg-warning text-white"  %>
+<% end %>
+</div>

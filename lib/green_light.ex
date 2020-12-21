@@ -69,6 +69,16 @@ defmodule GreenLight do
         |> GreenLight.Ecto.Query.assign_role!(unquote(schema), principal, entity, role)
       end
 
+      def remove_role!(%GreenLight.Principal{} = principal, entity, role) do
+        unquote(repo)
+        |> GreenLight.Ecto.Query.remove_role!(unquote(schema), principal, entity, role)
+      end
+
+      def list_principals(entity) do
+        unquote(repo)
+        |> GreenLight.Ecto.Query.list_principals(unquote(schema), entity)
+      end
+
       @doc """
       Assign a role by piping the result of an Ecto insert operation directly into
       this function.
