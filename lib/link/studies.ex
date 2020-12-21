@@ -9,6 +9,7 @@ defmodule Link.Studies do
 
   alias Link.Studies.{Study, Participant}
   alias Link.Users.User
+  alias GreenLight.Principal
 
   @doc """
   Returns the list of studies.
@@ -40,6 +41,44 @@ defmodule Link.Studies do
       )
 
     from(s in Study, where: s.id in subquery(entity_ids)) |> Repo.all()
+  end
+
+  def list_owners(%Study{} = study) do
+    owner_ids =
+      study
+      |> Authorization.list_principals()
+      |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
+      |> Enum.map(fn %{id: id} -> id end)
+
+    from(u in User, where: u.id in ^owner_ids, order_by: u.id) |> Repo.all()
+  end
+
+  def assign_owners(study, users) do
+    existing_owner_ids =
+      Authorization.list_principals(study)
+      |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
+      |> Enum.map(fn %{id: id} -> id end)
+      |> Enum.into(MapSet.new())
+
+    new_owners = users |> Enum.map(&Authorization.principal/1)
+
+    new_owners
+    |> Enum.filter(fn principal -> not MapSet.member?(existing_owner_ids, principal.id) end)
+    |> Enum.each(&Authorization.assign_role!(&1, study, :owner))
+
+    new_owner_ids =
+      new_owners
+      |> Enum.map(fn %{id: id} -> id end)
+      |> Enum.into(MapSet.new())
+
+    existing_owner_ids
+    |> Enum.filter(fn id -> not MapSet.member?(new_owner_ids, id) end)
+    |> Enum.each(&Authorization.remove_role!(%Principal{id: &1}, study, :owner))
+  end
+
+  def add_owner!(study, user) do
+    user
+    |> Authorization.assign_role!(study, :owner)
   end
 
   @doc """
@@ -173,5 +212,4 @@ defmodule Link.Studies do
     |> Repo.all()
     |> Enum.map(fn [user_id, status] -> %{user_id: user_id, status: status} end)
   end
-
 end
