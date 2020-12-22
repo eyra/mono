@@ -23,7 +23,9 @@ defmodule Link.Users do
   end
 
   def get_profile(user_id) do
-    Repo.get_by(Profile, user_id: user_id) || create_profile!(user_id)
+    if !is_nil(user_id) do
+      Repo.get_by(Profile, user_id: user_id) || create_profile!(user_id)
+    end
   end
 
   def get_display_label(%User{} = user) do

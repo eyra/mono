@@ -103,7 +103,7 @@ module.exports = {
   variants: {
     variants: {
       extend: {
-       borderColor: ['active'],
+       borderColor: ['active', 'hover'],
       },
     }  
   },

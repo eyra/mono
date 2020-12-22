@@ -184,6 +184,16 @@ defmodule LinkWeb.Components.ComponentHelpers do
     c(:card, :usp, opts)
   end
 
+  def button_card(conn, title, path, opts \\ []) do
+    opts =
+      opts
+      |> Keyword.put_new(:conn, conn)
+      |> Keyword.put_new(:title, title)
+      |> Keyword.put_new(:path, path)
+
+    c(:card, :button, opts)
+  end
+
   defp template(name) when is_atom(name) do
     "#{name}.html"
   end
