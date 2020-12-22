@@ -22,12 +22,12 @@ msgid "study.index.title"
 msgstr "Overzicht"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:36
+#: lib/link_web/templates/layout/app.html.eex:31
 msgid "dashboard.button"
 msgstr "Overzicht"
 
 #, elixir-format
-#: lib/link_web/templates/dashboard/index.html.eex:25
+#: lib/link_web/templates/dashboard/index.html.eex:28
 msgid "study.all.title"
 msgstr "Beschikbare studies:"
 
@@ -37,7 +37,7 @@ msgid "study.highlighted.title"
 msgstr "Mijn studies:"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:32
+#: lib/link_web/templates/layout/app.html.eex:35
 msgid "new.button"
 msgstr "Nieuwe studie"
 
@@ -76,7 +76,7 @@ msgid "title.label"
 msgstr "Titel"
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:37
+#: lib/link_web/templates/study/show.html.eex:31
 msgid "study.participate.button"
 msgstr "Aanmelden om mee te doen"
 
@@ -91,7 +91,7 @@ msgid "study.edit.button"
 msgstr "Aanpassen"
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:33
+#: lib/link_web/templates/study/show.html.eex:27
 msgid "share.button"
 msgstr "Delen"
 
@@ -111,6 +111,11 @@ msgid "owner.label"
 msgstr "Door:"
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:44
+#: lib/link_web/templates/study/show.html.eex:41
 msgid "participants.subtitle"
 msgstr "Deelnemers"
+
+#, elixir-format
+#: lib/link_web/templates/dashboard/index.html.eex:22
+msgid "add.card.title"
+msgstr "Maak een nieuwe studie aan"

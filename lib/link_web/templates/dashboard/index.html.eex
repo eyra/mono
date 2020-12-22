@@ -19,7 +19,7 @@
             <% end %>
           <% end %>
           <%= if can?(@conn, nil, LinkWeb.StudyController, :new) do %>
-            <%= button_card @conn, "Maak een nieuwe studie aan", Routes.study_path(@conn, :new) %>
+            <%= button_card @conn, dgettext("eyra-study", "add.card.title"), Routes.study_path(@conn, :new) %>
           <% end %>
         </div>
       </div>
