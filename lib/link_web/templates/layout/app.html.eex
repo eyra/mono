@@ -62,7 +62,7 @@
                   <%= @inner_content %>
                 </main>
               </div>
-              <div class="flex-wrap mt-16 md:mt-8">
+              <div class="flex-wrap mt-8 md:mt-8">
                 <footer>
                   <%= footer @conn %>
                 </footer>
