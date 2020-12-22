@@ -2,7 +2,7 @@
   dgettext("eyra-link", "welcome.subtitle"),
   Routes.static_path(@conn, "/images/illustration.svg")
 %>
-<div class="flex w-full">
+<div class="flex h-full w-full">
   <div class="flex-grow ml-6 mr-6 lg:ml-14 lg:mr-14">
     <div class="grid md:grid-cols-3 gap-8">
       <div class="md:col-span-2 mt-9 mt-9 lg:mt-24">

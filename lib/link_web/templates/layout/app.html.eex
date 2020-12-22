@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
-  <body class="font-body bg-grey5">
-    <div class="flex min-h-screen">
-      <div class="flex-wrap w-0 lg:w-sidebar"></div>
-      <div class="flex-grow w-full">
-        <div>
-          <header>
+  <body class="font-body bg-grey5 h-screen">
+    <div class="flex flex-row h-full">
+      <div class="h-full w-0 lg:w-sidebar"></div>
+      <div class="h-full w-full">
+        <div class="flex flex-col h-full">
+          <header class="flex-wrap">
             <div class="fixed text-warning">
               <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
               <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
@@ -54,13 +54,20 @@
               </div>
             </nav>
           </header>
-        </div>
-        <div class="flex h-full bg-white">
-          <div class="flex-wrap"></div>
-          <div class="flex-grow h-full">
-            <main role="main" class="h-full w-full">
-              <%= @inner_content %>
-            </main>
+          <div class="flex-grow">
+            <div class="flex flex-col h-full bg-white">
+              <div class="flex-wrap"></div>
+              <div class="flex-grow">
+                <main role="main" class="w-full">
+                  <%= @inner_content %>
+                </main>
+              </div>
+              <div class="flex-wrap mt-16 md:mt-8">
+                <footer>
+                  <%= footer @conn %>
+                </footer>
+              </div>
+            </div>
           </div>
         </div>
       </div>

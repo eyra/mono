@@ -194,6 +194,14 @@ defmodule LinkWeb.Components.ComponentHelpers do
     c(:card, :button, opts)
   end
 
+  def footer(conn, opts \\ []) do
+    opts =
+      opts
+      |> Keyword.put_new(:conn, conn)
+
+    c(:footer, :default, opts)
+  end
+
   defp template(name) when is_atom(name) do
     "#{name}.html"
   end
