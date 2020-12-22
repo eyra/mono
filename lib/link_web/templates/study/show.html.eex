@@ -7,8 +7,8 @@
       <%= if can?(@conn, @study, LinkWeb.ParticipantController, :index) do %>
         <div class="lg:col-span-2">
         <% else %>
-          <div class="ls:col-span-3">
-          <% end %>
+          <div class="lg:col-span-3">
+        <% end %>
           <div class="text-title3 font-title3 lg:text-title1 lg:font-title1 mb-7 lg:mb-8">
             <%= @study.title %>
           </div>
