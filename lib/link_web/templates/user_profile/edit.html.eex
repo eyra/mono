@@ -20,7 +20,7 @@
                 </div>
               <% end %>
             <div>
-                <%= link_button dgettext("eyra-account", "signout.button"), Routes.pow_session_path(@conn, :delete), :delete  %>
+                <%= secondary_button dgettext("eyra-account", "signout.button"), Routes.pow_session_path(@conn, :delete), :delete, "text-delete", "border-delete", "w-full"  %>
             </div>
             </div>
           </div>

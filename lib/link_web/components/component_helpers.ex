@@ -96,12 +96,16 @@ defmodule LinkWeb.Components.ComponentHelpers do
     c(:hero, :small, [title: title, illustration: illustration, bg_color: bg_color, text_color: text_color])
   end
 
-  def primary_button(label, path, method \\ :get, bg_color \\ "bg-grey1") do
-    c(:custom_button, :primary, [label: label, method: method, path: path, color: bg_color])
+  def primary_button(label, path, method \\ :get, bg_color \\ "bg-grey1", width \\ "w-none" ) do
+    c(:custom_button, :primary, [label: label, method: method, path: path, color: bg_color, width: width])
   end
 
   def primary_icon_button(label, icon, path, bg_color \\ "bg-grey1") do
     c(:custom_button, :primary_icon, [label: label, method: :get, icon: icon, path: path, color: bg_color])
+  end
+
+  def secondary_button(label, path, method \\ :get, text_color \\ "text-primary", border_color \\ "border-primary", width \\ "w-none" ) do
+    c(:custom_button, :secondary, [label: label, method: method, path: path, text_color: text_color, border_color: border_color, width: width])
   end
 
   def submit_button_wide(label, bg_color \\ "bg-grey1") do
