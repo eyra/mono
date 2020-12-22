@@ -44,7 +44,7 @@ msgstr "Nieuwe studie"
 #, elixir-format
 #: lib/link_web/templates/dashboard/index.html.eex:9
 msgid "dashboard.page.description"
-msgstr "Korte beschrijving over deze pagina lorem ipsum dolor sit amet consectetuer. Lorem ipsum dolor sit amet consectetuer."
+msgstr "Deze pagina biedt een overzicht van de studies op Science NL. De studies waar jij bij betrokken bent vind je onder 'Mijn studies'. Alle andere studies die open staan om aan mee te doen, vind je onder 'Beschikbare studies'."
 
 #, elixir-format
 #: lib/link_web/templates/study/edit.html.eex:1
