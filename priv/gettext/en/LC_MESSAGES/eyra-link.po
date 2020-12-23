@@ -17,19 +17,19 @@ msgid "welcome.title"
 msgstr "Welcome to"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:29
+#: lib/link_web/templates/page/index.html.eex:24
 msgid "dashboard-button"
 msgstr "Go to study overview"
 
 #, elixir-format
 #: lib/link_web/templates/page/index.html.eex:2
 msgid "welcome.subtitle"
-msgstr "Eyra Link"
+msgstr "Science NL"
 
 #, elixir-format
 #: lib/link_web/templates/page/index.html.eex:13
 msgid "link.message"
-msgstr "Short description about this page lorem ipsum dolor sit amet consectetuer. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+msgstr "Do you want to empower science? Register now and choose in which study you would like to participate, by for example answering questions or performing a task. Are you a social sciences or humanities researcher? Register now, set up a study and find the right participants."
 
 #, elixir-format
 #: lib/link_web/templates/page/index.html.eex:10
@@ -37,41 +37,51 @@ msgid "link.title"
 msgstr "Empower Science"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:16
-msgid "usp1.label"
-msgstr "First unique selling point"
-
-#, elixir-format
-#: lib/link_web/templates/page/index.html.eex:17
-msgid "usp2.label"
-msgstr "Second unique selling point"
-
-#, elixir-format
-#: lib/link_web/templates/page/index.html.eex:18
-msgid "usp3.label"
-msgstr "Third and last unique selling point"
-
-#, elixir-format
-#: lib/link_web/templates/page/index.html.eex:34
+#: lib/link_web/templates/page/index.html.eex:29
 msgid "signup.card.title"
-msgstr "Sign up and become a member for free"
+msgstr "Do you want to join or set up a study?"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:27
+#: lib/link_web/templates/page/index.html.eex:22
 msgid "member.card.title"
 msgstr "Welcome back!"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:26
+#: lib/link_web/templates/page/index.html.eex:21
 msgid "member.profile.card.title"
 msgstr "Hello %{user}, welcome back!"
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:24
-msgid "survey.tools.button"
-msgstr "Survey Tools"
+#: lib/link_web/templates/page/index.html.eex:29
+msgid "signup.card.button"
+msgstr "Sign up for free"
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:27
-msgid "participant.list.button"
-msgstr "Participants"
+#: lib/link_web/templates/page/index.html.eex:34
+msgid "usp1.description"
+msgstr "Are you looking for a study to participate in? Science NL provides an overview of studies that are open for participation."
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:34
+msgid "usp1.title"
+msgstr "Marketplace for Science"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:37
+msgid "usp2.description"
+msgstr "Having trouble finding enough participants for your research in the Netherlands? Publish your study on Science NL and start recruiting participants."
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:37
+msgid "usp2.title"
+msgstr "Research in the Netherlands"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:40
+msgid "usp3.description"
+msgstr "Do you have ideas on what would motivate you to participate more? Or can we help to make it easier to set up a study on Science NL? Let us know!"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:40
+msgid "usp3.title"
+msgstr "Improving Science Together"

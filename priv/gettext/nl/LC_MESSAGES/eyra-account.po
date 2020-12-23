@@ -42,7 +42,7 @@ msgid "password.label"
 msgstr "Wachtwoord"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:40
+#: lib/link_web/templates/layout/app.html.eex:45
 #: lib/link_web/templates/pow/session/new.html.eex:24 lib/link_web/templates/pow/session/new.html.eex:28
 msgid "signin.button"
 msgstr "Inloggen"
@@ -61,13 +61,12 @@ msgstr "Registreer"
 #, elixir-format
 #: lib/link_web/templates/pow/registration/new.html.eex:22
 msgid "signin.link"
-msgstr "Log in"
+msgstr "Log hier in"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:34
 #: lib/link_web/templates/pow/session/new.html.eex:32
 msgid "signup.link"
-msgstr "Registreren"
+msgstr "Maak hier een aan"
 
 #, elixir-format
 #: lib/link_web/components/component_helpers.ex:67
@@ -96,7 +95,7 @@ msgid "signout.button"
 msgstr "Uitloggen"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:35
+#: lib/link_web/templates/layout/app.html.eex:40
 msgid "profile.button"
 msgstr "Mijn profiel"
 
@@ -125,3 +124,13 @@ msgstr "ik ben een onderzoeker"
 #: lib/link_web/templates/user_profile/edit.html.eex:12
 msgid "displayname.label"
 msgstr "Schermnaam"
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:32
+msgid "signup.label"
+msgstr "Nog geen account?"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:22
+msgid "signin.label"
+msgstr "Heb je al een account?"

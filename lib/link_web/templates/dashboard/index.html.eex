@@ -18,6 +18,9 @@
               <%= primary_study_card @conn, study, "Bekijken" %>
             <% end %>
           <% end %>
+          <%= if can?(@conn, nil, LinkWeb.StudyController, :new) do %>
+            <%= button_card @conn, dgettext("eyra-study", "add.card.title"), Routes.study_path(@conn, :new) %>
+          <% end %>
         </div>
       </div>
       <div class="flex-wrap mt-0">

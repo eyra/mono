@@ -42,7 +42,7 @@ msgid "password.label"
 msgstr "Password"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:40
+#: lib/link_web/templates/layout/app.html.eex:45
 #: lib/link_web/templates/pow/session/new.html.eex:24 lib/link_web/templates/pow/session/new.html.eex:28
 msgid "signin.button"
 msgstr "Sign in"
@@ -61,13 +61,12 @@ msgstr "Sign up"
 #, elixir-format
 #: lib/link_web/templates/pow/registration/new.html.eex:22
 msgid "signin.link"
-msgstr "Sign in"
+msgstr "Sign in here"
 
 #, elixir-format
-#: lib/link_web/templates/page/index.html.eex:34
 #: lib/link_web/templates/pow/session/new.html.eex:32
 msgid "signup.link"
-msgstr "Sign up"
+msgstr "Create one here"
 
 #, elixir-format
 #: lib/link_web/components/component_helpers.ex:67
@@ -96,7 +95,7 @@ msgid "signout.button"
 msgstr "Sign out"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:35
+#: lib/link_web/templates/layout/app.html.eex:40
 msgid "profile.button"
 msgstr "My profile"
 
@@ -125,3 +124,13 @@ msgstr "I'm a researcher"
 #: lib/link_web/templates/user_profile/edit.html.eex:12
 msgid "displayname.label"
 msgstr "Display name"
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:32
+msgid "signup.label"
+msgstr "No account yet?"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:22
+msgid "signin.label"
+msgstr "Already an account?"

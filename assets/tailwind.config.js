@@ -3,6 +3,7 @@ module.exports = {
     "../**/*.html.eex",
     "../**/*.html.leex",
     "../**/views/**/*.ex",
+    "../**/components/**/*.ex",
     "../**/live/**/*.ex",
     "./js/**/*.js",
   ],
@@ -10,6 +11,7 @@ module.exports = {
   theme: {
     colors: {
       primary: '#4272EF',
+      primarylight: '#E3EAFD',
       secondary: '#FF5E5E',
       tertiary: '#FFCF60',
       success: '#6FCA37',
@@ -43,6 +45,9 @@ module.exports = {
         "topbar" : "64px",
         "topbar-sm" : "96px",
         "topbar-lg" : "128px",
+        "footer" : "48px",
+        "footer-sm" : "64px",
+        "footer-lg" : "96px",
         "header1" : "100px",
         "header1-sm" : "170px",
         "header1-lg" : "370px",
@@ -53,6 +58,7 @@ module.exports = {
         "logo-sm" : "48px",
         "48px" : "48px",
         "44px" : "44px",
+        "1px" : "1px",
       },
       fontFamily: {
         'title1': ['Finador-Black', 'sans-serif'],
@@ -100,7 +106,7 @@ module.exports = {
   variants: {
     variants: {
       extend: {
-       borderColor: ['active'],
+       borderColor: ['active', 'hover'],
       },
     }  
   },

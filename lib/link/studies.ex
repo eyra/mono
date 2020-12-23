@@ -202,14 +202,4 @@ defmodule Link.Studies do
     from(s in Study, join: p in Participant, on: s.id == p.study_id, where: p.user_id == ^user.id)
     |> Repo.all()
   end
-
-  def get_owner(%Study{} = study) do
-    from(p in Participant,
-      select: [p.user_id, p.status],
-      where: p.study_id == ^study.id,
-      order_by: :status
-    )
-    |> Repo.all()
-    |> Enum.map(fn [user_id, status] -> %{user_id: user_id, status: status} end)
-  end
 end

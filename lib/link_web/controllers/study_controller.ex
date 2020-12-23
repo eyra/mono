@@ -1,6 +1,7 @@
 defmodule LinkWeb.StudyController do
   use LinkWeb, :controller
 
+  alias Link.Users
   alias Link.Studies
   alias Link.Studies.Study
 
@@ -33,12 +34,25 @@ defmodule LinkWeb.StudyController do
   def show(%{assigns: %{study: study}} = conn, _) do
     user = Pow.Plug.current_user(conn)
 
+    owner_profile =
+      study
+      |> Studies.list_owners()
+      |> Enum.at(0)
+      |> Users.get_profile()
+
+    participants =
+        study
+        |> Studies.list_participants()
+        |> Enum.map(fn %{user_id: user_id} -> Users.get_display_label(user_id) end)
+
     application_status = Studies.application_status(study, user)
     can_participate = application_status === nil
 
     render(conn, "show.html",
       study: study,
-      can_participate: can_participate
+      participants: participants,
+      can_participate: can_participate,
+      owner_profile: owner_profile
     )
   end
 
@@ -64,6 +78,6 @@ defmodule LinkWeb.StudyController do
 
     conn
     |> put_flash(:info, "Study deleted successfully.")
-    |> redirect(to: Routes.study_path(conn, :index))
+    |> redirect(to: Routes.dashboard_path(conn, :index))
   end
 end

@@ -23,7 +23,23 @@ defmodule Link.Users do
   end
 
   def get_profile(user_id) do
-    Repo.get_by(Profile, user_id: user_id) || create_profile!(user_id)
+    if !is_nil(user_id) do
+      Repo.get_by(Profile, user_id: user_id) || create_profile!(user_id)
+    end
+  end
+
+  def get_display_label(%User{} = user) do
+    user_profile = get_profile(user)
+    cond do
+      user_profile.fullname != nil -> user_profile.fullname
+      user_profile.displayname != nil -> user_profile.displayname
+      true -> user.email
+    end
+  end
+
+  def get_display_label(user_id) do
+    get_by(id: user_id)
+    |> get_display_label()
   end
 
   def update_profile(%Profile{} = profile, attrs) do
@@ -40,4 +56,5 @@ defmodule Link.Users do
     %Profile{user_id: user_id}
     |> Repo.insert!()
   end
+
 end
