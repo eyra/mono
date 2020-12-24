@@ -1,0 +1,121 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/link_web/templates/dashboard/index.html.eex:2
+msgid "study.index.subtitle"
+msgstr "Studies"
+
+#, elixir-format
+#: lib/link_web/templates/dashboard/index.html.eex:1
+msgid "study.index.title"
+msgstr "Overview"
+
+#, elixir-format
+#: lib/link_web/templates/layout/app.html.eex:31
+msgid "dashboard.button"
+msgstr "Overview"
+
+#, elixir-format
+#: lib/link_web/templates/dashboard/index.html.eex:28
+msgid "study.all.title"
+msgstr "Available studies:"
+
+#, elixir-format
+#: lib/link_web/templates/dashboard/index.html.eex:13
+msgid "study.highlighted.title"
+msgstr "My studies:"
+
+#, elixir-format
+#: lib/link_web/templates/layout/app.html.eex:35
+msgid "new.button"
+msgstr "New study"
+
+#, elixir-format
+#: lib/link_web/templates/dashboard/index.html.eex:9
+msgid "dashboard.page.description"
+msgstr "This page provides an overview of the studies available on Science NL. The studies that you are involved in are listed under 'My studies'. All other studies that are open for participation, are listed under 'Available studies'."
+
+#, elixir-format
+#: lib/link_web/templates/study/edit.html.eex:1
+msgid "study.edit.title"
+msgstr "Study"
+
+#, elixir-format
+#: lib/link_web/templates/study/edit.html.eex:9
+msgid "study.edit.subtitle"
+msgstr "Edit"
+
+#, elixir-format
+#: lib/link_web/templates/study/edit.html.eex:15
+#: lib/link_web/templates/study/new.html.eex:15
+msgid "description.label"
+msgstr "Description"
+
+#, elixir-format
+#: lib/link_web/templates/study/edit.html.eex:18
+#: lib/link_web/templates/study/edit.html.eex:23 lib/link_web/templates/study/new.html.eex:18
+#: lib/link_web/templates/study/new.html.eex:22
+msgid "save.button"
+msgstr "Save"
+
+#, elixir-format
+#: lib/link_web/templates/study/edit.html.eex:14
+#: lib/link_web/templates/study/new.html.eex:14
+msgid "title.label"
+msgstr "Title"
+
+#, elixir-format
+#: lib/link_web/templates/study/show.html.eex:31
+msgid "study.participate.button"
+msgstr "Apply to participate"
+
+#, elixir-format
+#: lib/link_web/templates/study/show.html.eex:1
+msgid "study.show.title"
+msgstr "Study"
+
+#, elixir-format
+#: lib/link_web/templates/study/show.html.eex:24
+msgid "study.edit.button"
+msgstr "Edit"
+
+#, elixir-format
+#: lib/link_web/templates/study/show.html.eex:27
+msgid "share.button"
+msgstr "Share"
+
+#, elixir-format
+#: lib/link_web/templates/study/new.html.eex:9
+msgid "study.new.subtitle"
+msgstr "Set up a new study"
+
+#, elixir-format
+#: lib/link_web/templates/study/new.html.eex:1
+msgid "study.new.title"
+msgstr "Study"
+
+#, elixir-format
+#: lib/link_web/templates/study/show.html.eex:16
+msgid "owner.label"
+msgstr "By:"
+
+#, elixir-format
+#: lib/link_web/templates/study/show.html.eex:41
+msgid "participants.subtitle"
+msgstr "Participants"
+
+#, elixir-format
+#: lib/link_web/templates/dashboard/index.html.eex:22
+msgid "add.card.title"
+msgstr "Set up a new study"

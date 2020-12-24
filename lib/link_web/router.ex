@@ -2,10 +2,17 @@ defmodule LinkWeb.Router do
   use LinkWeb, :router
   use Pow.Phoenix.Router
   use PowAssent.Phoenix.Router
+  require LinkWeb.Cldr
 
   pipeline :browser_base do
     plug :accepts, ["html"]
     plug :fetch_session
+
+    plug Cldr.Plug.SetLocale,
+      apps: [cldr: LinkWeb.Cldr, gettext: :global],
+      from: [:query, :cookie, :accept_language],
+      param: "locale"
+
     plug :fetch_flash
   end
 
@@ -32,7 +39,7 @@ defmodule LinkWeb.Router do
     plug :browser_secure
   end
 
-  pipeline :protected do
+  pipeline :require_authenticated do
     plug Pow.Plug.RequireAuthenticated,
       error_handler: Pow.Phoenix.PlugErrorHandler
   end
@@ -44,6 +51,7 @@ defmodule LinkWeb.Router do
   scope "/", LinkWeb do
     pipe_through :browser
     get "/", PageController, :index
+    get "/switch-language/:locale", LanguageSwitchController, :index
   end
 
   scope "/" do
@@ -52,17 +60,34 @@ defmodule LinkWeb.Router do
   end
 
   scope "/" do
-    pipe_through :browser
+    pipe_through [:browser]
     pow_routes()
     pow_assent_routes()
   end
 
   scope "/", LinkWeb do
-    pipe_through [:browser, :protected]
+    pipe_through :browser
+  end
+
+  scope "/", LinkWeb do
+    pipe_through [:browser, :require_authenticated]
+
+    get "/dashboard", DashboardController, :index
+
+    get "/user-profile", UserProfileController, :edit
+    put "/user-profile", UserProfileController, :update
 
     resources "/studies", StudyController do
       resources "/survey-tools", SurveyToolController
+      get "/permissions", Studies.PermissionsController, :show
+      patch "/permissions", Studies.PermissionsController, :change
+      post "/permissions", Studies.PermissionsController, :create
     end
+
+    get "/studies/:id/participate", ParticipantController, :new
+    post "/studies/:id/participate", ParticipantController, :create
+    get "/studies/:id/participants", ParticipantController, :index
+    patch "/studies/:id/participants", ParticipantController, :update
   end
 
   # Other scopes may use custom stacks.
@@ -82,7 +107,7 @@ defmodule LinkWeb.Router do
 
     scope "/" do
       pipe_through :browser
-      live_dashboard "/dashboard", metrics: LinkWeb.Telemetry
+      live_dashboard "/phoenix-dashboard", metrics: LinkWeb.Telemetry
     end
   end
 end

@@ -7,7 +7,9 @@ defmodule Link.Studies do
   alias Link.Repo
   alias Link.Authorization
 
-  alias Link.Studies.Study
+  alias Link.Studies.{Study, Participant}
+  alias Link.Users.User
+  alias GreenLight.Principal
 
   @doc """
   Returns the list of studies.
@@ -18,8 +20,65 @@ defmodule Link.Studies do
       [%Study{}, ...]
 
   """
-  def list_studies() do
-    Study |> Repo.all() |> Repo.preload(:researcher)
+  def list_studies(opts \\ []) do
+    exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
+
+    from(s in Study,
+      where: s.id not in ^exclude
+    )
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of studies that are owned by the user.
+  """
+  def list_owned_studies(user) do
+    entity_ids =
+      Authorization.query_entity_ids(
+        entity_type: Study,
+        role: :owner,
+        principal: Authorization.principal(user)
+      )
+
+    from(s in Study, where: s.id in subquery(entity_ids)) |> Repo.all()
+  end
+
+  def list_owners(%Study{} = study) do
+    owner_ids =
+      study
+      |> Authorization.list_principals()
+      |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
+      |> Enum.map(fn %{id: id} -> id end)
+
+    from(u in User, where: u.id in ^owner_ids, order_by: u.id) |> Repo.all()
+  end
+
+  def assign_owners(study, users) do
+    existing_owner_ids =
+      Authorization.list_principals(study)
+      |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
+      |> Enum.map(fn %{id: id} -> id end)
+      |> Enum.into(MapSet.new())
+
+    new_owners = users |> Enum.map(&Authorization.principal/1)
+
+    new_owners
+    |> Enum.filter(fn principal -> not MapSet.member?(existing_owner_ids, principal.id) end)
+    |> Enum.each(&Authorization.assign_role!(&1, study, :owner))
+
+    new_owner_ids =
+      new_owners
+      |> Enum.map(fn %{id: id} -> id end)
+      |> Enum.into(MapSet.new())
+
+    existing_owner_ids
+    |> Enum.filter(fn id -> not MapSet.member?(new_owner_ids, id) end)
+    |> Enum.each(&Authorization.remove_role!(%Principal{id: &1}, study, :owner))
+  end
+
+  def add_owner!(study, user) do
+    user
+    |> Authorization.assign_role!(study, :owner)
   end
 
   @doc """
@@ -44,9 +103,8 @@ defmodule Link.Studies do
   def create_study(attrs, researcher) do
     %Study{}
     |> Study.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:researcher, researcher)
     |> Repo.insert()
-    |> Authorization.assign_role(researcher, :researcher)
+    |> Authorization.assign_role(researcher, :owner)
   end
 
   @doc """
@@ -94,5 +152,54 @@ defmodule Link.Studies do
   """
   def change_study(%Study{} = study, attrs \\ %{}) do
     Study.changeset(study, attrs)
+  end
+
+  def apply_participant(%Study{} = study, %User{} = user) do
+    %Participant{status: :applied}
+    |> Participant.changeset()
+    |> Ecto.Changeset.put_assoc(:study, study)
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Repo.insert()
+  end
+
+  def update_participant_status(%Study{} = study, %User{} = user, status) do
+    {update_count, _} =
+      from(p in Participant,
+        where: p.study_id == ^study.id and p.user_id == ^user.id,
+        update: [set: [status: ^status]]
+      )
+      |> Repo.update_all([])
+
+    if update_count == 1 do
+      :ok
+    else
+      :error
+    end
+  end
+
+  def application_status(%Study{} = study, %User{} = user) do
+    from(p in Participant,
+      select: p.status,
+      where:
+        p.user_id == ^user.id and
+          p.study_id ==
+            ^study.id
+    )
+    |> Repo.one()
+  end
+
+  def list_participants(%Study{} = study) do
+    from(p in Participant,
+      select: [p.user_id, p.status],
+      where: p.study_id == ^study.id,
+      order_by: :status
+    )
+    |> Repo.all()
+    |> Enum.map(fn [user_id, status] -> %{user_id: user_id, status: status} end)
+  end
+
+  def list_participations(%User{} = user) do
+    from(s in Study, join: p in Participant, on: s.id == p.study_id, where: p.user_id == ^user.id)
+    |> Repo.all()
   end
 end

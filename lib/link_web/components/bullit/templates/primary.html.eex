@@ -1,0 +1,8 @@
+<div class="flex items-center mb-3">
+    <div class="flex-wrap h-3 w-3 mr-3 flex-shrink-0">
+        <img src="<%= Routes.static_path(@conn, "/images/bullit.svg") %>"/>
+    </div>
+    <div class="flex-grow font-body text-bodymedium lg:text-bodylarge">
+        <%= @label %>
+    </div>
+</div>

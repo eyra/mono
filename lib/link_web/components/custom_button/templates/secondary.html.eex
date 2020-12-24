@@ -1,0 +1,10 @@
+<%= button(
+    method: @method,
+    to: @path,
+    class: "flex items-center justify-center leading-none pl-4 pr-4 h-48px focus:outline-none hover:opacity-60 border-2 rounded #{@border_color} #{@width}")
+    do
+    [
+        content_tag(:text, class: "#{@text_color} text-button font-button") do @label end
+    ]
+    end
+%>

@@ -1,0 +1,135 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:11
+msgid "apple.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/components/component_helpers.ex:53
+msgid "email.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:14
+msgid "eyra.signin.message.external"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:6
+msgid "eyra.signin.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:8
+msgid "google.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/components/component_helpers.ex:69
+msgid "password.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/layout/app.html.eex:45
+#: lib/link_web/templates/pow/session/new.html.eex:24 lib/link_web/templates/pow/session/new.html.eex:28
+msgid "signin.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:15
+#: lib/link_web/templates/pow/registration/new.html.eex:18
+msgid "signup.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:6
+msgid "signup.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:22
+msgid "signin.link"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:32
+msgid "signup.link"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/components/component_helpers.ex:67
+msgid "password.confirmation.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/components/component_helpers.ex:68
+msgid "password.current.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/edit.html.eex:16
+#: lib/link_web/templates/pow/registration/edit.html.eex:20
+msgid "update.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/edit.html.eex:6
+msgid "update.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:23
+msgid "signout.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/layout/app.html.eex:40
+msgid "profile.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:11
+msgid "fullname.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:15
+#: lib/link_web/templates/user_profile/edit.html.eex:19
+msgid "profile.save.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:6
+msgid "profile.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:10
+msgid "researcher.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/user_profile/edit.html.eex:12
+msgid "displayname.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:32
+msgid "signup.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:22
+msgid "signin.label"
+msgstr ""

@@ -1,21 +1,54 @@
-<h1>Show Study</h1>
-
-<ul>
-
-  <li>
-    <strong>Title:</strong>
-    <%= @study.title %>
-  </li>
-
-  <li>
-    <strong>Description:</strong>
-    <%= @study.description %>
-  </li>
-
-</ul>
-
-<span><%= button "Survey Tools",  method: :get, to: Routes.study_survey_tool_path(@conn, :index, @study) %></span>
-
-<hr>
-<span><%= button "Edit", class: "button-clear", method: :get, to: Routes.study_path(@conn, :edit, @study) %></span>
-<span><%= button "Back", class: "button-clear",  method: :get, to: Routes.study_path(@conn, :index) %></span>
+<%= hero_small dgettext("eyra-study", "study.show.title"),
+  Routes.static_path(@conn, "/images/illustration.svg")
+%>
+<div class="flex w-full">
+  <div class="flex-grow ml-6 mr-6 lg:ml-14 lg:mr-14">
+    <div class="grid lg:grid-cols-3 lg:gap-14 mt-9 lg:mt-24">
+      <%= if can?(@conn, @study, LinkWeb.ParticipantController, :index) do %>
+        <div class="lg:col-span-2">
+        <% else %>
+          <div class="lg:col-span-3">
+        <% end %>
+          <div class="text-title3 font-title3 lg:text-title1 lg:font-title1 mb-7 lg:mb-8">
+            <%= @study.title %>
+          </div>
+          <div class="text-subhead font-subhead tracking-widest mb-7 lg:mb-8 text-grey2">
+            <%= dgettext("eyra-study", "owner.label") %> <%= if @owner_profile != nil do @owner_profile.fullname end %>
+            </div>
+            <div class="text-bodymedium font-body lg:text-bodylarge mb-7 lg:mb-9">
+              <%= @study.description %>
+            </div>
+            <div class="flex">
+              <%= if can?(@conn, @study, LinkWeb.StudyController, :edit) do %>
+                <div class="mr-4">
+                  <%= primary_button dgettext("eyra-study", "study.edit.button"), Routes.study_path(@conn, :edit, @study) %>
+                </div>
+                <div class="mr-4">
+                  <%= primary_button dgettext("eyra-study", "share.button"), Routes.participant_path(@conn, :index, @study), :get, "bg-primary" %>
+                </div>
+              <% else %>
+                <%= if @can_participate do %>
+                  <%= primary_button dgettext("eyra-study", "study.participate.button"), Routes.participant_path(@conn, :create, @study), :post, "bg-primary" %>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+          <%= if can?(@conn, @study, LinkWeb.ParticipantController, :index) do %>
+            <div>
+              <div class="lg:hidden h-1px bg-grey4 mt-6 mb-8">
+              </div>
+              <div class="text-title4 font-title4 mb-8">
+                <%= dgettext("eyra-study", "participants.subtitle") %>
+              </div>
+              <div class="text-title4 font-title4">
+                <%= for participant <- @participants do %>
+                  <%= primary_bullit @conn, participant %>
+                <% end %>
+                <div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <div class="flex-wrap flex-shrink-0 w-0 lg:w-sidebar">
+          </div>
+        </div>

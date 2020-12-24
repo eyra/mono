@@ -1,0 +1,87 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:1
+msgid "welcome.title"
+msgstr "Welkom bij"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:24
+msgid "dashboard-button"
+msgstr "Naar studie overzicht"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:2
+msgid "welcome.subtitle"
+msgstr "Science NL"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:13
+msgid "link.message"
+msgstr "Wil jij de wetenschap een stap verder helpen? Meld je dan nu aan en kies aan welke studie jij je steentje bij wil dragen, door bijvoorbeeld vragen te beantwoorden of een taak uit te voeren. Ben je wetenschapper in de sociale of geesteswetenschappen? Meld je dan nu aan, zet een studie op en vind de juiste participanten."
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:10
+msgid "link.title"
+msgstr "Steun Onderzoek"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:29
+msgid "signup.card.title"
+msgstr "Meedoen of een studie opzetten?"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:22
+msgid "member.card.title"
+msgstr "Welkom terug!"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:21
+msgid "member.profile.card.title"
+msgstr "Hoi %{user}, welkom terug!"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:29
+msgid "signup.card.button"
+msgstr "Meld je gratis aan"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:34
+msgid "usp1.description"
+msgstr "Op zoek naar een studie om aan mee te doen? Bij Science NL vind je een overzicht van studies die op zoek zijn naar jou."
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:34
+msgid "usp1.title"
+msgstr "Marktplaats voor onderzoek"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:37
+msgid "usp2.description"
+msgstr "Heb je moeite om voldoende participanten te vinden voor je onderzoek in Nederland? Stel je studie dan beschikbaar op Science NL en begin met het werven van participanten."
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:37
+msgid "usp2.title"
+msgstr "Onderzoek in Nederland"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:40
+msgid "usp3.description"
+msgstr "Mis je iets dat jou zou motiveren om vaker mee te doen? Of kunnen we het makkelijker maken om een studie op te zetten op Science NL. Laat het ons weten!"
+
+#, elixir-format
+#: lib/link_web/templates/page/index.html.eex:40
+msgid "usp3.title"
+msgstr "Samen voor de wetenschap"

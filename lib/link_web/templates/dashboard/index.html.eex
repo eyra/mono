@@ -1,0 +1,42 @@
+<%= hero_large dgettext("eyra-study", "study.index.title"),
+  dgettext("eyra-study", "study.index.subtitle"),
+  Routes.static_path(@conn, "/images/illustration.svg")
+%>
+<div class="flex w-full">
+  <div class="flex-grow ml-6 mr-6 lg:ml-14 lg:mr-14">
+    <div class="flex flex-col">
+      <div class="flex-wrap text-grey1 text-bodylarge font-body mt-6 lg:mt-10">
+        <%= dgettext "eyra-study", "dashboard.page.description" %>
+      </div>
+      <div class="flex-wrap">
+        <div class="text-title5 font-title5 sm:text-title3 sm:font-title3 lg:text-title2 lg:font-title2 mt-12 lg:mt-16 mb-7 lg:mb-9">
+          <%= dgettext "eyra-study", "study.highlighted.title" %><span class="text-primary"> <%= @highlighted_count %></span>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <%= for {_tab, studies} <- @highlighted_studies do %>
+            <%= for study <- studies do %>
+              <%= primary_study_card @conn, study, "Bekijken" %>
+            <% end %>
+          <% end %>
+          <%= if can?(@conn, nil, LinkWeb.StudyController, :new) do %>
+            <%= button_card @conn, dgettext("eyra-study", "add.card.title"), Routes.study_path(@conn, :new) %>
+          <% end %>
+        </div>
+      </div>
+      <div class="flex-wrap mt-0">
+        <div class="text-title5 font-title5 sm:text-title3 sm:font-title3 lg:text-title2 lg:font-title2 mt-12 lg:mt-16 mb-7 lg:mb-9">
+          <%= dgettext "eyra-study", "study.all.title" %><span class="text-primary"> <%= @available_count %></span>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <%= for study <- @available_studies do %>
+            <div class="mb-1">
+              <%= secondary_study_card @conn, study, "Bekijken" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex-wrap flex-shrink-0 w-0 lg:w-sidebar">
+  </div>
+</div>

@@ -1,7 +1,7 @@
 defmodule LinkWeb.StudyControllerTest do
   use LinkWeb.ConnCase
 
-  alias Link.Studies
+  alias Link.{Studies, Users}
 
   @create_attrs %{description: "some description", title: "some title"}
   @update_attrs %{description: "some updated description", title: "some updated title"}
@@ -9,22 +9,20 @@ defmodule LinkWeb.StudyControllerTest do
 
   setup %{conn: conn} do
     user = user_fixture()
+
+    user
+    |> Users.get_profile()
+    |> Users.update_profile(%{researcher: true, fullname: "Grace Hopper", displayname: "Grace"})
+
     conn = Pow.Plug.assign_current_user(conn, user, otp_app: :link_web)
 
     {:ok, conn: conn, user: user}
   end
 
-  describe "index" do
-    test "lists all studies", %{conn: conn} do
-      conn = get(conn, Routes.study_path(conn, :index))
-      assert html_response(conn, 200) =~ "Study Overview"
-    end
-  end
-
   describe "new study" do
     test "renders form", %{conn: conn} do
       conn = get(conn, Routes.study_path(conn, :new))
-      assert html_response(conn, 200) =~ "New Study"
+      assert html_response(conn, 200) =~ "Study"
     end
   end
 
@@ -36,12 +34,12 @@ defmodule LinkWeb.StudyControllerTest do
       assert redirected_to(create_conn) == Routes.study_path(create_conn, :show, id)
 
       conn = get(conn, Routes.study_path(conn, :show, id))
-      assert html_response(conn, 200) =~ "Show Study"
+      assert html_response(conn, 200) =~ "Study"
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, Routes.study_path(conn, :create), study: @invalid_attrs)
-      assert html_response(conn, 200) =~ "New Study"
+      assert html_response(conn, 200) =~ "Study"
     end
   end
 
@@ -50,7 +48,7 @@ defmodule LinkWeb.StudyControllerTest do
 
     test "renders form for editing chosen study", %{conn: conn, study: study} do
       conn = get(conn, Routes.study_path(conn, :edit, study))
-      assert html_response(conn, 200) =~ "Edit Study"
+      assert html_response(conn, 200) =~ "Study"
     end
 
     test "deny editing a non-owned study", %{conn: conn} do
@@ -77,7 +75,7 @@ defmodule LinkWeb.StudyControllerTest do
 
     test "renders errors when data is invalid", %{conn: conn, study: study} do
       conn = put(conn, Routes.study_path(conn, :update, study), study: @invalid_attrs)
-      assert html_response(conn, 200) =~ "Edit Study"
+      assert html_response(conn, 200) =~ "Study"
     end
   end
 
@@ -86,7 +84,7 @@ defmodule LinkWeb.StudyControllerTest do
 
     test "deletes chosen study", %{conn: conn, study: study} do
       delete_conn = delete(conn, Routes.study_path(conn, :delete, study))
-      assert redirected_to(delete_conn) == Routes.study_path(delete_conn, :index)
+      assert redirected_to(delete_conn) == Routes.dashboard_path(delete_conn, :index)
 
       assert_error_sent 404, fn ->
         get(conn, Routes.study_path(conn, :show, study))

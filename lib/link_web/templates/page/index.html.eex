@@ -1,7 +1,46 @@
-<section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Link" %></h1>
-  <p>Recruitment Platform for Research Participants</p>
-  <%= if Pow.Plug.current_user(@conn) do %>
-    <span><%= button "Go to study overview", class: "button-clear", method: :get, to: Routes.study_path(@conn, :index) %></span>
-  <% end %>
-</section>
+<%= hero_large dgettext("eyra-link", "welcome.title"),
+  dgettext("eyra-link", "welcome.subtitle"),
+  Routes.static_path(@conn, "/images/illustration.svg")
+%>
+<div class="flex h-full w-full">
+  <div class="flex-grow ml-6 mr-6 lg:ml-14 lg:mr-14">
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="md:col-span-2 mt-9 mt-9 lg:mt-24">
+        <div class="text-title3 font-title3 lg:text-title1 lg:font-title1 mb-7 lg:mb-9">
+          <%= dgettext "eyra-link", "link.title" %>
+        </div>
+        <div class="text-intro lg:text-introdesktop font-intro lg:mb-9">
+          <%= dgettext "eyra-link", "link.message" %>
+        </div>
+      </div>
+      <div class="mt-0 md:mt-9 lg:mt-24">
+        <%= if Pow.Plug.current_user(@conn) do %>
+          <div class="">
+            <%=
+              cta_title = cond do
+                @profile != nil -> dgettext("eyra-link", "member.profile.card.title", user: @profile.displayname)
+                true -> dgettext("eyra-link", "member.card.title")
+              end
+              primary_cta cta_title, dgettext("eyra-link", "dashboard-button"), Routes.dashboard_path(@conn, :index)
+            %>
+          </div>
+        <% else %>
+          <div class="">
+            <%= primary_cta dgettext("eyra-link", "signup.card.title"), dgettext("eyra-link", "signup.card.button"), Routes.pow_session_path(@conn, :new) %>
+          </div>
+        <% end %>
+      </div>
+      <div>
+        <%= usp_card dgettext("eyra-link", "usp1.title"), dgettext("eyra-link", "usp1.description") %>
+      </div>
+      <div>
+        <%= usp_card dgettext("eyra-link", "usp2.title"), dgettext("eyra-link", "usp2.description") %>
+      </div>
+      <div>
+        <%= usp_card dgettext("eyra-link", "usp3.title"), dgettext("eyra-link", "usp3.description") %>
+      </div>
+    </div>
+  </div>
+  <div class="flex-wrap flex-shrink-0 w-0 lg:w-sidebar">
+  </div>
+</div>

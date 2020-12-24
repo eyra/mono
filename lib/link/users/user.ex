@@ -9,7 +9,7 @@ defmodule Link.Users.User do
 
   schema "users" do
     pow_user_fields()
-
+    has_one :profile, Profile
     timestamps()
   end
 end

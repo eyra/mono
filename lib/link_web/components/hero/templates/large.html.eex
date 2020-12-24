@@ -1,0 +1,10 @@
+<div class="flex h-header1 items-center sm:h-header1-sm lg:h-header1-lg <%= @text_color %> <%= @bg_color %>">
+  <div class="flex-grow flex-shrink-0">
+    <p class="text-title5 sm:text-title2 lg:text-title1 font-title1 ml-6 mr-6 lg:ml-14">
+      <%= @title %><br><%= @subtitle %>
+    </p>
+  </div>
+  <div class="flex-none w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
+    <img src="<%= @illustration %>"/>
+  </div>
+</div>

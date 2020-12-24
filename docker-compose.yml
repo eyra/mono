@@ -24,8 +24,8 @@ services:
     ports:
       - 4000:4000
     environment:
-      GOOGLE_AUTH_CLIENT_ID: ${GOOGLE_AUTH_CLIENT_ID}
-      GOOGLE_AUTH_CLIENT_SECRET: ${GOOGLE_AUTH_CLIENT_SECRET}
+      GOOGLE_AUTH_CLIENT_ID: 921548238010-egr9u89cgrg0k4fss3j26pp2suk3gl4k.apps.googleusercontent.com
+      GOOGLE_AUTH_CLIENT_SECRET: VsQkTNpCB50wWdF1MHcslUYk
 
   db:
     build:
@@ -49,7 +49,6 @@ services:
     command: "mix ci"
     depends_on:
       - testdb
-
   docs:
     <<: *default-app
     environment:

@@ -1,0 +1,31 @@
+<div class="flex w-full">
+  <div class="flex-grow">
+    <div class="w-full">
+      <div class="flex justify-center">
+          <div class="flex-grow max-w-form ml-6 mr-6 lg:m-0 mt-6 sm:mt-16 lg:mt-24">
+            <div class="mb-6 text-title5 font-title5 lg:text-title2 lg:font-title2"><%= dgettext "eyra-account", "profile.title" %></div>
+            <div>
+              <%= form_for @changeset, Routes.user_profile_path(@conn, :update), fn f -> %>
+
+                <%= checkbox_field f, :researcher, dgettext("eyra-account", "researcher.label") %>
+                <%= text_field f, :fullname, dgettext("eyra-account", "fullname.label") %>
+                <%= text_field f, :displayname, dgettext("eyra-account", "displayname.label") %>
+
+                <%= if @changeset.action do %>
+                  <%= warning dgettext("eyra-ux", "%{action}.failed", action: dgettext("eyra-account", "profile.save.button")) %>
+                <% end %>
+
+                <div class="mb-8">
+                  <%= submit_button_wide dgettext("eyra-account", "profile.save.button") %>
+                </div>
+              <% end %>
+            <div>
+                <%= secondary_button dgettext("eyra-account", "signout.button"), Routes.pow_session_path(@conn, :delete), :delete, "text-delete", "border-delete", "w-full"  %>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <div class="flex-wrap w-0 sm:w-sidebar"></div>
+</div>
