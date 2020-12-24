@@ -15,11 +15,17 @@ This will setup all required dependencies.
 
 ## Database
 
-To start the database run:
+Get PostgreSQL:
 
-    pg_ctl -D db start
+- [OS X](https://postgresapp.com))
+- [Windows](https://www.postgresql.org/download/windows/)
 
-Migrations (to setup the tables) can be run with:
+Make sure that it is started. Open a control panel to the database and
+add a new super user:
+
+    create user link  with superuser password 'supersecret';
+
+Now run the migrations with:
 
     mix ecto.migrate
 
