@@ -20,11 +20,6 @@ Get PostgreSQL:
 - [OS X](https://postgresapp.com))
 - [Windows](https://www.postgresql.org/download/windows/)
 
-Make sure that it is started. Open a control panel to the database and
-add a new super user:
-
-    create user link  with superuser password 'supersecret';
-
 Now run the migrations with:
 
     mix ecto.migrate

@@ -6,8 +6,8 @@ use Mix.Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :link, Link.Repo,
-  username: System.get_env("POSTGRES_USER", "link"),
-  password: System.get_env("POSTGRES_PASS", ""),
+  username: System.get_env("POSTGRES_USER", "postgres"),
+  password: System.get_env("POSTGRES_PASS", "postgres"),
   database: "link_test",
   hostname: System.get_env("POSTGRES_HOST", "localhost"),
   pool: Ecto.Adapters.SQL.Sandbox
