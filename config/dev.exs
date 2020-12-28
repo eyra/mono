@@ -2,8 +2,8 @@ use Mix.Config
 
 # Configure your database
 config :link, Link.Repo,
-  username: "link",
-  password: "supersecret",
+  username: "postgres",
+  password: "postgres",
   database: "link_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
