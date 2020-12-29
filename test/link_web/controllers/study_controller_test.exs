@@ -1,19 +1,14 @@
 defmodule LinkWeb.StudyControllerTest do
   use LinkWeb.ConnCase
 
-  alias Link.{Studies, Users}
+  alias Link.Studies
 
   @create_attrs %{description: "some description", title: "some title"}
   @update_attrs %{description: "some updated description", title: "some updated title"}
   @invalid_attrs %{description: nil, title: nil}
 
   setup %{conn: conn} do
-    user = user_fixture()
-
-    user
-    |> Users.get_profile()
-    |> Users.update_profile(%{researcher: true, fullname: "Grace Hopper", displayname: "Grace"})
-
+    user = Factories.insert!(:researcher)
     conn = Pow.Plug.assign_current_user(conn, user, otp_app: :link_web)
 
     {:ok, conn: conn, user: user}
@@ -53,7 +48,7 @@ defmodule LinkWeb.StudyControllerTest do
 
     test "deny editing a non-owned study", %{conn: conn} do
       # Setup a study owned by a different user
-      {:ok, study: study} = create_study(%{user: user_fixture()})
+      study = Factories.insert!(:study)
       # Now try to load that study
       conn = get(conn, Routes.study_path(conn, :edit, study))
       # The result should be an access denied error

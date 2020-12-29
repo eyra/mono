@@ -3,19 +3,8 @@ defmodule Link.Factories do
   This module provides factory function to be used for tests.
   """
   alias Link.Users
-  alias Link.Studies
+  alias Link.{Studies, SurveyTools}
   alias Link.Repo
-
-  def get_or_create_user(attrs \\ []) do
-    merged_attrs =
-      Enum.into(attrs, %{
-        email: Faker.Internet.email(),
-        password: "S4p3rS3cr3t",
-        password_confirmation: "S4p3rS3cr3t"
-      })
-
-    Users.get_by(email: merged_attrs.email) || Users.create!(merged_attrs)
-  end
 
   def build(:member) do
     %Users.User{
@@ -40,6 +29,13 @@ defmodule Link.Factories do
     %Studies.Study{
       description: Faker.Lorem.paragraph(),
       title: Faker.Lorem.sentence()
+    }
+  end
+
+  def build(:survey_tool) do
+    %SurveyTools.SurveyTool{
+      title: Faker.Lorem.sentence(),
+      study: build(:study)
     }
   end
 

@@ -4,7 +4,7 @@ defmodule LinkWeb.DashboardControllerTest do
   alias Link.Factories
 
   setup %{conn: conn} do
-    member = Factories.get_or_create_user()
+    member = Factories.insert!(:member)
     conn = Pow.Plug.assign_current_user(conn, member, otp_app: :link_web)
 
     {:ok, conn: conn, member: member}

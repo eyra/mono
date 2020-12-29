@@ -7,7 +7,7 @@ defmodule LinkWeb.UserProfileControllerTest do
   @invalid_attrs %{fullname: nil, displayname: nil}
 
   setup %{conn: conn} do
-    user = Factories.get_or_create_user()
+    user = Factories.insert!(:member)
     conn = Pow.Plug.assign_current_user(conn, user, otp_app: :link_web)
 
     {:ok, conn: conn, user: user}

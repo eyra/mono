@@ -10,8 +10,9 @@ defmodule LinkWeb.SurveyToolControllerTest do
   @invalid_attrs %{title: nil}
 
   setup %{conn: conn} do
-    user = user_fixture()
-    study = study_fixture(user)
+    user = Factories.insert!(:researcher)
+    study = Factories.insert!(:study)
+    Link.Authorization.assign_role!(user, study, :owner)
     conn = Pow.Plug.assign_current_user(conn, user, otp_app: :link_web)
 
     {:ok, conn: conn, user: user, study: study}

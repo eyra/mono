@@ -68,7 +68,7 @@ defmodule Link.StudiesTest do
 
     test "delete_study/1 deletes the study even with participations attached" do
       study = Factories.insert!(:study)
-      participant = Factories.get_or_create_user()
+      participant = Factories.insert!(:member)
       Studies.apply_participant(study, participant)
       assert {:ok, %Study{}} = Studies.delete_study(study)
       assert_raise Ecto.NoResultsError, fn -> Studies.get_study!(study.id) end
@@ -122,7 +122,7 @@ defmodule Link.StudiesTest do
 
     test "list_participations/1 list all studies a user is a part of" do
       study = Factories.insert!(:study)
-      member = Factories.get_or_create_user()
+      member = Factories.insert!(:member)
       # Listing without any participation should return an empty list
       assert Studies.list_participations(member) == []
       # The listing should contain the study after an application has been made
