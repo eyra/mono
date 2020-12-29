@@ -5,7 +5,7 @@ defmodule Link.StudiesTest do
 
   describe "studies" do
     alias Link.Studies.Study
-    alias Link.{Users, Factories}
+    alias Link.{Users, Factories, Authorization}
 
     @researcher %{
       email: Faker.Internet.email(),
@@ -38,15 +38,16 @@ defmodule Link.StudiesTest do
     end
 
     test "list_studies/1 allows excluding a list of ids" do
-      studies = 0..3 |> Enum.map(fn _ -> Factories.create_study() end)
+      studies = 0..3 |> Enum.map(fn _ -> Factories.insert!(:study) end)
       {excluded_study, expected_result} = List.pop_at(studies, 1)
       assert Studies.list_studies(exclude: [excluded_study.id]) == expected_result
     end
 
     test "list_owned_studies/1 returns only studies that are owned by the user" do
-      _not_owned = Factories.create_study()
-      researcher = Factories.get_or_create_researcher(email: "someone@example.com")
-      owned = Factories.create_study(owner: researcher)
+      _not_owned = Factories.insert!(:study)
+      researcher = Factories.insert!(:researcher)
+      owned = Factories.insert!(:study)
+      Authorization.assign_role!(researcher, owned, :owner)
       assert Studies.list_owned_studies(researcher) == [owned]
     end
 
@@ -85,7 +86,7 @@ defmodule Link.StudiesTest do
     end
 
     test "delete_study/1 deletes the study even with participations attached" do
-      study = Factories.create_study()
+      study = Factories.insert!(:study)
       participant = Factories.get_or_create_user()
       Studies.apply_participant(study, participant)
       assert {:ok, %Study{}} = Studies.delete_study(study)
@@ -139,7 +140,7 @@ defmodule Link.StudiesTest do
     end
 
     test "list_participations/1 list all studies a user is a part of" do
-      study = Factories.create_study()
+      study = Factories.insert!(:study)
       member = Factories.get_or_create_user()
       # Listing without any participation should return an empty list
       assert Studies.list_participations(member) == []
@@ -149,9 +150,10 @@ defmodule Link.StudiesTest do
     end
 
     test "add_owner!/2 grants a user ownership over a study" do
-      researcher_1 = Factories.get_or_create_researcher()
-      researcher_2 = Factories.get_or_create_researcher()
-      study = Factories.create_study(owner: researcher_1)
+      researcher_1 = Factories.insert!(:researcher)
+      researcher_2 = Factories.insert!(:researcher)
+      study = Factories.insert!(:study)
+      Authorization.assign_role!(researcher_1, study, :owner)
       # The second researcher is not the owner of the study
       assert Studies.list_owned_studies(researcher_2) == []
       Studies.add_owner!(study, researcher_2)
@@ -160,9 +162,10 @@ defmodule Link.StudiesTest do
     end
 
     test "assign_owners/2 adds or removes a users ownership of a study" do
-      researcher_1 = Factories.get_or_create_researcher()
-      researcher_2 = Factories.get_or_create_researcher()
-      study = Factories.create_study(owner: researcher_1)
+      researcher_1 = Factories.insert!(:researcher)
+      researcher_2 = Factories.insert!(:researcher)
+      study = Factories.insert!(:study)
+      Authorization.assign_role!(researcher_1, study, :owner)
       # The second researcher is not the owner of the study
       assert Studies.list_owned_studies(researcher_2) == []
       Studies.assign_owners(study, [researcher_2])
@@ -173,12 +176,13 @@ defmodule Link.StudiesTest do
     end
 
     test "list_owners/1 returns all users with ownership permission on the study" do
-      researcher_1 = Factories.get_or_create_researcher()
-      researcher_2 = Factories.get_or_create_researcher()
-      study = Factories.create_study(owner: researcher_1)
-      assert Studies.list_owners(study) == [researcher_1]
+      researcher_1 = Factories.insert!(:researcher)
+      researcher_2 = Factories.insert!(:researcher)
+      study = Factories.insert!(:study)
+      Authorization.assign_role!(researcher_1, study, :owner)
+      assert Studies.list_owners(study) |> Enum.map(& &1.id) == [researcher_1.id]
       Studies.assign_owners(study, [researcher_2])
-      assert Studies.list_owners(study) == [researcher_2]
+      assert Studies.list_owners(study) |> Enum.map(& &1.id) == [researcher_2.id]
     end
   end
 end

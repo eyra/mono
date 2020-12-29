@@ -13,7 +13,7 @@ defmodule LinkWeb.DashboardControllerTest do
   describe "index" do
     test "list all available studies", %{conn: conn} do
       titles = ["Analytical Engine", "FLOW-MATIC"]
-      titles |> Enum.map(&Factories.create_study(title: &1))
+      titles |> Enum.map(&Factories.insert!(:study, title: &1))
       conn = get(conn, Routes.dashboard_path(conn, :index))
 
       for title <- titles do

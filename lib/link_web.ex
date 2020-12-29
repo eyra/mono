@@ -31,9 +31,7 @@ defmodule LinkWeb do
     end
   end
 
-  def view(opts \\
-        [root: "lib/link_web/templates",
-         namespace: LinkWeb]) do
+  def view(opts \\ [root: "lib/link_web/templates", namespace: LinkWeb]) do
     quote do
       use Phoenix.View, unquote(opts)
 
@@ -91,17 +89,13 @@ defmodule LinkWeb do
   end
 
   @doc """
-  When used, dispatch to the appropriate controller/view/etc.
+  When used, dispatch to the appropriate controller/view/etc applying given opts.
   """
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])
   end
 
-  @doc """
-  When used, dispatch to the appropriate controller/view/etc applying given opts.
-  """
   defmacro __using__({which, opts}) when is_atom(which) do
     apply(__MODULE__, which, [opts])
   end
-
 end

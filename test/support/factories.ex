@@ -4,6 +4,7 @@ defmodule Link.Factories do
   """
   alias Link.Users
   alias Link.Studies
+  alias Link.Repo
 
   def get_or_create_user(attrs \\ []) do
     merged_attrs =
@@ -16,29 +17,37 @@ defmodule Link.Factories do
     Users.get_by(email: merged_attrs.email) || Users.create!(merged_attrs)
   end
 
-  def get_or_create_researcher(attrs \\ []) do
-    user = get_or_create_user(attrs)
-
-    user
-    |> Users.get_profile()
-    |> Users.update_profile(%{
-      researcher: true,
-      fullname: Faker.Person.last_name(),
-      displayname: Faker.Person.last_name()
-    })
-
-    user
+  def build(:member) do
+    %Users.User{
+      email: Faker.Internet.email(),
+      password: "S4p3rS3cr3t"
+    }
   end
 
-  def create_study(attrs \\ []) do
-    {researcher, study_attrs} = Keyword.pop(attrs, :owner)
-    researcher = researcher || get_or_create_researcher()
+  def build(:researcher) do
+    :member
+    |> build()
+    |> Map.merge(%{
+      profile: %Users.Profile{
+        fullname: Faker.Person.name(),
+        displayname: Faker.Person.first_name(),
+        researcher: true
+      }
+    })
+  end
 
-    {:ok, study} =
-      study_attrs
-      |> Enum.into(%{description: Faker.Lorem.paragraph(), title: Faker.Lorem.sentence()})
-      |> Studies.create_study(researcher)
+  def build(:study) do
+    %Studies.Study{
+      description: Faker.Lorem.paragraph(),
+      title: Faker.Lorem.sentence()
+    }
+  end
 
-    study
+  def build(factory_name, attributes) do
+    factory_name |> build() |> struct!(attributes)
+  end
+
+  def insert!(factory_name, attributes \\ []) do
+    factory_name |> build(attributes) |> Repo.insert!()
   end
 end

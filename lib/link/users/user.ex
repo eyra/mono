@@ -6,6 +6,7 @@ defmodule Link.Users.User do
   use Ecto.Schema
   use Pow.Ecto.Schema
   use PowAssent.Ecto.Schema
+  alias Link.Users.Profile
 
   schema "users" do
     pow_user_fields()
