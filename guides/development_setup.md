@@ -13,6 +13,12 @@ For OS X; install GnuPG, `brew install gnupg`.
 
 This will setup all required dependencies.
 
+## Pre-commit
+
+The project has several code quality tools in place. These can be  automatically executed on commit & push. Install [pre-commit](https://pre-commit.com/#install) to enable this. Then run:
+
+    pre-commit install
+
 ## Database
 
 Get PostgreSQL:
