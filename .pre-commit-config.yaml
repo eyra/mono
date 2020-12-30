@@ -17,13 +17,13 @@ repos:
         entry: mix test
         language: system
         pass_filenames: false
-        files: \.exs*$
+        files: \.exs?$
 
       - id: mix-format
         name: "elixir: mix format"
-        entry: mix format --check-formatted
+        entry: mix format
         language: system
-        files: \.exs*$
+        files: \.exs?$
 
       - id: mix-compile
         name: "elixir: mix compile"
@@ -35,6 +35,13 @@ repos:
       - id: mix-credo
         name: "elixir: mix credo"
         entry: mix credo
+        language: system
+        pass_filenames: false
+        files: \.exs*$
+
+      - id: mix-sobelow
+        name: "elixir: mix sobelow"
+        entry: mix sobelow -i Config.CSRF,Config.Headers
         language: system
         pass_filenames: false
         files: \.exs*$
