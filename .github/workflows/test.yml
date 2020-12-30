@@ -37,8 +37,8 @@ jobs:
           POSTGRES_USER: link
           POSTGRES_PASS: supersecret
 
-      - name: Format code
-        run: mix format
+      - name: Format & lint
+        run: pip install pre-commit && pre-commit run -a
 
       - name: Commit formatted code
         uses: EndBug/add-and-commit@v6
