@@ -1,4 +1,4 @@
-name: Test
+name: Test & Lint
 
 on:
   push:
@@ -36,3 +36,13 @@ jobs:
           MIX_ENV: test
           POSTGRES_USER: link
           POSTGRES_PASS: supersecret
+
+      - name: Format code
+        run: mix format
+
+      - name: Commit formatted code
+        uses: EndBug/add-and-commit@v6
+        with:
+          add: '.'
+          message: 'Formatted code'
+          token: ${{ secrets.GITHUB_TOKEN }}
