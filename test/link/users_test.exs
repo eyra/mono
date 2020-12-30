@@ -30,7 +30,11 @@ defmodule Link.UsersTest do
     test "update_user_profile/2 updates the user profile", %{
       user: user
     } do
-      {:ok, _} = user |> Users.get_profile() |> Users.update_profile(%{fullname: "Update Test", displayname: "Update"})
+      {:ok, _} =
+        user
+        |> Users.get_profile()
+        |> Users.update_profile(%{fullname: "Update Test", displayname: "Update"})
+
       assert user |> Users.get_profile() |> Map.get(:fullname) == "Update Test"
     end
 

@@ -30,6 +30,7 @@ defmodule Link.Users do
 
   def get_display_label(%User{} = user) do
     user_profile = get_profile(user)
+
     cond do
       user_profile.fullname != nil -> user_profile.fullname
       user_profile.displayname != nil -> user_profile.displayname
@@ -56,5 +57,4 @@ defmodule Link.Users do
     %Profile{user_id: user_id}
     |> Repo.insert!()
   end
-
 end
