@@ -27,7 +27,7 @@ module.exports = {
       white: '#FFFFFF',
       apple: '#000000',
       google: '#EA4335',
-    },    
+    },
     extend: {
       width: {
         "sidebar" : "68px",
@@ -101,14 +101,14 @@ module.exports = {
         "header1": "376px",
         "form": "400px"
       },
-    },  
+    },
   },
   variants: {
     variants: {
       extend: {
        borderColor: ['active', 'hover'],
       },
-    }  
+    }
   },
   plugins: [],
 }

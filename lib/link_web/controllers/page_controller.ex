@@ -19,6 +19,7 @@ defmodule LinkWeb.PageController do
     |> Users.get_profile()
   end
 
-  defp get_user_profile(nil) do nil end
-
+  defp get_user_profile(nil) do
+    nil
+  end
 end
