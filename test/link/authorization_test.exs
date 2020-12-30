@@ -9,7 +9,7 @@ defmodule Link.AuthorizationTest do
   end
 
   test "principal returns `member` for regular users" do
-    member = Factories.get_or_create_user()
+    member = Factories.insert!(:member)
 
     assert Authorization.principal(member) == %Principal{
              id: member.id,
@@ -18,7 +18,7 @@ defmodule Link.AuthorizationTest do
   end
 
   test "principal returns `member` and `researcher` for users marked as such" do
-    researcher = Factories.get_or_create_researcher()
+    researcher = Factories.insert!(:researcher)
 
     assert Authorization.principal(researcher) == %Principal{
              id: researcher.id,

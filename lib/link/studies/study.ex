@@ -11,6 +11,10 @@ defmodule Link.Studies.Study do
     field :description, :string
     field :title, :string
 
+    has_many :role_assignments, Link.Users.RoleAssignment,
+      foreign_key: :entity_id,
+      defaults: [entity_type: Link.Studies.Study |> Atom.to_string()]
+
     timestamps()
   end
 

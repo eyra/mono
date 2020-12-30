@@ -25,6 +25,7 @@ defmodule LinkWeb.ConnCase do
       import LinkWeb.ConnCase
 
       import Link.TestHelpers
+      alias Link.Factories
       alias LinkWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing

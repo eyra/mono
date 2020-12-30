@@ -1,11 +1,12 @@
 defmodule LinkWeb.Studies.PermissionsControllerTest do
   use LinkWeb.ConnCase
 
-  alias Link.{Studies, Factories}
+  alias Link.{Studies, Factories, Authorization}
 
   setup %{conn: conn} do
-    user = Factories.get_or_create_researcher()
-    study = Factories.create_study(owner: user)
+    user = Factories.insert!(:researcher)
+    study = Factories.insert!(:study)
+    Authorization.assign_role!(user, study, :owner)
     conn = Pow.Plug.assign_current_user(conn, user, otp_app: :link_web)
 
     {:ok, conn: conn, user: user, study: study}
@@ -13,7 +14,7 @@ defmodule LinkWeb.Studies.PermissionsControllerTest do
 
   describe "add owner" do
     test "can add user as an owner", %{conn: conn, study: study} do
-      additional_user = Factories.get_or_create_researcher()
+      additional_user = Factories.insert!(:researcher)
 
       update_conn =
         post(conn, Routes.study_permissions_path(conn, :create, study),
@@ -28,14 +29,15 @@ defmodule LinkWeb.Studies.PermissionsControllerTest do
     end
 
     test "adding an owner keeps the orignal owners", %{conn: conn, study: study, user: user} do
-      current_owners = [user, Factories.get_or_create_researcher()]
+      current_owners = [user, Factories.insert!(:researcher)]
       Studies.assign_owners(study, current_owners)
 
-      additional_user = Factories.get_or_create_researcher()
+      additional_user = Factories.insert!(:researcher)
 
       post(conn, Routes.study_permissions_path(conn, :create, study), email: additional_user.email)
 
-      assert Studies.list_owners(study) == current_owners ++ [additional_user]
+      assert study |> Studies.list_owners() |> Enum.map(& &1.id) ==
+               (current_owners ++ [additional_user]) |> Enum.map(& &1.id)
     end
 
     test "reports error when adding non-existing user", %{conn: conn, study: study} do
@@ -50,7 +52,7 @@ defmodule LinkWeb.Studies.PermissionsControllerTest do
 
   describe "remove owner" do
     test "can remove an owner from a study", %{conn: conn, study: study, user: user} do
-      additional_user = Factories.get_or_create_researcher()
+      additional_user = Factories.insert!(:researcher)
       Studies.assign_owners(study, [additional_user, user])
 
       update_conn =

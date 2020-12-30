@@ -6,7 +6,9 @@ defmodule Link.UsersTest do
   describe "user" do
     alias Link.Users
 
-    setup :user_fixture
+    setup do
+      %{user: Factories.insert!(:member)}
+    end
 
     test "get_user_profile!/1 returns an empty user profile when it does not yet exist", %{
       user: user
@@ -36,11 +38,6 @@ defmodule Link.UsersTest do
         |> Users.update_profile(%{fullname: "Update Test", displayname: "Update"})
 
       assert user |> Users.get_profile() |> Map.get(:fullname) == "Update Test"
-    end
-
-    defp user_fixture(context) do
-      context
-      |> Map.put(:user, Factories.get_or_create_user())
     end
   end
 end

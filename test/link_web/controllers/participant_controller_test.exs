@@ -1,10 +1,11 @@
 defmodule LinkWeb.ParticipantControllerTest do
   use LinkWeb.ConnCase
 
+  alias Link.Factories
   alias Link.Studies
 
   setup %{conn: conn} do
-    user = user_fixture()
+    user = Factories.insert!(:member)
     {:ok, study} = Studies.create_study(%{title: "Test", description: "Testing"}, user)
     conn = Pow.Plug.assign_current_user(conn, user, otp_app: :link_web)
 
@@ -32,10 +33,7 @@ defmodule LinkWeb.ParticipantControllerTest do
   describe "index" do
     test "deny listing participants to non-researcher", %{conn: conn} do
       # Create a new study with a different researcher
-      different_researcher = user_fixture()
-
-      {:ok, study} =
-        Studies.create_study(%{title: "Test", description: "Testing"}, different_researcher)
+      study = Factories.insert!(:study)
 
       # Our currently authenticated user should not be allowed access
       conn = get(conn, Routes.participant_path(conn, :index, study))
@@ -44,10 +42,10 @@ defmodule LinkWeb.ParticipantControllerTest do
 
     test "lists all participants", %{conn: conn, study: study} do
       # Setup different members
-      non_participant = user_fixture()
-      applied_participant = user_fixture()
+      non_participant = Factories.insert!(:member)
+      applied_participant = Factories.insert!(:member)
       Studies.apply_participant(study, applied_participant)
-      accepted_participant = user_fixture()
+      accepted_participant = Factories.insert!(:member)
       Studies.apply_participant(study, accepted_participant)
       Studies.update_participant_status(study, accepted_participant, "entered")
       # Now verify the (non)existence of them as participants
@@ -61,7 +59,7 @@ defmodule LinkWeb.ParticipantControllerTest do
 
   describe "manage participants" do
     test "enter a study applicant", %{conn: conn, study: study} do
-      participant = user_fixture()
+      participant = Factories.insert!(:member)
       Studies.apply_participant(study, participant)
 
       patch(conn, Routes.participant_path(conn, :update, study), %{

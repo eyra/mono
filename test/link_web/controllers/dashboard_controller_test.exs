@@ -4,7 +4,7 @@ defmodule LinkWeb.DashboardControllerTest do
   alias Link.Factories
 
   setup %{conn: conn} do
-    member = Factories.get_or_create_user()
+    member = Factories.insert!(:member)
     conn = Pow.Plug.assign_current_user(conn, member, otp_app: :link_web)
 
     {:ok, conn: conn, member: member}
@@ -13,7 +13,7 @@ defmodule LinkWeb.DashboardControllerTest do
   describe "index" do
     test "list all available studies", %{conn: conn} do
       titles = ["Analytical Engine", "FLOW-MATIC"]
-      titles |> Enum.map(&Factories.create_study(title: &1))
+      titles |> Enum.map(&Factories.insert!(:study, title: &1))
       conn = get(conn, Routes.dashboard_path(conn, :index))
 
       for title <- titles do
