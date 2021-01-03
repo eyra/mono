@@ -109,3 +109,8 @@ assignments run:
 There are guides and code has comments to explain the functionality. The documentation can be converted into HTML or Epub with ExDoc. The command to generate the documentation is:
 
     mix docs
+
+## Test Content
+
+A mix task: `content.generate` is provided which creates some sample content. More info can be found in the module `Mix.Tasks.Content.Generate`
+module.

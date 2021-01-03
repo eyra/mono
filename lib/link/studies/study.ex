@@ -15,6 +15,8 @@ defmodule Link.Studies.Study do
       foreign_key: :entity_id,
       defaults: [entity_type: Link.Studies.Study |> Atom.to_string()]
 
+    has_many :participants, Link.Studies.Participant
+
     timestamps()
   end
 

@@ -16,7 +16,7 @@ defmodule Link.Factories do
   def build(:researcher) do
     :member
     |> build()
-    |> Map.merge(%{
+    |> struct!(%{
       profile: %Users.Profile{
         fullname: Faker.Person.name(),
         displayname: Faker.Person.first_name(),
@@ -39,11 +39,23 @@ defmodule Link.Factories do
     }
   end
 
+  def build(:role_assignment) do
+    %Users.RoleAssignment{}
+  end
+
+  def build(:participant) do
+    %Studies.Participant{}
+  end
+
   def build(factory_name, attributes) do
     factory_name |> build() |> struct!(attributes)
   end
 
   def insert!(factory_name, attributes \\ []) do
     factory_name |> build(attributes) |> Repo.insert!()
+  end
+
+  def map_build(enumerable, factory, attributes_fn) do
+    enumerable |> Enum.map(&build(factory, attributes_fn.(&1)))
   end
 end
