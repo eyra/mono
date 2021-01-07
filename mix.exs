@@ -57,6 +57,7 @@ defmodule Link.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:pow, "~> 1.0.21"},
       {:pow_assent, "~> 0.4.9"},
+      {:faker, "~> 0.16"},
       # Optional, but recommended for SSL validation with :httpc adapter
       {:certifi, "~> 2.4"},
       # Optional, but recommended for SSL validation with :httpc adapter
@@ -66,10 +67,10 @@ defmodule Link.MixProject do
       {:ex_cldr_numbers, "~> 2.16"},
       {:ex_cldr_dates_times, "~> 2.6"},
       # Dev and test deps
+      {:progress_bar, "~> 2.0.1", only: :dev},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.8", only: [:dev, :test]},
-      {:faker, "~> 0.16", only: :test},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:table_rex, "~> 3.0.0"}
     ]
