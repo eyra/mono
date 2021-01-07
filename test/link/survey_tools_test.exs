@@ -65,5 +65,32 @@ defmodule Link.SurveyToolsTest do
       survey_tool = Factories.insert!(:survey_tool)
       assert %Ecto.Changeset{} = SurveyTools.change_survey_tool(survey_tool)
     end
+
+    test "get_task/2 returns a task when available" do
+      survey_tool_task = Factories.insert!(:survey_tool_task)
+
+      assert SurveyTools.get_task(survey_tool_task.survey_tool, survey_tool_task.user)
+             |> Map.take([:user_id, :survey_tool_id]) ==
+               survey_tool_task |> Map.take([:user_id, :survey_tool_id])
+    end
+
+    test "setup_tasks_for_participants/1 creates task for all entered participants" do
+      survey_tool = Factories.insert!(:survey_tool)
+
+      [applied, rejected, entered] =
+        [:applied, :rejected, :entered]
+        |> Enum.map(&Factories.insert!(:study_participant, study: survey_tool.study, status: &1))
+
+      SurveyTools.setup_tasks_for_participants(survey_tool)
+
+      SurveyTools.list_tasks(survey_tool) |> Enum.map(& &1.user_id) == [entered.user_id]
+    end
+
+    test "complete_task/2 marks a survey tool task as completed" do
+      task = Factories.insert!(:survey_tool_task)
+      survey_tool = task.survey_tool
+
+      SurveyTools.list_tasks(survey_tool) |> Enum.map(& &1.user_id) == [task.user_id]
+    end
   end
 end

@@ -1,0 +1,23 @@
+defmodule Link.SurveyTools.SurveyToolTask do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  alias Link.SurveyTools.SurveyTool
+  alias Link.Users.User
+
+  @primary_key false
+  schema "survey_tool_tasks" do
+    belongs_to :survey_tool, SurveyTool
+    belongs_to :user, User
+    field :status, Ecto.Enum, values: [:pending, :completed]
+
+    timestamps()
+  end
+
+  @doc false
+  def changeset(survey_tool_task, attrs) do
+    survey_tool_task
+    |> cast(attrs, [:status])
+    |> validate_required([:status])
+  end
+end

@@ -32,10 +32,28 @@ defmodule Link.Factories do
     }
   end
 
+  def build(:study_participant) do
+    %Studies.Participant{
+      study: build(:study),
+      user: build(:member),
+      status: :applied
+    }
+  end
+
   def build(:survey_tool) do
     %SurveyTools.SurveyTool{
       title: Faker.Lorem.sentence(),
       study: build(:study)
+    }
+  end
+
+  def build(:survey_tool_task) do
+    member = build(:member)
+
+    %SurveyTools.SurveyToolTask{
+      user: member,
+      survey_tool: build(:survey_tool, participants: [member]),
+      status: :pending
     }
   end
 

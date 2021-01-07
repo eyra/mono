@@ -7,7 +7,7 @@ defmodule Link.Authorization do
   """
   use GreenLight,
     repo: Link.Repo,
-    roles: [:visitor, :member, :researcher, :owner],
+    roles: [:visitor, :member, :researcher, :owner, :participant],
     role_assignment_schema: Link.Users.RoleAssignment
 
   alias GreenLight.Principal
@@ -18,6 +18,10 @@ defmodule Link.Authorization do
 
   grant_actions(LinkWeb.DashboardController, %{
     index: [:member]
+  })
+
+  grant_actions(LinkWeb.FakeSurveyController, %{
+    index: [:visitor, :member]
   })
 
   grant_actions(LinkWeb.SessionController, %{

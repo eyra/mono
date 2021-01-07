@@ -52,6 +52,7 @@ defmodule LinkWeb.Router do
     pipe_through :browser
     get "/", PageController, :index
     get "/switch-language/:locale", LanguageSwitchController, :index
+    get "/fake_survey", FakeSurveyController, :index
   end
 
   scope "/" do
@@ -66,10 +67,6 @@ defmodule LinkWeb.Router do
   end
 
   scope "/", LinkWeb do
-    pipe_through :browser
-  end
-
-  scope "/", LinkWeb do
     pipe_through [:browser, :require_authenticated]
 
     get "/dashboard", DashboardController, :index
@@ -78,7 +75,11 @@ defmodule LinkWeb.Router do
     put "/user-profile", UserProfileController, :update
 
     resources "/studies", StudyController do
-      resources "/survey-tools", SurveyToolController
+      resources "/survey-tools", SurveyToolController do
+        get "/start", SurveyToolTaskController, :start, as: :start_task
+        get "/complete", SurveyToolTaskController, :complete, as: :complete_task
+      end
+
       get "/permissions", Studies.PermissionsController, :show
       patch "/permissions", Studies.PermissionsController, :change
       post "/permissions", Studies.PermissionsController, :create

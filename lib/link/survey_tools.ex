@@ -1,12 +1,39 @@
 defmodule Link.SurveyTools do
   @moduledoc """
-  The SurveyTools context.
+
+  Survey tools allow a researcher to setup a link to an external survey
+  tool. The participant goes through the flow described below:
+
+  - Receive invitation to start a survey (mail, push etc.).
+  - Open survey tool, this opens it on the platform and requires authentication.
+  - The participant is then redirected to the survey at a 3rd party web-application.
+  - After completion the user is redirect back to the platform.
+  - The platform registers the completion of this survey for the participant.
+
+
+  A researcher is required to configure the 3rd party application with a redirect
+  link. The redirect link to be used is show on the survey tool configuration
+  screen (with copy button).
+
+  IDEA: The tool requires a sucessful round-trip with a verify flow to ensure
+  that everything is configured correctly.
+
+  Participants need to be invited to a particular survey explicitly. This avoids
+  the situation where a new user joins a study and then can immediately complete
+  previous surveys.
+
+  Once a participant has completed a survey they are no longer allowed to enter it
+  a second time. The status is clearly shown when the attempt to do so.
+
+  IDEA: A list of surveys can be access by the notification icon which is shown
+  on all screens.
   """
 
   import Ecto.Query, warn: false
   alias Link.Repo
+  alias Link.Studies
 
-  alias Link.SurveyTools.SurveyTool
+  alias Link.SurveyTools.{SurveyTool, SurveyToolTask}
 
   @doc """
   Returns the list of survey_tools.
@@ -101,5 +128,23 @@ defmodule Link.SurveyTools do
   """
   def change_survey_tool(%SurveyTool{} = survey_tool, attrs \\ %{}) do
     SurveyTool.changeset(survey_tool, attrs)
+  end
+
+  def get_task(survey_tool, user) do
+    Repo.get_by(SurveyToolTask, survey_tool_id: survey_tool.id, user_id: user.id)
+  end
+
+  def list_tasks(survey_tool) do
+    from(t in SurveyToolTask, where: t.survey_tool_id == ^survey_tool.id)
+    |> Repo.all()
+  end
+
+  def setup_tasks_for_participants(survey_tool) do
+    survey_tool.study
+    |> Studies.list_participants()
+    |> Enum.filter(&(Map.get(&1, :status) == :pending))
+    |> Enum.map(&Map.put(&1, :survey_tool_id, survey_tool.id))
+    |> Enum.map(&SurveyToolTask.changeset(%SurveyToolTask{}, &1))
+    |> Enum.map(&Repo.insert!(&1))
   end
 end
