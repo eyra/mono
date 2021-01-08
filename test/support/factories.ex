@@ -49,10 +49,12 @@ defmodule Link.Factories do
 
   def build(:survey_tool_task) do
     member = build(:member)
+    study = build(:study)
+    participant = build(:study_participant, user: member)
 
     %SurveyTools.SurveyToolTask{
       user: member,
-      survey_tool: build(:survey_tool, participants: [member]),
+      survey_tool: build(:survey_tool, study: study),
       status: :pending
     }
   end

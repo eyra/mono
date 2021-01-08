@@ -81,16 +81,24 @@ defmodule Link.SurveyToolsTest do
         [:applied, :rejected, :entered]
         |> Enum.map(&Factories.insert!(:study_participant, study: survey_tool.study, status: &1))
 
-      SurveyTools.setup_tasks_for_participants(survey_tool)
+      assert SurveyTools.setup_tasks_for_participants(survey_tool) |> Enum.count() == 1
 
-      SurveyTools.list_tasks(survey_tool) |> Enum.map(& &1.user_id) == [entered.user_id]
+      assert SurveyTools.list_tasks(survey_tool) |> Enum.map(& &1.user_id) == [entered.user_id]
+    end
+
+    test "list_tasks/1 returns the tasks for a survery tool" do
+      task = Factories.insert!(:survey_tool_task)
+      survey_tool = task.survey_tool
+
+      assert SurveyTools.list_tasks(survey_tool) |> Enum.map(& &1.user_id) == [task.user_id]
     end
 
     test "complete_task/2 marks a survey tool task as completed" do
       task = Factories.insert!(:survey_tool_task)
       survey_tool = task.survey_tool
 
-      SurveyTools.list_tasks(survey_tool) |> Enum.map(& &1.user_id) == [task.user_id]
+      assert SurveyTools.complete_task(survey_tool, task.user) == :ok
+      assert SurveyTools.get_task(survey_tool, task.user).status == :completed
     end
   end
 end
