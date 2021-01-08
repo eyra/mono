@@ -1,1 +1,5 @@
-<h1>Task</h1>
+<h1>Please continue</h1>
+
+<p>Follow the link below to enter the survey:</p>
+
+<%= link "Survey", to: @survey_tool.survey_url %>
