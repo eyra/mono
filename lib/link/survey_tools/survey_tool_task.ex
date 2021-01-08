@@ -1,11 +1,13 @@
 defmodule Link.SurveyTools.SurveyToolTask do
+  @moduledoc """
+  A task (fill out survey) to be completed by a participant.
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
   alias Link.SurveyTools.SurveyTool
   alias Link.Users.User
 
-  @primary_key false
   schema "survey_tool_tasks" do
     belongs_to :survey_tool, SurveyTool
     belongs_to :user, User

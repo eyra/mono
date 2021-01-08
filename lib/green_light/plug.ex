@@ -39,7 +39,7 @@ defmodule GreenLight.Plug do
           if auth_module.allowed?(roles, permission) do
             {:cont, {:ok, Plug.Conn.put_private(conn, :auth_principal_roles, roles)}}
           else
-            {:halt, {:error, :unauthorized}}
+            {:halt, {:error, %{principal_roles: roles, required_permission: permission}}}
           end
         end
       end)

@@ -3,9 +3,9 @@ defmodule LinkWeb.SurveyToolTaskControllerTest do
   alias Link.SurveyTools
 
   setup %{conn: conn} do
-    user = Factories.insert!(:member)
-    survey_tool = Factories.insert!(:survey_tool)
-    Link.Authorization.assign_role!(user, survey_tool.study, :participant)
+    %{user: user, study: study} = Factories.insert!(:study_participant, status: :entered)
+    survey_tool = Factories.insert!(:survey_tool, study: study)
+    Link.Authorization.assign_role!(user, study, :participant)
     conn = Pow.Plug.assign_current_user(conn, user, otp_app: :link_web)
     {:ok, conn: conn, survey_tool: survey_tool, user: user}
   end
@@ -26,16 +26,15 @@ defmodule LinkWeb.SurveyToolTaskControllerTest do
           )
         )
 
-      assert response(conn, 401) =~ "not allowed"
+      assert html_response(conn, 200) =~ "no task available for you"
     end
 
     test "show a message when a user has already completed a task", %{
       conn: conn,
-      survey_tool: survey_tool,
-      user: user
+      survey_tool: survey_tool
     } do
-      SurveyTools.setup_tasks_for_participants(survey_tool)
-      SurveyTools.complete_task(survey_tool, user)
+      [task] = SurveyTools.setup_tasks_for_participants!(survey_tool)
+      SurveyTools.complete_task!(task)
 
       conn =
         get(
@@ -48,7 +47,7 @@ defmodule LinkWeb.SurveyToolTaskControllerTest do
           )
         )
 
-      assert html_response(conn, 200) =~ "already completed"
+      assert html_response(conn, 200) =~ "task has already been completed"
     end
   end
 end

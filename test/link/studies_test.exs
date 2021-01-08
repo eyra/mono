@@ -113,7 +113,8 @@ defmodule Link.StudiesTest do
       Studies.apply_participant(study, rejected_participant)
       Studies.update_participant_status(study, rejected_participant, "rejected")
       # Both members that applied should be listed with their corresponding status.
-      assert Studies.list_participants(study) == [
+      assert Studies.list_participants(study)
+             |> Enum.map(&%{status: &1.status, user_id: &1.user.id}) == [
                %{status: :applied, user_id: applied_participant.id},
                %{status: :entered, user_id: accepted_participant.id},
                %{status: :rejected, user_id: rejected_participant.id}

@@ -4,35 +4,35 @@ defmodule LinkWeb.SurveyToolTaskController do
   alias Link.SurveyTools
 
   entity_loader(
-    &LinkWeb.SurveyToolTaskController.task_loader!/3,
+    &Loaders.task_loader!/3,
     parents: [
-      &Loaders.survey_tool!/3,
-      &Loaders.study!/3
+      &Loaders.study!/3,
+      &Loaders.survey_tool!/3
     ]
   )
 
-  def task_loader!(%{assigns: %{survey_tool: survey_tool}} = conn, _params, _as_parent) do
-    user = Pow.Plug.current_user(conn)
-    {:survey_tool_task, SurveyTools.get_task(survey_tool, user)}
+  def start(
+        %{assigns: %{survey_tool_task: survey_tool_task}} = conn,
+        _params
+      ) do
+    case survey_tool_task do
+      %{status: :pending} -> render(conn, "start.html")
+      nil -> render(conn, "not_available.html")
+      _ -> render(conn, "already_completed.html")
+    end
   end
 
-  def start(%{survey_tool: survey_tool} = conn, _params) do
-    # Load the appropriate task
-    # - when the user has no task show an error
-    # - when the user has already completed the task show a message
-    # Show screen with link to external tool
+  def complete(%{assigns: %{survey_tool_task: survey_tool_task}} = conn, _params) do
+    case survey_tool_task do
+      %{status: :pending} ->
+        SurveyTools.complete_task!(survey_tool_task)
+        render(conn, "completed.html")
 
-    survey_tool_tasks = SurveyTools.list_survey_tool_tasks(survey_tool)
-    render(conn, "index.html", survey_tool_tasks: survey_tool_tasks)
-  end
+      nil ->
+        render(conn, "not_available.html")
 
-  def complete(%{survey_tool: survey_tool} = conn, _params) do
-    # Load the appropriate task
-    # - when the user has no task show an error
-    # - when the user has already completed the task show a message
-    # Flag the task as completed.
-    # Show a screen that indicates the task has been completed.
-    survey_tool_tasks = SurveyTools.list_survey_tool_tasks()
-    render(conn, "index.html", survey_tool_tasks: survey_tool_tasks)
+      _ ->
+        render(conn, "already_completed.html")
+    end
   end
 end

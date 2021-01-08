@@ -14,7 +14,8 @@ defmodule Link.Authorization do
   alias Link.Users
 
   grant_access(Link.Studies.Study, [:visitor, :member])
-  grant_access(Link.SurveyTools.SurveyTool, [:owner])
+  grant_access(Link.SurveyTools.SurveyTool, [:owner, :participant])
+  grant_access(Link.SurveyTools.SurveyToolTask, [:participant])
 
   grant_actions(LinkWeb.DashboardController, %{
     index: [:member]
@@ -77,6 +78,11 @@ defmodule Link.Authorization do
     delete: [:owner]
   })
 
+  grant_actions(LinkWeb.SurveyToolTaskController, %{
+    start: [:participant],
+    complete: [:participant]
+  })
+
   grant_actions(LinkWeb.PageController, %{
     index: [:visitor, :member]
   })
@@ -104,5 +110,21 @@ defmodule Link.Authorization do
 
   def can?(%Plug.Conn{} = conn, entity, module, action) do
     conn |> principal() |> can?(entity, module, action)
+  end
+
+  def map_to_auth_entity(nil) do
+    nil
+  end
+
+  def map_to_auth_entity(%Link.SurveyTools.SurveyToolTask{} = task) do
+    {Atom.to_string(Link.SurveyTools.SurveyToolTask),
+     :erlang.phash(
+       {task.survey_tool_id, task.user_id},
+       :math.pow(2, 32) |> floor()
+     )}
+  end
+
+  def map_to_auth_entity(entity) do
+    {Atom.to_string(entity.__struct__), entity.id}
   end
 end

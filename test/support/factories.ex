@@ -47,23 +47,28 @@ defmodule Link.Factories do
     }
   end
 
-  def build(:survey_tool_task) do
-    member = build(:member)
-    study = build(:study)
-    participant = build(:study_participant, user: member)
-
-    %SurveyTools.SurveyToolTask{
-      user: member,
-      survey_tool: build(:survey_tool, study: study),
-      status: :pending
-    }
-  end
-
   def build(factory_name, attributes) do
     factory_name |> build() |> struct!(attributes)
   end
 
-  def insert!(factory_name, attributes \\ []) do
+  def insert!(factory_name, attributes \\ [])
+
+  def insert!(:survey_tool_task, attributes) do
+    member = insert!(:member)
+    study = insert!(:study)
+    insert!(:study_participant, user: member, study: study)
+    survey_tool = insert!(:survey_tool, study: study)
+
+    %SurveyTools.SurveyToolTask{
+      user: member,
+      survey_tool: survey_tool,
+      status: :pending
+    }
+    |> struct!(attributes)
+    |> Repo.insert!()
+  end
+
+  def insert!(factory_name, attributes) do
     factory_name |> build(attributes) |> Repo.insert!()
   end
 end

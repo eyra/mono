@@ -135,28 +135,25 @@ defmodule Link.SurveyTools do
   end
 
   def list_tasks(survey_tool) do
-    from(t in SurveyToolTask)
+    from(t in SurveyToolTask, where: t.survey_tool_id == ^survey_tool.id)
     |> Repo.all()
   end
 
-  def setup_tasks_for_participants(survey_tool) do
+  def setup_tasks_for_participants!(survey_tool) do
     survey_tool.study
     |> Studies.list_participants()
     |> Enum.filter(&(Map.get(&1, :status) == :entered))
-    |> Enum.map(&Map.take(&1, [:user_id]))
-    |> Enum.map(&Map.put(&1, :survey_tool_id, survey_tool.id))
-    |> Enum.map(&SurveyToolTask.changeset(%SurveyToolTask{status: :pending}, &1))
+    |> Enum.map(
+      &(SurveyToolTask.changeset(%SurveyToolTask{}, %{status: :pending})
+        |> Ecto.Changeset.put_assoc(:user, &1.user)
+        |> Ecto.Changeset.put_assoc(:survey_tool, survey_tool))
+    )
     |> Enum.map(&Repo.insert!(&1))
   end
 
-  def complete_task(survey_tool, user) do
-    from(stt in SurveyToolTask,
-      where: stt.user_id == ^user.id and stt.survey_tool_id == ^survey_tool.id
-    )
-    |> Repo.update_all(set: [status: :completed])
-    |> case do
-      {1, _} -> :ok
-      _ -> :error
-    end
+  def complete_task!(task) do
+    task
+    |> SurveyToolTask.changeset(%{status: :completed})
+    |> Repo.update!()
   end
 end

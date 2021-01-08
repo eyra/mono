@@ -70,7 +70,8 @@ defmodule LinkWeb.ParticipantControllerTest do
       })
 
       # The member has now been registered as entered
-      assert Studies.list_participants(study) == [
+      assert Studies.list_participants(study)
+             |> Enum.map(&%{user_id: &1.user.id, status: &1.status}) == [
                %{status: :entered, user_id: participant.id}
              ]
     end

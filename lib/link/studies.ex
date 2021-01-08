@@ -190,12 +190,13 @@ defmodule Link.Studies do
 
   def list_participants(%Study{} = study) do
     from(p in Participant,
-      select: [p.user_id, p.status],
       where: p.study_id == ^study.id,
-      order_by: :status
+      order_by: :status,
+      preload: [:user]
     )
     |> Repo.all()
-    |> Enum.map(fn [user_id, status] -> %{user_id: user_id, status: status} end)
+
+    # |> Enum.map(fn [user, status] -> %{user: user, status: status} end)
   end
 
   def list_participations(%User{} = user) do
