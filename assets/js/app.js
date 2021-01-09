@@ -12,14 +12,20 @@ import "../css/app.css";
 //     import {Socket} from "phoenix"
 //     import socket from "./socket"
 //
-
-import 'alpinejs'
+import Alpine from "alpinejs"
 import "phoenix_html"
-import {Socket} from "phoenix"
-import {LiveSocket} from "phoenix_live_view"
+import { Socket } from "phoenix"
+import { LiveSocket } from "phoenix_live_view"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+let liveSocket = new LiveSocket("/live", Socket, {
+    params: { _csrf_token: csrfToken },
+    dom: {
+        onBeforeElUpdated(from, to) {
+            if (from.__x) { Alpine.clone(from.__x, to) }
+        }
+    }
+})
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()
