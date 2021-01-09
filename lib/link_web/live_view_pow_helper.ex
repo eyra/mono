@@ -1,4 +1,7 @@
 defmodule LinkWeb.LiveViewPowHelper do
+  @moduledoc """
+  A (temporary) hack to get LiveView and Pow to play nicely.
+  """
   alias Link.Users.User
   alias Pow.Store.CredentialsCache
 

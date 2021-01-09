@@ -1,4 +1,7 @@
 defmodule LinkWeb.Index do
+  @moduledoc """
+  The home screen.
+  """
   use LinkWeb, :live_view
   use LinkWeb.LiveViewPowHelper
   import Link.Users
