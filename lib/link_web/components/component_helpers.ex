@@ -161,6 +161,22 @@ defmodule LinkWeb.Components.ComponentHelpers do
     )
   end
 
+  def delete_button(
+    label,
+    path,
+    opts \\ []
+  ) do
+    opts =
+      opts
+      |> Keyword.put_new(:label, label)
+      |> Keyword.put_new(:path, path)
+      |> Keyword.put_new(:color, "bg-delete")
+      |> Keyword.put_new(:width, "w-full")
+      |> Keyword.put_new(:method, :delete)
+
+    c(:custom_button, :delete, opts)
+  end
+
   def submit_button_wide(label, bg_color \\ "bg-grey1") do
     width = "w-full"
     c(:custom_button, :submit, label: label, color: bg_color, width: width)

@@ -45,7 +45,7 @@
                       <%= menu_button dgettext("eyra-account", "signin.button"), Routes.pow_session_path(@conn, :new) %>
                     </div>
                   <% end %>
-                  <div class="flex-none pl-1 pr-3 lg:pr-6 lg:pl-6 lg:pr-16 -mt-0.5">
+                  <div class="flex-none pl-1 pr-3 lg:pl-6 lg:pr-16 -mt-0.5">
                    <%= for {locale, _name} <- supported_languages() do %>
                       <%= language_button @conn, locale %>
                    <% end %>

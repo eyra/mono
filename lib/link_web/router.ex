@@ -51,7 +51,7 @@ defmodule LinkWeb.Router do
 
   scope "/", LinkWeb do
     pipe_through :browser
-    get "/", PageController, :index
+    live "/", Index
     get "/switch-language/:locale", LanguageSwitchController, :index
   end
 
@@ -68,8 +68,6 @@ defmodule LinkWeb.Router do
 
   scope "/", LinkWeb do
     pipe_through :browser
-
-    live "/live", TestLive
   end
 
   scope "/", LinkWeb do
