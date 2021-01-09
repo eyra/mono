@@ -78,6 +78,7 @@ defmodule LinkWeb.Router do
       resources "/survey-tools", SurveyToolController do
         get "/start", SurveyToolTaskController, :start, as: :task
         get "/complete", SurveyToolTaskController, :complete, as: :task
+        post "/tasks", SurveyToolTaskController, :setup_tasks, as: :task
       end
 
       get "/permissions", Studies.PermissionsController, :show

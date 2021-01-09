@@ -80,7 +80,8 @@ defmodule Link.Authorization do
 
   grant_actions(LinkWeb.SurveyToolTaskController, %{
     start: [:participant],
-    complete: [:participant]
+    complete: [:participant],
+    setup_tasks: [:owner]
   })
 
   grant_actions(LinkWeb.PageController, %{
@@ -106,6 +107,14 @@ defmodule Link.Authorization do
 
   def assign_role!(%Link.Users.User{} = user, entity, role) do
     user |> principal() |> assign_role!(entity, role)
+  end
+
+  def remove_role!(%Link.Users.User{} = user, entity, role) do
+    user |> principal() |> remove_role!(entity, role)
+  end
+
+  def list_roles(%Link.Users.User{} = user, entity) do
+    user |> principal() |> list_roles(entity)
   end
 
   def can?(%Plug.Conn{} = conn, entity, module, action) do

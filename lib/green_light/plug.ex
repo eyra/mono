@@ -4,6 +4,7 @@ defmodule GreenLight.Plug do
   """
   import Plug.Conn
   alias GreenLight.Permissions
+  require Logger
 
   def init(auth_module), do: auth_module
 
@@ -39,13 +40,19 @@ defmodule GreenLight.Plug do
           if auth_module.allowed?(roles, permission) do
             {:cont, {:ok, Plug.Conn.put_private(conn, :auth_principal_roles, roles)}}
           else
-            {:halt, {:error, %{principal_roles: roles, required_permission: permission}}}
+            {:halt, {:error, {roles, permission}}}
           end
         end
       end)
 
     case result do
-      {:error, _} ->
+      {:error, {principal_roles, required_permission}} ->
+        Logger.debug(
+          "Principal with roles: #{principal_roles |> Enum.join(", ")} is not allowed to: `#{
+            required_permission
+          }`."
+        )
+
         conn
         |> resp(401, "The current principal is not allowed access.")
         |> halt()

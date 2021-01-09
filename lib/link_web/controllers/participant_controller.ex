@@ -28,7 +28,9 @@ defmodule LinkWeb.ParticipantController do
   end
 
   def update(%{assigns: %{study: study}} = conn, %{"participation" => participation}) do
-    with status <- Map.get(participation, "status"),
+    with status <-
+           Ecto.Changeset.cast(%Studies.Participant{}, participation, [:status])
+           |> Ecto.Changeset.get_change(:status),
          user_id <- Map.get(participation, "user_id"),
          user <- Users.get_by(id: user_id),
          :ok <- Studies.update_participant_status(study, user, status) do

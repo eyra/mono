@@ -22,7 +22,7 @@ defmodule Link.SurveyTools.SurveyTool do
   @doc false
   def changeset(survey_tool, attrs) do
     survey_tool
-    |> cast(attrs, [:title])
+    |> cast(attrs, [:title, :survey_url])
     |> validate_required([:title])
   end
 end

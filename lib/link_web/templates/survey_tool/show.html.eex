@@ -9,5 +9,10 @@
 
 </ul>
 
+<%= button "Create tasks for participants", to: Routes.study_survey_tool_task_path(@conn, :setup_tasks, @study, @survey_tool), method: :post %>
+
+<p>The URL to set as the completion URL in an external survey:</p>
+<code><%= Routes.study_survey_tool_task_url(@conn, :complete, @study, @survey_tool) %></code>
+
 <span><%= link "Edit", to: Routes.study_survey_tool_path(@conn, :edit, @study, @survey_tool) %></span>
 <span><%= link "Back", to: Routes.study_survey_tool_path(@conn, :index, @study) %></span>

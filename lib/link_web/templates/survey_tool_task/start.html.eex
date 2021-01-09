@@ -1,5 +1,10 @@
 <h1>Please continue</h1>
 
+
+<%= if @survey_tool.survey_url do %>
 <p>Follow the link below to enter the survey:</p>
 
 <%= link "Survey", to: @survey_tool.survey_url %>
+<% else %>
+<p>The study is missing a referende to the survey. Please contact the researcher.</p>
+<% end %>

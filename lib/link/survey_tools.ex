@@ -31,7 +31,6 @@ defmodule Link.SurveyTools do
 
   import Ecto.Query, warn: false
   alias Link.Repo
-  alias Link.Studies
 
   alias Link.SurveyTools.{SurveyTool, SurveyToolTask}
 
@@ -139,13 +138,21 @@ defmodule Link.SurveyTools do
     |> Repo.all()
   end
 
-  def setup_tasks_for_participants!(survey_tool) do
-    survey_tool.study
-    |> Studies.list_participants()
-    |> Enum.filter(&(Map.get(&1, :status) == :entered))
+  def list_participants_without_task(survey_tool, study) do
+    user_ids_with_task =
+      from(t in SurveyToolTask, where: t.survey_tool_id == ^survey_tool.id, select: t.user_id)
+
+    from(p in Link.Studies.Participant,
+      where: p.study_id == ^study.id and p.user_id not in subquery(user_ids_with_task)
+    )
+    |> Repo.all()
+  end
+
+  def setup_tasks_for_participants!(participants, survey_tool) do
+    participants
     |> Enum.map(
       &(SurveyToolTask.changeset(%SurveyToolTask{}, %{status: :pending})
-        |> Ecto.Changeset.put_assoc(:user, &1.user)
+        |> Ecto.Changeset.put_change(:user_id, &1.user_id)
         |> Ecto.Changeset.put_assoc(:survey_tool, survey_tool))
     )
     |> Enum.map(&Repo.insert!(&1))

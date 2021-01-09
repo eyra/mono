@@ -35,4 +35,11 @@ defmodule LinkWeb.SurveyToolTaskController do
         render(conn, "already_completed.html")
     end
   end
+
+  def setup_tasks(%{assigns: %{study: study, survey_tool: survey_tool}} = conn, _params) do
+    SurveyTools.list_participants_without_task(study, survey_tool)
+    |> SurveyTools.setup_tasks_for_participants!(survey_tool)
+
+    redirect(conn, to: Routes.study_survey_tool_path(conn, :show, study, survey_tool))
+  end
 end

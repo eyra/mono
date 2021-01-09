@@ -3,7 +3,8 @@ defmodule LinkWeb.SurveyToolTaskControllerTest do
   alias Link.SurveyTools
 
   setup %{conn: conn} do
-    %{user: user, study: study} = Factories.insert!(:study_participant, status: :entered)
+    participation =
+      %{user: user, study: study} = Factories.insert!(:study_participant, status: :entered)
 
     survey_tool =
       Factories.insert!(:survey_tool,
@@ -13,7 +14,7 @@ defmodule LinkWeb.SurveyToolTaskControllerTest do
 
     Link.Authorization.assign_role!(user, study, :participant)
     conn = Pow.Plug.assign_current_user(conn, user, otp_app: :link_web)
-    {:ok, conn: conn, survey_tool: survey_tool, user: user}
+    {:ok, conn: conn, survey_tool: survey_tool, user: user, participation: participation}
   end
 
   describe "start" do
@@ -37,9 +38,10 @@ defmodule LinkWeb.SurveyToolTaskControllerTest do
 
     test "show a message when a user has already completed a task", %{
       conn: conn,
-      survey_tool: survey_tool
+      survey_tool: survey_tool,
+      participation: participation
     } do
-      [task] = SurveyTools.setup_tasks_for_participants!(survey_tool)
+      [task] = SurveyTools.setup_tasks_for_participants!([participation], survey_tool)
       SurveyTools.complete_task!(task)
 
       conn =
@@ -58,9 +60,10 @@ defmodule LinkWeb.SurveyToolTaskControllerTest do
 
     test "show link to the survey when task is available", %{
       conn: conn,
-      survey_tool: survey_tool
+      survey_tool: survey_tool,
+      participation: participation
     } do
-      SurveyTools.setup_tasks_for_participants!(survey_tool)
+      SurveyTools.setup_tasks_for_participants!([participation], survey_tool)
 
       conn =
         get(
@@ -98,9 +101,10 @@ defmodule LinkWeb.SurveyToolTaskControllerTest do
 
     test "show a message when a user has already completed a task", %{
       conn: conn,
-      survey_tool: survey_tool
+      survey_tool: survey_tool,
+      participation: participation
     } do
-      [task] = SurveyTools.setup_tasks_for_participants!(survey_tool)
+      [task] = SurveyTools.setup_tasks_for_participants!([participation], survey_tool)
       SurveyTools.complete_task!(task)
 
       conn =
@@ -119,9 +123,10 @@ defmodule LinkWeb.SurveyToolTaskControllerTest do
 
     test "show that the task is now completed", %{
       conn: conn,
-      survey_tool: survey_tool
+      survey_tool: survey_tool,
+      participation: participation
     } do
-      SurveyTools.setup_tasks_for_participants!(survey_tool)
+      SurveyTools.setup_tasks_for_participants!([participation], survey_tool)
 
       conn =
         get(
