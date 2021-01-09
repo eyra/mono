@@ -18,7 +18,7 @@ config :link, LinkWeb.Endpoint,
   secret_key_base: "QbAmUdYcDMMQ2e7wVp6PSXI8QdUjfDEGR0FTwjwkUIYS4lW1ledjE9Dkhr3pE4Qn",
   render_errors: [view: LinkWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Link.PubSub,
-  live_view: [signing_salt: "Vp1B/xB7"]
+  live_view: [signing_salt: "U46ENwad8CDswjwuXgNZVpJjUlBjbmL9"]
 
 # Configures Elixir's Logger
 config :logger, :console,

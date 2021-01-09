@@ -1,6 +1,4 @@
-<button class="button underline text-primary text-link font-link hover:text-black focus:outline-none"
-    data-csrf=<%= @csrf_token %>
-    data-method=<%= @method %>
-    data-to= <%= @path %> >
-        <%= @label %>
-</button>
+<a class="text-primary text-link font-link hover:text-black underline focus:outline-none"
+   href= <%= @path %>>
+    <%= @label %>
+</a>

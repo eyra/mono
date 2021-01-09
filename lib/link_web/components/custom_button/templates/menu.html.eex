@@ -1,7 +1,5 @@
-<button
-    class="h-10 pl-3 pr-3 lg:pl-4 lg:pr-4 text-button font-button hover:bg-grey4 focus:outline-none rounded-full"
-    data-csrf=<%= @csrf_token %>
-    data-method=<%= @method %>
-    data-to= <%= @path %> >
-    <%= @label %>
-</button>
+<a href= <%= @path %>>
+    <div class="flex items-center h-10 pl-3 pr-3 lg:pl-4 lg:pr-4 text-button font-button rounded-full hover:bg-grey4 focus:outline-none">
+        <div><%= @label %></div>
+    </div>
+</a>

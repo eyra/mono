@@ -7,13 +7,14 @@ defmodule LinkWeb.Router do
   pipeline :browser_base do
     plug :accepts, ["html"]
     plug :fetch_session
+    plug :put_root_layout, {LinkWeb.LayoutView, :root}
 
     plug Cldr.Plug.SetLocale,
       apps: [cldr: LinkWeb.Cldr, gettext: :global],
       from: [:query, :cookie, :accept_language],
       param: "locale"
 
-    plug :fetch_flash
+    plug :fetch_live_flash
   end
 
   pipeline :browser_secure do
@@ -50,7 +51,7 @@ defmodule LinkWeb.Router do
 
   scope "/", LinkWeb do
     pipe_through :browser
-    get "/", PageController, :index
+    live "/", Index
     get "/switch-language/:locale", LanguageSwitchController, :index
   end
 
