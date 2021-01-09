@@ -162,10 +162,10 @@ defmodule LinkWeb.Components.ComponentHelpers do
   end
 
   def delete_button(
-    label,
-    path,
-    opts \\ []
-  ) do
+        label,
+        path,
+        opts \\ []
+      ) do
     opts =
       opts
       |> Keyword.put_new(:label, label)

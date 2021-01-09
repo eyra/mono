@@ -9,5 +9,4 @@ defmodule LinkWeb.Index do
     socket = assign_current_user(socket, session, user, profile)
     {:ok, socket}
   end
-
 end

@@ -41,7 +41,7 @@ defmodule LinkWeb do
       import Phoenix.Controller,
         only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
 
-        # Include shared imports and aliases for views
+      # Include shared imports and aliases for views
       unquote(view_helpers())
 
       # use Link.Authorization.Controller, :view
@@ -87,7 +87,7 @@ defmodule LinkWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-       # Import LiveView helpers (live_render, live_component, live_patch, etc)
+      # Import LiveView helpers (live_render, live_component, live_patch, etc)
       import Phoenix.LiveView.Helpers
 
       # Import basic rendering functionality (render, render_layout, etc)
