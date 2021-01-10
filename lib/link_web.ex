@@ -50,7 +50,7 @@ defmodule LinkWeb do
 
   def live_view do
     quote do
-      use Phoenix.LiveView,
+      use Surface.LiveView,
         layout: {LinkWeb.LayoutView, "live.html"}
 
       unquote(view_helpers())
