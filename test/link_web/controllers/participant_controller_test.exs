@@ -47,7 +47,7 @@ defmodule LinkWeb.ParticipantControllerTest do
       Studies.apply_participant(study, applied_participant)
       accepted_participant = Factories.insert!(:member)
       Studies.apply_participant(study, accepted_participant)
-      Studies.update_participant_status(study, accepted_participant, "entered")
+      Studies.update_participant_status(study, accepted_participant, :entered)
       # Now verify the (non)existence of them as participants
       conn = get(conn, Routes.participant_path(conn, :index, study))
       body = html_response(conn, 200)
@@ -70,7 +70,8 @@ defmodule LinkWeb.ParticipantControllerTest do
       })
 
       # The member has now been registered as entered
-      assert Studies.list_participants(study) == [
+      assert Studies.list_participants(study)
+             |> Enum.map(&%{user_id: &1.user.id, status: &1.status}) == [
                %{status: :entered, user_id: participant.id}
              ]
     end

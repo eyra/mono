@@ -5,13 +5,7 @@ defmodule GreenLight.Ecto.Query do
 
   import Ecto.Query
 
-  defp get_db_entity(entity) do
-    {Atom.to_string(entity.__struct__), entity.id}
-  end
-
-  defp role_query(role_assignment_schema, principal, entity) do
-    {entity_type, entity_id} = get_db_entity(entity)
-
+  defp role_query(role_assignment_schema, principal, entity_type, entity_id) do
     from(ra in role_assignment_schema,
       select: ra.role,
       where:
@@ -29,11 +23,16 @@ defmodule GreenLight.Ecto.Query do
       when is_nil(entity),
       do: MapSet.new()
 
-  def list_roles(repo, role_assignment_schema, %GreenLight.Principal{} = principal, entity) do
+  def list_roles(
+        repo,
+        role_assignment_schema,
+        %GreenLight.Principal{} = principal,
+        {entity_type, entity_id}
+      ) do
     if is_nil(principal.id) do
       MapSet.new()
     else
-      role_query(role_assignment_schema, principal, entity)
+      role_query(role_assignment_schema, principal, entity_type, entity_id)
       |> repo.all()
       |> MapSet.new()
     end
@@ -43,11 +42,10 @@ defmodule GreenLight.Ecto.Query do
         repo,
         role_assignment_schema,
         %GreenLight.Principal{id: principal_id},
-        entity,
+        entity_type,
+        entity_id,
         role
       ) do
-    {entity_type, entity_id} = get_db_entity(entity)
-
     role_assignment_schema
     |> struct
     |> role_assignment_schema.changeset(%{
@@ -63,11 +61,10 @@ defmodule GreenLight.Ecto.Query do
         repo,
         role_assignment_schema,
         %GreenLight.Principal{} = principal,
-        entity,
+        entity_type,
+        entity_id,
         role
       ) do
-    {entity_type, entity_id} = get_db_entity(entity)
-
     query_role_assignments(
       role_assignment_schema,
       principal: principal,
@@ -78,11 +75,11 @@ defmodule GreenLight.Ecto.Query do
     |> repo.delete_all()
   end
 
-  def list_principals(repo, role_assignment_schema, entity) do
+  def list_principals(repo, role_assignment_schema, {entity_type, entity_id}) do
     query =
       query_role_assignments(role_assignment_schema,
-        entity_type: entity.__struct__,
-        entity_id: entity.id
+        entity_type: entity_type,
+        entity_id: entity_id
       )
 
     from(ra in query, select: {ra.principal_id, ra.role}, order_by: [ra.principal_id, ra.role])

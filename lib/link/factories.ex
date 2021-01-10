@@ -32,6 +32,14 @@ defmodule Link.Factories do
     }
   end
 
+  def build(:study_participant) do
+    %Studies.Participant{
+      study: build(:study),
+      user: build(:member),
+      status: :applied
+    }
+  end
+
   def build(:survey_tool) do
     %SurveyTools.SurveyTool{
       title: Faker.Lorem.sentence(),
@@ -51,7 +59,24 @@ defmodule Link.Factories do
     factory_name |> build() |> struct!(attributes)
   end
 
-  def insert!(factory_name, attributes \\ []) do
+  def insert!(factory_name, attributes \\ [])
+
+  def insert!(:survey_tool_task, attributes) do
+    member = insert!(:member)
+    study = insert!(:study)
+    insert!(:study_participant, user: member, study: study)
+    survey_tool = insert!(:survey_tool, study: study)
+
+    %SurveyTools.SurveyToolTask{
+      user: member,
+      survey_tool: survey_tool,
+      status: :pending
+    }
+    |> struct!(attributes)
+    |> Repo.insert!()
+  end
+
+  def insert!(factory_name, attributes) do
     factory_name |> build(attributes) |> Repo.insert!()
   end
 

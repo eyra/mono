@@ -65,5 +65,63 @@ defmodule Link.SurveyToolsTest do
       survey_tool = Factories.insert!(:survey_tool)
       assert %Ecto.Changeset{} = SurveyTools.change_survey_tool(survey_tool)
     end
+
+    test "get_task/2 returns a task when available" do
+      survey_tool_task = Factories.insert!(:survey_tool_task)
+
+      assert SurveyTools.get_task(survey_tool_task.survey_tool, survey_tool_task.user)
+             |> Map.take([:user_id, :survey_tool_id]) ==
+               survey_tool_task |> Map.take([:user_id, :survey_tool_id])
+    end
+
+    test "setup_tasks_for_participants/2 creates task for participants" do
+      survey_tool = Factories.insert!(:survey_tool)
+
+      participant =
+        Factories.insert!(:study_participant, study: survey_tool.study, status: :entered)
+
+      assert SurveyTools.setup_tasks_for_participants!([participant], survey_tool)
+             |> Enum.count() == 1
+
+      assert SurveyTools.list_tasks(survey_tool) |> Enum.map(& &1.user_id) == [
+               participant.user_id
+             ]
+    end
+
+    test "list_participants_without_task/2 returns the participants for a study that do not have a survey task" do
+      survey_tool = Factories.insert!(:survey_tool)
+      study = survey_tool.study
+      assert SurveyTools.list_participants_without_task(survey_tool, study) == []
+
+      participant_without_task = Factories.insert!(:study_participant, study: study)
+
+      assert SurveyTools.list_participants_without_task(survey_tool, study)
+             |> Enum.map(& &1.user_id) ==
+               [participant_without_task.user_id]
+
+      %SurveyTools.SurveyToolTask{
+        user: participant_without_task.user,
+        survey_tool: survey_tool,
+        status: :pending
+      }
+      |> Link.Repo.insert!()
+
+      assert SurveyTools.list_participants_without_task(survey_tool, study) == []
+    end
+
+    test "list_tasks/1 returns the tasks for a survery tool" do
+      task = Factories.insert!(:survey_tool_task)
+      survey_tool = task.survey_tool
+
+      assert SurveyTools.list_tasks(survey_tool) |> Enum.map(& &1.user_id) == [task.user_id]
+    end
+
+    test "complete_task/2 marks a survey tool task as completed" do
+      task = Factories.insert!(:survey_tool_task)
+      survey_tool = task.survey_tool
+
+      assert SurveyTools.complete_task!(task)
+      assert SurveyTools.get_task(survey_tool, task.user).status == :completed
+    end
   end
 end

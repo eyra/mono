@@ -1,5 +1,6 @@
 {
     "recommendations": [
-        "jakebecker.elixir-ls"
+        "jakebecker.elixir-ls",
+        "haapanen.vs-code-paragraph-hard-wrapper"
     ]
 }

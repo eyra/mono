@@ -162,6 +162,16 @@ defmodule Link.Studies do
     |> Repo.insert()
   end
 
+  defp update_participant_roles(%Study{} = study, %User{} = user, status) do
+    if status == :entered do
+      Authorization.assign_role!(user, study, :participant)
+    else
+      Authorization.remove_role!(user, study, :participant)
+    end
+  end
+
+  @spec update_participant_status(Link.Studies.Study.t(), Link.Users.User.t(), atom()) ::
+          :error | :ok
   def update_participant_status(%Study{} = study, %User{} = user, status) do
     {update_count, _} =
       from(p in Participant,
@@ -171,6 +181,7 @@ defmodule Link.Studies do
       |> Repo.update_all([])
 
     if update_count == 1 do
+      update_participant_roles(study, user, status)
       :ok
     else
       :error
@@ -188,14 +199,22 @@ defmodule Link.Studies do
     |> Repo.one()
   end
 
-  def list_participants(%Study{} = study) do
+  defp filter_participations_by_status(query, nil), do: query
+
+  defp filter_participations_by_status(query, status) do
+    query |> where([p], p.status == ^status)
+  end
+
+  def list_participants(%Study{} = study, status \\ nil) do
     from(p in Participant,
-      select: [p.user_id, p.status],
       where: p.study_id == ^study.id,
-      order_by: :status
+      order_by: :status,
+      preload: [:user]
     )
+    |> filter_participations_by_status(status)
     |> Repo.all()
-    |> Enum.map(fn [user_id, status] -> %{user_id: user_id, status: status} end)
+
+    # |> Enum.map(fn [user, status] -> %{user: user, status: status} end)
   end
 
   def list_participations(%User{} = user) do
