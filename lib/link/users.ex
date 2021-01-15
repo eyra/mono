@@ -49,6 +49,10 @@ defmodule Link.Users do
     |> Repo.update()
   end
 
+  def update_profile(changeset) do
+    Repo.update(changeset)
+  end
+
   def change_profile(%Profile{} = profile, attrs \\ %{}) do
     Profile.changeset(profile, attrs)
   end

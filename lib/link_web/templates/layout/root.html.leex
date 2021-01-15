@@ -38,7 +38,7 @@
                     <% end %>
                     <div class="flex-grow"></div>
                     <div class="flex-none lg:pr-4 text-button font-button">
-                      <%= menu_button dgettext("eyra-account", "profile.button"), Routes.user_profile_path(@conn, :edit) %>
+                      <%= menu_button dgettext("eyra-account", "profile.button"), Routes.live_path(@conn, LinkWeb.UserProfile.Index) %>
                     </div>
                   <% else %>
                     <div class="flex-grow"></div>

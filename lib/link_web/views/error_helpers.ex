@@ -9,7 +9,8 @@ defmodule LinkWeb.ErrorHelpers do
   Checkss if there are errors.
   """
   def has_error?(form, field) do
-    form.errors
+    form
+    |> Map.get(:errors, [])
     |> Keyword.get_values(field)
     |> length > 0
   end

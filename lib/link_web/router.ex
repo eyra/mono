@@ -72,8 +72,7 @@ defmodule LinkWeb.Router do
 
     get "/dashboard", DashboardController, :index
 
-    get "/user-profile", UserProfileController, :edit
-    put "/user-profile", UserProfileController, :update
+    live "/user-profile", UserProfile.Index
 
     resources "/studies", StudyController do
       resources "/survey-tools", SurveyToolController do
