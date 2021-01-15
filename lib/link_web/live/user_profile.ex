@@ -7,9 +7,10 @@ defmodule LinkWeb.UserProfile.Index do
   alias Surface.Components.Form
   alias Surface.Components.Form.{Checkbox}
   alias Link.Users
-  alias EyraUI.Form.{TextInput, SubmitButton}
+  alias EyraUI.Form.TextInput
+  alias Ecto.Changeset
 
-  @save_delay 10
+  @save_delay 2
 
   data current_user, :any
   data current_user_profile, :any
@@ -21,12 +22,25 @@ defmodule LinkWeb.UserProfile.Index do
     profile = Users.get_profile(user)
     changeset = Users.change_profile(profile)
 
-    socket = socket |> assign(changeset: changeset, user_profile: profile, saved: false)
+    socket =
+      socket
+      |> assign(
+        changeset: changeset,
+        user_profile: profile,
+        save_timer: nil
+      )
+
     {:ok, socket}
   end
 
-  defp schedule_save() do
-    Process.send_after(self(), :save, @save_delay * 1_000)
+  defp cancel_save_timer(nil), do: nil
+  defp cancel_save_timer(timer), do: Process.cancel_timer(timer)
+
+  defp schedule_save(socket) do
+    update_in(socket.assigns.save_timer, fn timer ->
+      cancel_save_timer(timer)
+      Process.send_after(self(), :save, @save_delay * 1_000)
+    end)
   end
 
   def handle_event(
@@ -34,23 +48,18 @@ defmodule LinkWeb.UserProfile.Index do
         %{"profile" => user_profile_params},
         %{assigns: %{user_profile: user_profile}} = socket
       ) do
-    schedule_save()
+    changeset = Users.change_profile(user_profile, user_profile_params)
 
-    {:noreply,
-     socket
-     |> assign(changeset: Users.change_profile(user_profile, user_profile_params))}
-  end
-
-  def handle_info(:save, %{assigns: %{changeset: changeset}} = socket) do
-    case Users.update_profile(changeset) do
+    case Changeset.apply_action(changeset, :update) do
       {:ok, user_profile} ->
         {:noreply,
          socket
+         |> schedule_save()
          |> assign(
-           changeset: Users.change_profile(user_profile),
+           changeset: changeset,
+           save_changeset: changeset,
            user_profile: user_profile
-         )
-         |> put_flash(:info, "Profile updated successfully.")}
+         )}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply,
@@ -58,6 +67,19 @@ defmodule LinkWeb.UserProfile.Index do
          |> assign(changeset: changeset)
          |> put_flash(:error, "Please correct the indicated errors.")}
     end
+  end
+
+  def handle_info(:save, %{assigns: %{save_changeset: changeset}} = socket) do
+    {:ok, user_profile} = Users.update_profile(changeset)
+
+    {:noreply,
+     socket
+     |> assign(user_profile: user_profile)}
+  end
+
+  def terminate(_reason, %{assigns: %{changeset: changeset}}) do
+    {:ok, _} = Users.update_profile(changeset)
+    :ok
   end
 
   def render(assigns) do
@@ -75,11 +97,6 @@ defmodule LinkWeb.UserProfile.Index do
                   <Checkbox field={{:researcher}} opts={{text: dgettext("eyra-account", "researcher.label")}}/>
                   <TextInput field={{:fullname}} label_text={{dgettext("eyra-account", "fullname.label")}} />
                   <TextInput field={{:displayname}} label_text={{dgettext("eyra-account", "displayname.label")}} />
-                  <div class="mb-8">
-                    <SubmitButton>
-                      {{dgettext("eyra-account", "profile.save.button")}}
-                    </SubmitButton>
-                  </div>
                 </Form>
               <div>
               </div>
@@ -90,7 +107,6 @@ defmodule LinkWeb.UserProfile.Index do
         <div class="flex-wrap w-0 sm:w-sidebar"></div>
       </div>
     </div>
-
     """
   end
 end
