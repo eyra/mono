@@ -73,13 +73,15 @@ defmodule LinkWeb.Router do
     get "/dashboard", DashboardController, :index
 
     live "/user-profile", UserProfile.Index
+    live "/survey-tools", SurveyTool.Index
+    live "/survey-tools/:id", SurveyTool.Edit
 
     resources "/studies", StudyController do
-      resources "/survey-tools", SurveyToolController do
-        get "/start", SurveyToolTaskController, :start, as: :task
-        get "/complete", SurveyToolTaskController, :complete, as: :task
-        post "/tasks", SurveyToolTaskController, :setup_tasks, as: :task
-      end
+      # resources "/survey-tools", SurveyToolController do
+      #   get "/start", SurveyToolTaskController, :start, as: :task
+      #   get "/complete", SurveyToolTaskController, :complete, as: :task
+      #   post "/tasks", SurveyToolTaskController, :setup_tasks, as: :task
+      # end
 
       get "/permissions", Studies.PermissionsController, :show
       patch "/permissions", Studies.PermissionsController, :change

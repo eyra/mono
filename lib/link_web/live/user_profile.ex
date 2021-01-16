@@ -5,82 +5,17 @@ defmodule LinkWeb.UserProfile.Index do
   use LinkWeb, :live_view
   use LinkWeb.LiveViewPowHelper
   alias Surface.Components.Form
-  alias Surface.Components.Form.{Checkbox}
   alias Link.Users
-  alias EyraUI.Form.TextInput
-  alias Ecto.Changeset
+  alias EyraUI.Form.{TextInput, Checkbox}
+  use EyraUI.AutoSave, :profile
 
-  @save_delay 2
-
-  data current_user, :any
-  data current_user_profile, :any
-  data changeset, :any
-  data saved, :boolean
-
-  def mount(_params, session, socket) do
+  def load(_params, session, socket) do
     user = get_user(socket, session)
-    profile = Users.get_profile(user)
-    changeset = Users.change_profile(profile)
-
-    socket =
-      socket
-      |> assign(
-        changeset: changeset,
-        user_profile: profile,
-        save_timer: nil
-      )
-
-    {:ok, socket}
+    Users.get_profile(user)
   end
 
-  defp cancel_save_timer(nil), do: nil
-  defp cancel_save_timer(timer), do: Process.cancel_timer(timer)
-
-  defp schedule_save(socket) do
-    update_in(socket.assigns.save_timer, fn timer ->
-      cancel_save_timer(timer)
-      Process.send_after(self(), :save, @save_delay * 1_000)
-    end)
-  end
-
-  def handle_event(
-        "save",
-        %{"profile" => user_profile_params},
-        %{assigns: %{user_profile: user_profile}} = socket
-      ) do
-    changeset = Users.change_profile(user_profile, user_profile_params)
-
-    case Changeset.apply_action(changeset, :update) do
-      {:ok, user_profile} ->
-        {:noreply,
-         socket
-         |> schedule_save()
-         |> assign(
-           changeset: changeset,
-           save_changeset: changeset,
-           user_profile: user_profile
-         )}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply,
-         socket
-         |> assign(changeset: changeset)
-         |> put_flash(:error, "Please correct the indicated errors.")}
-    end
-  end
-
-  def handle_info(:save, %{assigns: %{save_changeset: changeset}} = socket) do
-    {:ok, user_profile} = Users.update_profile(changeset)
-
-    {:noreply,
-     socket
-     |> assign(user_profile: user_profile)}
-  end
-
-  def terminate(_reason, %{assigns: %{changeset: changeset}}) do
-    {:ok, _} = Users.update_profile(changeset)
-    :ok
-  end
+  defdelegate get_changeset(profile, attrs \\ %{}), to: Users, as: :change_profile
+  defdelegate save(changeset), to: Users, as: :update_profile
 
   def render(assigns) do
     ~H"""
@@ -94,7 +29,7 @@ defmodule LinkWeb.UserProfile.Index do
               </div>
               <div>
                 <Form for={{ @changeset }} change="save">
-                  <Checkbox field={{:researcher}} opts={{text: dgettext("eyra-account", "researcher.label")}}/>
+                  <Checkbox field={{:researcher}} label_text={{dgettext("eyra-account", "researcher.label")}}/>
                   <TextInput field={{:fullname}} label_text={{dgettext("eyra-account", "fullname.label")}} />
                   <TextInput field={{:displayname}} label_text={{dgettext("eyra-account", "displayname.label")}} />
                 </Form>

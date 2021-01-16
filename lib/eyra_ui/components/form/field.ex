@@ -1,6 +1,6 @@
 defmodule EyraUI.Form.Field do
   use Surface.Component
-  alias Surface.Components.Form.{Label}
+  alias Surface.Components.Form.Label
   alias EyraUI.Form.ValidationErrors
 
   prop field, :atom, required: true

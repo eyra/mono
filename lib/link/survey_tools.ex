@@ -97,6 +97,11 @@ defmodule Link.SurveyTools do
   def update_survey_tool(%SurveyTool{} = survey_tool, attrs) do
     survey_tool
     |> SurveyTool.changeset(attrs)
+    |> update_survey_tool()
+  end
+
+  def update_survey_tool(changeset) do
+    changeset
     |> Repo.update()
   end
 
