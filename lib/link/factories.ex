@@ -9,7 +9,7 @@ defmodule Link.Factories do
   def build(:member) do
     %Users.User{
       email: Faker.Internet.email(),
-      password: "S4p3rS3cr3t"
+      password_hash: Pow.Ecto.Schema.Password.pbkdf2_hash("S4p3rS3cr3t")
     }
   end
 

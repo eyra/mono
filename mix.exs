@@ -90,7 +90,7 @@ defmodule Link.MixProject do
       setup: ["deps.get", "ecto.setup", "build_js"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test --color"],
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       ci: ["setup", "sobelow -i Config.CSRF,Config.Headers", "test", "credo"],
       i18n: [
         "gettext.extract --merge priv/gettext"
