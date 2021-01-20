@@ -3,10 +3,11 @@ defmodule EyraUI.AutoSave do
   Provides support for creating edit views the Eyra way (autosave etc.).
   """
   import Phoenix.LiveView, only: [assign: 2, assign: 3, put_flash: 3]
+  alias Phoenix.LiveView.Socket
 
   @save_delay 2
 
-  @callback load(params :: Map.t()) :: any()
+  @callback load(params :: Map.t(), session :: map(), socket :: Socket.t()) :: any()
   @callback save(changeset :: any()) :: any()
   @callback get_changeset(entity :: any()) :: any()
   @callback get_changeset(entity :: any(), attrs :: any()) :: any()
@@ -66,7 +67,7 @@ defmodule EyraUI.AutoSave do
     entity_var = {entity_name, [], Elixir}
 
     quote do
-      @behaviour AutoSave
+      @behaviour EyraUI.AutoSave
 
       alias Ecto.Changeset
       alias EyraUI.AutoSave
