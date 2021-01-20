@@ -8,6 +8,9 @@ defmodule LinkWeb.UserProfile.Index do
   alias Link.Users
   alias EyraUI.Form.{TextInput, Checkbox}
   use EyraUI.AutoSave, :profile
+  alias EyraUI.Form.Title
+  alias EyraUI.Container.SidebarAware
+  alias EyraUI.Container.FormAware
 
   def load(_params, session, socket) do
     user = get_user(socket, session)
@@ -19,29 +22,16 @@ defmodule LinkWeb.UserProfile.Index do
 
   def render(assigns) do
     ~H"""
-    <div class="flex w-full">
-      <div class="flex-grow">
-        <div class="w-full">
-          <div class="flex justify-center">
-            <div class="flex-grow max-w-form ml-6 mr-6 lg:m-0 mt-6 sm:mt-16 lg:mt-24">
-              <div class="mb-6 text-title5 font-title5 lg:text-title2 lg:font-title2">
-                {{ dgettext "eyra-account", "profile.title" }}
-              </div>
-              <div>
-                <Form for={{ @changeset }} change="save">
-                  <Checkbox field={{:researcher}} label_text={{dgettext("eyra-account", "researcher.label")}}/>
-                  <TextInput field={{:fullname}} label_text={{dgettext("eyra-account", "fullname.label")}} />
-                  <TextInput field={{:displayname}} label_text={{dgettext("eyra-account", "displayname.label")}} />
-                </Form>
-              <div>
-              </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="flex-wrap w-0 sm:w-sidebar"></div>
-      </div>
-    </div>
+    <SidebarAware>
+      <FormAware>
+        <Title text={{dgettext "eyra-account", "profile.title"}} />
+        <Form for={{ @changeset }} change="save">
+          <Checkbox field={{:researcher}} label_text={{dgettext("eyra-account", "researcher.label")}}/>
+          <TextInput field={{:fullname}} label_text={{dgettext("eyra-account", "fullname.label")}} />
+          <TextInput field={{:displayname}} label_text={{dgettext("eyra-account", "displayname.label")}} />
+        </Form>
+      </FormAware>
+    </SidebarAware>
     """
   end
 end
