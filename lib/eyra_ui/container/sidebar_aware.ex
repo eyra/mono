@@ -1,5 +1,4 @@
-defmodule EyraUI.Container.SidebarAware
- do
+defmodule EyraUI.Container.SidebarAware do
   @moduledoc """
   Container that makes the content appear centralized by adding margin to the right to adjust for the left sidebar.
   """
