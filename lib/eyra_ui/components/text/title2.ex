@@ -1,4 +1,3 @@
-
 defmodule EyraUI.Text.Title2 do
   use Surface.Component
 
