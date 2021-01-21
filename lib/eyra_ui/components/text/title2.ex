@@ -1,4 +1,5 @@
-defmodule EyraUI.Form.Title do
+
+defmodule EyraUI.Text.Title2 do
   use Surface.Component
 
   prop text, :string, required: true
