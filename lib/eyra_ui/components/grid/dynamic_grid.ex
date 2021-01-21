@@ -1,4 +1,3 @@
-
 defmodule EyraUI.Grid.DynamicGrid do
   use Surface.Component
 
