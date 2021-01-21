@@ -29,7 +29,7 @@
                 <div class="flex items-center">
                   <%= if Pow.Plug.current_user(@conn) do %>
                     <div class="flex-none lg:pr-4 text-button font-button">
-                      <%= menu_button dgettext("eyra-study", "dashboard.button"), Routes.dashboard_path(@conn, :index) %>
+                      <%= menu_button dgettext("eyra-study", "dashboard.button"), Routes.static_path(@conn, "/dashboard") %>
                     </div>
                     <%= if can?(@conn, nil, LinkWeb.StudyController, :new) do %>
                       <div class="hidden sm:block flex-none lg:pr-4 text-button font-button">

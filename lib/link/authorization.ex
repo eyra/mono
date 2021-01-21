@@ -121,6 +121,10 @@ defmodule Link.Authorization do
     conn |> principal() |> can?(entity, module, action)
   end
 
+  def can?(%Link.Users.User{} = user, entity, module, action) do
+    user |> principal() |> can?(entity, module, action)
+  end
+
   def map_to_auth_entity(nil) do
     nil
   end

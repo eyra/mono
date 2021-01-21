@@ -70,7 +70,7 @@ defmodule LinkWeb.Router do
   scope "/", LinkWeb do
     pipe_through [:browser, :require_authenticated]
 
-    get "/dashboard", DashboardController, :index
+    live "/dashboard", Dashboard
 
     live "/user-profile", UserProfile.Index
     live "/survey-tools", SurveyTool.Index

@@ -1,4 +1,4 @@
-defmodule EyraUI.Container.FormAware do
+defmodule EyraUI.Container.FormArea do
   @moduledoc """
   Container for displaying horizontally centralized forms.
   """

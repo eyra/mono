@@ -1,11 +1,11 @@
-defmodule EyraUI.Text.Title1 do
+defmodule EyraUI.Text.BodyLarge do
   use Surface.Component
 
   slot default, required: true
 
   def render(assigns) do
     ~H"""
-    <div class="text-title3 font-title3 lg:text-title1 lg:font-title1 mb-7 lg:mb-9">
+    <div class="flex-wrap text-grey1 text-bodylarge font-body mt-6 lg:mt-10">
       <slot />
     </div>
     """

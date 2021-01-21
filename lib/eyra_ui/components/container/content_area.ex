@@ -1,4 +1,4 @@
-defmodule EyraUI.Container.SidebarAware do
+defmodule EyraUI.Container.ContentArea do
   @moduledoc """
   Container that makes the content appear centralized by adding margin to the right to adjust for the left sidebar.
   """
@@ -10,7 +10,7 @@ defmodule EyraUI.Container.SidebarAware do
   def render(assigns) do
     ~H"""
     <div class="flex h-full w-full">
-      <div class="flex-grow">
+      <div class="flex-grow ml-6 mr-6 lg:ml-14 lg:mr-14">
         <div class="w-full">
           <slot />
         </div>

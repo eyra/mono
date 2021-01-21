@@ -2,12 +2,12 @@
 defmodule EyraUI.Text.Title2 do
   use Surface.Component
 
-  prop text, :string, required: true
+  slot default, required: true
 
   def render(assigns) do
     ~H"""
-    <div class="mb-6 text-title5 font-title5 lg:text-title2 lg:font-title2">
-      {{@text}}
+    <div class="text-title5 font-title5 sm:text-title3 sm:font-title3 lg:text-title2 lg:font-title2 mt-12 lg:mt-16 mb-7 lg:mb-9">
+      <slot />
     </div>
     """
   end

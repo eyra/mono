@@ -9,8 +9,7 @@ defmodule LinkWeb.UserProfile.Index do
   alias EyraUI.Form.{TextInput, Checkbox}
   use EyraUI.AutoSave, :profile
   alias EyraUI.Text.Title2
-  alias EyraUI.Container.SidebarAware
-  alias EyraUI.Container.FormAware
+  alias EyraUI.Container.{ContentArea, FormArea}
 
   def load(_params, session, socket) do
     user = get_user(socket, session)
@@ -22,16 +21,16 @@ defmodule LinkWeb.UserProfile.Index do
 
   def render(assigns) do
     ~H"""
-    <SidebarAware>
-      <FormAware>
-        <Title2 text={{dgettext "eyra-account", "profile.title"}} />
+    <ContentArea>
+      <FormArea>
+        <Title2>{{dgettext "eyra-account", "profile.title"}}</Title2>
         <Form for={{ @changeset }} change="save">
           <Checkbox field={{:researcher}} label_text={{dgettext("eyra-account", "researcher.label")}}/>
           <TextInput field={{:fullname}} label_text={{dgettext("eyra-account", "fullname.label")}} />
           <TextInput field={{:displayname}} label_text={{dgettext("eyra-account", "displayname.label")}} />
         </Form>
-      </FormAware>
-    </SidebarAware>
+      </FormArea>
+    </ContentArea>
     """
   end
 end
