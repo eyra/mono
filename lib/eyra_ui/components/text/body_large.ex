@@ -5,7 +5,7 @@ defmodule EyraUI.Text.BodyLarge do
 
   def render(assigns) do
     ~H"""
-    <div class="flex-wrap text-grey1 text-bodylarge font-body mt-6 lg:mt-10">
+    <div class="flex-wrap text-grey1 text-bodylarge font-body">
       <slot />
     </div>
     """

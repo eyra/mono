@@ -9,6 +9,7 @@ defmodule LinkWeb.Study.New do
   alias Surface.Components.Form
   alias EyraUI.Form.{TextInput, Checkbox}
   alias EyraUI.Hero
+  alias EyraUI.Container.{ContentArea}
 
   alias Link.Studies
   alias Link.Studies.Study
@@ -34,11 +35,13 @@ defmodule LinkWeb.Study.New do
     ~H"""
       <Hero title={{ dgettext("eyra-study", "study.new.title") }}
             subtitle={{dgettext("eyra-study", "study.new.subtitle")}} />
-    <Form for={{ @changeset }} submit="create">
-      <TextInput field={{:title}} label_text={{dgettext("eyra-study", "title.label")}} />
-      <TextInput field={{:description}} label_text={{dgettext("eyra-study", "description.label")}} />
-      <button>Create</button>
-    </Form>
+      <ContentArea>
+        <Form for={{ @changeset }} submit="create">
+          <TextInput field={{:title}} label_text={{dgettext("eyra-study", "title.label")}} />
+          <TextInput field={{:description}} label_text={{dgettext("eyra-study", "description.label")}} />
+          <button>Create</button>
+        </Form>
+      </ContentArea>
     """
   end
 

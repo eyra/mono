@@ -6,7 +6,7 @@ defmodule EyraUI.Grid.AbsoluteGrid do
 
   def render(assigns) do
     ~H"""
-    <div class="grid md:grid-cols-3 gap-8 ml-6 mr-6 lg:ml-14 lg:mr-14">
+    <div class="grid md:grid-cols-3 gap-8">
       <slot />
     </div>
     """

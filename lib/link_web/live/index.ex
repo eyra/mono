@@ -35,7 +35,7 @@ defmodule LinkWeb.Index do
 
       <ContentArea>
         <AbsoluteGrid>
-          <div class="md:col-span-2 mt-9 lg:mt-24">
+          <div class="md:col-span-2">
             <Title1>
               {{ dgettext("eyra-link", "link.title") }}
             </Title1>
@@ -43,7 +43,7 @@ defmodule LinkWeb.Index do
               {{ dgettext("eyra-link", "link.message") }}
             </Intro>
           </div>
-          <div class="mt-0 md:mt-9 lg:mt-24">
+          <div>
             <div :if={{ @current_user != nil }}>
               <PrimaryCTA
                 title={{ cta_title(@current_user_profile) }}
