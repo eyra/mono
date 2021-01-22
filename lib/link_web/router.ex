@@ -77,17 +77,19 @@ defmodule LinkWeb.Router do
     live "/survey-tools/new", SurveyTool.New
     live "/survey-tools/:id", SurveyTool.Edit
 
-    resources "/studies", StudyController do
-      # resources "/survey-tools", SurveyToolController do
-      #   get "/start", SurveyToolTaskController, :start, as: :task
-      #   get "/complete", SurveyToolTaskController, :complete, as: :task
-      #   post "/tasks", SurveyToolTaskController, :setup_tasks, as: :task
-      # end
+    live "/studies/new", Study.New
+    live "/studies/:id", Study.Show
+    # resources "/studies", StudyController do
+    #   # resources "/survey-tools", SurveyToolController do
+    #   #   get "/start", SurveyToolTaskController, :start, as: :task
+    #   #   get "/complete", SurveyToolTaskController, :complete, as: :task
+    #   #   post "/tasks", SurveyToolTaskController, :setup_tasks, as: :task
+    #   # end
 
-      get "/permissions", Studies.PermissionsController, :show
-      patch "/permissions", Studies.PermissionsController, :change
-      post "/permissions", Studies.PermissionsController, :create
-    end
+    #   get "/permissions", Studies.PermissionsController, :show
+    #   patch "/permissions", Studies.PermissionsController, :change
+    #   post "/permissions", Studies.PermissionsController, :create
+    # end
 
     get "/studies/:id/participate", ParticipantController, :new
     post "/studies/:id/participate", ParticipantController, :create

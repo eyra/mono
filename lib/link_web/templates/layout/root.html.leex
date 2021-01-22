@@ -33,7 +33,7 @@
                     </div>
                     <%= if can?(@conn, nil, LinkWeb.StudyController, :new) do %>
                       <div class="hidden sm:block flex-none lg:pr-4 text-button font-button">
-                        <%= menu_button dgettext("eyra-study", "new.button"), Routes.study_path(@conn, :new) %>
+                        <%= menu_button dgettext("eyra-study", "new.button"), Routes.live_path(@conn, LinkWeb.Study.New) %>
                       </div>
                     <% end %>
                     <div class="flex-grow"></div>

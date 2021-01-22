@@ -97,14 +97,24 @@ defmodule Link.Studies do
   """
   def get_study!(id), do: Repo.get!(Study, id)
 
+  def get_study_changeset(attrs \\ %{}) do
+    %Study{}
+    |> Study.changeset(attrs)
+  end
+
   @doc """
   Creates a study.
   """
-  def create_study(attrs, researcher) do
-    %Study{}
-    |> Study.changeset(attrs)
+  def create_study(%Ecto.Changeset{} = changeset, researcher) do
+    changeset
     |> Repo.insert()
     |> Authorization.assign_role(researcher, :owner)
+  end
+
+  def create_study(attrs, researcher) do
+    attrs
+    |> get_study_changeset()
+    |> create_study(researcher)
   end
 
   @doc """
@@ -119,10 +129,15 @@ defmodule Link.Studies do
       {:error, %Ecto.Changeset{}}
 
   """
+  def update_study(%Ecto.Changeset{} = changeset) do
+    changeset
+    |> Repo.update()
+  end
+
   def update_study(%Study{} = study, attrs) do
     study
     |> Study.changeset(attrs)
-    |> Repo.update()
+    |> update_study
   end
 
   @doc """

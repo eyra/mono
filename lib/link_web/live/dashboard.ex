@@ -63,12 +63,12 @@ defmodule LinkWeb.Dashboard do
               <span class="text-primary"> {{ @highlighted_count }}</span>
             </Title2>
             <DynamicGrid>
-                <div :for={{ study <- @highlighted_studies  }} >
-                  {{ primary_study_card(@socket, study, "Bekijken") }}
-                </div>
-                <div :if={{ can?(@current_user, nil, LinkWeb.StudyController, :new) }} >
-                  {{ button_card(@socket, dgettext("eyra-study", "add.card.title"), Routes.study_path(@socket, :new)) }}
-                </div>
+              <div :for={{ study <- @highlighted_studies  }} >
+                {{ primary_study_card(@socket, study, "Bekijken") }}
+              </div>
+              <div :if={{ can?(@current_user, nil, LinkWeb.StudyController, :new) }} >
+                {{ button_card(@socket, dgettext("eyra-study", "add.card.title"), Routes.live_path(@socket, LinkWeb.Study.New)) }}
+              </div>
             </DynamicGrid>
           </div>
           <div class="flex-wrap mt-0">

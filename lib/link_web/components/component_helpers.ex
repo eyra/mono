@@ -234,7 +234,7 @@ defmodule LinkWeb.Components.ComponentHelpers do
   end
 
   def primary_study_card(conn, study, button_label) do
-    button_path = Routes.study_path(conn, :show, study.id)
+    button_path = Routes.live_path(conn, LinkWeb.Study.Show, study.id)
     title_color = "text-white"
     description_color = "text-grey4"
     bg_color = "bg-grey1"
@@ -254,7 +254,7 @@ defmodule LinkWeb.Components.ComponentHelpers do
   end
 
   def secondary_study_card(conn, study, button_label) do
-    button_path = Routes.study_path(conn, :show, study.id)
+    button_path = Routes.live_path(conn, LinkWeb.Study.Show, study.id)
     title_color = "text-grey1"
     description_color = "text-grey2"
     bg_color = "bg-grey6"
