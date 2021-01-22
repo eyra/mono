@@ -21,7 +21,7 @@
                 @profile != nil -> dgettext("eyra-link", "member.profile.card.title", user: @profile.displayname)
                 true -> dgettext("eyra-link", "member.card.title")
               end
-              primary_cta cta_title, dgettext("eyra-link", "dashboard-button"), Routes.static_path(@conn, "/dashboard")
+              primary_cta cta_title, dgettext("eyra-link", "dashboard-button"), Routes.live_path(@conn, LinkWeb.Dashboard)
             %>
           </div>
         <% else %>

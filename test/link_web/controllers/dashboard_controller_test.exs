@@ -14,7 +14,7 @@ defmodule LinkWeb.DashboardControllerTest do
     test "list all available studies", %{conn: conn} do
       titles = ["Analytical Engine", "FLOW-MATIC"]
       titles |> Enum.map(&Factories.insert!(:study, title: &1))
-      conn = get(conn, Routes.static_path(@conn, "/dashboard"))
+      conn = get(conn, Routes.live_path(conn, LinkWeb.Dashboard))
 
       for title <- titles do
         assert html_response(conn, 200) =~ title

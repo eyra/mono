@@ -48,7 +48,7 @@ defmodule LinkWeb.Index do
               <PrimaryCTA
                 title={{ cta_title(@current_user_profile) }}
                 button_label={{ dgettext("eyra-link", "dashboard-button") }}
-                to={{Routes.static_path(@socket, "/dashboard")}} />
+                to={{Routes.live_path(@socket, LinkWeb.Dashboard)}} />
             </div>
             <div :if={{ @current_user == nil }}>
               <PrimaryCTA title={{ dgettext("eyra-link", "signup.card.title") }}

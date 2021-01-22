@@ -6,8 +6,8 @@ defmodule LinkWeb.Pow.Routes do
   alias LinkWeb.Router.Helpers, as: Routes
 
   @impl true
-  def after_sign_in_path(conn), do: Routes.static_path(conn, "/dashboard")
+  def after_sign_in_path(conn), do: Routes.live_path(conn, LinkWeb.Dashboard)
 
   @impl true
-  def after_sign_out_path(conn), do: Routes.static_path(conn, "/")
+  def after_sign_out_path(conn), do: Routes.live_path(conn, LinkWeb.Index)
 end

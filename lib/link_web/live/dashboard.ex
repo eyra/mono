@@ -7,7 +7,7 @@ defmodule LinkWeb.Dashboard do
   import Link.Authorization
   import Link.Users
   alias Link.Studies
-  alias EyraUI.{Hero}
+  alias EyraUI.{Hero, Stack}
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{BodyLarge, Title2}
   alias EyraUI.Grid.{DynamicGrid}
@@ -53,36 +53,30 @@ defmodule LinkWeb.Dashboard do
             subtitle={{dgettext("eyra-study", "study.index.subtitle")}} />
 
       <ContentArea>
-        <div class="flex flex-col">
-          <BodyLarge>
-            {{dgettext("eyra-study", "dashboard.page.description")}}
-          </BodyLarge>
-          <div class="flex-wrap">
-            <Title2>
-              {{ dgettext("eyra-study", "study.highlighted.title") }}
-              <span class="text-primary"> {{ @highlighted_count }}</span>
-            </Title2>
-            <DynamicGrid>
-              <div :for={{ study <- @highlighted_studies  }} >
-                {{ primary_study_card(@socket, study, "Bekijken") }}
-              </div>
-              <div :if={{ can?(@current_user, nil, LinkWeb.StudyController, :new) }} >
-                {{ button_card(@socket, dgettext("eyra-study", "add.card.title"), Routes.live_path(@socket, LinkWeb.Study.New)) }}
-              </div>
-            </DynamicGrid>
-          </div>
-          <div class="flex-wrap mt-0">
-            <Title2>
-              {{ dgettext("eyra-study", "study.all.title") }}
-              <span class="text-primary"> {{ @available_count }}</span>
-            </Title2>
-            <DynamicGrid>
-              <div :for={{ study <- @available_studies  }} class="mb-1" >
-                {{ secondary_study_card(@socket, study, "Bekijken") }}
-              </div>
-            </DynamicGrid>
-          </div>
-        </div>
+        <BodyLarge>
+          {{dgettext("eyra-study", "dashboard.page.description")}}
+        </BodyLarge>
+          <Title2>
+            {{ dgettext("eyra-study", "study.highlighted.title") }}
+            <span class="text-primary"> {{ @highlighted_count }}</span>
+          </Title2>
+          <DynamicGrid>
+            <div :for={{ study <- @highlighted_studies  }} >
+              {{ primary_study_card(@socket, study, "Bekijken") }}
+            </div>
+            <div :if={{ can?(@current_user, nil, LinkWeb.StudyController, :new) }} >
+              {{ button_card(@socket, dgettext("eyra-study", "add.card.title"), Routes.live_path(@socket, LinkWeb.Study.New)) }}
+            </div>
+          </DynamicGrid>
+          <Title2>
+            {{ dgettext("eyra-study", "study.all.title") }}
+            <span class="text-primary"> {{ @available_count }}</span>
+          </Title2>
+          <DynamicGrid>
+            <div :for={{ study <- @available_studies  }} class="mb-1" >
+              {{ secondary_study_card(@socket, study, "Bekijken") }}
+            </div>
+          </DynamicGrid>
       </ContentArea>
     """
   end
