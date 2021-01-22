@@ -13,11 +13,15 @@ defmodule LinkWeb.SurveyTool.Index do
   data saved, :boolean
 
   def mount(_params, _session, socket) do
-    socket =
-      socket
-      |> assign(survey_tools: SurveyTools.list_survey_tools())
+    {:ok, socket |> load_survey_tools}
+  end
 
-    {:ok, socket}
+  def handle_event("delete", params, socket) do
+    {:ok, _} =
+      %SurveyTool{id: params["value"] |> String.to_integer()}
+      |> SurveyTools.delete_survey_tool()
+
+    {:noreply, socket |> load_survey_tools}
   end
 
   def render(assigns) do
@@ -36,16 +40,22 @@ defmodule LinkWeb.SurveyTool.Index do
       <td>
         <span>{{ link "Show", to: Routes.live_path(@socket, __MODULE__) }}</span>
         <span fixme="can?(@socket, [survey_tool], LinkWeb.SurveyToolController, :edit)">
-        {{ link "Edit", to: Routes.live_path(@socket,  LinkWeb.SurveyTool.Edit, survey_tool.id) }}
+        {{ live_patch "Edit", to: Routes.live_path(@socket,  LinkWeb.SurveyTool.Edit, survey_tool.id), replace: true }}
         </span>
-        <span>{{ link "Delete", to: Routes.live_path(@socket, __MODULE__), method: :delete, data: [confirm: "Are you sure?"] }}</span>
+        <button phx-click="delete" value={{survey_tool.id}}>
+          Delete
+        </button>
       </td>
     </tr>
     </tbody>
     </table>
 
-    <span>{{ link "New Survey tool", to: Routes.live_path(@socket, __MODULE__) }}</span>
+    <span>{{ live_patch "New Survey tool", to: Routes.live_path(@socket, LinkWeb.SurveyTool.New), replace: true }}</span>
 
     """
+  end
+
+  defp load_survey_tools(socket) do
+    socket |> assign(survey_tools: SurveyTools.list_survey_tools())
   end
 end

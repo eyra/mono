@@ -74,6 +74,7 @@ defmodule LinkWeb.Router do
 
     live "/user-profile", UserProfile.Index
     live "/survey-tools", SurveyTool.Index
+    live "/survey-tools/new", SurveyTool.New
     live "/survey-tools/:id", SurveyTool.Edit
 
     resources "/studies", StudyController do
