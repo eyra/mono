@@ -3,7 +3,7 @@ defmodule Link.Factories do
   This module provides factory function to be used for tests.
   """
   alias Link.Users
-  alias Link.{Studies, SurveyTools}
+  alias Link.{Studies, SurveyTools, Authorization}
   alias Link.Repo
 
   def build(:member) do
@@ -25,8 +25,13 @@ defmodule Link.Factories do
     })
   end
 
+  def build(:auth_node) do
+    %Authorization.Node{}
+  end
+
   def build(:study) do
     %Studies.Study{
+      auth_node: build(:auth_node),
       description: Faker.Lorem.paragraph(),
       title: Faker.Lorem.sentence()
     }

@@ -5,21 +5,15 @@ defmodule LinkWeb.Study.New do
   use LinkWeb, :live_view
   use LinkWeb.LiveViewPowHelper
   use EyraUI.Create, :study
-  alias Surface.Components.Button
   alias Surface.Components.Form
-  alias EyraUI.Form.{TextInput, Checkbox}
+  alias EyraUI.Form.{TextInput}
   alias EyraUI.Hero
   alias EyraUI.Container.{ContentArea}
 
   alias Link.Studies
   alias Link.Studies.Study
 
-  def mount(params, session, socket) do
-    socket =
-      socket |> assign(current_user: get_user(socket, session) |> IO.inspect(label: "USER"))
-
-    super(params, session, socket)
-  end
+  import Link.Authorization, only: [can_access?: 2]
 
   def create(socket, changeset) do
     current_user = socket.assigns.current_user

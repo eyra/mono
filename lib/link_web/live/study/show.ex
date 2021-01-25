@@ -13,12 +13,18 @@ defmodule LinkWeb.Study.Show do
   alias Link.Studies
   alias Link.Studies.Study
 
+  @impl true
   def load(%{"id" => id}, session, socket) do
     Studies.get_study!(id)
   end
 
   defdelegate get_changeset(study, attrs \\ %{}), to: Studies, as: :change_study
   defdelegate save(changeset), to: Studies, as: :update_study
+
+  @impl true
+  def get_authorization_context(params, session, socket) do
+    load(params, session, socket)
+  end
 
   def render(assigns) do
     ~H"""

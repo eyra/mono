@@ -11,6 +11,9 @@ defmodule Link.Studies do
   alias Link.Users.User
   alias GreenLight.Principal
 
+  # read list_studies(current_user, ...) do
+  # end
+
   @doc """
   Returns the list of studies.
 
@@ -27,6 +30,8 @@ defmodule Link.Studies do
       where: s.id not in ^exclude
     )
     |> Repo.all()
+
+    # AUTH: Can be piped through auth filter.
   end
 
   @doc """
@@ -41,6 +46,7 @@ defmodule Link.Studies do
       )
 
     from(s in Study, where: s.id in subquery(entity_ids)) |> Repo.all()
+    # AUTH: Can be piped through auth filter (current code does the same thing).
   end
 
   def list_owners(%Study{} = study) do
@@ -51,6 +57,8 @@ defmodule Link.Studies do
       |> Enum.map(fn %{id: id} -> id end)
 
     from(u in User, where: u.id in ^owner_ids, order_by: u.id) |> Repo.all()
+    # AUTH: needs to be marked save. Current user is normally not allowed to
+    # access other users.
   end
 
   def assign_owners(study, users) do
@@ -74,11 +82,18 @@ defmodule Link.Studies do
     existing_owner_ids
     |> Enum.filter(fn id -> not MapSet.member?(new_owner_ids, id) end)
     |> Enum.each(&Authorization.remove_role!(%Principal{id: &1}, study, :owner))
+
+    # AUTH: Does not modify entities, only auth. This needs checks to see if
+    # the user is allowed to manage permissions? Could be implemented as part
+    # of the authorization functions?
   end
 
   def add_owner!(study, user) do
     user
     |> Authorization.assign_role!(study, :owner)
+
+    # AUTH: Does not modify entities, only auth. This needs checks to see if
+    # the user is allowed to manage permissions?
   end
 
   @doc """
@@ -108,7 +123,11 @@ defmodule Link.Studies do
   def create_study(%Ecto.Changeset{} = changeset, researcher) do
     changeset
     |> Repo.insert()
+    # AUTH; how to check this.
     |> Authorization.assign_role(researcher, :owner)
+
+    # AUTH: Does not modify entities, only auth. This needs checks to see if
+    # the user is allowed to manage permissions?
   end
 
   def create_study(attrs, researcher) do
@@ -154,6 +173,7 @@ defmodule Link.Studies do
   """
   def delete_study(%Study{} = study) do
     Repo.delete(study)
+    # AUTH; how to check this.
   end
 
   @doc """

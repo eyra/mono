@@ -50,6 +50,9 @@ defmodule LinkWeb do
 
   def live_view do
     quote do
+      import Link.Authorization, only: [can_access?: 2]
+      use GreenLight.Live, Link.Authorization
+
       use Surface.LiveView,
         layout: {LinkWeb.LayoutView, "live.html"}
 
