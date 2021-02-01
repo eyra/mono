@@ -72,8 +72,8 @@ module.exports = {
         'subhead': ['Finador-Regular', 'sans-serif'],
         'button': ['Finador-Bold', 'sans-serif'],
         'intro': ['Finador-Medium', 'sans-serif'],
-        'label': ['Finador-Regular', 'sans-serif'],
-        'body': ['Finador-Light', 'sans-serif'],
+        'label': ['Finador-Medium', 'sans-serif'],
+        'body': ['Finador-Light', 'sans-serif'],        
       },
       fontSize: {
         "title1": ['50px', '55px'],

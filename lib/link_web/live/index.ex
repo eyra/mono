@@ -5,8 +5,9 @@ defmodule LinkWeb.Index do
   use LinkWeb, :live_view
   use LinkWeb.LiveViewPowHelper
   import Link.Users
-  alias EyraUI.{Hero, PrimaryCTA, USPCard}
+  alias EyraUI.{PrimaryCTA, USPCard}
   alias EyraUI.Container.{ContentArea}
+  alias EyraUI.Hero.HeroLarge
   alias EyraUI.Text.{Title1, Intro}
   alias EyraUI.Grid.{AbsoluteGrid}
 
@@ -30,7 +31,7 @@ defmodule LinkWeb.Index do
 
   def render(assigns) do
     ~H"""
-      <Hero title={{ dgettext("eyra-link", "welcome.title") }}
+      <HeroLarge title={{ dgettext("eyra-link", "welcome.title") }}
             subtitle={{dgettext("eyra-link", "welcome.subtitle")}} />
 
       <ContentArea>

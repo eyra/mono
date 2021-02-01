@@ -11,37 +11,37 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/dashboard/index.html.eex:2
+#: lib/link_web/live/dashboard.ex:53
 msgid "study.index.subtitle"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/dashboard/index.html.eex:1
+#: lib/link_web/live/dashboard.ex:52
 msgid "study.index.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:31
+#: lib/link_web/templates/layout/root.html.leex:32
 msgid "dashboard.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/dashboard/index.html.eex:28
+#: lib/link_web/live/dashboard.ex:72
 msgid "study.all.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/dashboard/index.html.eex:13
+#: lib/link_web/live/dashboard.ex:60
 msgid "study.highlighted.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:35
+#: lib/link_web/templates/layout/root.html.leex:36
 msgid "new.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/dashboard/index.html.eex:9
+#: lib/link_web/live/dashboard.ex:57
 msgid "dashboard.page.description"
 msgstr ""
 
@@ -56,21 +56,21 @@ msgid "study.edit.subtitle"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/edit.html.eex:15
-#: lib/link_web/templates/study/new.html.eex:15
+#: lib/link_web/live/study/new.ex:40 lib/link_web/live/study/show.ex:30
+#: lib/link_web/templates/study/edit.html.eex:15 lib/link_web/templates/study/new.html.eex:15
 msgid "description.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/edit.html.eex:18
-#: lib/link_web/templates/study/edit.html.eex:23 lib/link_web/templates/study/new.html.eex:18
-#: lib/link_web/templates/study/new.html.eex:22
+#: lib/link_web/live/study/new.ex:41
+#: lib/link_web/templates/study/edit.html.eex:18 lib/link_web/templates/study/edit.html.eex:23
+#: lib/link_web/templates/study/new.html.eex:18 lib/link_web/templates/study/new.html.eex:22
 msgid "save.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/edit.html.eex:14
-#: lib/link_web/templates/study/new.html.eex:14
+#: lib/link_web/live/study/new.ex:39 lib/link_web/live/study/show.ex:29
+#: lib/link_web/templates/study/edit.html.eex:14 lib/link_web/templates/study/new.html.eex:14
 msgid "title.label"
 msgstr ""
 
@@ -80,6 +80,7 @@ msgid "study.participate.button"
 msgstr ""
 
 #, elixir-format
+#: lib/link_web/live/study/show.ex:25
 #: lib/link_web/templates/study/show.html.eex:1
 msgid "study.show.title"
 msgstr ""
@@ -100,7 +101,7 @@ msgid "study.new.subtitle"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/new.html.eex:1
+#: lib/link_web/live/study/new.ex:36 lib/link_web/templates/study/new.html.eex:1
 msgid "study.new.title"
 msgstr ""
 
@@ -115,6 +116,6 @@ msgid "participants.subtitle"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/dashboard/index.html.eex:22
+#: lib/link_web/live/dashboard.ex:68
 msgid "add.card.title"
 msgstr ""

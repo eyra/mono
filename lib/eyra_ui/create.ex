@@ -28,7 +28,7 @@ defmodule EyraUI.Create do
     end
   end
 
-  def mount(entity_name, changeset, socket) do
+  def mount(_entity_name, changeset, socket) do
     {:ok, socket |> assign(changeset: changeset)}
   end
 

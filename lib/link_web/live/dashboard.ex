@@ -7,7 +7,7 @@ defmodule LinkWeb.Dashboard do
   import Link.Authorization
   import Link.Users
   alias Link.Studies
-  alias EyraUI.{Hero, Stack}
+  alias EyraUI.Hero.HeroLarge
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{BodyLarge, Title2}
   alias EyraUI.Grid.{DynamicGrid}
@@ -49,7 +49,7 @@ defmodule LinkWeb.Dashboard do
 
   def render(assigns) do
     ~H"""
-      <Hero title={{ dgettext("eyra-study", "study.index.title") }}
+      <HeroLarge title={{ dgettext("eyra-study", "study.index.title") }}
             subtitle={{dgettext("eyra-study", "study.index.subtitle")}} />
 
       <ContentArea>

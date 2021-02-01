@@ -5,14 +5,14 @@ defmodule LinkWeb.Study.New do
   use LinkWeb, :live_view
   use LinkWeb.LiveViewPowHelper
   use EyraUI.Create, :study
-  alias Surface.Components.Button
   alias Surface.Components.Form
-  alias EyraUI.Form.{TextInput, Checkbox}
-  alias EyraUI.Hero
+  alias EyraUI.Form.{TextInput}
+  alias EyraUI.Hero.HeroSmall
+  alias EyraUI.Button.{SubmitButton}
   alias EyraUI.Container.{ContentArea}
 
   alias Link.Studies
-  alias Link.Studies.Study
+
 
   def mount(params, session, socket) do
     socket =
@@ -33,19 +33,15 @@ defmodule LinkWeb.Study.New do
 
   def render(assigns) do
     ~H"""
-      <Hero title={{ dgettext("eyra-study", "study.new.title") }}
-            subtitle={{dgettext("eyra-study", "study.new.subtitle")}} />
+      <HeroSmall title={{ dgettext("eyra-study", "study.new.title") }} />
       <ContentArea>
         <Form for={{ @changeset }} submit="create">
           <TextInput field={{:title}} label_text={{dgettext("eyra-study", "title.label")}} />
           <TextInput field={{:description}} label_text={{dgettext("eyra-study", "description.label")}} />
-          <button>Create</button>
+          <SubmitButton label={{ dgettext("eyra-study", "save.button") }} />
         </Form>
       </ContentArea>
     """
   end
 
-  defp setup_changeset(socket) do
-    socket |> assign(changeset: Studies.change_survey_tool(%Study{}))
-  end
 end

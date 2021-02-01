@@ -1,0 +1,57 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/link_web/live/study/show.ex:33
+msgid "config.nrofsubjects.label"
+msgstr "Aantal vereiste subjects"
+
+#, elixir-format
+#: lib/link_web/live/study/show.ex:32
+msgid "config.url.label"
+msgstr "Link naar Qualtrics"
+
+#, elixir-format
+#: lib/link_web/live/study/show.ex:31
+msgid "config.title"
+msgstr "Survey instellingen"
+
+#, elixir-format
+#: lib/link_web/live/study/show.ex:34
+msgid "config.devices.title"
+msgstr "Beschikbaarheid"
+
+#, elixir-format
+#: lib/link_web/live/study/show.ex:37
+msgid "desktop.enabled.label"
+msgstr "Desktop"
+
+#, elixir-format
+#: lib/link_web/live/study/show.ex:35
+msgid "mobile.enabled.label"
+msgstr "Telefoon"
+
+#, elixir-format
+#: lib/link_web/live/study/show.ex:36
+msgid "tablet.enabled.label"
+msgstr "Tablet"
+
+#, elixir-format
+#: lib/link_web/live/study/show.ex:39
+msgid "info.label"
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/link_web/live/study/show.ex:38
+msgid "info.title"
+msgstr "Survey instellingen"

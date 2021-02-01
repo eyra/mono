@@ -1,4 +1,4 @@
-defmodule EyraUI.Form.SubmitButton do
+defmodule EyraUI.Button.SubmitButtonWide do
   use Surface.Component
 
   @doc "The text to put on the button"

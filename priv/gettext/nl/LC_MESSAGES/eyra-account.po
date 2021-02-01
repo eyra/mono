@@ -17,7 +17,7 @@ msgid "apple.button"
 msgstr "Meld je aan met Apple"
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:53
+#: lib/link_web/components/component_helpers.ex:51
 msgid "email.label"
 msgstr "E-mail"
 
@@ -37,12 +37,12 @@ msgid "google.button"
 msgstr "Meld je aan met Google"
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:69
+#: lib/link_web/components/component_helpers.ex:73
 msgid "password.label"
 msgstr "Wachtwoord"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:45
+#: lib/link_web/templates/layout/root.html.leex:46
 #: lib/link_web/templates/pow/session/new.html.eex:24 lib/link_web/templates/pow/session/new.html.eex:28
 msgid "signin.button"
 msgstr "Inloggen"
@@ -74,7 +74,7 @@ msgid "password.confirmation.label"
 msgstr "Herhaal wachtwoord"
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:68
+#: lib/link_web/components/component_helpers.ex:70
 msgid "password.current.label"
 msgstr "Wachtwoord"
 
@@ -95,11 +95,12 @@ msgid "signout.button"
 msgstr "Uitloggen"
 
 #, elixir-format
-#: lib/link_web/templates/layout/app.html.eex:40
+#: lib/link_web/templates/layout/root.html.leex:41
 msgid "profile.button"
 msgstr "Mijn profiel"
 
 #, elixir-format
+#: lib/link_web/live/user_profile.ex:29
 #: lib/link_web/templates/user_profile/edit.html.eex:11
 msgid "fullname.label"
 msgstr "Volledige naam"
@@ -111,16 +112,19 @@ msgid "profile.save.button"
 msgstr "Opslaan"
 
 #, elixir-format
+#: lib/link_web/live/user_profile.ex:26
 #: lib/link_web/templates/user_profile/edit.html.eex:6
 msgid "profile.title"
 msgstr "Mijn profiel"
 
 #, elixir-format
+#: lib/link_web/live/user_profile.ex:28
 #: lib/link_web/templates/user_profile/edit.html.eex:10
 msgid "researcher.label"
 msgstr "ik ben een onderzoeker"
 
 #, elixir-format
+#: lib/link_web/live/user_profile.ex:30
 #: lib/link_web/templates/user_profile/edit.html.eex:12
 msgid "displayname.label"
 msgstr "Schermnaam"
@@ -134,3 +138,15 @@ msgstr "Nog geen account?"
 #: lib/link_web/templates/pow/registration/new.html.eex:22
 msgid "signin.label"
 msgstr "Heb je al een account?"
+
+#, elixir-format
+#: lib/link_web/live/survey_tool/edit.ex:26
+#: lib/link_web/live/survey_tool/new.ex:40
+msgid "survey_url.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/survey_tool/edit.ex:25
+#: lib/link_web/live/survey_tool/new.ex:39
+msgid "title.label"
+msgstr "E-mail"
