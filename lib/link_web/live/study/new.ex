@@ -13,7 +13,6 @@ defmodule LinkWeb.Study.New do
 
   alias Link.Studies
 
-
   def mount(params, session, socket) do
     socket =
       socket |> assign(current_user: get_user(socket, session) |> IO.inspect(label: "USER"))
@@ -43,5 +42,4 @@ defmodule LinkWeb.Study.New do
       </ContentArea>
     """
   end
-
 end

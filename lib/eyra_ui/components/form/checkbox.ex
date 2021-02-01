@@ -1,6 +1,6 @@
 defmodule EyraUI.Form.Checkbox do
   use Surface.Component
-  alias Surface.Components.Form.{Checkbox,Label}
+  alias Surface.Components.Form.{Checkbox, Label}
   alias EyraUI.Form.ValidationErrors
 
   prop field, :atom, required: true

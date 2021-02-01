@@ -73,7 +73,7 @@ module.exports = {
         'button': ['Finador-Bold', 'sans-serif'],
         'intro': ['Finador-Medium', 'sans-serif'],
         'label': ['Finador-Medium', 'sans-serif'],
-        'body': ['Finador-Light', 'sans-serif'],        
+        'body': ['Finador-Light', 'sans-serif'],
       },
       fontSize: {
         "title1": ['50px', '55px'],
