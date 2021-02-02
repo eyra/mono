@@ -140,4 +140,15 @@ defmodule Link.Authorization do
   def map_to_auth_entity(entity) do
     {Atom.to_string(entity.__struct__), entity.id}
   end
+
+  def can_access?(%Principal{} = principal, _module) do
+    # Hier kan je willekeurige logica toevoegen die op principal of module checkt
+    MapSet.member?(principal.roles, :researcher)
+  end
+
+  # Indien nodig kan jij (of ik) een tweede versie maken die ook een struct kan
+  # ontvangen (het huidige object)
+  def can_access?(user, module) do
+    can_access?(principal(user), module)
+  end
 end

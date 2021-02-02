@@ -64,7 +64,7 @@ defmodule LinkWeb.Dashboard do
             <div :for={{ study <- @highlighted_studies  }} >
               {{ primary_study_card(@socket, study, "Bekijken") }}
             </div>
-            <div :if={{ can?(@current_user, nil, LinkWeb.StudyController, :new) }} >
+            <div :if={{ can_access?(@current_user, LinkWeb.Study.New) }} >
               {{ button_card(@socket, dgettext("eyra-study", "add.card.title"), Routes.live_path(@socket, LinkWeb.Study.New)) }}
             </div>
           </DynamicGrid>
