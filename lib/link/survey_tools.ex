@@ -82,6 +82,7 @@ defmodule Link.SurveyTools do
     |> Repo.insert()
   end
 
+
   @doc """
   Updates a survey_tool.
 
@@ -99,6 +100,8 @@ defmodule Link.SurveyTools do
     |> SurveyTool.changeset(attrs)
     |> update_survey_tool()
   end
+
+  def update_survey_tool(_, _), do: nil
 
   def update_survey_tool(changeset) do
     changeset

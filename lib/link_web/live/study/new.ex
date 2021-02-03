@@ -12,6 +12,7 @@ defmodule LinkWeb.Study.New do
   alias EyraUI.Container.{ContentArea}
 
   alias Link.Studies
+  alias Link.SurveyTools
 
   def mount(params, session, socket) do
     socket =
@@ -23,7 +24,10 @@ defmodule LinkWeb.Study.New do
   def create(socket, changeset) do
     current_user = socket.assigns.current_user
 
-    with {:ok, study} <- Studies.create_study(changeset, current_user) do
+    # temp ensure every study has at least one survey
+    with {:ok, study} <- Studies.create_study(changeset, current_user),
+         {:ok, _survey_tool} <- SurveyTools.create_survey_tool(%{title: study.title}, study)
+    do
       {:ok, Routes.live_path(socket, LinkWeb.Study.Show, study.id)}
     end
   end

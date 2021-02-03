@@ -49,9 +49,9 @@ msgstr "Tablet"
 #, elixir-format
 #: lib/link_web/live/study/show.ex:39
 msgid "info.label"
-msgstr ""
+msgstr "Wat kan een subject verwachten van de survey?"
 
 #, elixir-format, fuzzy
 #: lib/link_web/live/study/show.ex:38
 msgid "info.title"
-msgstr "Survey instellingen"
+msgstr "Survey info"

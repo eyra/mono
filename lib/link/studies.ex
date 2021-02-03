@@ -9,6 +9,8 @@ defmodule Link.Studies do
 
   alias Link.Studies.{Study, Participant}
   alias Link.Users.User
+  alias Link.SurveyTools.SurveyTool
+
   alias GreenLight.Principal
 
   @doc """
@@ -230,6 +232,11 @@ defmodule Link.Studies do
     |> Repo.all()
 
     # |> Enum.map(fn [user, status] -> %{user: user, status: status} end)
+  end
+
+  def list_survey_tools(%Study{} = study) do
+    from(s in SurveyTool, where: s.study_id == ^study.id)
+    |> Repo.all()
   end
 
   def list_participations(%User{} = user) do

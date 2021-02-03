@@ -16,6 +16,7 @@ defmodule Link.Studies.Study do
       defaults: [entity_type: Link.Studies.Study |> Atom.to_string()]
 
     has_many :participants, Link.Studies.Participant
+    has_many :survey_tools, Link.SurveyTools.SurveyTool
 
     timestamps()
   end
