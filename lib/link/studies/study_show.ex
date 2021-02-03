@@ -17,15 +17,16 @@ defmodule Link.Studies.StudyShow do
     field :desktop_enabled, :boolean
   end
 
-  @required_fields ~w(title)
+  @required_fields ~w(title)a
 
   @study_fields ~w(title)a
   @survey_tool_fields ~w(description survey_url subject_count phone_enabled tablet_enabled desktop_enabled)a
+  @fields @study_fields ++ @survey_tool_fields
 
   @doc false
   def changeset(study_show, params) do
     study_show
-    |> cast(params, Map.keys(params))
+    |> cast(params, @fields)
     |> validate_required(@required_fields)
   end
 
@@ -41,7 +42,6 @@ defmodule Link.Studies.StudyShow do
     |> Map.take(@survey_tool_fields)
   end
 
-  @spec create(%{:id => any, optional(any) => any}, map) :: struct
   def create(study, survey_tool) do
     study_opts =
       study
@@ -52,6 +52,6 @@ defmodule Link.Studies.StudyShow do
       survey_tool
       |> Map.take(@survey_tool_fields)
 
-    struct(StudyShow, Map.merge(study_opts, survey_tool_opts))
+    struct(Link.Studies.StudyShow, Map.merge(study_opts, survey_tool_opts))
   end
 end
