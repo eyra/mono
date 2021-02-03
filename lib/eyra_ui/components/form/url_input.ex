@@ -1,5 +1,4 @@
-defmodule EyraUI.Form.UrlInput
-do
+defmodule EyraUI.Form.UrlInput do
   use Surface.Component
   alias Surface.Components.Form.UrlInput
   alias EyraUI.Form.Field

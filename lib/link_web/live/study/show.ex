@@ -29,7 +29,7 @@ defmodule LinkWeb.Study.Show do
     end
   end
 
-  def get_changeset(study_show, attrs \\ %{})  do
+  def get_changeset(study_show, attrs \\ %{}) do
     study_show |> StudyShow.changeset(attrs)
   end
 
@@ -43,20 +43,20 @@ defmodule LinkWeb.Study.Show do
   end
 
   def save_valid(changeset) do
-      study_show = Ecto.Changeset.apply_changes(changeset)
-      study_attrs = StudyShow.to_study(study_show)
-      survey_tool_attrs = StudyShow.to_survey_tool(study_show)
+    study_show = Ecto.Changeset.apply_changes(changeset)
+    study_attrs = StudyShow.to_study(study_show)
+    survey_tool_attrs = StudyShow.to_survey_tool(study_show)
 
-      study = Studies.get_study!(study_show.study_id)
+    study = Studies.get_study!(study_show.study_id)
 
-      study
-      |> load_survey_tool()
-      |> SurveyTools.update_survey_tool(survey_tool_attrs)
+    study
+    |> load_survey_tool()
+    |> SurveyTools.update_survey_tool(survey_tool_attrs)
 
-      study
-      |> Studies.update_study(study_attrs)
+    study
+    |> Studies.update_study(study_attrs)
 
-      {:ok, study_show}
+    {:ok, study_show}
   end
 
   def render(assigns) do

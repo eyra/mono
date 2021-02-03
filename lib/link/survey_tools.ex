@@ -82,7 +82,6 @@ defmodule Link.SurveyTools do
     |> Repo.insert()
   end
 
-
   @doc """
   Updates a survey_tool.
 

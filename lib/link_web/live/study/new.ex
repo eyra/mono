@@ -26,8 +26,7 @@ defmodule LinkWeb.Study.New do
 
     # temp ensure every study has at least one survey
     with {:ok, study} <- Studies.create_study(changeset, current_user),
-         {:ok, _survey_tool} <- SurveyTools.create_survey_tool(%{title: study.title}, study)
-    do
+         {:ok, _survey_tool} <- SurveyTools.create_survey_tool(%{title: study.title}, study) do
       {:ok, Routes.live_path(socket, LinkWeb.Study.Show, study.id)}
     end
   end

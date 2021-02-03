@@ -26,7 +26,15 @@ defmodule Link.SurveyTools.SurveyTool do
   @doc false
   def changeset(survey_tool, attrs) do
     survey_tool
-    |> cast(attrs, [:title, :description, :survey_url, :subject_count, :phone_enabled, :tablet_enabled, :desktop_enabled])
+    |> cast(attrs, [
+      :title,
+      :description,
+      :survey_url,
+      :subject_count,
+      :phone_enabled,
+      :tablet_enabled,
+      :desktop_enabled
+    ])
     |> validate_required([:title])
   end
 end
