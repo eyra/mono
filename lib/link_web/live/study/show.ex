@@ -15,6 +15,7 @@ defmodule LinkWeb.Study.Show do
   alias Link.Studies.{Study, StudyShow}
   alias Link.SurveyTools
 
+  @impl true
   def load(%{"id" => id}, _session, _socket) do
     study = Studies.get_study!(id)
     study_survey = study |> load_survey_tool()
@@ -22,7 +23,7 @@ defmodule LinkWeb.Study.Show do
   end
 
   def load_survey_tool(%Study{} = study) do
-    case study |> Studies.list_survey_tools() |> IO.inspect() do
+    case study |> Studies.list_survey_tools() do
       [survey_tool] -> survey_tool
       [survey_tool | _] -> survey_tool
       _ -> raise "Expected at least one survey tool for study #{study.title}"
@@ -57,6 +58,11 @@ defmodule LinkWeb.Study.Show do
     |> Studies.update_study(study_attrs)
 
     {:ok, study_show}
+  end
+
+  @impl true
+  def get_authorization_context(%{"id" => id}, session, socket) do
+    Studies.get_study!(id)
   end
 
   def render(assigns) do

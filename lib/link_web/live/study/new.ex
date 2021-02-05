@@ -14,12 +14,7 @@ defmodule LinkWeb.Study.New do
   alias Link.Studies
   alias Link.SurveyTools
 
-  def mount(params, session, socket) do
-    socket =
-      socket |> assign(current_user: get_user(socket, session) |> IO.inspect(label: "USER"))
-
-    super(params, session, socket)
-  end
+  import Link.Authorization, only: [can_access?: 2]
 
   def create(socket, changeset) do
     current_user = socket.assigns.current_user

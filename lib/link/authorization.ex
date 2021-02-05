@@ -12,6 +12,12 @@ defmodule Link.Authorization do
 
   alias GreenLight.Principal
   alias Link.Users
+  import Ecto.Query
+
+  GreenLight.Permissions.grant(__MODULE__, "test-auth", [:owner])
+
+  grant_access(LinkWeb.Study.New, [:researcher])
+  grant_access(LinkWeb.Study.Show, [:owner])
 
   grant_access(Link.Studies.Study, [:visitor, :member])
   grant_access(Link.SurveyTools.SurveyTool, [:owner, :participant])
@@ -141,14 +147,87 @@ defmodule Link.Authorization do
     {Atom.to_string(entity.__struct__), entity.id}
   end
 
-  def can_access?(%Principal{} = principal, _module) do
-    # Hier kan je willekeurige logica toevoegen die op principal of module checkt
-    MapSet.member?(principal.roles, :researcher)
+  def create_node(parent_id \\ nil) do
+    case %Link.Authorization.Node{parent_id: parent_id} |> Link.Repo.insert() do
+      {:ok, node} -> {:ok, node.id}
+      error -> error
+    end
   end
 
-  # Indien nodig kan jij (of ik) een tweede versie maken die ook een struct kan
-  # ontvangen (het huidige object)
-  def can_access?(user, module) do
-    can_access?(principal(user), module)
+  defp parent_node_query(node_id) do
+    initial_query = Link.Authorization.Node |> where([n], n.id == ^node_id)
+
+    recursion_query =
+      Link.Authorization.Node
+      |> join(:inner, [n], nt in "auth_node_parents", on: n.id == nt.parent_id)
+
+    parents_query = initial_query |> union_all(^recursion_query)
+
+    query =
+      from("auth_node_parents")
+      |> recursive_ctes(true)
+      |> with_cte("auth_node_parents", as: ^parents_query)
+      |> select([n], n.id)
+  end
+
+  def get_parent_nodes(node_id) do
+    node_id |> parent_node_query |> Link.Repo.all()
+  end
+
+  def assign_role(principal, node_id, role) do
+    %Link.Authorization.RoleAssignment{principal_id: principal, node_id: node_id, role: role}
+    |> Link.Repo.insert()
+    |> case do
+      {:ok, _} -> :ok
+      {:error, _} -> :error
+    end
+  end
+
+  def roles_intersect?(principal, node_id, roles) do
+    nodes_query = node_id |> parent_node_query
+
+    from(ra in Link.Authorization.RoleAssignment,
+      where: ra.node_id in subquery(nodes_query) and ra.role in ^roles
+    )
+    |> Link.Repo.exists?()
+  end
+
+  def can_access?(%Principal{} = principal, module) when is_atom(module) do
+    permission = GreenLight.Permissions.access_permission(module)
+    roles = principal.roles
+    GreenLight.PermissionMap.allowed?(permission_map(), permission, roles)
+  end
+
+  def can_access?(user, module) when is_atom(module) do
+    principal(user) |> can_access?(module)
+  end
+
+  def can_access?(%Principal{} = principal, node_id, permission)
+      when is_integer(node_id) and is_binary(permission) do
+    roles = principal.roles
+
+    unless GreenLight.PermissionMap.allowed?(permission_map(), permission, roles) do
+      roles_with_permission =
+        permission_map() |> GreenLight.PermissionMap.roles(permission) |> MapSet.to_list()
+
+      roles_intersect?(principal.id, node_id, roles_with_permission)
+    end
+  end
+
+  def can_access?(%Principal{} = principal, node_id, module)
+      when is_integer(node_id) and is_atom(module) do
+    can_access?(principal, node_id, GreenLight.Permissions.access_permission(module))
+  end
+
+  def can_access?(%Link.Users.User{} = user, node_id, module) when is_integer(node_id) do
+    can_access?(principal(user), node_id, module)
+  end
+
+  def can_access?(nil, node_id, module) when is_integer(node_id) do
+    can_access?(principal(nil), module)
+  end
+
+  def can_access?(user, %Link.Studies.Study{} = study, module) do
+    can_access?(user, study.auth_node_id, module)
   end
 end
