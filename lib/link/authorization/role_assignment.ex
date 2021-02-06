@@ -1,4 +1,8 @@
 defmodule Link.Authorization.RoleAssignment do
+  @moduledoc """
+  A role assignment entity is used to assign a role to a principal on a
+  specific entity.
+  """
   use Ecto.Schema
 
   schema "authorization_role_assignments" do

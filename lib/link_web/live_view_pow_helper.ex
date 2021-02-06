@@ -1,4 +1,7 @@
 defmodule LinkWeb.LiveViewPowHelper do
+  @moduledoc """
+  Glue code that makes authentication with Pow work in LiveView.
+  """
   alias Link.Users.User
   alias Pow.Store.CredentialsCache
 
