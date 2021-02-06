@@ -1,4 +1,7 @@
 defmodule EyraUI.Text.Intro do
+  @moduledoc """
+  The intro is to be used for ...?
+  """
   use Surface.Component
 
   slot default, required: true

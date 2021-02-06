@@ -1,4 +1,5 @@
 defmodule EyraUI.Form.NumberInput do
+  @moduledoc false
   use Surface.Component
   alias Surface.Components.Form.NumberInput
   alias EyraUI.Form.Field

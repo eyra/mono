@@ -1,4 +1,7 @@
 defmodule EyraUI.Grid.AbsoluteGrid do
+  @moduledoc """
+  The grid is to be used for.
+  """
   use Surface.Component
 
   @doc "The content"

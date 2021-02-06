@@ -1,4 +1,5 @@
 defmodule EyraUI.Form.Checkbox do
+  @moduledoc false
   use Surface.Component
   alias Surface.Components.Form.{Checkbox, Label}
   alias EyraUI.Form.ValidationErrors

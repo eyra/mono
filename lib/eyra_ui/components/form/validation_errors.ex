@@ -1,4 +1,5 @@
 defmodule EyraUI.Form.ValidationErrors do
+  @moduledoc false
   use Surface.Component
   import LinkWeb.ErrorHelpers, only: [error_tag: 2, has_error?: 2]
 

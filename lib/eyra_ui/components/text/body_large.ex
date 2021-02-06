@@ -1,4 +1,7 @@
 defmodule EyraUI.Text.BodyLarge do
+  @moduledoc """
+  The body large is to be used for ...?
+  """
   use Surface.Component
 
   slot default, required: true

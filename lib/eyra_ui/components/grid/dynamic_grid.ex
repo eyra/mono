@@ -1,4 +1,5 @@
 defmodule EyraUI.Grid.DynamicGrid do
+  @moduledoc false
   use Surface.Component
 
   @doc "The content"

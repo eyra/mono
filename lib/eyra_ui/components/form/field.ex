@@ -1,4 +1,5 @@
 defmodule EyraUI.Form.Field do
+  @moduledoc false
   use Surface.Component
   alias Surface.Components.Form.Label
   alias EyraUI.Form.ValidationErrors

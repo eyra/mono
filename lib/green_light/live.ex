@@ -1,4 +1,7 @@
 defmodule GreenLight.Live do
+  @moduledoc """
+  The Live module enables automatic authorization checks for LiveViews.
+  """
   @callback get_authorization_context(
               Phoenix.LiveView.unsigned_params() | :not_mounted_at_router,
               session :: map,

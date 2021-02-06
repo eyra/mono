@@ -19,7 +19,6 @@ defmodule LinkWeb.SurveyTool.New do
 
   @impl true
   def handle_event("create", %{"survey_tool" => data}, socket) do
-    # FIXME: Remove the study as a requirement from survey tools
     [study | _] = Link.Repo.all(Link.Studies.Study)
 
     case SurveyTools.create_survey_tool(data, study) do

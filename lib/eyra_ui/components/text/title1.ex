@@ -1,4 +1,7 @@
 defmodule EyraUI.Text.Title1 do
+  @moduledoc """
+  This title is to be used for ...?
+  """
   use Surface.Component
 
   slot default, required: true
