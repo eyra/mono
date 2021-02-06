@@ -180,8 +180,8 @@ defmodule Link.Authorization do
     node_id |> parent_node_query |> Link.Repo.all()
   end
 
-  def assign_role(principal, node_id, role) do
-    %Link.Authorization.RoleAssignment{principal_id: principal, node_id: node_id, role: role}
+  def assign_role(principal_id, node_id, role) do
+    %Link.Authorization.RoleAssignment{principal_id: principal_id, node_id: node_id, role: role}
     |> Link.Repo.insert()
     |> case do
       {:ok, _} -> :ok
