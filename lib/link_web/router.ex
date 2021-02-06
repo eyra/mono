@@ -79,22 +79,6 @@ defmodule LinkWeb.Router do
 
     live "/studies/new", Study.New
     live "/studies/:id", Study.Show
-    # resources "/studies", StudyController do
-    #   # resources "/survey-tools", SurveyToolController do
-    #   #   get "/start", SurveyToolTaskController, :start, as: :task
-    #   #   get "/complete", SurveyToolTaskController, :complete, as: :task
-    #   #   post "/tasks", SurveyToolTaskController, :setup_tasks, as: :task
-    #   # end
-
-    #   get "/permissions", Studies.PermissionsController, :show
-    #   patch "/permissions", Studies.PermissionsController, :change
-    #   post "/permissions", Studies.PermissionsController, :create
-    # end
-
-    get "/studies/:id/participate", ParticipantController, :new
-    post "/studies/:id/participate", ParticipantController, :create
-    get "/studies/:id/participants", ParticipantController, :index
-    patch "/studies/:id/participants", ParticipantController, :update
   end
 
   # Other scopes may use custom stacks.

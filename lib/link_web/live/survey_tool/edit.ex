@@ -5,11 +5,10 @@ defmodule LinkWeb.SurveyTool.Edit do
   use LinkWeb, :live_view
   use LinkWeb.LiveViewPowHelper
   alias Surface.Components.Form
-  alias EyraUI.Form.{TextInput, Checkbox}
+  alias EyraUI.Form.{TextInput}
   use EyraUI.AutoSave, :survey_tool
 
   alias Link.SurveyTools
-  alias Link.SurveyTools.SurveyTool
 
   def load(%{"id" => id}, _session, _socket) do
     SurveyTools.get_survey_tool!(id)

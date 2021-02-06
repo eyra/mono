@@ -14,8 +14,7 @@ defmodule LinkWeb.Study.New do
   alias Link.Studies
   alias Link.SurveyTools
 
-  import Link.Authorization, only: [can_access?: 2]
-
+  @impl true
   def create(socket, changeset) do
     current_user = socket.assigns.current_user
 
@@ -28,6 +27,7 @@ defmodule LinkWeb.Study.New do
 
   defdelegate get_changeset(attrs \\ %{}), to: Studies, as: :get_study_changeset
 
+  @impl true
   def render(assigns) do
     ~H"""
       <HeroSmall title={{ dgettext("eyra-study", "study.new.title") }} />

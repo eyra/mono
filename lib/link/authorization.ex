@@ -168,11 +168,10 @@ defmodule Link.Authorization do
 
     parents_query = initial_query |> union_all(^recursion_query)
 
-    query =
-      from("auth_node_parents")
-      |> recursive_ctes(true)
-      |> with_cte("auth_node_parents", as: ^parents_query)
-      |> select([n], n.id)
+    from("auth_node_parents")
+    |> recursive_ctes(true)
+    |> with_cte("auth_node_parents", as: ^parents_query)
+    |> select([n], n.id)
   end
 
   def get_parent_nodes(node_id) do
@@ -188,11 +187,13 @@ defmodule Link.Authorization do
     end
   end
 
-  def roles_intersect?(principal, node_id, roles) do
+  def roles_intersect?(%Principal{} = principal, node_id, roles) do
     nodes_query = node_id |> parent_node_query
 
     from(ra in Link.Authorization.RoleAssignment,
-      where: ra.node_id in subquery(nodes_query) and ra.role in ^roles
+      where:
+        ra.node_id in subquery(nodes_query) and ra.role in ^roles and
+          ra.principal_id == ^principal.id
     )
     |> Link.Repo.exists?()
   end

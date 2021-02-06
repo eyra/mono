@@ -2,10 +2,8 @@ defmodule EyraUI.Create do
   @moduledoc """
   Provides support for creating "new" views the Eyra way.
   """
-  import Phoenix.LiveView, only: [assign: 2, assign: 3, put_flash: 3, push_redirect: 2]
+  import Phoenix.LiveView, only: [assign: 2, put_flash: 3, push_redirect: 2]
   alias Phoenix.LiveView.Socket
-
-  @save_delay 2
 
   @callback create(socket :: Socket.t(), changeset :: any()) :: any()
   @callback get_changeset() :: any()
@@ -33,8 +31,6 @@ defmodule EyraUI.Create do
   end
 
   defmacro __using__(entity_name) do
-    entity_var = {entity_name, [], Elixir}
-
     quote do
       @behaviour EyraUI.Create
 
@@ -55,13 +51,6 @@ defmodule EyraUI.Create do
         Create.create(__MODULE__, socket, changeset)
       end
 
-      # def terminate(_reason, %{assigns: %{save_changeset: changeset}}) do
-      #   # FIXME: What to do here? Alert in some way (browser) or store in
-      #   # session so when the user navigates back the data will be populated
-      #   # again?
-      #   :ok
-      # end
-      #
       defoverridable mount: 3
     end
   end

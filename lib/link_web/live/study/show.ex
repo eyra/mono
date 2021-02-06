@@ -30,10 +30,12 @@ defmodule LinkWeb.Study.Show do
     end
   end
 
+  @impl true
   def get_changeset(study_show, attrs \\ %{}) do
     study_show |> StudyShow.changeset(attrs)
   end
 
+  @impl true
   def save(changeset) do
     if changeset.valid? do
       save_valid(changeset)
@@ -61,10 +63,11 @@ defmodule LinkWeb.Study.Show do
   end
 
   @impl true
-  def get_authorization_context(%{"id" => id}, session, socket) do
+  def get_authorization_context(%{"id" => id}, _session, _socket) do
     Studies.get_study!(id)
   end
 
+  @impl true
   def render(assigns) do
     ~H"""
       <HeroSmall title={{ dgettext("eyra-study", "study.show.title") }} />
