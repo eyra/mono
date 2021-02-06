@@ -19,7 +19,9 @@ defmodule Link.StudiesTest do
     test "list_studies/1 allows excluding a list of ids" do
       studies = 0..3 |> Enum.map(fn _ -> Factories.insert!(:study) end)
       {excluded_study, expected_result} = List.pop_at(studies, 1)
-      assert Studies.list_studies(exclude: [excluded_study.id]) == expected_result
+
+      assert Studies.list_studies(exclude: [excluded_study.id]) |> Enum.map(& &1.id) ==
+               expected_result |> Enum.map(& &1.id)
     end
 
     test "list_owned_studies/1 returns only studies that are owned by the user" do
@@ -27,7 +29,7 @@ defmodule Link.StudiesTest do
       researcher = Factories.insert!(:researcher)
       owned = Factories.insert!(:study)
       Authorization.assign_role!(researcher, owned, :owner)
-      assert Studies.list_owned_studies(researcher) == [owned]
+      assert Studies.list_owned_studies(researcher) |> Enum.map(& &1.id) == [owned.id]
     end
 
     test "get_study!/1 returns the study with given id" do
@@ -157,7 +159,7 @@ defmodule Link.StudiesTest do
       assert Studies.list_owned_studies(researcher_2) == []
       Studies.add_owner!(study, researcher_2)
       # The second researcher is now an owner of the study
-      assert Studies.list_owned_studies(researcher_2) == [study]
+      assert Studies.list_owned_studies(researcher_2) |> Enum.map(& &1.id) == [study.id]
     end
 
     test "assign_owners/2 adds or removes a users ownership of a study" do
