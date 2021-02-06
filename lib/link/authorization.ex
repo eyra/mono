@@ -218,7 +218,7 @@ defmodule Link.Authorization do
       roles_with_permission =
         permission_map() |> GreenLight.PermissionMap.roles(permission) |> MapSet.to_list()
 
-      roles_intersect?(principal.id, node_id, roles_with_permission)
+      roles_intersect?(principal, node_id, roles_with_permission)
     end
   end
 

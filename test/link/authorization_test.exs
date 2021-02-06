@@ -56,25 +56,25 @@ defmodule Link.AuthorizationTest do
   test "role intersection on a node" do
     {:ok, node} = Authorization.create_node()
     # Nothing intersects when not assigned
-    refute Authorization.roles_intersect?(1, node, [:owner])
+    refute Authorization.roles_intersect?(%Principal{id: 1}, node, [:owner])
     # Assignment for a different principal does not result in an intersection
-    refute Authorization.roles_intersect?(9, node, [:owner])
+    refute Authorization.roles_intersect?(%Principal{id: 9}, node, [:owner])
     # Assignment on the node results in an intersection
     :ok = Authorization.assign_role(1, node, :owner)
-    assert Authorization.roles_intersect?(1, node, [:owner])
+    assert Authorization.roles_intersect?(%Principal{id: 1}, node, [:owner])
   end
 
   test "role intersection works on sub-nodes" do
     {:ok, node} = Authorization.create_node()
     {:ok, sub_node} = Authorization.create_node(node)
     # Nothing intersects when not assigned
-    refute Authorization.roles_intersect?(1, sub_node, [:owner])
+    refute Authorization.roles_intersect?(%Principal{id: 1}, sub_node, [:owner])
     # A role assignment on the parent affects the sub-nodes
     :ok = Authorization.assign_role(1, node, :owner)
-    assert Authorization.roles_intersect?(1, sub_node, [:owner])
+    assert Authorization.roles_intersect?(%Principal{id: 1}, sub_node, [:owner])
     # It fails with non-intersecting roles
     {:ok, second_node} = Authorization.create_node()
     {:ok, second_sub_node} = Authorization.create_node(second_node)
-    refute Authorization.roles_intersect?(1, second_sub_node, [:owner])
+    refute Authorization.roles_intersect?(%Principal{id: 1}, second_sub_node, [:owner])
   end
 end
