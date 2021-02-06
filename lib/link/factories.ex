@@ -53,7 +53,7 @@ defmodule Link.Factories do
   end
 
   def build(:role_assignment) do
-    %Users.RoleAssignment{}
+    %Authorization.RoleAssignment{}
   end
 
   def build(:participant) do

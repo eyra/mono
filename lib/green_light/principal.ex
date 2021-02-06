@@ -1,4 +1,4 @@
-defmodule GreenLight.Principal do
+defprotocol GreenLight.Principal do
   @moduledoc """
   The principal is used as a representation for any person / thing that can
   interact with the system.
@@ -6,7 +6,9 @@ defmodule GreenLight.Principal do
   For more information see the [Wikipedia article on
   principals](https://en.wikipedia.org/wiki/Principal_(computer_security)/).
   """
-  @type roles :: MapSet.t(atom())
-  @type t :: %__MODULE__{id: integer() | nil, roles: roles}
-  defstruct id: nil, roles: MapSet.new()
+  @spec id(t) :: integer() | nil
+  def id(_t)
+
+  @spec roles(t) :: MapSet.t(atom())
+  def roles(_t)
 end

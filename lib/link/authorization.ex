@@ -8,10 +8,10 @@ defmodule Link.Authorization do
   use GreenLight,
     repo: Link.Repo,
     roles: [:visitor, :member, :researcher, :owner, :participant],
-    role_assignment_schema: Link.Users.RoleAssignment
+    role_assignment_schema: Link.Authorization.RoleAssignment
 
   alias GreenLight.Principal
-  alias Link.Users
+
   import Ecto.Query
 
   GreenLight.Permissions.grant(__MODULE__, "test-auth", [:owner])
@@ -97,59 +97,6 @@ defmodule Link.Authorization do
     index: [:visitor, :member]
   })
 
-  def principal(%Plug.Conn{} = conn) do
-    Pow.Plug.current_user(conn)
-    |> principal()
-  end
-
-  def principal(user) when is_nil(user) do
-    %Principal{id: nil, roles: MapSet.new([:visitor])}
-  end
-
-  def principal(%Link.Users.User{} = user) do
-    roles =
-      [:member | if(Users.get_profile(user).researcher, do: [:researcher], else: [])]
-      |> MapSet.new()
-
-    %Principal{id: user.id, roles: roles}
-  end
-
-  def assign_role!(%Link.Users.User{} = user, entity, role) do
-    user |> principal() |> assign_role!(entity, role)
-  end
-
-  def remove_role!(%Link.Users.User{} = user, entity, role) do
-    user |> principal() |> remove_role!(entity, role)
-  end
-
-  def list_roles(%Link.Users.User{} = user, entity) do
-    user |> principal() |> list_roles(entity)
-  end
-
-  def can?(%Plug.Conn{} = conn, entity, module, action) do
-    conn |> principal() |> can?(entity, module, action)
-  end
-
-  def can?(%Link.Users.User{} = user, entity, module, action) do
-    user |> principal() |> can?(entity, module, action)
-  end
-
-  def map_to_auth_entity(nil) do
-    nil
-  end
-
-  def map_to_auth_entity(%Link.SurveyTools.SurveyToolTask{} = task) do
-    {Atom.to_string(Link.SurveyTools.SurveyToolTask),
-     :erlang.phash(
-       {task.survey_tool_id, task.user_id},
-       :math.pow(2, 32) |> floor()
-     )}
-  end
-
-  def map_to_auth_entity(entity) do
-    {Atom.to_string(entity.__struct__), entity.id}
-  end
-
   def make_node(parent_id \\ nil) do
     %Link.Authorization.Node{parent_id: parent_id}
   end
@@ -161,8 +108,9 @@ defmodule Link.Authorization do
     end
   end
 
-  defp parent_node_query(node_id) do
-    initial_query = Link.Authorization.Node |> where([n], n.id == ^node_id)
+  defp parent_node_query(entity) do
+    initial_query =
+      Link.Authorization.Node |> where([n], n.id == ^GreenLight.AuthorizationNode.id(entity))
 
     recursion_query =
       Link.Authorization.Node
@@ -180,16 +128,7 @@ defmodule Link.Authorization do
     node_id |> parent_node_query |> Link.Repo.all()
   end
 
-  def assign_role(principal_id, node_id, role) do
-    %Link.Authorization.RoleAssignment{principal_id: principal_id, node_id: node_id, role: role}
-    |> Link.Repo.insert()
-    |> case do
-      {:ok, _} -> :ok
-      {:error, _} -> :error
-    end
-  end
-
-  def roles_intersect?(%Principal{} = principal, node_id, roles) do
+  def roles_intersect?(principal, node_id, roles) do
     nodes_query = node_id |> parent_node_query
 
     from(ra in Link.Authorization.RoleAssignment,
@@ -200,42 +139,24 @@ defmodule Link.Authorization do
     |> Link.Repo.exists?()
   end
 
-  def can_access?(%Principal{} = principal, module) when is_atom(module) do
+  def can_access?(principal, module) when is_atom(module) do
     permission = GreenLight.Permissions.access_permission(module)
-    roles = principal.roles
+    roles = Principal.roles(principal)
     GreenLight.PermissionMap.allowed?(permission_map(), permission, roles)
   end
 
-  def can_access?(user, module) when is_atom(module) do
-    principal(user) |> can_access?(module)
-  end
-
-  def can_access?(%Principal{} = principal, node_id, permission)
-      when is_integer(node_id) and is_binary(permission) do
-    roles = principal.roles
+  def can_access?(principal, entity, permission) when is_binary(permission) do
+    roles = Principal.roles(principal)
 
     unless GreenLight.PermissionMap.allowed?(permission_map(), permission, roles) do
       roles_with_permission =
         permission_map() |> GreenLight.PermissionMap.roles(permission) |> MapSet.to_list()
 
-      roles_intersect?(principal, node_id, roles_with_permission)
+      roles_intersect?(principal, entity, roles_with_permission)
     end
   end
 
-  def can_access?(%Principal{} = principal, node_id, module)
-      when is_integer(node_id) and is_atom(module) do
-    can_access?(principal, node_id, GreenLight.Permissions.access_permission(module))
-  end
-
-  def can_access?(%Link.Users.User{} = user, node_id, module) when is_integer(node_id) do
-    can_access?(principal(user), node_id, module)
-  end
-
-  def can_access?(nil, node_id, module) when is_integer(node_id) do
-    can_access?(principal(nil), module)
-  end
-
-  def can_access?(user, %Link.Studies.Study{} = study, module) do
-    can_access?(user, study.auth_node_id, module)
+  def can_access?(principal, entity, module) when is_atom(module) do
+    can_access?(principal, entity, GreenLight.Permissions.access_permission(module))
   end
 end

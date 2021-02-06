@@ -11,7 +11,7 @@ defmodule Link.Authorization.RoleAssignment do
 
     field :role, Ecto.Enum,
       primary_key: true,
-      values: [:owner, :researcher]
+      values: [:owner, :researcher, :participant]
 
     timestamps()
   end

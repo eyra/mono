@@ -4,89 +4,85 @@ defmodule GreenLight.Ecto.Query do
   """
 
   import Ecto.Query
+  alias GreenLight.AuthorizationNode
+  alias GreenLight.Principal
 
-  defp role_query(role_assignment_schema, principal, entity_type, entity_id) do
+  defp role_query(role_assignment_schema, principal, entity) do
     from(ra in role_assignment_schema,
       select: ra.role,
       where:
-        ra.principal_id == ^principal.id and ra.entity_id == ^entity_id and
-          ra.entity_type == ^entity_type
+        ra.principal_id == ^Principal.id(principal) and
+          ra.node_id == ^AuthorizationNode.id(entity)
     )
   end
 
-  def list_roles(repo, role_assignment_schema, %GreenLight.Principal{} = principal, entities)
+  def list_roles(repo, role_assignment_schema, principal, entities)
       when is_list(entities) do
     Enum.map(entities, &list_roles(repo, role_assignment_schema, principal, &1))
   end
 
-  def list_roles(_repo, _role_assignment_schema, %GreenLight.Principal{}, entity)
-      when is_nil(entity),
-      do: MapSet.new()
-
   def list_roles(
         repo,
         role_assignment_schema,
-        %GreenLight.Principal{} = principal,
-        {entity_type, entity_id}
+        principal,
+        entity
       ) do
-    if is_nil(principal.id) do
+    if is_nil(Principal.id(principal)) do
       MapSet.new()
     else
-      role_query(role_assignment_schema, principal, entity_type, entity_id)
+      role_query(role_assignment_schema, principal, entity)
       |> repo.all()
       |> MapSet.new()
     end
   end
 
-  def assign_role!(
+  def assign_role(
         repo,
         role_assignment_schema,
-        %GreenLight.Principal{id: principal_id},
-        entity_type,
-        entity_id,
+        principal,
+        entity,
         role
       ) do
     role_assignment_schema
-    |> struct
-    |> role_assignment_schema.changeset(%{
-      principal_id: principal_id,
-      entity_type: entity_type,
-      entity_id: entity_id,
+    |> struct(%{
+      principal_id: Principal.id(principal),
+      node_id: AuthorizationNode.id(entity),
       role: role
     })
-    |> repo.insert!()
+    |> repo.insert()
+    |> case do
+      {:ok, _} -> :ok
+      {:error, _} -> :error
+    end
   end
 
   def remove_role!(
         repo,
         role_assignment_schema,
-        %GreenLight.Principal{} = principal,
-        entity_type,
-        entity_id,
+        principal,
+        entity,
         role
       ) do
     query_role_assignments(
       role_assignment_schema,
       principal: principal,
-      entity_type: entity_type,
-      entity_id: entity_id,
+      entity: entity,
       role: role
     )
     |> repo.delete_all()
   end
 
-  def list_principals(repo, role_assignment_schema, {entity_type, entity_id}) do
+  def list_principals(repo, role_assignment_schema, entity) do
     query =
       query_role_assignments(role_assignment_schema,
-        entity_type: entity_type,
-        entity_id: entity_id
+        entity: entity
       )
 
     from(ra in query, select: {ra.principal_id, ra.role}, order_by: [ra.principal_id, ra.role])
     |> repo.all
     |> Enum.group_by(fn {principal_id, _} -> principal_id end, fn {_, role} -> role end)
     |> Enum.map(fn {principal_id, roles} ->
-      %GreenLight.Principal{id: principal_id, roles: MapSet.new(roles)}
+      %{id: principal_id, roles: MapSet.new(roles)}
     end)
   end
 
@@ -97,9 +93,8 @@ defmodule GreenLight.Ecto.Query do
         filter =
           case option do
             :role -> {:role, value}
-            :entity_type -> {:entity_type, value |> to_string}
-            :entity_id -> {:entity_id, value}
-            :principal -> {:principal_id, value.id}
+            :entity -> {:node_id, AuthorizationNode.id(value)}
+            :principal -> {:principal_id, Principal.id(value)}
           end
 
         [filter | filters]
@@ -108,8 +103,8 @@ defmodule GreenLight.Ecto.Query do
     Ecto.Query.from(ra in role_assignment_schema, where: ^filters)
   end
 
-  def query_entity_ids(role_assignment_schema, opts \\ []) do
+  def query_node_ids(role_assignment_schema, opts \\ []) do
     query = query_role_assignments(role_assignment_schema, opts)
-    Ecto.Query.from(ra in query, select: ra.entity_id)
+    Ecto.Query.from(ra in query, select: ra.node_id)
   end
 end

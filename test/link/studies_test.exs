@@ -28,7 +28,7 @@ defmodule Link.StudiesTest do
       _not_owned = Factories.insert!(:study)
       researcher = Factories.insert!(:researcher)
       owned = Factories.insert!(:study)
-      Authorization.assign_role!(researcher, owned, :owner)
+      :ok = Authorization.assign_role(researcher, owned, :owner)
       assert Studies.list_owned_studies(researcher) |> Enum.map(& &1.id) == [owned.id]
     end
 
@@ -154,7 +154,7 @@ defmodule Link.StudiesTest do
       researcher_1 = Factories.insert!(:researcher)
       researcher_2 = Factories.insert!(:researcher)
       study = Factories.insert!(:study)
-      Authorization.assign_role!(researcher_1, study, :owner)
+      :ok = Authorization.assign_role(researcher_1, study, :owner)
       # The second researcher is not the owner of the study
       assert Studies.list_owned_studies(researcher_2) == []
       Studies.add_owner!(study, researcher_2)
@@ -166,7 +166,7 @@ defmodule Link.StudiesTest do
       researcher_1 = Factories.insert!(:researcher)
       researcher_2 = Factories.insert!(:researcher)
       study = Factories.insert!(:study)
-      Authorization.assign_role!(researcher_1, study, :owner)
+      :ok = Authorization.assign_role(researcher_1, study, :owner)
       # The second researcher is not the owner of the study
       assert Studies.list_owned_studies(researcher_2) == []
       Studies.assign_owners(study, [researcher_2])
@@ -180,7 +180,7 @@ defmodule Link.StudiesTest do
       researcher_1 = Factories.insert!(:researcher)
       researcher_2 = Factories.insert!(:researcher)
       study = Factories.insert!(:study)
-      Authorization.assign_role!(researcher_1, study, :owner)
+      :ok = Authorization.assign_role(researcher_1, study, :owner)
       assert Studies.list_owners(study) |> Enum.map(& &1.id) == [researcher_1.id]
       Studies.assign_owners(study, [researcher_2])
       assert Studies.list_owners(study) |> Enum.map(& &1.id) == [researcher_2.id]

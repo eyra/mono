@@ -41,8 +41,19 @@ studies = [
   }
 ]
 
-_member = Link.Factories.insert!(:member, %{email: "member@eyra.co"})
-researcher = Link.Factories.insert!(:researcher, %{email: "researcher@eyra.co"})
+password_hash = Pow.Ecto.Schema.Password.pbkdf2_hash("asdf;lkj")
+
+_member =
+  Link.Factories.insert!(:member, %{
+    email: "member@eyra.co",
+    password_hash: password_hash
+  })
+
+researcher =
+  Link.Factories.insert!(:researcher, %{
+    email: "researcher@eyra.co",
+    password_hash: password_hash
+  })
 
 for data <- studies do
   study =

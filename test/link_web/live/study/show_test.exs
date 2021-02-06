@@ -25,12 +25,7 @@ defmodule LinkWeb.Live.Study.Show.Test do
   end
 
   defp take_ownership_of_study(%{user: user, study: study}) do
-    :ok =
-      Link.Authorization.assign_role(
-        Link.Authorization.principal(user).id,
-        study.auth_node_id,
-        :owner
-      )
+    :ok = Link.Authorization.assign_role(user, study, :owner)
 
     {:ok, []}
   end

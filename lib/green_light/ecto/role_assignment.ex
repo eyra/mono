@@ -6,8 +6,7 @@ defmodule GreenLight.Ecto.RoleAssignment do
 
   defmacro green_light_role_assignment_fields(roles) do
     quote do
-      field :entity_id, :integer, primary_key: true
-      field :entity_type, :string, primary_key: true
+      field :node_id, :integer, primary_key: true
       field :principal_id, :integer, primary_key: true
 
       field :role, Ecto.Enum,
@@ -23,8 +22,8 @@ defmodule GreenLight.Ecto.RoleAssignment do
       @doc false
       def changeset(role_assignment, attrs) do
         role_assignment
-        |> cast(attrs, [:entity_id, :entity_type, :role, :principal_id])
-        |> validate_required([:entity_id, :entity_type, :role, :principal_id])
+        |> cast(attrs, [:node_id, :role, :principal_id])
+        |> validate_required([:node_id, :role, :principal_id])
       end
 
       import unquote(__MODULE__), only: [green_light_role_assignment_fields: 1]

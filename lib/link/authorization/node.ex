@@ -7,6 +7,7 @@ defmodule Link.Authorization.Node do
 
   schema "authorization_nodes" do
     belongs_to :parent, Link.Authorization.Node
+    has_many :role_assignments, Link.Authorization.RoleAssignment
     timestamps()
   end
 end

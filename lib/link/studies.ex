@@ -4,14 +4,13 @@ defmodule Link.Studies do
   """
 
   import Ecto.Query, warn: false
+  alias GreenLight.Principal
   alias Link.Repo
   alias Link.Authorization
 
   alias Link.Studies.{Study, Participant}
   alias Link.Users.User
   alias Link.SurveyTools.SurveyTool
-
-  alias GreenLight.Principal
 
   # read list_studies(current_user, ...) do
   # end
@@ -40,14 +39,13 @@ defmodule Link.Studies do
   Returns the list of studies that are owned by the user.
   """
   def list_owned_studies(user) do
-    entity_ids =
-      Authorization.query_entity_ids(
-        entity_type: Study,
+    node_ids =
+      Authorization.query_node_ids(
         role: :owner,
-        principal: Authorization.principal(user)
+        principal: user
       )
 
-    from(s in Study, where: s.id in subquery(entity_ids)) |> Repo.all()
+    from(s in Study, where: s.auth_node_id in subquery(node_ids)) |> Repo.all()
     # AUTH: Can be piped through auth filter (current code does the same thing).
   end
 
@@ -65,25 +63,25 @@ defmodule Link.Studies do
 
   def assign_owners(study, users) do
     existing_owner_ids =
-      Authorization.list_principals(study)
+      Authorization.list_principals(study.auth_node_id)
       |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
       |> Enum.map(fn %{id: id} -> id end)
       |> Enum.into(MapSet.new())
 
-    new_owners = users |> Enum.map(&Authorization.principal/1)
-
-    new_owners
-    |> Enum.filter(fn principal -> not MapSet.member?(existing_owner_ids, principal.id) end)
-    |> Enum.each(&Authorization.assign_role!(&1, study, :owner))
+    users
+    |> Enum.filter(fn principal ->
+      not MapSet.member?(existing_owner_ids, Principal.id(principal))
+    end)
+    |> Enum.each(&Authorization.assign_role(&1, study, :owner))
 
     new_owner_ids =
-      new_owners
-      |> Enum.map(fn %{id: id} -> id end)
+      users
+      |> Enum.map(&Principal.id/1)
       |> Enum.into(MapSet.new())
 
     existing_owner_ids
     |> Enum.filter(fn id -> not MapSet.member?(new_owner_ids, id) end)
-    |> Enum.each(&Authorization.remove_role!(%Principal{id: &1}, study, :owner))
+    |> Enum.each(&Authorization.remove_role!(%User{id: &1}, study, :owner))
 
     # AUTH: Does not modify entities, only auth. This needs checks to see if
     # the user is allowed to manage permissions? Could be implemented as part
@@ -91,11 +89,7 @@ defmodule Link.Studies do
   end
 
   def add_owner!(study, user) do
-    user
-    |> Authorization.assign_role!(study, :owner)
-
-    # AUTH: Does not modify entities, only auth. This needs checks to see if
-    # the user is allowed to manage permissions?
+    :ok = Authorization.assign_role(user, study, :owner)
   end
 
   @doc """
@@ -123,14 +117,13 @@ defmodule Link.Studies do
   Creates a study.
   """
   def create_study(%Ecto.Changeset{} = changeset, researcher) do
-    changeset
-    |> Ecto.Changeset.put_assoc(:auth_node, Link.Authorization.make_node())
-    |> Repo.insert()
-    # AUTH; how to check this.
-    |> Authorization.assign_role(researcher, :owner)
-
-    # AUTH: Does not modify entities, only auth. This needs checks to see if
-    # the user is allowed to manage permissions?
+    with {:ok, study} <-
+           changeset
+           |> Ecto.Changeset.put_assoc(:auth_node, Link.Authorization.make_node())
+           |> Repo.insert() do
+      :ok = Authorization.assign_role(researcher, study, :owner)
+      {:ok, study}
+    end
   end
 
   def create_study(attrs, researcher) do
@@ -202,7 +195,7 @@ defmodule Link.Studies do
 
   defp update_participant_roles(%Study{} = study, %User{} = user, status) do
     if status == :entered do
-      Authorization.assign_role!(user, study, :participant)
+      Authorization.assign_role(user, study, :participant)
     else
       Authorization.remove_role!(user, study, :participant)
     end

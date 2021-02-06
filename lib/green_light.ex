@@ -16,8 +16,6 @@ defmodule GreenLight do
   @doc false
   defmacro __using__(config) do
     quote do
-      @behaviour GreenLight
-
       unquote(__MODULE__).__register_permission_map()
       unquote(__MODULE__).__register_schema_and_roles(unquote(config))
       unquote(__MODULE__).__register_helpers()
@@ -55,14 +53,6 @@ defmodule GreenLight do
       def allowed?(roles, permission) do
         permission_map() |> GreenLight.PermissionMap.allowed?(permission, roles)
       end
-
-      defp map_to_auth_entities(entities) when is_list(entities) do
-        Enum.map(entities, &map_to_auth_entity/1)
-      end
-
-      defp map_to_auth_entities(entity) do
-        map_to_auth_entity(entity)
-      end
     end
   end
 
@@ -71,44 +61,38 @@ defmodule GreenLight do
     schema = Config.role_assignment_schema!(config)
 
     quote do
-      def list_roles(%GreenLight.Principal{} = principal, entities) do
+      def list_roles(principal, entities) do
         GreenLight.Ecto.Query.list_roles(
           unquote(repo),
           unquote(schema),
           principal,
-          entities |> map_to_auth_entities()
+          entities
         )
       end
 
-      def assign_role!(%GreenLight.Principal{} = principal, entity, role) do
-        {entity_type, entity_id} = entity |> map_to_auth_entity()
-
-        unquote(repo)
-        |> GreenLight.Ecto.Query.assign_role!(
+      def assign_role(principal, entity, role) when is_atom(role) do
+        GreenLight.Ecto.Query.assign_role(
+          unquote(repo),
           unquote(schema),
           principal,
-          entity_type,
-          entity_id,
+          entity,
           role
         )
       end
 
-      def remove_role!(%GreenLight.Principal{} = principal, entity, role) do
-        {entity_type, entity_id} = entity |> map_to_auth_entity()
-
+      def remove_role!(principal, entity, role) do
         unquote(repo)
         |> GreenLight.Ecto.Query.remove_role!(
           unquote(schema),
           principal,
-          entity_type,
-          entity_id,
+          entity,
           role
         )
       end
 
       def list_principals(entity) do
         unquote(repo)
-        |> GreenLight.Ecto.Query.list_principals(unquote(schema), entity |> map_to_auth_entity())
+        |> GreenLight.Ecto.Query.list_principals(unquote(schema), entity)
       end
 
       @doc """
@@ -116,13 +100,13 @@ defmodule GreenLight do
       this function.
       """
       def assign_role({:ok, entity} = result, principal, role) do
-        assign_role!(principal, entity, role)
+        :ok = assign_role(principal, entity, role)
         result
       end
 
       def assign_role({:error, _} = result, _principal, _role), do: result
 
-      def can?(%GreenLight.Principal{} = principal, entity_or_entities, module, action) do
+      def can?(principal, entity_or_entities, module, action) do
         roles = list_roles(principal, entity_or_entities)
 
         GreenLight.Access.can?(
@@ -138,13 +122,9 @@ defmodule GreenLight do
     schema = Config.role_assignment_schema!(config)
 
     quote do
-      def query_entity_ids(opts \\ []) do
-        GreenLight.Ecto.Query.query_entity_ids(unquote(schema), opts)
+      def query_node_ids(opts \\ []) do
+        GreenLight.Ecto.Query.query_node_ids(unquote(schema), opts)
       end
     end
   end
-
-  ## User callbacks
-  @callback principal(conn :: Plug.Conn.t()) :: GreenLight.Principal.t()
-  @callback map_to_auth_entity(entity :: any()) :: {binary(), integer()}
 end

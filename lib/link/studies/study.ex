@@ -13,14 +13,16 @@ defmodule Link.Studies.Study do
 
     belongs_to :auth_node, Link.Authorization.Node
 
-    has_many :role_assignments, Link.Users.RoleAssignment,
-      foreign_key: :entity_id,
-      defaults: [entity_type: Link.Studies.Study |> Atom.to_string()]
+    has_many :role_assignments, through: [:auth_node, :role_assignments]
 
     has_many :participants, Link.Studies.Participant
     has_many :survey_tools, Link.SurveyTools.SurveyTool
 
     timestamps()
+  end
+
+  defimpl GreenLight.AuthorizationNode do
+    def id(study), do: study.auth_node_id
   end
 
   @doc false
