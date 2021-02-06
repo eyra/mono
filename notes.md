@@ -39,4 +39,3 @@ LiveView werkt met Phoenix Channel.
 - `handle_event` roept uiteindelijk functie op de live view aan
 
 LiveView mount gaat via router.
-
