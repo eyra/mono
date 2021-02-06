@@ -13,7 +13,7 @@ defmodule Link.StudiesTest do
 
     test "list_studies/1 returns all studies" do
       study = Factories.insert!(:study)
-      assert Studies.list_studies() == [study]
+      assert Studies.list_studies() |> Enum.map(& &1.id) == [study.id]
     end
 
     test "list_studies/1 allows excluding a list of ids" do
@@ -147,7 +147,7 @@ defmodule Link.StudiesTest do
       assert Studies.list_participations(member) == []
       # The listing should contain the study after an application has been made
       Studies.apply_participant(study, member)
-      assert Studies.list_participations(member) == [study]
+      assert Studies.list_participations(member) |> Enum.map(& &1.id) == [study.id]
     end
 
     test "add_owner!/2 grants a user ownership over a study" do
@@ -171,7 +171,7 @@ defmodule Link.StudiesTest do
       assert Studies.list_owned_studies(researcher_2) == []
       Studies.assign_owners(study, [researcher_2])
       # The second researcher is now an owner of the study
-      assert Studies.list_owned_studies(researcher_2) == [study]
+      assert Studies.list_owned_studies(researcher_2) |> Enum.map(& &1.id) == [study.id]
       # The original owner can no longer claim ownership
       assert Studies.list_owned_studies(researcher_1) == []
     end

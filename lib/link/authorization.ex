@@ -147,8 +147,12 @@ defmodule Link.Authorization do
     {Atom.to_string(entity.__struct__), entity.id}
   end
 
+  def make_node(parent_id \\ nil) do
+    %Link.Authorization.Node{parent_id: parent_id}
+  end
+
   def create_node(parent_id \\ nil) do
-    case %Link.Authorization.Node{parent_id: parent_id} |> Link.Repo.insert() do
+    case make_node(parent_id) |> Link.Repo.insert() do
       {:ok, node} -> {:ok, node.id}
       error -> error
     end

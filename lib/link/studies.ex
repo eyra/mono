@@ -124,6 +124,7 @@ defmodule Link.Studies do
   """
   def create_study(%Ecto.Changeset{} = changeset, researcher) do
     changeset
+    |> Ecto.Changeset.put_assoc(:auth_node, Link.Authorization.make_node())
     |> Repo.insert()
     # AUTH; how to check this.
     |> Authorization.assign_role(researcher, :owner)
