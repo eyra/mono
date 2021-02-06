@@ -1,5 +1,0 @@
-<h1>New Survey tool</h1>
-
-<%= render "form.html", Map.put(assigns, :action, Routes.study_survey_tool_path(@conn, :create, @study)) %>
-
-<span><%= link "Back", to: Routes.study_survey_tool_path(@conn, :index, @study) %></span>

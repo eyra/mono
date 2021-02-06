@@ -77,13 +77,4 @@ defmodule Link.AuthorizationTest do
     {:ok, second_sub_node} = Authorization.create_node(second_node)
     refute Authorization.roles_intersect?(1, second_sub_node, [:owner])
   end
-
-  test "can check for permission against a node" do
-    {:ok, node} = Authorization.create_node()
-    # The permission is denied by default
-    refute Authorization.can?(1, node, "test-auth")
-    # Assignment on the node makes the access allowed
-    :ok = Authorization.assign_role(1, node, :owner)
-    assert Authorization.can?(1, node, "test-auth")
-  end
 end

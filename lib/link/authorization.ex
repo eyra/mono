@@ -16,6 +16,7 @@ defmodule Link.Authorization do
 
   GreenLight.Permissions.grant(__MODULE__, "test-auth", [:owner])
 
+  grant_access(LinkWeb.UserProfile.Index, [:member])
   grant_access(LinkWeb.Study.New, [:researcher])
   grant_access(LinkWeb.Study.Show, [:owner])
 

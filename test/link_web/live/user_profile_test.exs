@@ -1,15 +1,10 @@
 defmodule LinkWeb.Live.UserProfileTest do
   use LinkWeb.ConnCase
-  import Plug.Conn
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
   alias LinkWeb.UserProfile
-  alias Link.Users.User
-  # @endpoint MyEndpoint
 
   alias Link.Factories
-
-  @invalid_attrs %{fullname: nil, displayname: nil}
 
   setup %{conn: conn} do
     user = Factories.insert!(:member)

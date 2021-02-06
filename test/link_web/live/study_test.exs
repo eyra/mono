@@ -1,16 +1,10 @@
 defmodule LinkWeb.Live.Study.New.Test do
   use LinkWeb.ConnCase
-  import Plug.Conn
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
   import Ecto.Query
   alias LinkWeb.Study
-  alias Link.Users.User
-  # @endpoint MyEndpoint
-
   alias Link.Factories
-
-  @invalid_attrs %{fullname: nil, displayname: nil}
 
   defp login(user, %{conn: conn}) do
     conn =
@@ -51,7 +45,7 @@ defmodule LinkWeb.Live.Study.New.Test do
     setup [:login_as_member]
 
     test "disallow members to create a study", %{conn: conn} do
-      {:ok, view, html} = live(conn, Routes.live_path(conn, Study.New))
+      {:ok, _view, html} = live(conn, Routes.live_path(conn, Study.New))
       assert html =~ "Access Denied"
     end
   end
