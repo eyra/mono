@@ -6,23 +6,6 @@ defmodule LinkWeb.Live.Study.New.Test do
   alias LinkWeb.Study
   alias Link.Factories
 
-  defp login(user, %{conn: conn}) do
-    conn =
-      post(conn, Routes.pow_session_path(conn, :create),
-        user: %{email: user.email, password: "S4p3rS3cr3t"}
-      )
-
-    {:ok, conn: conn, user: user}
-  end
-
-  defp login_as_member(ctx) do
-    Factories.insert!(:member) |> login(ctx)
-  end
-
-  defp login_as_researcher(ctx) do
-    Factories.insert!(:researcher) |> login(ctx)
-  end
-
   describe "as a researcher" do
     setup [:login_as_researcher]
 
