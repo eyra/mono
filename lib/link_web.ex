@@ -25,8 +25,6 @@ defmodule LinkWeb do
       import LinkWeb.Gettext
       alias LinkWeb.Router.Helpers, as: Routes
 
-      use GreenLight.Loaders
-      use GreenLight.Plug, Link.Authorization
       alias LinkWeb.Loaders
 
       import Phoenix.LiveView.Controller
@@ -50,6 +48,7 @@ defmodule LinkWeb do
 
   def live_view do
     quote do
+      use LinkWeb.LiveLocale
       import Link.Authorization, only: [can_access?: 2]
       use GreenLight.Live, Link.Authorization
 

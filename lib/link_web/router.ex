@@ -14,6 +14,8 @@ defmodule LinkWeb.Router do
       from: [:query, :cookie, :accept_language],
       param: "locale"
 
+    plug LinkWeb.Plug.LiveLocale
+
     plug :fetch_live_flash
   end
 
