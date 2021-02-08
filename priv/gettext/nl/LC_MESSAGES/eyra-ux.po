@@ -18,3 +18,18 @@ msgstr ""
 #: lib/link_web/templates/user_profile/edit.html.eex:15
 msgid "%{action}.failed"
 msgstr "%{action} is helaas niet gelukt"
+
+#, elixir-format
+#: lib/link_web/live/study/new.ex:52
+msgid "cancel.button"
+msgstr "Annuleer"
+
+#, elixir-format
+#: lib/eyra_ui/timestamp.ex:12
+msgid "timestamp.today"
+msgstr "vandaag"
+
+#, elixir-format
+#: lib/eyra_ui/timestamp.ex:14
+msgid "timestamp.yesterday"
+msgstr "gisteren"

@@ -1,4 +1,4 @@
-defmodule EyraUI.Card do
+defmodule EyraUI.Card.Card do
   @moduledoc """
   The Unique Selling Point Card highlights a reason for taking an action.
   """

@@ -14,7 +14,6 @@ end
 
 defmodule LinkWeb.LiveLocale do
   @moduledoc "A LiveView helper that automatically sets the current locale from a session variable."
-  import Plug.Conn
 
   defmacro __using__(_opts \\ nil) do
     quote do

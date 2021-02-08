@@ -19,7 +19,7 @@ defmodule LinkWeb.Live.Study.New.Test do
       |> render_submit(%{study: %{title: title, description: description}})
 
       new_study = Link.Repo.one(from s in Link.Studies.Study, order_by: s.inserted_at, limit: 1)
-      assert_redirect(view, "/studies/#{new_study.id}")
+      assert_redirect(view, "/studies/#{new_study.id}/edit")
     end
   end
 

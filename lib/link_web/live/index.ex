@@ -5,7 +5,7 @@ defmodule LinkWeb.Index do
   use LinkWeb, :live_view
   use LinkWeb.LiveViewPowHelper
   import Link.Users
-  alias EyraUI.{PrimaryCTA, USPCard}
+  alias EyraUI.Card.{PrimaryCTA, USP}
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Hero.HeroLarge
   alias EyraUI.Text.{Title1, Intro}
@@ -57,9 +57,9 @@ defmodule LinkWeb.Index do
                 to={{ Routes.pow_session_path(@socket, :new) }} />
             </div>
           </div>
-          <USPCard title={{ dgettext("eyra-link", "usp1.title") }} description={{ dgettext("eyra-link", "usp1.description") }} />
-          <USPCard title={{ dgettext("eyra-link", "usp2.title") }} description={{ dgettext("eyra-link", "usp2.description") }} />
-          <USPCard title={{ dgettext("eyra-link", "usp3.title") }} description={{ dgettext("eyra-link", "usp3.description") }} />
+          <USP title={{ dgettext("eyra-link", "usp1.title") }} description={{ dgettext("eyra-link", "usp1.description") }} />
+          <USP title={{ dgettext("eyra-link", "usp2.title") }} description={{ dgettext("eyra-link", "usp2.description") }} />
+          <USP title={{ dgettext("eyra-link", "usp3.title") }} description={{ dgettext("eyra-link", "usp3.description") }} />
          </AbsoluteGrid>
       </ContentArea>
     """

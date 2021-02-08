@@ -1,9 +1,9 @@
-defmodule EyraUI.PrimaryCTA do
+defmodule EyraUI.Card.PrimaryCTA do
   @moduledoc """
   A large eye-catcher meant to call a user into taking an action.
   """
   use Surface.Component
-  alias EyraUI.Card
+  alias EyraUI.Card.Card
 
   prop title, :string, required: true
   prop button_label, :string, required: true

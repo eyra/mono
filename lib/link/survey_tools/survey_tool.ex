@@ -14,27 +14,24 @@ defmodule Link.SurveyTools.SurveyTool do
     field :description, :string
     field :survey_url, :string
     field :subject_count, :integer
+    field :duration, :string
     field :phone_enabled, :boolean
     field :tablet_enabled, :boolean
     field :desktop_enabled, :boolean
+    field :is_published, :boolean
+    field :published_at, :naive_datetime
 
     has_many :tasks, SurveyToolTask
 
     timestamps()
   end
 
+  @fields ~w(title description survey_url subject_count duration phone_enabled tablet_enabled desktop_enabled is_published published_at)a
+
   @doc false
   def changeset(survey_tool, attrs) do
     survey_tool
-    |> cast(attrs, [
-      :title,
-      :description,
-      :survey_url,
-      :subject_count,
-      :phone_enabled,
-      :tablet_enabled,
-      :desktop_enabled
-    ])
+    |> cast(attrs, @fields)
     |> validate_required([:title])
   end
 end

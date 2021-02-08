@@ -61,6 +61,7 @@ defmodule Link.MixProject do
       {:pow_assent, "~> 0.4.9"},
       {:faker, "~> 0.16"},
       {:surface, "~> 0.1.0"},
+      {:timex, "~> 3.6"},
       # Optional, but recommended for SSL validation with :httpc adapter
       {:certifi, "~> 2.4"},
       # Optional, but recommended for SSL validation with :httpc adapter

@@ -12,46 +12,81 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/link_web/live/study/show.ex:33
+#: lib/link_web/live/study/edit.ex:117
 msgid "config.nrofsubjects.label"
 msgstr "Aantal vereiste subjects"
 
 #, elixir-format
-#: lib/link_web/live/study/show.ex:32
+#: lib/link_web/live/study/edit.ex:116
 msgid "config.url.label"
 msgstr "Link naar Qualtrics"
 
 #, elixir-format
-#: lib/link_web/live/study/show.ex:31
+#: lib/link_web/live/study/edit.ex:115
 msgid "config.title"
 msgstr "Survey instellingen"
 
 #, elixir-format
-#: lib/link_web/live/study/show.ex:34
+#: lib/link_web/live/study/edit.ex:119
 msgid "config.devices.title"
 msgstr "Beschikbaarheid"
 
 #, elixir-format
-#: lib/link_web/live/study/show.ex:37
+#: lib/link_web/live/study/edit.ex:122
 msgid "desktop.enabled.label"
 msgstr "Desktop"
 
 #, elixir-format
-#: lib/link_web/live/study/show.ex:35
+#: lib/link_web/live/study/edit.ex:120
 msgid "mobile.enabled.label"
 msgstr "Telefoon"
 
 #, elixir-format
-#: lib/link_web/live/study/show.ex:36
+#: lib/link_web/live/study/edit.ex:121
 msgid "tablet.enabled.label"
 msgstr "Tablet"
 
 #, elixir-format
-#: lib/link_web/live/study/show.ex:39
+#: lib/link_web/live/study/edit.ex:124
 msgid "info.label"
 msgstr "Wat kan een subject verwachten van de survey?"
 
-#, elixir-format, fuzzy
-#: lib/link_web/live/study/show.ex:38
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:123
 msgid "info.title"
 msgstr "Survey info"
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:126
+msgid "publish.button"
+msgstr "Publiceer"
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:127
+msgid "unpublish.button"
+msgstr "Maak publicatie ongedaan"
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:128
+msgid "delete.button"
+msgstr "Verwijder"
+
+#, elixir-format
+#: lib/link_web/live/study/public.ex:56
+msgid "apply.button"
+msgstr "Meld je aan om mee te doen"
+
+#, elixir-format
+#: lib/link_web/live/study/public.ex:53
+msgid "info.public.label"
+msgstr "Wat kan je verwachten van de vragenlijst?"
+
+#, elixir-format
+#: lib/link_web/live/study/public.ex:50
+msgid "duration.public.label"
+msgstr "Geschatte duur"
+
+#, elixir-format, fuzzy
+#: lib/link_web/live/study/edit.ex:118
+msgid "duration.label"
+msgstr "Geschatte duur van het onderzoek"
