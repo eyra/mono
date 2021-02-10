@@ -14,22 +14,20 @@ msgstr ""
 #, elixir-format
 #: lib/link_web/templates/pow/registration/edit.html.eex:16
 #: lib/link_web/templates/pow/registration/new.html.eex:15 lib/link_web/templates/pow/session/new.html.eex:24
-#: lib/link_web/templates/study/edit.html.eex:18 lib/link_web/templates/study/new.html.eex:18
-#: lib/link_web/templates/user_profile/edit.html.eex:15
 msgid "%{action}.failed"
 msgstr "%{action} failed"
 
 #, elixir-format
-#: lib/link_web/live/study/new.ex:52
+#: lib/link_web/live/study/new.ex:48
 msgid "cancel.button"
 msgstr "Cancel"
 
 #, elixir-format
-#: lib/eyra_ui/timestamp.ex:12
+#: lib/eyra_ui/timestamp.ex:13
 msgid "timestamp.today"
 msgstr "today"
 
 #, elixir-format
-#: lib/eyra_ui/timestamp.ex:14
+#: lib/eyra_ui/timestamp.ex:16
 msgid "timestamp.yesterday"
 msgstr "yesterday"

@@ -5,6 +5,7 @@ defmodule Link.Studies.StudyEdit do
   use Ecto.Schema
   use Timex
   import Ecto.Changeset
+  import LinkWeb.Gettext
 
   alias EyraUI.Timestamp
   alias Link.SurveyTools.SurveyTool
@@ -77,12 +78,14 @@ defmodule Link.Studies.StudyEdit do
   def get_byline(%SurveyTool{} = survey_tool) do
     case survey_tool.is_published do
       true ->
+        label = dgettext("eyra-survey", "published.true.label")
         timestamp = Timestamp.humanize(survey_tool.published_at)
-        "Gepubliseerd: #{timestamp}"
+        "#{label}: #{timestamp}"
 
       _ ->
+        label = dgettext("eyra-survey", "created.label")
         timestamp = Timestamp.humanize(survey_tool.inserted_at)
-        "Aangemaakt: #{timestamp}"
+        "#{label}: #{timestamp}"
     end
   end
 end

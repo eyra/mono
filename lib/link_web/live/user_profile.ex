@@ -4,12 +4,14 @@ defmodule LinkWeb.UserProfile.Index do
   """
   use LinkWeb, :live_view
   use LinkWeb.LiveViewPowHelper
+
   alias Surface.Components.Form
   alias Link.Users
   alias EyraUI.Form.{TextInput, Checkbox}
   use EyraUI.AutoSave, :profile
   alias EyraUI.Text.Title2
   alias EyraUI.Container.{ContentArea, FormArea}
+  alias EyraUI.Button.DeleteButton
 
   def load(_params, session, socket) do
     user = get_user(socket, session)
@@ -29,6 +31,7 @@ defmodule LinkWeb.UserProfile.Index do
           <TextInput field={{:fullname}} label_text={{dgettext("eyra-account", "fullname.label")}} />
           <TextInput field={{:displayname}} label_text={{dgettext("eyra-account", "displayname.label")}} />
         </Form>
+        <DeleteButton label={{ dgettext("eyra-account", "signout.button") }} path={{ Routes.pow_session_path(@socket, :delete) }} />
       </FormArea>
     </ContentArea>
     """

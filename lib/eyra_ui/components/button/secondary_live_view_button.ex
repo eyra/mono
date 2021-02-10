@@ -7,8 +7,6 @@ defmodule EyraUI.Button.SecondaryLiveViewButton do
   prop label, :string, required: true
   prop event, :string, required: true
   prop color, :css_class, default: "bg-white"
-  prop border_color, :css_class, default: "border-delete"
-  prop border_width, :css_class, default: "border-2"
   prop width, :css_class, default: "pl-4 pr-4"
   prop margin, :css_class, default: "mr-4"
 

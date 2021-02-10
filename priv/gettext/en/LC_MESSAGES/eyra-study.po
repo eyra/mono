@@ -12,12 +12,12 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:54
+#: lib/link_web/live/dashboard.ex:55
 msgid "study.index.subtitle"
 msgstr "Studies"
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:53
+#: lib/link_web/live/dashboard.ex:54
 msgid "study.index.title"
 msgstr "Overview"
 
@@ -27,12 +27,12 @@ msgid "dashboard.button"
 msgstr "Overview"
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:73
+#: lib/link_web/live/dashboard.ex:77
 msgid "study.all.title"
 msgstr "Available studies:"
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:61
+#: lib/link_web/live/dashboard.ex:62
 msgid "study.highlighted.title"
 msgstr "My studies:"
 
@@ -42,81 +42,36 @@ msgid "new.button"
 msgstr "New study"
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:58
+#: lib/link_web/live/dashboard.ex:59
 msgid "dashboard.page.description"
 msgstr "This page provides an overview of the studies available on Science NL. The studies that you are involved in are listed under 'My studies'. All other studies that are open for participation, are listed under 'Available studies'."
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:107
-#: lib/link_web/templates/study/edit.html.eex:1 lib/link_web/templates/study/show.html.eex:1
+#: lib/link_web/live/study/edit.ex:117
 msgid "study.edit.title"
 msgstr "Study"
 
 #, elixir-format
-#: lib/link_web/templates/study/edit.html.eex:9
-msgid "study.edit.subtitle"
-msgstr "Edit"
-
-#, elixir-format
-#: lib/link_web/templates/study/edit.html.eex:15
-#: lib/link_web/templates/study/new.html.eex:15
-msgid "description.label"
-msgstr "Description"
-
-#, elixir-format
-#: lib/link_web/live/study/new.ex:51
-#: lib/link_web/templates/study/edit.html.eex:18 lib/link_web/templates/study/edit.html.eex:23
-#: lib/link_web/templates/study/new.html.eex:18 lib/link_web/templates/study/new.html.eex:22
+#: lib/link_web/live/study/new.ex:47
 msgid "save.button"
 msgstr "Save"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:114 lib/link_web/live/study/new.ex:50
-#: lib/link_web/templates/study/edit.html.eex:14 lib/link_web/templates/study/new.html.eex:14
+#: lib/link_web/live/study/edit.ex:124 lib/link_web/live/study/new.ex:46
 msgid "title.label"
 msgstr "Title"
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:31
-msgid "study.participate.button"
-msgstr "Apply to participate"
-
-#, elixir-format
-#: lib/link_web/templates/study/show.html.eex:24
-msgid "study.edit.button"
-msgstr "Edit"
-
-#, elixir-format
-#: lib/link_web/templates/study/show.html.eex:27
-msgid "share.button"
-msgstr "Share"
-
-#, elixir-format
-#: lib/link_web/templates/study/new.html.eex:9
-msgid "study.new.subtitle"
-msgstr "Set up a new study"
-
-#, elixir-format
-#: lib/link_web/live/study/new.ex:47 lib/link_web/templates/study/new.html.eex:1
+#: lib/link_web/live/study/new.ex:43
 msgid "study.new.title"
 msgstr "Study"
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:16
-msgid "owner.label"
-msgstr "By:"
-
-#, elixir-format
-#: lib/link_web/templates/study/show.html.eex:41
-msgid "participants.subtitle"
-msgstr "Participants"
-
-#, elixir-format
-#: lib/link_web/live/dashboard.ex:69
+#: lib/link_web/live/dashboard.ex:73
 msgid "add.card.title"
 msgstr "Set up a new study"
 
 #, elixir-format
-#: lib/link_web/live/study/public.ex:46
+#: lib/link_web/live/study/public.ex:47
 msgid "study.public.title"
 msgstr "Studies"

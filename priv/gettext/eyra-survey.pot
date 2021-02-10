@@ -11,81 +11,96 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:117
+#: lib/link_web/live/study/edit.ex:127
 msgid "config.nrofsubjects.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:116
+#: lib/link_web/live/study/edit.ex:126
 msgid "config.url.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:115
+#: lib/link_web/live/study/edit.ex:125
 msgid "config.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:119
+#: lib/link_web/live/study/edit.ex:128
 msgid "config.devices.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:122
+#: lib/link_web/live/study/edit.ex:131
 msgid "desktop.enabled.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:120
+#: lib/link_web/live/study/edit.ex:129
 msgid "mobile.enabled.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:121
+#: lib/link_web/live/study/edit.ex:130
 msgid "tablet.enabled.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:124
+#: lib/link_web/live/study/edit.ex:134
 msgid "info.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:123
+#: lib/link_web/live/study/edit.ex:132
 msgid "info.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:126
+#: lib/link_web/live/study/edit.ex:136
 msgid "publish.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:127
+#: lib/link_web/live/study/edit.ex:137
 msgid "unpublish.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:128
+#: lib/link_web/live/study/edit.ex:138
 msgid "delete.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/public.ex:56
+#: lib/link_web/live/study/public.ex:57
 msgid "apply.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/public.ex:53
+#: lib/link_web/live/study/public.ex:54
 msgid "info.public.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/public.ex:50
+#: lib/link_web/live/study/public.ex:51
 msgid "duration.public.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:118
+#: lib/link_web/live/study/edit.ex:133
 msgid "duration.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:120
+msgid "published.false.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link/studies/study_edit.ex:81 lib/link_web/live/study/edit.ex:119
+msgid "published.true.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link/studies/study_edit.ex:85
+msgid "created.label"
 msgstr ""

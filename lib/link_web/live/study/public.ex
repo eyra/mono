@@ -1,6 +1,6 @@
 defmodule LinkWeb.Study.Public do
   @moduledoc """
-  The home screen.
+  The public page for participants.
   """
   use LinkWeb, :live_view
   use LinkWeb.LiveViewPowHelper

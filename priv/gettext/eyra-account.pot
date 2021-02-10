@@ -16,8 +16,7 @@ msgid "apple.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/user_profile.ex:30
-#: lib/link_web/templates/user_profile/edit.html.eex:12
+#: lib/link_web/live/user_profile.ex:39
 msgid "displayname.label"
 msgstr ""
 
@@ -37,8 +36,7 @@ msgid "eyra.signin.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/user_profile.ex:29
-#: lib/link_web/templates/user_profile/edit.html.eex:11
+#: lib/link_web/live/user_profile.ex:38
 msgid "fullname.label"
 msgstr ""
 
@@ -68,20 +66,12 @@ msgid "profile.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/user_profile/edit.html.eex:15
-#: lib/link_web/templates/user_profile/edit.html.eex:19
-msgid "profile.save.button"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/live/user_profile.ex:26
-#: lib/link_web/templates/user_profile/edit.html.eex:6
+#: lib/link_web/live/user_profile.ex:35
 msgid "profile.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/user_profile.ex:28
-#: lib/link_web/templates/user_profile/edit.html.eex:10
+#: lib/link_web/live/user_profile.ex:37
 msgid "researcher.label"
 msgstr ""
 
@@ -99,11 +89,6 @@ msgstr ""
 #, elixir-format
 #: lib/link_web/templates/pow/registration/new.html.eex:22
 msgid "signin.link"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/templates/user_profile/edit.html.eex:23
-msgid "signout.button"
 msgstr ""
 
 #, elixir-format
@@ -128,14 +113,14 @@ msgid "signup.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/survey_tool/edit.ex:26
-#: lib/link_web/live/survey_tool/new.ex:40
+#: lib/link_web/live/survey_tool/edit.ex:25
+#: lib/link_web/live/survey_tool/new.ex:42
 msgid "survey_url.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/survey_tool/edit.ex:25
-#: lib/link_web/live/survey_tool/new.ex:39
+#: lib/link_web/live/survey_tool/edit.ex:24
+#: lib/link_web/live/survey_tool/new.ex:41
 msgid "title.label"
 msgstr ""
 
@@ -148,4 +133,9 @@ msgstr ""
 #, elixir-format
 #: lib/link_web/templates/pow/registration/edit.html.eex:6
 msgid "update.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/user_profile.ex:41
+msgid "signout.button"
 msgstr ""

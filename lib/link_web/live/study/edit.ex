@@ -1,6 +1,6 @@
 defmodule LinkWeb.Study.Edit do
   @moduledoc """
-  The home screen.
+  The study page for owners.
   """
   use LinkWeb, :live_view
   use LinkWeb.LiveViewPowHelper
@@ -81,6 +81,8 @@ defmodule LinkWeb.Study.Edit do
     Studies.get_study!(study_edit.study_id)
     |> Studies.delete_study()
 
+    Users
+
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, LinkWeb.Dashboard))}
   end
 
@@ -114,8 +116,8 @@ defmodule LinkWeb.Study.Edit do
     ~H"""
       <HeroSmall title={{ dgettext("eyra-study", "study.edit.title") }} />
       <ContentArea>
-        <Info :if={{ @study_edit.is_published }} text="Gepubliceerd" />
-        <Warning :if={{ !@study_edit.is_published }} text="Nog niet gepubliceerd" />
+        <Info :if={{ @study_edit.is_published }} text={{dgettext("eyra-survey", "published.true.label")}} />
+        <Warning :if={{ !@study_edit.is_published }} text={{dgettext("eyra-survey", "published.false.label")}} />
         <SubHead>{{ @study_edit.byline }}</SubHead>
         <Title1>{{ @study_edit.title }}</Title1>
         <Form for={{ @changeset }} change="save">

@@ -17,8 +17,7 @@ msgid "apple.button"
 msgstr "Contine with Apple"
 
 #, elixir-format
-#: lib/link_web/live/user_profile.ex:30
-#: lib/link_web/templates/user_profile/edit.html.eex:12
+#: lib/link_web/live/user_profile.ex:39
 msgid "displayname.label"
 msgstr "Display name"
 
@@ -38,8 +37,7 @@ msgid "eyra.signin.title"
 msgstr "Sign in"
 
 #, elixir-format
-#: lib/link_web/live/user_profile.ex:29
-#: lib/link_web/templates/user_profile/edit.html.eex:11
+#: lib/link_web/live/user_profile.ex:38
 msgid "fullname.label"
 msgstr "Full name"
 
@@ -69,20 +67,12 @@ msgid "profile.button"
 msgstr "My profile"
 
 #, elixir-format
-#: lib/link_web/templates/user_profile/edit.html.eex:15
-#: lib/link_web/templates/user_profile/edit.html.eex:19
-msgid "profile.save.button"
-msgstr "Save"
-
-#, elixir-format
-#: lib/link_web/live/user_profile.ex:26
-#: lib/link_web/templates/user_profile/edit.html.eex:6
+#: lib/link_web/live/user_profile.ex:35
 msgid "profile.title"
 msgstr "My profile"
 
 #, elixir-format
-#: lib/link_web/live/user_profile.ex:28
-#: lib/link_web/templates/user_profile/edit.html.eex:10
+#: lib/link_web/live/user_profile.ex:37
 msgid "researcher.label"
 msgstr "I'm a researcher"
 
@@ -101,11 +91,6 @@ msgstr "Already an account?"
 #: lib/link_web/templates/pow/registration/new.html.eex:22
 msgid "signin.link"
 msgstr "Sign in here"
-
-#, elixir-format
-#: lib/link_web/templates/user_profile/edit.html.eex:23
-msgid "signout.button"
-msgstr "Sign out"
 
 #, elixir-format
 #: lib/link_web/templates/pow/registration/new.html.eex:15
@@ -129,14 +114,14 @@ msgid "signup.title"
 msgstr "Sign up"
 
 #, elixir-format
-#: lib/link_web/live/survey_tool/edit.ex:26
-#: lib/link_web/live/survey_tool/new.ex:40
+#: lib/link_web/live/survey_tool/edit.ex:25
+#: lib/link_web/live/survey_tool/new.ex:42
 msgid "survey_url.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/survey_tool/edit.ex:25
-#: lib/link_web/live/survey_tool/new.ex:39
+#: lib/link_web/live/survey_tool/edit.ex:24
+#: lib/link_web/live/survey_tool/new.ex:41
 msgid "title.label"
 msgstr "Email"
 
@@ -150,3 +135,8 @@ msgstr "Save"
 #: lib/link_web/templates/pow/registration/edit.html.eex:6
 msgid "update.title"
 msgstr "Update"
+
+#, elixir-format, fuzzy
+#: lib/link_web/live/user_profile.ex:41
+msgid "signout.button"
+msgstr "Sign out"
