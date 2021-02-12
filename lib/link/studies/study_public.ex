@@ -53,14 +53,12 @@ defmodule Link.Studies.StudyPublic do
 
   def get_byline(%Study{} = study, %SurveyTool{} = survey_tool) do
     date =
-      case survey_tool.is_published do
-        true ->
-          timestamp = Timestamp.humanize(survey_tool.published_at)
-          "Gepubliseerd: #{timestamp}"
-
-        _ ->
-          timestamp = Timestamp.humanize(survey_tool.inserted_at)
-          "Aangemaakt: #{timestamp}"
+      if SurveyTool.published?(survey_tool) do
+        timestamp = Timestamp.humanize(survey_tool.published_at)
+        "Gepubliseerd: #{timestamp}"
+      else
+        timestamp = Timestamp.humanize(survey_tool.inserted_at)
+        "Aangemaakt: #{timestamp}"
       end
 
     authors =

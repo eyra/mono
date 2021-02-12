@@ -70,7 +70,8 @@ for data <- studies do
       subject_count: data.subject_count,
       phone_enabled: Map.get(data, :phone_enabled, true),
       tablet_enabled: Map.get(data, :tablet_enabled, true),
-      desktop_enabled: Map.get(data, :desktop_enabled, true)
+      desktop_enabled: Map.get(data, :desktop_enabled, true),
+      published_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
     })
 
   Link.Authorization.assign_role(

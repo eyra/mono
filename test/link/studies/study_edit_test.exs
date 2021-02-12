@@ -36,7 +36,6 @@ defmodule Link.Studies.StudyEdit.Test do
              phone_enabled: survey_tool.phone_enabled,
              tablet_enabled: survey_tool.tablet_enabled,
              desktop_enabled: survey_tool.desktop_enabled,
-             is_published: survey_tool.is_published,
              published_at: survey_tool.published_at
            }
   end

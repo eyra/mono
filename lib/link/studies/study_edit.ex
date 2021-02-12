@@ -22,15 +22,15 @@ defmodule Link.Studies.StudyEdit do
     field :phone_enabled, :boolean, default: true
     field :tablet_enabled, :boolean, default: true
     field :desktop_enabled, :boolean, default: true
-    field :is_published, :boolean
     field :published_at, :naive_datetime
+    field :is_published, :boolean
   end
 
   @required_fields ~w(title byline)a
 
   @transient_fields ~w(byline)a
   @study_fields ~w(title)a
-  @survey_tool_fields ~w(description survey_url subject_count duration phone_enabled tablet_enabled desktop_enabled is_published published_at)a
+  @survey_tool_fields ~w(description survey_url subject_count duration phone_enabled tablet_enabled desktop_enabled published_at)a
 
   @fields @study_fields ++ @survey_tool_fields ++ @transient_fields
 
@@ -71,21 +71,20 @@ defmodule Link.Studies.StudyEdit do
       |> Map.merge(study_opts)
       |> Map.merge(survey_tool_opts)
       |> Map.merge(transient_opts)
+      |> Map.put(:is_published, SurveyTool.published?(survey_tool))
 
     struct(Link.Studies.StudyEdit, opts)
   end
 
   def get_byline(%SurveyTool{} = survey_tool) do
-    case survey_tool.is_published do
-      true ->
-        label = dgettext("eyra-survey", "published.true.label")
-        timestamp = Timestamp.humanize(survey_tool.published_at)
-        "#{label}: #{timestamp}"
-
-      _ ->
-        label = dgettext("eyra-survey", "created.label")
-        timestamp = Timestamp.humanize(survey_tool.inserted_at)
-        "#{label}: #{timestamp}"
+    if SurveyTool.published?(survey_tool) do
+      label = dgettext("eyra-survey", "published.true.label")
+      timestamp = Timestamp.humanize(survey_tool.published_at)
+      "#{label}: #{timestamp}"
+    else
+      label = dgettext("eyra-survey", "created.label")
+      timestamp = Timestamp.humanize(survey_tool.inserted_at)
+      "#{label}: #{timestamp}"
     end
   end
 end

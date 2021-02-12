@@ -37,7 +37,7 @@ defmodule Link.Studies do
 
   def list_studies_with_published_survey(opts \\ []) do
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
-    published = from(st in SurveyTool, where: st.is_published, select: st.study_id)
+    published = from(st in SurveyTool, where: not is_nil(st.published_at), select: st.study_id)
 
     from(s in Study,
       where:

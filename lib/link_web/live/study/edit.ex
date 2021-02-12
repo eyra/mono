@@ -86,12 +86,12 @@ defmodule LinkWeb.Study.Edit do
   end
 
   def handle_event("publish", _params, socket) do
-    params = %{is_published: true, published_at: NaiveDateTime.utc_now()}
+    params = %{published_at: NaiveDateTime.utc_now()}
     save(params, socket)
   end
 
   def handle_event("unpublish", _params, socket) do
-    params = %{is_published: false, published_at: nil}
+    params = %{published_at: nil}
     save(params, socket)
   end
 

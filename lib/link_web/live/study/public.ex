@@ -7,7 +7,7 @@ defmodule LinkWeb.Study.Public do
   alias EyraUI.Hero.HeroSmall
   alias EyraUI.Container.ContentArea
   alias EyraUI.Text.{Title1, Title6, SubHead, BodyMedium}
-  alias EyraUI.Button.{PrimaryLiveViewButton}
+  alias EyraUI.Button.{PrimaryLiveViewButton, PrimaryButton}
 
   alias Link.Studies
   alias Link.Studies.{Study, StudyPublic}
@@ -72,15 +72,6 @@ defmodule LinkWeb.Study.Public do
 
   def render(assigns) do
     ~H"""
-    <div :if={{@task_available?}}>
-      <a href={{@survey_tool.survey_url}}>Ga naar vragenlijst</a>
-    </div>
-    <div :if={{@task_completed?}}>
-      Je werk zit erop
-    </div>
-    <div :if={{not @participant?}}>
-      <button :on-click="signup">Aanmelden</button>
-    </div>
       <HeroSmall title={{ dgettext("eyra-study", "study.public.title") }} />
       <ContentArea>
         <SubHead>{{ @study_public.byline }}</SubHead>
@@ -91,7 +82,11 @@ defmodule LinkWeb.Study.Public do
         <Title6>{{dgettext("eyra-survey", "info.public.label")}}</Title6>
         <BodyMedium>{{ @study_public.description }}</BodyMedium>
         <div class="mb-8"/>
-        <PrimaryLiveViewButton label={{ dgettext("eyra-survey", "apply.button") }} event="apply" />
+        <PrimaryButton :if={{@task_available?}} label={{ dgettext("eyra-survey", "goto.survey") }} path={{@survey_tool.survey_url}} />
+        <PrimaryLiveViewButton :if={{not @participant?}} label={{ dgettext("eyra-survey", "apply.button") }} event="signup" />
+        <div :if={{@task_completed?}}>
+          Je werk zit erop
+        </div>
       </ContentArea>
     """
   end

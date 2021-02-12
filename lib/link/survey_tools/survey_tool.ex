@@ -20,7 +20,6 @@ defmodule Link.SurveyTools.SurveyTool do
     field :phone_enabled, :boolean
     field :tablet_enabled, :boolean
     field :desktop_enabled, :boolean
-    field :is_published, :boolean
     field :published_at, :naive_datetime
 
     has_many :tasks, SurveyToolTask
@@ -33,12 +32,16 @@ defmodule Link.SurveyTools.SurveyTool do
     def id(survey_tool), do: survey_tool.auth_node_id
   end
 
-  @fields ~w(title description survey_url subject_count duration phone_enabled tablet_enabled desktop_enabled is_published published_at)a
+  @fields ~w(title description survey_url subject_count duration phone_enabled tablet_enabled desktop_enabled published_at)a
 
   @doc false
   def changeset(survey_tool, attrs) do
     survey_tool
     |> cast(attrs, @fields)
     |> validate_required([:title])
+  end
+
+  def published?(%__MODULE__{published_at: published_at}) do
+    !is_nil(published_at)
   end
 end
