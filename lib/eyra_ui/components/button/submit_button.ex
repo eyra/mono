@@ -7,10 +7,11 @@ defmodule EyraUI.Button.SubmitButton do
   prop label, :string, required: true
   prop color, :css_class, default: "bg-primary"
   prop width, :css_class, default: "p-4"
+  prop margin, :css_class, default: "mr-4"
 
   def render(assigns) do
     ~H"""
-    <button class="h-48px leading-none font-button text-button text-white focus:outline-none hover:bg-opacity-80 rounded {{ @color }} {{ @width }}" type="submit">
+    <button class="h-48px leading-none font-button text-button text-white focus:outline-none hover:bg-opacity-80 rounded {{@color}} {{@width}} {{@margin}}" type="submit">
       {{ @label }}
     </button>
     """

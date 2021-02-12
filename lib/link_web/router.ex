@@ -80,8 +80,8 @@ defmodule LinkWeb.Router do
     live "/survey-tools/:id", SurveyTool.Edit
 
     live "/studies/new", Study.New
-    live "/studies/:id/manage", Study.Show
     live "/studies/:id", Study.Public
+    live "/studies/:id/edit", Study.Edit
   end
 
   # Other scopes may use custom stacks.

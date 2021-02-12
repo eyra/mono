@@ -12,46 +12,96 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/link_web/live/study/show.ex:33
+#: lib/link_web/live/study/edit.ex:127
 msgid "config.nrofsubjects.label"
 msgstr "Number of required subjects"
 
 #, elixir-format
-#: lib/link_web/live/study/show.ex:32
+#: lib/link_web/live/study/edit.ex:126
 msgid "config.url.label"
 msgstr "Link to Qualtrics"
 
 #, elixir-format
-#: lib/link_web/live/study/show.ex:31
+#: lib/link_web/live/study/edit.ex:125
 msgid "config.title"
 msgstr "Survey configuration"
 
 #, elixir-format
-#: lib/link_web/live/study/show.ex:34
+#: lib/link_web/live/study/edit.ex:128
 msgid "config.devices.title"
 msgstr "Survey configuration"
 
 #, elixir-format
-#: lib/link_web/live/study/show.ex:37
+#: lib/link_web/live/study/edit.ex:131
 msgid "desktop.enabled.label"
 msgstr "Desktop"
 
 #, elixir-format
-#: lib/link_web/live/study/show.ex:35
+#: lib/link_web/live/study/edit.ex:129
 msgid "mobile.enabled.label"
 msgstr "Phone"
 
 #, elixir-format
-#: lib/link_web/live/study/show.ex:36
+#: lib/link_web/live/study/edit.ex:130
 msgid "tablet.enabled.label"
 msgstr "Tablet"
 
 #, elixir-format
-#: lib/link_web/live/study/show.ex:39
+#: lib/link_web/live/study/edit.ex:134
 msgid "info.label"
 msgstr "What can a subject expect on this survey?"
 
-#, elixir-format, fuzzy
-#: lib/link_web/live/study/show.ex:38
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:132
 msgid "info.title"
 msgstr "Survey info"
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:136
+msgid "publish.button"
+msgstr "Publish"
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:137
+msgid "unpublish.button"
+msgstr "Unpublish"
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:138
+msgid "delete.button"
+msgstr "Delete"
+
+#, elixir-format
+#: lib/link_web/live/study/public.ex:57
+msgid "apply.button"
+msgstr "Apply for this survey"
+
+#, elixir-format
+#: lib/link_web/live/study/public.ex:54
+msgid "info.public.label"
+msgstr "What you can expect in this survey"
+
+#, elixir-format
+#: lib/link_web/live/study/public.ex:51
+msgid "duration.public.label"
+msgstr "Estimated duration"
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:133
+msgid "duration.label"
+msgstr "Estimated duration"
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:120
+msgid "published.false.label"
+msgstr "Not yet published"
+
+#, elixir-format
+#: lib/link/studies/study_edit.ex:81 lib/link_web/live/study/edit.ex:119
+msgid "published.true.label"
+msgstr "Published"
+
+#, elixir-format
+#: lib/link/studies/study_edit.ex:85
+msgid "created.label"
+msgstr "Created"

@@ -17,6 +17,11 @@ msgid "apple.button"
 msgstr "Meld je aan met Apple"
 
 #, elixir-format
+#: lib/link_web/live/user_profile.ex:39
+msgid "displayname.label"
+msgstr "Schermnaam"
+
+#, elixir-format
 #: lib/link_web/components/component_helpers.ex:51
 msgid "email.label"
 msgstr "E-mail"
@@ -32,41 +37,14 @@ msgid "eyra.signin.title"
 msgstr "Log in"
 
 #, elixir-format
+#: lib/link_web/live/user_profile.ex:38
+msgid "fullname.label"
+msgstr "Volledige naam"
+
+#, elixir-format
 #: lib/link_web/templates/pow/session/new.html.eex:8
 msgid "google.button"
 msgstr "Meld je aan met Google"
-
-#, elixir-format
-#: lib/link_web/components/component_helpers.ex:73
-msgid "password.label"
-msgstr "Wachtwoord"
-
-#, elixir-format
-#: lib/link_web/templates/layout/root.html.leex:46
-#: lib/link_web/templates/pow/session/new.html.eex:24 lib/link_web/templates/pow/session/new.html.eex:28
-msgid "signin.button"
-msgstr "Inloggen"
-
-#, elixir-format
-#: lib/link_web/templates/pow/registration/new.html.eex:15
-#: lib/link_web/templates/pow/registration/new.html.eex:18
-msgid "signup.button"
-msgstr "Registreren"
-
-#, elixir-format
-#: lib/link_web/templates/pow/registration/new.html.eex:6
-msgid "signup.title"
-msgstr "Registreer"
-
-#, elixir-format
-#: lib/link_web/templates/pow/registration/new.html.eex:22
-msgid "signin.link"
-msgstr "Log hier in"
-
-#, elixir-format
-#: lib/link_web/templates/pow/session/new.html.eex:32
-msgid "signup.link"
-msgstr "Maak hier een aan"
 
 #, elixir-format
 #: lib/link_web/components/component_helpers.ex:67
@@ -79,6 +57,75 @@ msgid "password.current.label"
 msgstr "Wachtwoord"
 
 #, elixir-format
+#: lib/link_web/components/component_helpers.ex:73
+msgid "password.label"
+msgstr "Wachtwoord"
+
+#, elixir-format
+#: lib/link_web/templates/layout/root.html.leex:41
+msgid "profile.button"
+msgstr "Mijn profiel"
+
+#, elixir-format
+#: lib/link_web/live/user_profile.ex:35
+msgid "profile.title"
+msgstr "Mijn profiel"
+
+#, elixir-format
+#: lib/link_web/live/user_profile.ex:37
+msgid "researcher.label"
+msgstr "ik ben een onderzoeker"
+
+#, elixir-format
+#: lib/link_web/templates/layout/root.html.leex:46
+#: lib/link_web/templates/pow/session/new.html.eex:24 lib/link_web/templates/pow/session/new.html.eex:28
+msgid "signin.button"
+msgstr "Inloggen"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:22
+msgid "signin.label"
+msgstr "Heb je al een account?"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:22
+msgid "signin.link"
+msgstr "Log hier in"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:15
+#: lib/link_web/templates/pow/registration/new.html.eex:18
+msgid "signup.button"
+msgstr "Registreren"
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:32
+msgid "signup.label"
+msgstr "Nog geen account?"
+
+#, elixir-format
+#: lib/link_web/templates/pow/session/new.html.eex:32
+msgid "signup.link"
+msgstr "Maak hier een aan"
+
+#, elixir-format
+#: lib/link_web/templates/pow/registration/new.html.eex:6
+msgid "signup.title"
+msgstr "Registreer"
+
+#, elixir-format
+#: lib/link_web/live/survey_tool/edit.ex:25
+#: lib/link_web/live/survey_tool/new.ex:42
+msgid "survey_url.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/survey_tool/edit.ex:24
+#: lib/link_web/live/survey_tool/new.ex:41
+msgid "title.label"
+msgstr "E-mail"
+
+#, elixir-format
 #: lib/link_web/templates/pow/registration/edit.html.eex:16
 #: lib/link_web/templates/pow/registration/edit.html.eex:20
 msgid "update.button"
@@ -89,64 +136,7 @@ msgstr "Save"
 msgid "update.title"
 msgstr "Aanpassen"
 
-#, elixir-format
-#: lib/link_web/templates/user_profile/edit.html.eex:23
+#, elixir-format, fuzzy
+#: lib/link_web/live/user_profile.ex:41
 msgid "signout.button"
-msgstr "Uitloggen"
-
-#, elixir-format
-#: lib/link_web/templates/layout/root.html.leex:41
-msgid "profile.button"
-msgstr "Mijn profiel"
-
-#, elixir-format
-#: lib/link_web/live/user_profile.ex:29
-#: lib/link_web/templates/user_profile/edit.html.eex:11
-msgid "fullname.label"
-msgstr "Volledige naam"
-
-#, elixir-format
-#: lib/link_web/templates/user_profile/edit.html.eex:15
-#: lib/link_web/templates/user_profile/edit.html.eex:19
-msgid "profile.save.button"
-msgstr "Opslaan"
-
-#, elixir-format
-#: lib/link_web/live/user_profile.ex:26
-#: lib/link_web/templates/user_profile/edit.html.eex:6
-msgid "profile.title"
-msgstr "Mijn profiel"
-
-#, elixir-format
-#: lib/link_web/live/user_profile.ex:28
-#: lib/link_web/templates/user_profile/edit.html.eex:10
-msgid "researcher.label"
-msgstr "ik ben een onderzoeker"
-
-#, elixir-format
-#: lib/link_web/live/user_profile.ex:30
-#: lib/link_web/templates/user_profile/edit.html.eex:12
-msgid "displayname.label"
-msgstr "Schermnaam"
-
-#, elixir-format
-#: lib/link_web/templates/pow/session/new.html.eex:32
-msgid "signup.label"
-msgstr "Nog geen account?"
-
-#, elixir-format
-#: lib/link_web/templates/pow/registration/new.html.eex:22
-msgid "signin.label"
-msgstr "Heb je al een account?"
-
-#, elixir-format
-#: lib/link_web/live/survey_tool/edit.ex:26
-#: lib/link_web/live/survey_tool/new.ex:40
-msgid "survey_url.label"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/live/survey_tool/edit.ex:25
-#: lib/link_web/live/survey_tool/new.ex:39
-msgid "title.label"
-msgstr "E-mail"
+msgstr "Afmelden"

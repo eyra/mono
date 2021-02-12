@@ -1,9 +1,9 @@
-defmodule EyraUI.USPCard do
+defmodule EyraUI.Card.USP do
   @moduledoc """
   The Unique Selling Point Card highlights a reason for taking an action.
   """
   use Surface.Component
-  alias EyraUI.Card
+  alias EyraUI.Card.Card
 
   prop title, :string, required: true
   prop description, :string, required: true

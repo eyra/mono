@@ -11,12 +11,12 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:53
+#: lib/link_web/live/dashboard.ex:55
 msgid "study.index.subtitle"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:52
+#: lib/link_web/live/dashboard.ex:54
 msgid "study.index.title"
 msgstr ""
 
@@ -26,12 +26,12 @@ msgid "dashboard.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:72
+#: lib/link_web/live/dashboard.ex:77
 msgid "study.all.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:60
+#: lib/link_web/live/dashboard.ex:62
 msgid "study.highlighted.title"
 msgstr ""
 
@@ -41,81 +41,36 @@ msgid "new.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:57
+#: lib/link_web/live/dashboard.ex:59
 msgid "dashboard.page.description"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/edit.html.eex:1
+#: lib/link_web/live/study/edit.ex:117
 msgid "study.edit.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/edit.html.eex:9
-msgid "study.edit.subtitle"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/live/study/new.ex:40 lib/link_web/live/study/show.ex:30
-#: lib/link_web/templates/study/edit.html.eex:15 lib/link_web/templates/study/new.html.eex:15
-msgid "description.label"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/live/study/new.ex:41
-#: lib/link_web/templates/study/edit.html.eex:18 lib/link_web/templates/study/edit.html.eex:23
-#: lib/link_web/templates/study/new.html.eex:18 lib/link_web/templates/study/new.html.eex:22
+#: lib/link_web/live/study/new.ex:47
 msgid "save.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/new.ex:39 lib/link_web/live/study/show.ex:29
-#: lib/link_web/templates/study/edit.html.eex:14 lib/link_web/templates/study/new.html.eex:14
+#: lib/link_web/live/study/edit.ex:124 lib/link_web/live/study/new.ex:46
 msgid "title.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:31
-msgid "study.participate.button"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/live/study/show.ex:25
-#: lib/link_web/templates/study/show.html.eex:1
-msgid "study.show.title"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/templates/study/show.html.eex:24
-msgid "study.edit.button"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/templates/study/show.html.eex:27
-msgid "share.button"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/templates/study/new.html.eex:9
-msgid "study.new.subtitle"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/live/study/new.ex:36 lib/link_web/templates/study/new.html.eex:1
+#: lib/link_web/live/study/new.ex:43
 msgid "study.new.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/study/show.html.eex:16
-msgid "owner.label"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/templates/study/show.html.eex:41
-msgid "participants.subtitle"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/live/dashboard.ex:68
+#: lib/link_web/live/dashboard.ex:73
 msgid "add.card.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/public.ex:47
+msgid "study.public.title"
 msgstr ""

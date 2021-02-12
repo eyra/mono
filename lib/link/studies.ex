@@ -8,7 +8,7 @@ defmodule Link.Studies do
   alias Link.Repo
   alias Link.Authorization
 
-  alias Link.Studies.{Study}
+  alias Link.Studies.{Study, Author}
   alias Link.Users.User
   alias Link.SurveyTools.SurveyTool
 
@@ -33,6 +33,18 @@ defmodule Link.Studies do
     |> Repo.all()
 
     # AUTH: Can be piped through auth filter.
+  end
+
+  def list_studies_with_published_survey(opts \\ []) do
+    exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
+    published = from(st in SurveyTool, where: st.is_published, select: st.study_id)
+
+    from(s in Study,
+      where:
+        s.id in subquery(published) and
+          s.id not in ^exclude
+    )
+    |> Repo.all()
   end
 
   @doc """
@@ -185,6 +197,20 @@ defmodule Link.Studies do
   """
   def change_study(%Study{} = study, attrs \\ %{}) do
     Study.changeset(study, attrs)
+  end
+
+  def add_author(%Study{} = study, %User{} = researcher) do
+    researcher
+    |> Author.from_user()
+    |> Author.changeset()
+    |> Ecto.Changeset.put_assoc(:study, study)
+    |> Ecto.Changeset.put_assoc(:user, researcher)
+    |> Repo.insert()
+  end
+
+  def list_authors(%Study{} = study) do
+    from(a in Author, where: a.study_id == ^study.id)
+    |> Repo.all()
   end
 
   def list_survey_tools(%Study{} = study) do

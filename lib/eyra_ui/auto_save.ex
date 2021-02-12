@@ -5,7 +5,7 @@ defmodule EyraUI.AutoSave do
   import Phoenix.LiveView, only: [assign: 2, assign: 3, put_flash: 3]
   alias Phoenix.LiveView.Socket
 
-  @save_delay 2
+  @save_delay 1
 
   @callback load(params :: Map.t(), session :: map(), socket :: Socket.t()) :: any()
   @callback save(changeset :: any()) :: any()

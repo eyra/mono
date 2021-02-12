@@ -1,4 +1,4 @@
-defmodule LinkWeb.Live.Study.Show.Test do
+defmodule LinkWeb.Live.Study.Edit.Test do
   use LinkWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
@@ -21,7 +21,7 @@ defmodule LinkWeb.Live.Study.Show.Test do
     setup [:login_as_researcher, :setup_study, :take_ownership_of_study]
 
     test "edit a study", %{conn: conn, study: study} do
-      {:ok, view, _html} = live(conn, Routes.live_path(conn, Study.Show, study.id))
+      {:ok, view, _html} = live(conn, Routes.live_path(conn, Study.Edit, study.id))
       title = Faker.Lorem.sentence()
       description = Faker.Lorem.sentence()
 
@@ -35,7 +35,7 @@ defmodule LinkWeb.Live.Study.Show.Test do
     setup [:login_as_researcher, :setup_study]
 
     test "disallow other researchers to edit a study", %{conn: conn, study: study} do
-      {:ok, _view, html} = live(conn, Routes.live_path(conn, Study.Show, study.id))
+      {:ok, _view, html} = live(conn, Routes.live_path(conn, Study.Edit, study.id))
       assert html =~ "Access Denied"
     end
   end
