@@ -100,6 +100,7 @@ defmodule LinkWeb do
       import LinkWeb.Components.ComponentHelpers
       alias LinkWeb.Router.Helpers, as: Routes
       import Link.Authorization, only: [can?: 4]
+      use LinkWeb.LiveViewPowHelper
 
       def supported_languages do
         current_locale = Gettext.get_locale()

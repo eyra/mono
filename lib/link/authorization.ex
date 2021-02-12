@@ -20,6 +20,7 @@ defmodule Link.Authorization do
   grant_access(LinkWeb.Dashboard, [:member])
   grant_access(LinkWeb.UserProfile.Index, [:member])
   grant_access(LinkWeb.Study.New, [:researcher])
+  grant_access(LinkWeb.Study.Public, [:visitor, :member])
   grant_access(LinkWeb.Study.Show, [:owner])
 
   grant_access(Link.Studies.Study, [:visitor, :member])
@@ -97,12 +98,19 @@ defmodule Link.Authorization do
     index: [:visitor, :member]
   })
 
-  def make_node(parent_id \\ nil) do
+  def make_node(), do: %Link.Authorization.Node{}
+  def make_node(nil), do: make_node()
+
+  def make_node(parent_id) when is_integer(parent_id) do
     %Link.Authorization.Node{parent_id: parent_id}
   end
 
-  def create_node(parent_id \\ nil) do
-    case make_node(parent_id) |> Link.Repo.insert() do
+  def make_node(parent) do
+    GreenLight.AuthorizationNode.id(parent) |> make_node
+  end
+
+  def create_node(parent \\ nil) do
+    case make_node(parent) |> Link.Repo.insert() do
       {:ok, node} -> {:ok, node.id}
       error -> error
     end
@@ -139,24 +147,29 @@ defmodule Link.Authorization do
     |> Link.Repo.exists?()
   end
 
-  def can_access?(principal, module) when is_atom(module) do
-    permission = GreenLight.Permissions.access_permission(module)
+  def can_access?(principal, permission) when is_binary(permission) do
     roles = Principal.roles(principal)
     GreenLight.PermissionMap.allowed?(permission_map(), permission, roles)
   end
 
-  def can_access?(principal, entity, permission) when is_binary(permission) do
-    roles = Principal.roles(principal)
+  def can_access?(principal, module) when is_atom(module) do
+    permission = GreenLight.Permissions.access_permission(module)
+    can_access?(principal, permission)
+  end
 
-    unless GreenLight.PermissionMap.allowed?(permission_map(), permission, roles) do
-      roles_with_permission =
-        permission_map() |> GreenLight.PermissionMap.roles(permission) |> MapSet.to_list()
+  defp has_required_roles_in_context?(principal, entity, permission) do
+    roles_with_permission =
+      permission_map() |> GreenLight.PermissionMap.roles(permission) |> MapSet.to_list()
 
-      roles_intersect?(principal, entity, roles_with_permission)
-    end
+    roles_intersect?(principal, entity, roles_with_permission)
   end
 
   def can_access?(principal, entity, module) when is_atom(module) do
     can_access?(principal, entity, GreenLight.Permissions.access_permission(module))
+  end
+
+  def can_access?(principal, entity, permission) when is_binary(permission) do
+    can_access?(principal, permission) or
+      has_required_roles_in_context?(principal, entity, permission)
   end
 end

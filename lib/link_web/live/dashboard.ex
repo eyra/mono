@@ -3,7 +3,6 @@ defmodule LinkWeb.Dashboard do
   The home screen.
   """
   use LinkWeb, :live_view
-  use LinkWeb.LiveViewPowHelper
   import Link.Authorization
   import Link.Users
   alias Link.Studies
@@ -24,17 +23,16 @@ defmodule LinkWeb.Dashboard do
     socket = assign_current_user(socket, session, user, profile)
 
     owned_studies = user |> Studies.list_owned_studies()
-    study_participations = user |> Studies.list_participations()
 
     exclusion_list =
-      Stream.concat(owned_studies, study_participations)
+      owned_studies
       |> Stream.map(fn study -> study.id end)
       |> Enum.into(MapSet.new())
 
     available_studies = Studies.list_studies(exclude: exclusion_list)
     available_count = Enum.count(available_studies)
 
-    highlighted_studies = owned_studies |> Enum.concat(study_participations)
+    highlighted_studies = owned_studies
     highlighted_count = Enum.count(exclusion_list)
 
     socket =
@@ -62,7 +60,9 @@ defmodule LinkWeb.Dashboard do
           </Title2>
           <DynamicGrid>
             <div :for={{ study <- @highlighted_studies  }} >
-              {{ primary_study_card(@socket, study, "Bekijken") }}
+              <div :if={{ can_access?(@current_user, study, LinkWeb.Study.Show) }} >
+                {{ primary_study_card(@socket, study, "Bekijken") }}
+              </div>
             </div>
             <div :if={{ can_access?(@current_user, LinkWeb.Study.New) }} >
               {{ button_card(@socket, dgettext("eyra-study", "add.card.title"), Routes.live_path(@socket, LinkWeb.Study.New)) }}
@@ -75,6 +75,9 @@ defmodule LinkWeb.Dashboard do
           <DynamicGrid>
             <div :for={{ study <- @available_studies  }} class="mb-1" >
               {{ secondary_study_card(@socket, study, "Bekijken") }}
+              <div :if={{ can_access?(@current_user, study, LinkWeb.Study.Public) }} >
+                <a href={{ Routes.live_path(@socket, LinkWeb.Study.Public, study.id) }}>Ga naar studie</a>
+              </div>
             </div>
           </DynamicGrid>
       </ContentArea>

@@ -2,6 +2,7 @@ defmodule Link.SurveyToolsTest do
   use Link.DataCase
 
   alias Link.SurveyTools
+  alias Link.Authorization
 
   describe "survey_tools" do
     alias Link.SurveyTools.SurveyTool
@@ -12,7 +13,11 @@ defmodule Link.SurveyToolsTest do
 
     test "list_survey_tools/0 returns all survey_tools" do
       survey_tool = Factories.insert!(:survey_tool)
-      assert SurveyTools.list_survey_tools() |> Enum.map(fn s -> s.id end) == [survey_tool.id]
+
+      assert SurveyTools.list_survey_tools()
+             |> Enum.map(& &1.id)
+             |> MapSet.new()
+             |> MapSet.member?(survey_tool.id)
     end
 
     test "get_survey_tool!/1 returns the survey_tool with given id" do
@@ -61,9 +66,53 @@ defmodule Link.SurveyToolsTest do
       assert_raise Ecto.NoResultsError, fn -> SurveyTools.get_survey_tool!(survey_tool.id) end
     end
 
+    test "delete_survey_tool/1 deletes the survey tool even with participations attached" do
+      survey_tool = Factories.insert!(:survey_tool)
+      participant = Factories.insert!(:member)
+      SurveyTools.apply_participant(survey_tool, participant)
+      assert {:ok, %SurveyTool{}} = SurveyTools.delete_survey_tool(survey_tool)
+      assert_raise Ecto.NoResultsError, fn -> SurveyTools.get_survey_tool!(survey_tool.id) end
+    end
+
     test "change_survey_tool/1 returns a survey_tool changeset" do
       survey_tool = Factories.insert!(:survey_tool)
       assert %Ecto.Changeset{} = SurveyTools.change_survey_tool(survey_tool)
+    end
+
+    test "apply_participant/2 creates application" do
+      survey_tool = Factories.insert!(:survey_tool)
+      member = Factories.insert!(:researcher)
+      assert {:ok, _} = SurveyTools.apply_participant(survey_tool, member)
+    end
+
+    test "apply_participant/2 assigns the participant role to the applicant" do
+      survey_tool = Factories.insert!(:survey_tool)
+      member = Factories.insert!(:researcher)
+      assert Authorization.list_roles(member, survey_tool) == MapSet.new()
+      assert {:ok, _} = SurveyTools.apply_participant(survey_tool, member)
+      assert Authorization.list_roles(member, survey_tool) == MapSet.new([:participant])
+    end
+
+    test "list_participants/1 lists all participants" do
+      survey = Factories.insert!(:survey_tool)
+      _non_particpant = Factories.insert!(:researcher)
+      applied_participant = Factories.insert!(:researcher)
+      SurveyTools.apply_participant(survey, applied_participant)
+
+      assert SurveyTools.list_participants(survey)
+             |> Enum.map(&%{user_id: &1.user.id}) == [
+               %{user_id: applied_participant.id}
+             ]
+    end
+
+    test "list_participations/1 list all studies a user is a part of" do
+      survey_tool = Factories.insert!(:survey_tool)
+      member = Factories.insert!(:member)
+      # Listing without any participation should return an empty list
+      assert SurveyTools.list_participations(member) == []
+      # The listing should contain the survey tool after an application has been made
+      SurveyTools.apply_participant(survey_tool, member)
+      assert SurveyTools.list_participations(member) |> Enum.map(& &1.id) == [survey_tool.id]
     end
 
     test "get_task/2 returns a task when available" do
@@ -77,8 +126,7 @@ defmodule Link.SurveyToolsTest do
     test "setup_tasks_for_participants/2 creates task for participants" do
       survey_tool = Factories.insert!(:survey_tool)
 
-      participant =
-        Factories.insert!(:study_participant, study: survey_tool.study, status: :entered)
+      participant = Factories.insert!(:survey_tool_participant, survey_tool: survey_tool)
 
       assert SurveyTools.setup_tasks_for_participants!([participant], survey_tool)
              |> Enum.count() == 1
@@ -90,12 +138,12 @@ defmodule Link.SurveyToolsTest do
 
     test "list_participants_without_task/2 returns the participants for a study that do not have a survey task" do
       survey_tool = Factories.insert!(:survey_tool)
-      study = survey_tool.study
-      assert SurveyTools.list_participants_without_task(survey_tool, study) == []
+      assert SurveyTools.list_participants_without_task(survey_tool) == []
 
-      participant_without_task = Factories.insert!(:study_participant, study: study)
+      participant_without_task =
+        Factories.insert!(:survey_tool_participant, survey_tool: survey_tool)
 
-      assert SurveyTools.list_participants_without_task(survey_tool, study)
+      assert SurveyTools.list_participants_without_task(survey_tool)
              |> Enum.map(& &1.user_id) ==
                [participant_without_task.user_id]
 
@@ -106,7 +154,7 @@ defmodule Link.SurveyToolsTest do
       }
       |> Link.Repo.insert!()
 
-      assert SurveyTools.list_participants_without_task(survey_tool, study) == []
+      assert SurveyTools.list_participants_without_task(survey_tool) == []
     end
 
     test "list_tasks/1 returns the tasks for a survery tool" do

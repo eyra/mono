@@ -3,7 +3,6 @@ defmodule LinkWeb.SurveyTool.Edit do
   The home screen.
   """
   use LinkWeb, :live_view
-  use LinkWeb.LiveViewPowHelper
   alias Surface.Components.Form
   alias EyraUI.Form.{TextInput}
   use EyraUI.AutoSave, :survey_tool

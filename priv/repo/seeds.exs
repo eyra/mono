@@ -74,8 +74,8 @@ for data <- studies do
     })
 
   Link.Authorization.assign_role(
-    Link.Authorization.principal(researcher).id,
-    study.auth_node_id,
+    researcher,
+    study,
     :owner
   )
 end

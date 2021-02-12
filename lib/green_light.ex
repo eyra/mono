@@ -70,6 +70,26 @@ defmodule GreenLight do
         )
       end
 
+      def build_role_assignment(principal, entity, role) do
+        unquote(schema)
+        |> struct(%{
+          principal_id: GreenLight.Principal.id(principal),
+          node_id: GreenLight.AuthorizationNode.id(entity),
+          role: role
+        })
+      end
+
+      @doc """
+      Assign a role by piping the result of an Ecto insert operation directly into
+      this function.
+      """
+      def assign_role({:ok, entity} = result, principal, role) do
+        :ok = assign_role(principal, entity, role)
+        result
+      end
+
+      def assign_role({:error, _} = result, _principal, _role), do: result
+
       def assign_role(principal, entity, role) when is_atom(role) do
         GreenLight.Ecto.Query.assign_role(
           unquote(repo),
@@ -94,17 +114,6 @@ defmodule GreenLight do
         unquote(repo)
         |> GreenLight.Ecto.Query.list_principals(unquote(schema), entity)
       end
-
-      @doc """
-      Assign a role by piping the result of an Ecto insert operation directly into
-      this function.
-      """
-      def assign_role({:ok, entity} = result, principal, role) do
-        :ok = assign_role(principal, entity, role)
-        result
-      end
-
-      def assign_role({:error, _} = result, _principal, _role), do: result
 
       def can?(principal, entity_or_entities, module, action) do
         roles = list_roles(principal, entity_or_entities)

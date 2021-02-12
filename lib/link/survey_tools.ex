@@ -30,9 +30,12 @@ defmodule Link.SurveyTools do
   """
 
   import Ecto.Query, warn: false
+  alias Ecto.Multi
   alias Link.Repo
 
-  alias Link.SurveyTools.{SurveyTool, SurveyToolTask}
+  alias Link.Users.User
+  alias Link.SurveyTools.{SurveyTool, SurveyToolTask, Participant}
+  alias Link.Authorization
 
   @doc """
   Returns the list of survey_tools.
@@ -62,6 +65,7 @@ defmodule Link.SurveyTools do
 
   """
   def get_survey_tool!(id), do: Repo.get!(SurveyTool, id)
+  def get_survey_tool(id), do: Repo.get(SurveyTool, id)
 
   @doc """
   Creates a survey_tool.
@@ -79,6 +83,7 @@ defmodule Link.SurveyTools do
     %SurveyTool{}
     |> SurveyTool.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:study, study)
+    |> Ecto.Changeset.put_assoc(:auth_node, Authorization.make_node(study))
     |> Repo.insert()
   end
 
@@ -136,8 +141,23 @@ defmodule Link.SurveyTools do
     SurveyTool.changeset(survey_tool, attrs)
   end
 
+  def create_task(survey_tool, user) do
+    Repo.insert(%SurveyToolTask{survey_tool: survey_tool, user: user, status: :pending})
+  end
+
   def get_task(survey_tool, user) do
     Repo.get_by(SurveyToolTask, survey_tool_id: survey_tool.id, user_id: user.id)
+  end
+
+  def get_or_create_task(survey_tool, user) do
+    if participant?(survey_tool, user) do
+      case get_task(survey_tool, user) do
+        nil -> create_task(survey_tool, user)
+        task -> {:ok, task}
+      end
+    else
+      {:error, :not_a_participant}
+    end
   end
 
   def list_tasks(survey_tool) do
@@ -145,12 +165,19 @@ defmodule Link.SurveyTools do
     |> Repo.all()
   end
 
-  def list_participants_without_task(survey_tool, study) do
+  def participant?(survey_tool, user) do
+    from(p in Link.SurveyTools.Participant,
+      where: p.survey_tool_id == ^survey_tool.id and p.user_id == ^user.id
+    )
+    |> Repo.exists?()
+  end
+
+  def list_participants_without_task(survey_tool) do
     user_ids_with_task =
       from(t in SurveyToolTask, where: t.survey_tool_id == ^survey_tool.id, select: t.user_id)
 
-    from(p in Link.Studies.Participant,
-      where: p.study_id == ^study.id and p.user_id not in subquery(user_ids_with_task)
+    from(p in Participant,
+      where: p.survey_tool_id == ^survey_tool.id and p.user_id not in subquery(user_ids_with_task)
     )
     |> Repo.all()
   end
@@ -169,5 +196,40 @@ defmodule Link.SurveyTools do
     task
     |> SurveyToolTask.changeset(%{status: :completed})
     |> Repo.update!()
+  end
+
+  # Participation
+  # -------------
+  def apply_participant(%SurveyTool{} = survey_tool, %User{} = user) do
+    Multi.new()
+    |> Multi.insert(
+      :participant,
+      %Participant{}
+      |> Participant.changeset()
+      |> Ecto.Changeset.put_assoc(:survey_tool, survey_tool)
+      |> Ecto.Changeset.put_assoc(:user, user)
+    )
+    |> Multi.insert(
+      :role_assignment,
+      Authorization.build_role_assignment(user, survey_tool, :participant)
+    )
+    |> Repo.transaction()
+  end
+
+  def list_participants(%SurveyTool{} = survey_tool) do
+    from(p in Participant,
+      where: p.survey_tool_id == ^survey_tool.id,
+      preload: [:user]
+    )
+    |> Repo.all()
+  end
+
+  def list_participations(%User{} = user) do
+    from(s in SurveyTool,
+      join: p in Participant,
+      on: s.id == p.survey_tool_id,
+      where: p.user_id == ^user.id
+    )
+    |> Repo.all()
   end
 end

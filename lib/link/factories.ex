@@ -37,19 +37,15 @@ defmodule Link.Factories do
     }
   end
 
-  def build(:study_participant) do
-    %Studies.Participant{
-      study: build(:study),
-      user: build(:member),
-      status: :applied
+  def build(:survey_tool_participant) do
+    %SurveyTools.Participant{
+      survey_tool: build(:survey_tool),
+      user: build(:member)
     }
   end
 
   def build(:survey_tool) do
-    %SurveyTools.SurveyTool{
-      title: Faker.Lorem.sentence(),
-      study: build(:study)
-    }
+    build(:survey_tool, %{})
   end
 
   def build(:role_assignment) do
@@ -57,7 +53,18 @@ defmodule Link.Factories do
   end
 
   def build(:participant) do
-    %Studies.Participant{}
+    %SurveyTools.Participant{}
+  end
+
+  def build(:survey_tool, %{} = attributes) do
+    {study, attributes} = Map.pop(attributes, :study, build(:study))
+
+    %SurveyTools.SurveyTool{
+      auth_node: build(:auth_node, %{parent: study.auth_node}),
+      title: Faker.Lorem.sentence(),
+      study: study
+    }
+    |> struct!(attributes)
   end
 
   def build(factory_name, attributes) do
@@ -67,10 +74,7 @@ defmodule Link.Factories do
   def insert!(factory_name, attributes \\ [])
 
   def insert!(:survey_tool_task, attributes) do
-    member = insert!(:member)
-    study = insert!(:study)
-    insert!(:study_participant, user: member, study: study)
-    survey_tool = insert!(:survey_tool, study: study)
+    %{survey_tool: survey_tool, user: member} = insert!(:survey_tool_participant)
 
     %SurveyTools.SurveyToolTask{
       user: member,

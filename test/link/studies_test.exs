@@ -13,15 +13,19 @@ defmodule Link.StudiesTest do
 
     test "list_studies/1 returns all studies" do
       study = Factories.insert!(:study)
-      assert Studies.list_studies() |> Enum.map(& &1.id) == [study.id]
+      assert Studies.list_studies() |> Enum.find(&(&1.id == study.id))
     end
 
     test "list_studies/1 allows excluding a list of ids" do
       studies = 0..3 |> Enum.map(fn _ -> Factories.insert!(:study) end)
       {excluded_study, expected_result} = List.pop_at(studies, 1)
 
-      assert Studies.list_studies(exclude: [excluded_study.id]) |> Enum.map(& &1.id) ==
-               expected_result |> Enum.map(& &1.id)
+      study_ids =
+        Studies.list_studies(exclude: [excluded_study.id]) |> Enum.map(& &1.id) |> MapSet.new()
+
+      expected_ids = expected_result |> Enum.map(& &1.id) |> MapSet.new()
+
+      assert MapSet.subset?(expected_ids, study_ids)
     end
 
     test "list_owned_studies/1 returns only studies that are owned by the user" do
@@ -68,86 +72,9 @@ defmodule Link.StudiesTest do
       assert_raise Ecto.NoResultsError, fn -> Studies.get_study!(study.id) end
     end
 
-    test "delete_study/1 deletes the study even with participations attached" do
-      study = Factories.insert!(:study)
-      participant = Factories.insert!(:member)
-      Studies.apply_participant(study, participant)
-      assert {:ok, %Study{}} = Studies.delete_study(study)
-      assert_raise Ecto.NoResultsError, fn -> Studies.get_study!(study.id) end
-    end
-
     test "change_study/1 returns a study changeset" do
       study = Factories.insert!(:study)
       assert %Ecto.Changeset{} = Studies.change_study(study)
-    end
-
-    test "apply_participant/2 creates application" do
-      study = Factories.insert!(:study)
-      member = Factories.insert!(:researcher)
-      assert {:ok, _} = Studies.apply_participant(study, member)
-    end
-
-    test "application_status/2 informs if a member has applied to a study" do
-      study = Factories.insert!(:study)
-      member = Factories.insert!(:researcher)
-      assert Studies.application_status(study, member) |> is_nil
-      Studies.apply_participant(study, member)
-      assert Studies.application_status(study, member) == :applied
-    end
-
-    test "update_participant_status/3 alters the status of a participant" do
-      study = Factories.insert!(:study)
-      member = Factories.insert!(:researcher)
-      Studies.apply_participant(study, member)
-      assert :ok = Studies.update_participant_status(study, member, :entered)
-      assert Studies.application_status(study, member) == :entered
-    end
-
-    test "update_participant_status/3 alters permission for a participant" do
-      study = Factories.insert!(:study)
-      member = Factories.insert!(:researcher)
-      Studies.apply_participant(study, member)
-
-      assert Authorization.list_roles(member, study) == MapSet.new()
-
-      assert :ok = Studies.update_participant_status(study, member, :entered)
-
-      assert Authorization.list_roles(member, study) == MapSet.new([:participant])
-
-      assert :ok = Studies.update_participant_status(study, member, :rejected)
-
-      # Rejecting a participant makes them lose their priviliges
-      assert Authorization.list_roles(member, study) == MapSet.new()
-    end
-
-    test "list_participants/1 lists all participants" do
-      study = Factories.insert!(:study)
-      _non_particpant = Factories.insert!(:researcher)
-      applied_participant = Factories.insert!(:researcher)
-      Studies.apply_participant(study, applied_participant)
-      accepted_participant = Factories.insert!(:researcher)
-      Studies.apply_participant(study, accepted_participant)
-      Studies.update_participant_status(study, accepted_participant, :entered)
-      rejected_participant = Factories.insert!(:researcher)
-      Studies.apply_participant(study, rejected_participant)
-      Studies.update_participant_status(study, rejected_participant, :rejected)
-      # Both members that applied should be listed with their corresponding status.
-      assert Studies.list_participants(study)
-             |> Enum.map(&%{status: &1.status, user_id: &1.user.id}) == [
-               %{status: :applied, user_id: applied_participant.id},
-               %{status: :entered, user_id: accepted_participant.id},
-               %{status: :rejected, user_id: rejected_participant.id}
-             ]
-    end
-
-    test "list_participations/1 list all studies a user is a part of" do
-      study = Factories.insert!(:study)
-      member = Factories.insert!(:member)
-      # Listing without any participation should return an empty list
-      assert Studies.list_participations(member) == []
-      # The listing should contain the study after an application has been made
-      Studies.apply_participant(study, member)
-      assert Studies.list_participations(member) |> Enum.map(& &1.id) == [study.id]
     end
 
     test "add_owner!/2 grants a user ownership over a study" do

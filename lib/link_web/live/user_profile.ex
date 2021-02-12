@@ -3,7 +3,6 @@ defmodule LinkWeb.UserProfile.Index do
   The home screen.
   """
   use LinkWeb, :live_view
-  use LinkWeb.LiveViewPowHelper
   alias Surface.Components.Form
   alias Link.Users
   alias EyraUI.Form.{TextInput, Checkbox}

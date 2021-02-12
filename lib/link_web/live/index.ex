@@ -3,7 +3,6 @@ defmodule LinkWeb.Index do
   The home screen.
   """
   use LinkWeb, :live_view
-  use LinkWeb.LiveViewPowHelper
   import Link.Users
   alias EyraUI.{PrimaryCTA, USPCard}
   alias EyraUI.Container.{ContentArea}

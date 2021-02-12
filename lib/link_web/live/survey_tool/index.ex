@@ -3,7 +3,6 @@ defmodule LinkWeb.SurveyTool.Index do
   The home screen.
   """
   use LinkWeb, :live_view
-  use LinkWeb.LiveViewPowHelper
   alias Link.SurveyTools
   alias Link.SurveyTools.SurveyTool
 
