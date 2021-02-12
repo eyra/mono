@@ -1,4 +1,4 @@
-defmodule LinkWeb.UserProfile.Index do
+defmodule LinkWeb.User.Profile do
   @moduledoc """
   The home screen.
   """

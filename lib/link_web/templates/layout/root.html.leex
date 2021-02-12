@@ -38,12 +38,12 @@
                     <% end %>
                     <div class="flex-grow"></div>
                     <div class="flex-none lg:pr-4 text-button font-button">
-                      <%= menu_button dgettext("eyra-account", "profile.button"), Routes.live_path(@conn, LinkWeb.UserProfile.Index) %>
+                      <%= menu_button dgettext("eyra-account", "profile.button"), Routes.live_path(@conn, LinkWeb.User.Profile) %>
                     </div>
                   <% else %>
                     <div class="flex-grow"></div>
                     <div class="flex-none pr-1 lg:pr-4">
-                      <%= menu_button dgettext("eyra-account", "signin.button"), Routes.pow_session_path(@conn, :new) %>
+                      <%= menu_button dgettext("eyra-account", "signin.button"), Routes.live_path(@conn, LinkWeb.User.Signin) %>
                     </div>
                   <% end %>
                   <div class="flex-none pl-1 pr-3 lg:pl-6 lg:pr-16 -mt-0.5">

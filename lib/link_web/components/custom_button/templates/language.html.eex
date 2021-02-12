@@ -1,3 +1,0 @@
-<a href= <%= Routes.language_switch_path(@conn, :index, @locale, redir: @conn.request_path) %> >
-    <img src="<%= Routes.static_path(@conn, "/images/"<> @locale <> ".svg") %>"/>
-</a>

@@ -53,7 +53,7 @@ defmodule LinkWeb.Index do
             <div :if={{ @current_user == nil }}>
               <PrimaryCTA title={{ dgettext("eyra-link", "signup.card.title") }}
                 button_label={{ dgettext("eyra-link", "signup.card.button") }}
-                to={{ Routes.pow_session_path(@socket, :new) }} />
+                to={{ Routes.live_path(@socket, LinkWeb.User.Signup) }} />
             </div>
           </div>
           <USP title={{ dgettext("eyra-link", "usp1.title") }} description={{ dgettext("eyra-link", "usp1.description") }} />

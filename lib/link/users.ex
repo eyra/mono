@@ -9,6 +9,10 @@ defmodule Link.Users do
   alias Link.Repo
   alias Link.Users.{Profile, User}
 
+  def authenticate(params) do
+    pow_authenticate(params)
+  end
+
   def create(params) do
     pow_create(params)
   end

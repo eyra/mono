@@ -54,6 +54,10 @@ defmodule LinkWeb.Router do
   scope "/", LinkWeb do
     pipe_through :browser
     live "/", Index
+
+    live "/user/signin", User.Signin
+    live "/user/signup", User.Signup
+
     get "/switch-language/:locale", LanguageSwitchController, :index
     get "/fake_survey", FakeSurveyController, :index
   end
@@ -65,7 +69,14 @@ defmodule LinkWeb.Router do
 
   scope "/" do
     pipe_through [:browser]
-    pow_routes()
+
+    scope "/", Pow.Phoenix, as: "pow" do
+      post "/session", SessionController, :create
+      delete "/session", SessionController, :delete
+
+      post "/registration", RegistrationController, :create
+    end
+
     pow_assent_routes()
   end
 
@@ -74,7 +85,8 @@ defmodule LinkWeb.Router do
 
     live "/dashboard", Dashboard
 
-    live "/user-profile", UserProfile.Index
+    live "/user/profile", User.Profile
+
     live "/survey-tools", SurveyTool.Index
     live "/survey-tools/new", SurveyTool.New
     live "/survey-tools/:id", SurveyTool.Edit

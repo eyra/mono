@@ -2,24 +2,15 @@ defmodule LinkWeb.Live.UserProfileTest do
   use LinkWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
-  alias LinkWeb.UserProfile
+  alias LinkWeb.User.Profile
 
   alias Link.Factories
 
-  setup %{conn: conn} do
-    user = Factories.insert!(:member)
-
-    conn =
-      post(conn, Routes.pow_session_path(conn, :create),
-        user: %{email: user.email, password: "S4p3rS3cr3t"}
-      )
-
-    {:ok, conn: conn, user: user}
-  end
-
   describe "edit a profile" do
+    setup [:login_as_member]
+
     test "renders form for editing the users profile", %{conn: conn} do
-      {:ok, view, _html} = live(conn, Routes.live_path(conn, UserProfile.Index))
+      {:ok, view, _html} = live(conn, Routes.live_path(conn, Profile))
       fullname = Faker.Person.name()
       displayname = Faker.Person.first_name()
 

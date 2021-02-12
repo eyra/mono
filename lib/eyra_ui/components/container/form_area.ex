@@ -10,7 +10,7 @@ defmodule EyraUI.Container.FormArea do
   def render(assigns) do
     ~H"""
     <div class="flex justify-center">
-      <div class="flex-grow max-w-form ml-6 mr-6 lg:m-0 mt-6 sm:mt-16 lg:mt-24">
+      <div class="flex-grow max-w-form ml-6 mr-6 lg:m-0">
         <slot />
       </div>
     </div>
