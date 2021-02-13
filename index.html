@@ -1,0 +1,60 @@
+<div id="controls">
+  <p id="loading-indicator">Loading...</p>
+  <input type="file" id="fileItem" disabled onChange="toggleProcessButton()" />
+  <button onClick="process()" id="process" disabled>Process</button>
+</div>
+
+<div id="results" style="display: none">
+  <p id="summary" />
+</div>
+
+<script type="text/javascript">
+  const loadingIndicator = document.getElementById("loading-indicator");
+  const processButton = document.getElementById("process");
+  const fileInput = document.getElementById("fileItem");
+  const resultElement = document.getElementById("results");
+  const summaryElement = document.getElementById("summary");
+
+  const pyWorker = new Worker("./pyworker.js");
+  pyWorker.onerror = console.log;
+  pyWorker.onmessage = (event) => {
+    const { eventType } = event.data;
+    if (eventType === "result") {
+      setControlsDisabled(false);
+      summaryElement.textContent = event.data.result.summary;
+      resultElement.style.display = "block";
+      console.log(event.data.result);
+    } else if (eventType === "initialized") {
+      loadingIndicator.hidden = true;
+      fileInput.disabled = false;
+    }
+  };
+
+  const toggleProcessButton = () => {
+    const file = fileInput.files[0];
+    processButton.disabled = file === undefined;
+  };
+
+  const setControlsDisabled = (disabled) => {
+    fileInput.disabled = disabled;
+    processButton.disabled = disabled;
+  };
+
+  const process = () => {
+    setControlsDisabled(true);
+    resultElement.style.display = "none";
+
+    const file = fileInput.files[0];
+    const reader = file.stream().getReader();
+    const sendToWorker = ({ done, value }) => {
+      if (done) {
+        pyWorker.postMessage({ eventType: "runPy" });
+        return;
+      }
+      pyWorker.postMessage({ eventType: "data", chunk: value });
+      reader.read().then(sendToWorker);
+    };
+    pyWorker.postMessage({ eventType: "initData", size: file.size });
+    reader.read().then(sendToWorker);
+  };
+</script>
