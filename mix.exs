@@ -74,7 +74,6 @@ defmodule Link.MixProject do
       {:progress_bar, "~> 2.0.1", only: :dev},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
-      {:sobelow, "~> 0.8", only: [:dev, :test]},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:table_rex, "~> 3.0.0"}
     ]
@@ -92,7 +91,7 @@ defmodule Link.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      ci: ["setup", "sobelow -i Config.CSRF,Config.Headers", "test", "credo"],
+      ci: ["setup", "test", "credo"],
       i18n: [
         "gettext.extract --merge priv/gettext"
       ],
