@@ -96,7 +96,7 @@ msgstr "Log hier in"
 #: lib/link_web/templates/pow/registration/new.html.eex:15
 #: lib/link_web/templates/pow/registration/new.html.eex:18
 msgid "signup.button"
-msgstr "Registreren"
+msgstr "Registreer"
 
 #, elixir-format
 #: lib/link_web/templates/pow/session/new.html.eex:32
@@ -111,7 +111,7 @@ msgstr "Maak hier een aan"
 #, elixir-format
 #: lib/link_web/templates/pow/registration/new.html.eex:6
 msgid "signup.title"
-msgstr "Registreer"
+msgstr "Nieuw account"
 
 #, elixir-format
 #: lib/link_web/live/survey_tool/edit.ex:25

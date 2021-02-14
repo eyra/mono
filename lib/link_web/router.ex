@@ -25,10 +25,13 @@ defmodule LinkWeb.Router do
     # https://hexdocs.pm/phoenix/Phoenix.Controller.html#put_secure_browser_headers/2
     # Information about the content-security-policy can be found at:
     # https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
-    plug :put_secure_browser_headers, %{
-      "content-security-policy" =>
-        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:; font-src 'self' data:"
-    }
+    plug :put_secure_browser_headers
+
+    # Disabled CSP for now, Safari has issues with web-sockets and "self" (https://bugs.webkit.org/show_bug.cgi?id=201591)
+    # , %{
+    #   "content-security-policy" =>
+    #     "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:; font-src 'self' data:"
+    # }
   end
 
   pipeline :browser do
@@ -54,6 +57,10 @@ defmodule LinkWeb.Router do
   scope "/", LinkWeb do
     pipe_through :browser
     live "/", Index
+
+    live "/user/signin", User.Signin
+    live "/user/signup", User.Signup
+
     get "/switch-language/:locale", LanguageSwitchController, :index
     get "/fake_survey", FakeSurveyController, :index
   end
@@ -65,7 +72,14 @@ defmodule LinkWeb.Router do
 
   scope "/" do
     pipe_through [:browser]
-    pow_routes()
+
+    scope "/", Pow.Phoenix, as: "pow" do
+      post "/session", SessionController, :create
+      delete "/session", SessionController, :delete
+
+      post "/registration", RegistrationController, :create
+    end
+
     pow_assent_routes()
   end
 
@@ -74,7 +88,8 @@ defmodule LinkWeb.Router do
 
     live "/dashboard", Dashboard
 
-    live "/user-profile", UserProfile.Index
+    live "/user/profile", User.Profile
+
     live "/survey-tools", SurveyTool.Index
     live "/survey-tools/new", SurveyTool.New
     live "/survey-tools/:id", SurveyTool.Edit

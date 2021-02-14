@@ -8,7 +8,7 @@ defmodule LinkWeb.Study.Edit do
   alias EyraUI.Form.{TextInput, UrlInput, NumberInput, TextArea, Checkbox}
   alias EyraUI.Hero.HeroSmall
   alias EyraUI.Container.ContentArea
-  alias EyraUI.Text.{Title1, Title3, SubHead}
+  alias EyraUI.Text.{Title1, SubHead, Section}
   alias EyraUI.Button.{PrimaryLiveViewButton, SecondaryLiveViewButton}
   alias EyraUI.Status.{Info, Warning}
 
@@ -121,16 +121,19 @@ defmodule LinkWeb.Study.Edit do
         <Title1>{{ @study_edit.title }}</Title1>
         <Form for={{ @changeset }} change="save">
           <TextInput field={{:title}} label_text={{dgettext("eyra-study", "title.label")}} />
-          <Title3>{{dgettext("eyra-survey", "config.title")}}</Title3>
-          <UrlInput field={{:survey_url}} label_text={{dgettext("eyra-survey", "config.url.label")}} />
-          <NumberInput field={{:subject_count}} label_text={{dgettext("eyra-survey", "config.nrofsubjects.label")}} />
-          <Title3>{{dgettext("eyra-survey", "config.devices.title")}}</Title3>
-          <Checkbox field={{:phone_enabled}} label_text={{dgettext("eyra-survey", "mobile.enabled.label")}}/>
-          <Checkbox field={{:tablet_enabled}} label_text={{dgettext("eyra-survey", "tablet.enabled.label")}}/>
-          <Checkbox field={{:desktop_enabled}} label_text={{dgettext("eyra-survey", "desktop.enabled.label")}}/>
-          <Title3>{{dgettext("eyra-survey", "info.title")}}</Title3>
-          <TextInput field={{:duration}} label_text={{dgettext("eyra-survey", "duration.label")}}/>
-          <TextArea field={{:description}} label_text={{dgettext("eyra-survey", "info.label")}}/>
+          <Section title={{dgettext("eyra-survey", "config.title")}}>
+            <UrlInput field={{:survey_url}} label_text={{dgettext("eyra-survey", "config.url.label")}} />
+            <NumberInput field={{:subject_count}} label_text={{dgettext("eyra-survey", "config.nrofsubjects.label")}} />
+          </Section>
+          <Section title={{dgettext("eyra-survey", "config.devices.title")}}>
+            <Checkbox field={{:phone_enabled}} label_text={{dgettext("eyra-survey", "mobile.enabled.label")}}/>
+            <Checkbox field={{:tablet_enabled}} label_text={{dgettext("eyra-survey", "tablet.enabled.label")}}/>
+            <Checkbox field={{:desktop_enabled}} label_text={{dgettext("eyra-survey", "desktop.enabled.label")}}/>
+          </Section>
+          <Section title={{dgettext("eyra-survey", "info.title")}}>
+            <TextInput field={{:duration}} label_text={{dgettext("eyra-survey", "duration.label")}}/>
+            <TextArea field={{:description}} label_text={{dgettext("eyra-survey", "info.label")}}/>
+          </Section>
         </Form>
         <PrimaryLiveViewButton :if={{ !@study_edit.is_published }} label={{ dgettext("eyra-survey", "publish.button") }} event="publish" />
         <SecondaryLiveViewButton :if={{ @study_edit.is_published }} label={{ dgettext("eyra-survey", "unpublish.button") }} event="unpublish" />

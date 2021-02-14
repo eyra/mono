@@ -1,3 +1,0 @@
-<button class="h-48px leading-none font-button text-button text-white focus:outline-none hover:bg-opacity-80 rounded <%= @color %> <%= @width %>" type="submit">
-    <%= @label %>
-</button>

@@ -6,7 +6,7 @@ defmodule LinkWeb.Dashboard do
   import Link.Authorization
   import Link.Users
   alias Link.Studies
-  alias EyraUI.Card.{PrimaryStudy, SecondaryStudy}
+  alias EyraUI.Card.{PrimaryStudy, SecondaryStudy, ButtonCard}
   alias EyraUI.Hero.HeroLarge
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{BodyLarge, Title2}
@@ -56,6 +56,7 @@ defmodule LinkWeb.Dashboard do
         <BodyLarge>
           {{dgettext("eyra-study", "dashboard.page.description")}}
         </BodyLarge>
+        <div class="mt-12 lg:mt-16"/>
         <Title2>
           {{ dgettext("eyra-study", "study.highlighted.title") }}
           <span class="text-primary"> {{ @highlighted_count }}</span>
@@ -68,9 +69,13 @@ defmodule LinkWeb.Dashboard do
               to={{Routes.live_path(@socket, LinkWeb.Study.Edit, study.id)}} />
           </div>
           <div :if={{ can_access?(@current_user, LinkWeb.Study.New) }} >
-            {{ button_card(@socket, dgettext("eyra-study", "add.card.title"), Routes.live_path(@socket, LinkWeb.Study.New)) }}
+            <ButtonCard
+              socket={{@socket}}
+              title={{dgettext("eyra-study", "add.card.title")}}
+              path={{Routes.live_path(@socket, LinkWeb.Study.New)}}/>
           </div>
         </DynamicGrid>
+        <div class="mt-12 lg:mt-16"/>
         <Title2>
           {{ dgettext("eyra-study", "study.all.title") }}
           <span class="text-primary"> {{ @available_count }}</span>

@@ -1,5 +1,0 @@
-<div class="flex mb-8">
-    <%= checkbox @form, @field, class: "flex-wrap border-2 h-6 w-6 border-solid focus:outline-none focus:border-primary rounded-lg" %>
-    <%= label @form, @field, @text, class: "flex-wrap ml-3 mt-1 font-label text-label" %>
-    <span class="text-warning font-caption mt-1"><%= error_tag @form, @field %></span>
-</div>

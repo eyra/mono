@@ -1,6 +1,0 @@
-<a href= <%= @path %>>
-    <div class="flex items-center justify-center leading-none pl-4 pr-4 h-48px focus:outline-none hover:bg-opacity-80 rounded <%= @color %>">
-        <img class="mr-3 -mt-1" src="<%= @icon %>"/>
-        <div class="font-button text-white text-button"><%= @label %></div>
-    </div>
-</a>

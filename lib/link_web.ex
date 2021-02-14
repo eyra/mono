@@ -97,7 +97,7 @@ defmodule LinkWeb do
 
       import LinkWeb.ErrorHelpers
       import LinkWeb.Gettext
-      import LinkWeb.Components.ComponentHelpers
+      import LinkWeb.Components.OldSkool
       alias LinkWeb.Router.Helpers, as: Routes
       import Link.Authorization, only: [can?: 4]
       use LinkWeb.LiveViewPowHelper

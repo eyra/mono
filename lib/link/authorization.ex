@@ -18,7 +18,9 @@ defmodule Link.Authorization do
 
   grant_access(LinkWeb.Index, [:visitor, :member])
   grant_access(LinkWeb.Dashboard, [:member])
-  grant_access(LinkWeb.UserProfile.Index, [:member])
+  grant_access(LinkWeb.User.Signin, [:visitor])
+  grant_access(LinkWeb.User.Signup, [:visitor])
+  grant_access(LinkWeb.User.Profile, [:member])
   grant_access(LinkWeb.Study.New, [:researcher])
   grant_access(LinkWeb.Study.Edit, [:owner])
   grant_access(LinkWeb.Study.Public, [:visitor, :member])
@@ -46,11 +48,6 @@ defmodule Link.Authorization do
 
   grant_actions(LinkWeb.LanguageSwitchController, %{
     index: [:visitor, :member]
-  })
-
-  grant_actions(LinkWeb.UserProfileController, %{
-    edit: [:member],
-    update: [:member]
   })
 
   grant_actions(LinkWeb.StudyController, %{
