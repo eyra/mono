@@ -26,12 +26,12 @@ msgid "dashboard.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:77
+#: lib/link_web/live/dashboard.ex:90
 msgid "study.all.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:62
+#: lib/link_web/live/dashboard.ex:63
 msgid "study.highlighted.title"
 msgstr ""
 
@@ -46,31 +46,37 @@ msgid "dashboard.page.description"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:117
+#: lib/link_web/live/study/edit.ex:130
 msgid "study.edit.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/new.ex:47
+#: lib/link_web/live/study/new.ex:46
 msgid "save.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:124 lib/link_web/live/study/new.ex:46
+#: lib/link_web/live/study/edit.ex:145 lib/link_web/live/study/new.ex:45
 msgid "title.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/new.ex:43
+#: lib/link_web/live/study/new.ex:42
 msgid "study.new.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:73
+#: lib/link_web/live/dashboard.ex:84
 msgid "add.card.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/public.ex:47
+#: lib/link_web/live/study/complete.ex:52 lib/link_web/live/study/public.ex:77
 msgid "study.public.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:70 lib/link_web/live/dashboard.ex:76
+#: lib/link_web/live/dashboard.ex:97
+msgid "open.button"
 msgstr ""

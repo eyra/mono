@@ -10,7 +10,7 @@ defmodule Link.Studies do
 
   alias Link.Studies.{Study, Author}
   alias Link.Users.User
-  alias Link.SurveyTools.SurveyTool
+  alias Link.SurveyTools.{SurveyTool, SurveyToolTask}
 
   # read list_studies(current_user, ...) do
   # end
@@ -59,6 +59,19 @@ defmodule Link.Studies do
 
     from(s in Study, where: s.auth_node_id in subquery(node_ids)) |> Repo.all()
     # AUTH: Can be piped through auth filter (current code does the same thing).
+  end
+
+  @doc """
+  Returns the list of studies where the user is a subject.
+  """
+  def list_subject_studies(user) do
+    survey_tool_ids =
+      from(stt in SurveyToolTask, where: stt.user_id == ^user.id, select: stt.survey_tool_id)
+
+    study_ids =
+      from(st in SurveyTool, where: st.id in subquery(survey_tool_ids), select: st.study_id)
+
+    from(s in Study, where: s.id in subquery(study_ids)) |> Repo.all()
   end
 
   def list_owners(%Study{} = study) do

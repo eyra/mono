@@ -12,8 +12,9 @@ defmodule LinkWeb.Dashboard do
   alias EyraUI.Text.{BodyLarge, Title2}
   alias EyraUI.Grid.{DynamicGrid}
 
-  data highlighted_studies, :any
   data highlighted_count, :any
+  data owned_studies, :any
+  data subject_studies, :any
   data available_studies, :any
   data available_count, :any
   data current_user, :any
@@ -24,23 +25,24 @@ defmodule LinkWeb.Dashboard do
     socket = assign_current_user(socket, session, user, profile)
 
     owned_studies = user |> Studies.list_owned_studies()
+    subject_studies = user |> Studies.list_subject_studies()
+
+    highlighted_studies = owned_studies ++ subject_studies
+    highlighted_count = Enum.count(highlighted_studies)
 
     exclusion_list =
-      owned_studies
+      highlighted_studies
       |> Stream.map(fn study -> study.id end)
       |> Enum.into(MapSet.new())
 
     available_studies = Studies.list_studies_with_published_survey(exclude: exclusion_list)
-
     available_count = Enum.count(available_studies)
-
-    highlighted_studies = owned_studies
-    highlighted_count = Enum.count(exclusion_list)
 
     socket =
       socket
-      |> assign(highlighted_studies: highlighted_studies)
       |> assign(highlighted_count: highlighted_count)
+      |> assign(owned_studies: owned_studies)
+      |> assign(subject_studies: subject_studies)
       |> assign(available_studies: available_studies)
       |> assign(available_count: available_count)
 
@@ -62,11 +64,19 @@ defmodule LinkWeb.Dashboard do
           <span class="text-primary"> {{ @highlighted_count }}</span>
         </Title2>
         <DynamicGrid>
-          <div :for={{ study <- @highlighted_studies  }} >
+          <div :for={{ study <- @owned_studies  }} >
             <PrimaryStudy
               title={{study.title}}
-              button_label="Bekijken"
+              button_label={{ dgettext("eyra-study", "open.button") }}
               to={{Routes.live_path(@socket, LinkWeb.Study.Edit, study.id)}} />
+          </div>
+          <div :for={{ study <- @subject_studies  }} >
+            <PrimaryStudy
+              title={{study.title}}
+              button_label={{ dgettext("eyra-study", "open.button") }}
+              to={{Routes.live_path(@socket, LinkWeb.Study.Public, study.id)}}
+              bg_color="bg-secondary"
+              button_text_color="text-grey1" />
           </div>
           <div :if={{ can_access?(@current_user, LinkWeb.Study.New) }} >
             <ButtonCard
@@ -84,7 +94,7 @@ defmodule LinkWeb.Dashboard do
           <div :for={{ study <- @available_studies  }} class="mb-1" >
             <SecondaryStudy
               title={{study.title}}
-              button_label="Bekijken"
+              button_label={{ dgettext("eyra-study", "open.button") }}
               to={{Routes.live_path(@socket, LinkWeb.Study.Public, study.id)}} />
           </div>
         </DynamicGrid>

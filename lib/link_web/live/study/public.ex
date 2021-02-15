@@ -4,10 +4,12 @@ defmodule LinkWeb.Study.Public do
   """
   use LinkWeb, :live_view
 
+  alias EyraUI.Spacing
   alias EyraUI.Hero.HeroSmall
   alias EyraUI.Container.ContentArea
-  alias EyraUI.Text.{Title1, Title6, SubHead, BodyMedium}
+  alias EyraUI.Text.{Title1, Title6, SubHead, BodyLarge, BodyMedium, Bullet}
   alias EyraUI.Button.{PrimaryLiveViewButton, PrimaryButton}
+  alias EyraUI.Case.{Case, True, False}
 
   alias Link.Studies
   alias Link.Studies.{Study, StudyPublic}
@@ -76,17 +78,33 @@ defmodule LinkWeb.Study.Public do
       <ContentArea>
         <SubHead>{{ @study_public.byline }}</SubHead>
         <Title1>{{ @study_public.title }}</Title1>
-        <Title6>{{dgettext("eyra-survey", "duration.public.label")}}</Title6>
-        <BodyMedium>{{ @study_public.duration }}</BodyMedium>
-        <div class="mb-6"/>
-        <Title6>{{dgettext("eyra-survey", "info.public.label")}}</Title6>
-        <BodyMedium>{{ @study_public.description }}</BodyMedium>
-        <div class="mb-8"/>
-        <PrimaryButton :if={{@task_available?}} label={{ dgettext("eyra-survey", "goto.survey") }} path={{@survey_tool.survey_url}} />
-        <PrimaryLiveViewButton :if={{not @participant?}} label={{ dgettext("eyra-survey", "apply.button") }} event="signup" />
-        <div :if={{@task_completed?}}>
-          Je werk zit erop
-        </div>
+        <Case value={{@task_completed?}}>
+          <True> <!-- Task completed -->
+            <BodyLarge>{{dgettext("eyra-survey", "completed.message")}}</BodyLarge>
+          </True>
+          <False> <!-- Task not completed -->
+            <BodyLarge>{{ @study_public.description }}</BodyLarge>
+            <Spacing value="L" />
+            <Title6>{{dgettext("eyra-survey", "duration.public.label")}}</Title6>
+            <BodyMedium>{{ @study_public.duration }}</BodyMedium>
+
+            <Spacing value="L" />
+            <Title6>{{dgettext("eyra-survey", "config.devices.title")}}</Title6>
+            <Bullet :if={{@study_public.phone_enabled}} socket={{@socket}}>
+              <BodyMedium>{{dgettext("eyra-survey", "phone.enabled.label")}}</BodyMedium>
+            </Bullet>
+            <Bullet :if={{@study_public.tablet_enabled}} socket={{@socket}}>
+              <BodyMedium>{{dgettext("eyra-survey", "tablet.enabled.label")}}</BodyMedium>
+            </Bullet>
+            <Bullet :if={{@study_public.desktop_enabled}} socket={{@socket}}>
+              <BodyMedium>{{dgettext("eyra-survey", "desktop.enabled.label")}}</BodyMedium>
+            </Bullet>
+
+            <Spacing value="L" />
+            <PrimaryLiveViewButton :if={{not @participant?}} label={{ dgettext("eyra-survey", "apply.button") }} event="signup" />
+            <PrimaryButton :if={{@task_available?}} label={{ dgettext("eyra-survey", "goto.survey") }} path={{@survey_tool.survey_url}} bg_color="bg-secondary" />
+          </False>
+        </Case>
       </ContentArea>
     """
   end

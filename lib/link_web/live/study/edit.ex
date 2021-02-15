@@ -8,13 +8,17 @@ defmodule LinkWeb.Study.Edit do
   alias EyraUI.Form.{TextInput, UrlInput, NumberInput, TextArea, Checkbox}
   alias EyraUI.Hero.HeroSmall
   alias EyraUI.Container.ContentArea
-  alias EyraUI.Text.{Title1, SubHead, Section}
+  alias EyraUI.Text.{Title1, Title3, Title6, SubHead, BodyMedium, Bullet}
   alias EyraUI.Button.{PrimaryLiveViewButton, SecondaryLiveViewButton}
   alias EyraUI.Status.{Info, Warning}
+  alias EyraUI.Spacing
+  alias EyraUI.Case.{Case, True, False}
 
   alias Link.Studies
   alias Link.Studies.{Study, StudyEdit}
   alias Link.SurveyTools
+
+  data uri_origin, :string
 
   @impl true
   def load(%{"id" => id}, _session, _socket) do
@@ -51,6 +55,13 @@ defmodule LinkWeb.Study.Edit do
     Studies.get_study!(id)
   end
 
+  @impl true
+  def handle_params(_unsigned_params, uri, socket) do
+    parsed_uri = URI.parse(uri)
+    uri_origin = "#{parsed_uri.scheme}://#{parsed_uri.authority}"
+    {:noreply, assign(socket, uri_origin: uri_origin)}
+  end
+
   def save_valid(changeset) do
     study_edit = Ecto.Changeset.apply_changes(changeset)
     study_attrs = StudyEdit.to_study(study_edit)
@@ -74,20 +85,25 @@ defmodule LinkWeb.Study.Edit do
   def handle_event("delete", _params, socket) do
     study_edit = socket.assigns[:study_edit]
 
-    SurveyTools.get_survey_tool!(study_edit.survey_tool_id)
-    |> SurveyTools.delete_survey_tool()
-
     Studies.get_study!(study_edit.study_id)
     |> Studies.delete_study()
-
-    Users
 
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, LinkWeb.Dashboard))}
   end
 
   def handle_event("publish", _params, socket) do
     params = %{published_at: NaiveDateTime.utc_now()}
-    save(params, socket)
+    study_edit = socket.assigns[:study_edit]
+
+    changeset = StudyEdit.validate_for_publish(study_edit, params)
+
+    if changeset.valid? do
+      save(params, socket)
+    else
+      {:noreply,
+       socket
+       |> put_flash(:error, "Please correct the indicated errors.")}
+    end
   end
 
   def handle_event("unpublish", _params, socket) do
@@ -120,24 +136,62 @@ defmodule LinkWeb.Study.Edit do
         <SubHead>{{ @study_edit.byline }}</SubHead>
         <Title1>{{ @study_edit.title }}</Title1>
         <Form for={{ @changeset }} change="save">
-          <TextInput field={{:title}} label_text={{dgettext("eyra-study", "title.label")}} />
-          <Section title={{dgettext("eyra-survey", "config.title")}}>
-            <UrlInput field={{:survey_url}} label_text={{dgettext("eyra-survey", "config.url.label")}} />
-            <NumberInput field={{:subject_count}} label_text={{dgettext("eyra-survey", "config.nrofsubjects.label")}} />
-          </Section>
-          <Section title={{dgettext("eyra-survey", "config.devices.title")}}>
-            <Checkbox field={{:phone_enabled}} label_text={{dgettext("eyra-survey", "mobile.enabled.label")}}/>
-            <Checkbox field={{:tablet_enabled}} label_text={{dgettext("eyra-survey", "tablet.enabled.label")}}/>
-            <Checkbox field={{:desktop_enabled}} label_text={{dgettext("eyra-survey", "desktop.enabled.label")}}/>
-          </Section>
-          <Section title={{dgettext("eyra-survey", "info.title")}}>
-            <TextInput field={{:duration}} label_text={{dgettext("eyra-survey", "duration.label")}}/>
-            <TextArea field={{:description}} label_text={{dgettext("eyra-survey", "info.label")}}/>
-          </Section>
+          <Case value={{ @study_edit.is_published }} >
+            <True> <!-- Published -->
+              <Title3>{{dgettext("eyra-survey", "status.title")}}</Title3>
+              <Title6>{{dgettext("eyra-survey", "completed.label")}}: <span class="text-success"> {{@study_edit.subject_completed_count}}</span></Title6>
+              <Title6>{{dgettext("eyra-survey", "pending.label")}}: <span class="text-warning"> {{@study_edit.subject_pending_count}}</span></Title6>
+              <Title6>{{dgettext("eyra-survey", "vacant.label")}}: <span class="text-delete"> {{@study_edit.subject_vacant_count}}</span></Title6>
+            </True>
+            <False> <!-- Not published -->
+              <TextInput field={{:title}} label_text={{dgettext("eyra-study", "title.label")}} />
+            </False>
+          </Case>
+
+          <Spacing value="XL" />
+          <Title3>{{dgettext("eyra-survey", "config.title")}}</Title3>
+
+          <Title6>Redirect url</Title6>
+          <BodyMedium>{{ @uri_origin <> Routes.live_path(@socket, LinkWeb.Study.Complete, @study_edit.study_id)}}</BodyMedium>
+
+          <Spacing value="S" />
+          <UrlInput field={{:survey_url}} label_text={{dgettext("eyra-survey", "config.url.label")}} read_only={{@study_edit.is_published}}/>
+          <NumberInput field={{:subject_count}} label_text={{dgettext("eyra-survey", "config.nrofsubjects.label")}} read_only={{@study_edit.is_published}}/>
+          <TextInput field={{:duration}} label_text={{dgettext("eyra-survey", "duration.label")}} read_only={{@study_edit.is_published}}/>
+          <TextArea field={{:description}} label_text={{dgettext("eyra-survey", "info.label")}} read_only={{@study_edit.is_published}}/>
+
+          <Spacing value="L" />
+          <Title3>{{dgettext("eyra-survey", "config.devices.title")}}</Title3>
+          <Case value={{ @study_edit.is_published }} >
+            <True> <!-- Published -->
+              <Bullet :if={{@study_edit.phone_enabled}} socket={{@socket}}>
+                <BodyMedium>{{dgettext("eyra-survey", "phone.enabled.label")}}</BodyMedium>
+              </Bullet>
+              <Bullet :if={{@study_edit.tablet_enabled}} socket={{@socket}}>
+                <BodyMedium>{{dgettext("eyra-survey", "tablet.enabled.label")}}</BodyMedium>
+              </Bullet>
+              <Bullet :if={{@study_edit.desktop_enabled}} socket={{@socket}}>
+                <BodyMedium>{{dgettext("eyra-survey", "desktop.enabled.label")}}</BodyMedium>
+              </Bullet>
+            </True>
+            <False> <!-- Not published -->
+              <Checkbox field={{:phone_enabled}} label_text={{dgettext("eyra-survey", "phone.enabled.label")}}/>
+              <Checkbox field={{:tablet_enabled}} label_text={{dgettext("eyra-survey", "tablet.enabled.label")}}/>
+              <Checkbox field={{:desktop_enabled}} label_text={{dgettext("eyra-survey", "desktop.enabled.label")}}/>
+            </False>
+          </Case>
+          <Spacing value="XL" />
         </Form>
-        <PrimaryLiveViewButton :if={{ !@study_edit.is_published }} label={{ dgettext("eyra-survey", "publish.button") }} event="publish" />
-        <SecondaryLiveViewButton :if={{ @study_edit.is_published }} label={{ dgettext("eyra-survey", "unpublish.button") }} event="unpublish" />
-        <SecondaryLiveViewButton :if={{ !@study_edit.is_published }} label={{ dgettext("eyra-survey", "delete.button") }} event="delete" />
+
+        <Case value={{ @study_edit.is_published }} >
+          <True> <!-- Published -->
+            <SecondaryLiveViewButton label={{ dgettext("eyra-survey", "unpublish.button") }} event="unpublish" />
+          </True>
+          <False> <!-- Not published -->
+            <PrimaryLiveViewButton label={{ dgettext("eyra-survey", "publish.button") }} event="publish" />
+            <SecondaryLiveViewButton label={{ dgettext("eyra-survey", "delete.button") }} event="delete" />
+          </False>
+        </Case>
       </ContentArea>
     """
   end

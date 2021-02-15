@@ -24,6 +24,8 @@ defmodule Link.Authorization do
   grant_access(LinkWeb.Study.New, [:researcher])
   grant_access(LinkWeb.Study.Edit, [:owner])
   grant_access(LinkWeb.Study.Public, [:visitor, :member])
+  grant_access(LinkWeb.Study.Complete, [:member])
+  grant_access(LinkWeb.FakeSurvey, [:member])
 
   grant_access(Link.Studies.Study, [:visitor, :member])
   grant_access(Link.SurveyTools.SurveyTool, [:owner, :participant])

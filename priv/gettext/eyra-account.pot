@@ -11,52 +11,47 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/pow/session/new.html.eex:11
+#: lib/link_web/live/user/signin.ex:36
 msgid "apple.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/user_profile.ex:39
+#: lib/link_web/live/user/profile.ex:30
 msgid "displayname.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:51
+#: lib/link_web/live/user/signin.ex:41 lib/link_web/live/user/signup.ex:33
 msgid "email.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/pow/session/new.html.eex:14
+#: lib/link_web/live/user/signin.ex:38
 msgid "eyra.signin.message.external"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/pow/session/new.html.eex:6
+#: lib/link_web/live/user/signin.ex:32
 msgid "eyra.signin.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/user_profile.ex:38
+#: lib/link_web/live/user/profile.ex:29
 msgid "fullname.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/pow/session/new.html.eex:8
+#: lib/link_web/live/user/signin.ex:34
 msgid "google.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:67
+#: lib/link_web/live/user/signup.ex:35
 msgid "password.confirmation.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/components/component_helpers.ex:70
-msgid "password.current.label"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/components/component_helpers.ex:73
+#: lib/link_web/live/user/signin.ex:42 lib/link_web/live/user/signup.ex:34
 msgid "password.label"
 msgstr ""
 
@@ -66,76 +61,64 @@ msgid "profile.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/user_profile.ex:35
+#: lib/link_web/live/user/profile.ex:26
 msgid "profile.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/user_profile.ex:37
+#: lib/link_web/live/user/profile.ex:28
 msgid "researcher.label"
 msgstr ""
 
 #, elixir-format
+#: lib/link_web/live/user/signin.ex:43
 #: lib/link_web/templates/layout/root.html.leex:46
-#: lib/link_web/templates/pow/session/new.html.eex:24 lib/link_web/templates/pow/session/new.html.eex:28
 msgid "signin.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/pow/registration/new.html.eex:22
+#: lib/link_web/live/user/signup.ex:39
 msgid "signin.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/pow/registration/new.html.eex:22
+#: lib/link_web/live/user/signup.ex:40
 msgid "signin.link"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/pow/registration/new.html.eex:15
-#: lib/link_web/templates/pow/registration/new.html.eex:18
+#: lib/link_web/live/user/signup.ex:36
 msgid "signup.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/pow/session/new.html.eex:32
+#: lib/link_web/live/user/signin.ex:46
 msgid "signup.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/pow/session/new.html.eex:32
+#: lib/link_web/live/user/signin.ex:47
 msgid "signup.link"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/pow/registration/new.html.eex:6
+#: lib/link_web/live/user/signup.ex:31
 msgid "signup.title"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/live/survey_tool/edit.ex:25
-#: lib/link_web/live/survey_tool/new.ex:42
-msgid "survey_url.label"
 msgstr ""
 
 #, elixir-format
 #: lib/link_web/live/survey_tool/edit.ex:24
 #: lib/link_web/live/survey_tool/new.ex:41
+msgid "survey_url.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/survey_tool/edit.ex:23
+#: lib/link_web/live/survey_tool/new.ex:40
 msgid "title.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/pow/registration/edit.html.eex:16
-#: lib/link_web/templates/pow/registration/edit.html.eex:20
-msgid "update.button"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/templates/pow/registration/edit.html.eex:6
-msgid "update.title"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/live/user_profile.ex:41
+#: lib/link_web/live/user/profile.ex:32
 msgid "signout.button"
 msgstr ""

@@ -11,96 +11,130 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:127
+#: lib/link_web/live/study/edit.ex:157
 msgid "config.nrofsubjects.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:126
+#: lib/link_web/live/study/edit.ex:156
 msgid "config.url.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:125
+#: lib/link_web/live/study/edit.ex:150
 msgid "config.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:128
+#: lib/link_web/live/study/edit.ex:162 lib/link_web/live/study/public.ex:92
 msgid "config.devices.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:131
+#: lib/link_web/live/study/edit.ex:172 lib/link_web/live/study/edit.ex:178
+#: lib/link_web/live/study/public.ex:100
 msgid "desktop.enabled.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:129
-msgid "mobile.enabled.label"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/live/study/edit.ex:130
+#: lib/link_web/live/study/edit.ex:169 lib/link_web/live/study/edit.ex:177
+#: lib/link_web/live/study/public.ex:97
 msgid "tablet.enabled.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:134
+#: lib/link_web/live/study/edit.ex:159
 msgid "info.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:132
-msgid "info.title"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/live/study/edit.ex:136
+#: lib/link_web/live/study/edit.ex:189
 msgid "publish.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:137
+#: lib/link_web/live/study/edit.ex:186
 msgid "unpublish.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:138
+#: lib/link_web/live/study/edit.ex:190
 msgid "delete.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/public.ex:57
+#: lib/link_web/live/study/public.ex:104
 msgid "apply.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/public.ex:54
-msgid "info.public.label"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/live/study/public.ex:51
+#: lib/link_web/live/study/public.ex:88
 msgid "duration.public.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:133
+#: lib/link_web/live/study/edit.ex:158
 msgid "duration.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:120
+#: lib/link_web/live/study/edit.ex:133
 msgid "published.false.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link/studies/study_edit.ex:81 lib/link_web/live/study/edit.ex:119
+#: lib/link/studies/study_edit.ex:133 lib/link/studies/study_public.ex:59
+#: lib/link_web/live/study/edit.ex:132
 msgid "published.true.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link/studies/study_edit.ex:85
+#: lib/link/studies/study_edit.ex:137 lib/link/studies/study_public.ex:62
 msgid "created.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link/studies/study_public.ex:71
+msgid "by.author.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/public.ex:105
+msgid "goto.survey"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/complete.ex:57
+msgid "thank.you.message"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/public.ex:83
+msgid "completed.message"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:140
+msgid "completed.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:139
+msgid "status.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:142
+msgid "vacant.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:141
+msgid "pending.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:166 lib/link_web/live/study/edit.ex:176
+#: lib/link_web/live/study/public.ex:94
+msgid "phone.enabled.label"
 msgstr ""

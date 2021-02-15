@@ -11,13 +11,7 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/templates/pow/registration/edit.html.eex:16
-#: lib/link_web/templates/pow/registration/new.html.eex:15 lib/link_web/templates/pow/session/new.html.eex:24
-msgid "%{action}.failed"
-msgstr ""
-
-#, elixir-format
-#: lib/link_web/live/study/new.ex:48
+#: lib/link_web/live/study/new.ex:47
 msgid "cancel.button"
 msgstr ""
 

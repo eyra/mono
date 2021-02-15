@@ -62,7 +62,7 @@ defmodule LinkWeb.Router do
     live "/user/signup", User.Signup
 
     get "/switch-language/:locale", LanguageSwitchController, :index
-    get "/fake_survey", FakeSurveyController, :index
+    live "/fake_survey", FakeSurvey
   end
 
   scope "/" do
@@ -97,6 +97,7 @@ defmodule LinkWeb.Router do
     live "/studies/new", Study.New
     live "/studies/:id", Study.Public
     live "/studies/:id/edit", Study.Edit
+    live "/studies/:id/complete", Study.Complete
   end
 
   # Other scopes may use custom stacks.

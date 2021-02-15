@@ -9,6 +9,7 @@ defmodule Link.Studies.StudyPublic do
   alias Link.Studies
   alias Link.Studies.Study
   alias Link.SurveyTools.SurveyTool
+  import LinkWeb.Gettext
 
   embedded_schema do
     field :study_id, :integer
@@ -55,10 +56,10 @@ defmodule Link.Studies.StudyPublic do
     date =
       if SurveyTool.published?(survey_tool) do
         timestamp = Timestamp.humanize(survey_tool.published_at)
-        "Gepubliseerd: #{timestamp}"
+        "#{dgettext("eyra-survey", "published.true.label")}: #{timestamp}"
       else
         timestamp = Timestamp.humanize(survey_tool.inserted_at)
-        "Aangemaakt: #{timestamp}"
+        "#{dgettext("eyra-survey", "created.label")}: #{timestamp}"
       end
 
     authors =
@@ -67,6 +68,6 @@ defmodule Link.Studies.StudyPublic do
       |> Enum.map(& &1.fullname)
       |> Enum.join(", ")
 
-    date <> " - Door " <> authors
+    date <> " - #{dgettext("eyra-survey", "by.author.label")} " <> authors
   end
 end

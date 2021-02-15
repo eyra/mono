@@ -13,4 +13,7 @@ defmodule LinkWeb.Pow.Routes do
 
   @impl true
   def user_not_authenticated_path(conn), do: Routes.live_path(conn, LinkWeb.User.Signin)
+
+  @impl true
+  def after_registration_path(conn), do: Routes.live_path(conn, LinkWeb.Dashboard)
 end

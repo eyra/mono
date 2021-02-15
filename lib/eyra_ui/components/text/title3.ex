@@ -8,7 +8,7 @@ defmodule EyraUI.Text.Title3 do
 
   def render(assigns) do
     ~H"""
-    <div class="text-title5 font-title5 sm:text-title4 sm:font-title4 lg:text-title3 lg:font-title3 mb-7 lg:mb-9">
+    <div class="text-title5 font-title5 sm:text-title4 sm:font-title4 lg:text-title3 lg:font-title3 mb-5">
       <slot />
     </div>
     """

@@ -160,11 +160,50 @@ defmodule Link.SurveyTools do
     end
   end
 
+  def get_or_create_task!(survey_tool, user) do
+    case get_or_create_task(survey_tool, user) do
+      {:ok, task} -> task
+      _ -> nil
+    end
+  end
+
   def list_tasks(survey_tool) do
     from(t in SurveyToolTask, where: t.survey_tool_id == ^survey_tool.id)
     |> Repo.all()
   end
 
+  def count_pending_tasks(survey_tool) do
+    case survey_tool.id do
+      nil ->
+        0
+
+      _ ->
+        from(t in SurveyToolTask,
+          where: t.survey_tool_id == ^survey_tool.id and t.status == :pending,
+          select: count(t.id)
+        )
+        |> Repo.one()
+    end
+  end
+
+  def count_completed_tasks(survey_tool) do
+    case survey_tool.id do
+      nil ->
+        0
+
+      _ ->
+        from(t in SurveyToolTask,
+          where: t.survey_tool_id == ^survey_tool.id and t.status == :completed,
+          select: count(t.id)
+        )
+        |> Repo.one()
+    end
+  end
+
+  @spec participant?(
+          atom | %{:id => any, optional(any) => any},
+          atom | %{:id => any, optional(any) => any}
+        ) :: boolean
   def participant?(survey_tool, user) do
     from(p in Link.SurveyTools.Participant,
       where: p.survey_tool_id == ^survey_tool.id and p.user_id == ^user.id
