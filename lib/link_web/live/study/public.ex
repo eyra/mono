@@ -102,7 +102,7 @@ defmodule LinkWeb.Study.Public do
 
             <Spacing value="L" />
             <PrimaryLiveViewButton :if={{not @participant?}} label={{ dgettext("eyra-survey", "apply.button") }} event="signup" />
-            <PrimaryButton :if={{@task_available?}} label={{ dgettext("eyra-survey", "goto.survey") }} path={{@survey_tool.survey_url}} bg_color="bg-grey2" />
+            <PrimaryButton :if={{@task_available?}} label={{ dgettext("eyra-survey", "goto.survey") }} path={{@survey_tool.survey_url}} bg_color="bg-grey1" />
           </False>
         </Case>
       </ContentArea>

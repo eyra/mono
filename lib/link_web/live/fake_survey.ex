@@ -17,13 +17,13 @@ defmodule LinkWeb.FakeSurvey do
 
   def render(assigns) do
     ~H"""
-      <HeroSmall title="Fake survey" bg_color="bg-grey2"/>
+      <HeroSmall title="Fake survey" bg_color="bg-grey1"/>
 
       <ContentArea>
         <Title2>Fake survey</Title2>
         <BodyLarge>This fake survey is used to validate the survey tool flow with an external tool.</BodyLarge>
         <Spacing value="S" />
-        <PrimaryButton label="Complete survey (go back)" path={{@redirect_url}} />
+        <PrimaryButton label="Complete survey (go back)" path={{@redirect_url}} bg_color="bg-grey1" />
       </ContentArea>
     """
   end
