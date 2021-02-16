@@ -67,16 +67,14 @@ defmodule LinkWeb.Dashboard do
           <div :for={{ study <- @owned_studies  }} >
             <PrimaryStudy
               title={{study.title}}
-              button_label={{ dgettext("eyra-study", "open.button") }}
+              button_label={{ dgettext("eyra-study", "edit.button") }}
               to={{Routes.live_path(@socket, LinkWeb.Study.Edit, study.id)}} />
           </div>
           <div :for={{ study <- @subject_studies  }} >
             <PrimaryStudy
               title={{study.title}}
               button_label={{ dgettext("eyra-study", "open.button") }}
-              to={{Routes.live_path(@socket, LinkWeb.Study.Public, study.id)}}
-              bg_color="bg-secondary"
-              button_text_color="text-grey1" />
+              to={{Routes.live_path(@socket, LinkWeb.Study.Public, study.id)}}/>
           </div>
           <div :if={{ can_access?(@current_user, LinkWeb.Study.New) }} >
             <ButtonCard

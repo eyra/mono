@@ -27,7 +27,7 @@ msgid "dashboard.button"
 msgstr "Overzicht"
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:90
+#: lib/link_web/live/dashboard.ex:88
 msgid "study.all.title"
 msgstr "Beschikbare studies:"
 
@@ -47,7 +47,7 @@ msgid "dashboard.page.description"
 msgstr "Deze pagina biedt een overzicht van de studies. De studies waar jij bij betrokken bent vind je onder 'Mijn studies'. Alle andere studies die open staan om aan mee te doen, vind je onder 'Beschikbare studies'."
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:130
+#: lib/link_web/live/study/edit.ex:132
 msgid "study.edit.title"
 msgstr "Studie"
 
@@ -57,7 +57,7 @@ msgid "save.button"
 msgstr "Aanmaken"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:145 lib/link_web/live/study/new.ex:45
+#: lib/link_web/live/study/edit.ex:147 lib/link_web/live/study/new.ex:45
 msgid "title.label"
 msgstr "Titel"
 
@@ -67,7 +67,7 @@ msgid "study.new.title"
 msgstr "Studie"
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:84
+#: lib/link_web/live/dashboard.ex:82
 msgid "add.card.title"
 msgstr "Maak een nieuwe studie aan"
 
@@ -77,7 +77,11 @@ msgid "study.public.title"
 msgstr "Studies"
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:70 lib/link_web/live/dashboard.ex:76
-#: lib/link_web/live/dashboard.ex:97
+#: lib/link_web/live/dashboard.ex:76 lib/link_web/live/dashboard.ex:95
 msgid "open.button"
-msgstr "Bekijken"
+msgstr "Details"
+
+#, elixir-format, fuzzy
+#: lib/link_web/live/dashboard.ex:70
+msgid "edit.button"
+msgstr "Aanpassen"

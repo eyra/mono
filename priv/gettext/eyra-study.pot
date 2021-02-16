@@ -26,7 +26,7 @@ msgid "dashboard.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:90
+#: lib/link_web/live/dashboard.ex:88
 msgid "study.all.title"
 msgstr ""
 
@@ -46,7 +46,7 @@ msgid "dashboard.page.description"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:130
+#: lib/link_web/live/study/edit.ex:132
 msgid "study.edit.title"
 msgstr ""
 
@@ -56,7 +56,7 @@ msgid "save.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:145 lib/link_web/live/study/new.ex:45
+#: lib/link_web/live/study/edit.ex:147 lib/link_web/live/study/new.ex:45
 msgid "title.label"
 msgstr ""
 
@@ -66,7 +66,7 @@ msgid "study.new.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:84
+#: lib/link_web/live/dashboard.ex:82
 msgid "add.card.title"
 msgstr ""
 
@@ -76,7 +76,11 @@ msgid "study.public.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:70 lib/link_web/live/dashboard.ex:76
-#: lib/link_web/live/dashboard.ex:97
+#: lib/link_web/live/dashboard.ex:76 lib/link_web/live/dashboard.ex:95
 msgid "open.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:70
+msgid "edit.button"
 msgstr ""

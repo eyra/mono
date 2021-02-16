@@ -27,7 +27,7 @@ msgid "dashboard.button"
 msgstr "Overview"
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:90
+#: lib/link_web/live/dashboard.ex:88
 msgid "study.all.title"
 msgstr "Available studies:"
 
@@ -47,7 +47,7 @@ msgid "dashboard.page.description"
 msgstr "This page provides an overview of the studies available. The studies that you are involved in are listed under 'My studies'. All other studies that are open for participation, are listed under 'Available studies'."
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:130
+#: lib/link_web/live/study/edit.ex:132
 msgid "study.edit.title"
 msgstr "Study"
 
@@ -57,7 +57,7 @@ msgid "save.button"
 msgstr "Save"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:145 lib/link_web/live/study/new.ex:45
+#: lib/link_web/live/study/edit.ex:147 lib/link_web/live/study/new.ex:45
 msgid "title.label"
 msgstr "Title"
 
@@ -67,7 +67,7 @@ msgid "study.new.title"
 msgstr "Study"
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:84
+#: lib/link_web/live/dashboard.ex:82
 msgid "add.card.title"
 msgstr "Set up a new study"
 
@@ -77,7 +77,11 @@ msgid "study.public.title"
 msgstr "Studies"
 
 #, elixir-format
-#: lib/link_web/live/dashboard.ex:70 lib/link_web/live/dashboard.ex:76
-#: lib/link_web/live/dashboard.ex:97
+#: lib/link_web/live/dashboard.ex:76 lib/link_web/live/dashboard.ex:95
 msgid "open.button"
-msgstr "Open"
+msgstr "Details"
+
+#, elixir-format, fuzzy
+#: lib/link_web/live/dashboard.ex:70
+msgid "edit.button"
+msgstr "Edit"

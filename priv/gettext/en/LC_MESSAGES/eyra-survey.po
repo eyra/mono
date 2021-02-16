@@ -12,54 +12,54 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:157
+#: lib/link_web/live/study/edit.ex:159
 msgid "config.nrofsubjects.label"
 msgstr "Number of required subjects"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:156
+#: lib/link_web/live/study/edit.ex:158
 msgid "config.url.label"
 msgstr "Link to survey"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:150
+#: lib/link_web/live/study/edit.ex:152
 msgid "config.title"
 msgstr "Survey configuration"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:162 lib/link_web/live/study/public.ex:92
+#: lib/link_web/live/study/edit.ex:164 lib/link_web/live/study/public.ex:92
 msgid "config.devices.title"
 msgstr "Survey configuration"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:172 lib/link_web/live/study/edit.ex:178
+#: lib/link_web/live/study/edit.ex:174 lib/link_web/live/study/edit.ex:180
 #: lib/link_web/live/study/public.ex:100
 msgid "desktop.enabled.label"
 msgstr "Desktop"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:169 lib/link_web/live/study/edit.ex:177
+#: lib/link_web/live/study/edit.ex:171 lib/link_web/live/study/edit.ex:179
 #: lib/link_web/live/study/public.ex:97
 msgid "tablet.enabled.label"
 msgstr "Tablet"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:159
+#: lib/link_web/live/study/edit.ex:161
 msgid "info.label"
 msgstr "What can a subject expect on this survey?"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:189
+#: lib/link_web/live/study/edit.ex:191
 msgid "publish.button"
 msgstr "Publish"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:186
+#: lib/link_web/live/study/edit.ex:188
 msgid "unpublish.button"
 msgstr "Unpublish"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:190
+#: lib/link_web/live/study/edit.ex:192
 msgid "delete.button"
 msgstr "Delete"
 
@@ -74,18 +74,18 @@ msgid "duration.public.label"
 msgstr "Estimated duration"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:158
+#: lib/link_web/live/study/edit.ex:160
 msgid "duration.label"
 msgstr "Estimated duration"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:133
+#: lib/link_web/live/study/edit.ex:135
 msgid "published.false.label"
 msgstr "Not yet published"
 
 #, elixir-format
 #: lib/link/studies/study_edit.ex:133 lib/link/studies/study_public.ex:59
-#: lib/link_web/live/study/edit.ex:132
+#: lib/link_web/live/study/edit.ex:134
 msgid "published.true.label"
 msgstr "Published"
 
@@ -115,27 +115,27 @@ msgid "completed.message"
 msgstr "You already have completed this survey."
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:140
+#: lib/link_web/live/study/edit.ex:142
 msgid "completed.label"
 msgstr "Completed"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:139
+#: lib/link_web/live/study/edit.ex:141
 msgid "status.title"
 msgstr "Progress"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:142
+#: lib/link_web/live/study/edit.ex:144
 msgid "vacant.label"
 msgstr "Vacant"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:141
+#: lib/link_web/live/study/edit.ex:143
 msgid "pending.label"
 msgstr "Pending"
 
-#, elixir-format, fuzzy
-#: lib/link_web/live/study/edit.ex:166 lib/link_web/live/study/edit.ex:176
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:168 lib/link_web/live/study/edit.ex:178
 #: lib/link_web/live/study/public.ex:94
 msgid "phone.enabled.label"
 msgstr "Phone"

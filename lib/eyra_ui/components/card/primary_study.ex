@@ -9,6 +9,7 @@ defmodule EyraUI.Card.PrimaryStudy do
   prop button_label, :string, required: true
   prop to, :string, required: true
   prop bg_color, :css_class, default: "bg-grey1"
+  prop text_color, :css_class, default: "text-white"
   prop button_bg_color, :css_class, default: "bg-white"
   prop button_text_color, :css_class, default: "text-primary"
 
@@ -16,7 +17,7 @@ defmodule EyraUI.Card.PrimaryStudy do
     ~H"""
     <Card bg_color={{@bg_color}}>
       <template slot="title">
-        <div class="text-white text-title5 font-title5 lg:text-title3 lg:font-title3">
+        <div class="text-title5 font-title5 lg:text-title3 lg:font-title3 {{@text_color}}">
             {{ @title }}
         </div>
       </template>
