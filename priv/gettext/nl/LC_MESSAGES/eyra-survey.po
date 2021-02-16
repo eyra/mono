@@ -81,13 +81,13 @@ msgstr "Geschatte duur van het onderzoek"
 #, elixir-format
 #: lib/link_web/live/study/edit.ex:133
 msgid "published.false.label"
-msgstr "Nog niet gepubliseerd"
+msgstr "Nog niet gepubliceerd"
 
 #, elixir-format
 #: lib/link/studies/study_edit.ex:133 lib/link/studies/study_public.ex:59
 #: lib/link_web/live/study/edit.ex:132
 msgid "published.true.label"
-msgstr "Gepubliseerd"
+msgstr "Gepubliceerd"
 
 #, elixir-format
 #: lib/link/studies/study_edit.ex:137 lib/link/studies/study_public.ex:62

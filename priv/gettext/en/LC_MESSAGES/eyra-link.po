@@ -14,7 +14,7 @@ msgstr ""
 #, elixir-format
 #: lib/link_web/live/index.ex:33
 msgid "welcome.title"
-msgstr "Welcome to"
+msgstr "Marketplace"
 
 #, elixir-format
 #: lib/link_web/live/index.ex:50
@@ -24,7 +24,7 @@ msgstr "Go to study overview"
 #, elixir-format
 #: lib/link_web/live/index.ex:34
 msgid "welcome.subtitle"
-msgstr "Science NL"
+msgstr "For research"
 
 #, elixir-format
 #: lib/link_web/live/index.ex:43
@@ -59,17 +59,17 @@ msgstr "Sign up for free"
 #, elixir-format
 #: lib/link_web/live/index.ex:59
 msgid "usp1.description"
-msgstr "Are you looking for a study to participate in? Science NL provides an overview of studies that are open for participation."
+msgstr "Are you looking for a study to participate in? This platform provides an overview of studies that are open for participation."
 
 #, elixir-format
 #: lib/link_web/live/index.ex:59
 msgid "usp1.title"
-msgstr "Marketplace for Science"
+msgstr "Marketplace for Research"
 
 #, elixir-format
 #: lib/link_web/live/index.ex:60
 msgid "usp2.description"
-msgstr "Having trouble finding enough participants for your research in the Netherlands? Publish your study on Science NL and start recruiting participants."
+msgstr "Having trouble finding enough participants for your research in the Netherlands? Publish your study on this platform and start recruiting participants."
 
 #, elixir-format
 #: lib/link_web/live/index.ex:60
@@ -79,9 +79,9 @@ msgstr "Research in the Netherlands"
 #, elixir-format
 #: lib/link_web/live/index.ex:61
 msgid "usp3.description"
-msgstr "Do you have ideas on what would motivate you to participate more? Or can we help to make it easier to set up a study on Science NL? Let us know!"
+msgstr "Do you have ideas on what would motivate you to participate more? Or can we help to make it easier to set up a study? Let us know!"
 
 #, elixir-format
 #: lib/link_web/live/index.ex:61
 msgid "usp3.title"
-msgstr "Improving Science Together"
+msgstr "Improving Research Together"

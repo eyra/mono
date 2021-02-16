@@ -14,7 +14,7 @@ msgstr ""
 #, elixir-format
 #: lib/link_web/live/index.ex:33
 msgid "welcome.title"
-msgstr "Welkom bij"
+msgstr "Marktplaats"
 
 #, elixir-format
 #: lib/link_web/live/index.ex:50
@@ -24,7 +24,7 @@ msgstr "Naar studie overzicht"
 #, elixir-format
 #: lib/link_web/live/index.ex:34
 msgid "welcome.subtitle"
-msgstr "Science NL"
+msgstr "Voor onderzoek"
 
 #, elixir-format
 #: lib/link_web/live/index.ex:43
@@ -59,7 +59,7 @@ msgstr "Meld je gratis aan"
 #, elixir-format
 #: lib/link_web/live/index.ex:59
 msgid "usp1.description"
-msgstr "Op zoek naar een studie om aan mee te doen? Bij Science NL vind je een overzicht van studies die op zoek zijn naar jou."
+msgstr "Op zoek naar een studie om aan mee te doen? Hier vind je een overzicht van studies die op zoek zijn naar jou."
 
 #, elixir-format
 #: lib/link_web/live/index.ex:59
@@ -69,7 +69,7 @@ msgstr "Marktplaats voor onderzoek"
 #, elixir-format
 #: lib/link_web/live/index.ex:60
 msgid "usp2.description"
-msgstr "Heb je moeite om voldoende participanten te vinden voor je onderzoek in Nederland? Stel je studie dan beschikbaar op Science NL en begin met het werven van participanten."
+msgstr "Heb je moeite om voldoende participanten te vinden voor je onderzoek in Nederland? Stel je studie dan hier beschikbaar en begin met het werven van participanten."
 
 #, elixir-format
 #: lib/link_web/live/index.ex:60
@@ -79,7 +79,7 @@ msgstr "Onderzoek in Nederland"
 #, elixir-format
 #: lib/link_web/live/index.ex:61
 msgid "usp3.description"
-msgstr "Mis je iets dat jou zou motiveren om vaker mee te doen? Of kunnen we het makkelijker maken om een studie op te zetten op Science NL. Laat het ons weten!"
+msgstr "Mis je iets dat jou zou motiveren om vaker mee te doen? Of kunnen we het makkelijker maken om een studie op te zetten? Laat het ons weten!"
 
 #, elixir-format
 #: lib/link_web/live/index.ex:61

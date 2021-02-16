@@ -44,7 +44,7 @@ msgstr "New study"
 #, elixir-format
 #: lib/link_web/live/dashboard.ex:59
 msgid "dashboard.page.description"
-msgstr "This page provides an overview of the studies available on Science NL. The studies that you are involved in are listed under 'My studies'. All other studies that are open for participation, are listed under 'Available studies'."
+msgstr "This page provides an overview of the studies available. The studies that you are involved in are listed under 'My studies'. All other studies that are open for participation, are listed under 'Available studies'."
 
 #, elixir-format
 #: lib/link_web/live/study/edit.ex:130

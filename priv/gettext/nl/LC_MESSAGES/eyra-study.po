@@ -44,7 +44,7 @@ msgstr "Nieuwe studie"
 #, elixir-format
 #: lib/link_web/live/dashboard.ex:59
 msgid "dashboard.page.description"
-msgstr "Deze pagina biedt een overzicht van de studies op Science NL. De studies waar jij bij betrokken bent vind je onder 'Mijn studies'. Alle andere studies die open staan om aan mee te doen, vind je onder 'Beschikbare studies'."
+msgstr "Deze pagina biedt een overzicht van de studies. De studies waar jij bij betrokken bent vind je onder 'Mijn studies'. Alle andere studies die open staan om aan mee te doen, vind je onder 'Beschikbare studies'."
 
 #, elixir-format
 #: lib/link_web/live/study/edit.ex:130
