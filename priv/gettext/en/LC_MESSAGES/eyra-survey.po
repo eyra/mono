@@ -27,19 +27,19 @@ msgid "config.title"
 msgstr "Survey configuration"
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:164 lib/link_web/live/study/public.ex:92
+#: lib/link_web/live/study/edit.ex:164 lib/link_web/live/study/public.ex:102
 msgid "config.devices.title"
 msgstr "Survey configuration"
 
 #, elixir-format
 #: lib/link_web/live/study/edit.ex:174 lib/link_web/live/study/edit.ex:180
-#: lib/link_web/live/study/public.ex:100
+#: lib/link_web/live/study/public.ex:110
 msgid "desktop.enabled.label"
 msgstr "Desktop"
 
 #, elixir-format
 #: lib/link_web/live/study/edit.ex:171 lib/link_web/live/study/edit.ex:179
-#: lib/link_web/live/study/public.ex:97
+#: lib/link_web/live/study/public.ex:107
 msgid "tablet.enabled.label"
 msgstr "Tablet"
 
@@ -64,12 +64,12 @@ msgid "delete.button"
 msgstr "Delete"
 
 #, elixir-format
-#: lib/link_web/live/study/public.ex:104
+#: lib/link_web/live/study/public.ex:114
 msgid "apply.button"
 msgstr "Apply for this survey"
 
 #, elixir-format
-#: lib/link_web/live/study/public.ex:88
+#: lib/link_web/live/study/public.ex:98
 msgid "duration.public.label"
 msgstr "Estimated duration"
 
@@ -100,7 +100,7 @@ msgid "by.author.label"
 msgstr "By"
 
 #, elixir-format
-#: lib/link_web/live/study/public.ex:105
+#: lib/link_web/live/study/public.ex:115
 msgid "goto.survey"
 msgstr "Go to survey"
 
@@ -110,7 +110,7 @@ msgid "thank.you.message"
 msgstr "Thank you for participating. Hopefully see you soon!"
 
 #, elixir-format
-#: lib/link_web/live/study/public.ex:83
+#: lib/link_web/live/study/public.ex:93
 msgid "completed.message"
 msgstr "You already have completed this survey."
 
@@ -136,6 +136,11 @@ msgstr "Pending"
 
 #, elixir-format
 #: lib/link_web/live/study/edit.ex:168 lib/link_web/live/study/edit.ex:178
-#: lib/link_web/live/study/public.ex:94
+#: lib/link_web/live/study/public.ex:104
 msgid "phone.enabled.label"
 msgstr "Phone"
+
+#, elixir-format
+#: lib/link_web/live/study/public.ex:121
+msgid "withdraw.button"
+msgstr "Withdraw from study"

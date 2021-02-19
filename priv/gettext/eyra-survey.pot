@@ -26,19 +26,19 @@ msgid "config.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/edit.ex:164 lib/link_web/live/study/public.ex:92
+#: lib/link_web/live/study/edit.ex:164 lib/link_web/live/study/public.ex:102
 msgid "config.devices.title"
 msgstr ""
 
 #, elixir-format
 #: lib/link_web/live/study/edit.ex:174 lib/link_web/live/study/edit.ex:180
-#: lib/link_web/live/study/public.ex:100
+#: lib/link_web/live/study/public.ex:110
 msgid "desktop.enabled.label"
 msgstr ""
 
 #, elixir-format
 #: lib/link_web/live/study/edit.ex:171 lib/link_web/live/study/edit.ex:179
-#: lib/link_web/live/study/public.ex:97
+#: lib/link_web/live/study/public.ex:107
 msgid "tablet.enabled.label"
 msgstr ""
 
@@ -63,12 +63,12 @@ msgid "delete.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/public.ex:104
+#: lib/link_web/live/study/public.ex:114
 msgid "apply.button"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/public.ex:88
+#: lib/link_web/live/study/public.ex:98
 msgid "duration.public.label"
 msgstr ""
 
@@ -99,7 +99,7 @@ msgid "by.author.label"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/public.ex:105
+#: lib/link_web/live/study/public.ex:115
 msgid "goto.survey"
 msgstr ""
 
@@ -109,7 +109,7 @@ msgid "thank.you.message"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/public.ex:83
+#: lib/link_web/live/study/public.ex:93
 msgid "completed.message"
 msgstr ""
 
@@ -135,6 +135,11 @@ msgstr ""
 
 #, elixir-format
 #: lib/link_web/live/study/edit.ex:168 lib/link_web/live/study/edit.ex:178
-#: lib/link_web/live/study/public.ex:94
+#: lib/link_web/live/study/public.ex:104
 msgid "phone.enabled.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/public.ex:121
+msgid "withdraw.button"
 msgstr ""

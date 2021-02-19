@@ -71,7 +71,7 @@ msgid "add.card.title"
 msgstr ""
 
 #, elixir-format
-#: lib/link_web/live/study/complete.ex:52 lib/link_web/live/study/public.ex:77
+#: lib/link_web/live/study/complete.ex:52 lib/link_web/live/study/public.ex:87
 msgid "study.public.title"
 msgstr ""
 

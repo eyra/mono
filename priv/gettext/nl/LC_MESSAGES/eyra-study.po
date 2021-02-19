@@ -72,7 +72,7 @@ msgid "add.card.title"
 msgstr "Maak een nieuwe studie aan"
 
 #, elixir-format
-#: lib/link_web/live/study/complete.ex:52 lib/link_web/live/study/public.ex:77
+#: lib/link_web/live/study/complete.ex:52 lib/link_web/live/study/public.ex:87
 msgid "study.public.title"
 msgstr "Studies"
 
@@ -81,7 +81,7 @@ msgstr "Studies"
 msgid "open.button"
 msgstr "Details"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/link_web/live/dashboard.ex:70
 msgid "edit.button"
 msgstr "Aanpassen"
