@@ -44,6 +44,7 @@ defmodule Link.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bcrypt_elixir, "~> 2.0"},
       {:phoenix, "~> 1.5.5"},
       {:phoenix_ecto, "~> 4.1"},
       {:phoenix_live_view, "~> 0.15.1"},
@@ -58,8 +59,6 @@ defmodule Link.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:pow, "~> 1.0.21"},
-      {:pow_assent, "~> 0.4.9"},
       {:faker, "~> 0.16"},
       {:surface, "~> 0.1.0"},
       {:timex, "~> 3.6"},
@@ -72,11 +71,12 @@ defmodule Link.MixProject do
       {:ex_cldr_numbers, "~> 2.16"},
       {:ex_cldr_dates_times, "~> 2.6"},
       # Dev and test deps
-      {:progress_bar, "~> 2.0.1", only: :dev},
+      {:progress_bar, "~> 2.0.1", only: [:dev, :test]},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
-      {:table_rex, "~> 3.0.0"}
+      {:table_rex, "~> 3.0.0"},
+      {:phx_gen_auth, "~> 0.6", only: [:dev], runtime: false}
     ]
   end
 

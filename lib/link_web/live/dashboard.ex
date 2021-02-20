@@ -4,7 +4,7 @@ defmodule LinkWeb.Dashboard do
   """
   use LinkWeb, :live_view
   import Link.Authorization
-  import Link.Users
+  import Link.Accounts
   alias Link.Studies
   alias EyraUI.Card.{PrimaryStudy, SecondaryStudy, ButtonCard}
   alias EyraUI.Hero.HeroLarge
@@ -22,7 +22,7 @@ defmodule LinkWeb.Dashboard do
   def mount(_params, session, socket) do
     user = get_user(socket, session)
     profile = get_profile(user)
-    socket = assign_current_user(socket, session, user, profile)
+    socket = assign(socket, current_user_profile: profile)
 
     owned_studies = user |> Studies.list_owned_studies()
     subject_studies = user |> Studies.list_subject_studies()

@@ -2,25 +2,27 @@ defmodule Link.Factories do
   @moduledoc """
   This module provides factory function to be used for tests.
   """
-  alias Link.Users
+  alias Link.Accounts.{User, Profile}
   alias Link.{Studies, SurveyTools, Authorization}
   alias Link.Repo
 
+  def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
+
   def build(:member) do
-    %Users.User{
+    %User{
       email: Faker.Internet.email(),
-      password_hash: Pow.Ecto.Schema.Password.pbkdf2_hash("S4p3rS3cr3t")
+      hashed_password: Bcrypt.hash_pwd_salt(valid_user_password()),
+      displayname: Faker.Person.first_name(),
+      confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
     }
   end
 
   def build(:researcher) do
     :member
-    |> build()
+    |> build(researcher: true)
     |> struct!(%{
-      profile: %Users.Profile{
-        fullname: Faker.Person.name(),
-        displayname: Faker.Person.first_name(),
-        researcher: true
+      profile: %Profile{
+        fullname: Faker.Person.name()
       }
     })
   end
@@ -54,6 +56,19 @@ defmodule Link.Factories do
 
   def build(:participant) do
     %SurveyTools.Participant{}
+  end
+
+  def build(:member, attributes) do
+    {password, attributes} = Keyword.pop(attributes, :password)
+
+    build(:member)
+    |> struct!(
+      if password do
+        Keyword.put(attributes, :hashed_password, Bcrypt.hash_pwd_salt(password))
+      else
+        attributes
+      end
+    )
   end
 
   def build(:survey_tool, %{} = attributes) do

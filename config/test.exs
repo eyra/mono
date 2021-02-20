@@ -22,4 +22,5 @@ config :link, LinkWeb.Endpoint,
 config :logger, level: :warn
 
 # Reduce password hashing impact on test duration
-config :pow, Pow.Ecto.Schema.Password, iterations: 1
+config :bcrypt_elixir,
+  log_rounds: 4

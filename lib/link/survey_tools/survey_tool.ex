@@ -6,7 +6,7 @@ defmodule Link.SurveyTools.SurveyTool do
   import Ecto.Changeset
   alias Link.Studies.Study
   alias Link.SurveyTools.SurveyToolTask
-  alias Link.Users.User
+  alias Link.Accounts.User
 
   schema "survey_tools" do
     belongs_to :auth_node, Link.Authorization.Node

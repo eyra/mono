@@ -1,7 +1,7 @@
 defmodule LinkWeb.Router do
   use LinkWeb, :router
-  use Pow.Phoenix.Router
-  use PowAssent.Phoenix.Router
+
+  import LinkWeb.UserAuth
   require LinkWeb.Cldr
 
   pipeline :browser_base do
@@ -26,6 +26,7 @@ defmodule LinkWeb.Router do
     # Information about the content-security-policy can be found at:
     # https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
     plug :put_secure_browser_headers
+    plug :fetch_current_user
 
     # Disabled CSP for now, Safari has issues with web-sockets and "self" (https://bugs.webkit.org/show_bug.cgi?id=201591)
     # , %{
@@ -45,50 +46,53 @@ defmodule LinkWeb.Router do
     plug :browser_secure
   end
 
-  pipeline :require_authenticated do
-    plug Pow.Plug.RequireAuthenticated,
-      error_handler: Pow.Phoenix.PlugErrorHandler
-  end
-
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  ## Authentication routes
+
+  scope "/", LinkWeb do
+    pipe_through [:browser, :redirect_if_user_is_authenticated]
+
+    live "/user/signup", User.Signup
+    live "/user/confirm/:token", User.ConfirmToken
+    live "/user/confirm", User.ConfirmToken
+    live "/user/await-confirmation", User.AwaitConfirmation
+    get "/user/signin", UserSessionController, :new
+    post "/user/signin", UserSessionController, :create
+    live "/user/reset-password", User.ResetPassword
+    live "/user/reset-password/:token", User.ResetPasswordToken
+  end
+
+  ## User routes
+
+  scope "/", LinkWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    live "/user/profile", User.Profile
+    get "/user/settings", UserSettingsController, :edit
+    put "/user/settings", UserSettingsController, :update
+    get "/user/settings/confirm-email/:token", UserSettingsController, :confirm_email
+  end
+
+  scope "/", LinkWeb do
+    pipe_through [:browser]
+    delete "/user/signout", UserSessionController, :delete
   end
 
   scope "/", LinkWeb do
     pipe_through :browser
     live "/", Index
 
-    live "/user/signin", User.Signin
-    live "/user/signup", User.Signup
-
     get "/switch-language/:locale", LanguageSwitchController, :index
     live "/fake_survey", FakeSurvey
   end
 
-  scope "/" do
-    pipe_through :browser_unprotected
-    pow_assent_authorization_post_callback_routes()
-  end
-
-  scope "/" do
-    pipe_through [:browser]
-
-    scope "/", Pow.Phoenix, as: "pow" do
-      post "/session", SessionController, :create
-      delete "/session", SessionController, :delete
-
-      post "/registration", RegistrationController, :create
-    end
-
-    pow_assent_routes()
-  end
-
   scope "/", LinkWeb do
-    pipe_through [:browser, :require_authenticated]
+    pipe_through [:browser, :require_authenticated_user]
 
     live "/dashboard", Dashboard
-
-    live "/user/profile", User.Profile
 
     live "/survey-tools", SurveyTool.Index
     live "/survey-tools/new", SurveyTool.New

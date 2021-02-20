@@ -20,7 +20,12 @@ defmodule Link.Authorization do
   grant_access(LinkWeb.Dashboard, [:member])
   grant_access(LinkWeb.User.Signin, [:visitor])
   grant_access(LinkWeb.User.Signup, [:visitor])
+  grant_access(LinkWeb.User.ResetPassword, [:visitor])
+  grant_access(LinkWeb.User.ResetPasswordToken, [:visitor])
+  grant_access(LinkWeb.User.AwaitConfirmation, [:visitor])
+  grant_access(LinkWeb.User.ConfirmToken, [:visitor])
   grant_access(LinkWeb.User.Profile, [:member])
+  grant_access(LinkWeb.User.SecuritySettings, [:member])
   grant_access(LinkWeb.Study.New, [:researcher])
   grant_access(LinkWeb.Study.Edit, [:owner])
   grant_access(LinkWeb.Study.Public, [:visitor, :member])
@@ -37,15 +42,6 @@ defmodule Link.Authorization do
 
   grant_actions(LinkWeb.FakeSurveyController, %{
     index: [:visitor, :member]
-  })
-
-  grant_actions(Pow.Phoenix.SessionController, %{
-    new: [:visitor],
-    delete: [:member]
-  })
-
-  grant_actions(Pow.Phoenix.SessionController, %{
-    new: [:visitor]
   })
 
   grant_actions(LinkWeb.LanguageSwitchController, %{
@@ -142,7 +138,7 @@ defmodule Link.Authorization do
     from(ra in Link.Authorization.RoleAssignment,
       where:
         ra.node_id in subquery(nodes_query) and ra.role in ^roles and
-          ra.principal_id == ^principal.id
+          ra.principal_id == ^GreenLight.Principal.id(principal)
     )
     |> Link.Repo.exists?()
   end
@@ -164,12 +160,12 @@ defmodule Link.Authorization do
     roles_intersect?(principal, entity, roles_with_permission)
   end
 
-  def can_access?(principal, entity, module) when is_atom(module) do
-    can_access?(principal, entity, GreenLight.Permissions.access_permission(module))
-  end
-
   def can_access?(principal, entity, permission) when is_binary(permission) do
     can_access?(principal, permission) or
       has_required_roles_in_context?(principal, entity, permission)
+  end
+
+  def can_access?(principal, entity, module) when is_atom(module) do
+    can_access?(principal, entity, GreenLight.Permissions.access_permission(module))
   end
 end

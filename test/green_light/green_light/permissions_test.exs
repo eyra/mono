@@ -27,16 +27,4 @@ defmodule GreenLight.PermissionsTest do
                "invoke/some_app_web/another_controller@show" => [:role_a]
              })
   end
-
-  # test "can? returns true / false based on wheter or not the user has permission" do
-  #   conn =
-  #     build_conn(:get, "/")
-  #     |> Plug.Conn.put_private(:phoenix_controller, LinkWeb.StudyController)
-  #     |> Pow.Plug.put_config([])
-  #     |> Pow.Plug.assign_current_user(%Link.Users.User{id: 9}, otp_app: :link_web)
-
-  #   refute Controller.can?(conn, :edit, %Link.Studies.Study{id: 1234})
-  #   assert Controller.can?(conn, :show, %Link.Studies.Study{id: 1234})
-  #   assert Controller.can?(conn, :index)
-  # end
 end

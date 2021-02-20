@@ -1,15 +1,13 @@
-defmodule Link.Users.Profile do
+defmodule Link.Accounts.Profile do
   @moduledoc """
   This schema contains profile related data for members.
   """
   use Ecto.Schema
   import Ecto.Changeset
-  alias Link.Users.User
+  alias Link.Accounts.User
 
   schema "user_profiles" do
     field :fullname, :string
-    field :displayname, :string
-    field :researcher, :boolean
     belongs_to :user, User
     timestamps()
   end
@@ -17,7 +15,7 @@ defmodule Link.Users.Profile do
   @doc false
   def changeset(profile, attrs) do
     profile
-    |> cast(attrs, [:fullname, :displayname, :researcher])
-    |> validate_required([:fullname, :displayname])
+    |> cast(attrs, [:fullname])
+    |> validate_required([:fullname])
   end
 end

@@ -2,7 +2,7 @@ defmodule Link.AuthorizationTest do
   alias Link.Authorization
   alias Link.Factories
   use Link.DataCase
-  alias Link.Users.User
+  alias Link.Accounts.User
   alias GreenLight.Principal
 
   test "principal returns `visitor` for nil users" do

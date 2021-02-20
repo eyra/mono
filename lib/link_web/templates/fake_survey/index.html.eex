@@ -1,6 +1,8 @@
 <h1>Fake survey</h1>
 
-<p>This fake survey is used to validate the survey
-tool flow with an external tool.</p>
+<p>
+  This fake survey is used to validate the survey tool flow with an external
+  tool.
+</p>
 
 <%= link "Complete survey (go back)", to: @redirect_url %>

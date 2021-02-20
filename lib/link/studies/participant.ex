@@ -5,7 +5,7 @@ defmodule Link.Studies.Participant do
   use Ecto.Schema
   import Ecto.Changeset
   alias Link.Studies.Study
-  alias Link.Users.User
+  alias Link.Accounts.User
 
   @primary_key false
   schema "study_participants" do

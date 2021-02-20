@@ -3,7 +3,7 @@ defmodule LinkWeb.Index do
   The home screen.
   """
   use LinkWeb, :live_view
-  import Link.Users
+  import Link.Accounts
   alias EyraUI.Card.{PrimaryCTA, USP}
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Hero.HeroLarge
@@ -16,8 +16,7 @@ defmodule LinkWeb.Index do
   def mount(_params, session, socket) do
     user = get_user(socket, session)
     profile = get_profile(user)
-    socket = assign_current_user(socket, session, user, profile)
-    {:ok, socket}
+    {:ok, socket |> assign(current_user_profile: profile)}
   end
 
   def cta_title(nil) do
