@@ -8,7 +8,7 @@ defmodule LinkWeb.Study.Public do
   alias EyraUI.Hero.HeroSmall
   alias EyraUI.Container.ContentArea
   alias EyraUI.Text.{Title1, Title6, SubHead, BodyLarge, BodyMedium, Bullet}
-  alias EyraUI.Button.{PrimaryLiveViewButton, PrimaryButton}
+  alias EyraUI.Button.{PrimaryLiveViewButton, PrimaryButton, SecondaryLiveViewButton}
   alias EyraUI.Case.{Case, True, False}
 
   alias Link.Studies
@@ -72,6 +72,16 @@ defmodule LinkWeb.Study.Public do
     {:noreply, socket |> assign_participation_info(survey_tool, user, task_info)}
   end
 
+  def handle_event("withdraw", _params, socket) do
+    study_public = socket.assigns[:study_public]
+    user = socket.assigns[:user]
+
+    SurveyTools.get_survey_tool!(study_public.survey_tool_id)
+    |> SurveyTools.withdraw_participant(user)
+
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, LinkWeb.Dashboard))}
+  end
+
   def render(assigns) do
     ~H"""
       <HeroSmall title={{ dgettext("eyra-study", "study.public.title") }} />
@@ -103,7 +113,13 @@ defmodule LinkWeb.Study.Public do
             <Spacing value="L" />
             <PrimaryLiveViewButton :if={{not @participant?}} label={{ dgettext("eyra-survey", "apply.button") }} event="signup" />
             <PrimaryButton :if={{@task_available?}} label={{ dgettext("eyra-survey", "goto.survey") }} path={{@survey_tool.survey_url}} bg_color="bg-grey1" />
-          </False>
+            </False>
+        </Case>
+        <Case value={{@participant?}}>
+          <True>
+            <Spacing value="L" />
+            <SecondaryLiveViewButton :if={{@participant?}} label={{ dgettext("eyra-survey", "withdraw.button") }} event="withdraw" />
+          </True>
         </Case>
       </ContentArea>
     """

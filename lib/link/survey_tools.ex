@@ -231,11 +231,18 @@ defmodule Link.SurveyTools do
     |> Enum.map(&Repo.insert!(&1))
   end
 
-  def complete_task!(task) do
+  def complete_task!(%SurveyToolTask{} = task) do
     task
     |> SurveyToolTask.changeset(%{status: :completed})
     |> Repo.update!()
   end
+
+  def delete_task(%SurveyToolTask{} = task) do
+    task
+    |> Repo.delete()
+  end
+
+  def delete_task(_), do: nil
 
   # Participation
   # -------------
@@ -270,5 +277,26 @@ defmodule Link.SurveyTools do
       where: p.user_id == ^user.id
     )
     |> Repo.all()
+  end
+
+  def withdraw_participant(%SurveyTool{} = survey_tool, %User{} = user) do
+    Multi.new()
+    |> Multi.delete_all(
+      :participant,
+      from(p in Participant,
+        where: p.survey_tool_id == ^survey_tool.id and p.user_id == ^user.id
+      )
+    )
+    |> Multi.delete_all(
+      :task,
+      from(t in SurveyToolTask,
+        where: t.survey_tool_id == ^survey_tool.id
+      )
+    )
+    |> Multi.delete_all(
+      :role_assignment,
+      Authorization.query_role_assignment(user, survey_tool, :participant)
+    )
+    |> Repo.transaction()
   end
 end
