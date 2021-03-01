@@ -33,7 +33,7 @@ defmodule Link.SurveyTools do
   alias Ecto.Multi
   alias Link.Repo
 
-  alias Link.Users.User
+  alias Link.Accounts.User
   alias Link.SurveyTools.{SurveyTool, SurveyToolTask, Participant}
   alias Link.Authorization
 

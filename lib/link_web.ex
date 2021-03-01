@@ -48,9 +48,11 @@ defmodule LinkWeb do
 
   def live_view do
     quote do
-      use LinkWeb.LiveLocale
+      def get_user(socket, session), do: nil
+      # use LinkWeb.LiveLocale
       import Link.Authorization, only: [can_access?: 2]
       use GreenLight.Live, Link.Authorization
+      use LinkWeb.LiveAuthHelper
 
       use Surface.LiveView,
         layout: {LinkWeb.LayoutView, "live.html"}
@@ -100,7 +102,9 @@ defmodule LinkWeb do
       import LinkWeb.Components.OldSkool
       alias LinkWeb.Router.Helpers, as: Routes
       import Link.Authorization, only: [can?: 4]
-      use LinkWeb.LiveViewPowHelper
+
+      def current_user(%{assigns: %{current_user: current_user}}), do: current_user
+      def current_user(_conn), do: nil
 
       def supported_languages do
         current_locale = Gettext.get_locale()

@@ -31,7 +31,7 @@ defmodule LinkWeb.ConnCase do
       # The default endpoint for testing
       @endpoint LinkWeb.Endpoint
 
-      unquote(authentication_helpers())
+      import Link.AuthTestHelpers
     end
   end
 
@@ -43,26 +43,5 @@ defmodule LinkWeb.ConnCase do
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}
-  end
-
-  defp authentication_helpers do
-    quote do
-      def login(user, %{conn: conn}) do
-        conn =
-          post(conn, Routes.pow_session_path(conn, :create),
-            user: %{email: user.email, password: "S4p3rS3cr3t"}
-          )
-
-        {:ok, conn: conn, user: user}
-      end
-
-      def login_as_member(ctx) do
-        Factories.insert!(:member) |> login(ctx)
-      end
-
-      def login_as_researcher(ctx) do
-        Factories.insert!(:researcher) |> login(ctx)
-      end
-    end
   end
 end

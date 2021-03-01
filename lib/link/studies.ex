@@ -9,7 +9,7 @@ defmodule Link.Studies do
   alias Link.Authorization
 
   alias Link.Studies.{Study, Author}
-  alias Link.Users.User
+  alias Link.Accounts.User
   alias Link.SurveyTools.{SurveyTool, SurveyToolTask}
 
   # read list_studies(current_user, ...) do

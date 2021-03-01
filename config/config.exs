@@ -28,12 +28,6 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :link, :pow,
-  user: Link.Users.User,
-  repo: Link.Repo,
-  web_module: LinkWeb,
-  routes_backend: LinkWeb.Pow.Routes
-
 config :link, LinkWeb.Gettext, default_locale: "nl", locales: ~w(en nl)
 
 # Import environment specific config. This must remain at the bottom

@@ -5,7 +5,7 @@ defmodule Link.SurveyTools.Participant do
   use Ecto.Schema
   import Ecto.Changeset
   alias Link.SurveyTools.SurveyTool
-  alias Link.Users.User
+  alias Link.Accounts.User
 
   @primary_key false
   schema "survey_tool_participants" do

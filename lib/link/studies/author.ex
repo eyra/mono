@@ -5,8 +5,8 @@ defmodule Link.Studies.Author do
   use Ecto.Schema
   import Ecto.Changeset
   alias Link.Studies.Study
-  alias Link.Users
-  alias Link.Users.User
+  alias Link.Accounts
+  alias Link.Accounts.User
 
   @primary_key false
   schema "authors" do
@@ -24,7 +24,7 @@ defmodule Link.Studies.Author do
   def from_user(%User{} = user) do
     profile =
       user
-      |> Users.get_profile()
+      |> Accounts.get_profile()
 
     fullname =
       case profile.fullname do
@@ -33,9 +33,9 @@ defmodule Link.Studies.Author do
       end
 
     displayname =
-      case profile.displayname do
+      case user.displayname do
         nil -> user.email |> String.split("@") |> List.first()
-        _ -> profile.displayname
+        _ -> user.displayname
       end
 
     %{

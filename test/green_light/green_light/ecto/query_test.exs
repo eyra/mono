@@ -1,7 +1,7 @@
 defmodule Link.Authorization.DBTest do
   # use Link.DataCase
 
-  # alias Link.Users.User
+  # alias Link.Accounts.User
   # alias Link.Authorization.TestEntity
   # alias Link.Authorization.DB
 
