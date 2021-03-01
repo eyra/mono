@@ -14,27 +14,27 @@ repos:
     hooks:
       - id: mix-test
         name: "elixir: mix test"
-        entry: mix test
+        entry: make test
         language: system
         pass_filenames: false
         files: \.exs?$
 
       - id: mix-format
-        name: "elixir: mix format"
-        entry: mix format
+        name: "elixir: make format"
+        entry: make format
         language: system
         files: \.exs?$
 
       - id: mix-compile
         name: "elixir: mix compile"
-        entry: mix compile --force --warnings-as-errors
+        entry: make compile
         language: system
         pass_filenames: false
         files: \.ex$
 
       - id: mix-credo
         name: "elixir: mix credo"
-        entry: mix credo
+        entry: make credo
         language: system
         pass_filenames: false
         files: \.exs*$
