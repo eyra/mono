@@ -3,8 +3,8 @@ defmodule Link.Repo.Migrations.AlterStudyDescriptionAndTitleToText do
 
   def change do
     alter table(:studies) do
-      modify :title, :text
-      modify :description, :text
+      modify(:title, :text)
+      modify(:description, :text)
     end
   end
 end

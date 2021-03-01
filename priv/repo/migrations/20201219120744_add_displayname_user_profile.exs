@@ -3,7 +3,7 @@ defmodule Link.Repo.Migrations.AddDisplaynameUserProfile do
 
   def change do
     alter table(:user_profiles) do
-      add :displayname, :string
+      add(:displayname, :string)
     end
   end
 end

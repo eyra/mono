@@ -3,9 +3,9 @@ defmodule Link.Repo.Migrations.CreateStudies do
 
   def change do
     create table(:studies) do
-      add :title, :string
-      add :description, :string
-      add :researcher_id, references(:users), null: false
+      add(:title, :string)
+      add(:description, :string)
+      add(:researcher_id, references(:users), null: false)
 
       timestamps()
     end
