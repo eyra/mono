@@ -1,0 +1,92 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:55
+msgid "study.index.subtitle"
+msgstr "Studies"
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:54
+msgid "study.index.title"
+msgstr "Overview"
+
+#, elixir-format
+#: lib/link_web/templates/layout/root.html.leex:45
+msgid "dashboard.button"
+msgstr "Overview"
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:88
+msgid "study.all.title"
+msgstr "Available studies:"
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:63
+msgid "study.highlighted.title"
+msgstr "My studies:"
+
+#, elixir-format
+#: lib/link_web/templates/layout/root.html.leex:51
+msgid "new.button"
+msgstr "New study"
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:59
+msgid "dashboard.page.description"
+msgstr "This page provides an overview of the studies available. The studies that you are involved in are listed under 'My studies'. All other studies that are open for participation, are listed under 'Available studies'."
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:132
+msgid "study.edit.title"
+msgstr "Study"
+
+#, elixir-format
+#: lib/link_web/live/study/new.ex:46
+msgid "save.button"
+msgstr "Save"
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:147 lib/link_web/live/study/new.ex:45
+msgid "title.label"
+msgstr "Title"
+
+#, elixir-format
+#: lib/link_web/live/study/new.ex:42
+msgid "study.new.title"
+msgstr "Study"
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:81
+msgid "add.card.title"
+msgstr "Set up a new study"
+
+#, elixir-format
+#: lib/link_web/live/study/complete.ex:52 lib/link_web/live/study/public.ex:87
+msgid "study.public.title"
+msgstr "Studies"
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:76 lib/link_web/live/dashboard.ex:95
+msgid "open.button"
+msgstr "Details"
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:70
+msgid "edit.button"
+msgstr "Edit"
+
+#, elixir-format, fuzzy
+#: lib/link_web/live/study/new.ex:47
+msgid "cancel.button"
+msgstr "Cancel"

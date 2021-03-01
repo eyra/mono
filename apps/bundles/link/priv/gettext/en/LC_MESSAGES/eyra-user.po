@@ -1,0 +1,48 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/link_web/live/user/confirm_token.ex:86
+msgid "confirm.token.email.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/user/reset_password.ex:51
+msgid "password_reset.email.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/user/reset_password_token.ex:52
+msgid "password_reset.password.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/user/reset_password_token.ex:53
+msgid "password_reset.password_confirmation.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/user/reset_password.ex:52
+msgid "password_reset.reset_button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/user/reset_password_token.ex:54
+msgid "password_reset.reset_password_button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/user/reset_password.ex:49
+#: lib/link_web/live/user/reset_password_token.ex:50
+msgid "user.password_reset.title"
+msgstr ""

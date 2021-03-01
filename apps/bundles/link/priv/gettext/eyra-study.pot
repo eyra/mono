@@ -1,0 +1,91 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:55
+msgid "study.index.subtitle"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:54
+msgid "study.index.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/layout/root.html.leex:45
+msgid "dashboard.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:88
+msgid "study.all.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:63
+msgid "study.highlighted.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/templates/layout/root.html.leex:51
+msgid "new.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:59
+msgid "dashboard.page.description"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:132
+msgid "study.edit.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/new.ex:46
+msgid "save.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/edit.ex:147 lib/link_web/live/study/new.ex:45
+msgid "title.label"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/new.ex:42
+msgid "study.new.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:81
+msgid "add.card.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/complete.ex:52 lib/link_web/live/study/public.ex:87
+msgid "study.public.title"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:76 lib/link_web/live/dashboard.ex:95
+msgid "open.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/dashboard.ex:70
+msgid "edit.button"
+msgstr ""
+
+#, elixir-format
+#: lib/link_web/live/study/new.ex:47
+msgid "cancel.button"
+msgstr ""
