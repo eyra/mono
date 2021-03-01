@@ -23,4 +23,4 @@ compile/%:
 
 deps: ${BUNDLES:%=deps/%} ${FRAMEWORKS:%=deps/%} deps/apps/core
 deps/%:
-	cd $* && mix deps
+	cd $* && mix deps.get
