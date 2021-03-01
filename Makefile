@@ -17,7 +17,7 @@ credo: ${BUNDLES:%=credo/%} ${FRAMEWORKS:%=credo/%} credo/apps/core
 credo/%:
 	cd $* && mix credo
 
-compile: ${BUNDLES:%=credo/%}
+compile: ${BUNDLES:%=compile/%}
 compile/%:
 	cd $* && mix compile --force --warnings-as-errors
 
