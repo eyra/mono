@@ -3,7 +3,7 @@ defmodule Link.Repo.Migrations.DropResearcherFromStudies do
 
   def change do
     alter table(:studies) do
-      remove :researcher_id
+      remove(:researcher_id)
     end
   end
 end

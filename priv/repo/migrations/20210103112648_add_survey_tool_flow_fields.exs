@@ -3,7 +3,7 @@ defmodule Link.Repo.Migrations.AddSurveyToolFlowFields do
 
   def change do
     alter table(:survey_tools) do
-      add :survey_url, :string
+      add(:survey_url, :string)
     end
   end
 end

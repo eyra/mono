@@ -3,7 +3,7 @@ defmodule Link.Repo.Migrations.CreateTestEntities do
 
   def change do
     create table(:test_entities) do
-      add :title, :string
+      add(:title, :string)
 
       timestamps()
     end
