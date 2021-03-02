@@ -39,16 +39,20 @@ defmodule GreenLight.Permissions do
     Module.put_attribute(module, :permission_map, GreenLight.PermissionMap.new())
   end
 
+  defp get_permission_map_from_module(module) do
+    Module.get_attribute(module, :permission_map)
+  end
+
   def grant(module, permission, roles) do
     permission_map =
-      Module.get_attribute(module, :permission_map) |> PermissionMap.grant(permission, roles)
+      get_permission_map_from_module(module) |> PermissionMap.grant(permission, roles)
 
     Module.put_attribute(module, :permission_map, permission_map)
   end
 
-  def grant(module, %{} = permission_map) do
+  def grant(module, permission_map) do
     permission_map =
-      Module.get_attribute(module, :permission_map)
+      get_permission_map_from_module(module)
       |> PermissionMap.merge(permission_map)
 
     Module.put_attribute(
@@ -75,7 +79,7 @@ defmodule GreenLight.Permissions do
 
   defmacro __before_compile__(_env) do
     quote do
-      def permission_map, do: @permission_map
+      def permission_map, do: @permission_map |> GreenLight.PermissionMap.new_t()
     end
   end
 end
