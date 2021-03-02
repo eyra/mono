@@ -1,35 +1,26 @@
-all: sync install build
+all: install build
 
-setup: sync install build
+setup: install build-digest
 
-install: install_dependencies install_assets
+install: install_dependencies deploy_assets
 
 install_dependencies:
 	@echo "Installing dependencies"
 	@mix deps.get
 
-install_assets:
-	@echo "Installing assets"
-	@cd ./assets && npm install
-
-build: compile_assets
-
-compile_assets:
-	@echo "Compiling assets"
+deploy_assets:
+	@echo "Deploying assets"
 	@cd ./assets && npm run deploy
+
+build: build-digest build-digest
+
+build-digest:
 	@mix phx.digest
 
-sync: sync_repo sync_assets
+build-app:
+	@mix compile
 
-sync_repo:
-	@echo "Synching database migrations"
-	@rsync -rupE --delete ../../../priv/repo/ priv/repo/
-
-sync_assets:
-	@echo "Synching global assets"
-	@rsync -rupE --delete --exclude "node_modules/" ../../../assets/ assets/
-
-run: sync
+run:
 	@echo "Starting Phoenix server"
 	@mix phx.server
 

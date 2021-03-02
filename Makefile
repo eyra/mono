@@ -3,6 +3,12 @@ FRAMEWORKS=$(wildcard apps/frameworks/*)
 
 all: test format compile credo deps
 
+setup: install_assets
+
+install_assets:
+	@echo "Installing assets"
+	@cd ./assets && npm install
+
 prepare: test format compile credo
 
 test: ${BUNDLES:%=test/%} ${FRAMEWORKS:%=test/%} test/apps/core
