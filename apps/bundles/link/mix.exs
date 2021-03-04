@@ -21,6 +21,9 @@ defmodule Link.MixProject do
           "guides/authorization.md",
           "guides/green_light.md"
         ]
+      ],
+      dialyzer: [
+        plt_add_apps: [:mix]
       ]
     ]
   end
