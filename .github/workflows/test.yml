@@ -38,7 +38,7 @@ jobs:
         run: make deps
 
       - name: Format
-        run: pip install pre-commit && SKIP=mix-test,mix-compile,mix-credo,mix-sobelow /home/runner/.local/bin/pre-commit run -a
+        run: pip install pre-commit && SKIP=mix-test,mix-dialyzer,mix-compile,mix-credo,mix-sobelow /home/runner/.local/bin/pre-commit run -a
         continue-on-error: true
 
       - name: Commit formatted code
