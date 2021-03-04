@@ -23,7 +23,8 @@ defmodule Link.MixProject do
         ]
       ],
       dialyzer: [
-        plt_add_apps: [:mix]
+        plt_add_apps: [:mix],
+        plt_add_deps: :transitive
       ]
     ]
   end
