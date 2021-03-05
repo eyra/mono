@@ -21,6 +21,9 @@ defmodule EyraUI.MixProject do
           "guides/authorization.md",
           "guides/green_light.md"
         ]
+      ],
+      dialyzer: [
+        plt_add_deps: :transitive
       ]
     ]
   end
@@ -51,7 +54,8 @@ defmodule EyraUI.MixProject do
       {:timex, "~> 3.6"},
       {:jason, "~> 1.0"},
       # Dev and test deps
-      {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
 end

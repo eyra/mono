@@ -89,7 +89,7 @@ defmodule Link.MixProject do
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:table_rex, "~> 3.0.0"},
       {:phx_gen_auth, "~> 0.6", only: [:dev], runtime: false},
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
 
