@@ -7,7 +7,7 @@ defmodule EyraUI.AutoSave do
 
   @save_delay 1
 
-  @callback load(params :: Map.t(), session :: map(), socket :: Socket.t()) :: any()
+  @callback load(params :: %{}, session :: map(), socket :: Socket.t()) :: any()
   @callback save(changeset :: any()) :: any()
   @callback get_changeset(entity :: any()) :: any()
   @callback get_changeset(entity :: any(), attrs :: any()) :: any()

@@ -19,7 +19,8 @@ defmodule GreenLight do
       unquote(__MODULE__).__register_permission_map()
       unquote(__MODULE__).__register_schema_and_roles(unquote(config))
       unquote(__MODULE__).__register_helpers()
-      unquote(__MODULE__).__register_authorization_functions(unquote(config))
+      unquote(__MODULE__).__register_authorization_check_functions()
+      unquote(__MODULE__).__register_authorization_management_functions(unquote(config))
       unquote(__MODULE__).__register_query_functions(unquote(config))
     end
   end
@@ -56,7 +57,27 @@ defmodule GreenLight do
     end
   end
 
-  defmacro __register_authorization_functions(config) do
+  defmacro __register_authorization_check_functions do
+    quote do
+      def can?(principal, entity_or_entities, module, action) do
+        roles = list_roles(principal, entity_or_entities)
+
+        GreenLight.Access.can?(
+          permission_map(),
+          roles,
+          GreenLight.Permissions.action_permission(module, action)
+        )
+      end
+
+      @spec can?(any, GreenLight.PermissionMap.permission()) :: boolean
+      def can?(principal, permission) when is_binary(permission) do
+        roles = GreenLight.Principal.roles(principal)
+        GreenLight.PermissionMap.allowed?(permission_map(), permission, roles)
+      end
+    end
+  end
+
+  defmacro __register_authorization_management_functions(config) do
     repo = Config.repo!(config)
     schema = Config.role_assignment_schema!(config)
 
@@ -113,16 +134,6 @@ defmodule GreenLight do
       def list_principals(entity) do
         unquote(repo)
         |> GreenLight.Ecto.Query.list_principals(unquote(schema), entity)
-      end
-
-      def can?(principal, entity_or_entities, module, action) do
-        roles = list_roles(principal, entity_or_entities)
-
-        GreenLight.Access.can?(
-          permission_map(),
-          roles,
-          GreenLight.Permissions.action_permission(module, action)
-        )
       end
     end
   end

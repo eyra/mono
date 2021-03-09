@@ -5,10 +5,19 @@ defmodule GreenLight.PermissionMap do
   Convenience functions to build it are provided in other modules.
   """
 
+  @type role :: atom
+  @type permission :: binary
+  @type role_set :: MapSet.t(role)
+  @type role_list :: [role]
+  @type role_enum :: role_set | role_list
+  @opaque t :: %{permission => role_list}
+
+  @spec new() :: t
   def new() do
     Map.new()
   end
 
+  @spec new(%{permission => role_enum}) :: t
   def new(%{} = mapping) do
     Enum.reduce(mapping, new(), fn {permission, roles}, permission_map ->
       grant(permission_map, permission, roles)
@@ -16,9 +25,18 @@ defmodule GreenLight.PermissionMap do
   end
 
   @doc """
+  This constructor is here to appease Dialyzer when a PermissionMap is used as a module attribute.
+  """
+  @spec new_t(any()) :: t
+  def new_t(permission_map) do
+    permission_map
+  end
+
+  @doc """
   Return a `MapSet` of roles for a given permission. This always returns a
   `MapSet` (might be empty).
   """
+  @spec roles(t, permission) :: role_set
   def roles(permission_map, permission) do
     Map.get(permission_map, permission, MapSet.new())
   end
@@ -34,6 +52,7 @@ defmodule GreenLight.PermissionMap do
   @doc """
   Add a mapping for the given role and permission if does not already exist.
   """
+  @spec grant(t, permission, role | role_list) :: t
   def grant(permission_map, permission, role) when is_atom(role) do
     Map.update(permission_map, permission, MapSet.new([role]), &MapSet.put(&1, role))
   end
@@ -46,12 +65,14 @@ defmodule GreenLight.PermissionMap do
   Returns wheter or not a the given set of roles should be allowed for the given
   permission.
   """
-  def allowed?(permission_map, permission, %MapSet{} = principal_roles) do
-    not (permission_map |> roles(permission) |> MapSet.disjoint?(principal_roles))
+  @spec allowed?(t, permission, role | role_list) :: boolean
+  def allowed?(permission_map, permission, principal_roles) when is_list(principal_roles) do
+    allowed?(permission_map, permission, MapSet.new(principal_roles))
   end
 
+  @spec allowed?(t, binary, role_set) :: boolean
   def allowed?(permission_map, permission, principal_roles) do
-    allowed?(permission_map, permission, MapSet.new(principal_roles))
+    not (permission_map |> roles(permission) |> MapSet.disjoint?(principal_roles))
   end
 
   @doc """
@@ -59,6 +80,7 @@ defmodule GreenLight.PermissionMap do
   which a permission that is available in either (or both) maps has the combined
   roles of both permission maps.
   """
+  @spec merge(t, t) :: t
   def merge(a, b) when a == %{}, do: b
   def merge(a, b) when b == %{}, do: a
 
