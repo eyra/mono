@@ -5,7 +5,7 @@ defmodule GreenLight.Live do
   @callback get_authorization_context(
               Phoenix.LiveView.unsigned_params() | :not_mounted_at_router,
               session :: map,
-              socket :: Socket.t()
+              socket :: Phoenix.Socket.t()
             ) :: integer
   @optional_callbacks get_authorization_context: 3
 

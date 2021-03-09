@@ -21,6 +21,9 @@ defmodule GreenLight.MixProject do
           "guides/authorization.md",
           "guides/green_light.md"
         ]
+      ],
+      dialyzer: [
+        plt_add_deps: :transitive
       ]
     ]
   end
@@ -44,11 +47,13 @@ defmodule GreenLight.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.5.5"},
+      {:phoenix_live_view, "~> 0.15.1"},
       {:phoenix_ecto, "~> 4.1"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       # Dev and test deps
-      {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
 end

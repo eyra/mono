@@ -46,7 +46,8 @@ defmodule Core.MixProject do
       {:green_light, path: "../frameworks/green_light"},
       {:eyra_ui, path: "../frameworks/eyra_ui"},
       # Dev and test deps
-      {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
 
