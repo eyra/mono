@@ -13,7 +13,7 @@ defmodule Mix.Tasks.Content.Generate do
   each time it runs.
   """
   use Mix.Task
-  alias Link.Factories
+  alias Core.Factories
 
   @progress_bar_format [
     right: [],

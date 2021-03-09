@@ -1,9 +1,9 @@
-defmodule Link.Authorization.DBTest do
-  # use Link.DataCase
+defmodule Core.Authorization.DBTest do
+  # use Core.DataCase
 
-  # alias Link.Accounts.User
-  # alias Link.Authorization.TestEntity
-  # alias Link.Authorization.DB
+  # alias Core.Accounts.User
+  # alias Core.Authorization.TestEntity
+  # alias Core.Authorization.DB
 
   # describe "list_roles" do
   #   test "returns empty set for nil principal" do

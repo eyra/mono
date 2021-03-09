@@ -10,13 +10,13 @@ use Mix.Config
 import_config "config.secret.exs"
 
 config :link,
-  ecto_repos: [Link.Repo]
+  ecto_repos: [Core.Repo]
 
 # Configures the endpoint
 config :link, LinkWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "QbAmUdYcDMMQ2e7wVp6PSXI8QdUjfDEGR0FTwjwkUIYS4lW1ledjE9Dkhr3pE4Qn",
-  render_errors: [view: LinkWeb.ErrorView, accepts: ~w(html json), layout: false],
+  render_errors: [view: CoreWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Link.PubSub,
   live_view: [signing_salt: "U46ENwad8CDswjwuXgNZVpJjUlBjbmL9"]
 
@@ -27,8 +27,6 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
-
-config :link, LinkWeb.Gettext, default_locale: "nl", locales: ~w(en nl)
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

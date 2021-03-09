@@ -1,4 +1,4 @@
-defmodule Link.Authorization.TestEntity do
+defmodule Core.Authorization.TestEntity do
   @moduledoc """
   An entity that is only used for test purposes.
   """
@@ -19,20 +19,20 @@ defmodule Link.Authorization.TestEntity do
   end
 end
 
-defmodule Link.TestHelpers do
+defmodule Core.TestHelpers do
   @moduledoc """
   Helper functions to make testing convenient.
   """
 end
 
-defmodule Link.AuthTestHelpers do
+defmodule Core.AuthTestHelpers do
   @moduledoc """
   Helper functions to make testing authorization convenient.
   """
-  alias Link.Factories
+  alias Core.Factories
 
   def login(user, %{conn: conn}) do
-    token = Link.Accounts.generate_user_session_token(user)
+    token = Core.Accounts.generate_user_session_token(user)
 
     conn =
       conn

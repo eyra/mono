@@ -1,0 +1,99 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:30
+msgid "displayname.label"
+msgstr "Schermnaam"
+
+#, elixir-format
+#: lib/core_web/live/user/signup.ex:51
+msgid "email.label"
+msgstr "E-mail"
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:29
+msgid "fullname.label"
+msgstr "Volledige naam"
+
+#, elixir-format
+#: lib/core_web/live/user/signup.ex:52
+msgid "password.label"
+msgstr "Wachtwoord"
+
+#, elixir-format
+#: lib/core_web/templates/layout/root.html.leex:56
+msgid "profile.button"
+msgstr "Mijn profiel"
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:26
+msgid "profile.title"
+msgstr "Mijn profiel"
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:28
+msgid "researcher.label"
+msgstr "ik ben een onderzoeker"
+
+#, elixir-format
+#: lib/core_web/templates/layout/root.html.leex:61
+msgid "signin.button"
+msgstr "Inloggen"
+
+#, elixir-format
+#: lib/core_web/live/user/signup.ex:56
+msgid "signin.label"
+msgstr "Heb je al een account?"
+
+#, elixir-format
+#: lib/core_web/live/user/signup.ex:57
+msgid "signin.link"
+msgstr "Log hier in"
+
+#, elixir-format
+#: lib/core_web/live/user/signup.ex:53
+msgid "signup.button"
+msgstr "Registreer"
+
+#, elixir-format
+#: lib/core_web/live/user/signup.ex:49
+msgid "signup.title"
+msgstr "Nieuw account"
+
+#, elixir-format
+#: lib/core_web/live/survey_tool/edit.ex:25
+#: lib/core_web/live/survey_tool/new.ex:45
+msgid "survey_url.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/survey_tool/edit.ex:24
+#: lib/core_web/live/survey_tool/new.ex:44
+msgid "title.label"
+msgstr "E-mail"
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:32
+msgid "signout.button"
+msgstr "Afmelden"
+
+#, elixir-format
+#: lib/core_web/live/user/await_confirmation.ex:45
+msgid "await.confirmation.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/confirm_token.ex:87
+msgid "confirm.token.resend_button"
+msgstr ""

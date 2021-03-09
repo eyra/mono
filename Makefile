@@ -11,7 +11,8 @@ install_assets:
 
 prepare: test format compile credo
 
-test: ${BUNDLES:%=test/%} ${FRAMEWORKS:%=test/%} test/apps/core
+#test: ${BUNDLES:%=test/%} ${FRAMEWORKS:%=test/%} test/apps/core
+test: ${FRAMEWORKS:%=test/%} test/apps/core
 test/%:
 	cd $* && mix test
 

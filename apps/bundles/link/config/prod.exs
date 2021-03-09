@@ -19,7 +19,7 @@ config :logger, level: :info
 # ## SSL Support
 # SSL should be terminated by the load-balancer / proxy server. The following
 # setting makes sure that users do not connect over plain HTTP.
-config :link, LinkWeb.Endpoint, force_ssl: [rewrite_on: [:x_forwarded_proto]]
+config :link, CoreWeb.Endpoint, force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
 # Finally import the config/prod.secret.exs which loads secrets
 # and configuration from environment variables.

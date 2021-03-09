@@ -1,8 +1,8 @@
 defmodule GreenLight.Test do
   # alias GreenLight.Permissions
   # use GreenLight.DataCase
-  use Link.DataCase
+  use Core.DataCase
   # require Ecto.Query
-  # alias Link.Repo
-  # alias Link.Factories
+  # alias Core.Repo
+  # alias Core.Factories
 end

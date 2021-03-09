@@ -1,10 +1,10 @@
-defmodule Link.Authorization.Plug.ControllerAuthorizationTest do
-  use Link.DataCase
+defmodule Core.Authorization.Plug.ControllerAuthorizationTest do
+  use Core.DataCase
   use Plug.Test
   alias Plug.Conn
-  alias Link.Authorization.Plug.ControllerAuthorization
-  alias Link.Authorization.PermissionMap
-  alias Link.Accounts
+  alias Core.Authorization.Plug.ControllerAuthorization
+  alias Core.Authorization.PermissionMap
+  alias Core.Accounts
 
   defmodule TestStruct do
     defstruct id: ""

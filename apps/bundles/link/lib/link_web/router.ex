@@ -1,21 +1,21 @@
 defmodule LinkWeb.Router do
   use LinkWeb, :router
 
-  import LinkWeb.UserAuth
-  require LinkWeb.Cldr
+  require CoreWeb.Cldr
+  import CoreWeb.UserAuth
 
   pipeline :browser_base do
     plug(:accepts, ["html"])
     plug(:fetch_session)
-    plug(:put_root_layout, {LinkWeb.LayoutView, :root})
+    plug(:put_root_layout, {CoreWeb.LayoutView, :root})
 
     plug(Cldr.Plug.SetLocale,
-      apps: [cldr: LinkWeb.Cldr, gettext: :global],
+      apps: [cldr: CoreWeb.Cldr, gettext: :global],
       from: [:query, :cookie, :accept_language],
       param: "locale"
     )
 
-    plug(LinkWeb.Plug.LiveLocale)
+    plug(CoreWeb.Plug.LiveLocale)
 
     plug(:fetch_live_flash)
   end
@@ -53,7 +53,7 @@ defmodule LinkWeb.Router do
 
   ## Authentication routes
 
-  scope "/", LinkWeb do
+  scope "/", CoreWeb do
     pipe_through([:browser, :redirect_if_user_is_authenticated])
 
     live("/user/signup", User.Signup)
@@ -68,7 +68,7 @@ defmodule LinkWeb.Router do
 
   ## User routes
 
-  scope "/", LinkWeb do
+  scope "/", CoreWeb do
     pipe_through([:browser, :require_authenticated_user])
 
     live("/user/profile", User.Profile)
@@ -77,12 +77,12 @@ defmodule LinkWeb.Router do
     get("/user/settings/confirm-email/:token", UserSettingsController, :confirm_email)
   end
 
-  scope "/", LinkWeb do
+  scope "/", CoreWeb do
     pipe_through([:browser])
     delete("/user/signout", UserSessionController, :delete)
   end
 
-  scope "/", LinkWeb do
+  scope "/", CoreWeb do
     pipe_through(:browser)
     live("/", Index)
 
@@ -90,7 +90,7 @@ defmodule LinkWeb.Router do
     live("/fake_survey", FakeSurvey)
   end
 
-  scope "/", LinkWeb do
+  scope "/", CoreWeb do
     pipe_through([:browser, :require_authenticated_user])
 
     live("/dashboard", Dashboard)
@@ -106,7 +106,7 @@ defmodule LinkWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", LinkWeb do
+  # scope "/api", CoreWeb do
   #   pipe_through :api
   # end
 
@@ -122,7 +122,7 @@ defmodule LinkWeb.Router do
 
     scope "/" do
       pipe_through(:browser)
-      live_dashboard("/phoenix-dashboard", metrics: LinkWeb.Telemetry)
+      live_dashboard("/phoenix-dashboard", metrics: CoreWeb.Telemetry)
     end
   end
 end

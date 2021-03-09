@@ -1,0 +1,98 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:30
+msgid "displayname.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/signup.ex:51
+msgid "email.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:29
+msgid "fullname.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/signup.ex:52
+msgid "password.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/layout/root.html.leex:56
+msgid "profile.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:26
+msgid "profile.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:28
+msgid "researcher.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/layout/root.html.leex:61
+msgid "signin.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/signup.ex:56
+msgid "signin.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/signup.ex:57
+msgid "signin.link"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/signup.ex:53
+msgid "signup.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/signup.ex:49
+msgid "signup.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/survey_tool/edit.ex:25
+#: lib/core_web/live/survey_tool/new.ex:45
+msgid "survey_url.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/survey_tool/edit.ex:24
+#: lib/core_web/live/survey_tool/new.ex:44
+msgid "title.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:32
+msgid "signout.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/await_confirmation.ex:45
+msgid "await.confirmation.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/confirm_token.ex:87
+msgid "confirm.token.resend_button"
+msgstr ""

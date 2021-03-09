@@ -1,7 +1,7 @@
 use Mix.Config
 
 # Configure your database
-config :link, Link.Repo,
+config :core, Core.Repo,
   username: "postgres",
   password: "postgres",
   database: "link_dev",

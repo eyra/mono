@@ -8,3 +8,5 @@
 use Mix.Config
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+config :core, CoreWeb.Gettext, default_locale: "nl", locales: ~w(en nl)
