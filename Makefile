@@ -11,6 +11,10 @@ install_assets:
 
 prepare: test format compile credo
 
+dialyzer: ${BUNDLES:%=dialyzer/%} ${FRAMEWORKS:%=dialyzer/%} dialyzer/apps/core
+dialyzer/%:
+	cd $* && mix dialyzer
+
 #test: ${BUNDLES:%=test/%} ${FRAMEWORKS:%=test/%} test/apps/core
 test: ${FRAMEWORKS:%=test/%} test/apps/core
 test/%:

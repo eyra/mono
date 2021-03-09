@@ -18,27 +18,35 @@ jobs:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      MIX_ENV: test
+      MIX_HOME: ${{ github.workspace }}/mix_home
+      POSTGRES_USER: link
+      POSTGRES_PASS: supersecret
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-elixir@v1
+      - id: setup-elixir
+        uses: erlef/setup-elixir@v1
         with:
-          otp-version: '23.1'
-          elixir-version: '1.11.2'
-          experimental-otp: true
-        env:
-          MIX_ENV: test
-          POSTGRES_USER: link
-          POSTGRES_PASS: supersecret
+          otp-version: '23.2'
+          elixir-version: '1.11.3'
 
       - name: Setup the Elixir project
         run: make deps
 
+      # Setup caching (mostly for Dialyzer)
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: mix_home
+          key: "mix-${{ runner.os }}-${{ steps.setup-elixir.outputs.otp-version }}-Elixir-${{ steps.setup-elixir.outputs.elixir-version }}"
+
       - name: Format
-        run: pip install pre-commit && SKIP=mix-test,mix-compile,mix-credo,mix-sobelow /home/runner/.local/bin/pre-commit run -a
+        run: make format
         continue-on-error: true
 
       - name: Commit formatted code
@@ -48,9 +56,17 @@ jobs:
           message: 'Formatted code'
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run tests & linters
-        run: /home/runner/.local/bin/pre-commit run -a
-        env:
-          MIX_ENV: test
-          POSTGRES_USER: link
-          POSTGRES_PASS: supersecret
+      - name: Dialyzer
+        run: make dialyzer
+
+      - name: Compile
+        run: make compile
+
+      - name: Test
+        run: make test
+
+      - name: Credo
+        run: make credo
+
+      - name: Format
+        run: make format
