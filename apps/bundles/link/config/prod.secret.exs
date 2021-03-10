@@ -23,12 +23,16 @@ secret_key_base =
     You can generate one by calling: mix phx.gen.secret
     """
 
-config :link, CoreWeb.Endpoint,
+config :link, LinkWeb.Endpoint,
   http: [
     port: String.to_integer(System.get_env("PORT") || "4000"),
     transport_options: [socket_opts: [:inet6]]
   ],
   secret_key_base: secret_key_base
+
+config :link, Core.SurfConext,
+  client_id: System.get_env("SURFCONEXT_CLIENT_ID"),
+  client_secret: System.get_env("SURFCONEXT_CLIENT_SECRET")
 
 # ## Using releases (Elixir v1.9+)
 #

@@ -41,19 +41,19 @@ studies = [
   }
 ]
 
-hashed_password = Bcrypt.hash_pwd_salt("asdf;lkj")
+password = "asdf;lkjASDF0987"
 
 _member =
-  Core.Factories.insert!(:member, %{
+  Core.Factories.insert!(:member,
     email: "member@eyra.co",
-    hashed_password: hashed_password
-  })
+    password: password
+  )
 
 researcher =
-  Core.Factories.insert!(:researcher, %{
+  Core.Factories.insert!(:researcher,
     email: "researcher@eyra.co",
-    hashed_password: hashed_password
-  })
+    password: password
+  )
 
 for data <- studies do
   study =

@@ -35,7 +35,7 @@ defmodule Link.MixProject do
   def application do
     [
       mod: {Link.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :inets]
     ]
   end
 
@@ -55,6 +55,7 @@ defmodule Link.MixProject do
   defp deps do
     [
       {:core, path: "../../core"},
+      {:assent, "~> 0.1.23"},
       # Dev and test deps
       {:progress_bar, "~> 2.0.1", only: [:dev, :test]},
       {:phoenix_live_reload, "~> 1.2", only: :dev},

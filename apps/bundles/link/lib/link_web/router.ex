@@ -3,6 +3,8 @@ defmodule LinkWeb.Router do
 
   require CoreWeb.Cldr
   import CoreWeb.UserAuth
+  alias Core.SurfConext
+  require Core.SurfConext
 
   pipeline :browser_base do
     plug(:accepts, ["html"])
@@ -52,6 +54,8 @@ defmodule LinkWeb.Router do
   end
 
   ## Authentication routes
+
+  SurfConext.routes(Application.fetch_env!(:link, SurfConext))
 
   scope "/", CoreWeb do
     pipe_through([:browser, :redirect_if_user_is_authenticated])

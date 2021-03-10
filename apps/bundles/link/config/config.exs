@@ -28,6 +28,12 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :link, Core.SurfConext,
+  client_id: "not-set",
+  client_secret: "not-set",
+  site: "https://connect.test.surfconext.nl",
+  redirect_uri: "not-set"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
