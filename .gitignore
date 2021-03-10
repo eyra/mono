@@ -4,6 +4,9 @@ postgres-data
 *.key
 *.pub
 
+# Local development settings
+dev.local.exs
+
 # The directory Mix will write compiled artifacts to.
 _build/
 

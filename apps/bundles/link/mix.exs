@@ -35,7 +35,7 @@ defmodule Link.MixProject do
   def application do
     [
       mod: {Link.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :inets]
     ]
   end
 
@@ -74,9 +74,8 @@ defmodule Link.MixProject do
       {:faker, "~> 0.16"},
       {:surface, "~> 0.1.0"},
       {:timex, "~> 3.6"},
-      # Optional, but recommended for SSL validation with :httpc adapter
+      {:assent, "~> 0.1.23"},
       {:certifi, "~> 2.4"},
-      # Optional, but recommended for SSL validation with :httpc adapter
       {:ssl_verify_fun, "~> 1.1"},
       # i18n
       {:ex_cldr, "~> 2.18"},

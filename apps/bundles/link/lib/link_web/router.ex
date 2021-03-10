@@ -3,6 +3,7 @@ defmodule LinkWeb.Router do
 
   import LinkWeb.UserAuth
   require LinkWeb.Cldr
+  require SurfConext
 
   pipeline :browser_base do
     plug(:accepts, ["html"])
@@ -52,6 +53,8 @@ defmodule LinkWeb.Router do
   end
 
   ## Authentication routes
+
+  SurfConext.routes(Application.fetch_env!(:link, SurfConext))
 
   scope "/", LinkWeb do
     pipe_through([:browser, :redirect_if_user_is_authenticated])

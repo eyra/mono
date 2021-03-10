@@ -118,6 +118,17 @@ defmodule Link.Accounts.User do
   end
 
   @doc """
+  A user changeset for use with Single Sign On systems. It implicitly trusts
+  most data that it receives.
+  """
+  def sso_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:email, :displayname])
+    |> cast_assoc(:profile)
+    |> put_change(:hashed_password, "no-password-set")
+  end
+
+  @doc """
   A user changeset for changing the password.
 
   ## Options

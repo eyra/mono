@@ -30,6 +30,10 @@ config :link, LinkWeb.Endpoint,
   ],
   secret_key_base: secret_key_base
 
+config :link, SurfConext,
+  client_id: System.get_env("SURFCONEXT_CLIENT_ID"),
+  client_secret: System.get_env("SURFCONEXT_CLIENT_SECRET")
+
 # ## Using releases (Elixir v1.9+)
 #
 # If you are doing OTP releases, you need to instruct Phoenix
