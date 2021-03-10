@@ -1,7 +1,7 @@
-defmodule CoreWeb.DependencyResolverTest do
+defmodule CoreWeb.Dependencies.ResolverTest do
   use ExUnit.Case, async: true
 
-  alias CoreWeb.DependencyResolver
+  alias CoreWeb.Dependencies.Resolver
 
   describe "resolve/2" do
     setup do
@@ -120,27 +120,27 @@ defmodule CoreWeb.DependencyResolverTest do
     end
 
     test "resolve dependency in root", %{map: map} do
-      endpoint = DependencyResolver.resolve(map, :endpoint)
+      endpoint = Resolver.resolve(map, :endpoint)
       assert endpoint === LinkWeb.Endpoint
     end
 
     test "resolve dependency in private subpath", %{map: map} do
-      endpoint = DependencyResolver.resolve(map, :phoenix_endpoint)
+      endpoint = Resolver.resolve(map, :phoenix_endpoint)
       assert endpoint === LinkWeb.Endpoint
     end
 
     test "resolve dependency in private/plug_session subpath", %{map: map} do
-      path_provider = DependencyResolver.resolve(map, "path_provider1")
+      path_provider = Resolver.resolve(map, "path_provider1")
       assert path_provider === LinkWeb.PathProvider
     end
 
     test "resolve dependency in private/connect_info/session subpath", %{map: map} do
-      path_provider = DependencyResolver.resolve(map, "path_provider2")
+      path_provider = Resolver.resolve(map, "path_provider2")
       assert path_provider === LinkWeb.PathProvider
     end
 
     test "resolve non-existing dependency", %{map: map} do
-      non_existing = DependencyResolver.resolve(map, :non_existing)
+      non_existing = Resolver.resolve(map, :non_existing)
       assert non_existing === :error
     end
   end

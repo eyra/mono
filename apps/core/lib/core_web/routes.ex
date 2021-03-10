@@ -1,9 +1,9 @@
 defmodule CoreWeb.Routes do
   alias Plug.Conn
-  alias CoreWeb.DependencyResolver
+  alias CoreWeb.Dependencies.Resolver
 
   def path_provider(conn) do
-    DependencyResolver.resolve(conn, "path_provider")
+    Resolver.resolve(conn, "path_provider")
   end
 
   def static_path(conn, asset) do
