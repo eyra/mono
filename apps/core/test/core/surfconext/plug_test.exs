@@ -56,7 +56,7 @@ end
 
 defmodule Core.SurfConext.CallbackPlug.Test do
   use ExUnit.Case, async: true
-  use Link.DataCase
+  use Core.DataCase
   use Plug.Test
   alias Core.SurfConext.CallbackPlug
 
@@ -68,7 +68,7 @@ defmodule Core.SurfConext.CallbackPlug.Test do
       client_secret: Faker.Lorem.sentence(),
       site: "https://connect.test.surfconext.nl",
       redirect_uri: "https://#{domain}/surfconext/auth",
-      oidc_module: SurfConext.FakeOIDC
+      oidc_module: Core.SurfConext.FakeOIDC
     ]
 
     {:ok, config: config}
@@ -105,7 +105,7 @@ defmodule Core.SurfConext.CallbackPlug.Test do
       [location] = get_resp_header(conn, "location")
       assert String.starts_with?(location, "/")
       session_token = get_session(conn, :user_token)
-      user = Link.Accounts.get_user_by_session_token(session_token)
+      user = Core.Accounts.get_user_by_session_token(session_token)
       assert user.email == email
     end
   end

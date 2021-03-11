@@ -30,12 +30,13 @@ defmodule Core.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
+      mod: {Core.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test"]
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
@@ -45,6 +46,7 @@ defmodule Core.MixProject do
     [
       {:green_light, path: "../frameworks/green_light"},
       {:eyra_ui, path: "../frameworks/eyra_ui"},
+      {:assent, "~> 0.1.23"},
       {:bcrypt_elixir, "~> 2.0"},
       {:phoenix, "~> 1.5.5"},
       {:phoenix_ecto, "~> 4.1"},
@@ -89,6 +91,8 @@ defmodule Core.MixProject do
   #
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
-    []
+    [
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+    ]
   end
 end

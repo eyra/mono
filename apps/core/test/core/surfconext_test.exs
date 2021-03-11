@@ -1,15 +1,14 @@
 defmodule Core.SurfConext.Test do
-  use Link.DataCase, async: true
+  use Core.DataCase, async: true
 
-  alias Link.Factories
-  alias Core.SurfContext
+  alias Core.Factories
 
   describe "get_user_by_sub/1" do
     test "get a user by their subject id" do
       user = Factories.insert!(:member)
-      Repo.insert!(%SurfConext.User{sub: "test", user: user})
+      Repo.insert!(%Core.SurfConext.User{sub: "test", user: user})
 
-      loaded_user = SurfConext.get_user_by_sub("test")
+      loaded_user = Core.SurfConext.get_user_by_sub("test")
 
       assert loaded_user.id == user.id
     end

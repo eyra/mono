@@ -7,10 +7,6 @@ defmodule Link.Application do
 
   def start(_type, _args) do
     children = [
-      # Start the Ecto repository
-      Core.Repo,
-      # Start the Telemetry supervisor
-      CoreWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Link.PubSub},
       # Start the Endpoint (http/https)

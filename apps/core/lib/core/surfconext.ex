@@ -30,7 +30,9 @@ defmodule Core.SurfConext do
     |> Repo.insert()
   end
 
-  defmacro routes(surfconext_config) do
+  defmacro routes() do
+    surfconext_config = Application.fetch_env!(:core, Core.SurfConext)
+
     quote bind_quoted: [surfconext_config: surfconext_config] do
       pipeline :surfconext_browser do
         plug(:accepts, ["html"])

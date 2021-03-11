@@ -16,6 +16,10 @@ config :link, LinkWeb.Endpoint,
   url: [host: host, port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+config :core, Core.SurfConext,
+  site: "https://connect.test.surfconext.nl",
+  redirect_uri: "https://#{host}/surfconext/auth"
+
 # Do not print debug messages in production
 config :logger, level: :info
 
@@ -23,10 +27,6 @@ config :logger, level: :info
 # SSL should be terminated by the load-balancer / proxy server. The following
 # setting makes sure that users do not connect over plain HTTP.
 config :link, CoreWeb.Endpoint, force_ssl: [rewrite_on: [:x_forwarded_proto]]
-
-config :link, Core.SurfConext,
-  site: "https://connect.test.surfconext.nl",
-  redirect_uri: "https://#{host}/surfconext/auth"
 
 # Finally import the config/prod.secret.exs which loads secrets
 # and configuration from environment variables.
