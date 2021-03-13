@@ -12,7 +12,7 @@ defmodule CoreWeb.UserSessionControllerTest do
     setup [:create_user]
 
     test "renders log in page", %{conn: conn} do
-      conn = get(conn, Routes.user_session_path(conn, :new))
+      conn = get(conn, Routes.path(conn, CoreWeb.UserSessionController, :new))
       response = html_response(conn, 200)
       assert response =~ "<h1>Log in</h1>"
     end
@@ -22,7 +22,7 @@ defmodule CoreWeb.UserSessionControllerTest do
     setup [:login_as_member]
 
     test "redirects if already logged in", %{conn: conn} do
-      conn = get(conn, Routes.user_session_path(conn, :new))
+      conn = get(conn, Routes.path(conn, CoreWeb.UserSessionController, :new))
       assert redirected_to(conn) == "/"
     end
   end
@@ -32,7 +32,7 @@ defmodule CoreWeb.UserSessionControllerTest do
 
     test "logs the user in", %{conn: conn, user: user, password: password} do
       conn =
-        post(conn, Routes.user_session_path(conn, :create), %{
+        post(conn, Routes.path(conn, CoreWeb.UserSessionController, :create), %{
           "user" => %{"email" => user.email, "password" => password}
         })
 
@@ -48,7 +48,7 @@ defmodule CoreWeb.UserSessionControllerTest do
 
     test "logs the user in with remember me", %{conn: conn, user: user, password: password} do
       conn =
-        post(conn, Routes.user_session_path(conn, :create), %{
+        post(conn, Routes.path(conn, CoreWeb.UserSessionController, :create), %{
           "user" => %{
             "email" => user.email,
             "password" => password,
@@ -64,7 +64,7 @@ defmodule CoreWeb.UserSessionControllerTest do
       conn =
         conn
         |> init_test_session(user_return_to: "/foo/bar")
-        |> post(Routes.user_session_path(conn, :create), %{
+        |> post(Routes.path(conn, CoreWeb.UserSessionController, :create), %{
           "user" => %{
             "email" => user.email,
             "password" => password
@@ -76,7 +76,7 @@ defmodule CoreWeb.UserSessionControllerTest do
 
     test "emits error message with invalid credentials", %{conn: conn, user: user} do
       conn =
-        post(conn, Routes.user_session_path(conn, :create), %{
+        post(conn, Routes.path(conn, CoreWeb.UserSessionController, :create), %{
           "user" => %{"email" => user.email, "password" => "invalid_password"}
         })
 
@@ -90,7 +90,7 @@ defmodule CoreWeb.UserSessionControllerTest do
     setup [:login_as_member]
 
     test "logs the user out", %{conn: conn} do
-      conn = delete(conn, Routes.user_session_path(conn, :delete))
+      conn = delete(conn, Routes.path(conn, CoreWeb.UserSessionController, :delete))
       assert redirected_to(conn) == "/"
       refute get_session(conn, :user_token)
       assert get_flash(conn, :info) =~ "Logged out successfully"
@@ -99,7 +99,7 @@ defmodule CoreWeb.UserSessionControllerTest do
 
   describe "DELETE /users/signout as visitor" do
     test "succeeds even if the user is not logged in", %{conn: conn} do
-      conn = delete(conn, Routes.user_session_path(conn, :delete))
+      conn = delete(conn, Routes.path(conn, CoreWeb.UserSessionController, :delete))
       assert redirected_to(conn) == "/"
       refute get_session(conn, :user_token)
       assert get_flash(conn, :info) =~ "Logged out successfully"

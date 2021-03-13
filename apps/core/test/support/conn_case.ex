@@ -16,6 +16,7 @@ defmodule CoreWeb.ConnCase do
   """
 
   use ExUnit.CaseTemplate
+  import Plug.Conn
 
   using do
     quote do
@@ -26,13 +27,19 @@ defmodule CoreWeb.ConnCase do
 
       import Core.TestHelpers
       alias Core.Factories
-      alias CoreWeb.Router.Helpers, as: Routes
+      alias CoreWeb.Routes
 
       # The default endpoint for testing
-      @endpoint CoreWeb.Endpoint
+      @endpoint CoreWeb.Support.Endpoint
 
       import Core.AuthTestHelpers
     end
+  end
+
+  def build_conn_with_dependencies() do
+    Phoenix.ConnTest.build_conn()
+    |> put_private(:path_provider, CoreWeb.Support.PathProvider)
+    |> put_private(:endpoint, CoreWeb.Support.Endpoint)
   end
 
   setup tags do
@@ -42,6 +49,8 @@ defmodule CoreWeb.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(Core.Repo, {:shared, self()})
     end
 
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    conn = build_conn_with_dependencies()
+
+    {:ok, conn: conn}
   end
 end

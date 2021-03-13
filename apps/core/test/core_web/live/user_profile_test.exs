@@ -4,8 +4,6 @@ defmodule CoreWeb.Live.UserProfileTest do
   import Phoenix.LiveViewTest
   alias CoreWeb.User.Profile
 
-  alias Core.Factories
-
   describe "edit a profile" do
     setup [:login_as_member]
 

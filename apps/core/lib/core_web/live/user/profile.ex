@@ -12,6 +12,8 @@ defmodule CoreWeb.User.Profile do
   alias EyraUI.Container.{ContentArea, FormArea}
   alias EyraUI.Button.DeleteButton
 
+  data(path_provider, :any)
+
   def load(_params, _session, %{assigns: %{current_user: user}}) do
     Accounts.get_profile(user)
   end
@@ -29,7 +31,7 @@ defmodule CoreWeb.User.Profile do
           <TextInput field={{:fullname}} label_text={{dgettext("eyra-account", "fullname.label")}} />
           <TextInput field={{:displayname}} label_text={{dgettext("eyra-account", "displayname.label")}} />
         </Form>
-        <DeleteButton label={{ dgettext("eyra-account", "signout.button") }} path={{ Routes.path(@socket, CoreWeb.UserSessionController, :delete) }} />
+        <DeleteButton label={{ dgettext("eyra-account", "signout.button") }} path={{ @path_provider.path(@socket, CoreWeb.UserSessionController, :delete) }} />
       </FormArea>
     </ContentArea>
     """

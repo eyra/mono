@@ -2,11 +2,9 @@ defmodule CoreWeb.Live.User.ResetPasswordToken.Test do
   use CoreWeb.ConnCase, async: true
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
-  import Ecto.Query
   alias CoreWeb.User.ResetPasswordToken
   alias Core.Accounts
   alias Core.Factories
-  alias Core.Repo
 
   describe "as a visitor" do
     test "reset form redirects on an invalid token", %{conn: conn} do
@@ -22,7 +20,7 @@ defmodule CoreWeb.Live.User.ResetPasswordToken.Test do
           Accounts.deliver_user_reset_password_instructions(user, url)
         end)
 
-      {:ok, view, html} = live(conn, Routes.live_path(conn, ResetPasswordToken, token))
+      {:ok, view, _html} = live(conn, Routes.live_path(conn, ResetPasswordToken, token))
 
       password = Factories.valid_user_password()
 
@@ -40,7 +38,7 @@ defmodule CoreWeb.Live.User.ResetPasswordToken.Test do
           Accounts.deliver_user_reset_password_instructions(user, url)
         end)
 
-      {:ok, view, html} = live(conn, Routes.live_path(conn, ResetPasswordToken, token))
+      {:ok, view, _html} = live(conn, Routes.live_path(conn, ResetPasswordToken, token))
 
       password = Factories.valid_user_password()
 

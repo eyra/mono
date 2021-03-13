@@ -24,7 +24,7 @@ defmodule CoreWeb.ChannelCase do
       import CoreWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint CoreWeb.Endpoint
+      @endpoint CoreWeb.Support.Endpoint
     end
   end
 

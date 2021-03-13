@@ -52,7 +52,7 @@ defmodule CoreWeb do
       use CoreWeb.LiveLocale
       import Core.Authorization, only: [can_access?: 2]
       use GreenLight.Live, Core.Authorization
-      use CoreWeb.LiveAuthHelper
+      use CoreWeb.LiveAssignHelper
 
       use Surface.LiveView,
         layout: {CoreWeb.LayoutView, "live.html"}
@@ -105,6 +105,16 @@ defmodule CoreWeb do
         ]
         |> Enum.reject(fn {locale, _} -> current_locale == locale end)
       end
+    end
+  end
+
+  def router do
+    quote do
+      use Phoenix.Router
+
+      import Plug.Conn
+      import Phoenix.Controller
+      import Phoenix.LiveView.Router
     end
   end
 

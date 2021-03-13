@@ -4,7 +4,6 @@ defmodule CoreWeb.Live.Study.New.Test do
   import Phoenix.LiveViewTest
   import Ecto.Query
   alias CoreWeb.Study
-  alias Core.Factories
 
   describe "as a researcher" do
     setup [:login_as_researcher]

@@ -17,6 +17,17 @@ config :link, LinkWeb.Endpoint,
   pubsub_server: Link.PubSub,
   live_view: [signing_salt: "U46ENwad8CDswjwuXgNZVpJjUlBjbmL9"]
 
+config :link, :children, [
+  {Phoenix.PubSub, name: Link.PubSub},
+  LinkWeb.Endpoint
+]
+
+config :core, :children, [
+  Core.Repo,
+  CoreWeb.Telemetry,
+  {Phoenix.PubSub, name: Core.PubSub}
+]
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

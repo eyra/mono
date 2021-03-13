@@ -14,6 +14,7 @@ defmodule CoreWeb.User.Signup do
   alias Core.Accounts.User
 
   data(changeset, :any)
+  data(path_provider, :any)
 
   def mount(_params, _session, socket) do
     changeset = Accounts.change_user_registration(%User{})
@@ -54,7 +55,7 @@ defmodule CoreWeb.User.Signup do
           </Form>
           <div class="mb-8" />
           {{ dgettext("eyra-account", "signin.label") }}
-          <LinkButton label={{ dgettext("eyra-account", "signin.link") }} path={{Routes.path(@socket, CoreWeb.UserSessionController, :new)}} />
+          <LinkButton label={{ dgettext("eyra-account", "signin.link") }} path={{@path_provider.path(@socket, CoreWeb.UserSessionController, :new)}} />
         </FormArea>
       </ContentArea>
     """

@@ -20,4 +20,10 @@ config :core, Core.SurfConext,
   site: "https://connect.test.surfconext.nl",
   redirect_uri: "not-set"
 
+config :core, :children, [
+  Core.Repo,
+  CoreWeb.Telemetry,
+  {Phoenix.PubSub, name: Core.PubSub}
+]
+
 import_config "#{Mix.env()}.exs"

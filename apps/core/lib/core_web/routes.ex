@@ -3,7 +3,7 @@ defmodule CoreWeb.Routes do
   alias CoreWeb.Dependencies.Resolver
 
   def path_provider(conn) do
-    Resolver.resolve(conn, "path_provider")
+    Resolver.resolve(conn, :path_provider)
   end
 
   def static_path(conn, asset) do
@@ -22,7 +22,11 @@ defmodule CoreWeb.Routes do
     path_provider(conn).path(conn, controller, view)
   end
 
-  def path(conn, controller, view, id, opts \\ []) do
+  def path(conn, controller, view, id) do
+    path_provider(conn).path(conn, controller, view, id)
+  end
+
+  def path(conn, controller, view, id, opts) do
     path_provider(conn).path(conn, controller, view, id, opts)
   end
 

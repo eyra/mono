@@ -28,13 +28,14 @@ defmodule CoreWeb.Dependencies.Injector do
 end
 
 defmodule CoreWeb.Dependencies.Resolver do
-  def resolve(conn, dependency) do
+  def resolve(conn, dependency) when is_atom(dependency) do
     [
       [dependency],
+      [:assigns, dependency],
       [:private, dependency],
-      [:private, :conn_session, dependency],
-      [:private, :plug_session, dependency],
-      [:private, :connect_info, :session, dependency]
+      [:private, :conn_session, Atom.to_string(dependency)],
+      [:private, :plug_session, Atom.to_string(dependency)],
+      [:private, :connect_info, :session, Atom.to_string(dependency)]
     ]
     |> find(conn)
   end

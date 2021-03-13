@@ -11,6 +11,7 @@ defmodule CoreWeb.SurveyTool.Index do
   data(study, :any)
   data(changeset, :any)
   data(saved, :boolean)
+  data(path_provider, :any)
 
   def mount(_params, _session, socket) do
     {:ok,
@@ -40,9 +41,9 @@ defmodule CoreWeb.SurveyTool.Index do
     <tr :for={{survey_tool <- @survey_tools}}>
       <td>{{ survey_tool.title }}</td>
       <td>
-        <span>{{ link "Show", to: Routes.live_path(@socket, __MODULE__) }}</span>
+        <span>{{ link "Show", to: @path_provider.live_path(@socket, __MODULE__) }}</span>
         <span fixme="can?(@socket, [survey_tool], CoreWeb.SurveyToolController, :edit)">
-        {{ live_patch "Edit", to: Routes.live_path(@socket,  CoreWeb.SurveyTool.Edit, survey_tool.id), replace: true }}
+        {{ live_patch "Edit", to: @path_provider.live_path(@socket,  CoreWeb.SurveyTool.Edit, survey_tool.id), replace: true }}
         </span>
         <button phx-click="delete" value={{survey_tool.id}}>
           Delete
@@ -52,7 +53,7 @@ defmodule CoreWeb.SurveyTool.Index do
     </tbody>
     </table>
 
-    <span>{{ live_patch "New Survey tool", to: Routes.live_path(@socket, CoreWeb.SurveyTool.New), replace: true }}</span>
+    <span>{{ live_patch "New Survey tool", to: @path_provider.live_path(@socket, CoreWeb.SurveyTool.New), replace: true }}</span>
 
     """
   end

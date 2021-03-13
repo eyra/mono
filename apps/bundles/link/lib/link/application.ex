@@ -6,14 +6,7 @@ defmodule Link.Application do
   use Application
 
   def start(_type, _args) do
-    children = [
-      # Start the PubSub system
-      {Phoenix.PubSub, name: Link.PubSub},
-      # Start the Endpoint (http/https)
-      LinkWeb.Endpoint
-      # Start a worker by calling: Core.Worker.start_link(arg)
-      # {Core.Worker, arg}
-    ]
+    children = Application.get_env(:link, :children)
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

@@ -1,5 +1,5 @@
-defmodule LinkWeb.PathProvider do
-  alias LinkWeb.Router.Helpers, as: Routes
+defmodule CoreWeb.Support.PathProvider do
+  alias CoreWeb.Support.Router.Helpers, as: Routes
 
   def static_path(conn, asset) do
     Routes.static_path(conn, asset)

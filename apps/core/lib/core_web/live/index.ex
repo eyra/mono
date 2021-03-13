@@ -13,6 +13,7 @@ defmodule CoreWeb.Index do
 
   data(current_user, :any)
   data(current_user_profile, :any)
+  data(path_provider, :any)
 
   def mount(_params, session, socket) do
     user = get_user(socket, session)
@@ -53,12 +54,12 @@ defmodule CoreWeb.Index do
               <PrimaryCTA
                 title={{ cta_title(@current_user_profile) }}
                 button_label={{ dgettext("eyra-link", "dashboard-button") }}
-                to={{ Routes.live_path(@socket, CoreWeb.Dashboard)}} />
+                to={{ @path_provider.live_path(@socket, CoreWeb.Dashboard)}} />
             </div>
             <div :if={{ @current_user == nil }}>
               <PrimaryCTA title={{ dgettext("eyra-link", "signup.card.title") }}
                 button_label={{ dgettext("eyra-link", "signup.card.button") }}
-                to={{ Routes.live_path(@socket, CoreWeb.User.Signup) }} />
+                to={{ @path_provider.live_path(@socket, CoreWeb.User.Signup) }} />
             </div>
           </div>
           <USP title={{ dgettext("eyra-link", "usp1.title") }} description={{ dgettext("eyra-link", "usp1.description") }} />

@@ -2,7 +2,6 @@ defmodule CoreWeb.Live.User.Signup.Test do
   use CoreWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
-  import Ecto.Query
   alias CoreWeb.User.Signup
   alias Core.Factories
 
@@ -19,7 +18,7 @@ defmodule CoreWeb.Live.User.Signup.Test do
     end
 
     test "signup redirects to confirmation view", %{conn: conn} do
-      {:ok, view, _html} = live(conn, Routes.live_path(conn, Signup))
+      {:ok, view, _html} = live(conn, Routes.live_path(conn, CoreWeb.User.Signup))
 
       view
       |> element("form")

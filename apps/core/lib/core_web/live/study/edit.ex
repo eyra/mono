@@ -19,6 +19,7 @@ defmodule CoreWeb.Study.Edit do
   alias Core.SurveyTools
 
   data(uri_origin, :string)
+  data(path_provider, :any)
 
   @impl true
   def load(%{"id" => id}, _session, _socket) do
@@ -154,7 +155,7 @@ defmodule CoreWeb.Study.Edit do
           <Title3>{{dgettext("eyra-survey", "config.title")}}</Title3>
 
           <Title6>Redirect url</Title6>
-          <BodyMedium>{{ @uri_origin <> Routes.live_path(@socket, CoreWeb.Study.Complete, @study_edit.study_id)}}</BodyMedium>
+          <BodyMedium>{{ @uri_origin <> @path_provider.live_path(@socket, CoreWeb.Study.Complete, @study_edit.study_id)}}</BodyMedium>
 
           <Spacing value="S" />
           <UrlInput field={{:survey_url}} label_text={{dgettext("eyra-survey", "config.url.label")}} read_only={{@study_edit.is_published}}/>

@@ -55,7 +55,6 @@ defmodule Link.MixProject do
   defp deps do
     [
       {:core, path: "../../core"},
-      {:assent, "~> 0.1.23"},
       # Dev and test deps
       {:progress_bar, "~> 2.0.1", only: [:dev, :test]},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
@@ -78,7 +77,6 @@ defmodule Link.MixProject do
       setup: ["deps.get", "ecto.setup", "build_js"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       ci: ["setup", "test", "credo"],
       i18n: [
         "gettext.extract --merge priv/gettext"

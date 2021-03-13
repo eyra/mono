@@ -11,6 +11,7 @@ defmodule CoreWeb.SurveyTool.New do
   alias Core.SurveyTools.SurveyTool
 
   data(changeset, :any)
+  data(path_provider, :any)
 
   @impl true
   def mount(_params, _session, socket) do
@@ -44,7 +45,7 @@ defmodule CoreWeb.SurveyTool.New do
       <TextInput field={{:survey_url}} label_text={{dgettext("eyra-account", "survey_url.label")}} />
       <button>Create</button>
     </Form>
-    <span><Surface.Components.Link to={{ Routes.live_path(@socket, CoreWeb.SurveyTool.Index) }} >Back</Surface.Components.Link></span>
+    <span><Surface.Components.Link to={{ @path_provider.live_path(@socket, CoreWeb.SurveyTool.Index) }} >Back</Surface.Components.Link></span>
     """
   end
 

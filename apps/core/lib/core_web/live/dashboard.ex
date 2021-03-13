@@ -19,6 +19,7 @@ defmodule CoreWeb.Dashboard do
   data(available_studies, :any)
   data(available_count, :any)
   data(current_user, :any)
+  data(path_provider, :any)
 
   def mount(_params, session, socket) do
     user = get_user(socket, session)
@@ -69,19 +70,19 @@ defmodule CoreWeb.Dashboard do
             <PrimaryStudy
               title={{study.title}}
               button_label={{ dgettext("eyra-study", "edit.button") }}
-              to={{Routes.live_path(@socket, CoreWeb.Study.Edit, study.id)}} />
+              to={{@path_provider.live_path(@socket, CoreWeb.Study.Edit, study.id)}} />
           </div>
           <div :for={{ study <- @subject_studies  }} >
             <PrimaryStudy
               title={{study.title}}
               button_label={{ dgettext("eyra-study", "open.button") }}
-              to={{Routes.live_path(@socket, CoreWeb.Study.Public, study.id)}}/>
+              to={{@path_provider.live_path(@socket, CoreWeb.Study.Public, study.id)}}/>
           </div>
           <div :if={{ can_access?(@current_user, CoreWeb.Study.New) }} >
             <ButtonCard
               title={{dgettext("eyra-study", "add.card.title")}}
-              path={{Routes.live_path(@socket, CoreWeb.Study.New)}}
-              image={{Routes.static_path(@socket, "/images/plus-primary.svg")}} />
+              path={{@path_provider.live_path(@socket, CoreWeb.Study.New)}}
+              image={{@path_provider.static_path(@socket, "/images/plus-primary.svg")}} />
           </div>
         </DynamicGrid>
         <div class="mt-12 lg:mt-16"/>
@@ -94,7 +95,7 @@ defmodule CoreWeb.Dashboard do
             <SecondaryStudy
               title={{study.title}}
               button_label={{ dgettext("eyra-study", "open.button") }}
-              to={{Routes.live_path(@socket, CoreWeb.Study.Public, study.id)}} />
+              to={{@path_provider.live_path(@socket, CoreWeb.Study.Public, study.id)}} />
           </div>
         </DynamicGrid>
       </ContentArea>

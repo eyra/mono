@@ -8,15 +8,15 @@ defmodule CoreWeb.UserSettingsControllerTest do
 
   describe "GET /users/settings" do
     test "renders settings page", %{conn: conn} do
-      conn = get(conn, Routes.user_settings_path(conn, :edit))
+      conn = get(conn, Routes.path(conn, CoreWeb.UserSettingsController, :edit))
       response = html_response(conn, 200)
       assert response =~ "<h1>Settings</h1>"
     end
 
     test "redirects if user is not logged in" do
-      conn = build_conn()
-      conn = get(conn, Routes.user_settings_path(conn, :edit))
-      assert redirected_to(conn) == Routes.user_session_path(conn, :new)
+      conn = build_conn_with_dependencies()
+      conn = get(conn, Routes.path(conn, CoreWeb.UserSettingsController, :edit))
+      assert redirected_to(conn) == Routes.path(conn, CoreWeb.UserSessionController, :new)
     end
   end
 
@@ -26,10 +26,10 @@ defmodule CoreWeb.UserSettingsControllerTest do
       user: user,
       password: password
     } do
-      new_password = Factories.valid_user_password()
+      _new_password = Factories.valid_user_password()
 
       new_password_conn =
-        put(conn, Routes.user_settings_path(conn, :update), %{
+        put(conn, Routes.path(conn, CoreWeb.UserSettingsController, :update), %{
           "action" => "update_password",
           "current_password" => password,
           "user" => %{
@@ -38,7 +38,9 @@ defmodule CoreWeb.UserSettingsControllerTest do
           }
         })
 
-      assert redirected_to(new_password_conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(new_password_conn) ==
+               Routes.path(conn, CoreWeb.UserSettingsController, :edit)
+
       assert get_session(new_password_conn, :user_token) != get_session(conn, :user_token)
       assert get_flash(new_password_conn, :info) =~ "Password updated successfully"
       assert Accounts.get_user_by_email_and_password(user.email, password)
@@ -46,7 +48,7 @@ defmodule CoreWeb.UserSettingsControllerTest do
 
     test "does not update password on invalid data", %{conn: conn} do
       old_password_conn =
-        put(conn, Routes.user_settings_path(conn, :update), %{
+        put(conn, Routes.path(conn, CoreWeb.UserSettingsController, :update), %{
           "action" => "update_password",
           "current_password" => "invalid",
           "user" => %{
@@ -69,20 +71,20 @@ defmodule CoreWeb.UserSettingsControllerTest do
     @tag :capture_log
     test "updates the user email", %{conn: conn, user: user, password: password} do
       conn =
-        put(conn, Routes.user_settings_path(conn, :update), %{
+        put(conn, Routes.path(conn, CoreWeb.UserSettingsController, :update), %{
           "action" => "update_email",
           "current_password" => password,
           "user" => %{"email" => Faker.Internet.email()}
         })
 
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(conn) == Routes.path(conn, CoreWeb.UserSettingsController, :edit)
       assert get_flash(conn, :info) =~ "A link to confirm your email"
       assert Accounts.get_user_by_email(user.email)
     end
 
     test "does not update email on invalid data", %{conn: conn} do
       conn =
-        put(conn, Routes.user_settings_path(conn, :update), %{
+        put(conn, Routes.path(conn, CoreWeb.UserSettingsController, :update), %{
           "action" => "update_email",
           "current_password" => "invalid",
           "user" => %{"email" => "with spaces"}
@@ -108,28 +110,28 @@ defmodule CoreWeb.UserSettingsControllerTest do
     end
 
     test "updates the user email once", %{conn: conn, user: user, token: token, email: email} do
-      conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      conn = get(conn, Routes.path(conn, CoreWeb.UserSettingsController, :confirm_email, token))
+      assert redirected_to(conn) == Routes.path(conn, CoreWeb.UserSettingsController, :edit)
       assert get_flash(conn, :info) =~ "Email changed successfully"
       refute Accounts.get_user_by_email(user.email)
       assert Accounts.get_user_by_email(email)
 
-      conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      conn = get(conn, Routes.path(conn, CoreWeb.UserSettingsController, :confirm_email, token))
+      assert redirected_to(conn) == Routes.path(conn, CoreWeb.UserSettingsController, :edit)
       assert get_flash(conn, :error) =~ "Email change link is invalid or it has expired"
     end
 
     test "does not update email with invalid token", %{conn: conn, user: user} do
-      conn = get(conn, Routes.user_settings_path(conn, :confirm_email, "oops"))
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      conn = get(conn, Routes.path(conn, CoreWeb.UserSettingsController, :confirm_email, "oops"))
+      assert redirected_to(conn) == Routes.path(conn, CoreWeb.UserSettingsController, :edit)
       assert get_flash(conn, :error) =~ "Email change link is invalid or it has expired"
       assert Accounts.get_user_by_email(user.email)
     end
 
     test "redirects if user is not logged in", %{token: token} do
-      conn = build_conn()
-      conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
-      assert redirected_to(conn) == Routes.user_session_path(conn, :new)
+      conn = build_conn_with_dependencies()
+      conn = get(conn, Routes.path(conn, CoreWeb.UserSettingsController, :confirm_email, token))
+      assert redirected_to(conn) == Routes.path(conn, CoreWeb.UserSessionController, :new)
     end
   end
 end

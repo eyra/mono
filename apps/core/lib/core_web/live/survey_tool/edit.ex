@@ -10,6 +10,8 @@ defmodule CoreWeb.SurveyTool.Edit do
 
   alias Core.SurveyTools
 
+  data(path_provider, :any)
+
   def load(%{"id" => id}, _session, _socket) do
     SurveyTools.get_survey_tool!(id)
   end
@@ -24,7 +26,7 @@ defmodule CoreWeb.SurveyTool.Edit do
       <TextInput field={{:title}} label_text={{dgettext("eyra-account", "title.label")}} />
       <TextInput field={{:survey_url}} label_text={{dgettext("eyra-account", "survey_url.label")}} />
     </Form>
-    <span><Surface.Components.Link to={{ Routes.live_path(@socket, CoreWeb.SurveyTool.Index) }} >Back</Surface.Components.Link></span>
+    <span><Surface.Components.Link to={{ @path_provider.live_path(@socket, CoreWeb.SurveyTool.Index) }} >Back</Surface.Components.Link></span>
     """
   end
 end

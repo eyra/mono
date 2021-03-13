@@ -2,7 +2,6 @@ defmodule CoreWeb.Live.User.ResetPassword.Test do
   use CoreWeb.ConnCase, async: true
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
-  import Ecto.Query
   alias CoreWeb.User.ResetPassword
   alias Core.Accounts
   alias Core.Factories

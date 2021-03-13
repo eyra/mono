@@ -9,7 +9,7 @@ defmodule CoreWeb.UserAuthTest do
   setup %{conn: conn} do
     conn =
       conn
-      |> Map.replace!(:secret_key_base, CoreWeb.Endpoint.config(:secret_key_base))
+      |> Map.replace!(:secret_key_base, CoreWeb.Support.Endpoint.config(:secret_key_base))
       |> init_test_session(%{})
 
     %{user: Core.Factories.insert!(:member), conn: conn}
@@ -64,7 +64,7 @@ defmodule CoreWeb.UserAuthTest do
 
     test "broadcasts to the given live_socket_id", %{conn: conn} do
       live_socket_id = "users_sessions:abcdef-token"
-      CoreWeb.Endpoint.subscribe(live_socket_id)
+      CoreWeb.Endpoint.subscribe(conn, live_socket_id)
 
       conn
       |> put_session(:live_socket_id, live_socket_id)
@@ -133,7 +133,7 @@ defmodule CoreWeb.UserAuthTest do
     test "redirects if user is not authenticated", %{conn: conn} do
       conn = conn |> fetch_flash() |> UserAuth.require_authenticated_user([])
       assert conn.halted
-      assert redirected_to(conn) == Routes.user_session_path(conn, :new)
+      assert redirected_to(conn) == Routes.path(conn, CoreWeb.UserSessionController, :new)
       assert get_flash(conn, :error) == "You must log in to access this page."
     end
 

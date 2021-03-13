@@ -27,6 +27,12 @@ defmodule CoreWeb.Study.New do
     end
   end
 
+  @spec create_survey_tool_attrs(any) :: %{
+          desktop_enabled: true,
+          phone_enabled: true,
+          tablet_enabled: true,
+          title: any
+        }
   def create_survey_tool_attrs(title) do
     %{title: title, phone_enabled: true, tablet_enabled: true, desktop_enabled: true}
   end

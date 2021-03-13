@@ -1,10 +1,10 @@
-defmodule CoreWeb.LiveAuthHelper do
+defmodule CoreWeb.LiveAssignHelper do
   @moduledoc """
   Automatically setup the current user in LiveViews.
   """
   defmacro __using__(_opts \\ nil) do
     quote do
-      @before_compile CoreWeb.LiveAuthHelper
+      @before_compile CoreWeb.LiveAssignHelper
     end
   end
 
@@ -18,8 +18,17 @@ defmodule CoreWeb.LiveAuthHelper do
 
       defp user(_), do: nil
 
+      defp path_provider(%{"path_provider" => path_provider}) do
+        path_provider
+      end
+
+      defp path_provider(_), do: nil
+
       def mount(params, session, socket) do
-        socket = Phoenix.LiveView.assign(socket, current_user: user(session))
+        socket =
+          socket
+          |> Phoenix.LiveView.assign(current_user: user(session))
+          |> Phoenix.LiveView.assign(path_provider: path_provider(session))
 
         super(params, session, socket)
       end
