@@ -3,7 +3,6 @@ defmodule SurfConext do
   alias Link.Repo
   import Ecto.Query, warn: false
 
-  @spec get_user_by_sub(String.t()) :: none | Link.Accounts.User.t()
   def get_user_by_sub(sub) do
     from(u in User,
       where:

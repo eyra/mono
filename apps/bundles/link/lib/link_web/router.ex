@@ -4,6 +4,7 @@ defmodule LinkWeb.Router do
   import LinkWeb.UserAuth
   require LinkWeb.Cldr
   require SurfConext
+  require SignInWithApple
 
   pipeline :browser_base do
     plug(:accepts, ["html"])
@@ -55,6 +56,7 @@ defmodule LinkWeb.Router do
   ## Authentication routes
 
   SurfConext.routes(Application.fetch_env!(:link, SurfConext))
+  SignInWithApple.routes(Application.fetch_env!(:link, SignInWithApple))
 
   scope "/", LinkWeb do
     pipe_through([:browser, :redirect_if_user_is_authenticated])

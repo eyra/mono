@@ -26,8 +26,10 @@ config :link, LinkWeb.Endpoint, force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
 config :link, SurfConext,
   site: "https://connect.test.surfconext.nl",
-  redirect_uri: "https://#{host}/surfconext/auth"
+  redirect_uri: "https://#{host}/surfconext/auth",
+  client_id: System.get_env("SURFCONEXT_CLIENT_ID")
 
+config :link, SignInWithApple, redirect_uri: "https://#{host}/apple/auth"
 # Finally import the config/prod.secret.exs which loads secrets
 # and configuration from environment variables.
 import_config "prod.secret.exs"
