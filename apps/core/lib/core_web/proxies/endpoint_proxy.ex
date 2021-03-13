@@ -1,4 +1,4 @@
-defmodule CoreWeb.Endpoint do
+defmodule CoreWeb.EndpointProxy do
   alias CoreWeb.Dependencies.Resolver
 
   def broadcast(conn, live_socket_id, message, opts) do

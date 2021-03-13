@@ -3,7 +3,7 @@ defmodule CoreWeb.UserAuth do
   import Phoenix.Controller
 
   alias Core.Accounts
-  alias CoreWeb.Routes
+  alias CoreWeb.RoutesProxy, as: Routes
 
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
@@ -75,7 +75,7 @@ defmodule CoreWeb.UserAuth do
     user_token && Accounts.delete_session_token(user_token)
 
     if live_socket_id = get_session(conn, :live_socket_id) do
-      CoreWeb.Endpoint.broadcast(conn, live_socket_id, "disconnect", %{})
+      CoreWeb.EndpointProxy.broadcast(conn, live_socket_id, "disconnect", %{})
     end
 
     conn

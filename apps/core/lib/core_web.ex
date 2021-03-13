@@ -23,7 +23,7 @@ defmodule CoreWeb do
 
       import Plug.Conn
       import CoreWeb.Gettext
-      alias CoreWeb.Routes
+      alias CoreWeb.RoutesProxy, as: Routes
 
       alias CoreWeb.Loaders
 
@@ -90,7 +90,7 @@ defmodule CoreWeb do
       import EyraUI.ErrorHelpers
       import EyraUI.Components.OldSkool
       import CoreWeb.Gettext
-      alias CoreWeb.Routes
+      alias CoreWeb.RoutesProxy, as: Routes
       import Core.Authorization, only: [can?: 4]
 
       def current_user(%{assigns: %{current_user: current_user}}), do: current_user

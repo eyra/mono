@@ -27,7 +27,7 @@ defmodule CoreWeb.ConnCase do
 
       import Core.TestHelpers
       alias Core.Factories
-      alias CoreWeb.Routes
+      alias CoreWeb.RoutesProxy, as: Routes
 
       # The default endpoint for testing
       @endpoint CoreWeb.Support.Endpoint
