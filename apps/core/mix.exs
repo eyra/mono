@@ -63,6 +63,7 @@ defmodule Core.MixProject do
       {:faker, "~> 0.16"},
       {:surface, "~> 0.1.0"},
       {:timex, "~> 3.6"},
+      {:bamboo, "~> 2.0.1"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       # i18n
