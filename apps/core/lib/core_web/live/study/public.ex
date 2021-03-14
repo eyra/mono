@@ -37,8 +37,8 @@ defmodule CoreWeb.Study.Public do
     )
   end
 
-  def mount(%{"id" => id}, session, socket) do
-    user = get_user(socket, session)
+  def mount(%{"id" => id}, _session, socket) do
+    user = socket.assigns[:current_user]
     study = Studies.get_study!(id)
     survey_tool = load_survey_tool(study)
     task_info = SurveyTools.get_or_create_task(survey_tool, user)
