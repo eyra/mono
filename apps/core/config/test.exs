@@ -30,3 +30,7 @@ config :core, :children, [
 config :core, Core.Mailer, adapter: Bamboo.TestAdapter
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+# Reduce password hashing impact on test duration
+config :bcrypt_elixir,
+  log_rounds: 4
