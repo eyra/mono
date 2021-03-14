@@ -1,0 +1,8 @@
+{
+  "test/*_test.exs": {"type": "test", "alternate": "lib/{}.ex"},
+  "lib/*.ex": {"type": "code", "alternate": "test/{}_test.exs"},
+  "lib/*.html.eex": {"type": "template"},
+  "priv/**/migrations/*.exs": {"type": "migration"},
+  "guides/*.md": {"type": "guide"},
+  "config/*.exs": {"type": "config"}
+}

@@ -1,7 +1,7 @@
 use Mix.Config
 
 # Configure your database
-config :link, Link.Repo,
+config :core, Core.Repo,
   username: "postgres",
   password: "postgres",
   database: "link_dev",
@@ -65,7 +65,7 @@ config :link, LinkWeb.Endpoint,
     ]
   ]
 
-config :link, SurfConext, site: "https://connect.test.surfconext.nl"
+config :core, Core.SurfConext, site: "https://connect.test.surfconext.nl"
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
@@ -82,5 +82,6 @@ config :phoenix, :plug_init_mode, :runtime
 try do
   import_config "dev.local.exs"
 rescue
-  File.Error -> IO.puts("Local development config not found. 3rd party services might not work.")
+  File.Error ->
+    IO.puts(:stderr, "Local development config not found. 3rd party services might not work.")
 end

@@ -1,0 +1,14 @@
+<ul>
+  <%= if @current_user do %>
+    <li><%= @current_user.email %></li>
+    <li><%= link "Settings", to: Routes.path(@conn, CoreWeb.UserSettingsController, :edit) %></li>
+    <li>
+      <%= link "Log out", to: Routes.path(@conn, CoreWeb.UserSessionController, :delete), method: :delete %>
+    </li>
+  <% else %>
+    <li>
+      <%= link "Register", to: Routes.live_path(@conn, CoreWeb.User.Signup) %>
+    </li>
+    <li><%= link "Log in", to: Routes.path(@conn, CoreWeb.UserSessionController, :new) %></li>
+  <% end %>
+</ul>

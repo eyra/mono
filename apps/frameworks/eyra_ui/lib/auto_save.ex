@@ -50,13 +50,14 @@ defmodule EyraUI.AutoSave do
     end
   end
 
-  def mount(entity_name, entity, changeset, socket) do
+  def mount(entity_name, entity, changeset, path_provider, socket) do
     socket =
       socket
       |> assign(
         changeset: changeset,
         save_changeset: changeset,
-        save_timer: nil
+        save_timer: nil,
+        path_provider: path_provider
       )
       |> assign(entity_name, entity)
 
@@ -76,9 +77,11 @@ defmodule EyraUI.AutoSave do
       data(changeset, :any)
 
       def mount(params, session, socket) do
+        label = "##### MOUNT AUTO_SAVE #{__MODULE__} ##############"
+        path_provider = Map.get(session, "path_provider")
         entity = load(params, session, socket)
         changeset = get_changeset(entity)
-        AutoSave.mount(unquote(entity_name), entity, changeset, socket)
+        AutoSave.mount(unquote(entity_name), entity, changeset, path_provider, socket)
       end
 
       def handle_event(

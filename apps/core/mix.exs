@@ -30,12 +30,13 @@ defmodule Core.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
+      mod: {Core.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:test), do: ["lib", "test", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
@@ -45,8 +46,40 @@ defmodule Core.MixProject do
     [
       {:green_light, path: "../frameworks/green_light"},
       {:eyra_ui, path: "../frameworks/eyra_ui"},
+      {:assent, "~> 0.1.23"},
+      {:bcrypt_elixir, "~> 2.0"},
+      {:phoenix, "~> 1.5.5"},
+      {:phoenix_ecto, "~> 4.1"},
+      {:phoenix_live_view, "~> 0.15.1"},
+      {:floki, ">= 0.27.0", only: :test},
+      {:ecto_sql, "~> 3.4"},
+      {:ecto_commons, "~> 0.3.2"},
+      {:postgrex, ">= 0.0.0"},
+      {:phoenix_html, "~> 2.11"},
+      {:phoenix_live_dashboard, "~> 0.2"},
+      {:gettext, "~> 0.11"},
+      {:jason, "~> 1.0"},
+      {:plug_cowboy, "~> 2.0"},
+      {:faker, "~> 0.16"},
+      {:surface, "~> 0.1.0"},
+      {:timex, "~> 3.6"},
+      {:telemetry_metrics, "~> 0.4"},
+      {:telemetry_poller, "~> 0.4"},
+      # i18n
+      {:ex_cldr, "~> 2.18"},
+      {:ex_cldr_numbers, "~> 2.16"},
+      {:ex_cldr_dates_times, "~> 2.6"},
+      # Optional, but recommended for SSL validation with :httpc adapter
+      {:certifi, "~> 2.4"},
+      # Optional, but recommended for SSL validation with :httpc adapter
+      {:ssl_verify_fun, "~> 1.1"},
       # Dev and test deps
+      {:progress_bar, "~> 2.0.1", only: [:dev, :test]},
+      {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.22", only: :dev, runtime: false},
+      {:table_rex, "~> 3.0.0"},
+      {:phx_gen_auth, "~> 0.6", only: [:dev], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
@@ -58,6 +91,8 @@ defmodule Core.MixProject do
   #
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
-    []
+    [
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+    ]
   end
 end

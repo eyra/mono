@@ -3,7 +3,7 @@ defmodule Mix.Tasks.Grlt.Perms do
   A Mix task to list all the permission with their role assignments.
   """
   use Mix.Task
-  alias Link.Authorization
+  alias Core.Authorization
 
   def run(_) do
     Authorization.permission_map()

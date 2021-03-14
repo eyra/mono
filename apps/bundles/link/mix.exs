@@ -54,33 +54,7 @@ defmodule Link.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:green_light, path: "../../frameworks/green_light"},
-      {:eyra_ui, path: "../../frameworks/eyra_ui"},
-      {:bcrypt_elixir, "~> 2.0"},
-      {:phoenix, "~> 1.5.5"},
-      {:phoenix_ecto, "~> 4.1"},
-      {:phoenix_live_view, "~> 0.15.1"},
-      {:floki, ">= 0.27.0", only: :test},
-      {:ecto_sql, "~> 3.4"},
-      {:ecto_commons, "~> 0.3.2"},
-      {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_dashboard, "~> 0.2"},
-      {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"},
-      {:gettext, "~> 0.11"},
-      {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"},
-      {:faker, "~> 0.16"},
-      {:surface, "~> 0.1.0"},
-      {:timex, "~> 3.6"},
-      {:assent, "~> 0.1.23"},
-      {:certifi, "~> 2.4"},
-      {:ssl_verify_fun, "~> 1.1"},
-      # i18n
-      {:ex_cldr, "~> 2.18"},
-      {:ex_cldr_numbers, "~> 2.16"},
-      {:ex_cldr_dates_times, "~> 2.6"},
+      {:core, path: "../../core"},
       # Dev and test deps
       {:progress_bar, "~> 2.0.1", only: [:dev, :test]},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
@@ -103,7 +77,6 @@ defmodule Link.MixProject do
       setup: ["deps.get", "ecto.setup", "build_js"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       ci: ["setup", "test", "credo"],
       i18n: [
         "gettext.extract --merge priv/gettext"

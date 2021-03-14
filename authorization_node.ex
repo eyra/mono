@@ -1,2 +1,2 @@
-defmodule Link.Authorization.Node do
+defmodule Core.Authorization.Node do
 end

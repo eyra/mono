@@ -1,0 +1,145 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:161
+msgid "config.nrofsubjects.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:160
+msgid "config.url.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:154
+msgid "config.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:166 lib/core_web/live/study/public.ex:103
+msgid "config.devices.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:176 lib/core_web/live/study/edit.ex:182
+#: lib/core_web/live/study/public.ex:111
+msgid "desktop.enabled.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:173 lib/core_web/live/study/edit.ex:181
+#: lib/core_web/live/study/public.ex:108
+msgid "tablet.enabled.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:163
+msgid "info.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:193
+msgid "publish.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:190
+msgid "unpublish.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:194
+msgid "delete.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/public.ex:115
+msgid "apply.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/public.ex:99
+msgid "duration.public.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:162
+msgid "duration.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:137
+msgid "published.false.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core/studies/study_edit.ex:133 lib/core/studies/study_public.ex:59
+#: lib/core_web/live/study/edit.ex:136
+msgid "published.true.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core/studies/study_edit.ex:137 lib/core/studies/study_public.ex:62
+msgid "created.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core/studies/study_public.ex:71
+msgid "by.author.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/public.ex:116
+msgid "goto.survey"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/complete.ex:59
+msgid "thank.you.message"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/public.ex:94
+msgid "completed.message"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:144
+msgid "completed.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:143
+msgid "status.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:146
+msgid "vacant.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:145
+msgid "pending.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:170 lib/core_web/live/study/edit.ex:180
+#: lib/core_web/live/study/public.ex:105
+msgid "phone.enabled.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/public.ex:122
+msgid "withdraw.button"
+msgstr ""
