@@ -5,7 +5,6 @@ defmodule CoreWeb.Dashboard do
   use CoreWeb, :live_view
 
   import Core.Authorization
-  import Core.Accounts
   alias Core.Studies
   alias EyraUI.Card.{PrimaryStudy, SecondaryStudy, ButtonCard}
   alias EyraUI.Hero.HeroLarge
@@ -21,10 +20,8 @@ defmodule CoreWeb.Dashboard do
   data(current_user, :any)
   data(path_provider, :any)
 
-  def mount(_params, session, socket) do
-    user = get_user(socket, session)
-    profile = get_profile(user)
-    socket = assign(socket, current_user_profile: profile)
+  def mount(_params, _session, socket) do
+    user = socket.assigns[:current_user]
 
     owned_studies = user |> Studies.list_owned_studies()
     subject_studies = user |> Studies.list_subject_studies()

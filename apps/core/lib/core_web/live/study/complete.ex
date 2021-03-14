@@ -20,8 +20,8 @@ defmodule CoreWeb.Study.Complete do
   data(participant?, :boolean)
   data(study_public, :any)
 
-  def mount(%{"id" => id}, session, socket) do
-    user = get_user(socket, session)
+  def mount(%{"id" => id}, _session, socket) do
+    user = socket.assigns[:current_user]
     study = Studies.get_study!(id)
     survey_tool = load_survey_tool(study)
     study_public = StudyPublic.create(study, survey_tool)
