@@ -367,8 +367,8 @@ defmodule Core.Accounts do
     user_profile = get_profile(user)
 
     cond do
+      user.displayname != nil -> user.displayname
       user_profile.fullname != nil -> user_profile.fullname
-      user_profile.displayname != nil -> user_profile.displayname
       true -> user.email
     end
   end
