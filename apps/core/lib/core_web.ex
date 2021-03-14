@@ -46,15 +46,6 @@ defmodule CoreWeb do
     end
   end
 
-  @spec live_view ::
-          {:__block__, [],
-           [
-             {:__block__, [], [...]}
-             | {:def, [...], [...]}
-             | {:import, [...], [...]}
-             | {:use, [...], [...]},
-             ...
-           ]}
   def live_view do
     quote do
       use CoreWeb.LiveLocale
