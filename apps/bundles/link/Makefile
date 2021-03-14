@@ -29,7 +29,6 @@ gettext:
 
 clean:
 	@rm -rf assets
-	@rm -rf priv/repo
 	@rm -rf priv/static
 	@rm -rf priv/cldr
 	@rm -rf deps

@@ -1,0 +1,146 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:161
+msgid "config.nrofsubjects.label"
+msgstr "Aantal vereiste subjects"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:160
+msgid "config.url.label"
+msgstr "Link naar survey"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:154
+msgid "config.title"
+msgstr "Survey instellingen"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:166 lib/core_web/live/study/public.ex:103
+msgid "config.devices.title"
+msgstr "Beschikbaarheid"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:176 lib/core_web/live/study/edit.ex:182
+#: lib/core_web/live/study/public.ex:111
+msgid "desktop.enabled.label"
+msgstr "Desktop"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:173 lib/core_web/live/study/edit.ex:181
+#: lib/core_web/live/study/public.ex:108
+msgid "tablet.enabled.label"
+msgstr "Tablet"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:163
+msgid "info.label"
+msgstr "Wat kan een subject verwachten van de survey?"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:193
+msgid "publish.button"
+msgstr "Publiceer"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:190
+msgid "unpublish.button"
+msgstr "Maak publicatie ongedaan"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:194
+msgid "delete.button"
+msgstr "Verwijder"
+
+#, elixir-format
+#: lib/core_web/live/study/public.ex:115
+msgid "apply.button"
+msgstr "Meld je aan om mee te doen"
+
+#, elixir-format
+#: lib/core_web/live/study/public.ex:99
+msgid "duration.public.label"
+msgstr "Geschatte duur"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:162
+msgid "duration.label"
+msgstr "Geschatte duur van het onderzoek"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:137
+msgid "published.false.label"
+msgstr "Nog niet gepubliceerd"
+
+#, elixir-format
+#: lib/core/studies/study_edit.ex:133 lib/core/studies/study_public.ex:59
+#: lib/core_web/live/study/edit.ex:136
+msgid "published.true.label"
+msgstr "Gepubliceerd"
+
+#, elixir-format
+#: lib/core/studies/study_edit.ex:137 lib/core/studies/study_public.ex:62
+msgid "created.label"
+msgstr "Aangemaakt"
+
+#, elixir-format
+#: lib/core/studies/study_public.ex:71
+msgid "by.author.label"
+msgstr "Door"
+
+#, elixir-format
+#: lib/core_web/live/study/public.ex:116
+msgid "goto.survey"
+msgstr "Ga naar de vragenlijst"
+
+#, elixir-format
+#: lib/core_web/live/study/complete.ex:59
+msgid "thank.you.message"
+msgstr "Bedankt voor het meedoen. Hopelijk tot snel!"
+
+#, elixir-format
+#: lib/core_web/live/study/public.ex:94
+msgid "completed.message"
+msgstr "Je hebt deze vragenlijst al succesvol doorlopen."
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:144
+msgid "completed.label"
+msgstr "Afgerond"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:143
+msgid "status.title"
+msgstr "Voortgang"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:146
+msgid "vacant.label"
+msgstr "Openstaand"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:145
+msgid "pending.label"
+msgstr "Bezig"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:170 lib/core_web/live/study/edit.ex:180
+#: lib/core_web/live/study/public.ex:105
+msgid "phone.enabled.label"
+msgstr "Telefoon"
+
+#, elixir-format
+#: lib/core_web/live/study/public.ex:122
+msgid "withdraw.button"
+msgstr "Intrekken"

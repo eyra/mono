@@ -1,7 +1,7 @@
 use Mix.Config
 
 # Configure your database
-config :link, Link.Repo,
+config :core, Core.Repo,
   username: "postgres",
   password: "postgres",
   database: "link_dev",
@@ -65,7 +65,7 @@ config :link, LinkWeb.Endpoint,
     ]
   ]
 
-config :link, SurfConext, site: "https://connect.test.surfconext.nl"
+config :core, Core.SurfConext, site: "https://connect.test.surfconext.nl"
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

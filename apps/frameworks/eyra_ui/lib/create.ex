@@ -47,7 +47,6 @@ defmodule EyraUI.Create do
         entity_name = unquote(entity_name)
         attrs = params[entity_name |> to_string]
         changeset = get_changeset(attrs)
-
         Create.create(__MODULE__, socket, changeset)
       end
 

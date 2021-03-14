@@ -10,7 +10,11 @@ defmodule LinkWeb.Endpoint do
     signing_salt: "3oh1/4M5"
   ]
 
-  socket("/socket", LinkWeb.UserSocket,
+  @dependencies [
+    path_provider: LinkWeb.PathProvider
+  ]
+
+  socket("/socket", CoreWeb.UserSocket,
     websocket: true,
     longpoll: false
   )
@@ -54,5 +58,6 @@ defmodule LinkWeb.Endpoint do
   plug(Plug.MethodOverride)
   plug(Plug.Head)
   plug(Plug.Session, @session_options)
+  plug(CoreWeb.Dependencies.Injector, @dependencies)
   plug(LinkWeb.Router)
 end
