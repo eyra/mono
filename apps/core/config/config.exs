@@ -13,6 +13,7 @@ config :phoenix, :json_library, Jason
 config :core, CoreWeb.Gettext, default_locale: "nl", locales: ~w(en nl)
 
 config :core, ecto_repos: [Core.Repo]
+config :core, default_from_email: "test@example.org"
 
 config :core, Core.SurfConext,
   client_id: "not-set",

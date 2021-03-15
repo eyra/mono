@@ -6,4 +6,8 @@ defmodule LinkWeb.Router do
 
   Core.SurfConext.routes()
   CoreWeb.Routes.routes()
+
+  if Mix.env() == :dev do
+    forward("/sent_emails", Bamboo.SentEmailViewerPlug)
+  end
 end
