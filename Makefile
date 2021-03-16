@@ -34,3 +34,8 @@ compile/%:
 deps: ${BUNDLES:%=deps/%} ${FRAMEWORKS:%=deps/%} deps/apps/core
 deps/%:
 	cd $* && mix deps.get
+
+run_link: run/apps/bundles/link
+run/%:
+	cd $* && make run
+

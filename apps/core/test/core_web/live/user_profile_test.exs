@@ -16,7 +16,7 @@ defmodule CoreWeb.Live.UserProfileTest do
       html =
         view
         |> element("form")
-        |> render_change(%{profile: %{fullname: fullname, displayname: displayname}})
+        |> render_change(%{user_profile_edit: %{fullname: fullname, displayname: displayname}})
 
       assert html =~ fullname
       assert html =~ displayname

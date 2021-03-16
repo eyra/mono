@@ -3,23 +3,51 @@ defmodule CoreWeb.User.Profile do
   The home screen.
   """
   use CoreWeb, :live_view
+  use EyraUI.AutoSave, :user_profile_edit
 
   alias Surface.Components.Form
   alias Core.Accounts
+  alias Core.Accounts.UserProfileEdit
+
   alias EyraUI.Form.{TextInput, Checkbox}
-  use EyraUI.AutoSave, :profile
   alias EyraUI.Text.Title2
   alias EyraUI.Container.{ContentArea, FormArea}
   alias EyraUI.Button.DeleteButton
 
   data(path_provider, :any)
 
+  @impl true
   def load(_params, _session, %{assigns: %{current_user: user}}) do
-    Accounts.get_profile(user)
+    profile = Accounts.get_profile(user)
+    UserProfileEdit.create(user, profile)
   end
 
-  defdelegate get_changeset(profile, attrs \\ %{}), to: Accounts, as: :change_profile
-  defdelegate save(changeset), to: Accounts, as: :update_profile
+  @impl true
+  def get_changeset(user_profile_edit, attrs \\ %{}) do
+    user_profile_edit |> UserProfileEdit.changeset(attrs)
+  end
+
+  @impl true
+  def save(changeset) do
+    if changeset.valid? do
+      save_valid(changeset)
+    else
+      changeset = %{changeset | action: :save}
+      {:error, changeset}
+    end
+  end
+
+  def save_valid(changeset) do
+    user_profile_edit = Ecto.Changeset.apply_changes(changeset)
+    user_attrs = UserProfileEdit.to_user(user_profile_edit)
+    profile_attrs = UserProfileEdit.to_profile(user_profile_edit)
+
+    user = Accounts.get_user!(user_profile_edit.user_id)
+
+    Accounts.update_user_profile(user, user_attrs, profile_attrs)
+
+    {:ok, user_profile_edit}
+  end
 
   def render(assigns) do
     ~H"""
