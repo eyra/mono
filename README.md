@@ -1,3 +1,3 @@
 # Eylixir: 
 
-The Eyra Exlixer SaaS platform
+The Eyra Elixer SaaS platform
