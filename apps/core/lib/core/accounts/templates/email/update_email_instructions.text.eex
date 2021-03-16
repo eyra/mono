@@ -1,0 +1,7 @@
+Hi <%= @user.displayname %>,
+
+You can change your email by visiting the URL below:
+
+<%= @url %>
+
+If you didn't request this change, please ignore this.

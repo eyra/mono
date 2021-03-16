@@ -1,0 +1,5 @@
+<h1>Hi <%= @user.displayname %>,</h1>
+
+Almost there, you can now <a href="<%= @url %>">confirm your account</a>.
+
+If you didn't create an account with us, please ignore this.
