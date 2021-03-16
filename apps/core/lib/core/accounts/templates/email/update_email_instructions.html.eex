@@ -1,0 +1,7 @@
+<h1>Hi <%= @user.displayname %>,</h1>
+
+You can change your email by visiting the URL below:
+
+<a href="<%= @url %>"><%= @url %></a>
+
+If you didn't request this change, please ignore this.

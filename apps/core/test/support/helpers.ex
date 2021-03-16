@@ -52,9 +52,15 @@ defmodule Core.AuthTestHelpers do
     Factories.insert!(:researcher) |> login(ctx)
   end
 
-  def extract_user_token(fun) do
+  def extract_user_token_old(fun) do
     {:ok, captured} = fun.(&"[TOKEN]#{&1}[TOKEN]")
     [_, token, _] = String.split(captured.body, "[TOKEN]")
+    token
+  end
+
+  def extract_user_token(fun) do
+    {:ok, captured} = fun.(&"[TOKEN]#{&1}[TOKEN]")
+    [_, token, _] = String.split(captured.text_body, "[TOKEN]")
     token
   end
 end
