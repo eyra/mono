@@ -4,6 +4,7 @@ defmodule Core.Accounts do
   """
 
   import Ecto.Query, warn: false
+  alias Ecto.Multi
   alias Core.Repo
   alias Core.Accounts.{User, UserToken, UserNotifier, Profile}
 
@@ -382,6 +383,15 @@ defmodule Core.Accounts do
     profile
     |> Profile.changeset(attrs)
     |> Repo.update()
+  end
+
+  def update_user_profile(%User{} = user, user_attrs, profile_attrs) do
+    profile = get_profile(user)
+
+    Multi.new()
+    |> Multi.update(:profile, Profile.changeset(profile, profile_attrs))
+    |> Multi.update(:user, User.user_profile_changeset(user, user_attrs))
+    |> Repo.transaction()
   end
 
   def update_profile(changeset) do

@@ -49,6 +49,14 @@ defmodule Core.Accounts.User do
     |> validate_password(opts)
   end
 
+  @doc """
+  User changeset for profile page
+  """
+  def user_profile_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:researcher, :displayname])
+  end
+
   defp validate_email(changeset) do
     changeset
     |> validate_required([:email])
