@@ -4,7 +4,6 @@ defmodule CoreWeb.Index do
   """
   use CoreWeb, :live_view
 
-  import Core.Accounts
   alias EyraUI.Card.{PrimaryCTA, USP}
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Hero.HeroLarge
@@ -12,17 +11,9 @@ defmodule CoreWeb.Index do
   alias EyraUI.Grid.{AbsoluteGrid}
 
   data(current_user, :any)
-  data(current_user_profile, :any)
   data(path_provider, :any)
 
-  def mount(_params, session, socket) do
-    user = get_user(socket, session)
-    profile = get_profile(user)
-
-    socket =
-      socket
-      |> assign(current_user_profile: profile)
-
+  def mount(_params, _session, socket) do
     {:ok, socket}
   end
 
@@ -30,8 +21,8 @@ defmodule CoreWeb.Index do
     dgettext("eyra-link", "member.card.title")
   end
 
-  def cta_title(current_user_profile) do
-    dgettext("eyra-link", "member.profile.card.title", user: current_user_profile.displayname)
+  def cta_title(current_user) do
+    dgettext("eyra-link", "member.profile.card.title", user: current_user.displayname)
   end
 
   def render(assigns) do
@@ -52,7 +43,7 @@ defmodule CoreWeb.Index do
           <div>
             <div :if={{ @current_user != nil }}>
               <PrimaryCTA
-                title={{ cta_title(@current_user_profile) }}
+                title={{ cta_title(@current_user) }}
                 button_label={{ dgettext("eyra-link", "dashboard-button") }}
                 to={{ @path_provider.live_path(@socket, CoreWeb.Dashboard)}} />
             </div>

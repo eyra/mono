@@ -28,6 +28,8 @@ config :core, :children, [
   {Phoenix.PubSub, name: Core.PubSub}
 ]
 
+config :core, Core.Mailer, adapter: Bamboo.LocalAdapter
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

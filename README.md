@@ -1,3 +1,3 @@
-# Eyra Link
+# Eylixir: 
 
-The Eyra Link platform is used to recruit and manage participants for scientific studies.
+The Eyra Elixer SaaS platform

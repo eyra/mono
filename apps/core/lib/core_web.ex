@@ -48,7 +48,6 @@ defmodule CoreWeb do
 
   def live_view do
     quote do
-      def get_user(socket, session), do: nil
       use CoreWeb.LiveLocale
       import Core.Authorization, only: [can_access?: 2]
       use GreenLight.Live, Core.Authorization

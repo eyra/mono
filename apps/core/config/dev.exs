@@ -9,6 +9,8 @@ config :core, Core.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
+config :core, Core.Mailer, adapter: Bamboo.LocalAdapter
+
 # Load developer machine specific config. This can be used to setup secrets and
 # such to connect with 3rd party services.
 try do

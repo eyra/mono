@@ -1,0 +1,11 @@
+<h1>Hi <%= @user.displayname %>,</h1>
+
+An attempt was made to activate your already activated account.
+
+You can go to the login page via the following link:
+
+<a href="<%= @url %>"><%= @url %></a>
+
+Please contact us if you didn't try to activate your account.
+
+# FIXME: Add suspicous activity reporting link here
