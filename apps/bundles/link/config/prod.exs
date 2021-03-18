@@ -20,6 +20,7 @@ config :core, Core.SurfConext,
   site: "https://connect.test.surfconext.nl",
   redirect_uri: "https://#{host}/surfconext/auth"
 
+config :core, SignInWithApple, redirect_uri: "https://#{host}/apple/auth"
 # Do not print debug messages in production
 config :logger, level: :info
 

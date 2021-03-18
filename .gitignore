@@ -47,3 +47,4 @@ apps/bundles/*/priv/static/
 logfile
 .env
 .DS_Store
+/mix_home/

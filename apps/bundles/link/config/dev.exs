@@ -84,5 +84,6 @@ config :exsync, addition_dirs: ["../../core", "../../frameworks"]
 try do
   import_config "dev.local.exs"
 rescue
-  File.Error -> IO.puts("Local development config not found. 3rd party services might not work.")
+  File.Error ->
+    IO.puts(:stderr, "Local development config not found. 3rd party services might not work.")
 end
