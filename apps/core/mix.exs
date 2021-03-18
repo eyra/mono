@@ -94,7 +94,14 @@ defmodule Core.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+      setup: ["deps.get", "ecto.setup"],
+      test: ["ecto.create --quiet", "ecto.migrate", "test"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      i18n: [
+        "gettext.extract --merge priv/gettext"
+      ],
+      makedocs: ["deps.get", "docs -o doc/output"]
     ]
   end
 end
