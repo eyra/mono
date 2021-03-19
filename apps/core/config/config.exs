@@ -27,6 +27,10 @@ config :core, SignInWithApple,
   private_key_id: System.get_env("SIGN_IN_WITH_APPLE_PRIVATE_KEY_ID"),
   redirect_uri: "https://localhost/apple/auth"
 
+config :core, Core.ImageCatalog.Unsplash,
+  access_key: "",
+  app_name: "Core"
+
 config :core, :children, [
   Core.Repo,
   CoreWeb.Telemetry,
