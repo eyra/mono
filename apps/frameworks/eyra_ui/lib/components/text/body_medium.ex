@@ -5,10 +5,11 @@ defmodule EyraUI.Text.BodyMedium do
   use Surface.Component
 
   slot(default, required: true)
+  prop(color, :css_class, default: "text-grey1")
 
   def render(assigns) do
     ~H"""
-    <div class="flex-wrap text-grey1 text-bodymedium font-body">
+    <div class="flex-wrap text-bodymedium font-body {{@color}}">
       <slot />
     </div>
     """

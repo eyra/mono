@@ -27,14 +27,15 @@ defmodule CoreWeb.Study.New do
     end
   end
 
-  @spec create_survey_tool_attrs(any) :: %{
-          desktop_enabled: true,
-          phone_enabled: true,
-          tablet_enabled: true,
-          title: any
-        }
   def create_survey_tool_attrs(title) do
-    %{title: title, phone_enabled: true, tablet_enabled: true, desktop_enabled: true}
+    %{
+      title: title,
+      phone_enabled: true,
+      tablet_enabled: true,
+      desktop_enabled: true,
+      image_url:
+        "https://images.unsplash.com/photo-1518770660439-4636190af475?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+    }
   end
 
   defdelegate get_changeset(attrs \\ %{}), to: Studies, as: :get_study_changeset

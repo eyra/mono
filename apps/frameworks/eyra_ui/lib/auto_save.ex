@@ -77,7 +77,6 @@ defmodule EyraUI.AutoSave do
       data(changeset, :any)
 
       def mount(params, session, socket) do
-        label = "##### MOUNT AUTO_SAVE #{__MODULE__} ##############"
         path_provider = Map.get(session, "path_provider")
         entity = load(params, session, socket)
         changeset = get_changeset(entity)
@@ -105,7 +104,7 @@ defmodule EyraUI.AutoSave do
          |> assign(unquote(entity_name), entity)}
       end
 
-      def terminate(_reason, %{assigns: %{save_changeset: changeset}}) do
+      def terminate(reason, %{assigns: %{save_changeset: changeset}}) do
         {:ok, _} = save(changeset)
         :ok
       end

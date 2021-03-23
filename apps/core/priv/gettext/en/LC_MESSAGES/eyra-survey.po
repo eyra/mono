@@ -81,7 +81,7 @@ msgstr "Estimated duration"
 #, elixir-format
 #: lib/core_web/live/study/edit.ex:137
 msgid "published.false.label"
-msgstr "Not yet published"
+msgstr "Concept"
 
 #, elixir-format
 #: lib/core/studies/study_edit.ex:133 lib/core/studies/study_public.ex:59

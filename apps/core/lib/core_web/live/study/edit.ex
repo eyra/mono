@@ -5,18 +5,21 @@ defmodule CoreWeb.Study.Edit do
   use CoreWeb, :live_view
   use EyraUI.AutoSave, :study_edit
   alias Surface.Components.Form
-  alias EyraUI.Form.{TextInput, UrlInput, NumberInput, TextArea, Checkbox}
+  alias EyraUI.Form.{TextInput, UrlInput, NumberInput, TextArea, Checkbox, RadioButtonGroup}
   alias EyraUI.Hero.HeroSmall
-  alias EyraUI.Container.ContentArea
+  alias EyraUI.Container.{ContentArea, Bar, BarItem}
   alias EyraUI.Text.{Title1, Title3, Title6, SubHead, BodyMedium, Bullet}
   alias EyraUI.Button.{PrimaryLiveViewButton, SecondaryLiveViewButton}
   alias EyraUI.Status.{Info, Warning}
-  alias EyraUI.Spacing
+  alias EyraUI.{Spacing, Line}
   alias EyraUI.Case.{Case, True, False}
+  alias EyraUI.Card.Card
+  alias EyraUI.Selectors.{LabelSelector, ImageSelector}
 
   alias Core.Studies
   alias Core.Studies.{Study, StudyEdit}
   alias Core.SurveyTools
+  alias Core.Marks
 
   data(uri_origin, :string)
   data(path_provider, :any)
@@ -42,8 +45,6 @@ defmodule CoreWeb.Study.Edit do
   end
 
   @impl true
-  @spec save(%{:action => any, :valid? => any, optional(any) => any}) ::
-          {:error, %{:action => :save, :valid? => any, optional(any) => any}} | {:ok, struct}
   def save(changeset) do
     if changeset.valid? do
       save_valid(changeset)
@@ -105,13 +106,28 @@ defmodule CoreWeb.Study.Edit do
     else
       {:noreply,
        socket
-       |> put_flash(:error, "Please correct the indicated errors.")}
+       |> put_flash(:error, "Please correct the indicated errors. #{changeset.errors}")}
     end
   end
 
   def handle_event("unpublish", _params, socket) do
     params = %{published_at: nil}
     save(params, socket)
+  end
+
+  def handle_info({:theme_selector, themes}, socket) do
+    params = %{themes: themes}
+    study_edit = socket.assigns[:study_edit]
+
+    changeset = StudyEdit.validate_for_publish(study_edit, params)
+
+    if changeset.valid? do
+      save(params, socket)
+    else
+      {:noreply,
+       socket
+       |> put_flash(:error, "Please correct the indicated errors. #{changeset.errors}")}
+    end
   end
 
   def save(params, socket) do
@@ -134,11 +150,31 @@ defmodule CoreWeb.Study.Edit do
     ~H"""
       <HeroSmall title={{ dgettext("eyra-study", "study.edit.title") }} />
       <ContentArea>
-        <Info :if={{ @study_edit.is_published }} text={{dgettext("eyra-survey", "published.true.label")}} />
-        <Warning :if={{ !@study_edit.is_published }} text={{dgettext("eyra-survey", "published.false.label")}} />
-        <SubHead>{{ @study_edit.byline }}</SubHead>
+        <Bar>
+          <BarItem>
+            <Info :if={{ @study_edit.is_published }} text={{dgettext("eyra-survey", "published.true.label")}} />
+            <Warning :if={{ !@study_edit.is_published }} text={{dgettext("eyra-survey", "published.false.label")}} />
+          </BarItem>
+          <BarItem>
+            <SubHead>{{ @study_edit.byline }}</SubHead>
+          </BarItem>
+        </Bar>
         <Title1>{{ @study_edit.title }}</Title1>
         <Form for={{ @changeset }} change="save">
+          <Spacing value="XL" />
+          <Card bg_color="bg-grey1">
+            <template slot="title">
+              <Title3 color="text-white" >{{dgettext("eyra-survey", "config.title")}}</Title3>
+            </template>
+            <UrlInput field={{:survey_url}} label_color="text-white" label_text={{dgettext("eyra-survey", "config.url.label")}} read_only={{@study_edit.is_published}}/>
+            <Spacing value="S" />
+            <Title6 color="text-white">Redirect url</Title6>
+            <BodyMedium color="text-grey3">{{ @uri_origin <> @path_provider.live_path(@socket, CoreWeb.Study.Complete, @study_edit.study_id)}}</BodyMedium>
+          </Card>
+          <Spacing value="XL" />
+          <Line />
+          <Spacing value="XL" />
+
           <Case value={{ @study_edit.is_published }} >
             <True> <!-- Published -->
               <Title3>{{dgettext("eyra-survey", "status.title")}}</Title3>
@@ -147,33 +183,56 @@ defmodule CoreWeb.Study.Edit do
               <Title6>{{dgettext("eyra-survey", "vacant.label")}}: <span class="text-delete"> {{@study_edit.subject_vacant_count}}</span></Title6>
             </True>
             <False> <!-- Not published -->
+              <Title3>{{dgettext("eyra-survey", "Titel")}}</Title3>
               <TextInput field={{:title}} label_text={{dgettext("eyra-study", "title.label")}} />
             </False>
           </Case>
 
           <Spacing value="XL" />
-          <Title3>{{dgettext("eyra-survey", "config.title")}}</Title3>
+          <Title3>{{dgettext("eyra-survey", "Thema's")}}</Title3>
+          <BodyMedium>{{dgettext("eyra-survey", "Selecteer een of meer themas.")}}</BodyMedium>
+          <Spacing value="XS" />
+          <LabelSelector id={{:theme_selector}} labels={{ @study_edit.theme_labels }}/>
+          <Spacing value="XL" />
 
-          <Title6>Redirect url</Title6>
-          <BodyMedium>{{ @uri_origin <> @path_provider.live_path(@socket, CoreWeb.Study.Complete, @study_edit.study_id)}}</BodyMedium>
+          <Title3>{{dgettext("eyra-survey", "Afbeelding")}}</Title3>
+          <BodyMedium>{{dgettext("eyra-survey", "De gekozen afbeelding wordt zichtbaar op je survey in het overzicht en op de detailpagina van je survey.")}}</BodyMedium>
+          <Spacing value="XS" />
+          <ImageSelector image_url={{ @study_edit.image_url }} />
+          <Spacing value="XL" />
 
-          <Spacing value="S" />
-          <UrlInput field={{:survey_url}} label_text={{dgettext("eyra-survey", "config.url.label")}} read_only={{@study_edit.is_published}}/>
-          <NumberInput field={{:subject_count}} label_text={{dgettext("eyra-survey", "config.nrofsubjects.label")}} read_only={{@study_edit.is_published}}/>
-          <TextInput field={{:duration}} label_text={{dgettext("eyra-survey", "duration.label")}} read_only={{@study_edit.is_published}}/>
+          <Title3>{{dgettext("eyra-survey", "Instantie")}}</Title3>
+          <RadioButtonGroup field={{:organization}} items={{ Marks.instances() }} checked={{ @study_edit.organization }}/>
+          <Spacing value="XL" />
+
+          <Title3>{{dgettext("eyra-survey", "Over het onderzoek")}}</Title3>
           <TextArea field={{:description}} label_text={{dgettext("eyra-survey", "info.label")}} read_only={{@study_edit.is_published}}/>
+          <Spacing value="XL" />
+
+          <Title3>{{dgettext("eyra-survey", "Duur")}}</Title3>
+          <TextInput field={{:duration}} label_text={{dgettext("eyra-survey", "duration.label")}} read_only={{@study_edit.is_published}}/>
+          <Spacing value="XL" />
+
+          <Title3>{{dgettext("eyra-survey", "Beloning")}}</Title3>
+          <NumberInput field={{:reward_value}} label_text={{dgettext("eyra-survey", "Bedrag in euro")}} read_only={{@study_edit.is_published}}/>
+          <Spacing value="XL" />
+
+          <Title3>{{dgettext("eyra-survey", "Aantal subjects")}}</Title3>
+          <NumberInput field={{:subject_count}} label_text={{dgettext("eyra-survey", "config.nrofsubjects.label")}} read_only={{@study_edit.is_published}}/>
+          <Spacing value="XL" />
+
 
           <Spacing value="L" />
           <Title3>{{dgettext("eyra-survey", "config.devices.title")}}</Title3>
           <Case value={{ @study_edit.is_published }} >
             <True> <!-- Published -->
-              <Bullet :if={{@study_edit.phone_enabled}} image={{Routes.static_path(@socket, "/images/bullit.svg")}}>
+              <Bullet :if={{@study_edit.phone_enabled}} image={{@path_provider.static_path(@socket, "/images/bullit.svg")}}>
                 <BodyMedium>{{dgettext("eyra-survey", "phone.enabled.label")}}</BodyMedium>
               </Bullet>
-              <Bullet :if={{@study_edit.tablet_enabled}} image={{Routes.static_path(@socket, "/images/bullit.svg")}}>
+              <Bullet :if={{@study_edit.tablet_enabled}} image={{@path_provider.static_path(@socket, "/images/bullit.svg")}}>
                 <BodyMedium>{{dgettext("eyra-survey", "tablet.enabled.label")}}</BodyMedium>
               </Bullet>
-              <Bullet :if={{@study_edit.desktop_enabled}} image={{Routes.static_path(@socket, "/images/bullit.svg")}}>
+              <Bullet :if={{@study_edit.desktop_enabled}} image={{@path_provider.static_path(@socket, "/images/bullit.svg")}}>
                 <BodyMedium>{{dgettext("eyra-survey", "desktop.enabled.label")}}</BodyMedium>
               </Bullet>
             </True>

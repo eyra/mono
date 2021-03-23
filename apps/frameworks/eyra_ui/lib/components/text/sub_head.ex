@@ -6,10 +6,11 @@ defmodule EyraUI.Text.SubHead do
   use Surface.Component
 
   slot(default, required: true)
+  prop(color, :css_class, default: "text-grey2")
 
   def render(assigns) do
     ~H"""
-    <div class="text-intro lg:text-subhead font-subhead mb-4 lg:mb-9 text-grey2 tracking-wider">
+    <div class="text-intro lg:text-subhead font-subhead mb-4 lg:mb-9 tracking-wider {{@color}}">
       <slot />
     </div>
     """

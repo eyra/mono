@@ -42,7 +42,8 @@ module.exports = {
         "illustration-md" : "398px",
         "illustration-lg" : "696px",
         "form" : "400px",
-        "card": "376px"
+        "card": "376px",
+        "image-preview": "200px"
       },
         height: {
         "topbar" : "64px",
@@ -59,6 +60,7 @@ module.exports = {
         "header2-lg" : "183px",
         "logo" : "32px",
         "logo-sm" : "48px",
+        "image-preview": "150px",
         "48px" : "48px",
         "44px" : "44px",
         "1px" : "1px",

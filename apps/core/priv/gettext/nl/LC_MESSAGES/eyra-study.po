@@ -59,7 +59,7 @@ msgstr "Aanmaken"
 #, elixir-format
 #: lib/core_web/live/study/edit.ex:149 lib/core_web/live/study/new.ex:47
 msgid "title.label"
-msgstr "Titel"
+msgstr "Een compacte omschrijving van je studie"
 
 #, elixir-format
 #: lib/core_web/live/study/new.ex:44
