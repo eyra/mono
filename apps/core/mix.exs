@@ -76,6 +76,8 @@ defmodule Core.MixProject do
       # Optional, but recommended for SSL validation with :httpc adapter
       {:ssl_verify_fun, "~> 1.1"},
       # Dev and test deps
+      {:bypass, "~> 2.1", only: :test},
+      {:mox, "~> 1.0", only: :test},
       {:progress_bar, "~> 2.0.1", only: [:dev, :test]},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
