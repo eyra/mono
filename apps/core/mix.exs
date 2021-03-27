@@ -77,6 +77,8 @@ defmodule Core.MixProject do
       # Optional, but recommended for SSL validation with :httpc adapter
       {:ssl_verify_fun, "~> 1.1"},
       # Dev and test deps
+      {:bypass, "~> 2.1", only: :test},
+      {:mox, "~> 1.0", only: :test},
       {:progress_bar, "~> 2.0.1", only: [:dev, :test]},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
@@ -95,7 +97,14 @@ defmodule Core.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+      setup: ["deps.get", "ecto.setup"],
+      test: ["ecto.create --quiet", "ecto.migrate", "test"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      i18n: [
+        "gettext.extract --merge priv/gettext"
+      ],
+      makedocs: ["deps.get", "docs -o doc/output"]
     ]
   end
 end

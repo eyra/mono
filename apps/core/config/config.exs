@@ -21,6 +21,16 @@ config :core, Core.SurfConext,
   site: "https://connect.test.surfconext.nl",
   redirect_uri: "not-set"
 
+config :core, SignInWithApple,
+  client_id: System.get_env("SIGN_IN_WITH_APPLE_CLIENT_ID"),
+  team_id: System.get_env("SIGN_IN_WITH_APPLE_TEAM_ID"),
+  private_key_id: System.get_env("SIGN_IN_WITH_APPLE_PRIVATE_KEY_ID"),
+  redirect_uri: "https://localhost/apple/auth"
+
+config :core, Core.ImageCatalog.Unsplash,
+  access_key: "",
+  app_name: "Core"
+
 config :core, :children, [
   Core.Repo,
   CoreWeb.Telemetry,

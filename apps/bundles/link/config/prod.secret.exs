@@ -18,9 +18,7 @@ config :link, LinkWeb.Endpoint,
   ],
   secret_key_base: secret_key_base
 
-config :core, Core.SurfConext,
-  client_id: System.get_env("SURFCONEXT_CLIENT_ID"),
-  client_secret: System.get_env("SURFCONEXT_CLIENT_SECRET")
+config :link, SurfConext, client_secret: System.get("SURFCONEXT_CLIENT_SECRET")
 
 # ## Using releases (Elixir v1.9+)
 #
