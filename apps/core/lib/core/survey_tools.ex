@@ -137,7 +137,7 @@ defmodule Core.SurveyTools do
       %Ecto.Changeset{data: %SurveyTool{}}
 
   """
-  def change_survey_tool(%SurveyTool{} = survey_tool, attrs \\ %{}) do
+  def change_survey_tool(%SurveyTool{} = survey_tool, _type, attrs \\ %{}) do
     SurveyTool.changeset(survey_tool, attrs)
   end
 
@@ -172,32 +172,26 @@ defmodule Core.SurveyTools do
     |> Repo.all()
   end
 
-  def count_pending_tasks(survey_tool) do
+  def count_tasks(survey_tool, status_list) do
     case survey_tool.id do
       nil ->
         0
 
       _ ->
         from(t in SurveyToolTask,
-          where: t.survey_tool_id == ^survey_tool.id and t.status == :pending,
+          where: t.survey_tool_id == ^survey_tool.id and t.status in ^status_list,
           select: count(t.id)
         )
         |> Repo.one()
     end
   end
 
-  def count_completed_tasks(survey_tool) do
-    case survey_tool.id do
-      nil ->
-        0
+  def count_pending_tasks(survey_tool) do
+    count_tasks(survey_tool, [:pending])
+  end
 
-      _ ->
-        from(t in SurveyToolTask,
-          where: t.survey_tool_id == ^survey_tool.id and t.status == :completed,
-          select: count(t.id)
-        )
-        |> Repo.one()
-    end
+  def count_completed_tasks(survey_tool) do
+    count_tasks(survey_tool, [:completed])
   end
 
   @spec participant?(

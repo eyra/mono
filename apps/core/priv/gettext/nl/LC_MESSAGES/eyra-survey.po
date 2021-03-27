@@ -12,85 +12,85 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:161
+#: lib/core_web/live/study/edit.ex:268
 msgid "config.nrofsubjects.label"
 msgstr "Aantal vereiste subjects"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:160
+#: lib/core_web/live/study/edit.ex:216
 msgid "config.url.label"
 msgstr "Link naar survey"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:154
+#: lib/core_web/live/study/edit.ex:214
 msgid "config.title"
 msgstr "Survey instellingen"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:166 lib/core_web/live/study/public.ex:103
+#: lib/core_web/live/study/edit.ex:273 lib/core_web/live/study/public.ex:102
 msgid "config.devices.title"
 msgstr "Beschikbaarheid"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:176 lib/core_web/live/study/edit.ex:182
-#: lib/core_web/live/study/public.ex:111
+#: lib/core_web/live/study/edit.ex:283 lib/core_web/live/study/edit.ex:289
+#: lib/core_web/live/study/public.ex:110
 msgid "desktop.enabled.label"
 msgstr "Desktop"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:173 lib/core_web/live/study/edit.ex:181
-#: lib/core_web/live/study/public.ex:108
+#: lib/core_web/live/study/edit.ex:280 lib/core_web/live/study/edit.ex:288
+#: lib/core_web/live/study/public.ex:107
 msgid "tablet.enabled.label"
 msgstr "Tablet"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:163
+#: lib/core_web/live/study/edit.ex:256
 msgid "info.label"
 msgstr "Wat kan een subject verwachten van de survey?"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:193
+#: lib/core_web/live/study/edit.ex:299
 msgid "publish.button"
 msgstr "Publiceer"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:190
+#: lib/core_web/live/study/edit.ex:296
 msgid "unpublish.button"
 msgstr "Maak publicatie ongedaan"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:194
+#: lib/core_web/live/study/edit.ex:300
 msgid "delete.button"
 msgstr "Verwijder"
 
 #, elixir-format
-#: lib/core_web/live/study/public.ex:115
+#: lib/core_web/live/study/public.ex:114
 msgid "apply.button"
 msgstr "Meld je aan om mee te doen"
 
 #, elixir-format
-#: lib/core_web/live/study/public.ex:99
+#: lib/core_web/live/study/public.ex:98
 msgid "duration.public.label"
 msgstr "Geschatte duur"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:162
+#: lib/core_web/live/study/edit.ex:260
 msgid "duration.label"
 msgstr "Geschatte duur van het onderzoek"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:137
+#: lib/core_web/live/study/edit.ex:203 lib/core_web/view_model/card.ex:48
 msgid "published.false.label"
 msgstr "Concept"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:133 lib/core/studies/study_public.ex:59
-#: lib/core_web/live/study/edit.ex:136
+#: lib/core/studies/study_edit.ex:184 lib/core/studies/study_public.ex:59
+#: lib/core_web/live/study/edit.ex:202
 msgid "published.true.label"
 msgstr "Gepubliceerd"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:137 lib/core/studies/study_public.ex:62
+#: lib/core/studies/study_edit.ex:188 lib/core/studies/study_public.ex:62
 msgid "created.label"
 msgstr "Aangemaakt"
 
@@ -100,7 +100,7 @@ msgid "by.author.label"
 msgstr "Door"
 
 #, elixir-format
-#: lib/core_web/live/study/public.ex:116
+#: lib/core_web/live/study/public.ex:115
 msgid "goto.survey"
 msgstr "Ga naar de vragenlijst"
 
@@ -110,37 +110,97 @@ msgid "thank.you.message"
 msgstr "Bedankt voor het meedoen. Hopelijk tot snel!"
 
 #, elixir-format
-#: lib/core_web/live/study/public.ex:94
+#: lib/core_web/live/study/public.ex:93
 msgid "completed.message"
 msgstr "Je hebt deze vragenlijst al succesvol doorlopen."
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:144
+#: lib/core_web/live/study/edit.ex:228
 msgid "completed.label"
 msgstr "Afgerond"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:143
+#: lib/core_web/live/study/edit.ex:227
 msgid "status.title"
 msgstr "Voortgang"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:146
+#: lib/core_web/live/study/edit.ex:230
 msgid "vacant.label"
 msgstr "Openstaand"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:145
+#: lib/core_web/live/study/edit.ex:229
 msgid "pending.label"
 msgstr "Bezig"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:170 lib/core_web/live/study/edit.ex:180
-#: lib/core_web/live/study/public.ex:105
+#: lib/core_web/live/study/edit.ex:277 lib/core_web/live/study/edit.ex:287
+#: lib/core_web/live/study/public.ex:104
 msgid "phone.enabled.label"
 msgstr "Telefoon"
 
 #, elixir-format
-#: lib/core_web/live/study/public.ex:122
+#: lib/core_web/live/study/public.ex:121
 msgid "withdraw.button"
 msgstr "Intrekken"
+
+#, elixir-format
+#: lib/core_web/view_model/card.ex:35
+msgid "deadline.label"
+msgstr "Nog %{days} dagen beschikbaar"
+
+#, elixir-format
+#: lib/core_web/view_model/card.ex:34
+msgid "open.spots.label"
+msgstr "%{count} deelnemers gezocht"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:264
+msgid "reward.label"
+msgstr "Beloning"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:255
+msgid "about.title"
+msgstr "Over het onderzoek"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:259 lib/core_web/view_model/card.ex:32
+msgid "duration.title"
+msgstr "Duur"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:245
+msgid "image.title"
+msgstr "Afbeelding"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:251
+msgid "organisation.title"
+msgstr "Instantie"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:263 lib/core_web/view_model/card.ex:33
+msgid "reward.title"
+msgstr "Beloning"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:267
+msgid "subjects.title"
+msgstr "Subjects"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:239
+msgid "themes.title"
+msgstr "Thema's"
+
+#, elixir-format, fuzzy
+#: lib/core_web/live/study/edit.ex:246
+msgid "image.label"
+msgstr "De gekozen afbeelding wordt zichtbaar op je survey in het overzicht en op de detailpagina van je survey."
+
+#, elixir-format, fuzzy
+#: lib/core_web/live/study/edit.ex:240
+msgid "themes.label"
+msgstr "Selecteer een om meerdere thema's."

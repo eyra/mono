@@ -49,7 +49,7 @@ defmodule Core.Studies.StudyEdit.Test do
     study = Factories.build(:study)
     survey_tool = Factories.build(:survey_tool)
     merged = StudyEdit.create(study, survey_tool)
-    changeset = StudyEdit.changeset(merged, %{title: ""})
+    changeset = StudyEdit.changeset(merged, :auto_save, %{title: ""})
 
     assert changeset.errors == [title: {"can't be blank", [validation: :required]}]
   end

@@ -20,7 +20,7 @@ defmodule Core.Accounts.UserProfileEdit do
 
   @fields @user_fields ++ @profile_fields
 
-  def changeset(user_edit, params) do
+  def changeset(user_edit, _type, params) do
     user_edit
     |> cast(params, @fields)
     |> validate_required(@required_fields)

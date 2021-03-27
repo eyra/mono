@@ -25,7 +25,7 @@ defmodule Core.SurveyTools.SurveyTool do
     field(:themes, {:array, Ecto.Enum}, values: Core.Themes.theme_values())
     field(:image_url, :string)
     field(:marks, {:array, :string})
-    field(:reward_currency, Ecto.Enum, values: [:euro])
+    field(:reward_currency, Ecto.Enum, values: [:eur, :usd, :gbp, :chf, :nok, :sek])
     field(:reward_value, :integer)
 
     has_many(:tasks, SurveyToolTask)

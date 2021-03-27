@@ -76,7 +76,7 @@ defmodule Core.SurveyToolsTest do
 
     test "change_survey_tool/1 returns a survey_tool changeset" do
       survey_tool = Factories.insert!(:survey_tool)
-      assert %Ecto.Changeset{} = SurveyTools.change_survey_tool(survey_tool)
+      assert %Ecto.Changeset{} = SurveyTools.change_survey_tool(survey_tool, :mount)
     end
 
     test "apply_participant/2 creates application" do

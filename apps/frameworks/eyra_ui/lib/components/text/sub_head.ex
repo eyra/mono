@@ -10,7 +10,7 @@ defmodule EyraUI.Text.SubHead do
 
   def render(assigns) do
     ~H"""
-    <div class="text-intro lg:text-subhead font-subhead mb-4 lg:mb-9 tracking-wider {{@color}}">
+    <div class="text-intro lg:text-subhead font-subhead tracking-wider {{@color}}">
       <slot />
     </div>
     """

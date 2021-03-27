@@ -36,13 +36,15 @@ defmodule Core.Studies do
   end
 
   def list_studies_with_published_survey(opts \\ []) do
+    preload = Keyword.get(opts, :preload, [])
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
     published = from(st in SurveyTool, where: not is_nil(st.published_at), select: st.study_id)
 
     from(s in Study,
       where:
         s.id in subquery(published) and
-          s.id not in ^exclude
+          s.id not in ^exclude,
+      preload: ^preload
     )
     |> Repo.all()
   end
@@ -50,28 +52,41 @@ defmodule Core.Studies do
   @doc """
   Returns the list of studies that are owned by the user.
   """
-  def list_owned_studies(user) do
+  def list_owned_studies(user, opts \\ []) do
+    preload = Keyword.get(opts, :preload, [])
+
     node_ids =
       Authorization.query_node_ids(
         role: :owner,
         principal: user
       )
 
-    from(s in Study, where: s.auth_node_id in subquery(node_ids)) |> Repo.all()
+    from(s in Study,
+      where: s.auth_node_id in subquery(node_ids),
+      preload: ^preload
+    )
+    |> Repo.all()
+
     # AUTH: Can be piped through auth filter (current code does the same thing).
   end
 
   @doc """
   Returns the list of studies where the user is a subject.
   """
-  def list_subject_studies(user) do
+  def list_subject_studies(user, opts \\ []) do
+    preload = Keyword.get(opts, :preload, [])
+
     survey_tool_ids =
       from(stt in SurveyToolTask, where: stt.user_id == ^user.id, select: stt.survey_tool_id)
 
     study_ids =
       from(st in SurveyTool, where: st.id in subquery(survey_tool_ids), select: st.study_id)
 
-    from(s in Study, where: s.id in subquery(study_ids)) |> Repo.all()
+    from(s in Study,
+      where: s.id in subquery(study_ids),
+      preload: ^preload
+    )
+    |> Repo.all()
   end
 
   def list_owners(%Study{} = study) do

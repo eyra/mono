@@ -60,6 +60,7 @@ module.exports = {
         "header2-lg" : "183px",
         "logo" : "32px",
         "logo-sm" : "48px",
+        "image-card": "200px",
         "image-preview": "150px",
         "48px" : "48px",
         "44px" : "44px",

@@ -12,12 +12,12 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:56
+#: lib/core_web/live/dashboard.ex:108
 msgid "study.index.subtitle"
 msgstr "Studies"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:55
+#: lib/core_web/live/dashboard.ex:107
 msgid "study.index.title"
 msgstr "Overzicht"
 
@@ -27,12 +27,12 @@ msgid "dashboard.button"
 msgstr "Overzicht"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:89
+#: lib/core_web/live/dashboard.ex:135
 msgid "study.all.title"
 msgstr "Beschikbare studies:"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:64
+#: lib/core_web/live/dashboard.ex:116
 msgid "study.highlighted.title"
 msgstr "Mijn studies:"
 
@@ -42,51 +42,51 @@ msgid "new.button"
 msgstr "Nieuwe studie"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:60
+#: lib/core_web/live/dashboard.ex:112
 msgid "dashboard.page.description"
 msgstr "Deze pagina biedt een overzicht van de studies. De studies waar jij bij betrokken bent vind je onder 'Mijn studies'. Alle andere studies die open staan om aan mee te doen, vind je onder 'Beschikbare studies'."
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:134
+#: lib/core_web/live/study/edit.ex:198
 msgid "study.edit.title"
 msgstr "Studie"
 
 #, elixir-format
-#: lib/core_web/live/study/new.ex:48
+#: lib/core_web/live/study/new.ex:55
 msgid "save.button"
 msgstr "Aanmaken"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:149 lib/core_web/live/study/new.ex:47
+#: lib/core_web/live/study/edit.ex:234 lib/core_web/live/study/new.ex:54
 msgid "title.label"
-msgstr "Een compacte omschrijving van je studie"
+msgstr "Pas de titel aan"
 
 #, elixir-format
-#: lib/core_web/live/study/new.ex:44
+#: lib/core_web/live/study/new.ex:51
 msgid "study.new.title"
 msgstr "Studie"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:82
+#: lib/core_web/live/dashboard.ex:128
 msgid "add.card.title"
 msgstr "Maak een nieuwe studie aan"
 
 #, elixir-format
-#: lib/core_web/live/study/complete.ex:54 lib/core_web/live/study/public.ex:88
+#: lib/core_web/live/study/complete.ex:54 lib/core_web/live/study/public.ex:87
 msgid "study.public.title"
-msgstr "Studies"
+msgstr "Studie"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:77 lib/core_web/live/dashboard.ex:96
+#: lib/core_web/live/dashboard.ex:142
 msgid "open.button"
 msgstr "Details"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:71
-msgid "edit.button"
-msgstr "Aanpassen"
-
-#, elixir-format
-#: lib/core_web/live/study/new.ex:49
+#: lib/core_web/live/study/new.ex:56
 msgid "cancel.button"
 msgstr "Annuleer"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:233
+msgid "title.title"
+msgstr "Title"

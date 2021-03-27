@@ -11,12 +11,12 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:56
+#: lib/core_web/live/dashboard.ex:108
 msgid "study.index.subtitle"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:55
+#: lib/core_web/live/dashboard.ex:107
 msgid "study.index.title"
 msgstr ""
 
@@ -26,12 +26,12 @@ msgid "dashboard.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:89
+#: lib/core_web/live/dashboard.ex:135
 msgid "study.all.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:64
+#: lib/core_web/live/dashboard.ex:116
 msgid "study.highlighted.title"
 msgstr ""
 
@@ -41,51 +41,51 @@ msgid "new.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:60
+#: lib/core_web/live/dashboard.ex:112
 msgid "dashboard.page.description"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:134
+#: lib/core_web/live/study/edit.ex:198
 msgid "study.edit.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/new.ex:48
+#: lib/core_web/live/study/new.ex:55
 msgid "save.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:149 lib/core_web/live/study/new.ex:47
+#: lib/core_web/live/study/edit.ex:234 lib/core_web/live/study/new.ex:54
 msgid "title.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/new.ex:44
+#: lib/core_web/live/study/new.ex:51
 msgid "study.new.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:82
+#: lib/core_web/live/dashboard.ex:128
 msgid "add.card.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/complete.ex:54 lib/core_web/live/study/public.ex:88
+#: lib/core_web/live/study/complete.ex:54 lib/core_web/live/study/public.ex:87
 msgid "study.public.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:77 lib/core_web/live/dashboard.ex:96
+#: lib/core_web/live/dashboard.ex:142
 msgid "open.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:71
-msgid "edit.button"
+#: lib/core_web/live/study/new.ex:56
+msgid "cancel.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/new.ex:49
-msgid "cancel.button"
+#: lib/core_web/live/study/edit.ex:233
+msgid "title.title"
 msgstr ""

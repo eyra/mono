@@ -26,7 +26,7 @@ defmodule CoreWeb.FakeSurvey do
       <ContentArea>
         <Title2>Fake survey</Title2>
         <BodyLarge>This fake survey is used to validate the survey tool flow with an external tool.</BodyLarge>
-        <Spacing value="S" />
+        <Spacing value="M" />
         <PrimaryButton label="Complete survey (go back)" path={{@redirect_url}} bg_color="bg-grey1" />
       </ContentArea>
     """

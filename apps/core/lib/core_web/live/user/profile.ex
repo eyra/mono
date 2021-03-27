@@ -23,9 +23,7 @@ defmodule CoreWeb.User.Profile do
   end
 
   @impl true
-  def get_changeset(user_profile_edit, attrs \\ %{}) do
-    user_profile_edit |> UserProfileEdit.changeset(attrs)
-  end
+  defdelegate get_changeset(survey_tool, type, attrs \\ %{}), to: UserProfileEdit, as: :changeset
 
   @impl true
   def save(changeset) do

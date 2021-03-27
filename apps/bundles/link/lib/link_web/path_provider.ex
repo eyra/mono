@@ -13,18 +13,18 @@ defmodule LinkWeb.PathProvider do
     Routes.live_path(conn, view, id)
   end
 
-  def path(conn, controller, view, param \\ nil) do
+  def path(conn, controller, view, id \\ nil) do
     case controller do
       CoreWeb.UserSettingsController ->
-        case param do
+        case id do
           nil -> Routes.user_settings_path(conn, view)
-          param -> Routes.user_settings_path(conn, view, param)
+          id -> Routes.user_settings_path(conn, view, id)
         end
 
       CoreWeb.UserSessionController ->
-        case param do
+        case id do
           nil -> Routes.user_session_path(conn, view)
-          param -> Routes.user_session_path(conn, view, param)
+          id -> Routes.user_session_path(conn, view, id)
         end
 
       _ ->
@@ -32,9 +32,9 @@ defmodule LinkWeb.PathProvider do
     end
   end
 
-  def path(conn, controller, view, param, opts) do
+  def path(conn, controller, view, id, opts) do
     case controller do
-      CoreWeb.LanguageSwitchController -> Routes.language_switch_path(conn, view, param, opts)
+      CoreWeb.LanguageSwitchController -> Routes.language_switch_path(conn, view, id, opts)
       _ -> :error
     end
   end

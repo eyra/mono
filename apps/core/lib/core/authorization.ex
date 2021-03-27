@@ -46,16 +46,6 @@ defmodule Core.Authorization do
     index: [:visitor, :member]
   })
 
-  grant_actions(CoreWeb.StudyController, %{
-    index: [:visitor, :member],
-    show: [:visitor, :member],
-    new: [:researcher],
-    create: [:researcher],
-    edit: [:owner],
-    update: [:owner],
-    delete: [:owner]
-  })
-
   grant_actions(CoreWeb.Studies.PermissionsController, %{
     show: [:owner],
     change: [:owner],

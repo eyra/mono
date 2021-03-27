@@ -16,32 +16,37 @@ defmodule Core.Studies.StudyEdit do
   require Core.Themes
 
   embedded_schema do
+    # Study
     field(:study_id, :integer)
     field(:title, :string)
-    field(:byline, :string)
+    # Survey Tool
     field(:survey_tool_id, :integer)
     field(:description, :string)
     field(:survey_url, :string)
     field(:subject_count, :integer)
-    field(:subject_pending_count, :integer)
-    field(:subject_completed_count, :integer)
-    field(:subject_vacant_count, :integer)
     field(:duration, :string)
     field(:phone_enabled, :boolean, default: true)
     field(:tablet_enabled, :boolean, default: true)
     field(:desktop_enabled, :boolean, default: true)
     field(:published_at, :naive_datetime)
-    field(:is_published, :boolean)
     field(:themes, {:array, Ecto.Enum}, values: Core.Themes.theme_values())
     field(:image_url, :string)
-    field(:organization, :string)
     field(:reward_currency, :string)
     field(:reward_value, :integer)
+    # Transient Form Fields
+    # Maps to the more abstract SurveyTool.marks
+    field(:organization, :string)
+    # Transient Data
+    field(:is_published, :boolean)
+    field(:byline, :string)
+    field(:subject_pending_count, :integer)
+    field(:subject_completed_count, :integer)
+    field(:subject_vacant_count, :integer)
     field(:theme_labels, {:array, :any})
   end
 
   @required_fields ~w(title byline)a
-  @required_fields_for_publish ~w(title byline survey_url subject_count themes image_url organization)a
+  @required_fields_for_publish ~w(title description survey_url subject_count duration themes image_url reward_value byline organization)a
 
   @transient_fields ~w(byline is_published subject_pending_count subject_completed_count subject_vacant_count theme_labels organization)a
   @study_fields ~w(title)a
@@ -49,8 +54,12 @@ defmodule Core.Studies.StudyEdit do
 
   @fields @study_fields ++ @survey_tool_fields ++ @transient_fields
 
-  @doc false
-  def changeset(study_edit, params) do
+  def changeset(study_edit, :mount, params) do
+    study_edit
+    |> cast(params, @fields)
+  end
+
+  def changeset(study_edit, :auto_save, params) do
     study_edit
     |> cast(params, @fields)
     |> validate_required(@required_fields)
@@ -58,7 +67,7 @@ defmodule Core.Studies.StudyEdit do
     |> validate_optional_number(:subject_count, greater_than: 0)
   end
 
-  def validate_for_publish(study_edit, params) do
+  def changeset(study_edit, :submit, params) do
     study_edit
     |> cast(params, @fields)
     |> validate_required(@required_fields_for_publish)

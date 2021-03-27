@@ -12,7 +12,7 @@ defmodule EyraUI.Card.PrimaryCTA do
 
   def render(assigns) do
     ~H"""
-    <Card bg_color="bg-grey1">
+    <Card bg_color="bg-grey1" id="PrimaryCTA">
       <template slot="title">
         <div class="text-white text-title5 font-title5 lg:text-title3 lg:font-title3">
             {{ @title }}

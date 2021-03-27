@@ -12,10 +12,10 @@
     />
     <script src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
-  <body class="font-body bg-grey5 h-screen">
-    <div class="flex flex-row h-full">
-      <div class="h-full w-0 lg:w-sidebar"></div>
-      <div class="h-full w-full">
+  <body class="font-body bg-grey5">
+    <div class="flex flex-row min-h-screen">
+      <div class="w-0 lg:w-sidebar"></div>
+      <div class="w-full">
         <div class="flex flex-col h-full">
           <header class="flex-wrap">
             <div class="fixed text-warning">
@@ -44,13 +44,6 @@
                     <div class="flex-none lg:pr-4 text-button font-button">
                       <%= menu_button dgettext("eyra-study", "dashboard.button"), Routes.live_path(@conn, CoreWeb.Dashboard) %>
                     </div>
-                    <%= if can?(@conn, nil, CoreWeb.StudyController, :new) do %>
-                      <div
-                        class="hidden sm:block flex-none lg:pr-4 text-button font-button"
-                      >
-                        <%= menu_button dgettext("eyra-study", "new.button"), Routes.live_path(@conn, CoreWeb.Study.New) %>
-                      </div>
-                    <% end %>
                     <div class="flex-grow"></div>
                     <div class="flex-none lg:pr-4 text-button font-button">
                       <%= menu_button dgettext("eyra-account", "profile.button"), Routes.live_path(@conn, CoreWeb.User.Profile) %>

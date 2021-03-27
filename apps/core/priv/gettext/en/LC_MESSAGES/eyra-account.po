@@ -12,22 +12,22 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:30
+#: lib/core_web/live/user/profile.ex:58
 msgid "displayname.label"
 msgstr "Display name"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:51
+#: lib/core_web/live/user/signup.ex:52
 msgid "email.label"
 msgstr "Email"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:29
+#: lib/core_web/live/user/profile.ex:57
 msgid "fullname.label"
 msgstr "Full name"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:52
+#: lib/core_web/live/user/signup.ex:53
 msgid "password.label"
 msgstr "Password"
 
@@ -37,12 +37,12 @@ msgid "profile.button"
 msgstr "My profile"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:26
+#: lib/core_web/live/user/profile.ex:54
 msgid "profile.title"
 msgstr "My profile"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:28
+#: lib/core_web/live/user/profile.ex:56
 msgid "researcher.label"
 msgstr "I'm a researcher"
 
@@ -52,39 +52,39 @@ msgid "signin.button"
 msgstr "Sign in"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:56
+#: lib/core_web/live/user/signup.ex:57
 msgid "signin.label"
 msgstr "Already an account?"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:57
+#: lib/core_web/live/user/signup.ex:58
 msgid "signin.link"
 msgstr "Sign in here"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:53
+#: lib/core_web/live/user/signup.ex:54
 msgid "signup.button"
 msgstr "Sign up"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:49
+#: lib/core_web/live/user/signup.ex:50
 msgid "signup.title"
 msgstr "Sign up"
 
 #, elixir-format
-#: lib/core_web/live/survey_tool/edit.ex:25
-#: lib/core_web/live/survey_tool/new.ex:45
+#: lib/core_web/live/survey_tool/edit.ex:30
+#: lib/core_web/live/survey_tool/new.ex:44
 msgid "survey_url.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/survey_tool/edit.ex:24
-#: lib/core_web/live/survey_tool/new.ex:44
+#: lib/core_web/live/survey_tool/edit.ex:29
+#: lib/core_web/live/survey_tool/new.ex:43
 msgid "title.label"
 msgstr "Email"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:32
+#: lib/core_web/live/user/profile.ex:60
 msgid "signout.button"
 msgstr "Sign out"
 
@@ -94,6 +94,6 @@ msgid "await.confirmation.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/confirm_token.ex:87
+#: lib/core_web/live/user/confirm_token.ex:80
 msgid "confirm.token.resend_button"
 msgstr ""

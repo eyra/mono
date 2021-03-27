@@ -55,7 +55,7 @@ defmodule CoreWeb.Study.Complete do
       <ContentArea>
         <SubHead>{{ @study_public.byline }}</SubHead>
         <Title1>{{ @study_public.title }}</Title1>
-        <Spacing value="S" />
+        <Spacing value="M" />
         <BodyLarge>{{dgettext("eyra-survey", "thank.you.message")}}</BodyLarge>
       </ContentArea>
     """

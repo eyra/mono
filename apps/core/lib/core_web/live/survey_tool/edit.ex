@@ -16,7 +16,12 @@ defmodule CoreWeb.SurveyTool.Edit do
     SurveyTools.get_survey_tool!(id)
   end
 
-  defdelegate get_changeset(survey_tool, attrs \\ %{}), to: SurveyTools, as: :change_survey_tool
+  @impl true
+  defdelegate get_changeset(survey_tool, type, attrs \\ %{}),
+    to: SurveyTools,
+    as: :change_survey_tool
+
+  @impl true
   defdelegate save(changeset), to: SurveyTools, as: :update_survey_tool
 
   def render(assigns) do
