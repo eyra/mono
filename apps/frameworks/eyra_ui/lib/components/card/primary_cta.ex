@@ -22,7 +22,7 @@ defmodule EyraUI.Card.PrimaryCTA do
           <div class="flex items-center">
               <div class="flex-wrap">
                   <a href={{ @to }}>
-                      <div class={{"flex", "items-center", "hover:bg-opacity-80", "focus:outline-none", "pl-4", "pr-4", "h-48px", "font-button", "text-button", "text-primary", "tracker-widest", "rounded",
+                      <div class={{"flex", "items-center", "active:opacity-80", "focus:outline-none", "pl-4", "pr-4", "h-48px", "font-button", "text-button", "text-primary", "tracker-widest", "rounded",
                                   @button_bg_color}}>
                           <div>{{ @button_label }}</div>
                       </div>

@@ -23,7 +23,7 @@ defmodule Core.SurveyTools.SurveyTool do
     field(:desktop_enabled, :boolean)
     field(:published_at, :naive_datetime)
     field(:themes, {:array, Ecto.Enum}, values: Core.Themes.theme_values())
-    field(:image_url, :string)
+    field(:image_id, :string)
     field(:marks, {:array, :string})
     field(:reward_currency, Ecto.Enum, values: [:eur, :usd, :gbp, :chf, :nok, :sek])
     field(:reward_value, :integer)
@@ -38,7 +38,7 @@ defmodule Core.SurveyTools.SurveyTool do
     def id(survey_tool), do: survey_tool.auth_node_id
   end
 
-  @fields ~w(title description survey_url subject_count duration phone_enabled tablet_enabled desktop_enabled published_at themes image_url marks reward_currency reward_value)a
+  @fields ~w(title description survey_url subject_count duration phone_enabled tablet_enabled desktop_enabled published_at themes image_id marks reward_currency reward_value)a
 
   @doc false
   def changeset(survey_tool, attrs) do

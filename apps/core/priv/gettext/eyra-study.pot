@@ -11,62 +11,42 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:108
+#: lib/core_web/live/dashboard.ex:111
 msgid "study.index.subtitle"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:107
+#: lib/core_web/live/dashboard.ex:110
 msgid "study.index.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:45
+#: lib/core_web/templates/layout/root.html.leex:47
 msgid "dashboard.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:135
+#: lib/core_web/live/dashboard.ex:134
 msgid "study.all.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:116
+#: lib/core_web/live/dashboard.ex:115
 msgid "study.highlighted.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:51
-msgid "new.button"
-msgstr ""
-
-#, elixir-format
-#: lib/core_web/live/dashboard.ex:112
-msgid "dashboard.page.description"
-msgstr ""
-
-#, elixir-format
-#: lib/core_web/live/study/edit.ex:198
+#: lib/core_web/live/study/edit.ex:167
 msgid "study.edit.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/new.ex:55
-msgid "save.button"
-msgstr ""
-
-#, elixir-format
-#: lib/core_web/live/study/edit.ex:234 lib/core_web/live/study/new.ex:54
+#: lib/core_web/live/study/edit.ex:198
 msgid "title.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/new.ex:51
-msgid "study.new.title"
-msgstr ""
-
-#, elixir-format
-#: lib/core_web/live/dashboard.ex:128
+#: lib/core_web/live/dashboard.ex:127
 msgid "add.card.title"
 msgstr ""
 
@@ -76,16 +56,36 @@ msgid "study.public.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:142
-msgid "open.button"
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.art"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/new.ex:56
-msgid "cancel.button"
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.health"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:233
-msgid "title.title"
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.history"
+msgstr ""
+
+#, elixir-format
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.language"
+msgstr ""
+
+#, elixir-format
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.politics"
+msgstr ""
+
+#, elixir-format
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.society"
+msgstr ""
+
+#, elixir-format
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.technology"
 msgstr ""

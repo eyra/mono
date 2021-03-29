@@ -9,6 +9,10 @@ defmodule Core.Themes do
     [:health, :history, :politics, :art, :language, :technology, :society]
   end
 
+  def translate(value) do
+    Gettext.dgettext(CoreWeb.Gettext, "eyra-study", "themes.#{value}")
+  end
+
   def labels(nil) do
     labels([])
   end
@@ -22,7 +26,7 @@ defmodule Core.Themes do
     value_as_string =
       value
       |> Atom.to_string()
-      |> String.capitalize()
+      |> translate()
 
     active =
       active_values
@@ -34,6 +38,20 @@ defmodule Core.Themes do
   defmacro theme_values(_opts \\ []) do
     quote do
       unquote(Core.Themes.values())
+    end
+  end
+
+  defmacro __using__(_opts) do
+    quote do
+      import CoreWeb.Gettext
+
+      unquote(
+        for theme <- values() do
+          quote do
+            dgettext("eyra-study", unquote("themes.#{theme}"))
+          end
+        end
+      )
     end
   end
 end

@@ -45,14 +45,35 @@ defmodule Core.ImageCatalog.Unsplash.HTTP do
 end
 
 defmodule Core.ImageCatalog.Unsplash do
-  def search(query) do
-    {:ok, json} = client().get(conf().access_key, "/search/photos", query: query, per_page: 2)
-    Map.get(json, "results", []) |> Enum.map(&parse_result_item/1)
+  def search(query, page \\ 1, page_size \\ 10) do
+    {:ok, json} =
+      client().get(conf().access_key, "/search/photos",
+        query: query,
+        page: page,
+        per_page: page_size
+      )
+
+    images = json |> Map.get("results", []) |> Enum.map(&parse_result_item/1)
+    image_count = json |> Map.get("total")
+    page_count = json |> Map.get("total_pages")
+
+    %{
+      images: images,
+      meta: %{
+        image_count: image_count,
+        page_count: page_count,
+        page: page,
+        page_size: page_size,
+        begin: page * page_size - page_size + 1,
+        end: Enum.min([page * page_size, image_count])
+      }
+    }
   end
 
-  def search_info(query, opts) do
+  def search_info(query, page, page_size, opts) do
     app_name = conf().app_name
-    query |> search() |> Enum.map(&info(app_name, &1, opts))
+    search_result = search(query, page, page_size)
+    %{search_result | images: search_result.images |> Enum.map(&info(app_name, &1, opts))}
   end
 
   def info(image_id, opts) do

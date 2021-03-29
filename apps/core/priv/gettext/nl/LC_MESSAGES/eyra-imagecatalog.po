@@ -1,0 +1,41 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/core_web/image_catalog_picker.ex:40
+msgid "no.results.found.message"
+msgstr "Geen afbeeldingen gevonden"
+
+#, elixir-format
+#: lib/core_web/image_catalog_picker.ex:35
+msgid "search.image.button"
+msgstr "Zoek"
+
+#, elixir-format
+#: lib/core_web/image_catalog_picker.ex:24
+msgid "search.image.title"
+msgstr "Zoek een afbeelding"
+
+#, elixir-format, fuzzy
+#: lib/core_web/image_catalog_picker.ex:44
+msgid "images.found.message"
+msgid_plural "images.found.message.%{count}"
+msgstr[0] "1 afbeelding:"
+msgstr[1] "%{count} afbeeldingen:"
+
+#, elixir-format, fuzzy
+#: lib/core_web/image_catalog_picker.ex:72
+msgid "page.info.message"
+msgid_plural "page.info.message.%{count}"
+msgstr[0] "Weergave 1 afbeelding"
+msgstr[1] "Weergave %{begin}-%{end} van %{count} afbeeldingen"

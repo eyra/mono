@@ -1,15 +1,47 @@
 defmodule Core.ImageCatalog.Local do
   @behaviour Core.ImageCatalog
 
-  def search(query) when query == "", do: []
-
-  def search(query) when query != "" do
-    list_image_ids()
-    |> Enum.filter(&String.contains?(&1, query))
+  def search(query, page, page_size) when query == "" do
+    %{
+      images: [],
+      meta: %{
+        image_count: 0,
+        page_count: 0,
+        page: page,
+        page_size: page_size,
+        begin: page * page_size - page_size,
+        end: page * page_size
+      }
+    }
   end
 
-  def search_info(query, opts) do
-    query |> search() |> Enum.map(&info(&1, opts))
+  def search(query, page, page_size) when query != "" do
+    images =
+      list_image_ids()
+      |> Enum.filter(&String.contains?(&1, query))
+
+    image_count = Enum.count(images)
+
+    %{
+      images: images,
+      meta: %{
+        image_count: image_count,
+        page_count: 1,
+        page: page,
+        page_size: page_size,
+        begin: page * page_size - page_size,
+        end: page * page_size
+      }
+    }
+  end
+
+  def search_info(query, page, page_size, opts) do
+    search_result = search(query, page, page_size)
+
+    %{
+      search_result
+      | images: search_result.images |> Enum.map(&info(&1, opts))
+    }
   end
 
   def info(image_id, _opts) do

@@ -43,7 +43,10 @@ module.exports = {
         "illustration-lg" : "696px",
         "form" : "400px",
         "card": "376px",
-        "image-preview": "200px"
+        "image-preview": "200px",
+        "popup-md": "730px",
+        "popup-lg": "1228px",
+        "button-sm": "14px",
       },
         height: {
         "topbar" : "64px",
@@ -65,6 +68,7 @@ module.exports = {
         "48px" : "48px",
         "44px" : "44px",
         "1px" : "1px",
+        "button-sm": "14px",
       },
       fontFamily: {
         'title1': ['Finador-Black', 'sans-serif'],
@@ -110,11 +114,16 @@ module.exports = {
     },
   },
   variants: {
-    variants: {
-      extend: {
-       borderColor: ['active', 'hover'],
-      },
-    }
+    extend: {
+      borderColor: ['active', 'hover'],
+      borderWidth: ['active', 'hover'],
+      ringColor: ['hover'],
+      ringWidth: ['hover'],
+      ringOpacity: ['hover'],
+      ringOffsetColor: ['hover'],
+      ringOffsetWidth: ['hover'],
+      opacity: ['active'],
+    },
   },
   plugins: [],
 }

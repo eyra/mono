@@ -9,7 +9,7 @@ defmodule EyraUI.Button.SubmitWideButton do
 
   def render(assigns) do
     ~H"""
-    <button class="w-full h-48px leading-none font-button text-button text-white focus:outline-none hover:bg-opacity-80 rounded pr-4 pl-4 {{@bg_color}}" type="submit">
+    <button class="w-full h-48px leading-none font-button text-button text-white focus:outline-none active:opacity-80 rounded pr-4 pl-4 {{@bg_color}}" type="submit">
       {{ @label }}
     </button>
     """

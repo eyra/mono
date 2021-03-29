@@ -10,8 +10,33 @@ defmodule Core.ImageCatalog do
           attribution: nil | Phoenix.HTML.Safe.t()
         }
 
-  @callback search(query :: binary) :: list(image_id)
-  @callback search_info(query :: binary, opts :: url_opts) :: list(image_info)
+  @type meta_info :: %{
+          page: pos_integer,
+          page_size: pos_integer,
+          page_count: non_neg_integer,
+          image_count: non_neg_integer,
+          begin: pos_integer,
+          end: pos_integer
+        }
+
+  @type search_result :: %{
+          images: list(image_id),
+          meta: meta_info
+        }
+
+  @type search_info_result :: %{
+          images: list(image_info),
+          meta: meta_info
+        }
+
+  @callback search(query :: binary, page :: pos_integer, page_size :: pos_integer) ::
+              search_result
+  @callback search_info(
+              query :: binary,
+              page :: pos_integer,
+              page_size :: pos_integer,
+              opts :: url_opts
+            ) :: search_info_result
 
   @doc "Returns the URLs for the given image (if available)"
   @callback info(image :: image_id, opts :: url_opts) :: image_info | nil

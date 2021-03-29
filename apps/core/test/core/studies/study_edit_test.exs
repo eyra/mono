@@ -37,7 +37,7 @@ defmodule Core.Studies.StudyEdit.Test do
              tablet_enabled: survey_tool.tablet_enabled,
              desktop_enabled: survey_tool.desktop_enabled,
              published_at: survey_tool.published_at,
-             image_url: survey_tool.image_url,
+             image_id: survey_tool.image_id,
              marks: survey_tool.marks,
              reward_currency: survey_tool.reward_currency,
              reward_value: survey_tool.reward_value,

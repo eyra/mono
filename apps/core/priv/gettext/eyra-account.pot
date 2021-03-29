@@ -31,7 +31,7 @@ msgid "password.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:56
+#: lib/core_web/templates/layout/root.html.leex:51
 msgid "profile.button"
 msgstr ""
 
@@ -46,7 +46,7 @@ msgid "researcher.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:61
+#: lib/core_web/templates/layout/root.html.leex:56
 msgid "signin.button"
 msgstr ""
 
@@ -71,13 +71,13 @@ msgid "signup.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/survey_tool/edit.ex:30
+#: lib/core_web/live/survey_tool/edit.ex:32
 #: lib/core_web/live/survey_tool/new.ex:44
 msgid "survey_url.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/survey_tool/edit.ex:29
+#: lib/core_web/live/survey_tool/edit.ex:31
 #: lib/core_web/live/survey_tool/new.ex:43
 msgid "title.label"
 msgstr ""

@@ -14,7 +14,7 @@ defmodule CoreWeb.Dashboard do
   alias EyraUI.Card.{PrimaryStudy, SecondaryStudy, ButtonCard}
   alias EyraUI.Hero.HeroLarge
   alias EyraUI.Container.{ContentArea}
-  alias EyraUI.Text.{BodyLarge, Title2}
+  alias EyraUI.Text.{Title2}
   alias EyraUI.Grid.{DynamicGrid}
 
   data(highlighted_count, :any)
@@ -111,10 +111,6 @@ defmodule CoreWeb.Dashboard do
             subtitle={{dgettext("eyra-study", "study.index.subtitle")}} />
 
       <ContentArea>
-        <BodyLarge>
-          {{dgettext("eyra-study", "dashboard.page.description")}}
-        </BodyLarge>
-        <div class="mt-12 lg:mt-16"/>
         <Title2>
           {{ dgettext("eyra-study", "study.highlighted.title") }}
           <span class="text-primary"> {{ @highlighted_count }}</span>

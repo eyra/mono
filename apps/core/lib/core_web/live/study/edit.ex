@@ -9,12 +9,14 @@ defmodule CoreWeb.Study.Edit do
   alias EyraUI.Hero.HeroSmall
   alias EyraUI.Container.{ContentArea, Bar, BarItem}
   alias EyraUI.Text.{Title1, Title3, Title6, SubHead, BodyMedium}
-  alias EyraUI.Button.{PrimaryLiveViewButton, SecondaryLiveViewButton}
+  alias EyraUI.Button.{PrimaryLiveViewButton, SecondaryLiveViewButton, SecondaryAlpineButton}
   alias EyraUI.Status.{Info, Warning}
   alias EyraUI.{Spacing, Line}
   alias EyraUI.Case.{Case, True, False}
   alias EyraUI.Panel.Panel
-  alias EyraUI.Selectors.{LabelSelector, ImageSelector}
+  alias EyraUI.Selectors.LabelSelector
+  alias EyraUI.ImagePreview
+  alias CoreWeb.ImageCatalogPicker
 
   alias Core.Studies
   alias Core.Studies.{Study, StudyEdit}
@@ -114,6 +116,13 @@ defmodule CoreWeb.Study.Edit do
     update_changeset(socket, changeset)
   end
 
+  def handle_info({:image_picker, image_id}, socket) do
+    attrs = %{image_id: image_id}
+    study_edit = socket.assigns[:study_edit]
+    changeset = get_changeset(study_edit, :auto_save, attrs)
+    update_changeset(socket, changeset)
+  end
+
   def update_changeset(socket, changeset) do
     case Ecto.Changeset.apply_action(changeset, :update) do
       {:ok, _study_edit} ->
@@ -147,101 +156,115 @@ defmodule CoreWeb.Study.Edit do
 
   def render(assigns) do
     ~H"""
+      <div x-data="{ open: false }">
+        <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="open">
+          <div class="flex flex-row items-center justify-center w-full h-full">
+            <div class="w-5/6 md:w-popup-md lg:w-popup-lg" @click.away="open = false, $parent.overlay = false">
+              <ImageCatalogPicker conn={{@socket}} path_provider={{@path_provider}} initial_query={{@study_edit.initial_image_query}} id={{:image_picker}} image_catalog={{Core.ImageCatalog.Unsplash}} />
+            </div>
+          </div>
+        </div>
       <HeroSmall title={{ dgettext("eyra-study", "study.edit.title") }} />
-      <ContentArea>
-        <If condition={{ @study_edit.is_published }} >
-          <Title3>{{dgettext("eyra-survey", "status.title")}}</Title3>
-          <Title6>{{dgettext("eyra-survey", "completed.label")}}: <span class="text-success"> {{@study_edit.subject_completed_count}}</span></Title6>
-          <Title6>{{dgettext("eyra-survey", "pending.label")}}: <span class="text-warning"> {{@study_edit.subject_pending_count}}</span></Title6>
-          <Title6>{{dgettext("eyra-survey", "vacant.label")}}: <span class="text-delete"> {{@study_edit.subject_vacant_count}}</span></Title6>
-          <Spacing value="XL" />
-          <Line />
-          <Spacing value="M" />
-        </If>
-
-        <Bar>
-          <BarItem>
-            <Case value={{@study_edit.is_published }} >
-              <True>
-                <Info text={{dgettext("eyra-survey", "published.true.label")}} />
-              </True>
-              <False>
-                <Warning text={{dgettext("eyra-survey", "published.false.label")}} />
-              </False>
-            </Case>
-          </BarItem>
-          <BarItem>
-            <SubHead>{{ @study_edit.byline }}</SubHead>
-          </BarItem>
-        </Bar>
-        <Spacing value="L" />
-
-        <Title1>{{ @study_edit.title }}</Title1>
-        <Form for={{ @changeset }} change="save">
-          <TextInput field={{:title}} label_text={{dgettext("eyra-study", "title.label")}} />
-
-          <Spacing value="XL" />
-          <Title3>{{dgettext("eyra-survey", "themes.title")}}</Title3>
-          <BodyMedium>{{dgettext("eyra-survey", "themes.label")}}</BodyMedium>
-          <Spacing value="XS" />
-          <LabelSelector id={{:theme_selector}} labels={{ @study_edit.theme_labels }}/>
-          <Spacing value="XL" />
-
-          <Title3>{{dgettext("eyra-survey", "image.title")}}</Title3>
-          <BodyMedium>{{dgettext("eyra-survey", "image.label")}}</BodyMedium>
-          <Spacing value="XS" />
-          <ImageSelector image_url={{ @study_edit.image_url }} />
-          <Spacing value="XL" />
-
-          <Title3>{{dgettext("eyra-survey", "organisation.title")}}</Title3>
-          <RadioButtonGroup field={{:organization}} items={{ Marks.instances() }} checked={{ @study_edit.organization }}/>
-          <Spacing value="XL" />
-
-          <Title3>{{dgettext("eyra-survey", "about.title")}}</Title3>
-          <TextArea field={{:description}} label_text={{dgettext("eyra-survey", "info.label")}}/>
-          <Spacing value="XL" />
-
-          <Title3>{{dgettext("eyra-survey", "duration.title")}}</Title3>
-          <TextInput field={{:duration}} label_text={{dgettext("eyra-survey", "duration.label")}} />
-          <Spacing value="XL" />
-
-          <Title3>{{dgettext("eyra-survey", "reward.title")}}</Title3>
-          <NumberInput field={{:reward_value}} label_text={{dgettext("eyra-survey", "reward.label")}} />
-          <Spacing value="XL" />
-
-          <Title3>{{dgettext("eyra-survey", "subjects.title")}}</Title3>
-          <NumberInput field={{:subject_count}} label_text={{dgettext("eyra-survey", "config.nrofsubjects.label")}} />
-          <Spacing value="XL" />
-
-
-          <Spacing value="L" />
-          <Title3>{{dgettext("eyra-survey", "config.devices.title")}}</Title3>
-          <Checkbox field={{:phone_enabled}} label_text={{dgettext("eyra-survey", "phone.enabled.label")}}/>
-          <Checkbox field={{:tablet_enabled}} label_text={{dgettext("eyra-survey", "tablet.enabled.label")}}/>
-          <Checkbox field={{:desktop_enabled}} label_text={{dgettext("eyra-survey", "desktop.enabled.label")}}/>
-          <Spacing value="XL" />
-
-          <Panel bg_color="bg-grey1">
-            <template slot="title">
-              <Title3 color="text-white" >{{dgettext("eyra-survey", "config.title")}}</Title3>
-            </template>
-            <UrlInput field={{:survey_url}} label_color="text-white" label_text={{dgettext("eyra-survey", "config.url.label")}} read_only={{@study_edit.is_published}}/>
+        <ContentArea>
+          <If condition={{ @study_edit.is_published }} >
+            <Title3>{{dgettext("eyra-survey", "status.title")}}</Title3>
+            <Title6>{{dgettext("eyra-survey", "completed.label")}}: <span class="text-success"> {{@study_edit.subject_completed_count}}</span></Title6>
+            <Title6>{{dgettext("eyra-survey", "pending.label")}}: <span class="text-warning"> {{@study_edit.subject_pending_count}}</span></Title6>
+            <Title6>{{dgettext("eyra-survey", "vacant.label")}}: <span class="text-delete"> {{@study_edit.subject_vacant_count}}</span></Title6>
+            <Spacing value="XL" />
+            <Line />
             <Spacing value="M" />
-            <Title6 color="text-white">Redirect url</Title6>
-            <BodyMedium color="text-grey3">{{ @uri_origin <> @path_provider.live_path(@socket, CoreWeb.Study.Complete, @study_edit.study_id)}}</BodyMedium>
-          </Panel>
-          <Spacing value="XL" />
-        </Form>
-        <Case value={{ @study_edit.is_published }} >
-          <True> <!-- Published -->
-            <SecondaryLiveViewButton label={{ dgettext("eyra-survey", "unpublish.button") }} event="unpublish" />
-          </True>
-          <False> <!-- Not published -->
-            <PrimaryLiveViewButton label={{ dgettext("eyra-survey", "publish.button") }} event="publish" />
-            <SecondaryLiveViewButton label={{ dgettext("eyra-survey", "delete.button") }} event="delete" />
-          </False>
-      </Case>
-      </ContentArea>
+          </If>
+
+          <Bar>
+            <BarItem>
+              <Case value={{@study_edit.is_published }} >
+                <True>
+                  <Info text={{dgettext("eyra-survey", "published.true.label")}} />
+                </True>
+                <False>
+                  <Warning text={{dgettext("eyra-survey", "published.false.label")}} />
+                </False>
+              </Case>
+            </BarItem>
+            <BarItem>
+              <SubHead>{{ @study_edit.byline }}</SubHead>
+            </BarItem>
+          </Bar>
+          <Spacing value="L" />
+
+          <Title1>{{ @study_edit.title }}</Title1>
+          <Form for={{ @changeset }} change="save">
+            <TextInput field={{:title}} label_text={{dgettext("eyra-study", "title.label")}} />
+
+            <Spacing value="XL" />
+            <Title3>{{dgettext("eyra-survey", "themes.title")}}</Title3>
+            <BodyMedium>{{dgettext("eyra-survey", "themes.label")}}</BodyMedium>
+            <Spacing value="XS" />
+            <LabelSelector id={{:theme_selector}} labels={{ @study_edit.theme_labels }}/>
+            <Spacing value="XL" />
+
+            <Title3>{{dgettext("eyra-survey", "image.title")}}</Title3>
+            <BodyMedium>{{dgettext("eyra-survey", "image.label")}}</BodyMedium>
+            <Spacing value="XS" />
+            <div class="flex flex-row">
+              <ImagePreview image_url={{ @study_edit.image_url }} />
+              <Spacing value="S" direction="l" />
+              <SecondaryAlpineButton click="open = true, $parent.overlay = true" label={{dgettext("eyra-survey", "search.different.image.button")}} />
+            </div>
+            <Spacing value="XL" />
+
+            <Title3>{{dgettext("eyra-survey", "organisation.title")}}</Title3>
+            <RadioButtonGroup field={{:organization}} items={{ Marks.instances() }} checked={{ @study_edit.organization }}/>
+            <Spacing value="XL" />
+
+            <Title3>{{dgettext("eyra-survey", "about.title")}}</Title3>
+            <TextArea field={{:description}} label_text={{dgettext("eyra-survey", "info.label")}}/>
+            <Spacing value="XL" />
+
+            <Title3>{{dgettext("eyra-survey", "duration.title")}}</Title3>
+            <TextInput field={{:duration}} label_text={{dgettext("eyra-survey", "duration.label")}} />
+            <Spacing value="XL" />
+
+            <Title3>{{dgettext("eyra-survey", "reward.title")}}</Title3>
+            <NumberInput field={{:reward_value}} label_text={{dgettext("eyra-survey", "reward.label")}} />
+            <Spacing value="XL" />
+
+            <Title3>{{dgettext("eyra-survey", "subjects.title")}}</Title3>
+            <NumberInput field={{:subject_count}} label_text={{dgettext("eyra-survey", "config.nrofsubjects.label")}} />
+            <Spacing value="XL" />
+
+
+            <Spacing value="L" />
+            <Title3>{{dgettext("eyra-survey", "config.devices.title")}}</Title3>
+            <Checkbox field={{:phone_enabled}} label_text={{dgettext("eyra-survey", "phone.enabled.label")}}/>
+            <Checkbox field={{:tablet_enabled}} label_text={{dgettext("eyra-survey", "tablet.enabled.label")}}/>
+            <Checkbox field={{:desktop_enabled}} label_text={{dgettext("eyra-survey", "desktop.enabled.label")}}/>
+            <Spacing value="XL" />
+
+            <Panel bg_color="bg-grey1">
+              <template slot="title">
+                <Title3 color="text-white" >{{dgettext("eyra-survey", "config.title")}}</Title3>
+              </template>
+              <UrlInput field={{:survey_url}} label_color="text-white" label_text={{dgettext("eyra-survey", "config.url.label")}} read_only={{@study_edit.is_published}}/>
+              <Spacing value="M" />
+              <Title6 color="text-white">Redirect url</Title6>
+              <BodyMedium color="text-grey3">{{ @uri_origin <> @path_provider.live_path(@socket, CoreWeb.Study.Complete, @study_edit.study_id)}}</BodyMedium>
+            </Panel>
+            <Spacing value="XL" />
+          </Form>
+
+          <Case value={{ @study_edit.is_published }} >
+            <True> <!-- Published -->
+              <SecondaryLiveViewButton label={{ dgettext("eyra-survey", "unpublish.button") }} event="unpublish" />
+            </True>
+            <False> <!-- Not published -->
+              <PrimaryLiveViewButton label={{ dgettext("eyra-survey", "publish.button") }} event="publish" />
+              <SecondaryLiveViewButton label={{ dgettext("eyra-survey", "delete.button") }} event="delete" />
+            </False>
+          </Case>
+        </ContentArea>
+      </div>
     """
   end
 end

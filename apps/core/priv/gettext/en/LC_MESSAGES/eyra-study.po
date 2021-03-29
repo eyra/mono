@@ -12,62 +12,42 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:108
+#: lib/core_web/live/dashboard.ex:111
 msgid "study.index.subtitle"
 msgstr "Studies"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:107
+#: lib/core_web/live/dashboard.ex:110
 msgid "study.index.title"
 msgstr "Overview"
 
 #, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:45
+#: lib/core_web/templates/layout/root.html.leex:47
 msgid "dashboard.button"
 msgstr "Overview"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:135
+#: lib/core_web/live/dashboard.ex:134
 msgid "study.all.title"
 msgstr "Available studies:"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:116
+#: lib/core_web/live/dashboard.ex:115
 msgid "study.highlighted.title"
 msgstr "My studies:"
 
 #, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:51
-msgid "new.button"
-msgstr "New study"
-
-#, elixir-format
-#: lib/core_web/live/dashboard.ex:112
-msgid "dashboard.page.description"
-msgstr "This page provides an overview of the studies available. The studies that you are involved in are listed under 'My studies'. All other studies that are open for participation, are listed under 'Available studies'."
-
-#, elixir-format
-#: lib/core_web/live/study/edit.ex:198
+#: lib/core_web/live/study/edit.ex:167
 msgid "study.edit.title"
 msgstr "Study"
 
 #, elixir-format
-#: lib/core_web/live/study/new.ex:55
-msgid "save.button"
-msgstr "Save"
-
-#, elixir-format
-#: lib/core_web/live/study/edit.ex:234 lib/core_web/live/study/new.ex:54
+#: lib/core_web/live/study/edit.ex:198
 msgid "title.label"
 msgstr "Change the title"
 
 #, elixir-format
-#: lib/core_web/live/study/new.ex:51
-msgid "study.new.title"
-msgstr "Study"
-
-#, elixir-format
-#: lib/core_web/live/dashboard.ex:128
+#: lib/core_web/live/dashboard.ex:127
 msgid "add.card.title"
 msgstr "Set up a new study"
 
@@ -77,16 +57,36 @@ msgid "study.public.title"
 msgstr "Study"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:142
-msgid "open.button"
-msgstr "Details"
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.art"
+msgstr "Art"
 
 #, elixir-format
-#: lib/core_web/live/study/new.ex:56
-msgid "cancel.button"
-msgstr "Cancel"
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.health"
+msgstr "Health"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:233
-msgid "title.title"
-msgstr "Title"
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.history"
+msgstr "History"
+
+#, elixir-format
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.language"
+msgstr "Language"
+
+#, elixir-format
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.politics"
+msgstr "Politics"
+
+#, elixir-format
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.society"
+msgstr "Society"
+
+#, elixir-format
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.technology"
+msgstr "Technology"

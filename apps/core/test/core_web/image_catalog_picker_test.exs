@@ -7,7 +7,7 @@ defmodule CoreWeb.ImageCatalogPicker.Test.View do
   def render(assigns) do
     ~H"""
     <div>
-    <ImageCatalogPicker id="picker" image_catalog={{Core.ImageCatalog.Local}} />
+    <ImageCatalogPicker id="picker" image_catalog={{Core.ImageCatalog.Local}} conn={{@socket}} path_provider={{CoreWeb.Support.PathProvider}}/>
     </div>
     """
   end
@@ -33,7 +33,7 @@ defmodule CoreWeb.ImageCatalogPicker.Test do
     test "searching for non-existent images shows no results", %{view: view} do
       assert view
              |> element("form")
-             |> render_submit(%{q: "somethingwhichdoesnotexist"}) =~ "No results"
+             |> render_submit(%{q: "somethingwhichdoesnotexist"}) =~ "Geen afbeeldingen gevonden"
     end
 
     test "searching existing images shows results", %{view: view} do
@@ -53,7 +53,7 @@ defmodule CoreWeb.ImageCatalogPicker.Test do
 
       html =
         view
-        |> element(".image")
+        |> element("div[id=clickable-area-0]")
         |> render_click()
 
       assert html =~ "cyan"

@@ -1,7 +1,7 @@
 defmodule CoreWeb.ViewModel.Card do
   alias Core.SurveyTools
+  alias Core.ImageCatalog.Unsplash, as: ImageCatalog
   alias CoreWeb.RoutesProxy, as: Routes
-
   import CoreWeb.Gettext
 
   def primary_study(
@@ -11,7 +11,7 @@ defmodule CoreWeb.ViewModel.Card do
           survey_tools: [
             %{
               subject_count: subject_count,
-              image_url: image_url,
+              image_id: image_id,
               themes: themes,
               duration: duration,
               reward_currency: reward_currency,
@@ -27,12 +27,6 @@ defmodule CoreWeb.ViewModel.Card do
     reward_value = if reward_value === nil, do: 0, else: reward_value
     reward_currency = if reward_currency === nil, do: :eur, else: reward_currency
     duration = if duration === nil, do: 0, else: duration
-
-    image_url =
-      if image_url === nil,
-        do:
-          "https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=3900&q=80",
-        else: image_url
 
     occupied_spot_count = SurveyTools.count_tasks(survey_tool, [:pending, :completed])
     open_spot_count = subject_count - occupied_spot_count
@@ -50,20 +44,18 @@ defmodule CoreWeb.ViewModel.Card do
       "#{deadline_label}"
     ]
 
-    icon_url =
-      case marks do
-        [mark] -> Routes.static_path(socket, "/images/#{mark}.svg")
-        _ -> nil
-      end
-
     label =
       if published_at === nil, do: dgettext("eyra-survey", "published.false.label"), else: nil
+
+    icon_url = get_icon_url(marks, socket)
+    image_url = get_image_url(image_id)
+    tags = get_tags(themes)
 
     %{
       id: id,
       title: title,
       image_url: image_url,
-      tags: themes,
+      tags: tags,
       duration: duration,
       info: info,
       icon_url: icon_url,
@@ -81,8 +73,7 @@ defmodule CoreWeb.ViewModel.Card do
     %{
       id: id,
       title: title,
-      image_url:
-        "https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=3900&q=80",
+      image_url: temp_default_image_url(),
       tags: [],
       duration: nil,
       info: [],
@@ -90,19 +81,26 @@ defmodule CoreWeb.ViewModel.Card do
     }
   end
 
-  def secondary_study(%{
-        id: id,
-        title: title,
-        survey_tools: [
-          %{
-            image_url: image_url
-          }
-        ]
-      }) do
-    %{
-      id: id,
-      title: title,
-      image_url: image_url
-    }
+  def get_tags(themes) do
+    themes
+    |> Enum.map(&Core.Themes.translate(&1))
+  end
+
+  def get_icon_url(marks, socket) do
+    case marks do
+      [mark] -> Routes.static_path(socket, "/images/#{mark}.svg")
+      _ -> nil
+    end
+  end
+
+  def get_image_url(image_id) do
+    case image_id do
+      nil -> temp_default_image_url()
+      image_id -> ImageCatalog.info(image_id, width: 800, height: 600).url
+    end
+  end
+
+  defp temp_default_image_url do
+    "https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=3900&q=80"
   end
 end
