@@ -1,8 +1,8 @@
 defmodule SignInWithApple.FakeBackend do
-  def validate_id_token(_config, _token) do
+  def callback(_config, _token) do
     {:ok,
      %{
-       claims: %{
+       user: %{
          "sub" => "test",
          "email" => Faker.Internet.email(),
          "is_private_email" => true
