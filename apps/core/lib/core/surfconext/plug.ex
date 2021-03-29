@@ -24,7 +24,7 @@ defmodule Core.SurfConext.AuthorizePlug do
   end
 end
 
-defmodule(Core.SurfConext.CallbackPlug) do
+defmodule Core.SurfConext.CallbackPlug do
   import Plug.Conn
   import Core.SurfConext.PlugUtils
 

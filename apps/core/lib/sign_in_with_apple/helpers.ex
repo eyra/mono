@@ -26,7 +26,7 @@ defmodule SignInWithApple.Helpers do
      <meta name="appleid-signin-client-id" content="#{Keyword.get(config, :client_id)}">
      <meta name="appleid-signin-scope" content="name email">
      <meta name="appleid-signin-redirect-uri" content="#{Keyword.get(config, :redirect_uri)}">
-     .authorize_url        <meta name="appleid-signin-state" content="#{session_params.state}">
+     <meta name="appleid-signin-state" content="#{session_params.state}">
     """
   end
 

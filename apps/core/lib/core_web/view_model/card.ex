@@ -81,6 +81,8 @@ defmodule CoreWeb.ViewModel.Card do
     }
   end
 
+  def get_tags(nil), do: []
+
   def get_tags(themes) do
     themes
     |> Enum.map(&Core.Themes.translate(&1))

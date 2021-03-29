@@ -14,7 +14,7 @@ defmodule CoreWeb.UserSessionControllerTest do
     test "renders log in page", %{conn: conn} do
       conn = get(conn, Routes.path(conn, CoreWeb.UserSessionController, :new))
       response = html_response(conn, 200)
-      assert response =~ "<h1>Log in</h1>"
+      assert response =~ "Log in"
     end
   end
 
@@ -42,8 +42,7 @@ defmodule CoreWeb.UserSessionControllerTest do
       # Now do a logged in request and assert on the menu
       conn = get(conn, "/")
       response = html_response(conn, 200)
-      assert response =~ user.email
-      assert response =~ "Log out</a>"
+      assert response =~ "My profile"
     end
 
     test "logs the user in with remember me", %{conn: conn, user: user, password: password} do
@@ -81,7 +80,7 @@ defmodule CoreWeb.UserSessionControllerTest do
         })
 
       response = html_response(conn, 200)
-      assert response =~ "<h1>Log in</h1>"
+      assert response =~ "Log in"
       assert response =~ "Invalid email or password"
     end
   end

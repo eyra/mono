@@ -30,6 +30,7 @@ module.exports = {
       white: '#FFFFFF',
       apple: '#000000',
       google: '#EA4335',
+      surfconext: '#4DB2CF',
     },
     extend: {
       width: {

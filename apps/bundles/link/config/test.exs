@@ -19,3 +19,8 @@ config :logger, level: :warn
 # Reduce password hashing impact on test duration
 config :bcrypt_elixir,
   log_rounds: 4
+
+config :core, GoogleSignIn,
+  client_id: "client_id",
+  client_secret: "client_secret",
+  redirect_uri: "http://localhost:4000/google-sign-in/auth"

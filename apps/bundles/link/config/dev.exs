@@ -65,8 +65,6 @@ config :link, LinkWeb.Endpoint,
     ]
   ]
 
-config :core, Core.SurfConext, site: "https://connect.test.surfconext.nl"
-
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 
