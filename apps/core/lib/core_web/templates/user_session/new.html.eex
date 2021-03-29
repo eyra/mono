@@ -1,3 +1,6 @@
+<h1>Log in</h1>
+
+>>>>>>> 058651d (Fixed Sign In with Apple and added setup doc)
 <p class="alert alert-info" role="alert"
                             phx-click="lv:clear-flash"
                             phx-value-key="info"></p>
@@ -23,8 +26,8 @@
               Meld je aan met Apple
             </div>
 
-            <div id="appleid-signin" data-color="black" data-border="true" data-type="sign in" data-logo-size="large" data-width="100%" data-height="100%" data-mode="left-align"></div>
-            <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+
+            <%= sign_in_with_apple_button(@conn) %>
           </div>
 
           <div class="mb-6"></div>

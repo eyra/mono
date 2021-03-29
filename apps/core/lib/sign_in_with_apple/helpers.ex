@@ -1,13 +1,12 @@
 defmodule SignInWithApple.Backend do
-  def validate_id_token(config, id_token) do
-    {:ok, %{claims: claims}} = Assent.Strategy.OIDC.validate_id_token(config, id_token)
-    claims
-  end
+  defdelegate callback(config, id_token), to: Assent.Strategy.Apple
 
   defdelegate authorize_url(config), to: Assent.Strategy.Apple
 end
 
 defmodule SignInWithApple.Helpers do
+  import Plug.Conn, only: [put_session: 3, get_session: 2]
+
   def backend_module(config) do
     Keyword.get(config, :apple_backend_module, SignInWithApple.Backend)
   end
@@ -18,22 +17,30 @@ defmodule SignInWithApple.Helpers do
     |> Keyword.merge(config)
   end
 
-  def html_meta(config) do
+  def html_sign_in_button(conn, config) do
     config = apply_defaults(config)
-    {:ok, %{session_params: session_params}} = backend_module(config).authorize_url(config)
+
+    session_params = get_session(conn, :sign_in_with_apple)
 
     """
-     <meta name="appleid-signin-client-id" content="#{Keyword.get(config, :client_id)}">
-     <meta name="appleid-signin-scope" content="name email">
-     <meta name="appleid-signin-redirect-uri" content="#{Keyword.get(config, :redirect_uri)}">
-     <meta name="appleid-signin-state" content="#{session_params.state}">
+    <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+    <div id="appleid-signin" data-color="black" data-border="true" data-type="sign in"></div>
+    <script type="text/javascript">
+        AppleID.auth.init({
+            clientId: '#{Keyword.get(config, :client_id)}',
+            scope: 'name email',
+            redirectURI: '#{Keyword.get(config, :redirect_uri)}',
+            state: '#{session_params.state}',
+        });
+    </script>
     """
   end
 
-  def html_sign_in_button do
-    """
-    <div id="appleid-signin" data-color="black" data-border="true" data-type="sign in"></div>
-    <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
-    """
+  def setup_session(conn, config) do
+    config = apply_defaults(config)
+
+    {:ok, %{session_params: session_params}} = backend_module(config).authorize_url(config)
+
+    conn |> put_session(:sign_in_with_apple, session_params)
   end
 end

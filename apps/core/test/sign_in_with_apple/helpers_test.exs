@@ -1,5 +1,6 @@
 defmodule SignInWithApple.Helpers.Test do
   use ExUnit.Case, async: true
+  use Plug.Test
 
   alias SignInWithApple.Helpers
 
@@ -11,13 +12,14 @@ defmodule SignInWithApple.Helpers.Test do
     assert Helpers.apply_defaults([]) |> Keyword.get(:site) == "https://appleid.apple.com"
   end
 
-  test "html_meta/1 returns the meta tags that are needed" do
-    html = Helpers.html_meta(redirect_uri: Faker.Internet.url(), client_id: "testing")
-    assert html =~ "<meta name=\"appleid-signin-client-id\" content=\"testing\""
-  end
-
   test "html_sign_in_button/1 returns the html for the button" do
-    html = Helpers.html_sign_in_button()
+    conn =
+      conn(:get, "/")
+      |> init_test_session(%{sign_in_with_apple: %{state: :test}})
+
+    html =
+      Helpers.html_sign_in_button(conn, redirect_uri: Faker.Internet.url(), client_id: "testing")
+
     assert html =~ "cdn-apple.com"
   end
 end
