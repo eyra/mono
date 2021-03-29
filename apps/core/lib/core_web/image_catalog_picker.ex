@@ -70,7 +70,33 @@ defmodule CoreWeb.ImageCatalogPicker do
               </div>
             </ImageGrid>
             <Spacing value="S" />
-            <Caption text_alignment="left" padding="p-0" margin="m-0" color="text-grey2">{{dngettext("eyra-imagecatalog", "page.info.message", "page.info.message.%{count}", @meta.image_count, begin: @meta.begin, end: @meta.end)}}</Caption>
+            <div class="flex flex-row">
+              <div class="flex-grow">
+                <Caption text_alignment="left" padding="p-0" margin="m-0" color="text-grey2">{{dngettext("eyra-imagecatalog", "page.info.message", "page.info.message.%{count}", @meta.image_count, begin: @meta.begin, end: @meta.end)}}</Caption>
+              </div>
+              <div class="flex-wrap">
+                <div class="flex flex-row" x-data="{ selected: {{@meta.page}} }" >
+                  <For each={{ page <- 1..Enum.min([10, @meta.page_count]) }}>
+                    <If condition={{ page > 1 }}>
+                      <Spacing value="XS" direction="l" />
+                    </If>
+                    <div
+                      class="rounded w-8 h-8 cursor-pointer"
+                      :class="{ 'bg-primary text-white':  selected === {{page}}, 'bg-grey5': selected  != {{page}} }"
+                      x-on:click="selected = {{page}}"
+                      :on-click="select_page"
+                      phx-value-page={{ page }}
+                    >
+                      <div class="flex flex-row items-center justify-center w-full h-full">
+                        <div class="text-label font-label" :class="{ 'text-white': selected === {{page}}, 'text-grey2': selected != {{page}} }">
+                          {{ page }}
+                        </div>
+                      </div>
+                    </div>
+                  </For>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -83,7 +109,24 @@ defmodule CoreWeb.ImageCatalogPicker do
         %{"q" => query},
         %{assigns: %{image_catalog: image_catalog}} = socket
       ) do
-    results = image_catalog.search_info(query, 1, 10, width: 400, height: 300)
+    search(socket, query, image_catalog, 1)
+  end
+
+  def handle_event(
+        "select_page",
+        %{"page" => page},
+        %{assigns: %{query: query, image_catalog: image_catalog}} = socket
+      ) do
+    search(socket, query, image_catalog, String.to_integer(page))
+  end
+
+  def handle_event("select_image", %{"image" => image_id}, %{assigns: %{id: id}} = socket) do
+    send(self(), {id, image_id})
+    {:noreply, socket}
+  end
+
+  defp search(socket, query, image_catalog, page, page_size \\ 10) do
+    results = image_catalog.search_info(query, page, page_size, width: 400, height: 300)
 
     {:noreply,
      socket
@@ -93,10 +136,5 @@ defmodule CoreWeb.ImageCatalogPicker do
        search_results: results.images,
        meta: results.meta
      )}
-  end
-
-  def handle_event("select_image", %{"image" => image_id}, %{assigns: %{id: id}} = socket) do
-    send(self(), {id, image_id})
-    {:noreply, socket}
   end
 end
