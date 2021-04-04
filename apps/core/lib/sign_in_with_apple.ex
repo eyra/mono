@@ -33,8 +33,8 @@ defmodule SignInWithApple do
     |> Repo.insert()
   end
 
-  defmacro routes(sign_in_with_apple_config) do
-    quote bind_quoted: [sign_in_with_apple_config: sign_in_with_apple_config] do
+  defmacro routes(otp_app) do
+    quote bind_quoted: [otp_app: otp_app] do
       pipeline :sign_in_with_apple_browser do
         plug(:accepts, ["html"])
         plug(:fetch_session)
@@ -42,7 +42,7 @@ defmodule SignInWithApple do
 
       scope "/", SignInWithApple do
         pipe_through([:sign_in_with_apple_browser])
-        post("/apple/auth", CallbackPlug, sign_in_with_apple_config)
+        post("/apple/auth", CallbackPlug, otp_app)
       end
     end
   end

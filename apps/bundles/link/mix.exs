@@ -25,6 +25,11 @@ defmodule Link.MixProject do
       dialyzer: [
         plt_add_apps: [:mix],
         plt_add_deps: :transitive
+      ],
+      releases: [
+        link: [
+          include_executables_for: [:unix]
+        ]
       ]
     ]
   end

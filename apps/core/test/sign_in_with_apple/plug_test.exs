@@ -18,16 +18,16 @@ defmodule SignInWithApple.CallbackPlug.Test do
   alias SignInWithApple.CallbackPlug
 
   setup do
-    config = [
+    Application.put_env(:test, SignInWithApple,
       apple_backend_module: SignInWithApple.FakeBackend,
       log_in_user: fn _conn, user -> user end
-    ]
+    )
 
-    {:ok, config: config}
+    :ok
   end
 
   describe "call/1" do
-    test "creates a user", %{config: config} do
+    test "creates a user" do
       user_data =
         Jason.encode!(%{
           "name" => %{
@@ -44,12 +44,12 @@ defmodule SignInWithApple.CallbackPlug.Test do
           "user" => user_data
         })
         |> init_test_session(%{})
-        |> CallbackPlug.call(config)
+        |> CallbackPlug.call(:test)
 
       assert user.id
     end
 
-    test "authenticates an existing user", %{config: config} do
+    test "authenticates an existing user" do
       email = Faker.Internet.email()
 
       SignInWithApple.register_user(%{
@@ -67,7 +67,7 @@ defmodule SignInWithApple.CallbackPlug.Test do
           "id_token" => "whatever"
         })
         |> init_test_session(%{})
-        |> CallbackPlug.call(config)
+        |> CallbackPlug.call(:test)
 
       assert user.email == email
     end

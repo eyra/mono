@@ -7,9 +7,9 @@ defmodule LinkWeb.Router do
   require CoreWeb.Routes
   require CoreWeb.LocalImageCatalogPlug
 
-  GoogleSignIn.routes()
-  Core.SurfConext.routes()
-  SignInWithApple.routes(Application.get_env(:core, SignInWithApple))
+  GoogleSignIn.routes(:core)
+  Core.SurfConext.routes(:core)
+  SignInWithApple.routes(:core)
   CoreWeb.Routes.routes()
   CoreWeb.LocalImageCatalogPlug.routes()
 

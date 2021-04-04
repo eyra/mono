@@ -30,10 +30,8 @@ defmodule Core.SurfConext do
     |> Repo.insert()
   end
 
-  defmacro routes() do
-    quote do
-      surfconext_config = Application.fetch_env!(:core, Core.SurfConext)
-
+  defmacro routes(otp_app) do
+    quote bind_quoted: [otp_app: otp_app] do
       pipeline :surfconext_browser do
         plug(:accepts, ["html"])
         plug(:fetch_session)
@@ -41,8 +39,8 @@ defmodule Core.SurfConext do
 
       scope "/", Core.SurfConext do
         pipe_through([:surfconext_browser])
-        get("/surfconext", AuthorizePlug, surfconext_config)
-        get("/surfconext/auth", CallbackPlug, surfconext_config)
+        get("/surfconext", AuthorizePlug, otp_app)
+        get("/surfconext/auth", CallbackPlug, otp_app)
       end
     end
   end

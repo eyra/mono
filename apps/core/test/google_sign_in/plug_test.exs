@@ -37,18 +37,18 @@ defmodule GoogleSignIn.AuthorizePlug.Test do
     test "redirects to SurfConext login page" do
       domain = Faker.Internet.domain_name()
 
-      config = [
+      Application.put_env(:test, GoogleSignIn,
         client_id: domain,
         client_secret: Faker.Lorem.sentence(),
         site: "https://connect.test.google_sign_in.nl",
         redirect_uri: "https://#{domain}/google_sign_in/auth",
         google_module: GoogleSignIn.FakeGoogle
-      ]
+      )
 
       conn =
         conn(:get, "/google")
         |> init_test_session(%{})
-        |> AuthorizePlug.call(config)
+        |> AuthorizePlug.call(:test)
 
       assert conn.private.plug_session["google_sign_in"]
       assert conn.status == 302
@@ -67,29 +67,29 @@ defmodule GoogleSignIn.CallbackPlug.Test do
   setup do
     domain = Faker.Internet.domain_name()
 
-    config = [
+    Application.put_env(:test, GoogleSignIn,
       client_id: domain,
       client_secret: Faker.Lorem.sentence(),
       site: "https://connect.test.google_sign_in.nl",
       redirect_uri: "https://#{domain}/google_sign_in/auth",
       google_module: GoogleSignIn.FakeGoogle,
       log_in_user: fn _conn, user -> user end
-    ]
+    )
 
-    {:ok, config: config}
+    :ok
   end
 
   describe "call/1" do
-    test "creates a user", %{config: config} do
+    test "creates a user" do
       user =
         conn(:get, "/google")
         |> init_test_session(%{})
-        |> CallbackPlug.call(config)
+        |> CallbackPlug.call(:test)
 
       assert user.id
     end
 
-    test "authenticates an existing user", %{config: config} do
+    test "authenticates an existing user" do
       email = Faker.Internet.email()
 
       given_name = Faker.Person.first_name()
@@ -109,7 +109,7 @@ defmodule GoogleSignIn.CallbackPlug.Test do
       user =
         conn(:get, "/google")
         |> init_test_session(%{})
-        |> CallbackPlug.call(config)
+        |> CallbackPlug.call(:test)
 
       assert user.email == email
     end

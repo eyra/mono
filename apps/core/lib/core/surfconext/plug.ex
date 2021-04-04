@@ -1,4 +1,8 @@
 defmodule Core.SurfConext.PlugUtils do
+  def config(otp_app) do
+    Application.get_env(otp_app, Core.SurfConext)
+  end
+
   def oidc_module(config) do
     Keyword.get(config, :oidc_module, Assent.Strategy.OIDC)
   end
@@ -18,9 +22,11 @@ defmodule Core.SurfConext.AuthorizePlug do
   import Plug.Conn
   import Core.SurfConext.PlugUtils
 
-  def init(options) when is_list(options), do: options
+  def init(otp_app) when is_atom(otp_app), do: otp_app
 
-  def call(conn, config) do
+  def call(conn, otp_app) do
+    config = config(otp_app)
+
     {:ok, %{url: url, session_params: session_params}} = oidc_module(config).authorize_url(config)
 
     conn
@@ -33,12 +39,12 @@ defmodule Core.SurfConext.CallbackPlug do
   import Plug.Conn
   import Core.SurfConext.PlugUtils
 
-  def init(options) when is_list(options), do: options
+  def init(otp_app) when is_atom(otp_app), do: otp_app
 
-  def call(conn, config) do
+  def call(conn, otp_app) do
     session_params = get_session(conn, :surfcontext)
 
-    config = Keyword.put(config, :session_params, session_params)
+    config = config(otp_app) |> Keyword.put(:session_params, session_params)
 
     {:ok, %{user: surf_user, token: token}} = oidc_module(config).callback(config, conn.params)
 

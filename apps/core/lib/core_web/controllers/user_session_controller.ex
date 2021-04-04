@@ -4,11 +4,7 @@ defmodule CoreWeb.UserSessionController do
   alias Core.Accounts
   alias CoreWeb.UserAuth
 
-  plug(
-    :setup_sign_in_with_apple,
-    Application.fetch_env!(:core, SignInWithApple)
-    when action != :delete
-  )
+  plug(:setup_sign_in_with_apple, :core when action != :delete)
 
   def new(conn, _params) do
     render(conn, "new.html", error_message: nil)
@@ -30,7 +26,8 @@ defmodule CoreWeb.UserSessionController do
     |> UserAuth.log_out_user()
   end
 
-  defp setup_sign_in_with_apple(conn, conf) do
+  defp setup_sign_in_with_apple(conn, otp_app) do
+    conf = Application.fetch_env!(otp_app, SignInWithApple)
     SignInWithApple.Helpers.setup_session(conn, conf)
   end
 end

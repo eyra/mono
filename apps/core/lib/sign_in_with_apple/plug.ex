@@ -2,9 +2,10 @@ defmodule SignInWithApple.CallbackPlug do
   import Plug.Conn
   import SignInWithApple.Helpers, only: [backend_module: 1, apply_defaults: 1]
 
-  def init(options) when is_list(options), do: options |> apply_defaults()
+  def init(otp_app) when is_atom(otp_app), do: otp_app
 
-  def call(conn, config) do
+  def call(conn, otp_app) do
+    config = otp_app |> Application.get_env(SignInWithApple) |> apply_defaults
     session_params = get_session(conn, :sign_in_with_apple)
     config = Keyword.put(config, :session_params, session_params)
     {:ok, %{user: user_info}} = backend_module(config).callback(config, conn.body_params)

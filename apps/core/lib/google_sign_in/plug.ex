@@ -1,4 +1,8 @@
 defmodule GoogleSignIn.PlugUtils do
+  def config(otp_app) do
+    Application.get_env(otp_app, GoogleSignIn)
+  end
+
   def google_module(config) do
     Keyword.get(config, :google_module, Assent.Strategy.Google)
   end
@@ -18,9 +22,11 @@ defmodule GoogleSignIn.AuthorizePlug do
   import Plug.Conn
   import GoogleSignIn.PlugUtils
 
-  def init(options) when is_list(options), do: options
+  def init(otp_app) when is_atom(otp_app), do: otp_app
 
-  def call(conn, config) do
+  def call(conn, otp_app) do
+    config = config(otp_app)
+
     {:ok, %{url: url, session_params: session_params}} =
       google_module(config).authorize_url(config)
 
@@ -34,12 +40,12 @@ defmodule(GoogleSignIn.CallbackPlug) do
   import Plug.Conn
   import GoogleSignIn.PlugUtils
 
-  def init(options) when is_list(options), do: options
+  def init(otp_app) when is_atom(otp_app), do: otp_app
 
-  def call(conn, config) do
+  def call(conn, otp_app) do
     session_params = get_session(conn, :google_sign_in)
 
-    config = Keyword.put(config, :session_params, session_params)
+    config = config(otp_app) |> Keyword.put(:session_params, session_params)
 
     {:ok, %{user: google_user}} = google_module(config).callback(config, conn.params)
 
