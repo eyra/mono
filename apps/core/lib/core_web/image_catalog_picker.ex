@@ -75,20 +75,20 @@ defmodule CoreWeb.ImageCatalogPicker do
                 <Caption text_alignment="left" padding="p-0" margin="m-0" color="text-grey2">{{dngettext("eyra-imagecatalog", "page.info.message", "page.info.message.%{count}", @meta.image_count, begin: @meta.begin, end: @meta.end)}}</Caption>
               </div>
               <div class="flex-wrap">
-                <div class="flex flex-row" x-data="{ selected: {{@meta.page}} }" >
+                <div class="flex flex-row" x-data="{ selected_page: {{@meta.page}} }" >
                   <For each={{ page <- 1..Enum.min([10, @meta.page_count]) }}>
                     <If condition={{ page > 1 }}>
                       <Spacing value="XS" direction="l" />
                     </If>
                     <div
                       class="rounded w-8 h-8 cursor-pointer"
-                      :class="{ 'bg-primary text-white':  selected === {{page}}, 'bg-grey5': selected  != {{page}} }"
-                      x-on:click="selected = {{page}}"
+                      :class="{ 'bg-primary text-white':  selected_page === {{page}}, 'bg-grey5': selected_page  != {{page}} }"
+                      x-on:click="selected = {{page}}, $parent.selected = -1"
                       :on-click="select_page"
                       phx-value-page={{ page }}
                     >
                       <div class="flex flex-row items-center justify-center w-full h-full">
-                        <div class="text-label font-label" :class="{ 'text-white': selected === {{page}}, 'text-grey2': selected != {{page}} }">
+                        <div class="text-label font-label" :class="{ 'text-white': selected_page === {{page}}, 'text-grey2': selected_page != {{page}} }">
                           {{ page }}
                         </div>
                       </div>

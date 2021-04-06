@@ -23,7 +23,7 @@ defmodule CoreWeb.UserSessionControllerTest do
 
     test "redirects if already logged in", %{conn: conn} do
       conn = get(conn, Routes.path(conn, CoreWeb.UserSessionController, :new))
-      assert redirected_to(conn) == "/"
+      assert redirected_to(conn) == "/dashboard"
     end
   end
 
@@ -90,7 +90,7 @@ defmodule CoreWeb.UserSessionControllerTest do
 
     test "logs the user out", %{conn: conn} do
       conn = delete(conn, Routes.path(conn, CoreWeb.UserSessionController, :delete))
-      assert redirected_to(conn) == "/"
+      assert redirected_to(conn) == "/user/signin"
       refute get_session(conn, :user_token)
       assert get_flash(conn, :info) =~ "Logged out successfully"
     end
@@ -99,7 +99,7 @@ defmodule CoreWeb.UserSessionControllerTest do
   describe "DELETE /users/signout as visitor" do
     test "succeeds even if the user is not logged in", %{conn: conn} do
       conn = delete(conn, Routes.path(conn, CoreWeb.UserSessionController, :delete))
-      assert redirected_to(conn) == "/"
+      assert redirected_to(conn) == "/user/signin"
       refute get_session(conn, :user_token)
       assert get_flash(conn, :info) =~ "Logged out successfully"
     end

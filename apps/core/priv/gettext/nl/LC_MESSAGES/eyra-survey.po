@@ -155,7 +155,7 @@ msgstr "%{count} deelnemers gezocht"
 #, elixir-format
 #: lib/core_web/live/study/edit.ex:230
 msgid "reward.label"
-msgstr "Beloning"
+msgstr "Beloning in euro centen (zonder komma)"
 
 #, elixir-format
 #: lib/core_web/live/study/edit.ex:221

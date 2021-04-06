@@ -28,6 +28,13 @@ defmodule CoreWeb.Dependencies.Injector do
 end
 
 defmodule CoreWeb.Dependencies.Resolver do
+  def resolve!(conn, dependency) when is_atom(dependency) do
+    case resolve(conn, dependency) do
+      :error -> nil
+      value -> value
+    end
+  end
+
   def resolve(conn, dependency) when is_atom(dependency) do
     [
       [dependency],

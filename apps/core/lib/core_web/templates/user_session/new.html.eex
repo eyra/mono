@@ -1,6 +1,3 @@
-<h1>Log in</h1>
-
->>>>>>> 058651d (Fixed Sign In with Apple and added setup doc)
 <p class="alert alert-info" role="alert"
                             phx-click="lv:clear-flash"
                             phx-value-key="info"></p>
@@ -21,13 +18,9 @@
 
           <div class="mb-6"></div>
 
-          <div class="flex w-full h-11 bg-black rounded justify-center items-center">
-            <div class="text-white text-button font-button">
-              Meld je aan met Apple
-            </div>
-
-
-            <%= sign_in_with_apple_button(@conn) %>
+          <div class="flex w-full h-11 bg-apple rounded justify-center items-center hover:opacity-80">
+              <div class="w-full h-full pl-4 pr-4 focus:outline-none" id="appleid-signin" data-color="black" data-border="false" data-type="sign in" data-logo-size="small" data-label-position="10" ></div>
+              <%= sign_in_with_apple_button(@conn) %>
           </div>
 
           <div class="mb-6"></div>

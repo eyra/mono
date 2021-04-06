@@ -81,7 +81,7 @@ defmodule CoreWeb.UserAuth do
     conn
     |> renew_session()
     |> delete_resp_cookie(@remember_me_cookie)
-    |> redirect(to: "/")
+    |> redirect(to: Routes.path(conn, CoreWeb.UserSessionController, :new))
   end
 
   @doc """
@@ -146,5 +146,5 @@ defmodule CoreWeb.UserAuth do
 
   defp maybe_store_return_to(conn), do: conn
 
-  defp signed_in_path(_conn), do: "/"
+  defp signed_in_path(conn), do: Routes.live_path(conn, CoreWeb.Dashboard)
 end

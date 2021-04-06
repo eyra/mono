@@ -10,7 +10,10 @@ defmodule CoreWeb.EndpointProxy do
   end
 
   defp endpoint(conn) do
-    [:endpoint, :phoenix_endpoint]
-    |> Enum.find_value(:error, &Resolver.resolve(conn, &1))
+    [
+      :endpoint,
+      :phoenix_endpoint
+    ]
+    |> Enum.find_value(:error, &Resolver.resolve!(conn, &1))
   end
 end
