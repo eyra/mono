@@ -18,21 +18,23 @@
 
           <div class="mb-6"></div>
 
-          <div class="flex w-full h-11 bg-apple rounded justify-center items-center hover:opacity-80">
+          <div class="flex w-full h-12 bg-apple rounded justify-center items-center hover:opacity-80">
               <div class="w-full h-full pl-4 pr-4 focus:outline-none" id="appleid-signin" data-color="black" data-border="false" data-type="sign in" data-logo-size="small" data-label-position="10" ></div>
               <%= sign_in_with_apple_button(@conn) %>
           </div>
 
           <div class="mb-6"></div>
           <a href="/google-sign-in">
-            <div class="flex w-full bg-google rounded justify-center items-center pl-4 pr-4 hover:opacity-80">
-              <div>
-                <img class="mr-3 -mt-1" src="/images/google.svg">
-              </div>
-              <div class="h-11 focus:outline-none">
-                <div class="flex flex-col justify-center h-full items-center rounded">
-                  <div class="text-white text-button font-button">
-                    Meld je aan met Google
+            <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-google rounded pl-4 pr-4">
+              <div class="flex w-full justify-center items-center">
+                <div>
+                  <img class="mr-3 -mt-1" src="/images/google.svg">
+                </div>
+                <div class="h-11 focus:outline-none">
+                  <div class="flex flex-col justify-center h-full items-center rounded">
+                    <div class="text-white text-button font-button">
+                      Meld je aan met Google
+                    </div>
                   </div>
                 </div>
               </div>
@@ -41,14 +43,16 @@
 
           <div class="mb-6"></div>
           <a href="/surfconext">
-            <div class="flex w-full bg-surfconext rounded justify-center items-center pl-4 pr-4 hover:opacity-80">
-              <div>
-                <img class="mr-3 -mt-1" src="/images/surfconext.svg">
-              </div>
-              <div class="h-11 focus:outline-none">
-                <div class="flex flex-col justify-center h-full items-center rounded">
-                  <div class="text-white text-button font-button">
-                    Meld je aan met SURF
+            <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-surfconext rounded pl-4 pr-4">
+              <div class="flex w-full justify-center items-center">
+                <div>
+                  <img class="mr-3 -mt-1" src="/images/surfconext.svg">
+                </div>
+                <div class="h-11 focus:outline-none">
+                  <div class="flex flex-col justify-center h-full items-center rounded">
+                    <div class="text-white text-button font-button">
+                      Meld je aan met SURF
+                    </div>
                   </div>
                 </div>
               </div>
@@ -86,7 +90,7 @@
             </div>
 
             <div>
-              <%= submit "Log in", class: "w-full h-48px leading-none font-button text-button text-white focus:outline-none hover:bg-opacity-80 rounded pr-4 pl-4 bg-grey1" %>
+              <%= submit "Log in", class: "w-full pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded pr-4 pl-4 bg-grey1" %>
             </div>
 
             <div class="mb-6"></div>

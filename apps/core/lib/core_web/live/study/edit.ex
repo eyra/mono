@@ -210,7 +210,9 @@ defmodule CoreWeb.Study.Edit do
             <div class="flex flex-row">
               <ImagePreview image_url={{ @study_edit.image_url }} />
               <Spacing value="S" direction="l" />
-              <SecondaryAlpineButton click="open = true, $parent.overlay = true" label={{dgettext("eyra-survey", "search.different.image.button")}} />
+              <div class="flex-wrap">
+                <SecondaryAlpineButton click="open = true, $parent.overlay = true" label={{dgettext("eyra-survey", "search.different.image.button")}} />
+              </div>
             </div>
             <Spacing value="XL" />
 
@@ -253,16 +255,22 @@ defmodule CoreWeb.Study.Edit do
             </Panel>
             <Spacing value="XL" />
           </Form>
-
           <Case value={{ @study_edit.is_published }} >
             <True> <!-- Published -->
               <SecondaryLiveViewButton label={{ dgettext("eyra-survey", "unpublish.button") }} event="unpublish" />
             </True>
             <False> <!-- Not published -->
-              <PrimaryLiveViewButton label={{ dgettext("eyra-survey", "publish.button") }} event="publish" />
-              <SecondaryLiveViewButton label={{ dgettext("eyra-survey", "delete.button") }} event="delete" />
+              <Bar>
+                <BarItem>
+                  <PrimaryLiveViewButton label={{ dgettext("eyra-survey", "publish.button") }} event="publish" />
+                </BarItem>
+                <BarItem>
+                  <SecondaryLiveViewButton label={{ dgettext("eyra-survey", "delete.button") }} event="delete" />
+                </BarItem>
+              </Bar>
             </False>
           </Case>
+
         </ContentArea>
       </div>
     """

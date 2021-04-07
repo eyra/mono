@@ -10,7 +10,7 @@ defmodule EyraUI.Button.SubmitButton do
 
   def render(assigns) do
     ~H"""
-    <button x-on:click={{@alpine_onclick}} class="h-48px leading-none font-button text-button text-white focus:outline-none active:opacity-80 rounded pr-4 pl-4 {{@bg_color}}" type="submit">
+    <button x-on:click={{@alpine_onclick}} class="pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded pr-4 pl-4 {{@bg_color}}" type="submit">
       {{ @label }}
     </button>
     """
