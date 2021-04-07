@@ -87,6 +87,7 @@ defmodule CoreWeb.Study.Public do
       <HeroSmall title={{ dgettext("eyra-study", "study.public.title") }} />
       <ContentArea>
         <SubHead>{{ @study_public.byline }}</SubHead>
+        <Spacing value="L" />
         <Title1>{{ @study_public.title }}</Title1>
         <Case value={{@task_completed?}}>
           <True> <!-- Task completed -->

@@ -6,11 +6,11 @@ defmodule EyraUI.Button.SubmitButton do
 
   prop(label, :string, required: true)
   prop(bg_color, :css_class, default: "bg-primary")
-  prop(margin, :css_class, default: "mr-4")
+  prop(alpine_onclick, :string)
 
   def render(assigns) do
     ~H"""
-    <button class="h-48px leading-none font-button text-button text-white focus:outline-none hover:bg-opacity-80 rounded pr-4 pl-4 {{@bg_color}} {{@margin}}" type="submit">
+    <button x-on:click={{@alpine_onclick}} class="pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded pr-4 pl-4 {{@bg_color}}" type="submit">
       {{ @label }}
     </button>
     """

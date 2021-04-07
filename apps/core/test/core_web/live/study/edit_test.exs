@@ -26,7 +26,7 @@ defmodule CoreWeb.Live.Study.Edit.Test do
       description = Faker.Lorem.sentence()
 
       view
-      |> element("form")
+      |> element("form", "search")
       |> render_change(%{study: %{title: title, description: description}})
     end
   end

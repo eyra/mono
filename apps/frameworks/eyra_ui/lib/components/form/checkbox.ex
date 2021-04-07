@@ -6,12 +6,13 @@ defmodule EyraUI.Form.Checkbox do
 
   prop(field, :atom, required: true)
   prop(label_text, :string)
+  prop(label_color, :css_class, default: "text-grey1")
 
   def render(assigns) do
     ~H"""
     <div class="flex flex-row mb-3">
       <Checkbox field={{@field}} opts={{class: "flex-wrap border-2 h-6 w-6 border-solid focus:outline-none focus:border-primary rounded-lg"}} />
-      <Label field={{@field}} opts={{class: "flex-wrap ml-3 mr-3 h-6 mt-1.5 font-label text-label"}} >
+      <Label field={{@field}} opts={{class: "flex-wrap ml-3 mr-3 h-6 mt-1.5 font-label text-label #{@label_color}"}} >
         {{@label_text}}
       </Label>
       <ValidationErrors field={{@field}} />

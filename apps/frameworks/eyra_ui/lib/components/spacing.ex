@@ -4,16 +4,19 @@ defmodule EyraUI.Spacing do
   """
   use Surface.Component
 
-  prop(value, :number, required: true)
+  prop(value, :string, required: true)
+  prop(direction, :string, default: "t")
 
-  defp spacing("XL"), do: "mt-12 lg:mt-16"
-  defp spacing("L"), do: "mt-10 lg:mt-12"
-  defp spacing("M"), do: "mt-12 lg:mt-16"
-  defp spacing("S"), do: "mt-8"
+  defp spacing("XL", d), do: "m#{d}-12 lg:m#{d}-16"
+  defp spacing("L", d), do: "m#{d}-10 lg:m#{d}-12"
+  defp spacing("M", d), do: "m#{d}-8"
+  defp spacing("S", d), do: "m#{d}-6"
+  defp spacing("XS", d), do: "m#{d}-4"
+  defp spacing(value, d), do: "m#{d}-#{value}"
 
   def render(assigns) do
     ~H"""
-    <div class="{{spacing(@value)}}" />
+    <div class="{{spacing(@value, @direction)}}" />
     """
   end
 end

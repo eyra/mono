@@ -15,9 +15,8 @@ defmodule CoreWeb.SurveyTool.New do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok,
-     socket
-     |> setup_changeset}
+    changeset = SurveyTools.change_survey_tool(%SurveyTool{}, :mount)
+    {:ok, socket |> assign(changeset: changeset)}
   end
 
   @impl true
@@ -47,9 +46,5 @@ defmodule CoreWeb.SurveyTool.New do
     </Form>
     <span><Surface.Components.Link to={{ @path_provider.live_path(@socket, CoreWeb.SurveyTool.Index) }} >Back</Surface.Components.Link></span>
     """
-  end
-
-  defp setup_changeset(socket) do
-    socket |> assign(changeset: SurveyTools.change_survey_tool(%SurveyTool{}))
   end
 end

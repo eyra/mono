@@ -28,8 +28,6 @@ gettext:
 	@mix gettext.extract --merge
 
 clean:
-	@rm -rf assets
-	@rm -rf priv/static
 	@rm -rf priv/cldr
 	@rm -rf deps
 	@rm -rf _build

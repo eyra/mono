@@ -11,12 +11,12 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/confirm_token.ex:86
+#: lib/core_web/live/user/confirm_token.ex:79
 msgid "confirm.token.email.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/reset_password.ex:55
+#: lib/core_web/live/user/reset_password.ex:54
 msgid "password_reset.email.label"
 msgstr ""
 
@@ -31,7 +31,7 @@ msgid "password_reset.password_confirmation.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/reset_password.ex:56
+#: lib/core_web/live/user/reset_password.ex:55
 msgid "password_reset.reset_button"
 msgstr ""
 
@@ -41,7 +41,7 @@ msgid "password_reset.reset_password_button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/reset_password.ex:53
+#: lib/core_web/live/user/reset_password.ex:52
 #: lib/core_web/live/user/reset_password_token.ex:51
 msgid "user.password_reset.title"
 msgstr ""

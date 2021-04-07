@@ -1,9 +1,9 @@
-defmodule EyraUI.Card.USP do
+defmodule EyraUI.Panel.USP do
   @moduledoc """
   The Unique Selling Point Card highlights a reason for taking an action.
   """
   use Surface.Component
-  alias EyraUI.Card.Card
+  alias EyraUI.Panel.Panel
 
   prop(title, :string, required: true)
   prop(description, :string, required: true)
@@ -12,7 +12,7 @@ defmodule EyraUI.Card.USP do
 
   def render(assigns) do
     ~H"""
-    <Card size="h-full">
+    <Panel size="h-full">
       <template slot="title">
         <div class={{"text-title5", "font-title5", "lg:text-title4", "lg:font-title4", "mb-4", "lg:mb-6", @title_color }}>
               {{ @title }}
@@ -21,7 +21,7 @@ defmodule EyraUI.Card.USP do
       <div class={{ "text-bodysmall", "lg:text-bodymedium", "font-body", @description_color }}>
           {{ @description }}
       </div>
-    </Card>
+    </Panel>
     """
   end
 end

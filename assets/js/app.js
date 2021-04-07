@@ -12,6 +12,8 @@ import "../css/app.css";
 //     import {Socket} from "phoenix"
 //     import socket from "./socket"
 //
+
+import 'alpine-magic-helpers/dist/component'
 import Alpine from "alpinejs"
 import "phoenix_html"
 import { Socket } from "phoenix"

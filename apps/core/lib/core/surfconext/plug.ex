@@ -2,6 +2,11 @@ defmodule Core.SurfConext.PlugUtils do
   def oidc_module(config) do
     Keyword.get(config, :oidc_module, Assent.Strategy.OIDC)
   end
+
+  def log_in_user(config, conn, user) do
+    log_in_user = Keyword.get(config, :log_in_user, &CoreWeb.UserAuth.log_in_user/2)
+    log_in_user.(conn, user)
+  end
 end
 
 defmodule Core.SurfConext.AuthorizePlug do
@@ -24,7 +29,7 @@ defmodule Core.SurfConext.AuthorizePlug do
   end
 end
 
-defmodule(Core.SurfConext.CallbackPlug) do
+defmodule Core.SurfConext.CallbackPlug do
   import Plug.Conn
   import Core.SurfConext.PlugUtils
 
@@ -47,6 +52,6 @@ defmodule(Core.SurfConext.CallbackPlug) do
         end
       end
 
-    CoreWeb.UserAuth.log_in_user(conn, user)
+    log_in_user(config, conn, user)
   end
 end

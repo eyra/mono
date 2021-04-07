@@ -12,14 +12,16 @@ defmodule EyraUI.Button.PrimaryIconButton do
   def render(assigns) do
     ~H"""
     <a href= {{ @path }} >
-      <div class="flex w-full {{@bg_color}} rounded justify-center items-center pl-4 pr-4 hover:opacity-80">
-        <div class="">
-            <img class="mr-3 -mt-1" src={{@icon}}/>
-        </div>
-        <div class="h-11 focus:outline-none">
-          <div class="flex flex-col justify-center h-full items-center rounded">
-            <div class="text-white text-button font-button">
-              {{ @label }}
+      <div class="pt-1 pb-1 active:pt-5px active:pb-3px active:shadow-top4px w-full rounded pl-4 pr-4 {{@bg_color}}">
+        <div class="flex justify-center items-center w-full">
+          <div>
+              <img class="mr-3 -mt-1" src={{@icon}}/>
+          </div>
+          <div class="h-10 focus:outline-none">
+            <div class="flex flex-col justify-center h-full items-center">
+              <div class="text-white text-button font-button">
+                {{ @label }}
+              </div>
             </div>
           </div>
         </div>

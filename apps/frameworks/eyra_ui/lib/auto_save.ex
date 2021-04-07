@@ -9,8 +9,7 @@ defmodule EyraUI.AutoSave do
 
   @callback load(params :: %{}, session :: map(), socket :: Socket.t()) :: any()
   @callback save(changeset :: any()) :: any()
-  @callback get_changeset(entity :: any()) :: any()
-  @callback get_changeset(entity :: any(), attrs :: any()) :: any()
+  @callback get_changeset(entity :: any(), type :: atom(), attrs :: any()) :: any()
 
   defp cancel_save_timer(nil), do: nil
   defp cancel_save_timer(timer), do: Process.cancel_timer(timer)
@@ -77,10 +76,9 @@ defmodule EyraUI.AutoSave do
       data(changeset, :any)
 
       def mount(params, session, socket) do
-        label = "##### MOUNT AUTO_SAVE #{__MODULE__} ##############"
         path_provider = Map.get(session, "path_provider")
         entity = load(params, session, socket)
-        changeset = get_changeset(entity)
+        changeset = get_changeset(entity, :mount, %{})
         AutoSave.mount(unquote(entity_name), entity, changeset, path_provider, socket)
       end
 
@@ -92,7 +90,8 @@ defmodule EyraUI.AutoSave do
         entity_name = unquote(entity_name)
         entity = socket.assigns[entity_name]
         attrs = params[entity_name |> to_string]
-        changeset = get_changeset(entity, attrs)
+
+        changeset = get_changeset(entity, :auto_save, attrs)
 
         AutoSave.update_changeset(socket, changeset, entity_name)
       end
@@ -105,7 +104,7 @@ defmodule EyraUI.AutoSave do
          |> assign(unquote(entity_name), entity)}
       end
 
-      def terminate(_reason, %{assigns: %{save_changeset: changeset}}) do
+      def terminate(reason, %{assigns: %{save_changeset: changeset}}) do
         {:ok, _} = save(changeset)
         :ok
       end

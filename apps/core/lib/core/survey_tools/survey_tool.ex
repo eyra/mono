@@ -3,6 +3,7 @@ defmodule Core.SurveyTools.SurveyTool do
   The survey tool schema.
   """
   use Ecto.Schema
+  require Core.Themes
   import Ecto.Changeset
   alias Core.Studies.Study
   alias Core.SurveyTools.SurveyToolTask
@@ -21,6 +22,11 @@ defmodule Core.SurveyTools.SurveyTool do
     field(:tablet_enabled, :boolean)
     field(:desktop_enabled, :boolean)
     field(:published_at, :naive_datetime)
+    field(:themes, {:array, Ecto.Enum}, values: Core.Themes.theme_values())
+    field(:image_id, :string)
+    field(:marks, {:array, :string})
+    field(:reward_currency, Ecto.Enum, values: [:eur, :usd, :gbp, :chf, :nok, :sek])
+    field(:reward_value, :integer)
 
     has_many(:tasks, SurveyToolTask)
     many_to_many(:participants, User, join_through: :survey_tool_participants)
@@ -32,7 +38,7 @@ defmodule Core.SurveyTools.SurveyTool do
     def id(survey_tool), do: survey_tool.auth_node_id
   end
 
-  @fields ~w(title description survey_url subject_count duration phone_enabled tablet_enabled desktop_enabled published_at)a
+  @fields ~w(title description survey_url subject_count duration phone_enabled tablet_enabled desktop_enabled published_at themes image_id marks reward_currency reward_value)a
 
   @doc false
   def changeset(survey_tool, attrs) do

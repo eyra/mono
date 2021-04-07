@@ -50,7 +50,9 @@ defmodule Core.ImageCatalog.Unsplash.Test do
          }}
       end)
 
-      assert Unsplash.search("test") |> Enum.count() == 1
+      result = Unsplash.search("test", 1, 10)
+
+      assert result.images |> Enum.count() == 1
     end
   end
 
@@ -70,7 +72,7 @@ defmodule Core.ImageCatalog.Unsplash.Test do
          }}
       end)
 
-      [info] = Unsplash.search_info("test", width: 200, height: 300)
+      %{images: [info]} = Unsplash.search_info("test", 1, 10, width: 400, height: 150)
 
       assert info.attribution ==
                {:safe,

@@ -67,6 +67,7 @@ defmodule Core.MixProject do
       {:bamboo_phoenix, "~> 1.0.0"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
+      {:currency_formatter, "~> 0.4"},
       # i18n
       {:ex_cldr, "~> 2.18"},
       {:ex_cldr_numbers, "~> 2.16"},

@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/index.min.js"></script>
     <title>Link</title>
     <link
       rel="stylesheet"
@@ -12,10 +13,11 @@
     />
     <script src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
-  <body class="font-body bg-grey5 h-screen">
-    <div class="flex flex-row h-full">
-      <div class="h-full w-0 lg:w-sidebar"></div>
-      <div class="h-full w-full">
+  <body class="font-body bg-grey5" x-data="{ overlay: false }">
+    <div class="fixed z-10 w-full h-full bg-black bg-opacity-30" x-show="overlay"></div>
+    <div class="flex flex-row min-h-screen">
+      <div class="w-0 lg:w-sidebar"></div>
+      <div class="w-full">
         <div class="flex flex-col h-full">
           <header class="flex-wrap">
             <div class="fixed text-warning">
@@ -44,13 +46,6 @@
                     <div class="flex-none lg:pr-4 text-button font-button">
                       <%= menu_button dgettext("eyra-study", "dashboard.button"), Routes.live_path(@conn, CoreWeb.Dashboard) %>
                     </div>
-                    <%= if can?(@conn, nil, CoreWeb.StudyController, :new) do %>
-                      <div
-                        class="hidden sm:block flex-none lg:pr-4 text-button font-button"
-                      >
-                        <%= menu_button dgettext("eyra-study", "new.button"), Routes.live_path(@conn, CoreWeb.Study.New) %>
-                      </div>
-                    <% end %>
                     <div class="flex-grow"></div>
                     <div class="flex-none lg:pr-4 text-button font-button">
                       <%= menu_button dgettext("eyra-account", "profile.button"), Routes.live_path(@conn, CoreWeb.User.Profile) %>
@@ -68,7 +63,6 @@
                   </div>
                 </div>
               </div>
-              <%= render "_user_menu.html", assigns %>
             </nav>
           </header>
           <div class="flex-grow">

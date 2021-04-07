@@ -29,10 +29,7 @@ config :core, :children, [
 ]
 
 config :core, Core.Mailer, adapter: Bamboo.LocalAdapter
-
-config :core, GoogleSignIn,
-  client_id: System.get_env("GOOGLE_SIGN_IN_CLIENT_ID"),
-  client_secret: System.get_env("GOOGLE_SIGN_IN_CLIENT_SECRET")
+config :core, Core.SurfConext, []
 
 # Configures Elixir's Logger
 config :logger, :console,

@@ -11,81 +11,81 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:56
+#: lib/core_web/live/dashboard.ex:111
 msgid "study.index.subtitle"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:55
+#: lib/core_web/live/dashboard.ex:110
 msgid "study.index.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:45
+#: lib/core_web/templates/layout/root.html.leex:47
 msgid "dashboard.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:89
+#: lib/core_web/live/dashboard.ex:134
 msgid "study.all.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:64
+#: lib/core_web/live/dashboard.ex:115
 msgid "study.highlighted.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:51
-msgid "new.button"
-msgstr ""
-
-#, elixir-format
-#: lib/core_web/live/dashboard.ex:60
-msgid "dashboard.page.description"
-msgstr ""
-
-#, elixir-format
-#: lib/core_web/live/study/edit.ex:134
+#: lib/core_web/live/study/edit.ex:167
 msgid "study.edit.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/new.ex:48
-msgid "save.button"
-msgstr ""
-
-#, elixir-format
-#: lib/core_web/live/study/edit.ex:149 lib/core_web/live/study/new.ex:47
+#: lib/core_web/live/study/edit.ex:198
 msgid "title.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/new.ex:44
-msgid "study.new.title"
-msgstr ""
-
-#, elixir-format
-#: lib/core_web/live/dashboard.ex:82
+#: lib/core_web/live/dashboard.ex:127
 msgid "add.card.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/complete.ex:54 lib/core_web/live/study/public.ex:88
+#: lib/core_web/live/study/complete.ex:54 lib/core_web/live/study/public.ex:87
 msgid "study.public.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:77 lib/core_web/live/dashboard.ex:96
-msgid "open.button"
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.art"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:71
-msgid "edit.button"
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.health"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/new.ex:49
-msgid "cancel.button"
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.history"
+msgstr ""
+
+#, elixir-format
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.language"
+msgstr ""
+
+#, elixir-format
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.politics"
+msgstr ""
+
+#, elixir-format
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.society"
+msgstr ""
+
+#, elixir-format
+#: lib/core/studies/study_edit.ex:18
+msgid "themes.technology"
 msgstr ""

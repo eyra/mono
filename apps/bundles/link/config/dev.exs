@@ -65,8 +65,6 @@ config :link, LinkWeb.Endpoint,
     ]
   ]
 
-config :core, Core.SurfConext, site: "https://connect.test.surfconext.nl"
-
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 
@@ -77,7 +75,7 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
-config :exsync, addition_dirs: ["../../core", "../../frameworks"]
+config :exsync, addition_dirs: ["../../core", "../../frameworks", "../../../assets"]
 
 # Load developer machine specific config. This can be used to setup secrets and
 # such to connect with 3rd party services.

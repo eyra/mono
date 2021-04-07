@@ -46,7 +46,7 @@ defmodule GoogleSignIn.AuthorizePlug.Test do
       ]
 
       conn =
-        conn(:get, "/surf")
+        conn(:get, "/google")
         |> init_test_session(%{})
         |> AuthorizePlug.call(config)
 
@@ -72,7 +72,8 @@ defmodule GoogleSignIn.CallbackPlug.Test do
       client_secret: Faker.Lorem.sentence(),
       site: "https://connect.test.google_sign_in.nl",
       redirect_uri: "https://#{domain}/google_sign_in/auth",
-      google_module: GoogleSignIn.FakeGoogle
+      google_module: GoogleSignIn.FakeGoogle,
+      log_in_user: fn _conn, user -> user end
     ]
 
     {:ok, config: config}
@@ -80,15 +81,12 @@ defmodule GoogleSignIn.CallbackPlug.Test do
 
   describe "call/1" do
     test "creates a user", %{config: config} do
-      conn =
-        conn(:get, "/surf")
+      user =
+        conn(:get, "/google")
         |> init_test_session(%{})
         |> CallbackPlug.call(config)
 
-      assert conn.status == 302
-      [location] = get_resp_header(conn, "location")
-      assert String.starts_with?(location, "/")
-      assert get_session(conn, :user_token)
+      assert user.id
     end
 
     test "authenticates an existing user", %{config: config} do
@@ -108,16 +106,11 @@ defmodule GoogleSignIn.CallbackPlug.Test do
         "locale" => "en"
       })
 
-      conn =
-        conn(:get, "/surf")
+      user =
+        conn(:get, "/google")
         |> init_test_session(%{})
         |> CallbackPlug.call(config)
 
-      assert conn.status == 302
-      [location] = get_resp_header(conn, "location")
-      assert String.starts_with?(location, "/")
-      session_token = get_session(conn, :user_token)
-      user = Core.Accounts.get_user_by_session_token(session_token)
       assert user.email == email
     end
   end

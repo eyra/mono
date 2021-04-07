@@ -2,6 +2,11 @@ defmodule GoogleSignIn.PlugUtils do
   def google_module(config) do
     Keyword.get(config, :google_module, Assent.Strategy.Google)
   end
+
+  def log_in_user(config, conn, user) do
+    log_in_user = Keyword.get(config, :log_in_user, &CoreWeb.UserAuth.log_in_user/2)
+    log_in_user.(conn, user)
+  end
 end
 
 defmodule GoogleSignIn.AuthorizePlug do
@@ -40,7 +45,7 @@ defmodule(GoogleSignIn.CallbackPlug) do
 
     user = GoogleSignIn.get_user_by_sub(google_user["sub"]) || register_user(google_user)
 
-    CoreWeb.UserAuth.log_in_user(conn, user)
+    log_in_user(config, conn, user)
   end
 
   defp register_user(info) do

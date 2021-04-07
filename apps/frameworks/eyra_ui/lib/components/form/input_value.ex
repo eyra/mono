@@ -7,11 +7,12 @@ defmodule EyraUI.Form.InputValue do
 
   prop(field, :atom)
   prop(form, :form)
+  prop(text_color, :css_class, default: "text-grey2")
 
   def render(assigns) do
     ~H"""
     <InputContext assigns={{ assigns }} :let={{ form: form, field: field }}>
-      <BodyMedium>{{input_value(form,field)}}</BodyMedium>
+      <BodyMedium color={{@text_color}} >{{input_value(form,field)}}</BodyMedium>
     </InputContext>
     """
   end

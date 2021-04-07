@@ -11,54 +11,52 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:161
+#: lib/core_web/live/study/edit.ex:234
 msgid "config.nrofsubjects.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:160
+#: lib/core_web/live/study/edit.ex:249
 msgid "config.url.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:154
+#: lib/core_web/live/study/edit.ex:247
 msgid "config.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:166 lib/core_web/live/study/public.ex:103
+#: lib/core_web/live/study/edit.ex:239 lib/core_web/live/study/public.ex:103
 msgid "config.devices.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:176 lib/core_web/live/study/edit.ex:182
-#: lib/core_web/live/study/public.ex:111
+#: lib/core_web/live/study/edit.ex:242 lib/core_web/live/study/public.ex:111
 msgid "desktop.enabled.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:173 lib/core_web/live/study/edit.ex:181
-#: lib/core_web/live/study/public.ex:108
+#: lib/core_web/live/study/edit.ex:241 lib/core_web/live/study/public.ex:108
 msgid "tablet.enabled.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:163
+#: lib/core_web/live/study/edit.ex:222
 msgid "info.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:193
+#: lib/core_web/live/study/edit.ex:262
 msgid "publish.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:190
+#: lib/core_web/live/study/edit.ex:259
 msgid "unpublish.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:194
+#: lib/core_web/live/study/edit.ex:263
 msgid "delete.button"
 msgstr ""
 
@@ -73,23 +71,23 @@ msgid "duration.public.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:162
+#: lib/core_web/live/study/edit.ex:226
 msgid "duration.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:137
+#: lib/core_web/live/study/edit.ex:186 lib/core_web/view_model/card.ex:60
 msgid "published.false.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:133 lib/core/studies/study_public.ex:59
-#: lib/core_web/live/study/edit.ex:136
+#: lib/core/studies/study_edit.ex:207 lib/core/studies/study_public.ex:59
+#: lib/core_web/live/study/edit.ex:183
 msgid "published.true.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:137 lib/core/studies/study_public.ex:62
+#: lib/core/studies/study_edit.ex:211 lib/core/studies/study_public.ex:62
 msgid "created.label"
 msgstr ""
 
@@ -114,32 +112,96 @@ msgid "completed.message"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:144
+#: lib/core_web/live/study/edit.ex:171
 msgid "completed.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:143
+#: lib/core_web/live/study/edit.ex:170
 msgid "status.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:146
+#: lib/core_web/live/study/edit.ex:173
 msgid "vacant.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:145
+#: lib/core_web/live/study/edit.ex:172
 msgid "pending.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:170 lib/core_web/live/study/edit.ex:180
-#: lib/core_web/live/study/public.ex:105
+#: lib/core_web/live/study/edit.ex:240 lib/core_web/live/study/public.ex:105
 msgid "phone.enabled.label"
 msgstr ""
 
 #, elixir-format
 #: lib/core_web/live/study/public.ex:122
 msgid "withdraw.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/view_model/card.ex:45
+msgid "deadline.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/view_model/card.ex:44
+msgid "open.spots.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:230
+msgid "reward.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:221
+msgid "about.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:225 lib/core_web/view_model/card.ex:42
+msgid "duration.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:207
+msgid "image.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:217
+msgid "organisation.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:229 lib/core_web/view_model/card.ex:43
+msgid "reward.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:233
+msgid "subjects.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:201
+msgid "themes.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:208
+msgid "image.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:202
+msgid "themes.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:213
+msgid "search.different.image.button"
 msgstr ""

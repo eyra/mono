@@ -4,7 +4,8 @@ defmodule CoreWeb.Index do
   """
   use CoreWeb, :live_view
 
-  alias EyraUI.Card.{PrimaryCTA, USP}
+  alias EyraUI.Card.PrimaryCTA
+  alias EyraUI.Panel.USP
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Hero.HeroLarge
   alias EyraUI.Text.{Title1, Intro}

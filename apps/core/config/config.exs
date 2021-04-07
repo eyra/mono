@@ -27,6 +27,11 @@ config :core, SignInWithApple,
   private_key_id: System.get_env("SIGN_IN_WITH_APPLE_PRIVATE_KEY_ID"),
   redirect_uri: "https://localhost/apple/auth"
 
+config :core, GoogleSignIn,
+  client_id: "1027619588178-ckkft8qhcj2jev6bsonbuqghe6pn6isf.apps.googleusercontent.com",
+  client_secret: "C-x02CCKC29o4OttKzhi0hE8",
+  redirect_uri: "http://localhost:4000/google-sign-in/auth"
+
 config :core, Core.ImageCatalog.Unsplash,
   access_key: "",
   app_name: "Core"

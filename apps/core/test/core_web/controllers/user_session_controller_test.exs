@@ -14,7 +14,7 @@ defmodule CoreWeb.UserSessionControllerTest do
     test "renders log in page", %{conn: conn} do
       conn = get(conn, Routes.path(conn, CoreWeb.UserSessionController, :new))
       response = html_response(conn, 200)
-      assert response =~ "<h1>Log in</h1>"
+      assert response =~ "Log in"
     end
   end
 
@@ -23,7 +23,7 @@ defmodule CoreWeb.UserSessionControllerTest do
 
     test "redirects if already logged in", %{conn: conn} do
       conn = get(conn, Routes.path(conn, CoreWeb.UserSessionController, :new))
-      assert redirected_to(conn) == "/"
+      assert redirected_to(conn) == "/dashboard"
     end
   end
 
@@ -42,8 +42,7 @@ defmodule CoreWeb.UserSessionControllerTest do
       # Now do a logged in request and assert on the menu
       conn = get(conn, "/")
       response = html_response(conn, 200)
-      assert response =~ user.email
-      assert response =~ "Log out</a>"
+      assert response =~ "My profile"
     end
 
     test "logs the user in with remember me", %{conn: conn, user: user, password: password} do
@@ -81,7 +80,7 @@ defmodule CoreWeb.UserSessionControllerTest do
         })
 
       response = html_response(conn, 200)
-      assert response =~ "<h1>Log in</h1>"
+      assert response =~ "Log in"
       assert response =~ "Invalid email or password"
     end
   end
@@ -91,7 +90,7 @@ defmodule CoreWeb.UserSessionControllerTest do
 
     test "logs the user out", %{conn: conn} do
       conn = delete(conn, Routes.path(conn, CoreWeb.UserSessionController, :delete))
-      assert redirected_to(conn) == "/"
+      assert redirected_to(conn) == "/user/signin"
       refute get_session(conn, :user_token)
       assert get_flash(conn, :info) =~ "Logged out successfully"
     end
@@ -100,7 +99,7 @@ defmodule CoreWeb.UserSessionControllerTest do
   describe "DELETE /users/signout as visitor" do
     test "succeeds even if the user is not logged in", %{conn: conn} do
       conn = delete(conn, Routes.path(conn, CoreWeb.UserSessionController, :delete))
-      assert redirected_to(conn) == "/"
+      assert redirected_to(conn) == "/user/signin"
       refute get_session(conn, :user_token)
       assert get_flash(conn, :info) =~ "Logged out successfully"
     end

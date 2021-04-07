@@ -7,6 +7,7 @@ defmodule EyraUI.Form.Field do
 
   prop(field, :atom, required: true)
   prop(label_text, :string, required: true)
+  prop(label_color, :css_class, default: "text-grey1")
   prop(change, :event)
   prop(read_only, :boolean, default: false)
 
@@ -14,12 +15,12 @@ defmodule EyraUI.Form.Field do
     ~H"""
     <div class="flex flex-col mb-8">
       <Label field={{@field}}
-              opts={{class: "flex-wrap mt-0.5 text-title6 font-title6 mb-2"}} >
+              opts={{class: "flex-wrap mt-0.5 text-title6 font-title6 mb-2 #{@label_color}"}} >
         {{@label_text}}
       </Label>
       <Case value={{@read_only}}>
         <True>
-          <InputValue field={{@field}}/>
+          <InputValue field={{@field}} />
         </True>
         <False>
           <slot />
