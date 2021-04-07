@@ -29,6 +29,7 @@ config :core, :children, [
 ]
 
 config :core, Core.Mailer, adapter: Bamboo.LocalAdapter
+config :core, Core.SurfConext, []
 
 # Configures Elixir's Logger
 config :logger, :console,

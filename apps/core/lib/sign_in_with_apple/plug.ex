@@ -28,6 +28,11 @@ defmodule SignInWithApple.CallbackPlug do
         signed_in_apple_user.user
       end
 
-    CoreWeb.UserAuth.log_in_user(conn, user)
+    log_in_user(config, conn, user)
+  end
+
+  defp log_in_user(config, conn, user) do
+    log_in_user = Keyword.get(config, :log_in_user, &CoreWeb.UserAuth.log_in_user/2)
+    log_in_user.(conn, user)
   end
 end

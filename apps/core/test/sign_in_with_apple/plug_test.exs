@@ -18,7 +18,10 @@ defmodule SignInWithApple.CallbackPlug.Test do
   alias SignInWithApple.CallbackPlug
 
   setup do
-    config = [apple_backend_module: SignInWithApple.FakeBackend]
+    config = [
+      apple_backend_module: SignInWithApple.FakeBackend,
+      log_in_user: fn _conn, user -> user end
+    ]
 
     {:ok, config: config}
   end
@@ -34,7 +37,7 @@ defmodule SignInWithApple.CallbackPlug.Test do
           }
         })
 
-      conn =
+      user =
         conn(:post, "/apple/auth")
         |> Map.put(:body_params, %{
           "id_token" => "whatever",
@@ -43,10 +46,7 @@ defmodule SignInWithApple.CallbackPlug.Test do
         |> init_test_session(%{})
         |> CallbackPlug.call(config)
 
-      assert conn.status == 302
-      [location] = get_resp_header(conn, "location")
-      assert String.starts_with?(location, "/")
-      assert get_session(conn, :user_token)
+      assert user.id
     end
 
     test "authenticates an existing user", %{config: config} do
@@ -61,7 +61,7 @@ defmodule SignInWithApple.CallbackPlug.Test do
         last_name: Faker.Person.last_name()
       })
 
-      conn =
+      user =
         conn(:post, "/apple/auth")
         |> Map.put(:body_params, %{
           "id_token" => "whatever"
@@ -69,11 +69,6 @@ defmodule SignInWithApple.CallbackPlug.Test do
         |> init_test_session(%{})
         |> CallbackPlug.call(config)
 
-      assert conn.status == 302
-      [location] = get_resp_header(conn, "location")
-      assert String.starts_with?(location, "/")
-      session_token = get_session(conn, :user_token)
-      user = Core.Accounts.get_user_by_session_token(session_token)
       assert user.email == email
     end
   end

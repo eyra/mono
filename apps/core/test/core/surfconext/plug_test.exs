@@ -68,6 +68,7 @@ defmodule Core.SurfConext.CallbackPlug.Test do
       client_secret: Faker.Lorem.sentence(),
       site: "https://connect.test.surfconext.nl",
       redirect_uri: "https://#{domain}/surfconext/auth",
+      log_in_user: fn _conn, user -> user end,
       oidc_module: Core.SurfConext.FakeOIDC
     ]
 
@@ -76,15 +77,12 @@ defmodule Core.SurfConext.CallbackPlug.Test do
 
   describe "call/1" do
     test "creates a user", %{config: config} do
-      conn =
+      user =
         conn(:get, "/surf")
         |> init_test_session(%{})
         |> CallbackPlug.call(config)
 
-      assert conn.status == 302
-      [location] = get_resp_header(conn, "location")
-      assert String.starts_with?(location, "/")
-      assert get_session(conn, :user_token)
+      assert user.id
     end
 
     test "authenticates an existing user", %{config: config} do
@@ -96,16 +94,11 @@ defmodule Core.SurfConext.CallbackPlug.Test do
         "preferred_username" => Faker.Person.name()
       })
 
-      conn =
+      user =
         conn(:get, "/surf")
         |> init_test_session(%{})
         |> CallbackPlug.call(config)
 
-      assert conn.status == 302
-      [location] = get_resp_header(conn, "location")
-      assert String.starts_with?(location, "/")
-      session_token = get_session(conn, :user_token)
-      user = Core.Accounts.get_user_by_session_token(session_token)
       assert user.email == email
     end
   end

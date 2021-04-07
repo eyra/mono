@@ -103,7 +103,8 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
     setup [:login_as_member]
 
     test "an invalid token redirects", %{conn: conn} do
-      {:error, {:redirect, %{to: "/"}}} = live(conn, Routes.live_path(conn, ConfirmToken, "abc"))
+      {:error, {:redirect, %{to: "/dashboard"}}} =
+        live(conn, Routes.live_path(conn, ConfirmToken, "abc"))
     end
   end
 end
