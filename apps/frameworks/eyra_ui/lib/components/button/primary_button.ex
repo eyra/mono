@@ -12,7 +12,7 @@ defmodule EyraUI.Button.PrimaryButton do
     ~H"""
     <a href= {{ @path }} >
       <div class="flex">
-        <div class="flex-wrap h-11 focus:outline-none hover:opacity-80 rounded mr-4 {{@bg_color}}">
+        <div class="flex-wrap pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px focus:outline-none rounded mr-4 {{@bg_color}}">
           <div class="flex flex-col justify-center h-full items-center rounded">
             <div class="text-white text-button font-button pl-4 pr-4">
               {{ @label }}

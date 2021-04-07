@@ -9,6 +9,10 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    boxShadow: {
+      top4px: 'inset 0 4px 0 0 rgba(0, 0, 0, 0.15)',
+      top2px: 'inset 0 2px 0 0 rgba(0, 0, 0, 0.15)',
+    },    
     colors: {
       primary: '#4272EF',
       primarylight: '#E3EAFD',
@@ -33,6 +37,25 @@ module.exports = {
       surfconext: '#4DB2CF',
     },
     extend: {
+      spacing: {
+        "1px" : "1px",
+        "2px" : "2px",
+        "3px" : "3px",
+        "5px" : "5px",
+        "6px" : "6px",
+        "7px" : "7px",
+        "9px" : "9px",
+        "10px" : "10px",
+        "11px" : "11px",
+        "13px" : "13px",
+        "14px" : "14px",
+        "15px" : "15px",
+        "17px" : "17px",
+        "18px" : "18px",
+        "19px" : "19px",
+        "48px" : "48px",
+        "44px" : "44px",
+      },
       width: {
         "sidebar" : "68px",
         "main-left" : "56px",
@@ -66,9 +89,6 @@ module.exports = {
         "logo-sm" : "48px",
         "image-card": "200px",
         "image-preview": "150px",
-        "48px" : "48px",
-        "44px" : "44px",
-        "1px" : "1px",
         "button-sm": "14px",
       },
       fontFamily: {
@@ -124,6 +144,8 @@ module.exports = {
       ringOffsetColor: ['hover'],
       ringOffsetWidth: ['hover'],
       opacity: ['active'],
+      padding: ['active'],
+      boxShadow: ['active'],
     },
   },
   plugins: [],
