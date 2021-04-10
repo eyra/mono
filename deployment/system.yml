@@ -1,0 +1,17 @@
+---
+- name: Setup server
+  hosts: all
+  remote_user: commander
+  become: true
+  vars:
+    elixir_version: "1.11"
+  roles:
+    - bundle
+  # setup outgoing mail
+  # investigate app armor
+  # * Install libpam-tmpdir to set $TMP and $TMPDIR for PAM sessions [CUST-0280]
+
+  tasks:
+    - import_tasks: tasks/postgresql.yml
+      tags: [postgresql]
+

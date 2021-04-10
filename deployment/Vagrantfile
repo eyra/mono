@@ -1,0 +1,42 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "generic/ubuntu2004"
+  config.vm.provider :libvirt do |libvirt|
+    libvirt.cpus = 10
+    libvirt.memory = 8192
+  end
+
+  config.vm.define  "b1"
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "playbook.yml"
+    ansible.groups = {
+      "bundle_server" => ["b1"],
+      "bundle_server:vars" => {
+        "bundle" => "link",
+        "db_name" => '{{bundle}}',
+        "db_user" => '{{bundle}}',
+        "db_host" => 'localhost',
+        "bundle_domain" => 'localhost',
+        "surfconext_site" => 'test',
+        "surfconext_client_id" => "link.dev.eyra.co",
+        "surfconext_client_secret" => "secret",
+        "lets_encrypt_directory_url" => "https=>//acme-staging-v02.api.letsencrypt.org/directory",
+        "secret_key_base" => '2ba74581cd6890a2401d3945b0b4e104595440565a9961a8626e54ae13b7384f',
+        "surfconext_client_secret" => 'test',
+        "db_pass" => 'asdfjklasdfjlk',
+        "google_sign_in_client_id" => 'test',
+        "google_sign_in_client_secret" => 'test',
+        "unsplash_app_name" => 'Link',
+        "unsplash_access_key" => 'test',
+        "sign_in_with_apple_client_id" => "test.vagrant",
+        "sign_in_with_apple_team_id" => "ABCD",
+        "sign_in_with_apple_private_key_id" => "1234",
+        "sign_in_with_apple_private_key" => "key"
+      }
+    }
+
+  end
+end

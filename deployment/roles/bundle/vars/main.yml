@@ -1,0 +1,3 @@
+---
+lets_encrypt_db: "/home/{{bundle}}/etc"
+sign_in_with_apple_private_key_path: "/home/{{bundle}}/etc/sign_in_with_apple_{{sign_in_with_apple_private_key_id}}.pem"

@@ -1,0 +1,62 @@
+---
+- import_tasks: general.yml
+- import_tasks: nodejs.yml
+- import_tasks: elixir.yml
+
+- name: Add bundle user
+  ansible.builtin.user:
+    name: '{{bundle}}'
+    shell: /bin/bash
+    home: '/home/{{bundle}}'
+    create_home: yes
+    state: present
+
+- name: Add SSL certificate folder
+  ansible.builtin.file:
+    path: '{{lets_encrypt_db}}'
+    state: directory
+    owner: '{{bundle}}'
+
+- name: Allow bundle user to restart Systemd service
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^{{bundle}}'
+    line: '{{bundle}} ALL= NOPASSWD: /bin/systemctl restart {{bundle}}.service'
+    validate: 'visudo -cf %s'
+
+- name: Add SSH public key for user
+  ansible.builtin.authorized_key:
+    user: '{{bundle}}'
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    state: present
+
+- name: Allow HTTP(S) (firewall)
+  ansible.builtin.ufw:
+    rule: allow
+    port: '{{item}}'
+    proto: tcp
+  with_items:
+    - http
+    - https
+
+- name: Systemd service for bundle
+  ansible.builtin.template:
+    src: templates/bundle.service
+    dest: '/lib/systemd/system/{{bundle}}.service'
+    owner: root
+    group: root
+    mode: 0644
+  notify: Reload Systemd
+
+- name: Sign In with Apple private key
+  ansible.builtin.copy:
+    content: '{{sign_in_with_apple_private_key}}'
+    dest: '{{sign_in_with_apple_private_key_path}}'
+
+- name: Setup bundle service
+  ansible.builtin.service:
+    name: '{{bundle}}'
+    enabled: yes
+    daemon_reload: true
+
