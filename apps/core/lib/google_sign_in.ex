@@ -34,10 +34,8 @@ defmodule GoogleSignIn do
     |> Repo.insert()
   end
 
-  defmacro routes() do
-    google_sign_in_config = Application.fetch_env!(:core, GoogleSignIn)
-
-    quote bind_quoted: [google_sign_in_config: google_sign_in_config] do
+  defmacro routes(otp_app) do
+    quote bind_quoted: [otp_app: otp_app] do
       pipeline :google_sign_in_browser do
         plug(:accepts, ["html"])
         plug(:fetch_session)
@@ -45,8 +43,8 @@ defmodule GoogleSignIn do
 
       scope "/", GoogleSignIn do
         pipe_through([:google_sign_in_browser])
-        get("/google-sign-in", AuthorizePlug, google_sign_in_config)
-        get("/google-sign-in/auth", CallbackPlug, google_sign_in_config)
+        get("/google-sign-in", AuthorizePlug, otp_app)
+        get("/google-sign-in/auth", CallbackPlug, otp_app)
       end
     end
   end

@@ -15,12 +15,15 @@ config :link, LinkWeb.Endpoint,
   secret_key_base: "QbAmUdYcDMMQ2e7wVp6PSXI8QdUjfDEGR0FTwjwkUIYS4lW1ledjE9Dkhr3pE4Qn",
   render_errors: [view: CoreWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Link.PubSub,
-  live_view: [signing_salt: "U46ENwad8CDswjwuXgNZVpJjUlBjbmL9"]
+  live_view: [signing_salt: "U46ENwad8CDswjwuXgNZVpJjUlBjbmL9"],
+  https: [port: 4001]
 
 config :link, :children, [
-  {Phoenix.PubSub, name: Link.PubSub},
-  LinkWeb.Endpoint
+  {SiteEncrypt.Phoenix, LinkWeb.Endpoint},
+  {Phoenix.PubSub, name: Link.PubSub}
 ]
+
+config :link, ecto_repos: [Core.Repo]
 
 config :core, :children, [
   Core.Repo,
@@ -30,6 +33,8 @@ config :core, :children, [
 
 config :core, Core.Mailer, adapter: Bamboo.LocalAdapter
 config :core, Core.SurfConext, []
+config :core, SignInWithApple, []
+config :core, GoogleSignIn, []
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -38,6 +43,13 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+config :link, :ssl,
+  client: :native,
+  directory_url: {:internal, port: 4002},
+  db_folder: Path.join("tmp", "site_encrypt_db"),
+  domains: ["localhost"],
+  emails: ["admin@localhost"]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

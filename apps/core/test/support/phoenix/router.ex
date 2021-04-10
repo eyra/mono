@@ -6,8 +6,8 @@ defmodule CoreWeb.Support.Router do
   require Core.SurfConext
   require CoreWeb.Routes
 
-  GoogleSignIn.routes()
-  SignInWithApple.routes(Application.get_env(:core, SignInWithApple))
-  Core.SurfConext.routes()
+  GoogleSignIn.routes(:core)
+  SignInWithApple.routes(:core)
+  Core.SurfConext.routes(:core)
   CoreWeb.Routes.routes()
 end

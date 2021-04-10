@@ -1,5 +1,6 @@
 defmodule LinkWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :link
+  use SiteEncrypt.Phoenix
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
@@ -60,4 +61,14 @@ defmodule LinkWeb.Endpoint do
   plug(Plug.Session, @session_options)
   plug(CoreWeb.Dependencies.Injector, @dependencies)
   plug(LinkWeb.Router)
+
+  @impl Phoenix.Endpoint
+  def init(_key, config) do
+    {:ok, SiteEncrypt.Phoenix.configure_https(config)}
+  end
+
+  @impl SiteEncrypt
+  def certification do
+    SiteEncrypt.configure(Application.fetch_env!(:link, :ssl))
+  end
 end

@@ -34,22 +34,22 @@ defmodule Core.SurfConext.AuthorizePlug.Test do
     test "redirects to SurfConext login page" do
       domain = Faker.Internet.domain_name()
 
-      config = [
+      Application.put_env(:test, Core.SurfConext,
         client_id: domain,
         client_secret: Faker.Lorem.sentence(),
         site: "https://connect.test.surfconext.nl",
         redirect_uri: "https://#{domain}/surfconext/auth"
-      ]
+      )
 
       conn =
         conn(:get, "/surf")
         |> init_test_session(%{})
-        |> AuthorizePlug.call(config)
+        |> AuthorizePlug.call(:test)
 
       assert conn.private.plug_session["surfconext"]
       assert conn.status == 302
       [location] = get_resp_header(conn, "location")
-      assert String.starts_with?(location, "https://connect.test.surfconext.nl/")
+      assert String.starts_with?(location, "https://connect.test.surfconext.nl")
     end
   end
 end
@@ -63,29 +63,29 @@ defmodule Core.SurfConext.CallbackPlug.Test do
   setup do
     domain = Faker.Internet.domain_name()
 
-    config = [
+    Application.put_env(:test, Core.SurfConext,
       client_id: domain,
       client_secret: Faker.Lorem.sentence(),
       site: "https://connect.test.surfconext.nl",
       redirect_uri: "https://#{domain}/surfconext/auth",
       log_in_user: fn _conn, user -> user end,
       oidc_module: Core.SurfConext.FakeOIDC
-    ]
+    )
 
-    {:ok, config: config}
+    :ok
   end
 
   describe "call/1" do
-    test "creates a user", %{config: config} do
+    test "creates a user" do
       user =
         conn(:get, "/surf")
         |> init_test_session(%{})
-        |> CallbackPlug.call(config)
+        |> CallbackPlug.call(:test)
 
       assert user.id
     end
 
-    test "authenticates an existing user", %{config: config} do
+    test "authenticates an existing user" do
       email = Faker.Internet.email()
 
       Core.SurfConext.register_user(%{
@@ -97,7 +97,7 @@ defmodule Core.SurfConext.CallbackPlug.Test do
       user =
         conn(:get, "/surf")
         |> init_test_session(%{})
-        |> CallbackPlug.call(config)
+        |> CallbackPlug.call(:test)
 
       assert user.email == email
     end
