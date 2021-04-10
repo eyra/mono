@@ -1,0 +1,124 @@
+---
+- name: 'Deploy {{ bundle }}'
+  hosts: all
+  remote_user: '{{bundle}}'
+  vars:
+    home: '/home/{{bundle}}'
+    bundle_src: '{{home}}/src/apps/bundles/{{bundle}}'
+    repo: 'https://github.com/eyraco/eylixir.git'
+
+  tasks:
+  - name: Update source
+    ansible.builtin.git:
+      repo: '{{repo}}'
+      dest: '{{home}}/src'
+      version: 'master'
+      update: yes
+      force: yes
+    register: source
+
+  - name: Set the release dir
+    ansible.builtin.set_fact:
+      release_dir: '{{home}}/releases/{{source.after}}'
+
+  - name: Build
+    when: source.changed
+    block:
+      - name: Hex
+        ansible.builtin.command:
+          cmd: mix local.hex --force
+          creates: '{{home}}/.mix/archives/hex-*'
+          chdir: '{{ bundle_src }}'
+
+      - name: Rebar
+        ansible.builtin.command:
+          cmd: mix local.rebar --force
+          creates: '{{home}}/.mix/rebar'
+          chdir: '{{ bundle_src }}'
+
+      - name: Get deps
+        ansible.builtin.command:
+          cmd: mix deps.get
+          chdir: '{{ bundle_src }}'
+
+      - name: Remove the assets symlink
+        ansible.builtin.file:
+          path: '{{ bundle_src }}/assets'
+          state: absent
+
+      - name: Remove the static symlink
+        ansible.builtin.file:
+          path: '{{ bundle_src }}/priv/static'
+          state: absent
+
+      - name: Copy assets folder to bundle
+        ansible.builtin.copy:
+          src: '{{ home }}/src/assets'
+          dest: '{{ bundle_src }}'
+          remote_src: yes
+
+      - name: Patch Tailwind purge paths
+        ansible.builtin.replace:
+            path: '{{ bundle_src }}/assets/tailwind.config.js'
+            regexp: '(\s+)"(.*?ex)",$'
+            replace: '\1"../../../\2",'
+
+      - name: Get node deps
+        ansible.builtin.command:
+          cmd: npm install
+          chdir: '{{ bundle_src }}/assets'
+
+      - name: Update browserslist package
+        ansible.builtin.command:
+          cmd: npx browserslist@latest --update-db
+          chdir: '{{ bundle_src }}/assets'
+
+      - name: Build static resources
+        ansible.builtin.command:
+          cmd: npm run deploy
+          chdir: '{{ bundle_src }}/assets'
+
+      - name: Build digest
+        ansible.builtin.command:
+          cmd: mix phx.digest
+          chdir: '{{ bundle_src }}'
+        environment:
+          MIX_ENV: prod
+
+      - name: Build release
+        ansible.builtin.command:
+          cmd: mix release --overwrite --path '{{ release_dir }}'
+          chdir: '{{ bundle_src }}'
+        environment:
+          MIX_ENV: prod
+
+      - name: Run migrations
+        ansible.builtin.command:
+          cmd: '{{ release_dir }}/bin/{{bundle}} eval "{{bundle.title()}}.Release.migrate"'
+          chdir: '{{ bundle_src }}'
+        environment:
+          MIX_ENV: prod
+          DB_NAME: '{{db_name}}'
+          DB_USER: '{{db_user}}'
+          DB_HOST: '{{db_host}}'
+          DB_PASS: '{{db_pass}}'
+          BUNDLE_DOMAIN: '{{bundle_domain}}'
+          SECRET_KEY_BASE: '{{secret_key_base}}'
+
+      - name: Symlink the new release
+        ansible.builtin.file:
+          src: '{{release_dir}}'
+          dest: '{{home}}/current'
+          state: link
+        notify: Restart bundle
+
+      - name: Cleanup older releases
+        ansible.builtin.shell:
+          cmd: 'ls --sort=time | tail -n +4 | xargs rm -rf'
+          chdir: '{{home}}/releases'
+
+  handlers:
+    - name: Restart bundle
+      ansible.builtin.command:
+        cmd: 'sudo systemctl restart {{bundle}}.service'
+        warn: no

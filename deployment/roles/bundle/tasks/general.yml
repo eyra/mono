@@ -1,0 +1,54 @@
+---
+- name: Security packages
+  ansible.builtin.apt:
+    state: present
+    name:
+      - fail2ban
+      - debian-goodies
+      - apt-listchanges
+      - acl
+
+- name: Set timezone to Europe/Amsterdam
+  community.general.timezone:
+    name: Europe/Amsterdam
+
+- name: SSH config
+  ansible.builtin.template:
+    src: templates/sshd_config
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0600
+  notify: Reload SSH
+
+- name: Unattended upgrades conf
+  ansible.builtin.template:
+      src: templates/unattended-upgrades.conf
+      dest: /etc/apt/apt.conf.d/50unattended-upgrades
+- name: setup unattended upgrades
+  apt:
+    name: unattended-upgrades
+    state: present
+
+- name: libpam quality (password strength)
+  ansible.builtin.apt:
+    name: libpam-pwquality
+    state: present
+    # FIXME: add some more rules to lock down
+
+- name: Rate limit ssh (firewall)
+  ansible.builtin.ufw:
+    rule: limit
+    port: ssh
+    proto: tcp
+
+- name: Allow outgoing (firewall)
+  ansible.builtin.ufw:
+    policy: allow
+    direction: outgoing
+
+- name: Deny incoming
+  ansible.builtin.ufw:
+    state: enabled
+    policy: deny
+    direction: incoming
