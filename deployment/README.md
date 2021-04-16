@@ -50,6 +50,20 @@ The inventory with it's secrets should not be added to the repository. Usage of
 [Ansible Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html)
 is also advised to keep the secrets safe.
 
+The deployment playbook allows the deployment branch to be specified with the
+`branch` variable. It defaults to to `master`.
+
+## Example Run
+
+To run the playbook run a command like:
+
+	ansible-playbook --inventory path-to/hosts.ini site.yml
+
+When the system is already setup the `deploy.yml` if the only playbook needed.
+It can also deploy a specific branch like:
+
+	ansible-playbook --inventory path-to/hosts.ini -e branch=my-fancy-branch deploy.yml
+
 ## Development
 
 A [Vagrant](https://www.vagrantup.com) configuration is available to test the

@@ -27,7 +27,7 @@ config :core, :children, [
   CoreWeb.Support.Endpoint
 ]
 
-config :core, Core.Mailer, adapter: Bamboo.TestAdapter
+config :core, Core.Mailer, adapter: Bamboo.TestAdapter, default_from_email: "no-reply@example.com"
 # Print only warnings and errors during test
 config :logger, level: :warn
 
