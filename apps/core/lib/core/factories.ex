@@ -3,7 +3,7 @@ defmodule Core.Factories do
   This module provides factory function to be used for tests.
   """
   alias Core.Accounts.{User, Profile}
-  alias Core.{Studies, SurveyTools, Authorization}
+  alias Core.{Studies, SurveyTools, Authorization, DataUploader}
   alias Core.Repo
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
@@ -50,6 +50,10 @@ defmodule Core.Factories do
     build(:survey_tool, %{})
   end
 
+  def build(:client_script) do
+    build(:survey_tool, %{})
+  end
+
   def build(:role_assignment) do
     %Authorization.RoleAssignment{}
   end
@@ -77,6 +81,17 @@ defmodule Core.Factories do
     %SurveyTools.SurveyTool{
       auth_node: build(:auth_node, %{parent: study.auth_node}),
       title: Faker.Lorem.sentence(),
+      study: study
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:client_script, %{} = attributes) do
+    {study, attributes} = Map.pop(attributes, :study, build(:study))
+
+    %DataUploader.ClientScript{
+      auth_node: build(:auth_node, %{parent: study.auth_node}),
+      script: "def process():\n\tprint('hello')",
       study: study
     }
     |> struct!(attributes)
