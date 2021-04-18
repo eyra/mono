@@ -1,5 +1,5 @@
 ---
-- name: 'Deploy {{ bundle }}'
+- name: 'Deploy'
   hosts: all
   remote_user: '{{bundle}}'
   vars:
@@ -8,11 +8,11 @@
     repo: 'https://github.com/eyraco/eylixir.git'
 
   tasks:
-  - name: Update source
+  - name: 'Update source - {{branch}}'
     ansible.builtin.git:
       repo: '{{repo}}'
       dest: '{{home}}/src'
-      version: 'master'
+      version: '{{branch|default("master")}}'
       update: yes
       force: yes
     register: source

@@ -45,8 +45,10 @@ if config_env() == :prod do
 
   config :core, Core.Mailer,
     adapter: Bamboo.MailgunAdapter,
+    base_uri: "https://api.eu.mailgun.net/v3",
     api_key: System.get_env("MAILGUN_API_KEY"),
     domain: host,
+    default_from_email: "no-reply@#{host}",
     hackney_opts: [recv_timeout: :timer.minutes(1)]
 
   config :link, :ssl,
