@@ -1,0 +1,12 @@
+[Unit]
+Description=Notify Slack on shutdown
+DefaultDependencies=no
+Before=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/notify_slack_on_shutdown
+TimeoutStartSec=0
+
+[Install]
+WantedBy=shutdown.target
