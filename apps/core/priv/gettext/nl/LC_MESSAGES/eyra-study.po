@@ -22,7 +22,7 @@ msgid "study.index.title"
 msgstr "Overzicht"
 
 #, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:47
+#: lib/core_web/templates/layout/root.html.leex:72
 msgid "dashboard.button"
 msgstr "Overzicht"
 
@@ -37,12 +37,12 @@ msgid "study.highlighted.title"
 msgstr "Mijn studies:"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:167
+#: lib/core_web/live/study/edit.ex:177
 msgid "study.edit.title"
 msgstr "Studie"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:198
+#: lib/core_web/live/study/edit.ex:208
 msgid "title.label"
 msgstr "Pas de titel aan"
 
@@ -90,3 +90,13 @@ msgstr "Maatschappij"
 #: lib/core/studies/study_edit.ex:18
 msgid "themes.technology"
 msgstr "Technologie"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:143
+msgid "Please correct the indicated errors."
+msgstr "Er zijn wat problemen gevonden op de pagina. Probeer deze eerst op te lossen"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:162
+msgid "Saved"
+msgstr "Opgeslagen"

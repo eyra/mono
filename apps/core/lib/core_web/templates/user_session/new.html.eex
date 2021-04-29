@@ -1,12 +1,5 @@
-<p class="alert alert-info" role="alert"
-                            phx-click="lv:clear-flash"
-                            phx-value-key="info"></p>
-
-<p class="alert alert-danger" role="alert"
-                              phx-click="lv:clear-flash"
-                              phx-value-key="error"></p>
 <div class="flex h-full w-full mt-9 lg:mt-24">
-  <div class="flex-grow ml-6 mr-6 lg:ml-14 lg:mr-14">
+  <div class="flex-grow ml-6 mr-6 lg:ml-0 lg:mr-14">
     <div class="w-full">
 
       <div class="flex justify-center">
@@ -68,12 +61,6 @@
           <div class="mb-7 bg-grey4 h-px"></div>
 
           <%= form_for @conn, Routes.path(@conn, CoreWeb.UserSessionController, :create), [as: :user], fn f -> %>
-            <%= if @error_message do %>
-              <div class="alert alert-danger">
-                <p><%= @error_message %></p>
-              </div>
-            <% end %>
-
             <div class="flex flex-col mb-8">
               <%= label f, :email, class: "flex-wrap mt-0.5 text-title6 font-title6 mb-2" %>
               <div>

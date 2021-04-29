@@ -2,10 +2,12 @@ defmodule EyraUI.AutoSave do
   @moduledoc """
   Provides support for creating edit views the Eyra way (autosave etc.).
   """
-  import Phoenix.LiveView, only: [assign: 2, assign: 3, put_flash: 3]
+  import Phoenix.LiveView, only: [assign: 2, assign: 3, put_flash: 3, clear_flash: 1]
   alias Phoenix.LiveView.Socket
+  import EyraUI.Gettext
 
   @save_delay 1
+  @hide_message_delay 3
 
   @callback load(params :: %{}, session :: map(), socket :: Socket.t()) :: any()
   @callback save(changeset :: any()) :: any()
@@ -25,11 +27,21 @@ defmodule EyraUI.AutoSave do
     )
   end
 
+  defp cancel_hide_message_timer(nil), do: nil
+  defp cancel_hide_message_timer(timer), do: Process.cancel_timer(timer)
+
+  def schedule_hide_message(socket) do
+    update_in(socket.assigns.hide_message_timer, fn timer ->
+      cancel_hide_message_timer(timer)
+      Process.send_after(self(), :hide_message, @hide_message_delay * 1_000)
+    end)
+  end
+
   def handle_validation_error(socket, changeset) do
     {:noreply,
      socket
      |> assign(changeset: changeset)
-     |> put_flash(:error, "Please correct the indicated errors.")}
+     |> put_flash(:error, dgettext("eyra-ui", "Please correct the indicated errors."))}
   end
 
   def handle_success(socket, changeset, entity_name, entity) do
@@ -40,6 +52,10 @@ defmodule EyraUI.AutoSave do
   end
 
   def update_changeset(socket, changeset, entity_name) do
+    socket =
+      socket
+      |> hide_message()
+
     case Ecto.Changeset.apply_action(changeset, :update) do
       {:ok, entity} ->
         handle_success(socket, changeset, entity_name, entity)
@@ -49,6 +65,13 @@ defmodule EyraUI.AutoSave do
     end
   end
 
+  def hide_message(socket) do
+    cancel_hide_message_timer(socket.assigns.hide_message_timer)
+
+    socket
+    |> clear_flash()
+  end
+
   def mount(entity_name, entity, changeset, path_provider, socket) do
     socket =
       socket
@@ -56,6 +79,8 @@ defmodule EyraUI.AutoSave do
         changeset: changeset,
         save_changeset: changeset,
         save_timer: nil,
+        hide_message_timer: nil,
+        focus: nil,
         path_provider: path_provider
       )
       |> assign(entity_name, entity)
@@ -72,8 +97,11 @@ defmodule EyraUI.AutoSave do
       alias Ecto.Changeset
       alias EyraUI.AutoSave
 
+      require EyraUI.Gettext
+
       data(unquote(entity_var), :any)
       data(changeset, :any)
+      data(focus, :any)
 
       def mount(params, session, socket) do
         path_provider = Map.get(session, "path_provider")
@@ -82,11 +110,7 @@ defmodule EyraUI.AutoSave do
         AutoSave.mount(unquote(entity_name), entity, changeset, path_provider, socket)
       end
 
-      def handle_event(
-            "save",
-            params,
-            socket
-          ) do
+      def handle_event("save", params, socket) do
         entity_name = unquote(entity_name)
         entity = socket.assigns[entity_name]
         attrs = params[entity_name |> to_string]
@@ -96,12 +120,28 @@ defmodule EyraUI.AutoSave do
         AutoSave.update_changeset(socket, changeset, entity_name)
       end
 
+      def handle_event("focus", %{"field" => field}, socket) do
+        {
+          :noreply,
+          socket
+          |> assign(:focus, field)
+        }
+      end
+
       def handle_info(:save, %{assigns: %{save_changeset: changeset}} = socket) do
         {:ok, entity} = save(changeset)
 
         {:noreply,
          socket
-         |> assign(unquote(entity_name), entity)}
+         |> assign(unquote(entity_name), entity)
+         |> put_flash(:info, EyraUI.Gettext.dgettext("eyra-study", "Saved"))
+         |> AutoSave.schedule_hide_message()}
+      end
+
+      def handle_info(:hide_message, socket) do
+        {:noreply,
+         socket
+         |> AutoSave.hide_message()}
       end
 
       def terminate(reason, %{assigns: %{save_changeset: changeset}}) do

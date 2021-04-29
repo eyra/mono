@@ -13,7 +13,7 @@ defmodule EyraUI.Create do
     {:noreply,
      socket
      |> assign(changeset: changeset)
-     |> put_flash(:error, "Please correct the indicated errors.")}
+     |> put_flash("eyra-ui", "Please correct the indicated errors.")}
   end
 
   def create(module, socket, changeset) do

@@ -32,7 +32,7 @@ msgid "password.label"
 msgstr "Wachtwoord"
 
 #, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:51
+#: lib/core_web/templates/layout/root.html.leex:76
 msgid "profile.button"
 msgstr "Mijn profiel"
 
@@ -47,7 +47,7 @@ msgid "researcher.label"
 msgstr "ik ben een onderzoeker"
 
 #, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:56
+#: lib/core_web/templates/layout/root.html.leex:81
 msgid "signin.button"
 msgstr "Inloggen"
 

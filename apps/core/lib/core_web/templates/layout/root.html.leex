@@ -16,18 +16,43 @@
   <body class="font-body bg-grey5" x-data="{ overlay: false }">
     <div class="fixed z-10 w-full h-full bg-black bg-opacity-30" x-show="overlay"></div>
     <div class="flex flex-row min-h-screen">
+      <div
+          class="fixed z-20 top-6 w-full pointer-events-none"
+          x-data="{ visible: <%= get_flash(@conn, :error) != nil %> }"
+          x-show="visible"
+      >
+        <div class="flex flex-row items-center justify-center" >
+          <div class="max-w-form flex-shrink-0 pointer-events-auto" >
+            <div class="text-label font-label bg-white rounded shadow-2xl">
+              <div class="flex flex-row">
+                <div
+                  class="alert alert-danger text-warning flex-wrap p-4 leading-6"
+                  role="alert"
+                  phx-click="lv:clear-flash"
+                  phx-value-key="error"
+                >
+                  <p><%= get_flash(@conn, :error) %></p>
+                </div>
+
+                <button
+                  x-on:click="visible = false"
+                  type="button"
+                  class="w-button-sm h-button-sm flex-shrink-0 cursor-pointer active:opacity-50 mt-5 mr-4 mb-4"
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 1.41L12.59 0L7 5.59L1.41 0L0 1.41L5.59 7L0 12.59L1.41 14L7 8.41L12.59 14L14 12.59L8.41 7L14 1.41Z" fill="#F28D15"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="w-0 lg:w-sidebar"></div>
       <div class="w-full">
         <div class="flex flex-col h-full">
           <header class="flex-wrap">
-            <div class="fixed text-warning">
-              <p class="alert alert-info" role="alert">
-                <%= get_flash(@conn, :info) %>
-              </p>
-              <p class="alert alert-danger" role="alert">
-                <%= get_flash(@conn, :error) %>
-              </p>
-            </div>
             <nav
               class="flex items-center h-topbar sm:h-topbar-sm lg:h-topbar-lg"
             >

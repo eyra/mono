@@ -183,6 +183,7 @@ defmodule Core.Studies.StudyEdit do
       |> get_image_url()
 
     %{}
+    |> Map.put(:focus, "")
     |> Map.put(:byline, get_byline(survey_tool))
     |> Map.put(:is_published, SurveyTool.published?(survey_tool))
     |> Map.put(:subject_pending_count, pending)

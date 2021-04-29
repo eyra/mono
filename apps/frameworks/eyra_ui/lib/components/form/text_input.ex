@@ -1,19 +1,18 @@
 defmodule EyraUI.Form.TextInput do
   @moduledoc false
   use Surface.Component
-  alias Surface.Components.Form.TextInput
-  alias EyraUI.Form.Field
+  alias EyraUI.Form.Input
 
   prop(field, :atom, required: true)
   prop(label_text, :string)
   prop(label_color, :css_class, default: "text-grey1")
-  prop(read_only, :boolean, default: false)
+  prop(background, :atom, default: :light)
 
   def render(assigns) do
     ~H"""
-    <Field field={{@field}} label_text={{@label_text}} label_color={{@label_color}} read_only={{@read_only}}>
-      <TextInput field={{@field}} opts={{class: "text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-44px"}} />
-    </Field>
+    <Context get={{Surface.Components.Form, form: form}} >
+      <Input form={{form}} field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}} type="text" />
+    </Context>
     """
   end
 end
