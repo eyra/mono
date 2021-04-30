@@ -4,8 +4,7 @@ defmodule CoreWeb.Study.Edit do
   """
   use CoreWeb, :live_view
   use EyraUI.AutoSave, :study_edit
-  alias Surface.Components.Form
-  alias EyraUI.Form.{TextInput, UrlInput, NumberInput, TextArea, Checkbox, RadioButtonGroup}
+  alias EyraUI.Form.{Form, TextInput, UrlInput, NumberInput, TextArea, Checkbox, RadioButtonGroup}
   alias EyraUI.Hero.HeroSmall
   alias EyraUI.Container.{ContentArea, Bar, BarItem}
   alias EyraUI.Text.{Title1, Title3, Title6, SubHead, BodyMedium}
@@ -22,6 +21,8 @@ defmodule CoreWeb.Study.Edit do
   alias Core.Studies.{Study, StudyEdit}
   alias Core.SurveyTools
   alias Core.Marks
+
+  import CoreWeb.Gettext
 
   data(uri_origin, :string)
   data(path_provider, :any)
@@ -134,10 +135,12 @@ defmodule CoreWeb.Study.Edit do
   end
 
   def handle_validation_error(socket, changeset) do
-    {:noreply,
-     socket
-     |> assign(changeset: changeset)
-     |> put_flash(:error, "Please correct the indicated errors.")}
+    {
+      :noreply,
+      socket
+      |> assign(changeset: changeset)
+      |> put_flash(:error, dgettext("eyra-study", "Please correct the indicated errors."))
+    }
   end
 
   def handle_success(socket, changeset) do
@@ -151,7 +154,13 @@ defmodule CoreWeb.Study.Edit do
         save_changeset: changeset
       )
 
-    {:noreply, socket |> assign(study_edit: study_edit)}
+    {
+      :noreply,
+      socket
+      |> assign(study_edit: study_edit)
+      |> put_flash(:info, dgettext("eyra-study", "Saved"))
+      |> AutoSave.schedule_hide_message()
+    }
   end
 
   def render(assigns) do
@@ -194,7 +203,7 @@ defmodule CoreWeb.Study.Edit do
           <Spacing value="L" />
 
           <Title1>{{ @study_edit.title }}</Title1>
-          <Form for={{ @changeset }} change="save">
+          <Form changeset={{@changeset}} change_event="save" focus={{@focus}}>
             <TextInput field={{:title}} label_text={{dgettext("eyra-study", "title.label")}} />
 
             <Spacing value="XL" />
@@ -248,7 +257,7 @@ defmodule CoreWeb.Study.Edit do
               <template slot="title">
                 <Title3 color="text-white" >{{dgettext("eyra-survey", "config.title")}}</Title3>
               </template>
-              <UrlInput field={{:survey_url}} label_color="text-white" label_text={{dgettext("eyra-survey", "config.url.label")}} read_only={{@study_edit.is_published}}/>
+              <UrlInput field={{:survey_url}} label_color="text-white" label_text={{dgettext("eyra-survey", "config.url.label")}} background="dark"/>
               <Spacing value="M" />
               <Title6 color="text-white">Redirect url</Title6>
               <BodyMedium color="text-grey3">{{ @uri_origin <> @path_provider.live_path(@socket, CoreWeb.Study.Complete, @study_edit.study_id)}}</BodyMedium>

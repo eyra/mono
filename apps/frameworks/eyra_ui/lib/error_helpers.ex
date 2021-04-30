@@ -28,6 +28,17 @@ defmodule EyraUI.ErrorHelpers do
   end
 
   @doc """
+  Returnes border color in error, focus, and normal state.
+  """
+  def border_color(form, field) do
+    if has_error?(form, field) do
+      "border-warning focus:border-warning"
+    else
+      "border-grey3 focus:border-primary"
+    end
+  end
+
+  @doc """
   Translates an error message using gettext.
   """
   def translate_error({msg, opts}) do

@@ -19,3 +19,8 @@ msgstr ""
 #: lib/timestamp.ex:16
 msgid "timestamp.yesterday"
 msgstr ""
+
+#, elixir-format
+#: lib/auto_save.ex:45
+msgid "Please correct the indicated errors."
+msgstr ""

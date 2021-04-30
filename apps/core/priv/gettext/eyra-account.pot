@@ -31,7 +31,7 @@ msgid "password.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:51
+#: lib/core_web/templates/layout/root.html.leex:76
 msgid "profile.button"
 msgstr ""
 
@@ -46,7 +46,7 @@ msgid "researcher.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:56
+#: lib/core_web/templates/layout/root.html.leex:81
 msgid "signin.button"
 msgstr ""
 

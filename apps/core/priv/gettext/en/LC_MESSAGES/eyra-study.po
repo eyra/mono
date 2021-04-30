@@ -22,7 +22,7 @@ msgid "study.index.title"
 msgstr "Overview"
 
 #, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:47
+#: lib/core_web/templates/layout/root.html.leex:72
 msgid "dashboard.button"
 msgstr "Overview"
 
@@ -37,12 +37,12 @@ msgid "study.highlighted.title"
 msgstr "My studies:"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:167
+#: lib/core_web/live/study/edit.ex:177
 msgid "study.edit.title"
 msgstr "Study"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:198
+#: lib/core_web/live/study/edit.ex:208
 msgid "title.label"
 msgstr "Change the title"
 
@@ -90,3 +90,13 @@ msgstr "Society"
 #: lib/core/studies/study_edit.ex:18
 msgid "themes.technology"
 msgstr "Technology"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:143
+msgid "Please correct the indicated errors."
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:162
+msgid "Saved"
+msgstr ""
