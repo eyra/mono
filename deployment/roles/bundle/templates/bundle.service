@@ -5,7 +5,7 @@ Description={{bundle}}
 User={{bundle}}
 Group={{bundle}}
 Type=simple
-ExecStart=/home/{{bundle}}/current/bin/{{bundle}} start
+ExecStart=/home/{{bundle}}/current/bin/core start
 Restart=on-failure
 AmbientCapabilities=CAP_NET_BIND_SERVICE
 

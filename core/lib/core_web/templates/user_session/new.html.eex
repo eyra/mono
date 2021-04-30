@@ -1,0 +1,116 @@
+<p class="alert alert-info" role="alert"
+                            phx-click="lv:clear-flash"
+                            phx-value-key="info"></p>
+
+<p class="alert alert-danger" role="alert"
+                              phx-click="lv:clear-flash"
+                              phx-value-key="error"></p>
+<div class="flex h-full w-full mt-9 lg:mt-24">
+  <div class="flex-grow ml-6 mr-6 lg:ml-14 lg:mr-14">
+    <div class="w-full">
+
+      <div class="flex justify-center">
+        <div class="flex-grow max-w-form ml-6 mr-6 lg:m-0">
+
+          <div class="text-title5 font-title5 sm:text-title3 sm:font-title3 lg:text-title2 lg:font-title2 mb-7 lg:mb-9">
+            Log in
+          </div>
+
+          <div class="mb-6"></div>
+
+          <div class="flex w-full h-12 bg-apple rounded justify-center items-center hover:opacity-80">
+              <div class="w-full h-full pl-4 pr-4 focus:outline-none" id="appleid-signin" data-color="black" data-border="false" data-type="sign in" data-logo-size="small" data-label-position="10" ></div>
+              <%= sign_in_with_apple_button(@conn) %>
+          </div>
+
+          <div class="mb-6"></div>
+          <a href="/google-sign-in">
+            <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-google rounded pl-4 pr-4">
+              <div class="flex w-full justify-center items-center">
+                <div>
+                  <img class="mr-3 -mt-1" src="/images/google.svg">
+                </div>
+                <div class="h-11 focus:outline-none">
+                  <div class="flex flex-col justify-center h-full items-center rounded">
+                    <div class="text-white text-button font-button">
+                      Meld je aan met Google
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <div class="mb-6"></div>
+          <a href="/surfconext">
+            <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-surfconext rounded pl-4 pr-4">
+              <div class="flex w-full justify-center items-center">
+                <div>
+                  <img class="mr-3 -mt-1" src="/images/surfconext.svg">
+                </div>
+                <div class="h-11 focus:outline-none">
+                  <div class="flex flex-col justify-center h-full items-center rounded">
+                    <div class="text-white text-button font-button">
+                      Meld je aan met SURF
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+          <div class="mb-6"></div>
+
+          <div class="mb-6"></div>
+          <div class="mb-5 pl-4 pr-4 text-grey3 mb-6 text-caption text-center">
+            We delen geen gegevens met derden. Je Google, Apple of SURF account wordt enkel gebruikt om gemakkelijk in te loggen.
+          </div>
+
+          <div class="mb-7 bg-grey4 h-px"></div>
+
+          <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user], fn f -> %>
+            <%= if @error_message do %>
+              <div class="alert alert-danger">
+                <p><%= @error_message %></p>
+              </div>
+            <% end %>
+
+            <div class="flex flex-col mb-8">
+              <%= label f, :email, class: "flex-wrap mt-0.5 text-title6 font-title6 mb-2" %>
+              <div>
+                <%= email_input f, :email, required: true, class: "text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-44px" %>
+              </div>
+            </div>
+
+            <div class="flex flex-col mb-6">
+              <%= label f, :password, class: "flex-wrap mt-0.5 text-title6 font-title6 mb-2" %>
+              <div>
+                <%= password_input f, :password, required: true, class: "text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-44px" %>
+
+              </div>
+            </div>
+
+            <div>
+              <%= submit "Log in", class: "w-full pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded pr-4 pl-4 bg-grey1" %>
+            </div>
+
+            <div class="mb-6"></div>
+            <div class="flex flex-row text-label font-label items-center">
+              <%= checkbox f, :remember_me %>
+              <div class="ml-2"></div>
+              <%= label f, :remember_me, "Blijf ingelogd voor 60 dagen" %>
+            </div>
+            <div class="mb-10"></div>
+
+          <% end %>
+
+          <div class="flex flex-row" >
+              <div class="mb-8"></div>
+             <%= link "Registreren", to: Routes.live_path(@conn, CoreWeb.User.Signup), class: "text-primary text-link font-link hover:text-black underline focus:outline-none" %>
+            <div class="ml-2"></div>|<div class="ml-2"></div>
+            <%= link "Reset wachtwoord", to: Routes.live_path(@conn, CoreWeb.User.ResetPassword), class: "text-primary text-link font-link hover:text-black underline focus:outline-none" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
