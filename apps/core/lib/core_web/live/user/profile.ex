@@ -5,11 +5,10 @@ defmodule CoreWeb.User.Profile do
   use CoreWeb, :live_view
   use EyraUI.AutoSave, :user_profile_edit
 
-  alias Surface.Components.Form
   alias Core.Accounts
   alias Core.Accounts.UserProfileEdit
 
-  alias EyraUI.Form.{TextInput, Checkbox}
+  alias EyraUI.Form.{Form, TextInput, Checkbox}
   alias EyraUI.Text.Title2
   alias EyraUI.Container.{ContentArea, FormArea}
   alias EyraUI.Button.DeleteButton
@@ -52,7 +51,7 @@ defmodule CoreWeb.User.Profile do
     <ContentArea>
       <FormArea>
         <Title2>{{dgettext "eyra-account", "profile.title"}}</Title2>
-        <Form for={{ @changeset }} change="save">
+        <Form changeset={{@changeset}} change_event="save" focus={{@focus}}>
           <Checkbox field={{:researcher}} label_text={{dgettext("eyra-account", "researcher.label")}}/>
           <TextInput field={{:fullname}} label_text={{dgettext("eyra-account", "fullname.label")}} />
           <TextInput field={{:displayname}} label_text={{dgettext("eyra-account", "displayname.label")}} />
