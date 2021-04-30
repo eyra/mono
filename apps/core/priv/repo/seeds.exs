@@ -15,29 +15,61 @@ survey_url = "https://vuamsterdam.eu.qualtrics.com/jfe/form/SV_4Po8iTxbvcxtuaW"
 
 studies = [
   %{
+    type: :survey_tool,
     title: "A study about E-numbers, food and beverages",
+    survey_url: survey_url,
     description: ~S"""
     With this survey we want to learn more about people's feelings towards the
     addition of additives with "E-numbers" to food and beverages. This study
     contains a short video with sound, so please only participate when you are
     able to listen (using speakers or headphones).
     """,
+    published_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+    desktop_enabled: true,
     phone_enabled: false,
     tablet_enabled: false,
     subject_count: 400,
-    study_duration: 16,
-    fee: "2.5"
+    duration: "a few minutes",
+    reward_currency: :eur,
+    reward_value: 2500
   },
   %{
+    type: :survey_tool,
     title: "Staying in contact with your parents",
+    survey_url: survey_url,
     description: ~S"""
     In this study we want to investigate how people stay in touch with their
     parent(s) after they have moved out of the parental home. It will take
     approximately 20 minutes to complete the questionnaire.
     """,
+    published_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+    desktop_enabled: true,
+    phone_enabled: true,
+    tablet_enabled: true,
     subject_count: 56,
-    study_duration: 20,
-    fee: "3,3"
+    duration: "a while",
+    reward_currency: :usd,
+    reward_value: 3300
+  },
+  %{
+    type: :client_script,
+    title: "Files from ZIP",
+    script: """
+    import zipfile
+
+    def process(file_data):
+        names = []
+        data = []
+        zfile = zipfile.ZipFile(file_data)
+        for name in zfile.namelist():
+            names.append(name)
+            data.append((name, zfile.read(name).decode("utf8")))
+
+        return {
+            "summary": f"The following files where read: {', '.join(names)}.",
+            "data": data
+        }
+    """
   }
 ]
 
@@ -62,17 +94,12 @@ for data <- studies do
       description: ""
     })
 
-  _survey_tool =
-    Core.Factories.insert!(:survey_tool, %{
-      study: study,
-      survey_url: survey_url,
-      description: data.description,
-      subject_count: data.subject_count,
-      phone_enabled: Map.get(data, :phone_enabled, true),
-      tablet_enabled: Map.get(data, :tablet_enabled, true),
-      desktop_enabled: Map.get(data, :desktop_enabled, true),
-      published_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-    })
+  {type, tool_data} = Map.pop!(data, :type)
+
+  Core.Factories.insert!(
+    type,
+    Map.merge(%{study: study}, tool_data)
+  )
 
   Core.Authorization.assign_role(
     researcher,
