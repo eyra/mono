@@ -10,13 +10,15 @@ defmodule EyraUI.Form.Checkbox do
 
   def render(assigns) do
     ~H"""
-    <div class="flex flex-row mb-3">
-      <Checkbox field={{@field}} opts={{class: "flex-wrap border-2 h-6 w-6 border-solid focus:outline-none focus:border-primary rounded-lg"}} />
-      <Label field={{@field}} opts={{class: "flex-wrap ml-3 mr-3 h-6 mt-1.5 font-label text-label #{@label_color}"}} >
-        {{@label_text}}
-      </Label>
-      <ValidationErrors field={{@field}} />
+    <Context get={{Surface.Components.Form, form: form}} >
+      <div class="flex flex-row mb-3">
+        <Checkbox field={{@field}} opts={{class: "flex-wrap border-2 h-6 w-6 border-solid focus:outline-none focus:border-primary rounded-lg"}} />
+        <Label field={{@field}} opts={{class: "flex-wrap ml-3 mr-3 h-6 mt-1.5 font-label text-label #{@label_color}"}} >
+          {{@label_text}}
+        </Label>
+        <ValidationErrors form={{form}} field={{@field}}/>
       </div>
+    </Context>
     """
   end
 end

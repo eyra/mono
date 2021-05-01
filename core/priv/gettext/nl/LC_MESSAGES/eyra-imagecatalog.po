@@ -26,15 +26,15 @@ msgstr "Zoek"
 msgid "search.image.title"
 msgstr "Zoek een afbeelding"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/core_web/image_catalog_picker.ex:44
 msgid "images.found.message"
 msgid_plural "images.found.message.%{count}"
 msgstr[0] "1 afbeelding:"
 msgstr[1] "%{count} afbeeldingen:"
 
-#, elixir-format, fuzzy
-#: lib/core_web/image_catalog_picker.ex:72
+#, elixir-format
+#: lib/core_web/image_catalog_picker.ex:75
 msgid "page.info.message"
 msgid_plural "page.info.message.%{count}"
 msgstr[0] "Weergave 1 afbeelding"

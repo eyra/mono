@@ -9,7 +9,6 @@ defmodule CoreWeb.Routes do
       pipeline :browser_base do
         plug(:accepts, ["html"])
         plug(:fetch_session)
-        plug(:put_root_layout, {CoreWeb.LayoutView, :root})
 
         plug(Cldr.Plug.SetLocale,
           apps: [cldr: CoreWeb.Cldr, gettext: :global],
@@ -20,6 +19,7 @@ defmodule CoreWeb.Routes do
         plug(CoreWeb.Plug.LiveLocale)
 
         plug(:fetch_live_flash)
+        plug(:put_root_layout, {CoreWeb.LayoutView, :root})
       end
 
       pipeline :browser_secure do

@@ -12,52 +12,52 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:234
+#: lib/core_web/live/study/edit.ex:246
 msgid "config.nrofsubjects.label"
 msgstr "Number of required subjects"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:249
+#: lib/core_web/live/study/edit.ex:261
 msgid "config.url.label"
 msgstr "Link to survey"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:247
+#: lib/core_web/live/study/edit.ex:259
 msgid "config.title"
 msgstr "Survey configuration"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:239 lib/core_web/live/study/public.ex:103
+#: lib/core_web/live/study/edit.ex:251 lib/core_web/live/study/public.ex:103
 msgid "config.devices.title"
 msgstr "Survey configuration"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:242 lib/core_web/live/study/public.ex:111
+#: lib/core_web/live/study/edit.ex:254 lib/core_web/live/study/public.ex:111
 msgid "desktop.enabled.label"
 msgstr "Desktop"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:241 lib/core_web/live/study/public.ex:108
+#: lib/core_web/live/study/edit.ex:253 lib/core_web/live/study/public.ex:108
 msgid "tablet.enabled.label"
 msgstr "Tablet"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:222
+#: lib/core_web/live/study/edit.ex:234
 msgid "info.label"
 msgstr "What can a subject expect on this survey?"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:262
+#: lib/core_web/live/study/edit.ex:275
 msgid "publish.button"
 msgstr "Publish"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:259
+#: lib/core_web/live/study/edit.ex:270
 msgid "unpublish.button"
 msgstr "Unpublish"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:263
+#: lib/core_web/live/study/edit.ex:278
 msgid "delete.button"
 msgstr "Delete"
 
@@ -72,23 +72,23 @@ msgid "duration.public.label"
 msgstr "Estimated duration"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:226
+#: lib/core_web/live/study/edit.ex:238
 msgid "duration.label"
 msgstr "Estimated duration"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:186 lib/core_web/view_model/card.ex:60
+#: lib/core_web/live/study/edit.ex:196 lib/core_web/view_model/card.ex:48
 msgid "published.false.label"
 msgstr "Concept"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:207 lib/core/studies/study_public.ex:59
-#: lib/core_web/live/study/edit.ex:183
+#: lib/core/studies/study_edit.ex:232 lib/core/studies/study_public.ex:59
+#: lib/core_web/live/study/edit.ex:193
 msgid "published.true.label"
 msgstr "Published"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:211 lib/core/studies/study_public.ex:62
+#: lib/core/studies/study_edit.ex:236 lib/core/studies/study_public.ex:62
 msgid "created.label"
 msgstr "Created"
 
@@ -113,27 +113,27 @@ msgid "completed.message"
 msgstr "You already have completed this survey."
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:171
+#: lib/core_web/live/study/edit.ex:181
 msgid "completed.label"
 msgstr "Completed"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:170
+#: lib/core_web/live/study/edit.ex:180
 msgid "status.title"
 msgstr "Progress"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:173
+#: lib/core_web/live/study/edit.ex:183
 msgid "vacant.label"
 msgstr "Vacant"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:172
+#: lib/core_web/live/study/edit.ex:182
 msgid "pending.label"
 msgstr "Pending"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:240 lib/core_web/live/study/public.ex:105
+#: lib/core_web/live/study/edit.ex:252 lib/core_web/live/study/public.ex:105
 msgid "phone.enabled.label"
 msgstr "Phone"
 
@@ -143,66 +143,66 @@ msgid "withdraw.button"
 msgstr "Withdraw from study"
 
 #, elixir-format
-#: lib/core_web/view_model/card.ex:45
+#: lib/core_web/view_model/card.ex:39
 msgid "deadline.label"
 msgstr "Still %{days} days available"
 
 #, elixir-format
-#: lib/core_web/view_model/card.ex:44
+#: lib/core_web/view_model/card.ex:38
 msgid "open.spots.label"
 msgstr "%{count} open spots"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:230
+#: lib/core_web/live/study/edit.ex:242
 msgid "reward.label"
 msgstr "Credits"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:221
+#: lib/core_web/live/study/edit.ex:233
 msgid "about.title"
 msgstr "About this research"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:225 lib/core_web/view_model/card.ex:42
+#: lib/core_web/live/study/edit.ex:237 lib/core_web/view_model/card.ex:36
 msgid "duration.title"
 msgstr "Duration"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:207
+#: lib/core_web/live/study/edit.ex:217
 msgid "image.title"
 msgstr "Image"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:217
+#: lib/core_web/live/study/edit.ex:229
 msgid "organisation.title"
 msgstr "Organisation"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:229 lib/core_web/view_model/card.ex:43
+#: lib/core_web/live/study/edit.ex:241 lib/core_web/view_model/card.ex:37
 msgid "reward.title"
 msgstr "Credits"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:233
+#: lib/core_web/live/study/edit.ex:245
 msgid "subjects.title"
 msgstr "Number of subjects"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:201
+#: lib/core_web/live/study/edit.ex:211
 msgid "themes.title"
 msgstr "Themes"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:208
+#: lib/core_web/live/study/edit.ex:218
 msgid "image.label"
 msgstr "The selected image will be visible in the marketplace and on the detail page of your survey."
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:202
+#: lib/core_web/live/study/edit.ex:212
 msgid "themes.label"
 msgstr "Select one or more themes."
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:213
+#: lib/core_web/live/study/edit.ex:224
 msgid "search.different.image.button"
 msgstr "Select different image"

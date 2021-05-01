@@ -13,20 +13,22 @@ defmodule EyraUI.Form.RadioButtonGroup do
 
   def render(assigns) do
     ~H"""
-    <div class="flex flex-row mb-3">
-      <Field name={{@field}}>
-      <For each={{ item <- @items }} >
-          <div class="flex flex-row items-center">
-          <RadioButton value={{ item.id }} checked={{ item.id === @checked }} opts={{class: "flex-wrap border-2 h-6 w-6 border-solid focus:outline-none focus:border-primary"}} />
-          <Spacing value="XS" direction="l" />
-          <BodyLarge>
-            {{ item.label }}
-          </BodyLarge>
-          </div>
-        </For>
-        <ValidationErrors field={{@field}} />
-      </Field>
-    </div>
+    <Context get={{Surface.Components.Form, form: form}} >
+      <div class="flex flex-row mb-3">
+        <Field name={{@field}}>
+        <For each={{ item <- @items }} >
+            <div class="flex flex-row items-center">
+            <RadioButton value={{ item.id }} checked={{ item.id === @checked }} opts={{class: "flex-wrap border-2 h-6 w-6 border-solid focus:outline-none focus:border-primary"}} />
+            <Spacing value="XS" direction="l" />
+            <BodyLarge>
+              {{ item.label }}
+            </BodyLarge>
+            </div>
+          </For>
+          <ValidationErrors form={{form}} field={{@field}} />
+        </Field>
+      </div>
+    </Context>
     """
   end
 end

@@ -33,7 +33,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-format
-#: lib/core_web/image_catalog_picker.ex:72
+#: lib/core_web/image_catalog_picker.ex:75
 msgid "page.info.message"
 msgid_plural "page.info.message.%{count}"
 msgstr[0] ""

@@ -56,6 +56,9 @@ defmodule CoreWeb do
       use Surface.LiveView,
         layout: {CoreWeb.LayoutView, "live.html"}
 
+      import Phoenix.Controller,
+        only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
+
       unquote(view_helpers())
     end
   end
