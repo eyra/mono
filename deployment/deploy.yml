@@ -4,7 +4,7 @@
   remote_user: '{{bundle}}'
   vars:
     home: '/home/{{bundle}}'
-    bundle_src: '{{home}}/src/apps/bundles/{{bundle}}'
+    src: '{{home}}/src/core'
     repo: 'https://github.com/eyraco/eylixir.git'
 
   tasks:
@@ -28,74 +28,53 @@
         ansible.builtin.command:
           cmd: mix local.hex --force
           creates: '{{home}}/.mix/archives/hex-*'
-          chdir: '{{ bundle_src }}'
+          chdir: '{{ src }}'
 
       - name: Rebar
         ansible.builtin.command:
           cmd: mix local.rebar --force
           creates: '{{home}}/.mix/rebar'
-          chdir: '{{ bundle_src }}'
+          chdir: '{{ src }}'
 
       - name: Get deps
         ansible.builtin.command:
           cmd: mix deps.get
-          chdir: '{{ bundle_src }}'
-
-      - name: Remove the assets symlink
-        ansible.builtin.file:
-          path: '{{ bundle_src }}/assets'
-          state: absent
-
-      - name: Remove the static symlink
-        ansible.builtin.file:
-          path: '{{ bundle_src }}/priv/static'
-          state: absent
-
-      - name: Copy assets folder to bundle
-        ansible.builtin.copy:
-          src: '{{ home }}/src/assets'
-          dest: '{{ bundle_src }}'
-          remote_src: yes
-
-      - name: Patch Tailwind purge paths
-        ansible.builtin.replace:
-            path: '{{ bundle_src }}/assets/tailwind.config.js'
-            regexp: '(\s+)"(.*?ex)",$'
-            replace: '\1"../../../\2",'
+          chdir: '{{ src }}'
 
       - name: Get node deps
         ansible.builtin.command:
           cmd: npm install
-          chdir: '{{ bundle_src }}/assets'
+          chdir: '{{ src }}/assets'
 
       - name: Update browserslist package
         ansible.builtin.command:
           cmd: npx browserslist@latest --update-db
-          chdir: '{{ bundle_src }}/assets'
+          chdir: '{{ src }}/assets'
 
       - name: Build static resources
         ansible.builtin.command:
           cmd: npm run deploy
-          chdir: '{{ bundle_src }}/assets'
+          chdir: '{{ src }}/assets'
 
       - name: Build digest
         ansible.builtin.command:
           cmd: mix phx.digest
-          chdir: '{{ bundle_src }}'
+          chdir: '{{ src }}'
         environment:
           MIX_ENV: prod
 
       - name: Build release
         ansible.builtin.command:
           cmd: mix release --overwrite --path '{{ release_dir }}'
-          chdir: '{{ bundle_src }}'
+          chdir: '{{ src }}'
         environment:
           MIX_ENV: prod
+          BUNDLE: '{{bundle}}'
 
       - name: Run migrations
         ansible.builtin.command:
-          cmd: '{{ release_dir }}/bin/{{bundle}} eval "{{bundle.title()}}.Release.migrate"'
-          chdir: '{{ bundle_src }}'
+          cmd: '{{ release_dir }}/bin/core eval "Core.Release.migrate"'
+          chdir: '{{ src }}'
         environment:
           MIX_ENV: prod
           DB_NAME: '{{db_name}}'

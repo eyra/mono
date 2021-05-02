@@ -1,41 +1,53 @@
-BUNDLES=$(wildcard apps/bundles/*)
-FRAMEWORKS=$(wildcard apps/frameworks/*)
+BUNDLES=$(wildcard core/bundles/*)
+FRAMEWORKS=$(wildcard frameworks/*)
+MIX_PROJECTS=${FRAMEWORKS} core
 
+.PHONY: all
 all: test format compile credo deps
 
+.PHONY: setup
 setup: install_assets
 
+.PHONY: install_assets
 install_assets:
 	@echo "Installing assets"
-	@cd ./assets && npm install
+	@cd ./core/assets && npm install
 
+.PHONY: prepare
 prepare: test format compile credo
 
-dialyzer: ${BUNDLES:%=dialyzer/%} ${FRAMEWORKS:%=dialyzer/%} dialyzer/apps/core
-dialyzer/%:
-	cd $* && mix dialyzer --force-check
+.PHONY: dialyzer
+dialyzer:
+	cd core && mix dialyzer --force-check
 
-test: ${BUNDLES:%=test/%} ${FRAMEWORKS:%=test/%} test/apps/core
+.PHONY: test
+test: ${MIX_PROJECTS:%=test/%}
 test/%:
 	cd $* && mix test
 
-format: ${BUNDLES:%=format/%} ${FRAMEWORKS:%=format/%} format/apps/core
+.PHONY: format
+format: ${MIX_PROJECTS:%=format/%}
 format/%:
 	cd $* && mix format
 
-credo: ${BUNDLES:%=credo/%} ${FRAMEWORKS:%=credo/%} credo/apps/core
+.PHONY: credo
+credo: ${MIX_PROJECTS:%=credo/%}
 credo/%:
 	cd $* && mix credo
 
-compile: ${BUNDLES:%=compile/%}
-compile/%:
+.PHONY: compile
+compile: ${MIX_PROJECTS:%=%/_build}
+%/_build:
 	cd $* && mix compile --force --warnings-as-errors
 
-deps: ${BUNDLES:%=deps/%} ${FRAMEWORKS:%=deps/%} deps/apps/core
-deps/%:
+.PHONY: deps
+deps: ${MIX_PROJECTS:%=%/deps}
+%/deps:
 	cd $* && mix deps.get
 
-run_link: run/apps/bundles/link
-run/%:
-	cd $* && make run
-
+.PHONY: docs
+docs: ${MIX_PROJECTS:%=%/doc}
+%/doc:
+	mkdir -p doc
+	cd $* && mix docs
+	cp -R $*/doc/ doc/`basename $*`

@@ -12,14 +12,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Create docs folder
-        run: mkdir doc
+      - id: setup-elixir
+        uses: erlef/setup-elixir@v1
+        with:
+          otp-version: '23.2'
+          elixir-version: '1.11.3'
+
+      - name: Setup the Elixir project
+        run: make deps
 
       - name: Generate the docs
-        run: docker-compose run docs
+        run: make docs
 
       - name: Publish documentation
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./doc/output
+          publish_dir: ./doc/
