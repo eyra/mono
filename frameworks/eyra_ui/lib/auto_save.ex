@@ -9,6 +9,7 @@ defmodule EyraUI.AutoSave do
   @save_delay 1
   @hide_message_delay 3
 
+  @callback init(params :: %{}, session :: map(), socket :: Socket.t()) :: Socket.t()
   @callback load(params :: %{}, session :: map(), socket :: Socket.t()) :: any()
   @callback save(changeset :: any()) :: any()
   @callback get_changeset(entity :: any(), type :: atom(), attrs :: any()) :: any()
@@ -41,7 +42,7 @@ defmodule EyraUI.AutoSave do
     {:noreply,
      socket
      |> assign(changeset: changeset)
-     |> put_flash(:error, dgettext("eyra-ui", "Please correct the indicated errors."))}
+     |> put_error_flash()}
   end
 
   def handle_success(socket, changeset, entity_name, entity) do
@@ -72,7 +73,17 @@ defmodule EyraUI.AutoSave do
     |> clear_flash()
   end
 
-  def mount(entity_name, entity, changeset, path_provider, socket) do
+  def put_error_flash(socket) do
+    socket
+    |> put_flash(:error, dgettext("eyra-ui", "error.flash"))
+  end
+
+  def put_saved_flash(socket) do
+    socket
+    |> put_flash(:info, dgettext("eyra-ui", "saved.info.flash"))
+  end
+
+  def mount(entity_name, entity, changeset, socket) do
     socket =
       socket
       |> assign(
@@ -80,8 +91,7 @@ defmodule EyraUI.AutoSave do
         save_changeset: changeset,
         save_timer: nil,
         hide_message_timer: nil,
-        focus: nil,
-        path_provider: path_provider
+        focus: nil
       )
       |> assign(entity_name, entity)
 
@@ -104,10 +114,10 @@ defmodule EyraUI.AutoSave do
       data(focus, :any)
 
       def mount(params, session, socket) do
-        path_provider = Map.get(session, "path_provider")
+        socket = init(params, session, socket)
         entity = load(params, session, socket)
         changeset = get_changeset(entity, :mount, %{})
-        AutoSave.mount(unquote(entity_name), entity, changeset, path_provider, socket)
+        AutoSave.mount(unquote(entity_name), entity, changeset, socket)
       end
 
       def handle_event("save", params, socket) do
@@ -134,7 +144,7 @@ defmodule EyraUI.AutoSave do
         {:noreply,
          socket
          |> assign(unquote(entity_name), entity)
-         |> put_flash(:info, EyraUI.Gettext.dgettext("eyra-study", "Saved"))
+         |> AutoSave.put_saved_flash()
          |> AutoSave.schedule_hide_message()}
       end
 

@@ -67,6 +67,7 @@ module.exports = {
         "form" : "400px",
         "card": "376px",
         "image-preview": "200px",
+        "image-preview-circle": "150px",
         "popup-md": "730px",
         "popup-lg": "1228px",
         "button-sm": "14px",
@@ -88,6 +89,7 @@ module.exports = {
         "logo-sm" : "48px",
         "image-card": "200px",
         "image-preview": "150px",
+        "image-preview-circle": "150px",
         "button-sm": "14px",
       },
       fontFamily: {

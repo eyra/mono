@@ -10,6 +10,12 @@ defmodule CoreWeb.SurveyTool.Edit do
 
   alias Core.SurveyTools
 
+  @impl true
+  def init(_params, _session, socket) do
+    socket
+  end
+
+  @impl true
   def load(%{"id" => id}, _session, _socket) do
     SurveyTools.get_survey_tool!(id)
   end

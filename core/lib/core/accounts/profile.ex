@@ -8,14 +8,19 @@ defmodule Core.Accounts.Profile do
 
   schema "user_profiles" do
     field(:fullname, :string)
+    field(:photo_url, :string)
     belongs_to(:user, User)
     timestamps()
   end
 
+  @required_fields ~w(fullname)a
+
+  @fields ~w(fullname photo_url)a
+
   @doc false
   def changeset(profile, attrs) do
     profile
-    |> cast(attrs, [:fullname])
-    |> validate_required([:fullname])
+    |> cast(attrs, @fields)
+    |> validate_required(@required_fields)
   end
 end

@@ -22,6 +22,11 @@ msgid "timestamp.yesterday"
 msgstr "gisteren"
 
 #, elixir-format
-#: lib/auto_save.ex:45
-msgid "Please correct the indicated errors."
-msgstr "Er zijn wat problemen gevonden op de pagina. Probeer deze eerst op te lossen"
+#: lib/auto_save.ex:79
+msgid "error.flash"
+msgstr "De pagina kon niet worden opgeslagen."
+
+#, elixir-format
+#: lib/auto_save.ex:84
+msgid "saved.info.flash"
+msgstr "Opgeslagen"

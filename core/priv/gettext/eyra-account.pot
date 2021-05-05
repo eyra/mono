@@ -11,22 +11,22 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:58
+#: lib/core_web/live/user/profile.ex:136
 msgid "displayname.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:52
+#: lib/core_web/live/user/signup.ex:51
 msgid "email.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:57
+#: lib/core_web/live/user/profile.ex:135
 msgid "fullname.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:53
+#: lib/core_web/live/user/signup.ex:52
 msgid "password.label"
 msgstr ""
 
@@ -36,12 +36,12 @@ msgid "profile.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:54
+#: lib/core_web/live/user/profile.ex:133
 msgid "profile.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:56
+#: lib/core_web/live/user/profile.ex:157
 msgid "researcher.label"
 msgstr ""
 
@@ -51,39 +51,39 @@ msgid "signin.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:57
+#: lib/core_web/live/user/signup.ex:56
 msgid "signin.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:58
+#: lib/core_web/live/user/signup.ex:57
 msgid "signin.link"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:54
+#: lib/core_web/live/user/signup.ex:53
 msgid "signup.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:50
+#: lib/core_web/live/user/signup.ex:49
 msgid "signup.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/survey_tool/edit.ex:32
-#: lib/core_web/live/survey_tool/new.ex:44
+#: lib/core_web/live/survey_tool/edit.ex:36
+#: lib/core_web/live/survey_tool/new.ex:43
 msgid "survey_url.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/survey_tool/edit.ex:31
-#: lib/core_web/live/survey_tool/new.ex:43
+#: lib/core_web/live/survey_tool/edit.ex:35
+#: lib/core_web/live/survey_tool/new.ex:42
 msgid "title.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:60
+#: lib/core_web/live/user/profile.ex:160
 msgid "signout.button"
 msgstr ""
 
@@ -95,4 +95,24 @@ msgstr ""
 #, elixir-format
 #: lib/core_web/live/user/confirm_token.ex:80
 msgid "confirm.token.resend_button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:137
+msgid "photo.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:150
+msgid "choose.profile.photo.file"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:104
+msgid "photo.upload.error.flash"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:147
+msgid "choose.other.profile.photo.file"
 msgstr ""

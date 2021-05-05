@@ -12,12 +12,12 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:111
+#: lib/core_web/live/dashboard.ex:110
 msgid "study.index.subtitle"
 msgstr "Studies"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:110
+#: lib/core_web/live/dashboard.ex:109
 msgid "study.index.title"
 msgstr "Overzicht"
 
@@ -27,27 +27,27 @@ msgid "dashboard.button"
 msgstr "Overzicht"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:134
+#: lib/core_web/live/dashboard.ex:133
 msgid "study.all.title"
 msgstr "Beschikbare studies:"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:115
+#: lib/core_web/live/dashboard.ex:114
 msgid "study.highlighted.title"
 msgstr "Mijn studies:"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:177
+#: lib/core_web/live/study/edit.ex:180
 msgid "study.edit.title"
 msgstr "Studie"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:208
+#: lib/core_web/live/study/edit.ex:211
 msgid "title.label"
 msgstr "Pas de titel aan"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:127
+#: lib/core_web/live/dashboard.ex:126
 msgid "add.card.title"
 msgstr "Maak een nieuwe studie aan"
 
@@ -92,11 +92,11 @@ msgid "themes.technology"
 msgstr "Technologie"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:143
+#: lib/core_web/live/study/edit.ex:146
 msgid "Please correct the indicated errors."
 msgstr "Er zijn wat problemen gevonden op de pagina. Probeer deze eerst op te lossen"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:162
+#: lib/core_web/live/study/edit.ex:165
 msgid "Saved"
 msgstr "Opgeslagen"

@@ -3,11 +3,13 @@ defmodule EyraUI.ImagePreview do
   use Surface.Component
 
   prop(image_url, :string)
+  prop(placeholder, :string, required: true)
+  prop(shape, :string, default: "w-image-preview h-image-preview rounded")
 
   def render(assigns) do
     ~H"""
-    <div class="w-image-preview h-image-preview rounded overflow-hidden bg-grey4">
-      <img class="object-cover w-full h-full" src="{{ @image_url }}" />
+    <div class="overflow-hidden bg-grey4 border-2 border-grey4 {{@shape}}">
+      <img class="object-cover w-full h-full" src="{{ if @image_url do @image_url else @placeholder end }}" />
     </div>
     """
   end

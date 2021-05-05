@@ -11,12 +11,13 @@ defmodule Core.Accounts.UserProfileEdit do
     field(:displayname, :string)
     field(:researcher, :boolean)
     field(:fullname, :string)
+    field(:photo_url, :string)
   end
 
   @required_fields ~w(displayname)a
 
   @user_fields ~w(displayname researcher)a
-  @profile_fields ~w(fullname)a
+  @profile_fields ~w(fullname photo_url)a
 
   @fields @user_fields ++ @profile_fields
 

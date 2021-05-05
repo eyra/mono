@@ -12,76 +12,76 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/index.ex:31
+#: lib/core_web/live/index.ex:30
 msgid "welcome.title"
 msgstr "Marketplace"
 
 #, elixir-format
-#: lib/core_web/live/index.ex:48
+#: lib/core_web/live/index.ex:47
 msgid "dashboard-button"
 msgstr "Go to study overview"
 
 #, elixir-format
-#: lib/core_web/live/index.ex:32
+#: lib/core_web/live/index.ex:31
 msgid "welcome.subtitle"
 msgstr "For research"
 
 #, elixir-format
-#: lib/core_web/live/index.ex:41
+#: lib/core_web/live/index.ex:40
 msgid "link.message"
 msgstr "Do you want to empower science? Register now and choose in which study you would like to participate, by for example answering questions or performing a task. Are you a social sciences or humanities researcher? Register now, set up a study and find the right participants."
 
 #, elixir-format
-#: lib/core_web/live/index.ex:38
+#: lib/core_web/live/index.ex:37
 msgid "link.title"
 msgstr "Empower Science"
 
 #, elixir-format
-#: lib/core_web/live/index.ex:52
+#: lib/core_web/live/index.ex:51
 msgid "signup.card.title"
 msgstr "Do you want to join or set up a study?"
 
 #, elixir-format
-#: lib/core_web/live/index.ex:22
+#: lib/core_web/live/index.ex:21
 msgid "member.card.title"
 msgstr "Welcome back!"
 
 #, elixir-format
-#: lib/core_web/live/index.ex:26
+#: lib/core_web/live/index.ex:25
 msgid "member.profile.card.title"
 msgstr "Hello %{user}, welcome back!"
 
 #, elixir-format
-#: lib/core_web/live/index.ex:53
+#: lib/core_web/live/index.ex:52
 msgid "signup.card.button"
 msgstr "Sign up for free"
 
 #, elixir-format
-#: lib/core_web/live/index.ex:57
+#: lib/core_web/live/index.ex:56
 msgid "usp1.description"
 msgstr "Are you looking for a study to participate in? This platform provides an overview of studies that are open for participation."
 
 #, elixir-format
-#: lib/core_web/live/index.ex:57
+#: lib/core_web/live/index.ex:56
 msgid "usp1.title"
 msgstr "Marketplace for Research"
 
 #, elixir-format
-#: lib/core_web/live/index.ex:58
+#: lib/core_web/live/index.ex:57
 msgid "usp2.description"
 msgstr "Having trouble finding enough participants for your research in the Netherlands? Publish your study on this platform and start recruiting participants."
 
 #, elixir-format
-#: lib/core_web/live/index.ex:58
+#: lib/core_web/live/index.ex:57
 msgid "usp2.title"
 msgstr "Research in the Netherlands"
 
 #, elixir-format
-#: lib/core_web/live/index.ex:59
+#: lib/core_web/live/index.ex:58
 msgid "usp3.description"
 msgstr "Do you have ideas on what would motivate you to participate more? Or can we help to make it easier to set up a study? Let us know!"
 
 #, elixir-format
-#: lib/core_web/live/index.ex:59
+#: lib/core_web/live/index.ex:58
 msgid "usp3.title"
 msgstr "Improving Research Together"
