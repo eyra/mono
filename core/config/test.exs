@@ -27,4 +27,4 @@ config :core, CoreWeb.Endpoint,
   force_ssl: false,
   server: false
 
-config :test, Core.SurfConext, oidc_module: Core.SurfContext.FakeOIDC
+config :core, Core.SurfConext, oidc_module: Core.SurfContext.FakeOIDC

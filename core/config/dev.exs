@@ -33,6 +33,9 @@ config :core, CoreWeb.Endpoint,
     ]
   ]
 
+config :exsync,
+  addition_dirs: ["../../frameworks"]
+
 # Load developer machine specific config. This can be used to setup secrets and
 # such to connect with 3rd party services.
 try do

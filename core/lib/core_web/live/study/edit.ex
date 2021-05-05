@@ -27,6 +27,11 @@ defmodule CoreWeb.Study.Edit do
   data(uri_origin, :string)
 
   @impl true
+  def init(_params, _session, socket) do
+    socket
+  end
+
+  @impl true
   def load(%{"id" => id}, _session, _socket) do
     study = Studies.get_study!(id)
     study_survey = study |> load_survey_tool()
@@ -168,7 +173,7 @@ defmodule CoreWeb.Study.Edit do
         <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="open">
           <div class="flex flex-row items-center justify-center w-full h-full">
             <div class="w-5/6 md:w-popup-md lg:w-popup-lg" @click.away="open = false, $parent.overlay = false">
-              <ImageCatalogPicker conn={{@socket}} static_path={{&CoreWeb.Router.Helpers.static_path/2}} initial_query={{@study_edit.initial_image_query}} id={{:image_picker}} image_catalog={{Core.ImageCatalog.Unsplash}} />
+              <ImageCatalogPicker conn={{@socket}} static_path={{&Routes.static_path/2}} initial_query={{@study_edit.initial_image_query}} id={{:image_picker}} image_catalog={{Core.ImageCatalog.Unsplash}} />
             </div>
           </div>
         </div>
@@ -216,7 +221,7 @@ defmodule CoreWeb.Study.Edit do
             <BodyMedium>{{dgettext("eyra-survey", "image.label")}}</BodyMedium>
             <Spacing value="XS" />
             <div class="flex flex-row">
-              <ImagePreview image_url={{ @study_edit.image_url }} />
+              <ImagePreview image_url={{ @study_edit.image_url }} placeholder="" />
               <Spacing value="S" direction="l" />
               <div class="flex-wrap">
                 <SecondaryAlpineButton click="open = true, $parent.overlay = true" label={{dgettext("eyra-survey", "search.different.image.button")}} />

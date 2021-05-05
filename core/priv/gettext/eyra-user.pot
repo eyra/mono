@@ -47,6 +47,6 @@ msgid "user.password_reset.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/controllers/user_session_controller.ex:24
+#: lib/core_web/controllers/user_session_controller.ex:20
 msgid "Invalid email or password"
 msgstr ""
