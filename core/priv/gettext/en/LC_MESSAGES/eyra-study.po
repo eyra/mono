@@ -37,14 +37,14 @@ msgid "study.highlighted.title"
 msgstr "My studies:"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:180
+#: lib/core_web/live/study/edit.ex:187
 msgid "study.edit.title"
 msgstr "Study"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:211
+#: lib/core_web/live/study/edit.ex:218
 msgid "title.label"
-msgstr "Change the title"
+msgstr "Title"
 
 #, elixir-format
 #: lib/core_web/live/dashboard.ex:126
@@ -92,11 +92,11 @@ msgid "themes.technology"
 msgstr "Technology"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:146
+#: lib/core_web/live/study/edit.ex:161
 msgid "Please correct the indicated errors."
-msgstr ""
+msgstr "Please correct the indicated errors."
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:165
+#: lib/core_web/live/study/edit.ex:173
 msgid "Saved"
-msgstr ""
+msgstr "Saved"

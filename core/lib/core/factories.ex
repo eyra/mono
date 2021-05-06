@@ -19,7 +19,7 @@ defmodule Core.Factories do
 
   def build(:researcher) do
     :member
-    |> build(researcher: true)
+    |> build(%{researcher: true})
     |> struct!(%{
       profile: %Profile{
         fullname: Faker.Person.name()
@@ -39,11 +39,21 @@ defmodule Core.Factories do
     }
   end
 
-  def build(:survey_tool_participant) do
-    %SurveyTools.Participant{
-      survey_tool: build(:survey_tool),
-      user: build(:member)
+  def build(:author) do
+    %Studies.Author{
+      fullname: Faker.Person.name(),
+      displayname: Faker.Person.first_name()
     }
+  end
+
+  def build(:survey_tool_participant) do
+    build(
+      :survey_tool_participant,
+      %{
+        survey_tool: build(:survey_tool),
+        user: build(:member)
+      }
+    )
   end
 
   def build(:survey_tool) do
@@ -62,17 +72,45 @@ defmodule Core.Factories do
     %SurveyTools.Participant{}
   end
 
-  def build(:member, attributes) do
-    {password, attributes} = Keyword.pop(attributes, :password)
+  def build(:author, %{} = attributes) do
+    {researcher, attributes} = Map.pop(attributes, :researcher)
+    {study, _attributes} = Map.pop(attributes, :study)
+
+    build(:author)
+    |> struct!(%{
+      user: researcher,
+      study: study
+    })
+  end
+
+  def build(:study, %{} = attributes) do
+    build(:study)
+    |> struct!(%{
+      authors: many_relationship(:authors, attributes)
+    })
+  end
+
+  def build(:member, %{} = attributes) do
+    {password, attributes} = Map.pop(attributes, :password)
 
     build(:member)
     |> struct!(
       if password do
-        Keyword.put(attributes, :hashed_password, Bcrypt.hash_pwd_salt(password))
+        Map.put(attributes, :hashed_password, Bcrypt.hash_pwd_salt(password))
       else
         attributes
       end
     )
+  end
+
+  def build(:survey_tool_participant, %{} = attributes) do
+    {survey_tool, _attributes} = Map.pop(attributes, :survey_tool, build(:survey_tool))
+    {user, _attributes} = Map.pop(attributes, :user, build(:member))
+
+    %SurveyTools.Participant{
+      survey_tool: survey_tool,
+      user: user
+    }
   end
 
   def build(:survey_tool, %{} = attributes) do
@@ -97,13 +135,15 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
-  def build(factory_name, attributes) do
+  def build(factory_name, %{} = attributes) do
     factory_name |> build() |> struct!(attributes)
   end
 
-  def insert!(factory_name, attributes \\ [])
+  def insert!(factory_name) do
+    insert!(factory_name, %{})
+  end
 
-  def insert!(:survey_tool_task, attributes) do
+  def insert!(:survey_tool_task, %{} = attributes) do
     %{survey_tool: survey_tool, user: member} = insert!(:survey_tool_participant)
 
     %SurveyTools.SurveyToolTask{
@@ -115,11 +155,21 @@ defmodule Core.Factories do
     |> Repo.insert!()
   end
 
-  def insert!(factory_name, attributes) do
+  def insert!(factory_name, %{} = attributes) do
     factory_name |> build(attributes) |> Repo.insert!()
   end
 
   def map_build(enumerable, factory, attributes_fn) do
     enumerable |> Enum.map(&build(factory, attributes_fn.(&1)))
+  end
+
+  def many_relationship(name, %{} = attributes) do
+    {result, _attributes} = Map.pop(attributes, name)
+
+    if result === nil do
+      []
+    else
+      result
+    end
   end
 end

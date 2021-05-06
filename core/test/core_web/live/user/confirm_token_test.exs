@@ -9,7 +9,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
 
   describe "as a visitor" do
     test "a valid token activates the account", %{conn: conn} do
-      user = Factories.insert!(:member, confirmed_at: nil)
+      user = Factories.insert!(:member, %{confirmed_at: nil})
 
       token =
         extract_user_token(fn url ->
@@ -23,7 +23,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
     end
 
     test "a valid token can be used only once", %{conn: conn} do
-      user = Factories.insert!(:member, confirmed_at: nil)
+      user = Factories.insert!(:member, %{confirmed_at: nil})
 
       token =
         extract_user_token(fn url ->
@@ -38,7 +38,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
     end
 
     test "an invalid token does not activate the account", %{conn: conn} do
-      user = Factories.insert!(:member, confirmed_at: nil)
+      user = Factories.insert!(:member, %{confirmed_at: nil})
       live(conn, Routes.live_path(conn, ConfirmToken, "abc"))
 
       refute user.confirmed_at
@@ -74,7 +74,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
     end
 
     test "resend form sends new token to not-yet activated user", %{conn: conn} do
-      user = Factories.insert!(:member, confirmed_at: nil)
+      user = Factories.insert!(:member, %{confirmed_at: nil})
       {:ok, view, _html} = live(conn, Routes.live_path(conn, ConfirmToken, "test"))
 
       html =
@@ -87,7 +87,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
     end
 
     test "resend form sends login info to already activated user", %{conn: conn} do
-      user = Factories.insert!(:member, confirmed_at: nil)
+      user = Factories.insert!(:member, %{confirmed_at: nil})
       {:ok, view, _html} = live(conn, Routes.live_path(conn, ConfirmToken, "test"))
 
       html =

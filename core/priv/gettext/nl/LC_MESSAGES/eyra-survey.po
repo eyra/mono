@@ -12,52 +12,52 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:249
+#: lib/core_web/live/study/edit.ex:258
 msgid "config.nrofsubjects.label"
 msgstr "Aantal vereiste subjects"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:264
+#: lib/core_web/live/study/edit.ex:291
 msgid "config.url.label"
 msgstr "Link naar survey"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:262
+#: lib/core_web/live/study/edit.ex:289
 msgid "config.title"
 msgstr "Survey instellingen"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:254 lib/core_web/live/study/public.ex:103
+#: lib/core_web/live/study/edit.ex:263 lib/core_web/live/study/public.ex:103
 msgid "config.devices.title"
 msgstr "Beschikbaarheid"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:257 lib/core_web/live/study/public.ex:111
+#: lib/core_web/live/study/edit.ex:266 lib/core_web/live/study/public.ex:111
 msgid "desktop.enabled.label"
 msgstr "Desktop"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:256 lib/core_web/live/study/public.ex:108
+#: lib/core_web/live/study/edit.ex:265 lib/core_web/live/study/public.ex:108
 msgid "tablet.enabled.label"
 msgstr "Tablet"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:237
+#: lib/core_web/live/study/edit.ex:246
 msgid "info.label"
-msgstr "Wat kan een subject verwachten van de survey?"
+msgstr "Over het onderzoek"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:278
+#: lib/core_web/live/study/edit.ex:305
 msgid "publish.button"
 msgstr "Publiceer"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:273
+#: lib/core_web/live/study/edit.ex:300
 msgid "unpublish.button"
 msgstr "Maak publicatie ongedaan"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:281
+#: lib/core_web/live/study/edit.ex:308
 msgid "delete.button"
 msgstr "Verwijder"
 
@@ -72,23 +72,23 @@ msgid "duration.public.label"
 msgstr "Geschatte duur"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:241
+#: lib/core_web/live/study/edit.ex:250
 msgid "duration.label"
 msgstr "Geschatte duur van het onderzoek"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:199 lib/core_web/view_model/card.ex:48
+#: lib/core_web/live/study/edit.ex:206 lib/core_web/view_model/card.ex:48
 msgid "published.false.label"
 msgstr "Concept"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:233 lib/core/studies/study_public.ex:59
-#: lib/core_web/live/study/edit.ex:196
+#: lib/core/studies/study_edit.ex:256 lib/core/studies/study_public.ex:59
+#: lib/core_web/live/study/edit.ex:203
 msgid "published.true.label"
 msgstr "Gepubliceerd"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:237 lib/core/studies/study_public.ex:62
+#: lib/core/studies/study_edit.ex:260 lib/core/studies/study_public.ex:62
 msgid "created.label"
 msgstr "Aangemaakt"
 
@@ -113,27 +113,27 @@ msgid "completed.message"
 msgstr "Je hebt deze vragenlijst al succesvol doorlopen."
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:184
+#: lib/core_web/live/study/edit.ex:191
 msgid "completed.label"
 msgstr "Afgerond"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:183
+#: lib/core_web/live/study/edit.ex:190
 msgid "status.title"
 msgstr "Voortgang"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:186
+#: lib/core_web/live/study/edit.ex:193
 msgid "vacant.label"
 msgstr "Openstaand"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:185
+#: lib/core_web/live/study/edit.ex:192
 msgid "pending.label"
 msgstr "Bezig"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:255 lib/core_web/live/study/public.ex:105
+#: lib/core_web/live/study/edit.ex:264 lib/core_web/live/study/public.ex:105
 msgid "phone.enabled.label"
 msgstr "Telefoon"
 
@@ -153,56 +153,96 @@ msgid "open.spots.label"
 msgstr "%{count} deelnemers gezocht"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:245
+#: lib/core_web/live/study/edit.ex:254
 msgid "reward.label"
 msgstr "Beloning in euro centen"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:236
+#: lib/core_web/live/study/edit.ex:244
 msgid "about.title"
-msgstr "Over het onderzoek"
+msgstr "Beschrijving"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:240 lib/core_web/view_model/card.ex:36
+#: lib/core_web/live/study/edit.ex:249 lib/core_web/view_model/card.ex:36
 msgid "duration.title"
 msgstr "Duur"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:220
+#: lib/core_web/live/study/edit.ex:228
 msgid "image.title"
 msgstr "Afbeelding"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:232
+#: lib/core_web/live/study/edit.ex:240
 msgid "organisation.title"
 msgstr "Instantie"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:244 lib/core_web/view_model/card.ex:37
+#: lib/core_web/live/study/edit.ex:253 lib/core_web/view_model/card.ex:37
 msgid "reward.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:248
+#: lib/core_web/live/study/edit.ex:257
 msgid "subjects.title"
 msgstr "Subjects"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:214
+#: lib/core_web/live/study/edit.ex:222
 msgid "themes.title"
 msgstr "Thema's"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:221
+#: lib/core_web/live/study/edit.ex:229
 msgid "image.label"
 msgstr "De gekozen afbeelding wordt zichtbaar op je survey in het overzicht en op de detailpagina van je survey."
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:215
+#: lib/core_web/live/study/edit.ex:223
 msgid "themes.label"
 msgstr "Selecteer een of meerdere thema's."
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:227
+#: lib/core_web/live/study/edit.ex:235
 msgid "search.different.image.button"
 msgstr "Selecteer andere afbeelding"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:245
+msgid "expectations.label"
+msgstr "Wat kan de participant verwachten van de survey?"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:283
+msgid "banner.subtitle.label"
+msgstr "Ondertitel"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:269
+msgid "banner.title"
+msgstr "Banner"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:282
+msgid "banner.title.label"
+msgstr "Titel"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:284
+msgid "banner.url.label"
+msgstr "Link"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:276
+msgid "choose.banner.photo.file"
+msgstr "Selecteer een foto"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:277
+msgid "choose.other.banner.photo.file"
+msgstr "Selecteer andere foto"
+
+#, elixir-format
+#: lib/core_web/live/study/edit.ex:219
+msgid "subtitle.label"
+msgstr "Ondertitel"

@@ -7,7 +7,15 @@ defmodule CoreWeb.Live.Study.Edit.Test do
   alias Core.Factories
 
   def setup_study(_ctx) do
-    study = Factories.insert!(:survey_tool).study
+    researcher = Factories.insert!(:researcher)
+    study = Factories.insert!(:study)
+    _author = Factories.insert!(:author, %{study: study, researcher: researcher})
+    survey_tool = Factories.insert!(:survey_tool, %{study: study})
+    user = Factories.insert!(:member)
+
+    _survey_tool_participant =
+      Factories.insert!(:survey_tool_participant, %{survey_tool: survey_tool, user: user})
+
     {:ok, study: study}
   end
 
@@ -26,7 +34,7 @@ defmodule CoreWeb.Live.Study.Edit.Test do
       description = Faker.Lorem.sentence()
 
       view
-      |> element("form", "search")
+      |> form("#main_form")
       |> render_change(%{study: %{title: title, description: description}})
     end
   end

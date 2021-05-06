@@ -14,6 +14,8 @@ defmodule Core.SurveyTools.SurveyTool do
     belongs_to(:study, Study)
 
     field(:title, :string)
+    field(:subtitle, :string)
+    field(:expectations, :string)
     field(:description, :string)
     field(:survey_url, :string)
     field(:subject_count, :integer)
@@ -27,6 +29,10 @@ defmodule Core.SurveyTools.SurveyTool do
     field(:marks, {:array, :string})
     field(:reward_currency, Ecto.Enum, values: [:eur, :usd, :gbp, :chf, :nok, :sek])
     field(:reward_value, :integer)
+    field(:banner_photo_url, :string)
+    field(:banner_title, :string)
+    field(:banner_subtitle, :string)
+    field(:banner_url, :string)
 
     has_many(:tasks, SurveyToolTask)
     many_to_many(:participants, User, join_through: :survey_tool_participants)
@@ -38,7 +44,7 @@ defmodule Core.SurveyTools.SurveyTool do
     def id(survey_tool), do: survey_tool.auth_node_id
   end
 
-  @fields ~w(title description survey_url subject_count duration phone_enabled tablet_enabled desktop_enabled published_at themes image_id marks reward_currency reward_value)a
+  @fields ~w(title subtitle expectations description survey_url subject_count duration phone_enabled tablet_enabled desktop_enabled published_at themes image_id marks reward_currency reward_value banner_photo_url banner_title banner_subtitle banner_url)a
 
   @doc false
   def changeset(survey_tool, attrs) do

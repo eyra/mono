@@ -22,7 +22,9 @@ defmodule Core.Studies.StudyEdit do
     field(:study_id, :integer)
     field(:title, :string)
     # Survey Tool
+    field(:subtitle, :string)
     field(:survey_tool_id, :integer)
+    field(:expectations, :string)
     field(:description, :string)
     field(:survey_url, :string)
     field(:subject_count, :integer)
@@ -35,6 +37,10 @@ defmodule Core.Studies.StudyEdit do
     field(:image_id, :string)
     field(:reward_currency, :string)
     field(:reward_value, :integer)
+    field(:banner_photo_url, :string)
+    field(:banner_title, :string)
+    field(:banner_subtitle, :string)
+    field(:banner_url, :string)
     # Transient Form Fields
     # Maps to the more abstract SurveyTool.marks
     field(:organization, :string)
@@ -50,11 +56,11 @@ defmodule Core.Studies.StudyEdit do
   end
 
   @required_fields ~w(title byline)a
-  @required_fields_for_publish ~w(title description survey_url subject_count duration themes image_id reward_value byline organization)a
+  @required_fields_for_publish ~w(title subtitle expectations description survey_url subject_count duration themes image_id reward_value byline organization banner_photo_url banner_title banner_subtitle banner_url)a
 
   @transient_fields ~w(byline is_published subject_pending_count subject_completed_count subject_vacant_count theme_labels organization initial_image_query image_url)a
   @study_fields ~w(title)a
-  @survey_tool_fields ~w(description survey_url subject_count duration phone_enabled tablet_enabled desktop_enabled published_at themes image_id reward_currency reward_value)a
+  @survey_tool_fields ~w(subtitle expectations description survey_url subject_count duration phone_enabled tablet_enabled desktop_enabled published_at themes image_id reward_currency reward_value banner_photo_url banner_title banner_subtitle banner_url)a
 
   @fields @study_fields ++ @survey_tool_fields ++ @transient_fields
 
@@ -138,7 +144,7 @@ defmodule Core.Studies.StudyEdit do
     |> Map.put(:marks, marks)
   end
 
-  def create(study, survey_tool) do
+  def create(study, survey_tool, user, profile) do
     study_opts =
       study
       |> Map.take(@study_fields)
@@ -148,6 +154,10 @@ defmodule Core.Studies.StudyEdit do
       survey_tool
       |> Map.take(@survey_tool_fields)
       |> Map.put(:survey_tool_id, survey_tool.id)
+      |> put_default(:banner_photo_url, profile.photo_url)
+      |> put_default(:banner_title, user.displayname)
+      |> put_default(:banner_subtitle, profile.title)
+      |> put_default(:banner_url, profile.url)
 
     transient_opts =
       survey_tool
@@ -160,6 +170,14 @@ defmodule Core.Studies.StudyEdit do
       |> Map.merge(transient_opts)
 
     struct(Core.Studies.StudyEdit, opts)
+  end
+
+  defp put_default(map, key, value) do
+    if !Map.has_key?(map, key) || map[key] === nil do
+      map |> Map.put(key, value)
+    else
+      map
+    end
   end
 
   defp create_transient_opts(survey_tool) do
