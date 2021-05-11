@@ -1,0 +1,2 @@
+defmodule Next do
+end

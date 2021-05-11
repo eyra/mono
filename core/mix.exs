@@ -46,8 +46,8 @@ defmodule Core.MixProject do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "bundles", "test", "test/support"]
-  defp elixirc_paths(_), do: ["lib", "bundles"]
+  defp elixirc_paths(:test), do: ["bundles", "lib", "test", "test/support"]
+  defp elixirc_paths(_), do: ["bundles", "lib"]
 
   # Specifies your project dependencies.
   #
