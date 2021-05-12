@@ -8,6 +8,8 @@ defmodule Core.Accounts.Profile do
 
   schema "user_profiles" do
     field(:fullname, :string)
+    field(:title, :string)
+    field(:url, :string)
     field(:photo_url, :string)
     belongs_to(:user, User)
     timestamps()
@@ -15,7 +17,7 @@ defmodule Core.Accounts.Profile do
 
   @required_fields ~w(fullname)a
 
-  @fields ~w(fullname photo_url)a
+  @fields ~w(fullname title url photo_url)a
 
   @doc false
   def changeset(profile, attrs) do

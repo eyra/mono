@@ -3,8 +3,20 @@ defmodule CoreWeb.Study.Edit do
   The study page for owners.
   """
   use CoreWeb, :live_view
+  use CoreWeb.FileUploader
   use EyraUI.AutoSave, :study_edit
-  alias EyraUI.Form.{Form, TextInput, UrlInput, NumberInput, TextArea, Checkbox, RadioButtonGroup}
+
+  alias EyraUI.Form.{
+    Form,
+    TextInput,
+    UrlInput,
+    NumberInput,
+    TextArea,
+    Checkbox,
+    RadioButtonGroup,
+    PhotoInput
+  }
+
   alias EyraUI.Hero.HeroSmall
   alias EyraUI.Container.{ContentArea, Bar, BarItem}
   alias EyraUI.Text.{Title1, Title3, Title6, SubHead, BodyMedium}
@@ -17,6 +29,7 @@ defmodule CoreWeb.Study.Edit do
   alias EyraUI.ImagePreview
   alias CoreWeb.ImageCatalogPicker
 
+  alias Core.Accounts
   alias Core.Studies
   alias Core.Studies.{Study, StudyEdit}
   alias Core.SurveyTools
@@ -29,13 +42,16 @@ defmodule CoreWeb.Study.Edit do
   @impl true
   def init(_params, _session, socket) do
     socket
+    |> init_file_uploader(:photo)
   end
 
   @impl true
   def load(%{"id" => id}, _session, _socket) do
     study = Studies.get_study!(id)
+    [author | _] = Studies.list_authors(study)
+    profile = Accounts.get_profile(author.user)
     study_survey = study |> load_survey_tool()
-    StudyEdit.create(study, study_survey)
+    StudyEdit.create(study, study_survey, author.user, profile)
   end
 
   def load_survey_tool(%Study{} = study) do
@@ -60,7 +76,15 @@ defmodule CoreWeb.Study.Edit do
     end
   end
 
-  def save_valid(changeset) do
+  @impl true
+  def save_file(socket, uploaded_file) do
+    attrs = %{banner_photo_url: uploaded_file}
+    study_edit = socket.assigns[:study_edit]
+    changeset = get_changeset(study_edit, :auto_save, attrs)
+    update_changeset(socket, changeset)
+  end
+
+  defp save_valid(changeset) do
     study_edit = Ecto.Changeset.apply_changes(changeset)
     study_attrs = StudyEdit.to_study(study_edit)
     survey_tool_attrs = StudyEdit.to_survey_tool(study_edit)
@@ -76,7 +100,10 @@ defmodule CoreWeb.Study.Edit do
       study
       |> Studies.update_study(study_attrs)
 
-    StudyEdit.create(study, survey_tool)
+    [author | _] = Studies.list_authors(study)
+    profile = Accounts.get_profile(author.user)
+
+    StudyEdit.create(study, survey_tool, author.user, profile)
   end
 
   @impl true
@@ -91,41 +118,35 @@ defmodule CoreWeb.Study.Edit do
     {:noreply, assign(socket, uri_origin: uri_origin)}
   end
 
-  def handle_event("delete", _params, socket) do
-    study_edit = socket.assigns[:study_edit]
-
+  def handle_event("delete", _params, %{assigns: %{study_edit: study_edit}} = socket) do
     Studies.get_study!(study_edit.study_id)
     |> Studies.delete_study()
 
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Dashboard))}
   end
 
-  def handle_event("publish", _params, socket) do
+  def handle_event("publish", _params, %{assigns: %{study_edit: study_edit}} = socket) do
     attrs = %{published_at: NaiveDateTime.utc_now()}
-    study_edit = socket.assigns[:study_edit]
     changeset = get_changeset(study_edit, :submit, attrs)
-    update_changeset(socket, changeset)
+    {:noreply, socket |> update_changeset(changeset)}
   end
 
-  def handle_event("unpublish", _params, socket) do
+  def handle_event("unpublish", _params, %{assigns: %{study_edit: study_edit}} = socket) do
     attrs = %{published_at: nil}
-    study_edit = socket.assigns[:study_edit]
     changeset = get_changeset(study_edit, :auto_save, attrs)
-    update_changeset(socket, changeset)
+    {:noreply, socket |> update_changeset(changeset)}
   end
 
-  def handle_info({:theme_selector, themes}, socket) do
+  def handle_info({:theme_selector, themes}, %{assigns: %{study_edit: study_edit}} = socket) do
     attrs = %{themes: themes}
-    study_edit = socket.assigns[:study_edit]
     changeset = get_changeset(study_edit, :auto_save, attrs)
-    update_changeset(socket, changeset)
+    {:noreply, socket |> update_changeset(changeset)}
   end
 
-  def handle_info({:image_picker, image_id}, socket) do
+  def handle_info({:image_picker, image_id}, %{assigns: %{study_edit: study_edit}} = socket) do
     attrs = %{image_id: image_id}
-    study_edit = socket.assigns[:study_edit]
     changeset = get_changeset(study_edit, :auto_save, attrs)
-    update_changeset(socket, changeset)
+    {:noreply, socket |> update_changeset(changeset)}
   end
 
   def update_changeset(socket, changeset) do
@@ -139,32 +160,22 @@ defmodule CoreWeb.Study.Edit do
   end
 
   def handle_validation_error(socket, changeset) do
-    {
-      :noreply,
-      socket
-      |> assign(changeset: changeset)
-      |> put_flash(:error, dgettext("eyra-study", "Please correct the indicated errors."))
-    }
+    socket
+    |> assign(changeset: changeset)
+    |> put_flash(:error, dgettext("eyra-study", "Please correct the indicated errors."))
   end
 
   def handle_success(socket, changeset) do
     study_edit = save_valid(changeset)
 
-    socket =
-      socket
-      |> assign(
-        study_edit: study_edit,
-        changeset: changeset,
-        save_changeset: changeset
-      )
-
-    {
-      :noreply,
-      socket
-      |> assign(study_edit: study_edit)
-      |> put_flash(:info, dgettext("eyra-study", "Saved"))
-      |> AutoSave.schedule_hide_message()
-    }
+    socket
+    |> assign(
+      study_edit: study_edit,
+      changeset: changeset,
+      save_changeset: changeset
+    )
+    |> put_flash(:info, dgettext("eyra-study", "Saved"))
+    |> AutoSave.schedule_hide_message()
   end
 
   def render(assigns) do
@@ -207,8 +218,9 @@ defmodule CoreWeb.Study.Edit do
           <Spacing value="L" />
 
           <Title1>{{ @study_edit.title }}</Title1>
-          <Form changeset={{@changeset}} change_event="save" focus={{@focus}}>
+          <Form id="main_form" changeset={{@changeset}} change_event="save" focus={{@focus}}>
             <TextInput field={{:title}} label_text={{dgettext("eyra-study", "title.label")}} />
+            <TextInput field={{:subtitle}} label_text={{dgettext("eyra-survey", "subtitle.label")}} />
 
             <Spacing value="XL" />
             <Title3>{{dgettext("eyra-survey", "themes.title")}}</Title3>
@@ -224,7 +236,7 @@ defmodule CoreWeb.Study.Edit do
               <ImagePreview image_url={{ @study_edit.image_url }} placeholder="" />
               <Spacing value="S" direction="l" />
               <div class="flex-wrap">
-                <SecondaryAlpineButton click="open = true, $parent.overlay = true" label={{dgettext("eyra-survey", "search.different.image.button")}} />
+                <SecondaryAlpineButton click="$parent.open = true, $parent.$parent.overlay = true" label={{dgettext("eyra-survey", "search.different.image.button")}} />
               </div>
             </div>
             <Spacing value="XL" />
@@ -234,6 +246,7 @@ defmodule CoreWeb.Study.Edit do
             <Spacing value="XL" />
 
             <Title3>{{dgettext("eyra-survey", "about.title")}}</Title3>
+            <TextArea field={{:expectations}} label_text={{dgettext("eyra-survey", "expectations.label")}}/>
             <TextArea field={{:description}} label_text={{dgettext("eyra-survey", "info.label")}}/>
             <Spacing value="XL" />
 
@@ -255,6 +268,24 @@ defmodule CoreWeb.Study.Edit do
             <Checkbox field={{:phone_enabled}} label_text={{dgettext("eyra-survey", "phone.enabled.label")}}/>
             <Checkbox field={{:tablet_enabled}} label_text={{dgettext("eyra-survey", "tablet.enabled.label")}}/>
             <Checkbox field={{:desktop_enabled}} label_text={{dgettext("eyra-survey", "desktop.enabled.label")}}/>
+            <Spacing value="XL" />
+
+            <Title3>{{dgettext("eyra-survey", "banner.title")}}</Title3>
+
+            <PhotoInput
+              conn={{@socket}}
+              static_path={{&Routes.static_path/2}}
+              photo_url={{@study_edit.banner_photo_url}}
+              uploads={{@uploads}}
+              primary_button_text={{dgettext("eyra-survey", "choose.banner.photo.file")}}
+              secondary_button_text={{dgettext("eyra-survey", "choose.other.banner.photo.file")}}
+              />
+
+            <Spacing value="S" />
+
+            <TextInput field={{:banner_title}} label_text={{dgettext("eyra-survey", "banner.title.label")}} />
+            <TextInput field={{:banner_subtitle}} label_text={{dgettext("eyra-survey", "banner.subtitle.label")}} />
+            <UrlInput field={{:banner_url}} label_text={{dgettext("eyra-survey", "banner.url.label")}} />
             <Spacing value="XL" />
 
             <Panel bg_color="bg-grey1">

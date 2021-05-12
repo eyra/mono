@@ -15,6 +15,9 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :core,
+  image_catalog: Core.ImageCatalog.Unsplash
+
 config :core, CoreWeb.Gettext, default_locale: "nl", locales: ~w(en nl)
 
 config :core, ecto_repos: [Core.Repo]

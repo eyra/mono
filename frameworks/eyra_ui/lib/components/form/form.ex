@@ -4,6 +4,8 @@ defmodule EyraUI.Form.Form do
   alias Surface.Components.Form
 
   slot(default, required: true)
+
+  prop(id, :string, required: true)
   prop(changeset, :any, required: true)
   prop(change_event, :any, required: true)
   prop(focus, :string, required: true)
@@ -16,7 +18,7 @@ defmodule EyraUI.Form.Form do
       phx-click="focus"
       phx-value-field="''"
     >
-      <Form for={{ @changeset }} change={{@change_event}}>
+      <Form for={{ @changeset }} change={{@change_event}} opts={{ id: @id }} >
         <slot />
       </Form>
     </div>

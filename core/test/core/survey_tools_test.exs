@@ -126,7 +126,7 @@ defmodule Core.SurveyToolsTest do
     test "setup_tasks_for_participants/2 creates task for participants" do
       survey_tool = Factories.insert!(:survey_tool)
 
-      participant = Factories.insert!(:survey_tool_participant, survey_tool: survey_tool)
+      participant = Factories.insert!(:survey_tool_participant, %{survey_tool: survey_tool})
 
       assert SurveyTools.setup_tasks_for_participants!([participant], survey_tool)
              |> Enum.count() == 1
@@ -141,7 +141,7 @@ defmodule Core.SurveyToolsTest do
       assert SurveyTools.list_participants_without_task(survey_tool) == []
 
       participant_without_task =
-        Factories.insert!(:survey_tool_participant, survey_tool: survey_tool)
+        Factories.insert!(:survey_tool_participant, %{survey_tool: survey_tool})
 
       assert SurveyTools.list_participants_without_task(survey_tool)
              |> Enum.map(& &1.user_id) ==

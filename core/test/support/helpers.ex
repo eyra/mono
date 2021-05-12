@@ -44,7 +44,7 @@ defmodule Core.AuthTestHelpers do
 
   def login_as_member(ctx) do
     password = Factories.valid_user_password()
-    {:ok, ctx} = Factories.insert!(:member, password: password) |> login(ctx)
+    {:ok, ctx} = Factories.insert!(:member, %{password: password}) |> login(ctx)
     {:ok, Keyword.put(ctx, :password, password)}
   end
 

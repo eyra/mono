@@ -5,7 +5,8 @@ defmodule CoreWeb.UserSessionControllerTest do
 
   defp create_user(_ctx) do
     password = Factories.valid_user_password()
-    %{user: Factories.insert!(:member, password: password), password: password}
+    user = Factories.insert!(:member, %{password: password})
+    %{user: user, password: password}
   end
 
   describe "GET /user/signin" do

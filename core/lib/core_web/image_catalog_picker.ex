@@ -28,7 +28,7 @@ defmodule CoreWeb.ImageCatalogPicker do
           </button>
         </div>
         <div x-data="{ selected: -1 }">
-          <form :on-submit="search">
+          <form id="image_catalog_picker_form" :on-submit="search">
             <div class="flex flex-row">
               <input value={{@initial_query}} class="text-grey1 text-bodymedium font-body pl-3 pr-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-48px" name="q" type="search" />
               <Spacing value="XS" direction="l" />

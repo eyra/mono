@@ -5,19 +5,22 @@ defmodule Core.Accounts.UserProfileEdit do
   use Ecto.Schema
 
   import Ecto.Changeset
+  import EctoCommons.URLValidator
 
   embedded_schema do
     field(:user_id, :integer)
     field(:displayname, :string)
     field(:researcher, :boolean)
     field(:fullname, :string)
+    field(:title, :string)
+    field(:url, :string)
     field(:photo_url, :string)
   end
 
-  @required_fields ~w(displayname)a
+  @required_fields ~w()a
 
   @user_fields ~w(displayname researcher)a
-  @profile_fields ~w(fullname photo_url)a
+  @profile_fields ~w(fullname title url photo_url)a
 
   @fields @user_fields ++ @profile_fields
 
@@ -25,6 +28,7 @@ defmodule Core.Accounts.UserProfileEdit do
     user_edit
     |> cast(params, @fields)
     |> validate_required(@required_fields)
+    |> validate_optional_url(:url)
   end
 
   def to_user(user_edit) do
@@ -53,5 +57,19 @@ defmodule Core.Accounts.UserProfileEdit do
       |> Map.merge(profile_opts)
 
     struct(Core.Accounts.UserProfileEdit, opts)
+  end
+
+  def validate_optional_url(changeset, field) do
+    if blank?(changeset, field) do
+      changeset
+    else
+      changeset |> validate_url(field)
+    end
+  end
+
+  defp blank?(changeset, field) do
+    %{changes: changes} = changeset
+    value = Map.get(changes, field)
+    blank?(value)
   end
 end

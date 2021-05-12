@@ -5,11 +5,16 @@ defmodule CoreWeb.Study.Public do
   use CoreWeb, :live_view
 
   alias EyraUI.Spacing
-  alias EyraUI.Hero.HeroSmall
+  alias EyraUI.CampaignBanner
+  alias EyraUI.Panel.Panel
   alias EyraUI.Container.ContentArea
-  alias EyraUI.Text.{Title1, Title6, SubHead, BodyLarge, BodyMedium, Bullet}
-  alias EyraUI.Button.{PrimaryLiveViewButton, PrimaryButton, SecondaryLiveViewButton}
+  alias EyraUI.Text.{Title1, Title2, Title3, BodyLarge, Intro}
+  alias EyraUI.Button.{PrimaryLiveViewButton, PrimaryButton, SecondaryLiveViewButton, BackButton}
   alias EyraUI.Case.{Case, True, False}
+  alias EyraUI.Hero.{HeroImage, HeroBanner}
+  alias EyraUI.Card.Highlight
+
+  alias CoreWeb.Devices
 
   alias Core.Studies
   alias Core.Studies.{Study, StudyPublic}
@@ -84,44 +89,82 @@ defmodule CoreWeb.Study.Public do
 
   def render(assigns) do
     ~H"""
-      <HeroSmall title={{ dgettext("eyra-study", "study.public.title") }} />
+      <HeroImage
+        title={{@study_public.title}}
+        subtitle={{@study_public.themes}}
+        image_url={{@study_public.image_url}}
+      >
+        <template slot="call_to_action">
+          <PrimaryLiveViewButton :if={{not @participant?}} label={{ dgettext("eyra-survey", "apply.button") }} event="signup" />
+          <PrimaryButton :if={{@task_available?}} label={{ dgettext("eyra-survey", "goto.survey") }} path={{@survey_tool.survey_url}} />
+        </template>
+      </HeroImage>
+      <HeroBanner title={{@study_public.organisation_name}} subtitle={{ @study_public.byline }} icon_url={{ Routes.static_path(@socket, "/images/#{@study_public.organisation_icon}.svg") }}/>
       <ContentArea>
-        <SubHead>{{ @study_public.byline }}</SubHead>
-        <Spacing value="L" />
-        <Title1>{{ @study_public.title }}</Title1>
         <Case value={{@task_completed?}}>
           <True> <!-- Task completed -->
             <BodyLarge>{{dgettext("eyra-survey", "completed.message")}}</BodyLarge>
           </True>
           <False> <!-- Task not completed -->
+            <div class="ml-8 mr-8 text-center">
+              <Title1>{{@study_public.subtitle}}</Title1>
+            </div>
+
+            <div class="mb-12 sm:mb-16" />
+            <div class="grid grid-cols-1 gap-6 sm:gap-8 sm:grid-cols-{{ Enum.count(@study_public.highlights) }}">
+              <div :for={{ highlight <- @study_public.highlights }} class="bg-grey5 rounded">
+                <Highlight title={{highlight.title}} text={{highlight.text}} />
+              </div>
+            </div>
+            <div class="mb-12 sm:mb-16" />
+
+            <Title2>{{dgettext("eyra-survey", "expectations.public.label")}}</Title2>
+            <Spacing value="M" />
+            <BodyLarge>{{ @study_public.expectations }}</BodyLarge>
+            <Spacing value="M" />
+            <Title2>{{dgettext("eyra-survey", "description.public.label")}}</Title2>
+            <Spacing value="M" />
             <BodyLarge>{{ @study_public.description }}</BodyLarge>
             <Spacing value="L" />
-            <Title6>{{dgettext("eyra-survey", "duration.public.label")}}</Title6>
-            <BodyMedium>{{ @study_public.duration }}</BodyMedium>
+
+            <CampaignBanner
+              photo_url={{@study_public.banner_photo_url}}
+              placeholder_photo_url={{ Routes.static_path(@socket, "/images/profile_photo_default.svg") }}
+              title={{@study_public.banner_title}}
+              subtitle={{@study_public.banner_subtitle}}
+              url={{@study_public.banner_url}}
+            />
+            <Spacing value="L" />
+            <Panel bg_color="bg-grey5" align="text-center">
+              <template slot="title">
+                <Title3>Benieuwd naar de resultaten van dit onderzoek?</Title3>
+              </template>
+              <Intro>Je kan je hier inschrijven voor de nieuwsbrief. </Intro>
+              <Spacing value="M" />
+              <SecondaryLiveViewButton label="Houd me op de hoogte" event="register" color="text-primary"/>
+            </Panel>
 
             <Spacing value="L" />
-            <Title6>{{dgettext("eyra-survey", "config.devices.title")}}</Title6>
-            <Bullet :if={{@study_public.phone_enabled}} image={{Routes.static_path(@socket, "/images/bullit.svg")}}>
-              <BodyMedium>{{dgettext("eyra-survey", "phone.enabled.label")}}</BodyMedium>
-            </Bullet>
-            <Bullet :if={{@study_public.tablet_enabled}} image={{Routes.static_path(@socket, "/images/bullit.svg")}}>
-              <BodyMedium>{{dgettext("eyra-survey", "tablet.enabled.label")}}</BodyMedium>
-            </Bullet>
-            <Bullet :if={{@study_public.desktop_enabled}} image={{Routes.static_path(@socket, "/images/bullit.svg")}}>
-              <BodyMedium>{{dgettext("eyra-survey", "desktop.enabled.label")}}</BodyMedium>
-            </Bullet>
+            <Devices label={{ dgettext("eyra-survey", "devices.available.label") }} devices={{ @study_public.devices }}/>
+            <Spacing value="XL" />
 
-            <Spacing value="L" />
-            <PrimaryLiveViewButton :if={{not @participant?}} label={{ dgettext("eyra-survey", "apply.button") }} event="signup" />
-            <PrimaryButton :if={{@task_available?}} label={{ dgettext("eyra-survey", "goto.survey") }} path={{@survey_tool.survey_url}} bg_color="bg-grey1" />
-            </False>
-        </Case>
-        <Case value={{@participant?}}>
-          <True>
-            <Spacing value="L" />
-            <SecondaryLiveViewButton :if={{@participant?}} label={{ dgettext("eyra-survey", "withdraw.button") }} event="withdraw" />
-          </True>
-        </Case>
+            <div class="flex flex-row">
+              <div :if={{not @participant?}} class="mr-4">
+                <PrimaryLiveViewButton label={{ dgettext("eyra-survey", "apply.button") }} event="signup" />
+              </div>
+              <div :if={{@task_available?}} class="mr-4">
+                <PrimaryButton label={{ dgettext("eyra-survey", "goto.survey") }} path={{@survey_tool.survey_url}} />
+              </div>
+              <div :if={{@participant?}}>
+                <SecondaryLiveViewButton label={{ dgettext("eyra-survey", "withdraw.button") }} event="withdraw" />
+              </div>
+            </div>
+          </False>
+          </Case>
+          <Spacing value="M" />
+          <div class="flex">
+            <BackButton label="Terug naar overzicht" path={{ Routes.live_path(@socket, CoreWeb.Dashboard) }}/>
+          </div>
       </ContentArea>
     """
   end
