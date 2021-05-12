@@ -104,8 +104,8 @@ defmodule Core.Factories do
   end
 
   def build(:survey_tool_participant, %{} = attributes) do
-    {survey_tool, _attributes} = Map.pop(attributes, :survey_tool, build(:survey_tool))
-    {user, _attributes} = Map.pop(attributes, :user, build(:member))
+    survey_tool = Map.get(attributes, :survey_tool, build(:survey_tool))
+    user = Map.get(attributes, :user, build(:member))
 
     %SurveyTools.Participant{
       survey_tool: survey_tool,
@@ -164,7 +164,7 @@ defmodule Core.Factories do
   end
 
   def many_relationship(name, %{} = attributes) do
-    {result, _attributes} = Map.pop(attributes, name)
+    result = Map.get(attributes, name)
 
     if result === nil do
       []

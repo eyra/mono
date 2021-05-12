@@ -118,41 +118,33 @@ defmodule CoreWeb.Study.Edit do
     {:noreply, assign(socket, uri_origin: uri_origin)}
   end
 
-  def handle_event("delete", _params, socket) do
-    study_edit = socket.assigns[:study_edit]
-
+  def handle_event("delete", _params, %{assigns: %{study_edit: study_edit}} = socket) do
     Studies.get_study!(study_edit.study_id)
     |> Studies.delete_study()
 
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Dashboard))}
   end
 
-  def handle_event("publish", _params, socket) do
+  def handle_event("publish", _params, %{assigns: %{study_edit: study_edit}} = socket) do
     attrs = %{published_at: NaiveDateTime.utc_now()}
-    study_edit = socket.assigns[:study_edit]
-
     changeset = get_changeset(study_edit, :submit, attrs)
-
     {:noreply, socket |> update_changeset(changeset)}
   end
 
-  def handle_event("unpublish", _params, socket) do
+  def handle_event("unpublish", _params, %{assigns: %{study_edit: study_edit}} = socket) do
     attrs = %{published_at: nil}
-    study_edit = socket.assigns[:study_edit]
     changeset = get_changeset(study_edit, :auto_save, attrs)
     {:noreply, socket |> update_changeset(changeset)}
   end
 
-  def handle_info({:theme_selector, themes}, socket) do
+  def handle_info({:theme_selector, themes}, %{assigns: %{study_edit: study_edit}} = socket) do
     attrs = %{themes: themes}
-    study_edit = socket.assigns[:study_edit]
     changeset = get_changeset(study_edit, :auto_save, attrs)
     {:noreply, socket |> update_changeset(changeset)}
   end
 
-  def handle_info({:image_picker, image_id}, socket) do
+  def handle_info({:image_picker, image_id}, %{assigns: %{study_edit: study_edit}} = socket) do
     attrs = %{image_id: image_id}
-    study_edit = socket.assigns[:study_edit]
     changeset = get_changeset(study_edit, :auto_save, attrs)
     {:noreply, socket |> update_changeset(changeset)}
   end

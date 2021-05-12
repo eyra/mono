@@ -173,11 +173,7 @@ defmodule Core.Studies.StudyEdit do
   end
 
   defp put_default(map, key, value) do
-    if !Map.has_key?(map, key) || map[key] === nil do
-      map |> Map.put(key, value)
-    else
-      map
-    end
+    Map.update(map, key, value, &(&1 || value))
   end
 
   defp create_transient_opts(survey_tool) do

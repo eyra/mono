@@ -58,15 +58,15 @@ defmodule Core.Studies.StudyPublic do
       |> Map.take(@survey_tool_fields)
       |> Map.put(:survey_tool_id, survey_tool.id)
 
-    transient_opts =
-      %{}
-      |> Map.put(:image_url, ImageHelpers.get_image_url(survey_tool.image_id, 2560, 1920))
-      |> Map.put(:themes, get_themes(survey_tool))
-      |> Map.put(:byline, get_byline(study, survey_tool))
-      |> Map.put(:organisation_icon, get_organisation_id(survey_tool))
-      |> Map.put(:organisation_name, get_organisation_name(survey_tool))
-      |> Map.put(:devices, get_devices(survey_tool_opts))
-      |> Map.put(:highlights, get_highlights(survey_tool))
+    transient_opts = %{
+      image_url: ImageHelpers.get_image_url(survey_tool.image_id, 2560, 1920),
+      themes: get_themes(survey_tool),
+      byline: get_byline(study, survey_tool),
+      organisation_icon: get_organisation_id(survey_tool),
+      organisation_name: get_organisation_name(survey_tool),
+      devices: get_devices(survey_tool_opts),
+      highlights: get_highlights(survey_tool)
+    }
 
     opts =
       %{}
@@ -106,12 +106,8 @@ defmodule Core.Studies.StudyPublic do
     end
   end
 
-  defp get_organisation_id(survey_tool) do
-    case survey_tool.marks do
-      nil -> nil
-      marks -> marks |> List.first()
-    end
-  end
+  defp get_organisation_id(%{marks: [first_mark | _]}), do: first_mark
+  defp get_organisation_id(_), do: nil
 
   def get_highlights(survey_tool) do
     reward_string =
