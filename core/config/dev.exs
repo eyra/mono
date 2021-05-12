@@ -19,7 +19,7 @@ config :core, CoreWeb.Endpoint,
       ~r"priv/gettext/.*(po)$",
       ~r"lib/core_web/(live|views)/.*(ex)$",
       ~r"lib/core_web/templates/.*(eex)$",
-      ~r"bundles/*/(live|views)/.*(ex)$",
+      ~r"bundles/*/.*(ex)$",
       ~r"bundles/*/templates/.*(eex)$"
     ]
   ],

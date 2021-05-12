@@ -10,9 +10,13 @@ defmodule Core.Authorization do
     roles: [:visitor, :member, :researcher, :owner, :participant],
     role_assignment_schema: Core.Authorization.RoleAssignment
 
+  use Core.BundleOverrides
+
   import Ecto.Query
 
   GreenLight.Permissions.grant(__MODULE__, "test-auth", [:owner])
+
+  Core.BundleOverrides.grants()
 
   grant_access(CoreWeb.Index, [:visitor, :member])
   grant_access(CoreWeb.Dashboard, [:member])
