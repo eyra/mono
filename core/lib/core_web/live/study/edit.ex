@@ -130,7 +130,9 @@ defmodule CoreWeb.Study.Edit do
   def handle_event("publish", _params, socket) do
     attrs = %{published_at: NaiveDateTime.utc_now()}
     study_edit = socket.assigns[:study_edit]
+
     changeset = get_changeset(study_edit, :submit, attrs)
+
     {:noreply, socket |> update_changeset(changeset)}
   end
 
@@ -242,7 +244,7 @@ defmodule CoreWeb.Study.Edit do
               <ImagePreview image_url={{ @study_edit.image_url }} placeholder="" />
               <Spacing value="S" direction="l" />
               <div class="flex-wrap">
-                <SecondaryAlpineButton click="open = true, $parent.overlay = true" label={{dgettext("eyra-survey", "search.different.image.button")}} />
+                <SecondaryAlpineButton click="$parent.open = true, $parent.$parent.overlay = true" label={{dgettext("eyra-survey", "search.different.image.button")}} />
               </div>
             </div>
             <Spacing value="XL" />

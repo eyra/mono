@@ -1,6 +1,6 @@
 defmodule CoreWeb.ViewModel.Card do
   alias Core.SurveyTools
-  alias Core.ImageCatalog.Unsplash, as: ImageCatalog
+  alias Core.ImageHelpers
   alias CoreWeb.Router.Helpers, as: Routes
   import CoreWeb.Gettext
 
@@ -48,7 +48,7 @@ defmodule CoreWeb.ViewModel.Card do
       if published_at === nil, do: dgettext("eyra-survey", "published.false.label"), else: nil
 
     icon_url = get_icon_url(marks, socket)
-    image_url = get_image_url(image_id)
+    image_url = ImageHelpers.get_image_url(image_id)
     tags = get_tags(themes)
 
     %{
@@ -73,7 +73,7 @@ defmodule CoreWeb.ViewModel.Card do
     %{
       id: id,
       title: title,
-      image_url: temp_default_image_url(),
+      image_url: ImageHelpers.get_image_url(nil),
       tags: [],
       duration: nil,
       info: [],
@@ -93,16 +93,5 @@ defmodule CoreWeb.ViewModel.Card do
       [mark] -> Routes.static_path(socket, "/images/#{mark}.svg")
       _ -> nil
     end
-  end
-
-  def get_image_url(image_id) do
-    case image_id do
-      nil -> temp_default_image_url()
-      image_id -> ImageCatalog.info(image_id, width: 800, height: 600).url
-    end
-  end
-
-  defp temp_default_image_url do
-    "https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=3900&q=80"
   end
 end

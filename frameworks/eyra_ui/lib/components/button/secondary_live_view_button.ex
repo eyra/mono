@@ -6,12 +6,12 @@ defmodule EyraUI.Button.SecondaryLiveViewButton do
 
   prop(label, :string, required: true)
   prop(event, :string, required: true)
-  prop(color, :css_class, default: "bg-white")
+  prop(color, :css_class, default: "text-delete")
   prop(width, :css_class, default: "pl-4 pr-4")
 
   def render(assigns) do
     ~H"""
-    <button phx-click={{ @event }} class="pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 border-delete font-button text-button text-delete focus:outline-none rounded {{@color}} {{@width}}">
+    <button phx-click={{ @event }} class="pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 font-button text-button focus:outline-none rounded bg-opacity-0 {{@color}} {{@width}}">
       {{@label}}
     </button>
     """

@@ -1,4 +1,4 @@
-defmodule EyraUI.Text.Title1 do
+defmodule EyraUI.Text.Title0 do
   @moduledoc """
   This title is to be used for ...?
   """
@@ -9,7 +9,7 @@ defmodule EyraUI.Text.Title1 do
 
   def render(assigns) do
     ~H"""
-    <div class="text-title3 font-title3 sm:text-title2 lg:text-title1 lg:font-title1 mb-7 lg:mb-9">
+    <div class="text-title4 font-title4 sm:text-title2 sm:font-title2 lg:text-title0 lg:font-title0 {{@color}}">
       <slot />
     </div>
     """

@@ -54,6 +54,7 @@ module.exports = {
         "19px" : "19px",
         "48px" : "48px",
         "44px" : "44px",
+        "84px" : "84px",
       },
       width: {
         "sidebar" : "68px",
@@ -87,12 +88,16 @@ module.exports = {
         "header2-lg" : "183px",
         "logo" : "32px",
         "logo-sm" : "48px",
+        "image-header": "375px",
+        "image-header-sm": "500px",
         "image-card": "200px",
         "image-preview": "150px",
         "image-preview-circle": "150px",
+        "campaign-banner": "224px",
         "button-sm": "14px",
       },
       fontFamily: {
+        'title0': ['Finador-Black', 'sans-serif'],
         'title1': ['Finador-Black', 'sans-serif'],
         'title2': ['Finador-Black', 'sans-serif'],
         'title3': ['Finador-Black', 'sans-serif'],
@@ -108,6 +113,7 @@ module.exports = {
         'body': ['Finador-Light', 'sans-serif'],
       },
       fontSize: {
+        "title0": ['64px', '68px'],
         "title1": ['50px', '55px'],
         "title2": ['40px', '44px'],
         "title3": ['32px', '38px'],
@@ -123,6 +129,8 @@ module.exports = {
         "bodylarge": ['24px', '36px'],
         "bodymedium": ['20px', '30px'],
         "bodysmall": ['16px', '24px'],
+        "bodylinklarge": ['24px', '36px'],
+        "bodylinkmedium": ['30px', '30px'],
         "link": ['16px', '24px'],
       },
       maxWidth: {

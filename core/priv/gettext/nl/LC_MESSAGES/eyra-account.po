@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:113
+#: lib/core_web/live/user/profile.ex:111
 msgid "displayname.label"
 msgstr "Schermnaam"
 
@@ -22,7 +22,7 @@ msgid "email.label"
 msgstr "E-mail"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:112
+#: lib/core_web/live/user/profile.ex:110
 msgid "fullname.label"
 msgstr "Volledige naam"
 
@@ -37,12 +37,12 @@ msgid "profile.button"
 msgstr "Mijn profiel"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:99
+#: lib/core_web/live/user/profile.ex:98
 msgid "profile.title"
 msgstr "Mijn profiel"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:118
+#: lib/core_web/live/user/profile.ex:116
 msgid "researcher.label"
 msgstr "ik ben een onderzoeker"
 
@@ -84,7 +84,7 @@ msgid "title.label"
 msgstr "E-mail"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:121
+#: lib/core_web/live/user/profile.ex:119
 msgid "signout.button"
 msgstr "Afmelden"
 
@@ -99,26 +99,26 @@ msgid "confirm.token.resend_button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:106
+#: lib/core_web/live/user/profile.ex:105
 msgid "choose.profile.photo.file"
 msgstr "Kies foto"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:78
+#: lib/core_web/live/user/profile.ex:77
 msgid "photo.upload.error.flash"
 msgstr "Er ging iets mis bij uploaden van de foto."
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:107
+#: lib/core_web/live/user/profile.ex:106
 msgid "choose.other.profile.photo.file"
 msgstr "Kies andere foto"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:114
+#: lib/core_web/live/user/profile.ex:112
 msgid "professionaltitle.label"
 msgstr "Functietitel"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:115
+#: lib/core_web/live/user/profile.ex:113
 msgid "website.label"
 msgstr "Website"

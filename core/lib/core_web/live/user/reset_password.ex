@@ -50,7 +50,7 @@ defmodule CoreWeb.User.ResetPassword do
     <ContentArea>
       <FormArea>
         <Title2>{{dgettext "eyra-user", "user.password_reset.title"}}</Title2>
-        <Form id="main_form" for={{ @changeset }} submit="reset-password">
+        <Form for={{ @changeset }} submit="reset-password">
           <EmailInput field={{:email}} label_text={{dgettext("eyra-user", "password_reset.email.label")}} />
           <SubmitButton label={{ dgettext("eyra-user", "password_reset.reset_button") }} />
         </Form>

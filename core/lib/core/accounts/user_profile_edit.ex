@@ -17,7 +17,7 @@ defmodule Core.Accounts.UserProfileEdit do
     field(:photo_url, :string)
   end
 
-  @required_fields ~w(displayname)a
+  @required_fields ~w()a
 
   @user_fields ~w(displayname researcher)a
   @profile_fields ~w(fullname title url photo_url)a

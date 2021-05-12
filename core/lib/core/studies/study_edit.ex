@@ -9,7 +9,7 @@ defmodule Core.Studies.StudyEdit do
   import EctoCommons.URLValidator
   import CoreWeb.Gettext
 
-  alias Core.ImageCatalog.Unsplash, as: ImageCatalog
+  alias Core.ImageHelpers
   alias EyraUI.Timestamp
   alias Core.SurveyTools
   alias Core.SurveyTools.SurveyTool
@@ -56,7 +56,7 @@ defmodule Core.Studies.StudyEdit do
   end
 
   @required_fields ~w(title byline)a
-  @required_fields_for_publish ~w(title subtitle expectations description survey_url subject_count duration themes image_id reward_value byline organization banner_photo_url banner_title banner_subtitle banner_url)a
+  @required_fields_for_publish ~w(title subtitle expectations description survey_url subject_count duration themes reward_value byline organization banner_photo_url banner_title banner_subtitle banner_url)a
 
   @transient_fields ~w(byline is_published subject_pending_count subject_completed_count subject_vacant_count theme_labels organization initial_image_query image_url)a
   @study_fields ~w(title)a
@@ -197,8 +197,8 @@ defmodule Core.Studies.StudyEdit do
       |> get_initial_image_query()
 
     image_url =
-      survey_tool
-      |> get_image_url()
+      survey_tool.image_id
+      |> ImageHelpers.get_image_url(400, 300)
 
     %{}
     |> Map.put(:focus, "")
@@ -233,17 +233,6 @@ defmodule Core.Studies.StudyEdit do
       nil -> ""
       themes -> themes |> Enum.map(&Atom.to_string(&1)) |> Enum.join(" ")
     end
-  end
-
-  defp get_image_url(survey_tool) do
-    case survey_tool.image_id do
-      nil -> temp_default_image_url()
-      image_id -> ImageCatalog.info(image_id, width: 400, height: 300).url
-    end
-  end
-
-  defp temp_default_image_url do
-    "https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=3900&q=80"
   end
 
   def get_byline(%SurveyTool{} = survey_tool) do
