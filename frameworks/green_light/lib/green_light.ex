@@ -146,6 +146,10 @@ defmodule GreenLight do
         GreenLight.Ecto.Query.query_node_ids(unquote(schema), opts)
       end
 
+      def query_principal_ids(opts \\ []) do
+        GreenLight.Ecto.Query.query_principal_ids(unquote(schema), opts)
+      end
+
       def query_role_assignment(principal, entity, role) do
         unquote(schema)
         |> GreenLight.Ecto.Query.query_role_assignments(
