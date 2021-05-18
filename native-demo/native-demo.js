@@ -11,14 +11,14 @@ class Navigation {
   }
 
   pushModal() {
-    this.screen = Object.assign({}, this.screen, {parent: this.screen, navDepth: 0, modalDepth: this.screen.modalDepth + 1}); 
+    this.screen = Object.assign({}, this.screen, {parent: this.screen, navDepth: 0, modalDepth: this.screen.modalDepth + 1});
     return this.screen
   }
 
   pushScreen() {
-    this.screen = Object.assign({}, this.screen, {parent: this.screen, navDepth: this.screen.navDepth + 1}); 
+    this.screen = Object.assign({}, this.screen, {parent: this.screen, navDepth: this.screen.navDepth + 1});
     return this.screen
-  } 
+  }
 
   popModal() {
     let targetModalDepth = Math.max(0, this.screen.modalDepth - 1);
@@ -44,45 +44,42 @@ const nativeWrapper = {
   //
   // Uncomment each section to enable it.
   pushScreen: ()=> {
-    // window.webkit.messageHandlers.Push.postMessage({
-    //   type: "regular",
-    // })
+    window.webkit.messageHandlers.Push.postMessage({
+      type: "regular",
+    })
   },
   popScreen: ()=> {
-    // window.webkit.messageHandlers.Pop.postMessage({
-    //   type: "regular",
-    // })
+    window.webkit.messageHandlers.Pop.postMessage({
+      type: "regular",
+    })
   },
   pushModal: () => {
-    // window.webkit.messageHandlers.Push.postMessage({
-    //   type: "modal",
-    // })
+    window.webkit.messageHandlers.Push.postMessage({
+      type: "modal",
+    })
   },
   popModal: ()=> {
-    // window.webkit.messageHandlers.Pop.postMessage({
-    //   type: "modal",
-    // })
+    window.webkit.messageHandlers.Pop.postMessage({
+      type: "modal",
+    })
   },
   updateScreenInfo: (title)=> {
-    // window.webkit.messageHandlers.UpdateScreen.postMessage({
-    //   title 
-    // })
+    window.webkit.messageHandlers.UpdateScreen.postMessage({
+      title
+    })
   }
 }
 
 const updateScreenInfo = ()=>{
   console.log(nav.navDepth);
   const title = `Nav depth ${nav.navDepth}, modal depth: ${nav.modalDepth}`
-  document.getElementById("title").innerText = title 
-  nativeWrapper.updateScreenInfo({
-    title,
-  })
+  document.getElementById("title").innerText = title
+  nativeWrapper.updateScreenInfo(title)
 }
 
-
 const pushScreen = ()=>{
-  // nativeWrapper.pushScreen();
   nav.pushScreen();
+  nativeWrapper.pushScreen();
   updateScreenInfo()
 }
 
@@ -93,8 +90,8 @@ const popScreen = ()=>{
 }
 
 const pushModal= () => {
-  nativeWrapper.pushModal();
   nav.pushModal();
+  nativeWrapper.pushModal();
   updateScreenInfo()
 }
 const popModal= () => {
@@ -104,3 +101,13 @@ const popModal= () => {
 }
 
 updateScreenInfo()
+
+const screenIsPopped= () => {
+  nav.popScreen();
+  updateScreenInfo()
+}
+
+const modalIsPopped= () => {
+  nav.popModal();
+  updateScreenInfo()
+}
