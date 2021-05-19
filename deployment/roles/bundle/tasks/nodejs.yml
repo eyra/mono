@@ -9,7 +9,7 @@
   ansible.builtin.apt_repository:
     repo: deb https://deb.nodesource.com/node_14.x focal main
 
-- name: Install Elixir
+- name: Install Nodejs
   ansible.builtin.apt:
     name:
       - build-essential
