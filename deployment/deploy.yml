@@ -6,9 +6,39 @@
     home: '/home/{{bundle}}'
     src: '{{home}}/src/core'
     repo: 'https://github.com/eyraco/eylixir.git'
+    asdf_version: "v0.8.1"
 
   tasks:
-  - name: 'Update source - {{branch}}'
+  - name: ASDF
+    block:
+      - name: 'Checkout'
+        ansible.builtin.git:
+          repo: 'https://github.com/asdf-vm/asdf.git'
+          dest: '{{home}}/.asdf'
+          version: '{{asdf_version}}'
+          update: yes
+          force: yes
+        register: asdf
+
+      - name: 'Install plugins'
+        ansible.builtin.command:
+          cmd: "{{home}}/.asdf/bin/asdf plugin add {{item}}"
+          creates: "{{home}}/.asdf/plugins/{{item}}"
+          chdir:
+        with_items:
+          - "erlang"
+          - "elixir"
+          - "nodejs"
+          - "python"
+
+      - name: Add ASDF to shell
+        lineinfile:
+          dest: "{{home}}/.bashrc"
+          state: present
+          regexp: 'asdf'
+          line: '. $HOME/.asdf/asdf.sh'
+
+  - name: 'Update source'
     ansible.builtin.git:
       repo: '{{repo}}'
       dest: '{{home}}/src'
@@ -24,48 +54,54 @@
   - name: Build
     when: source.changed
     block:
+      - name: Update ASDF deps
+        ansible.builtin.command:
+          cmd: "bash --rcfile ~/.asdf/asdf.sh -c 'asdf install'"
+          chdir: '{{ src }}'
+
       - name: Hex
         ansible.builtin.command:
-          cmd: mix local.hex --force
+          cmd: "bash --rcfile ~/.asdf/asdf.sh -c 'mix local.hex --force'"
           creates: '{{home}}/.mix/archives/hex-*'
           chdir: '{{ src }}'
 
       - name: Rebar
         ansible.builtin.command:
-          cmd: mix local.rebar --force
+          cmd: bash --rcfile ~/.asdf/asdf.sh -c 'mix local.rebar --force'
           creates: '{{home}}/.mix/rebar'
           chdir: '{{ src }}'
 
       - name: Get deps
         ansible.builtin.command:
-          cmd: mix deps.get
+          cmd: bash --rcfile ~/.asdf/asdf.sh -c 'mix deps.get'
           chdir: '{{ src }}'
 
       - name: Get node deps
         ansible.builtin.command:
-          cmd: npm install
+          cmd: bash --rcfile ~/.asdf/asdf.sh -c 'npm install'
           chdir: '{{ src }}/assets'
 
       - name: Update browserslist package
         ansible.builtin.command:
-          cmd: npx browserslist@latest --update-db
+          cmd: bash --rcfile ~/.asdf/asdf.sh -c 'npx browserslist@latest --update-db'
           chdir: '{{ src }}/assets'
 
       - name: Build static resources
         ansible.builtin.command:
-          cmd: npm run deploy
+          cmd: bash --rcfile ~/.asdf/asdf.sh -c 'npm run deploy'
           chdir: '{{ src }}/assets'
 
       - name: Build digest
         ansible.builtin.command:
-          cmd: mix phx.digest
+          cmd: bash --rcfile ~/.asdf/asdf.sh -c 'mix phx.digest'
           chdir: '{{ src }}'
         environment:
           MIX_ENV: prod
 
       - name: Build release
         ansible.builtin.command:
-          cmd: mix release --overwrite --path '{{ release_dir }}'
+          cmd: >
+            bash --rcfile ~/.asdf/asdf.sh -c "mix release --overwrite --path '{{ release_dir }}'"
           chdir: '{{ src }}'
         environment:
           MIX_ENV: prod
@@ -73,7 +109,8 @@
 
       - name: Run migrations
         ansible.builtin.command:
-          cmd: '{{ release_dir }}/bin/core eval "Core.Release.migrate"'
+          cmd: >
+            bash --rcfile ~/.asdf/asdf.sh -c '{{ release_dir }}/bin/core eval "Core.Release.migrate"'
           chdir: '{{ src }}'
         environment:
           MIX_ENV: prod
