@@ -15,11 +15,11 @@ config :core, CoreWeb.Endpoint,
   check_origin: false,
   live_reload: [
     patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/static/(?!uploads)/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/core_web/(live|views)/.*(ex)$",
       ~r"lib/core_web/templates/.*(eex)$",
-      ~r"bundles/*/(live|views)/.*(ex)$",
+      ~r"bundles/*/.*(ex)$",
       ~r"bundles/*/templates/.*(eex)$"
     ]
   ],
@@ -33,14 +33,9 @@ config :core, CoreWeb.Endpoint,
     ]
   ]
 
+config :core, Core.ImageCatalog.Unsplash,
+  access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
+  app_name: System.get_env("UNSPLASH_APP_NAME")
+
 config :exsync,
   addition_dirs: ["../../frameworks"]
-
-# Load developer machine specific config. This can be used to setup secrets and
-# such to connect with 3rd party services.
-try do
-  import_config "dev.local.exs"
-rescue
-  File.Error ->
-    IO.puts(:stderr, "Local development config not found. 3rd party services might not work.")
-end

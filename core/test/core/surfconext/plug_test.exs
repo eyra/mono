@@ -26,7 +26,7 @@ defmodule Core.SurfConext.FakeOIDC do
 end
 
 defmodule Core.SurfConext.AuthorizePlug.Test do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   use Plug.Test
   alias Core.SurfConext.AuthorizePlug
 

@@ -15,6 +15,9 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :core,
+  image_catalog: Core.ImageCatalog.Unsplash
+
 config :core, CoreWeb.Gettext, default_locale: "nl", locales: ~w(en nl)
 
 config :core, ecto_repos: [Core.Repo]
@@ -52,7 +55,6 @@ config :core, :children, [
 config :core, CoreWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "QbAmUdYcDMMQ2e7wVp6PSXI8QdUjfDEGR0FTwjwkUIYS4lW1ledjE9Dkhr3pE4Qn",
-  cache_static_manifest: "priv/static/cache_manifest.json",
   server: true,
   force_ssl: [],
   render_errors: [view: CoreWeb.ErrorView, accepts: ~w(html json), layout: false],
@@ -70,7 +72,9 @@ config :core, :ssl,
 
 import_config "#{Mix.env()}.exs"
 
-bundle = System.get_env("BUNDLE")
+bundle = System.get_env("BUNDLE", "next") |> String.to_atom()
+
+config :core, :bundle, bundle
 
 unless is_nil(bundle) do
   import_config "../bundles/#{bundle}/config.exs"

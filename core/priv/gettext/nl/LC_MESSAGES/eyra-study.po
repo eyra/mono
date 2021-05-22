@@ -37,14 +37,14 @@ msgid "study.highlighted.title"
 msgstr "Mijn studies:"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:180
+#: lib/core_web/live/study/edit.ex:197
 msgid "study.edit.title"
 msgstr "Studie"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:211
+#: lib/core_web/live/study/edit.ex:228
 msgid "title.label"
-msgstr "Pas de titel aan"
+msgstr "Titel"
 
 #, elixir-format
 #: lib/core_web/live/dashboard.ex:126
@@ -52,51 +52,51 @@ msgid "add.card.title"
 msgstr "Maak een nieuwe studie aan"
 
 #, elixir-format
-#: lib/core_web/live/study/complete.ex:54 lib/core_web/live/study/public.ex:87
+#: lib/core_web/live/study/complete.ex:54
 msgid "study.public.title"
 msgstr "Studie"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:18
+#: lib/core/studies/study_edit.ex:18 lib/core/studies/study_public.ex:15
 msgid "themes.art"
 msgstr "Kunst"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:18
+#: lib/core/studies/study_edit.ex:18 lib/core/studies/study_public.ex:15
 msgid "themes.health"
 msgstr "Gezondheid"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:18
+#: lib/core/studies/study_edit.ex:18 lib/core/studies/study_public.ex:15
 msgid "themes.history"
 msgstr "Geschiedenis"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:18
+#: lib/core/studies/study_edit.ex:18 lib/core/studies/study_public.ex:15
 msgid "themes.language"
 msgstr "Taal"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:18
+#: lib/core/studies/study_edit.ex:18 lib/core/studies/study_public.ex:15
 msgid "themes.politics"
 msgstr "Politiek"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:18
+#: lib/core/studies/study_edit.ex:18 lib/core/studies/study_public.ex:15
 msgid "themes.society"
 msgstr "Maatschappij"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:18
+#: lib/core/studies/study_edit.ex:18 lib/core/studies/study_public.ex:15
 msgid "themes.technology"
 msgstr "Technologie"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:146
+#: lib/core_web/live/study/edit.ex:171
 msgid "Please correct the indicated errors."
-msgstr "Er zijn wat problemen gevonden op de pagina. Probeer deze eerst op te lossen"
+msgstr "Er zijn wat problemen gevonden op de pagina"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:165
+#: lib/core_web/live/study/edit.ex:183
 msgid "Saved"
 msgstr "Opgeslagen"

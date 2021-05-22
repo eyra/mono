@@ -5,17 +5,23 @@ defmodule Core.Studies.StudyPublic do
   use Ecto.Schema
   use Timex
 
-  alias EyraUI.Timestamp
+  alias Core.Marks
+  alias Core.ImageHelpers
   alias Core.Studies
   alias Core.Studies.Study
-  alias Core.SurveyTools.SurveyTool
-  import CoreWeb.Gettext
+  alias Core.SurveyTools
+  alias Core.Themes
+  require Core.Themes
+  use Core.Themes
 
   embedded_schema do
+    # Study
     field(:study_id, :integer)
     field(:title, :string)
-    field(:byline, :string)
+    # Survey
     field(:survey_tool_id, :integer)
+    field(:subtitle, :string)
+    field(:expectations, :string)
     field(:description, :string)
     field(:survey_url, :string)
     field(:subject_count, :integer)
@@ -23,10 +29,23 @@ defmodule Core.Studies.StudyPublic do
     field(:phone_enabled, :boolean, default: true)
     field(:tablet_enabled, :boolean, default: true)
     field(:desktop_enabled, :boolean, default: true)
+    field(:banner_photo_url, :string)
+    field(:banner_title, :string)
+    field(:banner_subtitle, :string)
+    field(:banner_url, :string)
+    # Transient
+    field(:image_url, :string)
+    field(:themes, :string)
+    field(:byline, :string)
+    field(:icon_url, :string)
+    field(:highlights, {:array, :any})
+    field(:organisation_name, :string)
+    field(:organisation_icon, :string)
+    field(:devices, {:array, :string})
   end
 
   @study_fields ~w(title)a
-  @survey_tool_fields ~w(description survey_url subject_count duration phone_enabled tablet_enabled desktop_enabled)a
+  @survey_tool_fields ~w(subtitle expectations description survey_url subject_count duration phone_enabled tablet_enabled desktop_enabled banner_photo_url banner_title banner_subtitle banner_url)a
 
   def create(study, survey_tool) do
     study_opts =
@@ -39,9 +58,15 @@ defmodule Core.Studies.StudyPublic do
       |> Map.take(@survey_tool_fields)
       |> Map.put(:survey_tool_id, survey_tool.id)
 
-    transient_opts =
-      %{}
-      |> Map.put(:byline, get_byline(study, survey_tool))
+    transient_opts = %{
+      image_url: ImageHelpers.get_image_url(survey_tool.image_id, 2560, 1920),
+      themes: get_themes(survey_tool),
+      byline: get_byline(study, survey_tool),
+      organisation_icon: get_organisation_id(survey_tool),
+      organisation_name: get_organisation_name(survey_tool),
+      devices: get_devices(survey_tool_opts),
+      highlights: get_highlights(survey_tool)
+    }
 
     opts =
       %{}
@@ -52,22 +77,79 @@ defmodule Core.Studies.StudyPublic do
     struct(Core.Studies.StudyPublic, opts)
   end
 
-  def get_byline(%Study{} = study, %SurveyTool{} = survey_tool) do
-    date =
-      if SurveyTool.published?(survey_tool) do
-        timestamp = Timestamp.humanize(survey_tool.published_at)
-        "#{dgettext("eyra-survey", "published.true.label")}: #{timestamp}"
-      else
-        timestamp = Timestamp.humanize(survey_tool.inserted_at)
-        "#{dgettext("eyra-survey", "created.label")}: #{timestamp}"
-      end
+  def get_devices(survey_tool) do
+    [:desktop, :phone, :tablet]
+    |> Enum.filter(&survey_tool[String.to_atom("#{&1}_enabled")])
+  end
 
+  def get_byline(%Study{} = study, _survey_tool) do
     authors =
       study
       |> Studies.list_authors()
       |> Enum.map(& &1.fullname)
       |> Enum.join(", ")
 
-    date <> " - #{dgettext("eyra-survey", "by.author.label")} " <> authors
+    "#{dgettext("eyra-survey", "by.author.label")}: " <> authors
+  end
+
+  defp get_organisation_name(survey_tool) do
+    case get_organisation_id(survey_tool) do
+      nil ->
+        nil
+
+      id ->
+        organisation =
+          Marks.instances()
+          |> Enum.find(&(&1.id === String.to_existing_atom(id)))
+
+        organisation.label
+    end
+  end
+
+  defp get_organisation_id(%{marks: [first_mark | _]}), do: first_mark
+  defp get_organisation_id(_), do: nil
+
+  def get_highlights(survey_tool) do
+    reward_string =
+      CurrencyFormatter.format(
+        survey_tool.reward_value,
+        survey_tool.reward_currency,
+        keep_decimals: true
+      )
+
+    occupied_spot_count = SurveyTools.count_tasks(survey_tool, [:pending, :completed])
+    open_spot_count = survey_tool.subject_count - occupied_spot_count
+    open_spot_string = "Nog #{open_spot_count} van #{survey_tool.subject_count}"
+
+    available_title = dgettext("eyra-survey", "available.highlight.title")
+    reward_title = dgettext("eyra-survey", "reward.highlight.title")
+    duration_title = dgettext("eyra-survey", "duration.highlight.title")
+    spots_title = dgettext("eyra-survey", "spots.highlight.title")
+
+    available_text =
+      dgettext("eyra-survey", "available.future.highlight.text",
+        from: "15 apr",
+        till: "22 april 2021"
+      )
+
+    duration_text =
+      dgettext("eyra-survey", "duration.highlight.text", duration: survey_tool.duration)
+
+    [
+      %{title: available_title, text: available_text},
+      %{title: reward_title, text: reward_string},
+      %{title: duration_title, text: duration_text},
+      %{title: spots_title, text: open_spot_string}
+    ]
+
+    # %{title: duration_title, text: "± #{survey_tool.duration} minuten"},
+  end
+
+  def get_themes(survey_tool) do
+    survey_tool.themes
+    |> Themes.labels()
+    |> Enum.filter(& &1.active)
+    |> Enum.map(& &1.value)
+    |> Enum.join(", ")
   end
 end

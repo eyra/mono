@@ -28,7 +28,7 @@ defmodule Core.AccountsTest do
 
     test "does not return the user if the email has not been confirmed" do
       password = Factories.valid_user_password()
-      user = Factories.insert!(:member, confirmed_at: nil, password: password)
+      user = Factories.insert!(:member, %{confirmed_at: nil, password: password})
       refute Accounts.get_user_by_email_and_password(user.email, password)
     end
 
@@ -39,7 +39,7 @@ defmodule Core.AccountsTest do
 
     test "returns the user if the email and password are valid" do
       password = Factories.valid_user_password()
-      %{id: id} = user = Factories.insert!(:member, password: password)
+      %{id: id} = user = Factories.insert!(:member, %{password: password})
 
       assert %User{id: ^id} = Accounts.get_user_by_email_and_password(user.email, password)
     end
@@ -141,7 +141,7 @@ defmodule Core.AccountsTest do
   describe "apply_user_email/3" do
     setup do
       password = Factories.valid_user_password()
-      %{user: Factories.insert!(:member, password: password), password: password}
+      %{user: Factories.insert!(:member, %{password: password}), password: password}
     end
 
     test "requires email to change", %{user: user} do
@@ -211,9 +211,12 @@ defmodule Core.AccountsTest do
   describe "update_user_email/2" do
     setup do
       user =
-        Factories.insert!(:member,
-          confirmed_at:
-            Faker.DateTime.backward(4) |> DateTime.to_naive() |> NaiveDateTime.truncate(:second)
+        Factories.insert!(
+          :member,
+          %{
+            confirmed_at:
+              Faker.DateTime.backward(4) |> DateTime.to_naive() |> NaiveDateTime.truncate(:second)
+          }
         )
 
       email = Faker.Internet.email()
@@ -279,7 +282,7 @@ defmodule Core.AccountsTest do
   describe "update_user_password/3" do
     setup do
       password = Factories.valid_user_password()
-      %{user: Factories.insert!(:member, password: password), password: password}
+      %{user: Factories.insert!(:member, %{password: password}), password: password}
     end
 
     test "validates password", %{user: user} do
@@ -395,7 +398,7 @@ defmodule Core.AccountsTest do
 
   describe "deliver_user_confirmation_instructions/2" do
     setup do
-      %{user: Factories.insert!(:member, confirmed_at: nil)}
+      %{user: Factories.insert!(:member, %{confirmed_at: nil})}
     end
 
     test "sends token through notification", %{user: user} do
@@ -414,7 +417,7 @@ defmodule Core.AccountsTest do
 
   describe "confirm_user/2" do
     setup do
-      user = Factories.insert!(:member, confirmed_at: nil)
+      user = Factories.insert!(:member, %{confirmed_at: nil})
 
       token =
         extract_user_token(fn url ->

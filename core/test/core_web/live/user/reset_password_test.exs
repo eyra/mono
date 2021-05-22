@@ -32,7 +32,7 @@ defmodule CoreWeb.Live.User.ResetPassword.Test do
     end
 
     test "reset form sends token to user", %{conn: conn} do
-      user = Factories.insert!(:member, confirmed_at: nil)
+      user = Factories.insert!(:member, %{confirmed_at: nil})
       {:ok, view, _html} = live(conn, Routes.live_path(conn, ResetPassword))
 
       html =

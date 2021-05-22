@@ -237,7 +237,11 @@ defmodule Core.Studies do
   end
 
   def list_authors(%Study{} = study) do
-    from(a in Author, where: a.study_id == ^study.id)
+    from(
+      a in Author,
+      where: a.study_id == ^study.id,
+      preload: [:user]
+    )
     |> Repo.all()
   end
 
