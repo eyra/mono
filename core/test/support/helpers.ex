@@ -38,6 +38,7 @@ defmodule Core.AuthTestHelpers do
       conn
       |> Phoenix.ConnTest.init_test_session(%{})
       |> Plug.Conn.put_session(:user_token, token)
+      |> Plug.Conn.assign(:current_user, user)
 
     {:ok, conn: conn, user: user}
   end

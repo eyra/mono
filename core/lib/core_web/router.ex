@@ -16,6 +16,12 @@ defmodule CoreWeb.Router do
   CoreWeb.Routes.routes()
   CoreWeb.LocalImageCatalogPlug.routes()
 
+  scope "/", CoreWeb do
+    pipe_through([:api])
+    get("/web-push/vapid-public-key", PushSubscriptionController, :vapid_public_key)
+    post("/web-push/register", PushSubscriptionController, :register)
+  end
+
   if Mix.env() == :dev do
     forward("/sent_emails", Bamboo.SentEmailViewerPlug)
   end
