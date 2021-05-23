@@ -26,7 +26,7 @@ defmodule EyraUI.Form.Input do
           x-bind:class="{ '{{focus_border_color(@background)}}': focus === '{{@field}}', '{{border_color(assigns, @form)}}': focus !== '{{@field}}' }"
           x-on:focus="focus = '{{ @field }}'"
           x-on:click.stop
-          phx-focus="focus"
+          sphx-focus="focus"
           phx-value-field={{ @field }}
         />
       </Field>

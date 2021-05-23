@@ -7,6 +7,7 @@ defmodule EyraUI.Card.Study do
   alias EyraUI.{Tag, Spacing, Icon}
   alias EyraUI.Text.{SubHead, Label}
   alias EyraUI.Card.Card
+  alias EyraUI.Image
 
   prop(conn, :any, required: true)
   prop(path_provider, :any, required: true)
@@ -31,12 +32,12 @@ defmodule EyraUI.Card.Study do
             </div>
           </If>
           <If condition={{ @card.icon_url }} >
-            <div class="absolute top-6 right-6">
+            <div class="absolute top-6 right-6 z-20">
               <Icon size="S" src={{ @card.icon_url }} />
             </div>
           </If>
-          <div class="h-image-card">
-            <img class="rounded-t-lg bg-grey4 object-cover w-full h-full" src="{{ @card.image_url }}" />
+        <div class="h-image-card" x-data="blurHash()">
+          <Image id={{@card.id}} image={{@card.image_info}} class="rounded-t-lg bg-grey4 object-cover w-full h-full" />
           </div>
         </div>
       </template>

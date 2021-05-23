@@ -5,20 +5,21 @@ defmodule EyraUI.Hero.HeroImage do
   use Surface.Component
 
   alias EyraUI.Spacing
+  alias EyraUI.Image
   alias EyraUI.Text.{Title0, Title4}
 
   slot(call_to_action, required: true)
 
   prop(title, :string, required: true)
   prop(subtitle, :string, required: true)
-  prop(image_url, :string, required: true)
+  prop(image_info, :any, required: true)
   prop(text_color, :css_class, default: "text-white")
 
   def render(assigns) do
     ~H"""
     <div class="w-full">
       <div class="relative overflow-hidden w-full h-image-header sm:h-image-header-sm bg-grey4">
-        <img class="object-cover w-full h-full" src={{@image_url}}/>
+        <Image id="a" class="object-cover w-full h-full" image={{@image_info}} />
         <div class="absolute top-0 left-0 h-full flex items-center justify-center">
           <div class="ml-6 mr-6 sm:ml-20 sm:mr-20 text-shadow-md flex-wrap">
             <Title0 color="text-white">{{@title}}</Title0>

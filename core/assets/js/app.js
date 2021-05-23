@@ -20,36 +20,30 @@ import { Socket } from "phoenix"
 import { LiveSocket } from "phoenix_live_view"
 import { decode } from "blurhash";
 
-const setupBlurHashes = (root) => {
-    const images = root.getElementsByTagName("img");
-    Array.prototype.forEach.call(images, (img)=>{
-        const blurhash = img.dataset.blurhash
-        if (img.complete || img.dataset.hasBlurHash || blurhash === undefined) { return }
-        img.addEventListener("load", ()=>{
-          canvas.classList.add("transition", "duration-700", "opacity-0")
-        })
-        const width = parseInt(img.getAttribute("width"), 10)
-        const height = parseInt(img.getAttribute("height"), 10)
-        const pixels = decode(img.dataset.blurhash, width, height);
-        const canvas = document.createElement("canvas");
-        canvas.classList.add(...img.classList.values());
-        canvas.dataset.phxSkip = true
-        canvas.setAttribute("width", width)
-        canvas.setAttribute("height", height)
-        canvas.classList.add("z-10", "absolute")
-        const ctx = canvas.getContext("2d");
-        const imageData = ctx.createImageData(width, height);
-        imageData.data.set(pixels);
-        ctx.putImageData(imageData, 0, 0);
-        img.insertAdjacentElement("beforebegin", canvas);
-        img.dataset.hasBlurHash = true
-    })
+window.blurHash = () => {
+    return {
+        show: true,
+        showBlurHash() {
+            return this.show!== false;
+        },
+        hideBlurHash() {
+            this.show= false;
+        },
+        render() {
+            const canvas = this.$el.getElementsByTagName("canvas")[0];
+            if (canvas.dataset.rendered) { return }
+            const blurhash = canvas.dataset.blurhash
+            const width = parseInt(canvas.getAttribute("width"), 10)
+            const height = parseInt(canvas.getAttribute("height"), 10)
+            const pixels = decode(blurhash, width, height);
+            const ctx = canvas.getContext("2d");
+            const imageData = ctx.createImageData(width, height);
+            imageData.data.set(pixels);
+            ctx.putImageData(imageData, 0, 0);
+            canvas.dataset.rendered = true
+        }
+    }
 }
-
-
-window.addEventListener("DOMContentLoaded", ()=>{
-    setupBlurHashes(document.body)
-})
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
@@ -57,7 +51,6 @@ let liveSocket = new LiveSocket("/live", Socket, {
     dom: {
         onBeforeElUpdated(from, to) {
             if (from.__x) { Alpine.clone(from.__x, to) }
-            setupBlurHashes(from, to)
         }
     }
 })

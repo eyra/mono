@@ -2,7 +2,6 @@ defmodule Core.Studies.StudyPublic do
   @moduledoc """
   The study type.
   """
-  use Ecto.Schema
   use Timex
 
   alias Core.Marks
@@ -14,35 +13,36 @@ defmodule Core.Studies.StudyPublic do
   require Core.Themes
   use Core.Themes
 
-  embedded_schema do
+  defstruct [
     # Study
-    field(:study_id, :integer)
-    field(:title, :string)
+    study_id: nil,
+    title: "",
     # Survey
-    field(:survey_tool_id, :integer)
-    field(:subtitle, :string)
-    field(:expectations, :string)
-    field(:description, :string)
-    field(:survey_url, :string)
-    field(:subject_count, :integer)
-    field(:duration, :string)
-    field(:phone_enabled, :boolean, default: true)
-    field(:tablet_enabled, :boolean, default: true)
-    field(:desktop_enabled, :boolean, default: true)
-    field(:banner_photo_url, :string)
-    field(:banner_title, :string)
-    field(:banner_subtitle, :string)
-    field(:banner_url, :string)
+    survey_tool_id: nil,
+    subtitle: "",
+    expectations: "",
+    description: "",
+    survey_url: "",
+    subject_count: 0,
+    duration: "",
+    phone_enabled: true,
+    tablet_enabled: true,
+    desktop_enabled: true,
+    banner_photo_url: "",
+    banner_title: "",
+    banner_subtitle: "",
+    banner_url: "",
     # Transient
-    field(:image_url, :string)
-    field(:themes, :string)
-    field(:byline, :string)
-    field(:icon_url, :string)
-    field(:highlights, {:array, :any})
-    field(:organisation_name, :string)
-    field(:organisation_icon, :string)
-    field(:devices, {:array, :string})
-  end
+    image_url: nil,
+    image_info: nil,
+    themes: "",
+    byline: "",
+    icon_url: "",
+    highlights: [],
+    organisation_name: "",
+    organisation_icon: "",
+    devices: []
+  ]
 
   @study_fields ~w(title)a
   @survey_tool_fields ~w(subtitle expectations description survey_url subject_count duration phone_enabled tablet_enabled desktop_enabled banner_photo_url banner_title banner_subtitle banner_url)a
@@ -59,6 +59,7 @@ defmodule Core.Studies.StudyPublic do
       |> Map.put(:survey_tool_id, survey_tool.id)
 
     transient_opts = %{
+      image_info: ImageHelpers.get_image_info(survey_tool.image_id, 2560, 1920),
       image_url: ImageHelpers.get_image_url(survey_tool.image_id, 2560, 1920),
       themes: get_themes(survey_tool),
       byline: get_byline(study, survey_tool),
@@ -74,7 +75,7 @@ defmodule Core.Studies.StudyPublic do
       |> Map.merge(survey_tool_opts)
       |> Map.merge(transient_opts)
 
-    struct(Core.Studies.StudyPublic, opts)
+    struct!(Core.Studies.StudyPublic, opts)
   end
 
   def get_devices(survey_tool) do
