@@ -13,22 +13,35 @@ import "../css/app.scss"
 //     import socket from "./socket"
 //
 import "phoenix_html"
-import {Socket} from "phoenix"
+import {
+  Socket
+} from "phoenix"
 import topbar from "topbar"
-import {LiveSocket} from "phoenix_live_view"
+import {
+  LiveSocket
+} from "phoenix_live_view"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+let liveSocket = new LiveSocket("/live", Socket, {
+  params: {
+    _csrf_token: csrfToken
+  }
+})
 
 // Show progress bar on live navigation and form submits
-topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
+topbar.config({
+  barColors: {
+    0: "#29d"
+  },
+  shadowColor: "rgba(0, 0, 0, .3)"
+})
 
 const nativeIOSWrapper = {
   // The native code bridge assumes that handlers have been setup. Seethe docs for more info:
   // https://developer.apple.com/documentation/webkit/wkusercontentcontroller/1537172-add
   //
   // Uncomment each section to enable it.
-  openScreen: (id)=> {
+  openScreen: (id) => {
     window.webkit.messageHandlers.Push.postMessage({
       type: "open",
       id,
@@ -39,12 +52,12 @@ const nativeIOSWrapper = {
       type: "modal",
     })
   },
-  popModal: ()=> {
+  popModal: () => {
     window.webkit.messageHandlers.Pop.postMessage({
       type: "modal",
     })
   },
-  updateScreenInfo: (title)=> {
+  updateScreenInfo: (title) => {
     window.webkit.messageHandlers.UpdateScreen.postMessage({
       title
     })
@@ -52,16 +65,16 @@ const nativeIOSWrapper = {
 }
 
 const loggingWrapper = {
-  openScreen: (id)=> {
+  openScreen: (id) => {
     console.log("open screen", id)
   },
   pushModal: () => {
     console.log("push modal screen")
   },
-  popModal: ()=> {
+  popModal: () => {
     console.log("pop modal screen")
   },
-  updateScreenInfo: (title)=> {
+  updateScreenInfo: (title) => {
     console.log("set screen title", title)
   }
 }
@@ -72,21 +85,20 @@ const nativeWrapper = window.webkit?.messageHandlers !== undefined ? nativeIOSWr
 window.addEventListener("phx:page-loading-start", info => {
   topbar.show()
   // other kind options are "error" and "initial"
-  if (info.detail.kind === "redirect" && info.explicitOriginalTarget) {
-    const nativeOperation = info.explicitOriginalTarget.dataset?.nativeOperation
+  if (info.detail.kind === "redirect") { 
+    const to = new URL(info.detail.to);
+    const nativeOperation = to.searchParams.get("_no");
     if (nativeOperation === "push_modal") {
       nativeWrapper.pushModal()
-    }
-    else if (nativeOperation === "pop_modal") {
+    } else if (nativeOperation === "pop_modal") {
       nativeWrapper.popModal()
-    }
-    else {
+    } else {
       nativeWrapper.openScreen(info.detail.to)
     }
   }
 })
 window.addEventListener("phx:page-loading-stop", info => {
-  topbar.hide() 
+  topbar.hide()
   const nativeSettingsNode = document.querySelector(".native-settings")
   if (nativeSettingsNode) {
     const settings = nativeSettingsNode.dataset
@@ -102,4 +114,3 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
-

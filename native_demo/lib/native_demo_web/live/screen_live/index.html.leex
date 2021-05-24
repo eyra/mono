@@ -27,10 +27,10 @@
         </div>
         <hr>
         <div>
-          <%= live_redirect "Open modal screen", to: Routes.screen_index_path(@socket, :index, nav_stack: @push_modal_nav_stack), data: [native_operation: :push_modal] %>
+          <%= live_redirect "Open modal screen", to: Routes.screen_index_path(@socket, :index, nav_stack: @push_modal_nav_stack, _no: :push_modal) %>
         </div>
         <div>
-          <%= live_redirect "Close modal screen", to: Routes.screen_index_path(@socket, :index, nav_stack: @pop_modal_nav_stack), data: [native_operation: :pop_modal] %>
+          <%= live_redirect "Close modal screen", to: Routes.screen_index_path(@socket, :index, nav_stack: @pop_modal_nav_stack, _no: :pop_modal) %>
         </div>
       </div>
     </div>
