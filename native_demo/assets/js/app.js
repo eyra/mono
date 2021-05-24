@@ -57,10 +57,10 @@ const nativeIOSWrapper = {
       type: "modal",
     })
   },
-  updateScreenInfo: (title) => {
-    window.webkit.messageHandlers.UpdateScreen.postMessage({
-      title
-    })
+  updateScreenInfo: (info) => {
+    window.webkit.messageHandlers.UpdateScreen.postMessage(
+      info
+    )
   }
 }
 
@@ -74,13 +74,19 @@ const loggingWrapper = {
   popModal: () => {
     console.log("pop modal screen")
   },
-  updateScreenInfo: (title) => {
-    console.log("set screen title", title)
+  updateScreenInfo: (info) => {
+    console.log("set screen info", info)
   }
 }
 
 const nativeWrapper = window.webkit?.messageHandlers !== undefined ? nativeIOSWrapper : loggingWrapper
 
+const screenId = (urlString) => {
+    const url = new URL(urlString);
+    const params = new URLSearchParams(url.search);
+    params.delete("_no");
+    return `${url.pathname}${params.toString()}` 
+}
 
 window.addEventListener("phx:page-loading-start", info => {
   topbar.show()
@@ -93,17 +99,15 @@ window.addEventListener("phx:page-loading-start", info => {
     } else if (nativeOperation === "pop_modal") {
       nativeWrapper.popModal()
     } else {
-      nativeWrapper.openScreen(info.detail.to)
+      nativeWrapper.openScreen(screenId(info.detail.to))
     }
   }
 })
 window.addEventListener("phx:page-loading-stop", info => {
   topbar.hide()
   const nativeSettingsNode = document.querySelector(".native-settings")
-  if (nativeSettingsNode) {
-    const settings = nativeSettingsNode.dataset
-    nativeWrapper.updateScreenInfo(settings.nativeTitle)
-  }
+  const title = nativeSettingsNode?.dataset.nativeTitle;
+  nativeWrapper.updateScreenInfo({title, id: screenId(info.detail.to)})
 })
 
 // connect if there are any LiveViews on the page
