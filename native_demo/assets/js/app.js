@@ -85,7 +85,7 @@ const screenId = (urlString) => {
     const url = new URL(urlString);
     const params = new URLSearchParams(url.search);
     params.delete("_no");
-    return `${url.pathname}${params.toString()}` 
+    return `${url.pathname}?${params.toString()}` 
 }
 
 window.addEventListener("phx:page-loading-start", info => {
@@ -118,3 +118,7 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
+
+window.setScreenFromNative = (screenId) => {
+  liveSocket.redirect(screenId, null);
+}
