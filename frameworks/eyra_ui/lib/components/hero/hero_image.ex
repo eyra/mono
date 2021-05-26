@@ -19,8 +19,8 @@ defmodule EyraUI.Hero.HeroImage do
     ~H"""
     <div class="w-full">
       <div class="relative overflow-hidden w-full h-image-header sm:h-image-header-sm bg-grey4">
-        <Image id="a" class="object-cover w-full h-full" image={{@image_info}} />
-        <div class="absolute top-0 left-0 h-full flex items-center justify-center">
+        <Image image={{@image_info}} class="object-cover w-full h-full" transition="duration-1000"/>
+        <div class="absolute z-20 top-0 left-0 h-full flex items-center justify-center">
           <div class="ml-6 mr-6 sm:ml-20 sm:mr-20 text-shadow-md flex-wrap">
             <Title0 color="text-white">{{@title}}</Title0>
             <Spacing value="S" />

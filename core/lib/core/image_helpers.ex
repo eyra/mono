@@ -21,7 +21,6 @@ defmodule Core.ImageHelpers do
   end
 
   def get_image_info(image_id, width, height) do
-    IO.inspect(image_id, label: "image_id")
     catalog().info(image_id, width: width, height: height)
   end
 end
