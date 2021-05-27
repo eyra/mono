@@ -1,22 +1,22 @@
 ---
-- name: Setup Erlang/OTP repository key
-  apt_key:
-    state: present
-    url: https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc
-    id: 434975BD900CCBE4F7EE1B1ED208507CA14F4FCA
 
-- name: Setup Erlang/OTP respository
-  ansible.builtin.apt_repository:
-    repo: deb https://packages.erlang-solutions.com/ubuntu focal contrib
-    state: present
-
-- name: Install Elixir
+- name: Install ASDF Deps
   ansible.builtin.apt:
     name:
-      - 'elixir={{elixir_version}}*'
-      - erlang
-      - erlang-dev
-      - erlang-src
+      - autoconf
+      - automake
       - build-essential
+      - curl
+      - git
+      - libffi-dev
+      - libncurses5-dev
+      - libreadline-dev
+      - libssl-dev
+      - libtool
+      - libxslt-dev
+      - libyaml-dev
+      - unzip
     state: present
-    install_recommends: no
+    install_recommends: yes
+
+

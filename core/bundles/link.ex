@@ -1,3 +1,5 @@
+# (c) Copyright 2021 Vrije Universiteit Amsterdam, all rights reserved.
+
 defmodule Link do
   def routes do
     quote do

@@ -19,6 +19,7 @@ import "phoenix_html"
 import { Socket } from "phoenix"
 import { LiveSocket } from "phoenix_live_view"
 import { decode } from "blurhash";
+import {urlBase64ToUint8Array} from "./tools"
 
 window.blurHash = () => {
     return {
@@ -63,3 +64,45 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
+
+
+// PWA
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js', {scope: './'})
+  .catch((error) => {
+    // registration failed
+    console.log('Registration failed with ' + error);
+  });
+
+
+  navigator.serviceWorker.ready.then((registration)=> {
+    return registration.pushManager.getSubscription().then((subscription)=> {
+
+      if (subscription) {
+        return subscription;
+      }
+
+      return fetch('/web-push/vapid-public-key').then((response)=>{
+        return response.text()
+      }).then((vapidPublicKey)=>{
+        // Chrome doesn’t accept the base64-encoded (string) vapidPublicKey yet urlBase64ToUint8Array() is defined in /tools.js
+        const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
+
+        return registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: convertedVapidKey
+        });
+      })
+    });
+  }).then(function(subscription) {
+    fetch('/web-push/register', {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        subscription: subscription
+      }),
+    });
+  });
+}

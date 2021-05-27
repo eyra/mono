@@ -5,6 +5,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const {InjectManifest} = require('workbox-webpack-plugin');
+
 
 module.exports = (env, options) => {
   const devMode = options.mode !== 'production';
@@ -17,7 +19,8 @@ module.exports = (env, options) => {
       ]
     },
     entry: {
-      'app': glob.sync('./vendor/**/*.js').concat(['./js/app.js'])
+      'app': glob.sync('./vendor/**/*.js').concat(['./js/app.js']),
+      // 'sw': ['./js/sw.js']
     },
     output: {
       filename: '[name].js',
@@ -31,9 +34,12 @@ module.exports = (env, options) => {
           test: /\.js$/,
           exclude: /node_modules/,
           use: {
-            loader: 'babel-loader'
+            loader: 'babel-loader',
+            options: {
+             "targets": "defaults" 
+
           }
-        },
+        }},
         {
           test: /\.css$/,
           use: [
@@ -56,7 +62,8 @@ module.exports = (env, options) => {
     },
     plugins: [
       new MiniCssExtractPlugin({ filename: '../css/app.css' }),
-      new CopyWebpackPlugin([{ from: 'static/', to: '../' }])
+      new CopyWebpackPlugin([{ from: 'static/', to: '../' }]),
+      new InjectManifest({ swSrc: './js/sw.js', swDest: '../sw.js' }),
     ]
     .concat(devMode ? [new HardSourceWebpackPlugin()] : [])
   }
