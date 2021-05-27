@@ -194,7 +194,8 @@ defmodule Core.Studies.StudyEdit do
 
     image_url =
       survey_tool.image_id
-      |> ImageHelpers.get_image_url(400, 300)
+      |> ImageHelpers.get_image_info(400, 300)
+      |> Map.get(:url)
 
     %{}
     |> Map.put(:focus, "")

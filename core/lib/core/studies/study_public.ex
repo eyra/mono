@@ -33,7 +33,6 @@ defmodule Core.Studies.StudyPublic do
     banner_subtitle: "",
     banner_url: "",
     # Transient
-    image_url: nil,
     image_info: nil,
     themes: "",
     byline: "",
@@ -60,7 +59,6 @@ defmodule Core.Studies.StudyPublic do
 
     transient_opts = %{
       image_info: ImageHelpers.get_image_info(survey_tool.image_id, 2560, 1920),
-      image_url: ImageHelpers.get_image_url(survey_tool.image_id, 2560, 1920),
       themes: get_themes(survey_tool),
       byline: get_byline(study, survey_tool),
       organisation_icon: get_organisation_id(survey_tool),
