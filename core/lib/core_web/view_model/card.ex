@@ -48,13 +48,13 @@ defmodule CoreWeb.ViewModel.Card do
       if published_at === nil, do: dgettext("eyra-survey", "published.false.label"), else: nil
 
     icon_url = get_icon_url(marks, socket)
-    image_url = ImageHelpers.get_image_url(image_id)
+    image_info = ImageHelpers.get_image_info(image_id)
     tags = get_tags(themes)
 
     %{
       id: id,
       title: title,
-      image_url: image_url,
+      image_info: image_info,
       tags: tags,
       duration: duration,
       info: info,
@@ -73,7 +73,7 @@ defmodule CoreWeb.ViewModel.Card do
     %{
       id: id,
       title: title,
-      image_url: ImageHelpers.get_image_url(nil),
+      image_info: ImageHelpers.get_image_info(nil),
       tags: [],
       duration: nil,
       info: [],

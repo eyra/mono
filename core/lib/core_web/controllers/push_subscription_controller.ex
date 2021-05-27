@@ -10,6 +10,10 @@ defmodule CoreWeb.PushSubscriptionController do
     conn |> json(%{})
   end
 
+  def register(conn, _) do
+    conn |> json(%{})
+  end
+
   def vapid_public_key(conn, _) do
     conn
     |> put_resp_content_type("text/plain")

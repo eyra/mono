@@ -92,7 +92,7 @@ defmodule CoreWeb.Study.Public do
       <HeroImage
         title={{@study_public.title}}
         subtitle={{@study_public.themes}}
-        image_url={{@study_public.image_url}}
+        image_info={{@study_public.image_info}}
       >
         <template slot="call_to_action">
           <PrimaryLiveViewButton :if={{not @participant?}} label={{ dgettext("eyra-survey", "apply.button") }} event="signup" />
