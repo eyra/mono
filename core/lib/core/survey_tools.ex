@@ -36,7 +36,7 @@ defmodule Core.SurveyTools do
   alias Core.Accounts.User
   alias Core.SurveyTools.{SurveyTool, SurveyToolTask, Participant}
   alias Core.Authorization
-  alias Core.NotificationCenter
+  alias Core.Signals
 
   @doc """
   Returns the list of survey_tools.
@@ -254,13 +254,10 @@ defmodule Core.SurveyTools do
       :role_assignment,
       Authorization.build_role_assignment(user, survey_tool, :participant)
     )
-    |> Multi.run(:notify_participant, fn _, _ ->
-      NotificationCenter.notify_users_with_role(
-        survey_tool,
-        :owner,
-        title: "New application for: #{survey_tool.title}"
-      )
-    end)
+    |> Signals.multi_dispatch(:participant_applied, %{
+      survey_tool: survey_tool,
+      user: user
+    })
     |> Repo.transaction()
   end
 

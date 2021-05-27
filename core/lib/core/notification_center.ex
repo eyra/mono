@@ -12,13 +12,19 @@ defmodule Core.NotificationCenter do
   alias Core.Repo
   alias Core.NotificationCenter.Notification
   alias Core.NotificationCenter.Box
+  alias Core.Signals
 
-  def notify(%Box{id: box_id}, %{} = notification_data) do
+  def notify(%Box{id: box_id} = box, %{} = notification_data) do
     with {:ok, _} <-
            %Notification{}
            |> Notification.changeset(notification_data)
            |> Ecto.Changeset.put_change(:box_id, box_id)
            |> Repo.insert() do
+      Signals.dispatch!(:notification_created, %{
+        box: box,
+        data: notification_data
+      })
+
       :ok
     end
   end
