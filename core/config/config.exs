@@ -70,6 +70,11 @@ config :core, :ssl,
   domains: ["localhost"],
   emails: ["admin@localhost"]
 
+config :web_push_encryption, :vapid_details,
+  subject: "mailto:administrator@example.com",
+  public_key: "use `mix web_push.gen.keypair`",
+  private_key: ""
+
 import_config "#{Mix.env()}.exs"
 
 bundle = System.get_env("BUNDLE", "next") |> String.to_atom()

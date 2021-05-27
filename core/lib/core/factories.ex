@@ -3,7 +3,7 @@ defmodule Core.Factories do
   This module provides factory function to be used for tests.
   """
   alias Core.Accounts.{User, Profile}
-  alias Core.{Studies, SurveyTools, Authorization, DataUploader}
+  alias Core.{Studies, SurveyTools, Authorization, DataUploader, WebPush}
   alias Core.Repo
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
@@ -29,6 +29,16 @@ defmodule Core.Factories do
 
   def build(:auth_node) do
     %Authorization.Node{}
+  end
+
+  def build(:web_push_subscription) do
+    %WebPush.PushSubscription{
+      user: build(:member),
+      endpoint: Faker.Internet.url(),
+      expiration_time: 0,
+      auth: Faker.String.base64(22),
+      p256dh: Faker.String.base64(87)
+    }
   end
 
   def build(:study) do
