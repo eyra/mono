@@ -105,6 +105,9 @@ const nativeIOSWrapper = {
 };
 
 const loggingWrapper = {
+  setScreenState: (info) => {
+    console.log(info);
+  },
   openScreen: (info) => {
     console.log("open screen", info);
   },
@@ -137,7 +140,7 @@ window.addEventListener("phx:page-loading-start", (info) => {
   if (info.detail.kind === "redirect") {
     const to = new URL(info.detail.to);
     const nativeOperation = to.searchParams.get("_no");
-    nativeWrapper.setState({
+    nativeWrapper.setScreenState({
       scrollPosition: window.scrollY,
     });
     if (nativeOperation === "push_modal") {
