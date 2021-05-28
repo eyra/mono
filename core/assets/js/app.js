@@ -154,6 +154,11 @@ window.addEventListener("phx:page-loading-start", (info) => {
     }
   }
 });
+
+const updateState = (state) => {
+  window.scroll(0, state?.scrollPosition || 0);
+};
+
 window.addEventListener("phx:page-loading-stop", (info) => {
   const titleNode = document.querySelector("[data-native-title]");
   const title = titleNode?.dataset.nativeTitle || "- no title set -";
@@ -161,16 +166,19 @@ window.addEventListener("phx:page-loading-stop", (info) => {
     title,
     id: screenId(info.detail.to),
   });
-  if (nativeWrapper.scrollPosition) {
-    window.scroll(0, nativeWrapper.scrollPosition);
-    nativeWrapper.scrollPosition = undefined;
-  }
   nativeWrapper.webReady();
 });
 
 window.setScreenFromNative = (screenId, state) => {
-  nativeWrapper.scrollPosition = state?.scrollPosition;
-  liveSocket.replaceMain(screenId, null);
+  liveSocket.replaceMain(screenId, null, () => {
+    setTimeout(() => {
+      updateState(state);
+    }, 0);
+  });
+};
+
+window.setStateFromNative = (state) => {
+  updateState(state);
 };
 
 // connect if there are any LiveViews on the page
