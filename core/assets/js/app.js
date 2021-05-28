@@ -64,7 +64,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
   },
 });
 
-const nativeIOSWrapper = {
+window.nativeIOSWrapper = {
   // The native code bridge assumes that handlers have been setup. Seethe docs for more info:
   // https://developer.apple.com/documentation/webkit/wkusercontentcontroller/1537172-add
   //
@@ -132,7 +132,7 @@ const screenId = (urlString) => {
   const url = new URL(urlString);
   const params = new URLSearchParams(url.search);
   params.delete("_no");
-  return `${url.pathname}?${params.toString()}`;
+  return `${url.protocol}//${url.host}${url.pathname}?${params.toString()}`;
 };
 
 window.addEventListener("phx:page-loading-start", (info) => {
@@ -170,7 +170,7 @@ window.addEventListener("phx:page-loading-stop", (info) => {
 
 window.setScreenFromNative = (screenId, state) => {
   nativeWrapper.scrollPosition = state?.scrollPosition;
-  liveSocket.redirect(screenId, null);
+  liveSocket.replaceMain(screenId, null);
 };
 
 // connect if there are any LiveViews on the page
