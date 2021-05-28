@@ -5,6 +5,15 @@ defmodule EyraUI.Components.OldSkool do
   Conveniences for reusable UI components
   """
 
+  def native_wrapper?(%{req_headers: req_headers}) do
+    req_headers
+    |> Enum.into(%{})
+    |> IO.inspect()
+    |> Map.get("user-agent", "")
+    |> IO.inspect(label: "AGENT")
+    |> String.contains?("NativeWrapper")
+  end
+
   def menu_button(label, path) do
     ~E"""
     <a href= <%= path %>>
