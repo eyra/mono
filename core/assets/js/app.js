@@ -16,18 +16,10 @@ import "../css/app.css";
 import "alpine-magic-helpers/dist/component";
 import Alpine from "alpinejs";
 import "phoenix_html";
-import {
-  Socket
-} from "phoenix";
-import {
-  LiveSocket
-} from "phoenix_live_view";
-import {
-  decode
-} from "blurhash";
-import {
-  urlBase64ToUint8Array
-} from "./tools";
+import { Socket } from "phoenix";
+import { LiveSocket } from "phoenix_live_view";
+import { decode } from "blurhash";
+import { urlBase64ToUint8Array } from "./tools";
 
 window.blurHash = () => {
   return {
@@ -119,9 +111,9 @@ const loggingWrapper = {
 };
 
 const nativeWrapper =
-  window.webkit ? .messageHandlers !== undefined ?
-  nativeIOSWrapper :
-  loggingWrapper;
+  window.webkit?.messageHandlers !== undefined
+    ? nativeIOSWrapper
+    : loggingWrapper;
 
 const screenId = (urlString) => {
   const url = new URL(urlString);
@@ -151,7 +143,7 @@ window.addEventListener("phx:page-loading-start", (info) => {
 });
 window.addEventListener("phx:page-loading-stop", (info) => {
   const titleNode = document.querySelector("[data-native-title]");
-  const title = titleNode ? .dataset.nativeTitle || "- no title set -";
+  const title = titleNode?.dataset.nativeTitle || "- no title set -";
   nativeWrapper.updateScreenInfo({
     title,
     id: screenId(info.detail.to),
@@ -214,7 +206,7 @@ if ("serviceWorker" in navigator) {
           });
       });
     })
-    .then(function(subscription) {
+    .then(function (subscription) {
       fetch("/web-push/register", {
         method: "post",
         headers: {
