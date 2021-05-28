@@ -169,7 +169,7 @@ window.addEventListener("phx:page-loading-stop", (info) => {
 });
 
 window.setScreenFromNative = (screenId, state) => {
-  nativeWrapper.scrollPosition = state.scrollPosition;
+  nativeWrapper.scrollPosition = state?.scrollPosition;
   liveSocket.redirect(screenId, null);
 };
 
