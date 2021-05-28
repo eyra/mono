@@ -69,28 +69,38 @@ const nativeIOSWrapper = {
   // https://developer.apple.com/documentation/webkit/wkusercontentcontroller/1537172-add
   //
   // Uncomment each section to enable it.
-  setScreenState: (state) => {},
+  setScreenState: (state) => {
+    window.webkit.messageHandlers.Native.postMessage({
+      type: "setScreenState",
+      state,
+    });
+  },
   openScreen: (info) => {
-    window.webkit.messageHandlers.Push.postMessage({
-      type: "open",
+    window.webkit.messageHandlers.Native.postMessage({
+      type: "openScreen",
       ...info,
     });
   },
   pushModal: () => {
-    window.webkit.messageHandlers.Push.postMessage({
-      type: "modal",
+    window.webkit.messageHandlers.Native.postMessage({
+      type: "pushModal",
     });
   },
   popModal: () => {
-    window.webkit.messageHandlers.Pop.postMessage({
-      type: "modal",
+    window.webkit.messageHandlers.Native.postMessage({
+      type: "popModal",
     });
   },
   updateScreenInfo: (info) => {
-    window.webkit.messageHandlers.UpdateScreen.postMessage(info);
+    window.webkit.messageHandlers.Native.postMessage({
+      type: "updateScreen",
+      ...info,
+    });
   },
   webReady: () => {
-    window.webkit.messageHandlers.WebReady.postMessage();
+    window.webkit.messageHandlers.Native.postMessage({
+      type: "webReady",
+    });
   },
 };
 
