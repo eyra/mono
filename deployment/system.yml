@@ -3,8 +3,6 @@
   hosts: all
   remote_user: commander
   become: true
-  vars:
-    elixir_version: "1.11"
   roles:
     - bundle
   # setup outgoing mail

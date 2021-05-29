@@ -1,0 +1,2 @@
+defmodule CoreWeb.VapidPublicKeyController do
+end

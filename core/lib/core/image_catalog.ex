@@ -5,6 +5,8 @@ defmodule Core.ImageCatalog do
   @type image_info :: %{
           id: image_id,
           url: binary,
+          width: pos_integer(),
+          height: pos_integer(),
           srcset: binary,
           blur_hash: nil | binary,
           attribution: nil | Phoenix.HTML.Safe.t()

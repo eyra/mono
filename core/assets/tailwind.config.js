@@ -36,6 +36,9 @@ module.exports = {
       surfconext: '#4DB2CF',
     },
     extend: {
+      transitionDuration: {
+        '2000': '2000ms',
+      },      
       spacing: {
         "1px" : "1px",
         "2px" : "2px",

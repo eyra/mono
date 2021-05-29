@@ -95,6 +95,8 @@ defmodule Core.ImageCatalog.Unsplash do
       url: image_url(raw_url, w: width, h: height),
       srcset: 1..3 |> Enum.map(&srcset_item(raw_url, width, height, &1)) |> Enum.join(","),
       blur_hash: blur_hash,
+      width: width,
+      height: height,
       attribution:
         {:safe,
          ~s(Photo by <a href="https://unsplash.com/@#{safe_username}=#{app_name}&utm_medium=referral">#{
@@ -121,7 +123,7 @@ defmodule Core.ImageCatalog.Unsplash do
   defp image_query(query_string, opts) do
     query_string
     |> URI.decode_query()
-    |> Map.merge(%{auto: :compress})
+    |> Map.merge(%{auto: :compress, fit: :crop, crop: "faces,focalpoint"})
     |> Map.merge(opts |> Map.new())
     |> URI.encode_query()
   end
