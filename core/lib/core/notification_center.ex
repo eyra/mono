@@ -20,7 +20,7 @@ defmodule Core.NotificationCenter do
            |> Notification.changeset(notification_data)
            |> Ecto.Changeset.put_change(:box_id, box_id)
            |> Repo.insert() do
-      Signals.dispatch!(:notification_created, %{
+      Signals.dispatch!(:new_notification, %{
         box: box,
         data: notification_data
       })

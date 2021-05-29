@@ -6,7 +6,7 @@ defmodule Core.Mailer.SignalHandlers do
 
   @impl true
   def dispatch(:new_notification, %{box: box, data: %{title: title}}) do
-    for mail <- mail_users(box) do
+    for mail <- base_emails(box) do
       mail
       |> subject(title)
       |> render(:new_notification, title: title)
@@ -14,7 +14,7 @@ defmodule Core.Mailer.SignalHandlers do
     end
   end
 
-  defp mail_users(%Box{} = box) do
+  defp base_emails(%Box{} = box) do
     box
     |> Core.Authorization.users_with_role(:owner)
     |> Enum.map(&user_email(&1))
