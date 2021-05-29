@@ -13,6 +13,7 @@ import "../css/app.css";
 //     import socket from "./socket"
 //
 
+import '@ryangjchandler/spruce'
 import 'alpine-magic-helpers/dist/component'
 import Alpine from "alpinejs"
 import "phoenix_html"
@@ -20,6 +21,7 @@ import { Socket } from "phoenix"
 import { LiveSocket } from "phoenix_live_view"
 import { decode } from "blurhash";
 import {urlBase64ToUint8Array} from "./tools"
+
 
 window.blurHash = () => {
     return {
@@ -67,42 +69,74 @@ window.liveSocket = liveSocket
 
 
 // PWA
+//
+//
+const pushStore = Spruce.store("push", {registration: "pending"})
+const getExistingSubscription = () => {
+  return navigator.serviceWorker.ready.then((registration)=> {
+    return registration.pushManager.getSubscription().then(subscription=>{
+      return {registration, subscription};
+    })
+  });
+}
+const registerPushSubscription = (subscription) => {
+      console.log("Server", subscription);
+  return fetch('/web-push/register', {
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      subscription: subscription
+    }),
+  }).then(()=>{
+    pushStore.registration = "registered"
+  });
+}
+
+
+window.registerForPush = ()=>{
+  if (!('serviceWorker' in navigator)) {
+    alert("Sorry, your browser does not support push")
+    return;    
+  }
+  pushStore.registration = "registering"
+  getExistingSubscription().then(({registration,subscription})=> {
+    if (subscription) {
+      // already registered
+      return subscription;
+    }
+
+    return fetch('/web-push/vapid-public-key').then((response)=>{
+      console.log("Vapid", response);
+      return response.text()
+    }).then((vapidPublicKey)=>{
+      // Chrome doesn’t accept the base64-encoded (string) vapidPublicKey yet urlBase64ToUint8Array() is defined in /tools.js
+      const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
+
+      return registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: convertedVapidKey
+      });
+    })
+  }).then(registerPushSubscription).catch(e=>{
+    pushStore.registration = "denied";
+  });
+}
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js', {scope: './'})
+  navigator.serviceWorker.register('/sw.js', {scope: './'})
   .catch((error) => {
     // registration failed
     console.log('Registration failed with ' + error);
   });
 
-
-  navigator.serviceWorker.ready.then((registration)=> {
-    return registration.pushManager.getSubscription().then((subscription)=> {
-
-      if (subscription) {
-        return subscription;
-      }
-
-      return fetch('/web-push/vapid-public-key').then((response)=>{
-        return response.text()
-      }).then((vapidPublicKey)=>{
-        // Chrome doesn’t accept the base64-encoded (string) vapidPublicKey yet urlBase64ToUint8Array() is defined in /tools.js
-        const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
-
-        return registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: convertedVapidKey
-        });
-      })
-    });
-  }).then(function(subscription) {
-    fetch('/web-push/register', {
-      method: 'post',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        subscription: subscription
-      }),
-    });
-  });
+  getExistingSubscription().then(({subscription}) => {
+    if (subscription) {
+      return registerPushSubscription(subscription);
+    } else {
+      pushStore.registration = "not-registered";
+    }
+  })
+} else {
+  Spruce.store("push", {registration: "unavailable"})
 }
