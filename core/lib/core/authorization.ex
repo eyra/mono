@@ -20,6 +20,7 @@ defmodule Core.Authorization do
 
   grant_access(CoreWeb.Index, [:visitor, :member])
   grant_access(CoreWeb.Dashboard, [:member])
+  grant_access(CoreWeb.Notifications, [:member])
   grant_access(CoreWeb.User.Signin, [:visitor])
   grant_access(CoreWeb.User.Signup, [:visitor])
   grant_access(CoreWeb.User.ResetPassword, [:visitor])
