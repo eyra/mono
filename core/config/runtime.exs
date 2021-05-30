@@ -56,4 +56,9 @@ if config_env() == :prod do
     emails: [System.get_env("LETS_ENCRYPT_EMAIL", "admin@#{host}")],
     directory_url: System.get_env("LETS_ENCRYPT_DIRECTORY_URL"),
     db_folder: System.get_env("LETS_ENCRYPT_DB")
+
+  config :web_push_encryption, :vapid_details,
+    subject: "mailto:admin@#{host}",
+    public_key: System.get_env("WEB_PUSH_PUBLIC_KEY"),
+    private_key: System.get_env("WEB_PUSH_PRIVATE_KEY")
 end
