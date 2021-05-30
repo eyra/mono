@@ -99,9 +99,7 @@ defmodule Core.ImageCatalog.Unsplash do
       height: height,
       attribution:
         {:safe,
-         ~s(Photo by <a href="https://unsplash.com/@#{safe_username}=#{app_name}&utm_medium=referral">#{
-           safe_name
-         }</a> on <a href="https://unsplash.com/?utm_source=#{app_name}&utm_medium=referral">Unsplash</a>)}
+         ~s(Photo by <a href="https://unsplash.com/@#{safe_username}=#{app_name}&utm_medium=referral">#{safe_name}</a> on <a href="https://unsplash.com/?utm_source=#{app_name}&utm_medium=referral">Unsplash</a>)}
     }
   end
 

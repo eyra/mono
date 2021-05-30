@@ -48,9 +48,7 @@ defmodule GreenLight.Plug do
     case result do
       {:error, {principal_roles, required_permission}} ->
         Logger.debug(
-          "Principal with roles: #{principal_roles |> Enum.join(", ")} is not allowed to: `#{
-            required_permission
-          }`."
+          "Principal with roles: #{principal_roles |> Enum.join(", ")} is not allowed to: `#{required_permission}`."
         )
 
         conn
