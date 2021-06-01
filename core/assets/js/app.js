@@ -160,6 +160,9 @@ const updateState = (state) => {
 };
 
 window.addEventListener("phx:page-loading-stop", (info) => {
+  if (info.detail.kind !== "initial") {
+    return
+  }
   const titleNode = document.querySelector("[data-native-title]");
   const title = titleNode?.dataset.nativeTitle || "- no title set -";
   nativeWrapper.updateScreenInfo({
