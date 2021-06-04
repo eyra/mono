@@ -20,6 +20,7 @@ defmodule Core.Authorization do
 
   grant_access(CoreWeb.Index, [:visitor, :member])
   grant_access(CoreWeb.Dashboard, [:member])
+  grant_access(CoreWeb.Notifications, [:member])
   grant_access(CoreWeb.User.Signin, [:visitor])
   grant_access(CoreWeb.User.Signup, [:visitor])
   grant_access(CoreWeb.User.ResetPassword, [:visitor])
@@ -154,5 +155,14 @@ defmodule Core.Authorization do
 
   def can_access?(principal, entity, module) when is_atom(module) do
     can?(principal, entity, GreenLight.Permissions.access_permission(module))
+  end
+
+  def users_with_role(entity, role) do
+    principal_ids = Core.Authorization.query_principal_ids(role: role, entity: entity)
+
+    Ecto.Query.from(u in Core.Accounts.User,
+      where: u.id in subquery(principal_ids)
+    )
+    |> Core.Repo.all()
   end
 end

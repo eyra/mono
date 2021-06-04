@@ -31,6 +31,8 @@ Environment="SIGN_IN_WITH_APPLE_TEAM_ID={{sign_in_with_apple_team_id}}"
 Environment="SIGN_IN_WITH_APPLE_PRIVATE_KEY_ID={{sign_in_with_apple_private_key_id}}"
 Environment="SIGN_IN_WITH_APPLE_PRIVATE_KEY_PATH={{sign_in_with_apple_private_key_path}}"
 Environment="MAILGUN_API_KEY={{mailgun_api_key}}"
+Environment="WEB_PUSH_PUBLIC_KEY={{web_push_public_key}}"
+Environment="WEB_PUSH_PRIVATE_KEY={{web_push_private_key}}"
 
 [Install]
 WantedBy=multi-user.target

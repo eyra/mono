@@ -3,8 +3,9 @@ defmodule Core.WebPushTest do
   import ExUnit.CaptureLog
   import Mox
   alias Core.Factories
-
   alias Core.WebPush
+
+  setup :verify_on_exit!
 
   setup do
     user = Factories.insert!(:member)

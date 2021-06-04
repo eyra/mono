@@ -107,4 +107,9 @@ defmodule GreenLight.Ecto.Query do
     query = query_role_assignments(role_assignment_schema, opts)
     Ecto.Query.from(ra in query, select: ra.node_id)
   end
+
+  def query_principal_ids(role_assignment_schema, opts \\ []) do
+    query = query_role_assignments(role_assignment_schema, opts)
+    Ecto.Query.from(ra in query, select: ra.principal_id)
+  end
 end

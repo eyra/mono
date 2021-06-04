@@ -36,6 +36,7 @@ defmodule Core.SurveyTools do
   alias Core.Accounts.User
   alias Core.SurveyTools.{SurveyTool, SurveyToolTask, Participant}
   alias Core.Authorization
+  alias Core.Signals
 
   @doc """
   Returns the list of survey_tools.
@@ -253,6 +254,10 @@ defmodule Core.SurveyTools do
       :role_assignment,
       Authorization.build_role_assignment(user, survey_tool, :participant)
     )
+    |> Signals.multi_dispatch(:participant_applied, %{
+      survey_tool: survey_tool,
+      user: user
+    })
     |> Repo.transaction()
   end
 
