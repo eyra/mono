@@ -17,7 +17,8 @@ defmodule EyraUI.Hero.HeroImage do
 
   def render(assigns) do
     ~H"""
-    <div class="w-full">
+    <div class="w-full"
+       data-native-title={{@title}}>
       <div class="relative overflow-hidden w-full h-image-header sm:h-image-header-sm bg-grey4">
         <Image image={{@image_info}} transition="duration-1000"/>
         <div class="absolute z-20 top-0 left-0 h-full flex items-center justify-center">
