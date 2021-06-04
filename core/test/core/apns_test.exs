@@ -3,7 +3,6 @@ defmodule Core.APNSTest do
   import Mox
   import ExUnit.CaptureLog
   alias Core.APNS
-  alias Core.APNS.PushToken
   alias Core.Factories
 
   @valid_token %{device_token: "some device_token"}

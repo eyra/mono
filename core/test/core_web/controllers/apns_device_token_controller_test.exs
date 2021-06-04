@@ -1,9 +1,6 @@
 defmodule CoreWeb.APNSDeviceTokenControllerTest do
   use CoreWeb.ConnCase
 
-  alias Core.APNS
-  alias Core.APNS.PushToken
-
   setup [:login_as_member]
 
   setup %{conn: conn} do
