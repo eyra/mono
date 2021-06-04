@@ -8,9 +8,7 @@ defmodule EyraUI.Components.OldSkool do
   def native_wrapper?(%{req_headers: req_headers}) do
     req_headers
     |> Enum.into(%{})
-    |> IO.inspect()
     |> Map.get("user-agent", "")
-    |> IO.inspect(label: "AGENT")
     |> String.contains?("NativeWrapper")
   end
 
