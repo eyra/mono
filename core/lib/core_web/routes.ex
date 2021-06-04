@@ -54,6 +54,12 @@ defmodule CoreWeb.Routes do
       end
 
       CoreWeb.Live.Routes.routes()
+
+      scope "/", CoreWeb do
+        pipe_through(:api)
+
+        post("/api/apns-token", APNSDeviceTokenController, :create)
+      end
     end
   end
 end
