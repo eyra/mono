@@ -69,9 +69,10 @@ window.nativeIOSWrapper = {
   // https://developer.apple.com/documentation/webkit/wkusercontentcontroller/1537172-add
   //
   // Uncomment each section to enable it.
-  setScreenState: (state) => {
+  setScreenState: (id, state) => {
     window.webkit.messageHandlers.Native.postMessage({
       type: "setScreenState",
+      id,
       state,
     });
   },
@@ -105,8 +106,8 @@ window.nativeIOSWrapper = {
 };
 
 const loggingWrapper = {
-  setScreenState: (info) => {
-    console.log(info);
+  setScreenState: (id, info) => {
+    console.log(id, info);
   },
   openScreen: (info) => {
     console.log("open screen", info);
@@ -140,9 +141,10 @@ window.addEventListener("phx:page-loading-start", (info) => {
   if (info.detail.kind === "redirect") {
     const to = new URL(info.detail.to);
     const nativeOperation = to.searchParams.get("_no");
-    nativeWrapper.setScreenState({
-      scrollPosition: window.scrollY,
-    });
+    nativeWrapper.setScreenState(
+      screenId(window.location),
+      { scrollPosition: window.scrollY }
+    );
     if (nativeOperation === "push_modal") {
       nativeWrapper.pushModal();
     } else if (nativeOperation === "pop_modal") {
