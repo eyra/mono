@@ -13,96 +13,234 @@ import "../css/app.css";
 //     import socket from "./socket"
 //
 
-import 'alpine-magic-helpers/dist/component'
-import Alpine from "alpinejs"
-import "phoenix_html"
-import { Socket } from "phoenix"
-import { LiveSocket } from "phoenix_live_view"
+import "alpine-magic-helpers/dist/component";
+import Alpine from "alpinejs";
+import "phoenix_html";
+import { Socket } from "phoenix";
+import { LiveSocket } from "phoenix_live_view";
 import { decode } from "blurhash";
-import {urlBase64ToUint8Array} from "./tools"
+import { urlBase64ToUint8Array } from "./tools";
 
 window.blurHash = () => {
-    return {
-        show: true,
-        showBlurHash() {
-            return this.show!== false;
-        },
-        hideBlurHash() {
-            this.show= false;
-        },
-        render() {
-            const canvas = this.$el.getElementsByTagName("canvas")[0];
-            if (canvas.dataset.rendered) { return }
-            const blurhash = canvas.dataset.blurhash
-            const width = parseInt(canvas.getAttribute("width"), 10)
-            const height = parseInt(canvas.getAttribute("height"), 10)
-            const pixels = decode(blurhash, width, height);
-            const ctx = canvas.getContext("2d");
-            const imageData = ctx.createImageData(width, height);
-            imageData.data.set(pixels);
-            ctx.putImageData(imageData, 0, 0);
-            canvas.dataset.rendered = true
-        }
-    }
-}
+  return {
+    show: true,
+    showBlurHash() {
+      return this.show !== false;
+    },
+    hideBlurHash() {
+      this.show = false;
+    },
+    render() {
+      const canvas = this.$el.getElementsByTagName("canvas")[0];
+      if (canvas.dataset.rendered) {
+        return;
+      }
+      const blurhash = canvas.dataset.blurhash;
+      const width = parseInt(canvas.getAttribute("width"), 10);
+      const height = parseInt(canvas.getAttribute("height"), 10);
+      const pixels = decode(blurhash, width, height);
+      const ctx = canvas.getContext("2d");
+      const imageData = ctx.createImageData(width, height);
+      imageData.data.set(pixels);
+      ctx.putImageData(imageData, 0, 0);
+      canvas.dataset.rendered = true;
+    },
+  };
+};
 
-let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+let csrfToken = document
+  .querySelector("meta[name='csrf-token']")
+  .getAttribute("content");
 let liveSocket = new LiveSocket("/live", Socket, {
-    params: { _csrf_token: csrfToken },
-    dom: {
-        onBeforeElUpdated(from, to) {
-            if (from.__x) { Alpine.clone(from.__x, to) }
-        }
+  params: {
+    _csrf_token: csrfToken,
+  },
+  dom: {
+    onBeforeElUpdated(from, to) {
+      if (from.__x) {
+        Alpine.clone(from.__x, to);
+      }
+    },
+  },
+});
+
+window.nativeIOSWrapper = {
+  // The native code bridge assumes that handlers have been setup. Seethe docs for more info:
+  // https://developer.apple.com/documentation/webkit/wkusercontentcontroller/1537172-add
+  //
+  // Uncomment each section to enable it.
+  setScreenState: (id, state) => {
+    window.webkit.messageHandlers.Native.postMessage({
+      type: "setScreenState",
+      id,
+      state,
+    });
+  },
+  openScreen: (info) => {
+    window.webkit.messageHandlers.Native.postMessage({
+      type: "openScreen",
+      ...info,
+    });
+  },
+  pushModal: () => {
+    window.webkit.messageHandlers.Native.postMessage({
+      type: "pushModal",
+    });
+  },
+  popModal: () => {
+    window.webkit.messageHandlers.Native.postMessage({
+      type: "popModal",
+    });
+  },
+  updateScreenInfo: (info) => {
+    window.webkit.messageHandlers.Native.postMessage({
+      type: "updateScreen",
+      ...info,
+    });
+  },
+  webReady: () => {
+    window.webkit.messageHandlers.Native.postMessage({
+      type: "webReady",
+    });
+  },
+};
+
+const loggingWrapper = {
+  setScreenState: (id, info) => {
+    console.log(id, info);
+  },
+  openScreen: (info) => {
+    console.log("open screen", info);
+  },
+  pushModal: () => {
+    console.log("push modal screen");
+  },
+  popModal: () => {
+    console.log("pop modal screen");
+  },
+  updateScreenInfo: (info) => {
+    console.log("set screen info", info);
+  },
+  webReady: () => {},
+};
+
+const nativeWrapper =
+  window.webkit?.messageHandlers !== undefined
+    ? nativeIOSWrapper
+    : loggingWrapper;
+
+const screenId = (urlString) => {
+  const url = new URL(urlString);
+  const params = new URLSearchParams(url.search);
+  params.delete("_no");
+  return `${url.protocol}//${url.host}${url.pathname}?${params.toString()}`;
+};
+
+window.addEventListener("phx:page-loading-start", (info) => {
+  // other kind options are "error" and "initial"
+  if (info.detail.kind === "redirect") {
+    const to = new URL(info.detail.to);
+    const nativeOperation = to.searchParams.get("_no");
+    nativeWrapper.setScreenState(
+      screenId(window.location),
+      { scrollPosition: window.scrollY }
+    );
+    if (nativeOperation === "push_modal") {
+      nativeWrapper.pushModal();
+    } else if (nativeOperation === "pop_modal") {
+      nativeWrapper.popModal();
+    } else {
+      nativeWrapper.openScreen({
+        id: screenId(info.detail.to),
+      });
     }
-})
+  }
+});
+
+const updateState = (state) => {
+  window.scroll(0, state?.scrollPosition || 0);
+};
+
+window.addEventListener("phx:page-loading-stop", (info) => {
+  if (info.detail.kind !== "initial") {
+    return
+  }
+  const titleNode = document.querySelector("[data-native-title]");
+  const title = titleNode?.dataset.nativeTitle || "- no title set -";
+  nativeWrapper.updateScreenInfo({
+    title,
+    id: screenId(info.detail.to),
+  });
+  nativeWrapper.webReady();
+});
+
+window.setScreenFromNative = (screenId, state) => {
+  liveSocket.replaceMain(screenId, null, () => {
+    setTimeout(() => {
+      updateState(state);
+    }, 0);
+  });
+};
+
+window.setStateFromNative = (state) => {
+  updateState(state);
+};
 
 // connect if there are any LiveViews on the page
-liveSocket.connect()
+liveSocket.connect();
 
 // expose liveSocket on window for web console debug logs and latency simulation:
 // >> liveSocket.enableDebug()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
-window.liveSocket = liveSocket
-
+window.liveSocket = liveSocket;
 
 // PWA
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js', {scope: './'})
-  .catch((error) => {
-    // registration failed
-    console.log('Registration failed with ' + error);
-  });
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("/sw.js", {
+      scope: "./",
+    })
+    .catch((error) => {
+      // registration failed
+      console.log("Registration failed with " + error);
+    });
 
-
-  navigator.serviceWorker.ready.then((registration)=> {
-    return registration.pushManager.getSubscription().then((subscription)=> {
-
-      if (subscription) {
-        return subscription;
+  navigator.serviceWorker.ready
+    .then((registration) => {
+      const pushManager = registration.pushManager;
+      if (!pushManager) {
+        return;
       }
+      return pushManager.getSubscription().then((subscription) => {
+        if (subscription) {
+          return subscription;
+        }
 
-      return fetch('/web-push/vapid-public-key').then((response)=>{
-        return response.text()
-      }).then((vapidPublicKey)=>{
-        // Chrome doesn’t accept the base64-encoded (string) vapidPublicKey yet urlBase64ToUint8Array() is defined in /tools.js
-        const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
+        return fetch("/web-push/vapid-public-key")
+          .then((response) => {
+            return response.text();
+          })
+          .then((vapidPublicKey) => {
+            // Chrome doesn’t accept the base64-encoded (string) vapidPublicKey yet urlBase64ToUint8Array() is defined in /tools.js
+            const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
 
-        return registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: convertedVapidKey
-        });
-      })
+            return registration.pushManager.subscribe({
+              userVisibleOnly: true,
+              applicationServerKey: convertedVapidKey,
+            });
+          });
+      });
+    })
+    .then(function (subscription) {
+      fetch("/web-push/register", {
+        method: "post",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          subscription: subscription,
+        }),
+      });
     });
-  }).then(function(subscription) {
-    fetch('/web-push/register', {
-      method: 'post',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        subscription: subscription
-      }),
-    });
-  });
 }
