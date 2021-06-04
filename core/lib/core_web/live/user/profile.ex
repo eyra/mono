@@ -94,6 +94,13 @@ defmodule CoreWeb.User.Profile do
   def render(assigns) do
     ~H"""
       <ContentArea>
+        <div x-data>
+    <h1 x-text="$store.push.registration"/>
+          <p x-show="$store.push.registration === 'pending'">...</p>
+          <button x-show="$store.push.registration === 'not-registered'" onclick="registerForPush()">Register for push</button>
+          <p x-show="$store.push.registration === 'registered'">Registered for push</p>
+          <p x-show="$store.push.registration === 'denied'">Apparently you don't want push</p>
+        </div>
         <FormArea>
           <Title2>{{dgettext "eyra-account", "profile.title"}}</Title2>
           <Form id="main_form" changeset={{@changeset}} change_event="save" focus={{@focus}}>

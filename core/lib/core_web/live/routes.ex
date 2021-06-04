@@ -22,6 +22,7 @@ defmodule CoreWeb.Live.Routes do
       scope "/", CoreWeb do
         pipe_through([:browser, :require_authenticated_user])
         live("/dashboard", Dashboard)
+        live("/notifications", Notifications)
       end
 
       # Enables LiveDashboard only for development
