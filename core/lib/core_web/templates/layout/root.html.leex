@@ -55,6 +55,7 @@
       <div class="w-0 lg:w-sidebar"></div>
       <div class="w-full">
         <div class="flex flex-col h-full">
+          <%= if not native_wrapper?(@conn) do %>
           <header class="flex-wrap">
             <nav
               class="flex items-center h-topbar sm:h-topbar-sm lg:h-topbar-lg"
@@ -93,6 +94,7 @@
               </div>
             </nav>
           </header>
+          <% end %>
           <div class="flex-grow">
             <div class="flex flex-col h-full bg-white">
               <div class="flex-wrap"></div>
