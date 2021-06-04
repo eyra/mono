@@ -79,6 +79,8 @@ defmodule Core.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:currency_formatter, "~> 0.4"},
       {:web_push_encryption, "~> 0.3"},
+      {:pigeon, "~> 1.6.1"},
+      {:kadabra, "~> 0.6.0"},
       # i18n
       {:ex_cldr, "~> 2.18"},
       {:ex_cldr_numbers, "~> 2.16"},
