@@ -183,6 +183,9 @@ window.setScreenFromNative = (screenId, state) => {
     }, 0);
   });
 };
+window.toggleMenuFromNative = ()=>{
+   window.document.body.dispatchEvent(new CustomEvent("toggle-menu", {}))
+}
 
 window.setStateFromNative = (state) => {
   updateState(state);
@@ -226,7 +229,7 @@ const registerPushSubscription = (subscription) => {
 window.registerForPush = ()=>{
   if (!('serviceWorker' in navigator)) {
     alert("Sorry, your browser does not support push")
-    return;    
+    return;
   }
   pushStore.registration = "registering"
   getExistingSubscription().then(({registration,subscription})=> {
