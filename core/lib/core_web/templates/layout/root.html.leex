@@ -61,13 +61,13 @@
               class="flex items-center h-topbar sm:h-topbar-sm lg:h-topbar-lg"
             >
               <div class="flex-none pl-4 lg:pl-0">
-                <a href="/">
+                <%= live_redirect to: "/" do %>
                   <img
                     class="h-logo sm:h-logo-sm"
                     src="<%= Routes.static_path(@conn, "/images/eyra-logo.svg") %>"
                     alt="Eyra Link Logo"
                   />
-                </a>
+                  <% end %>
               </div>
               <div class="flex-grow ml-2 lg:ml-6">
                 <div class="flex items-center">
