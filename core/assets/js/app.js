@@ -105,6 +105,12 @@ window.nativeIOSWrapper = {
       type: "webReady",
     });
   },
+  toggleSidePanel: (info)=>{
+    window.webkit.messageHandler.Native.postMessage({
+      type: "toggleSidePanel",
+      ...info
+    })
+  }
 };
 
 const loggingWrapper = {
@@ -124,6 +130,9 @@ const loggingWrapper = {
     console.log("set screen info", info);
   },
   webReady: () => {},
+  toggleSidePanel: (info) => {
+    console.log("toggle side panel", info)
+  },
 };
 
 const nativeWrapper =
@@ -172,6 +181,10 @@ window.addEventListener("phx:page-loading-stop", (info) => {
   nativeWrapper.updateScreenInfo({
     title,
     id: screenId(info.detail.to),
+    rightBarButtons: [{
+      title: "Menu",
+      action: {id: "toggle-menu"},
+    }]
   });
   nativeWrapper.webReady();
 });
@@ -183,8 +196,11 @@ window.setScreenFromNative = (screenId, state) => {
     }, 0);
   });
 };
-window.toggleMenuFromNative = ()=>{
-   window.document.body.dispatchEvent(new CustomEvent("toggle-menu", {}))
+window.handleActionFromNative = (action)=>{
+  if (action.id === "toggle-menu") {
+    nativeWrapper.toggleSidePanel({side: "right"})
+    window.document.body.dispatchEvent(new CustomEvent("toggle-menu", {}))
+  }
 }
 
 window.setStateFromNative = (state) => {
