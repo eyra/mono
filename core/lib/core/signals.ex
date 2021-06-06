@@ -2,7 +2,8 @@ defmodule Core.Signals do
   @signal_handlers [
     Core.NotificationCenter.SignalHandlers,
     Core.Mailer.SignalHandlers,
-    Core.WebPush.SignalHandlers
+    Core.WebPush.SignalHandlers,
+    Core.APNS.SignalHandlers
   ]
 
   def dispatch(signal, message) do

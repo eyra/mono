@@ -31,6 +31,8 @@ defmodule CoreWeb.PushSubscriptionControllerTest do
   end
 
   describe "vapid_public_key" do
+    setup [:login_as_member]
+
     test "return the public key", %{conn: conn} do
       conn = get(conn, Routes.push_subscription_path(conn, :vapid_public_key))
 

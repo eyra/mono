@@ -21,6 +21,9 @@ import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
 import { decode } from "blurhash";
 import { urlBase64ToUint8Array } from "./tools";
+import { registerAPNSDeviceToken } from "./apns";
+
+window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
 
 window.blurHash = () => {
@@ -152,10 +155,9 @@ window.addEventListener("phx:page-loading-start", (info) => {
   if (info.detail.kind === "redirect") {
     const to = new URL(info.detail.to);
     const nativeOperation = to.searchParams.get("_no");
-    nativeWrapper.setScreenState(
-      screenId(window.location),
-      { scrollPosition: window.scrollY }
-    );
+    nativeWrapper.setScreenState(screenId(window.location), {
+      scrollPosition: window.scrollY,
+    });
     if (nativeOperation === "push_modal") {
       nativeWrapper.pushModal();
     } else if (nativeOperation === "pop_modal") {
@@ -174,7 +176,7 @@ const updateState = (state) => {
 
 window.addEventListener("phx:page-loading-stop", (info) => {
   if (info.detail.kind !== "initial") {
-    return
+    return;
   }
   const titleNode = document.querySelector("[data-native-title]");
   const title = titleNode?.dataset.nativeTitle || "- no title set -";
