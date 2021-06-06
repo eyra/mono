@@ -1,10 +1,9 @@
 defmodule Core.WebPush.SignalHandler.Test do
   use Core.DataCase, async: true
-  import Mox
+  use Oban.Testing, repo: Core.Repo
   alias Core.Factories
   alias Core.WebPush.SignalHandlers
-
-  setup :verify_on_exit!
+  alias Core.WebPush.Worker
 
   describe "new notification" do
     setup do
@@ -12,17 +11,16 @@ defmodule Core.WebPush.SignalHandler.Test do
       user = subscription.user
       box = Factories.insert!(:notification_box, %{user: user})
 
-      {:ok, box: box, user: user}
+      {:ok, box: box, user: user, subscription: subscription}
     end
 
-    test "send web-push for new notifications", %{box: box} do
-      mock_push()
+    test "send web-push for new notifications", %{box: box, subscription: subscription} do
       SignalHandlers.dispatch(:new_notification, %{box: box, data: %{title: "Hello Test"}})
-    end
-  end
 
-  defp mock_push do
-    Core.WebPush.MockBackend
-    |> expect(:send_web_push, fn _sub, _message -> {:ok, %{status_code: 201}} end)
+      assert_enqueued(
+        worker: Worker,
+        args: %{subscription: subscription.id, message: "Hello Test"}
+      )
+    end
   end
 end

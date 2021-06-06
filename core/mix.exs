@@ -81,6 +81,7 @@ defmodule Core.MixProject do
       {:web_push_encryption, "~> 0.3"},
       {:pigeon, "~> 1.6.1"},
       {:kadabra, "~> 0.6.0"},
+      {:oban, "~> 2.7"},
       # i18n
       {:ex_cldr, "~> 2.18"},
       {:ex_cldr_numbers, "~> 2.16"},
