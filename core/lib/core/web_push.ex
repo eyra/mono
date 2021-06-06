@@ -73,55 +73,8 @@ defmodule Core.WebPush do
   end
 
   defp send_notification(subscription, message) do
-    sub = %{
-      endpoint: subscription.endpoint,
-      expirationTime: subscription.expiration_time,
-      keys: %{
-        auth: subscription.auth,
-        p256dh: subscription.p256dh
-      }
-    }
-
-    case send_web_push(message, sub) do
-      {:ok, %{status_code: 201}} -> :ok
-      # not found / subscription gone
-      {:ok, %{status_code: status}} when status in [404, 410] -> remove_subscription(subscription)
-      response -> log_error(subscription, response)
-    end
-  end
-
-  defp send_web_push(message, sub) do
-    backend = Application.get_env(:core, :web_push_backend, WebPushEncryption)
-    backend.send_web_push(message, sub)
-  end
-
-  defp log_error(subscription, http_response) do
-    Logger.error(
-      "Error when sending web-push",
-      [
-        subscription_id: subscription.id
-      ] ++ http_response_logging_metadata(http_response)
-    )
-  end
-
-  defp http_response_logging_metadata({:ok, %{status_code: status_code}}) do
-    [
-      http_status_code: status_code,
-      reason:
-        case status_code do
-          400 -> "Invalid request (malformed headers)"
-          413 -> "Payload size too large"
-          429 -> "Rate limit hit"
-          _ -> "Unexpected status code"
-        end
-    ]
-  end
-
-  defp http_response_logging_metadata({:error, reason}) do
-    [reason: reason]
-  end
-
-  defp remove_subscription(subscription) do
-    Repo.delete(subscription)
+    %{subscription: subscription.id, message: message}
+    |> Core.WebPush.Worker.new()
+    |> Oban.insert()
   end
 end

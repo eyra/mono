@@ -6,15 +6,23 @@ defmodule Core.Application do
   use Application
 
   def start(_type, _args) do
-    children = Application.get_env(:core, :children)
+    children = [
+      Core.Repo,
+      CoreWeb.Telemetry,
+      {SiteEncrypt.Phoenix, CoreWeb.Endpoint},
+      {Phoenix.PubSub, name: Core.PubSub},
+      {Oban, oban_config()}
+    ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Core.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
   def config_change(_changed, _new, _removed) do
     :ok
+  end
+
+  defp oban_config do
+    Application.fetch_env!(:core, Oban)
   end
 end

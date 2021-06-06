@@ -20,6 +20,11 @@ config :core,
 
 config :core, CoreWeb.Gettext, default_locale: "nl", locales: ~w(en nl)
 
+config :core, Oban,
+  repo: Core.Repo,
+  plugins: [],
+  queues: [default: 5]
+
 config :core, ecto_repos: [Core.Repo]
 
 config :core, Core.Mailer, adapter: Bamboo.TestAdapter, default_from_email: "no-reply@example.com"
@@ -44,13 +49,6 @@ config :core, GoogleSignIn,
 config :core, Core.ImageCatalog.Unsplash,
   access_key: "",
   app_name: "Core"
-
-config :core, :children, [
-  Core.Repo,
-  CoreWeb.Telemetry,
-  {SiteEncrypt.Phoenix, CoreWeb.Endpoint},
-  {Phoenix.PubSub, name: Core.PubSub}
-]
 
 config :core, CoreWeb.Endpoint,
   url: [host: "localhost"],

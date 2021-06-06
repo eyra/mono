@@ -1,6 +1,5 @@
 defmodule Core.WebPushTest do
   use Core.DataCase, async: true
-  import ExUnit.CaptureLog
   import Mox
   alias Core.Factories
   alias Core.WebPush
@@ -77,36 +76,7 @@ defmodule Core.WebPushTest do
       |> expect(:send_web_push, fn _sub, _message -> {:ok, %{status_code: 201}} end)
 
       assert WebPush.send(subscription.user, "Hello") == :ok
-    end
-
-    test "log error responses", %{subscription: subscription} do
-      for status_code <- [400, 413, 429, 999] do
-        Core.WebPush.MockBackend
-        |> expect(:send_web_push, fn _sub, _message -> {:ok, %{status_code: status_code}} end)
-
-        assert capture_log(fn -> :ok = WebPush.send(subscription.user, "Hello") end) =~
-                 "Error when sending"
-      end
-    end
-
-    test "log error when http connection fails", %{subscription: subscription} do
-      Core.WebPush.MockBackend
-      |> expect(:send_web_push, fn _sub, _message -> {:error, "Some reason"} end)
-
-      assert capture_log(fn -> :ok = WebPush.send(subscription.user, "Hello") end) =~
-               "Error when sending"
-    end
-
-    test "remove subscription on not found / gone" do
-      for status_code <- [404, 410] do
-        Core.WebPush.MockBackend
-        |> expect(:send_web_push, fn _sub, _message -> {:ok, %{status_code: status_code}} end)
-
-        subscription = Factories.insert!(:web_push_subscription)
-
-        :ok = WebPush.send(subscription.user, "Hello")
-        assert Repo.get(WebPush.PushSubscription, subscription.id) == nil
-      end
+      assert %{success: 1, failure: 0} = Oban.drain_queue(queue: :default)
     end
   end
 end
