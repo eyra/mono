@@ -153,7 +153,7 @@ defmodule CoreWeb.Study.Public do
                 <PrimaryLiveViewButton label={{ dgettext("eyra-survey", "apply.button") }} event="signup" />
               </div>
               <div :if={{@task_available?}} class="mr-4">
-                <PrimaryButton label={{ dgettext("eyra-survey", "goto.survey") }} path={{@survey_tool.survey_url}} />
+                <PrimaryButton label={{ dgettext("eyra-survey", "goto.survey") }} to={{@survey_tool.survey_url}} />
               </div>
               <div :if={{@participant?}}>
                 <SecondaryLiveViewButton label={{ dgettext("eyra-survey", "withdraw.button") }} event="withdraw" />

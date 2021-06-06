@@ -3,6 +3,7 @@ defmodule EyraUI.Card.PrimaryCTA do
   A large eye-catcher meant to call a user into taking an action.
   """
   use Surface.Component
+  alias Surface.Components.LiveRedirect
   alias EyraUI.Card.Card
 
   prop(title, :string, required: true)
@@ -21,12 +22,12 @@ defmodule EyraUI.Card.PrimaryCTA do
       <div class="mt-6 lg:mt-8">
           <div class="flex items-center">
               <div class="flex-wrap">
-                  <a href={{ @to }}>
+                  <LiveRedirect to={{ @to }}>
                       <div class={{"flex", "items-center", "active:opacity-80", "focus:outline-none", "pl-4", "pr-4", "h-48px", "font-button", "text-button", "text-primary", "tracker-widest", "rounded",
                                   @button_bg_color}}>
                           <div>{{ @button_label }}</div>
                       </div>
-                  </a>
+                  </LiveRedirect>
               </div>
               <div class="flex-grow"></div>
           </div>
