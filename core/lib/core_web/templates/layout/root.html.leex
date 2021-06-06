@@ -16,7 +16,10 @@
     />
     <script src="<%= Routes.static_path(@conn, "/js/app.js") %>" defer></script>
   </head>
-  <body class="font-body bg-grey5" x-data="{ overlay: false }">
+  <body class="font-body bg-grey5"
+        x-data="{ overlay: false, menu: true }"
+        :class="{'menu': menu}"
+        @toggle-menu="menu = !menu">
     <div class="fixed z-10 w-full h-full bg-black bg-opacity-30" x-show="overlay"></div>
     <div class="flex flex-row min-h-screen">
       <div
