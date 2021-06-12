@@ -40,7 +40,7 @@ defmodule EyraUI.MixProject do
       {:phoenix, "~> 1.5.5"},
       {:phoenix_ecto, "~> 4.1"},
       {:phoenix_live_view, "~> 0.15.1"},
-      {:surface, "~> 0.1.0"},
+      {:surface, "~> 0.4.0"},
       {:gettext, "~> 0.11"},
       {:timex, "~> 3.6"},
       {:jason, "~> 1.0"},
