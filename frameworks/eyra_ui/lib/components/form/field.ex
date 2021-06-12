@@ -13,6 +13,7 @@ defmodule EyraUI.Form.Field do
   prop(change, :event)
   prop(read_only, :boolean, default: false)
   prop(reserve_error_space, :boolean, default: true)
+  slot(default)
 
   def render(assigns) do
     ~H"""
