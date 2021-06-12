@@ -7,9 +7,9 @@ defmodule EyraUI.MixProject do
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:gettext] ++ Mix.compilers(),
+      compilers: [:gettext, :phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
-      aliases: [],
+      aliases: aliases(),
       deps: deps(),
       # The main page in the docs
       docs: [],
@@ -21,7 +21,15 @@ defmodule EyraUI.MixProject do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:dev), do: ["lib"] ++ catalogues()
   defp elixirc_paths(_), do: ["lib"]
+
+  def catalogues do
+    [
+      "priv/catalogue",
+      "deps/surface/priv/catalogue"
+    ]
+  end
 
   # Configuration for the OTP application.
   #
@@ -45,9 +53,16 @@ defmodule EyraUI.MixProject do
       {:timex, "~> 3.6"},
       {:jason, "~> 1.0"},
       # Dev and test deps
+      {:surface_catalogue, "~> 0.0.7", only: [:dev, :test]},
       {:ex_doc, "~> 0.22", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
+    ]
+  end
+
+  defp aliases do
+    [
+      dev: "run --no-halt dev.exs"
     ]
   end
 end
