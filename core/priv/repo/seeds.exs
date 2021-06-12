@@ -65,22 +65,7 @@ studies =
     %{
       type: :client_script,
       title: "Files from ZIP",
-      script: """
-      import zipfile
-
-      def process(file_data):
-          names = []
-          data = []
-          zfile = zipfile.ZipFile(file_data)
-          for name in zfile.namelist():
-              names.append(name)
-              data.append((name, zfile.read(name).decode("utf8")))
-
-          return {
-              "summary": f"The following files where read: {', '.join(names)}.",
-              "data": data
-          }
-      """
+      script: File.read!(Path.join([:code.priv_dir(:core), "repo", "script.py"]))
     }
   ] ++
     Enum.map(images, fn image ->

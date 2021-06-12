@@ -2,3 +2,4 @@ _build/
 tmp/
 priv/static
 priv/cldr
+.bundle

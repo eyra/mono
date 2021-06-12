@@ -45,7 +45,7 @@ var data = undefined;
 
 languagePluginLoader
   .then(() => {
-    return pyodide.loadPackage("micropip");
+    return pyodide.loadPackage(["micropip", "numpy", "pandas"]);
   })
   .then(() => {
     self.pyodide.runPython(`
