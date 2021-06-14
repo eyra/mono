@@ -81,7 +81,7 @@ class _ChunkedFile:
 
 def _process_data(data):
   file_data = _ChunkedFile(data)
-  return data_extractor.process(file_data)
+  return google_semantic_history_location.process(file_data)
   `);
     self.postMessage({ eventType: "initialized" });
   });

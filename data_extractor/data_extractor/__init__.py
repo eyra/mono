@@ -2,6 +2,7 @@ __version__ = '0.1.0'
 
 import zipfile
 
+
 def process(file_data):
     names = []
     data = []
