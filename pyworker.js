@@ -45,20 +45,13 @@ var data = undefined;
 
 languagePluginLoader
   .then(() => {
-    return pyodide.loadPackage("micropip");
+    return pyodide.loadPackage(["pandas"]);
   })
-  .then(() => {
-    return self.pyodide.runPython(
-      `
-import micropip
-micropip.install(
-    "http://localhost:8000/data_extractor/dist/data_extractor-0.1.0-py3-none-any.whl"
-    )`
-    );
-  })
-  .then(() => {
+  .then(() => fetch("/data_extractor/google_semantic_location_history/__init__.py"))
+  .then(response => response.text())
+  .then((code) => {
     self.pyodide.runPython(`
-import data_extractor
+${code}
 
 class _ChunkedFile:
   def __init__(self, proxy):
@@ -81,7 +74,17 @@ class _ChunkedFile:
 
 def _process_data(data):
   file_data = _ChunkedFile(data)
-  return data_extractor.process(file_data)
+  result = process(file_data)
+  data = []
+  html = []
+  for df in result.get("data_frames", []):
+    html.append(df.to_html())
+    data.append(df.to_dict())
+  return {
+    "summary": result["summary"],
+    "html": "\\n".join(html),
+    "data": data,
+  }
   `);
     self.postMessage({ eventType: "initialized" });
   });

@@ -1,0 +1,44 @@
+# Run pylint and pytest
+name: Build-Lint-Test
+on: [pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1.1.4
+
+      - name: Cache Poetry installed packages
+        uses: actions/cache@v1
+        id: cache
+        with:
+          path: .venv
+          key: poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: poetry-
+
+      - name: Install Dependencies using Poetry
+        working-directory: data_extractor
+        run: poetry install
+        if: steps.cache.outputs.cache-hit != 'true'
+
+      - name: Pylint
+        working-directory: data_extractor
+        run: poetry run pylint google_semantic_location_history
+
+      - name: Flake8
+        working-directory: data_extractor
+        run: poetry run flake8 google_semantic_location_history
+
+      - name: Pytest
+        working-directory: data_extractor      
+        run: poetry run pytest -v --cov=google_semantic_location_history --cov=data_extractor --cov-fail-under=80 tests/
