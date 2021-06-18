@@ -128,5 +128,7 @@ def process(file_data):
 
     return {
         "summary": TEXT,
-        "data": data_frame.fillna(0).to_csv(index=False)
+        "data_frames": [
+            data_frame.fillna(0)
+        ]
     }

@@ -5,6 +5,7 @@ from zipfile import ZipFile
 from io import BytesIO
 from pytest import approx
 import pandas as pd
+from pandas.testing import assert_frame_equal
 from numpy import nan
 
 from google_semantic_location_history import __visit_duration
@@ -127,9 +128,9 @@ def test_process():
     expected = pd.json_normalize([
         {'Year': 2020, 'Month': 'JANUARY', 'Number of Places': 3, 'Places Duration [days]': 1.866, 'Activity Duration [days]': 0.0, 'Activity Distance [km]': 0.0, 'Place 1 [days]': 1.116, 'Place 2 [days]': 0.5, 'Place 3 [days]': 0.25, 'Place 4 [days]': 0.},
         {'Year': 2021, 'Month': 'JANUARY', 'Number of Places': 4, 'Places Duration [days]': 1.866, 'Activity Duration [days]': 0.0, 'Activity Distance [km]': 0.0, 'Place 1 [days]': 0., 'Place 2 [days]': 0.5, 'Place 3 [days]': 0.25, 'Place 4 [days]': 1.0}])
-    assert result["data"] == expected.to_csv(index=False)
+    assert_frame_equal(result["data_frames"][0], expected)
 
 def test_process_no_matching_files():
     result = process(__create_zip_no_matching_files())
     expected = pd.DataFrame()
-    assert result["data"] == expected.to_csv(index=False)
+    assert_frame_equal(result["data_frames"][0], expected)

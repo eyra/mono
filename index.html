@@ -6,6 +6,7 @@
 
 <div id="results" style="display: none">
   <p id="summary" />
+  <div id="html" />
 </div>
 
 <script type="text/javascript">
@@ -14,6 +15,7 @@
   const fileInput = document.getElementById("fileItem");
   const resultElement = document.getElementById("results");
   const summaryElement = document.getElementById("summary");
+  const htmlElement = document.getElementById("html");
 
   const pyWorker = new Worker("./pyworker.js");
   pyWorker.onerror = console.log;
@@ -22,6 +24,7 @@
     if (eventType === "result") {
       setControlsDisabled(false);
       summaryElement.textContent = event.data.result.summary;
+      htmlElement.innerHTML = event.data.result.html;
       resultElement.style.display = "block";
       console.log(event.data.result);
     } else if (eventType === "initialized") {

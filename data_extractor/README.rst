@@ -18,9 +18,8 @@ The behavior of the ``process`` function can be verified by running the tests.
 The test are located in the ``tests`` folder. To run the tests execute:
 ``poetry run pytest``.
 
-To run the extraction code from the browser first run ``poetry build`` to
-create an updated version of the Python Wheel (package).
-Now run: ``python3 -m http.server`` from the root folder (the one with
+To run the extraction code from the browser run: 
+``python3 -m http.server`` from the root folder (the one with
 ``.git``). This will start a webserver on: 
 `localhost <http://localhost:8000>`__.
 
