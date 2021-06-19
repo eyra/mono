@@ -4,7 +4,7 @@ defmodule CoreWeb.Live.DataUploader.Routes do
       scope "/", CoreWeb do
         pipe_through([:browser])
 
-        get("/data-uploader/:id", DataLoaderController, :index)
+        live("/data-uploader/:id", DataUploader.Uploader)
       end
     end
   end
