@@ -40,6 +40,7 @@ defmodule CoreWeb.DataDonation.Form do
 
   defp update_ui(socket, entity) do
     changeset = Tool.changeset(entity, :mount, %{})
+
     socket
     |> assign(changeset: changeset)
   end
