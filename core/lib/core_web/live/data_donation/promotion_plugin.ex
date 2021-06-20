@@ -1,5 +1,4 @@
 defmodule CoreWeb.DataDonation.PromotionPlugin do
-
   import CoreWeb.Gettext
 
   alias Core.Promotions.CallToAction
@@ -34,20 +33,19 @@ defmodule CoreWeb.DataDonation.PromotionPlugin do
   end
 
   defp get_call_to_action(tool, user) do
-
     case Tools.participant?(tool, user) do
       false ->
         %CallToAction{
           label: dgettext("eyra-data-donation", "apply.cta.title"),
           target: %Target{type: :event, value: "apply"}
-         }
+        }
+
       true ->
         %CallToAction{
           label: dgettext("eyra-data-donation", "open.cta.title"),
           target: %Target{type: :event, value: "open"}
         }
     end
-
   end
 
   defp get_highlights(_tool) do
@@ -68,7 +66,6 @@ defmodule CoreWeb.DataDonation.PromotionPlugin do
 
     # available_text = dgettext("eyra-data-donation", "available.future.highlight.text", from: "15 june", till: "22 june 2021")
 
-    [ %{title: spots_title, text: ""}]
+    [%{title: spots_title, text: ""}]
   end
-
 end

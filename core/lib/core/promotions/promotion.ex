@@ -69,5 +69,4 @@ defmodule Core.Promotions.Promotion do
     |> Enum.map(& &1.value)
     |> Enum.join(", ")
   end
-
 end

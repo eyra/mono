@@ -9,7 +9,11 @@ defmodule CoreWeb.Promotion.Plugin do
   @type promotion :: binary
   @type event :: binary
   @type highlight :: %{title: binary, text: binary}
-  @type info_result :: %{call_to_action: CallToAction.t(), highlights: list(highlight), devices: list(atom)}
+  @type info_result :: %{
+          call_to_action: CallToAction.t(),
+          highlights: list(highlight),
+          devices: list(atom)
+        }
 
   @type handle_event_result :: {:ok, socket} | {:error, binary}
 
