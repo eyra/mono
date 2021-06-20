@@ -55,10 +55,19 @@ defmodule Core.Studies do
     preload = Keyword.get(opts, :preload, [])
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
 
-    promotions = from(promotion in Promotion, where: not is_nil(promotion.published_at), select: promotion.id)
-    studies = from(tool in tool_entity, where: tool.promotion_id in subquery(promotions) , select: tool.study_id)
+    promotions =
+      from(promotion in Promotion, where: not is_nil(promotion.published_at), select: promotion.id)
 
-    from(study in Study, where: study.id in subquery(studies) and study.id not in ^exclude, preload: ^preload)
+    studies =
+      from(tool in tool_entity,
+        where: tool.promotion_id in subquery(promotions),
+        select: tool.study_id
+      )
+
+    from(study in Study,
+      where: study.id in subquery(studies) and study.id not in ^exclude,
+      preload: ^preload
+    )
     |> Repo.all()
   end
 
@@ -109,7 +118,10 @@ defmodule Core.Studies do
     preload = Keyword.get(opts, :preload, [])
 
     tool_ids =
-      from(task in DataDonation.Task, where: task.user_id == ^user.id, select: task.data_donation_tool_id)
+      from(task in DataDonation.Task,
+        where: task.user_id == ^user.id,
+        select: task.data_donation_tool_id
+      )
 
     study_ids =
       from(st in DataDonation.Tool, where: st.id in subquery(tool_ids), select: st.study_id)
@@ -120,7 +132,6 @@ defmodule Core.Studies do
     )
     |> Repo.all()
   end
-
 
   def list_owners(%Study{} = study) do
     owner_ids =

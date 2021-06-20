@@ -1,5 +1,4 @@
 defmodule CoreWeb.LiveForm do
-
   defmacro __using__(_opts) do
     quote do
       use Surface.LiveComponent
@@ -14,6 +13,7 @@ defmodule CoreWeb.LiveForm do
 
       def handle_event("focus", %{"field" => field}, socket) do
         claim_focus(socket)
+
         {
           :noreply,
           socket
@@ -35,7 +35,8 @@ defmodule CoreWeb.LiveForm do
         socket
         |> hide_flash()
 
-        case Ecto.Changeset.apply_action(changeset, :update) |> IO.inspect(label: "APPLY ACTION") do
+        case Ecto.Changeset.apply_action(changeset, :update)
+             |> IO.inspect(label: "APPLY ACTION") do
           {:ok, entity} ->
             handle_success(socket, changeset, node_changeset, entity)
 
@@ -51,7 +52,7 @@ defmodule CoreWeb.LiveForm do
       end
 
       defp handle_success(socket, changeset, node_changeset, entity) do
-        changesets =  %{
+        changesets = %{
           "#{socket.assigns.id}_tool" => changeset,
           "#{socket.assigns.id}_node" => node_changeset
         }
@@ -69,7 +70,6 @@ defmodule CoreWeb.LiveForm do
       defp claim_focus(%{assigns: %{id: id}}) do
         send(self(), {:claim_focus, id})
       end
-
     end
   end
 end

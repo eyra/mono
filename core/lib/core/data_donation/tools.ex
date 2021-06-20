@@ -72,5 +72,4 @@ defmodule Core.DataDonation.Tools do
   def count_completed_tasks(tool) do
     count_tasks(tool, [:completed])
   end
-
 end

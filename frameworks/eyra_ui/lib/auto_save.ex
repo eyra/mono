@@ -130,7 +130,6 @@ defmodule EyraUI.AutoSave do
         AutoSave.update_changeset(socket, changeset, entity_name)
       end
 
-
       def handle_info(:save, %{assigns: %{save_changeset: changeset}} = socket) do
         {:ok, entity} = save(changeset)
 

@@ -9,7 +9,7 @@ defmodule CoreWeb.DataDonation.Form do
   alias CoreWeb.Router.Helpers, as: Routes
 
   alias EyraUI.Spacing
-  alias EyraUI.Text.{ Title3 }
+  alias EyraUI.Text.{Title3}
   alias EyraUI.Form.{Form, TextArea, NumberInput}
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Button.SecondaryLiveViewButton
@@ -36,7 +36,7 @@ defmodule CoreWeb.DataDonation.Form do
   end
 
   # Handle Events
-  def handle_event("save", %{ "tool" => attrs}, %{assigns: %{entity: entity}} = socket) do
+  def handle_event("save", %{"tool" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket

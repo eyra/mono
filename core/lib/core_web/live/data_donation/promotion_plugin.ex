@@ -1,5 +1,4 @@
 defmodule CoreWeb.DataDonation.PromotionPlugin do
-
   alias Core.Promotions.CallToAction
   alias Core.Promotions.CallToAction.Target
   alias CoreWeb.Promotion.Plugin
@@ -23,5 +22,4 @@ defmodule CoreWeb.DataDonation.PromotionPlugin do
   def handle_event(_event, _socket) do
     {:error, "Unknown event"}
   end
-
 end

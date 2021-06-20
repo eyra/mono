@@ -37,7 +37,7 @@ defmodule CoreWeb.DataDonation.Content do
         promotion_id: tool.promotion_id,
         changesets: %{},
         save_timer: nil,
-        hide_flash_timer: nil,
+        hide_flash_timer: nil
       )
     }
   end
@@ -140,25 +140,25 @@ defmodule CoreWeb.DataDonation.Content do
   # Handle Event
 
   def handle_event("reset_focus", _, socket) do
-    send_update ToolForm, id: :tool_form, focus: ""
-    send_update PromotionForm, id: :promotion_form, focus: ""
-    { :noreply, socket}
+    send_update(ToolForm, id: :tool_form, focus: "")
+    send_update(PromotionForm, id: :promotion_form, focus: "")
+    {:noreply, socket}
   end
 
   # Handle Info
 
   def handle_info({:claim_focus, :tool_form}, socket) do
-    send_update PromotionForm, id: :promotion_form, focus: ""
+    send_update(PromotionForm, id: :promotion_form, focus: "")
     {:noreply, socket}
   end
 
   def handle_info({:claim_focus, :promotion_form}, socket) do
-    send_update ToolForm, id: :tool_form, focus: ""
+    send_update(ToolForm, id: :tool_form, focus: "")
     {:noreply, socket}
   end
 
   def handle_info({:image_picker, image_id}, socket) do
-    send_update PromotionForm, id: :promotion_form, image_id: image_id
+    send_update(PromotionForm, id: :promotion_form, image_id: image_id)
     {:noreply, socket}
   end
 

@@ -3,7 +3,18 @@ defmodule Core.Factories do
   This module provides factory function to be used for tests.
   """
   alias Core.Accounts.{User, Profile}
-  alias Core.{Studies, Content, Promotions, SurveyTools, Authorization, DataDonation, NotificationCenter, WebPush}
+
+  alias Core.{
+    Studies,
+    Content,
+    Promotions,
+    SurveyTools,
+    Authorization,
+    DataDonation,
+    NotificationCenter,
+    WebPush
+  }
+
   alias Core.Repo
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
@@ -83,7 +94,7 @@ defmodule Core.Factories do
   end
 
   def build(:content_node) do
-    %Content.Node{ ready: true }
+    %Content.Node{ready: true}
   end
 
   def build(:notification_box, %{user: user} = attributes) do
@@ -146,7 +157,7 @@ defmodule Core.Factories do
 
     %Promotions.Promotion{
       content_node: build(:content_node, %{parent: parent_content_node}),
-      auth_node: build(:auth_node, %{parent: study.auth_node}),
+      auth_node: build(:auth_node, %{parent: study.auth_node})
     }
     |> struct!(attributes)
   end

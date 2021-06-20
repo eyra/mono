@@ -1,4 +1,3 @@
-
 defmodule Core.Promotions do
   @moduledoc """
 
@@ -41,5 +40,4 @@ defmodule Core.Promotions do
   def ready?(%Promotion{} = promotion) do
     Nodes.get!(promotion.content_node_id).ready?()
   end
-
 end

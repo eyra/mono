@@ -189,133 +189,132 @@
 #           </div>
 #         </div>
 #       <HeroSmall title={{ dgettext("eyra-study", "study.edit.title") }} />
-        # <ContentArea>
-        #   <If condition={{ @content_form.is_published }} >
-        #     <Title3>{{dgettext("eyra-survey", "status.title")}}</Title3>
-        #     <Title6>{{dgettext("eyra-survey", "completed.label")}}: <span class="text-success"> {{@content_form.subject_completed_count}}</span></Title6>
-        #     <Title6>{{dgettext("eyra-survey", "pending.label")}}: <span class="text-warning"> {{@content_form.subject_pending_count}}</span></Title6>
-        #     <Title6>{{dgettext("eyra-survey", "vacant.label")}}: <span class="text-delete"> {{@content_form.subject_vacant_count}}</span></Title6>
-        #     <Spacing value="XL" />
-        #     <Line />
-        #     <Spacing value="M" />
-        #   </If>
+# <ContentArea>
+#   <If condition={{ @content_form.is_published }} >
+#     <Title3>{{dgettext("eyra-survey", "status.title")}}</Title3>
+#     <Title6>{{dgettext("eyra-survey", "completed.label")}}: <span class="text-success"> {{@content_form.subject_completed_count}}</span></Title6>
+#     <Title6>{{dgettext("eyra-survey", "pending.label")}}: <span class="text-warning"> {{@content_form.subject_pending_count}}</span></Title6>
+#     <Title6>{{dgettext("eyra-survey", "vacant.label")}}: <span class="text-delete"> {{@content_form.subject_vacant_count}}</span></Title6>
+#     <Spacing value="XL" />
+#     <Line />
+#     <Spacing value="M" />
+#   </If>
 
-        #   <Bar>
-        #     <BarItem>
-        #       <Case value={{@content_form.is_published }} >
-        #         <True>
-        #           <Info text={{dgettext("eyra-survey", "published.true.label")}} />
-        #         </True>
-        #         <False>
-        #           <Warning text={{dgettext("eyra-survey", "published.false.label")}} />
-        #         </False>
-        #       </Case>
-        #     </BarItem>
-        #     <BarItem>
-        #       <SubHead>{{ @content_form.byline }}</SubHead>
-        #     </BarItem>
-        #   </Bar>
-        #   <Spacing value="L" />
+#   <Bar>
+#     <BarItem>
+#       <Case value={{@content_form.is_published }} >
+#         <True>
+#           <Info text={{dgettext("eyra-survey", "published.true.label")}} />
+#         </True>
+#         <False>
+#           <Warning text={{dgettext("eyra-survey", "published.false.label")}} />
+#         </False>
+#       </Case>
+#     </BarItem>
+#     <BarItem>
+#       <SubHead>{{ @content_form.byline }}</SubHead>
+#     </BarItem>
+#   </Bar>
+#   <Spacing value="L" />
 
-        #   <Title1>{{ @content_form.title }}</Title1>
-        #   <Form id="main_form" changeset={{@changeset}} change_event="save" focus={{@focus}}>
-        #     <TextInput field={{:title}} label_text={{dgettext("eyra-study", "title.label")}} />
-        #     <TextInput field={{:subtitle}} label_text={{dgettext("eyra-survey", "subtitle.label")}} />
+#   <Title1>{{ @content_form.title }}</Title1>
+#   <Form id="main_form" changeset={{@changeset}} change_event="save" focus={{@focus}}>
+#     <TextInput field={{:title}} label_text={{dgettext("eyra-study", "title.label")}} />
+#     <TextInput field={{:subtitle}} label_text={{dgettext("eyra-survey", "subtitle.label")}} />
 
-        #     <Spacing value="XL" />
-        #     <Title3>{{dgettext("eyra-survey", "themes.title")}}</Title3>
-        #     <BodyMedium>{{dgettext("eyra-survey", "themes.label")}}</BodyMedium>
-        #     <Spacing value="XS" />
-        #     <LabelSelector id={{:theme_selector}} labels={{ @content_form.theme_labels }}/>
-        #     <Spacing value="XL" />
+#     <Spacing value="XL" />
+#     <Title3>{{dgettext("eyra-survey", "themes.title")}}</Title3>
+#     <BodyMedium>{{dgettext("eyra-survey", "themes.label")}}</BodyMedium>
+#     <Spacing value="XS" />
+#     <LabelSelector id={{:theme_selector}} labels={{ @content_form.theme_labels }}/>
+#     <Spacing value="XL" />
 
-        #     <Title3>{{dgettext("eyra-survey", "image.title")}}</Title3>
-        #     <BodyMedium>{{dgettext("eyra-survey", "image.label")}}</BodyMedium>
-        #     <Spacing value="XS" />
-        #     <div class="flex flex-row">
-        #       <ImagePreview image_url={{ @content_form.image_url }} placeholder="" />
-        #       <Spacing value="S" direction="l" />
-        #       <div class="flex-wrap">
-        #         <SecondaryAlpineButton click="$parent.open = true, $parent.$parent.overlay = true" label={{dgettext("eyra-survey", "search.different.image.button")}} />
-        #       </div>
-        #     </div>
-        #     <Spacing value="XL" />
+#     <Title3>{{dgettext("eyra-survey", "image.title")}}</Title3>
+#     <BodyMedium>{{dgettext("eyra-survey", "image.label")}}</BodyMedium>
+#     <Spacing value="XS" />
+#     <div class="flex flex-row">
+#       <ImagePreview image_url={{ @content_form.image_url }} placeholder="" />
+#       <Spacing value="S" direction="l" />
+#       <div class="flex-wrap">
+#         <SecondaryAlpineButton click="$parent.open = true, $parent.$parent.overlay = true" label={{dgettext("eyra-survey", "search.different.image.button")}} />
+#       </div>
+#     </div>
+#     <Spacing value="XL" />
 
-        #     <Title3>{{dgettext("eyra-survey", "organisation.title")}}</Title3>
-        #     <RadioButtonGroup field={{:organization}} items={{ Marks.instances() }} checked={{ @content_form.organization }}/>
-        #     <Spacing value="XL" />
+#     <Title3>{{dgettext("eyra-survey", "organisation.title")}}</Title3>
+#     <RadioButtonGroup field={{:organization}} items={{ Marks.instances() }} checked={{ @content_form.organization }}/>
+#     <Spacing value="XL" />
 
-        #     <Title3>{{dgettext("eyra-survey", "about.title")}}</Title3>
-        #     <TextArea field={{:expectations}} label_text={{dgettext("eyra-survey", "expectations.label")}}/>
-        #     <TextArea field={{:description}} label_text={{dgettext("eyra-survey", "info.label")}}/>
-        #     <Spacing value="XL" />
+#     <Title3>{{dgettext("eyra-survey", "about.title")}}</Title3>
+#     <TextArea field={{:expectations}} label_text={{dgettext("eyra-survey", "expectations.label")}}/>
+#     <TextArea field={{:description}} label_text={{dgettext("eyra-survey", "info.label")}}/>
+#     <Spacing value="XL" />
 
-        #     <Title3>{{dgettext("eyra-survey", "duration.title")}}</Title3>
-        #     <TextInput field={{:duration}} label_text={{dgettext("eyra-survey", "duration.label")}} />
-        #     <Spacing value="XL" />
+#     <Title3>{{dgettext("eyra-survey", "duration.title")}}</Title3>
+#     <TextInput field={{:duration}} label_text={{dgettext("eyra-survey", "duration.label")}} />
+#     <Spacing value="XL" />
 
-        #     <Title3>{{dgettext("eyra-survey", "reward.title")}}</Title3>
-        #     <NumberInput field={{:reward_value}} label_text={{dgettext("eyra-survey", "reward.label")}} />
-        #     <Spacing value="XL" />
+#     <Title3>{{dgettext("eyra-survey", "reward.title")}}</Title3>
+#     <NumberInput field={{:reward_value}} label_text={{dgettext("eyra-survey", "reward.label")}} />
+#     <Spacing value="XL" />
 
-        #     <Title3>{{dgettext("eyra-survey", "subjects.title")}}</Title3>
-        #     <NumberInput field={{:subject_count}} label_text={{dgettext("eyra-survey", "config.nrofsubjects.label")}} />
-        #     <Spacing value="XL" />
+#     <Title3>{{dgettext("eyra-survey", "subjects.title")}}</Title3>
+#     <NumberInput field={{:subject_count}} label_text={{dgettext("eyra-survey", "config.nrofsubjects.label")}} />
+#     <Spacing value="XL" />
 
+#     <Spacing value="L" />
+#     <Title3>{{dgettext("eyra-survey", "config.devices.title")}}</Title3>
+#     <Checkbox field={{:phone_enabled}} label_text={{dgettext("eyra-survey", "phone.enabled.label")}}/>
+#     <Checkbox field={{:tablet_enabled}} label_text={{dgettext("eyra-survey", "tablet.enabled.label")}}/>
+#     <Checkbox field={{:desktop_enabled}} label_text={{dgettext("eyra-survey", "desktop.enabled.label")}}/>
+#     <Spacing value="XL" />
 
-        #     <Spacing value="L" />
-        #     <Title3>{{dgettext("eyra-survey", "config.devices.title")}}</Title3>
-        #     <Checkbox field={{:phone_enabled}} label_text={{dgettext("eyra-survey", "phone.enabled.label")}}/>
-        #     <Checkbox field={{:tablet_enabled}} label_text={{dgettext("eyra-survey", "tablet.enabled.label")}}/>
-        #     <Checkbox field={{:desktop_enabled}} label_text={{dgettext("eyra-survey", "desktop.enabled.label")}}/>
-        #     <Spacing value="XL" />
+#     <Title3>{{dgettext("eyra-survey", "banner.title")}}</Title3>
 
-        #     <Title3>{{dgettext("eyra-survey", "banner.title")}}</Title3>
+#     <PhotoInput
+#       conn={{@socket}}
+#       static_path={{&Routes.static_path/2}}
+#       photo_url={{@content_form.banner_photo_url}}
+#       uploads={{@uploads}}
+#       primary_button_text={{dgettext("eyra-survey", "choose.banner.photo.file")}}
+#       secondary_button_text={{dgettext("eyra-survey", "choose.other.banner.photo.file")}}
+#       />
 
-        #     <PhotoInput
-        #       conn={{@socket}}
-        #       static_path={{&Routes.static_path/2}}
-        #       photo_url={{@content_form.banner_photo_url}}
-        #       uploads={{@uploads}}
-        #       primary_button_text={{dgettext("eyra-survey", "choose.banner.photo.file")}}
-        #       secondary_button_text={{dgettext("eyra-survey", "choose.other.banner.photo.file")}}
-        #       />
+#     <Spacing value="S" />
 
-        #     <Spacing value="S" />
+#     <TextInput field={{:banner_title}} label_text={{dgettext("eyra-survey", "banner.title.label")}} />
+#     <TextInput field={{:banner_subtitle}} label_text={{dgettext("eyra-survey", "banner.subtitle.label")}} />
+#     <UrlInput field={{:banner_url}} label_text={{dgettext("eyra-survey", "banner.url.label")}} />
+#     <Spacing value="XL" />
 
-        #     <TextInput field={{:banner_title}} label_text={{dgettext("eyra-survey", "banner.title.label")}} />
-        #     <TextInput field={{:banner_subtitle}} label_text={{dgettext("eyra-survey", "banner.subtitle.label")}} />
-        #     <UrlInput field={{:banner_url}} label_text={{dgettext("eyra-survey", "banner.url.label")}} />
-        #     <Spacing value="XL" />
+#     <Panel bg_color="bg-grey1">
+#       <template slot="title">
+#         <Title3 color="text-white" >{{dgettext("eyra-survey", "config.title")}}</Title3>
+#       </template>
+#       <UrlInput field={{:survey_url}} label_color="text-white" label_text={{dgettext("eyra-survey", "config.url.label")}} background="dark"/>
+#       <Spacing value="M" />
+#       <Title6 color="text-white">Redirect url</Title6>
+#       <BodyMedium color="text-grey3">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, CoreWeb.Study.Complete, @content_form.study_id)}}</BodyMedium>
+#     </Panel>
+#     <Spacing value="XL" />
+#   </Form>
+#   <Case value={{ @content_form.is_published }} >
+#     <True> <!-- Published -->
+#       <SecondaryLiveViewButton label={{ dgettext("eyra-survey", "unpublish.button") }} event="unpublish" />
+#     </True>
+#     <False> <!-- Not published -->
+#       <Bar>
+#         <BarItem>
+#           <PrimaryLiveViewButton label={{ dgettext("eyra-survey", "publish.button") }} event="publish" />
+#         </BarItem>
+#         <BarItem>
+#           <SecondaryLiveViewButton label={{ dgettext("eyra-survey", "delete.button") }} event="delete" />
+#         </BarItem>
+#       </Bar>
+#     </False>
+#   </Case>
 
-        #     <Panel bg_color="bg-grey1">
-        #       <template slot="title">
-        #         <Title3 color="text-white" >{{dgettext("eyra-survey", "config.title")}}</Title3>
-        #       </template>
-        #       <UrlInput field={{:survey_url}} label_color="text-white" label_text={{dgettext("eyra-survey", "config.url.label")}} background="dark"/>
-        #       <Spacing value="M" />
-        #       <Title6 color="text-white">Redirect url</Title6>
-        #       <BodyMedium color="text-grey3">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, CoreWeb.Study.Complete, @content_form.study_id)}}</BodyMedium>
-        #     </Panel>
-        #     <Spacing value="XL" />
-        #   </Form>
-        #   <Case value={{ @content_form.is_published }} >
-        #     <True> <!-- Published -->
-        #       <SecondaryLiveViewButton label={{ dgettext("eyra-survey", "unpublish.button") }} event="unpublish" />
-        #     </True>
-        #     <False> <!-- Not published -->
-        #       <Bar>
-        #         <BarItem>
-        #           <PrimaryLiveViewButton label={{ dgettext("eyra-survey", "publish.button") }} event="publish" />
-        #         </BarItem>
-        #         <BarItem>
-        #           <SecondaryLiveViewButton label={{ dgettext("eyra-survey", "delete.button") }} event="delete" />
-        #         </BarItem>
-        #       </Bar>
-        #     </False>
-        #   </Case>
-
-        # </ContentArea>
+# </ContentArea>
 #       </div>
 #     """
 #   end

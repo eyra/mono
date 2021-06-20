@@ -8,11 +8,11 @@ defmodule EyraUI.Selectors.LabelSelector do
 
   alias EyraUI.Spacing
 
-  prop labels, :list, required: true
-  prop target, :any
+  prop(labels, :list, required: true)
+  prop(target, :any)
 
-  @callback all_labels(socket :: Socket.t()) :: list(String.t)
-  @callback update_selected_labels(socket :: Socket.t(), labels :: list(String.t)) :: Socket.t()
+  @callback all_labels(socket :: Socket.t()) :: list(String.t())
+  @callback update_selected_labels(socket :: Socket.t(), labels :: list(String.t())) :: Socket.t()
 
   defmacro __using__(_opts) do
     quote do

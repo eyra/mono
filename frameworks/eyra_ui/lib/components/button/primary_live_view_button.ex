@@ -7,7 +7,7 @@ defmodule EyraUI.Button.PrimaryLiveViewButton do
   prop(label, :string, required: true)
   prop(event, :string, required: true)
   prop(width, :css_class, default: "pl-4 pr-4")
-  prop(target,   :any)
+  prop(target, :any)
 
   def render(assigns) do
     ~H"""

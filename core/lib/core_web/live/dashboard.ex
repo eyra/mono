@@ -50,7 +50,10 @@ defmodule CoreWeb.Dashboard do
       |> Enum.into(MapSet.new())
 
     available_studies =
-      Studies.list_studies_with_published_promotion(DataDonation.Tool, exclude: exclusion_list, preload: preload)
+      Studies.list_studies_with_published_promotion(DataDonation.Tool,
+        exclude: exclusion_list,
+        preload: preload
+      )
       |> Enum.map(&CardVM.primary_study(&1, socket))
 
     available_count = Enum.count(available_studies)
@@ -67,16 +70,20 @@ defmodule CoreWeb.Dashboard do
   end
 
   def handle_info({:handle_click, %{action: :edit, card_id: card_id}}, socket) do
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.DataDonation.Content, card_id))}
+    {:noreply,
+     push_redirect(socket, to: Routes.live_path(socket, CoreWeb.DataDonation.Content, card_id))}
   end
 
   def handle_info({:handle_click, %{action: :public, card_id: card_id}}, socket) do
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.DataDonation.Content, card_id))}
+    {:noreply,
+     push_redirect(socket, to: Routes.live_path(socket, CoreWeb.DataDonation.Content, card_id))}
   end
 
   def handle_event("create_study", _params, socket) do
     tool = create_tool(socket)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.DataDonation.Content, tool.id))}
+
+    {:noreply,
+     push_redirect(socket, to: Routes.live_path(socket, CoreWeb.DataDonation.Content, tool.id))}
   end
 
   defp create_tool(socket) do
@@ -88,13 +95,14 @@ defmodule CoreWeb.Dashboard do
       %Study{}
       |> Study.changeset(%{title: title})
 
-      tool_attrs = create_tool_attrs()
-      promotion_attrs = create_promotion_attrs(title)
+    tool_attrs = create_tool_attrs()
+    promotion_attrs = create_promotion_attrs(title)
 
     with {:ok, study} <- Studies.create_study(changeset, current_user),
          {:ok, _author} <- Studies.add_author(study, current_user),
-         {:ok, tool_content_node} <- Content.Nodes.create(%{ ready: false }),
-         {:ok, promotion_content_node} <- Content.Nodes.create(%{ ready: false }, tool_content_node),
+         {:ok, tool_content_node} <- Content.Nodes.create(%{ready: false}),
+         {:ok, promotion_content_node} <-
+           Content.Nodes.create(%{ready: false}, tool_content_node),
          {:ok, promotion} <- Promotions.create(promotion_attrs, study, promotion_content_node),
          {:ok, tool} <- DataDonation.Tools.create(tool_attrs, study, promotion, tool_content_node) do
       tool
@@ -103,7 +111,7 @@ defmodule CoreWeb.Dashboard do
 
   defp create_tool_attrs() do
     %{
-      reward_currency: :eur,
+      reward_currency: :eur
     }
   end
 

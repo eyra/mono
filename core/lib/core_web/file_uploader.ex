@@ -10,6 +10,7 @@ defmodule CoreWeb.FileUploader do
 
       def init_file_uploader(socket, key) do
         "init_file_uploader" |> IO.inspect(label: "1")
+
         socket
         |> allow_upload(key,
           accept: ~w(.png .jpg .jpeg),
@@ -20,11 +21,14 @@ defmodule CoreWeb.FileUploader do
 
       def handle_progress(_key, entry, socket) do
         "handle_progress" |> IO.inspect(label: "1")
+
         if entry.done? do
           "handle_progress" |> IO.inspect(label: "2")
+
           uploaded_file =
             socket
             |> consume_file(entry)
+
           "handle_progress" |> IO.inspect(label: "3")
 
           {:noreply, socket |> save_file(uploaded_file)}
@@ -36,6 +40,7 @@ defmodule CoreWeb.FileUploader do
 
       def consume_file(socket, entry) do
         "consume_file" |> IO.inspect(label: "1")
+
         consume_uploaded_entry(socket, entry, fn %{path: path} ->
           "consume_file" |> IO.inspect(label: "2")
           file = "#{entry.uuid}.#{ext(entry)}"

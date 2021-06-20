@@ -7,7 +7,7 @@ defmodule CoreWeb.Promotion.Form do
 
   alias Core.Content.Nodes
   alias Core.Promotions
-  alias Core.Promotions.{ Promotion, FormData }
+  alias Core.Promotions.{Promotion, FormData}
 
   alias CoreWeb.Router.Helpers, as: Routes
 
@@ -31,7 +31,7 @@ defmodule CoreWeb.Promotion.Form do
   data(myself, :any)
 
   @impl true
-  def save_file(%{ assigns: %{entity: entity}} = socket, uploaded_file) do
+  def save_file(%{assigns: %{entity: entity}} = socket, uploaded_file) do
     socket
     |> schedule_save(entity, %{banner_photo_url: uploaded_file})
     |> update_ui()
@@ -51,7 +51,7 @@ defmodule CoreWeb.Promotion.Form do
     }
   end
 
-  def update(%{image_id: image_id}, %{ assigns: %{entity: entity}} = socket) do
+  def update(%{image_id: image_id}, %{assigns: %{entity: entity}} = socket) do
     attrs = %{image_id: image_id}
 
     {
@@ -62,8 +62,7 @@ defmodule CoreWeb.Promotion.Form do
     }
   end
 
-
-  def handle_event("save", %{ "form_data" => attrs}, %{ assigns: %{entity: entity}} = socket) do
+  def handle_event("save", %{"form_data" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket
@@ -72,14 +71,18 @@ defmodule CoreWeb.Promotion.Form do
     }
   end
 
-  def handle_event("publish", _params, %{assigns: %{entity: entity, form_data: form_data}} = socket) do
+  def handle_event(
+        "publish",
+        _params,
+        %{assigns: %{entity: entity, form_data: form_data}} = socket
+      ) do
     case validate_for_publish(form_data) do
       {:ok, _form_data} ->
         {:noreply,
-          socket
-          |> schedule_save(entity, %{published_at: NaiveDateTime.utc_now()})
-          |> update_ui()
-        }
+         socket
+         |> schedule_save(entity, %{published_at: NaiveDateTime.utc_now()})
+         |> update_ui()}
+
       {:error, changeset} ->
         {
           :noreply,
@@ -184,6 +187,7 @@ defmodule CoreWeb.Promotion.Form do
 
   defp validate_for_publish(form_data) do
     changeset = FormData.changeset(form_data, :publish, %{})
+
     if changeset.valid? do
       {:ok, changeset}
     else
@@ -206,7 +210,6 @@ defmodule CoreWeb.Promotion.Form do
     |> assign(changeset: changeset)
   end
 
-
   # Label Selector (Themes)
 
   def all_labels(socket) do
@@ -218,7 +221,6 @@ defmodule CoreWeb.Promotion.Form do
     |> schedule_save(entity, %{themes: labels})
   end
 
-
   # Save
 
   def schedule_save(socket, %Promotion{} = entity, attrs) do
@@ -229,5 +231,4 @@ defmodule CoreWeb.Promotion.Form do
     socket
     |> schedule_save(changeset, node_changeset)
   end
-
 end

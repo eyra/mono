@@ -13,5 +13,5 @@ defmodule CoreWeb.Promotion.Plugin do
   @doc """
   Handles event from call to action
   """
-  @callback handle_event(String.t, Socket) :: {:ok, Socket} | {:error, String.t}
+  @callback handle_event(String.t(), Socket) :: {:ok, Socket} | {:error, String.t()}
 end

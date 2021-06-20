@@ -67,7 +67,8 @@ defmodule CoreWeb.ViewModel.Card do
   def primary_study(
         %{
           id: id,
-          data_donation_tool: %{
+          data_donation_tool:
+            %{
               script: _script,
               subject_count: subject_count,
               reward_currency: reward_currency,
@@ -83,7 +84,6 @@ defmodule CoreWeb.ViewModel.Card do
         },
         socket
       ) do
-
     subject_count = if subject_count === nil, do: 0, else: subject_count
     reward_value = if reward_value === nil, do: 0, else: reward_value
     reward_currency = if reward_currency === nil, do: :eur, else: reward_currency

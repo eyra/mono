@@ -1,4 +1,3 @@
-
 defmodule Core.Content.Nodes do
   @moduledoc """
 
@@ -13,7 +12,10 @@ defmodule Core.Content.Nodes do
   def ready?(id) when is_integer(id), do: ready?(get!(id))
   def ready?(%Node{} = node), do: ready?(node, node.parent_id)
   def ready?(%Node{} = node, nil), do: node.ready
-  def ready?(%Node{} = node, parent_id) when is_integer(parent_id), do: node.ready && ready?(get(parent_id))
+
+  def ready?(%Node{} = node, parent_id) when is_integer(parent_id),
+    do: node.ready && ready?(get(parent_id))
+
   def ready?(%Node{} = node, %Node{} = parent), do: node.ready && ready?(parent)
 
   def get!(id), do: Repo.get!(Node, id)
@@ -46,5 +48,4 @@ defmodule Core.Content.Nodes do
   def delete(%Node{} = node) do
     Repo.delete(node)
   end
-
 end
