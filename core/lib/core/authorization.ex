@@ -34,7 +34,8 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.Study.Public, [:visitor, :member])
   grant_access(CoreWeb.Study.Complete, [:member])
   grant_access(CoreWeb.FakeSurvey, [:member])
-  grant_access(CoreWeb.DataDonation.Content, [:member])
+  grant_access(CoreWeb.DataDonation.Content, [:member, :owner])
+  grant_access(CoreWeb.Promotion.Public, [:visitor, :member, :owner])
 
   grant_access(Core.Studies.Study, [:visitor, :member])
   grant_access(Core.SurveyTools.SurveyTool, [:owner, :participant])

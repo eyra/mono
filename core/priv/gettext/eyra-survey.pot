@@ -61,8 +61,7 @@ msgid "delete.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:98
-#: lib/core_web/live/promotion/public.ex:153 lib/core_web/live/study/public.ex:98 lib/core_web/live/study/public.ex:153
+#: lib/core_web/live/study/public.ex:98 lib/core_web/live/study/public.ex:153
 msgid "apply.button"
 msgstr ""
 
@@ -92,8 +91,7 @@ msgid "by.author.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:99
-#: lib/core_web/live/promotion/public.ex:156 lib/core_web/live/study/public.ex:99 lib/core_web/live/study/public.ex:156
+#: lib/core_web/live/study/public.ex:99 lib/core_web/live/study/public.ex:156
 msgid "goto.survey"
 msgstr ""
 
@@ -103,7 +101,6 @@ msgid "thank.you.message"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:106
 #: lib/core_web/live/study/public.ex:106
 msgid "completed.message"
 msgstr ""
@@ -134,7 +131,6 @@ msgid "phone.enabled.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:159
 #: lib/core_web/live/study/public.ex:159
 msgid "withdraw.button"
 msgstr ""
@@ -200,7 +196,7 @@ msgid "themes.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:127 lib/core_web/live/study/edit.ex:239
+#: lib/core_web/live/promotion/form.ex:145 lib/core_web/live/study/edit.ex:239
 msgid "search.different.image.button"
 msgstr ""
 
@@ -245,13 +241,13 @@ msgid "subtitle.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:125
+#: lib/core_web/live/promotion/public.ex:96
 #: lib/core_web/live/study/public.ex:125
 msgid "description.public.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:121
+#: lib/core_web/live/promotion/public.ex:92
 #: lib/core_web/live/study/public.ex:121
 msgid "expectations.public.label"
 msgstr ""
@@ -287,7 +283,6 @@ msgid "spots.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:148
 #: lib/core_web/live/study/public.ex:148
 msgid "devices.available.label"
 msgstr ""

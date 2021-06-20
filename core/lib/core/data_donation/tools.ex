@@ -14,7 +14,7 @@ defmodule Core.DataDonation.Tools do
   alias Core.Repo
 
   alias Ecto.Multi
-  alias Core.DataDonation.{Tool, Task}
+  alias Core.DataDonation.{Tool, Task, Participant}
   alias Core.Authorization
 
   def list do
@@ -23,6 +23,13 @@ defmodule Core.DataDonation.Tools do
 
   def get!(id), do: Repo.get!(Tool, id)
   def get(id), do: Repo.get(Tool, id)
+
+  def get_by_promotion(promotion_id) do
+    from(t in Tool,
+      where: t.promotion_id == ^promotion_id
+    )
+    |> Repo.one()
+  end
 
   def create(attrs, study, promotion, content_node) do
     %Tool{}
@@ -51,6 +58,13 @@ defmodule Core.DataDonation.Tools do
     |> Repo.transaction()
   end
 
+  def participant?(tool, user) do
+    from(p in Participant,
+      where: p.tool_id == ^tool.id and p.user_id == ^user.id
+    )
+    |> Repo.exists?()
+  end
+
   def count_tasks(tool, status_list) do
     case tool.id do
       nil ->
@@ -58,7 +72,7 @@ defmodule Core.DataDonation.Tools do
 
       _ ->
         from(t in Task,
-          where: t.data_donation_tool_id == ^tool.id and t.status in ^status_list,
+          where: t.tool_id == ^tool.id and t.status in ^status_list,
           select: count(t.id)
         )
         |> Repo.one()

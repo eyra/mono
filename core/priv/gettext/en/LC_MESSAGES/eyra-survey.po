@@ -62,8 +62,7 @@ msgid "delete.button"
 msgstr "Delete"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:98
-#: lib/core_web/live/promotion/public.ex:153 lib/core_web/live/study/public.ex:98 lib/core_web/live/study/public.ex:153
+#: lib/core_web/live/study/public.ex:98 lib/core_web/live/study/public.ex:153
 msgid "apply.button"
 msgstr "Apply for this survey"
 
@@ -93,8 +92,7 @@ msgid "by.author.label"
 msgstr "By"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:99
-#: lib/core_web/live/promotion/public.ex:156 lib/core_web/live/study/public.ex:99 lib/core_web/live/study/public.ex:156
+#: lib/core_web/live/study/public.ex:99 lib/core_web/live/study/public.ex:156
 msgid "goto.survey"
 msgstr "Go to survey"
 
@@ -104,7 +102,6 @@ msgid "thank.you.message"
 msgstr "Thank you for participating. Hopefully see you soon!"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:106
 #: lib/core_web/live/study/public.ex:106
 msgid "completed.message"
 msgstr "You already have completed this survey."
@@ -135,7 +132,6 @@ msgid "phone.enabled.label"
 msgstr "Phone"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:159
 #: lib/core_web/live/study/public.ex:159
 msgid "withdraw.button"
 msgstr "Withdraw from study"
@@ -201,7 +197,7 @@ msgid "themes.label"
 msgstr "Select one or more themes."
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:127 lib/core_web/live/study/edit.ex:239
+#: lib/core_web/live/promotion/form.ex:145 lib/core_web/live/study/edit.ex:239
 msgid "search.different.image.button"
 msgstr "Select different image"
 
@@ -246,13 +242,13 @@ msgid "subtitle.label"
 msgstr "Subtitle"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:125
+#: lib/core_web/live/promotion/public.ex:96
 #: lib/core_web/live/study/public.ex:125
 msgid "description.public.label"
 msgstr "Estimated duration"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:121
+#: lib/core_web/live/promotion/public.ex:92
 #: lib/core_web/live/study/public.ex:121
 msgid "expectations.public.label"
 msgstr "What can participants expect from the survey?"
@@ -288,7 +284,6 @@ msgid "spots.highlight.title"
 msgstr "Open spots"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:148
 #: lib/core_web/live/study/public.ex:148
 msgid "devices.available.label"
 msgstr "Survey available on:"

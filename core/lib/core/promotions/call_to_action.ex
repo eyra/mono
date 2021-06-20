@@ -3,7 +3,7 @@ defmodule Core.Promotions.CallToAction.Target do
   """
   defstruct [:type, :value]
 
-  @type t() :: %__MODULE__{
+  @type t :: %__MODULE__{
           type: :event | :navigation,
           value: String.t()
         }
@@ -14,8 +14,8 @@ defmodule Core.Promotions.CallToAction do
   """
   defstruct [:label, :target]
 
-  @type t() :: %__MODULE__{
+  @type t :: %__MODULE__{
           label: String.t(),
-          target: %Core.Promotions.CallToAction.Target{}
+          target: Core.Promotions.CallToAction.Target.t()
         }
 end

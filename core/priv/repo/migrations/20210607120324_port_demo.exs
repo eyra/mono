@@ -57,24 +57,24 @@ defmodule Core.Repo.Migrations.PortDemo do
     create table(:data_donation_tasks) do
       add(:status, :string, null: false)
       add(:user_id, references(:users, on_delete: :delete_all), null: false)
-      add(:data_donation_tool_id, references(:data_donation_tools, on_delete: :delete_all), null: false)
+      add(:tool_id, references(:data_donation_tools, on_delete: :delete_all), null: false)
 
       timestamps()
     end
 
     create(index(:data_donation_tasks, [:status]))
-    create(index(:data_donation_tasks, [:data_donation_tool_id]))
-    create(unique_index(:data_donation_tasks, [:user_id, :data_donation_tool_id]))
+    create(index(:data_donation_tasks, [:tool_id]))
+    create(unique_index(:data_donation_tasks, [:user_id, :tool_id]))
 
     # PARTICIPANTS
     create table(:data_donation_participants) do
       add(:user_id, references(:users, on_delete: :delete_all))
-      add(:data_donation_tool_id, references(:data_donation_tools, on_delete: :delete_all))
+      add(:tool_id, references(:data_donation_tools, on_delete: :delete_all))
 
       timestamps()
     end
 
-    create(unique_index(:data_donation_participants, [:data_donation_tool_id, :user_id]))
+    create(unique_index(:data_donation_participants, [:tool_id, :user_id]))
 
 
   end

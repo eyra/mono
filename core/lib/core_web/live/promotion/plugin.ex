@@ -5,13 +5,22 @@ defmodule CoreWeb.Promotion.Plugin do
   alias Core.Promotions.CallToAction
   alias Phoenix.Socket
 
+  @type socket :: Socket.t()
+  @type promotion :: binary
+  @type event :: binary
+  @type highlight :: %{title: binary, text: binary}
+  @type info_result :: %{call_to_action: CallToAction.t(), highlights: list(highlight), devices: list(atom)}
+
+  @type handle_event_result :: {:ok, socket} | {:error, binary}
+
   @doc """
-  Delivers call to action info to embed the tool on the public promotions page
+  Delivers info to embed the tool on the public promotions page
   """
-  @callback call_to_action() :: %CallToAction{}
+  @callback info(promotion, socket) :: info_result
 
   @doc """
   Handles event from call to action
   """
-  @callback handle_event(String.t(), Socket) :: {:ok, Socket} | {:error, String.t()}
+
+  @callback handle_event(promotion, event, socket) :: handle_event_result
 end

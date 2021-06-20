@@ -11,41 +11,56 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/data_donation/content.ex:43
+#: lib/core_web/live/data_donation/content.ex:65
 msgid "content.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:68
+#: lib/core_web/live/data_donation/form.ex:74
 msgid "reward.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:64
+#: lib/core_web/live/data_donation/form.ex:70
 msgid "script.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:72
+#: lib/core_web/live/data_donation/form.ex:78
 msgid "config.nrofsubjects.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:71
+#: lib/core_web/live/data_donation/form.ex:77
 msgid "nrofsubjects.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:67
+#: lib/core_web/live/data_donation/form.ex:73
 msgid "reward.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:63
+#: lib/core_web/live/data_donation/form.ex:69
 msgid "script.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:75
+#: lib/core_web/live/data_donation/form.ex:81
 msgid "delete.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:41
+msgid "apply.cta.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:46
+msgid "open.cta.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:67
+msgid "spots.highlight.title"
 msgstr ""

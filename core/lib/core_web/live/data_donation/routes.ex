@@ -2,9 +2,8 @@ defmodule CoreWeb.Live.DataDonation.Routes do
   defmacro routes() do
     quote do
       scope "/", CoreWeb do
-        pipe_through([:browser])
+        pipe_through([:browser, :require_authenticated_user])
 
-        # get("/data-donation/:id", DataDonationController, :index)
         live("/data-donation/:id/content", DataDonation.Content)
       end
     end

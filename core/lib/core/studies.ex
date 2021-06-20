@@ -120,7 +120,7 @@ defmodule Core.Studies do
     tool_ids =
       from(task in DataDonation.Task,
         where: task.user_id == ^user.id,
-        select: task.data_donation_tool_id
+        select: task.tool_id
       )
 
     study_ids =

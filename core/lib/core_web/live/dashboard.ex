@@ -76,7 +76,7 @@ defmodule CoreWeb.Dashboard do
 
   def handle_info({:handle_click, %{action: :public, card_id: card_id}}, socket) do
     {:noreply,
-     push_redirect(socket, to: Routes.live_path(socket, CoreWeb.DataDonation.Content, card_id))}
+     push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Promotion.Public, card_id))}
   end
 
   def handle_event("create_study", _params, socket) do

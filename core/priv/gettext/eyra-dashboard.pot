@@ -11,26 +11,26 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:134
+#: lib/core_web/live/dashboard.ex:142
 msgid "add.card.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:122
+#: lib/core_web/live/dashboard.ex:130
 msgid "highlighted.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:141
+#: lib/core_web/live/dashboard.ex:149
 msgid "marketplace.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:119
+#: lib/core_web/live/dashboard.ex:127
 msgid "title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:85
+#: lib/core_web/live/dashboard.ex:92
 msgid "default.study.title"
 msgstr ""

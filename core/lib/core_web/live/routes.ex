@@ -4,11 +4,13 @@ defmodule CoreWeb.Live.Routes do
       require CoreWeb.Live.Study.Routes
       require CoreWeb.Live.SurveyTool.Routes
       require CoreWeb.Live.DataDonation.Routes
+      require CoreWeb.Live.Promotion.Routes
       require CoreWeb.Live.User.Routes
 
       CoreWeb.Live.Study.Routes.routes()
       CoreWeb.Live.SurveyTool.Routes.routes()
       CoreWeb.Live.DataDonation.Routes.routes()
+      CoreWeb.Live.Promotion.Routes.routes()
       CoreWeb.Live.User.Routes.routes()
 
       scope "/", CoreWeb do
