@@ -67,7 +67,10 @@ Hooks.PythonUploader = {
     this.worker.onmessage = (event) => {
       const { eventType } = event.data;
       if (eventType === "result") {
-        this.pushEvent("script-result", event.data.result)
+        this.result = event.data.result;
+        this.el.querySelector(".summary").innerText = this.result.summary;
+        this.el.querySelector(".extracted").innerHTML = this.result.html;
+        this.el.querySelector(".results").hidden = false;
       }
       else if (eventType === "initialized") {
         const script = this.el.getElementsByTagName("code")[0].innerText
@@ -76,7 +79,7 @@ Hooks.PythonUploader = {
         this.pushEvent("script-initialized", {})
       }
     }
-    // Hook up the button to the worker
+    // Hook up the process button to the worker
     this.el.addEventListener("click", (event)=>{
       if (event.target.dataset.role !== "process-trigger") {
         return;
@@ -94,6 +97,13 @@ Hooks.PythonUploader = {
       };
       this.worker.postMessage({ eventType: "initData", size: file.size });
       reader.read().then(sendToWorker);
+    })
+    // Hook up the share results button
+    this.el.addEventListener("click", (event)=>{
+      if (event.target.dataset.role !== "share-trigger") {
+        return;
+      }
+      this.pushEvent("script-result", this.result);
     })
   }
 }

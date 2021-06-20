@@ -29,7 +29,7 @@ defmodule CoreWeb.DataUploader.Uploader do
     {:ok,
      socket
      |> assign(:result, nil)
-     |> assign(:script, client_script.script)
+     |> assign(:client_script, client_script)
      |> assign(:changeset, UploadChangeset.changeset(%{}))}
   end
 
@@ -38,7 +38,13 @@ defmodule CoreWeb.DataUploader.Uploader do
     {:noreply, socket |> assign(:ready, true)}
   end
 
-  def handle_event("script-result", _params, socket) do
+  def handle_event(
+        "script-result",
+        %{"data" => data},
+        %{assigns: %{client_script: client_script}} = socket
+      ) do
+    DataUploader.store_results(client_script, data)
+
     {:noreply, socket}
   end
 
@@ -52,13 +58,14 @@ defmodule CoreWeb.DataUploader.Uploader do
         <input type="file" id="fileItem">
         <button data-role="process-trigger">Process</button>
       </div>
-      <pre><code>{{ @script }}</code></pre>
+      <div class="results" hidden>
+        <p class="summary" />
+        <p class="extracted" />
+        <button data-role="share-trigger">Share results</button>
+      </div>
+      <pre><code>{{ @client_script.script }}</code></pre>
     </div>
 
-    <div id="results">
-      <p id="summary" />
-      <button>Submit</button>
-    </div>
 
     """
   end

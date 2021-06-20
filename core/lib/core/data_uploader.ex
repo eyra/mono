@@ -14,6 +14,7 @@ defmodule Core.DataUploader do
   alias Core.Repo
 
   alias Core.DataUploader.ClientScript
+  alias Core.DataUploader.UserData
   alias Core.Authorization
 
   def list_client_scripts do
@@ -48,5 +49,11 @@ defmodule Core.DataUploader do
 
   def change_client_script(%ClientScript{} = client_script, _type, attrs \\ %{}) do
     ClientScript.changeset(client_script, attrs)
+  end
+
+  def store_results(%ClientScript{} = client_script, data) when is_binary(data) do
+    %UserData{}
+    |> UserData.changeset(%{client_script: client_script, data: data})
+    |> Repo.insert!()
   end
 end

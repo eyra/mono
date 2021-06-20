@@ -61,7 +61,8 @@ defmodule Core.Factories do
       :survey_tool_participant,
       %{
         survey_tool: build(:survey_tool),
-        user: build(:member)
+        user: build(:member),
+        auth_node: build(:auth_node)
       }
     )
   end
@@ -71,7 +72,10 @@ defmodule Core.Factories do
   end
 
   def build(:client_script) do
-    build(:survey_tool, %{})
+    %DataUploader.ClientScript{
+      title: Faker.Lorem.sentence(),
+      script: "print 'hello'"
+    }
   end
 
   def build(:role_assignment) do
