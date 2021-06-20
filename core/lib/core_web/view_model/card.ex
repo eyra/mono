@@ -1,5 +1,6 @@
 defmodule CoreWeb.ViewModel.Card do
   alias Core.SurveyTools
+  alias Core.DataDonation
   alias Core.ImageHelpers
   alias CoreWeb.Router.Helpers, as: Routes
   import CoreWeb.Gettext
@@ -66,6 +67,64 @@ defmodule CoreWeb.ViewModel.Card do
   def primary_study(
         %{
           id: id,
+          data_donation_tool: %{
+              script: _script,
+              subject_count: subject_count,
+              reward_currency: reward_currency,
+              reward_value: reward_value,
+              promotion: %{
+                title: title,
+                image_id: image_id,
+                themes: themes,
+                marks: marks,
+                published_at: published_at
+              }
+            } = tool
+        },
+        socket
+      ) do
+
+    subject_count = if subject_count === nil, do: 0, else: subject_count
+    reward_value = if reward_value === nil, do: 0, else: reward_value
+    reward_currency = if reward_currency === nil, do: :eur, else: reward_currency
+
+    occupied_spot_count = DataDonation.Tools.count_tasks(tool, [:pending, :completed])
+    open_spot_count = subject_count - occupied_spot_count
+
+    reward_string = CurrencyFormatter.format(reward_value, reward_currency, keep_decimals: true)
+
+    reward_label = dgettext("eyra-promotion", "reward.title")
+    open_spots_label = dgettext("eyra-promotion", "open.spots.label", count: "#{open_spot_count}")
+    deadline_label = dgettext("eyra-promotion", "deadline.label", days: "3")
+
+    info = [
+      "#{reward_label}: #{reward_string}",
+      "#{open_spots_label}",
+      "#{deadline_label}"
+    ]
+
+    label =
+      if published_at === nil, do: dgettext("eyra-promotion", "published.false.label"), else: nil
+
+    icon_url = get_icon_url(marks, socket)
+    image_info = ImageHelpers.get_image_info(image_id)
+    tags = get_tags(themes)
+
+    %{
+      id: id,
+      title: title,
+      image_info: image_info,
+      tags: tags,
+      duration: nil,
+      info: info,
+      icon_url: icon_url,
+      label: label
+    }
+  end
+
+  def primary_study(
+        %{
+          id: id,
           title: title
         },
         socket
@@ -73,6 +132,7 @@ defmodule CoreWeb.ViewModel.Card do
     %{
       id: id,
       title: title,
+      label: nil,
       image_info: ImageHelpers.get_image_info(nil),
       tags: [],
       duration: nil,

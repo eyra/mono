@@ -90,6 +90,14 @@ defmodule CoreWeb.User.Profile do
     |> AutoSave.schedule_hide_message()
   end
 
+  def handle_event("focus", %{"field" => field}, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(:focus, field)
+    }
+  end
+
   @impl true
   def render(assigns) do
     ~H"""

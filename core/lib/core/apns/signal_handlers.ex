@@ -2,7 +2,6 @@ defmodule Core.APNS.SignalHandlers do
   use Core.Signals.Handlers
   use Bamboo.Phoenix, view: Core.Mailer.EmailView
   import Core.APNS, only: [send_notification: 2]
-  alias Core.NotificationCenter.Box
 
   @impl true
   def dispatch(:new_notification, %{box: box, data: %{title: title}}) do

@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:111
+#: lib/core_web/live/user/profile.ex:126
 msgid "displayname.label"
 msgstr "Schermnaam"
 
@@ -22,7 +22,7 @@ msgid "email.label"
 msgstr "E-mail"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:110
+#: lib/core_web/live/user/profile.ex:125
 msgid "fullname.label"
 msgstr "Volledige naam"
 
@@ -32,22 +32,22 @@ msgid "password.label"
 msgstr "Wachtwoord"
 
 #, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:76
+#: lib/core_web/templates/layout/root.html.leex:83
 msgid "profile.button"
 msgstr "Mijn profiel"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:98
+#: lib/core_web/live/user/profile.ex:113
 msgid "profile.title"
 msgstr "Mijn profiel"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:116
+#: lib/core_web/live/user/profile.ex:131
 msgid "researcher.label"
 msgstr "ik ben een onderzoeker"
 
 #, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:81
+#: lib/core_web/templates/layout/root.html.leex:88
 msgid "signin.button"
 msgstr "Inloggen"
 
@@ -84,7 +84,7 @@ msgid "title.label"
 msgstr "E-mail"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:119
+#: lib/core_web/live/user/profile.ex:134
 msgid "signout.button"
 msgstr "Afmelden"
 
@@ -99,7 +99,7 @@ msgid "confirm.token.resend_button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:105
+#: lib/core_web/live/user/profile.ex:120
 msgid "choose.profile.photo.file"
 msgstr "Kies foto"
 
@@ -109,16 +109,16 @@ msgid "photo.upload.error.flash"
 msgstr "Er ging iets mis bij uploaden van de foto."
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:106
+#: lib/core_web/live/user/profile.ex:121
 msgid "choose.other.profile.photo.file"
 msgstr "Kies andere foto"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:112
+#: lib/core_web/live/user/profile.ex:127
 msgid "professionaltitle.label"
 msgstr "Functietitel"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:113
+#: lib/core_web/live/user/profile.ex:128
 msgid "website.label"
 msgstr "Website"

@@ -1,0 +1,137 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/core/promotions/form_data.ex:108
+msgid "created.label"
+msgstr "Created"
+
+#, elixir-format
+#: lib/core_web/view_model/card.ex:98
+msgid "deadline.label"
+msgstr "Still %{days} days available"
+
+#, elixir-format
+#: lib/core_web/view_model/card.ex:97
+msgid "open.spots.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:99 lib/core_web/view_model/card.ex:107
+msgid "published.false.label"
+msgstr "Concept"
+
+#, elixir-format
+#: lib/core/promotions/form_data.ex:104 lib/core_web/live/promotion/form.ex:96
+msgid "published.true.label"
+msgstr "Published"
+
+#, elixir-format
+#: lib/core_web/view_model/card.ex:96
+msgid "reward.title"
+msgstr "Credits"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:110
+msgid "title.label"
+msgstr "Title"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:90
+msgid "form.title"
+msgstr "Promotion"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:111
+msgid "subtitle.label"
+msgstr "Subtitle"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:115
+msgid "themes.label"
+msgstr "Select one or more themes."
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:114
+msgid "themes.title"
+msgstr "Themes"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:153
+msgid "banner.subtitle.label"
+msgstr "Subtitle"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:140
+msgid "banner.title"
+msgstr "Banner"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:152
+msgid "banner.title.label"
+msgstr "Title"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:154
+msgid "banner.url.label"
+msgstr "Website"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:146
+msgid "choose.banner.photo.file"
+msgstr "Choose photo"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:147
+msgid "choose.other.banner.photo.file"
+msgstr "Choose different photo"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:137
+msgid "description.label"
+msgstr "Some background information for the participants"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:136
+msgid "description.title"
+msgstr "About the study"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:133
+msgid "expectations.label"
+msgstr "Expectations for the participants"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:132
+msgid "expectations.title"
+msgstr "About the task"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:121
+msgid "image.label"
+msgstr "The selected image will be visible in the marketplace overview and on promotion page"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:120
+msgid "image.title"
+msgstr "Image"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:162
+msgid "publish.button"
+msgstr "Publish"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:159
+msgid "unpublish.button"
+msgstr "Unpublish"

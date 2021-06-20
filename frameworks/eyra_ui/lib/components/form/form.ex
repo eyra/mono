@@ -9,16 +9,14 @@ defmodule EyraUI.Form.Form do
   prop(changeset, :any, required: true)
   prop(change_event, :any, required: true)
   prop(focus, :string, required: true)
+  prop(target, :any)
 
   def render(assigns) do
     ~H"""
     <div
       x-data="{ focus: '{{@focus}}' }"
-      x-on:click="{ focus = ''}"
-      phx-click="focus"
-      phx-value-field="''"
     >
-      <Form for={{ @changeset }} change={{@change_event}} opts={{ id: @id }} >
+      <Form for={{ @changeset }} change={{@change_event}} opts={{ id: @id, phx_target: @target }} >
         <slot />
       </Form>
     </div>
