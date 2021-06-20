@@ -23,16 +23,25 @@ defmodule CoreWeb.DataDonation.Form do
 
   def update(%{id: id, entity_id: entity_id}, socket) do
     entity = Tools.get!(entity_id)
-    changeset = Tool.changeset(entity, :mount, %{})
 
-    socket =
+    {
+      :ok,
       socket
       |> assign(entity_id: entity_id)
       |> assign(entity: entity)
-      |> assign(changeset: changeset)
       |> assign(id: id)
+      |> update_ui()
+    }
+  end
 
-    {:ok, socket}
+  defp update_ui(%{assigns: %{entity: entity}} = socket) do
+    update_ui(socket, entity)
+  end
+
+  defp update_ui(socket, entity) do
+    changeset = Tool.changeset(entity, :mount, %{})
+    socket
+    |> assign(changeset: changeset)
   end
 
   # Handle Events
@@ -41,6 +50,7 @@ defmodule CoreWeb.DataDonation.Form do
       :noreply,
       socket
       |> schedule_save(entity, :auto_save, attrs)
+      |> update_ui()
     }
   end
 
