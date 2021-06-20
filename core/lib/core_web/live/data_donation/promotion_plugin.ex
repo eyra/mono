@@ -6,6 +6,7 @@ defmodule CoreWeb.DataDonation.PromotionPlugin do
   alias Core.Promotions.CallToAction.Target
   alias Core.DataDonation.Tools
 
+  alias CoreWeb.Router.Helpers, as: Routes
   alias CoreWeb.Promotion.Plugin
 
   @behaviour Plugin
@@ -26,15 +27,21 @@ defmodule CoreWeb.DataDonation.PromotionPlugin do
   end
 
   @impl Plugin
-  def handle_event(_promotion_id, "apply", socket) do
+  def handle_event(promotion_id, "apply", %{assigns: %{current_user: user}} = socket) do
     __MODULE__ |> IO.inspect(label: "APPLY")
-    {:ok, socket}
+
+    tool = Tools.get_by_promotion(promotion_id)
+    Tools.apply_participant(tool, user)
+    Tools.get_or_create_task(tool, user)
+
+    Routes.live_path(socket, CoreWeb.Dashboard)
   end
 
   @impl Plugin
   def handle_event(_promotion_id, "open", socket) do
     __MODULE__ |> IO.inspect(label: "OPEN")
-    {:ok, socket}
+
+    Routes.live_path(socket, CoreWeb.Dashboard)
   end
 
   defp get_call_to_action(tool, user) do

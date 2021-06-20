@@ -16,7 +16,7 @@ defmodule CoreWeb.Promotion.Plugin do
           byline: binary
         }
 
-  @type handle_event_result :: {:ok, socket} | {:error, binary}
+  @type handle_event_result :: binary
 
   @doc """
   Delivers info to embed the tool on the public promotions page
