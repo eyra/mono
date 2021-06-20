@@ -7,6 +7,8 @@ defmodule Core.Promotions.Promotion do
 
   require Core.Themes
   alias Core.Themes
+  alias Core.Marks
+
   import Ecto.Changeset
 
   schema "promotions" do
@@ -70,4 +72,17 @@ defmodule Core.Promotions.Promotion do
     |> Enum.join(", ")
   end
 
+  def get_organisation(promotion) do
+    case get_organisation_id(promotion) do
+      nil ->
+        nil
+
+      id ->
+        Marks.instances()
+        |> Enum.find(&(&1.id === String.to_existing_atom(id)))
+    end
+  end
+
+  defp get_organisation_id(%__MODULE__{marks: [first_mark | _]}), do: first_mark
+  defp get_organisation_id(_), do: nil
 end

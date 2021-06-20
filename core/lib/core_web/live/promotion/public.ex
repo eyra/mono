@@ -21,20 +21,20 @@ defmodule CoreWeb.Promotion.Public do
 
   data(study, :any)
   data(promotion, :any)
+  data(plugin, :any)
   data(plugin_info, :any)
-  data(image_info, :any)
-  data(byline, :any)
-  data(organisation_name, :any)
-  data(themes, :any)
+  data(transient, :any)
 
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
     promotion = Promotions.get!(id)
-    image_info = ImageHelpers.get_image_info(promotion.image_id, 2560, 1920)
-    themes = promotion |> Promotion.get_themes()
-    byline = "Byline"
-    organisation_name = "organisation_name"
     plugin = promotion |> load_plugin()
-    plugin_info = plugin.info(id, socket)
+    plugin_info = plugin.info(id, socket) |> IO.inspect(label: "PLUGIN INFO")
+
+    transient = %{
+      image_info: ImageHelpers.get_image_info(promotion.image_id, 2560, 1920),
+      themes: promotion |> Promotion.get_themes(),
+      organisation: promotion |> Promotion.get_organisation() |> IO.inspect(label: "ORG")
+    }
 
     {
       :ok,
@@ -42,11 +42,9 @@ defmodule CoreWeb.Promotion.Public do
       |> assign(
         user: user,
         promotion: promotion,
-        image_info: image_info,
-        byline: byline,
-        organisation_name: organisation_name,
-        themes: themes,
-        plugin_info: plugin_info
+        transient: transient,
+        plugin_info: plugin_info,
+        plugin: plugin
       )
     }
   end
@@ -58,9 +56,14 @@ defmodule CoreWeb.Promotion.Public do
   def handle_event(
         "call-to-action",
         _params,
-        %{assigns: %{id: id, plugin: plugin, call_to_action: %{target: %{event: event}}}} = socket
+        %{assigns: %{promotion: promotion, plugin: plugin, plugin_info: plugin_info}} = socket
       ) do
-    plugin.handle_event(id, event)
+    plugin.handle_event(promotion.id, plugin_info.call_to_action.target.value, socket)
+    {:noreply, socket}
+  end
+
+  def handle_event("call-to-action", _params, %{assigns: assigns} = socket) do
+    assigns |> IO.inspect(label: "ASSIGNS")
     {:noreply, socket}
   end
 
@@ -68,14 +71,14 @@ defmodule CoreWeb.Promotion.Public do
     ~H"""
       <HeroImage
         title={{@promotion.title}}
-        subtitle={{@themes}}
-        image_info={{@image_info}}
+        subtitle={{@transient.themes}}
+        image_info={{@transient.image_info}}
       >
         <template slot="call_to_action">
           <PrimaryLiveViewButton label={{ @plugin_info.call_to_action.label }} event="call-to-action" />
         </template>
       </HeroImage>
-      <HeroBanner title={{@organisation_name}} subtitle={{ @byline }} icon_url={{ Routes.static_path(@socket, "/images/uu.svg") }}/>
+      <HeroBanner title={{@transient.organisation.label}} subtitle={{ @plugin_info.byline }} icon_url={{ Routes.static_path(@socket, "/images/#{@transient.organisation.id}.svg") }}/>
       <ContentArea>
           <div class="ml-8 mr-8 text-center">
             <Title1>{{@promotion.subtitle}}</Title1>

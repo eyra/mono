@@ -136,26 +136,26 @@ msgid "unpublish.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:126
+#: lib/core_web/live/promotion/public.ex:129
 msgid "back.button.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:119
+#: lib/core_web/live/promotion/public.ex:122
 msgid "devices.available.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:115
+#: lib/core_web/live/promotion/public.ex:118
 msgid "keep.me.updated.button.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:113
+#: lib/core_web/live/promotion/public.ex:116
 msgid "keep.me.updated.text"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:111
+#: lib/core_web/live/promotion/public.ex:114
 msgid "keep.me.updated.title"
 msgstr ""

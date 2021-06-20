@@ -118,6 +118,7 @@ defmodule CoreWeb.Dashboard do
   defp create_promotion_attrs(title) do
     %{
       title: title,
+      marks: ["uu"],
       plugin: "data_donation"
     }
   end

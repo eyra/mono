@@ -137,26 +137,26 @@ msgid "unpublish.button"
 msgstr "Unpublish"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:126
+#: lib/core_web/live/promotion/public.ex:129
 msgid "back.button.label"
-msgstr ""
+msgstr "Back to overview"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:119
+#: lib/core_web/live/promotion/public.ex:122
 msgid "devices.available.label"
-msgstr ""
+msgstr "Available on:"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:115
+#: lib/core_web/live/promotion/public.ex:118
 msgid "keep.me.updated.button.label"
-msgstr ""
+msgstr "Keep me updated"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:113
+#: lib/core_web/live/promotion/public.ex:116
 msgid "keep.me.updated.text"
-msgstr ""
+msgstr "Register here for our newsletter"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:111
+#: lib/core_web/live/promotion/public.ex:114
 msgid "keep.me.updated.title"
-msgstr ""
+msgstr "Curious for the results of this study?"

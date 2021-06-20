@@ -242,13 +242,13 @@ msgid "subtitle.label"
 msgstr "Ondertitel"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:96
+#: lib/core_web/live/promotion/public.ex:99
 #: lib/core_web/live/study/public.ex:125
 msgid "description.public.label"
 msgstr "Over het onderzoek"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:92
+#: lib/core_web/live/promotion/public.ex:95
 #: lib/core_web/live/study/public.ex:121
 msgid "expectations.public.label"
 msgstr "Wat kun je verwachten?"

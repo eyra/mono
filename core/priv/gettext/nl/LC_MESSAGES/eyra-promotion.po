@@ -137,26 +137,26 @@ msgid "unpublish.button"
 msgstr "Maak publicatie ongedaan"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:126
+#: lib/core_web/live/promotion/public.ex:129
 msgid "back.button.label"
-msgstr ""
+msgstr "Terug naar overzicht"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:119
+#: lib/core_web/live/promotion/public.ex:122
 msgid "devices.available.label"
-msgstr ""
+msgstr "Beschikbaar op:"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:115
+#: lib/core_web/live/promotion/public.ex:118
 msgid "keep.me.updated.button.label"
-msgstr ""
+msgstr "Houd me op de hoogte"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:113
+#: lib/core_web/live/promotion/public.ex:116
 msgid "keep.me.updated.text"
-msgstr ""
+msgstr "Je kan je hier inschrijven voor de nieuwsbrief"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:111
+#: lib/core_web/live/promotion/public.ex:114
 msgid "keep.me.updated.title"
-msgstr ""
+msgstr "Benieuwd naar de resultaten van dit onderzoek?"

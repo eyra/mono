@@ -33,7 +33,9 @@ defmodule Core.Content.Node do
       @behaviour Core.Content.Node
 
       import Ecto.Changeset
+
       alias Core.Content.Node
+      alias Core.Repo
 
       def ready?(node, attrs) do
         changeset =

@@ -12,22 +12,22 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:142
+#: lib/core_web/live/dashboard.ex:143
 msgid "add.card.title"
 msgstr "Add study"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:130
+#: lib/core_web/live/dashboard.ex:131
 msgid "highlighted.title"
 msgstr "My studies"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:149
+#: lib/core_web/live/dashboard.ex:150
 msgid "marketplace.title"
 msgstr "Marketplace"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:127
+#: lib/core_web/live/dashboard.ex:128
 msgid "title"
 msgstr "Dashboard"
 
