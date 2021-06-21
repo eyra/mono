@@ -9,11 +9,12 @@ defmodule CoreWeb.DataDonation.Form do
   alias CoreWeb.Router.Helpers, as: Routes
 
   alias EyraUI.Spacing
-  alias EyraUI.Text.{Title1, Title3}
+  alias EyraUI.Text.{Title2, Title3}
   alias EyraUI.Form.{Form, TextArea, NumberInput}
   alias EyraUI.Container.{ContentArea}
-  alias EyraUI.Button.{SecondaryLiveViewButton, LinkButton, PrimaryAlpineButton}
+  alias EyraUI.Button.{SecondaryLiveViewButton, PrimaryAlpineButton}
   alias EyraUI.Panel.Panel
+  alias EyraUI.Timestamp
 
   prop(entity_id, :any, required: true)
 
@@ -79,13 +80,22 @@ defmodule CoreWeb.DataDonation.Form do
     ~H"""
       <ContentArea>
         <div :if={{ Enum.count(@donations) > 0 }}>
-          <Title1>{{dgettext("eyra-data-donation", "donations.title")}}</Title1>
+          <Title2>{{dgettext("eyra-data-donation", "donations.title")}}</Title2>
           <Panel bg_color="bg-grey6">
-            <div :for={{ donation <- @donations  }} class="mb-2">
-              <span class="text-label font-label mr-2">
-                Participant {{donation.user_id}}:
-              </span>
-              <LinkButton label={{dgettext("eyra-data-donation", "download.button.label")}} path=""/>
+            <div :for={{ donation <- @donations  }} class="mb-2 w-full">
+              <div class="flex flex-row w-full">
+                <div class="flex-wrap text-grey1 text-bodymedium font-body mr-6">
+                  Participant {{donation.user_id}}
+                </div>
+                <div class="flex-grow text-grey2 text-bodymedium font-body">
+                  {{dgettext("eyra-data-donation", "received.label")}} {{Timestamp.humanize(donation.inserted_at)}}
+                </div>
+                <div class="flex-wrap">
+                  <a href="" class="text-primary text-bodymedium font-body hover:text-grey1 underline focus:outline-none" >
+                  {{dgettext("eyra-data-donation", "download.button.label")}}
+                  </a>
+                </div>
+              </div>
             </div>
           </Panel>
           <Spacing value="S" />
