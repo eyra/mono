@@ -22,6 +22,11 @@ defmodule CoreWeb.DataDonation.Content do
   data(author, :any)
   data(initial_image_query, :any)
 
+  @impl true
+  def get_authorization_context(%{"id" => id}, _session, _socket) do
+    Tools.get!(id)
+  end
+
   def mount(%{"id" => id}, _session, socket) do
     tool = Tools.get!(id)
 
