@@ -45,7 +45,7 @@ data_donation_promotions =
       themes: [:technology],
       marks: ["vu"],
       banner_photo_url: Faker.Internet.url(),
-      banner_title:  "Banner title",
+      banner_title: "Banner title",
       banner_subtitle: "Banner subtitle",
       banner_url: Faker.Internet.url(),
       published_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
@@ -83,13 +83,13 @@ _member =
   })
 
 researcher =
-  Core.Factories.insert!(:researcher, %{
+  Core.Factories.insert!(:member, %{
+    researcher: true,
     email: "researcher@eyra.co",
     password: password
   })
 
 for study_data <- studies do
-
   {tool_type, study_data} = Map.pop!(study_data, :type)
   {tool_data, study_data} = Map.pop!(study_data, tool_type)
 
@@ -107,15 +107,16 @@ for study_data <- studies do
   # PROMOTION
 
   {promotion_data, tool_data} = Map.pop!(tool_data, :promotion)
-  promotion = Core.Factories.insert!(
-    :promotion,
-    Map.merge(%{parent_content_node: tool_content_node, study: study}, promotion_data)
-  )
+
+  promotion =
+    Core.Factories.insert!(
+      :promotion,
+      Map.merge(%{parent_content_node: tool_content_node, study: study}, promotion_data)
+    )
 
   # TOOL
   Core.Factories.insert!(
     tool_type,
     Map.merge(%{content_node: tool_content_node, study: study, promotion: promotion}, tool_data)
   )
-
 end

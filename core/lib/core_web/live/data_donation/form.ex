@@ -12,7 +12,7 @@ defmodule CoreWeb.DataDonation.Form do
   alias EyraUI.Text.{Title2, Title3}
   alias EyraUI.Form.{Form, TextArea, NumberInput}
   alias EyraUI.Container.{ContentArea}
-  alias EyraUI.Button.{SecondaryLiveViewButton, PrimaryAlpineButton}
+  alias EyraUI.Button.{SecondaryLiveViewButton, PrimaryButton}
   alias EyraUI.Panel.Panel
   alias EyraUI.Timestamp
 
@@ -91,7 +91,7 @@ defmodule CoreWeb.DataDonation.Form do
                   {{dgettext("eyra-data-donation", "received.label")}} {{Timestamp.humanize(donation.inserted_at)}}
                 </div>
                 <div class="flex-wrap">
-                  <a href="" class="text-primary text-bodymedium font-body hover:text-grey1 underline focus:outline-none" >
+          <a href={{Routes.data_donation_path(@socket, :download_single, @entity_id, donation.id)}} class="text-primary text-bodymedium font-body hover:text-grey1 underline focus:outline-none" >
                   {{dgettext("eyra-data-donation", "download.button.label")}}
                   </a>
                 </div>
@@ -99,7 +99,7 @@ defmodule CoreWeb.DataDonation.Form do
             </div>
           </Panel>
           <Spacing value="S" />
-          <PrimaryAlpineButton click="" label={{dgettext("eyra-data-donation", "download.all.button.label")}} />
+          <PrimaryButton to={{Routes.data_donation_path(@socket, :download_all, @entity_id )}} label={{dgettext("eyra-data-donation", "download.all.button.label")}} />
           <Spacing value="XL" />
         </div>
         <Form id={{@id}} changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>

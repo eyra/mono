@@ -168,9 +168,15 @@ defmodule Core.Factories do
   end
 
   def build(:data_donation_tool, %{} = attributes) do
-    {study, attributes} = Map.pop!(attributes, :study)
-    {promotion, attributes} = Map.pop!(attributes, :promotion)
-    {content_node, attributes} = Map.pop!(attributes, :content_node)
+    {content_node, attributes} = Map.pop(attributes, :content_node, build(:content_node, %{}))
+    {study, attributes} = Map.pop(attributes, :study, build(:study))
+
+    {promotion, attributes} =
+      Map.pop(
+        attributes,
+        :promotion,
+        build(:promotion, %{study: study, parent_content_node: content_node})
+      )
 
     %DataDonation.Tool{
       content_node: content_node,

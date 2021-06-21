@@ -28,12 +28,12 @@ defmodule CoreWeb.Promotion.Public do
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
     promotion = Promotions.get!(id)
     plugin = promotion |> load_plugin()
-    plugin_info = plugin.info(id, socket) |> IO.inspect(label: "PLUGIN INFO")
+    plugin_info = plugin.info(id, socket)
 
     transient = %{
       image_info: ImageHelpers.get_image_info(promotion.image_id, 2560, 1920),
       themes: promotion |> Promotion.get_themes(),
-      organisation: promotion |> Promotion.get_organisation() |> IO.inspect(label: "ORG")
+      organisation: promotion |> Promotion.get_organisation()
     }
 
     {
@@ -63,7 +63,6 @@ defmodule CoreWeb.Promotion.Public do
   end
 
   def handle_event("call-to-action", _params, %{assigns: assigns} = socket) do
-    assigns |> IO.inspect(label: "ASSIGNS")
     {:noreply, socket}
   end
 

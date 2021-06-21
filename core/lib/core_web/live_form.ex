@@ -35,8 +35,7 @@ defmodule CoreWeb.LiveForm do
         socket
         |> hide_flash()
 
-        case Ecto.Changeset.apply_action(changeset, :update)
-             |> IO.inspect(label: "APPLY ACTION") do
+        case Ecto.Changeset.apply_action(changeset, :update) do
           {:ok, entity} ->
             handle_success(socket, changeset, node_changeset, entity)
 
