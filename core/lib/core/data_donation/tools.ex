@@ -14,7 +14,7 @@ defmodule Core.DataDonation.Tools do
   alias Core.Repo
 
   alias Ecto.Multi
-  alias Core.DataDonation.{Tool, Task, Participant}
+  alias Core.DataDonation.{Tool, Task, Participant, UserData}
   alias Core.Authorization
   alias Core.Accounts.User
   alias Core.Signals
@@ -172,4 +172,13 @@ defmodule Core.DataDonation.Tools do
       _ -> nil
     end
   end
+
+  def list_donations(%Tool{} = tool) do
+    from(u in UserData,
+      where: u.tool_id == ^tool.id,
+      preload: [:user]
+    )
+    |> Repo.all()
+  end
+
 end

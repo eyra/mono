@@ -17,37 +17,37 @@ msgid "content.title"
 msgstr "Data Donation"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:84
+#: lib/core_web/live/data_donation/form.ex:98
 msgid "reward.label"
 msgstr "Amount in euro cents"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:80
+#: lib/core_web/live/data_donation/form.ex:94
 msgid "script.label"
 msgstr "Paste your python script here"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:88
+#: lib/core_web/live/data_donation/form.ex:102
 msgid "config.nrofsubjects.label"
 msgstr "Number of required subjects"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:87
+#: lib/core_web/live/data_donation/form.ex:101
 msgid "nrofsubjects.title"
 msgstr "Subjects"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:83
+#: lib/core_web/live/data_donation/form.ex:97
 msgid "reward.title"
 msgstr "Credits"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:79
+#: lib/core_web/live/data_donation/form.ex:93
 msgid "script.title"
 msgstr "Script"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:91
+#: lib/core_web/live/data_donation/form.ex:105
 msgid "delete.button"
 msgstr "Delete"
 
@@ -87,6 +87,21 @@ msgid "reward.highlight.title"
 msgstr "Reward"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/uploader.ex:59
+#: lib/core_web/live/data_donation/uploader.ex:60
 msgid "uploader.title"
 msgstr "Data Donation"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:81
+msgid "donations.title"
+msgstr "Received donations"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:89
+msgid "download.all.button.label"
+msgstr "Download all"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:86
+msgid "download.button.label"
+msgstr "Download"

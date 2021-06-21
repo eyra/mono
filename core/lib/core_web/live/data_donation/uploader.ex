@@ -4,10 +4,11 @@ defmodule CoreWeb.DataDonation.Uploader do
   alias Core.DataDonation.{Tools, Tool}
 
   alias EyraUI.Hero.HeroSmall
-  alias EyraUI.Text.{Title3, BodyMedium, BodyLarge}
+  alias EyraUI.Text.{Title3, BodyLarge}
   alias EyraUI.Spacing
   alias EyraUI.Panel.Panel
-  alias EyraUI.Container.{ContentArea, Bar, BarItem}
+  alias EyraUI.Container.{ContentArea}
+  alias EyraUI.Button.LinkButton
 
   defmodule UploadChangeset do
     use Ecto.Schema
@@ -65,7 +66,8 @@ defmodule CoreWeb.DataDonation.Uploader do
         </div>
 
         <Title3>Step 1: Download from Google</Title3>
-        <BodyLarge>Bla bla bla bla https://takeout.google.com/u/2/?pli=1</BodyLarge>
+        <BodyLarge>Bla bla bla bla </BodyLarge>
+        <LinkButton label="Go to download page" path="https://takeout.google.com/u/2/?pli=1" />
         <Spacing value="L" />
 
         <Title3>Step 2: Select the downloaded data package</Title3>
@@ -86,7 +88,7 @@ defmodule CoreWeb.DataDonation.Uploader do
         <BodyLarge>Bla bla bla bla</BodyLarge>
         <Spacing value="S" />
         <div :if={{@ready}}>
-          <button class="pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 leading-none font-button text-button focus:outline-none rounded pr-4 pl-4 border-primary text-primary" data-role="process-trigger">
+          <button class="pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded pr-4 pl-4 bg-secondary" data-role="process-trigger">
             Process selected file
           </button>
         </div>
@@ -102,10 +104,10 @@ defmodule CoreWeb.DataDonation.Uploader do
             <p class="summary" />
             <p class="extracted" />
           </Panel>
-          <button class="pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 leading-none font-button text-button focus:outline-none rounded pr-4 pl-4 border-primary text-primary" data-role="share-trigger">
+          <Spacing value="S" />
+          <button class="pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-grey1 focus:outline-none rounded pr-4 pl-4 bg-tertiary" data-role="share-trigger">
             Donate
           </button>
-          <Spacing value="S" />
         </div>
         <Spacing value="L" />
 

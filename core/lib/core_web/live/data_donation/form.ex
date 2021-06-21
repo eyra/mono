@@ -9,25 +9,29 @@ defmodule CoreWeb.DataDonation.Form do
   alias CoreWeb.Router.Helpers, as: Routes
 
   alias EyraUI.Spacing
-  alias EyraUI.Text.{Title3}
+  alias EyraUI.Text.{Title1, Title3}
   alias EyraUI.Form.{Form, TextArea, NumberInput}
   alias EyraUI.Container.{ContentArea}
-  alias EyraUI.Button.SecondaryLiveViewButton
+  alias EyraUI.Button.{SecondaryLiveViewButton, LinkButton, PrimaryAlpineButton}
+  alias EyraUI.Panel.Panel
 
   prop(entity_id, :any, required: true)
 
   data(entity, :any)
+  data(donations, :any)
   data(changeset, :any)
   data(focus, :any, default: "")
 
   def update(%{id: id, entity_id: entity_id}, socket) do
     entity = Tools.get!(entity_id)
+    donations = Tools.list_donations(entity)
 
     {
       :ok,
       socket
       |> assign(entity_id: entity_id)
       |> assign(entity: entity)
+      |> assign(donations: donations)
       |> assign(id: id)
       |> update_ui()
     }
@@ -74,8 +78,21 @@ defmodule CoreWeb.DataDonation.Form do
   def render(assigns) do
     ~H"""
       <ContentArea>
+        <div :if={{ Enum.count(@donations) > 0 }}>
+          <Title1>{{dgettext("eyra-data-donation", "donations.title")}}</Title1>
+          <Panel bg_color="bg-grey6">
+            <div :for={{ donation <- @donations  }} class="mb-2">
+              <span class="text-label font-label mr-2">
+                Participant {{donation.user_id}}:
+              </span>
+              <LinkButton label={{dgettext("eyra-data-donation", "download.button.label")}} path=""/>
+            </div>
+          </Panel>
+          <Spacing value="S" />
+          <PrimaryAlpineButton click="" label={{dgettext("eyra-data-donation", "download.all.button.label")}} />
+          <Spacing value="XL" />
+        </div>
         <Form id={{@id}} changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
-
           <Title3>{{dgettext("eyra-data-donation", "script.title")}}</Title3>
           <TextArea field={{:script}} label_text={{dgettext("eyra-data-donation", "script.label")}} target={{@myself}} />
           <Spacing value="L" />
