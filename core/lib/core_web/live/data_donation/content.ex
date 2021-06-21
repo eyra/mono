@@ -143,7 +143,8 @@ defmodule CoreWeb.DataDonation.Content do
   end
 
   # Handle Event
-
+  
+  @impl true
   def handle_event("reset_focus", _, socket) do
     send_update(ToolForm, id: :tool_form, focus: "")
     send_update(PromotionForm, id: :promotion_form, focus: "")
@@ -152,6 +153,7 @@ defmodule CoreWeb.DataDonation.Content do
 
   # Handle Info
 
+  @impl true
   def handle_info({:claim_focus, :tool_form}, socket) do
     send_update(PromotionForm, id: :promotion_form, focus: "")
     {:noreply, socket}
