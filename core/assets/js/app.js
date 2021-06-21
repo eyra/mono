@@ -56,6 +56,57 @@ window.blurHash = () => {
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
+let Hooks = {};
+Hooks.PythonUploader = {
+  destroyed(){
+    this.worker && this.worker.terminate();
+  },
+  mounted(){
+    this.worker = new Worker("/js/pyworker.js");
+    this.worker.onerror = console.log;
+    this.worker.onmessage = (event) => {
+      const { eventType } = event.data;
+      if (eventType === "result") {
+        this.result = event.data.result;
+        this.el.querySelector(".summary").innerText = this.result.summary;
+        this.el.querySelector(".extracted").innerHTML = this.result.html;
+        this.el.querySelector(".results").hidden = false;
+      }
+      else if (eventType === "initialized") {
+        const script = this.el.getElementsByTagName("code")[0].innerText
+        this.worker.postMessage({eventType: "runPython", script })
+        // Let the LiveView know everything is ready
+        this.pushEvent("script-initialized", {})
+      }
+    }
+    // Hook up the process button to the worker
+    this.el.addEventListener("click", (event)=>{
+      if (event.target.dataset.role !== "process-trigger") {
+        return;
+      }
+      const fileInput = this.el.querySelector("input[type=file]")
+      const file = fileInput.files[0];
+      const reader = file.stream().getReader();
+      const sendToWorker = ({ done, value }) => {
+        if (done) {
+          this.worker.postMessage({ eventType: "processData" });
+          return;
+        }
+        this.worker.postMessage({ eventType: "data", chunk: value });
+        reader.read().then(sendToWorker);
+      };
+      this.worker.postMessage({ eventType: "initData", size: file.size });
+      reader.read().then(sendToWorker);
+    })
+    // Hook up the share results button
+    this.el.addEventListener("click", (event)=>{
+      if (event.target.dataset.role !== "share-trigger") {
+        return;
+      }
+      this.pushEvent("script-result", this.result);
+    })
+  }
+}
 let liveSocket = new LiveSocket("/live", Socket, {
   params: {
     _csrf_token: csrfToken,
@@ -67,6 +118,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
       }
     },
   },
+  hooks: Hooks,
 });
 
 window.nativeIOSWrapper = {

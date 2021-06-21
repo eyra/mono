@@ -71,7 +71,7 @@ defmodule Core.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:faker, "~> 0.16"},
-      {:surface, "~> 0.1.0"},
+      {:surface, "~> 0.4.0"},
       {:timex, "~> 3.6"},
       {:bamboo, "~> 2.0.1"},
       {:bamboo_phoenix, "~> 1.0.0"},

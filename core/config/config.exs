@@ -75,7 +75,13 @@ config :web_push_encryption, :vapid_details,
 
 import_config "#{Mix.env()}.exs"
 
-bundle = System.get_env("BUNDLE", "next") |> String.to_atom()
+default_bundle =
+  case File.read(".bundle") do
+    {:ok, bundle} -> String.trim(bundle)
+    {:error, _} -> "next"
+  end
+
+bundle = System.get_env("BUNDLE", default_bundle) |> String.to_atom()
 
 config :core, :bundle, bundle
 
