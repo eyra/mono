@@ -34,6 +34,7 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.Study.Public, [:visitor, :member])
   grant_access(CoreWeb.Study.Complete, [:member])
   grant_access(CoreWeb.FakeSurvey, [:member])
+  grant_access(CoreWeb.DataUploader.Uploader, [:visitor, :member])
 
   grant_access(Core.Studies.Study, [:visitor, :member])
   grant_access(Core.SurveyTools.SurveyTool, [:owner, :participant])
