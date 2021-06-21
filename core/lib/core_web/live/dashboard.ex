@@ -27,8 +27,7 @@ defmodule CoreWeb.Dashboard do
   data(available_count, :any)
   data(current_user, :any)
 
-  def mount(_params, _session, socket) do
-    user = socket.assigns[:current_user]
+  def mount(_params, _session, %{ assigns: %{current_user: user}} = socket) do
     preload = [data_donation_tool: [:promotion]]
 
     owned_studies =

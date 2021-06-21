@@ -19,7 +19,6 @@ defmodule CoreWeb.DataDonation.Form do
   data(entity, :any)
   data(changeset, :any)
   data(focus, :any, default: "")
-  data(myself, :any)
 
   def update(%{id: id, entity_id: entity_id}, socket) do
     entity = Tools.get!(entity_id)

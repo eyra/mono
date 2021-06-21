@@ -4882,11 +4882,11 @@
 
 "phoenix_live_view@file:../deps/phoenix_live_view":
   "resolved" "file:../deps/phoenix_live_view"
-  "version" "0.15.4"
+  "version" "0.15.7"
 
 "phoenix@file:../deps/phoenix":
   "resolved" "file:../deps/phoenix"
-  "version" "1.5.8"
+  "version" "1.5.9"
 
 "picomatch@^2.0.4", "picomatch@^2.0.5", "picomatch@^2.2.1", "picomatch@^2.2.2":
   "integrity" "sha512-q0M/9eZHzmr0AulXyPwNfZjtwZ/RBZlbN3K3CErVrk50T2ASYI7Bye0EvekFY3IP1Nt2DHu0re+V2ZHIpMkuWg=="

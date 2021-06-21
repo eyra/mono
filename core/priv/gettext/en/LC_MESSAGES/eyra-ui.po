@@ -12,11 +12,11 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/content.ex:132
+#: lib/core_web/live/data_donation/content.ex:137
 msgid "error.flash"
 msgstr "Something went wrong"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/content.ex:137
+#: lib/core_web/live/data_donation/content.ex:142
 msgid "saved.info.flash"
 msgstr "Saved"

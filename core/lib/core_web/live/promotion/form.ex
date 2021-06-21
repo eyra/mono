@@ -27,8 +27,8 @@ defmodule CoreWeb.Promotion.Form do
   data(entity, :any)
   data(form_data, :any)
   data(changeset, :any)
+  data(uploads, :any)
   data(focus, :any, default: "")
-  data(myself, :any)
 
   @impl true
   def save_file(%{assigns: %{entity: entity}} = socket, uploaded_file) do
@@ -102,6 +102,7 @@ defmodule CoreWeb.Promotion.Form do
     }
   end
 
+  @impl true
   def render(assigns) do
     ~H"""
       <ContentArea>

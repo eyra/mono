@@ -28,22 +28,17 @@ defmodule CoreWeb.DataDonation.PromotionPlugin do
 
   @impl Plugin
   def handle_event(promotion_id, "apply", %{assigns: %{current_user: user}} = socket) do
-    __MODULE__ |> IO.inspect(label: "APPLY")
-
     tool = Tools.get_by_promotion(promotion_id)
     Tools.apply_participant(tool, user)
     Tools.get_or_create_task(tool, user)
 
-    # TBD: temp forward to dashboard, replace with Data Donation Tool page
-    Routes.live_path(socket, CoreWeb.Dashboard)
+    Routes.live_path(socket, CoreWeb.DataDonation.Uploader, tool.id)
   end
 
   @impl Plugin
-  def handle_event(_promotion_id, "open", socket) do
-    __MODULE__ |> IO.inspect(label: "OPEN")
-
-    # TBD: temp forward to dashboard, replace with Data Donation Tool page
-    Routes.live_path(socket, CoreWeb.Dashboard)
+  def handle_event(promotion_id, "open", socket) do
+    tool = Tools.get_by_promotion(promotion_id)
+    Routes.live_path(socket, CoreWeb.DataDonation.Uploader, tool.id)
   end
 
   defp get_call_to_action(tool, user) do

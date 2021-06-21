@@ -13,6 +13,7 @@ defmodule Core.DataDonation.Tool do
   alias Core.Studies.Study
   alias Core.Accounts.User
   alias Core.Promotions.Promotion
+  alias Core.DataDonation.UserData
 
   schema "data_donation_tools" do
     belongs_to(:auth_node, Core.Authorization.Node)
@@ -65,5 +66,11 @@ defmodule Core.DataDonation.Tool do
     %{changes: changes} = changeset
     value = Map.get(changes, field)
     blank?(value)
+  end
+
+  def store_results(%__MODULE__{} = tool, user, data) when is_binary(data) do
+    %UserData{}
+    |> UserData.changeset(%{tool: tool, user: user, data: data})
+    |> Repo.insert!()
   end
 end

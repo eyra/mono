@@ -197,7 +197,7 @@ msgid "themes.label"
 msgstr "Selecteer een of meerdere thema's."
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:145 lib/core_web/live/study/edit.ex:239
+#: lib/core_web/live/promotion/form.ex:146 lib/core_web/live/study/edit.ex:239
 msgid "search.different.image.button"
 msgstr "Selecteer andere afbeelding"
 
