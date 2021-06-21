@@ -143,7 +143,7 @@ defmodule CoreWeb.DataDonation.Content do
   end
 
   # Handle Event
-  
+
   @impl true
   def handle_event("reset_focus", _, socket) do
     send_update(ToolForm, id: :tool_form, focus: "")
