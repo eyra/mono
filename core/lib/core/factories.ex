@@ -83,10 +83,11 @@ defmodule Core.Factories do
   end
 
   # def build(:client_script) do
-    %DataUploader.ClientScript{
-      title: Faker.Lorem.sentence(),
-      script: "print 'hello'"
-    }
+  %DataUploader.ClientScript{
+    title: Faker.Lorem.sentence(),
+    script: "print 'hello'"
+  }
+
   # end
 
   def build(:role_assignment) do
