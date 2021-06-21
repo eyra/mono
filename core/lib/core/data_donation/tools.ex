@@ -180,5 +180,4 @@ defmodule Core.DataDonation.Tools do
     )
     |> Repo.all()
   end
-
 end
