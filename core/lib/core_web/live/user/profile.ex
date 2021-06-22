@@ -102,8 +102,8 @@ defmodule CoreWeb.User.Profile do
   def render(assigns) do
     ~H"""
       <ContentArea>
-        <div x-data>
-    <h1 x-text="$store.push.registration"/>
+        <div x-data hidden>
+          <h1 x-text="$store.push.registration"/>
           <p x-show="$store.push.registration === 'pending'">...</p>
           <button x-show="$store.push.registration === 'not-registered'" onclick="registerForPush()">Register for push</button>
           <p x-show="$store.push.registration === 'registered'">Registered for push</p>

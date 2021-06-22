@@ -24,7 +24,7 @@ msgstr "Still %{days} days available"
 #, elixir-format
 #: lib/core_web/view_model/card.ex:97
 msgid "open.spots.label"
-msgstr ""
+msgstr "%{count} open spots"
 
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:118 lib/core_web/view_model/card.ex:107
