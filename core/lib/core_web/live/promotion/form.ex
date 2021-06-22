@@ -27,6 +27,7 @@ defmodule CoreWeb.Promotion.Form do
   data(entity, :any)
   data(form_data, :any)
   data(changeset, :any)
+  data(uploads, :any)
   data(focus, :any, default: "")
 
   @impl true
@@ -101,7 +102,7 @@ defmodule CoreWeb.Promotion.Form do
     }
   end
 
-@impl true
+  @impl true
   def render(assigns) do
     ~H"""
       <ContentArea>
@@ -145,7 +146,7 @@ defmodule CoreWeb.Promotion.Form do
               <SecondaryAlpineButton click="$parent.open = true, $parent.$parent.overlay = true" label={{dgettext("eyra-survey", "search.different.image.button")}} />
             </div>
           </div>
-          <Spacing value="L" />
+          <Spacing value="XL" />
 
           <Title3>{{dgettext("eyra-promotion", "expectations.title")}}</Title3>
           <TextArea field={{:expectations}} label_text={{dgettext("eyra-promotion", "expectations.label")}} target={{@myself}}/>

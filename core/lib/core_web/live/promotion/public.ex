@@ -62,7 +62,7 @@ defmodule CoreWeb.Promotion.Public do
     {:noreply, push_redirect(socket, to: path)}
   end
 
-  def handle_event("call-to-action", _params, %{assigns: assigns} = socket) do
+  def handle_event("call-to-action", _params, socket) do
     {:noreply, socket}
   end
 

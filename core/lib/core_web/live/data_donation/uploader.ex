@@ -8,7 +8,6 @@ defmodule CoreWeb.DataDonation.Uploader do
   alias EyraUI.Spacing
   alias EyraUI.Panel.Panel
   alias EyraUI.Container.{ContentArea}
-  alias EyraUI.Button.LinkButton
 
   defmodule UploadChangeset do
     use Ecto.Schema

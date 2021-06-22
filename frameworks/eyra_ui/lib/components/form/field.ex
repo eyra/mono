@@ -18,10 +18,10 @@ defmodule EyraUI.Form.Field do
   def render(assigns) do
     ~H"""
     <Label form={{@form}} field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}} />
-    <Spacing value="2" />
+    <Spacing value="XXS" />
     <slot />
     <ValidationErrors form={{@form}} field={{@field}} reserve_error_space={{@reserve_error_space}}/>
-    <Spacing value="2" />
+    <Spacing value="XXS" />
     """
   end
 end
