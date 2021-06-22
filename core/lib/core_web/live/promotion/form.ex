@@ -101,7 +101,7 @@ defmodule CoreWeb.Promotion.Form do
     }
   end
 
-@impl true
+  @impl true
   def render(assigns) do
     ~H"""
       <ContentArea>
