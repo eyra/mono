@@ -27,7 +27,6 @@ defmodule CoreWeb.Promotion.Form do
   data(entity, :any)
   data(form_data, :any)
   data(changeset, :any)
-  data(uploads, :any)
   data(focus, :any, default: "")
 
   @impl true
@@ -102,7 +101,7 @@ defmodule CoreWeb.Promotion.Form do
     }
   end
 
-  @impl true
+@impl true
   def render(assigns) do
     ~H"""
       <ContentArea>

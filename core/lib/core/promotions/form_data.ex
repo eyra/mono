@@ -36,14 +36,17 @@ defmodule Core.Promotions.FormData do
     field(:byline, :string)
   end
 
-  @promotion_fields ~w(title subtitle expectations description banner_photo_url banner_title banner_subtitle banner_url)a
+  @required_fields ~w(title subtitle expectations description banner_title banner_subtitle banner_url)a
+  @optional_fields ~w(banner_photo_url)a
+  @promotion_fields @required_fields ++ @optional_fields
+
   @transient_fields ~w(is_published theme_labels image_url byline)a
   @fields @promotion_fields ++ @transient_fields
 
   def changeset(form_data, :publish, params) do
     form_data
     |> cast(params, @fields)
-    |> validate_required(@fields)
+    |> validate_required(@required_fields ++ @transient_fields)
   end
 
   def changeset(form_data, _, params) do
@@ -55,10 +58,6 @@ defmodule Core.Promotions.FormData do
     promotion_opts =
       promotion
       |> Map.take(@promotion_fields)
-      |> put_default(:banner_photo_url, profile.photo_url)
-      |> put_default(:banner_title, user.displayname)
-      |> put_default(:banner_subtitle, profile.title)
-      |> put_default(:banner_url, profile.url)
 
     transient_opts =
       promotion

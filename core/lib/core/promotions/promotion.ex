@@ -53,6 +53,10 @@ defmodule Core.Promotions.Promotion do
     |> Map.take(@fields)
   end
 
+  defp put_default(map, key, value) do
+    Map.update(map, key, value, &(&1 || value))
+  end
+
   @doc false
   def changeset(promotion, attrs) do
     promotion

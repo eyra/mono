@@ -6,6 +6,7 @@ defmodule CoreWeb.Dashboard do
 
   import Core.Authorization
 
+  alias Core.Accounts
   alias Core.Studies
   alias Core.Studies.Study
   alias Core.DataDonation
@@ -86,7 +87,8 @@ defmodule CoreWeb.Dashboard do
   end
 
   defp create_tool(socket) do
-    current_user = socket.assigns.current_user
+    user = socket.assigns.current_user
+    profile = user |> Accounts.get_profile()
 
     title = dgettext("eyra-dashboard", "default.study.title")
 
@@ -95,10 +97,10 @@ defmodule CoreWeb.Dashboard do
       |> Study.changeset(%{title: title})
 
     tool_attrs = create_tool_attrs()
-    promotion_attrs = create_promotion_attrs(title)
+    promotion_attrs = create_promotion_attrs(title, user, profile)
 
-    with {:ok, study} <- Studies.create_study(changeset, current_user),
-         {:ok, _author} <- Studies.add_author(study, current_user),
+    with {:ok, study} <- Studies.create_study(changeset, user),
+         {:ok, _author} <- Studies.add_author(study, user),
          {:ok, tool_content_node} <- Content.Nodes.create(%{ready: false}),
          {:ok, promotion_content_node} <-
            Content.Nodes.create(%{ready: false}, tool_content_node),
@@ -114,11 +116,15 @@ defmodule CoreWeb.Dashboard do
     }
   end
 
-  defp create_promotion_attrs(title) do
+  defp create_promotion_attrs(title, user, profile) do
     %{
       title: title,
       marks: ["uu"],
-      plugin: "data_donation"
+      plugin: "data_donation",
+      banner_photo_url: profile.photo_url,
+      banner_title: user.displayname,
+      banner_subtitle: profile.title,
+      banner_url: profile.url
     }
   end
 
