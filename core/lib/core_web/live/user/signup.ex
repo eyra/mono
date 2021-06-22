@@ -4,7 +4,8 @@ defmodule CoreWeb.User.Signup do
   """
   use CoreWeb, :live_view
 
-  alias EyraUI.Form.{Form, EmailInput, PasswordInput}
+  alias Surface.Components.Form
+  alias EyraUI.Form.{EmailInput, PasswordInput}
   alias EyraUI.Button.{SubmitWideButton, LinkButton}
   alias EyraUI.Container.{ContentArea, FormArea}
   alias EyraUI.Text.Title2
@@ -55,11 +56,13 @@ defmodule CoreWeb.User.Signup do
       <ContentArea>
         <FormArea>
           <Title2>{{dgettext "eyra-account", "signup.title"}}</Title2>
-          <Form id="main_form" changeset={{@changeset}} change_event="signup" focus={{@focus}}>
-            <EmailInput field={{:email}} label_text={{dgettext("eyra-account", "email.label")}} />
-            <PasswordInput field={{:password}} label_text={{dgettext("eyra-account", "password.label")}} />
-            <SubmitWideButton label={{ dgettext("eyra-account", "signup.button") }} bg_color="bg-grey1" />
-          </Form>
+          <div x-data="{ focus: '{{@focus}}' }">
+            <Form for={{@changeset}} submit="signup">
+              <EmailInput field={{:email}} label_text={{dgettext("eyra-account", "email.label")}} />
+              <PasswordInput field={{:password}} label_text={{dgettext("eyra-account", "password.label")}} />
+              <SubmitWideButton label={{ dgettext("eyra-account", "signup.button") }} bg_color="bg-grey1" />
+            </Form>
+          </div>
           <div class="mb-8" />
           {{ dgettext("eyra-account", "signin.label") }}
           <LinkButton label={{ dgettext("eyra-account", "signin.link") }} path={{Routes.user_session_path(@socket, :new)}} />
