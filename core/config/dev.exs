@@ -47,3 +47,5 @@ config :web_push_encryption, :vapid_details,
   private_key: "yWo9lKKkdbN1IGQH8aUlk3u_Shemyh8CmtDnJoNdhBk"
 
 config :core, :apns_backend, backend: Core.APNS.LoggingBackend
+
+config :core, :static_path, "/home/jeroen"

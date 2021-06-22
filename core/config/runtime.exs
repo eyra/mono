@@ -3,6 +3,8 @@ import Config
 if config_env() == :prod do
   host = System.fetch_env!("BUNDLE_DOMAIN")
 
+  config :core, :static_path, System.fetch_env!("STATIC_PATH")
+
   config :core, CoreWeb.Endpoint,
     cache_static_manifest: "priv/static/cache_manifest.json",
     server: true,

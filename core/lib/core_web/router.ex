@@ -17,6 +17,11 @@ defmodule CoreWeb.Router do
   CoreWeb.LocalImageCatalogPlug.routes()
 
   scope "/", CoreWeb do
+    pipe_through([:browser_base])
+    get("/uploads/:filename", UploadedFileController, :get)
+  end
+
+  scope "/", CoreWeb do
     pipe_through([:api, :require_authenticated_user])
     get("/web-push/vapid-public-key", PushSubscriptionController, :vapid_public_key)
     post("/web-push/register", PushSubscriptionController, :register)
