@@ -4,6 +4,11 @@ defmodule CoreWeb.FileUploader do
 
   @callback save_file(socket :: Socket.t(), uploaded_file :: any()) :: Socket.t()
 
+  def get_static_path(filename) do
+    root = Application.get_env(:core, :static_path, "priv/static/uploads")
+    Path.join(root, filename)
+  end
+
   defmacro __using__(_opts) do
     quote do
       @behaviour CoreWeb.FileUploader
@@ -32,7 +37,7 @@ defmodule CoreWeb.FileUploader do
       def consume_file(socket, entry) do
         consume_uploaded_entry(socket, entry, fn %{path: path} ->
           file = "#{entry.uuid}.#{ext(entry)}"
-          dest = Path.join("priv/static/uploads", file)
+          dest = CoreWeb.FileUploader.get_static_path(file)
           File.cp!(path, dest)
           CoreWeb.Router.Helpers.static_path(socket, "/uploads/#{file}")
         end)
