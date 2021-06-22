@@ -91,7 +91,7 @@ msgstr "Sign out"
 #, elixir-format
 #: lib/core_web/live/user/await_confirmation.ex:45
 msgid "await.confirmation.title"
-msgstr ""
+msgstr "Bevestig je registratie"
 
 #, elixir-format
 #: lib/core_web/live/user/confirm_token.ex:80

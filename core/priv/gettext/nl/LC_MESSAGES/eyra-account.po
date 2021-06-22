@@ -91,7 +91,7 @@ msgstr "Afmelden"
 #, elixir-format
 #: lib/core_web/live/user/await_confirmation.ex:45
 msgid "await.confirmation.title"
-msgstr ""
+msgstr "Confirm you registration"
 
 #, elixir-format
 #: lib/core_web/live/user/confirm_token.ex:80
