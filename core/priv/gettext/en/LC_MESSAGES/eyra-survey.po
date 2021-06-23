@@ -242,13 +242,13 @@ msgid "subtitle.label"
 msgstr "Subtitle"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:99
+#: lib/core_web/live/promotion/public.ex:98
 #: lib/core_web/live/study/public.ex:125
 msgid "description.public.label"
 msgstr "Estimated duration"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:95
+#: lib/core_web/live/promotion/public.ex:94
 #: lib/core_web/live/study/public.ex:121
 msgid "expectations.public.label"
 msgstr "What can participants expect from the survey?"

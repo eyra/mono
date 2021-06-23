@@ -12,22 +12,22 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:126
+#: lib/core_web/live/user/profile.ex:145
 msgid "displayname.label"
 msgstr "Display name"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:51
+#: lib/core_web/live/user/signup.ex:66
 msgid "email.label"
 msgstr "Email"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:125
+#: lib/core_web/live/user/profile.ex:144
 msgid "fullname.label"
 msgstr "Full name"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:52
+#: lib/core_web/live/user/signup.ex:67
 msgid "password.label"
 msgstr "Password"
 
@@ -37,12 +37,12 @@ msgid "profile.button"
 msgstr "My profile"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:113
+#: lib/core_web/live/user/profile.ex:132
 msgid "profile.title"
 msgstr "My profile"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:131
+#: lib/core_web/live/user/profile.ex:148
 msgid "researcher.label"
 msgstr "I'm a researcher"
 
@@ -52,22 +52,22 @@ msgid "signin.button"
 msgstr "Sign in"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:56
+#: lib/core_web/live/user/signup.ex:72
 msgid "signin.label"
 msgstr "Already an account?"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:57
+#: lib/core_web/live/user/signup.ex:73
 msgid "signin.link"
 msgstr "Sign in here"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:53
+#: lib/core_web/live/user/signup.ex:68
 msgid "signup.button"
 msgstr "Sign up"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:49
+#: lib/core_web/live/user/signup.ex:63
 msgid "signup.title"
 msgstr "Sign up"
 
@@ -84,7 +84,7 @@ msgid "title.label"
 msgstr "Email"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:134
+#: lib/core_web/live/user/profile.ex:151
 msgid "signout.button"
 msgstr "Sign out"
 
@@ -99,26 +99,61 @@ msgid "confirm.token.resend_button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:120
+#: lib/core_web/live/user/profile.ex:139
 msgid "choose.profile.photo.file"
 msgstr "Choose photo"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:77
+#: lib/core_web/live/user/profile.ex:98
 msgid "photo.upload.error.flash"
 msgstr "Something went wrong while uploading photo"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:121
+#: lib/core_web/live/user/profile.ex:140
 msgid "choose.other.profile.photo.file"
 msgstr "Choose other photo"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:127
+#: lib/core_web/live/user/profile.ex:146
 msgid "professionaltitle.label"
 msgstr "Professional title"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:128
+#: lib/core_web/live/user/profile.ex:147
 msgid "website.label"
 msgstr "Website"
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:160
+msgid "push.registration.button"
+msgstr "Activate"
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:156
+msgid "push.registration.title"
+msgstr "Push notifications"
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:167
+msgid "push.registration.activated"
+msgstr "Push notifications are activated on this browser"
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:164
+msgid "push.registration.denied"
+msgstr "Push notifications are deactivated on this browser"
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:158
+msgid "push.registration.label"
+msgstr "Activate on this browser"
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:163
+msgid "push.registration.pending"
+msgstr "Determining state.."
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:169
+msgid "push.registration.test.button"
+msgstr "Send test notification"

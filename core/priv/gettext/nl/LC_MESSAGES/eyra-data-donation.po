@@ -87,7 +87,7 @@ msgid "reward.highlight.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/uploader.ex:60
+#: lib/core_web/live/data_donation/uploader.ex:58
 msgid "uploader.title"
 msgstr "Data Donatie"
 

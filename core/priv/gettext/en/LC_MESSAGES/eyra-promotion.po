@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core/promotions/form_data.ex:95
+#: lib/core/promotions/form_data.ex:94
 msgid "created.label"
 msgstr "Created"
 
@@ -32,7 +32,7 @@ msgid "published.false.label"
 msgstr "Concept"
 
 #, elixir-format
-#: lib/core/promotions/form_data.ex:91 lib/core_web/live/promotion/form.ex:115
+#: lib/core/promotions/form_data.ex:90 lib/core_web/live/promotion/form.ex:115
 msgid "published.true.label"
 msgstr "Published"
 
@@ -137,26 +137,26 @@ msgid "unpublish.button"
 msgstr "Unpublish"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:129
+#: lib/core_web/live/promotion/public.ex:128
 msgid "back.button.label"
 msgstr "Back to overview"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:122
+#: lib/core_web/live/promotion/public.ex:121
 msgid "devices.available.label"
 msgstr "Available on:"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:118
+#: lib/core_web/live/promotion/public.ex:117
 msgid "keep.me.updated.button.label"
 msgstr "Keep me updated"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:116
+#: lib/core_web/live/promotion/public.ex:115
 msgid "keep.me.updated.text"
 msgstr "Register here for our newsletter"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:114
+#: lib/core_web/live/promotion/public.ex:113
 msgid "keep.me.updated.title"
 msgstr "Curious for the results of this study?"

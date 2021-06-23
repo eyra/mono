@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core/promotions/form_data.ex:95
+#: lib/core/promotions/form_data.ex:94
 msgid "created.label"
 msgstr ""
 
@@ -31,7 +31,7 @@ msgid "published.false.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core/promotions/form_data.ex:91 lib/core_web/live/promotion/form.ex:115
+#: lib/core/promotions/form_data.ex:90 lib/core_web/live/promotion/form.ex:115
 msgid "published.true.label"
 msgstr ""
 
@@ -136,26 +136,26 @@ msgid "unpublish.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:129
+#: lib/core_web/live/promotion/public.ex:128
 msgid "back.button.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:122
+#: lib/core_web/live/promotion/public.ex:121
 msgid "devices.available.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:118
+#: lib/core_web/live/promotion/public.ex:117
 msgid "keep.me.updated.button.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:116
+#: lib/core_web/live/promotion/public.ex:115
 msgid "keep.me.updated.text"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:114
+#: lib/core_web/live/promotion/public.ex:113
 msgid "keep.me.updated.title"
 msgstr ""

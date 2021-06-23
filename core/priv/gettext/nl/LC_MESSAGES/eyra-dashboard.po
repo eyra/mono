@@ -12,26 +12,26 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:142
+#: lib/core_web/live/dashboard.ex:148
 msgid "add.card.title"
 msgstr "Nieuwe studie"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:130
+#: lib/core_web/live/dashboard.ex:136
 msgid "highlighted.title"
 msgstr "Mijn studies"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:149
+#: lib/core_web/live/dashboard.ex:155
 msgid "marketplace.title"
 msgstr "Marktplaats"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:127
+#: lib/core_web/live/dashboard.ex:133
 msgid "title"
 msgstr "Dashboard"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:91
+#: lib/core_web/live/dashboard.ex:93
 msgid "default.study.title"
 msgstr "Nieuwe studie"
