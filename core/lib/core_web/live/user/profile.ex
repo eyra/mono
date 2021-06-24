@@ -10,7 +10,7 @@ defmodule CoreWeb.User.Profile do
   alias Core.Accounts.UserProfileEdit
 
   alias EyraUI.Form.{Form, TextInput, Checkbox, UrlInput, PhotoInput}
-  alias EyraUI.Text.{Title2, Title3, Label, BodyMedium}
+  alias EyraUI.Text.{Title2, Title3, BodyMedium}
   alias EyraUI.Spacing
   alias EyraUI.Container.{ContentArea, FormArea}
   alias EyraUI.Button.{DeleteButton, PrimaryAlpineButton, SecondaryLiveViewButton}
@@ -147,7 +147,7 @@ defmodule CoreWeb.User.Profile do
             <div x-data>
               <Title3>{{dgettext "eyra-account", "push.registration.title"}}</Title3>
               <div x-show="$store.push.registration === 'not-registered'">
-                <BodyMedium class="label">{{dgettext("eyra-account", "push.registration.label")}}</BodyMedium>
+                <BodyMedium>{{dgettext("eyra-account", "push.registration.label")}}</BodyMedium>
                 <Spacing value="XS" />
                 <PrimaryAlpineButton click="registerForPush()" label={{dgettext("eyra-account", "push.registration.button")}} />
               </div>

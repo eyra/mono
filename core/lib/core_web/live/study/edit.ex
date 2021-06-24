@@ -292,7 +292,7 @@ defmodule CoreWeb.Study.Edit do
               <template slot="title">
                 <Title3 color="text-white" >{{dgettext("eyra-survey", "config.title")}}</Title3>
               </template>
-              <UrlInput field={{:survey_url}} label_color="text-white" label_text={{dgettext("eyra-survey", "config.url.label")}} background="dark"/>
+              <UrlInput field={{:survey_url}} label_color="text-white" label_text={{dgettext("eyra-survey", "config.url.label")}} background={{:dark}}/>
               <Spacing value="M" />
               <Title6 color="text-white">Redirect url</Title6>
               <BodyMedium color="text-grey3">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, CoreWeb.Study.Complete, @study_edit.study_id)}}</BodyMedium>
