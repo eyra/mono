@@ -7,11 +7,8 @@ defmodule Core.Signals do
   ]
 
   def dispatch(signal, message) do
-    message |> IO.inspect(label: "DISPATCH")
-
     for handler <- @signal_handlers do
       handler.dispatch(signal, message)
-      handler |> IO.inspect(label: "DISPATCHED")
     end
 
     :ok

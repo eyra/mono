@@ -87,6 +87,11 @@ defmodule CoreWeb.Study.Public do
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Dashboard))}
   end
 
+  def handle_info({:delivered_email, _email}, socket) do
+    # TBD
+    {:noreply, socket}
+  end
+
   def render(assigns) do
     ~H"""
       <HeroImage

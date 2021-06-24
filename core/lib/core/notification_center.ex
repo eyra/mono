@@ -15,9 +15,6 @@ defmodule Core.NotificationCenter do
   alias Core.Signals
 
   def notify(%Box{id: box_id} = box, %{} = notification_data) do
-    box |> IO.inspect(label: "NOTIFY!")
-    notification_data |> IO.inspect(label: "NOTIFY!")
-
     with {:ok, _} <-
            %Notification{}
            |> Notification.changeset(notification_data)
@@ -52,12 +49,8 @@ defmodule Core.NotificationCenter do
   end
 
   def notify_users_with_role(entity, role, notification_data) do
-    entity |> IO.inspect(label: "entity")
-    role |> IO.inspect(label: "notify_users_with_role")
-
     entity
     |> Core.Authorization.users_with_role(role)
-    |> IO.inspect(label: "USERS WITH ROLE")
     |> notify(notification_data)
   end
 

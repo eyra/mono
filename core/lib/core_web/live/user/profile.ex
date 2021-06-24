@@ -32,7 +32,6 @@ defmodule CoreWeb.User.Profile do
   def init_user_agent(socket, %{user_agent: user_agent}) do
     socket
     |> assign(user_agent: user_agent)
-    |> IO.inspect(label: "init_user_agent")
   end
 
   def init_user_agent(socket, nil), do: socket
