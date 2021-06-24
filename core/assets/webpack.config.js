@@ -20,7 +20,6 @@ module.exports = (env, options) => {
     },
     entry: {
       'app': glob.sync('./vendor/**/*.js').concat(['./js/app.js']),
-      'python_data_loader': ['./js/python_data_loader.js'],
       'pyworker': ['./js/pyworker.js'],
       // 'sw': ['./js/sw.js']
     },
