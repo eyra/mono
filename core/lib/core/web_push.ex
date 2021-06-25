@@ -54,8 +54,7 @@ defmodule Core.WebPush do
   end
 
   def register(%User{} = user, subscription) do
-    with {:ok, data} <- Jason.decode(subscription),
-         changeset <- Subscription.changeset(data),
+    with changeset <- Subscription.changeset(subscription),
          {:ok, sub} <- apply_action(changeset, :update),
          changeset <-
            PushSubscription.changeset(%PushSubscription{}, %{

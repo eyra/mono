@@ -51,6 +51,9 @@ defmodule CoreWeb.Routes do
 
       pipeline :api do
         plug(:accepts, ["json"])
+        plug(:fetch_session)
+        plug(:fetch_current_user)
+        plug(:fetch_live_flash)
       end
 
       CoreWeb.Live.Routes.routes()

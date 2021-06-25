@@ -10,15 +10,32 @@ defmodule CoreWeb.User.Profile do
   alias Core.Accounts.UserProfileEdit
 
   alias EyraUI.Form.{Form, TextInput, Checkbox, UrlInput, PhotoInput}
-  alias EyraUI.Text.{Title2}
+  alias EyraUI.Text.{Title2, Title3, BodyMedium}
   alias EyraUI.Spacing
   alias EyraUI.Container.{ContentArea, FormArea}
-  alias EyraUI.Button.{DeleteButton}
+  alias EyraUI.Button.{DeleteButton, PrimaryAlpineButton, SecondaryLiveViewButton}
+
+  data(user_agent, :string, default: "")
 
   @impl true
   def init(_params, _session, socket) do
     socket
+    |> init_user_agent()
     |> init_file_uploader(:photo)
+  end
+
+  def init_user_agent(socket) do
+    init_user_agent(socket, get_connect_info(socket))
+  end
+
+  def init_user_agent(socket, %{user_agent: user_agent}) do
+    assign(socket, user_agent: user_agent)
+  end
+
+  def init_user_agent(socket, _), do: socket
+
+  def is_native(user_agent) do
+    String.contains?(user_agent, "NativeWrapper")
   end
 
   @impl true
@@ -90,17 +107,15 @@ defmodule CoreWeb.User.Profile do
     |> AutoSave.schedule_hide_message()
   end
 
+  def handle_event("send-test-notification", _params, %{assigns: %{current_user: user}} = socket) do
+    Core.WebPush.send(user, "Test notification")
+    {:noreply, socket}
+  end
+
   @impl true
   def render(assigns) do
     ~H"""
       <ContentArea>
-        <div x-data>
-    <h1 x-text="$store.push.registration"/>
-          <p x-show="$store.push.registration === 'pending'">...</p>
-          <button x-show="$store.push.registration === 'not-registered'" onclick="registerForPush()">Register for push</button>
-          <p x-show="$store.push.registration === 'registered'">Registered for push</p>
-          <p x-show="$store.push.registration === 'denied'">Apparently you don't want push</p>
-        </div>
         <FormArea>
           <Title2>{{dgettext "eyra-account", "profile.title"}}</Title2>
           <Form id="main_form" changeset={{@changeset}} change_event="save" focus={{@focus}}>
@@ -118,12 +133,32 @@ defmodule CoreWeb.User.Profile do
             <TextInput field={{:displayname}} label_text={{dgettext("eyra-account", "displayname.label")}} />
             <TextInput field={{:title}} label_text={{dgettext("eyra-account", "professionaltitle.label")}} />
             <UrlInput field={{:url}} label_text={{dgettext("eyra-account", "website.label")}} />
-
-            <Spacing value="S" />
             <Checkbox field={{:researcher}} label_text={{dgettext("eyra-account", "researcher.label")}}/>
           </Form>
           <Spacing value="L" />
           <DeleteButton label={{ dgettext("eyra-account", "signout.button") }} path={{ Routes.user_session_path(@socket, :delete) }} />
+
+          <div :if={{ !is_native(@user_agent) }}>
+            <Spacing value="XL" />
+            <div x-data>
+              <Title3>{{dgettext "eyra-account", "push.registration.title"}}</Title3>
+              <div x-show="$store.push.registration === 'not-registered'">
+                <BodyMedium>{{dgettext("eyra-account", "push.registration.label")}}</BodyMedium>
+                <Spacing value="XS" />
+                <PrimaryAlpineButton click="registerForPush()" label={{dgettext("eyra-account", "push.registration.button")}} />
+              </div>
+              <BodyMedium>
+                <span x-show="$store.push.registration === 'pending'">{{dgettext("eyra-account", "push.registration.pending")}}</span>
+                <span x-show="$store.push.registration === 'denied'">{{dgettext("eyra-account", "push.registration.denied")}}</span>
+              </BodyMedium>
+              <div x-show="$store.push.registration === 'registered'">
+                <span>{{dgettext("eyra-account", "push.registration.activated")}}</span>
+                <Spacing value="XS" />
+                <SecondaryLiveViewButton color="text-grey2" label={{dgettext("eyra-account", "push.registration.test.button")}} event="send-test-notification"/>
+              </div>
+            </div>
+          </div>
+
         </FormArea>
       </ContentArea>
     """
