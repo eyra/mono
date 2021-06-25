@@ -96,8 +96,7 @@ defmodule CoreWeb.UserAuth do
   end
 
   def native_wrapper?(%{req_headers: req_headers}) do
-    req_headers
-    |> String.contains?("NativeWrapper")
+    req_headers |> String.contains?("NativeWrapper")
   end
 
   defp ensure_user_token(conn) do
