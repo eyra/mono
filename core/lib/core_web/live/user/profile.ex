@@ -25,20 +25,17 @@ defmodule CoreWeb.User.Profile do
   end
 
   def init_user_agent(socket) do
-    socket
-    |> init_user_agent(get_connect_info(socket))
+    init_user_agent(socket, get_connect_info(socket))
   end
 
   def init_user_agent(socket, %{user_agent: user_agent}) do
-    socket
-    |> assign(user_agent: user_agent)
+    assign(socket, user_agent: user_agent)
   end
 
-  def init_user_agent(socket, nil), do: socket
+  def init_user_agent(socket, _), do: socket
 
   def is_native(user_agent) do
-    user_agent
-    |> String.contains?("NativeWrapper")
+    String.contains?(user_agent, "NativeWrapper")
   end
 
   @impl true

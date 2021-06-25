@@ -88,18 +88,19 @@ defmodule Core.SurveyToolsTest do
     test "apply_participant/2 notifies the researchers" do
       survey_tool = Factories.insert!(:survey_tool)
       researcher = Factories.insert!(:researcher)
-      Authorization.assign_role(researcher, survey_tool, :owner)
+      study = Core.Studies.get_study!(survey_tool.study_id)
+      Authorization.assign_role(researcher, study, :owner)
       member = Factories.insert!(:researcher)
       {:ok, _} = SurveyTools.apply_participant(survey_tool, member)
 
       assert Core.NotificationCenter.list(researcher) |> Enum.map(& &1.title) == [
-               "New application for: #{survey_tool.title}"
+               "New participant for: #{survey_tool.title}"
              ]
     end
 
     test "apply_participant/2 assigns the participant role to the applicant" do
       survey_tool = Factories.insert!(:survey_tool)
-      member = Factories.insert!(:researcher)
+      member = Factories.insert!(:member)
       assert Authorization.list_roles(member, survey_tool) == MapSet.new()
       assert {:ok, _} = SurveyTools.apply_participant(survey_tool, member)
       assert Authorization.list_roles(member, survey_tool) == MapSet.new([:participant])
