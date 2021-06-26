@@ -2,9 +2,15 @@ defmodule CoreWeb.FileUploader do
   @moduledoc """
   """
 
+  @allowed_filename_pattern ~r"^[a-z0-9][a-z0-9\-]+[a-z0-9]\.[a-z]{3,4}$"
+
   @callback save_file(socket :: Socket.t(), uploaded_file :: any()) :: Socket.t()
 
   def get_static_path(filename) do
+    unless Regex.match?(@allowed_filename_pattern, filename) do
+      throw(:invalid_filename)
+    end
+
     root = Application.get_env(:core, :static_path, "priv/static/uploads")
     Path.join(root, filename)
   end
