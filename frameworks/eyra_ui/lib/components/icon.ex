@@ -14,7 +14,7 @@ defmodule EyraUI.Icon do
   def render(assigns) do
     ~H"""
     <div class="{{size(@size)}} rounded-full bg-white border-grey4 border-opacity-100 {{@border_size}}">
-      <img class="rounded-full" src={{@src}}/>
+      <img class="rounded-full w-full h-full" src={{@src}}/>
     </div>
     """
   end

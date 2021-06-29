@@ -10,15 +10,17 @@ defmodule EyraUI.Timestamp do
 
     cond do
       Timex.before?(Timex.shift(Timex.today(), days: -1), NaiveDateTime.to_date(timestamp)) ->
-        "#{dgettext("eyra-ui", "timestamp.today")} om #{time}"
+        "#{dgettext("eyra-ui", "timestamp.today")} #{dgettext("eyra-ui", "timestamp.at")} #{time}"
 
       Timex.before?(Timex.shift(Timex.today(), days: -2), NaiveDateTime.to_date(timestamp)) ->
-        "#{dgettext("eyra-ui", "timestamp.yesterday")} om #{time}"
+        "#{dgettext("eyra-ui", "timestamp.yesterday")} #{dgettext("eyra-ui", "timestamp.at")} #{
+          time
+        }"
 
       Timex.before?(Timex.shift(Timex.today(), days: -8), NaiveDateTime.to_date(timestamp)) ->
         weekday = Timex.format!(timestamp, "%A", :strftime)
         translated_weekday = Timex.Translator.translate(Gettext.get_locale(), "weekdays", weekday)
-        "#{translated_weekday} om #{time}"
+        "#{translated_weekday} #{dgettext("eyra-ui", "timestamp.at")} #{time}"
 
       true ->
         datetime = Timex.format!(timestamp, "%A, %B %e,", :strftime) <> time

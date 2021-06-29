@@ -7,12 +7,19 @@ defmodule EyraUI.Spacing do
   prop(value, :string, required: true)
   prop(direction, :string, default: "t")
 
-  defp spacing("XL", d), do: "m#{d}-12 lg:m#{d}-16"
-  defp spacing("L", d), do: "m#{d}-10 lg:m#{d}-12"
-  defp spacing("M", d), do: "m#{d}-8"
-  defp spacing("S", d), do: "m#{d}-6"
-  defp spacing("XS", d), do: "m#{d}-4"
-  defp spacing(value, d), do: "m#{d}-#{value}"
+  defp spacing("XL", "t"), do: "mt-12 lg:mt-16"
+  defp spacing("L", "t"), do: "mt-10 lg:mt-12"
+  defp spacing("M", "t"), do: "mt-8"
+  defp spacing("S", "t"), do: "mt-6"
+  defp spacing("XS", "t"), do: "mt-4"
+  defp spacing("XXS", "t"), do: "mt-2"
+
+  defp spacing("XL", "l"), do: "ml-12 lg:ml-16"
+  defp spacing("L", "l"), do: "ml-10 lg:ml-12"
+  defp spacing("M", "l"), do: "ml-8"
+  defp spacing("S", "l"), do: "ml-6"
+  defp spacing("XS", "l"), do: "ml-4"
+  defp spacing("XXS", "l"), do: "ml-2"
 
   def render(assigns) do
     ~H"""

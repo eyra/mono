@@ -71,7 +71,7 @@ msgid "duration.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:210 lib/core_web/view_model/card.ex:48
+#: lib/core_web/live/study/edit.ex:210 lib/core_web/view_model/card.ex:49
 msgid "published.false.label"
 msgstr ""
 
@@ -136,12 +136,12 @@ msgid "withdraw.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/view_model/card.ex:39
+#: lib/core_web/view_model/card.ex:40
 msgid "deadline.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/view_model/card.ex:38
+#: lib/core_web/view_model/card.ex:39
 msgid "open.spots.label"
 msgstr ""
 
@@ -156,7 +156,7 @@ msgid "about.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:253 lib/core_web/view_model/card.ex:36
+#: lib/core_web/live/study/edit.ex:253 lib/core_web/view_model/card.ex:37
 msgid "duration.title"
 msgstr ""
 
@@ -171,7 +171,7 @@ msgid "organisation.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:257 lib/core_web/view_model/card.ex:37
+#: lib/core_web/live/study/edit.ex:257 lib/core_web/view_model/card.ex:38
 msgid "reward.title"
 msgstr ""
 
@@ -196,7 +196,7 @@ msgid "themes.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:239
+#: lib/core_web/live/promotion/form.ex:146 lib/core_web/live/study/edit.ex:239
 msgid "search.different.image.button"
 msgstr ""
 
@@ -241,11 +241,13 @@ msgid "subtitle.label"
 msgstr ""
 
 #, elixir-format
+#: lib/core_web/live/promotion/public.ex:98
 #: lib/core_web/live/study/public.ex:125
 msgid "description.public.label"
 msgstr ""
 
 #, elixir-format
+#: lib/core_web/live/promotion/public.ex:94
 #: lib/core_web/live/study/public.ex:121
 msgid "expectations.public.label"
 msgstr ""

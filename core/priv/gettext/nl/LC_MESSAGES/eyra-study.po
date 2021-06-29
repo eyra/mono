@@ -12,27 +12,27 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/dashboard.ex:110 lib/core_web/live/dashboard.ex:110
+#: bundles/link/dashboard.ex:110
 msgid "study.index.subtitle"
 msgstr "Studies"
 
 #, elixir-format
-#: bundles/link/dashboard.ex:109 lib/core_web/live/dashboard.ex:109
+#: bundles/link/dashboard.ex:109
 msgid "study.index.title"
 msgstr "Overzicht"
 
 #, elixir-format
 #: lib/core_web/templates/layout/root.html.leex:79
 msgid "dashboard.button"
-msgstr "Overzicht"
+msgstr "Dashboard"
 
 #, elixir-format
-#: bundles/link/dashboard.ex:133 lib/core_web/live/dashboard.ex:133
+#: bundles/link/dashboard.ex:133
 msgid "study.all.title"
 msgstr "Beschikbare studies:"
 
 #, elixir-format
-#: bundles/link/dashboard.ex:114 lib/core_web/live/dashboard.ex:114
+#: bundles/link/dashboard.ex:114
 msgid "study.highlighted.title"
 msgstr "Mijn studies:"
 
@@ -47,7 +47,7 @@ msgid "title.label"
 msgstr "Titel"
 
 #, elixir-format
-#: bundles/link/dashboard.ex:126 lib/core_web/live/dashboard.ex:126
+#: bundles/link/dashboard.ex:126
 msgid "add.card.title"
 msgstr "Maak een nieuwe studie aan"
 
@@ -57,37 +57,44 @@ msgid "study.public.title"
 msgstr "Studie"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:18 lib/core/studies/study_public.ex:14
+#: lib/core/promotions/form_data.ex:17 lib/core/studies/study_edit.ex:18
+#: lib/core/studies/study_public.ex:14
 msgid "themes.art"
 msgstr "Kunst"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:18 lib/core/studies/study_public.ex:14
+#: lib/core/promotions/form_data.ex:17 lib/core/studies/study_edit.ex:18
+#: lib/core/studies/study_public.ex:14
 msgid "themes.health"
 msgstr "Gezondheid"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:18 lib/core/studies/study_public.ex:14
+#: lib/core/promotions/form_data.ex:17 lib/core/studies/study_edit.ex:18
+#: lib/core/studies/study_public.ex:14
 msgid "themes.history"
 msgstr "Geschiedenis"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:18 lib/core/studies/study_public.ex:14
+#: lib/core/promotions/form_data.ex:17 lib/core/studies/study_edit.ex:18
+#: lib/core/studies/study_public.ex:14
 msgid "themes.language"
 msgstr "Taal"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:18 lib/core/studies/study_public.ex:14
+#: lib/core/promotions/form_data.ex:17 lib/core/studies/study_edit.ex:18
+#: lib/core/studies/study_public.ex:14
 msgid "themes.politics"
 msgstr "Politiek"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:18 lib/core/studies/study_public.ex:14
+#: lib/core/promotions/form_data.ex:17 lib/core/studies/study_edit.ex:18
+#: lib/core/studies/study_public.ex:14
 msgid "themes.society"
 msgstr "Maatschappij"
 
 #, elixir-format
-#: lib/core/studies/study_edit.ex:18 lib/core/studies/study_public.ex:14
+#: lib/core/promotions/form_data.ex:17 lib/core/studies/study_edit.ex:18
+#: lib/core/studies/study_public.ex:14
 msgid "themes.technology"
 msgstr "Technologie"
 

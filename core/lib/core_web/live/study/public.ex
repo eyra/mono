@@ -96,7 +96,7 @@ defmodule CoreWeb.Study.Public do
       >
         <template slot="call_to_action">
           <PrimaryLiveViewButton :if={{not @participant?}} label={{ dgettext("eyra-survey", "apply.button") }} event="signup" />
-          <PrimaryButton :if={{@task_available?}} label={{ dgettext("eyra-survey", "goto.survey") }} path={{@survey_tool.survey_url}} />
+          <PrimaryButton :if={{@task_available?}} label={{ dgettext("eyra-survey", "goto.survey") }} to={{@survey_tool.survey_url}} />
         </template>
       </HeroImage>
       <HeroBanner title={{@study_public.organisation_name}} subtitle={{ @study_public.byline }} icon_url={{ Routes.static_path(@socket, "/images/#{@study_public.organisation_icon}.svg") }}/>

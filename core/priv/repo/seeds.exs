@@ -11,7 +11,8 @@
 # and so on) as they will fail if something goes wrong.
 #
 #
-survey_url = "https://vuamsterdam.eu.qualtrics.com/jfe/form/SV_4Po8iTxbvcxtuaW"
+
+_survey_url = "https://vuamsterdam.eu.qualtrics.com/jfe/form/SV_4Po8iTxbvcxtuaW"
 
 images = [
   "raw_url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1498462440456-0dba182e775b%3Fixid%3DMnwyMTY0MzZ8MHwxfHNlYXJjaHw5fHx3YXRlcnxlbnwwfHx8fDE2MjE3NzY0MjA%26ixlib%3Drb-1.2.1&username=samaradoole&name=Samara+Doole&blur_hash=LtI~0%3Ft7aeof~qofazayt6f6j%5Bf6",
@@ -23,68 +24,55 @@ images = [
   "raw_url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1515378791036-0648a3ef77b2%3Fixid%3DMnwyMTY0MzZ8MHwxfHNlYXJjaHw4fHx3b3JrfGVufDB8fHx8MTYyMTc3NjgwOQ%26ixlib%3Drb-1.2.1&username=christinhumephoto&name=Christin+Hume&blur_hash=LMF%3B%3Dw0LAJR%25~A9uT0nNRjxaW%3DIo"
 ]
 
-studies =
-  [
+data_donation_promotions =
+  Enum.map(images, fn image ->
     %{
-      type: :survey_tool,
-      title: "A study about E-numbers, food and beverages",
-      survey_url: survey_url,
+      title: Faker.Lorem.sentence(),
+      subtitle: "Subtitle",
+      expectations: ~S"""
+      With this survey we want to learn more about people's feelings towards the
+      addition of additives with "E-numbers" to food and beverages. This study
+      contains a short video with sound, so please only participate when you are
+      able to listen (using speakers or headphones).
+      """,
       description: ~S"""
       With this survey we want to learn more about people's feelings towards the
       addition of additives with "E-numbers" to food and beverages. This study
       contains a short video with sound, so please only participate when you are
       able to listen (using speakers or headphones).
       """,
+      image_id: image,
+      themes: [:technology],
+      marks: ["vu"],
+      banner_photo_url: Faker.Internet.url(),
+      banner_title: "Banner title",
+      banner_subtitle: "Banner subtitle",
+      banner_url: Faker.Internet.url(),
       published_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-      desktop_enabled: true,
-      phone_enabled: false,
-      tablet_enabled: false,
-      subject_count: 400,
-      duration: "a few minutes",
-      reward_currency: :eur,
-      reward_value: 2500
-    },
-    %{
-      type: :survey_tool,
-      title: "Staying in contact with your parents",
-      survey_url: survey_url,
-      description: ~S"""
-      In this study we want to investigate how people stay in touch with their
-      parent(s) after they have moved out of the parental home. It will take
-      approximately 20 minutes to complete the questionnaire.
-      """,
-      published_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-      desktop_enabled: true,
-      phone_enabled: true,
-      tablet_enabled: true,
-      subject_count: 56,
-      duration: "a while",
-      reward_currency: :usd,
-      reward_value: 3300
-    },
-    %{
-      type: :client_script,
-      title: "Files from ZIP",
-      script: File.read!(Path.join([:code.priv_dir(:core), "repo", "script.py"]))
+      plugin: "data_donation"
     }
-  ] ++
-    Enum.map(images, fn image ->
-      %{
-        type: :survey_tool,
-        title: Faker.Lorem.sentence(),
-        image_id: image,
-        survey_url: Faker.Internet.url(),
-        description: Faker.Lorem.paragraph(),
-        published_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        desktop_enabled: true,
-        phone_enabled: true,
-        tablet_enabled: true,
-        subject_count: 56,
-        duration: "a while",
-        reward_currency: :usd,
-        reward_value: 3300
-      }
-    end)
+  end)
+
+data_donation_tools =
+  Enum.map(data_donation_promotions, fn promotion ->
+    %{
+      script: File.read!(Path.join([:code.priv_dir(:core), "repo", "script.py"])),
+      reward_currency: :eur,
+      reward_value: 375,
+      subject_count: 400,
+      promotion: promotion
+    }
+  end)
+
+studies =
+  Enum.map(data_donation_tools, fn data_donation_tool ->
+    %{
+      title: Faker.Lorem.sentence(),
+      description: Faker.Lorem.paragraph(),
+      type: :data_donation_tool,
+      data_donation_tool: data_donation_tool
+    }
+  end)
 
 password = "asdf;lkjASDF0987"
 
@@ -95,28 +83,40 @@ _member =
   })
 
 researcher =
-  Core.Factories.insert!(:researcher, %{
+  Core.Factories.insert!(:member, %{
+    researcher: true,
     email: "researcher@eyra.co",
     password: password
   })
 
-for data <- studies do
-  study =
-    Core.Factories.insert!(:study, %{
-      title: data.title,
-      description: ""
-    })
+for study_data <- studies do
+  {tool_type, study_data} = Map.pop!(study_data, :type)
+  {tool_data, study_data} = Map.pop!(study_data, tool_type)
 
-  {type, tool_data} = Map.pop!(data, :type)
+  tool_content_node = Core.Factories.insert!(:content_node)
 
-  Core.Factories.insert!(
-    type,
-    Map.merge(%{study: study}, tool_data)
-  )
+  # STUDY
+  study = Core.Factories.insert!(:study, study_data)
 
   Core.Authorization.assign_role(
     researcher,
     study,
     :owner
+  )
+
+  # PROMOTION
+
+  {promotion_data, tool_data} = Map.pop!(tool_data, :promotion)
+
+  promotion =
+    Core.Factories.insert!(
+      :promotion,
+      Map.merge(%{parent_content_node: tool_content_node, study: study}, promotion_data)
+    )
+
+  # TOOL
+  Core.Factories.insert!(
+    tool_type,
+    Map.merge(%{content_node: tool_content_node, study: study, promotion: promotion}, tool_data)
   )
 end

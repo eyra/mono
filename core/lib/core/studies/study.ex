@@ -18,6 +18,7 @@ defmodule Core.Studies.Study do
     has_many(:authors, Core.Studies.Author)
     has_many(:participants, Core.Studies.Participant)
     has_many(:survey_tools, Core.SurveyTools.SurveyTool)
+    has_one(:data_donation_tool, Core.DataDonation.Tool)
 
     timestamps()
   end

@@ -3,7 +3,18 @@ defmodule Core.Factories do
   This module provides factory function to be used for tests.
   """
   alias Core.Accounts.{User, Profile}
-  alias Core.{Studies, SurveyTools, Authorization, DataUploader, NotificationCenter, WebPush}
+
+  alias Core.{
+    Studies,
+    Content,
+    Promotions,
+    SurveyTools,
+    Authorization,
+    DataDonation,
+    NotificationCenter,
+    WebPush
+  }
+
   alias Core.Repo
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
@@ -71,12 +82,13 @@ defmodule Core.Factories do
     build(:survey_tool, %{})
   end
 
-  def build(:client_script) do
-    %DataUploader.ClientScript{
-      title: Faker.Lorem.sentence(),
-      script: "print 'hello'"
-    }
-  end
+  # def build(:client_script) do
+  #   %DataDonation.Tool{
+  #     title: Faker.Lorem.sentence(),
+  #     script: "print 'hello'"
+  #   }
+
+  # end
 
   def build(:role_assignment) do
     %Authorization.RoleAssignment{}
@@ -84,6 +96,10 @@ defmodule Core.Factories do
 
   def build(:participant) do
     %SurveyTools.Participant{}
+  end
+
+  def build(:content_node) do
+    %Content.Node{ready: true}
   end
 
   def build(:notification_box, %{user: user} = attributes) do
@@ -135,6 +151,42 @@ defmodule Core.Factories do
     )
   end
 
+  def build(:content_node, %{} = attributes) do
+    %Content.Node{}
+    |> struct!(attributes)
+  end
+
+  def build(:promotion, %{} = attributes) do
+    {study, attributes} = Map.pop!(attributes, :study)
+    {parent_content_node, attributes} = Map.pop!(attributes, :parent_content_node)
+
+    %Promotions.Promotion{
+      content_node: build(:content_node, %{parent: parent_content_node}),
+      auth_node: build(:auth_node, %{parent: study.auth_node})
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:data_donation_tool, %{} = attributes) do
+    {content_node, attributes} = Map.pop(attributes, :content_node, build(:content_node, %{}))
+    {study, attributes} = Map.pop(attributes, :study, build(:study))
+
+    {promotion, attributes} =
+      Map.pop(
+        attributes,
+        :promotion,
+        build(:promotion, %{study: study, parent_content_node: content_node})
+      )
+
+    %DataDonation.Tool{
+      content_node: content_node,
+      auth_node: build(:auth_node, %{parent: study.auth_node}),
+      study: study,
+      promotion: promotion
+    }
+    |> struct!(attributes)
+  end
+
   def build(:survey_tool_participant, %{} = attributes) do
     survey_tool = Map.get(attributes, :survey_tool, build(:survey_tool))
     user = Map.get(attributes, :user, build(:member))
@@ -151,17 +203,6 @@ defmodule Core.Factories do
     %SurveyTools.SurveyTool{
       auth_node: build(:auth_node, %{parent: study.auth_node}),
       title: Faker.Lorem.sentence(),
-      study: study
-    }
-    |> struct!(attributes)
-  end
-
-  def build(:client_script, %{} = attributes) do
-    {study, attributes} = Map.pop(attributes, :study, build(:study))
-
-    %DataUploader.ClientScript{
-      auth_node: build(:auth_node, %{parent: study.auth_node}),
-      script: "def process():\n\tprint('hello')",
       study: study
     }
     |> struct!(attributes)

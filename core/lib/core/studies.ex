@@ -11,6 +11,8 @@ defmodule Core.Studies do
   alias Core.Studies.{Study, Author}
   alias Core.Accounts.User
   alias Core.SurveyTools.{SurveyTool, SurveyToolTask}
+  alias Core.DataDonation
+  alias Core.Promotions.Promotion
 
   # read list_studies(current_user, ...) do
   # end
@@ -49,6 +51,26 @@ defmodule Core.Studies do
     |> Repo.all()
   end
 
+  def list_studies_with_published_promotion(tool_entity, opts \\ []) do
+    preload = Keyword.get(opts, :preload, [])
+    exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
+
+    promotions =
+      from(promotion in Promotion, where: not is_nil(promotion.published_at), select: promotion.id)
+
+    studies =
+      from(tool in tool_entity,
+        where: tool.promotion_id in subquery(promotions),
+        select: tool.study_id
+      )
+
+    from(study in Study,
+      where: study.id in subquery(studies) and study.id not in ^exclude,
+      preload: ^preload
+    )
+    |> Repo.all()
+  end
+
   @doc """
   Returns the list of studies that are owned by the user.
   """
@@ -81,6 +103,28 @@ defmodule Core.Studies do
 
     study_ids =
       from(st in SurveyTool, where: st.id in subquery(survey_tool_ids), select: st.study_id)
+
+    from(s in Study,
+      where: s.id in subquery(study_ids),
+      preload: ^preload
+    )
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of studies where the user is a data donation subject.
+  """
+  def list_data_donation_subject_studies(user, opts \\ []) do
+    preload = Keyword.get(opts, :preload, [])
+
+    tool_ids =
+      from(task in DataDonation.Task,
+        where: task.user_id == ^user.id,
+        select: task.tool_id
+      )
+
+    study_ids =
+      from(st in DataDonation.Tool, where: st.id in subquery(tool_ids), select: st.study_id)
 
     from(s in Study,
       where: s.id in subquery(study_ids),
@@ -240,13 +284,18 @@ defmodule Core.Studies do
     from(
       a in Author,
       where: a.study_id == ^study.id,
-      preload: [:user]
+      preload: [user: [:profile]]
     )
     |> Repo.all()
   end
 
   def list_survey_tools(%Study{} = study) do
     from(s in SurveyTool, where: s.study_id == ^study.id)
+    |> Repo.all()
+  end
+
+  def list_tools(%Study{} = study, schema) do
+    from(s in schema, where: s.study_id == ^study.id)
     |> Repo.all()
   end
 end

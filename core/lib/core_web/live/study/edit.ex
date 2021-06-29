@@ -5,6 +5,7 @@ defmodule CoreWeb.Study.Edit do
   use CoreWeb, :live_view
   use CoreWeb.FileUploader
   use EyraUI.AutoSave, :study_edit
+  use EyraUI.Selectors.LabelSelector
 
   alias EyraUI.Form.{
     Form,
@@ -118,6 +119,13 @@ defmodule CoreWeb.Study.Edit do
     {:noreply, assign(socket, uri_origin: uri_origin)}
   end
 
+  def handle_event("focus", %{"field" => field}, socket) do
+    {
+      :noreply,
+      socket |> assign(focus: field)
+    }
+  end
+
   def handle_event("delete", _params, %{assigns: %{study_edit: study_edit}} = socket) do
     Studies.get_study!(study_edit.study_id)
     |> Studies.delete_study()
@@ -133,12 +141,6 @@ defmodule CoreWeb.Study.Edit do
 
   def handle_event("unpublish", _params, %{assigns: %{study_edit: study_edit}} = socket) do
     attrs = %{published_at: nil}
-    changeset = get_changeset(study_edit, :auto_save, attrs)
-    {:noreply, socket |> update_changeset(changeset)}
-  end
-
-  def handle_info({:theme_selector, themes}, %{assigns: %{study_edit: study_edit}} = socket) do
-    attrs = %{themes: themes}
     changeset = get_changeset(study_edit, :auto_save, attrs)
     {:noreply, socket |> update_changeset(changeset)}
   end
@@ -176,6 +178,18 @@ defmodule CoreWeb.Study.Edit do
     )
     |> put_flash(:info, dgettext("eyra-study", "Saved"))
     |> AutoSave.schedule_hide_message()
+  end
+
+  # Label Selector (Themes)
+
+  def all_labels(socket) do
+    socket.assigns.study_edit.theme_labels
+  end
+
+  def update_selected_labels(%{assigns: %{study_edit: study_edit}} = socket, labels) do
+    attrs = %{themes: labels}
+    changeset = get_changeset(study_edit, :auto_save, attrs)
+    socket |> update_changeset(changeset)
   end
 
   def render(assigns) do
@@ -226,7 +240,7 @@ defmodule CoreWeb.Study.Edit do
             <Title3>{{dgettext("eyra-survey", "themes.title")}}</Title3>
             <BodyMedium>{{dgettext("eyra-survey", "themes.label")}}</BodyMedium>
             <Spacing value="XS" />
-            <LabelSelector id={{:theme_selector}} labels={{ @study_edit.theme_labels }}/>
+            <LabelSelector labels={{ @study_edit.theme_labels }}/>
             <Spacing value="XL" />
 
             <Title3>{{dgettext("eyra-survey", "image.title")}}</Title3>
@@ -292,7 +306,7 @@ defmodule CoreWeb.Study.Edit do
               <template slot="title">
                 <Title3 color="text-white" >{{dgettext("eyra-survey", "config.title")}}</Title3>
               </template>
-              <UrlInput field={{:survey_url}} label_color="text-white" label_text={{dgettext("eyra-survey", "config.url.label")}} background={{:dark}}/>
+              <UrlInput field={{:survey_url}} label_color="text-white" label_text={{dgettext("eyra-survey", "config.url.label")}} background={{ :dark }}/>
               <Spacing value="M" />
               <Title6 color="text-white">Redirect url</Title6>
               <BodyMedium color="text-grey3">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, CoreWeb.Study.Complete, @study_edit.study_id)}}</BodyMedium>

@@ -1,0 +1,111 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/content.ex:70
+msgid "content.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:111
+msgid "reward.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:107
+msgid "script.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:115
+msgid "config.nrofsubjects.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:114
+msgid "nrofsubjects.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:110
+msgid "reward.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:106
+msgid "script.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:118
+msgid "delete.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:48
+msgid "apply.cta.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:54
+msgid "open.cta.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:74
+msgid "spots.highlight.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:67
+msgid "by.author.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:80
+msgid "available.future.highlight.text"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:77
+msgid "available.highlight.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:85
+msgid "reward.highlight.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/uploader.ex:58
+msgid "uploader.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:83
+msgid "donations.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:102
+msgid "download.all.button.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:95
+msgid "download.button.label"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:91
+msgid "received.label"
+msgstr ""

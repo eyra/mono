@@ -66,17 +66,18 @@ Hooks.PythonUploader = {
     this.worker.onerror = console.log;
     this.worker.onmessage = (event) => {
       const { eventType } = event.data;
-      if (eventType === "result") {
-        this.result = event.data.result;
-        this.el.querySelector(".summary").innerText = this.result.summary;
-        this.el.querySelector(".extracted").innerHTML = this.result.html;
-        this.el.querySelector(".results").hidden = false;
-      }
-      else if (eventType === "initialized") {
+      if (eventType === "initialized") {
         const script = this.el.getElementsByTagName("code")[0].innerText
         this.worker.postMessage({eventType: "runPython", script })
         // Let the LiveView know everything is ready
-        this.pushEvent("script-initialized", {})
+        this.el.querySelector(".loading-indicator").hidden = true;        
+        this.el.querySelector(".step2").hidden = false;        
+      }
+      else if (eventType === "result") {
+        this.result = event.data.result;
+        this.el.querySelector(".summary").innerText = this.result.summary;
+        this.el.querySelector(".extracted").innerHTML = this.result.html;
+        this.el.querySelector(".step4").hidden = false;        
       }
     }
     // Hook up the process button to the worker
@@ -99,11 +100,21 @@ Hooks.PythonUploader = {
       reader.read().then(sendToWorker);
     })
     // Hook up the share results button
-    this.el.addEventListener("click", (event)=>{
-      if (event.target.dataset.role !== "share-trigger") {
+    this.el.addEventListener("change", (event)=>{
+      if (event.target.dataset.role !== "file-input") {
         return;
       }
-      this.pushEvent("script-result", this.result);
+
+      this.el.querySelector(".step4").hidden = true;        
+      this.el.querySelector(".step3").hidden = false;
+      this.el.querySelector(".script").hidden = false;
+    })
+    // Hook up the share results button
+    this.el.addEventListener("click", (event)=>{
+      if (event.target.dataset.role !== "donate-trigger") {
+        return;
+      }
+      this.pushEvent("donate", this.result);
     })
   }
 }

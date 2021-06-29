@@ -2,7 +2,7 @@ defmodule EyraUI.Form.TextArea do
   @moduledoc false
   use Surface.Component
   alias EyraUI.Form.Field
-  import EyraUI.FormHelpers, only: [focus_border_color: 1]
+  import EyraUI.FormHelpers, only: [focus_border_color: 1, border_color: 2]
 
   import Phoenix.HTML
   import Phoenix.HTML.Form
@@ -11,6 +11,7 @@ defmodule EyraUI.Form.TextArea do
   prop(label_text, :string)
   prop(label_color, :css_class, default: "text-grey1")
   prop(background, :atom, default: :light)
+  prop(target, :any)
 
   def render(assigns) do
     ~H"""
@@ -20,11 +21,12 @@ defmodule EyraUI.Form.TextArea do
             id={{ input_id(form, @field) }}
             name={{ input_name(form, @field) }}
             class="text-grey1 text-bodymedium font-body pl-3 pt-2 w-full h-64 border-2 focus:outline-none rounded"
-            x-bind:class="{ '{{focus_border_color(@background)}}': focus === '{{@field}}', 'border-grey3': focus !== '{{@field}}' }"
+            x-bind:class="{ '{{focus_border_color(@background)}}': focus === '{{@field}}', '{{border_color(assigns, form)}}': focus !== '{{@field}}' }"
             x-on:focus="focus = '{{ @field }}'"
             x-on:click.stop
             phx-focus="focus"
             phx-value-field={{ @field }}
+            phx-target={{ @target }}
           >{{ html_escape(input_value(form, @field) || "") }}</textarea>
         </Field>
       </Context>
