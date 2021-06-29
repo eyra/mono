@@ -1,6 +1,6 @@
 defmodule CoreWeb.DataDonationController do
   use CoreWeb, :controller
-  alias Core.DataDonation.{Tools, UserData}
+  alias Core.DataDonation.{Tools}
 
   def download(conn, %{"id" => tool_id}) do
     tool = Tools.get!(tool_id)

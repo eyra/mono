@@ -8,7 +8,6 @@ defmodule CoreWeb.DataDonation.Content do
 
   alias EyraUI.Hero.HeroSmall
   alias Core.Repo
-  alias Core.Studies
   alias Core.DataDonation.Tools
   alias Core.Promotions
 
@@ -19,7 +18,6 @@ defmodule CoreWeb.DataDonation.Content do
   data(tool_id, :any)
   data(promotion_id, :any)
   data(changesets, :any)
-  data(author, :any)
   data(initial_image_query, :any)
 
   @impl true
@@ -30,14 +28,10 @@ defmodule CoreWeb.DataDonation.Content do
   def mount(%{"id" => id}, _session, socket) do
     tool = Tools.get!(id)
 
-    study = Studies.get_study!(tool.study_id)
-    [author | _] = Studies.list_authors(study)
-
     {
       :ok,
       socket
       |> assign(
-        author: author.user,
         tool_id: id,
         promotion_id: tool.promotion_id,
         changesets: %{},
@@ -69,7 +63,7 @@ defmodule CoreWeb.DataDonation.Content do
           </div>
           <HeroSmall title={{ dgettext("eyra-data-donation", "content.title") }} />
           <ToolForm id={{:tool_form}} entity_id={{@tool_id}} />
-          <PromotionForm id={{:promotion_form}} entity_id={{@promotion_id}} owner={{@author}} />
+          <PromotionForm id={{:promotion_form}} entity_id={{@promotion_id}} />
         </div>
       </div>
     """

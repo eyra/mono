@@ -54,7 +54,7 @@ defmodule Core.Promotions.FormData do
     |> cast(params, @fields)
   end
 
-  def create(promotion, user, profile) do
+  def create(promotion) do
     promotion_opts =
       promotion
       |> Map.take(@promotion_fields)
@@ -95,9 +95,5 @@ defmodule Core.Promotions.FormData do
       timestamp = Timestamp.humanize(promotion.inserted_at)
       "#{label}: #{timestamp}"
     end
-  end
-
-  defp put_default(map, key, value) do
-    Map.update(map, key, value, &(&1 || value))
   end
 end

@@ -5,8 +5,6 @@ defmodule Core.APNSTest do
   alias Core.APNS
   alias Core.Factories
 
-  @valid_token %{device_token: "some device_token"}
-
   setup :verify_on_exit!
 
   setup do

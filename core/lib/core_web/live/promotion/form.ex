@@ -22,7 +22,6 @@ defmodule CoreWeb.Promotion.Form do
   alias EyraUI.Button.{SecondaryAlpineButton, PrimaryLiveViewButton, SecondaryLiveViewButton}
 
   prop(entity_id, :any, required: true)
-  prop(owner, :any, required: true)
 
   data(entity, :any)
   data(form_data, :any)
@@ -37,7 +36,7 @@ defmodule CoreWeb.Promotion.Form do
     |> update_ui()
   end
 
-  def update(%{id: id, entity_id: entity_id, owner: owner}, socket) do
+  def update(%{id: id, entity_id: entity_id}, socket) do
     entity = Promotions.get!(entity_id)
 
     {
@@ -46,8 +45,7 @@ defmodule CoreWeb.Promotion.Form do
       |> init_file_uploader(:photo)
       |> assign(id: id)
       |> assign(entity_id: entity_id)
-      |> assign(owner: owner)
-      |> update_ui(entity, owner)
+      |> update_ui(entity)
     }
   end
 
@@ -197,12 +195,12 @@ defmodule CoreWeb.Promotion.Form do
     end
   end
 
-  defp update_ui(%{assigns: %{entity: entity, owner: owner}} = socket) do
-    update_ui(socket, entity, owner)
+  defp update_ui(%{assigns: %{entity: entity}} = socket) do
+    update_ui(socket, entity)
   end
 
-  defp update_ui(socket, entity, owner) do
-    form_data = FormData.create(entity, owner, owner.profile)
+  defp update_ui(socket, entity) do
+    form_data = FormData.create(entity)
     changeset = FormData.changeset(form_data, :update_ui, %{})
 
     socket

@@ -10,7 +10,7 @@ defmodule CoreWeb.User.Profile do
   alias Core.Accounts.UserProfileEdit
 
   alias EyraUI.Form.{Form, TextInput, Checkbox, UrlInput, PhotoInput}
-  alias EyraUI.Text.{Title2, Title3, Label, BodyMedium}
+  alias EyraUI.Text.{Title2, Title3, BodyMedium}
   alias EyraUI.Spacing
   alias EyraUI.Container.{ContentArea, FormArea}
   alias EyraUI.Button.{DeleteButton, PrimaryAlpineButton, SecondaryLiveViewButton}
@@ -32,10 +32,9 @@ defmodule CoreWeb.User.Profile do
   def init_user_agent(socket, %{user_agent: user_agent}) do
     socket
     |> assign(user_agent: user_agent)
-    |> IO.inspect(label: "init_user_agent")
   end
 
-  def init_user_agent(socket, nil), do: socket
+  def init_user_agent(socket, _), do: socket
 
   def is_native(user_agent) do
     user_agent
@@ -155,7 +154,7 @@ defmodule CoreWeb.User.Profile do
             <div x-data>
               <Title3>{{dgettext "eyra-account", "push.registration.title"}}</Title3>
               <div x-show="$store.push.registration === 'not-registered'">
-                <BodyMedium class="label">{{dgettext("eyra-account", "push.registration.label")}}</BodyMedium>
+                <BodyMedium>{{dgettext("eyra-account", "push.registration.label")}}</BodyMedium>
                 <Spacing value="XS" />
                 <PrimaryAlpineButton click="registerForPush()" label={{dgettext("eyra-account", "push.registration.button")}} />
               </div>

@@ -3,7 +3,6 @@ defmodule CoreWeb.Notifications.Test do
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
   alias Core.NotificationCenter
-  alias Core.Factories
 
   setup [:login_as_member]
 

@@ -13,48 +13,42 @@ defmodule Core.WebPushTest do
 
   describe "register/2" do
     test "register rejects invalid subscriptions", %{user: user} do
-      subscription =
-        %{
-          "expirationTime" => nil,
-          "keys" => %{
-            "auth" => "adf",
-            "something-else" => "abcde"
-          }
+      subscription = %{
+        "expirationTime" => nil,
+        "keys" => %{
+          "auth" => "adf",
+          "something-else" => "abcde"
         }
-        |> Jason.encode!()
+      }
 
       assert {:error, _} = WebPush.register(user, subscription)
     end
 
     test "register accepts valid subscription", %{user: user} do
-      subscription =
-        %{
-          "endpoint" => "https://example.com/push/send/qwerty1234",
-          "expirationTime" => nil,
-          "keys" => %{
-            "auth" => "qlbEtiId4mHSgnXPB7pPTQ",
-            "p256dh" =>
-              "BKfP8PDm3qrDizHkeEh5lsHcD155JxsGBCQ9u6Evb2eWwy2jspyfTiWr6hA1-15lgrR1XxkQqPOupU50OOJ_5Fg"
-          }
+      subscription = %{
+        "endpoint" => "https://example.com/push/send/qwerty1234",
+        "expirationTime" => nil,
+        "keys" => %{
+          "auth" => "qlbEtiId4mHSgnXPB7pPTQ",
+          "p256dh" =>
+            "BKfP8PDm3qrDizHkeEh5lsHcD155JxsGBCQ9u6Evb2eWwy2jspyfTiWr6hA1-15lgrR1XxkQqPOupU50OOJ_5Fg"
         }
-        |> Jason.encode!()
+      }
 
       assert {:ok, _} = WebPush.register(user, subscription)
     end
 
     test "registering the same endpoint twice updates the auth info", %{user: user} do
       for key <- ["abcde", "fghijk"] do
-        subscription =
-          %{
-            "endpoint" => "https://example.com/push/send/qwerty1234",
-            "expirationTime" => nil,
-            "keys" => %{
-              "auth" => key,
-              "p256dh" =>
-                "BKfP8PDm3qrDizHkeEh5lsHcD155JxsGBCQ9u6Evb2eWwy2jspyfTiWr6hA1-15lgrR1XxkQqPOupU50OOJ_5Fg"
-            }
+        subscription = %{
+          "endpoint" => "https://example.com/push/send/qwerty1234",
+          "expirationTime" => nil,
+          "keys" => %{
+            "auth" => key,
+            "p256dh" =>
+              "BKfP8PDm3qrDizHkeEh5lsHcD155JxsGBCQ9u6Evb2eWwy2jspyfTiWr6hA1-15lgrR1XxkQqPOupU50OOJ_5Fg"
           }
-          |> Jason.encode!()
+        }
 
         {:ok, _} = WebPush.register(user, subscription)
       end
