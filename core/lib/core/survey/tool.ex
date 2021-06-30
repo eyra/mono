@@ -1,4 +1,4 @@
-defmodule Core.SurveyTools.SurveyTool do
+defmodule Core.Survey.Tool do
   @moduledoc """
   The survey tool schema.
   """
@@ -6,7 +6,7 @@ defmodule Core.SurveyTools.SurveyTool do
   require Core.Themes
   import Ecto.Changeset
   alias Core.Studies.Study
-  alias Core.SurveyTools.SurveyToolTask
+  alias Core.Survey.Task
   alias Core.Accounts.User
 
   schema "survey_tools" do
@@ -34,7 +34,7 @@ defmodule Core.SurveyTools.SurveyTool do
     field(:banner_subtitle, :string)
     field(:banner_url, :string)
 
-    has_many(:tasks, SurveyToolTask)
+    has_many(:tasks, Task)
     many_to_many(:participants, User, join_through: :survey_tool_participants)
 
     timestamps()

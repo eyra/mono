@@ -11,8 +11,7 @@ defmodule Core.Studies.StudyEdit do
 
   alias Core.ImageHelpers
   alias EyraUI.Timestamp
-  alias Core.SurveyTools
-  alias Core.SurveyTools.SurveyTool
+  alias Core.Survey.{Tool, Tools}
   alias Core.Themes
   require Core.Themes
   use Core.Themes
@@ -42,7 +41,7 @@ defmodule Core.Studies.StudyEdit do
     field(:banner_subtitle, :string)
     field(:banner_url, :string)
     # Transient Form Fields
-    # Maps to the more abstract SurveyTool.marks
+    # Maps to the more abstract Tool.marks
     field(:organization, :string)
     # Transient Data
     field(:is_published, :boolean)
@@ -177,8 +176,8 @@ defmodule Core.Studies.StudyEdit do
   end
 
   defp create_transient_opts(survey_tool) do
-    completed = SurveyTools.count_completed_tasks(survey_tool)
-    pending = SurveyTools.count_pending_tasks(survey_tool)
+    completed = Tools.count_completed_tasks(survey_tool)
+    pending = Tools.count_pending_tasks(survey_tool)
 
     subject_vacant_count =
       survey_tool
@@ -200,7 +199,7 @@ defmodule Core.Studies.StudyEdit do
     %{}
     |> Map.put(:focus, "")
     |> Map.put(:byline, get_byline(survey_tool))
-    |> Map.put(:is_published, SurveyTool.published?(survey_tool))
+    |> Map.put(:is_published, Tool.published?(survey_tool))
     |> Map.put(:subject_pending_count, pending)
     |> Map.put(:subject_completed_count, completed)
     |> Map.put(:subject_vacant_count, subject_vacant_count)
@@ -232,8 +231,8 @@ defmodule Core.Studies.StudyEdit do
     end
   end
 
-  def get_byline(%SurveyTool{} = survey_tool) do
-    if SurveyTool.published?(survey_tool) do
+  def get_byline(%Tool{} = survey_tool) do
+    if Tool.published?(survey_tool) do
       label = dgettext("eyra-survey", "published.true.label")
       timestamp = Timestamp.humanize(survey_tool.published_at)
       "#{label}: #{timestamp}"

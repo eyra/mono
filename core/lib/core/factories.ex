@@ -8,7 +8,7 @@ defmodule Core.Factories do
     Studies,
     Content,
     Promotions,
-    SurveyTools,
+    Survey,
     Authorization,
     DataDonation,
     NotificationCenter,
@@ -95,7 +95,7 @@ defmodule Core.Factories do
   end
 
   def build(:participant) do
-    %SurveyTools.Participant{}
+    %Survey.Participant{}
   end
 
   def build(:content_node) do
@@ -191,7 +191,7 @@ defmodule Core.Factories do
     survey_tool = Map.get(attributes, :survey_tool, build(:survey_tool))
     user = Map.get(attributes, :user, build(:member))
 
-    %SurveyTools.Participant{
+    %Survey.Participant{
       survey_tool: survey_tool,
       user: user
     }
@@ -200,7 +200,7 @@ defmodule Core.Factories do
   def build(:survey_tool, %{} = attributes) do
     {study, attributes} = Map.pop(attributes, :study, build(:study))
 
-    %SurveyTools.SurveyTool{
+    %Survey.Tool{
       auth_node: build(:auth_node, %{parent: study.auth_node}),
       title: Faker.Lorem.sentence(),
       study: study
@@ -219,7 +219,7 @@ defmodule Core.Factories do
   def insert!(:survey_tool_task, %{} = attributes) do
     %{survey_tool: survey_tool, user: member} = insert!(:survey_tool_participant)
 
-    %SurveyTools.SurveyToolTask{
+    %Survey.Task{
       user: member,
       survey_tool: survey_tool,
       status: :pending

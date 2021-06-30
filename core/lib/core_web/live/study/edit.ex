@@ -33,7 +33,7 @@ defmodule CoreWeb.Study.Edit do
   alias Core.Accounts
   alias Core.Studies
   alias Core.Studies.{Study, StudyEdit}
-  alias Core.SurveyTools
+  alias Core.Survey.Tools
   alias Core.Marks
 
   import CoreWeb.Gettext
@@ -95,7 +95,7 @@ defmodule CoreWeb.Study.Edit do
     {:ok, survey_tool} =
       study
       |> load_survey_tool()
-      |> SurveyTools.update_survey_tool(survey_tool_attrs)
+      |> Tools.update_survey_tool(survey_tool_attrs)
 
     {:ok, study} =
       study

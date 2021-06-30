@@ -8,7 +8,7 @@ defmodule Core.Studies.StudyPublic do
   alias Core.ImageHelpers
   alias Core.Studies
   alias Core.Studies.Study
-  alias Core.SurveyTools
+  alias Core.Survey.Tools
   alias Core.Themes
   require Core.Themes
   use Core.Themes
@@ -116,7 +116,7 @@ defmodule Core.Studies.StudyPublic do
         keep_decimals: true
       )
 
-    occupied_spot_count = SurveyTools.count_tasks(survey_tool, [:pending, :completed])
+    occupied_spot_count = Tools.count_tasks(survey_tool, [:pending, :completed])
     open_spot_count = survey_tool.subject_count - occupied_spot_count
     open_spot_string = "Nog #{open_spot_count} van #{survey_tool.subject_count}"
 

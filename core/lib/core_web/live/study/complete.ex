@@ -11,7 +11,7 @@ defmodule CoreWeb.Study.Complete do
 
   alias Core.Studies
   alias Core.Studies.{Study, StudyPublic}
-  alias Core.SurveyTools
+  alias Core.Survey.Tools
 
   data(study, :any)
   data(survey_tool, :any)
@@ -27,8 +27,8 @@ defmodule CoreWeb.Study.Complete do
     study_public = StudyPublic.create(study, survey_tool)
 
     survey_tool
-    |> SurveyTools.get_or_create_task!(user)
-    |> SurveyTools.complete_task!()
+    |> Tools.get_or_create_task!(user)
+    |> Tools.complete_task!()
 
     socket =
       socket

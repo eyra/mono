@@ -1,5 +1,5 @@
 defmodule CoreWeb.ViewModel.Card do
-  alias Core.SurveyTools
+  alias Core.Survey.Tools
   alias Core.DataDonation
   alias Core.ImageHelpers
   alias CoreWeb.Router.Helpers, as: Routes
@@ -29,7 +29,7 @@ defmodule CoreWeb.ViewModel.Card do
     reward_currency = if reward_currency === nil, do: :eur, else: reward_currency
     duration = if duration === nil, do: 0, else: duration
 
-    occupied_spot_count = SurveyTools.count_tasks(survey_tool, [:pending, :completed])
+    occupied_spot_count = Tools.count_tasks(survey_tool, [:pending, :completed])
     open_spot_count = subject_count - occupied_spot_count
 
     reward_string = CurrencyFormatter.format(reward_value, reward_currency, keep_decimals: true)

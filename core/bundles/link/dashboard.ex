@@ -7,7 +7,7 @@ defmodule Link.Dashboard do
   import Core.Authorization
   alias Core.Studies
   alias Core.Studies.Study
-  alias Core.SurveyTools
+  alias Core.Survey.Tools
 
   alias CoreWeb.ViewModel.Card, as: CardVM
 
@@ -87,7 +87,7 @@ defmodule Link.Dashboard do
     with {:ok, study} <- Studies.create_study(changeset, current_user),
          {:ok, _author} <- Studies.add_author(study, current_user),
          {:ok, _survey_tool} <-
-           SurveyTools.create_survey_tool(create_survey_tool_attrs(study.title), study) do
+           Tools.create_survey_tool(create_survey_tool_attrs(study.title), study) do
       study
     end
   end

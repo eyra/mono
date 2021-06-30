@@ -39,8 +39,8 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.Promotion.Public, [:visitor, :member, :owner])
 
   grant_access(Core.Studies.Study, [:visitor, :member])
-  grant_access(Core.SurveyTools.SurveyTool, [:owner, :participant])
-  grant_access(Core.SurveyTools.SurveyToolTask, [:participant])
+  grant_access(Core.Survey.Tool, [:owner, :participant])
+  grant_access(Core.Survey.Task, [:participant])
 
   grant_actions(CoreWeb.DashboardController, %{
     index: [:member]

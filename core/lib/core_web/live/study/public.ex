@@ -18,8 +18,7 @@ defmodule CoreWeb.Study.Public do
 
   alias Core.Studies
   alias Core.Studies.{Study, StudyPublic}
-  alias Core.SurveyTools
-  alias Core.SurveyTools.SurveyToolTask
+  alias Core.Survey.{Tools, Task}
 
   data(study, :any)
   data(survey_tool, :any)
@@ -28,9 +27,9 @@ defmodule CoreWeb.Study.Public do
   data(participant?, :boolean)
   data(study_public, :any)
 
-  defp task_available?({:ok, %SurveyToolTask{status: :pending}}), do: true
+  defp task_available?({:ok, %Task{status: :pending}}), do: true
   defp task_available?(_), do: false
-  defp task_completed?({:ok, %SurveyToolTask{status: :completed}}), do: true
+  defp task_completed?({:ok, %Task{status: :completed}}), do: true
   defp task_completed?(_), do: false
 
   defp assign_participation_info(socket, survey_tool, user, task_info) do
@@ -38,7 +37,7 @@ defmodule CoreWeb.Study.Public do
     |> assign(
       task_available?: task_available?(task_info),
       task_completed?: task_completed?(task_info),
-      participant?: SurveyTools.participant?(survey_tool, user)
+      participant?: Tools.participant?(survey_tool, user)
     )
   end
 
@@ -46,7 +45,7 @@ defmodule CoreWeb.Study.Public do
     user = socket.assigns[:current_user]
     study = Studies.get_study!(id)
     survey_tool = load_survey_tool(study)
-    task_info = SurveyTools.get_or_create_task(survey_tool, user)
+    task_info = Tools.get_or_create_task(survey_tool, user)
     study_public = StudyPublic.create(study, survey_tool)
 
     {:ok,
@@ -72,8 +71,8 @@ defmodule CoreWeb.Study.Public do
         _params,
         %{assigns: %{survey_tool: survey_tool, user: user}} = socket
       ) do
-    {:ok, _} = SurveyTools.apply_participant(survey_tool, user)
-    task_info = SurveyTools.get_or_create_task(survey_tool, user)
+    {:ok, _} = Tools.apply_participant(survey_tool, user)
+    task_info = Tools.get_or_create_task(survey_tool, user)
     {:noreply, socket |> assign_participation_info(survey_tool, user, task_info)}
   end
 
@@ -81,8 +80,8 @@ defmodule CoreWeb.Study.Public do
     study_public = socket.assigns[:study_public]
     user = socket.assigns[:user]
 
-    SurveyTools.get_survey_tool!(study_public.survey_tool_id)
-    |> SurveyTools.withdraw_participant(user)
+    Tools.get_survey_tool!(study_public.survey_tool_id)
+    |> Tools.withdraw_participant(user)
 
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Dashboard))}
   end
