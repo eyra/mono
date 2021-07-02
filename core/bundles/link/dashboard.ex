@@ -7,7 +7,10 @@ defmodule Link.Dashboard do
   import Core.Authorization
   alias Core.Studies
   alias Core.Studies.Study
-  alias Core.Survey.Tools
+  alias Core.Survey.{Tools, Tool}
+  alias Core.Accounts
+  alias Core.Content
+  alias Core.Promotions
 
   alias CoreWeb.ViewModel.Card, as: CardVM
 
@@ -26,7 +29,7 @@ defmodule Link.Dashboard do
 
   def mount(_params, _session, socket) do
     user = socket.assigns[:current_user]
-    preload = [:survey_tools]
+    preload = [survey_tool: [:promotion]]
 
     owned_studies =
       user
@@ -47,7 +50,7 @@ defmodule Link.Dashboard do
       |> Enum.into(MapSet.new())
 
     available_studies =
-      Studies.list_studies_with_published_survey(exclude: exclusion_list, preload: preload)
+      Studies.list_studies_with_published_promotion(Tool, exclude: exclusion_list, preload: preload)
       |> Enum.map(&CardVM.primary_study(&1, socket))
 
     available_count = Enum.count(available_studies)
@@ -63,44 +66,59 @@ defmodule Link.Dashboard do
     {:ok, socket}
   end
 
-  def handle_info({:handle_click, %{action: :edit, card_id: card_id}}, socket) do
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Study.Edit, card_id))}
+  def handle_info({:handle_click, %{action: :edit, id: id}}, socket) do
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Survey.Content, id))}
   end
 
-  def handle_info({:handle_click, %{action: :public, card_id: card_id}}, socket) do
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Study.Public, card_id))}
+  def handle_info({:handle_click, %{action: :public, id: id}}, socket) do
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Promotion.Public, id))}
   end
 
-  def handle_event("create_study", _params, socket) do
-    study = create_study(socket)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Study.Edit, study.id))}
+  def handle_event("create_tool", _params, socket) do
+    tool = create_tool(socket)
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Survey.Content, tool.id))}
   end
 
-  defp create_study(socket) do
-    current_user = socket.assigns.current_user
+  defp create_tool(socket) do
+    user = socket.assigns.current_user
+    profile = user |> Accounts.get_profile()
+
+    title = dgettext("eyra-dashboard", "default.study.title")
 
     changeset =
       %Study{}
-      |> Study.changeset(%{title: "Nieuwe studie"})
+      |> Study.changeset(%{title: title})
 
-    # temp ensure every study has at least one survey
-    with {:ok, study} <- Studies.create_study(changeset, current_user),
-         {:ok, _author} <- Studies.add_author(study, current_user),
-         {:ok, _survey_tool} <-
-           Tools.create_survey_tool(create_survey_tool_attrs(study.title), study) do
-      study
+    tool_attrs = create_tool_attrs()
+    promotion_attrs = create_promotion_attrs(title, user, profile)
+
+    with {:ok, study} <- Studies.create_study(changeset, user),
+      {:ok, _author} <- Studies.add_author(study, user),
+      {:ok, tool_content_node} <- Content.Nodes.create(%{ready: false}),
+      {:ok, promotion_content_node} <-
+        Content.Nodes.create(%{ready: false}, tool_content_node),
+      {:ok, promotion} <- Promotions.create(promotion_attrs, study, promotion_content_node),
+      {:ok, tool} <- Tools.create_survey_tool(tool_attrs, study, promotion, tool_content_node) do
+        tool
     end
   end
 
-  defp create_survey_tool_attrs(title) do
+  defp create_tool_attrs() do
+    %{
+      reward_currency: :eur,
+      devices: [:phone, :tablet, :desktop]
+    }
+  end
+
+  defp create_promotion_attrs(title, user, profile) do
     %{
       title: title,
-      phone_enabled: true,
-      tablet_enabled: true,
-      desktop_enabled: true,
-      reward_currency: :eur,
-      image_url:
-        "https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=3900&q=80"
+      marks: ["vu"],
+      plugin: "survey",
+      banner_photo_url: profile.photo_url,
+      banner_title: user.displayname,
+      banner_subtitle: profile.title,
+      banner_url: profile.url
     }
   end
 
@@ -116,16 +134,16 @@ defmodule Link.Dashboard do
         </Title2>
         <DynamicGrid>
           <div :for={{ card <- @owned_studies  }} >
-            <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :edit, card_id: card.id } }} />
+            <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :edit, id: card.edit_id } }} />
           </div>
           <div :for={{ card <- @subject_studies  }} >
-            <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, card_id: card.id } }} />
+            <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
           </div>
           <div :if={{ can_access?(@current_user, CoreWeb.Study.New) }} >
             <ButtonCard
               title={{dgettext("eyra-study", "add.card.title")}}
               image={{Routes.static_path(@socket, "/images/plus-primary.svg")}}
-              event="create_study" />
+              event="create_tool" />
           </div>
         </DynamicGrid>
         <div class="mt-12 lg:mt-16"/>
@@ -135,7 +153,7 @@ defmodule Link.Dashboard do
         </Title2>
         <DynamicGrid>
           <div :for={{ card <- @available_studies  }} class="mb-1" >
-            <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, card_id: card.id } }} />
+            <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
           </div>
         </DynamicGrid>
       </ContentArea>

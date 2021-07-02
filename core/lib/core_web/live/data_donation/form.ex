@@ -67,7 +67,7 @@ defmodule CoreWeb.DataDonation.Form do
   end
 
   # Saving
-  def schedule_save(socket, %Tool{} = entity, type, attrs) do
+  def schedule_save(socket, %Core.DataDonation.Tool{} = entity, type, attrs) do
     node = Nodes.get!(entity.content_node_id)
     changeset = Tool.changeset(entity, type, attrs)
     node_changeset = Tool.node_changeset(node, entity, attrs)

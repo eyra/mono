@@ -69,17 +69,16 @@ defmodule CoreWeb.Dashboard do
     {:ok, socket}
   end
 
-  def handle_info({:handle_click, %{action: :edit, card_id: card_id}}, socket) do
+  def handle_info({:handle_click, %{action: :edit, id: id}}, socket) do
     {:noreply,
-     push_redirect(socket, to: Routes.live_path(socket, CoreWeb.DataDonation.Content, card_id))}
+     push_redirect(socket, to: Routes.live_path(socket, CoreWeb.DataDonation.Content, id))}
   end
 
-  def handle_info({:handle_click, %{action: :public, card_id: card_id}}, socket) do
-    {:noreply,
-     push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Promotion.Public, card_id))}
+  def handle_info({:handle_click, %{action: :public, id: id}}, socket) do
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Promotion.Public, id))}
   end
 
-  def handle_event("create_study", _params, socket) do
+  def handle_event("create_tool", _params, socket) do
     tool = create_tool(socket)
 
     {:noreply,
@@ -138,16 +137,16 @@ defmodule CoreWeb.Dashboard do
         </Title2>
         <DynamicGrid>
           <div :for={{ card <- @owned_studies  }} >
-            <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :edit, card_id: card.id } }} />
+            <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :edit, id: card.edit_id } }} />
           </div>
           <div :for={{ card <- @subject_studies  }} >
-            <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, card_id: card.id } }} />
+            <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
           </div>
           <div :if={{ can_access?(@current_user, CoreWeb.Study.New) }} >
             <ButtonCard
               title={{dgettext("eyra-dashboard", "add.card.title")}}
               image={{Routes.static_path(@socket, "/images/plus-primary.svg")}}
-              event="create_study" />
+              event="create_tool" />
           </div>
         </DynamicGrid>
         <div class="mt-12 lg:mt-16"/>
@@ -157,7 +156,7 @@ defmodule CoreWeb.Dashboard do
         </Title2>
         <DynamicGrid>
           <div :for={{ card <- @available_studies  }} class="mb-1" >
-            <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, card_id: card.id } }} />
+            <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
           </div>
         </DynamicGrid>
       </ContentArea>

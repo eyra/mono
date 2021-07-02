@@ -1,12 +1,11 @@
-defmodule CoreWeb.DataDonation.PromotionPlugin do
+defmodule CoreWeb.Survey.PromotionPlugin do
   import CoreWeb.Gettext
 
   alias Core.Studies
   alias Core.Promotions.CallToAction
   alias Core.Promotions.CallToAction.Target
-  alias Core.DataDonation.Tools
+  alias Core.Survey.Tools
 
-  alias CoreWeb.Router.Helpers, as: Routes
   alias CoreWeb.Promotion.Plugin
 
   @behaviour Plugin
@@ -21,37 +20,36 @@ defmodule CoreWeb.DataDonation.PromotionPlugin do
     %{
       call_to_action: call_to_action,
       highlights: highlights,
-      devices: [:desktop],
+      devices: tool.devices,
       byline: byline
     }
   end
 
   @impl Plugin
-  def get_cta_path(promotion_id, "apply", %{assigns: %{current_user: user}} = socket) do
+  def get_cta_path(promotion_id, "apply", %{assigns: %{current_user: user}} = _socket) do
     tool = Tools.get_by_promotion(promotion_id)
     Tools.apply_participant(tool, user)
     Tools.get_or_create_task(tool, user)
-
-    Routes.live_path(socket, CoreWeb.DataDonation.Uploader, tool.id)
+    tool.survey_url
   end
 
   @impl Plugin
-  def get_cta_path(promotion_id, "open", socket) do
+  def get_cta_path(promotion_id, "open", _socket) do
     tool = Tools.get_by_promotion(promotion_id)
-    Routes.live_path(socket, CoreWeb.DataDonation.Uploader, tool.id)
+    tool.survey_url
   end
 
   defp get_call_to_action(tool, user) do
     case Tools.participant?(tool, user) do
       false ->
         %CallToAction{
-          label: dgettext("eyra-data-donation", "apply.cta.title"),
+          label: dgettext("eyra-survey", "apply.cta.title"),
           target: %Target{type: :event, value: "apply"}
         }
 
       true ->
         %CallToAction{
-          label: dgettext("eyra-data-donation", "open.cta.title"),
+          label: dgettext("eyra-survey", "open.cta.title"),
           target: %Target{type: :event, value: "open"}
         }
     end
@@ -64,25 +62,25 @@ defmodule CoreWeb.DataDonation.PromotionPlugin do
       |> Enum.map(& &1.fullname)
       |> Enum.join(", ")
 
-    "#{dgettext("eyra-data-donation", "by.author.label")}: " <> authors
+    "#{dgettext("eyra-survey", "by.author.label")}: " <> authors
   end
 
   defp get_highlights(tool) do
     occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
     open_spot_count = tool.subject_count - occupied_spot_count
 
-    spots_title = dgettext("eyra-data-donation", "spots.highlight.title")
+    spots_title = dgettext("eyra-survey", "spots.highlight.title")
     spots_text = "Nog #{open_spot_count} van #{tool.subject_count}"
 
-    available_title = dgettext("eyra-data-donation", "available.highlight.title")
+    available_title = dgettext("eyra-survey", "available.highlight.title")
 
     available_text =
-      dgettext("eyra-data-donation", "available.future.highlight.text",
+      dgettext("eyra-survey", "available.future.highlight.text",
         from: "15 june",
         till: "15 augustus 2021"
       )
 
-    reward_title = dgettext("eyra-data-donation", "reward.highlight.title")
+    reward_title = dgettext("eyra-survey", "reward.highlight.title")
 
     reward_text =
       CurrencyFormatter.format(tool.reward_value, tool.reward_currency, keep_decimals: true)

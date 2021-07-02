@@ -9,7 +9,7 @@ defmodule Core.Survey.Task do
   alias Core.Accounts.User
 
   schema "survey_tool_tasks" do
-    belongs_to(:survey_tool, Tool)
+    belongs_to(:tool, Tool)
     belongs_to(:user, User)
     field(:status, Ecto.Enum, values: [:pending, :completed])
 

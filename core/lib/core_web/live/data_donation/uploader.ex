@@ -1,28 +1,13 @@
 defmodule CoreWeb.DataDonation.Uploader do
   use CoreWeb, :live_view
 
-  alias Core.DataDonation.{Tools, Tool}
+  alias Core.DataDonation.{Tools, Tool, Upload}
 
   alias EyraUI.Hero.HeroSmall
   alias EyraUI.Text.{Title3, Title4, BodyLarge, BodyMedium}
   alias EyraUI.Spacing
   alias EyraUI.Panel.Panel
   alias EyraUI.Container.{ContentArea}
-
-  defmodule UploadChangeset do
-    use Ecto.Schema
-    import Ecto.Changeset
-
-    embedded_schema do
-      field(:terms_accepted, :boolean)
-    end
-
-    def changeset(params) do
-      %UploadChangeset{}
-      |> cast(params, [:terms_accepted])
-      |> validate_required([:terms_accepted])
-    end
-  end
 
   data(result, :any)
   data(tool, :any)
@@ -31,8 +16,8 @@ defmodule CoreWeb.DataDonation.Uploader do
   data(step2, :css_class, default: "hidden")
   data(step3, :css_class, default: "hidden")
   data(step4, :css_class, default: "hidden")
-  data(summary, :any, default: "<b>AAP</b>")
-  data(extracted, :any, default: "AAP")
+  data(summary, :any, default: "")
+  data(extracted, :any, default: "")
 
   def mount(%{"id" => tool_id}, _session, socket) do
     tool = Tools.get!(tool_id)
@@ -41,7 +26,7 @@ defmodule CoreWeb.DataDonation.Uploader do
      socket
      |> assign(:result, nil)
      |> assign(:tool, tool)
-     |> assign(:changeset, UploadChangeset.changeset(%{}))}
+     |> assign(:changeset, Upload.changeset(%{}))}
   end
 
   def handle_event(

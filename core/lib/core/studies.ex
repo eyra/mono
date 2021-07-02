@@ -37,20 +37,6 @@ defmodule Core.Studies do
     # AUTH: Can be piped through auth filter.
   end
 
-  def list_studies_with_published_survey(opts \\ []) do
-    preload = Keyword.get(opts, :preload, [])
-    exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
-    published = from(st in Tool, where: not is_nil(st.published_at), select: st.study_id)
-
-    from(s in Study,
-      where:
-        s.id in subquery(published) and
-          s.id not in ^exclude,
-      preload: ^preload
-    )
-    |> Repo.all()
-  end
-
   def list_studies_with_published_promotion(tool_entity, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
@@ -98,10 +84,9 @@ defmodule Core.Studies do
   def list_subject_studies(user, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
 
-    survey_tool_ids =
-      from(stt in Task, where: stt.user_id == ^user.id, select: stt.survey_tool_id)
+    tool_ids = from(stt in Task, where: stt.user_id == ^user.id, select: stt.tool_id)
 
-    study_ids = from(st in Tool, where: st.id in subquery(survey_tool_ids), select: st.study_id)
+    study_ids = from(st in Tool, where: st.id in subquery(tool_ids), select: st.study_id)
 
     from(s in Study,
       where: s.id in subquery(study_ids),

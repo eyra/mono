@@ -104,6 +104,7 @@ defmodule CoreWeb.Promotion.Form do
   def render(assigns) do
     ~H"""
       <ContentArea>
+        <Spacing value="XL" />
         <Title1>{{dgettext("eyra-promotion", "form.title")}}</Title1>
 
         <Bar>

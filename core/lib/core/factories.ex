@@ -98,6 +98,10 @@ defmodule Core.Factories do
     %Survey.Participant{}
   end
 
+  def build(:promotion) do
+    %Promotions.Promotion{}
+  end
+
   def build(:content_node) do
     %Content.Node{ready: true}
   end
@@ -198,12 +202,21 @@ defmodule Core.Factories do
   end
 
   def build(:survey_tool, %{} = attributes) do
+    {content_node, attributes} = Map.pop(attributes, :content_node, build(:content_node, %{}))
     {study, attributes} = Map.pop(attributes, :study, build(:study))
 
+    {promotion, attributes} =
+      Map.pop(
+        attributes,
+        :promotion,
+        build(:promotion, %{study: study, parent_content_node: content_node})
+      )
+
     %Survey.Tool{
+      content_node: content_node,
       auth_node: build(:auth_node, %{parent: study.auth_node}),
-      title: Faker.Lorem.sentence(),
-      study: study
+      study: study,
+      promotion: promotion
     }
     |> struct!(attributes)
   end
@@ -221,7 +234,7 @@ defmodule Core.Factories do
 
     %Survey.Task{
       user: member,
-      survey_tool: survey_tool,
+      tool: survey_tool,
       status: :pending
     }
     |> struct!(attributes)

@@ -1,4 +1,4 @@
-defmodule CoreWeb.Study.Complete do
+defmodule CoreWeb.Survey.Complete do
   @moduledoc """
   The public study screen.
   """
@@ -6,27 +6,25 @@ defmodule CoreWeb.Study.Complete do
 
   alias EyraUI.Hero.HeroSmall
   alias EyraUI.Container.ContentArea
-  alias EyraUI.Text.{Title1, SubHead, BodyLarge}
+  alias EyraUI.Text.{Title1, BodyLarge}
   alias EyraUI.Spacing
 
   alias Core.Studies
-  alias Core.Studies.{Study, StudyPublic}
+  alias Core.Studies.Study
   alias Core.Survey.Tools
+  alias Core.Promotions
 
   data(study, :any)
-  data(survey_tool, :any)
-  data(task_available?, :boolean)
-  data(task_completed?, :boolean)
-  data(participant?, :boolean)
-  data(study_public, :any)
+  data(tool, :any)
+  data(promotion, :any)
 
   def mount(%{"id" => id}, _session, socket) do
     user = socket.assigns[:current_user]
     study = Studies.get_study!(id)
-    survey_tool = load_survey_tool(study)
-    study_public = StudyPublic.create(study, survey_tool)
+    tool = load_tool(study)
+    promotion = Promotions.get!(tool.promotion_id)
 
-    survey_tool
+    tool
     |> Tools.get_or_create_task!(user)
     |> Tools.complete_task!()
 
@@ -35,14 +33,14 @@ defmodule CoreWeb.Study.Complete do
       |> assign(
         user: user,
         study: study,
-        survey_tool: survey_tool,
-        study_public: study_public
+        tool: tool,
+        promotion: promotion
       )
 
     {:ok, socket}
   end
 
-  def load_survey_tool(%Study{} = study) do
+  def load_tool(%Study{} = study) do
     case Studies.list_survey_tools(study) do
       [] -> raise "Expected at least one survey tool for study #{study.title}"
       [survey_tool | _] -> survey_tool
@@ -51,10 +49,9 @@ defmodule CoreWeb.Study.Complete do
 
   def render(assigns) do
     ~H"""
-      <HeroSmall title={{ dgettext("eyra-study", "study.public.title") }} />
+      <HeroSmall title={{ dgettext("eyra-survey", "conpleted.title") }} />
       <ContentArea>
-        <SubHead>{{ @study_public.byline }}</SubHead>
-        <Title1>{{ @study_public.title }}</Title1>
+        <Title1>{{ @promotion.title }}</Title1>
         <Spacing value="M" />
         <BodyLarge>{{dgettext("eyra-survey", "thank.you.message")}}</BodyLarge>
       </ContentArea>

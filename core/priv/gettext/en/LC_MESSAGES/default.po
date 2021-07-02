@@ -15,9 +15,7 @@ msgstr ""
 #: bundles/link/dashboard.ex:5 lib/core_web/live/dashboard.ex:5
 #: lib/core_web/live/data_donation/content.ex:5 lib/core_web/live/data_donation/uploader.ex:2
 #: lib/core_web/live/fake_survey.ex:5 lib/core_web/live/index.ex:5 lib/core_web/live/notifications.ex:2
-#: lib/core_web/live/promotion/public.ex:5 lib/core_web/live/study/complete.ex:5 lib/core_web/live/study/edit.ex:5
-#: lib/core_web/live/study/public.ex:5 lib/core_web/live/survey_tool/edit.ex:5
-#: lib/core_web/live/survey_tool/index.ex:5 lib/core_web/live/survey_tool/new.ex:5
+#: lib/core_web/live/promotion/public.ex:5 lib/core_web/live/survey/complete.ex:5 lib/core_web/live/survey/content.ex:5
 #: lib/core_web/live/user/await_confirmation.ex:5 lib/core_web/live/user/confirm_token.ex:5 lib/core_web/live/user/profile.ex:5
 #: lib/core_web/live/user/reset_password.ex:5 lib/core_web/live/user/reset_password_token.ex:5
 #: lib/core_web/live/user/signup.ex:5 lib/core_web/views/changeset_view.ex:2
@@ -33,9 +31,7 @@ msgstr ""
 #: bundles/link/dashboard.ex:5 lib/core_web/live/dashboard.ex:5
 #: lib/core_web/live/data_donation/content.ex:5 lib/core_web/live/data_donation/uploader.ex:2
 #: lib/core_web/live/fake_survey.ex:5 lib/core_web/live/index.ex:5 lib/core_web/live/notifications.ex:2
-#: lib/core_web/live/promotion/public.ex:5 lib/core_web/live/study/complete.ex:5 lib/core_web/live/study/edit.ex:5
-#: lib/core_web/live/study/public.ex:5 lib/core_web/live/survey_tool/edit.ex:5
-#: lib/core_web/live/survey_tool/index.ex:5 lib/core_web/live/survey_tool/new.ex:5
+#: lib/core_web/live/promotion/public.ex:5 lib/core_web/live/survey/complete.ex:5 lib/core_web/live/survey/content.ex:5
 #: lib/core_web/live/user/await_confirmation.ex:5 lib/core_web/live/user/confirm_token.ex:5 lib/core_web/live/user/profile.ex:5
 #: lib/core_web/live/user/reset_password.ex:5 lib/core_web/live/user/reset_password_token.ex:5
 #: lib/core_web/live/user/signup.ex:5 lib/core_web/views/changeset_view.ex:2

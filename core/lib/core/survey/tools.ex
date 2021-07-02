@@ -40,12 +40,6 @@ defmodule Core.Survey.Tools do
 
   @doc """
   Returns the list of survey_tools.
-
-  ## Examples
-
-      iex> list_survey_tools()
-      [%Tool{}, ...]
-
   """
   def list_survey_tools do
     Repo.all(Tool)
@@ -55,58 +49,40 @@ defmodule Core.Survey.Tools do
   Gets a single survey_tool.
 
   Raises `Ecto.NoResultsError` if the Survey tool does not exist.
-
-  ## Examples
-
-      iex> get_survey_tool!(123)
-      %Tool{}
-
-      iex> get_survey_tool!(456)
-      ** (Ecto.NoResultsError)
-
   """
   def get_survey_tool!(id), do: Repo.get!(Tool, id)
   def get_survey_tool(id), do: Repo.get(Tool, id)
 
+  def get_by_promotion(promotion_id) do
+    from(t in Tool,
+      where: t.promotion_id == ^promotion_id
+    )
+    |> Repo.one()
+  end
+
   @doc """
   Creates a survey_tool.
-
-  ## Examples
-
-      iex> create_survey_tool(%{field: value})
-      {:ok, %Tool{}}
-
-      iex> create_survey_tool(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
   """
-  def create_survey_tool(attrs, study) do
+  def create_survey_tool(attrs, study, promotion, content_node) do
     %Tool{}
-    |> Tool.changeset(attrs)
+    |> Tool.changeset(:mount, attrs)
     |> Ecto.Changeset.put_assoc(:study, study)
+    |> Ecto.Changeset.put_assoc(:promotion, promotion)
+    |> Ecto.Changeset.put_assoc(:content_node, content_node)
     |> Ecto.Changeset.put_assoc(:auth_node, Authorization.make_node(study))
     |> Repo.insert()
   end
 
   @doc """
   Updates a survey_tool.
-
-  ## Examples
-
-      iex> update_survey_tool(survey_tool, %{field: new_value})
-      {:ok, %Tool{}}
-
-      iex> update_survey_tool(survey_tool, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
   """
-  def update_survey_tool(%Tool{} = survey_tool, attrs) do
+  def update_survey_tool(%Tool{} = survey_tool, type, attrs) do
     survey_tool
-    |> Tool.changeset(attrs)
+    |> Tool.changeset(type, attrs)
     |> update_survey_tool()
   end
 
-  def update_survey_tool(_, _), do: nil
+  def update_survey_tool(_, _, _), do: nil
 
   def update_survey_tool(changeset) do
     changeset
@@ -115,39 +91,32 @@ defmodule Core.Survey.Tools do
 
   @doc """
   Deletes a survey_tool.
-
-  ## Examples
-
-      iex> delete_survey_tool(survey_tool)
-      {:ok, %Tool{}}
-
-      iex> delete_survey_tool(survey_tool)
-      {:error, %Ecto.Changeset{}}
-
   """
   def delete_survey_tool(%Tool{} = survey_tool) do
-    Repo.delete(survey_tool)
+    study = Core.Studies.get_study!(survey_tool.study_id)
+    content_node = Core.Content.Nodes.get!(survey_tool.content_node_id)
+    promotion = Core.Promotions.get!(survey_tool.promotion_id)
+
+    Multi.new()
+    |> Multi.delete(:study, study)
+    |> Multi.delete(:promotion, promotion)
+    |> Multi.delete(:content_node, content_node)
+    |> Repo.transaction()
   end
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking survey_tool changes.
-
-  ## Examples
-
-      iex> change_survey_tool(survey_tool)
-      %Ecto.Changeset{data: %Tool{}}
-
   """
-  def change_survey_tool(%Tool{} = survey_tool, _type, attrs \\ %{}) do
-    Tool.changeset(survey_tool, attrs)
+  def change_survey_tool(%Tool{} = survey_tool, type, attrs \\ %{}) do
+    Tool.changeset(survey_tool, type, attrs)
   end
 
   def create_task(survey_tool, user) do
-    Repo.insert(%Task{survey_tool: survey_tool, user: user, status: :pending})
+    Repo.insert(%Task{tool: survey_tool, user: user, status: :pending})
   end
 
   def get_task(survey_tool, user) do
-    Repo.get_by(Task, survey_tool_id: survey_tool.id, user_id: user.id)
+    Repo.get_by(Task, tool_id: survey_tool.id, user_id: user.id)
   end
 
   def get_or_create_task(survey_tool, user) do
@@ -169,7 +138,7 @@ defmodule Core.Survey.Tools do
   end
 
   def list_tasks(survey_tool) do
-    from(t in Task, where: t.survey_tool_id == ^survey_tool.id)
+    from(t in Task, where: t.tool_id == ^survey_tool.id)
     |> Repo.all()
   end
 
@@ -180,7 +149,7 @@ defmodule Core.Survey.Tools do
 
       _ ->
         from(t in Task,
-          where: t.survey_tool_id == ^survey_tool.id and t.status in ^status_list,
+          where: t.tool_id == ^survey_tool.id and t.status in ^status_list,
           select: count(t.id)
         )
         |> Repo.one()
@@ -207,8 +176,7 @@ defmodule Core.Survey.Tools do
   end
 
   def list_participants_without_task(survey_tool) do
-    user_ids_with_task =
-      from(t in Task, where: t.survey_tool_id == ^survey_tool.id, select: t.user_id)
+    user_ids_with_task = from(t in Task, where: t.tool_id == ^survey_tool.id, select: t.user_id)
 
     from(p in Participant,
       where: p.survey_tool_id == ^survey_tool.id and p.user_id not in subquery(user_ids_with_task)
@@ -221,7 +189,7 @@ defmodule Core.Survey.Tools do
     |> Enum.map(
       &(Task.changeset(%Task{}, %{status: :pending})
         |> Ecto.Changeset.put_change(:user_id, &1.user_id)
-        |> Ecto.Changeset.put_assoc(:survey_tool, survey_tool))
+        |> Ecto.Changeset.put_assoc(:tool, survey_tool))
     )
     |> Enum.map(&Repo.insert!(&1))
   end
@@ -255,7 +223,7 @@ defmodule Core.Survey.Tools do
       Authorization.build_role_assignment(user, survey_tool, :participant)
     )
     |> Signals.multi_dispatch(:participant_applied, %{
-      survey_tool: survey_tool,
+      tool: survey_tool,
       user: user
     })
     |> Repo.transaction()
@@ -289,7 +257,7 @@ defmodule Core.Survey.Tools do
     |> Multi.delete_all(
       :task,
       from(t in Task,
-        where: t.survey_tool_id == ^survey_tool.id
+        where: t.tool_id == ^survey_tool.id
       )
     )
     |> Multi.delete_all(

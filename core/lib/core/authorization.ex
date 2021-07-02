@@ -29,10 +29,8 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.User.ConfirmToken, [:visitor])
   grant_access(CoreWeb.User.Profile, [:member])
   grant_access(CoreWeb.User.SecuritySettings, [:member])
-  grant_access(CoreWeb.Study.New, [:researcher])
-  grant_access(CoreWeb.Study.Edit, [:owner])
-  grant_access(CoreWeb.Study.Public, [:visitor, :member])
-  grant_access(CoreWeb.Study.Complete, [:member])
+  grant_access(CoreWeb.Survey.Content, [:owner])
+  grant_access(CoreWeb.Survey.Complete, [:participant])
   grant_access(CoreWeb.FakeSurvey, [:member])
   grant_access(CoreWeb.DataDonation.Content, [:owner])
   grant_access(CoreWeb.DataDonation.Uploader, [:member])
@@ -41,6 +39,10 @@ defmodule Core.Authorization do
   grant_access(Core.Studies.Study, [:visitor, :member])
   grant_access(Core.Survey.Tool, [:owner, :participant])
   grant_access(Core.Survey.Task, [:participant])
+  grant_access(Core.DataDonation.Tool, [:owner, :participant])
+  grant_access(Core.DataDonation.Task, [:participant])
+
+  grant_access(CoreWeb.Study.New, [:researcher])
 
   grant_actions(CoreWeb.DashboardController, %{
     index: [:member]
