@@ -1,5 +1,5 @@
-defmodule CoreWeb.ViewModel.Card do
-  alias Core.DataDonation
+defmodule Link.Dashboard.Card do
+  alias Core.Survey.Tools
   alias Core.ImageHelpers
   alias CoreWeb.Router.Helpers, as: Routes
   import CoreWeb.Gettext
@@ -7,10 +7,10 @@ defmodule CoreWeb.ViewModel.Card do
   def primary_study(
         %{
           id: id,
-          data_donation_tool:
+          survey_tool:
             %{
               id: edit_id,
-              script: _script,
+              duration: duration,
               subject_count: subject_count,
               reward_currency: reward_currency,
               reward_value: reward_value,
@@ -29,18 +29,20 @@ defmodule CoreWeb.ViewModel.Card do
     subject_count = if subject_count === nil, do: 0, else: subject_count
     reward_value = if reward_value === nil, do: 0, else: reward_value
     reward_currency = if reward_currency === nil, do: :eur, else: reward_currency
+    duration = if duration === nil, do: 0, else: duration
 
-    occupied_spot_count = DataDonation.Tools.count_tasks(tool, [:pending, :completed])
+    occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
     open_spot_count = subject_count - occupied_spot_count
 
     reward_string = CurrencyFormatter.format(reward_value, reward_currency, keep_decimals: true)
 
+    duration_label = dgettext("eyra-promotion", "duration.title")
     reward_label = dgettext("eyra-promotion", "reward.title")
     open_spots_label = dgettext("eyra-promotion", "open.spots.label", count: "#{open_spot_count}")
     deadline_label = dgettext("eyra-promotion", "deadline.label", days: "3")
 
     info = [
-      "#{reward_label}: #{reward_string}",
+      "#{duration_label}: #{duration} min. | #{reward_label}: #{reward_string}",
       "#{open_spots_label}",
       "#{deadline_label}"
     ]
@@ -59,7 +61,7 @@ defmodule CoreWeb.ViewModel.Card do
       title: title,
       image_info: image_info,
       tags: tags,
-      duration: nil,
+      duration: duration,
       info: info,
       icon_url: icon_url,
       label: label

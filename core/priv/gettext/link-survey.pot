@@ -1,0 +1,131 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:113
+msgid "config.nrofsubjects.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:104
+msgid "config.url.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:122
+msgid "delete.button"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:107
+msgid "duration.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:65
+msgid "by.author.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/complete.ex:56
+msgid "thank.you.message"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:78
+msgid "available.future.highlight.text"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:75
+msgid "available.highlight.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:83
+msgid "reward.highlight.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:72
+msgid "spots.highlight.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:46
+msgid "apply.cta.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/complete.ex:52
+msgid "conpleted.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:117
+msgid "devices.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:52
+msgid "open.cta.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:98
+msgid "redirect.description"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:97
+msgid "redirect.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:110
+msgid "reward.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:116
+msgid "devices.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:100
+msgid "redirect.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/monitor.ex:19
+msgid "completed.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/monitor.ex:20
+msgid "pending.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/monitor.ex:16
+msgid "status.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/monitor.ex:21
+msgid "vacant.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/monitor.ex:17
+msgid "status.label"
+msgstr ""

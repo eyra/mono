@@ -12,7 +12,7 @@ defmodule Link.Dashboard do
   alias Core.Content
   alias Core.Promotions
 
-  alias CoreWeb.ViewModel.Card, as: CardVM
+  alias Link.Dashboard.Card, as: CardVM
 
   alias EyraUI.Card.{PrimaryStudy, SecondaryStudy, ButtonCard}
   alias EyraUI.Hero.HeroLarge
@@ -67,7 +67,7 @@ defmodule Link.Dashboard do
   end
 
   def handle_info({:handle_click, %{action: :edit, id: id}}, socket) do
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Survey.Content, id))}
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, Link.Survey.Content, id))}
   end
 
   def handle_info({:handle_click, %{action: :public, id: id}}, socket) do
@@ -76,7 +76,7 @@ defmodule Link.Dashboard do
 
   def handle_event("create_tool", _params, socket) do
     tool = create_tool(socket)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Survey.Content, tool.id))}
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, Link.Survey.Content, tool.id))}
   end
 
   defp create_tool(socket) do

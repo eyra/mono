@@ -16,7 +16,8 @@ config :logger, :console,
   metadata: [:request_id]
 
 config :core,
-  image_catalog: Core.ImageCatalog.Unsplash
+  image_catalog: Core.ImageCatalog.Unsplash,
+  promotion_plugins: [data_donation: CoreWeb.DataDonation.PromotionPlugin]
 
 config :core, CoreWeb.Gettext, default_locale: "nl", locales: ~w(en nl)
 

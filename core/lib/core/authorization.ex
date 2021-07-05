@@ -29,8 +29,6 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.User.ConfirmToken, [:visitor])
   grant_access(CoreWeb.User.Profile, [:member])
   grant_access(CoreWeb.User.SecuritySettings, [:member])
-  grant_access(CoreWeb.Survey.Content, [:owner])
-  grant_access(CoreWeb.Survey.Complete, [:participant])
   grant_access(CoreWeb.FakeSurvey, [:member])
   grant_access(CoreWeb.DataDonation.Content, [:owner])
   grant_access(CoreWeb.DataDonation.Uploader, [:member])
@@ -70,22 +68,6 @@ defmodule Core.Authorization do
     edit: [:owner],
     update: [:owner],
     delete: [:owner]
-  })
-
-  grant_actions(CoreWeb.SurveyToolController, %{
-    index: [:owner],
-    show: [:owner, :participant],
-    new: [:owner],
-    create: [:owner],
-    edit: [:owner],
-    update: [:owner],
-    delete: [:owner]
-  })
-
-  grant_actions(CoreWeb.SurveyToolTaskController, %{
-    start: [:participant],
-    complete: [:participant],
-    setup_tasks: [:owner]
   })
 
   grant_actions(CoreWeb.PageController, %{

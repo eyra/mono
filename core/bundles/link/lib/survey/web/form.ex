@@ -1,4 +1,4 @@
-defmodule CoreWeb.Survey.Form do
+defmodule Link.Survey.Form do
   use CoreWeb.LiveForm
   use EyraUI.Selectors.LabelSelector
 
@@ -94,32 +94,32 @@ defmodule CoreWeb.Survey.Form do
       <ContentArea>
         <Form id={{@id}} changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
           <Panel bg_color="bg-grey1">
-            <Title3 color="text-white">{{dgettext("eyra-survey", "redirect.title")}}</Title3>
-            <BodyMedium color="text-white">{{dgettext("eyra-survey", "redirect.description")}}</BodyMedium>
+            <Title3 color="text-white">{{dgettext("link-survey", "redirect.title")}}</Title3>
+            <BodyMedium color="text-white">{{dgettext("link-survey", "redirect.description")}}</BodyMedium>
             <Spacing value="S" />
-            <Title6 color="text-white">{{dgettext("eyra-survey", "redirect.label")}}</Title6>
-            <BodyMedium color="text-tertiary">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, CoreWeb.Survey.Complete, @entity_id)}}</BodyMedium>
+            <Title6 color="text-white">{{dgettext("link-survey", "redirect.label")}}</Title6>
+            <BodyMedium color="text-tertiary">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Link.Survey.Complete, @entity_id)}}</BodyMedium>
           </Panel>
           <Spacing value="L" />
-          <UrlInput field={{:survey_url}} label_text={{dgettext("eyra-survey", "config.url.label")}} target={{@myself}}/>
+          <UrlInput field={{:survey_url}} label_text={{dgettext("link-survey", "config.url.label")}} target={{@myself}}/>
           <Spacing value="M" />
 
-          <TextInput field={{:duration}} label_text={{dgettext("eyra-survey", "duration.label")}} target={{@myself}} />
+          <TextInput field={{:duration}} label_text={{dgettext("link-survey", "duration.label")}} target={{@myself}} />
           <Spacing value="M" />
 
-          <NumberInput field={{:reward_value}} label_text={{dgettext("eyra-survey", "reward.label")}} target={{@myself}} />
+          <NumberInput field={{:reward_value}} label_text={{dgettext("link-survey", "reward.label")}} target={{@myself}} />
           <Spacing value="M" />
 
-          <NumberInput field={{:subject_count}} label_text={{dgettext("eyra-survey", "config.nrofsubjects.label")}} target={{@myself}} />
+          <NumberInput field={{:subject_count}} label_text={{dgettext("link-survey", "config.nrofsubjects.label")}} target={{@myself}} />
           <Spacing value="M" />
 
-          <Title3>{{dgettext("eyra-survey", "devices.title")}}</Title3>
-          <BodyMedium>{{dgettext("eyra-survey", "devices.label")}}</BodyMedium>
+          <Title3>{{dgettext("link-survey", "devices.title")}}</Title3>
+          <BodyMedium>{{dgettext("link-survey", "devices.label")}}</BodyMedium>
           <Spacing value="XS" />
           <LabelSelector labels={{ @form_data.device_labels }} target={{@myself}}/>
         </Form>
         <Spacing value="XL" />
-        <SecondaryLiveViewButton label={{ dgettext("eyra-survey", "delete.button") }} event="delete" target={{@myself}} />
+        <SecondaryLiveViewButton label={{ dgettext("link-survey", "delete.button") }} event="delete" target={{@myself}} />
       </ContentArea>
     """
   end

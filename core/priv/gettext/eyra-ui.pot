@@ -11,13 +11,13 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/data_donation/content.ex:131
-#: lib/core_web/live/survey/content.ex:147
+#: bundles/link/lib/survey/web/content.ex:6
+#: lib/core_web/live/data_donation/content.ex:6
 msgid "error.flash"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/data_donation/content.ex:136
-#: lib/core_web/live/survey/content.ex:152
+#: bundles/link/lib/survey/web/content.ex:6
+#: lib/core_web/live/data_donation/content.ex:6
 msgid "saved.info.flash"
 msgstr ""

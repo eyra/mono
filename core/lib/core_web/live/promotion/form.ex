@@ -142,7 +142,7 @@ defmodule CoreWeb.Promotion.Form do
             <ImagePreview image_url={{ @form_data.image_url }} placeholder="" />
             <Spacing value="S" direction="l" />
             <div class="flex-wrap">
-              <SecondaryAlpineButton click="$parent.open = true, $parent.$parent.overlay = true" label={{dgettext("eyra-survey", "search.different.image.button")}} />
+              <SecondaryAlpineButton click="$parent.open = true, $parent.$parent.overlay = true" label={{dgettext("eyra-promotion", "search.different.image.button")}} />
             </div>
           </div>
           <Spacing value="XL" />

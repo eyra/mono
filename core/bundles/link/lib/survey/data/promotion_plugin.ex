@@ -1,4 +1,4 @@
-defmodule CoreWeb.Survey.PromotionPlugin do
+defmodule Link.Survey.PromotionPlugin do
   import CoreWeb.Gettext
 
   alias Core.Studies
@@ -43,13 +43,13 @@ defmodule CoreWeb.Survey.PromotionPlugin do
     case Tools.participant?(tool, user) do
       false ->
         %CallToAction{
-          label: dgettext("eyra-survey", "apply.cta.title"),
+          label: dgettext("link-survey", "apply.cta.title"),
           target: %Target{type: :event, value: "apply"}
         }
 
       true ->
         %CallToAction{
-          label: dgettext("eyra-survey", "open.cta.title"),
+          label: dgettext("link-survey", "open.cta.title"),
           target: %Target{type: :event, value: "open"}
         }
     end
@@ -62,25 +62,25 @@ defmodule CoreWeb.Survey.PromotionPlugin do
       |> Enum.map(& &1.fullname)
       |> Enum.join(", ")
 
-    "#{dgettext("eyra-survey", "by.author.label")}: " <> authors
+    "#{dgettext("link-survey", "by.author.label")}: " <> authors
   end
 
   defp get_highlights(tool) do
     occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
     open_spot_count = tool.subject_count - occupied_spot_count
 
-    spots_title = dgettext("eyra-survey", "spots.highlight.title")
+    spots_title = dgettext("link-survey", "spots.highlight.title")
     spots_text = "Nog #{open_spot_count} van #{tool.subject_count}"
 
-    available_title = dgettext("eyra-survey", "available.highlight.title")
+    available_title = dgettext("link-survey", "available.highlight.title")
 
     available_text =
-      dgettext("eyra-survey", "available.future.highlight.text",
+      dgettext("link-survey", "available.future.highlight.text",
         from: "15 june",
         till: "15 augustus 2021"
       )
 
-    reward_title = dgettext("eyra-survey", "reward.highlight.title")
+    reward_title = dgettext("link-survey", "reward.highlight.title")
 
     reward_text =
       CurrencyFormatter.format(tool.reward_value, tool.reward_currency, keep_decimals: true)
