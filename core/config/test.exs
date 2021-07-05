@@ -27,4 +27,6 @@ config :core, CoreWeb.Endpoint,
   force_ssl: false,
   server: false
 
+config :core, Oban, queues: false, plugins: false
+
 config :core, Core.SurfConext, oidc_module: Core.SurfContext.FakeOIDC

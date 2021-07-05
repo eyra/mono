@@ -934,6 +934,13 @@
     "estree-walker" "^1.0.1"
     "picomatch" "^2.2.2"
 
+"@ryangjchandler/spruce@^2.7.1":
+  "integrity" "sha512-UfSt3iYDCnErtK6p8OntDIbXYQMmzkozaLONckIqCkSgMSlqPd2VjHB/0IaBcFrbRHhhxHMOvieuiUoYg//s/g=="
+  "resolved" "https://registry.npmjs.org/@ryangjchandler/spruce/-/spruce-2.7.1.tgz"
+  "version" "2.7.1"
+  dependencies:
+    "alpinejs" "^2.5"
+
 "@stylelint/postcss-css-in-js@^0.37.2":
   "integrity" "sha512-nEhsFoJurt8oUmieT8qy4nk81WRHmJynmVwn/Vts08PL9fhgIsMhk1GId5yAN643OzqEEb5S/6At2TZW7pqPDA=="
   "resolved" "https://registry.npmjs.org/@stylelint/postcss-css-in-js/-/postcss-css-in-js-0.37.2.tgz"
@@ -1241,7 +1248,7 @@
   dependencies:
     "deep-diff" "^1.0.2"
 
-"alpinejs@^2.8.2":
+"alpinejs@^2.5", "alpinejs@^2.8.2":
   "integrity" "sha512-5yOUtckn4CBp0qsHpo2qgjZyZit84uXvHbB7NJ27sn4FA6UlFl2i9PGUAdTXkcbFvvxDJBM+zpOD8RuNYFvQAw=="
   "resolved" "https://registry.npmjs.org/alpinejs/-/alpinejs-2.8.2.tgz"
   "version" "2.8.2"
@@ -4875,11 +4882,11 @@
 
 "phoenix_live_view@file:../deps/phoenix_live_view":
   "resolved" "file:../deps/phoenix_live_view"
-  "version" "0.15.4"
+  "version" "0.15.7"
 
 "phoenix@file:../deps/phoenix":
   "resolved" "file:../deps/phoenix"
-  "version" "1.5.8"
+  "version" "1.5.9"
 
 "picomatch@^2.0.4", "picomatch@^2.0.5", "picomatch@^2.2.1", "picomatch@^2.2.2":
   "integrity" "sha512-q0M/9eZHzmr0AulXyPwNfZjtwZ/RBZlbN3K3CErVrk50T2ASYI7Bye0EvekFY3IP1Nt2DHu0re+V2ZHIpMkuWg=="

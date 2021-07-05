@@ -1,0 +1,36 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/dashboard.ex:148
+msgid "add.card.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/dashboard.ex:136
+msgid "highlighted.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/dashboard.ex:155
+msgid "marketplace.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/dashboard.ex:133
+msgid "title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/dashboard.ex:86 lib/core_web/live/dashboard.ex:93
+msgid "default.study.title"
+msgstr ""

@@ -13,6 +13,7 @@ defmodule EyraUI.Form.Input do
   prop(label_text, :string)
   prop(label_color, :css_class, default: "text-grey1")
   prop(background, :atom, default: :light)
+  prop(target, :any)
 
   def render(assigns) do
     ~H"""
@@ -26,8 +27,9 @@ defmodule EyraUI.Form.Input do
           x-bind:class="{ '{{focus_border_color(@background)}}': focus === '{{@field}}', '{{border_color(assigns, @form)}}': focus !== '{{@field}}' }"
           x-on:focus="focus = '{{ @field }}'"
           x-on:click.stop
-          sphx-focus="focus"
+          phx-focus="focus"
           phx-value-field={{ @field }}
+          phx-target={{ @target }}
         />
       </Field>
     """

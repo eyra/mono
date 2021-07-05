@@ -71,7 +71,7 @@ defmodule Core.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:faker, "~> 0.16"},
-      {:surface, "~> 0.1.0"},
+      {:surface, "~> 0.4.0"},
       {:timex, "~> 3.6"},
       {:bamboo, "~> 2.0.1"},
       {:bamboo_phoenix, "~> 1.0.0"},
@@ -79,6 +79,9 @@ defmodule Core.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:currency_formatter, "~> 0.4"},
       {:web_push_encryption, "~> 0.3"},
+      {:pigeon, "~> 1.6.1"},
+      {:kadabra, "~> 0.6.0"},
+      {:oban, "~> 2.7"},
       # i18n
       {:ex_cldr, "~> 2.18"},
       {:ex_cldr_numbers, "~> 2.16"},

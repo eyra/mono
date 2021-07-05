@@ -2,7 +2,18 @@ defmodule CoreWeb.FileUploader do
   @moduledoc """
   """
 
+  @allowed_filename_pattern ~r"^[a-z0-9][a-z0-9\-]+[a-z0-9]\.[a-z]{3,4}$"
+
   @callback save_file(socket :: Socket.t(), uploaded_file :: any()) :: Socket.t()
+
+  def get_static_path(filename) do
+    unless Regex.match?(@allowed_filename_pattern, filename) do
+      throw(:invalid_filename)
+    end
+
+    root = Application.get_env(:core, :static_path, "priv/static/uploads")
+    Path.join(root, filename)
+  end
 
   defmacro __using__(_opts) do
     quote do
@@ -32,7 +43,7 @@ defmodule CoreWeb.FileUploader do
       def consume_file(socket, entry) do
         consume_uploaded_entry(socket, entry, fn %{path: path} ->
           file = "#{entry.uuid}.#{ext(entry)}"
-          dest = Path.join("priv/static/uploads", file)
+          dest = CoreWeb.FileUploader.get_static_path(file)
           File.cp!(path, dest)
           CoreWeb.Router.Helpers.static_path(socket, "/uploads/#{file}")
         end)

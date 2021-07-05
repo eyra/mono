@@ -39,3 +39,13 @@ config :core, Core.ImageCatalog.Unsplash,
 
 config :exsync,
   addition_dirs: ["../../frameworks"]
+
+config :web_push_encryption, :vapid_details,
+  subject: "mailto:administrator@example.com",
+  public_key:
+    "BLddMfMPHE67WZkYxELLBedpRNvJMj7xTbn8ZsObC_0c1-p-AsHl7ndhoty2YURTgCR0XMPm6Mf-74FnwH32fhw",
+  private_key: "yWo9lKKkdbN1IGQH8aUlk3u_Shemyh8CmtDnJoNdhBk"
+
+config :core, :apns_backend, backend: Core.APNS.LoggingBackend
+
+config :core, :static_path, "/Users/emiel"

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddCascadingDeleteToSurveyTools do
+defmodule Core.Repo.Migrations.AddCascadingDeleteToTools do
   use Ecto.Migration
 
   def up do

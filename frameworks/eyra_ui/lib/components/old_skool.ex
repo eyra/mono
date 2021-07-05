@@ -1,17 +1,25 @@
 defmodule EyraUI.Components.OldSkool do
   import Phoenix.HTML
+  import Phoenix.LiveView.Helpers
 
   @moduledoc """
   Conveniences for reusable UI components
   """
 
+  def native_wrapper?(%{req_headers: req_headers}) do
+    req_headers
+    |> Enum.into(%{})
+    |> Map.get("user-agent", "")
+    |> String.contains?("NativeWrapper")
+  end
+
   def menu_button(label, path) do
     ~E"""
-    <a href= <%= path %>>
+    <%= live_redirect to: path do %>
       <div class="flex items-center h-10 pl-3 pr-3 lg:pl-4 lg:pr-4 text-button font-button rounded-full hover:bg-grey4 focus:outline-none">
         <div><%= label %></div>
       </div>
-    </a>
+    <% end %>
     """
   end
 

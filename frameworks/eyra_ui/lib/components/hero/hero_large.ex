@@ -13,7 +13,8 @@ defmodule EyraUI.Hero.HeroLarge do
 
   def render(assigns) do
     ~H"""
-    <div class={{"flex", "h-header1", "items-center", "sm:h-header1-sm", "lg:h-header1-lg", "mb-9", "lg:mb-16", @text_color,  @bg_color }}>
+    <div class={{"flex", "h-header1", "items-center", "sm:h-header1-sm", "lg:h-header1-lg", "mb-9", "lg:mb-16", @text_color,  @bg_color }}
+         data-native-title={{@title}}>
       <div class="flex-grow flex-shrink-0">
         <p class="text-title5 sm:text-title2 lg:text-title1 font-title1 ml-6 mr-6 lg:ml-14">
           {{ @title }}<br>{{ @subtitle }}

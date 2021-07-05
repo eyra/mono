@@ -3,7 +3,18 @@ defmodule Core.Factories do
   This module provides factory function to be used for tests.
   """
   alias Core.Accounts.{User, Profile}
-  alias Core.{Studies, SurveyTools, Authorization, DataUploader, WebPush}
+
+  alias Core.{
+    Studies,
+    Content,
+    Promotions,
+    Survey,
+    Authorization,
+    DataDonation,
+    NotificationCenter,
+    WebPush
+  }
+
   alias Core.Repo
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
@@ -61,7 +72,8 @@ defmodule Core.Factories do
       :survey_tool_participant,
       %{
         survey_tool: build(:survey_tool),
-        user: build(:member)
+        user: build(:member),
+        auth_node: build(:auth_node)
       }
     )
   end
@@ -70,16 +82,46 @@ defmodule Core.Factories do
     build(:survey_tool, %{})
   end
 
-  def build(:client_script) do
-    build(:survey_tool, %{})
-  end
+  # def build(:client_script) do
+  #   %DataDonation.Tool{
+  #     title: Faker.Lorem.sentence(),
+  #     script: "print 'hello'"
+  #   }
+
+  # end
 
   def build(:role_assignment) do
     %Authorization.RoleAssignment{}
   end
 
   def build(:participant) do
-    %SurveyTools.Participant{}
+    %Survey.Participant{}
+  end
+
+  def build(:promotion) do
+    %Promotions.Promotion{}
+  end
+
+  def build(:content_node) do
+    %Content.Node{ready: true}
+  end
+
+  def build(:notification_box, %{user: user} = attributes) do
+    auth_node =
+      build(:auth_node, %{
+        role_assignments: [
+          %{
+            role: :owner,
+            principal_id: GreenLight.Principal.id(user)
+          }
+        ]
+      })
+
+    %NotificationCenter.Box{}
+    |> struct!(
+      Map.delete(attributes, :user)
+      |> Map.put(:auth_node, auth_node)
+    )
   end
 
   def build(:author, %{} = attributes) do
@@ -113,34 +155,68 @@ defmodule Core.Factories do
     )
   end
 
+  def build(:content_node, %{} = attributes) do
+    %Content.Node{}
+    |> struct!(attributes)
+  end
+
+  def build(:promotion, %{} = attributes) do
+    {study, attributes} = Map.pop!(attributes, :study)
+    {parent_content_node, attributes} = Map.pop!(attributes, :parent_content_node)
+
+    %Promotions.Promotion{
+      content_node: build(:content_node, %{parent: parent_content_node}),
+      auth_node: build(:auth_node, %{parent: study.auth_node})
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:data_donation_tool, %{} = attributes) do
+    {content_node, attributes} = Map.pop(attributes, :content_node, build(:content_node, %{}))
+    {study, attributes} = Map.pop(attributes, :study, build(:study))
+
+    {promotion, attributes} =
+      Map.pop(
+        attributes,
+        :promotion,
+        build(:promotion, %{study: study, parent_content_node: content_node})
+      )
+
+    %DataDonation.Tool{
+      content_node: content_node,
+      auth_node: build(:auth_node, %{parent: study.auth_node}),
+      study: study,
+      promotion: promotion
+    }
+    |> struct!(attributes)
+  end
+
   def build(:survey_tool_participant, %{} = attributes) do
     survey_tool = Map.get(attributes, :survey_tool, build(:survey_tool))
     user = Map.get(attributes, :user, build(:member))
 
-    %SurveyTools.Participant{
+    %Survey.Participant{
       survey_tool: survey_tool,
       user: user
     }
   end
 
   def build(:survey_tool, %{} = attributes) do
+    {content_node, attributes} = Map.pop(attributes, :content_node, build(:content_node, %{}))
     {study, attributes} = Map.pop(attributes, :study, build(:study))
 
-    %SurveyTools.SurveyTool{
-      auth_node: build(:auth_node, %{parent: study.auth_node}),
-      title: Faker.Lorem.sentence(),
-      study: study
-    }
-    |> struct!(attributes)
-  end
+    {promotion, attributes} =
+      Map.pop(
+        attributes,
+        :promotion,
+        build(:promotion, %{study: study, parent_content_node: content_node})
+      )
 
-  def build(:client_script, %{} = attributes) do
-    {study, attributes} = Map.pop(attributes, :study, build(:study))
-
-    %DataUploader.ClientScript{
+    %Survey.Tool{
+      content_node: content_node,
       auth_node: build(:auth_node, %{parent: study.auth_node}),
-      script: "def process():\n\tprint('hello')",
-      study: study
+      study: study,
+      promotion: promotion
     }
     |> struct!(attributes)
   end
@@ -156,9 +232,9 @@ defmodule Core.Factories do
   def insert!(:survey_tool_task, %{} = attributes) do
     %{survey_tool: survey_tool, user: member} = insert!(:survey_tool_participant)
 
-    %SurveyTools.SurveyToolTask{
+    %Survey.Task{
       user: member,
-      survey_tool: survey_tool,
+      tool: survey_tool,
       status: :pending
     }
     |> struct!(attributes)

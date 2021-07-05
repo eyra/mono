@@ -3,6 +3,8 @@ import Config
 if config_env() == :prod do
   host = System.fetch_env!("BUNDLE_DOMAIN")
 
+  config :core, :static_path, System.fetch_env!("STATIC_PATH")
+
   config :core, CoreWeb.Endpoint,
     cache_static_manifest: "priv/static/cache_manifest.json",
     server: true,
@@ -56,4 +58,9 @@ if config_env() == :prod do
     emails: [System.get_env("LETS_ENCRYPT_EMAIL", "admin@#{host}")],
     directory_url: System.get_env("LETS_ENCRYPT_DIRECTORY_URL"),
     db_folder: System.get_env("LETS_ENCRYPT_DB")
+
+  config :web_push_encryption, :vapid_details,
+    subject: "mailto:admin@#{host}",
+    public_key: System.get_env("WEB_PUSH_PUBLIC_KEY"),
+    private_key: System.get_env("WEB_PUSH_PRIVATE_KEY")
 end

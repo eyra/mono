@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Link</title>
+    <title>Eyra Next</title>
     <%= csrf_meta_tag() %>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -16,7 +16,10 @@
     />
     <script src="<%= Routes.static_path(@conn, "/js/app.js") %>" defer></script>
   </head>
-  <body class="font-body bg-grey5" x-data="{ overlay: false }">
+  <body class="font-body bg-grey5"
+        x-data="{ overlay: false, menu: true }"
+        :class="{'menu': menu}"
+        @toggle-menu="menu = !menu">
     <div class="fixed z-10 w-full h-full bg-black bg-opacity-30" x-show="overlay"></div>
     <div class="flex flex-row min-h-screen">
       <div
@@ -55,18 +58,19 @@
       <div class="w-0 lg:w-sidebar"></div>
       <div class="w-full">
         <div class="flex flex-col h-full">
+          <%= if not native_wrapper?(@conn) do %>
           <header class="flex-wrap">
             <nav
               class="flex items-center h-topbar sm:h-topbar-sm lg:h-topbar-lg"
             >
               <div class="flex-none pl-4 lg:pl-0">
-                <a href="/">
+                <%= live_redirect to: "/" do %>
                   <img
                     class="h-logo sm:h-logo-sm"
                     src="<%= Routes.static_path(@conn, "/images/eyra-logo.svg") %>"
                     alt="Eyra Link Logo"
                   />
-                </a>
+                  <% end %>
               </div>
               <div class="flex-grow ml-2 lg:ml-6">
                 <div class="flex items-center">
@@ -93,6 +97,7 @@
               </div>
             </nav>
           </header>
+          <% end %>
           <div class="flex-grow">
             <div class="flex flex-col h-full bg-white">
               <div class="flex-wrap"></div>

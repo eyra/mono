@@ -20,6 +20,7 @@ defmodule Core.Authorization do
 
   grant_access(CoreWeb.Index, [:visitor, :member])
   grant_access(CoreWeb.Dashboard, [:member])
+  grant_access(CoreWeb.Notifications, [:member])
   grant_access(CoreWeb.User.Signin, [:visitor])
   grant_access(CoreWeb.User.Signup, [:visitor])
   grant_access(CoreWeb.User.ResetPassword, [:visitor])
@@ -28,15 +29,20 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.User.ConfirmToken, [:visitor])
   grant_access(CoreWeb.User.Profile, [:member])
   grant_access(CoreWeb.User.SecuritySettings, [:member])
-  grant_access(CoreWeb.Study.New, [:researcher])
-  grant_access(CoreWeb.Study.Edit, [:owner])
-  grant_access(CoreWeb.Study.Public, [:visitor, :member])
-  grant_access(CoreWeb.Study.Complete, [:member])
+  grant_access(CoreWeb.Survey.Content, [:owner])
+  grant_access(CoreWeb.Survey.Complete, [:participant])
   grant_access(CoreWeb.FakeSurvey, [:member])
+  grant_access(CoreWeb.DataDonation.Content, [:owner])
+  grant_access(CoreWeb.DataDonation.Uploader, [:member])
+  grant_access(CoreWeb.Promotion.Public, [:visitor, :member, :owner])
 
   grant_access(Core.Studies.Study, [:visitor, :member])
-  grant_access(Core.SurveyTools.SurveyTool, [:owner, :participant])
-  grant_access(Core.SurveyTools.SurveyToolTask, [:participant])
+  grant_access(Core.Survey.Tool, [:owner, :participant])
+  grant_access(Core.Survey.Task, [:participant])
+  grant_access(Core.DataDonation.Tool, [:owner, :participant])
+  grant_access(Core.DataDonation.Task, [:participant])
+
+  grant_access(CoreWeb.Study.New, [:researcher])
 
   grant_actions(CoreWeb.DashboardController, %{
     index: [:member]
@@ -154,5 +160,14 @@ defmodule Core.Authorization do
 
   def can_access?(principal, entity, module) when is_atom(module) do
     can?(principal, entity, GreenLight.Permissions.access_permission(module))
+  end
+
+  def users_with_role(entity, role) do
+    principal_ids = Core.Authorization.query_principal_ids(role: role, entity: entity)
+
+    Ecto.Query.from(u in Core.Accounts.User,
+      where: u.id in subquery(principal_ids)
+    )
+    |> Core.Repo.all()
   end
 end
