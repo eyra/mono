@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/content.ex:70
+#: lib/core_web/live/data_donation/content.ex:64
 msgid "content.title"
 msgstr "Data Donation"
 
@@ -87,7 +87,7 @@ msgid "reward.highlight.title"
 msgstr "Reward"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/uploader.ex:58
+#: lib/core_web/live/data_donation/uploader.ex:43
 msgid "uploader.title"
 msgstr "Data Donation"
 

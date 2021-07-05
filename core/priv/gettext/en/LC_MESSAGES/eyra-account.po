@@ -72,18 +72,6 @@ msgid "signup.title"
 msgstr "Sign up"
 
 #, elixir-format
-#: lib/core_web/live/survey_tool/edit.ex:36
-#: lib/core_web/live/survey_tool/new.ex:43
-msgid "survey_url.label"
-msgstr ""
-
-#, elixir-format
-#: lib/core_web/live/survey_tool/edit.ex:35
-#: lib/core_web/live/survey_tool/new.ex:42
-msgid "title.label"
-msgstr "Email"
-
-#, elixir-format
 #: lib/core_web/live/user/profile.ex:147
 msgid "signout.button"
 msgstr "Sign out"

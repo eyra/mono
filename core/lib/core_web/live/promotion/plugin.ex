@@ -16,7 +16,7 @@ defmodule CoreWeb.Promotion.Plugin do
           byline: binary
         }
 
-  @type handle_event_result :: binary
+  @type get_cta_path_result :: binary
 
   @doc """
   Delivers info to embed the tool on the public promotions page
@@ -27,5 +27,5 @@ defmodule CoreWeb.Promotion.Plugin do
   Handles event from call to action
   """
 
-  @callback handle_event(promotion, event, socket) :: handle_event_result
+  @callback get_cta_path(promotion, event, socket) :: get_cta_path_result
 end

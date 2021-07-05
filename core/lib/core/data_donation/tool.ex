@@ -16,6 +16,7 @@ defmodule Core.DataDonation.Tool do
   alias Core.DataDonation.UserData
 
   schema "data_donation_tools" do
+    belongs_to(:content_node, Core.Content.Node)
     belongs_to(:auth_node, Core.Authorization.Node)
     belongs_to(:study, Study)
     belongs_to(:promotion, Promotion)
@@ -25,7 +26,6 @@ defmodule Core.DataDonation.Tool do
     field(:reward_value, :integer)
     field(:subject_count, :integer)
 
-    belongs_to(:content_node, Core.Content.Node)
     has_many(:tasks, Core.DataDonation.Task)
     many_to_many(:participants, User, join_through: :data_donation_participants)
 

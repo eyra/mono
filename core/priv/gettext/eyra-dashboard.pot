@@ -31,6 +31,6 @@ msgid "title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:93
+#: bundles/link/dashboard.ex:86 lib/core_web/live/dashboard.ex:93
 msgid "default.study.title"
 msgstr ""

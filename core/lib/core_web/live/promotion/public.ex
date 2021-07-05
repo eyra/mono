@@ -25,9 +25,14 @@ defmodule CoreWeb.Promotion.Public do
   data(plugin_info, :any)
   data(transient, :any)
 
+  @plugins %{
+    "data_donation" => CoreWeb.DataDonation.PromotionPlugin,
+    "survey" => CoreWeb.Survey.PromotionPlugin
+  }
+
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
     promotion = Promotions.get!(id)
-    plugin = promotion |> load_plugin()
+    plugin = load_plugin(promotion)
     plugin_info = plugin.info(id, socket)
 
     transient = %{
@@ -49,8 +54,8 @@ defmodule CoreWeb.Promotion.Public do
     }
   end
 
-  def load_plugin(_promotion) do
-    CoreWeb.DataDonation.PromotionPlugin
+  def load_plugin(%{plugin: plugin}) do
+    @plugins[plugin]
   end
 
   def handle_event(
@@ -58,7 +63,7 @@ defmodule CoreWeb.Promotion.Public do
         _params,
         %{assigns: %{promotion: promotion, plugin: plugin, plugin_info: plugin_info}} = socket
       ) do
-    path = plugin.handle_event(promotion.id, plugin_info.call_to_action.target.value, socket)
+    path = plugin.get_cta_path(promotion.id, plugin_info.call_to_action.target.value, socket)
     {:noreply, push_redirect(socket, to: path)}
   end
 

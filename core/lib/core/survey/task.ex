@@ -1,15 +1,15 @@
-defmodule Core.SurveyTools.SurveyToolTask do
+defmodule Core.Survey.Task do
   @moduledoc """
   A task (fill out survey) to be completed by a participant.
   """
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Core.SurveyTools.SurveyTool
+  alias Core.Survey.Tool
   alias Core.Accounts.User
 
   schema "survey_tool_tasks" do
-    belongs_to(:survey_tool, SurveyTool)
+    belongs_to(:tool, Tool)
     belongs_to(:user, User)
     field(:status, Ecto.Enum, values: [:pending, :completed])
 

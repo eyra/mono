@@ -12,12 +12,12 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/dashboard.ex:110
+#: bundles/link/dashboard.ex:128
 msgid "study.index.subtitle"
 msgstr "Studies"
 
 #, elixir-format
-#: bundles/link/dashboard.ex:109
+#: bundles/link/dashboard.ex:127
 msgid "study.index.title"
 msgstr "Overview"
 
@@ -27,83 +27,66 @@ msgid "dashboard.button"
 msgstr "Dashboard"
 
 #, elixir-format
-#: bundles/link/dashboard.ex:133
+#: bundles/link/dashboard.ex:151
 msgid "study.all.title"
 msgstr "Available studies:"
 
 #, elixir-format
-#: bundles/link/dashboard.ex:114
+#: bundles/link/dashboard.ex:132
 msgid "study.highlighted.title"
 msgstr "My studies:"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:191
-msgid "study.edit.title"
-msgstr "Study"
-
-#, elixir-format
-#: lib/core_web/live/study/edit.ex:222
-msgid "title.label"
-msgstr "Title"
-
-#, elixir-format
-#: bundles/link/dashboard.ex:126
+#: bundles/link/dashboard.ex:144
 msgid "add.card.title"
 msgstr "Set up a new study"
 
 #, elixir-format
-#: lib/core_web/live/study/complete.ex:54
-msgid "study.public.title"
-msgstr "Study"
-
-#, elixir-format
-#: lib/core/promotions/form_data.ex:17 lib/core/studies/study_edit.ex:18
-#: lib/core/studies/study_public.ex:14
+#: lib/core/promotions/form_data.ex:17
 msgid "themes.art"
 msgstr "Art"
 
 #, elixir-format
-#: lib/core/promotions/form_data.ex:17 lib/core/studies/study_edit.ex:18
-#: lib/core/studies/study_public.ex:14
+#: lib/core/promotions/form_data.ex:17
 msgid "themes.health"
 msgstr "Health"
 
 #, elixir-format
-#: lib/core/promotions/form_data.ex:17 lib/core/studies/study_edit.ex:18
-#: lib/core/studies/study_public.ex:14
+#: lib/core/promotions/form_data.ex:17
 msgid "themes.history"
 msgstr "History"
 
 #, elixir-format
-#: lib/core/promotions/form_data.ex:17 lib/core/studies/study_edit.ex:18
-#: lib/core/studies/study_public.ex:14
+#: lib/core/promotions/form_data.ex:17
 msgid "themes.language"
 msgstr "Language"
 
 #, elixir-format
-#: lib/core/promotions/form_data.ex:17 lib/core/studies/study_edit.ex:18
-#: lib/core/studies/study_public.ex:14
+#: lib/core/promotions/form_data.ex:17
 msgid "themes.politics"
 msgstr "Politics"
 
 #, elixir-format
-#: lib/core/promotions/form_data.ex:17 lib/core/studies/study_edit.ex:18
-#: lib/core/studies/study_public.ex:14
+#: lib/core/promotions/form_data.ex:17
 msgid "themes.society"
 msgstr "Society"
 
 #, elixir-format
-#: lib/core/promotions/form_data.ex:17 lib/core/studies/study_edit.ex:18
-#: lib/core/studies/study_public.ex:14
+#: lib/core/promotions/form_data.ex:17
 msgid "themes.technology"
 msgstr "Technology"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:165
-msgid "Please correct the indicated errors."
-msgstr "Please correct the indicated errors."
+#: lib/core/survey/form_data.ex:11
+msgid "devices.desktop"
+msgstr "Desktop"
 
 #, elixir-format
-#: lib/core_web/live/study/edit.ex:177
-msgid "Saved"
-msgstr "Saved"
+#: lib/core/survey/form_data.ex:11
+msgid "devices.phone"
+msgstr "Phone"
+
+#, elixir-format
+#: lib/core/survey/form_data.ex:11
+msgid "devices.tablet"
+msgstr "Tablet"
