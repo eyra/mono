@@ -1,4 +1,4 @@
-defmodule CoreWeb.Survey.Complete do
+defmodule Link.Survey.Complete do
   @moduledoc """
   The public study screen.
   """
@@ -49,11 +49,11 @@ defmodule CoreWeb.Survey.Complete do
 
   def render(assigns) do
     ~H"""
-      <HeroSmall title={{ dgettext("eyra-survey", "conpleted.title") }} />
+      <HeroSmall title={{ dgettext("link-survey", "conpleted.title") }} />
       <ContentArea>
         <Title1>{{ @promotion.title }}</Title1>
         <Spacing value="M" />
-        <BodyLarge>{{dgettext("eyra-survey", "thank.you.message")}}</BodyLarge>
+        <BodyLarge>{{dgettext("link-survey", "thank.you.message")}}</BodyLarge>
       </ContentArea>
     """
   end

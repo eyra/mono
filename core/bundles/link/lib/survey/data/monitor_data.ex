@@ -1,4 +1,4 @@
-defmodule Core.Survey.MonitorData do
+defmodule Link.Survey.MonitorData do
   use Ecto.Schema
 
   alias Core.Survey.Tools
@@ -24,7 +24,7 @@ defmodule Core.Survey.MonitorData do
       |> Map.put(:subject_completed_count, completed)
       |> Map.put(:subject_vacant_count, subject_vacant_count)
 
-    struct(Core.Survey.MonitorData, opts)
+    struct(Link.Survey.MonitorData, opts)
   end
 
   defp get_subject_vacant_count(survey_tool, completed, pending) do

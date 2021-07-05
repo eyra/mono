@@ -25,11 +25,6 @@ defmodule CoreWeb.Promotion.Public do
   data(plugin_info, :any)
   data(transient, :any)
 
-  @plugins %{
-    "data_donation" => CoreWeb.DataDonation.PromotionPlugin,
-    "survey" => CoreWeb.Survey.PromotionPlugin
-  }
-
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
     promotion = Promotions.get!(id)
     plugin = load_plugin(promotion)
@@ -55,8 +50,10 @@ defmodule CoreWeb.Promotion.Public do
   end
 
   def load_plugin(%{plugin: plugin}) do
-    @plugins[plugin]
+    plugins()[String.to_atom(plugin)]
   end
+
+  defp plugins, do: Application.fetch_env!(:core, :promotion_plugins)
 
   def handle_event(
         "call-to-action",
@@ -96,11 +93,11 @@ defmodule CoreWeb.Promotion.Public do
           </div>
           <div class="mb-12 sm:mb-16" />
 
-          <Title2>{{dgettext("eyra-survey", "expectations.public.label")}}</Title2>
+          <Title2>{{dgettext("eyra-promotion", "expectations.public.label")}}</Title2>
           <Spacing value="M" />
           <BodyLarge>{{ @promotion.expectations }}</BodyLarge>
           <Spacing value="M" />
-          <Title2>{{dgettext("eyra-survey", "description.public.label")}}</Title2>
+          <Title2>{{dgettext("eyra-promotion", "description.public.label")}}</Title2>
           <Spacing value="M" />
           <BodyLarge>{{ @promotion.description }}</BodyLarge>
           <Spacing value="L" />
