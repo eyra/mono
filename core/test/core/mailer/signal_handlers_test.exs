@@ -12,7 +12,7 @@ defmodule Core.Mailer.SignalHandlers.Test do
       {:ok, box: box, user: user}
     end
 
-    test "send mail to user", %{box: box, user: user} do
+    test "send mail to user", %{box: box, user: _user} do
       SignalHandlers.dispatch(:new_notification, %{box: box, data: %{title: "Hello Test Message"}})
 
       assert_email_delivered_with(text_body: ~r/Test Message/)

@@ -1,9 +1,0 @@
----
-- name: Reload SSH
-  ansible.builtin.service:
-    name: sshd
-    state: reloaded
-
-- name: Reload Systemd
-  ansible.builtin.systemd:
-    daemon_reload: yes

@@ -14,6 +14,7 @@ defmodule CoreWeb.User.Signup do
   alias Core.Accounts.User
 
   data(changeset, :any)
+  data(focus, :string, default: "")
 
   def mount(_params, _session, socket) do
     changeset = Accounts.change_user_registration(%User{})
@@ -42,16 +43,31 @@ defmodule CoreWeb.User.Signup do
     end
   end
 
+  def handle_event("form_change", %{"user" => attrs}, socket) do
+    changeset = Accounts.change_user_registration(%User{}, attrs)
+    {:noreply, socket |> assign(changeset: changeset)}
+  end
+
+  def handle_event("focus", %{"field" => field}, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(focus: field)
+    }
+  end
+
   def render(assigns) do
     ~H"""
       <ContentArea>
         <FormArea>
           <Title2>{{dgettext "eyra-account", "signup.title"}}</Title2>
-          <Form for={{@changeset}} submit="signup">
-            <EmailInput field={{:email}} label_text={{dgettext("eyra-account", "email.label")}} />
-            <PasswordInput field={{:password}} label_text={{dgettext("eyra-account", "password.label")}} />
-            <SubmitWideButton label={{ dgettext("eyra-account", "signup.button") }} bg_color="bg-grey1" />
-          </Form>
+          <div x-data="{ focus: '{{@focus}}' }">
+            <Form for={{@changeset}} submit="signup" change="form_change">
+              <EmailInput field={{:email}} label_text={{dgettext("eyra-account", "email.label")}} />
+              <PasswordInput field={{:password}} label_text={{dgettext("eyra-account", "password.label")}} />
+              <SubmitWideButton label={{ dgettext("eyra-account", "signup.button") }} bg_color="bg-grey1" />
+            </Form>
+          </div>
           <div class="mb-8" />
           {{ dgettext("eyra-account", "signin.label") }}
           <LinkButton label={{ dgettext("eyra-account", "signin.link") }} path={{Routes.user_session_path(@socket, :new)}} />

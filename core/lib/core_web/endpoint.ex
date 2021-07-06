@@ -16,7 +16,9 @@ defmodule CoreWeb.Endpoint do
     longpoll: false
   )
 
-  socket("/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]])
+  socket("/live", Phoenix.LiveView.Socket,
+    websocket: [connect_info: [:user_agent, session: @session_options]]
+  )
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -26,7 +28,7 @@ defmodule CoreWeb.Endpoint do
     at: "/",
     from: :core,
     gzip: false,
-    only: ~w(css fonts images uploads js favicon.ico robots.txt manifest.json sw.js)
+    only: ~w(css fonts images js favicon.ico robots.txt manifest.json sw.js)
   )
 
   # Code reloading can be explicitly enabled under the

@@ -1,0 +1,132 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:113
+msgid "config.nrofsubjects.label"
+msgstr "Number of required subjects"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:104
+msgid "config.url.label"
+msgstr "Public web link of your survey"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:122
+msgid "delete.button"
+msgstr "Delete survey"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:107
+msgid "duration.label"
+msgstr "Estimated duration"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:65
+msgid "by.author.label"
+msgstr "By"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/complete.ex:56
+msgid "thank.you.message"
+msgstr "Thank you for participating. Hopefully see you soon!"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:78
+msgid "available.future.highlight.text"
+msgstr "%{from} till %{till}"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:75
+msgid "available.highlight.title"
+msgstr "Available from"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:83
+msgid "reward.highlight.title"
+msgstr "Reward"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:72
+msgid "spots.highlight.title"
+msgstr "Open spots"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:46
+msgid "apply.cta.title"
+msgstr "Apply for this survey"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/complete.ex:52
+msgid "conpleted.title"
+msgstr "Completed"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:117
+msgid "devices.label"
+msgstr "Select one or more devices that can be used by the participant to fill in the survey."
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:52
+msgid "open.cta.title"
+msgstr "Go to survey"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:98
+msgid "redirect.description"
+msgstr "Below you can find the redirect url for your survey. This should be used to redirect participants back at the end of the survey to complete the work. Copy the redirect url and go to your survey on the platform of your choice. Paste the url at the appropriate location."
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:97
+msgid "redirect.title"
+msgstr "Connect your survey"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:110
+msgid "reward.label"
+msgstr "Credits in euro cents"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:116
+msgid "devices.title"
+msgstr "Devices"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:100
+msgid "redirect.label"
+msgstr "Redirect url"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/monitor.ex:19
+msgid "completed.label"
+msgstr "Completed tasks"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/monitor.ex:20
+msgid "pending.label"
+msgstr "Participants working"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/monitor.ex:16
+msgid "status.title"
+msgstr "Task monitor"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/monitor.ex:21
+msgid "vacant.label"
+msgstr "Open spots"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/monitor.ex:17
+msgid "status.label"
+msgstr "Below you can keep an eye on the progress of the tasks"

@@ -95,6 +95,10 @@ defmodule CoreWeb.UserAuth do
     assign(conn, :current_user, user)
   end
 
+  def native_wrapper?(%{req_headers: req_headers}) do
+    req_headers |> String.contains?("NativeWrapper")
+  end
+
   defp ensure_user_token(conn) do
     if user_token = get_session(conn, :user_token) do
       {user_token, conn}

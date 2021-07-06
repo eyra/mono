@@ -1,0 +1,113 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:78
+#: lib/core_web/live/data_donation/content.ex:64
+msgid "content.title"
+msgstr "Data Donation"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:111
+msgid "reward.label"
+msgstr "Amount in euro cents"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:107
+msgid "script.label"
+msgstr "Paste your python script here"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:115
+msgid "config.nrofsubjects.label"
+msgstr "Number of required subjects"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:114
+msgid "nrofsubjects.title"
+msgstr "Subjects"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:110
+msgid "reward.title"
+msgstr "Credits"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:106
+msgid "script.title"
+msgstr "Script"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:118
+msgid "delete.button"
+msgstr "Delete"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:48
+msgid "apply.cta.title"
+msgstr "Apply for donation"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:54
+msgid "open.cta.title"
+msgstr "Donate your data"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:74
+msgid "spots.highlight.title"
+msgstr "Availability"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:67
+msgid "by.author.label"
+msgstr "By"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:80
+msgid "available.future.highlight.text"
+msgstr "%{from} till %{till}"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:77
+msgid "available.highlight.title"
+msgstr "Available from"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/promotion_plugin.ex:85
+msgid "reward.highlight.title"
+msgstr "Reward"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/uploader.ex:43
+msgid "uploader.title"
+msgstr "Data Donation"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:83
+msgid "donations.title"
+msgstr "Received donations"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:102
+msgid "download.all.button.label"
+msgstr "Download all"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:95
+msgid "download.button.label"
+msgstr "Download"
+
+#, elixir-format
+#: lib/core_web/live/data_donation/form.ex:91
+msgid "received.label"
+msgstr "Received"

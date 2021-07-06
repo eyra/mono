@@ -70,7 +70,7 @@ defmodule EyraUI.Card.Study do
                   </Label>
                 </If>
                 <If condition={{ Enum.count(@card.info) > 2 }} >
-                  <Spacing value="2" />
+                  <Spacing value="XXS" />
                   <Label color={{@info2_color}}>
                     {{ @card.info |> Enum.at(2) }}
                   </Label>

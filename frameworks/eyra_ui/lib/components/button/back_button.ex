@@ -3,6 +3,7 @@ defmodule EyraUI.Button.BackButton do
   A colored button with white text
   """
   use Surface.Component
+  alias Surface.Components.LiveRedirect
 
   prop(path, :string, required: true)
   prop(label, :string, required: true)
@@ -10,7 +11,7 @@ defmodule EyraUI.Button.BackButton do
 
   def render(assigns) do
     ~H"""
-    <a href= {{ @path }} >
+    <LiveRedirect to={{ @path }} >
       <div class="pt-1 pb-1 active:pt-5px active:pb-3px rounded pl-4 pr-4 bg-opacity-0">
         <div class="flex items-center">
           <div>
@@ -25,7 +26,7 @@ defmodule EyraUI.Button.BackButton do
           </div>
         </div>
       </div>
-    </a>
+    </LiveRedirect>
     """
   end
 end

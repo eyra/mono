@@ -19,7 +19,7 @@ msgstr "Marketplace"
 #, elixir-format
 #: lib/core_web/live/index.ex:47
 msgid "dashboard-button"
-msgstr "Go to study overview"
+msgstr "Go to dashboard"
 
 #, elixir-format
 #: lib/core_web/live/index.ex:31

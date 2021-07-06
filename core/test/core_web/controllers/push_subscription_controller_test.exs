@@ -21,9 +21,7 @@ defmodule CoreWeb.PushSubscriptionControllerTest do
 
     test "register a subscription", %{conn: conn, user: user} do
       conn =
-        post(conn, Routes.push_subscription_path(conn, :register),
-          subscription: Jason.encode!(@valid_attrs)
-        )
+        post(conn, Routes.push_subscription_path(conn, :register), subscription: @valid_attrs)
 
       assert json_response(conn, 200) == %{}
       assert Core.Repo.get_by(PushSubscription, user_id: user.id) != nil
@@ -31,6 +29,8 @@ defmodule CoreWeb.PushSubscriptionControllerTest do
   end
 
   describe "vapid_public_key" do
+    setup [:login_as_member]
+
     test "return the public key", %{conn: conn} do
       conn = get(conn, Routes.push_subscription_path(conn, :vapid_public_key))
 

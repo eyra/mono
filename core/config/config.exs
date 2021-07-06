@@ -16,9 +16,15 @@ config :logger, :console,
   metadata: [:request_id]
 
 config :core,
-  image_catalog: Core.ImageCatalog.Unsplash
+  image_catalog: Core.ImageCatalog.Unsplash,
+  promotion_plugins: [data_donation: CoreWeb.DataDonation.PromotionPlugin]
 
 config :core, CoreWeb.Gettext, default_locale: "nl", locales: ~w(en nl)
+
+config :core, Oban,
+  repo: Core.Repo,
+  plugins: [],
+  queues: [default: 5]
 
 config :core, ecto_repos: [Core.Repo]
 
@@ -45,13 +51,6 @@ config :core, Core.ImageCatalog.Unsplash,
   access_key: "",
   app_name: "Core"
 
-config :core, :children, [
-  Core.Repo,
-  CoreWeb.Telemetry,
-  {SiteEncrypt.Phoenix, CoreWeb.Endpoint},
-  {Phoenix.PubSub, name: Core.PubSub}
-]
-
 config :core, CoreWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "QbAmUdYcDMMQ2e7wVp6PSXI8QdUjfDEGR0FTwjwkUIYS4lW1ledjE9Dkhr3pE4Qn",
@@ -77,7 +76,13 @@ config :web_push_encryption, :vapid_details,
 
 import_config "#{Mix.env()}.exs"
 
-bundle = System.get_env("BUNDLE", "next") |> String.to_atom()
+default_bundle =
+  case File.read(".bundle") do
+    {:ok, bundle} -> String.trim(bundle)
+    {:error, _} -> "next"
+  end
+
+bundle = System.get_env("BUNDLE", default_bundle) |> String.to_atom()
 
 config :core, :bundle, bundle
 

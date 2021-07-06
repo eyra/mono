@@ -45,7 +45,7 @@ var data = undefined;
 
 languagePluginLoader
   .then(() => {
-    return pyodide.loadPackage("micropip");
+    return pyodide.loadPackage(["micropip", "numpy", "pandas"]);
   })
   .then(() => {
     self.pyodide.runPython(`
@@ -69,8 +69,19 @@ class _ChunkedFile:
 
 
 def _process_data(data):
+  import json
   file_data = _ChunkedFile(data)
-  return process(file_data)
+  result = process(file_data)
+  data = []
+  html = []
+  for df in result.get("data_frames", []):
+    html.append(df.to_html())
+    data.append(df.to_dict())
+  return {
+    "summary": result["summary"],
+    "html": "\\n".join(html),
+    "data": json.dumps(data),
+  }
   `);
     self.postMessage({ eventType: "initialized" });
   });
