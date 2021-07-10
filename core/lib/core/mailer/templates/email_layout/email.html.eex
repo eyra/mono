@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <style>
+            body,h1,h2,h3,p,table,tr,td { padding: 0; margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 20px; line-height: 150%; font-weight: normal; }
+            table {background-color: #4272EF; width: 100%; padding: 0; font-size: 24px; font-weight: bold; border: none}
+            table, tr, td {border: none; margin: 0; padding: 0}
+            h1,h2 { font-size: 32px; font-weight: bold; margin-top: 8px; margin-bottom: 8px; line-height: 120%; }
+            .header-title { font-size: 24px; font-weight: bold; line-height: 120%; }
+            .header-title {color: #FFFFFF; font-weight: bold; }
+            p { margin-top: 12px; margin-bottom: 12px; }
+            a { color: #4272EF; }
+            body { background-color: #F6F6F6; }
+            .content { background-color: #FFFFFF; padding: 24px; }
+            .container { margin-left: auto; margin-right: auto; max-width: 600px; }
+            .header-title {padding-left: 24px}
+            .illustration { height: 100px; }
+            .header-decoration {line-height: 0}
+            .lead { font-weight: bold; }
+            .footer-images { background-color: #FFFFFF }
+            .footer-images td { line-height: 0 }
+            .footer-contact { background-color: #F6F6F6; color: #999999; }
+            .footer-contact td { font-size: 16px; padding-top: 24px; padding-bottom: 24px; }
+
+        </style>
+    </head>
+    <body>
+        <table class="container" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="header-title">Welkom bij<br/>Eyra</td>
+                <td class="header-decoration" align="right"><%= image_tag("illustration") %></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="content">
+                    <%= @inner_content %>
+                </td>
+            </tr>
+            <tr class="footer-images">
+                <td align="left"><%= image_tag("footer-left") %></td>
+                <td align="right"><%= image_tag("footer-right") %></td>
+            </tr>
+            <tr class="footer-contact"><td colspan="2" align="center">Apollo 14  |  Unit 4.13  |  Saturnusstraat 14  |  2516 AH Den Haag  |  LinkedIn  |  eyra.co</td></tr>
+        </table>
+    </body>
+</html>
