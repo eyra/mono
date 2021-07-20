@@ -1,12 +1,13 @@
 defmodule Core.Accounts.NextActions.CompleteProfile do
-  alias CoreWeb.Router.Helpers, as: Routes
+  @behaviour Core.NextActions.ViewModel
 
-  def to_view_model(socket, _count, _params) do
+  @impl Core.NextActions.ViewModel
+  def to_view_model(url_resolver, _count, _params) do
     %{
       title: "Complete your profile",
       description: "Fill out the missing fields to complete your profile.",
       cta: "Open profile",
-      url: Routes.live_path(socket, CoreWeb.User.Profile)
+      url: url_resolver.(CoreWeb.User.Profile, [])
     }
   end
 end

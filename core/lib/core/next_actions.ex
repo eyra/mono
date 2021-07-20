@@ -11,10 +11,12 @@ defmodule Core.NextActions do
 
   @doc """
   """
-  def list_next_actions(%User{} = user, content_node \\ nil) do
+  def list_next_actions(url_resolver, %User{} = user, content_node \\ nil)
+      when is_function(url_resolver) do
     from(na in NextAction, where: na.user_id == ^user.id, limit: 10)
     |> filter_by_content_node(content_node)
     |> Repo.all()
+    |> Enum.map(&to_view_model(url_resolver, &1))
   end
 
   @doc """
@@ -51,9 +53,9 @@ defmodule Core.NextActions do
     |> Repo.delete_all()
   end
 
-  def to_view_model(socket, %NextAction{action: action, count: count, params: params}) do
+  defp to_view_model(url_resolver, %NextAction{action: action, count: count, params: params}) do
     action_type = String.to_existing_atom(action)
-    apply(action_type, :to_view_model, [socket, count, params])
+    apply(action_type, :to_view_model, [url_resolver, count, params])
   end
 
   defp filter_by_content_node(query, content_node) when is_nil(content_node), do: query

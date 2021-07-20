@@ -68,10 +68,7 @@ defmodule CoreWeb.Dashboard do
       |> assign(subject_studies: subject_studies)
       |> assign(available_studies: available_studies)
       |> assign(available_count: available_count)
-      |> assign(
-        next_actions:
-          NextActions.list_next_actions(user) |> Enum.map(&NextActions.to_view_model(socket, &1))
-      )
+      |> assign(next_actions: NextActions.list_next_actions(url_resolver(socket), user))
 
     {:ok, socket}
   end
