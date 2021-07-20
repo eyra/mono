@@ -6,6 +6,6 @@ defmodule Core.Mailer do
   def base_email do
     new_email()
     |> from(Application.fetch_env!(:core, __MODULE__) |> Keyword.fetch!(:default_from_email))
-    |> put_layout({Core.EmailLayoutView, :email})
+    |> put_layout({Core.Mailer.EmailLayoutView, :email})
   end
 end

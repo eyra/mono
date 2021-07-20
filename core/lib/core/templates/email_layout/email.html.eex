@@ -1,4 +1,0 @@
-Base template used in mail
-
-<%= @inner_content %>
-
