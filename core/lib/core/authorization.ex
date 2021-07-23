@@ -19,7 +19,7 @@ defmodule Core.Authorization do
   Core.BundleOverrides.grants()
 
   grant_access(CoreWeb.Index, [:visitor, :member])
-  grant_access(CoreWeb.Dashboard, [:member])
+  grant_access(CoreWeb.Marketplace, [:member])
   grant_access(CoreWeb.Notifications, [:member])
   grant_access(CoreWeb.User.Signin, [:visitor])
   grant_access(CoreWeb.User.Signup, [:visitor])
@@ -41,10 +41,6 @@ defmodule Core.Authorization do
   grant_access(Core.DataDonation.Task, [:participant])
 
   grant_access(CoreWeb.Study.New, [:researcher])
-
-  grant_actions(CoreWeb.DashboardController, %{
-    index: [:member]
-  })
 
   grant_actions(CoreWeb.FakeSurveyController, %{
     index: [:visitor, :member]

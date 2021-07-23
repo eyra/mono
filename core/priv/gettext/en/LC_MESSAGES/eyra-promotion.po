@@ -138,32 +138,32 @@ msgid "unpublish.button"
 msgstr "Unpublish"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:132
+#: lib/core_web/live/promotion/public.ex:130
 msgid "back.button.label"
 msgstr "Back to overview"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:125
+#: lib/core_web/live/promotion/public.ex:123
 msgid "devices.available.label"
 msgstr "Available on:"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:121
+#: lib/core_web/live/promotion/public.ex:119
 msgid "keep.me.updated.button.label"
 msgstr "Keep me updated"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:119
+#: lib/core_web/live/promotion/public.ex:117
 msgid "keep.me.updated.text"
 msgstr "Register here for our newsletter"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:117
+#: lib/core_web/live/promotion/public.ex:115
 msgid "keep.me.updated.title"
 msgstr "Curious for the results of this study?"
 
-#, elixir-format, fuzzy
-#: lib/core_web/live/promotion/public.ex:102
+#, elixir-format
+#: lib/core_web/live/promotion/public.ex:100
 msgid "description.public.label"
 msgstr "Some background information for the participants"
 
@@ -172,8 +172,8 @@ msgstr "Some background information for the participants"
 msgid "duration.title"
 msgstr ""
 
-#, elixir-format, fuzzy
-#: lib/core_web/live/promotion/public.ex:98
+#, elixir-format
+#: lib/core_web/live/promotion/public.ex:96
 msgid "expectations.public.label"
 msgstr "Expectations for the participants"
 

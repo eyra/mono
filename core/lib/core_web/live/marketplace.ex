@@ -1,4 +1,4 @@
-defmodule CoreWeb.Dashboard do
+defmodule CoreWeb.Marketplace do
   @moduledoc """
   The home screen.
   """
@@ -89,7 +89,7 @@ defmodule CoreWeb.Dashboard do
     user = socket.assigns.current_user
     profile = user |> Accounts.get_profile()
 
-    title = dgettext("eyra-dashboard", "default.study.title")
+    title = dgettext("eyra-marketplace", "default.study.title")
 
     changeset =
       %Study{}
@@ -129,10 +129,10 @@ defmodule CoreWeb.Dashboard do
 
   def render(assigns) do
     ~H"""
-      <HeroSmall title={{ dgettext("eyra-dashboard", "title") }} />
+      <HeroSmall title={{ dgettext("eyra-marketplace", "title") }} />
       <ContentArea>
         <Title2>
-          {{ dgettext("eyra-dashboard", "highlighted.title") }}
+          {{ dgettext("eyra-marketplace", "highlighted.title") }}
           <span class="text-primary"> {{ @highlighted_count }}</span>
         </Title2>
         <DynamicGrid>
@@ -144,14 +144,14 @@ defmodule CoreWeb.Dashboard do
           </div>
           <div :if={{ can_access?(@current_user, CoreWeb.Study.New) }} >
             <ButtonCard
-              title={{dgettext("eyra-dashboard", "add.card.title")}}
+              title={{dgettext("eyra-marketplace", "add.card.title")}}
               image={{Routes.static_path(@socket, "/images/plus-primary.svg")}}
               event="create_tool" />
           </div>
         </DynamicGrid>
         <div class="mt-12 lg:mt-16"/>
         <Title2>
-          {{ dgettext("eyra-dashboard", "marketplace.title") }}
+          {{ dgettext("eyra-marketplace", "marketplace.title") }}
           <span class="text-primary"> {{ @available_count }}</span>
         </Title2>
         <DynamicGrid>

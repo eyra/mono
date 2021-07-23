@@ -24,7 +24,7 @@ defmodule CoreWeb.UserSessionControllerTest do
 
     test "redirects if already logged in", %{conn: conn} do
       conn = get(conn, Routes.user_session_path(conn, :new))
-      assert redirected_to(conn) == "/dashboard"
+      assert redirected_to(conn) == "/marketplace"
     end
   end
 

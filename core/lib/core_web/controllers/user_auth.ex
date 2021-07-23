@@ -150,5 +150,5 @@ defmodule CoreWeb.UserAuth do
 
   defp maybe_store_return_to(conn), do: conn
 
-  defp signed_in_path(conn), do: Routes.live_path(conn, CoreWeb.Dashboard)
+  defp signed_in_path(conn), do: Routes.live_path(conn, CoreWeb.Marketplace)
 end

@@ -35,7 +35,7 @@ defmodule CoreWeb.DataDonation.Uploader do
         %{assigns: %{tool: tool, current_user: user}} = socket
       ) do
     Tool.store_results(tool, user, data)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Dashboard))}
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Marketplace))}
   end
 
   def render(assigns) do
