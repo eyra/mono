@@ -29,17 +29,27 @@ window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 window.blurHash = () => {
   return {
     show: true,
+    rendered: false,
     showBlurHash() {
       return this.show !== false;
     },
     hideBlurHash() {
+      if (!liveSocket.socket.isConnected()) {
+        return;
+      }
       this.show = false;
     },
     render() {
-      const canvas = this.$el.getElementsByTagName("canvas")[0];
-      if (canvas.dataset.rendered) {
+      const img = this.$el.getElementsByTagName("img")[0]
+      if (img.complete) {
+        this.show = false;
         return;
       }
+      if (this.rendered) {
+        return;
+      }
+      this.rendered = true;
+      const canvas = this.$el.getElementsByTagName("canvas")[0];
       const blurhash = canvas.dataset.blurhash;
       const width = parseInt(canvas.getAttribute("width"), 10);
       const height = parseInt(canvas.getAttribute("height"), 10);
@@ -48,7 +58,6 @@ window.blurHash = () => {
       const imageData = ctx.createImageData(width, height);
       imageData.data.set(pixels);
       ctx.putImageData(imageData, 0, 0);
-      canvas.dataset.rendered = true;
     },
   };
 };
@@ -70,14 +79,14 @@ Hooks.PythonUploader = {
         const script = this.el.getElementsByTagName("code")[0].innerText
         this.worker.postMessage({eventType: "runPython", script })
         // Let the LiveView know everything is ready
-        this.el.querySelector(".loading-indicator").hidden = true;        
-        this.el.querySelector(".step2").hidden = false;        
+        this.el.querySelector(".loading-indicator").hidden = true;
+        this.el.querySelector(".step2").hidden = false;
       }
       else if (eventType === "result") {
         this.result = event.data.result;
         this.el.querySelector(".summary").innerText = this.result.summary;
         this.el.querySelector(".extracted").innerHTML = this.result.html;
-        this.el.querySelector(".step4").hidden = false;        
+        this.el.querySelector(".step4").hidden = false;
       }
     }
     // Hook up the process button to the worker
@@ -105,7 +114,7 @@ Hooks.PythonUploader = {
         return;
       }
 
-      this.el.querySelector(".step4").hidden = true;        
+      this.el.querySelector(".step4").hidden = true;
       this.el.querySelector(".step3").hidden = false;
       this.el.querySelector(".script").hidden = false;
     })

@@ -36,7 +36,7 @@ defmodule EyraUI.Card.Study do
               <Icon size="S" src={{ @card.icon_url }} />
             </div>
           </If>
-        <div class="h-image-card" x-data="blurHash()">
+        <div class="h-image-card">
           <Image image={{@card.image_info}} transition="duration-500" corners="rounded-t-lg"/>
           </div>
         </div>
