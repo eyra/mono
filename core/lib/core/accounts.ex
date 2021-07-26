@@ -7,6 +7,7 @@ defmodule Core.Accounts do
   alias Ecto.Multi
   alias Core.Repo
   alias Core.Accounts.{User, UserToken, UserNotifier, Profile}
+  alias Core.Signals
 
   ## Database getters
 
@@ -387,10 +388,15 @@ defmodule Core.Accounts do
 
   def update_user_profile(%User{} = user, user_attrs, profile_attrs) do
     profile = get_profile(user)
+    profile_changeset = Profile.changeset(profile, profile_attrs)
 
     Multi.new()
-    |> Multi.update(:profile, Profile.changeset(profile, profile_attrs))
+    |> Multi.update(:profile, profile_changeset)
     |> Multi.update(:user, User.user_profile_changeset(user, user_attrs))
+    |> Signals.multi_dispatch(:user_profile_updated, %{
+      user: user,
+      profile_changeset: profile_changeset
+    })
     |> Repo.transaction()
   end
 

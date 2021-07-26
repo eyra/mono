@@ -17,6 +17,8 @@ defmodule CoreWeb.Dashboard do
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title2}
   alias EyraUI.Grid.{DynamicGrid}
+  alias Core.NextActions.Live.NextActionHighlight
+  alias Core.NextActions
 
   alias CoreWeb.Layout.Workspace
   alias CoreWeb.ViewModel.Card, as: CardVM
@@ -27,6 +29,7 @@ defmodule CoreWeb.Dashboard do
   data(available_studies, :any)
   data(available_count, :any)
   data(current_user, :any)
+  data(next_actions, :any)
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
     preload = [data_donation_tool: [:promotion]]
@@ -65,6 +68,7 @@ defmodule CoreWeb.Dashboard do
       |> assign(subject_studies: subject_studies)
       |> assign(available_studies: available_studies)
       |> assign(available_count: available_count)
+      |> assign(next_actions: NextActions.list_next_actions(url_resolver(socket), user))
 
     {:ok, socket}
   end
@@ -140,6 +144,7 @@ defmodule CoreWeb.Dashboard do
         active_item={{ :dashboard }}
       >
         <ContentArea>
+          <NextActionHighlight actions={{@next_actions}}/>
           <Title2>
             {{ dgettext("eyra-dashboard", "highlighted.title") }}
             <span class="text-primary"> {{ @highlighted_count }}</span>
