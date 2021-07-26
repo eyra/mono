@@ -47,7 +47,8 @@ defmodule EyraUI.MixProject do
       # Dev and test deps
       {:ex_doc, "~> 0.22", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:browser, "~> 0.4.4"}
     ]
   end
 end

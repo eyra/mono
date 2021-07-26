@@ -20,9 +20,15 @@ defmodule CoreWeb.Live.User.Routes do
         pipe_through([:browser, :require_authenticated_user])
 
         live("/user/profile", User.Profile)
-        get("/user/settings", UserSettingsController, :edit)
-        put("/user/settings", UserSettingsController, :update)
-        get("/user/settings/confirm-email/:token", UserSettingsController, :confirm_email)
+        live("/user/settings", User.Settings)
+        get("/user/settingscontroller", UserSettingsController, :edit)
+        put("/user/settingscontroller", UserSettingsController, :update)
+
+        get(
+          "/user/settingscontroller/confirm-email/:token",
+          UserSettingsController,
+          :confirm_email
+        )
       end
 
       scope "/", CoreWeb do

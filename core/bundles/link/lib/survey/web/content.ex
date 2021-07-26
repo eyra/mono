@@ -7,12 +7,12 @@ defmodule Link.Survey.Content do
 
   import CoreWeb.Gettext
 
-  alias EyraUI.Hero.HeroSmall
   alias Core.Survey.Tools
   alias Core.Promotions
 
   alias CoreWeb.ImageCatalogPicker
   alias CoreWeb.Promotion.Form, as: PromotionForm
+  alias CoreWeb.Layout.Workspace
 
   alias Link.Survey.Form, as: ToolForm
   alias Link.Survey.{MonitorData, Monitor}
@@ -66,6 +66,12 @@ defmodule Link.Survey.Content do
 
   def render(assigns) do
     ~H"""
+    <Workspace
+      title={{ dgettext("link-survey", "content.title") }}
+      user_agent={{ Browser.Ua.to_ua(@socket) }}
+      active_item={{ :survey }}
+      id={{ @tool_id }}
+    >
       <div phx-click="reset_focus">
         <div x-data="{ open: false }">
           <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="open">
@@ -75,12 +81,12 @@ defmodule Link.Survey.Content do
               </div>
             </div>
           </div>
-          <HeroSmall title={{ dgettext("eyra-data-donation", "content.title") }} />
           <Monitor monitor_data={{@monitor_data}}/>
           <ToolForm id={{:tool_form}} entity_id={{@tool_id}} uri_origin={{@uri_origin}}/>
           <PromotionForm id={{:promotion_form}} entity_id={{@promotion_id}} />
         </div>
       </div>
+    </Workspace>
     """
   end
 end

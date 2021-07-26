@@ -13,13 +13,13 @@ defmodule CoreWeb.Dashboard do
   alias Core.Promotions
   alias Core.Content
 
-  alias CoreWeb.ViewModel.Card, as: CardVM
-
   alias EyraUI.Card.{PrimaryStudy, SecondaryStudy, ButtonCard}
-  alias EyraUI.Hero.HeroSmall
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title2}
   alias EyraUI.Grid.{DynamicGrid}
+
+  alias CoreWeb.Layout.Workspace
+  alias CoreWeb.ViewModel.Card, as: CardVM
 
   data(highlighted_count, :any)
   data(owned_studies, :any)
@@ -69,12 +69,12 @@ defmodule CoreWeb.Dashboard do
     {:ok, socket}
   end
 
-  def handle_info({:handle_click, %{action: :edit, id: id}}, socket) do
+  def handle_info({:card_click, %{action: :edit, id: id}}, socket) do
     {:noreply,
      push_redirect(socket, to: Routes.live_path(socket, CoreWeb.DataDonation.Content, id))}
   end
 
-  def handle_info({:handle_click, %{action: :public, id: id}}, socket) do
+  def handle_info({:card_click, %{action: :public, id: id}}, socket) do
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Promotion.Public, id))}
   end
 
@@ -83,6 +83,11 @@ defmodule CoreWeb.Dashboard do
 
     {:noreply,
      push_redirect(socket, to: Routes.live_path(socket, CoreWeb.DataDonation.Content, tool.id))}
+  end
+
+  def handle_event("menu-item-clicked", %{"action" => action}, socket) do
+    # toggle menu
+    {:noreply, push_redirect(socket, to: action)}
   end
 
   defp create_tool(socket) do
@@ -129,37 +134,42 @@ defmodule CoreWeb.Dashboard do
 
   def render(assigns) do
     ~H"""
-      <HeroSmall title={{ dgettext("eyra-dashboard", "title") }} />
-      <ContentArea>
-        <Title2>
-          {{ dgettext("eyra-dashboard", "highlighted.title") }}
-          <span class="text-primary"> {{ @highlighted_count }}</span>
-        </Title2>
-        <DynamicGrid>
-          <div :for={{ card <- @owned_studies  }} >
-            <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :edit, id: card.edit_id } }} />
-          </div>
-          <div :for={{ card <- @subject_studies  }} >
-            <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
-          </div>
-          <div :if={{ can_access?(@current_user, CoreWeb.Study.New) }} >
-            <ButtonCard
-              title={{dgettext("eyra-dashboard", "add.card.title")}}
-              image={{Routes.static_path(@socket, "/images/plus-primary.svg")}}
-              event="create_tool" />
-          </div>
-        </DynamicGrid>
-        <div class="mt-12 lg:mt-16"/>
-        <Title2>
-          {{ dgettext("eyra-dashboard", "marketplace.title") }}
-          <span class="text-primary"> {{ @available_count }}</span>
-        </Title2>
-        <DynamicGrid>
-          <div :for={{ card <- @available_studies  }} class="mb-1" >
-            <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
-          </div>
-        </DynamicGrid>
-      </ContentArea>
+      <Workspace
+        title={{ dgettext("eyra-dashboard", "title") }}
+        user_agent={{ Browser.Ua.to_ua(@socket) }}
+        active_item={{ :dashboard }}
+      >
+        <ContentArea>
+          <Title2>
+            {{ dgettext("eyra-dashboard", "highlighted.title") }}
+            <span class="text-primary"> {{ @highlighted_count }}</span>
+          </Title2>
+          <DynamicGrid>
+            <div :for={{ card <- @owned_studies  }} >
+              <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :edit, id: card.edit_id } }} />
+            </div>
+            <div :for={{ card <- @subject_studies  }} >
+              <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
+            </div>
+            <div :if={{ can_access?(@current_user, CoreWeb.Study.New) }} >
+              <ButtonCard
+                title={{dgettext("eyra-dashboard", "add.card.title")}}
+                image={{Routes.static_path(@socket, "/images/plus-primary.svg")}}
+                event="create_tool" />
+            </div>
+          </DynamicGrid>
+          <div class="mt-12 lg:mt-16"/>
+          <Title2>
+            {{ dgettext("eyra-dashboard", "marketplace.title") }}
+            <span class="text-primary"> {{ @available_count }}</span>
+          </Title2>
+          <DynamicGrid>
+            <div :for={{ card <- @available_studies  }} class="mb-1" >
+              <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
+            </div>
+          </DynamicGrid>
+        </ContentArea>
+      </Workspace>
     """
   end
 end
