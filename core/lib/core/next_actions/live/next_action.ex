@@ -1,18 +1,19 @@
-defmodule CoreWeb.Devices do
-  @moduledoc """
-  """
+defmodule Core.NextActions.Live.NextAction do
   use Surface.Component
+  alias Surface.Components.LiveRedirect
+  alias CoreWeb.Router.Helpers, as: Routes
 
   prop(title, :string, required: true)
   prop(description, :string, required: true)
   prop(cta, :string, required: true)
-  prop(action, :string, required: true)
+  prop(url, :string, required: true)
 
   def render(assigns) do
     ~H"""
-    <a href="#" class="block">
-      <div class="font-sans bg-yellow-300 p-6 flex items-center space-x-4 rounded-md">
-        <img src="https://www.tamaraday.com/wp-content/uploads/2019/07/Icon-Placeholder.png" class="inline-block w-12 h-12">
+    <LiveRedirect to={{@url}} class="block mb-4">
+      <div class="bg-tertiary p-6 flex items-center space-x-4 rounded-md">
+        <img src={{ Routes.static_path(@socket, "/images/checklist.svg") }}
+             class="inline-block w-12 h-12">
         <div class="flex-grow">
           <div class="text-xl font-bold">
             {{@title}}
@@ -25,7 +26,7 @@ defmodule CoreWeb.Devices do
           {{@cta}}
         </div>
       </div>
-    </a>
+    </LiveRedirect>
     """
   end
 end
