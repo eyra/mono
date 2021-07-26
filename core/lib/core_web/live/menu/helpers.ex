@@ -108,7 +108,7 @@ defmodule CoreWeb.Menu.Helpers do
         :get
       end
 
-    action = %{path: Routes.user_session_path(socket, info.target), method: method}
+    action = %{path: Routes.user_session_path(socket, method), method: method}
     %MenuItem.ViewModel{id: id, title: title, icon: icon, action: action}
   end
 
