@@ -20,7 +20,7 @@ defmodule CoreWeb.Dashboard do
   alias Core.NextActions.Live.NextActionHighlight
   alias Core.NextActions
 
-  alias CoreWeb.Layouts.Workspace
+  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.ViewModel.Card, as: CardVM
 
   data(highlighted_count, :any)

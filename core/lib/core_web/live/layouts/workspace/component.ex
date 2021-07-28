@@ -1,12 +1,10 @@
-defmodule CoreWeb.Layouts.Workspace do
+defmodule CoreWeb.Layouts.Workspace.Component do
   @moduledoc """
     Wrapper component used at the root of a page to create a menu + detail layout
   """
   use Surface.Component
 
   import EyraUI.Components.OldSkool
-
-  alias CoreWeb.Layouts.Workspace.{DesktopMenuBuilder, MobileMenuBuilder, MobileNavbarBuilder}
 
   alias EyraUI.Navigation.{DesktopMenu, MobileNavbar, MobileMenu}
   alias EyraUI.Hero.HeroSmall
@@ -18,17 +16,29 @@ defmodule CoreWeb.Layouts.Workspace do
 
   slot(default, required: true)
 
+  defp builder, do: Application.fetch_env!(:core, :workspace_menu_builder)
+
+  defp build_menu(type, socket) do
+    builder().build_menu(
+      type,
+      socket,
+      socket,
+      socket.assigns.__assigns__.active_item,
+      socket.assigns.__assigns__.id
+    )
+  end
+
   def render(assigns) do
     ~H"""
     <div class="w-full h-screen" x-data="{mobile_menu: false}">
       <div class="fixed z-30 right-0 top-0 w-mobile-menu-width h-screen" x-show="mobile_menu" @click.away="mobile_menu = !mobile_menu, $parent.overlay = false">
-        <MobileMenu items={{ MobileMenuBuilder.build_menu(@socket, @socket, @active_item, @id) }} path_provider={{ CoreWeb.Router.Helpers }} />
+        <MobileMenu items={{ build_menu(:mobile_menu, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
       </div>
-      <DesktopMenu items={{ DesktopMenuBuilder.build_menu(@socket, @socket, @active_item, @id) }} path_provider={{ CoreWeb.Router.Helpers }} />
+      <DesktopMenu items={{ build_menu(:desktop_menu, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
       <div class="w-full h-full md:pl-desktop-menu-width z-2">
         <div class="pt-0 md:pt-10 h-full">
           <div class="flex flex-col bg-white min-h-full">
-            <MobileNavbar items={{ MobileNavbarBuilder.build_menu(@socket, @socket, @active_item, @id) }} path_provider={{ CoreWeb.Router.Helpers }} />
+            <MobileNavbar items={{ build_menu(:mobile_navbar, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
             <div :if={{ @title }}>
               <HeroSmall title={{ @title }} />
             </div>

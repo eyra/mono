@@ -12,7 +12,7 @@ defmodule Link.Survey.Content do
 
   alias CoreWeb.ImageCatalogPicker
   alias CoreWeb.Promotion.Form, as: PromotionForm
-  alias CoreWeb.Layouts.Workspace
+  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias Link.Survey.Form, as: ToolForm
   alias Link.Survey.{MonitorData, Monitor}

@@ -10,7 +10,7 @@ defmodule CoreWeb.Index do
   alias EyraUI.Text.{Title1, Intro}
   alias EyraUI.Grid.{AbsoluteGrid}
 
-  alias CoreWeb.Layouts.Website
+  alias CoreWeb.Layouts.Website.Component, as: Website
 
   data(current_user, :any)
 

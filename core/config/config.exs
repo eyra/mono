@@ -17,7 +17,10 @@ config :logger, :console,
 
 config :core,
   image_catalog: Core.ImageCatalog.Unsplash,
-  promotion_plugins: [data_donation: CoreWeb.DataDonation.PromotionPlugin]
+  promotion_plugins: [data_donation: CoreWeb.DataDonation.PromotionPlugin],
+  menu_items: CoreWeb.Menu.Items,
+  workspace_menu_builder: CoreWeb.Layouts.Workspace.MenuBuilder,
+  website_menu_builder: CoreWeb.Layouts.Website.MenuBuilder
 
 config :core, CoreWeb.Gettext, default_locale: "nl", locales: ~w(en nl)
 

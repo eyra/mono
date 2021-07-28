@@ -1,5 +1,5 @@
 defmodule CoreWeb.Menu.Helpers do
-  use CoreWeb.Menu.Items
+  use CoreWeb.Menu.ItemsProvider
 
   require CoreWeb.Gettext
 
