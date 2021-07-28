@@ -1,4 +1,4 @@
-defmodule CoreWeb.Menu.Workspace.MobileNavbarBuilder do
+defmodule CoreWeb.Layouts.Workspace.MobileNavbarBuilder do
   @behaviour CoreWeb.Menu.Builder
 
   import CoreWeb.Menu.Helpers
@@ -7,7 +7,7 @@ defmodule CoreWeb.Menu.Workspace.MobileNavbarBuilder do
   def build_menu(socket, _user, active_item, _page_id) do
     %{
       home: live_item(socket, :eyra, active_item),
-      second: [
+      right: [
         alpine_item(:menu, active_item, false, true)
       ]
     }

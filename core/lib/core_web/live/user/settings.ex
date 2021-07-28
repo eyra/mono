@@ -4,7 +4,7 @@ defmodule CoreWeb.User.Settings do
   """
   use CoreWeb, :live_view
 
-  alias CoreWeb.Layout.Workspace
+  alias CoreWeb.Layouts.Workspace
 
   alias EyraUI.Spacing
   alias EyraUI.Container.{ContentArea, FormArea}

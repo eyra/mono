@@ -8,7 +8,7 @@ defmodule CoreWeb.User.Profile do
 
   alias Core.Accounts
   alias Core.Accounts.UserProfileEdit
-  alias CoreWeb.Layout.Workspace
+  alias CoreWeb.Layouts.Workspace
 
   alias EyraUI.Form.{Form, TextInput, Checkbox, UrlInput, PhotoInput}
   alias EyraUI.Text.{Title2}

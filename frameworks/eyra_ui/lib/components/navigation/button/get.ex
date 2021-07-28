@@ -9,7 +9,6 @@ defmodule EyraUI.Navigation.Get do
     ~H"""
       <a
         class="cursor-pointer"
-        x-data="{}"
         data-phx-link="redirect"
         data-phx-link-state="replace"
         href={{ @path }}

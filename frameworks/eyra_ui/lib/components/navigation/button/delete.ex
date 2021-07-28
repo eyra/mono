@@ -9,7 +9,6 @@ defmodule EyraUI.Navigation.Delete do
     ~H"""
       <a
         class="cursor-pointer"
-        x-data="{}"
         href={{ @path }}
         data-to={{ @path }}
         data-method="delete"

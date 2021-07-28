@@ -9,7 +9,6 @@ defmodule EyraUI.Navigation.GetDead do
     ~H"""
       <a
         class="cursor-pointer"
-        x-data="{}"
         href={{ @path }}
       >
         <slot />

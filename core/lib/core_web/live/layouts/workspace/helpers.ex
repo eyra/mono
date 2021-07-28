@@ -1,4 +1,4 @@
-defmodule CoreWeb.Menu.Workspace.Helpers do
+defmodule CoreWeb.Layouts.Workspace.MenuHelpers do
   import CoreWeb.Menu.Helpers
 
   def build_menu_first_part(socket, active_item) do

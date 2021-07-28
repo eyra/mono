@@ -1,4 +1,4 @@
-defmodule CoreWeb.Layout.Website do
+defmodule CoreWeb.Layouts.Website do
   @moduledoc """
     Wrapper component used at the root of a page to create a menu + detail layout
   """
@@ -6,7 +6,7 @@ defmodule CoreWeb.Layout.Website do
 
   import EyraUI.Components.OldSkool
 
-  alias CoreWeb.Menu.Website.{DesktopNavbarBuilder, MobileMenuBuilder, MobileNavbarBuilder}
+  alias CoreWeb.Layouts.Website.{DesktopNavbarBuilder, MobileMenuBuilder, MobileNavbarBuilder}
 
   alias EyraUI.Navigation.{DesktopNavbar, MobileNavbar, MobileMenu}
   alias EyraUI.Hero.HeroLarge

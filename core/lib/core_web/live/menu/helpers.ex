@@ -3,11 +3,10 @@ defmodule CoreWeb.Menu.Helpers do
 
   require CoreWeb.Gettext
 
-  alias EyraUI.Navigation.MenuItem
   alias CoreWeb.Router.Helpers, as: Routes
 
   defp size(%{size: size}), do: size
-  defp size(_), do: :default
+  defp size(_), do: :small
 
   def live_item(socket, id, active_item, use_icon \\ true) when is_atom(id) do
     info = info(id)
@@ -31,14 +30,14 @@ defmodule CoreWeb.Menu.Helpers do
       end
 
     path = Routes.live_path(socket, info.target)
-    action = %{path: path}
+    action = %{target: path}
 
-    %MenuItem.ViewModel{
+    %{
       id: id,
       title: title,
       icon: icon,
       action: action,
-      active: active_item === id
+      active?: active_item === id
     }
   end
 
@@ -50,7 +49,7 @@ defmodule CoreWeb.Menu.Helpers do
     end
   end
 
-  def alpine_item(id, active_item, use_icon, overlay) do
+  def alpine_item(id, active_item, use_icon, overlay?) do
     info = info(id)
     size = size(info)
 
@@ -72,14 +71,14 @@ defmodule CoreWeb.Menu.Helpers do
       end
 
     method = :alpine
-    action = %{click_handler: info.target, method: method, overlay: overlay}
+    action = %{target: info.target, method: method, overlay?: overlay?}
 
-    %MenuItem.ViewModel{
+    %{
       id: id,
       title: title,
       icon: icon,
       action: action,
-      active: active_item === id
+      active?: active_item === id
     }
   end
 
@@ -108,15 +107,15 @@ defmodule CoreWeb.Menu.Helpers do
         :get
       end
 
-    action = %{path: Routes.user_session_path(socket, method), method: method}
-    %MenuItem.ViewModel{id: id, title: title, icon: icon, action: action}
+    action = %{target: Routes.user_session_path(socket, method), method: method}
+    %{id: id, title: title, icon: icon, action: action}
   end
 
   def language_switch_item(socket, page_id) do
     [locale | _] = supported_languages()
 
     title = locale.name
-    icon = %{name: locale.id, size: :default}
+    icon = %{name: locale.id, size: :small}
 
     redir =
       if page_id do
@@ -126,8 +125,8 @@ defmodule CoreWeb.Menu.Helpers do
       end
 
     path = Routes.language_switch_path(socket, :index, locale.id, redir: redir)
-    action = %{path: path, dead: true}
-    %MenuItem.ViewModel{id: locale.id, title: title, icon: icon, action: action}
+    action = %{target: path, dead?: true}
+    %{id: locale.id, title: title, icon: icon, action: action}
   end
 
   def supported_languages do

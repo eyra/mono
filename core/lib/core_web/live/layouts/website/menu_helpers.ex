@@ -1,4 +1,4 @@
-defmodule CoreWeb.Menu.Website.Helpers do
+defmodule CoreWeb.Layouts.Website.MenuHelpers do
   import CoreWeb.Menu.Helpers
 
   alias CoreWeb.User.Service, as: UserService

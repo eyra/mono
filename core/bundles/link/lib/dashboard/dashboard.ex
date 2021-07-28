@@ -17,7 +17,7 @@ defmodule Link.Dashboard do
   alias EyraUI.Text.{Title2}
   alias EyraUI.Grid.{DynamicGrid}
 
-  alias CoreWeb.Layout.Workspace
+  alias CoreWeb.Layouts.Workspace
   alias Link.Dashboard.Card, as: CardVM
 
   data(highlighted_count, :any)
