@@ -14,6 +14,7 @@ defmodule CoreWeb.Marketplace do
   alias Core.Content
 
   alias CoreWeb.ViewModel.Card, as: CardVM
+  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias EyraUI.Card.{PrimaryStudy, SecondaryStudy, ButtonCard}
   alias EyraUI.Hero.HeroSmall
@@ -69,12 +70,12 @@ defmodule CoreWeb.Marketplace do
     {:ok, socket}
   end
 
-  def handle_info({:handle_click, %{action: :edit, id: id}}, socket) do
+  def handle_info({:card_click, %{action: :edit, id: id}}, socket) do
     {:noreply,
      push_redirect(socket, to: Routes.live_path(socket, CoreWeb.DataDonation.Content, id))}
   end
 
-  def handle_info({:handle_click, %{action: :public, id: id}}, socket) do
+  def handle_info({:card_click, %{action: :public, id: id}}, socket) do
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Promotion.Public, id))}
   end
 
@@ -129,37 +130,42 @@ defmodule CoreWeb.Marketplace do
 
   def render(assigns) do
     ~H"""
-      <HeroSmall title={{ dgettext("eyra-marketplace", "title") }} />
-      <ContentArea>
-        <Title2>
-          {{ dgettext("eyra-marketplace", "highlighted.title") }}
-          <span class="text-primary"> {{ @highlighted_count }}</span>
-        </Title2>
-        <DynamicGrid>
-          <div :for={{ card <- @owned_studies  }} >
-            <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :edit, id: card.edit_id } }} />
-          </div>
-          <div :for={{ card <- @subject_studies  }} >
-            <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
-          </div>
-          <div :if={{ can_access?(@current_user, CoreWeb.Study.New) }} >
-            <ButtonCard
-              title={{dgettext("eyra-marketplace", "add.card.title")}}
-              image={{Routes.static_path(@socket, "/images/plus-primary.svg")}}
-              event="create_tool" />
-          </div>
-        </DynamicGrid>
-        <div class="mt-12 lg:mt-16"/>
-        <Title2>
-          {{ dgettext("eyra-marketplace", "marketplace.title") }}
-          <span class="text-primary"> {{ @available_count }}</span>
-        </Title2>
-        <DynamicGrid>
-          <div :for={{ card <- @available_studies  }} class="mb-1" >
-            <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
-          </div>
-        </DynamicGrid>
-      </ContentArea>
+      <Workspace
+        title={{ dgettext("eyra-marketplace", "title") }}
+        user_agent={{ Browser.Ua.to_ua(@socket) }}
+        active_item={{ :marketplace }}
+      >
+        <ContentArea>
+          <Title2>
+            {{ dgettext("eyra-marketplace", "highlighted.title") }}
+            <span class="text-primary"> {{ @highlighted_count }}</span>
+          </Title2>
+          <DynamicGrid>
+            <div :for={{ card <- @owned_studies  }} >
+              <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :edit, id: card.edit_id } }} />
+            </div>
+            <div :for={{ card <- @subject_studies  }} >
+              <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
+            </div>
+            <div :if={{ can_access?(@current_user, CoreWeb.Study.New) }} >
+              <ButtonCard
+                title={{dgettext("eyra-marketplace", "add.card.title")}}
+                image={{Routes.static_path(@socket, "/images/plus-primary.svg")}}
+                event="create_tool" />
+            </div>
+          </DynamicGrid>
+          <div class="mt-12 lg:mt-16"/>
+          <Title2>
+            {{ dgettext("eyra-marketplace", "marketplace.title") }}
+            <span class="text-primary"> {{ @available_count }}</span>
+          </Title2>
+          <DynamicGrid>
+            <div :for={{ card <- @available_studies  }} class="mb-1" >
+              <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
+            </div>
+          </DynamicGrid>
+        </ContentArea>
+      </Workspace>
     """
   end
 end

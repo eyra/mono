@@ -17,18 +17,18 @@ msgid "created.label"
 msgstr "Aangemaakt"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/card.ex:42 lib/core_web/view_model/card.ex:40
+#: bundles/link/lib/marketplace/card.ex:42 lib/core_web/view_model/card.ex:40
 msgid "deadline.label"
 msgstr "Nog %{days} dagen beschikbaar"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/card.ex:41 lib/core_web/view_model/card.ex:39
+#: bundles/link/lib/marketplace/card.ex:41 lib/core_web/view_model/card.ex:39
 msgid "open.spots.label"
 msgstr "%{count} deelnemers gezocht"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/card.ex:51 lib/core_web/live/promotion/form.ex:117
-#: lib/core_web/view_model/card.ex:49
+#: bundles/link/lib/marketplace/card.ex:51
+#: lib/core_web/live/promotion/form.ex:117 lib/core_web/view_model/card.ex:49
 msgid "published.false.label"
 msgstr "Concept"
 
@@ -38,7 +38,7 @@ msgid "published.true.label"
 msgstr "Gepubliceerd"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/card.ex:40 lib/core_web/view_model/card.ex:38
+#: bundles/link/lib/marketplace/card.ex:40 lib/core_web/view_model/card.ex:38
 msgid "reward.title"
 msgstr "Beloning"
 
@@ -168,7 +168,7 @@ msgid "description.public.label"
 msgstr "Achtergrond informatie voor de participanten"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/card.ex:39
+#: bundles/link/lib/marketplace/card.ex:39
 msgid "duration.title"
 msgstr ""
 

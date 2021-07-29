@@ -7,10 +7,13 @@ defmodule Link.Dashboard do
 
   alias Core.Studies
   alias CoreWeb.Components.ContentListItem
+  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias EyraUI.Hero.HeroSmall
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title2}
+  alias Core.NextActions.Live.NextActionHighlight
+  alias Core.NextActions
 
   data(content_items, :any)
   data(current_user, :any)
@@ -26,19 +29,26 @@ defmodule Link.Dashboard do
     socket =
       socket
       |> assign(content_items: content_items)
+      |> assign(next_actions: NextActions.list_next_actions(url_resolver(socket), user))
 
     {:ok, socket}
   end
 
   def render(assigns) do
     ~H"""
-      <HeroSmall title={{ dgettext("link-dashboard", "title") }} />
-      <ContentArea>
-        <Title2>
-          {{ dgettext("link-dashboard", "recent-items.title") }}
-        </Title2>
-        <ContentListItem :for={{item <- @content_items}} title={{item.title}} description="Facere dolorem sequi sit voluptas labore porro qui quis" quick_summary={{item.quick_summary}} status={{item.status}} level={{:critical}} image_id={{item.image_id}} to={{item.path}}  />
-      </ContentArea>
+      <Workspace
+        title={{ dgettext("link-dashboard", "title") }}
+        user_agent={{ Browser.Ua.to_ua(@socket) }}
+        active_item={{ :dashboard }}
+      >
+        <ContentArea>
+          <NextActionHighlight actions={{@next_actions}}/>
+          <Title2>
+            {{ dgettext("link-dashboard", "recent-items.title") }}
+          </Title2>
+          <ContentListItem :for={{item <- @content_items}} title={{item.title}} description="Facere dolorem sequi sit voluptas labore porro qui quis" quick_summary={{item.quick_summary}} status={{item.status}} level={{:critical}} image_id={{item.image_id}} to={{item.path}}  />
+        </ContentArea>
+      </Workspace>
     """
   end
 

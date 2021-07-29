@@ -6,7 +6,7 @@ defmodule EyraUI.Card.Study do
 
   alias EyraUI.{Tag, Spacing, Icon}
   alias EyraUI.Text.{SubHead, Label}
-  alias EyraUI.Card.Card
+  alias EyraUI.Card.ClickableCard
   alias EyraUI.Image
 
   prop(conn, :any, required: true)
@@ -23,7 +23,7 @@ defmodule EyraUI.Card.Study do
 
   def render(assigns) do
     ~H"""
-    <Card bg_color={{@bg_color}} id={{@card.id}} click_event_name={{@click_event_name}} click_event_data={{@click_event_data}}>
+    <ClickableCard bg_color={{@bg_color}} id={{@card.id}} click_event_name={{@click_event_name}} click_event_data={{@click_event_data}}>
       <template slot="image">
         <div class="relative">
           <If condition={{ @card.label }} >
@@ -79,7 +79,7 @@ defmodule EyraUI.Card.Study do
               <div class="flex-grow"></div>
           </div>
       </div>
-    </Card>
+    </ClickableCard>
     """
   end
 end

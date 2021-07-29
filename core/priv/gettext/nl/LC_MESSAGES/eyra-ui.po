@@ -22,3 +22,53 @@ msgstr "Er is een fout opgetreden"
 #: lib/core_web/live/data_donation/content.ex:6
 msgid "saved.info.flash"
 msgstr "Opgeslagen"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.dashboard"
+msgstr "Dashboard"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.inbox"
+msgstr "Inbox"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.marketplace"
+msgstr "Marktplaats"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.profile"
+msgstr "Mijn profiel"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2 lib/core_web/live/user/settings.ex:27
+msgid "menu.item.settings"
+msgstr "Instellingen"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.signin"
+msgstr "Inloggen"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.signout"
+msgstr "Uitloggen"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.menu"
+msgstr "Menu"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.eyra"
+msgstr "Menu"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.payments"
+msgstr "Betalingen"

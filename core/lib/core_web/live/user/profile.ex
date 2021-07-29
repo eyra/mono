@@ -8,34 +8,20 @@ defmodule CoreWeb.User.Profile do
 
   alias Core.Accounts
   alias Core.Accounts.UserProfileEdit
+  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias EyraUI.Form.{Form, TextInput, Checkbox, UrlInput, PhotoInput}
-  alias EyraUI.Text.{Title2, Title3, BodyMedium}
+  alias EyraUI.Text.{Title2}
   alias EyraUI.Spacing
   alias EyraUI.Container.{ContentArea, FormArea}
-  alias EyraUI.Button.{DeleteButton, PrimaryAlpineButton, SecondaryLiveViewButton}
+  alias EyraUI.Button.{DeleteButton}
 
   data(user_agent, :string, default: "")
 
   @impl true
   def init(_params, _session, socket) do
     socket
-    |> init_user_agent()
     |> init_file_uploader(:photo)
-  end
-
-  def init_user_agent(socket) do
-    init_user_agent(socket, get_connect_info(socket))
-  end
-
-  def init_user_agent(socket, %{user_agent: user_agent}) do
-    assign(socket, user_agent: user_agent)
-  end
-
-  def init_user_agent(socket, _), do: socket
-
-  def is_native(user_agent) do
-    String.contains?(user_agent, "NativeWrapper")
   end
 
   @impl true
@@ -123,6 +109,10 @@ defmodule CoreWeb.User.Profile do
   @impl true
   def render(assigns) do
     ~H"""
+    <Workspace
+      user_agent={{ Browser.Ua.to_ua(@socket) }}
+      active_item={{ :profile }}
+    >
       <ContentArea>
         <FormArea>
           <Title2>{{dgettext "eyra-account", "profile.title"}}</Title2>
@@ -145,30 +135,9 @@ defmodule CoreWeb.User.Profile do
           </Form>
           <Spacing value="L" />
           <DeleteButton label={{ dgettext("eyra-account", "signout.button") }} path={{ Routes.user_session_path(@socket, :delete) }} />
-
-          <div :if={{ !is_native(@user_agent) }}>
-            <Spacing value="XL" />
-            <div x-data>
-              <Title3>{{dgettext "eyra-account", "push.registration.title"}}</Title3>
-              <div x-show="$store.push.registration === 'not-registered'">
-                <BodyMedium>{{dgettext("eyra-account", "push.registration.label")}}</BodyMedium>
-                <Spacing value="XS" />
-                <PrimaryAlpineButton click="registerForPush()" label={{dgettext("eyra-account", "push.registration.button")}} />
-              </div>
-              <BodyMedium>
-                <span x-show="$store.push.registration === 'pending'">{{dgettext("eyra-account", "push.registration.pending")}}</span>
-                <span x-show="$store.push.registration === 'denied'">{{dgettext("eyra-account", "push.registration.denied")}}</span>
-              </BodyMedium>
-              <div x-show="$store.push.registration === 'registered'">
-                <span>{{dgettext("eyra-account", "push.registration.activated")}}</span>
-                <Spacing value="XS" />
-                <SecondaryLiveViewButton color="text-grey2" label={{dgettext("eyra-account", "push.registration.test.button")}} event="send-test-notification"/>
-              </div>
-            </div>
-          </div>
-
         </FormArea>
       </ContentArea>
+    </Workspace>
     """
   end
 end

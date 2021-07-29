@@ -59,6 +59,8 @@ defmodule CoreWeb do
       import Phoenix.Controller,
         only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
 
+      import CoreWeb.UrlResolver, only: [url_resolver: 1]
+
       unquote(view_helpers())
     end
   end
@@ -97,16 +99,6 @@ defmodule CoreWeb do
 
       def current_user(%{assigns: %{current_user: current_user}}), do: current_user
       def current_user(_conn), do: nil
-
-      def supported_languages do
-        current_locale = Gettext.get_locale()
-
-        [
-          {"en", gettext("English")},
-          {"nl", gettext("Dutch")}
-        ]
-        |> Enum.reject(fn {locale, _} -> current_locale == locale end)
-      end
     end
   end
 

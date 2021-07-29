@@ -12,32 +12,17 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/dashboard.ex:131
-msgid "study.index.subtitle"
-msgstr "Studies"
-
-#, elixir-format
-#: bundles/link/lib/dashboard/dashboard.ex:130
-msgid "study.index.title"
-msgstr "Overview"
-
-#, elixir-format
-#: lib/core_web/templates/layout/root.html.leex:79
-msgid "dashboard.button"
-msgstr "Dashboard"
-
-#, elixir-format
-#: bundles/link/lib/dashboard/dashboard.ex:154
+#: bundles/link/lib/marketplace/marketplace.ex:163
 msgid "study.all.title"
 msgstr "Available studies:"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/dashboard.ex:135
+#: bundles/link/lib/marketplace/marketplace.ex:144
 msgid "study.highlighted.title"
 msgstr "My studies:"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/dashboard.ex:147
+#: bundles/link/lib/marketplace/marketplace.ex:156
 msgid "add.card.title"
 msgstr "Set up a new study"
 

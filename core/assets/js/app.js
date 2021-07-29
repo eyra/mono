@@ -66,6 +66,18 @@ let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
 let Hooks = {};
+
+Hooks.NativeWrapper = {
+  mounted() {
+    window.nativeWrapperHook = this
+  },
+  toggleSidePanel() {
+    console.log("NativeWrapper::toggleSidePanel")
+    nativeWrapper.toggleSidePanel({origin: "right"})
+    window.dispatchEvent(new CustomEvent("toggle-native-menu", {}))
+  }
+}
+
 Hooks.PythonUploader = {
   destroyed(){
     this.worker && this.worker.terminate();
@@ -127,19 +139,20 @@ Hooks.PythonUploader = {
     })
   }
 }
-let liveSocket = new LiveSocket("/live", Socket, {
-  params: {
-    _csrf_token: csrfToken,
-  },
+
+let liveSocket = new LiveSocket('/live', Socket, {
   dom: {
     onBeforeElUpdated(from, to) {
       if (from.__x) {
-        Alpine.clone(from.__x, to);
+        window.Alpine.clone(from.__x, to)
       }
-    },
+    }
   },
-  hooks: Hooks,
-});
+  params: {
+    _csrf_token: csrfToken
+  },
+  hooks: Hooks
+})
 
 window.nativeIOSWrapper = {
   // The native code bridge assumes that handlers have been setup. Seethe docs for more info:
@@ -175,13 +188,14 @@ window.nativeIOSWrapper = {
       ...info,
     });
   },
-  webReady: () => {
+  webReady: (id) => {
     window.webkit.messageHandlers.Native.postMessage({
       type: "webReady",
+      id
     });
   },
   toggleSidePanel: (info)=>{
-    window.webkit.messageHandler.Native.postMessage({
+    window.webkit.messageHandlers.Native.postMessage({
       type: "toggleSidePanel",
       ...info
     })
@@ -204,7 +218,9 @@ const loggingWrapper = {
   updateScreenInfo: (info) => {
     console.log("set screen info", info);
   },
-  webReady: () => {},
+  webReady: (id) => {
+    console.log("web ready", id);
+  },
   toggleSidePanel: (info) => {
     console.log("toggle side panel", info)
   },
@@ -224,19 +240,24 @@ const screenId = (urlString) => {
 
 window.addEventListener("phx:page-loading-start", (info) => {
   // other kind options are "error" and "initial"
+  console.log("phx:page-loading-start");
   if (info.detail.kind === "redirect") {
     const to = new URL(info.detail.to);
     const nativeOperation = to.searchParams.get("_no");
+    console.log("nativeOperation", nativeOperation);
     nativeWrapper.setScreenState(screenId(window.location), {
       scrollPosition: window.scrollY,
     });
-    if (nativeOperation === "push_modal") {
-      nativeWrapper.pushModal();
-    } else if (nativeOperation === "pop_modal") {
-      nativeWrapper.popModal();
-    } else {
+    if (nativeOperation === "replace") {
       nativeWrapper.openScreen({
         id: screenId(info.detail.to),
+        subtype: "replace",
+      });
+    } else {
+      window.scrollTo(0, -100); // TBD: makes sure new page is scrolled to top, even with transparant top bar (ios)
+      nativeWrapper.openScreen({
+        id: screenId(info.detail.to),
+        subtype: "push",
       });
     }
   }
@@ -257,10 +278,10 @@ window.addEventListener("phx:page-loading-stop", (info) => {
     id: screenId(info.detail.to),
     rightBarButtons: [{
       title: "Menu",
-      action: {id: "toggle-menu"},
+      action: {id: "toggle-native-menu"},
     }]
   });
-  nativeWrapper.webReady();
+  nativeWrapper.webReady(screenId(info.detail.to));
 });
 
 window.setScreenFromNative = (screenId, state) => {
@@ -271,9 +292,9 @@ window.setScreenFromNative = (screenId, state) => {
   });
 };
 window.handleActionFromNative = (action)=>{
-  if (action.id === "toggle-menu") {
-    nativeWrapper.toggleSidePanel({side: "right"})
-    window.document.body.dispatchEvent(new CustomEvent("toggle-menu", {}))
+  if (action.id === "toggle-native-menu") {
+    nativeWrapper.toggleSidePanel({origin: "right"})
+    window.dispatchEvent(new CustomEvent("toggle-native-menu", {}))
   }
 }
 

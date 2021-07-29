@@ -22,7 +22,7 @@ defmodule EyraUI.Card.PrimaryCTA do
       <div class="mt-6 lg:mt-8">
           <div class="flex items-center">
               <div class="flex-wrap">
-                  <LiveRedirect to={{ @to }}>
+                  <LiveRedirect to={{ @to }} >
                       <div class={{"flex", "items-center", "active:opacity-80", "focus:outline-none", "pl-4", "pr-4", "h-48px", "font-button", "text-button", "text-primary", "tracker-widest", "rounded",
                                   @button_bg_color}}>
                           <div>{{ @button_label }}</div>

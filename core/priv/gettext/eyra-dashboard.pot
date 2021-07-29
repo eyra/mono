@@ -11,11 +11,16 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard/dashboard.ex:89
+#: bundles/link/lib/marketplace/marketplace.ex:96
 msgid "default.study.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:35
+#: lib/core_web/live/dashboard.ex:42
 msgid "title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/dashboard.ex:49
+msgid "recent-items.title"
 msgstr ""

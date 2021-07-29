@@ -76,11 +76,13 @@ studies =
 
 password = "asdf;lkjASDF0987"
 
-_member =
+member =
   Core.Factories.insert!(:member, %{
     email: "member@eyra.co",
     password: password
   })
+
+Core.NextActions.create_next_action(member, Core.Accounts.NextActions.CompleteProfile)
 
 researcher =
   Core.Factories.insert!(:member, %{
@@ -88,6 +90,8 @@ researcher =
     email: "researcher@eyra.co",
     password: password
   })
+
+Core.NextActions.create_next_action(researcher, Core.Accounts.NextActions.CompleteProfile)
 
 for study_data <- studies do
   {tool_type, study_data} = Map.pop!(study_data, :type)

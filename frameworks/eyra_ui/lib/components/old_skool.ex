@@ -1,3 +1,8 @@
+defimpl Browser.Ua, for: Phoenix.LiveView.Socket do
+  def to_ua(%{private: %{connect_info: %{user_agent: user_agent}}}), do: user_agent
+  def to_ua(_), do: ""
+end
+
 defmodule EyraUI.Components.OldSkool do
   import Phoenix.HTML
   import Phoenix.LiveView.Helpers
@@ -6,11 +11,17 @@ defmodule EyraUI.Components.OldSkool do
   Conveniences for reusable UI components
   """
 
-  def native_wrapper?(%{req_headers: req_headers}) do
-    req_headers
-    |> Enum.into(%{})
-    |> Map.get("user-agent", "")
-    |> String.contains?("NativeWrapper")
+  def is_native_web?(conn) do
+    user_agent = Browser.Ua.to_ua(conn)
+    String.match?(user_agent, ~r/NativeWrapper/i)
+  end
+
+  def is_mobile_web?(conn) do
+    Browser.mobile?(conn) && !is_native_web?(conn)
+  end
+
+  def is_desktop_web?(conn) do
+    !is_native_web?(conn) && !is_mobile_web?(conn)
   end
 
   def menu_button(label, path) do

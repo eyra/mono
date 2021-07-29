@@ -1,3 +1,5 @@
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   purge: [
     "../../**/*.html.eex",
@@ -38,7 +40,7 @@ module.exports = {
     extend: {
       transitionDuration: {
         '2000': '2000ms',
-      },      
+      },
       spacing: {
         "1px" : "1px",
         "2px" : "2px",
@@ -58,6 +60,8 @@ module.exports = {
         "48px" : "48px",
         "44px" : "44px",
         "84px" : "84px",
+        "desktop-menu-width" : "256px",
+        "mobile-menu-width" : "304px",
       },
       width: {
         "sidebar" : "68px",
@@ -160,5 +164,20 @@ module.exports = {
       boxShadow: ['active'],
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function({ addUtilities }) {
+      const newUtilities = {
+        '.scrollbar-hide': {
+          /* Firefox */
+          'scrollbar-width': 'thin',
+
+          /* Safari and Chrome */
+          '&::-webkit-scrollbar': {
+            display: 'none'
+          }
+        }
+      }
+      addUtilities(newUtilities)
+    })
+  ],
 }

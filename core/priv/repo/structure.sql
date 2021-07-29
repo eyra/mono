@@ -68,6 +68,30 @@ END;
 $$;
 
 
+--
+-- Name: set_survey_tool_current_subject_count(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.set_survey_tool_current_subject_count() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF (TG_OP = 'DELETE') THEN
+    UPDATE survey_tools SET
+      current_subject_count=(SELECT COUNT(*) FROM survey_tool_participants
+                             WHERE survey_tool_id=OLD.survey_tool_id)
+    WHERE survey_tools.id=OLD.survey_tool_id;
+  ELSIF (TG_OP = 'UPDATE' OR TG_OP = 'INSERT') THEN
+    UPDATE survey_tools SET
+      current_subject_count=(SELECT COUNT(*) FROM survey_tool_participants
+                             WHERE survey_tool_id=NEW.survey_tool_id)
+    WHERE survey_tools.id=NEW.survey_tool_id;
+  END IF;
+  RETURN NULL;
+END;
+$$;
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -441,6 +465,21 @@ CREATE SEQUENCE public.google_sign_in_users_id_seq
 --
 
 ALTER SEQUENCE public.google_sign_in_users_id_seq OWNED BY public.google_sign_in_users.id;
+
+
+--
+-- Name: next_actions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.next_actions (
+    user_id bigint,
+    action character varying(255) NOT NULL,
+    content_node_id bigint,
+    count integer DEFAULT 1 NOT NULL,
+    params jsonb,
+    inserted_at timestamp(0) without time zone NOT NULL,
+    updated_at timestamp(0) without time zone NOT NULL
+);
 
 
 --
@@ -823,7 +862,8 @@ CREATE TABLE public.survey_tools (
     reward_value integer,
     devices character varying(255)[],
     promotion_id bigint,
-    content_node_id bigint NOT NULL
+    content_node_id bigint NOT NULL,
+    current_subject_count integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1492,6 +1532,20 @@ CREATE UNIQUE INDEX google_sign_in_users_sub_index ON public.google_sign_in_user
 
 
 --
+-- Name: next_actions_user_id_action_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX next_actions_user_id_action_index ON public.next_actions USING btree (user_id, action) WHERE (content_node_id IS NULL);
+
+
+--
+-- Name: next_actions_user_id_content_node_id_action_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX next_actions_user_id_content_node_id_action_index ON public.next_actions USING btree (user_id, content_node_id, action) WHERE (content_node_id IS NOT NULL);
+
+
+--
 -- Name: oban_jobs_args_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1608,6 +1662,13 @@ CREATE INDEX web_push_subscriptions_user_id_index ON public.web_push_subscriptio
 --
 
 CREATE TRIGGER oban_notify AFTER INSERT ON public.oban_jobs FOR EACH ROW EXECUTE FUNCTION public.oban_jobs_notify();
+
+
+--
+-- Name: survey_tool_participants survey_tool_current_subject_count; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER survey_tool_current_subject_count AFTER INSERT OR DELETE OR UPDATE ON public.survey_tool_participants FOR EACH ROW EXECUTE FUNCTION public.set_survey_tool_current_subject_count();
 
 
 --
@@ -1760,6 +1821,22 @@ ALTER TABLE ONLY public.data_donation_user_data
 
 ALTER TABLE ONLY public.google_sign_in_users
     ADD CONSTRAINT google_sign_in_users_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: next_actions next_actions_content_node_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.next_actions
+    ADD CONSTRAINT next_actions_content_node_id_fkey FOREIGN KEY (content_node_id) REFERENCES public.content_nodes(id);
+
+
+--
+-- Name: next_actions next_actions_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.next_actions
+    ADD CONSTRAINT next_actions_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
@@ -1951,3 +2028,5 @@ INSERT INTO public."schema_migrations" (version) VALUES (20210605085911);
 INSERT INTO public."schema_migrations" (version) VALUES (20210607120324);
 INSERT INTO public."schema_migrations" (version) VALUES (20210620092414);
 INSERT INTO public."schema_migrations" (version) VALUES (20210630111238);
+INSERT INTO public."schema_migrations" (version) VALUES (20210711182414);
+INSERT INTO public."schema_migrations" (version) VALUES (20210728062650);
