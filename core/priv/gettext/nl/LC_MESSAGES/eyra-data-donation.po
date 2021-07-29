@@ -12,7 +12,6 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:78
 #: lib/core_web/live/data_donation/content.ex:64
 msgid "content.title"
 msgstr "Data Donatie"

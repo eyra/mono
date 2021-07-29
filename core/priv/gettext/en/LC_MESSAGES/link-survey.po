@@ -130,3 +130,8 @@ msgstr "Open spots"
 #: bundles/link/lib/survey/web/monitor.ex:17
 msgid "status.label"
 msgstr "Below you can keep an eye on the progress of the tasks"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:70
+msgid "content.title"
+msgstr "Survey"

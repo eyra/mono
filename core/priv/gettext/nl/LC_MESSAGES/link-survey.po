@@ -130,3 +130,8 @@ msgstr "Open taken"
 #: bundles/link/lib/survey/web/monitor.ex:17
 msgid "status.label"
 msgstr "Hieronder kan je in gaten houden hoe het uitvoeren van taken verloopt"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:70
+msgid "content.title"
+msgstr "Survey"

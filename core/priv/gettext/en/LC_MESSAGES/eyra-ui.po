@@ -22,3 +22,53 @@ msgstr "Something went wrong"
 #: lib/core_web/live/data_donation/content.ex:6
 msgid "saved.info.flash"
 msgstr "Saved"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.dashboard"
+msgstr "Dashboard"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.inbox"
+msgstr "Inbox"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.marketplace"
+msgstr "Marketplace"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.profile"
+msgstr "My profile"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2 lib/core_web/live/user/settings.ex:27
+msgid "menu.item.settings"
+msgstr "Settings"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.signin"
+msgstr "Sign in"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.signout"
+msgstr "Sign out"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.menu"
+msgstr "Menu"
+
+#, elixir-format, fuzzy
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.eyra"
+msgstr "Menu"
+
+#, elixir-format, fuzzy
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.payments"
+msgstr "Payments"

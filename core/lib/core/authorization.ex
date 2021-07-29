@@ -28,6 +28,7 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.User.AwaitConfirmation, [:visitor])
   grant_access(CoreWeb.User.ConfirmToken, [:visitor])
   grant_access(CoreWeb.User.Profile, [:member])
+  grant_access(CoreWeb.User.Settings, [:member])
   grant_access(CoreWeb.User.SecuritySettings, [:member])
   grant_access(CoreWeb.FakeSurvey, [:member])
   grant_access(CoreWeb.DataDonation.Content, [:owner])

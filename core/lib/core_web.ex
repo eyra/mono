@@ -99,16 +99,6 @@ defmodule CoreWeb do
 
       def current_user(%{assigns: %{current_user: current_user}}), do: current_user
       def current_user(_conn), do: nil
-
-      def supported_languages do
-        current_locale = Gettext.get_locale()
-
-        [
-          {"en", gettext("English")},
-          {"nl", gettext("Dutch")}
-        ]
-        |> Enum.reject(fn {locale, _} -> current_locale == locale end)
-      end
     end
   end
 

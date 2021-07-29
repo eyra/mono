@@ -21,3 +21,53 @@ msgstr ""
 #: lib/core_web/live/data_donation/content.ex:6
 msgid "saved.info.flash"
 msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.dashboard"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.inbox"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.marketplace"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.profile"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2 lib/core_web/live/user/settings.ex:27
+msgid "menu.item.settings"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.signin"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.signout"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.menu"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.eyra"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.payments"
+msgstr ""

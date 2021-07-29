@@ -16,15 +16,12 @@
     />
     <script src="<%= Routes.static_path(@conn, "/js/app.js") %>" defer></script>
   </head>
-  <body class="font-body bg-grey5"
-        x-data="{ overlay: false, menu: true }"
-        :class="{'menu': menu}"
-        @toggle-menu="menu = !menu">
-    <div class="fixed z-10 w-full h-full bg-black bg-opacity-30" x-show="overlay"></div>
-    <div class="flex flex-row min-h-screen">
+  <body class="font-body bg-grey5 scrollbar-hide" x-data="{ overlay: false}" >
+    <div class="fixed z-10 w-full h-full bg-black bg-opacity-20" x-show="overlay"></div>
+    <div class="flex flex-row">
       <div
           class="fixed z-20 top-6 w-full pointer-events-none"
-          x-data="{ visible: <%= get_flash(@conn, :error) != nil %> }"
+          x-data="{ visible: <%= get_flash(@conn, :error) != nil %> }"z
           x-show="visible"
       >
         <div class="flex flex-row items-center justify-center" >
@@ -56,61 +53,9 @@
       </div>
 
       <div class="w-0 lg:w-sidebar"></div>
-      <div class="w-full">
-        <div class="flex flex-col h-full">
-          <%= if not native_wrapper?(@conn) do %>
-          <header class="flex-wrap">
-            <nav
-              class="flex items-center h-topbar sm:h-topbar-sm lg:h-topbar-lg"
-            >
-              <div class="flex-none pl-4 lg:pl-0">
-                <%= live_redirect to: "/" do %>
-                  <img
-                    class="h-logo sm:h-logo-sm"
-                    src="<%= Routes.static_path(@conn, "/images/eyra-logo.svg") %>"
-                    alt="Eyra Link Logo"
-                  />
-                  <% end %>
-              </div>
-              <div class="flex-grow ml-2 lg:ml-6">
-                <div class="flex items-center">
-                  <%= if current_user(@conn) do %>
-                    <div class="flex-none lg:pr-4 text-button font-button">
-                      <%= menu_button dgettext("eyra-study", "dashboard.button"), Routes.live_path(@conn, CoreWeb.Dashboard) %>
-                    </div>
-                    <div class="flex-grow"></div>
-                    <div class="flex-none lg:pr-4 text-button font-button">
-                      <%= menu_button dgettext("eyra-account", "profile.button"), Routes.live_path(@conn, CoreWeb.User.Profile) %>
-                    </div>
-                  <% else %>
-                    <div class="flex-grow"></div>
-                    <div class="flex-none pr-1 lg:pr-4">
-                      <%= menu_button dgettext("eyra-account", "signin.button"), Routes.user_session_path(@conn, :new) %>
-                    </div>
-                  <% end %>
-                  <div class="flex-none pl-1 pr-3 lg:pl-6 lg:pr-16 -mt-0.5">
-                    <%= for {locale, _name} <- supported_languages() do %>
-                      <%= language_button Routes.language_switch_path(@conn, :index, locale, redir: @conn.request_path), Routes.static_path(@conn, "/images/" <> locale <> ".svg") %>
-                    <% end %>
-                  </div>
-                </div>
-              </div>
-            </nav>
-          </header>
-          <% end %>
-          <div class="flex-grow">
-            <div class="flex flex-col h-full bg-white">
-              <div class="flex-wrap"></div>
-              <div class="flex-grow">
-                <%= @inner_content %>
-              </div>
-              <div class="flex-wrap mt-8 md:mt-8">
-                <footer>
-                  <%= footer Routes.static_path(@conn, "/images/footer-left.svg"), Routes.static_path(@conn, "/images/footer-right.svg") %>
-                </footer>
-              </div>
-            </div>
-          </div>
+      <div class="flex flex-col w-full">
+        <div class="flex-grow">
+          <%= @inner_content %>
         </div>
       </div>
     </div>
