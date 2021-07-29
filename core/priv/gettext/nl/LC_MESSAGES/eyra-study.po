@@ -12,12 +12,12 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/dashboard.ex:128
+#: bundles/link/lib/dashboard/dashboard.ex:131
 msgid "study.index.subtitle"
 msgstr "Studies"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/dashboard.ex:127
+#: bundles/link/lib/dashboard/dashboard.ex:130
 msgid "study.index.title"
 msgstr "Overzicht"
 
@@ -27,17 +27,17 @@ msgid "dashboard.button"
 msgstr "Dashboard"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/dashboard.ex:151
+#: bundles/link/lib/dashboard/dashboard.ex:154
 msgid "study.all.title"
 msgstr "Beschikbare studies:"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/dashboard.ex:132
+#: bundles/link/lib/dashboard/dashboard.ex:135
 msgid "study.highlighted.title"
 msgstr "Mijn studies:"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/dashboard.ex:144
+#: bundles/link/lib/dashboard/dashboard.ex:147
 msgid "add.card.title"
 msgstr "Maak een nieuwe studie aan"
 

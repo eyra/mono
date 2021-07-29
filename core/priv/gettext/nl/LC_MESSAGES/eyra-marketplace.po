@@ -35,3 +35,8 @@ msgstr "Marktplaats"
 #: lib/core_web/live/marketplace.ex:132
 msgid "title"
 msgstr "Marktplaats"
+
+#, elixir-format
+#: lib/core_web/live/dashboard.ex:38
+msgid "recent-items.title"
+msgstr ""

@@ -56,7 +56,7 @@ defmodule CoreWeb.Dashboard do
       path: Routes.live_path(socket, CoreWeb.DataDonation.Content, edit_id),
       title: title,
       description: description,
-      status: "Concept",
+      status: %{label: "Concept", color: "success"},
       level: :critical,
       image_id: image_id
     }

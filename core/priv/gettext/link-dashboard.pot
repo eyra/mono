@@ -11,11 +11,26 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard/dashboard.ex:89
-msgid "default.study.title"
+#: bundles/link/lib/dashboard.ex:73
+msgid "quick_summary.%{subject_count}.%{target_subject_count}"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:35
+#: bundles/link/lib/dashboard.ex:38
+msgid "recent-items.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:60
+msgid "status.concept"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:62
+msgid "status.published"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:35
 msgid "title"
 msgstr ""

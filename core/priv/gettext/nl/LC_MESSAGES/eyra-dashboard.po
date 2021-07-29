@@ -12,6 +12,11 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/dashboard.ex:86
+#: bundles/link/lib/dashboard/dashboard.ex:89
 msgid "default.study.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/dashboard.ex:35
+msgid "title"
 msgstr ""

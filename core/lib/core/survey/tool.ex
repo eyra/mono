@@ -19,6 +19,7 @@ defmodule Core.Survey.Tool do
     belongs_to(:promotion, Promotion)
 
     field(:survey_url, :string)
+    field(:current_subject_count, :integer)
     field(:subject_count, :integer)
     field(:duration, :string)
     field(:reward_currency, Ecto.Enum, values: [:eur, :usd, :gbp, :chf, :nok, :sek])

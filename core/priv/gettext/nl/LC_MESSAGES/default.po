@@ -21,8 +21,8 @@ msgstr ""
 "X-Generator: Poedit 2.4.2\n"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/dashboard.ex:5
-#: bundles/link/lib/survey/web/complete.ex:5 bundles/link/lib/survey/web/content.ex:5
+#: bundles/link/lib/dashboard.ex:5 bundles/link/lib/dashboard/dashboard.ex:5
+#: bundles/link/lib/survey/web/complete.ex:5 bundles/link/lib/survey/web/content.ex:5 lib/core_web/live/dashboard.ex:5
 #: lib/core_web/live/data_donation/content.ex:5 lib/core_web/live/data_donation/uploader.ex:2
 #: lib/core_web/live/fake_survey.ex:5 lib/core_web/live/index.ex:5 lib/core_web/live/marketplace.ex:5
 #: lib/core_web/live/notifications.ex:2 lib/core_web/live/promotion/public.ex:5
@@ -37,8 +37,8 @@ msgid "Dutch"
 msgstr "Nederlands"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/dashboard.ex:5
-#: bundles/link/lib/survey/web/complete.ex:5 bundles/link/lib/survey/web/content.ex:5
+#: bundles/link/lib/dashboard.ex:5 bundles/link/lib/dashboard/dashboard.ex:5
+#: bundles/link/lib/survey/web/complete.ex:5 bundles/link/lib/survey/web/content.ex:5 lib/core_web/live/dashboard.ex:5
 #: lib/core_web/live/data_donation/content.ex:5 lib/core_web/live/data_donation/uploader.ex:2
 #: lib/core_web/live/fake_survey.ex:5 lib/core_web/live/index.ex:5 lib/core_web/live/marketplace.ex:5
 #: lib/core_web/live/notifications.ex:2 lib/core_web/live/promotion/public.ex:5

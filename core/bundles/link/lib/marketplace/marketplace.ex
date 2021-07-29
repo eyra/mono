@@ -1,4 +1,4 @@
-defmodule Link.Dashboard do
+defmodule Link.Marketplace do
   @moduledoc """
   The home screen.
   """
@@ -12,7 +12,7 @@ defmodule Link.Dashboard do
   alias Core.Content
   alias Core.Promotions
 
-  alias Link.Dashboard.Card, as: CardVM
+  alias Link.Marketplace.Card, as: CardVM
 
   alias EyraUI.Card.{PrimaryStudy, SecondaryStudy, ButtonCard}
   alias EyraUI.Hero.HeroLarge
@@ -50,7 +50,10 @@ defmodule Link.Dashboard do
       |> Enum.into(MapSet.new())
 
     available_studies =
-      Studies.list_studies_with_published_promotion(Tool, exclude: exclusion_list, preload: preload)
+      Studies.list_studies_with_published_promotion(Tool,
+        exclude: exclusion_list,
+        preload: preload
+      )
       |> Enum.map(&CardVM.primary_study(&1, socket))
 
     available_count = Enum.count(available_studies)
@@ -93,13 +96,13 @@ defmodule Link.Dashboard do
     promotion_attrs = create_promotion_attrs(title, user, profile)
 
     with {:ok, study} <- Studies.create_study(changeset, user),
-      {:ok, _author} <- Studies.add_author(study, user),
-      {:ok, tool_content_node} <- Content.Nodes.create(%{ready: false}),
-      {:ok, promotion_content_node} <-
-        Content.Nodes.create(%{ready: false}, tool_content_node),
-      {:ok, promotion} <- Promotions.create(promotion_attrs, study, promotion_content_node),
-      {:ok, tool} <- Tools.create_survey_tool(tool_attrs, study, promotion, tool_content_node) do
-        tool
+         {:ok, _author} <- Studies.add_author(study, user),
+         {:ok, tool_content_node} <- Content.Nodes.create(%{ready: false}),
+         {:ok, promotion_content_node} <-
+           Content.Nodes.create(%{ready: false}, tool_content_node),
+         {:ok, promotion} <- Promotions.create(promotion_attrs, study, promotion_content_node),
+         {:ok, tool} <- Tools.create_survey_tool(tool_attrs, study, promotion, tool_content_node) do
+      tool
     end
   end
 

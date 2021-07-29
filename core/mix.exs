@@ -118,6 +118,12 @@ defmodule Core.MixProject do
       test: ["ecto.create --quiet", "ecto.migrate", "test"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
+      "ecto.reset.link": [
+        "ecto.drop",
+        "ecto.create",
+        "ecto.migrate",
+        "run bundles/link/seeds.exs"
+      ],
       i18n: [
         "gettext.extract --merge priv/gettext"
       ],

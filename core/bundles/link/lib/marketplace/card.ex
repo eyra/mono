@@ -1,4 +1,4 @@
-defmodule Link.Dashboard.Card do
+defmodule Link.Marketplace.Card do
   alias Core.Survey.Tools
   alias Core.ImageHelpers
   alias CoreWeb.Router.Helpers, as: Routes
