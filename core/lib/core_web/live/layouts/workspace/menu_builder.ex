@@ -34,7 +34,7 @@ defmodule CoreWeb.Layouts.Workspace.MenuBuilder do
     [
       live_item(socket, :dashboard, active_item),
       live_item(socket, :marketplace, active_item),
-      live_item(socket, :inbox, active_item),
+      live_item(socket, :todo, active_item),
       live_item(socket, :payments, active_item)
     ]
   end

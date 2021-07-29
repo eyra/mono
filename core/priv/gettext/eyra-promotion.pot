@@ -16,17 +16,17 @@ msgid "created.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard/card.ex:42 lib/core_web/view_model/card.ex:40
+#: bundles/link/lib/card.ex:42 lib/core_web/view_model/card.ex:40
 msgid "deadline.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard/card.ex:41 lib/core_web/view_model/card.ex:39
+#: bundles/link/lib/card.ex:41 lib/core_web/view_model/card.ex:39
 msgid "open.spots.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard/card.ex:51 lib/core_web/live/promotion/form.ex:117
+#: bundles/link/lib/card.ex:51 lib/core_web/live/promotion/form.ex:117
 #: lib/core_web/view_model/card.ex:49
 msgid "published.false.label"
 msgstr ""
@@ -37,7 +37,7 @@ msgid "published.true.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard/card.ex:40 lib/core_web/view_model/card.ex:38
+#: bundles/link/lib/card.ex:40 lib/core_web/view_model/card.ex:38
 msgid "reward.title"
 msgstr ""
 
@@ -167,7 +167,7 @@ msgid "description.public.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard/card.ex:39
+#: bundles/link/lib/card.ex:39
 msgid "duration.title"
 msgstr ""
 

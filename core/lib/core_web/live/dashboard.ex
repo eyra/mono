@@ -139,7 +139,8 @@ defmodule CoreWeb.Dashboard do
   def render(assigns) do
     ~H"""
       <Workspace
-        title={{ dgettext("eyra-dashboard", "title") }}
+        title={{ dgettext("eyra-ui", "dashboard.title") }}
+        user={{@current_user}}
         user_agent={{ Browser.Ua.to_ua(@socket) }}
         active_item={{ :dashboard }}
       >

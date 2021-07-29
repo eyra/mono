@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:131
+#: lib/core_web/live/user/profile.ex:127
 msgid "displayname.label"
 msgstr ""
 
@@ -21,7 +21,7 @@ msgid "email.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:130
+#: lib/core_web/live/user/profile.ex:126
 msgid "fullname.label"
 msgstr ""
 
@@ -31,12 +31,12 @@ msgid "password.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:118
+#: lib/core_web/live/user/profile.ex:114
 msgid "profile.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:134
+#: lib/core_web/live/user/profile.ex:130
 msgid "researcher.label"
 msgstr ""
 
@@ -61,7 +61,7 @@ msgid "signup.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:137
+#: lib/core_web/live/user/profile.ex:133
 msgid "signout.button"
 msgstr ""
 
@@ -76,7 +76,7 @@ msgid "confirm.token.resend_button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:125
+#: lib/core_web/live/user/profile.ex:121
 msgid "choose.profile.photo.file"
 msgstr ""
 
@@ -86,51 +86,51 @@ msgid "photo.upload.error.flash"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:126
+#: lib/core_web/live/user/profile.ex:122
 msgid "choose.other.profile.photo.file"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:132
+#: lib/core_web/live/user/profile.ex:128
 msgid "professionaltitle.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:133
+#: lib/core_web/live/user/profile.ex:129
 msgid "website.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:35
+#: lib/core_web/live/user/settings.ex:41
 msgid "push.registration.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:31
+#: lib/core_web/live/user/settings.ex:37
 msgid "push.registration.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:42
+#: lib/core_web/live/user/settings.ex:48
 msgid "push.registration.activated"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:39
+#: lib/core_web/live/user/settings.ex:45
 msgid "push.registration.denied"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:33
+#: lib/core_web/live/user/settings.ex:39
 msgid "push.registration.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:38
+#: lib/core_web/live/user/settings.ex:44
 msgid "push.registration.pending"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:44
+#: lib/core_web/live/user/settings.ex:50
 msgid "push.registration.test.button"
 msgstr ""

@@ -21,11 +21,11 @@ msgstr ""
 "X-Generator: Poedit 2.4.2\n"
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:120
+#: lib/core_web/live/menu/helpers.ex:137
 msgid "Dutch"
 msgstr "Nederlands"
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:119
+#: lib/core_web/live/menu/helpers.ex:136
 msgid "English"
 msgstr "Engels"

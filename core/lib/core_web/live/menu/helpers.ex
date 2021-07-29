@@ -107,7 +107,7 @@ defmodule CoreWeb.Menu.Helpers do
         :get
       end
 
-    action = %{target: Routes.user_session_path(socket, method), method: method}
+    action = %{target: Routes.user_session_path(socket, info.target), method: method, dead?: true}
     %{id: id, title: title, icon: icon, action: action}
   end
 

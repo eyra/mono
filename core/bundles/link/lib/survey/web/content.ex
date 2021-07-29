@@ -68,6 +68,7 @@ defmodule Link.Survey.Content do
     ~H"""
     <Workspace
       title={{ dgettext("link-survey", "content.title") }}
+      user={{@current_user}}
       user_agent={{ Browser.Ua.to_ua(@socket) }}
       active_item={{ :survey }}
       id={{ @tool_id }}

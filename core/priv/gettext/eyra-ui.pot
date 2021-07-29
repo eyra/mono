@@ -29,11 +29,6 @@ msgstr ""
 
 #, elixir-format
 #: lib/core_web/live/menu/helpers.ex:2
-msgid "menu.item.inbox"
-msgstr ""
-
-#, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2
 msgid "menu.item.marketplace"
 msgstr ""
 
@@ -43,7 +38,7 @@ msgid "menu.item.profile"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2 lib/core_web/live/user/settings.ex:27
+#: lib/core_web/live/menu/helpers.ex:2 lib/core_web/live/user/settings.ex:33
 msgid "menu.item.settings"
 msgstr ""
 
@@ -69,5 +64,20 @@ msgstr ""
 
 #, elixir-format
 #: lib/core_web/live/menu/helpers.ex:2
-msgid "menu.item.payments"
+msgid "menu.item.todo"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:114 lib/core_web/live/dashboard.ex:142
+msgid "dashboard.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/marketplace.ex:126
+msgid "marketplace.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/todo.ex:17
+msgid "todo.title"
 msgstr ""
