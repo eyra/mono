@@ -14,12 +14,16 @@ defmodule Core.SurfConext do
   end
 
   def register_user(attrs) do
+    affiliation = attrs |> Map.get("eduperson_affiliation", []) |> MapSet.new()
+
     sso_info = %{
       email: Map.get(attrs, "email"),
       displayname: Map.get(attrs, "preferred_username"),
       profile: %{
         fullname: Map.get(attrs, "preferred_username")
-      }
+      },
+      researcher: MapSet.member?(affiliation, "employee"),
+      student: MapSet.member?(affiliation, "student")
     }
 
     user = User.sso_changeset(%User{}, sso_info)

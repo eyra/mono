@@ -32,5 +32,33 @@ defmodule Core.SurfConext.Test do
       assert surf_user.user.displayname == Map.get(sso_info, "preferred_username")
       assert surf_user.user.profile.fullname == Map.get(sso_info, "preferred_username")
     end
+
+    test "assign the researcher role when the user is an employee" do
+      sso_info = %{
+        "sub" => Faker.UUID.v4(),
+        "email" => Faker.Internet.email(),
+        "preferred_username" => Faker.Person.name(),
+        "schac_home_organization" => "eduid.nl",
+        "eduperson_affiliation" => ["member", "employee", "faculty"]
+      }
+
+      {:ok, surf_user} = Core.SurfConext.register_user(sso_info)
+
+      assert surf_user.user.researcher
+    end
+
+    test "assign the student role when the user is an student" do
+      sso_info = %{
+        "sub" => Faker.UUID.v4(),
+        "email" => Faker.Internet.email(),
+        "preferred_username" => Faker.Person.name(),
+        "schac_home_organization" => "eduid.nl",
+        "eduperson_affiliation" => ["student"]
+      }
+
+      {:ok, surf_user} = Core.SurfConext.register_user(sso_info)
+
+      assert surf_user.user.student
+    end
   end
 end

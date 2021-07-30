@@ -10,6 +10,7 @@ defmodule Core.SurfConext.User do
     field(:given_name, :string)
     field(:preferred_username, :string)
     field(:schac_home_organization, :string)
+    field(:eduperson_affiliation, {:array, :string})
 
     timestamps()
   end
@@ -22,7 +23,8 @@ defmodule Core.SurfConext.User do
       :family_name,
       :given_name,
       :preferred_username,
-      :schac_home_organization
+      :schac_home_organization,
+      :eduperson_affiliation
     ])
     |> validate_required(:sub)
   end

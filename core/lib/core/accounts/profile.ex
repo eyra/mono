@@ -15,14 +15,11 @@ defmodule Core.Accounts.Profile do
     timestamps()
   end
 
-  @required_fields ~w(fullname)a
-
   @fields ~w(fullname title url photo_url)a
 
   @doc false
   def changeset(profile, attrs) do
     profile
     |> cast(attrs, @fields)
-    |> validate_required(@required_fields)
   end
 end

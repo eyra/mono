@@ -8,8 +8,9 @@ defimpl GreenLight.Principal, for: Core.Accounts.User do
   def id(user), do: user.id
 
   def roles(user) do
-    roles = if(user.researcher, do: [:researcher], else: [])
-    MapSet.new([:member | roles])
+    roles = MapSet.new([:member])
+    roles = if user.researcher, do: MapSet.put(roles, :researcher), else: roles
+    if user.student, do: MapSet.put(roles, :student), else: roles
   end
 end
 
