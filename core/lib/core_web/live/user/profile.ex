@@ -93,11 +93,6 @@ defmodule CoreWeb.User.Profile do
     |> AutoSave.schedule_hide_message()
   end
 
-  def handle_event("send-test-notification", _params, %{assigns: %{current_user: user}} = socket) do
-    Core.WebPush.send(user, "Test notification")
-    {:noreply, socket}
-  end
-
   def handle_event("focus", %{"field" => field}, socket) do
     {
       :noreply,
@@ -110,6 +105,7 @@ defmodule CoreWeb.User.Profile do
   def render(assigns) do
     ~H"""
     <Workspace
+      user={{@current_user}}
       user_agent={{ Browser.Ua.to_ua(@socket) }}
       active_item={{ :profile }}
     >

@@ -22,12 +22,23 @@ defmodule CoreWeb.Menu.ItemsProvider do
       end
 
       def info(item_id) do
-        CoreWeb.Menu.ItemsProvider.item(item_id)
+        case CoreWeb.Menu.ItemsProvider.item(item_id) do
+          nil -> exit("Menu item :#{item_id} not found in configuration")
+          item -> item
+        end
       end
 
       def title(item_id) do
-        %{domain: domain, target: target} = CoreWeb.Menu.ItemsProvider.item(item_id)
-        Gettext.dgettext(CoreWeb.Gettext, domain, "menu.item.#{item_id}")
+        case CoreWeb.Menu.ItemsProvider.item(item_id) do
+          nil ->
+            exit("Menu item :#{item_id} not found in configuration")
+
+          %{domain: domain} ->
+            Gettext.dgettext(CoreWeb.Gettext, domain, "menu.item.#{item_id}")
+
+          _ ->
+            exit("Menu item #{item_id} has no configuration for domain")
+        end
       end
     end
   end

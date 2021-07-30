@@ -23,6 +23,7 @@ defmodule CoreWeb.Live.Routes do
         pipe_through([:browser, :require_authenticated_user])
         live("/dashboard", Dashboard)
         live("/marketplace", Marketplace)
+        live("/todo", Todo)
         live("/notifications", Notifications)
       end
 

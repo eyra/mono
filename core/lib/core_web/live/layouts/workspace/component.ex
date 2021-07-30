@@ -10,6 +10,7 @@ defmodule CoreWeb.Layouts.Workspace.Component do
   alias EyraUI.Hero.HeroSmall
 
   prop(title, :string)
+  prop(user, :string, required: true)
   prop(user_agent, :string, required: true)
   prop(active_item, :any, required: true)
   prop(id, :string)
@@ -22,7 +23,7 @@ defmodule CoreWeb.Layouts.Workspace.Component do
     builder().build_menu(
       type,
       socket,
-      socket,
+      socket.assigns.__assigns__.user,
       socket.assigns.__assigns__.active_item,
       socket.assigns.__assigns__.id
     )

@@ -24,7 +24,7 @@ defmodule CoreWeb.Layouts.Website.Component do
     builder().build_menu(
       type,
       socket,
-      socket,
+      socket.assigns.__assigns__.user,
       socket.assigns.__assigns__.active_item,
       socket.assigns.__assigns__.id
     )

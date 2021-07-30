@@ -11,18 +11,28 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace/marketplace.ex:163
+#: lib/core/survey/form_data.ex:11
+msgid "devices.desktop"
+msgstr ""
+
+#, elixir-format
+#: lib/core/survey/form_data.ex:11
+msgid "devices.phone"
+msgstr ""
+
+#, elixir-format
+#: lib/core/survey/form_data.ex:11
+msgid "devices.tablet"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/marketplace.ex:148
 msgid "study.all.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace/marketplace.ex:144
+#: bundles/link/lib/marketplace.ex:138
 msgid "study.highlighted.title"
-msgstr ""
-
-#, elixir-format
-#: bundles/link/lib/marketplace/marketplace.ex:156
-msgid "add.card.title"
 msgstr ""
 
 #, elixir-format
@@ -58,19 +68,4 @@ msgstr ""
 #, elixir-format
 #: lib/core/promotions/form_data.ex:17
 msgid "themes.technology"
-msgstr ""
-
-#, elixir-format
-#: lib/core/survey/form_data.ex:11
-msgid "devices.desktop"
-msgstr ""
-
-#, elixir-format
-#: lib/core/survey/form_data.ex:11
-msgid "devices.phone"
-msgstr ""
-
-#, elixir-format
-#: lib/core/survey/form_data.ex:11
-msgid "devices.tablet"
 msgstr ""

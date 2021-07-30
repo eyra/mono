@@ -32,7 +32,6 @@ msgid "marketplace.title"
 msgstr "Marktplaats"
 
 #, elixir-format
-#: bundles/link/lib/marketplace/marketplace.ex:138
 #: lib/core_web/live/marketplace.ex:134
 msgid "title"
 msgstr "Marktplaats"

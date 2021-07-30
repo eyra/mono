@@ -12,22 +12,22 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:83
+#: bundles/link/lib/dashboard.ex:84
 msgid "quick_summary.%{subject_count}.%{target_subject_count}"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:47
+#: bundles/link/lib/dashboard.ex:48
 msgid "recent-items.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:70
+#: bundles/link/lib/dashboard.ex:71
 msgid "status.concept"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:72
+#: bundles/link/lib/dashboard.ex:73
 msgid "status.published"
 msgstr ""
 

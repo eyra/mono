@@ -4,7 +4,6 @@ defmodule Link.Marketplace do
   """
   use CoreWeb, :live_view
 
-  import Core.Authorization
   alias Core.Studies
   alias Core.Studies.Study
   alias Core.Survey.{Tools, Tool}
@@ -14,7 +13,7 @@ defmodule Link.Marketplace do
 
   alias Link.Marketplace.Card, as: CardVM
 
-  alias EyraUI.Card.{PrimaryStudy, SecondaryStudy, ButtonCard}
+  alias EyraUI.Card.{PrimaryStudy, SecondaryStudy}
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title2}
   alias EyraUI.Grid.{DynamicGrid}
@@ -32,18 +31,13 @@ defmodule Link.Marketplace do
     user = socket.assigns[:current_user]
     preload = [survey_tool: [:promotion]]
 
-    owned_studies =
-      user
-      |> Studies.list_owned_studies(preload: preload)
-      |> Enum.map(&CardVM.primary_study(&1, socket))
-
     subject_studies =
       user
       |> Studies.list_subject_studies(preload: preload)
       |> Enum.map(&CardVM.primary_study(&1, socket))
 
-    highlighted_studies = owned_studies ++ subject_studies
-    highlighted_count = Enum.count(highlighted_studies)
+    highlighted_studies = subject_studies
+    highlighted_count = Enum.count(subject_studies)
 
     exclusion_list =
       highlighted_studies
@@ -62,7 +56,6 @@ defmodule Link.Marketplace do
     socket =
       socket
       |> assign(highlighted_count: highlighted_count)
-      |> assign(owned_studies: owned_studies)
       |> assign(subject_studies: subject_studies)
       |> assign(available_studies: available_studies)
       |> assign(available_count: available_count)
@@ -135,7 +128,8 @@ defmodule Link.Marketplace do
   def render(assigns) do
     ~H"""
         <Workspace
-          title={{ dgettext("eyra-marketplace", "title") }}
+          title={{ dgettext("eyra-ui", "marketplace.title") }}
+          user={{@current_user}}
           user_agent={{ Browser.Ua.to_ua(@socket) }}
           active_item={{ :marketplace }}
         >
@@ -145,17 +139,8 @@ defmodule Link.Marketplace do
               <span class="text-primary"> {{ @highlighted_count }}</span>
             </Title2>
             <DynamicGrid>
-              <div :for={{ card <- @owned_studies  }} >
-                <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :edit, id: card.edit_id } }} />
-              </div>
               <div :for={{ card <- @subject_studies  }} >
                 <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
-              </div>
-              <div :if={{ can_access?(@current_user, CoreWeb.Study.New) }} >
-                <ButtonCard
-                  title={{dgettext("eyra-study", "add.card.title")}}
-                  image={{Routes.static_path(@socket, "/images/plus-primary.svg")}}
-                  event="create_tool" />
               </div>
             </DynamicGrid>
             <div class="mt-12 lg:mt-16"/>

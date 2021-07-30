@@ -12,19 +12,29 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/marketplace/marketplace.ex:163
+#: lib/core/survey/form_data.ex:11
+msgid "devices.desktop"
+msgstr "Desktop"
+
+#, elixir-format
+#: lib/core/survey/form_data.ex:11
+msgid "devices.phone"
+msgstr "Telefoon"
+
+#, elixir-format
+#: lib/core/survey/form_data.ex:11
+msgid "devices.tablet"
+msgstr "Tablet"
+
+#, elixir-format
+#: bundles/link/lib/marketplace.ex:148
 msgid "study.all.title"
 msgstr "Beschikbare studies:"
 
 #, elixir-format
-#: bundles/link/lib/marketplace/marketplace.ex:144
+#: bundles/link/lib/marketplace.ex:138
 msgid "study.highlighted.title"
-msgstr "Mijn studies:"
-
-#, elixir-format
-#: bundles/link/lib/marketplace/marketplace.ex:156
-msgid "add.card.title"
-msgstr "Maak een nieuwe studie aan"
+msgstr "Mijn contributies:"
 
 #, elixir-format
 #: lib/core/promotions/form_data.ex:17
@@ -60,18 +70,3 @@ msgstr "Maatschappij"
 #: lib/core/promotions/form_data.ex:17
 msgid "themes.technology"
 msgstr "Technologie"
-
-#, elixir-format
-#: lib/core/survey/form_data.ex:11
-msgid "devices.desktop"
-msgstr "Desktop"
-
-#, elixir-format
-#: lib/core/survey/form_data.ex:11
-msgid "devices.phone"
-msgstr "Telefoon"
-
-#, elixir-format
-#: lib/core/survey/form_data.ex:11
-msgid "devices.tablet"
-msgstr "Tablet"

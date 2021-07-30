@@ -135,3 +135,8 @@ msgstr "Hieronder kan je in gaten houden hoe het uitvoeren van taken verloopt"
 #: bundles/link/lib/survey/web/content.ex:70
 msgid "content.title"
 msgstr "Survey"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:17
+msgid "title"
+msgstr "Surveys"

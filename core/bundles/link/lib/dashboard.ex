@@ -38,6 +38,7 @@ defmodule Link.Dashboard do
     ~H"""
       <Workspace
         title={{ dgettext("link-dashboard", "title") }}
+        user={{@current_user}}
         user_agent={{ Browser.Ua.to_ua(@socket) }}
         active_item={{ :dashboard }}
       >
@@ -46,7 +47,7 @@ defmodule Link.Dashboard do
           <Title2>
             {{ dgettext("link-dashboard", "recent-items.title") }}
           </Title2>
-          <ContentListItem :for={{item <- @content_items}} title={{item.title}} description="Facere dolorem sequi sit voluptas labore porro qui quis" quick_summary={{item.quick_summary}} status={{item.status}} level={{:critical}} image_id={{item.image_id}} to={{item.path}}  />
+          <ContentListItem :for={{item <- @content_items}} title={{item.title}} description="Facere dolorem sequi sit voluptas labore porro qui quis" quick_summary={{item.quick_summary}} status={{item.status}} image_id={{item.image_id}} to={{item.path}}  />
         </ContentArea>
       </Workspace>
     """

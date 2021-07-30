@@ -12,7 +12,7 @@ defmodule EyraUI.Navigation.Button do
 
   slot(default, required: true)
 
-  alias EyraUI.Navigation.{Delete, Get, GetDead, Alpine}
+  alias EyraUI.Navigation.{Get, Dead, Alpine}
 
   def render(assigns) do
     ~H"""
@@ -20,12 +20,9 @@ defmodule EyraUI.Navigation.Button do
         <Get :if={{ method(@vm) === :get && !dead?(@vm)}} path={{target(@vm)}}>
           <slot />
         </Get>
-        <GetDead :if={{ method(@vm) === :get && dead?(@vm)}} path={{target(@vm)}}>
+        <Dead :if={{dead?(@vm)}} method={{method(@vm) }} path={{target(@vm)}}>
           <slot />
-        </GetDead>
-        <Delete :if={{ method(@vm) === :delete }} path={{target(@vm)}}>
-          <slot />
-        </Delete>
+        </Dead>
         <Alpine :if={{ method(@vm) === :alpine}} click_handler={{target(@vm)}}>
           <slot />
         </Alpine>
