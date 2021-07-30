@@ -11,13 +11,14 @@ defmodule Link.Marketplace do
   alias Core.Content
   alias Core.Promotions
 
+  alias Link.Marketplace.Card, as: CardVM
+
   alias EyraUI.Card.{PrimaryStudy, SecondaryStudy}
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title2}
   alias EyraUI.Grid.{DynamicGrid}
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias Link.Dashboard.Card, as: CardVM
 
   data(highlighted_count, :any)
   data(owned_studies, :any)
@@ -44,7 +45,10 @@ defmodule Link.Marketplace do
       |> Enum.into(MapSet.new())
 
     available_studies =
-      Studies.list_studies_with_published_promotion(Tool, exclude: exclusion_list, preload: preload)
+      Studies.list_studies_with_published_promotion(Tool,
+        exclude: exclusion_list,
+        preload: preload
+      )
       |> Enum.map(&CardVM.primary_study(&1, socket))
 
     available_count = Enum.count(available_studies)
@@ -60,7 +64,8 @@ defmodule Link.Marketplace do
   end
 
   def handle_info({:card_click, %{action: :edit, id: id}}, socket) do
-    {:noreply, push_redirect(socket, to: CoreWeb.Router.Helpers.live_path(socket, Link.Survey.Content, id))}
+    {:noreply,
+     push_redirect(socket, to: CoreWeb.Router.Helpers.live_path(socket, Link.Survey.Content, id))}
   end
 
   def handle_info({:card_click, %{action: :public, id: id}}, socket) do
@@ -72,7 +77,7 @@ defmodule Link.Marketplace do
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, Link.Survey.Content, tool.id))}
   end
 
-  def handle_event("menu-item-clicked", %{ "action" => action}, socket) do
+  def handle_event("menu-item-clicked", %{"action" => action}, socket) do
     # toggle menu
     {:noreply, push_redirect(socket, to: action)}
   end
@@ -91,13 +96,13 @@ defmodule Link.Marketplace do
     promotion_attrs = create_promotion_attrs(title, user, profile)
 
     with {:ok, study} <- Studies.create_study(changeset, user),
-      {:ok, _author} <- Studies.add_author(study, user),
-      {:ok, tool_content_node} <- Content.Nodes.create(%{ready: false}),
-      {:ok, promotion_content_node} <-
-        Content.Nodes.create(%{ready: false}, tool_content_node),
-      {:ok, promotion} <- Promotions.create(promotion_attrs, study, promotion_content_node),
-      {:ok, tool} <- Tools.create_survey_tool(tool_attrs, study, promotion, tool_content_node) do
-        tool
+         {:ok, _author} <- Studies.add_author(study, user),
+         {:ok, tool_content_node} <- Content.Nodes.create(%{ready: false}),
+         {:ok, promotion_content_node} <-
+           Content.Nodes.create(%{ready: false}, tool_content_node),
+         {:ok, promotion} <- Promotions.create(promotion_attrs, study, promotion_content_node),
+         {:ok, tool} <- Tools.create_survey_tool(tool_attrs, study, promotion, tool_content_node) do
+      tool
     end
   end
 

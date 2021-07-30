@@ -7,6 +7,7 @@ defmodule EyraUI.Image do
   prop(image, :any, required: true)
   prop(corners, :css_class, default: "")
   prop(transition, :css_class, default: "duration-500")
+  prop(css_class, :css_class, default: "")
 
   def render(assigns) do
     canvas_width = 32
@@ -14,9 +15,9 @@ defmodule EyraUI.Image do
 
     ~H"""
     <div
-      class="blurhash-wrapper overflow-hidden w-full h-full"
+      class="blurhash-wrapper overflow-hidden w-full h-full relative"
       x-data="blurHash()"
-      x-init="render()"
+      x-init="$nextTick(()=>render())"
       >
       <canvas
         x-show="showBlurHash()"
@@ -25,11 +26,11 @@ defmodule EyraUI.Image do
         x-transition:leave-end="opacity-0"
         width={{canvas_width}}
         height={{canvas_height}}
-        class="absolute z-10 object-cover w-full h-full {{@corners}}"
+        class={{"absolute", "z-10", "object-cover", "w-full", "h-full", @corners}}
         data-blurhash={{@image.blur_hash}}
         />
       <img
-        class="object-cover w-full h-full {{@corners}}"
+        class={{"object-cover", "w-full", "h-full", @corners}}
         src={{ @image.url }}
         srcset={{@image.srcset}}
         loading="lazy"

@@ -29,17 +29,27 @@ window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 window.blurHash = () => {
   return {
     show: true,
+    rendered: false,
     showBlurHash() {
       return this.show !== false;
     },
     hideBlurHash() {
+      if (!liveSocket.socket.isConnected()) {
+        return;
+      }
       this.show = false;
     },
     render() {
-      const canvas = this.$el.getElementsByTagName("canvas")[0];
-      if (canvas.dataset.rendered) {
+      const img = this.$el.getElementsByTagName("img")[0]
+      if (img.complete) {
+        this.show = false;
         return;
       }
+      if (this.rendered) {
+        return;
+      }
+      this.rendered = true;
+      const canvas = this.$el.getElementsByTagName("canvas")[0];
       const blurhash = canvas.dataset.blurhash;
       const width = parseInt(canvas.getAttribute("width"), 10);
       const height = parseInt(canvas.getAttribute("height"), 10);
@@ -48,7 +58,6 @@ window.blurHash = () => {
       const imageData = ctx.createImageData(width, height);
       imageData.data.set(pixels);
       ctx.putImageData(imageData, 0, 0);
-      canvas.dataset.rendered = true;
     },
   };
 };

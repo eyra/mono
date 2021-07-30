@@ -6,7 +6,7 @@ defmodule CoreWeb.Menu.Items do
     do: %{
       eyra: %{target: CoreWeb.Index, size: :large, domain: "eyra-ui"},
       dashboard: %{target: CoreWeb.Dashboard, domain: "eyra-ui"},
-      marketplace: %{target: CoreWeb.Dashboard, domain: "eyra-ui"},
+      marketplace: %{target: CoreWeb.Marketplace, domain: "eyra-ui"},
       todo: %{target: CoreWeb.Todo, domain: "eyra-ui"},
       payments: %{target: CoreWeb.Dashboard, domain: "eyra-ui"},
       settings: %{target: CoreWeb.User.Settings, domain: "eyra-ui"},

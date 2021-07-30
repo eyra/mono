@@ -165,6 +165,7 @@ defmodule Core.Factories do
     {parent_content_node, attributes} = Map.pop!(attributes, :parent_content_node)
 
     %Promotions.Promotion{
+      title: Faker.Lorem.sentence(),
       content_node: build(:content_node, %{parent: parent_content_node}),
       auth_node: build(:auth_node, %{parent: study.auth_node})
     }

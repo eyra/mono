@@ -136,11 +136,6 @@ msgid "content.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2
-msgid "menu.item.surveys"
-msgstr ""
-
-#, elixir-format
 #: bundles/link/lib/survey/web/overview.ex:17
 msgid "title"
 msgstr ""

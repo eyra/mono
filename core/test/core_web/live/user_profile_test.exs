@@ -10,8 +10,8 @@ defmodule CoreWeb.Live.UserProfileTest do
     test "renders form for editing the users profile", %{conn: conn} do
       {:ok, view, _html} = live(conn, Routes.live_path(conn, Profile))
 
-      fullname = Faker.Person.name()
-      displayname = Faker.Person.first_name()
+      fullname = Faker.Lorem.word()
+      displayname = Faker.Lorem.word()
 
       # Editing the profile should update it
       html =

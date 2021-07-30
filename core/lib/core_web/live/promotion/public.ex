@@ -127,7 +127,7 @@ defmodule CoreWeb.Promotion.Public do
           <Spacing value="M" />
 
           <div class="flex">
-            <BackButton label={{ dgettext("eyra-promotion", "back.button.label") }} path={{ Routes.live_path(@socket, CoreWeb.Dashboard) }}/>
+            <BackButton label={{ dgettext("eyra-promotion", "back.button.label") }} path={{ Routes.live_path(@socket, CoreWeb.Marketplace) }}/>
           </div>
       </ContentArea>
     """

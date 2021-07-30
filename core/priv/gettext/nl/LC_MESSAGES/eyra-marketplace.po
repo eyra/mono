@@ -12,11 +12,26 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:89
+#: lib/core_web/live/marketplace.ex:140
+msgid "highlighted.title"
+msgstr "Mijn studies"
+
+#, elixir-format
+#: lib/core_web/live/marketplace.ex:152
+msgid "add.card.title"
+msgstr "Nieuwe studie"
+
+#, elixir-format
+#: lib/core_web/live/marketplace.ex:93
 msgid "default.study.title"
 msgstr "Nieuwe studie"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:50
-msgid "recent-items.title"
-msgstr "Recente items"
+#: lib/core_web/live/marketplace.ex:159
+msgid "marketplace.title"
+msgstr "Marktplaats"
+
+#, elixir-format
+#: lib/core_web/live/marketplace.ex:134
+msgid "title"
+msgstr "Marktplaats"

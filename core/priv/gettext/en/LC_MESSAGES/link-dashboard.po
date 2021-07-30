@@ -12,11 +12,26 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:89
-msgid "default.study.title"
-msgstr "New study"
+#: bundles/link/lib/dashboard.ex:84
+msgid "quick_summary.%{subject_count}.%{target_subject_count}"
+msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:50
+#: bundles/link/lib/dashboard.ex:48
 msgid "recent-items.title"
-msgstr "Recent items:"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:71
+msgid "status.concept"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:73
+msgid "status.published"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:40
+msgid "title"
+msgstr ""

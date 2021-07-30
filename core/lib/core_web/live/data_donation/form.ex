@@ -63,7 +63,7 @@ defmodule CoreWeb.DataDonation.Form do
     Tools.get!(entity_id)
     |> Tools.delete()
 
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Dashboard))}
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Marketplace))}
   end
 
   # Saving

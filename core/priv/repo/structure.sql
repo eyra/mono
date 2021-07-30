@@ -68,6 +68,30 @@ END;
 $$;
 
 
+--
+-- Name: set_survey_tool_current_subject_count(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.set_survey_tool_current_subject_count() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF (TG_OP = 'DELETE') THEN
+    UPDATE survey_tools SET
+      current_subject_count=(SELECT COUNT(*) FROM survey_tool_participants
+                             WHERE survey_tool_id=OLD.survey_tool_id)
+    WHERE survey_tools.id=OLD.survey_tool_id;
+  ELSIF (TG_OP = 'UPDATE' OR TG_OP = 'INSERT') THEN
+    UPDATE survey_tools SET
+      current_subject_count=(SELECT COUNT(*) FROM survey_tool_participants
+                             WHERE survey_tool_id=NEW.survey_tool_id)
+    WHERE survey_tools.id=NEW.survey_tool_id;
+  END IF;
+  RETURN NULL;
+END;
+$$;
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -838,7 +862,8 @@ CREATE TABLE public.survey_tools (
     reward_value integer,
     devices character varying(255)[],
     promotion_id bigint,
-    content_node_id bigint NOT NULL
+    content_node_id bigint NOT NULL,
+    current_subject_count integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1640,6 +1665,13 @@ CREATE TRIGGER oban_notify AFTER INSERT ON public.oban_jobs FOR EACH ROW EXECUTE
 
 
 --
+-- Name: survey_tool_participants survey_tool_current_subject_count; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER survey_tool_current_subject_count AFTER INSERT OR DELETE OR UPDATE ON public.survey_tool_participants FOR EACH ROW EXECUTE FUNCTION public.set_survey_tool_current_subject_count();
+
+
+--
 -- Name: apns_device_tokens apns_device_tokens_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1997,3 +2029,4 @@ INSERT INTO public."schema_migrations" (version) VALUES (20210607120324);
 INSERT INTO public."schema_migrations" (version) VALUES (20210620092414);
 INSERT INTO public."schema_migrations" (version) VALUES (20210630111238);
 INSERT INTO public."schema_migrations" (version) VALUES (20210711182414);
+INSERT INTO public."schema_migrations" (version) VALUES (20210728062650);

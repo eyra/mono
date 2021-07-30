@@ -68,16 +68,21 @@ msgid "menu.item.todo"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:114 lib/core_web/live/dashboard.ex:142
+#: lib/core_web/live/dashboard.ex:42
 msgid "dashboard.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:126
+#: bundles/link/lib/marketplace.ex:131
 msgid "marketplace.title"
 msgstr ""
 
 #, elixir-format
 #: lib/core_web/live/todo.ex:17
 msgid "todo.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.payments"
 msgstr ""

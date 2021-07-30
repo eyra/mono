@@ -55,7 +55,7 @@ defmodule CoreWeb.Index do
                 <PrimaryCTA
                   title={{ cta_title(@current_user) }}
                   button_label={{ dgettext("eyra-link", "dashboard-button") }}
-                  to={{ Routes.live_path(@socket, CoreWeb.Dashboard)}} />
+                  to={{ Routes.live_path(@socket, CoreWeb.Marketplace)}} />
               </div>
               <div :if={{ @current_user == nil }}>
                 <PrimaryCTA title={{ dgettext("eyra-link", "signup.card.title") }}
