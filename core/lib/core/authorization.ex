@@ -7,7 +7,7 @@ defmodule Core.Authorization do
   """
   use GreenLight,
     repo: Core.Repo,
-    roles: [:visitor, :member, :researcher, :owner, :participant],
+    roles: [:visitor, :member, :student, :researcher, :owner, :participant],
     role_assignment_schema: Core.Authorization.RoleAssignment
 
   use Core.BundleOverrides
