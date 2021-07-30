@@ -1,7 +1,8 @@
-defmodule EyraUI.Navigation.Delete do
+defmodule EyraUI.Navigation.Dead do
   use Surface.Component
 
   prop(path, :string, required: true)
+  prop(method, :string, required: true)
 
   slot(default, required: true)
 
@@ -11,7 +12,7 @@ defmodule EyraUI.Navigation.Delete do
         class="cursor-pointer"
         href={{ @path }}
         data-to={{ @path }}
-        data-method="delete"
+        data-method={{ @method }}
         data-csrf={{ Plug.CSRFProtection.get_csrf_token_for(@path) }}
       >
         <slot />

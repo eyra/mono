@@ -17,17 +17,17 @@ msgid "created.label"
 msgstr "Created"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/card.ex:42 lib/core_web/view_model/card.ex:40
+#: bundles/link/lib/card.ex:42 lib/core_web/view_model/card.ex:40
 msgid "deadline.label"
 msgstr "Still %{days} days available"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/card.ex:41 lib/core_web/view_model/card.ex:39
+#: bundles/link/lib/card.ex:41 lib/core_web/view_model/card.ex:39
 msgid "open.spots.label"
 msgstr "%{count} open spots"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/card.ex:51 lib/core_web/live/promotion/form.ex:117
+#: bundles/link/lib/card.ex:51 lib/core_web/live/promotion/form.ex:117
 #: lib/core_web/view_model/card.ex:49
 msgid "published.false.label"
 msgstr "Concept"
@@ -38,7 +38,7 @@ msgid "published.true.label"
 msgstr "Published"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/card.ex:40 lib/core_web/view_model/card.ex:38
+#: bundles/link/lib/card.ex:40 lib/core_web/view_model/card.ex:38
 msgid "reward.title"
 msgstr "Credits"
 
@@ -168,7 +168,7 @@ msgid "description.public.label"
 msgstr "Some background information for the participants"
 
 #, elixir-format
-#: bundles/link/lib/dashboard/card.ex:39
+#: bundles/link/lib/card.ex:39
 msgid "duration.title"
 msgstr ""
 

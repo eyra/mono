@@ -135,3 +135,13 @@ msgstr "Below you can keep an eye on the progress of the tasks"
 #: bundles/link/lib/survey/web/content.ex:70
 msgid "content.title"
 msgstr "Survey"
+
+#, elixir-format
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.surveys"
+msgstr "Surveys"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:17
+msgid "title"
+msgstr "Surveys"

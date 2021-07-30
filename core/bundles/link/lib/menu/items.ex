@@ -3,11 +3,13 @@ defmodule Link.Menu.Items do
 
   @impl true
   def values(), do: %{
-    eyra: %{target: CoreWeb.Index, size: :large, domain: "eyra-ui"},
+    eyra: %{target: Link.Index, size: :large, domain: "eyra-ui"},
     dashboard: %{target: Link.Dashboard, domain: "eyra-ui"},
-    marketplace: %{target: Link.Dashboard, domain: "eyra-ui"},
-    inbox: %{target: Link.Dashboard, domain: "eyra-ui"},
-    payments: %{target: Link.Dashboard, domain: "eyra-ui"},
+    marketplace: %{target: Link.Marketplace, domain: "eyra-ui"},
+    studentpool: %{target: Link.StudentPool, domain: "link-studentpool"},
+    surveys: %{target: Link.Survey.Overview, domain: "link-survey"},
+    labstudies: %{target: Link.LabStudy.Overview, domain: "link-labstudies"},
+    todo: %{target: CoreWeb.Todo, domain: "eyra-ui"},
     settings: %{target: CoreWeb.User.Settings, domain: "eyra-ui"},
     profile: %{target: CoreWeb.User.Profile, domain: "eyra-ui"},
     signout: %{target: :delete, domain: "eyra-ui"},

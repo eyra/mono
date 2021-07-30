@@ -40,7 +40,7 @@ defmodule CoreWeb.Layouts.Website.MenuBuilder do
   end
 
   defp build_menu_second_part(socket, user_state, active_item, page_id, use_icon \\ true) do
-    is_logged_in = UserService.is_logged_in?(user_state)
+    is_logged_in = user_state != nil
 
     [
       account_item(socket, is_logged_in, active_item, use_icon),

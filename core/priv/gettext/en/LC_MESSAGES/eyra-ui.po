@@ -30,11 +30,6 @@ msgstr "Dashboard"
 
 #, elixir-format
 #: lib/core_web/live/menu/helpers.ex:2
-msgid "menu.item.inbox"
-msgstr "Inbox"
-
-#, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2
 msgid "menu.item.marketplace"
 msgstr "Marketplace"
 
@@ -44,7 +39,7 @@ msgid "menu.item.profile"
 msgstr "My profile"
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2 lib/core_web/live/user/settings.ex:27
+#: lib/core_web/live/menu/helpers.ex:2 lib/core_web/live/user/settings.ex:33
 msgid "menu.item.settings"
 msgstr "Settings"
 
@@ -63,12 +58,27 @@ msgstr "Sign out"
 msgid "menu.item.menu"
 msgstr "Menu"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/core_web/live/menu/helpers.ex:2
 msgid "menu.item.eyra"
-msgstr "Menu"
+msgstr "Eyra"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/core_web/live/menu/helpers.ex:2
-msgid "menu.item.payments"
-msgstr "Payments"
+msgid "menu.item.todo"
+msgstr "To-do"
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:114 lib/core_web/live/dashboard.ex:142
+msgid "dashboard.title"
+msgstr "Dashboard"
+
+#, elixir-format
+#: bundles/link/lib/marketplace.ex:126
+msgid "marketplace.title"
+msgstr "Marketplace"
+
+#, elixir-format
+#: lib/core_web/live/todo.ex:17
+msgid "todo.title"
+msgstr "To-do"

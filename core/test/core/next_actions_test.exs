@@ -82,7 +82,7 @@ defmodule Core.NextActionsTest do
   end
 
   describe "clear_next_action/3" do
-    test "clearing a non existing action does nothing", %{user: user, url_resolver: url_resolver} do
+    test "clearing a non existing action does nothing", %{user: user, url_resolver: _url_resolver} do
       NextActions.clear_next_action(user, :does_not_exist)
 
       NextActions.clear_next_action(user, :with_content_node, Factories.insert!(:content_node))
