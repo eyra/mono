@@ -19,6 +19,7 @@ defmodule Core.Accounts.User do
     field(:displayname, :string)
     # Simplified role system, will be based on different rules later
     field(:researcher, :boolean)
+    field(:student, :boolean)
 
     has_one(:profile, Core.Accounts.Profile)
 
@@ -131,7 +132,7 @@ defmodule Core.Accounts.User do
   """
   def sso_changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :displayname])
+    |> cast(attrs, [:email, :displayname, :student, :researcher])
     |> cast_assoc(:profile)
     |> put_change(:hashed_password, "no-password-set")
   end
