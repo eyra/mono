@@ -7,7 +7,7 @@ defmodule Core.NextActions.Live.NextActionHighlight do
   def render(assigns) do
     ~H"""
     <NextAction :for={{action <- @actions}}
-    title={{action.title}} description={{action.description}} cta={{action.cta}} url={{action.url}} />
+    title={{action.title}} description={{action.description}} cta={{action.cta}} url={{action.url}} highlighted=true />
     """
   end
 end
