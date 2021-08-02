@@ -17,6 +17,6 @@ msgid "default.study.title"
 msgstr "Nieuwe studie"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:50
+#: lib/core_web/live/dashboard.ex:49
 msgid "recent-items.title"
 msgstr "Recente items"

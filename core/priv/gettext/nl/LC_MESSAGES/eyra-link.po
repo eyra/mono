@@ -14,7 +14,7 @@ msgstr ""
 #, elixir-format
 #: bundles/link/lib/index.ex:37 lib/core_web/live/index.ex:37
 msgid "welcome.title"
-msgstr "Marktplaats"
+msgstr "Welkom bij"
 
 #, elixir-format
 #: bundles/link/lib/index.ex:57 lib/core_web/live/index.ex:57
@@ -84,4 +84,4 @@ msgstr "Samen voor de wetenschap"
 #, elixir-format
 #: bundles/link/lib/index.ex:38 lib/core_web/live/index.ex:38
 msgid "welcome.subtitle"
-msgstr "Marktplaats"
+msgstr "PaNL"

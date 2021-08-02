@@ -3,8 +3,6 @@ defmodule CoreWeb.Layouts.Website.MenuBuilder do
 
   import CoreWeb.Menu.Helpers
 
-  alias CoreWeb.User.Service, as: UserService
-
   @impl true
   def build_menu(:desktop_navbar, socket, user_state, active_item, page_id) do
     %{

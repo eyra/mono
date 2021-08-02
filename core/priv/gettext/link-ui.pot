@@ -11,26 +11,21 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:82
-msgid "quick_summary.%{subject_count}.%{target_subject_count}"
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.labstudies"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:46
-msgid "recent-items.title"
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.studentpool"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:69
-msgid "status.concept"
+#: lib/core_web/live/menu/helpers.ex:2
+msgid "menu.item.surveys"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:71
-msgid "status.published"
-msgstr ""
-
-#, elixir-format
-#: bundles/link/lib/dashboard.ex:38
+#: bundles/link/lib/student_pool.ex:17
 msgid "title"
 msgstr ""

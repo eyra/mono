@@ -1,62 +1,64 @@
 defmodule EyraUI.ViewModel do
-  def sub_props(props) when is_list(props), do: props
-  def sub_props(_), do: nil
+  defp sub_props(props) when is_list(props), do: props
+  defp sub_props(_), do: nil
 
-  def concat(nil, first), do: [first]
-  def concat(path, next), do: path ++ [next]
+  defp concat(nil, first), do: [first]
+  defp concat(path, next), do: path ++ [next]
 
-  defmacro prop_functions(path, value) when is_list(value) do
-    path_string = Enum.join(path, "_")
-
-    quote do
-      def unquote(:"#{path_string}")(view_model) do
-        Kernel.get_in(view_model, unquote(path))
-      end
-
-      def unquote(:"has_#{path_string}?")(view_model) do
-        Kernel.get_in(view_model, unquote(path)) != nil
-      end
-    end
-  end
-
-  defmacro prop_functions(path, value) do
-    path_string = Enum.join(path, "_")
-
-    quote do
-      def unquote(:"#{path_string}")(view_model, default \\ unquote(value)) do
-        case Kernel.get_in(view_model, unquote(path)) do
-          nil -> default
-          value -> value
-        end
-      end
-
-      def unquote(:"has_#{path_string}?")(view_model) do
-        Kernel.get_in(view_model, unquote(path)) != nil
-      end
-    end
-  end
-
-  defmacro parse(props, path \\ nil)
-
-  defmacro parse(props, path) when is_list(props) do
-    for {name, value} <- props do
-      next_path = EyraUI.ViewModel.concat(path, name)
-      next_props = EyraUI.ViewModel.sub_props(value)
+  defmacro defgetter(p, value) do
+    for path <- [p] do
+      path_string = Enum.join(path, "_")
 
       quote do
-        EyraUI.ViewModel.prop_functions(unquote(next_path), unquote(value))
-        EyraUI.ViewModel.parse(unquote(next_props), unquote(next_path))
+        def unquote(:"#{path_string}")(view_model, default \\ unquote(value)) do
+          case Kernel.get_in(view_model, unquote(path)) do
+            nil -> default
+            value -> value
+          end
+        end
       end
     end
   end
 
-  defmacro parse(_, _) do
+  defmacro defhas(path) do
+    path_string = Enum.join(path, "_")
+
+    path_string =
+      if String.ends_with?(path_string, "?") do
+        String.slice(path_string, 0, String.length(path_string) - 1)
+      else
+        path_string
+      end
+
+    quote do
+      def unquote(:"has_#{path_string}?")(view_model) do
+        case Kernel.get_in(view_model, unquote(path)) do
+          nil -> false
+          _ -> true
+        end
+      end
+    end
   end
 
-  defmacro __using__(props) do
+  defmacro defviewmodel(props) do
     quote do
-      require EyraUI.ViewModel
-      EyraUI.ViewModel.parse(unquote(props))
+      defviewmodel(unquote(props), nil)
+    end
+  end
+
+  defmacro defviewmodel(nil, _), do: :noop
+  defmacro defviewmodel([], _), do: :noop
+
+  defmacro defviewmodel(props, path) do
+    for {name, value} <- props do
+      next_path = concat(path, name)
+      next_props = sub_props(value)
+
+      quote do
+        defgetter(unquote(next_path), unquote(value))
+        defhas(unquote(next_path))
+        defviewmodel(unquote(next_props), unquote(next_path))
+      end
     end
   end
 end

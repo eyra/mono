@@ -2,14 +2,15 @@ defmodule EyraUI.Navigation.MenuItem do
   @moduledoc """
     Item that can be used in Menu or Navbar
   """
-  use Surface.Component
+  use EyraUI.Component
 
-  use EyraUI.ViewModel,
+  defviewmodel(
     id: nil,
     action: nil,
     title: nil,
     active?: false,
     icon: [name: nil, size: :small]
+  )
 
   alias EyraUI.Navigation.Button
 

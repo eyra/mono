@@ -13,7 +13,7 @@ defmodule EyraUI.Text.Caption do
 
   def render(assigns) do
     ~H"""
-    <div class="text-caption {{@padding}} {{@text_alignment}} {{@color}}">
+    <div class="text-caption font-caption {{@padding}} {{@text_alignment}} {{@color}}">
       <slot />
     </div>
     """

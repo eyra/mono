@@ -22,7 +22,7 @@ msgid "add.card.title"
 msgstr "Nieuwe studie"
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:93
+#: lib/core_web/live/marketplace.ex:92
 msgid "default.study.title"
 msgstr "Nieuwe studie"
 
@@ -32,6 +32,6 @@ msgid "marketplace.title"
 msgstr "Marktplaats"
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:134
+#: lib/core_web/live/marketplace.ex:133
 msgid "title"
 msgstr "Marktplaats"

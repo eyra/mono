@@ -3,13 +3,12 @@ defmodule Link.Dashboard do
   The dashboard screen.
   """
   use CoreWeb, :live_view
-  import Ecto
 
   alias Core.Studies
   alias CoreWeb.Components.ContentListItem
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
-  alias EyraUI.Hero.HeroSmall
+  alias EyraUI.Spacing
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title2}
   alias Core.NextActions.Live.NextActionHighlight
@@ -17,6 +16,7 @@ defmodule Link.Dashboard do
 
   data(content_items, :any)
   data(current_user, :any)
+  data(next_best_action, :any)
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
     preload = [survey_tool: [:promotion]]
@@ -29,7 +29,7 @@ defmodule Link.Dashboard do
     socket =
       socket
       |> assign(content_items: content_items)
-      |> assign(next_actions: NextActions.list_next_actions(url_resolver(socket), user))
+      |> assign(next_best_action: NextActions.next_best_action!(url_resolver(socket), user))
 
     {:ok, socket}
   end
@@ -43,7 +43,9 @@ defmodule Link.Dashboard do
         active_item={{ :dashboard }}
       >
         <ContentArea>
-          <NextActionHighlight actions={{@next_actions}}/>
+          <div :if={{ @next_best_action }} class="mb-6 md:mb-10">
+            <NextActionHighlight vm={{ @next_best_action }}/>
+          </div>
           <Title2>
             {{ dgettext("link-dashboard", "recent-items.title") }}
           </Title2>
@@ -68,7 +70,7 @@ defmodule Link.Dashboard do
       }) do
     status =
       if is_nil(published_at) do
-        %{label: dgettext("link-dashboard", "status.concept"), color: "tertiary"}
+        %{label: dgettext("link-dashboard", "status.concept"), color: "warning"}
       else
         %{label: dgettext("link-dashboard", "status.published"), color: "success"}
       end

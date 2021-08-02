@@ -1,11 +1,12 @@
 defmodule EyraUI.Navigation.Button do
-  use Surface.Component
+  use EyraUI.Component
 
-  use EyraUI.ViewModel,
+  defviewmodel(
     target: nil,
     method: :get,
     overlay?: false,
     dead?: false
+  )
 
   prop(id, :string, required: true)
   prop(vm, :string, required: true)

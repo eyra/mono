@@ -14,7 +14,7 @@ defmodule Link.StudentPool do
   def render(assigns) do
     ~H"""
       <Workspace
-        title={{ dgettext("link-studentpool", "title") }}
+        title={{ dgettext("link-ui", "title") }}
         user={{@current_user}}
         user_agent={{ Browser.Ua.to_ua(@socket) }}
         active_item={{ :studentpool }}

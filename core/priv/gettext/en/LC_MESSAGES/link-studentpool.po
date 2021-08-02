@@ -10,8 +10,3 @@ msgid ""
 msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
-
-#, elixir-format
-#: bundles/link/lib/student_pool.ex:17
-msgid "title"
-msgstr "Student pool"
