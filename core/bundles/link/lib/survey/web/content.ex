@@ -64,6 +64,27 @@ defmodule Link.Survey.Content do
     end
   end
 
+  def handle_event("reset_focus", _, socket) do
+    send_update(ToolForm, id: :tool_form, focus: "")
+    send_update(PromotionForm, id: :promotion_form, focus: "")
+    {:noreply, socket}
+  end
+
+  def handle_info({:claim_focus, :tool_form}, socket) do
+    send_update(PromotionForm, id: :promotion_form, focus: "")
+    {:noreply, socket}
+  end
+
+  def handle_info({:claim_focus, :promotion_form}, socket) do
+    send_update(ToolForm, id: :tool_form, focus: "")
+    {:noreply, socket}
+  end
+
+  def handle_info({:image_picker, image_id}, socket) do
+    send_update(PromotionForm, id: :promotion_form, image_id: image_id)
+    {:noreply, socket}
+  end
+
   def render(assigns) do
     ~H"""
     <Workspace
