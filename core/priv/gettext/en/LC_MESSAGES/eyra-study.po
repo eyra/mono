@@ -12,61 +12,11 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core/survey/form_data.ex:11
-msgid "devices.desktop"
-msgstr "Desktop"
-
-#, elixir-format
-#: lib/core/survey/form_data.ex:11
-msgid "devices.phone"
-msgstr "Phone"
-
-#, elixir-format
-#: lib/core/survey/form_data.ex:11
-msgid "devices.tablet"
-msgstr "Tablet"
-
-#, elixir-format
-#: bundles/link/lib/marketplace.ex:148
+#: bundles/link/lib/marketplace.ex:93
 msgid "study.all.title"
 msgstr "Available studies:"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:138
+#: bundles/link/lib/marketplace.ex:83
 msgid "study.highlighted.title"
 msgstr "My contributions:"
-
-#, elixir-format
-#: lib/core/promotions/form_data.ex:17
-msgid "themes.art"
-msgstr "Art"
-
-#, elixir-format
-#: lib/core/promotions/form_data.ex:17
-msgid "themes.health"
-msgstr "Health"
-
-#, elixir-format
-#: lib/core/promotions/form_data.ex:17
-msgid "themes.history"
-msgstr "History"
-
-#, elixir-format
-#: lib/core/promotions/form_data.ex:17
-msgid "themes.language"
-msgstr "Language"
-
-#, elixir-format
-#: lib/core/promotions/form_data.ex:17
-msgid "themes.politics"
-msgstr "Politics"
-
-#, elixir-format
-#: lib/core/promotions/form_data.ex:17
-msgid "themes.society"
-msgstr "Society"
-
-#, elixir-format
-#: lib/core/promotions/form_data.ex:17
-msgid "themes.technology"
-msgstr "Technology"

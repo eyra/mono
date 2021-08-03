@@ -5,8 +5,8 @@ defmodule Core.Promotions.Promotion do
   use Ecto.Schema
   use Core.Content.Node
 
-  require Core.Themes
-  alias Core.Themes
+  require Core.Enums.Themes
+  alias Core.Enums.Themes
   alias Core.Marks
 
   import Ecto.Changeset
@@ -24,7 +24,7 @@ defmodule Core.Promotions.Promotion do
     # Rich Content
     field(:image_id, :string)
     field(:marks, {:array, :string})
-    field(:themes, {:array, Ecto.Enum}, values: Themes.theme_values())
+    field(:themes, {:array, Ecto.Enum}, values: Themes.schema_values())
     field(:published_at, :naive_datetime)
     # Technical
     field(:plugin, :string)

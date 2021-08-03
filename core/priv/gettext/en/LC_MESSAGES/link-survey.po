@@ -119,7 +119,7 @@ msgstr "Participants working"
 #, elixir-format
 #: bundles/link/lib/survey/web/monitor.ex:16
 msgid "status.title"
-msgstr "Task monitor"
+msgstr "Panel"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/monitor.ex:21
@@ -132,11 +132,11 @@ msgid "status.label"
 msgstr "Below you can keep an eye on the progress of the tasks"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:70
+#: bundles/link/lib/survey/web/content.ex:91
 msgid "content.title"
 msgstr "Survey"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:17
+#: bundles/link/lib/survey/web/overview.ex:72
 msgid "title"
 msgstr "Surveys"

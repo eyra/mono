@@ -82,9 +82,9 @@ defmodule Link.Survey.Content do
               </div>
             </div>
           </div>
-          <Monitor monitor_data={{@monitor_data}}/>
           <ToolForm id={{:tool_form}} entity_id={{@tool_id}} uri_origin={{@uri_origin}}/>
           <PromotionForm id={{:promotion_form}} entity_id={{@promotion_id}} />
+          <Monitor monitor_data={{@monitor_data}}/>
         </div>
       </div>
     </Workspace>

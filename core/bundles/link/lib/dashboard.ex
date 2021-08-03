@@ -8,7 +8,6 @@ defmodule Link.Dashboard do
   alias CoreWeb.Components.ContentListItem
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
-  alias EyraUI.Spacing
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title2}
   alias Core.NextActions.Live.NextActionHighlight

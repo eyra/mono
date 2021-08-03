@@ -14,9 +14,8 @@ defmodule Core.Promotions.FormData do
 
   alias Core.Promotions.Promotion
 
-  use Core.Themes
-  alias Core.Themes
-  require Core.Themes
+  alias Core.Enums.Themes
+  require Core.Enums.Themes
 
   embedded_schema do
     # Plain Data

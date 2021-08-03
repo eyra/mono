@@ -1,0 +1,77 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/core/enums/devices.ex:5
+msgid "devices.desktop"
+msgstr "Dekstop"
+
+#, elixir-format
+#: lib/core/enums/devices.ex:5
+msgid "devices.phone"
+msgstr "Phone"
+
+#, elixir-format
+#: lib/core/enums/devices.ex:5
+msgid "devices.tablet"
+msgstr "Tablet"
+
+#, elixir-format
+#: lib/core/enums/genders.ex:5
+msgid "genders.man"
+msgstr "Man"
+
+#, elixir-format
+#: lib/core/enums/genders.ex:5
+msgid "genders.woman"
+msgstr "Women"
+
+#, elixir-format
+#: lib/core/enums/genders.ex:5
+msgid "genders.x"
+msgstr "X"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.art"
+msgstr "Art"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.health"
+msgstr "Health"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.history"
+msgstr "History"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.language"
+msgstr "Language"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.politics"
+msgstr "Politics"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.society"
+msgstr "Society"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.technology"
+msgstr "Technology"

@@ -29,7 +29,7 @@ defmodule CoreWeb.TodoTest do
       assert html =~ "Open test"
     end
 
-    test "shows done message when all tasks are done", %{conn: conn, user: user} do
+    test "shows done message when all tasks are done", %{conn: conn, user: _user} do
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Todo))
 
       assert html =~ "All tasks done"

@@ -5,7 +5,8 @@ defmodule Core.Survey.Tool do
   use Ecto.Schema
   use Core.Content.Node
 
-  require Core.Devices
+  require Core.Enums.Devices
+
   import Ecto.Changeset
   alias Core.Studies.Study
   alias Core.Survey.Task
@@ -24,7 +25,7 @@ defmodule Core.Survey.Tool do
     field(:duration, :string)
     field(:reward_currency, Ecto.Enum, values: [:eur, :usd, :gbp, :chf, :nok, :sek])
     field(:reward_value, :integer)
-    field(:devices, {:array, Ecto.Enum}, values: Core.Devices.device_values())
+    field(:devices, {:array, Ecto.Enum}, values: Core.Enums.Devices.schema_values())
 
     has_many(:tasks, Task)
     many_to_many(:participants, User, join_through: :survey_tool_participants)
