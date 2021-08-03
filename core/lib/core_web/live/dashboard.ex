@@ -31,7 +31,7 @@ defmodule CoreWeb.Dashboard do
     socket =
       socket
       |> assign(content_items: content_items)
-      |> assign(next_best_action: NextActions.next_best_action!(url_resolver(socket), user))
+      |> assign(next_best_action: NextActions.next_best_action(url_resolver(socket), user))
 
     {:ok, socket}
   end

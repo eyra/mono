@@ -69,7 +69,7 @@ msgid "menu.item.todo"
 msgstr "To-do"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:42
+#: lib/core_web/live/dashboard.ex:41
 msgid "dashboard.title"
 msgstr "Dashboard"
 

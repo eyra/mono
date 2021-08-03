@@ -31,6 +31,6 @@ msgid "status.published"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:40
+#: bundles/link/lib/dashboard.ex:38
 msgid "title"
 msgstr ""
