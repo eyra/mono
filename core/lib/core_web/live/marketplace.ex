@@ -17,7 +17,6 @@ defmodule CoreWeb.Marketplace do
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias EyraUI.Card.{PrimaryStudy, SecondaryStudy, ButtonCard}
-  alias EyraUI.Hero.HeroSmall
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title2}
   alias EyraUI.Grid.{DynamicGrid}
@@ -132,6 +131,7 @@ defmodule CoreWeb.Marketplace do
     ~H"""
       <Workspace
         title={{ dgettext("eyra-marketplace", "title") }}
+        user={{ @current_user }}
         user_agent={{ Browser.Ua.to_ua(@socket) }}
         active_item={{ :marketplace }}
       >

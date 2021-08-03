@@ -64,6 +64,7 @@ defmodule Link.Survey.Content do
     end
   end
 
+  @impl true
   def handle_event("reset_focus", _, socket) do
     send_update(ToolForm, id: :tool_form, focus: "")
     send_update(PromotionForm, id: :promotion_form, focus: "")

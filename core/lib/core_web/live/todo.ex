@@ -33,8 +33,7 @@ defmodule CoreWeb.Todo do
             All tasks done. Great job!
           </div>
           <div :if={{@has_next_actions?}}>
-            <NextAction :for={{action <- @next_actions}}
-            title={{action.title}} description={{action.description}} cta={{action.cta}} url={{action.url}} />
+            <NextAction :for={{action <- @next_actions}} vm={{ action }} />
           </div>
         </ContentArea>
       </Workspace>

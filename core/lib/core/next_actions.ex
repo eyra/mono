@@ -16,7 +16,17 @@ defmodule Core.NextActions do
     from(na in NextAction, where: na.user_id == ^user.id, limit: 10)
     |> filter_by_content_node(content_node)
     |> Repo.all()
-    |> Enum.map(&to_view_model(url_resolver, &1))
+    |> Enum.map(&to_view_model(&1, url_resolver))
+  end
+
+  @doc """
+  """
+  def next_best_action(url_resolver, %User{} = user, content_node \\ nil)
+      when is_function(url_resolver) do
+    from(na in NextAction, where: na.user_id == ^user.id, limit: 10)
+    |> filter_by_content_node(content_node)
+    |> Repo.one()
+    |> to_view_model(url_resolver)
   end
 
   @doc """
@@ -53,7 +63,9 @@ defmodule Core.NextActions do
     |> Repo.delete_all()
   end
 
-  defp to_view_model(url_resolver, %NextAction{action: action, count: count, params: params}) do
+  defp to_view_model(nil, _url_resolver), do: nil
+
+  defp to_view_model(%NextAction{action: action, count: count, params: params}, url_resolver) do
     action_type = String.to_existing_atom(action)
     apply(action_type, :to_view_model, [url_resolver, count, params])
   end
