@@ -9,6 +9,7 @@ defmodule Core.Factories do
     Content,
     Promotions,
     Survey,
+    Lab,
     Authorization,
     DataDonation,
     NotificationCenter,
@@ -80,6 +81,10 @@ defmodule Core.Factories do
 
   def build(:survey_tool) do
     build(:survey_tool, %{})
+  end
+
+  def build(:lab_tool) do
+    build(:lab_tool, %{})
   end
 
   # def build(:client_script) do
@@ -214,6 +219,26 @@ defmodule Core.Factories do
       )
 
     %Survey.Tool{
+      content_node: content_node,
+      auth_node: build(:auth_node, %{parent: study.auth_node}),
+      study: study,
+      promotion: promotion
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:lab_tool, %{} = attributes) do
+    {content_node, attributes} = Map.pop(attributes, :content_node, build(:content_node, %{}))
+    {study, attributes} = Map.pop(attributes, :study, build(:study))
+
+    {promotion, attributes} =
+      Map.pop(
+        attributes,
+        :promotion,
+        build(:promotion, %{study: study, parent_content_node: content_node})
+      )
+
+    %Lab.Tool{
       content_node: content_node,
       auth_node: build(:auth_node, %{parent: study.auth_node}),
       study: study,

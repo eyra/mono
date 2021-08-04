@@ -5,9 +5,9 @@ defmodule Core.Marks do
   """
   def instances do
     [
-      %Core.Marks.Mark{id: :vu, label: "Vrije Universiteit Amsterdam"},
-      %Core.Marks.Mark{id: :uva, label: "Universiteit van Amsterdam"},
-      %Core.Marks.Mark{id: :uu, label: "Universiteit Utrecht"}
+      %Core.Marks.Mark{id: "vu", label: "Vrije Universiteit Amsterdam"},
+      %Core.Marks.Mark{id: "uva", label: "Universiteit van Amsterdam"},
+      %Core.Marks.Mark{id: "uu", label: "Universiteit Utrecht"}
     ]
   end
 end
