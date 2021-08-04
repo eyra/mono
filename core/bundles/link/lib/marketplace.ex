@@ -6,7 +6,9 @@ defmodule Link.Marketplace do
 
   alias Core.Studies
   alias Core.Studies.Study
-  alias Core.Survey.{Tools, Tool}
+  alias Core.Survey.Tool, as: SurveyTool
+  alias Core.Lab.Tool, as: LabTool
+  alias Core.Lab.Tools
   alias Core.Accounts
   alias Core.Content
   alias Core.Promotions
@@ -29,7 +31,7 @@ defmodule Link.Marketplace do
 
   def mount(_params, _session, socket) do
     user = socket.assigns[:current_user]
-    preload = [survey_tool: [:promotion]]
+    preload = [survey_tool: [:promotion], lab_tool: [:promotion, :time_slots]]
 
     subject_studies =
       user
@@ -45,7 +47,7 @@ defmodule Link.Marketplace do
       |> Enum.into(MapSet.new())
 
     available_studies =
-      Studies.list_studies_with_published_promotion(Tool,
+      Studies.list_studies_with_published_promotion([LabTool, SurveyTool],
         exclude: exclusion_list,
         preload: preload
       )

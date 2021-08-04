@@ -73,13 +73,11 @@ defmodule Core.Promotions.Promotion do
   end
 
   def get_organisation(promotion) do
-    case get_organisation_id(promotion) do
-      nil ->
-        nil
-
-      id ->
-        Marks.instances()
-        |> Enum.find(&(&1.id === String.to_existing_atom(id)))
+    if id = get_organisation_id(promotion) do
+      Enum.find(
+        Marks.instances(),
+        &(&1.id == id)
+      )
     end
   end
 

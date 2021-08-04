@@ -70,6 +70,11 @@ defmodule Core.ImageCatalog.Unsplash do
     }
   end
 
+  def random(count \\ 30) do
+    {:ok, json} = client().get(conf().access_key, "/photos/random", count: count)
+    Enum.map(json, &parse_result_item/1)
+  end
+
   def search_info(query, page, page_size, opts) do
     app_name = conf().app_name
     search_result = search(query, page, page_size)

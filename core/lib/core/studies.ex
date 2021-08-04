@@ -37,21 +37,31 @@ defmodule Core.Studies do
     # AUTH: Can be piped through auth filter.
   end
 
-  def list_studies_with_published_promotion(tool_entity, opts \\ []) do
+  def list_studies_with_published_promotion(tool_entities, opts \\ [])
+      when is_list(tool_entities) do
     preload = Keyword.get(opts, :preload, [])
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
 
     promotions =
       from(promotion in Promotion, where: not is_nil(promotion.published_at), select: promotion.id)
 
-    studies =
-      from(tool in tool_entity,
-        where: tool.promotion_id in subquery(promotions),
-        select: tool.study_id
+    studie_ids =
+      tool_entities
+      |> Enum.map(
+        &from(tool in &1,
+          where: tool.promotion_id in subquery(promotions),
+          select: tool.study_id
+        )
       )
+      |> Enum.reduce(fn tool_query, query ->
+        union_all(
+          query,
+          ^tool_query
+        )
+      end)
 
     from(study in Study,
-      where: study.id in subquery(studies) and study.id not in ^exclude,
+      where: study.id in subquery(studie_ids) and study.id not in ^exclude,
       preload: ^preload
     )
     |> Repo.all()
