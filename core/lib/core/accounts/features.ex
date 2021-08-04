@@ -6,15 +6,14 @@ defmodule Core.Accounts.Features do
   import Ecto.Changeset
   alias Core.Accounts.User
 
-  alias Core.Enums.{Genders, DominantHands, NativeLanguages, StudyPrograms, StudyYears}
-  require Core.Enums.{Genders, DominantHands, NativeLanguages, StudyPrograms, StudyYears}
+  alias Core.Enums.{Genders, DominantHands, NativeLanguages, StudyProgramCodes}
+  require Core.Enums.{Genders, DominantHands, NativeLanguages, StudyProgramCodes}
 
   schema "user_features" do
     field(:gender, Ecto.Enum, values: Genders.schema_values())
     field(:dominant_hand, Ecto.Enum, values: DominantHands.schema_values())
     field(:native_language, Ecto.Enum, values: NativeLanguages.schema_values())
-    field(:study_programs, {:array, Ecto.Enum}, values: StudyPrograms.schema_values())
-    field(:study_years, {:array, Ecto.Enum}, values: StudyYears.schema_values())
+    field(:study_program_codes, {:array, Ecto.Enum}, values: StudyProgramCodes.schema_values())
 
     belongs_to(:user, User)
     timestamps()

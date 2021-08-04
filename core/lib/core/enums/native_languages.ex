@@ -1,6 +1,6 @@
 defmodule Core.Enums.NativeLanguages do
   @moduledoc """
-    Defines hands used as user feature.
+    Defines languages used as user feature.
   """
-  use Core.Enums.Base, {:languages, [:nl, :en]}
+  use Core.Enums.Base, {:native_languages, [:nl, :en]}
 end

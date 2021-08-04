@@ -6,8 +6,8 @@ defmodule Core.Eligibility.Criteria do
   import Ecto.Changeset
   alias Core.Studies.Study
 
-  alias Core.Enums.{Genders, DominantHands, NativeLanguages, StudyPrograms, StudyYears}
-  require Core.Enums.{Genders, DominantHands, NativeLanguages, StudyPrograms, StudyYears}
+  alias Core.Enums.{Genders, DominantHands, NativeLanguages, StudyProgramCodes}
+  require Core.Enums.{Genders, DominantHands, NativeLanguages, StudyProgramCodes}
 
   schema "eligibility_criteria" do
     belongs_to(:study, Study)
@@ -15,8 +15,7 @@ defmodule Core.Eligibility.Criteria do
     field(:genders, {:array, Ecto.Enum}, values: Genders.schema_values())
     field(:dominant_hands, {:array, Ecto.Enum}, values: DominantHands.schema_values())
     field(:native_languages, {:array, Ecto.Enum}, values: NativeLanguages.schema_values())
-    field(:study_programs, {:array, Ecto.Enum}, values: StudyPrograms.schema_values())
-    field(:study_years, {:array, Ecto.Enum}, values: StudyYears.schema_values())
+    field(:study_program_codes, {:array, Ecto.Enum}, values: StudyProgramCodes.schema_values())
 
     timestamps()
   end
