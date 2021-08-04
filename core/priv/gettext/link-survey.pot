@@ -131,7 +131,7 @@ msgid "status.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:91
+#: bundles/link/lib/survey/web/content.ex:92
 msgid "content.title"
 msgstr ""
 

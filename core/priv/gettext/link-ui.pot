@@ -11,21 +11,6 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2
-msgid "menu.item.labstudies"
-msgstr ""
-
-#, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2
-msgid "menu.item.studentpool"
-msgstr ""
-
-#, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2
-msgid "menu.item.surveys"
-msgstr ""
-
-#, elixir-format
 #: bundles/link/lib/student_pool.ex:17
 msgid "title"
 msgstr ""

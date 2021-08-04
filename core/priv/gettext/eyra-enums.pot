@@ -74,3 +74,63 @@ msgstr ""
 #: lib/core/enums/themes.ex:5
 msgid "themes.technology"
 msgstr ""
+
+#, elixir-format
+#: lib/core/enums/dominant_hands.ex:5
+msgid "dominant_hands.left"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/dominant_hands.ex:5
+msgid "dominant_hands.right"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/native_languages.ex:5
+msgid "native_languages.en"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/native_languages.ex:5
+msgid "native_languages.nl"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.bk_1"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.bk_1_h"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.bk_2"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.bk_2_h"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.iba_1"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.iba_1_h"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.iba_2"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.iba_2_h"
+msgstr ""
