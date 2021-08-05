@@ -50,7 +50,7 @@ defmodule CoreWeb.Promotion.Public do
   end
 
   def load_plugin(%{plugin: plugin}) do
-    plugins()[String.to_atom(plugin)]
+    plugins()[String.to_existing_atom(plugin)]
   end
 
   defp plugins, do: Application.fetch_env!(:core, :promotion_plugins)

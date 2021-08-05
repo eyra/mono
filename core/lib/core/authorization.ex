@@ -36,6 +36,7 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.DataDonation.Content, [:owner])
   grant_access(CoreWeb.DataDonation.Uploader, [:member])
   grant_access(CoreWeb.Promotion.Public, [:visitor, :member, :owner])
+  grant_access(CoreWeb.Lab.Public, [:member])
 
   grant_access(Core.Studies.Study, [:visitor, :member])
   grant_access(Core.Survey.Tool, [:owner, :participant])

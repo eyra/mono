@@ -9,7 +9,17 @@
   },
   "test/*_test.exs": {
     "type": "test",
-    "alternate": "lib/{}.ex"
+    "alternate": "lib/{}.ex",
+    "template": [
+      "defmodule {camelcase|capitalize|dot}Test do",
+      "  use Core.DataCase, async: true",
+      "  alias Core.Factories",
+      "  describe \"\" do",
+      "    test \"\" do",
+      "    end",
+      "  end",
+      "end"
+    ]
   },
   "lib/*.ex": {
     "type": "code",
