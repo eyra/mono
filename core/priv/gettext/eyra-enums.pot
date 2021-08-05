@@ -1,0 +1,136 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/devices.ex:5
+msgid "devices.desktop"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/devices.ex:5
+msgid "devices.phone"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/devices.ex:5
+msgid "devices.tablet"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/genders.ex:5
+msgid "genders.man"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/genders.ex:5
+msgid "genders.woman"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/genders.ex:5
+msgid "genders.x"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.art"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.health"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.history"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.language"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.politics"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.society"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.technology"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/dominant_hands.ex:5
+msgid "dominant_hands.left"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/dominant_hands.ex:5
+msgid "dominant_hands.right"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/native_languages.ex:5
+msgid "native_languages.en"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/native_languages.ex:5
+msgid "native_languages.nl"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.bk_1"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.bk_1_h"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.bk_2"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.bk_2_h"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.iba_1"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.iba_1_h"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.iba_2"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.iba_2_h"
+msgstr ""

@@ -2,7 +2,7 @@ defmodule Core.Lab.Tool do
   use Ecto.Schema
   use Core.Content.Node
 
-  require Core.Themes
+  require Core.Enums.Themes
 
   import Ecto.Changeset
 

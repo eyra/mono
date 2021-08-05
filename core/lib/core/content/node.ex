@@ -3,7 +3,7 @@ defmodule Core.Content.Node do
   The content node schema.
   """
   use Ecto.Schema
-  require Core.Themes
+  require Core.Enums.Themes
   import Ecto.Changeset
 
   schema "content_nodes" do

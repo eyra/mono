@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core/promotions/form_data.ex:94
+#: lib/core/promotions/form_data.ex:93
 msgid "created.label"
 msgstr ""
 
@@ -142,7 +142,7 @@ msgid "published.false.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core/promotions/form_data.ex:90 lib/core_web/live/promotion/form.ex:114
+#: lib/core/promotions/form_data.ex:89 lib/core_web/live/promotion/form.ex:114
 msgid "published.true.label"
 msgstr ""
 

@@ -22,6 +22,7 @@ defmodule Core.Accounts.User do
     field(:student, :boolean)
 
     has_one(:profile, Core.Accounts.Profile)
+    has_one(:features, Core.Accounts.Features)
 
     timestamps()
   end

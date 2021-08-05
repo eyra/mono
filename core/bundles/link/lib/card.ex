@@ -132,7 +132,7 @@ defmodule Link.Marketplace.Card do
 
   def get_tags(themes) do
     themes
-    |> Enum.map(&Core.Themes.translate(&1))
+    |> Enum.map(&Core.Enums.Themes.translate(&1))
   end
 
   def get_icon_url(marks, socket) do

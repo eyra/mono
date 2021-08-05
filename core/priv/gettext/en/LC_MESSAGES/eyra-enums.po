@@ -1,0 +1,137 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/core/enums/devices.ex:5
+msgid "devices.desktop"
+msgstr "Dekstop"
+
+#, elixir-format
+#: lib/core/enums/devices.ex:5
+msgid "devices.phone"
+msgstr "Phone"
+
+#, elixir-format
+#: lib/core/enums/devices.ex:5
+msgid "devices.tablet"
+msgstr "Tablet"
+
+#, elixir-format
+#: lib/core/enums/genders.ex:5
+msgid "genders.man"
+msgstr "Man"
+
+#, elixir-format
+#: lib/core/enums/genders.ex:5
+msgid "genders.woman"
+msgstr "Women"
+
+#, elixir-format
+#: lib/core/enums/genders.ex:5
+msgid "genders.x"
+msgstr "X"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.art"
+msgstr "Art"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.health"
+msgstr "Health"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.history"
+msgstr "History"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.language"
+msgstr "Language"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.politics"
+msgstr "Politics"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.society"
+msgstr "Society"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.technology"
+msgstr "Technology"
+
+#, elixir-format
+#: lib/core/enums/dominant_hands.ex:5
+msgid "dominant_hands.left"
+msgstr "Left"
+
+#, elixir-format
+#: lib/core/enums/dominant_hands.ex:5
+msgid "dominant_hands.right"
+msgstr "Right"
+
+#, elixir-format
+#: lib/core/enums/native_languages.ex:5
+msgid "native_languages.en"
+msgstr "English"
+
+#, elixir-format
+#: lib/core/enums/native_languages.ex:5
+msgid "native_languages.nl"
+msgstr "Dutch"
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.bk_1"
+msgstr "BK 1st year"
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.bk_1_h"
+msgstr "BK 1st year (resit)"
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.bk_2"
+msgstr "BK 2nd year"
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.bk_2_h"
+msgstr "BK 2nd year (resit)"
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.iba_1"
+msgstr "IBA 1st year"
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.iba_1_h"
+msgstr "IBA 1st year (resit)"
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.iba_2"
+msgstr "IBA 2nd year"
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.iba_2_h"
+msgstr "IBA 2nd year (resit)"

@@ -5,7 +5,7 @@ defmodule Link.Survey.Monitor do
 
   alias EyraUI.Spacing
   alias EyraUI.Container.ContentArea
-  alias EyraUI.Text.{Title3, Title6, BodyMedium}
+  alias EyraUI.Text.{Title2, Title6, BodyMedium}
 
   prop(monitor_data, :any, required: true)
 
@@ -13,7 +13,7 @@ defmodule Link.Survey.Monitor do
     ~H"""
     <If condition={{ @monitor_data.is_published }} >
       <ContentArea>
-        <Title3>{{dgettext("link-survey", "status.title")}}</Title3>
+        <Title2>{{dgettext("link-survey", "status.title")}}</Title2>
         <BodyMedium>{{dgettext("link-survey", "status.label")}}</BodyMedium>
         <Spacing value="XS" />
         <Title6>{{dgettext("link-survey", "completed.label")}}: <span class="text-success"> {{@monitor_data.subject_completed_count}}</span></Title6>

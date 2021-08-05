@@ -1,16 +1,14 @@
 defmodule Core.Survey.FormData do
   @moduledoc """
-  The study type.
+  The schema for the survey form.
   """
   use Ecto.Schema
   use Timex
 
   import Ecto.Changeset
-  import CoreWeb.Gettext
 
-  use Core.Devices
-  alias Core.Devices
-  require Core.Devices
+  alias Core.Enums.Devices
+  require Core.Enums.Devices
 
   embedded_schema do
     # Plain Data

@@ -1,0 +1,137 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/core/enums/devices.ex:5
+msgid "devices.desktop"
+msgstr "Desktop"
+
+#, elixir-format
+#: lib/core/enums/devices.ex:5
+msgid "devices.phone"
+msgstr "Telefoon"
+
+#, elixir-format
+#: lib/core/enums/devices.ex:5
+msgid "devices.tablet"
+msgstr "Tablet"
+
+#, elixir-format
+#: lib/core/enums/genders.ex:5
+msgid "genders.man"
+msgstr "Man"
+
+#, elixir-format
+#: lib/core/enums/genders.ex:5
+msgid "genders.woman"
+msgstr "Vrouw"
+
+#, elixir-format
+#: lib/core/enums/genders.ex:5
+msgid "genders.x"
+msgstr "X"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.art"
+msgstr "Kunst"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.health"
+msgstr "Gezondheid"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.history"
+msgstr "Geschiedenis"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.language"
+msgstr "Taal"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.politics"
+msgstr "Politiek"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.society"
+msgstr "Maatschappij"
+
+#, elixir-format
+#: lib/core/enums/themes.ex:5
+msgid "themes.technology"
+msgstr "Technologie"
+
+#, elixir-format
+#: lib/core/enums/dominant_hands.ex:5
+msgid "dominant_hands.left"
+msgstr "Links"
+
+#, elixir-format
+#: lib/core/enums/dominant_hands.ex:5
+msgid "dominant_hands.right"
+msgstr "Rechts"
+
+#, elixir-format
+#: lib/core/enums/native_languages.ex:5
+msgid "native_languages.en"
+msgstr "Nederlands"
+
+#, elixir-format
+#: lib/core/enums/native_languages.ex:5
+msgid "native_languages.nl"
+msgstr "Engels"
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.bk_1"
+msgstr "BK 1e jaar"
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.bk_1_h"
+msgstr "BK 1e jaar (herkansing)"
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.bk_2"
+msgstr "BK 2e jaar"
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.bk_2_h"
+msgstr "BK 2e jaar (herkansing)"
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.iba_1"
+msgstr "IBA 1e jaar"
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.iba_1_h"
+msgstr "IBA 1e jaar (herkansing)"
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.iba_2"
+msgstr "IBA 2e jaar"
+
+#, elixir-format
+#: lib/core/enums/study_program_codes.ex:5
+msgid "study_pogram_codes.iba_2_h"
+msgstr "IBA 2e jaar (herkansing)"

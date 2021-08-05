@@ -30,6 +30,14 @@ defmodule Core.NextActions do
   end
 
   @doc """
+  """
+  def next_best_action!(url_resolver, %User{} = user, content_node \\ nil)
+      when is_function(url_resolver) do
+    list_next_actions(url_resolver, user, content_node)
+    |> List.first()
+  end
+
+  @doc """
   Creates a next action.
   """
   def create_next_action(%User{} = user, action, opts \\ []) when is_atom(action) do

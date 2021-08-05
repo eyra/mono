@@ -131,11 +131,11 @@ msgid "status.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:70
+#: bundles/link/lib/survey/web/content.ex:92
 msgid "content.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:17
+#: bundles/link/lib/survey/web/overview.ex:72
 msgid "title"
 msgstr ""
