@@ -17,32 +17,32 @@ install_assets:
 prepare: test format compile credo
 
 .PHONY: dialyzer
-dialyzer:
+dialyzer: FORCE
 	cd core && mix dialyzer --force-check
 
 .PHONY: test
 test: ${MIX_PROJECTS:%=test/%}
-test/%:
+test/%: FORCE
 	cd $* && mix test
 
 .PHONY: format
 format: ${MIX_PROJECTS:%=format/%}
-format/%:
+format/%: FORCE
 	cd $* && mix format
 
 .PHONY: credo
 credo: ${MIX_PROJECTS:%=credo/%}
-credo/%:
+credo/%: FORCE
 	cd $* && mix credo
 
 .PHONY: compile
 compile: ${MIX_PROJECTS:%=%/_build}
-%/_build:
+%/_build: FORCE
 	cd $* && mix compile --force --warnings-as-errors
 
 .PHONY: deps
 deps: ${MIX_PROJECTS:%=%/deps}
-%/deps:
+%/deps: FORCE
 	cd $* && mix deps.get
 
 .PHONY: docs
@@ -51,3 +51,5 @@ docs: ${MIX_PROJECTS:%=%/doc}
 	mkdir -p doc
 	cd $* && mix docs
 	cp -R $*/doc/ doc/`basename $*`
+
+.PHONY: FORCE

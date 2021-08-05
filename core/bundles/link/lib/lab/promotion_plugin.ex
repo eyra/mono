@@ -32,7 +32,7 @@ defmodule Link.Lab.PromotionPlugin do
     CoreWeb.Router.Helpers.live_path(socket, CoreWeb.Lab.Public, tool.id)
   end
 
-  defp get_call_to_action(tool, _user) do
+  defp get_call_to_action(_tool, _user) do
     %CallToAction{
       label: dgettext("link-lab", "apply.cta.title"),
       target: %Target{type: :event, value: "apply"}
@@ -49,31 +49,7 @@ defmodule Link.Lab.PromotionPlugin do
     "#{dgettext("link-survey", "by.author.label")}: " <> authors
   end
 
-  defp get_highlights(tool) do
-    # occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
-    # open_spot_count = tool.subject_count - occupied_spot_count
-
-    # spots_title = dgettext("link-survey", "spots.highlight.title")
-    # spots_text = "Nog #{open_spot_count} van #{tool.subject_count}"
-
-    # available_title = dgettext("link-survey", "available.highlight.title")
-
-    # available_text =
-    #   dgettext("link-survey", "available.future.highlight.text",
-    #     from: "15 june",
-    #     till: "15 augustus 2021"
-    #   )
-
-    # reward_title = dgettext("link-survey", "reward.highlight.title")
-
-    # reward_text =
-    #   CurrencyFormatter.format(tool.reward_value, tool.reward_currency, keep_decimals: true)
-
-    # [
-    #   %{title: available_title, text: available_text},
-    #   %{title: spots_title, text: spots_text},
-    #   %{title: reward_title, text: reward_text}
-    # ]
+  defp get_highlights(_tool) do
     []
   end
 end
