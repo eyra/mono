@@ -2,8 +2,6 @@ defmodule Core.Lab.ToolsTest do
   use Core.DataCase, async: true
   alias Core.Factories
   alias Core.Lab.Tools
-  alias Core.Repo
-  alias Core.Lab.Reservation
 
   setup do
     {:ok,

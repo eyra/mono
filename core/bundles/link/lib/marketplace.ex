@@ -5,14 +5,8 @@ defmodule Link.Marketplace do
   use CoreWeb, :live_view
 
   alias Core.Studies
-  alias Core.Survey.Tool
-  alias Core.Studies.Study
   alias Core.Survey.Tool, as: SurveyTool
   alias Core.Lab.Tool, as: LabTool
-  alias Core.Lab.Tools
-  alias Core.Accounts
-  alias Core.Content
-  alias Core.Promotions
 
   alias Link.Marketplace.Card, as: CardVM
 
