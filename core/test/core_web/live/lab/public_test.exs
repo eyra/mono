@@ -3,7 +3,6 @@ defmodule CoreWeb.Lab.PublicTest do
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
   alias CoreWeb.Lab.Public
-  alias Core.Lab.Tools
 
   @expected_message_after_reservation "You have made a reservation"
   setup do
@@ -23,7 +22,7 @@ defmodule CoreWeb.Lab.PublicTest do
     setup [:login_as_member]
 
     test "show all available time slots", %{conn: conn, lab: lab} do
-      {:ok, view, html} = live(conn, Routes.live_path(conn, Public, lab.id))
+      {:ok, _view, html} = live(conn, Routes.live_path(conn, Public, lab.id))
       [slot | _] = lab.time_slots
       assert html =~ slot.location
     end
@@ -32,7 +31,6 @@ defmodule CoreWeb.Lab.PublicTest do
       {:ok, view, html} = live(conn, Routes.live_path(conn, Public, lab.id))
       # The users starts without a reservation
       refute html =~ @expected_message_after_reservation
-      [slot | _] = lab.time_slots
 
       # Now let's make the reservation
       html =
@@ -48,8 +46,7 @@ defmodule CoreWeb.Lab.PublicTest do
     end
 
     test "cancel a reservation removes the reservation info", %{conn: conn, lab: lab} do
-      {:ok, view, html} = live(conn, Routes.live_path(conn, Public, lab.id))
-      [slot | _] = lab.time_slots
+      {:ok, view, _html} = live(conn, Routes.live_path(conn, Public, lab.id))
 
       view
       |> element("button", "Apply")

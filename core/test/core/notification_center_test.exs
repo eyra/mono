@@ -122,4 +122,22 @@ defmodule Core.NotificationCenterTest do
       assert NotificationCenter.list(user) |> Enum.map(& &1.title) == ["Testing"]
     end
   end
+
+  describe "mark_as_notified/1" do
+    test "marking creates a record" do
+      NotificationCenter.mark_as_notified(Factories.insert!(:member), :test_example)
+    end
+  end
+
+  describe "marked_as_notified?/1" do
+    test "returns false when an item has not been marked" do
+      refute NotificationCenter.marked_as_notified?(Factories.insert!(:member), :test_example)
+    end
+
+    test "returns true when an item has been marked at least once" do
+      item = Factories.insert!(:member)
+      NotificationCenter.mark_as_notified(item, :test_example)
+      assert NotificationCenter.marked_as_notified?(item, :test_example)
+    end
+  end
 end

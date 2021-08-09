@@ -44,7 +44,8 @@ defmodule Core.SurfConext.Test do
 
       {:ok, surf_user} = Core.SurfConext.register_user(sso_info)
 
-      assert_signal_dispatched(:user_created, %{user: surf_user})
+      message = assert_signal_dispatched(:user_created)
+      assert message == %{user: surf_user}
     end
 
     test "assign the researcher role when the user is an employee" do

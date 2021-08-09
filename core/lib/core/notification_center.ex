@@ -12,6 +12,7 @@ defmodule Core.NotificationCenter do
   alias Core.Repo
   alias Core.NotificationCenter.Notification
   alias Core.NotificationCenter.Box
+  alias Core.NotificationCenter.Log
   alias Core.Signals
 
   def notify(%Box{id: box_id} = box, %{} = notification_data) do
@@ -70,6 +71,20 @@ defmodule Core.NotificationCenter do
     notification
     |> Notification.changeset(%{status: status})
     |> Repo.update()
+  end
+
+  def mark_as_notified(%{__struct__: type, id: id}, signal) do
+    %{type: type, id: id, signal: signal}
+    |> Log.changeset()
+    |> Repo.insert!()
+  end
+
+  def marked_as_notified?(%{__struct__: type, id: id}, signal) do
+    from(l in Log,
+      where:
+        l.item_type == ^to_string(type) and l.item_id == ^id and l.signal == ^to_string(signal)
+    )
+    |> Repo.exists?()
   end
 
   def get_or_create_box(user) do
