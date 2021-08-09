@@ -29,14 +29,14 @@ defmodule Core.SurfConext do
 
     user = User.sso_changeset(%User{}, sso_info)
 
-    user =
-      %Core.SurfConext.User{}
-      |> Core.SurfConext.User.changeset(attrs)
-      |> Ecto.Changeset.put_assoc(:user, user)
-      |> Repo.insert!()
-
-    Signals.dispatch!(:user_created, %{user: user})
-    {:ok, user}
+    with {:ok, user} <-
+           %Core.SurfConext.User{}
+           |> Core.SurfConext.User.changeset(attrs)
+           |> Ecto.Changeset.put_assoc(:user, user)
+           |> Repo.insert() do
+      Signals.dispatch!(:user_created, %{user: user})
+      {:ok, user}
+    end
   end
 
   defmacro routes(otp_app) do
@@ -49,7 +49,11 @@ defmodule Core.SurfConext do
       scope "/", Core.SurfConext do
         pipe_through([:surfconext_browser])
         get("/surfconext", AuthorizePlug, otp_app)
-        get("/surfconext/auth", CallbackPlug, otp_app)
+      end
+
+      scope "/", Core.SurfConext do
+        pipe_through([:browser])
+        get("/surfconext/auth", CallbackController, :authenticate)
       end
     end
   end

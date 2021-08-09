@@ -13,3 +13,5 @@ config :core, :features,
   sign_in_with_apple: false,
   google_sign_in: false,
   password_sign_in: false
+
+config :core, Core.SurfConext, limit_schac_home_organization: "replace-with-vu"

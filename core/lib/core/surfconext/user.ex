@@ -26,6 +26,20 @@ defmodule Core.SurfConext.User do
       :schac_home_organization,
       :eduperson_affiliation
     ])
+    |> validate_change(:schac_home_organization, fn :schac_home_organization, value ->
+      limit_schac_home_organization = get_limit_schac_home_organization()
+
+      if limit_schac_home_organization && value != limit_schac_home_organization do
+        [schac_home_organization: "Your organization is not allowed to authenticate"]
+      else
+        []
+      end
+    end)
     |> validate_required(:sub)
+  end
+
+  def get_limit_schac_home_organization do
+    Application.get_env(:core, Core.SurfConext, [])
+    |> Keyword.get(:limit_schac_home_organization)
   end
 end
