@@ -8,7 +8,7 @@ defmodule Core.Signals do
   ]
 
   def dispatch(signal, message) do
-    for handler <- @signal_handlers do
+    for handler <- signal_handlers() do
       handler.dispatch(signal, message)
     end
 
@@ -24,5 +24,10 @@ defmodule Core.Signals do
       :ok = dispatch(signal, message)
       {:ok, nil}
     end)
+  end
+
+  defp signal_handlers do
+    Application.get_env(:core, :signal_handlers, []) ++
+      @signal_handlers
   end
 end

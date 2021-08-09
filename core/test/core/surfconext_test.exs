@@ -1,5 +1,6 @@
 defmodule Core.SurfConext.Test do
   use Core.DataCase, async: true
+  import Core.Signals.Test
 
   alias Core.Factories
 
@@ -31,6 +32,19 @@ defmodule Core.SurfConext.Test do
       assert surf_user.user.email == Map.get(sso_info, "email")
       assert surf_user.user.displayname == Map.get(sso_info, "preferred_username")
       assert surf_user.user.profile.fullname == Map.get(sso_info, "preferred_username")
+    end
+
+    test "dispatches signal" do
+      sso_info = %{
+        "sub" => Faker.UUID.v4(),
+        "email" => Faker.Internet.email(),
+        "preferred_username" => Faker.Person.name(),
+        "schac_home_organization" => "eduid.nl"
+      }
+
+      {:ok, surf_user} = Core.SurfConext.register_user(sso_info)
+
+      assert_signal_dispatched(:user_created, %{user: surf_user})
     end
 
     test "assign the researcher role when the user is an employee" do

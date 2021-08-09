@@ -29,4 +29,10 @@ defmodule Core.Accounts.Email do
     |> subject("Already activated")
     |> render(:already_activated_notification, url: url)
   end
+
+  def account_created(user) do
+    mail_user(user)
+    |> subject("Welcome")
+    |> render(:account_created)
+  end
 end
