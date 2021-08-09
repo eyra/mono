@@ -11,12 +11,16 @@
 
           <div class="mb-6"></div>
 
+          <%= if feature_enabled?(:sign_in_with_apple) do %>
           <div class="flex w-full h-12 bg-apple rounded justify-center items-center hover:opacity-80">
               <div class="w-full h-full pl-4 pr-4 focus:outline-none" id="appleid-signin" data-color="black" data-border="false" data-type="sign in" data-logo-size="small" data-label-position="10" ></div>
               <%= sign_in_with_apple_button(@conn) %>
           </div>
 
           <div class="mb-6"></div>
+          <% end %>
+
+          <%= if feature_enabled?(:google_sign_in) do %>
           <a href="/google-sign-in">
             <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-google rounded pl-4 pr-4">
               <div class="flex w-full justify-center items-center">
@@ -35,6 +39,8 @@
           </a>
 
           <div class="mb-6"></div>
+          <% end %>
+
           <a href="/surfconext">
             <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-surfconext rounded pl-4 pr-4">
               <div class="flex w-full justify-center items-center">
@@ -58,6 +64,7 @@
             We delen geen gegevens met derden. Je Google, Apple of SURF account wordt enkel gebruikt om gemakkelijk in te loggen.
           </div>
 
+          <%= if feature_enabled?(:password_sign_in) do %>
           <div class="mb-7 bg-grey4 h-px"></div>
 
           <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user], fn f -> %>
@@ -96,6 +103,7 @@
             <div class="ml-2"></div>|<div class="ml-2"></div>
             <%= link "Reset wachtwoord", to: Routes.live_path(@conn, CoreWeb.User.ResetPassword), class: "text-primary text-link font-link hover:text-black underline focus:outline-none" %>
           </div>
+          <% end %>
         </div>
       </div>
     </div>

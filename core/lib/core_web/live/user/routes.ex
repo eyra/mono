@@ -3,15 +3,18 @@ defmodule CoreWeb.Live.User.Routes do
     quote do
       scope "/", CoreWeb do
         pipe_through([:browser, :redirect_if_user_is_authenticated])
-
-        live("/user/signup", User.Signup)
-        live("/user/confirm/:token", User.ConfirmToken)
-        live("/user/confirm", User.ConfirmToken)
-        live("/user/await-confirmation", User.AwaitConfirmation)
         get("/user/signin", UserSessionController, :new)
-        post("/user/signin", UserSessionController, :create)
-        live("/user/reset-password", User.ResetPassword)
-        live("/user/reset-password/:token", User.ResetPasswordToken)
+
+        if feature_enabled?(:password_sign_in) do
+          live("/user/signup", User.Signup)
+          live("/user/confirm/:token", User.ConfirmToken)
+          live("/user/confirm", User.ConfirmToken)
+          live("/user/await-confirmation", User.AwaitConfirmation)
+
+          post("/user/signin", UserSessionController, :create)
+          live("/user/reset-password", User.ResetPassword)
+          live("/user/reset-password/:token", User.ResetPasswordToken)
+        end
       end
 
       ## User routes

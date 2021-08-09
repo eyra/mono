@@ -1,18 +1,26 @@
 defmodule CoreWeb.Router do
   use CoreWeb, :router
+  import Core.FeatureFlags
 
   require Core.BundleOverrides
-  require GoogleSignIn
-  require SignInWithApple
   require Core.SurfConext
   require CoreWeb.Routes
   require CoreWeb.LocalImageCatalogPlug
 
   Core.BundleOverrides.routes()
 
-  GoogleSignIn.routes(:core)
+  if feature_enabled?(:google_sign_in) do
+    require GoogleSignIn
+    GoogleSignIn.routes(:core)
+  end
+
+  if feature_enabled?(:sign_in_with_apple) do
+    require SignInWithApple
+    SignInWithApple.routes(:core)
+  end
+
   Core.SurfConext.routes(:core)
-  SignInWithApple.routes(:core)
+
   CoreWeb.Routes.routes()
   CoreWeb.LocalImageCatalogPlug.routes()
 
