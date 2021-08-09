@@ -4,7 +4,6 @@ defmodule CoreWeb.DataDonation.Form do
   import CoreWeb.Gettext
 
   alias Core.DataDonation.{Tools, Tool}
-  alias Core.Content.Nodes
 
   alias CoreWeb.Router.Helpers, as: Routes
 
@@ -26,27 +25,17 @@ defmodule CoreWeb.DataDonation.Form do
   def update(%{id: id, entity_id: entity_id}, socket) do
     entity = Tools.get!(entity_id)
     donations = Tools.list_donations(entity)
+    changeset = Tool.changeset(entity, :mount, %{})
 
     {
       :ok,
       socket
       |> assign(entity_id: entity_id)
       |> assign(entity: entity)
+      |> assign(changeset: changeset)
       |> assign(donations: donations)
       |> assign(id: id)
-      |> update_ui()
     }
-  end
-
-  defp update_ui(%{assigns: %{entity: entity}} = socket) do
-    update_ui(socket, entity)
-  end
-
-  defp update_ui(socket, entity) do
-    changeset = Tool.changeset(entity, :mount, %{})
-
-    socket
-    |> assign(changeset: changeset)
   end
 
   # Handle Events
@@ -54,8 +43,7 @@ defmodule CoreWeb.DataDonation.Form do
     {
       :noreply,
       socket
-      |> schedule_save(entity, :auto_save, attrs)
-      |> update_ui()
+      |> save(entity, :auto_save, attrs)
     }
   end
 
@@ -67,13 +55,11 @@ defmodule CoreWeb.DataDonation.Form do
   end
 
   # Saving
-  def schedule_save(socket, %Core.DataDonation.Tool{} = entity, type, attrs) do
-    node = Nodes.get!(entity.content_node_id)
+  def save(socket, %Core.DataDonation.Tool{} = entity, type, attrs) do
     changeset = Tool.changeset(entity, type, attrs)
-    node_changeset = Tool.node_changeset(node, entity, attrs)
 
     socket
-    |> schedule_save(changeset, node_changeset)
+    |> schedule_save(changeset)
   end
 
   def render(assigns) do

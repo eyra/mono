@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:127
+#: lib/core_web/live/user/forms/profile.ex:106
 msgid "displayname.label"
 msgstr "Schermnaam"
 
@@ -22,7 +22,7 @@ msgid "email.label"
 msgstr "E-mail"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:126
+#: lib/core_web/live/user/forms/profile.ex:105
 msgid "fullname.label"
 msgstr "Volledige naam"
 
@@ -32,14 +32,14 @@ msgid "password.label"
 msgstr "Wachtwoord"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:114
+#: lib/core_web/live/user/forms/profile.ex:93
 msgid "profile.title"
 msgstr "Mijn profiel"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:130
+#: lib/core_web/live/user/forms/profile.ex:109
 msgid "researcher.label"
-msgstr "ik ben een onderzoeker"
+msgstr "Ik ben een onderzoeker"
 
 #, elixir-format
 #: lib/core_web/live/user/signup.ex:72
@@ -62,11 +62,6 @@ msgid "signup.title"
 msgstr "Nieuw account"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:133
-msgid "signout.button"
-msgstr "Uitloggen"
-
-#, elixir-format
 #: lib/core_web/live/user/await_confirmation.ex:45
 msgid "await.confirmation.title"
 msgstr "Confirm you registration"
@@ -77,27 +72,22 @@ msgid "confirm.token.resend_button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:121
+#: lib/core_web/live/user/forms/profile.ex:100
 msgid "choose.profile.photo.file"
 msgstr "Kies foto"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:80
-msgid "photo.upload.error.flash"
-msgstr "Er ging iets mis bij uploaden van de foto."
-
-#, elixir-format
-#: lib/core_web/live/user/profile.ex:122
+#: lib/core_web/live/user/forms/profile.ex:101
 msgid "choose.other.profile.photo.file"
 msgstr "Kies andere foto"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:128
+#: lib/core_web/live/user/forms/profile.ex:107
 msgid "professionaltitle.label"
 msgstr "Functietitel"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:129
+#: lib/core_web/live/user/forms/profile.ex:108
 msgid "website.label"
 msgstr "Website"
 
@@ -135,3 +125,43 @@ msgstr "Push notificaties zijn gedeactiveerd op deze browser"
 #: lib/core_web/live/user/settings.ex:50
 msgid "push.registration.test.button"
 msgstr "Stuur test notificatie"
+
+#, elixir-format
+#: lib/core_web/live/user/forms/study.ex:71
+msgid "feature.study.description"
+msgstr "Je kan meerdere studies opgeven. Als je taken van het vorig leerjaar moet gaan doen kies dan (ook) de herkansing variant van het vorige jaar."
+
+#, elixir-format
+#: lib/core_web/live/user/forms/features.ex:86
+msgid "features.description"
+msgstr "Onderstaande kenmerken worden gebruikt om jou onderzoeken te tonen die bedoeld zijn voor participanten met specifieke kenmerken."
+
+#, elixir-format
+#: lib/core_web/live/user/forms/features.ex:97
+msgid "features.dominanthand.title"
+msgstr "Voorkeurshand"
+
+#, elixir-format
+#: lib/core_web/live/user/forms/features.ex:89
+msgid "features.gender.title"
+msgstr "Geslacht"
+
+#, elixir-format
+#: lib/core_web/live/user/forms/features.ex:93
+msgid "features.nativelanguage.title"
+msgstr "Moedertaal"
+
+#, elixir-format
+#: lib/core_web/live/user/forms/study.ex:70
+msgid "features.study.title"
+msgstr "Studie"
+
+#, elixir-format
+#: lib/core_web/live/user/forms/features.ex:85
+msgid "features.title"
+msgstr "Kenmerken"
+
+#, elixir-format
+#: lib/core_web/live/user/forms/profile.ex:110
+msgid "student.label"
+msgstr "Ik ben een student"

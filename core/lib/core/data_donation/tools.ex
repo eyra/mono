@@ -18,6 +18,7 @@ defmodule Core.DataDonation.Tools do
   alias Core.Authorization
   alias Core.Accounts.User
   alias Core.Signals
+  alias Core.Content.Nodes
 
   def list do
     Repo.all(Tool)
@@ -43,9 +44,14 @@ defmodule Core.DataDonation.Tools do
     |> Repo.insert()
   end
 
-  def update(changeset) do
-    changeset
-    |> Repo.update()
+  def update(%{data: tool, changes: attrs} = changeset) do
+    node = Nodes.get!(tool.content_node_id)
+    node_changeset = Tool.node_changeset(node, tool, attrs)
+
+    Multi.new()
+    |> Multi.update(:tool, changeset)
+    |> Multi.update(:content_node, node_changeset)
+    |> Repo.transaction()
   end
 
   def delete(%Tool{} = tool) do
@@ -179,5 +185,11 @@ defmodule Core.DataDonation.Tools do
       preload: [:user]
     )
     |> Repo.all()
+  end
+end
+
+defimpl Core.Persister, for: Core.DataDonation.Tool do
+  def save(_tool, changeset) do
+    Core.DataDonation.Tools.update(changeset)
   end
 end

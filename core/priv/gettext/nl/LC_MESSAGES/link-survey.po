@@ -12,26 +12,27 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:113
+#: bundles/link/lib/survey/web/form.ex:110
 msgid "config.nrofsubjects.label"
 msgstr "Aantal vereiste subjects"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:104
+#: bundles/link/lib/survey/web/form.ex:101
 msgid "config.url.label"
 msgstr "Publieke web link van je survey"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:122
+#: bundles/link/lib/survey/web/form.ex:119
 msgid "delete.button"
 msgstr "Verwijder survey"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:107
+#: bundles/link/lib/survey/web/form.ex:104
 msgid "duration.label"
 msgstr "Geschatte duur van het onderzoek"
 
 #, elixir-format
+#: bundles/link/lib/lab/promotion_plugin.ex:49
 #: bundles/link/lib/survey/data/promotion_plugin.ex:65
 msgid "by.author.label"
 msgstr "Door"
@@ -72,7 +73,7 @@ msgid "conpleted.title"
 msgstr "Afgerond"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:117
+#: bundles/link/lib/survey/web/form.ex:114
 msgid "devices.label"
 msgstr "Selecteer een of meerdere apparaten waarmee de participant de survey kan invullen."
 
@@ -82,27 +83,27 @@ msgid "open.cta.title"
 msgstr "Ga naar de vragenlijst"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:98
+#: bundles/link/lib/survey/web/form.ex:95
 msgid "redirect.description"
 msgstr "Hieronder staat de redirect url voor je survey. Deze moet gebruikt worden om participanten aan het einde van de survey weer terug te sturen om het werk af te melden. Kopieer de url en ga naar de survey op het platform naar keuze. Volg de instructies van het platform en plak de url op de juiste plaats."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:97
+#: bundles/link/lib/survey/web/form.ex:94
 msgid "redirect.title"
 msgstr "Koppel je survey"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:110
+#: bundles/link/lib/survey/web/form.ex:107
 msgid "reward.label"
 msgstr "Beloning in euro centen"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:116
+#: bundles/link/lib/survey/web/form.ex:113
 msgid "devices.title"
 msgstr "Apparaten"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:100
+#: bundles/link/lib/survey/web/form.ex:97
 msgid "redirect.label"
 msgstr "Redirect url"
 

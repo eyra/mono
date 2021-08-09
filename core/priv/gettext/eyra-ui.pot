@@ -12,13 +12,13 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:6
-#: lib/core_web/live/data_donation/content.ex:6
+#: lib/core_web/live/data_donation/content.ex:6 lib/core_web/live/user/profile.ex:6
 msgid "error.flash"
 msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:6
-#: lib/core_web/live/data_donation/content.ex:6
+#: lib/core_web/live/data_donation/content.ex:6 lib/core_web/live/user/profile.ex:6
 msgid "saved.info.flash"
 msgstr ""
 
@@ -73,7 +73,7 @@ msgid "dashboard.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:79
+#: bundles/link/lib/marketplace.ex:80
 msgid "marketplace.title"
 msgstr ""
 
