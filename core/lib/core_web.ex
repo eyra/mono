@@ -23,6 +23,7 @@ defmodule CoreWeb do
 
       import Plug.Conn
       import CoreWeb.Gettext
+      import Core.FeatureFlags
       alias CoreWeb.Router.Helpers, as: Routes
 
       alias CoreWeb.Loaders
@@ -38,6 +39,8 @@ defmodule CoreWeb do
       # Import convenience functions from controllers
       import Phoenix.Controller,
         only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
+
+      import Core.FeatureFlags
 
       # Include shared imports and aliases for views
       unquote(view_helpers())
