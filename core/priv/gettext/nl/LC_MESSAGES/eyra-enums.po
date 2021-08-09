@@ -89,12 +89,12 @@ msgstr "Rechts"
 #, elixir-format
 #: lib/core/enums/native_languages.ex:5
 msgid "native_languages.en"
-msgstr "Nederlands"
+msgstr "Engels"
 
 #, elixir-format
 #: lib/core/enums/native_languages.ex:5
 msgid "native_languages.nl"
-msgstr "Engels"
+msgstr "Nederlands"
 
 #, elixir-format
 #: lib/core/enums/study_program_codes.ex:5

@@ -5,11 +5,14 @@ defmodule Core.Promotions.Promotion do
   use Ecto.Schema
   use Core.Content.Node
 
+  import Ecto.Changeset
+  import CoreWeb.Gettext
+
   require Core.Enums.Themes
   alias Core.Enums.Themes
   alias Core.Marks
-
-  import Ecto.Changeset
+  alias Core.ImageHelpers
+  alias EyraUI.Timestamp
 
   schema "promotions" do
     # Plain Content
@@ -39,6 +42,8 @@ defmodule Core.Promotions.Promotion do
   @rich_fields ~w(themes image_id marks published_at)a
   @technical_fields ~w(plugin)a
 
+  @publish_required_fields ~w(title subtitle expectations description banner_title banner_subtitle)a
+
   @fields @plain_fields ++ @rich_fields ++ @technical_fields
 
   @impl true
@@ -53,8 +58,13 @@ defmodule Core.Promotions.Promotion do
     |> Map.take(@fields)
   end
 
-  @doc false
-  def changeset(promotion, attrs) do
+  def changeset(promotion, :publish, params) do
+    promotion
+    |> cast(params, @fields)
+    |> validate_required(@publish_required_fields)
+  end
+
+  def changeset(promotion, _, attrs) do
     promotion
     |> cast(attrs, @fields)
     |> validate_required([:title, :plugin])
@@ -83,4 +93,22 @@ defmodule Core.Promotions.Promotion do
 
   defp get_organisation_id(%__MODULE__{marks: [first_mark | _]}), do: first_mark
   defp get_organisation_id(_), do: nil
+
+  def get_byline(promotion) do
+    if published?(promotion) do
+      label = dgettext("eyra-promotion", "published.true.label")
+      timestamp = Timestamp.humanize(promotion.published_at)
+      "#{label}: #{timestamp}"
+    else
+      label = dgettext("eyra-promotion", "created.label")
+      timestamp = Timestamp.humanize(promotion.inserted_at)
+      "#{label}: #{timestamp}"
+    end
+  end
+
+  def get_image_url(promotion, %{width: width, height: height}) do
+    promotion.image_id
+    |> ImageHelpers.get_image_info(width, height)
+    |> Map.get(:url)
+  end
 end

@@ -37,23 +37,18 @@ defmodule Core.Content.Node do
       alias Core.Content.Node
       alias Core.Repo
 
-      def ready?(node, attrs) do
+      def ready?(entity, attrs) do
         changeset =
-          node
+          entity
           |> cast(attrs, operational_fields())
           |> validate_required(operational_fields())
 
         changeset.valid?
       end
 
-      def node_changeset(node, tool, attrs) do
-        ready = ready?(tool, attrs)
+      def node_changeset(node, entity, attrs) do
+        ready = ready?(entity, attrs)
         Node.changeset(node, %{ready: ready})
-      end
-
-      def save_node(changeset) do
-        changeset
-        |> Repo.update()
       end
     end
   end

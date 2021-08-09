@@ -19,11 +19,18 @@ defmodule Core.Accounts.Features do
     timestamps()
   end
 
-  @fields ~w(gender dominant_hand native_language study_programs study_years)a
+  @fields ~w(gender dominant_hand native_language study_program_codes)a
+  @required_fields ~w()a
 
   @doc false
-  def changeset(profile, attrs) do
-    profile
-    |> cast(attrs, @fields)
+  def changeset(tool, :mount, params) do
+    tool
+    |> cast(params, @fields)
+  end
+
+  def changeset(tool, :auto_save, params) do
+    tool
+    |> cast(params, @fields)
+    |> validate_required(@required_fields)
   end
 end

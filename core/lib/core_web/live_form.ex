@@ -2,6 +2,7 @@ defmodule CoreWeb.LiveForm do
   defmacro __using__(_opts) do
     quote do
       use Surface.LiveComponent
+      alias CoreWeb.Router.Helpers, as: Routes
 
       def update(%{focus: focus}, socket) do
         {
@@ -31,13 +32,13 @@ defmodule CoreWeb.LiveForm do
         socket
       end
 
-      def schedule_save(socket, %Ecto.Changeset{} = changeset, node_changeset) do
+      def schedule_save(socket, changeset) do
         socket
         |> hide_flash()
 
         case Ecto.Changeset.apply_action(changeset, :update) do
           {:ok, entity} ->
-            handle_success(socket, changeset, node_changeset, entity)
+            handle_success(socket, changeset, entity)
 
           {:error, %Ecto.Changeset{} = changeset} ->
             handle_validation_error(socket, changeset)
@@ -50,20 +51,16 @@ defmodule CoreWeb.LiveForm do
         |> flash_error()
       end
 
-      defp handle_success(socket, changeset, node_changeset, entity) do
-        changesets = %{
-          "#{socket.assigns.id}_tool" => changeset,
-          "#{socket.assigns.id}_node" => node_changeset
-        }
-
-        schedule_save(changesets)
+      defp handle_success(socket, changeset, entity) do
+        do_schedule_save(socket, changeset)
 
         socket
         |> assign(:entity, entity)
+        |> assign(:changeset, changeset)
       end
 
-      defp schedule_save(changesets) do
-        send(self(), {:schedule_save, changesets})
+      defp do_schedule_save(%{assigns: %{id: id}}, changeset) do
+        send(self(), {:schedule_save, %{id: id, changeset: changeset}})
       end
 
       defp claim_focus(%{assigns: %{id: id}}) do

@@ -1,11 +1,10 @@
 defmodule Link.Survey.Form do
   use CoreWeb.LiveForm
-  use EyraUI.Selectors.LabelSelector
 
   import CoreWeb.Gettext
 
-  alias Core.Survey.{Tools, Tool, FormData}
-  alias Core.Content.Nodes
+  alias Core.Enums.Devices
+  alias Core.Survey.{Tools, Tool}
 
   alias CoreWeb.Router.Helpers, as: Routes
 
@@ -21,45 +20,55 @@ defmodule Link.Survey.Form do
   prop(uri_origin, :any, required: true)
 
   data(entity, :any)
-  data(form_data, :any)
+  data(device_labels, :list)
   data(changeset, :any)
   data(focus, :any, default: "")
 
+  # Handle selector update
+  def update(%{active_label_ids: active_label_ids, selector_id: selector_id},
+
+  %{assigns: %{entity: entity}} = socket) do
+    {
+      :ok,
+      socket
+      |> save(entity, :auto_save, %{selector_id => active_label_ids})
+    }
+  end
+
+  # Handle update from parent after save
+  def update(_params, %{assigns: %{entity: _entity}} = socket) do
+    {
+      :ok,
+      socket
+    }
+  end
+
+  # Handle initial update
   def update(%{id: id, entity_id: entity_id, uri_origin: uri_origin}, socket) do
     entity = Tools.get_survey_tool!(entity_id)
+    changeset = Tool.changeset(entity, :create, %{})
+
+    device_labels = Devices.labels(entity.devices)
 
     {
       :ok,
       socket
+      |> assign(id: id)
       |> assign(entity_id: entity_id)
       |> assign(entity: entity)
-      |> assign(id: id)
+      |> assign(changeset: changeset)
+      |> assign(device_labels: device_labels)
       |> assign(uri_origin: uri_origin)
-      |> update_ui()
     }
   end
 
-  defp update_ui(%{assigns: %{entity: entity}} = socket) do
-    update_ui(socket, entity)
-  end
-
-  defp update_ui(socket, entity) do
-    form_data = FormData.create(entity)
-    changeset = FormData.changeset(form_data, :update_ui, %{})
-
-    socket
-    |> assign(entity: entity)
-    |> assign(form_data: form_data)
-    |> assign(changeset: changeset)
-  end
-
   # Handle Events
-  def handle_event("save", %{"form_data" => attrs}, %{assigns: %{entity: entity}} = socket) do
+
+  def handle_event("save", %{"tool" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket
-      |> schedule_save(entity, :auto_save, attrs)
-      |> update_ui()
+      |> save(entity, :auto_save, attrs)
     }
   end
 
@@ -71,22 +80,10 @@ defmodule Link.Survey.Form do
   end
 
   # Saving
-  def schedule_save(socket, %Core.Survey.Tool{} = entity, type, attrs) do
-    node = Nodes.get!(entity.content_node_id)
+  def save(socket, entity, type, attrs) do
     changeset = Tool.changeset(entity, type, attrs)
-    node_changeset = Tool.node_changeset(node, entity, attrs)
 
-    socket |> schedule_save(changeset, node_changeset)
-  end
-
-  # Label Selector (Themes)
-
-  def all_labels(socket) do
-    socket.assigns.form_data.device_labels
-  end
-
-  def update_selected_labels(%{assigns: %{entity: entity}} = socket, labels) do
-    socket |> schedule_save(entity, :update, %{devices: labels})
+    socket |> schedule_save(changeset)
   end
 
   def render(assigns) do
@@ -116,7 +113,7 @@ defmodule Link.Survey.Form do
           <Title3>{{dgettext("link-survey", "devices.title")}}</Title3>
           <BodyMedium>{{dgettext("link-survey", "devices.label")}}</BodyMedium>
           <Spacing value="XS" />
-          <LabelSelector labels={{ @form_data.device_labels }} target={{@myself}}/>
+          <LabelSelector id={{:devices}} labels={{ @device_labels }} parent={{ %{type: __MODULE__, id: @id} }} />
         </Form>
         <Spacing value="XL" />
         <SecondaryLiveViewButton label={{ dgettext("link-survey", "delete.button") }} event="delete" target={{@myself}} />

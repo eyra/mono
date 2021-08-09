@@ -11,6 +11,6 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/lab/overview.ex:17
-msgid "title"
+#: bundles/link/lib/lab/promotion_plugin.ex:37
+msgid "apply.cta.title"
 msgstr ""

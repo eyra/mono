@@ -8,6 +8,7 @@ defmodule Link.Marketplace do
   alias Core.Survey.Tool, as: SurveyTool
   alias Core.Lab.Tool, as: LabTool
 
+
   alias Link.Marketplace.Card, as: CardVM
 
   alias EyraUI.Card.{PrimaryStudy, SecondaryStudy}
