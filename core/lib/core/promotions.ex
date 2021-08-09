@@ -16,7 +16,7 @@ defmodule Core.Promotions do
 
   def create(attrs, auth_parent, %Node{} = content_node) do
     %Promotion{}
-    |> Promotion.changeset(attrs)
+    |> Promotion.changeset(:insert, attrs)
     |> Ecto.Changeset.put_assoc(:content_node, content_node)
     |> Ecto.Changeset.put_assoc(:auth_node, Authorization.make_node(auth_parent))
     |> Repo.insert()
@@ -24,7 +24,7 @@ defmodule Core.Promotions do
 
   def update(%Promotion{} = promotion, attrs) do
     promotion
-    |> Promotion.changeset(attrs)
+    |> Promotion.changeset(:update, attrs)
     |> update()
   end
 

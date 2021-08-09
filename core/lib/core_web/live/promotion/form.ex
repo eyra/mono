@@ -1,13 +1,12 @@
 defmodule CoreWeb.Promotion.Form do
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader
-  use EyraUI.Selectors.LabelSelector
 
   import CoreWeb.Gettext
 
-  alias Core.Content.Nodes
+  alias Core.Enums.Themes
   alias Core.Promotions
-  alias Core.Promotions.{Promotion, FormData}
+  alias Core.Promotions.Promotion
 
   alias CoreWeb.Router.Helpers, as: Routes
 
@@ -24,29 +23,19 @@ defmodule CoreWeb.Promotion.Form do
   prop(entity_id, :any, required: true)
 
   data(entity, :any)
-  data(form_data, :any)
   data(changeset, :any)
   data(uploads, :any)
   data(focus, :any, default: "")
 
+  data(published?, :boolean)
+  data(byline, :string)
+  data(image_url, :string)
+  data(theme_labels, :list)
+
   @impl true
   def save_file(%{assigns: %{entity: entity}} = socket, uploaded_file) do
     socket
-    |> schedule_save(entity, %{banner_photo_url: uploaded_file})
-    |> update_ui()
-  end
-
-  def update(%{id: id, entity_id: entity_id}, socket) do
-    entity = Promotions.get!(entity_id)
-
-    {
-      :ok,
-      socket
-      |> init_file_uploader(:photo)
-      |> assign(id: id)
-      |> assign(entity_id: entity_id)
-      |> update_ui(entity)
-    }
+    |> save(entity, %{banner_photo_url: uploaded_file})
   end
 
   def update(%{image_id: image_id}, %{assigns: %{entity: entity}} = socket) do
@@ -55,31 +44,76 @@ defmodule CoreWeb.Promotion.Form do
     {
       :ok,
       socket
-      |> schedule_save(entity, attrs)
-      |> update_ui()
+      |> save(entity, attrs)
     }
   end
 
-  def handle_event("save", %{"form_data" => attrs}, %{assigns: %{entity: entity}} = socket) do
+  def update(_params, %{assigns: %{entity: _entity}} = socket) do
+    {
+      :ok,
+      socket
+    }
+  end
+
+  def update(%{id: id, entity_id: entity_id}, socket) do
+    entity = Promotions.get!(entity_id)
+    changeset = Promotion.changeset(entity, :create, %{})
+
+    published? = Promotion.published?(entity)
+    byline = Promotion.get_byline(entity)
+    image_url = Promotion.get_image_url(entity, %{width: 400, height: 300})
+    theme_labels = Themes.labels(entity.themes)
+
+    {
+      :ok,
+      socket
+      |> init_file_uploader(:photo)
+      |> assign(id: id)
+      |> assign(entity_id: entity_id)
+      |> assign(entity: entity)
+      |> assign(changeset: changeset)
+      |> assign(published?: published?)
+      |> assign(byline: byline)
+      |> assign(image_url: image_url)
+      |> assign(theme_labels: theme_labels)
+    }
+  end
+
+  # Handle Selector Update
+  def update(
+        %{active_label_ids: active_label_ids, selector_id: selector_id},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    {:ok, socket |> save(entity, %{selector_id => active_label_ids})}
+  end
+
+  # Save
+  def save(socket, %Promotion{} = entity, attrs) do
+    changeset = Promotion.changeset(entity, :save, attrs)
+
+    socket
+    |> schedule_save(changeset)
+  end
+
+  # Handle Events
+
+  def handle_event("save", %{"promotion" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket
-      |> schedule_save(entity, attrs)
-      |> update_ui()
+      |> save(entity, attrs)
     }
   end
 
-  def handle_event(
-        "publish",
-        _params,
-        %{assigns: %{entity: entity, form_data: form_data}} = socket
-      ) do
-    case validate_for_publish(form_data) do
-      {:ok, _form_data} ->
-        {:noreply,
-         socket
-         |> schedule_save(entity, %{published_at: NaiveDateTime.utc_now()})
-         |> update_ui()}
+  def handle_event("publish", _params, %{assigns: %{entity: entity}} = socket) do
+    case validate_for_publish(entity) do
+      {:ok, entity} ->
+        {
+          :noreply,
+          socket
+          |> save(entity, %{published_at: NaiveDateTime.utc_now()})
+          |> update_published_state()
+        }
 
       {:error, changeset} ->
         {
@@ -95,9 +129,25 @@ defmodule CoreWeb.Promotion.Form do
     {
       :noreply,
       socket
-      |> schedule_save(entity, %{published_at: nil})
-      |> update_ui()
+      |> save(entity, %{published_at: nil})
+      |> update_published_state()
     }
+  end
+
+  defp update_published_state(%{assigns: %{entity: entity}} = socket) do
+    published? = Promotion.published?(entity)
+    socket |> assign(published?: published?)
+  end
+
+  defp validate_for_publish(entity) do
+    changeset = Promotion.changeset(entity, :publish, %{})
+
+    if changeset.valid? do
+      {:ok, entity}
+    else
+      changeset = %{changeset | action: :save}
+      {:error, changeset}
+    end
   end
 
   @impl true
@@ -109,7 +159,7 @@ defmodule CoreWeb.Promotion.Form do
 
         <Bar>
           <BarItem>
-            <Case value={{@form_data.is_published }} >
+            <Case value={{@published? }} >
               <True>
                 <Info text={{dgettext("eyra-promotion", "published.true.label")}} />
               </True>
@@ -119,7 +169,7 @@ defmodule CoreWeb.Promotion.Form do
             </Case>
           </BarItem>
           <BarItem>
-            <SubHead>{{ @form_data.byline }}</SubHead>
+            <SubHead>{{ @byline }}</SubHead>
           </BarItem>
         </Bar>
         <Spacing value="L" />
@@ -132,14 +182,14 @@ defmodule CoreWeb.Promotion.Form do
           <Title3>{{dgettext("eyra-promotion", "themes.title")}}</Title3>
           <BodyMedium>{{dgettext("eyra-promotion", "themes.label")}}</BodyMedium>
           <Spacing value="XS" />
-          <LabelSelector labels={{ @form_data.theme_labels }} target={{@myself}}/>
+          <LabelSelector id={{:themes}} labels={{ @theme_labels }} parent={{ %{type: __MODULE__, id: @id} }} />
           <Spacing value="XL" />
 
           <Title3>{{dgettext("eyra-promotion", "image.title")}}</Title3>
           <BodyMedium>{{dgettext("eyra-promotion", "image.label")}}</BodyMedium>
           <Spacing value="XS" />
           <div class="flex flex-row">
-            <ImagePreview image_url={{ @form_data.image_url }} placeholder="" />
+            <ImagePreview image_url={{ @image_url }} placeholder="" />
             <Spacing value="S" direction="l" />
             <div class="flex-wrap">
               <SecondaryAlpineButton click="$parent.open = true, $parent.$parent.overlay = true" label={{dgettext("eyra-promotion", "search.different.image.button")}} />
@@ -159,7 +209,7 @@ defmodule CoreWeb.Promotion.Form do
           <PhotoInput
             conn={{@socket}}
             static_path={{&Routes.static_path/2}}
-            photo_url={{@form_data.banner_photo_url}}
+            photo_url={{@entity.banner_photo_url}}
             uploads={{@uploads}}
             primary_button_text={{dgettext("eyra-promotion", "choose.banner.photo.file")}}
             secondary_button_text={{dgettext("eyra-promotion", "choose.other.banner.photo.file")}}
@@ -172,7 +222,7 @@ defmodule CoreWeb.Promotion.Form do
           <UrlInput field={{:banner_url}} label_text={{dgettext("eyra-promotion", "banner.url.label")}} target={{@myself}} />
           <Spacing value="XL" />
         </Form>
-        <Case value={{ @form_data.is_published }} >
+        <Case value={{ @published? }} >
         <True> <!-- Published -->
           <SecondaryLiveViewButton label={{ dgettext("eyra-promotion", "unpublish.button") }} event="unpublish" target={{@myself}} />
         </True>
@@ -183,52 +233,5 @@ defmodule CoreWeb.Promotion.Form do
 
       </ContentArea>
     """
-  end
-
-  defp validate_for_publish(form_data) do
-    changeset = FormData.changeset(form_data, :publish, %{})
-
-    if changeset.valid? do
-      {:ok, changeset}
-    else
-      changeset = %{changeset | action: :save}
-      {:error, changeset}
-    end
-  end
-
-  defp update_ui(%{assigns: %{entity: entity}} = socket) do
-    update_ui(socket, entity)
-  end
-
-  defp update_ui(socket, entity) do
-    form_data = FormData.create(entity)
-    changeset = FormData.changeset(form_data, :update_ui, %{})
-
-    socket
-    |> assign(entity: entity)
-    |> assign(form_data: form_data)
-    |> assign(changeset: changeset)
-  end
-
-  # Label Selector (Themes)
-
-  def all_labels(socket) do
-    socket.assigns.form_data.theme_labels
-  end
-
-  def update_selected_labels(%{assigns: %{entity: entity}} = socket, labels) do
-    socket
-    |> schedule_save(entity, %{themes: labels})
-  end
-
-  # Save
-
-  def schedule_save(socket, %Promotion{} = entity, attrs) do
-    node = Nodes.get!(entity.content_node_id)
-    changeset = Promotion.changeset(entity, attrs)
-    node_changeset = Promotion.node_changeset(node, entity, attrs)
-
-    socket
-    |> schedule_save(changeset, node_changeset)
   end
 end

@@ -8,15 +8,10 @@
 ## to merge POT files into PO files.
 msgid ""
 msgstr ""
-"Language: nl\n"
+"Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:97
-msgid "study.all.title"
-msgstr "Beschikbare studies:"
-
-#, elixir-format
-#: bundles/link/lib/marketplace.ex:87
-msgid "study.highlighted.title"
-msgstr "Mijn contributies:"
+#: bundles/link/lib/lab/promotion_plugin.ex:37
+msgid "apply.cta.title"
+msgstr ""

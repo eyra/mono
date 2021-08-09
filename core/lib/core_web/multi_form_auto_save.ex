@@ -2,6 +2,7 @@ defmodule CoreWeb.MultiFormAutoSave do
   defmacro __using__(_opts) do
     quote do
       alias Core.Repo
+      alias Core.Persister
 
       # Schedule Save
       @save_delay 1
@@ -9,7 +10,7 @@ defmodule CoreWeb.MultiFormAutoSave do
       defp cancel_save_timer(nil), do: nil
       defp cancel_save_timer(timer), do: Process.cancel_timer(timer)
 
-      def schedule_save(socket, new_changesets) do
+      def schedule_save(socket, id, changeset) do
         socket =
           update_in(socket.assigns.save_timer, fn timer ->
             cancel_save_timer(timer)
@@ -18,26 +19,10 @@ defmodule CoreWeb.MultiFormAutoSave do
 
         socket =
           update_in(socket.assigns.changesets, fn existing_changesets ->
-            Map.merge(existing_changesets, new_changesets)
+            Map.merge(existing_changesets, %{id => changeset})
           end)
 
         socket
-      end
-
-      # Save
-      def save(changeset) do
-        if changeset.valid? do
-          entity = save_valid(changeset)
-          {:ok, entity}
-        else
-          changeset = %{changeset | action: :save}
-          {:error, changeset}
-        end
-      end
-
-      defp save_valid(changeset) do
-        {:ok, entity} = changeset |> Repo.update()
-        entity
       end
 
       # Schedule Hide Message
@@ -74,8 +59,8 @@ defmodule CoreWeb.MultiFormAutoSave do
 
       def handle_info(:save, %{assigns: %{changesets: changesets}} = socket) do
         changesets
-        |> Enum.each(fn {_, value} ->
-          value |> Repo.update()
+        |> Enum.each(fn {_, changeset} ->
+          Persister.save(changeset.data, changeset)
         end)
 
         {
@@ -101,15 +86,14 @@ defmodule CoreWeb.MultiFormAutoSave do
           socket
           |> put_error_flash()
           |> schedule_hide_flash()
-          |> hide_flash()
         }
       end
 
-      def handle_info({:schedule_save, changesets}, socket) do
+      def handle_info({:schedule_save, %{id: id, changeset: changeset}}, socket) do
         {
           :noreply,
           socket
-          |> schedule_save(changesets)
+          |> schedule_save(id, changeset)
         }
       end
     end

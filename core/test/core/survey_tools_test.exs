@@ -51,7 +51,7 @@ defmodule Core.Survey.ToolsTest do
     test "update_survey_tool/2 with valid data updates the survey_tool" do
       survey_tool = Factories.insert!(:survey_tool)
 
-      assert {:ok, %{} = survey_tool} =
+      assert {:ok, %{tool: survey_tool}} =
                Tools.update_survey_tool(survey_tool, :auto_save, @update_attrs)
 
       assert survey_tool.survey_url == "http://eyra.co/fake_survey"

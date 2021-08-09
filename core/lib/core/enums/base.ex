@@ -23,6 +23,10 @@ defmodule Core.Enums.Base do
         |> Enum.map(&convert_to_label(&1, active_values))
       end
 
+      def labels(active_value) do
+        labels([active_value])
+      end
+
       defp convert_to_label(value, active_values) when is_atom(value) do
         value_as_string =
           value

@@ -50,7 +50,7 @@ defmodule CoreWeb.Marketplace do
       |> Enum.into(MapSet.new())
 
     available_studies =
-      Studies.list_studies_with_published_promotion(DataDonation.Tool,
+      Studies.list_studies_with_published_promotion([DataDonation.Tool],
         exclude: exclusion_list,
         preload: preload
       )

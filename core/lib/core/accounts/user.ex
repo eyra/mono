@@ -56,7 +56,7 @@ defmodule Core.Accounts.User do
   """
   def user_profile_changeset(user, attrs) do
     user
-    |> cast(attrs, [:researcher, :displayname])
+    |> cast(attrs, [:researcher, :student, :displayname])
   end
 
   defp validate_email(changeset) do

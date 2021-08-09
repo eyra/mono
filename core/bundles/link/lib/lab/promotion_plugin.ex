@@ -32,7 +32,7 @@ defmodule Link.Lab.PromotionPlugin do
     CoreWeb.Router.Helpers.live_path(socket, CoreWeb.Lab.Public, tool.id)
   end
 
-  defp get_call_to_action(tool, _user) do
+  defp get_call_to_action(_tool, _user) do
     %CallToAction{
       label: dgettext("link-lab", "apply.cta.title"),
       target: %Target{type: :event, value: "apply"}
@@ -49,7 +49,7 @@ defmodule Link.Lab.PromotionPlugin do
     "#{dgettext("link-survey", "by.author.label")}: " <> authors
   end
 
-  defp get_highlights(tool) do
+  defp get_highlights(_tool) do
     # occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
     # open_spot_count = tool.subject_count - occupied_spot_count
 

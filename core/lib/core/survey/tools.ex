@@ -37,6 +37,7 @@ defmodule Core.Survey.Tools do
   alias Core.Survey.{Tool, Task, Participant}
   alias Core.Authorization
   alias Core.Signals
+  alias Core.Content.Nodes
 
   @doc """
   Returns the list of survey_tools.
@@ -84,9 +85,14 @@ defmodule Core.Survey.Tools do
 
   def update_survey_tool(_, _, _), do: nil
 
-  def update_survey_tool(changeset) do
-    changeset
-    |> Repo.update()
+  def update_survey_tool(%{data: tool, changes: attrs} = changeset) do
+    node = Nodes.get!(tool.content_node_id)
+    node_changeset = Tool.node_changeset(node, tool, attrs)
+
+    Multi.new()
+    |> Multi.update(:tool, changeset)
+    |> Multi.update(:content_node, node_changeset)
+    |> Repo.transaction()
   end
 
   @doc """
@@ -265,5 +271,11 @@ defmodule Core.Survey.Tools do
       Authorization.query_role_assignment(user, survey_tool, :participant)
     )
     |> Repo.transaction()
+  end
+end
+
+defimpl Core.Persister, for: Core.Survey.Tool do
+  def save(_tool, changeset) do
+    Core.Survey.Tools.update_survey_tool(changeset)
   end
 end

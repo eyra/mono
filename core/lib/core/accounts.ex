@@ -6,7 +6,7 @@ defmodule Core.Accounts do
   import Ecto.Query, warn: false
   alias Ecto.Multi
   alias Core.Repo
-  alias Core.Accounts.{User, UserToken, UserNotifier, Profile}
+  alias Core.Accounts.{User, UserToken, UserNotifier, Profile, Features}
   alias Core.Signals
 
   ## Database getters
@@ -411,5 +411,49 @@ defmodule Core.Accounts do
   defp create_profile!(user_id) do
     %Profile{user_id: user_id}
     |> Repo.insert!()
+  end
+
+  # User Features
+
+  def get_features(%User{id: user_id}) do
+    get_features(user_id)
+  end
+
+  def get_features(user_id) do
+    if !is_nil(user_id) do
+      Repo.get_by(Features, user_id: user_id) || create_features!(user_id)
+    end
+  end
+
+  defp create_features!(user_id) do
+    %Features{user_id: user_id}
+    |> Repo.insert!()
+  end
+end
+
+defimpl Core.Persister, for: Core.Accounts.UserProfileEdit do
+  alias Core.Accounts
+  alias Core.Accounts.UserProfileEdit
+
+  def save(_user_profile_edit, changeset) do
+    case Ecto.Changeset.apply_action(changeset, :update) do
+      {:ok, user_profile_edit} ->
+        handle_success(user_profile_edit)
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        handle_validation_error(changeset)
+    end
+  end
+
+  defp handle_validation_error(_changeset) do
+    raise "unable to save invalid user profile data"
+  end
+
+  defp handle_success(user_profile_edit) do
+    user = Accounts.get_user!(user_profile_edit.user_id)
+    user_attrs = UserProfileEdit.to_user(user_profile_edit)
+    profile_attrs = UserProfileEdit.to_profile(user_profile_edit)
+
+    Accounts.update_user_profile(user, user_attrs, profile_attrs)
   end
 end
