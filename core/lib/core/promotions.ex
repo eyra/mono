@@ -6,6 +6,7 @@ defmodule Core.Promotions do
   alias Core.Promotions.Promotion
   alias Core.Content.{Nodes, Node}
   alias Core.Authorization
+  alias Core.Signals
 
   def list do
     Repo.all(Promotion)
@@ -15,11 +16,17 @@ defmodule Core.Promotions do
   def get(id), do: Repo.get(Promotion, id)
 
   def create(attrs, auth_parent, %Node{} = content_node) do
-    %Promotion{}
-    |> Promotion.changeset(:insert, attrs)
-    |> Ecto.Changeset.put_assoc(:content_node, content_node)
-    |> Ecto.Changeset.put_assoc(:auth_node, Authorization.make_node(auth_parent))
-    |> Repo.insert()
+    changeset =
+      %Promotion{}
+      |> Promotion.changeset(:insert, attrs)
+      |> Ecto.Changeset.put_assoc(:content_node, content_node)
+      |> Ecto.Changeset.put_assoc(:auth_node, Authorization.make_node(auth_parent))
+
+    result = changeset |> Repo.insert()
+
+    with {:ok, promotion} <- result do
+      {:ok, notify_when_published(promotion, changeset)}
+    end
   end
 
   def update(%Promotion{} = promotion, attrs) do
@@ -29,8 +36,9 @@ defmodule Core.Promotions do
   end
 
   def update(changeset) do
-    changeset
-    |> Repo.update()
+    with {:ok, promotion} <- Repo.update(changeset) do
+      {:ok, notify_when_published(promotion, changeset)}
+    end
   end
 
   def delete(%Promotion{} = promotion) do
@@ -39,5 +47,14 @@ defmodule Core.Promotions do
 
   def ready?(%Promotion{} = promotion) do
     Nodes.get!(promotion.content_node_id).ready?()
+  end
+
+  defp notify_when_published(%Promotion{} = promotion, %Ecto.Changeset{} = changeset) do
+    # FIXME: Add logic for published_at date > now
+    if Ecto.Changeset.get_change(changeset, :published_at) do
+      Signals.dispatch(:promotion_published, %{promotion: promotion})
+    end
+
+    promotion
   end
 end

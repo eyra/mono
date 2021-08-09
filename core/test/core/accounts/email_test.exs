@@ -59,4 +59,15 @@ defmodule Core.Accounts.Email.Test do
       assert email.text_body =~ url
     end
   end
+
+  describe("account_created/1") do
+    test "has all the fields filled properly" do
+      user = Factories.build(:member)
+      email = Email.account_created(user)
+      assert email.to == user.email
+      assert email.subject == "Welcome"
+      assert email.html_body =~ "Your account has been created"
+      assert email.text_body =~ "Your account has been created"
+    end
+  end
 end

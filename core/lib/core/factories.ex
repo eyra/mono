@@ -104,7 +104,9 @@ defmodule Core.Factories do
   end
 
   def build(:promotion) do
-    %Promotions.Promotion{}
+    %Promotions.Promotion{
+      title: Faker.Lorem.sentence()
+    }
   end
 
   def build(:content_node) do

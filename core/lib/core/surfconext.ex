@@ -1,6 +1,7 @@
 defmodule Core.SurfConext do
   alias Core.Accounts.User
   alias Core.Repo
+  alias Core.Signals
   import Ecto.Query, warn: false
 
   def get_user_by_sub(sub) do
@@ -28,10 +29,14 @@ defmodule Core.SurfConext do
 
     user = User.sso_changeset(%User{}, sso_info)
 
-    %Core.SurfConext.User{}
-    |> Core.SurfConext.User.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:user, user)
-    |> Repo.insert()
+    user =
+      %Core.SurfConext.User{}
+      |> Core.SurfConext.User.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:user, user)
+      |> Repo.insert!()
+
+    Signals.dispatch!(:user_created, %{user: user})
+    {:ok, user}
   end
 
   defmacro routes(otp_app) do

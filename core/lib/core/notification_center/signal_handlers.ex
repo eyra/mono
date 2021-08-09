@@ -1,7 +1,12 @@
 defmodule Core.NotificationCenter.SignalHandlers do
   use Core.Signals.Handlers
-  import Core.NotificationCenter, only: [notify_users_with_role: 3]
+  import Ecto.Query
+  alias Core.Repo
 
+  import Core.NotificationCenter,
+    only: [notify: 2, notify_users_with_role: 3, mark_as_notified: 2, marked_as_notified?: 2]
+
+  alias Core.Accounts.User
   alias Core.Studies
   alias Core.Promotions
 
@@ -13,5 +18,26 @@ defmodule Core.NotificationCenter.SignalHandlers do
     notify_users_with_role(study, :owner, %{
       title: "New participant for: #{promotion.title}"
     })
+  end
+
+  @impl true
+  def dispatch(:promotion_published, %{promotion: promotion}) do
+    unless marked_as_notified?(promotion, :promotion_published) do
+      # FIXME: extend with elegibility filter & move to other location
+      query = from(u in User, where: u.student)
+      stream = Repo.stream(query)
+
+      Repo.transaction(fn ->
+        notify_users(stream, %{title: "New study available"})
+
+        mark_as_notified(promotion, :promotion_published)
+      end)
+    end
+  end
+
+  defp notify_users(users, message) do
+    Enum.each(users, fn user ->
+      notify(user, message)
+    end)
   end
 end
