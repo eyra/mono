@@ -35,29 +35,32 @@ defmodule Core.SurfConext.AuthorizePlug do
   end
 end
 
-defmodule Core.SurfConext.CallbackPlug do
-  import Plug.Conn
+defmodule Core.SurfConext.CallbackController do
+  use CoreWeb, :controller
   import Core.SurfConext.PlugUtils
 
-  def init(otp_app) when is_atom(otp_app), do: otp_app
-
-  def call(conn, otp_app) do
+  def authenticate(conn, params) do
     session_params = get_session(conn, :surfcontext)
 
-    config = config(otp_app) |> Keyword.put(:session_params, session_params)
+    config = config(:core) |> Keyword.put(:session_params, session_params)
 
-    {:ok, %{user: surf_user, token: token}} = oidc_module(config).callback(config, conn.params)
+    {:ok, %{user: surf_user, token: token}} = oidc_module(config).callback(config, params)
 
-    user =
-      if user = Core.SurfConext.get_user_by_sub(surf_user["sub"]) do
-        user
-      else
-        with {:ok, userinfo} <- oidc_module(config).fetch_userinfo(config, token),
-             {:ok, surfconext_user} <- Core.SurfConext.register_user(userinfo) do
-          surfconext_user.user
+    if user = Core.SurfConext.get_user_by_sub(surf_user["sub"]) do
+      log_in_user(config, conn, user)
+    else
+      with {:ok, userinfo} <- oidc_module(config).fetch_userinfo(config, token) do
+        case(Core.SurfConext.register_user(userinfo)) do
+          {:ok, surfconext_user} ->
+            log_in_user(config, conn, surfconext_user.user)
+
+          {:error, changeset} ->
+            Enum.reduce(changeset.errors, conn, fn {_, {message, _}}, conn ->
+              put_flash(conn, :error, message)
+            end)
+            |> redirect(to: Routes.user_session_path(conn, :new))
         end
       end
-
-    log_in_user(config, conn, user)
+    end
   end
 end
