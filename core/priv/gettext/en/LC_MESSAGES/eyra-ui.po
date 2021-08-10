@@ -24,47 +24,48 @@ msgid "saved.info.flash"
 msgstr "Saved"
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2
+#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.dashboard"
 msgstr "Dashboard"
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2
+#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.marketplace"
 msgstr "Marketplace"
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2
+#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.profile"
 msgstr "My profile"
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2 lib/core_web/live/user/settings.ex:33
+#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
+#: lib/core_web/live/user/settings.ex:33
 msgid "menu.item.settings"
 msgstr "Settings"
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2
+#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.signin"
 msgstr "Sign in"
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2
+#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.signout"
 msgstr "Sign out"
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2
+#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.menu"
 msgstr "Menu"
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2
+#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.eyra"
 msgstr "Eyra"
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:2
+#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.todo"
 msgstr "To-do"
 
@@ -74,7 +75,7 @@ msgid "dashboard.title"
 msgstr "Dashboard"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:80
+#: bundles/link/lib/marketplace.ex:81
 msgid "marketplace.title"
 msgstr "Marketplace"
 
@@ -83,7 +84,37 @@ msgstr "Marketplace"
 msgid "todo.title"
 msgstr "To-do"
 
-#, elixir-format, fuzzy
-#: lib/core_web/live/menu/helpers.ex:2
+#, elixir-format
+#: lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.payments"
 msgstr "Payments"
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:72
+msgid "tabbar.item.features"
+msgstr "Characteristics"
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:57
+msgid "tabbar.item.profile"
+msgstr "My profile"
+
+#, elixir-format
+#: lib/core_web/live/user/profile.ex:64
+msgid "tabbar.item.study"
+msgstr "Study"
+
+#, elixir-format, fuzzy
+#: lib/core_web/live/user/profile.ex:73
+msgid "tabbar.item.features.forward"
+msgstr "Update characteristics"
+
+#, elixir-format, fuzzy
+#: lib/core_web/live/user/profile.ex:58
+msgid "tabbar.item.profile.forward"
+msgstr "Update profile"
+
+#, elixir-format, fuzzy
+#: lib/core_web/live/user/profile.ex:65
+msgid "tabbar.item.study.forward"
+msgstr "Select study"

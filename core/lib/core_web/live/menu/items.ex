@@ -15,4 +15,18 @@ defmodule CoreWeb.Menu.Items do
       signin: %{target: :new, domain: "eyra-ui"},
       menu: %{target: "mobile_menu = !mobile_menu", domain: "eyra-ui"}
     }
+
+  defmacro __using__(_opts) do
+    quote do
+      import CoreWeb.Gettext
+
+      unquote do
+        for {item_id, %{domain: domain}} <- CoreWeb.Menu.Items.values() do
+          quote do
+            dgettext(unquote(domain), unquote("menu.item.#{item_id}"))
+          end
+        end
+      end
+    end
+  end
 end

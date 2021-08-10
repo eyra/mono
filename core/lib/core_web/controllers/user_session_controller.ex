@@ -1,8 +1,6 @@
 defmodule CoreWeb.UserSessionController do
   use CoreWeb, :controller
 
-  alias Core.Accounts
-  alias CoreWeb.UserAuth
   import CoreWeb.Gettext
 
   if feature_enabled?(:signin_with_apple) do
@@ -22,8 +20,8 @@ defmodule CoreWeb.UserSessionController do
     def create(conn, %{"user" => user_params}) do
       %{"email" => email, "password" => password} = user_params
 
-      if user = Accounts.get_user_by_email_and_password(email, password) do
-        UserAuth.log_in_user(conn, user, user_params)
+      if user = Core.Accounts.get_user_by_email_and_password(email, password) do
+        CoreWeb.UserAuth.log_in_user(conn, user, user_params)
       else
         message = dgettext("eyra-user", "Invalid email or password")
         render(conn |> put_flash(:error, message), "new.html")
@@ -34,6 +32,6 @@ defmodule CoreWeb.UserSessionController do
   def delete(conn, _params) do
     conn
     |> put_flash(:info, "Logged out successfully.")
-    |> UserAuth.log_out_user()
+    |> CoreWeb.UserAuth.log_out_user()
   end
 end

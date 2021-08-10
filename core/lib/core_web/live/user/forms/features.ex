@@ -80,7 +80,7 @@ defmodule CoreWeb.User.Forms.Features do
 
   def render(assigns) do
     ~H"""
-      <ContentArea>
+      <ContentArea top_padding="pt-14">
         <FormArea>
           <Title2>{{dgettext("eyra-account", "features.title")}}</Title2>
           <BodyMedium>{{dgettext("eyra-account", "features.description")}}</BodyMedium>

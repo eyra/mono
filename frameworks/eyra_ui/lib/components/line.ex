@@ -6,7 +6,7 @@ defmodule EyraUI.Line do
 
   def render(assigns) do
     ~H"""
-    <div class="mb-7 bg-grey4 h-px"></div>
+    <div class="bg-grey4 h-px"></div>
     """
   end
 end

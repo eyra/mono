@@ -93,6 +93,7 @@ module.exports = {
         "header2" : "50px",
         "header2-sm" : "90px",
         "header2-lg" : "183px",
+        "navbar" : "90px",
         "logo" : "32px",
         "logo-sm" : "48px",
         "image-header": "375px",
