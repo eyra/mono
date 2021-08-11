@@ -11,7 +11,7 @@ defmodule EyraUI.Navigation.DesktopMenu do
 
   def render(assigns) do
     ~H"""
-    <div class="fixed z-1 w-desktop-menu-width h-full pt-0 pr-8 md:pt-10 pb-0 md:pb-10 hidden md:block h-full">
+    <div class="fixed z-1 w-desktop-menu-width h-full pl-10 pt-0 pr-8 md:pt-10 pb-0 md:pb-10 hidden md:block h-full">
       <Menu items={{@items}} path_provider={{@path_provider}} />
     </div>
     """

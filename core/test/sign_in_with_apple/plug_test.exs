@@ -20,13 +20,13 @@ defmodule SignInWithApple.CallbackPlug.Test do
   setup do
     Application.put_env(:test, SignInWithApple,
       apple_backend_module: SignInWithApple.FakeBackend,
-      log_in_user: fn _conn, user -> user end
+      log_in_user: fn _conn, user, _first_time? -> user end
     )
 
     :ok
   end
 
-  describe "call/1" do
+  describe "call/2" do
     test "creates a user" do
       user_data =
         Jason.encode!(%{

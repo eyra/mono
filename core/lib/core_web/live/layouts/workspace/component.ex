@@ -38,24 +38,24 @@ defmodule CoreWeb.Layouts.Workspace.Component do
       <DesktopMenu items={{ build_menu(:desktop_menu, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
       <div class="w-full h-full md:pl-desktop-menu-width z-2">
         <div class="pt-0 md:pt-10 h-full">
-          <div class="flex flex-col bg-white min-h-full">
-            <MobileNavbar items={{ build_menu(:mobile_navbar, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
-            <div :if={{ @title }}>
-              <HeroSmall title={{ @title }} />
-            </div>
-            <div class="flex-1">
+          <MobileNavbar items={{ build_menu(:mobile_navbar, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
+          <div class="flex flex-col bg-white h-full ">
+            <div class="border-t border-l border-b border-grey4 h-full">
               <div class="flex flex-col h-full">
-                <div>
-                  <slot />
-                </div>
                 <div class="flex-1">
+                  <div :if={{ @title }} class="flex-none">
+                    <HeroSmall title={{ @title }} />
+                  </div>
+                  <div class="">
+                    <slot />
+                  </div>
+                </div>
+                <div class="flex-none bg-white">
+                  {{ footer CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-left.svg"), CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-right.svg") }}
                 </div>
               </div>
             </div>
             <div class="pb-0 md:pb-10 bg-grey5">
-                <div class="bg-white">
-                  {{ footer CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-left.svg"), CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-right.svg") }}
-                </div>
             </div>
           </div>
         </div>

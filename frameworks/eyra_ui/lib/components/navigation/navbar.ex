@@ -24,7 +24,7 @@ defmodule EyraUI.Navigation.Navbar do
     <div class="h-topbar sm:h-topbar-sm lg:h-topbar-lg">
       <HorizontalCenter>
         <div class="flex-wrap" :if={{ has_home?(@items) }} >
-          <div class="ml-1 sm:ml-4 lg:ml-0 mr-8">
+          <div class="ml-6 lg:ml-0 mr-8">
             <MenuItem vm={{ @items.home }} path_provider={{@path_provider}}/>
           </div>
         </div>

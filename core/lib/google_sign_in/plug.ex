@@ -7,9 +7,9 @@ defmodule GoogleSignIn.PlugUtils do
     Keyword.get(config, :google_module, Assent.Strategy.Google)
   end
 
-  def log_in_user(config, conn, user) do
-    log_in_user = Keyword.get(config, :log_in_user, &CoreWeb.UserAuth.log_in_user/2)
-    log_in_user.(conn, user)
+  def log_in_user(config, conn, user, first_time?) do
+    log_in_user = Keyword.get(config, :log_in_user, &CoreWeb.UserAuth.log_in_user/3)
+    log_in_user.(conn, user, first_time?)
   end
 end
 
@@ -49,9 +49,14 @@ defmodule(GoogleSignIn.CallbackPlug) do
 
     {:ok, %{user: google_user}} = google_module(config).callback(config, conn.params)
 
-    user = GoogleSignIn.get_user_by_sub(google_user["sub"]) || register_user(google_user)
+    {user, first_time?} =
+      if user = GoogleSignIn.get_user_by_sub(google_user["sub"]) do
+        {user, false}
+      else
+        {register_user(google_user), true}
+      end
 
-    log_in_user(config, conn, user)
+    log_in_user(config, conn, user, first_time?)
   end
 
   defp register_user(info) do

@@ -68,7 +68,7 @@ defmodule Core.SurfConext.CallbackPlug.Test do
       client_secret: Faker.Lorem.sentence(),
       site: "https://connect.test.surfconext.nl",
       redirect_uri: "https://#{domain}/surfconext/auth",
-      log_in_user: fn _conn, user -> user end,
+      log_in_user: fn _conn, user, _first_time? -> user end,
       oidc_module: Core.SurfConext.FakeOIDC
     )
 

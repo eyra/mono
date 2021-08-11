@@ -73,7 +73,7 @@ defmodule GoogleSignIn.CallbackPlug.Test do
       site: "https://connect.test.google_sign_in.nl",
       redirect_uri: "https://#{domain}/google_sign_in/auth",
       google_module: GoogleSignIn.FakeGoogle,
-      log_in_user: fn _conn, user -> user end
+      log_in_user: fn _conn, user, _first_time? -> user end
     )
 
     :ok

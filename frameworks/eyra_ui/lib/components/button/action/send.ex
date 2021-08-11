@@ -11,7 +11,7 @@ defmodule EyraUI.Button.Action.Send do
 
   def render(assigns) do
     ~H"""
-    <button phx-target={{@target}} phx-click={{ @event }} class="focus:outline-none">
+    <button phx-target={{@target}} phx-click={{ @event }} class="cursor-pointer focus:outline-none">
       <slot />
     </button>
     """

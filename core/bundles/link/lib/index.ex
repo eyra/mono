@@ -60,7 +60,7 @@ defmodule Link.Index do
               <div :if={{ @current_user == nil }}>
                 <PrimaryCTA title={{ dgettext("eyra-link", "signup.card.title") }}
                   button_label={{ dgettext("eyra-link", "signup.card.button") }}
-                  to={{ Routes.live_path(@socket, CoreWeb.User.Signup) }} />
+                  to={{ Routes.user_session_path(@socket, :new) }} />
               </div>
             </div>
             <USP title={{ dgettext("eyra-link", "usp1.title") }} description={{ dgettext("eyra-link", "usp1.description") }} />

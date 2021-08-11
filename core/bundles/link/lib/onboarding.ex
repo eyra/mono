@@ -1,4 +1,4 @@
-defmodule CoreWeb.User.Profile do
+defmodule Link.Onboarding do
   @moduledoc """
   The home screen.
   """
@@ -7,11 +7,13 @@ defmodule CoreWeb.User.Profile do
 
   import CoreWeb.Gettext
 
-  alias Core
-  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
+  alias CoreWeb.Layouts.Stripped.Component, as: Stripped
   alias CoreWeb.User.Forms.Profile, as: ProfileForm
+  alias CoreWeb.User.Forms.Study, as: StudyForm
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
 
+  alias EyraUI.Button.Action.Redirect
+  alias EyraUI.Button.Face.Primary
   alias EyraUI.Navigation.{Tabbar, TabbarContent, TabbarFooter, TabbarArea}
 
   data(user_agent, :string, default: "")
@@ -48,7 +50,7 @@ defmodule CoreWeb.User.Profile do
     if cond, do: list ++ [extra], else: list
   end
 
-  defp create_tabs(_socket) do
+  defp create_tabs(%{assigns: %{current_user: current_user}}) do
     []
     |> append(%{
       id: :profile,
@@ -56,6 +58,15 @@ defmodule CoreWeb.User.Profile do
       forward_title: dgettext("eyra-ui", "tabbar.item.profile.forward"),
       component: ProfileForm
     })
+    |> append(
+      %{
+        id: :study,
+        title: dgettext("eyra-ui", "tabbar.item.study"),
+        forward_title: dgettext("eyra-ui", "tabbar.item.study.forward"),
+        component: StudyForm
+      },
+      current_user.student
+    )
     |> append(%{
       id: :features,
       action: nil,
@@ -65,20 +76,31 @@ defmodule CoreWeb.User.Profile do
     })
   end
 
+  defp forward_path(socket) do
+    page = forward_page(socket)
+    Routes.live_path(socket, page)
+  end
+
+  defp forward_page(%{assigns: %{current_user: %{researcher: true}}}), do: Link.Dashboard
+  defp forward_page(_), do: Link.Marketplace
+
   @impl true
   def render(assigns) do
     ~H"""
-    <Workspace
-      user={{@current_user}}
-      user_agent={{ Browser.Ua.to_ua(@socket) }}
-      active_item={{ :profile }}
-    >
-      <TabbarArea tabs={{@tabs}}>
-        <Tabbar id={{ :tabbar }}/>
-        <TabbarContent user={{@current_user}} />
-        <TabbarFooter/>
-      </TabbarArea>
-    </Workspace>
+      <Stripped
+        user={{@current_user}}
+        active_item={{ :dashboard }}
+      >
+        <TabbarArea tabs={{@tabs}}>
+          <Tabbar id={{ :tabbar }}/>
+          <TabbarContent user={{@current_user}} />
+          <TabbarFooter>
+              <Redirect to={{ forward_path(@socket) }}>
+                <Primary label={{ dgettext("eyra-ui", "onboarding.forward") }}/>
+              </Redirect>
+          </TabbarFooter>
+        </TabbarArea>
+      </Stripped>
     """
   end
 end
