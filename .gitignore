@@ -1,2 +1,12 @@
 
 *.pyc
+data_extractor/tests/data/BrowserHistory.json
+data_extractor/.coverage
+data_extractor/.ipynb_checkpoints/
+data_extractor/google_search_history/POC.py
+.coverage
+.python-version
+Lib/
+Scripts/
+.vscode/
+pyvenv.cfg

@@ -8,6 +8,8 @@ authors = ["Jeroen Vloothuis <jeroen@9bitcat.com>"]
 python = "^3.8"
 pandas = "^1.2.4"
 pylint = "^2.8.2"
+Faker = "^8.11.0"
+numpy = "^1.21.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
