@@ -7,7 +7,7 @@ defmodule CoreWeb.User.Forms.Study do
   alias Core.Accounts
   alias Core.Accounts.Features
 
-  alias EyraUI.Selectors.LabelSelector
+  alias EyraUI.Selector.Selector
   alias EyraUI.Spacing
   alias EyraUI.Text.{Title2, BodyMedium}
   alias EyraUI.Container.{ContentArea, FormArea}
@@ -38,10 +38,10 @@ defmodule CoreWeb.User.Forms.Study do
 
   # Handle Selector Update
   def update(
-        %{active_label_ids: active_label_ids, selector_id: selector_id},
+        %{active_item_ids: active_item_ids, selector_id: selector_id},
         %{assigns: %{entity: entity}} = socket
       ) do
-    {:ok, socket |> save(entity, :auto_save, %{selector_id => active_label_ids})}
+    {:ok, socket |> save(entity, :auto_save, %{selector_id => active_item_ids})}
   end
 
   defp update_ui(%{assigns: %{entity: entity}} = socket) do
@@ -70,7 +70,7 @@ defmodule CoreWeb.User.Forms.Study do
           <Title2>{{dgettext("eyra-account", "features.study.title")}}</Title2>
           <BodyMedium>{{dgettext("eyra-account", "feature.study.description")}}</BodyMedium>
           <Spacing value="S" />
-          <LabelSelector id={{:study_program_codes}} labels={{ @study_labels }} parent={{ %{type: __MODULE__, id: @id} }}/>
+          <Selector id={{:study_program_codes}} items={{ @study_labels }} type={{:checkbox}} parent={{ %{type: __MODULE__, id: @id} }}/>
         </FormArea>
       </ContentArea>
     """

@@ -16,7 +16,7 @@ defmodule CoreWeb.Promotion.Form do
   alias EyraUI.Text.{Title1, Title3, BodyMedium, SubHead}
   alias EyraUI.Form.{Form, TextInput, TextArea, PhotoInput, UrlInput}
   alias EyraUI.Container.{ContentArea, Bar, BarItem}
-  alias EyraUI.Selectors.LabelSelector
+  alias EyraUI.Selector.Selector
   alias EyraUI.ImagePreview
   alias EyraUI.Button.{SecondaryAlpineButton, PrimaryLiveViewButton, SecondaryLiveViewButton}
 
@@ -81,10 +81,10 @@ defmodule CoreWeb.Promotion.Form do
 
   # Handle Selector Update
   def update(
-        %{active_label_ids: active_label_ids, selector_id: selector_id},
+        %{active_item_ids: active_item_ids, selector_id: selector_id},
         %{assigns: %{entity: entity}} = socket
       ) do
-    {:ok, socket |> save(entity, %{selector_id => active_label_ids})}
+    {:ok, socket |> save(entity, %{selector_id => active_item_ids})}
   end
 
   # Save
@@ -182,7 +182,7 @@ defmodule CoreWeb.Promotion.Form do
           <Title3>{{dgettext("eyra-promotion", "themes.title")}}</Title3>
           <BodyMedium>{{dgettext("eyra-promotion", "themes.label")}}</BodyMedium>
           <Spacing value="XS" />
-          <LabelSelector id={{:themes}} labels={{ @theme_labels }} parent={{ %{type: __MODULE__, id: @id} }} />
+          <Selector id={{:themes}} items={{ @theme_labels }} parent={{ %{type: __MODULE__, id: @id} }} />
           <Spacing value="XL" />
 
           <Title3>{{dgettext("eyra-promotion", "image.title")}}</Title3>
