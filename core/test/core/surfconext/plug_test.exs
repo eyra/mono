@@ -56,8 +56,8 @@ end
 
 defmodule Core.SurfConext.CallbackController.Test do
   use CoreWeb.ConnCase, async: false
-  describe "authenticate/1" do
 
+  describe "authenticate/1" do
     setup do
       conf = Application.get_env(:core, Core.SurfConext, [])
 
