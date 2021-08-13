@@ -34,7 +34,7 @@ defmodule CoreWeb.UserAuth do
         signed_in_path(conn, user)
 
     redirect_to =
-      if first_time? do
+      if first_time? && first_time_path do
         first_time_path
       else
         normal_path
@@ -176,5 +176,10 @@ defmodule CoreWeb.UserAuth do
 
   defp signed_in_page(_), do: page(:participant_signed_in_page, CoreWeb.Marketplace)
 
-  defp page(key, default), do: Application.get_env(:core, key, default)
+  defp page(key, default), do: auth_config(key, default)
+
+  defp auth_config(key, default) when is_atom(key) do
+    Application.get_env(:core, CoreWeb.UserAuth, [])
+    |> Keyword.get(key, default)
+  end
 end

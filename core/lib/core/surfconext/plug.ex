@@ -36,7 +36,8 @@ defmodule Core.SurfConext.AuthorizePlug do
 end
 
 defmodule Core.SurfConext.CallbackController do
-  use CoreWeb, :controller
+  use Phoenix.Controller, namespace: CoreWeb
+  alias CoreWeb.Router.Helpers, as: Routes
   import Core.SurfConext.PlugUtils
 
   def authenticate(conn, params) do
@@ -46,8 +47,10 @@ defmodule Core.SurfConext.CallbackController do
 
     {:ok, %{user: surf_user, token: token}} = oidc_module(config).callback(config, params)
 
+    Core.SurfConext.get_user_by_sub(surf_user["sub"])
+
     if user = Core.SurfConext.get_user_by_sub(surf_user["sub"]) do
-      log_in_user(config, conn, user)
+      log_in_user(config, conn, user, false)
     else
       with {:ok, userinfo} <- oidc_module(config).fetch_userinfo(config, token) do
         case(Core.SurfConext.register_user(userinfo)) do

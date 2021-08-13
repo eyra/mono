@@ -9,6 +9,8 @@ config :core,
   workspace_menu_builder: Link.Layouts.Workspace.MenuBuilder,
   website_menu_builder: Link.Layouts.Website.MenuBuilder,
   stripped_menu_builder: CoreWeb.Layouts.Stripped.MenuBuilder,
+
+config :core, CoreWeb.UserAuth,
   researcher_signed_in_page: Link.Dashboard,
   participant_signed_in_page: Link.Marketplace,
   participant_signed_in_first_time_page: Link.Onboarding

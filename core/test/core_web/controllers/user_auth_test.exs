@@ -12,6 +12,19 @@ defmodule CoreWeb.UserAuthTest do
       |> Map.replace!(:secret_key_base, CoreWeb.Endpoint.config(:secret_key_base))
       |> init_test_session(%{})
 
+    conf = Application.get_env(:core, CoreWeb.UserAuth, [])
+
+    on_exit(fn ->
+      Application.put_env(:core, CoreWeb.UserAuth, conf)
+    end)
+
+    test_conf = [
+      # fake onboarding path
+      participant_signed_in_first_time_page: CoreWeb.User.Profile
+    ]
+
+    Application.put_env(:core, CoreWeb.UserAuth, test_conf)
+
     %{user: Core.Factories.insert!(:member), conn: conn}
   end
 
@@ -47,6 +60,23 @@ defmodule CoreWeb.UserAuthTest do
       assert %{value: signed_token, max_age: max_age} = conn.resp_cookies[@remember_me_cookie]
       assert signed_token != get_session(conn, :user_token)
       assert max_age == 5_184_000
+    end
+
+    test "student first time redirects to onboarding path", %{conn: conn, user: user} do
+      first_time? = true
+      user = user |> Map.put(:student, first_time?)
+      conn = conn |> UserAuth.log_in_user(user, true, %{})
+
+      # fake onboarding path
+      assert redirected_to(conn) == "/user/profile"
+    end
+
+    test "researcher first time redirects to dashboard", %{conn: conn, user: user} do
+      first_time? = true
+      user = user |> Map.put(:researcher, first_time?)
+      conn = conn |> UserAuth.log_in_user(user, true, %{})
+
+      assert redirected_to(conn) == "/dashboard"
     end
   end
 
