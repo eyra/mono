@@ -42,7 +42,7 @@ defmodule Core.SurfConext.AuthorizePlug.Test do
       )
 
       conn =
-        conn(:get, "/surf")
+        conn(:get, "/surfconext/auth")
         |> init_test_session(%{})
         |> AuthorizePlug.call(:test)
 
@@ -54,38 +54,52 @@ defmodule Core.SurfConext.AuthorizePlug.Test do
   end
 end
 
-defmodule Core.SurfConext.CallbackPlug.Test do
-  use ExUnit.Case, async: true
-  use Core.DataCase
-  use Plug.Test
-  alias Core.SurfConext.CallbackPlug
+defmodule Core.SurfConext.CallbackController.Test do
+  use CoreWeb.ConnCase, async: false
+  describe "authenticate/1" do
 
-  setup do
-    domain = Faker.Internet.domain_name()
+    setup do
+      conf = Application.get_env(:core, Core.SurfConext, [])
 
-    Application.put_env(:test, Core.SurfConext,
-      client_id: domain,
-      client_secret: Faker.Lorem.sentence(),
-      site: "https://connect.test.surfconext.nl",
-      redirect_uri: "https://#{domain}/surfconext/auth",
-      log_in_user: fn _conn, user, _first_time? -> user end,
-      oidc_module: Core.SurfConext.FakeOIDC
-    )
+      on_exit(fn ->
+        Application.put_env(:core, Core.SurfConext, conf)
+      end)
 
-    :ok
-  end
+      domain = Faker.Internet.domain_name()
 
-  describe "call/1" do
-    test "creates a user" do
-      user =
-        conn(:get, "/surf")
-        |> init_test_session(%{})
-        |> CallbackPlug.call(:test)
+      test_conf = [
+        client_id: domain,
+        client_secret: Faker.Lorem.sentence(),
+        site: "https://connect.test.surfconext.nl",
+        redirect_uri: "https://#{domain}/surfconext/auth",
+        # log_in_user: fn _conn, user, _first_time? -> user end,
+        oidc_module: Core.SurfConext.FakeOIDC
+      ]
 
-      assert user.id
+      Application.put_env(:core, Core.SurfConext, test_conf)
+
+      {:ok, conn: build_conn(), conf: test_conf}
     end
 
-    test "authenticates an existing user" do
+    test "creates a user", %{conn: conn} do
+      conn = conn |> get("/surfconext/auth")
+      assert redirected_to(conn) == "/marketplace"
+    end
+
+    test "redirects when the changeset is invalid", %{conn: conn, conf: conf} do
+      Application.put_env(
+        :core,
+        Core.SurfConext,
+        Keyword.put(conf, :limit_schac_home_organization, "my-org")
+      )
+
+      conn = conn |> get("/surfconext/auth")
+      assert redirected_to(conn) == "/user/signin"
+
+      assert get_flash(conn, :error) =~ "not allowed to authenticate"
+    end
+
+    test "authenticates an existing user", %{conn: conn} do
       email = Faker.Internet.email()
 
       Core.SurfConext.register_user(%{
@@ -94,12 +108,8 @@ defmodule Core.SurfConext.CallbackPlug.Test do
         "preferred_username" => Faker.Person.name()
       })
 
-      user =
-        conn(:get, "/surf")
-        |> init_test_session(%{})
-        |> CallbackPlug.call(:test)
-
-      assert user.email == email
+      conn = conn |> get("/surfconext/auth")
+      assert redirected_to(conn) == "/marketplace"
     end
   end
 end

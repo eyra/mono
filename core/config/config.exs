@@ -38,7 +38,8 @@ config :core, Core.SurfConext,
   client_id: "not-set",
   client_secret: "not-set",
   site: "https://connect.test.surfconext.nl",
-  redirect_uri: "not-set"
+  redirect_uri: "not-set",
+  limit_schac_home_organization: nil
 
 config :core, SignInWithApple,
   client_id: System.get_env("SIGN_IN_WITH_APPLE_CLIENT_ID"),
