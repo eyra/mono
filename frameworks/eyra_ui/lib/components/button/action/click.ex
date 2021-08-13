@@ -10,7 +10,7 @@ defmodule EyraUI.Button.Action.Click do
 
   def render(assigns) do
     ~H"""
-    <button @click={{@code}} type="button" class="focus:outline-none">
+    <button @click={{@code}} type="button" class="cursor-pointer focus:outline-none">
       <slot />
     </button>
     """

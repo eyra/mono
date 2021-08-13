@@ -7,9 +7,9 @@ defmodule Core.SurfConext.PlugUtils do
     Keyword.get(config, :oidc_module, Assent.Strategy.OIDC)
   end
 
-  def log_in_user(config, conn, user) do
-    log_in_user = Keyword.get(config, :log_in_user, &CoreWeb.UserAuth.log_in_user/2)
-    log_in_user.(conn, user)
+  def log_in_user(config, conn, user, first_time?) do
+    log_in_user = Keyword.get(config, :log_in_user, &CoreWeb.UserAuth.log_in_user/3)
+    log_in_user.(conn, user, first_time?)
   end
 end
 
@@ -48,16 +48,16 @@ defmodule Core.SurfConext.CallbackPlug do
 
     {:ok, %{user: surf_user, token: token}} = oidc_module(config).callback(config, conn.params)
 
-    user =
+    {user, first_time?} =
       if user = Core.SurfConext.get_user_by_sub(surf_user["sub"]) do
-        user
+        {user, false}
       else
         with {:ok, userinfo} <- oidc_module(config).fetch_userinfo(config, token),
              {:ok, surfconext_user} <- Core.SurfConext.register_user(userinfo) do
-          surfconext_user.user
+          {surfconext_user.user, true}
         end
       end
 
-    log_in_user(config, conn, user)
+    log_in_user(config, conn, user, first_time?)
   end
 end

@@ -10,7 +10,7 @@ defmodule EyraUI.Button.Action.Submit do
 
   def render(assigns) do
     ~H"""
-    <button @click={{@alpine_code}} type="submit" class="focus:outline-none">
+    <button @click={{@alpine_code}} type="submit" class="cursor-pointer focus:outline-none">
       <slot />
     </button>
     """

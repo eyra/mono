@@ -60,11 +60,11 @@ module.exports = {
         "48px" : "48px",
         "44px" : "44px",
         "84px" : "84px",
-        "desktop-menu-width" : "256px",
+        "desktop-menu-width" : "296px",
         "mobile-menu-width" : "304px",
+        "sidepadding" : "64px",
       },
       width: {
-        "sidebar" : "68px",
         "main-left" : "56px",
         "logo" : "23px",
         "logo-sm" : "48px",

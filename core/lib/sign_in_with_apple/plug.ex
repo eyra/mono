@@ -10,9 +10,9 @@ defmodule SignInWithApple.CallbackPlug do
     config = Keyword.put(config, :session_params, session_params)
     {:ok, %{user: user_info}} = backend_module(config).callback(config, conn.body_params)
 
-    user =
+    {user, first_time?} =
       if user = SignInWithApple.get_user_by_sub(user_info["sub"]) do
-        user
+        {user, false}
       else
         {:ok, user_name_params} = conn.body_params["user"] |> Jason.decode!() |> Map.fetch("name")
 
@@ -26,14 +26,14 @@ defmodule SignInWithApple.CallbackPlug do
             last_name: user_name_params["lastName"]
           })
 
-        signed_in_apple_user.user
+        {signed_in_apple_user.user, true}
       end
 
-    log_in_user(config, conn, user)
+    log_in_user(config, conn, user, first_time?)
   end
 
-  defp log_in_user(config, conn, user) do
-    log_in_user = Keyword.get(config, :log_in_user, &CoreWeb.UserAuth.log_in_user/2)
-    log_in_user.(conn, user)
+  defp log_in_user(config, conn, user, first_time?) do
+    log_in_user = Keyword.get(config, :log_in_user, &CoreWeb.UserAuth.log_in_user/3)
+    log_in_user.(conn, user, first_time?)
   end
 end

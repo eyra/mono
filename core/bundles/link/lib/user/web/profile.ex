@@ -1,4 +1,4 @@
-defmodule CoreWeb.User.Profile do
+defmodule Link.User.Web.Profile do
   @moduledoc """
   The home screen.
   """
@@ -10,6 +10,7 @@ defmodule CoreWeb.User.Profile do
   alias Core
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.User.Forms.Profile, as: ProfileForm
+  alias CoreWeb.User.Forms.Study, as: StudyForm
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
 
   alias EyraUI.Navigation.{Tabbar, TabbarContent, TabbarFooter, TabbarArea}
@@ -44,11 +45,11 @@ defmodule CoreWeb.User.Profile do
     {:noreply, socket}
   end
 
-  defp append(list, extra, condition \\ true) do
-    if condition, do: list ++ [extra], else: list
+  defp append(list, extra, cond \\ true) do
+    if cond, do: list ++ [extra], else: list
   end
 
-  defp create_tabs(_socket) do
+  defp create_tabs(%{assigns: %{current_user: current_user}}) do
     []
     |> append(%{
       id: :profile,
@@ -56,6 +57,15 @@ defmodule CoreWeb.User.Profile do
       forward_title: dgettext("eyra-ui", "tabbar.item.profile.forward"),
       component: ProfileForm
     })
+    |> append(
+      %{
+        id: :study,
+        title: dgettext("eyra-ui", "tabbar.item.study"),
+        forward_title: dgettext("eyra-ui", "tabbar.item.study.forward"),
+        component: StudyForm
+      },
+      current_user.student
+    )
     |> append(%{
       id: :features,
       action: nil,

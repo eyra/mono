@@ -16,8 +16,6 @@ defmodule EyraUI.Container.ContentArea do
           <slot />
         </div>
       </div>
-      <div class="flex-wrap flex-shrink-0 w-0 lg:w-sidebar">
-      </div>
     </div>
     """
   end
