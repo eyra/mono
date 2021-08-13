@@ -24,16 +24,28 @@ defmodule CoreWeb.UserAuth do
   disconnected on log out. The line can be safely removed
   if you are not using LiveView.
   """
-  def log_in_user(conn, user, params \\ %{}) do
+  def log_in_user(conn, user, first_time?, params \\ %{}) do
     token = Accounts.generate_user_session_token(user)
-    user_return_to = get_session(conn, :user_return_to)
+
+    first_time_path = signed_in_first_time_path(conn, user)
+
+    normal_path =
+      get_session(conn, :user_return_to) ||
+        signed_in_path(conn, user)
+
+    redirect_to =
+      if first_time? && first_time_path do
+        first_time_path
+      else
+        normal_path
+      end
 
     conn
     |> renew_session()
     |> put_session(:user_token, token)
     |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
     |> maybe_write_remember_me_cookie(token, params)
-    |> redirect(to: user_return_to || signed_in_path(conn))
+    |> redirect(to: redirect_to)
   end
 
   defp maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}) do
@@ -113,9 +125,9 @@ defmodule CoreWeb.UserAuth do
   Used for routes that require the user to not be authenticated.
   """
   def redirect_if_user_is_authenticated(conn, _opts) do
-    if conn.assigns[:current_user] do
+    if user = conn.assigns[:current_user] do
       conn
-      |> redirect(to: signed_in_path(conn))
+      |> redirect(to: signed_in_path(conn, user))
       |> halt()
     else
       conn
@@ -146,5 +158,28 @@ defmodule CoreWeb.UserAuth do
 
   defp maybe_store_return_to(conn), do: conn
 
-  defp signed_in_path(conn), do: Routes.live_path(conn, CoreWeb.Marketplace)
+  defp signed_in_first_time_path(conn, user) do
+    if page = signed_in_first_time_page(user) do
+      Routes.live_path(conn, page)
+    end
+  end
+
+  defp signed_in_first_time_page(%{student: true}),
+    do: page(:participant_signed_in_first_time_page, CoreWeb.Marketplace)
+
+  defp signed_in_first_time_page(_), do: nil
+
+  defp signed_in_path(conn, user), do: Routes.live_path(conn, signed_in_page(user))
+
+  defp signed_in_page(%{researcher: true}),
+    do: page(:researcher_signed_in_page, CoreWeb.Dashboard)
+
+  defp signed_in_page(_), do: page(:participant_signed_in_page, CoreWeb.Marketplace)
+
+  defp page(key, default), do: auth_config(key, default)
+
+  defp auth_config(key, default) when is_atom(key) do
+    Application.get_env(:core, CoreWeb.UserAuth, [])
+    |> Keyword.get(key, default)
+  end
 end

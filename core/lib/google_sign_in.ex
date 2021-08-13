@@ -19,6 +19,8 @@ defmodule GoogleSignIn do
       |> Enum.join(" ")
 
     sso_info = %{
+      researcher: true,
+      student: true,
       email: Map.get(attrs, "email"),
       displayname: fullname,
       profile: %{

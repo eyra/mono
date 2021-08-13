@@ -20,7 +20,8 @@ config :core,
   promotion_plugins: [data_donation: CoreWeb.DataDonation.PromotionPlugin],
   menu_items: CoreWeb.Menu.Items,
   workspace_menu_builder: CoreWeb.Layouts.Workspace.MenuBuilder,
-  website_menu_builder: CoreWeb.Layouts.Website.MenuBuilder
+  website_menu_builder: CoreWeb.Layouts.Website.MenuBuilder,
+  stripped_menu_builder: CoreWeb.Layouts.Stripped.MenuBuilder
 
 config :core, CoreWeb.Gettext, default_locale: "nl", locales: ~w(en nl)
 

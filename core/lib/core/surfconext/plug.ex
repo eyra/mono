@@ -7,9 +7,9 @@ defmodule Core.SurfConext.PlugUtils do
     Keyword.get(config, :oidc_module, Assent.Strategy.OIDC)
   end
 
-  def log_in_user(config, conn, user) do
-    log_in_user = Keyword.get(config, :log_in_user, &CoreWeb.UserAuth.log_in_user/2)
-    log_in_user.(conn, user)
+  def log_in_user(config, conn, user, first_time?) do
+    log_in_user = Keyword.get(config, :log_in_user, &CoreWeb.UserAuth.log_in_user/3)
+    log_in_user.(conn, user, first_time?)
   end
 end
 
@@ -36,7 +36,8 @@ defmodule Core.SurfConext.AuthorizePlug do
 end
 
 defmodule Core.SurfConext.CallbackController do
-  use CoreWeb, :controller
+  use Phoenix.Controller, namespace: CoreWeb
+  alias CoreWeb.Router.Helpers, as: Routes
   import Core.SurfConext.PlugUtils
 
   def authenticate(conn, params) do
@@ -46,13 +47,15 @@ defmodule Core.SurfConext.CallbackController do
 
     {:ok, %{user: surf_user, token: token}} = oidc_module(config).callback(config, params)
 
+    Core.SurfConext.get_user_by_sub(surf_user["sub"])
+
     if user = Core.SurfConext.get_user_by_sub(surf_user["sub"]) do
-      log_in_user(config, conn, user)
+      log_in_user(config, conn, user, false)
     else
       with {:ok, userinfo} <- oidc_module(config).fetch_userinfo(config, token) do
         case(Core.SurfConext.register_user(userinfo)) do
           {:ok, surfconext_user} ->
-            log_in_user(config, conn, surfconext_user.user)
+            log_in_user(config, conn, surfconext_user.user, true)
 
           {:error, changeset} ->
             Enum.reduce(changeset.errors, conn, fn {_, {message, _}}, conn ->

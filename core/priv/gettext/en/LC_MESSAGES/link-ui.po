@@ -14,4 +14,19 @@ msgstr ""
 #, elixir-format
 #: bundles/link/lib/student_pool.ex:17
 msgid "title"
-msgstr "Student poolmix compile"
+msgstr "Student pool"
+
+#, elixir-format
+#: translations.ex:2
+msgid "menu.item.labstudies"
+msgstr "Lab studies"
+
+#, elixir-format
+#: translations.ex:2
+msgid "menu.item.studentpool"
+msgstr "Student pool"
+
+#, elixir-format
+#: translations.ex:2
+msgid "menu.item.surveys"
+msgstr "Surveys"

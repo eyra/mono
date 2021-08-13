@@ -18,7 +18,7 @@ defmodule EyraUI.Navigation.MenuItem do
   prop(text_color, :css_class, default: "text-grey1")
   prop(path_provider, :any, required: true)
 
-  defp icon_rect(:large), do: "w-12 h-12"
+  defp icon_rect(:large), do: "w-8 h-8 sm:w-12 sm:h-12"
   defp icon_rect(:small), do: "w-6 h-6"
 
   defp icon_filename(name, true), do: "#{name}_active"

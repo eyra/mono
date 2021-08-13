@@ -10,8 +10,6 @@ defmodule EyraUI.Selectors.LabelSelector do
   prop(parent, :map, required: true)
   prop(multiselect, :boolean, default: true)
 
-  # @callback update_selected_labels(id :: atom, socket :: Socket.t(), labels :: list(String.t())) :: Socket.t()
-
   def handle_event("toggle", %{"label" => label_id}, socket) do
     active_label_ids =
       socket

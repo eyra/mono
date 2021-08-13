@@ -15,7 +15,7 @@ defmodule SignInWithApple.Test do
     end
   end
 
-  describe "register_surfconext_user/1" do
+  describe "register_apple_user/1" do
     test "creates a user with a profile" do
       for middle_name? <- [false, true] do
         middle_name = if middle_name?, do: Faker.Person.first_name(), else: nil

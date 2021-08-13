@@ -11,11 +11,11 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:97
+#: bundles/link/lib/marketplace.ex:98
 msgid "study.all.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:87
+#: bundles/link/lib/marketplace.ex:88
 msgid "study.highlighted.title"
 msgstr ""

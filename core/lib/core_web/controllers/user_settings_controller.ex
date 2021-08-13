@@ -43,7 +43,7 @@ defmodule CoreWeb.UserSettingsController do
         conn
         |> put_flash(:info, "Password updated successfully.")
         |> put_session(:user_return_to, Routes.user_settings_path(conn, :edit))
-        |> UserAuth.log_in_user(user)
+        |> UserAuth.log_in_user(user, false)
 
       {:error, changeset} ->
         render(conn, "edit.html", password_changeset: changeset)

@@ -1,23 +1,49 @@
 defmodule Core.SurfConext.FakeOIDC do
-  def callback(_config, _params) do
-    {:ok, %{user: %{"sub" => "test"}, token: "test-token"}}
+  def callback(config, _params) do
+    sub = Keyword.get(config, :sub, "test")
+    token = Keyword.get(config, :token, "test-token")
+
+    {:ok, %{user: %{"sub" => sub}, token: token}}
   end
 
-  def fetch_userinfo(_config, "test-token") do
+  def fetch_userinfo(config, "test-token") do
+    {:ok, base_user(config)}
+  end
+
+  def fetch_userinfo(config, "student-token") do
+    user =
+      config
+      |> base_user()
+      |> Map.put("eduperson_affiliation", ["student"])
+
+    {:ok, user}
+  end
+
+  def fetch_userinfo(config, "researcher-token") do
+    user =
+      config
+      |> base_user()
+      |> Map.put("eduperson_affiliation", ["employee"])
+
+    {:ok, user}
+  end
+
+  defp base_user(config) do
+    sub = Keyword.get(config, :sub, "test")
+
     first_name = Faker.Person.first_name()
     last_name = Faker.Person.last_name()
 
-    {:ok,
-     %{
-       "sub" => "test",
-       "email" => Faker.Internet.email(),
-       "email_verified" => true,
-       "preferred_username" => "#{first_name} #{last_name}",
-       "name" => "#{first_name} #{last_name}",
-       "nickname" => "#{first_name} #{last_name}",
-       "schac_home_organization" => "eduid.nl",
-       "updated_at" => 1_615_100_207
-     }}
+    %{
+      "sub" => sub,
+      "email" => Faker.Internet.email(),
+      "email_verified" => true,
+      "preferred_username" => "#{first_name} #{last_name}",
+      "name" => "#{first_name} #{last_name}",
+      "nickname" => "#{first_name} #{last_name}",
+      "schac_home_organization" => "eduid.nl",
+      "updated_at" => 1_615_100_207
+    }
   end
 
   def authorize_url(config) do
@@ -72,7 +98,6 @@ defmodule Core.SurfConext.CallbackController.Test do
         client_secret: Faker.Lorem.sentence(),
         site: "https://connect.test.surfconext.nl",
         redirect_uri: "https://#{domain}/surfconext/auth",
-        # log_in_user: fn _conn, user -> user end,
         oidc_module: Core.SurfConext.FakeOIDC
       ]
 
@@ -109,6 +134,60 @@ defmodule Core.SurfConext.CallbackController.Test do
       })
 
       conn = conn |> get("/surfconext/auth")
+      assert redirected_to(conn) == "/marketplace"
+    end
+
+    test "authenticates an existing researcher", %{conn: conn} do
+      email = Faker.Internet.email()
+
+      Core.SurfConext.register_user(%{
+        "sub" => "test",
+        "email" => email,
+        "preferred_username" => Faker.Person.name(),
+        "eduperson_affiliation" => ["employee"]
+      })
+
+      conn = conn |> get("/surfconext/auth")
+      assert redirected_to(conn) == "/dashboard"
+    end
+
+    test "authenticates an existing student", %{conn: conn} do
+      email = Faker.Internet.email()
+
+      Core.SurfConext.register_user(%{
+        "sub" => "test",
+        "email" => email,
+        "preferred_username" => Faker.Person.name(),
+        "eduperson_affiliation" => ["student"]
+      })
+
+      conn = conn |> get("/surfconext/auth")
+      assert redirected_to(conn) == "/marketplace"
+    end
+
+    test "authenticates new researcher", %{conn: conn, conf: conf} do
+      conf =
+        conf
+        |> Keyword.put(:sub, "researcher")
+        |> Keyword.put(:token, "researcher-token")
+
+      Application.put_env(:core, Core.SurfConext, conf)
+
+      conn = conn |> get("/surfconext/auth")
+      # no onboarding yet for researchers
+      assert redirected_to(conn) == "/dashboard"
+    end
+
+    test "authenticates new student", %{conn: conn, conf: conf} do
+      conf =
+        conf
+        |> Keyword.put(:sub, "student")
+        |> Keyword.put(:token, "student-token")
+
+      Application.put_env(:core, Core.SurfConext, conf)
+
+      conn = conn |> get("/surfconext/auth")
+      # onboarding only on link yet
       assert redirected_to(conn) == "/marketplace"
     end
   end
