@@ -21,10 +21,12 @@ defmodule GoogleSignIn.AuthorizePlug do
   """
   import Plug.Conn
   import GoogleSignIn.PlugUtils
+  use Core.FeatureFlags
 
   def init(otp_app) when is_atom(otp_app), do: otp_app
 
   def call(conn, otp_app) do
+    require_feature(:google_sign_in)
     config = config(otp_app)
 
     {:ok, %{url: url, session_params: session_params}} =
@@ -39,10 +41,12 @@ end
 defmodule(GoogleSignIn.CallbackPlug) do
   import Plug.Conn
   import GoogleSignIn.PlugUtils
+  use Core.FeatureFlags
 
   def init(otp_app) when is_atom(otp_app), do: otp_app
 
   def call(conn, otp_app) do
+    require_feature(:google_sign_in)
     session_params = get_session(conn, :google_sign_in)
 
     config = config(otp_app) |> Keyword.put(:session_params, session_params)

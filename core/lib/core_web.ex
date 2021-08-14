@@ -55,6 +55,7 @@ defmodule CoreWeb do
       import Core.Authorization, only: [can_access?: 2]
       use GreenLight.Live, Core.Authorization
       use CoreWeb.LiveAssignHelper
+      import Core.FeatureFlags
 
       use Surface.LiveView,
         layout: {CoreWeb.LayoutView, "live.html"}
