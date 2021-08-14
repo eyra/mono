@@ -1,5 +1,6 @@
 defmodule Core.StudiesTest do
   use Core.DataCase
+  import Core.Signals.Test
 
   alias Core.Studies
 
@@ -47,6 +48,7 @@ defmodule Core.StudiesTest do
 
       assert study.description == "some description"
       assert study.title == "some title"
+      assert_signal_dispatched(:study_created)
     end
 
     test "create_study/1 with invalid data returns error changeset" do

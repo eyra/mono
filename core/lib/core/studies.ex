@@ -13,6 +13,7 @@ defmodule Core.Studies do
   alias Core.Survey.{Tool, Task}
   alias Core.DataDonation
   alias Core.Promotions.Promotion
+  alias Core.Signals
 
   # read list_studies(current_user, ...) do
   # end
@@ -202,6 +203,7 @@ defmodule Core.Studies do
            |> Ecto.Changeset.put_assoc(:auth_node, Core.Authorization.make_node())
            |> Repo.insert() do
       :ok = Authorization.assign_role(researcher, study, :owner)
+      Signals.dispatch!(:study_created, %{study: study})
       {:ok, study}
     end
   end

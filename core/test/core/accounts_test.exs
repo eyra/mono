@@ -1,5 +1,6 @@
 defmodule Core.AccountsTest do
   use Core.DataCase, async: true
+  import Core.Signals.Test
 
   alias Core.Factories
   alias Core.Accounts
@@ -575,11 +576,10 @@ defmodule Core.AccountsTest do
       user: user
     } do
       {:ok, _} =
-        user
-        |> Accounts.get_profile()
-        |> Accounts.update_profile(%{fullname: "Update Test", displayname: "Update"})
+        Accounts.update_user_profile(user, %{}, %{fullname: "Update Test", displayname: "Update"})
 
       assert user |> Accounts.get_profile() |> Map.get(:fullname) == "Update Test"
+      assert_signal_dispatched(:user_profile_updated)
     end
   end
 end
