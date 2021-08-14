@@ -18,6 +18,7 @@ defmodule Core.Authorization do
 
   Core.BundleOverrides.grants()
 
+  grant_access(CoreWeb.Admin.CoordinatorManagement, [:visitor, :member])
   grant_access(CoreWeb.Index, [:visitor, :member])
   grant_access(CoreWeb.Dashboard, [:researcher])
   grant_access(CoreWeb.Marketplace, [:member])
