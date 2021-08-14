@@ -8,7 +8,7 @@ config :core,
   menu_items: Link.Menu.Items,
   workspace_menu_builder: Link.Layouts.Workspace.MenuBuilder,
   website_menu_builder: Link.Layouts.Website.MenuBuilder,
-  stripped_menu_builder: CoreWeb.Layouts.Stripped.MenuBuilder,
+  stripped_menu_builder: CoreWeb.Layouts.Stripped.MenuBuilder
 
 config :core, CoreWeb.UserAuth,
   researcher_signed_in_page: Link.Dashboard,
