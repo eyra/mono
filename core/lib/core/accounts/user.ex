@@ -20,6 +20,7 @@ defmodule Core.Accounts.User do
     # Simplified role system, will be based on different rules later
     field(:researcher, :boolean)
     field(:student, :boolean)
+    field(:coordinator, :boolean)
 
     has_one(:profile, Core.Accounts.Profile)
     has_one(:features, Core.Accounts.Features)
@@ -56,7 +57,7 @@ defmodule Core.Accounts.User do
   """
   def user_profile_changeset(user, attrs) do
     user
-    |> cast(attrs, [:researcher, :student, :displayname])
+    |> cast(attrs, [:researcher, :student, :coordinator, :displayname])
   end
 
   defp validate_email(changeset) do
