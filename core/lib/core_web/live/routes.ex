@@ -6,12 +6,14 @@ defmodule CoreWeb.Live.Routes do
       require CoreWeb.Live.Lab.Routes
       require CoreWeb.Live.Promotion.Routes
       require CoreWeb.Live.User.Routes
+      require CoreWeb.Live.Admin.Routes
 
       CoreWeb.Live.Study.Routes.routes()
       CoreWeb.Live.DataDonation.Routes.routes()
       CoreWeb.Live.Lab.Routes.routes()
       CoreWeb.Live.Promotion.Routes.routes()
       CoreWeb.Live.User.Routes.routes()
+      CoreWeb.Live.Admin.Routes.routes()
 
       scope "/", CoreWeb do
         pipe_through(:browser)
