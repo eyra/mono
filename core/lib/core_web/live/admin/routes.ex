@@ -4,6 +4,7 @@ defmodule CoreWeb.Live.Admin.Routes do
       scope "/admin", CoreWeb.Admin do
         pipe_through([:browser])
 
+        live("/login", Login)
         live("/coordinator-management", CoordinatorManagement)
       end
     end

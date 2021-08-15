@@ -44,7 +44,7 @@
                   <div class="mb-6"></div>
                   <% end %>
 
-                  <%= if feature_enabled?(:google_sign_in) do %>
+                  <%= if feature_enabled?(:member_google_sign_in) do %>
                   <a href="/google-sign-in">
                     <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-google rounded pl-4 pr-4">
                       <div class="flex w-full justify-center items-center">

@@ -122,6 +122,12 @@ _member =
     password: password
   })
 
+_admin =
+  Core.Factories.insert!(:member, %{
+    email: "admin@example.org",
+    password: password
+  })
+
 researcher =
   Core.Factories.insert!(:member, %{
     researcher: true,

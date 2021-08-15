@@ -8,9 +8,14 @@ defimpl GreenLight.Principal, for: Core.Accounts.User do
   def id(user), do: user.id
 
   def roles(user) do
-    roles = MapSet.new([:member])
-    roles = if user.researcher, do: MapSet.put(roles, :researcher), else: roles
-    if user.student, do: MapSet.put(roles, :student), else: roles
+    MapSet.new([:member])
+    |> add_role_when(:researcher, user.researcher)
+    |> add_role_when(:student, user.student)
+    |> add_role_when(:admin, Core.Admin.admin?(user))
+  end
+
+  defp add_role_when(roles, role, flag) do
+    if flag, do: MapSet.put(roles, role), else: roles
   end
 end
 
