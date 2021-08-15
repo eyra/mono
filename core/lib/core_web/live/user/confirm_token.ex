@@ -16,6 +16,8 @@ defmodule CoreWeb.User.ConfirmToken do
   data(changeset, :any)
 
   def mount(%{"token" => token}, _session, socket) do
+    require_feature(:password_sign_in)
+
     case Accounts.confirm_user(token) do
       {:ok, _} ->
         {:ok,

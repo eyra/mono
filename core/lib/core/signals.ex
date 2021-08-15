@@ -1,6 +1,7 @@
 defmodule Core.Signals do
   @signal_handlers [
     Core.Accounts.SignalHandlers,
+    Core.Pools.SignalHandlers,
     Core.NotificationCenter.SignalHandlers,
     Core.Mailer.SignalHandlers,
     Core.WebPush.SignalHandlers,

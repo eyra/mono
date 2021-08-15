@@ -389,19 +389,17 @@ defmodule Core.Accounts do
   def update_user_profile(%User{} = user, user_attrs, profile_attrs) do
     profile = get_profile(user)
     profile_changeset = Profile.changeset(profile, profile_attrs)
+    user_changeset = User.user_profile_changeset(user, user_attrs)
 
     Multi.new()
     |> Multi.update(:profile, profile_changeset)
-    |> Multi.update(:user, User.user_profile_changeset(user, user_attrs))
+    |> Multi.update(:user, user_changeset)
     |> Signals.multi_dispatch(:user_profile_updated, %{
       user: user,
+      user_changeset: user_changeset,
       profile_changeset: profile_changeset
     })
     |> Repo.transaction()
-  end
-
-  def update_profile(changeset) do
-    Repo.update(changeset)
   end
 
   def change_profile(%Profile{} = profile, attrs \\ %{}) do

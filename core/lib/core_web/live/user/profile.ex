@@ -44,8 +44,8 @@ defmodule CoreWeb.User.Profile do
     {:noreply, socket}
   end
 
-  defp append(list, extra, cond \\ true) do
-    if cond, do: list ++ [extra], else: list
+  defp append(list, extra, condition \\ true) do
+    if condition, do: list ++ [extra], else: list
   end
 
   defp create_tabs(_socket) do

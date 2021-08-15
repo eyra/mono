@@ -7,7 +7,7 @@ defmodule Core.Authorization do
   """
   use GreenLight,
     repo: Core.Repo,
-    roles: [:visitor, :member, :student, :researcher, :owner, :participant],
+    roles: [:visitor, :member, :student, :researcher, :owner, :participant, :coordinator],
     role_assignment_schema: Core.Authorization.RoleAssignment
 
   use Core.BundleOverrides
@@ -18,6 +18,7 @@ defmodule Core.Authorization do
 
   Core.BundleOverrides.grants()
 
+  grant_access(CoreWeb.Admin.CoordinatorManagement, [:visitor, :member])
   grant_access(CoreWeb.Index, [:visitor, :member])
   grant_access(CoreWeb.Dashboard, [:researcher])
   grant_access(CoreWeb.Marketplace, [:member])
@@ -33,15 +34,15 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.User.Settings, [:member])
   grant_access(CoreWeb.User.SecuritySettings, [:member])
   grant_access(CoreWeb.FakeSurvey, [:member])
-  grant_access(CoreWeb.DataDonation.Content, [:owner])
+  grant_access(CoreWeb.DataDonation.Content, [:owner, :coordinator])
   grant_access(CoreWeb.DataDonation.Uploader, [:member])
   grant_access(CoreWeb.Promotion.Public, [:visitor, :member, :owner])
   grant_access(CoreWeb.Lab.Public, [:member])
 
   grant_access(Core.Studies.Study, [:visitor, :member])
-  grant_access(Core.Survey.Tool, [:owner, :participant])
+  grant_access(Core.Survey.Tool, [:owner, :coordinator, :participant])
   grant_access(Core.Survey.Task, [:participant])
-  grant_access(Core.DataDonation.Tool, [:owner, :participant])
+  grant_access(Core.DataDonation.Tool, [:owner, :coordinator, :participant])
   grant_access(Core.DataDonation.Task, [:participant])
 
   grant_access(CoreWeb.Study.New, [:researcher])

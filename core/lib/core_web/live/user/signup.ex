@@ -17,6 +17,7 @@ defmodule CoreWeb.User.Signup do
   data(focus, :string, default: "")
 
   def mount(_params, _session, socket) do
+    require_feature(:password_sign_in)
     changeset = Accounts.change_user_registration(%User{})
 
     {:ok,
