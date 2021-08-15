@@ -39,7 +39,7 @@ msgstr "Doorloop de volgende stappen om mee te kunnen doen aan onderzoeksstudies
 #, elixir-format
 #: bundles/link/lib/onboarding/welcome.ex:12
 msgid "onboarding.welcome.title"
-msgstr "Welkom bij PaNL"
+msgstr "Welkom %{member}"
 
 #, elixir-format
 #: bundles/link/lib/debug.ex:22

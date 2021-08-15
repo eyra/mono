@@ -17,13 +17,13 @@ defmodule EyraUI.Navigation.Tabbar do
           <div class="flex flex-row items-center h-navbar">
             <div class="flex-grow">
             </div>
-            <div class="flex-1">
+            <div class="flex-wrap">
               <div class="flex flex-row items-center gap-6 sm:gap-10 h-full">
                 <Context get={{tabs: tabs}}>
                   <For each={{ {tab, index} <- Enum.with_index(tabs) }}>
                     <div
                       x-on:mousedown="active_tab = {{ index }}"
-                      class="flex-wrap flex-shrink-0 {{ side_padding(index, Enum.count(tabs)) }}"
+                      class="flex-shrink-0 {{ side_padding(index, Enum.count(tabs)) }}"
                     >
                       <TabbarItem vm={{ Map.put(tab, :index, index) }} />
                     </div>

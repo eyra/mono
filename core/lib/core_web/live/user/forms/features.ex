@@ -96,7 +96,6 @@ defmodule CoreWeb.User.Forms.Features do
 
           <Title3>{{dgettext("eyra-account", "features.dominanthand.title")}}</Title3>
           <Selector id={{:dominant_hand}} items={{ @dominanthand_labels }} type={{:radio}} parent={{ %{type: __MODULE__, id: @id} }} />
-          <Spacing value="XL" />
         </FormArea>
       </ContentArea>
     """

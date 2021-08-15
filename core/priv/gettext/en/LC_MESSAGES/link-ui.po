@@ -39,7 +39,7 @@ msgstr "Walk thought the next steps to be able to participate in research studie
 #, elixir-format
 #: bundles/link/lib/onboarding/welcome.ex:12
 msgid "onboarding.welcome.title"
-msgstr "Welcome to PaNL"
+msgstr "Welcome ${member}"
 
 #, elixir-format
 #: bundles/link/lib/debug.ex:22

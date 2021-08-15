@@ -52,3 +52,5 @@ config :web_push_encryption, :vapid_details,
 config :core, :apns_backend, backend: Core.APNS.LoggingBackend
 
 config :core, :static_path, "/Users/emiel"
+
+config :core, :features, debug: true

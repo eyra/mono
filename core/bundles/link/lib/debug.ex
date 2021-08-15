@@ -12,6 +12,7 @@ defmodule Link.Debug do
   alias EyraUI.Container.{ContentArea, Wrap}
 
   def mount(_params, _session, socket) do
+    require_feature(:debug)
     {:ok, socket }
   end
 

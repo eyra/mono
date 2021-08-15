@@ -1,5 +1,6 @@
 defmodule Link.Layouts.Workspace.MenuBuilder do
   @behaviour CoreWeb.Menu.Builder
+  use Core.FeatureFlags
 
   import Core.Authorization, only: [can_access?: 2]
   import CoreWeb.Menu.Helpers
@@ -47,8 +48,8 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
       live_item(socket, :settings, active_item),
       live_item(socket, :profile, active_item),
       user_session_item(socket, :signout, active_item),
-      live_item(socket, :debug, active_item),
     ]
+    |> append(live_item(socket, :debug, active_item), feature_enabled?(:debug))
   end
 
   defp append(list, extra, cond \\ true) do
