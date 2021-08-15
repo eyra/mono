@@ -5,6 +5,7 @@ defmodule Link.Menu.Items do
   def values() do
     %{
       eyra: %{target: Link.Index, size: :large, domain: "eyra-ui"},
+      debug: %{target: Link.Debug, domain: "eyra-ui"},
       dashboard: %{target: Link.Dashboard, domain: "eyra-ui"},
       marketplace: %{target: Link.Marketplace, domain: "eyra-ui"},
       studentpool: %{target: Link.StudentPool, domain: "link-ui"},

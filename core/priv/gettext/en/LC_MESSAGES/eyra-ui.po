@@ -12,14 +12,16 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:6
-#: lib/core_web/live/data_donation/content.ex:6 lib/core_web/live/onboarding.ex:6 lib/core_web/live/user/profile.ex:6
+#: bundles/link/lib/onboarding/wizard.ex:6
+#: bundles/link/lib/survey/web/content.ex:6 bundles/link/lib/user/web/profile.ex:6
+#: lib/core_web/live/data_donation/content.ex:6 lib/core_web/live/user/profile.ex:6
 msgid "error.flash"
 msgstr "Something went wrong"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:6
-#: lib/core_web/live/data_donation/content.ex:6 lib/core_web/live/onboarding.ex:6 lib/core_web/live/user/profile.ex:6
+#: bundles/link/lib/onboarding/wizard.ex:6
+#: bundles/link/lib/survey/web/content.ex:6 bundles/link/lib/user/web/profile.ex:6
+#: lib/core_web/live/data_donation/content.ex:6 lib/core_web/live/user/profile.ex:6
 msgid "saved.info.flash"
 msgstr "Saved"
 
@@ -90,41 +92,55 @@ msgid "menu.item.payments"
 msgstr "Payments"
 
 #, elixir-format
-#: lib/core_web/live/onboarding.ex:73 lib/core_web/live/user/profile.ex:72
+#: bundles/link/lib/onboarding/wizard.ex:73
+#: bundles/link/lib/user/web/profile.ex:72 lib/core_web/live/user/profile.ex:62
 msgid "tabbar.item.features"
 msgstr "Characteristics"
 
 #, elixir-format
-#: lib/core_web/live/onboarding.ex:57 lib/core_web/live/user/profile.ex:56
+#: bundles/link/lib/user/web/profile.ex:56 lib/core_web/live/user/profile.ex:55
 msgid "tabbar.item.profile"
 msgstr "My profile"
 
 #, elixir-format
-#: lib/core_web/live/onboarding.ex:64 lib/core_web/live/user/profile.ex:63
+#: bundles/link/lib/onboarding/wizard.ex:64
+#: bundles/link/lib/user/web/profile.ex:63
 msgid "tabbar.item.study"
 msgstr "Study"
 
 #, elixir-format
-#: lib/core_web/live/onboarding.ex:74 lib/core_web/live/user/profile.ex:73
+#: bundles/link/lib/onboarding/wizard.ex:74
+#: bundles/link/lib/user/web/profile.ex:73 lib/core_web/live/user/profile.ex:63
 msgid "tabbar.item.features.forward"
 msgstr "Update characteristics"
 
 #, elixir-format
-#: lib/core_web/live/onboarding.ex:58 lib/core_web/live/user/profile.ex:57
+#: bundles/link/lib/user/web/profile.ex:57 lib/core_web/live/user/profile.ex:56
 msgid "tabbar.item.profile.forward"
 msgstr "Update profile"
 
 #, elixir-format
-#: lib/core_web/live/onboarding.ex:65 lib/core_web/live/user/profile.ex:64
+#: bundles/link/lib/onboarding/wizard.ex:65
+#: bundles/link/lib/user/web/profile.ex:64
 msgid "tabbar.item.study.forward"
 msgstr "Select study"
 
-#, elixir-format, fuzzy
-#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
-msgid "menu.item.onboarding"
-msgstr "Onboarding"
-
 #, elixir-format
-#: lib/core_web/live/onboarding.ex:91
+#: bundles/link/lib/onboarding/wizard.ex:99
 msgid "onboarding.forward"
 msgstr "Continue"
+
+#, elixir-format
+#: translations.ex:2
+msgid "menu.item.debug"
+msgstr "Debug"
+
+#, elixir-format
+#: bundles/link/lib/onboarding/wizard.ex:57
+msgid "tabbar.item.welcome"
+msgstr "Welcome"
+
+#, elixir-format
+#: bundles/link/lib/onboarding/wizard.ex:58
+msgid "tabbar.item.welcome.forward"
+msgstr "Welcome"

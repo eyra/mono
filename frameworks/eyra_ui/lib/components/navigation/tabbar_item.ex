@@ -24,7 +24,7 @@ defmodule EyraUI.Navigation.TabbarItem do
         </div>
         <div
           :if={{ has_title?(@vm) && has_index?(@vm) }}
-          class="ml-3"
+          class="ml-2 sm:ml-3"
         >
         </div>
         <div :if={{ has_title?(@vm) }}>

@@ -72,6 +72,7 @@ module.exports = {
         "illustration-sm" : "320px",
         "illustration-md" : "398px",
         "illustration-lg" : "696px",
+        "sheet": "760px",
         "form" : "400px",
         "card": "376px",
         "image-preview": "200px",
@@ -134,7 +135,9 @@ module.exports = {
         "captionsmall": ['12px', '14px'],
         "subhead": ['20px', '20px'],
         "label": ['16px', '16px'],
+        "labelsmall": ['14px', '14px'],
         "button": ['18px', '18px'],
+        "buttonsmall": ['16px', '16px'],
         "intro": ['20px', '30px'],
         "introdesktop": ['24px', '36px'],
         "bodylarge": ['24px', '36px'],
@@ -146,7 +149,8 @@ module.exports = {
       },
       maxWidth: {
         "card": "376px",
-        "form": "400px"
+        "form": "400px",
+        "sheet": "760px"
       },
       maxHeight: {
         "header1": "376px",

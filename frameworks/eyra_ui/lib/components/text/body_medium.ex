@@ -6,10 +6,11 @@ defmodule EyraUI.Text.BodyMedium do
 
   slot(default, required: true)
   prop(color, :css_class, default: "text-grey1")
+  prop(align, :css_class, default: "text-left")
 
   def render(assigns) do
     ~H"""
-    <div class="flex-wrap text-bodymedium font-body {{@color}}">
+    <div class="flex-wrap text-bodymedium font-body {{@color}} {{@align}}">
       <slot />
     </div>
     """

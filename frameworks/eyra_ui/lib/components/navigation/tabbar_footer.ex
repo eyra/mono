@@ -9,8 +9,11 @@ defmodule EyraUI.Navigation.TabbarFooter do
 
   slot(default)
 
-  defp skip_first(list) do
-    list |> tl()
+  defp align(%{type: :sheet}), do: "justify-center"
+  defp align(_), do: "justify-left"
+
+  defp combine_shifted(tabs) do
+    tabs |> Enum.chunk_every(2, 1, :discard)
   end
 
   def render(assigns) do
@@ -23,10 +26,10 @@ defmodule EyraUI.Navigation.TabbarFooter do
               <slot />
             </div>
           </div>
-          <div x-show="active_tab < {{ Enum.count(tabs)-1 }}" class="pt-8">
-            <div :for={{ {tab, index} <- Enum.with_index(skip_first(tabs)) }} x-show="active_tab == {{ index }}">
+          <div :for={{ {[tab1, tab2], index} <- Enum.with_index(combine_shifted(tabs)) }} x-show="active_tab == {{ index }}">
+            <div x-show="active_tab < {{ Enum.count(tabs)-1 }}" class="flex flex-row {{ align(tab1) }}">
               <Click code="active_tab = active_tab + 1" >
-                <Forward label="{{ tab.forward_title }}" />
+                <Forward label="{{ tab2.forward_title }}" />
               </Click>
             </div>
           </div>
