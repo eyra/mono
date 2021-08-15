@@ -7,7 +7,7 @@ defmodule CoreWeb.User.Forms.Features do
   alias Core.Accounts
   alias Core.Accounts.Features
 
-  alias EyraUI.Selectors.LabelSelector
+  alias EyraUI.Selector.Selector
   alias EyraUI.Spacing
   alias EyraUI.Text.{Title2, Title3, BodyMedium}
   alias EyraUI.Container.{ContentArea, FormArea}
@@ -44,13 +44,13 @@ defmodule CoreWeb.User.Forms.Features do
 
   # Handle Selector Update
   def update(
-        %{active_label_id: active_label_id, selector_id: selector_id},
+        %{active_item_id: active_item_id, selector_id: selector_id},
         %{assigns: %{entity: entity}} = socket
       ) do
     {
       :ok,
       socket
-      |> save(entity, :auto_save, %{selector_id => active_label_id})
+      |> save(entity, :auto_save, %{selector_id => active_item_id})
     }
   end
 
@@ -87,15 +87,15 @@ defmodule CoreWeb.User.Forms.Features do
           <Spacing value="XL" />
 
           <Title3>{{dgettext("eyra-account", "features.gender.title")}}</Title3>
-          <LabelSelector id={{:gender}} labels={{ @gender_labels }} multiselect={{false}} parent={{ %{type: __MODULE__, id: @id} }} />
+          <Selector id={{:gender}} items={{ @gender_labels }} type={{:radio}} parent={{ %{type: __MODULE__, id: @id} }} />
           <Spacing value="XL" />
 
           <Title3>{{dgettext("eyra-account", "features.nativelanguage.title")}}</Title3>
-          <LabelSelector id={{:native_language}} labels={{ @nativelanguage_labels }} multiselect={{false}} parent={{ %{type: __MODULE__, id: @id} }} />
+          <Selector id={{:native_language}} items={{ @nativelanguage_labels }} type={{:radio}} parent={{ %{type: __MODULE__, id: @id} }} />
           <Spacing value="XL" />
 
           <Title3>{{dgettext("eyra-account", "features.dominanthand.title")}}</Title3>
-          <LabelSelector id={{:dominant_hand}} labels={{ @dominanthand_labels }} multiselect={{false}} parent={{ %{type: __MODULE__, id: @id} }} />
+          <Selector id={{:dominant_hand}} items={{ @dominanthand_labels }} type={{:radio}} parent={{ %{type: __MODULE__, id: @id} }} />
           <Spacing value="XL" />
         </FormArea>
       </ContentArea>

@@ -8,7 +8,7 @@ defmodule Link.Survey.Form do
 
   alias CoreWeb.Router.Helpers, as: Routes
 
-  alias EyraUI.Selectors.LabelSelector
+  alias EyraUI.Selector.Selector
   alias EyraUI.Spacing
   alias EyraUI.Panel.Panel
   alias EyraUI.Text.{Title3, Title6, BodyMedium}
@@ -25,13 +25,13 @@ defmodule Link.Survey.Form do
   data(focus, :any, default: "")
 
   # Handle selector update
-  def update(%{active_label_ids: active_label_ids, selector_id: selector_id},
+  def update(%{active_item_ids: active_item_ids, selector_id: selector_id},
 
   %{assigns: %{entity: entity}} = socket) do
     {
       :ok,
       socket
-      |> save(entity, :auto_save, %{selector_id => active_label_ids})
+      |> save(entity, :auto_save, %{selector_id => active_item_ids})
     }
   end
 
@@ -113,7 +113,7 @@ defmodule Link.Survey.Form do
           <Title3>{{dgettext("link-survey", "devices.title")}}</Title3>
           <BodyMedium>{{dgettext("link-survey", "devices.label")}}</BodyMedium>
           <Spacing value="XS" />
-          <LabelSelector id={{:devices}} labels={{ @device_labels }} parent={{ %{type: __MODULE__, id: @id} }} />
+          <Selector id={{:devices}} items={{ @device_labels }} parent={{ %{type: __MODULE__, id: @id} }} />
         </Form>
         <Spacing value="XL" />
         <SecondaryLiveViewButton label={{ dgettext("link-survey", "delete.button") }} event="delete" target={{@myself}} />
