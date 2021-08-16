@@ -1,6 +1,7 @@
 defmodule Core.FeatureFlagsTest do
-  use Core.DataCase, async: true
+  use Core.DataCase, async: false
   use Core.FeatureFlags
+  use Core.FeatureFlags.Test
 
   describe "feature_enabled?/1" do
     test "return true by default" do
