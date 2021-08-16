@@ -46,10 +46,10 @@ defmodule CoreWeb.User.Forms.Profile do
 
   # Handle Selector Update
   def update(
-        %{active_label_ids: active_label_ids, selector_id: selector_id},
+        %{active_item_ids: active_item_ids, selector_id: selector_id},
         %{assigns: %{entity: entity}} = socket
       ) do
-    {:ok, socket |> save(entity, :auto_save, %{selector_id => active_label_ids})}
+    {:ok, socket |> save(entity, :auto_save, %{selector_id => active_item_ids})}
   end
 
   defp update_ui(%{assigns: %{entity: entity}} = socket) do

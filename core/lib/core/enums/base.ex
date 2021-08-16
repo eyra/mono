@@ -3,7 +3,7 @@ defmodule Core.Enums.Base do
 
   defmacro __using__({name, values}) do
     quote do
-      alias EyraUI.Selectors.Label
+      alias EyraUI.Selector.Item
       import CoreWeb.Gettext
 
       def values do
@@ -37,7 +37,7 @@ defmodule Core.Enums.Base do
           active_values
           |> Enum.member?(value)
 
-        %Label{id: value, value: value_as_string, active: active}
+        %Item{id: value, value: value_as_string, active: active}
       end
 
       defmacro schema_values(_opts \\ []) do
