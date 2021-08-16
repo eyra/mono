@@ -1,7 +1,9 @@
 defmodule GoogleSignIn.FakeGoogle do
   @sub Faker.UUID.v4()
+  @email Faker.Internet.email()
 
   def sub, do: @sub
+  def email, do: @email
 
   def callback(_config, _params) do
     given_name = Faker.Person.first_name()
@@ -12,7 +14,7 @@ defmodule GoogleSignIn.FakeGoogle do
        user: %{
          "sub" => @sub,
          "name" => "#{given_name} #{family_name}",
-         "email" => Faker.Internet.email(),
+         "email" => @email,
          "email_verified" => true,
          "given_name" => given_name,
          "family_name" => family_name,
@@ -34,7 +36,7 @@ defmodule GoogleSignIn.AuthorizePlug.Test do
   alias GoogleSignIn.AuthorizePlug
 
   describe "call/1" do
-    test "redirects to SurfConext login page" do
+    setup do
       domain = Faker.Internet.domain_name()
 
       Application.put_env(:test, GoogleSignIn,
@@ -45,6 +47,10 @@ defmodule GoogleSignIn.AuthorizePlug.Test do
         google_module: GoogleSignIn.FakeGoogle
       )
 
+      {:ok, domain: domain}
+    end
+
+    test "redirects to SurfConext login page" do
       conn =
         conn(:get, "/google")
         |> init_test_session(%{})
@@ -55,16 +61,33 @@ defmodule GoogleSignIn.AuthorizePlug.Test do
       [location] = get_resp_header(conn, "location")
       assert String.starts_with?(location, "https://connect.test.google_sign_in.nl")
     end
+
+    test "sets :user_return_to session var" do
+      conn =
+        conn(:get, "/google?return_to=/test")
+        |> Plug.Conn.fetch_query_params()
+        |> init_test_session(%{})
+        |> AuthorizePlug.call(:test)
+
+      assert conn.private.plug_session["user_return_to"] == "/test"
+    end
   end
 end
 
 defmodule GoogleSignIn.CallbackPlug.Test do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   use Core.DataCase
   use Plug.Test
+  use Core.FeatureFlags.Test
   alias GoogleSignIn.CallbackPlug
 
   setup do
+    conf = Application.get_env(:core, :admins, MapSet.new())
+
+    on_exit(fn ->
+      Application.put_env(:core, :admins, conf)
+    end)
+
     domain = Faker.Internet.domain_name()
 
     Application.put_env(:test, GoogleSignIn,
@@ -112,6 +135,28 @@ defmodule GoogleSignIn.CallbackPlug.Test do
         |> CallbackPlug.call(:test)
 
       assert user.email == email
+    end
+
+    test "deny member when member login is disabled" do
+      set_feature_flag(:member_google_sign_in, false)
+
+      assert catch_throw(
+               conn(:get, "/google")
+               |> init_test_session(%{})
+               |> CallbackPlug.call(:test)
+             ) == "Google login is disabled"
+    end
+
+    test "allow admin when member login is disabled" do
+      Application.put_env(:core, :admins, MapSet.new([GoogleSignIn.FakeGoogle.email()]))
+      set_feature_flag(:member_google_sign_in, false)
+
+      user =
+        conn(:get, "/google")
+        |> init_test_session(%{})
+        |> CallbackPlug.call(:test)
+
+      assert user.email == GoogleSignIn.FakeGoogle.email()
     end
   end
 end

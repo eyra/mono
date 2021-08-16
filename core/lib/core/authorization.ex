@@ -7,7 +7,7 @@ defmodule Core.Authorization do
   """
   use GreenLight,
     repo: Core.Repo,
-    roles: [:visitor, :member, :student, :researcher, :owner, :participant, :coordinator],
+    roles: [:visitor, :member, :student, :researcher, :owner, :participant, :coordinator, :admin],
     role_assignment_schema: Core.Authorization.RoleAssignment
 
   use Core.BundleOverrides
@@ -18,7 +18,8 @@ defmodule Core.Authorization do
 
   Core.BundleOverrides.grants()
 
-  grant_access(CoreWeb.Admin.CoordinatorManagement, [:visitor, :member])
+  grant_access(CoreWeb.Admin.Login, [:visitor, :member])
+  grant_access(CoreWeb.Admin.CoordinatorManagement, [:admin])
   grant_access(CoreWeb.Index, [:visitor, :member])
   grant_access(CoreWeb.Dashboard, [:researcher])
   grant_access(CoreWeb.Marketplace, [:member])

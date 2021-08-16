@@ -15,5 +15,24 @@ defmodule Core.GreenLight.PrincipalTest do
     test "student gets additional researcher role" do
       assert Principal.roles(%User{student: true}) == MapSet.new([:member, :student])
     end
+
+    test "user gets admin when listed in the config" do
+      current_env = Application.get_env(:core, :features, [])
+
+      on_exit(fn ->
+        Application.put_env(:core, Core.SurfConext, current_env)
+      end)
+
+      Application.put_env(
+        :core,
+        :admins,
+        MapSet.new(["admin@example.org"])
+      )
+
+      # Regular member
+      assert Principal.roles(%User{email: "regular@example.org"}) == MapSet.new([:member])
+      # Admin user
+      assert Principal.roles(%User{email: "admin@example.org"}) == MapSet.new([:member, :admin])
+    end
   end
 end

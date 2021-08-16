@@ -45,7 +45,7 @@ defmodule GoogleSignIn do
 
       scope "/", GoogleSignIn do
         pipe_through([:google_sign_in_browser])
-        get("/google-sign-in", AuthorizePlug, otp_app)
+        get("/google-sign-in", AuthorizePlug, otp_app, as: :google_sign_in)
         get("/google-sign-in/auth", CallbackPlug, otp_app)
       end
     end

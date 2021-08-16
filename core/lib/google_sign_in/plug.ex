@@ -21,12 +21,10 @@ defmodule GoogleSignIn.AuthorizePlug do
   """
   import Plug.Conn
   import GoogleSignIn.PlugUtils
-  use Core.FeatureFlags
 
   def init(otp_app) when is_atom(otp_app), do: otp_app
 
   def call(conn, otp_app) do
-    require_feature(:google_sign_in)
     config = config(otp_app)
 
     {:ok, %{url: url, session_params: session_params}} =
@@ -34,7 +32,13 @@ defmodule GoogleSignIn.AuthorizePlug do
 
     conn
     |> put_session(:google_sign_in, session_params)
+    |> set_return_to()
     |> Phoenix.Controller.redirect(external: url)
+  end
+
+  defp set_return_to(conn) do
+    return_to = Map.get(conn.query_params, "return_to")
+    if return_to, do: put_session(conn, :user_return_to, return_to), else: conn
   end
 end
 
@@ -46,12 +50,15 @@ defmodule(GoogleSignIn.CallbackPlug) do
   def init(otp_app) when is_atom(otp_app), do: otp_app
 
   def call(conn, otp_app) do
-    require_feature(:google_sign_in)
     session_params = get_session(conn, :google_sign_in)
 
     config = config(otp_app) |> Keyword.put(:session_params, session_params)
 
     {:ok, %{user: google_user}} = google_module(config).callback(config, conn.params)
+
+    if !feature_enabled?(:member_google_sign_in) && !admin?(google_user) do
+      throw("Google login is disabled")
+    end
 
     {user, first_time?} =
       if user = GoogleSignIn.get_user_by_sub(google_user["sub"]) do
@@ -67,4 +74,6 @@ defmodule(GoogleSignIn.CallbackPlug) do
     {:ok, google_sign_in_user} = GoogleSignIn.register_user(info)
     google_sign_in_user.user
   end
+
+  defp admin?(%{"email" => email}), do: Core.Admin.admin?(email)
 end

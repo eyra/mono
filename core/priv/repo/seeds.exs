@@ -82,6 +82,12 @@ member =
     password: password
   })
 
+_admin =
+  Core.Factories.insert!(:member, %{
+    email: "admin@example.org",
+    password: password
+  })
+
 Core.NextActions.create_next_action(member, Core.Accounts.NextActions.CompleteProfile)
 
 researcher =
