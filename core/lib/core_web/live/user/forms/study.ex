@@ -65,7 +65,7 @@ defmodule CoreWeb.User.Forms.Study do
 
   def render(assigns) do
     ~H"""
-      <ContentArea top_padding="pt-14">
+      <ContentArea top_padding="pt-6 sm:pt-14">
         <FormArea>
           <Title2>{{dgettext("eyra-account", "features.study.title")}}</Title2>
           <BodyMedium>{{dgettext("eyra-account", "feature.study.description")}}</BodyMedium>

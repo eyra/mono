@@ -18,11 +18,13 @@ defmodule GoogleSignIn do
       |> Enum.filter(&(&1 != ""))
       |> Enum.join(" ")
 
+    display_name = Map.get(attrs, "given_name", fullname)
+
     sso_info = %{
       researcher: true,
       student: true,
       email: Map.get(attrs, "email"),
-      displayname: fullname,
+      displayname: display_name,
       profile: %{
         fullname: fullname
       }

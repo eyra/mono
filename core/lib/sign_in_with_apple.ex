@@ -19,9 +19,11 @@ defmodule SignInWithApple do
       |> Enum.reject(&(&1 == ""))
       |> Enum.join(" ")
 
+    display_name = Map.get(attrs, "first_name", fullname)
+
     sso_info = %{
       email: attrs.email,
-      displayname: fullname,
+      displayname: display_name,
       profile: %{fullname: fullname}
     }
 

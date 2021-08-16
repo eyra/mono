@@ -30,3 +30,18 @@ msgstr "Student pool"
 #: translations.ex:2
 msgid "menu.item.surveys"
 msgstr "Surveys"
+
+#, elixir-format
+#: bundles/link/lib/onboarding/welcome.ex:27
+msgid "onboarding.welcome.description"
+msgstr "Walk thought the next steps to be able to participate in research studies for the \"Research Participation\" course."
+
+#, elixir-format
+#: bundles/link/lib/onboarding/welcome.ex:12
+msgid "onboarding.welcome.title"
+msgstr "Welcome ${member}"
+
+#, elixir-format
+#: bundles/link/lib/debug.ex:22
+msgid "debug.title"
+msgstr "Debug"

@@ -9,6 +9,7 @@ defmodule EyraUI.Navigation.TabbarContent do
 
   def render(assigns) do
     ~H"""
+      <div class="h-navbar"></div>
       <Context get={{tabs: tabs}}>
         <For each={{ {tab, index} <- Enum.with_index(tabs) }} >
           <Tab index= {{ index }}>

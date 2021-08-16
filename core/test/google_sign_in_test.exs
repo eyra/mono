@@ -37,9 +37,8 @@ defmodule GoogleSignIn.Test do
       end
 
       assert google_user.user.email == Map.get(sso_info, "email")
-      fullname = "#{given_name} #{family_name}"
-      assert google_user.user.displayname == fullname
-      assert google_user.user.profile.fullname == fullname
+      assert google_user.user.displayname == "#{given_name}"
+      assert google_user.user.profile.fullname == "#{given_name} #{family_name}"
     end
   end
 end

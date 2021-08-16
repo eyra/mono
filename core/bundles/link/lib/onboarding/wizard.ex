@@ -1,4 +1,4 @@
-defmodule Link.Onboarding do
+defmodule Link.Onboarding.Wizard do
   @moduledoc """
   The home screen.
   """
@@ -8,7 +8,7 @@ defmodule Link.Onboarding do
   import CoreWeb.Gettext
 
   alias CoreWeb.Layouts.Stripped.Component, as: Stripped
-  alias CoreWeb.User.Forms.Profile, as: ProfileForm
+  alias Link.Onboarding.Welcome, as: Welcome
   alias CoreWeb.User.Forms.Study, as: StudyForm
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
 
@@ -53,17 +53,19 @@ defmodule Link.Onboarding do
   defp create_tabs(%{assigns: %{current_user: current_user}}) do
     []
     |> append(%{
-      id: :profile,
-      title: dgettext("eyra-ui", "tabbar.item.profile"),
-      forward_title: dgettext("eyra-ui", "tabbar.item.profile.forward"),
-      component: ProfileForm
+      id: :welcome,
+      title: dgettext("eyra-ui", "tabbar.item.welcome"),
+      forward_title: dgettext("eyra-ui", "tabbar.item.welcome.forward"),
+      component: Welcome,
+      type: :sheet
     })
     |> append(
       %{
         id: :study,
         title: dgettext("eyra-ui", "tabbar.item.study"),
         forward_title: dgettext("eyra-ui", "tabbar.item.study.forward"),
-        component: StudyForm
+        component: StudyForm,
+        type: :form
       },
       current_user.student
     )
@@ -72,7 +74,8 @@ defmodule Link.Onboarding do
       action: nil,
       title: dgettext("eyra-ui", "tabbar.item.features"),
       forward_title: dgettext("eyra-ui", "tabbar.item.features.forward"),
-      component: FeaturesForm
+      component: FeaturesForm,
+      type: :form
     })
   end
 

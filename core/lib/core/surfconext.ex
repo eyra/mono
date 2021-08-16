@@ -17,11 +17,19 @@ defmodule Core.SurfConext do
   def register_user(attrs) do
     affiliation = attrs |> Map.get("eduperson_affiliation", []) |> MapSet.new()
 
+    fullname =
+      ~w(given_name family_name)
+      |> Enum.map(&Map.get(attrs, &1, ""))
+      |> Enum.filter(&(&1 != ""))
+      |> Enum.join(" ")
+
+    display_name = Map.get(attrs, "given_name", fullname)
+
     sso_info = %{
       email: Map.get(attrs, "email"),
-      displayname: Map.get(attrs, "preferred_username"),
+      displayname: display_name,
       profile: %{
-        fullname: Map.get(attrs, "preferred_username")
+        fullname: fullname
       },
       researcher: MapSet.member?(affiliation, "employee"),
       student: MapSet.member?(affiliation, "student")

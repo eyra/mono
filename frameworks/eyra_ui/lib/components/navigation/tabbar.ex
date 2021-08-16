@@ -11,24 +11,32 @@ defmodule EyraUI.Navigation.Tabbar do
 
   def render(assigns) do
     ~H"""
-    <div>
-      <div class="overflow-scroll scrollbar-hide">
-        <div class="sm:flex flex-row items-center justify-center h-full">
-          <div class="flex flex-row items-center gap-10 h-navbar">
-            <Context get={{tabs: tabs}}>
-              <For each={{ {tab, index} <- Enum.with_index(tabs) }}>
-                <div
-                  x-on:mousedown="active_tab = {{ index }}"
-                  class="flex-nowrap flex-shrink-0 {{ side_padding(index, Enum.count(tabs)) }}"
-                >
-                  <TabbarItem vm={{ Map.put(tab, :index, index) }} />
-                </div>
-              </For>
-            </Context>
+    <div class="relative">
+      <div class="absolute top-0 left-0 w-full">
+        <div class=" overflow-scroll scrollbar-hide">
+          <div class="flex flex-row items-center h-navbar">
+            <div class="flex-grow">
+            </div>
+            <div class="flex-wrap">
+              <div class="flex flex-row items-center gap-6 sm:gap-10 h-full">
+                <Context get={{tabs: tabs}}>
+                  <For each={{ {tab, index} <- Enum.with_index(tabs) }}>
+                    <div
+                      x-on:mousedown="active_tab = {{ index }}"
+                      class="flex-shrink-0 {{ side_padding(index, Enum.count(tabs)) }}"
+                    >
+                      <TabbarItem vm={{ Map.put(tab, :index, index) }} />
+                    </div>
+                  </For>
+                </Context>
+              </div>
+            </div>
+            <div class="flex-grow">
+            </div>
           </div>
         </div>
+        <Line />
       </div>
-      <Line />
     </div>
     """
   end

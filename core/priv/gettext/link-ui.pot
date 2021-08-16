@@ -29,3 +29,18 @@ msgstr ""
 #: bundles/link/lib/menu/items-translations.ex:2
 msgid "menu.item.surveys"
 msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/onboarding/welcome.ex:27
+msgid "onboarding.welcome.description"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/onboarding/welcome.ex:12
+msgid "onboarding.welcome.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/debug.ex:22
+msgid "debug.title"
+msgstr ""

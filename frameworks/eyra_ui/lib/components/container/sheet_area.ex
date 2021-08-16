@@ -1,4 +1,4 @@
-defmodule EyraUI.Container.FormArea do
+defmodule EyraUI.Container.SheetArea do
   @moduledoc """
   Container for displaying horizontally centralized forms.
   """
@@ -12,7 +12,7 @@ defmodule EyraUI.Container.FormArea do
   def render(assigns) do
     ~H"""
     <div class="flex justify-center {{ @top_padding }}">
-      <div class="flex-grow sm:max-w-form">
+      <div class="flex-grow sm:max-w-sheet">
         <slot />
       </div>
     </div>

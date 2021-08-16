@@ -80,7 +80,7 @@ defmodule CoreWeb.User.Forms.Features do
 
   def render(assigns) do
     ~H"""
-      <ContentArea top_padding="pt-14">
+      <ContentArea top_padding="pt-6 sm:pt-14">
         <FormArea>
           <Title2>{{dgettext("eyra-account", "features.title")}}</Title2>
           <BodyMedium>{{dgettext("eyra-account", "features.description")}}</BodyMedium>
@@ -96,7 +96,6 @@ defmodule CoreWeb.User.Forms.Features do
 
           <Title3>{{dgettext("eyra-account", "features.dominanthand.title")}}</Title3>
           <Selector id={{:dominant_hand}} items={{ @dominanthand_labels }} type={{:radio}} parent={{ %{type: __MODULE__, id: @id} }} />
-          <Spacing value="XL" />
         </FormArea>
       </ContentArea>
     """

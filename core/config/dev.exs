@@ -53,6 +53,8 @@ config :core, :apns_backend, backend: Core.APNS.LoggingBackend
 
 config :core, :static_path, "/Users/emiel"
 
+config :core, :features, debug: true
+
 config :core,
        :admins,
        MapSet.new([

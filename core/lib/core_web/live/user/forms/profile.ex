@@ -88,7 +88,7 @@ defmodule CoreWeb.User.Forms.Profile do
   @impl true
   def render(assigns) do
     ~H"""
-        <ContentArea top_padding="pt-14">
+        <ContentArea top_padding="pt-6 sm:pt-14">
         <FormArea>
           <Title2>{{dgettext "eyra-account", "profile.title"}}</Title2>
           <Form id="main_form" changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>

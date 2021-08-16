@@ -27,19 +27,33 @@ defmodule CoreWeb.Layouts.Stripped.Component do
 
   def render(assigns) do
     ~H"""
-      <div>
-        <div class="flex flex-col w-full h-screen">
-          <div class="flex-wrap">
-            <MobileNavbar items={{ build_menu(:mobile_navbar, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
-            <DesktopNavbar items={{ build_menu(:desktop_navbar, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
-          </div>
-          <div class="bg-white flex-grow">
-            <slot />
+      <div class="flex flex-row">
+        <div class="w-0 md:w-sidepadding flex-shrink-0">
+        </div>
+        <div class="flex-1">
+          <div class="flex flex-col w-full h-screen">
+            <div class="flex-wrap">
+              <MobileNavbar items={{ build_menu(:mobile_navbar, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
+              <DesktopNavbar items={{ build_menu(:desktop_navbar, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
+            </div>
+            <div class="flex-1">
+              <div class="flex flex-col h-full border-t border-l border-b border-grey4">
+                <div class="flex-1 bg-white">
+                  <div class="flex flex-row">
+                    <div class="flex-1">
+                        <slot />
+                    </div>
+                    <div class="w-0 md:w-sidepadding flex-shrink-0">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white">
+                {{ footer CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-left.svg"), CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-right.svg") }}
+              </div>
+            </div>
           </div>
           <div class="pb-0 md:pb-10 bg-grey5">
-            <div class="bg-white">
-              {{ footer CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-left.svg"), CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-right.svg") }}
-            </div>
           </div>
         </div>
       </div>
