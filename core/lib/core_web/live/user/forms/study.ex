@@ -20,6 +20,19 @@ defmodule CoreWeb.User.Forms.Study do
   data(changeset, :any)
   data(focus, :any, default: "")
 
+  # Handle Selector Update
+  def update(
+        %{active_item_ids: active_item_ids, selector_id: selector_id},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    {:ok, socket |> save(entity, :auto_save, %{selector_id => active_item_ids})}
+  end
+
+  # Handle update from parent after auto-save, prevents overwrite of current state
+  def update(_params, %{assigns: %{entity: _entity}} = socket) do
+    {:ok, socket}
+  end
+
   def update(%{id: id, user: user}, socket) do
     entity = Accounts.get_features(user)
 
@@ -34,14 +47,6 @@ defmodule CoreWeb.User.Forms.Study do
       |> assign(study_labels: study_labels)
       |> update_ui()
     }
-  end
-
-  # Handle Selector Update
-  def update(
-        %{active_item_ids: active_item_ids, selector_id: selector_id},
-        %{assigns: %{entity: entity}} = socket
-      ) do
-    {:ok, socket |> save(entity, :auto_save, %{selector_id => active_item_ids})}
   end
 
   defp update_ui(%{assigns: %{entity: entity}} = socket) do

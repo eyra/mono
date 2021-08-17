@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/user/confirm_token.ex:79
+#: lib/core_web/live/user/confirm_token.ex:81
 msgid "confirm.token.email.label"
 msgstr ""
 
@@ -45,4 +45,9 @@ msgstr ""
 #: lib/core_web/live/user/reset_password.ex:52
 #: lib/core_web/live/user/reset_password_token.ex:51
 msgid "user.password_reset.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/controllers/user_session_controller.ex:25
+msgid "Invalid email or password"
 msgstr ""

@@ -35,12 +35,9 @@ defmodule Link.Survey.Form do
     }
   end
 
-  # Handle update from parent after save
+  # Handle update from parent after auto-save, prevents overwrite of current state
   def update(_params, %{assigns: %{entity: _entity}} = socket) do
-    {
-      :ok,
-      socket
-    }
+    { :ok, socket }
   end
 
   # Handle initial update

@@ -1,10 +1,14 @@
 defmodule Core.AccountsTest do
   use Core.DataCase, async: true
   import Core.Signals.Test
+  import Core.NextActions.Test
 
   alias Core.Factories
   alias Core.Accounts
   alias Core.Accounts.{User, UserToken}
+  alias Core.NextActions
+
+  alias Core.Accounts.NextActions.{PromotePushStudent}
 
   import Core.AuthTestHelpers
 
@@ -580,6 +584,53 @@ defmodule Core.AccountsTest do
 
       assert user |> Accounts.get_profile() |> Map.get(:fullname) == "Update Test"
       assert_signal_dispatched(:user_profile_updated)
+    end
+  end
+
+  describe "visited_pages" do
+    alias Core.Accounts
+
+    setup do
+      url_resolver = fn target, _ ->
+        case target do
+          CoreWeb.User.Settings -> "/settings"
+          CoreWeb.User.Profile -> "/profile"
+        end
+      end
+
+      %{user: Factories.insert!(:member), url_resolver: url_resolver}
+    end
+
+    test "mark_as_visited/2 updates the user", %{
+      user: user,
+      url_resolver: url_resolver
+    } do
+      {:ok, %{user: user}} = Accounts.update_user_profile(user, %{student: true}, %{})
+      {:ok, %{user: user}} = Accounts.mark_as_visited(user, :settings)
+
+      assert user |> Map.get(:visited_pages) == ["settings"]
+      assert_signal_dispatched(:visited_pages_updated)
+      assert_next_action(user, url_resolver, "/profile")
+    end
+
+    test "mark_as_visited/2 clears next best action for student", %{
+      user: user,
+      url_resolver: url_resolver
+    } do
+      {:ok, %{user: user}} = Accounts.update_user_profile(user, %{student: true}, %{})
+
+      NextActions.create_next_action(user, PromotePushStudent)
+      assert_next_action(user, url_resolver, "/settings")
+
+      {:ok, %{user: user}} = Accounts.mark_as_visited(user, :settings)
+      refute_next_action(user, url_resolver, "/settings")
+    end
+
+    test "visited?/2 updates the user", %{
+      user: user
+    } do
+      Accounts.mark_as_visited(user, :settings)
+      assert user.id |> Accounts.get_user!() |> Accounts.visited?(:settings)
     end
   end
 end

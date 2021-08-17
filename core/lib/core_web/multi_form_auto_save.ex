@@ -1,8 +1,15 @@
 defmodule CoreWeb.MultiFormAutoSave do
+  alias Phoenix.LiveView.Socket
+
+  @callback handle_auto_save_done(socket :: Socket.t()) :: Socket.t()
+
   defmacro __using__(_opts) do
     quote do
+      @behaviour CoreWeb.MultiFormAutoSave
+
       alias Core.Repo
       alias Core.Persister
+      alias Phoenix.LiveView.Socket
 
       # Schedule Save
       @save_delay 1
@@ -69,6 +76,7 @@ defmodule CoreWeb.MultiFormAutoSave do
           |> assign(changesets: %{})
           |> put_saved_flash()
           |> schedule_hide_flash()
+          |> handle_auto_save_done()
         }
       end
 

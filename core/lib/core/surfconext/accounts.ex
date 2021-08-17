@@ -427,6 +427,49 @@ defmodule Core.Accounts do
     %Features{user_id: user_id}
     |> Repo.insert!()
   end
+
+  def update_features(%Features{} = features, changeset) do
+    Multi.new()
+    |> Multi.update(:features, changeset)
+    |> Signals.multi_dispatch(:features_updated, %{
+      features: features,
+      features_changeset: changeset
+    })
+    |> Repo.transaction()
+  end
+
+  # Visited Pages
+  def mark_as_visited(user, page) when is_atom(page),
+    do: mark_as_visited(user, Atom.to_string(page))
+
+  def mark_as_visited(%User{visited_pages: nil} = user, page) do
+    update_visited(user, [page])
+  end
+
+  def mark_as_visited(%User{visited_pages: visited_pages} = user, page) do
+    if not visited?(user, page) do
+      update_visited(user, visited_pages ++ [page])
+    end
+  end
+
+  defp update_visited(user, visited_pages) do
+    changeset = user |> User.visited_changeset(%{visited_pages: visited_pages})
+
+    Multi.new()
+    |> Multi.update(:user, changeset)
+    |> Signals.multi_dispatch(:visited_pages_updated, %{
+      user: user,
+      user_changeset: changeset
+    })
+    |> Repo.transaction()
+  end
+
+  def visited?(user, page) when is_atom(page), do: visited?(user, Atom.to_string(page))
+  def visited?(%User{visited_pages: nil}, _page), do: false
+
+  def visited?(%User{visited_pages: visited_pages}, page) do
+    Enum.member?(visited_pages, page)
+  end
 end
 
 defimpl Core.Persister, for: Core.Accounts.UserProfileEdit do
@@ -453,5 +496,27 @@ defimpl Core.Persister, for: Core.Accounts.UserProfileEdit do
     profile_attrs = UserProfileEdit.to_profile(user_profile_edit)
 
     Accounts.update_user_profile(user, user_attrs, profile_attrs)
+  end
+end
+
+defimpl Core.Persister, for: Core.Accounts.Features do
+  alias Core.Accounts
+
+  def save(features, changeset) do
+    case Ecto.Changeset.apply_action(changeset, :update) do
+      {:ok, _} ->
+        handle_success(features, changeset)
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        handle_validation_error(changeset)
+    end
+  end
+
+  defp handle_validation_error(_changeset) do
+    raise "unable to save invalid features data"
+  end
+
+  defp handle_success(features, changeset) do
+    Accounts.update_features(features, changeset)
   end
 end

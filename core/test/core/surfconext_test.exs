@@ -1,6 +1,7 @@
 defmodule Core.SurfConext.Test do
   use Core.DataCase, async: true
   import Core.Signals.Test
+  import Core.NextActions.Test
 
   alias Core.Factories
 
@@ -48,7 +49,7 @@ defmodule Core.SurfConext.Test do
       {:ok, surf_user} = Core.SurfConext.register_user(sso_info)
 
       message = assert_signal_dispatched(:user_created)
-      assert message == %{user: surf_user}
+      assert message == %{user: surf_user.user}
     end
 
     test "assign the researcher role when the user is an employee" do
@@ -77,6 +78,27 @@ defmodule Core.SurfConext.Test do
       {:ok, surf_user} = Core.SurfConext.register_user(sso_info)
 
       assert surf_user.user.student
+    end
+
+    test "creates next action when the registered user is a student" do
+      sso_info = %{
+        "sub" => Faker.UUID.v4(),
+        "email" => Faker.Internet.email(),
+        "preferred_username" => Faker.Person.name(),
+        "schac_home_organization" => "eduid.nl",
+        "eduperson_affiliation" => ["student"]
+      }
+
+      {:ok, %{user: user}} = Core.SurfConext.register_user(sso_info)
+
+      url_resolver = fn target, _ ->
+        case target do
+          CoreWeb.User.Settings -> "/settings"
+          _ -> "/"
+        end
+      end
+
+      assert_next_action(user, url_resolver, "/settings")
     end
   end
 end

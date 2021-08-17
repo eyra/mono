@@ -31,12 +31,12 @@ msgid "menu.item.surveys"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/onboarding/welcome.ex:27
+#: bundles/link/lib/onboarding/welcome.ex:35
 msgid "onboarding.welcome.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/onboarding/welcome.ex:12
+#: bundles/link/lib/onboarding/welcome.ex:14
 msgid "onboarding.welcome.title"
 msgstr ""
 

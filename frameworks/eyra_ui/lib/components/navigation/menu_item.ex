@@ -9,6 +9,7 @@ defmodule EyraUI.Navigation.MenuItem do
     action: nil,
     title: nil,
     active?: false,
+    counter: nil,
     icon: [name: nil, size: :small]
   )
 
@@ -27,12 +28,15 @@ defmodule EyraUI.Navigation.MenuItem do
   defp item_height(:large), do: "h-12"
   defp item_height(:small), do: "h-10"
 
+  defp counter_color(0), do: "bg-success"
+  defp counter_color(_), do: "bg-secondary"
+
   defp needs_hover?(vm), do: has_title?(vm)
 
   def render(assigns) do
     ~H"""
       <Button id={{id(@vm)}} vm={{ action(@vm)}} >
-        <div class="flex flex-row items-center justify-start rounded-full focus:outline-none {{ if active?(@vm) do "bg-grey4" end }} {{ if needs_hover?(@vm) do "hover:bg-grey4 px-4" end }} {{ item_height(icon_size(@vm)) }}">
+        <div class="flex flex-row items-center gap-3 justify-start rounded-full focus:outline-none {{ if active?(@vm) do "bg-grey4" end }} {{ if needs_hover?(@vm) do "hover:bg-grey4 px-4" end }} {{ item_height(icon_size(@vm)) }}">
           <div :if={{ has_icon?(@vm) }}>
             <div class="flex flex-col items-center justify-center">
               <div>
@@ -40,12 +44,20 @@ defmodule EyraUI.Navigation.MenuItem do
               </div>
             </div>
           </div>
-          <div :if={{ has_title?(@vm) && has_icon?(@vm) }} class="ml-3">
-          </div>
           <div :if={{ has_title?(@vm) }}>
             <div class="flex flex-col items-center justify-center">
               <div class="text-button font-button {{@text_color}} mt-1px" >
-                {{ @vm.title }}
+                {{ title(@vm) }}
+              </div>
+            </div>
+          </div>
+          <div class="flex-grow"></div>
+          <div :if={{ has_counter?(@vm) }}>
+            <div class="flex flex-col items-center justify-center">
+              <div class="px-6px rounded-full {{counter_color(counter(@vm))}}" >
+                <div class="text-captionsmall font-caption text-white mt-2px" >
+                  {{ counter(@vm) }}
+                </div>
               </div>
             </div>
           </div>

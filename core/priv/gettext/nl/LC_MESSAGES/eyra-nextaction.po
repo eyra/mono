@@ -1,0 +1,57 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/core/accounts/next_actions/complete_profile.ex:11
+msgid "complete.profile.cta"
+msgstr "Ga naar profiel"
+
+#, elixir-format
+#: lib/core/accounts/next_actions/complete_profile.ex:10
+msgid "complete.profile.description"
+msgstr "Vul de missende velden van je profiel in."
+
+#, elixir-format
+#: lib/core/accounts/next_actions/complete_profile.ex:9
+msgid "complete.profile.title"
+msgstr "Maak je profiel compleet"
+
+#, elixir-format
+#: lib/core/accounts/next_actions/promote_push_student.ex:12
+msgid "promote.push.student.cta"
+msgstr "Ga naar instellingen"
+
+#, elixir-format
+#: lib/core/accounts/next_actions/promote_push_student.ex:11
+msgid "promote.push.student.description"
+msgstr "Registreer nu ook voor pushberichten."
+
+#, elixir-format
+#: lib/core/accounts/next_actions/promote_push_student.ex:10
+msgid "promote.push.student.title"
+msgstr "Je ontvangt automatisch een email bij nieuw toegevoegde studies."
+
+#, elixir-format
+#: lib/core/accounts/next_actions/select_study_student.ex:12
+msgid "select.study.student.cta"
+msgstr "Ga naar profiel"
+
+#, elixir-format
+#: lib/core/accounts/next_actions/select_study_student.ex:11
+msgid "select.study.student.description"
+msgstr "Selecteer daarvoor je studie op de profiel pagina."
+
+#, elixir-format
+#: lib/core/accounts/next_actions/select_study_student.ex:10
+msgid "select.study.student.title"
+msgstr "Doe mee aan het vak 'Research Participation'."

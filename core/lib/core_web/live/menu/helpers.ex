@@ -8,7 +8,7 @@ defmodule CoreWeb.Menu.Helpers do
   defp size(%{size: size}), do: size
   defp size(_), do: :small
 
-  def live_item(socket, id, active_item, use_icon \\ true) when is_atom(id) do
+  def live_item(socket, id, active_item, use_icon \\ true, counter \\ nil) when is_atom(id) do
     info = info(id)
     size = size(info)
 
@@ -37,7 +37,8 @@ defmodule CoreWeb.Menu.Helpers do
       title: title,
       icon: icon,
       action: action,
-      active?: active_item === id
+      active?: active_item === id,
+      counter: counter
     }
   end
 

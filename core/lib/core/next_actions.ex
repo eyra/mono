@@ -11,6 +11,13 @@ defmodule Core.NextActions do
 
   @doc """
   """
+  def count_next_actions(%User{} = user) do
+    from(na in NextAction, where: na.user_id == ^user.id, select: count("*"))
+    |> Repo.one()
+  end
+
+  @doc """
+  """
   def list_next_actions(url_resolver, %User{} = user, content_node \\ nil)
       when is_function(url_resolver) do
     from(na in NextAction, where: na.user_id == ^user.id, limit: 10)
@@ -23,7 +30,7 @@ defmodule Core.NextActions do
   """
   def next_best_action(url_resolver, %User{} = user, content_node \\ nil)
       when is_function(url_resolver) do
-    from(na in NextAction, where: na.user_id == ^user.id, limit: 10)
+    from(na in NextAction, where: na.user_id == ^user.id, limit: 1)
     |> filter_by_content_node(content_node)
     |> Repo.one()
     |> to_view_model(url_resolver)

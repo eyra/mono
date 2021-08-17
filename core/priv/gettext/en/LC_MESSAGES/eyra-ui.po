@@ -42,7 +42,7 @@ msgstr "My profile"
 
 #, elixir-format
 #: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
-#: lib/core_web/live/user/settings.ex:33
+#: lib/core_web/live/user/settings.ex:35
 msgid "menu.item.settings"
 msgstr "Settings"
 
@@ -77,7 +77,7 @@ msgid "dashboard.title"
 msgstr "Dashboard"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:81
+#: bundles/link/lib/marketplace.ex:86
 msgid "marketplace.title"
 msgstr "Marketplace"
 
@@ -92,7 +92,7 @@ msgid "menu.item.payments"
 msgstr "Payments"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:73
+#: bundles/link/lib/onboarding/wizard.ex:75
 #: bundles/link/lib/user/web/profile.ex:72 lib/core_web/live/user/profile.ex:62
 msgid "tabbar.item.features"
 msgstr "Characteristics"
@@ -103,13 +103,13 @@ msgid "tabbar.item.profile"
 msgstr "My profile"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:64
+#: bundles/link/lib/onboarding/wizard.ex:65
 #: bundles/link/lib/user/web/profile.ex:63
 msgid "tabbar.item.study"
 msgstr "Study"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:74
+#: bundles/link/lib/onboarding/wizard.ex:76
 #: bundles/link/lib/user/web/profile.ex:73 lib/core_web/live/user/profile.ex:63
 msgid "tabbar.item.features.forward"
 msgstr "Update characteristics"
@@ -120,13 +120,13 @@ msgid "tabbar.item.profile.forward"
 msgstr "Update profile"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:65
+#: bundles/link/lib/onboarding/wizard.ex:66
 #: bundles/link/lib/user/web/profile.ex:64
 msgid "tabbar.item.study.forward"
 msgstr "Select study"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:99
+#: bundles/link/lib/onboarding/wizard.ex:102
 msgid "onboarding.forward"
 msgstr "Continue"
 

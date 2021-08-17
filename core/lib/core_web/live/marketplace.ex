@@ -3,6 +3,7 @@ defmodule CoreWeb.Marketplace do
   The home screen.
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Workspace.Component, :marketplace
 
   import Core.Authorization
 
@@ -60,6 +61,7 @@ defmodule CoreWeb.Marketplace do
 
     socket =
       socket
+      |> update_menus()
       |> assign(highlighted_count: highlighted_count)
       |> assign(owned_studies: owned_studies)
       |> assign(subject_studies: subject_studies)
@@ -67,6 +69,10 @@ defmodule CoreWeb.Marketplace do
       |> assign(available_count: available_count)
 
     {:ok, socket}
+  end
+
+  def handle_auto_save_done(socket) do
+    socket |> update_menus()
   end
 
   def handle_info({:card_click, %{action: :edit, id: id}}, socket) do
@@ -131,9 +137,7 @@ defmodule CoreWeb.Marketplace do
     ~H"""
       <Workspace
         title={{ dgettext("eyra-marketplace", "title") }}
-        user={{ @current_user }}
-        user_agent={{ Browser.Ua.to_ua(@socket) }}
-        active_item={{ :marketplace }}
+        menus={{ @menus }}
       >
         <ContentArea>
           <Title2>

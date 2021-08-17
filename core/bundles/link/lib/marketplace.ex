@@ -3,14 +3,17 @@ defmodule Link.Marketplace do
   The home screen.
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Workspace.Component, :marketplace
 
+  alias Core.NextActions
+  alias Core.NextActions.Live.NextActionHighlight
   alias Core.Studies
   alias Core.Survey.Tool, as: SurveyTool
   alias Core.Lab.Tool, as: LabTool
 
-
   alias Link.Marketplace.Card, as: CardVM
 
+  alias EyraUI.Spacing
   alias EyraUI.Card.{PrimaryStudy, SecondaryStudy}
   alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title2}
@@ -18,6 +21,7 @@ defmodule Link.Marketplace do
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
+  data(next_best_action, :any)
   data(highlighted_count, :any)
   data(owned_studies, :any)
   data(subject_studies, :any)
@@ -25,7 +29,8 @@ defmodule Link.Marketplace do
   data(available_count, :any)
   data(current_user, :any)
 
-  def mount(_params, _session, socket) do
+  def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
+    next_best_action = NextActions.next_best_action(url_resolver(socket), user)
     user = socket.assigns[:current_user]
     preload = [survey_tool: [:promotion], lab_tool: [:promotion, :time_slots]]
 
@@ -53,12 +58,18 @@ defmodule Link.Marketplace do
 
     socket =
       socket
+      |> update_menus()
+      |> assign(next_best_action: next_best_action)
       |> assign(highlighted_count: highlighted_count)
       |> assign(subject_studies: subject_studies)
       |> assign(available_studies: available_studies)
       |> assign(available_count: available_count)
 
     {:ok, socket}
+  end
+
+  def handle_auto_save_done(socket) do
+    socket |> update_menus()
   end
 
   def handle_info({:card_click, %{action: :edit, id: id}}, socket) do
@@ -79,11 +90,13 @@ defmodule Link.Marketplace do
     ~H"""
         <Workspace
           title={{ dgettext("eyra-ui", "marketplace.title") }}
-          user={{@current_user}}
-          user_agent={{ Browser.Ua.to_ua(@socket) }}
-          active_item={{ :marketplace }}
+          menus={{ @menus }}
         >
           <ContentArea>
+            <div :if={{ @next_best_action }}>
+              <NextActionHighlight vm={{ @next_best_action }}/>
+              <Spacing value="XL" />
+            </div>
             <Title2>
               {{ dgettext("eyra-study", "study.highlighted.title") }}
               <span class="text-primary"> {{ @highlighted_count }}</span>

@@ -4,6 +4,7 @@ defmodule Link.Survey.Content do
   """
   use CoreWeb, :live_view
   use CoreWeb.MultiFormAutoSave
+  use CoreWeb.Layouts.Workspace.Component, :survey
 
   import CoreWeb.Gettext
 
@@ -52,7 +53,13 @@ defmodule Link.Survey.Content do
         save_timer: nil,
         hide_flash_timer: nil
       )
+      |> update_menus()
     }
+  end
+
+  @impl true
+  def handle_auto_save_done(socket) do
+    socket |> update_menus()
   end
 
   defp initial_image_query(%{promotion_id: promotion_id}) do
@@ -90,10 +97,7 @@ defmodule Link.Survey.Content do
     ~H"""
     <Workspace
       title={{ dgettext("link-survey", "content.title") }}
-      user={{@current_user}}
-      user_agent={{ Browser.Ua.to_ua(@socket) }}
-      active_item={{ :survey }}
-      id={{ @tool_id }}
+      menus={{ @menus }}
     >
       <div phx-click="reset_focus">
         <div x-data="{ open: false }">
