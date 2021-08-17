@@ -13,7 +13,7 @@ defmodule Link.Menu.Items do
       labstudies: %{target: Link.LabStudy.Overview, domain: "link-ui"},
       todo: %{target: CoreWeb.Todo, domain: "eyra-ui"},
       settings: %{target: CoreWeb.User.Settings, domain: "eyra-ui"},
-      profile: %{target: Link.User.Web.Profile, domain: "eyra-ui"},
+      profile: %{target: CoreWeb.User.Profile, domain: "eyra-ui"},
       signout: %{target: :delete, domain: "eyra-ui"},
       signin: %{target: :new, domain: "eyra-ui"},
       menu: %{target: "mobile_menu = !mobile_menu", domain: "eyra-ui"}

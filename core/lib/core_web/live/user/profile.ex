@@ -21,8 +21,8 @@ defmodule CoreWeb.User.Profile do
   data(tabs, :any)
 
   @impl true
-  def mount(_params, _session, socket) do
-    tabs = create_tabs(socket)
+  def mount(%{"tab" => active_tab}, _session, socket) do
+    tabs = create_tabs(socket, String.to_atom(active_tab))
 
     {
       :ok,
@@ -35,6 +35,11 @@ defmodule CoreWeb.User.Profile do
       )
       |> update_menus()
     }
+  end
+
+  @impl true
+  def mount(_params, session, socket) do
+    mount(%{"tab" => "profile"}, session, socket)
   end
 
   @impl true
@@ -57,20 +62,22 @@ defmodule CoreWeb.User.Profile do
     if cond, do: list ++ [extra], else: list
   end
 
-  defp create_tabs(%{assigns: %{current_user: current_user}}) do
+  defp create_tabs(%{assigns: %{current_user: current_user}}, active_tab) do
     []
     |> append(%{
       id: :profile,
       title: dgettext("eyra-ui", "tabbar.item.profile"),
       forward_title: dgettext("eyra-ui", "tabbar.item.profile.forward"),
-      component: ProfileForm
+      component: ProfileForm,
+      active: active_tab === :profile
     })
     |> append(
       %{
         id: :study,
         title: dgettext("eyra-ui", "tabbar.item.study"),
         forward_title: dgettext("eyra-ui", "tabbar.item.study.forward"),
-        component: StudyForm
+        component: StudyForm,
+        active: active_tab === :study
       },
       current_user.student
     )
@@ -79,7 +86,8 @@ defmodule CoreWeb.User.Profile do
       action: nil,
       title: dgettext("eyra-ui", "tabbar.item.features"),
       forward_title: dgettext("eyra-ui", "tabbar.item.features.forward"),
-      component: FeaturesForm
+      component: FeaturesForm,
+      active: active_tab === :features
     })
   end
 

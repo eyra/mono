@@ -62,7 +62,8 @@ defmodule Link.Onboarding.Wizard do
       title: dgettext("eyra-ui", "tabbar.item.welcome"),
       forward_title: dgettext("eyra-ui", "tabbar.item.welcome.forward"),
       component: Welcome,
-      type: :sheet
+      type: :sheet,
+      active: true
     })
     |> append(
       %{
