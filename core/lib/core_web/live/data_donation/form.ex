@@ -22,6 +22,11 @@ defmodule CoreWeb.DataDonation.Form do
   data(changeset, :any)
   data(focus, :any, default: "")
 
+  # Handle update from parent after auto-save, prevents overwrite of current state
+  def update(_params, %{assigns: %{entity: _entity}} = socket) do
+    {:ok, socket}
+  end
+
   def update(%{id: id, entity_id: entity_id}, socket) do
     entity = Tools.get!(entity_id)
     donations = Tools.list_donations(entity)

@@ -17,7 +17,7 @@ msgid "displayname.label"
 msgstr "Schermnaam"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:66
+#: lib/core_web/live/user/signup.ex:67
 msgid "email.label"
 msgstr "E-mail"
 
@@ -27,7 +27,7 @@ msgid "fullname.label"
 msgstr "Volledige naam"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:67
+#: lib/core_web/live/user/signup.ex:68
 msgid "password.label"
 msgstr "Wachtwoord"
 
@@ -37,37 +37,37 @@ msgid "profile.title"
 msgstr "Mijn profiel"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:109
+#: lib/core_web/live/user/forms/profile.ex:112
 msgid "researcher.label"
 msgstr "Ik ben een onderzoeker"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:72
+#: lib/core_web/live/user/signup.ex:73
 msgid "signin.label"
 msgstr "Heb je al een account?"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:73
+#: lib/core_web/live/user/signup.ex:74
 msgid "signin.link"
 msgstr "Log hier in"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:68
+#: lib/core_web/live/user/signup.ex:69
 msgid "signup.button"
 msgstr "Registreer"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:63
+#: lib/core_web/live/user/signup.ex:64
 msgid "signup.title"
 msgstr "Nieuw account"
 
 #, elixir-format
-#: lib/core_web/live/user/await_confirmation.ex:45
+#: lib/core_web/live/user/await_confirmation.ex:46
 msgid "await.confirmation.title"
 msgstr "Confirm you registration"
 
 #, elixir-format
-#: lib/core_web/live/user/confirm_token.ex:80
+#: lib/core_web/live/user/confirm_token.ex:82
 msgid "confirm.token.resend_button"
 msgstr ""
 
@@ -82,47 +82,47 @@ msgid "choose.other.profile.photo.file"
 msgstr "Kies andere foto"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:107
+#: lib/core_web/live/user/forms/profile.ex:109
 msgid "professionaltitle.label"
 msgstr "Functietitel"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:108
+#: lib/core_web/live/user/forms/profile.ex:110
 msgid "website.label"
 msgstr "Website"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:41
+#: lib/core_web/live/user/settings.ex:43
 msgid "push.registration.button"
 msgstr "Registreren"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:37
+#: lib/core_web/live/user/settings.ex:39
 msgid "push.registration.title"
 msgstr "Push notificaties"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:48
+#: lib/core_web/live/user/settings.ex:50
 msgid "push.registration.activated"
 msgstr "Push notificaties zijn geactiveerd op deze browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:45
+#: lib/core_web/live/user/settings.ex:47
 msgid "push.registration.denied"
 msgstr "Push notificaties zijn gedeactiveerd op deze browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:39
+#: lib/core_web/live/user/settings.ex:41
 msgid "push.registration.label"
 msgstr "Activeren op deze browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:44
+#: lib/core_web/live/user/settings.ex:46
 msgid "push.registration.pending"
 msgstr "Push notificaties zijn gedeactiveerd op deze browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:50
+#: lib/core_web/live/user/settings.ex:52
 msgid "push.registration.test.button"
 msgstr "Stuur test notificatie"
 
@@ -134,7 +134,7 @@ msgstr "Je kan meerdere studies opgeven. Als je taken van het vorig leerjaar moe
 #, elixir-format
 #: lib/core_web/live/user/forms/features.ex:86
 msgid "features.description"
-msgstr "Onderstaande kenmerken worden gebruikt om jou onderzoeken te tonen die bedoeld zijn voor participanten met specifieke kenmerken."
+msgstr "Onderstaande kenmerken worden gebruikt om in de marktplaats onderzoeken met specifieke eisen te laten zien."
 
 #, elixir-format
 #: lib/core_web/live/user/forms/features.ex:97
@@ -162,6 +162,6 @@ msgid "features.title"
 msgstr "Kenmerken"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:110
+#: lib/core_web/live/user/forms/profile.ex:113
 msgid "student.label"
 msgstr "Ik ben een student"

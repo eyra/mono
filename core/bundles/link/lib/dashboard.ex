@@ -3,6 +3,7 @@ defmodule Link.Dashboard do
   The dashboard screen.
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Workspace.Component, :dashboard
 
   alias Core.Studies
   alias CoreWeb.Components.ContentListItem
@@ -27,19 +28,22 @@ defmodule Link.Dashboard do
 
     socket =
       socket
+      |> update_menus()
       |> assign(content_items: content_items)
       |> assign(next_best_action: NextActions.next_best_action(url_resolver(socket), user))
 
     {:ok, socket}
   end
 
+  def handle_auto_save_done(socket) do
+    socket |> update_menus()
+  end
+
   def render(assigns) do
     ~H"""
       <Workspace
         title={{ dgettext("link-dashboard", "title") }}
-        user={{@current_user}}
-        user_agent={{ Browser.Ua.to_ua(@socket) }}
-        active_item={{ :dashboard }}
+        menus={{ build_menus(@socket, @current_user, :dashboard) }}
       >
         <ContentArea>
           <div :if={{ @next_best_action }} class="mb-6 md:mb-10">

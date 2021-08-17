@@ -37,13 +37,13 @@ defmodule Core.SurfConext do
 
     user = User.sso_changeset(%User{}, sso_info)
 
-    with {:ok, user} <-
+    with {:ok, surf_user} <-
            %Core.SurfConext.User{}
            |> Core.SurfConext.User.changeset(attrs)
            |> Ecto.Changeset.put_assoc(:user, user)
            |> Repo.insert() do
-      Signals.dispatch!(:user_created, %{user: user})
-      {:ok, user}
+      Signals.dispatch!(:user_created, %{user: surf_user.user})
+      {:ok, surf_user}
     end
   end
 

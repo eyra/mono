@@ -41,6 +41,11 @@ defmodule CoreWeb.DataDonation.Content do
     }
   end
 
+  @impl true
+  def handle_auto_save_done(socket) do
+    socket
+  end
+
   defp initial_image_query(%{promotion_id: promotion_id}) do
     promotion = Promotions.get!(promotion_id)
 

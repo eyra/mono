@@ -3,6 +3,7 @@ defmodule Link.Survey.Overview do
    The surveys screen.
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Workspace.Component, :surveys
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias EyraUI.Container.ContentArea
@@ -15,7 +16,11 @@ defmodule Link.Survey.Overview do
   alias Core.Promotions
 
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    {:ok, socket |> update_menus()}
+  end
+
+  def handle_auto_save_done(socket) do
+    socket |> update_menus()
   end
 
   def handle_event("create_tool", _params, socket) do
@@ -70,9 +75,7 @@ defmodule Link.Survey.Overview do
     ~H"""
       <Workspace
         title={{ dgettext("link-survey", "title") }}
-        user={{@current_user}}
-        user_agent={{ Browser.Ua.to_ua(@socket) }}
-        active_item={{ :surveys }}
+        menus={{ @menus }}
       >
         <ContentArea>
           <PrimaryLiveViewButton label="Add" event="create_tool"/>

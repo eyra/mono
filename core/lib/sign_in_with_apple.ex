@@ -1,6 +1,7 @@
 defmodule SignInWithApple do
   alias Core.Accounts.User
   alias Core.Repo
+  alias Core.Signals
   import Ecto.Query, warn: false
 
   def get_user_by_sub(sub) do
@@ -29,10 +30,14 @@ defmodule SignInWithApple do
 
     user = User.sso_changeset(%User{}, sso_info)
 
-    %SignInWithApple.User{}
-    |> SignInWithApple.User.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:user, user)
-    |> Repo.insert()
+    with {:ok, apple_user} <-
+           %SignInWithApple.User{}
+           |> SignInWithApple.User.changeset(attrs)
+           |> Ecto.Changeset.put_assoc(:user, user)
+           |> Repo.insert() do
+      Signals.dispatch!(:user_created, %{user: apple_user.user})
+      {:ok, apple_user}
+    end
   end
 
   defmacro routes(otp_app) do

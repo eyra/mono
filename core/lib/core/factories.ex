@@ -39,6 +39,16 @@ defmodule Core.Factories do
     })
   end
 
+  def build(:student) do
+    :member
+    |> build(%{student: true})
+    |> struct!(%{
+      profile: %Profile{
+        fullname: Faker.Person.name()
+      }
+    })
+  end
+
   def build(:auth_node) do
     %Authorization.Node{}
   end

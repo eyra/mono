@@ -3,6 +3,7 @@ defmodule Link.Debug do
   The dashboard screen.
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Workspace.Component, :debug
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
@@ -13,16 +14,18 @@ defmodule Link.Debug do
 
   def mount(_params, _session, socket) do
     require_feature(:debug)
-    {:ok, socket }
+    {:ok, socket |> update_menus()}
+  end
+
+  def handle_auto_save_done(socket) do
+    socket |> update_menus()
   end
 
   def render(assigns) do
     ~H"""
       <Workspace
         title={{ dgettext("link-ui", "debug.title") }}
-        user={{@current_user}}
-        user_agent={{ Browser.Ua.to_ua(@socket) }}
-        active_item={{ :debug }}
+        menus={{ @menus }}
       >
         <ContentArea>
         <Wrap>

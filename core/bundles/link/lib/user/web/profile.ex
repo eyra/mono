@@ -4,6 +4,7 @@ defmodule Link.User.Web.Profile do
   """
   use CoreWeb, :live_view
   use CoreWeb.MultiFormAutoSave
+  use CoreWeb.Layouts.Workspace.Component, :profile
 
   import CoreWeb.Gettext
 
@@ -31,7 +32,13 @@ defmodule Link.User.Web.Profile do
         save_timer: nil,
         hide_flash_timer: nil
       )
+      |> update_menus()
     }
+  end
+
+  @impl true
+  def handle_auto_save_done(socket) do
+    socket |> update_menus()
   end
 
   @impl true
@@ -78,11 +85,7 @@ defmodule Link.User.Web.Profile do
   @impl true
   def render(assigns) do
     ~H"""
-    <Workspace
-      user={{@current_user}}
-      user_agent={{ Browser.Ua.to_ua(@socket) }}
-      active_item={{ :profile }}
-    >
+    <Workspace menus={{ @menus }}>
       <TabbarArea tabs={{@tabs}}>
         <Tabbar id={{ :tabbar }}/>
         <TabbarContent user={{@current_user}} />

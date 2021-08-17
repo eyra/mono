@@ -4,12 +4,14 @@ defmodule CoreWeb.User.Profile do
   """
   use CoreWeb, :live_view
   use CoreWeb.MultiFormAutoSave
+  use CoreWeb.Layouts.Workspace.Component, :profile
 
   import CoreWeb.Gettext
 
   alias Core
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.User.Forms.Profile, as: ProfileForm
+  alias CoreWeb.User.Forms.Study, as: StudyForm
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
 
   alias EyraUI.Navigation.{Tabbar, TabbarContent, TabbarFooter, TabbarArea}
@@ -18,6 +20,7 @@ defmodule CoreWeb.User.Profile do
   data(current_user, :any)
   data(tabs, :any)
 
+  @impl true
   def mount(_params, _session, socket) do
     tabs = create_tabs(socket)
 
@@ -30,7 +33,13 @@ defmodule CoreWeb.User.Profile do
         save_timer: nil,
         hide_flash_timer: nil
       )
+      |> update_menus()
     }
+  end
+
+  @impl true
+  def handle_auto_save_done(socket) do
+    socket |> update_menus()
   end
 
   @impl true
@@ -44,11 +53,11 @@ defmodule CoreWeb.User.Profile do
     {:noreply, socket}
   end
 
-  defp append(list, extra, condition \\ true) do
-    if condition, do: list ++ [extra], else: list
+  defp append(list, extra, cond \\ true) do
+    if cond, do: list ++ [extra], else: list
   end
 
-  defp create_tabs(_socket) do
+  defp create_tabs(%{assigns: %{current_user: current_user}}) do
     []
     |> append(%{
       id: :profile,
@@ -56,6 +65,15 @@ defmodule CoreWeb.User.Profile do
       forward_title: dgettext("eyra-ui", "tabbar.item.profile.forward"),
       component: ProfileForm
     })
+    |> append(
+      %{
+        id: :study,
+        title: dgettext("eyra-ui", "tabbar.item.study"),
+        forward_title: dgettext("eyra-ui", "tabbar.item.study.forward"),
+        component: StudyForm
+      },
+      current_user.student
+    )
     |> append(%{
       id: :features,
       action: nil,
@@ -68,11 +86,7 @@ defmodule CoreWeb.User.Profile do
   @impl true
   def render(assigns) do
     ~H"""
-    <Workspace
-      user={{@current_user}}
-      user_agent={{ Browser.Ua.to_ua(@socket) }}
-      active_item={{ :profile }}
-    >
+    <Workspace menus={{ @menus }}>
       <TabbarArea tabs={{@tabs}}>
         <Tabbar id={{ :tabbar }}/>
         <TabbarContent user={{@current_user}} />

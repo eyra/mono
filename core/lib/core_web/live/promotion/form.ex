@@ -48,6 +48,15 @@ defmodule CoreWeb.Promotion.Form do
     }
   end
 
+  # Handle Selector Update
+  def update(
+        %{active_item_ids: active_item_ids, selector_id: selector_id},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    {:ok, socket |> save(entity, %{selector_id => active_item_ids})}
+  end
+
+  # Handle update from parent after auto-save, prevents overwrite of current state
   def update(_params, %{assigns: %{entity: _entity}} = socket) do
     {
       :ok,
@@ -77,14 +86,6 @@ defmodule CoreWeb.Promotion.Form do
       |> assign(image_url: image_url)
       |> assign(theme_labels: theme_labels)
     }
-  end
-
-  # Handle Selector Update
-  def update(
-        %{active_item_ids: active_item_ids, selector_id: selector_id},
-        %{assigns: %{entity: entity}} = socket
-      ) do
-    {:ok, socket |> save(entity, %{selector_id => active_item_ids})}
   end
 
   # Save

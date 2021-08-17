@@ -36,6 +36,11 @@ defmodule Link.Onboarding.Wizard do
   end
 
   @impl true
+  def handle_auto_save_done(socket) do
+    socket
+  end
+
+  @impl true
   def handle_event("reset_focus", _, socket) do
     send_update(ProfileForm, id: :profile, focus: "")
     {:noreply, socket}

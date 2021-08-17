@@ -26,6 +26,19 @@ defmodule CoreWeb.User.Forms.Profile do
     save(socket, entity, :auto_save, %{photo_url: uploaded_file})
   end
 
+  # Handle Selector Update
+  def update(
+        %{active_item_ids: active_item_ids, selector_id: selector_id},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    {:ok, socket |> save(entity, :auto_save, %{selector_id => active_item_ids})}
+  end
+
+  # Handle update from parent after auto-save, prevents overwrite of current state
+  def update(_params, %{assigns: %{entity: _entity}} = socket) do
+    {:ok, socket}
+  end
+
   def update(%{id: id, user: user}, socket) do
     profile = Accounts.get_profile(user)
     entity = UserProfileEdit.create(user, profile)
@@ -42,14 +55,6 @@ defmodule CoreWeb.User.Forms.Profile do
       |> init_file_uploader(:photo)
       |> update_ui()
     }
-  end
-
-  # Handle Selector Update
-  def update(
-        %{active_item_ids: active_item_ids, selector_id: selector_id},
-        %{assigns: %{entity: entity}} = socket
-      ) do
-    {:ok, socket |> save(entity, :auto_save, %{selector_id => active_item_ids})}
   end
 
   defp update_ui(%{assigns: %{entity: entity}} = socket) do
@@ -104,8 +109,11 @@ defmodule CoreWeb.User.Forms.Profile do
 
             <TextInput field={{:fullname}} label_text={{dgettext("eyra-account", "fullname.label")}} target={{@myself}} />
             <TextInput field={{:displayname}} label_text={{dgettext("eyra-account", "displayname.label")}} target={{@myself}} />
-            <TextInput field={{:title}} label_text={{dgettext("eyra-account", "professionaltitle.label")}} target={{@myself}} />
-            <UrlInput field={{:url}} label_text={{dgettext("eyra-account", "website.label")}} target={{@myself}} />
+
+            <div :if={{@user.researcher}} >
+              <TextInput field={{:title}} label_text={{dgettext("eyra-account", "professionaltitle.label")}} target={{@myself}} />
+              <UrlInput field={{:url}} label_text={{dgettext("eyra-account", "website.label")}} target={{@myself}} />
+            </div>
             <Checkbox field={{:researcher}} label_text={{dgettext("eyra-account", "researcher.label")}}/>
             <Checkbox field={{:student}} label_text={{dgettext("eyra-account", "student.label")}}/>
           </Form>

@@ -3,21 +3,24 @@ defmodule Link.StudentPool do
    The student overview screen.
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Workspace.Component, :studentpool
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias EyraUI.Container.ContentArea
 
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    {:ok, socket |> update_menus()}
+  end
+
+  def handle_auto_save_done(socket) do
+    socket |> update_menus()
   end
 
   def render(assigns) do
     ~H"""
       <Workspace
         title={{ dgettext("link-ui", "title") }}
-        user={{@current_user}}
-        user_agent={{ Browser.Ua.to_ua(@socket) }}
-        active_item={{ :studentpool }}
+        menus={{ @menus }}
       >
         <ContentArea>
           <div>TBD</div>

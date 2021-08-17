@@ -1,6 +1,7 @@
 defmodule GoogleSignIn do
   alias Core.Accounts.User
   alias Core.Repo
+  alias Core.Signals
   import Ecto.Query, warn: false
 
   def get_user_by_sub(sub) do
@@ -32,10 +33,14 @@ defmodule GoogleSignIn do
 
     user = User.sso_changeset(%User{}, sso_info)
 
-    %GoogleSignIn.User{}
-    |> GoogleSignIn.User.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:user, user)
-    |> Repo.insert()
+    with {:ok, google_user} <-
+           %GoogleSignIn.User{}
+           |> GoogleSignIn.User.changeset(attrs)
+           |> Ecto.Changeset.put_assoc(:user, user)
+           |> Repo.insert() do
+      Signals.dispatch!(:user_created, %{user: google_user.user})
+      {:ok, google_user}
+    end
   end
 
   defmacro routes(otp_app) do
