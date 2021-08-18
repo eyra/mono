@@ -37,11 +37,11 @@ msgid "title"
 msgstr "Marktplaats"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:131
+#: bundles/link/lib/marketplace.ex:127
 msgid "empty.description"
 msgstr "Momenteel zijn er geen onderzoeksstudies beschikbaar. Zodra er een onderzoeksstudie voor jou beschikbaar komt, wordt deze hier toegevoegd en ontvang je een email."
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:125
+#: bundles/link/lib/marketplace.ex:126
 msgid "empty.title"
 msgstr "Hier vind je straks studies om aan mee te doen"

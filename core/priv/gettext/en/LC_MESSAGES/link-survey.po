@@ -138,6 +138,26 @@ msgid "content.title"
 msgstr "Survey"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:77
+#: bundles/link/lib/survey/web/overview.ex:81
 msgid "title"
 msgstr "Surveys"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:96
+msgid "add.first.button"
+msgstr "Add your first survey"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:87
+msgid "add.new.button"
+msgstr "Add new survey"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:92
+msgid "empty.description"
+msgstr "There are currently no surveys created by you. As soon as a you create one, it will be added to this page. Start by clicking on the button below."
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:91
+msgid "empty.title"
+msgstr "Surveys you create will appear here"

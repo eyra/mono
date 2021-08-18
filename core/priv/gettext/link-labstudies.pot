@@ -11,6 +11,26 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/lab/overview.ex:22
+#: bundles/link/lib/lab/overview.ex:28
 msgid "title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/lab/overview.ex:43
+msgid "add.first.button"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/lab/overview.ex:39
+msgid "empty.description"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/lab/overview.ex:38
+msgid "empty.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/lab/overview.ex:34
+msgid "add.new.button"
 msgstr ""

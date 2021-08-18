@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:35
+#: bundles/link/lib/survey/web/overview.ex:39
 msgid "default.study.title"
 msgstr "New study"
 
@@ -20,3 +20,13 @@ msgstr "New study"
 #: lib/core_web/live/dashboard.ex:57
 msgid "recent-items.title"
 msgstr "Recent items:"
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:63
+msgid "empty.description"
+msgstr "The dashboard is the go to place to find an overview of your work. A list of recent items is the starting point of this page."
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:62
+msgid "empty.title"
+msgstr "Items you worked on recently will appear here"

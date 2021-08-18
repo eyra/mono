@@ -138,6 +138,26 @@ msgid "content.title"
 msgstr "Survey"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:77
+#: bundles/link/lib/survey/web/overview.ex:81
 msgid "title"
 msgstr "Surveys"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:96
+msgid "add.first.button"
+msgstr "Maak je eerste survey aan"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:87
+msgid "add.new.button"
+msgstr "Maal nieuwe survey aan"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:92
+msgid "empty.description"
+msgstr "Momenteel heb je nog geen surveys aangemaakt. Zodra je een survey aanmaakt zal deze aan deze pagina worden toegevoegd. Klik op de ondertaande button om te starten."
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:91
+msgid "empty.title"
+msgstr "Hier vind je een overzicht van je surveys"

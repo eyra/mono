@@ -12,14 +12,14 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:6
+#: bundles/link/lib/debug.ex:6 bundles/link/lib/onboarding/wizard.ex:6
 #: bundles/link/lib/survey/web/content.ex:6 lib/core_web/live/data_donation/content.ex:6
 #: lib/core_web/live/user/profile.ex:6
 msgid "error.flash"
 msgstr "Er is een fout opgetreden"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:6
+#: bundles/link/lib/debug.ex:6 bundles/link/lib/onboarding/wizard.ex:6
 #: bundles/link/lib/survey/web/content.ex:6 lib/core_web/live/data_donation/content.ex:6
 #: lib/core_web/live/user/profile.ex:6
 msgid "saved.info.flash"

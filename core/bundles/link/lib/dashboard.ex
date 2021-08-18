@@ -6,6 +6,7 @@ defmodule Link.Dashboard do
   use CoreWeb.Layouts.Workspace.Component, :dashboard
 
   alias Core.Studies
+  alias CoreWeb.Empty
   alias CoreWeb.Components.ContentListItem
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
@@ -49,10 +50,21 @@ defmodule Link.Dashboard do
           <div :if={{ @next_best_action }} class="mb-6 md:mb-10">
             <NextActionHighlight vm={{ @next_best_action }}/>
           </div>
-          <Title2>
-            {{ dgettext("link-dashboard", "recent-items.title") }}
-          </Title2>
-          <ContentListItem :for={{item <- @content_items}} title={{item.title}} description="Facere dolorem sequi sit voluptas labore porro qui quis" quick_summary={{item.quick_summary}} status={{item.status}} image_id={{item.image_id}} to={{item.path}}  />
+          <Case value={{ Enum.count(@content_items) > 0 }} >
+            <True>
+              <Title2>
+                {{ dgettext("link-dashboard", "recent-items.title") }}
+              </Title2>
+              <ContentListItem :for={{item <- @content_items}} title={{item.title}} description="Facere dolorem sequi sit voluptas labore porro qui quis" quick_summary={{item.quick_summary}} status={{item.status}} image_id={{item.image_id}} to={{item.path}}  />
+            </True>
+            <False>
+              <Empty
+                title={{ dgettext("eyra-dashboard", "empty.title") }}
+                body={{ dgettext("eyra-dashboard", "empty.description") }}
+                illustration="items"
+              />
+            </False>
+          </Case>
         </ContentArea>
       </Workspace>
     """

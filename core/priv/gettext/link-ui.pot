@@ -41,6 +41,6 @@ msgid "onboarding.welcome.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/debug.ex:27
+#: bundles/link/lib/debug.ex:54
 msgid "debug.title"
 msgstr ""

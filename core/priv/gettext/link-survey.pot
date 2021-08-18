@@ -137,6 +137,26 @@ msgid "content.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:77
+#: bundles/link/lib/survey/web/overview.ex:81
 msgid "title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:96
+msgid "add.first.button"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:87
+msgid "add.new.button"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:92
+msgid "empty.description"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:91
+msgid "empty.title"
 msgstr ""

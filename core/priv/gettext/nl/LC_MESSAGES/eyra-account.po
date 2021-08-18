@@ -37,11 +37,6 @@ msgid "profile.title"
 msgstr "Mijn profiel"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:117
-msgid "researcher.label"
-msgstr "Ik ben een onderzoeker"
-
-#, elixir-format
 #: lib/core_web/live/user/signup.ex:73
 msgid "signin.label"
 msgstr "Heb je al een account?"
@@ -160,8 +155,3 @@ msgstr "Opleiding"
 #: lib/core_web/live/user/forms/features.ex:90
 msgid "features.title"
 msgstr "Kenmerken"
-
-#, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:118
-msgid "student.label"
-msgstr "Ik ben een student"
