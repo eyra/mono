@@ -27,31 +27,31 @@ msgid "complete.profile.title"
 msgstr "Complete your profile"
 
 #, elixir-format
-#: lib/core/accounts/next_actions/promote_push_student.ex:12
+#: lib/core/accounts/next_actions/promote_push_student.ex:11
 msgid "promote.push.student.cta"
 msgstr "Open settings"
 
 #, elixir-format
-#: lib/core/accounts/next_actions/promote_push_student.ex:11
+#: lib/core/accounts/next_actions/promote_push_student.ex:10
 msgid "promote.push.student.description"
 msgstr "You receive e-mail when new studies are added."
 
 #, elixir-format
-#: lib/core/accounts/next_actions/promote_push_student.ex:10
+#: lib/core/accounts/next_actions/promote_push_student.ex:9
 msgid "promote.push.student.title"
 msgstr "Register also for receiving push messages."
 
 #, elixir-format
-#: lib/core/accounts/next_actions/select_study_student.ex:12
+#: lib/core/accounts/next_actions/select_study_student.ex:11
 msgid "select.study.student.cta"
 msgstr "Open profile"
 
 #, elixir-format
-#: lib/core/accounts/next_actions/select_study_student.ex:11
+#: lib/core/accounts/next_actions/select_study_student.ex:10
 msgid "select.study.student.description"
-msgstr "Select your study in the profile page for this."
+msgstr "Select your study program in the profile page for this."
 
 #, elixir-format
-#: lib/core/accounts/next_actions/select_study_student.ex:10
+#: lib/core/accounts/next_actions/select_study_student.ex:9
 msgid "select.study.student.title"
-msgstr "Join the 'Research Participation' course."
+msgstr "Join the research studies."

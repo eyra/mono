@@ -12,6 +12,6 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/lab/overview.ex:17
+#: bundles/link/lib/lab/overview.ex:22
 msgid "title"
 msgstr "Lab studies"

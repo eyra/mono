@@ -12,6 +12,7 @@ defmodule Core.Accounts.UserProfileEdit do
     field(:displayname, :string)
     field(:researcher, :boolean)
     field(:student, :boolean)
+    field(:coordinator, :boolean)
     field(:fullname, :string)
     field(:title, :string)
     field(:url, :string)
@@ -20,7 +21,7 @@ defmodule Core.Accounts.UserProfileEdit do
 
   @required_fields ~w()a
 
-  @user_fields ~w(displayname researcher student)a
+  @user_fields ~w(displayname researcher student coordinator)a
   @profile_fields ~w(fullname title url photo_url)a
 
   @fields @user_fields ++ @profile_fields

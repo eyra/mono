@@ -51,10 +51,10 @@ defmodule Core.NextActions.Live.NextAction do
             {{description(@vm)}}
           </div>
         </div>
-        <div class="hidden sm:block font-button text-button text-center p-3 rounded-md whitespace-nowrap {{colors(@vm).button}}">
+        <div class="hidden lg:block font-button text-button text-center p-3 rounded-md whitespace-nowrap {{colors(@vm).button}}">
           {{cta(@vm)}}
         </div>
-        <div class="inline-block sm:hidden self-start">
+        <div class="inline-block lg:hidden self-start mt-2px md:mt-1 ">
           <svg width="8" height="13" viewBox="0 0 8 13" class="fill-current {{colors(@vm).icon}}">
             <path d="M0.263916 11.34L4.84392 6.75L0.263916 2.16L1.67392 0.75L7.67392 6.75L1.67392 12.75L0.263916 11.34Z" />
           </svg>

@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/student_pool.ex:17
+#: bundles/link/lib/student_pool.ex:22
 msgid "title"
 msgstr "Studentenpool"
 
@@ -42,6 +42,6 @@ msgid "onboarding.welcome.title"
 msgstr "Welkom %{member}"
 
 #, elixir-format
-#: bundles/link/lib/debug.ex:22
+#: bundles/link/lib/debug.ex:27
 msgid "debug.title"
 msgstr "Debug"

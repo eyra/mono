@@ -12,22 +12,22 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:110
+#: bundles/link/lib/survey/web/form.ex:107
 msgid "config.nrofsubjects.label"
 msgstr "Number of required subjects"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:101
+#: bundles/link/lib/survey/web/form.ex:98
 msgid "config.url.label"
 msgstr "Public web link of your survey"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:119
+#: bundles/link/lib/survey/web/form.ex:116
 msgid "delete.button"
 msgstr "Delete survey"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:104
+#: bundles/link/lib/survey/web/form.ex:101
 msgid "duration.label"
 msgstr "Estimated duration"
 
@@ -73,7 +73,7 @@ msgid "conpleted.title"
 msgstr "Completed"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:114
+#: bundles/link/lib/survey/web/form.ex:111
 msgid "devices.label"
 msgstr "Select one or more devices that can be used by the participant to fill in the survey."
 
@@ -83,27 +83,27 @@ msgid "open.cta.title"
 msgstr "Go to survey"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:95
+#: bundles/link/lib/survey/web/form.ex:92
 msgid "redirect.description"
 msgstr "Below you can find the redirect url for your survey. This should be used to redirect participants back at the end of the survey to complete the work. Copy the redirect url and go to your survey on the platform of your choice. Paste the url at the appropriate location."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:94
+#: bundles/link/lib/survey/web/form.ex:91
 msgid "redirect.title"
 msgstr "Connect your survey"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:107
+#: bundles/link/lib/survey/web/form.ex:104
 msgid "reward.label"
 msgstr "Credits in euro cents"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:113
+#: bundles/link/lib/survey/web/form.ex:110
 msgid "devices.title"
 msgstr "Devices"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:97
+#: bundles/link/lib/survey/web/form.ex:94
 msgid "redirect.label"
 msgstr "Redirect url"
 
@@ -133,11 +133,11 @@ msgid "status.label"
 msgstr "Below you can keep an eye on the progress of the tasks"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:92
+#: bundles/link/lib/survey/web/content.ex:99
 msgid "content.title"
 msgstr "Survey"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:72
+#: bundles/link/lib/survey/web/overview.ex:77
 msgid "title"
 msgstr "Surveys"

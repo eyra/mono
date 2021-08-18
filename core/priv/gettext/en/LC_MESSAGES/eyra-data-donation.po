@@ -12,42 +12,42 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/content.ex:86
+#: lib/core_web/live/data_donation/content.ex:91
 msgid "content.title"
 msgstr "Data Donation"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:97
+#: lib/core_web/live/data_donation/form.ex:102
 msgid "reward.label"
 msgstr "Amount in euro cents"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:93
+#: lib/core_web/live/data_donation/form.ex:98
 msgid "script.label"
 msgstr "Paste your python script here"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:101
+#: lib/core_web/live/data_donation/form.ex:106
 msgid "config.nrofsubjects.label"
 msgstr "Number of required subjects"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:100
+#: lib/core_web/live/data_donation/form.ex:105
 msgid "nrofsubjects.title"
 msgstr "Subjects"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:96
+#: lib/core_web/live/data_donation/form.ex:101
 msgid "reward.title"
 msgstr "Credits"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:92
+#: lib/core_web/live/data_donation/form.ex:97
 msgid "script.title"
 msgstr "Script"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:104
+#: lib/core_web/live/data_donation/form.ex:109
 msgid "delete.button"
 msgstr "Delete"
 
@@ -92,21 +92,21 @@ msgid "uploader.title"
 msgstr "Data Donation"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:69
+#: lib/core_web/live/data_donation/form.ex:74
 msgid "donations.title"
 msgstr "Received donations"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:88
+#: lib/core_web/live/data_donation/form.ex:93
 msgid "download.all.button.label"
 msgstr "Download all"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:81
+#: lib/core_web/live/data_donation/form.ex:86
 msgid "download.button.label"
 msgstr "Download"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:77
+#: lib/core_web/live/data_donation/form.ex:82
 msgid "received.label"
 msgstr "Received"

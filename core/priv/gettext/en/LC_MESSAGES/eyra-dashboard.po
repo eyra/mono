@@ -12,11 +12,11 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:30
+#: bundles/link/lib/survey/web/overview.ex:35
 msgid "default.study.title"
 msgstr "New study"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:53
+#: lib/core_web/live/dashboard.ex:57
 msgid "recent-items.title"
 msgstr "Recent items:"

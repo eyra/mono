@@ -21,32 +21,32 @@ msgid "back.button.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:221
+#: lib/core_web/live/promotion/form.ex:222
 msgid "banner.subtitle.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:208
+#: lib/core_web/live/promotion/form.ex:209
 msgid "banner.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:220
+#: lib/core_web/live/promotion/form.ex:221
 msgid "banner.title.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:222
+#: lib/core_web/live/promotion/form.ex:223
 msgid "banner.url.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:214
+#: lib/core_web/live/promotion/form.ex:215
 msgid "choose.banner.photo.file"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:215
+#: lib/core_web/live/promotion/form.ex:216
 msgid "choose.other.banner.photo.file"
 msgstr ""
 
@@ -57,7 +57,7 @@ msgid "deadline.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:205
+#: lib/core_web/live/promotion/form.ex:206
 msgid "description.label"
 msgstr ""
 
@@ -67,7 +67,7 @@ msgid "description.public.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:204
+#: lib/core_web/live/promotion/form.ex:205
 msgid "description.title"
 msgstr ""
 
@@ -82,7 +82,7 @@ msgid "duration.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:201
+#: lib/core_web/live/promotion/form.ex:202
 msgid "expectations.label"
 msgstr ""
 
@@ -92,22 +92,22 @@ msgid "expectations.public.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:200
+#: lib/core_web/live/promotion/form.ex:201
 msgid "expectations.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:158
+#: lib/core_web/live/promotion/form.ex:159
 msgid "form.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:189
+#: lib/core_web/live/promotion/form.ex:190
 msgid "image.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:188
+#: lib/core_web/live/promotion/form.ex:189
 msgid "image.title"
 msgstr ""
 
@@ -133,18 +133,18 @@ msgid "open.spots.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:230
+#: lib/core_web/live/promotion/form.ex:231
 msgid "publish.button"
 msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/card.ex:47 bundles/link/lib/card.ex:111
-#: lib/core_web/live/promotion/form.ex:167 lib/core_web/view_model/card.ex:49
+#: lib/core_web/live/promotion/form.ex:168 lib/core_web/view_model/card.ex:49
 msgid "published.false.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core/promotions/promotion.ex:99 lib/core_web/live/promotion/form.ex:164
+#: lib/core/promotions/promotion.ex:99 lib/core_web/live/promotion/form.ex:165
 msgid "published.true.label"
 msgstr ""
 
@@ -155,31 +155,31 @@ msgid "reward.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:195
+#: lib/core_web/live/promotion/form.ex:196
 msgid "search.different.image.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:179
+#: lib/core_web/live/promotion/form.ex:180
 msgid "subtitle.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:183
+#: lib/core_web/live/promotion/form.ex:184
 msgid "themes.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:182
+#: lib/core_web/live/promotion/form.ex:183
 msgid "themes.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:178
+#: lib/core_web/live/promotion/form.ex:179
 msgid "title.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:227
+#: lib/core_web/live/promotion/form.ex:228
 msgid "unpublish.button"
 msgstr ""

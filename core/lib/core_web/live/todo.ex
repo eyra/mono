@@ -43,7 +43,7 @@ defmodule CoreWeb.Todo do
         </div>
 
         <ContentArea>
-          <div :if={{@has_next_actions?}}>
+          <div :if={{@has_next_actions?}} class="flex flex-col gap-6 sm:gap-10">
             <NextAction :for={{action <- @next_actions}} vm={{ action }} />
           </div>
         </ContentArea>

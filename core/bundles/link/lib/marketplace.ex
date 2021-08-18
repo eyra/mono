@@ -13,10 +13,9 @@ defmodule Link.Marketplace do
 
   alias Link.Marketplace.Card, as: CardVM
 
-  alias EyraUI.Spacing
   alias EyraUI.Card.{PrimaryStudy, SecondaryStudy}
   alias EyraUI.Container.{ContentArea}
-  alias EyraUI.Text.{Title2}
+  alias EyraUI.Text.{Title1, Title2}
   alias EyraUI.Grid.{DynamicGrid}
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
@@ -95,27 +94,42 @@ defmodule Link.Marketplace do
           <ContentArea>
             <div :if={{ @next_best_action }}>
               <NextActionHighlight vm={{ @next_best_action }}/>
-              <Spacing value="XL" />
+              <div class="mt-6 lg:mt-10"/>
             </div>
-            <Title2>
-              {{ dgettext("eyra-study", "study.highlighted.title") }}
-              <span class="text-primary"> {{ @highlighted_count }}</span>
-            </Title2>
-            <DynamicGrid>
-              <div :for={{ card <- @subject_studies  }} >
-                <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
+            <div :if={{@highlighted_count > 0}}>
+              <Title2>
+                {{ dgettext("eyra-study", "study.highlighted.title") }}
+                <span class="text-primary"> {{ @highlighted_count }}</span>
+              </Title2>
+            </div>
+            <div :if={{ Enum.count(@subject_studies) > 0}}>
+              <DynamicGrid>
+                <div :for={{ card <- @subject_studies  }} >
+                  <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
+                </div>
+              </DynamicGrid>
+              <div class="mt-6 lg:mt-10"/>
+              <Title2>
+                {{ dgettext("eyra-study", "study.all.title") }}
+                <span class="text-primary"> {{ @available_count }}</span>
+              </Title2>
+              <DynamicGrid>
+                <div :for={{ card <- @available_studies  }} class="mb-1" >
+                  <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
+                </div>
+              </DynamicGrid>
+            </div>
+            <div :if={{ Enum.count(@subject_studies) == 0}} class="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-8">
+              <Title1 margin="">
+                {{ dgettext("eyra-marketplace", "empty.title") }}
+              </Title1>
+              <div class="w-full">
+                <img class="object-fill w-full" src="/images/illustrations/studies.svg" />
               </div>
-            </DynamicGrid>
-            <div class="mt-12 lg:mt-16"/>
-            <Title2>
-              {{ dgettext("eyra-study", "study.all.title") }}
-              <span class="text-primary"> {{ @available_count }}</span>
-            </Title2>
-            <DynamicGrid>
-              <div :for={{ card <- @available_studies  }} class="mb-1" >
-                <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
+              <div class="text-bodymedium sm:text-bodylarge font-body">
+                {{ dgettext("eyra-marketplace", "empty.description") }}
               </div>
-            </DynamicGrid>
+            </div>
           </ContentArea>
         </Workspace>
     """
