@@ -51,63 +51,62 @@ defmodule Core.SurfConext.FakeOIDC do
   end
 end
 
-# Temp disable test due to 503:
-#
-# defmodule Core.SurfConext.AuthorizePlug.Test do
-#   use ExUnit.Case, async: false
-#   use Plug.Test
-#   alias Core.SurfConext.AuthorizePlug
+defmodule Core.SurfConext.AuthorizePlug.Test do
+  use ExUnit.Case, async: false
+  use Plug.Test
+  alias Core.SurfConext.AuthorizePlug
 
-#   describe "call/1" do
-#       test "redirects to SurfConext login page" do
-#         domain = Faker.Internet.domain_name()
-
-#         Application.put_env(:test, Core.SurfConext,
-#           client_id: domain,
-#           client_secret: Faker.Lorem.sentence(),
-#           site: "https://connect.test.surfconext.nl",
-#           redirect_uri: "https://#{domain}/surfconext/auth"
-#         )
-
-#       conn =
-#         conn(:get, "/surfconext/auth")
-#         |> init_test_session(%{})
-#         |> AuthorizePlug.call(:test)
-
-#       assert conn.private.plug_session["surfconext"]
-#       assert conn.status == 302
-#       [location] = get_resp_header(conn, "location")
-#       assert String.starts_with?(location, "https://connect.test.surfconext.nl")
-#       end
-#   end
-# end
-
-defmodule Core.SurfConext.CallbackController.Test do
-  use CoreWeb.ConnCase, async: false
-
-  describe "authenticate/1" do
-    setup do
-      conf = Application.get_env(:core, Core.SurfConext, [])
-
-      on_exit(fn ->
-        Application.put_env(:core, Core.SurfConext, conf)
-      end)
-
+  describe "call/1" do
+    test "redirects to SurfConext login page" do
       domain = Faker.Internet.domain_name()
 
-      test_conf = [
+      Application.put_env(:test, Core.SurfConext,
         client_id: domain,
         client_secret: Faker.Lorem.sentence(),
         site: "https://connect.test.surfconext.nl",
         redirect_uri: "https://#{domain}/surfconext/auth",
         oidc_module: Core.SurfConext.FakeOIDC
-      ]
+      )
 
-      Application.put_env(:core, Core.SurfConext, test_conf)
+      conn =
+        conn(:get, "/surfconext/auth")
+        |> init_test_session(%{})
+        |> AuthorizePlug.call(:test)
 
-      {:ok, conn: build_conn(), conf: test_conf}
+      assert conn.private.plug_session["surfconext"]
+      assert conn.status == 302
+      [location] = get_resp_header(conn, "location")
+      assert String.starts_with?(location, "https://connect.test.surfconext.nl")
     end
+  end
+end
 
+defmodule Core.SurfConext.CallbackController.Test do
+  use CoreWeb.ConnCase, async: false
+
+  setup do
+    conf = Application.get_env(:core, Core.SurfConext, [])
+
+    on_exit(fn ->
+      Application.put_env(:core, Core.SurfConext, conf)
+    end)
+
+    domain = Faker.Internet.domain_name()
+
+    test_conf = [
+      client_id: domain,
+      client_secret: Faker.Lorem.sentence(),
+      site: "https://connect.test.surfconext.nl",
+      redirect_uri: "https://#{domain}/surfconext/auth",
+      oidc_module: Core.SurfConext.FakeOIDC
+    ]
+
+    Application.put_env(:core, Core.SurfConext, test_conf)
+
+    {:ok, conn: build_conn(), conf: test_conf}
+  end
+
+  describe "authenticate/1" do
     test "creates a user", %{conn: conn} do
       conn = conn |> get("/surfconext/auth")
       assert redirected_to(conn) == "/marketplace"
