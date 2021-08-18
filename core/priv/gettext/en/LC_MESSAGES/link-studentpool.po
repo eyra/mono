@@ -10,3 +10,38 @@ msgid ""
 msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: bundles/link/lib/student_pool/overview.ex:38
+msgid "tabbar.item.students"
+msgstr "Students"
+
+#, elixir-format
+#: bundles/link/lib/student_pool/overview.ex:45
+msgid "tabbar.item.studies"
+msgstr "Studies"
+
+#, elixir-format
+#: bundles/link/lib/student_pool/overview.ex:56
+msgid "title"
+msgstr "Student pool"
+
+#, elixir-format
+#: bundles/link/lib/student_pool/students.ex:16
+msgid "students.empty.description"
+msgstr "There are currently no registered students. You will be notified as soon as students have signed up."
+
+#, elixir-format
+#: bundles/link/lib/student_pool/students.ex:15
+msgid "students.empty.title"
+msgstr "Students participating in this pool will appear here"
+
+#, elixir-format
+#: bundles/link/lib/student_pool/studies.ex:16
+msgid "studies.empty.description"
+msgstr "There are currently no research studies available. You will be notified as soon as studies have been enrolled in this pool."
+
+#, elixir-format
+#: bundles/link/lib/student_pool/studies.ex:15
+msgid "studies.empty.title"
+msgstr "Research studies enrolled in this pool will appear here"

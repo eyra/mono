@@ -12,11 +12,6 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/student_pool.ex:22
-msgid "title"
-msgstr "Studentenpool"
-
-#, elixir-format
 #: translations.ex:2
 msgid "menu.item.labstudies"
 msgstr "Labstudies"

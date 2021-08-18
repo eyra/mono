@@ -12,25 +12,16 @@ defmodule CoreWeb.Empty do
 
   def render(assigns) do
     ~H"""
-      <div class="md:hidden grid grid-cols-1 gap-x-10 gap-y-8">
-        <Title1>{{ @title }}</Title1>
-        <div class="w-full">
-          <img class="object-fill w-full" src="/images/illustrations/{{@illustration}}.svg" />
-        </div>
-        <div class="text-bodymedium sm:text-bodylarge font-body">
-          {{ @body }}
-        </div>
-      </div>
-
-      <div class="hidden md:grid grid-cols-2 gap-x-10 gap-y-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
         <div>
           <Title1>{{ @title }}</Title1>
           <div class="text-bodymedium sm:text-bodylarge font-body">
             {{ @body }}
           </div>
         </div>
-        <div class="w-full">
-          <img class="object-fill w-full" src="/images/illustrations/{{@illustration}}.svg" />
+        <div class="w-full mt-6 md:mt-0">
+          <img class="hidden md:block object-fill w-full" src="/images/illustrations/{{@illustration}}.svg" />
+          <img class="md:hidden object-fill w-full" src="/images/illustrations/{{@illustration}}_mobile.svg" />
         </div>
       </div>
     """

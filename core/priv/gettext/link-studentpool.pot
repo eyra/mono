@@ -9,3 +9,38 @@
 ## effect: edit them in PO (.po) files instead.
 msgid ""
 msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/student_pool/overview.ex:38
+msgid "tabbar.item.students"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/student_pool/overview.ex:45
+msgid "tabbar.item.studies"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/student_pool/overview.ex:56
+msgid "title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/student_pool/students.ex:16
+msgid "students.empty.description"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/student_pool/students.ex:15
+msgid "students.empty.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/student_pool/studies.ex:16
+msgid "studies.empty.description"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/student_pool/studies.ex:15
+msgid "studies.empty.title"
+msgstr ""

@@ -11,7 +11,9 @@ defmodule Link.Onboarding.Welcome do
   data title, :any
 
   def update(%{id: id, user: user}, socket) do
-    title = dgettext("link-ui", "onboarding.welcome.title", member: user.displayname)
+    user.displayname |> IO.inspect(label: "USER DISPLAY NAME")
+
+    title = dgettext("link-ui", "onboarding.welcome.title", member: user.displayname || "")
 
     {
       :ok,

@@ -12,11 +12,6 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/student_pool.ex:22
-msgid "title"
-msgstr "Student pool"
-
-#, elixir-format
 #: translations.ex:2
 msgid "menu.item.labstudies"
 msgstr "Lab studies"
@@ -39,7 +34,7 @@ msgstr "Walk thought the next steps to be able to participate in research studie
 #, elixir-format
 #: bundles/link/lib/onboarding/welcome.ex:14
 msgid "onboarding.welcome.title"
-msgstr "Welcome ${member}"
+msgstr "Welcome %{member}"
 
 #, elixir-format
 #: bundles/link/lib/debug.ex:54
