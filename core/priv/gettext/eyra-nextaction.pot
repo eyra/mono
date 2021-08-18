@@ -26,31 +26,31 @@ msgid "complete.profile.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core/accounts/next_actions/promote_push_student.ex:12
+#: lib/core/accounts/next_actions/promote_push_student.ex:11
 msgid "promote.push.student.cta"
 msgstr ""
 
 #, elixir-format
-#: lib/core/accounts/next_actions/promote_push_student.ex:11
+#: lib/core/accounts/next_actions/promote_push_student.ex:10
 msgid "promote.push.student.description"
 msgstr ""
 
 #, elixir-format
-#: lib/core/accounts/next_actions/promote_push_student.ex:10
+#: lib/core/accounts/next_actions/promote_push_student.ex:9
 msgid "promote.push.student.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core/accounts/next_actions/select_study_student.ex:12
+#: lib/core/accounts/next_actions/select_study_student.ex:11
 msgid "select.study.student.cta"
 msgstr ""
 
 #, elixir-format
-#: lib/core/accounts/next_actions/select_study_student.ex:11
+#: lib/core/accounts/next_actions/select_study_student.ex:10
 msgid "select.study.student.description"
 msgstr ""
 
 #, elixir-format
-#: lib/core/accounts/next_actions/select_study_student.ex:10
+#: lib/core/accounts/next_actions/select_study_student.ex:9
 msgid "select.study.student.title"
 msgstr ""

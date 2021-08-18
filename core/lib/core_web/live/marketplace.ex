@@ -158,7 +158,7 @@ defmodule CoreWeb.Marketplace do
                 event="create_tool" />
             </div>
           </DynamicGrid>
-          <div class="mt-12 lg:mt-16"/>
+          <div class="mt-6 lg:mt-10"/>
           <Title2>
             {{ dgettext("eyra-marketplace", "marketplace.title") }}
             <span class="text-primary"> {{ @available_count }}</span>

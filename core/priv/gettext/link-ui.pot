@@ -11,11 +11,6 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/student_pool.ex:17
-msgid "title"
-msgstr ""
-
-#, elixir-format
 #: bundles/link/lib/menu/items-translations.ex:2
 msgid "menu.item.labstudies"
 msgstr ""
@@ -41,6 +36,6 @@ msgid "onboarding.welcome.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/debug.ex:22
+#: bundles/link/lib/debug.ex:54
 msgid "debug.title"
 msgstr ""

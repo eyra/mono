@@ -10,3 +10,38 @@ msgid ""
 msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: bundles/link/lib/student_pool/overview.ex:38
+msgid "tabbar.item.students"
+msgstr "Studenten"
+
+#, elixir-format
+#: bundles/link/lib/student_pool/overview.ex:45
+msgid "tabbar.item.studies"
+msgstr "Studies"
+
+#, elixir-format
+#: bundles/link/lib/student_pool/overview.ex:56
+msgid "title"
+msgstr "Studentenpool"
+
+#, elixir-format
+#: bundles/link/lib/student_pool/students.ex:16
+msgid "students.empty.description"
+msgstr "Op dit moment zijn er nog geen studenten geregistreerd. Je wordt op de hoogte gesteld zodra er studenten zijn die zich  hebben aangemeld."
+
+#, elixir-format
+#: bundles/link/lib/student_pool/students.ex:15
+msgid "students.empty.title"
+msgstr "Hier vind je straks alle geregistreerde studenten."
+
+#, elixir-format
+#: bundles/link/lib/student_pool/studies.ex:16
+msgid "studies.empty.description"
+msgstr "Op dit moment zijn er nog geen onderzoeksstudies aangemeld voor de pool. Je wordt op de hoogte gesteld zodra er studies beschikbaar zijn."
+
+#, elixir-format
+#: bundles/link/lib/student_pool/studies.ex:15
+msgid "studies.empty.title"
+msgstr "Hier vind je straks alle onderzoeksstudies uit deze pool."

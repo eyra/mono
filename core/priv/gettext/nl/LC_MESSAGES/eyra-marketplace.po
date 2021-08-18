@@ -12,26 +12,36 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:140
+#: lib/core_web/live/marketplace.ex:144
 msgid "highlighted.title"
 msgstr "Mijn studies"
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:152
+#: lib/core_web/live/marketplace.ex:156
 msgid "add.card.title"
 msgstr "Nieuwe studie"
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:92
+#: lib/core_web/live/marketplace.ex:98
 msgid "default.study.title"
 msgstr "Nieuwe studie"
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:159
+#: lib/core_web/live/marketplace.ex:163
 msgid "marketplace.title"
 msgstr "Marktplaats"
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:133
+#: lib/core_web/live/marketplace.ex:139
 msgid "title"
 msgstr "Marktplaats"
+
+#, elixir-format
+#: bundles/link/lib/marketplace.ex:127
+msgid "empty.description"
+msgstr "Momenteel zijn er geen onderzoeksstudies beschikbaar. Zodra er een onderzoeksstudie voor jou beschikbaar komt, wordt deze hier toegevoegd en ontvang je een email."
+
+#, elixir-format
+#: bundles/link/lib/marketplace.ex:126
+msgid "empty.title"
+msgstr "Hier vind je straks studies om aan mee te doen"

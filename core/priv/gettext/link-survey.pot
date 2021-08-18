@@ -11,22 +11,22 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:110
+#: bundles/link/lib/survey/web/form.ex:107
 msgid "config.nrofsubjects.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:101
+#: bundles/link/lib/survey/web/form.ex:98
 msgid "config.url.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:119
+#: bundles/link/lib/survey/web/form.ex:116
 msgid "delete.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:104
+#: bundles/link/lib/survey/web/form.ex:101
 msgid "duration.label"
 msgstr ""
 
@@ -72,7 +72,7 @@ msgid "conpleted.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:114
+#: bundles/link/lib/survey/web/form.ex:111
 msgid "devices.label"
 msgstr ""
 
@@ -82,27 +82,27 @@ msgid "open.cta.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:95
+#: bundles/link/lib/survey/web/form.ex:92
 msgid "redirect.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:94
+#: bundles/link/lib/survey/web/form.ex:91
 msgid "redirect.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:107
+#: bundles/link/lib/survey/web/form.ex:104
 msgid "reward.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:113
+#: bundles/link/lib/survey/web/form.ex:110
 msgid "devices.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:97
+#: bundles/link/lib/survey/web/form.ex:94
 msgid "redirect.label"
 msgstr ""
 
@@ -132,11 +132,31 @@ msgid "status.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:92
+#: bundles/link/lib/survey/web/content.ex:99
 msgid "content.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:72
+#: bundles/link/lib/survey/web/overview.ex:81
 msgid "title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:96
+msgid "add.first.button"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:87
+msgid "add.new.button"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:92
+msgid "empty.description"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:91
+msgid "empty.title"
 msgstr ""

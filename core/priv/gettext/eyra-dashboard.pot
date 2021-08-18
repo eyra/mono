@@ -11,11 +11,21 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:30
+#: bundles/link/lib/survey/web/overview.ex:39
 msgid "default.study.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:53
+#: lib/core_web/live/dashboard.ex:57
 msgid "recent-items.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:63
+msgid "empty.description"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:62
+msgid "empty.title"
 msgstr ""

@@ -6,7 +6,8 @@ defmodule EyraUI.Container.ContentArea do
 
   @doc "The content"
   slot(default, required: true)
-  prop(top_padding, :css_class, default: "pt-6 md:pt-9 lg:pt-20")
+
+  prop(top_padding, :string, default: "pt-6 md:pt-8 lg:pt-14")
 
   def render(assigns) do
     ~H"""

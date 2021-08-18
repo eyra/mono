@@ -61,9 +61,8 @@ defmodule Core.Accounts.SignalHandlers do
   @impl true
   def dispatch(:user_created, %{user: user}) do
     if user.student do
-      if not Accounts.visited?(user, :settings) do
-        NextActions.create_next_action(user, PromotePushStudent)
-      end
+      NextActions.create_next_action(user, SelectStudyStudent)
+      NextActions.create_next_action(user, PromotePushStudent)
     end
 
     Email.account_created(user)

@@ -5,15 +5,19 @@ defmodule Link.Survey.Overview do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :surveys
 
+  alias CoreWeb.Empty
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias EyraUI.Container.ContentArea
   alias EyraUI.Button.PrimaryLiveViewButton
+  alias EyraUI.Spacing
   alias Core.Studies
   alias Core.Studies.Study
   alias Core.Accounts
   alias Core.Survey.Tools
   alias Core.Content
   alias Core.Promotions
+
+  data(surveys, :map, default: [])
 
   def mount(_params, _session, socket) do
     {:ok, socket |> update_menus()}
@@ -78,7 +82,20 @@ defmodule Link.Survey.Overview do
         menus={{ @menus }}
       >
         <ContentArea>
-          <PrimaryLiveViewButton label="Add" event="create_tool"/>
+          <Case value={{ Enum.count(@surveys) > 0 }} >
+          <True>
+            <PrimaryLiveViewButton label={{ dgettext("link-survey", "add.new.button") }} event="create_tool"/>
+          </True>
+          <False>
+            <Empty
+              title={{ dgettext("link-survey", "empty.title") }}
+              body={{ dgettext("link-survey", "empty.description") }}
+              illustration="cards"
+            />
+            <Spacing value="L" />
+            <PrimaryLiveViewButton label={{ dgettext("link-survey", "add.first.button") }} event="create_tool"/>
+          </False>
+          </Case>
         </ContentArea>
       </Workspace>
     """

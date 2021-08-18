@@ -10,7 +10,7 @@ defmodule CoreWeb.User.Forms.Profile do
 
   alias EyraUI.Spacing
   alias EyraUI.Text.{Title2}
-  alias EyraUI.Form.{Form, TextInput, UrlInput, Checkbox, PhotoInput}
+  alias EyraUI.Form.{Form, TextInput, UrlInput, PhotoInput}
   alias EyraUI.Container.{ContentArea, FormArea}
 
   prop(user, :any, required: true)
@@ -114,8 +114,6 @@ defmodule CoreWeb.User.Forms.Profile do
               <TextInput field={{:title}} label_text={{dgettext("eyra-account", "professionaltitle.label")}} target={{@myself}} />
               <UrlInput field={{:url}} label_text={{dgettext("eyra-account", "website.label")}} target={{@myself}} />
             </div>
-            <Checkbox field={{:researcher}} label_text={{dgettext("eyra-account", "researcher.label")}}/>
-            <Checkbox field={{:student}} label_text={{dgettext("eyra-account", "student.label")}}/>
           </Form>
         </FormArea>
       </ContentArea>

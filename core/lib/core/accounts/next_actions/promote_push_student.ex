@@ -6,7 +6,6 @@ defmodule Core.Accounts.NextActions.PromotePushStudent do
   @impl Core.NextActions.ViewModel
   def to_view_model(url_resolver, _count, _params) do
     %{
-      type: __MODULE__,
       title: dgettext("eyra-nextaction", "promote.push.student.title"),
       description: dgettext("eyra-nextaction", "promote.push.student.description"),
       cta: dgettext("eyra-nextaction", "promote.push.student.cta"),

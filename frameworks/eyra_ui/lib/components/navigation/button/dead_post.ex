@@ -1,8 +1,7 @@
-defmodule EyraUI.Navigation.Dead do
+defmodule EyraUI.Navigation.DeadPost do
   use Surface.Component
 
   prop(path, :string, required: true)
-  prop(method, :string, required: true)
 
   slot(default, required: true)
 
@@ -12,7 +11,7 @@ defmodule EyraUI.Navigation.Dead do
         class="cursor-pointer"
         href={{ @path }}
         data-to={{ @path }}
-        data-method={{ @method }}
+        data-method="post"
         data-csrf={{ Plug.CSRFProtection.get_csrf_token_for(@path) }}
       >
         <slot />

@@ -11,7 +11,9 @@ defmodule Link.Onboarding.Welcome do
   data title, :any
 
   def update(%{id: id, user: user}, socket) do
-    title = dgettext("link-ui", "onboarding.welcome.title", member: user.displayname)
+    user.displayname |> IO.inspect(label: "USER DISPLAY NAME")
+
+    title = dgettext("link-ui", "onboarding.welcome.title", member: user.displayname || "")
 
     {
       :ok,
@@ -28,7 +30,7 @@ defmodule Link.Onboarding.Welcome do
         <SheetArea>
           <div class="flex flex-col items-center">
             <div class="mb-8 sm:mb-16">
-              <img src="/images/illustrations/studies.svg" />
+              <img src="/images/illustrations/cards.svg" />
             </div>
             <Title2>{{ @title }}</Title2>
             <div class="sm:px-2 text-center text-bodymedium sm:text-bodylarge font-body">

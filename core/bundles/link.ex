@@ -11,10 +11,9 @@ defmodule Link do
       scope "/", Link do
         pipe_through([:browser, :require_authenticated_user])
         live("/debug", Debug)
-        live("/profile", User.Web.Profile)
         live("/dashboard", Dashboard)
         live("/onboarding", Onboarding.Wizard)
-        live("/studentpool", StudentPool)
+        live("/studentpool", StudentPool.Overview)
         live("/marketplace", Marketplace)
         live("/labstudy/all", LabStudy.Overview)
         live("/survey/all", Survey.Overview)
@@ -28,10 +27,9 @@ defmodule Link do
     quote do
       grant_access(Link.Debug, [:visitor, :member])
       grant_access(Link.Index, [:visitor, :member])
-      grant_access(Link.User.Web.Profile, [:member])
       grant_access(Link.Dashboard, [:researcher])
       grant_access(Link.Onboarding.Wizard, [:member])
-      grant_access(Link.StudentPool, [:researcher])
+      grant_access(Link.StudentPool.Overview, [:researcher])
       grant_access(Link.Marketplace, [:member])
       grant_access(Link.LabStudy.Overview, [:researcher])
       grant_access(Link.Survey.Overview, [:member])

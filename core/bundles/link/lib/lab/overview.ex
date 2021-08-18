@@ -5,8 +5,14 @@ defmodule Link.LabStudy.Overview do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :labstudies
 
+  alias CoreWeb.Empty
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
+
+  alias EyraUI.Spacing
   alias EyraUI.Container.ContentArea
+  alias EyraUI.Button.PrimaryLiveViewButton
+
+  data(labstudies, :map, default: [])
 
   def mount(_params, _session, socket) do
     {:ok, socket |> update_menus()}
@@ -23,7 +29,20 @@ def handle_auto_save_done(socket) do
         menus={{ @menus }}
       >
         <ContentArea>
-          <div>TBD</div>
+          <Case value={{ Enum.count(@labstudies) > 0 }} >
+            <True>
+              <PrimaryLiveViewButton label={{ dgettext("link-labstudies", "add.new.button") }} event="create_tool"/>
+            </True>
+            <False>
+              <Empty
+                title={{ dgettext("link-labstudies", "empty.title") }}
+                body={{ dgettext("link-labstudies", "empty.description") }}
+                illustration="cards"
+              />
+              <Spacing value="L" />
+              <PrimaryLiveViewButton label={{ dgettext("link-labstudies", "add.first.button") }} event="create_tool"/>
+            </False>
+          </Case>
         </ContentArea>
       </Workspace>
     """
