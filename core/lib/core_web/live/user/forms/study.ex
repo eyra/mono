@@ -1,19 +1,16 @@
 defmodule CoreWeb.User.Forms.Study do
   use CoreWeb.LiveForm
 
-  import CoreWeb.Gettext
-
   alias Core.Enums.StudyProgramCodes
   alias Core.Accounts
   alias Core.Accounts.Features
 
   alias EyraUI.Selector.Selector
-  alias EyraUI.Spacing
   alias EyraUI.Text.{Title2, BodyMedium}
-  alias EyraUI.Container.{ContentArea, FormArea}
 
-  prop(user, :any, required: true)
+  prop(props, :any, required: true)
 
+  data(user, :any)
   data(entity, :any)
   data(study_labels, :any)
 
@@ -33,7 +30,7 @@ defmodule CoreWeb.User.Forms.Study do
     {:ok, socket}
   end
 
-  def update(%{id: id, user: user}, socket) do
+  def update(%{id: id, props: %{user: user}}, socket) do
     entity = Accounts.get_features(user)
 
     study_labels = StudyProgramCodes.labels(entity.study_program_codes)
@@ -70,7 +67,8 @@ defmodule CoreWeb.User.Forms.Study do
 
   def render(assigns) do
     ~H"""
-      <ContentArea top_padding="pt-6 sm:pt-14">
+      <ContentArea>
+        <MarginY id={{:page_top}} />
         <FormArea>
           <Title2>{{dgettext("eyra-account", "features.study.title")}}</Title2>
           <BodyMedium>{{dgettext("eyra-account", "feature.study.description")}}</BodyMedium>

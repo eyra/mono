@@ -1,8 +1,8 @@
-defmodule CoreWeb.Empty do
+defmodule CoreWeb.UI.Empty do
   @moduledoc """
   A line.
   """
-  use Surface.Component
+  use CoreWeb.UI.Component
 
   alias EyraUI.Text.Title1
 

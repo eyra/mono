@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:111
+#: lib/core_web/live/user/forms/profile.ex:112
 msgid "displayname.label"
 msgstr "Display name"
 
@@ -22,7 +22,7 @@ msgid "email.label"
 msgstr "Email"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:110
+#: lib/core_web/live/user/forms/profile.ex:111
 msgid "fullname.label"
 msgstr "Full name"
 
@@ -32,7 +32,7 @@ msgid "password.label"
 msgstr "Password"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:98
+#: lib/core_web/live/user/forms/profile.ex:99
 msgid "profile.title"
 msgstr "My profile"
 
@@ -67,22 +67,22 @@ msgid "confirm.token.resend_button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:105
+#: lib/core_web/live/user/forms/profile.ex:106
 msgid "choose.profile.photo.file"
 msgstr "Choose photo"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:106
+#: lib/core_web/live/user/forms/profile.ex:107
 msgid "choose.other.profile.photo.file"
 msgstr "Choose other photo"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:114
+#: lib/core_web/live/user/forms/profile.ex:115
 msgid "professionaltitle.label"
 msgstr "Professional title"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:115
+#: lib/core_web/live/user/forms/profile.ex:116
 msgid "website.label"
 msgstr "Website"
 
@@ -122,36 +122,36 @@ msgid "push.registration.test.button"
 msgstr "Send test notification"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/study.ex:76
+#: lib/core_web/live/user/forms/study.ex:77
 msgid "feature.study.description"
 msgstr "Multiple programs can be selected. Choose the resit variant if you (also) need to apply for previous year tasks."
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:91
+#: lib/core_web/live/user/forms/features.ex:92
 msgid "features.description"
 msgstr "Selected characteristics will be used to show in you research studies in the marketplace that require specific participant traits."
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:102
+#: lib/core_web/live/user/forms/features.ex:103
 msgid "features.dominanthand.title"
 msgstr "Dominant hand"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:94
+#: lib/core_web/live/user/forms/features.ex:95
 msgid "features.gender.title"
 msgstr "Gender"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:98
+#: lib/core_web/live/user/forms/features.ex:99
 msgid "features.nativelanguage.title"
 msgstr "Native language"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/study.ex:75
+#: lib/core_web/live/user/forms/study.ex:76
 msgid "features.study.title"
 msgstr "Study program"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:90
+#: lib/core_web/live/user/forms/features.ex:91
 msgid "features.title"
 msgstr "Characteristics"

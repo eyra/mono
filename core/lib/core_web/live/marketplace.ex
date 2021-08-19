@@ -18,7 +18,6 @@ defmodule CoreWeb.Marketplace do
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias EyraUI.Card.{PrimaryStudy, SecondaryStudy, ButtonCard}
-  alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title2}
   alias EyraUI.Grid.{DynamicGrid}
 
@@ -140,6 +139,7 @@ defmodule CoreWeb.Marketplace do
         menus={{ @menus }}
       >
         <ContentArea>
+          <MarginY id={{:page_top}} />
           <Title2>
             {{ dgettext("eyra-marketplace", "highlighted.title") }}
             <span class="text-primary"> {{ @highlighted_count }}</span>

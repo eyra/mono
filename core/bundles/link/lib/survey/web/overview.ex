@@ -5,11 +5,8 @@ defmodule Link.Survey.Overview do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :surveys
 
-  alias CoreWeb.Empty
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias EyraUI.Container.ContentArea
   alias EyraUI.Button.PrimaryLiveViewButton
-  alias EyraUI.Spacing
   alias Core.Studies
   alias Core.Studies.Study
   alias Core.Accounts
@@ -64,6 +61,7 @@ defmodule Link.Survey.Overview do
   end
 
   defp create_promotion_attrs(title, user, profile) do
+    image_id = List.first(Core.ImageCatalog.Unsplash.random(1))
     %{
       title: title,
       marks: ["vu"],
@@ -71,7 +69,8 @@ defmodule Link.Survey.Overview do
       banner_photo_url: profile.photo_url,
       banner_title: user.displayname,
       banner_subtitle: profile.title,
-      banner_url: profile.url
+      banner_url: profile.url,
+      image_id: image_id
     }
   end
 
@@ -82,6 +81,7 @@ defmodule Link.Survey.Overview do
         menus={{ @menus }}
       >
         <ContentArea>
+          <MarginY id={{:page_top}} />
           <Case value={{ Enum.count(@surveys) > 0 }} >
           <True>
             <PrimaryLiveViewButton label={{ dgettext("link-survey", "add.new.button") }} event="create_tool"/>

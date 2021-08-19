@@ -5,7 +5,6 @@ defmodule CoreWeb.Lab.Public do
   use CoreWeb, :live_view
   alias Core.Lab.Tools
 
-  alias EyraUI.Container.ContentArea
   data(reservation, :any, default: nil)
 
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
@@ -41,6 +40,7 @@ defmodule CoreWeb.Lab.Public do
   def render(assigns) do
     ~H"""
       <ContentArea>
+        <MarginY id={{:page_top}} />
         <div :if={{@reservation}}>
           You have made a reservation
           <button :on-click="cancel-reservation" data-confirm="Are you sure you want to cancel the reservation?">Cancel</button>

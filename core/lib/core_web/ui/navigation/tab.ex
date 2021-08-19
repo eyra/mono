@@ -1,6 +1,6 @@
-defmodule EyraUI.Navigation.Tab do
+defmodule CoreWeb.UI.Navigation.Tab do
   @moduledoc false
-  use Surface.Component
+  use CoreWeb.UI.Component
 
   prop(index, :integer, required: true)
 

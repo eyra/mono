@@ -12,12 +12,10 @@ defmodule Link.Marketplace do
   alias Core.Lab.Tool, as: LabTool
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias CoreWeb.Empty
 
   alias Link.Marketplace.Card, as: CardVM
 
   alias EyraUI.Card.{PrimaryStudy, SecondaryStudy}
-  alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title2}
   alias EyraUI.Grid.{DynamicGrid}
 
@@ -93,6 +91,7 @@ defmodule Link.Marketplace do
           menus={{ @menus }}
         >
           <ContentArea>
+            <MarginY id={{:page_top}} />
             <div :if={{ @next_best_action }}>
               <NextActionHighlight vm={{ @next_best_action }}/>
               <div class="mt-6 lg:mt-10"/>

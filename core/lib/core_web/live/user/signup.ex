@@ -7,7 +7,6 @@ defmodule CoreWeb.User.Signup do
   alias Surface.Components.Form
   alias EyraUI.Form.{EmailInput, PasswordInput}
   alias EyraUI.Button.{SubmitWideButton, LinkButton}
-  alias EyraUI.Container.{ContentArea, FormArea}
   alias EyraUI.Text.Title2
 
   alias Core.Accounts
@@ -60,6 +59,7 @@ defmodule CoreWeb.User.Signup do
   def render(assigns) do
     ~H"""
       <ContentArea>
+        <MarginY id={{:page_top}} />
         <FormArea>
           <Title2>{{dgettext "eyra-account", "signup.title"}}</Title2>
           <div x-data="{ focus: '{{@focus}}' }">

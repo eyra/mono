@@ -1,7 +1,7 @@
 defmodule CoreWeb.Devices do
   @moduledoc """
   """
-  use Surface.Component
+  use CoreWeb.UI.Component
 
   prop(devices, :any, required: true)
   prop(label, :string, required: true)

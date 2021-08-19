@@ -12,22 +12,22 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:107
+#: bundles/link/lib/survey/web/form.ex:109
 msgid "config.nrofsubjects.label"
 msgstr "Number of required subjects"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:98
+#: bundles/link/lib/survey/web/form.ex:100
 msgid "config.url.label"
 msgstr "Public web link of your survey"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:116
+#: bundles/link/lib/survey/web/form.ex:118
 msgid "delete.button"
 msgstr "Delete survey"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:101
+#: bundles/link/lib/survey/web/form.ex:103
 msgid "duration.label"
 msgstr "Estimated duration"
 
@@ -73,7 +73,7 @@ msgid "conpleted.title"
 msgstr "Completed"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:111
+#: bundles/link/lib/survey/web/form.ex:113
 msgid "devices.label"
 msgstr "Select one or more devices that can be used by the participant to fill in the survey."
 
@@ -83,57 +83,57 @@ msgid "open.cta.title"
 msgstr "Go to survey"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:92
+#: bundles/link/lib/survey/web/form.ex:94
 msgid "redirect.description"
 msgstr "Below you can find the redirect url for your survey. This should be used to redirect participants back at the end of the survey to complete the work. Copy the redirect url and go to your survey on the platform of your choice. Paste the url at the appropriate location."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:91
+#: bundles/link/lib/survey/web/form.ex:93
 msgid "redirect.title"
 msgstr "Connect your survey"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:104
+#: bundles/link/lib/survey/web/form.ex:106
 msgid "reward.label"
 msgstr "Credits in euro cents"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:110
+#: bundles/link/lib/survey/web/form.ex:112
 msgid "devices.title"
 msgstr "Devices"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:94
+#: bundles/link/lib/survey/web/form.ex:96
 msgid "redirect.label"
 msgstr "Redirect url"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:19
+#: bundles/link/lib/survey/web/monitor.ex:46
 msgid "completed.label"
 msgstr "Completed tasks"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:20
+#: bundles/link/lib/survey/web/monitor.ex:47
 msgid "pending.label"
 msgstr "Participants working"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:16
+#: bundles/link/lib/survey/web/monitor.ex:43
 msgid "status.title"
 msgstr "Panel"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:21
+#: bundles/link/lib/survey/web/monitor.ex:48
 msgid "vacant.label"
 msgstr "Open spots"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:17
+#: bundles/link/lib/survey/web/monitor.ex:44
 msgid "status.label"
 msgstr "Below you can keep an eye on the progress of the tasks"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:99
+#: bundles/link/lib/survey/web/content.ex:151
 msgid "content.title"
 msgstr "Survey"
 
@@ -161,3 +161,43 @@ msgstr "There are currently no surveys created by you. As soon as a you create o
 #: bundles/link/lib/survey/web/overview.ex:91
 msgid "empty.title"
 msgstr "Surveys you create will appear here"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:101
+msgid "tabbar.item.monitor"
+msgstr "Participants"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:90
+msgid "tabbar.item.promotion"
+msgstr "Promotion"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:77
+msgid "tabbar.item.survey"
+msgstr "Survey"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/monitor.ex:53
+msgid "monitor.empty.description"
+msgstr "After publication of this study this page will present an overview of the participants that applied and their status."
+
+#, elixir-format
+#: bundles/link/lib/survey/web/monitor.ex:52
+msgid "monitor.empty.title"
+msgstr "Information about the participants will appear here"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:91
+msgid "tabbar.item.promotion.forward"
+msgstr "Create promotion"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:78
+msgid "tabbar.item.survey.forward"
+msgstr "Create survey"
+
+#, elixir-format, fuzzy
+#: bundles/link/lib/survey/web/content.ex:102
+msgid "tabbar.item.monitor.forward"
+msgstr "View participants"

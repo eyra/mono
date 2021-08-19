@@ -5,9 +5,7 @@ defmodule CoreWeb.DataDonation.Uploader do
 
   alias EyraUI.Hero.HeroSmall
   alias EyraUI.Text.{Title3, Title4, BodyLarge, BodyMedium}
-  alias EyraUI.Spacing
   alias EyraUI.Panel.Panel
-  alias EyraUI.Container.{ContentArea}
 
   data(result, :any)
   data(tool, :any)
@@ -42,6 +40,7 @@ defmodule CoreWeb.DataDonation.Uploader do
     ~H"""
     <HeroSmall title={{ dgettext("eyra-data-donation", "uploader.title") }} />
     <ContentArea>
+      <MarginY id={{:page_top}} />
       <div id="controls" phx-hook="PythonUploader">
         <Title3>Step 1: Download from Google</Title3>
         <BodyLarge>Go to the

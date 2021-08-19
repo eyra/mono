@@ -1,16 +1,12 @@
 defmodule CoreWeb.DataDonation.Form do
   use CoreWeb.LiveForm
 
-  import CoreWeb.Gettext
-
   alias Core.DataDonation.{Tools, Tool}
 
   alias CoreWeb.Router.Helpers, as: Routes
 
-  alias EyraUI.Spacing
   alias EyraUI.Text.{Title2, Title3}
   alias EyraUI.Form.{Form, TextArea, NumberInput}
-  alias EyraUI.Container.{ContentArea}
   alias EyraUI.Button.{SecondaryLiveViewButton, PrimaryButton}
   alias EyraUI.Panel.Panel
   alias EyraUI.Timestamp
@@ -70,6 +66,7 @@ defmodule CoreWeb.DataDonation.Form do
   def render(assigns) do
     ~H"""
       <ContentArea>
+        <MarginY id={{:page_top}} />
         <div :if={{ Enum.count(@donations) > 0 }}>
           <Title2>{{dgettext("eyra-data-donation", "donations.title")}}</Title2>
           <Panel bg_color="bg-grey6">

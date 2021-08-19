@@ -1,10 +1,10 @@
-defmodule EyraUI.Navigation.Navbar do
+defmodule CoreWeb.UI.Navigation.Navbar do
   @moduledoc """
     Horizontal menu used on top of the page
   """
-  use Surface.Component
+  use CoreWeb.UI.Component
 
-  alias EyraUI.Navigation.MenuItem
+  alias CoreWeb.UI.Navigation.MenuItem
   alias EyraUI.Alignment.HorizontalCenter
 
   prop(items, :any, required: true)

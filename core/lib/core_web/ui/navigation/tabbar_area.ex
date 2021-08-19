@@ -1,6 +1,6 @@
-defmodule EyraUI.Navigation.TabbarArea do
+defmodule CoreWeb.UI.Navigation.TabbarArea do
   @moduledoc false
-  use Surface.Component
+  use CoreWeb.UI.Component
 
   prop(tabs, :list, required: true)
 

@@ -2,11 +2,11 @@ defmodule CoreWeb.Layouts.Workspace.Component do
   @moduledoc """
   Wrapper component used at the root of a page to create a menu + detail layout
   """
-  use Surface.Component
+  use CoreWeb.UI.Component
 
   import EyraUI.Components.OldSkool
 
-  alias EyraUI.Navigation.{DesktopMenu, MobileNavbar, MobileMenu}
+  alias CoreWeb.UI.Navigation.{DesktopMenu, MobileNavbar, MobileMenu}
   alias EyraUI.Hero.HeroSmall
 
   prop(title, :string)
@@ -55,7 +55,7 @@ defmodule CoreWeb.Layouts.Workspace.Component do
         <div class="pt-0 md:pt-10 h-full">
           <MobileNavbar items={{ @menus.mobile_navbar }} path_provider={{ CoreWeb.Router.Helpers }} />
           <div class="flex flex-col bg-white h-full ">
-            <div class="border-t border-l border-b border-grey4 h-full">
+            <div class="flex-1 bg-white border-t border-l border-b border-grey4">
               <div class="flex flex-col h-full">
                 <div class="flex-1">
                   <div class="flex flex-col h-full">
@@ -67,7 +67,7 @@ defmodule CoreWeb.Layouts.Workspace.Component do
                     </div>
                   </div>
                 </div>
-                <div class="flex-none bg-white">
+                <div class="flex-none">
                   {{ footer CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-left.svg"), CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-right.svg") }}
                 </div>
               </div>

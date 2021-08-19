@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:111
+#: lib/core_web/live/user/forms/profile.ex:112
 msgid "displayname.label"
 msgstr ""
 
@@ -21,7 +21,7 @@ msgid "email.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:110
+#: lib/core_web/live/user/forms/profile.ex:111
 msgid "fullname.label"
 msgstr ""
 
@@ -31,7 +31,7 @@ msgid "password.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:98
+#: lib/core_web/live/user/forms/profile.ex:99
 msgid "profile.title"
 msgstr ""
 
@@ -66,22 +66,22 @@ msgid "confirm.token.resend_button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:105
+#: lib/core_web/live/user/forms/profile.ex:106
 msgid "choose.profile.photo.file"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:106
+#: lib/core_web/live/user/forms/profile.ex:107
 msgid "choose.other.profile.photo.file"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:114
+#: lib/core_web/live/user/forms/profile.ex:115
 msgid "professionaltitle.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:115
+#: lib/core_web/live/user/forms/profile.ex:116
 msgid "website.label"
 msgstr ""
 
@@ -121,36 +121,36 @@ msgid "push.registration.test.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/study.ex:76
+#: lib/core_web/live/user/forms/study.ex:77
 msgid "feature.study.description"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:91
+#: lib/core_web/live/user/forms/features.ex:92
 msgid "features.description"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:102
+#: lib/core_web/live/user/forms/features.ex:103
 msgid "features.dominanthand.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:94
+#: lib/core_web/live/user/forms/features.ex:95
 msgid "features.gender.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:98
+#: lib/core_web/live/user/forms/features.ex:99
 msgid "features.nativelanguage.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/study.ex:75
+#: lib/core_web/live/user/forms/study.ex:76
 msgid "features.study.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:90
+#: lib/core_web/live/user/forms/features.ex:91
 msgid "features.title"
 msgstr ""

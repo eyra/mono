@@ -14,7 +14,7 @@ defmodule Link.Onboarding.Wizard do
 
   alias EyraUI.Button.Action.Redirect
   alias EyraUI.Button.Face.Primary
-  alias EyraUI.Navigation.{Tabbar, TabbarContent, TabbarFooter, TabbarArea}
+  alias CoreWeb.UI.Navigation.{Tabbar, TabbarContent, TabbarFooter, TabbarArea}
 
   data(user_agent, :string, default: "")
   data(current_user, :any)
@@ -62,6 +62,7 @@ defmodule Link.Onboarding.Wizard do
       title: dgettext("eyra-ui", "tabbar.item.welcome"),
       forward_title: dgettext("eyra-ui", "tabbar.item.welcome.forward"),
       component: Welcome,
+      props: %{user: current_user},
       type: :sheet,
       active: true
     })
@@ -71,6 +72,7 @@ defmodule Link.Onboarding.Wizard do
         title: dgettext("eyra-ui", "tabbar.item.study"),
         forward_title: dgettext("eyra-ui", "tabbar.item.study.forward"),
         component: StudyForm,
+        props: %{user: current_user},
         type: :form
       },
       current_user.student
@@ -81,6 +83,7 @@ defmodule Link.Onboarding.Wizard do
       title: dgettext("eyra-ui", "tabbar.item.features"),
       forward_title: dgettext("eyra-ui", "tabbar.item.features.forward"),
       component: FeaturesForm,
+      props: %{user: current_user},
       type: :form
     })
   end
@@ -102,7 +105,7 @@ defmodule Link.Onboarding.Wizard do
       >
         <TabbarArea tabs={{@tabs}}>
           <Tabbar id={{ :tabbar }}/>
-          <TabbarContent user={{@current_user}} />
+          <TabbarContent/>
           <TabbarFooter>
               <Redirect to={{ forward_path(@socket) }}>
                 <Primary label={{ dgettext("eyra-ui", "onboarding.forward") }}/>

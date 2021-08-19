@@ -6,11 +6,9 @@ defmodule Link.Dashboard do
   use CoreWeb.Layouts.Workspace.Component, :dashboard
 
   alias Core.Studies
-  alias CoreWeb.Empty
-  alias CoreWeb.Components.ContentListItem
+  alias CoreWeb.UI.ContentListItem
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
-  alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title2}
   alias Core.NextActions.Live.NextActionHighlight
   alias Core.NextActions
@@ -44,9 +42,10 @@ defmodule Link.Dashboard do
     ~H"""
       <Workspace
         title={{ dgettext("link-dashboard", "title") }}
-        menus={{ build_menus(@socket, @current_user, :dashboard) }}
+        menus={{ @menus }}
       >
         <ContentArea>
+          <MarginY id={{:page_top}} />
           <div :if={{ @next_best_action }} class="mb-6 md:mb-10">
             <NextActionHighlight vm={{ @next_best_action }}/>
           </div>

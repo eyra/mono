@@ -4,7 +4,6 @@ defmodule CoreWeb.User.AwaitConfirmation do
   """
   use CoreWeb, :live_view
 
-  alias EyraUI.Container.ContentArea
   alias EyraUI.Text.Title2
 
   alias Core.Accounts
@@ -43,6 +42,7 @@ defmodule CoreWeb.User.AwaitConfirmation do
   def render(assigns) do
     ~H"""
       <ContentArea>
+        <MarginY id={{:page_top}} />
         <Title2>{{dgettext "eyra-account", "await.confirmation.title"}}</Title2>
         <p>Please check your e-mail for a confirmation link.</p>
       </ContentArea>

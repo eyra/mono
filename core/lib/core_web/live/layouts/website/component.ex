@@ -2,11 +2,11 @@ defmodule CoreWeb.Layouts.Website.Component do
   @moduledoc """
     Wrapper component used at the root of a page to create a menu + detail layout
   """
-  use Surface.Component
+  use CoreWeb.UI.Component
 
   import EyraUI.Components.OldSkool
 
-  alias EyraUI.Navigation.{DesktopNavbar, MobileNavbar, MobileMenu}
+  alias CoreWeb.UI.Navigation.{DesktopNavbar, MobileNavbar, MobileMenu}
   alias EyraUI.Hero.HeroLarge
 
   prop(title, :string, required: true)

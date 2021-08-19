@@ -1,4 +1,4 @@
-defmodule EyraUI.Navigation.TabbarItem do
+defmodule CoreWeb.UI.Navigation.TabbarItem do
   @moduledoc """
     Item that can be used in Menu or Navbar
   """

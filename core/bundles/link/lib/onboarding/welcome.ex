@@ -1,18 +1,13 @@
 defmodule Link.Onboarding.Welcome do
-  use Surface.LiveComponent
-
-  import CoreWeb.Gettext
+  use CoreWeb.UI.LiveComponent
 
   alias EyraUI.Text.{Title2}
-  alias EyraUI.Container.{ContentArea, SheetArea}
 
   prop(user, :any, required: true)
 
   data title, :any
 
-  def update(%{id: id, user: user}, socket) do
-    user.displayname |> IO.inspect(label: "USER DISPLAY NAME")
-
+  def update(%{id: id, props: %{user: user}}, socket) do
     title = dgettext("link-ui", "onboarding.welcome.title", member: user.displayname || "")
 
     {
@@ -26,7 +21,8 @@ defmodule Link.Onboarding.Welcome do
 
   def render(assigns) do
     ~H"""
-      <ContentArea top_padding="pt-0">
+      <ContentArea>
+        <MarginY id={{:page_top}} />
         <SheetArea>
           <div class="flex flex-col items-center">
             <div class="mb-8 sm:mb-16">

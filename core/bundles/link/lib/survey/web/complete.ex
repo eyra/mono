@@ -5,9 +5,7 @@ defmodule Link.Survey.Complete do
   use CoreWeb, :live_view
 
   alias EyraUI.Hero.HeroSmall
-  alias EyraUI.Container.ContentArea
   alias EyraUI.Text.{Title1, BodyLarge}
-  alias EyraUI.Spacing
 
   alias Core.Studies
   alias Core.Studies.Study
@@ -51,6 +49,7 @@ defmodule Link.Survey.Complete do
     ~H"""
       <HeroSmall title={{ dgettext("link-survey", "conpleted.title") }} />
       <ContentArea>
+        <MarginY id={{:page_top}} />
         <Title1>{{ @promotion.title }}</Title1>
         <Spacing value="M" />
         <BodyLarge>{{dgettext("link-survey", "thank.you.message")}}</BodyLarge>

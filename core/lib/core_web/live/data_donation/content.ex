@@ -90,7 +90,7 @@ defmodule CoreWeb.DataDonation.Content do
           </div>
           <HeroSmall title={{ dgettext("eyra-data-donation", "content.title") }} />
           <ToolForm id={{:tool_form}} entity_id={{@tool_id}} />
-          <PromotionForm id={{:promotion_form}} entity_id={{@promotion_id}} />
+          <PromotionForm id={{:promotion_form}} props={{ %{entity_id: @promotion_id} }} />
         </div>
       </div>
     """
