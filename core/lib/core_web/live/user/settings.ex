@@ -8,8 +8,6 @@ defmodule CoreWeb.User.Settings do
   alias Core.Accounts
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
-  alias EyraUI.Spacing
-  alias EyraUI.Container.{ContentArea, FormArea}
   alias EyraUI.Text.{Title2, Title6, BodyMedium}
   alias EyraUI.Button.{SecondaryLiveViewButton, PrimaryAlpineButton}
 
@@ -32,6 +30,7 @@ defmodule CoreWeb.User.Settings do
     ~H"""
     <Workspace menus={{ @menus }}>
       <ContentArea>
+        <MarginY id={{:page_top}} />
         <FormArea>
           <Title2>{{dgettext "eyra-ui", "menu.item.settings"}}</Title2>
           <div :if={{ !is_native_web?(@socket) }}>

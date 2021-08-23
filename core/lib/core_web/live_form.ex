@@ -1,8 +1,7 @@
 defmodule CoreWeb.LiveForm do
   defmacro __using__(_opts) do
     quote do
-      use Surface.LiveComponent
-      alias CoreWeb.Router.Helpers, as: Routes
+      use CoreWeb.UI.LiveComponent
 
       def update(%{focus: focus}, socket) do
         {

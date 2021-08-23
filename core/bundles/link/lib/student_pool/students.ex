@@ -1,16 +1,12 @@
 defmodule Link.StudentPool.Students do
-  use Surface.LiveComponent
-
-  import CoreWeb.Gettext
-
-  alias CoreWeb.Empty
-  alias EyraUI.Container.ContentArea
+  use CoreWeb.UI.LiveComponent
 
   prop(user, :any, required: true)
 
   def render(assigns) do
     ~H"""
       <ContentArea>
+        <MarginY id={{:page_top}} />
         <Empty
           title={{ dgettext("link-studentpool", "students.empty.title") }}
           body={{ dgettext("link-studentpool", "students.empty.description") }}

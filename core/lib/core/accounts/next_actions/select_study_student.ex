@@ -9,7 +9,7 @@ defmodule Core.Accounts.NextActions.SelectStudyStudent do
       title: dgettext("eyra-nextaction", "select.study.student.title"),
       description: dgettext("eyra-nextaction", "select.study.student.description"),
       cta: dgettext("eyra-nextaction", "select.study.student.cta"),
-      url: url_resolver.(CoreWeb.User.Profile, [:study])
+      url: url_resolver.(CoreWeb.User.Profile, tab: "study")
     }
   end
 end

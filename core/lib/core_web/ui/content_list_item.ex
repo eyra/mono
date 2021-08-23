@@ -1,9 +1,9 @@
-defmodule CoreWeb.Components.ContentListItem do
-  use Surface.Component
+defmodule CoreWeb.UI.ContentListItem do
+  use CoreWeb.UI.Component
   alias Surface.Components.LiveRedirect
   alias Core.ImageHelpers
 
-  alias EyraUI.{Image, Spacing}
+  alias EyraUI.{Image}
   alias EyraUI.Text.{Label}
 
   prop(to, :string, required: true)
@@ -30,7 +30,7 @@ defmodule CoreWeb.Components.ContentListItem do
   def render(assigns) do
     assigns =
       assigns
-      |> Map.put(:image_info, ImageHelpers.get_image_info(assigns.image_id, 96, 96))
+      |> Map.put(:image_info, ImageHelpers.get_image_info(assigns.image_id, 120, 115))
 
     ~H"""
       <LiveRedirect to={{@to}} class="block my-6">
@@ -74,7 +74,7 @@ defmodule CoreWeb.Components.ContentListItem do
                 </div>
               </div>
             </div>
-            <div class="flex-wrap flex-shrink-0 w-20 md:w-24">
+            <div class="flex-wrap flex-shrink-0 w-20 md:w-30">
               <Image image={{@image_info}} corners="rounded-br-md rounded-tr-xl md:rounded-tr-md" />
             </div>
           </div>

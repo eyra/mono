@@ -17,12 +17,12 @@ msgid "tabbar.item.students"
 msgstr "Students"
 
 #, elixir-format
-#: bundles/link/lib/student_pool/overview.ex:45
+#: bundles/link/lib/student_pool/overview.ex:46
 msgid "tabbar.item.studies"
 msgstr "Studies"
 
 #, elixir-format
-#: bundles/link/lib/student_pool/overview.ex:56
+#: bundles/link/lib/student_pool/overview.ex:58
 msgid "title"
 msgstr "Student pool"
 

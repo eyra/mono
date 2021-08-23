@@ -1,25 +1,20 @@
 defmodule Link.Survey.Form do
   use CoreWeb.LiveForm
 
-  import CoreWeb.Gettext
-
   alias Core.Enums.Devices
   alias Core.Survey.{Tools, Tool}
 
-  alias CoreWeb.Router.Helpers, as: Routes
-
   alias EyraUI.Selector.Selector
-  alias EyraUI.Spacing
   alias EyraUI.Panel.Panel
   alias EyraUI.Text.{Title3, Title6, BodyMedium}
   alias EyraUI.Form.{Form, UrlInput, TextInput, NumberInput}
-  alias EyraUI.Container.{ContentArea}
   alias EyraUI.Button.{SecondaryLiveViewButton}
 
-  prop(entity_id, :any, required: true)
-  prop(uri_origin, :any, required: true)
+  prop(props, :map, required: true)
 
   data(entity, :any)
+  data(entity_id, :any)
+  data(uri_origin, :any)
   data(device_labels, :list)
   data(changeset, :any)
   data(focus, :any, default: "")
@@ -41,7 +36,7 @@ defmodule Link.Survey.Form do
   end
 
   # Handle initial update
-  def update(%{id: id, entity_id: entity_id, uri_origin: uri_origin}, socket) do
+  def update(%{id: id, props: %{entity_id: entity_id, uri_origin: uri_origin}}, socket) do
     entity = Tools.get_survey_tool!(entity_id)
     changeset = Tool.changeset(entity, :create, %{})
 
@@ -53,6 +48,7 @@ defmodule Link.Survey.Form do
       |> assign(id: id)
       |> assign(entity_id: entity_id)
       |> assign(entity: entity)
+      |> assign(uri_origin: uri_origin)
       |> assign(changeset: changeset)
       |> assign(device_labels: device_labels)
       |> assign(uri_origin: uri_origin)
@@ -86,6 +82,7 @@ defmodule Link.Survey.Form do
   def render(assigns) do
     ~H"""
       <ContentArea>
+        <MarginY id={{:page_top}} />
         <Form id={{@id}} changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
           <Panel bg_color="bg-grey1">
             <Title3 color="text-white">{{dgettext("link-survey", "redirect.title")}}</Title3>

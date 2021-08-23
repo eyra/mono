@@ -6,7 +6,6 @@ defmodule CoreWeb.User.Forms.Debug do
 
   alias EyraUI.Text.{Title2}
   alias EyraUI.Form.{Form, Checkbox}
-  alias EyraUI.Container.{ContentArea}
 
   prop(user, :any, required: true)
 
@@ -69,14 +68,16 @@ defmodule CoreWeb.User.Forms.Debug do
   @impl true
   def render(assigns) do
     ~H"""
-        <ContentArea top_padding="pt-6 sm:pt-14">
-        <Title2>User roles</Title2>
-        <Form id="main_form" changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
-          <Checkbox field={{:student}} label_text="Student"/>
-          <Checkbox field={{:researcher}} label_text="Researcher"/>
-          <Checkbox field={{:coordinator}} label_text="Coordinator"/>
-        </Form>
-      </ContentArea>
+        <ContentArea>
+          <MarginY id={{:page_top}} />
+          <MarginY id={{:page_top}} />
+          <Title2>User roles</Title2>
+          <Form id="main_form" changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
+            <Checkbox field={{:student}} label_text="Student"/>
+            <Checkbox field={{:researcher}} label_text="Researcher"/>
+            <Checkbox field={{:coordinator}} label_text="Coordinator"/>
+          </Form>
+        </ContentArea>
     """
   end
 end

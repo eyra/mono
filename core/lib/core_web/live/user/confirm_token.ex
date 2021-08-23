@@ -6,7 +6,6 @@ defmodule CoreWeb.User.ConfirmToken do
 
   alias Surface.Components.Form
   alias EyraUI.Button.SubmitButton
-  alias EyraUI.Container.ContentArea
   alias EyraUI.Form.EmailInput
 
   alias Core.Accounts
@@ -75,6 +74,7 @@ defmodule CoreWeb.User.ConfirmToken do
   def render(assigns) do
     ~H"""
       <ContentArea>
+        <MarginY id={{:page_top}} />
         <p>Account confirmation link is invalid or it has expired.</p>
         <p>Enter your e-mail to resend the token</p>
         <Form for={{ @changeset }} submit="resend-token">

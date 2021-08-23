@@ -2,25 +2,21 @@ defmodule CoreWeb.Promotion.Form do
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader
 
-  import CoreWeb.Gettext
-
   alias Core.Enums.Themes
   alias Core.Promotions
   alias Core.Promotions.Promotion
 
   alias CoreWeb.Router.Helpers, as: Routes
 
-  alias EyraUI.Spacing
-  alias EyraUI.Case.{Case, True, False}
   alias EyraUI.Status.{Info, Warning}
   alias EyraUI.Text.{Title1, Title3, BodyMedium, SubHead}
   alias EyraUI.Form.{Form, TextInput, TextArea, PhotoInput, UrlInput}
-  alias EyraUI.Container.{ContentArea, Bar, BarItem}
+  alias EyraUI.Container.{Bar, BarItem}
   alias EyraUI.Selector.Selector
   alias EyraUI.ImagePreview
   alias EyraUI.Button.{SecondaryAlpineButton, PrimaryLiveViewButton, SecondaryLiveViewButton}
 
-  prop(entity_id, :any, required: true)
+  prop(props, :any, required: true)
 
   data(entity, :any)
   data(changeset, :any)
@@ -40,10 +36,12 @@ defmodule CoreWeb.Promotion.Form do
 
   def update(%{image_id: image_id}, %{assigns: %{entity: entity}} = socket) do
     attrs = %{image_id: image_id}
+    image_url = Promotion.get_image_url(attrs, %{width: 400, height: 300})
 
     {
       :ok,
       socket
+      |> assign(image_url: image_url)
       |> save(entity, attrs)
     }
   end
@@ -64,7 +62,7 @@ defmodule CoreWeb.Promotion.Form do
     }
   end
 
-  def update(%{id: id, entity_id: entity_id}, socket) do
+  def update(%{id: id, props: %{entity_id: entity_id}}, socket) do
     entity = Promotions.get!(entity_id)
     changeset = Promotion.changeset(entity, :create, %{})
 
@@ -155,7 +153,7 @@ defmodule CoreWeb.Promotion.Form do
   def render(assigns) do
     ~H"""
       <ContentArea>
-        <Spacing value="XL" />
+        <MarginY id={{:page_top}} />
         <Title1>{{dgettext("eyra-promotion", "form.title")}}</Title1>
 
         <Bar>
@@ -193,7 +191,7 @@ defmodule CoreWeb.Promotion.Form do
             <ImagePreview image_url={{ @image_url }} placeholder="" />
             <Spacing value="S" direction="l" />
             <div class="flex-wrap">
-              <SecondaryAlpineButton click="$parent.open = true, $parent.$parent.overlay = true" label={{dgettext("eyra-promotion", "search.different.image.button")}} />
+              <SecondaryAlpineButton click="$parent.$parent.open = true, $parent.$parent.$parent.$parent.overlay = true" label={{dgettext("eyra-promotion", "search.different.image.button")}} />
             </div>
           </div>
           <Spacing value="XL" />

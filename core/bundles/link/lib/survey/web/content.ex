@@ -15,15 +15,19 @@ defmodule Link.Survey.Content do
   alias CoreWeb.Promotion.Form, as: PromotionForm
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
+  alias CoreWeb.UI.Navigation.{TabbarArea, Tabbar, TabbarContent, TabbarFooter}
+
   alias Link.Survey.Form, as: ToolForm
-  alias Link.Survey.{MonitorData, Monitor}
+  alias Link.Survey.Monitor
 
   data(tool_id, :any)
   data(promotion_id, :any)
-  data(monitor_data, :any)
+  data(active_tab, :any)
+  data(tabs, :map)
   data(changesets, :any)
   data(initial_image_query, :any)
   data(uri_origin, :any)
+
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
@@ -31,30 +35,78 @@ defmodule Link.Survey.Content do
   end
 
   @impl true
-  def handle_params(_unsigned_params, uri, socket) do
-    parsed_uri = URI.parse(uri)
-    uri_origin = "#{parsed_uri.scheme}://#{parsed_uri.authority}"
-    {:noreply, assign(socket, uri_origin: uri_origin)}
-  end
+  def mount(%{"id" => tool_id, "tab" => active_tab}, _session, socket) do
 
-  def mount(%{"id" => id}, _session, socket) do
-    tool = Tools.get_survey_tool!(id)
-    promotion = Promotions.get!(tool.promotion_id)
-    monitor_data = MonitorData.create(tool, promotion)
+    tool = Tools.get_survey_tool!(tool_id)
 
     {
       :ok,
       socket
       |> assign(
-        tool_id: id,
+        tool_id: tool_id,
         promotion_id: tool.promotion_id,
-        monitor_data: monitor_data,
+        active_tab: active_tab,
         changesets: %{},
         save_timer: nil,
         hide_flash_timer: nil
       )
       |> update_menus()
     }
+  end
+
+  @impl true
+  def mount(params, session, socket) do
+    mount(Map.put(params, "tab", "tool_form"), session, socket)
+  end
+
+  @impl true
+  def handle_params(_unsigned_params, uri, %{assigns: %{tool_id: tool_id, active_tab: active_tab}} = socket) do
+    parsed_uri = URI.parse(uri)
+    uri_origin = "#{parsed_uri.scheme}://#{parsed_uri.authority}"
+    tool = Tools.get_survey_tool!(tool_id)
+    tabs = create_tabs(active_tab, tool, uri_origin)
+
+    {:noreply, assign(socket, tabs: tabs)}
+  end
+
+  defp create_tabs(active_tab, tool, uri_origin) do
+    [
+      %{
+        id: :tool_form,
+        active: active_tab === :tool_form,
+        title: dgettext("link-survey", "tabbar.item.survey"),
+        forward_title: dgettext("link-survey", "tabbar.item.survey.forward"),
+        type: :fullpage,
+        component: ToolForm,
+        props: %{
+          entity_id: tool.id,
+          uri_origin: uri_origin
+        },
+      },
+      %{
+        id: :promotion_form,
+        active: active_tab === :promotion_form,
+        entity_id: tool.promotion_id,
+        title: dgettext("link-survey", "tabbar.item.promotion"),
+        forward_title: dgettext("link-survey", "tabbar.item.promotion.forward"),
+        type: :fullpage,
+        component: PromotionForm,
+        props: %{
+          entity_id: tool.promotion_id
+        }
+      },
+      %{
+        id: :monitor,
+        active: active_tab === :monitor,
+        title: dgettext("link-survey", "tabbar.item.monitor"),
+        forward_title: dgettext("link-survey", "tabbar.item.monitor.forward"),
+        type: :fullpage,
+        component: Monitor,
+        props: %{
+          entity_id: tool.id,
+        }
+      }
+    ]
   end
 
   @impl true
@@ -103,14 +155,16 @@ defmodule Link.Survey.Content do
         <div x-data="{ open: false }">
           <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="open">
             <div class="flex flex-row items-center justify-center w-full h-full">
-              <div class="w-5/6 md:w-popup-md lg:w-popup-lg" @click.away="open = false, $parent.overlay = false">
+              <div class="w-5/6 md:w-popup-md lg:w-popup-lg" @click.away="open = false, $parent.$parent.overlay = false">
                 <ImageCatalogPicker conn={{@socket}} static_path={{&Routes.static_path/2}} initial_query={{initial_image_query(assigns)}} id={{:image_picker}} image_catalog={{Core.ImageCatalog.Unsplash}} />
               </div>
             </div>
           </div>
-          <ToolForm id={{:tool_form}} entity_id={{@tool_id}} uri_origin={{@uri_origin}}/>
-          <PromotionForm id={{:promotion_form}} entity_id={{@promotion_id}} />
-          <Monitor monitor_data={{@monitor_data}}/>
+          <TabbarArea tabs={{@tabs}}>
+            <Tabbar id={{ :tabbar }} />
+            <TabbarContent/>
+            <TabbarFooter/>
+          </TabbarArea>
         </div>
       </div>
     </Workspace>

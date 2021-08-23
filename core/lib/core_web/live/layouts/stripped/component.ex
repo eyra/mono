@@ -2,11 +2,11 @@ defmodule CoreWeb.Layouts.Stripped.Component do
   @moduledoc """
     Wrapper component used at the root of a page to create a menu + detail layout
   """
-  use Surface.Component
+  use CoreWeb.UI.Component
 
   import EyraUI.Components.OldSkool
 
-  alias EyraUI.Navigation.{DesktopNavbar, MobileNavbar}
+  alias CoreWeb.UI.Navigation.{DesktopNavbar, MobileNavbar}
 
   prop(user, :string, required: true)
   prop(active_item, :any, required: true)

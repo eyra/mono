@@ -6,10 +6,8 @@ defmodule CoreWeb.Dashboard do
   use CoreWeb.Layouts.Workspace.Component, :dashboard
 
   alias Core.Studies
-  alias CoreWeb.Components.ContentListItem
+  alias CoreWeb.UI.ContentListItem
 
-  alias EyraUI.Spacing
-  alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title2}
   alias Core.NextActions.Live.NextActionHighlight
   alias Core.NextActions
@@ -49,6 +47,7 @@ defmodule CoreWeb.Dashboard do
         menus={{ @menus }}
       >
         <ContentArea>
+          <MarginY id={{:page_top}} />
           <div :if={{ @next_best_action }}>
             <NextActionHighlight vm={{ @next_best_action }}/>
             <Spacing value="XL" />

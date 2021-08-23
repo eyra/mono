@@ -6,6 +6,6 @@ defmodule CoreWeb.UrlResolver do
   but needs to generate URLs.
   """
   def url_resolver(socket) do
-    fn view, args -> apply(CoreWeb.Router.Helpers, :live_path, [socket | [view | args]]) end
+    fn view, args -> CoreWeb.Router.Helpers.live_path(socket, view, args) end
   end
 end

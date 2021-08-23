@@ -60,6 +60,7 @@ module.exports = {
         "48px" : "48px",
         "44px" : "44px",
         "84px" : "84px",
+        "30" : "120px",
         "desktop-menu-width" : "296px",
         "mobile-menu-width" : "304px",
         "sidepadding" : "64px",

@@ -6,7 +6,6 @@ defmodule CoreWeb.Todo do
   use CoreWeb.Layouts.Workspace.Component, :todo
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias EyraUI.Container.ContentArea
   alias Core.NextActions
   alias Core.NextActions.Live.NextAction
 
@@ -43,6 +42,7 @@ defmodule CoreWeb.Todo do
         </div>
 
         <ContentArea>
+          <MarginY id={{:page_top}} />
           <div :if={{@has_next_actions?}} class="flex flex-col gap-6 sm:gap-10">
             <NextAction :for={{action <- @next_actions}} vm={{ action }} />
           </div>

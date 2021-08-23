@@ -10,7 +10,7 @@ defmodule Link.StudentPool.Overview do
   alias Link.StudentPool.{Students, Studies}
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias EyraUI.Navigation.{TabbarArea, Tabbar, TabbarContent}
+  alias CoreWeb.UI.Navigation.{TabbarArea, Tabbar, TabbarContent}
 
   data(tabs, :any)
 
@@ -37,6 +37,7 @@ defmodule Link.StudentPool.Overview do
         id: :students,
         title: dgettext("link-studentpool", "tabbar.item.students"),
         component: Students,
+        props: nil,
         type: :fullpage,
         active: active_tab === :students
       },
@@ -44,6 +45,7 @@ defmodule Link.StudentPool.Overview do
         id: :studies,
         title: dgettext("link-studentpool", "tabbar.item.studies"),
         component: Studies,
+        props: nil,
         type: :fullpage,
         active: active_tab === :studies
       }
@@ -58,7 +60,7 @@ defmodule Link.StudentPool.Overview do
       >
         <TabbarArea tabs={{@tabs}}>
           <Tabbar id={{ :tabbar }}/>
-          <TabbarContent user={{@current_user}} />
+          <TabbarContent/>
         </TabbarArea>
       </Workspace>
     """

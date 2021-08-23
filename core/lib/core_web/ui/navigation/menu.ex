@@ -1,10 +1,10 @@
-defmodule EyraUI.Navigation.Menu do
+defmodule CoreWeb.UI.Navigation.Menu do
   @moduledoc """
     Vertical stacked menu used on the side
   """
-  use Surface.Component
+  use CoreWeb.UI.Component
 
-  alias EyraUI.Navigation.MenuItem
+  alias CoreWeb.UI.Navigation.MenuItem
 
   prop(items, :any, required: true)
   prop(path_provider, :any, required: true)

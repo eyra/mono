@@ -1,17 +1,17 @@
-defmodule EyraUI.Navigation.MobileNavbar do
+defmodule CoreWeb.UI.Navigation.DesktopNavbar do
   @moduledoc """
     Horizontal menu used on top of the page
   """
-  use Surface.Component
+  use CoreWeb.UI.Component
 
-  alias EyraUI.Navigation.Navbar
+  alias CoreWeb.UI.Navigation.Navbar
 
   prop(items, :any, required: true)
   prop(path_provider, :any, required: true)
 
   def render(assigns) do
     ~H"""
-    <div class="md:hidden bg-grey5" >
+    <div class="hidden md:block pr-4" >
       <Navbar items={{@items}} path_provider={{@path_provider}}/>
     </div>
     """

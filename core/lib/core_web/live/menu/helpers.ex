@@ -120,7 +120,7 @@ defmodule CoreWeb.Menu.Helpers do
 
     redir =
       if page_id do
-        Routes.live_path(socket, socket.view, [page_id])
+        Routes.live_path(socket, socket.view, page_id)
       else
         Routes.live_path(socket, socket.view)
       end

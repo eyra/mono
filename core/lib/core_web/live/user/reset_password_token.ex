@@ -8,7 +8,6 @@ defmodule CoreWeb.User.ResetPasswordToken do
   alias Core.Accounts
   alias EyraUI.Form.PasswordInput
   alias EyraUI.Text.Title2
-  alias EyraUI.Container.{ContentArea, FormArea}
   alias EyraUI.Button.SubmitButton
 
   data(changeset, :any)
@@ -47,6 +46,7 @@ defmodule CoreWeb.User.ResetPasswordToken do
   def render(assigns) do
     ~H"""
     <ContentArea>
+      <MarginY id={{:page_top}} />
       <FormArea>
         <Title2>{{dgettext "eyra-user", "user.password_reset.title"}}</Title2>
         <Form for={{ @changeset }} submit="reset-password">

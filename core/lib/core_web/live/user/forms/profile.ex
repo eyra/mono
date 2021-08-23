@@ -2,19 +2,16 @@ defmodule CoreWeb.User.Forms.Profile do
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader
 
-  import CoreWeb.Gettext
-
   alias Core.Enums.StudyProgramCodes
   alias Core.Accounts
   alias Core.Accounts.UserProfileEdit
 
-  alias EyraUI.Spacing
   alias EyraUI.Text.{Title2}
   alias EyraUI.Form.{Form, TextInput, UrlInput, PhotoInput}
-  alias EyraUI.Container.{ContentArea, FormArea}
 
-  prop(user, :any, required: true)
+  prop(props, :any, required: true)
 
+  data(user, :any)
   data(entity, :any)
   data(study_labels, :any)
   data(uploads, :any)
@@ -39,7 +36,7 @@ defmodule CoreWeb.User.Forms.Profile do
     {:ok, socket}
   end
 
-  def update(%{id: id, user: user}, socket) do
+  def update(%{id: id, props: %{user: user}}, socket) do
     profile = Accounts.get_profile(user)
     entity = UserProfileEdit.create(user, profile)
 
@@ -93,7 +90,8 @@ defmodule CoreWeb.User.Forms.Profile do
   @impl true
   def render(assigns) do
     ~H"""
-        <ContentArea top_padding="pt-6 sm:pt-14">
+      <ContentArea>
+        <MarginY id={{:page_top}} />
         <FormArea>
           <Title2>{{dgettext "eyra-account", "profile.title"}}</Title2>
           <Form id="main_form" changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>

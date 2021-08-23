@@ -21,7 +21,6 @@ defmodule CoreWeb.Live.User.Routes do
         pipe_through([:browser, :require_authenticated_user])
 
         live("/user/profile", User.Profile)
-        live("/user/profile/:tab", User.Profile)
         live("/user/settings", User.Settings)
         get("/user/settingscontroller", UserSettingsController, :edit)
         put("/user/settingscontroller", UserSettingsController, :update)

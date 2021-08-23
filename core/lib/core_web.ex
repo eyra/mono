@@ -65,6 +65,9 @@ defmodule CoreWeb do
 
       import CoreWeb.UrlResolver, only: [url_resolver: 1]
 
+      alias CoreWeb.UI.{MarginY, Empty}
+      alias CoreWeb.UI.Container.{ContentArea, FormArea, SheetArea}
+      alias EyraUI.Spacing
       alias EyraUI.Case.{Case, True, False}
 
       unquote(view_helpers())
