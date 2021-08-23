@@ -69,6 +69,7 @@ defmodule CoreWeb do
       alias CoreWeb.UI.Container.{ContentArea, FormArea, SheetArea}
       alias EyraUI.Spacing
       alias EyraUI.Case.{Case, True, False}
+      alias EyraUI.Button.DynamicButton
 
       unquote(view_helpers())
     end

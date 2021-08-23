@@ -28,10 +28,10 @@ defmodule Core.Promotions.Promotion do
     field(:image_id, :string)
     field(:marks, {:array, :string})
     field(:themes, {:array, Ecto.Enum}, values: Themes.schema_values())
-    field(:published_at, :naive_datetime)
     # Technical
     field(:plugin, :string)
 
+    has_one(:submission, Core.Pools.Submission)
     belongs_to(:content_node, Core.Content.Node)
     belongs_to(:auth_node, Core.Authorization.Node)
 
@@ -39,15 +39,15 @@ defmodule Core.Promotions.Promotion do
   end
 
   @plain_fields ~w(title subtitle expectations description banner_photo_url banner_title banner_subtitle banner_url)a
-  @rich_fields ~w(themes image_id marks published_at)a
+  @rich_fields ~w(themes image_id marks)a
   @technical_fields ~w(plugin)a
-
-  @publish_required_fields ~w(title subtitle expectations description banner_title banner_subtitle)a
 
   @fields @plain_fields ++ @rich_fields ++ @technical_fields
 
+  @publish_required_fields ~w(title subtitle expectations description banner_title banner_subtitle)a
+
   @impl true
-  def operational_fields, do: @plain_fields ++ @rich_fields
+  def operational_fields, do: @publish_required_fields
 
   defimpl GreenLight.AuthorizationNode do
     def id(promotion), do: promotion.auth_node_id
@@ -68,10 +68,6 @@ defmodule Core.Promotions.Promotion do
     promotion
     |> cast(attrs, @fields)
     |> validate_required([:title, :plugin])
-  end
-
-  def published?(%__MODULE__{published_at: published_at}) do
-    !is_nil(published_at)
   end
 
   def get_themes(promotion) do
@@ -95,15 +91,9 @@ defmodule Core.Promotions.Promotion do
   defp get_organisation_id(_), do: nil
 
   def get_byline(promotion) do
-    if published?(promotion) do
-      label = dgettext("eyra-promotion", "published.true.label")
-      timestamp = Timestamp.humanize(promotion.published_at)
-      "#{label}: #{timestamp}"
-    else
-      label = dgettext("eyra-promotion", "created.label")
-      timestamp = Timestamp.humanize(promotion.inserted_at)
-      "#{label}: #{timestamp}"
-    end
+    label = dgettext("eyra-promotion", "created.label")
+    timestamp = Timestamp.humanize(promotion.inserted_at)
+    "#{label}: #{timestamp}"
   end
 
   def get_image_url(%{image_id: image_id}, %{width: width, height: height}) do

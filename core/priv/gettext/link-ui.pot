@@ -12,11 +12,6 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/menu/items-translations.ex:2
-msgid "menu.item.labstudies"
-msgstr ""
-
-#, elixir-format
-#: bundles/link/lib/menu/items-translations.ex:2
 msgid "menu.item.studentpool"
 msgstr ""
 
@@ -26,16 +21,16 @@ msgid "menu.item.surveys"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/onboarding/welcome.ex:37
+#: bundles/link/lib/onboarding/welcome.ex:33
 msgid "onboarding.welcome.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/onboarding/welcome.ex:16
+#: bundles/link/lib/onboarding/welcome.ex:11
 msgid "onboarding.welcome.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/debug.ex:54
+#: bundles/link/lib/debug.ex:65
 msgid "debug.title"
 msgstr ""

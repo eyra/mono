@@ -9,7 +9,7 @@ defmodule EyraUI.Text.Label do
 
   def render(assigns) do
     ~H"""
-    <div class="text-label font-label {{@color}}">
+    <div class="text-label font-label leading-5 {{@color}}">
       <slot />
     </div>
     """

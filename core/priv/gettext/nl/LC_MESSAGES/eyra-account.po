@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:112
+#: lib/core_web/live/user/forms/profile.ex:109
 msgid "displayname.label"
 msgstr "Schermnaam"
 
@@ -22,7 +22,7 @@ msgid "email.label"
 msgstr "E-mail"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:111
+#: lib/core_web/live/user/forms/profile.ex:108
 msgid "fullname.label"
 msgstr "Volledige naam"
 
@@ -32,7 +32,7 @@ msgid "password.label"
 msgstr "Wachtwoord"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:99
+#: lib/core_web/live/user/forms/profile.ex:96
 msgid "profile.title"
 msgstr "Mijn profiel"
 
@@ -67,91 +67,106 @@ msgid "confirm.token.resend_button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:106
+#: lib/core_web/live/user/forms/profile.ex:103
 msgid "choose.profile.photo.file"
 msgstr "Kies foto"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:107
+#: lib/core_web/live/user/forms/profile.ex:104
 msgid "choose.other.profile.photo.file"
 msgstr "Kies andere foto"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:115
+#: lib/core_web/live/user/forms/profile.ex:112
 msgid "professionaltitle.label"
 msgstr "Functietitel"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:116
+#: lib/core_web/live/user/forms/profile.ex:113
 msgid "website.label"
 msgstr "Website"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:44
+#: lib/core_web/live/user/settings.ex:43
 msgid "push.registration.button"
 msgstr "Registreren"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:40
+#: lib/core_web/live/user/settings.ex:39
 msgid "push.registration.title"
 msgstr "Push notificaties"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:51
+#: lib/core_web/live/user/settings.ex:50
 msgid "push.registration.activated"
 msgstr "Push notificaties zijn geactiveerd op deze browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:48
+#: lib/core_web/live/user/settings.ex:47
 msgid "push.registration.denied"
 msgstr "Push notificaties zijn gedeactiveerd op deze browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:42
+#: lib/core_web/live/user/settings.ex:41
 msgid "push.registration.label"
 msgstr "Activeren op deze browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:47
+#: lib/core_web/live/user/settings.ex:46
 msgid "push.registration.pending"
 msgstr "Push notificaties zijn gedeactiveerd op deze browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:53
+#: lib/core_web/live/user/settings.ex:52
 msgid "push.registration.test.button"
 msgstr "Stuur test notificatie"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/study.ex:77
+#: lib/core_web/live/user/forms/study.ex:74
 msgid "feature.study.description"
 msgstr "Je kan meerdere opleidingen opgeven. Als je taken van het vorig leerjaar moet gaan doen kies dan (ook) de herkansing variant van het vorige jaar."
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:92
+#: lib/core_web/live/user/forms/features.ex:89
 msgid "features.description"
 msgstr "Onderstaande kenmerken worden gebruikt om in de marktplaats onderzoeken met specifieke eisen te laten zien."
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:103
+#: bundles/link/lib/pool/form/submission.ex:157
+#: lib/core_web/live/user/forms/features.ex:100
 msgid "features.dominanthand.title"
 msgstr "Voorkeurshand"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:95
+#: bundles/link/lib/pool/form/submission.ex:149
+#: lib/core_web/live/user/forms/features.ex:92
 msgid "features.gender.title"
 msgstr "Geslacht"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:99
+#: bundles/link/lib/pool/form/submission.ex:153
+#: lib/core_web/live/user/forms/features.ex:96
 msgid "features.nativelanguage.title"
 msgstr "Moedertaal"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/study.ex:76
+#: bundles/link/lib/pool/form/submission.ex:161
+#: lib/core_web/live/user/forms/study.ex:73
 msgid "features.study.title"
 msgstr "Opleiding"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:91
+#: bundles/link/lib/pool/form/submission.ex:145
+#: lib/core_web/live/user/forms/features.ex:88
 msgid "features.title"
 msgstr "Kenmerken"
+
+#, elixir-format
+#: bundles/link/lib/pool/form/submission.ex:162
+msgid "feature.study.content.description"
+msgstr "Studenten van de geselecteerd opleidingen komen in aanmerking. Geen selectie betekend dat iedere student in aanmerking komt."
+
+#, elixir-format
+#: bundles/link/lib/pool/form/submission.ex:146
+msgid "features.content.description"
+msgstr "Studenten met de geselecteerde kenmerken komen in aanmerking. Geen selectie betekend dat iedere student in aanmerking komt."

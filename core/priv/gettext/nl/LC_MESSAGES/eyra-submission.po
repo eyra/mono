@@ -1,0 +1,57 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: bundles/link/lib/pool/form/submission.ex:90
+msgid "retract.button"
+msgstr "Campagne terugtrekken"
+
+#, elixir-format
+#: bundles/link/lib/pool/form/submission.ex:95
+msgid "submit.button"
+msgstr "Campagne indienen"
+
+#, elixir-format
+#: bundles/link/lib/pool/form/submission.ex:113
+msgid "submit.error"
+msgstr "Je kan de campagne nog niet indienen. Vul eerst de formulieren (1) Advertentie en (2) Studie volledig in."
+
+#, elixir-format
+#: bundles/link/lib/card.ex:157 bundles/link/lib/dashboard.ex:92
+msgid "status.accepted.label"
+msgstr "Online"
+
+#, elixir-format
+#: bundles/link/lib/card.ex:155 bundles/link/lib/dashboard.ex:90
+msgid "status.idle.label"
+msgstr "Concept"
+
+#, elixir-format
+#: bundles/link/lib/card.ex:156 bundles/link/lib/dashboard.ex:91
+msgid "status.submitted.label"
+msgstr "Ingediend"
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:102
+msgid "incomplete.forms.message"
+msgstr "Formulieren zijn nog niet volledig ingevuld"
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:100
+msgid "ready.for.submission.message"
+msgstr "Klaar om in te dienen bij de studentenpool coordinator"
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:105
+msgid "waiting.for.coordinator.message"
+msgstr "De coordinator zal de campagne spoedig in de marktplaats publiseren"

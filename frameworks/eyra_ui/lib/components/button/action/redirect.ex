@@ -2,15 +2,18 @@ defmodule EyraUI.Button.Action.Redirect do
   @moduledoc """
   Redirects to next live view
   """
-  use Surface.Component
+  use EyraUI.Component
   alias Surface.Components.LiveRedirect
 
-  prop(to, :string, required: true)
   slot(default, required: true)
+
+  prop(vm, :map, required: true)
+
+  defviewmodel(to: nil)
 
   def render(assigns) do
     ~H"""
-    <LiveRedirect to={{ @to }} class="cursor-pointer focus:outline-none" >
+    <LiveRedirect to={{ to(@vm) }} class="cursor-pointer focus:outline-none" >
       <slot />
     </LiveRedirect>
     """

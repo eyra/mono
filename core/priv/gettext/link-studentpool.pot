@@ -11,36 +11,36 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/student_pool/overview.ex:38
+#: bundles/link/lib/pool/overview.ex:38
 msgid "tabbar.item.students"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/student_pool/overview.ex:46
+#: bundles/link/lib/pool/overview.ex:46
 msgid "tabbar.item.studies"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/student_pool/overview.ex:58
+#: bundles/link/lib/pool/overview.ex:58
 msgid "title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/student_pool/students.ex:16
+#: bundles/link/lib/pool/form/students.ex:12
 msgid "students.empty.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/student_pool/students.ex:15
+#: bundles/link/lib/pool/form/students.ex:11
 msgid "students.empty.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/student_pool/studies.ex:16
+#: bundles/link/lib/pool/form/studies.ex:12
 msgid "studies.empty.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/student_pool/studies.ex:15
+#: bundles/link/lib/pool/form/studies.ex:11
 msgid "studies.empty.title"
 msgstr ""

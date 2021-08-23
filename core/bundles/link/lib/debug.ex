@@ -10,8 +10,7 @@ defmodule Link.Debug do
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias EyraUI.Spacing
-  alias EyraUI.Button.Action.Redirect
-  alias EyraUI.Button.Face.Primary
+  alias EyraUI.Button.DynamicButton
 
   alias EyraUI.Container.{Wrap}
   alias EyraUI.Text.Title2
@@ -20,10 +19,22 @@ defmodule Link.Debug do
   def mount(_params, _session, socket) do
     require_feature(:debug)
 
+    start_button = %{
+      action: %{
+        type: :redirect,
+        to: Routes.live_path(socket, Link.Onboarding.Wizard)
+      },
+      face: %{
+        type: :primary,
+        label: "Start onboarding flow"
+      }
+    }
+
     {
       :ok,
       socket
       |> assign(
+        start_button: start_button,
         changesets: %{},
         save_timer: nil,
         hide_flash_timer: nil
@@ -60,9 +71,7 @@ defmodule Link.Debug do
           <MarginY id={{:page_top}} />
           <Wrap>
             <Title2>Onboarding</Title2>
-            <Redirect to={{ Routes.live_path(@socket, Link.Onboarding.Wizard) }}>
-              <Primary label="Start onboarding flow" />
-            </Redirect>
+            <DynamicButton vm={{ @start_button }} />
           </Wrap>
         </ContentArea>
       </Workspace>

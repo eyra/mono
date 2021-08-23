@@ -42,7 +42,7 @@ msgstr "My profile"
 
 #, elixir-format
 #: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
-#: lib/core_web/live/user/settings.ex:36
+#: lib/core_web/live/user/settings.ex:35
 msgid "menu.item.settings"
 msgstr "Settings"
 
@@ -72,17 +72,17 @@ msgid "menu.item.todo"
 msgstr "To-do"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:48
+#: lib/core_web/live/dashboard.ex:46
 msgid "dashboard.title"
 msgstr "Dashboard"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:92
+#: bundles/link/lib/marketplace.ex:90
 msgid "marketplace.title"
 msgstr "Marketplace"
 
 #, elixir-format
-#: lib/core_web/live/todo.ex:32
+#: lib/core_web/live/todo.ex:31
 msgid "todo.title"
 msgstr "To-do"
 
@@ -92,7 +92,7 @@ msgid "menu.item.payments"
 msgstr "Payments"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:83 lib/core_web/live/user/profile.ex:90
+#: bundles/link/lib/onboarding/wizard.ex:94 lib/core_web/live/user/profile.ex:92
 msgid "tabbar.item.features"
 msgstr "Characteristics"
 
@@ -102,12 +102,12 @@ msgid "tabbar.item.profile"
 msgstr "My profile"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:72 lib/core_web/live/user/profile.ex:79
+#: bundles/link/lib/onboarding/wizard.ex:83 lib/core_web/live/user/profile.ex:80
 msgid "tabbar.item.study"
 msgstr "Study program"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:84 lib/core_web/live/user/profile.ex:91
+#: bundles/link/lib/onboarding/wizard.ex:95 lib/core_web/live/user/profile.ex:93
 msgid "tabbar.item.features.forward"
 msgstr "Update characteristics"
 
@@ -117,12 +117,12 @@ msgid "tabbar.item.profile.forward"
 msgstr "Update profile"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:73 lib/core_web/live/user/profile.ex:80
+#: bundles/link/lib/onboarding/wizard.ex:84 lib/core_web/live/user/profile.ex:81
 msgid "tabbar.item.study.forward"
 msgstr "Select study"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:111
+#: bundles/link/lib/onboarding/wizard.ex:32
 msgid "onboarding.forward"
 msgstr "Continue"
 
@@ -132,11 +132,11 @@ msgid "menu.item.debug"
 msgstr "Debug"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:62
+#: bundles/link/lib/onboarding/wizard.ex:73
 msgid "tabbar.item.welcome"
 msgstr "Welcome"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:63
+#: bundles/link/lib/onboarding/wizard.ex:74
 msgid "tabbar.item.welcome.forward"
 msgstr "Welcome"

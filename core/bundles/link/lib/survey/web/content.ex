@@ -10,18 +10,20 @@ defmodule Link.Survey.Content do
 
   alias Core.Survey.Tools
   alias Core.Promotions
+  alias Core.Pools.Submissions
 
   alias CoreWeb.ImageCatalogPicker
   alias CoreWeb.Promotion.Form, as: PromotionForm
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias CoreWeb.UI.Navigation.{TabbarArea, Tabbar, TabbarContent, TabbarFooter}
-
-  alias Link.Survey.Form, as: ToolForm
   alias Link.Survey.Monitor
+  alias Link.Survey.Form, as: ToolForm
+  alias Link.Pool.Form.Submission, as: SubmissionForm
 
   data(tool_id, :any)
   data(promotion_id, :any)
+  data(submission_id, :any)
   data(active_tab, :any)
   data(tabs, :map)
   data(changesets, :any)
@@ -36,8 +38,9 @@ defmodule Link.Survey.Content do
 
   @impl true
   def mount(%{"id" => tool_id, "tab" => active_tab}, _session, socket) do
-
     tool = Tools.get_survey_tool!(tool_id)
+    promotion = Promotions.get!(tool.promotion_id)
+    submission = Submissions.get!(promotion)
 
     {
       :ok,
@@ -45,6 +48,7 @@ defmodule Link.Survey.Content do
       |> assign(
         tool_id: tool_id,
         promotion_id: tool.promotion_id,
+        submission_id: submission.id,
         active_tab: active_tab,
         changesets: %{},
         save_timer: nil,
@@ -60,17 +64,33 @@ defmodule Link.Survey.Content do
   end
 
   @impl true
-  def handle_params(_unsigned_params, uri, %{assigns: %{tool_id: tool_id, active_tab: active_tab}} = socket) do
+  def handle_params(_unsigned_params, uri, %{assigns: %{tool_id: tool_id, active_tab: active_tab, submission_id: submission_id}} = socket) do
     parsed_uri = URI.parse(uri)
     uri_origin = "#{parsed_uri.scheme}://#{parsed_uri.authority}"
     tool = Tools.get_survey_tool!(tool_id)
-    tabs = create_tabs(active_tab, tool, uri_origin)
+    tabs = create_tabs(active_tab, tool, submission_id, uri_origin)
 
-    {:noreply, assign(socket, tabs: tabs)}
+    {
+      :noreply,
+      socket
+      |> assign(tabs: tabs)
+    }
   end
 
-  defp create_tabs(active_tab, tool, uri_origin) do
+  defp create_tabs(active_tab, tool, submission_id, uri_origin) do
     [
+      %{
+        id: :promotion_form,
+        active: active_tab === :promotion_form,
+        entity_id: tool.promotion_id,
+        title: dgettext("link-survey", "tabbar.item.promotion"),
+        forward_title: dgettext("link-survey", "tabbar.item.promotion.forward"),
+        type: :fullpage,
+        component: PromotionForm,
+        props: %{
+          entity_id: tool.promotion_id
+        }
+      },
       %{
         id: :tool_form,
         active: active_tab === :tool_form,
@@ -84,16 +104,15 @@ defmodule Link.Survey.Content do
         },
       },
       %{
-        id: :promotion_form,
-        active: active_tab === :promotion_form,
-        entity_id: tool.promotion_id,
-        title: dgettext("link-survey", "tabbar.item.promotion"),
-        forward_title: dgettext("link-survey", "tabbar.item.promotion.forward"),
+        id: :criteria_form,
+        active: active_tab === :criteria_form,
+        title: dgettext("link-survey", "tabbar.item.criteria"),
+        forward_title: dgettext("link-survey", "tabbar.item.criteria.forward"),
         type: :fullpage,
-        component: PromotionForm,
+        component: SubmissionForm,
         props: %{
-          entity_id: tool.promotion_id
-        }
+          entity_id: submission_id
+        },
       },
       %{
         id: :monitor,
@@ -128,6 +147,13 @@ defmodule Link.Survey.Content do
     send_update(ToolForm, id: :tool_form, focus: "")
     send_update(PromotionForm, id: :promotion_form, focus: "")
     {:noreply, socket}
+  end
+
+  def handle_event("delete", _params, %{assigns: %{tool_id: tool_id}} = socket) do
+    Tools.get_survey_tool!(tool_id)
+    |> Tools.delete_survey_tool()
+
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Dashboard))}
   end
 
   def handle_info({:claim_focus, :tool_form}, socket) do

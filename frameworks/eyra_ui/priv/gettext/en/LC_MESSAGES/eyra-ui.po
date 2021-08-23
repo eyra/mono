@@ -14,12 +14,12 @@ msgstr ""
 #, elixir-format
 #: lib/timestamp.ex:13
 msgid "timestamp.today"
-msgstr "today"
+msgstr "Today"
 
 #, elixir-format
 #: lib/timestamp.ex:16
 msgid "timestamp.yesterday"
-msgstr "yesterday"
+msgstr "Yesterday"
 
 #, elixir-format
 #: lib/auto_save.ex:78

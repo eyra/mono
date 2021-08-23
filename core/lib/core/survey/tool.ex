@@ -23,8 +23,8 @@ defmodule Core.Survey.Tool do
     field(:current_subject_count, :integer)
     field(:subject_count, :integer)
     field(:duration, :string)
-    field(:reward_currency, Ecto.Enum, values: [:eur, :usd, :gbp, :chf, :nok, :sek])
-    field(:reward_value, :integer)
+    # field(:reward_currency, Ecto.Enum, values: [:eur, :usd, :gbp, :chf, :nok, :sek])
+    # field(:reward_value, :integer)
     field(:devices, {:array, Ecto.Enum}, values: Core.Enums.Devices.schema_values())
 
     has_many(:tasks, Task)
@@ -37,7 +37,7 @@ defmodule Core.Survey.Tool do
     def id(survey_tool), do: survey_tool.auth_node_id
   end
 
-  @fields ~w(survey_url subject_count duration reward_currency reward_value devices)a
+  @fields ~w(survey_url subject_count duration devices)a
   @required_fields ~w()a
 
   @impl true

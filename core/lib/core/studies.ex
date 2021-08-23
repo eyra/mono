@@ -13,6 +13,7 @@ defmodule Core.Studies do
   alias Core.Survey.{Tool, Task}
   alias Core.DataDonation
   alias Core.Promotions.Promotion
+  alias Core.Pools.Submission
   alias Core.Signals
 
   # read list_studies(current_user, ...) do
@@ -38,13 +39,19 @@ defmodule Core.Studies do
     # AUTH: Can be piped through auth filter.
   end
 
-  def list_studies_with_published_promotion(tool_entities, opts \\ [])
+  def list_studies_with_accepted_submission(tool_entities, opts \\ [])
       when is_list(tool_entities) do
     preload = Keyword.get(opts, :preload, [])
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
 
+    accepted_submissions =
+      from(submission in Submission, where: submission.status == :accepted, select: submission.id)
+
     promotions =
-      from(promotion in Promotion, where: not is_nil(promotion.published_at), select: promotion.id)
+      from(promotion in Promotion,
+        where: promotion.id in subquery(accepted_submissions),
+        select: promotion.id
+      )
 
     studie_ids =
       tool_entities
@@ -82,6 +89,7 @@ defmodule Core.Studies do
 
     from(s in Study,
       where: s.auth_node_id in subquery(node_ids),
+      order_by: [desc: s.updated_at],
       preload: ^preload
     )
     |> Repo.all()

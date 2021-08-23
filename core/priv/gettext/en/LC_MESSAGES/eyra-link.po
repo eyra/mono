@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:37 lib/core_web/live/promotion/index.ex:37
+#: bundles/link/lib/index.ex:36 lib/core_web/live/promotion/index.ex:36
 msgid "welcome.title"
 msgstr "Welcome to"
 
@@ -37,12 +37,12 @@ msgid "signup.card.title"
 msgstr "Do you want to join or set up a study?"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:22 lib/core_web/live/promotion/index.ex:22
+#: bundles/link/lib/index.ex:21 lib/core_web/live/promotion/index.ex:21
 msgid "member.card.title"
 msgstr "Welcome back!"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:26 lib/core_web/live/promotion/index.ex:26
+#: bundles/link/lib/index.ex:25 lib/core_web/live/promotion/index.ex:25
 msgid "member.profile.card.title"
 msgstr "Hello %{user}, welcome back!"
 
@@ -82,6 +82,6 @@ msgid "usp3.title"
 msgstr "Improving Research Together"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:38 lib/core_web/live/promotion/index.ex:38
+#: bundles/link/lib/index.ex:37 lib/core_web/live/promotion/index.ex:37
 msgid "welcome.subtitle"
 msgstr "PaNL"

@@ -1,0 +1,56 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/form/submission.ex:90
+msgid "retract.button"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/form/submission.ex:95
+msgid "submit.button"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/form/submission.ex:113
+msgid "submit.error"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/card.ex:157 bundles/link/lib/dashboard.ex:92
+msgid "status.accepted.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/card.ex:155 bundles/link/lib/dashboard.ex:90
+msgid "status.idle.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/card.ex:156 bundles/link/lib/dashboard.ex:91
+msgid "status.submitted.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:102
+msgid "incomplete.forms.message"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:100
+msgid "ready.for.submission.message"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:105
+msgid "waiting.for.coordinator.message"
+msgstr ""
