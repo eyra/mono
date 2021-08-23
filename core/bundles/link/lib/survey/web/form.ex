@@ -6,9 +6,8 @@ defmodule Link.Survey.Form do
 
   alias EyraUI.Selector.Selector
   alias EyraUI.Panel.Panel
-  alias EyraUI.Text.{Title3, Title6, BodyMedium}
+  alias EyraUI.Text.{Title2, Title3, Title6, BodyMedium}
   alias EyraUI.Form.{Form, UrlInput, TextInput, NumberInput}
-  alias EyraUI.Button.{SecondaryLiveViewButton}
 
   prop(props, :map, required: true)
 
@@ -65,13 +64,6 @@ defmodule Link.Survey.Form do
     }
   end
 
-  def handle_event("delete", _params, %{assigns: %{entity_id: entity_id}} = socket) do
-    Tools.get_survey_tool!(entity_id)
-    |> Tools.delete_survey_tool()
-
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Dashboard))}
-  end
-
   # Saving
   def save(socket, entity, type, attrs) do
     changeset = Tool.changeset(entity, type, attrs)
@@ -83,6 +75,7 @@ defmodule Link.Survey.Form do
     ~H"""
       <ContentArea>
         <MarginY id={{:page_top}} />
+        <Title2>{{dgettext("link-survey", "form.title")}}</Title2>
         <Form id={{@id}} changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
           <Panel bg_color="bg-grey1">
             <Title3 color="text-white">{{dgettext("link-survey", "redirect.title")}}</Title3>
@@ -98,9 +91,6 @@ defmodule Link.Survey.Form do
           <TextInput field={{:duration}} label_text={{dgettext("link-survey", "duration.label")}} target={{@myself}} />
           <Spacing value="M" />
 
-          <NumberInput field={{:reward_value}} label_text={{dgettext("link-survey", "reward.label")}} target={{@myself}} />
-          <Spacing value="M" />
-
           <NumberInput field={{:subject_count}} label_text={{dgettext("link-survey", "config.nrofsubjects.label")}} target={{@myself}} />
           <Spacing value="M" />
 
@@ -109,8 +99,6 @@ defmodule Link.Survey.Form do
           <Spacing value="XS" />
           <Selector id={{:devices}} items={{ @device_labels }} parent={{ %{type: __MODULE__, id: @id} }} />
         </Form>
-        <Spacing value="XL" />
-        <SecondaryLiveViewButton label={{ dgettext("link-survey", "delete.button") }} event="delete" target={{@myself}} />
       </ContentArea>
     """
   end

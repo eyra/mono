@@ -84,7 +84,6 @@ defmodule CoreWeb.User.Forms.Features do
     ~H"""
       <ContentArea>
         <MarginY id={{:page_top}} />
-        <MarginY id={{:page_top}} />
         <FormArea>
           <Title2>{{dgettext("eyra-account", "features.title")}}</Title2>
           <BodyMedium>{{dgettext("eyra-account", "features.description")}}</BodyMedium>

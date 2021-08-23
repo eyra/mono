@@ -167,6 +167,10 @@ window.nativeIOSWrapper = {
     });
   },
   openScreen: (info) => {
+    if (info.subtype === "push") {
+      window.scrollTo(0, -100); // TBD: makes sure new page is scrolled to top, even with transparant top bar (ios)
+    }
+
     window.webkit.messageHandlers.Native.postMessage({
       type: "openScreen",
       ...info,
@@ -254,7 +258,6 @@ window.addEventListener("phx:page-loading-start", (info) => {
         subtype: "replace",
       });
     } else {
-      window.scrollTo(0, -100); // TBD: makes sure new page is scrolled to top, even with transparant top bar (ios)
       nativeWrapper.openScreen({
         id: screenId(info.detail.to),
         subtype: "push",

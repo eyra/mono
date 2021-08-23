@@ -21,16 +21,15 @@ defmodule Core.NotificationCenter.SignalHandlers do
   end
 
   @impl true
-  def dispatch(:promotion_published, %{promotion: promotion}) do
-    unless marked_as_notified?(promotion, :promotion_published) do
-      # FIXME: extend with elegibility filter & move to other location
+  def dispatch(:submission_accepted, %{submission: submission}) do
+    unless marked_as_notified?(submission, :submission_accepted) do
       query = from(u in User, where: u.student)
       stream = Repo.stream(query)
 
       Repo.transaction(fn ->
         notify_users(stream, %{title: "New study available"})
 
-        mark_as_notified(promotion, :promotion_published)
+        mark_as_notified(submission, :submission_accepted)
       end)
     end
   end

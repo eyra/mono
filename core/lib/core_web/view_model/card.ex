@@ -19,8 +19,7 @@ defmodule CoreWeb.ViewModel.Card do
                 title: title,
                 image_id: image_id,
                 themes: themes,
-                marks: marks,
-                published_at: published_at
+                marks: marks
               }
             } = tool
         },
@@ -45,8 +44,7 @@ defmodule CoreWeb.ViewModel.Card do
       "#{deadline_label}"
     ]
 
-    label =
-      if published_at === nil, do: dgettext("eyra-promotion", "published.false.label"), else: nil
+    label = nil
 
     icon_url = get_icon_url(marks, socket)
     image_info = ImageHelpers.get_image_info(image_id)

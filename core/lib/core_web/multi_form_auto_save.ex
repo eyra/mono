@@ -88,6 +88,15 @@ defmodule CoreWeb.MultiFormAutoSave do
         }
       end
 
+      def handle_info({:flash, type, message}, socket) do
+        {
+          :noreply,
+          socket
+          |> put_flash(type, message)
+          |> schedule_hide_flash()
+        }
+      end
+
       def handle_info({:flash, :error}, socket) do
         {
           :noreply,

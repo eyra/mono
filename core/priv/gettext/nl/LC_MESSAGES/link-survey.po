@@ -12,22 +12,17 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:109
+#: bundles/link/lib/survey/web/form.ex:94
 msgid "config.nrofsubjects.label"
 msgstr "Aantal vereiste subjects"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:100
+#: bundles/link/lib/survey/web/form.ex:88
 msgid "config.url.label"
-msgstr "Publieke web link van je survey"
+msgstr "Publieke web link van je online studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:118
-msgid "delete.button"
-msgstr "Verwijder survey"
-
-#, elixir-format
-#: bundles/link/lib/survey/web/form.ex:103
+#: bundles/link/lib/survey/web/form.ex:91
 msgid "duration.label"
 msgstr "Geschatte duur van het onderzoek"
 
@@ -38,7 +33,7 @@ msgid "by.author.label"
 msgstr "Door"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/complete.ex:56
+#: bundles/link/lib/survey/web/complete.ex:55
 msgid "thank.you.message"
 msgstr "Bedankt voor het meedoen. Hopelijk tot snel!"
 
@@ -68,14 +63,14 @@ msgid "apply.cta.title"
 msgstr "Doe mee met het onderzoek!"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/complete.ex:52
+#: bundles/link/lib/survey/web/complete.ex:50
 msgid "conpleted.title"
 msgstr "Afgerond"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:113
+#: bundles/link/lib/survey/web/form.ex:98
 msgid "devices.label"
-msgstr "Selecteer een of meerdere apparaten waarmee de participant de survey kan invullen."
+msgstr "Selecteer een of meerdere apparaten waarmee de participant de online study kan uitvoeren."
 
 #, elixir-format
 #: bundles/link/lib/survey/data/promotion_plugin.ex:52
@@ -83,121 +78,136 @@ msgid "open.cta.title"
 msgstr "Ga naar de vragenlijst"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:94
+#: bundles/link/lib/survey/web/form.ex:82
 msgid "redirect.description"
-msgstr "Hieronder staat de redirect url voor je survey. Deze moet gebruikt worden om participanten aan het einde van de survey weer terug te sturen om het werk af te melden. Kopieer de url en ga naar de survey op het platform naar keuze. Volg de instructies van het platform en plak de url op de juiste plaats."
+msgstr "Hieronder staat de redirect url voor je online study. Deze wordt gebruikt om participanten na afloop terug te sturen op PaNL. Kopieer de url en ga naar de studie op het online platform naar keuze. Volg de instructies van het platform en plak de url op de juiste plaats."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:93
+#: bundles/link/lib/survey/web/form.ex:81
 msgid "redirect.title"
-msgstr "Koppel je survey"
+msgstr "Koppel je online study"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:106
-msgid "reward.label"
-msgstr "Beloning in euro centen"
-
-#, elixir-format
-#: bundles/link/lib/survey/web/form.ex:112
+#: bundles/link/lib/survey/web/form.ex:97
 msgid "devices.title"
 msgstr "Apparaten"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:96
+#: bundles/link/lib/survey/web/form.ex:84
 msgid "redirect.label"
 msgstr "Redirect url"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:46
+#: bundles/link/lib/survey/web/monitor.ex:41
 msgid "completed.label"
 msgstr "Afgeronde taken"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:47
+#: bundles/link/lib/survey/web/monitor.ex:42
 msgid "pending.label"
 msgstr "Participanten bezig"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:43
+#: bundles/link/lib/survey/web/monitor.ex:38
 msgid "status.title"
 msgstr "Panel"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:48
+#: bundles/link/lib/survey/web/monitor.ex:43
 msgid "vacant.label"
 msgstr "Open taken"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:44
+#: bundles/link/lib/survey/web/monitor.ex:39
 msgid "status.label"
-msgstr "Hieronder kan je in gaten houden hoe het uitvoeren van taken verloopt"
+msgstr "Hieronder kan je in gaten houden hoe de campagne verloopt"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:151
+#: bundles/link/lib/survey/web/content.ex:181
 msgid "content.title"
-msgstr "Survey"
+msgstr "Campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:81
+#: bundles/link/lib/survey/web/overview.ex:109
 msgid "title"
-msgstr "Surveys"
+msgstr "Werving"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:96
+#: bundles/link/lib/survey/web/overview.ex:143
 msgid "add.first.button"
-msgstr "Maak je eerste survey aan"
+msgstr "Start je eerste campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:87
+#: bundles/link/lib/survey/web/overview.ex:124
 msgid "add.new.button"
-msgstr "Maal nieuwe survey aan"
+msgstr "Start nieuwe campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:92
+#: bundles/link/lib/survey/web/overview.ex:139
 msgid "empty.description"
-msgstr "Momenteel heb je nog geen surveys aangemaakt. Zodra je een survey aanmaakt zal deze aan deze pagina worden toegevoegd. Klik op de ondertaande button om te starten."
+msgstr "Momenteel heb je nog geen campagnes aangemaakt. Zodra je er een aanmaakt zal deze aan deze pagina worden toegevoegd. Klik op de ondertaande button om te starten."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:91
+#: bundles/link/lib/survey/web/overview.ex:138
 msgid "empty.title"
-msgstr "Hier vind je een overzicht van je surveys"
+msgstr "Hier vind je een overzicht van je campagnes"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:101
+#: bundles/link/lib/survey/web/content.ex:123
 msgid "tabbar.item.monitor"
 msgstr "Deelnemers"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:90
+#: bundles/link/lib/survey/web/content.ex:89
 msgid "tabbar.item.promotion"
 msgstr "Advertentie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:77
+#: bundles/link/lib/survey/web/content.ex:100
 msgid "tabbar.item.survey"
-msgstr "Survey"
+msgstr "Studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:53
+#: bundles/link/lib/survey/web/monitor.ex:48
 msgid "monitor.empty.description"
-msgstr "Na publicatie van de studie kan je op deze pagina een overzicht vinden van de aangemelde deelnemers en hun status."
+msgstr "Na pulbicate van de campagne kan je op deze pagina een overzicht vinden van de aangemelde deelnemers en hun status."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:52
+#: bundles/link/lib/survey/web/monitor.ex:47
 msgid "monitor.empty.title"
 msgstr "Hier komt informatie over de deelnemers"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:91
+#: bundles/link/lib/survey/web/content.ex:90
 msgid "tabbar.item.promotion.forward"
 msgstr "Maak advertentie aan"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:78
+#: bundles/link/lib/survey/web/content.ex:101
 msgid "tabbar.item.survey.forward"
-msgstr "Maak survey aan"
+msgstr "Koppel je studie"
 
-#, elixir-format, fuzzy
-#: bundles/link/lib/survey/web/content.ex:102
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:124
 msgid "tabbar.item.monitor.forward"
 msgstr "Bekijk deelnemers"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:112
+msgid "tabbar.item.criteria"
+msgstr "Studentenpool"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:113
+msgid "tabbar.item.criteria.forward"
+msgstr "Campagne indienen"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:78
+msgid "form.title"
+msgstr "Studie"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/overview.ex:118
+msgid "survey.overview.title"
+msgstr "Campagnes"

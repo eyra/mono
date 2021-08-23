@@ -39,10 +39,9 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
 
     []
     |> append(live_item(socket, :dashboard, active_item), can_access?(user_state, Link.Dashboard))
-    |> append(live_item(socket, :marketplace, active_item))
-    |> append(live_item(socket, :studentpool, active_item), user_state.coordinator)
     |> append(live_item(socket, :surveys, active_item), can_access?(user_state, CoreWeb.Study.New))
-    |> append(live_item(socket, :labstudies, active_item), can_access?(user_state, CoreWeb.Study.New))
+    |> append(live_item(socket, :studentpool, active_item), user_state.coordinator)
+    |> append(live_item(socket, :marketplace, active_item))
     |> append(live_item(socket, :todo, active_item, true, next_action_count))
   end
 

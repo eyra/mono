@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:37 lib/core_web/live/promotion/index.ex:37
+#: bundles/link/lib/index.ex:36 lib/core_web/live/promotion/index.ex:36
 msgid "welcome.title"
 msgstr ""
 
@@ -36,12 +36,12 @@ msgid "signup.card.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:22 lib/core_web/live/promotion/index.ex:22
+#: bundles/link/lib/index.ex:21 lib/core_web/live/promotion/index.ex:21
 msgid "member.card.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:26 lib/core_web/live/promotion/index.ex:26
+#: bundles/link/lib/index.ex:25 lib/core_web/live/promotion/index.ex:25
 msgid "member.profile.card.title"
 msgstr ""
 
@@ -81,6 +81,6 @@ msgid "usp3.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:38 lib/core_web/live/promotion/index.ex:38
+#: bundles/link/lib/index.ex:37 lib/core_web/live/promotion/index.ex:37
 msgid "welcome.subtitle"
 msgstr ""

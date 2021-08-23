@@ -25,6 +25,8 @@ module.exports = {
       warninglight: '#FFEFDC',
       delete: '#DB1E1E',
       deletelight: '#FFECEC',
+      error: '#DB1E1E',
+      errorlight: '#FFECEC',
       black: '#000000',
       grey1: '#222222',
       grey2: '#999999',

@@ -12,8 +12,7 @@ defmodule Link.Onboarding.Wizard do
   alias CoreWeb.User.Forms.Study, as: StudyForm
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
 
-  alias EyraUI.Button.Action.Redirect
-  alias EyraUI.Button.Face.Primary
+  alias EyraUI.Button.DynamicButton
   alias CoreWeb.UI.Navigation.{Tabbar, TabbarContent, TabbarFooter, TabbarArea}
 
   data(user_agent, :string, default: "")
@@ -23,11 +22,23 @@ defmodule Link.Onboarding.Wizard do
   def mount(_params, _session, socket) do
     tabs = create_tabs(socket)
 
+    finish_button = %{
+      action: %{
+        type: :redirect,
+        to: forward_path(socket)
+      },
+      face: %{
+        type: :primary,
+        label: dgettext("eyra-ui", "onboarding.forward")
+      }
+    }
+
     {
       :ok,
       socket
       |> assign(
         tabs: tabs,
+        finish_button: finish_button,
         changesets: %{},
         save_timer: nil,
         hide_flash_timer: nil
@@ -107,9 +118,7 @@ defmodule Link.Onboarding.Wizard do
           <Tabbar id={{ :tabbar }}/>
           <TabbarContent/>
           <TabbarFooter>
-              <Redirect to={{ forward_path(@socket) }}>
-                <Primary label={{ dgettext("eyra-ui", "onboarding.forward") }}/>
-              </Redirect>
+            <DynamicButton vm={{ @finish_button }} />
           </TabbarFooter>
         </TabbarArea>
       </Stripped>

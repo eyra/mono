@@ -12,36 +12,36 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/student_pool/overview.ex:38
+#: bundles/link/lib/pool/overview.ex:38
 msgid "tabbar.item.students"
 msgstr "Students"
 
 #, elixir-format
-#: bundles/link/lib/student_pool/overview.ex:46
+#: bundles/link/lib/pool/overview.ex:46
 msgid "tabbar.item.studies"
 msgstr "Studies"
 
 #, elixir-format
-#: bundles/link/lib/student_pool/overview.ex:58
+#: bundles/link/lib/pool/overview.ex:58
 msgid "title"
 msgstr "Student pool"
 
 #, elixir-format
-#: bundles/link/lib/student_pool/students.ex:16
+#: bundles/link/lib/pool/form/students.ex:12
 msgid "students.empty.description"
 msgstr "There are currently no registered students. You will be notified as soon as students have signed up."
 
 #, elixir-format
-#: bundles/link/lib/student_pool/students.ex:15
+#: bundles/link/lib/pool/form/students.ex:11
 msgid "students.empty.title"
 msgstr "Students participating in this pool will appear here"
 
 #, elixir-format
-#: bundles/link/lib/student_pool/studies.ex:16
+#: bundles/link/lib/pool/form/studies.ex:12
 msgid "studies.empty.description"
-msgstr "There are currently no research studies available. You will be notified as soon as studies have been enrolled in this pool."
+msgstr "There are currently no research studies available. You will be notified as soon as studies have been submitted in this pool."
 
 #, elixir-format
-#: bundles/link/lib/student_pool/studies.ex:15
+#: bundles/link/lib/pool/form/studies.ex:11
 msgid "studies.empty.title"
-msgstr "Research studies enrolled in this pool will appear here"
+msgstr "Research studies submitted in this pool will appear here"

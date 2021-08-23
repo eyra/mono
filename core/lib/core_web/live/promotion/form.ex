@@ -8,13 +8,11 @@ defmodule CoreWeb.Promotion.Form do
 
   alias CoreWeb.Router.Helpers, as: Routes
 
-  alias EyraUI.Status.{Info, Warning}
-  alias EyraUI.Text.{Title1, Title3, BodyMedium, SubHead}
+  alias EyraUI.Text.{Title2, Title3, BodyMedium}
   alias EyraUI.Form.{Form, TextInput, TextArea, PhotoInput, UrlInput}
-  alias EyraUI.Container.{Bar, BarItem}
   alias EyraUI.Selector.Selector
   alias EyraUI.ImagePreview
-  alias EyraUI.Button.{SecondaryAlpineButton, PrimaryLiveViewButton, SecondaryLiveViewButton}
+  alias EyraUI.Button.SecondaryAlpineButton
 
   prop(props, :any, required: true)
 
@@ -66,7 +64,6 @@ defmodule CoreWeb.Promotion.Form do
     entity = Promotions.get!(entity_id)
     changeset = Promotion.changeset(entity, :create, %{})
 
-    published? = Promotion.published?(entity)
     byline = Promotion.get_byline(entity)
     image_url = Promotion.get_image_url(entity, %{width: 400, height: 300})
     theme_labels = Themes.labels(entity.themes)
@@ -79,7 +76,6 @@ defmodule CoreWeb.Promotion.Form do
       |> assign(entity_id: entity_id)
       |> assign(entity: entity)
       |> assign(changeset: changeset)
-      |> assign(published?: published?)
       |> assign(byline: byline)
       |> assign(image_url: image_url)
       |> assign(theme_labels: theme_labels)
@@ -104,75 +100,12 @@ defmodule CoreWeb.Promotion.Form do
     }
   end
 
-  def handle_event("publish", _params, %{assigns: %{entity: entity}} = socket) do
-    case validate_for_publish(entity) do
-      {:ok, entity} ->
-        {
-          :noreply,
-          socket
-          |> save(entity, %{published_at: NaiveDateTime.utc_now()})
-          |> update_published_state()
-        }
-
-      {:error, changeset} ->
-        {
-          :noreply,
-          socket
-          |> assign(changeset: changeset)
-          |> flash_error()
-        }
-    end
-  end
-
-  def handle_event("unpublish", _params, %{assigns: %{entity: entity}} = socket) do
-    {
-      :noreply,
-      socket
-      |> save(entity, %{published_at: nil})
-      |> update_published_state()
-    }
-  end
-
-  defp update_published_state(%{assigns: %{entity: entity}} = socket) do
-    published? = Promotion.published?(entity)
-    socket |> assign(published?: published?)
-  end
-
-  defp validate_for_publish(entity) do
-    changeset = Promotion.changeset(entity, :publish, %{})
-
-    if changeset.valid? do
-      {:ok, entity}
-    else
-      changeset = %{changeset | action: :save}
-      {:error, changeset}
-    end
-  end
-
   @impl true
   def render(assigns) do
     ~H"""
       <ContentArea>
         <MarginY id={{:page_top}} />
-        <Title1>{{dgettext("eyra-promotion", "form.title")}}</Title1>
-
-        <Bar>
-          <BarItem>
-            <Case value={{@published? }} >
-              <True>
-                <Info text={{dgettext("eyra-promotion", "published.true.label")}} />
-              </True>
-              <False>
-                <Warning text={{dgettext("eyra-promotion", "published.false.label")}} />
-              </False>
-            </Case>
-          </BarItem>
-          <BarItem>
-            <SubHead>{{ @byline }}</SubHead>
-          </BarItem>
-        </Bar>
-        <Spacing value="L" />
-
+        <Title2>{{dgettext("eyra-promotion", "form.title")}}</Title2>
         <Form id={{@id}} changeset={{@changeset}} change_event="save" focus={{@focus}} target={{@myself}}>
           <TextInput field={{:title}} label_text={{dgettext("eyra-promotion", "title.label")}} target={{@myself}} />
           <TextInput field={{:subtitle}} label_text={{dgettext("eyra-promotion", "subtitle.label")}} target={{@myself}} />
@@ -219,17 +152,7 @@ defmodule CoreWeb.Promotion.Form do
           <TextInput field={{:banner_title}} label_text={{dgettext("eyra-promotion", "banner.title.label")}} target={{@myself}} />
           <TextInput field={{:banner_subtitle}} label_text={{dgettext("eyra-promotion", "banner.subtitle.label")}} target={{@myself}} />
           <UrlInput field={{:banner_url}} label_text={{dgettext("eyra-promotion", "banner.url.label")}} target={{@myself}} />
-          <Spacing value="XL" />
         </Form>
-        <Case value={{ @published? }} >
-        <True> <!-- Published -->
-          <SecondaryLiveViewButton label={{ dgettext("eyra-promotion", "unpublish.button") }} event="unpublish" target={{@myself}} />
-        </True>
-        <False> <!-- Not published -->
-          <PrimaryLiveViewButton label={{ dgettext("eyra-promotion", "publish.button") }} event="publish" target={{@myself}} />
-        </False>
-      </Case>
-
       </ContentArea>
     """
   end

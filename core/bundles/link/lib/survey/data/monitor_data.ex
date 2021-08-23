@@ -2,16 +2,18 @@ defmodule Link.Survey.MonitorData do
   use Ecto.Schema
 
   alias Core.Survey.Tools
-  alias Core.Promotions.Promotion
+  alias Core.Pools.Submissions
 
   embedded_schema do
-    field(:is_published, :boolean)
+    field(:is_active, :boolean)
     field(:subject_pending_count, :integer)
     field(:subject_completed_count, :integer)
     field(:subject_vacant_count, :integer)
   end
 
   def create(tool, promotion) do
+    submission = Submissions.get!(promotion)
+    is_active = submission.status === :accepted
     completed = Tools.count_completed_tasks(tool)
     pending = Tools.count_pending_tasks(tool)
 
@@ -19,7 +21,7 @@ defmodule Link.Survey.MonitorData do
 
     opts =
       %{}
-      |> Map.put(:is_published, Promotion.published?(promotion))
+      |> Map.put(:is_active, is_active)
       |> Map.put(:subject_pending_count, pending)
       |> Map.put(:subject_completed_count, completed)
       |> Map.put(:subject_vacant_count, subject_vacant_count)

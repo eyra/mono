@@ -2,24 +2,28 @@ defmodule EyraUI.Button.Face.PrimaryIcon do
   @moduledoc """
   A colored button with white text and an icon to the left
   """
-  use Surface.Component
+  use EyraUI.Component
 
-  prop(to, :string, required: true)
-  prop(label, :string, required: true)
-  prop(icon, :string, required: true)
-  prop(bg_color, :string, required: true)
+  prop(vm, :map, required: true)
+
+  defviewmodel(
+    label: nil,
+    icon: nil,
+    bg_color: "bg-primary",
+    text_color: "text-white"
+  )
 
   def render(assigns) do
     ~H"""
-    <div class="pt-1 pb-1 active:pt-5px active:pb-3px active:shadow-top4px w-full rounded pl-4 pr-4 {{@bg_color}}">
+    <div class="pt-1 pb-1 active:pt-5px active:pb-3px active:shadow-top4px w-full rounded pl-4 pr-4 {{bg_color(@vm)}}">
       <div class="flex justify-center items-center w-full">
         <div>
-            <img class="mr-3 -mt-1" src={{@icon}}/>
+            <img class="mr-3 -mt-1" src={{icon(@vm)}}/>
         </div>
         <div class="h-10 focus:outline-none">
           <div class="flex flex-col justify-center h-full items-center">
-            <div class="text-white text-button font-button">
-              {{ @label }}
+            <div class="text-button font-button {{text_color(@vm)}}">
+              {{ label(@vm) }}
             </div>
           </div>
         </div>

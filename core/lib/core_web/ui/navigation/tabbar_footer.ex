@@ -23,8 +23,8 @@ defmodule CoreWeb.UI.Navigation.TabbarFooter do
             <div :for={{ {[tab1, tab2], index} <- Enum.with_index(combine_shifted(tabs)) }} x-show="active_tab == {{ index }}">
               <RestrictedWidthArea type={{ tab1.type }}>
                 <div x-show="active_tab < {{ Enum.count(tabs)-1 }}" class="flex flex-row {{ align(tab1) }}">
-                  <Click code="active_tab = active_tab + 1" >
-                  <Forward label="{{ tab2.forward_title }}" />
+                  <Click vm={{ %{code: "active_tab = active_tab + 1"} }} >
+                    <Forward vm={{ %{label: tab2.forward_title} }} />
                   </Click>
                 </div>
               </RestrictedWidthArea>

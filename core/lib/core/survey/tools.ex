@@ -38,6 +38,8 @@ defmodule Core.Survey.Tools do
   alias Core.Authorization
   alias Core.Signals
   alias Core.Content.Nodes
+  alias Core.Studies
+  alias Core.Studies.Study
 
   @doc """
   Returns the list of survey_tools.
@@ -89,9 +91,13 @@ defmodule Core.Survey.Tools do
     node = Nodes.get!(tool.content_node_id)
     node_changeset = Tool.node_changeset(node, tool, attrs)
 
+    study = Studies.get_study!(tool.study_id)
+    study_changeset = Study.changeset(study, %{updated_at: NaiveDateTime.utc_now()})
+
     Multi.new()
     |> Multi.update(:tool, changeset)
     |> Multi.update(:content_node, node_changeset)
+    |> Multi.update(:study, study_changeset)
     |> Repo.transaction()
   end
 

@@ -158,7 +158,6 @@ labs =
         subtitle: Faker.Lorem.sentence(),
         description: Faker.Lorem.paragraph(),
         image_id: Enum.random(images),
-        published_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
         marks: ["vu"],
         plugin: "lab"
       },
@@ -187,7 +186,6 @@ surveys =
         subtitle: Faker.Lorem.sentence(),
         description: Faker.Lorem.paragraph(),
         image_id: Enum.random(images),
-        published_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
         marks: ["vu"],
         plugin: "survey"
       },

@@ -31,6 +31,11 @@ defmodule CoreWeb.LiveForm do
         socket
       end
 
+      def flash_error(socket, message) do
+        send(self(), {:flash, :error, message})
+        socket
+      end
+
       def schedule_save(socket, changeset) do
         socket
         |> hide_flash()

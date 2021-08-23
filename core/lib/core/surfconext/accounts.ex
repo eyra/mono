@@ -9,6 +9,20 @@ defmodule Core.Accounts do
   alias Core.Accounts.{User, UserToken, UserNotifier, Profile, Features}
   alias Core.Signals
 
+  ## Listings
+
+  def list_students() do
+    Repo.get_by(User, student: true)
+  end
+
+  def list_researchers() do
+    Repo.get_by(User, researcher: true)
+  end
+
+  def list_coordinators() do
+    Repo.get_by(User, coordinator: true)
+  end
+
   ## Database getters
 
   @doc """

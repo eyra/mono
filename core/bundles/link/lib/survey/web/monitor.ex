@@ -33,7 +33,7 @@ defmodule Link.Survey.Monitor do
     ~H"""
       <ContentArea>
         <MarginY id={{:page_top}} />
-        <Case value={{ @monitor_data.is_published }} >
+        <Case value={{ @monitor_data.is_active }} >
           <True>
             <Title2>{{dgettext("link-survey", "status.title")}}</Title2>
             <BodyMedium>{{dgettext("link-survey", "status.label")}}</BodyMedium>

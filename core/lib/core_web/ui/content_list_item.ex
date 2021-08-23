@@ -8,9 +8,9 @@ defmodule CoreWeb.UI.ContentListItem do
 
   prop(to, :string, required: true)
   prop(title, :string, required: true)
-  prop(description, :string, required: true)
+  prop(subtitle, :string, required: true)
   prop(quick_summary, :string, required: true)
-  prop(status, :any, required: true)
+  prop(label, :map, required: true)
   prop(image_id, :any, required: true)
 
   prop(title_css, :css_class,
@@ -21,11 +21,10 @@ defmodule CoreWeb.UI.ContentListItem do
 
   data(image_info, :any)
 
-  def label_bg_color(%{color: "warning"}), do: "bg-warning"
-  def label_bg_color(%{color: "success"}), do: "bg-success"
-  def label_text_color(%{color: "warning"}), do: "text-white"
-  def label_text_color(%{color: "success"}), do: "text-white"
-  def label_text_color(_), do: "text-grey1"
+  def label_bg_color(%{type: type}), do: "bg-#{type}"
+
+  def label_text_color(%{type: :tertiary}), do: "text-grey1"
+  def label_text_color(_), do: "text-white"
 
   def render(assigns) do
     assigns =
@@ -42,33 +41,36 @@ defmodule CoreWeb.UI.ContentListItem do
                 <div>
                   <div class={{@title_css}}>{{@title}}</div>
                   <Spacing value="XXS" />
-                  <div class={{@subtitle_css}}>{{@quick_summary}}</div>
+                  <div class={{@subtitle_css}}>{{@subtitle}}</div>
                   <Spacing value="XXS" />
                   <div class="flex flex-row">
                     <div class="flex-wrap">
-                      <div class="{{label_bg_color(@status)}} {{label_text_color(@status)}} w-full text-center rounded-full px-2 py-2px font-caption text-captionsmall md:text-caption" >
-                        {{@status.label}}
+                      <div class="{{label_bg_color(@label)}} {{label_text_color(@label)}} w-full text-center rounded-full px-2 py-2px font-caption text-captionsmall md:text-caption" >
+                        {{@label.text}}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
               <!-- LARGE VARIANT -->
-              <div class="hidden lg:block w-full">
-                <div class="flex flex-row w-full">
+              <div class="hidden lg:block w-full h-full">
+                <div class="flex flex-row w-full h-full gap-4 justify-center">
                   <div class="flex-grow">
-                    <div class={{@title_css}}>{{@title}}</div>
-                    <Spacing value="XXS" />
-                    <div class={{@subtitle_css}}>{{@description}}</div>
+                    <div class="flex flex-col gap-2 h-full justify-center">
+                      <div class={{@title_css}}>{{@title}}</div>
+                      <div :if={{ @subtitle != nil && @subtitle != "" }} class={{@subtitle_css}}>{{@subtitle}}</div>
+                    </div>
                   </div>
-                  <div class="flex-wrap flex-shrink-0 px-6 place-self-center">
+                  <div class="flex-shrink-0 w-30 place-self-center">
                     <Label color="text-grey2">
                       {{@quick_summary}}
                     </Label>
                   </div>
-                  <div class="flex-wrap flex-shrink-0 px-6 place-self-center">
-                    <div class="{{label_bg_color(@status)}} {{label_text_color(@status)}} w-full text-center rounded-full px-2 py-3px text-caption font-caption" >
-                      {{@status.label}}
+                  <div class="flex-shrink-0 w-30 place-self-center">
+                    <div class="flex flex-row justify-center w-full">
+                      <div class="{{label_bg_color(@label)}} {{label_text_color(@label)}} flex-wraptext-center rounded-full px-2 py-3px text-caption font-caption" >
+                        {{@label.text}}
+                      </div>
                     </div>
                   </div>
                 </div>
