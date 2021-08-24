@@ -3,6 +3,14 @@ import Config
 if config_env() == :prod do
   host = System.fetch_env!("BUNDLE_DOMAIN")
 
+  # Allow enabling of features from an environment variable
+  config :core,
+         :features,
+         System.get_env("ENABLED_APP_FEATURES", "")
+         |> String.split(~r"\s*,\s*")
+         |> Enum.map(&String.to_existing_atom/1)
+         |> Enum.map(&{&1, true})
+
   config :core, :admins, System.get_env("APP_ADMINS", "") |> String.split() |> MapSet.new()
   config :core, :static_path, System.fetch_env!("STATIC_PATH")
 
