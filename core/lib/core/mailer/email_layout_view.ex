@@ -2,6 +2,9 @@ defmodule Core.Mailer.EmailLayoutView do
   use Phoenix.View, root: "lib/core/mailer/templates", namespace: Core.Mailer
 
   @scales ["", "@2x", "@3x"]
+  def header_image_tag(name) do
+    image_tag("email-header-#{name}")
+  end
 
   def image_tag(image_name) do
     [{url, _} | _] =
