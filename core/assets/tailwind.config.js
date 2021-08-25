@@ -64,7 +64,7 @@ module.exports = {
         "84px" : "84px",
         "30" : "120px",
         "desktop-menu-width" : "296px",
-        "mobile-menu-width" : "304px",
+        "mobile-menu-width" : "256px",
         "sidepadding" : "64px",
       },
       width: {
@@ -178,6 +178,9 @@ module.exports = {
   plugins: [
     plugin(function({ addUtilities }) {
       const newUtilities = {
+        '.h-viewport' : {
+          height: 'calc(var(--vh, 1vh) * 100)'
+        },
         '.safe-top' : {
             paddingTop: 'constant(safe-area-inset-top)',
             paddingTop: 'env(safe-area-inset-top)'

@@ -1,4 +1,4 @@
-<div class="flex flex-row h-screen w-full">
+<div class="flex flex-row h-viewport w-full">
   <div class="w-0 md:w-sidepadding flex-shrink-0">
   </div>
   <div class="flex-1">

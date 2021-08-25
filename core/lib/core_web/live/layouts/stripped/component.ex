@@ -31,7 +31,7 @@ defmodule CoreWeb.Layouts.Stripped.Component do
         <div class="w-0 md:w-sidepadding flex-shrink-0">
         </div>
         <div class="flex-1">
-          <div class="flex flex-col w-full h-screen">
+          <div class="flex flex-col w-full h-viewport">
             <div class="flex-wrap">
               <MobileNavbar items={{ build_menu(:mobile_navbar, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
               <DesktopNavbar items={{ build_menu(:desktop_navbar, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />

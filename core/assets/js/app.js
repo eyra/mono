@@ -22,9 +22,9 @@ import { LiveSocket } from "phoenix_live_view";
 import { decode } from "blurhash";
 import { urlBase64ToUint8Array } from "./tools";
 import { registerAPNSDeviceToken } from "./apns";
+import "./100vh-fix";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
-
 
 window.blurHash = () => {
   return {

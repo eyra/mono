@@ -41,8 +41,8 @@ defmodule CoreWeb.Layouts.Website.MenuBuilder do
     is_logged_in = user_state != nil
 
     [
-      account_item(socket, is_logged_in, active_item, use_icon),
-      language_switch_item(socket, page_id)
+      language_switch_item(socket, page_id),
+      account_item(socket, is_logged_in, active_item, use_icon)
     ]
   end
 end

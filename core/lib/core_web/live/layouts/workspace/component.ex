@@ -46,8 +46,8 @@ defmodule CoreWeb.Layouts.Workspace.Component do
 
   def render(assigns) do
     ~H"""
-    <div class="w-full h-screen" x-data="{mobile_menu: false}">
-      <div class="fixed z-40 right-0 top-0 w-mobile-menu-width h-screen" x-show="mobile_menu" @click.away="mobile_menu = !mobile_menu, $parent.overlay = false">
+    <div class="w-full h-viewport" x-data="{mobile_menu: false}">
+      <div class="fixed z-40 right-0 top-0 w-mobile-menu-width h-viewport" x-show="mobile_menu" @click.away="mobile_menu = !mobile_menu, $parent.overlay = false">
         <MobileMenu items={{ @menus.mobile_menu }} path_provider={{ CoreWeb.Router.Helpers }} />
       </div>
       <DesktopMenu items={{ @menus.desktop_menu }} path_provider={{ CoreWeb.Router.Helpers }} />
