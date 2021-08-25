@@ -106,6 +106,7 @@ defmodule CoreWeb do
       import CoreWeb.Gettext
       alias CoreWeb.Router.Helpers, as: Routes
       import Core.Authorization, only: [can?: 4]
+      alias CoreWeb.Meta
 
       def current_user(%{assigns: %{current_user: current_user}}), do: current_user
       def current_user(_conn), do: nil

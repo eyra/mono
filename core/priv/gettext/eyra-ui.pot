@@ -67,7 +67,6 @@ msgid "menu.item.menu"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/menu/items-translations.ex:2
 #: lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.eyra"
 msgstr ""
@@ -146,4 +145,9 @@ msgstr ""
 #, elixir-format
 #: bundles/link/lib/onboarding/wizard.ex:74
 msgid "tabbar.item.welcome.forward"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/menu/items-translations.ex:2
+msgid "menu.item.link"
 msgstr ""

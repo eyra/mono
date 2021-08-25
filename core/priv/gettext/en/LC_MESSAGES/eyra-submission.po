@@ -27,17 +27,17 @@ msgid "submit.error"
 msgstr "The campaign is not ready to submit yet. Complete the forms (1) Promotion and (2) Study first."
 
 #, elixir-format
-#: bundles/link/lib/card.ex:157 bundles/link/lib/dashboard.ex:92
+#: bundles/link/lib/card.ex:157 bundles/link/lib/dashboard.ex:94
 msgid "status.accepted.label"
 msgstr "Online"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:155 bundles/link/lib/dashboard.ex:90
+#: bundles/link/lib/card.ex:155 bundles/link/lib/dashboard.ex:92
 msgid "status.idle.label"
 msgstr "Concept"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:156 bundles/link/lib/dashboard.ex:91
+#: bundles/link/lib/card.ex:156 bundles/link/lib/dashboard.ex:93
 msgid "status.submitted.label"
 msgstr "Submitted"
 

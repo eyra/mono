@@ -4,7 +4,7 @@ defmodule Link.Menu.Items do
   @impl true
   def values() do
     %{
-      eyra: %{target: Link.Index, size: :large, domain: "eyra-ui"},
+      link: %{target: Link.Index, size: :large, title: "Panl", domain: "eyra-ui"},
       debug: %{target: Link.Debug, domain: "eyra-ui"},
       dashboard: %{target: Link.Dashboard, domain: "eyra-ui"},
       marketplace: %{target: Link.Marketplace, domain: "eyra-ui"},

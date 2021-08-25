@@ -123,47 +123,47 @@ msgid "status.label"
 msgstr "Below you can keep an eye on the progress campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:181
+#: bundles/link/lib/survey/web/content.ex:177
 msgid "content.title"
 msgstr "Campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:109
+#: bundles/link/lib/survey/web/overview.ex:108
 msgid "title"
 msgstr "Recruitment"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:143
+#: bundles/link/lib/survey/web/overview.ex:142
 msgid "add.first.button"
 msgstr "Start your first campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:124
+#: bundles/link/lib/survey/web/overview.ex:123
 msgid "add.new.button"
 msgstr "Start new campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:139
+#: bundles/link/lib/survey/web/overview.ex:138
 msgid "empty.description"
 msgstr "There are currently no campaigns created by you. As soon as a you create one, it will be added to this page. Start by clicking on the button below."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:138
+#: bundles/link/lib/survey/web/overview.ex:137
 msgid "empty.title"
 msgstr "Campaigns you create will appear here"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:123
+#: bundles/link/lib/survey/web/content.ex:120
 msgid "tabbar.item.monitor"
 msgstr "Participants"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:89
+#: bundles/link/lib/survey/web/content.ex:86
 msgid "tabbar.item.promotion"
 msgstr "Promotion"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:100
+#: bundles/link/lib/survey/web/content.ex:97
 msgid "tabbar.item.survey"
 msgstr "Study"
 
@@ -178,27 +178,27 @@ msgid "monitor.empty.title"
 msgstr "Information about the participants will appear here"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:90
+#: bundles/link/lib/survey/web/content.ex:87
 msgid "tabbar.item.promotion.forward"
 msgstr "Create promotion"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:101
+#: bundles/link/lib/survey/web/content.ex:98
 msgid "tabbar.item.survey.forward"
 msgstr "Link your online study"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:124
+#: bundles/link/lib/survey/web/content.ex:121
 msgid "tabbar.item.monitor.forward"
 msgstr "View participants"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:112
+#: bundles/link/lib/survey/web/content.ex:109
 msgid "tabbar.item.criteria"
 msgstr "Student pool"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:113
+#: bundles/link/lib/survey/web/content.ex:110
 msgid "tabbar.item.criteria.forward"
 msgstr "Submit campaign"
 
@@ -208,6 +208,6 @@ msgid "form.title"
 msgstr "Study"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:118
+#: bundles/link/lib/survey/web/overview.ex:117
 msgid "survey.overview.title"
 msgstr "Campaigns"
