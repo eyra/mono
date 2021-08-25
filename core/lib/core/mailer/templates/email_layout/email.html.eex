@@ -27,7 +27,7 @@
     <body>
         <table class="container" border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td class="header-title">Welkom bij<br/>Eyra</td>
+                <td class="header-title"><%= header_image_tag(@email_header_image) %></td>
                 <td class="header-decoration" align="right"><%= image_tag("illustration") %></td>
             </tr>
             <tr>

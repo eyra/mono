@@ -1,4 +1,4 @@
-defmodule Link.StudentPool.Overview do
+defmodule Link.Pool.Overview do
   @moduledoc """
    The student overview screen.
   """
@@ -7,7 +7,7 @@ defmodule Link.StudentPool.Overview do
 
   import CoreWeb.Gettext
 
-  alias Link.StudentPool.{Students, Studies}
+  alias Link.Pool.Form.{Students, Studies}
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.UI.Navigation.{TabbarArea, Tabbar, TabbarContent}
