@@ -65,4 +65,8 @@ config :core,
          "admin@example.org"
        ])
 
-import_config "dev.secret.exs"
+try do
+  import_config "dev.secret.exs"
+rescue
+  _ -> IO.puts("Continueing without `dev.secret.exs` file..")
+end
