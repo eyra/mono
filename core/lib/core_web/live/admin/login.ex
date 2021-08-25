@@ -34,7 +34,7 @@ defmodule CoreWeb.Admin.Login do
 
   def render(assigns) do
     ~H"""
-    <div class="flex flex-row h-screen w-full">
+    <div class="flex flex-row h-viewport w-full">
       <div class="w-1 md:w-sidepadding flex-shrink-0"> </div>
       <div class="flex-2">
         <div class="flex flex-col h-full w-full">

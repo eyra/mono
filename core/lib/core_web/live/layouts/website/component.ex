@@ -37,10 +37,10 @@ defmodule CoreWeb.Layouts.Website.Component do
         </div>
         <div class="flex-1">
           <div x-data="{native_menu: false, mobile_menu: false}" @toggle-native-menu.window="native_menu = !native_menu">
-            <div class="fixed z-30 right-0 top-0 w-mobile-menu-width h-screen" x-show="mobile_menu" @click.away="mobile_menu = !mobile_menu, $parent.overlay = false">
+            <div class="fixed z-30 right-0 top-0 w-mobile-menu-width h-viewport" x-show="mobile_menu" @click.away="mobile_menu = !mobile_menu, $parent.overlay = false">
               <MobileMenu items={{ build_menu(:mobile_menu, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
             </div>
-            <div class="flex flex-col w-full h-screen">
+            <div class="flex flex-col w-full h-viewport">
               <div class="flex-wrap">
                 <MobileNavbar items={{ build_menu(:mobile_navbar, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
                 <DesktopNavbar items={{ build_menu(:desktop_navbar, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
