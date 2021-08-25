@@ -1,9 +1,7 @@
 function setDocHeight() {
-    document.documentElement.style.setProperty('--vh', `${window.innerHeight/100}px`);
-  };
+  document.documentElement.style.setProperty('--vh', `${window.innerHeight/100}px`);
+};
 
-  window.addEventListener('resize', setDocHeight);
-
-  window.addEventListener('orientationchange', setDocHeight);
-
-  setDocHeight();
+["resize", "orientationchange", "DOMContentLoaded"].forEach((eventName)=>{
+  window.addEventListener(eventName, setDocHeight);
+});
