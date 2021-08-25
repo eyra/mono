@@ -26,17 +26,17 @@ msgid "submit.error"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:157 bundles/link/lib/dashboard.ex:92
+#: bundles/link/lib/card.ex:157 bundles/link/lib/dashboard.ex:94
 msgid "status.accepted.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:155 bundles/link/lib/dashboard.ex:90
+#: bundles/link/lib/card.ex:155 bundles/link/lib/dashboard.ex:92
 msgid "status.idle.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:156 bundles/link/lib/dashboard.ex:91
+#: bundles/link/lib/card.ex:156 bundles/link/lib/dashboard.ex:93
 msgid "status.submitted.label"
 msgstr ""
 

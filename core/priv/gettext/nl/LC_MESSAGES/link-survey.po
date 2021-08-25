@@ -123,47 +123,47 @@ msgid "status.label"
 msgstr "Hieronder kan je in gaten houden hoe de campagne verloopt"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:181
+#: bundles/link/lib/survey/web/content.ex:177
 msgid "content.title"
 msgstr "Campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:109
+#: bundles/link/lib/survey/web/overview.ex:108
 msgid "title"
 msgstr "Werving"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:143
+#: bundles/link/lib/survey/web/overview.ex:142
 msgid "add.first.button"
 msgstr "Start je eerste campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:124
+#: bundles/link/lib/survey/web/overview.ex:123
 msgid "add.new.button"
 msgstr "Start nieuwe campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:139
+#: bundles/link/lib/survey/web/overview.ex:138
 msgid "empty.description"
 msgstr "Momenteel heb je nog geen campagnes aangemaakt. Zodra je er een aanmaakt zal deze aan deze pagina worden toegevoegd. Klik op de ondertaande button om te starten."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:138
+#: bundles/link/lib/survey/web/overview.ex:137
 msgid "empty.title"
 msgstr "Hier vind je een overzicht van je campagnes"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:123
+#: bundles/link/lib/survey/web/content.ex:120
 msgid "tabbar.item.monitor"
 msgstr "Deelnemers"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:89
+#: bundles/link/lib/survey/web/content.ex:86
 msgid "tabbar.item.promotion"
 msgstr "Advertentie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:100
+#: bundles/link/lib/survey/web/content.ex:97
 msgid "tabbar.item.survey"
 msgstr "Studie"
 
@@ -178,27 +178,27 @@ msgid "monitor.empty.title"
 msgstr "Hier komt informatie over de deelnemers"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:90
+#: bundles/link/lib/survey/web/content.ex:87
 msgid "tabbar.item.promotion.forward"
 msgstr "Maak advertentie aan"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:101
+#: bundles/link/lib/survey/web/content.ex:98
 msgid "tabbar.item.survey.forward"
 msgstr "Koppel je studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:124
+#: bundles/link/lib/survey/web/content.ex:121
 msgid "tabbar.item.monitor.forward"
 msgstr "Bekijk deelnemers"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:112
+#: bundles/link/lib/survey/web/content.ex:109
 msgid "tabbar.item.criteria"
 msgstr "Studentenpool"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:113
+#: bundles/link/lib/survey/web/content.ex:110
 msgid "tabbar.item.criteria.forward"
 msgstr "Campagne indienen"
 
@@ -208,6 +208,6 @@ msgid "form.title"
 msgstr "Studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:118
+#: bundles/link/lib/survey/web/overview.ex:117
 msgid "survey.overview.title"
 msgstr "Campagnes"

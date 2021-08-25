@@ -62,7 +62,7 @@ msgid "menu.item.menu"
 msgstr "Menu"
 
 #, elixir-format
-#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
+#: lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.eyra"
 msgstr "Menu"
 
@@ -140,3 +140,8 @@ msgstr "Welkom"
 #: bundles/link/lib/onboarding/wizard.ex:74
 msgid "tabbar.item.welcome.forward"
 msgstr "Welkom"
+
+#, elixir-format
+#: translations.ex:2
+msgid "menu.item.link"
+msgstr "Panl"

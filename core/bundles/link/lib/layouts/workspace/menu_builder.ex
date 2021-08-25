@@ -10,7 +10,7 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
   @impl true
   def build_menu(:desktop_menu, socket, user_state, active_item, page_id) do
     %{
-      home: live_item(socket, :eyra, active_item),
+      home: live_item(socket, :link, active_item),
       top: build_menu_first_part(socket, user_state, active_item),
       bottom: build_menu_second_part(socket, active_item, page_id)
     }
@@ -19,7 +19,7 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
   @impl true
   def build_menu(:mobile_navbar, socket, _user, active_item, _page_id) do
     %{
-      home: live_item(socket, :eyra, active_item),
+      home: live_item(socket, :link, active_item),
       right: [
         alpine_item(:menu, active_item, false, true)
       ]

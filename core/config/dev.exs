@@ -64,3 +64,5 @@ config :core,
        MapSet.new([
          "admin@example.org"
        ])
+
+import_config "dev.secret.exs"

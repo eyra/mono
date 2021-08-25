@@ -1,4 +1,4 @@
-defmodule Link.StudentPool.Form.Studies do
+defmodule Link.Pool.Form.Studies do
   use CoreWeb.UI.LiveComponent
 
   prop(user, :any, required: true)

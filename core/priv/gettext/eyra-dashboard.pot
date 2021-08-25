@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:62
+#: bundles/link/lib/survey/web/overview.ex:61
 msgid "default.study.title"
 msgstr ""
 

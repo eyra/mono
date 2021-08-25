@@ -8,7 +8,7 @@ config :core,
   menu_items: Link.Menu.Items,
   workspace_menu_builder: Link.Layouts.Workspace.MenuBuilder,
   website_menu_builder: Link.Layouts.Website.MenuBuilder,
-  stripped_menu_builder: CoreWeb.Layouts.Stripped.MenuBuilder
+  stripped_menu_builder: Link.Layouts.Stripped.MenuBuilder
 
 config :core, CoreWeb.UserAuth,
   researcher_signed_in_page: Link.Dashboard,
@@ -21,6 +21,10 @@ config :core, :features,
   password_sign_in: false
 
 config :core, Core.SurfConext, limit_schac_home_organization: "replace-with-vu"
+
+config :core, :meta,
+  bundle_title: "PaNL",
+  bundle: :link
 
 if Mix.env === :dev do
   import_config "#{Mix.env()}.exs"
