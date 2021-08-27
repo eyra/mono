@@ -119,7 +119,7 @@ msgstr "Pas profiel aan"
 #, elixir-format
 #: bundles/link/lib/onboarding/wizard.ex:84 lib/core_web/live/user/profile.ex:81
 msgid "tabbar.item.study.forward"
-msgstr "Selecteer studie"
+msgstr "Selecteer opleiding"
 
 #, elixir-format
 #: bundles/link/lib/onboarding/wizard.ex:32

@@ -49,12 +49,16 @@ defmodule Link.Index do
               <Intro>
                 {{ dgettext("eyra-link", "link.message") }}
               </Intro>
+              <Intro>
+                {{ dgettext("eyra-link", "link.message.interested") }}
+                <a href="mailto:info@researchpanl.eu" class="text-primary" >info@researchpanl.eu</a>.
+              </Intro>
             </div>
             <div>
               <div :if={{ @current_user != nil }}>
                 <PrimaryCTA
                   title={{ cta_title(@current_user) }}
-                  button_label={{ dgettext("eyra-link", "dashboard-button") }}
+                  button_label={{ if @current_user.researcher do dgettext("eyra-link", "dashboard-button") else dgettext("eyra-link", "marketplace-button") end }}
                   to={{ Routes.live_path(@socket, CoreWeb.Dashboard)}} />
               </div>
               <div :if={{ @current_user == nil }}>

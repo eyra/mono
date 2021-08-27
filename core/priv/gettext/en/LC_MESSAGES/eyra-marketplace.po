@@ -39,9 +39,9 @@ msgstr "Marketplace"
 #, elixir-format
 #: bundles/link/lib/marketplace.ex:126
 msgid "empty.description"
-msgstr "There are currently no research studies available to participate in. As soon as a research study becomes available, it will be added here and you will receive an email."
+msgstr "There are currently no research studies available to participate in. As soon as one becomes available, it will be added here and you will be notified by email (make sure to check your spam or junk mail folder, just in case)."
 
 #, elixir-format
 #: bundles/link/lib/marketplace.ex:125
 msgid "empty.title"
-msgstr "Studies to participate in will appear here"
+msgstr "Looking for a study?"
