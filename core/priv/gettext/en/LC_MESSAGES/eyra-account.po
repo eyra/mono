@@ -74,7 +74,7 @@ msgstr "Choose photo"
 #, elixir-format
 #: lib/core_web/live/user/forms/profile.ex:104
 msgid "choose.other.profile.photo.file"
-msgstr "Choose other photo"
+msgstr "Change"
 
 #, elixir-format
 #: lib/core_web/live/user/forms/profile.ex:112
