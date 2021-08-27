@@ -24,6 +24,15 @@ if config_env() == :prod do
     ],
     https: [port: String.to_integer(System.get_env("HTTPS_PORT", "443"))]
 
+  if https_keyfile = System.get_env("HTTPS_KEYFILE") do
+    config :core, CoreWeb.Endpoint,
+      https: [
+        cipher_suite: :strong,
+        keyfile: https_keyfile,
+        certfile: System.fetch_env!("HTTPS_CERTFILE")
+      ]
+  end
+
   config :core, Core.Repo,
     username: System.get_env("DB_USER"),
     password: System.get_env("DB_PASS"),

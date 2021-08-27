@@ -72,7 +72,12 @@ defmodule CoreWeb.Endpoint do
 
   @impl Phoenix.Endpoint
   def init(_key, config) do
-    {:ok, SiteEncrypt.Phoenix.configure_https(config)}
+    if Application.get_env(:core, __MODULE__) |> Keyword.get(:certfile) do
+      # Disable let's encrypt
+      {:ok, put_in(config, [:https, :mode], :manual)}
+    else
+      {:ok, SiteEncrypt.Phoenix.configure_https(config, mode: :manual) |> IO.inspect()}
+    end
   end
 
   @impl SiteEncrypt
