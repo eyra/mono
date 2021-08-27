@@ -1,6 +1,7 @@
 defmodule Core.SurfConext.Test do
   use Core.DataCase, async: true
   import Core.Signals.Test
+  import Core.NextActions.Test
 
   alias Core.Factories
 
@@ -20,7 +21,8 @@ defmodule Core.SurfConext.Test do
       sso_info = %{
         "sub" => Faker.UUID.v4(),
         "email" => Faker.Internet.email(),
-        "preferred_username" => Faker.Person.name(),
+        "given_name" => Faker.Person.name(),
+        "family_name" => Faker.Person.name(),
         "schac_home_organization" => "eduid.nl"
       }
 
@@ -30,8 +32,10 @@ defmodule Core.SurfConext.Test do
       assert surf_user.email == Map.get(sso_info, "email")
       assert surf_user.schac_home_organization == "eduid.nl"
       assert surf_user.user.email == Map.get(sso_info, "email")
-      assert surf_user.user.displayname == Map.get(sso_info, "preferred_username")
-      assert surf_user.user.profile.fullname == Map.get(sso_info, "preferred_username")
+      assert surf_user.user.displayname == "#{sso_info["given_name"]}"
+
+      assert surf_user.user.profile.fullname ==
+               "#{sso_info["given_name"]} #{sso_info["family_name"]}"
     end
 
     test "dispatches signal" do
@@ -45,7 +49,7 @@ defmodule Core.SurfConext.Test do
       {:ok, surf_user} = Core.SurfConext.register_user(sso_info)
 
       message = assert_signal_dispatched(:user_created)
-      assert message == %{user: surf_user}
+      assert message == %{user: surf_user.user}
     end
 
     test "assign the researcher role when the user is an employee" do
@@ -74,6 +78,27 @@ defmodule Core.SurfConext.Test do
       {:ok, surf_user} = Core.SurfConext.register_user(sso_info)
 
       assert surf_user.user.student
+    end
+
+    test "creates next action when the registered user is a student" do
+      sso_info = %{
+        "sub" => Faker.UUID.v4(),
+        "email" => Faker.Internet.email(),
+        "preferred_username" => Faker.Person.name(),
+        "schac_home_organization" => "eduid.nl",
+        "eduperson_affiliation" => ["student"]
+      }
+
+      {:ok, %{user: user}} = Core.SurfConext.register_user(sso_info)
+
+      url_resolver = fn target, _ ->
+        case target do
+          CoreWeb.User.Settings -> "/settings"
+          _ -> "/"
+        end
+      end
+
+      assert_next_action(user, url_resolver, "/settings")
     end
   end
 end

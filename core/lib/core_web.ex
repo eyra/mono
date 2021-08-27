@@ -65,6 +65,12 @@ defmodule CoreWeb do
 
       import CoreWeb.UrlResolver, only: [url_resolver: 1]
 
+      alias CoreWeb.UI.{MarginY, Empty}
+      alias CoreWeb.UI.Container.{ContentArea, FormArea, SheetArea}
+      alias EyraUI.Spacing
+      alias EyraUI.Case.{Case, True, False}
+      alias EyraUI.Button.DynamicButton
+
       unquote(view_helpers())
     end
   end
@@ -100,6 +106,7 @@ defmodule CoreWeb do
       import CoreWeb.Gettext
       alias CoreWeb.Router.Helpers, as: Routes
       import Core.Authorization, only: [can?: 4]
+      alias CoreWeb.Meta
 
       def current_user(%{assigns: %{current_user: current_user}}), do: current_user
       def current_user(_conn), do: nil

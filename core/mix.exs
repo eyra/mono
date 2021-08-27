@@ -15,7 +15,7 @@ defmodule Core.MixProject do
       # The main page in the docs
       docs: [
         main: "readme",
-        logo: "assets/static/images/eyra-logo.svg",
+        logo: "assets/static/logo-192x192.svg",
         extras: [
           "../README.md",
           "../guides/development_setup.md",

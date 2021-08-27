@@ -1,0 +1,57 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/core/accounts/next_actions/complete_profile.ex:11
+msgid "complete.profile.cta"
+msgstr "Open profile"
+
+#, elixir-format
+#: lib/core/accounts/next_actions/complete_profile.ex:10
+msgid "complete.profile.description"
+msgstr "Fill out the missing fields to complete your profile."
+
+#, elixir-format
+#: lib/core/accounts/next_actions/complete_profile.ex:9
+msgid "complete.profile.title"
+msgstr "Complete your profile"
+
+#, elixir-format
+#: lib/core/accounts/next_actions/promote_push_student.ex:11
+msgid "promote.push.student.cta"
+msgstr "Open settings"
+
+#, elixir-format
+#: lib/core/accounts/next_actions/promote_push_student.ex:10
+msgid "promote.push.student.description"
+msgstr "You receive e-mail when new studies are added."
+
+#, elixir-format
+#: lib/core/accounts/next_actions/promote_push_student.ex:9
+msgid "promote.push.student.title"
+msgstr "Register also for receiving push messages."
+
+#, elixir-format
+#: lib/core/accounts/next_actions/select_study_student.ex:11
+msgid "select.study.student.cta"
+msgstr "Open profile"
+
+#, elixir-format
+#: lib/core/accounts/next_actions/select_study_student.ex:10
+msgid "select.study.student.description"
+msgstr "Select your study program in the profile page for this."
+
+#, elixir-format
+#: lib/core/accounts/next_actions/select_study_student.ex:9
+msgid "select.study.student.title"
+msgstr "Join the research studies."

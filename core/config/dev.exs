@@ -40,6 +40,10 @@ config :core, Core.ImageCatalog.Unsplash,
   access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
   app_name: System.get_env("UNSPLASH_APP_NAME")
 
+config :core, Core.Mailer,
+  adapter: Bamboo.LocalAdapter,
+  default_from_email: "no-reply@example.com"
+
 config :exsync,
   addition_dirs: ["../../frameworks"]
 
@@ -53,8 +57,18 @@ config :core, :apns_backend, backend: Core.APNS.LoggingBackend
 
 config :core, :static_path, "/Users/emiel"
 
+config :core, :features, debug: true
+
 config :core,
        :admins,
        MapSet.new([
          "admin@example.org"
        ])
+
+try do
+  import_config "dev.secret.exs"
+rescue
+  File.Error ->
+    # Continuing without `dev.secret.exs` file...
+    nil
+end

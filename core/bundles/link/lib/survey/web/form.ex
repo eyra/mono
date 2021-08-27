@@ -1,25 +1,19 @@
 defmodule Link.Survey.Form do
   use CoreWeb.LiveForm
 
-  import CoreWeb.Gettext
-
   alias Core.Enums.Devices
   alias Core.Survey.{Tools, Tool}
 
-  alias CoreWeb.Router.Helpers, as: Routes
-
   alias EyraUI.Selector.Selector
-  alias EyraUI.Spacing
   alias EyraUI.Panel.Panel
-  alias EyraUI.Text.{Title3, Title6, BodyMedium}
+  alias EyraUI.Text.{Title2, Title3, Title6, BodyMedium}
   alias EyraUI.Form.{Form, UrlInput, TextInput, NumberInput}
-  alias EyraUI.Container.{ContentArea}
-  alias EyraUI.Button.{SecondaryLiveViewButton}
 
-  prop(entity_id, :any, required: true)
-  prop(uri_origin, :any, required: true)
+  prop(props, :map, required: true)
 
   data(entity, :any)
+  data(entity_id, :any)
+  data(uri_origin, :any)
   data(device_labels, :list)
   data(changeset, :any)
   data(focus, :any, default: "")
@@ -35,16 +29,13 @@ defmodule Link.Survey.Form do
     }
   end
 
-  # Handle update from parent after save
+  # Handle update from parent after auto-save, prevents overwrite of current state
   def update(_params, %{assigns: %{entity: _entity}} = socket) do
-    {
-      :ok,
-      socket
-    }
+    { :ok, socket }
   end
 
   # Handle initial update
-  def update(%{id: id, entity_id: entity_id, uri_origin: uri_origin}, socket) do
+  def update(%{id: id, props: %{entity_id: entity_id, uri_origin: uri_origin}}, socket) do
     entity = Tools.get_survey_tool!(entity_id)
     changeset = Tool.changeset(entity, :create, %{})
 
@@ -56,6 +47,7 @@ defmodule Link.Survey.Form do
       |> assign(id: id)
       |> assign(entity_id: entity_id)
       |> assign(entity: entity)
+      |> assign(uri_origin: uri_origin)
       |> assign(changeset: changeset)
       |> assign(device_labels: device_labels)
       |> assign(uri_origin: uri_origin)
@@ -72,13 +64,6 @@ defmodule Link.Survey.Form do
     }
   end
 
-  def handle_event("delete", _params, %{assigns: %{entity_id: entity_id}} = socket) do
-    Tools.get_survey_tool!(entity_id)
-    |> Tools.delete_survey_tool()
-
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Dashboard))}
-  end
-
   # Saving
   def save(socket, entity, type, attrs) do
     changeset = Tool.changeset(entity, type, attrs)
@@ -89,6 +74,8 @@ defmodule Link.Survey.Form do
   def render(assigns) do
     ~H"""
       <ContentArea>
+        <MarginY id={{:page_top}} />
+        <Title2>{{dgettext("link-survey", "form.title")}}</Title2>
         <Form id={{@id}} changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
           <Panel bg_color="bg-grey1">
             <Title3 color="text-white">{{dgettext("link-survey", "redirect.title")}}</Title3>
@@ -104,9 +91,6 @@ defmodule Link.Survey.Form do
           <TextInput field={{:duration}} label_text={{dgettext("link-survey", "duration.label")}} target={{@myself}} />
           <Spacing value="M" />
 
-          <NumberInput field={{:reward_value}} label_text={{dgettext("link-survey", "reward.label")}} target={{@myself}} />
-          <Spacing value="M" />
-
           <NumberInput field={{:subject_count}} label_text={{dgettext("link-survey", "config.nrofsubjects.label")}} target={{@myself}} />
           <Spacing value="M" />
 
@@ -115,8 +99,6 @@ defmodule Link.Survey.Form do
           <Spacing value="XS" />
           <Selector id={{:devices}} items={{ @device_labels }} parent={{ %{type: __MODULE__, id: @id} }} />
         </Form>
-        <Spacing value="XL" />
-        <SecondaryLiveViewButton label={{ dgettext("link-survey", "delete.button") }} event="delete" target={{@myself}} />
       </ContentArea>
     """
   end

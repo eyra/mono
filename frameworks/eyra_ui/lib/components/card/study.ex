@@ -27,8 +27,8 @@ defmodule EyraUI.Card.Study do
       <template slot="image">
         <div class="relative">
           <If condition={{ @card.label }} >
-            <div class="absolute top-6">
-              <EyraUI.Card.Label conn={{@socket}} path_provider={{@path_provider}} text={{@card.label}} type={{@label_type}} />
+            <div class="absolute top-6 z-30">
+              <EyraUI.Card.Label conn={{@socket}} path_provider={{@path_provider}} text={{@card.label.text}} type={{@card.label.type}} />
             </div>
           </If>
           <If condition={{ @card.icon_url }} >

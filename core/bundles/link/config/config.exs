@@ -1,24 +1,31 @@
-# This file is responsible for configuring your application
-# and its dependencies with the aid of the Mix.Config module.
-#
-# This configuration file is loaded before any dependency and
-# is restricted to this project.
-
-# General application configuration
 use Mix.Config
 
-import_config "config.secret.exs"
+config :core,
+  promotion_plugins: [
+    survey: Link.Survey.PromotionPlugin,
+    lab: Link.Lab.PromotionPlugin
+  ],
+  menu_items: Link.Menu.Items,
+  workspace_menu_builder: Link.Layouts.Workspace.MenuBuilder,
+  website_menu_builder: Link.Layouts.Website.MenuBuilder,
+  stripped_menu_builder: Link.Layouts.Stripped.MenuBuilder
 
-# Use Jason for JSON parsing in Phoenix
-config :phoenix, :json_library, Jason
+config :core, CoreWeb.UserAuth,
+  researcher_signed_in_page: Link.Dashboard,
+  participant_signed_in_page: Link.Marketplace,
+  participant_signed_in_first_time_page: Link.Onboarding.Wizard
 
-config :link, :ssl,
-  client: :native,
-  directory_url: {:internal, port: 4002},
-  db_folder: Path.join("tmp", "site_encrypt_db"),
-  domains: ["localhost"],
-  emails: ["admin@localhost"]
+config :core, :features,
+  sign_in_with_apple: false,
+  google_sign_in: false,
+  password_sign_in: false
 
-# Import environment specific config. This must remain at the bottom
-# of this file so it overrides the configuration defined above.
-import_config "#{Mix.env()}.exs"
+config :core, Core.SurfConext, limit_schac_home_organization: "replace-with-vu"
+
+config :core, :meta,
+  bundle_title: "PaNL",
+  bundle: :link
+
+if Mix.env === :dev do
+  import_config "#{Mix.env()}.exs"
+end

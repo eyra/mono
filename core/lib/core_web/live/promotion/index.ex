@@ -6,7 +6,6 @@ defmodule CoreWeb.Index do
 
   alias EyraUI.Card.PrimaryCTA
   alias EyraUI.Panel.USP
-  alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title1, Intro}
   alias EyraUI.Grid.{AbsoluteGrid}
 
@@ -41,6 +40,7 @@ defmodule CoreWeb.Index do
         active_item={{ :index }}
       >
         <ContentArea>
+          <MarginY id={{:page_top}} />
           <AbsoluteGrid>
             <div class="md:col-span-2">
               <Title1>

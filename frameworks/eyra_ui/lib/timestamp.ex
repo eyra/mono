@@ -10,10 +10,10 @@ defmodule EyraUI.Timestamp do
 
     cond do
       Timex.before?(Timex.shift(Timex.today(), days: -1), NaiveDateTime.to_date(timestamp)) ->
-        "#{dgettext("eyra-ui", "timestamp.today")} #{dgettext("eyra-ui", "timestamp.at")} #{time}"
+        "#{dgettext("eyra-ui", "timestamp.today")} #{dgettext("eyra-ui", "timestamp.at")}: #{time}"
 
       Timex.before?(Timex.shift(Timex.today(), days: -2), NaiveDateTime.to_date(timestamp)) ->
-        "#{dgettext("eyra-ui", "timestamp.yesterday")} #{dgettext("eyra-ui", "timestamp.at")} #{time}"
+        "#{dgettext("eyra-ui", "timestamp.yesterday")} #{dgettext("eyra-ui", "timestamp.at")}: #{time}"
 
       Timex.before?(Timex.shift(Timex.today(), days: -8), NaiveDateTime.to_date(timestamp)) ->
         weekday = Timex.format!(timestamp, "%A", :strftime)
@@ -28,5 +28,14 @@ defmodule EyraUI.Timestamp do
 
   def humanize(_) do
     "?"
+  end
+
+  # FIXME: Replace hard coded Timezone with user settings
+  def apply_timezone(%NaiveDateTime{} = timestamp, timezone \\ "Europe/Amsterdam") do
+    tz_offset =
+      Timex.timezone(timezone, timestamp)
+      |> Timex.Timezone.total_offset()
+
+    Timex.shift(timestamp, seconds: tz_offset)
   end
 end

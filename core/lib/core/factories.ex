@@ -8,6 +8,7 @@ defmodule Core.Factories do
     Studies,
     Content,
     Promotions,
+    Pools,
     Survey,
     Lab,
     Authorization,
@@ -43,6 +44,11 @@ defmodule Core.Factories do
   def build(:admin) do
     :member
     |> build(%{email: Core.Admin.emails() |> Enum.random()})
+  end
+
+  def build(:student) do
+    :member
+    |> build(%{student: true})
     |> struct!(%{
       profile: %Profile{
         fullname: Faker.Person.name()
@@ -128,6 +134,10 @@ defmodule Core.Factories do
     }
   end
 
+  def build(:criteria) do
+    %Pools.Criteria{}
+  end
+
   def build(:content_node) do
     %Content.Node{ready: true}
   end
@@ -186,14 +196,29 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
+  def build(:submission, %{} = attributes) do
+    {parent_content_node, _attributes} = Map.pop!(attributes, :parent_content_node)
+    content_node = build(:content_node, %{parent: parent_content_node})
+
+    %Pools.Submission{
+      status: :idle,
+      criteria: build(:criteria),
+      pool: Pools.get_by_name(:vu_students),
+      content_node: content_node
+    }
+  end
+
   def build(:promotion, %{} = attributes) do
     {study, attributes} = Map.pop!(attributes, :study)
     {parent_content_node, attributes} = Map.pop!(attributes, :parent_content_node)
 
+    content_node = build(:content_node, %{parent: parent_content_node})
+
     %Promotions.Promotion{
       title: Faker.Lorem.sentence(),
-      content_node: build(:content_node, %{parent: parent_content_node}),
-      auth_node: build(:auth_node, %{parent: study.auth_node})
+      content_node: content_node,
+      auth_node: build(:auth_node, %{parent: study.auth_node}),
+      submission: build(:submission, %{parent_content_node: content_node})
     }
     |> struct!(attributes)
   end

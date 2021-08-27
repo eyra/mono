@@ -2,19 +2,16 @@ defmodule CoreWeb.User.Forms.Profile do
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader
 
-  import CoreWeb.Gettext
-
   alias Core.Enums.StudyProgramCodes
   alias Core.Accounts
   alias Core.Accounts.UserProfileEdit
 
-  alias EyraUI.Spacing
   alias EyraUI.Text.{Title2}
-  alias EyraUI.Form.{Form, TextInput, UrlInput, Checkbox, PhotoInput}
-  alias EyraUI.Container.{ContentArea, FormArea}
+  alias EyraUI.Form.{Form, TextInput, UrlInput, PhotoInput}
 
-  prop(user, :any, required: true)
+  prop(props, :any, required: true)
 
+  data(user, :any)
   data(entity, :any)
   data(study_labels, :any)
   data(uploads, :any)
@@ -26,7 +23,20 @@ defmodule CoreWeb.User.Forms.Profile do
     save(socket, entity, :auto_save, %{photo_url: uploaded_file})
   end
 
-  def update(%{id: id, user: user}, socket) do
+  # Handle Selector Update
+  def update(
+        %{active_item_ids: active_item_ids, selector_id: selector_id},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    {:ok, socket |> save(entity, :auto_save, %{selector_id => active_item_ids})}
+  end
+
+  # Handle update from parent after auto-save, prevents overwrite of current state
+  def update(_params, %{assigns: %{entity: _entity}} = socket) do
+    {:ok, socket}
+  end
+
+  def update(%{id: id, props: %{user: user}}, socket) do
     profile = Accounts.get_profile(user)
     entity = UserProfileEdit.create(user, profile)
 
@@ -42,14 +52,6 @@ defmodule CoreWeb.User.Forms.Profile do
       |> init_file_uploader(:photo)
       |> update_ui()
     }
-  end
-
-  # Handle Selector Update
-  def update(
-        %{active_item_ids: active_item_ids, selector_id: selector_id},
-        %{assigns: %{entity: entity}} = socket
-      ) do
-    {:ok, socket |> save(entity, :auto_save, %{selector_id => active_item_ids})}
   end
 
   defp update_ui(%{assigns: %{entity: entity}} = socket) do
@@ -88,7 +90,8 @@ defmodule CoreWeb.User.Forms.Profile do
   @impl true
   def render(assigns) do
     ~H"""
-        <ContentArea top_padding="pt-14">
+      <ContentArea>
+        <MarginY id={{:page_top}} />
         <FormArea>
           <Title2>{{dgettext "eyra-account", "profile.title"}}</Title2>
           <Form id="main_form" changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
@@ -104,10 +107,11 @@ defmodule CoreWeb.User.Forms.Profile do
 
             <TextInput field={{:fullname}} label_text={{dgettext("eyra-account", "fullname.label")}} target={{@myself}} />
             <TextInput field={{:displayname}} label_text={{dgettext("eyra-account", "displayname.label")}} target={{@myself}} />
-            <TextInput field={{:title}} label_text={{dgettext("eyra-account", "professionaltitle.label")}} target={{@myself}} />
-            <UrlInput field={{:url}} label_text={{dgettext("eyra-account", "website.label")}} target={{@myself}} />
-            <Checkbox field={{:researcher}} label_text={{dgettext("eyra-account", "researcher.label")}}/>
-            <Checkbox field={{:student}} label_text={{dgettext("eyra-account", "student.label")}}/>
+
+            <div :if={{@user.researcher}} >
+              <TextInput field={{:title}} label_text={{dgettext("eyra-account", "professionaltitle.label")}} target={{@myself}} />
+              <UrlInput field={{:url}} label_text={{dgettext("eyra-account", "website.label")}} target={{@myself}} />
+            </div>
           </Form>
         </FormArea>
       </ContentArea>

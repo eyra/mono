@@ -7,5 +7,6 @@ defmodule Core.Mailer do
     new_email()
     |> from(Application.fetch_env!(:core, __MODULE__) |> Keyword.fetch!(:default_from_email))
     |> put_layout({Core.Mailer.EmailLayoutView, :email})
+    |> assign(:email_header_image, "notification")
   end
 end

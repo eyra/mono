@@ -32,7 +32,8 @@ defmodule Core.Accounts.Email do
 
   def account_created(user) do
     mail_user(user)
-    |> subject("Welcome")
+    |> assign(:email_header_image, "welcome")
+    |> subject("Welcome to PaNL")
     |> render(:account_created)
   end
 end

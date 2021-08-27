@@ -2,11 +2,15 @@ defmodule EyraUI.Button.Face.Forward do
   @moduledoc """
     A text button with a forward arrow on the right
   """
-  use Surface.Component
+  use EyraUI.Component
 
-  prop(label, :string, required: true)
-  prop(icon, :string, default: "/images/forward.svg")
-  prop(text_color, :css_class, default: "text-grey1")
+  prop(vm, :map, required: true)
+
+  defviewmodel(
+    label: nil,
+    icon: "/images/forward.svg",
+    text_color: "text-grey1"
+  )
 
   def render(assigns) do
     ~H"""
@@ -14,13 +18,13 @@ defmodule EyraUI.Button.Face.Forward do
       <div class="flex items-center">
         <div class="focus:outline-none">
           <div class="flex flex-col justify-center h-full items-center">
-            <div class="flex-wrap text-button font-button {{@text_color}}">
-              {{ @label }}
+            <div class="flex-wrap text-button font-button {{text_color(@vm)}}">
+              {{ label(@vm) }}
             </div>
           </div>
         </div>
         <div>
-            <img class="ml-4 -mt-2px" src={{@icon}}/>
+            <img class="ml-4 -mt-2px" src={{icon(@vm)}}/>
         </div>
       </div>
     </div>

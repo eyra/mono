@@ -3,21 +3,23 @@ defmodule Link.Marketplace do
   The home screen.
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Workspace.Component, :marketplace
 
+  alias Core.NextActions
+  alias Core.NextActions.Live.NextActionHighlight
   alias Core.Studies
   alias Core.Survey.Tool, as: SurveyTool
   alias Core.Lab.Tool, as: LabTool
 
+  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias Link.Marketplace.Card, as: CardVM
 
   alias EyraUI.Card.{PrimaryStudy, SecondaryStudy}
-  alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title2}
   alias EyraUI.Grid.{DynamicGrid}
 
-  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-
+  data(next_best_action, :any)
   data(highlighted_count, :any)
   data(owned_studies, :any)
   data(subject_studies, :any)
@@ -25,7 +27,8 @@ defmodule Link.Marketplace do
   data(available_count, :any)
   data(current_user, :any)
 
-  def mount(_params, _session, socket) do
+  def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
+    next_best_action = NextActions.next_best_action(url_resolver(socket), user)
     user = socket.assigns[:current_user]
     preload = [survey_tool: [:promotion], lab_tool: [:promotion, :time_slots]]
 
@@ -43,7 +46,7 @@ defmodule Link.Marketplace do
       |> Enum.into(MapSet.new())
 
     available_studies =
-      Studies.list_studies_with_published_promotion([LabTool, SurveyTool],
+      Studies.list_studies_with_accepted_submission([LabTool, SurveyTool],
         exclude: exclusion_list,
         preload: preload
       )
@@ -53,12 +56,18 @@ defmodule Link.Marketplace do
 
     socket =
       socket
+      |> update_menus()
+      |> assign(next_best_action: next_best_action)
       |> assign(highlighted_count: highlighted_count)
       |> assign(subject_studies: subject_studies)
       |> assign(available_studies: available_studies)
       |> assign(available_count: available_count)
 
     {:ok, socket}
+  end
+
+  def handle_auto_save_done(socket) do
+    socket |> update_menus()
   end
 
   def handle_info({:card_click, %{action: :edit, id: id}}, socket) do
@@ -79,30 +88,46 @@ defmodule Link.Marketplace do
     ~H"""
         <Workspace
           title={{ dgettext("eyra-ui", "marketplace.title") }}
-          user={{@current_user}}
-          user_agent={{ Browser.Ua.to_ua(@socket) }}
-          active_item={{ :marketplace }}
+          menus={{ @menus }}
         >
           <ContentArea>
-            <Title2>
-              {{ dgettext("eyra-study", "study.highlighted.title") }}
-              <span class="text-primary"> {{ @highlighted_count }}</span>
-            </Title2>
-            <DynamicGrid>
-              <div :for={{ card <- @subject_studies  }} >
-                <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
-              </div>
-            </DynamicGrid>
-            <div class="mt-12 lg:mt-16"/>
-            <Title2>
-              {{ dgettext("eyra-study", "study.all.title") }}
-              <span class="text-primary"> {{ @available_count }}</span>
-            </Title2>
-            <DynamicGrid>
-              <div :for={{ card <- @available_studies  }} class="mb-1" >
-                <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
-              </div>
-            </DynamicGrid>
+            <MarginY id={{:page_top}} />
+            <div :if={{ @next_best_action }}>
+              <NextActionHighlight vm={{ @next_best_action }}/>
+              <div class="mt-6 lg:mt-10"/>
+            </div>
+            <div :if={{@highlighted_count > 0}}>
+              <Title2>
+                {{ dgettext("eyra-study", "study.highlighted.title") }}
+                <span class="text-primary"> {{ @highlighted_count }}</span>
+              </Title2>
+            </div>
+            <Case value={{ Enum.count(@subject_studies) > 0 }} >
+              <True>
+                <DynamicGrid>
+                  <div :for={{ card <- @subject_studies  }} >
+                    <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
+                  </div>
+                </DynamicGrid>
+                <div class="mt-6 lg:mt-10"/>
+                <Title2>
+                  {{ dgettext("eyra-study", "study.all.title") }}
+                  <span class="text-primary"> {{ @available_count }}</span>
+                </Title2>
+                <DynamicGrid>
+                  <div :for={{ card <- @available_studies  }} class="mb-1" >
+                    <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
+                  </div>
+                </DynamicGrid>
+              </True>
+              <False>
+                <Empty
+                  title={{ dgettext("eyra-marketplace", "empty.title") }}
+                  body={{ dgettext("eyra-marketplace", "empty.description") }}
+                  illustration="cards"
+                />
+              </False>
+            </Case>
           </ContentArea>
         </Workspace>
     """

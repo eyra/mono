@@ -11,26 +11,36 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:140
+#: lib/core_web/live/marketplace.ex:144
 msgid "highlighted.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:152
+#: lib/core_web/live/marketplace.ex:156
 msgid "add.card.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:92
+#: lib/core_web/live/marketplace.ex:97
 msgid "default.study.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:159
+#: lib/core_web/live/marketplace.ex:163
 msgid "marketplace.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:133
+#: lib/core_web/live/marketplace.ex:138
 msgid "title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/marketplace.ex:126
+msgid "empty.description"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/marketplace.ex:125
+msgid "empty.title"
 msgstr ""

@@ -1,8 +1,7 @@
 defmodule CoreWeb.LiveForm do
   defmacro __using__(_opts) do
     quote do
-      use Surface.LiveComponent
-      alias CoreWeb.Router.Helpers, as: Routes
+      use CoreWeb.UI.LiveComponent
 
       def update(%{focus: focus}, socket) do
         {
@@ -29,6 +28,11 @@ defmodule CoreWeb.LiveForm do
 
       def flash_error(socket) do
         send(self(), {:flash, :error})
+        socket
+      end
+
+      def flash_error(socket, message) do
+        send(self(), {:flash, :error, message})
         socket
       end
 

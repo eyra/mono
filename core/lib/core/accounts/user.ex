@@ -17,6 +17,7 @@ defmodule Core.Accounts.User do
     field(:hashed_password, :string)
     field(:confirmed_at, :naive_datetime)
     field(:displayname, :string)
+    field(:visited_pages, {:array, :string})
     # Simplified role system, will be based on different rules later
     field(:researcher, :boolean)
     field(:student, :boolean)
@@ -102,6 +103,12 @@ defmodule Core.Accounts.User do
     |> validate_required([:email])
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
     |> validate_length(:email, max: 160)
+  end
+
+  def visited_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:visited_pages])
+    |> validate_required([:visited_pages])
   end
 
   @doc """

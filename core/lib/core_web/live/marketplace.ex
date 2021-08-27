@@ -3,6 +3,7 @@ defmodule CoreWeb.Marketplace do
   The home screen.
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Workspace.Component, :marketplace
 
   import Core.Authorization
 
@@ -17,7 +18,6 @@ defmodule CoreWeb.Marketplace do
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias EyraUI.Card.{PrimaryStudy, SecondaryStudy, ButtonCard}
-  alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title2}
   alias EyraUI.Grid.{DynamicGrid}
 
@@ -50,7 +50,7 @@ defmodule CoreWeb.Marketplace do
       |> Enum.into(MapSet.new())
 
     available_studies =
-      Studies.list_studies_with_published_promotion([DataDonation.Tool],
+      Studies.list_studies_with_accepted_submission([DataDonation.Tool],
         exclude: exclusion_list,
         preload: preload
       )
@@ -60,6 +60,7 @@ defmodule CoreWeb.Marketplace do
 
     socket =
       socket
+      |> update_menus()
       |> assign(highlighted_count: highlighted_count)
       |> assign(owned_studies: owned_studies)
       |> assign(subject_studies: subject_studies)
@@ -67,6 +68,10 @@ defmodule CoreWeb.Marketplace do
       |> assign(available_count: available_count)
 
     {:ok, socket}
+  end
+
+  def handle_auto_save_done(socket) do
+    socket |> update_menus()
   end
 
   def handle_info({:card_click, %{action: :edit, id: id}}, socket) do
@@ -131,11 +136,10 @@ defmodule CoreWeb.Marketplace do
     ~H"""
       <Workspace
         title={{ dgettext("eyra-marketplace", "title") }}
-        user={{ @current_user }}
-        user_agent={{ Browser.Ua.to_ua(@socket) }}
-        active_item={{ :marketplace }}
+        menus={{ @menus }}
       >
         <ContentArea>
+          <MarginY id={{:page_top}} />
           <Title2>
             {{ dgettext("eyra-marketplace", "highlighted.title") }}
             <span class="text-primary"> {{ @highlighted_count }}</span>
@@ -154,7 +158,7 @@ defmodule CoreWeb.Marketplace do
                 event="create_tool" />
             </div>
           </DynamicGrid>
-          <div class="mt-12 lg:mt-16"/>
+          <div class="mt-6 lg:mt-10"/>
           <Title2>
             {{ dgettext("eyra-marketplace", "marketplace.title") }}
             <span class="text-primary"> {{ @available_count }}</span>

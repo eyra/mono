@@ -4,10 +4,8 @@ defmodule CoreWeb.FakeSurvey do
   """
   use CoreWeb, :live_view
   alias EyraUI.Hero.HeroSmall
-  alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{BodyLarge, Title2}
   alias EyraUI.Button.PrimaryButton
-  alias EyraUI.Spacing
 
   data(redirect_url, :string)
 
@@ -24,6 +22,7 @@ defmodule CoreWeb.FakeSurvey do
       <HeroSmall title="Fake survey" bg_color="bg-grey1"/>
 
       <ContentArea>
+        <MarginY id={{:page_top}} />
         <Title2>Fake survey</Title2>
         <BodyLarge>This fake survey is used to validate the survey tool flow with an external tool.</BodyLarge>
         <Spacing value="M" />

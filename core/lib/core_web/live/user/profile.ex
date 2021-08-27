@@ -4,22 +4,25 @@ defmodule CoreWeb.User.Profile do
   """
   use CoreWeb, :live_view
   use CoreWeb.MultiFormAutoSave
+  use CoreWeb.Layouts.Workspace.Component, :profile
 
   import CoreWeb.Gettext
 
   alias Core
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.User.Forms.Profile, as: ProfileForm
+  alias CoreWeb.User.Forms.Study, as: StudyForm
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
 
-  alias EyraUI.Navigation.{Tabbar, TabbarContent, TabbarFooter, TabbarArea}
+  alias CoreWeb.UI.Navigation.{Tabbar, TabbarContent, TabbarFooter, TabbarArea}
 
   data(user_agent, :string, default: "")
   data(current_user, :any)
   data(tabs, :any)
 
-  def mount(_params, _session, socket) do
-    tabs = create_tabs(socket)
+  @impl true
+  def mount(%{"tab" => active_tab}, _session, socket) do
+    tabs = create_tabs(socket, String.to_atom(active_tab))
 
     {
       :ok,
@@ -30,7 +33,18 @@ defmodule CoreWeb.User.Profile do
         save_timer: nil,
         hide_flash_timer: nil
       )
+      |> update_menus()
     }
+  end
+
+  @impl true
+  def mount(_params, session, socket) do
+    mount(%{"tab" => "profile"}, session, socket)
+  end
+
+  @impl true
+  def handle_auto_save_done(socket) do
+    socket |> update_menus()
   end
 
   @impl true
@@ -44,38 +58,52 @@ defmodule CoreWeb.User.Profile do
     {:noreply, socket}
   end
 
-  defp append(list, extra, condition \\ true) do
-    if condition, do: list ++ [extra], else: list
+  defp append(list, extra, cond \\ true) do
+    if cond, do: list ++ [extra], else: list
   end
 
-  defp create_tabs(_socket) do
+  defp create_tabs(%{assigns: %{current_user: current_user}}, active_tab) do
     []
     |> append(%{
       id: :profile,
+      active: active_tab === :profile,
       title: dgettext("eyra-ui", "tabbar.item.profile"),
       forward_title: dgettext("eyra-ui", "tabbar.item.profile.forward"),
-      component: ProfileForm
+      type: :form,
+      component: ProfileForm,
+      props: %{user: current_user}
     })
+    |> append(
+      %{
+        id: :study,
+        active: active_tab === :study,
+        title: dgettext("eyra-ui", "tabbar.item.study"),
+        forward_title: dgettext("eyra-ui", "tabbar.item.study.forward"),
+        type: :form,
+        component: StudyForm,
+        props: %{user: current_user}
+      },
+      current_user.student
+    )
     |> append(%{
       id: :features,
+      active: active_tab === :features,
       action: nil,
       title: dgettext("eyra-ui", "tabbar.item.features"),
       forward_title: dgettext("eyra-ui", "tabbar.item.features.forward"),
-      component: FeaturesForm
+      type: :form,
+      component: FeaturesForm,
+      props: %{user: current_user}
     })
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-    <Workspace
-      user={{@current_user}}
-      user_agent={{ Browser.Ua.to_ua(@socket) }}
-      active_item={{ :profile }}
-    >
+    <Workspace menus={{ @menus }}>
       <TabbarArea tabs={{@tabs}}>
         <Tabbar id={{ :tabbar }}/>
-        <TabbarContent user={{@current_user}} />
+        <TabbarContent />
         <TabbarFooter/>
       </TabbarArea>
     </Workspace>

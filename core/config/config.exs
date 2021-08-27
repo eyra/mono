@@ -50,7 +50,7 @@ config :core, SignInWithApple,
 config :core, GoogleSignIn,
   client_id: "1027619588178-ckkft8qhcj2jev6bsonbuqghe6pn6isf.apps.googleusercontent.com",
   client_secret: "C-x02CCKC29o4OttKzhi0hE8",
-  redirect_uri: "http://localhost:4000/google-sign-in/auth"
+  redirect_uri: "http://74aa-2a02-a443-cab9-1-589c-bd8a-c01b-f0e1.ngrok.io/google-sign-in/auth"
 
 config :core, Core.ImageCatalog.Unsplash,
   access_key: "",
@@ -79,6 +79,8 @@ config :web_push_encryption, :vapid_details,
   public_key: "use `mix web_push.gen.keypair`",
   private_key: ""
 
+config :core, :features, debug: false
+
 import_config "#{Mix.env()}.exs"
 
 default_bundle =
@@ -92,5 +94,5 @@ bundle = System.get_env("BUNDLE", default_bundle) |> String.to_atom()
 config :core, :bundle, bundle
 
 unless is_nil(bundle) do
-  import_config "../bundles/#{bundle}/config.exs"
+  import_config "../bundles/#{bundle}/config/config.exs"
 end

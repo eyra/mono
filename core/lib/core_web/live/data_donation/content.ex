@@ -41,6 +41,11 @@ defmodule CoreWeb.DataDonation.Content do
     }
   end
 
+  @impl true
+  def handle_auto_save_done(socket) do
+    socket
+  end
+
   defp initial_image_query(%{promotion_id: promotion_id}) do
     promotion = Promotions.get!(promotion_id)
 
@@ -85,7 +90,7 @@ defmodule CoreWeb.DataDonation.Content do
           </div>
           <HeroSmall title={{ dgettext("eyra-data-donation", "content.title") }} />
           <ToolForm id={{:tool_form}} entity_id={{@tool_id}} />
-          <PromotionForm id={{:promotion_form}} entity_id={{@promotion_id}} />
+          <PromotionForm id={{:promotion_form}} props={{ %{entity_id: @promotion_id} }} />
         </div>
       </div>
     """

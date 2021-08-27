@@ -3,12 +3,11 @@ defmodule CoreWeb.Dashboard do
   The dashboard screen.
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Workspace.Component, :dashboard
 
   alias Core.Studies
-  alias CoreWeb.Components.ContentListItem
+  alias CoreWeb.UI.ContentListItem
 
-  alias EyraUI.Spacing
-  alias EyraUI.Container.{ContentArea}
   alias EyraUI.Text.{Title2}
   alias Core.NextActions.Live.NextActionHighlight
   alias Core.NextActions
@@ -30,21 +29,25 @@ defmodule CoreWeb.Dashboard do
 
     socket =
       socket
+      |> update_menus()
       |> assign(content_items: content_items)
       |> assign(next_best_action: NextActions.next_best_action(url_resolver(socket), user))
 
     {:ok, socket}
   end
 
+  def handle_auto_save_done(socket) do
+    socket |> update_menus()
+  end
+
   def render(assigns) do
     ~H"""
       <Workspace
         title={{ dgettext("eyra-ui", "dashboard.title") }}
-        user={{@current_user}}
-        user_agent={{ Browser.Ua.to_ua(@socket) }}
-        active_item={{ :dashboard }}
+        menus={{ @menus }}
       >
         <ContentArea>
+          <MarginY id={{:page_top}} />
           <div :if={{ @next_best_action }}>
             <NextActionHighlight vm={{ @next_best_action }}/>
             <Spacing value="XL" />
@@ -52,7 +55,7 @@ defmodule CoreWeb.Dashboard do
           <Title2>
             {{ dgettext("eyra-dashboard", "recent-items.title") }}
           </Title2>
-          <ContentListItem :for={{item <- @content_items}} title={{item.title}} description="Facere dolorem sequi sit voluptas labore porro qui quis" status={{item.status}} quick_summary="quick_summary" image_id={{item.image_id}} to={{item.path}}  />
+          <ContentListItem :for={{item <- @content_items}} title={{item.title}} subtitle={{item.subtitle}} label={{item.label}} quick_summary="quick_summary" image_id={{item.image_id}} to={{item.path}}  />
         </ContentArea>
     </Workspace>
     """
@@ -63,7 +66,7 @@ defmodule CoreWeb.Dashboard do
           id: edit_id,
           promotion: %{
             title: title,
-            description: description,
+            subtitle: subtitle,
             image_id: image_id
           }
         }
@@ -71,8 +74,8 @@ defmodule CoreWeb.Dashboard do
     %{
       path: Routes.live_path(socket, CoreWeb.DataDonation.Content, edit_id),
       title: title,
-      description: description,
-      status: %{label: "Concept", color: "success"},
+      subtitle: subtitle,
+      label: %{text: "Concept", type: :success},
       level: :critical,
       image_id: image_id
     }

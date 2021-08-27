@@ -4,6 +4,8 @@ defmodule EyraUI.Dynamic do
   prop(component, :module, required: true)
   prop(props, :map, default: %{})
 
+  slot(default)
+
   def render(assigns) do
     props =
       assigns

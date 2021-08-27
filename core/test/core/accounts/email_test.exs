@@ -65,9 +65,10 @@ defmodule Core.Accounts.Email.Test do
       user = Factories.build(:member)
       email = Email.account_created(user)
       assert email.to == user.email
-      assert email.subject == "Welcome"
-      assert email.html_body =~ "Your account has been created"
-      assert email.text_body =~ "Your account has been created"
+      assert email.subject =~ "Welcome"
+      assert email.html_body =~ "You have made an account"
+      assert email.html_body =~ "email-header-welcome.png"
+      assert email.text_body =~ "You have made an account"
     end
   end
 end

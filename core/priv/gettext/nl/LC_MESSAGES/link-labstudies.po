@@ -12,6 +12,26 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/lab/overview.ex:17
+#: bundles/link/lib/lab/overview.ex:25
 msgid "title"
 msgstr "Labstudies"
+
+#, elixir-format
+#: bundles/link/lib/lab/overview.ex:41
+msgid "add.first.button"
+msgstr "Maak je eerste labstudie aan"
+
+#, elixir-format
+#: bundles/link/lib/lab/overview.ex:37
+msgid "empty.description"
+msgstr "Momenteel heb je nog geen labstudies aangemaakt. Zodra je een labstudie aanmaakt zal deze aan deze pagina worden toegevoegd. Klik op de ondertaande button om te starten."
+
+#, elixir-format
+#: bundles/link/lib/lab/overview.ex:36
+msgid "empty.title"
+msgstr "Hier vind je een overzicht van je labstudies"
+
+#, elixir-format
+#: bundles/link/lib/lab/overview.ex:32
+msgid "add.new.button"
+msgstr "Maak nieuwe labstudie aan"

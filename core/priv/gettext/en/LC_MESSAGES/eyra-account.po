@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:106
+#: lib/core_web/live/user/forms/profile.ex:109
 msgid "displayname.label"
 msgstr "Display name"
 
@@ -22,7 +22,7 @@ msgid "email.label"
 msgstr "Email"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:105
+#: lib/core_web/live/user/forms/profile.ex:108
 msgid "fullname.label"
 msgstr "Full name"
 
@@ -32,14 +32,9 @@ msgid "password.label"
 msgstr "Password"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:93
+#: lib/core_web/live/user/forms/profile.ex:96
 msgid "profile.title"
 msgstr "My profile"
-
-#, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:109
-msgid "researcher.label"
-msgstr "I'm a researcher"
 
 #, elixir-format
 #: lib/core_web/live/user/signup.ex:73
@@ -72,96 +67,106 @@ msgid "confirm.token.resend_button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:100
+#: lib/core_web/live/user/forms/profile.ex:103
 msgid "choose.profile.photo.file"
 msgstr "Choose photo"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:101
+#: lib/core_web/live/user/forms/profile.ex:104
 msgid "choose.other.profile.photo.file"
 msgstr "Choose other photo"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:107
+#: lib/core_web/live/user/forms/profile.ex:112
 msgid "professionaltitle.label"
 msgstr "Professional title"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:108
+#: lib/core_web/live/user/forms/profile.ex:113
 msgid "website.label"
 msgstr "Website"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:41
+#: lib/core_web/live/user/settings.ex:43
 msgid "push.registration.button"
 msgstr "Activate"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:37
+#: lib/core_web/live/user/settings.ex:39
 msgid "push.registration.title"
 msgstr "Push notifications"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:48
+#: lib/core_web/live/user/settings.ex:50
 msgid "push.registration.activated"
 msgstr "Push notifications are activated on this browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:45
+#: lib/core_web/live/user/settings.ex:47
 msgid "push.registration.denied"
 msgstr "Push notifications are deactivated on this browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:39
+#: lib/core_web/live/user/settings.ex:41
 msgid "push.registration.label"
 msgstr "Activate on this browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:44
+#: lib/core_web/live/user/settings.ex:46
 msgid "push.registration.pending"
 msgstr "Determining state.."
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:50
+#: lib/core_web/live/user/settings.ex:52
 msgid "push.registration.test.button"
 msgstr "Send test notification"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/study.ex:71
+#: lib/core_web/live/user/forms/study.ex:74
 msgid "feature.study.description"
-msgstr "Multiple studies can be selected. Choose the resit variant if you (also) need to apply for previous year tasks."
+msgstr "Multiple programs can be selected. Choose the resit variant if you (also) need to apply for previous year tasks."
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:86
+#: lib/core_web/live/user/forms/features.ex:89
 msgid "features.description"
-msgstr "Selected characteristics will be used to show you studies that require specific participant traits."
+msgstr "Selected characteristics will be used to show in you research studies in the marketplace that require specific participant traits."
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:97
+#: bundles/link/lib/pool/form/submission.ex:157
+#: lib/core_web/live/user/forms/features.ex:100
 msgid "features.dominanthand.title"
 msgstr "Dominant hand"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:89
+#: bundles/link/lib/pool/form/submission.ex:149
+#: lib/core_web/live/user/forms/features.ex:92
 msgid "features.gender.title"
 msgstr "Gender"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:93
+#: bundles/link/lib/pool/form/submission.ex:153
+#: lib/core_web/live/user/forms/features.ex:96
 msgid "features.nativelanguage.title"
 msgstr "Native language"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/study.ex:70
+#: bundles/link/lib/pool/form/submission.ex:161
+#: lib/core_web/live/user/forms/study.ex:73
 msgid "features.study.title"
-msgstr "Study"
+msgstr "Study program"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:85
+#: bundles/link/lib/pool/form/submission.ex:145
+#: lib/core_web/live/user/forms/features.ex:88
 msgid "features.title"
 msgstr "Characteristics"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:110
-msgid "student.label"
-msgstr "I'm a student"
+#: bundles/link/lib/pool/form/submission.ex:162
+msgid "feature.study.content.description"
+msgstr "Students of the selected studies are eligitable. No selection means all students are eligitable."
+
+#, elixir-format
+#: bundles/link/lib/pool/form/submission.ex:146
+msgid "features.content.description"
+msgstr "Students with the selected characteristics are eligitable. No selection means all students are eligitable."

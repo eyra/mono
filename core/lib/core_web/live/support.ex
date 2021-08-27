@@ -1,10 +1,10 @@
 defmodule CoreWeb.Support do
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Workspace.Component, :support
 
   alias Surface.Components.Form
   alias EyraUI.Text.{Title3, BodyLarge}
   alias EyraUI.Spacing
-  alias EyraUI.Container.{ContentArea}
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias EyraUI.Form.{TextArea, TextInput}
   alias EyraUI.Text.{Title3}
@@ -15,7 +15,10 @@ defmodule CoreWeb.Support do
   data(data, :any, default: {})
 
   def mount(_params, _session, socket) do
-    {:ok, socket |> assign(:changeset, Helpdesk.new_ticket_changeset())}
+    {:ok,
+     socket
+     |> assign(:changeset, Helpdesk.new_ticket_changeset())
+     |> update_menus()}
   end
 
   def handle_event(
@@ -47,9 +50,8 @@ defmodule CoreWeb.Support do
     ~H"""
     <Workspace
         title={{ dgettext("eyra-support", "title") }}
-        user={{ @current_user }}
-        user_agent={{ Browser.Ua.to_ua(@socket) }}
-        active_item={{ :support }} >
+        menus={{ @menus }}
+    >
       <ContentArea>
         <Title3>{{dgettext("eyra-support", "form.title")}}</Title3>
         <BodyLarge>{{dgettext("eyra-support", "form.description")}} </BodyLarge>

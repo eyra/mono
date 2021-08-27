@@ -48,7 +48,6 @@ data_donation_promotions =
       banner_title: "Banner title",
       banner_subtitle: "Banner subtitle",
       banner_url: Faker.Internet.url(),
-      published_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
       plugin: "data_donation"
     }
   end)

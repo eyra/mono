@@ -4,10 +4,8 @@ defmodule CoreWeb.Promotion.Public do
   """
   use CoreWeb, :live_view
 
-  alias EyraUI.Spacing
   alias EyraUI.CampaignBanner
   alias EyraUI.Panel.Panel
-  alias EyraUI.Container.ContentArea
   alias EyraUI.Text.{Title1, Title2, Title3, BodyLarge, Intro}
   alias EyraUI.Button.{PrimaryLiveViewButton, SecondaryLiveViewButton, BackButton}
   alias EyraUI.Hero.{HeroImage, HeroBanner}
@@ -81,6 +79,7 @@ defmodule CoreWeb.Promotion.Public do
       </HeroImage>
       <HeroBanner title={{@transient.organisation.label}} subtitle={{ @plugin_info.byline }} icon_url={{ Routes.static_path(@socket, "/images/#{@transient.organisation.id}.svg") }}/>
       <ContentArea>
+          <MarginY id={{:page_top}} />
           <div class="ml-8 mr-8 text-center">
             <Title1>{{@promotion.subtitle}}</Title1>
           </div>

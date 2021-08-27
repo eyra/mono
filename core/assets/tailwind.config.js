@@ -25,6 +25,8 @@ module.exports = {
       warninglight: '#FFEFDC',
       delete: '#DB1E1E',
       deletelight: '#FFECEC',
+      error: '#DB1E1E',
+      errorlight: '#FFECEC',
       black: '#000000',
       grey1: '#222222',
       grey2: '#999999',
@@ -60,8 +62,9 @@ module.exports = {
         "48px" : "48px",
         "44px" : "44px",
         "84px" : "84px",
+        "30" : "120px",
         "desktop-menu-width" : "296px",
-        "mobile-menu-width" : "304px",
+        "mobile-menu-width" : "256px",
         "sidepadding" : "64px",
       },
       width: {
@@ -72,6 +75,7 @@ module.exports = {
         "illustration-sm" : "320px",
         "illustration-md" : "398px",
         "illustration-lg" : "696px",
+        "sheet": "760px",
         "form" : "400px",
         "card": "376px",
         "image-preview": "200px",
@@ -90,8 +94,8 @@ module.exports = {
         "header1" : "100px",
         "header1-sm" : "170px",
         "header1-lg" : "370px",
-        "header2" : "50px",
-        "header2-sm" : "90px",
+        "header2" : "100px",
+        "header2-sm" : "100px",
         "header2-lg" : "183px",
         "navbar" : "90px",
         "logo" : "32px",
@@ -134,7 +138,9 @@ module.exports = {
         "captionsmall": ['12px', '14px'],
         "subhead": ['20px', '20px'],
         "label": ['16px', '16px'],
+        "labelsmall": ['14px', '14px'],
         "button": ['18px', '18px'],
+        "buttonsmall": ['16px', '16px'],
         "intro": ['20px', '30px'],
         "introdesktop": ['24px', '36px'],
         "bodylarge": ['24px', '36px'],
@@ -146,7 +152,8 @@ module.exports = {
       },
       maxWidth: {
         "card": "376px",
-        "form": "400px"
+        "form": "400px",
+        "sheet": "760px"
       },
       maxHeight: {
         "header1": "376px",
@@ -171,6 +178,25 @@ module.exports = {
   plugins: [
     plugin(function({ addUtilities }) {
       const newUtilities = {
+        '.h-viewport' : {
+          height: 'calc(var(--vh, 1vh) * 100)'
+        },
+        '.safe-top' : {
+            paddingTop: 'constant(safe-area-inset-top)',
+            paddingTop: 'env(safe-area-inset-top)'
+        },
+        '.safe-left' : {
+            paddingLeft: 'constant(safe-area-inset-left)',
+            paddingLeft: 'env(safe-area-inset-left)'
+        },
+        '.safe-right' : {
+            paddingRight: 'constant(safe-area-inset-right)',
+            paddingRight: 'env(safe-area-inset-right)'
+        },
+        '.safe-bottom' : {
+            paddingBottom: 'constant(safe-area-inset-bottom)',
+            paddingBottom: 'env(safe-area-inset-bottom)'
+        },
         '.scrollbar-hide': {
           /* Firefox */
           'scrollbar-width': 'thin',

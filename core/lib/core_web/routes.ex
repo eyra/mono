@@ -5,6 +5,7 @@ defmodule CoreWeb.Routes do
 
       require CoreWeb.Cldr
       import CoreWeb.UserAuth
+      import CoreWeb.Meta
 
       pipeline :browser_base do
         plug(:accepts, ["html"])
@@ -19,6 +20,7 @@ defmodule CoreWeb.Routes do
         plug(CoreWeb.Plug.LiveLocale)
 
         plug(:fetch_live_flash)
+        plug(:fetch_meta_info)
         plug(:put_root_layout, {CoreWeb.LayoutView, :root})
       end
 

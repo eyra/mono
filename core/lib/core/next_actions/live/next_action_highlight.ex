@@ -1,5 +1,5 @@
 defmodule Core.NextActions.Live.NextActionHighlight do
-  use Surface.Component
+  use CoreWeb.UI.Component
   alias Core.NextActions.Live.NextAction
 
   prop(vm, :any, required: true)

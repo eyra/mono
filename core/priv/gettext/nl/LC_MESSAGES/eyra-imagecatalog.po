@@ -12,29 +12,29 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/image_catalog_picker.ex:40
+#: lib/core_web/image_catalog_picker.ex:38
 msgid "no.results.found.message"
 msgstr "Geen afbeeldingen gevonden"
 
 #, elixir-format
-#: lib/core_web/image_catalog_picker.ex:35
+#: lib/core_web/image_catalog_picker.ex:33
 msgid "search.image.button"
 msgstr "Zoek"
 
 #, elixir-format
-#: lib/core_web/image_catalog_picker.ex:24
+#: lib/core_web/image_catalog_picker.ex:22
 msgid "search.image.title"
 msgstr "Zoek een afbeelding"
 
 #, elixir-format
-#: lib/core_web/image_catalog_picker.ex:44
+#: lib/core_web/image_catalog_picker.ex:42
 msgid "images.found.message"
 msgid_plural "images.found.message.%{count}"
 msgstr[0] "1 afbeelding:"
 msgstr[1] "%{count} afbeeldingen:"
 
 #, elixir-format
-#: lib/core_web/image_catalog_picker.ex:75
+#: lib/core_web/image_catalog_picker.ex:73
 msgid "page.info.message"
 msgid_plural "page.info.message.%{count}"
 msgstr[0] "Weergave 1 afbeelding"

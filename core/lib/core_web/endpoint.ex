@@ -20,6 +20,17 @@ defmodule CoreWeb.Endpoint do
     websocket: [connect_info: [:user_agent, session: @session_options]]
   )
 
+  bundle = Application.get_env(:core, :bundle)
+
+  if bundle do
+    plug(Plug.Static,
+      at: "/",
+      from: {:core, "priv/bundles/#{to_string(bundle)}"},
+      gzip: false,
+      only: ~w(css fonts images js favicon.ico robots.txt manifest.json sw.js)
+    )
+  end
+
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phx.digest
@@ -28,7 +39,7 @@ defmodule CoreWeb.Endpoint do
     at: "/",
     from: :core,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt manifest.json sw.js)
+    only_matching: ~w(css fonts images js favicon logo apple-touch-icon robots manifest sw)
   )
 
   # Code reloading can be explicitly enabled under the
