@@ -1,0 +1,47 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/core_web/live/support.ex:64
+msgid "form.description"
+msgstr "Vul het formulier in om een vraag te stellen. We zullen bij / na behandeling contact met je opnemen via email."
+
+#, elixir-format
+#: lib/core_web/live/support.ex:63
+msgid "form.title"
+msgstr "Maak ondersteuningsvraag"
+
+#, elixir-format
+#: lib/core_web/live/support.ex:70
+msgid "ticket.description.label"
+msgstr "Uitleg van je ondersteuningsvraag"
+
+#, elixir-format
+#: lib/core_web/live/support.ex:68
+msgid "ticket.title.label"
+msgstr "Korte beschrijving van je vraag"
+
+#, elixir-format
+#: lib/core_web/live/support.ex:58
+msgid "title"
+msgstr "Ondersteuning"
+
+#, elixir-format
+#: lib/core_web/live/support.ex:72
+msgid "create_ticket.button"
+msgstr "Verstuur"
+
+#, elixir-format
+#: lib/core_web/live/support.ex:39
+msgid "ticket_created.info.flash"
+msgstr ""

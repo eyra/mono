@@ -14,74 +14,84 @@ msgstr ""
 #, elixir-format
 #: bundles/link/lib/index.ex:36 lib/core_web/live/promotion/index.ex:36
 msgid "welcome.title"
-msgstr "Welkom bij"
+msgstr "PaNL"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:57 lib/core_web/live/promotion/index.ex:57
+#: bundles/link/lib/index.ex:61 lib/core_web/live/promotion/index.ex:57
 msgid "dashboard-button"
-msgstr "Naar studie overzicht"
+msgstr "Naar het dashboard"
 
 #, elixir-format
 #: bundles/link/lib/index.ex:50 lib/core_web/live/promotion/index.ex:50
 msgid "link.message"
-msgstr "Wil jij de wetenschap een stap verder helpen? Meld je dan nu aan en kies aan welke studie jij je steentje bij wil dragen, door bijvoorbeeld vragen te beantwoorden of een taak uit te voeren. Ben je wetenschapper in de sociale of geesteswetenschappen? Meld je dan nu aan, zet een studie op en vind de juiste participanten."
+msgstr "PaNL is een marktplaats voor onderzoek. Onderzoekers kunnen hier campagnes opzetten voor het werven van deelnemers aan onderzoeksstudies. Deelnemers kunnen zich vervolgens opgeven om mee te doen aan deze studies. Op dit moment wordt PaNL alleen gebruikt voor student deelname aan onderzoeksstudies van de VU SBE faculteit. In 2022 wordt PaNL breder beschikbaar gesteld."
 
 #, elixir-format
 #: bundles/link/lib/index.ex:47 lib/core_web/live/promotion/index.ex:47
 msgid "link.title"
-msgstr "Steun Onderzoek"
+msgstr "Marktplaats"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:61 lib/core_web/live/promotion/index.ex:61
+#: bundles/link/lib/index.ex:65 lib/core_web/live/promotion/index.ex:61
 msgid "signup.card.title"
-msgstr "Meedoen of een studie opzetten?"
+msgstr "Ben je VU student of medewerker?"
 
 #, elixir-format
 #: bundles/link/lib/index.ex:21 lib/core_web/live/promotion/index.ex:21
 msgid "member.card.title"
-msgstr "Welkom terug!"
+msgstr "Welkom terug."
 
 #, elixir-format
 #: bundles/link/lib/index.ex:25 lib/core_web/live/promotion/index.ex:25
 msgid "member.profile.card.title"
-msgstr "Hoi %{user}, welkom terug!"
+msgstr "Welkom terug %{user}."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:62 lib/core_web/live/promotion/index.ex:62
+#: bundles/link/lib/index.ex:66 lib/core_web/live/promotion/index.ex:62
 msgid "signup.card.button"
-msgstr "Meld je gratis aan"
+msgstr "Meld je hier aan"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:66 lib/core_web/live/promotion/index.ex:66
+#: bundles/link/lib/index.ex:70 lib/core_web/live/promotion/index.ex:66
 msgid "usp1.description"
-msgstr "Op zoek naar een studie om aan mee te doen? Hier vind je een overzicht van studies die op zoek zijn naar jou."
+msgstr "Ondersteunt een flexibele en efficiënte workflow, inclusief een mobile-first ontwerp voor makkelijk gebruik op mobiel."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:66 lib/core_web/live/promotion/index.ex:66
+#: bundles/link/lib/index.ex:70 lib/core_web/live/promotion/index.ex:66
 msgid "usp1.title"
-msgstr "Marktplaats voor onderzoek"
+msgstr "Efficiënt voor onderzoekers"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:67 lib/core_web/live/promotion/index.ex:67
+#: bundles/link/lib/index.ex:71 lib/core_web/live/promotion/index.ex:67
 msgid "usp2.description"
-msgstr "Heb je moeite om voldoende participanten te vinden voor je onderzoek in Nederland? Stel je studie dan hier beschikbaar en begin met het werven van participanten."
+msgstr "De marktplaats biedt een aantrekkelijk overzicht van beschikbare studies waar deelnemers meer informatie kunnen vinden en deel kunnen nemen aan onderzoek."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:67 lib/core_web/live/promotion/index.ex:67
+#: bundles/link/lib/index.ex:71 lib/core_web/live/promotion/index.ex:67
 msgid "usp2.title"
-msgstr "Onderzoek in Nederland"
+msgstr "Aantrekkelijk voor deelnemers"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:68 lib/core_web/live/promotion/index.ex:68
+#: bundles/link/lib/index.ex:72 lib/core_web/live/promotion/index.ex:68
 msgid "usp3.description"
-msgstr "Mis je iets dat jou zou motiveren om vaker mee te doen? Of kunnen we het makkelijker maken om een studie op te zetten? Laat het ons weten!"
+msgstr "Ontwikkelt door onderzoekers van de VU met ervaring in het werven van deelnemers voor onderzoek, in samenwerking met platform ontwikkelaar Eyra en SURF."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:68 lib/core_web/live/promotion/index.ex:68
+#: bundles/link/lib/index.ex:72 lib/core_web/live/promotion/index.ex:68
 msgid "usp3.title"
-msgstr "Samen voor de wetenschap"
+msgstr "Voor en door onderzoekers"
 
 #, elixir-format
 #: bundles/link/lib/index.ex:37 lib/core_web/live/promotion/index.ex:37
 msgid "welcome.subtitle"
-msgstr "PaNL"
+msgstr "Voor onderzoek"
+
+#, elixir-format
+#: bundles/link/lib/index.ex:61
+msgid "marketplace-button"
+msgstr "Naar de marktplaats"
+
+#, elixir-format, fuzzy
+#: bundles/link/lib/index.ex:53
+msgid "link.message.interested"
+msgstr "Meer weten? Stuur een e-mail naar "

@@ -74,7 +74,7 @@ msgstr "Choose photo"
 #, elixir-format
 #: lib/core_web/live/user/forms/profile.ex:104
 msgid "choose.other.profile.photo.file"
-msgstr "Choose other photo"
+msgstr "Change"
 
 #, elixir-format
 #: lib/core_web/live/user/forms/profile.ex:112
@@ -124,12 +124,12 @@ msgstr "Send test notification"
 #, elixir-format
 #: lib/core_web/live/user/forms/study.ex:74
 msgid "feature.study.description"
-msgstr "Multiple programs can be selected. Choose the resit variant if you (also) need to apply for previous year tasks."
+msgstr "Select your study program(s), bedrijfskunde (BK) and/or international business administration (IBA). Were you enrolled in RPR1 (1st year) or RPR2 (2nd year) before, but did not finish? Select the \"(resit)\" version of the year that you still need to finish."
 
 #, elixir-format
 #: lib/core_web/live/user/forms/features.ex:89
 msgid "features.description"
-msgstr "Selected characteristics will be used to show in you research studies in the marketplace that require specific participant traits."
+msgstr "By selecting these characteristics, more studies will become available to you. It enables you to participate in research studies with specific eligibility requirements."
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:157
@@ -147,7 +147,7 @@ msgstr "Gender"
 #: bundles/link/lib/pool/form/submission.ex:153
 #: lib/core_web/live/user/forms/features.ex:96
 msgid "features.nativelanguage.title"
-msgstr "Native language"
+msgstr "First language"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:161

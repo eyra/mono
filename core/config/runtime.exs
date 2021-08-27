@@ -25,6 +25,8 @@ if config_env() == :prod do
     https: [port: String.to_integer(System.get_env("HTTPS_PORT", "443"))]
 
   if https_keyfile = System.get_env("HTTPS_KEYFILE") do
+    config :core, :ssl, mode: :manual
+
     config :core, CoreWeb.Endpoint,
       https: [
         cipher_suite: :strong,

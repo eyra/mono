@@ -68,5 +68,7 @@ config :core,
 try do
   import_config "dev.secret.exs"
 rescue
-  _ -> IO.puts("Continueing without `dev.secret.exs` file..")
+  File.Error ->
+    # Continuing without `dev.secret.exs` file...
+    nil
 end

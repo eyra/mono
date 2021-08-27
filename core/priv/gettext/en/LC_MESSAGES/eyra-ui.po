@@ -119,7 +119,7 @@ msgstr "Update profile"
 #, elixir-format
 #: bundles/link/lib/onboarding/wizard.ex:84 lib/core_web/live/user/profile.ex:81
 msgid "tabbar.item.study.forward"
-msgstr "Select study"
+msgstr "Select study program"
 
 #, elixir-format
 #: bundles/link/lib/onboarding/wizard.ex:32

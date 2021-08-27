@@ -136,7 +136,7 @@ msgstr "Credits"
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:127
 msgid "search.different.image.button"
-msgstr "Select other image"
+msgstr "Select image"
 
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:111

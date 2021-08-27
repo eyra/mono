@@ -30,6 +30,7 @@ defmodule CoreWeb.Live.Routes do
         live("/marketplace", Marketplace)
         live("/todo", Todo)
         live("/notifications", Notifications)
+        live("/support", Support)
       end
 
       if Mix.env() in [:dev, :test] do

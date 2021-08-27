@@ -14,74 +14,84 @@ msgstr ""
 #, elixir-format
 #: bundles/link/lib/index.ex:36 lib/core_web/live/promotion/index.ex:36
 msgid "welcome.title"
-msgstr "Welcome to"
+msgstr "PaNL"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:57 lib/core_web/live/promotion/index.ex:57
+#: bundles/link/lib/index.ex:61 lib/core_web/live/promotion/index.ex:57
 msgid "dashboard-button"
 msgstr "Go to dashboard"
 
 #, elixir-format
 #: bundles/link/lib/index.ex:50 lib/core_web/live/promotion/index.ex:50
 msgid "link.message"
-msgstr "Do you want to empower science? Register now and choose in which study you would like to participate, by for example answering questions or performing a task. Are you a social sciences or humanities researcher? Register now, set up a study and find the right participants."
+msgstr "PaNL is a marketplace for research. Researchers can set-up campaigns to recruit participants for research studies. Participants can then apply to participate in these studies. Currently PaNL is only available for student participation in research studies of the VU SBE faculty. In 2022 PaNL will be released for a broader audience."
 
 #, elixir-format
 #: bundles/link/lib/index.ex:47 lib/core_web/live/promotion/index.ex:47
 msgid "link.title"
-msgstr "Empower Science"
+msgstr "Marketplace"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:61 lib/core_web/live/promotion/index.ex:61
+#: bundles/link/lib/index.ex:65 lib/core_web/live/promotion/index.ex:61
 msgid "signup.card.title"
-msgstr "Do you want to join or set up a study?"
+msgstr "Are you a VU student or employee? "
 
 #, elixir-format
 #: bundles/link/lib/index.ex:21 lib/core_web/live/promotion/index.ex:21
 msgid "member.card.title"
-msgstr "Welcome back!"
+msgstr "Welcome back."
 
 #, elixir-format
 #: bundles/link/lib/index.ex:25 lib/core_web/live/promotion/index.ex:25
 msgid "member.profile.card.title"
-msgstr "Hello %{user}, welcome back!"
+msgstr "Welcome back %{user}."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:62 lib/core_web/live/promotion/index.ex:62
+#: bundles/link/lib/index.ex:66 lib/core_web/live/promotion/index.ex:62
 msgid "signup.card.button"
-msgstr "Sign up for free"
+msgstr "Sign up here"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:66 lib/core_web/live/promotion/index.ex:66
+#: bundles/link/lib/index.ex:70 lib/core_web/live/promotion/index.ex:66
 msgid "usp1.description"
-msgstr "Are you looking for a study to participate in? This platform provides an overview of studies that are open for participation."
+msgstr "Supports a flexible and efficient workflow, including a mobile-first design that enables easy use on mobile devices."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:66 lib/core_web/live/promotion/index.ex:66
+#: bundles/link/lib/index.ex:70 lib/core_web/live/promotion/index.ex:66
 msgid "usp1.title"
-msgstr "Marketplace for Research"
+msgstr "Efficient for researchers"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:67 lib/core_web/live/promotion/index.ex:67
+#: bundles/link/lib/index.ex:71 lib/core_web/live/promotion/index.ex:67
 msgid "usp2.description"
-msgstr "Having trouble finding enough participants for your research in the Netherlands? Publish your study on this platform and start recruiting participants."
+msgstr "Designed to make it appealing for participants to browse through available studies and apply to participate."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:67 lib/core_web/live/promotion/index.ex:67
+#: bundles/link/lib/index.ex:71 lib/core_web/live/promotion/index.ex:67
 msgid "usp2.title"
-msgstr "Research in the Netherlands"
+msgstr "Appealing to participants"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:68 lib/core_web/live/promotion/index.ex:68
+#: bundles/link/lib/index.ex:72 lib/core_web/live/promotion/index.ex:68
 msgid "usp3.description"
-msgstr "Do you have ideas on what would motivate you to participate more? Or can we help to make it easier to set up a study? Let us know!"
+msgstr "Developed by researchers from the VU experienced in participant recruitment, in collaboration with platform developer Eyra and SURF."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:68 lib/core_web/live/promotion/index.ex:68
+#: bundles/link/lib/index.ex:72 lib/core_web/live/promotion/index.ex:68
 msgid "usp3.title"
-msgstr "Improving Research Together"
+msgstr "For and by researchers"
 
 #, elixir-format
 #: bundles/link/lib/index.ex:37 lib/core_web/live/promotion/index.ex:37
 msgid "welcome.subtitle"
-msgstr "PaNL"
+msgstr "For research"
+
+#, elixir-format
+#: bundles/link/lib/index.ex:61
+msgid "marketplace-button"
+msgstr "Go to marketplace"
+
+#, elixir-format, fuzzy
+#: bundles/link/lib/index.ex:53
+msgid "link.message.interested"
+msgstr "Interested? Sent an email to "

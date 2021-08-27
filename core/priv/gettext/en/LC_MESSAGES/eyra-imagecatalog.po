@@ -37,5 +37,5 @@ msgstr[1] "%{count} images found:"
 #: lib/core_web/image_catalog_picker.ex:73
 msgid "page.info.message"
 msgid_plural "page.info.message.%{count}"
-msgstr[0] "Displayed 1 image"
-msgstr[1] "Displayed %{begin}-%{end} of %{count} images"
+msgstr[0] "1 image"
+msgstr[1] "%{begin}-%{end} of %{count} images"
