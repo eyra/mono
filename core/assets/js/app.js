@@ -23,6 +23,7 @@ import { decode } from "blurhash";
 import { urlBase64ToUint8Array } from "./tools";
 import { registerAPNSDeviceToken } from "./apns";
 import "./100vh-fix";
+import { ViewportResize } from "./viewport_resize"
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -65,10 +66,12 @@ window.blurHash = () => {
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
-let Hooks = {};
+
+let Hooks = { ViewportResize };
 
 Hooks.NativeWrapper = {
   mounted() {
+    console.log("NativeWrapper mounted")
     window.nativeWrapperHook = this
   },
   toggleSidePanel() {
@@ -83,6 +86,8 @@ Hooks.PythonUploader = {
     this.worker && this.worker.terminate();
   },
   mounted(){
+    console.log("PythonUploader mounted")
+
     this.worker = new Worker("/js/pyworker.js");
     this.worker.onerror = console.log;
     this.worker.onmessage = (event) => {
@@ -149,7 +154,11 @@ let liveSocket = new LiveSocket('/live', Socket, {
     }
   },
   params: {
-    _csrf_token: csrfToken
+    _csrf_token: csrfToken,
+    viewport: {
+      width: window.innerWidth,
+      height: window.innerHeight
+    }
   },
   hooks: Hooks
 })

@@ -5,6 +5,7 @@ defmodule Link.Survey.Content do
   use CoreWeb, :live_view
   use CoreWeb.MultiFormAutoSave
   use CoreWeb.Layouts.Workspace.Component, :survey
+  use Coreweb.UI.ViewportHelpers
 
   import CoreWeb.Gettext
 
@@ -30,7 +31,6 @@ defmodule Link.Survey.Content do
   data(initial_image_query, :any)
   data(uri_origin, :any)
 
-
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
     Tools.get_survey_tool!(id)
@@ -55,6 +55,8 @@ defmodule Link.Survey.Content do
         hide_flash_timer: nil
       )
       |> update_menus()
+      |> assign_viewport()
+      |> assign_breakpoint()
     }
   end
 
@@ -171,18 +173,29 @@ defmodule Link.Survey.Content do
     {:noreply, socket}
   end
 
+  defp marginX(:mobile), do: "mx-6"
+  defp marginX(_), do: "mx-10"
+
   def render(assigns) do
     ~H"""
     <Workspace
       title={{ dgettext("link-survey", "content.title") }}
       menus={{ @menus }}
     >
-      <div phx-click="reset_focus">
+      <div id={{ :survey_content }} phx-hook="ViewportResize" phx-click="reset_focus">
         <div x-data="{ open: false }">
           <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="open">
             <div class="flex flex-row items-center justify-center w-full h-full">
-              <div class="w-5/6 md:w-popup-md lg:w-popup-lg" @click.away="open = false, $parent.$parent.overlay = false">
-                <ImageCatalogPicker conn={{@socket}} static_path={{&Routes.static_path/2}} initial_query={{initial_image_query(assigns)}} id={{:image_picker}} image_catalog={{Core.ImageCatalog.Unsplash}} />
+              <div class="{{marginX(@breakpoint)}} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg" @click.away="open = false, $parent.$parent.overlay = false">
+                <ImageCatalogPicker
+                  id={{:image_picker}}
+                  conn={{@socket}}
+                  viewport={{@viewport}}
+                  breakpoint={{@breakpoint}}
+                  static_path={{&Routes.static_path/2}}
+                  initial_query={{initial_image_query(assigns)}}
+                  image_catalog={{Core.ImageCatalog.Unsplash}}
+                />
               </div>
             </div>
           </div>

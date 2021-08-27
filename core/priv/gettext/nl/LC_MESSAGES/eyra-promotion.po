@@ -44,12 +44,12 @@ msgstr "Website"
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:146
 msgid "choose.banner.photo.file"
-msgstr "Selecteer een foto"
+msgstr "Kies foto"
 
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:147
 msgid "choose.other.banner.photo.file"
-msgstr "Selecteer andere foto"
+msgstr "Kies andere foto"
 
 #, elixir-format
 #: bundles/link/lib/card.ex:37 lib/core_web/view_model/card.ex:39
@@ -136,7 +136,7 @@ msgstr "Beloning"
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:127
 msgid "search.different.image.button"
-msgstr "Kies andere afbeelding"
+msgstr "Kies afbeelding"
 
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:111

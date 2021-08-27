@@ -23,7 +23,7 @@ defmodule EyraUI.Form.PhotoInput do
       <ImagePreview
         image_url={{ @photo_url }}
         placeholder={{ @static_path.(@conn, "/images/profile_photo_default.svg") }}
-        shape="w-image-preview-circle h-image-preview-circle rounded-full" />
+        shape="w-image-preview-circle sm:w-image-preview-circle-sm h-image-preview-circle sm:h-image-preview-circle-sm rounded-full" />
       <Spacing value="S" direction="l" />
       <div class="flex-wrap">
         <Case value={{@photo_url}} >

@@ -4,7 +4,10 @@ defmodule EyraUI.ImagePreview do
 
   prop(image_url, :string)
   prop(placeholder, :string, required: true)
-  prop(shape, :string, default: "w-image-preview h-image-preview rounded")
+
+  prop(shape, :string,
+    default: "w-image-preview sm:w-image-preview-sm h-image-preview sm:h-image-preview-sm rounded"
+  )
 
   def render(assigns) do
     ~H"""

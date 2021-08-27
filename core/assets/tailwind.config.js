@@ -78,10 +78,10 @@ module.exports = {
         "sheet": "760px",
         "form" : "400px",
         "card": "376px",
-        "image-preview": "200px",
-        "image-preview-circle": "150px",
-        "popup-md": "730px",
-        "popup-lg": "1228px",
+        "image-preview": "120px",
+        "image-preview-sm": "200px",
+        "image-preview-circle": "120px",
+        "image-preview-circle-sm": "150px",
         "button-sm": "14px",
       },
         height: {
@@ -103,8 +103,10 @@ module.exports = {
         "image-header": "375px",
         "image-header-sm": "500px",
         "image-card": "200px",
-        "image-preview": "150px",
-        "image-preview-circle": "150px",
+        "image-preview": "90px",
+        "image-preview-sm": "150px",
+        "image-preview-circle": "120px",
+        "image-preview-circle-sm": "150px",
         "campaign-banner": "224px",
         "button-sm": "14px",
       },
@@ -153,7 +155,11 @@ module.exports = {
       maxWidth: {
         "card": "376px",
         "form": "400px",
-        "sheet": "760px"
+        "sheet": "760px",
+        "popup": "480px",
+        "popup-sm": "520px",
+        "popup-md": "730px",
+        "popup-lg": "1228px"
       },
       maxHeight: {
         "header1": "376px",

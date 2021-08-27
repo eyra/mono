@@ -53,12 +53,7 @@ defmodule CoreWeb.Promotion.Form do
   end
 
   # Handle update from parent after auto-save, prevents overwrite of current state
-  def update(_params, %{assigns: %{entity: _entity}} = socket) do
-    {
-      :ok,
-      socket
-    }
-  end
+  Pimage_i
 
   def update(%{id: id, props: %{entity_id: entity_id}}, socket) do
     entity = Promotions.get!(entity_id)
