@@ -50,7 +50,7 @@ config :core, SignInWithApple,
 config :core, GoogleSignIn,
   client_id: "1027619588178-ckkft8qhcj2jev6bsonbuqghe6pn6isf.apps.googleusercontent.com",
   client_secret: "C-x02CCKC29o4OttKzhi0hE8",
-  redirect_uri: "http://74aa-2a02-a443-cab9-1-589c-bd8a-c01b-f0e1.ngrok.io/google-sign-in/auth"
+  redirect_uri: "http://localhost:4000/google-sign-in/auth"
 
 config :core, Core.ImageCatalog.Unsplash,
   access_key: "",

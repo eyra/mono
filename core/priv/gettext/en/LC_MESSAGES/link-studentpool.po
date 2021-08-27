@@ -39,7 +39,7 @@ msgstr "Students participating in this pool will appear here"
 #, elixir-format
 #: bundles/link/lib/pool/form/studies.ex:12
 msgid "studies.empty.description"
-msgstr "There are currently no research studies available. You will be notified as soon as studies have been submitted in this pool."
+msgstr "There are currently no research studies available to participate in. As soon as one becomes available, it will be added here and you will be notified by email (make sure to check your spam or junk mail folder, just in case)."
 
 #, elixir-format
 #: bundles/link/lib/pool/form/studies.ex:11

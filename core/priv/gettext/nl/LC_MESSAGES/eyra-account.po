@@ -124,12 +124,12 @@ msgstr "Stuur test notificatie"
 #, elixir-format
 #: lib/core_web/live/user/forms/study.ex:74
 msgid "feature.study.description"
-msgstr "Je kan meerdere opleidingen opgeven. Als je taken van het vorig leerjaar moet gaan doen kies dan (ook) de herkansing variant van het vorige jaar."
+msgstr "Selecteer je opleiding(en), bedrijfskunde (BK) en/of international business administration (IBA). Heb je RPR1 (1e jaar) of RPR2 (2e jaar) al eerder gevolgd maar nog niet afgerond? Selecteer dan de \"(herkansing)\" variant van het jaar dat je nog niet afgerond hebt."
 
 #, elixir-format
 #: lib/core_web/live/user/forms/features.ex:89
 msgid "features.description"
-msgstr "Onderstaande kenmerken worden gebruikt om in de marktplaats onderzoeken met specifieke eisen te laten zien."
+msgstr "Als je deze kenmerken invult krijg je meer studies te zien. Je kunt dan ook deelnemen aan onderzoeksstudies met specifieke selectie criteria."
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:157
@@ -147,7 +147,7 @@ msgstr "Geslacht"
 #: bundles/link/lib/pool/form/submission.ex:153
 #: lib/core_web/live/user/forms/features.ex:96
 msgid "features.nativelanguage.title"
-msgstr "Moedertaal"
+msgstr "Eerste taal"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:161
