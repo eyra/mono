@@ -44,6 +44,7 @@ defmodule CoreWeb.Layouts.Workspace.MenuBuilder do
       language_switch_item(socket, page_id),
       live_item(socket, :settings, active_item),
       live_item(socket, :profile, active_item),
+      live_item(socket, :support, active_item),
       user_session_item(socket, :signout, active_item)
     ]
   end

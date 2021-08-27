@@ -17,7 +17,7 @@ msgid "displayname.label"
 msgstr "Display name"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:66
+#: lib/core_web/live/user/signup.ex:67
 msgid "email.label"
 msgstr "Email"
 
@@ -27,7 +27,7 @@ msgid "fullname.label"
 msgstr "Full name"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:67
+#: lib/core_web/live/user/signup.ex:68
 msgid "password.label"
 msgstr "Password"
 
@@ -42,32 +42,32 @@ msgid "researcher.label"
 msgstr "I'm a researcher"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:72
+#: lib/core_web/live/user/signup.ex:73
 msgid "signin.label"
 msgstr "Already an account?"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:73
+#: lib/core_web/live/user/signup.ex:74
 msgid "signin.link"
 msgstr "Sign in here"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:68
+#: lib/core_web/live/user/signup.ex:69
 msgid "signup.button"
 msgstr "Sign up"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:63
+#: lib/core_web/live/user/signup.ex:64
 msgid "signup.title"
 msgstr "Sign up"
 
 #, elixir-format
-#: lib/core_web/live/user/await_confirmation.ex:45
+#: lib/core_web/live/user/await_confirmation.ex:46
 msgid "await.confirmation.title"
 msgstr "Bevestig je registratie"
 
 #, elixir-format
-#: lib/core_web/live/user/confirm_token.ex:80
+#: lib/core_web/live/user/confirm_token.ex:82
 msgid "confirm.token.resend_button"
 msgstr ""
 

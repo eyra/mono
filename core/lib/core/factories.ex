@@ -13,7 +13,8 @@ defmodule Core.Factories do
     Authorization,
     DataDonation,
     NotificationCenter,
-    WebPush
+    WebPush,
+    Helpdesk
   }
 
   alias Core.Repo
@@ -32,6 +33,16 @@ defmodule Core.Factories do
   def build(:researcher) do
     :member
     |> build(%{researcher: true})
+    |> struct!(%{
+      profile: %Profile{
+        fullname: Faker.Person.name()
+      }
+    })
+  end
+
+  def build(:admin) do
+    :member
+    |> build(%{email: Core.Admin.emails() |> Enum.random()})
     |> struct!(%{
       profile: %Profile{
         fullname: Faker.Person.name()
@@ -58,6 +69,14 @@ defmodule Core.Factories do
       auth_node: build(:auth_node),
       description: Faker.Lorem.paragraph(),
       title: Faker.Lorem.sentence()
+    }
+  end
+
+  def build(:helpdesk_ticket) do
+    %Helpdesk.Ticket{
+      title: Faker.Lorem.sentence(),
+      description: Faker.Lorem.paragraph(),
+      user: build(:member)
     }
   end
 

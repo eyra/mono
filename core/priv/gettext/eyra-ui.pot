@@ -11,14 +11,16 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:6
-#: lib/core_web/live/data_donation/content.ex:6 lib/core_web/live/onboarding.ex:6 lib/core_web/live/user/profile.ex:6
+#: bundles/link/lib/onboarding.ex:6 bundles/link/lib/survey/web/content.ex:6
+#: bundles/link/lib/user/web/profile.ex:6 lib/core_web/live/data_donation/content.ex:6
+#: lib/core_web/live/user/profile.ex:6
 msgid "error.flash"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:6
-#: lib/core_web/live/data_donation/content.ex:6 lib/core_web/live/onboarding.ex:6 lib/core_web/live/user/profile.ex:6
+#: bundles/link/lib/onboarding.ex:6 bundles/link/lib/survey/web/content.ex:6
+#: bundles/link/lib/user/web/profile.ex:6 lib/core_web/live/data_donation/content.ex:6
+#: lib/core_web/live/user/profile.ex:6
 msgid "saved.info.flash"
 msgstr ""
 
@@ -97,42 +99,45 @@ msgid "menu.item.payments"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/onboarding.ex:73 lib/core_web/live/user/profile.ex:72
+#: bundles/link/lib/onboarding.ex:73 bundles/link/lib/user/web/profile.ex:72
+#: lib/core_web/live/user/profile.ex:62
 msgid "tabbar.item.features"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/onboarding.ex:57 lib/core_web/live/user/profile.ex:56
+#: bundles/link/lib/onboarding.ex:57 bundles/link/lib/user/web/profile.ex:56
+#: lib/core_web/live/user/profile.ex:55
 msgid "tabbar.item.profile"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/onboarding.ex:64 lib/core_web/live/user/profile.ex:63
+#: bundles/link/lib/onboarding.ex:64 bundles/link/lib/user/web/profile.ex:63
 msgid "tabbar.item.study"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/onboarding.ex:74 lib/core_web/live/user/profile.ex:73
+#: bundles/link/lib/onboarding.ex:74 bundles/link/lib/user/web/profile.ex:73
+#: lib/core_web/live/user/profile.ex:63
 msgid "tabbar.item.features.forward"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/onboarding.ex:58 lib/core_web/live/user/profile.ex:57
+#: bundles/link/lib/onboarding.ex:58 bundles/link/lib/user/web/profile.ex:57
+#: lib/core_web/live/user/profile.ex:56
 msgid "tabbar.item.profile.forward"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/onboarding.ex:65 lib/core_web/live/user/profile.ex:64
+#: bundles/link/lib/onboarding.ex:65 bundles/link/lib/user/web/profile.ex:64
 msgid "tabbar.item.study.forward"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/menu/items-translations.ex:2
-#: lib/core_web/live/menu/items_translations.ex:2
-msgid "menu.item.onboarding"
+#: bundles/link/lib/onboarding.ex:99
+msgid "onboarding.forward"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/onboarding.ex:91
-msgid "onboarding.forward"
+#: lib/core_web/live/menu/items_translations.ex:2
+msgid "menu.item.support"
 msgstr ""

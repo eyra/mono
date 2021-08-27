@@ -53,6 +53,19 @@ defmodule Core.AuthTestHelpers do
     Factories.insert!(:researcher) |> login(ctx)
   end
 
+  def login_as_admin(ctx) do
+    email = Core.Admin.emails() |> Enum.random()
+
+    user =
+      if user = Core.Accounts.get_user_by_email(email) do
+        user
+      else
+        Factories.insert!(:admin, %{email: email})
+      end
+
+    login(user, ctx)
+  end
+
   def extract_user_token_old(fun) do
     {:ok, captured} = fun.(&"[TOKEN]#{&1}[TOKEN]")
     [_, token, _] = String.split(captured.body, "[TOKEN]")

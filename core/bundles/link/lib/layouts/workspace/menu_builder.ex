@@ -35,15 +35,25 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
     []
     |> append(live_item(socket, :dashboard, active_item), can_access?(user_state, Link.Dashboard))
     |> append(live_item(socket, :marketplace, active_item))
-    |> append(live_item(socket, :studentpool, active_item), can_access?(user_state, Link.StudentPool))
-    |> append(live_item(socket, :surveys, active_item), can_access?(user_state, CoreWeb.Study.New))
-    |> append(live_item(socket, :labstudies, active_item), can_access?(user_state, CoreWeb.Study.New))
+    |> append(
+      live_item(socket, :studentpool, active_item),
+      can_access?(user_state, Link.StudentPool)
+    )
+    |> append(
+      live_item(socket, :surveys, active_item),
+      can_access?(user_state, CoreWeb.Study.New)
+    )
+    |> append(
+      live_item(socket, :labstudies, active_item),
+      can_access?(user_state, CoreWeb.Study.New)
+    )
     |> append(live_item(socket, :todo, active_item))
   end
 
   defp build_menu_second_part(socket, active_item, page_id) do
     [
       language_switch_item(socket, page_id),
+      live_item(socket, :support, active_item),
       live_item(socket, :settings, active_item),
       live_item(socket, :profile, active_item),
       user_session_item(socket, :signout, active_item)
