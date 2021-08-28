@@ -39,7 +39,7 @@
                 <td align="left"><%= image_tag("footer-left") %></td>
                 <td align="right"><%= image_tag("footer-right") %></td>
             </tr>
-            <tr class="footer-contact"><td colspan="2" align="center">Apollo 14  |  Unit 4.13  |  Saturnusstraat 14  |  2516 AH Den Haag  |  LinkedIn  |  eyra.co</td></tr>
+            <tr class="footer-contact"><td colspan="2" align="center">&nbsp;</td></tr>
         </table>
     </body>
 </html>
