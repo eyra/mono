@@ -7,18 +7,21 @@ defmodule EyraUI.Form.Form do
 
   prop(id, :string, required: true)
   prop(changeset, :any, required: true)
-  prop(change_event, :any, required: true)
+  prop(change_event, :any)
+  prop(submit, :any)
   prop(focus, :string, required: true)
-  prop(target, :any)
+  prop(target, :any, default: "")
 
   def render(assigns) do
     ~H"""
     <div
       x-data="{ focus: '{{@focus}}' }"
     >
-      <Form for={{ @changeset }} change={{@change_event}} opts={{ id: @id, phx_target: @target }} >
-        <slot />
-      </Form>
+      <Context put={{target: @target}}>
+        <Form for={{ @changeset }} submit={{@submit}} change={{@change_event}} opts={{ id: @id, phx_target: @target }} >
+          <slot />
+        </Form>
+      </Context>
     </div>
     """
   end

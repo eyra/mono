@@ -92,18 +92,18 @@ defmodule CoreWeb.DataDonation.Form do
         </div>
         <Form id={{@id}} changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
           <Title3>{{dgettext("eyra-data-donation", "script.title")}}</Title3>
-          <TextArea field={{:script}} label_text={{dgettext("eyra-data-donation", "script.label")}} target={{@myself}} />
+          <TextArea field={{:script}} label_text={{dgettext("eyra-data-donation", "script.label")}} />
           <Spacing value="L" />
 
           <Title3>{{dgettext("eyra-data-donation", "reward.title")}}</Title3>
-          <NumberInput field={{:reward_value}} label_text={{dgettext("eyra-data-donation", "reward.label")}} target={{@myself}} />
+          <NumberInput field={{:reward_value}} label_text={{dgettext("eyra-data-donation", "reward.label")}} />
           <Spacing value="L" />
 
           <Title3>{{dgettext("eyra-data-donation", "nrofsubjects.title")}}</Title3>
-          <NumberInput field={{:subject_count}} label_text={{dgettext("eyra-data-donation", "config.nrofsubjects.label")}} target={{@myself}} />
+          <NumberInput field={{:subject_count}} label_text={{dgettext("eyra-data-donation", "config.nrofsubjects.label")}} />
         </Form>
         <Spacing value="M" />
-        <SecondaryLiveViewButton label={{ dgettext("eyra-data-donation", "delete.button") }} event="delete" target={{@myself}} />
+        <SecondaryLiveViewButton label={{ dgettext("eyra-data-donation", "delete.button") }} event="delete" />
       </ContentArea>
     """
   end

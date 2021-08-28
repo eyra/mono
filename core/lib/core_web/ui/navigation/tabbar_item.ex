@@ -17,7 +17,7 @@ defmodule CoreWeb.UI.Navigation.TabbarItem do
       <div class="flex flex-row items-center justify-start rounded-full focus:outline-none cursor-pointer">
         <div
           :if={{ has_index?(@vm) }}
-          class="w-8 h-8 font-label text-label rounded-full flex items-center"
+          class="w-6 h-6 font-caption text-caption rounded-full flex items-center"
           :class="{ 'bg-primary text-white': active_tab == {{ index(@vm) }}, 'bg-grey5 text-grey2': active_tab != {{ index(@vm) }} }"
         >
           <div class="text-center w-full mt-1px">{{ index(@vm)+1 }}</div>

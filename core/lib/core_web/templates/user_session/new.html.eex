@@ -14,7 +14,7 @@
                   data-phx-link-state="replace"
                   href="/"
                 >
-                  <img class="w-8 h-8 sm:w-12 sm:h-12" src=" <%= Routes.static_path(@conn, "/images/icons/eyra.svg") %>" />
+                  <img class="h-8 sm:h-12" src=" <%= Routes.static_path(@conn, "/images/icons/#{Meta.bundle(@conn)}.svg") %>" />
                 </a>
               </div>
             </div>
