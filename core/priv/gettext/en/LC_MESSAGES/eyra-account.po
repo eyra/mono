@@ -97,12 +97,12 @@ msgid "push.registration.title"
 msgstr "Push notifications"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:50
+#: lib/core_web/live/user/settings.ex:52
 msgid "push.registration.activated"
 msgstr "Push notifications are activated on this browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:47
+#: lib/core_web/live/user/settings.ex:48
 msgid "push.registration.denied"
 msgstr "Push notifications are deactivated on this browser"
 
@@ -112,12 +112,12 @@ msgid "push.registration.label"
 msgstr "Activate on this browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:46
+#: lib/core_web/live/user/settings.ex:47
 msgid "push.registration.pending"
 msgstr "Determining state.."
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:52
+#: lib/core_web/live/user/settings.ex:54
 msgid "push.registration.test.button"
 msgstr "Send test notification"
 
@@ -170,3 +170,8 @@ msgstr "Students of the selected studies are eligitable. No selection means all 
 #: bundles/link/lib/pool/form/submission.ex:146
 msgid "features.content.description"
 msgstr "Students with the selected characteristics are eligitable. No selection means all students are eligitable."
+
+#, elixir-format, fuzzy
+#: lib/core_web/live/user/settings.ex:49
+msgid "push.registration.unavailable"
+msgstr "Notifications are not (yet) available for your browser. Firefox, Chrome or Edge are supported."

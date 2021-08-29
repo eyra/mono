@@ -45,6 +45,7 @@ defmodule CoreWeb.User.Settings do
               <BodyMedium>
                 <span x-show="$store.push.registration === 'pending'">{{dgettext("eyra-account", "push.registration.pending")}}</span>
                 <span x-show="$store.push.registration === 'denied'">{{dgettext("eyra-account", "push.registration.denied")}}</span>
+                <span x-show="$store.push.registration === 'unavailable'">{{dgettext("eyra-account", "push.registration.unavailable")}}</span>
               </BodyMedium>
               <div x-show="$store.push.registration === 'registered'">
                 <span>{{dgettext("eyra-account", "push.registration.activated")}}</span>

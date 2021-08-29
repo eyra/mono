@@ -151,3 +151,8 @@ msgstr ""
 #: bundles/link/lib/menu/items-translations.ex:2
 msgid "menu.item.link"
 msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/menu/items_translations.ex:2
+msgid "menu.item.support"
+msgstr ""

@@ -76,16 +76,16 @@ Hooks.NativeWrapper = {
   },
   toggleSidePanel() {
     console.log("NativeWrapper::toggleSidePanel")
-    nativeWrapper.toggleSidePanel({origin: "right"})
+    nativeWrapper.toggleSidePanel({ origin: "right" })
     window.dispatchEvent(new CustomEvent("toggle-native-menu", {}))
   }
 }
 
 Hooks.PythonUploader = {
-  destroyed(){
+  destroyed() {
     this.worker && this.worker.terminate();
   },
-  mounted(){
+  mounted() {
     console.log("PythonUploader mounted")
 
     this.worker = new Worker("/js/pyworker.js");
@@ -94,7 +94,7 @@ Hooks.PythonUploader = {
       const { eventType } = event.data;
       if (eventType === "initialized") {
         const script = this.el.getElementsByTagName("code")[0].innerText
-        this.worker.postMessage({eventType: "runPython", script })
+        this.worker.postMessage({ eventType: "runPython", script })
         // Let the LiveView know everything is ready
         this.el.querySelector(".loading-indicator").hidden = true;
         this.el.querySelector(".step2").hidden = false;
@@ -107,7 +107,7 @@ Hooks.PythonUploader = {
       }
     }
     // Hook up the process button to the worker
-    this.el.addEventListener("click", (event)=>{
+    this.el.addEventListener("click", (event) => {
       if (event.target.dataset.role !== "process-trigger") {
         return;
       }
@@ -126,7 +126,7 @@ Hooks.PythonUploader = {
       reader.read().then(sendToWorker);
     })
     // Hook up the share results button
-    this.el.addEventListener("change", (event)=>{
+    this.el.addEventListener("change", (event) => {
       if (event.target.dataset.role !== "file-input") {
         return;
       }
@@ -136,7 +136,7 @@ Hooks.PythonUploader = {
       this.el.querySelector(".script").hidden = false;
     })
     // Hook up the share results button
-    this.el.addEventListener("click", (event)=>{
+    this.el.addEventListener("click", (event) => {
       if (event.target.dataset.role !== "donate-trigger") {
         return;
       }
@@ -207,7 +207,7 @@ window.nativeIOSWrapper = {
       id
     });
   },
-  toggleSidePanel: (info)=>{
+  toggleSidePanel: (info) => {
     window.webkit.messageHandlers.Native.postMessage({
       type: "toggleSidePanel",
       ...info
@@ -290,7 +290,7 @@ window.addEventListener("phx:page-loading-stop", (info) => {
     id: screenId(info.detail.to),
     rightBarButtons: [{
       title: "Menu",
-      action: {id: "toggle-native-menu"},
+      action: { id: "toggle-native-menu" },
     }]
   });
   nativeWrapper.webReady(screenId(info.detail.to));
@@ -303,9 +303,9 @@ window.setScreenFromNative = (screenId, state) => {
     }, 0);
   });
 };
-window.handleActionFromNative = (action)=>{
+window.handleActionFromNative = (action) => {
   if (action.id === "toggle-native-menu") {
-    nativeWrapper.toggleSidePanel({origin: "right"})
+    nativeWrapper.toggleSidePanel({ origin: "right" })
     window.dispatchEvent(new CustomEvent("toggle-native-menu", {}))
   }
 }
@@ -325,16 +325,19 @@ window.liveSocket = liveSocket;
 
 // PWA
 //
-const pushStore = Spruce.store("push", {registration: "pending"})
+const pushStore = Spruce.store("push", { registration: "pending" })
 const getExistingSubscription = () => {
-  return navigator.serviceWorker.ready.then((registration)=> {
-    return registration.pushManager.getSubscription().then(subscription=>{
-      return {registration, subscription};
+  return navigator.serviceWorker.ready.then((registration) => {
+    if (registration.pushManager === undefined) {
+      throw "unavailable";
+    }
+    return registration.pushManager.getSubscription().then(subscription => {
+      return { registration, subscription };
     })
   });
 }
 const registerPushSubscription = (subscription) => {
-      console.log("Server", subscription);
+  console.log("Server", subscription);
   return fetch('/web-push/register', {
     method: 'post',
     headers: {
@@ -343,28 +346,28 @@ const registerPushSubscription = (subscription) => {
     body: JSON.stringify({
       subscription: subscription
     }),
-  }).then(()=>{
+  }).then(() => {
     pushStore.registration = "registered"
   });
 }
 
 
-window.registerForPush = ()=>{
+window.registerForPush = () => {
   if (!('serviceWorker' in navigator)) {
     alert("Sorry, your browser does not support push")
     return;
   }
   pushStore.registration = "registering"
-  getExistingSubscription().then(({registration,subscription})=> {
+  getExistingSubscription().then(({ registration, subscription }) => {
     if (subscription) {
       // already registered
       return subscription;
     }
 
-    return fetch('/web-push/vapid-public-key').then((response)=>{
+    return fetch('/web-push/vapid-public-key').then((response) => {
       console.log("Vapid", response);
       return response.text()
-    }).then((vapidPublicKey)=>{
+    }).then((vapidPublicKey) => {
       // Chrome doesn’t accept the base64-encoded (string) vapidPublicKey yet urlBase64ToUint8Array() is defined in /tools.js
       const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
 
@@ -373,24 +376,26 @@ window.registerForPush = ()=>{
         applicationServerKey: convertedVapidKey
       });
     })
-  }).then(registerPushSubscription).catch(e=>{
+  }).then(registerPushSubscription).catch(e => {
     pushStore.registration = "denied";
   });
 }
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js', {scope: './'})
-  .catch((error) => {
-    // registration failed
-    console.log('Registration failed with ' + error);
-  });
+  navigator.serviceWorker.register('/sw.js', { scope: './' })
+    .catch((error) => {
+      // registration failed
+      console.log('Registration failed with ' + error);
+    });
 
-  getExistingSubscription().then(({subscription}) => {
+  getExistingSubscription().then(({ subscription }) => {
     if (subscription) {
       return registerPushSubscription(subscription);
     } else {
       pushStore.registration = "not-registered";
     }
-  })
+  }).catch(e => {
+    pushStore.registration = "unavailable";
+  });
 } else {
-  Spruce.store("push", {registration: "unavailable"})
+  Spruce.store("push", { registration: "unavailable" })
 }

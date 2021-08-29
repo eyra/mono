@@ -97,12 +97,12 @@ msgid "push.registration.title"
 msgstr "Push notificaties"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:50
+#: lib/core_web/live/user/settings.ex:52
 msgid "push.registration.activated"
 msgstr "Push notificaties zijn geactiveerd op deze browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:47
+#: lib/core_web/live/user/settings.ex:48
 msgid "push.registration.denied"
 msgstr "Push notificaties zijn gedeactiveerd op deze browser"
 
@@ -112,12 +112,12 @@ msgid "push.registration.label"
 msgstr "Activeren op deze browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:46
+#: lib/core_web/live/user/settings.ex:47
 msgid "push.registration.pending"
 msgstr "Push notificaties zijn gedeactiveerd op deze browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:52
+#: lib/core_web/live/user/settings.ex:54
 msgid "push.registration.test.button"
 msgstr "Stuur test notificatie"
 
@@ -170,3 +170,8 @@ msgstr "Studenten van de geselecteerd opleidingen komen in aanmerking. Geen sele
 #: bundles/link/lib/pool/form/submission.ex:146
 msgid "features.content.description"
 msgstr "Studenten met de geselecteerde kenmerken komen in aanmerking. Geen selectie betekend dat iedere student in aanmerking komt."
+
+#, elixir-format, fuzzy
+#: lib/core_web/live/user/settings.ex:49
+msgid "push.registration.unavailable"
+msgstr "Notificaties zijn (nog) niet beschikbaar voor jouw browser. Firefox, Chrome of Edge worden ondersteund."

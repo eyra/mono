@@ -123,7 +123,7 @@ msgid "status.label"
 msgstr "Below you can keep an eye on the progress campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:177
+#: bundles/link/lib/survey/web/content.ex:182
 msgid "content.title"
 msgstr "Campaign"
 
@@ -153,17 +153,17 @@ msgid "empty.title"
 msgstr "Campaigns you create will appear here"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:120
+#: bundles/link/lib/survey/web/content.ex:122
 msgid "tabbar.item.monitor"
 msgstr "Participants"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:86
+#: bundles/link/lib/survey/web/content.ex:88
 msgid "tabbar.item.promotion"
 msgstr "Promotion"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:97
+#: bundles/link/lib/survey/web/content.ex:99
 msgid "tabbar.item.survey"
 msgstr "Study"
 
@@ -178,27 +178,27 @@ msgid "monitor.empty.title"
 msgstr "Information about the participants will appear here"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:87
+#: bundles/link/lib/survey/web/content.ex:89
 msgid "tabbar.item.promotion.forward"
 msgstr "Create promotion"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:98
+#: bundles/link/lib/survey/web/content.ex:100
 msgid "tabbar.item.survey.forward"
 msgstr "Link your online study"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:121
+#: bundles/link/lib/survey/web/content.ex:123
 msgid "tabbar.item.monitor.forward"
 msgstr "View participants"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:109
+#: bundles/link/lib/survey/web/content.ex:111
 msgid "tabbar.item.criteria"
 msgstr "Student pool"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:110
+#: bundles/link/lib/survey/web/content.ex:112
 msgid "tabbar.item.criteria.forward"
 msgstr "Submit campaign"
 

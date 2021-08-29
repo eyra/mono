@@ -96,12 +96,12 @@ msgid "push.registration.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:50
+#: lib/core_web/live/user/settings.ex:52
 msgid "push.registration.activated"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:47
+#: lib/core_web/live/user/settings.ex:48
 msgid "push.registration.denied"
 msgstr ""
 
@@ -111,12 +111,12 @@ msgid "push.registration.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:46
+#: lib/core_web/live/user/settings.ex:47
 msgid "push.registration.pending"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:52
+#: lib/core_web/live/user/settings.ex:54
 msgid "push.registration.test.button"
 msgstr ""
 
@@ -168,4 +168,9 @@ msgstr ""
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:146
 msgid "features.content.description"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/user/settings.ex:49
+msgid "push.registration.unavailable"
 msgstr ""
