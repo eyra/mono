@@ -135,3 +135,18 @@ msgstr "IBA 2nd year"
 #: lib/core/enums/study_program_codes.ex:5
 msgid "study_pogram_codes.iba_2_h"
 msgstr "IBA 2nd year (resit)"
+
+#, elixir-format
+#: lib/core/enums/ticket_types.ex:5
+msgid "ticket_types.bug"
+msgstr "Malfunction"
+
+#, elixir-format
+#: lib/core/enums/ticket_types.ex:5
+msgid "ticket_types.question"
+msgstr "Question"
+
+#, elixir-format
+#: lib/core/enums/ticket_types.ex:5
+msgid "ticket_types.tip"
+msgstr "Improvement suggestion"

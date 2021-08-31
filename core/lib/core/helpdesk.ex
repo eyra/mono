@@ -29,7 +29,7 @@ defmodule Core.Helpdesk do
     |> Repo.insert()
   end
 
-  def new_ticket_changeset(attrs \\ %{}) do
+  def new_ticket_changeset(attrs \\ %{type: :question}) do
     Ticket.changeset(%Ticket{}, attrs)
   end
 end

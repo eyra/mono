@@ -1,19 +1,15 @@
 defmodule CoreWeb.Live.Routes do
   defmacro routes() do
     quote do
-      require CoreWeb.Live.Study.Routes
-      require CoreWeb.Live.DataDonation.Routes
-      require CoreWeb.Live.Lab.Routes
-      require CoreWeb.Live.Promotion.Routes
-      require CoreWeb.Live.User.Routes
-      require CoreWeb.Live.Admin.Routes
-
-      CoreWeb.Live.Study.Routes.routes()
-      CoreWeb.Live.DataDonation.Routes.routes()
-      CoreWeb.Live.Lab.Routes.routes()
-      CoreWeb.Live.Promotion.Routes.routes()
-      CoreWeb.Live.User.Routes.routes()
-      CoreWeb.Live.Admin.Routes.routes()
+      use CoreWeb.Live.Subroutes, [
+        :study,
+        :helpdesk,
+        :data_donation,
+        :lab,
+        :promotion,
+        :user,
+        :admin
+      ]
 
       scope "/", CoreWeb do
         pipe_through(:browser)
@@ -30,7 +26,6 @@ defmodule CoreWeb.Live.Routes do
         live("/marketplace", Marketplace)
         live("/todo", Todo)
         live("/notifications", Notifications)
-        live("/support", Support)
       end
 
       if Mix.env() in [:dev, :test] do

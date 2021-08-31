@@ -39,7 +39,7 @@ defmodule EyraUI.Grid.ImageGrid.Image do
         x-on:click="selected = {{index(@vm)}}"
         :on-click="select_image"
         phx-value-image={{id(@vm)}}
-        phx-target={{target(@vm) |> IO.inspect(label: "TARGET")}}
+        phx-target={{target(@vm)}}
       >
         <div
           class="absolute z-10 w-full h-full bg-primary bg-opacity-50"

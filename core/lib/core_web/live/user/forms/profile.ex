@@ -105,12 +105,12 @@ defmodule CoreWeb.User.Forms.Profile do
             />
             <Spacing value="M" />
 
-            <TextInput field={{:fullname}} label_text={{dgettext("eyra-account", "fullname.label")}} target={{@myself}} />
-            <TextInput field={{:displayname}} label_text={{dgettext("eyra-account", "displayname.label")}} target={{@myself}} />
+            <TextInput field={{:fullname}} label_text={{dgettext("eyra-account", "fullname.label")}} />
+            <TextInput field={{:displayname}} label_text={{dgettext("eyra-account", "displayname.label")}} />
 
             <div :if={{@user.researcher}} >
-              <TextInput field={{:title}} label_text={{dgettext("eyra-account", "professionaltitle.label")}} target={{@myself}} />
-              <UrlInput field={{:url}} label_text={{dgettext("eyra-account", "website.label")}} target={{@myself}} />
+              <TextInput field={{:title}} label_text={{dgettext("eyra-account", "professionaltitle.label")}} />
+              <UrlInput field={{:url}} label_text={{dgettext("eyra-account", "website.label")}} />
             </div>
           </Form>
         </FormArea>

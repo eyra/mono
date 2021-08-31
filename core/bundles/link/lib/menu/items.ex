@@ -11,6 +11,7 @@ defmodule Link.Menu.Items do
       studentpool: %{target: Link.Pool.Overview, domain: "link-ui"},
       surveys: %{target: Link.Survey.Overview, domain: "link-ui"},
       todo: %{target: CoreWeb.Todo, domain: "eyra-ui"},
+      helpdesk: %{target: CoreWeb.Helpdesk.Public, domain: "eyra-ui"},
       settings: %{target: CoreWeb.User.Settings, domain: "eyra-ui"},
       profile: %{target: CoreWeb.User.Profile, domain: "eyra-ui"},
       signout: %{target: :delete, domain: "eyra-ui"},

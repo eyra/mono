@@ -10,9 +10,7 @@ defmodule EyraUI.Form.EmailInput do
 
   def render(assigns) do
     ~H"""
-    <Context get={{Surface.Components.Form, form: form}} >
-      <Input form={{form}} field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}} type="email" />
-    </Context>
+      <Input field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}} type="email" />
     """
   end
 end

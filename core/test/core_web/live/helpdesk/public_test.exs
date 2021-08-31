@@ -1,15 +1,14 @@
-defmodule CoreWeb.Live.SupportTest do
+defmodule CoreWeb.Live.Helpdesk.PublicTest do
   use CoreWeb.ConnCase, async: true
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
   alias Core.Helpdesk
-  alias CoreWeb.Support
 
   setup [:login_as_member]
 
   describe "create support ticket" do
     test "a member can submit a new ticket", %{conn: conn} do
-      {:ok, view, _html} = live(conn, Routes.live_path(conn, Support))
+      {:ok, view, _html} = live(conn, Routes.live_path(conn, CoreWeb.Helpdesk.Public))
 
       view
       |> element("form")
