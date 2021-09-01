@@ -159,14 +159,14 @@ msgstr "Study program"
 #: bundles/link/lib/pool/form/submission.ex:145
 #: lib/core_web/live/user/forms/features.ex:88
 msgid "features.title"
-msgstr "Characteristics"
+msgstr "Inclusion criteria"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:162
 msgid "feature.study.content.description"
-msgstr "Students of the selected studies are eligitable. No selection means all students are eligitable."
+msgstr "Select which students (BK: bedrijfskunde, IBA: international business administration) are eligible to participate. If nothing is selected, all students in the pool are eligible to participate."
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:146
 msgid "features.content.description"
-msgstr "Students with the selected characteristics are eligitable. No selection means all students are eligitable."
+msgstr "Select the inclusion criteria for your study. If nothing is selected, all students in the pool are eligible to participate."

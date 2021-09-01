@@ -80,12 +80,12 @@ msgstr "Go to online study"
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:82
 msgid "redirect.description"
-msgstr "Below you can find the redirect url for your online study. This should be used to redirect participants back to mark the task completed. Copy the redirect url and go to your survey on the platform of your choice. Paste the url at the appropriate location."
+msgstr "The redirect url to link your online study is provided below. This is used to sent participants back to PaNL after finishing their task on an external platform (e.g. a questionnaire on Qualtrics). Copy the url and paste it at the location indicated by the external platform."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:81
 msgid "redirect.title"
-msgstr "Connect your online study"
+msgstr "Link back to PaNL"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:97
@@ -155,7 +155,7 @@ msgstr "Campaigns you create will appear here"
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:122
 msgid "tabbar.item.monitor"
-msgstr "Participants"
+msgstr "Results"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:88
@@ -170,12 +170,12 @@ msgstr "Study"
 #, elixir-format
 #: bundles/link/lib/survey/web/monitor.ex:48
 msgid "monitor.empty.description"
-msgstr "After publication of this campaign this page will present an overview of the participants that applied and their status."
+msgstr "Here you'll find an overview of anonymised participants, who applied to participate in your study, once your recruitment campaign has been published. You can view their status and accept or reject their results, after they have finished their task."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/monitor.ex:47
 msgid "monitor.empty.title"
-msgstr "Information about the participants will appear here"
+msgstr "Recruitment results"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:89
@@ -185,17 +185,17 @@ msgstr "Create promotion"
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:100
 msgid "tabbar.item.survey.forward"
-msgstr "Link your online study"
+msgstr "Link your study"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:123
 msgid "tabbar.item.monitor.forward"
-msgstr "View participants"
+msgstr "View results"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:111
 msgid "tabbar.item.criteria"
-msgstr "Student pool"
+msgstr "Sample"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:112

@@ -101,6 +101,8 @@ defmodule CoreWeb.Promotion.Form do
       <ContentArea>
         <MarginY id={{:page_top}} />
         <Title2>{{dgettext("eyra-promotion", "form.title")}}</Title2>
+        <div class="text-bodymedium md:text-bodylarge font-body text-grey1">{{dgettext("eyra-promotion", "form.description")}}</div>
+        <Spacing value="L" />
         <Form id={{@id}} changeset={{@changeset}} change_event="save" focus={{@focus}} target={{@myself}}>
           <TextInput field={{:title}} label_text={{dgettext("eyra-promotion", "title.label")}} />
           <TextInput field={{:subtitle}} label_text={{dgettext("eyra-promotion", "subtitle.label")}} />
