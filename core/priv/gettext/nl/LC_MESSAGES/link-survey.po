@@ -80,12 +80,12 @@ msgstr "Ga naar de vragenlijst"
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:82
 msgid "redirect.description"
-msgstr "Hieronder staat de redirect url voor je online study. Deze wordt gebruikt om participanten na afloop terug te sturen op PaNL. Kopieer de url en ga naar de studie op het online platform naar keuze. Volg de instructies van het platform en plak de url op de juiste plaats."
+msgstr "Hieronder staat de \"redirect url\" voor je online studie. Deze wordt gebruikt om participanten na afronding van hun taak op een ander platform terug te sturen naar PaNL. Kopieer de url en ga naar de taak op het online platform naar keuze (bijv. een vragenlijst in Qualtrics). Volg de platform instructies en plak de url op de juiste plaats."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:81
 msgid "redirect.title"
-msgstr "Koppel je online study"
+msgstr "Link terug naar PaNL"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:97
@@ -155,7 +155,7 @@ msgstr "Hier vind je een overzicht van je campagnes"
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:122
 msgid "tabbar.item.monitor"
-msgstr "Deelnemers"
+msgstr "Resultaten"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:88
@@ -170,12 +170,12 @@ msgstr "Studie"
 #, elixir-format
 #: bundles/link/lib/survey/web/monitor.ex:48
 msgid "monitor.empty.description"
-msgstr "Na pulbicate van de campagne kan je op deze pagina een overzicht vinden van de aangemelde deelnemers en hun status."
+msgstr "Na publicatie van jouw wervingscampagne, vind je hier een lijst van geanonimiseerde participanten, die zich aangemeld hebben voor jouw studie. Je kunt hier hun status bekijken en na afronding van hun taak, de resultaten accepteren of afwijzen."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/monitor.ex:47
 msgid "monitor.empty.title"
-msgstr "Hier komt informatie over de deelnemers"
+msgstr "Wervingsresultaten"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:89
@@ -190,17 +190,17 @@ msgstr "Koppel je studie"
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:123
 msgid "tabbar.item.monitor.forward"
-msgstr "Bekijk deelnemers"
+msgstr "Bekijk resultaten"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:111
 msgid "tabbar.item.criteria"
-msgstr "Studentenpool"
+msgstr "Sample"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:112
 msgid "tabbar.item.criteria.forward"
-msgstr "Campagne indienen"
+msgstr "Bepaal je sample"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:78

@@ -12,36 +12,36 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/helpdesk/public.ex:26
+#: lib/core_web/live/helpdesk/public.ex:31
 msgid "form.description"
 msgstr "Vul het formulier in om een melding te doen. We zullen hierna contact met je opnemen via email."
 
 #, elixir-format
-#: lib/core_web/live/helpdesk/public.ex:25
+#: lib/core_web/live/helpdesk/public.ex:30
 msgid "form.title"
 msgstr "Helpdesk"
 
 #, elixir-format
-#: lib/core_web/live/helpdesk/form.ex:88
+#: lib/core_web/live/helpdesk/form.ex:89
 msgid "ticket.description.label"
 msgstr "Beschrijving"
 
 #, elixir-format
-#: lib/core_web/live/helpdesk/form.ex:86
+#: lib/core_web/live/helpdesk/form.ex:87
 msgid "ticket.title.label"
 msgstr "Onderwerp"
 
 #, elixir-format
-#: lib/core_web/live/helpdesk/form.ex:90
+#: lib/core_web/live/helpdesk/form.ex:91
 msgid "create_ticket.button"
 msgstr "Verstuur melding"
 
 #, elixir-format
-#: lib/core_web/live/helpdesk/form.ex:60
+#: lib/core_web/live/helpdesk/form.ex:66
 msgid "ticket_created.info.flash"
 msgstr "Melding ontvangen"
 
 #, elixir-format
-#: lib/core_web/live/helpdesk/form.ex:82
+#: lib/core_web/live/helpdesk/form.ex:83
 msgid "ticket.type"
 msgstr "Melding"
