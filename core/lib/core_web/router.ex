@@ -21,6 +21,11 @@ defmodule CoreWeb.Router do
 
   scope "/", CoreWeb do
     pipe_through([:browser_base])
+    get("/.status/health", HealthController, :get)
+  end
+
+  scope "/", CoreWeb do
+    pipe_through([:browser_base])
     get("/uploads/:filename", UploadedFileController, :get)
   end
 
