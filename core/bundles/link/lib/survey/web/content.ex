@@ -21,6 +21,7 @@ defmodule Link.Survey.Content do
   alias Link.Survey.Monitor
   alias Link.Survey.Form, as: ToolForm
   alias Link.Pool.Form.Submission, as: SubmissionForm
+  import Core.ImageCatalog, only: [image_catalog: 0]
 
   data(tool_id, :any)
   data(promotion_id, :any)
@@ -66,7 +67,12 @@ defmodule Link.Survey.Content do
   end
 
   @impl true
-  def handle_params(_unsigned_params, uri, %{assigns: %{tool_id: tool_id, active_tab: active_tab, submission_id: submission_id}} = socket) do
+  def handle_params(
+        _unsigned_params,
+        uri,
+        %{assigns: %{tool_id: tool_id, active_tab: active_tab, submission_id: submission_id}} =
+          socket
+      ) do
     parsed_uri = URI.parse(uri)
     uri_origin = "#{parsed_uri.scheme}://#{parsed_uri.authority}"
     tool = Tools.get_survey_tool!(tool_id)
@@ -103,7 +109,7 @@ defmodule Link.Survey.Content do
         props: %{
           entity_id: tool.id,
           uri_origin: uri_origin
-        },
+        }
       },
       %{
         id: :criteria_form,
@@ -114,7 +120,7 @@ defmodule Link.Survey.Content do
         component: SubmissionForm,
         props: %{
           entity_id: submission_id
-        },
+        }
       },
       %{
         id: :monitor,
@@ -124,7 +130,7 @@ defmodule Link.Survey.Content do
         type: :fullpage,
         component: Monitor,
         props: %{
-          entity_id: tool.id,
+          entity_id: tool.id
         }
       }
     ]
@@ -194,7 +200,7 @@ defmodule Link.Survey.Content do
                   breakpoint={{@breakpoint}}
                   static_path={{&Routes.static_path/2}}
                   initial_query={{initial_image_query(assigns)}}
-                  image_catalog={{Core.ImageCatalog.Unsplash}}
+                  image_catalog={{image_catalog()}}
                 />
               </div>
             </div>

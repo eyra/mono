@@ -33,6 +33,7 @@ defmodule Core.ImageCatalog do
 
   @callback search(query :: binary, page :: pos_integer, page_size :: pos_integer) ::
               search_result
+  @callback random(count :: pos_integer) :: list(binary())
   @callback search_info(
               query :: binary,
               page :: pos_integer,
@@ -42,4 +43,7 @@ defmodule Core.ImageCatalog do
 
   @doc "Returns the URLs for the given image (if available)"
   @callback info(image :: image_id, opts :: url_opts) :: image_info | nil
+  def image_catalog do
+    Application.get_env(:core, :image_catalog, Core.ImageCatalog.Local)
+  end
 end

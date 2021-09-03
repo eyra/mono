@@ -51,6 +51,11 @@ defmodule Core.ImageCatalog.Local do
     end
   end
 
+  def random(count \\ 2) do
+    list_image_ids()
+    |> Enum.take_random(count)
+  end
+
   defp file_name_to_image_info(file_name) do
     [_, image_id, width, height] = Regex.run(~r/(.*?)_(\d+)x(\d+).\w+/, file_name)
 

@@ -195,9 +195,7 @@ surveys =
         # phone_enabled: true,
         # tablet_enabled: true,
         subject_count: 56,
-        duration: "a while",
-        reward_currency: :usd,
-        reward_value: 3300
+        duration: "a while"
       }
     }
   end
