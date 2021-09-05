@@ -57,7 +57,12 @@ config :web_push_encryption, :vapid_details,
 
 config :core, :apns_backend, backend: Core.APNS.LoggingBackend
 
-config :core, :static_path, "/Users/emiel"
+config :core,
+       :static_path,
+       File.cwd!()
+       |> Path.join("tmp")
+       |> Path.join("uploads")
+       |> tap(&File.mkdir_p!/1)
 
 config :core, :features, debug: true
 

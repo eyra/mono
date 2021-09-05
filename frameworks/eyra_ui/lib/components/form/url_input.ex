@@ -8,11 +8,14 @@ defmodule EyraUI.Form.UrlInput do
   prop(label_color, :css_class, default: "text-grey1")
   prop(background, :atom, default: :light)
   prop(target, :any)
+  slot(default)
 
   def render(assigns) do
     ~H"""
     <Context get={{Surface.Components.Form, form: form}} >
-      <Input form={{form}} field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}} target={{@target}} type="url" />
+      <Input form={{form}} field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}} target={{@target}} type="url" >
+        <slot />
+      </Input>
     </Context>
     """
   end

@@ -91,7 +91,7 @@ msgstr "For research"
 msgid "marketplace-button"
 msgstr "Go to marketplace"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: bundles/link/lib/index.ex:53
 msgid "link.message.interested"
 msgstr "Interested? Sent an email to "

@@ -59,7 +59,7 @@ defmodule CoreWeb.Promotion.Public do
         %{assigns: %{promotion: promotion, plugin: plugin, plugin_info: plugin_info}} = socket
       ) do
     path = plugin.get_cta_path(promotion.id, plugin_info.call_to_action.target.value, socket)
-    {:noreply, push_redirect(socket, to: path)}
+    {:noreply, redirect(socket, external: path)}
   end
 
   def handle_event("call-to-action", _params, socket) do

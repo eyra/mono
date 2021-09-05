@@ -11,36 +11,36 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/support.ex:64
+#: lib/core_web/live/support.ex:57
 msgid "form.description"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/support.ex:63
+#: lib/core_web/live/support.ex:56
 msgid "form.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/support.ex:70
+#: lib/core_web/live/support.ex:63
 msgid "ticket.description.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/support.ex:68
+#: lib/core_web/live/support.ex:61
 msgid "ticket.title.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/support.ex:58
+#: lib/core_web/live/support.ex:52
 msgid "title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/support.ex:72
+#: lib/core_web/live/support.ex:65
 msgid "create_ticket.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/support.ex:39
+#: lib/core_web/live/support.ex:33
 msgid "ticket_created.info.flash"
 msgstr ""

@@ -30,3 +30,6 @@ config :core, CoreWeb.Endpoint,
 config :core, Oban, queues: false, plugins: false
 
 config :core, Core.SurfConext, oidc_module: Core.SurfConext.FakeOIDC
+
+# Tests always use the next bundle
+config :core, :bundle, :next

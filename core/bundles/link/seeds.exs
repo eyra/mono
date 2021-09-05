@@ -135,113 +135,142 @@ researcher =
     password: password
   })
 
-students =
-  for _ <- 1..student_count do
-    Core.Factories.insert!(:member)
-  end
+{:ok, students} =
+  Core.Repo.transaction(fn ->
+    for _ <- 1..student_count do
+      Core.Factories.insert!(:member)
+    end
+  end)
 
-researchers =
-  [researcher] ++
+{:ok, researchers} =
+  Core.Repo.transaction(fn ->
     for _ <- 1..researcher_count do
       Core.Factories.insert!(:member, %{researcher: true})
     end
+  end)
 
-labs =
-  for _ <- 1..lab_count do
-    number_of_seats = :random.uniform(time_slots_per_lab)
-    reservation_count = :random.uniform(number_of_seats)
+{:ok, labs} =
+  Core.Repo.transaction(fn ->
+    for _ <- 1..lab_count do
+      number_of_seats = :random.uniform(time_slots_per_lab)
+      reservation_count = :random.uniform(number_of_seats)
 
-    %{
-      type: :lab_tool,
-      promotion: %{
-        title: Faker.Lorem.sentence() <> " (lab)",
-        subtitle: Faker.Lorem.sentence(),
-        description: Faker.Lorem.paragraph(),
-        image_id: Enum.random(images),
-        marks: ["vu"],
-        plugin: "lab"
-      },
-      lab_tool: %{
-        time_slots:
-          for _ <- 0..:random.uniform(time_slots_per_lab) do
-            %{
-              start_time: Faker.DateTime.forward(365) |> DateTime.truncate(:second),
-              location: Faker.Lorem.sentence(),
-              number_of_seats: number_of_seats,
-              reservations:
-                Enum.take_random(students, reservation_count)
-                |> Enum.map(&%{user: &1, status: :reserved})
-            }
-          end
+      %{
+        type: :lab_tool,
+        promotion: %{
+          title: Faker.Lorem.sentence() <> " (lab)",
+          subtitle: Faker.Lorem.sentence(),
+          description: Faker.Lorem.paragraph(),
+          image_id: Enum.random(images),
+          marks: ["vu"],
+          plugin: "lab"
+        },
+        lab_tool: %{
+          time_slots:
+            for _ <- 0..:random.uniform(time_slots_per_lab) do
+              %{
+                start_time: Faker.DateTime.forward(365) |> DateTime.truncate(:second),
+                location: Faker.Lorem.sentence(),
+                number_of_seats: number_of_seats,
+                reservations:
+                  Enum.take_random(students, reservation_count)
+                  |> Enum.map(&%{user: &1, status: :reserved})
+              }
+            end
+        }
       }
-    }
-  end
+    end
+  end)
 
-surveys =
-  for _ <- 1..survey_count do
-    %{
-      type: :survey_tool,
-      promotion: %{
-        title: Faker.Lorem.sentence() <> " (survey)",
-        subtitle: Faker.Lorem.sentence(),
-        description: Faker.Lorem.paragraph(),
-        image_id: Enum.random(images),
-        marks: ["vu"],
-        plugin: "survey"
-      },
-      survey_tool: %{
-        survey_url: Faker.Internet.url(),
-        # desktop_enabled: true,
-        # phone_enabled: true,
-        # tablet_enabled: true,
-        subject_count: 56,
-        duration: "a while"
+{:ok, surveys} =
+  Core.Repo.transaction(fn ->
+    for _ <- 1..survey_count do
+      %{
+        type: :survey_tool,
+        promotion: %{
+          title: Faker.Lorem.sentence() <> " (survey)",
+          subtitle: Faker.Lorem.sentence(),
+          description: Faker.Lorem.paragraph(),
+          image_id: Enum.random(images),
+          marks: ["vu"],
+          plugin: "survey"
+        },
+        survey_tool: %{
+          survey_url: Faker.Internet.url(),
+          # desktop_enabled: true,
+          # phone_enabled: true,
+          # tablet_enabled: true,
+          subject_count: 56,
+          duration: "a while"
+        }
       }
-    }
-  end
+    end
+  end)
 
 studies = labs ++ surveys
 
-for study_data <- studies do
-  study =
-    Core.Factories.insert!(:study, %{
-      title: study_data.promotion.title,
-      description: ""
-    })
+Core.Repo.transaction(
+  fn ->
+    for study_data <- studies do
+      study =
+        Core.Factories.insert!(:study, %{
+          title: study_data.promotion.title,
+          description: ""
+        })
 
-  tool_content_node = Core.Factories.insert!(:content_node)
-  {tool_type, study_data} = Map.pop!(study_data, :type)
-  {tool_data, study_data} = Map.pop!(study_data, tool_type)
-  {promotion_data, study_data} = Map.pop!(study_data, :promotion)
+      tool_content_node = Core.Factories.insert!(:content_node)
+      {tool_type, study_data} = Map.pop!(study_data, :type)
+      {tool_data, study_data} = Map.pop!(study_data, tool_type)
+      {promotion_data, study_data} = Map.pop!(study_data, :promotion)
 
-  promotion =
-    Core.Factories.insert!(
-      :promotion,
-      Map.merge(
-        %{parent_content_node: tool_content_node, study: study},
-        promotion_data
+      promotion =
+        Core.Factories.insert!(
+          :promotion,
+          Map.merge(
+            %{
+              parent_content_node: tool_content_node,
+              study: study,
+              submission:
+                Core.Factories.build(:submission, %{
+                  parent_content_node: tool_content_node,
+                  status: :accepted
+                })
+            },
+            promotion_data
+          )
+        )
+
+      tool =
+        Core.Factories.insert!(
+          tool_type,
+          Map.merge(
+            %{content_node: tool_content_node, study: study, promotion: promotion},
+            tool_data
+          )
+        )
+
+      if tool_type == :survey_tool do
+        participant_count = :random.uniform(tool.subject_count)
+
+        for student <- Enum.take_random(students, participant_count) do
+          Core.Survey.Tools.apply_participant(tool, student)
+        end
+      end
+
+      for owner <- Enum.take_random(researchers, max(:random.uniform(researchers_per_study), 1)) do
+        Core.Authorization.assign_role(
+          owner,
+          study,
+          :owner
+        )
+      end
+
+      Core.Authorization.assign_role(
+        researcher,
+        study,
+        :owner
       )
-    )
-
-  tool =
-    Core.Factories.insert!(
-      tool_type,
-      Map.merge(%{content_node: tool_content_node, study: study, promotion: promotion}, tool_data)
-    )
-
-  if tool_type == :survey_tool do
-    participant_count = :random.uniform(tool.subject_count)
-
-    for student <- Enum.take_random(students, participant_count) do
-      Core.Survey.Tools.apply_participant(tool, student)
     end
-  end
-
-  for researcher <- Enum.take_random(researchers, max(:random.uniform(researchers_per_study), 1)) do
-    Core.Authorization.assign_role(
-      researcher,
-      study,
-      :owner
-    )
-  end
-end
+  end,
+  timeout: :infinity
+)

@@ -32,6 +32,8 @@ defmodule Link.Survey.Overview do
     surveys =
       user
       |> Studies.list_owned_studies(preload: preload)
+      # Temp: filter out labs
+      |> Enum.filter(& &1.survey_tool)
       |> Enum.map(&CardVM.primary_study_researcher(&1, socket))
 
     {:ok,

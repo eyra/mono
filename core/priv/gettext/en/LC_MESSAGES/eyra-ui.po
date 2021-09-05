@@ -145,3 +145,8 @@ msgstr "Welcome"
 #: translations.ex:2
 msgid "menu.item.link"
 msgstr "Panl"
+
+#, elixir-format, fuzzy
+#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
+msgid "menu.item.support"
+msgstr "Sign out"

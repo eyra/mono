@@ -47,7 +47,15 @@ defmodule Core.ImageCatalog.Local do
   def info(image_id, _opts) do
     if info = Map.get(image_map(), image_id) do
       url = "/image-catalog/#{info.file_name}"
-      %{id: info.id, url: url, srcset: "#{url} 1x"}
+
+      %{
+        id: info.id,
+        url: url,
+        srcset: "#{url} 1x",
+        width: info.width,
+        height: info.height,
+        blur_hash: nil
+      }
     end
   end
 

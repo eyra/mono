@@ -14,10 +14,12 @@ defmodule EyraUI.Form.Input do
   prop(label_color, :css_class, default: "text-grey1")
   prop(background, :atom, default: :light)
   prop(target, :any)
+  slot(default)
 
   def render(assigns) do
     ~H"""
       <Field form={{@form}} field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}}>
+        <slot />
         <input
           type={{@type}}
           id={{ input_id(@form, @field) }}
