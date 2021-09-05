@@ -8,10 +8,9 @@ export const ViewportResize = {
     // Direct push of current window size to properly update view
     this.pushResizeEvent()
 
-    resizeHandler = _.debounce(() => {
+    window.addEventListener('resize', (event) => {
       this.pushResizeEvent()
-    }, 100)
-    window.addEventListener('resize', resizeHandler)
+    })
   },
 
   pushResizeEvent () {

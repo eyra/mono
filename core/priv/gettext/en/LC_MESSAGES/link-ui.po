@@ -35,3 +35,29 @@ msgstr "Welcome %{member}"
 #: bundles/link/lib/debug.ex:65
 msgid "debug.title"
 msgstr "Debug"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:168
+msgid "delete.confirm.campaign"
+msgstr "campaign"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:292
+msgid "delete.button"
+msgstr "Delete"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:274
+#: bundles/link/lib/survey/web/content.ex:282
+msgid "preview.button"
+msgstr "Preview"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:264
+msgid "submit.button"
+msgstr "Submit"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:302
+msgid "retract.button"
+msgstr "Retract"

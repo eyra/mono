@@ -12,7 +12,7 @@ defmodule CoreWeb.UI.Navigation.TabbarArea do
 
   def render(assigns) do
     ~H"""
-    <div x-data="{ active_tab: {{active_tab(@tabs)}} }" >
+    <div x-init="active_tab = {{active_tab(@tabs)}} }" >
       <Context put={{tabs: @tabs}}>
         <slot />
       </Context>

@@ -39,7 +39,7 @@ defmodule CoreWeb.Endpoint do
     at: "/",
     from: :core,
     gzip: false,
-    only_matching: ~w(css fonts images js favicon logo apple-touch-icon robots manifest sw)
+    only_matching: ~w(css fonts images js favicon logo icon apple-touch-icon robots manifest sw)
   )
 
   # Code reloading can be explicitly enabled under the
