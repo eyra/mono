@@ -155,5 +155,5 @@ msgstr ""
 #, elixir-format
 #: bundles/link/lib/menu/items-translations.ex:2
 #: lib/core_web/live/menu/items_translations.ex:2
-msgid "menu.item.support"
+msgid "menu.item.helpdesk"
 msgstr ""

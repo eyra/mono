@@ -159,14 +159,14 @@ msgstr "Opleiding"
 #: bundles/link/lib/pool/form/submission.ex:145
 #: lib/core_web/live/user/forms/features.ex:88
 msgid "features.title"
-msgstr "Kenmerken"
+msgstr "Inclusiecriteria"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:162
 msgid "feature.study.content.description"
-msgstr "Studenten van de geselecteerd opleidingen komen in aanmerking. Geen selectie betekend dat iedere student in aanmerking komt."
+msgstr "Selecteer welke studenten (BK: bedrijfskunde, IBA: international business administration) mee mogen doen aan de studie. Geen selectie betekend dat alle studenten mee mogen doen met de studie."
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:146
 msgid "features.content.description"
-msgstr "Studenten met de geselecteerde kenmerken komen in aanmerking. Geen selectie betekend dat iedere student in aanmerking komt."
+msgstr "Selecteer hieronder de inclusiecriteria voor je studie. Geen selectie betekend dat alle studenten in de pool mee mogen doen met de studie."

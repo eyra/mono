@@ -6,7 +6,6 @@ defmodule CoreWeb.Live.Admin.Routes do
 
         live("/login", Login)
         live("/coordinator-management", CoordinatorManagement)
-        live("/support-tickets", SupportTickets)
       end
     end
   end

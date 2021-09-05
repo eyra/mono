@@ -30,6 +30,22 @@ defmodule Link.Index do
     {:noreply, push_redirect(socket, to: action)}
   end
 
+  def primary_cta_button_label(current_user) do
+    if current_user.researcher do
+      dgettext("eyra-link", "dashboard-button")
+    else
+      dgettext("eyra-link", "marketplace-button")
+    end
+  end
+
+  def primary_cta_path(socket, current_user) do
+    if current_user.researcher do
+      Routes.live_path(socket, Link.Dashboard)
+    else
+      Routes.live_path(socket, Link.Marketplace)
+    end
+  end
+
   def render(assigns) do
     ~H"""
       <Website
@@ -58,8 +74,8 @@ defmodule Link.Index do
               <div :if={{ @current_user != nil }}>
                 <PrimaryCTA
                   title={{ cta_title(@current_user) }}
-                  button_label={{ if @current_user.researcher do dgettext("eyra-link", "dashboard-button") else dgettext("eyra-link", "marketplace-button") end }}
-                  to={{ Routes.live_path(@socket, CoreWeb.Dashboard)}} />
+                  button_label={{ primary_cta_button_label(@current_user) }}
+                  to={{ primary_cta_path(@socket, @current_user) }} />
               </div>
               <div :if={{ @current_user == nil }}>
                 <PrimaryCTA title={{ dgettext("eyra-link", "signup.card.title") }}

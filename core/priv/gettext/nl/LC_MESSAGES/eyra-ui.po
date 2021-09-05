@@ -146,7 +146,7 @@ msgstr "Welkom"
 msgid "menu.item.link"
 msgstr "Panl"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
-msgid "menu.item.support"
-msgstr "Uitloggen"
+msgid "menu.item.helpdesk"
+msgstr "Helpdesk"

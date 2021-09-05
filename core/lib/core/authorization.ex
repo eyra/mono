@@ -20,9 +20,9 @@ defmodule Core.Authorization do
 
   grant_access(CoreWeb.Admin.Login, [:visitor, :member])
   grant_access(CoreWeb.Admin.CoordinatorManagement, [:admin])
-  grant_access(CoreWeb.Admin.SupportTickets, [:admin])
   grant_access(CoreWeb.Index, [:visitor, :member])
-  grant_access(CoreWeb.Support, [:member])
+  grant_access(CoreWeb.Helpdesk.Public, [:member])
+  grant_access(CoreWeb.Helpdesk.Admin, [:admin])
   grant_access(CoreWeb.Dashboard, [:researcher])
   grant_access(CoreWeb.Marketplace, [:member])
   grant_access(CoreWeb.Todo, [:member])

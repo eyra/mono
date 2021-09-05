@@ -11,11 +11,13 @@ defmodule EyraUI.Form.TextArea do
   prop(label_text, :string)
   prop(label_color, :css_class, default: "text-grey1")
   prop(background, :atom, default: :light)
-  prop(target, :any)
 
   def render(assigns) do
     ~H"""
-      <Context get={{Surface.Components.Form, form: form}} >
+      <Context
+        get={{Surface.Components.Form, form: form}}
+        get={{target: target}}
+      >
         <Field form={{form}} field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}}>
           <textarea
             id={{ input_id(form, @field) }}
@@ -26,7 +28,7 @@ defmodule EyraUI.Form.TextArea do
             x-on:click.stop
             phx-focus="focus"
             phx-value-field={{ @field }}
-            phx-target={{ @target }}
+            phx-target={{ target }}
           >{{ html_escape(input_value(form, @field) || "") }}</textarea>
         </Field>
       </Context>

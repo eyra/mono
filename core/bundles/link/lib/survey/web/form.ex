@@ -95,7 +95,7 @@ defmodule Link.Survey.Form do
             <BodyMedium color="text-tertiary">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Link.Survey.Complete, @entity_id)}}</BodyMedium>
           </Panel>
           <Spacing value="L" />
-          <UrlInput field={{:survey_url}} label_text={{dgettext("link-survey", "config.url.label")}} target={{@myself}}>
+          <UrlInput field={{:survey_url}} label_text={{dgettext("link-survey", "config.url.label")}}>
             <BodyMedium>{{dgettext("link-survey", "config.url.description")}}</BodyMedium>
             <BodyMedium :if={{@qualtrics_url?}}>
               See the
@@ -105,10 +105,10 @@ defmodule Link.Survey.Form do
           </UrlInput>
           <Spacing value="M" />
 
-          <TextInput field={{:duration}} label_text={{dgettext("link-survey", "duration.label")}} target={{@myself}} />
+          <TextInput field={{:duration}} label_text={{dgettext("link-survey", "duration.label")}} />
           <Spacing value="M" />
 
-          <NumberInput field={{:subject_count}} label_text={{dgettext("link-survey", "config.nrofsubjects.label")}} target={{@myself}} />
+          <NumberInput field={{:subject_count}} label_text={{dgettext("link-survey", "config.nrofsubjects.label")}} />
           <Spacing value="M" />
 
           <Title3>{{dgettext("link-survey", "devices.title")}}</Title3>

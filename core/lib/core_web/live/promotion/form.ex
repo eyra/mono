@@ -101,9 +101,11 @@ defmodule CoreWeb.Promotion.Form do
       <ContentArea>
         <MarginY id={{:page_top}} />
         <Title2>{{dgettext("eyra-promotion", "form.title")}}</Title2>
+        <div class="text-bodymedium md:text-bodylarge font-body text-grey1">{{dgettext("eyra-promotion", "form.description")}}</div>
+        <Spacing value="L" />
         <Form id={{@id}} changeset={{@changeset}} change_event="save" focus={{@focus}} target={{@myself}}>
-          <TextInput field={{:title}} label_text={{dgettext("eyra-promotion", "title.label")}} target={{@myself}} />
-          <TextInput field={{:subtitle}} label_text={{dgettext("eyra-promotion", "subtitle.label")}} target={{@myself}} />
+          <TextInput field={{:title}} label_text={{dgettext("eyra-promotion", "title.label")}} />
+          <TextInput field={{:subtitle}} label_text={{dgettext("eyra-promotion", "subtitle.label")}} />
 
           <Spacing value="XL" />
           <Title3>{{dgettext("eyra-promotion", "themes.title")}}</Title3>
@@ -125,11 +127,11 @@ defmodule CoreWeb.Promotion.Form do
           <Spacing value="XL" />
 
           <Title3>{{dgettext("eyra-promotion", "expectations.title")}}</Title3>
-          <TextArea field={{:expectations}} label_text={{dgettext("eyra-promotion", "expectations.label")}} target={{@myself}}/>
+          <TextArea field={{:expectations}} label_text={{dgettext("eyra-promotion", "expectations.label")}} />
           <Spacing value="L" />
 
           <Title3>{{dgettext("eyra-promotion", "description.title")}}</Title3>
-          <TextArea field={{:description}} label_text={{dgettext("eyra-promotion", "description.label")}} target={{@myself}}/>
+          <TextArea field={{:description}} label_text={{dgettext("eyra-promotion", "description.label")}} />
           <Spacing value="L" />
 
           <Title3>{{dgettext("eyra-promotion", "banner.title")}}</Title3>
@@ -144,9 +146,9 @@ defmodule CoreWeb.Promotion.Form do
 
           <Spacing value="S" />
 
-          <TextInput field={{:banner_title}} label_text={{dgettext("eyra-promotion", "banner.title.label")}} target={{@myself}} />
-          <TextInput field={{:banner_subtitle}} label_text={{dgettext("eyra-promotion", "banner.subtitle.label")}} target={{@myself}} />
-          <UrlInput field={{:banner_url}} label_text={{dgettext("eyra-promotion", "banner.url.label")}} target={{@myself}} />
+          <TextInput field={{:banner_title}} label_text={{dgettext("eyra-promotion", "banner.title.label")}} />
+          <TextInput field={{:banner_subtitle}} label_text={{dgettext("eyra-promotion", "banner.subtitle.label")}} />
+          <UrlInput field={{:banner_url}} label_text={{dgettext("eyra-promotion", "banner.url.label")}} />
         </Form>
       </ContentArea>
     """
