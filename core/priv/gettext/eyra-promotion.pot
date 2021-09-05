@@ -21,22 +21,18 @@ msgid "back.button.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:153
 msgid "banner.subtitle.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:140
 msgid "banner.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:152
 msgid "banner.title.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:154
 msgid "banner.url.label"
 msgstr ""
 
@@ -149,9 +145,4 @@ msgstr ""
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:108
 msgid "form.title"
-msgstr ""
-
-#, elixir-format
-#: lib/core_web/live/promotion/form.ex:104
-msgid "form.description"
 msgstr ""

@@ -13,7 +13,7 @@ defmodule Link.Onboarding.Wizard do
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
 
   alias EyraUI.Button.DynamicButton
-  alias CoreWeb.UI.Navigation.{Tabbar, TabbarContent, TabbarFooter, TabbarArea}
+  alias CoreWeb.UI.Navigation.{ActionBar, Tabbar, TabbarContent, TabbarFooter, TabbarArea}
 
   data(user_agent, :string, default: "")
   data(current_user, :any)
@@ -115,7 +115,9 @@ defmodule Link.Onboarding.Wizard do
         active_item={{ :dashboard }}
       >
         <TabbarArea tabs={{@tabs}}>
-          <Tabbar id={{ :tabbar }}/>
+          <ActionBar>
+            <Tabbar />
+          </ActionBar>
           <TabbarContent/>
           <TabbarFooter>
             <DynamicButton vm={{ @finish_button }} />

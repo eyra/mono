@@ -7,7 +7,7 @@ defmodule CoreWeb.UI.Navigation.TabbarContent do
 
   def render(assigns) do
     ~H"""
-      <div class="h-navbar"></div>
+      <div class="h-navbar-height"></div>
       <Context get={{tabs: tabs}}>
         <For each={{ {tab, index} <- Enum.with_index(tabs) }} >
           <Tab index= {{ index }}>

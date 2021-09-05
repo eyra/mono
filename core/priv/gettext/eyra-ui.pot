@@ -157,3 +157,38 @@ msgstr ""
 #: lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.helpdesk"
 msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:9
+msgid "cancel.button"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:170
+msgid "delete.confirm.text"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:169
+msgid "delete.confirm.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:171
+msgid "delete.confirm.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:9
+msgid "ok.button"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:227
+msgid "feature.unavailable.text"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:226
+msgid "feature.unavailable.title"
+msgstr ""

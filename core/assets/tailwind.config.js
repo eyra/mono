@@ -43,6 +43,9 @@ module.exports = {
       transitionDuration: {
         '2000': '2000ms',
       },
+      opacity: {
+        'shadow': '.15',
+      },
       spacing: {
         "1px" : "1px",
         "2px" : "2px",
@@ -63,9 +66,14 @@ module.exports = {
         "44px" : "44px",
         "84px" : "84px",
         "30" : "120px",
+        "action_menu-width" : "180px",
+        "tablet-menu-width" : "72px",
         "desktop-menu-width" : "296px",
         "mobile-menu-width" : "256px",
         "sidepadding" : "64px",
+        "navbar-height" : "90px",
+        "dialog-width" : "320px",
+        "dialog-width-sm" : "400px",
       },
       width: {
         "main-left" : "56px",
@@ -97,7 +105,6 @@ module.exports = {
         "header2" : "100px",
         "header2-sm" : "100px",
         "header2-lg" : "183px",
-        "navbar" : "90px",
         "logo" : "32px",
         "logo-sm" : "48px",
         "image-header": "375px",

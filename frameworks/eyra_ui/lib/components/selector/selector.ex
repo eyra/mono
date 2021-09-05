@@ -11,6 +11,7 @@ defmodule EyraUI.Selector.Selector do
   prop(items, :list, required: true)
   prop(parent, :map, required: true)
   prop(type, :atom, default: :label)
+  prop(opts, :string, default: "")
 
   defp flex_options(:radio), do: "flex-col gap-3"
   defp flex_options(:checkbox), do: "flex-row flex-wrap gap-x-8 gap-y-3 items-center"
@@ -81,7 +82,7 @@ defmodule EyraUI.Selector.Selector do
 
   def render(assigns) do
     ~H"""
-    <div class="flex {{ flex_options(@type) }}">
+    <div class="flex {{ flex_options(@type) }} {{ @opts }}">
       <For each={{ {item, _} <- Enum.with_index(@items) }}>
         <div x-data="{ active: {{ item.active }} }" >
           <div

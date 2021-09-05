@@ -150,3 +150,38 @@ msgstr "Panl"
 #: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.helpdesk"
 msgstr "Helpdesk"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:9
+msgid "cancel.button"
+msgstr "Cancel"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:170
+msgid "delete.confirm.text"
+msgstr "This %{item} will be permanently deleted."
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:169
+msgid "delete.confirm.title"
+msgstr "Delete %{item}?"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:171
+msgid "delete.confirm.label"
+msgstr "Delete"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:9
+msgid "ok.button"
+msgstr "OK"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:227
+msgid "feature.unavailable.text"
+msgstr "Stay tuned. We are continuesly working on new functionality."
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:226
+msgid "feature.unavailable.title"
+msgstr "Feature not yet available"

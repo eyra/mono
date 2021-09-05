@@ -10,7 +10,7 @@ defmodule Link.Pool.Overview do
   alias Link.Pool.Form.{Students, Studies}
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias CoreWeb.UI.Navigation.{TabbarArea, Tabbar, TabbarContent}
+  alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent}
 
   data(tabs, :any)
 
@@ -59,7 +59,9 @@ defmodule Link.Pool.Overview do
         menus={{ @menus }}
       >
         <TabbarArea tabs={{@tabs}}>
-          <Tabbar id={{ :tabbar }}/>
+          <ActionBar>
+            <Tabbar />
+          </ActionBar>
           <TabbarContent/>
         </TabbarArea>
       </Workspace>

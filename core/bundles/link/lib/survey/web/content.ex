@@ -5,19 +5,21 @@ defmodule Link.Survey.Content do
   use CoreWeb, :live_view
   use CoreWeb.MultiFormAutoSave
   use CoreWeb.Layouts.Workspace.Component, :survey
-  use Coreweb.UI.ViewportHelpers
+  use CoreWeb.UI.Responsive.Viewport
+  use CoreWeb.UI.Dialog
 
   import CoreWeb.Gettext
 
   alias Core.Survey.Tools
   alias Core.Promotions
   alias Core.Pools.Submissions
+  alias Core.Content.Nodes
 
   alias CoreWeb.ImageCatalogPicker
   alias CoreWeb.Promotion.Form, as: PromotionForm
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
-  alias CoreWeb.UI.Navigation.{TabbarArea, Tabbar, TabbarContent, TabbarFooter}
+  alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent, TabbarFooter}
   alias Link.Survey.Monitor
   alias Link.Survey.Form, as: ToolForm
   alias Link.Pool.Form.Submission, as: SubmissionForm
@@ -26,11 +28,14 @@ defmodule Link.Survey.Content do
   data(tool_id, :any)
   data(promotion_id, :any)
   data(submission_id, :any)
+  data(is_submitted, :any)
   data(active_tab, :any)
   data(tabs, :map)
+  data(actions, :map)
   data(changesets, :any)
   data(initial_image_query, :any)
   data(uri_origin, :any)
+  data(dialog, :any)
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
@@ -42,6 +47,7 @@ defmodule Link.Survey.Content do
     tool = Tools.get_survey_tool!(tool_id)
     promotion = Promotions.get!(tool.promotion_id)
     submission = Submissions.get!(promotion)
+    is_submitted = submission.status != :idle
 
     {
       :ok,
@@ -50,14 +56,16 @@ defmodule Link.Survey.Content do
         tool_id: tool_id,
         promotion_id: tool.promotion_id,
         submission_id: submission.id,
+        is_submitted: is_submitted,
         active_tab: active_tab,
         changesets: %{},
         save_timer: nil,
-        hide_flash_timer: nil
+        hide_flash_timer: nil,
+        dialog: nil
       )
-      |> update_menus()
       |> assign_viewport()
       |> assign_breakpoint()
+      |> update_menus()
     }
   end
 
@@ -83,6 +91,11 @@ defmodule Link.Survey.Content do
       socket
       |> assign(tabs: tabs)
     }
+  end
+
+  @impl true
+  def handle_resize(socket) do
+    socket |> update_menus()
   end
 
   defp create_tabs(active_tab, tool, submission_id, uri_origin) do
@@ -157,11 +170,77 @@ defmodule Link.Survey.Content do
     {:noreply, socket}
   end
 
-  def handle_event("delete", _params, %{assigns: %{tool_id: tool_id}} = socket) do
+  def handle_event("delete", _params, socket) do
+    item = dgettext("link-ui", "delete.confirm.campaign")
+    title = dgettext("eyra-ui", "delete.confirm.title", item: item)
+    text = dgettext("eyra-ui", "delete.confirm.text", item: item)
+    confirm_label = dgettext("eyra-ui", "delete.confirm.label")
+
+    {:noreply, socket |> confirm("delete", title, text, confirm_label)}
+  end
+
+  def handle_event("delete_confirm", _params, %{assigns: %{tool_id: tool_id}} = socket) do
     Tools.get_survey_tool!(tool_id)
     |> Tools.delete_survey_tool()
 
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Dashboard))}
+  end
+
+  def handle_event("delete_cancel", _params, socket) do
+    {:noreply, socket |> assign(dialog: nil)}
+  end
+
+  # Events
+  def handle_event("submit", _params, %{assigns: %{submission_id: submission_id}} = socket) do
+    submission = Submissions.get!(submission_id)
+
+    socket =
+      if Nodes.ready?(submission.content_node) do
+        {:ok, _submission} = Submissions.update(submission, %{status: :submitted})
+
+        title = dgettext("eyra-submission", "submit.success.title")
+        text = dgettext("eyra-submission", "submit.success.text")
+
+        socket
+        |> assign(is_submitted: true)
+        |> inform(title, text)
+      else
+        title = dgettext("eyra-submission", "submit.error.title")
+        text = dgettext("eyra-submission", "submit.error.text")
+        socket |> inform(title, text)
+      end
+
+    { :noreply, socket}
+  end
+
+  def handle_event("retract", _params, %{assigns: %{submission_id: submission_id}} = socket) do
+    submission = Submissions.get!(submission_id)
+    {:ok, _submission} = Submissions.update(submission, %{status: :idle})
+
+    title = dgettext("eyra-submission", "retract.success.title")
+    text = dgettext("eyra-submission", "retract.success.text")
+
+    {
+      :noreply,
+      socket
+      |> assign(is_submitted: false)
+      |> inform(title, text)
+    }
+  end
+
+  def handle_event("preview", _params, socket) do
+    title = dgettext("eyra-ui", "feature.unavailable.title")
+    text = dgettext("eyra-ui", "feature.unavailable.text")
+
+    {
+      :noreply,
+      socket
+      |> inform(title, text)
+    }
+  end
+
+  def handle_event("inform_ok", _params, socket) do
+    {:noreply, socket |> assign(dialog: nil)}
   end
 
   def handle_info({:claim_focus, :tool_form}, socket) do
@@ -179,8 +258,160 @@ defmodule Link.Survey.Content do
     {:noreply, socket}
   end
 
+
   defp marginX(:mobile), do: "mx-6"
   defp marginX(_), do: "mx-10"
+
+  defp action_map() do
+    %{
+      submit: %{
+        label: %{
+          action: %{ type: :send, event: "submit"},
+          face: %{ type: :primary, label: dgettext("link-ui", "submit.button"), bg_color: "bg-success"}
+        },
+        icon: %{
+          action: %{ type: :send, event: "submit"},
+          face: %{ type: :icon, icon: :submit}
+        }
+      },
+      preview: %{
+        label: %{
+          action: %{ type: :send, event: "preview"},
+          face: %{ type: :primary, label: dgettext("link-ui", "preview.button"), bg_color: "bg-primary"}
+        },
+        icon: %{
+          action: %{ type: :send, event: "preview"},
+          face: %{ type: :icon, icon: :preview}
+        },
+        label_icon: %{
+          action: %{ type: :send, event: "preview"},
+          face: %{ type: :label, icon: :preview, label: dgettext("link-ui", "preview.button")}
+        }
+      },
+      delete: %{
+        icon: %{
+          action: %{ type: :send, event: "delete"},
+          face: %{ type: :icon, icon: :delete }
+        },
+        label_icon: %{
+          action: %{ type: :send, event: "delete"},
+          face: %{ type: :label, icon: :delete, label: dgettext("link-ui", "delete.button") }
+        }
+      },
+      retract: %{
+        icon: %{
+          action: %{ type: :send, event: "retract"},
+          face: %{ type: :icon, icon: :retract }
+        },
+        label_icon: %{
+          action: %{ type: :send, event: "retract"},
+          face: %{ type: :label, icon: :retract, label: dgettext("link-ui", "retract.button") }
+        }
+      },
+      more: %{
+        icon: %{
+          action: %{ type: :toggle, id: :more, target: "action_menu" },
+          face: %{ type: :icon, icon: :more }
+        }
+      },
+    }
+  end
+
+  defp create_actions(breakpoint, is_submitted) do
+    create_actions(action_map(), breakpoint, is_submitted)
+  end
+
+  defp create_actions(_, {:unknown, _}, _), do: []
+
+  defp create_actions(%{submit: submit, preview: preview, delete: delete, more: more}, bp, false) do
+    submit =
+      value(bp, nil,
+        xs: %{ 0 => submit.icon },
+        md: %{ 40 => submit.label, 100 => submit.icon },
+        lg: %{ 50 => submit.label}
+      )
+
+    preview =
+      value(bp, nil,
+        xs: %{ 25 => preview.icon},
+        sm: %{ 30 => nil},
+        md: %{ 0 => preview.icon, 60 => preview.label, 100 => nil },
+        lg: %{ 14 => preview.icon, 75 => preview.label }
+      )
+
+    delete =
+      value(bp, nil,
+        xs: %{ 25 => delete.icon},
+        sm: %{ 30 => nil},
+        md: %{ 0 => delete.icon, 100 => nil },
+        lg: %{ 14 => delete.icon }
+      )
+
+    more =
+      value(bp, more.icon,
+        xs: %{ 25 => nil},
+        sm: %{ 30 => more.icon},
+        md: %{ 0 => nil, 100 => more.icon },
+        lg: %{ 14 => nil }
+      )
+
+    [
+      submit, preview, delete, more
+    ]
+    |> Enum.filter(&(not is_nil(&1)))
+  end
+
+  defp create_actions(%{preview: preview, retract: retract, more: more}, bp, true) do
+
+    preview =
+      value(bp, nil,
+        xs: %{ 8 => preview.icon },
+        md: %{ 25 => preview.label, 100 => preview.icon },
+        lg: %{ 20 => preview.label}
+      )
+
+    retract =
+      value(bp, nil,
+        xs: %{ 8 => retract.icon}
+      )
+
+    more =
+      value(bp, more.icon,
+        xs: %{ 8 => nil}
+      )
+
+    [
+      preview, retract, more
+    ]
+    |> Enum.filter(&(not is_nil(&1)))
+  end
+
+
+  defp create_more_actions(is_submitted) do
+    create_more_actions(action_map(), is_submitted)
+  end
+
+  defp create_more_actions(%{preview: preview, delete: delete}, false) do
+    [
+      preview.label_icon,
+      delete.label_icon
+    ]
+    |> Enum.filter(&(not is_nil(&1)))
+  end
+
+  defp create_more_actions(%{preview: preview, retract: retract}, true) do
+    [
+      preview.label_icon,
+      retract.label_icon
+    ]
+    |> Enum.filter(&(not is_nil(&1)))
+  end
+
+  defp tabbar_size({:unknown, _}), do: :unknown
+  defp tabbar_size(bp), do: value(bp, :narrow, sm: %{ 30 => :wide })
+
+  defp show_dialog?(nil), do: false
+  defp show_dialog?(_), do: true
 
   def render(assigns) do
     ~H"""
@@ -189,10 +420,10 @@ defmodule Link.Survey.Content do
       menus={{ @menus }}
     >
       <div id={{ :survey_content }} phx-hook="ViewportResize" phx-click="reset_focus">
-        <div x-data="{ open: false }">
-          <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="open">
+        <div x-data="{ image_picker: false, active_tab: 0, dropdown: false }">
+          <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="image_picker">
             <div class="flex flex-row items-center justify-center w-full h-full">
-              <div class="{{marginX(@breakpoint)}} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg" @click.away="open = false, $parent.$parent.overlay = false">
+              <div class="{{marginX(@breakpoint)}} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg" x-on:click.away="image_picker = false, $parent.$parent.overlay = false">
                 <ImageCatalogPicker
                   id={{:image_picker}}
                   conn={{@socket}}
@@ -205,8 +436,15 @@ defmodule Link.Survey.Content do
               </div>
             </div>
           </div>
+          <div :if={{ show_dialog?(@dialog) }} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
+            <div class="flex flex-row items-center justify-center w-full h-full">
+              <Dialog vm={{ @dialog }} />
+            </div>
+          </div>
           <TabbarArea tabs={{@tabs}}>
-            <Tabbar id={{ :tabbar }} />
+            <ActionBar right_bar_buttons={{ create_actions(@breakpoint, @is_submitted) }} more_buttons={{ create_more_actions(@is_submitted) }}>
+              <Tabbar size={{ tabbar_size(@breakpoint) }} />
+            </ActionBar>
             <TabbarContent/>
             <TabbarFooter/>
           </TabbarArea>

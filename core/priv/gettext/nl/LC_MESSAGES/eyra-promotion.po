@@ -145,8 +145,3 @@ msgstr "Titel"
 #: lib/core_web/live/promotion/form.ex:103
 msgid "form.title"
 msgstr "Advertentie"
-
-#, elixir-format
-#: lib/core_web/live/promotion/form.ex:104
-msgid "form.description"
-msgstr "Deze informatie wordt gebruikt om jouw wervingscampagne te presenteren aan potentiële participanten in de marktplaats."

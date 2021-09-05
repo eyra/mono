@@ -22,17 +22,17 @@ msgid "back.button.label"
 msgstr "Back to overview"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:150
+#: lib/core_web/live/promotion/form.ex:148
 msgid "banner.subtitle.label"
 msgstr "Subtitle"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:137
+#: lib/core_web/live/promotion/form.ex:135
 msgid "banner.title"
 msgstr "Banner"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:149
+#: lib/core_web/live/promotion/form.ex:147
 msgid "banner.title.label"
 msgstr "Title"
 
@@ -67,7 +67,7 @@ msgid "description.public.label"
 msgstr "Some background information for the participants"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:133
+#: lib/core_web/live/promotion/form.ex:131
 msgid "description.title"
 msgstr "About the study"
 
@@ -83,7 +83,7 @@ msgid "duration.title"
 msgstr "Expected duration"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:130
+#: lib/core_web/live/promotion/form.ex:128
 msgid "expectations.label"
 msgstr "Expectations for the participants"
 
@@ -93,17 +93,17 @@ msgid "expectations.public.label"
 msgstr "Expectations for the participants"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:129
+#: lib/core_web/live/promotion/form.ex:127
 msgid "expectations.title"
 msgstr "About the task"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:118
+#: lib/core_web/live/promotion/form.ex:116
 msgid "image.label"
 msgstr "The selected image will be visible in the marketplace overview and on promotion page"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:117
+#: lib/core_web/live/promotion/form.ex:115
 msgid "image.title"
 msgstr "Image"
 
@@ -134,7 +134,7 @@ msgid "reward.title"
 msgstr "Credits"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:124
+#: lib/core_web/live/promotion/form.ex:122
 msgid "search.different.image.button"
 msgstr "Select image"
 
@@ -161,8 +161,3 @@ msgstr "Title"
 #: lib/core_web/live/promotion/form.ex:103
 msgid "form.title"
 msgstr "Promotion"
-
-#, elixir-format
-#: lib/core_web/live/promotion/form.ex:104
-msgid "form.description"
-msgstr "This information is used to present your recruitment campaign to potential participants in the marketplace."

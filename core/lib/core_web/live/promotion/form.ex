@@ -101,8 +101,6 @@ defmodule CoreWeb.Promotion.Form do
       <ContentArea>
         <MarginY id={{:page_top}} />
         <Title2>{{dgettext("eyra-promotion", "form.title")}}</Title2>
-        <div class="text-bodymedium md:text-bodylarge font-body text-grey1">{{dgettext("eyra-promotion", "form.description")}}</div>
-        <Spacing value="L" />
         <Form id={{@id}} changeset={{@changeset}} change_event="save" focus={{@focus}} target={{@myself}}>
           <TextInput field={{:title}} label_text={{dgettext("eyra-promotion", "title.label")}} />
           <TextInput field={{:subtitle}} label_text={{dgettext("eyra-promotion", "subtitle.label")}} />
@@ -121,7 +119,7 @@ defmodule CoreWeb.Promotion.Form do
             <ImagePreview image_url={{ @image_url }} placeholder="" />
             <Spacing value="S" direction="l" />
             <div class="flex-wrap">
-              <SecondaryAlpineButton click="$parent.$parent.open = true, $parent.$parent.$parent.$parent.overlay = true" label={{dgettext("eyra-promotion", "search.different.image.button")}} />
+              <SecondaryAlpineButton click="$parent.image_picker = true, $parent.$parent.$parent.overlay = true" label={{dgettext("eyra-promotion", "search.different.image.button")}} />
             </div>
           </div>
           <Spacing value="XL" />

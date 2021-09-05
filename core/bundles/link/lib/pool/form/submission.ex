@@ -6,7 +6,6 @@ defmodule Link.Pool.Form.Submission do
   alias EyraUI.Selector.Selector
   alias EyraUI.Text.{Title2, Title3, BodyMedium}
 
-  alias Core.Content.Nodes
   alias Core.Pools.{Submissions, Criteria}
 
   prop(props, :any, required: true)
@@ -16,7 +15,6 @@ defmodule Link.Pool.Form.Submission do
   data(gender_labels, :any)
   data(dominanthand_labels, :any)
   data(nativelanguage_labels, :any)
-  data(buttons, :map)
 
   data(changeset, :any)
   data(focus, :any, default: "")
@@ -57,7 +55,6 @@ defmodule Link.Pool.Form.Submission do
       |> assign(gender_labels: gender_labels)
       |> assign(dominanthand_labels: dominanthand_labels)
       |> assign(nativelanguage_labels: nativelanguage_labels)
-      |> update_buttons()
       |> update_ui()
     }
   end
@@ -79,54 +76,6 @@ defmodule Link.Pool.Form.Submission do
     |> assign(nativelanguage_labels: nativelanguage_labels)
   end
 
-  defp update_buttons(%{assigns: %{submission: submission, myself: myself }} = socket) do
-    submitted? = submission.status === :submitted
-
-    buttons =
-      [
-        if submitted? do
-          %{
-            action: %{ type: :send, event: "retract", target: myself},
-            face: %{ type: :secondary, label: dgettext("eyra-submission", "retract.button") }
-          }
-        else
-          %{
-            action: %{ type: :send, event: "submit", target: myself},
-            face: %{ type: :primary, label: dgettext("eyra-submission", "submit.button")}
-          }
-        end
-      ]
-
-    socket |> assign(buttons: buttons)
-  end
-
-  # Events
-  def handle_event("submit", _params, %{assigns: %{submission: submission}} = socket) do
-    socket =
-    if Nodes.ready?(submission.content_node) do
-      {:ok, submission} = Submissions.update(submission, %{status: :submitted})
-      socket
-      |> assign(submission: submission)
-      |> update_buttons()
-    else
-      socket
-      |> flash_error(dgettext("eyra-submission", "submit.error"))
-    end
-
-    { :noreply, socket}
-  end
-
-  def handle_event("retract", _params, %{assigns: %{submission: submission}} = socket) do
-    {:ok, submission} = Submissions.update(submission, %{status: :idle})
-
-    {
-      :noreply,
-      socket
-      |> assign(submission: submission)
-      |> update_buttons()
-    }
-  end
-
   # Saving
   def save(socket, %Criteria{} = criteria, _type, attrs) do
     changeset = Criteria.changeset(criteria, attrs)
@@ -140,8 +89,8 @@ defmodule Link.Pool.Form.Submission do
     ~H"""
       <ContentArea>
         <MarginY id={{:page_top}} />
-        <div class="grid grid-cols-2 gap-14">
-          <div class="max-w-form">
+        <div class="flex flex-col-reverse xl:flex-row gap-8 xl:gap-14">
+          <div class="xl:max-w-form">
             <Title2>{{dgettext("eyra-account", "features.title")}}</Title2>
             <BodyMedium>{{dgettext("eyra-account", "features.content.description")}}</BodyMedium>
             <Spacing value="M" />
@@ -157,17 +106,13 @@ defmodule Link.Pool.Form.Submission do
             <Title3>{{dgettext("eyra-account", "features.dominanthand.title")}}</Title3>
             <Selector id={{:dominant_hands}} items={{ @dominanthand_labels }} type={{:checkbox}} parent={{ %{type: __MODULE__, id: @id} }} />
           </div>
-          <div class="max-w-form">
+          <div class="xl:max-w-form">
             <Title2>{{dgettext("eyra-account", "features.study.title")}}</Title2>
             <BodyMedium>{{dgettext("eyra-account", "feature.study.content.description")}}</BodyMedium>
             <Spacing value="S" />
-            <Selector id={{:study_program_codes}} items={{ @study_labels }} type={{:checkbox}} parent={{ %{type: __MODULE__, id: @id} }}/>
+            <Selector id={{:study_program_codes}} items={{ @study_labels }} type={{:checkbox}} parent={{ %{type: __MODULE__, id: @id} }} opts="max-w-form" />
             <Spacing value="XL" />
           </div>
-        </div>
-        <Spacing value="XL" />
-        <div class="flex flex-row gap-6 ml-">
-          <DynamicButton :for={{ button <- @buttons }} vm={{ button }} />
         </div>
       </ContentArea>
     """

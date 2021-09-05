@@ -83,7 +83,7 @@ defmodule Link.Survey.Form do
       )
 
     ~H"""
-      <ContentArea>
+      <ContentArea class="mb-4" >
         <MarginY id={{:page_top}} />
         <Title2>{{dgettext("link-survey", "form.title")}}</Title2>
         <Form id={{@id}} changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>

@@ -17,7 +17,7 @@ defmodule CoreWeb.UI.Navigation.TabbarFooter do
 
   def render(assigns) do
     ~H"""
-      <ContentArea>
+      <ContentArea class="mb-8">
         <MarginY id={{:page_top}} />
           <Context get={{tabs: tabs}}>
             <div :for={{ {[tab1, tab2], index} <- Enum.with_index(combine_shifted(tabs)) }} x-show="active_tab == {{ index }}">
