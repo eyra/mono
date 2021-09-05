@@ -24,6 +24,7 @@ import { urlBase64ToUint8Array } from "./tools";
 import { registerAPNSDeviceToken } from "./apns";
 import "./100vh-fix";
 import { ViewportResize } from "./viewport_resize"
+import { Toggle } from "./toggle"
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -67,7 +68,7 @@ let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
 
-let Hooks = { ViewportResize };
+let Hooks = { ViewportResize, Toggle };
 
 Hooks.NativeWrapper = {
   mounted() {

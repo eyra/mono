@@ -130,7 +130,7 @@ defmodule CoreWeb.ImageCatalogPicker do
           <div class="flex-grow">
             <Title3>{{dgettext("eyra-imagecatalog", "search.image.title")}}</Title3>
           </div>
-          <button type="button" class="w-button-sm h-button-sm flex-wrap cursor-pointer active:opacity-50" x-on:click="open = false, $parent.$parent.overlay = false">
+          <button type="button" class="w-button-sm h-button-sm flex-wrap cursor-pointer active:opacity-50" x-on:click="image_picker = false, $parent.$parent.overlay = false">
             <img src={{ @static_path.(@conn, "/images/close.svg")}} />
           </button>
         </div>

@@ -12,21 +12,6 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:90
-msgid "retract.button"
-msgstr "Retract campaign"
-
-#, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:95
-msgid "submit.button"
-msgstr "Submit campaign"
-
-#, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:113
-msgid "submit.error"
-msgstr "The campaign is not ready to submit yet. Complete the forms (1) Promotion and (2) Study first."
-
-#, elixir-format
 #: bundles/link/lib/card.ex:157 bundles/link/lib/dashboard.ex:94
 msgid "status.accepted.label"
 msgstr "Online"
@@ -55,3 +40,33 @@ msgstr "Ready to submit campaign to coordinator of student pool"
 #: bundles/link/lib/dashboard.ex:105
 msgid "waiting.for.coordinator.message"
 msgstr "Waiting for coordinator to publish campaign in marketplace"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:203
+msgid "submit.error.text"
+msgstr "The campaign is not ready to submit yet. Complete all the forms first."
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:202
+msgid "submit.error.title"
+msgstr "Incomplete campaign"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:196
+msgid "submit.success.text"
+msgstr "The coordinator of the pool has been informed. You will be notified when the campaign is put online."
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:195
+msgid "submit.success.title"
+msgstr "Campaign submitted"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:215
+msgid "retract.success.text"
+msgstr "The campaign is not longer visible in the marketplace for new participants."
+
+#, elixir-format
+#: bundles/link/lib/survey/web/content.ex:214
+msgid "retract.success.title"
+msgstr "Campaign offline"

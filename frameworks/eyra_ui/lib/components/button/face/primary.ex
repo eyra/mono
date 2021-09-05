@@ -15,7 +15,7 @@ defmodule EyraUI.Button.Face.Primary do
 
   def render(assigns) do
     ~H"""
-    <div class="pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px leading-none font-button text-button focus:outline-none rounded pr-4 pl-4 {{bg_color(@vm)}} {{text_color(@vm)}}">
+    <div class="pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px leading-none font-button text-button rounded pr-4 pl-4 {{bg_color(@vm)}} {{text_color(@vm)}}">
       {{ label(@vm) }}
     </div>
     """

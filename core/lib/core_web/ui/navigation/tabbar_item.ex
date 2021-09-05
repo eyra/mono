@@ -12,6 +12,10 @@ defmodule CoreWeb.UI.Navigation.TabbarItem do
 
   prop(vm, :any, required: true)
 
+  def center_correction_for_number(1), do: "mr-1px"
+  def center_correction_for_number(4), do: "mr-1px"
+  def center_correction_for_number(_), do: ""
+
   def render(assigns) do
     ~H"""
       <div class="flex flex-row items-center justify-start rounded-full focus:outline-none cursor-pointer">
@@ -20,11 +24,11 @@ defmodule CoreWeb.UI.Navigation.TabbarItem do
           class="w-6 h-6 font-caption text-caption rounded-full flex items-center"
           :class="{ 'bg-primary text-white': active_tab == {{ index(@vm) }}, 'bg-grey5 text-grey2': active_tab != {{ index(@vm) }} }"
         >
-          <div class="text-center w-full mt-1px">{{ index(@vm)+1 }}</div>
+          <div class="text-center w-full mt-1px {{center_correction_for_number(index(@vm)+1)}}">{{ index(@vm)+1 }}</div>
         </div>
         <div
           :if={{ has_title?(@vm) && has_index?(@vm) }}
-          class="ml-2 sm:ml-3"
+          class="ml-3"
         >
         </div>
         <div :if={{ has_title?(@vm) }}>

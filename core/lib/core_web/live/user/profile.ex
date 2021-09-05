@@ -14,7 +14,7 @@ defmodule CoreWeb.User.Profile do
   alias CoreWeb.User.Forms.Study, as: StudyForm
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
 
-  alias CoreWeb.UI.Navigation.{Tabbar, TabbarContent, TabbarFooter, TabbarArea}
+  alias CoreWeb.UI.Navigation.{ActionBar, Tabbar, TabbarContent, TabbarFooter, TabbarArea}
 
   data(user_agent, :string, default: "")
   data(current_user, :any)
@@ -102,7 +102,9 @@ defmodule CoreWeb.User.Profile do
     ~H"""
     <Workspace menus={{ @menus }}>
       <TabbarArea tabs={{@tabs}}>
-        <Tabbar id={{ :tabbar }}/>
+        <ActionBar>
+          <Tabbar />
+        </ActionBar>
         <TabbarContent />
         <TabbarFooter/>
       </TabbarArea>

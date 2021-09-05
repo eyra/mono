@@ -3,6 +3,9 @@ defmodule CoreWeb.UI.Component do
     quote do
       use Surface.Component
 
+      require EyraUI.ViewModel
+      import EyraUI.ViewModel
+
       import CoreWeb.Gettext
 
       alias CoreWeb.UI.{Empty, MarginY}
