@@ -82,6 +82,7 @@ defmodule Core.MixProject do
       {:pigeon, "~> 1.6.1"},
       {:kadabra, "~> 0.6.0"},
       {:oban, "~> 2.7"},
+      {:nimble_parsec, "~> 1.0"},
       # i18n
       {:ex_cldr, "~> 2.18"},
       {:ex_cldr_numbers, "~> 2.16"},

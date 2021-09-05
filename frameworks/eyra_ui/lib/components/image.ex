@@ -11,13 +11,20 @@ defmodule EyraUI.Image do
 
   def render(assigns) do
     canvas_width = 32
-    canvas_height = floor(assigns.image.height / (assigns.image.width / 32))
+
+    canvas_height =
+      if assigns.image do
+        floor(assigns.image.height / (assigns.image.width / 32))
+      else
+        32
+      end
 
     ~H"""
     <div
       class="blurhash-wrapper overflow-hidden w-full h-full relative"
       x-data="blurHash()"
       x-init="$nextTick(()=>render())"
+      :if={{@image}}
       >
       <canvas
         x-show="showBlurHash()"

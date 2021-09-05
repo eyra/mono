@@ -83,16 +83,18 @@ config :core, :features, debug: false
 
 import_config "#{Mix.env()}.exs"
 
-default_bundle =
-  case File.read(".bundle") do
-    {:ok, bundle} -> String.trim(bundle)
-    {:error, _} -> "next"
+unless Mix.env() == :test do
+  default_bundle =
+    case File.read(".bundle") do
+      {:ok, bundle} -> String.trim(bundle)
+      {:error, _} -> "next"
+    end
+
+  bundle = System.get_env("BUNDLE", default_bundle) |> String.to_atom()
+
+  config :core, :bundle, bundle
+
+  unless is_nil(bundle) do
+    import_config "../bundles/#{bundle}/config/config.exs"
   end
-
-bundle = System.get_env("BUNDLE", default_bundle) |> String.to_atom()
-
-config :core, :bundle, bundle
-
-unless is_nil(bundle) do
-  import_config "../bundles/#{bundle}/config/config.exs"
 end

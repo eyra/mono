@@ -19,7 +19,10 @@ defmodule Link.Dashboard do
   data(next_best_action, :any)
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    preload = [survey_tool: [promotion: [:content_node, :submission]]]
+    preload = [
+      survey_tool: [promotion: [:content_node, :submission]],
+      lab_tool: [promotion: [:content_node, :submission]]
+    ]
 
     content_items =
       user
@@ -87,28 +90,36 @@ defmodule Link.Dashboard do
           }
         }
       }) do
+    label =
+      case status do
+        :idle ->
+          %{text: dgettext("eyra-submission", "status.idle.label"), type: :warning}
 
-    label = case status do
-      :idle -> %{text: dgettext("eyra-submission", "status.idle.label"), type: :warning }
-      :submitted -> %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary }
-      :accepted -> %{text: dgettext("eyra-submission", "status.accepted.label"), type: :success }
-    end
+        :submitted ->
+          %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary}
 
-    subtitle = case status do
-      :idle ->
-        if Nodes.ready?(promotion_content_node) do
-          dgettext("eyra-submission", "ready.for.submission.message")
-        else
-          dgettext("eyra-submission", "incomplete.forms.message")
-        end
-      :submitted ->
-        dgettext("eyra-submission", "waiting.for.coordinator.message")
-      :accepted ->
-        dgettext("link-dashboard", "quick_summary.%{subject_count}.%{target_subject_count}",
-          subject_count: current_subject_count,
-          target_subject_count: target_subject_count || 0
-        )
-    end
+        :accepted ->
+          %{text: dgettext("eyra-submission", "status.accepted.label"), type: :success}
+      end
+
+    subtitle =
+      case status do
+        :idle ->
+          if Nodes.ready?(promotion_content_node) do
+            dgettext("eyra-submission", "ready.for.submission.message")
+          else
+            dgettext("eyra-submission", "incomplete.forms.message")
+          end
+
+        :submitted ->
+          dgettext("eyra-submission", "waiting.for.coordinator.message")
+
+        :accepted ->
+          dgettext("link-dashboard", "quick_summary.%{subject_count}.%{target_subject_count}",
+            subject_count: current_subject_count,
+            target_subject_count: target_subject_count || 0
+          )
+      end
 
     quick_summery =
       updated_at
@@ -119,6 +130,67 @@ defmodule Link.Dashboard do
       path: Routes.live_path(socket, Link.Survey.Content, edit_id),
       title: title,
       subtitle: subtitle || "<no subtitle>",
+      label: label,
+      level: :critical,
+      image_id: image_id,
+      quick_summary: quick_summery
+    }
+  end
+
+  def convert_to_vm(socket, %{
+        updated_at: updated_at,
+        lab_tool: %{
+          id: edit_id,
+          promotion: %{
+            title: title,
+            image_id: image_id,
+            content_node: promotion_content_node,
+            submission: %{
+              status: status
+            }
+          }
+        }
+      }) do
+    label =
+      case status do
+        :idle ->
+          %{text: dgettext("eyra-submission", "status.idle.label"), type: :warning}
+
+        :submitted ->
+          %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary}
+
+        :accepted ->
+          %{text: dgettext("eyra-submission", "status.accepted.label"), type: :success}
+      end
+
+    subtitle =
+      case status do
+        :idle ->
+          if Nodes.ready?(promotion_content_node) do
+            dgettext("eyra-submission", "ready.for.submission.message")
+          else
+            dgettext("eyra-submission", "incomplete.forms.message")
+          end
+
+        :submitted ->
+          dgettext("eyra-submission", "waiting.for.coordinator.message")
+
+        :accepted ->
+          dgettext("link-dashboard", "quick_summary.%{subject_count}.%{target_subject_count}",
+            subject_count: -1,
+            target_subject_count: -1
+          )
+      end
+
+    quick_summery =
+      updated_at
+      |> EyraUI.Timestamp.apply_timezone()
+      |> EyraUI.Timestamp.humanize()
+
+    %{
+      path: Routes.live_path(socket, Link.Survey.Content, edit_id),
+      title: title,
+      subtitle: subtitle,
       label: label,
       level: :critical,
       image_id: image_id,

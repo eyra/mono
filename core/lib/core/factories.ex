@@ -197,7 +197,7 @@ defmodule Core.Factories do
   end
 
   def build(:submission, %{} = attributes) do
-    {parent_content_node, _attributes} = Map.pop!(attributes, :parent_content_node)
+    {parent_content_node, attributes} = Map.pop!(attributes, :parent_content_node)
     content_node = build(:content_node, %{parent: parent_content_node})
 
     %Pools.Submission{
@@ -206,6 +206,7 @@ defmodule Core.Factories do
       pool: Pools.get_by_name(:vu_students),
       content_node: content_node
     }
+    |> struct!(attributes)
   end
 
   def build(:promotion, %{} = attributes) do

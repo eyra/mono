@@ -12,17 +12,17 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:94
+#: bundles/link/lib/survey/web/form.ex:97
 msgid "config.nrofsubjects.label"
 msgstr "Aantal vereiste subjects"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:88
+#: bundles/link/lib/survey/web/form.ex:89
 msgid "config.url.label"
 msgstr "Publieke web link van je online studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:91
+#: bundles/link/lib/survey/web/form.ex:94
 msgid "duration.label"
 msgstr "Geschatte duur van het onderzoek"
 
@@ -68,7 +68,7 @@ msgid "conpleted.title"
 msgstr "Afgerond"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:98
+#: bundles/link/lib/survey/web/form.ex:101
 msgid "devices.label"
 msgstr "Selecteer een of meerdere apparaten waarmee de participant de online study kan uitvoeren."
 
@@ -78,22 +78,22 @@ msgid "open.cta.title"
 msgstr "Ga naar de vragenlijst"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:82
+#: bundles/link/lib/survey/web/form.ex:83
 msgid "redirect.description"
 msgstr "Hieronder staat de \"redirect url\" voor je online studie. Deze wordt gebruikt om participanten na afronding van hun taak op een ander platform terug te sturen naar PaNL. Kopieer de url en ga naar de taak op het online platform naar keuze (bijv. een vragenlijst in Qualtrics). Volg de platform instructies en plak de url op de juiste plaats."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:81
+#: bundles/link/lib/survey/web/form.ex:82
 msgid "redirect.title"
 msgstr "Link terug naar PaNL"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:97
+#: bundles/link/lib/survey/web/form.ex:100
 msgid "devices.title"
 msgstr "Apparaten"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:84
+#: bundles/link/lib/survey/web/form.ex:85
 msgid "redirect.label"
 msgstr "Redirect url"
 
@@ -123,47 +123,43 @@ msgid "status.label"
 msgstr "Hieronder kan je in gaten houden hoe de campagne verloopt"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:395
 msgid "content.title"
 msgstr "Campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:108
+#: bundles/link/lib/survey/web/overview.ex:111
 msgid "title"
 msgstr "Werving"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:142
+#: bundles/link/lib/survey/web/overview.ex:145
 msgid "add.first.button"
 msgstr "Start je eerste campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:123
+#: bundles/link/lib/survey/web/overview.ex:126
 msgid "add.new.button"
 msgstr "Start nieuwe campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:138
+#: bundles/link/lib/survey/web/overview.ex:141
 msgid "empty.description"
 msgstr "Momenteel heb je nog geen campagnes aangemaakt. Zodra je er een aanmaakt zal deze aan deze pagina worden toegevoegd. Klik op de ondertaande button om te starten."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:137
+#: bundles/link/lib/survey/web/overview.ex:140
 msgid "empty.title"
 msgstr "Hier vind je een overzicht van je campagnes"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:135
 msgid "tabbar.item.monitor"
 msgstr "Resultaten"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:101
 msgid "tabbar.item.promotion"
 msgstr "Advertentie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:112
 msgid "tabbar.item.survey"
 msgstr "Studie"
 
@@ -178,36 +174,36 @@ msgid "monitor.empty.title"
 msgstr "Wervingsresultaten"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:102
 msgid "tabbar.item.promotion.forward"
 msgstr "Maak advertentie aan"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:113
 msgid "tabbar.item.survey.forward"
 msgstr "Koppel je studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:136
 msgid "tabbar.item.monitor.forward"
 msgstr "Bekijk resultaten"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:124
 msgid "tabbar.item.criteria"
 msgstr "Sample"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:125
 msgid "tabbar.item.criteria.forward"
 msgstr "Bepaal je sample"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:78
+#: bundles/link/lib/survey/web/form.ex:79
 msgid "form.title"
 msgstr "Studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:117
+#: bundles/link/lib/survey/web/overview.ex:120
 msgid "survey.overview.title"
 msgstr "Campagnes"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:90
+msgid "config.url.description"
+msgstr "Het is mogelijk om variabelen te gebruiken in de URL parameters om bijvoorbeeld het participant nummer door te sturen. Dit kan door in de parameters een variabele (<participantId>) te gebruiken."

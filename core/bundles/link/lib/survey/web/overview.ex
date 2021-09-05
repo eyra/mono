@@ -22,22 +22,24 @@ defmodule Link.Survey.Overview do
   alias EyraUI.Text.Title2
   alias EyraUI.Button.Action.Send
   alias EyraUI.Button.Face.Forward
+  import Core.ImageCatalog, only: [image_catalog: 0]
 
   data(surveys, :map, default: [])
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-
     preload = [survey_tool: [promotion: [:submission]]]
 
     surveys =
       user
       |> Studies.list_owned_studies(preload: preload)
+      # Temp: filter out labs
+      |> Enum.filter(& &1.survey_tool)
       |> Enum.map(&CardVM.primary_study_researcher(&1, socket))
 
     {:ok,
-      socket
-      |> assign(surveys: surveys)
-      |> update_menus()}
+     socket
+     |> assign(surveys: surveys)
+     |> update_menus()}
   end
 
   def handle_auto_save_done(socket) do
@@ -72,9 +74,11 @@ defmodule Link.Survey.Overview do
     with {:ok, study} <- Studies.create_study(changeset, user),
          {:ok, _author} <- Studies.add_author(study, user),
          {:ok, tool_content_node} <- Content.Nodes.create(%{ready: false}),
-         {:ok, promotion_content_node} <- Content.Nodes.create(%{ready: false}, tool_content_node),
+         {:ok, promotion_content_node} <-
+           Content.Nodes.create(%{ready: false}, tool_content_node),
          {:ok, promotion} <- Promotions.create(promotion_attrs, study, promotion_content_node),
-         {:ok, submission_content_node} <- Content.Nodes.create(%{ready: true}, promotion_content_node),
+         {:ok, submission_content_node} <-
+           Content.Nodes.create(%{ready: true}, promotion_content_node),
          {:ok, _submission} <- Submissions.create(promotion, pool, submission_content_node),
          {:ok, tool} <- Tools.create_survey_tool(tool_attrs, study, promotion, tool_content_node) do
       tool
@@ -89,7 +93,8 @@ defmodule Link.Survey.Overview do
   end
 
   defp create_promotion_attrs(title, user, profile) do
-    image_id = List.first(Core.ImageCatalog.Unsplash.random(1))
+    image_id = List.first(image_catalog().random(1))
+
     %{
       title: title,
       marks: ["vu"],

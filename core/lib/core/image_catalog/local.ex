@@ -47,8 +47,21 @@ defmodule Core.ImageCatalog.Local do
   def info(image_id, _opts) do
     if info = Map.get(image_map(), image_id) do
       url = "/image-catalog/#{info.file_name}"
-      %{id: info.id, url: url, srcset: "#{url} 1x"}
+
+      %{
+        id: info.id,
+        url: url,
+        srcset: "#{url} 1x",
+        width: info.width,
+        height: info.height,
+        blur_hash: nil
+      }
     end
+  end
+
+  def random(count \\ 2) do
+    list_image_ids()
+    |> Enum.take_random(count)
   end
 
   defp file_name_to_image_info(file_name) do
