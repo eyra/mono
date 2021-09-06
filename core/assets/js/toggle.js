@@ -4,7 +4,7 @@ export const Toggle = {
         this.targetId = this.el.getAttribute("target")
         this.target = document.getElementById(this.targetId);
         this.target.style.display = "none"
-        
+
         this.el.addEventListener("click", (event)=>{
             event.stopPropagation()
             if (this.target.style.display !== "block") {

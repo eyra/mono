@@ -6,13 +6,9 @@ defmodule CoreWeb.UI.Navigation.TabbarArea do
 
   slot(default, required: true)
 
-  defp active_tab(tabs) do
-    Enum.find_index(tabs, & &1.active) || 0
-  end
-
   def render(assigns) do
     ~H"""
-    <div x-init="active_tab = {{active_tab(@tabs)}} }" >
+    <div>
       <Context put={{tabs: @tabs}}>
         <slot />
       </Context>

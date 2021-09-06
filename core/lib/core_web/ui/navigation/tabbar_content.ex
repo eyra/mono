@@ -9,8 +9,8 @@ defmodule CoreWeb.UI.Navigation.TabbarContent do
     ~H"""
       <div class="h-navbar-height"></div>
       <Context get={{tabs: tabs}}>
-        <For each={{ {tab, index} <- Enum.with_index(tabs) }} >
-          <Tab index= {{ index }}>
+        <For each={{ tab <- tabs }} >
+          <Tab id={{ tab.id }}>
             <Dynamic component={{ tab.component }} props={{ %{id: tab.id, props: tab.props } }}/>
           </Tab>
         </For>

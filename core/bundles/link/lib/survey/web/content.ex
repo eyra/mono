@@ -28,7 +28,7 @@ defmodule Link.Survey.Content do
   data(promotion_id, :any)
   data(submission_id, :any)
   data(is_submitted, :any)
-  data(active_tab, :any)
+  data(initial_tab, :any)
   data(tabs, :map)
   data(actions, :map)
   data(changesets, :any)
@@ -42,7 +42,7 @@ defmodule Link.Survey.Content do
   end
 
   @impl true
-  def mount(%{"id" => tool_id, "tab" => active_tab}, _session, socket) do
+  def mount(%{"id" => tool_id, "tab" => initial_tab}, _session, socket) do
     tool = Tools.get_survey_tool!(tool_id)
     promotion = Promotions.get!(tool.promotion_id)
     submission = Submissions.get!(promotion)
@@ -56,7 +56,7 @@ defmodule Link.Survey.Content do
         promotion_id: tool.promotion_id,
         submission_id: submission.id,
         is_submitted: is_submitted,
-        active_tab: active_tab,
+        initial_tab: initial_tab,
         changesets: %{},
         save_timer: nil,
         hide_flash_timer: nil,
@@ -70,15 +70,15 @@ defmodule Link.Survey.Content do
 
   @impl true
   def mount(params, session, socket) do
-    mount(Map.put(params, "tab", "tool_form"), session, socket)
+    mount(Map.put(params, "tab", "promotion_form"), session, socket)
   end
 
   @impl true
-  def handle_params(_unsigned_params, uri, %{assigns: %{tool_id: tool_id, active_tab: active_tab, submission_id: submission_id}} = socket) do
+  def handle_params(_unsigned_params, uri, %{assigns: %{tool_id: tool_id, submission_id: submission_id}} = socket) do
     parsed_uri = URI.parse(uri)
     uri_origin = "#{parsed_uri.scheme}://#{parsed_uri.authority}"
     tool = Tools.get_survey_tool!(tool_id)
-    tabs = create_tabs(active_tab, tool, submission_id, uri_origin)
+    tabs = create_tabs(tool, submission_id, uri_origin)
 
     {
       :noreply,
@@ -92,11 +92,10 @@ defmodule Link.Survey.Content do
     socket |> update_menus()
   end
 
-  defp create_tabs(active_tab, tool, submission_id, uri_origin) do
+  defp create_tabs(tool, submission_id, uri_origin) do
     [
       %{
         id: :promotion_form,
-        active: active_tab === :promotion_form,
         entity_id: tool.promotion_id,
         title: dgettext("link-survey", "tabbar.item.promotion"),
         forward_title: dgettext("link-survey", "tabbar.item.promotion.forward"),
@@ -108,7 +107,6 @@ defmodule Link.Survey.Content do
       },
       %{
         id: :tool_form,
-        active: active_tab === :tool_form,
         title: dgettext("link-survey", "tabbar.item.survey"),
         forward_title: dgettext("link-survey", "tabbar.item.survey.forward"),
         type: :fullpage,
@@ -120,7 +118,6 @@ defmodule Link.Survey.Content do
       },
       %{
         id: :criteria_form,
-        active: active_tab === :criteria_form,
         title: dgettext("link-survey", "tabbar.item.criteria"),
         forward_title: dgettext("link-survey", "tabbar.item.criteria.forward"),
         type: :fullpage,
@@ -131,7 +128,6 @@ defmodule Link.Survey.Content do
       },
       %{
         id: :monitor,
-        active: active_tab === :monitor,
         title: dgettext("link-survey", "tabbar.item.monitor"),
         forward_title: dgettext("link-survey", "tabbar.item.monitor.forward"),
         type: :fullpage,
@@ -437,7 +433,7 @@ defmodule Link.Survey.Content do
           </div>
           <TabbarArea tabs={{@tabs}}>
             <ActionBar right_bar_buttons={{ create_actions(@breakpoint, @is_submitted) }} more_buttons={{ create_more_actions(@is_submitted) }}>
-              <Tabbar size={{ tabbar_size(@breakpoint) }} />
+              <Tabbar size={{ tabbar_size(@breakpoint) }} initial_tab={{ @initial_tab }}/>
             </ActionBar>
             <TabbarContent/>
             <TabbarFooter/>
