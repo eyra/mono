@@ -5,6 +5,7 @@ defmodule Link.Survey.PromotionPlugin do
   alias Core.Promotions.CallToAction
   alias Core.Promotions.CallToAction.Target
   alias Core.Survey.Tools
+  alias Core.Survey.Tool
 
   alias CoreWeb.Promotion.Plugin
 
@@ -34,24 +35,25 @@ defmodule Link.Survey.PromotionPlugin do
   end
 
   @impl Plugin
-  def get_cta_path(promotion_id, "open", _socket) do
+  def get_cta_path(promotion_id, "open", %{assigns: %{current_user: user}}) do
     tool = Tools.get_by_promotion(promotion_id)
-    tool.survey_url
+    Tool.prepare_url(
+      tool.survey_url,
+      %{"participantId"=> Tools.participant_id(tool, user)}
+    )
   end
 
   defp get_call_to_action(tool, user) do
-    case Tools.participant?(tool, user) do
-      false ->
-        %CallToAction{
-          label: dgettext("link-survey", "apply.cta.title"),
-          target: %Target{type: :event, value: "apply"}
-        }
-
-      true ->
-        %CallToAction{
-          label: dgettext("link-survey", "open.cta.title"),
-          target: %Target{type: :event, value: "open"}
-        }
+    if Tools.participant?(tool, user) do
+      %CallToAction{
+        label: dgettext("link-survey", "open.cta.title"),
+        target: %Target{type: :event, value: "open"}
+      }
+    else
+      %CallToAction{
+        label: dgettext("link-survey", "apply.cta.title"),
+        target: %Target{type: :event, value: "apply"}
+      }
     end
   end
 
@@ -82,8 +84,10 @@ defmodule Link.Survey.PromotionPlugin do
 
     reward_title = dgettext("link-survey", "reward.highlight.title")
 
-    reward_text =
-      CurrencyFormatter.format(tool.reward_value, tool.reward_currency, keep_decimals: true)
+    # reward_text =
+    #   CurrencyFormatter.format(tool.reward_value, tool.reward_currency, keep_decimals: true)
+
+    reward_text = "Eternal glory"
 
     [
       %{title: available_title, text: available_text},

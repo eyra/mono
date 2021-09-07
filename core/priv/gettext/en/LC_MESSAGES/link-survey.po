@@ -12,17 +12,17 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:94
+#: bundles/link/lib/survey/web/form.ex:97
 msgid "config.nrofsubjects.label"
 msgstr "Number of required subjects"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:88
+#: bundles/link/lib/survey/web/form.ex:89
 msgid "config.url.label"
 msgstr "Public web link of your online study"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:91
+#: bundles/link/lib/survey/web/form.ex:94
 msgid "duration.label"
 msgstr "Estimated duration"
 
@@ -68,7 +68,7 @@ msgid "conpleted.title"
 msgstr "Completed"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:98
+#: bundles/link/lib/survey/web/form.ex:101
 msgid "devices.label"
 msgstr "Select one or more devices that can be used to participate in your online study."
 
@@ -78,22 +78,22 @@ msgid "open.cta.title"
 msgstr "Go to online study"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:82
+#: bundles/link/lib/survey/web/form.ex:83
 msgid "redirect.description"
 msgstr "The redirect url to link your online study is provided below. This is used to sent participants back to PaNL after finishing their task on an external platform (e.g. a questionnaire on Qualtrics). Copy the url and paste it at the location indicated by the external platform."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:81
+#: bundles/link/lib/survey/web/form.ex:82
 msgid "redirect.title"
 msgstr "Link back to PaNL"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:97
+#: bundles/link/lib/survey/web/form.ex:100
 msgid "devices.title"
 msgstr "Devices"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:84
+#: bundles/link/lib/survey/web/form.ex:85
 msgid "redirect.label"
 msgstr "Redirect url"
 
@@ -128,27 +128,27 @@ msgid "content.title"
 msgstr "Campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:108
+#: bundles/link/lib/survey/web/overview.ex:111
 msgid "title"
 msgstr "Recruitment"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:142
+#: bundles/link/lib/survey/web/overview.ex:145
 msgid "add.first.button"
 msgstr "Start your first campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:123
+#: bundles/link/lib/survey/web/overview.ex:126
 msgid "add.new.button"
 msgstr "Start new campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:138
+#: bundles/link/lib/survey/web/overview.ex:141
 msgid "empty.description"
 msgstr "There are currently no campaigns created by you. As soon as a you create one, it will be added to this page. Start by clicking on the button below."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:137
+#: bundles/link/lib/survey/web/overview.ex:140
 msgid "empty.title"
 msgstr "Campaigns you create will appear here"
 
@@ -203,11 +203,16 @@ msgid "tabbar.item.criteria.forward"
 msgstr "Submit campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:78
+#: bundles/link/lib/survey/web/form.ex:79
 msgid "form.title"
 msgstr "Study"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:117
+#: bundles/link/lib/survey/web/overview.ex:120
 msgid "survey.overview.title"
 msgstr "Campaigns"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:90
+msgid "config.url.description"
+msgstr "It's possible to use variables within the URL parameters to send the participant ID to an external system. This can be done by using <participantId> as the parameter value."

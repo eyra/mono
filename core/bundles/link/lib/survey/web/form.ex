@@ -17,11 +17,13 @@ defmodule Link.Survey.Form do
   data(device_labels, :list)
   data(changeset, :any)
   data(focus, :any, default: "")
+  data(qualtrics_url?, :any, default: false)
 
   # Handle selector update
   def update(
       %{active_item_ids: active_item_ids, selector_id: selector_id},
-      %{assigns: %{entity: entity}} = socket) do
+      %{assigns: %{entity: entity}} = socket
+  ) do
     {
       :ok,
       socket
@@ -101,6 +103,14 @@ defmodule Link.Survey.Form do
   def validate_for_publish(socket), do: socket
 
   def render(assigns) do
+    assigns =
+      Map.put(
+        assigns,
+        :qualtrics_url?,
+        Ecto.Changeset.apply_changes(assigns.changeset).survey_url
+        |> String.contains?("qualtrics.com")
+      )
+
     ~H"""
       <ContentArea class="mb-4" >
         <MarginY id={{:page_top}} />
@@ -114,7 +124,14 @@ defmodule Link.Survey.Form do
             <BodyMedium color="text-tertiary"><span class="break-all">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Link.Survey.Complete, @entity_id)}}</span></BodyMedium>
           </Panel>
           <Spacing value="L" />
-          <UrlInput field={{:survey_url}} label_text={{dgettext("link-survey", "config.url.label")}} />
+          <UrlInput field={{:survey_url}} label_text={{dgettext("link-survey", "config.url.label")}}>
+            <BodyMedium>{{dgettext("link-survey", "config.url.description")}}</BodyMedium>
+            <BodyMedium :if={{@qualtrics_url?}}>
+              See the
+              <a href="https://www.qualtrics.com/support/survey-platform/survey-module/survey-flow/standard-elements/passing-information-through-query-strings/?parent=p001135#PassingInformationIntoASurvey">instructions for Qualtrics</a>
+              on how to setup the Qualtrics side.
+            </BodyMedium>
+          </UrlInput>
           <Spacing value="M" />
 
           <TextInput field={{:duration}} label_text={{dgettext("link-survey", "duration.label")}} />

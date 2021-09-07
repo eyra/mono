@@ -97,8 +97,10 @@ defmodule Core.Promotions.Promotion do
   end
 
   def get_image_url(%{image_id: image_id}, %{width: width, height: height}) do
-    image_id
-    |> ImageHelpers.get_image_info(width, height)
-    |> Map.get(:url)
+    image_info = ImageHelpers.get_image_info(image_id, width, height)
+
+    if image_info do
+      Map.get(image_info, :url)
+    end
   end
 end

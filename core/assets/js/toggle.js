@@ -1,6 +1,5 @@
 export const Toggle = {
     mounted() {
-        console.log("Show mounted ", this.el)
         this.targetId = this.el.getAttribute("target")
         this.target = document.getElementById(this.targetId);
         this.target.style.display = "none"

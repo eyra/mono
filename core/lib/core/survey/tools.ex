@@ -176,14 +176,20 @@ defmodule Core.Survey.Tools do
     count_tasks(survey_tool, [:completed])
   end
 
+  def participant_id(tool, user) do
+    tool
+    |> participant_query(user)
+    |> select([p], p.participant_id)
+    |> Repo.one()
+  end
+
   @spec participant?(
           atom | %{:id => any, optional(any) => any},
           atom | %{:id => any, optional(any) => any}
         ) :: boolean
   def participant?(survey_tool, user) do
-    from(p in Core.Survey.Participant,
-      where: p.survey_tool_id == ^survey_tool.id and p.user_id == ^user.id
-    )
+    survey_tool
+    |> participant_query(user)
     |> Repo.exists?()
   end
 
@@ -277,6 +283,12 @@ defmodule Core.Survey.Tools do
       Authorization.query_role_assignment(user, survey_tool, :participant)
     )
     |> Repo.transaction()
+  end
+
+  defp participant_query(survey_tool, user) do
+    from(p in Core.Survey.Participant,
+      where: p.survey_tool_id == ^survey_tool.id and p.user_id == ^user.id
+    )
   end
 
   def ready?(%Tool{} = survey_tool) do

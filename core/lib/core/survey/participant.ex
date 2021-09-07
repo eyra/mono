@@ -11,6 +11,7 @@ defmodule Core.Survey.Participant do
   schema "survey_tool_participants" do
     belongs_to(:survey_tool, Tool)
     belongs_to(:user, User)
+    field(:participant_id, :integer)
 
     timestamps()
   end

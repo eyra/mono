@@ -23,6 +23,7 @@ defmodule Link.Survey.Content do
   alias Link.Survey.Monitor
   alias Link.Survey.Form, as: ToolForm
   alias Link.Pool.Form.Submission, as: SubmissionForm
+  import Core.ImageCatalog, only: [image_catalog: 0]
 
   data(tool_id, :any)
   data(promotion_id, :any)
@@ -139,7 +140,7 @@ defmodule Link.Survey.Content do
           entity_id: tool.id,
           uri_origin: uri_origin,
           validate?: validate?
-        },
+        }
       },
       %{
         id: :criteria_form,
@@ -158,7 +159,7 @@ defmodule Link.Survey.Content do
         type: :fullpage,
         component: Monitor,
         props: %{
-          entity_id: tool.id,
+          entity_id: tool.id
         }
       }
     ]
@@ -470,7 +471,7 @@ defmodule Link.Survey.Content do
                   breakpoint={{@breakpoint}}
                   static_path={{&Routes.static_path/2}}
                   initial_query={{initial_image_query(assigns)}}
-                  image_catalog={{Core.ImageCatalog.Unsplash}}
+                  image_catalog={{image_catalog()}}
                 />
               </div>
             </div>

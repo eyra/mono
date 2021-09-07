@@ -16,7 +16,7 @@ defmodule Link.Marketplace.Card do
               title: title,
               image_id: image_id,
               themes: themes,
-              marks: marks,
+              marks: marks
             }
           }
         },
@@ -75,7 +75,7 @@ defmodule Link.Marketplace.Card do
                 title: title,
                 image_id: image_id,
                 themes: themes,
-                marks: marks,
+                marks: marks
               }
             } = tool
         },
@@ -92,7 +92,7 @@ defmodule Link.Marketplace.Card do
 
     info = [
       "#{duration_label}: #{duration} min.",
-      "#{open_spots_label}",
+      "#{open_spots_label}"
     ]
 
     label = nil
@@ -148,14 +148,20 @@ defmodule Link.Marketplace.Card do
 
     info = [
       "#{duration_label}: #{duration} min.",
-      "#{open_spots_label}",
+      "#{open_spots_label}"
     ]
 
-    label = case status do
-      :idle -> %{text: dgettext("eyra-submission", "status.idle.label"), type: :warning }
-      :submitted -> %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary }
-      :accepted -> %{text: dgettext("eyra-submission", "status.accepted.label"), type: :success }
-    end
+    label =
+      case status do
+        :idle ->
+          %{text: dgettext("eyra-submission", "status.idle.label"), type: :warning}
+
+        :submitted ->
+          %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary}
+
+        :accepted ->
+          %{text: dgettext("eyra-submission", "status.accepted.label"), type: :success}
+      end
 
     icon_url = get_icon_url(marks, socket)
     image_info = ImageHelpers.get_image_info(image_id)
@@ -176,6 +182,56 @@ defmodule Link.Marketplace.Card do
     }
   end
 
+  # lab study
+  def primary_study_researcher(
+        %{
+          id: id,
+          lab_tool: %{
+            id: edit_id,
+            promotion: %{
+              id: open_id,
+              title: title,
+              image_id: image_id,
+              themes: themes,
+              marks: marks,
+              submission: %{
+                status: status
+              }
+            }
+          }
+        },
+        socket
+      ) do
+    label =
+      case status do
+        :idle ->
+          %{text: dgettext("eyra-submission", "status.idle.label"), type: :warning}
+
+        :submitted ->
+          %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary}
+
+        :accepted ->
+          %{text: dgettext("eyra-submission", "status.accepted.label"), type: :success}
+      end
+
+    icon_url = get_icon_url(marks, socket)
+    image_info = ImageHelpers.get_image_info(image_id)
+    tags = get_tags(themes)
+
+    %{
+      id: id,
+      edit_id: edit_id,
+      open_id: open_id,
+      title: title,
+      image_info: image_info,
+      tags: tags,
+      duration: "-",
+      info: ["-"],
+      icon_url: icon_url,
+      label: label,
+      label_type: "secondary"
+    }
+  end
 
   def get_tags(nil), do: []
 

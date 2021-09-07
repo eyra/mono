@@ -32,7 +32,10 @@ defmodule Core.ImageCatalog.Local.Test do
                  %{
                    id: "cyan_magenta",
                    srcset: "/image-catalog/cyan_magenta_1920x1080.jpg 1x",
-                   url: "/image-catalog/cyan_magenta_1920x1080.jpg"
+                   url: "/image-catalog/cyan_magenta_1920x1080.jpg",
+                   blur_hash: nil,
+                   height: 1080,
+                   width: 1920
                  }
                ],
                meta: %{begin: 0, end: 10, image_count: 1, page: 1, page_count: 1, page_size: 10}
@@ -49,7 +52,10 @@ defmodule Core.ImageCatalog.Local.Test do
       assert Local.info("cyan_magenta", []) == %{
                id: "cyan_magenta",
                srcset: "/image-catalog/cyan_magenta_1920x1080.jpg 1x",
-               url: "/image-catalog/cyan_magenta_1920x1080.jpg"
+               url: "/image-catalog/cyan_magenta_1920x1080.jpg",
+               blur_hash: nil,
+               height: 1080,
+               width: 1920
              }
     end
   end

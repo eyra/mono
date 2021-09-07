@@ -40,6 +40,8 @@ config :core, Core.ImageCatalog.Unsplash,
   access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
   app_name: System.get_env("UNSPLASH_APP_NAME")
 
+config :core, image_catalog: Core.ImageCatalog.Local
+
 config :core, Core.Mailer,
   adapter: Bamboo.LocalAdapter,
   default_from_email: "no-reply@example.com"
@@ -55,7 +57,12 @@ config :web_push_encryption, :vapid_details,
 
 config :core, :apns_backend, backend: Core.APNS.LoggingBackend
 
-config :core, :static_path, "/Users/emiel"
+config :core,
+       :static_path,
+       File.cwd!()
+       |> Path.join("tmp")
+       |> Path.join("uploads")
+       |> tap(&File.mkdir_p!/1)
 
 config :core, :features, debug: true
 

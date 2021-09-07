@@ -183,5 +183,20 @@ defmodule Core.Survey.ToolsTest do
       assert Tools.complete_task!(task)
       assert Tools.get_task(survey_tool, task.user).status == :completed
     end
+
+    test "participant_id/1 returns the id for the participant" do
+      survey_tool = Factories.insert!(:survey_tool)
+      member = Factories.insert!(:member)
+      {:ok, _} = Tools.apply_participant(survey_tool, member)
+      assert Tools.participant_id(survey_tool, member) == 1
+      # A second participant will get the next number
+      member = Factories.insert!(:member)
+      {:ok, _} = Tools.apply_participant(survey_tool, member)
+      assert Tools.participant_id(survey_tool, member) == 2
+      # The numbering system is unique per survey
+      survey_tool = Factories.insert!(:survey_tool)
+      {:ok, _} = Tools.apply_participant(survey_tool, member)
+      assert Tools.participant_id(survey_tool, member) == 1
+    end
   end
 end
