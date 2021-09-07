@@ -14,7 +14,7 @@ defmodule CoreWeb.UI.Navigation.TabbarNarrow do
         <div class="flex-shrink-0">
           <For each={{ {tab, index} <- Enum.with_index(tabs) }}>
             <div class="flex-shrink-0">
-              <TabbarItem tabbar="narrow" opts="hide-when-idle" vm={{ Map.put(tab, :index, index) }} />
+              <TabbarItem tabbar="narrow" opts="hide-when-idle" vm={{ Map.merge(tab, %{index: index}) }} />
             </div>
           </For>
         </div>

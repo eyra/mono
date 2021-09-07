@@ -58,7 +58,7 @@ defmodule Core.Promotions do
   end
 
   def ready?(%Promotion{} = promotion) do
-    Nodes.get!(promotion.content_node_id).ready?()
+    Nodes.get!(promotion.content_node_id).ready
   end
 
   def has_submission?(promotion_id, pool_id) do

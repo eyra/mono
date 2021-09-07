@@ -278,6 +278,10 @@ defmodule Core.Survey.Tools do
     )
     |> Repo.transaction()
   end
+
+  def ready?(%Tool{} = survey_tool) do
+    Nodes.get!(survey_tool.content_node_id).ready
+  end
 end
 
 defimpl Core.Persister, for: Core.Survey.Tool do

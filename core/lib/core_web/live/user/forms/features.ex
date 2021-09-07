@@ -15,7 +15,6 @@ defmodule CoreWeb.User.Forms.Features do
   data(gender_labels, :any)
   data(dominanthand_labels, :any)
   data(nativelanguage_labels, :any)
-
   data(changeset, :any)
   data(focus, :any, default: "")
 
