@@ -1,4 +1,4 @@
-defmodule CoreWeb.Helpdesk.Admin do
+defmodule CoreWeb.Admin.Support do
   use CoreWeb, :live_view
   alias Core.Helpdesk
 

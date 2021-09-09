@@ -127,25 +127,25 @@ msgid "feature.study.description"
 msgstr "Selecteer je opleiding(en), bedrijfskunde (BK) en/of international business administration (IBA). Heb je RPR1 (1e jaar) of RPR2 (2e jaar) al eerder gevolgd maar nog niet afgerond? Selecteer dan de \"(herkansing)\" variant van het jaar dat je nog niet afgerond hebt."
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:89
+#: lib/core_web/live/user/forms/features.ex:88
 msgid "features.description"
 msgstr "Als je deze kenmerken invult krijg je meer studies te zien. Je kunt dan ook deelnemen aan onderzoeksstudies met specifieke selectie criteria."
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:106
-#: lib/core_web/live/user/forms/features.ex:100
+#: lib/core_web/live/user/forms/features.ex:99
 msgid "features.dominanthand.title"
 msgstr "Voorkeurshand"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:98
-#: lib/core_web/live/user/forms/features.ex:92
+#: lib/core_web/live/user/forms/features.ex:91
 msgid "features.gender.title"
 msgstr "Geslacht"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:102
-#: lib/core_web/live/user/forms/features.ex:96
+#: lib/core_web/live/user/forms/features.ex:95
 msgid "features.nativelanguage.title"
 msgstr "Eerste taal"
 
@@ -157,7 +157,7 @@ msgstr "Opleiding"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:94
-#: lib/core_web/live/user/forms/features.ex:88
+#: lib/core_web/live/user/forms/features.ex:87
 msgid "features.title"
 msgstr "Inclusiecriteria"
 

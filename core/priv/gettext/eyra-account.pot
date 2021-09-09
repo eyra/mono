@@ -126,25 +126,25 @@ msgid "feature.study.description"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:89
+#: lib/core_web/live/user/forms/features.ex:88
 msgid "features.description"
 msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:106
-#: lib/core_web/live/user/forms/features.ex:100
+#: lib/core_web/live/user/forms/features.ex:99
 msgid "features.dominanthand.title"
 msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:98
-#: lib/core_web/live/user/forms/features.ex:92
+#: lib/core_web/live/user/forms/features.ex:91
 msgid "features.gender.title"
 msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:102
-#: lib/core_web/live/user/forms/features.ex:96
+#: lib/core_web/live/user/forms/features.ex:95
 msgid "features.nativelanguage.title"
 msgstr ""
 
@@ -156,7 +156,7 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:94
-#: lib/core_web/live/user/forms/features.ex:88
+#: lib/core_web/live/user/forms/features.ex:87
 msgid "features.title"
 msgstr ""
 

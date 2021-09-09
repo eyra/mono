@@ -5,7 +5,6 @@ defmodule CoreWeb.Live.Helpdesk.Routes do
         pipe_through([:browser])
 
         live("/", Public)
-        live("/admin", Admin)
       end
     end
   end

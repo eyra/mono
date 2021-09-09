@@ -11,21 +11,21 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:63
-msgid "default.study.title"
+#: lib/core_web/live/admin/permissions.ex:90
+msgid "permissions.pooladmin.candidates.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:56
-msgid "recent-items.title"
+#: lib/core_web/live/admin/permissions.ex:77
+msgid "permissions.pooladmin.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:66
-msgid "empty.description"
+#: lib/core_web/live/admin/permissions.ex:76
+msgid "permissions.pooladmin.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:65
-msgid "empty.title"
+#: lib/core_web/live/admin/permissions.ex:71
+msgid "permissions.title"
 msgstr ""

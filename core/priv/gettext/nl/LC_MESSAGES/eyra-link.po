@@ -92,5 +92,6 @@ msgid "marketplace-button"
 msgstr "Naar de marktplaats"
 
 #, elixir-format
+#: bundles/link/lib/index.ex:69
 msgid "link.message.interested"
 msgstr "Meer weten? Stuur een e-mail naar "

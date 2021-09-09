@@ -16,6 +16,8 @@ defmodule CoreWeb.Layouts.Workspace.Component do
 
   defmacro __using__(active_item) do
     quote do
+      alias CoreWeb.Layouts.Workspace.Component, as: Workspace
+
       data(menus, :map)
 
       def builder, do: Application.fetch_env!(:core, :workspace_menu_builder)

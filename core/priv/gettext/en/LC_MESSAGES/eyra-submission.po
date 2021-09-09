@@ -12,61 +12,64 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:157 bundles/link/lib/dashboard.ex:94
+#: bundles/link/lib/card.ex:163 bundles/link/lib/card.ex:214
+#: bundles/link/lib/dashboard.ex:102 bundles/link/lib/dashboard.ex:163
 msgid "status.accepted.label"
 msgstr "Online"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:155 bundles/link/lib/dashboard.ex:92
+#: bundles/link/lib/card.ex:157 bundles/link/lib/card.ex:208
+#: bundles/link/lib/dashboard.ex:96 bundles/link/lib/dashboard.ex:157
 msgid "status.idle.label"
 msgstr "Concept"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:156 bundles/link/lib/dashboard.ex:93
+#: bundles/link/lib/card.ex:160 bundles/link/lib/card.ex:211
+#: bundles/link/lib/dashboard.ex:99 bundles/link/lib/dashboard.ex:160
 msgid "status.submitted.label"
 msgstr "Submitted"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:102
+#: bundles/link/lib/dashboard.ex:111 bundles/link/lib/dashboard.ex:172
 msgid "incomplete.forms.message"
 msgstr "Forms are not yet filled in completely"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:100
+#: bundles/link/lib/dashboard.ex:109 bundles/link/lib/dashboard.ex:170
 msgid "ready.for.submission.message"
 msgstr "Ready to submit campaign to coordinator of student pool"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:105
+#: bundles/link/lib/dashboard.ex:115 bundles/link/lib/dashboard.ex:176
 msgid "waiting.for.coordinator.message"
 msgstr "Waiting for coordinator to publish campaign in marketplace"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:203
+#: bundles/link/lib/survey/web/content.ex:229
 msgid "submit.error.text"
 msgstr "The campaign is not ready to submit yet. Complete all the forms first."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:202
+#: bundles/link/lib/survey/web/content.ex:228
 msgid "submit.error.title"
 msgstr "Incomplete campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:196
+#: bundles/link/lib/survey/web/content.ex:221
 msgid "submit.success.text"
 msgstr "The coordinator of the pool has been informed. You will be notified when the campaign is put online."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:195
+#: bundles/link/lib/survey/web/content.ex:220
 msgid "submit.success.title"
 msgstr "Campaign submitted"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:215
+#: bundles/link/lib/survey/web/content.ex:245
 msgid "retract.success.text"
 msgstr "The campaign is not longer visible in the marketplace for new participants."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:214
+#: bundles/link/lib/survey/web/content.ex:244
 msgid "retract.success.title"
 msgstr "Campaign offline"

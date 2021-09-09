@@ -1,0 +1,32 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/core_web/live/admin/permissions.ex:90
+msgid "permissions.pooladmin.candidates.title"
+msgstr "Researchers"
+
+#, elixir-format
+#: lib/core_web/live/admin/permissions.ex:77
+msgid "permissions.pooladmin.description"
+msgstr "Select one or more researchers who will administer the student pool on behalf of the VU."
+
+#, elixir-format
+#: lib/core_web/live/admin/permissions.ex:76
+msgid "permissions.pooladmin.title"
+msgstr "Pool administrators"
+
+#, elixir-format
+#: lib/core_web/live/admin/permissions.ex:71
+msgid "permissions.title"
+msgstr "Permissions"

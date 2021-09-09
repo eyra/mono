@@ -11,23 +11,23 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:97
+#: bundles/link/lib/survey/web/form.ex:140
 msgid "config.nrofsubjects.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:89
+#: bundles/link/lib/survey/web/form.ex:127
 msgid "config.url.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:94
+#: bundles/link/lib/survey/web/form.ex:137
 msgid "duration.label"
 msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/lab/promotion_plugin.ex:49
-#: bundles/link/lib/survey/data/promotion_plugin.ex:65
+#: bundles/link/lib/survey/data/promotion_plugin.ex:67
 msgid "by.author.label"
 msgstr ""
 
@@ -37,27 +37,27 @@ msgid "thank.you.message"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:78
+#: bundles/link/lib/survey/data/promotion_plugin.ex:80
 msgid "available.future.highlight.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:75
+#: bundles/link/lib/survey/data/promotion_plugin.ex:77
 msgid "available.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:83
+#: bundles/link/lib/survey/data/promotion_plugin.ex:85
 msgid "reward.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:72
+#: bundles/link/lib/survey/data/promotion_plugin.ex:74
 msgid "spots.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:46
+#: bundles/link/lib/survey/data/promotion_plugin.ex:54
 msgid "apply.cta.title"
 msgstr ""
 
@@ -67,32 +67,32 @@ msgid "conpleted.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:101
+#: bundles/link/lib/survey/web/form.ex:144
 msgid "devices.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:52
+#: bundles/link/lib/survey/data/promotion_plugin.ex:49
 msgid "open.cta.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:83
+#: bundles/link/lib/survey/web/form.ex:121
 msgid "redirect.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:82
+#: bundles/link/lib/survey/web/form.ex:120
 msgid "redirect.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:100
+#: bundles/link/lib/survey/web/form.ex:143
 msgid "devices.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:85
+#: bundles/link/lib/survey/web/form.ex:123
 msgid "redirect.label"
 msgstr ""
 
@@ -122,47 +122,47 @@ msgid "status.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:395
+#: bundles/link/lib/survey/web/content.ex:459
 msgid "content.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:111
+#: bundles/link/lib/survey/web/overview.ex:113
 msgid "title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:145
+#: bundles/link/lib/survey/web/overview.ex:147
 msgid "add.first.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:126
+#: bundles/link/lib/survey/web/overview.ex:128
 msgid "add.new.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:141
+#: bundles/link/lib/survey/web/overview.ex:143
 msgid "empty.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:140
+#: bundles/link/lib/survey/web/overview.ex:142
 msgid "empty.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:135
+#: bundles/link/lib/survey/web/content.ex:157
 msgid "tabbar.item.monitor"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:101
+#: bundles/link/lib/survey/web/content.ex:123
 msgid "tabbar.item.promotion"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:112
+#: bundles/link/lib/survey/web/content.ex:135
 msgid "tabbar.item.survey"
 msgstr ""
 
@@ -177,41 +177,41 @@ msgid "monitor.empty.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:102
+#: bundles/link/lib/survey/web/content.ex:124
 msgid "tabbar.item.promotion.forward"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:113
+#: bundles/link/lib/survey/web/content.ex:136
 msgid "tabbar.item.survey.forward"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:136
+#: bundles/link/lib/survey/web/content.ex:158
 msgid "tabbar.item.monitor.forward"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:124
+#: bundles/link/lib/survey/web/content.ex:147
 msgid "tabbar.item.criteria"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:125
+#: bundles/link/lib/survey/web/content.ex:148
 msgid "tabbar.item.criteria.forward"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:79
+#: bundles/link/lib/survey/web/form.ex:117
 msgid "form.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:120
+#: bundles/link/lib/survey/web/overview.ex:122
 msgid "survey.overview.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:90
+#: bundles/link/lib/survey/web/form.ex:128
 msgid "config.url.description"
 msgstr ""

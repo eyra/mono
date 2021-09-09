@@ -8,6 +8,7 @@ defmodule EyraUI.Button.Action.Send do
 
   defviewmodel(
     event: nil,
+    item: "",
     target: ""
   )
 
@@ -15,7 +16,7 @@ defmodule EyraUI.Button.Action.Send do
 
   def render(assigns) do
     ~H"""
-    <div phx-target={{target(@vm)}} phx-click={{ event(@vm) }} class="cursor-pointer focus:outline-none">
+    <div phx-target={{target(@vm)}} phx-click={{ event(@vm) }} phx-value-item={{item(@vm)}} class="cursor-pointer focus:outline-none">
       <slot />
     </div>
     """

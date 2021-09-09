@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:61
+#: bundles/link/lib/survey/web/overview.ex:63
 msgid "default.study.title"
 msgstr "Nieuwe studie"
 
@@ -22,11 +22,11 @@ msgid "recent-items.title"
 msgstr "Recente items"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:63
+#: bundles/link/lib/dashboard.ex:66
 msgid "empty.description"
 msgstr "Het dashboard is de plek waar je een overzicht kan vinden van je werk. Centraal staat op dit moment de onderzoeksstudies waar je recent aan gewerkt hebt."
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:62
+#: bundles/link/lib/dashboard.ex:65
 msgid "empty.title"
 msgstr "Hier komen de items te staan waar je recent aan gewerkt hebt"

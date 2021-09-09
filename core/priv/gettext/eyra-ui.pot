@@ -98,12 +98,12 @@ msgid "menu.item.payments"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:94 lib/core_web/live/user/profile.ex:92
+#: bundles/link/lib/onboarding/wizard.ex:94 lib/core_web/live/user/profile.ex:91
 msgid "tabbar.item.features"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:70
+#: lib/core_web/live/user/profile.ex:71
 msgid "tabbar.item.profile"
 msgstr ""
 
@@ -113,12 +113,12 @@ msgid "tabbar.item.study"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:95 lib/core_web/live/user/profile.ex:93
+#: bundles/link/lib/onboarding/wizard.ex:95 lib/core_web/live/user/profile.ex:92
 msgid "tabbar.item.features.forward"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:71
+#: lib/core_web/live/user/profile.ex:72
 msgid "tabbar.item.profile.forward"
 msgstr ""
 
@@ -164,17 +164,17 @@ msgid "cancel.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:170
+#: bundles/link/lib/survey/web/content.ex:195
 msgid "delete.confirm.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:169
+#: bundles/link/lib/survey/web/content.ex:194
 msgid "delete.confirm.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:171
+#: bundles/link/lib/survey/web/content.ex:196
 msgid "delete.confirm.label"
 msgstr ""
 
@@ -184,11 +184,23 @@ msgid "ok.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:227
+#: bundles/link/lib/survey/web/content.ex:257
 msgid "feature.unavailable.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:226
+#: bundles/link/lib/survey/web/content.ex:256
 msgid "feature.unavailable.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/menu/items-translations.ex:2
+#: lib/core_web/live/menu/items_translations.ex:2
+msgid "menu.item.permissions"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/menu/items-translations.ex:2
+#: lib/core_web/live/menu/items_translations.ex:2
+msgid "menu.item.support"
 msgstr ""
