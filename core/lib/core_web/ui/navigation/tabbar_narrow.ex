@@ -7,14 +7,14 @@ defmodule CoreWeb.UI.Navigation.TabbarNarrow do
   def render(assigns) do
     ~H"""
     <Context get={{tabs: tabs}}>
-      <div x-show="dropdown" class="absolute left-0 top-navbar-height w-full h-full">
+      <div id="tabbar_dropdown" class="absolute left-0 top-navbar-height w-full h-full">
         <TabbarDropdown />
       </div>
-      <div x-on:click="dropdown = true" class="flex flex-row cursor-pointer items-center h-full w-full">
+      <div id="tabbar_narrow" phx-hook="Toggle" target="tabbar_dropdown" class="flex flex-row cursor-pointer items-center h-full w-full">
         <div class="flex-shrink-0">
           <For each={{ {tab, index} <- Enum.with_index(tabs) }}>
-            <div x-show="active_tab == {{ index }}" class="flex-shrink-0">
-              <TabbarItem vm={{ Map.put(tab, :index, index) }} />
+            <div class="flex-shrink-0">
+              <TabbarItem tabbar="narrow" opts="hide-when-idle" vm={{ Map.merge(tab, %{index: index}) }} />
             </div>
           </For>
         </div>

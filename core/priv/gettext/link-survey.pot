@@ -122,6 +122,7 @@ msgid "status.label"
 msgstr ""
 
 #, elixir-format
+#: bundles/link/lib/survey/web/content.ex:395
 msgid "content.title"
 msgstr ""
 
@@ -151,14 +152,17 @@ msgid "empty.title"
 msgstr ""
 
 #, elixir-format
+#: bundles/link/lib/survey/web/content.ex:135
 msgid "tabbar.item.monitor"
 msgstr ""
 
 #, elixir-format
+#: bundles/link/lib/survey/web/content.ex:101
 msgid "tabbar.item.promotion"
 msgstr ""
 
 #, elixir-format
+#: bundles/link/lib/survey/web/content.ex:112
 msgid "tabbar.item.survey"
 msgstr ""
 
@@ -173,22 +177,27 @@ msgid "monitor.empty.title"
 msgstr ""
 
 #, elixir-format
+#: bundles/link/lib/survey/web/content.ex:102
 msgid "tabbar.item.promotion.forward"
 msgstr ""
 
 #, elixir-format
+#: bundles/link/lib/survey/web/content.ex:113
 msgid "tabbar.item.survey.forward"
 msgstr ""
 
 #, elixir-format
+#: bundles/link/lib/survey/web/content.ex:136
 msgid "tabbar.item.monitor.forward"
 msgstr ""
 
 #, elixir-format
+#: bundles/link/lib/survey/web/content.ex:124
 msgid "tabbar.item.criteria"
 msgstr ""
 
 #, elixir-format
+#: bundles/link/lib/survey/web/content.ex:125
 msgid "tabbar.item.criteria.forward"
 msgstr ""
 

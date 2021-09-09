@@ -149,6 +149,7 @@ msgid "themes.label"
 msgstr "Select one or more themes."
 
 #, elixir-format
+#: lib/core_web/live/promotion/form.ex:109
 msgid "themes.title"
 msgstr "Themes"
 

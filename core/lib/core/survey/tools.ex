@@ -290,6 +290,10 @@ defmodule Core.Survey.Tools do
       where: p.survey_tool_id == ^survey_tool.id and p.user_id == ^user.id
     )
   end
+
+  def ready?(%Tool{} = survey_tool) do
+    Nodes.get!(survey_tool.content_node_id).ready
+  end
 end
 
 defimpl Core.Persister, for: Core.Survey.Tool do

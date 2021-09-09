@@ -60,7 +60,7 @@ defmodule Link.Pool.Overview do
       >
         <TabbarArea tabs={{@tabs}}>
           <ActionBar>
-            <Tabbar />
+            <Tabbar initial_tab={{ :students }} />
           </ActionBar>
           <TabbarContent/>
         </TabbarArea>

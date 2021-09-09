@@ -19,16 +19,18 @@ defmodule CoreWeb.User.Profile do
   data(user_agent, :string, default: "")
   data(current_user, :any)
   data(tabs, :any)
+  data(initial_tab, :any)
 
   @impl true
-  def mount(%{"tab" => active_tab}, _session, socket) do
-    tabs = create_tabs(socket, String.to_atom(active_tab))
+  def mount(%{"tab" => initial_tab}, _session, socket) do
+    tabs = create_tabs(socket)
 
     {
       :ok,
       socket
       |> assign(
         tabs: tabs,
+        initial_tab: initial_tab,
         changesets: %{},
         save_timer: nil,
         hide_flash_timer: nil
@@ -62,11 +64,10 @@ defmodule CoreWeb.User.Profile do
     if cond, do: list ++ [extra], else: list
   end
 
-  defp create_tabs(%{assigns: %{current_user: current_user}}, active_tab) do
+  defp create_tabs(%{assigns: %{current_user: current_user}}) do
     []
     |> append(%{
       id: :profile,
-      active: active_tab === :profile,
       title: dgettext("eyra-ui", "tabbar.item.profile"),
       forward_title: dgettext("eyra-ui", "tabbar.item.profile.forward"),
       type: :form,
@@ -76,7 +77,6 @@ defmodule CoreWeb.User.Profile do
     |> append(
       %{
         id: :study,
-        active: active_tab === :study,
         title: dgettext("eyra-ui", "tabbar.item.study"),
         forward_title: dgettext("eyra-ui", "tabbar.item.study.forward"),
         type: :form,
@@ -87,7 +87,6 @@ defmodule CoreWeb.User.Profile do
     )
     |> append(%{
       id: :features,
-      active: active_tab === :features,
       action: nil,
       title: dgettext("eyra-ui", "tabbar.item.features"),
       forward_title: dgettext("eyra-ui", "tabbar.item.features.forward"),
@@ -103,7 +102,7 @@ defmodule CoreWeb.User.Profile do
     <Workspace menus={{ @menus }}>
       <TabbarArea tabs={{@tabs}}>
         <ActionBar>
-          <Tabbar />
+          <Tabbar initial_tab={{ @initial_tab }}/>
         </ActionBar>
         <TabbarContent />
         <TabbarFooter/>

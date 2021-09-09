@@ -21,13 +21,23 @@ defmodule Link.Survey.Form do
 
   # Handle selector update
   def update(
-        %{active_item_ids: active_item_ids, selector_id: selector_id},
-        %{assigns: %{entity: entity}} = socket
-      ) do
+      %{active_item_ids: active_item_ids, selector_id: selector_id},
+      %{assigns: %{entity: entity}} = socket
+  ) do
     {
       :ok,
       socket
       |> save(entity, :auto_save, %{selector_id => active_item_ids})
+    }
+  end
+
+  # Handle update from parent after attempt to publish
+  def update(%{props: %{validate?: new}}, %{assigns: %{validate?: current}} = socket) when new != current do
+    {
+      :ok,
+      socket
+      |> assign(validate?: new)
+      |> validate_for_publish()
     }
   end
 
@@ -37,7 +47,7 @@ defmodule Link.Survey.Form do
   end
 
   # Handle initial update
-  def update(%{id: id, props: %{entity_id: entity_id, uri_origin: uri_origin}}, socket) do
+  def update(%{id: id, props: %{entity_id: entity_id, uri_origin: uri_origin, validate?: validate?}}, socket) do
     entity = Tools.get_survey_tool!(entity_id)
     changeset = Tool.changeset(entity, :create, %{})
 
@@ -53,6 +63,8 @@ defmodule Link.Survey.Form do
       |> assign(changeset: changeset)
       |> assign(device_labels: device_labels)
       |> assign(uri_origin: uri_origin)
+      |> assign(validate?: validate?)
+      |> validate_for_publish()
     }
   end
 
@@ -70,8 +82,25 @@ defmodule Link.Survey.Form do
   def save(socket, entity, type, attrs) do
     changeset = Tool.changeset(entity, type, attrs)
 
-    socket |> schedule_save(changeset)
+    socket
+    |> schedule_save(changeset)
+    |> validate_for_publish()
   end
+
+  # Validate
+
+  def validate_for_publish(%{assigns: %{id: id, entity: entity, validate?: true}} = socket) do
+    changeset =
+      Tool.operational_changeset(entity, %{})
+      |> Map.put(:action, :validate_for_publish)
+
+    send(self(), %{id: id, ready?: changeset.valid?})
+
+    socket
+    |> assign(changeset: changeset)
+  end
+
+  def validate_for_publish(socket), do: socket
 
   def render(assigns) do
     assigns =
@@ -92,7 +121,7 @@ defmodule Link.Survey.Form do
             <BodyMedium color="text-white">{{dgettext("link-survey", "redirect.description")}}</BodyMedium>
             <Spacing value="S" />
             <Title6 color="text-white">{{dgettext("link-survey", "redirect.label")}}</Title6>
-            <BodyMedium color="text-tertiary">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Link.Survey.Complete, @entity_id)}}</BodyMedium>
+            <BodyMedium color="text-tertiary"><span class="break-all">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Link.Survey.Complete, @entity_id)}}</span></BodyMedium>
           </Panel>
           <Spacing value="L" />
           <UrlInput field={{:survey_url}} label_text={{dgettext("link-survey", "config.url.label")}}>

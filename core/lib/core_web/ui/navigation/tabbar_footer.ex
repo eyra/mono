@@ -3,7 +3,6 @@ defmodule CoreWeb.UI.Navigation.TabbarFooter do
   use CoreWeb.UI.Component
 
   alias CoreWeb.UI.Container.RestrictedWidthArea
-  alias EyraUI.Button.Action.Click
   alias EyraUI.Button.Face.Forward
 
   slot(default)
@@ -12,7 +11,7 @@ defmodule CoreWeb.UI.Navigation.TabbarFooter do
   defp align(_), do: "justify-left"
 
   defp combine_shifted(tabs) do
-    tabs |> Enum.chunk_every(2, 1, :discard)
+    tabs |> Enum.chunk_every(2, 1, [%{id: "fake_tab"}])
   end
 
   def render(assigns) do
@@ -20,22 +19,22 @@ defmodule CoreWeb.UI.Navigation.TabbarFooter do
       <ContentArea class="mb-8">
         <MarginY id={{:page_top}} />
           <Context get={{tabs: tabs}}>
-            <div :for={{ {[tab1, tab2], index} <- Enum.with_index(combine_shifted(tabs)) }} x-show="active_tab == {{ index }}">
+            <div :for={{ {[tab1, tab2], index} <- Enum.with_index(combine_shifted(tabs)) }} >
               <RestrictedWidthArea type={{ tab1.type }}>
-                <div x-show="active_tab < {{ Enum.count(tabs)-1 }}" class="flex flex-row {{ align(tab1) }}">
-                  <Click vm={{ %{code: "active_tab = active_tab + 1"} }} >
-                    <Forward vm={{ %{label: tab2.forward_title} }} />
-                  </Click>
+                <div class="flex flex-row {{ align(tab1) }}">
+                  <div id="tabbar-footer-item-{{ tab1.id }}" phx-hook="TabbarFooterItem" tab-id={{ tab1.id }} target-tab-id={{ tab2.id }} class="tabbar-footer-item cursor-pointer">
+                    <Case value={{ index < Enum.count(tabs)-1 }} >
+                      <True>
+                        <Forward vm={{ %{label: tab2.forward_title} }} />
+                      </True>
+                      <False>
+                        <slot />
+                      </False>
+                    </Case>
+                  </div>
                 </div>
               </RestrictedWidthArea>
             </div>
-            <RestrictedWidthArea type={{ List.last(tabs).type }}>
-              <div x-show="active_tab == {{ Enum.count(tabs)-1 }}" class="flex flex-row">
-                <div class="flex-wrap">
-                  <slot />
-                </div>
-              </div>
-            </RestrictedWidthArea>
         </Context>
       </ContentArea>
     """

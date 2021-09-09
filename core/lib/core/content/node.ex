@@ -38,12 +38,15 @@ defmodule Core.Content.Node do
       alias Core.Repo
 
       def ready?(entity, attrs) do
+        changeset = operational_changeset(entity, attrs)
+        changeset.valid?
+      end
+
+      def operational_changeset(entity, attrs) do
         changeset =
           entity
           |> cast(attrs, operational_fields())
           |> validate_required(operational_fields())
-
-        changeset.valid?
       end
 
       def node_changeset(node, entity, attrs) do

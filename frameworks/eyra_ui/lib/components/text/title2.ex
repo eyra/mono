@@ -5,7 +5,7 @@ defmodule EyraUI.Text.Title2 do
   use Surface.Component
 
   slot(default, required: true)
-  prop(color, :css_class, default: "text-grey1")
+  prop(color, :string, default: "text-grey1")
   prop(margin, :string, default: "mb-6 md:mb-8 lg:mb-10")
 
   def render(assigns) do

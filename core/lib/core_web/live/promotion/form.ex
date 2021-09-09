@@ -17,6 +17,7 @@ defmodule CoreWeb.Promotion.Form do
   prop(props, :any, required: true)
 
   data(entity, :any)
+  data(validate?, :boolean)
   data(changeset, :any)
   data(uploads, :any)
   data(focus, :any, default: "")
@@ -52,10 +53,23 @@ defmodule CoreWeb.Promotion.Form do
     {:ok, socket |> save(entity, %{selector_id => active_item_ids})}
   end
 
-  # Handle update from parent after auto-save, prevents overwrite of current state
-  Pimage_i
+  # Handle update from parent after attempt to publish
+  def update(%{props: %{validate?: new}}, %{assigns: %{validate?: current}} = socket)
+      when new != current do
+    {
+      :ok,
+      socket
+      |> assign(validate?: new)
+      |> validate_for_publish()
+    }
+  end
 
-  def update(%{id: id, props: %{entity_id: entity_id}}, socket) do
+  # Handle update from parent after auto-save, prevents overwrite of current state
+  def update(_params, %{assigns: %{entity: _entity}} = socket) do
+    {:ok, socket}
+  end
+
+  def update(%{id: id, props: %{entity_id: entity_id, validate?: validate?}}, socket) do
     entity = Promotions.get!(entity_id)
     changeset = Promotion.changeset(entity, :create, %{})
 
@@ -74,6 +88,8 @@ defmodule CoreWeb.Promotion.Form do
       |> assign(byline: byline)
       |> assign(image_url: image_url)
       |> assign(theme_labels: theme_labels)
+      |> assign(validate?: validate?)
+      |> validate_for_publish()
     }
   end
 
@@ -83,7 +99,23 @@ defmodule CoreWeb.Promotion.Form do
 
     socket
     |> schedule_save(changeset)
+    |> validate_for_publish()
   end
+
+  # Validate
+
+  def validate_for_publish(%{assigns: %{id: id, entity: entity, validate?: true}} = socket) do
+    changeset =
+      Promotion.operational_changeset(entity, %{})
+      |> Map.put(:action, :validate_for_publish)
+
+    send(self(), %{id: id, ready?: changeset.valid?})
+
+    socket
+    |> assign(changeset: changeset)
+  end
+
+  def validate_for_publish(socket), do: socket
 
   # Handle Events
 
