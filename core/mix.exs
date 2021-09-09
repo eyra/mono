@@ -75,6 +75,7 @@ defmodule Core.MixProject do
       {:timex, "~> 3.6"},
       {:bamboo, "~> 2.0.1"},
       {:bamboo_phoenix, "~> 1.0.0"},
+      {:bamboo_ses, "~> 0.2.0"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:currency_formatter, "~> 0.4"},
