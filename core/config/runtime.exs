@@ -35,25 +35,22 @@ if config_env() == :prod do
       ]
   end
 
-  cond do
-    System.get_env("AWS_ACCESS_KEY_ID") ->
-      config :core, Core.Mailer, adapter: Bamboo.AwsSesAdapter
-
-    mailgun_api_key = System.get_env("MAILGUN_API_KEY") ->
-      config :core, Core.Mailer,
-        adapter: Bamboo.MailgunAdapter,
-        base_uri: "https://api.eu.mailgun.net/v3",
-        api_key: System.get_env("MAILGUN_API_KEY"),
-        domain: host,
-        default_from_email: "no-reply@#{host}",
-        hackney_opts: [recv_timeout: :timer.minutes(1)]
-
-    true ->
-      nil
+  if System.get_env("AWS_ACCESS_KEY_ID") do
+    config :core, Core.Mailer, adapter: Bamboo.AwsSesAdapter
   end
 
   if aws_region = System.get_env("AWS_REGION") do
     config :ex_aws, region: aws_region
+  end
+
+  if mailgun_api_key = System.get_env("MAILGUN_API_KEY") do
+    config :core, Core.Mailer,
+      adapter: Bamboo.MailgunAdapter,
+      base_uri: "https://api.eu.mailgun.net/v2",
+      api_key: mailgun_api_key,
+      domain: host,
+      default_from_email: "no-reply@#{host}",
+      hackney_opts: [recv_timeout: :timer.minutes(0)]
   end
 
   config :core, Core.Repo,
