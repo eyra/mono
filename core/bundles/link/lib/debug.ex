@@ -7,6 +7,7 @@ defmodule Link.Debug do
   use CoreWeb.Layouts.Workspace.Component, :debug
 
   alias CoreWeb.User.Forms.Debug, as: UserDebugForm
+  alias CoreWeb.Mail.Forms.Debug, as: MailDebugForm
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias EyraUI.Spacing
@@ -14,7 +15,6 @@ defmodule Link.Debug do
 
   alias EyraUI.Container.{Wrap}
   alias EyraUI.Text.Title2
-
 
   def mount(_params, _session, socket) do
     require_feature(:debug)
@@ -59,6 +59,10 @@ defmodule Link.Debug do
     {:noreply, socket}
   end
 
+  def handle_info({:claim_focus, :mail_debug}, socket) do
+    {:noreply, socket}
+  end
+
   def render(assigns) do
     ~H"""
       <Workspace
@@ -66,6 +70,8 @@ defmodule Link.Debug do
         menus={{ @menus }}
       >
         <UserDebugForm id={{:user_debug}} user={{@current_user }}/>
+        <Spacing value="M" />
+        <MailDebugForm id={{:mail_debug}} />
         <Spacing value="M" />
         <ContentArea>
           <MarginY id={{:page_top}} />
