@@ -87,37 +87,37 @@ msgid "website.label"
 msgstr "Website"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:43
+#: lib/core_web/live/user/settings.ex:44
 msgid "push.registration.button"
 msgstr "Registreren"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:39
+#: lib/core_web/live/user/settings.ex:38
 msgid "push.registration.title"
 msgstr "Push notificaties"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:50
+#: lib/core_web/live/user/settings.ex:51
 msgid "push.registration.activated"
 msgstr "Push notificaties zijn geactiveerd op deze browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:47
+#: lib/core_web/live/user/settings.ex:48
 msgid "push.registration.denied"
 msgstr "Push notificaties zijn gedeactiveerd op deze browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:41
+#: lib/core_web/live/user/settings.ex:42
 msgid "push.registration.label"
 msgstr "Activeren op deze browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:46
+#: lib/core_web/live/user/settings.ex:47
 msgid "push.registration.pending"
 msgstr "Push notificaties zijn gedeactiveerd op deze browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:52
+#: lib/core_web/live/user/settings.ex:53
 msgid "push.registration.test.button"
 msgstr "Stuur test notificatie"
 
@@ -170,3 +170,8 @@ msgstr "Selecteer welke studenten (BK: bedrijfskunde, IBA: international busines
 #: bundles/link/lib/pool/form/submission.ex:95
 msgid "features.content.description"
 msgstr "Selecteer hieronder de inclusiecriteria voor je studie. Geen selectie betekend dat alle studenten in de pool mee mogen doen met de studie."
+
+#, elixir-format
+#: lib/core_web/live/user/settings.ex:39
+msgid "push.unavailable.label"
+msgstr "Registereren voor push notificaties is op dit moment alleen beschikbaar op Chrome en Firefox browsers. Open deze website in een van deze browser om gebruik te maken van push notificaties."

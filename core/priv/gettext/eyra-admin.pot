@@ -11,21 +11,21 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/permissions.ex:90
+#: lib/core_web/live/admin/permissions.ex:93
 msgid "permissions.pooladmin.candidates.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/permissions.ex:77
+#: lib/core_web/live/admin/permissions.ex:79
 msgid "permissions.pooladmin.description"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/permissions.ex:76
+#: lib/core_web/live/admin/permissions.ex:78
 msgid "permissions.pooladmin.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/permissions.ex:71
+#: lib/core_web/live/admin/permissions.ex:73
 msgid "permissions.title"
 msgstr ""
