@@ -92,12 +92,12 @@ msgid "menu.item.payments"
 msgstr "Betalingen"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:94 lib/core_web/live/user/profile.ex:92
+#: bundles/link/lib/onboarding/wizard.ex:94 lib/core_web/live/user/profile.ex:91
 msgid "tabbar.item.features"
 msgstr "Kenmerken"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:70
+#: lib/core_web/live/user/profile.ex:71
 msgid "tabbar.item.profile"
 msgstr "Mijn profiel"
 
@@ -107,12 +107,12 @@ msgid "tabbar.item.study"
 msgstr "Opleiding"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:95 lib/core_web/live/user/profile.ex:93
+#: bundles/link/lib/onboarding/wizard.ex:95 lib/core_web/live/user/profile.ex:92
 msgid "tabbar.item.features.forward"
 msgstr "Pas kenmerken aan"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:71
+#: lib/core_web/live/user/profile.ex:72
 msgid "tabbar.item.profile.forward"
 msgstr "Pas profiel aan"
 
@@ -157,17 +157,17 @@ msgid "cancel.button"
 msgstr "Annuleren"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:170
+#: bundles/link/lib/survey/web/content.ex:195
 msgid "delete.confirm.text"
 msgstr "De %{item} wordt permanent verwijderd."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:169
+#: bundles/link/lib/survey/web/content.ex:194
 msgid "delete.confirm.title"
 msgstr "Verwijder %{item}?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:171
+#: bundles/link/lib/survey/web/content.ex:196
 msgid "delete.confirm.label"
 msgstr "Verwijderen"
 
@@ -177,11 +177,21 @@ msgid "ok.button"
 msgstr "OK"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:227
+#: bundles/link/lib/survey/web/content.ex:257
 msgid "feature.unavailable.text"
 msgstr "Houd deze functie in gaten. We werken continue aan het uitbreiden van het platform."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:226
+#: bundles/link/lib/survey/web/content.ex:256
 msgid "feature.unavailable.title"
 msgstr "Functie nog niet beschikbaar"
+
+#, elixir-format
+#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
+msgid "menu.item.permissions"
+msgstr "Permissies"
+
+#, elixir-format
+#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
+msgid "menu.item.support"
+msgstr "Support"

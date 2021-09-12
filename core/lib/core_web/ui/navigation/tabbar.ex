@@ -9,7 +9,7 @@ defmodule CoreWeb.UI.Navigation.Tabbar do
 
   def render(assigns) do
     ~H"""
-    <div id="tabbar" initial-tab={{@initial_tab}} phx-hook="Tabbar">
+    <div id="tabbar" data-initial-tab={{@initial_tab}} phx-hook="Tabbar">
       <TabbarWide :if={{ @size == :wide }} id={{ :tabbar_wide }} />
       <TabbarNarrow :if={{ @size == :narrow }} id={{ :tabbar_narrow }} />
     </div>

@@ -36,7 +36,7 @@ defmodule CoreWeb.UI.Navigation.TabbarItem do
     ~H"""
       <div
         id="tabbar-{{@tabbar}}-{{id(@vm)}}"
-        tab-id={{ id(@vm) }}
+        data-tab-id={{ id(@vm) }}
         phx-hook="TabbarItem"
         class="tabbar-item flex flex-row items-center justify-start rounded-full focus:outline-none cursor-pointer {{@opts}}"
       >

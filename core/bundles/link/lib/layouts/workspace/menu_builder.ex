@@ -4,6 +4,7 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
 
   import Core.Authorization, only: [can_access?: 2]
   import CoreWeb.Menu.Helpers
+  import Core.Admin
 
   alias Core.NextActions
 
@@ -34,11 +35,13 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
     }
   end
 
-  defp build_menu_first_part(socket, user_state, active_item) do
+  defp build_menu_first_part(socket, %{email: email} = user_state, active_item) do
     next_action_count = NextActions.count_next_actions(user_state)
 
     []
     |> append(live_item(socket, :dashboard, active_item), can_access?(user_state, Link.Dashboard))
+    |> append(live_item(socket, :permissions, active_item), admin?(email))
+    |> append(live_item(socket, :support, active_item), admin?(email))
     |> append(
       live_item(socket, :surveys, active_item),
       can_access?(user_state, CoreWeb.Study.New)
@@ -59,7 +62,7 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
     |> append(live_item(socket, :debug, active_item), feature_enabled?(:debug))
   end
 
-  defp append(list, extra, cond \\ true) do
-    if cond, do: list ++ [extra], else: list
+  defp append(list, extra, condition \\ true) do
+    if condition, do: list ++ [extra], else: list
   end
 end

@@ -2,7 +2,7 @@ let activeTabId = ""
 
 export const Tabbar = {
     mounted() {
-        var initialTab = "tab_"+this.el.getAttribute("initial-tab")
+        var initialTab = "tab_"+this.el.getAttribute("data-initial-tab")
         this.show(initialTab, true)
 
     },
@@ -14,29 +14,29 @@ export const Tabbar = {
         activeTabId = nextTabId
         var tabs = Array.from(document.querySelectorAll('[id^="tab_"]'));
 
-        if (tabs.filter((tab) => { return tab.id === nextTabId }).length === 0) {
-            // skip unknown tab
+        // Skip unknown tab
+        if (!tabs.some(tab => tab.id === nextTabId )) {
+            console.warn("Skip unknown tab", nextTabId)
             return
         }
 
         // Show active tab
         tabs.forEach(tab => {
-            var tab_id = tab.getAttribute("id")
-            var isVisible = tab_id === nextTabId
+            var isVisible = tab.id === nextTabId
             setVisible(tab, isVisible)
         });
 
         // Activate tabbar item for active tab
         var tabbar_items = Array.from(document.getElementsByClassName('tabbar-item'));
         tabbar_items.forEach(tabbar_item => {
-            var tab_id = "tab_"+tabbar_item.getAttribute("tab-id")
+            var tab_id = "tab_"+tabbar_item.getAttribute("data-tab-id")
             updateTabbarItem(tabbar_item, tab_id === nextTabId)
         });
 
         // Show footer item for active tab
         var tabbar_footer_items = Array.from(document.getElementsByClassName('tabbar-footer-item'));
         tabbar_footer_items.forEach(tabbar_footer_item => {
-            var tab_id = "tab_"+tabbar_footer_item.getAttribute("tab-id")
+            var tab_id = "tab_"+tabbar_footer_item.getAttribute("data-tab-id")
             var isVisible = tab_id === nextTabId
             setVisible(tabbar_footer_item, isVisible)
         });
@@ -51,7 +51,7 @@ export const TabbarItem = {
     mounted() {
         this.el.addEventListener("click", (event)=>{
             this.tabbar = document.getElementById("tabbar");
-            Tabbar.show("tab_"+this.el.getAttribute("tab-id"), true)
+            Tabbar.show("tab_"+this.el.getAttribute("data-tab-id"), true)
         })
     }
   }
@@ -60,7 +60,7 @@ export const TabbarItem = {
     mounted() {
         this.el.addEventListener("click", (event)=>{
             this.tabbar = document.getElementById("tabbar");
-            Tabbar.show("tab_"+this.el.getAttribute("target-tab-id"), true)
+            Tabbar.show("tab_"+this.el.getAttribute("data-target-tab-id"), true)
         })
     }
   }

@@ -5,7 +5,8 @@ defmodule CoreWeb.Live.Admin.Routes do
         pipe_through([:browser])
 
         live("/login", Login)
-        live("/coordinator-management", CoordinatorManagement)
+        live("/permissions", Permissions)
+        live("/support", Support)
       end
     end
   end
