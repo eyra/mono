@@ -37,27 +37,27 @@ msgid "debug.title"
 msgstr "Debug"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:168
+#: bundles/link/lib/survey/web/content.ex:192
 msgid "delete.confirm.campaign"
 msgstr "campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:292
+#: bundles/link/lib/survey/web/content.ex:337
 msgid "delete.button"
 msgstr "Verwijderen"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:274
-#: bundles/link/lib/survey/web/content.ex:282
+#: bundles/link/lib/survey/web/content.ex:319
+#: bundles/link/lib/survey/web/content.ex:327
 msgid "preview.button"
 msgstr "Bekijken"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:264
+#: bundles/link/lib/survey/web/content.ex:309
 msgid "submit.button"
-msgstr "Indienen"
+msgstr "Zet online"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:302
+#: bundles/link/lib/survey/web/content.ex:347
 msgid "retract.button"
-msgstr "Terugtrekken"
+msgstr "Haal offline"

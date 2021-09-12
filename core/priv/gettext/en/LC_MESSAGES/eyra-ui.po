@@ -72,7 +72,7 @@ msgid "menu.item.todo"
 msgstr "To-do"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:46
+#: lib/core_web/live/dashboard.ex:47
 msgid "dashboard.title"
 msgstr "Dashboard"
 
@@ -92,12 +92,12 @@ msgid "menu.item.payments"
 msgstr "Payments"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:94 lib/core_web/live/user/profile.ex:92
+#: bundles/link/lib/onboarding/wizard.ex:94 lib/core_web/live/user/profile.ex:91
 msgid "tabbar.item.features"
 msgstr "Characteristics"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:70
+#: lib/core_web/live/user/profile.ex:71
 msgid "tabbar.item.profile"
 msgstr "My profile"
 
@@ -107,12 +107,12 @@ msgid "tabbar.item.study"
 msgstr "Study program"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:95 lib/core_web/live/user/profile.ex:93
+#: bundles/link/lib/onboarding/wizard.ex:95 lib/core_web/live/user/profile.ex:92
 msgid "tabbar.item.features.forward"
 msgstr "Update characteristics"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:71
+#: lib/core_web/live/user/profile.ex:72
 msgid "tabbar.item.profile.forward"
 msgstr "Update profile"
 
@@ -152,36 +152,77 @@ msgid "menu.item.helpdesk"
 msgstr "Helpdesk"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:9
+#: bundles/link/lib/survey/web/content.ex:9 lib/core_web/live/admin/ticket.ex:4
 msgid "cancel.button"
 msgstr "Cancel"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:170
+#: bundles/link/lib/survey/web/content.ex:194
 msgid "delete.confirm.text"
 msgstr "This %{item} will be permanently deleted."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:169
+#: bundles/link/lib/survey/web/content.ex:193
 msgid "delete.confirm.title"
 msgstr "Delete %{item}?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:171
+#: bundles/link/lib/survey/web/content.ex:195
 msgid "delete.confirm.label"
 msgstr "Delete"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:9
+#: bundles/link/lib/survey/web/content.ex:9 lib/core_web/live/admin/ticket.ex:4
 msgid "ok.button"
 msgstr "OK"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:227
+#: bundles/link/lib/survey/web/content.ex:256
 msgid "feature.unavailable.text"
 msgstr "Stay tuned. We are continuesly working on new functionality."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:226
+#: bundles/link/lib/survey/web/content.ex:255
 msgid "feature.unavailable.title"
 msgstr "Feature not yet available"
+
+#, elixir-format
+#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
+msgid "menu.item.permissions"
+msgstr "Permissions"
+
+#, elixir-format
+#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
+msgid "menu.item.support"
+msgstr "Support"
+
+#, elixir-format
+#: lib/core_web/ui/timestamp.ex:17 lib/core_web/ui/timestamp.ex:20
+#: lib/core_web/ui/timestamp.ex:25
+msgid "timestamp.at"
+msgstr "at"
+
+#, elixir-format
+#: lib/core_web/ui/timestamp.ex:17
+msgid "timestamp.today"
+msgstr "Today"
+
+#, elixir-format
+#: lib/core_web/ui/timestamp.ex:20
+msgid "timestamp.yesterday"
+msgstr "Yesterday"
+
+#, elixir-format, fuzzy
+#: lib/core_web/live/admin/ticket.ex:83
+msgid "close.confirm.label"
+msgstr "Close"
+
+#, elixir-format, fuzzy
+#: lib/core_web/live/admin/ticket.ex:82
+msgid "close.confirm.text"
+msgstr "This %{item} will be permanently closed."
+
+#, elixir-format, fuzzy
+#: lib/core_web/live/admin/ticket.ex:81
+msgid "close.confirm.title"
+msgstr "Close %{item}?"

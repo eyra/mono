@@ -11,6 +11,7 @@ defmodule CoreWeb.Dashboard do
   alias EyraUI.Text.{Title2}
   alias Core.NextActions.Live.NextActionHighlight
   alias Core.NextActions
+  alias Core.ImageHelpers
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
@@ -55,7 +56,7 @@ defmodule CoreWeb.Dashboard do
           <Title2>
             {{ dgettext("eyra-dashboard", "recent-items.title") }}
           </Title2>
-          <ContentListItem :for={{item <- @content_items}} title={{item.title}} subtitle={{item.subtitle}} label={{item.label}} quick_summary="quick_summary" image_id={{item.image_id}} to={{item.path}}  />
+          <ContentListItem :for={{item <- @content_items}} vm={{item}} />
         </ContentArea>
     </Workspace>
     """
@@ -71,13 +72,16 @@ defmodule CoreWeb.Dashboard do
           }
         }
       }) do
+    image_info = ImageHelpers.get_image_info(image_id, 120, 115)
+    image = %{type: :catalog, info: image_info}
+
     %{
       path: Routes.live_path(socket, CoreWeb.DataDonation.Content, edit_id),
       title: title,
       subtitle: subtitle,
-      label: %{text: "Concept", type: :success},
+      tag: %{text: "Concept", type: :success},
       level: :critical,
-      image_id: image_id
+      image: image
     }
   end
 end

@@ -11,61 +11,64 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:157 bundles/link/lib/dashboard.ex:94
+#: bundles/link/lib/card.ex:163 bundles/link/lib/card.ex:214
+#: bundles/link/lib/dashboard.ex:103 bundles/link/lib/dashboard.ex:167
 msgid "status.accepted.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:155 bundles/link/lib/dashboard.ex:92
+#: bundles/link/lib/card.ex:157 bundles/link/lib/card.ex:208
+#: bundles/link/lib/dashboard.ex:97 bundles/link/lib/dashboard.ex:161
 msgid "status.idle.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:156 bundles/link/lib/dashboard.ex:93
+#: bundles/link/lib/card.ex:160 bundles/link/lib/card.ex:211
+#: bundles/link/lib/dashboard.ex:100 bundles/link/lib/dashboard.ex:164
 msgid "status.submitted.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:102
+#: bundles/link/lib/dashboard.ex:112 bundles/link/lib/dashboard.ex:176
 msgid "incomplete.forms.message"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:100
+#: bundles/link/lib/dashboard.ex:110 bundles/link/lib/dashboard.ex:174
 msgid "ready.for.submission.message"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:105
+#: bundles/link/lib/dashboard.ex:116 bundles/link/lib/dashboard.ex:180
 msgid "waiting.for.coordinator.message"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:203
+#: bundles/link/lib/survey/web/content.ex:228
 msgid "submit.error.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:202
+#: bundles/link/lib/survey/web/content.ex:227
 msgid "submit.error.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:196
+#: bundles/link/lib/survey/web/content.ex:220
 msgid "submit.success.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:195
+#: bundles/link/lib/survey/web/content.ex:219
 msgid "submit.success.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:215
+#: bundles/link/lib/survey/web/content.ex:244
 msgid "retract.success.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:214
+#: bundles/link/lib/survey/web/content.ex:243
 msgid "retract.success.title"
 msgstr ""

@@ -4,6 +4,8 @@ defmodule Link.Menu.Items do
   @impl true
   def values() do
     %{
+      permissions: %{target: CoreWeb.Admin.Permissions, domain: "eyra-ui"},
+      support: %{target: CoreWeb.Admin.Support, domain: "eyra-ui"},
       link: %{target: Link.Index, size: :large, title: "Panl", domain: "eyra-ui"},
       debug: %{target: Link.Debug, domain: "eyra-ui"},
       dashboard: %{target: Link.Dashboard, domain: "eyra-ui"},

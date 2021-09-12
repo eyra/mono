@@ -12,23 +12,23 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:97
+#: bundles/link/lib/survey/web/form.ex:140
 msgid "config.nrofsubjects.label"
 msgstr "Number of required subjects"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:89
+#: bundles/link/lib/survey/web/form.ex:127
 msgid "config.url.label"
 msgstr "Public web link of your online study"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:94
+#: bundles/link/lib/survey/web/form.ex:137
 msgid "duration.label"
 msgstr "Estimated duration"
 
 #, elixir-format
 #: bundles/link/lib/lab/promotion_plugin.ex:49
-#: bundles/link/lib/survey/data/promotion_plugin.ex:65
+#: bundles/link/lib/survey/data/promotion_plugin.ex:67
 msgid "by.author.label"
 msgstr "By"
 
@@ -38,27 +38,27 @@ msgid "thank.you.message"
 msgstr "Thank you for participating. Hopefully see you soon!"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:78
+#: bundles/link/lib/survey/data/promotion_plugin.ex:80
 msgid "available.future.highlight.text"
 msgstr "%{from} till %{till}"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:75
+#: bundles/link/lib/survey/data/promotion_plugin.ex:77
 msgid "available.highlight.title"
 msgstr "Available from"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:83
+#: bundles/link/lib/survey/data/promotion_plugin.ex:85
 msgid "reward.highlight.title"
 msgstr "Reward"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:72
+#: bundles/link/lib/survey/data/promotion_plugin.ex:74
 msgid "spots.highlight.title"
 msgstr "Open spots"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:46
+#: bundles/link/lib/survey/data/promotion_plugin.ex:54
 msgid "apply.cta.title"
 msgstr "Apply for this online study"
 
@@ -68,32 +68,32 @@ msgid "conpleted.title"
 msgstr "Completed"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:101
+#: bundles/link/lib/survey/web/form.ex:144
 msgid "devices.label"
 msgstr "Select one or more devices that can be used to participate in your online study."
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:52
+#: bundles/link/lib/survey/data/promotion_plugin.ex:49
 msgid "open.cta.title"
 msgstr "Go to online study"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:83
+#: bundles/link/lib/survey/web/form.ex:121
 msgid "redirect.description"
 msgstr "The redirect url to link your online study is provided below. This is used to sent participants back to PaNL after finishing their task on an external platform (e.g. a questionnaire on Qualtrics). Copy the url and paste it at the location indicated by the external platform."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:82
+#: bundles/link/lib/survey/web/form.ex:120
 msgid "redirect.title"
 msgstr "Link back to PaNL"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:100
+#: bundles/link/lib/survey/web/form.ex:143
 msgid "devices.title"
 msgstr "Devices"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:85
+#: bundles/link/lib/survey/web/form.ex:123
 msgid "redirect.label"
 msgstr "Redirect url"
 
@@ -123,47 +123,47 @@ msgid "status.label"
 msgstr "Below you can keep an eye on the progress campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:395
+#: bundles/link/lib/survey/web/content.ex:458
 msgid "content.title"
 msgstr "Campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:111
+#: bundles/link/lib/survey/web/overview.ex:113
 msgid "title"
 msgstr "Recruitment"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:145
+#: bundles/link/lib/survey/web/overview.ex:147
 msgid "add.first.button"
 msgstr "Start your first campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:126
+#: bundles/link/lib/survey/web/overview.ex:128
 msgid "add.new.button"
 msgstr "Start new campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:141
+#: bundles/link/lib/survey/web/overview.ex:143
 msgid "empty.description"
 msgstr "There are currently no campaigns created by you. As soon as a you create one, it will be added to this page. Start by clicking on the button below."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:140
+#: bundles/link/lib/survey/web/overview.ex:142
 msgid "empty.title"
 msgstr "Campaigns you create will appear here"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:135
+#: bundles/link/lib/survey/web/content.ex:156
 msgid "tabbar.item.monitor"
 msgstr "Results"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:101
+#: bundles/link/lib/survey/web/content.ex:122
 msgid "tabbar.item.promotion"
 msgstr "Promotion"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:112
+#: bundles/link/lib/survey/web/content.ex:134
 msgid "tabbar.item.survey"
 msgstr "Study"
 
@@ -178,41 +178,41 @@ msgid "monitor.empty.title"
 msgstr "Recruitment results"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:102
+#: bundles/link/lib/survey/web/content.ex:123
 msgid "tabbar.item.promotion.forward"
 msgstr "Create promotion"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:113
+#: bundles/link/lib/survey/web/content.ex:135
 msgid "tabbar.item.survey.forward"
 msgstr "Link your study"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:136
+#: bundles/link/lib/survey/web/content.ex:157
 msgid "tabbar.item.monitor.forward"
 msgstr "View results"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:124
+#: bundles/link/lib/survey/web/content.ex:146
 msgid "tabbar.item.criteria"
 msgstr "Sample"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:125
+#: bundles/link/lib/survey/web/content.ex:147
 msgid "tabbar.item.criteria.forward"
-msgstr "Submit campaign"
+msgstr "Publish campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:79
+#: bundles/link/lib/survey/web/form.ex:117
 msgid "form.title"
 msgstr "Study"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:120
+#: bundles/link/lib/survey/web/overview.ex:122
 msgid "survey.overview.title"
 msgstr "Campaigns"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:90
+#: bundles/link/lib/survey/web/form.ex:128
 msgid "config.url.description"
 msgstr "It's possible to use variables within the URL parameters to send the participant ID to an external system. This can be done by using <participantId> as the parameter value."

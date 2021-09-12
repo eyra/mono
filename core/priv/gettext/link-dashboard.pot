@@ -11,16 +11,16 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:107
+#: bundles/link/lib/dashboard.ex:119 bundles/link/lib/dashboard.ex:183
 msgid "quick_summary.%{subject_count}.%{target_subject_count}"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:56
+#: bundles/link/lib/dashboard.ex:60
 msgid "recent-items.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:45
+#: bundles/link/lib/dashboard.ex:49
 msgid "title"
 msgstr ""

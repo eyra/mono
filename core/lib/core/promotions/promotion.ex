@@ -12,7 +12,7 @@ defmodule Core.Promotions.Promotion do
   alias Core.Enums.Themes
   alias Core.Marks
   alias Core.ImageHelpers
-  alias EyraUI.Timestamp
+  alias Coreweb.UI.Timestamp
 
   schema "promotions" do
     # Plain Content

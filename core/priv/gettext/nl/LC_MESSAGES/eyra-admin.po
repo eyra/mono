@@ -1,0 +1,92 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/core_web/live/admin/permissions.ex:93
+msgid "permissions.pooladmin.candidates.title"
+msgstr "Onderzoekers"
+
+#, elixir-format
+#: lib/core_web/live/admin/permissions.ex:79
+msgid "permissions.pooladmin.description"
+msgstr "Selecteer een of meer onderzoekers die namens de VU de studentenpool beheren."
+
+#, elixir-format
+#: lib/core_web/live/admin/permissions.ex:78
+msgid "permissions.pooladmin.title"
+msgstr "Pool beheerders"
+
+#, elixir-format
+#: lib/core_web/live/admin/permissions.ex:73
+msgid "permissions.title"
+msgstr "Permissies"
+
+#, elixir-format
+#: lib/core_web/live/admin/support.ex:68
+msgid "support.tickets.title"
+msgstr "Meldingen"
+
+#, elixir-format
+#: lib/core_web/live/admin/support.ex:63
+msgid "support.title"
+msgstr "Support"
+
+#, elixir-format
+#: lib/core/helpdesk/ticket.ex:28
+msgid "ticket.tag.bug"
+msgstr "Bug"
+
+#, elixir-format
+#: lib/core/helpdesk/ticket.ex:30
+msgid "ticket.tag.question"
+msgstr "Vraag"
+
+#, elixir-format
+#: lib/core/helpdesk/ticket.ex:29
+msgid "ticket.tag.tip"
+msgstr "Tip"
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:133
+msgid "close.ticket.button"
+msgstr "Melding sluiten"
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:103
+msgid "ticket.title"
+msgstr "Melding"
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:62
+msgid "role.coordinator"
+msgstr "Pool beheerder"
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:63
+msgid "role.researcher"
+msgstr "Onderzoeker"
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:64
+msgid "role.student"
+msgstr "Student"
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:74
+msgid "ticket.mailto.button"
+msgstr "Benaderen"
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:80
+msgid "close.confirm.ticket"
+msgstr "melding"

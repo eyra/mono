@@ -13,6 +13,7 @@ defmodule Link.Dashboard do
   alias Core.NextActions.Live.NextActionHighlight
   alias Core.NextActions
   alias Core.Content.Nodes
+  alias Core.ImageHelpers
 
   data(content_items, :any)
   data(current_user, :any)
@@ -58,7 +59,7 @@ defmodule Link.Dashboard do
               <Title2>
                 {{ dgettext("link-dashboard", "recent-items.title") }}
               </Title2>
-              <ContentListItem :for={{item <- @content_items}} title={{item.title}} subtitle={{item.subtitle}} quick_summary={{item.quick_summary}} label={{item.label}} image_id={{item.image_id}} to={{item.path}}  />
+              <ContentListItem :for={{item <- @content_items}} vm={{item}} />
             </True>
             <False>
               <Empty
@@ -90,7 +91,7 @@ defmodule Link.Dashboard do
           }
         }
       }) do
-    label =
+    tag =
       case status do
         :idle ->
           %{text: dgettext("eyra-submission", "status.idle.label"), type: :warning}
@@ -123,16 +124,19 @@ defmodule Link.Dashboard do
 
     quick_summery =
       updated_at
-      |> EyraUI.Timestamp.apply_timezone()
-      |> EyraUI.Timestamp.humanize()
+      |> Coreweb.UI.Timestamp.apply_timezone()
+      |> Coreweb.UI.Timestamp.humanize()
+
+    image_info = ImageHelpers.get_image_info(image_id, 120, 115)
+    image = %{type: :catalog, info: image_info }
 
     %{
       path: Routes.live_path(socket, Link.Survey.Content, edit_id),
       title: title,
       subtitle: subtitle || "<no subtitle>",
-      label: label,
+      tag: tag,
       level: :critical,
-      image_id: image_id,
+      image: image,
       quick_summary: quick_summery
     }
   end
@@ -184,8 +188,11 @@ defmodule Link.Dashboard do
 
     quick_summery =
       updated_at
-      |> EyraUI.Timestamp.apply_timezone()
-      |> EyraUI.Timestamp.humanize()
+      |> Coreweb.UI.Timestamp.apply_timezone()
+      |> Coreweb.UI.Timestamp.humanize()
+
+    image_info = ImageHelpers.get_image_info(image_id, 120, 115)
+    image = %{type: :catalog, info: image_info }
 
     %{
       path: Routes.live_path(socket, Link.Survey.Content, edit_id),
@@ -193,7 +200,7 @@ defmodule Link.Dashboard do
       subtitle: subtitle,
       label: label,
       level: :critical,
-      image_id: image_id,
+      image: image,
       quick_summary: quick_summery
     }
   end

@@ -19,10 +19,11 @@ defmodule Core.Authorization do
   Core.BundleOverrides.grants()
 
   grant_access(CoreWeb.Admin.Login, [:visitor, :member])
-  grant_access(CoreWeb.Admin.CoordinatorManagement, [:admin])
+  grant_access(CoreWeb.Admin.Permissions, [:admin])
+  grant_access(CoreWeb.Admin.Support, [:admin])
+  grant_access(CoreWeb.Admin.Ticket, [:admin])
   grant_access(CoreWeb.Index, [:visitor, :member])
   grant_access(CoreWeb.Helpdesk.Public, [:member])
-  grant_access(CoreWeb.Helpdesk.Admin, [:admin])
   grant_access(CoreWeb.Dashboard, [:researcher])
   grant_access(CoreWeb.Marketplace, [:member])
   grant_access(CoreWeb.Todo, [:member])
@@ -148,11 +149,12 @@ defmodule Core.Authorization do
     can?(principal, entity, GreenLight.Permissions.access_permission(module))
   end
 
-  def users_with_role(entity, role) do
+  def users_with_role(entity, role, preload \\ []) do
     principal_ids = Core.Authorization.query_principal_ids(role: role, entity: entity)
 
     Ecto.Query.from(u in Core.Accounts.User,
-      where: u.id in subquery(principal_ids)
+      where: u.id in subquery(principal_ids),
+      preload: ^preload
     )
     |> Core.Repo.all()
   end

@@ -1,0 +1,91 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/permissions.ex:93
+msgid "permissions.pooladmin.candidates.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/permissions.ex:79
+msgid "permissions.pooladmin.description"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/permissions.ex:78
+msgid "permissions.pooladmin.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/permissions.ex:73
+msgid "permissions.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/support.ex:68
+msgid "support.tickets.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/support.ex:63
+msgid "support.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core/helpdesk/ticket.ex:28
+msgid "ticket.tag.bug"
+msgstr ""
+
+#, elixir-format
+#: lib/core/helpdesk/ticket.ex:30
+msgid "ticket.tag.question"
+msgstr ""
+
+#, elixir-format
+#: lib/core/helpdesk/ticket.ex:29
+msgid "ticket.tag.tip"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:133
+msgid "close.ticket.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:103
+msgid "ticket.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:62
+msgid "role.coordinator"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:63
+msgid "role.researcher"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:64
+msgid "role.student"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:74
+msgid "ticket.mailto.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:80
+msgid "close.confirm.ticket"
+msgstr ""
