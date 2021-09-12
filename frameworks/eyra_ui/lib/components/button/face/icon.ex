@@ -10,7 +10,7 @@ defmodule EyraUI.Button.Face.Icon do
 
   def render(assigns) do
     ~H"""
-    <div class="active:opacity-80">
+    <div class="active:opacity-80 cursor-pointer">
       <img src="/images/icons/{{icon(@vm)}}.svg"/>
     </div>
     """

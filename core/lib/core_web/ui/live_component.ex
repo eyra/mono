@@ -11,6 +11,9 @@ defmodule CoreWeb.UI.LiveComponent do
       alias EyraUI.Button.DynamicButton
       alias EyraUI.Spacing
 
+      require EyraUI.ViewModel
+      import EyraUI.ViewModel
+
       alias CoreWeb.Router.Helpers, as: Routes
     end
   end

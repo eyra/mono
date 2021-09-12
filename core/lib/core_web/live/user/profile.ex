@@ -5,6 +5,7 @@ defmodule CoreWeb.User.Profile do
   use CoreWeb, :live_view
   use CoreWeb.MultiFormAutoSave
   use CoreWeb.Layouts.Workspace.Component, :profile
+  use CoreWeb.UI.Responsive.Viewport
 
   import CoreWeb.Gettext
 
@@ -20,6 +21,7 @@ defmodule CoreWeb.User.Profile do
   data(current_user, :any)
   data(tabs, :any)
   data(initial_tab, :any)
+  data(bar_size, :any)
 
   @impl true
   def mount(%{"tab" => initial_tab}, _session, socket) do
@@ -35,6 +37,9 @@ defmodule CoreWeb.User.Profile do
         save_timer: nil,
         hide_flash_timer: nil
       )
+      |> assign_viewport()
+      |> assign_breakpoint()
+      |> update_tabbar()
       |> update_menus()
     }
   end
@@ -53,6 +58,18 @@ defmodule CoreWeb.User.Profile do
   def handle_event("reset_focus", _, socket) do
     send_update(ProfileForm, id: :profile, focus: "")
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_resize(socket) do
+    socket |> update_tabbar()
+  end
+
+  defp update_tabbar(%{assigns: %{breakpoint: breakpoint}} = socket) do
+    bar_size = bar_size(breakpoint)
+
+    socket
+    |> assign(bar_size: bar_size)
   end
 
   def handle_info({:claim_focus, :profile}, socket) do
@@ -96,17 +113,22 @@ defmodule CoreWeb.User.Profile do
     })
   end
 
+  defp bar_size({:unknown, _}), do: :unknown
+  defp bar_size(bp), do: value(bp, :narrow, xs: %{45 => :wide})
+
   @impl true
   def render(assigns) do
     ~H"""
     <Workspace menus={{ @menus }}>
-      <TabbarArea tabs={{@tabs}}>
-        <ActionBar>
-          <Tabbar initial_tab={{ @initial_tab }}/>
-        </ActionBar>
-        <TabbarContent />
-        <TabbarFooter/>
-      </TabbarArea>
+      <div id={{ :profile }} phx-hook="ViewportResize">
+        <TabbarArea tabs={{@tabs}}>
+          <ActionBar size={{ @bar_size }}>
+            <Tabbar vm={{ %{initial_tab: @initial_tab, size: @bar_size, type: :segmented} }} />
+          </ActionBar>
+          <TabbarContent />
+          <TabbarFooter/>
+        </TabbarArea>
+      </div>
     </Workspace>
     """
   end

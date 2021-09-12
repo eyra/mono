@@ -81,11 +81,19 @@ function updateTabbarItem (tabbar_item, activate) {
 
     var icon = tabbar_item.getElementsByClassName('icon')[0]
     var title = tabbar_item.getElementsByClassName('title')[0]
-    updateElement(icon, activate)
+
+    updateElement(tabbar_item, activate)
+    if (icon) {
+        updateElement(icon, activate)
+    }
     updateElement(title, activate)
 }
 
 function updateElement(element, activate) {
+    if (!element) {
+        return console.warn("Unknown element")
+    }
+
     var idle_classes = customClasses(element, 'idle');
     var active_classes = customClasses(element, 'active');
 

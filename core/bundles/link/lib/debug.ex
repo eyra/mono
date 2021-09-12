@@ -69,17 +69,22 @@ defmodule Link.Debug do
         title={{ dgettext("link-ui", "debug.title") }}
         menus={{ @menus }}
       >
-        <UserDebugForm id={{:user_debug}} user={{@current_user }}/>
-        <Spacing value="M" />
-        <MailDebugForm id={{:mail_debug}} />
-        <Spacing value="M" />
+        <MarginY id={{:page_top}} />
         <ContentArea>
           <MarginY id={{:page_top}} />
-          <Wrap>
-            <Title2>Onboarding</Title2>
-            <DynamicButton vm={{ @start_button }} />
-          </Wrap>
+            <Title2 margin="">Onboarding</Title2>
+            <Spacing value="S" />
+            <Wrap>
+              <DynamicButton vm={{ @start_button }} />
+            </Wrap>
         </ContentArea>
+
+        <Spacing value="XL" />
+        <UserDebugForm id={{:user_debug}} user={{@current_user }}/>
+        <Spacing value="XL" />
+        <MailDebugForm id={{:mail_debug}} />
+
+        <MarginY id={{:page_footer_top}} />
       </Workspace>
     """
   end

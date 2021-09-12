@@ -69,8 +69,6 @@ defmodule CoreWeb.User.Forms.Debug do
   def render(assigns) do
     ~H"""
         <ContentArea>
-          <MarginY id={{:page_top}} />
-          <MarginY id={{:page_top}} />
           <Title2>User roles</Title2>
           <Form id="main_form" changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
             <Checkbox field={{:student}} label_text="Student"/>

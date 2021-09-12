@@ -116,7 +116,7 @@ defmodule Link.Onboarding.Wizard do
       >
         <TabbarArea tabs={{@tabs}}>
           <ActionBar>
-            <Tabbar  initial_tab={{ :welcome }}/>
+            <Tabbar  vm={{ %{initial_tab: :welcome} }}/>
           </ActionBar>
           <TabbarContent/>
           <TabbarFooter>

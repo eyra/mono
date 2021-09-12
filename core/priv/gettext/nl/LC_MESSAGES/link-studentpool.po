@@ -44,4 +44,4 @@ msgstr "Op dit moment zijn er nog geen onderzoeksstudies aangemeld voor de pool.
 #, elixir-format
 #: bundles/link/lib/pool/form/studies.ex:11
 msgid "studies.empty.title"
-msgstr "Hier vind je straks alle onderzoeksstudies uit deze pool."
+msgstr "Hier vind je straks alle studies uit deze pool."
