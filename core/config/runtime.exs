@@ -36,7 +36,10 @@ if config_env() == :prod do
   end
 
   if System.get_env("AWS_ACCESS_KEY_ID") do
-    config :core, Core.Mailer, adapter: Bamboo.AwsSesAdapter
+    config :core, Core.Mailer,
+      adapter: Bamboo.SesAdapter,
+      domain: host,
+      default_from_email: "no-reply@#{host}"
   end
 
   if aws_region = System.get_env("AWS_REGION") do
@@ -58,8 +61,6 @@ if config_env() == :prod do
     password: System.get_env("DB_PASS"),
     database: System.get_env("DB_NAME"),
     hostname: System.get_env("DB_HOST")
-
-  config :core, Core.Mailer, adapter: Bamboo.LocalAdapter
 
   config :core, GoogleSignIn,
     redirect_uri: "https://#{host}/google-sign-in/auth",
