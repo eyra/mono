@@ -16,7 +16,7 @@ defmodule CoreWeb.Mail.Forms.Debug do
   alias EyraUI.Form.{Form, TextInput, TextArea}
   alias EyraUI.Button.SubmitButton
   use Bamboo.Phoenix, view: Core.Mailer.EmailView
-  import Core.Mailer, only: [base_email: 0, deliver_later!: 1]
+  import Core.Mailer, only: [base_email: 0, deliver_now!: 1]
 
   data(to, :string)
   data(subject, :string)
@@ -45,18 +45,19 @@ defmodule CoreWeb.Mail.Forms.Debug do
         %{"debug_schema" => mail_data},
         socket
       ) do
-    socket =
+    changeset =
       case changeset(mail_data) do
         %{valid?: true, changes: %{to: to, subject: subject, message: message}} ->
           send_mail(to, subject, message)
+          changeset(%{})
 
-        _ ->
-          socket
+        changeset ->
+          changeset
       end
 
     {
       :noreply,
-      Phoenix.LiveView.assign(socket, :changeset, changeset(%{}))
+      Phoenix.LiveView.assign(socket, :changeset, changeset)
     }
   end
 
@@ -87,6 +88,7 @@ defmodule CoreWeb.Mail.Forms.Debug do
     |> to(to)
     |> subject(subject)
     |> Map.put(:text_body, message)
-    |> deliver_later!()
+    |> Map.put(:html_body, message)
+    |> deliver_now!()
   end
 end
