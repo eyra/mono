@@ -11,18 +11,22 @@ msgid ""
 msgstr ""
 
 #, elixir-format
+#: lib/core_web/live/helpdesk/public.ex:31
 msgid "form.description"
 msgstr ""
 
 #, elixir-format
+#: lib/core_web/live/helpdesk/public.ex:30
 msgid "form.title"
 msgstr ""
 
 #, elixir-format
+#: lib/core_web/live/helpdesk/form.ex:89
 msgid "ticket.description.label"
 msgstr ""
 
 #, elixir-format
+#: lib/core_web/live/helpdesk/form.ex:87
 msgid "ticket.title.label"
 msgstr ""
 
