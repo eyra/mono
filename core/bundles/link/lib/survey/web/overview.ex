@@ -93,7 +93,7 @@ defmodule Link.Survey.Overview do
   end
 
   defp create_promotion_attrs(title, user, profile) do
-    image_id = List.first(image_catalog().random(1))
+    image_id = image_catalog().random(:abstract)
 
     %{
       title: title,

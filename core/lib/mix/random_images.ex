@@ -6,7 +6,7 @@ defmodule Mix.Tasks.Unsplash.RandomImages do
   def run(_) do
     :application.ensure_all_started(:hackney)
 
-    Core.ImageCatalog.Unsplash.random()
+    Core.ImageCatalog.Unsplash.random(30)
     |> Enum.map(&IO.puts/1)
   end
 end
