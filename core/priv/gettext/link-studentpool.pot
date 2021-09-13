@@ -11,6 +11,7 @@ msgid ""
 msgstr ""
 
 #, elixir-format
+#: bundles/link/lib/pool/form/students.ex:81
 #: bundles/link/lib/pool/overview.ex:38
 msgid "tabbar.item.students"
 msgstr ""
@@ -26,12 +27,12 @@ msgid "title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:12
+#: bundles/link/lib/pool/form/students.ex:77
 msgid "students.empty.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:11
+#: bundles/link/lib/pool/form/students.ex:76
 msgid "students.empty.title"
 msgstr ""
 
@@ -43,4 +44,19 @@ msgstr ""
 #, elixir-format
 #: bundles/link/lib/pool/form/studies.ex:11
 msgid "studies.empty.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/form/students.ex:61
+msgid "missing.study.program.codes"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/form/students.ex:67
+msgid "student.tag.complete"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/form/students.ex:66
+msgid "student.tag.incomplete"
 msgstr ""

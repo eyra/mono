@@ -11,16 +11,31 @@ defmodule Core.Accounts do
 
   ## Listings
 
-  def list_students() do
-    Repo.get_by(User, student: true)
+  def list_students(preload \\ []) do
+    from(u in User,
+      where: u.student,
+      order_by: {:desc, :inserted_at},
+      preload: ^preload
+    )
+    |> Repo.all()
   end
 
-  def list_researchers() do
-    Repo.get_by(User, researcher: true)
+  def list_researchers(preload \\ []) do
+    from(u in User,
+      where: u.researcher,
+      order_by: {:desc, :inserted_at},
+      preload: ^preload
+    )
+    |> Repo.all()
   end
 
-  def list_coordinators() do
-    Repo.get_by(User, coordinator: true)
+  def list_coordinators(preload \\ []) do
+    from(u in User,
+      where: u.coordinator,
+      order_by: {:desc, :inserted_at},
+      preload: ^preload
+    )
+    |> Repo.all()
   end
 
   ## Database getters

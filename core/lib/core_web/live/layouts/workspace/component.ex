@@ -45,6 +45,11 @@ defmodule CoreWeb.Layouts.Workspace.Component do
         socket
         |> build_menus(current_user)
       end
+
+      def update_menus(%{assigns: %{current_user: current_user}} = socket, id) do
+        socket
+        |> build_menus(current_user, id)
+      end
     end
   end
 

@@ -7,6 +7,7 @@ defmodule CoreWeb.Live.Admin.Routes do
         live("/login", Login)
         live("/permissions", Permissions)
         live("/support", Support)
+        live("/support/:id", Ticket)
       end
     end
   end

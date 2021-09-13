@@ -27,7 +27,11 @@ defmodule Core.Factories do
       email: Faker.Internet.email(),
       hashed_password: Bcrypt.hash_pwd_salt(valid_user_password()),
       displayname: Faker.Person.first_name(),
-      confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+      profile: %Profile{
+        fullname: Faker.Person.name(),
+        photo_url: Faker.Avatar.image_url()
+      }
     }
   end
 
@@ -36,7 +40,8 @@ defmodule Core.Factories do
     |> build(%{researcher: true})
     |> struct!(%{
       profile: %Profile{
-        fullname: Faker.Person.name()
+        fullname: Faker.Person.name(),
+        photo_url: Faker.Avatar.image_url()
       }
     })
   end
@@ -51,7 +56,8 @@ defmodule Core.Factories do
     |> build(%{student: true})
     |> struct!(%{
       profile: %Profile{
-        fullname: Faker.Person.name()
+        fullname: Faker.Person.name(),
+        photo_url: Faker.Avatar.image_url()
       }
     })
   end

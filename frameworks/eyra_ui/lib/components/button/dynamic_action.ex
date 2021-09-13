@@ -1,6 +1,6 @@
 defmodule EyraUI.Button.DynamicAction do
   use EyraUI.Component
-  alias EyraUI.Button.Action.{Click, Redirect, Send, Submit, Toggle}
+  alias EyraUI.Button.Action.{Click, Redirect, Send, Submit, Toggle, Href}
 
   slot(default, required: true)
   prop(vm, :map, required: true)
@@ -27,6 +27,9 @@ defmodule EyraUI.Button.DynamicAction do
             <Submit :if={{ type(@vm) == :submit }} vm={{@vm}}>
               <slot />
             </Submit>
+            <Href :if={{ type(@vm) == :href }} vm={{@vm}}>
+              <slot />
+            </Href>
           </div>
         </div>
       </div>
