@@ -33,7 +33,7 @@ defmodule Link.Pool.Form.Students do
   }, socket) do
 
     subtitle =
-      [email] ++ get_study_programs(features)
+      [email|get_study_programs(features)]
       |> Enum.join(" ▪︎ ")
 
     tag = get_tag(features)
