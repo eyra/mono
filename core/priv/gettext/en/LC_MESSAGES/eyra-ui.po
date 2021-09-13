@@ -212,17 +212,17 @@ msgstr "Today"
 msgid "timestamp.yesterday"
 msgstr "Yesterday"
 
-#, elixir-format, fuzzy
-#: lib/core_web/live/admin/ticket.ex:83
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:82
 msgid "close.confirm.label"
 msgstr "Close"
 
-#, elixir-format, fuzzy
-#: lib/core_web/live/admin/ticket.ex:82
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:81
 msgid "close.confirm.text"
 msgstr "This %{item} will be permanently closed."
 
-#, elixir-format, fuzzy
-#: lib/core_web/live/admin/ticket.ex:81
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:80
 msgid "close.confirm.title"
 msgstr "Close %{item}?"

@@ -32,12 +32,12 @@ msgid "permissions.title"
 msgstr "Permissies"
 
 #, elixir-format
-#: lib/core_web/live/admin/support.ex:68
+#: lib/core_web/live/admin/support.ex:70
 msgid "support.tickets.title"
 msgstr "Meldingen"
 
 #, elixir-format
-#: lib/core_web/live/admin/support.ex:63
+#: lib/core_web/live/admin/support.ex:65
 msgid "support.title"
 msgstr "Support"
 
@@ -57,36 +57,36 @@ msgid "ticket.tag.tip"
 msgstr "Tip"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:133
+#: lib/core_web/live/admin/ticket.ex:132
 msgid "close.ticket.button"
 msgstr "Melding sluiten"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:103
+#: lib/core_web/live/admin/ticket.ex:102
 msgid "ticket.title"
 msgstr "Melding"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:62
+#: lib/core_web/live/admin/ticket.ex:61
 msgid "role.coordinator"
 msgstr "Pool beheerder"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:63
+#: lib/core_web/live/admin/ticket.ex:62
 msgid "role.researcher"
 msgstr "Onderzoeker"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:64
+#: lib/core_web/live/admin/ticket.ex:63
 msgid "role.student"
 msgstr "Student"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:74
+#: lib/core_web/live/admin/ticket.ex:73
 msgid "ticket.mailto.button"
 msgstr "Benaderen"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:80
+#: lib/core_web/live/admin/ticket.ex:79
 msgid "close.confirm.ticket"
 msgstr "melding"

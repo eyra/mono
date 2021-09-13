@@ -212,17 +212,17 @@ msgstr "vandaag"
 msgid "timestamp.yesterday"
 msgstr "gisteren"
 
-#, elixir-format, fuzzy
-#: lib/core_web/live/admin/ticket.ex:83
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:82
 msgid "close.confirm.label"
 msgstr "Sluiten"
 
-#, elixir-format, fuzzy
-#: lib/core_web/live/admin/ticket.ex:82
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:81
 msgid "close.confirm.text"
 msgstr "De %{item} wordt permanent gesloten."
 
-#, elixir-format, fuzzy
-#: lib/core_web/live/admin/ticket.ex:81
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:80
 msgid "close.confirm.title"
 msgstr "%{item} sluiten?"

@@ -222,16 +222,16 @@ msgid "timestamp.yesterday"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:83
+#: lib/core_web/live/admin/ticket.ex:82
 msgid "close.confirm.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:82
+#: lib/core_web/live/admin/ticket.ex:81
 msgid "close.confirm.text"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:81
+#: lib/core_web/live/admin/ticket.ex:80
 msgid "close.confirm.title"
 msgstr ""
