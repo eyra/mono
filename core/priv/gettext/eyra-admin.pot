@@ -29,3 +29,63 @@ msgstr ""
 #: lib/core_web/live/admin/permissions.ex:73
 msgid "permissions.title"
 msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/support.ex:70
+msgid "support.tickets.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/support.ex:65
+msgid "support.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core/helpdesk/ticket.ex:28
+msgid "ticket.tag.bug"
+msgstr ""
+
+#, elixir-format
+#: lib/core/helpdesk/ticket.ex:30
+msgid "ticket.tag.question"
+msgstr ""
+
+#, elixir-format
+#: lib/core/helpdesk/ticket.ex:29
+msgid "ticket.tag.tip"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:132
+msgid "close.ticket.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:102
+msgid "ticket.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:61
+msgid "role.coordinator"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:62
+msgid "role.researcher"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:63
+msgid "role.student"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:73
+msgid "ticket.mailto.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:79
+msgid "close.confirm.ticket"
+msgstr ""

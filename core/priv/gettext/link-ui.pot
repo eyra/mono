@@ -36,27 +36,27 @@ msgid "debug.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:193
+#: bundles/link/lib/survey/web/content.ex:192
 msgid "delete.confirm.campaign"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:338
+#: bundles/link/lib/survey/web/content.ex:337
 msgid "delete.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:320
-#: bundles/link/lib/survey/web/content.ex:328
+#: bundles/link/lib/survey/web/content.ex:319
+#: bundles/link/lib/survey/web/content.ex:327
 msgid "preview.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:310
+#: bundles/link/lib/survey/web/content.ex:309
 msgid "submit.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:348
+#: bundles/link/lib/survey/web/content.ex:347
 msgid "retract.button"
 msgstr ""

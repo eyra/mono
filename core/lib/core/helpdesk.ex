@@ -8,13 +8,26 @@ defmodule Core.Helpdesk do
 
   alias Core.Helpdesk.Ticket
 
+  def count_open_tickets do
+    from(t in Ticket, where: is_nil(t.completed_at), select: count("*"))
+    |> Repo.one()
+  end
+
   def list_open_tickets do
     from(t in Ticket,
       where: is_nil(t.completed_at),
-      order_by: {:asc, :inserted_at},
-      preload: :user
+      order_by: {:desc, :inserted_at},
+      preload: [user: [:profile]]
     )
     |> Repo.all()
+  end
+
+  def get_ticket!(id) do
+    from(t in Ticket,
+      where: t.id == ^id,
+      preload: [user: [:profile]]
+    )
+    |> Repo.one!()
   end
 
   def close_ticket_by_id(id) do

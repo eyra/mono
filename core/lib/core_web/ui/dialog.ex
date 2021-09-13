@@ -15,6 +15,8 @@ defmodule CoreWeb.UI.Dialog do
     quote do
       alias CoreWeb.UI.Dialog
 
+      data(dialog, :any)
+
       defp confirm(socket, action, title, text, confirm_label) do
         buttons = [
           %{

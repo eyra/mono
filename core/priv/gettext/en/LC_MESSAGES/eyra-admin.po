@@ -30,3 +30,63 @@ msgstr "Pool administrators"
 #: lib/core_web/live/admin/permissions.ex:73
 msgid "permissions.title"
 msgstr "Permissions"
+
+#, elixir-format
+#: lib/core_web/live/admin/support.ex:70
+msgid "support.tickets.title"
+msgstr "Meldingen"
+
+#, elixir-format
+#: lib/core_web/live/admin/support.ex:65
+msgid "support.title"
+msgstr "Support"
+
+#, elixir-format
+#: lib/core/helpdesk/ticket.ex:28
+msgid "ticket.tag.bug"
+msgstr "Bug"
+
+#, elixir-format
+#: lib/core/helpdesk/ticket.ex:30
+msgid "ticket.tag.question"
+msgstr "Question"
+
+#, elixir-format
+#: lib/core/helpdesk/ticket.ex:29
+msgid "ticket.tag.tip"
+msgstr "Tip"
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:132
+msgid "close.ticket.button"
+msgstr "Close ticket"
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:102
+msgid "ticket.title"
+msgstr "Ticket"
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:61
+msgid "role.coordinator"
+msgstr "Pool administrator"
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:62
+msgid "role.researcher"
+msgstr "Researcher"
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:63
+msgid "role.student"
+msgstr "Student"
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:73
+msgid "ticket.mailto.button"
+msgstr "Get in touch"
+
+#, elixir-format
+#: lib/core_web/live/admin/ticket.ex:79
+msgid "close.confirm.ticket"
+msgstr "ticket"

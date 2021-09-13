@@ -36,7 +36,6 @@ defmodule Link.Survey.Content do
   data(changesets, :any)
   data(initial_image_query, :any)
   data(uri_origin, :any)
-  data(dialog, :any)
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
@@ -191,8 +190,8 @@ defmodule Link.Survey.Content do
 
   def handle_event("delete", _params, socket) do
     item = dgettext("link-ui", "delete.confirm.campaign")
-    title = dgettext("eyra-ui", "delete.confirm.title", item: item)
-    text = dgettext("eyra-ui", "delete.confirm.text", item: item)
+    title = String.capitalize(dgettext("eyra-ui", "delete.confirm.title", item: item))
+    text = String.capitalize(dgettext("eyra-ui", "delete.confirm.text", item: item))
     confirm_label = dgettext("eyra-ui", "delete.confirm.label")
 
     {:noreply, socket |> confirm("delete", title, text, confirm_label)}
