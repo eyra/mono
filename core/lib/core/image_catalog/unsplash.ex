@@ -6,7 +6,11 @@ end
 defmodule Core.ImageCatalog.Unsplash.HTTP do
   @behaviour Core.ImageCatalog.Unsplash.Client
 
-  def get(access_key, path, query) do
+  def get(access_key, path, query) when is_list(query) do
+    get(access_key, path, URI.encode_query(query))
+  end
+
+  def get(access_key, path, query) when is_binary(query) do
     headers = [
       {"Authorization", "Client-ID #{access_key}"},
       {"Accept-Version", "v1"},
@@ -18,7 +22,7 @@ defmodule Core.ImageCatalog.Unsplash.HTTP do
         endpoint(),
         %URI{
           path: path,
-          query: URI.encode_query(query)
+          query: query
         }
       )
       |> URI.to_string()
@@ -70,8 +74,13 @@ defmodule Core.ImageCatalog.Unsplash do
     }
   end
 
-  def random(count \\ 30) do
-    {:ok, json} = client().get(conf().access_key, "/photos/random", count: count)
+  def random(keyword) when is_atom(keyword) do
+    {:ok, item} = client().get(conf().access_key, "/photos/random", "query=#{keyword}")
+    parse_result_item(item)
+  end
+
+  def random(count) when is_integer(count) do
+    {:ok, json} = client().get(conf().access_key, "/photos/random", "count=#{count}")
     Enum.map(json, &parse_result_item/1)
   end
 

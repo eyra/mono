@@ -88,7 +88,7 @@ defmodule CoreWeb.Admin.Permissions do
             <td><BodyLarge>{{user.email}}</BodyLarge></td>
           </tr>
         </table>
-        <div :if={{ Enum.count(@pool_admin_candidates) |> IO.inspect(label: "JAJA") > 0}}>
+        <div :if={{ Enum.count(@pool_admin_candidates) }}>
           <Spacing value="XL" />
           <Title3>{{ dgettext("eyra-admin", "permissions.pooladmin.candidates.title") }}</Title3>
           <Spacing value="XS" />

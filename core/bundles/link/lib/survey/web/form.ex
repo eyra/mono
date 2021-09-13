@@ -103,13 +103,17 @@ defmodule Link.Survey.Form do
   def validate_for_publish(socket), do: socket
 
   def render(assigns) do
+
+    survey_url = Ecto.Changeset.apply_changes(assigns.changeset).survey_url
+    qualtrics_url? =
+      if survey_url != nil and String.contains?(survey_url, "qualtrics.com") do
+        true
+      else
+        false
+      end
+
     assigns =
-      Map.put(
-        assigns,
-        :qualtrics_url?,
-        Ecto.Changeset.apply_changes(assigns.changeset).survey_url
-        |> String.contains?("qualtrics.com")
-      )
+      Map.put(assigns, :qualtrics_url?, qualtrics_url?)
 
     ~H"""
       <ContentArea class="mb-4" >
