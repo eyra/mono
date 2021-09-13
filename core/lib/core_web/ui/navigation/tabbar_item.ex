@@ -5,6 +5,7 @@ defmodule CoreWeb.UI.Navigation.TabbarItem do
   use EyraUI.Component
 
   defviewmodel(
+    type: :seperated,
     id: nil,
     title: nil,
     ready?: true,
@@ -27,10 +28,21 @@ defmodule CoreWeb.UI.Navigation.TabbarItem do
   def idle_icon(%{ready?: false}), do: "bg-warning text-white"
   def idle_icon(_), do: "bg-grey5 text-grey2"
 
+  def active_title(%{type: :segmented}), do: "text-white"
   def active_title(_), do: "text-primary"
 
   def idle_title(%{ready?: false}), do: "text-warning"
   def idle_title(_), do: "text-grey2"
+
+  def idle_shape("wide", %{type: :segmented, ready?: false}), do: "h-full px-4 bg-warning"
+  def idle_shape("wide", %{type: :segmented}), do: "h-full px-4 bg-grey5"
+  def idle_shape(_, _), do: "rounded-full"
+
+  def active_shape(_, %{type: :segmented}), do: "h-full px-4 bg-primary"
+  def active_shape(_, _), do: "rounded-full"
+
+  def title_inset(%{type: :segmented}), do: "mt-0"
+  def title_inset(_), do: "mt-1px"
 
   def render(assigns) do
     ~H"""
@@ -38,7 +50,9 @@ defmodule CoreWeb.UI.Navigation.TabbarItem do
         id="tabbar-{{@tabbar}}-{{id(@vm)}}"
         data-tab-id={{ id(@vm) }}
         phx-hook="TabbarItem"
-        class="tabbar-item flex flex-row items-center justify-start rounded-full focus:outline-none cursor-pointer {{@opts}}"
+        class="tabbar-item flex flex-row items-center justify-start focus:outline-none cursor-pointer {{@opts}}"
+        idle-class={{idle_shape(@tabbar, @vm)}}
+        active-class={{active_shape(@tabbar, @vm)}}
       >
         <div
           :if={{ has_index?(@vm) }}
@@ -56,7 +70,7 @@ defmodule CoreWeb.UI.Navigation.TabbarItem do
         <div :if={{ has_title?(@vm) }}>
           <div class="flex flex-col items-center justify-center">
             <div
-              class="title text-button font-button mt-1px"
+              class="title text-button font-button {{title_inset(@vm)}}"
               idle-class={{idle_title(@vm)}}
               active-class={{active_title(@vm)}}
             >

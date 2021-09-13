@@ -482,7 +482,7 @@ defmodule Link.Survey.Content do
           </div>
           <TabbarArea tabs={{@tabs}}>
             <ActionBar right_bar_buttons={{ create_actions(@breakpoint, @submitted?) }} more_buttons={{ create_more_actions(@submitted?) }}>
-              <Tabbar size={{ tabbar_size(@breakpoint) }} initial_tab={{ @initial_tab }}/>
+              <Tabbar vm={{ %{initial_tab: @initial_tab, size: tabbar_size(@breakpoint)} }} />
             </ActionBar>
             <TabbarContent/>
             <TabbarFooter/>
