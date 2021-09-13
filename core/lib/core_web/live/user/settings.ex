@@ -33,10 +33,11 @@ defmodule CoreWeb.User.Settings do
         <MarginY id={{:page_top}} />
         <FormArea>
           <Title2>{{dgettext "eyra-ui", "menu.item.settings"}}</Title2>
-          <div :if={{ !is_native_web?(@socket) }}>
-            <Spacing value="XL" />
-            <div x-data>
-              <Title6>{{dgettext "eyra-account", "push.registration.title"}}</Title6>
+          <Spacing value="XL" />
+          <div x-data>
+            <Title6>{{dgettext "eyra-account", "push.registration.title"}}</Title6>
+            <BodyMedium :if={{ not is_push_supported?(@socket) }} >{{dgettext("eyra-account", "push.unavailable.label")}}</BodyMedium>
+            <div :if={{ is_push_supported?(@socket) }}>
               <div x-show="$store.push.registration === 'not-registered'">
                 <BodyMedium>{{dgettext("eyra-account", "push.registration.label")}}</BodyMedium>
                 <Spacing value="XS" />

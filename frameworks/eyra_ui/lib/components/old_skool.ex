@@ -24,6 +24,10 @@ defmodule EyraUI.Components.OldSkool do
     !is_native_web?(conn) && !is_mobile_web?(conn)
   end
 
+  def is_push_supported?(conn) do
+    Browser.chrome?(conn) || Browser.firefox?(conn)
+  end
+
   def menu_button(label, path) do
     ~E"""
     <%= live_redirect to: path do %>
