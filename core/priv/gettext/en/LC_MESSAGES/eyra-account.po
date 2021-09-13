@@ -175,3 +175,38 @@ msgstr "Select the inclusion criteria for your study. If nothing is selected, al
 #: lib/core_web/live/user/settings.ex:39
 msgid "push.unavailable.label"
 msgstr "Registering for push notifications is currently available on Chrome and Firefox browsers. Please open the website on one of these browsers to make use of for push notifications."
+
+#, elixir-format
+#: lib/core_web/templates/user_session/new.html.eex:76
+msgid "login.google.button"
+msgstr "Sign in with Google"
+
+#, elixir-format
+#: lib/core_web/templates/user_session/new.html.eex:57
+msgid "login.surf.button"
+msgstr "Sign in with SURF"
+
+#, elixir-format
+#: lib/core_web/templates/user_session/new.html.eex:33
+msgid "login.title"
+msgstr "Sign in with SURF"
+
+#, elixir-format
+#: lib/core_web/templates/user_session/new.html.eex:38
+msgid "login.surf.message.part1"
+msgstr "Your VU account is used to sign in to panl. This works via"
+
+#, elixir-format
+#: lib/core_web/templates/user_session/new.html.eex:41
+msgid "login.surf.message.part2"
+msgstr "In the"
+
+#, elixir-format
+#: lib/core_web/templates/user_session/new.html.eex:43
+msgid "login.surf.message.part3"
+msgstr "privacy statement"
+
+#, elixir-format
+#: lib/core_web/templates/user_session/new.html.eex:44
+msgid "login.surf.message.part4"
+msgstr "you can find the information that is shared with panl. Your information will exclusively be used for platform functionality."

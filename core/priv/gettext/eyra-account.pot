@@ -174,3 +174,38 @@ msgstr ""
 #: lib/core_web/live/user/settings.ex:39
 msgid "push.unavailable.label"
 msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/user_session/new.html.eex:76
+msgid "login.google.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/user_session/new.html.eex:57
+msgid "login.surf.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/user_session/new.html.eex:33
+msgid "login.title"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/user_session/new.html.eex:38
+msgid "login.surf.message.part1"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/user_session/new.html.eex:41
+msgid "login.surf.message.part2"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/user_session/new.html.eex:43
+msgid "login.surf.message.part3"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/user_session/new.html.eex:44
+msgid "login.surf.message.part4"
+msgstr ""

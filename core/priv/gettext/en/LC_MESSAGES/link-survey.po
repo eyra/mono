@@ -12,17 +12,17 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:140
+#: bundles/link/lib/survey/web/form.ex:139
 msgid "config.nrofsubjects.label"
 msgstr "Number of required subjects"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:127
+#: bundles/link/lib/survey/web/form.ex:126
 msgid "config.url.label"
 msgstr "Public web link of your online study"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:137
+#: bundles/link/lib/survey/web/form.ex:136
 msgid "duration.label"
 msgstr "Estimated duration"
 
@@ -68,7 +68,7 @@ msgid "conpleted.title"
 msgstr "Completed"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:144
+#: bundles/link/lib/survey/web/form.ex:143
 msgid "devices.label"
 msgstr "Select one or more devices that can be used to participate in your online study."
 
@@ -78,22 +78,22 @@ msgid "open.cta.title"
 msgstr "Go to online study"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:121
+#: bundles/link/lib/survey/web/form.ex:120
 msgid "redirect.description"
 msgstr "The redirect url to link your online study is provided below. This is used to sent participants back to PaNL after finishing their task on an external platform (e.g. a questionnaire on Qualtrics). Copy the url and paste it at the location indicated by the external platform."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:120
+#: bundles/link/lib/survey/web/form.ex:119
 msgid "redirect.title"
 msgstr "Link back to PaNL"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:143
+#: bundles/link/lib/survey/web/form.ex:142
 msgid "devices.title"
 msgstr "Devices"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:123
+#: bundles/link/lib/survey/web/form.ex:122
 msgid "redirect.label"
 msgstr "Redirect url"
 
@@ -203,7 +203,7 @@ msgid "tabbar.item.criteria.forward"
 msgstr "Publish campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:117
+#: bundles/link/lib/survey/web/form.ex:116
 msgid "form.title"
 msgstr "Study"
 
@@ -213,6 +213,6 @@ msgid "survey.overview.title"
 msgstr "Campaigns"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:128
+#: bundles/link/lib/survey/web/form.ex:127
 msgid "config.url.description"
 msgstr "It's possible to use variables within the URL parameters to send the participant ID to an external system. This can be done by using <participantId> as the parameter value."
