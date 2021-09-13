@@ -23,9 +23,6 @@ defmodule CoreWeb.UI.Navigation.TabbarNarrow do
         <div>
           <img src="/images/icons/dropdown.svg" />
         </div>
-        <div class="px-4">
-          <img src="/images/icons/bar_seperator.svg" />
-        </div>
       </div>
     </Context>
     """

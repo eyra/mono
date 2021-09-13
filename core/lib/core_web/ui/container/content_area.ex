@@ -12,7 +12,7 @@ defmodule CoreWeb.UI.Container.ContentArea do
   def render(assigns) do
     ~H"""
     <div class="flex w-full {{ @class }}">
-      <div class="flex-grow ml-6 mr-6 lg:ml-14 lg:mr-14">
+      <div class="flex-grow mx-6 lg:mx-14">
         <div class="w-full">
           <slot />
         </div>

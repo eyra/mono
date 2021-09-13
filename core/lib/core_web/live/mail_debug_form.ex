@@ -65,8 +65,6 @@ defmodule CoreWeb.Mail.Forms.Debug do
   def render(assigns) do
     ~H"""
         <ContentArea>
-          <MarginY id={{:page_top}} />
-          <MarginY id={{:page_top}} />
           <Title2>Mail</Title2>
           <Form id="mail_form" changeset={{@changeset}} change_event="update" submit="send" target={{@myself}} focus={{@focus}}>
             <TextInput field={{:to}} label_text="To"/>
