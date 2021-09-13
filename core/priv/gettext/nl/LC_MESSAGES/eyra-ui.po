@@ -92,32 +92,34 @@ msgid "menu.item.payments"
 msgstr "Betalingen"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:94 lib/core_web/live/user/profile.ex:91
+#: bundles/link/lib/onboarding/wizard.ex:94
+#: lib/core_web/live/user/profile.ex:108
 msgid "tabbar.item.features"
 msgstr "Kenmerken"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:71
+#: lib/core_web/live/user/profile.ex:88
 msgid "tabbar.item.profile"
 msgstr "Mijn profiel"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:83 lib/core_web/live/user/profile.ex:80
+#: bundles/link/lib/onboarding/wizard.ex:83 lib/core_web/live/user/profile.ex:97
 msgid "tabbar.item.study"
 msgstr "Opleiding"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:95 lib/core_web/live/user/profile.ex:92
+#: bundles/link/lib/onboarding/wizard.ex:95
+#: lib/core_web/live/user/profile.ex:109
 msgid "tabbar.item.features.forward"
 msgstr "Pas kenmerken aan"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:72
+#: lib/core_web/live/user/profile.ex:89
 msgid "tabbar.item.profile.forward"
 msgstr "Pas profiel aan"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:84 lib/core_web/live/user/profile.ex:81
+#: bundles/link/lib/onboarding/wizard.ex:84 lib/core_web/live/user/profile.ex:98
 msgid "tabbar.item.study.forward"
 msgstr "Selecteer opleiding"
 

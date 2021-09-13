@@ -29,20 +29,36 @@
               <div class="flex justify-center">
                 <div class="flex-grow max-w-form ml-6 mr-6 lg:m-0 pt-6 md:pt-9 lg:pt-20">
 
-                  <div class="text-title5 font-title5 sm:text-title3 sm:font-title3 lg:text-title2 lg:font-title2 mb-7 lg:mb-9">
-                    Log in
+                  <div class="text-title4 font-title4 sm:text-title2 sm:font-title2 lg:text-title1 lg:font-title1 mb-7 lg:mb-9">
+                    <%= dgettext("eyra-account", "login.title") %>
                   </div>
 
-                  <div class="mb-6"></div>
-
-                  <%= if feature_enabled?(:sign_in_with_apple) do %>
-                  <div class="flex w-full h-12 bg-apple rounded justify-center items-center hover:opacity-80">
-                      <div class="w-full h-full pl-4 pr-4 focus:outline-none" id="appleid-signin" data-color="black" data-border="false" data-type="sign in" data-logo-size="small" data-label-position="10" ></div>
-                      <%= sign_in_with_apple_button(@conn) %>
+                  <div class="mb-8"></div>
+                  <div class="text-bodymedium font-body">
+                    <%=  dgettext("eyra-account", "login.surf.message.part1") %>
+                    <a class="text-primary underline" target="_blank" href="https://www.surf.nl/surfconext-overal-veilige-toegang-met-1-set-credentials">SURFconext</a>.
+                    <%=  dgettext("eyra-account", "login.surf.message.part2") %>
+                    <a class="text-primary underline" target="_blank" href=""><%= dgettext("eyra-account", "login.surf.message.part3") %></a>
+                    <%= dgettext("eyra-account", "login.surf.message.part4") %>
                   </div>
-
+                  <div class="mb-8"></div>
+                  <a href="/surfconext">
+                    <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-grey1 rounded pl-4 pr-4">
+                      <div class="flex w-full justify-center items-center">
+                        <div>
+                          <img class="mr-3 -mt-1" src="/images/surfconext.svg">
+                        </div>
+                        <div class="h-11 focus:outline-none">
+                          <div class="flex flex-col justify-center h-full items-center rounded">
+                            <div class="text-white text-button font-button">
+                              <%= dgettext("eyra-account", "login.surf.button") %>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
                   <div class="mb-6"></div>
-                  <% end %>
 
                   <%= if feature_enabled?(:member_google_sign_in) do %>
                   <a href="/google-sign-in">
@@ -54,7 +70,7 @@
                         <div class="h-11 focus:outline-none">
                           <div class="flex flex-col justify-center h-full items-center rounded">
                             <div class="text-white text-button font-button">
-                              Meld je aan met Google
+                              <%= dgettext("eyra-account", "login.google.button") %>
                             </div>
                           </div>
                         </div>
@@ -65,28 +81,14 @@
                   <div class="mb-6"></div>
                   <% end %>
 
-                  <a href="/surfconext">
-                    <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-surfconext rounded pl-4 pr-4">
-                      <div class="flex w-full justify-center items-center">
-                        <div>
-                          <img class="mr-3 -mt-1" src="/images/surfconext.svg">
-                        </div>
-                        <div class="h-11 focus:outline-none">
-                          <div class="flex flex-col justify-center h-full items-center rounded">
-                            <div class="text-white text-button font-button">
-                              Meld je aan met SURF
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                  <div class="mb-6"></div>
+                  <%= if feature_enabled?(:sign_in_with_apple) do %>
+                  <div class="flex w-full h-12 bg-apple rounded justify-center items-center hover:opacity-80">
+                      <div class="w-full h-full pl-4 pr-4 focus:outline-none" id="appleid-signin" data-color="black" data-border="false" data-type="sign in" data-logo-size="small" data-label-position="10" ></div>
+                      <%= sign_in_with_apple_button(@conn) %>
+                  </div>
 
                   <div class="mb-6"></div>
-                  <div class="mb-5 pl-4 pr-4 text-grey3 mb-6 text-caption text-center">
-                    We delen geen gegevens met derden. Je Google, Apple of SURF account wordt enkel gebruikt om gemakkelijk in te loggen.
-                  </div>
+                  <% end %>
 
                   <%= if feature_enabled?(:password_sign_in) do %>
                   <div class="mb-7 bg-grey4 h-px"></div>

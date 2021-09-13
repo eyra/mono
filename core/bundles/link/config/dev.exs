@@ -1,5 +1,6 @@
 use Mix.Config
 
 config :core, :features,
-  google_sign_in: true,
-  password_sign_in: true
+  member_google_sign_in: false,
+  google_sign_in: false,
+  password_sign_in: false

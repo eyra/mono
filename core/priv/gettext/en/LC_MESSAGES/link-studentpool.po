@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:81
+#: bundles/link/lib/pool/form/students.ex:89
 #: bundles/link/lib/pool/overview.ex:38
 msgid "tabbar.item.students"
 msgstr "Students"
@@ -28,12 +28,12 @@ msgid "title"
 msgstr "Student pool"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:77
+#: bundles/link/lib/pool/form/students.ex:85
 msgid "students.empty.description"
 msgstr "There are currently no registered students. You will be notified as soon as students have signed up."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:76
+#: bundles/link/lib/pool/form/students.ex:84
 msgid "students.empty.title"
 msgstr "Students participating in this pool will appear here"
 
@@ -48,16 +48,11 @@ msgid "studies.empty.title"
 msgstr "Research studies submitted in this pool will appear here"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:61
-msgid "missing.study.program.codes"
-msgstr "Study program unknown"
-
-#, elixir-format, fuzzy
-#: bundles/link/lib/pool/form/students.ex:67
+#: bundles/link/lib/pool/form/students.ex:69
 msgid "student.tag.complete"
 msgstr "Ready"
 
-#, elixir-format, fuzzy
-#: bundles/link/lib/pool/form/students.ex:66
+#, elixir-format
+#: bundles/link/lib/pool/form/students.ex:70
 msgid "student.tag.incomplete"
 msgstr "Incompleet"
