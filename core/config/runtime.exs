@@ -94,4 +94,6 @@ if config_env() == :prod do
     subject: "mailto:admin@#{host}",
     public_key: System.get_env("WEB_PUSH_PUBLIC_KEY"),
     private_key: System.get_env("WEB_PUSH_PRIVATE_KEY")
+
+  config :logger, level: System.get_env("LOG_LEVEL", "info") |> String.to_existing_atom()
 end
