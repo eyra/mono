@@ -36,16 +36,19 @@ defmodule Core.SurfConext.AuthorizePlug do
 end
 
 defmodule Core.SurfConext.CallbackController do
+  require Logger
   use Phoenix.Controller, namespace: CoreWeb
   alias CoreWeb.Router.Helpers, as: Routes
   import Core.SurfConext.PlugUtils
 
   def authenticate(conn, params) do
+    Logger.debug("SURFconext params: #{inspect(params)}")
     session_params = get_session(conn, :surfcontext)
 
     config = config(:core) |> Keyword.put(:session_params, session_params)
 
     {:ok, %{user: surf_user, token: token}} = oidc_module(config).callback(config, params)
+    Logger.debug("SURFconext user: #{inspect(surf_user)}")
 
     Core.SurfConext.get_user_by_sub(surf_user["sub"])
 
