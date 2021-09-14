@@ -22,12 +22,12 @@ config :core, :features,
   password_sign_in: false,
   notification_mails: false
 
-config :core, Core.SurfConext, limit_schac_home_organization: "replace-with-vu"
+config :core, Core.SurfConext, limit_schac_home_organization: "vu.nl"
 
 config :core, :meta,
   bundle_title: "Panl",
   bundle: :link
 
-if Mix.env === :dev do
+if Mix.env() === :dev do
   import_config "#{Mix.env()}.exs"
 end

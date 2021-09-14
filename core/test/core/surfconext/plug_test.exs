@@ -39,8 +39,8 @@ defmodule Core.SurfConext.FakeOIDC do
       "email" => Faker.Internet.email(),
       "email_verified" => true,
       "preferred_username" => "#{first_name} #{last_name}",
-      "name" => "#{first_name} #{last_name}",
-      "nickname" => "#{first_name} #{last_name}",
+      "given_name" => first_name,
+      "family_name" => last_name,
       "schac_home_organization" => "eduid.nl",
       "updated_at" => 1_615_100_207
     }
