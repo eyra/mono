@@ -174,7 +174,6 @@ defmodule Link.Survey.Content do
   end
 
   defp create_tabs(socket) do
-    socket.assigns |> IO.inspect(label: "")
     socket
   end
 
