@@ -8,7 +8,7 @@ defmodule CoreWeb.UI.Navigation.Tab do
 
   def render(assigns) do
     ~H"""
-    <div id="tab_{{ @id}}">
+    <div id="tab_{{ @id}}" class="hidden">
       <slot />
     </div>
     """
