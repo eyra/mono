@@ -8,8 +8,9 @@ defmodule CoreWeb.Admin.SupportTest do
     setup [:login_as_member]
 
     test "deny access to non-admin", %{conn: conn} do
-      {:ok, _view, html} = live(conn, Routes.live_path(conn, Admin.Support))
-      assert html =~ "Access Denied"
+      assert_error_sent(403, fn ->
+        live(conn, Routes.live_path(conn, Admin.Support))
+      end)
     end
   end
 

@@ -80,12 +80,12 @@ msgstr "Ga naar de vragenlijst"
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:120
 msgid "redirect.description"
-msgstr "Hieronder staat de \"redirect url\" voor je online studie. Deze wordt gebruikt om participanten na afronding van hun taak op een ander platform terug te sturen naar PaNL. Kopieer de url en ga naar de taak op het online platform naar keuze (bijv. een vragenlijst in Qualtrics). Volg de platform instructies en plak de url op de juiste plaats."
+msgstr "Hieronder staat de \"redirect url\" voor je online studie. Deze wordt gebruikt om participanten na afronding van hun taak op een ander platform terug te sturen naar Panl. Kopieer de url en ga naar de taak op het online platform naar keuze (bijv. een vragenlijst in Qualtrics). Volg de platform instructies en plak de url op de juiste plaats."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:119
 msgid "redirect.title"
-msgstr "Link terug naar PaNL"
+msgstr "Link terug naar Panl"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:142
