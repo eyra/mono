@@ -20,7 +20,7 @@ defmodule CoreWeb.UserAuthTest do
 
     test_conf = [
       # fake onboarding path
-      participant_signed_in_first_time_page: CoreWeb.User.Profile
+      participant_onboarding_page: CoreWeb.User.Profile
     ]
 
     Application.put_env(:core, CoreWeb.UserAuth, test_conf)

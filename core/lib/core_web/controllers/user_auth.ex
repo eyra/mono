@@ -24,21 +24,10 @@ defmodule CoreWeb.UserAuth do
   disconnected on log out. The line can be safely removed
   if you are not using LiveView.
   """
-  def log_in_user(conn, user, first_time?, params \\ %{}) do
+  def log_in_user(conn, user, _first_time?, params \\ %{}) do
     token = Accounts.generate_user_session_token(user)
 
-    first_time_path = signed_in_first_time_path(conn, user)
-
-    normal_path =
-      get_session(conn, :user_return_to) ||
-        signed_in_path(conn, user)
-
-    redirect_to =
-      if first_time? && first_time_path do
-        first_time_path
-      else
-        normal_path
-      end
+    redirect_to = redirect_path_after_signin(conn, user)
 
     conn
     |> renew_session()
@@ -158,18 +147,28 @@ defmodule CoreWeb.UserAuth do
 
   defp maybe_store_return_to(conn), do: conn
 
-  defp signed_in_first_time_path(conn, user) do
-    if page = signed_in_first_time_page(user) do
-      Routes.live_path(conn, page)
+  defp redirect_path_after_signin(conn, user) do
+    onboarding_path(conn, user) ||
+      get_session(conn, :user_return_to) ||
+      signed_in_path(conn, user)
+  end
+
+  defp onboarding_path(conn, %{student: true} = user) do
+    if Accounts.visited?(user, :onboarding) do
+      nil
+    else
+      onboarding_page = page(:participant_onboarding_page, CoreWeb.Marketplace)
+      Routes.live_path(conn, onboarding_page)
     end
   end
 
-  defp signed_in_first_time_page(%{student: true}),
-    do: page(:participant_signed_in_first_time_page, CoreWeb.Marketplace)
+  defp onboarding_path(_, _), do: nil
 
-  defp signed_in_first_time_page(_), do: nil
+  defp signed_in_path(conn, user),
+    do: Routes.live_path(conn, signed_in_page(user))
 
-  defp signed_in_path(conn, user), do: Routes.live_path(conn, signed_in_page(user))
+  defp signed_in_page(%{student: true}),
+    do: page(:participant_signed_in_page, CoreWeb.Marketplace)
 
   defp signed_in_page(%{researcher: true}),
     do: page(:researcher_signed_in_page, CoreWeb.Dashboard)

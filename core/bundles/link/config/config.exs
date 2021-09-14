@@ -13,7 +13,7 @@ config :core,
 config :core, CoreWeb.UserAuth,
   researcher_signed_in_page: Link.Dashboard,
   participant_signed_in_page: Link.Marketplace,
-  participant_signed_in_first_time_page: Link.Onboarding.Wizard
+  participant_onboarding_page: Link.Onboarding.Wizard
 
 config :core, :features,
   sign_in_with_apple: false,
