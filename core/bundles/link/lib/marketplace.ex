@@ -84,6 +84,10 @@ defmodule Link.Marketplace do
     {:noreply, push_redirect(socket, to: action)}
   end
 
+  def render_empty?(%{available_count: available_count}) do
+    not feature_enabled?(:marketplace) or available_count == 0
+  end
+
   def render(assigns) do
     ~H"""
         <Workspace
@@ -96,14 +100,8 @@ defmodule Link.Marketplace do
               <NextActionHighlight vm={{ @next_best_action }}/>
               <div class="mt-6 lg:mt-10"/>
             </div>
-            <div :if={{@highlighted_count > 0}}>
-              <Title2>
-                {{ dgettext("eyra-study", "study.highlighted.title") }}
-                <span class="text-primary"> {{ @highlighted_count }}</span>
-              </Title2>
-            </div>
-            <Case value={{ Enum.count(@subject_studies) > 0 }} >
-              <True>
+            <Case value={{ render_empty?(assigns) }} >
+              <False>
                 <DynamicGrid>
                   <div :for={{ card <- @subject_studies  }} >
                     <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
@@ -119,14 +117,14 @@ defmodule Link.Marketplace do
                     <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
                   </div>
                 </DynamicGrid>
-              </True>
-              <False>
+              </False>
+              <True>
                 <Empty
                   title={{ dgettext("eyra-marketplace", "empty.title") }}
                   body={{ dgettext("eyra-marketplace", "empty.description") }}
                   illustration="cards"
                 />
-              </False>
+              </True>
             </Case>
           </ContentArea>
         </Workspace>
