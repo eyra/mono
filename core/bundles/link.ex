@@ -16,9 +16,9 @@ defmodule Link do
         live("/studentpool", Pool.Overview)
         live("/marketplace", Marketplace)
         live("/labstudy/all", LabStudy.Overview)
-        live("/survey/all", Survey.Overview)
-        live("/survey/:id/content", Survey.Content)
-        live("/survey/:id/complete", Survey.Complete)
+        live("/campaign/all", Survey.Overview)
+        live("/campaign/:id/content", Survey.Content)
+        live("/campaign/:id/complete", Survey.Complete)
       end
     end
   end

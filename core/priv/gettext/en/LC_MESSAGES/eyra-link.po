@@ -14,7 +14,7 @@ msgstr ""
 #, elixir-format
 #: bundles/link/lib/index.ex:52 lib/core_web/live/promotion/index.ex:36
 msgid "welcome.title"
-msgstr "PaNL"
+msgstr "Panl"
 
 #, elixir-format
 #: bundles/link/lib/index.ex:35 lib/core_web/live/promotion/index.ex:57
@@ -24,7 +24,7 @@ msgstr "Go to dashboard"
 #, elixir-format
 #: bundles/link/lib/index.ex:66 lib/core_web/live/promotion/index.ex:50
 msgid "link.message"
-msgstr "PaNL is a marketplace for research. Researchers can set-up campaigns to recruit participants for research studies. Participants can then apply to participate in these studies. Currently PaNL is only available for student participation in research studies of the VU SBE faculty. In 2022 PaNL will be released for a broader audience."
+msgstr "Panl is a marketplace for research. Researchers can set-up campaigns to recruit participants for research studies. Participants can then apply to participate in these studies. Currently Panl is only available for student participation in research studies of the VU SBE faculty. In 2022 Panl will be released for a broader audience."
 
 #, elixir-format
 #: bundles/link/lib/index.ex:63 lib/core_web/live/promotion/index.ex:47

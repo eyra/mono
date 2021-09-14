@@ -174,7 +174,7 @@ msgstr "Select the inclusion criteria for your study. If nothing is selected, al
 #, elixir-format
 #: lib/core_web/live/user/settings.ex:39
 msgid "push.unavailable.label"
-msgstr "Registering for push notifications is currently available on Chrome and Firefox browsers. Please open the website on one of these browsers to make use of for push notifications."
+msgstr "Registering for push notifications is currently available on Chrome and Firefox browsers. Please open the website on one of these browsers to make use of push notifications."
 
 #, elixir-format
 #: lib/core_web/templates/user_session/new.html.eex:76

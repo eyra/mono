@@ -70,4 +70,78 @@ defmodule EyraUI.Components.OldSkool do
     </div>
     """
   end
+
+  def primary_button(label, to) do
+    ~E"""
+    <div class="flex flex-row">
+      <div class="flex-wrap">
+          <a href="<%= to %>" >
+            <div class="pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px leading-none font-button text-button rounded pr-4 pl-4 bg-primary text-white">
+              <%= label %>
+            </div>
+          </a>
+      </div>
+    </div>
+    """
+  end
+
+  def secondary_button(label, to) do
+    ~E"""
+    <div class="flex flex-row">
+      <div class="flex-wrap">
+          <a href="<%= to %>" >
+            <div class="pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 font-button text-button rounded bg-opacity-0 pr-4 pl-4 text-primary border-primary">
+              <%= label %>
+            </div>
+          </a>
+      </div>
+    </div>
+    """
+  end
+
+  def hero_small(title) do
+    ~E"""
+    <div class="flex h-header2 items-center sm:h-header2-sm lg:h-header2-lg text-white bg-primary overflow-hidden" data-native-title="<%= title %>">
+      <div class="flex-grow flex-shrink-0">
+          <p class="text-title5 sm:text-title2 lg:text-title1 font-title1 ml-6 mr-6 lg:ml-14">
+            <%= title %>
+          </p>
+      </div>
+      <div class="flex-none h-header2 sm:h-header2-sm lg:h-header2-lg w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
+          <img src="/images/illustration.svg"/>
+      </div>
+    </div>
+    """
+  end
+
+  def stripped_navbar(icon) do
+    ~E"""
+    <div class="h-topbar sm:h-topbar-sm lg:h-topbar-lg pl-6 md:pl-0 flex-shrink-0" >
+      <div class="flex flex-row h-full">
+          <div class="flex-wrap">
+              <div class="flex flex-col items-center justify-center h-full">
+                  <div class="flex-wrap cursor-pointer">
+                      <a
+                      class="cursor-pointer"
+                      data-phx-link="redirect"
+                      data-phx-link-state="replace"
+                      href="/"
+                      >
+                          <img class="h-8 sm:h-12" src=" <%= icon %>" />
+                      </a>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+    """
+  end
+
+  def page_footer do
+    ~E"""
+    <div class="bg-white">
+      <%= footer "/images/footer-left.svg", "/images/footer-right.svg" %>
+    </div>
+    """
+  end
 end

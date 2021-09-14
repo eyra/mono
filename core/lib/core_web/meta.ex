@@ -18,7 +18,15 @@ defmodule CoreWeb.Meta do
     bundle_title
   end
 
+  def bundle_title do
+    Keyword.get(config(), :bundle_title, "Eyra Next")
+  end
+
   def bundle(%{assigns: %{bundle: bundle}} = _conn) do
     bundle
+  end
+
+  def bundle do
+    Keyword.get(config(), :bundle, :eyra)
   end
 end

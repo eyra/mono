@@ -82,6 +82,12 @@ defmodule Link.Survey.Content do
   end
 
   @impl true
+  def handle_params(_unsigned_params, _uri, %{assigns: %{authorization_failed: true}} = socket) do
+    # skip handling params if authorization already has already failed to prevent errors
+    { :noreply, socket }
+  end
+
+  @impl true
   def handle_params(_unsigned_params, uri, socket) do
     parsed_uri = URI.parse(uri)
     uri_origin = "#{parsed_uri.scheme}://#{parsed_uri.authority}"
@@ -166,6 +172,12 @@ defmodule Link.Survey.Content do
     socket
     |> assign(tabs: tabs)
   end
+
+  defp create_tabs(socket) do
+    socket.assigns |> IO.inspect(label: "")
+    socket
+  end
+
 
   @impl true
   def handle_auto_save_done(socket) do

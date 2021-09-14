@@ -9,8 +9,10 @@ defmodule CoreWeb.Admin.TicketTest do
 
     test "deny access to non-admin", %{conn: conn} do
       ticket = Factories.insert!(:helpdesk_ticket)
-      {:ok, _view, html} = live(conn, Routes.live_path(conn, Admin.Ticket, ticket.id))
-      assert html =~ "Access Denied"
+
+      assert_error_sent(403, fn ->
+        live(conn, Routes.live_path(conn, Admin.Ticket, ticket.id))
+      end)
     end
   end
 
