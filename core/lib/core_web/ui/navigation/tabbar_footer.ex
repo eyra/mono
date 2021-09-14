@@ -22,7 +22,7 @@ defmodule CoreWeb.UI.Navigation.TabbarFooter do
             <div :for={{ {[tab1, tab2], index} <- Enum.with_index(combine_shifted(tabs)) }} >
               <RestrictedWidthArea type={{ tab1.type }}>
                 <div class="flex flex-row {{ align(tab1) }}">
-                  <div id="tabbar-footer-item-{{ tab1.id }}" phx-hook="TabbarFooterItem" data-tab-id={{ tab1.id }} data-target-tab-id={{ tab2.id }} class="tabbar-footer-item cursor-pointer">
+                  <div id="tabbar-footer-item-{{ tab1.id }}" phx-hook="TabbarFooterItem" data-tab-id={{ tab1.id }} data-target-tab-id={{ tab2.id }} class="tabbar-footer-item cursor-pointer hidden">
                     <Case value={{ index < Enum.count(tabs)-1 }} >
                       <True>
                         <Forward vm={{ %{label: tab2.forward_title} }} />
