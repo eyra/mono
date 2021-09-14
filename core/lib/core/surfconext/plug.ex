@@ -50,6 +50,10 @@ defmodule Core.SurfConext.CallbackController do
     {:ok, %{user: surf_user, token: token}} = oidc_module(config).callback(config, params)
     Logger.debug("SURFconext user: #{inspect(surf_user)}")
 
+    Logger.debug(
+      "SURFconext oidc info: #{inspect(oidc_module(config).fetch_userinfo(config, token))}"
+    )
+
     Core.SurfConext.get_user_by_sub(surf_user["sub"])
 
     if user = Core.SurfConext.get_user_by_sub(surf_user["sub"]) do
