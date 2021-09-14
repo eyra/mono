@@ -4,7 +4,7 @@ import json
 from zipfile import ZipFile
 from io import BytesIO
 
-from google_search_history import __extract
+from google_search_history import _extract
 from google_search_history import process
 from pandas.testing import assert_frame_equal
 
@@ -94,7 +94,7 @@ EXPECTED = [
 ]
 
 
-def __create_zip():
+def _create_zip():
     """
     returns: zip archive
     """
@@ -107,7 +107,7 @@ def __create_zip():
     return archive
 
 
-def __reshape_expected():
+def _reshape_expected():
     """
     returns: excpeted outcome to sorted dataframe
     """
@@ -121,10 +121,10 @@ def __reshape_expected():
 
 
 def test_extract():
-    """checks if output of __extract function is as expected
+    """checks if output of _extract function is as expected
     returns: if no AssertionError, outputs are the same
     """
-    result = __extract(DATA)
+    result = _extract(DATA)
     assert result[0] == EXPECTED
 
 
@@ -132,6 +132,6 @@ def test_process():
     """ checks if output of process function is as expected
     returns: if no AssertionError, dataframes are the same
     """
-    result = process(__create_zip())
-    expected = __reshape_expected()
+    result = process(_create_zip())
+    expected = _reshape_expected()
     assert_frame_equal(result["data_frames"][0], expected)

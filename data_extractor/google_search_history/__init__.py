@@ -7,12 +7,13 @@ import re
 import zipfile
 from datetime import datetime
 import pandas as pd
+import pytz
 
-
-START = datetime(2021, 1, 23, 21)
-END = datetime(2021, 4, 28, 4, 30)
+ZONE = pytz.timezone('Europe/Amsterdam')
+START = datetime(2021, 1, 23, 21).astimezone(ZONE)
+END = datetime(2021, 4, 28, 4, 30).astimezone(ZONE)
 TEXT = f"""
-With this research we want to invesitgate how our news consumption \
+With this research we want to investigate how our news consumption \
 behavior has changed during/after the COVID-19 related curfew. \
 To examine this, we looked at your Google Search History.
 First, we divided your browser history into three periods:
@@ -29,7 +30,7 @@ NEWSSITES = 'news.google.com|nieuws.nl|nos.nl|www.rtlnieuws.nl|nu.nl|\
     metronieuws.nl|nd.nl|nrc.nl|rd.nl|trouw.nl'
 
 
-def __calculate(dates):
+def _calculate(dates):
     """Counts number of web searches per time unit (morning, afternoon,
         evening, night), per website-period combination
     Args:
@@ -57,7 +58,7 @@ def __calculate(dates):
     return results
 
 
-def __extract(data):
+def _extract(data):
     """Extracts relevant data from browser history:
         - number of times websites (news vs. other) are visited
         - at which specific periods (pre, during, and post curfew),
@@ -74,15 +75,13 @@ def __extract(data):
     # (i.e., pre/during/after Dutch curfew)
     dates = {'before_news': [], 'during_news': [], 'post_news': [],
              'before_other': [], 'during_other': [], 'post_other': []}
-    earliest = datetime.today()
-    latest = datetime(2000, 1, 1)
+    timestamps = [d["time_usec"]
+                  for d in data["Browser History"] if d["page_transition"].lower() != "reload"]
+    earliest = datetime.fromtimestamp(min(timestamps)/1e6).astimezone(ZONE)
+    latest = datetime.fromtimestamp(max(timestamps)/1e6).astimezone(ZONE)
     for data_unit in data["Browser History"]:
-        if data_unit["page_transition"].lower() != 'reload':
-            time = datetime.fromtimestamp(data_unit["time_usec"]/1e6)
-            if time < earliest:
-                earliest = time
-            if time > latest:
-                latest = time
+        if data_unit["page_transition"].lower() != "reload":
+            time = datetime.fromtimestamp(data_unit["time_usec"]/1e6).astimezone(ZONE)
             if time < START and re.findall(NEWSSITES, data_unit["url"]):
                 dates['before_news'].append(time)
             elif time > END and re.findall(NEWSSITES, data_unit["url"]):
@@ -97,7 +96,7 @@ def __extract(data):
                 dates['during_other'].append(time)
     # Calculate times visited per time unit
     # (i.e., morning, afternoon, evening, night)
-    results = __calculate(dates)
+    results = _calculate(dates)
     return results, earliest, latest
 
 
@@ -119,7 +118,7 @@ def process(file_data):
                 data = json.loads(zfile.read(name).decode("utf8"))
     # Extract pre/during/post website searches,
     # earliest webclick and latest webclick
-    results, earliest, latest = __extract(data)
+    results, earliest, latest = _extract(data)
     # Make tidy dataframe of webclicks
     df_results = pd.melt(pd.json_normalize(results), ["Curfew", "Website"],
                          var_name="Time", value_name="Searches")
