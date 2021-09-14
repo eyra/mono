@@ -7,6 +7,7 @@ defmodule Link.Onboarding.Wizard do
 
   import CoreWeb.Gettext
 
+  alias Core.Accounts
   alias CoreWeb.Layouts.Stripped.Component, as: Stripped
   alias Link.Onboarding.Welcome, as: Welcome
   alias CoreWeb.User.Forms.Study, as: StudyForm
@@ -24,8 +25,8 @@ defmodule Link.Onboarding.Wizard do
 
     finish_button = %{
       action: %{
-        type: :redirect,
-        to: forward_path(socket)
+        type: :send,
+        event: "finish"
       },
       face: %{
         type: :primary,
@@ -55,6 +56,11 @@ defmodule Link.Onboarding.Wizard do
   def handle_event("reset_focus", _, socket) do
     send_update(ProfileForm, id: :profile, focus: "")
     {:noreply, socket}
+  end
+
+  def handle_event("finish", _, %{assigns: %{current_user: current_user}} = socket) do
+    Accounts.mark_as_visited(current_user, :onboarding)
+    {:noreply, push_redirect(socket, to: forward_path(socket)) }
   end
 
   def handle_info({:claim_focus, :profile}, socket) do
