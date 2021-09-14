@@ -16,8 +16,8 @@ defmodule GreenLight.Live do
       @before_compile GreenLight.Live
       import Phoenix.LiveView.Helpers
 
-      def render(%{authorization_failed: true} = var!(assigns)) do
-        ~L"<h1>Access Denied</h1>"
+      def render(%{authorization_failed: true}) do
+        raise GreenLight.AccessDeniedError, "Authorization failed for #{__MODULE__}"
       end
     end
   end

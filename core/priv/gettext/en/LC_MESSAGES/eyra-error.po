@@ -1,0 +1,57 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/core_web/templates/error/403_page.html.eex:5
+msgid "403.body"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/error/404_page.html.eex:5
+msgid "404.body"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/error/500_page.html.eex:5
+msgid "500.body"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/error/503_page.html.eex:5
+msgid "503.body"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/error/403_page.html.eex:8
+#: lib/core_web/templates/error/404_page.html.eex:8
+msgid "helpdesk.button"
+msgstr "Go to Helpdesk"
+
+#, elixir-format
+#: lib/core_web/templates/error/403_page.html.eex:7
+#: lib/core_web/templates/error/404_page.html.eex:7
+msgid "home.button"
+msgstr "Panl Home"
+
+#, elixir-format
+#: lib/core_web/templates/error/500_page.html.eex:7
+#: lib/core_web/templates/error/503_page.html.eex:7
+msgid "mail.button"
+msgstr "Contact us"
+
+#, elixir-format
+#: lib/core_web/templates/error/403_page.html.eex:3
+#: lib/core_web/templates/error/404_page.html.eex:3 lib/core_web/templates/error/500_page.html.eex:3
+#: lib/core_web/templates/error/503_page.html.eex:3
+msgid "page.title"
+msgstr "Oops!"

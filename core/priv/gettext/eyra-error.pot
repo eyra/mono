@@ -1,0 +1,56 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/error/403_page.html.eex:5
+msgid "403.body"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/error/404_page.html.eex:5
+msgid "404.body"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/error/500_page.html.eex:5
+msgid "500.body"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/error/503_page.html.eex:5
+msgid "503.body"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/error/403_page.html.eex:8
+#: lib/core_web/templates/error/404_page.html.eex:8
+msgid "helpdesk.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/error/403_page.html.eex:7
+#: lib/core_web/templates/error/404_page.html.eex:7
+msgid "home.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/error/500_page.html.eex:7
+#: lib/core_web/templates/error/503_page.html.eex:7
+msgid "mail.button"
+msgstr ""
+
+#, elixir-format
+#: lib/core_web/templates/error/403_page.html.eex:3
+#: lib/core_web/templates/error/404_page.html.eex:3 lib/core_web/templates/error/500_page.html.eex:3
+#: lib/core_web/templates/error/503_page.html.eex:3
+msgid "page.title"
+msgstr ""

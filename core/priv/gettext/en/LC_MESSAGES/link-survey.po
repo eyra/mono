@@ -80,12 +80,12 @@ msgstr "Go to online study"
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:120
 msgid "redirect.description"
-msgstr "The redirect url to link your online study is provided below. This is used to sent participants back to PaNL after finishing their task on an external platform (e.g. a questionnaire on Qualtrics). Copy the url and paste it at the location indicated by the external platform."
+msgstr "The redirect url to link your online study is provided below. This is used to sent participants back to Panl after finishing their task on an external platform (e.g. a questionnaire on Qualtrics). Copy the url and paste it at the location indicated by the external platform."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:119
 msgid "redirect.title"
-msgstr "Link back to PaNL"
+msgstr "Link back to Panl"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:142

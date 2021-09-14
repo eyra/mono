@@ -21,7 +21,7 @@ config :core, CoreWeb.Endpoint,
       ~r"priv/static/(?!uploads)/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/core_web/(live|views)/.*(ex)$",
-      ~r"lib/core_web/templates/.*(eex)$",
+      ~r"lib/core_web/templates/*/.*(eex)$",
       ~r"bundles/*/.*(ex)$",
       ~r"bundles/*/templates/.*(eex)$"
     ]
