@@ -1,16 +1,19 @@
 defmodule Core.Mailer.SignalHandlers do
   use Core.Signals.Handlers
   use Bamboo.Phoenix, view: Core.Mailer.EmailView
+  import Core.FeatureFlags
   import Core.Mailer, only: [base_email: 0, deliver_later: 1]
   alias Core.NotificationCenter.Box
 
   @impl true
   def dispatch(:new_notification, %{box: box, data: %{title: title}}) do
-    for mail <- base_emails(box) do
-      mail
-      |> subject(title)
-      |> render(:new_notification, title: title)
-      |> deliver_later()
+    if feature_enabled?(:notification_mails) do
+      for mail <- base_emails(box) do
+        mail
+        |> subject(title)
+        |> render(:new_notification, title: title)
+        |> deliver_later()
+      end
     end
   end
 
