@@ -16,6 +16,7 @@ config :core, CoreWeb.UserAuth,
   participant_onboarding_page: Link.Onboarding.Wizard
 
 config :core, :features,
+  marketplace: false,
   sign_in_with_apple: false,
   google_sign_in: false,
   password_sign_in: false,
