@@ -47,13 +47,13 @@ defmodule CoreWeb.Layouts.Stripped.Component do
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="bg-white">
+                <div class="bg-white">
                 {{ footer CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-left.svg"), CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-right.svg") }}
+                </div>
               </div>
             </div>
-          </div>
-          <div class="pb-0 md:pb-10 bg-grey5">
+            <div class="pb-0 md:pb-10 bg-grey5">
+            </div>
           </div>
         </div>
       </div>
