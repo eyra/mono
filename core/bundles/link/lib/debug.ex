@@ -17,8 +17,6 @@ defmodule Link.Debug do
   alias EyraUI.Text.Title2
 
   def mount(_params, _session, socket) do
-    require_feature(:debug)
-
     start_button = %{
       action: %{
         type: :redirect,

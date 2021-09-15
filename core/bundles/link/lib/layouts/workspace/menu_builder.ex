@@ -14,7 +14,7 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
     %{
       home: live_item(socket, :link, active_item),
       top: build_menu_first_part(socket, user_state, active_item),
-      bottom: build_menu_second_part(socket, active_item, page_id)
+      bottom: build_menu_second_part(socket, user_state, active_item, page_id)
     }
   end
 
@@ -32,7 +32,7 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
   def build_menu(:mobile_menu, socket, user_state, active_item, page_id) do
     %{
       top: build_menu_first_part(socket, user_state, active_item),
-      bottom: build_menu_second_part(socket, active_item, page_id)
+      bottom: build_menu_second_part(socket, user_state, active_item, page_id)
     }
   end
 
@@ -53,7 +53,7 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
     |> append(live_item(socket, :todo, active_item, true, next_action_count))
   end
 
-  defp build_menu_second_part(socket, active_item, page_id) do
+  defp build_menu_second_part(socket, %{email: email} = _user_state, active_item, page_id) do
     [
       language_switch_item(socket, page_id),
       live_item(socket, :helpdesk, active_item),
@@ -61,7 +61,7 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
       live_item(socket, :profile, active_item),
       user_session_item(socket, :signout, active_item)
     ]
-    |> append(live_item(socket, :debug, active_item), feature_enabled?(:debug))
+    |> append(live_item(socket, :debug, active_item), admin?(email))
   end
 
   defp append(list, extra, condition \\ true) do

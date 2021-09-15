@@ -64,8 +64,6 @@ config :core,
        |> Path.join("uploads")
        |> tap(&File.mkdir_p!/1)
 
-config :core, :features, debug: true
-
 config :core,
        :admins,
        MapSet.new([
