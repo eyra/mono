@@ -18,7 +18,7 @@ config :core, CoreWeb.UserAuth,
 config :core, :features,
   marketplace: false,
   sign_in_with_apple: false,
-  google_sign_in: false,
+  member_google_sign_in: false,
   password_sign_in: false,
   notification_mails: false
 

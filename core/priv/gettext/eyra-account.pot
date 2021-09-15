@@ -176,12 +176,12 @@ msgid "push.unavailable.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:76
+#: lib/core_web/templates/user_session/new.html.eex:72
 msgid "login.google.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:57
+#: lib/core_web/templates/user_session/new.html.eex:53
 msgid "login.surf.button"
 msgstr ""
 
@@ -196,16 +196,16 @@ msgid "login.surf.message.part1"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:41
+#: lib/core_web/templates/user_session/new.html.eex:40
 msgid "login.surf.message.part2"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:43
+#: lib/core_web/templates/user_session/new.html.eex:41
 msgid "login.surf.message.part3"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:44
-msgid "login.surf.message.part4"
+#: lib/core_web/templates/user_session/new.html.eex:39
+msgid "login.surf.message.surfconext.href"
 msgstr ""

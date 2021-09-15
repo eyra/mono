@@ -14,12 +14,12 @@ msgstr ""
 #, elixir-format
 #: lib/core/accounts/next_actions/complete_profile.ex:11
 msgid "complete.profile.cta"
-msgstr "Open profile"
+msgstr "Go to profile"
 
 #, elixir-format
 #: lib/core/accounts/next_actions/complete_profile.ex:10
 msgid "complete.profile.description"
-msgstr "Fill out the missing fields to complete your profile."
+msgstr "Some fields in your profile are not filled out."
 
 #, elixir-format
 #: lib/core/accounts/next_actions/complete_profile.ex:9
@@ -34,24 +34,24 @@ msgstr "Open settings"
 #, elixir-format
 #: lib/core/accounts/next_actions/promote_push_student.ex:10
 msgid "promote.push.student.description"
-msgstr "You receive e-mail when new studies are added."
+msgstr "Choose to activate them. Email notifications are send by default."
 
 #, elixir-format
 #: lib/core/accounts/next_actions/promote_push_student.ex:9
 msgid "promote.push.student.title"
-msgstr "Register also for receiving push messages."
+msgstr "Do you want to receive push notifications?"
 
 #, elixir-format
 #: lib/core/accounts/next_actions/select_study_student.ex:11
 msgid "select.study.student.cta"
-msgstr "Open profile"
+msgstr "Go to profile"
 
 #, elixir-format
 #: lib/core/accounts/next_actions/select_study_student.ex:10
 msgid "select.study.student.description"
-msgstr "Select your study program in the profile page for this."
+msgstr "To be able to participate in research studies."
 
 #, elixir-format
 #: lib/core/accounts/next_actions/select_study_student.ex:9
 msgid "select.study.student.title"
-msgstr "Join the research studies."
+msgstr "Select your study program"

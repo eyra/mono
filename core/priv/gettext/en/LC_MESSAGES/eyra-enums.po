@@ -29,12 +29,12 @@ msgstr "Tablet"
 #, elixir-format
 #: lib/core/enums/genders.ex:5
 msgid "genders.man"
-msgstr "Man"
+msgstr "M"
 
 #, elixir-format
 #: lib/core/enums/genders.ex:5
 msgid "genders.woman"
-msgstr "Women"
+msgstr "F"
 
 #, elixir-format
 #: lib/core/enums/genders.ex:5
@@ -104,7 +104,7 @@ msgstr "BK 1st year"
 #, elixir-format
 #: lib/core/enums/study_program_codes.ex:5
 msgid "study_pogram_codes.bk_1_h"
-msgstr "BK 1st year (resit)"
+msgstr "BK 1st year (re-sit)"
 
 #, elixir-format
 #: lib/core/enums/study_program_codes.ex:5
@@ -114,7 +114,7 @@ msgstr "BK 2nd year"
 #, elixir-format
 #: lib/core/enums/study_program_codes.ex:5
 msgid "study_pogram_codes.bk_2_h"
-msgstr "BK 2nd year (resit)"
+msgstr "BK 2nd year (re-sit)"
 
 #, elixir-format
 #: lib/core/enums/study_program_codes.ex:5
@@ -124,7 +124,7 @@ msgstr "IBA 1st year"
 #, elixir-format
 #: lib/core/enums/study_program_codes.ex:5
 msgid "study_pogram_codes.iba_1_h"
-msgstr "IBA 1st year (resit)"
+msgstr "IBA 1st year (re-sit)"
 
 #, elixir-format
 #: lib/core/enums/study_program_codes.ex:5
@@ -134,19 +134,19 @@ msgstr "IBA 2nd year"
 #, elixir-format
 #: lib/core/enums/study_program_codes.ex:5
 msgid "study_pogram_codes.iba_2_h"
-msgstr "IBA 2nd year (resit)"
+msgstr "IBA 2nd year (re-sit)"
 
 #, elixir-format
 #: lib/core/enums/ticket_types.ex:5
 msgid "ticket_types.bug"
-msgstr "Malfunction"
+msgstr "I encountered a problem"
 
 #, elixir-format
 #: lib/core/enums/ticket_types.ex:5
 msgid "ticket_types.question"
-msgstr "Question"
+msgstr "I have a question"
 
 #, elixir-format
 #: lib/core/enums/ticket_types.ex:5
 msgid "ticket_types.tip"
-msgstr "Improvement suggestion"
+msgstr "I have an idea to improve the platform"

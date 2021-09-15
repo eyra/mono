@@ -29,12 +29,12 @@ msgstr "Tablet"
 #, elixir-format
 #: lib/core/enums/genders.ex:5
 msgid "genders.man"
-msgstr "Man"
+msgstr "M"
 
 #, elixir-format
 #: lib/core/enums/genders.ex:5
 msgid "genders.woman"
-msgstr "Vrouw"
+msgstr "V"
 
 #, elixir-format
 #: lib/core/enums/genders.ex:5
@@ -139,14 +139,14 @@ msgstr "IBA 2e jaar (herkansing)"
 #, elixir-format
 #: lib/core/enums/ticket_types.ex:5
 msgid "ticket_types.bug"
-msgstr "Probleem"
+msgstr "Ik ben tegen een probleem aangelopen"
 
 #, elixir-format
 #: lib/core/enums/ticket_types.ex:5
 msgid "ticket_types.question"
-msgstr "Vraag"
+msgstr "Ik heb een vraag"
 
 #, elixir-format
 #: lib/core/enums/ticket_types.ex:5
 msgid "ticket_types.tip"
-msgstr "Verbeterpunt"
+msgstr "Ik heb een idee om het platform te verbeteren"

@@ -79,8 +79,6 @@ config :web_push_encryption, :vapid_details,
   public_key: "use `mix web_push.gen.keypair`",
   private_key: ""
 
-config :core, :features, debug: false
-
 import_config "#{Mix.env()}.exs"
 
 unless Mix.env() == :test do

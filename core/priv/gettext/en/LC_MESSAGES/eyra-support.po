@@ -14,7 +14,7 @@ msgstr ""
 #, elixir-format
 #: lib/core_web/live/helpdesk/public.ex:31
 msgid "form.description"
-msgstr "Fill out the form to report your issue. We will get back to you via email."
+msgstr "Help us to improve the Panl platform. Do you have a question about the Panl platform? Or do you want to give us feedback? Fill out the form below. We will reply by sending an email."
 
 #, elixir-format
 #: lib/core_web/live/helpdesk/public.ex:30
@@ -34,7 +34,7 @@ msgstr "Subject"
 #, elixir-format
 #: lib/core_web/live/helpdesk/form.ex:91
 msgid "create_ticket.button"
-msgstr "Submit report"
+msgstr "Submit"
 
 #, elixir-format
 #: lib/core_web/live/helpdesk/form.ex:66
@@ -44,4 +44,4 @@ msgstr "Report is received"
 #, elixir-format
 #: lib/core_web/live/helpdesk/form.ex:83
 msgid "ticket.type"
-msgstr "Report"
+msgstr "Form"

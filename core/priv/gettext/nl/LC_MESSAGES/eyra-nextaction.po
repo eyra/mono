@@ -19,7 +19,7 @@ msgstr "Ga naar profiel"
 #, elixir-format
 #: lib/core/accounts/next_actions/complete_profile.ex:10
 msgid "complete.profile.description"
-msgstr "Vul de missende velden van je profiel in."
+msgstr "Sommige velden in je profiel zijn niet ingevuld."
 
 #, elixir-format
 #: lib/core/accounts/next_actions/complete_profile.ex:9
@@ -34,12 +34,12 @@ msgstr "Ga naar instellingen"
 #, elixir-format
 #: lib/core/accounts/next_actions/promote_push_student.ex:10
 msgid "promote.push.student.description"
-msgstr "Registreer nu ook voor pushberichten."
+msgstr "Deze kun je activeren. E-mail notificaties worden automatisch verstuurd."
 
 #, elixir-format
 #: lib/core/accounts/next_actions/promote_push_student.ex:9
 msgid "promote.push.student.title"
-msgstr "Je ontvangt automatisch een email bij nieuw toegevoegde studies."
+msgstr "Wil je push notificaties ontvangen?"
 
 #, elixir-format
 #: lib/core/accounts/next_actions/select_study_student.ex:11
@@ -49,9 +49,9 @@ msgstr "Ga naar profiel"
 #, elixir-format
 #: lib/core/accounts/next_actions/select_study_student.ex:10
 msgid "select.study.student.description"
-msgstr "Selecteer daarvoor je opleiding op de profiel pagina."
+msgstr "Om mee te kunnen doen aan onderzoeksstudies."
 
 #, elixir-format
 #: lib/core/accounts/next_actions/select_study_student.ex:9
 msgid "select.study.student.title"
-msgstr "Doe mee aan onderzoeksstudies."
+msgstr "Selecteer je opleiding"

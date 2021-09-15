@@ -8,8 +8,8 @@ defmodule CoreWeb.User.Settings do
   alias Core.Accounts
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
-  alias EyraUI.Text.{Title2, Title6, BodyMedium}
-  alias EyraUI.Button.{SecondaryLiveViewButton, PrimaryAlpineButton}
+  alias EyraUI.Text.{Title2, Title4}
+  alias EyraUI.Button.PrimaryAlpineButton
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
     Accounts.mark_as_visited(user, :settings)
@@ -35,22 +35,21 @@ defmodule CoreWeb.User.Settings do
           <Title2>{{dgettext "eyra-ui", "menu.item.settings"}}</Title2>
           <Spacing value="XL" />
           <div x-data>
-            <Title6>{{dgettext "eyra-account", "push.registration.title"}}</Title6>
-            <BodyMedium :if={{ not is_push_supported?(@socket) }} >{{dgettext("eyra-account", "push.unavailable.label")}}</BodyMedium>
+            <Title4>{{dgettext "eyra-account", "push.registration.title"}}</Title4>
+            <Spacing value="XS" />
+            <div class="text-bodymedium sm:text-bodylarge font-body" :if={{ not is_push_supported?(@socket) }} >{{dgettext("eyra-account", "push.unavailable.label")}}</div>
             <div :if={{ is_push_supported?(@socket) }}>
               <div x-show="$store.push.registration === 'not-registered'">
-                <BodyMedium>{{dgettext("eyra-account", "push.registration.label")}}</BodyMedium>
+                <div class="text-bodymedium sm:text-bodylarge font-body">{{dgettext("eyra-account", "push.registration.label")}}</div>
                 <Spacing value="XS" />
                 <PrimaryAlpineButton click="registerForPush()" label={{dgettext("eyra-account", "push.registration.button")}} />
               </div>
-              <BodyMedium>
+              <div class="text-bodymedium sm:text-bodylarge font-body">
                 <span x-show="$store.push.registration === 'pending'">{{dgettext("eyra-account", "push.registration.pending")}}</span>
                 <span x-show="$store.push.registration === 'denied'">{{dgettext("eyra-account", "push.registration.denied")}}</span>
-              </BodyMedium>
+              </div>
               <div x-show="$store.push.registration === 'registered'">
                 <span>{{dgettext("eyra-account", "push.registration.activated")}}</span>
-                <Spacing value="XS" />
-                <SecondaryLiveViewButton color="text-grey2" label={{dgettext("eyra-account", "push.registration.test.button")}} event="send-test-notification"/>
               </div>
             </div>
           </div>

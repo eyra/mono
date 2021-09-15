@@ -24,7 +24,7 @@ msgstr "Go to dashboard"
 #, elixir-format
 #: bundles/link/lib/index.ex:66 lib/core_web/live/promotion/index.ex:50
 msgid "link.message"
-msgstr "Panl is a marketplace for research. Researchers can set-up campaigns to recruit participants for research studies. Participants can then apply to participate in these studies. Currently Panl is only available for student participation in research studies of the VU SBE faculty. In 2022 Panl will be released for a broader audience."
+msgstr "Panl is a marketplace for research. Researchers can set up campaigns to recruit participants for research studies. Participants can apply to participate in these studies. Currently Panl is only available for student participation in research studies of the VU Amsterdam School of Business and Economics (SBE). In 2022 Panl will be released to a broader audience."
 
 #, elixir-format
 #: bundles/link/lib/index.ex:63 lib/core_web/live/promotion/index.ex:47
@@ -49,7 +49,7 @@ msgstr "Welcome back %{user}."
 #, elixir-format
 #: bundles/link/lib/index.ex:82 lib/core_web/live/promotion/index.ex:62
 msgid "signup.card.button"
-msgstr "Sign up here"
+msgstr "Sign in here"
 
 #, elixir-format
 #: bundles/link/lib/index.ex:86 lib/core_web/live/promotion/index.ex:66
@@ -74,7 +74,7 @@ msgstr "Appealing to participants"
 #, elixir-format
 #: bundles/link/lib/index.ex:88 lib/core_web/live/promotion/index.ex:68
 msgid "usp3.description"
-msgstr "Developed by researchers from the VU experienced in participant recruitment, in collaboration with platform developer Eyra and SURF."
+msgstr "Developed by researchers from the VU Amsterdam experienced in participant recruitment, in collaboration with platform developer Eyra and SURF."
 
 #, elixir-format
 #: bundles/link/lib/index.ex:88 lib/core_web/live/promotion/index.ex:68
