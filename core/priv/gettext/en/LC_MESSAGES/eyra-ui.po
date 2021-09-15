@@ -77,7 +77,7 @@ msgid "dashboard.title"
 msgstr "Dashboard"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:90
+#: bundles/link/lib/marketplace.ex:94
 msgid "marketplace.title"
 msgstr "Marketplace"
 
@@ -92,7 +92,7 @@ msgid "menu.item.payments"
 msgstr "Payments"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:94
+#: bundles/link/lib/onboarding/wizard.ex:100
 #: lib/core_web/live/user/profile.ex:108
 msgid "tabbar.item.features"
 msgstr "Characteristics"
@@ -103,12 +103,12 @@ msgid "tabbar.item.profile"
 msgstr "My profile"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:83 lib/core_web/live/user/profile.ex:97
+#: bundles/link/lib/onboarding/wizard.ex:89 lib/core_web/live/user/profile.ex:97
 msgid "tabbar.item.study"
 msgstr "Study program"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:95
+#: bundles/link/lib/onboarding/wizard.ex:101
 #: lib/core_web/live/user/profile.ex:109
 msgid "tabbar.item.features.forward"
 msgstr "Update characteristics"
@@ -119,12 +119,12 @@ msgid "tabbar.item.profile.forward"
 msgstr "Update profile"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:84 lib/core_web/live/user/profile.ex:98
+#: bundles/link/lib/onboarding/wizard.ex:90 lib/core_web/live/user/profile.ex:98
 msgid "tabbar.item.study.forward"
 msgstr "Select study program"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:32
+#: bundles/link/lib/onboarding/wizard.ex:33
 msgid "onboarding.forward"
 msgstr "Continue"
 
@@ -134,12 +134,12 @@ msgid "menu.item.debug"
 msgstr "Debug"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:73
+#: bundles/link/lib/onboarding/wizard.ex:79
 msgid "tabbar.item.welcome"
 msgstr "Welcome"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:74
+#: bundles/link/lib/onboarding/wizard.ex:80
 msgid "tabbar.item.welcome.forward"
 msgstr "Welcome"
 
@@ -159,17 +159,17 @@ msgid "cancel.button"
 msgstr "Cancel"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:194
+#: bundles/link/lib/survey/web/content.ex:205
 msgid "delete.confirm.text"
 msgstr "This %{item} will be permanently deleted."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:193
+#: bundles/link/lib/survey/web/content.ex:204
 msgid "delete.confirm.title"
 msgstr "Delete %{item}?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:195
+#: bundles/link/lib/survey/web/content.ex:206
 msgid "delete.confirm.label"
 msgstr "Delete"
 
@@ -179,12 +179,12 @@ msgid "ok.button"
 msgstr "OK"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:256
+#: bundles/link/lib/survey/web/content.ex:267
 msgid "feature.unavailable.text"
 msgstr "Stay tuned. We are continuesly working on new functionality."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:255
+#: bundles/link/lib/survey/web/content.ex:266
 msgid "feature.unavailable.title"
 msgstr "Feature not yet available"
 

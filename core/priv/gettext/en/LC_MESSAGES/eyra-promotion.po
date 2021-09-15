@@ -44,7 +44,7 @@ msgstr "Website"
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:173
 msgid "choose.banner.photo.file"
-msgstr "Choose photo"
+msgstr "Select picture"
 
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:174

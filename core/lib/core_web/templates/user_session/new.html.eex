@@ -36,10 +36,9 @@
                   <div class="mb-8"></div>
                   <div class="text-bodymedium font-body">
                     <%=  dgettext("eyra-account", "login.surf.message.part1") %>
-                    <a class="text-primary underline" target="_blank" href="https://wiki.surfnet.nl/display/conextsupport/Inloggen+via+SURFconext">SURFconext</a>.
+                    <a class="text-primary underline" target="_blank" href="<%= dgettext("eyra-account", "login.surf.message.surfconext.href") %>">SURFconext</a>.
                     <%=  dgettext("eyra-account", "login.surf.message.part2") %>
                     <a class="text-primary underline" target="_blank" href="/privacy-statement.pdf"><%= dgettext("eyra-account", "login.surf.message.part3") %></a>
-                    <%= dgettext("eyra-account", "login.surf.message.part4") %>
                   </div>
                   <div class="mb-8"></div>
                   <a href="/surfconext">
