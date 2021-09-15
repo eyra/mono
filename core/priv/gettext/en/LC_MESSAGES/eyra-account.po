@@ -199,7 +199,7 @@ msgstr "You can use your VU Amsterdam credentials to sign in on Panl, through "
 #, elixir-format
 #: lib/core_web/templates/user_session/new.html.eex:40
 msgid "login.surf.message.part2"
-msgstr "our personal data is used to ensure proper functioning of the platform. More info? Check out our "
+msgstr "Your personal data is used to ensure proper functioning of the platform. More info? Check out our "
 
 #, elixir-format
 #: lib/core_web/templates/user_session/new.html.eex:41
