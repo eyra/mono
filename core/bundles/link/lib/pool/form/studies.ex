@@ -11,7 +11,7 @@ defmodule Link.Pool.Form.Studies do
           title={{ dgettext("link-studentpool", "studies.empty.title") }}
           body={{ dgettext("link-studentpool", "studies.empty.description") }}
           illustration="items"
-      />
+        />
       </ContentArea>
     """
   end

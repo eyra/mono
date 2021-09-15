@@ -94,4 +94,4 @@ msgstr "Go to marketplace"
 #, elixir-format
 #: bundles/link/lib/index.ex:69
 msgid "link.message.interested"
-msgstr "Interested? Sent an email to "
+msgstr "Interested? Send an email to "

@@ -103,7 +103,7 @@ defmodule CoreWeb do
       import Phoenix.View
 
       import EyraUI.ErrorHelpers
-      import EyraUI.Components.OldSkool
+      import CoreWeb.UI.OldSkool
       import CoreWeb.Gettext
       alias CoreWeb.Router.Helpers, as: Routes
       import Core.Authorization, only: [can?: 4]

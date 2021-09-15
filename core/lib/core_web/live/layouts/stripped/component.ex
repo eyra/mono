@@ -4,7 +4,7 @@ defmodule CoreWeb.Layouts.Stripped.Component do
   """
   use CoreWeb.UI.Component
 
-  import EyraUI.Components.OldSkool
+  import CoreWeb.UI.OldSkool
 
   alias CoreWeb.UI.Navigation.{DesktopNavbar, MobileNavbar}
 
@@ -41,14 +41,15 @@ defmodule CoreWeb.Layouts.Stripped.Component do
                 <div class="flex-1 bg-white">
                   <div class="flex flex-row">
                     <div class="flex-1">
-                        <slot />
+                      <slot />
+                      <MarginY id={{:page_footer_top}} />
                     </div>
                     <div class="w-0 md:w-sidepadding flex-shrink-0">
                     </div>
                   </div>
                 </div>
                 <div class="bg-white">
-                {{ footer CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-left.svg"), CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-right.svg") }}
+                  {{ footer CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-left.svg"), CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-right.svg") }}
                 </div>
               </div>
             </div>

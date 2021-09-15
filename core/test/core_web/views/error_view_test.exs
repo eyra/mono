@@ -20,7 +20,7 @@ defmodule CoreWeb.ErrorViewTest do
   end
 
   test "renders 503.html" do
-    html = render_to_string(CoreWeb.ErrorView, "503.html", conn: %{})
+    html = render_to_string(CoreWeb.ErrorView, "503.html", %{conn: %{}, details: "details"})
     assert html =~ "Service Unavailable"
   end
 end

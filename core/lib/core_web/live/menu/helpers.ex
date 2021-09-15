@@ -112,10 +112,16 @@ defmodule CoreWeb.Menu.Helpers do
     %{id: id, title: title, icon: icon, action: action}
   end
 
-  def language_switch_item(socket, page_id) do
+  def language_switch_item(socket, page_id, icon_only? \\ false) do
     [locale | _] = supported_languages()
 
-    title = locale.name
+    title =
+      if icon_only? do
+        nil
+      else
+        locale.name
+      end
+
     icon = %{name: locale.id, size: :small}
 
     redir =

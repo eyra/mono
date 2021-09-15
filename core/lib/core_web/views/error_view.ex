@@ -30,10 +30,35 @@ defmodule CoreWeb.ErrorView do
     render_error("404_page.html", "Page Not Found", assigns)
   end
 
+  defp render_error(page, title, %{conn: conn, reason: reason, stack: stack}) do
+    message = Exception.message(reason)
+    stack = Exception.format_stacktrace(stack)
+
+    details = """
+    I would like to share some technical information about a problem I had when using Panl.
+
+    ---
+
+    ### Error Message ###
+    #{message}
+
+    ### Stacktrace ###
+    #{stack}
+    """
+
+    render(CoreWeb.ErrorView, page,
+      layout: {CoreWeb.LayoutView, "error.html"},
+      conn: conn,
+      details: URI.encode(details),
+      title: title
+    )
+  end
+
   defp render_error(page, title, %{conn: conn}) do
     render(CoreWeb.ErrorView, page,
       layout: {CoreWeb.LayoutView, "error.html"},
       conn: conn,
+      details: "No further technical details provided",
       title: title
     )
   end

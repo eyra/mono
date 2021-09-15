@@ -24,7 +24,7 @@ msgstr "Recruitment"
 #, elixir-format
 #: bundles/link/lib/onboarding/welcome.ex:33
 msgid "onboarding.welcome.description"
-msgstr "Walk throught the next steps to be able to participate in research studies."
+msgstr "Walk through the next steps to be able to participate in research studies."
 
 #, elixir-format
 #: bundles/link/lib/onboarding/welcome.ex:11

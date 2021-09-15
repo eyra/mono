@@ -49,14 +49,14 @@ defmodule CoreWeb.Dashboard do
       >
         <ContentArea>
           <MarginY id={{:page_top}} />
-          <div :if={{ @next_best_action }}>
-            <NextActionHighlight vm={{ @next_best_action }}/>
-            <Spacing value="XL" />
-          </div>
-          <Title2>
-            {{ dgettext("eyra-dashboard", "recent-items.title") }}
-          </Title2>
-          <ContentListItem :for={{item <- @content_items}} vm={{item}} />
+            <div :if={{ @next_best_action }}>
+              <NextActionHighlight vm={{ @next_best_action }}/>
+              <Spacing value="XL" />
+            </div>
+            <Title2>
+              {{ dgettext("eyra-dashboard", "recent-items.title") }}
+            </Title2>
+            <ContentListItem :for={{item <- @content_items}} vm={{item}} />
         </ContentArea>
     </Workspace>
     """

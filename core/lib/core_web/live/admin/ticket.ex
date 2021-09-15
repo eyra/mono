@@ -133,7 +133,6 @@ defmodule CoreWeb.Admin.Ticket do
           </Send>
         </Wrap>
       </ContentArea>
-      <MarginY id={{:page_footer_top}} />
     </Workspace>
     """
   end
