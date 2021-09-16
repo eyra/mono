@@ -63,8 +63,8 @@ defmodule CoreWeb.UI.ContentListItem do
               </div>
             </div>
             <div class="flex-wrap flex-shrink-0">
-              <Image :if={{ image_type(@vm) == :catalog }} image={{image_info(@vm)}} corners="rounded-br-md rounded-tr-xl md:rounded-tr-md w-20 md:w-30" />
-              <img :if={{ image_type(@vm) == :avatar }} src={{image_info(@vm)}} class="rounded-full w-20 h-20 my-6 mr-6" />
+              <Image :if={{ image_type(@vm) == :catalog }} image={{image_info(@vm)}} corners="rounded-br-md rounded-tr-xl md:rounded-tr-md w-20 md:w-30" alt="" />
+              <img :if={{ image_type(@vm) == :avatar }} src={{image_info(@vm)}} class="rounded-full w-20 h-20 my-6 mr-6" alt="" />
             </div>
           </div>
         </div>

@@ -3,7 +3,6 @@
   <head>
     <title><%= Meta.bundle_title(@conn) %></title>
     <%= csrf_meta_tag() %>
-    <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, height=device-height, viewport-fit=cover, user-scalable=no, initial-scale=1.0" />
     <meta name="theme-color" content="#4272ef">
@@ -26,7 +25,7 @@
     <div class="flex flex-row">
       <div
           class="fixed z-20 top-6 w-full pointer-events-none"
-          x-data="{ visible: <%= get_flash(@conn, :error) != nil %> }"z
+          x-data="{ visible: <%= get_flash(@conn, :error) != nil %> }"
           x-show="visible"
       >
         <div class="flex flex-row items-center justify-center" >

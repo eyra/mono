@@ -37,7 +37,7 @@ defmodule CoreWeb.UI.Navigation.ActionBar do
                 <slot/> <!-- tabbar -->
               </div>
               <div class="flex-wrap px-4" :if={{ has_right_bar_buttons?(assigns) }}>
-                <img src="/images/icons/bar_seperator.svg" />
+                <img src="/images/icons/bar_seperator.svg" alt="" />
               </div>
               <div class="flex-wrap h-full" :if={{ has_right_bar_buttons?(assigns) }} >
                 <div class="flex flex-row gap-6 h-full">

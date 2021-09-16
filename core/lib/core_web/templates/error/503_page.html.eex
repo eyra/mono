@@ -7,6 +7,6 @@
         <%= primary_button dgettext("eyra-error","mail.button"), "mailto:support@eyra.co?subject=[503] #{@title}" %>
     </div>
     <div class="flex-shrink-0">
-        <img src="/images/illustrations/503.svg" />
+        <img src="/images/illustrations/503.svg" alt="" />
     </div>
 </div>
