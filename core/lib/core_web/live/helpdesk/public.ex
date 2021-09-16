@@ -35,6 +35,7 @@ defmodule CoreWeb.Helpdesk.Public do
       <Spacing value="XL" />
 
       <HelpdeskForm id={{ :helpdesk_form }} user={{ @current_user }}/>
+
     </Workspace>
     """
   end

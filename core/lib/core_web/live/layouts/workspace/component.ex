@@ -4,7 +4,7 @@ defmodule CoreWeb.Layouts.Workspace.Component do
   """
   use CoreWeb.UI.Component
 
-  import EyraUI.Components.OldSkool
+  import CoreWeb.UI.OldSkool
 
   alias CoreWeb.UI.Navigation.{DesktopMenu, TabletMenu, MobileNavbar, MobileMenu}
   alias EyraUI.Hero.HeroSmall
@@ -63,9 +63,11 @@ defmodule CoreWeb.Layouts.Workspace.Component do
       <DesktopMenu items={{ @menus.desktop_menu }} path_provider={{ CoreWeb.Router.Helpers }} />
       <div class="w-full h-full md:pl-tablet-menu-width lg:pl-desktop-menu-width z-2">
         <div class="pt-0 md:pt-10 h-full">
-          <MobileNavbar items={{ @menus.mobile_navbar }} path_provider={{ CoreWeb.Router.Helpers }} />
           <div class="flex flex-col bg-white h-full ">
-            <div class="flex-1 bg-white border-t border-l border-b border-grey4">
+            <div class="flex-wrap">
+              <MobileNavbar items={{ @menus.mobile_navbar }} path_provider={{ CoreWeb.Router.Helpers }} />
+            </div>
+            <div class="flex-1 bg-white md:border-t md:border-l md:border-b border-grey4">
               <div class="flex flex-col h-full">
                 <div class="flex-1">
                   <div class="flex flex-col h-full">
@@ -74,6 +76,7 @@ defmodule CoreWeb.Layouts.Workspace.Component do
                     </div>
                     <div class="flex-1">
                       <slot />
+                      <MarginY id={{:page_footer_top}} />
                     </div>
                   </div>
                 </div>

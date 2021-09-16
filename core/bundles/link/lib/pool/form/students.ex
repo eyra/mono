@@ -89,7 +89,6 @@ defmodule Link.Pool.Form.Students do
           <Title2>{{ dgettext("link-studentpool", "tabbar.item.students") }}: <span class="text-primary">{{ Enum.count(@students) }}</span></Title2>
           <ContentListItem :for={{item <- @students}} vm={{item}} />
         </div>
-        <MarginY id={{:page_footer_top}} />
       </ContentArea>
     """
   end

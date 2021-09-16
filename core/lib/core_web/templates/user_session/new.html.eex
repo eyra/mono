@@ -4,7 +4,7 @@
   <div class="flex-1">
     <div class="flex flex-col h-full w-full">
       <div class="h-topbar sm:h-topbar-sm lg:h-topbar-lg pl-6 md:pl-0 flex-shrink-0" >
-        <div class="flex flex-row h-full">
+        <div class="flex flex-row h-full items-center pr-6">
           <div class="flex-wrap">
             <div class="flex flex-col items-center justify-center h-full">
               <div class="flex-wrap cursor-pointer">
@@ -19,6 +19,8 @@
               </div>
             </div>
           </div>
+          <div class="flex-grow"></div>
+          <div><%= language_switch_item(@conn) %></div>
         </div>
       </div>
       <div class="flex-grow">
@@ -38,7 +40,7 @@
                     <%=  dgettext("eyra-account", "login.surf.message.part1") %>
                     <a class="text-primary underline" target="_blank" href="<%= dgettext("eyra-account", "login.surf.message.surfconext.href") %>">SURFconext</a>.
                     <%=  dgettext("eyra-account", "login.surf.message.part2") %>
-                    <a class="text-primary underline" target="_blank" href="/privacy-statement.pdf"><%= dgettext("eyra-account", "login.surf.message.part3") %></a>
+                    <a class="text-primary underline" target="_blank" href="/privacy-statement.pdf"><%= dgettext("eyra-account", "login.surf.message.part3")%></a>.
                   </div>
                   <div class="mb-8"></div>
                   <a href="/surfconext">

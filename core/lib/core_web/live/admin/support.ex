@@ -70,7 +70,6 @@ defmodule CoreWeb.Admin.Support do
         <Title2>{{ dgettext("eyra-admin", "support.tickets.title") }}</Title2>
         <ContentListItem :for={{item <- @tickets}} vm={{item}} />
       </ContentArea>
-      <MarginY id={{:page_footer_top}} />
     </Workspace>
     """
   end

@@ -228,3 +228,8 @@ msgstr "De %{item} wordt permanent gesloten."
 #: lib/core_web/live/admin/ticket.ex:80
 msgid "close.confirm.title"
 msgstr "%{item} sluiten?"
+
+#, elixir-format
+#: lib/core_web/controllers/user_auth.ex:138
+msgid "authentication.required.error"
+msgstr "Deze pagina bekijken? Log hier eerst in."

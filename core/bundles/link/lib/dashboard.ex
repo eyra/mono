@@ -70,7 +70,6 @@ defmodule Link.Dashboard do
             </False>
           </Case>
         </ContentArea>
-        <MarginY id={{ :page_footer_top }} />
       </Workspace>
     """
   end

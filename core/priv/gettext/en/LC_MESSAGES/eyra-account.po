@@ -87,7 +87,7 @@ msgid "website.label"
 msgstr "Website"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:44
+#: lib/core_web/live/user/settings.ex:45
 msgid "push.registration.button"
 msgstr "Activate"
 
@@ -97,29 +97,24 @@ msgid "push.registration.title"
 msgstr "Push notifications"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:51
+#: lib/core_web/live/user/settings.ex:52
 msgid "push.registration.activated"
 msgstr "Push notifications are activated on this browser."
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:48
+#: lib/core_web/live/user/settings.ex:49
 msgid "push.registration.denied"
 msgstr "Push notifications are deactivated on this browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:42
+#: lib/core_web/live/user/settings.ex:43
 msgid "push.registration.label"
 msgstr "Activate to receive notifications from the Panl platform in your browser. After activation, your browser might ask for permission to show notifications."
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:47
+#: lib/core_web/live/user/settings.ex:48
 msgid "push.registration.pending"
 msgstr "Determining state.."
-
-#, elixir-format
-#: lib/core_web/live/user/settings.ex:53
-msgid "push.registration.test.button"
-msgstr "Send push notification"
 
 #, elixir-format
 #: lib/core_web/live/user/forms/study.ex:74
@@ -172,41 +167,41 @@ msgid "features.content.description"
 msgstr "Select the inclusion criteria for your study. If nothing is selected, all students in the pool are eligible to participate."
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:39
+#: lib/core_web/live/user/settings.ex:40
 msgid "push.unavailable.label"
 msgstr "Registering for push notifications is currently available on Chrome and Firefox browsers. Please open the website on one of these browsers to make use of push notifications."
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:72
+#: lib/core_web/templates/user_session/new.html.eex:74
 msgid "login.google.button"
 msgstr "Sign in with Google"
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:53
+#: lib/core_web/templates/user_session/new.html.eex:55
 msgid "login.surf.button"
 msgstr "Sign in through SURFconext"
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:33
+#: lib/core_web/templates/user_session/new.html.eex:35
 msgid "login.title"
 msgstr "Sign in"
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:38
+#: lib/core_web/templates/user_session/new.html.eex:40
 msgid "login.surf.message.part1"
 msgstr "You can use your VU Amsterdam credentials to sign in on Panl, through "
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:40
+#: lib/core_web/templates/user_session/new.html.eex:42
 msgid "login.surf.message.part2"
 msgstr "Your personal data is used to ensure proper functioning of the platform. More info? Check out our "
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:41
+#: lib/core_web/templates/user_session/new.html.eex:43
 msgid "login.surf.message.part3"
 msgstr "privacy statement"
 
-#, elixir-format, fuzzy
-#: lib/core_web/templates/user_session/new.html.eex:39
+#, elixir-format
+#: lib/core_web/templates/user_session/new.html.eex:41
 msgid "login.surf.message.surfconext.href"
 msgstr "https://wiki.surfnet.nl/display/conextsupport/Log+in+SURFconext"

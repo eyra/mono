@@ -34,7 +34,7 @@ msgstr "Permissions"
 #, elixir-format
 #: lib/core_web/live/admin/support.ex:70
 msgid "support.tickets.title"
-msgstr "Meldingen"
+msgstr "Tickets"
 
 #, elixir-format
 #: lib/core_web/live/admin/support.ex:65

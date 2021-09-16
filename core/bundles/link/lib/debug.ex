@@ -82,7 +82,6 @@ defmodule Link.Debug do
         <Spacing value="XL" />
         <MailDebugForm id={{:mail_debug}} />
 
-        <MarginY id={{:page_footer_top}} />
       </Workspace>
     """
   end

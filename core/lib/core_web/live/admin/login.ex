@@ -64,7 +64,6 @@ defmodule CoreWeb.Admin.Login do
                 </div>
               </a>
           </FormArea>
-          <MarginY id={{ :page_footer_top }} />
         </ContentArea>
       </Stripped>
     """

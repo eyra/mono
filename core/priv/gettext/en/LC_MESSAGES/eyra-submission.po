@@ -13,34 +13,34 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/card.ex:163 bundles/link/lib/card.ex:214
-#: bundles/link/lib/dashboard.ex:103 bundles/link/lib/dashboard.ex:167
+#: bundles/link/lib/dashboard.ex:102 bundles/link/lib/dashboard.ex:166
 msgid "status.accepted.label"
 msgstr "Online"
 
 #, elixir-format
 #: bundles/link/lib/card.ex:157 bundles/link/lib/card.ex:208
-#: bundles/link/lib/dashboard.ex:97 bundles/link/lib/dashboard.ex:161
+#: bundles/link/lib/dashboard.ex:96 bundles/link/lib/dashboard.ex:160
 msgid "status.idle.label"
 msgstr "Concept"
 
 #, elixir-format
 #: bundles/link/lib/card.ex:160 bundles/link/lib/card.ex:211
-#: bundles/link/lib/dashboard.ex:100 bundles/link/lib/dashboard.ex:164
+#: bundles/link/lib/dashboard.ex:99 bundles/link/lib/dashboard.ex:163
 msgid "status.submitted.label"
 msgstr "Published"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:112 bundles/link/lib/dashboard.ex:176
+#: bundles/link/lib/dashboard.ex:111 bundles/link/lib/dashboard.ex:175
 msgid "incomplete.forms.message"
 msgstr "Forms are not yet filled in completely"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:110 bundles/link/lib/dashboard.ex:174
+#: bundles/link/lib/dashboard.ex:109 bundles/link/lib/dashboard.ex:173
 msgid "ready.for.submission.message"
 msgstr "Ready to publish campaign to pool administrator"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:116 bundles/link/lib/dashboard.ex:180
+#: bundles/link/lib/dashboard.ex:115 bundles/link/lib/dashboard.ex:179
 msgid "waiting.for.coordinator.message"
 msgstr "Waiting for pool administrator to publish campaign in marketplace"
 

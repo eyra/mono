@@ -3,7 +3,7 @@ defimpl Browser.Ua, for: Phoenix.LiveView.Socket do
   def to_ua(_), do: ""
 end
 
-defmodule EyraUI.Components.OldSkool do
+defmodule CoreWeb.UI.OldSkool do
   import Phoenix.HTML
   import Phoenix.LiveView.Helpers
 
@@ -38,10 +38,15 @@ defmodule EyraUI.Components.OldSkool do
     """
   end
 
-  def language_button(path, image) do
+  def language_switch_item(%{request_path: request_path} = conn) do
+    [locale | _] = CoreWeb.Menu.Helpers.supported_languages()
+
+    path =
+      CoreWeb.Router.Helpers.language_switch_path(conn, :index, locale.id, redir: request_path)
+
     ~E"""
     <a href= <%= path %> >
-      <img src="<%= image %>"/>
+      <img src="/images/icons/<%= locale.id %>.svg"/>
     </a>
     """
   end

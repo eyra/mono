@@ -14,7 +14,7 @@ msgstr ""
 #, elixir-format
 #: lib/core_web/templates/error/403_page.html.eex:5
 msgid "403.body"
-msgstr "- [ ]  Unfortunately, you don't have access to this page. If you think this is an error, we would appreciate it if you report this at our helpdesk. If not, click \"Home\" to return to the Panl home page."
+msgstr "Unfortunately, you don't have access to this page. If you think this is an error, we would appreciate it if you report this at our helpdesk. If not, click \"Home\" to return to the Panl home page."
 
 #, elixir-format
 #: lib/core_web/templates/error/404_page.html.eex:5

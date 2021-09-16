@@ -4,7 +4,7 @@ defmodule CoreWeb.Layouts.Website.Component do
   """
   use CoreWeb.UI.Component
 
-  import EyraUI.Components.OldSkool
+  import CoreWeb.UI.OldSkool
 
   alias CoreWeb.UI.Navigation.{DesktopNavbar, MobileNavbar, MobileMenu}
   alias EyraUI.Hero.HeroLarge
@@ -54,13 +54,14 @@ defmodule CoreWeb.Layouts.Website.Component do
                     <div class="flex flex-row">
                       <div class="flex-1">
                         <slot />
+                        <MarginY id={{:page_footer_top}} />
                       </div>
                       <div class="w-0 md:w-sidepadding">
                       </div>
                     </div>
                   </div>
                   <div class="bg-white">
-                  {{ footer CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-left.svg"), CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-right.svg") }}
+                    {{ footer CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-left.svg"), CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-right.svg") }}
                   </div>
                 </div>
               </div>

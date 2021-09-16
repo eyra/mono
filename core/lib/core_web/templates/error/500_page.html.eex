@@ -4,7 +4,7 @@
         <div class="mb-6 md:mb-8"></div>
         <div class="text-bodymedium sm:text-bodylarge font-body text-grey1"><%= dgettext("eyra-error","500.body") %></div>
         <div class="mb-6 md:mb-8"></div>
-        <%= primary_button dgettext("eyra-error","mail.button"), "mailto:support@eyra.co?subject=[500] Service Unavailable" %>
+        <%= primary_button dgettext("eyra-error","mail.button"), "mailto:support@eyra.co?subject=[500] #{@title}" %>
     </div>
     <div class="flex-shrink-0">
         <img src="/images/illustrations/500.svg" />

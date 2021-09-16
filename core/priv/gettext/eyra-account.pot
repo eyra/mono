@@ -86,7 +86,7 @@ msgid "website.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:44
+#: lib/core_web/live/user/settings.ex:45
 msgid "push.registration.button"
 msgstr ""
 
@@ -96,28 +96,23 @@ msgid "push.registration.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:51
+#: lib/core_web/live/user/settings.ex:52
 msgid "push.registration.activated"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:48
+#: lib/core_web/live/user/settings.ex:49
 msgid "push.registration.denied"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:42
+#: lib/core_web/live/user/settings.ex:43
 msgid "push.registration.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:47
+#: lib/core_web/live/user/settings.ex:48
 msgid "push.registration.pending"
-msgstr ""
-
-#, elixir-format
-#: lib/core_web/live/user/settings.ex:53
-msgid "push.registration.test.button"
 msgstr ""
 
 #, elixir-format
@@ -171,41 +166,41 @@ msgid "features.content.description"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:39
+#: lib/core_web/live/user/settings.ex:40
 msgid "push.unavailable.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:72
+#: lib/core_web/templates/user_session/new.html.eex:74
 msgid "login.google.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:53
+#: lib/core_web/templates/user_session/new.html.eex:55
 msgid "login.surf.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:33
+#: lib/core_web/templates/user_session/new.html.eex:35
 msgid "login.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:38
+#: lib/core_web/templates/user_session/new.html.eex:40
 msgid "login.surf.message.part1"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:40
+#: lib/core_web/templates/user_session/new.html.eex:42
 msgid "login.surf.message.part2"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:41
+#: lib/core_web/templates/user_session/new.html.eex:43
 msgid "login.surf.message.part3"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/templates/user_session/new.html.eex:39
+#: lib/core_web/templates/user_session/new.html.eex:41
 msgid "login.surf.message.surfconext.href"
 msgstr ""

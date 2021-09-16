@@ -1,6 +1,7 @@
 defmodule CoreWeb.UserAuth do
   import Plug.Conn
   import Phoenix.Controller
+  import CoreWeb.Gettext
 
   alias Core.Accounts
   alias CoreWeb.Router.Helpers, as: Routes
@@ -134,7 +135,7 @@ defmodule CoreWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "You must log in to access this page.")
+      |> put_flash(:error, dgettext("eyra-ui", "authentication.required.error"))
       |> maybe_store_return_to()
       |> redirect(to: Routes.user_session_path(conn, :new))
       |> halt()
