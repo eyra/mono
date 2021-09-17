@@ -22,7 +22,7 @@ defmodule EyraUI.Card.Label do
           <Title5 color={{ text_color(@type) }}>{{@text}}</Title5>
         </div>
       </div>
-      <img src={{ @path_provider.static_path(@conn, "/images/label-arrow-#{@type}.svg")}} />
+      <img src={{ @path_provider.static_path(@conn, "/images/label-arrow-#{@type}.svg")}} alt={{@text}}/>
     </div>
     """
   end

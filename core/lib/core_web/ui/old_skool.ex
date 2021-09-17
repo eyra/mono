@@ -45,7 +45,7 @@ defmodule CoreWeb.UI.OldSkool do
       CoreWeb.Router.Helpers.language_switch_path(conn, :index, locale.id, redir: request_path)
 
     ~E"""
-    <a href= <%= path %> >
+    <a href="<%= path %>">
       <img src="/images/icons/<%= locale.id %>.svg" alt="Switch language to <%= locale.name %>"/>
     </a>
     """

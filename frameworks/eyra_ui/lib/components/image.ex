@@ -42,6 +42,7 @@ defmodule EyraUI.Image do
         srcset={{@image.srcset}}
         loading="lazy"
         x-on:load="hideBlurHash()"
+        alt=""
       />
     </div>
     """

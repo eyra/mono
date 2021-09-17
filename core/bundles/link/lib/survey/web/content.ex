@@ -321,7 +321,7 @@ defmodule Link.Survey.Content do
         },
         icon: %{
           action: %{ type: :send, event: "submit"},
-          face: %{ type: :icon, icon: :submit}
+          face: %{ type: :icon, icon: :submit, alt: dgettext("link-ui", "submit.button")}
         }
       },
       preview: %{
@@ -331,7 +331,7 @@ defmodule Link.Survey.Content do
         },
         icon: %{
           action: %{ type: :send, event: "preview"},
-          face: %{ type: :icon, icon: :preview}
+          face: %{ type: :icon, icon: :preview, alt: dgettext("link-ui", "preview.button")}
         },
         label_icon: %{
           action: %{ type: :send, event: "preview"},
@@ -341,7 +341,7 @@ defmodule Link.Survey.Content do
       delete: %{
         icon: %{
           action: %{ type: :send, event: "delete"},
-          face: %{ type: :icon, icon: :delete }
+          face: %{ type: :icon, icon: :delete, alt: dgettext("link-ui", "delete.button") }
         },
         label_icon: %{
           action: %{ type: :send, event: "delete"},
@@ -351,7 +351,7 @@ defmodule Link.Survey.Content do
       retract: %{
         icon: %{
           action: %{ type: :send, event: "retract"},
-          face: %{ type: :icon, icon: :retract }
+          face: %{ type: :icon, icon: :retract, alt: dgettext("link-ui", "delete.button") }
         },
         label_icon: %{
           action: %{ type: :send, event: "retract"},
@@ -361,7 +361,7 @@ defmodule Link.Survey.Content do
       more: %{
         icon: %{
           action: %{ type: :toggle, id: :more, target: "action_menu" },
-          face: %{ type: :icon, icon: :more }
+          face: %{ type: :icon, icon: :more, alt: "Show more actions" }
         }
       },
     }

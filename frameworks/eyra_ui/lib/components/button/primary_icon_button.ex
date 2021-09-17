@@ -16,7 +16,7 @@ defmodule EyraUI.Button.PrimaryIconButton do
       <div class="pt-1 pb-1 active:pt-5px active:pb-3px active:shadow-top4px w-full rounded pl-4 pr-4 {{@bg_color}}">
         <div class="flex justify-center items-center w-full">
           <div>
-              <img class="mr-3 -mt-1" src={{@icon}}/>
+              <img class="mr-3 -mt-1" src={{@icon}} alt={{@label}} />
           </div>
           <div class="h-10 focus:outline-none">
             <div class="flex flex-col justify-center h-full items-center">

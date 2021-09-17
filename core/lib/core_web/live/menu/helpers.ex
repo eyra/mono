@@ -8,7 +8,8 @@ defmodule CoreWeb.Menu.Helpers do
   defp size(%{size: size}), do: size
   defp size(_), do: :small
 
-  def live_item(socket, id, active_item, use_icon \\ true, counter \\ nil) when is_atom(id) do
+  def live_item(socket, menu_id, id, active_item, use_icon \\ true, counter \\ nil)
+      when is_atom(id) do
     info = info(id)
     size = size(info)
 
@@ -33,6 +34,7 @@ defmodule CoreWeb.Menu.Helpers do
     action = %{target: path}
 
     %{
+      menu_id: menu_id,
       id: id,
       title: title,
       icon: icon,
@@ -42,15 +44,15 @@ defmodule CoreWeb.Menu.Helpers do
     }
   end
 
-  def account_item(socket, is_logged_in, active_item, use_icon \\ true) do
+  def account_item(socket, menu_id, is_logged_in, active_item, use_icon \\ true) do
     if is_logged_in do
-      live_item(socket, :profile, active_item, use_icon)
+      live_item(socket, menu_id, :profile, active_item, use_icon)
     else
-      user_session_item(socket, :signin, use_icon)
+      user_session_item(socket, menu_id, :signin, use_icon)
     end
   end
 
-  def alpine_item(id, active_item, use_icon, overlay?) do
+  def alpine_item(menu_id, id, active_item, use_icon, overlay?) do
     info = info(id)
     size = size(info)
 
@@ -75,6 +77,7 @@ defmodule CoreWeb.Menu.Helpers do
     action = %{target: info.target, method: method, overlay?: overlay?}
 
     %{
+      menu_id: menu_id,
       id: id,
       title: title,
       icon: icon,
@@ -83,7 +86,7 @@ defmodule CoreWeb.Menu.Helpers do
     }
   end
 
-  def user_session_item(socket, id, use_icon) do
+  def user_session_item(socket, menu_id, id, use_icon) do
     info = info(id)
     size = size(info)
 
@@ -109,10 +112,10 @@ defmodule CoreWeb.Menu.Helpers do
       end
 
     action = %{target: Routes.user_session_path(socket, info.target), method: method, dead?: true}
-    %{id: id, title: title, icon: icon, action: action}
+    %{menu_id: menu_id, id: id, title: title, icon: icon, action: action}
   end
 
-  def language_switch_item(socket, page_id, icon_only? \\ false) do
+  def language_switch_item(socket, menu_id, page_id, icon_only? \\ false) do
     [locale | _] = supported_languages()
 
     title =
@@ -133,7 +136,7 @@ defmodule CoreWeb.Menu.Helpers do
 
     path = Routes.language_switch_path(socket, :index, locale.id, redir: redir)
     action = %{target: path, dead?: true}
-    %{id: locale.id, title: title, icon: icon, action: action}
+    %{menu_id: menu_id, id: locale.id, title: title, icon: icon, action: action}
   end
 
   def supported_languages do

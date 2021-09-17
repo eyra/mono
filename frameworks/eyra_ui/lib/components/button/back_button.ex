@@ -15,7 +15,7 @@ defmodule EyraUI.Button.BackButton do
       <div class="pt-1 pb-1 active:pt-5px active:pb-3px rounded pl-4 pr-4 bg-opacity-0">
         <div class="flex items-center">
           <div>
-              <img class="mr-3 -mt-2px" src={{@icon}}/>
+              <img class="mr-3 -mt-2px" src={{@icon}} alt={{@label}} />
           </div>
           <div class="h-10 focus:outline-none">
             <div class="flex flex-col justify-center h-full items-center">
