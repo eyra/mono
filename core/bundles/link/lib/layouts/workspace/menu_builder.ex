@@ -19,6 +19,15 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
   end
 
   @impl true
+  def build_menu(:tablet_menu = menu_id, socket, user_state, active_item, page_id) do
+    %{
+      home: live_item(socket, menu_id, :link, active_item),
+      top: build_menu_first_part(socket, menu_id, user_state, active_item),
+      bottom: build_menu_second_part(socket, menu_id, user_state, active_item, page_id)
+    }
+  end
+
+  @impl true
   def build_menu(:mobile_navbar = menu_id, socket, _user, active_item, _page_id) do
     %{
       home: live_item(socket, menu_id, :link, active_item),

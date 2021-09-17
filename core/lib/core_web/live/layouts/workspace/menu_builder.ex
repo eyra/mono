@@ -14,6 +14,15 @@ defmodule CoreWeb.Layouts.Workspace.MenuBuilder do
   end
 
   @impl true
+  def build_menu(:tablet_menu = menu_id, socket, user, active_item, page_id) do
+    %{
+      home: live_item(socket, menu_id, :eyra, active_item),
+      top: build_menu_first_part(socket, menu_id, user, active_item),
+      bottom: build_menu_second_part(socket, menu_id, active_item, page_id)
+    }
+  end
+
+  @impl true
   def build_menu(:mobile_navbar = menu_id, socket, _user, active_item, _page_id) do
     %{
       home: live_item(socket, menu_id, :eyra, active_item),
