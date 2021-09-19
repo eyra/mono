@@ -424,7 +424,6 @@ defmodule Core.Accounts do
     |> Multi.update(:profile, profile_changeset)
     |> Multi.update(:user, user_changeset)
     |> Signals.multi_dispatch(:user_profile_updated, %{
-      user: user,
       user_changeset: user_changeset,
       profile_changeset: profile_changeset
     })
@@ -487,7 +486,6 @@ defmodule Core.Accounts do
     Multi.new()
     |> Multi.update(:user, changeset)
     |> Signals.multi_dispatch(:visited_pages_updated, %{
-      user: user,
       user_changeset: changeset
     })
     |> Repo.transaction()

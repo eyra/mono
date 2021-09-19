@@ -5,7 +5,8 @@ defmodule Core.Signals do
     Core.NotificationCenter.SignalHandlers,
     Core.Mailer.SignalHandlers,
     Core.WebPush.SignalHandlers,
-    Core.APNS.SignalHandlers
+    Core.APNS.SignalHandlers,
+    Core.Observatory.Switch
   ]
 
   def dispatch(signal, message) do
@@ -20,9 +21,15 @@ defmodule Core.Signals do
     :ok = dispatch(signal, message)
   end
 
-  def multi_dispatch(multi, signal, message) do
-    Ecto.Multi.run(multi, :dispatch_signal, fn _, _ ->
-      :ok = dispatch(signal, message)
+  @doc """
+  Send a signal as part of an Ecto Multi.
+
+  It automatically merges the message with the multi
+  changes.
+  """
+  def multi_dispatch(multi, signal, message) when is_map(message) do
+    Ecto.Multi.run(multi, :dispatch_signal, fn _, updates ->
+      :ok = dispatch(signal, Map.merge(updates, message))
       {:ok, nil}
     end)
   end

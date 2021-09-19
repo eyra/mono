@@ -6,6 +6,7 @@ defmodule Core.NextActions do
   import Ecto.Query, warn: false
   alias Core.Repo
   alias Core.Accounts.User
+  alias Core.Signals
 
   alias Core.NextActions.NextAction
 
@@ -68,6 +69,9 @@ defmodule Core.NextActions do
       on_conflict: [inc: [count: 1]],
       conflict_target: {:unsafe_fragment, conflict_target_fragment}
     )
+    |> tap(
+      &Signals.dispatch!(:next_action_created, %{action_type: action, user: user, action: &1})
+    )
   end
 
   def clear_next_action(user, action, content_node \\ nil) do
@@ -76,13 +80,17 @@ defmodule Core.NextActions do
     from(na in NextAction, where: na.user_id == ^user.id and na.action == ^action_string)
     |> filter_by_content_node(content_node)
     |> Repo.delete_all()
+    |> tap(fn _ -> Signals.dispatch!(:next_action_cleared, %{user: user, action_type: action}) end)
   end
 
-  defp to_view_model(nil, _url_resolver), do: nil
+  def to_view_model(nil, _url_resolver), do: nil
 
-  defp to_view_model(%NextAction{action: action, count: count, params: params}, url_resolver) do
+  def to_view_model(%NextAction{action: action, count: count, params: params}, url_resolver) do
     action_type = String.to_existing_atom(action)
-    apply(action_type, :to_view_model, [url_resolver, count, params])
+
+    action_type
+    |> apply(:to_view_model, [url_resolver, count, params])
+    |> Map.put(:action_type, action_type)
   end
 
   defp filter_by_content_node(query, content_node) when is_nil(content_node), do: query

@@ -10,15 +10,34 @@ defmodule CoreWeb.Todo do
   alias Core.NextActions.Live.NextAction
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    next_actions = NextActions.list_next_actions(url_resolver(socket), user)
+    observe(
+      socket,
+      next_action_cleared: [user.id],
+      next_action_created: [user.id]
+    )
 
     socket =
       socket
       |> update_menus()
-      |> assign(:next_actions, next_actions)
-      |> assign(:has_next_actions?, not Enum.empty?(next_actions))
+      |> refresh_next_actions()
 
     {:ok, socket}
+  end
+
+  def refresh_next_actions(%{assigns: %{current_user: user}} = socket) do
+    assign(
+      socket,
+      :next_actions,
+      NextActions.list_next_actions(url_resolver(socket), user)
+    )
+  end
+
+  def handle_observation(socket, :next_action_created, _payload) do
+    refresh_next_actions(socket)
+  end
+
+  def handle_observation(socket, :next_action_cleared, _payload) do
+    refresh_next_actions(socket)
   end
 
   def handle_auto_save_done(socket) do
@@ -31,11 +50,11 @@ defmodule CoreWeb.Todo do
         title={{ dgettext("eyra-ui", "todo.title") }}
         menus={{ @menus }}
       >
-        <div :if={{not @has_next_actions?}} class="h-full">
+        <div :if={{Enum.empty?(@next_actions)}} class="h-full">
           <div class="flex flex-col items-center w-full h-full">
             <div class="flex-grow"></div>
             <div class="flex-none">
-              <img src="/images/illustrations/zero-todo.svg" />
+              <img src="/images/illustrations/zero-todo.svg" id="zero-todos" />
             </div>
             <div class="flex-grow"></div>
           </div>
@@ -43,7 +62,7 @@ defmodule CoreWeb.Todo do
 
         <ContentArea>
           <MarginY id={{:page_top}} />
-          <div :if={{@has_next_actions?}} class="flex flex-col gap-6 sm:gap-10">
+          <div :if={{!Enum.empty?(@next_actions)}} class="flex flex-col gap-6 sm:gap-10" id="next-actions">
             <NextAction :for={{action <- @next_actions}} vm={{ action }} />
           </div>
         </ContentArea>
