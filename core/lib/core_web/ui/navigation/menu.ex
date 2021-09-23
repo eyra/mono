@@ -25,7 +25,7 @@ defmodule CoreWeb.UI.Navigation.Menu do
   def render(assigns) do
     ~H"""
     <div class="h-full">
-      <div class="flex flex-col h-full {{align(@size)}}">
+      <div class="flex flex-col h-full {{align(@size)}}" >
         <div class="flex-wrap" :if={{ has_home?(@items) }} >
            <div class="mb-8">
               <MenuItem vm={{ @items.home }} path_provider={{@path_provider}} size={{@size}} />

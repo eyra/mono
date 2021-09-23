@@ -5,49 +5,58 @@ defmodule CoreWeb.Layouts.Workspace.MenuBuilder do
   import CoreWeb.Menu.Helpers
 
   @impl true
-  def build_menu(:desktop_menu, socket, user, active_item, page_id) do
+  def build_menu(:desktop_menu = menu_id, socket, user, active_item, page_id) do
     %{
-      home: live_item(socket, :eyra, active_item),
-      top: build_menu_first_part(socket, user, active_item),
-      bottom: build_menu_second_part(socket, active_item, page_id)
+      home: live_item(socket, menu_id, :eyra, active_item),
+      top: build_menu_first_part(socket, menu_id, user, active_item),
+      bottom: build_menu_second_part(socket, menu_id, active_item, page_id)
     }
   end
 
   @impl true
-  def build_menu(:mobile_navbar, socket, _user, active_item, _page_id) do
+  def build_menu(:tablet_menu = menu_id, socket, user, active_item, page_id) do
     %{
-      home: live_item(socket, :eyra, active_item),
+      home: live_item(socket, menu_id, :eyra, active_item),
+      top: build_menu_first_part(socket, menu_id, user, active_item),
+      bottom: build_menu_second_part(socket, menu_id, active_item, page_id)
+    }
+  end
+
+  @impl true
+  def build_menu(:mobile_navbar = menu_id, socket, _user, active_item, _page_id) do
+    %{
+      home: live_item(socket, menu_id, :eyra, active_item),
       right: [
-        alpine_item(:menu, active_item, false, true)
+        alpine_item(menu_id, :menu, active_item, false, true)
       ]
     }
   end
 
   @impl true
-  def build_menu(:mobile_menu, socket, user, active_item, page_id) do
+  def build_menu(:mobile_menu = menu_id, socket, user, active_item, page_id) do
     %{
-      top: build_menu_first_part(socket, user, active_item),
-      bottom: build_menu_second_part(socket, active_item, page_id)
+      top: build_menu_first_part(socket, menu_id, user, active_item),
+      bottom: build_menu_second_part(socket, menu_id, active_item, page_id)
     }
   end
 
-  defp build_menu_first_part(socket, %{email: email} = _user, active_item) do
+  defp build_menu_first_part(socket, menu_id, %{email: email} = _user, active_item) do
     []
-    |> append(live_item(socket, :dashboard, active_item))
-    |> append(live_item(socket, :permissions, active_item), admin?(email))
-    |> append(live_item(socket, :support, active_item), admin?(email))
-    |> append(live_item(socket, :marketplace, active_item))
-    |> append(live_item(socket, :todo, active_item))
-    |> append(live_item(socket, :payments, active_item))
+    |> append(live_item(socket, menu_id, :dashboard, active_item))
+    |> append(live_item(socket, menu_id, :permissions, active_item), admin?(email))
+    |> append(live_item(socket, menu_id, :support, active_item), admin?(email))
+    |> append(live_item(socket, menu_id, :marketplace, active_item))
+    |> append(live_item(socket, menu_id, :todo, active_item))
+    |> append(live_item(socket, menu_id, :payments, active_item))
   end
 
-  defp build_menu_second_part(socket, active_item, page_id) do
+  defp build_menu_second_part(socket, menu_id, active_item, page_id) do
     [
-      language_switch_item(socket, page_id),
-      live_item(socket, :helpdesk, active_item),
-      live_item(socket, :settings, active_item),
-      live_item(socket, :profile, active_item),
-      user_session_item(socket, :signout, active_item)
+      language_switch_item(socket, menu_id, page_id),
+      live_item(socket, menu_id, :helpdesk, active_item),
+      live_item(socket, menu_id, :settings, active_item),
+      live_item(socket, menu_id, :profile, active_item),
+      user_session_item(socket, menu_id, :signout, active_item)
     ]
   end
 

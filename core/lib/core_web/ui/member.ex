@@ -21,7 +21,7 @@ defmodule CoreWeb.UI.Member do
     ~H"""
     <div class="flex flex-row gap-4 md:gap-8 h-full">
       <div class="flex-shrink-0">
-        <img src={{ photo_url(@vm)}} class="rounded-full w-16 h-16 md:w-24 md:h-24 lg:w-32 lg:h-32" />
+        <img src={{ photo_url(@vm)}} class="rounded-full w-16 h-16 md:w-24 md:h-24 lg:w-32 lg:h-32" alt="" />
       </div>
       <div>
         <div class="h-full">

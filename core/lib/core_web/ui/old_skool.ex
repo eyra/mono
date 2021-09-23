@@ -45,8 +45,8 @@ defmodule CoreWeb.UI.OldSkool do
       CoreWeb.Router.Helpers.language_switch_path(conn, :index, locale.id, redir: request_path)
 
     ~E"""
-    <a href= <%= path %> >
-      <img src="/images/icons/<%= locale.id %>.svg"/>
+    <a href="<%= path %>">
+      <img src="/images/icons/<%= locale.id %>.svg" alt="Switch language to <%= locale.name %>"/>
     </a>
     """
   end
@@ -64,12 +64,12 @@ defmodule CoreWeb.UI.OldSkool do
     <div class="h-footer sm:h-footer-sm lg:h-footer-lg">
       <div class="flex">
         <div class="flex-wrap">
-            <img class="h-footer sm:h-footer-sm lg:h-footer-lg" src="<%= left %>"/>
+            <img class="h-footer sm:h-footer-sm lg:h-footer-lg" src="<%= left %>" alt=""/>
         </div>
         <div class="flex-grow">
         </div>
         <div class="flex-wrap">
-            <img class="h-footer sm:h-footer-sm lg:h-footer-lg" src="<%= right %>"/>
+            <img class="h-footer sm:h-footer-sm lg:h-footer-lg" src="<%= right %>" alt="" />
         </div>
       </div>
     </div>
@@ -113,7 +113,7 @@ defmodule CoreWeb.UI.OldSkool do
           </p>
       </div>
       <div class="flex-none h-header2 sm:h-header2-sm lg:h-header2-lg w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
-          <img src="/images/illustration.svg"/>
+          <img src="/images/illustration.svg" alt=""/>
       </div>
     </div>
     """
@@ -132,7 +132,7 @@ defmodule CoreWeb.UI.OldSkool do
                       data-phx-link-state="replace"
                       href="/"
                       >
-                          <img class="h-8 sm:h-12" src=" <%= icon %>" />
+                          <img class="h-8 sm:h-12" src=" <%= icon %>" alt="Home" />
                       </a>
                   </div>
               </div>

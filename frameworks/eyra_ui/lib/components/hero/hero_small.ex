@@ -19,7 +19,7 @@ defmodule EyraUI.Hero.HeroSmall do
         </p>
       </div>
       <div class="flex-none h-header2 sm:h-header2-sm lg:h-header2-lg w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
-        <img src={{ @illustration }}/>
+        <img src={{ @illustration }} alt=""/>
       </div>
     </div>
     """

@@ -20,8 +20,8 @@ defmodule CoreWeb.UI.Empty do
           </div>
         </div>
         <div class="w-full mt-6 md:mt-0">
-          <img class="hidden md:block object-fill w-full" src="/images/illustrations/{{@illustration}}.svg" />
-          <img class="md:hidden object-fill w-full" src="/images/illustrations/{{@illustration}}_mobile.svg" />
+          <img class="hidden md:block object-fill w-full" src="/images/illustrations/{{@illustration}}.svg" alt="" />
+          <img class="md:hidden object-fill w-full" src="/images/illustrations/{{@illustration}}_mobile.svg" alt="" />
         </div>
       </div>
     """

@@ -21,7 +21,7 @@ defmodule EyraUI.Hero.HeroLarge do
         </p>
       </div>
       <div class="flex-none w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
-        <img src={{ @illustration }}/>
+        <img src={{ @illustration }} alt=""/>
       </div>
     </div>
     """

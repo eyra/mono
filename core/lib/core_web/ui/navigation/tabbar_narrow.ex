@@ -21,7 +21,7 @@ defmodule CoreWeb.UI.Navigation.TabbarNarrow do
         <div class="flex-grow">
         </div>
         <div>
-          <img src="/images/icons/dropdown.svg" />
+          <img src="/images/icons/dropdown.svg" alt="Show tabbar dropdown" />
         </div>
       </div>
     </Context>

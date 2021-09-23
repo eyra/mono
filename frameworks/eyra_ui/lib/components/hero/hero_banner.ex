@@ -32,7 +32,7 @@ defmodule EyraUI.Hero.HeroBanner do
           </div>
         </div>
         <div class="absolute z-10 bottom-0 right-0 object-scale-down flex-wrap h-full flex-shrink-0">
-          <img class="object-scale-down h-full" src={{ @illustration }}/>
+          <img class="object-scale-down h-full" src={{ @illustration }} alt="" />
         </div>
       </div>
     </div>
