@@ -35,7 +35,7 @@ defmodule CoreWeb.Todo do
           <div class="flex flex-col items-center w-full h-full">
             <div class="flex-grow"></div>
             <div class="flex-none">
-              <img src="/images/illustrations/zero-todo.svg" />
+              <img src="/images/illustrations/zero-todo.svg" alt="All done" />
             </div>
             <div class="flex-grow"></div>
           </div>

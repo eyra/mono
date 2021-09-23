@@ -24,7 +24,7 @@ defmodule EyraUI.Button.Face.Forward do
           </div>
         </div>
         <div>
-            <img class="ml-4 -mt-2px" src={{icon(@vm)}}/>
+            <img class="ml-4 -mt-2px" src={{icon(@vm)}} alt={{label(@vm)}} />
         </div>
       </div>
     </div>

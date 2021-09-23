@@ -16,7 +16,7 @@ defmodule CoreWeb.Devices do
           </div>
           <div class="flex">
             <div class="mr-4" :for={{ device <- @devices }}>
-                <img src={{ "/images/#{device}.svg" }} />
+                <img src={{ "/images/#{device}.svg" }} alt="Select {{device}}" />
             </div>
           </div>
         </div>

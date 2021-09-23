@@ -49,7 +49,7 @@ defmodule EyraUI.Grid.ImageGrid.Image do
           class="absolute z-20 w-full h-full"
           :class="{ 'visible': selected === {{index(@vm)}}, 'invisible': selected != {{index(@vm)}} }"
         >
-          <img class="w-full h-full object-none" src="/images/checkmark.svg" />
+          <img class="w-full h-full object-none" src="/images/checkmark.svg" alt="" />
         </div>
         <div class="w-full h-full">
           <img class="object-cover w-full h-full image" src={{url(@vm)}} srcset={{srcset(@vm)}}/>

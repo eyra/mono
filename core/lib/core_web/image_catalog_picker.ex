@@ -131,7 +131,7 @@ defmodule CoreWeb.ImageCatalogPicker do
             <Title3>{{dgettext("eyra-imagecatalog", "search.image.title")}}</Title3>
           </div>
           <button type="button" class="w-button-sm h-button-sm flex-wrap cursor-pointer active:opacity-50" x-on:click="image_picker = false, $parent.$parent.overlay = false">
-            <img src={{ @static_path.(@conn, "/images/close.svg")}} />
+            <img src={{ @static_path.(@conn, "/images/close.svg") }} alt="Close image picker" />
           </button>
         </div>
         <div x-data="{ selected: -1 }">

@@ -5,6 +5,7 @@ defmodule CoreWeb.UI.Navigation.MenuItem do
   use EyraUI.Component
 
   defviewmodel(
+    menu_id: nil,
     id: nil,
     action: nil,
     title: nil,
@@ -45,19 +46,19 @@ defmodule CoreWeb.UI.Navigation.MenuItem do
 
   def render(assigns) do
     ~H"""
-      <Button id={{id(@vm)}} vm={{ action(@vm)}} >
+      <Button id="{{menu_id(@vm)}}_{{id(@vm)}}" vm={{ action(@vm)}} >
         <div class="flex flex-row items-center justify-start rounded-full focus:outline-none {{ gap(@size) }} {{ bg_color(@vm, @size) }} {{ hover(@vm, @size) }} {{ item_height(icon_size(@vm)) }}">
           <div :if={{ has_icon?(@vm) && icon_size(@vm) == :large}}>
             <div class="flex flex-col items-center justify-center">
               <div>
-                <img class={{ icon_rect(icon_size(@vm)) }} src={{ @path_provider.static_path(@socket, "/images/icons/#{ icon_filename(icon_name(@vm), @size) }.svg") }} />
+                <img class={{ icon_rect(icon_size(@vm)) }} src={{ @path_provider.static_path(@socket, "/images/icons/#{ icon_filename(icon_name(@vm), @size) }.svg") }} alt="#{icon_name(@vm)}" />
               </div>
             </div>
           </div>
           <div :if={{ has_icon?(@vm) && icon_size(@vm) == :small}}>
             <div class="flex flex-col items-center justify-center">
               <div>
-                <img class={{ icon_rect(icon_size(@vm)) }} src={{ @path_provider.static_path(@socket, "/images/icons/#{ icon_filename(icon_name(@vm), active?(@vm)) }.svg") }} />
+                <img class={{ icon_rect(icon_size(@vm)) }} src={{ @path_provider.static_path(@socket, "/images/icons/#{ icon_filename(icon_name(@vm), active?(@vm)) }.svg") }} alt="" />
               </div>
             </div>
           </div>

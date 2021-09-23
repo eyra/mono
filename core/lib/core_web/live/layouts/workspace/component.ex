@@ -29,6 +29,7 @@ defmodule CoreWeb.Layouts.Workspace.Component do
       def build_menus(socket, user, id \\ nil) do
         menus = %{
           mobile_menu: build_menu(socket, :mobile_menu, user, id),
+          tablet_menu: build_menu(socket, :tablet_menu, user, id),
           desktop_menu: build_menu(socket, :desktop_menu, user, id),
           mobile_navbar: build_menu(socket, :mobile_navbar, user, id)
         }
@@ -59,7 +60,7 @@ defmodule CoreWeb.Layouts.Workspace.Component do
       <div class="fixed z-40 right-0 top-0 w-mobile-menu-width h-viewport" x-show="mobile_menu" @click.away="mobile_menu = !mobile_menu, $parent.overlay = false">
         <MobileMenu items={{ @menus.mobile_menu }} path_provider={{ CoreWeb.Router.Helpers }} />
       </div>
-      <TabletMenu items={{ @menus.desktop_menu }} path_provider={{ CoreWeb.Router.Helpers }} />
+      <TabletMenu items={{ @menus.tablet_menu }} path_provider={{ CoreWeb.Router.Helpers }} />
       <DesktopMenu items={{ @menus.desktop_menu }} path_provider={{ CoreWeb.Router.Helpers }} />
       <div class="w-full h-full md:pl-tablet-menu-width lg:pl-desktop-menu-width z-2">
         <div class="pt-0 md:pt-10 h-full">
