@@ -51,6 +51,7 @@ defmodule CoreWeb do
 
   def live_view do
     quote do
+      use Core.Observatory
       use CoreWeb.LiveLocale
       import Core.Authorization, only: [can_access?: 2]
       use GreenLight.Live, Core.Authorization

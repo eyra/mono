@@ -610,7 +610,6 @@ defmodule Core.AccountsTest do
 
       assert user |> Map.get(:visited_pages) == ["settings"]
       assert_signal_dispatched(:visited_pages_updated)
-      assert_next_action(user, url_resolver, "/profile")
     end
 
     test "mark_as_visited/2 clears next best action for student", %{

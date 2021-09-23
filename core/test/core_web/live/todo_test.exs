@@ -28,5 +28,19 @@ defmodule CoreWeb.TodoTest do
 
       assert html =~ "Open test"
     end
+
+    test "is updated when task is added", %{conn: conn, user: user} do
+      {:ok, view, _html} = live(conn, Routes.live_path(conn, Todo))
+      assert has_element?(view, "#zero-todos")
+      NextActions.create_next_action(user, SomeAction)
+      assert render(element(view, "#next-actions")) =~ "Open test"
+    end
+
+    test "is updated when task is completed", %{conn: conn, user: user} do
+      NextActions.create_next_action(user, SomeAction)
+      {:ok, view, _html} = live(conn, Routes.live_path(conn, Todo))
+      NextActions.clear_next_action(user, SomeAction)
+      refute has_element?(view, "#next-actions")
+    end
   end
 end
