@@ -17,9 +17,9 @@ With this research we want to investigate how our news consumption \
 behavior has changed during/after the COVID-19 related curfew. \
 To examine this, we looked at your Google Search History.
 First, we divided your browser history into three periods:
-- before the start of the curfew (i.e., pages visited before {START}),
-- during the curfew (i.e., pages visited between {START} and {END}), and
-- post curfew (i.e., pages visited after {END}).
+- before the start of the curfew (i.e., pages visited before {START.strftime('%A %d-%m-%Y %H:%M:%S')}),
+- during the curfew (i.e., pages visited between {START.strftime('%A %d-%m-%Y %H:%M:%S')} and {END.strftime('%A %d-%m-%Y %H:%M:%S')}), and
+- post curfew (i.e., pages visited after {END.strftime('%A %d-%m-%Y %H:%M:%S')}).
 For each period, we counted how many times you visited a news \
 website versus any another type of website (i.e., news/other). \
 While counting, we also took the time of day \
@@ -127,9 +127,9 @@ def process(file_data):
     # Return output
     text = f"""{TEXT}
     read_files: BrowserHistory.json
-    Your earliest web search was on {earliest},
-    The Dutch curfew took place between {START} and {END},
-    Your latest web search was on {latest}.
+    Your earliest web search was on {earliest.strftime('%A %d-%m-%Y at %H:%M:%S')},
+    The Dutch curfew took place between {START.strftime('%A %d-%m-%Y %H:%M:%S')} and {END.strftime('%A %d-%m-%Y %H:%M:%S')},
+    Your latest web search was on {latest.strftime('%A %d-%m-%Y at %H:%M:%S')}.
     """
     return {
         "summary": text,
