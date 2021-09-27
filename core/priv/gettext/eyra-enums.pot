@@ -159,3 +159,33 @@ msgstr ""
 #: lib/core/enums/study_years.ex:5
 msgid "study_years.second"
 msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.accounting"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.business"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.economics"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.management"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.marketing"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.organisation"
+msgstr ""

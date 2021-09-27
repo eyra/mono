@@ -1,4 +1,4 @@
-defmodule CoreWeb.Promotion.Public do
+defmodule Link.Promotion.Public do
   @moduledoc """
   The public promotion screen.
   """
@@ -18,7 +18,8 @@ defmodule CoreWeb.Promotion.Public do
   alias Core.Promotions.Promotion
 
   alias CoreWeb.Devices
-  alias CoreWeb.Enums.Themes
+
+  alias Link.Enums.Themes
 
   data(study, :any)
   data(promotion, :any)
@@ -71,6 +72,9 @@ defmodule CoreWeb.Promotion.Public do
   end
 
   def handle_observation(socket, :promotion_updated, promotion) do
+
+    promotion |> IO.inspect(label: "handle_observation")
+
     themes = promotion |> Promotion.get_themes(Themes)
     organisation = promotion |> Promotion.get_organisation()
 

@@ -10,6 +10,9 @@ defmodule Link.Survey.Content do
 
   import CoreWeb.Gettext
 
+  require Link.Enums.Themes
+  alias Link.Enums.Themes
+
   alias Core.Survey.Tools
   alias Core.Promotions
   alias Core.Pools.Submissions
@@ -53,7 +56,7 @@ defmodule Link.Survey.Content do
 
     tool_form_ready? = Tools.ready?(tool)
     promotion_form_ready? = Promotions.ready?(promotion)
-    preview_path = Routes.live_path(socket, CoreWeb.Promotion.Public, promotion.id, preview: true)
+    preview_path = Routes.live_path(socket, Link.Promotion.Public, promotion.id, preview: true)
 
     {
       :ok,
@@ -134,7 +137,8 @@ defmodule Link.Survey.Content do
         component: PromotionForm,
         props: %{
           entity_id: promotion.id,
-          validate?: validate?
+          validate?: validate?,
+          themes_module: Themes
         }
       },
       %{
@@ -191,7 +195,7 @@ defmodule Link.Survey.Content do
 
     case promotion.themes do
       nil -> ""
-      themes -> themes |> Enum.map(&Atom.to_string(&1)) |> Enum.join(" ")
+      themes -> themes |> Enum.join(" ")
     end
   end
 

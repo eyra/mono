@@ -94,9 +94,7 @@ defmodule EyraUI.Selector.Selector do
   defp update_items(%{assigns: %{current_items: items}} = socket, item_id_to_toggle) do
     items =
       items
-      |> IO.inspect(label: "ITEMS A")
       |> Enum.map(&toggle(socket, &1, item_id_to_toggle))
-      |> IO.inspect(label: "ITEMS B")
 
     socket |> assign(current_items: items)
   end

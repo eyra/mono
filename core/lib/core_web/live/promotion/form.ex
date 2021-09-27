@@ -2,7 +2,6 @@ defmodule CoreWeb.Promotion.Form do
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader
 
-  alias Core.Enums.Themes
   alias Core.Promotions
   alias Core.Promotions.Promotion
 
@@ -49,14 +48,20 @@ defmodule CoreWeb.Promotion.Form do
 
   # Handle Selector Update
   def update(
-        %{active_item_ids: active_item_ids, selector_id: selector_id},
+        %{active_item_ids: active_theme_ids, selector_id: :themes},
         %{assigns: %{entity: entity}} = socket
       ) do
+    active_theme_ids =
+      active_theme_ids
+      |> Enum.map(&Atom.to_string(&1))
+
+    active_theme_ids |> IO.inspect(label: "ACTIVE ITEM IDS")
+
     {
       :ok,
       socket
       # force save
-      |> save(entity, %{selector_id => active_item_ids}, false)
+      |> save(entity, %{:themes => active_theme_ids}, false)
     }
   end
 
@@ -76,13 +81,19 @@ defmodule CoreWeb.Promotion.Form do
     {:ok, socket}
   end
 
-  def update(%{id: id, props: %{entity_id: entity_id, validate?: validate?}}, socket) do
+  def update(
+        %{
+          id: id,
+          props: %{entity_id: entity_id, validate?: validate?, themes_module: themes_module}
+        },
+        socket
+      ) do
     entity = Promotions.get!(entity_id)
     changeset = Promotion.changeset(entity, :create, %{})
 
     byline = Promotion.get_byline(entity)
     image_url = Promotion.get_image_url(entity, %{width: 400, height: 300})
-    theme_labels = Themes.labels(entity.themes)
+    theme_labels = themes_module.labels(entity.themes)
 
     {
       :ok,
@@ -102,19 +113,11 @@ defmodule CoreWeb.Promotion.Form do
 
   # Save
   defp save(socket, %Promotion{} = entity, attrs, schedule?) do
-    changeset = Promotion.changeset(entity, :save, attrs) |> IO.inspect(label: "CHANGESET")
+    changeset = Promotion.changeset(entity, :save, attrs)
 
     socket
-    |> print("A")
     |> save(changeset, schedule?)
-    |> print("B")
     |> validate_for_publish()
-    |> print("C")
-  end
-
-  defp print(socket, label) do
-    socket.assigns.entity.themes |> IO.inspect(label: label, structs: false)
-    socket
   end
 
   # Validate

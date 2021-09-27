@@ -37,29 +37,29 @@ msgid "debug.title"
 msgstr "Debug"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:206
+#: bundles/link/lib/survey/web/content.ex:207
 msgid "delete.confirm.campaign"
 msgstr "campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:353
-#: bundles/link/lib/survey/web/content.ex:357 bundles/link/lib/survey/web/content.ex:363
+#: bundles/link/lib/survey/web/content.ex:354
+#: bundles/link/lib/survey/web/content.ex:358 bundles/link/lib/survey/web/content.ex:364
 msgid "delete.button"
 msgstr "Verwijderen"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:339
-#: bundles/link/lib/survey/web/content.ex:343 bundles/link/lib/survey/web/content.ex:347
+#: bundles/link/lib/survey/web/content.ex:340
+#: bundles/link/lib/survey/web/content.ex:344 bundles/link/lib/survey/web/content.ex:348
 msgid "preview.button"
 msgstr "Bekijken"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:329
-#: bundles/link/lib/survey/web/content.ex:333
+#: bundles/link/lib/survey/web/content.ex:330
+#: bundles/link/lib/survey/web/content.ex:334
 msgid "submit.button"
 msgstr "Zet online"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:367
+#: bundles/link/lib/survey/web/content.ex:368
 msgid "retract.button"
 msgstr "Haal offline"

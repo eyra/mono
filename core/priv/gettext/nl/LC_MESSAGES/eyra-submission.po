@@ -45,31 +45,31 @@ msgid "waiting.for.coordinator.message"
 msgstr "De beheerder van de pool zal de campagne spoedig in de marktplaats publiseren"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:242
+#: bundles/link/lib/survey/web/content.ex:243
 msgid "submit.error.text"
 msgstr "Je kan de campagne nog niet indienen. Vul eerst alle formulieren volledig in."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:241
+#: bundles/link/lib/survey/web/content.ex:242
 msgid "submit.error.title"
 msgstr "Campagne onvolledig"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:234
+#: bundles/link/lib/survey/web/content.ex:235
 msgid "submit.success.text"
 msgstr "De beheerder van de pool is op de hoogte gebracht. Zodra de campagne online staat krijg je een bericht."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:233
+#: bundles/link/lib/survey/web/content.ex:234
 msgid "submit.success.title"
 msgstr "Campagne ingediend"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:258
+#: bundles/link/lib/survey/web/content.ex:259
 msgid "retract.success.text"
 msgstr "De campagne is niet meer zichtbaar in de marktplaats."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:257
+#: bundles/link/lib/survey/web/content.ex:258
 msgid "retract.success.title"
 msgstr "Campagne teruggetrokken"

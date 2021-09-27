@@ -45,31 +45,31 @@ msgid "waiting.for.coordinator.message"
 msgstr "Waiting for pool administrator to publish campaign in marketplace"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:242
+#: bundles/link/lib/survey/web/content.ex:243
 msgid "submit.error.text"
 msgstr "The campaign is not ready to publish yet. Complete all the forms first."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:241
+#: bundles/link/lib/survey/web/content.ex:242
 msgid "submit.error.title"
 msgstr "Incomplete campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:234
+#: bundles/link/lib/survey/web/content.ex:235
 msgid "submit.success.text"
 msgstr "The pool administrator has been informed. You will be notified when the campaign is put online."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:233
+#: bundles/link/lib/survey/web/content.ex:234
 msgid "submit.success.title"
 msgstr "Campaign submitted"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:258
+#: bundles/link/lib/survey/web/content.ex:259
 msgid "retract.success.text"
 msgstr "The campaign is not longer visible in the marketplace for new participants."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:257
+#: bundles/link/lib/survey/web/content.ex:258
 msgid "retract.success.title"
 msgstr "Campaign offline"

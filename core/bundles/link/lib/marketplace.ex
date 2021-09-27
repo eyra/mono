@@ -76,7 +76,7 @@ defmodule Link.Marketplace do
   end
 
   def handle_info({:card_click, %{action: :public, id: id}}, socket) do
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Promotion.Public, id))}
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, Link.Promotion.Public, id))}
   end
 
   def handle_event("menu-item-clicked", %{"action" => action}, socket) do

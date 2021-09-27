@@ -5,6 +5,9 @@ defmodule CoreWeb.DataDonation.Content do
   use CoreWeb, :live_view
   use CoreWeb.MultiFormAutoSave
 
+  require Core.Enums.Themes
+  alias Core.Enums.Themes
+
   import CoreWeb.Gettext
 
   alias EyraUI.Hero.HeroSmall
@@ -90,7 +93,7 @@ defmodule CoreWeb.DataDonation.Content do
           </div>
           <HeroSmall title={{ dgettext("eyra-data-donation", "content.title") }} />
           <ToolForm id={{:tool_form}} entity_id={{@tool_id}} />
-          <PromotionForm id={{:promotion_form}} props={{ %{entity_id: @promotion_id} }} />
+          <PromotionForm id={{:promotion_form}} props={{ %{entity_id: @promotion_id, themes_module: Themes} }} />
         </div>
       </div>
     """

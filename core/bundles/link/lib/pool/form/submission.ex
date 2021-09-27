@@ -25,8 +25,6 @@ defmodule Link.Pool.Form.Submission do
         %{active_item_id: active_study_year, selector_id: :study_year},
         %{assigns: %{criteria: criteria}} = socket
       ) do
-    active_study_year |> IO.inspect(label: "active_study_year")
-
     study_program_codes = StudyProgramCodes.values_by_year(active_study_year)
     study_year_labels = StudyYears.labels(active_study_year)
     study_program_labels = StudyProgramCodes.labels_by_year(active_study_year, study_program_codes)
