@@ -36,6 +36,9 @@ window.blurHash = () => {
     showBlurHash() {
       return this.show !== false;
     },
+    reset() {
+      console.log("Reset blurhash")
+    },
     hideBlurHash() {
       if (!liveSocket.socket.isConnected()) {
         return;
@@ -43,6 +46,7 @@ window.blurHash = () => {
       this.show = false;
     },
     render() {
+      console.log("Render blurhash")
       const img = this.$el.getElementsByTagName("img")[0]
       if (img.complete) {
         this.show = false;

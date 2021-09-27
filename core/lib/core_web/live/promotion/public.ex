@@ -4,6 +4,8 @@ defmodule CoreWeb.Promotion.Public do
   """
   use CoreWeb, :live_view
 
+  import CoreWeb.UI.Responsive.Viewport
+
   alias EyraUI.CampaignBanner
   alias EyraUI.Panel.Panel
   alias EyraUI.Text.{Title1, Title2, Title3, BodyLarge, Intro}
@@ -21,30 +23,64 @@ defmodule CoreWeb.Promotion.Public do
   data(promotion, :any)
   data(plugin, :any)
   data(plugin_info, :any)
-  data(transient, :any)
+  data(themes, :any)
+  data(organisation, :any)
+  data(image_info, :any, default: nil)
 
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
     promotion = Promotions.get!(id)
     plugin = load_plugin(promotion)
     plugin_info = plugin.info(id, socket)
 
-    transient = %{
-      image_info: ImageHelpers.get_image_info(promotion.image_id, 2560, 1920),
-      themes: promotion |> Promotion.get_themes(),
-      organisation: promotion |> Promotion.get_organisation()
-    }
+    themes = promotion |> Promotion.get_themes()
+    organisation = promotion |> Promotion.get_organisation()
+
+    observe(socket, promotion_updated: [promotion.id])
 
     {
       :ok,
       socket
+      |> assign_viewport()
       |> assign(
         user: user,
         promotion: promotion,
-        transient: transient,
+        themes: themes,
+        organisation: organisation,
         plugin_info: plugin_info,
         plugin: plugin
       )
+      |> update_image_info()
     }
+  end
+
+  defp update_image_info(%{assigns: %{viewport: %{"width" => 0}}} = socket), do: socket
+
+  defp update_image_info(socket) do
+    image_info = get_image_info(socket)
+    socket |> assign(image_info: image_info)
+  end
+
+  defp get_image_info(%{
+         assigns: %{promotion: %{image_id: image_id}, viewport: %{"width" => viewport_width}}
+       }) do
+    image_width = viewport_width
+    image_height = image_width * 0.75
+
+    ImageHelpers.get_image_info(image_id, image_width, image_height)
+    |> IO.inspect(label: "IMAGE INFO")
+  end
+
+  def handle_observation(socket, :promotion_updated, promotion) do
+    themes = promotion |> Promotion.get_themes()
+    organisation = promotion |> Promotion.get_organisation()
+
+    socket
+    |> assign(
+      promotion: promotion,
+      themes: themes,
+      organisation: organisation
+    )
+    |> update_image_info()
   end
 
   def load_plugin(%{plugin: plugin}) do
@@ -70,14 +106,14 @@ defmodule CoreWeb.Promotion.Public do
     ~H"""
       <HeroImage
         title={{@promotion.title}}
-        subtitle={{@transient.themes}}
-        image_info={{@transient.image_info}}
+        subtitle={{@themes}}
+        image_info={{@image_info}}
       >
         <template slot="call_to_action">
           <PrimaryLiveViewButton label={{ @plugin_info.call_to_action.label }} event="call-to-action" />
         </template>
       </HeroImage>
-      <HeroBanner title={{@transient.organisation.label}} subtitle={{ @plugin_info.byline }} icon_url={{ Routes.static_path(@socket, "/images/#{@transient.organisation.id}.svg") }}/>
+      <HeroBanner title={{@organisation.label}} subtitle={{ @plugin_info.byline }} icon_url={{ Routes.static_path(@socket, "/images/#{@organisation.id}.svg") }}/>
       <ContentArea>
           <MarginY id={{:page_top}} />
           <div class="ml-8 mr-8 text-center">

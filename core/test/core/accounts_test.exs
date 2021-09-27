@@ -602,8 +602,7 @@ defmodule Core.AccountsTest do
     end
 
     test "mark_as_visited/2 updates the user", %{
-      user: user,
-      url_resolver: url_resolver
+      user: user
     } do
       {:ok, %{user: user}} = Accounts.update_user_profile(user, %{student: true}, %{})
       {:ok, %{user: user}} = Accounts.mark_as_visited(user, :settings)

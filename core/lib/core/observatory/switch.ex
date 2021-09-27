@@ -9,4 +9,8 @@ defmodule Core.Observatory.Switch do
   def dispatch(:next_action_cleared, %{user: user} = message) do
     Observatory.local_dispatch(:next_action_cleared, [user.id], message)
   end
+
+  def dispatch(:promotion_updated, promotion) do
+    Observatory.local_dispatch(:promotion_updated, [promotion.id], promotion)
+  end
 end

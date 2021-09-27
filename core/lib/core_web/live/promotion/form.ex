@@ -30,7 +30,8 @@ defmodule CoreWeb.Promotion.Form do
   @impl true
   def save_file(%{assigns: %{entity: entity}} = socket, uploaded_file) do
     socket
-    |> save(entity, %{banner_photo_url: uploaded_file})
+    # force save
+    |> save(entity, %{banner_photo_url: uploaded_file}, false)
   end
 
   def update(%{image_id: image_id}, %{assigns: %{entity: entity}} = socket) do
@@ -41,7 +42,8 @@ defmodule CoreWeb.Promotion.Form do
       :ok,
       socket
       |> assign(image_url: image_url)
-      |> save(entity, attrs)
+      # force save
+      |> save(entity, attrs, false)
     }
   end
 
@@ -50,7 +52,12 @@ defmodule CoreWeb.Promotion.Form do
         %{active_item_ids: active_item_ids, selector_id: selector_id},
         %{assigns: %{entity: entity}} = socket
       ) do
-    {:ok, socket |> save(entity, %{selector_id => active_item_ids})}
+    {
+      :ok,
+      socket
+      # force save
+      |> save(entity, %{selector_id => active_item_ids}, false)
+    }
   end
 
   # Handle update from parent after attempt to publish
@@ -94,12 +101,20 @@ defmodule CoreWeb.Promotion.Form do
   end
 
   # Save
-  def save(socket, %Promotion{} = entity, attrs) do
-    changeset = Promotion.changeset(entity, :save, attrs)
+  defp save(socket, %Promotion{} = entity, attrs, schedule?) do
+    changeset = Promotion.changeset(entity, :save, attrs) |> IO.inspect(label: "CHANGESET")
 
     socket
-    |> schedule_save(changeset)
+    |> print("A")
+    |> save(changeset, schedule?)
+    |> print("B")
     |> validate_for_publish()
+    |> print("C")
+  end
+
+  defp print(socket, label) do
+    socket.assigns.entity.themes |> IO.inspect(label: label, structs: false)
+    socket
   end
 
   # Validate
@@ -123,7 +138,7 @@ defmodule CoreWeb.Promotion.Form do
     {
       :noreply,
       socket
-      |> save(entity, attrs)
+      |> save(entity, attrs, true)
     }
   end
 
