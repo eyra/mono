@@ -1,7 +1,7 @@
 defmodule Link.Pool.Form.Submission do
   use CoreWeb.LiveForm
 
-  alias Core.Enums.{StudyProgramCodes, Genders, DominantHands, NativeLanguages}
+  alias Core.Enums.{StudyYears, StudyProgramCodes, Genders, DominantHands, NativeLanguages}
 
   alias EyraUI.Selector.Selector
   alias EyraUI.Text.{Title2, Title3, BodyMedium}
@@ -11,7 +11,8 @@ defmodule Link.Pool.Form.Submission do
   prop(props, :any, required: true)
 
   data(entity, :any)
-  data(study_labels, :any)
+  data(study_year_labels, :any)
+  data(study_program_labels, :any)
   data(gender_labels, :any)
   data(dominanthand_labels, :any)
   data(nativelanguage_labels, :any)
@@ -20,6 +21,27 @@ defmodule Link.Pool.Form.Submission do
   data(focus, :any, default: "")
 
   # Handle Selector Update
+  def update(
+        %{active_item_id: active_study_year, selector_id: :study_year},
+        %{assigns: %{criteria: criteria}} = socket
+      ) do
+    active_study_year |> IO.inspect(label: "active_study_year")
+
+    study_program_codes = StudyProgramCodes.values_by_year(active_study_year)
+    study_year_labels = StudyYears.labels(active_study_year)
+    study_program_labels = StudyProgramCodes.labels_by_year(active_study_year, study_program_codes)
+
+    send_update(Selector, id: :study_program, reset: study_program_labels)
+
+    {
+      :ok,
+      socket
+      |> save(criteria, :auto_save, %{:study_program_codes => study_program_codes})
+      |> assign(study_year_labels: study_year_labels)
+      |> assign(study_program_labels: study_program_labels)
+    }
+  end
+
   def update(
         %{active_item_id: active_item_id, selector_id: selector_id},
         %{assigns: %{criteria: criteria}} = socket
@@ -40,7 +62,16 @@ defmodule Link.Pool.Form.Submission do
     submission = Submissions.get!(entity_id)
     criteria = submission.criteria
 
-    study_labels = StudyProgramCodes.labels(criteria.study_program_codes)
+    year =
+      if StudyProgramCodes.is_first_year_active?(criteria.study_program_codes) do
+        :first
+      else
+        :second
+      end
+
+    study_year_labels = StudyYears.labels(year)
+    study_program_labels = StudyProgramCodes.labels_by_year(year, criteria.study_program_codes)
+
     gender_labels = Genders.labels(criteria.genders)
     dominanthand_labels = DominantHands.labels(criteria.dominant_hands)
     nativelanguage_labels = NativeLanguages.labels(criteria.native_languages)
@@ -51,7 +82,8 @@ defmodule Link.Pool.Form.Submission do
       |> assign(id: id)
       |> assign(submission: submission)
       |> assign(criteria: criteria)
-      |> assign(study_labels: study_labels)
+      |> assign(study_year_labels: study_year_labels)
+      |> assign(study_program_labels: study_program_labels)
       |> assign(gender_labels: gender_labels)
       |> assign(dominanthand_labels: dominanthand_labels)
       |> assign(nativelanguage_labels: nativelanguage_labels)
@@ -109,8 +141,14 @@ defmodule Link.Pool.Form.Submission do
           <div class="xl:max-w-form">
             <Title2>{{dgettext("eyra-account", "features.study.title")}}</Title2>
             <BodyMedium>{{dgettext("eyra-account", "feature.study.content.description")}}</BodyMedium>
-            <Spacing value="S" />
-            <Selector id={{:study_program_codes}} items={{ @study_labels }} type={{:checkbox}} parent={{ %{type: __MODULE__, id: @id} }} opts="max-w-form" />
+            <Spacing value="M" />
+
+            <Title3>{{dgettext("eyra-account", "features.study.year")}}</Title3>
+            <Selector id={{:study_year}} items={{ @study_year_labels }} type={{:radio}} parent={{ %{type: __MODULE__, id: @id} }} />
+            <Spacing value="XL" />
+
+            <Title3>{{dgettext("eyra-account", "features.study.program")}}</Title3>
+            <Selector id={{:study_program}} items={{ @study_program_labels }} type={{:checkbox}} parent={{ %{type: __MODULE__, id: @id} }} opts="max-w-form" />
             <Spacing value="XL" />
           </div>
         </div>

@@ -149,3 +149,13 @@ msgstr ""
 #: lib/core/enums/ticket_types.ex:5
 msgid "ticket_types.tip"
 msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_years.ex:5
+msgid "study_years.first"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_years.ex:5
+msgid "study_years.second"
+msgstr ""

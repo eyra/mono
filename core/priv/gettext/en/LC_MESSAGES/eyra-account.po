@@ -127,42 +127,42 @@ msgid "features.description"
 msgstr "By selecting these characteristics, more studies will become available to you. It enables you to participate in research studies with specific eligibility requirements."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:106
+#: bundles/link/lib/pool/form/submission.ex:138
 #: lib/core_web/live/user/forms/features.ex:99
 msgid "features.dominanthand.title"
 msgstr "Dominant hand"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:98
+#: bundles/link/lib/pool/form/submission.ex:130
 #: lib/core_web/live/user/forms/features.ex:91
 msgid "features.gender.title"
 msgstr "Gender"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:102
+#: bundles/link/lib/pool/form/submission.ex:134
 #: lib/core_web/live/user/forms/features.ex:95
 msgid "features.nativelanguage.title"
 msgstr "First language"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:110
+#: bundles/link/lib/pool/form/submission.ex:142
 #: lib/core_web/live/user/forms/study.ex:73
 msgid "features.study.title"
 msgstr "Study program"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:94
+#: bundles/link/lib/pool/form/submission.ex:126
 #: lib/core_web/live/user/forms/features.ex:87
 msgid "features.title"
 msgstr "Inclusion criteria"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:111
+#: bundles/link/lib/pool/form/submission.ex:143
 msgid "feature.study.content.description"
 msgstr "Select which students (BK: bedrijfskunde, IBA: international business administration) are eligible to participate. If nothing is selected, all students in the pool are eligible to participate."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:95
+#: bundles/link/lib/pool/form/submission.ex:127
 msgid "features.content.description"
 msgstr "Select the inclusion criteria for your study. If nothing is selected, all students in the pool are eligible to participate."
 
@@ -205,3 +205,13 @@ msgstr "privacy statement"
 #: lib/core_web/templates/user_session/new.html.eex:41
 msgid "login.surf.message.surfconext.href"
 msgstr "https://wiki.surfnet.nl/display/conextsupport/Log+in+SURFconext"
+
+#, elixir-format, fuzzy
+#: bundles/link/lib/pool/form/submission.ex:150
+msgid "features.study.program"
+msgstr "Study program"
+
+#, elixir-format, fuzzy
+#: bundles/link/lib/pool/form/submission.ex:146
+msgid "features.study.year"
+msgstr "Study year"

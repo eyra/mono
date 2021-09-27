@@ -150,3 +150,13 @@ msgstr "Ik heb een vraag"
 #: lib/core/enums/ticket_types.ex:5
 msgid "ticket_types.tip"
 msgstr "Ik heb een idee om het platform te verbeteren"
+
+#, elixir-format
+#: lib/core/enums/study_years.ex:5
+msgid "study_years.first"
+msgstr "Eerste jaar"
+
+#, elixir-format
+#: lib/core/enums/study_years.ex:5
+msgid "study_years.second"
+msgstr "Tweede jaar"

@@ -22,6 +22,14 @@ defmodule EyraUI.Selector.Selector do
   defp multiselect?(:radio), do: false
   defp multiselect?(_), do: true
 
+  def update(%{reset: new_items}, socket) do
+    {
+      :ok,
+      socket
+      |> assign(current_items: new_items)
+    }
+  end
+
   # Handle update from parent after auto-save, prevents overwrite of current state
   def update(_params, %{assigns: %{current_items: _current_items}} = socket) do
     {:ok, socket}
