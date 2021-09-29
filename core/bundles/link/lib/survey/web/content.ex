@@ -319,8 +319,9 @@ defmodule Link.Survey.Content do
   defp marginX(:mobile), do: "mx-6"
   defp marginX(_), do: "mx-10"
 
-  defp action_map(%{preview_path: preview_path}) do
-    preview_action = %{ type: :redirect, to: preview_path}
+  defp action_map(%{preview_path: _preview_path}) do
+    #preview_action = %{ type: :redirect, to: preview_path}
+    preview_action = %{ type: :send, event: "preview"}
     submit_action = %{ type: :send, event: "submit"}
     delete_action = %{ type: :send, event: "delete"}
     retract_action = %{ type: :send, event: "retract"}
