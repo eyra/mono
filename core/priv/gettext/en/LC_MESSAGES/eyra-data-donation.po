@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/content.ex:91
+#: lib/core_web/live/data_donation/content.ex:94
 msgid "content.title"
 msgstr "Data Donation"
 
@@ -29,7 +29,7 @@ msgstr "Paste your python script here"
 #, elixir-format
 #: lib/core_web/live/data_donation/form.ex:103
 msgid "config.nrofsubjects.label"
-msgstr "Number of required subjects"
+msgstr "How many participants do you need?"
 
 #, elixir-format
 #: lib/core_web/live/data_donation/form.ex:102

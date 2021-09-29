@@ -69,7 +69,7 @@ defmodule Link.Survey.PromotionPlugin do
 
   defp get_highlights(tool) do
     occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
-    open_spot_count = tool.subject_count - occupied_spot_count
+    open_spot_count = if tool.subject_count do tool.subject_count - occupied_spot_count else 0 end
 
     spots_title = dgettext("link-survey", "spots.highlight.title")
     spots_text = "Nog #{open_spot_count} van #{tool.subject_count}"

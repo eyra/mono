@@ -13,11 +13,12 @@ defmodule EyraUI.Panel.Panel do
   prop(bg_color, :css_class, default: "bg-grey6")
   prop(size, :css_class, default: "h-full")
   prop(align, :css_class, default: "text-left")
+  prop(padding, :string, default: "p-6 lg:p-8")
 
   def render(assigns) do
     ~H"""
     <div class={{ @bg_color, @size, "rounded-md" }}>
-      <div class="p-6 lg:pl-8 lg:pr-8 lg:pt-10 lg:pb-10 {{@align}}">
+      <div class="{{@padding}} {{@align}}">
         <slot name="title" />
         <slot />
       </div>

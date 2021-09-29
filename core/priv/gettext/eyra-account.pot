@@ -126,42 +126,42 @@ msgid "features.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:106
+#: bundles/link/lib/pool/form/submission.ex:136
 #: lib/core_web/live/user/forms/features.ex:99
 msgid "features.dominanthand.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:98
+#: bundles/link/lib/pool/form/submission.ex:128
 #: lib/core_web/live/user/forms/features.ex:91
 msgid "features.gender.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:102
+#: bundles/link/lib/pool/form/submission.ex:132
 #: lib/core_web/live/user/forms/features.ex:95
 msgid "features.nativelanguage.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:110
+#: bundles/link/lib/pool/form/submission.ex:140
 #: lib/core_web/live/user/forms/study.ex:73
 msgid "features.study.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:94
+#: bundles/link/lib/pool/form/submission.ex:124
 #: lib/core_web/live/user/forms/features.ex:87
 msgid "features.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:111
+#: bundles/link/lib/pool/form/submission.ex:141
 msgid "feature.study.content.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:95
+#: bundles/link/lib/pool/form/submission.ex:125
 msgid "features.content.description"
 msgstr ""
 
@@ -203,4 +203,14 @@ msgstr ""
 #, elixir-format
 #: lib/core_web/templates/user_session/new.html.eex:41
 msgid "login.surf.message.surfconext.href"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/form/submission.ex:148
+msgid "features.study.program"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/form/submission.ex:144
+msgid "features.study.year"
 msgstr ""

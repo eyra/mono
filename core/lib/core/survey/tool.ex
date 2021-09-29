@@ -24,6 +24,9 @@ defmodule Core.Survey.Tool do
     field(:current_subject_count, :integer)
     field(:subject_count, :integer)
     field(:duration, :string)
+    field(:language, :string)
+    field(:ethical_approval, :boolean)
+
     # field(:reward_currency, Ecto.Enum, values: [:eur, :usd, :gbp, :chf, :nok, :sek])
     # field(:reward_value, :integer)
     field(:devices, {:array, Ecto.Enum}, values: Core.Enums.Devices.schema_values())
@@ -38,11 +41,23 @@ defmodule Core.Survey.Tool do
     def id(survey_tool), do: survey_tool.auth_node_id
   end
 
-  @fields ~w(survey_url subject_count duration devices)a
+  @fields ~w(survey_url subject_count duration ethical_approval devices)a
   @required_fields ~w()a
 
   @impl true
   def operational_fields, do: @fields
+
+  @impl true
+  def operational_validation(changeset) do
+    validate_true(changeset, :ethical_approval)
+  end
+
+  defp validate_true(changeset, field) do
+    case get_field(changeset, field) do
+      true -> changeset
+      _ -> add_error(changeset, field, "is not true")
+    end
+  end
 
   def changeset(tool, :auto_save, params) do
     tool

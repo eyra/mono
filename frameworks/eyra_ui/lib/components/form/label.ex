@@ -12,8 +12,8 @@ defmodule EyraUI.Form.Label do
 
   def render(assigns) do
     ~H"""
-    <div class="mt-0.5 text-title6 font-title6"
-        x-bind:class="{'{{focus_label_color(@background)}}': focus === '{{@field}}', '{{label_color(assigns, @form)}}': focus !== '{{@field}}' }"
+    <div class="mt-0.5 text-title6 font-title6 leading-snug"
+        x-bind:class="{'{{focus_label_color(@background)}}': focus === '{{@field}}', '{{label_color(assigns, @form, @label_color)}}': focus !== '{{@field}}' }"
     >
       {{@label_text}}
     </div>

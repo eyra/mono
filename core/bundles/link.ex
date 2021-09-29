@@ -19,6 +19,7 @@ defmodule Link do
         live("/campaign/all", Survey.Overview)
         live("/campaign/:id/content", Survey.Content)
         live("/campaign/:id/complete", Survey.Complete)
+        live("/promotion/:id", Promotion.Public)
       end
     end
   end
@@ -35,6 +36,7 @@ defmodule Link do
       grant_access(Link.Survey.Overview, [:member])
       grant_access(Link.Survey.Content, [:owner])
       grant_access(Link.Survey.Complete, [:participant])
+      grant_access(Link.Promotion.Public, [:visitor, :member, :owner])
     end
   end
 end

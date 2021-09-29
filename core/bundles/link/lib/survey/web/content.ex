@@ -10,6 +10,9 @@ defmodule Link.Survey.Content do
 
   import CoreWeb.Gettext
 
+  require Link.Enums.Themes
+  alias Link.Enums.Themes
+
   alias Core.Survey.Tools
   alias Core.Promotions
   alias Core.Pools.Submissions
@@ -30,6 +33,7 @@ defmodule Link.Survey.Content do
   data(submission_id, :any)
   data(submitted?, :any)
   data(validate?, :any)
+  data(preview_path, :any)
   data(initial_tab, :any)
   data(tabs, :map)
   data(actions, :map)
@@ -52,6 +56,7 @@ defmodule Link.Survey.Content do
 
     tool_form_ready? = Tools.ready?(tool)
     promotion_form_ready? = Promotions.ready?(promotion)
+    preview_path = Routes.live_path(socket, Link.Promotion.Public, promotion.id, preview: true)
 
     {
       :ok,
@@ -64,6 +69,7 @@ defmodule Link.Survey.Content do
         validate?: validate?,
         tool_form_ready?: tool_form_ready?,
         promotion_form_ready?: promotion_form_ready?,
+        preview_path: preview_path,
         initial_tab: initial_tab,
         changesets: %{},
         save_timer: nil,
@@ -131,7 +137,8 @@ defmodule Link.Survey.Content do
         component: PromotionForm,
         props: %{
           entity_id: promotion.id,
-          validate?: validate?
+          validate?: validate?,
+          themes_module: Themes
         }
       },
       %{
@@ -188,7 +195,7 @@ defmodule Link.Survey.Content do
 
     case promotion.themes do
       nil -> ""
-      themes -> themes |> Enum.map(&Atom.to_string(&1)) |> Enum.join(" ")
+      themes -> themes |> Enum.join(" ")
     end
   end
 
@@ -312,63 +319,70 @@ defmodule Link.Survey.Content do
   defp marginX(:mobile), do: "mx-6"
   defp marginX(_), do: "mx-10"
 
-  defp action_map() do
+  defp action_map(%{preview_path: _preview_path}) do
+    #preview_action = %{ type: :redirect, to: preview_path}
+    preview_action = %{ type: :send, event: "preview"}
+    submit_action = %{ type: :send, event: "submit"}
+    delete_action = %{ type: :send, event: "delete"}
+    retract_action = %{ type: :send, event: "retract"}
+    more_action = %{ type: :toggle, id: :more, target: "action_menu" }
+
     %{
       submit: %{
         label: %{
-          action: %{ type: :send, event: "submit"},
+          action: submit_action,
           face: %{ type: :primary, label: dgettext("link-ui", "submit.button"), bg_color: "bg-success"}
         },
         icon: %{
-          action: %{ type: :send, event: "submit"},
+          action: submit_action,
           face: %{ type: :icon, icon: :submit, alt: dgettext("link-ui", "submit.button")}
         }
       },
       preview: %{
         label: %{
-          action: %{ type: :send, event: "preview"},
+          action: preview_action,
           face: %{ type: :primary, label: dgettext("link-ui", "preview.button"), bg_color: "bg-primary"}
         },
         icon: %{
-          action: %{ type: :send, event: "preview"},
+          action: preview_action,
           face: %{ type: :icon, icon: :preview, alt: dgettext("link-ui", "preview.button")}
         },
         label_icon: %{
-          action: %{ type: :send, event: "preview"},
+          action: preview_action,
           face: %{ type: :label, icon: :preview, label: dgettext("link-ui", "preview.button")}
         }
       },
       delete: %{
         icon: %{
-          action: %{ type: :send, event: "delete"},
+          action: delete_action,
           face: %{ type: :icon, icon: :delete, alt: dgettext("link-ui", "delete.button") }
         },
         label_icon: %{
-          action: %{ type: :send, event: "delete"},
+          action: delete_action,
           face: %{ type: :label, icon: :delete, label: dgettext("link-ui", "delete.button") }
         }
       },
       retract: %{
         icon: %{
-          action: %{ type: :send, event: "retract"},
+          action: retract_action,
           face: %{ type: :icon, icon: :retract, alt: dgettext("link-ui", "delete.button") }
         },
         label_icon: %{
-          action: %{ type: :send, event: "retract"},
+          action: retract_action,
           face: %{ type: :label, icon: :retract, label: dgettext("link-ui", "retract.button") }
         }
       },
       more: %{
         icon: %{
-          action: %{ type: :toggle, id: :more, target: "action_menu" },
+          action: more_action,
           face: %{ type: :icon, icon: :more, alt: "Show more actions" }
         }
       },
     }
   end
 
-  defp create_actions(breakpoint, submitted?) do
-    create_actions(action_map(), breakpoint, submitted?)
+  defp create_actions(%{breakpoint: breakpoint, submitted?: submitted?} = assigns) do
+    create_actions(action_map(assigns), breakpoint, submitted?)
   end
 
   defp create_actions(_, {:unknown, _}, _), do: []
@@ -437,8 +451,8 @@ defmodule Link.Survey.Content do
   end
 
 
-  defp create_more_actions(submitted?) do
-    create_more_actions(action_map(), submitted?)
+  defp create_more_actions(%{submitted?: submitted?} = assigns) do
+    create_more_actions(action_map(assigns), submitted?)
   end
 
   defp create_more_actions(%{preview: preview, delete: delete}, false) do
@@ -492,7 +506,7 @@ defmodule Link.Survey.Content do
             </div>
           </div>
           <TabbarArea tabs={{@tabs}}>
-            <ActionBar right_bar_buttons={{ create_actions(@breakpoint, @submitted?) }} more_buttons={{ create_more_actions(@submitted?) }}>
+            <ActionBar right_bar_buttons={{ create_actions(assigns) }} more_buttons={{ create_more_actions(assigns) }}>
               <Tabbar vm={{ %{initial_tab: @initial_tab, size: tabbar_size(@breakpoint)} }} />
             </ActionBar>
             <TabbarContent/>

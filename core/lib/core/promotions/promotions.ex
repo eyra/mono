@@ -8,6 +8,7 @@ defmodule Core.Promotions do
   alias Ecto.Multi
   alias Ecto.Changeset
   alias Core.Repo
+  alias Core.Signals
   alias Core.Promotions.Promotion
   alias Core.Content.{Nodes, Node}
   alias Core.Authorization
@@ -41,11 +42,15 @@ defmodule Core.Promotions do
     study = Studies.get_study!(tool.study_id)
     study_changeset = Study.changeset(study, %{updated_at: NaiveDateTime.utc_now()})
 
-    Multi.new()
-    |> Multi.update(:promotion, changeset)
-    |> Multi.update(:content_node, node_changeset)
-    |> Multi.update(:study, study_changeset)
-    |> Repo.transaction()
+    with {:ok, %{promotion: promotion} = result} <-
+           Multi.new()
+           |> Multi.update(:promotion, changeset)
+           |> Multi.update(:content_node, node_changeset)
+           |> Multi.update(:study, study_changeset)
+           |> Repo.transaction() do
+      Signals.dispatch!(:promotion_updated, promotion)
+      {:ok, result}
+    end
   end
 
   def update(%Promotion{} = promotion, attrs) do

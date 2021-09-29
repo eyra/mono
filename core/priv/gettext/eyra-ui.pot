@@ -88,7 +88,7 @@ msgid "marketplace.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/todo.ex:31
+#: lib/core_web/live/todo.ex:50
 msgid "todo.title"
 msgstr ""
 
@@ -166,17 +166,17 @@ msgid "cancel.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:205
+#: bundles/link/lib/survey/web/content.ex:212
 msgid "delete.confirm.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:204
+#: bundles/link/lib/survey/web/content.ex:211
 msgid "delete.confirm.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:206
+#: bundles/link/lib/survey/web/content.ex:213
 msgid "delete.confirm.label"
 msgstr ""
 
@@ -186,12 +186,12 @@ msgid "ok.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:267
+#: bundles/link/lib/survey/web/content.ex:274
 msgid "feature.unavailable.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:266
+#: bundles/link/lib/survey/web/content.ex:273
 msgid "feature.unavailable.title"
 msgstr ""
 

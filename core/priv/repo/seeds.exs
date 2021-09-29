@@ -42,7 +42,7 @@ data_donation_promotions =
       able to listen (using speakers or headphones).
       """,
       image_id: image,
-      themes: [:technology],
+      themes: ["technology"],
       marks: ["vu"],
       banner_photo_url: Faker.Internet.url(),
       banner_title: "Banner title",

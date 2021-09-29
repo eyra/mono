@@ -20,7 +20,7 @@ defmodule EyraUI.Image do
       end
 
     ~H"""
-    <div
+    <div id={{ @image.url }}
       class="blurhash-wrapper overflow-hidden w-full h-full relative"
       x-data="blurHash()"
       x-init="$nextTick(()=>render())"

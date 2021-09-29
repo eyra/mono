@@ -2,13 +2,12 @@ defmodule CoreWeb.Promotion.Form do
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader
 
-  alias Core.Enums.Themes
   alias Core.Promotions
   alias Core.Promotions.Promotion
 
   alias CoreWeb.Router.Helpers, as: Routes
 
-  alias EyraUI.Text.{Title2, Title3, BodyMedium}
+  alias EyraUI.Text.{Title2, Title3, Body, BodyLarge}
   alias EyraUI.Form.{Form, TextInput, TextArea, PhotoInput, UrlInput}
   alias EyraUI.Selector.Selector
   alias EyraUI.ImagePreview
@@ -30,7 +29,8 @@ defmodule CoreWeb.Promotion.Form do
   @impl true
   def save_file(%{assigns: %{entity: entity}} = socket, uploaded_file) do
     socket
-    |> save(entity, %{banner_photo_url: uploaded_file})
+    # force save
+    |> save(entity, %{banner_photo_url: uploaded_file}, false)
   end
 
   def update(%{image_id: image_id}, %{assigns: %{entity: entity}} = socket) do
@@ -41,16 +41,26 @@ defmodule CoreWeb.Promotion.Form do
       :ok,
       socket
       |> assign(image_url: image_url)
-      |> save(entity, attrs)
+      # force save
+      |> save(entity, attrs, false)
     }
   end
 
   # Handle Selector Update
   def update(
-        %{active_item_ids: active_item_ids, selector_id: selector_id},
+        %{active_item_ids: active_theme_ids, selector_id: :themes},
         %{assigns: %{entity: entity}} = socket
       ) do
-    {:ok, socket |> save(entity, %{selector_id => active_item_ids})}
+    active_theme_ids =
+      active_theme_ids
+      |> Enum.map(&Atom.to_string(&1))
+
+    {
+      :ok,
+      socket
+      # force save
+      |> save(entity, %{:themes => active_theme_ids}, false)
+    }
   end
 
   # Handle update from parent after attempt to publish
@@ -69,13 +79,19 @@ defmodule CoreWeb.Promotion.Form do
     {:ok, socket}
   end
 
-  def update(%{id: id, props: %{entity_id: entity_id, validate?: validate?}}, socket) do
+  def update(
+        %{
+          id: id,
+          props: %{entity_id: entity_id, validate?: validate?, themes_module: themes_module}
+        },
+        socket
+      ) do
     entity = Promotions.get!(entity_id)
     changeset = Promotion.changeset(entity, :create, %{})
 
     byline = Promotion.get_byline(entity)
     image_url = Promotion.get_image_url(entity, %{width: 400, height: 300})
-    theme_labels = Themes.labels(entity.themes)
+    theme_labels = themes_module.labels(entity.themes)
 
     {
       :ok,
@@ -94,11 +110,11 @@ defmodule CoreWeb.Promotion.Form do
   end
 
   # Save
-  def save(socket, %Promotion{} = entity, attrs) do
+  defp save(socket, %Promotion{} = entity, attrs, schedule?) do
     changeset = Promotion.changeset(entity, :save, attrs)
 
     socket
-    |> schedule_save(changeset)
+    |> save(changeset, schedule?)
     |> validate_for_publish()
   end
 
@@ -123,7 +139,7 @@ defmodule CoreWeb.Promotion.Form do
     {
       :noreply,
       socket
-      |> save(entity, attrs)
+      |> save(entity, attrs, true)
     }
   end
 
@@ -133,19 +149,21 @@ defmodule CoreWeb.Promotion.Form do
       <ContentArea>
         <MarginY id={{:page_top}} />
         <Title2>{{dgettext("eyra-promotion", "form.title")}}</Title2>
+        <BodyLarge>{{dgettext("eyra-promotion", "form.description")}}</BodyLarge>
+        <Spacing value="M" />
         <Form id={{@id}} changeset={{@changeset}} change_event="save" focus={{@focus}} target={{@myself}}>
           <TextInput field={{:title}} label_text={{dgettext("eyra-promotion", "title.label")}} />
           <TextInput field={{:subtitle}} label_text={{dgettext("eyra-promotion", "subtitle.label")}} />
 
           <Spacing value="XL" />
           <Title3>{{dgettext("eyra-promotion", "themes.title")}}</Title3>
-          <BodyMedium>{{dgettext("eyra-promotion", "themes.label")}}</BodyMedium>
+          <Body>{{dgettext("eyra-promotion", "themes.label")}}</Body>
           <Spacing value="XS" />
           <Selector id={{:themes}} items={{ @theme_labels }} parent={{ %{type: __MODULE__, id: @id} }} />
           <Spacing value="XL" />
 
           <Title3>{{dgettext("eyra-promotion", "image.title")}}</Title3>
-          <BodyMedium>{{dgettext("eyra-promotion", "image.label")}}</BodyMedium>
+          <Body>{{dgettext("eyra-promotion", "image.label")}}</Body>
           <Spacing value="XS" />
           <div class="flex flex-row">
             <ImagePreview image_url={{ @image_url }} placeholder="" />

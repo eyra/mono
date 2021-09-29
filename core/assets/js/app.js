@@ -26,6 +26,7 @@ import "./100vh-fix";
 import { ViewportResize } from "./viewport_resize"
 import { Toggle } from "./toggle"
 import { Tabbar, TabbarItem, TabbarFooterItem } from "./tabbar"
+import { Clipboard } from "./clipboard"
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -36,6 +37,9 @@ window.blurHash = () => {
     showBlurHash() {
       return this.show !== false;
     },
+    reset() {
+      console.log("Reset blurhash")
+    },
     hideBlurHash() {
       if (!liveSocket.socket.isConnected()) {
         return;
@@ -43,6 +47,7 @@ window.blurHash = () => {
       this.show = false;
     },
     render() {
+      console.log("Render blurhash")
       const img = this.$el.getElementsByTagName("img")[0]
       if (img.complete) {
         this.show = false;
@@ -69,7 +74,7 @@ let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
 
-let Hooks = { ViewportResize, Toggle, Tabbar, TabbarItem, TabbarFooterItem };
+let Hooks = { Clipboard, ViewportResize, Toggle, Tabbar, TabbarItem, TabbarFooterItem };
 
 Hooks.NativeWrapper = {
   mounted() {
