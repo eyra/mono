@@ -1,7 +1,3 @@
-defmodule EyraUI.Selector.Item do
-  defstruct [:id, :value, :active]
-end
-
 defmodule EyraUI.Selector.Selector do
   @moduledoc false
   use Surface.LiveComponent

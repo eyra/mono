@@ -7,8 +7,8 @@ defmodule Link.Survey.Form do
 
   alias EyraUI.Selector.Selector
   alias EyraUI.Panel.Panel
-  alias EyraUI.Text.{Title2, Title3, Title5, BodyMedium}
-  alias EyraUI.Form.{Form, UrlInput, TextInput, NumberInput}
+  alias EyraUI.Text.{Title2, Title3, Title5, Body, BodyLarge, BodyMedium}
+  alias EyraUI.Form.{Form, UrlInput, TextInput, NumberInput, Checkbox}
   alias EyraUI.Button.Face.LabelIcon
 
   alias CoreWeb.UI.StepIndicator
@@ -20,11 +20,25 @@ defmodule Link.Survey.Form do
   data(uri_origin, :any)
   data(device_labels, :list)
   data(language_labels, :list)
+  data(ethical_label, :any)
   data(changeset, :any)
   data(focus, :any, default: "")
   data(panlid_link, :any)
 
   # Handle selector update
+
+  def update(
+    %{active_item_ids: active_item_ids, selector_id: :ethical_approval},
+    %{assigns: %{entity: entity}} = socket
+  ) do
+    {
+      :ok,
+      socket
+      |> save(entity, :auto_save, %{ ethical_approval: not Enum.empty?(active_item_ids)}, false) #force save
+    }
+  end
+
+
   def update(
       %{active_item_ids: active_item_ids, selector_id: selector_id},
       %{assigns: %{entity: entity}} = socket
@@ -32,7 +46,7 @@ defmodule Link.Survey.Form do
     {
       :ok,
       socket
-      |> save(entity, :auto_save, %{selector_id => active_item_ids})
+      |> save(entity, :auto_save, %{selector_id => active_item_ids}, false) #force save
     }
   end
 
@@ -59,6 +73,13 @@ defmodule Link.Survey.Form do
     device_labels = Devices.labels(entity.devices)
     language_labels = OnlineStudyLanguages.labels(entity.language)
 
+    ethical_label = %{
+      id: :statement,
+      value: dgettext("link-survey", "ethical.label"),
+      accent: :tertiary,
+      active: entity.ethical_approval
+    }
+
     {
       :ok,
       socket
@@ -68,6 +89,7 @@ defmodule Link.Survey.Form do
       |> assign(uri_origin: uri_origin)
       |> assign(changeset: changeset)
       |> assign(device_labels: device_labels)
+      |> assign(ethical_label: ethical_label)
       |> assign(language_labels: language_labels)
       |> assign(uri_origin: uri_origin)
       |> assign(validate?: validate?)
@@ -77,20 +99,34 @@ defmodule Link.Survey.Form do
 
   # Handle Events
 
+  def handle_event("toggle", %{"checkbox" => checkbox}, %{assigns: %{entity: entity}} = socket) do
+    new_value = not Map.get(entity, checkbox, false)
+    attrs = %{checkbox => new_value}
+
+    {
+      :noreply,
+      socket
+      |> force_save(entity, :auto_save, attrs)
+    }
+  end
+
   def handle_event("save", %{"tool" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket
-      |> save(entity, :auto_save, attrs)
+      |> schedule_save(entity, :auto_save, attrs)
     }
   end
 
   # Saving
-  def save(socket, entity, type, attrs) do
+  def force_save(socket, entity, type, attrs), do: save(socket, entity, type, attrs, false)
+  def schedule_save(socket, entity, type, attrs), do: save(socket, entity, type, attrs, true)
+
+  def save(socket, entity, type, attrs, schedule?) do
     changeset = Tool.changeset(entity, type, attrs)
 
     socket
-    |> schedule_save(changeset)
+    |> save(changeset, schedule?)
     |> validate_for_publish()
   end
 
@@ -109,16 +145,24 @@ defmodule Link.Survey.Form do
 
   def validate_for_publish(socket), do: socket
 
+
+  defp redirect_instructions_link() do
+    link_as_string(
+      dgettext("link-survey", "redirect.instructions.link"),
+      "https://www.qualtrics.com/support/survey-platform/survey-module/survey-options/survey-termination/#RedirectingRespondentsToAUrl"
+    )
+  end
+
   defp panlid_instructions_link() do
     link_as_string(
-      dgettext("link-survey", "panlid.link"),
+      dgettext("link-survey", "panlid.instructions.link"),
       "https://www.qualtrics.com/support/survey-platform/survey-module/survey-flow/standard-elements/passing-information-through-query-strings/?parent=p001135#PassingInformationIntoASurvey"
     )
   end
 
   defp study_instructions_link() do
     link_as_string(
-      dgettext("link-survey", "study.link"),
+      dgettext("link-survey", "study.instructions.link"),
       "https://www.qualtrics.com/support/survey-platform/distributions-module/web-distribution/anonymous-link/#ObtainingTheAnonymousLink"
     )
   end
@@ -126,7 +170,7 @@ defmodule Link.Survey.Form do
   defp link_as_string(label, url) do
     label
     |> Phoenix.HTML.Link.link(
-      class: "text-tertiary underline",
+      class: "text-white underline",
       target: "_blank",
       to: url
     )
@@ -138,8 +182,9 @@ defmodule Link.Survey.Form do
       <ContentArea class="mb-4" >
         <MarginY id={{:page_top}} />
         <Title2>{{dgettext("link-survey", "form.title")}}</Title2>
+        <BodyLarge>{{ dgettext("link-survey", "form.description") }}</BodyLarge>
+        <Spacing value="M" />
         <Form id={{@id}} changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
-
           <Panel bg_color="bg-grey1">
             <Title3 color="text-white">{{dgettext("link-survey", "setup.title")}}</Title3>
             <Spacing value="M" />
@@ -163,8 +208,8 @@ defmodule Link.Survey.Form do
                 <div class="flex-wrap">
                   <Title5 color="text-white">{{dgettext("link-survey", "redirect.title")}}</Title5>
                   <Spacing value="XS" />
-                  <BodyMedium color="text-white">{{dgettext("link-survey", "redirect.description")}}</BodyMedium>
-                  <Spacing value="XXS" />
+                  <BodyMedium color="text-white">{{ raw(dgettext("link-survey", "redirect.description", link: redirect_instructions_link()))}}</BodyMedium>
+                  <Spacing value="XS" />
                   <div class="flex flex-row gap-6 items-center">
                     <div class="flex-wrap">
                       <BodyMedium color="text-tertiary"><span class="break-all">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Link.Survey.Complete, @entity_id)}}</span></BodyMedium>
@@ -203,22 +248,37 @@ defmodule Link.Survey.Form do
           <Spacing value="M" />
 
           <Title3>{{dgettext("link-survey", "language.title")}}</Title3>
-          <BodyMedium>{{dgettext("link-survey", "languages.label")}}</BodyMedium>
-          <Spacing value="XS" />
-          <Selector id={{:language}} items={{ @language_labels }} type={{:radio}} parent={{ %{type: __MODULE__, id: @id} }} />
+          <Body>{{dgettext("link-survey", "languages.label")}}</Body>
+          <Spacing value="S" />
+          <Selector
+            id={{:language}}
+            items={{ @language_labels }}
+            type={{:radio}}
+            parent={{ %{type: __MODULE__, id: @id} }}
+          />
           <Spacing value="XL" />
 
           <Title3>{{dgettext("link-survey", "devices.title")}}</Title3>
-          <BodyMedium>{{dgettext("link-survey", "devices.label")}}</BodyMedium>
-          <Spacing value="XS" />
-          <Selector id={{:devices}} items={{ @device_labels }} parent={{ %{type: __MODULE__, id: @id} }} />
+          <Body>{{dgettext("link-survey", "devices.label")}}</Body>
+          <Spacing value="S" />
+          <Selector
+            id={{:devices}}
+            items={{ @device_labels }}
+            parent={{ %{type: __MODULE__, id: @id} }}
+          />
           <Spacing value="XL" />
 
-          <Panel bg_color="bg-grey1" padding="pt-6 pb-0 px-6 lg:pt-8 lg:pb-1 lg:px-8">
-            <Title3 color="text-white" >{{dgettext("link-survey", "rerb.title")}}</Title3>
-            <BodyMedium color="text-white">{{dgettext("link-survey", "rerb.description")}}</BodyMedium>
-            <Spacing value="XS" />
-            <TextInput field={{:rerb_code}} label_text={{dgettext("link-survey", "rerb.label")}} label_color="text-white" background={{ :dark }}/>
+          <Panel bg_color="bg-grey1">
+            <Title3 color="text-white" >{{dgettext("link-survey", "ethical.title")}}</Title3>
+            <BodyMedium color="text-white">{{dgettext("link-survey", "ethical.description")}}</BodyMedium>
+            <Spacing value="S" />
+            <Checkbox
+              field={{:ethical_approval}}
+              label_text={{ dgettext("link-survey", "ethical.label")}}
+              label_color="text-white"
+              accent={{:tertiary}}
+              background={{:dark}}
+            />
           </Panel>
 
         </Form>

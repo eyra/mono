@@ -12,19 +12,19 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:202
+#: bundles/link/lib/survey/web/form.ex:211
 msgid "config.nrofsubjects.label"
-msgstr "Number of required subjects"
+msgstr "How many participants do you need?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:196
+#: bundles/link/lib/survey/web/form.ex:205
 msgid "config.url.label"
-msgstr "Public web link of your online study"
+msgstr "Online study link"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:199
+#: bundles/link/lib/survey/web/form.ex:208
 msgid "duration.label"
-msgstr "Estimated duration"
+msgstr "How much time do you estimate participants will need?"
 
 #, elixir-format
 #: bundles/link/lib/lab/promotion_plugin.ex:49
@@ -68,9 +68,9 @@ msgid "conpleted.title"
 msgstr "Completed"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:212
+#: bundles/link/lib/survey/web/form.ex:221
 msgid "devices.label"
-msgstr "Select one or more devices that can be used to participate in your online study."
+msgstr "Which devices can participants use?"
 
 #, elixir-format
 #: bundles/link/lib/survey/data/promotion_plugin.ex:49
@@ -78,17 +78,17 @@ msgid "open.cta.title"
 msgstr "Go to online study"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:166
+#: bundles/link/lib/survey/web/form.ex:175
 msgid "redirect.description"
-msgstr "The redirect url to link your online study is provided below. This is used to sent participants back to Panl after finishing their task on an external platform (e.g. a questionnaire on Qualtrics). Copy the url and paste it at the location indicated by the external platform."
+msgstr "To redirect participants back to Panl at the end of the survey, copy the redirect URL below and paste it as \"Website URL\" in Qualtrics as %{link}."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:164
+#: bundles/link/lib/survey/web/form.ex:173
 msgid "redirect.title"
-msgstr "Link back to Panl"
+msgstr "Redirect URL (End of Survey)"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:211
+#: bundles/link/lib/survey/web/form.ex:220
 msgid "devices.title"
 msgstr "Devices"
 
@@ -195,10 +195,10 @@ msgstr "Sample"
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:160
 msgid "tabbar.item.criteria.forward"
-msgstr "Publish campaign"
+msgstr "Determine your sample"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:140
+#: bundles/link/lib/survey/web/form.ex:148
 msgid "form.title"
 msgstr "Study"
 
@@ -208,66 +208,76 @@ msgid "survey.overview.title"
 msgstr "Campaigns"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:205
+#: bundles/link/lib/survey/web/form.ex:214
 msgid "language.title"
 msgstr "Language"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:206
+#: bundles/link/lib/survey/web/form.ex:215
 msgid "languages.label"
-msgstr "Select the language of the online study"
+msgstr "In what language is your online study written?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:221
-msgid "rerb.label"
-msgstr "RERB code"
+#: bundles/link/lib/survey/web/form.ex:230
+msgid "ethical.label"
+msgstr "I hereby state that my study conforms to all ethical standards."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:218
-msgid "rerb.title"
-msgstr "Research Ethics Review Board"
+#: bundles/link/lib/survey/web/form.ex:227
+msgid "ethical.title"
+msgstr "Ethical review"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:155
+#: bundles/link/lib/survey/web/form.ex:164
 msgid "panlid.description"
-msgstr "Panl includes the parameter 'panl_id' when redirecting the participant to Qualtrics. This parameter represents the participant within your online study. Check %{link} about embedding parameters in your online studie."
+msgstr "Panl automatically adds the participant ID to your Qualtrics survey URL. To use this ID in Qualtrics, add an embedded data element field with the name \"panl_id\", as %{link} in \"PART 2\"."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:153
+#: bundles/link/lib/survey/web/form.ex:162
 msgid "panlid.title"
 msgstr "Panl ID"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:144
+#: bundles/link/lib/survey/web/form.ex:153
 msgid "setup.title"
-msgstr "Setup Qualtrics"
+msgstr "How to set up your survey on Qualtrics?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:114
-msgid "panlid.link"
-msgstr "this instructions on Qualtrics"
-
-#, elixir-format
-#: bundles/link/lib/survey/web/form.ex:174
+#: bundles/link/lib/survey/web/form.ex:183
 msgid "redirect.copy.button"
 msgstr "Copy"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:219
-msgid "rerb.description"
-msgstr "Provide the RERB code for your study. Without this code your campaign will not be made available for participants."
+#: bundles/link/lib/survey/web/form.ex:228
+msgid "ethical.description"
+msgstr "Make sure that you run through the ethical checklist and that you have approval of the FEWEB Research Ethics Review Board, if required for your study."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:188
+#: bundles/link/lib/survey/web/form.ex:197
 msgid "study.link.description"
-msgstr "To obtain the link to your Qualtrics survey, follow %{link}. Paste your link in the \"Qualtrics anonymous survey link\" field below."
+msgstr "To obtain the link to your Qualtrics survey, follow %{link}. Paste your link in the  \"Online study link\" field in the form below."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:186
+#: bundles/link/lib/survey/web/form.ex:195
 msgid "study.link.title"
 msgstr "Anonymous Survey Link"
 
-#, elixir-format, fuzzy
-#: bundles/link/lib/survey/web/form.ex:121
-msgid "study.link"
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:122
+msgid "panlid.instructions.link"
+msgstr "explained here"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:115
+msgid "redirect.instructions.link"
+msgstr "instructed here"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:129
+msgid "study.instructions.link"
 msgstr "these instructions"
+
+#, elixir-format, fuzzy
+#: bundles/link/lib/survey/web/form.ex:149
+msgid "form.description"
+msgstr "First of all follow the steps below so participants can start your online studie from Panl and are redirected back to Panl after they finish."

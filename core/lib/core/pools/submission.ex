@@ -24,7 +24,11 @@ defmodule Core.Pools.Submission do
 
   @fields ~w(status)a
 
+  @impl true
   def operational_fields, do: @fields
+
+  @impl true
+  def operational_validation(changeset), do: changeset
 
   def changeset(submission, attrs) do
     submission

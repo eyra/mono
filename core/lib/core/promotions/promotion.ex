@@ -47,6 +47,9 @@ defmodule Core.Promotions.Promotion do
   @impl true
   def operational_fields, do: @publish_required_fields
 
+  @impl true
+  def operational_validation(changeset), do: changeset
+
   defimpl GreenLight.AuthorizationNode do
     def id(promotion), do: promotion.auth_node_id
   end

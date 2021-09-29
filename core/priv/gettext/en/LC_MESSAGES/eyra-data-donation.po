@@ -29,7 +29,7 @@ msgstr "Paste your python script here"
 #, elixir-format
 #: lib/core_web/live/data_donation/form.ex:103
 msgid "config.nrofsubjects.label"
-msgstr "Number of required subjects"
+msgstr "How many participants do you need?"
 
 #, elixir-format
 #: lib/core_web/live/data_donation/form.ex:102

@@ -45,6 +45,18 @@ defmodule CoreWeb.User.Forms.Debug do
 
   # Saving
 
+  def handle_event("toggle", %{"checkbox" => checkbox}, %{assigns: %{entity: entity}} = socket) do
+    new_value = not Map.get(entity, checkbox, false)
+    attrs = %{checkbox => new_value}
+
+    {
+      :noreply,
+      socket
+      |> force_save(entity, :auto_save, attrs)
+      |> update_ui()
+    }
+  end
+
   def handle_event(
         "save",
         %{"user_profile_edit" => attrs},
@@ -53,16 +65,19 @@ defmodule CoreWeb.User.Forms.Debug do
     {
       :noreply,
       socket
-      |> save(entity, :auto_save, attrs)
+      |> schedule_save(entity, :auto_save, attrs)
       |> update_ui()
     }
   end
 
-  def save(socket, %Core.Accounts.UserProfileEdit{} = entity, type, attrs) do
+  def force_save(socket, entity, type, attrs), do: save(socket, entity, type, attrs, false)
+  def schedule_save(socket, entity, type, attrs), do: save(socket, entity, type, attrs, true)
+
+  def save(socket, %Core.Accounts.UserProfileEdit{} = entity, type, attrs, schedule?) do
     changeset = UserProfileEdit.changeset(entity, type, attrs)
 
     socket
-    |> schedule_save(changeset)
+    |> save(changeset, schedule?)
   end
 
   @impl true
@@ -71,9 +86,9 @@ defmodule CoreWeb.User.Forms.Debug do
         <ContentArea>
           <Title2>User roles</Title2>
           <Form id="main_form" changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
-            <Checkbox field={{:student}} label_text="Student"/>
-            <Checkbox field={{:researcher}} label_text="Researcher"/>
-            <Checkbox field={{:coordinator}} label_text="Coordinator"/>
+            <Checkbox field={{:student}} label_text="Student" />
+            <Checkbox field={{:researcher}} label_text="Researcher" />
+            <Checkbox field={{:coordinator}} label_text="Coordinator" />
           </Form>
         </ContentArea>
     """

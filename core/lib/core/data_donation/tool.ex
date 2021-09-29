@@ -38,6 +38,9 @@ defmodule Core.DataDonation.Tool do
   @impl true
   def operational_fields, do: @fields
 
+  @impl true
+  def operational_validation(changeset), do: changeset
+
   defimpl GreenLight.AuthorizationNode do
     def id(data_donation_tool), do: data_donation_tool.auth_node_id
   end

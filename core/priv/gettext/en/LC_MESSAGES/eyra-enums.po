@@ -14,7 +14,7 @@ msgstr ""
 #, elixir-format
 #: lib/core/enums/devices.ex:5
 msgid "devices.desktop"
-msgstr "Dekstop"
+msgstr "Desktop"
 
 #, elixir-format
 #: lib/core/enums/devices.ex:5
