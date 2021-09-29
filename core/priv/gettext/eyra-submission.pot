@@ -44,31 +44,31 @@ msgid "waiting.for.coordinator.message"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:243
+#: bundles/link/lib/survey/web/content.ex:246
 msgid "submit.error.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:242
+#: bundles/link/lib/survey/web/content.ex:245
 msgid "submit.error.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:235
+#: bundles/link/lib/survey/web/content.ex:238
 msgid "submit.success.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:234
+#: bundles/link/lib/survey/web/content.ex:237
 msgid "submit.success.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:259
+#: bundles/link/lib/survey/web/content.ex:262
 msgid "retract.success.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:258
+#: bundles/link/lib/survey/web/content.ex:261
 msgid "retract.success.title"
 msgstr ""

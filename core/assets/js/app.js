@@ -26,6 +26,7 @@ import "./100vh-fix";
 import { ViewportResize } from "./viewport_resize"
 import { Toggle } from "./toggle"
 import { Tabbar, TabbarItem, TabbarFooterItem } from "./tabbar"
+import { Clipboard } from "./clipboard"
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -73,7 +74,7 @@ let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
 
-let Hooks = { ViewportResize, Toggle, Tabbar, TabbarItem, TabbarFooterItem };
+let Hooks = { Clipboard, ViewportResize, Toggle, Tabbar, TabbarItem, TabbarFooterItem };
 
 Hooks.NativeWrapper = {
   mounted() {

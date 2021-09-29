@@ -12,17 +12,17 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:139
+#: bundles/link/lib/survey/web/form.ex:202
 msgid "config.nrofsubjects.label"
 msgstr "Aantal vereiste subjects"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:126
+#: bundles/link/lib/survey/web/form.ex:196
 msgid "config.url.label"
 msgstr "Publieke web link van je online studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:136
+#: bundles/link/lib/survey/web/form.ex:199
 msgid "duration.label"
 msgstr "Geschatte duur van het onderzoek"
 
@@ -68,7 +68,7 @@ msgid "conpleted.title"
 msgstr "Afgerond"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:143
+#: bundles/link/lib/survey/web/form.ex:212
 msgid "devices.label"
 msgstr "Selecteer een of meerdere apparaten waarmee de participant de online study kan uitvoeren."
 
@@ -78,24 +78,19 @@ msgid "open.cta.title"
 msgstr "Ga naar de vragenlijst"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:120
+#: bundles/link/lib/survey/web/form.ex:166
 msgid "redirect.description"
 msgstr "Hieronder staat de \"redirect url\" voor je online studie. Deze wordt gebruikt om participanten na afronding van hun taak op een ander platform terug te sturen naar Panl. Kopieer de url en ga naar de taak op het online platform naar keuze (bijv. een vragenlijst in Qualtrics). Volg de platform instructies en plak de url op de juiste plaats."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:119
+#: bundles/link/lib/survey/web/form.ex:164
 msgid "redirect.title"
 msgstr "Link terug naar Panl"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:142
+#: bundles/link/lib/survey/web/form.ex:211
 msgid "devices.title"
 msgstr "Apparaten"
-
-#, elixir-format
-#: bundles/link/lib/survey/web/form.ex:122
-msgid "redirect.label"
-msgstr "Redirect url"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/monitor.ex:41
@@ -123,7 +118,7 @@ msgid "status.label"
 msgstr "Hieronder kan je in gaten houden hoe de campagne verloopt"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:479
+#: bundles/link/lib/survey/web/content.ex:482
 msgid "content.title"
 msgstr "Campagne"
 
@@ -153,17 +148,17 @@ msgid "empty.title"
 msgstr "Hier vind je een overzicht van je campagnes"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:166
+#: bundles/link/lib/survey/web/content.ex:169
 msgid "tabbar.item.monitor"
 msgstr "Resultaten"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:131
+#: bundles/link/lib/survey/web/content.ex:134
 msgid "tabbar.item.promotion"
 msgstr "Advertentie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:144
+#: bundles/link/lib/survey/web/content.ex:147
 msgid "tabbar.item.survey"
 msgstr "Studie"
 
@@ -178,32 +173,32 @@ msgid "monitor.empty.title"
 msgstr "Resultaten"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:132
+#: bundles/link/lib/survey/web/content.ex:135
 msgid "tabbar.item.promotion.forward"
 msgstr "Maak advertentie aan"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:145
+#: bundles/link/lib/survey/web/content.ex:148
 msgid "tabbar.item.survey.forward"
 msgstr "Koppel je studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:167
+#: bundles/link/lib/survey/web/content.ex:170
 msgid "tabbar.item.monitor.forward"
 msgstr "Bekijk resultaten"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:156
+#: bundles/link/lib/survey/web/content.ex:159
 msgid "tabbar.item.criteria"
 msgstr "Sample"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:157
+#: bundles/link/lib/survey/web/content.ex:160
 msgid "tabbar.item.criteria.forward"
 msgstr "Bepaal je sample"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:116
+#: bundles/link/lib/survey/web/form.ex:140
 msgid "form.title"
 msgstr "Studie"
 
@@ -213,6 +208,66 @@ msgid "survey.overview.title"
 msgstr "Campagnes"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:127
-msgid "config.url.description"
-msgstr "Het is mogelijk om variabelen te gebruiken in de URL parameters om bijvoorbeeld het participant nummer door te sturen. Dit kan door in de parameters een variabele (<participantId>) te gebruiken."
+#: bundles/link/lib/survey/web/form.ex:205
+msgid "language.title"
+msgstr "Taal"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:206
+msgid "languages.label"
+msgstr "Selecteer de taal van de online study"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:221
+msgid "rerb.label"
+msgstr "RERB code"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:218
+msgid "rerb.title"
+msgstr "Research Ethics Review Board"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:155
+msgid "panlid.description"
+msgstr "Zodra Panl de participant naar Qualtrics stuurt, wordt de parameter 'panl_id' meegenomen. Dit 'panl_id' is het ID van de participant binnen jou online studie. Bekijk %{link} over het opnemen van parameters in jouw online studie."
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:153
+msgid "panlid.title"
+msgstr "Panl ID"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:144
+msgid "setup.title"
+msgstr "Qualtrics setup"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:114
+msgid "panlid.link"
+msgstr "deze instructies op Qualtrics"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:174
+msgid "redirect.copy.button"
+msgstr "Kopieer"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:219
+msgid "rerb.description"
+msgstr "Vul de RERB code in voor jouw studie. Zonder deze code wordt jouw campagne niet opengesteld voor participanten."
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:188
+msgid "study.link.description"
+msgstr "Volg %{link} om jouw Qualtrics vragenlijst link op te halen. Plak deze link in het \"Qualtrics anonymous survey link\" veld hieronder."
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:186
+msgid "study.link.title"
+msgstr "Anonymous Survey Link"
+
+#, elixir-format, fuzzy
+#: bundles/link/lib/survey/web/form.ex:121
+msgid "study.link"
+msgstr "deze instructies"

@@ -189,3 +189,13 @@ msgstr ""
 #: bundles/link/lib/enums/themes.ex:5
 msgid "themes.organisation"
 msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/online_study_languages.ex:5
+msgid "online_study_languages.en"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/online_study_languages.ex:5
+msgid "online_study_languages.nl"
+msgstr ""

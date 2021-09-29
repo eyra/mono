@@ -52,8 +52,6 @@ defmodule CoreWeb.LiveForm do
       end
 
       defp handle_validation_error(socket, changeset) do
-        changeset |> IO.inspect(label: "ERROR CHANGESET")
-
         socket
         |> assign(changeset: changeset)
         |> flash_error()

@@ -55,8 +55,6 @@ defmodule CoreWeb.Promotion.Form do
       active_theme_ids
       |> Enum.map(&Atom.to_string(&1))
 
-    active_theme_ids |> IO.inspect(label: "ACTIVE ITEM IDS")
-
     {
       :ok,
       socket

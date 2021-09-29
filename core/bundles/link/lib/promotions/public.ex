@@ -72,9 +72,6 @@ defmodule Link.Promotion.Public do
   end
 
   def handle_observation(socket, :promotion_updated, promotion) do
-
-    promotion |> IO.inspect(label: "handle_observation")
-
     themes = promotion |> Promotion.get_themes(Themes)
     organisation = promotion |> Promotion.get_organisation()
 

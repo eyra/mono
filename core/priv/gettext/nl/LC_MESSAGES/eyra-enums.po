@@ -161,7 +161,7 @@ msgstr "Eerste jaar"
 msgid "study_years.second"
 msgstr "Tweede jaar"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: bundles/link/lib/enums/themes.ex:5
 msgid "themes.accounting"
 msgstr "Accounting"
@@ -176,17 +176,27 @@ msgstr "Business"
 msgid "themes.economics"
 msgstr "Economie"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: bundles/link/lib/enums/themes.ex:5
 msgid "themes.management"
 msgstr "Management"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: bundles/link/lib/enums/themes.ex:5
 msgid "themes.marketing"
 msgstr "Marketing"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: bundles/link/lib/enums/themes.ex:5
 msgid "themes.organisation"
 msgstr "Organisatie"
+
+#, elixir-format
+#: bundles/link/lib/enums/online_study_languages.ex:5
+msgid "online_study_languages.en"
+msgstr "Engels"
+
+#, elixir-format
+#: bundles/link/lib/enums/online_study_languages.ex:5
+msgid "online_study_languages.nl"
+msgstr "Nederlands"

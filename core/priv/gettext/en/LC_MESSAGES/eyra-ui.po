@@ -159,17 +159,17 @@ msgid "cancel.button"
 msgstr "Cancel"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:209
+#: bundles/link/lib/survey/web/content.ex:212
 msgid "delete.confirm.text"
 msgstr "This %{item} will be permanently deleted."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:208
+#: bundles/link/lib/survey/web/content.ex:211
 msgid "delete.confirm.title"
 msgstr "Delete %{item}?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:210
+#: bundles/link/lib/survey/web/content.ex:213
 msgid "delete.confirm.label"
 msgstr "Delete"
 
@@ -179,12 +179,12 @@ msgid "ok.button"
 msgstr "OK"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:271
+#: bundles/link/lib/survey/web/content.ex:274
 msgid "feature.unavailable.text"
 msgstr "Stay tuned. We are continuesly working on new functionality."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:270
+#: bundles/link/lib/survey/web/content.ex:273
 msgid "feature.unavailable.title"
 msgstr "Feature not yet available"
 

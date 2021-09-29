@@ -7,7 +7,7 @@ defmodule EyraUI.Form.Field do
 
   prop(form, :form, required: true)
   prop(field, :atom, required: true)
-  prop(label_text, :string, required: true)
+  prop(label_text, :string)
   prop(label_color, :css_class, default: "text-grey1")
   prop(background, :atom, required: true)
   prop(change, :event)
@@ -17,8 +17,10 @@ defmodule EyraUI.Form.Field do
 
   def render(assigns) do
     ~H"""
-    <Label form={{@form}} field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}} />
-    <Spacing value="XXS" />
+    <div :if={{ @label_text }}>
+      <Label form={{@form}} field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}} />
+      <Spacing value="XXS" />
+    </div>
     <slot />
     <ValidationErrors form={{@form}} field={{@field}} reserve_error_space={{@reserve_error_space}}/>
     <Spacing value="XXS" />
