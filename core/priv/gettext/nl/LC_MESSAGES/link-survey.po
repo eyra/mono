@@ -12,17 +12,17 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:211
+#: bundles/link/lib/survey/web/form.ex:247
 msgid "config.nrofsubjects.label"
 msgstr "Hoeveel deelnemers heb je nodig?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:205
+#: bundles/link/lib/survey/web/form.ex:241
 msgid "config.url.label"
 msgstr "Online studie link"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:208
+#: bundles/link/lib/survey/web/form.ex:244
 msgid "duration.label"
 msgstr "Hoeveel tijd schat je in dat deelnemers nodig hebben?"
 
@@ -68,7 +68,7 @@ msgid "conpleted.title"
 msgstr "Afgerond"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:221
+#: bundles/link/lib/survey/web/form.ex:262
 msgid "devices.label"
 msgstr "Welke apparaten kunnen door deelnemers gebruikt worden?"
 
@@ -78,17 +78,17 @@ msgid "open.cta.title"
 msgstr "Ga naar de vragenlijst"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:175
+#: bundles/link/lib/survey/web/form.ex:211
 msgid "redirect.description"
 msgstr "De redirect URL zorgt ervoor dat deelnemers teruggestuurd worden naar Panl, aan het einde van de vragenlijst. Kopieer de redirect URL hieronder en plak deze als \"Website URL\" in Qualtrics zoals %{link}."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:173
+#: bundles/link/lib/survey/web/form.ex:209
 msgid "redirect.title"
 msgstr "Redirect URL (End of Survey)"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:220
+#: bundles/link/lib/survey/web/form.ex:261
 msgid "devices.title"
 msgstr "Apparaten"
 
@@ -140,12 +140,12 @@ msgstr "Start nieuwe campagne"
 #, elixir-format
 #: bundles/link/lib/survey/web/overview.ex:143
 msgid "empty.description"
-msgstr "Momenteel heb je nog geen campagnes aangemaakt. Zodra je er een aanmaakt zal deze aan deze pagina worden toegevoegd. Klik op de ondertaande button om te starten."
+msgstr "Hier kun je campagnes opzetten en hun status volgen. Een campagne is een georganiseerde werkwijze om een doel te behalen, in dit geval het werven van deelnemers. Het bestaat uit het opzetten van een advertentie voor in de marktplaats, het koppelen van jouw studie details, het bepalen van jouw sample, en het reviewen van de resultaten."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/overview.ex:142
 msgid "empty.title"
-msgstr "Hier vind je een overzicht van je campagnes"
+msgstr "Werf deelnemers voor jouw studie"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:169
@@ -198,7 +198,7 @@ msgid "tabbar.item.criteria.forward"
 msgstr "Bepaal je sample"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:148
+#: bundles/link/lib/survey/web/form.ex:184
 msgid "form.title"
 msgstr "Studie"
 
@@ -208,76 +208,77 @@ msgid "survey.overview.title"
 msgstr "Campagnes"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:214
+#: bundles/link/lib/survey/web/form.ex:250
 msgid "language.title"
 msgstr "Taal"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:215
+#: bundles/link/lib/survey/web/form.ex:251
 msgid "languages.label"
 msgstr "In welke taal is jouw online studie geschreven?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:230
+#: bundles/link/lib/survey/web/form.ex:78
+#: bundles/link/lib/survey/web/form.ex:277
 msgid "ethical.label"
 msgstr "Hierbij verklaar ik dat mijn studie voldoet aan alle ethische standaarden."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:227
+#: bundles/link/lib/survey/web/form.ex:272
 msgid "ethical.title"
 msgstr "Ethische toetsing"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:164
+#: bundles/link/lib/survey/web/form.ex:200
 msgid "panlid.description"
 msgstr "Panl voegt automatisch een ID van de deelnemer toe aan de URL van je Qualtrics vragenlijst. Om deze ID in Qualtrics te kunnen gebruiken, voeg je een \"embedded data element field\" toe met de naam \"panl_id\". Instructies hiervoor %{link} in \"PART 2\"."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:162
+#: bundles/link/lib/survey/web/form.ex:198
 msgid "panlid.title"
 msgstr "Panl ID"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:153
+#: bundles/link/lib/survey/web/form.ex:189
 msgid "setup.title"
 msgstr "Wat moet ik doen op Qualtrics?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:183
+#: bundles/link/lib/survey/web/form.ex:219
 msgid "redirect.copy.button"
 msgstr "Kopieer"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:228
+#: bundles/link/lib/survey/web/form.ex:273
 msgid "ethical.description"
 msgstr "Zorg ervoor dat je de ethische checklist doorlopen hebt en dat je goedkeuring hebt van de \"FEWEB Research Ethics Review Board\", wanneer dat vereist is voor jouw studie."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:197
+#: bundles/link/lib/survey/web/form.ex:233
 msgid "study.link.description"
 msgstr "Volg %{link} om jouw Qualtrics vragenlijst link aan te maken op te halen. Plak deze link in het \"Online studie link\" veld van het formulier hieronder."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:195
+#: bundles/link/lib/survey/web/form.ex:231
 msgid "study.link.title"
 msgstr "Anonymous Survey Link"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:122
+#: bundles/link/lib/survey/web/form.ex:158
 msgid "panlid.instructions.link"
 msgstr "vind je hier"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:115
+#: bundles/link/lib/survey/web/form.ex:151
 msgid "redirect.instructions.link"
 msgstr "hier beschreven"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:129
+#: bundles/link/lib/survey/web/form.ex:165
 msgid "study.instructions.link"
 msgstr "deze instructies"
 
-#, elixir-format, fuzzy
-#: bundles/link/lib/survey/web/form.ex:149
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:185
 msgid "form.description"
-msgstr "Doorloop als eerste de stappen in het onderstaande kader. Op deze manier zorg je ervoor dat je participanten vanuit Panl deel kunnen nemen aan je online studie en na afloop weer teruggestuurd worden naar Panl."
+msgstr "Doorloop eerst de stappen in het zwarte kader. Zo zorg je ervoor dat deelnemers vanuit Panl deel kunnen nemen aan jouw online studie en na afloop weer teruggestuurd worden naar Panl."

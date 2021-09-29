@@ -32,7 +32,7 @@ msgstr "Ingediend"
 #, elixir-format
 #: bundles/link/lib/dashboard.ex:111 bundles/link/lib/dashboard.ex:175
 msgid "incomplete.forms.message"
-msgstr "Formulieren zijn nog niet volledig ingevuld"
+msgstr "Sommige verplichte velden zijn nog niet ingevuld"
 
 #, elixir-format
 #: bundles/link/lib/dashboard.ex:109 bundles/link/lib/dashboard.ex:173
@@ -42,17 +42,17 @@ msgstr "Klaar om in te dienen bij de studentenpool coordinator"
 #, elixir-format
 #: bundles/link/lib/dashboard.ex:115 bundles/link/lib/dashboard.ex:179
 msgid "waiting.for.coordinator.message"
-msgstr "De beheerder van de pool zal de campagne spoedig in de marktplaats publiseren"
+msgstr "Jouw campagne staat in de wachtrij om door de poolbeheerder in de marktplaats gezet te worden"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:246
 msgid "submit.error.text"
-msgstr "Je kan de campagne nog niet indienen. Vul eerst alle formulieren volledig in."
+msgstr "Sommige verplichte velden in je campagne zijn niet ingevuld."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:245
 msgid "submit.error.title"
-msgstr "Campagne onvolledig"
+msgstr "Maak je campagne compleet"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:238
@@ -67,9 +67,9 @@ msgstr "Campagne ingediend"
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:262
 msgid "retract.success.text"
-msgstr "De campagne is niet meer zichtbaar in de marktplaats."
+msgstr "Jouw campagne is niet meer zichtbaar voor de deelnemers in de marktplaats."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:261
 msgid "retract.success.title"
-msgstr "Campagne teruggetrokken"
+msgstr "Campagne offline"

@@ -181,12 +181,12 @@ msgstr "OK"
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:274
 msgid "feature.unavailable.text"
-msgstr "Stay tuned. We are continuesly working on new functionality."
+msgstr "Currently, we are still working on this feature. Try again later, the platform is updated regularly."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:273
 msgid "feature.unavailable.title"
-msgstr "Feature not yet available"
+msgstr "Coming soon"
 
 #, elixir-format
 #: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2

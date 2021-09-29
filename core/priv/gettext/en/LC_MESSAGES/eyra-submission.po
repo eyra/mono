@@ -32,7 +32,7 @@ msgstr "Published"
 #, elixir-format
 #: bundles/link/lib/dashboard.ex:111 bundles/link/lib/dashboard.ex:175
 msgid "incomplete.forms.message"
-msgstr "Forms are not yet filled in completely"
+msgstr "Some required fields are not filled in yet"
 
 #, elixir-format
 #: bundles/link/lib/dashboard.ex:109 bundles/link/lib/dashboard.ex:173
@@ -42,17 +42,17 @@ msgstr "Ready to publish campaign to pool administrator"
 #, elixir-format
 #: bundles/link/lib/dashboard.ex:115 bundles/link/lib/dashboard.ex:179
 msgid "waiting.for.coordinator.message"
-msgstr "Waiting for pool administrator to publish campaign in marketplace"
+msgstr "Waiting for the pool administrator to publish your campaign in the marketplace"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:246
 msgid "submit.error.text"
-msgstr "The campaign is not ready to publish yet. Complete all the forms first."
+msgstr "Some required fields in your campaign are not filled in."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:245
 msgid "submit.error.title"
-msgstr "Incomplete campaign"
+msgstr "Complete your campaign"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:238
@@ -67,7 +67,7 @@ msgstr "Campaign submitted"
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:262
 msgid "retract.success.text"
-msgstr "The campaign is not longer visible in the marketplace for new participants."
+msgstr "Your campaign is no longer visible for participants in the marketplace."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:261

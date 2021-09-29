@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core/promotions/promotion.ex:92
+#: lib/core/promotions/promotion.ex:95
 msgid "created.label"
 msgstr "Created"
 
@@ -23,32 +23,32 @@ msgid "back.button.label"
 msgstr "Back to overview"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:196
+#: lib/core_web/live/promotion/form.ex:198
 msgid "banner.subtitle.label"
-msgstr "Subtitle"
+msgstr "Job title"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:183
+#: lib/core_web/live/promotion/form.ex:185
 msgid "banner.title"
-msgstr "Banner"
-
-#, elixir-format
-#: lib/core_web/live/promotion/form.ex:195
-msgid "banner.title.label"
-msgstr "Title"
+msgstr "Contact info"
 
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:197
+msgid "banner.title.label"
+msgstr "Name"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:199
 msgid "banner.url.label"
 msgstr "Website"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:189
+#: lib/core_web/live/promotion/form.ex:191
 msgid "choose.banner.photo.file"
 msgstr "Select picture"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:190
+#: lib/core_web/live/promotion/form.ex:192
 msgid "choose.other.banner.photo.file"
 msgstr "Choose different photo"
 
@@ -58,9 +58,9 @@ msgid "deadline.label"
 msgstr "Still %{days} days available"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:180
+#: lib/core_web/live/promotion/form.ex:182
 msgid "description.label"
-msgstr "Some background information for the participants"
+msgstr "Provide some background information about this study"
 
 #, elixir-format
 #: bundles/link/lib/promotions/public.ex:136
@@ -69,9 +69,9 @@ msgid "description.public.label"
 msgstr "Some background information for the participants"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:179
+#: lib/core_web/live/promotion/form.ex:181
 msgid "description.title"
-msgstr "About the study"
+msgstr "Why are you performing this study?"
 
 #, elixir-format
 #: bundles/link/lib/promotions/public.ex:159
@@ -86,9 +86,9 @@ msgid "duration.title"
 msgstr "Expected duration"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:176
+#: lib/core_web/live/promotion/form.ex:178
 msgid "expectations.label"
-msgstr "Expectations for the participants"
+msgstr "Describe what is expected of participants"
 
 #, elixir-format
 #: bundles/link/lib/promotions/public.ex:132
@@ -97,19 +97,19 @@ msgid "expectations.public.label"
 msgstr "Expectations for the participants"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:175
+#: lib/core_web/live/promotion/form.ex:177
 msgid "expectations.title"
-msgstr "About the task"
+msgstr "What do participants have to do?"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:164
+#: lib/core_web/live/promotion/form.ex:166
 msgid "image.label"
-msgstr "The selected image will be visible in the marketplace overview and on promotion page"
+msgstr "This image is used as a cover image for your promotion page and your marketplace tile."
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:163
+#: lib/core_web/live/promotion/form.ex:165
 msgid "image.title"
-msgstr "Image"
+msgstr "Cover image"
 
 #, elixir-format
 #: bundles/link/lib/promotions/public.ex:155
@@ -141,27 +141,27 @@ msgid "reward.title"
 msgstr "Credits"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:170
+#: lib/core_web/live/promotion/form.ex:172
 msgid "search.different.image.button"
-msgstr "Select image"
+msgstr "Change cover"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:154
+#: lib/core_web/live/promotion/form.ex:156
 msgid "subtitle.label"
-msgstr "Subtitle"
+msgstr "Can you explain in one line what your study is about?"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:158
+#: lib/core_web/live/promotion/form.ex:160
 msgid "themes.label"
-msgstr "Select one or more themes."
+msgstr "Which theme fits your study best? You could select multiple."
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:157
+#: lib/core_web/live/promotion/form.ex:159
 msgid "themes.title"
 msgstr "Themes"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:153
+#: lib/core_web/live/promotion/form.ex:155
 msgid "title.label"
 msgstr "Title"
 
@@ -169,3 +169,8 @@ msgstr "Title"
 #: lib/core_web/live/promotion/form.ex:151
 msgid "form.title"
 msgstr "Promotion"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:152
+msgid "form.description"
+msgstr "Promotions will be published in the marketplace to recruit participants. Preview the promotion page to view what participants will see when they click your marketplace tile."

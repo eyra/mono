@@ -7,7 +7,7 @@ defmodule CoreWeb.Promotion.Form do
 
   alias CoreWeb.Router.Helpers, as: Routes
 
-  alias EyraUI.Text.{Title2, Title3, BodyMedium}
+  alias EyraUI.Text.{Title2, Title3, Body, BodyLarge}
   alias EyraUI.Form.{Form, TextInput, TextArea, PhotoInput, UrlInput}
   alias EyraUI.Selector.Selector
   alias EyraUI.ImagePreview
@@ -149,19 +149,21 @@ defmodule CoreWeb.Promotion.Form do
       <ContentArea>
         <MarginY id={{:page_top}} />
         <Title2>{{dgettext("eyra-promotion", "form.title")}}</Title2>
+        <BodyLarge>{{dgettext("eyra-promotion", "form.description")}}</BodyLarge>
+        <Spacing value="M" />
         <Form id={{@id}} changeset={{@changeset}} change_event="save" focus={{@focus}} target={{@myself}}>
           <TextInput field={{:title}} label_text={{dgettext("eyra-promotion", "title.label")}} />
           <TextInput field={{:subtitle}} label_text={{dgettext("eyra-promotion", "subtitle.label")}} />
 
           <Spacing value="XL" />
           <Title3>{{dgettext("eyra-promotion", "themes.title")}}</Title3>
-          <BodyMedium>{{dgettext("eyra-promotion", "themes.label")}}</BodyMedium>
+          <Body>{{dgettext("eyra-promotion", "themes.label")}}</Body>
           <Spacing value="XS" />
           <Selector id={{:themes}} items={{ @theme_labels }} parent={{ %{type: __MODULE__, id: @id} }} />
           <Spacing value="XL" />
 
           <Title3>{{dgettext("eyra-promotion", "image.title")}}</Title3>
-          <BodyMedium>{{dgettext("eyra-promotion", "image.label")}}</BodyMedium>
+          <Body>{{dgettext("eyra-promotion", "image.label")}}</Body>
           <Spacing value="XS" />
           <div class="flex flex-row">
             <ImagePreview image_url={{ @image_url }} placeholder="" />

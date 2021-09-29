@@ -24,9 +24,9 @@ msgstr "Recente items"
 #, elixir-format
 #: bundles/link/lib/dashboard.ex:67
 msgid "empty.description"
-msgstr "Het dashboard is de plek waar je een overzicht kan vinden van je werk. Centraal staan op dit moment de onderzoeksstudies waar je recent aan gewerkt hebt."
+msgstr "Zodra je begint te werken met Panl, vind je de items waar je recent aan gewerkt hebt hier. Bezoek het dashboard om snel weer verder te gaan, met de items waar je de laatste keer mee bezig was op Panl."
 
 #, elixir-format
 #: bundles/link/lib/dashboard.ex:66
 msgid "empty.title"
-msgstr "Hier komen de items te staan waar je recent aan gewerkt hebt"
+msgstr "Op zoek naar recente items?"

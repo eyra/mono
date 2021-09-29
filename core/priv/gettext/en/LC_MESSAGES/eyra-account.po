@@ -148,7 +148,7 @@ msgstr "First language"
 #: bundles/link/lib/pool/form/submission.ex:140
 #: lib/core_web/live/user/forms/study.ex:73
 msgid "features.study.title"
-msgstr "Study program"
+msgstr "Students"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:124
