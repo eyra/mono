@@ -20,7 +20,6 @@ execute: `poetry run pytest`.
 To run the extraction code from the browser run:
 `python3 -m http.server` from the project root folder (the one with `.git`).
 This will start a webserver on: [localhost](http://localhost:8000).
-
 Opening a browser with that URL will initialize the application. After
 it has been loaded a file can be selected. The output of the process
 function will be displayed after a while (depending on the amount of
@@ -35,7 +34,6 @@ from the simulated DDP.
 
 ### Data simulation
 Command:
-
 `poetry run python google_semantic_location_history/simulation_gslh.py`
 
 This creates a zipfile with the simulated Google Semantic Location
@@ -45,7 +43,6 @@ GSLH data is simulated using the python libraries
 [GenSON](<https://pypi.org/project/genson/>),
 [Faker](<https://github.com/joke2k/faker>), and
 [faker-schema](<https://pypi.org/project/faker-schema/>).
-
 The simulation script first generates a JSON schema from a JSON object using
 `GenSON's SchemaBuilder` class. The JSON object is derived from an
 example GSLH data package, downloaded from Google Takeout. The GSLH data
@@ -64,7 +61,6 @@ specifications.
 
 ### Data extraction
 Command:
-
 `poetry run python google_semantic_location_history/main.py`
 
 This extracts and displays the relevant data and summary. It calls the
@@ -80,7 +76,6 @@ In this example, we first create a simulated Google Search History
 
 ### Data simulation
 Command:
-
 `poetry run python google_search_history/simulation_gsh.py`
 
 This will generate a dummy Google Takeout ZIP file, containing a
@@ -111,7 +106,6 @@ fake (True). Default=False
 
 ### Data extraction
 Command:
-
 `poetry run python google_search_history/main.py`
 
 After running this script, the relevant data (i.e., an overview of the
