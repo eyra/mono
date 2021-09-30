@@ -67,8 +67,8 @@ This extracts and displays the relevant data and summary. It calls the
 same `process` function as the web application would. To use the GSLH
 data extraction script in the web application, one needs to specify this
 in [pyworker.js](../pyworker.js) by changing
- `/data_extractor/data_extractor/__init__.py` into 
- `/data_extractor/google_semantic_location_history/__init__.py`.
+ `data_extractor/__init__.py` into 
+ `google_semantic_location_history/__init__.py`.
 
 ## Google Search History
 In this example, we first create a simulated Google Search History
@@ -78,7 +78,7 @@ In this example, we first create a simulated Google Search History
 Command:
 `poetry run python google_search_history/simulation_gsh.py`
 
-This will generate a dummy Google Takeout ZIP file, containing a
+This will generate a dummy Google Takeout ZIP file containing a
 simulated BrowserHistory.json file, and stores it in `tests/data/takeout.zip`.
 
 The BrowserHistory.json file mainly describes what 
@@ -115,6 +115,6 @@ extracted from the (simulated) takeout.ZIP and displayed in a dataframe
 together with a textual summary. It calls the same `process` function as
 the web application would. To use the GSH data extraction script in the
 web application, specify this in [pyworker.js](../pyworker.js) by changing
- `/data_extractor/data_extractor/__init__.py` into 
- `/data_extractor/google_search_history/__init__.py`.
+ `data_extractor/__init__.py` into 
+ `google_search_history/__init__.py`.
 
