@@ -69,7 +69,7 @@ defmodule CoreWeb.UI.Navigation.MenuItem do
               </div>
             </div>
           </div>
-          <div class="flex-grow"></div>
+          <div :if={{ has_counter?(@vm) && @size == :wide }} class="flex-grow"></div>
           <div :if={{ has_counter?(@vm) && @size == :wide }}>
             <div class="flex flex-col items-center justify-center">
               <div class="px-6px rounded-full {{counter_color(counter(@vm))}}" >

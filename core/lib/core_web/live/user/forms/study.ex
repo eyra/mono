@@ -70,7 +70,7 @@ defmodule CoreWeb.User.Forms.Study do
       <ContentArea>
         <MarginY id={{:page_top}} />
         <FormArea>
-          <Title2>{{dgettext("eyra-account", "features.study.title")}}</Title2>
+          <Title2>{{dgettext("eyra-ui", "tabbar.item.study")}}</Title2>
           <BodyMedium>{{dgettext("eyra-account", "feature.study.description")}}</BodyMedium>
           <Spacing value="S" />
           <Selector id={{:study_program_codes}} items={{ @study_labels }} type={{:checkbox}} parent={{ %{type: __MODULE__, id: @id} }}/>
