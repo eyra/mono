@@ -25,7 +25,7 @@ msgstr "Terug naar overzicht"
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:198
 msgid "banner.subtitle.label"
-msgstr "Kun je in een zin uitleggen waar je studie over gaat?"
+msgstr "Functietitel"
 
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:185
@@ -148,7 +148,7 @@ msgstr "Verander omslag"
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:156
 msgid "subtitle.label"
-msgstr "Functietitel"
+msgstr "Kun je in een zin uitleggen waar je studie over gaat?"
 
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:160
