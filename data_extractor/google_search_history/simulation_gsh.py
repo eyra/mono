@@ -117,18 +117,17 @@ def _create_bins(num):
     return bins
 
 
-def create_zip(browser_hist):
+def create_zip(browser_hist, path):
     """ Saves created BrowserHistory in zipped file
     Args:
-        browser_history: json.dumps,
-            created browser history dictionary
+        browser_history: dict, created browser history dictionary
+        path: str, folder to save zipfile in
     """
-    for file_ in Path('.').glob('**/*'):
-        if Path(file_).name == 'data':
-            path = file_
-    with ZipFile(path / 'Takeout.zip', 'w') as zipped_f:
+    zipfile = Path(path) / 'Takeout.zip'
+    with ZipFile(zipfile, 'w') as zipped_f:
         zipped_f.writestr("Takeout/Chrome/BrowserHistory.json", browser_hist)
-        return Path(path, 'Takeout.zip')
+
+    return zipfile
 
 
 def browserhistory(num: int, site_diff: float, time_diff: bool,
@@ -187,5 +186,5 @@ def browserhistory(num: int, site_diff: float, time_diff: bool,
 if __name__ == "__main__":
     file_data = browserhistory(
         num=1000, site_diff=0.15, time_diff=0.2, seed=0, fake=False)
-    takeout_path = create_zip(file_data)
-    print(f'Created BrowserHistory.json in {takeout_path}')
+    zip_file = create_zip(file_data, "tests/data")
+    print(f'Created Google Semantic Location History data in {zip_file}')

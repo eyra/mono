@@ -5,6 +5,7 @@ from datetime import datetime
 from collections import OrderedDict
 from calendar import monthrange
 
+from pathlib import Path
 from zipfile import ZipFile
 from faker import Faker
 from faker.providers import geo
@@ -145,12 +146,15 @@ def _update_data(data, start_date, places, seed=None):
     return data
 
 
-def write_zipfile(data, zipfile):
+def write_zipfile(data, path):
     """ Write zipfile with monthly JSON files
     Args:
         data (dict): dict with data per year and month
-        zipfile (str): name of zipfile
+        path (str): path for storing zipfile
+    Returns:
+        pathlib.PosixPath: path object to stored zipfile
     """
+    zipfile = Path(path) / 'Location History.zip'
     with ZipFile(zipfile, 'w') as zip_archive:
         for year, month in data:
             with zip_archive.open(
@@ -160,6 +164,7 @@ def write_zipfile(data, zipfile):
                 file1.write(
                     json.dumps(data[(year, month)]).encode('utf-8')
                 )
+    return zipfile
 
 
 def fake_data(json_file, seed=0):
@@ -206,4 +211,5 @@ def fake_data(json_file, seed=0):
 
 if __name__ == '__main__':
     location_data = fake_data("tests/data/2021_JANUARY.json", seed=3)
-    write_zipfile(location_data, "tests/data/Location History.zip")
+    zip_file = write_zipfile(location_data, "tests/data")
+    print(f'Created Google Semantic Location History data in {zip_file}')

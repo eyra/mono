@@ -1,6 +1,7 @@
 """Test simulated Google BrowserHistory.json file"""
 
 import random
+import tempfile
 
 from pathlib import Path
 from pandas.testing import assert_frame_equal
@@ -134,9 +135,10 @@ def test_create_bins():
 
 def test_browserfile():
     """
-    compares processed simulated data with expectated dataframe
+    compares processed simulated data with expected dataframe
     """
-    file_data = create_zip(_create_browserfile())
-    result = process(file_data)
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        zip_file = create_zip(_create_browserfile(), tmpdirname)
+        result = process(zip_file)
     expected = _reshape_expected()
     assert_frame_equal(result["data_frames"][0], expected)
