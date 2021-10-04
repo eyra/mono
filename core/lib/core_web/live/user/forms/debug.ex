@@ -80,19 +80,6 @@ defmodule CoreWeb.User.Forms.Debug do
 
   # Saving
 
-  def handle_event("toggle", %{"checkbox" => checkbox}, %{assigns: %{entity: entity}} = socket) do
-    field = String.to_atom(checkbox)
-    new_value = not Map.get(entity, field, false)
-    attrs = %{field => new_value}
-
-    {
-      :noreply,
-      socket
-      |> force_save(entity, :auto_save, attrs)
-      |> update_ui()
-    }
-  end
-
   def handle_event(
         "save",
         %{"user_profile_edit" => attrs},

@@ -100,7 +100,7 @@ defmodule Link.Survey.Form do
   # Handle Events
 
   def handle_event("toggle", %{"checkbox" => checkbox}, %{assigns: %{entity: entity}} = socket) do
-    field = String.to_atom(checkbox)
+    field = String.to_existing_atom(checkbox)
     new_value = not Map.get(entity, field, false)
     attrs = %{field => new_value}
 
