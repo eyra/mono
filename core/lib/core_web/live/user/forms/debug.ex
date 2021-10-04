@@ -5,13 +5,34 @@ defmodule CoreWeb.User.Forms.Debug do
   alias Core.Accounts.UserProfileEdit
 
   alias EyraUI.Text.{Title2}
-  alias EyraUI.Form.{Form, Checkbox}
+  alias EyraUI.Form.{Form}
+  alias EyraUI.Selector.Selector
 
   prop(user, :any, required: true)
 
   data(entity, :any)
   data(changeset, :any)
+  data(role_labels, :list)
   data(focus, :any, default: "")
+
+  # Handle Selector Update
+  def update(
+        %{active_item_id: active_item_id, selector_id: :role_selector},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    attrs =
+      [:student, :researcher]
+      |> Enum.reduce(%{}, fn field, acc ->
+        Map.put(acc, field, field == active_item_id)
+      end)
+
+    {
+      :ok,
+      socket
+      |> force_save(entity, :auto_save, attrs)
+      |> update_ui()
+    }
+  end
 
   # Handle update from parent after auto-save, prevents overwrite of current state
   def update(_params, %{assigns: %{entity: _entity}} = socket) do
@@ -22,12 +43,26 @@ defmodule CoreWeb.User.Forms.Debug do
     profile = Accounts.get_profile(user)
     entity = UserProfileEdit.create(user, profile)
 
+    role_labels = [
+      %{
+        id: :student,
+        value: "Student",
+        active: not entity.researcher
+      },
+      %{
+        id: :researcher,
+        value: "Researcher",
+        active: entity.researcher
+      }
+    ]
+
     {
       :ok,
       socket
       |> assign(id: id)
       |> assign(user: user)
       |> assign(entity: entity)
+      |> assign(role_labels: role_labels)
       |> update_ui()
     }
   end
@@ -46,8 +81,9 @@ defmodule CoreWeb.User.Forms.Debug do
   # Saving
 
   def handle_event("toggle", %{"checkbox" => checkbox}, %{assigns: %{entity: entity}} = socket) do
-    new_value = not Map.get(entity, checkbox, false)
-    attrs = %{checkbox => new_value}
+    field = String.to_atom(checkbox)
+    new_value = not Map.get(entity, field, false)
+    attrs = %{field => new_value}
 
     {
       :noreply,
@@ -86,9 +122,7 @@ defmodule CoreWeb.User.Forms.Debug do
         <ContentArea>
           <Title2>User roles</Title2>
           <Form id="main_form" changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
-            <Checkbox field={{:student}} label_text="Student" />
-            <Checkbox field={{:researcher}} label_text="Researcher" />
-            <Checkbox field={{:coordinator}} label_text="Coordinator" />
+            <Selector id={{:role_selector}} items={{ @role_labels }} type={{:radio}} parent={{ %{type: __MODULE__, id: @id} }} />
           </Form>
         </ContentArea>
     """
