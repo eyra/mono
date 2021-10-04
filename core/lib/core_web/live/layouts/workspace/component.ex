@@ -22,24 +22,19 @@ defmodule CoreWeb.Layouts.Workspace.Component do
 
       def builder, do: Application.fetch_env!(:core, :workspace_menu_builder)
 
-      def build_menu(socket, type, user, id \\ nil) do
-        builder().build_menu(type, socket, user, unquote(active_item), id)
+      def build_menu(socket, type, user) do
+        builder().build_menu(type, socket, user, unquote(active_item))
       end
 
-      def build_menus(socket, user, id \\ nil) do
+      def build_menus(socket, user) do
         menus = %{
-          mobile_menu: build_menu(socket, :mobile_menu, user, id),
-          tablet_menu: build_menu(socket, :tablet_menu, user, id),
-          desktop_menu: build_menu(socket, :desktop_menu, user, id),
-          mobile_navbar: build_menu(socket, :mobile_navbar, user, id)
+          mobile_menu: build_menu(socket, :mobile_menu, user),
+          tablet_menu: build_menu(socket, :tablet_menu, user),
+          desktop_menu: build_menu(socket, :desktop_menu, user),
+          mobile_navbar: build_menu(socket, :mobile_navbar, user)
         }
 
         socket |> assign(menus: menus)
-      end
-
-      def update_menus(%{assigns: %{tool_id: tool_id, current_user: current_user}} = socket) do
-        socket
-        |> build_menus(current_user, tool_id)
       end
 
       def update_menus(%{assigns: %{current_user: current_user}} = socket) do
@@ -47,9 +42,8 @@ defmodule CoreWeb.Layouts.Workspace.Component do
         |> build_menus(current_user)
       end
 
-      def update_menus(%{assigns: %{current_user: current_user}} = socket, id) do
-        socket
-        |> build_menus(current_user, id)
+      def handle_uri(socket) do
+        update_menus(socket)
       end
     end
   end

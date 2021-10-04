@@ -7,27 +7,45 @@ defmodule CoreWeb.Layouts.Website.Component do
   import CoreWeb.UI.OldSkool
 
   alias CoreWeb.UI.Navigation.{DesktopNavbar, MobileNavbar, MobileMenu}
-  alias EyraUI.Hero.HeroLarge
 
-  prop(title, :string, required: true)
-  prop(subtitle, :string, required: true)
   prop(user, :string, required: true)
   prop(user_agent, :string, required: true)
-  prop(active_item, :any, required: true)
-  prop(id, :string)
+  prop(menus, :map)
 
+  slot(hero, required: true)
   slot(default, required: true)
 
-  defp builder, do: Application.fetch_env!(:core, :website_menu_builder)
+  defmacro __using__(active_item) do
+    quote do
+      alias CoreWeb.Layouts.Website.Component, as: Website
 
-  defp build_menu(type, socket) do
-    builder().build_menu(
-      type,
-      socket,
-      socket.assigns.__assigns__.user,
-      socket.assigns.__assigns__.active_item,
-      socket.assigns.__assigns__.id
-    )
+      data(menus, :map)
+
+      def builder, do: Application.fetch_env!(:core, :website_menu_builder)
+
+      def build_menu(socket, type, user) do
+        builder().build_menu(type, socket, user, unquote(active_item))
+      end
+
+      def build_menus(socket, user) do
+        menus = %{
+          mobile_menu: build_menu(socket, :mobile_menu, user),
+          mobile_navbar: build_menu(socket, :mobile_navbar, user),
+          desktop_navbar: build_menu(socket, :desktop_navbar, user)
+        }
+
+        socket |> assign(menus: menus)
+      end
+
+      def update_menus(%{assigns: %{current_user: current_user}} = socket) do
+        socket
+        |> build_menus(current_user)
+      end
+
+      def handle_uri(socket) do
+        update_menus(socket)
+      end
+    end
   end
 
   def render(assigns) do
@@ -38,17 +56,17 @@ defmodule CoreWeb.Layouts.Website.Component do
         <div class="flex-1">
           <div x-data="{native_menu: false, mobile_menu: false}" @toggle-native-menu.window="native_menu = !native_menu">
             <div class="fixed z-30 right-0 top-0 w-mobile-menu-width h-viewport" x-show="mobile_menu" @click.away="mobile_menu = !mobile_menu, $parent.overlay = false">
-              <MobileMenu items={{ build_menu(:mobile_menu, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
+              <MobileMenu items={{ @menus.mobile_menu }} path_provider={{ CoreWeb.Router.Helpers }} />
             </div>
             <div class="flex flex-col w-full h-viewport">
               <div class="flex-wrap">
-                <MobileNavbar items={{ build_menu(:mobile_navbar, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
-                <DesktopNavbar items={{ build_menu(:desktop_navbar, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
+                <MobileNavbar items={{ @menus.mobile_navbar }} path_provider={{ CoreWeb.Router.Helpers }} />
+                <DesktopNavbar items={{ @menus.desktop_navbar }} path_provider={{ CoreWeb.Router.Helpers }} />
               </div>
               <div class="flex-1">
                 <div class="flex flex-col h-full border-t border-l border-b border-grey4">
                   <div class="bg-white">
-                    <HeroLarge title={{ @title }} subtitle={{ @subtitle }}/>
+                    <slot name="hero" />
                   </div>
                   <div class="flex-1 bg-white">
                     <div class="flex flex-row">

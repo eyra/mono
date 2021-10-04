@@ -52,6 +52,7 @@ defmodule CoreWeb.Helpdesk.Form do
     }
   end
 
+  @impl true
   def handle_event(
         "create_ticket",
         %{"ticket" => data},
@@ -71,6 +72,7 @@ defmodule CoreWeb.Helpdesk.Form do
     end
   end
 
+  @impl true
   def handle_event("store_state", %{"ticket" => ticket}, socket) do
     {:noreply, assign(socket, :changeset, Helpdesk.new_ticket_changeset(ticket))}
   end

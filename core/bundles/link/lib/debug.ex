@@ -41,6 +41,7 @@ defmodule Link.Debug do
     }
   end
 
+
   @impl true
   def handle_auto_save_done(socket) do
     socket |> update_menus()

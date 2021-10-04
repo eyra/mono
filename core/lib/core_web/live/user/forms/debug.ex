@@ -45,6 +45,7 @@ defmodule CoreWeb.User.Forms.Debug do
 
   # Saving
 
+  @impl true
   def handle_event("toggle", %{"checkbox" => checkbox}, %{assigns: %{entity: entity}} = socket) do
     new_value = not Map.get(entity, checkbox, false)
     attrs = %{checkbox => new_value}
@@ -57,6 +58,7 @@ defmodule CoreWeb.User.Forms.Debug do
     }
   end
 
+  @impl true
   def handle_event(
         "save",
         %{"user_profile_edit" => attrs},

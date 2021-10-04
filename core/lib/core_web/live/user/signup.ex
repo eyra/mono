@@ -24,6 +24,7 @@ defmodule CoreWeb.User.Signup do
      |> assign(changeset: changeset)}
   end
 
+  @impl true
   def handle_event("signup", %{"user" => user_params}, socket) do
     case Accounts.register_user(user_params) do
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -43,11 +44,13 @@ defmodule CoreWeb.User.Signup do
     end
   end
 
+  @impl true
   def handle_event("form_change", %{"user" => attrs}, socket) do
     changeset = Accounts.change_user_registration(%User{}, attrs)
     {:noreply, socket |> assign(changeset: changeset)}
   end
 
+  @impl true
   def handle_event("focus", %{"field" => field}, socket) do
     {
       :noreply,
@@ -55,6 +58,9 @@ defmodule CoreWeb.User.Signup do
       |> assign(focus: field)
     }
   end
+
+  @impl true
+  def handle_uri(socket), do: socket
 
   def render(assigns) do
     ~H"""

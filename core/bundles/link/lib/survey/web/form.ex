@@ -99,6 +99,7 @@ defmodule Link.Survey.Form do
 
   # Handle Events
 
+  @impl true
   def handle_event("toggle", %{"checkbox" => checkbox}, %{assigns: %{entity: entity}} = socket) do
     new_value = not Map.get(entity, checkbox, false)
     attrs = %{checkbox => new_value}
@@ -110,6 +111,7 @@ defmodule Link.Survey.Form do
     }
   end
 
+  @impl true
   def handle_event("save", %{"tool" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,

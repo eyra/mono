@@ -17,6 +17,9 @@ defmodule CoreWeb.FakeSurvey do
     {:ok, socket}
   end
 
+  @impl true
+  def handle_uri(socket), do: socket
+
   def render(assigns) do
     ~H"""
       <HeroSmall title="Fake survey" bg_color="bg-grey1"/>

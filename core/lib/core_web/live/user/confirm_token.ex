@@ -33,6 +33,10 @@ defmodule CoreWeb.User.ConfirmToken do
     end
   end
 
+  @impl true
+  def handle_uri(socket), do: socket
+
+  @impl true
   def handle_event("resend-token", %{"user" => %{"email" => email}}, socket) do
     case User.valid_email_changeset(email) do
       %{valid?: true} ->

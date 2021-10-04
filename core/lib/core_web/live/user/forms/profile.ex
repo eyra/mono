@@ -67,6 +67,7 @@ defmodule CoreWeb.User.Forms.Profile do
 
   # Saving
 
+  @impl true
   def handle_event(
         "save",
         %{"user_profile_edit" => attrs},

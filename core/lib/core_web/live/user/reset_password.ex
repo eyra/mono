@@ -19,6 +19,7 @@ defmodule CoreWeb.User.ResetPassword do
      |> assign(changeset: User.valid_email_changeset())}
   end
 
+  @impl true
   def handle_event("reset-password", %{"user" => %{"email" => email}}, socket) do
     case User.valid_email_changeset(email) do
       %{valid?: true} ->
@@ -43,6 +44,9 @@ defmodule CoreWeb.User.ResetPassword do
          socket |> assign(changeset: changeset) |> put_flash(:error, "Invalid email address")}
     end
   end
+
+  @impl true
+  def handle_uri(socket), do: socket
 
   def render(assigns) do
     ~H"""

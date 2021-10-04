@@ -33,7 +33,7 @@ defmodule CoreWeb.Admin.Ticket do
       |> assign(timestamp: timestamp)
       |> assign(dialog: nil)
       |> update_member()
-      |> update_menus(id)
+      |> update_menus()
     }
   end
 
@@ -75,6 +75,7 @@ defmodule CoreWeb.Admin.Ticket do
     }
   end
 
+  @impl true
   def handle_event("close_ticket", _params, socket) do
     item = dgettext("eyra-admin", "close.confirm.ticket")
     title = String.capitalize(dgettext("eyra-ui", "close.confirm.title", item: item))
@@ -84,11 +85,13 @@ defmodule CoreWeb.Admin.Ticket do
     {:noreply, socket |> confirm("close", title, text, confirm_label)}
   end
 
+  @impl true
   def handle_event("close_confirm", _params, %{assigns: %{id: id}} = socket) do
     Helpdesk.close_ticket_by_id(id)
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Admin.Support))}
   end
 
+  @impl true
   def handle_event("close_cancel", _params, socket) do
     {:noreply, socket |> assign(dialog: nil)}
   end

@@ -15,7 +15,8 @@ defmodule Link.LabStudy.Overview do
     {:ok, socket |> update_menus()}
   end
 
-def handle_auto_save_done(socket) do
+
+  def handle_auto_save_done(socket) do
     socket |> update_menus()
   end
 

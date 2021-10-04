@@ -32,6 +32,7 @@ defmodule CoreWeb.Mail.Forms.Debug do
      |> Phoenix.LiveView.assign(:changeset, changeset(params))}
   end
 
+  @impl true
   def handle_event(
         "update",
         %{"debug_schema" => mail_data},
@@ -40,6 +41,7 @@ defmodule CoreWeb.Mail.Forms.Debug do
     {:noreply, Phoenix.LiveView.assign(socket, :changeset, changeset(mail_data))}
   end
 
+  @impl true
   def handle_event(
         "send",
         %{"debug_schema" => mail_data},

@@ -20,7 +20,7 @@ msgstr "Created"
 #: bundles/link/lib/promotions/public.ex:166
 #: lib/core_web/live/promotion/public.ex:165
 msgid "back.button.label"
-msgstr "Back to overview"
+msgstr "Back"
 
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:198

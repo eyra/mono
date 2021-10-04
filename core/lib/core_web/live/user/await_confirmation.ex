@@ -20,6 +20,10 @@ defmodule CoreWeb.User.AwaitConfirmation do
      |> assign(changeset: changeset)}
   end
 
+  @impl true
+  def handle_uri(socket), do: socket
+
+  @impl true
   def handle_event("signup", params, socket) do
     case Accounts.register_user(params) do
       {:error, %Ecto.Changeset{} = changeset} ->
