@@ -47,7 +47,7 @@ languagePluginLoader
   .then(() => {
     return pyodide.loadPackage(["pandas"]);
   })
-  .then(() => fetch("/data_extractor/google_semantic_location_history/__init__.py"))
+  .then(() => fetch("/data_extractor/data_extractor/__init__.py"))
   .then(response => response.text())
   .then((code) => {
     self.pyodide.runPython(`

@@ -8,11 +8,17 @@ authors = ["Jeroen Vloothuis <jeroen@9bitcat.com>"]
 python = "^3.8"
 pandas = "^1.2.4"
 pylint = "^2.8.2"
+Faker = "^8.11.0"
+numpy = "^1.21.1"
+geopy = "^2.2.0"
+genson = "^1.2.2"
+faker-schema = "^0.1.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 pytest-cov = "^2.11.1"
 flake8 = "^3.9.2"
+mock = "^4.0.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

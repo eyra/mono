@@ -20,7 +20,7 @@ and the number of days spend per place for the three most visited places. Also, 
 the number of days spend in places and travelling, and the travelled distance in km."
 
 
-def __visit_duration(data):
+def _visit_duration(data):
     """Get duration per visited place
     Args:
         data (dict): Google Semantic Location History data
@@ -51,7 +51,7 @@ def __visit_duration(data):
     return places
 
 
-def __activity_duration(data):
+def _activity_duration(data):
     """Get total duration of activities
     Args:
         data (dict): Google Semantic Location History data
@@ -67,7 +67,7 @@ def __activity_duration(data):
     return activity_duration
 
 
-def __activity_distance(data):
+def _activity_distance(data):
     """Get total distance of activities
     Args:
         data (dict): Google Semantic Location History data
@@ -103,7 +103,7 @@ def process(file_data):
                     if re.search(monthfile, name) is not None:
                         filenames.append(monthfile)
                         data = json.loads(zfile.read(name).decode("utf8"))
-                        places = __visit_duration(data)
+                        places = _visit_duration(data)
                         results.append({
                             "Year": year,
                             "Month": month,
@@ -111,8 +111,8 @@ def process(file_data):
                             "Number of Places": len(places),
                             "Places Duration [days]": round(
                                 sum(value for value in places.values()), 3),
-                            "Activity Duration [days]": round(__activity_duration(data), 3),
-                            "Activity Distance [km]": round(__activity_distance(data), 3)
+                            "Activity Duration [days]": round(_activity_duration(data), 3),
+                            "Activity Distance [km]": round(_activity_distance(data), 3)
                         })
                         break
 
