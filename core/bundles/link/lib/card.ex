@@ -69,6 +69,7 @@ defmodule Link.Marketplace.Card do
             %{
               id: edit_id,
               duration: duration,
+              language: language,
               subject_count: subject_count,
               promotion: %{
                 id: open_id,
@@ -90,8 +91,10 @@ defmodule Link.Marketplace.Card do
     duration_label = dgettext("eyra-promotion", "duration.title")
     open_spots_label = dgettext("eyra-promotion", "open.spots.label", count: "#{open_spot_count}")
 
+    language_label = language |> String.upcase()
+
     info = [
-      "#{duration_label}: #{duration} min.",
+      "#{duration_label}: #{duration} min. | #{language_label}",
       "#{open_spots_label}"
     ]
 
@@ -123,6 +126,7 @@ defmodule Link.Marketplace.Card do
               id: edit_id,
               duration: duration,
               subject_count: subject_count,
+              language: language,
               promotion: %{
                 id: open_id,
                 title: title,
@@ -143,13 +147,23 @@ defmodule Link.Marketplace.Card do
     occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
     open_spot_count = subject_count - occupied_spot_count
 
+    reward_label = dgettext("eyra-submission", "reward.title")
     duration_label = dgettext("eyra-promotion", "duration.title")
     open_spots_label = dgettext("eyra-promotion", "open.spots.label", count: "#{open_spot_count}")
 
-    info = [
-      "#{duration_label}: #{duration} min.",
-      "#{open_spots_label}"
-    ]
+    info1_elements = ["#{duration_label}: #{duration} min.", "#{reward_label}: ?"]
+    info1_elements =
+      if language != nil do
+        language_label = language |> String.upcase(:ascii)
+        info1_elements ++ ["#{language_label}"]
+      else
+        info1_elements
+      end
+
+    info1 = Enum.join(info1_elements, " | ")
+    info2 = "#{open_spots_label}"
+
+    info = [info1, info2]
 
     label =
       case status do

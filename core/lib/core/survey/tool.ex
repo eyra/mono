@@ -41,7 +41,7 @@ defmodule Core.Survey.Tool do
     def id(survey_tool), do: survey_tool.auth_node_id
   end
 
-  @fields ~w(survey_url subject_count duration ethical_approval devices)a
+  @fields ~w(survey_url subject_count duration language ethical_approval devices)a
   @required_fields ~w()a
 
   @impl true

@@ -3,15 +3,15 @@ defmodule Link.Promotion.Public do
   The public promotion screen.
   """
   use CoreWeb, :live_view
+  use CoreWeb.UI.Dialog
   use CoreWeb.Layouts.Website.Component, :promotion
   alias CoreWeb.Layouts.Website.Component, as: Website
 
   import CoreWeb.UI.Responsive.Viewport
 
   alias EyraUI.CampaignBanner
-  alias EyraUI.Panel.Panel
-  alias EyraUI.Text.{Title1, Title2, Title3, BodyLarge, Intro}
-  alias EyraUI.Button.{PrimaryLiveViewButton, SecondaryLiveViewButton, BackButton}
+  alias EyraUI.Text.{Title1, Title2, BodyLarge}
+  alias EyraUI.Button.{PrimaryLiveViewButton, BackButton}
   alias EyraUI.Hero.{HeroImage, HeroBanner}
   alias EyraUI.Card.Highlight
 
@@ -19,13 +19,14 @@ defmodule Link.Promotion.Public do
   alias Core.Promotions
   alias Core.Promotions.Promotion
 
-  alias CoreWeb.Devices
+  alias CoreWeb.{Devices, Languages}
 
   alias Link.Enums.Themes
 
   data(preview, :boolean)
   data(study, :any)
   data(promotion, :any)
+  data(subtitle, :string)
   data(plugin, :any)
   data(plugin_info, :any)
   data(themes, :any)
@@ -34,7 +35,6 @@ defmodule Link.Promotion.Public do
   data(back_path, :any)
 
   def mount(%{"id" => id, "preview" => preview, "back" => back}, _session, %{assigns: %{current_user: user}} = socket) do
-    IO.puts("MOUNT")
 
     promotion = Promotions.get!(id)
     plugin = load_plugin(promotion)
@@ -57,8 +57,10 @@ defmodule Link.Promotion.Public do
         organisation: organisation,
         back_path: back,
         plugin_info: plugin_info,
-        plugin: plugin
+        plugin: plugin,
+        dialog: nil
       )
+      |> update_subtitle()
       |> update_image_info()
       |> update_menus()
     }
@@ -91,6 +93,14 @@ defmodule Link.Promotion.Public do
     socket |> assign(image_info: image_info)
   end
 
+  defp update_subtitle(%{assigns: %{promotion: %{subtitle: nil}}} = socket) do
+    assign(socket, subtitle: dgettext("eyra-promotion", "subtitle.label"))
+  end
+
+  defp update_subtitle(%{assigns: %{promotion: %{subtitle: subtitle}}} = socket) do
+    assign(socket, subtitle: subtitle)
+  end
+
   defp get_image_info(%{
          assigns: %{promotion: %{image_id: image_id}, viewport: %{"width" => viewport_width}}
        }) do
@@ -110,6 +120,7 @@ defmodule Link.Promotion.Public do
       themes: themes,
       organisation: organisation
     )
+    |> update_subtitle()
     |> update_image_info()
   end
 
@@ -118,6 +129,18 @@ defmodule Link.Promotion.Public do
   end
 
   defp plugins, do: Application.fetch_env!(:core, :promotion_plugins)
+
+  @impl true
+  def handle_event("call-to-action", _params, %{assigns: %{preview: true}} = socket) do
+    title = dgettext("eyra-promotion", "preview.inform.title")
+    text = dgettext("eyra-promotion", "preview.inform.text")
+
+    {
+      :noreply,
+      socket
+      |> inform(title, text)
+    }
+  end
 
   @impl true
   def handle_event(
@@ -134,6 +157,15 @@ defmodule Link.Promotion.Public do
     {:noreply, socket}
   end
 
+  @impl true
+  def handle_event("inform_ok", _params, socket) do
+    {:noreply, socket |> assign(dialog: nil)}
+  end
+
+  defp show_dialog?(nil), do: false
+  defp show_dialog?(_), do: true
+
+  @impl true
   def render(assigns) do
     ~H"""
       <Website
@@ -154,10 +186,16 @@ defmodule Link.Promotion.Public do
           <HeroBanner title={{@organisation.label}} subtitle={{ @plugin_info.byline }} icon_url={{ Routes.static_path(@socket, "/images/#{@organisation.id}.svg") }}/>
         </template>
 
+        <div :if={{ show_dialog?(@dialog) }} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
+          <div class="flex flex-row items-center justify-center w-full h-full">
+            <Dialog vm={{ @dialog }} />
+          </div>
+        </div>
+
         <ContentArea>
             <MarginY id={{:page_top}} />
             <div class="ml-8 mr-8 text-center">
-              <Title1>{{@promotion.subtitle}}</Title1>
+              <Title1>{{@subtitle}}</Title1>
             </div>
 
             <div class="mb-12 sm:mb-16" />
@@ -168,11 +206,11 @@ defmodule Link.Promotion.Public do
             </div>
             <div class="mb-12 sm:mb-16" />
 
-            <Title2>{{dgettext("eyra-promotion", "expectations.public.label")}}</Title2>
+            <Title2 margin="">{{dgettext("eyra-promotion", "expectations.public.label")}}</Title2>
             <Spacing value="M" />
             <BodyLarge>{{ @promotion.expectations }}</BodyLarge>
             <Spacing value="M" />
-            <Title2>{{dgettext("eyra-promotion", "description.public.label")}}</Title2>
+            <Title2 margin="">{{dgettext("eyra-promotion", "description.public.label")}}</Title2>
             <Spacing value="M" />
             <BodyLarge>{{ @promotion.description }}</BodyLarge>
             <Spacing value="L" />
@@ -185,17 +223,10 @@ defmodule Link.Promotion.Public do
               url={{@promotion.banner_url}}
             />
             <Spacing value="L" />
-            <Panel bg_color="bg-grey5" align="text-center">
-              <template slot="title">
-                <Title3>{{ dgettext("eyra-promotion", "keep.me.updated.title") }}</Title3>
-              </template>
-              <Intro>{{ dgettext("eyra-promotion", "keep.me.updated.text") }}</Intro>
-              <Spacing value="M" />
-              <SecondaryLiveViewButton label={{ dgettext("eyra-promotion", "keep.me.updated.button.label") }} event="register" color="text-primary"/>
-            </Panel>
-
-            <Spacing value="L" />
-            <Devices label={{ dgettext("eyra-promotion", "devices.available.label") }} devices={{ @plugin_info.devices }}/>
+            <div class="flex flex-col justify-center sm:flex-row gap-4 sm:gap-8 items-center">
+              <Devices label={{ dgettext("eyra-promotion", "devices.available.label") }} devices={{ @plugin_info.devices }} />
+              <Languages label={{ dgettext("eyra-promotion", "languages.available.label") }} languages={{ @plugin_info.languages }} />
+            </div>
             <Spacing value="XL" />
 
             <PrimaryLiveViewButton label={{ @plugin_info.call_to_action.label }} event="call-to-action" />

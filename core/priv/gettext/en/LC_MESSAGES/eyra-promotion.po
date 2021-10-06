@@ -17,38 +17,38 @@ msgid "created.label"
 msgstr "Created"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:166
-#: lib/core_web/live/promotion/public.ex:165
+#: bundles/link/lib/promotions/public.ex:234
+#: lib/core_web/live/promotion/public.ex:178
 msgid "back.button.label"
 msgstr "Back"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:198
+#: lib/core_web/live/promotion/form.ex:199
 msgid "banner.subtitle.label"
 msgstr "Job title"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:185
+#: lib/core_web/live/promotion/form.ex:186
 msgid "banner.title"
 msgstr "Contact info"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:197
+#: lib/core_web/live/promotion/form.ex:198
 msgid "banner.title.label"
 msgstr "Name"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:199
+#: lib/core_web/live/promotion/form.ex:200
 msgid "banner.url.label"
 msgstr "Website"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:191
+#: lib/core_web/live/promotion/form.ex:192
 msgid "choose.banner.photo.file"
 msgstr "Select picture"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:192
+#: lib/core_web/live/promotion/form.ex:193
 msgid "choose.other.banner.photo.file"
 msgstr "Choose different photo"
 
@@ -58,80 +58,77 @@ msgid "deadline.label"
 msgstr "Still %{days} days available"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:182
+#: lib/core_web/live/promotion/form.ex:183
 msgid "description.label"
 msgstr "Provide some background information about this study"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:136
-#: lib/core_web/live/promotion/public.ex:135
+#: bundles/link/lib/promotions/public.ex:211
+#: lib/core_web/live/promotion/public.ex:148
 msgid "description.public.label"
-msgstr "Some background information for the participants"
+msgstr "About this study"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:181
+#: lib/core_web/live/promotion/form.ex:182
 msgid "description.title"
 msgstr "Why are you performing this study?"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:159
-#: lib/core_web/live/promotion/public.ex:158
+#: bundles/link/lib/promotions/public.ex:225
+#: lib/core_web/live/promotion/public.ex:171
 msgid "devices.available.label"
 msgstr "Available on:"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:34 bundles/link/lib/card.ex:90
-#: bundles/link/lib/card.ex:146
+#: bundles/link/lib/card.ex:34 bundles/link/lib/card.ex:91
+#: bundles/link/lib/card.ex:151
 msgid "duration.title"
-msgstr "Expected duration"
+msgstr "Duration"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:178
+#: lib/core_web/live/promotion/form.ex:179
 msgid "expectations.label"
 msgstr "Describe what is expected of participants"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:132
-#: lib/core_web/live/promotion/public.ex:131
+#: bundles/link/lib/promotions/public.ex:207
+#: lib/core_web/live/promotion/public.ex:144
 msgid "expectations.public.label"
-msgstr "Expectations for the participants"
+msgstr "What to expect?"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:177
+#: lib/core_web/live/promotion/form.ex:178
 msgid "expectations.title"
 msgstr "What do participants have to do?"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:166
+#: lib/core_web/live/promotion/form.ex:167
 msgid "image.label"
 msgstr "This image is used as a cover image for your promotion page and your marketplace tile."
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:165
+#: lib/core_web/live/promotion/form.ex:166
 msgid "image.title"
 msgstr "Cover image"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:155
-#: lib/core_web/live/promotion/public.ex:154
+#: lib/core_web/live/promotion/public.ex:167
 msgid "keep.me.updated.button.label"
 msgstr "Keep me updated"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:153
-#: lib/core_web/live/promotion/public.ex:152
+#: lib/core_web/live/promotion/public.ex:165
 msgid "keep.me.updated.text"
 msgstr "Register here for our newsletter"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:151
-#: lib/core_web/live/promotion/public.ex:150
+#: lib/core_web/live/promotion/public.ex:163
 msgid "keep.me.updated.title"
 msgstr "Curious for the results of this study?"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:36 bundles/link/lib/card.ex:91
-#: bundles/link/lib/card.ex:147 lib/core_web/view_model/card.ex:38
+#: bundles/link/lib/card.ex:36 bundles/link/lib/card.ex:92
+#: bundles/link/lib/card.ex:152 lib/core_web/view_model/card.ex:38
 msgid "open.spots.label"
 msgstr "%{count} open spots"
 
@@ -141,36 +138,52 @@ msgid "reward.title"
 msgstr "Credits"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:172
+#: lib/core_web/live/promotion/form.ex:173
 msgid "search.different.image.button"
 msgstr "Change cover"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:156
+#: bundles/link/lib/promotions/public.ex:52
+#: lib/core_web/live/promotion/form.ex:157
 msgid "subtitle.label"
 msgstr "Can you explain in one line what your study is about?"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:160
+#: lib/core_web/live/promotion/form.ex:161
 msgid "themes.label"
 msgstr "Which theme fits your study best? You could select multiple."
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:159
+#: lib/core_web/live/promotion/form.ex:160
 msgid "themes.title"
 msgstr "Themes"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:155
+#: lib/core_web/live/promotion/form.ex:156
 msgid "title.label"
 msgstr "Title"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:151
+#: lib/core_web/live/promotion/form.ex:152
 msgid "form.title"
 msgstr "Promotion"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:152
+#: lib/core_web/live/promotion/form.ex:153
 msgid "form.description"
 msgstr "Promotions will be published in the marketplace to recruit participants. Preview the promotion page to view what participants will see when they click your marketplace tile."
+
+#, elixir-format
+#: bundles/link/lib/promotions/public.ex:134
+msgid "preview.inform.text"
+msgstr "This feature does not work in preview mode."
+
+#, elixir-format
+#: bundles/link/lib/promotions/public.ex:133
+msgid "preview.inform.title"
+msgstr "Preview"
+
+#, elixir-format
+#: bundles/link/lib/promotions/public.ex:226
+msgid "languages.available.label"
+msgstr "Language:"

@@ -18,10 +18,18 @@ defmodule Link.Survey.PromotionPlugin do
     byline = get_byline(tool)
     highlights = get_highlights(tool)
 
+    languages =
+      if tool.language != nil do
+        [tool.language]
+      else
+        []
+      end
+
     %{
       call_to_action: call_to_action,
       highlights: highlights,
       devices: tool.devices,
+      languages: languages,
       byline: byline
     }
   end
@@ -67,32 +75,27 @@ defmodule Link.Survey.PromotionPlugin do
     "#{dgettext("link-survey", "by.author.label")}: " <> authors
   end
 
-  defp get_highlights(tool) do
+  defp get_highlights(%{subject_count: subject_count, duration: duration} = tool) do
     occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
-    open_spot_count = if tool.subject_count do tool.subject_count - occupied_spot_count else 0 end
+    open_spot_count = if subject_count do subject_count - occupied_spot_count else 0 end
 
     spots_title = dgettext("link-survey", "spots.highlight.title")
-    spots_text = "Nog #{open_spot_count} van #{tool.subject_count}"
+    spots_text = dgettext("link-survey", "spots.highlight.text", open: open_spot_count, total: subject_count)
 
-    available_title = dgettext("link-survey", "available.highlight.title")
-
-    available_text =
-      dgettext("link-survey", "available.future.highlight.text",
-        from: "15 june",
-        till: "15 augustus 2021"
-      )
+    duration_title = dgettext("link-survey", "duration.highlight.title")
+    duration_text = dgettext("link-survey", "duration.highlight.text", duration: duration)
 
     reward_title = dgettext("link-survey", "reward.highlight.title")
 
     # reward_text =
     #   CurrencyFormatter.format(tool.reward_value, tool.reward_currency, keep_decimals: true)
 
-    reward_text = "Eternal glory"
+    reward_text = "? credits"
 
     [
-      %{title: available_title, text: available_text},
+      %{title: duration_title, text: duration_text},
+      %{title: reward_title, text: reward_text},
       %{title: spots_title, text: spots_text},
-      %{title: reward_title, text: reward_text}
     ]
   end
 end

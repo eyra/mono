@@ -125,6 +125,7 @@ defmodule CoreWeb.ImageCatalogPicker do
      )}
   end
 
+  @impl true
   def render(assigns) do
     ~H"""
     <div class="bg-white rounded">

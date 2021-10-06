@@ -12,36 +12,36 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:144
+#: lib/core_web/live/marketplace.ex:145
 msgid "highlighted.title"
 msgstr "My studies"
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:156
+#: lib/core_web/live/marketplace.ex:157
 msgid "add.card.title"
 msgstr "Add Study"
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:97
+#: lib/core_web/live/marketplace.ex:98
 msgid "default.study.title"
 msgstr "New Study"
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:163
+#: lib/core_web/live/marketplace.ex:164
 msgid "marketplace.title"
 msgstr "Marketplace"
 
 #, elixir-format
-#: lib/core_web/live/marketplace.ex:138
+#: lib/core_web/live/marketplace.ex:139
 msgid "title"
 msgstr "Marketplace"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:124
+#: bundles/link/lib/marketplace.ex:126
 msgid "empty.description"
 msgstr "There are currently no research studies available to participate in. As soon as one becomes available, it will be added here and you will be notified by email (make sure to check your spam or junk mail folder, just in case)."
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:123
+#: bundles/link/lib/marketplace.ex:125
 msgid "empty.title"
 msgstr "Looking for a study?"

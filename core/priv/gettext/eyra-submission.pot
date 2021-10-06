@@ -11,19 +11,19 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:163 bundles/link/lib/card.ex:214
+#: bundles/link/lib/card.ex:177 bundles/link/lib/card.ex:228
 #: bundles/link/lib/dashboard.ex:102 bundles/link/lib/dashboard.ex:166
 msgid "status.accepted.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:157 bundles/link/lib/card.ex:208
+#: bundles/link/lib/card.ex:171 bundles/link/lib/card.ex:222
 #: bundles/link/lib/dashboard.ex:96 bundles/link/lib/dashboard.ex:160
 msgid "status.idle.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:160 bundles/link/lib/card.ex:211
+#: bundles/link/lib/card.ex:174 bundles/link/lib/card.ex:225
 #: bundles/link/lib/dashboard.ex:99 bundles/link/lib/dashboard.ex:163
 msgid "status.submitted.label"
 msgstr ""
@@ -44,31 +44,36 @@ msgid "waiting.for.coordinator.message"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:246
+#: bundles/link/lib/survey/web/content.ex:247
 msgid "submit.error.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:245
+#: bundles/link/lib/survey/web/content.ex:246
 msgid "submit.error.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:238
+#: bundles/link/lib/survey/web/content.ex:239
 msgid "submit.success.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:237
+#: bundles/link/lib/survey/web/content.ex:238
 msgid "submit.success.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:262
+#: bundles/link/lib/survey/web/content.ex:264
 msgid "retract.success.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:261
+#: bundles/link/lib/survey/web/content.ex:263
 msgid "retract.success.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/card.ex:150
+msgid "reward.title"
 msgstr ""

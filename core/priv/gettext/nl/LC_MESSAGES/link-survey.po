@@ -12,83 +12,73 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:247
+#: bundles/link/lib/survey/web/form.ex:260
 msgid "config.nrofsubjects.label"
 msgstr "Hoeveel deelnemers heb je nodig?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:241
+#: bundles/link/lib/survey/web/form.ex:254
 msgid "config.url.label"
 msgstr "Online studie link"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:244
+#: bundles/link/lib/survey/web/form.ex:257
 msgid "duration.label"
-msgstr "Hoeveel tijd schat je in dat deelnemers nodig hebben?"
+msgstr "Hoeveel minuten schat je in dat deelnemers nodig hebben?"
 
 #, elixir-format
-#: bundles/link/lib/lab/promotion_plugin.ex:49
-#: bundles/link/lib/survey/data/promotion_plugin.ex:67
+#: bundles/link/lib/lab/promotion_plugin.ex:50
+#: bundles/link/lib/survey/data/promotion_plugin.ex:75
 msgid "by.author.label"
 msgstr "Door"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/complete.ex:55
+#: bundles/link/lib/survey/web/complete.ex:58
 msgid "thank.you.message"
 msgstr "Bedankt voor het meedoen. Hopelijk tot snel!"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:80
-msgid "available.future.highlight.text"
-msgstr "%{from} t/m %{till}"
-
-#, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:77
-msgid "available.highlight.title"
-msgstr "Beschikbaar van"
-
-#, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:85
+#: bundles/link/lib/survey/data/promotion_plugin.ex:88
 msgid "reward.highlight.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:74
+#: bundles/link/lib/survey/data/promotion_plugin.ex:82
 msgid "spots.highlight.title"
 msgstr "Beschikbare plekken"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:54
+#: bundles/link/lib/survey/data/promotion_plugin.ex:62
 msgid "apply.cta.title"
-msgstr "Doe mee met het onderzoek!"
+msgstr "Meld je aan"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/complete.ex:50
+#: bundles/link/lib/survey/web/complete.ex:53
 msgid "conpleted.title"
 msgstr "Afgerond"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:262
+#: bundles/link/lib/survey/web/form.ex:275
 msgid "devices.label"
 msgstr "Welke apparaten kunnen door deelnemers gebruikt worden?"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:49
+#: bundles/link/lib/survey/data/promotion_plugin.ex:57
 msgid "open.cta.title"
 msgstr "Ga naar de vragenlijst"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:211
+#: bundles/link/lib/survey/web/form.ex:224
 msgid "redirect.description"
 msgstr "De redirect URL zorgt ervoor dat deelnemers teruggestuurd worden naar Panl, aan het einde van de vragenlijst. Kopieer de redirect URL hieronder en plak deze als \"Website URL\" in Qualtrics zoals %{link}."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:209
+#: bundles/link/lib/survey/web/form.ex:222
 msgid "redirect.title"
 msgstr "Redirect URL (End of Survey)"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:261
+#: bundles/link/lib/survey/web/form.ex:274
 msgid "devices.title"
 msgstr "Apparaten"
 
@@ -118,47 +108,47 @@ msgid "status.label"
 msgstr "Hieronder kan je in gaten houden hoe de campagne verloopt"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:482
+#: bundles/link/lib/survey/web/content.ex:486
 msgid "content.title"
 msgstr "Campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:113
+#: bundles/link/lib/survey/web/overview.ex:115
 msgid "title"
 msgstr "Werving"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:147
+#: bundles/link/lib/survey/web/overview.ex:149
 msgid "add.first.button"
 msgstr "Start je eerste campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:128
+#: bundles/link/lib/survey/web/overview.ex:130
 msgid "add.new.button"
 msgstr "Start nieuwe campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:143
+#: bundles/link/lib/survey/web/overview.ex:145
 msgid "empty.description"
 msgstr "Hier kun je campagnes opzetten en hun status volgen. Een campagne is een georganiseerde werkwijze om een doel te behalen, in dit geval het werven van deelnemers. Het bestaat uit het opzetten van een advertentie voor in de marktplaats, het koppelen van jouw studie details, het bepalen van jouw sample, en het reviewen van de resultaten."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:142
+#: bundles/link/lib/survey/web/overview.ex:144
 msgid "empty.title"
 msgstr "Werf deelnemers voor jouw studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:169
+#: bundles/link/lib/survey/web/content.ex:167
 msgid "tabbar.item.monitor"
 msgstr "Resultaten"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:134
+#: bundles/link/lib/survey/web/content.ex:132
 msgid "tabbar.item.promotion"
 msgstr "Advertentie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:147
+#: bundles/link/lib/survey/web/content.ex:145
 msgid "tabbar.item.survey"
 msgstr "Studie"
 
@@ -173,112 +163,127 @@ msgid "monitor.empty.title"
 msgstr "Resultaten"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:135
+#: bundles/link/lib/survey/web/content.ex:133
 msgid "tabbar.item.promotion.forward"
 msgstr "Maak advertentie aan"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:148
+#: bundles/link/lib/survey/web/content.ex:146
 msgid "tabbar.item.survey.forward"
 msgstr "Koppel je studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:170
+#: bundles/link/lib/survey/web/content.ex:168
 msgid "tabbar.item.monitor.forward"
 msgstr "Bekijk resultaten"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:159
+#: bundles/link/lib/survey/web/content.ex:157
 msgid "tabbar.item.criteria"
 msgstr "Sample"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:160
+#: bundles/link/lib/survey/web/content.ex:158
 msgid "tabbar.item.criteria.forward"
 msgstr "Bepaal je sample"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:184
+#: bundles/link/lib/survey/web/form.ex:197
 msgid "form.title"
 msgstr "Studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:122
+#: bundles/link/lib/survey/web/overview.ex:124
 msgid "survey.overview.title"
 msgstr "Campagnes"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:250
+#: bundles/link/lib/survey/web/form.ex:263
 msgid "language.title"
 msgstr "Taal"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:251
+#: bundles/link/lib/survey/web/form.ex:264
 msgid "languages.label"
 msgstr "In welke taal is jouw online studie geschreven?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:78
-#: bundles/link/lib/survey/web/form.ex:277
+#: bundles/link/lib/survey/web/form.ex:88
+#: bundles/link/lib/survey/web/form.ex:290
 msgid "ethical.label"
 msgstr "Hierbij verklaar ik dat mijn studie voldoet aan alle ethische standaarden."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:272
+#: bundles/link/lib/survey/web/form.ex:285
 msgid "ethical.title"
 msgstr "Ethische toetsing"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:200
+#: bundles/link/lib/survey/web/form.ex:213
 msgid "panlid.description"
 msgstr "Panl voegt automatisch een ID van de deelnemer toe aan de URL van je Qualtrics vragenlijst. Om deze ID in Qualtrics te kunnen gebruiken, voeg je een \"embedded data element field\" toe met de naam \"panl_id\". Instructies hiervoor %{link} in \"PART 2\"."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:198
+#: bundles/link/lib/survey/web/form.ex:211
 msgid "panlid.title"
 msgstr "Panl ID"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:189
+#: bundles/link/lib/survey/web/form.ex:202
 msgid "setup.title"
 msgstr "Wat moet ik doen op Qualtrics?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:219
+#: bundles/link/lib/survey/web/form.ex:232
 msgid "redirect.copy.button"
 msgstr "Kopieer"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:273
+#: bundles/link/lib/survey/web/form.ex:286
 msgid "ethical.description"
 msgstr "Zorg ervoor dat je de ethische checklist doorlopen hebt en dat je goedkeuring hebt van de \"FEWEB Research Ethics Review Board\", wanneer dat vereist is voor jouw studie."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:233
+#: bundles/link/lib/survey/web/form.ex:246
 msgid "study.link.description"
 msgstr "Volg %{link} om jouw Qualtrics vragenlijst link aan te maken op te halen. Plak deze link in het \"Online studie link\" veld van het formulier hieronder."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:231
+#: bundles/link/lib/survey/web/form.ex:244
 msgid "study.link.title"
 msgstr "Anonymous Survey Link"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:158
+#: bundles/link/lib/survey/web/form.ex:171
 msgid "panlid.instructions.link"
 msgstr "vind je hier"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:151
+#: bundles/link/lib/survey/web/form.ex:164
 msgid "redirect.instructions.link"
 msgstr "hier beschreven"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:165
+#: bundles/link/lib/survey/web/form.ex:178
 msgid "study.instructions.link"
 msgstr "deze instructies"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:185
+#: bundles/link/lib/survey/web/form.ex:198
 msgid "form.description"
 msgstr "Doorloop eerst de stappen in het zwarte kader. Zo zorg je ervoor dat deelnemers vanuit Panl deel kunnen nemen aan jouw online studie en na afloop weer teruggestuurd worden naar Panl."
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:86
+msgid "duration.highlight.text"
+msgstr "%{duration} minuten"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:85
+msgid "duration.highlight.title"
+msgstr "Duur"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/promotion_plugin.ex:83
+msgid "spots.highlight.text"
+msgstr "Nog %{open} van de %{total}"

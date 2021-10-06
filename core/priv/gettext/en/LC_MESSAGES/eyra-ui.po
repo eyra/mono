@@ -42,7 +42,7 @@ msgstr "My profile"
 
 #, elixir-format
 #: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
-#: lib/core_web/live/user/settings.ex:35
+#: lib/core_web/live/user/settings.ex:36
 msgid "menu.item.settings"
 msgstr "Settings"
 
@@ -77,7 +77,7 @@ msgid "dashboard.title"
 msgstr "Dashboard"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:94
+#: bundles/link/lib/marketplace.ex:96
 msgid "marketplace.title"
 msgstr "Marketplace"
 
@@ -92,8 +92,8 @@ msgid "menu.item.payments"
 msgstr "Payments"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:100
-#: lib/core_web/live/user/profile.ex:108
+#: bundles/link/lib/onboarding/wizard.ex:104
+#: lib/core_web/live/user/forms/features.ex:87 lib/core_web/live/user/profile.ex:108
 msgid "tabbar.item.features"
 msgstr "Characteristics"
 
@@ -103,12 +103,13 @@ msgid "tabbar.item.profile"
 msgstr "My profile"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:89 lib/core_web/live/user/profile.ex:97
+#: bundles/link/lib/onboarding/wizard.ex:93
+#: lib/core_web/live/user/forms/study.ex:73 lib/core_web/live/user/profile.ex:97
 msgid "tabbar.item.study"
 msgstr "Study program"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:101
+#: bundles/link/lib/onboarding/wizard.ex:105
 #: lib/core_web/live/user/profile.ex:109
 msgid "tabbar.item.features.forward"
 msgstr "Update characteristics"
@@ -119,12 +120,12 @@ msgid "tabbar.item.profile.forward"
 msgstr "Update profile"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:90 lib/core_web/live/user/profile.ex:98
+#: bundles/link/lib/onboarding/wizard.ex:94 lib/core_web/live/user/profile.ex:98
 msgid "tabbar.item.study.forward"
 msgstr "Select study program"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:33
+#: bundles/link/lib/onboarding/wizard.ex:34
 msgid "onboarding.forward"
 msgstr "Continue"
 
@@ -134,12 +135,12 @@ msgid "menu.item.debug"
 msgstr "Debug"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:79
+#: bundles/link/lib/onboarding/wizard.ex:83
 msgid "tabbar.item.welcome"
 msgstr "Welcome"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:80
+#: bundles/link/lib/onboarding/wizard.ex:84
 msgid "tabbar.item.welcome.forward"
 msgstr "Welcome"
 
@@ -154,37 +155,39 @@ msgid "menu.item.helpdesk"
 msgstr "Helpdesk"
 
 #, elixir-format
+#: bundles/link/lib/promotions/public.ex:6
 #: bundles/link/lib/survey/web/content.ex:9 lib/core_web/live/admin/ticket.ex:4
 msgid "cancel.button"
 msgstr "Cancel"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:212
+#: bundles/link/lib/survey/web/content.ex:211
 msgid "delete.confirm.text"
 msgstr "This %{item} will be permanently deleted."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:211
+#: bundles/link/lib/survey/web/content.ex:210
 msgid "delete.confirm.title"
 msgstr "Delete %{item}?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:213
+#: bundles/link/lib/survey/web/content.ex:212
 msgid "delete.confirm.label"
 msgstr "Delete"
 
 #, elixir-format
+#: bundles/link/lib/promotions/public.ex:6
 #: bundles/link/lib/survey/web/content.ex:9 lib/core_web/live/admin/ticket.ex:4
 msgid "ok.button"
 msgstr "OK"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:274
+#: bundles/link/lib/survey/web/content.ex:277
 msgid "feature.unavailable.text"
-msgstr "Currently, we are still working on this feature. Try again later, the platform is updated regularly."
+msgstr "We are still working on this feature. Try again later, the platform is updated regularly. "
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:273
+#: bundles/link/lib/survey/web/content.ex:276
 msgid "feature.unavailable.title"
 msgstr "Coming soon"
 
@@ -215,17 +218,17 @@ msgid "timestamp.yesterday"
 msgstr "Yesterday"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:82
+#: lib/core_web/live/admin/ticket.ex:83
 msgid "close.confirm.label"
 msgstr "Close"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:81
+#: lib/core_web/live/admin/ticket.ex:82
 msgid "close.confirm.text"
 msgstr "This %{item} will be permanently closed."
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:80
+#: lib/core_web/live/admin/ticket.ex:81
 msgid "close.confirm.title"
 msgstr "Close %{item}?"
 

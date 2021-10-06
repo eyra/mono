@@ -5,6 +5,7 @@ defmodule CoreWeb.ImageCatalogPicker.Test.View do
 
   data(image_id, :string, default: nil)
 
+  @impl true
   def render(assigns) do
     ~H"""
     <div>

@@ -22,6 +22,7 @@ defmodule CoreWeb.DataDonation.PromotionPlugin do
       call_to_action: call_to_action,
       highlights: highlights,
       devices: [:desktop],
+      languages: [],
       byline: byline
     }
   end

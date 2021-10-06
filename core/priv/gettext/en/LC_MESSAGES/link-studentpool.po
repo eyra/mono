@@ -13,17 +13,17 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/pool/form/students.ex:89
-#: bundles/link/lib/pool/overview.ex:38
+#: bundles/link/lib/pool/overview.ex:39
 msgid "tabbar.item.students"
 msgstr "Students"
 
 #, elixir-format
-#: bundles/link/lib/pool/overview.ex:46
+#: bundles/link/lib/pool/overview.ex:47
 msgid "tabbar.item.studies"
 msgstr "Studies"
 
 #, elixir-format
-#: bundles/link/lib/pool/overview.ex:58
+#: bundles/link/lib/pool/overview.ex:59
 msgid "title"
 msgstr "Student pool"
 
