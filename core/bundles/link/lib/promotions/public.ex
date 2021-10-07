@@ -111,11 +111,15 @@ defmodule Link.Promotion.Public do
   end
 
   def handle_observation(socket, :promotion_updated, promotion) do
+    plugin = load_plugin(promotion)
+    plugin_info = plugin.info(promotion.id, socket)
+
     themes = promotion |> Promotion.get_themes(Themes)
     organisation = promotion |> Promotion.get_organisation()
 
     socket
     |> assign(
+      plugin_info: plugin_info,
       promotion: promotion,
       themes: themes,
       organisation: organisation

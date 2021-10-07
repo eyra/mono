@@ -22,8 +22,8 @@ defmodule Link.Survey.PromotionPlugin do
       if tool.language != nil do
         [tool.language]
       else
-        []
-      end
+        nil
+      end |> IO.inspect(label: "LANGUAGES")
 
     %{
       call_to_action: call_to_action,

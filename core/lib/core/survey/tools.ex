@@ -94,11 +94,15 @@ defmodule Core.Survey.Tools do
     study = Studies.get_study!(tool.study_id)
     study_changeset = Study.changeset(study, %{updated_at: NaiveDateTime.utc_now()})
 
-    Multi.new()
-    |> Multi.update(:tool, changeset)
-    |> Multi.update(:content_node, node_changeset)
-    |> Multi.update(:study, study_changeset)
-    |> Repo.transaction()
+    with {:ok, %{tool: tool} = result} <-
+           Multi.new()
+           |> Multi.update(:tool, changeset)
+           |> Multi.update(:content_node, node_changeset)
+           |> Multi.update(:study, study_changeset)
+           |> Repo.transaction() do
+      Signals.dispatch!(:tool_updated, tool)
+      {:ok, result}
+    end
   end
 
   @doc """
