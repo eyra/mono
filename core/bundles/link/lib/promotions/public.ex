@@ -169,9 +169,9 @@ defmodule Link.Promotion.Public do
   defp show_dialog?(nil), do: false
   defp show_dialog?(_), do: true
 
-  defp grid_cols(1), do: "grid-cols-1"
-  defp grid_cols(2), do: "grid-cols-2"
-  defp grid_cols(_), do: "grid-cols-3"
+  defp grid_cols(1), do: "grid-cols-1 sm:grid-cols-1"
+  defp grid_cols(2), do: "grid-cols-1 sm:grid-cols-2"
+  defp grid_cols(_), do: "grid-cols-1 sm:grid-cols-3"
 
   @impl true
   def render(assigns) do
@@ -207,7 +207,7 @@ defmodule Link.Promotion.Public do
             </div>
 
             <div class="mb-12 sm:mb-16" />
-            <div class="grid grid-cols-1 gap-6 sm:gap-8 sm:{{ grid_cols(Enum.count(@plugin_info.highlights)) }}">
+            <div class="grid gap-6 sm:gap-8 {{ grid_cols(Enum.count(@plugin_info.highlights)) }}">
               <div :for={{ highlight <- @plugin_info.highlights }} class="bg-grey5 rounded">
                 <Highlight title={{highlight.title}} text={{highlight.text}} />
               </div>
