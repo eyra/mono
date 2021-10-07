@@ -34,9 +34,23 @@ defmodule Link.Pool.Form.Submission do
     {
       :ok,
       socket
-      |> save(criteria, :auto_save, %{:study_program_codes => study_program_codes})
+      |> force_save(criteria, %{:study_program_codes => study_program_codes})
       |> assign(study_year_labels: study_year_labels)
       |> assign(study_program_labels: study_program_labels)
+    }
+  end
+
+  def update(
+        %{active_item_ids: active_item_ids, selector_id: selector_id},
+        %{assigns: %{criteria: criteria}} = socket
+      ) do
+
+        active_item_ids |> IO.inspect(label: "ITEM")
+
+    {
+      :ok,
+      socket
+      |> force_save(criteria, %{selector_id => active_item_ids})
     }
   end
 
@@ -44,10 +58,13 @@ defmodule Link.Pool.Form.Submission do
         %{active_item_id: active_item_id, selector_id: selector_id},
         %{assigns: %{criteria: criteria}} = socket
       ) do
+
+        active_item_id |> IO.inspect(label: "ITEM")
+
     {
       :ok,
       socket
-      |> save(criteria, :auto_save, %{selector_id => active_item_id})
+      |> force_save(criteria, %{selector_id => active_item_id})
     }
   end
 
@@ -107,11 +124,15 @@ defmodule Link.Pool.Form.Submission do
   end
 
   # Saving
-  def save(socket, %Criteria{} = criteria, _type, attrs) do
-    changeset = Criteria.changeset(criteria, attrs)
+
+  def force_save(socket, entity, attrs), do: save(socket, entity, attrs, false)
+  def schedule_save(socket, entity, attrs), do: save(socket, entity, attrs, true)
+
+  def save(socket, %Criteria{} = entity, attrs, schedule?) do
+    changeset = Criteria.changeset(entity, attrs)
 
     socket
-    |> schedule_save(changeset)
+    |> save(changeset, schedule?)
     |> update_ui()
   end
 

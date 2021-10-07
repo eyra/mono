@@ -42,10 +42,18 @@ defmodule Link.Survey.Form do
     %{active_item_id: active_item_id, selector_id: :language},
     %{assigns: %{entity: entity}} = socket
   ) do
+
+    language =
+      case active_item_id do
+        nil -> nil
+        item when is_atom(item) -> Atom.to_string(item)
+        _ -> active_item_id
+      end
+
     {
       :ok,
       socket
-      |> save(entity, :auto_save, %{ language: active_item_id}, false) #force save
+      |> save(entity, :auto_save, %{ language: language}, false) #force save
     }
   end
 

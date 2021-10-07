@@ -13,4 +13,9 @@ defmodule Core.Observatory.Switch do
   def dispatch(:promotion_updated, promotion) do
     Observatory.local_dispatch(:promotion_updated, [promotion.id], promotion)
   end
+
+  def dispatch(:tool_updated, tool) do
+    promotion = Core.Promotions.get!(tool.promotion_id)
+    Observatory.local_dispatch(:promotion_updated, [promotion.id], promotion)
+  end
 end
