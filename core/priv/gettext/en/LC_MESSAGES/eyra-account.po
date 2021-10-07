@@ -124,7 +124,7 @@ msgstr "Select your study program(s), bedrijfskunde (BK) and/or international bu
 #, elixir-format
 #: lib/core_web/live/user/forms/features.ex:88
 msgid "features.description"
-msgstr "By selecting these characteristics, more studies will become available to you. It enables you to participate in research studies with specific eligibility requirements."
+msgstr "A few studies use specific eligibility requirements. Selecting the optional characteristics below, allows you to participate in studies that specify your characteristics as requirements."
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:136

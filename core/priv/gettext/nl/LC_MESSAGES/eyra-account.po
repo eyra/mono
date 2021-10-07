@@ -124,7 +124,7 @@ msgstr "Selecteer je opleiding(en), bedrijfskunde (BK) en/of international busin
 #, elixir-format
 #: lib/core_web/live/user/forms/features.ex:88
 msgid "features.description"
-msgstr "Als je deze kenmerken invult krijg je meer studies te zien. Je kunt dan ook deelnemen aan onderzoeksstudies met specifieke selectie criteria."
+msgstr "Enkele studies gebruiken specifieke selectie criteria. Als je de onderstaande optionele kenmerken invult kun je meedoen aan studies waarvoor jouw kenmerken geselecteerd zijn."
 
 #, elixir-format
 #: bundles/link/lib/pool/form/submission.ex:136

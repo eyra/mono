@@ -16,7 +16,7 @@ msgid "created.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:234
+#: bundles/link/lib/promotions/public.ex:244
 #: lib/core_web/live/promotion/public.ex:178
 msgid "back.button.label"
 msgstr ""
@@ -62,7 +62,7 @@ msgid "description.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:211
+#: bundles/link/lib/promotions/public.ex:221
 #: lib/core_web/live/promotion/public.ex:148
 msgid "description.public.label"
 msgstr ""
@@ -73,7 +73,7 @@ msgid "description.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:225
+#: bundles/link/lib/promotions/public.ex:235
 #: lib/core_web/live/promotion/public.ex:171
 msgid "devices.available.label"
 msgstr ""
@@ -90,7 +90,7 @@ msgid "expectations.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:207
+#: bundles/link/lib/promotions/public.ex:217
 #: lib/core_web/live/promotion/public.ex:144
 msgid "expectations.public.label"
 msgstr ""
@@ -142,7 +142,7 @@ msgid "search.different.image.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:52
+#: bundles/link/lib/promotions/public.ex:97
 #: lib/core_web/live/promotion/form.ex:157
 msgid "subtitle.label"
 msgstr ""
@@ -173,16 +173,16 @@ msgid "form.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:134
+#: bundles/link/lib/promotions/public.ex:140
 msgid "preview.inform.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:133
+#: bundles/link/lib/promotions/public.ex:139
 msgid "preview.inform.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:226
+#: bundles/link/lib/promotions/public.ex:236
 msgid "languages.available.label"
 msgstr ""

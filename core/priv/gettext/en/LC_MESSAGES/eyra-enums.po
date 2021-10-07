@@ -200,3 +200,8 @@ msgstr "English"
 #: bundles/link/lib/enums/online_study_languages.ex:5
 msgid "online_study_languages.nl"
 msgstr "Dutch"
+
+#, elixir-format, fuzzy
+#: lib/core/enums/native_languages.ex:5
+msgid "native_languages.other"
+msgstr "Other"
