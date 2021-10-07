@@ -66,6 +66,7 @@ defmodule Link.Marketplace do
     {:ok, socket}
   end
 
+
   def handle_auto_save_done(socket) do
     socket |> update_menus()
   end
@@ -79,6 +80,7 @@ defmodule Link.Marketplace do
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, Link.Promotion.Public, id))}
   end
 
+  @impl true
   def handle_event("menu-item-clicked", %{"action" => action}, socket) do
     # toggle menu
     {:noreply, push_redirect(socket, to: action)}

@@ -3,6 +3,8 @@ defmodule CoreWeb.Promotion.Public do
   The public promotion screen.
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Website.Component, :promotion
+  alias CoreWeb.Layouts.Website.Component, as: Website
 
   import CoreWeb.UI.Responsive.Viewport
 
@@ -51,6 +53,7 @@ defmodule CoreWeb.Promotion.Public do
         plugin: plugin
       )
       |> update_image_info()
+      |> update_menus()
     }
   end
 
@@ -89,6 +92,7 @@ defmodule CoreWeb.Promotion.Public do
 
   defp plugins, do: Application.fetch_env!(:core, :promotion_plugins)
 
+  @impl true
   def handle_event(
         "call-to-action",
         _params,
@@ -98,73 +102,83 @@ defmodule CoreWeb.Promotion.Public do
     {:noreply, redirect(socket, external: path)}
   end
 
+  @impl true
   def handle_event("call-to-action", _params, socket) do
     {:noreply, socket}
   end
 
   def render(assigns) do
     ~H"""
-      <HeroImage
-        title={{@promotion.title}}
-        subtitle={{@themes}}
-        image_info={{@image_info}}
+      <Website
+        user={{ @current_user}}
+        user_agent={{ Browser.Ua.to_ua(@socket) }}
+        menus={{ @menus }}
       >
-        <template slot="call_to_action">
-          <PrimaryLiveViewButton label={{ @plugin_info.call_to_action.label }} event="call-to-action" />
-        </template>
-      </HeroImage>
-      <HeroBanner title={{@organisation.label}} subtitle={{ @plugin_info.byline }} icon_url={{ Routes.static_path(@socket, "/images/#{@organisation.id}.svg") }}/>
-      <ContentArea>
-          <MarginY id={{:page_top}} />
-          <div class="ml-8 mr-8 text-center">
-            <Title1>{{@promotion.subtitle}}</Title1>
-          </div>
-
-          <div class="mb-12 sm:mb-16" />
-          <div class="grid grid-cols-1 gap-6 sm:gap-8 sm:grid-cols-{{ Enum.count(@plugin_info.highlights) }}">
-            <div :for={{ highlight <- @plugin_info.highlights }} class="bg-grey5 rounded">
-              <Highlight title={{highlight.title}} text={{highlight.text}} />
-            </div>
-          </div>
-          <div class="mb-12 sm:mb-16" />
-
-          <Title2>{{dgettext("eyra-promotion", "expectations.public.label")}}</Title2>
-          <Spacing value="M" />
-          <BodyLarge>{{ @promotion.expectations }}</BodyLarge>
-          <Spacing value="M" />
-          <Title2>{{dgettext("eyra-promotion", "description.public.label")}}</Title2>
-          <Spacing value="M" />
-          <BodyLarge>{{ @promotion.description }}</BodyLarge>
-          <Spacing value="L" />
-
-          <CampaignBanner
-            photo_url={{@promotion.banner_photo_url}}
-            placeholder_photo_url={{ Routes.static_path(@socket, "/images/profile_photo_default.svg") }}
-            title={{@promotion.banner_title}}
-            subtitle={{@promotion.banner_subtitle}}
-            url={{@promotion.banner_url}}
-          />
-          <Spacing value="L" />
-          <Panel bg_color="bg-grey5" align="text-center">
-            <template slot="title">
-              <Title3>{{ dgettext("eyra-promotion", "keep.me.updated.title") }}</Title3>
+        <template slot="hero">
+          <HeroImage
+            title={{@promotion.title}}
+            subtitle={{@themes}}
+            image_info={{@image_info}}
+          >
+            <template slot="call_to_action">
+              <PrimaryLiveViewButton label={{ @plugin_info.call_to_action.label }} event="call-to-action" />
             </template>
-            <Intro>{{ dgettext("eyra-promotion", "keep.me.updated.text") }}</Intro>
+          </HeroImage>
+          <HeroBanner title={{@organisation.label}} subtitle={{ @plugin_info.byline }} icon_url={{ Routes.static_path(@socket, "/images/#{@organisation.id}.svg") }}/>
+        </template>
+
+        <ContentArea>
+            <MarginY id={{:page_top}} />
+            <div class="ml-8 mr-8 text-center">
+              <Title1>{{@promotion.subtitle}}</Title1>
+            </div>
+
+            <div class="mb-12 sm:mb-16" />
+            <div class="grid grid-cols-1 gap-6 sm:gap-8 sm:grid-cols-{{ Enum.count(@plugin_info.highlights) }}">
+              <div :for={{ highlight <- @plugin_info.highlights }} class="bg-grey5 rounded">
+                <Highlight title={{highlight.title}} text={{highlight.text}} />
+              </div>
+            </div>
+            <div class="mb-12 sm:mb-16" />
+
+            <Title2>{{dgettext("eyra-promotion", "expectations.public.label")}}</Title2>
             <Spacing value="M" />
-            <SecondaryLiveViewButton label={{ dgettext("eyra-promotion", "keep.me.updated.button.label") }} event="register" color="text-primary"/>
-          </Panel>
+            <BodyLarge>{{ @promotion.expectations }}</BodyLarge>
+            <Spacing value="M" />
+            <Title2>{{dgettext("eyra-promotion", "description.public.label")}}</Title2>
+            <Spacing value="M" />
+            <BodyLarge>{{ @promotion.description }}</BodyLarge>
+            <Spacing value="L" />
 
-          <Spacing value="L" />
-          <Devices label={{ dgettext("eyra-promotion", "devices.available.label") }} devices={{ @plugin_info.devices }}/>
-          <Spacing value="XL" />
+            <CampaignBanner
+              photo_url={{@promotion.banner_photo_url}}
+              placeholder_photo_url={{ Routes.static_path(@socket, "/images/profile_photo_default.svg") }}
+              title={{@promotion.banner_title}}
+              subtitle={{@promotion.banner_subtitle}}
+              url={{@promotion.banner_url}}
+            />
+            <Spacing value="L" />
+            <Panel bg_color="bg-grey5" align="text-center">
+              <template slot="title">
+                <Title3>{{ dgettext("eyra-promotion", "keep.me.updated.title") }}</Title3>
+              </template>
+              <Intro>{{ dgettext("eyra-promotion", "keep.me.updated.text") }}</Intro>
+              <Spacing value="M" />
+              <SecondaryLiveViewButton label={{ dgettext("eyra-promotion", "keep.me.updated.button.label") }} event="register" color="text-primary"/>
+            </Panel>
 
-          <PrimaryLiveViewButton label={{ @plugin_info.call_to_action.label }} event="call-to-action" />
-          <Spacing value="M" />
+            <Spacing value="L" />
+            <Devices label={{ dgettext("eyra-promotion", "devices.available.label") }} devices={{ @plugin_info.devices }}/>
+            <Spacing value="XL" />
 
-          <div class="flex">
-            <BackButton label={{ dgettext("eyra-promotion", "back.button.label") }} path={{ Routes.live_path(@socket, CoreWeb.Marketplace) }}/>
-          </div>
-      </ContentArea>
+            <PrimaryLiveViewButton label={{ @plugin_info.call_to_action.label }} event="call-to-action" />
+            <Spacing value="M" />
+
+            <div class="flex">
+              <BackButton label={{ dgettext("eyra-promotion", "back.button.label") }} path={{ Routes.live_path(@socket, CoreWeb.Marketplace) }}/>
+            </div>
+        </ContentArea>
+      </Website>
     """
   end
 end

@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:63
+#: bundles/link/lib/survey/web/overview.ex:65
 msgid "default.study.title"
 msgstr "Nieuwe studie"
 

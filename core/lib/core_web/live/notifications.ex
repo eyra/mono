@@ -8,6 +8,9 @@ defmodule CoreWeb.Notifications do
     {:ok, socket |> assign(:notifications, NotificationCenter.list(user))}
   end
 
+  @impl true
+  def handle_uri(socket), do: socket
+
   def render(assigns) do
     ~H"""
     <div>

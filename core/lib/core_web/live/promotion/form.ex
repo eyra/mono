@@ -135,6 +135,7 @@ defmodule CoreWeb.Promotion.Form do
 
   # Handle Events
 
+  @impl true
   def handle_event("save", %{"promotion" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,

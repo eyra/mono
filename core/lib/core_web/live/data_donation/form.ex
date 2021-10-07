@@ -40,6 +40,8 @@ defmodule CoreWeb.DataDonation.Form do
   end
 
   # Handle Events
+
+  @impl true
   def handle_event("save", %{"tool" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
@@ -48,6 +50,7 @@ defmodule CoreWeb.DataDonation.Form do
     }
   end
 
+  @impl true
   def handle_event("delete", _params, %{assigns: %{entity_id: entity_id}} = socket) do
     Tools.get!(entity_id)
     |> Tools.delete()

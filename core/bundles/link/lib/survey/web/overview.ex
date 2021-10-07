@@ -42,10 +42,12 @@ defmodule Link.Survey.Overview do
      |> update_menus()}
   end
 
+
   def handle_auto_save_done(socket) do
     socket |> update_menus()
   end
 
+  @impl true
   def handle_event("create_tool", _params, socket) do
     tool = create_tool(socket)
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, Link.Survey.Content, tool.id))}

@@ -47,6 +47,7 @@ defmodule CoreWeb.Admin.Permissions do
     |> assign(:pool_admin_candidates, list_pool_admin_candidates())
   end
 
+  @impl true
   def handle_event("assign_pool_admin_role", %{"item" => email}, socket) do
     user = Accounts.get_user_by_email(email)
     Accounts.update_user_profile(user, %{coordinator: true}, %{})
@@ -57,6 +58,7 @@ defmodule CoreWeb.Admin.Permissions do
     }
   end
 
+  @impl true
   def handle_event("remove_pool_admin_role", %{"item" => email}, socket) do
     user = Accounts.get_user_by_email(email)
     Accounts.update_user_profile(user, %{coordinator: false}, %{})

@@ -13,6 +13,7 @@ defmodule CoreWeb.Promotion.Plugin do
           call_to_action: CallToAction.t(),
           highlights: list(highlight),
           devices: list(atom),
+          languages: list(atom),
           byline: binary
         }
 

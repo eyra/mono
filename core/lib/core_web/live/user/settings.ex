@@ -20,6 +20,7 @@ defmodule CoreWeb.User.Settings do
     socket |> update_menus()
   end
 
+  @impl true
   def handle_event("send-test-notification", _params, %{assigns: %{current_user: user}} = socket) do
     Core.WebPush.send(user, "Test notification")
     {:noreply, socket}

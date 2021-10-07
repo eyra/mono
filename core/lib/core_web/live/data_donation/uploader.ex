@@ -27,6 +27,10 @@ defmodule CoreWeb.DataDonation.Uploader do
      |> assign(:changeset, Upload.changeset(%{}))}
   end
 
+  @impl true
+  def handle_uri(socket), do: socket
+
+  @impl true
   def handle_event(
         "donate",
         %{"data" => data},

@@ -87,23 +87,21 @@ defmodule Link.Survey.Content do
     mount(Map.put(params, "tab", "promotion_form"), session, socket)
   end
 
-  @impl true
-  def handle_params(_unsigned_params, _uri, %{assigns: %{authorization_failed: true}} = socket) do
-    # skip handling params if authorization already has already failed to prevent errors
-    { :noreply, socket }
-  end
+  defoverridable handle_uri: 1
 
   @impl true
-  def handle_params(_unsigned_params, uri, socket) do
-    parsed_uri = URI.parse(uri)
-    uri_origin = "#{parsed_uri.scheme}://#{parsed_uri.authority}"
+  def handle_uri(%{assigns: %{uri_origin: uri_origin, uri_path: uri_path, promotion_id: promotion_id}} = socket) do
 
-    {
-      :noreply,
+    preview_path = Routes.live_path(socket, Link.Promotion.Public, promotion_id, preview: true, back: uri_path)
+
+    socket =
       socket
       |> assign(uri_origin: uri_origin)
+      |> assign(preview_path: preview_path)
       |> create_tabs()
-    }
+      |> update_menus()
+
+    super(socket)
   end
 
   @impl true
@@ -206,6 +204,7 @@ defmodule Link.Survey.Content do
     {:noreply, socket}
   end
 
+  @impl true
   def handle_event("delete", _params, socket) do
     item = dgettext("link-ui", "delete.confirm.campaign")
     title = String.capitalize(dgettext("eyra-ui", "delete.confirm.title", item: item))
@@ -215,6 +214,7 @@ defmodule Link.Survey.Content do
     {:noreply, socket |> confirm("delete", title, text, confirm_label)}
   end
 
+  @impl true
   def handle_event("delete_confirm", _params, %{assigns: %{tool_id: tool_id}} = socket) do
     Tools.get_survey_tool!(tool_id)
     |> Tools.delete_survey_tool()
@@ -222,11 +222,12 @@ defmodule Link.Survey.Content do
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Dashboard))}
   end
 
+  @impl true
   def handle_event("delete_cancel", _params, socket) do
     {:noreply, socket |> assign(dialog: nil)}
   end
 
-  # Events
+  @impl true
   def handle_event("submit", _params, %{assigns: %{submission_id: submission_id}} = socket) do
     submission = Submissions.get!(submission_id)
 
@@ -254,6 +255,7 @@ defmodule Link.Survey.Content do
     { :noreply, socket}
   end
 
+  @impl true
   def handle_event("retract", _params, %{assigns: %{submission_id: submission_id}} = socket) do
     submission = Submissions.get!(submission_id)
     {:ok, _submission} = Submissions.update(submission, %{status: :idle})
@@ -269,6 +271,7 @@ defmodule Link.Survey.Content do
     }
   end
 
+  @impl true
   def handle_event("preview", _params, socket) do
     title = dgettext("eyra-ui", "feature.unavailable.title")
     text = dgettext("eyra-ui", "feature.unavailable.text")
@@ -280,6 +283,7 @@ defmodule Link.Survey.Content do
     }
   end
 
+  @impl true
   def handle_event("inform_ok", _params, socket) do
     {:noreply, socket |> assign(dialog: nil)}
   end
@@ -319,9 +323,8 @@ defmodule Link.Survey.Content do
   defp marginX(:mobile), do: "mx-6"
   defp marginX(_), do: "mx-10"
 
-  defp action_map(%{preview_path: _preview_path}) do
-    #preview_action = %{ type: :redirect, to: preview_path}
-    preview_action = %{ type: :send, event: "preview"}
+  defp action_map(%{preview_path: preview_path}) do
+    preview_action = %{ type: :redirect, to: preview_path}
     submit_action = %{ type: :send, event: "submit"}
     delete_action = %{ type: :send, event: "delete"}
     retract_action = %{ type: :send, event: "retract"}

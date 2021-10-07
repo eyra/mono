@@ -5,6 +5,7 @@ defmodule CoreWeb.ImageCatalogPicker.Test.View do
 
   data(image_id, :string, default: nil)
 
+  @impl true
   def render(assigns) do
     ~H"""
     <div>
@@ -13,6 +14,7 @@ defmodule CoreWeb.ImageCatalogPicker.Test.View do
     """
   end
 
+  @impl true
   def handle_event("set_image_id", %{"image_id" => image_id}, socket) do
     {:noreply, socket |> assign(:image_id, image_id)}
   end

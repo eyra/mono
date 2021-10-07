@@ -82,6 +82,7 @@ defmodule CoreWeb.ImageCatalogPicker do
     }
   end
 
+  @impl true
   def handle_event(
         "search",
         %{"q" => query},
@@ -90,6 +91,7 @@ defmodule CoreWeb.ImageCatalogPicker do
     search(socket, query, image_catalog, 1)
   end
 
+  @impl true
   def handle_event(
         "select_page",
         %{"page" => page},
@@ -98,6 +100,7 @@ defmodule CoreWeb.ImageCatalogPicker do
     search(socket, query, image_catalog, String.to_integer(page))
   end
 
+  @impl true
   def handle_event("select_image", %{"image" => image_id}, %{assigns: %{id: id}} = socket) do
     send(self(), {id, image_id})
     {:noreply, socket}
@@ -122,6 +125,7 @@ defmodule CoreWeb.ImageCatalogPicker do
      )}
   end
 
+  @impl true
   def render(assigns) do
     ~H"""
     <div class="bg-white rounded">

@@ -8,7 +8,7 @@ defmodule Link.Survey.Form do
   alias EyraUI.Selector.Selector
   alias EyraUI.Panel.Panel
   alias EyraUI.Text.{Title2, Title3, Title5, Body, BodyLarge, BodyMedium}
-  alias EyraUI.Form.{Form, UrlInput, TextInput, NumberInput, Checkbox}
+  alias EyraUI.Form.{Form, UrlInput, NumberInput, Checkbox}
   alias EyraUI.Button.Face.LabelIcon
 
   alias CoreWeb.UI.StepIndicator
@@ -38,6 +38,16 @@ defmodule Link.Survey.Form do
     }
   end
 
+  def update(
+    %{active_item_id: active_item_id, selector_id: :language},
+    %{assigns: %{entity: entity}} = socket
+  ) do
+    {
+      :ok,
+      socket
+      |> save(entity, :auto_save, %{ language: active_item_id}, false) #force save
+    }
+  end
 
   def update(
       %{active_item_ids: active_item_ids, selector_id: selector_id},
@@ -99,6 +109,7 @@ defmodule Link.Survey.Form do
 
   # Handle Events
 
+  @impl true
   def handle_event("toggle", %{"checkbox" => checkbox}, %{assigns: %{entity: entity}} = socket) do
     field = String.to_existing_atom(checkbox)
     new_value = not Map.get(entity, field, false)
@@ -111,6 +122,7 @@ defmodule Link.Survey.Form do
     }
   end
 
+  @impl true
   def handle_event("save", %{"tool" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
@@ -242,7 +254,7 @@ defmodule Link.Survey.Form do
           <UrlInput field={{:survey_url}} label_text={{dgettext("link-survey", "config.url.label")}} />
           <Spacing value="M" />
 
-          <TextInput field={{:duration}} label_text={{dgettext("link-survey", "duration.label")}} />
+          <NumberInput field={{:duration}} label_text={{dgettext("link-survey", "duration.label")}} />
           <Spacing value="M" />
 
           <NumberInput field={{:subject_count}} label_text={{dgettext("link-survey", "config.nrofsubjects.label")}} />

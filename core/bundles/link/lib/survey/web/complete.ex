@@ -38,6 +38,9 @@ defmodule Link.Survey.Complete do
     {:ok, socket}
   end
 
+  @impl true
+  def handle_uri(socket), do: socket
+
   def load_tool(%Study{} = study) do
     case Studies.list_survey_tools(study) do
       [] -> raise "Expected at least one survey tool for study #{study.title}"

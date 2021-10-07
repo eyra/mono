@@ -4,24 +4,24 @@ defmodule Link.Layouts.Stripped.MenuBuilder do
   import CoreWeb.Menu.Helpers
 
   @impl true
-  def build_menu(:desktop_navbar = menu_id, socket, _user_state, active_item, page_id) do
+  def build_menu(:desktop_navbar = menu_id, socket, _user_state, active_item) do
     %{
       home: live_item(socket, menu_id, :link, active_item),
-      right: build_menu_second_part(socket, menu_id, page_id)
+      right: build_menu_second_part(socket, menu_id)
     }
   end
 
   @impl true
-  def build_menu(:mobile_navbar = menu_id, socket, _user_state, active_item, page_id) do
+  def build_menu(:mobile_navbar = menu_id, socket, _user_state, active_item) do
     %{
       home: live_item(socket, menu_id, :link, active_item),
-      right: build_menu_second_part(socket, menu_id, page_id)
+      right: build_menu_second_part(socket, menu_id)
     }
   end
 
-  defp build_menu_second_part(socket, menu_id, page_id, icon_only? \\ true) do
+  defp build_menu_second_part(socket, menu_id, icon_only? \\ true) do
     [
-      language_switch_item(socket, menu_id, page_id, icon_only?)
+      language_switch_item(socket, menu_id, icon_only?)
     ]
   end
 

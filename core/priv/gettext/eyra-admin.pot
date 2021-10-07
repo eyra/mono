@@ -11,22 +11,22 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/permissions.ex:93
+#: lib/core_web/live/admin/permissions.ex:95
 msgid "permissions.pooladmin.candidates.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/permissions.ex:79
+#: lib/core_web/live/admin/permissions.ex:81
 msgid "permissions.pooladmin.description"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/permissions.ex:78
+#: lib/core_web/live/admin/permissions.ex:80
 msgid "permissions.pooladmin.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/permissions.ex:73
+#: lib/core_web/live/admin/permissions.ex:75
 msgid "permissions.title"
 msgstr ""
 
@@ -56,12 +56,12 @@ msgid "ticket.tag.tip"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:132
+#: lib/core_web/live/admin/ticket.ex:135
 msgid "close.ticket.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:102
+#: lib/core_web/live/admin/ticket.ex:105
 msgid "ticket.title"
 msgstr ""
 
@@ -86,6 +86,6 @@ msgid "ticket.mailto.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:79
+#: lib/core_web/live/admin/ticket.ex:80
 msgid "close.confirm.ticket"
 msgstr ""

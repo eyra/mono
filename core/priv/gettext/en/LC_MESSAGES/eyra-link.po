@@ -12,86 +12,86 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:52 lib/core_web/live/promotion/index.ex:36
+#: bundles/link/lib/index.ex:65 lib/core_web/live/promotion/index.ex:48
 msgid "welcome.title"
 msgstr "Panl"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:35 lib/core_web/live/promotion/index.ex:57
+#: bundles/link/lib/index.ex:42 lib/core_web/live/promotion/index.ex:68
 msgid "dashboard-button"
 msgstr "Go to dashboard"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:66 lib/core_web/live/promotion/index.ex:50
+#: bundles/link/lib/index.ex:77 lib/core_web/live/promotion/index.ex:61
 msgid "link.message"
 msgstr "Panl is a marketplace for research. Researchers can set up campaigns to recruit participants for research studies. Participants can apply to participate in these studies. Currently Panl is only available for student participation in research studies of the VU Amsterdam School of Business and Economics (SBE). In 2022 Panl will be released to a broader audience."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:63 lib/core_web/live/promotion/index.ex:47
+#: bundles/link/lib/index.ex:74 lib/core_web/live/promotion/index.ex:58
 msgid "link.title"
 msgstr "Marketplace"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:81 lib/core_web/live/promotion/index.ex:61
+#: bundles/link/lib/index.ex:92 lib/core_web/live/promotion/index.ex:72
 msgid "signup.card.title"
 msgstr "Are you a VU student or employee? "
 
 #, elixir-format
-#: bundles/link/lib/index.ex:21 lib/core_web/live/promotion/index.ex:21
+#: bundles/link/lib/index.ex:27 lib/core_web/live/promotion/index.ex:26
 msgid "member.card.title"
 msgstr "Welcome back."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:25 lib/core_web/live/promotion/index.ex:25
+#: bundles/link/lib/index.ex:31 lib/core_web/live/promotion/index.ex:30
 msgid "member.profile.card.title"
 msgstr "Welcome back %{user}."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:82 lib/core_web/live/promotion/index.ex:62
+#: bundles/link/lib/index.ex:93 lib/core_web/live/promotion/index.ex:73
 msgid "signup.card.button"
 msgstr "Sign in here"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:86 lib/core_web/live/promotion/index.ex:66
+#: bundles/link/lib/index.ex:97 lib/core_web/live/promotion/index.ex:77
 msgid "usp1.description"
 msgstr "Supports a flexible and efficient workflow, including a mobile-first design that enables easy use on mobile devices."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:86 lib/core_web/live/promotion/index.ex:66
+#: bundles/link/lib/index.ex:97 lib/core_web/live/promotion/index.ex:77
 msgid "usp1.title"
 msgstr "Efficient for researchers"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:87 lib/core_web/live/promotion/index.ex:67
+#: bundles/link/lib/index.ex:98 lib/core_web/live/promotion/index.ex:78
 msgid "usp2.description"
 msgstr "Designed to make it appealing for participants to browse through available studies and apply to participate."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:87 lib/core_web/live/promotion/index.ex:67
+#: bundles/link/lib/index.ex:98 lib/core_web/live/promotion/index.ex:78
 msgid "usp2.title"
 msgstr "Appealing to participants"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:88 lib/core_web/live/promotion/index.ex:68
+#: bundles/link/lib/index.ex:99 lib/core_web/live/promotion/index.ex:79
 msgid "usp3.description"
 msgstr "Developed by researchers from the VU Amsterdam experienced in participant recruitment, in collaboration with platform developer Eyra and SURF."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:88 lib/core_web/live/promotion/index.ex:68
+#: bundles/link/lib/index.ex:99 lib/core_web/live/promotion/index.ex:79
 msgid "usp3.title"
 msgstr "For and by researchers"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:53 lib/core_web/live/promotion/index.ex:37
+#: bundles/link/lib/index.ex:66 lib/core_web/live/promotion/index.ex:49
 msgid "welcome.subtitle"
 msgstr "For research"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:37
+#: bundles/link/lib/index.ex:44
 msgid "marketplace-button"
 msgstr "Go to marketplace"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:69
+#: bundles/link/lib/index.ex:80
 msgid "link.message.interested"
 msgstr "Interested? Send an email to "

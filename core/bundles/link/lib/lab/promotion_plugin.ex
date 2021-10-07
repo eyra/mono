@@ -22,6 +22,7 @@ defmodule Link.Lab.PromotionPlugin do
       highlights: highlights,
       # devices: tool.devices,
       devices: [],
+      languages: [],
       byline: byline
     }
   end

@@ -3,18 +3,23 @@ defmodule CoreWeb.Index do
   The home screen.
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Website.Component, :index
+  alias CoreWeb.Layouts.Website.Component, as: Website
 
   alias EyraUI.Card.PrimaryCTA
   alias EyraUI.Panel.USP
   alias EyraUI.Text.{Title1, Intro}
   alias EyraUI.Grid.{AbsoluteGrid}
-
-  alias CoreWeb.Layouts.Website.Component, as: Website
+  alias EyraUI.Hero.HeroLarge
 
   data(current_user, :any)
 
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    {
+      :ok,
+      socket
+      |> update_menus()
+    }
   end
 
   def cta_title(nil) do
@@ -25,6 +30,7 @@ defmodule CoreWeb.Index do
     dgettext("eyra-link", "member.profile.card.title", user: current_user.displayname)
   end
 
+  @impl true
   def handle_event("menu-item-clicked", %{"action" => action}, socket) do
     # toggle menu
     {:noreply, push_redirect(socket, to: action)}
@@ -33,12 +39,17 @@ defmodule CoreWeb.Index do
   def render(assigns) do
     ~H"""
       <Website
-        title={{ dgettext("eyra-link", "welcome.title") }}
-        subtitle={{ dgettext("eyra-link", "welcome.subtitle") }}
         user={{ @current_user}}
         user_agent={{ Browser.Ua.to_ua(@socket) }}
-        active_item={{ :index }}
+        menus={{ @menus }}
       >
+        <template slot="hero">
+          <HeroLarge
+            title={{ dgettext("eyra-link", "welcome.title") }}
+            subtitle={{ dgettext("eyra-link", "welcome.subtitle") }}
+          />
+        </template>
+
         <ContentArea>
           <MarginY id={{:page_top}} />
           <AbsoluteGrid>

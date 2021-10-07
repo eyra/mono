@@ -83,6 +83,7 @@ defmodule CoreWeb.Marketplace do
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Promotion.Public, id))}
   end
 
+  @impl true
   def handle_event("create_tool", _params, socket) do
     tool = create_tool(socket)
 
