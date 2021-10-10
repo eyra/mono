@@ -1,6 +1,6 @@
 defmodule CoreWeb.Notifications do
   use CoreWeb, :live_view
-  alias Core.NotificationCenter
+  alias Systems.NotificationCenter
 
   data(notifications, :any)
 

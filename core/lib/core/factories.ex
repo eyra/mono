@@ -13,9 +13,11 @@ defmodule Core.Factories do
     Lab,
     Authorization,
     DataDonation,
-    NotificationCenter,
     WebPush,
     Helpdesk
+  }
+  alias Systems.{
+    NotificationCenter
   }
 
   alias Core.Repo

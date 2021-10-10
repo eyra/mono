@@ -2,7 +2,7 @@ defmodule CoreWeb.Notifications.Test do
   use CoreWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
-  alias Core.NotificationCenter
+  alias Systems.NotificationCenter
 
   setup [:login_as_member]
 

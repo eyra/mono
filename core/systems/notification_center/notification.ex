@@ -1,4 +1,4 @@
-defmodule Core.NotificationCenter.Notification do
+defmodule Systems.NotificationCenter.Notification do
   @moduledoc """
   The notification type.
   """
@@ -10,7 +10,7 @@ defmodule Core.NotificationCenter.Notification do
     field(:action, :string)
     field(:status, Ecto.Enum, values: [:new, :read, :archived], default: :new)
 
-    belongs_to(:box, Core.NotificationCenter.Box)
+    belongs_to(:box, Systems.NotificationCenter.Box)
 
     timestamps()
   end

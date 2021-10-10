@@ -1,6 +1,6 @@
 defmodule Core.WebPush.SignalHandlers do
   use Core.Signals.Handlers
-  alias Core.NotificationCenter.Box
+  alias Systems.NotificationCenter.Box
   alias Core.WebPush
 
   @impl true

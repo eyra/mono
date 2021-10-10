@@ -1,8 +1,8 @@
-defmodule Core.NotificationCenter.SignalHandlersTest do
+defmodule Systems.NotificationCenter.SwitchTest do
   use Core.DataCase, async: true
   import Core.Signals.Test
   alias Core.Factories
-  alias Core.NotificationCenter.SignalHandlers
+  alias Systems.NotificationCenter.Switch
 
   describe "submission_published" do
     setup do
@@ -10,7 +10,7 @@ defmodule Core.NotificationCenter.SignalHandlersTest do
     end
 
     test "create notification when a submission is accepted", %{student: student} do
-      box = Core.NotificationCenter.get_or_create_box(student)
+      box = Systems.NotificationCenter.get_or_create_box(student)
 
       promotion =
         Factories.insert!(:promotion, %{
@@ -18,7 +18,7 @@ defmodule Core.NotificationCenter.SignalHandlersTest do
           parent_content_node: Factories.insert!(:content_node)
         })
 
-      SignalHandlers.dispatch(:submission_accepted, %{submission: promotion.submission})
+      Switch.dispatch(:submission_accepted, %{submission: promotion.submission})
 
       message = assert_signal_dispatched(:new_notification)
       assert message.data.title == "New study available"
@@ -32,14 +32,14 @@ defmodule Core.NotificationCenter.SignalHandlersTest do
           parent_content_node: Factories.insert!(:content_node)
         })
 
-      SignalHandlers.dispatch(:submission_accepted, %{submission: promotion.submission})
+      Switch.dispatch(:submission_accepted, %{submission: promotion.submission})
 
       # Clear out the messages
       assert_signal_dispatched(:new_notification)
 
       # Retracting and publishing the same promotion again will not trigger a
       # notification.
-      SignalHandlers.dispatch(:submission_accepted, %{submission: promotion.submission})
+      Switch.dispatch(:submission_accepted, %{submission: promotion.submission})
 
       refute_signal_dispatched(:new_notification)
     end

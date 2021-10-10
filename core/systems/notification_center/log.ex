@@ -1,4 +1,4 @@
-defmodule Core.NotificationCenter.Log do
+defmodule Systems.NotificationCenter.Log do
   use Ecto.Schema
   import Ecto.Changeset
 

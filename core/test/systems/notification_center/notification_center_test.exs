@@ -1,7 +1,7 @@
-defmodule Core.NotificationCenterTest do
+defmodule Systems.NotificationCenterTest do
   use Core.DataCase
   alias Core.Factories
-  alias Core.NotificationCenter
+  alias Systems.NotificationCenter
   doctest NotificationCenter
 
   setup do

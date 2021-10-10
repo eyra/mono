@@ -1,4 +1,4 @@
-defmodule Core.NotificationCenter do
+defmodule Systems.NotificationCenter do
   @moduledoc """
   Documentation for `NotificationCenter`.
 
@@ -10,9 +10,9 @@ defmodule Core.NotificationCenter do
   import Ecto.Query, warn: false
   alias Core.Authorization
   alias Core.Repo
-  alias Core.NotificationCenter.Notification
-  alias Core.NotificationCenter.Box
-  alias Core.NotificationCenter.Log
+  alias Systems.NotificationCenter.Notification
+  alias Systems.NotificationCenter.Box
+  alias Systems.NotificationCenter.Log
   alias Core.Signals
 
   def notify(%Box{id: box_id} = box, %{} = notification_data) do

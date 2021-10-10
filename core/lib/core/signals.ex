@@ -2,11 +2,11 @@ defmodule Core.Signals do
   @signal_handlers [
     Core.Accounts.SignalHandlers,
     Core.Pools.SignalHandlers,
-    Core.NotificationCenter.SignalHandlers,
     Core.Mailer.SignalHandlers,
     Core.WebPush.SignalHandlers,
     Core.APNS.SignalHandlers,
-    Core.Observatory.Switch
+    Core.Observatory.Switch,
+    Systems.NotificationCenter.Switch
   ]
 
   def dispatch(signal, message) do

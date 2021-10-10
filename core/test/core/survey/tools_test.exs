@@ -92,7 +92,7 @@ defmodule Core.Survey.ToolsTest do
       member = Factories.insert!(:researcher)
       {:ok, _} = Tools.apply_participant(survey_tool, member)
 
-      assert Core.NotificationCenter.list(researcher) |> Enum.map(& &1.title) == [
+      assert Systems.NotificationCenter.list(researcher) |> Enum.map(& &1.title) == [
                "New participant for: #{promotion.title}"
              ]
     end
