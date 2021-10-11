@@ -24,7 +24,6 @@ defmodule CoreWeb.Live.Routes do
         live("/onboarding", Onboarding)
         live("/dashboard", Dashboard)
         live("/marketplace", Marketplace)
-        live("/todo", Todo)
       end
 
       if Mix.env() in [:dev, :test] do
