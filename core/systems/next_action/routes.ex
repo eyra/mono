@@ -4,7 +4,7 @@ defmodule Systems.NextAction.Routes do
 
       scope "/", Systems.NextAction do
         pipe_through([:browser, :require_authenticated_user])
-        live("todo", OverviewPage)
+        live("/todo", OverviewPage)
       end
     end
   end

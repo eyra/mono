@@ -3,7 +3,7 @@ defmodule Systems.NextAction.OverviewPageTest do
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
   alias Systems.NextAction
-  alias CoreWeb.Todo
+  alias Systems.NextAction.OverviewPage
 
   defmodule SomeAction do
     @behaviour Systems.NextAction.ViewModel
@@ -24,13 +24,13 @@ defmodule Systems.NextAction.OverviewPageTest do
 
     test "shows a next action when available", %{conn: conn, user: user} do
       NextAction.Context.create_next_action(user, SomeAction)
-      {:ok, _view, html} = live(conn, Routes.live_path(conn, Todo))
+      {:ok, _view, html} = live(conn, Routes.live_path(conn, OverviewPage))
 
       assert html =~ "Open test"
     end
 
     test "is updated when task is added", %{conn: conn, user: user} do
-      {:ok, view, _html} = live(conn, Routes.live_path(conn, Todo))
+      {:ok, view, _html} = live(conn, Routes.live_path(conn, OverviewPage))
       assert has_element?(view, "#zero-todos")
       NextAction.Context.create_next_action(user, SomeAction)
       assert render(element(view, "#next-actions")) =~ "Open test"
@@ -38,7 +38,7 @@ defmodule Systems.NextAction.OverviewPageTest do
 
     test "is updated when task is completed", %{conn: conn, user: user} do
       NextAction.Context.create_next_action(user, SomeAction)
-      {:ok, view, _html} = live(conn, Routes.live_path(conn, Todo))
+      {:ok, view, _html} = live(conn, Routes.live_path(conn, OverviewPage))
       NextAction.Context.clear_next_action(user, SomeAction)
       refute has_element?(view, "#next-actions")
     end

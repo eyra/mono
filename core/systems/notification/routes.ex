@@ -4,7 +4,7 @@ defmodule Systems.Notification.Routes do
 
       scope "/", Systems.Notification do
         pipe_through([:browser, :require_authenticated_user])
-        live("notifications", OverviewPage)
+        live("/notifications", OverviewPage)
       end
     end
   end
