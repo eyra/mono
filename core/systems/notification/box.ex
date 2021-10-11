@@ -1,4 +1,4 @@
-defmodule Systems.NotificationCenter.Box do
+defmodule Systems.Notification.Box do
   @moduledoc """
   The box type.
   """

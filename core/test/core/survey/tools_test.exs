@@ -7,6 +7,7 @@ defmodule Core.Survey.ToolsTest do
   describe "survey_tools" do
     alias Core.Survey.Tool
     alias Core.Factories
+    alias Systems.Notification
 
     @update_attrs %{survey_url: "http://eyra.co/fake_survey"}
 
@@ -92,7 +93,7 @@ defmodule Core.Survey.ToolsTest do
       member = Factories.insert!(:researcher)
       {:ok, _} = Tools.apply_participant(survey_tool, member)
 
-      assert Systems.NotificationCenter.list(researcher) |> Enum.map(& &1.title) == [
+      assert Notification.Api.list(researcher) |> Enum.map(& &1.title) == [
                "New participant for: #{promotion.title}"
              ]
     end

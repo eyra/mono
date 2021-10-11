@@ -18,6 +18,8 @@ defmodule Core.Authorization do
 
   Core.BundleOverrides.grants()
 
+  grant_access(Systems.Notification.OverviewPage, [:member])
+  
   grant_access(CoreWeb.Admin.Login, [:visitor, :member])
   grant_access(CoreWeb.Admin.Permissions, [:admin])
   grant_access(CoreWeb.Admin.Support, [:admin])
@@ -27,7 +29,6 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.Dashboard, [:researcher])
   grant_access(CoreWeb.Marketplace, [:member])
   grant_access(CoreWeb.Todo, [:member])
-  grant_access(CoreWeb.Notifications, [:member])
   grant_access(CoreWeb.User.Signin, [:visitor])
   grant_access(CoreWeb.User.Signup, [:visitor])
   grant_access(CoreWeb.User.ResetPassword, [:visitor])

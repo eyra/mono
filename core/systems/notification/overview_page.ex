@@ -1,11 +1,11 @@
-defmodule CoreWeb.Notifications do
+defmodule Systems.Notification.OverviewPage do
   use CoreWeb, :live_view
-  alias Systems.NotificationCenter
+  alias Systems.Notification
 
   data(notifications, :any)
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    {:ok, socket |> assign(:notifications, NotificationCenter.list(user))}
+    {:ok, socket |> assign(:notifications, Notification.Context.list(user))}
   end
 
   @impl true

@@ -10,8 +10,7 @@ defmodule Link.Dashboard do
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias EyraUI.Text.{Title2}
-  alias Core.NextActions.Live.NextActionHighlight
-  alias Core.NextActions
+  alias Systems.NextAction
   alias Core.Content.Nodes
   alias Core.ImageHelpers
 
@@ -34,7 +33,7 @@ defmodule Link.Dashboard do
       socket
       |> update_menus()
       |> assign(content_items: content_items)
-      |> assign(next_best_action: NextActions.next_best_action(url_resolver(socket), user))
+      |> assign(next_best_action: NextAction.Context.next_best_action(url_resolver(socket), user))
 
     {:ok, socket}
   end
@@ -52,7 +51,7 @@ defmodule Link.Dashboard do
         <ContentArea>
           <MarginY id={{:page_top}} />
           <div :if={{ @next_best_action }} class="mb-6 md:mb-10">
-            <NextActionHighlight vm={{ @next_best_action }}/>
+            <NextAction.HighlightView vm={{ @next_best_action }}/>
           </div>
           <Case value={{ Enum.count(@content_items) > 0 }} >
             <True>

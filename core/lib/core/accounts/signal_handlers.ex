@@ -2,7 +2,7 @@ defmodule Core.Accounts.SignalHandlers do
   use Core.Signals.Handlers
   import Ecto.Changeset
   alias Core.Accounts
-  alias Core.NextActions
+  alias Systems.NextActions
   alias Core.Accounts.NextActions.{CompleteProfile, PromotePushStudent, SelectStudyStudent}
   alias Core.Accounts.Email
 

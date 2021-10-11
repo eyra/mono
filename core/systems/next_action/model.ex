@@ -1,4 +1,4 @@
-defmodule Core.NextActions.NextAction do
+defmodule Systems.NextAction.Model do
   use Ecto.Schema
   import Ecto.Changeset
   alias Core.Accounts.User

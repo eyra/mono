@@ -6,7 +6,7 @@ defmodule Core.Signals do
     Core.WebPush.SignalHandlers,
     Core.APNS.SignalHandlers,
     Core.Observatory.Switch,
-    Systems.NotificationCenter.Switch
+    Systems.Notification.Switch
   ]
 
   def dispatch(signal, message) do

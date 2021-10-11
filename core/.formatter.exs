@@ -1,5 +1,5 @@
 [
   import_deps: [],
-  inputs: ["*.{ex,exs}", "{config,lib,test}/**/*.{ex,exs}"],
+  inputs: ["*.{ex,exs}", "{config,bundleslib,test}/**/*.{ex,exs}"],
   subdirectories: []
 ]

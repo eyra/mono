@@ -1,12 +1,12 @@
 defmodule Core.AccountsTest do
   use Core.DataCase, async: true
   import Core.Signals.Test
-  import Core.NextActions.Test
+  import Systems.NextAction.TestHelper
 
   alias Core.Factories
   alias Core.Accounts
   alias Core.Accounts.{User, UserToken}
-  alias Core.NextActions
+  alias Systems.NextAction
 
   alias Core.Accounts.NextActions.{PromotePushStudent}
 

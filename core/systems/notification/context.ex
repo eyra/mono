@@ -1,6 +1,6 @@
-defmodule Systems.NotificationCenter do
+defmodule Systems.Notification.Context do
   @moduledoc """
-  Documentation for `NotificationCenter`.
+  Documentation for `Notification System`.
 
 
   title
@@ -10,15 +10,13 @@ defmodule Systems.NotificationCenter do
   import Ecto.Query, warn: false
   alias Core.Authorization
   alias Core.Repo
-  alias Systems.NotificationCenter.Notification
-  alias Systems.NotificationCenter.Box
-  alias Systems.NotificationCenter.Log
+  alias Systems.Notification.{Box, Model, Log}
   alias Core.Signals
 
   def notify(%Box{id: box_id} = box, %{} = notification_data) do
     with {:ok, _} <-
-           %Notification{}
-           |> Notification.changeset(notification_data)
+           %Model{}
+           |> Model.changeset(notification_data)
            |> Ecto.Changeset.put_change(:box_id, box_id)
            |> Repo.insert() do
       Signals.dispatch!(:new_notification, %{
@@ -64,12 +62,12 @@ defmodule Systems.NotificationCenter do
   end
 
   def get(id) do
-    Repo.get_by(Notification, id: id)
+    Repo.get_by(Model, id: id)
   end
 
   def mark(notification, status) do
     notification
-    |> Notification.changeset(%{status: status})
+    |> Model.changeset(%{status: status})
     |> Repo.update()
   end
 
@@ -114,7 +112,7 @@ defmodule Systems.NotificationCenter do
   defp owned_notifications(user) do
     node_ids = auth_nodes_for_user(user)
 
-    from(n in Notification,
+    from(n in Model,
       join: b in Box,
       on: b.id == n.box_id,
       where: b.auth_node_id in subquery(node_ids)

@@ -5,8 +5,7 @@ defmodule Link.Marketplace do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :marketplace
 
-  alias Core.NextActions
-  alias Core.NextActions.Live.NextActionHighlight
+  alias Systems.NextAction
   alias Core.Studies
   alias Core.Survey.Tool, as: SurveyTool
   alias Core.Lab.Tool, as: LabTool
@@ -99,7 +98,7 @@ defmodule Link.Marketplace do
           <ContentArea>
             <MarginY id={{:page_top}} />
             <div :if={{ @next_best_action }}>
-              <NextActionHighlight vm={{ @next_best_action }}/>
+              <NextAction.HighlightView vm={{ @next_best_action }}/>
               <div class="mt-6 lg:mt-10"/>
             </div>
             <Case value={{ render_empty?(assigns) }} >

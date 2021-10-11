@@ -87,7 +87,7 @@ _admin =
     password: password
   })
 
-Core.NextActions.create_next_action(member, Core.Accounts.NextActions.CompleteProfile)
+Systems.NextActions.create_next_action(member, Core.Accounts.NextActions.CompleteProfile)
 
 researcher =
   Core.Factories.insert!(:member, %{
@@ -96,7 +96,7 @@ researcher =
     password: password
   })
 
-Core.NextActions.create_next_action(researcher, Core.Accounts.NextActions.CompleteProfile)
+Systems.NextActions.create_next_action(researcher, Core.Accounts.NextActions.CompleteProfile)
 
 for study_data <- studies do
   {tool_type, study_data} = Map.pop!(study_data, :type)

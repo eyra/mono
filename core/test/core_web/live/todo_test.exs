@@ -2,13 +2,13 @@ defmodule CoreWeb.TodoTest do
   use CoreWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
-  alias Core.NextActions
+  alias Systems.NextActions
   alias CoreWeb.Todo
 
   defmodule SomeAction do
-    @behaviour Core.NextActions.ViewModel
+    @behaviour Systems.NextAction.ViewModel
 
-    @impl Core.NextActions.ViewModel
+    @impl Systems.NextAction.ViewModel
     def to_view_model(_url_resolver, count, _params) do
       %{
         title: "Test: #{count}",

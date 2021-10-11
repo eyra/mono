@@ -1,4 +1,4 @@
-defmodule Core.NextActions.ViewModel do
+defmodule Systems.NextAction.ViewModel do
   @callback to_view_model(fun(), integer(), map()) :: %{
               title: binary(),
               description: binary(),

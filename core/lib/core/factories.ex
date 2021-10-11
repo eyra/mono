@@ -17,7 +17,7 @@ defmodule Core.Factories do
     Helpdesk
   }
   alias Systems.{
-    NotificationCenter
+    Notification
   }
 
   alias Core.Repo
@@ -161,7 +161,7 @@ defmodule Core.Factories do
         ]
       })
 
-    %NotificationCenter.Box{}
+    %Notification.Box{}
     |> struct!(
       Map.delete(attributes, :user)
       |> Map.put(:auth_node, auth_node)

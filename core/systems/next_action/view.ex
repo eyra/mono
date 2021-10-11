@@ -1,4 +1,4 @@
-defmodule Core.NextActions.Live.NextAction do
+defmodule Systems.NextAction.View do
   use EyraUI.Component
 
   defviewmodel(

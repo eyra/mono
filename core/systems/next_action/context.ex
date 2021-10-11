@@ -1,4 +1,4 @@
-defmodule Core.NextActions do
+defmodule Systems.NextAction.Context do
   @moduledoc """
   The NextActions context.
   """
@@ -8,12 +8,12 @@ defmodule Core.NextActions do
   alias Core.Accounts.User
   alias Core.Signals
 
-  alias Core.NextActions.NextAction
+  alias Systems.NextAction
 
   @doc """
   """
   def count_next_actions(%User{} = user) do
-    from(na in NextAction, where: na.user_id == ^user.id, select: count("*"))
+    from(na in NextAction.Model, where: na.user_id == ^user.id, select: count("*"))
     |> Repo.one()
   end
 
@@ -21,7 +21,7 @@ defmodule Core.NextActions do
   """
   def list_next_actions(url_resolver, %User{} = user, content_node \\ nil)
       when is_function(url_resolver) do
-    from(na in NextAction, where: na.user_id == ^user.id, limit: 10)
+    from(na in NextAction.Model, where: na.user_id == ^user.id, limit: 10)
     |> filter_by_content_node(content_node)
     |> Repo.all()
     |> Enum.map(&to_view_model(&1, url_resolver))
@@ -31,7 +31,7 @@ defmodule Core.NextActions do
   """
   def next_best_action(url_resolver, %User{} = user, content_node \\ nil)
       when is_function(url_resolver) do
-    from(na in NextAction, where: na.user_id == ^user.id, limit: 1)
+    from(na in NextAction.Model, where: na.user_id == ^user.id, limit: 1)
     |> filter_by_content_node(content_node)
     |> Repo.one()
     |> to_view_model(url_resolver)
@@ -58,8 +58,8 @@ defmodule Core.NextActions do
         "(user_id,action,content_node_id) WHERE content_node_id is not NULL"
       end
 
-    %NextAction{}
-    |> NextAction.changeset(%{
+    %NextAction.Model{}
+    |> NextAction.Model.changeset(%{
       user: user,
       action: Atom.to_string(action),
       content_node: content_node,
@@ -77,7 +77,7 @@ defmodule Core.NextActions do
   def clear_next_action(user, action, content_node \\ nil) do
     action_string = to_string(action)
 
-    from(na in NextAction, where: na.user_id == ^user.id and na.action == ^action_string)
+    from(na in NextAction.Model, where: na.user_id == ^user.id and na.action == ^action_string)
     |> filter_by_content_node(content_node)
     |> Repo.delete_all()
     |> tap(fn _ -> Signals.dispatch!(:next_action_cleared, %{user: user, action_type: action}) end)
@@ -85,7 +85,7 @@ defmodule Core.NextActions do
 
   def to_view_model(nil, _url_resolver), do: nil
 
-  def to_view_model(%NextAction{action: action, count: count, params: params}, url_resolver) do
+  def to_view_model(%NextAction.Model{action: action, count: count, params: params}, url_resolver) do
     action_type = String.to_existing_atom(action)
 
     action_type

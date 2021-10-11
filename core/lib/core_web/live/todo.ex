@@ -6,8 +6,7 @@ defmodule CoreWeb.Todo do
   use CoreWeb.Layouts.Workspace.Component, :todo
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias Core.NextActions
-  alias Core.NextActions.Live.NextAction
+  alias Systems.NextAction
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
     observe(
@@ -28,7 +27,7 @@ defmodule CoreWeb.Todo do
     assign(
       socket,
       :next_actions,
-      NextActions.list_next_actions(url_resolver(socket), user)
+      NextAction.Context.list_next_actions(url_resolver(socket), user)
     )
   end
 
@@ -63,7 +62,7 @@ defmodule CoreWeb.Todo do
         <ContentArea>
           <MarginY id={{:page_top}} />
           <div :if={{!Enum.empty?(@next_actions)}} class="flex flex-col gap-6 sm:gap-10" id="next-actions">
-            <NextAction :for={{action <- @next_actions}} vm={{ action }} />
+            <NextAction.View :for={{action <- @next_actions}} vm={{ action }} />
           </div>
         </ContentArea>
       </Workspace>

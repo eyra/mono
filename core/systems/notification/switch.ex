@@ -1,9 +1,9 @@
-defmodule Systems.NotificationCenter.Switch do
+defmodule Systems.Notification.Switch do
   use Core.Signals.Handlers
   import Ecto.Query
   alias Core.Repo
 
-  import Systems.NotificationCenter,
+  import Systems.Notification.Context,
     only: [notify: 2, notify_users_with_role: 3, mark_as_notified: 2, marked_as_notified?: 2]
 
   alias Core.Accounts.User

@@ -6,7 +6,7 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
   import CoreWeb.Menu.Helpers
   import Core.Admin
 
-  alias Core.NextActions
+  alias Systems.NextActions
   alias Core.Helpdesk
 
   @impl true

@@ -1,15 +1,15 @@
-defmodule CoreWeb.Notifications.Test do
+defmodule Systems.Notifications.OverviewPageTest do
   use CoreWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
-  alias Systems.NotificationCenter
+  alias Systems.Notification.Context
 
   setup [:login_as_member]
 
   test "show notifications", %{conn: conn, user: user} do
     title = Faker.Lorem.sentence()
-    NotificationCenter.notify(user, %{title: title})
-    {:ok, _view, html} = live(conn, Routes.live_path(conn, CoreWeb.Notifications))
+    Context.notify(user, %{title: title})
+    {:ok, _view, html} = live(conn, Routes.live_path(conn, Systems.Notification.OverviewPage))
     assert html =~ title
   end
 end
