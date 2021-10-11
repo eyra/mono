@@ -1,4 +1,4 @@
-defmodule Core.Signals.Test do
+defmodule Frameworks.Signal.TestHelper do
   import ExUnit.Assertions
 
   defmacro assert_signal_dispatched(signal) do

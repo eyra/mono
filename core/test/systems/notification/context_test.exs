@@ -2,7 +2,7 @@ defmodule Systems.Notification.ContextTest do
   use Core.DataCase
   alias Core.Factories
   alias Systems.Notification.Context
-  doctest Notification.Context
+  doctest Systems.Notification.Context
 
   setup do
     %{user: Factories.insert!(:member)}
@@ -116,7 +116,6 @@ defmodule Systems.Notification.ContextTest do
   describe "notify_users_with_role/3" do
     test "sends message to users with matching role", %{user: user} do
       box = Context.get_or_create_box(user)
-      
 
       {:ok, _} = Context.notify_users_with_role(box, :owner, %{title: "Testing"})
 

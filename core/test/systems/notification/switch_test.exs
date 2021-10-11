@@ -1,6 +1,6 @@
 defmodule Systems.Notification.SwitchTest do
   use Core.DataCase, async: true
-  import Core.Signals.Test
+  import Frameworks.Signal.TestHelper
   alias Core.Factories
   alias Systems.Notification
 
@@ -10,7 +10,7 @@ defmodule Systems.Notification.SwitchTest do
     end
 
     test "create notification when a submission is accepted", %{student: student} do
-      box = Notification.Api.get_or_create_box(student)
+      box = Notification.Context.get_or_create_box(student)
 
       promotion =
         Factories.insert!(:promotion, %{

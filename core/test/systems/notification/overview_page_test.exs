@@ -1,4 +1,4 @@
-defmodule Systems.Notifications.OverviewPageTest do
+defmodule Systems.Notification.OverviewPageTest do
   use CoreWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest

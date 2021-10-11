@@ -11,7 +11,7 @@
           "lib/",
           "src/",
           "test/",
-          "web/",
+          "web/"
         ],
         excluded: [~r"/_build/", ~r"/deps/", ~r"/node_modules/"]
       },

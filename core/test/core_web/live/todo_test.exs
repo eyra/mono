@@ -2,7 +2,7 @@ defmodule CoreWeb.TodoTest do
   use CoreWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
-  alias Systems.NextActions
+  alias Systems.NextAction
   alias CoreWeb.Todo
 
   defmodule SomeAction do
@@ -23,7 +23,7 @@ defmodule CoreWeb.TodoTest do
     setup [:login_as_member]
 
     test "shows a next action when available", %{conn: conn, user: user} do
-      NextActions.create_next_action(user, SomeAction)
+      NextAction.Context.create_next_action(user, SomeAction)
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Todo))
 
       assert html =~ "Open test"
@@ -32,14 +32,14 @@ defmodule CoreWeb.TodoTest do
     test "is updated when task is added", %{conn: conn, user: user} do
       {:ok, view, _html} = live(conn, Routes.live_path(conn, Todo))
       assert has_element?(view, "#zero-todos")
-      NextActions.create_next_action(user, SomeAction)
+      NextAction.Context.create_next_action(user, SomeAction)
       assert render(element(view, "#next-actions")) =~ "Open test"
     end
 
     test "is updated when task is completed", %{conn: conn, user: user} do
-      NextActions.create_next_action(user, SomeAction)
+      NextAction.Context.create_next_action(user, SomeAction)
       {:ok, view, _html} = live(conn, Routes.live_path(conn, Todo))
-      NextActions.clear_next_action(user, SomeAction)
+      NextAction.Context.clear_next_action(user, SomeAction)
       refute has_element?(view, "#next-actions")
     end
   end

@@ -7,7 +7,7 @@ defmodule Core.Accounts do
   alias Ecto.Multi
   alias Core.Repo
   alias Core.Accounts.{User, UserToken, UserNotifier, Profile, Features}
-  alias Core.Signals
+  alias Frameworks.Signal
 
   ## Listings
 
@@ -423,7 +423,7 @@ defmodule Core.Accounts do
     Multi.new()
     |> Multi.update(:profile, profile_changeset)
     |> Multi.update(:user, user_changeset)
-    |> Signals.multi_dispatch(:user_profile_updated, %{
+    |> Signal.Context.multi_dispatch(:user_profile_updated, %{
       user_changeset: user_changeset,
       profile_changeset: profile_changeset
     })
@@ -459,7 +459,7 @@ defmodule Core.Accounts do
   def update_features(%Features{} = features, changeset) do
     Multi.new()
     |> Multi.update(:features, changeset)
-    |> Signals.multi_dispatch(:features_updated, %{
+    |> Signal.Context.multi_dispatch(:features_updated, %{
       features: features,
       features_changeset: changeset
     })
@@ -485,7 +485,7 @@ defmodule Core.Accounts do
 
     Multi.new()
     |> Multi.update(:user, changeset)
-    |> Signals.multi_dispatch(:visited_pages_updated, %{
+    |> Signal.Context.multi_dispatch(:visited_pages_updated, %{
       user_changeset: changeset
     })
     |> Repo.transaction()

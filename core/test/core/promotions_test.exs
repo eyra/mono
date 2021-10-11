@@ -1,6 +1,6 @@
 defmodule Core.PromotionsTest do
   use Core.DataCase, async: true
-  import Core.Signals.Test
+  import Frameworks.Signal.TestHelper
   alias Core.Factories
   alias Core.Pools.Submissions
 

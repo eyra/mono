@@ -27,7 +27,7 @@ defmodule Link.Marketplace do
   data(current_user, :any)
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    next_best_action = NextActions.next_best_action(url_resolver(socket), user)
+    next_best_action = NextAction.Context.next_best_action(url_resolver(socket), user)
     user = socket.assigns[:current_user]
     preload = [survey_tool: [:promotion], lab_tool: [:promotion, :time_slots]]
 

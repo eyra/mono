@@ -11,7 +11,7 @@ defmodule Systems.Notification.Context do
   alias Core.Authorization
   alias Core.Repo
   alias Systems.Notification.{Box, Model, Log}
-  alias Core.Signals
+  alias Frameworks.Signal
 
   def notify(%Box{id: box_id} = box, %{} = notification_data) do
     with {:ok, _} <-
@@ -19,7 +19,7 @@ defmodule Systems.Notification.Context do
            |> Model.changeset(notification_data)
            |> Ecto.Changeset.put_change(:box_id, box_id)
            |> Repo.insert() do
-      Signals.dispatch!(:new_notification, %{
+      Signal.Context.dispatch!(:new_notification, %{
         box: box,
         data: notification_data
       })

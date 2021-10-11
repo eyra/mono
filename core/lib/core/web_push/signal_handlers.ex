@@ -1,5 +1,5 @@
 defmodule Core.WebPush.SignalHandlers do
-  use Core.Signals.Handlers
+  use Frameworks.Signal.Handler
   alias Systems.Notification.Box
   alias Core.WebPush
 

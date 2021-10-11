@@ -5,7 +5,7 @@ defmodule Core.Pools.Submissions do
 
   alias Ecto.Multi
   alias Core.Repo
-  alias Core.Signals
+  alias Frameworks.Signal
   alias Core.Content.{Nodes, Node}
   alias Core.Pools.{Submission, Criteria}
   alias Core.Promotions.Promotion
@@ -63,7 +63,7 @@ defmodule Core.Pools.Submissions do
 
   defp notify_when_accepted(%Submission{} = submission, %Ecto.Changeset{} = changeset) do
     if Ecto.Changeset.get_change(changeset, :status) === :accepted do
-      Signals.dispatch(:submission_accepted, %{submission: submission})
+      Signal.Context.dispatch(:submission_accepted, %{submission: submission})
     end
 
     submission

@@ -1,8 +1,8 @@
 defmodule Core.Accounts.SignalHandlers do
-  use Core.Signals.Handlers
+  use Frameworks.Signal.Handler
   import Ecto.Changeset
   alias Core.Accounts
-  alias Systems.NextActions
+  alias Systems.NextAction
   alias Core.Accounts.NextActions.{CompleteProfile, PromotePushStudent, SelectStudyStudent}
   alias Core.Accounts.Email
 
@@ -22,9 +22,9 @@ defmodule Core.Accounts.SignalHandlers do
     profile_valid? = validate_required(profile_changeset, required_fields).valid?
 
     if user_valid? && profile_valid? do
-      NextActions.clear_next_action(user, CompleteProfile)
+      NextAction.Context.clear_next_action(user, CompleteProfile)
     else
-      NextActions.create_next_action(user, CompleteProfile)
+      NextAction.Context.create_next_action(user, CompleteProfile)
     end
   end
 
@@ -39,9 +39,9 @@ defmodule Core.Accounts.SignalHandlers do
         |> validate_length(:study_program_codes, min: 1)
 
       if validated.valid? do
-        NextActions.clear_next_action(user, SelectStudyStudent)
+        NextAction.Context.clear_next_action(user, SelectStudyStudent)
       else
-        NextActions.create_next_action(user, SelectStudyStudent)
+        NextAction.Context.create_next_action(user, SelectStudyStudent)
       end
     end
   end
@@ -54,15 +54,15 @@ defmodule Core.Accounts.SignalHandlers do
     visited_settings? = Enum.member?(visited_pages, "settings")
 
     if user.student && visited_settings? do
-      NextActions.clear_next_action(user, PromotePushStudent)
+      NextAction.Context.clear_next_action(user, PromotePushStudent)
     end
   end
 
   @impl true
   def dispatch(:user_created, %{user: user}) do
     if user.student do
-      NextActions.create_next_action(user, SelectStudyStudent)
-      NextActions.create_next_action(user, PromotePushStudent)
+      NextAction.Context.create_next_action(user, SelectStudyStudent)
+      NextAction.Context.create_next_action(user, PromotePushStudent)
     end
 
     Email.account_created(user)

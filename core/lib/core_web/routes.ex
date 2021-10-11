@@ -60,6 +60,9 @@ defmodule CoreWeb.Routes do
 
       CoreWeb.Live.Routes.routes()
 
+      require Systems.Notification.Routes
+      Systems.Notification.Routes.routes()
+
       scope "/", CoreWeb do
         pipe_through(:api)
 

@@ -1,5 +1,5 @@
 defmodule Systems.Notification.Switch do
-  use Core.Signals.Handlers
+  use Frameworks.Signal.Handler
   import Ecto.Query
   alias Core.Repo
 

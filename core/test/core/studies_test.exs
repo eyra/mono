@@ -1,6 +1,6 @@
 defmodule Core.StudiesTest do
   use Core.DataCase
-  import Core.Signals.Test
+  import Frameworks.Signal.TestHelper
 
   alias Core.Studies
 

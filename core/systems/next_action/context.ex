@@ -6,7 +6,7 @@ defmodule Systems.NextAction.Context do
   import Ecto.Query, warn: false
   alias Core.Repo
   alias Core.Accounts.User
-  alias Core.Signals
+  alias Frameworks.Signal
 
   alias Systems.NextAction
 
@@ -70,7 +70,7 @@ defmodule Systems.NextAction.Context do
       conflict_target: {:unsafe_fragment, conflict_target_fragment}
     )
     |> tap(
-      &Signals.dispatch!(:next_action_created, %{action_type: action, user: user, action: &1})
+      &Signal.Context.dispatch!(:next_action_created, %{action_type: action, user: user, action: &1})
     )
   end
 
@@ -80,7 +80,7 @@ defmodule Systems.NextAction.Context do
     from(na in NextAction.Model, where: na.user_id == ^user.id and na.action == ^action_string)
     |> filter_by_content_node(content_node)
     |> Repo.delete_all()
-    |> tap(fn _ -> Signals.dispatch!(:next_action_cleared, %{user: user, action_type: action}) end)
+    |> tap(fn _ -> Signal.Context.dispatch!(:next_action_cleared, %{user: user, action_type: action}) end)
   end
 
   def to_view_model(nil, _url_resolver), do: nil

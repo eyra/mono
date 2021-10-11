@@ -1,4 +1,4 @@
-defmodule Core.Signals do
+defmodule Frameworks.Signal.Context do
   @signal_handlers [
     Core.Accounts.SignalHandlers,
     Core.Pools.SignalHandlers,

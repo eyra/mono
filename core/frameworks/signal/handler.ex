@@ -1,9 +1,9 @@
-defmodule Core.Signals.Handlers do
+defmodule Frameworks.Signal.Handler do
   @callback dispatch(signal :: atom(), message :: any()) :: any()
   defmacro __using__(_opts) do
     quote do
-      @behaviour Core.Signals.Handlers
-      @before_compile Core.Signals.Handlers
+      @behaviour Frameworks.Signal.Handler
+      @before_compile Frameworks.Signal.Handler
     end
   end
 

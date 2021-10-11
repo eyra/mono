@@ -36,7 +36,7 @@ defmodule Core.Survey.Tools do
   alias Core.Accounts.User
   alias Core.Survey.{Tool, Task, Participant}
   alias Core.Authorization
-  alias Core.Signals
+  alias Frameworks.Signal
   alias Core.Content.Nodes
   alias Core.Studies
   alias Core.Studies.Study
@@ -100,7 +100,7 @@ defmodule Core.Survey.Tools do
            |> Multi.update(:content_node, node_changeset)
            |> Multi.update(:study, study_changeset)
            |> Repo.transaction() do
-      Signals.dispatch!(:tool_updated, tool)
+      Signal.Context.dispatch!(:tool_updated, tool)
       {:ok, result}
     end
   end
@@ -244,7 +244,7 @@ defmodule Core.Survey.Tools do
       :role_assignment,
       Authorization.build_role_assignment(user, survey_tool, :participant)
     )
-    |> Signals.multi_dispatch(:participant_applied, %{
+    |> Signal.Context.multi_dispatch(:participant_applied, %{
       tool: survey_tool,
       user: user
     })

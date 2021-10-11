@@ -2,7 +2,7 @@ defmodule Systems.NextAction.ContextTest do
   use Core.DataCase
   alias Core.Factories
 
-  alias Systems.NextAction
+  alias Systems.NextAction.Context
 
   defmodule SomeAction do
     @behaviour Systems.NextAction.ViewModel
@@ -35,8 +35,7 @@ defmodule Systems.NextAction.ContextTest do
       Context.create_next_action(user, SomeAction, content_node: content_node)
       assert [_] = Context.list_next_actions(url_resolver, user, content_node)
       # Filter by another node shows no results
-      assert [] =
-               Context.list_next_actions(url_resolver, user, Factories.insert!(:content_node))
+      assert [] = Context.list_next_actions(url_resolver, user, Factories.insert!(:content_node))
     end
   end
 
@@ -74,8 +73,7 @@ defmodule Systems.NextAction.ContextTest do
       Context.create_next_action(user, SomeAction, content_node: other_node)
       Context.create_next_action(user, SomeAction, content_node: content_node)
 
-      assert [%{title: "Test: 2"}] =
-               Context.list_next_actions(url_resolver, user, content_node)
+      assert [%{title: "Test: 2"}] = Context.list_next_actions(url_resolver, user, content_node)
 
       assert [%{title: "Test: 1"}] = Context.list_next_actions(url_resolver, user, other_node)
     end
