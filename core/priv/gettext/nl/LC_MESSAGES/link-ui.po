@@ -48,18 +48,20 @@ msgid "delete.button"
 msgstr "Verwijderen"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:347
+#: bundles/link/lib/pool/submission.ex:154
+#: bundles/link/lib/pool/submission.ex:163 bundles/link/lib/survey/web/content.ex:347
 #: bundles/link/lib/survey/web/content.ex:351 bundles/link/lib/survey/web/content.ex:355
 msgid "preview.button"
 msgstr "Bekijken"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:337
-#: bundles/link/lib/survey/web/content.ex:341
+#: bundles/link/lib/pool/submission.ex:149
+#: bundles/link/lib/survey/web/content.ex:337 bundles/link/lib/survey/web/content.ex:341
 msgid "submit.button"
 msgstr "Zet online"
 
 #, elixir-format
+#: bundles/link/lib/pool/submission.ex:168
 #: bundles/link/lib/survey/web/content.ex:375
 msgid "retract.button"
 msgstr "Haal offline"

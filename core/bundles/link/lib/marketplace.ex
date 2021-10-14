@@ -45,7 +45,7 @@ defmodule Link.Marketplace do
       |> Enum.into(MapSet.new())
 
     available_studies =
-      Studies.list_studies_with_accepted_submission([LabTool, SurveyTool],
+      Studies.list_accepted_studies([LabTool, SurveyTool],
         exclude: exclusion_list,
         preload: preload
       )

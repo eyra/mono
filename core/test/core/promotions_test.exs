@@ -16,16 +16,10 @@ defmodule Core.PromotionsTest do
       {:ok, promotion: promotion}
     end
 
-    test "sends accepted signal", %{promotion: promotion} do
-      Submissions.update(promotion.submission, %{status: :accepted})
-      message = assert_signal_dispatched(:submission_accepted)
-      assert message.submission.id == promotion.submission.id
-    end
-
     test "do not send accepted signal when the publication date is not set", %{
       promotion: promotion
     } do
-      Submissions.update(promotion.submission, %{status: :retacted})
+      Submissions.update(promotion.submission, %{status: :retracted})
       refute_signal_dispatched(:submission_accepted)
     end
   end

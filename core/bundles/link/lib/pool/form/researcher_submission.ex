@@ -1,4 +1,4 @@
-defmodule Link.Pool.Form.Submission do
+defmodule Link.Pool.Form.ResearcherSubmission do
   use CoreWeb.LiveForm
 
   alias Core.Enums.{StudyYears, StudyProgramCodes, Genders, DominantHands, NativeLanguages}
@@ -44,9 +44,6 @@ defmodule Link.Pool.Form.Submission do
         %{active_item_ids: active_item_ids, selector_id: selector_id},
         %{assigns: %{criteria: criteria}} = socket
       ) do
-
-        active_item_ids |> IO.inspect(label: "ITEM")
-
     {
       :ok,
       socket
@@ -58,9 +55,6 @@ defmodule Link.Pool.Form.Submission do
         %{active_item_id: active_item_id, selector_id: selector_id},
         %{assigns: %{criteria: criteria}} = socket
       ) do
-
-        active_item_id |> IO.inspect(label: "ITEM")
-
     {
       :ok,
       socket

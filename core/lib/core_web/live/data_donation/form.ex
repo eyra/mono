@@ -9,7 +9,7 @@ defmodule CoreWeb.DataDonation.Form do
   alias EyraUI.Form.{Form, TextArea, NumberInput}
   alias EyraUI.Button.{SecondaryLiveViewButton, PrimaryButton}
   alias EyraUI.Panel.Panel
-  alias Coreweb.UI.Timestamp
+  alias CoreWeb.UI.Timestamp
 
   prop(entity_id, :any, required: true)
 

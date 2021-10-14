@@ -244,10 +244,6 @@ defmodule Core.Survey.Tools do
       :role_assignment,
       Authorization.build_role_assignment(user, survey_tool, :participant)
     )
-    |> Signal.Context.multi_dispatch(:participant_applied, %{
-      tool: survey_tool,
-      user: user
-    })
     |> Repo.transaction()
   end
 

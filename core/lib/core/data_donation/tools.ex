@@ -86,10 +86,6 @@ defmodule Core.DataDonation.Tools do
       :role_assignment,
       Authorization.build_role_assignment(user, tool, :participant)
     )
-    |> Signal.Context.multi_dispatch(:participant_applied, %{
-      tool: tool,
-      user: user
-    })
     |> Repo.transaction()
   end
 

@@ -39,13 +39,21 @@ defmodule Core.Studies do
     # AUTH: Can be piped through auth filter.
   end
 
-  def list_studies_with_accepted_submission(tool_entities, opts \\ [])
+  def list_submitted_studies(tool_entities, opts \\ []) do
+    list_studies_by_submission_status(tool_entities, :submitted, opts)
+  end
+
+  def list_accepted_studies(tool_entities, opts \\ []) do
+    list_studies_by_submission_status(tool_entities, :accepted, opts)
+  end
+
+  def list_studies_by_submission_status(tool_entities, submission_status, opts \\ [])
       when is_list(tool_entities) do
     preload = Keyword.get(opts, :preload, [])
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
 
     accepted_submissions =
-      from(submission in Submission, where: submission.status == :accepted, select: submission.id)
+      from(submission in Submission, where: submission.status == ^submission_status, select: submission.id)
 
     promotions =
       from(promotion in Promotion,

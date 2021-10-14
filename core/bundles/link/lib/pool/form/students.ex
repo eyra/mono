@@ -42,8 +42,8 @@ defmodule Link.Pool.Form.Students do
 
     quick_summery =
       inserted_at
-      |> Coreweb.UI.Timestamp.apply_timezone()
-      |> Coreweb.UI.Timestamp.humanize()
+      |> CoreWeb.UI.Timestamp.apply_timezone()
+      |> CoreWeb.UI.Timestamp.humanize()
 
     %{
       path: Routes.live_path(socket, Link.Pool.Overview),

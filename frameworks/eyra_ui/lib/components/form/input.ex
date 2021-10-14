@@ -9,9 +9,11 @@ defmodule EyraUI.Form.Input do
 
   prop(field, :atom, required: true)
   prop(type, :string, required: true)
+  prop(placeholder, :string, default: "")
   prop(label_text, :string)
   prop(label_color, :css_class, default: "text-grey1")
   prop(background, :atom, default: :light)
+  prop(disabled, :boolean, default: false)
   slot(default)
 
   def render(assigns) do
@@ -22,11 +24,21 @@ defmodule EyraUI.Form.Input do
       >
         <slot />
         <Field form={{form}} field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}}>
-          <input
+          <input :if={{ @disabled }}
             type={{@type}}
             id={{ input_id(form, @field) }}
             name={{ input_name(form, @field) }}
             value={{ input_value(form, @field) }}
+            placeholder={{@placeholder}}
+            class="text-grey3 bg-white placeholder-grey3 text-bodymedium font-body pl-3 w-full disabled:border-grey3 border-2 border-solid focus:outline-none rounded h-44px"
+            disabled
+          />
+          <input :if={{ not @disabled }}
+            type={{@type}}
+            id={{ input_id(form, @field) }}
+            name={{ input_name(form, @field) }}
+            value={{ input_value(form, @field) }}
+            placeholder={{@placeholder}}
             class="text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid focus:outline-none rounded h-44px"
             x-bind:class="{ '{{focus_border_color(@background)}}': focus === '{{@field}}', '{{border_color(assigns, form)}}': focus !== '{{@field}}' }"
             x-on:focus="focus = '{{ @field }}'"

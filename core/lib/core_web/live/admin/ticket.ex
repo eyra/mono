@@ -22,8 +22,8 @@ defmodule CoreWeb.Admin.Ticket do
 
     timestamp =
       ticket.updated_at
-      |> Coreweb.UI.Timestamp.apply_timezone()
-      |> Coreweb.UI.Timestamp.humanize()
+      |> CoreWeb.UI.Timestamp.apply_timezone()
+      |> CoreWeb.UI.Timestamp.humanize()
 
     {
       :ok,

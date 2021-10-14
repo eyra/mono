@@ -44,8 +44,8 @@ defmodule CoreWeb.Admin.Support do
        ) do
     quick_summery =
       updated_at
-      |> Coreweb.UI.Timestamp.apply_timezone()
-      |> Coreweb.UI.Timestamp.humanize()
+      |> CoreWeb.UI.Timestamp.apply_timezone()
+      |> CoreWeb.UI.Timestamp.humanize()
 
     image = %{type: :avatar, info: photo_url}
 

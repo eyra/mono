@@ -29,7 +29,7 @@ defmodule Core.Accounts do
     |> Repo.all()
   end
 
-  def list_coordinators(preload \\ []) do
+  def list_pool_admins(preload \\ []) do
     from(u in User,
       where: u.coordinator,
       order_by: {:desc, :inserted_at},
@@ -475,7 +475,9 @@ defmodule Core.Accounts do
   end
 
   def mark_as_visited(%User{visited_pages: visited_pages} = user, page) do
-    if not visited?(user, page) do
+    if visited?(user, page) do
+      Signal.Context.dispatch(:visited_pages_updated, %{user: user, visited_pages: visited_pages})
+    else
       update_visited(user, visited_pages ++ [page])
     end
   end
@@ -486,7 +488,7 @@ defmodule Core.Accounts do
     Multi.new()
     |> Multi.update(:user, changeset)
     |> Signal.Context.multi_dispatch(:visited_pages_updated, %{
-      user_changeset: changeset
+      visited_pages: changeset.changes.visited_pages
     })
     |> Repo.transaction()
   end

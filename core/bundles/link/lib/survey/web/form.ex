@@ -34,7 +34,7 @@ defmodule Link.Survey.Form do
     {
       :ok,
       socket
-      |> save(entity, :auto_save, %{ ethical_approval: not Enum.empty?(active_item_ids)}, false) #force save
+      |> save(entity, :auto_save, %{ethical_approval: not Enum.empty?(active_item_ids)}, false) #force save
     }
   end
 
@@ -53,7 +53,7 @@ defmodule Link.Survey.Form do
     {
       :ok,
       socket
-      |> save(entity, :auto_save, %{ language: language}, false) #force save
+      |> save(entity, :auto_save, %{language: language}, false) #force save
     }
   end
 
@@ -120,7 +120,13 @@ defmodule Link.Survey.Form do
   @impl true
   def handle_event("toggle", %{"checkbox" => checkbox}, %{assigns: %{entity: entity}} = socket) do
     field = String.to_existing_atom(checkbox)
-    new_value = not Map.get(entity, field, false)
+
+    current_value = Map.get(entity, field)
+    new_value =
+      case Map.get(entity, field) do
+        nil -> true
+        value -> not value
+      end
     attrs = %{field => new_value}
 
     {

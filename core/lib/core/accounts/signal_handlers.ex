@@ -47,13 +47,10 @@ defmodule Core.Accounts.SignalHandlers do
   end
 
   @impl true
-  def dispatch(:visited_pages_updated, %{
-        user: user,
-        user_changeset: %{changes: %{visited_pages: visited_pages}}
-      }) do
+  def dispatch(:visited_pages_updated, %{user: user, visited_pages: visited_pages}) do
     visited_settings? = Enum.member?(visited_pages, "settings")
 
-    if user.student && visited_settings? do
+    if visited_settings? do
       NextAction.Context.clear_next_action(user, PromotePushStudent)
     end
   end

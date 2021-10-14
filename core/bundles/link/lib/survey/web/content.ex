@@ -25,7 +25,7 @@ defmodule Link.Survey.Content do
   alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent, TabbarFooter}
   alias Link.Survey.Monitor
   alias Link.Survey.Form, as: ToolForm
-  alias Link.Pool.Form.Submission, as: SubmissionForm
+  alias Link.Pool.Form.ResearcherSubmission, as: SubmissionForm
   import Core.ImageCatalog, only: [image_catalog: 0]
 
   data(tool_id, :any)
@@ -84,7 +84,7 @@ defmodule Link.Survey.Content do
 
   @impl true
   def mount(params, session, socket) do
-    mount(Map.put(params, "tab", "promotion_form"), session, socket)
+    mount(Map.put(params, "tab", nil), session, socket)
   end
 
   defoverridable handle_uri: 1
@@ -252,7 +252,7 @@ defmodule Link.Survey.Content do
         |> inform(title, text)
       end
 
-    { :noreply, socket}
+    {:noreply, socket}
   end
 
   @impl true
@@ -320,65 +320,65 @@ defmodule Link.Survey.Content do
   end
 
 
-  defp marginX(:mobile), do: "mx-6"
-  defp marginX(_), do: "mx-10"
+  defp margin_x(:mobile), do: "mx-6"
+  defp margin_x(_), do: "mx-10"
 
   defp action_map(%{preview_path: preview_path}) do
-    preview_action = %{ type: :redirect, to: preview_path}
-    submit_action = %{ type: :send, event: "submit"}
-    delete_action = %{ type: :send, event: "delete"}
-    retract_action = %{ type: :send, event: "retract"}
-    more_action = %{ type: :toggle, id: :more, target: "action_menu" }
+    preview_action = %{type: :redirect, to: preview_path}
+    submit_action = %{type: :send, event: "submit"}
+    delete_action = %{type: :send, event: "delete"}
+    retract_action = %{type: :send, event: "retract"}
+    more_action = %{type: :toggle, id: :more, target: "action_menu" }
 
     %{
       submit: %{
         label: %{
           action: submit_action,
-          face: %{ type: :primary, label: dgettext("link-ui", "submit.button"), bg_color: "bg-success"}
+          face: %{type: :primary, label: dgettext("link-ui", "submit.button"), bg_color: "bg-success"}
         },
         icon: %{
           action: submit_action,
-          face: %{ type: :icon, icon: :submit, alt: dgettext("link-ui", "submit.button")}
+          face: %{type: :icon, icon: :submit, alt: dgettext("link-ui", "submit.button")}
         }
       },
       preview: %{
         label: %{
           action: preview_action,
-          face: %{ type: :primary, label: dgettext("link-ui", "preview.button"), bg_color: "bg-primary"}
+          face: %{type: :primary, label: dgettext("link-ui", "preview.button"), bg_color: "bg-primary"}
         },
         icon: %{
           action: preview_action,
-          face: %{ type: :icon, icon: :preview, alt: dgettext("link-ui", "preview.button")}
+          face: %{type: :icon, icon: :preview, alt: dgettext("link-ui", "preview.button")}
         },
         label_icon: %{
           action: preview_action,
-          face: %{ type: :label, icon: :preview, label: dgettext("link-ui", "preview.button")}
+          face: %{type: :label, icon: :preview, label: dgettext("link-ui", "preview.button")}
         }
       },
       delete: %{
         icon: %{
           action: delete_action,
-          face: %{ type: :icon, icon: :delete, alt: dgettext("link-ui", "delete.button") }
+          face: %{type: :icon, icon: :delete, alt: dgettext("link-ui", "delete.button")}
         },
         label_icon: %{
           action: delete_action,
-          face: %{ type: :label, icon: :delete, label: dgettext("link-ui", "delete.button") }
+          face: %{type: :label, icon: :delete, label: dgettext("link-ui", "delete.button")}
         }
       },
       retract: %{
         icon: %{
           action: retract_action,
-          face: %{ type: :icon, icon: :retract, alt: dgettext("link-ui", "delete.button") }
+          face: %{type: :icon, icon: :retract, alt: dgettext("link-ui", "delete.button")}
         },
         label_icon: %{
           action: retract_action,
-          face: %{ type: :label, icon: :retract, label: dgettext("link-ui", "retract.button") }
+          face: %{type: :label, icon: :retract, label: dgettext("link-ui", "retract.button")}
         }
       },
       more: %{
         icon: %{
           action: more_action,
-          face: %{ type: :icon, icon: :more, alt: "Show more actions" }
+          face: %{type: :icon, icon: :more, alt: "Show more actions"}
         }
       },
     }
@@ -393,33 +393,33 @@ defmodule Link.Survey.Content do
   defp create_actions(%{submit: submit, preview: preview, delete: delete, more: more}, bp, false) do
     submit =
       value(bp, nil,
-        xs: %{ 0 => submit.icon },
-        md: %{ 40 => submit.label, 100 => submit.icon },
-        lg: %{ 50 => submit.label}
+        xs: %{0 => submit.icon},
+        md: %{40 => submit.label, 100 => submit.icon},
+        lg: %{50 => submit.label}
       )
 
     preview =
       value(bp, nil,
-        xs: %{ 25 => preview.icon},
-        sm: %{ 30 => nil},
-        md: %{ 0 => preview.icon, 60 => preview.label, 100 => nil },
-        lg: %{ 14 => preview.icon, 75 => preview.label }
+        xs: %{25 => preview.icon},
+        sm: %{30 => nil},
+        md: %{0 => preview.icon, 60 => preview.label, 100 => nil},
+        lg: %{14 => preview.icon, 75 => preview.label}
       )
 
     delete =
       value(bp, nil,
-        xs: %{ 25 => delete.icon},
-        sm: %{ 30 => nil},
-        md: %{ 0 => delete.icon, 100 => nil },
-        lg: %{ 14 => delete.icon }
+        xs: %{25 => delete.icon},
+        sm: %{30 => nil},
+        md: %{0 => delete.icon, 100 => nil},
+        lg: %{14 => delete.icon}
       )
 
     more =
       value(bp, more.icon,
-        xs: %{ 25 => nil},
-        sm: %{ 30 => more.icon},
-        md: %{ 0 => nil, 100 => more.icon },
-        lg: %{ 14 => nil }
+        xs: %{25 => nil},
+        sm: %{30 => more.icon},
+        md: %{0 => nil, 100 => more.icon},
+        lg: %{14 => nil}
       )
 
     [
@@ -432,19 +432,19 @@ defmodule Link.Survey.Content do
 
     preview =
       value(bp, nil,
-        xs: %{ 8 => preview.icon },
-        md: %{ 25 => preview.label, 100 => preview.icon },
-        lg: %{ 20 => preview.label}
+        xs: %{8 => preview.icon},
+        md: %{25 => preview.label, 100 => preview.icon},
+        lg: %{20 => preview.label}
       )
 
     retract =
       value(bp, nil,
-        xs: %{ 8 => retract.icon}
+        xs: %{8 => retract.icon}
       )
 
     more =
       value(bp, more.icon,
-        xs: %{ 8 => nil}
+        xs: %{8 => nil}
       )
 
     [
@@ -475,7 +475,7 @@ defmodule Link.Survey.Content do
   end
 
   defp tabbar_size({:unknown, _}), do: :unknown
-  defp tabbar_size(bp), do: value(bp, :narrow, sm: %{ 30 => :wide })
+  defp tabbar_size(bp), do: value(bp, :narrow, sm: %{30 => :wide})
 
   defp show_dialog?(nil), do: false
   defp show_dialog?(_), do: true
@@ -490,7 +490,7 @@ defmodule Link.Survey.Content do
         <div x-data="{ image_picker: false, active_tab: 0, dropdown: false }">
           <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="image_picker">
             <div class="flex flex-row items-center justify-center w-full h-full">
-              <div class="{{marginX(@breakpoint)}} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg" x-on:click.away="image_picker = false, $parent.$parent.overlay = false">
+              <div class="{{margin_x(@breakpoint)}} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg" x-on:click.away="image_picker = false, $parent.$parent.overlay = false">
                 <ImageCatalogPicker
                   id={{:image_picker}}
                   conn={{@socket}}

@@ -15,8 +15,9 @@ defmodule EyraUI.Selector.Selector do
   defp flex_options(:checkbox), do: "flex-row flex-wrap gap-x-8 gap-y-3 items-center"
   defp flex_options(_), do: "flex-row flex-wrap gap-3 items-center"
 
-  defp multiselect?(:radio), do: false
-  defp multiselect?(_), do: true
+  defp multiselect?(:radio, _), do: false
+  defp multiselect?(_, 1), do: false
+  defp multiselect?(_, _), do: true
 
   def update(%{reset: new_items}, socket) do
     {
@@ -59,10 +60,10 @@ defmodule EyraUI.Selector.Selector do
   end
 
   defp update_parent(
-         %{assigns: %{type: type, parent: parent, id: selector_id}},
+         %{assigns: %{type: type, parent: parent, items: items, id: selector_id}},
          active_item_ids
        ) do
-    if multiselect?(type) do
+    if multiselect?(type, Enum.count(items)) do
       send_update(parent.type,
         id: parent.id,
         selector_id: selector_id,
@@ -95,11 +96,11 @@ defmodule EyraUI.Selector.Selector do
     socket |> assign(current_items: items)
   end
 
-  defp toggle(%{assigns: %{type: type}}, item, item_id) when is_atom(item_id) do
+  defp toggle(%{assigns: %{items: items, type: type}}, item, item_id) when is_atom(item_id) do
     if item.id === item_id do
       %{item | active: !item.active}
     else
-      if multiselect?(type) do
+      if multiselect?(type, Enum.count(items)) do
         item
       else
         %{item | active: false}
@@ -125,7 +126,15 @@ defmodule EyraUI.Selector.Selector do
             phx-value-item="{{ item.id }}"
             phx-target={{@myself}}
           >
-            <Dynamic component={{ item_component(@type) }} props={{ %{item: item } }} />
+            <Dynamic
+              component={{ item_component(@type) }}
+              props={{
+                %{
+                  item: item,
+                  multiselect?: multiselect?(@type, Enum.count(@items))
+                }
+              }}
+            />
           </div>
         </div>
       </For>

@@ -177,14 +177,14 @@ module.exports = {
   },
   variants: {
     extend: {
-      borderColor: ['active', 'hover'],
-      borderWidth: ['active', 'hover'],
+      borderColor: ['active', 'hover', 'disabled'],
+      borderWidth: ['active', 'hover', 'disabled'],
       ringColor: ['hover'],
       ringWidth: ['hover'],
       ringOpacity: ['hover'],
       ringOffsetColor: ['hover'],
       ringOffsetWidth: ['hover'],
-      opacity: ['active'],
+      opacity: ['active', 'disabled'],
       padding: ['active'],
       boxShadow: ['active'],
     },

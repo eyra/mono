@@ -3,6 +3,7 @@ defmodule EyraUI.Selector.Radio do
   use EyraUI.Component
 
   prop(item, :map, required: true)
+  prop(multiselect?, :boolean, default: true)
 
   def render(assigns) do
     ~H"""

@@ -12,34 +12,34 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/card.ex:177 bundles/link/lib/card.ex:228
-#: bundles/link/lib/dashboard.ex:102 bundles/link/lib/dashboard.ex:166
+#: bundles/link/lib/dashboard.ex:101 bundles/link/lib/dashboard.ex:165
 msgid "status.accepted.label"
 msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/card.ex:171 bundles/link/lib/card.ex:222
-#: bundles/link/lib/dashboard.ex:96 bundles/link/lib/dashboard.ex:160
+#: bundles/link/lib/dashboard.ex:95 bundles/link/lib/dashboard.ex:159
 msgid "status.idle.label"
 msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/card.ex:174 bundles/link/lib/card.ex:225
-#: bundles/link/lib/dashboard.ex:99 bundles/link/lib/dashboard.ex:163
+#: bundles/link/lib/dashboard.ex:98 bundles/link/lib/dashboard.ex:162
 msgid "status.submitted.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:111 bundles/link/lib/dashboard.ex:175
+#: bundles/link/lib/dashboard.ex:110 bundles/link/lib/dashboard.ex:174
 msgid "incomplete.forms.message"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:109 bundles/link/lib/dashboard.ex:173
+#: bundles/link/lib/dashboard.ex:108 bundles/link/lib/dashboard.ex:172
 msgid "ready.for.submission.message"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:115 bundles/link/lib/dashboard.ex:179
+#: bundles/link/lib/dashboard.ex:114 bundles/link/lib/dashboard.ex:178
 msgid "waiting.for.coordinator.message"
 msgstr ""
 
@@ -76,4 +76,69 @@ msgstr ""
 #, elixir-format
 #: bundles/link/lib/card.ex:150
 msgid "reward.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/submission.ex:42
+msgid "byline"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/submission.ex:119
+msgid "retract.admin.success.text"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/submission.ex:118
+msgid "retract.admin.success.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/submission.ex:103
+msgid "accept.error.text"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/submission.ex:102
+msgid "accept.error.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/submission.ex:96
+msgid "accept.success.text"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/submission.ex:95
+msgid "accept.success.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/form/admin_submission.ex:186
+msgid "reward.value.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/form/admin_submission.ex:185
+msgid "reward.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/form/admin_submission.ex:116
+msgid "schedule.end.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/form/admin_submission.ex:111
+msgid "schedule.start.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/form/admin_submission.ex:190
+msgid "schedule.description"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/form/admin_submission.ex:189
+msgid "schedule.title"
 msgstr ""

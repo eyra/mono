@@ -2,6 +2,8 @@ defmodule Link.Survey.PromotionPlugin do
   import CoreWeb.Gettext
 
   alias Core.Studies
+  alias Core.Pools.Submissions
+  alias Core.Promotions
   alias Core.Promotions.CallToAction
   alias Core.Promotions.CallToAction.Target
   alias Core.Survey.Tools
@@ -13,17 +15,19 @@ defmodule Link.Survey.PromotionPlugin do
 
   @impl Plugin
   def info(promotion_id, %{assigns: %{current_user: user}} = _socket) do
+    promotion = Promotions.get!(promotion_id)
+    submission = Submissions.get!(promotion)
     tool = Tools.get_by_promotion(promotion_id)
     call_to_action = get_call_to_action(tool, user)
     byline = get_byline(tool)
-    highlights = get_highlights(tool)
+    highlights = get_highlights(tool, submission)
 
     languages =
       if tool.language != nil do
         [tool.language]
       else
         nil
-      end |> IO.inspect(label: "LANGUAGES")
+      end
 
     %{
       call_to_action: call_to_action,
@@ -75,7 +79,7 @@ defmodule Link.Survey.PromotionPlugin do
     "#{dgettext("link-survey", "by.author.label")}: " <> authors
   end
 
-  defp get_highlights(%{subject_count: subject_count, duration: duration} = tool) do
+  defp get_highlights(%{subject_count: subject_count, duration: duration} = tool, %{reward_value: reward_value}) do
     occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
     open_spot_count = if subject_count do subject_count - occupied_spot_count else 0 end
 
@@ -87,10 +91,13 @@ defmodule Link.Survey.PromotionPlugin do
 
     reward_title = dgettext("link-survey", "reward.highlight.title")
 
-    # reward_text =
-    #   CurrencyFormatter.format(tool.reward_value, tool.reward_currency, keep_decimals: true)
+    reward_value =
+      case reward_value do
+        nil -> "?"
+        value -> value
+      end
 
-    reward_text = "? credits"
+    reward_text = "#{reward_value} credits"
 
     [
       %{title: duration_title, text: duration_text},

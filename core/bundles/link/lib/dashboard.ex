@@ -122,8 +122,8 @@ defmodule Link.Dashboard do
 
     quick_summery =
       updated_at
-      |> Coreweb.UI.Timestamp.apply_timezone()
-      |> Coreweb.UI.Timestamp.humanize()
+      |> CoreWeb.UI.Timestamp.apply_timezone()
+      |> CoreWeb.UI.Timestamp.humanize()
 
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
     image = %{type: :catalog, info: image_info }
@@ -186,8 +186,8 @@ defmodule Link.Dashboard do
 
     quick_summery =
       updated_at
-      |> Coreweb.UI.Timestamp.apply_timezone()
-      |> Coreweb.UI.Timestamp.humanize()
+      |> CoreWeb.UI.Timestamp.apply_timezone()
+      |> CoreWeb.UI.Timestamp.humanize()
 
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
     image = %{type: :catalog, info: image_info }

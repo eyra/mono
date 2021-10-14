@@ -10,7 +10,7 @@ defmodule Core.Promotions.Promotion do
 
   alias Core.Marks
   alias Core.ImageHelpers
-  alias Coreweb.UI.Timestamp
+  alias CoreWeb.UI.Timestamp
 
   schema "promotions" do
     # Plain Content

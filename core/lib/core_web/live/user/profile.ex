@@ -46,7 +46,7 @@ defmodule CoreWeb.User.Profile do
 
   @impl true
   def mount(_params, session, socket) do
-    mount(%{"tab" => "profile"}, session, socket)
+    mount(%{"tab" => nil}, session, socket)
   end
 
   @impl true
