@@ -128,6 +128,7 @@ defmodule Link.Dashboard do
           }
         }
       }) do
+
     tag = get_tag(status)
     subtitle = get_subtitle(status, promotion_content_node, current_subject_count, target_subject_count)
     quick_summary = get_quick_summary(updated_at)

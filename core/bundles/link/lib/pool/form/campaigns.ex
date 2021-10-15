@@ -1,6 +1,8 @@
 defmodule Link.Pool.Form.Campaigns do
   use CoreWeb.UI.LiveComponent
 
+  import Frameworks.Utility.Guards
+
   alias Systems.NextAction
 
   alias Core.Studies
@@ -103,6 +105,9 @@ defmodule Link.Pool.Form.Campaigns do
             %{text: dgettext("link-studentpool", "status.scheduled.label"), type: :warning}
           end
       end
+
+    target_subject_count = guard_nil(target_subject_count, :integer)
+    current_subject_count = guard_nil(current_subject_count, :integer)
 
     open_spots = target_subject_count - current_subject_count
     subtitle = dgettext("link-studentpool", "spots.available", open: open_spots, total: target_subject_count)
