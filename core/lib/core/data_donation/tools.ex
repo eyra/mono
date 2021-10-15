@@ -17,7 +17,6 @@ defmodule Core.DataDonation.Tools do
   alias Core.DataDonation.{Tool, Task, Participant, UserData}
   alias Core.Authorization
   alias Core.Accounts.User
-  alias Frameworks.Signal
   alias Core.Content.Nodes
 
   def list do

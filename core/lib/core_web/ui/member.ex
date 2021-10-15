@@ -7,8 +7,6 @@ defmodule CoreWeb.UI.Member do
   alias Core.ImageHelpers
 
   alias EyraUI.Button.DynamicButton
-  alias EyraUI.Text.{Title3, SubHead}
-  alias EyraUI.Wrap
 
   defviewmodel(
     title: nil,

@@ -47,7 +47,7 @@ defmodule Link.Pool.Submission do
     validate? = accepted?
 
     update_at =
-      submission.updated_at
+      study.updated_at
       |> CoreWeb.UI.Timestamp.apply_timezone()
       |> CoreWeb.UI.Timestamp.humanize()
 
@@ -224,8 +224,6 @@ defmodule Link.Pool.Submission do
 
     [preview, retract]
   end
-
-  defp create_actions(_, _), do: []
 
   defp show_dialog?(nil), do: false
   defp show_dialog?(_), do: true

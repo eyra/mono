@@ -10,7 +10,6 @@ defmodule CoreWeb.Admin.Ticket do
   alias EyraUI.Text.Title2
   alias EyraUI.Button.Face.Secondary
   alias EyraUI.Button.Action.Send
-  alias EyraUI.Line
   alias CoreWeb.UI.{Member, ContentTag}
 
   data(ticket, :any)

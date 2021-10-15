@@ -121,12 +121,12 @@ defmodule Link.Survey.Form do
   def handle_event("toggle", %{"checkbox" => checkbox}, %{assigns: %{entity: entity}} = socket) do
     field = String.to_existing_atom(checkbox)
 
-    current_value = Map.get(entity, field)
     new_value =
       case Map.get(entity, field) do
         nil -> true
         value -> not value
       end
+
     attrs = %{field => new_value}
 
     {

@@ -2,7 +2,7 @@ defmodule Core.Factories do
   @moduledoc """
   This module provides factory function to be used for tests.
   """
-  alias Core.Accounts.{User, Profile}
+  alias Core.Accounts.{User, Profile, Features}
 
   alias Core.{
     Studies,
@@ -33,6 +33,9 @@ defmodule Core.Factories do
       profile: %Profile{
         fullname: Faker.Person.name(),
         photo_url: Faker.Avatar.image_url()
+      },
+      features: %Features{
+        gender: :man,
       }
     }
   end

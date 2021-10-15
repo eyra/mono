@@ -18,13 +18,12 @@ defmodule Link.Pool.Form.AdminSubmissionCriteria do
 
   # Handle Selector Update
   def update(
-        %{active_item_id: active_study_year, selector_id: :study_year},
+        %{active_item_id: active_item_id, selector_id: :study_year},
         %{assigns: %{criteria: criteria}} = socket
       ) do
-    study_program_codes = StudyProgramCodes.values_by_year(active_study_year)
-    study_year_labels = StudyYears.labels(active_study_year)
-    study_program_labels = StudyProgramCodes.labels_by_year(active_study_year, study_program_codes)
-
+    study_program_codes = StudyProgramCodes.values_by_year(active_item_id)
+    study_year_labels = StudyYears.labels(active_item_id)
+    study_program_labels = StudyProgramCodes.labels_by_year(active_item_id, study_program_codes)
     send_update(Selector, id: :study_program, reset: study_program_labels)
 
     {
