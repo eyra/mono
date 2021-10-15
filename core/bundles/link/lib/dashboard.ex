@@ -128,7 +128,6 @@ defmodule Link.Dashboard do
           }
         }
       }) do
-
     tag = get_tag(status)
 
     subtitle =
