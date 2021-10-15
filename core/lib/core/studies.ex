@@ -144,14 +144,14 @@ defmodule Core.Studies do
     |> Repo.all()
   end
 
-  def list_owners(%Study{} = study) do
+  def list_owners(%Study{} = study, preload \\ []) do
     owner_ids =
       study
       |> Authorization.list_principals()
       |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
       |> Enum.map(fn %{id: id} -> id end)
 
-    from(u in User, where: u.id in ^owner_ids, order_by: u.id) |> Repo.all()
+    from(u in User, where: u.id in ^owner_ids, preload: ^preload, order_by: u.id  ) |> Repo.all()
     # AUTH: needs to be marked save. Current user is normally not allowed to
     # access other users.
   end

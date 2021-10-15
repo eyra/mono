@@ -176,11 +176,11 @@ defmodule Link.Pool.Form.AdminSubmission do
     ~H"""
       <ContentArea>
         <Form id={{@id}} changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
-          <Title3>{{dgettext("eyra-submission", "reward.label")}}</Title3>
+          <Title3 margin="mb-5 sm:mb-8">{{dgettext("eyra-submission", "reward.label")}}</Title3>
           <NumberInput field={{:reward_value}} label_text={{dgettext("eyra-submission", "reward.value.label")}} />
           <Spacing value="L" />
 
-          <Title3>{{dgettext("eyra-submission", "schedule.title")}}</Title3>
+          <Title3 margin="mb-5 sm:mb-8">{{dgettext("eyra-submission", "schedule.title")}}</Title3>
           <Body>{{dgettext("eyra-submission", "schedule.description")}}</Body>
           <Spacing value="S" />
 

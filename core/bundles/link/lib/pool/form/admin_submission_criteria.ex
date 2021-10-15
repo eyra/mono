@@ -107,11 +107,11 @@ defmodule Link.Pool.Form.AdminSubmissionCriteria do
   def render(assigns) do
     ~H"""
       <ContentArea>
-        <Title3>{{dgettext("eyra-account", "features.study.year")}}</Title3>
+        <Title3 margin="mb-5 sm:mb-8">{{dgettext("eyra-account", "features.study.year")}}</Title3>
         <Selector id={{:study_year}} items={{ @study_year_labels }} type={{:radio}} parent={{ %{type: __MODULE__, id: @id} }} />
         <Spacing value="XL" />
 
-        <Title3>{{dgettext("eyra-account", "features.study.program")}}</Title3>
+        <Title3 margin="mb-5 sm:mb-8">{{dgettext("eyra-account", "features.study.program")}}</Title3>
         <Selector id={{:study_program}} items={{ @study_program_labels }} type={{:checkbox}} parent={{ %{type: __MODULE__, id: @id} }} opts="max-w-form" />
       </ContentArea>
     """
