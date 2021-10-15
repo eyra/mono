@@ -12,65 +12,65 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:177 bundles/link/lib/card.ex:228
-#: bundles/link/lib/dashboard.ex:101 bundles/link/lib/dashboard.ex:165
+#: bundles/link/lib/card.ex:178 bundles/link/lib/card.ex:229
+#: bundles/link/lib/dashboard.ex:85
 msgid "status.accepted.label"
 msgstr "Online"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:171 bundles/link/lib/card.ex:222
-#: bundles/link/lib/dashboard.ex:95 bundles/link/lib/dashboard.ex:159
+#: bundles/link/lib/card.ex:172 bundles/link/lib/card.ex:223
+#: bundles/link/lib/dashboard.ex:79
 msgid "status.idle.label"
 msgstr "Concept"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:174 bundles/link/lib/card.ex:225
-#: bundles/link/lib/dashboard.ex:98 bundles/link/lib/dashboard.ex:162
+#: bundles/link/lib/card.ex:175 bundles/link/lib/card.ex:226
+#: bundles/link/lib/dashboard.ex:82
 msgid "status.submitted.label"
 msgstr "Ingediend"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:110 bundles/link/lib/dashboard.ex:174
+#: bundles/link/lib/dashboard.ex:101
 msgid "incomplete.forms.message"
 msgstr "Sommige verplichte velden zijn nog niet ingevuld"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:108 bundles/link/lib/dashboard.ex:172
+#: bundles/link/lib/dashboard.ex:99
 msgid "ready.for.submission.message"
 msgstr "Klaar om in te dienen bij de studentenpool coordinator"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:114 bundles/link/lib/dashboard.ex:178
+#: bundles/link/lib/dashboard.ex:105
 msgid "waiting.for.coordinator.message"
 msgstr "Jouw campagne staat in de wachtrij om door de poolbeheerder in de marktplaats gezet te worden"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:247
+#: bundles/link/lib/survey/web/content.ex:248
 msgid "submit.error.text"
 msgstr "Sommige verplichte velden in je campagne zijn niet ingevuld."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:246
+#: bundles/link/lib/survey/web/content.ex:247
 msgid "submit.error.title"
 msgstr "Maak je campagne compleet"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:239
+#: bundles/link/lib/survey/web/content.ex:240
 msgid "submit.success.text"
 msgstr "De beheerder van de pool is op de hoogte gebracht. Zodra de campagne online staat krijg je een bericht."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:238
+#: bundles/link/lib/survey/web/content.ex:239
 msgid "submit.success.title"
 msgstr "Campagne ingediend"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:264
+#: bundles/link/lib/survey/web/content.ex:265
 msgid "retract.success.text"
 msgstr "Jouw campagne is niet meer zichtbaar voor de deelnemers in de marktplaats."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:263
+#: bundles/link/lib/survey/web/content.ex:264
 msgid "retract.success.title"
 msgstr "Campagne offline"
 
@@ -80,66 +80,66 @@ msgid "reward.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:42
+#: bundles/link/lib/pool/submission.ex:53
 msgid "byline"
 msgstr "Laatste aanpassing: %{timestamp}"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:119
+#: bundles/link/lib/pool/submission.ex:139
 msgid "retract.admin.success.text"
 msgstr "De campagne is niet meer zichtbaar voor de deelnemers in de marktplaats."
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:118
+#: bundles/link/lib/pool/submission.ex:138
 msgid "retract.admin.success.title"
 msgstr "Campagne offline"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:103
+#: bundles/link/lib/pool/submission.ex:123
 msgid "accept.error.text"
 msgstr "Sommige verplichte velden zijn niet correct ingevuld."
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:102
+#: bundles/link/lib/pool/submission.ex:122
 msgid "accept.error.title"
 msgstr "Maak het formulier compleet"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:96
+#: bundles/link/lib/pool/submission.ex:116
 msgid "accept.success.text"
 msgstr "De campagne is zichtbaar voor de deelnemers in de marktplaats."
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:95
+#: bundles/link/lib/pool/submission.ex:115
 msgid "accept.success.title"
 msgstr "Campagne online"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:186
+#: bundles/link/lib/pool/form/admin_submission.ex:199
 msgid "reward.value.label"
 msgstr "Beloning in studie credits"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:185
+#: bundles/link/lib/pool/form/admin_submission.ex:198
 msgid "reward.label"
 msgstr "Beloning"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:116
+#: bundles/link/lib/pool/form/admin_submission.ex:125
 msgid "schedule.end.label"
 msgstr "Deadline"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:111
+#: bundles/link/lib/pool/form/admin_submission.ex:115
 msgid "schedule.start.label"
 msgstr "Start"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:190
+#: bundles/link/lib/pool/form/admin_submission.ex:203
 msgid "schedule.description"
 msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:189
+#: bundles/link/lib/pool/form/admin_submission.ex:202
 msgid "schedule.title"
 msgstr "Planning"

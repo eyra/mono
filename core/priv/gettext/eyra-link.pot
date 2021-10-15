@@ -11,86 +11,86 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:65 lib/core_web/live/promotion/index.ex:48
+#: bundles/link/lib/index.ex:64 lib/core_web/live/promotion/index.ex:48
 msgid "welcome.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:42 lib/core_web/live/promotion/index.ex:68
+#: bundles/link/lib/index.ex:41 lib/core_web/live/promotion/index.ex:68
 msgid "dashboard-button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:77 lib/core_web/live/promotion/index.ex:61
+#: bundles/link/lib/index.ex:76 lib/core_web/live/promotion/index.ex:61
 msgid "link.message"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:74 lib/core_web/live/promotion/index.ex:58
+#: bundles/link/lib/index.ex:73 lib/core_web/live/promotion/index.ex:58
 msgid "link.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:92 lib/core_web/live/promotion/index.ex:72
+#: bundles/link/lib/index.ex:91 lib/core_web/live/promotion/index.ex:72
 msgid "signup.card.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:27 lib/core_web/live/promotion/index.ex:26
+#: bundles/link/lib/index.ex:26 lib/core_web/live/promotion/index.ex:26
 msgid "member.card.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:31 lib/core_web/live/promotion/index.ex:30
+#: bundles/link/lib/index.ex:30 lib/core_web/live/promotion/index.ex:30
 msgid "member.profile.card.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:93 lib/core_web/live/promotion/index.ex:73
+#: bundles/link/lib/index.ex:92 lib/core_web/live/promotion/index.ex:73
 msgid "signup.card.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:97 lib/core_web/live/promotion/index.ex:77
+#: bundles/link/lib/index.ex:96 lib/core_web/live/promotion/index.ex:77
 msgid "usp1.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:97 lib/core_web/live/promotion/index.ex:77
+#: bundles/link/lib/index.ex:96 lib/core_web/live/promotion/index.ex:77
 msgid "usp1.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:98 lib/core_web/live/promotion/index.ex:78
+#: bundles/link/lib/index.ex:97 lib/core_web/live/promotion/index.ex:78
 msgid "usp2.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:98 lib/core_web/live/promotion/index.ex:78
+#: bundles/link/lib/index.ex:97 lib/core_web/live/promotion/index.ex:78
 msgid "usp2.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:99 lib/core_web/live/promotion/index.ex:79
+#: bundles/link/lib/index.ex:98 lib/core_web/live/promotion/index.ex:79
 msgid "usp3.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:99 lib/core_web/live/promotion/index.ex:79
+#: bundles/link/lib/index.ex:98 lib/core_web/live/promotion/index.ex:79
 msgid "usp3.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:66 lib/core_web/live/promotion/index.ex:49
+#: bundles/link/lib/index.ex:65 lib/core_web/live/promotion/index.ex:49
 msgid "welcome.subtitle"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:44
+#: bundles/link/lib/index.ex:43
 msgid "marketplace-button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:80
+#: bundles/link/lib/index.ex:79
 msgid "link.message.interested"
 msgstr ""

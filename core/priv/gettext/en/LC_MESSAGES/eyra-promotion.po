@@ -17,7 +17,7 @@ msgid "created.label"
 msgstr "Created"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:244
+#: bundles/link/lib/promotions/public.ex:250
 #: lib/core_web/live/promotion/public.ex:178
 msgid "back.button.label"
 msgstr "Back"
@@ -63,7 +63,7 @@ msgid "description.label"
 msgstr "Provide some background information about this study"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:221
+#: bundles/link/lib/promotions/public.ex:227
 #: lib/core_web/live/promotion/public.ex:148
 msgid "description.public.label"
 msgstr "About this study"
@@ -74,7 +74,7 @@ msgid "description.title"
 msgstr "Why are you performing this study?"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:235
+#: bundles/link/lib/promotions/public.ex:241
 #: lib/core_web/live/promotion/public.ex:171
 msgid "devices.available.label"
 msgstr "Available on:"
@@ -91,7 +91,7 @@ msgid "expectations.label"
 msgstr "Describe what is expected of participants"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:217
+#: bundles/link/lib/promotions/public.ex:223
 #: lib/core_web/live/promotion/public.ex:144
 msgid "expectations.public.label"
 msgstr "What to expect?"
@@ -143,7 +143,7 @@ msgid "search.different.image.button"
 msgstr "Change cover"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:97
+#: bundles/link/lib/promotions/public.ex:103
 #: lib/core_web/live/promotion/form.ex:157
 msgid "subtitle.label"
 msgstr "Can you explain in one line what your study is about?"
@@ -174,16 +174,16 @@ msgid "form.description"
 msgstr "Promotions will be published in the marketplace to recruit participants. Preview the promotion page to view what participants will see when they click your marketplace tile."
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:140
+#: bundles/link/lib/promotions/public.ex:146
 msgid "preview.inform.text"
 msgstr "This feature does not work in preview mode."
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:139
+#: bundles/link/lib/promotions/public.ex:145
 msgid "preview.inform.title"
 msgstr "Preview"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:236
+#: bundles/link/lib/promotions/public.ex:242
 msgid "languages.available.label"
 msgstr "Language:"

@@ -26,6 +26,7 @@ defmodule Core.Survey.Tool do
     field(:duration, :string)
     field(:language, :string)
     field(:ethical_approval, :boolean)
+    field(:ethical_code, :string)
 
     # field(:reward_currency, Ecto.Enum, values: [:eur, :usd, :gbp, :chf, :nok, :sek])
     # field(:reward_value, :integer)
@@ -41,7 +42,7 @@ defmodule Core.Survey.Tool do
     def id(survey_tool), do: survey_tool.auth_node_id
   end
 
-  @fields ~w(survey_url subject_count duration language ethical_approval devices)a
+  @fields ~w(survey_url subject_count duration language ethical_code ethical_approval devices)a
   @required_fields ~w()a
 
   @impl true

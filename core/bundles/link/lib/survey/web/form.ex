@@ -8,7 +8,7 @@ defmodule Link.Survey.Form do
   alias EyraUI.Selector.Selector
   alias EyraUI.Panel.Panel
   alias EyraUI.Text.{Title2, Title3, Title5, Body, BodyLarge, BodyMedium}
-  alias EyraUI.Form.{Form, UrlInput, NumberInput, Checkbox}
+  alias EyraUI.Form.{Form, TextInput, UrlInput, NumberInput, Checkbox}
   alias EyraUI.Button.Face.LabelIcon
 
   alias CoreWeb.UI.StepIndicator
@@ -304,6 +304,7 @@ defmodule Link.Survey.Form do
             <Title3 color="text-white" >{{dgettext("link-survey", "ethical.title")}}</Title3>
             <BodyMedium color="text-white">{{dgettext("link-survey", "ethical.description")}}</BodyMedium>
             <Spacing value="S" />
+            <TextInput field={{:ethical_code}} placeholder={{dgettext("eyra-account", "ehtical.code.label")}} background={{:dark}} />
             <Checkbox
               field={{:ethical_approval}}
               label_text={{ dgettext("link-survey", "ethical.label")}}
