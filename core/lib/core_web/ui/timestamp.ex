@@ -78,7 +78,6 @@ defmodule CoreWeb.UI.Timestamp do
     end
   end
 
-
   def humanize(%NaiveDateTime{} = timestamp) do
     time = Timex.format!(timestamp, "%H:%M", :strftime)
 

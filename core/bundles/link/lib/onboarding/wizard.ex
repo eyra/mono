@@ -54,7 +54,6 @@ defmodule Link.Onboarding.Wizard do
     socket |> update_menus()
   end
 
-
   @impl true
   def handle_event("reset_focus", _, socket) do
     send_update(ProfileForm, id: :profile, focus: "")
@@ -64,7 +63,7 @@ defmodule Link.Onboarding.Wizard do
   @impl true
   def handle_event("finish", _, %{assigns: %{current_user: current_user}} = socket) do
     Accounts.mark_as_visited(current_user, :onboarding)
-    {:noreply, push_redirect(socket, to: forward_path(socket)) }
+    {:noreply, push_redirect(socket, to: forward_path(socket))}
   end
 
   def handle_info({:claim_focus, :profile}, socket) do

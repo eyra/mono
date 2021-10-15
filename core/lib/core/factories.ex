@@ -16,6 +16,7 @@ defmodule Core.Factories do
     WebPush,
     Helpdesk
   }
+
   alias Systems.{
     Notification
   }
@@ -35,7 +36,7 @@ defmodule Core.Factories do
         photo_url: Faker.Avatar.image_url()
       },
       features: %Features{
-        gender: :man,
+        gender: :man
       }
     }
   end

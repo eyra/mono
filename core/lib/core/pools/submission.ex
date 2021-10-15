@@ -49,8 +49,12 @@ defmodule Core.Pools.Submission do
       |> Timestamp.parse_user_input_date()
 
     case {start_date, end_date} do
-      {nil, _} -> changeset
-      {_, nil} -> changeset
+      {nil, _} ->
+        changeset
+
+      {_, nil} ->
+        changeset
+
       {start_date, end_date} ->
         if Timestamp.after?(start_date, end_date) do
           add_error(changeset, end_field, "deadline is before start")
@@ -70,15 +74,17 @@ defmodule Core.Pools.Submission do
   end
 
   defp past?(nil), do: false
+
   defp past?(schedule_end) do
     Timestamp.parse_user_input_date(schedule_end)
-    |> Timex.shift(days: 1) # add one day to include the end date
+    # add one day to include the end date
+    |> Timex.shift(days: 1)
     |> Timestamp.past?()
   end
 
   defp future?(nil), do: false
+
   defp future?(schedule_start) do
     Timestamp.future?(schedule_start)
   end
-
 end

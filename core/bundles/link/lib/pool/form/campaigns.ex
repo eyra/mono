@@ -41,7 +41,7 @@ defmodule Link.Pool.Form.Campaigns do
   end
 
   defp clear_review_submission_next_action do
-    for user <- Accounts.list_pool_admins do
+    for user <- Accounts.list_pool_admins() do
       NextAction.Context.clear_next_action(user, Core.Pools.ReviewSubmission)
     end
   end
@@ -77,20 +77,21 @@ defmodule Link.Pool.Form.Campaigns do
   end
 
   defp convert_to_vm(socket, %{
-      updated_at: updated_at,
-      survey_tool: %{
-        current_subject_count: current_subject_count,
-        subject_count: target_subject_count,
-        promotion: %{
-          title: title,
-          image_id: image_id,
-          submission: %{
-            id: submission_id,
-            status: status
-          } = submission
-        }
-      }
-  }) do
+         updated_at: updated_at,
+         survey_tool: %{
+           current_subject_count: current_subject_count,
+           subject_count: target_subject_count,
+           promotion: %{
+             title: title,
+             image_id: image_id,
+             submission:
+               %{
+                 id: submission_id,
+                 status: status
+               } = submission
+           }
+         }
+       }) do
     tag =
       case status do
         :submitted ->
@@ -105,7 +106,12 @@ defmodule Link.Pool.Form.Campaigns do
       end
 
     open_spots = target_subject_count - current_subject_count
-    subtitle = dgettext("link-studentpool", "spots.available", open: open_spots, total: target_subject_count)
+
+    subtitle =
+      dgettext("link-studentpool", "spots.available",
+        open: open_spots,
+        total: target_subject_count
+      )
 
     quick_summery =
       updated_at
@@ -113,7 +119,7 @@ defmodule Link.Pool.Form.Campaigns do
       |> CoreWeb.UI.Timestamp.humanize()
 
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
-    image = %{type: :catalog, info: image_info }
+    image = %{type: :catalog, info: image_info}
 
     %{
       path: Routes.live_path(socket, Link.Pool.Submission, submission_id),

@@ -50,9 +50,15 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
     support_count = Helpdesk.count_open_tickets()
 
     []
-    |> append(live_item(socket, menu_id, :dashboard, active_item), can_access?(user_state, Link.Dashboard))
+    |> append(
+      live_item(socket, menu_id, :dashboard, active_item),
+      can_access?(user_state, Link.Dashboard)
+    )
     |> append(live_item(socket, menu_id, :permissions, active_item), admin?(email))
-    |> append(live_item(socket, menu_id, :support, active_item, true, support_count), admin?(email))
+    |> append(
+      live_item(socket, menu_id, :support, active_item, true, support_count),
+      admin?(email)
+    )
     |> append(
       live_item(socket, menu_id, :surveys, active_item),
       can_access?(user_state, CoreWeb.Study.New)

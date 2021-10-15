@@ -34,7 +34,6 @@ defmodule Link.Pool.Submission do
 
   @impl true
   def mount(%{"id" => submission_id}, _session, socket) do
-
     submission = Submissions.get!(submission_id)
     promotion = Promotions.get!(submission.promotion_id)
     tool = Tools.get_by_promotion(submission.promotion_id)
@@ -53,7 +52,8 @@ defmodule Link.Pool.Submission do
 
     byline = dgettext("eyra-submission", "byline", timestamp: update_at)
 
-    preview_path = Routes.live_path(socket, Link.Promotion.Public, submission.promotion_id, preview: true)
+    preview_path =
+      Routes.live_path(socket, Link.Promotion.Public, submission.promotion_id, preview: true)
 
     {
       :ok,
@@ -168,7 +168,11 @@ defmodule Link.Pool.Submission do
       accept: %{
         label: %{
           action: accept_action,
-          face: %{type: :primary, label: dgettext("link-ui", "submit.button"), bg_color: "bg-success"}
+          face: %{
+            type: :primary,
+            label: dgettext("link-ui", "submit.button"),
+            bg_color: "bg-success"
+          }
         },
         icon: %{
           action: accept_action,
@@ -178,7 +182,11 @@ defmodule Link.Pool.Submission do
       preview: %{
         label: %{
           action: preview_action,
-          face: %{type: :primary, label: dgettext("link-ui", "preview.button"), bg_color: "bg-primary"}
+          face: %{
+            type: :primary,
+            label: dgettext("link-ui", "preview.button"),
+            bg_color: "bg-primary"
+          }
         },
         icon: %{
           action: preview_action,
@@ -201,24 +209,15 @@ defmodule Link.Pool.Submission do
   defp create_actions(_, {:unknown, _}, _), do: []
 
   defp create_actions(%{accept: accept, preview: preview}, bp, false) do
-    accept =
-      value(bp, accept.icon,
-        sm: %{0 => accept.label}
-      )
+    accept = value(bp, accept.icon, sm: %{0 => accept.label})
 
-    preview =
-      value(bp, preview.icon,
-        sm: %{0 => preview.label}
-      )
+    preview = value(bp, preview.icon, sm: %{0 => preview.label})
 
     [accept, preview]
   end
 
   defp create_actions(%{preview: preview, retract: retract}, bp, true) do
-    preview =
-      value(bp, preview.icon,
-        sm: %{0 => preview.label}
-      )
+    preview = value(bp, preview.icon, sm: %{0 => preview.label})
 
     retract = retract.icon
 
@@ -262,20 +261,20 @@ defmodule Link.Pool.Submission do
   end
 
   defp to_member(
-    %{
-      email: email,
-      profile: %{
-        fullname: fullname,
-        photo_url: photo_url
-      },
-      features: %{
-        gender: gender
-      }
-    },
-    %{
-      title: title
-    }
-  ) do
+         %{
+           email: email,
+           profile: %{
+             fullname: fullname,
+             photo_url: photo_url
+           },
+           features: %{
+             gender: gender
+           }
+         },
+         %{
+           title: title
+         }
+       ) do
     role = dgettext("eyra-admin", "role.researcher")
     action = %{type: :href, href: "mailto:#{email}?subject=Re: #{title}"}
 
@@ -286,7 +285,12 @@ defmodule Link.Pool.Submission do
       gender: gender,
       button_large: %{
         action: action,
-        face: %{type: :primary, label: dgettext("eyra-admin", "ticket.mailto.button"), bg_color: "bg-tertiary", text_color: "text-grey1"}
+        face: %{
+          type: :primary,
+          label: dgettext("eyra-admin", "ticket.mailto.button"),
+          bg_color: "bg-tertiary",
+          text_color: "text-grey1"
+        }
       },
       button_small: %{
         action: action,
@@ -294,5 +298,4 @@ defmodule Link.Pool.Submission do
       }
     }
   end
-
 end

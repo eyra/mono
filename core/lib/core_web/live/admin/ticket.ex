@@ -75,7 +75,12 @@ defmodule CoreWeb.Admin.Ticket do
       gender: gender,
       button_large: %{
         action: action,
-        face: %{type: :primary, label: dgettext("eyra-admin", "ticket.mailto.button"), bg_color: "bg-tertiary", text_color: "text-grey1"}
+        face: %{
+          type: :primary,
+          label: dgettext("eyra-admin", "ticket.mailto.button"),
+          bg_color: "bg-tertiary",
+          text_color: "text-grey1"
+        }
       },
       button_small: %{
         action: action,

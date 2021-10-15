@@ -90,9 +90,12 @@ defmodule Link.Survey.Content do
   defoverridable handle_uri: 1
 
   @impl true
-  def handle_uri(%{assigns: %{uri_origin: uri_origin, uri_path: uri_path, promotion_id: promotion_id}} = socket) do
-
-    preview_path = Routes.live_path(socket, Link.Promotion.Public, promotion_id, preview: true, back: uri_path)
+  def handle_uri(
+        %{assigns: %{uri_origin: uri_origin, uri_path: uri_path, promotion_id: promotion_id}} =
+          socket
+      ) do
+    preview_path =
+      Routes.live_path(socket, Link.Promotion.Public, promotion_id, preview: true, back: uri_path)
 
     socket =
       socket
@@ -110,17 +113,16 @@ defmodule Link.Survey.Content do
   end
 
   defp create_tabs(
-    %{
-      assigns:
-      %{
-        uri_origin: uri_origin,
-        tool_id: tool_id,
-        validate?: validate?,
-        tool_form_ready?: tool_form_ready?,
-        promotion_form_ready?: promotion_form_ready?
-      }
-    } = socket) do
-
+         %{
+           assigns: %{
+             uri_origin: uri_origin,
+             tool_id: tool_id,
+             validate?: validate?,
+             tool_form_ready?: tool_form_ready?,
+             promotion_form_ready?: promotion_form_ready?
+           }
+         } = socket
+       ) do
     tool = Tools.get_survey_tool!(tool_id)
     promotion = Promotions.get!(tool.promotion_id)
     submission = Submissions.get!(promotion)
@@ -160,7 +162,7 @@ defmodule Link.Survey.Content do
         component: SubmissionForm,
         props: %{
           entity_id: submission.id
-        },
+        }
       },
       %{
         id: :monitor,
@@ -181,7 +183,6 @@ defmodule Link.Survey.Content do
   defp create_tabs(socket) do
     socket
   end
-
 
   @impl true
   def handle_auto_save_done(socket) do
@@ -304,13 +305,12 @@ defmodule Link.Survey.Content do
   end
 
   def handle_info(%{id: form, ready?: ready?}, socket) do
-
     ready_key = String.to_atom("#{form}_ready?")
 
     socket =
       if socket.assigns[ready_key] != ready? do
         socket
-        |> assign(ready_key, ready? )
+        |> assign(ready_key, ready?)
         |> create_tabs()
       else
         socket
@@ -318,7 +318,6 @@ defmodule Link.Survey.Content do
 
     {:noreply, socket}
   end
-
 
   defp margin_x(:mobile), do: "mx-6"
   defp margin_x(_), do: "mx-10"
@@ -328,13 +327,17 @@ defmodule Link.Survey.Content do
     submit_action = %{type: :send, event: "submit"}
     delete_action = %{type: :send, event: "delete"}
     retract_action = %{type: :send, event: "retract"}
-    more_action = %{type: :toggle, id: :more, target: "action_menu" }
+    more_action = %{type: :toggle, id: :more, target: "action_menu"}
 
     %{
       submit: %{
         label: %{
           action: submit_action,
-          face: %{type: :primary, label: dgettext("link-ui", "submit.button"), bg_color: "bg-success"}
+          face: %{
+            type: :primary,
+            label: dgettext("link-ui", "submit.button"),
+            bg_color: "bg-success"
+          }
         },
         icon: %{
           action: submit_action,
@@ -344,7 +347,11 @@ defmodule Link.Survey.Content do
       preview: %{
         label: %{
           action: preview_action,
-          face: %{type: :primary, label: dgettext("link-ui", "preview.button"), bg_color: "bg-primary"}
+          face: %{
+            type: :primary,
+            label: dgettext("link-ui", "preview.button"),
+            bg_color: "bg-primary"
+          }
         },
         icon: %{
           action: preview_action,
@@ -380,7 +387,7 @@ defmodule Link.Survey.Content do
           action: more_action,
           face: %{type: :icon, icon: :more, alt: "Show more actions"}
         }
-      },
+      }
     }
   end
 
@@ -423,13 +430,15 @@ defmodule Link.Survey.Content do
       )
 
     [
-      submit, preview, delete, more
+      submit,
+      preview,
+      delete,
+      more
     ]
     |> Enum.filter(&(not is_nil(&1)))
   end
 
   defp create_actions(%{preview: preview, retract: retract, more: more}, bp, true) do
-
     preview =
       value(bp, nil,
         xs: %{8 => preview.icon},
@@ -437,22 +446,17 @@ defmodule Link.Survey.Content do
         lg: %{20 => preview.label}
       )
 
-    retract =
-      value(bp, nil,
-        xs: %{8 => retract.icon}
-      )
+    retract = value(bp, nil, xs: %{8 => retract.icon})
 
-    more =
-      value(bp, more.icon,
-        xs: %{8 => nil}
-      )
+    more = value(bp, more.icon, xs: %{8 => nil})
 
     [
-      preview, retract, more
+      preview,
+      retract,
+      more
     ]
     |> Enum.filter(&(not is_nil(&1)))
   end
-
 
   defp create_more_actions(%{submitted?: submitted?} = assigns) do
     create_more_actions(action_map(assigns), submitted?)

@@ -49,9 +49,10 @@ defmodule Link.Survey.PromotionPlugin do
   @impl Plugin
   def get_cta_path(promotion_id, "open", %{assigns: %{current_user: user}}) do
     tool = Tools.get_by_promotion(promotion_id)
+
     Tool.prepare_url(
       tool.survey_url,
-      %{"participantId"=> Tools.participant_id(tool, user)}
+      %{"participantId" => Tools.participant_id(tool, user)}
     )
   end
 
@@ -79,12 +80,22 @@ defmodule Link.Survey.PromotionPlugin do
     "#{dgettext("link-survey", "by.author.label")}: " <> authors
   end
 
-  defp get_highlights(%{subject_count: subject_count, duration: duration} = tool, %{reward_value: reward_value}) do
+  defp get_highlights(%{subject_count: subject_count, duration: duration} = tool, %{
+         reward_value: reward_value
+       }) do
     occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
-    open_spot_count = if subject_count do subject_count - occupied_spot_count else 0 end
+
+    open_spot_count =
+      if subject_count do
+        subject_count - occupied_spot_count
+      else
+        0
+      end
 
     spots_title = dgettext("link-survey", "spots.highlight.title")
-    spots_text = dgettext("link-survey", "spots.highlight.text", open: open_spot_count, total: subject_count)
+
+    spots_text =
+      dgettext("link-survey", "spots.highlight.text", open: open_spot_count, total: subject_count)
 
     duration_title = dgettext("link-survey", "duration.highlight.title")
     duration_text = dgettext("link-survey", "duration.highlight.text", duration: duration)
@@ -102,7 +113,7 @@ defmodule Link.Survey.PromotionPlugin do
     [
       %{title: duration_title, text: duration_text},
       %{title: reward_title, text: reward_text},
-      %{title: spots_title, text: spots_text},
+      %{title: spots_title, text: spots_text}
     ]
   end
 end

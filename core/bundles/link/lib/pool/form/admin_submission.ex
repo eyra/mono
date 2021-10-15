@@ -5,7 +5,15 @@ defmodule Link.Pool.Form.AdminSubmission do
   alias EyraUI.Text.{Title3, Body}
   alias EyraUI.Form.{Form, NumberInput, DateInput}
 
-  import CoreWeb.UI.Timestamp, only: [now: 0, one_week_after: 1, parse_user_input_date: 1, format_user_input_date: 1, before?: 2]
+  import CoreWeb.UI.Timestamp,
+    only: [
+      now: 0,
+      one_week_after: 1,
+      parse_user_input_date: 1,
+      format_user_input_date: 1,
+      before?: 2
+    ]
+
   alias Core.Pools.{Submissions, Submission}
 
   prop(props, :any, required: true)
@@ -21,6 +29,7 @@ defmodule Link.Pool.Form.AdminSubmission do
 
   defp determine_new_end(_, nil), do: nil
   defp determine_new_end(nil, schedule_end), do: schedule_end
+
   defp determine_new_end(schedule_start, schedule_end) do
     if before?(schedule_end, schedule_start) do
       format_user_input_date(one_week_after(schedule_start))
@@ -30,36 +39,33 @@ defmodule Link.Pool.Form.AdminSubmission do
   end
 
   def update(
-    %{active_item_id: active_item_id, selector_id: :schedule_start_toggle},
-    %{assigns: %{entity: entity}} = socket
-  ) do
-
+        %{active_item_id: active_item_id, selector_id: :schedule_start_toggle},
+        %{assigns: %{entity: entity}} = socket
+      ) do
     schedule_start =
       case active_item_id do
         nil -> nil
-        _ ->  format_user_input_date(now())
+        _ -> format_user_input_date(now())
       end
 
     schedule_end = determine_new_end(schedule_start, entity.schedule_end)
 
-    attrs =
-      %{
-        schedule_start: schedule_start,
-        schedule_end: schedule_end,
-      }
+    attrs = %{
+      schedule_start: schedule_start,
+      schedule_end: schedule_end
+    }
 
     {
       :ok,
       socket
-      |> force_save(entity, attrs )
+      |> force_save(entity, attrs)
     }
   end
 
   def update(
-    %{active_item_id: active_item_id, selector_id: :schedule_end_toggle},
-    %{assigns: %{entity: entity}} = socket
-  ) do
-
+        %{active_item_id: active_item_id, selector_id: :schedule_end_toggle},
+        %{assigns: %{entity: entity}} = socket
+      ) do
     base_date =
       case entity.schedule_start do
         nil -> now()
@@ -82,7 +88,8 @@ defmodule Link.Pool.Form.AdminSubmission do
   end
 
   # Handle update from parent after attempt to publish
-  def update(%{props: %{validate?: new}}, %{assigns: %{validate?: current}} = socket) when new != current do
+  def update(%{props: %{validate?: new}}, %{assigns: %{validate?: current}} = socket)
+      when new != current do
     {
       :ok,
       socket
@@ -101,13 +108,23 @@ defmodule Link.Pool.Form.AdminSubmission do
     changeset = Submission.changeset(entity, %{})
 
     schedule_start_disabled = entity.schedule_start == nil
+
     schedule_start_toggle_labels = [
-      %{id: :schedule_start_toggle, value: dgettext("eyra-submission", "schedule.start.label"), active: not schedule_start_disabled}
+      %{
+        id: :schedule_start_toggle,
+        value: dgettext("eyra-submission", "schedule.start.label"),
+        active: not schedule_start_disabled
+      }
     ]
 
     schedule_end_disabled = entity.schedule_end == nil
+
     schedule_end_toggle_labels = [
-      %{id: :schedule_end_toggle, value: dgettext("eyra-submission", "schedule.end.label"), active: not schedule_end_disabled}
+      %{
+        id: :schedule_end_toggle,
+        value: dgettext("eyra-submission", "schedule.end.label"),
+        active: not schedule_end_disabled
+      }
     ]
 
     {
@@ -127,7 +144,10 @@ defmodule Link.Pool.Form.AdminSubmission do
     }
   end
 
-  defp update_ui(%{assigns: %{entity: %{schedule_start: schedule_start, schedule_end: schedule_end}}} = socket) do
+  defp update_ui(
+         %{assigns: %{entity: %{schedule_start: schedule_start, schedule_end: schedule_end}}} =
+           socket
+       ) do
     socket
     |> assign(
       schedule_start_disabled: schedule_start == nil,
@@ -138,7 +158,6 @@ defmodule Link.Pool.Form.AdminSubmission do
   # Validate
 
   def validate_for_publish(%{assigns: %{entity: entity, validate?: true}} = socket) do
-
     changeset =
       Submission.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
