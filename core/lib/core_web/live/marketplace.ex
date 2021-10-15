@@ -129,7 +129,7 @@ defmodule CoreWeb.Marketplace do
       banner_photo_url: profile.photo_url,
       banner_title: user.displayname,
       banner_subtitle: profile.title,
-      banner_url: profile.url
+      banner_url: nil
     }
   end
 
