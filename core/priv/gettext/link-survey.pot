@@ -11,17 +11,17 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:279
+#: bundles/link/lib/survey/web/form.ex:287
 msgid "config.nrofsubjects.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:273
+#: bundles/link/lib/survey/web/form.ex:281
 msgid "config.url.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:276
+#: bundles/link/lib/survey/web/form.ex:284
 msgid "duration.label"
 msgstr ""
 
@@ -57,7 +57,7 @@ msgid "conpleted.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:294
+#: bundles/link/lib/survey/web/form.ex:302
 msgid "devices.label"
 msgstr ""
 
@@ -67,17 +67,17 @@ msgid "open.cta.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:243
+#: bundles/link/lib/survey/web/form.ex:251
 msgid "redirect.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:241
+#: bundles/link/lib/survey/web/form.ex:249
 msgid "redirect.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:293
+#: bundles/link/lib/survey/web/form.ex:301
 msgid "devices.title"
 msgstr ""
 
@@ -187,7 +187,7 @@ msgid "tabbar.item.criteria.forward"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:216
+#: bundles/link/lib/survey/web/form.ex:224
 msgid "form.title"
 msgstr ""
 
@@ -197,58 +197,58 @@ msgid "survey.overview.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:282
+#: bundles/link/lib/survey/web/form.ex:290
 msgid "language.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:283
+#: bundles/link/lib/survey/web/form.ex:291
 msgid "languages.label"
 msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:102
-#: bundles/link/lib/survey/web/form.ex:311
+#: bundles/link/lib/survey/web/form.ex:318
 msgid "ethical.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:304
+#: bundles/link/lib/survey/web/form.ex:312
 msgid "ethical.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:232
+#: bundles/link/lib/survey/web/form.ex:240
 msgid "panlid.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:230
+#: bundles/link/lib/survey/web/form.ex:238
 msgid "panlid.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:221
+#: bundles/link/lib/survey/web/form.ex:229
 msgid "setup.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:251
+#: bundles/link/lib/survey/web/form.ex:259
 msgid "redirect.copy.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:305
+#: bundles/link/lib/survey/web/form.ex:313
 msgid "ethical.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:265
+#: bundles/link/lib/survey/web/form.ex:273
 msgid "study.link.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:263
+#: bundles/link/lib/survey/web/form.ex:271
 msgid "study.link.title"
 msgstr ""
 
@@ -268,7 +268,7 @@ msgid "study.instructions.link"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:217
+#: bundles/link/lib/survey/web/form.ex:225
 msgid "form.description"
 msgstr ""
 
@@ -285,4 +285,9 @@ msgstr ""
 #, elixir-format
 #: bundles/link/lib/survey/data/promotion_plugin.ex:98
 msgid "spots.highlight.text"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:204
+msgid "ethical.review.link"
 msgstr ""

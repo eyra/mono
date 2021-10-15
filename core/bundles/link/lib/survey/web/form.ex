@@ -199,6 +199,13 @@ defmodule Link.Survey.Form do
     )
   end
 
+  defp ethical_review_link() do
+    link_as_string(
+      dgettext("link-survey", "ethical.review.link"),
+      "https://vueconomics.eu.qualtrics.com/jfe/form/SV_1SKjMzceWRZIk9D"
+    )
+  end
+
   defp link_as_string(label, url) do
     label
     |> Phoenix.HTML.Link.link(
@@ -302,7 +309,7 @@ defmodule Link.Survey.Form do
 
           <Panel bg_color="bg-grey1">
             <Title3 color="text-white" >{{dgettext("link-survey", "ethical.title")}}</Title3>
-            <BodyMedium color="text-white">{{dgettext("link-survey", "ethical.description")}}</BodyMedium>
+            <BodyMedium color="text-white">{{ raw(dgettext("link-survey", "ethical.description", link: ethical_review_link()))}}</BodyMedium>
             <Spacing value="S" />
             <TextInput field={{:ethical_code}} placeholder={{dgettext("eyra-account", "ehtical.code.label")}} background={{:dark}} />
             <Checkbox
