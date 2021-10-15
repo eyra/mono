@@ -52,8 +52,7 @@ defmodule Link.Pool.Form.AdminSubmissionCriteria do
   end
 
   def update(%{id: id, props: %{entity_id: entity_id}}, socket) do
-    criteria =
-      Submissions.get!(entity_id).criteria
+    criteria = Submissions.get!(entity_id).criteria
 
     year =
       if StudyProgramCodes.is_first_year_active?(criteria.study_program_codes) do
@@ -95,7 +94,6 @@ defmodule Link.Pool.Form.AdminSubmissionCriteria do
   def schedule_save(socket, entity, attrs), do: save(socket, entity, attrs, true)
 
   def save(socket, %Criteria{} = entity, attrs, schedule?) do
-
     changeset = Criteria.changeset(entity, attrs)
 
     socket

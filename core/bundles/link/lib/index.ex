@@ -12,7 +12,6 @@ defmodule Link.Index do
   alias EyraUI.Grid.{AbsoluteGrid}
   alias EyraUI.Hero.HeroLarge
 
-
   data(current_user, :any)
 
   def mount(_params, _session, socket) do

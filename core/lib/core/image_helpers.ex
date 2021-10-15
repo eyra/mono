@@ -25,8 +25,10 @@ defmodule Core.ImageHelpers do
   end
 
   def get_photo_url(%{photo_url: nil, gender: :man}), do: "/images/profile_photo_default_male.svg"
-  def get_photo_url(%{photo_url: nil, gender: :woman}), do: "/images/profile_photo_default_female.svg"
+
+  def get_photo_url(%{photo_url: nil, gender: :woman}),
+    do: "/images/profile_photo_default_female.svg"
+
   def get_photo_url(%{photo_url: nil}), do: "/images/profile_photo_default.svg"
   def get_photo_url(%{photo_url: photo_url}), do: photo_url
-
 end

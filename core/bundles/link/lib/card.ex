@@ -152,6 +152,7 @@ defmodule Link.Marketplace.Card do
     open_spots_label = dgettext("eyra-promotion", "open.spots.label", count: "#{open_spot_count}")
 
     info1_elements = ["#{duration_label}: #{duration} min.", "#{reward_label}: ?"]
+
     info1_elements =
       if language != nil do
         language_label = language |> String.upcase(:ascii)

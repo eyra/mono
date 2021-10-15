@@ -65,7 +65,6 @@ defmodule Link.Marketplace do
     {:ok, socket}
   end
 
-
   def handle_auto_save_done(socket) do
     socket |> update_menus()
   end

@@ -51,7 +51,10 @@ defmodule CoreWeb.Admin.Support do
       |> CoreWeb.UI.Timestamp.apply_timezone()
       |> CoreWeb.UI.Timestamp.humanize()
 
-    image = %{type: :avatar, info: ImageHelpers.get_photo_url(%{photo_url: photo_url, gender: gender})}
+    image = %{
+      type: :avatar,
+      info: ImageHelpers.get_photo_url(%{photo_url: photo_url, gender: gender})
+    }
 
     %{
       path: Routes.live_path(socket, CoreWeb.Admin.Ticket, id),

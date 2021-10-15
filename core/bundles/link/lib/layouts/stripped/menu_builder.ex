@@ -24,5 +24,4 @@ defmodule Link.Layouts.Stripped.MenuBuilder do
       language_switch_item(socket, menu_id, icon_only?)
     ]
   end
-
 end

@@ -34,8 +34,11 @@ defmodule Link.Promotion.Public do
   data(image_info, :any, default: nil)
   data(back_path, :any)
 
-  def mount(%{"id" => id, "preview" => preview, "back" => back}, _session, %{assigns: %{current_user: user}} = socket) do
-
+  def mount(
+        %{"id" => id, "preview" => preview, "back" => back},
+        _session,
+        %{assigns: %{current_user: user}} = socket
+      ) do
     promotion = Promotions.get!(id)
     plugin = load_plugin(promotion)
     plugin_info = plugin.info(id, socket)
@@ -68,13 +71,17 @@ defmodule Link.Promotion.Public do
 
   def mount(params, session, %{assigns: %{current_user: user}} = socket) do
     preview = Map.get(params, "preview", "false")
-    back = Map.get(params, "back",
-      if user.researcher do
-        Routes.live_path(socket, Link.Dashboard)
-      else
-        Routes.live_path(socket, Link.Marketplace)
-      end
-    )
+
+    back =
+      Map.get(
+        params,
+        "back",
+        if user.researcher do
+          Routes.live_path(socket, Link.Dashboard)
+        else
+          Routes.live_path(socket, Link.Marketplace)
+        end
+      )
 
     mount(
       params
@@ -84,7 +91,6 @@ defmodule Link.Promotion.Public do
       socket
     )
   end
-
 
   defp update_image_info(%{assigns: %{viewport: %{"width" => 0}}} = socket), do: socket
 

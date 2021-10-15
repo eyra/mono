@@ -78,14 +78,13 @@ defmodule Core.Pools.Submissions do
 
   defp notify_when_submitted(%Submission{} = submission, %Ecto.Changeset{} = changeset) do
     if Ecto.Changeset.get_change(changeset, :status) === :submitted do
-      for user <- Accounts.list_pool_admins do
+      for user <- Accounts.list_pool_admins() do
         NextAction.Context.create_next_action(user, Core.Pools.ReviewSubmission)
       end
     end
 
     submission
   end
-
 end
 
 defimpl Core.Persister, for: Core.Pools.Submission do
