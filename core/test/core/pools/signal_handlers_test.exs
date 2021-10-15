@@ -23,7 +23,9 @@ defmodule Core.Pools.SignalHandlersTest do
         study: study
       })
 
-      assert Authorization.users_with_role(study, :coordinator, [:profile]) == [coordinator]
+      assert Authorization.users_with_role(study, :coordinator, [:profile, :features]) == [
+               coordinator
+             ]
     end
   end
 
@@ -37,7 +39,9 @@ defmodule Core.Pools.SignalHandlersTest do
         user_changeset: Changeset.cast(%User{}, %{coordinator: true}, [:coordinator])
       })
 
-      assert Authorization.users_with_role(study, :coordinator, [:profile]) == [coordinator]
+      assert Authorization.users_with_role(study, :coordinator, [:profile, :features]) == [
+               coordinator
+             ]
     end
 
     test "do not assign coordinator role to students/researchers", %{

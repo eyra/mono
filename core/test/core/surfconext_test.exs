@@ -1,7 +1,7 @@
 defmodule Core.SurfConext.Test do
   use Core.DataCase, async: true
-  import Core.Signals.Test
-  import Core.NextActions.Test
+  import Frameworks.Signal.TestHelper
+  import Systems.NextAction.TestHelper
 
   alias Core.Factories
 

@@ -1,5 +1,5 @@
 defmodule Core.Pools.SignalHandlers do
-  use Core.Signals.Handlers
+  use Frameworks.Signal.Handler
   alias Core.Authorization
   alias Core.Accounts.User
   alias Core.Studies.Study

@@ -12,15 +12,15 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/debug.ex:6 bundles/link/lib/onboarding/wizard.ex:6
-#: bundles/link/lib/survey/web/content.ex:6 lib/core_web/live/data_donation/content.ex:6
-#: lib/core_web/live/user/profile.ex:6
+#: bundles/link/lib/pool/submission.ex:6 bundles/link/lib/survey/web/content.ex:6
+#: lib/core_web/live/data_donation/content.ex:6 lib/core_web/live/user/profile.ex:6
 msgid "error.flash"
 msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/debug.ex:6 bundles/link/lib/onboarding/wizard.ex:6
-#: bundles/link/lib/survey/web/content.ex:6 lib/core_web/live/data_donation/content.ex:6
-#: lib/core_web/live/user/profile.ex:6
+#: bundles/link/lib/pool/submission.ex:6 bundles/link/lib/survey/web/content.ex:6
+#: lib/core_web/live/data_donation/content.ex:6 lib/core_web/live/user/profile.ex:6
 msgid "saved.info.flash"
 msgstr ""
 
@@ -78,17 +78,17 @@ msgid "menu.item.todo"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:47
+#: lib/core_web/live/dashboard.ex:46
 msgid "dashboard.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:96
+#: bundles/link/lib/marketplace.ex:95
 msgid "marketplace.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/todo.ex:50
+#: systems/next_action/overview_page.ex:49
 msgid "todo.title"
 msgstr ""
 
@@ -162,7 +162,7 @@ msgid "menu.item.helpdesk"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:6
+#: bundles/link/lib/pool/submission.ex:8 bundles/link/lib/promotions/public.ex:6
 #: bundles/link/lib/survey/web/content.ex:9 lib/core_web/live/admin/ticket.ex:4
 msgid "cancel.button"
 msgstr ""
@@ -183,7 +183,7 @@ msgid "delete.confirm.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:6
+#: bundles/link/lib/pool/submission.ex:8 bundles/link/lib/promotions/public.ex:6
 #: bundles/link/lib/survey/web/content.ex:9 lib/core_web/live/admin/ticket.ex:4
 msgid "ok.button"
 msgstr ""
@@ -211,18 +211,18 @@ msgid "menu.item.support"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:17 lib/core_web/ui/timestamp.ex:20
-#: lib/core_web/ui/timestamp.ex:25
+#: lib/core_web/ui/timestamp.ex:87 lib/core_web/ui/timestamp.ex:90
+#: lib/core_web/ui/timestamp.ex:95
 msgid "timestamp.at"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:17
+#: lib/core_web/ui/timestamp.ex:87
 msgid "timestamp.today"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:20
+#: lib/core_web/ui/timestamp.ex:90
 msgid "timestamp.yesterday"
 msgstr ""
 

@@ -6,7 +6,7 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
   import CoreWeb.Menu.Helpers
   import Core.Admin
 
-  alias Core.NextActions
+  alias Systems.NextAction
   alias Core.Helpdesk
 
   @impl true
@@ -46,13 +46,19 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
   end
 
   defp build_menu_first_part(socket, menu_id, %{email: email} = user_state, active_item) do
-    next_action_count = NextActions.count_next_actions(user_state)
+    next_action_count = NextAction.Context.count_next_actions(user_state)
     support_count = Helpdesk.count_open_tickets()
 
     []
-    |> append(live_item(socket, menu_id, :dashboard, active_item), can_access?(user_state, Link.Dashboard))
+    |> append(
+      live_item(socket, menu_id, :dashboard, active_item),
+      can_access?(user_state, Link.Dashboard)
+    )
     |> append(live_item(socket, menu_id, :permissions, active_item), admin?(email))
-    |> append(live_item(socket, menu_id, :support, active_item, true, support_count), admin?(email))
+    |> append(
+      live_item(socket, menu_id, :support, active_item, true, support_count),
+      admin?(email)
+    )
     |> append(
       live_item(socket, menu_id, :surveys, active_item),
       can_access?(user_state, CoreWeb.Study.New)

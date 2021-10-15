@@ -7,32 +7,33 @@ defmodule Link.Pool.Overview do
 
   import CoreWeb.Gettext
 
-  alias Link.Pool.Form.{Students, Studies}
+  alias Link.Pool.Form.{Students, Campaigns}
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent}
 
   data(tabs, :any)
+  data(initial_tab, :any)
 
   @impl true
-  def mount(%{"tab" => active_tab}, _session, socket) do
-    tabs = create_tabs(active_tab)
+  def mount(%{"tab" => initial_tab}, _session, socket) do
+    tabs = create_tabs(initial_tab)
 
     {
       :ok,
       socket
       |> assign(tabs: tabs)
+      |> assign(initial_tab: initial_tab)
       |> update_menus()
     }
   end
 
   @impl true
   def mount(_params, session, socket) do
-    mount(%{"tab" => "students"}, session, socket)
+    mount(%{"tab" => nil}, session, socket)
   end
 
-
-  defp create_tabs(active_tab) do
+  defp create_tabs(initial_tab) do
     [
       %{
         id: :students,
@@ -40,15 +41,15 @@ defmodule Link.Pool.Overview do
         component: Students,
         props: nil,
         type: :fullpage,
-        active: active_tab === :students
+        active: initial_tab === :students
       },
       %{
-        id: :studies,
-        title: dgettext("link-studentpool", "tabbar.item.studies"),
-        component: Studies,
+        id: :campaigns,
+        title: dgettext("link-studentpool", "tabbar.item.campaigns"),
+        component: Campaigns,
         props: nil,
         type: :fullpage,
-        active: active_tab === :studies
+        active: initial_tab === :campaigns
       }
     ]
   end
@@ -61,7 +62,7 @@ defmodule Link.Pool.Overview do
       >
         <TabbarArea tabs={{@tabs}}>
           <ActionBar>
-            <Tabbar vm={{ %{initial_tab: :students, size: :wide, type: :segmented} }} />
+            <Tabbar vm={{ %{initial_tab: @initial_tab, size: :wide, type: :segmented} }} />
           </ActionBar>
           <TabbarContent/>
         </TabbarArea>

@@ -14,7 +14,7 @@ defmodule Core.Studies do
   alias Core.DataDonation
   alias Core.Promotions.Promotion
   alias Core.Pools.Submission
-  alias Core.Signals
+  alias Frameworks.Signal
 
   # read list_studies(current_user, ...) do
   # end
@@ -39,13 +39,24 @@ defmodule Core.Studies do
     # AUTH: Can be piped through auth filter.
   end
 
-  def list_studies_with_accepted_submission(tool_entities, opts \\ [])
+  def list_submitted_studies(tool_entities, opts \\ []) do
+    list_studies_by_submission_status(tool_entities, :submitted, opts)
+  end
+
+  def list_accepted_studies(tool_entities, opts \\ []) do
+    list_studies_by_submission_status(tool_entities, :accepted, opts)
+  end
+
+  def list_studies_by_submission_status(tool_entities, submission_status, opts \\ [])
       when is_list(tool_entities) do
     preload = Keyword.get(opts, :preload, [])
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
 
     accepted_submissions =
-      from(submission in Submission, where: submission.status == :accepted, select: submission.id)
+      from(submission in Submission,
+        where: submission.status == ^submission_status,
+        select: submission.id
+      )
 
     promotions =
       from(promotion in Promotion,
@@ -136,14 +147,14 @@ defmodule Core.Studies do
     |> Repo.all()
   end
 
-  def list_owners(%Study{} = study) do
+  def list_owners(%Study{} = study, preload \\ []) do
     owner_ids =
       study
       |> Authorization.list_principals()
       |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
       |> Enum.map(fn %{id: id} -> id end)
 
-    from(u in User, where: u.id in ^owner_ids, order_by: u.id) |> Repo.all()
+    from(u in User, where: u.id in ^owner_ids, preload: ^preload, order_by: u.id) |> Repo.all()
     # AUTH: needs to be marked save. Current user is normally not allowed to
     # access other users.
   end
@@ -211,7 +222,7 @@ defmodule Core.Studies do
            |> Ecto.Changeset.put_assoc(:auth_node, Core.Authorization.make_node())
            |> Repo.insert() do
       :ok = Authorization.assign_role(researcher, study, :owner)
-      Signals.dispatch!(:study_created, %{study: study})
+      Signal.Context.dispatch!(:study_created, %{study: study})
       {:ok, study}
     end
   end

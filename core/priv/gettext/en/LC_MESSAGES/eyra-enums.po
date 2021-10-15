@@ -201,7 +201,7 @@ msgstr "English"
 msgid "online_study_languages.nl"
 msgstr "Dutch"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/core/enums/native_languages.ex:5
 msgid "native_languages.other"
 msgstr "Other"

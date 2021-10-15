@@ -2,7 +2,7 @@ defmodule Core.Factories do
   @moduledoc """
   This module provides factory function to be used for tests.
   """
-  alias Core.Accounts.{User, Profile}
+  alias Core.Accounts.{User, Profile, Features}
 
   alias Core.{
     Studies,
@@ -13,9 +13,12 @@ defmodule Core.Factories do
     Lab,
     Authorization,
     DataDonation,
-    NotificationCenter,
     WebPush,
     Helpdesk
+  }
+
+  alias Systems.{
+    Notification
   }
 
   alias Core.Repo
@@ -31,6 +34,9 @@ defmodule Core.Factories do
       profile: %Profile{
         fullname: Faker.Person.name(),
         photo_url: Faker.Avatar.image_url()
+      },
+      features: %Features{
+        gender: :man
       }
     }
   end
@@ -159,7 +165,7 @@ defmodule Core.Factories do
         ]
       })
 
-    %NotificationCenter.Box{}
+    %Notification.Box{}
     |> struct!(
       Map.delete(attributes, :user)
       |> Map.put(:auth_node, auth_node)

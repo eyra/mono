@@ -42,7 +42,6 @@ defmodule Link.Survey.Overview do
      |> update_menus()}
   end
 
-
   def handle_auto_save_done(socket) do
     socket |> update_menus()
   end

@@ -28,21 +28,21 @@ defmodule Link.Survey.Form do
   # Handle selector update
 
   def update(
-    %{active_item_ids: active_item_ids, selector_id: :ethical_approval},
-    %{assigns: %{entity: entity}} = socket
-  ) do
+        %{active_item_ids: active_item_ids, selector_id: :ethical_approval},
+        %{assigns: %{entity: entity}} = socket
+      ) do
     {
       :ok,
       socket
-      |> save(entity, :auto_save, %{ ethical_approval: not Enum.empty?(active_item_ids)}, false) #force save
+      # force save
+      |> save(entity, :auto_save, %{ethical_approval: not Enum.empty?(active_item_ids)}, false)
     }
   end
 
   def update(
-    %{active_item_id: active_item_id, selector_id: :language},
-    %{assigns: %{entity: entity}} = socket
-  ) do
-
+        %{active_item_id: active_item_id, selector_id: :language},
+        %{assigns: %{entity: entity}} = socket
+      ) do
     language =
       case active_item_id do
         nil -> nil
@@ -53,23 +53,26 @@ defmodule Link.Survey.Form do
     {
       :ok,
       socket
-      |> save(entity, :auto_save, %{ language: language}, false) #force save
+      # force save
+      |> save(entity, :auto_save, %{language: language}, false)
     }
   end
 
   def update(
-      %{active_item_ids: active_item_ids, selector_id: selector_id},
-      %{assigns: %{entity: entity}} = socket
-  ) do
+        %{active_item_ids: active_item_ids, selector_id: selector_id},
+        %{assigns: %{entity: entity}} = socket
+      ) do
     {
       :ok,
       socket
-      |> save(entity, :auto_save, %{selector_id => active_item_ids}, false) #force save
+      # force save
+      |> save(entity, :auto_save, %{selector_id => active_item_ids}, false)
     }
   end
 
   # Handle update from parent after attempt to publish
-  def update(%{props: %{validate?: new}}, %{assigns: %{validate?: current}} = socket) when new != current do
+  def update(%{props: %{validate?: new}}, %{assigns: %{validate?: current}} = socket)
+      when new != current do
     {
       :ok,
       socket
@@ -84,7 +87,10 @@ defmodule Link.Survey.Form do
   end
 
   # Handle initial update
-  def update(%{id: id, props: %{entity_id: entity_id, uri_origin: uri_origin, validate?: validate?}}, socket) do
+  def update(
+        %{id: id, props: %{entity_id: entity_id, uri_origin: uri_origin, validate?: validate?}},
+        socket
+      ) do
     entity = Tools.get_survey_tool!(entity_id)
     changeset = Tool.changeset(entity, :create, %{})
 
@@ -120,7 +126,13 @@ defmodule Link.Survey.Form do
   @impl true
   def handle_event("toggle", %{"checkbox" => checkbox}, %{assigns: %{entity: entity}} = socket) do
     field = String.to_existing_atom(checkbox)
-    new_value = not Map.get(entity, field, false)
+
+    new_value =
+      case Map.get(entity, field) do
+        nil -> true
+        value -> not value
+      end
+
     attrs = %{field => new_value}
 
     {
@@ -165,7 +177,6 @@ defmodule Link.Survey.Form do
   end
 
   def validate_for_publish(socket), do: socket
-
 
   defp redirect_instructions_link() do
     link_as_string(

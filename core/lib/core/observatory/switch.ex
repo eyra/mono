@@ -1,5 +1,5 @@
 defmodule Core.Observatory.Switch do
-  use Core.Signals.Handlers
+  use Frameworks.Signal.Handler
   alias Core.Observatory
 
   def dispatch(:next_action_created, %{user: user} = message) do

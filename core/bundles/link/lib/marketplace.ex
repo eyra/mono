@@ -5,8 +5,7 @@ defmodule Link.Marketplace do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :marketplace
 
-  alias Core.NextActions
-  alias Core.NextActions.Live.NextActionHighlight
+  alias Systems.NextAction
   alias Core.Studies
   alias Core.Survey.Tool, as: SurveyTool
   alias Core.Lab.Tool, as: LabTool
@@ -28,7 +27,7 @@ defmodule Link.Marketplace do
   data(current_user, :any)
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    next_best_action = NextActions.next_best_action(url_resolver(socket), user)
+    next_best_action = NextAction.Context.next_best_action(url_resolver(socket), user)
     user = socket.assigns[:current_user]
     preload = [survey_tool: [:promotion], lab_tool: [:promotion, :time_slots]]
 
@@ -46,7 +45,7 @@ defmodule Link.Marketplace do
       |> Enum.into(MapSet.new())
 
     available_studies =
-      Studies.list_studies_with_accepted_submission([LabTool, SurveyTool],
+      Studies.list_accepted_studies([LabTool, SurveyTool],
         exclude: exclusion_list,
         preload: preload
       )
@@ -65,7 +64,6 @@ defmodule Link.Marketplace do
 
     {:ok, socket}
   end
-
 
   def handle_auto_save_done(socket) do
     socket |> update_menus()
@@ -99,7 +97,7 @@ defmodule Link.Marketplace do
           <ContentArea>
             <MarginY id={{:page_top}} />
             <div :if={{ @next_best_action }}>
-              <NextActionHighlight vm={{ @next_best_action }}/>
+              <NextAction.HighlightView vm={{ @next_best_action }}/>
               <div class="mt-6 lg:mt-10"/>
             </div>
             <Case value={{ render_empty?(assigns) }} >

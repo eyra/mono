@@ -127,40 +127,40 @@ msgid "features.description"
 msgstr "Enkele studies gebruiken specifieke selectie criteria. Als je de onderstaande optionele kenmerken invult kun je meedoen aan studies waarvoor jouw kenmerken geselecteerd zijn."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:136
+#: bundles/link/lib/pool/form/researcher_submission.ex:151
 #: lib/core_web/live/user/forms/features.ex:99
 msgid "features.dominanthand.title"
 msgstr "Voorkeurshand"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:128
+#: bundles/link/lib/pool/form/researcher_submission.ex:143
 #: lib/core_web/live/user/forms/features.ex:91
 msgid "features.gender.title"
 msgstr "Geslacht"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:132
+#: bundles/link/lib/pool/form/researcher_submission.ex:147
 #: lib/core_web/live/user/forms/features.ex:95
 msgid "features.nativelanguage.title"
 msgstr "Eerste taal"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:140
+#: bundles/link/lib/pool/form/researcher_submission.ex:155
 msgid "features.study.title"
 msgstr "Studenten"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:124
+#: bundles/link/lib/pool/form/researcher_submission.ex:139
 msgid "features.title"
 msgstr "Inclusiecriteria"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:141
+#: bundles/link/lib/pool/form/researcher_submission.ex:156
 msgid "feature.study.content.description"
 msgstr "Selecteer welke studenten (BK: bedrijfskunde, IBA: international business administration) mee mogen doen aan de studie. Geen selectie betekend dat alle studenten mee mogen doen met de studie."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:125
+#: bundles/link/lib/pool/form/researcher_submission.ex:140
 msgid "features.content.description"
 msgstr "Selecteer hieronder de inclusiecriteria voor je studie. Geen selectie betekend dat alle studenten in de pool mee mogen doen met de studie."
 
@@ -205,11 +205,13 @@ msgid "login.surf.message.surfconext.href"
 msgstr "https://wiki.surfnet.nl/display/conextsupport/Inloggen+via+SURFconext"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:148
+#: bundles/link/lib/pool/form/admin_submission_criteria.ex:128
+#: bundles/link/lib/pool/form/researcher_submission.ex:163
 msgid "features.study.program"
 msgstr "Opleiding"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:144
+#: bundles/link/lib/pool/form/admin_submission_criteria.ex:124
+#: bundles/link/lib/pool/form/researcher_submission.ex:159
 msgid "features.study.year"
 msgstr "Leerjaar"

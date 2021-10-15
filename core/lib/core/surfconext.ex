@@ -1,7 +1,7 @@
 defmodule Core.SurfConext do
   alias Core.Accounts.User
   alias Core.Repo
-  alias Core.Signals
+  alias Frameworks.Signal
   import Ecto.Query, warn: false
 
   def get_user_by_sub(sub) do
@@ -42,7 +42,7 @@ defmodule Core.SurfConext do
            |> Core.SurfConext.User.changeset(attrs)
            |> Ecto.Changeset.put_assoc(:user, user)
            |> Repo.insert() do
-      Signals.dispatch!(:user_created, %{user: surf_user.user})
+      Signal.Context.dispatch!(:user_created, %{user: surf_user.user})
       {:ok, surf_user}
     end
   end

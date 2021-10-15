@@ -17,7 +17,6 @@ defmodule Core.DataDonation.Tools do
   alias Core.DataDonation.{Tool, Task, Participant, UserData}
   alias Core.Authorization
   alias Core.Accounts.User
-  alias Core.Signals
   alias Core.Content.Nodes
 
   def list do
@@ -86,10 +85,6 @@ defmodule Core.DataDonation.Tools do
       :role_assignment,
       Authorization.build_role_assignment(user, tool, :participant)
     )
-    |> Signals.multi_dispatch(:participant_applied, %{
-      tool: tool,
-      user: user
-    })
     |> Repo.transaction()
   end
 

@@ -19,6 +19,7 @@ defmodule Link do
         live("/campaign/all", Survey.Overview)
         live("/campaign/:id/content", Survey.Content)
         live("/campaign/:id/complete", Survey.Complete)
+        live("/campaign/:id/submission", Pool.Submission)
         live("/promotion/:id", Promotion.Public)
       end
     end
@@ -31,6 +32,7 @@ defmodule Link do
       grant_access(Link.Dashboard, [:researcher])
       grant_access(Link.Onboarding.Wizard, [:member])
       grant_access(Link.Pool.Overview, [:researcher])
+      grant_access(Link.Pool.Submission, [:researcher])
       grant_access(Link.Marketplace, [:member])
       grant_access(Link.LabStudy.Overview, [:researcher])
       grant_access(Link.Survey.Overview, [:member])

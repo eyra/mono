@@ -22,18 +22,20 @@ defmodule Link.Pool.Form.Students do
     }
   end
 
-  defp to_view_model(%{
-    email: email,
-    inserted_at: inserted_at,
-    profile: %{
-      fullname: fullname,
-      photo_url: photo_url
-    },
-    features: features
-  }, socket) do
-
+  defp to_view_model(
+         %{
+           email: email,
+           inserted_at: inserted_at,
+           profile: %{
+             fullname: fullname,
+             photo_url: photo_url
+           },
+           features: features
+         },
+         socket
+       ) do
     subtitle =
-      [email|get_study_programs(features)]
+      [email | get_study_programs(features)]
       |> Enum.join(" ▪︎ ")
 
     tag = get_tag(features)
@@ -42,8 +44,8 @@ defmodule Link.Pool.Form.Students do
 
     quick_summery =
       inserted_at
-      |> Coreweb.UI.Timestamp.apply_timezone()
-      |> Coreweb.UI.Timestamp.humanize()
+      |> CoreWeb.UI.Timestamp.apply_timezone()
+      |> CoreWeb.UI.Timestamp.humanize()
 
     %{
       path: Routes.live_path(socket, Link.Pool.Overview),
@@ -55,7 +57,8 @@ defmodule Link.Pool.Form.Students do
     }
   end
 
-  defp get_study_programs(%{study_program_codes: study_program_codes}) when is_list(study_program_codes) and study_program_codes != [] do
+  defp get_study_programs(%{study_program_codes: study_program_codes})
+       when is_list(study_program_codes) and study_program_codes != [] do
     study_program_codes
     |> Enum.map(&StudyProgramCodes.translate(&1))
   end

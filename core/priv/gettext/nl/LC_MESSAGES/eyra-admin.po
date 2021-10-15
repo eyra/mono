@@ -12,22 +12,22 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/admin/permissions.ex:95
+#: lib/core_web/live/admin/permissions.ex:80
 msgid "permissions.pooladmin.candidates.title"
 msgstr "Onderzoekers"
 
 #, elixir-format
-#: lib/core_web/live/admin/permissions.ex:81
+#: lib/core_web/live/admin/permissions.ex:66
 msgid "permissions.pooladmin.description"
 msgstr "Selecteer een of meer onderzoekers die namens de VU de studentenpool beheren."
 
 #, elixir-format
-#: lib/core_web/live/admin/permissions.ex:80
+#: lib/core_web/live/admin/permissions.ex:65
 msgid "permissions.pooladmin.title"
 msgstr "Pool beheerders"
 
 #, elixir-format
-#: lib/core_web/live/admin/permissions.ex:75
+#: lib/core_web/live/admin/permissions.ex:60
 msgid "permissions.title"
 msgstr "Permissies"
 

@@ -9,8 +9,7 @@ defmodule CoreWeb.Dashboard do
   alias CoreWeb.UI.ContentListItem
 
   alias EyraUI.Text.{Title2}
-  alias Core.NextActions.Live.NextActionHighlight
-  alias Core.NextActions
+  alias Systems.NextAction
   alias Core.ImageHelpers
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
@@ -32,7 +31,7 @@ defmodule CoreWeb.Dashboard do
       socket
       |> update_menus()
       |> assign(content_items: content_items)
-      |> assign(next_best_action: NextActions.next_best_action(url_resolver(socket), user))
+      |> assign(next_best_action: NextAction.Context.next_best_action(url_resolver(socket), user))
 
     {:ok, socket}
   end
@@ -50,7 +49,7 @@ defmodule CoreWeb.Dashboard do
         <ContentArea>
           <MarginY id={{:page_top}} />
             <div :if={{ @next_best_action }}>
-              <NextActionHighlight vm={{ @next_best_action }}/>
+              <NextAction.HighlightView vm={{ @next_best_action }}/>
               <Spacing value="XL" />
             </div>
             <Title2>

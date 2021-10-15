@@ -4,6 +4,7 @@ defmodule CoreWeb.Admin.Support do
 
   alias Core.Helpdesk
   alias Core.Helpdesk.Ticket
+  alias Core.ImageHelpers
 
   alias EyraUI.Text.{Title2}
   alias CoreWeb.UI.ContentListItem
@@ -37,6 +38,9 @@ defmodule CoreWeb.Admin.Support do
              profile: %{
                fullname: subtitle,
                photo_url: photo_url
+             },
+             features: %{
+               gender: gender
              }
            }
          } = ticket,
@@ -44,10 +48,13 @@ defmodule CoreWeb.Admin.Support do
        ) do
     quick_summery =
       updated_at
-      |> Coreweb.UI.Timestamp.apply_timezone()
-      |> Coreweb.UI.Timestamp.humanize()
+      |> CoreWeb.UI.Timestamp.apply_timezone()
+      |> CoreWeb.UI.Timestamp.humanize()
 
-    image = %{type: :avatar, info: photo_url}
+    image = %{
+      type: :avatar,
+      info: ImageHelpers.get_photo_url(%{photo_url: photo_url, gender: gender})
+    }
 
     %{
       path: Routes.live_path(socket, CoreWeb.Admin.Ticket, id),

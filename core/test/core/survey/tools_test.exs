@@ -82,21 +82,6 @@ defmodule Core.Survey.ToolsTest do
       assert {:ok, _} = Tools.apply_participant(survey_tool, member)
     end
 
-    test "apply_participant/2 notifies the researchers" do
-      survey_tool = Factories.insert!(:survey_tool)
-      researcher = Factories.insert!(:researcher)
-      promotion = Core.Promotions.get!(survey_tool.promotion_id)
-
-      study = Core.Studies.get_study!(survey_tool.study_id)
-      Authorization.assign_role(researcher, study, :owner)
-      member = Factories.insert!(:researcher)
-      {:ok, _} = Tools.apply_participant(survey_tool, member)
-
-      assert Core.NotificationCenter.list(researcher) |> Enum.map(& &1.title) == [
-               "New participant for: #{promotion.title}"
-             ]
-    end
-
     test "apply_participant/2 assigns the participant role to the applicant" do
       survey_tool = Factories.insert!(:survey_tool)
       member = Factories.insert!(:member)
