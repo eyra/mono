@@ -113,8 +113,8 @@ defmodule Link.Pool.Form.AdminSubmission do
     {
       :ok,
       socket
-      |> assign(id: id)
       |> assign(
+        id: id,
         entity: entity,
         schedule_start_toggle_labels: schedule_start_toggle_labels,
         schedule_start_disabled: schedule_start_disabled,

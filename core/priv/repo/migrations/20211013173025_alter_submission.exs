@@ -8,9 +8,18 @@ defmodule Core.Repo.Migrations.AlterSubmission do
       add(:schedule_start, :string)
       add(:schedule_end, :string)
     end
+
+    create(
+      constraint(:pool_submissions, :reward_value_can_not_be_negative,
+        check: "reward_value >= 0",
+        comment: "A reward can not be negative"
+      )
+    )
   end
 
   def down do
+    drop constraint(:pool_submissions, :reward_value_can_not_be_negative)
+
     alter table(:pool_submissions) do
       remove(:reward_value)
       remove(:reward_currency)
