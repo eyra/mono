@@ -40,12 +40,12 @@ msgstr "Students participating in this pool will appear here"
 #, elixir-format
 #: bundles/link/lib/pool/form/campaigns.ex:72
 msgid "campaigns.empty.description"
-msgstr "There are currently no research studies available to participate in. As soon as one becomes available, it will be added here and you will be notified by email (make sure to check your spam or junk mail folder, just in case)."
+msgstr "As soon as researchers publish a campaign in your pool to recruit participants for their study it will be added here. You can schedule when campaigns will become available in the marketplace for eligible participants."
 
 #, elixir-format
 #: bundles/link/lib/pool/form/campaigns.ex:71
 msgid "campaigns.empty.title"
-msgstr "Research studies submitted in this pool will appear here"
+msgstr "Campaigns in your pool"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/students.ex:72
