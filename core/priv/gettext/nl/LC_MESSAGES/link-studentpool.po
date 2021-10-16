@@ -60,7 +60,7 @@ msgstr "Onvolledig"
 #, elixir-format
 #: bundles/link/lib/pool/form/campaigns.ex:64
 msgid "accepted.title"
-msgstr "Live en ingeroosterd"
+msgstr "Online en ingeroosterd"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/campaigns.ex:106
@@ -90,4 +90,4 @@ msgstr "Campagne"
 #, elixir-format
 #: bundles/link/lib/pool/form/campaigns.ex:104
 msgid "status.live.label"
-msgstr "Live"
+msgstr "Online"

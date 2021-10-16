@@ -13,13 +13,13 @@ defmodule Link do
         live("/debug", Debug)
         live("/dashboard", Dashboard)
         live("/onboarding", Onboarding.Wizard)
-        live("/studentpool", Pool.Overview)
+        live("/studentpool", Pool.OverviewPage)
         live("/marketplace", Marketplace)
         live("/labstudy/all", LabStudy.Overview)
         live("/campaign/all", Survey.Overview)
         live("/campaign/:id/content", Survey.Content)
         live("/campaign/:id/complete", Survey.Complete)
-        live("/campaign/:id/submission", Pool.Submission)
+        live("/campaign/:id/submission", Pool.SubmissionPage)
         live("/promotion/:id", Promotion.Public)
       end
     end

@@ -76,10 +76,10 @@ defmodule CoreWeb.Admin.Ticket do
       button_large: %{
         action: action,
         face: %{
-          type: :primary,
+          type: :secondary,
           label: dgettext("eyra-admin", "ticket.mailto.button"),
-          bg_color: "bg-tertiary",
-          text_color: "text-grey1"
+          border_color: "border-white",
+          text_color: "text-white"
         }
       },
       button_small: %{
