@@ -25,12 +25,12 @@ msgstr "Back"
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:199
 msgid "banner.subtitle.label"
-msgstr "Job title"
+msgstr "Description"
 
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:186
 msgid "banner.title"
-msgstr "Contact info"
+msgstr "About you or your team"
 
 #, elixir-format
 #: lib/core_web/live/promotion/form.ex:198
@@ -81,7 +81,7 @@ msgstr "Available on:"
 
 #, elixir-format
 #: bundles/link/lib/card.ex:34 bundles/link/lib/card.ex:91
-#: bundles/link/lib/card.ex:151
+#: bundles/link/lib/card.ex:149
 msgid "duration.title"
 msgstr "Duration"
 
@@ -128,7 +128,7 @@ msgstr "Curious for the results of this study?"
 
 #, elixir-format
 #: bundles/link/lib/card.ex:36 bundles/link/lib/card.ex:92
-#: bundles/link/lib/card.ex:152 lib/core_web/view_model/card.ex:38
+#: bundles/link/lib/card.ex:150 lib/core_web/view_model/card.ex:38
 msgid "open.spots.label"
 msgstr "%{count} open spots"
 

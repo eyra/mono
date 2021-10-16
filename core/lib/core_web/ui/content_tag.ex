@@ -18,6 +18,7 @@ defmodule CoreWeb.UI.ContentTag do
   def bg_color(%{type: :primary}), do: "bg-primary"
   def bg_color(%{type: :secondary}), do: "bg-secondary"
   def bg_color(%{type: :tertiary}), do: "bg-tertiary"
+  def bg_color(%{type: :disabled}), do: "bg-grey1"
   def bg_color(%{type: type}), do: "bg-#{type}"
 
   def text_color(%{type: :tertiary}), do: "text-grey1"

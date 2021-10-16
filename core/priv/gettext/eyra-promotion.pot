@@ -80,7 +80,7 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/card.ex:34 bundles/link/lib/card.ex:91
-#: bundles/link/lib/card.ex:151
+#: bundles/link/lib/card.ex:149
 msgid "duration.title"
 msgstr ""
 
@@ -127,7 +127,7 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/card.ex:36 bundles/link/lib/card.ex:92
-#: bundles/link/lib/card.ex:152 lib/core_web/view_model/card.ex:38
+#: bundles/link/lib/card.ex:150 lib/core_web/view_model/card.ex:38
 msgid "open.spots.label"
 msgstr ""
 

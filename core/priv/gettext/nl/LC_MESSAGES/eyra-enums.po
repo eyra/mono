@@ -206,7 +206,7 @@ msgstr "Nederlands"
 msgid "native_languages.other"
 msgstr "Anders"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: bundles/link/lib/enums/themes.ex:5
 msgid "themes.data_science"
 msgstr "Data science"
@@ -216,7 +216,7 @@ msgstr "Data science"
 msgid "themes.digital_innovation"
 msgstr "Digitale innovatie"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: bundles/link/lib/enums/themes.ex:5
 msgid "themes.econometrics"
 msgstr "Econometrie"
@@ -226,7 +226,7 @@ msgstr "Econometrie"
 msgid "themes.finance"
 msgstr "Finance"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: bundles/link/lib/enums/themes.ex:5
 msgid "themes.operations_analytics"
 msgstr "Operations analytics"

@@ -122,40 +122,40 @@ msgid "features.description"
 msgstr "A few studies use specific eligibility requirements. Selecting the optional characteristics below, allows you to participate in studies that specify your characteristics as requirements."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:153
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:153
 #: lib/core_web/live/user/forms/features.ex:99
 msgid "features.dominanthand.title"
 msgstr "Dominant hand"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:145
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:145
 #: lib/core_web/live/user/forms/features.ex:91
 msgid "features.gender.title"
 msgstr "Gender"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:149
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:149
 #: lib/core_web/live/user/forms/features.ex:95
 msgid "features.nativelanguage.title"
 msgstr "First language"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:157
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:157
 msgid "features.study.title"
 msgstr "Students"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:141
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:141
 msgid "features.title"
 msgstr "Inclusion criteria"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:158
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:158
 msgid "feature.study.content.description"
 msgstr "Select which students (BK: bedrijfskunde, IBA: international business administration) are eligible to participate. If nothing is selected, all students in the pool are eligible to participate."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:142
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:142
 msgid "features.content.description"
 msgstr "Select the inclusion criteria for your study. If nothing is selected, all students in the pool are eligible to participate."
 
@@ -200,18 +200,18 @@ msgid "login.surf.message.surfconext.href"
 msgstr "https://wiki.surfnet.nl/display/conextsupport/Log+in+SURFconext"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission_criteria.ex:111
-#: bundles/link/lib/pool/form/researcher_submission.ex:165
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:165
+#: bundles/link/lib/pool/views/submission_criteria_view.ex:111
 msgid "features.study.program"
 msgstr "Study program"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission_criteria.ex:107
-#: bundles/link/lib/pool/form/researcher_submission.ex:161
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:161
+#: bundles/link/lib/pool/views/submission_criteria_view.ex:107
 msgid "features.study.year"
 msgstr "Study year"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:315
+#: bundles/link/lib/survey/web/form.ex:314
 msgid "ehtical.code.label"
 msgstr "Code"

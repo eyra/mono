@@ -6,6 +6,7 @@ defmodule Link.Dashboard do
   use CoreWeb.Layouts.Workspace.Component, :dashboard
 
   alias Core.Studies
+  alias Core.Pools.Submission
   alias CoreWeb.UI.ContentListItem
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
@@ -73,16 +74,28 @@ defmodule Link.Dashboard do
     """
   end
 
-  defp get_tag(status) do
+  defp get_tag(%{status: status} = submission) do
     case status do
       :idle ->
-        %{text: dgettext("eyra-submission", "status.idle.label"), type: :warning}
+        %{text: dgettext("eyra-submission", "status.idle.label"), type: :tertiary}
 
       :submitted ->
-        %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary}
+        %{text: dgettext("eyra-submission", "status.submitted.label"), type: :secondary}
 
       :accepted ->
-        %{text: dgettext("eyra-submission", "status.accepted.label"), type: :success}
+        case Submission.published_status(submission) do
+          :scheduled ->
+            %{
+              text: dgettext("eyra-submission", "status.accepted.scheduled.label"),
+              type: :warning
+            }
+
+          :online ->
+            %{text: dgettext("eyra-submission", "status.accepted.online.label"), type: :success}
+
+          :closed ->
+            %{text: dgettext("eyra-submission", "status.accepted.closed.label"), type: :disabled}
+        end
     end
   end
 
@@ -92,8 +105,13 @@ defmodule Link.Dashboard do
     |> CoreWeb.UI.Timestamp.humanize()
   end
 
-  defp get_subtitle(status, promotion_content_node, current_subject_count, target_subject_count) do
-    case status do
+  defp get_subtitle(
+         submission,
+         promotion_content_node,
+         current_subject_count,
+         target_subject_count
+       ) do
+    case submission.status do
       :idle ->
         if Nodes.ready?(promotion_content_node) do
           dgettext("eyra-submission", "ready.for.submission.message")
@@ -105,10 +123,19 @@ defmodule Link.Dashboard do
         dgettext("eyra-submission", "waiting.for.coordinator.message")
 
       :accepted ->
-        dgettext("link-dashboard", "quick_summary.%{subject_count}.%{target_subject_count}",
-          subject_count: current_subject_count,
-          target_subject_count: target_subject_count || 0
-        )
+        case Submission.published_status(submission) do
+          :scheduled ->
+            dgettext("eyra-submission", "accepted.scheduled.message")
+
+          :online ->
+            dgettext("link-dashboard", "quick_summary.%{subject_count}.%{target_subject_count}",
+              subject_count: current_subject_count,
+              target_subject_count: target_subject_count || 0
+            )
+
+          :closed ->
+            dgettext("eyra-submission", "accepted.closed.message")
+        end
     end
   end
 
@@ -122,16 +149,19 @@ defmodule Link.Dashboard do
             title: title,
             image_id: image_id,
             content_node: promotion_content_node,
-            submission: %{
-              status: status
-            }
+            submission: submission
           }
         }
       }) do
-    tag = get_tag(status)
+    tag = get_tag(submission)
 
     subtitle =
-      get_subtitle(status, promotion_content_node, current_subject_count, target_subject_count)
+      get_subtitle(
+        submission,
+        promotion_content_node,
+        current_subject_count,
+        target_subject_count
+      )
 
     quick_summary = get_quick_summary(updated_at)
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
@@ -156,14 +186,12 @@ defmodule Link.Dashboard do
             title: title,
             image_id: image_id,
             content_node: promotion_content_node,
-            submission: %{
-              status: status
-            }
+            submission: submission
           }
         }
       }) do
-    tag = get_tag(status)
-    subtitle = get_subtitle(status, promotion_content_node, -1, -1)
+    tag = get_tag(submission)
+    subtitle = get_subtitle(submission, promotion_content_node, -1, -1)
     quick_summery = get_quick_summary(updated_at)
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
     image = %{type: :catalog, info: image_info}

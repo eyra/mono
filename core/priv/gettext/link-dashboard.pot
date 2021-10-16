@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:108
+#: bundles/link/lib/dashboard.ex:115
 msgid "quick_summary.%{subject_count}.%{target_subject_count}"
 msgstr ""
 

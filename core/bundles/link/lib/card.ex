@@ -1,5 +1,6 @@
 defmodule Link.Marketplace.Card do
   alias Core.Survey.Tools
+  alias Core.Pools.Submission
   alias Core.ImageHelpers
   alias CoreWeb.Router.Helpers, as: Routes
   import CoreWeb.Gettext
@@ -133,9 +134,7 @@ defmodule Link.Marketplace.Card do
                 image_id: image_id,
                 themes: themes,
                 marks: marks,
-                submission: %{
-                  status: status
-                }
+                submission: submission
               }
             } = tool
         },
@@ -166,18 +165,7 @@ defmodule Link.Marketplace.Card do
 
     info = [info1, info2]
 
-    label =
-      case status do
-        :idle ->
-          %{text: dgettext("eyra-submission", "status.idle.label"), type: :warning}
-
-        :submitted ->
-          %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary}
-
-        :accepted ->
-          %{text: dgettext("eyra-submission", "status.accepted.label"), type: :success}
-      end
-
+    label = get_label(submission)
     icon_url = get_icon_url(marks, socket)
     image_info = ImageHelpers.get_image_info(image_id)
     tags = get_tags(themes)
@@ -209,26 +197,13 @@ defmodule Link.Marketplace.Card do
               image_id: image_id,
               themes: themes,
               marks: marks,
-              submission: %{
-                status: status
-              }
+              submission: submission
             }
           }
         },
         socket
       ) do
-    label =
-      case status do
-        :idle ->
-          %{text: dgettext("eyra-submission", "status.idle.label"), type: :warning}
-
-        :submitted ->
-          %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary}
-
-        :accepted ->
-          %{text: dgettext("eyra-submission", "status.accepted.label"), type: :success}
-      end
-
+    label = get_label(submission)
     icon_url = get_icon_url(marks, socket)
     image_info = ImageHelpers.get_image_info(image_id)
     tags = get_tags(themes)
@@ -246,6 +221,34 @@ defmodule Link.Marketplace.Card do
       label: label,
       label_type: "secondary"
     }
+  end
+
+  defp get_label(submission) do
+    case submission.status do
+      :idle ->
+        %{text: dgettext("eyra-submission", "status.idle.label"), type: :tertiary}
+
+      :submitted ->
+        %{text: dgettext("eyra-submission", "status.submitted.label"), type: :secondary}
+
+      :accepted ->
+        case Submission.published_status(submission) do
+          :scheduled ->
+            %{
+              text: dgettext("eyra-submission", "status.accepted.scheduled.label"),
+              type: :warning
+            }
+
+          :online ->
+            %{text: dgettext("eyra-submission", "status.accepted.online.label"), type: :success}
+
+          :closed ->
+            %{
+              text: dgettext("eyra-submission", "status.accepted.closed.label"),
+              type: :disabled
+            }
+        end
+    end
   end
 
   def get_tags(nil), do: []

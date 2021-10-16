@@ -69,8 +69,24 @@ defmodule Core.Pools.Submission do
     |> cast(attrs, @fields)
   end
 
-  def live?(%{schedule_start: schedule_start, schedule_end: schedule_end}) do
-    not future?(schedule_start) && not past?(schedule_end)
+  def published_status(submission) do
+    if closed?(submission) do
+      :closed
+    else
+      if scheduled?(submission) do
+        :scheduled
+      else
+        :online
+      end
+    end
+  end
+
+  defp closed?(%{schedule_end: schedule_end}) do
+    past?(schedule_end)
+  end
+
+  defp scheduled?(%{schedule_start: schedule_start}) do
+    future?(schedule_start)
   end
 
   defp past?(nil), do: false

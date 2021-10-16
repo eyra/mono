@@ -12,35 +12,34 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:178 bundles/link/lib/card.ex:229
-#: bundles/link/lib/dashboard.ex:85
+#: bundles/link/lib/card.ex:235
 msgid "status.accepted.label"
 msgstr "Online"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:172 bundles/link/lib/card.ex:223
+#: bundles/link/lib/card.ex:170 bundles/link/lib/card.ex:223
 #: bundles/link/lib/dashboard.ex:79
 msgid "status.idle.label"
 msgstr "Concept"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:175 bundles/link/lib/card.ex:226
+#: bundles/link/lib/card.ex:173 bundles/link/lib/card.ex:226
 #: bundles/link/lib/dashboard.ex:82
 msgid "status.submitted.label"
-msgstr "Published"
+msgstr "Submitted"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:101
+#: bundles/link/lib/dashboard.ex:105
 msgid "incomplete.forms.message"
 msgstr "Some required fields are not filled in yet"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:99
+#: bundles/link/lib/dashboard.ex:103
 msgid "ready.for.submission.message"
-msgstr "Ready to publish campaign to pool administrator"
+msgstr "All required fields are filled, you can submit this campaign"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:105
+#: bundles/link/lib/dashboard.ex:109
 msgid "waiting.for.coordinator.message"
 msgstr "Waiting for the pool administrator to publish your campaign in the marketplace"
 
@@ -75,71 +74,99 @@ msgid "retract.success.title"
 msgstr "Campaign offline"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:150
+#: bundles/link/lib/card.ex:148
 msgid "reward.title"
 msgstr "Reward"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:53
+#: bundles/link/lib/pool/submission_page.ex:53
 msgid "byline"
 msgstr "Updated %{timestamp}"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:139
+#: bundles/link/lib/pool/submission_page.ex:132
 msgid "retract.admin.success.text"
-msgstr "The campaign is no longer visible for participants in the marketplace."
+msgstr "The campaign is no longer open or scheduled for participation in the marketplace."
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:138
+#: bundles/link/lib/pool/submission_page.ex:131
 msgid "retract.admin.success.title"
 msgstr "Campaign offline"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:123
+#: bundles/link/lib/pool/submission_page.ex:116
 msgid "accept.error.text"
 msgstr "Some required fields are not filled in correctly."
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:122
+#: bundles/link/lib/pool/submission_page.ex:115
 msgid "accept.error.title"
 msgstr "Complete the form"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:116
+#: bundles/link/lib/pool/submission_page.ex:109
 msgid "accept.success.text"
-msgstr "The campaign is visible for participants in the marketplace."
+msgstr "The campaign is open or scheduled for participation in the marketplace."
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:115
+#: bundles/link/lib/pool/submission_page.ex:108
 msgid "accept.success.title"
-msgstr "Campaign online"
+msgstr "Campaign published"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:199
+#: bundles/link/lib/pool/views/submission_view.ex:199
 msgid "reward.value.label"
 msgstr "Credits"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:198
+#: bundles/link/lib/pool/views/submission_view.ex:198
 msgid "reward.label"
 msgstr "Reward"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:125
+#: bundles/link/lib/pool/views/submission_view.ex:125
 msgid "schedule.end.label"
 msgstr "Offline after"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:115
+#: bundles/link/lib/pool/views/submission_view.ex:115
 msgid "schedule.start.label"
 msgstr "Online on"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:203
+#: bundles/link/lib/pool/views/submission_view.ex:203
 msgid "schedule.description"
 msgstr "Scheduling is optional. If you publish a campaign without scheduling, it is immediately visible in the marketplace. You can retract a published campaign at any moment in time."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:202
+#: bundles/link/lib/pool/views/submission_view.ex:202
 msgid "schedule.title"
 msgstr "Schedule"
+
+#, elixir-format
+#: bundles/link/lib/card.ex:179 bundles/link/lib/card.ex:232
+#: bundles/link/lib/dashboard.ex:88
+msgid "status.accepted.closed.label"
+msgstr "Closed"
+
+#, elixir-format
+#: bundles/link/lib/card.ex:178 bundles/link/lib/card.ex:231
+#: bundles/link/lib/dashboard.ex:87
+msgid "status.accepted.online.label"
+msgstr "Online"
+
+#, elixir-format
+#: bundles/link/lib/card.ex:177 bundles/link/lib/card.ex:230
+#: bundles/link/lib/dashboard.ex:86
+msgid "status.accepted.scheduled.label"
+msgstr "Scheduled"
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:119
+msgid "accepted.closed.message"
+msgstr "This campaign is closed"
+
+#, elixir-format, fuzzy
+#: bundles/link/lib/dashboard.ex:113
+msgid "accepted.scheduled.message"
+msgstr "This campaign is scheduled for participation"
