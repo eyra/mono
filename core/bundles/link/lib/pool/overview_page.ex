@@ -1,4 +1,4 @@
-defmodule Link.Pool.Overview do
+defmodule Link.Pool.OverviewPage do
   @moduledoc """
    The student overview screen.
   """
@@ -7,7 +7,7 @@ defmodule Link.Pool.Overview do
 
   import CoreWeb.Gettext
 
-  alias Link.Pool.Form.{Students, Campaigns}
+  alias Link.Pool.{StudentsView, CampaignsView}
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent}
@@ -38,7 +38,7 @@ defmodule Link.Pool.Overview do
       %{
         id: :students,
         title: dgettext("link-studentpool", "tabbar.item.students"),
-        component: Students,
+        component: StudentsView,
         props: nil,
         type: :fullpage,
         active: initial_tab === :students
@@ -46,7 +46,7 @@ defmodule Link.Pool.Overview do
       %{
         id: :campaigns,
         title: dgettext("link-studentpool", "tabbar.item.campaigns"),
-        component: Campaigns,
+        component: CampaignsView,
         props: nil,
         type: :fullpage,
         active: initial_tab === :campaigns

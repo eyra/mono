@@ -1,4 +1,4 @@
-defmodule Link.Pool.Form.AdminSubmissionCriteria do
+defmodule Link.Pool.SubmissionCriteriaView do
   use CoreWeb.LiveForm
 
   alias Core.Enums.{StudyYears, StudyProgramCodes}

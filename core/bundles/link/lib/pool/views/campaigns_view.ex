@@ -1,4 +1,4 @@
-defmodule Link.Pool.Form.Campaigns do
+defmodule Link.Pool.CampaignsView do
   use CoreWeb.UI.LiveComponent
 
   import Frameworks.Utility.Guards
@@ -127,7 +127,7 @@ defmodule Link.Pool.Form.Campaigns do
     image = %{type: :catalog, info: image_info}
 
     %{
-      path: Routes.live_path(socket, Link.Pool.Submission, submission_id),
+      path: Routes.live_path(socket, Link.Pool.SubmissionPage, submission_id),
       title: title,
       subtitle: subtitle || "<no subtitle>",
       tag: tag,

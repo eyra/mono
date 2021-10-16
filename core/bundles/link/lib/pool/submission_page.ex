@@ -1,4 +1,4 @@
-defmodule Link.Pool.Submission do
+defmodule Link.Pool.SubmissionPage do
   @moduledoc """
    The submission page for a campaign.
   """
@@ -19,8 +19,8 @@ defmodule Link.Pool.Submission do
   alias CoreWeb.UI.Navigation.ActionBar
   alias CoreWeb.UI.Member
 
-  alias Link.Pool.Form.AdminSubmission, as: SubmissionForm
-  alias Link.Pool.Form.AdminSubmissionCriteria, as: SubmissionCriteriaForm
+  alias Link.Pool.SubmissionView, as: SubmissionForm
+  alias Link.Pool.SubmissionCriteriaView, as: SubmissionCriteriaForm
 
   alias EyraUI.Text.{Title1, SubHead}
 

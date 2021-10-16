@@ -25,7 +25,7 @@ defmodule Link.Survey.Content do
   alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent, TabbarFooter}
   alias Link.Survey.Monitor
   alias Link.Survey.Form, as: ToolForm
-  alias Link.Pool.Form.ResearcherSubmission, as: SubmissionForm
+  alias Link.Pool.CampaignSubmissionView, as: SubmissionForm
   import Core.ImageCatalog, only: [image_catalog: 0]
 
   data(tool_id, :any)
