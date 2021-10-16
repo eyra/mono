@@ -57,7 +57,7 @@ msgstr "Complete your campaign"
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:240
 msgid "submit.success.text"
-msgstr "The pool administrator has been informed. You will be notified when the campaign is put online."
+msgstr "Thank you for your submission. The pool administrator will review your campaign and schedule it for publication in the marketplace."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:239
@@ -67,7 +67,7 @@ msgstr "Campaign submitted"
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:265
 msgid "retract.success.text"
-msgstr "Your campaign is no longer visible for participants in the marketplace."
+msgstr "Your campaign is no longer visible for the pool administrator and in the marketplace of the participants."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:264
@@ -117,7 +117,7 @@ msgstr "Campaign online"
 #, elixir-format
 #: bundles/link/lib/pool/form/admin_submission.ex:199
 msgid "reward.value.label"
-msgstr "Reward in study credits"
+msgstr "Credits"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/admin_submission.ex:198
@@ -127,17 +127,17 @@ msgstr "Reward"
 #, elixir-format
 #: bundles/link/lib/pool/form/admin_submission.ex:125
 msgid "schedule.end.label"
-msgstr "Deadline"
+msgstr "Offline after"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/admin_submission.ex:115
 msgid "schedule.start.label"
-msgstr "Start"
+msgstr "Online on"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/admin_submission.ex:203
 msgid "schedule.description"
-msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+msgstr "Scheduling is optional. If you publish a campaign without scheduling, it is immediately visible in the marketplace. You can retract a published campaign at any moment in time."
 
 #, elixir-format
 #: bundles/link/lib/pool/form/admin_submission.ex:202

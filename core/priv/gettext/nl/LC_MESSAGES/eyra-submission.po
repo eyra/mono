@@ -57,7 +57,7 @@ msgstr "Maak je campagne compleet"
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:240
 msgid "submit.success.text"
-msgstr "De beheerder van de pool is op de hoogte gebracht. Zodra de campagne online staat krijg je een bericht."
+msgstr "Bedankt voor het indienen. De poolbeheerder zal je campagne bekijken en deze inplannen voor publicatie in de marktplaats."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:239
@@ -67,7 +67,7 @@ msgstr "Campagne ingediend"
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:265
 msgid "retract.success.text"
-msgstr "Jouw campagne is niet meer zichtbaar voor de deelnemers in de marktplaats."
+msgstr "Jouw campagne is niet meer zichtbaar voor de poolbeheerder en in de marktplaats van de deelnemers."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/content.ex:264
@@ -117,7 +117,7 @@ msgstr "Campagne online"
 #, elixir-format
 #: bundles/link/lib/pool/form/admin_submission.ex:199
 msgid "reward.value.label"
-msgstr "Beloning in studie credits"
+msgstr "Credits"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/admin_submission.ex:198
@@ -127,17 +127,17 @@ msgstr "Beloning"
 #, elixir-format
 #: bundles/link/lib/pool/form/admin_submission.ex:125
 msgid "schedule.end.label"
-msgstr "Deadline"
+msgstr "Offline na"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/admin_submission.ex:115
 msgid "schedule.start.label"
-msgstr "Start"
+msgstr "Online op"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/admin_submission.ex:203
 msgid "schedule.description"
-msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+msgstr "Het plannen van een campagne is optioneel. Als je een campagne online zet, zonder planning, dan is deze meteen beschikbaar op de marktplaats. Je kunt een campagne die online staat op elk moment weer terugtrekken."
 
 #, elixir-format
 #: bundles/link/lib/pool/form/admin_submission.ex:202
