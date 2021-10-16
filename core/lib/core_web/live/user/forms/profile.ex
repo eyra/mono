@@ -7,7 +7,7 @@ defmodule CoreWeb.User.Forms.Profile do
   alias Core.Accounts.UserProfileEdit
 
   alias EyraUI.Text.{Title2}
-  alias EyraUI.Form.{Form, TextInput, UrlInput, PhotoInput}
+  alias EyraUI.Form.{Form, TextInput, PhotoInput}
 
   prop(props, :any, required: true)
 
@@ -111,7 +111,6 @@ defmodule CoreWeb.User.Forms.Profile do
 
             <div :if={{@user.researcher}} >
               <TextInput field={{:title}} label_text={{dgettext("eyra-account", "professionaltitle.label")}} />
-              <UrlInput field={{:url}} label_text={{dgettext("eyra-account", "website.label")}} />
             </div>
           </Form>
         </FormArea>

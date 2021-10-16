@@ -82,11 +82,6 @@ msgid "professionaltitle.label"
 msgstr "Functietitel"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:114
-msgid "website.label"
-msgstr "Website"
-
-#, elixir-format
 #: lib/core_web/live/user/settings.ex:46
 msgid "push.registration.button"
 msgstr "Activeren"
@@ -127,40 +122,40 @@ msgid "features.description"
 msgstr "Enkele studies gebruiken specifieke selectie criteria. Als je de onderstaande optionele kenmerken invult kun je meedoen aan studies waarvoor jouw kenmerken geselecteerd zijn."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:151
+#: bundles/link/lib/pool/form/researcher_submission.ex:153
 #: lib/core_web/live/user/forms/features.ex:99
 msgid "features.dominanthand.title"
 msgstr "Voorkeurshand"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:143
+#: bundles/link/lib/pool/form/researcher_submission.ex:145
 #: lib/core_web/live/user/forms/features.ex:91
 msgid "features.gender.title"
 msgstr "Geslacht"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:147
+#: bundles/link/lib/pool/form/researcher_submission.ex:149
 #: lib/core_web/live/user/forms/features.ex:95
 msgid "features.nativelanguage.title"
 msgstr "Eerste taal"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:155
+#: bundles/link/lib/pool/form/researcher_submission.ex:157
 msgid "features.study.title"
 msgstr "Studenten"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:139
+#: bundles/link/lib/pool/form/researcher_submission.ex:141
 msgid "features.title"
 msgstr "Inclusiecriteria"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:156
+#: bundles/link/lib/pool/form/researcher_submission.ex:158
 msgid "feature.study.content.description"
 msgstr "Selecteer welke studenten (BK: bedrijfskunde, IBA: international business administration) mee mogen doen aan de studie. Geen selectie betekend dat alle studenten mee mogen doen met de studie."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:140
+#: bundles/link/lib/pool/form/researcher_submission.ex:142
 msgid "features.content.description"
 msgstr "Selecteer hieronder de inclusiecriteria voor je studie. Geen selectie betekend dat alle studenten in de pool mee mogen doen met de studie."
 
@@ -205,13 +200,18 @@ msgid "login.surf.message.surfconext.href"
 msgstr "https://wiki.surfnet.nl/display/conextsupport/Inloggen+via+SURFconext"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission_criteria.ex:128
-#: bundles/link/lib/pool/form/researcher_submission.ex:163
+#: bundles/link/lib/pool/form/admin_submission_criteria.ex:111
+#: bundles/link/lib/pool/form/researcher_submission.ex:165
 msgid "features.study.program"
 msgstr "Opleiding"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission_criteria.ex:124
-#: bundles/link/lib/pool/form/researcher_submission.ex:159
+#: bundles/link/lib/pool/form/admin_submission_criteria.ex:107
+#: bundles/link/lib/pool/form/researcher_submission.ex:161
 msgid "features.study.year"
 msgstr "Leerjaar"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:315
+msgid "ehtical.code.label"
+msgstr "Code"

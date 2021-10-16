@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:89
+#: bundles/link/lib/pool/form/students.ex:92
 #: bundles/link/lib/pool/overview.ex:40
 msgid "tabbar.item.students"
 msgstr ""
@@ -27,37 +27,37 @@ msgid "title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:85
+#: bundles/link/lib/pool/form/students.ex:88
 msgid "students.empty.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:84
+#: bundles/link/lib/pool/form/students.ex:87
 msgid "students.empty.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/campaigns.ex:71
+#: bundles/link/lib/pool/form/campaigns.ex:72
 msgid "campaigns.empty.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/campaigns.ex:70
+#: bundles/link/lib/pool/form/campaigns.ex:71
 msgid "campaigns.empty.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:69
+#: bundles/link/lib/pool/form/students.ex:72
 msgid "student.tag.complete"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:70
+#: bundles/link/lib/pool/form/students.ex:73
 msgid "student.tag.incomplete"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/campaigns.ex:63
+#: bundles/link/lib/pool/form/campaigns.ex:64
 msgid "accepted.title"
 msgstr ""
 
@@ -72,17 +72,17 @@ msgid "status.submitted.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/campaigns.ex:57
+#: bundles/link/lib/pool/form/campaigns.ex:58
 msgid "submitted.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/campaigns.ex:111
+#: bundles/link/lib/pool/form/campaigns.ex:116
 msgid "spots.available"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:183
+#: bundles/link/lib/pool/submission.ex:234
 msgid "submission.title"
 msgstr ""
 

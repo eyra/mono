@@ -81,11 +81,6 @@ msgid "professionaltitle.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:114
-msgid "website.label"
-msgstr ""
-
-#, elixir-format
 #: lib/core_web/live/user/settings.ex:46
 msgid "push.registration.button"
 msgstr ""
@@ -126,40 +121,40 @@ msgid "features.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:151
+#: bundles/link/lib/pool/form/researcher_submission.ex:153
 #: lib/core_web/live/user/forms/features.ex:99
 msgid "features.dominanthand.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:143
+#: bundles/link/lib/pool/form/researcher_submission.ex:145
 #: lib/core_web/live/user/forms/features.ex:91
 msgid "features.gender.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:147
+#: bundles/link/lib/pool/form/researcher_submission.ex:149
 #: lib/core_web/live/user/forms/features.ex:95
 msgid "features.nativelanguage.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:155
+#: bundles/link/lib/pool/form/researcher_submission.ex:157
 msgid "features.study.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:139
+#: bundles/link/lib/pool/form/researcher_submission.ex:141
 msgid "features.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:156
+#: bundles/link/lib/pool/form/researcher_submission.ex:158
 msgid "feature.study.content.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/researcher_submission.ex:140
+#: bundles/link/lib/pool/form/researcher_submission.ex:142
 msgid "features.content.description"
 msgstr ""
 
@@ -204,13 +199,18 @@ msgid "login.surf.message.surfconext.href"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission_criteria.ex:128
-#: bundles/link/lib/pool/form/researcher_submission.ex:163
+#: bundles/link/lib/pool/form/admin_submission_criteria.ex:111
+#: bundles/link/lib/pool/form/researcher_submission.ex:165
 msgid "features.study.program"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission_criteria.ex:124
-#: bundles/link/lib/pool/form/researcher_submission.ex:159
+#: bundles/link/lib/pool/form/admin_submission_criteria.ex:107
+#: bundles/link/lib/pool/form/researcher_submission.ex:161
 msgid "features.study.year"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:315
+msgid "ehtical.code.label"
 msgstr ""

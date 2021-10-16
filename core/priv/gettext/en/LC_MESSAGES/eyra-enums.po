@@ -205,3 +205,28 @@ msgstr "Dutch"
 #: lib/core/enums/native_languages.ex:5
 msgid "native_languages.other"
 msgstr "Other"
+
+#, elixir-format, fuzzy
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.data_science"
+msgstr "Data science"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.digital_innovation"
+msgstr "Digital innovation"
+
+#, elixir-format, fuzzy
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.econometrics"
+msgstr "Econometrics"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.finance"
+msgstr "Finance"
+
+#, elixir-format, fuzzy
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.operations_analytics"
+msgstr "Operations analytics"

@@ -204,3 +204,28 @@ msgstr ""
 #: lib/core/enums/native_languages.ex:5
 msgid "native_languages.other"
 msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.data_science"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.digital_innovation"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.econometrics"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.finance"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.operations_analytics"
+msgstr ""

@@ -12,6 +12,12 @@ defmodule CoreWeb.UI.ContentTag do
 
   prop(vm, :map, required: true)
 
+  def bg_color(%{type: :delete}), do: "bg-delete"
+  def bg_color(%{type: :warning}), do: "bg-warning"
+  def bg_color(%{type: :success}), do: "bg-success"
+  def bg_color(%{type: :primary}), do: "bg-primary"
+  def bg_color(%{type: :secondary}), do: "bg-secondary"
+  def bg_color(%{type: :tertiary}), do: "bg-tertiary"
   def bg_color(%{type: type}), do: "bg-#{type}"
 
   def text_color(%{type: :tertiary}), do: "text-grey1"

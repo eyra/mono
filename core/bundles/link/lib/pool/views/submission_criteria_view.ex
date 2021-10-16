@@ -1,4 +1,4 @@
-defmodule Link.Pool.Form.AdminSubmissionCriteria do
+defmodule Link.Pool.SubmissionCriteriaView do
   use CoreWeb.LiveForm
 
   alias Core.Enums.{StudyYears, StudyProgramCodes}
@@ -106,7 +106,7 @@ defmodule Link.Pool.Form.AdminSubmissionCriteria do
       <ContentArea>
         <Title3 margin="mb-5 sm:mb-8">{{dgettext("eyra-account", "features.study.year")}}</Title3>
         <Selector id={{:study_year}} items={{ @study_year_labels }} type={{:radio}} parent={{ %{type: __MODULE__, id: @id} }} />
-        <Spacing value="XL" />
+        <Spacing value="L" />
 
         <Title3 margin="mb-5 sm:mb-8">{{dgettext("eyra-account", "features.study.program")}}</Title3>
         <Selector id={{:study_program}} items={{ @study_program_labels }} type={{:checkbox}} parent={{ %{type: __MODULE__, id: @id} }} opts="max-w-form" />

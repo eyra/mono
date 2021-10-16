@@ -9,7 +9,7 @@ defmodule Core.Pools.ReviewSubmission do
       title: dgettext("eyra-nextaction", "review.submission.title"),
       description: dgettext("eyra-nextaction", "review.submission.description"),
       cta: dgettext("eyra-nextaction", "review.submission.cta"),
-      url: url_resolver.(Link.Pool.Overview, tab: "campaigns")
+      url: url_resolver.(Link.Pool.OverviewPage, tab: "campaigns")
     }
   end
 end

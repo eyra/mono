@@ -11,6 +11,6 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:113
+#: bundles/link/lib/marketplace.ex:112
 msgid "study.all.title"
 msgstr ""

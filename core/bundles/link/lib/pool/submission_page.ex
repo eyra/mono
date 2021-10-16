@@ -1,4 +1,4 @@
-defmodule Link.Pool.Submission do
+defmodule Link.Pool.SubmissionPage do
   @moduledoc """
    The submission page for a campaign.
   """
@@ -6,7 +6,6 @@ defmodule Link.Pool.Submission do
   use CoreWeb.MultiFormAutoSave
   use CoreWeb.Layouts.Workspace.Component, :pool_submission
   use CoreWeb.UI.Dialog
-  use CoreWeb.UI.Responsive.Viewport
 
   import CoreWeb.Gettext
 
@@ -16,11 +15,11 @@ defmodule Link.Pool.Submission do
   alias Core.Pools.{Submissions, Submission}
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias CoreWeb.UI.Navigation.ActionBar
+  alias CoreWeb.UI.Navigation.ButtonBar
   alias CoreWeb.UI.Member
 
-  alias Link.Pool.Form.AdminSubmission, as: SubmissionForm
-  alias Link.Pool.Form.AdminSubmissionCriteria, as: SubmissionCriteriaForm
+  alias Link.Pool.SubmissionView, as: SubmissionForm
+  alias Link.Pool.SubmissionCriteriaView, as: SubmissionCriteriaForm
 
   alias EyraUI.Text.{Title1, SubHead}
 
@@ -31,6 +30,7 @@ defmodule Link.Pool.Submission do
   data(validate?, :any)
   data(preview_path, :any)
   data(member, :any)
+  data(buttons, :any)
 
   @impl true
   def mount(%{"id" => submission_id}, _session, socket) do
@@ -71,15 +71,8 @@ defmodule Link.Pool.Submission do
         hide_flash_timer: nil,
         dialog: nil
       )
-      |> assign_viewport()
-      |> assign_breakpoint()
       |> update_menus()
     }
-  end
-
-  @impl true
-  def handle_resize(socket) do
-    socket |> update_menus()
   end
 
   @impl true
@@ -166,63 +159,34 @@ defmodule Link.Pool.Submission do
 
     %{
       accept: %{
-        label: %{
-          action: accept_action,
-          face: %{
-            type: :primary,
-            label: dgettext("link-ui", "submit.button"),
-            bg_color: "bg-success"
-          }
-        },
-        icon: %{
-          action: accept_action,
-          face: %{type: :icon, icon: :submit, alt: dgettext("link-ui", "submit.button")}
+        action: accept_action,
+        face: %{
+          type: :primary,
+          label: dgettext("link-ui", "submit.button"),
+          bg_color: "bg-success"
         }
       },
       preview: %{
-        label: %{
-          action: preview_action,
-          face: %{
-            type: :primary,
-            label: dgettext("link-ui", "preview.button"),
-            bg_color: "bg-primary"
-          }
-        },
-        icon: %{
-          action: preview_action,
-          face: %{type: :icon, icon: :preview, alt: dgettext("link-ui", "preview.button")}
+        action: preview_action,
+        face: %{
+          type: :primary,
+          label: dgettext("link-ui", "preview.button"),
+          bg_color: "bg-primary"
         }
       },
       retract: %{
-        icon: %{
-          action: retract_action,
-          face: %{type: :icon, icon: :retract, alt: dgettext("link-ui", "retract.button")}
-        }
+        action: retract_action,
+        face: %{type: :icon, icon: :retract, alt: dgettext("link-ui", "retract.button")}
       }
     }
   end
 
-  defp create_actions(%{accepted?: accepted?, breakpoint: breakpoint} = assigns) do
-    create_actions(action_map(assigns), breakpoint, accepted?)
+  defp create_actions(%{accepted?: accepted?} = assigns) do
+    create_actions(action_map(assigns), accepted?)
   end
 
-  defp create_actions(_, {:unknown, _}, _), do: []
-
-  defp create_actions(%{accept: accept, preview: preview}, bp, false) do
-    accept = value(bp, accept.icon, sm: %{0 => accept.label})
-
-    preview = value(bp, preview.icon, sm: %{0 => preview.label})
-
-    [accept, preview]
-  end
-
-  defp create_actions(%{preview: preview, retract: retract}, bp, true) do
-    preview = value(bp, preview.icon, sm: %{0 => preview.label})
-
-    retract = retract.icon
-
-    [preview, retract]
-  end
+  defp create_actions(%{accept: accept, preview: preview}, false), do: [accept, preview]
+  defp create_actions(%{preview: preview, retract: retract}, true), do: [preview, retract]
 
   defp show_dialog?(nil), do: false
   defp show_dialog?(_), do: true
@@ -239,9 +203,7 @@ defmodule Link.Pool.Submission do
             <Dialog vm={{ @dialog }} />
           </div>
         </div>
-        <ActionBar right_bar_buttons={{ create_actions(assigns) }} more_buttons={{ [] }} hide_seperator={{ true }} />
-        <div phx-hook="ViewportResize" phx-click="reset_focus">
-          <MarginY id={{:actionbar}} />
+        <div phx-click="reset_focus">
           <ContentArea>
             <MarginY id={{:page_top}} />
             <Member :if={{ @member }} vm={{ @member }} />
@@ -256,6 +218,10 @@ defmodule Link.Pool.Submission do
           <Spacing value="XL" />
           <SubmissionForm id={{:submission_form}} props={{ %{entity_id: @submission_id, validate?: @validate?} }}/>
         </div>
+        <ContentArea>
+          <MarginY id={{:button_bar_top}} />
+          <ButtonBar buttons={{create_actions(assigns)}} />
+        </ContentArea>
       </Workspace>
     """
   end
@@ -286,10 +252,10 @@ defmodule Link.Pool.Submission do
       button_large: %{
         action: action,
         face: %{
-          type: :primary,
+          type: :secondary,
           label: dgettext("eyra-admin", "ticket.mailto.button"),
-          bg_color: "bg-tertiary",
-          text_color: "text-grey1"
+          border_color: "border-white",
+          text_color: "text-white"
         }
       },
       button_small: %{

@@ -83,7 +83,7 @@ msgid "dashboard.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:95
+#: bundles/link/lib/marketplace.ex:94
 msgid "marketplace.title"
 msgstr ""
 
@@ -98,7 +98,7 @@ msgid "menu.item.payments"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:104
+#: bundles/link/lib/onboarding/wizard.ex:103
 #: lib/core_web/live/user/forms/features.ex:87 lib/core_web/live/user/profile.ex:108
 msgid "tabbar.item.features"
 msgstr ""
@@ -109,13 +109,13 @@ msgid "tabbar.item.profile"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:93
+#: bundles/link/lib/onboarding/wizard.ex:92
 #: lib/core_web/live/user/forms/study.ex:73 lib/core_web/live/user/profile.ex:97
 msgid "tabbar.item.study"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:105
+#: bundles/link/lib/onboarding/wizard.ex:104
 #: lib/core_web/live/user/profile.ex:109
 msgid "tabbar.item.features.forward"
 msgstr ""
@@ -126,7 +126,7 @@ msgid "tabbar.item.profile.forward"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:94 lib/core_web/live/user/profile.ex:98
+#: bundles/link/lib/onboarding/wizard.ex:93 lib/core_web/live/user/profile.ex:98
 msgid "tabbar.item.study.forward"
 msgstr ""
 
@@ -141,12 +141,12 @@ msgid "menu.item.debug"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:83
+#: bundles/link/lib/onboarding/wizard.ex:82
 msgid "tabbar.item.welcome"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:84
+#: bundles/link/lib/onboarding/wizard.ex:83
 msgid "tabbar.item.welcome.forward"
 msgstr ""
 
@@ -168,17 +168,17 @@ msgid "cancel.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:211
+#: bundles/link/lib/survey/web/content.ex:212
 msgid "delete.confirm.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:210
+#: bundles/link/lib/survey/web/content.ex:211
 msgid "delete.confirm.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:212
+#: bundles/link/lib/survey/web/content.ex:213
 msgid "delete.confirm.label"
 msgstr ""
 
@@ -189,12 +189,12 @@ msgid "ok.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:277
+#: bundles/link/lib/survey/web/content.ex:278
 msgid "feature.unavailable.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:276
+#: bundles/link/lib/survey/web/content.ex:277
 msgid "feature.unavailable.title"
 msgstr ""
 
@@ -211,33 +211,33 @@ msgid "menu.item.support"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:87 lib/core_web/ui/timestamp.ex:90
-#: lib/core_web/ui/timestamp.ex:95
+#: lib/core_web/ui/timestamp.ex:86 lib/core_web/ui/timestamp.ex:89
+#: lib/core_web/ui/timestamp.ex:94
 msgid "timestamp.at"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:87
+#: lib/core_web/ui/timestamp.ex:86
 msgid "timestamp.today"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:90
+#: lib/core_web/ui/timestamp.ex:89
 msgid "timestamp.yesterday"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:83
+#: lib/core_web/live/admin/ticket.ex:97
 msgid "close.confirm.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:82
+#: lib/core_web/live/admin/ticket.ex:96
 msgid "close.confirm.text"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:81
+#: lib/core_web/live/admin/ticket.ex:95
 msgid "close.confirm.title"
 msgstr ""
 

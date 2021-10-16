@@ -12,65 +12,65 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:177 bundles/link/lib/card.ex:228
-#: bundles/link/lib/dashboard.ex:101 bundles/link/lib/dashboard.ex:165
+#: bundles/link/lib/card.ex:178 bundles/link/lib/card.ex:229
+#: bundles/link/lib/dashboard.ex:85
 msgid "status.accepted.label"
 msgstr "Online"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:171 bundles/link/lib/card.ex:222
-#: bundles/link/lib/dashboard.ex:95 bundles/link/lib/dashboard.ex:159
+#: bundles/link/lib/card.ex:172 bundles/link/lib/card.ex:223
+#: bundles/link/lib/dashboard.ex:79
 msgid "status.idle.label"
 msgstr "Concept"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:174 bundles/link/lib/card.ex:225
-#: bundles/link/lib/dashboard.ex:98 bundles/link/lib/dashboard.ex:162
+#: bundles/link/lib/card.ex:175 bundles/link/lib/card.ex:226
+#: bundles/link/lib/dashboard.ex:82
 msgid "status.submitted.label"
 msgstr "Published"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:110 bundles/link/lib/dashboard.ex:174
+#: bundles/link/lib/dashboard.ex:101
 msgid "incomplete.forms.message"
 msgstr "Some required fields are not filled in yet"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:108 bundles/link/lib/dashboard.ex:172
+#: bundles/link/lib/dashboard.ex:99
 msgid "ready.for.submission.message"
 msgstr "Ready to publish campaign to pool administrator"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:114 bundles/link/lib/dashboard.ex:178
+#: bundles/link/lib/dashboard.ex:105
 msgid "waiting.for.coordinator.message"
 msgstr "Waiting for the pool administrator to publish your campaign in the marketplace"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:247
+#: bundles/link/lib/survey/web/content.ex:248
 msgid "submit.error.text"
 msgstr "Some required fields in your campaign are not filled in."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:246
+#: bundles/link/lib/survey/web/content.ex:247
 msgid "submit.error.title"
 msgstr "Complete your campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:239
+#: bundles/link/lib/survey/web/content.ex:240
 msgid "submit.success.text"
-msgstr "The pool administrator has been informed. You will be notified when the campaign is put online."
+msgstr "Thank you for your submission. The pool administrator will review your campaign and schedule it for publication in the marketplace."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:238
+#: bundles/link/lib/survey/web/content.ex:239
 msgid "submit.success.title"
 msgstr "Campaign submitted"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:264
+#: bundles/link/lib/survey/web/content.ex:265
 msgid "retract.success.text"
-msgstr "Your campaign is no longer visible for participants in the marketplace."
+msgstr "Your campaign is no longer visible for the pool administrator and in the marketplace of the participants."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:263
+#: bundles/link/lib/survey/web/content.ex:264
 msgid "retract.success.title"
 msgstr "Campaign offline"
 
@@ -80,66 +80,66 @@ msgid "reward.title"
 msgstr "Reward"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:42
+#: bundles/link/lib/pool/submission.ex:53
 msgid "byline"
 msgstr "Updated %{timestamp}"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:119
+#: bundles/link/lib/pool/submission.ex:139
 msgid "retract.admin.success.text"
 msgstr "The campaign is no longer visible for participants in the marketplace."
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:118
+#: bundles/link/lib/pool/submission.ex:138
 msgid "retract.admin.success.title"
 msgstr "Campaign offline"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:103
+#: bundles/link/lib/pool/submission.ex:123
 msgid "accept.error.text"
 msgstr "Some required fields are not filled in correctly."
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:102
+#: bundles/link/lib/pool/submission.ex:122
 msgid "accept.error.title"
 msgstr "Complete the form"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:96
+#: bundles/link/lib/pool/submission.ex:116
 msgid "accept.success.text"
 msgstr "The campaign is visible for participants in the marketplace."
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:95
+#: bundles/link/lib/pool/submission.ex:115
 msgid "accept.success.title"
 msgstr "Campaign online"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:186
+#: bundles/link/lib/pool/form/admin_submission.ex:199
 msgid "reward.value.label"
-msgstr "Reward in study credits"
+msgstr "Credits"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:185
+#: bundles/link/lib/pool/form/admin_submission.ex:198
 msgid "reward.label"
 msgstr "Reward"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:116
+#: bundles/link/lib/pool/form/admin_submission.ex:125
 msgid "schedule.end.label"
-msgstr "Deadline"
+msgstr "Offline after"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:111
+#: bundles/link/lib/pool/form/admin_submission.ex:115
 msgid "schedule.start.label"
-msgstr "Start"
+msgstr "Online on"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:190
+#: bundles/link/lib/pool/form/admin_submission.ex:203
 msgid "schedule.description"
-msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+msgstr "Scheduling is optional. If you publish a campaign without scheduling, it is immediately visible in the marketplace. You can retract a published campaign at any moment in time."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/admin_submission.ex:189
+#: bundles/link/lib/pool/form/admin_submission.ex:202
 msgid "schedule.title"
 msgstr "Schedule"

@@ -103,7 +103,7 @@ defmodule Link.Survey.Overview do
       banner_photo_url: profile.photo_url,
       banner_title: user.displayname,
       banner_subtitle: profile.title,
-      banner_url: profile.url,
+      banner_url: nil,
       image_id: image_id
     }
   end

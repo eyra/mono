@@ -23,7 +23,7 @@ defmodule GoogleSignIn do
 
     sso_info = %{
       researcher: true,
-      student: true,
+      student: false,
       email: Map.get(attrs, "email"),
       displayname: display_name,
       profile: %{

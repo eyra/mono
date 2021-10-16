@@ -32,36 +32,37 @@ msgid "onboarding.welcome.title"
 msgstr "Welcome %{member}"
 
 #, elixir-format
-#: bundles/link/lib/debug.ex:68
+#: bundles/link/lib/debug.ex:67
 msgid "debug.title"
 msgstr "Debug"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:209
+#: bundles/link/lib/survey/web/content.ex:210
 msgid "delete.confirm.campaign"
 msgstr "campaign"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:361
-#: bundles/link/lib/survey/web/content.ex:365 bundles/link/lib/survey/web/content.ex:371
+#: bundles/link/lib/survey/web/content.ex:368
+#: bundles/link/lib/survey/web/content.ex:372 bundles/link/lib/survey/web/content.ex:378
 msgid "delete.button"
 msgstr "Delete"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:154
-#: bundles/link/lib/pool/submission.ex:163 bundles/link/lib/survey/web/content.ex:347
-#: bundles/link/lib/survey/web/content.ex:351 bundles/link/lib/survey/web/content.ex:355
+#: bundles/link/lib/pool/submission.ex:187
+#: bundles/link/lib/pool/submission.ex:193 bundles/link/lib/survey/web/content.ex:352
+#: bundles/link/lib/survey/web/content.ex:358 bundles/link/lib/survey/web/content.ex:362
 msgid "preview.button"
 msgstr "Preview"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:149
-#: bundles/link/lib/survey/web/content.ex:337 bundles/link/lib/survey/web/content.ex:341
+#: bundles/link/lib/pool/submission.ex:173
+#: bundles/link/lib/pool/submission.ex:179 bundles/link/lib/survey/web/content.ex:338
+#: bundles/link/lib/survey/web/content.ex:344
 msgid "submit.button"
 msgstr "Publish"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:168
-#: bundles/link/lib/survey/web/content.ex:375
+#: bundles/link/lib/pool/submission.ex:199
+#: bundles/link/lib/survey/web/content.ex:382
 msgid "retract.button"
 msgstr "Unpublish"

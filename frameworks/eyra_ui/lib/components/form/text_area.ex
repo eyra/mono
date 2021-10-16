@@ -18,7 +18,7 @@ defmodule EyraUI.Form.TextArea do
         get={{Surface.Components.Form, form: form}}
         get={{target: target}}
       >
-        <Field form={{form}} field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}}>
+        <Field form={{form}} field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}} extra_space={{ false }}>
           <textarea
             id={{ input_id(form, @field) }}
             name={{ input_name(form, @field) }}

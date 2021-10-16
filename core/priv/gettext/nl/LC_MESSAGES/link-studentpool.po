@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:89
+#: bundles/link/lib/pool/form/students.ex:92
 #: bundles/link/lib/pool/overview.ex:40
 msgid "tabbar.item.students"
 msgstr "Studenten"
@@ -28,39 +28,39 @@ msgid "title"
 msgstr "Studentenpool"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:85
+#: bundles/link/lib/pool/form/students.ex:88
 msgid "students.empty.description"
 msgstr "Op dit moment zijn er nog geen studenten geregistreerd. Je wordt op de hoogte gesteld zodra er studenten zijn die zich  hebben aangemeld."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:84
+#: bundles/link/lib/pool/form/students.ex:87
 msgid "students.empty.title"
 msgstr "Hier vind je straks alle geregistreerde studenten."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/campaigns.ex:71
+#: bundles/link/lib/pool/form/campaigns.ex:72
 msgid "campaigns.empty.description"
-msgstr "Op dit moment zijn er nog geen onderzoeksstudies aangemeld voor de pool. Je wordt op de hoogte gesteld zodra er studies beschikbaar zijn."
+msgstr "Hier vind je straks de campagnes die onderzoekers in jouw pool beschikbaar willen stellen, om deelnemers te werven voor hun studie. Vervolgens kun je deze campagnes beschikbaar stellen in de marktplaats van de deelnemers die daarvoor in aanmerking komen."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/campaigns.ex:70
+#: bundles/link/lib/pool/form/campaigns.ex:71
 msgid "campaigns.empty.title"
-msgstr "Hier vind je straks alle studies uit deze pool."
+msgstr "Campagnes in jouw pool"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:69
+#: bundles/link/lib/pool/form/students.ex:72
 msgid "student.tag.complete"
 msgstr "Gereed"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:70
+#: bundles/link/lib/pool/form/students.ex:73
 msgid "student.tag.incomplete"
 msgstr "Onvolledig"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/campaigns.ex:63
+#: bundles/link/lib/pool/form/campaigns.ex:64
 msgid "accepted.title"
-msgstr "Live en ingeroosterd"
+msgstr "Online en ingeroosterd"
 
 #, elixir-format
 #: bundles/link/lib/pool/form/campaigns.ex:106
@@ -73,21 +73,21 @@ msgid "status.submitted.label"
 msgstr "Wachtend"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/campaigns.ex:57
+#: bundles/link/lib/pool/form/campaigns.ex:58
 msgid "submitted.title"
 msgstr "Wachtrij"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/campaigns.ex:111
+#: bundles/link/lib/pool/form/campaigns.ex:116
 msgid "spots.available"
 msgstr "%{open} van de %{total} plaatsen beschikbaar"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:183
+#: bundles/link/lib/pool/submission.ex:234
 msgid "submission.title"
 msgstr "Campagne"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: bundles/link/lib/pool/form/campaigns.ex:104
 msgid "status.live.label"
-msgstr "Live"
+msgstr "Online"
