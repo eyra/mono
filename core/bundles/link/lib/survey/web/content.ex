@@ -233,7 +233,7 @@ defmodule Link.Survey.Content do
     submission = Submissions.get!(submission_id)
 
     socket =
-      if Nodes.ready?(submission.content_node) do
+      if Nodes.parent_ready?(submission.content_node) do
         {:ok, _submission} = Submissions.update(submission, %{status: :submitted})
 
         title = dgettext("eyra-submission", "submit.success.title")
