@@ -18,7 +18,7 @@ defmodule CoreWeb.UI.ContentTag do
   def bg_color(%{type: :primary}), do: "bg-primary"
   def bg_color(%{type: :secondary}), do: "bg-secondary"
   def bg_color(%{type: :tertiary}), do: "bg-tertiary"
-  def bg_color(%{type: :disabled}), do: "bg-grey1"
+  def bg_color(%{type: :disabled}), do: "bg-grey3"
   def bg_color(%{type: type}), do: "bg-#{type}"
 
   def text_color(%{type: :tertiary}), do: "text-grey1"
@@ -30,7 +30,7 @@ defmodule CoreWeb.UI.ContentTag do
   def render(assigns) do
     ~H"""
     <div class="flex flex-row justify-center">
-      <div class="{{bg_color(@vm)}} {{text_color(@vm)}} flex-wrap text-center rounded-full {{class(@vm)}}" >
+      <div class="{{text_color(@vm)}} flex-wrap rounded-full {{bg_color(@vm)}} {{class(@vm)}}" >
         {{text(@vm)}}
       </div>
     </div>
