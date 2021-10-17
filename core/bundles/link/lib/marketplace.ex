@@ -8,6 +8,7 @@ defmodule Link.Marketplace do
   alias Systems.NextAction
 
   alias Core.ImageHelpers
+  alias Core.Accounts
   alias Core.Studies
   alias Core.Pools.{Submission, Criteria}
   alias Core.Survey.Tool, as: SurveyTool
@@ -34,7 +35,11 @@ defmodule Link.Marketplace do
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
     next_best_action = NextAction.Context.next_best_action(url_resolver(socket), user)
     user = socket.assigns[:current_user]
-    preload = [survey_tool: [promotion: [:submission]], lab_tool: [:promotion, :time_slots]]
+
+    preload = [
+      survey_tool: [promotion: [submission: [:criteria]]],
+      lab_tool: [:promotion, :time_slots]
+    ]
 
     subject_studies =
       user
@@ -81,8 +86,10 @@ defmodule Link.Marketplace do
          %{
            survey_tool: %{promotion: %{submission: %{criteria: submission_criteria} = submission}}
          },
-         %{assigns: %{current_user: %{features: user_features}}}
+         %{assigns: %{current_user: user}}
        ) do
+    user_features = Accounts.get_features(user)
+
     Submission.published_status(submission) == :online &&
       Criteria.eligitable?(submission_criteria, user_features)
   end
