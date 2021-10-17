@@ -5,6 +5,7 @@ defmodule Core.Pools.Submission do
   use Ecto.Schema
   use Core.Content.Node
 
+  import CoreWeb.Gettext
   import Ecto.Changeset
 
   alias Core.Pools.{Criteria, Pool}
@@ -102,5 +103,30 @@ defmodule Core.Pools.Submission do
 
   defp future?(schedule_start) do
     Timestamp.future?(schedule_start)
+  end
+
+  def get_tag(%{status: status} = submission) do
+    case status do
+      :idle ->
+        %{text: dgettext("eyra-submission", "status.idle.label"), type: :tertiary}
+
+      :submitted ->
+        %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary}
+
+      :accepted ->
+        case published_status(submission) do
+          :scheduled ->
+            %{
+              text: dgettext("eyra-submission", "status.accepted.scheduled.label"),
+              type: :tertiary
+            }
+
+          :online ->
+            %{text: dgettext("eyra-submission", "status.accepted.online.label"), type: :success}
+
+          :closed ->
+            %{text: dgettext("eyra-submission", "status.accepted.closed.label"), type: :disabled}
+        end
+    end
   end
 end

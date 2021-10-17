@@ -72,7 +72,7 @@ msgid "submitted.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:116
+#: bundles/link/lib/pool/views/campaigns_view.ex:130
 msgid "spots.available"
 msgstr ""
 
@@ -82,16 +82,16 @@ msgid "submission.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:106
+#: bundles/link/lib/pool/views/campaigns_view.ex:118
 msgid "status.accepted.closed.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:105
+#: bundles/link/lib/pool/views/campaigns_view.ex:112
 msgid "status.accepted.online.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:104
+#: bundles/link/lib/pool/views/campaigns_view.ex:106
 msgid "status.accepted.scheduled.label"
 msgstr ""

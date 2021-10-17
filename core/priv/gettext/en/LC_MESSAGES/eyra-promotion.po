@@ -53,7 +53,7 @@ msgid "choose.other.banner.photo.file"
 msgstr "Choose different photo"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:37 lib/core_web/view_model/card.ex:39
+#: bundles/link/lib/card.ex:38 lib/core_web/view_model/card.ex:39
 msgid "deadline.label"
 msgstr "Still %{days} days available"
 
@@ -80,8 +80,8 @@ msgid "devices.available.label"
 msgstr "Available on:"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:34 bundles/link/lib/card.ex:91
-#: bundles/link/lib/card.ex:149
+#: bundles/link/lib/card.ex:35 bundles/link/lib/card.ex:94
+#: bundles/link/lib/card.ex:162
 msgid "duration.title"
 msgstr "Duration"
 
@@ -127,13 +127,13 @@ msgid "keep.me.updated.title"
 msgstr "Curious for the results of this study?"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:36 bundles/link/lib/card.ex:92
-#: bundles/link/lib/card.ex:150 lib/core_web/view_model/card.ex:38
+#: bundles/link/lib/card.ex:37 bundles/link/lib/card.ex:95
+#: bundles/link/lib/card.ex:163 lib/core_web/view_model/card.ex:38
 msgid "open.spots.label"
 msgstr "%{count} open spots"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:35 lib/core_web/view_model/card.ex:37
+#: bundles/link/lib/card.ex:36 lib/core_web/view_model/card.ex:37
 msgid "reward.title"
 msgstr "Credits"
 

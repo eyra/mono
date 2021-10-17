@@ -12,34 +12,29 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:235
-msgid "status.accepted.label"
-msgstr "Online"
-
-#, elixir-format
-#: bundles/link/lib/card.ex:170 bundles/link/lib/card.ex:223
-#: bundles/link/lib/dashboard.ex:79
+#: bundles/link/lib/card.ex:241 bundles/link/lib/dashboard.ex:80
+#: bundles/link/lib/marketplace.ex:145
 msgid "status.idle.label"
 msgstr "Concept"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:173 bundles/link/lib/card.ex:226
-#: bundles/link/lib/dashboard.ex:82
+#: bundles/link/lib/card.ex:244 bundles/link/lib/dashboard.ex:83
+#: bundles/link/lib/marketplace.ex:148
 msgid "status.submitted.label"
 msgstr "Submitted"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:105
+#: bundles/link/lib/dashboard.ex:119 bundles/link/lib/marketplace.ex:184
 msgid "incomplete.forms.message"
 msgstr "Some required fields are not filled in yet"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:103
+#: bundles/link/lib/dashboard.ex:117 bundles/link/lib/marketplace.ex:182
 msgid "ready.for.submission.message"
 msgstr "All required fields are filled, you can submit this campaign"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:109
+#: bundles/link/lib/dashboard.ex:123 bundles/link/lib/marketplace.ex:188
 msgid "waiting.for.coordinator.message"
 msgstr "Waiting for the pool administrator to publish your campaign in the marketplace"
 
@@ -74,7 +69,7 @@ msgid "retract.success.title"
 msgstr "Campaign offline"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:148
+#: bundles/link/lib/card.ex:93 bundles/link/lib/card.ex:161
 msgid "reward.title"
 msgstr "Reward"
 
@@ -144,29 +139,29 @@ msgid "schedule.title"
 msgstr "Schedule"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:179 bundles/link/lib/card.ex:232
-#: bundles/link/lib/dashboard.ex:88
+#: bundles/link/lib/card.ex:259 bundles/link/lib/dashboard.ex:97
+#: bundles/link/lib/marketplace.ex:162
 msgid "status.accepted.closed.label"
 msgstr "Closed"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:178 bundles/link/lib/card.ex:231
-#: bundles/link/lib/dashboard.ex:87
+#: bundles/link/lib/card.ex:255 bundles/link/lib/dashboard.ex:94
+#: bundles/link/lib/marketplace.ex:159
 msgid "status.accepted.online.label"
 msgstr "Online"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:177 bundles/link/lib/card.ex:230
-#: bundles/link/lib/dashboard.ex:86
+#: bundles/link/lib/card.ex:250 bundles/link/lib/dashboard.ex:89
+#: bundles/link/lib/marketplace.ex:154
 msgid "status.accepted.scheduled.label"
 msgstr "Scheduled"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:119
+#: bundles/link/lib/dashboard.ex:137 bundles/link/lib/marketplace.ex:202
 msgid "accepted.closed.message"
 msgstr "This campaign is closed"
 
-#, elixir-format, fuzzy
-#: bundles/link/lib/dashboard.ex:113
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:128 bundles/link/lib/marketplace.ex:193
 msgid "accepted.scheduled.message"
 msgstr "This campaign is scheduled for participation"

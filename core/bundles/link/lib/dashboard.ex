@@ -5,6 +5,8 @@ defmodule Link.Dashboard do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :dashboard
 
+  alias Core.Content.Nodes
+  alias Core.ImageHelpers
   alias Core.Studies
   alias Core.Pools.Submission
   alias CoreWeb.UI.ContentListItem
@@ -12,8 +14,6 @@ defmodule Link.Dashboard do
 
   alias EyraUI.Text.{Title2}
   alias Systems.NextAction
-  alias Core.Content.Nodes
-  alias Core.ImageHelpers
 
   data(content_items, :any)
   data(current_user, :any)
@@ -74,31 +74,6 @@ defmodule Link.Dashboard do
     """
   end
 
-  defp get_tag(%{status: status} = submission) do
-    case status do
-      :idle ->
-        %{text: dgettext("eyra-submission", "status.idle.label"), type: :tertiary}
-
-      :submitted ->
-        %{text: dgettext("eyra-submission", "status.submitted.label"), type: :secondary}
-
-      :accepted ->
-        case Submission.published_status(submission) do
-          :scheduled ->
-            %{
-              text: dgettext("eyra-submission", "status.accepted.scheduled.label"),
-              type: :warning
-            }
-
-          :online ->
-            %{text: dgettext("eyra-submission", "status.accepted.online.label"), type: :success}
-
-          :closed ->
-            %{text: dgettext("eyra-submission", "status.accepted.closed.label"), type: :disabled}
-        end
-    end
-  end
-
   defp get_quick_summary(updated_at) do
     updated_at
     |> CoreWeb.UI.Timestamp.apply_timezone()
@@ -153,7 +128,7 @@ defmodule Link.Dashboard do
           }
         }
       }) do
-    tag = get_tag(submission)
+    tag = Submission.get_tag(submission)
 
     subtitle =
       get_subtitle(
@@ -190,7 +165,7 @@ defmodule Link.Dashboard do
           }
         }
       }) do
-    tag = get_tag(submission)
+    tag = Submission.get_tag(submission)
     subtitle = get_subtitle(submission, promotion_content_node, -1, -1)
     quick_summery = get_quick_summary(updated_at)
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
