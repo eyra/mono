@@ -28,8 +28,6 @@ defmodule Core.Survey.Tool do
     field(:ethical_approval, :boolean)
     field(:ethical_code, :string)
 
-    # field(:reward_currency, Ecto.Enum, values: [:eur, :usd, :gbp, :chf, :nok, :sek])
-    # field(:reward_value, :integer)
     field(:devices, {:array, Ecto.Enum}, values: Core.Enums.Devices.schema_values())
 
     has_many(:tasks, Task)

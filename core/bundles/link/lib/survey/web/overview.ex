@@ -17,7 +17,7 @@ defmodule Link.Survey.Overview do
   alias Core.Pools.Submissions
 
   alias Link.Marketplace.Card, as: CardVM
-  alias EyraUI.Card.PrimaryStudy
+  alias EyraUI.Card.DynamicStudy
   alias EyraUI.Grid.DynamicGrid
   alias EyraUI.Text.Title2
   alias EyraUI.Button.Action.Send
@@ -34,7 +34,7 @@ defmodule Link.Survey.Overview do
       |> Studies.list_owned_studies(preload: preload)
       # Temp: filter out labs
       |> Enum.filter(& &1.survey_tool)
-      |> Enum.map(&CardVM.primary_study_researcher(&1, socket))
+      |> Enum.map(&CardVM.study_researcher(&1, socket))
 
     {:ok,
      socket
@@ -132,8 +132,8 @@ defmodule Link.Survey.Overview do
             </div>
             <MarginY id={{:title2_bottom}} />
             <DynamicGrid>
-              <div :for={{ card <- @surveys  }} >
-                <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :edit, id: card.edit_id } }} />
+              <div :for={{ study <- @surveys  }} >
+                <DynamicStudy conn={{@socket}} path_provider={{Routes}} card={{study}} click_event_data={{%{action: :edit, id: study.edit_id } }} />
               </div>
             </DynamicGrid>
             <Spacing value="L" />

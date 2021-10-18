@@ -47,21 +47,25 @@ msgid "delete.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:187
-#: bundles/link/lib/pool/submission.ex:193 bundles/link/lib/survey/web/content.ex:352
-#: bundles/link/lib/survey/web/content.ex:358 bundles/link/lib/survey/web/content.ex:362
+#: bundles/link/lib/pool/submission_page.ex:173
+#: bundles/link/lib/survey/web/content.ex:352 bundles/link/lib/survey/web/content.ex:358
+#: bundles/link/lib/survey/web/content.ex:362
 msgid "preview.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:173
-#: bundles/link/lib/pool/submission.ex:179 bundles/link/lib/survey/web/content.ex:338
+#: bundles/link/lib/survey/web/content.ex:338
 #: bundles/link/lib/survey/web/content.ex:344
 msgid "submit.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:199
+#: bundles/link/lib/pool/submission_page.ex:179
 #: bundles/link/lib/survey/web/content.ex:382
 msgid "retract.button"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/submission_page.ex:165
+msgid "accept.button"
 msgstr ""

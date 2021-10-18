@@ -100,10 +100,24 @@ defmodule Link.Pool.CampaignsView do
           %{text: dgettext("link-studentpool", "status.submitted.label"), type: :delete}
 
         :accepted ->
-          if Submission.live?(submission) do
-            %{text: dgettext("link-studentpool", "status.live.label"), type: :success}
-          else
-            %{text: dgettext("link-studentpool", "status.scheduled.label"), type: :warning}
+          case Submission.published_status(submission) do
+            :scheduled ->
+              %{
+                text: dgettext("link-studentpool", "status.accepted.scheduled.label"),
+                type: :warning
+              }
+
+            :online ->
+              %{
+                text: dgettext("link-studentpool", "status.accepted.online.label"),
+                type: :success
+              }
+
+            :closed ->
+              %{
+                text: dgettext("link-studentpool", "status.accepted.closed.label"),
+                type: :disabled
+              }
           end
       end
 

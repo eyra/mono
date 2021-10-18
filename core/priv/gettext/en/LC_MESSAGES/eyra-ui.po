@@ -13,14 +13,14 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/debug.ex:6 bundles/link/lib/onboarding/wizard.ex:6
-#: bundles/link/lib/pool/submission.ex:6 bundles/link/lib/survey/web/content.ex:6
+#: bundles/link/lib/pool/submission_page.ex:6 bundles/link/lib/survey/web/content.ex:6
 #: lib/core_web/live/data_donation/content.ex:6 lib/core_web/live/user/profile.ex:6
 msgid "error.flash"
 msgstr "Something went wrong"
 
 #, elixir-format
 #: bundles/link/lib/debug.ex:6 bundles/link/lib/onboarding/wizard.ex:6
-#: bundles/link/lib/pool/submission.ex:6 bundles/link/lib/survey/web/content.ex:6
+#: bundles/link/lib/pool/submission_page.ex:6 bundles/link/lib/survey/web/content.ex:6
 #: lib/core_web/live/data_donation/content.ex:6 lib/core_web/live/user/profile.ex:6
 msgid "saved.info.flash"
 msgstr "Saved"
@@ -77,7 +77,7 @@ msgid "dashboard.title"
 msgstr "Dashboard"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:94
+#: bundles/link/lib/marketplace.ex:98
 msgid "marketplace.title"
 msgstr "Marketplace"
 
@@ -155,8 +155,8 @@ msgid "menu.item.helpdesk"
 msgstr "Helpdesk"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:8 bundles/link/lib/promotions/public.ex:6
-#: bundles/link/lib/survey/web/content.ex:9 lib/core_web/live/admin/ticket.ex:4
+#: bundles/link/lib/pool/submission_page.ex:8
+#: bundles/link/lib/promotions/public.ex:6 bundles/link/lib/survey/web/content.ex:9 lib/core_web/live/admin/ticket.ex:4
 msgid "cancel.button"
 msgstr "Cancel"
 
@@ -176,8 +176,8 @@ msgid "delete.confirm.label"
 msgstr "Delete"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission.ex:8 bundles/link/lib/promotions/public.ex:6
-#: bundles/link/lib/survey/web/content.ex:9 lib/core_web/live/admin/ticket.ex:4
+#: bundles/link/lib/pool/submission_page.ex:8
+#: bundles/link/lib/promotions/public.ex:6 bundles/link/lib/survey/web/content.ex:9 lib/core_web/live/admin/ticket.ex:4
 msgid "ok.button"
 msgstr "OK"
 

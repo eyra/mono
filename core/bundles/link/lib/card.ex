@@ -1,5 +1,6 @@
 defmodule Link.Marketplace.Card do
   alias Core.Survey.Tools
+  alias Core.Pools.Submission
   alias Core.ImageHelpers
   alias CoreWeb.Router.Helpers, as: Routes
   import CoreWeb.Gettext
@@ -76,7 +77,8 @@ defmodule Link.Marketplace.Card do
                 title: title,
                 image_id: image_id,
                 themes: themes,
-                marks: marks
+                marks: marks,
+                submission: submission
               }
             } = tool
         },
@@ -88,15 +90,27 @@ defmodule Link.Marketplace.Card do
     occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
     open_spot_count = subject_count - occupied_spot_count
 
+    reward_label = dgettext("eyra-submission", "reward.title")
     duration_label = dgettext("eyra-promotion", "duration.title")
     open_spots_label = dgettext("eyra-promotion", "open.spots.label", count: "#{open_spot_count}")
 
-    language_label = language |> String.upcase()
-
-    info = [
-      "#{duration_label}: #{duration} min. | #{language_label}",
-      "#{open_spots_label}"
+    info1_elements = [
+      "#{duration_label}: #{duration} min.",
+      "#{reward_label}: #{submission.reward_value}"
     ]
+
+    info1_elements =
+      if language != nil do
+        language_label = language |> String.upcase(:ascii)
+        info1_elements ++ ["#{language_label}"]
+      else
+        info1_elements
+      end
+
+    info1 = Enum.join(info1_elements, " | ")
+    info2 = "#{open_spots_label}"
+
+    info = [info1, info2]
 
     label = nil
 
@@ -118,7 +132,7 @@ defmodule Link.Marketplace.Card do
     }
   end
 
-  def primary_study_researcher(
+  def study_researcher(
         %{
           id: id,
           survey_tool:
@@ -133,9 +147,7 @@ defmodule Link.Marketplace.Card do
                 image_id: image_id,
                 themes: themes,
                 marks: marks,
-                submission: %{
-                  status: status
-                }
+                submission: submission
               }
             } = tool
         },
@@ -151,7 +163,10 @@ defmodule Link.Marketplace.Card do
     duration_label = dgettext("eyra-promotion", "duration.title")
     open_spots_label = dgettext("eyra-promotion", "open.spots.label", count: "#{open_spot_count}")
 
-    info1_elements = ["#{duration_label}: #{duration} min.", "#{reward_label}: ?"]
+    info1_elements = [
+      "#{duration_label}: #{duration} min.",
+      "#{reward_label}: #{submission.reward_value}"
+    ]
 
     info1_elements =
       if language != nil do
@@ -166,23 +181,14 @@ defmodule Link.Marketplace.Card do
 
     info = [info1, info2]
 
-    label =
-      case status do
-        :idle ->
-          %{text: dgettext("eyra-submission", "status.idle.label"), type: :warning}
-
-        :submitted ->
-          %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary}
-
-        :accepted ->
-          %{text: dgettext("eyra-submission", "status.accepted.label"), type: :success}
-      end
-
+    label = get_label(submission)
     icon_url = get_icon_url(marks, socket)
     image_info = ImageHelpers.get_image_info(image_id)
     tags = get_tags(themes)
+    type = get_type(submission)
 
     %{
+      type: type,
       id: id,
       edit_id: edit_id,
       open_id: open_id,
@@ -198,7 +204,7 @@ defmodule Link.Marketplace.Card do
   end
 
   # lab study
-  def primary_study_researcher(
+  def study_researcher(
         %{
           id: id,
           lab_tool: %{
@@ -209,31 +215,20 @@ defmodule Link.Marketplace.Card do
               image_id: image_id,
               themes: themes,
               marks: marks,
-              submission: %{
-                status: status
-              }
+              submission: submission
             }
           }
         },
         socket
       ) do
-    label =
-      case status do
-        :idle ->
-          %{text: dgettext("eyra-submission", "status.idle.label"), type: :warning}
-
-        :submitted ->
-          %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary}
-
-        :accepted ->
-          %{text: dgettext("eyra-submission", "status.accepted.label"), type: :success}
-      end
-
+    label = get_label(submission)
     icon_url = get_icon_url(marks, socket)
     image_info = ImageHelpers.get_image_info(image_id)
     tags = get_tags(themes)
+    type = get_type(submission)
 
     %{
+      type: type,
       id: id,
       edit_id: edit_id,
       open_id: open_id,
@@ -246,6 +241,48 @@ defmodule Link.Marketplace.Card do
       label: label,
       label_type: "secondary"
     }
+  end
+
+  defp get_label(submission) do
+    case submission.status do
+      :idle ->
+        %{text: dgettext("eyra-submission", "status.idle.label"), type: :tertiary}
+
+      :submitted ->
+        %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary}
+
+      :accepted ->
+        case Submission.published_status(submission) do
+          :scheduled ->
+            %{
+              text: dgettext("eyra-submission", "status.accepted.scheduled.label"),
+              type: :tertiary
+            }
+
+          :online ->
+            %{text: dgettext("eyra-submission", "status.accepted.online.label"), type: :success}
+
+          :closed ->
+            %{
+              text: dgettext("eyra-submission", "status.accepted.closed.label"),
+              type: :disabled
+            }
+        end
+    end
+  end
+
+  defp closed?(%{status: status} = submission) do
+    case status do
+      :accepted -> Submission.published_status(submission) == :closed
+      _ -> false
+    end
+  end
+
+  def get_type(submission) do
+    case closed?(submission) do
+      true -> :secondary
+      false -> :primary
+    end
   end
 
   def get_tags(nil), do: []

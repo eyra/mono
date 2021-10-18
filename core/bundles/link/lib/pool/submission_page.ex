@@ -162,7 +162,7 @@ defmodule Link.Pool.SubmissionPage do
         action: accept_action,
         face: %{
           type: :primary,
-          label: dgettext("link-ui", "submit.button"),
+          label: dgettext("link-ui", "accept.button"),
           bg_color: "bg-success"
         }
       },
