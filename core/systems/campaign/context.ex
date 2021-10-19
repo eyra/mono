@@ -13,7 +13,7 @@ defmodule Systems.Campaign.Context do
     Crew
   }
   alias Core.Accounts.User
-  alias Core.Survey.{Tool, Task}
+  alias Core.Survey.Tool
   alias Core.DataDonation
   alias Core.Promotions.Promotion
   alias Core.Pools.Submission
@@ -117,9 +117,9 @@ defmodule Systems.Campaign.Context do
   def list_subject_campaigns(user, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
 
-    tool_ids = from(stt in Task, where: stt.user_id == ^user.id, select: stt.tool_id)
-
-    campaign_ids = from(st in Tool, where: st.id in subquery(tool_ids), select: st.study_id)
+    member_ids = from(m in Crew.MemberModel, where: m.user_id == ^user.id, select: m.id)
+    crew_ids = from(t in Crew.TaskModel, where: t.member_id in subquery(member_ids), select: t.crew_id)
+    campaign_ids = from(c in Crew.Model, where: c.reference_type == :campaign and c.id in subquery(crew_ids), select: c.reference_id)
 
     from(s in Campaign.Model,
       where: s.id in subquery(campaign_ids),
