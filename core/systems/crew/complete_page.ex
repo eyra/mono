@@ -1,25 +1,24 @@
-defmodule Link.Survey.Complete do
+defmodule Systems.Task.CompletePage do
   @moduledoc """
-  The public study screen.
+  The redirect page to complete a task
   """
   use CoreWeb, :live_view
 
   alias EyraUI.Hero.HeroSmall
   alias EyraUI.Text.{Title1, BodyLarge}
 
-  alias Core.Studies
-  alias Core.Studies.Study
+  alias Systems.Campaign
   alias Core.Survey.Tools
   alias Core.Promotions
 
-  data(study, :any)
+  data(campaign, :any)
   data(tool, :any)
   data(promotion, :any)
 
   def mount(%{"id" => id}, _session, socket) do
     user = socket.assigns[:current_user]
-    study = Studies.get_study!(id)
-    tool = load_tool(study)
+    campaign = Campaign.Context.get!(id)
+    tool = load_tool(campaign)
     promotion = Promotions.get!(tool.promotion_id)
 
     tool
@@ -30,7 +29,7 @@ defmodule Link.Survey.Complete do
       socket
       |> assign(
         user: user,
-        study: study,
+        campaign: campaign,
         tool: tool,
         promotion: promotion
       )
@@ -41,9 +40,9 @@ defmodule Link.Survey.Complete do
   @impl true
   def handle_uri(socket), do: socket
 
-  def load_tool(%Study{} = study) do
-    case Studies.list_survey_tools(study) do
-      [] -> raise "Expected at least one survey tool for study #{study.title}"
+  def load_tool(%Campaign.Model{} = campaign) do
+    case Campaign.Context.list_survey_tools(campaign) do
+      [] -> raise "Expected at least one survey tool for campaign #{campaign.title}"
       [survey_tool | _] -> survey_tool
     end
   end

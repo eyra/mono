@@ -24,7 +24,6 @@ defmodule Link.Promotion.Public do
   alias Link.Enums.Themes
 
   data(preview, :boolean)
-  data(study, :any)
   data(promotion, :any)
   data(subtitle, :string)
   data(plugin, :any)

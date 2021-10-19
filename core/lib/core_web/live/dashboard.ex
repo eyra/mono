@@ -5,11 +5,12 @@ defmodule CoreWeb.Dashboard do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :dashboard
 
-  alias Core.Studies
   alias CoreWeb.UI.ContentListItem
 
-  alias EyraUI.Text.{Title2}
+  alias Systems.Campaign
   alias Systems.NextAction
+
+  alias EyraUI.Text.{Title2}
   alias Core.ImageHelpers
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
@@ -24,7 +25,7 @@ defmodule CoreWeb.Dashboard do
     # FIXME: Refactor to use content node
     content_items =
       user
-      |> Studies.list_owned_studies(preload: preload)
+      |> Campaign.Context.list_owned_campaigns(preload: preload)
       |> Enum.map(&convert_to_vm(socket, &1))
 
     socket =

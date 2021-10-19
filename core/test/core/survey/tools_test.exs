@@ -28,19 +28,19 @@ defmodule Core.Survey.ToolsTest do
       title = Faker.Lorem.sentence()
 
       content_node = Factories.insert!(:content_node)
-      study = Factories.insert!(:study)
+      campaign = Factories.insert!(:campaign)
 
       promotion =
         Factories.insert!(:promotion, %{
           title: title,
-          study: study,
+          campaign: campaign,
           parent_content_node: content_node
         })
 
       assert {:ok, %Tool{} = _survey_tool} =
                Tools.create_survey_tool(
                  %{},
-                 study,
+                 campaign,
                  promotion,
                  content_node
                )

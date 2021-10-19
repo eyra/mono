@@ -1,9 +1,14 @@
-defmodule Link.Survey.Monitor do
+defmodule Systems.Campaign.MonitorView do
   use CoreWeb.UI.Component
 
   alias Core.Survey.Tools
   alias Core.Promotions
-  alias Link.Survey.MonitorData
+  alias Core.Pools.Submissions
+
+  alias Systems.{
+    Crew,
+    Campaign
+  }
 
   alias EyraUI.Text.{Title2, Title6, BodyMedium}
 
@@ -15,7 +20,10 @@ defmodule Link.Survey.Monitor do
   def update(%{id: id, props: %{entity_id: entity_id}}, socket) do
     tool = Tools.get_survey_tool!(entity_id)
     promotion = Promotions.get!(tool.promotion_id)
-    monitor_data = MonitorData.create(tool, promotion)
+    campaign = Campaign.Context.get!(tool.study_id)
+    crew = Campaign.Context.get_or_create_crew(campaign)
+
+    monitor_data = create(crew, tool, promotion)
 
     {
       :ok,
@@ -24,6 +32,32 @@ defmodule Link.Survey.Monitor do
       |> assign(entity_id: entity_id)
       |> assign(monitor_data: monitor_data)
     }
+  end
+
+  def create(crew, tool, promotion) do
+    submission = Submissions.get!(promotion)
+    is_active = submission.status === :accepted
+    completed = Crew.Context.count_completed_tasks(crew)
+    pending = Crew.Context.count_pending_tasks(crew)
+
+    vacant = tool |> get_vacant_count(completed, pending)
+
+    opts =
+      %{}
+      |> Map.put(:is_active, is_active)
+      |> Map.put(:pending_count, pending)
+      |> Map.put(:completed_count, completed)
+      |> Map.put(:vacant_count, vacant)
+
+    struct(Systems.Crew.MonitorModel, opts)
+  end
+
+  defp get_vacant_count(tool, completed, pending) do
+    case tool.subject_count do
+      count when is_nil(count) -> 0
+      count when count > 0 -> count - (completed + pending)
+      _ -> 0
+    end
   end
 
   def update() do

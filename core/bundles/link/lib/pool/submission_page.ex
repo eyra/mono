@@ -10,7 +10,7 @@ defmodule Link.Pool.SubmissionPage do
   import CoreWeb.Gettext
 
   alias Core.Survey.Tools
-  alias Core.Studies
+  alias Systems.Campaign
   alias Core.Promotions
   alias Core.Pools.{Submissions, Submission}
 
@@ -37,8 +37,8 @@ defmodule Link.Pool.SubmissionPage do
     submission = Submissions.get!(submission_id)
     promotion = Promotions.get!(submission.promotion_id)
     tool = Tools.get_by_promotion(submission.promotion_id)
-    study = Studies.get_study!(tool.study_id)
-    owners = Studies.list_owners(study, [:profile, :features])
+    campaign = Campaign.Context.get!(tool.study_id)
+    owners = Campaign.Context.list_owners(campaign, [:profile, :features])
     owner = List.first(owners)
     member = to_member(owner, promotion)
 
@@ -46,7 +46,7 @@ defmodule Link.Pool.SubmissionPage do
     validate? = accepted?
 
     update_at =
-      study.updated_at
+      campaign.updated_at
       |> CoreWeb.UI.Timestamp.apply_timezone()
       |> CoreWeb.UI.Timestamp.humanize()
 

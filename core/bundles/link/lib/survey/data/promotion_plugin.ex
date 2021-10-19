@@ -1,7 +1,7 @@
 defmodule Link.Survey.PromotionPlugin do
   import CoreWeb.Gettext
 
-  alias Core.Studies
+  alias Systems.Campaign
   alias Core.Pools.Submissions
   alias Core.Promotions
   alias Core.Promotions.CallToAction
@@ -72,8 +72,8 @@ defmodule Link.Survey.PromotionPlugin do
 
   defp get_byline(tool) do
     authors =
-      Studies.get_study!(tool.study_id)
-      |> Studies.list_authors()
+      Campaign.Context.get!(tool.study_id)
+      |> Campaign.Context.list_authors()
       |> Enum.map(& &1.fullname)
       |> Enum.join(", ")
 

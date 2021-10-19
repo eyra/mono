@@ -1,4 +1,4 @@
-defmodule Core.Studies do
+defmodule Systems.Campaign.Context do
   @moduledoc """
   The Studies context.
   """
@@ -8,7 +8,10 @@ defmodule Core.Studies do
   alias Core.Repo
   alias Core.Authorization
 
-  alias Core.Studies.{Study, Author}
+  alias Systems.{
+    Campaign,
+    Crew
+  }
   alias Core.Accounts.User
   alias Core.Survey.{Tool, Task}
   alias Core.DataDonation
@@ -16,7 +19,7 @@ defmodule Core.Studies do
   alias Core.Pools.Submission
   alias Frameworks.Signal
 
-  # read list_studies(current_user, ...) do
+  # read list(current_user, ...) do
   # end
 
   @doc """
@@ -24,14 +27,14 @@ defmodule Core.Studies do
 
   ## Examples
 
-      iex> list_studies()
-      [%Study{}, ...]
+      iex> list()
+      [%Campaign.Model{}, ...]
 
   """
-  def list_studies(opts \\ []) do
+  def list(opts \\ []) do
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
 
-    from(s in Study,
+    from(s in Campaign.Model,
       where: s.id not in ^exclude
     )
     |> Repo.all()
@@ -39,15 +42,15 @@ defmodule Core.Studies do
     # AUTH: Can be piped through auth filter.
   end
 
-  def list_submitted_studies(tool_entities, opts \\ []) do
-    list_studies_by_submission_status(tool_entities, :submitted, opts)
+  def list_submitted_campaigns(tool_entities, opts \\ []) do
+    list_by_submission_status(tool_entities, :submitted, opts)
   end
 
-  def list_accepted_studies(tool_entities, opts \\ []) do
-    list_studies_by_submission_status(tool_entities, :accepted, opts)
+  def list_accepted_campaigns(tool_entities, opts \\ []) do
+    list_by_submission_status(tool_entities, :accepted, opts)
   end
 
-  def list_studies_by_submission_status(tool_entities, submission_status, opts \\ [])
+  def list_by_submission_status(tool_entities, submission_status, opts \\ [])
       when is_list(tool_entities) do
     preload = Keyword.get(opts, :preload, [])
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
@@ -79,8 +82,8 @@ defmodule Core.Studies do
         )
       end)
 
-    from(study in Study,
-      where: study.id in subquery(studie_ids) and study.id not in ^exclude,
+    from(campaign in Campaign.Model,
+      where: campaign.id in subquery(studie_ids) and campaign.id not in ^exclude,
       preload: ^preload
     )
     |> Repo.all()
@@ -89,7 +92,7 @@ defmodule Core.Studies do
   @doc """
   Returns the list of studies that are owned by the user.
   """
-  def list_owned_studies(user, opts \\ []) do
+  def list_owned_campaigns(user, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
 
     node_ids =
@@ -98,7 +101,7 @@ defmodule Core.Studies do
         principal: user
       )
 
-    from(s in Study,
+    from(s in Campaign.Model,
       where: s.auth_node_id in subquery(node_ids),
       order_by: [desc: s.updated_at],
       preload: ^preload
@@ -111,15 +114,15 @@ defmodule Core.Studies do
   @doc """
   Returns the list of studies where the user is a subject.
   """
-  def list_subject_studies(user, opts \\ []) do
+  def list_subject_campaigns(user, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
 
     tool_ids = from(stt in Task, where: stt.user_id == ^user.id, select: stt.tool_id)
 
-    study_ids = from(st in Tool, where: st.id in subquery(tool_ids), select: st.study_id)
+    campaign_ids = from(st in Tool, where: st.id in subquery(tool_ids), select: st.study_id)
 
-    from(s in Study,
-      where: s.id in subquery(study_ids),
+    from(s in Campaign.Model,
+      where: s.id in subquery(campaign_ids),
       preload: ^preload
     )
     |> Repo.all()
@@ -128,7 +131,7 @@ defmodule Core.Studies do
   @doc """
   Returns the list of studies where the user is a data donation subject.
   """
-  def list_data_donation_subject_studies(user, opts \\ []) do
+  def list_data_donation_subject_campaigns(user, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
 
     tool_ids =
@@ -137,19 +140,19 @@ defmodule Core.Studies do
         select: task.tool_id
       )
 
-    study_ids =
+    campaign_ids =
       from(st in DataDonation.Tool, where: st.id in subquery(tool_ids), select: st.study_id)
 
-    from(s in Study,
-      where: s.id in subquery(study_ids),
+    from(s in Campaign.Model,
+      where: s.id in subquery(campaign_ids),
       preload: ^preload
     )
     |> Repo.all()
   end
 
-  def list_owners(%Study{} = study, preload \\ []) do
+  def list_owners(%Campaign.Model{} = campaign, preload \\ []) do
     owner_ids =
-      study
+      campaign
       |> Authorization.list_principals()
       |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
       |> Enum.map(fn %{id: id} -> id end)
@@ -159,9 +162,9 @@ defmodule Core.Studies do
     # access other users.
   end
 
-  def assign_owners(study, users) do
+  def assign_owners(campaign, users) do
     existing_owner_ids =
-      Authorization.list_principals(study.auth_node_id)
+      Authorization.list_principals(campaign.auth_node_id)
       |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
       |> Enum.map(fn %{id: id} -> id end)
       |> Enum.into(MapSet.new())
@@ -170,7 +173,7 @@ defmodule Core.Studies do
     |> Enum.filter(fn principal ->
       not MapSet.member?(existing_owner_ids, Principal.id(principal))
     end)
-    |> Enum.each(&Authorization.assign_role(&1, study, :owner))
+    |> Enum.each(&Authorization.assign_role(&1, campaign, :owner))
 
     new_owner_ids =
       users
@@ -179,138 +182,162 @@ defmodule Core.Studies do
 
     existing_owner_ids
     |> Enum.filter(fn id -> not MapSet.member?(new_owner_ids, id) end)
-    |> Enum.each(&Authorization.remove_role!(%User{id: &1}, study, :owner))
+    |> Enum.each(&Authorization.remove_role!(%User{id: &1}, campaign, :owner))
 
     # AUTH: Does not modify entities, only auth. This needs checks to see if
     # the user is allowed to manage permissions? Could be implemented as part
     # of the authorization functions?
   end
 
-  def add_owner!(study, user) do
-    :ok = Authorization.assign_role(user, study, :owner)
+  def add_owner!(campaign, user) do
+    :ok = Authorization.assign_role(user, campaign, :owner)
   end
 
   @doc """
-  Gets a single study.
+  Gets a single campaign.
 
   Raises `Ecto.NoResultsError` if the Study does not exist.
 
   ## Examples
 
-      iex> get_study!(123)
-      %Study{}
+      iex> get!(123)
+      %Campaign.Model{}
 
-      iex> get_study!(456)
+      iex> get!(456)
       ** (Ecto.NoResultsError)
 
   """
-  def get_study!(id) do
-    Repo.get!(Study, id)
+  def get!(id) do
+    Repo.get!(Campaign.Model, id)
   end
 
-  def get_study_changeset(attrs \\ %{}) do
-    %Study{}
-    |> Study.changeset(attrs)
+  def get_changeset(attrs \\ %{}) do
+    %Campaign.Model{}
+    |> Campaign.Model.changeset(attrs)
   end
 
   @doc """
-  Creates a study.
+  Creates a campaign.
   """
-  def create_study(%Ecto.Changeset{} = changeset, researcher) do
-    with {:ok, study} <-
+  def create(%Ecto.Changeset{} = changeset, researcher) do
+    with {:ok, campaign} <-
            changeset
            |> Ecto.Changeset.put_assoc(:auth_node, Core.Authorization.make_node())
            |> Repo.insert() do
-      :ok = Authorization.assign_role(researcher, study, :owner)
-      Signal.Context.dispatch!(:study_created, %{study: study})
-      {:ok, study}
+      :ok = Authorization.assign_role(researcher, campaign, :owner)
+      Signal.Context.dispatch!(:campaign_created, %{campaign: campaign})
+      {:ok, campaign}
     end
   end
 
-  def create_study(attrs, researcher) do
+  def create(attrs, researcher) do
     attrs
-    |> get_study_changeset()
-    |> create_study(researcher)
+    |> get_changeset()
+    |> create(researcher)
   end
 
   @doc """
-  Updates a study.
+  Updates a get_campaign.
 
   ## Examples
 
-      iex> update_study(study, %{field: new_value})
-      {:ok, %Study{}}
+      iex> update(get_campaign, %{field: new_value})
+      {:ok, %Campaign.Model{}}
 
-      iex> update_study(study, %{field: bad_value})
+      iex> update(get_campaign, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_study(%Ecto.Changeset{} = changeset) do
+  def update(%Ecto.Changeset{} = changeset) do
     changeset
     |> Repo.update()
   end
 
-  def update_study(%Study{} = study, attrs) do
-    study
-    |> Study.changeset(attrs)
-    |> update_study
+  def update(%Campaign.Model{} = campaign, attrs) do
+    campaign
+    |> Campaign.Model.changeset(attrs)
+    |> update
   end
 
   @doc """
-  Deletes a study.
+  Deletes a get_campaign.
 
   ## Examples
 
-      iex> delete_study(study)
-      {:ok, %Study{}}
+      iex> delete(campaign)
+      {:ok, %Campaign.Model{}}
 
-      iex> delete_study(study)
+      iex> delete(campaign)
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_study(%Study{} = study) do
-    Repo.delete(study)
+  def delete(%Campaign.Model{} = campaign) do
+    Repo.delete(campaign)
     # AUTH; how to check this.
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking study changes.
+  Returns an `%Ecto.Changeset{}` for tracking campaign changes.
 
   ## Examples
 
-      iex> change_study(study)
-      %Ecto.Changeset{data: %Study{}}
+      iex> change(campaign)
+      %Ecto.Changeset{data: %Campaign.Model{}}
 
   """
-  def change_study(%Study{} = study, attrs \\ %{}) do
-    Study.changeset(study, attrs)
+  def change(%Campaign.Model{} = campaign, attrs \\ %{}) do
+    Campaign.Model.changeset(campaign, attrs)
   end
 
-  def add_author(%Study{} = study, %User{} = researcher) do
+  def add_author(%Campaign.Model{} = campaign, %User{} = researcher) do
     researcher
-    |> Author.from_user()
-    |> Author.changeset()
-    |> Ecto.Changeset.put_assoc(:study, study)
+    |> Campaign.AuthorModel.from_user()
+    |> Campaign.AuthorModel.changeset()
+    |> Ecto.Changeset.put_assoc(:study, campaign)
     |> Ecto.Changeset.put_assoc(:user, researcher)
     |> Repo.insert()
   end
 
-  def list_authors(%Study{} = study) do
+  def list_authors(%Campaign.Model{} = campaign) do
     from(
-      a in Author,
-      where: a.study_id == ^study.id,
+      a in Campaign.AuthorModel,
+      where: a.study_id == ^campaign.id,
       preload: [user: [:profile]]
     )
     |> Repo.all()
   end
 
-  def list_survey_tools(%Study{} = study) do
-    from(s in Tool, where: s.study_id == ^study.id)
+  def list_survey_tools(%Campaign.Model{} = campaign) do
+    from(s in Tool, where: s.study_id == ^campaign.id)
     |> Repo.all()
   end
 
-  def list_tools(%Study{} = study, schema) do
-    from(s in schema, where: s.study_id == ^study.id)
+  def list_tools(%Campaign.Model{} = campaign, schema) do
+    from(s in schema, where: s.study_id == ^campaign.id)
     |> Repo.all()
+  end
+
+
+  # Crew
+
+  def get_crew(campaign) do
+    reference_type = "campaign"
+    reference_id = "#{campaign.id}"
+    from(
+      c in Crew.Model,
+      where: c.reference_type == ^reference_type and c.reference_id == ^reference_id
+    )
+    |> Repo.all()
+  end
+
+  def create_crew(campaign) do
+    Crew.Context.create("campaign", "#{campaign.id}", Core.Authorization.make_node(campaign))
+  end
+
+  def get_or_create_crew(campaign) do
+    case get_crew(campaign) do
+      nil -> create_crew(campaign)
+      crew -> {:ok, crew}
+    end
   end
 end

@@ -38,8 +38,7 @@ defmodule Core.Survey.Tools do
   alias Core.Authorization
   alias Frameworks.Signal
   alias Core.Content.Nodes
-  alias Core.Studies
-  alias Core.Studies.Study
+  alias Systems.Campaign
 
   @doc """
   Returns the list of survey_tools.
@@ -91,14 +90,16 @@ defmodule Core.Survey.Tools do
     node = Nodes.get!(tool.content_node_id)
     node_changeset = Tool.node_changeset(node, tool, attrs)
 
-    study = Studies.get_study!(tool.study_id)
-    study_changeset = Study.changeset(study, %{updated_at: NaiveDateTime.utc_now()})
+    campaign = Campaign.Context.get!(tool.study_id)
+
+    campaign_changeset =
+      Campaign.Model.changeset(campaign, %{updated_at: NaiveDateTime.utc_now()})
 
     with {:ok, %{tool: tool} = result} <-
            Multi.new()
            |> Multi.update(:tool, changeset)
            |> Multi.update(:content_node, node_changeset)
-           |> Multi.update(:study, study_changeset)
+           |> Multi.update(:campaign, campaign_changeset)
            |> Repo.transaction() do
       Signal.Context.dispatch!(:tool_updated, tool)
       {:ok, result}
@@ -109,12 +110,12 @@ defmodule Core.Survey.Tools do
   Deletes a survey_tool.
   """
   def delete_survey_tool(%Tool{} = survey_tool) do
-    study = Core.Studies.get_study!(survey_tool.study_id)
+    campaign = Campaign.Context.get!(survey_tool.study_id)
     content_node = Core.Content.Nodes.get!(survey_tool.content_node_id)
     promotion = Core.Promotions.get!(survey_tool.promotion_id)
 
     Multi.new()
-    |> Multi.delete(:study, study)
+    |> Multi.delete(:campaign, campaign)
     |> Multi.delete(:promotion, promotion)
     |> Multi.delete(:content_node, content_node)
     |> Repo.transaction()

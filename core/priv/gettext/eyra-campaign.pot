@@ -12,10 +12,10 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/marketplace.ex:120
-msgid "study.all.title"
+msgid "campaign.all.title"
 msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/marketplace.ex:112
-msgid "study.subject.title"
+msgid "campaign.subject.title"
 msgstr ""

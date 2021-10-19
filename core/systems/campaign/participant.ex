@@ -1,10 +1,10 @@
-defmodule Core.Studies.Participant do
+defmodule Systems.Campaign.Participant do
   @moduledoc """
-  The schema for a study participant.
+  The schema for a campaign participant.
   """
   use Ecto.Schema
   import Ecto.Changeset
-  alias Core.Studies.Study
+  alias Systems.Campaign.Model, as: Study
   alias Core.Accounts.User
 
   @primary_key false

@@ -5,7 +5,7 @@ defmodule Link.Marketplace.Card do
   alias CoreWeb.Router.Helpers, as: Routes
   import CoreWeb.Gettext
 
-  def primary_study(
+  def primary_campaign(
         %{
           id: id,
           lab_tool: %{
@@ -63,7 +63,7 @@ defmodule Link.Marketplace.Card do
     }
   end
 
-  def primary_study(
+  def primary_campaign(
         %{
           id: id,
           survey_tool:
@@ -132,7 +132,7 @@ defmodule Link.Marketplace.Card do
     }
   end
 
-  def study_researcher(
+  def campaign_researcher(
         %{
           id: id,
           survey_tool:
@@ -204,7 +204,7 @@ defmodule Link.Marketplace.Card do
   end
 
   # lab study
-  def study_researcher(
+  def campaign_researcher(
         %{
           id: id,
           lab_tool: %{

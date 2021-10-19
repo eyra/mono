@@ -8,7 +8,7 @@ defmodule Core.PromotionsTest do
     setup do
       promotion =
         Factories.insert!(:promotion, %{
-          study: Factories.insert!(:study),
+          campaign: Factories.insert!(:campaign),
           plugin: "lab",
           parent_content_node: Factories.insert!(:content_node)
         })

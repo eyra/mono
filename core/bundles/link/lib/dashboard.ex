@@ -5,9 +5,9 @@ defmodule Link.Dashboard do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :dashboard
 
+  alias Systems.Campaign
   alias Core.Content.Nodes
   alias Core.ImageHelpers
-  alias Core.Studies
   alias Core.Pools.Submission
   alias CoreWeb.UI.ContentListItem
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
@@ -27,7 +27,7 @@ defmodule Link.Dashboard do
 
     content_items =
       user
-      |> Studies.list_owned_studies(preload: preload)
+      |> Campaign.Context.list_owned_campaigns(preload: preload)
       |> Enum.map(&convert_to_vm(socket, &1))
 
     socket =
@@ -143,7 +143,7 @@ defmodule Link.Dashboard do
     image = %{type: :catalog, info: image_info}
 
     %{
-      path: Routes.live_path(socket, Link.Survey.Content, edit_id),
+      path: Routes.live_path(socket, Systems.Campaign.ContentPage, edit_id),
       title: title,
       subtitle: subtitle || "<no subtitle>",
       tag: tag,
@@ -172,7 +172,7 @@ defmodule Link.Dashboard do
     image = %{type: :catalog, info: image_info}
 
     %{
-      path: Routes.live_path(socket, Link.Survey.Content, edit_id),
+      path: Routes.live_path(socket, Systems.Campaign.ContentPage, edit_id),
       title: title,
       subtitle: subtitle,
       tag: tag,

@@ -6,9 +6,9 @@ defmodule Core.Lab.Tool do
 
   import Ecto.Changeset
 
-  alias Core.Studies.Study
   alias Core.Accounts.User
   alias Core.Promotions.Promotion
+  alias Systems.Campaign.Model, as: Study
 
   schema "lab_tools" do
     belongs_to(:content_node, Core.Content.Node)

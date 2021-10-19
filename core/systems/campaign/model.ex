@@ -1,11 +1,9 @@
-defmodule Core.Studies.Study do
+defmodule Systems.Campaign.Model do
   @moduledoc """
-  The study type.
+  The campaign type.
   """
   use Ecto.Schema
   import Ecto.Changeset
-
-  # grant_access([:member])
 
   schema "studies" do
     field(:description, :string)
@@ -15,11 +13,11 @@ defmodule Core.Studies.Study do
 
     has_many(:role_assignments, through: [:auth_node, :role_assignments])
 
-    has_many(:authors, Core.Studies.Author)
-    has_many(:participants, Core.Studies.Participant)
-    has_one(:survey_tool, Core.Survey.Tool)
-    has_one(:lab_tool, Core.Lab.Tool)
-    has_one(:data_donation_tool, Core.DataDonation.Tool)
+    has_many(:authors, Systems.Campaign.AuthorModel, foreign_key: :study_id)
+    has_many(:participants, Systems.Campaign.Participant, foreign_key: :study_id)
+    has_one(:survey_tool, Core.Survey.Tool, foreign_key: :study_id)
+    has_one(:lab_tool, Core.Lab.Tool, foreign_key: :study_id)
+    has_one(:data_donation_tool, Core.DataDonation.Tool, foreign_key: :study_id)
 
     timestamps()
   end
@@ -29,12 +27,12 @@ defmodule Core.Studies.Study do
   @fields @required_fields ++ @optional_fields
 
   defimpl GreenLight.AuthorizationNode do
-    def id(study), do: study.auth_node_id
+    def id(campaign), do: campaign.auth_node_id
   end
 
   @doc false
-  def changeset(study, attrs) do
-    study
+  def changeset(campaign, attrs) do
+    campaign
     |> cast(attrs, @fields)
     |> validate_required(@required_fields)
   end

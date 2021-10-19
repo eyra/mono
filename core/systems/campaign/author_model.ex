@@ -1,10 +1,10 @@
-defmodule Core.Studies.Author do
+defmodule Systems.Campaign.AuthorModel do
   @moduledoc """
-  The schema for a study author.
+  The schema for a campaign author.
   """
   use Ecto.Schema
   import Ecto.Changeset
-  alias Core.Studies.Study
+  alias Systems.Campaign.Model, as: Study
   alias Core.Accounts
   alias Core.Accounts.User
 
@@ -45,7 +45,7 @@ defmodule Core.Studies.Author do
   end
 
   def changeset(params) do
-    %Core.Studies.Author{}
+    %Systems.Campaign.AuthorModel{}
     |> cast(params, @required_fields)
     |> validate_required(@required_fields)
   end

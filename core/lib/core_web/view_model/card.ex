@@ -4,7 +4,7 @@ defmodule CoreWeb.ViewModel.Card do
   alias CoreWeb.Router.Helpers, as: Routes
   import CoreWeb.Gettext
 
-  def primary_study(
+  def primary_campaign(
         %{
           id: id,
           data_donation_tool:
