@@ -75,6 +75,7 @@ defmodule Systems.Campaign.OverviewPage do
 
     with {:ok, campaign} <- Campaign.Context.create(changeset, user),
          {:ok, _author} <- Campaign.Context.add_author(campaign, user),
+         {:ok, _crew} <- Campaign.Context.create_crew(campaign),
          {:ok, tool_content_node} <- Content.Nodes.create(%{ready: false}),
          {:ok, promotion_content_node} <-
            Content.Nodes.create(%{ready: false}, tool_content_node),

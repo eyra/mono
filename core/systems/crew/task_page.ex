@@ -50,6 +50,8 @@ defmodule Systems.Crew.TaskPage do
   def handle_event("call-to-action", _params,
         %{assigns: %{task: task, plugin: plugin, plugin_info: plugin_info}} = socket
   ) do
+    Crew.Context.start_task!(task)
+
     path = plugin.get_cta_path(task.id, plugin_info.call_to_action.target.value, socket)
     {:noreply, redirect(socket, external: path)}
   end
