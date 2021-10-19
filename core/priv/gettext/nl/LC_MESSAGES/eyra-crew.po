@@ -1,0 +1,27 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: systems/crew/task_complete_page.ex:71
+msgid "task.completed.message.part1"
+msgstr "Jouw bijdrage wordt automatisch goedgekeurd, maar zal door de auteur van de studie beoordeeld worden. Als je binnen twee weken geen afwijzing ontvangt, wordt de beloning definitief toegekend."
+
+#, elixir-format
+#: systems/crew/task_complete_page.ex:73
+msgid "task.completed.message.part2"
+msgstr "Bezoek de marktplaats om jouw bijdragen en andere beschikbare studies te bekijken."
+
+#, elixir-format
+#: systems/crew/task_complete_page.ex:69
+msgid "task.completed.title"
+msgstr "Bedankt voor jouw deelname"

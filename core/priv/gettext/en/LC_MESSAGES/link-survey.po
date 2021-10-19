@@ -28,35 +28,26 @@ msgstr "How many minutes do you estimate participants will need?"
 
 #, elixir-format
 #: bundles/link/lib/lab/promotion_plugin.ex:50
-#: bundles/link/lib/survey/data/promotion_plugin.ex:74
+#: bundles/link/lib/survey/data/promotion_plugin.ex:76
 msgid "by.author.label"
 msgstr "By"
 
 #, elixir-format
-#: systems/crew/task_complete_page.ex:57
-msgid "thank.you.message"
-msgstr "Thank you for participating. Hopefully see you soon!"
-
-#, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:97
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:127
+#: bundles/link/lib/survey/data/promotion_plugin.ex:99
 msgid "reward.highlight.title"
 msgstr "Reward"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:89
+#: bundles/link/lib/survey/data/promotion_plugin.ex:91
 msgid "spots.highlight.title"
 msgstr "Open spots"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:61
-#: bundles/link/lib/survey/data/promotion_plugin.ex:62
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:106
+#: bundles/link/lib/survey/data/promotion_plugin.ex:64
 msgid "apply.cta.title"
 msgstr "Apply to participate"
-
-#, elixir-format
-#: systems/crew/task_complete_page.ex:52
-msgid "conpleted.title"
-msgstr "Completed"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:301
@@ -64,9 +55,9 @@ msgid "devices.label"
 msgstr "Which devices can participants use?"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:56
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:101
 msgid "open.cta.title"
-msgstr "Go to online study"
+msgstr "Go to survey"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:250
@@ -275,17 +266,17 @@ msgid "form.description"
 msgstr "Follow the steps in the black frame to make sure that participants can start your online study on Panl and are redirected back to Panl after they finish."
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:95
+#: bundles/link/lib/survey/data/promotion_plugin.ex:97
 msgid "duration.highlight.text"
 msgstr "%{duration} minutes"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:94
+#: bundles/link/lib/survey/data/promotion_plugin.ex:96
 msgid "duration.highlight.title"
 msgstr "Duration"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:92
+#: bundles/link/lib/survey/data/promotion_plugin.ex:94
 msgid "spots.highlight.text"
 msgstr "Still %{open} out of %{total} available"
 
@@ -295,6 +286,41 @@ msgid "ethical.review.link"
 msgstr "ethical checklist"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:20
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:31
 msgid "task.hero.title"
 msgstr "Online Study"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:43
+msgid "task.completed.subtitle"
+msgstr "You have completed this survey"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:50
+msgid "task.completed.text"
+msgstr "Your contribution will be reviewed by the author of this study. If you did not receive a rejection within two weeks after the completion of this survey, the assigned reward is final."
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:42
+msgid "task.pending.subtitle"
+msgstr "You have applied to participate"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:125
+msgid "completed.highlight.default"
+msgstr "Not yet finished"
+
+#, elixir-format, fuzzy
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:124
+msgid "completed.highlight.title"
+msgstr "Finished"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:122
+msgid "started.highlight.default"
+msgstr "Not yet started"
+
+#, elixir-format, fuzzy
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:121
+msgid "started.highlight.title"
+msgstr "Started"

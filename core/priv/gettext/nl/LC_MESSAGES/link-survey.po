@@ -28,35 +28,26 @@ msgstr "Hoeveel minuten schat je in dat deelnemers nodig hebben?"
 
 #, elixir-format
 #: bundles/link/lib/lab/promotion_plugin.ex:50
-#: bundles/link/lib/survey/data/promotion_plugin.ex:74
+#: bundles/link/lib/survey/data/promotion_plugin.ex:76
 msgid "by.author.label"
 msgstr "Door"
 
 #, elixir-format
-#: systems/crew/task_complete_page.ex:57
-msgid "thank.you.message"
-msgstr "Bedankt voor het meedoen. Hopelijk tot snel!"
-
-#, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:97
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:127
+#: bundles/link/lib/survey/data/promotion_plugin.ex:99
 msgid "reward.highlight.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:89
+#: bundles/link/lib/survey/data/promotion_plugin.ex:91
 msgid "spots.highlight.title"
 msgstr "Beschikbare plekken"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:61
-#: bundles/link/lib/survey/data/promotion_plugin.ex:62
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:106
+#: bundles/link/lib/survey/data/promotion_plugin.ex:64
 msgid "apply.cta.title"
 msgstr "Meld je aan"
-
-#, elixir-format
-#: systems/crew/task_complete_page.ex:52
-msgid "conpleted.title"
-msgstr "Afgerond"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:301
@@ -64,9 +55,9 @@ msgid "devices.label"
 msgstr "Welke apparaten kunnen door deelnemers gebruikt worden?"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:56
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:101
 msgid "open.cta.title"
-msgstr "Ga naar de vragenlijst"
+msgstr "Naar vragenlijst"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:250
@@ -275,17 +266,17 @@ msgid "form.description"
 msgstr "Doorloop eerst de stappen in het zwarte kader. Zo zorg je ervoor dat deelnemers vanuit Panl deel kunnen nemen aan jouw online studie en na afloop weer teruggestuurd worden naar Panl."
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:95
+#: bundles/link/lib/survey/data/promotion_plugin.ex:97
 msgid "duration.highlight.text"
 msgstr "%{duration} minuten"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:94
+#: bundles/link/lib/survey/data/promotion_plugin.ex:96
 msgid "duration.highlight.title"
 msgstr "Duur"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:92
+#: bundles/link/lib/survey/data/promotion_plugin.ex:94
 msgid "spots.highlight.text"
 msgstr "Nog %{open} van de %{total}"
 
@@ -295,6 +286,41 @@ msgid "ethical.review.link"
 msgstr "ethische checklist"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:20
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:31
 msgid "task.hero.title"
 msgstr "Online Studie"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:43
+msgid "task.completed.subtitle"
+msgstr "Je hebt deze vragenlijst ingevuld"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:50
+msgid "task.completed.text"
+msgstr "Jouw bijdrage wordt door de auteur van deze studie beoordeeld. Als je binnen twee weken na afronding van de vragenlijst geen afkeuring hebt ontvangen, is de toegewezen beloning definitief."
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:42
+msgid "task.pending.subtitle"
+msgstr "Je bent aangemeld voor deelname"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:125
+msgid "completed.highlight.default"
+msgstr "Nog niet afgerond"
+
+#, elixir-format, fuzzy
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:124
+msgid "completed.highlight.title"
+msgstr "Afgerond"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:122
+msgid "started.highlight.default"
+msgstr "Nog niet gestart"
+
+#, elixir-format, fuzzy
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:121
+msgid "started.highlight.title"
+msgstr "Gestart"

@@ -105,9 +105,26 @@ defmodule Systems.Crew.Context do
     |> Enum.map(&Repo.insert!(&1))
   end
 
+  def start_task!(%Crew.TaskModel{} = task) do
+    update_task!(task,
+      %{
+        started_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      }
+    )
+  end
+
   def complete_task!(%Crew.TaskModel{} = task) do
+    update_task!(task,
+      %{
+        status: :completed,
+        completed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      }
+    )
+  end
+
+  def update_task!(%Crew.TaskModel{} = task, attrs) do
     task
-    |> Crew.TaskModel.changeset(%{status: :completed})
+    |> Crew.TaskModel.changeset(attrs)
     |> Repo.update!()
   end
 

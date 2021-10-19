@@ -191,10 +191,10 @@ defmodule Link.Marketplace do
         id: id,
         updated_at: updated_at,
         survey_tool: %{
-          id: edit_id,
           current_subject_count: current_subject_count,
           subject_count: target_subject_count,
           promotion: %{
+            id: promotion_id,
             title: title,
             image_id: image_id,
             content_node: promotion_content_node,
@@ -218,7 +218,7 @@ defmodule Link.Marketplace do
 
     %{
       id: id,
-      path: Routes.live_path(socket, Systems.Campaign.ContentPage, edit_id),
+      path: Routes.live_path(socket, CoreWeb.Promotion.Public, promotion_id),
       title: title,
       subtitle: subtitle || "<no subtitle>",
       tag: tag,

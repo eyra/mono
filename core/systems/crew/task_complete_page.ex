@@ -3,59 +3,78 @@ defmodule Systems.Crew.TaskCompletePage do
   The redirect page to complete a task
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Workspace.Component, :survey
 
-  alias EyraUI.Hero.HeroSmall
-  alias EyraUI.Text.{Title1, BodyLarge}
+  alias EyraUI.Text.{Title1, Title3, BodyLarge}
+  alias EyraUI.Button.PrimaryLiveViewButton
 
-  alias Systems.Campaign
-  alias Core.Survey.Tools
-  alias Core.Promotions
+  alias Systems.{
+    Crew
+  }
 
-  data(campaign, :any)
-  data(tool, :any)
-  data(promotion, :any)
+  data(task, :map)
+  data(plugin, :map)
+  data(plugin_info, :map)
 
-  def mount(%{"id" => id}, _session, socket) do
-    user = socket.assigns[:current_user]
-    campaign = Campaign.Context.get!(id)
-    tool = load_tool(campaign)
-    promotion = Promotions.get!(tool.promotion_id)
-
-    tool
-    |> Tools.get_or_create_task!(user)
-    |> Tools.complete_task!()
-
-    socket =
-      socket
-      |> assign(
-        user: user,
-        campaign: campaign,
-        tool: tool,
-        promotion: promotion
-      )
-
-    {:ok, socket}
+  @impl true
+  def get_authorization_context(%{"id" => id}, _session, _socket) do
+    task = Crew.Context.get_task!(id)
+    Crew.Context.get!(task.crew_id)
   end
 
   @impl true
-  def handle_uri(socket), do: socket
+  def mount(%{"id" => id}, _session, socket) do
+    task = Crew.Context.get_task!(id)
+    Crew.Context.complete_task!(task)
 
-  def load_tool(%Campaign.Model{} = campaign) do
-    case Campaign.Context.list_survey_tools(campaign) do
-      [] -> raise "Expected at least one survey tool for campaign #{campaign.title}"
-      [survey_tool | _] -> survey_tool
-    end
+    plugin = load_plugin(task)
+    plugin_info = plugin.info(id, socket)
+
+    {
+      :ok,
+      socket
+      |> assign(
+        task: task,
+        plugin: plugin,
+        plugin_info: plugin_info,
+      )
+      |> update_menus()
+    }
   end
+
+  @impl true
+  def handle_event("call-to-action", _params,
+        %{assigns: %{task: task, plugin: plugin, plugin_info: plugin_info}} = socket
+  ) do
+    path = plugin.get_cta_path(task.id, plugin_info.call_to_action.target.value, socket)
+    {:noreply, redirect(socket, external: path)}
+  end
+
+  def load_plugin(%{plugin: plugin}) do
+    plugins()[plugin]
+  end
+
+  defp plugins, do: Application.fetch_env!(:core, :crew_task_plugins)
 
   def render(assigns) do
     ~H"""
-      <HeroSmall title={{ dgettext("link-survey", "conpleted.title") }} />
-      <ContentArea>
-        <MarginY id={{:page_top}} />
-        <Title1>{{ @promotion.title }}</Title1>
-        <Spacing value="M" />
-        <BodyLarge>{{dgettext("link-survey", "thank.you.message")}}</BodyLarge>
-      </ContentArea>
+      <Workspace
+        title={{ @plugin_info.hero_title }}
+        menus={{ @menus }}
+      >
+        <ContentArea>
+          <MarginY id={{:page_top}} />
+          <Title1>{{@plugin_info.title}}</Title1>
+          <Spacing value="M" />
+          <Title3>{{ dgettext("eyra-crew", "task.completed.title") }}</Title3>
+          <Spacing value="M" />
+          <BodyLarge>{{ dgettext("eyra-crew", "task.completed.message.part1") }}</BodyLarge>
+          <Spacing value="XS" />
+          <BodyLarge>{{ dgettext("eyra-crew", "task.completed.message.part2") }}</BodyLarge>
+          <Spacing value="L" />
+          <PrimaryLiveViewButton label={{ @plugin_info.call_to_action.label }} event="call-to-action" />
+        </ContentArea>
+      </Workspace>
     """
   end
 end

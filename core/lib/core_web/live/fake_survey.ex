@@ -9,7 +9,9 @@ defmodule CoreWeb.FakeSurvey do
 
   data(redirect_url, :string)
 
-  def mount(%{"redirect_url" => redirect_url}, _session, socket) do
+  def mount(%{"id" => id}, _session, socket) do
+    redirect_url = "/task/#{id}/callback"
+
     socket =
       socket
       |> assign(redirect_url: redirect_url)

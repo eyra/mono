@@ -87,7 +87,8 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/index.ex:43
-msgid "marketplace-button"
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:93
+msgid "marketplace.button"
 msgstr ""
 
 #, elixir-format

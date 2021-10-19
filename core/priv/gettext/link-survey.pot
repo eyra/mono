@@ -27,34 +27,25 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/lab/promotion_plugin.ex:50
-#: bundles/link/lib/survey/data/promotion_plugin.ex:74
+#: bundles/link/lib/survey/data/promotion_plugin.ex:76
 msgid "by.author.label"
 msgstr ""
 
 #, elixir-format
-#: systems/crew/task_complete_page.ex:57
-msgid "thank.you.message"
-msgstr ""
-
-#, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:97
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:127
+#: bundles/link/lib/survey/data/promotion_plugin.ex:99
 msgid "reward.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:89
+#: bundles/link/lib/survey/data/promotion_plugin.ex:91
 msgid "spots.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:61
-#: bundles/link/lib/survey/data/promotion_plugin.ex:62
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:106
+#: bundles/link/lib/survey/data/promotion_plugin.ex:64
 msgid "apply.cta.title"
-msgstr ""
-
-#, elixir-format
-#: systems/crew/task_complete_page.ex:52
-msgid "conpleted.title"
 msgstr ""
 
 #, elixir-format
@@ -63,7 +54,7 @@ msgid "devices.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:56
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:101
 msgid "open.cta.title"
 msgstr ""
 
@@ -274,17 +265,17 @@ msgid "form.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:95
+#: bundles/link/lib/survey/data/promotion_plugin.ex:97
 msgid "duration.highlight.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:94
+#: bundles/link/lib/survey/data/promotion_plugin.ex:96
 msgid "duration.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:92
+#: bundles/link/lib/survey/data/promotion_plugin.ex:94
 msgid "spots.highlight.text"
 msgstr ""
 
@@ -294,6 +285,41 @@ msgid "ethical.review.link"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:20
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:31
 msgid "task.hero.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:43
+msgid "task.completed.subtitle"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:50
+msgid "task.completed.text"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:42
+msgid "task.pending.subtitle"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:125
+msgid "completed.highlight.default"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:124
+msgid "completed.highlight.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:122
+msgid "started.highlight.default"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:121
+msgid "started.highlight.title"
 msgstr ""
