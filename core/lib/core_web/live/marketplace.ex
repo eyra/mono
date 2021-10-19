@@ -8,8 +8,7 @@ defmodule CoreWeb.Marketplace do
   import Core.Authorization
 
   alias Systems.{
-    Campaign,
-    Crew
+    Campaign
   }
 
   alias Core.Accounts
@@ -110,12 +109,7 @@ defmodule CoreWeb.Marketplace do
 
     with {:ok, campaign} <- Campaign.Context.create(changeset, user),
          {:ok, _author} <- Campaign.Context.add_author(campaign, user),
-         {:ok, _crew} <-
-           Crew.Context.create(
-             "campaign",
-             "#{campaign.id}",
-             Core.Authorization.make_node(campaign)
-           ),
+         {:ok, _crew} <- Campaign.Context.create_crew(campaign),
          {:ok, tool_content_node} <- Content.Nodes.create(%{ready: false}),
          {:ok, promotion_content_node} <-
            Content.Nodes.create(%{ready: false}, tool_content_node),

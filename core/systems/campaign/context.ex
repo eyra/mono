@@ -38,6 +38,7 @@ defmodule Systems.Campaign.Context do
       where: s.id not in ^exclude
     )
     |> Repo.all()
+    |> ensure_crew()
 
     # AUTH: Can be piped through auth filter.
   end
@@ -87,6 +88,7 @@ defmodule Systems.Campaign.Context do
       preload: ^preload
     )
     |> Repo.all()
+    |> ensure_crew()
   end
 
   @doc """
@@ -107,6 +109,7 @@ defmodule Systems.Campaign.Context do
       preload: ^preload
     )
     |> Repo.all()
+    |> ensure_crew()
 
     # AUTH: Can be piped through auth filter (current code does the same thing).
   end
@@ -126,6 +129,7 @@ defmodule Systems.Campaign.Context do
       preload: ^preload
     )
     |> Repo.all()
+    |> ensure_crew()
   end
 
   @doc """
@@ -148,6 +152,7 @@ defmodule Systems.Campaign.Context do
       preload: ^preload
     )
     |> Repo.all()
+    |> ensure_crew()
   end
 
   def list_owners(%Campaign.Model{} = campaign, preload \\ []) do
@@ -213,6 +218,7 @@ defmodule Systems.Campaign.Context do
       preload: ^preload
     )
     |> Repo.one!()
+    |> ensure_crew()
   end
 
   def get_changeset(attrs \\ %{}) do
@@ -324,12 +330,29 @@ defmodule Systems.Campaign.Context do
 
   # Crew
 
-  def get_crew(campaign) do
-    reference_type = "campaign"
-    reference_id = "#{campaign.id}"
+  defp ensure_crew(list) when is_list(list) do
+    list |> Enum.map(&ensure_crew(&1))
+  end
+
+  defp ensure_crew(%Campaign.Model{} = campaign) do
+    get_or_create_crew!(campaign)
+    campaign
+  end
+
+  defp ensure_crew(term), do: term
+
+  def crew?(campaign) do
     from(
       c in Crew.Model,
-      where: c.reference_type == ^reference_type and c.reference_id == ^reference_id
+      where: c.reference_type == :campaign and c.reference_id == ^campaign.id
+    )
+    |> Repo.exists?()
+  end
+
+  def get_crew(campaign) do
+    from(
+      c in Crew.Model,
+      where: c.reference_type == :campaign and c.reference_id == ^campaign.id
     )
     |> Repo.one()
   end
@@ -339,9 +362,9 @@ defmodule Systems.Campaign.Context do
   end
 
   def get_or_create_crew(campaign) do
-    case get_crew(campaign) do
-      nil -> create_crew(campaign)
-      crew -> {:ok, crew}
+    case crew?(campaign) do
+      false -> create_crew(campaign)
+      true -> {:ok, get_crew(campaign)}
     end
   end
 
