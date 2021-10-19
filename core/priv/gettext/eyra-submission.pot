@@ -11,99 +11,97 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:241 bundles/link/lib/dashboard.ex:80
-#: bundles/link/lib/marketplace.ex:145
+#: bundles/link/lib/card.ex:249 lib/core/pools/submission.ex:111
 msgid "status.idle.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:244 bundles/link/lib/dashboard.ex:83
-#: bundles/link/lib/marketplace.ex:148
+#: bundles/link/lib/card.ex:252 lib/core/pools/submission.ex:114
 msgid "status.submitted.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:119 bundles/link/lib/marketplace.ex:184
+#: bundles/link/lib/dashboard.ex:94
 msgid "incomplete.forms.message"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:117 bundles/link/lib/marketplace.ex:182
+#: bundles/link/lib/dashboard.ex:92
 msgid "ready.for.submission.message"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:123 bundles/link/lib/marketplace.ex:188
+#: bundles/link/lib/dashboard.ex:98
 msgid "waiting.for.coordinator.message"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:248
+#: systems/campaign/content_page.ex:248
 msgid "submit.error.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:247
+#: systems/campaign/content_page.ex:247
 msgid "submit.error.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:240
+#: systems/campaign/content_page.ex:240
 msgid "submit.success.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:239
+#: systems/campaign/content_page.ex:239
 msgid "submit.success.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:265
+#: systems/campaign/content_page.ex:265
 msgid "retract.success.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:264
+#: systems/campaign/content_page.ex:264
 msgid "retract.success.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:93 bundles/link/lib/card.ex:161
+#: bundles/link/lib/card.ex:93 bundles/link/lib/card.ex:162
 msgid "reward.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:53
+#: bundles/link/lib/pool/submission_page.ex:54
 msgid "byline"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:132
+#: bundles/link/lib/pool/submission_page.ex:133
 msgid "retract.admin.success.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:131
+#: bundles/link/lib/pool/submission_page.ex:132
 msgid "retract.admin.success.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:116
+#: bundles/link/lib/pool/submission_page.ex:117
 msgid "accept.error.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:115
+#: bundles/link/lib/pool/submission_page.ex:116
 msgid "accept.error.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:109
+#: bundles/link/lib/pool/submission_page.ex:110
 msgid "accept.success.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:108
+#: bundles/link/lib/pool/submission_page.ex:109
 msgid "accept.success.title"
 msgstr ""
 
@@ -138,29 +136,26 @@ msgid "schedule.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:259 bundles/link/lib/dashboard.ex:97
-#: bundles/link/lib/marketplace.ex:162
+#: bundles/link/lib/card.ex:267 lib/core/pools/submission.ex:128
 msgid "status.accepted.closed.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:255 bundles/link/lib/dashboard.ex:94
-#: bundles/link/lib/marketplace.ex:159
+#: bundles/link/lib/card.ex:263 lib/core/pools/submission.ex:125
 msgid "status.accepted.online.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:250 bundles/link/lib/dashboard.ex:89
-#: bundles/link/lib/marketplace.ex:154
+#: bundles/link/lib/card.ex:258 lib/core/pools/submission.ex:120
 msgid "status.accepted.scheduled.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:137 bundles/link/lib/marketplace.ex:202
+#: bundles/link/lib/dashboard.ex:112
 msgid "accepted.closed.message"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:128 bundles/link/lib/marketplace.ex:193
+#: bundles/link/lib/dashboard.ex:103
 msgid "accepted.scheduled.message"
 msgstr ""

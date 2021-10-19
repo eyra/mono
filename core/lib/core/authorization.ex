@@ -22,7 +22,8 @@ defmodule Core.Authorization do
   grant_access(Systems.NextAction.OverviewPage, [:member])
   grant_access(Systems.Campaign.OverviewPage, [:researcher])
   grant_access(Systems.Campaign.ContentPage, [:owner])
-  grant_access(Systems.Crew.CompletePage, [:participant])
+  grant_access(Systems.Crew.TaskPage, [:participant])
+  grant_access(Systems.Crew.TaskCompletePage, [:participant])
 
   grant_access(CoreWeb.Admin.Login, [:visitor, :member])
   grant_access(CoreWeb.Admin.Permissions, [:admin])

@@ -41,8 +41,8 @@ defmodule Systems.Crew.Context do
     Repo.get!(Crew.TaskModel, id)
   end
 
-  def create_task(crew, member) do
-    attrs = %{status: :pending}
+  def create_task(crew, member, plugin) do
+    attrs = %{status: :pending, plugin: plugin}
 
     %Crew.TaskModel{}
     |> Crew.TaskModel.changeset(attrs)
@@ -51,15 +51,22 @@ defmodule Systems.Crew.Context do
     |> Repo.insert()
   end
 
-  def get_or_create_task(crew, member) do
+  def create_task!(crew, member, plugin) do
+    case create_task(crew, member, plugin) do
+      {:ok, task} -> task
+      _ -> nil
+    end
+  end
+
+  def get_or_create_task(crew, member, plugin) do
     case get_task(crew, member) do
-      nil -> create_task(crew, member)
+      nil -> create_task(crew, member, plugin)
       task -> {:ok, task}
     end
   end
 
-  def get_or_create_task!(crew, member) do
-    case get_or_create_task(crew, member) do
+  def get_or_create_task!(crew, member, plugin) do
+    case get_or_create_task(crew, member, plugin) do
       {:ok, task} -> task
       _ -> nil
     end
@@ -88,10 +95,10 @@ defmodule Systems.Crew.Context do
     count_tasks(crew, [:completed])
   end
 
-  def setup_tasks_for_members!(members, crew) do
+  def setup_tasks_for_members!(members, crew, plugin) do
     members
     |> Enum.map(
-      &(Crew.TaskModel.changeset(%Crew.TaskModel{}, %{status: :pending})
+      &(Crew.TaskModel.changeset(%Crew.TaskModel{}, %{status: :pending, plugin: plugin})
         |> Ecto.Changeset.put_change(:member_id, &1.id)
         |> Ecto.Changeset.put_assoc(:crew, crew))
     )
@@ -131,7 +138,7 @@ defmodule Systems.Crew.Context do
 
   def get_member!(crew, user) do
     from(m in Crew.MemberModel,
-      where: m.crew_id == ^crew.id and m.user_id in ^user.id,
+      where: m.crew_id == ^crew.id and m.user_id == ^user.id,
     )
     |> Repo.one()
   end
@@ -163,6 +170,13 @@ defmodule Systems.Crew.Context do
       Authorization.build_role_assignment(user, crew, :participant)
     )
     |> Repo.transaction()
+  end
+
+  def apply_member!(%Crew.Model{} = crew, %User{} = user) do
+    case Crew.Context.apply_member(crew, user) do
+      {:ok, %{member: member}} -> member
+      _ -> nil
+    end
   end
 
   def list_members(%Crew.Model{} = crew) do

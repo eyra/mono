@@ -5,26 +5,32 @@ defmodule Link.Survey.CrewTaskPlugin do
   alias Systems.Crew
   alias Systems.Crew.TaskPlugin.CallToAction
 
-  alias Core.Survey.Tools
-
   @behaviour Systems.Crew.TaskPlugin
 
   @impl Systems.Crew.TaskPlugin
   def info(task_id, %{assigns: %{current_user: user}} = _socket) do
     task = Crew.Context.get_task!(task_id)
-    campaign = Campaign.Context.get!(task.reference_id)
-    crew = Campaign.Context.get_or_create_crew!(campaign)
+    crew = Crew.Context.get!(task.crew_id)
+    campaign = Campaign.Context.get!(crew.reference_id, [:survey_tool])
+    tool = campaign.survey_tool
+    promotion = Core.Promotions.get!(tool.promotion_id)
+
     call_to_action = get_call_to_action(crew, user)
 
-    %{call_to_action: call_to_action}
+    %{
+      hero_title: dgettext("link-survey", "task.hero.title"),
+      title: promotion.title,
+      text: promotion.expectations,
+      call_to_action: call_to_action
+    }
   end
 
   @impl Systems.Crew.TaskPlugin
   def get_cta_path(task_id, "open", %{assigns: %{current_user: user}}) do
     task = Crew.Context.get_task!(task_id)
-    campaign = Campaign.Context.get!(task.reference_id)
-    tool = Tools.get_survey_tool!(campaign.survey_tool_id)
-    crew = Campaign.Context.get_or_create_crew!(campaign)
+    crew = Crew.Context.get!(task.crew_id)
+    campaign = Campaign.Context.get!(crew.reference_id, [:survey_tool])
+    tool = campaign.survey_tool
 
     prepare(tool.survey_url, crew, user)
   end

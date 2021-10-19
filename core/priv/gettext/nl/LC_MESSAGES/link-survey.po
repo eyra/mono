@@ -28,32 +28,33 @@ msgstr "Hoeveel minuten schat je in dat deelnemers nodig hebben?"
 
 #, elixir-format
 #: bundles/link/lib/lab/promotion_plugin.ex:50
-#: bundles/link/lib/survey/data/promotion_plugin.ex:80
+#: bundles/link/lib/survey/data/promotion_plugin.ex:74
 msgid "by.author.label"
 msgstr "Door"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/complete.ex:58
+#: systems/crew/task_complete_page.ex:57
 msgid "thank.you.message"
 msgstr "Bedankt voor het meedoen. Hopelijk tot snel!"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:103
+#: bundles/link/lib/survey/data/promotion_plugin.ex:97
 msgid "reward.highlight.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:95
+#: bundles/link/lib/survey/data/promotion_plugin.ex:89
 msgid "spots.highlight.title"
 msgstr "Beschikbare plekken"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:67
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:61
+#: bundles/link/lib/survey/data/promotion_plugin.ex:62
 msgid "apply.cta.title"
 msgstr "Meld je aan"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/complete.ex:53
+#: systems/crew/task_complete_page.ex:52
 msgid "conpleted.title"
 msgstr "Afgerond"
 
@@ -63,7 +64,7 @@ msgid "devices.label"
 msgstr "Welke apparaten kunnen door deelnemers gebruikt worden?"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:62
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:56
 msgid "open.cta.title"
 msgstr "Ga naar de vragenlijst"
 
@@ -83,107 +84,107 @@ msgid "devices.title"
 msgstr "Apparaten"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:41
+#: systems/campaign/monitor_view.ex:75
 msgid "completed.label"
 msgstr "Afgeronde taken"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:42
+#: systems/campaign/monitor_view.ex:76
 msgid "pending.label"
 msgstr "Deelnemers bezig"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:38
+#: systems/campaign/monitor_view.ex:72
 msgid "status.title"
 msgstr "Panel"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:43
+#: systems/campaign/monitor_view.ex:77
 msgid "vacant.label"
 msgstr "Open taken"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:39
+#: systems/campaign/monitor_view.ex:73
 msgid "status.label"
 msgstr "Hieronder kan je in gaten houden hoe de campagne verloopt"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:490
+#: systems/campaign/content_page.ex:490
 msgid "content.title"
 msgstr "Campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:114
+#: systems/campaign/overview_page.ex:115
 msgid "title"
 msgstr "Werving"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:148
+#: systems/campaign/overview_page.ex:149
 msgid "add.first.button"
 msgstr "Start je eerste campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:129
+#: systems/campaign/overview_page.ex:130
 msgid "add.new.button"
 msgstr "Start nieuwe campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:144
+#: systems/campaign/overview_page.ex:145
 msgid "empty.description"
 msgstr "Hier kun je campagnes opzetten en hun status volgen. Een campagne is een georganiseerde werkwijze om een doel te behalen, in dit geval het werven van deelnemers. Het bestaat uit het opzetten van een advertentie voor in de marktplaats, het koppelen van jouw studie details, het bepalen van jouw sample, en het reviewen van de resultaten."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:143
+#: systems/campaign/overview_page.ex:144
 msgid "empty.title"
 msgstr "Werf deelnemers voor jouw studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:169
+#: systems/campaign/content_page.ex:169
 msgid "tabbar.item.monitor"
 msgstr "Resultaten"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:134
+#: systems/campaign/content_page.ex:134
 msgid "tabbar.item.promotion"
 msgstr "Advertentie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:147
+#: systems/campaign/content_page.ex:147
 msgid "tabbar.item.survey"
 msgstr "Studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:48
+#: systems/campaign/monitor_view.ex:82
 msgid "monitor.empty.description"
 msgstr "Na publicatie van jouw wervingscampagne, vind je hier een lijst van geanonimiseerde deelnemers, die zich aangemeld hebben voor jouw studie. Je kunt hier hun status bekijken en na afronding van hun taak, de resultaten accepteren of afwijzen."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/monitor.ex:47
+#: systems/campaign/monitor_view.ex:81
 msgid "monitor.empty.title"
 msgstr "Resultaten"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:135
+#: systems/campaign/content_page.ex:135
 msgid "tabbar.item.promotion.forward"
 msgstr "Maak advertentie aan"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:148
+#: systems/campaign/content_page.ex:148
 msgid "tabbar.item.survey.forward"
 msgstr "Koppel je studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:170
+#: systems/campaign/content_page.ex:170
 msgid "tabbar.item.monitor.forward"
 msgstr "Bekijk resultaten"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:159
+#: systems/campaign/content_page.ex:159
 msgid "tabbar.item.criteria"
 msgstr "Sample"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:160
+#: systems/campaign/content_page.ex:160
 msgid "tabbar.item.criteria.forward"
 msgstr "Bepaal je sample"
 
@@ -193,7 +194,7 @@ msgid "form.title"
 msgstr "Studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:123
+#: systems/campaign/overview_page.ex:124
 msgid "campaign.overview.title"
 msgstr "Campagnes"
 
@@ -274,17 +275,17 @@ msgid "form.description"
 msgstr "Doorloop eerst de stappen in het zwarte kader. Zo zorg je ervoor dat deelnemers vanuit Panl deel kunnen nemen aan jouw online studie en na afloop weer teruggestuurd worden naar Panl."
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:101
+#: bundles/link/lib/survey/data/promotion_plugin.ex:95
 msgid "duration.highlight.text"
 msgstr "%{duration} minuten"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:100
+#: bundles/link/lib/survey/data/promotion_plugin.ex:94
 msgid "duration.highlight.title"
 msgstr "Duur"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:98
+#: bundles/link/lib/survey/data/promotion_plugin.ex:92
 msgid "spots.highlight.text"
 msgstr "Nog %{open} van de %{total}"
 
@@ -292,3 +293,8 @@ msgstr "Nog %{open} van de %{total}"
 #: bundles/link/lib/survey/web/form.ex:204
 msgid "ethical.review.link"
 msgstr "ethische checklist"
+
+#, elixir-format
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:20
+msgid "task.hero.title"
+msgstr "Online Studie"

@@ -207,8 +207,12 @@ defmodule Systems.Campaign.Context do
       ** (Ecto.NoResultsError)
 
   """
-  def get!(id) do
-    Repo.get!(Campaign.Model, id)
+  def get!(id, preload \\ []) do
+    from(c in Campaign.Model,
+      where: c.id == ^id,
+      preload: ^preload
+    )
+    |> Repo.one!()
   end
 
   def get_changeset(attrs \\ %{}) do

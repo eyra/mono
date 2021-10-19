@@ -9,6 +9,7 @@ defmodule Systems.Crew.TaskModel do
 
   schema "crew_tasks" do
     field(:status, Ecto.Enum, values: [:pending, :completed])
+    field(:plugin, Ecto.Enum, values: [:online_study])
 
     belongs_to(:crew, Crew.Model)
     belongs_to(:member, Crew.MemberModel)
@@ -19,7 +20,7 @@ defmodule Systems.Crew.TaskModel do
   @doc false
   def changeset(task, attrs) do
     task
-    |> cast(attrs, [:status])
-    |> validate_required([:status])
+    |> cast(attrs, [:status, :plugin])
+    |> validate_required([:status, :plugin])
   end
 end

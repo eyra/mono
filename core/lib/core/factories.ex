@@ -227,12 +227,14 @@ defmodule Core.Factories do
   end
 
   def build(:crew_task, %{} = attributes) do
+    {plugin, attributes} = Map.pop(attributes, :plugin, :online_study)
     {status, attributes} = Map.pop(attributes, :status)
     {member, attributes} = Map.pop(attributes, :member)
     {crew, _attributes} = Map.pop(attributes, :crew)
 
     build(:crew_task)
     |> struct!(%{
+      plugin: plugin,
       status: status,
       member: member,
       crew: crew

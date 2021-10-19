@@ -26,6 +26,7 @@ defmodule Core.Repo.Migrations.AddCrew do
 
     create table(:crew_tasks) do
       add(:status, :string, null: false)
+      add(:plugin, :string, null: false)
       add(:crew_id, references(:crews, on_delete: :delete_all), null: false)
       add(:member_id, references(:crew_members, on_delete: :delete_all), null: false)
 

@@ -127,7 +127,7 @@ defmodule Systems.Crew.ContextTest do
       crew = Factories.insert!(:crew, %{reference_type: :campaign, reference_id: 1})
       member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
-      {:ok, task} = Crew.Context.create_task(crew, member)
+      {:ok, task} = Crew.Context.create_task(crew, member, :online_study)
 
       assert task.crew_id == crew.id
       assert task.member_id == member.id
@@ -141,7 +141,7 @@ defmodule Systems.Crew.ContextTest do
       crew = Factories.insert!(:crew, %{reference_type: :campaign, reference_id: 1})
       member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
-      {:ok, _task} = Crew.Context.create_task(crew, member)
+      {:ok, _task} = Crew.Context.create_task(crew, member, :online_study)
 
       list = Crew.Context.list_tasks(crew)
       assert list |> Enum.find(&(&1.member_id == member.id))
@@ -169,7 +169,7 @@ defmodule Systems.Crew.ContextTest do
       crew = Factories.insert!(:crew, %{reference_type: :campaign, reference_id: 1})
       member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
-      {:ok, _} = Crew.Context.get_or_create_task(crew, member)
+      {:ok, _} = Crew.Context.get_or_create_task(crew, member, :online_study)
     end
 
     test "setup_tasks_for_members/2 " do
@@ -179,7 +179,7 @@ defmodule Systems.Crew.ContextTest do
       member1 = Factories.insert!(:crew_member, %{crew: crew, user: user1})
       member2 = Factories.insert!(:crew_member, %{crew: crew, user: user2})
 
-      list = Crew.Context.setup_tasks_for_members!([member1, member2], crew)
+      list = Crew.Context.setup_tasks_for_members!([member1, member2], crew, :online_study)
       assert list |> Enum.find(&(&1.member_id == member1.id))
       assert list |> Enum.find(&(&1.member_id == member2.id))
       assert Crew.Context.count_tasks(crew, [:pending]) == 2
@@ -191,7 +191,15 @@ defmodule Systems.Crew.ContextTest do
       member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
       assert Crew.Context.count_tasks(crew, [:completed]) == 0
-      task = Factories.insert!(:crew_task, %{crew: crew, member: member, status: :pending})
+
+      task =
+        Factories.insert!(:crew_task, %{
+          crew: crew,
+          member: member,
+          status: :pending,
+          plugin: :online_study
+        })
+
       assert Crew.Context.count_tasks(crew, [:completed]) == 0
       task = Crew.Context.complete_task!(task)
       assert task.status == :completed
@@ -204,7 +212,15 @@ defmodule Systems.Crew.ContextTest do
       member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
       assert Crew.Context.count_tasks(crew, [:pending]) == 0
-      task = Factories.insert!(:crew_task, %{crew: crew, member: member, status: :pending})
+
+      task =
+        Factories.insert!(:crew_task, %{
+          crew: crew,
+          member: member,
+          status: :pending,
+          plugin: :online_study
+        })
+
       assert Crew.Context.count_tasks(crew, [:pending]) == 1
 
       list = Crew.Context.list_members_without_task(crew)

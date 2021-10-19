@@ -77,7 +77,7 @@ msgid "spots.available"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:198
+#: bundles/link/lib/pool/submission_page.ex:199
 msgid "submission.title"
 msgstr ""
 
