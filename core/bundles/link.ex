@@ -16,9 +16,6 @@ defmodule Link do
         live("/studentpool", Pool.OverviewPage)
         live("/marketplace", Marketplace)
         live("/labstudy/all", LabStudy.Overview)
-        live("/campaign/all", Survey.Overview)
-        live("/campaign/:id/content", Survey.Content)
-        live("/campaign/:id/complete", Survey.Complete)
         live("/campaign/:id/submission", Pool.SubmissionPage)
         live("/promotion/:id", Promotion.Public)
       end
@@ -35,9 +32,6 @@ defmodule Link do
       grant_access(Link.Pool.SubmissionPage, [:researcher])
       grant_access(Link.Marketplace, [:member])
       grant_access(Link.LabStudy.Overview, [:researcher])
-      grant_access(Link.Survey.Overview, [:member])
-      grant_access(Link.Survey.Content, [:owner])
-      grant_access(Link.Survey.Complete, [:participant])
       grant_access(Link.Promotion.Public, [:visitor, :member, :owner])
     end
   end

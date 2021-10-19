@@ -5,7 +5,7 @@ defmodule Link.Pool.CampaignsView do
 
   alias Systems.NextAction
 
-  alias Core.Studies
+  alias Systems.Campaign
   alias Core.Accounts
   alias Core.ImageHelpers
   alias Core.Pools.Submission
@@ -16,8 +16,8 @@ defmodule Link.Pool.CampaignsView do
 
   prop(user, :any, required: true)
 
-  data(submitted_studies, :list)
-  data(accepted_studies, :list)
+  data(submitted_campaigns, :list)
+  data(accepted_campaigns, :list)
 
   def update(_params, socket) do
     clear_review_submission_next_action()
@@ -26,19 +26,19 @@ defmodule Link.Pool.CampaignsView do
       survey_tool: [promotion: [:content_node, :submission]]
     ]
 
-    submitted_studies =
-      Studies.list_submitted_studies([Core.Survey.Tool], preload: preload)
+    submitted_campaigns =
+      Campaign.Context.list_submitted_campaigns([Core.Survey.Tool], preload: preload)
       |> Enum.map(&convert_to_vm(socket, &1))
 
-    accepted_studies =
-      Studies.list_accepted_studies([Core.Survey.Tool], preload: preload)
+    accepted_campaigns =
+      Campaign.Context.list_accepted_campaigns([Core.Survey.Tool], preload: preload)
       |> Enum.map(&convert_to_vm(socket, &1))
 
     {
       :ok,
       socket
-      |> assign(submitted_studies: submitted_studies)
-      |> assign(accepted_studies: accepted_studies)
+      |> assign(submitted_campaigns: submitted_campaigns)
+      |> assign(accepted_campaigns: accepted_campaigns)
     }
   end
 
@@ -52,19 +52,19 @@ defmodule Link.Pool.CampaignsView do
     ~H"""
       <ContentArea>
         <MarginY id={{:page_top}} />
-        <Case value={{ Enum.count(@submitted_studies) + Enum.count(@accepted_studies) > 0 }} >
+        <Case value={{ Enum.count(@submitted_campaigns) + Enum.count(@accepted_campaigns) > 0 }} >
           <True>
             <Title2>
               {{ dgettext("link-studentpool", "submitted.title") }}
-              <span class="text-primary"> {{ Enum.count(@submitted_studies) }}</span>
+              <span class="text-primary"> {{ Enum.count(@submitted_campaigns) }}</span>
             </Title2>
-            <ContentListItem :for={{item <- @submitted_studies}} vm={{item}} />
+            <ContentListItem :for={{item <- @submitted_campaigns}} vm={{item}} />
             <Spacing value="XL" />
             <Title2>
               {{ dgettext("link-studentpool", "accepted.title") }}
-              <span class="text-primary"> {{ Enum.count(@accepted_studies) }}</span>
+              <span class="text-primary"> {{ Enum.count(@accepted_campaigns) }}</span>
             </Title2>
-            <ContentListItem :for={{item <- @accepted_studies}} vm={{item}} />
+            <ContentListItem :for={{item <- @accepted_campaigns}} vm={{item}} />
           </True>
           <False>
             <Empty

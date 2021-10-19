@@ -18,7 +18,7 @@ msgstr "Studentenpool"
 
 #, elixir-format
 #: translations.ex:2
-msgid "menu.item.surveys"
+msgid "menu.item.recruitment"
 msgstr "Werving"
 
 #, elixir-format
@@ -37,36 +37,34 @@ msgid "debug.title"
 msgstr "Debug"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:210
+#: systems/campaign/content_page.ex:210
 msgid "delete.confirm.campaign"
 msgstr "campagne"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:368
-#: bundles/link/lib/survey/web/content.ex:372 bundles/link/lib/survey/web/content.ex:378
+#: systems/campaign/content_page.ex:368 systems/campaign/content_page.ex:372
+#: systems/campaign/content_page.ex:378
 msgid "delete.button"
 msgstr "Verwijderen"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:173
-#: bundles/link/lib/survey/web/content.ex:352 bundles/link/lib/survey/web/content.ex:358
-#: bundles/link/lib/survey/web/content.ex:362
+#: bundles/link/lib/pool/submission_page.ex:174
+#: systems/campaign/content_page.ex:352 systems/campaign/content_page.ex:358 systems/campaign/content_page.ex:362
 msgid "preview.button"
 msgstr "Bekijken"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:338
-#: bundles/link/lib/survey/web/content.ex:344
+#: systems/campaign/content_page.ex:338 systems/campaign/content_page.ex:344
 msgid "submit.button"
 msgstr "Indienen"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:179
-#: bundles/link/lib/survey/web/content.ex:382
+#: bundles/link/lib/pool/submission_page.ex:180
+#: systems/campaign/content_page.ex:382
 msgid "retract.button"
 msgstr "Haal offline"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:165
+#: bundles/link/lib/pool/submission_page.ex:166
 msgid "accept.button"
 msgstr "Publiceren"

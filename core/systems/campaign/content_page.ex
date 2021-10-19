@@ -1,4 +1,4 @@
-defmodule Link.Survey.Content do
+defmodule Systems.Campaign.ContentPage do
   @moduledoc """
   The cms page for survey tool
   """
@@ -23,7 +23,7 @@ defmodule Link.Survey.Content do
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent, TabbarFooter}
-  alias Link.Survey.Monitor
+  alias Systems.Campaign.MonitorView
   alias Link.Survey.Form, as: ToolForm
   alias Link.Pool.CampaignSubmissionView, as: SubmissionForm
   import Core.ImageCatalog, only: [image_catalog: 0]
@@ -169,7 +169,7 @@ defmodule Link.Survey.Content do
         title: dgettext("link-survey", "tabbar.item.monitor"),
         forward_title: dgettext("link-survey", "tabbar.item.monitor.forward"),
         type: :fullpage,
-        component: Monitor,
+        component: MonitorView,
         props: %{
           entity_id: tool.id
         }

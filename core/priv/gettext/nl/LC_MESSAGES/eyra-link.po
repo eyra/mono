@@ -88,7 +88,8 @@ msgstr "Voor onderzoek"
 
 #, elixir-format
 #: bundles/link/lib/index.ex:43
-msgid "marketplace-button"
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:91
+msgid "marketplace.button"
 msgstr "Naar de marktplaats"
 
 #, elixir-format

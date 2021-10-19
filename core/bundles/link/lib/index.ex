@@ -40,7 +40,7 @@ defmodule Link.Index do
     if current_user.researcher do
       dgettext("eyra-link", "dashboard-button")
     else
-      dgettext("eyra-link", "marketplace-button")
+      dgettext("eyra-link", "marketplace.button")
     end
   end
 

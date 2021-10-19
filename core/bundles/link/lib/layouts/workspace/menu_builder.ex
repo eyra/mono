@@ -60,8 +60,8 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
       admin?(email)
     )
     |> append(
-      live_item(socket, menu_id, :surveys, active_item),
-      can_access?(user_state, CoreWeb.Study.New)
+      live_item(socket, menu_id, :recruitment, active_item),
+      user_state.researcher
     )
     |> append(live_item(socket, menu_id, :studentpool, active_item), user_state.coordinator)
     |> append(live_item(socket, menu_id, :marketplace, active_item))

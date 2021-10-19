@@ -9,29 +9,29 @@ defmodule Core.Pools.SignalHandlersTest do
   setup do
     {:ok,
      %{
-       study: Factories.insert!(:study),
+       campaign: Factories.insert!(:campaign),
        coordinator: Factories.insert!(:member, %{coordinator: true})
      }}
   end
 
-  describe "study_created" do
+  describe "campaign_created" do
     test "assign the coordinator role on newly created studies", %{
-      study: study,
+      campaign: campaign,
       coordinator: coordinator
     } do
-      SignalHandlers.dispatch(:study_created, %{
-        study: study
+      SignalHandlers.dispatch(:campaign_created, %{
+        campaign: campaign
       })
 
-      assert Authorization.users_with_role(study, :coordinator, [:profile, :features]) == [
+      assert Authorization.users_with_role(campaign, :coordinator, [:profile, :features]) == [
                coordinator
              ]
     end
   end
 
   describe "user_profile_updated" do
-    test "assign the coordinator role on all existing studyies", %{
-      study: study,
+    test "assign the coordinator role on all existing campaigns", %{
+      campaign: campaign,
       coordinator: coordinator
     } do
       SignalHandlers.dispatch(:user_profile_updated, %{
@@ -39,13 +39,13 @@ defmodule Core.Pools.SignalHandlersTest do
         user_changeset: Changeset.cast(%User{}, %{coordinator: true}, [:coordinator])
       })
 
-      assert Authorization.users_with_role(study, :coordinator, [:profile, :features]) == [
+      assert Authorization.users_with_role(campaign, :coordinator, [:profile, :features]) == [
                coordinator
              ]
     end
 
     test "do not assign coordinator role to students/researchers", %{
-      study: study
+      campaign: campaign
     } do
       student = Factories.insert!(:member, %{student: true})
 
@@ -54,21 +54,21 @@ defmodule Core.Pools.SignalHandlersTest do
         user_changeset: Changeset.cast(%User{}, %{coordinator: false}, [:coordinator])
       })
 
-      assert Authorization.users_with_role(study, :coordinator) == []
+      assert Authorization.users_with_role(campaign, :coordinator) == []
     end
 
-    test "remove the coordinator role on all existing studyies", %{
-      study: study
+    test "remove the coordinator role on all existing campaigns", %{
+      campaign: campaign
     } do
       user = Factories.insert!(:member)
-      Authorization.assign_role(user, study, :coordinator)
+      Authorization.assign_role(user, campaign, :coordinator)
 
       SignalHandlers.dispatch(:user_profile_updated, %{
         user: user,
         user_changeset: Changeset.cast(%User{}, %{coordinator: false}, [:coordinator])
       })
 
-      assert Authorization.users_with_role(study, :coordinator) == []
+      assert Authorization.users_with_role(campaign, :coordinator) == []
     end
   end
 end

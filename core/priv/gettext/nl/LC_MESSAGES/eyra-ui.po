@@ -13,15 +13,15 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/debug.ex:6 bundles/link/lib/onboarding/wizard.ex:6
-#: bundles/link/lib/pool/submission_page.ex:6 bundles/link/lib/survey/web/content.ex:6
-#: lib/core_web/live/data_donation/content.ex:6 lib/core_web/live/user/profile.ex:6
+#: bundles/link/lib/pool/submission_page.ex:6 lib/core_web/live/data_donation/content.ex:6
+#: lib/core_web/live/user/profile.ex:6 systems/campaign/content_page.ex:6
 msgid "error.flash"
 msgstr "Er is een fout opgetreden"
 
 #, elixir-format
 #: bundles/link/lib/debug.ex:6 bundles/link/lib/onboarding/wizard.ex:6
-#: bundles/link/lib/pool/submission_page.ex:6 bundles/link/lib/survey/web/content.ex:6
-#: lib/core_web/live/data_donation/content.ex:6 lib/core_web/live/user/profile.ex:6
+#: bundles/link/lib/pool/submission_page.ex:6 lib/core_web/live/data_donation/content.ex:6
+#: lib/core_web/live/user/profile.ex:6 systems/campaign/content_page.ex:6
 msgid "saved.info.flash"
 msgstr "Opgeslagen"
 
@@ -72,12 +72,12 @@ msgid "menu.item.todo"
 msgstr "To-do"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:46
+#: lib/core_web/live/dashboard.ex:47
 msgid "dashboard.title"
 msgstr "Dashboard"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:98
+#: bundles/link/lib/marketplace.ex:130
 msgid "marketplace.title"
 msgstr "Marktplaats"
 
@@ -156,38 +156,38 @@ msgstr "Helpdesk"
 
 #, elixir-format
 #: bundles/link/lib/pool/submission_page.ex:8
-#: bundles/link/lib/promotions/public.ex:6 bundles/link/lib/survey/web/content.ex:9 lib/core_web/live/admin/ticket.ex:4
+#: bundles/link/lib/promotions/public.ex:6 lib/core_web/live/admin/ticket.ex:4 systems/campaign/content_page.ex:9
 msgid "cancel.button"
 msgstr "Annuleren"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:212
+#: systems/campaign/content_page.ex:212
 msgid "delete.confirm.text"
 msgstr "De %{item} wordt permanent verwijderd."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:211
+#: systems/campaign/content_page.ex:211
 msgid "delete.confirm.title"
 msgstr "%{item} verwijderen?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:213
+#: systems/campaign/content_page.ex:213
 msgid "delete.confirm.label"
 msgstr "Verwijderen"
 
 #, elixir-format
 #: bundles/link/lib/pool/submission_page.ex:8
-#: bundles/link/lib/promotions/public.ex:6 bundles/link/lib/survey/web/content.ex:9 lib/core_web/live/admin/ticket.ex:4
+#: bundles/link/lib/promotions/public.ex:6 lib/core_web/live/admin/ticket.ex:4 systems/campaign/content_page.ex:9
 msgid "ok.button"
 msgstr "OK"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:278
+#: systems/campaign/content_page.ex:278
 msgid "feature.unavailable.text"
 msgstr "Op dit moment werken we nog aan deze functie. We updaten het platform regelmatig. Probeer het later nog eens."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:277
+#: systems/campaign/content_page.ex:277
 msgid "feature.unavailable.title"
 msgstr "Binnenkort beschikbaar"
 

@@ -17,6 +17,7 @@ defmodule Link.Survey.Form do
 
   data(entity, :any)
   data(entity_id, :any)
+  data(campaign_id, :any)
   data(uri_origin, :any)
   data(device_labels, :list)
   data(language_labels, :list)
@@ -92,6 +93,7 @@ defmodule Link.Survey.Form do
         socket
       ) do
     entity = Tools.get_survey_tool!(entity_id)
+
     changeset = Tool.changeset(entity, :create, %{})
 
     device_labels = Devices.labels(entity.devices)
@@ -251,10 +253,10 @@ defmodule Link.Survey.Form do
                   <Spacing value="XS" />
                   <div class="flex flex-row gap-6 items-center">
                     <div class="flex-wrap">
-                      <BodyMedium color="text-tertiary"><span class="break-all">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Link.Survey.Complete, @entity_id)}}</span></BodyMedium>
+                      <BodyMedium color="text-tertiary"><span class="break-all">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Systems.Crew.TaskCompletePage, :campaign, @entity.study_id)}}</span></BodyMedium>
                     </div>
                     <div class="flex-wrap flex-shrink-0 mt-1">
-                      <div id="copy-redirect-url" class="cursor-pointer" phx-hook="Clipboard" data-text={{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Link.Survey.Complete, @entity_id)}} >
+                      <div id="copy-redirect-url" class="cursor-pointer" phx-hook="Clipboard" data-text={{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Systems.Crew.TaskCompletePage, :campaign, @entity.study_id)}} >
                         <LabelIcon vm={{ %{ label: dgettext("link-survey", "redirect.copy.button"),  icon: :clipboard_tertiary, text_color: "text-tertiary" } }} />
                       </div>
                     </div>

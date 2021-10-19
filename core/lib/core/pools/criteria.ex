@@ -29,6 +29,15 @@ defmodule Core.Pools.Criteria do
     |> cast(attrs, @fields)
   end
 
+  def eligitable?(nil, nil), do: true
+
+  def eligitable?(criteria, nil) do
+    meets?(criteria.genders, nil) &&
+      meets?(criteria.dominant_hands, nil) &&
+      meets?(criteria.native_languages, nil) &&
+      meets?(criteria.study_program_codes, nil)
+  end
+
   def eligitable?(
         criteria,
         %{

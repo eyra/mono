@@ -10,7 +10,7 @@ defmodule Core.DataDonation.Tool do
   import Ecto.Changeset
   import EctoCommons.URLValidator
 
-  alias Core.Studies.Study
+  alias Systems.Campaign.Model, as: Study
   alias Core.Accounts.User
   alias Core.Promotions.Promotion
   alias Core.DataDonation.UserData
@@ -18,7 +18,7 @@ defmodule Core.DataDonation.Tool do
   schema "data_donation_tools" do
     belongs_to(:content_node, Core.Content.Node)
     belongs_to(:auth_node, Core.Authorization.Node)
-    belongs_to(:study, Study)
+    belongs_to(:study, Study, source: :id)
     belongs_to(:promotion, Promotion)
 
     field(:script, :string)

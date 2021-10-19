@@ -12,11 +12,11 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:120
-msgid "study.all.title"
-msgstr "< Aanbod >"
+#: bundles/link/lib/marketplace.ex:152
+msgid "campaign.all.title"
+msgstr "Beschikbare studies"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:112
-msgid "study.subject.title"
-msgstr "< Mijn bijdrages >"
+#: bundles/link/lib/marketplace.ex:142
+msgid "campaign.subject.title"
+msgstr "Mijn bijdragen"

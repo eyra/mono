@@ -7,9 +7,13 @@ defmodule CoreWeb.Marketplace do
 
   import Core.Authorization
 
+  alias Systems.{
+    Campaign,
+    Crew
+  }
+
   alias Core.Accounts
-  alias Core.Studies
-  alias Core.Studies.Study
+  alias Systems.Campaign
   alias Core.DataDonation
   alias Core.Promotions
   alias Core.Content
@@ -22,49 +26,49 @@ defmodule CoreWeb.Marketplace do
   alias EyraUI.Grid.{DynamicGrid}
 
   data(highlighted_count, :any)
-  data(owned_studies, :any)
-  data(subject_studies, :any)
-  data(available_studies, :any)
+  data(owned_campaigns, :any)
+  data(subject_campaigns, :any)
+  data(available_campaigns, :any)
   data(available_count, :any)
   data(current_user, :any)
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
     preload = [data_donation_tool: [:promotion]]
 
-    owned_studies =
+    owned_campaigns =
       user
-      |> Studies.list_owned_studies(preload: preload)
-      |> Enum.map(&CardVM.primary_study(&1, socket))
+      |> Campaign.Context.list_owned_campaigns(preload: preload)
+      |> Enum.map(&CardVM.primary_campaign(&1, socket))
 
-    subject_studies =
+    subject_campaigns =
       user
-      |> Studies.list_data_donation_subject_studies(preload: preload)
-      |> Enum.map(&CardVM.primary_study(&1, socket))
+      |> Campaign.Context.list_data_donation_subject_campaigns(preload: preload)
+      |> Enum.map(&CardVM.primary_campaign(&1, socket))
 
-    highlighted_studies = owned_studies ++ subject_studies
-    highlighted_count = Enum.count(highlighted_studies)
+    highlighted_campaigns = owned_campaigns ++ subject_campaigns
+    highlighted_count = Enum.count(highlighted_campaigns)
 
     exclusion_list =
-      highlighted_studies
-      |> Stream.map(fn study -> study.id end)
+      highlighted_campaigns
+      |> Stream.map(fn campaign -> campaign.id end)
       |> Enum.into(MapSet.new())
 
-    available_studies =
-      Studies.list_accepted_studies([DataDonation.Tool],
+    available_campaigns =
+      Campaign.Context.list_accepted_campaigns([DataDonation.Tool],
         exclude: exclusion_list,
         preload: preload
       )
-      |> Enum.map(&CardVM.primary_study(&1, socket))
+      |> Enum.map(&CardVM.primary_campaign(&1, socket))
 
-    available_count = Enum.count(available_studies)
+    available_count = Enum.count(available_campaigns)
 
     socket =
       socket
       |> update_menus()
       |> assign(highlighted_count: highlighted_count)
-      |> assign(owned_studies: owned_studies)
-      |> assign(subject_studies: subject_studies)
-      |> assign(available_studies: available_studies)
+      |> assign(owned_campaigns: owned_campaigns)
+      |> assign(subject_campaigns: subject_campaigns)
+      |> assign(available_campaigns: available_campaigns)
       |> assign(available_count: available_count)
 
     {:ok, socket}
@@ -98,19 +102,26 @@ defmodule CoreWeb.Marketplace do
     title = dgettext("eyra-marketplace", "default.study.title")
 
     changeset =
-      %Study{}
-      |> Study.changeset(%{title: title})
+      %Campaign.Model{}
+      |> Campaign.Model.changeset(%{title: title})
 
     tool_attrs = create_tool_attrs()
     promotion_attrs = create_promotion_attrs(title, user, profile)
 
-    with {:ok, study} <- Studies.create_study(changeset, user),
-         {:ok, _author} <- Studies.add_author(study, user),
+    with {:ok, campaign} <- Campaign.Context.create(changeset, user),
+         {:ok, _author} <- Campaign.Context.add_author(campaign, user),
+         {:ok, _crew} <-
+           Crew.Context.create(
+             "campaign",
+             "#{campaign.id}",
+             Core.Authorization.make_node(campaign)
+           ),
          {:ok, tool_content_node} <- Content.Nodes.create(%{ready: false}),
          {:ok, promotion_content_node} <-
            Content.Nodes.create(%{ready: false}, tool_content_node),
-         {:ok, promotion} <- Promotions.create(promotion_attrs, study, promotion_content_node),
-         {:ok, tool} <- DataDonation.Tools.create(tool_attrs, study, promotion, tool_content_node) do
+         {:ok, promotion} <- Promotions.create(promotion_attrs, campaign, promotion_content_node),
+         {:ok, tool} <-
+           DataDonation.Tools.create(tool_attrs, campaign, promotion, tool_content_node) do
       tool
     end
   end
@@ -146,10 +157,10 @@ defmodule CoreWeb.Marketplace do
             <span class="text-primary"> {{ @highlighted_count }}</span>
           </Title2>
           <DynamicGrid>
-            <div :for={{ card <- @owned_studies  }} >
+            <div :for={{ card <- @owned_campaigns  }} >
               <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :edit, id: card.edit_id } }} />
             </div>
-            <div :for={{ card <- @subject_studies  }} >
+            <div :for={{ card <- @subject_campaigns  }} >
               <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
             </div>
             <div :if={{ can_access?(@current_user, CoreWeb.Study.New) }} >
@@ -165,7 +176,7 @@ defmodule CoreWeb.Marketplace do
             <span class="text-primary"> {{ @available_count }}</span>
           </Title2>
           <DynamicGrid>
-            <div :for={{ card <- @available_studies  }} class="mb-1" >
+            <div :for={{ card <- @available_campaigns  }} class="mb-1" >
               <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
             </div>
           </DynamicGrid>

@@ -78,7 +78,7 @@ msgid "spots.available"
 msgstr "%{open} van de %{total} plaatsen beschikbaar"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:198
+#: bundles/link/lib/pool/submission_page.ex:199
 msgid "submission.title"
 msgstr "Campagne"
 

@@ -5,11 +5,14 @@ defmodule Link.Marketplace do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :marketplace
 
-  alias Systems.NextAction
+  alias Systems.{
+    NextAction,
+    Campaign,
+    Crew
+  }
 
   alias Core.ImageHelpers
   alias Core.Accounts
-  alias Core.Studies
   alias Core.Pools.{Submission, Criteria}
   alias Core.Survey.Tool, as: SurveyTool
   alias Core.Lab.Tool, as: LabTool
@@ -25,10 +28,10 @@ defmodule Link.Marketplace do
 
   data(next_best_action, :any)
   data(highlighted_count, :any)
-  data(owned_studies, :any)
-  data(subject_studies, :any)
+  data(owned_campaigns, :any)
+  data(subject_campaigns, :any)
   data(subject_count, :any)
-  data(available_studies, :any)
+  data(available_campaigns, :any)
   data(available_count, :any)
   data(current_user, :any)
 
@@ -41,38 +44,38 @@ defmodule Link.Marketplace do
       lab_tool: [:promotion, :time_slots]
     ]
 
-    subject_studies =
+    subject_campaigns =
       user
-      |> Studies.list_subject_studies(preload: preload)
+      |> Campaign.Context.list_subject_campaigns(preload: preload)
       |> Enum.map(&convert_to_vm(socket, &1))
 
-    highlighted_studies = subject_studies
-    highlighted_count = Enum.count(subject_studies)
+    highlighted_campaigns = subject_campaigns
+    highlighted_count = Enum.count(subject_campaigns)
 
     exclusion_list =
-      highlighted_studies
-      |> Stream.map(fn study -> study.id end)
+      highlighted_campaigns
+      |> Stream.map(fn campaign -> campaign.id end)
       |> Enum.into(MapSet.new())
 
-    available_studies =
-      Studies.list_accepted_studies([LabTool, SurveyTool],
+    available_campaigns =
+      Campaign.Context.list_accepted_campaigns([LabTool, SurveyTool],
         exclude: exclusion_list,
         preload: preload
       )
       |> filter(socket)
-      |> Enum.map(&CardVM.primary_study(&1, socket))
+      |> Enum.map(&CardVM.primary_campaign(&1, socket))
 
-    subject_count = Enum.count(subject_studies)
-    available_count = Enum.count(available_studies)
+    subject_count = Enum.count(subject_campaigns)
+    available_count = Enum.count(available_campaigns)
 
     socket =
       socket
       |> update_menus()
       |> assign(next_best_action: next_best_action)
       |> assign(highlighted_count: highlighted_count)
-      |> assign(subject_studies: subject_studies)
+      |> assign(subject_campaigns: subject_campaigns)
       |> assign(subject_count: subject_count)
-      |> assign(available_studies: available_studies)
+      |> assign(available_campaigns: available_campaigns)
       |> assign(available_count: available_count)
 
     {:ok, socket}
@@ -90,8 +93,10 @@ defmodule Link.Marketplace do
        ) do
     user_features = Accounts.get_features(user)
 
-    Submission.published_status(submission) == :online &&
-      Criteria.eligitable?(submission_criteria, user_features)
+    online? = Submission.published_status(submission) == :online
+    eligitable? = Criteria.eligitable?(submission_criteria, user_features)
+
+    online? and eligitable?
   end
 
   def handle_auto_save_done(socket) do
@@ -100,7 +105,9 @@ defmodule Link.Marketplace do
 
   def handle_info({:card_click, %{action: :edit, id: id}}, socket) do
     {:noreply,
-     push_redirect(socket, to: CoreWeb.Router.Helpers.live_path(socket, Link.Survey.Content, id))}
+     push_redirect(socket,
+       to: CoreWeb.Router.Helpers.live_path(socket, Systems.Campaign.ContentPage, id)
+     )}
   end
 
   def handle_info({:card_click, %{action: :public, id: id}}, socket) do
@@ -132,21 +139,21 @@ defmodule Link.Marketplace do
             <Case value={{ @subject_count > 0 }} >
               <True>
                 <Title2>
-                  {{ dgettext("eyra-study", "study.subject.title") }}
+                  {{ dgettext("eyra-campaign", "campaign.subject.title") }}
                   <span class="text-primary"> {{ @subject_count }}</span>
                 </Title2>
-                <ContentListItem :for={{item <- @subject_studies}} vm={{item}} />
+                <ContentListItem :for={{item <- @subject_campaigns}} vm={{item}} />
               </True>
             </Case>
             <Case value={{ render_empty?(assigns) }} >
               <False>
                 <Spacing :if={{ @subject_count > 0 }} value="XL" />
                 <Title2>
-                  {{ dgettext("eyra-study", "study.all.title") }}
+                  {{ dgettext("eyra-campaign", "campaign.all.title") }}
                   <span class="text-primary"> {{ @available_count }}</span>
                 </Title2>
                 <DynamicGrid>
-                  <div :for={{ card <- @available_studies  }} class="mb-1" >
+                  <div :for={{ card <- @available_campaigns  }} class="mb-1" >
                     <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
                   </div>
                 </DynamicGrid>
@@ -171,50 +178,31 @@ defmodule Link.Marketplace do
     |> CoreWeb.UI.Timestamp.humanize()
   end
 
-  defp get_subtitle(
-         _submission,
-         _promotion_content_node,
-         current_subject_count,
-         target_subject_count
-       ) do
-    dgettext("link-dashboard", "quick_summary.%{subject_count}.%{target_subject_count}",
-      subject_count: current_subject_count,
-      target_subject_count: target_subject_count || 0
-    )
+  defp get_subtitle(%{reward_value: reward_value} = _submission) do
+    dgettext("eyra-marketplace", "reward.label", value: reward_value)
   end
 
   def convert_to_vm(socket, %{
         id: id,
         updated_at: updated_at,
         survey_tool: %{
-          id: edit_id,
-          current_subject_count: current_subject_count,
-          subject_count: target_subject_count,
           promotion: %{
             title: title,
             image_id: image_id,
-            content_node: promotion_content_node,
             submission: submission
           }
         }
       }) do
     tag = Submission.get_tag(submission)
 
-    subtitle =
-      get_subtitle(
-        submission,
-        promotion_content_node,
-        current_subject_count,
-        target_subject_count
-      )
-
+    subtitle = get_subtitle(submission)
     quick_summary = get_quick_summary(updated_at)
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
     image = %{type: :catalog, info: image_info}
 
     %{
       id: id,
-      path: Routes.live_path(socket, Link.Survey.Content, edit_id),
+      path: Routes.live_path(socket, Crew.TaskPage, :campaign, id),
       title: title,
       subtitle: subtitle || "<no subtitle>",
       tag: tag,

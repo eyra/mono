@@ -9,7 +9,7 @@ defmodule Core.Survey.Tool do
   require Core.Enums.Devices
 
   import Ecto.Changeset
-  alias Core.Studies.Study
+  alias Systems.Campaign.Model, as: Study
   alias Core.Survey.Task
   alias Core.Accounts.User
   alias Core.Promotions.Promotion

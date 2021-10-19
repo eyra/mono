@@ -5,9 +5,13 @@ defmodule Link.Dashboard do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :dashboard
 
+  alias Systems.{
+    Campaign,
+    Crew
+  }
+
   alias Core.Content.Nodes
   alias Core.ImageHelpers
-  alias Core.Studies
   alias Core.Pools.Submission
   alias CoreWeb.UI.ContentListItem
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
@@ -27,7 +31,7 @@ defmodule Link.Dashboard do
 
     content_items =
       user
-      |> Studies.list_owned_studies(preload: preload)
+      |> Campaign.Context.list_owned_campaigns(preload: preload)
       |> Enum.map(&convert_to_vm(socket, &1))
 
     socket =
@@ -104,8 +108,8 @@ defmodule Link.Dashboard do
 
           :online ->
             dgettext("link-dashboard", "quick_summary.%{subject_count}.%{target_subject_count}",
-              subject_count: current_subject_count,
-              target_subject_count: target_subject_count || 0
+              subject_count: target_subject_count - current_subject_count,
+              target_subject_count: target_subject_count
             )
 
           :closed ->
@@ -115,10 +119,10 @@ defmodule Link.Dashboard do
   end
 
   def convert_to_vm(socket, %{
+        id: id,
         updated_at: updated_at,
         survey_tool: %{
           id: edit_id,
-          current_subject_count: current_subject_count,
           subject_count: target_subject_count,
           promotion: %{
             title: title,
@@ -129,6 +133,16 @@ defmodule Link.Dashboard do
         }
       }) do
     tag = Submission.get_tag(submission)
+
+    target_subject_count =
+      if target_subject_count == nil do
+        0
+      else
+        target_subject_count
+      end
+
+    crew = Crew.Context.get_by_reference!(:campaign, id)
+    current_subject_count = Crew.Context.count_tasks(crew, [:pending, :completed])
 
     subtitle =
       get_subtitle(
@@ -143,7 +157,7 @@ defmodule Link.Dashboard do
     image = %{type: :catalog, info: image_info}
 
     %{
-      path: Routes.live_path(socket, Link.Survey.Content, edit_id),
+      path: Routes.live_path(socket, Systems.Campaign.ContentPage, edit_id),
       title: title,
       subtitle: subtitle || "<no subtitle>",
       tag: tag,
@@ -172,7 +186,7 @@ defmodule Link.Dashboard do
     image = %{type: :catalog, info: image_info}
 
     %{
-      path: Routes.live_path(socket, Link.Survey.Content, edit_id),
+      path: Routes.live_path(socket, Systems.Campaign.ContentPage, edit_id),
       title: title,
       subtitle: subtitle,
       tag: tag,

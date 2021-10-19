@@ -5,6 +5,9 @@ config :core,
     survey: Link.Survey.PromotionPlugin,
     lab: Link.Lab.PromotionPlugin
   ],
+  crew_task_plugins: [
+    online_study: Link.Survey.CrewTaskPlugin
+  ],
   menu_items: Link.Menu.Items,
   workspace_menu_builder: Link.Layouts.Workspace.MenuBuilder,
   website_menu_builder: Link.Layouts.Website.MenuBuilder,
@@ -16,7 +19,6 @@ config :core, CoreWeb.UserAuth,
   participant_onboarding_page: Link.Onboarding.Wizard
 
 config :core, :features,
-  marketplace: false,
   sign_in_with_apple: false,
   member_google_sign_in: false,
   password_sign_in: false,

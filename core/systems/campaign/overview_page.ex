@@ -1,14 +1,15 @@
-defmodule Link.Survey.Overview do
+defmodule Systems.Campaign.OverviewPage do
   @moduledoc """
-   The surveys screen.
+   The recruitment page for researchers.
   """
   use CoreWeb, :live_view
-  use CoreWeb.Layouts.Workspace.Component, :surveys
+  use CoreWeb.Layouts.Workspace.Component, :recruitment
+
+  alias Systems.Campaign
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias EyraUI.Button.PrimaryLiveViewButton
-  alias Core.Studies
-  alias Core.Studies.Study
+
   alias Core.Accounts
   alias Core.Survey.Tools
   alias Core.Content
@@ -24,21 +25,21 @@ defmodule Link.Survey.Overview do
   alias EyraUI.Button.Face.Forward
   import Core.ImageCatalog, only: [image_catalog: 0]
 
-  data(surveys, :map, default: [])
+  data(campaigns, :map, default: [])
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
     preload = [survey_tool: [promotion: [:submission]]]
 
-    surveys =
+    campaigns =
       user
-      |> Studies.list_owned_studies(preload: preload)
+      |> Campaign.Context.list_owned_campaigns(preload: preload)
       # Temp: filter out labs
       |> Enum.filter(& &1.survey_tool)
-      |> Enum.map(&CardVM.study_researcher(&1, socket))
+      |> Enum.map(&CardVM.campaign_researcher(&1, socket))
 
     {:ok,
      socket
-     |> assign(surveys: surveys)
+     |> assign(campaigns: campaigns)
      |> update_menus()}
   end
 
@@ -47,41 +48,41 @@ defmodule Link.Survey.Overview do
   end
 
   @impl true
-  def handle_event("create_tool", _params, socket) do
-    tool = create_tool(socket)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, Link.Survey.Content, tool.id))}
+  def handle_event("create_campaign", _params, socket) do
+    tool = create_campaign(socket)
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, Campaign.ContentPage, tool.id))}
   end
 
   def handle_info({:card_click, %{action: :edit, id: id}}, socket) do
     {:noreply,
-     push_redirect(socket, to: CoreWeb.Router.Helpers.live_path(socket, Link.Survey.Content, id))}
+     push_redirect(socket, to: CoreWeb.Router.Helpers.live_path(socket, Campaign.ContentPage, id))}
   end
 
-  defp create_tool(socket) do
+  defp create_campaign(socket) do
     user = socket.assigns.current_user
     profile = user |> Accounts.get_profile()
 
     title = dgettext("eyra-dashboard", "default.study.title")
 
     changeset =
-      %Study{}
-      |> Study.changeset(%{title: title})
+      %Campaign.Model{}
+      |> Campaign.Model.changeset(%{title: title})
 
     tool_attrs = create_tool_attrs()
     promotion_attrs = create_promotion_attrs(title, user, profile)
 
     pool = Pools.get_by_name(:vu_students)
 
-    with {:ok, study} <- Studies.create_study(changeset, user),
-         {:ok, _author} <- Studies.add_author(study, user),
+    with {:ok, campaign} <- Campaign.Context.create(changeset, user),
+         {:ok, _author} <- Campaign.Context.add_author(campaign, user),
          {:ok, tool_content_node} <- Content.Nodes.create(%{ready: false}),
          {:ok, promotion_content_node} <-
            Content.Nodes.create(%{ready: false}, tool_content_node),
-         {:ok, promotion} <- Promotions.create(promotion_attrs, study, promotion_content_node),
+         {:ok, promotion} <- Promotions.create(promotion_attrs, campaign, promotion_content_node),
          {:ok, submission_content_node} <-
            Content.Nodes.create(%{ready: true}, promotion_content_node),
          {:ok, _submission} <- Submissions.create(promotion, pool, submission_content_node),
-         {:ok, tool} <- Tools.create_survey_tool(tool_attrs, study, promotion, tool_content_node) do
+         {:ok, tool} <- Tools.create_survey_tool(tool_attrs, campaign, promotion, tool_content_node) do
       tool
     end
   end
@@ -116,24 +117,24 @@ defmodule Link.Survey.Overview do
       >
         <ContentArea>
           <MarginY id={{:page_top}} />
-          <Case value={{ Enum.count(@surveys) > 0 }} >
+          <Case value={{ Enum.count(@campaigns) > 0 }} >
           <True>
             <div class="flex flex-row items-center">
               <div class="h-full">
-                <Title2 margin="">{{ dgettext("link-survey", "survey.overview.title") }}</Title2>
+                <Title2 margin="">{{ dgettext("link-survey", "campaign.overview.title") }}</Title2>
               </div>
               <div class="flex-grow">
               </div>
               <div class="h-full pt-2px lg:pt-1">
-                <Send vm={{ %{event: "create_tool" } }}>
+                <Send vm={{ %{event: "create_campaign" } }}>
                   <Forward vm={{ label: dgettext("link-survey", "add.new.button") }} />
                 </Send>
               </div>
             </div>
             <MarginY id={{:title2_bottom}} />
             <DynamicGrid>
-              <div :for={{ study <- @surveys  }} >
-                <DynamicStudy conn={{@socket}} path_provider={{Routes}} card={{study}} click_event_data={{%{action: :edit, id: study.edit_id } }} />
+              <div :for={{ campaign <- @campaigns  }} >
+                <DynamicStudy conn={{@socket}} path_provider={{Routes}} card={{campaign}} click_event_data={{%{action: :edit, id: campaign.edit_id } }} />
               </div>
             </DynamicGrid>
             <Spacing value="L" />
@@ -145,7 +146,7 @@ defmodule Link.Survey.Overview do
               illustration="cards"
             />
             <Spacing value="L" />
-            <PrimaryLiveViewButton label={{ dgettext("link-survey", "add.first.button") }} event="create_tool"/>
+            <PrimaryLiveViewButton label={{ dgettext("link-survey", "add.first.button") }} event="create_campaign"/>
           </False>
           </Case>
         </ContentArea>
