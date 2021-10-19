@@ -11,16 +11,21 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/crew/task_complete_page.ex:71
+#: systems/crew/task_complete_page.ex:73
 msgid "task.completed.message.part1"
 msgstr ""
 
 #, elixir-format
-#: systems/crew/task_complete_page.ex:73
+#: systems/crew/task_complete_page.ex:75
 msgid "task.completed.message.part2"
 msgstr ""
 
 #, elixir-format
-#: systems/crew/task_complete_page.ex:69
+#: systems/crew/task_complete_page.ex:71
 msgid "task.completed.title"
+msgstr ""
+
+#, elixir-format
+#: systems/crew/task_page.ex:89
+msgid "withdraw.button"
 msgstr ""

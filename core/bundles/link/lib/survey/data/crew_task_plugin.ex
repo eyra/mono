@@ -24,7 +24,8 @@ defmodule Link.Survey.CrewTaskPlugin do
 
     subtitle = make_subtitle(task)
     text = make_text(task, promotion)
-    call_to_action = make_call_to_action(task, crew, user)
+    call_to_action = get_call_to_action(crew, user, task.status)
+    withdraw_redirect = get_call_to_action(crew, user, :completed)
     highlights = get_highlights(task, submission)
 
     %{
@@ -33,6 +34,7 @@ defmodule Link.Survey.CrewTaskPlugin do
       subtitle: subtitle,
       text: text,
       call_to_action: call_to_action,
+      withdraw_redirect: withdraw_redirect,
       highlights: highlights
     }
   end
@@ -49,10 +51,6 @@ defmodule Link.Survey.CrewTaskPlugin do
       :pending -> expectations
       :completed -> dgettext("link-survey", "task.completed.text")
     end
-  end
-
-  defp make_call_to_action(%{status: status}, crew, user) do
-    get_call_to_action(crew, user, status)
   end
 
   @impl Systems.Crew.TaskPlugin

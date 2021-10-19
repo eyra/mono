@@ -6,8 +6,9 @@ defmodule Systems.Crew.TaskPage do
   use CoreWeb.Layouts.Workspace.Component, :survey
 
   alias EyraUI.Text.{Title1, Title3, BodyLarge}
-  alias EyraUI.Button.PrimaryLiveViewButton
   alias EyraUI.Card.Highlight
+
+  alias CoreWeb.UI.Navigation.ButtonBar
 
   alias Systems.{
     Crew
@@ -37,6 +38,7 @@ defmodule Systems.Crew.TaskPage do
       socket
       |> assign(
         task: task,
+        crew: crew,
         plugin: plugin,
         plugin_info: plugin_info
       )
@@ -48,9 +50,19 @@ defmodule Systems.Crew.TaskPage do
   def handle_event("call-to-action", _params,
         %{assigns: %{task: task, plugin: plugin, plugin_info: plugin_info}} = socket
   ) do
-    Crew.Context.start_task!(task)
-
     path = plugin.get_cta_path(task.id, plugin_info.call_to_action.target.value, socket)
+    {:noreply, redirect(socket, external: path)}
+  end
+
+  @impl true
+  def handle_event("withdraw", _params,
+        %{assigns: %{crew: crew, task: task, plugin: plugin, plugin_info: plugin_info, current_user: user}} = socket
+  ) do
+
+    path = plugin.get_cta_path(task.id, plugin_info.withdraw_redirect.target.value, socket)
+
+    Crew.Context.withdraw_member(crew, user)
+
     {:noreply, redirect(socket, external: path)}
   end
 
@@ -63,6 +75,34 @@ defmodule Systems.Crew.TaskPage do
   defp grid_cols(1), do: "grid-cols-1 sm:grid-cols-1"
   defp grid_cols(2), do: "grid-cols-1 sm:grid-cols-2"
   defp grid_cols(_), do: "grid-cols-1 sm:grid-cols-3"
+
+  defp action_map(%{plugin_info: plugin_info}) do
+    %{
+      call_to_action: %{
+        action: %{type: :send, event: "call-to-action"},
+        face: %{
+          type: :primary,
+          label: plugin_info.call_to_action.label
+        }
+      },
+      withdraw: %{
+        action: %{type: :send, event: "withdraw"},
+        face: %{
+          type: :secondary,
+          label: dgettext("eyra-crew", "withdraw.button"),
+          text_color: "text-delete",
+          border_color: "border-delete"
+        }
+      },
+    }
+  end
+
+  defp create_actions(%{task: %{status: status}} = assigns) do
+    create_actions(action_map(assigns), status == :completed)
+  end
+
+  defp create_actions(%{call_to_action: call_to_action, withdraw: withdraw}, false), do: [call_to_action, withdraw]
+  defp create_actions(%{call_to_action: call_to_action}, true), do: [call_to_action]
 
   def render(assigns) do
     ~H"""
@@ -84,7 +124,9 @@ defmodule Systems.Crew.TaskPage do
         <Spacing value="M" />
         <BodyLarge>{{@plugin_info.text}}</BodyLarge>
         <Spacing value="L" />
-        <PrimaryLiveViewButton label={{ @plugin_info.call_to_action.label }} event="call-to-action" />
+
+        <MarginY id={{:button_bar_top}} />
+        <ButtonBar buttons={{create_actions(assigns)}} />
       </ContentArea>
     </Workspace>
     """
