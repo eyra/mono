@@ -17,7 +17,7 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/menu/items-translations.ex:2
-msgid "menu.item.surveys"
+msgid "menu.item.recruitment"
 msgstr ""
 
 #, elixir-format

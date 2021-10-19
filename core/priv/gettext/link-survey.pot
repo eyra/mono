@@ -193,7 +193,7 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/survey/web/overview.ex:123
-msgid "survey.overview.title"
+msgid "campaign.overview.title"
 msgstr ""
 
 #, elixir-format

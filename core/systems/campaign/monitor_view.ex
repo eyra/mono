@@ -21,7 +21,7 @@ defmodule Systems.Campaign.MonitorView do
     tool = Tools.get_survey_tool!(entity_id)
     promotion = Promotions.get!(tool.promotion_id)
     campaign = Campaign.Context.get!(tool.study_id)
-    crew = Campaign.Context.get_or_create_crew(campaign)
+    crew = Campaign.Context.get_or_create_crew!(campaign)
 
     monitor_data = create(crew, tool, promotion)
 
@@ -49,7 +49,7 @@ defmodule Systems.Campaign.MonitorView do
       |> Map.put(:completed_count, completed)
       |> Map.put(:vacant_count, vacant)
 
-    struct(Systems.Crew.MonitorModel, opts)
+    struct(Campaign.MonitorModel, opts)
   end
 
   defp get_vacant_count(tool, completed, pending) do
@@ -72,9 +72,9 @@ defmodule Systems.Campaign.MonitorView do
             <Title2>{{dgettext("link-survey", "status.title")}}</Title2>
             <BodyMedium>{{dgettext("link-survey", "status.label")}}</BodyMedium>
             <Spacing value="XS" />
-            <Title6>{{dgettext("link-survey", "completed.label")}}: <span class="text-success"> {{@monitor_data.subject_completed_count}}</span></Title6>
-            <Title6>{{dgettext("link-survey", "pending.label")}}: <span class="text-warning"> {{@monitor_data.subject_pending_count}}</span></Title6>
-            <Title6>{{dgettext("link-survey", "vacant.label")}}: <span class="text-delete"> {{@monitor_data.subject_vacant_count}}</span></Title6>
+            <Title6>{{dgettext("link-survey", "completed.label")}}: <span class="text-success"> {{@monitor_data.completed_count}}</span></Title6>
+            <Title6>{{dgettext("link-survey", "pending.label")}}: <span class="text-warning"> {{@monitor_data.pending_count}}</span></Title6>
+            <Title6>{{dgettext("link-survey", "vacant.label")}}: <span class="text-delete"> {{@monitor_data.vacant_count}}</span></Title6>
           </True>
           <False>
             <Empty

@@ -327,11 +327,11 @@ defmodule Systems.Campaign.Context do
       c in Crew.Model,
       where: c.reference_type == ^reference_type and c.reference_id == ^reference_id
     )
-    |> Repo.all()
+    |> Repo.one()
   end
 
   def create_crew(campaign) do
-    Crew.Context.create("campaign", "#{campaign.id}", Core.Authorization.make_node(campaign))
+    Crew.Context.create(:campaign, campaign.id, Core.Authorization.make_node(campaign))
   end
 
   def get_or_create_crew(campaign) do
@@ -340,4 +340,12 @@ defmodule Systems.Campaign.Context do
       crew -> {:ok, crew}
     end
   end
+
+  def get_or_create_crew!(campaign) do
+    case get_or_create_crew(campaign) do
+      {:ok, crew} -> crew
+      _ -> nil
+    end
+  end
+
 end

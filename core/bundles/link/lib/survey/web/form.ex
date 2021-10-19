@@ -251,10 +251,10 @@ defmodule Link.Survey.Form do
                   <Spacing value="XS" />
                   <div class="flex flex-row gap-6 items-center">
                     <div class="flex-wrap">
-                      <BodyMedium color="text-tertiary"><span class="break-all">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Systems.Crew.CompletePage, @entity_id)}}</span></BodyMedium>
+                      <BodyMedium color="text-tertiary"><span class="break-all">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Systems.Crew.TaskCompletePage, @entity_id)}}</span></BodyMedium>
                     </div>
                     <div class="flex-wrap flex-shrink-0 mt-1">
-                      <div id="copy-redirect-url" class="cursor-pointer" phx-hook="Clipboard" data-text={{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Systems.Crew.CompletePage, @entity_id)}} >
+                      <div id="copy-redirect-url" class="cursor-pointer" phx-hook="Clipboard" data-text={{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Systems.Crew.TaskCompletePage, @entity_id)}} >
                         <LabelIcon vm={{ %{ label: dgettext("link-survey", "redirect.copy.button"),  icon: :clipboard_tertiary, text_color: "text-tertiary" } }} />
                       </div>
                     </div>

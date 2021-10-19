@@ -18,7 +18,7 @@ msgstr "Studentenpool"
 
 #, elixir-format
 #: translations.ex:2
-msgid "menu.item.surveys"
+msgid "menu.item.recruitment"
 msgstr "Werving"
 
 #, elixir-format

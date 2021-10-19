@@ -204,4 +204,7 @@ defmodule Core.Accounts.User do
       add_error(changeset, :current_password, "is not valid")
     end
   end
+
+  def get_gender(%{features: nil}), do: nil
+  def get_gender(%{features: %{gender: gender}}), do: gender
 end

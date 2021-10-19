@@ -65,13 +65,13 @@ defmodule Core.Survey.Tools do
   @doc """
   Creates a survey_tool.
   """
-  def create_survey_tool(attrs, study, promotion, content_node) do
+  def create_survey_tool(attrs, campaign, promotion, content_node) do
     %Tool{}
     |> Tool.changeset(:mount, attrs)
-    |> Ecto.Changeset.put_assoc(:study, study)
+    |> Ecto.Changeset.put_assoc(:study, campaign)
     |> Ecto.Changeset.put_assoc(:promotion, promotion)
     |> Ecto.Changeset.put_assoc(:content_node, content_node)
-    |> Ecto.Changeset.put_assoc(:auth_node, Authorization.make_node(study))
+    |> Ecto.Changeset.put_assoc(:auth_node, Authorization.make_node(campaign))
     |> Repo.insert()
   end
 

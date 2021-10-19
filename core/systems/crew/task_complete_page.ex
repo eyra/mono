@@ -1,4 +1,4 @@
-defmodule Systems.Task.CompletePage do
+defmodule Systems.Crew.TaskCompletePage do
   @moduledoc """
   The redirect page to complete a task
   """

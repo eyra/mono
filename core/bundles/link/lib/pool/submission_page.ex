@@ -10,6 +10,7 @@ defmodule Link.Pool.SubmissionPage do
   import CoreWeb.Gettext
 
   alias Core.Survey.Tools
+  alias Core.Accounts.User
   alias Systems.Campaign
   alias Core.Promotions
   alias Core.Pools.{Submissions, Submission}
@@ -232,11 +233,8 @@ defmodule Link.Pool.SubmissionPage do
            profile: %{
              fullname: fullname,
              photo_url: photo_url
-           },
-           features: %{
-             gender: gender
            }
-         },
+         } = user,
          %{
            title: title
          }
@@ -248,7 +246,7 @@ defmodule Link.Pool.SubmissionPage do
       title: fullname,
       subtitle: role,
       photo_url: photo_url,
-      gender: gender,
+      gender: User.get_gender(user),
       button_large: %{
         action: action,
         face: %{

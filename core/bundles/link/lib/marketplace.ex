@@ -90,8 +90,10 @@ defmodule Link.Marketplace do
        ) do
     user_features = Accounts.get_features(user)
 
-    Submission.published_status(submission) == :online &&
-      Criteria.eligitable?(submission_criteria, user_features)
+    online? = Submission.published_status(submission) == :online
+    eligitable? = Criteria.eligitable?(submission_criteria, user_features)
+
+    online? and eligitable?
   end
 
   def handle_auto_save_done(socket) do

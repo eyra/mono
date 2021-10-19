@@ -8,7 +8,7 @@ defmodule Link.Survey.CrewTaskPluginTest do
 
     test "prepare/3 returns correct url with panl_id" do
       user = Factories.insert!(:member)
-      crew = Factories.insert!(:crew, %{reference_type: "campaign", reference_id: "campaign-1"})
+      crew = Factories.insert!(:crew, %{reference_type: :campaign, reference_id: 1})
       _member = Factories.insert!(:crew_member, %{crew: crew, user: user})
       public_id = Crew.Context.public_id(crew, user)
 
@@ -20,7 +20,7 @@ defmodule Link.Survey.CrewTaskPluginTest do
 
     test "prepare/3 returns correct url with panl_id and exisiting query" do
       user = Factories.insert!(:member)
-      crew = Factories.insert!(:crew, %{reference_type: "campaign", reference_id: "campaign-1"})
+      crew = Factories.insert!(:crew, %{reference_type: :campaign, reference_id: 1})
       _member = Factories.insert!(:crew_member, %{crew: crew, user: user})
       public_id = Crew.Context.public_id(crew, user)
 

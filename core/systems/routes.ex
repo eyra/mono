@@ -3,7 +3,9 @@ defmodule Systems.Routes do
     quote do
       use Systems.Subroutes, [
         :next_action,
-        :notification
+        :notification,
+        :crew,
+        :campaign
       ]
     end
   end

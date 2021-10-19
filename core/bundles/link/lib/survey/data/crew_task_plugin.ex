@@ -13,7 +13,7 @@ defmodule Link.Survey.CrewTaskPlugin do
   def info(task_id, %{assigns: %{current_user: user}} = _socket) do
     task = Crew.Context.get_task!(task_id)
     campaign = Campaign.Context.get!(task.reference_id)
-    crew = Campaign.Context.get_or_create_crew(campaign)
+    crew = Campaign.Context.get_or_create_crew!(campaign)
     call_to_action = get_call_to_action(crew, user)
 
     %{call_to_action: call_to_action}
@@ -24,7 +24,7 @@ defmodule Link.Survey.CrewTaskPlugin do
     task = Crew.Context.get_task!(task_id)
     campaign = Campaign.Context.get!(task.reference_id)
     tool = Tools.get_survey_tool!(campaign.survey_tool_id)
-    crew = Campaign.Context.get_or_create_crew(campaign)
+    crew = Campaign.Context.get_or_create_crew!(campaign)
 
     prepare(tool.survey_url, crew, user)
   end

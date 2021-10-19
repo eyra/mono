@@ -11,6 +11,7 @@ defmodule Link.Menu.Items do
       dashboard: %{target: Link.Dashboard, domain: "eyra-ui"},
       marketplace: %{target: Link.Marketplace, domain: "eyra-ui"},
       studentpool: %{target: Link.Pool.OverviewPage, domain: "link-ui"},
+      recruitment: %{target: Systems.Campaign.OverviewPage, domain: "link-ui"},
       todo: %{target: Systems.NextAction.OverviewPage, domain: "eyra-ui"},
       helpdesk: %{target: CoreWeb.Helpdesk.Public, domain: "eyra-ui"},
       settings: %{target: CoreWeb.User.Settings, domain: "eyra-ui"},

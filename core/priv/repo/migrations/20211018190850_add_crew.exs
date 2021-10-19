@@ -4,7 +4,7 @@ defmodule Core.Repo.Migrations.AddCrew do
   def up do
     create table(:crews) do
       add(:reference_type, :string, null: false)
-      add(:reference_id, :string, null: false)
+      add(:reference_id, :bigint, null: false)
       add(:next_public_id, :bigint, default: 0)
       add(:auth_node_id, references(:authorization_nodes), null: false)
 

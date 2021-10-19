@@ -73,17 +73,11 @@ defmodule Systems.Crew.Context do
   end
 
   def count_tasks(crew, status_list) do
-    case crew.id do
-      nil ->
-        0
-
-      _ ->
-        from(t in Crew.TaskModel,
-          where: t.crew_id == ^crew.id and t.status in ^status_list,
-          select: count(t.id)
-        )
-        |> Repo.one()
-    end
+    from(t in Crew.TaskModel,
+      where: t.crew_id == ^crew.id and t.status in ^status_list,
+      select: count(t.id)
+    )
+    |> Repo.one()
   end
 
   def count_pending_tasks(crew) do
