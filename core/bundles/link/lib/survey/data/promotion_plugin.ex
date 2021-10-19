@@ -54,9 +54,9 @@ defmodule Link.Survey.PromotionPlugin do
         false -> Crew.Context.apply_member!(crew, user)
       end
 
-    task = Crew.Context.get_or_create_task!(crew, member, :online_study)
+    _task = Crew.Context.get_or_create_task!(crew, member, :online_study)
 
-    Routes.live_path(socket, Systems.Crew.TaskPage, task.id)
+    Routes.live_path(socket, Systems.Crew.TaskPage, :campaign, campaign.id)
   end
 
   defp get_call_to_action() do

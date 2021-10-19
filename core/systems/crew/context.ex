@@ -19,6 +19,11 @@ defmodule Systems.Crew.Context do
     |> Repo.one()
   end
 
+  def get_by_reference!(type, id, preload \\ [:tasks, :members]) do
+    from(c in Crew.Model, where: c.reference_type == ^type and c.reference_id == ^id, preload: ^preload)
+    |> Repo.one()
+  end
+
   def create(reference_type, reference_id, auth_node) do
     attrs = %{
       reference_type: reference_type,

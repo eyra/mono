@@ -18,17 +18,19 @@ defmodule Systems.Crew.TaskPage do
   data(plugin_info, :any)
 
   @impl true
-  def get_authorization_context(%{"id" => id}, _session, _socket) do
-    task = Crew.Context.get_task!(id)
-    Crew.Context.get!(task.crew_id)
+  def get_authorization_context(%{"type" => type, "id" => id}, _session, _socket) do
+    crew = Crew.Context.get_by_reference!(String.to_atom(type), id)
+    Crew.Context.get!(crew.id)
   end
 
   @impl true
-  def mount(%{"id" => id}, _session, socket) do
-    task = Crew.Context.get_task!(id)
+  def mount(%{"type" => type, "id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
+    crew = Crew.Context.get_by_reference!(String.to_atom(type), id)
+    member = Crew.Context.get_member!(crew, user)
+    task = Crew.Context.get_task(crew, member)
 
     plugin = load_plugin(task)
-    plugin_info = plugin.info(id, socket)
+    plugin_info = plugin.info(task.id, socket)
 
     {
       :ok,
