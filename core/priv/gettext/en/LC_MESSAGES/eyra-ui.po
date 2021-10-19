@@ -77,7 +77,7 @@ msgid "dashboard.title"
 msgstr "Dashboard"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:127
+#: bundles/link/lib/marketplace.ex:130
 msgid "marketplace.title"
 msgstr "Marketplace"
 

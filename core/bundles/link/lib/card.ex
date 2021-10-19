@@ -5,6 +5,10 @@ defmodule Link.Marketplace.Card do
   alias CoreWeb.Router.Helpers, as: Routes
   import CoreWeb.Gettext
 
+  alias Systems.{
+    Crew
+  }
+
   def primary_campaign(
         %{
           id: id,
@@ -135,28 +139,28 @@ defmodule Link.Marketplace.Card do
   def campaign_researcher(
         %{
           id: id,
-          survey_tool:
-            %{
-              id: edit_id,
-              duration: duration,
-              subject_count: subject_count,
-              language: language,
-              promotion: %{
-                id: open_id,
-                title: title,
-                image_id: image_id,
-                themes: themes,
-                marks: marks,
-                submission: submission
-              }
-            } = tool
+          survey_tool: %{
+            id: edit_id,
+            duration: duration,
+            subject_count: subject_count,
+            language: language,
+            promotion: %{
+              id: open_id,
+              title: title,
+              image_id: image_id,
+              themes: themes,
+              marks: marks,
+              submission: submission
+            }
+          }
         },
         socket
       ) do
     subject_count = if subject_count === nil, do: 0, else: subject_count
     duration = if duration === nil, do: 0, else: duration
 
-    occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
+    crew = Crew.Context.get_by_reference!(:campaign, id)
+    occupied_spot_count = Crew.Context.count_tasks(crew, [:pending, :completed])
     open_spot_count = subject_count - occupied_spot_count
 
     reward_label = dgettext("eyra-submission", "reward.title")

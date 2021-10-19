@@ -88,7 +88,7 @@ msgstr "For research"
 
 #, elixir-format
 #: bundles/link/lib/index.ex:43
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:93
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:91
 msgid "marketplace.button"
 msgstr "Go to marketplace"
 

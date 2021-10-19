@@ -27,6 +27,6 @@ msgid "task.completed.title"
 msgstr "Bedankt voor jouw deelname"
 
 #, elixir-format
-#: systems/crew/task_page.ex:89
+#: systems/crew/task_page.ex:92
 msgid "withdraw.button"
 msgstr "Afmelden"

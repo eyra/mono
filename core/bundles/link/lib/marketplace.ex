@@ -5,8 +5,11 @@ defmodule Link.Marketplace do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :marketplace
 
-  alias Systems.NextAction
-  alias Systems.Campaign
+  alias Systems.{
+    NextAction,
+    Campaign,
+    Crew
+  }
 
   alias Core.ImageHelpers
   alias Core.Accounts
@@ -175,50 +178,31 @@ defmodule Link.Marketplace do
     |> CoreWeb.UI.Timestamp.humanize()
   end
 
-  defp get_subtitle(
-         _submission,
-         _promotion_content_node,
-         current_subject_count,
-         target_subject_count
-       ) do
-    dgettext("link-dashboard", "quick_summary.%{subject_count}.%{target_subject_count}",
-      subject_count: current_subject_count,
-      target_subject_count: target_subject_count || 0
-    )
+  defp get_subtitle(%{reward_value: reward_value} = _submission) do
+    dgettext("eyra-marketplace", "reward.label", value: reward_value)
   end
 
   def convert_to_vm(socket, %{
         id: id,
         updated_at: updated_at,
         survey_tool: %{
-          current_subject_count: current_subject_count,
-          subject_count: target_subject_count,
           promotion: %{
-            id: promotion_id,
             title: title,
             image_id: image_id,
-            content_node: promotion_content_node,
             submission: submission
           }
         }
       }) do
     tag = Submission.get_tag(submission)
 
-    subtitle =
-      get_subtitle(
-        submission,
-        promotion_content_node,
-        current_subject_count,
-        target_subject_count
-      )
-
+    subtitle = get_subtitle(submission)
     quick_summary = get_quick_summary(updated_at)
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
     image = %{type: :catalog, info: image_info}
 
     %{
       id: id,
-      path: Routes.live_path(socket, CoreWeb.Promotion.Public, promotion_id),
+      path: Routes.live_path(socket, Crew.TaskPage, :campaign, id),
       title: title,
       subtitle: subtitle || "<no subtitle>",
       tag: tag,

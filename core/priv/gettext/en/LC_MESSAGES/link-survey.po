@@ -33,7 +33,7 @@ msgid "by.author.label"
 msgstr "By"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:147
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:145
 #: bundles/link/lib/survey/data/promotion_plugin.ex:99
 msgid "reward.highlight.title"
 msgstr "Reward"
@@ -44,7 +44,7 @@ msgid "spots.highlight.title"
 msgstr "Open spots"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:106
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:104
 #: bundles/link/lib/survey/data/promotion_plugin.ex:64
 msgid "apply.cta.title"
 msgstr "Apply to participate"
@@ -55,7 +55,7 @@ msgid "devices.label"
 msgstr "Which devices can participants use?"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:101
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:99
 msgid "open.cta.title"
 msgstr "Go to survey"
 
@@ -87,7 +87,7 @@ msgstr "Participants working"
 #, elixir-format
 #: systems/campaign/monitor_view.ex:72
 msgid "status.title"
-msgstr "Panel"
+msgstr "Progress"
 
 #, elixir-format
 #: systems/campaign/monitor_view.ex:77
@@ -97,7 +97,7 @@ msgstr "Open spots"
 #, elixir-format
 #: systems/campaign/monitor_view.ex:73
 msgid "status.label"
-msgstr "Below you can keep an eye on the progress campaign"
+msgstr "Monitor the progress of your campaign below."
 
 #, elixir-format
 #: systems/campaign/content_page.ex:490
@@ -286,41 +286,41 @@ msgid "ethical.review.link"
 msgstr "ethical checklist"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:31
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:32
 msgid "task.hero.title"
 msgstr "Online Study"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:43
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:45
 msgid "task.completed.subtitle"
 msgstr "You have completed this survey"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:50
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:52
 msgid "task.completed.text"
 msgstr "Your contribution will be reviewed by the author of this study. If you did not receive a rejection within two weeks after the completion of this survey, the assigned reward is final."
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:42
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:44
 msgid "task.pending.subtitle"
 msgstr "You have applied to participate"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:139
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:137
 msgid "completed.highlight.default"
 msgstr "Not yet finished"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:134
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:132
 msgid "completed.highlight.title"
 msgstr "Finished"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:126
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:124
 msgid "started.highlight.default"
 msgstr "Not yet started"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:121
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:119
 msgid "started.highlight.title"
 msgstr "Started"

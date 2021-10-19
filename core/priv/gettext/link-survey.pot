@@ -32,7 +32,7 @@ msgid "by.author.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:147
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:145
 #: bundles/link/lib/survey/data/promotion_plugin.ex:99
 msgid "reward.highlight.title"
 msgstr ""
@@ -43,7 +43,7 @@ msgid "spots.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:106
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:104
 #: bundles/link/lib/survey/data/promotion_plugin.ex:64
 msgid "apply.cta.title"
 msgstr ""
@@ -54,7 +54,7 @@ msgid "devices.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:101
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:99
 msgid "open.cta.title"
 msgstr ""
 
@@ -285,41 +285,41 @@ msgid "ethical.review.link"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:31
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:32
 msgid "task.hero.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:43
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:45
 msgid "task.completed.subtitle"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:50
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:52
 msgid "task.completed.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:42
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:44
 msgid "task.pending.subtitle"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:139
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:137
 msgid "completed.highlight.default"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:134
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:132
 msgid "completed.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:126
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:124
 msgid "started.highlight.default"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:121
+#: bundles/link/lib/survey/data/crew_task_plugin.ex:119
 msgid "started.highlight.title"
 msgstr ""

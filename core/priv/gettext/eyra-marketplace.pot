@@ -36,11 +36,16 @@ msgid "title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:162
+#: bundles/link/lib/marketplace.ex:165
 msgid "empty.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:161
+#: bundles/link/lib/marketplace.ex:164
 msgid "empty.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/marketplace.ex:182
+msgid "reward.label"
 msgstr ""

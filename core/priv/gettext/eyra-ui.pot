@@ -83,7 +83,7 @@ msgid "dashboard.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:127
+#: bundles/link/lib/marketplace.ex:130
 msgid "marketplace.title"
 msgstr ""
 

@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:106 bundles/link/lib/marketplace.ex:184
+#: bundles/link/lib/dashboard.ex:106
 msgid "quick_summary.%{subject_count}.%{target_subject_count}"
 msgstr "%{subject_count} van %{target_subject_count} plaatsen beschikbaar"
 
