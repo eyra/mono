@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  tagged-release:
+    runs-on: ubuntu-20.04
+    env:
+      MIX_ENV: test
+    steps:
+      - name: Set tag
+        id: tag
+        run: "echo ::set-output name=TAG::${GITHUB_REF##*/}"
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - id: setup-elixir
+        uses: erlef/setup-elixir@v1
+        with:
+          otp-version: '24.0.1'
+          elixir-version: '1.12.1'
+
+      - name: Setup the Elixir project
+        run: make deps
+
+      - name: Install Node deps
+        run: npm install
+        working-directory: core/assets
+
+      - name: Build release
+        run: mix release --overwrite --path "../${GITHUB_REF##*/}"
+        working-directory: core
+
+      - name: Archive release
+        run: tar cfj "${GITHUB_REF##*/}.tar.bz2" "${GITHUB_REF##*/}"
+
+      - uses: softprops/action-gh-release@v1
+        with:
+          prerelease: false
+          fail_on_unmatched_files: true
+          files: |
+            ${{steps.tag.outputs.tag}}.tar.bz2

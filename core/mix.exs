@@ -15,7 +15,7 @@ defmodule Core.MixProject do
       # The main page in the docs
       docs: [
         main: "readme",
-        logo: "assets/static/icon-192x192.svg",
+        logo: "assets/static/images/desktop.svg",
         extras: [
           "../README.md",
           "../guides/development_setup.md",
