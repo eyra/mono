@@ -210,24 +210,28 @@ defmodule Systems.Crew.Context do
   end
 
   def withdraw_member(%Crew.Model{} = crew, %User{} = user) do
-    Multi.new()
-    |> Multi.delete_all(
-      :member,
-      from(m in Crew.MemberModel,
-        where: m.crew_id == ^crew.id and m.user_id == ^user.id
+    if member?(crew, user) do
+      member = get_member!(crew, user)
+
+      Multi.new()
+      |> Multi.delete_all(
+        :member,
+        from(m in Crew.MemberModel,
+          where: m.crew_id == ^crew.id and m.user_id == ^user.id
+        )
       )
-    )
-    |> Multi.delete_all(
-      :task,
-      from(t in Crew.TaskModel,
-        where: t.crew_id == ^crew.id
+      |> Multi.delete_all(
+        :task,
+        from(t in Crew.TaskModel,
+          where: t.crew_id == ^crew.id and t.member_id == ^member.id
+        )
       )
-    )
-    |> Multi.delete_all(
-      :role_assignment,
-      Authorization.query_role_assignment(user, crew, :participant)
-    )
-    |> Repo.transaction()
+      |> Multi.delete_all(
+        :role_assignment,
+        Authorization.query_role_assignment(user, crew, :participant)
+      )
+      |> Repo.transaction()
+    end
   end
 
   @spec member?(
