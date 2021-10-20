@@ -76,17 +76,31 @@ defmodule Systems.Crew.ContextTest do
       assert users |> Enum.find(&(&1.id == user.id))
     end
 
-    test "withdraw_member/2 removes user from crew as memeber and deletes all tasks" do
-      user = Factories.insert!(:member)
+    test "withdraw_member/2 removes user from crew as member and deletes all its tasks" do
+      user1 = Factories.insert!(:member)
+      user2 = Factories.insert!(:member)
       crew = Factories.insert!(:crew, %{reference_type: :campaign, reference_id: 1})
 
-      {:ok, _} = Crew.Context.apply_member(crew, user)
+      {:ok, %{member: member1}} = Crew.Context.apply_member(crew, user1)
+      {:ok, %{member: member2}} = Crew.Context.apply_member(crew, user2)
 
-      Crew.Context.withdraw_member(crew, user)
-      assert Crew.Context.member?(crew, user) == false
+      Crew.Context.create_task!(crew, member1, :online_study)
+      Crew.Context.create_task!(crew, member2, :online_study)
+
+      assert Crew.Context.get_task(crew, member1)
+      assert Crew.Context.get_task(crew, member2)
+
+      Crew.Context.withdraw_member(crew, user1)
+
+      assert is_nil(Crew.Context.get_task(crew, member1))
+      assert Crew.Context.get_task(crew, member2)
+
+      assert Crew.Context.member?(crew, user1) == false
+      assert Crew.Context.member?(crew, user2) == true
 
       users = Authorization.users_with_role(crew, :participant)
-      assert is_nil(users |> Enum.find(&(&1.id == user.id)))
+      assert is_nil(users |> Enum.find(&(&1.id == user1.id)))
+      assert users |> Enum.find(&(&1.id == user2.id))
     end
 
     test "list_members_without_task/1 lists freshly applied member" do
