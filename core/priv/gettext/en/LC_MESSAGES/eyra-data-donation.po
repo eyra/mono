@@ -52,37 +52,37 @@ msgid "delete.button"
 msgstr "Delete"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/promotion_plugin.ex:49
+#: lib/core_web/live/data_donation/promotion_plugin.ex:50
 msgid "apply.cta.title"
 msgstr "Apply for donation"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/promotion_plugin.ex:55
+#: lib/core_web/live/data_donation/promotion_plugin.ex:56
 msgid "open.cta.title"
 msgstr "Donate your data"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/promotion_plugin.ex:75
+#: lib/core_web/live/data_donation/promotion_plugin.ex:81
 msgid "spots.highlight.title"
 msgstr "Availability"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/promotion_plugin.ex:68
+#: lib/core_web/live/data_donation/promotion_plugin.ex:69
 msgid "by.author.label"
 msgstr "By"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/promotion_plugin.ex:81
+#: lib/core_web/live/data_donation/promotion_plugin.ex:87
 msgid "available.future.highlight.text"
 msgstr "%{from} till %{till}"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/promotion_plugin.ex:78
+#: lib/core_web/live/data_donation/promotion_plugin.ex:84
 msgid "available.highlight.title"
 msgstr "Available from"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/promotion_plugin.ex:86
+#: lib/core_web/live/data_donation/promotion_plugin.ex:92
 msgid "reward.highlight.title"
 msgstr "Reward"
 

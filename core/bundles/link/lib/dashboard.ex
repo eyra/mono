@@ -5,10 +5,7 @@ defmodule Link.Dashboard do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :dashboard
 
-  alias Systems.{
-    Campaign,
-    Crew
-  }
+  alias Systems.Campaign
 
   alias Core.Content.Nodes
   alias Core.ImageHelpers
@@ -87,7 +84,7 @@ defmodule Link.Dashboard do
   defp get_subtitle(
          submission,
          promotion_content_node,
-         current_subject_count,
+         open_spot_count,
          target_subject_count
        ) do
     case submission.status do
@@ -108,7 +105,7 @@ defmodule Link.Dashboard do
 
           :online ->
             dgettext("link-dashboard", "quick_summary.%{subject_count}.%{target_subject_count}",
-              subject_count: target_subject_count - current_subject_count,
+              subject_count: open_spot_count,
               target_subject_count: target_subject_count
             )
 
@@ -118,20 +115,22 @@ defmodule Link.Dashboard do
     end
   end
 
-  def convert_to_vm(socket, %{
-        id: id,
-        updated_at: updated_at,
-        survey_tool: %{
-          id: edit_id,
-          subject_count: target_subject_count,
-          promotion: %{
-            title: title,
-            image_id: image_id,
-            content_node: promotion_content_node,
-            submission: submission
+  def convert_to_vm(
+        socket,
+        %{
+          updated_at: updated_at,
+          survey_tool: %{
+            id: edit_id,
+            subject_count: target_subject_count,
+            promotion: %{
+              title: title,
+              image_id: image_id,
+              content_node: promotion_content_node,
+              submission: submission
+            }
           }
-        }
-      }) do
+        } = campaign
+      ) do
     tag = Submission.get_tag(submission)
 
     target_subject_count =
@@ -141,14 +140,13 @@ defmodule Link.Dashboard do
         target_subject_count
       end
 
-    crew = Crew.Context.get_by_reference!(:campaign, id)
-    current_subject_count = Crew.Context.count_tasks(crew, [:pending, :completed])
+    open_spot_count = Campaign.Context.count_open_spots(campaign)
 
     subtitle =
       get_subtitle(
         submission,
         promotion_content_node,
-        current_subject_count,
+        open_spot_count,
         target_subject_count
       )
 

@@ -27,6 +27,6 @@ msgid "task.completed.title"
 msgstr "Thank you for participating"
 
 #, elixir-format
-#: systems/crew/task_page.ex:92
+#: systems/crew/task_page.ex:94
 msgid "withdraw.button"
 msgstr "Withdraw"

@@ -5,8 +5,7 @@ defmodule Link.Pool.CampaignsView do
 
   alias Systems.{
     NextAction,
-    Campaign,
-    Crew
+    Campaign
   }
 
   alias Core.Accounts
@@ -81,22 +80,24 @@ defmodule Link.Pool.CampaignsView do
     """
   end
 
-  defp convert_to_vm(socket, %{
-         id: id,
-         updated_at: updated_at,
-         survey_tool: %{
-           subject_count: target_subject_count,
-           promotion: %{
-             title: title,
-             image_id: image_id,
-             submission:
-               %{
-                 id: submission_id,
-                 status: status
-               } = submission
+  defp convert_to_vm(
+         socket,
+         %{
+           updated_at: updated_at,
+           survey_tool: %{
+             subject_count: target_subject_count,
+             promotion: %{
+               title: title,
+               image_id: image_id,
+               submission:
+                 %{
+                   id: submission_id,
+                   status: status
+                 } = submission
+             }
            }
-         }
-       }) do
+         } = campaign
+       ) do
     tag =
       case status do
         :submitted ->
@@ -125,14 +126,11 @@ defmodule Link.Pool.CampaignsView do
       end
 
     target_subject_count = guard_nil(target_subject_count, :integer)
-
-    crew = Crew.Context.get_by_reference!(:campaign, id)
-    current_subject_count = Crew.Context.count_tasks(crew, [:pending, :completed])
-    open_spots = target_subject_count - current_subject_count
+    open_spot_count = Campaign.Context.count_open_spots(campaign)
 
     subtitle =
       dgettext("link-studentpool", "spots.available",
-        open: open_spots,
+        open: open_spot_count,
         total: target_subject_count
       )
 

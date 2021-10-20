@@ -19,8 +19,38 @@ defmodule Systems.Campaign.Context do
   alias Core.Pools.Submission
   alias Frameworks.Signal
 
-  # read list(current_user, ...) do
-  # end
+  def count_open_spots(id) when is_number(id) do
+    get!(id, [:survey_tool, :lab_tool, :data_donation_tool])
+    |> count_open_spots()
+  end
+
+  def count_open_spots(%Campaign.Model{survey_tool: %{subject_count: subject_count}} = campaign) do
+    campaign
+    |> get_crew()
+    |> count_tasks()
+    |> count_open_spots(subject_count)
+  end
+
+  def count_open_spots(%Campaign.Model{data_donation_tool: %{subject_count: subject_count} = tool}) do
+    tool
+    |> DataDonation.Tools.count_tasks([:pending, :completed])
+    |> count_open_spots(subject_count)
+  end
+
+  def count_open_spots(_), do: 0
+
+  defp count_open_spots(_, nil), do: 0
+  defp count_open_spots(nil, total), do: total
+  defp count_open_spots(current, total), do: max(total - current, 0)
+
+  def open?(id) when is_number(id) do
+    get!(id, [:survey_tool, :lab_tool, :data_donation_tool])
+    |> open?()
+  end
+
+  def open?(campaign) do
+    count_open_spots(campaign) > 0
+  end
 
   @doc """
   Returns the list of studies.
@@ -373,6 +403,11 @@ defmodule Systems.Campaign.Context do
       {:ok, crew} -> crew
       _ -> nil
     end
+  end
+
+  def count_tasks(crew) do
+    crew
+    |> Crew.Context.count_tasks([:pending, :completed])
   end
 
 end

@@ -10,6 +10,7 @@ defmodule CoreWeb.Promotion.Plugin do
   @type event :: binary
   @type highlight :: %{title: binary, text: binary}
   @type info_result :: %{
+          closed?: boolean,
           call_to_action: CallToAction.t(),
           highlights: list(highlight),
           devices: list(atom),

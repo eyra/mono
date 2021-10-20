@@ -1,13 +1,10 @@
 defmodule Link.Marketplace.Card do
-  alias Core.Survey.Tools
   alias Core.Pools.Submission
   alias Core.ImageHelpers
   alias CoreWeb.Router.Helpers, as: Routes
   import CoreWeb.Gettext
 
-  alias Systems.{
-    Crew
-  }
+  alias Systems.Campaign
 
   def primary_campaign(
         %{
@@ -70,29 +67,25 @@ defmodule Link.Marketplace.Card do
   def primary_campaign(
         %{
           id: id,
-          survey_tool:
-            %{
-              id: edit_id,
-              duration: duration,
-              language: language,
-              subject_count: subject_count,
-              promotion: %{
-                id: open_id,
-                title: title,
-                image_id: image_id,
-                themes: themes,
-                marks: marks,
-                submission: submission
-              }
-            } = tool
-        },
+          survey_tool: %{
+            id: edit_id,
+            duration: duration,
+            language: language,
+            promotion: %{
+              id: open_id,
+              title: title,
+              image_id: image_id,
+              themes: themes,
+              marks: marks,
+              submission: submission
+            }
+          }
+        } = campaign,
         socket
       ) do
-    subject_count = if subject_count === nil, do: 0, else: subject_count
     duration = if duration === nil, do: 0, else: duration
 
-    occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
-    open_spot_count = subject_count - occupied_spot_count
+    open_spot_count = Campaign.Context.count_open_spots(campaign)
 
     reward_label = dgettext("eyra-submission", "reward.title")
     duration_label = dgettext("eyra-promotion", "duration.title")
@@ -116,7 +109,12 @@ defmodule Link.Marketplace.Card do
 
     info = [info1, info2]
 
-    label = nil
+    label =
+      if open_spot_count <= 0 do
+        %{text: dgettext("eyra-marketplace", "status.closed.label"), type: :tertiary}
+      else
+        nil
+      end
 
     icon_url = get_icon_url(marks, socket)
     image_info = ImageHelpers.get_image_info(image_id)
@@ -142,7 +140,6 @@ defmodule Link.Marketplace.Card do
           survey_tool: %{
             id: edit_id,
             duration: duration,
-            subject_count: subject_count,
             language: language,
             promotion: %{
               id: open_id,
@@ -153,15 +150,12 @@ defmodule Link.Marketplace.Card do
               submission: submission
             }
           }
-        },
+        } = campaign,
         socket
       ) do
-    subject_count = if subject_count === nil, do: 0, else: subject_count
     duration = if duration === nil, do: 0, else: duration
 
-    crew = Crew.Context.get_by_reference!(:campaign, id)
-    occupied_spot_count = Crew.Context.count_tasks(crew, [:pending, :completed])
-    open_spot_count = subject_count - occupied_spot_count
+    open_spot_count = Campaign.Context.count_open_spots(campaign)
 
     reward_label = dgettext("eyra-submission", "reward.title")
     duration_label = dgettext("eyra-promotion", "duration.title")

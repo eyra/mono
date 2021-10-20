@@ -22,8 +22,8 @@ defmodule GoogleSignIn do
     display_name = Map.get(attrs, "given_name", fullname)
 
     sso_info = %{
-      researcher: true,
-      student: false,
+      researcher: false,
+      student: true,
       email: Map.get(attrs, "email"),
       displayname: display_name,
       profile: %{

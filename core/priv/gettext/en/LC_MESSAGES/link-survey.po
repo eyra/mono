@@ -27,25 +27,25 @@ msgid "duration.label"
 msgstr "How many minutes do you estimate participants will need?"
 
 #, elixir-format
-#: bundles/link/lib/lab/promotion_plugin.ex:50
-#: bundles/link/lib/survey/data/promotion_plugin.ex:76
+#: bundles/link/lib/lab/promotion_plugin.ex:51
+#: bundles/link/lib/survey/data/promotion_plugin.ex:78
 msgid "by.author.label"
 msgstr "By"
 
 #, elixir-format
 #: bundles/link/lib/survey/data/crew_task_plugin.ex:145
-#: bundles/link/lib/survey/data/promotion_plugin.ex:99
+#: bundles/link/lib/survey/data/promotion_plugin.ex:100
 msgid "reward.highlight.title"
 msgstr "Reward"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:91
+#: bundles/link/lib/survey/data/promotion_plugin.ex:92
 msgid "spots.highlight.title"
 msgstr "Open spots"
 
 #, elixir-format
 #: bundles/link/lib/survey/data/crew_task_plugin.ex:104
-#: bundles/link/lib/survey/data/promotion_plugin.ex:64
+#: bundles/link/lib/survey/data/promotion_plugin.ex:66
 msgid "apply.cta.title"
 msgstr "Apply to participate"
 
@@ -105,27 +105,27 @@ msgid "content.title"
 msgstr "Campaign"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:115
+#: systems/campaign/overview_page.ex:116
 msgid "title"
 msgstr "Recruitment"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:149
+#: systems/campaign/overview_page.ex:150
 msgid "add.first.button"
 msgstr "Start your first campaign"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:130
+#: systems/campaign/overview_page.ex:131
 msgid "add.new.button"
 msgstr "Start new campaign"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:145
+#: systems/campaign/overview_page.ex:146
 msgid "empty.description"
 msgstr "Here you can set-up and follow the status of your campaigns. A campaign is an organized course of action to achieve a goal, in this case to recruit participants. It consists of publishing a promotion in the marketplace, linking your study details, determining your sample and reviewing the results."
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:144
+#: systems/campaign/overview_page.ex:145
 msgid "empty.title"
 msgstr "Recruit participants for your study"
 
@@ -185,7 +185,7 @@ msgid "form.title"
 msgstr "Study"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:124
+#: systems/campaign/overview_page.ex:125
 msgid "campaign.overview.title"
 msgstr "Campaigns"
 
@@ -266,17 +266,17 @@ msgid "form.description"
 msgstr "Follow the steps in the black frame to make sure that participants can start your online study on Panl and are redirected back to Panl after they finish."
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:97
+#: bundles/link/lib/survey/data/promotion_plugin.ex:98
 msgid "duration.highlight.text"
 msgstr "%{duration} minutes"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:96
+#: bundles/link/lib/survey/data/promotion_plugin.ex:97
 msgid "duration.highlight.title"
 msgstr "Duration"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:94
+#: bundles/link/lib/survey/data/promotion_plugin.ex:95
 msgid "spots.highlight.text"
 msgstr "Still %{open} out of %{total} available"
 

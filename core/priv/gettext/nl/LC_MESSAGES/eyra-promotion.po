@@ -17,7 +17,7 @@ msgid "created.label"
 msgstr "Aangemaakt"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:249
+#: bundles/link/lib/promotions/public.ex:261
 #: lib/core_web/live/promotion/public.ex:178
 msgid "back.button.label"
 msgstr "Terug"
@@ -53,7 +53,7 @@ msgid "choose.other.banner.photo.file"
 msgstr "Kies andere foto"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:38 lib/core_web/view_model/card.ex:39
+#: bundles/link/lib/card.ex:39 lib/core_web/view_model/card.ex:40
 msgid "deadline.label"
 msgstr "Nog %{days} dagen beschikbaar"
 
@@ -63,7 +63,7 @@ msgid "description.label"
 msgstr "Geef wat achtergrond informatie over deze studie"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:226
+#: bundles/link/lib/promotions/public.ex:238
 #: lib/core_web/live/promotion/public.ex:148
 msgid "description.public.label"
 msgstr "Over deze studie"
@@ -74,14 +74,14 @@ msgid "description.title"
 msgstr "Waarom voer je deze study uit?"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:240
+#: bundles/link/lib/promotions/public.ex:252
 #: lib/core_web/live/promotion/public.ex:171
 msgid "devices.available.label"
 msgstr "Beschikbaar op:"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:35 bundles/link/lib/card.ex:94
-#: bundles/link/lib/card.ex:163
+#: bundles/link/lib/card.ex:36 bundles/link/lib/card.ex:92
+#: bundles/link/lib/card.ex:162
 msgid "duration.title"
 msgstr "Duur"
 
@@ -91,7 +91,7 @@ msgid "expectations.label"
 msgstr "Beschrijf wat er van de deelnemers wordt verwacht"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:222
+#: bundles/link/lib/promotions/public.ex:234
 #: lib/core_web/live/promotion/public.ex:144
 msgid "expectations.public.label"
 msgstr "Wat kun je verwachten?"
@@ -127,13 +127,13 @@ msgid "keep.me.updated.title"
 msgstr "Benieuwd naar de resultaten van dit onderzoek?"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:37 bundles/link/lib/card.ex:95
-#: bundles/link/lib/card.ex:164 lib/core_web/view_model/card.ex:38
+#: bundles/link/lib/card.ex:38 bundles/link/lib/card.ex:93
+#: bundles/link/lib/card.ex:163 lib/core_web/view_model/card.ex:39
 msgid "open.spots.label"
 msgstr "%{count} spots open"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:36 lib/core_web/view_model/card.ex:37
+#: bundles/link/lib/card.ex:37 lib/core_web/view_model/card.ex:38
 msgid "reward.title"
 msgstr "Beloning"
 
@@ -184,6 +184,16 @@ msgid "preview.inform.title"
 msgstr "Preview"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:241
+#: bundles/link/lib/promotions/public.ex:253
 msgid "languages.available.label"
 msgstr "Taal:"
+
+#, elixir-format
+#: bundles/link/lib/promotions/public.ex:157
+msgid "closed.inform.text"
+msgstr "Helaas is het maximaal aantal deelnemer voor deze studie bereikt."
+
+#, elixir-format
+#: bundles/link/lib/promotions/public.ex:156
+msgid "closed.inform.title"
+msgstr "Deelname gesloten"

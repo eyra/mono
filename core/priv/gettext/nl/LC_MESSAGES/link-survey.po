@@ -27,25 +27,25 @@ msgid "duration.label"
 msgstr "Hoeveel minuten schat je in dat deelnemers nodig hebben?"
 
 #, elixir-format
-#: bundles/link/lib/lab/promotion_plugin.ex:50
-#: bundles/link/lib/survey/data/promotion_plugin.ex:76
+#: bundles/link/lib/lab/promotion_plugin.ex:51
+#: bundles/link/lib/survey/data/promotion_plugin.ex:78
 msgid "by.author.label"
 msgstr "Door"
 
 #, elixir-format
 #: bundles/link/lib/survey/data/crew_task_plugin.ex:145
-#: bundles/link/lib/survey/data/promotion_plugin.ex:99
+#: bundles/link/lib/survey/data/promotion_plugin.ex:100
 msgid "reward.highlight.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:91
+#: bundles/link/lib/survey/data/promotion_plugin.ex:92
 msgid "spots.highlight.title"
 msgstr "Beschikbare plekken"
 
 #, elixir-format
 #: bundles/link/lib/survey/data/crew_task_plugin.ex:104
-#: bundles/link/lib/survey/data/promotion_plugin.ex:64
+#: bundles/link/lib/survey/data/promotion_plugin.ex:66
 msgid "apply.cta.title"
 msgstr "Meld je aan"
 
@@ -105,27 +105,27 @@ msgid "content.title"
 msgstr "Campagne"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:115
+#: systems/campaign/overview_page.ex:116
 msgid "title"
 msgstr "Werving"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:149
+#: systems/campaign/overview_page.ex:150
 msgid "add.first.button"
 msgstr "Start je eerste campagne"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:130
+#: systems/campaign/overview_page.ex:131
 msgid "add.new.button"
 msgstr "Start nieuwe campagne"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:145
+#: systems/campaign/overview_page.ex:146
 msgid "empty.description"
 msgstr "Hier kun je campagnes opzetten en hun status volgen. Een campagne is een georganiseerde werkwijze om een doel te behalen, in dit geval het werven van deelnemers. Het bestaat uit het opzetten van een advertentie voor in de marktplaats, het koppelen van jouw studie details, het bepalen van jouw sample, en het reviewen van de resultaten."
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:144
+#: systems/campaign/overview_page.ex:145
 msgid "empty.title"
 msgstr "Werf deelnemers voor jouw studie"
 
@@ -185,7 +185,7 @@ msgid "form.title"
 msgstr "Studie"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:124
+#: systems/campaign/overview_page.ex:125
 msgid "campaign.overview.title"
 msgstr "Campagnes"
 
@@ -266,17 +266,17 @@ msgid "form.description"
 msgstr "Doorloop eerst de stappen in het zwarte kader. Zo zorg je ervoor dat deelnemers vanuit Panl deel kunnen nemen aan jouw online studie en na afloop weer teruggestuurd worden naar Panl."
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:97
+#: bundles/link/lib/survey/data/promotion_plugin.ex:98
 msgid "duration.highlight.text"
 msgstr "%{duration} minuten"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:96
+#: bundles/link/lib/survey/data/promotion_plugin.ex:97
 msgid "duration.highlight.title"
 msgstr "Duur"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:94
+#: bundles/link/lib/survey/data/promotion_plugin.ex:95
 msgid "spots.highlight.text"
 msgstr "Nog %{open} van de %{total}"
 

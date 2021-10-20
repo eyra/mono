@@ -18,13 +18,15 @@ defmodule Link.Survey.PromotionPlugin do
   @behaviour Plugin
 
   @impl Plugin
-  def info(promotion_id, _socket) do
+  def info(promotion_id, %{assigns: %{current_user: user}}) do
     promotion = Promotions.get!(promotion_id)
     submission = Submissions.get!(promotion)
     tool = Tools.get_by_promotion(promotion_id)
+
     call_to_action = get_call_to_action()
     byline = get_byline(tool)
     highlights = get_highlights(tool, submission)
+    closed? = not open?(tool, user)
 
     languages =
       if tool.language != nil do
@@ -34,6 +36,7 @@ defmodule Link.Survey.PromotionPlugin do
       end
 
     %{
+      closed?: closed?,
       call_to_action: call_to_action,
       highlights: highlights,
       devices: tool.devices,
@@ -76,18 +79,17 @@ defmodule Link.Survey.PromotionPlugin do
     "#{dgettext("link-survey", "by.author.label")}: " <> authors
   end
 
-  defp get_highlights(%{subject_count: subject_count, duration: duration} = tool, %{
-         reward_value: reward_value
-       }) do
-    occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
-
-    open_spot_count =
-      if subject_count do
-        subject_count - occupied_spot_count
-      else
-        0
-      end
-
+  defp get_highlights(
+         %{
+           subject_count: subject_count,
+           duration: duration,
+           study_id: study_id
+         },
+         %{
+           reward_value: reward_value
+         }
+       ) do
+    open_spot_count = Campaign.Context.count_open_spots(study_id)
     spots_title = dgettext("link-survey", "spots.highlight.title")
 
     spots_text =
@@ -111,5 +113,11 @@ defmodule Link.Survey.PromotionPlugin do
       %{title: reward_title, text: reward_text},
       %{title: spots_title, text: spots_text}
     ]
+  end
+
+  defp open?(%{study_id: study_id}, user) do
+    campaign = Campaign.Context.get!(study_id)
+    crew = Campaign.Context.get_or_create_crew!(campaign)
+    Campaign.Context.open?(study_id) || Crew.Context.member?(crew, user)
   end
 end

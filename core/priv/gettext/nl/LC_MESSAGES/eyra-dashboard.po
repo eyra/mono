@@ -22,11 +22,11 @@ msgid "recent-items.title"
 msgstr "Recente items"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:67
+#: bundles/link/lib/dashboard.ex:68
 msgid "empty.description"
 msgstr "Zodra je begint te werken met Panl, vind je de items waar je recent aan gewerkt hebt hier. Bezoek het dashboard om snel weer verder te gaan, met de items waar je de laatste keer mee bezig was op Panl."
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:66
+#: bundles/link/lib/dashboard.ex:67
 msgid "empty.title"
 msgstr "Op zoek naar recente items?"

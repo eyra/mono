@@ -155,6 +155,22 @@ defmodule Link.Promotion.Public do
   def handle_event(
         "call-to-action",
         _params,
+        %{assigns: %{plugin_info: %{closed?: true}}} = socket
+      ) do
+    title = dgettext("eyra-promotion", "closed.inform.title")
+    text = dgettext("eyra-promotion", "closed.inform.text")
+
+    {
+      :noreply,
+      socket
+      |> inform(title, text)
+    }
+  end
+
+  @impl true
+  def handle_event(
+        "call-to-action",
+        _params,
         %{assigns: %{promotion: promotion, plugin: plugin, plugin_info: plugin_info}} = socket
       ) do
     path = plugin.get_cta_path(promotion.id, plugin_info.call_to_action.target.value, socket)

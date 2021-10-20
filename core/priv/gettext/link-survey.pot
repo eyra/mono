@@ -26,25 +26,25 @@ msgid "duration.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/lab/promotion_plugin.ex:50
-#: bundles/link/lib/survey/data/promotion_plugin.ex:76
+#: bundles/link/lib/lab/promotion_plugin.ex:51
+#: bundles/link/lib/survey/data/promotion_plugin.ex:78
 msgid "by.author.label"
 msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/survey/data/crew_task_plugin.ex:145
-#: bundles/link/lib/survey/data/promotion_plugin.ex:99
+#: bundles/link/lib/survey/data/promotion_plugin.ex:100
 msgid "reward.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:91
+#: bundles/link/lib/survey/data/promotion_plugin.ex:92
 msgid "spots.highlight.title"
 msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/survey/data/crew_task_plugin.ex:104
-#: bundles/link/lib/survey/data/promotion_plugin.ex:64
+#: bundles/link/lib/survey/data/promotion_plugin.ex:66
 msgid "apply.cta.title"
 msgstr ""
 
@@ -104,27 +104,27 @@ msgid "content.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:115
+#: systems/campaign/overview_page.ex:116
 msgid "title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:149
+#: systems/campaign/overview_page.ex:150
 msgid "add.first.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:130
+#: systems/campaign/overview_page.ex:131
 msgid "add.new.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:145
+#: systems/campaign/overview_page.ex:146
 msgid "empty.description"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:144
+#: systems/campaign/overview_page.ex:145
 msgid "empty.title"
 msgstr ""
 
@@ -184,7 +184,7 @@ msgid "form.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:124
+#: systems/campaign/overview_page.ex:125
 msgid "campaign.overview.title"
 msgstr ""
 
@@ -265,17 +265,17 @@ msgid "form.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:97
+#: bundles/link/lib/survey/data/promotion_plugin.ex:98
 msgid "duration.highlight.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:96
+#: bundles/link/lib/survey/data/promotion_plugin.ex:97
 msgid "duration.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:94
+#: bundles/link/lib/survey/data/promotion_plugin.ex:95
 msgid "spots.highlight.text"
 msgstr ""
 

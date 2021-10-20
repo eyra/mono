@@ -18,6 +18,7 @@ defmodule Link.Lab.PromotionPlugin do
     highlights = get_highlights(tool)
 
     %{
+      closed?: false,
       call_to_action: call_to_action,
       highlights: highlights,
       # devices: tool.devices,

@@ -1,36 +1,34 @@
 defmodule CoreWeb.ViewModel.Card do
-  alias Core.DataDonation
+  import CoreWeb.Gettext
+
+  alias Systems.Campaign
+
   alias Core.ImageHelpers
   alias CoreWeb.Router.Helpers, as: Routes
-  import CoreWeb.Gettext
 
   def primary_campaign(
         %{
           id: id,
-          data_donation_tool:
-            %{
-              id: edit_id,
-              script: _script,
-              subject_count: subject_count,
-              reward_currency: reward_currency,
-              reward_value: reward_value,
-              promotion: %{
-                id: open_id,
-                title: title,
-                image_id: image_id,
-                themes: themes,
-                marks: marks
-              }
-            } = tool
-        },
+          data_donation_tool: %{
+            id: edit_id,
+            script: _script,
+            reward_currency: reward_currency,
+            reward_value: reward_value,
+            promotion: %{
+              id: open_id,
+              title: title,
+              image_id: image_id,
+              themes: themes,
+              marks: marks
+            }
+          }
+        } = campaign,
         socket
       ) do
-    subject_count = if subject_count === nil, do: 0, else: subject_count
     reward_value = if reward_value === nil, do: 0, else: reward_value
     reward_currency = if reward_currency === nil, do: :eur, else: reward_currency
 
-    occupied_spot_count = DataDonation.Tools.count_tasks(tool, [:pending, :completed])
-    open_spot_count = subject_count - occupied_spot_count
+    open_spot_count = Campaign.Context.count_open_spots(campaign)
 
     reward_string = CurrencyFormatter.format(reward_value, reward_currency, keep_decimals: true)
 

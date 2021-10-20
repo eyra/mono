@@ -14,7 +14,7 @@ msgstr ""
 #, elixir-format
 #: bundles/link/lib/marketplace.ex:152
 msgid "campaign.all.title"
-msgstr "Beschikbare studies"
+msgstr "Studies"
 
 #, elixir-format
 #: bundles/link/lib/marketplace.ex:142

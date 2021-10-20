@@ -12,27 +12,27 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:249 lib/core/pools/submission.ex:111
+#: bundles/link/lib/card.ex:248 lib/core/pools/submission.ex:111
 msgid "status.idle.label"
 msgstr "Concept"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:252 lib/core/pools/submission.ex:114
+#: bundles/link/lib/card.ex:251 lib/core/pools/submission.ex:114
 msgid "status.submitted.label"
 msgstr "Submitted"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:94
+#: bundles/link/lib/dashboard.ex:95
 msgid "incomplete.forms.message"
 msgstr "Some required fields are not filled in yet"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:92
+#: bundles/link/lib/dashboard.ex:93
 msgid "ready.for.submission.message"
 msgstr "All required fields are filled, you can submit this campaign"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:98
+#: bundles/link/lib/dashboard.ex:99
 msgid "waiting.for.coordinator.message"
 msgstr "Waiting for the pool administrator to publish your campaign in the marketplace"
 
@@ -67,7 +67,7 @@ msgid "retract.success.title"
 msgstr "Campaign offline"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:93 bundles/link/lib/card.ex:162
+#: bundles/link/lib/card.ex:91 bundles/link/lib/card.ex:161
 msgid "reward.title"
 msgstr "Reward"
 
@@ -137,26 +137,26 @@ msgid "schedule.title"
 msgstr "Schedule"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:267 lib/core/pools/submission.ex:128
+#: bundles/link/lib/card.ex:266 lib/core/pools/submission.ex:128
 msgid "status.accepted.closed.label"
 msgstr "Closed"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:263 lib/core/pools/submission.ex:125
+#: bundles/link/lib/card.ex:262 lib/core/pools/submission.ex:125
 msgid "status.accepted.online.label"
 msgstr "Online"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:258 lib/core/pools/submission.ex:120
+#: bundles/link/lib/card.ex:257 lib/core/pools/submission.ex:120
 msgid "status.accepted.scheduled.label"
 msgstr "Scheduled"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:112
+#: bundles/link/lib/dashboard.ex:113
 msgid "accepted.closed.message"
 msgstr "This campaign is closed"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:103
+#: bundles/link/lib/dashboard.ex:104
 msgid "accepted.scheduled.message"
 msgstr "This campaign is scheduled for participation"

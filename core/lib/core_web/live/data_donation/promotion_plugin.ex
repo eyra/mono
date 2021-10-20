@@ -19,6 +19,7 @@ defmodule CoreWeb.DataDonation.PromotionPlugin do
     highlights = get_highlights(tool)
 
     %{
+      closed?: false,
       call_to_action: call_to_action,
       highlights: highlights,
       devices: [:desktop],
@@ -68,12 +69,16 @@ defmodule CoreWeb.DataDonation.PromotionPlugin do
     "#{dgettext("eyra-data-donation", "by.author.label")}: " <> authors
   end
 
-  defp get_highlights(tool) do
-    occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
-    open_spot_count = tool.subject_count - occupied_spot_count
+  defp get_highlights(%{
+         study_id: study_id,
+         subject_count: subject_count,
+         reward_value: reward_value,
+         reward_currency: reward_currency
+       }) do
+    open_spot_count = Campaign.Context.count_open_spots(study_id)
 
     spots_title = dgettext("eyra-data-donation", "spots.highlight.title")
-    spots_text = "Nog #{open_spot_count} van #{tool.subject_count}"
+    spots_text = "Nog #{open_spot_count} van #{subject_count}"
 
     available_title = dgettext("eyra-data-donation", "available.highlight.title")
 
@@ -85,8 +90,7 @@ defmodule CoreWeb.DataDonation.PromotionPlugin do
 
     reward_title = dgettext("eyra-data-donation", "reward.highlight.title")
 
-    reward_text =
-      CurrencyFormatter.format(tool.reward_value, tool.reward_currency, keep_decimals: true)
+    reward_text = CurrencyFormatter.format(reward_value, reward_currency, keep_decimals: true)
 
     [
       %{title: available_title, text: available_text},
