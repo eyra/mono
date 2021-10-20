@@ -2,26 +2,14 @@ name: Test & Lint
 
 on:
   push:
-    branches-ignore:
-      - master
+    tags:
+      - '*'
 
 jobs:
-  test:
+  tagged-release:
     runs-on: ubuntu-20.04
-    services:
-      postgres:
-        image: postgres:11
-        env:
-          POSTGRES_USER: core
-          POSTGRES_PASSWORD: supersecret
-        ports:
-          - 5432:5432
-        # needed because the postgres container does not provide a healthcheck
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     env:
       MIX_ENV: test
-      POSTGRES_USER: core
-      POSTGRES_PASS: supersecret
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -37,35 +25,20 @@ jobs:
       - name: Setup the Elixir project
         run: make deps
 
-      # Setup caching (mostly for Dialyzer)
-      - uses: actions/cache@v2
-        id: cache
+      - name: Install Node deps
+        run: npm install
+        working-directory: core/assets
+
+      - name: Build release
+        run: mix release --overwrite --path "../core-release-$GITHUB_REF"
+        working-directory: core
+
+      - name: Archive release
+        run: tar cfj "core-release-$GITHUB_REF.tar.bz2" "core-release-$GITHUB_REF"
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          path: core/priv/plts
-          key: "mix-${{ runner.os }}-${{ steps.setup-elixir.outputs.otp-version }}-Elixir-${{ steps.setup-elixir.outputs.elixir-version }}"
-
-      - name: Format
-        run: make format
-        continue-on-error: true
-
-      - name: Commit formatted code
-        uses: EndBug/add-and-commit@v6
-        with:
-          add: '.'
-          message: 'Formatted code'
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Dialyzer
-        run: make dialyzer
-
-      - name: Compile
-        run: make compile
-
-      - name: Test
-        run: make test
-
-      - name: Credo
-        run: make credo
-
-      - name: Format
-        run: make format
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            "core-release-$GITHUB_REF.tar.bz2"
