@@ -3,9 +3,12 @@ defmodule Link.Pool.CampaignsView do
 
   import Frameworks.Utility.Guards
 
-  alias Systems.NextAction
+  alias Systems.{
+    NextAction,
+    Campaign,
+    Crew
+  }
 
-  alias Systems.Campaign
   alias Core.Accounts
   alias Core.ImageHelpers
   alias Core.Pools.Submission
@@ -79,9 +82,9 @@ defmodule Link.Pool.CampaignsView do
   end
 
   defp convert_to_vm(socket, %{
+         id: id,
          updated_at: updated_at,
          survey_tool: %{
-           current_subject_count: current_subject_count,
            subject_count: target_subject_count,
            promotion: %{
              title: title,
@@ -122,8 +125,9 @@ defmodule Link.Pool.CampaignsView do
       end
 
     target_subject_count = guard_nil(target_subject_count, :integer)
-    current_subject_count = guard_nil(current_subject_count, :integer)
 
+    crew = Crew.Context.get_by_reference!(:campaign, id)
+    current_subject_count = Crew.Context.count_tasks(crew, [:pending, :completed])
     open_spots = target_subject_count - current_subject_count
 
     subtitle =
