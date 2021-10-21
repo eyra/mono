@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - '*'
+      - '[a-z]+-[0-9]+'
 
 jobs:
   tagged-release:
@@ -13,7 +13,10 @@ jobs:
     steps:
       - name: Set tag
         id: tag
-        run: "echo ::set-output name=TAG::${GITHUB_REF##*/}"
+        run: >
+          echo ::set-output name=TAG::${GITHUB_REF##*/} &&
+          echo ${GITHUB_REF} | sed -E  "s/.*\/(\w+)\-.*/::set-output name=BUNDLE::\1/"
+
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -36,6 +39,8 @@ jobs:
       - name: Build release
         run: mix release --overwrite --path "../${GITHUB_REF##*/}"
         working-directory: core
+        env:
+          BUNDLE: ${{steps.tag.outputs.bundle}}
 
       - name: Archive release
         run: tar cfj "${GITHUB_REF##*/}.tar.bz2" "${GITHUB_REF##*/}"
