@@ -50,7 +50,7 @@ defmodule EyraUI.Card.Study do
           <div class="flex items-center">
               <div class="flex-wrap">
                 <If condition={{ @card.tags }} >
-                  <div class="flex items-center">
+                  <div class="flex flex-wrap items-center gap-y-3">
                     <For each={{ tag <- @card.tags }} >
                       <Tag text={{ tag }} bg_color="bg-{{@tag_type}}" text_color="text-{{@tag_type}}" />
                       <Spacing value="XS" direction="l" />

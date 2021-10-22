@@ -4,11 +4,12 @@ defmodule Link.Onboarding.Wizard do
   """
   use CoreWeb, :live_view
   use CoreWeb.MultiFormAutoSave
+  use CoreWeb.Layouts.Stripped.Component, :onboarding
+  alias CoreWeb.Layouts.Stripped.Component, as: Stripped
 
   import CoreWeb.Gettext
 
   alias Core.Accounts
-  alias CoreWeb.Layouts.Stripped.Component, as: Stripped
   alias Link.Onboarding.Welcome, as: Welcome
   alias CoreWeb.User.Forms.Study, as: StudyForm
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
@@ -44,12 +45,13 @@ defmodule Link.Onboarding.Wizard do
         save_timer: nil,
         hide_flash_timer: nil
       )
+      |> update_menus()
     }
   end
 
   @impl true
   def handle_auto_save_done(socket) do
-    socket
+    socket |> update_menus()
   end
 
   @impl true
@@ -58,9 +60,10 @@ defmodule Link.Onboarding.Wizard do
     {:noreply, socket}
   end
 
+  @impl true
   def handle_event("finish", _, %{assigns: %{current_user: current_user}} = socket) do
     Accounts.mark_as_visited(current_user, :onboarding)
-    {:noreply, push_redirect(socket, to: forward_path(socket)) }
+    {:noreply, push_redirect(socket, to: forward_path(socket))}
   end
 
   def handle_info({:claim_focus, :profile}, socket) do
@@ -118,7 +121,7 @@ defmodule Link.Onboarding.Wizard do
     ~H"""
       <Stripped
         user={{@current_user}}
-        active_item={{ :dashboard }}
+        menus={{ @menus }}
       >
         <TabbarArea tabs={{@tabs}}>
           <ActionBar>

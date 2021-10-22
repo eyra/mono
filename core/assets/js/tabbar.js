@@ -1,17 +1,42 @@
-let activeTabId = ""
+let tabbarId = ""
 
 export const Tabbar = {
     mounted() {
-        var initialTab = "tab_"+this.el.getAttribute("data-initial-tab")
-        this.show(initialTab, true)
+        tabbarId = this.el.id
 
+        var initialTabId = this.el.dataset.initialTab ? "tab_"+this.el.dataset.initialTab : undefined
+        var savedTabId = this.loadActiveTab()
+        var firstTabId = this.getFirstTab()
+
+        var nextTabId = initialTabId ?? savedTabId ?? firstTabId
+        this.show(nextTabId, true)
     },
+
     updated() {
-        this.show(activeTabId, false)
+        var savedTabId = this.loadActiveTab()
+        this.show(savedTabId, false)
+    },
+
+    getActiveTabKey() {
+        var path = window.location.pathname
+        return path + "/" + tabbarId + "/active_tab"
+    },
+
+    loadActiveTab() {
+        return window.localStorage.getItem(this.getActiveTabKey())
+    },
+
+    saveActiveTab(tabId) {
+        window.localStorage.setItem(this.getActiveTabKey(), tabId)
+    },
+
+    getFirstTab() {
+        var firstTab = document.querySelectorAll('[id^="tab_"]')[0];
+        return firstTab.id
     },
 
     show(nextTabId, scrollToTop) {
-        activeTabId = nextTabId
+        this.saveActiveTab(nextTabId)
         var tabs = Array.from(document.querySelectorAll('[id^="tab_"]'));
 
         // Skip unknown tab
@@ -29,14 +54,14 @@ export const Tabbar = {
         // Activate tabbar item for active tab
         var tabbar_items = Array.from(document.getElementsByClassName('tabbar-item'));
         tabbar_items.forEach(tabbar_item => {
-            var tab_id = "tab_"+tabbar_item.getAttribute("data-tab-id")
+            var tab_id = "tab_"+tabbar_item.dataset.tabId
             updateTabbarItem(tabbar_item, tab_id === nextTabId)
         });
 
         // Show footer item for active tab
         var tabbar_footer_items = Array.from(document.getElementsByClassName('tabbar-footer-item'));
         tabbar_footer_items.forEach(tabbar_footer_item => {
-            var tab_id = "tab_"+tabbar_footer_item.getAttribute("data-tab-id")
+            var tab_id = "tab_"+tabbar_footer_item.dataset.tabId
             var isVisible = tab_id === nextTabId
             setVisible(tabbar_footer_item, isVisible)
         });
@@ -51,7 +76,7 @@ export const TabbarItem = {
     mounted() {
         this.el.addEventListener("click", (event)=>{
             this.tabbar = document.getElementById("tabbar");
-            Tabbar.show("tab_"+this.el.getAttribute("data-tab-id"), true)
+            Tabbar.show("tab_"+this.el.dataset.tabId, true)
         })
     }
   }
@@ -60,7 +85,7 @@ export const TabbarItem = {
     mounted() {
         this.el.addEventListener("click", (event)=>{
             this.tabbar = document.getElementById("tabbar");
-            Tabbar.show("tab_"+this.el.getAttribute("data-target-tab-id"), true)
+            Tabbar.show("tab_"+this.el.dataset.targetTabId, true)
         })
     }
   }

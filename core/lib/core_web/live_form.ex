@@ -36,13 +36,15 @@ defmodule CoreWeb.LiveForm do
         socket
       end
 
-      def schedule_save(socket, changeset) do
+      def schedule_save(socket, changeset), do: save(socket, changeset, true)
+
+      def save(socket, changeset, schedule?) do
         socket
         |> hide_flash()
 
         case Ecto.Changeset.apply_action(changeset, :update) do
           {:ok, entity} ->
-            handle_success(socket, changeset, entity)
+            handle_success(socket, changeset, entity, schedule?)
 
           {:error, %Ecto.Changeset{} = changeset} ->
             handle_validation_error(socket, changeset)
@@ -55,17 +57,20 @@ defmodule CoreWeb.LiveForm do
         |> flash_error()
       end
 
-      defp handle_success(socket, changeset, entity) do
-        do_schedule_save(socket, changeset)
+      defp handle_success(socket, changeset, entity, schedule?) do
+        do_save(socket, changeset, schedule?)
 
         socket
         |> assign(:entity, entity)
         |> assign(:changeset, changeset)
       end
 
-      defp do_schedule_save(%{assigns: %{id: id}}, changeset) do
-        send(self(), {:schedule_save, %{id: id, changeset: changeset}})
+      defp do_save(%{assigns: %{id: id}}, changeset, schedule?) do
+        send(self(), {save_key(schedule?), %{id: id, changeset: changeset}})
       end
+
+      defp save_key(true), do: :schedule_save
+      defp save_key(_), do: :force_save
 
       defp claim_focus(%{assigns: %{id: id}}) do
         send(self(), {:claim_focus, id})

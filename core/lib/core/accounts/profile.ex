@@ -9,13 +9,12 @@ defmodule Core.Accounts.Profile do
   schema "user_profiles" do
     field(:fullname, :string)
     field(:title, :string)
-    field(:url, :string)
     field(:photo_url, :string)
     belongs_to(:user, User)
     timestamps()
   end
 
-  @fields ~w(fullname title url photo_url)a
+  @fields ~w(fullname title photo_url)a
 
   @doc false
   def changeset(profile, attrs) do

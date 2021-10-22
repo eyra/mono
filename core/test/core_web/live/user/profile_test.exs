@@ -11,7 +11,7 @@ defmodule CoreWeb.User.ProfileTest do
       assert html =~ user.displayname
     end
 
-    test "allow altering the user info", %{conn: conn, user: user} do
+    test "allow altering the user info", %{conn: conn} do
       {:ok, view, _html} = live(conn, Routes.live_path(conn, Profile))
 
       view

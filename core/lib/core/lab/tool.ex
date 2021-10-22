@@ -6,9 +6,9 @@ defmodule Core.Lab.Tool do
 
   import Ecto.Changeset
 
-  alias Core.Studies.Study
   alias Core.Accounts.User
   alias Core.Promotions.Promotion
+  alias Systems.Campaign.Model, as: Study
 
   schema "lab_tools" do
     belongs_to(:content_node, Core.Content.Node)
@@ -27,6 +27,9 @@ defmodule Core.Lab.Tool do
 
   @impl true
   def operational_fields, do: @fields
+
+  @impl true
+  def operational_validation(changeset), do: changeset
 
   defimpl GreenLight.AuthorizationNode do
     def id(lab_tool), do: lab_tool.auth_node_id

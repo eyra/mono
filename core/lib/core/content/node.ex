@@ -27,6 +27,7 @@ defmodule Core.Content.Node do
   end
 
   @callback operational_fields() :: list(atom())
+  @callback operational_validation(Changeset.t()) :: Changeset.t()
 
   defmacro __using__(_opts) do
     quote do
@@ -47,6 +48,7 @@ defmodule Core.Content.Node do
           entity
           |> cast(attrs, operational_fields())
           |> validate_required(operational_fields())
+          |> operational_validation()
       end
 
       def node_changeset(node, entity, attrs) do

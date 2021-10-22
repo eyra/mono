@@ -12,107 +12,102 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:109
+#: lib/core_web/live/user/forms/profile.ex:110
 msgid "displayname.label"
 msgstr "Display name"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:67
+#: lib/core_web/live/user/signup.ex:73
 msgid "email.label"
 msgstr "Email"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:108
+#: lib/core_web/live/user/forms/profile.ex:109
 msgid "fullname.label"
 msgstr "Full name"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:68
+#: lib/core_web/live/user/signup.ex:74
 msgid "password.label"
 msgstr "Password"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:96
+#: lib/core_web/live/user/forms/profile.ex:97
 msgid "profile.title"
 msgstr "My profile"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:73
+#: lib/core_web/live/user/signup.ex:79
 msgid "signin.label"
 msgstr "Already an account?"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:74
+#: lib/core_web/live/user/signup.ex:80
 msgid "signin.link"
 msgstr "Sign in here"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:69
+#: lib/core_web/live/user/signup.ex:75
 msgid "signup.button"
 msgstr "Sign up"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:64
+#: lib/core_web/live/user/signup.ex:70
 msgid "signup.title"
 msgstr "Sign up"
 
 #, elixir-format
-#: lib/core_web/live/user/await_confirmation.ex:46
+#: lib/core_web/live/user/await_confirmation.ex:50
 msgid "await.confirmation.title"
 msgstr "Bevestig je registratie"
 
 #, elixir-format
-#: lib/core_web/live/user/confirm_token.ex:82
+#: lib/core_web/live/user/confirm_token.ex:86
 msgid "confirm.token.resend_button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:103
+#: lib/core_web/live/user/forms/profile.ex:104
 msgid "choose.profile.photo.file"
 msgstr "Select picture"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:104
+#: lib/core_web/live/user/forms/profile.ex:105
 msgid "choose.other.profile.photo.file"
 msgstr "Change"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:112
+#: lib/core_web/live/user/forms/profile.ex:113
 msgid "professionaltitle.label"
 msgstr "Professional title"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:113
-msgid "website.label"
-msgstr "Website"
-
-#, elixir-format
-#: lib/core_web/live/user/settings.ex:45
+#: lib/core_web/live/user/settings.ex:46
 msgid "push.registration.button"
 msgstr "Activate"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:38
+#: lib/core_web/live/user/settings.ex:39
 msgid "push.registration.title"
 msgstr "Push notifications"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:52
+#: lib/core_web/live/user/settings.ex:53
 msgid "push.registration.activated"
 msgstr "Push notifications are activated on this browser."
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:49
+#: lib/core_web/live/user/settings.ex:50
 msgid "push.registration.denied"
 msgstr "Push notifications are deactivated on this browser"
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:43
+#: lib/core_web/live/user/settings.ex:44
 msgid "push.registration.label"
 msgstr "Activate to receive notifications from the Panl platform in your browser. After activation, your browser might ask for permission to show notifications."
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:48
+#: lib/core_web/live/user/settings.ex:49
 msgid "push.registration.pending"
 msgstr "Determining state.."
 
@@ -124,50 +119,48 @@ msgstr "Select your study program(s), bedrijfskunde (BK) and/or international bu
 #, elixir-format
 #: lib/core_web/live/user/forms/features.ex:88
 msgid "features.description"
-msgstr "By selecting these characteristics, more studies will become available to you. It enables you to participate in research studies with specific eligibility requirements."
+msgstr "A few studies use specific eligibility requirements. Selecting the optional characteristics below, allows you to participate in studies that specify your characteristics as requirements."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:106
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:153
 #: lib/core_web/live/user/forms/features.ex:99
 msgid "features.dominanthand.title"
 msgstr "Dominant hand"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:98
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:145
 #: lib/core_web/live/user/forms/features.ex:91
 msgid "features.gender.title"
 msgstr "Gender"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:102
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:149
 #: lib/core_web/live/user/forms/features.ex:95
 msgid "features.nativelanguage.title"
 msgstr "First language"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:110
-#: lib/core_web/live/user/forms/study.ex:73
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:157
 msgid "features.study.title"
-msgstr "Study program"
+msgstr "Students"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:94
-#: lib/core_web/live/user/forms/features.ex:87
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:141
 msgid "features.title"
 msgstr "Inclusion criteria"
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:111
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:158
 msgid "feature.study.content.description"
 msgstr "Select which students (BK: bedrijfskunde, IBA: international business administration) are eligible to participate. If nothing is selected, all students in the pool are eligible to participate."
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:95
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:142
 msgid "features.content.description"
 msgstr "Select the inclusion criteria for your study. If nothing is selected, all students in the pool are eligible to participate."
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:40
+#: lib/core_web/live/user/settings.ex:41
 msgid "push.unavailable.label"
 msgstr "Registering for push notifications is currently available on Chrome and Firefox browsers. Please open the website on one of these browsers to make use of push notifications."
 
@@ -205,3 +198,20 @@ msgstr "privacy statement"
 #: lib/core_web/templates/user_session/new.html.eex:41
 msgid "login.surf.message.surfconext.href"
 msgstr "https://wiki.surfnet.nl/display/conextsupport/Log+in+SURFconext"
+
+#, elixir-format
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:165
+#: bundles/link/lib/pool/views/submission_criteria_view.ex:111
+msgid "features.study.program"
+msgstr "Study program"
+
+#, elixir-format
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:161
+#: bundles/link/lib/pool/views/submission_criteria_view.ex:107
+msgid "features.study.year"
+msgstr "Study year"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:316
+msgid "ehtical.code.label"
+msgstr "Code"

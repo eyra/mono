@@ -12,32 +12,32 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/admin/permissions.ex:93
+#: lib/core_web/live/admin/permissions.ex:80
 msgid "permissions.pooladmin.candidates.title"
 msgstr "Onderzoekers"
 
 #, elixir-format
-#: lib/core_web/live/admin/permissions.ex:79
+#: lib/core_web/live/admin/permissions.ex:66
 msgid "permissions.pooladmin.description"
 msgstr "Selecteer een of meer onderzoekers die namens de VU de studentenpool beheren."
 
 #, elixir-format
-#: lib/core_web/live/admin/permissions.ex:78
+#: lib/core_web/live/admin/permissions.ex:65
 msgid "permissions.pooladmin.title"
 msgstr "Pool beheerders"
 
 #, elixir-format
-#: lib/core_web/live/admin/permissions.ex:73
+#: lib/core_web/live/admin/permissions.ex:60
 msgid "permissions.title"
 msgstr "Permissies"
 
 #, elixir-format
-#: lib/core_web/live/admin/support.ex:70
+#: lib/core_web/live/admin/support.ex:77
 msgid "support.tickets.title"
 msgstr "Meldingen"
 
 #, elixir-format
-#: lib/core_web/live/admin/support.ex:65
+#: lib/core_web/live/admin/support.ex:72
 msgid "support.title"
 msgstr "Support"
 
@@ -57,36 +57,38 @@ msgid "ticket.tag.tip"
 msgstr "Tip"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:132
+#: lib/core_web/live/admin/ticket.ex:147
 msgid "close.ticket.button"
 msgstr "Melding sluiten"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:102
+#: lib/core_web/live/admin/ticket.ex:119
 msgid "ticket.title"
 msgstr "Melding"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:61
+#: lib/core_web/live/admin/ticket.ex:63
 msgid "role.coordinator"
 msgstr "Pool beheerder"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:62
+#: bundles/link/lib/pool/submission_page.ex:242
+#: lib/core_web/live/admin/ticket.ex:64
 msgid "role.researcher"
 msgstr "Onderzoeker"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:63
+#: lib/core_web/live/admin/ticket.ex:65
 msgid "role.student"
 msgstr "Student"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:73
+#: bundles/link/lib/pool/submission_page.ex:254
+#: lib/core_web/live/admin/ticket.ex:80
 msgid "ticket.mailto.button"
 msgstr "Benaderen"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:79
+#: lib/core_web/live/admin/ticket.ex:94
 msgid "close.confirm.ticket"
 msgstr "melding"

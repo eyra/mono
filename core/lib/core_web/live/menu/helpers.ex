@@ -115,7 +115,25 @@ defmodule CoreWeb.Menu.Helpers do
     %{menu_id: menu_id, id: id, title: title, icon: icon, action: action}
   end
 
-  def language_switch_item(socket, menu_id, page_id, icon_only? \\ false) do
+  def language_switch_item(socket, menu_id, icon_only? \\ false)
+
+  def language_switch_item(%{assigns: %{uri: uri}} = socket, menu_id, icon_only?) do
+    parsed_uri = URI.parse(uri)
+
+    redir =
+      case parsed_uri.query do
+        nil -> parsed_uri.path
+        query -> "#{parsed_uri.path}?#{query}"
+      end
+
+    language_switch_item(socket, menu_id, redir, icon_only?)
+  end
+
+  def language_switch_item(socket, menu_id, icon_only?) do
+    language_switch_item(socket, menu_id, "\\", icon_only?)
+  end
+
+  defp language_switch_item(socket, menu_id, redir, icon_only?) do
     [locale | _] = supported_languages()
 
     title =
@@ -126,13 +144,6 @@ defmodule CoreWeb.Menu.Helpers do
       end
 
     icon = %{name: locale.id, size: :small}
-
-    redir =
-      if page_id do
-        Routes.live_path(socket, socket.view, page_id)
-      else
-        Routes.live_path(socket, socket.view)
-      end
 
     path = Routes.language_switch_path(socket, :index, locale.id, redir: redir)
     action = %{target: path, dead?: true}

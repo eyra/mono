@@ -1,9 +1,9 @@
 defmodule Core.Mailer.SignalHandlers do
-  use Core.Signals.Handlers
+  use Frameworks.Signal.Handler
   use Bamboo.Phoenix, view: Core.Mailer.EmailView
   import Core.FeatureFlags
   import Core.Mailer, only: [base_email: 0, deliver_later: 1]
-  alias Core.NotificationCenter.Box
+  alias Systems.Notification.Box
 
   @impl true
   def dispatch(:new_notification, %{box: box, data: %{title: title}}) do

@@ -14,6 +14,10 @@ defmodule CoreWeb.Lab.Public do
      socket |> assign(:tool, tool) |> assign(:reservation, Tools.reservation_for_user(tool, user))}
   end
 
+  @impl true
+  def handle_uri(socket), do: socket
+
+  @impl true
   def handle_event(
         "reserve-time-slot",
         %{"time-slot-id" => time_slot_id},
@@ -28,6 +32,7 @@ defmodule CoreWeb.Lab.Public do
     {:noreply, socket |> assign(:reservation, reservation)}
   end
 
+  @impl true
   def handle_event(
         "cancel-reservation",
         _params,

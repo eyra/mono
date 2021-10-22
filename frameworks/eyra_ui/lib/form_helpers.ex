@@ -21,11 +21,11 @@ defmodule EyraUI.FormHelpers do
     ErrorHelpers.error_tag(form, assigns.field)
   end
 
-  def label_color(assigns, form) do
+  def label_color(assigns, form, default \\ "text-grey1") do
     if assigns |> field_has_error?(form) do
       "text-warning"
     else
-      assigns.label_color
+      default
     end
   end
 
@@ -36,11 +36,11 @@ defmodule EyraUI.FormHelpers do
     end
   end
 
-  def border_color(assigns, form) do
+  def border_color(assigns, form, default \\ "border-grey3") do
     if assigns |> field_has_error?(form) do
       "border-warning"
     else
-      "border-grey3"
+      default
     end
   end
 

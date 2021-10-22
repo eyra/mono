@@ -12,64 +12,151 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:163 bundles/link/lib/card.ex:214
-#: bundles/link/lib/dashboard.ex:102 bundles/link/lib/dashboard.ex:166
-msgid "status.accepted.label"
-msgstr "Online"
-
-#, elixir-format
-#: bundles/link/lib/card.ex:157 bundles/link/lib/card.ex:208
-#: bundles/link/lib/dashboard.ex:96 bundles/link/lib/dashboard.ex:160
+#: bundles/link/lib/card.ex:249 lib/core/pools/submission.ex:111
 msgid "status.idle.label"
 msgstr "Concept"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:160 bundles/link/lib/card.ex:211
-#: bundles/link/lib/dashboard.ex:99 bundles/link/lib/dashboard.ex:163
+#: bundles/link/lib/card.ex:252 lib/core/pools/submission.ex:114
 msgid "status.submitted.label"
 msgstr "Ingediend"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:111 bundles/link/lib/dashboard.ex:175
+#: bundles/link/lib/dashboard.ex:94
 msgid "incomplete.forms.message"
-msgstr "Formulieren zijn nog niet volledig ingevuld"
+msgstr "Sommige verplichte velden zijn nog niet ingevuld"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:109 bundles/link/lib/dashboard.ex:173
+#: bundles/link/lib/dashboard.ex:92
 msgid "ready.for.submission.message"
-msgstr "Klaar om in te dienen bij de studentenpool coordinator"
+msgstr "Alle verplichte velden zijn gevuld, je kunt deze campagne indienen"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:115 bundles/link/lib/dashboard.ex:179
+#: bundles/link/lib/dashboard.ex:98
 msgid "waiting.for.coordinator.message"
-msgstr "De beheerder van de pool zal de campagne spoedig in de marktplaats publiseren"
+msgstr "Jouw campagne staat in de wachtrij om door de poolbeheerder in de marktplaats gezet te worden"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:239
+#: systems/campaign/content_page.ex:248
 msgid "submit.error.text"
-msgstr "Je kan de campagne nog niet indienen. Vul eerst alle formulieren volledig in."
+msgstr "Sommige verplichte velden in je campagne zijn niet ingevuld."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:238
+#: systems/campaign/content_page.ex:247
 msgid "submit.error.title"
-msgstr "Campagne onvolledig"
+msgstr "Maak je campagne compleet"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:231
+#: systems/campaign/content_page.ex:240
 msgid "submit.success.text"
-msgstr "De beheerder van de pool is op de hoogte gebracht. Zodra de campagne online staat krijg je een bericht."
+msgstr "Bedankt voor het indienen. De poolbeheerder zal je campagne bekijken en deze inplannen voor publicatie in de marktplaats."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:230
+#: systems/campaign/content_page.ex:239
 msgid "submit.success.title"
 msgstr "Campagne ingediend"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:255
+#: systems/campaign/content_page.ex:265
 msgid "retract.success.text"
-msgstr "De campagne is niet meer zichtbaar in de marktplaats."
+msgstr "Jouw campagne is niet meer zichtbaar voor de poolbeheerder en in de marktplaats van de deelnemers."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/content.ex:254
+#: systems/campaign/content_page.ex:264
 msgid "retract.success.title"
-msgstr "Campagne teruggetrokken"
+msgstr "Campagne offline"
+
+#, elixir-format
+#: bundles/link/lib/card.ex:93 bundles/link/lib/card.ex:162
+msgid "reward.title"
+msgstr "Beloning"
+
+#, elixir-format
+#: bundles/link/lib/pool/submission_page.ex:54
+msgid "byline"
+msgstr "Laatste aanpassing: %{timestamp}"
+
+#, elixir-format
+#: bundles/link/lib/pool/submission_page.ex:133
+msgid "retract.admin.success.text"
+msgstr "De campagne is niet meer open of ingepland voor deelname in de marktplaats."
+
+#, elixir-format
+#: bundles/link/lib/pool/submission_page.ex:132
+msgid "retract.admin.success.title"
+msgstr "Campagne offline"
+
+#, elixir-format
+#: bundles/link/lib/pool/submission_page.ex:117
+msgid "accept.error.text"
+msgstr "Sommige verplichte velden zijn niet correct ingevuld."
+
+#, elixir-format
+#: bundles/link/lib/pool/submission_page.ex:116
+msgid "accept.error.title"
+msgstr "Maak het formulier compleet"
+
+#, elixir-format
+#: bundles/link/lib/pool/submission_page.ex:110
+msgid "accept.success.text"
+msgstr "De campagne staat open of is ingepland voor deelname in de marktplaats."
+
+#, elixir-format
+#: bundles/link/lib/pool/submission_page.ex:109
+msgid "accept.success.title"
+msgstr "Campagne gepubliceerd"
+
+#, elixir-format
+#: bundles/link/lib/pool/views/submission_view.ex:199
+msgid "reward.value.label"
+msgstr "Credits"
+
+#, elixir-format
+#: bundles/link/lib/pool/views/submission_view.ex:198
+msgid "reward.label"
+msgstr "Beloning"
+
+#, elixir-format
+#: bundles/link/lib/pool/views/submission_view.ex:125
+msgid "schedule.end.label"
+msgstr "Offline na"
+
+#, elixir-format
+#: bundles/link/lib/pool/views/submission_view.ex:115
+msgid "schedule.start.label"
+msgstr "Online op"
+
+#, elixir-format
+#: bundles/link/lib/pool/views/submission_view.ex:203
+msgid "schedule.description"
+msgstr "Het plannen van een campagne is optioneel. Als je een campagne online zet, zonder planning, dan is deze meteen beschikbaar op de marktplaats. Je kunt een campagne die online staat op elk moment weer terugtrekken."
+
+#, elixir-format
+#: bundles/link/lib/pool/views/submission_view.ex:202
+msgid "schedule.title"
+msgstr "Planning"
+
+#, elixir-format
+#: bundles/link/lib/card.ex:267 lib/core/pools/submission.ex:128
+msgid "status.accepted.closed.label"
+msgstr "Afgerond"
+
+#, elixir-format
+#: bundles/link/lib/card.ex:263 lib/core/pools/submission.ex:125
+msgid "status.accepted.online.label"
+msgstr "Online"
+
+#, elixir-format
+#: bundles/link/lib/card.ex:258 lib/core/pools/submission.ex:120
+msgid "status.accepted.scheduled.label"
+msgstr "Ingepland"
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:112
+msgid "accepted.closed.message"
+msgstr "Deze campagne is afgerond"
+
+#, elixir-format
+#: bundles/link/lib/dashboard.ex:103
+msgid "accepted.scheduled.message"
+msgstr "Deze campagne staat ingepland voor deelname "

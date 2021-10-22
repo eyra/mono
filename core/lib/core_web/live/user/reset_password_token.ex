@@ -26,6 +26,10 @@ defmodule CoreWeb.User.ResetPasswordToken do
     end
   end
 
+  @impl true
+  def handle_uri(socket), do: socket
+
+  @impl true
   def handle_event(
         "reset-password",
         %{"user" => password_params},

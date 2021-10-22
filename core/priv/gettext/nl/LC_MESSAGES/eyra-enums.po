@@ -150,3 +150,83 @@ msgstr "Ik heb een vraag"
 #: lib/core/enums/ticket_types.ex:5
 msgid "ticket_types.tip"
 msgstr "Ik heb een idee om het platform te verbeteren"
+
+#, elixir-format
+#: lib/core/enums/study_years.ex:5
+msgid "study_years.first"
+msgstr "Eerste jaar"
+
+#, elixir-format
+#: lib/core/enums/study_years.ex:5
+msgid "study_years.second"
+msgstr "Tweede jaar"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.accounting"
+msgstr "Boekhouding"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.business"
+msgstr "Bedrijfskunde"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.economics"
+msgstr "Economie"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.management"
+msgstr "Management"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.marketing"
+msgstr "Marketing"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.organisation"
+msgstr "Organisatie"
+
+#, elixir-format
+#: bundles/link/lib/enums/online_study_languages.ex:5
+msgid "online_study_languages.en"
+msgstr "Engels"
+
+#, elixir-format
+#: bundles/link/lib/enums/online_study_languages.ex:5
+msgid "online_study_languages.nl"
+msgstr "Nederlands"
+
+#, elixir-format
+#: lib/core/enums/native_languages.ex:5
+msgid "native_languages.other"
+msgstr "Anders"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.data_science"
+msgstr "Data science"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.digital_innovation"
+msgstr "Digitale innovatie"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.econometrics"
+msgstr "Econometrie"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.finance"
+msgstr "Finance"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.operations_analytics"
+msgstr "Operations analytics"

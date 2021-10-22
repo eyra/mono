@@ -8,11 +8,9 @@ defmodule Core.Promotions.Promotion do
   import Ecto.Changeset
   import CoreWeb.Gettext
 
-  require Core.Enums.Themes
-  alias Core.Enums.Themes
   alias Core.Marks
   alias Core.ImageHelpers
-  alias Coreweb.UI.Timestamp
+  alias CoreWeb.UI.Timestamp
 
   schema "promotions" do
     # Plain Content
@@ -27,7 +25,7 @@ defmodule Core.Promotions.Promotion do
     # Rich Content
     field(:image_id, :string)
     field(:marks, {:array, :string})
-    field(:themes, {:array, Ecto.Enum}, values: Themes.schema_values())
+    field(:themes, {:array, :string})
     # Technical
     field(:plugin, :string)
 
@@ -48,6 +46,9 @@ defmodule Core.Promotions.Promotion do
 
   @impl true
   def operational_fields, do: @publish_required_fields
+
+  @impl true
+  def operational_validation(changeset), do: changeset
 
   defimpl GreenLight.AuthorizationNode do
     def id(promotion), do: promotion.auth_node_id
@@ -70,9 +71,9 @@ defmodule Core.Promotions.Promotion do
     |> validate_required([:title, :plugin])
   end
 
-  def get_themes(promotion) do
+  def get_themes(promotion, themes_module) do
     promotion.themes
-    |> Themes.labels()
+    |> themes_module.labels()
     |> Enum.filter(& &1.active)
     |> Enum.map(& &1.value)
     |> Enum.join(", ")

@@ -18,6 +18,13 @@ defmodule Core.Authorization do
 
   Core.BundleOverrides.grants()
 
+  grant_access(Systems.Notification.OverviewPage, [:member])
+  grant_access(Systems.NextAction.OverviewPage, [:member])
+  grant_access(Systems.Campaign.OverviewPage, [:researcher])
+  grant_access(Systems.Campaign.ContentPage, [:owner])
+  grant_access(Systems.Crew.TaskPage, [:participant])
+  grant_access(Systems.Crew.TaskCompletePage, [:participant])
+
   grant_access(CoreWeb.Admin.Login, [:visitor, :member])
   grant_access(CoreWeb.Admin.Permissions, [:admin])
   grant_access(CoreWeb.Admin.Support, [:admin])
@@ -26,8 +33,6 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.Helpdesk.Public, [:member])
   grant_access(CoreWeb.Dashboard, [:researcher])
   grant_access(CoreWeb.Marketplace, [:member])
-  grant_access(CoreWeb.Todo, [:member])
-  grant_access(CoreWeb.Notifications, [:member])
   grant_access(CoreWeb.User.Signin, [:visitor])
   grant_access(CoreWeb.User.Signup, [:visitor])
   grant_access(CoreWeb.User.ResetPassword, [:visitor])
@@ -43,7 +48,7 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.Promotion.Public, [:visitor, :member, :owner])
   grant_access(CoreWeb.Lab.Public, [:member])
 
-  grant_access(Core.Studies.Study, [:visitor, :member])
+  grant_access(Systems.Campaign.Model, [:visitor, :member])
   grant_access(Core.Survey.Tool, [:owner, :coordinator, :participant])
   grant_access(Core.Survey.Task, [:participant])
   grant_access(Core.DataDonation.Tool, [:owner, :coordinator, :participant])

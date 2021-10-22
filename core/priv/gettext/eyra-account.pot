@@ -11,107 +11,102 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:109
+#: lib/core_web/live/user/forms/profile.ex:110
 msgid "displayname.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:67
+#: lib/core_web/live/user/signup.ex:73
 msgid "email.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:108
+#: lib/core_web/live/user/forms/profile.ex:109
 msgid "fullname.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:68
+#: lib/core_web/live/user/signup.ex:74
 msgid "password.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:96
+#: lib/core_web/live/user/forms/profile.ex:97
 msgid "profile.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:73
+#: lib/core_web/live/user/signup.ex:79
 msgid "signin.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:74
+#: lib/core_web/live/user/signup.ex:80
 msgid "signin.link"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:69
+#: lib/core_web/live/user/signup.ex:75
 msgid "signup.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:64
+#: lib/core_web/live/user/signup.ex:70
 msgid "signup.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/await_confirmation.ex:46
+#: lib/core_web/live/user/await_confirmation.ex:50
 msgid "await.confirmation.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/confirm_token.ex:82
+#: lib/core_web/live/user/confirm_token.ex:86
 msgid "confirm.token.resend_button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:103
+#: lib/core_web/live/user/forms/profile.ex:104
 msgid "choose.profile.photo.file"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:104
+#: lib/core_web/live/user/forms/profile.ex:105
 msgid "choose.other.profile.photo.file"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:112
+#: lib/core_web/live/user/forms/profile.ex:113
 msgid "professionaltitle.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/profile.ex:113
-msgid "website.label"
-msgstr ""
-
-#, elixir-format
-#: lib/core_web/live/user/settings.ex:45
+#: lib/core_web/live/user/settings.ex:46
 msgid "push.registration.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:38
+#: lib/core_web/live/user/settings.ex:39
 msgid "push.registration.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:52
+#: lib/core_web/live/user/settings.ex:53
 msgid "push.registration.activated"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:49
+#: lib/core_web/live/user/settings.ex:50
 msgid "push.registration.denied"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:43
+#: lib/core_web/live/user/settings.ex:44
 msgid "push.registration.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:48
+#: lib/core_web/live/user/settings.ex:49
 msgid "push.registration.pending"
 msgstr ""
 
@@ -126,47 +121,45 @@ msgid "features.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:106
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:153
 #: lib/core_web/live/user/forms/features.ex:99
 msgid "features.dominanthand.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:98
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:145
 #: lib/core_web/live/user/forms/features.ex:91
 msgid "features.gender.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:102
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:149
 #: lib/core_web/live/user/forms/features.ex:95
 msgid "features.nativelanguage.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:110
-#: lib/core_web/live/user/forms/study.ex:73
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:157
 msgid "features.study.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:94
-#: lib/core_web/live/user/forms/features.ex:87
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:141
 msgid "features.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:111
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:158
 msgid "feature.study.content.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/submission.ex:95
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:142
 msgid "features.content.description"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/settings.ex:40
+#: lib/core_web/live/user/settings.ex:41
 msgid "push.unavailable.label"
 msgstr ""
 
@@ -203,4 +196,21 @@ msgstr ""
 #, elixir-format
 #: lib/core_web/templates/user_session/new.html.eex:41
 msgid "login.surf.message.surfconext.href"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:165
+#: bundles/link/lib/pool/views/submission_criteria_view.ex:111
+msgid "features.study.program"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/views/campaign_submission_view.ex:161
+#: bundles/link/lib/pool/views/submission_criteria_view.ex:107
+msgid "features.study.year"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:316
+msgid "ehtical.code.label"
 msgstr ""

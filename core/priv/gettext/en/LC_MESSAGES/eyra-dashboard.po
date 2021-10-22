@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/overview.ex:63
+#: systems/campaign/overview_page.ex:65
 msgid "default.study.title"
 msgstr "New study"
 
@@ -24,9 +24,9 @@ msgstr "Recent items:"
 #, elixir-format
 #: bundles/link/lib/dashboard.ex:67
 msgid "empty.description"
-msgstr "The dashboard is the go to place to find an overview of your work. A list of recent items is the starting point of this page."
+msgstr "Once you start working with Panl, you will find the items you recently worked on here. This dashboard is the place to be, to quickly pick up where you left off the last time that you visited Panl."
 
 #, elixir-format
 #: bundles/link/lib/dashboard.ex:66
 msgid "empty.title"
-msgstr "Items you worked on recently will appear here"
+msgstr "Looking for recent items?"

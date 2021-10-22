@@ -54,3 +54,18 @@ msgstr ""
 #: lib/core/accounts/next_actions/select_study_student.ex:9
 msgid "select.study.student.title"
 msgstr ""
+
+#, elixir-format
+#: lib/core/pools/next_actions/review_submission.ex:11
+msgid "review.submission.cta"
+msgstr ""
+
+#, elixir-format
+#: lib/core/pools/next_actions/review_submission.ex:10
+msgid "review.submission.description"
+msgstr ""
+
+#, elixir-format
+#: lib/core/pools/next_actions/review_submission.ex:9
+msgid "review.submission.title"
+msgstr ""

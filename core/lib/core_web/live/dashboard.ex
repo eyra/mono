@@ -5,12 +5,12 @@ defmodule CoreWeb.Dashboard do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :dashboard
 
-  alias Core.Studies
   alias CoreWeb.UI.ContentListItem
 
+  alias Systems.Campaign
+  alias Systems.NextAction
+
   alias EyraUI.Text.{Title2}
-  alias Core.NextActions.Live.NextActionHighlight
-  alias Core.NextActions
   alias Core.ImageHelpers
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
@@ -25,14 +25,14 @@ defmodule CoreWeb.Dashboard do
     # FIXME: Refactor to use content node
     content_items =
       user
-      |> Studies.list_owned_studies(preload: preload)
+      |> Campaign.Context.list_owned_campaigns(preload: preload)
       |> Enum.map(&convert_to_vm(socket, &1))
 
     socket =
       socket
       |> update_menus()
       |> assign(content_items: content_items)
-      |> assign(next_best_action: NextActions.next_best_action(url_resolver(socket), user))
+      |> assign(next_best_action: NextAction.Context.next_best_action(url_resolver(socket), user))
 
     {:ok, socket}
   end
@@ -50,7 +50,7 @@ defmodule CoreWeb.Dashboard do
         <ContentArea>
           <MarginY id={{:page_top}} />
             <div :if={{ @next_best_action }}>
-              <NextActionHighlight vm={{ @next_best_action }}/>
+              <NextAction.HighlightView vm={{ @next_best_action }}/>
               <Spacing value="XL" />
             </div>
             <Title2>

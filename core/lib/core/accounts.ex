@@ -7,7 +7,7 @@ defmodule Core.Accounts do
   alias Ecto.Multi
   alias Core.Repo
   alias Core.Accounts.{User, UserToken, UserNotifier, Profile, Features}
-  alias Core.Signals
+  alias Frameworks.Signal
 
   ## Listings
 
@@ -29,7 +29,7 @@ defmodule Core.Accounts do
     |> Repo.all()
   end
 
-  def list_coordinators(preload \\ []) do
+  def list_pool_admins(preload \\ []) do
     from(u in User,
       where: u.coordinator,
       order_by: {:desc, :inserted_at},
@@ -423,7 +423,7 @@ defmodule Core.Accounts do
     Multi.new()
     |> Multi.update(:profile, profile_changeset)
     |> Multi.update(:user, user_changeset)
-    |> Signals.multi_dispatch(:user_profile_updated, %{
+    |> Signal.Context.multi_dispatch(:user_profile_updated, %{
       user_changeset: user_changeset,
       profile_changeset: profile_changeset
     })
@@ -459,7 +459,7 @@ defmodule Core.Accounts do
   def update_features(%Features{} = features, changeset) do
     Multi.new()
     |> Multi.update(:features, changeset)
-    |> Signals.multi_dispatch(:features_updated, %{
+    |> Signal.Context.multi_dispatch(:features_updated, %{
       features: features,
       features_changeset: changeset
     })
@@ -475,7 +475,9 @@ defmodule Core.Accounts do
   end
 
   def mark_as_visited(%User{visited_pages: visited_pages} = user, page) do
-    if not visited?(user, page) do
+    if visited?(user, page) do
+      Signal.Context.dispatch(:visited_pages_updated, %{user: user, visited_pages: visited_pages})
+    else
       update_visited(user, visited_pages ++ [page])
     end
   end
@@ -485,8 +487,8 @@ defmodule Core.Accounts do
 
     Multi.new()
     |> Multi.update(:user, changeset)
-    |> Signals.multi_dispatch(:visited_pages_updated, %{
-      user_changeset: changeset
+    |> Signal.Context.multi_dispatch(:visited_pages_updated, %{
+      visited_pages: changeset.changes.visited_pages
     })
     |> Repo.transaction()
   end

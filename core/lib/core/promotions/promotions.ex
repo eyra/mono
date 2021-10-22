@@ -8,13 +8,13 @@ defmodule Core.Promotions do
   alias Ecto.Multi
   alias Ecto.Changeset
   alias Core.Repo
+  alias Frameworks.Signal
   alias Core.Promotions.Promotion
   alias Core.Content.{Nodes, Node}
   alias Core.Authorization
   alias Core.Pools.Submission
   alias Core.Survey.Tools
-  alias Core.Studies
-  alias Core.Studies.Study
+  alias Systems.Campaign
 
   def list do
     Repo.all(Promotion)
@@ -38,14 +38,20 @@ defmodule Core.Promotions do
     node_changeset = Promotion.node_changeset(node, promotion, changeset.changes)
 
     tool = Tools.get_by_promotion(promotion.id)
-    study = Studies.get_study!(tool.study_id)
-    study_changeset = Study.changeset(study, %{updated_at: NaiveDateTime.utc_now()})
+    campaign = Campaign.Context.get!(tool.study_id)
 
-    Multi.new()
-    |> Multi.update(:promotion, changeset)
-    |> Multi.update(:content_node, node_changeset)
-    |> Multi.update(:study, study_changeset)
-    |> Repo.transaction()
+    campaign_changeset =
+      Campaign.Model.changeset(campaign, %{updated_at: NaiveDateTime.utc_now()})
+
+    with {:ok, %{promotion: promotion} = result} <-
+           Multi.new()
+           |> Multi.update(:promotion, changeset)
+           |> Multi.update(:content_node, node_changeset)
+           |> Multi.update(:study, campaign_changeset)
+           |> Repo.transaction() do
+      Signal.Context.dispatch!(:promotion_updated, promotion)
+      {:ok, result}
+    end
   end
 
   def update(%Promotion{} = promotion, attrs) do

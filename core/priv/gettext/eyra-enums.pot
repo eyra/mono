@@ -149,3 +149,83 @@ msgstr ""
 #: lib/core/enums/ticket_types.ex:5
 msgid "ticket_types.tip"
 msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_years.ex:5
+msgid "study_years.first"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/study_years.ex:5
+msgid "study_years.second"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.accounting"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.business"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.economics"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.management"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.marketing"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.organisation"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/online_study_languages.ex:5
+msgid "online_study_languages.en"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/online_study_languages.ex:5
+msgid "online_study_languages.nl"
+msgstr ""
+
+#, elixir-format
+#: lib/core/enums/native_languages.ex:5
+msgid "native_languages.other"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.data_science"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.digital_innovation"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.econometrics"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.finance"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.operations_analytics"
+msgstr ""

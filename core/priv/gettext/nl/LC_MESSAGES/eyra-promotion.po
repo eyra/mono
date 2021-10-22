@@ -12,153 +12,178 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core/promotions/promotion.ex:94
+#: lib/core/promotions/promotion.ex:95
 msgid "created.label"
 msgstr "Aangemaakt"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:129
+#: bundles/link/lib/promotions/public.ex:249
+#: lib/core_web/live/promotion/public.ex:178
 msgid "back.button.label"
-msgstr "Terug naar overzicht"
+msgstr "Terug"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:180
+#: lib/core_web/live/promotion/form.ex:199
 msgid "banner.subtitle.label"
-msgstr "Ondertitel"
+msgstr "Omschrijving"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:167
+#: lib/core_web/live/promotion/form.ex:186
 msgid "banner.title"
-msgstr "Banner"
+msgstr "Over jou of jouw team"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:179
+#: lib/core_web/live/promotion/form.ex:198
 msgid "banner.title.label"
-msgstr "Titel"
+msgstr "Naam"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:181
+#: lib/core_web/live/promotion/form.ex:200
 msgid "banner.url.label"
 msgstr "Website"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:173
+#: lib/core_web/live/promotion/form.ex:192
 msgid "choose.banner.photo.file"
 msgstr "Kies foto"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:174
+#: lib/core_web/live/promotion/form.ex:193
 msgid "choose.other.banner.photo.file"
 msgstr "Kies andere foto"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:37 lib/core_web/view_model/card.ex:39
+#: bundles/link/lib/card.ex:38 lib/core_web/view_model/card.ex:39
 msgid "deadline.label"
 msgstr "Nog %{days} dagen beschikbaar"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:164
+#: lib/core_web/live/promotion/form.ex:183
 msgid "description.label"
-msgstr "Achtergrond informatie voor de participanten"
+msgstr "Geef wat achtergrond informatie over deze studie"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:99
+#: bundles/link/lib/promotions/public.ex:226
+#: lib/core_web/live/promotion/public.ex:148
 msgid "description.public.label"
-msgstr "Achtergrond informatie voor de participanten"
+msgstr "Over deze studie"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:163
+#: lib/core_web/live/promotion/form.ex:182
 msgid "description.title"
-msgstr "Over het onderzoek"
+msgstr "Waarom voer je deze study uit?"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:122
+#: bundles/link/lib/promotions/public.ex:240
+#: lib/core_web/live/promotion/public.ex:171
 msgid "devices.available.label"
 msgstr "Beschikbaar op:"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:34 bundles/link/lib/card.ex:90
-#: bundles/link/lib/card.ex:146
+#: bundles/link/lib/card.ex:35 bundles/link/lib/card.ex:94
+#: bundles/link/lib/card.ex:163
 msgid "duration.title"
-msgstr "Verwachte duur"
+msgstr "Duur"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:160
+#: lib/core_web/live/promotion/form.ex:179
 msgid "expectations.label"
-msgstr "Verwachtingen voor de participanten"
+msgstr "Beschrijf wat er van de deelnemers wordt verwacht"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:95
+#: bundles/link/lib/promotions/public.ex:222
+#: lib/core_web/live/promotion/public.ex:144
 msgid "expectations.public.label"
-msgstr "Verwachtingen voor de participanten"
+msgstr "Wat kun je verwachten?"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:159
+#: lib/core_web/live/promotion/form.ex:178
 msgid "expectations.title"
-msgstr "Over de taak"
+msgstr "Wat moeten deelnemers doen?"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:148
+#: lib/core_web/live/promotion/form.ex:167
 msgid "image.label"
-msgstr "De gekozen afbeelding wordt zichtbaar in het marktplaats overzicht en op de campagne advertentie."
+msgstr "Deze afbeelding wordt gebruikt als omslagafbeelding voor jouw advertentiepagina en jouw marktplaats tegel."
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:147
+#: lib/core_web/live/promotion/form.ex:166
 msgid "image.title"
-msgstr "Afbeelding"
+msgstr "Omslagafbeelding"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:118
+#: lib/core_web/live/promotion/public.ex:167
 msgid "keep.me.updated.button.label"
 msgstr "Houd me op de hoogte"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:116
+#: lib/core_web/live/promotion/public.ex:165
 msgid "keep.me.updated.text"
 msgstr "Je kan je hier inschrijven voor de nieuwsbrief"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:114
+#: lib/core_web/live/promotion/public.ex:163
 msgid "keep.me.updated.title"
 msgstr "Benieuwd naar de resultaten van dit onderzoek?"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:36 bundles/link/lib/card.ex:91
-#: bundles/link/lib/card.ex:147 lib/core_web/view_model/card.ex:38
+#: bundles/link/lib/card.ex:37 bundles/link/lib/card.ex:95
+#: bundles/link/lib/card.ex:164 lib/core_web/view_model/card.ex:38
 msgid "open.spots.label"
-msgstr "%{count} deelnemers gezocht"
+msgstr "%{count} spots open"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:35 lib/core_web/view_model/card.ex:37
+#: bundles/link/lib/card.ex:36 lib/core_web/view_model/card.ex:37
 msgid "reward.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:154
+#: lib/core_web/live/promotion/form.ex:173
 msgid "search.different.image.button"
-msgstr "Kies afbeelding"
+msgstr "Verander omslag"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:138
+#: bundles/link/lib/promotions/public.ex:102
+#: lib/core_web/live/promotion/form.ex:157
 msgid "subtitle.label"
-msgstr "Ondertitel"
+msgstr "Kun je in een zin uitleggen waar je studie over gaat?"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:142
+#: lib/core_web/live/promotion/form.ex:161
 msgid "themes.label"
-msgstr "Selecteer een of meerdere thema's."
+msgstr "Welk thema past het beste bij jou study? Je kan er meerdere selecteren."
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:141
+#: lib/core_web/live/promotion/form.ex:160
 msgid "themes.title"
 msgstr "Thema's"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:137
+#: lib/core_web/live/promotion/form.ex:156
 msgid "title.label"
 msgstr "Titel"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:135
+#: lib/core_web/live/promotion/form.ex:152
 msgid "form.title"
 msgstr "Advertentie"
+
+#, elixir-format
+#: lib/core_web/live/promotion/form.ex:153
+msgid "form.description"
+msgstr "Advertenties worden op de marktplaats gezet om deelnemers te werven. Bekijk de voorbeeld pagina om te zien hoe deelnemers jouw advertentie pagina zien als ze op jouw marktplaats tegel klikken."
+
+#, elixir-format
+#: bundles/link/lib/promotions/public.ex:145
+msgid "preview.inform.text"
+msgstr "Deze feature werkt niet in preview modus."
+
+#, elixir-format
+#: bundles/link/lib/promotions/public.ex:144
+msgid "preview.inform.title"
+msgstr "Preview"
+
+#, elixir-format
+#: bundles/link/lib/promotions/public.ex:241
+msgid "languages.available.label"
+msgstr "Taal:"

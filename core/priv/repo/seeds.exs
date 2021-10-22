@@ -42,7 +42,7 @@ data_donation_promotions =
       able to listen (using speakers or headphones).
       """,
       image_id: image,
-      themes: [:technology],
+      themes: ["technology"],
       marks: ["vu"],
       banner_photo_url: Faker.Internet.url(),
       banner_title: "Banner title",
@@ -63,7 +63,7 @@ data_donation_tools =
     }
   end)
 
-studies =
+  campaigns =
   Enum.map(data_donation_tools, fn data_donation_tool ->
     %{
       title: Faker.Lorem.sentence(),
@@ -87,7 +87,7 @@ _admin =
     password: password
   })
 
-Core.NextActions.create_next_action(member, Core.Accounts.NextActions.CompleteProfile)
+Systems.NextAction.Context.create_next_action(member, Core.Accounts.NextActions.CompleteProfile)
 
 researcher =
   Core.Factories.insert!(:member, %{
@@ -96,20 +96,20 @@ researcher =
     password: password
   })
 
-Core.NextActions.create_next_action(researcher, Core.Accounts.NextActions.CompleteProfile)
+Systems.NextAction.Context.create_next_action(researcher, Core.Accounts.NextActions.CompleteProfile)
 
-for study_data <- studies do
-  {tool_type, study_data} = Map.pop!(study_data, :type)
-  {tool_data, study_data} = Map.pop!(study_data, tool_type)
+for campaign_data <- campaigns do
+  {tool_type, campaign_data} = Map.pop!(campaign_data, :type)
+  {tool_data, campaign_data} = Map.pop!(campaign_data, tool_type)
 
   tool_content_node = Core.Factories.insert!(:content_node)
 
-  # STUDY
-  study = Core.Factories.insert!(:study, study_data)
+  # CAMPAIGN
+  campaign = Core.Factories.insert!(:campaign, campaign_data)
 
   Core.Authorization.assign_role(
     researcher,
-    study,
+    campaign,
     :owner
   )
 
@@ -120,12 +120,12 @@ for study_data <- studies do
   promotion =
     Core.Factories.insert!(
       :promotion,
-      Map.merge(%{parent_content_node: tool_content_node, study: study}, promotion_data)
+      Map.merge(%{parent_content_node: tool_content_node, campaign: campaign}, promotion_data)
     )
 
   # TOOL
   Core.Factories.insert!(
     tool_type,
-    Map.merge(%{content_node: tool_content_node, study: study, promotion: promotion}, tool_data)
+    Map.merge(%{content_node: tool_content_node, campaign: campaign, promotion: promotion}, tool_data)
   )
 end

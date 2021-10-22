@@ -6,5 +6,5 @@ defmodule CoreWeb.Menu.Builder do
   @type page_id :: binary()
   @type menu :: map()
 
-  @callback build_menu(type, socket, user, active_item, page_id) :: menu
+  @callback build_menu(type, socket, user, active_item) :: menu
 end

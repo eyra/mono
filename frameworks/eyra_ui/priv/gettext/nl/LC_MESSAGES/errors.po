@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 msgid "can't be blank"
-msgstr "mag niet leeg zijn"
+msgstr "Vul dit veld in"
 
 msgid "has already been taken"
 msgstr "is reeds bekend in het systeem"

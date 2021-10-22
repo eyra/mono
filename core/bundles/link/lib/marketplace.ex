@@ -5,65 +5,98 @@ defmodule Link.Marketplace do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :marketplace
 
-  alias Core.NextActions
-  alias Core.NextActions.Live.NextActionHighlight
-  alias Core.Studies
+  alias Systems.{
+    NextAction,
+    Campaign,
+    Crew
+  }
+
+  alias Core.ImageHelpers
+  alias Core.Accounts
+  alias Core.Pools.{Submission, Criteria}
   alias Core.Survey.Tool, as: SurveyTool
   alias Core.Lab.Tool, as: LabTool
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
+  alias CoreWeb.UI.ContentListItem
 
   alias Link.Marketplace.Card, as: CardVM
 
-  alias EyraUI.Card.{PrimaryStudy, SecondaryStudy}
+  alias EyraUI.Card.SecondaryStudy
   alias EyraUI.Text.{Title2}
   alias EyraUI.Grid.{DynamicGrid}
 
   data(next_best_action, :any)
   data(highlighted_count, :any)
-  data(owned_studies, :any)
-  data(subject_studies, :any)
-  data(available_studies, :any)
+  data(owned_campaigns, :any)
+  data(subject_campaigns, :any)
+  data(subject_count, :any)
+  data(available_campaigns, :any)
   data(available_count, :any)
   data(current_user, :any)
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    next_best_action = NextActions.next_best_action(url_resolver(socket), user)
+    next_best_action = NextAction.Context.next_best_action(url_resolver(socket), user)
     user = socket.assigns[:current_user]
-    preload = [survey_tool: [:promotion], lab_tool: [:promotion, :time_slots]]
 
-    subject_studies =
+    preload = [
+      survey_tool: [promotion: [submission: [:criteria]]],
+      lab_tool: [:promotion, :time_slots]
+    ]
+
+    subject_campaigns =
       user
-      |> Studies.list_subject_studies(preload: preload)
-      |> Enum.map(&CardVM.primary_study(&1, socket))
+      |> Campaign.Context.list_subject_campaigns(preload: preload)
+      |> Enum.map(&convert_to_vm(socket, &1))
 
-    highlighted_studies = subject_studies
-    highlighted_count = Enum.count(subject_studies)
+    highlighted_campaigns = subject_campaigns
+    highlighted_count = Enum.count(subject_campaigns)
 
     exclusion_list =
-      highlighted_studies
-      |> Stream.map(fn study -> study.id end)
+      highlighted_campaigns
+      |> Stream.map(fn campaign -> campaign.id end)
       |> Enum.into(MapSet.new())
 
-    available_studies =
-      Studies.list_studies_with_accepted_submission([LabTool, SurveyTool],
+    available_campaigns =
+      Campaign.Context.list_accepted_campaigns([LabTool, SurveyTool],
         exclude: exclusion_list,
         preload: preload
       )
-      |> Enum.map(&CardVM.primary_study(&1, socket))
+      |> filter(socket)
+      |> Enum.map(&CardVM.primary_campaign(&1, socket))
 
-    available_count = Enum.count(available_studies)
+    subject_count = Enum.count(subject_campaigns)
+    available_count = Enum.count(available_campaigns)
 
     socket =
       socket
       |> update_menus()
       |> assign(next_best_action: next_best_action)
       |> assign(highlighted_count: highlighted_count)
-      |> assign(subject_studies: subject_studies)
-      |> assign(available_studies: available_studies)
+      |> assign(subject_campaigns: subject_campaigns)
+      |> assign(subject_count: subject_count)
+      |> assign(available_campaigns: available_campaigns)
       |> assign(available_count: available_count)
 
     {:ok, socket}
+  end
+
+  defp filter(studies, socket) when is_list(studies) do
+    Enum.filter(studies, &filter(&1, socket))
+  end
+
+  defp filter(
+         %{
+           survey_tool: %{promotion: %{submission: %{criteria: submission_criteria} = submission}}
+         },
+         %{assigns: %{current_user: user}}
+       ) do
+    user_features = Accounts.get_features(user)
+
+    online? = Submission.published_status(submission) == :online
+    eligitable? = Criteria.eligitable?(submission_criteria, user_features)
+
+    online? and eligitable?
   end
 
   def handle_auto_save_done(socket) do
@@ -72,13 +105,16 @@ defmodule Link.Marketplace do
 
   def handle_info({:card_click, %{action: :edit, id: id}}, socket) do
     {:noreply,
-     push_redirect(socket, to: CoreWeb.Router.Helpers.live_path(socket, Link.Survey.Content, id))}
+     push_redirect(socket,
+       to: CoreWeb.Router.Helpers.live_path(socket, Systems.Campaign.ContentPage, id)
+     )}
   end
 
   def handle_info({:card_click, %{action: :public, id: id}}, socket) do
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Promotion.Public, id))}
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, Link.Promotion.Public, id))}
   end
 
+  @impl true
   def handle_event("menu-item-clicked", %{"action" => action}, socket) do
     # toggle menu
     {:noreply, push_redirect(socket, to: action)}
@@ -97,28 +133,33 @@ defmodule Link.Marketplace do
           <ContentArea>
             <MarginY id={{:page_top}} />
             <div :if={{ @next_best_action }}>
-              <NextActionHighlight vm={{ @next_best_action }}/>
+              <NextAction.HighlightView vm={{ @next_best_action }}/>
               <div class="mt-6 lg:mt-10"/>
             </div>
+            <Case value={{ @subject_count > 0 }} >
+              <True>
+                <Title2>
+                  {{ dgettext("eyra-campaign", "campaign.subject.title") }}
+                  <span class="text-primary"> {{ @subject_count }}</span>
+                </Title2>
+                <ContentListItem :for={{item <- @subject_campaigns}} vm={{item}} />
+              </True>
+            </Case>
             <Case value={{ render_empty?(assigns) }} >
               <False>
-                <DynamicGrid>
-                  <div :for={{ card <- @subject_studies  }} >
-                    <PrimaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
-                  </div>
-                </DynamicGrid>
-                <div class="mt-6 lg:mt-10"/>
+                <Spacing :if={{ @subject_count > 0 }} value="XL" />
                 <Title2>
-                  {{ dgettext("eyra-study", "study.all.title") }}
+                  {{ dgettext("eyra-campaign", "campaign.all.title") }}
                   <span class="text-primary"> {{ @available_count }}</span>
                 </Title2>
                 <DynamicGrid>
-                  <div :for={{ card <- @available_studies  }} class="mb-1" >
+                  <div :for={{ card <- @available_campaigns  }} class="mb-1" >
                     <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
                   </div>
                 </DynamicGrid>
               </False>
               <True>
+                <Spacing :if={{ @subject_count > 0 }} value="XXL" />
                 <Empty
                   title={{ dgettext("eyra-marketplace", "empty.title") }}
                   body={{ dgettext("eyra-marketplace", "empty.description") }}
@@ -129,5 +170,45 @@ defmodule Link.Marketplace do
           </ContentArea>
         </Workspace>
     """
+  end
+
+  defp get_quick_summary(updated_at) do
+    updated_at
+    |> CoreWeb.UI.Timestamp.apply_timezone()
+    |> CoreWeb.UI.Timestamp.humanize()
+  end
+
+  defp get_subtitle(%{reward_value: reward_value} = _submission) do
+    dgettext("eyra-marketplace", "reward.label", value: reward_value)
+  end
+
+  def convert_to_vm(socket, %{
+        id: id,
+        updated_at: updated_at,
+        survey_tool: %{
+          promotion: %{
+            title: title,
+            image_id: image_id,
+            submission: submission
+          }
+        }
+      }) do
+    tag = Submission.get_tag(submission)
+
+    subtitle = get_subtitle(submission)
+    quick_summary = get_quick_summary(updated_at)
+    image_info = ImageHelpers.get_image_info(image_id, 120, 115)
+    image = %{type: :catalog, info: image_info}
+
+    %{
+      id: id,
+      path: Routes.live_path(socket, Crew.TaskPage, :campaign, id),
+      title: title,
+      subtitle: subtitle || "<no subtitle>",
+      tag: tag,
+      level: :critical,
+      image: image,
+      quick_summary: quick_summary
+    }
   end
 end

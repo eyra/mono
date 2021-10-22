@@ -8,16 +8,18 @@ defmodule CoreWeb.UI.Navigation.ActionBar do
   prop(right_bar_buttons, :list, default: [])
   prop(more_buttons, :list, default: [])
   prop(size, :atom, default: :wide)
+  prop(hide_seperator, :boolean, default: false)
 
-  slot(default, required: true)
+  slot(default)
 
   defp centralize?(%{size: :wide, right_bar_buttons: right_bar_buttons}),
     do: right_bar_buttons == []
 
   defp centralize?(_), do: false
 
-  defp has_right_bar_buttons?(%{right_bar_buttons: right_bar_buttons}),
-    do: !Enum.empty?(right_bar_buttons)
+  defp has_right_bar_buttons?(%{right_bar_buttons: right_bar_buttons}) do
+    !Enum.empty?(right_bar_buttons)
+  end
 
   defp has_right_bar_buttons?(_), do: false
 
@@ -36,7 +38,7 @@ defmodule CoreWeb.UI.Navigation.ActionBar do
               <div class="{{ if centralize?(assigns) do "flex-wrap" else "flex-grow" end }}">
                 <slot/> <!-- tabbar -->
               </div>
-              <div class="flex-wrap px-4" :if={{ has_right_bar_buttons?(assigns) }}>
+              <div class="flex-wrap px-4" :if={{ has_right_bar_buttons?(assigns) && !@hide_seperator }}>
                 <img src="/images/icons/bar_seperator.svg" alt="" />
               </div>
               <div class="flex-wrap h-full" :if={{ has_right_bar_buttons?(assigns) }} >

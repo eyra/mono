@@ -13,19 +13,19 @@ defmodule Core.Helpdesk do
     |> Repo.one()
   end
 
-  def list_open_tickets do
+  def list_open_tickets(preload \\ [user: [:profile, :features]]) do
     from(t in Ticket,
       where: is_nil(t.completed_at),
       order_by: {:desc, :inserted_at},
-      preload: [user: [:profile]]
+      preload: ^preload
     )
     |> Repo.all()
   end
 
-  def get_ticket!(id) do
+  def get_ticket!(id, preload \\ [user: [:profile, :features]]) do
     from(t in Ticket,
       where: t.id == ^id,
-      preload: [user: [:profile]]
+      preload: ^preload
     )
     |> Repo.one!()
   end

@@ -10,7 +10,6 @@ defmodule CoreWeb.Admin.Ticket do
   alias EyraUI.Text.Title2
   alias EyraUI.Button.Face.Secondary
   alias EyraUI.Button.Action.Send
-  alias EyraUI.Line
   alias CoreWeb.UI.{Member, ContentTag}
 
   data(ticket, :any)
@@ -22,8 +21,8 @@ defmodule CoreWeb.Admin.Ticket do
 
     timestamp =
       ticket.updated_at
-      |> Coreweb.UI.Timestamp.apply_timezone()
-      |> Coreweb.UI.Timestamp.humanize()
+      |> CoreWeb.UI.Timestamp.apply_timezone()
+      |> CoreWeb.UI.Timestamp.humanize()
 
     {
       :ok,
@@ -33,7 +32,7 @@ defmodule CoreWeb.Admin.Ticket do
       |> assign(timestamp: timestamp)
       |> assign(dialog: nil)
       |> update_member()
-      |> update_menus(id)
+      |> update_menus()
     }
   end
 
@@ -53,6 +52,9 @@ defmodule CoreWeb.Admin.Ticket do
            profile: %{
              fullname: fullname,
              photo_url: photo_url
+           },
+           features: %{
+             gender: gender
            }
          }
        }) do
@@ -64,17 +66,30 @@ defmodule CoreWeb.Admin.Ticket do
         true -> nil
       end
 
+    action = %{type: :href, href: "mailto:#{email}?subject=Re: [##{id}] #{title}"}
+
     %{
       title: fullname,
       subtitle: role,
       photo_url: photo_url,
-      button: %{
-        action: %{type: :href, href: "mailto:#{email}?subject=Re: [##{id}] #{title}"},
-        face: %{type: :primary, label: dgettext("eyra-admin", "ticket.mailto.button")}
+      gender: gender,
+      button_large: %{
+        action: action,
+        face: %{
+          type: :secondary,
+          label: dgettext("eyra-admin", "ticket.mailto.button"),
+          border_color: "border-white",
+          text_color: "text-white"
+        }
+      },
+      button_small: %{
+        action: action,
+        face: %{type: :icon, icon: :contact_tertiary}
       }
     }
   end
 
+  @impl true
   def handle_event("close_ticket", _params, socket) do
     item = dgettext("eyra-admin", "close.confirm.ticket")
     title = String.capitalize(dgettext("eyra-ui", "close.confirm.title", item: item))
@@ -84,11 +99,13 @@ defmodule CoreWeb.Admin.Ticket do
     {:noreply, socket |> confirm("close", title, text, confirm_label)}
   end
 
+  @impl true
   def handle_event("close_confirm", _params, %{assigns: %{id: id}} = socket) do
     Helpdesk.close_ticket_by_id(id)
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Admin.Support))}
   end
 
+  @impl true
   def handle_event("close_cancel", _params, socket) do
     {:noreply, socket |> assign(dialog: nil)}
   end
@@ -111,8 +128,6 @@ defmodule CoreWeb.Admin.Ticket do
         <MarginY id={{:page_top}} />
         <Member :if={{ @member }} vm={{ @member }} />
         <MarginY id={{:page_top}} />
-        <Line />
-        <Spacing value="M" />
         <div class="flex flex-row gap-4 items-center">
           <Wrap>
             <ContentTag vm={{ Ticket.tag(@ticket) }} />

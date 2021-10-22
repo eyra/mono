@@ -2,11 +2,12 @@ const plugin = require('tailwindcss/plugin')
 
 module.exports = {
   purge: [
-    "../../**/*.html.eex",
-    "../../**/*.html.leex",
-    "../../**/*.ex",
-    "./js/**/*.js",
+      "../../**/*.html.eex",
+      "../../**/*.html.leex",
+      "../../**/*.ex",
+      "./js/**/*.js",
   ],
+
   darkMode: false, // or 'media' or 'class'
   theme: {
     boxShadow: {
@@ -176,14 +177,14 @@ module.exports = {
   },
   variants: {
     extend: {
-      borderColor: ['active', 'hover'],
-      borderWidth: ['active', 'hover'],
+      borderColor: ['active', 'hover', 'disabled'],
+      borderWidth: ['active', 'hover', 'disabled'],
       ringColor: ['hover'],
       ringWidth: ['hover'],
       ringOpacity: ['hover'],
       ringOffsetColor: ['hover'],
       ringOffsetWidth: ['hover'],
-      opacity: ['active'],
+      opacity: ['active', 'disabled'],
       padding: ['active'],
       boxShadow: ['active'],
     },

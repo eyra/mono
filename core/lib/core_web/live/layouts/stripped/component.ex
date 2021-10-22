@@ -9,20 +9,40 @@ defmodule CoreWeb.Layouts.Stripped.Component do
   alias CoreWeb.UI.Navigation.{DesktopNavbar, MobileNavbar}
 
   prop(user, :string, required: true)
-  prop(active_item, :any, required: true)
+  prop(menus, :map, required: true)
 
   slot(default, required: true)
 
-  defp builder, do: Application.fetch_env!(:core, :stripped_menu_builder)
+  defmacro __using__(active_item) do
+    quote do
+      alias CoreWeb.Layouts.Website.Component, as: Website
 
-  defp build_menu(type, socket) do
-    builder().build_menu(
-      type,
-      socket,
-      socket.assigns.__assigns__.user,
-      socket.assigns.__assigns__.active_item,
-      nil
-    )
+      data(menus, :map)
+
+      def builder, do: Application.fetch_env!(:core, :stripped_menu_builder)
+
+      def build_menu(socket, type, user) do
+        builder().build_menu(type, socket, user, unquote(active_item))
+      end
+
+      def build_menus(socket, user) do
+        menus = %{
+          mobile_navbar: build_menu(socket, :mobile_navbar, user),
+          desktop_navbar: build_menu(socket, :desktop_navbar, user)
+        }
+
+        socket |> assign(menus: menus)
+      end
+
+      def update_menus(%{assigns: %{current_user: current_user}} = socket) do
+        socket
+        |> build_menus(current_user)
+      end
+
+      def handle_uri(socket) do
+        update_menus(socket)
+      end
+    end
   end
 
   def render(assigns) do
@@ -33,8 +53,8 @@ defmodule CoreWeb.Layouts.Stripped.Component do
         <div class="flex-1">
           <div class="flex flex-col w-full h-viewport">
             <div class="flex-wrap">
-              <MobileNavbar items={{ build_menu(:mobile_navbar, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
-              <DesktopNavbar items={{ build_menu(:desktop_navbar, @socket) }} path_provider={{ CoreWeb.Router.Helpers }} />
+              <MobileNavbar items={{ @menus.mobile_navbar }} path_provider={{ CoreWeb.Router.Helpers }} />
+              <DesktopNavbar items={{ @menus.desktop_navbar }} path_provider={{ CoreWeb.Router.Helpers }} />
             </div>
             <div class="flex-1">
               <div class="flex flex-col h-full border-t border-l border-b border-grey4">

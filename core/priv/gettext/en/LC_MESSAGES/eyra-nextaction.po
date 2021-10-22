@@ -55,3 +55,18 @@ msgstr "To be able to participate in research studies."
 #: lib/core/accounts/next_actions/select_study_student.ex:9
 msgid "select.study.student.title"
 msgstr "Select your study program"
+
+#, elixir-format
+#: lib/core/pools/next_actions/review_submission.ex:11
+msgid "review.submission.cta"
+msgstr "Go to waiting list"
+
+#, elixir-format
+#: lib/core/pools/next_actions/review_submission.ex:10
+msgid "review.submission.description"
+msgstr "New campaigns available for publishing"
+
+#, elixir-format
+#: lib/core/pools/next_actions/review_submission.ex:9
+msgid "review.submission.title"
+msgstr "New campaigns"

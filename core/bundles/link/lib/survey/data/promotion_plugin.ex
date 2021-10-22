@@ -1,98 +1,115 @@
 defmodule Link.Survey.PromotionPlugin do
   import CoreWeb.Gettext
 
-  alias Core.Studies
+  alias Systems.{
+    Campaign,
+    Crew
+  }
+
+  alias CoreWeb.Router.Helpers, as: Routes
+  alias Core.Pools.Submissions
+  alias Core.Promotions
   alias Core.Promotions.CallToAction
   alias Core.Promotions.CallToAction.Target
   alias Core.Survey.Tools
-  alias Core.Survey.Tool
 
   alias CoreWeb.Promotion.Plugin
 
   @behaviour Plugin
 
   @impl Plugin
-  def info(promotion_id, %{assigns: %{current_user: user}} = _socket) do
+  def info(promotion_id, _socket) do
+    promotion = Promotions.get!(promotion_id)
+    submission = Submissions.get!(promotion)
     tool = Tools.get_by_promotion(promotion_id)
-    call_to_action = get_call_to_action(tool, user)
+    call_to_action = get_call_to_action()
     byline = get_byline(tool)
-    highlights = get_highlights(tool)
+    highlights = get_highlights(tool, submission)
+
+    languages =
+      if tool.language != nil do
+        [tool.language]
+      else
+        nil
+      end
 
     %{
       call_to_action: call_to_action,
       highlights: highlights,
       devices: tool.devices,
+      languages: languages,
       byline: byline
     }
   end
 
   @impl Plugin
-  def get_cta_path(promotion_id, "apply", %{assigns: %{current_user: user}} = _socket) do
+  def get_cta_path(promotion_id, "apply", %{assigns: %{current_user: user}} = socket) do
     tool = Tools.get_by_promotion(promotion_id)
-    Tools.apply_participant(tool, user)
-    Tools.get_or_create_task(tool, user)
-    tool.survey_url
+    campaign = Campaign.Context.get!(tool.study_id)
+    crew = Campaign.Context.get_or_create_crew!(campaign)
+
+    member =
+      case Crew.Context.member?(crew, user) do
+        true -> Crew.Context.get_member!(crew, user)
+        false -> Crew.Context.apply_member!(crew, user)
+      end
+
+    _task = Crew.Context.get_or_create_task!(crew, member, :online_study)
+
+    Routes.live_path(socket, Systems.Crew.TaskPage, :campaign, campaign.id)
   end
 
-  @impl Plugin
-  def get_cta_path(promotion_id, "open", %{assigns: %{current_user: user}}) do
-    tool = Tools.get_by_promotion(promotion_id)
-    Tool.prepare_url(
-      tool.survey_url,
-      %{"participantId"=> Tools.participant_id(tool, user)}
-    )
-  end
-
-  defp get_call_to_action(tool, user) do
-    if Tools.participant?(tool, user) do
-      %CallToAction{
-        label: dgettext("link-survey", "open.cta.title"),
-        target: %Target{type: :event, value: "open"}
-      }
-    else
-      %CallToAction{
-        label: dgettext("link-survey", "apply.cta.title"),
-        target: %Target{type: :event, value: "apply"}
-      }
-    end
+  defp get_call_to_action() do
+    %CallToAction{
+      label: dgettext("link-survey", "apply.cta.title"),
+      target: %Target{type: :event, value: "apply"}
+    }
   end
 
   defp get_byline(tool) do
     authors =
-      Studies.get_study!(tool.study_id)
-      |> Studies.list_authors()
+      Campaign.Context.get!(tool.study_id)
+      |> Campaign.Context.list_authors()
       |> Enum.map(& &1.fullname)
       |> Enum.join(", ")
 
     "#{dgettext("link-survey", "by.author.label")}: " <> authors
   end
 
-  defp get_highlights(tool) do
+  defp get_highlights(%{subject_count: subject_count, duration: duration} = tool, %{
+         reward_value: reward_value
+       }) do
     occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
-    open_spot_count = tool.subject_count - occupied_spot_count
+
+    open_spot_count =
+      if subject_count do
+        subject_count - occupied_spot_count
+      else
+        0
+      end
 
     spots_title = dgettext("link-survey", "spots.highlight.title")
-    spots_text = "Nog #{open_spot_count} van #{tool.subject_count}"
 
-    available_title = dgettext("link-survey", "available.highlight.title")
+    spots_text =
+      dgettext("link-survey", "spots.highlight.text", open: open_spot_count, total: subject_count)
 
-    available_text =
-      dgettext("link-survey", "available.future.highlight.text",
-        from: "15 june",
-        till: "15 augustus 2021"
-      )
+    duration_title = dgettext("link-survey", "duration.highlight.title")
+    duration_text = dgettext("link-survey", "duration.highlight.text", duration: duration)
 
     reward_title = dgettext("link-survey", "reward.highlight.title")
 
-    # reward_text =
-    #   CurrencyFormatter.format(tool.reward_value, tool.reward_currency, keep_decimals: true)
+    reward_value =
+      case reward_value do
+        nil -> "?"
+        value -> value
+      end
 
-    reward_text = "Eternal glory"
+    reward_text = "#{reward_value} credits"
 
     [
-      %{title: available_title, text: available_text},
-      %{title: spots_title, text: spots_text},
-      %{title: reward_title, text: reward_text}
+      %{title: duration_title, text: duration_text},
+      %{title: reward_title, text: reward_text},
+      %{title: spots_title, text: spots_text}
     ]
   end
 end

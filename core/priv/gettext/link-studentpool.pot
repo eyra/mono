@@ -11,47 +11,87 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:89
-#: bundles/link/lib/pool/overview.ex:38
+#: bundles/link/lib/pool/overview_page.ex:40
+#: bundles/link/lib/pool/views/students_view.ex:92
 msgid "tabbar.item.students"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/overview.ex:46
-msgid "tabbar.item.studies"
+#: bundles/link/lib/pool/overview_page.ex:48
+msgid "tabbar.item.campaigns"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/overview.ex:58
+#: bundles/link/lib/pool/overview_page.ex:60
 msgid "title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:85
+#: bundles/link/lib/pool/views/students_view.ex:88
 msgid "students.empty.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:84
+#: bundles/link/lib/pool/views/students_view.ex:87
 msgid "students.empty.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/studies.ex:12
-msgid "studies.empty.description"
+#: bundles/link/lib/pool/views/campaigns_view.ex:72
+msgid "campaigns.empty.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/studies.ex:11
-msgid "studies.empty.title"
+#: bundles/link/lib/pool/views/campaigns_view.ex:71
+msgid "campaigns.empty.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:69
+#: bundles/link/lib/pool/views/students_view.ex:72
 msgid "student.tag.complete"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/form/students.ex:70
+#: bundles/link/lib/pool/views/students_view.ex:73
 msgid "student.tag.incomplete"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/views/campaigns_view.ex:64
+msgid "accepted.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/views/campaigns_view.ex:100
+msgid "status.submitted.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/views/campaigns_view.ex:58
+msgid "submitted.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/views/campaigns_view.ex:130
+msgid "spots.available"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/submission_page.ex:199
+msgid "submission.title"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/views/campaigns_view.ex:118
+msgid "status.accepted.closed.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/views/campaigns_view.ex:112
+msgid "status.accepted.online.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/pool/views/campaigns_view.ex:106
+msgid "status.accepted.scheduled.label"
 msgstr ""

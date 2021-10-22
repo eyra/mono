@@ -17,7 +17,6 @@ defmodule Core.DataDonation.Tools do
   alias Core.DataDonation.{Tool, Task, Participant, UserData}
   alias Core.Authorization
   alias Core.Accounts.User
-  alias Core.Signals
   alias Core.Content.Nodes
 
   def list do
@@ -34,13 +33,13 @@ defmodule Core.DataDonation.Tools do
     |> Repo.one()
   end
 
-  def create(attrs, study, promotion, content_node) do
+  def create(attrs, campaign, promotion, content_node) do
     %Tool{}
     |> Tool.changeset(:mount, attrs)
-    |> Ecto.Changeset.put_assoc(:study, study)
+    |> Ecto.Changeset.put_assoc(:study, campaign)
     |> Ecto.Changeset.put_assoc(:promotion, promotion)
     |> Ecto.Changeset.put_assoc(:content_node, content_node)
-    |> Ecto.Changeset.put_assoc(:auth_node, Authorization.make_node(study))
+    |> Ecto.Changeset.put_assoc(:auth_node, Authorization.make_node(campaign))
     |> Repo.insert()
   end
 
@@ -55,12 +54,12 @@ defmodule Core.DataDonation.Tools do
   end
 
   def delete(%Tool{} = tool) do
-    study = Core.Studies.get_study!(tool.study_id)
+    campaign = Systems.Campaign.Context.get!(tool.study_id)
     content_node = Core.Content.Nodes.get!(tool.content_node_id)
     promotion = Core.Promotions.get!(tool.promotion_id)
 
     Multi.new()
-    |> Multi.delete(:study, study)
+    |> Multi.delete(:study, campaign)
     |> Multi.delete(:promotion, promotion)
     |> Multi.delete(:content_node, content_node)
     |> Repo.transaction()
@@ -86,10 +85,6 @@ defmodule Core.DataDonation.Tools do
       :role_assignment,
       Authorization.build_role_assignment(user, tool, :participant)
     )
-    |> Signals.multi_dispatch(:participant_applied, %{
-      tool: tool,
-      user: user
-    })
     |> Repo.transaction()
   end
 

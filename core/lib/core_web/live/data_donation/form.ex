@@ -9,7 +9,7 @@ defmodule CoreWeb.DataDonation.Form do
   alias EyraUI.Form.{Form, TextArea, NumberInput}
   alias EyraUI.Button.{SecondaryLiveViewButton, PrimaryButton}
   alias EyraUI.Panel.Panel
-  alias Coreweb.UI.Timestamp
+  alias CoreWeb.UI.Timestamp
 
   prop(entity_id, :any, required: true)
 
@@ -40,6 +40,8 @@ defmodule CoreWeb.DataDonation.Form do
   end
 
   # Handle Events
+
+  @impl true
   def handle_event("save", %{"tool" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
@@ -48,6 +50,7 @@ defmodule CoreWeb.DataDonation.Form do
     }
   end
 
+  @impl true
   def handle_event("delete", _params, %{assigns: %{entity_id: entity_id}} = socket) do
     Tools.get!(entity_id)
     |> Tools.delete()

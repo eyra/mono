@@ -14,7 +14,7 @@ msgstr ""
 #, elixir-format
 #: lib/core/enums/devices.ex:5
 msgid "devices.desktop"
-msgstr "Dekstop"
+msgstr "Desktop"
 
 #, elixir-format
 #: lib/core/enums/devices.ex:5
@@ -150,3 +150,83 @@ msgstr "I have a question"
 #: lib/core/enums/ticket_types.ex:5
 msgid "ticket_types.tip"
 msgstr "I have an idea to improve the platform"
+
+#, elixir-format
+#: lib/core/enums/study_years.ex:5
+msgid "study_years.first"
+msgstr "First year"
+
+#, elixir-format
+#: lib/core/enums/study_years.ex:5
+msgid "study_years.second"
+msgstr "Second year"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.accounting"
+msgstr "Accounting"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.business"
+msgstr "Business"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.economics"
+msgstr "Economics"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.management"
+msgstr "Management"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.marketing"
+msgstr "Marketing"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.organisation"
+msgstr "Organisation"
+
+#, elixir-format
+#: bundles/link/lib/enums/online_study_languages.ex:5
+msgid "online_study_languages.en"
+msgstr "English"
+
+#, elixir-format
+#: bundles/link/lib/enums/online_study_languages.ex:5
+msgid "online_study_languages.nl"
+msgstr "Dutch"
+
+#, elixir-format
+#: lib/core/enums/native_languages.ex:5
+msgid "native_languages.other"
+msgstr "Other"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.data_science"
+msgstr "Data science"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.digital_innovation"
+msgstr "Digital innovation"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.econometrics"
+msgstr "Econometrics"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.finance"
+msgstr "Finance"
+
+#, elixir-format
+#: bundles/link/lib/enums/themes.ex:5
+msgid "themes.operations_analytics"
+msgstr "Operations analytics"

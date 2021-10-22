@@ -2,9 +2,6 @@ defmodule CoreWeb.Admin.Permissions do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :permissions
 
-  import Ecto.Query
-  alias Core.Repo
-  alias Core.Accounts.User
   alias Core.Accounts
 
   alias EyraUI.Text.{BodyLarge, Title2, Title3}
@@ -24,29 +21,18 @@ defmodule CoreWeb.Admin.Permissions do
     }
   end
 
-  # FIXME: Move this to Accounts
-  defp list_researchers do
-    from(u in User, order_by: {:asc, :email})
-    |> Repo.all()
-    |> Enum.filter(& &1.researcher)
-  end
-
-  defp list_pool_admins do
-    list_researchers()
-    |> Enum.filter(& &1.coordinator)
-  end
-
   defp list_pool_admin_candidates do
-    list_researchers()
+    Accounts.list_researchers()
     |> Enum.filter(&(!&1.coordinator))
   end
 
   defp update_pool_admin_data(socket) do
     socket
-    |> assign(:pool_admins, list_pool_admins())
+    |> assign(:pool_admins, Accounts.list_pool_admins())
     |> assign(:pool_admin_candidates, list_pool_admin_candidates())
   end
 
+  @impl true
   def handle_event("assign_pool_admin_role", %{"item" => email}, socket) do
     user = Accounts.get_user_by_email(email)
     Accounts.update_user_profile(user, %{coordinator: true}, %{})
@@ -57,6 +43,7 @@ defmodule CoreWeb.Admin.Permissions do
     }
   end
 
+  @impl true
   def handle_event("remove_pool_admin_role", %{"item" => email}, socket) do
     user = Accounts.get_user_by_email(email)
     Accounts.update_user_profile(user, %{coordinator: false}, %{})

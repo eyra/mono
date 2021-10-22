@@ -1,12 +1,12 @@
 defmodule Core.AccountsTest do
   use Core.DataCase, async: true
-  import Core.Signals.Test
-  import Core.NextActions.Test
+  import Frameworks.Signal.TestHelper
+  import Systems.NextAction.TestHelper
 
   alias Core.Factories
   alias Core.Accounts
   alias Core.Accounts.{User, UserToken}
-  alias Core.NextActions
+  alias Systems.NextAction
 
   alias Core.Accounts.NextActions.{PromotePushStudent}
 
@@ -602,8 +602,7 @@ defmodule Core.AccountsTest do
     end
 
     test "mark_as_visited/2 updates the user", %{
-      user: user,
-      url_resolver: url_resolver
+      user: user
     } do
       {:ok, %{user: user}} = Accounts.update_user_profile(user, %{student: true}, %{})
       {:ok, %{user: user}} = Accounts.mark_as_visited(user, :settings)
@@ -618,7 +617,7 @@ defmodule Core.AccountsTest do
     } do
       {:ok, %{user: user}} = Accounts.update_user_profile(user, %{student: true}, %{})
 
-      NextActions.create_next_action(user, PromotePushStudent)
+      NextAction.Context.create_next_action(user, PromotePushStudent)
       assert_next_action(user, url_resolver, "/settings")
 
       {:ok, %{user: user}} = Accounts.mark_as_visited(user, :settings)

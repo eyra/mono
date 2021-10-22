@@ -10,6 +10,7 @@ defmodule Core.Content.Nodes do
   end
 
   def ready?(id) when is_integer(id), do: ready?(get!(id))
+  def ready?(nil), do: true
   def ready?(%Node{} = node), do: ready?(node, node.parent_id)
   def ready?(%Node{} = node, nil), do: node.ready
 
@@ -17,6 +18,9 @@ defmodule Core.Content.Nodes do
     do: node.ready && ready?(get(parent_id))
 
   def ready?(%Node{} = node, %Node{} = parent), do: node.ready && ready?(parent)
+
+  def parent_ready?(%Node{parent_id: nil}), do: nil
+  def parent_ready?(%Node{parent_id: parent_id}), do: ready?(get!(parent_id))
 
   def get!(id), do: Repo.get!(Node, id)
   def get(id), do: Repo.get(Node, id)

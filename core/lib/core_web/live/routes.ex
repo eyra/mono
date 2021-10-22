@@ -16,7 +16,7 @@ defmodule CoreWeb.Live.Routes do
         live("/", Index)
 
         get("/switch-language/:locale", LanguageSwitchController, :index)
-        live("/fake_survey", FakeSurvey)
+        live("/fake_survey/:id", FakeSurvey)
       end
 
       scope "/", CoreWeb do
@@ -24,8 +24,6 @@ defmodule CoreWeb.Live.Routes do
         live("/onboarding", Onboarding)
         live("/dashboard", Dashboard)
         live("/marketplace", Marketplace)
-        live("/todo", Todo)
-        live("/notifications", Notifications)
       end
 
       if Mix.env() in [:dev, :test] do

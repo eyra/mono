@@ -28,19 +28,19 @@ defmodule Core.Survey.ToolsTest do
       title = Faker.Lorem.sentence()
 
       content_node = Factories.insert!(:content_node)
-      study = Factories.insert!(:study)
+      campaign = Factories.insert!(:campaign)
 
       promotion =
         Factories.insert!(:promotion, %{
           title: title,
-          study: study,
+          campaign: campaign,
           parent_content_node: content_node
         })
 
       assert {:ok, %Tool{} = _survey_tool} =
                Tools.create_survey_tool(
                  %{},
-                 study,
+                 campaign,
                  promotion,
                  content_node
                )
@@ -80,21 +80,6 @@ defmodule Core.Survey.ToolsTest do
       survey_tool = Factories.insert!(:survey_tool)
       member = Factories.insert!(:researcher)
       assert {:ok, _} = Tools.apply_participant(survey_tool, member)
-    end
-
-    test "apply_participant/2 notifies the researchers" do
-      survey_tool = Factories.insert!(:survey_tool)
-      researcher = Factories.insert!(:researcher)
-      promotion = Core.Promotions.get!(survey_tool.promotion_id)
-
-      study = Core.Studies.get_study!(survey_tool.study_id)
-      Authorization.assign_role(researcher, study, :owner)
-      member = Factories.insert!(:researcher)
-      {:ok, _} = Tools.apply_participant(survey_tool, member)
-
-      assert Core.NotificationCenter.list(researcher) |> Enum.map(& &1.title) == [
-               "New participant for: #{promotion.title}"
-             ]
     end
 
     test "apply_participant/2 assigns the participant role to the applicant" do

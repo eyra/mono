@@ -5,7 +5,7 @@ defmodule Link.Onboarding.Welcome do
 
   prop(user, :any, required: true)
 
-  data title, :any
+  data(title, :any)
 
   def update(%{id: id, props: %{user: user}}, socket) do
     title = dgettext("link-ui", "onboarding.welcome.title", member: user.displayname || "")

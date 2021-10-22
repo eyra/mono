@@ -13,7 +13,7 @@
 #
 student_count = 1500
 researcher_count = 100
-researchers_per_study = 5
+researchers_per_campaign = 5
 lab_count = 200
 survey_count = 600
 time_slots_per_lab = 20
@@ -211,17 +211,17 @@ studies = labs ++ surveys
 
 Core.Repo.transaction(
   fn ->
-    for study_data <- studies do
-      study =
-        Core.Factories.insert!(:study, %{
-          title: study_data.promotion.title,
+    for campaign_data <- campaigns do
+      campaign =
+        Core.Factories.insert!(:campaign, %{
+          title: campaign_data.promotion.title,
           description: ""
         })
 
       tool_content_node = Core.Factories.insert!(:content_node)
-      {tool_type, study_data} = Map.pop!(study_data, :type)
-      {tool_data, study_data} = Map.pop!(study_data, tool_type)
-      {promotion_data, study_data} = Map.pop!(study_data, :promotion)
+      {tool_type, campaign_data} = Map.pop!(campaign_data, :type)
+      {tool_data, campaign_data} = Map.pop!(campaign_data, tool_type)
+      {promotion_data, campaign_data} = Map.pop!(campaign_data, :promotion)
 
       promotion =
         Core.Factories.insert!(
@@ -229,7 +229,7 @@ Core.Repo.transaction(
           Map.merge(
             %{
               parent_content_node: tool_content_node,
-              study: study,
+              campaign: campaign,
               submission:
                 Core.Factories.build(:submission, %{
                   parent_content_node: tool_content_node,
@@ -244,7 +244,7 @@ Core.Repo.transaction(
         Core.Factories.insert!(
           tool_type,
           Map.merge(
-            %{content_node: tool_content_node, study: study, promotion: promotion},
+            %{content_node: tool_content_node, campaign: campaign, promotion: promotion},
             tool_data
           )
         )
@@ -257,17 +257,18 @@ Core.Repo.transaction(
         end
       end
 
-      for owner <- Enum.take_random(researchers, max(:random.uniform(researchers_per_study), 1)) do
+      for owner <-
+            Enum.take_random(researchers, max(:random.uniform(researchers_per_campaign), 1)) do
         Core.Authorization.assign_role(
           owner,
-          study,
+          campaign,
           :owner
         )
       end
 
       Core.Authorization.assign_role(
         researcher,
-        study,
+        campaign,
         :owner
       )
     end

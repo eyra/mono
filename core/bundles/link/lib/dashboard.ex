@@ -5,15 +5,19 @@ defmodule Link.Dashboard do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :dashboard
 
-  alias Core.Studies
+  alias Systems.{
+    Campaign,
+    Crew
+  }
+
+  alias Core.Content.Nodes
+  alias Core.ImageHelpers
+  alias Core.Pools.Submission
   alias CoreWeb.UI.ContentListItem
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias EyraUI.Text.{Title2}
-  alias Core.NextActions.Live.NextActionHighlight
-  alias Core.NextActions
-  alias Core.Content.Nodes
-  alias Core.ImageHelpers
+  alias Systems.NextAction
 
   data(content_items, :any)
   data(current_user, :any)
@@ -27,14 +31,14 @@ defmodule Link.Dashboard do
 
     content_items =
       user
-      |> Studies.list_owned_studies(preload: preload)
+      |> Campaign.Context.list_owned_campaigns(preload: preload)
       |> Enum.map(&convert_to_vm(socket, &1))
 
     socket =
       socket
       |> update_menus()
       |> assign(content_items: content_items)
-      |> assign(next_best_action: NextActions.next_best_action(url_resolver(socket), user))
+      |> assign(next_best_action: NextAction.Context.next_best_action(url_resolver(socket), user))
 
     {:ok, socket}
   end
@@ -52,7 +56,7 @@ defmodule Link.Dashboard do
         <ContentArea>
           <MarginY id={{:page_top}} />
           <div :if={{ @next_best_action }} class="mb-6 md:mb-10">
-            <NextActionHighlight vm={{ @next_best_action }}/>
+            <NextAction.HighlightView vm={{ @next_best_action }}/>
           </div>
           <Case value={{ Enum.count(@content_items) > 0 }} >
             <True>
@@ -74,69 +78,92 @@ defmodule Link.Dashboard do
     """
   end
 
+  defp get_quick_summary(updated_at) do
+    updated_at
+    |> CoreWeb.UI.Timestamp.apply_timezone()
+    |> CoreWeb.UI.Timestamp.humanize()
+  end
+
+  defp get_subtitle(
+         submission,
+         promotion_content_node,
+         current_subject_count,
+         target_subject_count
+       ) do
+    case submission.status do
+      :idle ->
+        if Nodes.ready?(promotion_content_node) do
+          dgettext("eyra-submission", "ready.for.submission.message")
+        else
+          dgettext("eyra-submission", "incomplete.forms.message")
+        end
+
+      :submitted ->
+        dgettext("eyra-submission", "waiting.for.coordinator.message")
+
+      :accepted ->
+        case Submission.published_status(submission) do
+          :scheduled ->
+            dgettext("eyra-submission", "accepted.scheduled.message")
+
+          :online ->
+            dgettext("link-dashboard", "quick_summary.%{subject_count}.%{target_subject_count}",
+              subject_count: target_subject_count - current_subject_count,
+              target_subject_count: target_subject_count
+            )
+
+          :closed ->
+            dgettext("eyra-submission", "accepted.closed.message")
+        end
+    end
+  end
+
   def convert_to_vm(socket, %{
+        id: id,
         updated_at: updated_at,
         survey_tool: %{
           id: edit_id,
-          current_subject_count: current_subject_count,
           subject_count: target_subject_count,
           promotion: %{
             title: title,
             image_id: image_id,
             content_node: promotion_content_node,
-            submission: %{
-              status: status
-            }
+            submission: submission
           }
         }
       }) do
-    tag =
-      case status do
-        :idle ->
-          %{text: dgettext("eyra-submission", "status.idle.label"), type: :warning}
+    tag = Submission.get_tag(submission)
 
-        :submitted ->
-          %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary}
-
-        :accepted ->
-          %{text: dgettext("eyra-submission", "status.accepted.label"), type: :success}
+    target_subject_count =
+      if target_subject_count == nil do
+        0
+      else
+        target_subject_count
       end
+
+    crew = Crew.Context.get_by_reference!(:campaign, id)
+    current_subject_count = Crew.Context.count_tasks(crew, [:pending, :completed])
 
     subtitle =
-      case status do
-        :idle ->
-          if Nodes.ready?(promotion_content_node) do
-            dgettext("eyra-submission", "ready.for.submission.message")
-          else
-            dgettext("eyra-submission", "incomplete.forms.message")
-          end
+      get_subtitle(
+        submission,
+        promotion_content_node,
+        current_subject_count,
+        target_subject_count
+      )
 
-        :submitted ->
-          dgettext("eyra-submission", "waiting.for.coordinator.message")
-
-        :accepted ->
-          dgettext("link-dashboard", "quick_summary.%{subject_count}.%{target_subject_count}",
-            subject_count: current_subject_count,
-            target_subject_count: target_subject_count || 0
-          )
-      end
-
-    quick_summery =
-      updated_at
-      |> Coreweb.UI.Timestamp.apply_timezone()
-      |> Coreweb.UI.Timestamp.humanize()
-
+    quick_summary = get_quick_summary(updated_at)
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
-    image = %{type: :catalog, info: image_info }
+    image = %{type: :catalog, info: image_info}
 
     %{
-      path: Routes.live_path(socket, Link.Survey.Content, edit_id),
+      path: Routes.live_path(socket, Systems.Campaign.ContentPage, edit_id),
       title: title,
       subtitle: subtitle || "<no subtitle>",
       tag: tag,
       level: :critical,
       image: image,
-      quick_summary: quick_summery
+      quick_summary: quick_summary
     }
   end
 
@@ -148,56 +175,21 @@ defmodule Link.Dashboard do
             title: title,
             image_id: image_id,
             content_node: promotion_content_node,
-            submission: %{
-              status: status
-            }
+            submission: submission
           }
         }
       }) do
-    label =
-      case status do
-        :idle ->
-          %{text: dgettext("eyra-submission", "status.idle.label"), type: :warning}
-
-        :submitted ->
-          %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary}
-
-        :accepted ->
-          %{text: dgettext("eyra-submission", "status.accepted.label"), type: :success}
-      end
-
-    subtitle =
-      case status do
-        :idle ->
-          if Nodes.ready?(promotion_content_node) do
-            dgettext("eyra-submission", "ready.for.submission.message")
-          else
-            dgettext("eyra-submission", "incomplete.forms.message")
-          end
-
-        :submitted ->
-          dgettext("eyra-submission", "waiting.for.coordinator.message")
-
-        :accepted ->
-          dgettext("link-dashboard", "quick_summary.%{subject_count}.%{target_subject_count}",
-            subject_count: -1,
-            target_subject_count: -1
-          )
-      end
-
-    quick_summery =
-      updated_at
-      |> Coreweb.UI.Timestamp.apply_timezone()
-      |> Coreweb.UI.Timestamp.humanize()
-
+    tag = Submission.get_tag(submission)
+    subtitle = get_subtitle(submission, promotion_content_node, -1, -1)
+    quick_summery = get_quick_summary(updated_at)
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
-    image = %{type: :catalog, info: image_info }
+    image = %{type: :catalog, info: image_info}
 
     %{
-      path: Routes.live_path(socket, Link.Survey.Content, edit_id),
+      path: Routes.live_path(socket, Systems.Campaign.ContentPage, edit_id),
       title: title,
       subtitle: subtitle,
-      label: label,
+      tag: tag,
       level: :critical,
       image: image,
       quick_summary: quick_summery

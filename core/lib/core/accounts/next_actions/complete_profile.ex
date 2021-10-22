@@ -1,9 +1,9 @@
 defmodule Core.Accounts.NextActions.CompleteProfile do
-  @behaviour Core.NextActions.ViewModel
+  @behaviour Systems.NextAction.ViewModel
 
   import CoreWeb.Gettext
 
-  @impl Core.NextActions.ViewModel
+  @impl Systems.NextAction.ViewModel
   def to_view_model(url_resolver, _count, _params) do
     %{
       title: dgettext("eyra-nextaction", "complete.profile.title"),
