@@ -46,7 +46,7 @@ jobs:
 
       - name: Build digest
         run: mix phx.digest
-        working-directory: core/assets
+        working-directory: core
         env:
           MIX_ENV: prod
 
