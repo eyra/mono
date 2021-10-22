@@ -9,7 +9,7 @@ jobs:
   tagged-release:
     runs-on: ubuntu-20.04
     env:
-      MIX_ENV: test
+      MIX_ENV: prod
     steps:
       - name: Set tag
         id: tag
