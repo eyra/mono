@@ -35,6 +35,20 @@ jobs:
       - name: Install Node deps
         run: npm install
         working-directory: core/assets
+        
+      - name: Update browserslist package
+        run: npx browserslist@latest --update-db
+        working-directory: core/assets
+
+      - name: Build static resources
+        run: npm run deploy
+        working-directory: core/assets
+
+      - name: Build digest
+        run: mix phx.digest
+        working-directory: core/assets
+        env:
+          MIX_ENV: prod
 
       - name: Build release
         run: mix release --overwrite --path "../${GITHUB_REF##*/}"
