@@ -33,3 +33,5 @@ config :core, Core.SurfConext, oidc_module: Core.SurfConext.FakeOIDC
 
 # Tests always use the next bundle
 config :core, :bundle, :next
+
+config :core, :banking_backend, Core.Banking.Dummy

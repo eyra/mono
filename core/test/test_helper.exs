@@ -17,3 +17,6 @@ Application.put_env(
     "admin2@example.org"
   ])
 )
+
+Mox.defmock(Core.Banking.MockBackend, for: Core.Banking.Backend)
+Application.put_env(:core, :banking_backend, Core.Banking.MockBackend)

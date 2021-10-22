@@ -11,7 +11,8 @@ defmodule Core.Application do
       CoreWeb.Telemetry,
       {SiteEncrypt.Phoenix, CoreWeb.Endpoint},
       {Phoenix.PubSub, name: Core.PubSub},
-      {Oban, oban_config()}
+      {Oban, oban_config()},
+      {Core.Banking.backend(), "account-number"}
     ]
 
     opts = [strategy: :one_for_one, name: Core.Supervisor]
