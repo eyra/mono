@@ -1,27 +1,24 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - '[a-z]+-[0-9]+'
-
+  workflow_dispatch:
+    inputs:
+      bundle:
+        description: 'Bundle ID (link / next etc.)'     
+        required: true
+        default: 'link'
 jobs:
   tagged-release:
     runs-on: ubuntu-20.04
     env:
       MIX_ENV: prod
     steps:
-      - name: Set tag
-        id: tag
-        run: >
-          echo ::set-output name=TAG::${GITHUB_REF##*/} &&
-          echo ${GITHUB_REF} | sed -E  "s/.*\/(\w+)\-.*/::set-output name=BUNDLE::\1/"
-
-
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+
+      - name: Tag name
+        id: tag
+        run: echo ::set-output "name=TAG::${{github.event.inputs.bundle}}_$(date +%F)_${{github.run_number}}"
 
       - id: setup-elixir
         uses: erlef/setup-elixir@v1
@@ -51,16 +48,23 @@ jobs:
           MIX_ENV: prod
 
       - name: Build release
-        run: mix release --overwrite --path "../${GITHUB_REF##*/}"
+        run: mix release --overwrite --path "../${{steps.tag.outputs.tag}}"
         working-directory: core
         env:
-          BUNDLE: ${{steps.tag.outputs.bundle}}
+          BUNDLE: ${{github.event.inputs.bundle}}
 
       - name: Archive release
-        run: tar cfj "${GITHUB_REF##*/}.tar.bz2" "${GITHUB_REF##*/}"
+        run: tar cfj "${{steps.tag.outputs.tag}}.tar.bz2" "${{steps.tag.outputs.tag}}"
+
+      - name: Tag the build
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag: "${{steps.tag.outputs.tag}}"
+          force_push_tag: true
 
       - uses: softprops/action-gh-release@v1
         with:
+          tag_name: "${{steps.tag.outputs.tag}}"
           prerelease: false
           fail_on_unmatched_files: true
           files: |
