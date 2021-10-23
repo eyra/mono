@@ -113,6 +113,10 @@ defmodule CoreWeb do
 
       def current_user(%{assigns: %{current_user: current_user}}), do: current_user
       def current_user(_conn), do: nil
+
+      def version do
+        unquote(Application.fetch_env!(:core, :version))
+      end
     end
   end
 
