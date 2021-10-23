@@ -17,11 +17,8 @@ jobs:
           echo ::set-output name=TAG::${GITHUB_REF##*/} &&
           echo ${GITHUB_REF} | sed -E  "s/.*\/(\w+)\-.*/::set-output name=BUNDLE::\1/"
 
-
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
 
       - id: setup-elixir
         uses: erlef/setup-elixir@v1

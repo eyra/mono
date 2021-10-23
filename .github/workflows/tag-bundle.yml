@@ -1,0 +1,25 @@
+name: Tag bundle
+
+on: 
+  workflow_dispatch:
+    inputs:
+      bundle:
+        description: 'Bundle ID (link / next etc.)'     
+        required: true
+        default: 'link'
+jobs:
+  tagged-release:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Tag name
+        id: tag
+        run: echo ::set-output name=TAG::${{github.event.inputs.bundle}} 
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Create tag to trigger build
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag: "${{steps.tag.outputs.tag}}"
+          message: "Latest release"
