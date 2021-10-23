@@ -1,4 +1,4 @@
-defmodule Core.MoneyManager.TransactionMarker do
+defmodule Systems.MoneyManager.TransactionMarkerModel do
   use Ecto.Schema
 
   schema "money_manager_transaction_marker" do

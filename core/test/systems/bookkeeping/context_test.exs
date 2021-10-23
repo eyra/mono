@@ -1,13 +1,13 @@
-defmodule Core.BooksTest do
+defmodule Systems.Bookkeeping.ContextTest do
   use Core.DataCase, async: true
-  alias Core.Books
+  alias Systems.Bookkeeping
 
   describe "enter/1" do
     test "enter single booking" do
       amount = :rand.uniform(10_000)
 
       :ok =
-        Books.enter(%{
+        Bookkeeping.Context.enter(%{
           idempotence_key: Faker.String.base64(),
           journal_message: "Bank transaction: 123, received: 123,45 for money box: 89",
           lines: [
@@ -22,8 +22,8 @@ defmodule Core.BooksTest do
           ]
         })
 
-      assert %{debit: ^amount} = Books.balance(:bank)
-      assert %{credit: ^amount} = Books.balance({:money_box_budget, 89})
+      assert %{debit: ^amount} = Bookkeeping.Context.balance(:bank)
+      assert %{credit: ^amount} = Bookkeeping.Context.balance({:money_box_budget, 89})
     end
 
     test "enter multiple bookings partialy, for the same books" do
@@ -33,7 +33,7 @@ defmodule Core.BooksTest do
       second_amount = :rand.uniform(10_000)
 
       :ok =
-        Books.enter(%{
+        Bookkeeping.Context.enter(%{
           idempotence_key: Faker.String.base64(),
           journal_message: "Bank transaction",
           lines: [
@@ -49,7 +49,7 @@ defmodule Core.BooksTest do
         })
 
       :ok =
-        Books.enter(%{
+        Bookkeeping.Context.enter(%{
           idempotence_key: Faker.String.base64(),
           journal_message: "Bank transaction",
           lines: [
@@ -65,15 +65,19 @@ defmodule Core.BooksTest do
         })
 
       expected_bank_amount = first_amount + second_amount
-      assert %{debit: ^expected_bank_amount, credit: 0} = Books.balance(:bank)
-      assert %{credit: ^first_amount} = Books.balance({:money_box_budget, money_box_one})
-      assert %{credit: ^second_amount} = Books.balance({:money_box_budget, money_box_two})
+      assert %{debit: ^expected_bank_amount, credit: 0} = Bookkeeping.Context.balance(:bank)
+
+      assert %{credit: ^first_amount} =
+               Bookkeeping.Context.balance({:money_box_budget, money_box_one})
+
+      assert %{credit: ^second_amount} =
+               Bookkeeping.Context.balance({:money_box_budget, money_box_two})
     end
 
     for {debit, credit} <- [{1, 2}, {2, 1}] do
       test "require lines to balance: #{debit} v.s. #{credit}" do
         result =
-          Books.enter(%{
+          Bookkeeping.Context.enter(%{
             idempotence_key: Faker.String.base64(),
             journal_message: "",
             lines: [
@@ -94,7 +98,7 @@ defmodule Core.BooksTest do
 
     test "require lines to have either debit or credit, not both" do
       result =
-        Books.enter(%{
+        Bookkeeping.Context.enter(%{
           idempotence_key: Faker.String.base64(),
           journal_message: "",
           lines: [
@@ -115,7 +119,7 @@ defmodule Core.BooksTest do
 
     test "require lines to have a unique idempotence key" do
       :ok =
-        Books.enter(%{
+        Bookkeeping.Context.enter(%{
           idempotence_key: "test",
           journal_message: "Testing",
           lines: [
@@ -131,7 +135,7 @@ defmodule Core.BooksTest do
         })
 
       result =
-        Books.enter(%{
+        Bookkeeping.Context.enter(%{
           idempotence_key: "test",
           journal_message: "Testing 2",
           lines: [
@@ -152,12 +156,12 @@ defmodule Core.BooksTest do
 
   describe "list_lines/1" do
     test "listing of an unknown book returns empty list" do
-      assert Books.list_entries(:bank) == []
+      assert Bookkeeping.Context.list_entries(:bank) == []
     end
 
     test "entries have the lines" do
       :ok =
-        Books.enter(%{
+        Bookkeeping.Context.enter(%{
           idempotence_key: "a",
           journal_message: "Bank transaction: 123, received: 123,45 for money box: 89",
           lines: [
@@ -173,7 +177,7 @@ defmodule Core.BooksTest do
         })
 
       :ok =
-        Books.enter(%{
+        Bookkeeping.Context.enter(%{
           idempotence_key: "b",
           journal_message: "Bank transaction: 123, received: 123,45 for money box: 89",
           lines: [
@@ -188,7 +192,7 @@ defmodule Core.BooksTest do
           ]
         })
 
-      assert Books.list_entries(:bank) == [
+      assert Bookkeeping.Context.list_entries(:bank) == [
                %{
                  idempotence_key: "a",
                  journal_message: "Bank transaction: 123, received: 123,45 for money box: 89",

@@ -1,6 +1,6 @@
-defmodule Core.Banking.DummyTest do
+defmodule Systems.Banking.DummyTest do
   use ExUnit.Case, async: true
-  alias Core.Banking.Dummy
+  alias Systems.Banking.Dummy
 
   setup do
     {:ok, pid: Dummy.start_link("1234")}

@@ -18,5 +18,5 @@ Application.put_env(
   ])
 )
 
-Mox.defmock(Core.Banking.MockBackend, for: Core.Banking.Backend)
-Application.put_env(:core, :banking_backend, Core.Banking.MockBackend)
+Mox.defmock(Systems.Banking.MockBackend, for: Systems.Banking.Backend)
+Application.put_env(:core, :banking_backend, Systems.Banking.MockBackend)

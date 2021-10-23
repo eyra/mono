@@ -1,6 +1,4 @@
-defmodule Core.Banking do
-  alias Core.Banking.Transaction
-
+defmodule Systems.Banking.Context do
   @type account :: %{id: binary(), name: binary()}
   @type transaction :: %{
           from: account(),
@@ -12,7 +10,7 @@ defmodule Core.Banking do
 
   @spec list_payments(since :: binary() | nil) :: %{
           marker: binary(),
-          transactions: list(Transaction.t()),
+          transactions: list(transaction()),
           has_more: boolean()
         }
   def list_payments(since) when is_nil(since) or is_binary(since) do

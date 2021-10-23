@@ -1,10 +1,10 @@
-defmodule Core.Books do
+defmodule Systems.Bookkeeping.Context do
   @moduledoc """
   The bookkeeping system.
   """
 
   alias Core.Repo
-  alias Core.Books.{Book, Entry, Line}
+  alias Systems.Bookkeeping.{BookModel, EntryModel, LineModel}
   import Ecto.Query
   import Ecto.Changeset
   alias Ecto.Multi
@@ -20,7 +20,7 @@ defmodule Core.Books do
   end
 
   def balance(book) do
-    case Repo.get_by(Book, identifier: to_identifier(book)) do
+    case Repo.get_by(BookModel, identifier: to_identifier(book)) do
       nil -> %{debit: 0, credit: 0}
       %{balance_debit: debit, balance_credit: credit} -> %{debit: debit, credit: credit}
     end
@@ -29,10 +29,10 @@ defmodule Core.Books do
   def list_entries(book) do
     book_identifier = to_identifier(book)
 
-    from(line in Line,
-      join: entry in Entry,
+    from(line in LineModel,
+      join: entry in EntryModel,
       on: entry.id == line.entry_id,
-      join: book in Book,
+      join: book in BookModel,
       on: book.id == line.book_id,
       where: book.identifier == ^book_identifier,
       preload: [:book, :entry]
@@ -63,7 +63,7 @@ defmodule Core.Books do
     multi
     |> Multi.run("line-#{to_identifier(book)}", fn repo, %{entry: entry} = changes ->
       repo.insert(
-        %Line{}
+        %LineModel{}
         |> cast(line, [:debit, :credit])
         |> put_assoc(:book, Map.fetch!(changes, book))
         |> put_assoc(:entry, entry)
@@ -81,7 +81,7 @@ defmodule Core.Books do
     multi
     |> Multi.insert(
       :entry,
-      %Entry{}
+      %EntryModel{}
       |> cast(entry, [:idempotence_key, :journal_message])
       |> validate_required([:idempotence_key, :journal_message])
       |> unique_constraint(:idempotence_key)
@@ -109,7 +109,7 @@ defmodule Core.Books do
     multi
     |> Multi.insert(
       book,
-      %Book{
+      %BookModel{
         identifier: to_identifier(book),
         balance_debit: debit,
         balance_credit: credit

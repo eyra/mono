@@ -1,6 +1,6 @@
-defmodule Core.Banking.Backend do
-  alias Core.Banking
-  alias Core.Banking.Transaction
+defmodule Systems.Banking.Backend do
+  alias Systems.Banking
+  alias Systems.Banking.Transaction
 
   @type account :: Banking.account()
   @type payment :: Banking.payment()

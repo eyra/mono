@@ -1,9 +1,8 @@
-defmodule Core.MoneyManager do
+defmodule Systems.MoneyManager.Context do
   require Logger
-  alias Core.Banking
-  alias Core.Books
+  alias Systems.{Banking, Bookkeeping}
   alias Core.Repo
-  alias Core.MoneyManager.TransactionMarker
+  alias Systems.MoneyManager.TransactionMarkerModel
   import Ecto.Query
 
   @books %{
@@ -18,7 +17,7 @@ defmodule Core.MoneyManager do
   def process_bank_transactions do
     %{marker: new_marker, transactions: transactions} =
       last_transaction_marker()
-      |> Banking.list_payments()
+      |> Banking.Context.list_payments()
 
     unless Enum.empty?(transactions) do
       Enum.each(transactions, &process_bank_transaction/1)
@@ -47,7 +46,7 @@ defmodule Core.MoneyManager do
           ]
       end
 
-    Books.enter(%{
+    Bookkeeping.Context.enter(%{
       idempotence_key: to_string(id),
       journal_message:
         "Bank transaction: #{id} at: #{date} for: #{amount} from: #{transaction.from_iban} to: #{transaction.to_iban}",
@@ -82,7 +81,7 @@ defmodule Core.MoneyManager do
         amount: amount,
         description: description
       }) do
-    Banking.submit_payment(%{
+    Banking.Context.submit_payment(%{
       idempotence_key: idempotence_key,
       to: to,
       amount: amount,
@@ -109,7 +108,7 @@ defmodule Core.MoneyManager do
   end
 
   def last_transaction_marker do
-    from(tm in TransactionMarker,
+    from(tm in TransactionMarkerModel,
       select: tm.marker,
       order_by: [desc: tm.inserted_at],
       limit: 1
@@ -118,7 +117,7 @@ defmodule Core.MoneyManager do
   end
 
   def update_transaction_marker(new_marker, payment_count) do
-    Repo.insert!(%TransactionMarker{
+    Repo.insert!(%TransactionMarkerModel{
       marker: new_marker,
       payment_count: payment_count
     })

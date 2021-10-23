@@ -1,6 +1,6 @@
-defmodule Core.Banking.Dummy do
+defmodule Systems.Banking.Dummy do
   use GenServer
-  @behaviour Core.Banking.Backend
+  @behaviour Systems.Banking.Backend
   @payment_batch_size 8
 
   def start_link(account) do

@@ -1,4 +1,4 @@
-defmodule Core.Books.Entry do
+defmodule Systems.Bookkeeping.EntryModel do
   use Ecto.Schema
 
   schema "book_entries" do

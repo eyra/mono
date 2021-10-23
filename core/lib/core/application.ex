@@ -12,7 +12,7 @@ defmodule Core.Application do
       {SiteEncrypt.Phoenix, CoreWeb.Endpoint},
       {Phoenix.PubSub, name: Core.PubSub},
       {Oban, oban_config()},
-      {Core.Banking.backend(), "account-number"}
+      {Systems.Banking.Context.backend(), "account-number"}
     ]
 
     opts = [strategy: :one_for_one, name: Core.Supervisor]
