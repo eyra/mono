@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Tag name
         id: tag
-        run: echo ::set-output "name=TAG::${{github.event.inputs.bundle}}-$(date +%F)-${{github.run_number}}"
+        run: echo ::set-output "name=TAG::${{github.event.inputs.bundle}}_$(date +%F)_${{github.run_number}}"
 
       - name: Checkout
         uses: actions/checkout@v2
