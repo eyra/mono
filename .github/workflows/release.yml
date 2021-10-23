@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       bundle:
-        description: 'Bundle ID (link / next etc.)'     
+        description: 'Bundle ID (link / next etc.)'
         required: true
         default: 'link'
 jobs:
@@ -32,7 +32,7 @@ jobs:
       - name: Install Node deps
         run: npm install
         working-directory: core/assets
-        
+
       - name: Update browserslist package
         run: npx browserslist@latest --update-db
         working-directory: core/assets
@@ -52,6 +52,7 @@ jobs:
         working-directory: core
         env:
           BUNDLE: ${{github.event.inputs.bundle}}
+          VERSION: ${{steps.tag.outputs.tag}}
 
       - name: Archive release
         run: tar cfj "${{steps.tag.outputs.tag}}.tar.bz2" "${{steps.tag.outputs.tag}}"
