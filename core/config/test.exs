@@ -13,7 +13,9 @@ config :core, Core.Repo,
   password: System.get_env("POSTGRES_PASS", "postgres"),
   database: "core_test",
   hostname: System.get_env("POSTGRES_HOST", "localhost"),
-  pool: Ecto.Adapters.SQL.Sandbox
+  pool: Ecto.Adapters.SQL.Sandbox,
+  pool_size: 10,
+  queue_target: 5000
 
 # Print only warnings and errors during test
 config :logger, level: :warn

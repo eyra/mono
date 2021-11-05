@@ -4,13 +4,9 @@ defmodule Systems.Campaign.ModelTest do
 
   alias Systems.Campaign
 
-  describe "studies" do
+  describe "campaigns" do
     alias Systems.Campaign
     alias Core.{Factories, Authorization}
-
-    @valid_attrs %{description: "some description", title: "some title"}
-    @update_attrs %{description: "some updated description", title: "some updated title"}
-    @invalid_attrs %{description: nil, title: nil}
 
     test "list/1 returns all campaigns" do
       campaign = Factories.insert!(:campaign)
@@ -41,36 +37,19 @@ defmodule Systems.Campaign.ModelTest do
 
     test "get!/1 returns the campaign with given id" do
       campaign = Factories.insert!(:campaign)
-      assert Campaign.Context.get!(campaign.id).title == campaign.title
+      assert Campaign.Context.get!(campaign.id) != nil
     end
 
     test "create/1 with valid data creates a campaign" do
-      assert {:ok, %Campaign.Model{} = campaign} =
-               Campaign.Context.create(@valid_attrs, Factories.insert!(:researcher))
+      promotion = Factories.insert!(:promotion)
+      assignment = Factories.insert!(:assignment)
+      researcher = Factories.insert!(:researcher)
+      auth_node = Factories.insert!(:auth_node)
 
-      assert campaign.description == "some description"
-      assert campaign.title == "some title"
+      assert {:ok, %Campaign.Model{}} =
+               Campaign.Context.create(promotion, assignment, researcher, auth_node)
+
       assert_signal_dispatched(:campaign_created)
-    end
-
-    test "create/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} =
-               Campaign.Context.create(@invalid_attrs, Factories.insert!(:researcher))
-    end
-
-    test "update/2 with valid data updates the campaign" do
-      campaign = Factories.insert!(:campaign)
-
-      assert {:ok, %Campaign.Model{} = campaign} =
-               Campaign.Context.update(campaign, @update_attrs)
-
-      assert campaign.description == "some updated description"
-      assert campaign.title == "some updated title"
-    end
-
-    test "update/2 with invalid data returns error changeset" do
-      campaign = Factories.insert!(:campaign)
-      assert {:error, %Ecto.Changeset{}} = Campaign.Context.update(campaign, @invalid_attrs)
     end
 
     test "delete/1 deletes the campaign" do

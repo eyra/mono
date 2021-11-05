@@ -24,12 +24,7 @@ defmodule Systems.Crew.Context do
     |> Repo.one()
   end
 
-  def create(reference_type, reference_id, auth_node) do
-    attrs = %{
-      reference_type: reference_type,
-      reference_id: reference_id
-    }
-
+  def create(auth_node, attrs \\ %{}) do
     %Crew.Model{}
     |> Crew.Model.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
@@ -37,6 +32,7 @@ defmodule Systems.Crew.Context do
   end
 
   # Tasks
+  def get_task(_crew, nil), do: nil
 
   def get_task(crew, member) do
     Repo.get_by(Crew.TaskModel, crew_id: crew.id, member_id: member.id)
@@ -46,8 +42,8 @@ defmodule Systems.Crew.Context do
     Repo.get!(Crew.TaskModel, id)
   end
 
-  def create_task(crew, member, plugin) do
-    attrs = %{status: :pending, plugin: plugin}
+  def create_task(crew, member) do
+    attrs = %{status: :pending}
 
     %Crew.TaskModel{}
     |> Crew.TaskModel.changeset(attrs)
@@ -56,22 +52,22 @@ defmodule Systems.Crew.Context do
     |> Repo.insert()
   end
 
-  def create_task!(crew, member, plugin) do
-    case create_task(crew, member, plugin) do
+  def create_task!(crew, member) do
+    case create_task(crew, member) do
       {:ok, task} -> task
       _ -> nil
     end
   end
 
-  def get_or_create_task(crew, member, plugin) do
+  def get_or_create_task(crew, member) do
     case get_task(crew, member) do
-      nil -> create_task(crew, member, plugin)
+      nil -> create_task(crew, member)
       task -> {:ok, task}
     end
   end
 
-  def get_or_create_task!(crew, member, plugin) do
-    case get_or_create_task(crew, member, plugin) do
+  def get_or_create_task!(crew, member) do
+    case get_or_create_task(crew, member) do
       {:ok, task} -> task
       _ -> nil
     end
@@ -100,10 +96,10 @@ defmodule Systems.Crew.Context do
     count_tasks(crew, [:completed])
   end
 
-  def setup_tasks_for_members!(members, crew, plugin) do
+  def setup_tasks_for_members!(members, crew) do
     members
     |> Enum.map(
-      &(Crew.TaskModel.changeset(%Crew.TaskModel{}, %{status: :pending, plugin: plugin})
+      &(Crew.TaskModel.changeset(%Crew.TaskModel{}, %{status: :pending})
         |> Ecto.Changeset.put_change(:member_id, &1.id)
         |> Ecto.Changeset.put_assoc(:crew, crew))
     )

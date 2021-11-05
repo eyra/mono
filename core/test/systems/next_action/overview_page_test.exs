@@ -33,7 +33,7 @@ defmodule Systems.NextAction.OverviewPageTest do
       {:ok, view, _html} = live(conn, Routes.live_path(conn, OverviewPage))
       assert has_element?(view, "#zero-todos")
       NextAction.Context.create_next_action(user, SomeAction)
-      assert render(element(view, "#next-actions")) =~ "Open test"
+      assert render(view) =~ "Open test"
     end
 
     test "is updated when task is completed", %{conn: conn, user: user} do

@@ -17,7 +17,6 @@ defmodule Link do
         live("/marketplace", Marketplace)
         live("/labstudy/all", LabStudy.Overview)
         live("/campaign/:id/submission", Pool.SubmissionPage)
-        live("/promotion/:id", Promotion.Public)
       end
     end
   end
@@ -32,7 +31,7 @@ defmodule Link do
       grant_access(Link.Pool.SubmissionPage, [:researcher])
       grant_access(Link.Marketplace, [:member])
       grant_access(Link.LabStudy.Overview, [:researcher])
-      grant_access(Link.Promotion.Public, [:visitor, :member, :owner])
+      grant_access(Systems.Promotion.LandingPage, [:visitor, :member, :owner])
     end
   end
 end

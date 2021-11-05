@@ -25,9 +25,7 @@ defmodule Link.Pool.CampaignsView do
   def update(_params, socket) do
     clear_review_submission_next_action()
 
-    preload = [
-      survey_tool: [promotion: [:content_node, :submission]]
-    ]
+    preload = Campaign.Model.preload_graph(:full)
 
     submitted_campaigns =
       Campaign.Context.list_submitted_campaigns([Core.Survey.Tool], preload: preload)
@@ -82,18 +80,20 @@ defmodule Link.Pool.CampaignsView do
   end
 
   defp convert_to_vm(socket, %{
-         id: id,
          updated_at: updated_at,
-         survey_tool: %{
-           subject_count: target_subject_count,
-           promotion: %{
-             title: title,
-             image_id: image_id,
-             submission:
-               %{
-                 id: submission_id,
-                 status: status
-               } = submission
+         promotion: %{
+           title: title,
+           image_id: image_id,
+           submission:
+             %{
+               id: submission_id,
+               status: status
+             } = submission
+         },
+         promotable_assignment: %{
+           crew: crew,
+           assignable_survey_tool: %{
+             subject_count: target_subject_count
            }
          }
        }) do
@@ -126,7 +126,6 @@ defmodule Link.Pool.CampaignsView do
 
     target_subject_count = guard_nil(target_subject_count, :integer)
 
-    crew = Crew.Context.get_by_reference!(:campaign, id)
     current_subject_count = Crew.Context.count_tasks(crew, [:pending, :completed])
     open_spots = target_subject_count - current_subject_count
 

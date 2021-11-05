@@ -26,25 +26,22 @@ msgid "duration.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/lab/promotion_plugin.ex:50
-#: bundles/link/lib/survey/data/promotion_plugin.ex:76
+#: systems/campaign/model.ex:98 systems/promotion/form_view.ex:115
 msgid "by.author.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:145
-#: bundles/link/lib/survey/data/promotion_plugin.ex:99
+#: systems/promotion/model.ex:141
 msgid "reward.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:91
+#: systems/assignment/model.ex:222
 msgid "spots.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:104
-#: bundles/link/lib/survey/data/promotion_plugin.ex:64
+#: lib/core/survey/tool.ex:145
 msgid "apply.cta.title"
 msgstr ""
 
@@ -54,7 +51,7 @@ msgid "devices.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:99
+#: lib/core/survey/tool.ex:146
 msgid "open.cta.title"
 msgstr ""
 
@@ -74,27 +71,27 @@ msgid "devices.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:75
+#: systems/campaign/monitor_view.ex:76
 msgid "completed.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:76
+#: systems/campaign/monitor_view.ex:77
 msgid "pending.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:72
+#: systems/campaign/monitor_view.ex:73
 msgid "status.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:77
+#: systems/campaign/monitor_view.ex:78
 msgid "vacant.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:73
+#: systems/campaign/monitor_view.ex:74
 msgid "status.label"
 msgstr ""
 
@@ -104,27 +101,27 @@ msgid "content.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:115
+#: systems/campaign/overview_page.ex:62
 msgid "title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:149
+#: systems/campaign/overview_page.ex:96
 msgid "add.first.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:130
+#: systems/campaign/overview_page.ex:77
 msgid "add.new.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:145
+#: systems/campaign/overview_page.ex:92
 msgid "empty.description"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:144
+#: systems/campaign/overview_page.ex:91
 msgid "empty.title"
 msgstr ""
 
@@ -144,12 +141,12 @@ msgid "tabbar.item.survey"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:82
+#: systems/campaign/monitor_view.ex:83
 msgid "monitor.empty.description"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:81
+#: systems/campaign/monitor_view.ex:82
 msgid "monitor.empty.title"
 msgstr ""
 
@@ -184,7 +181,7 @@ msgid "form.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:124
+#: systems/campaign/overview_page.ex:71
 msgid "campaign.overview.title"
 msgstr ""
 
@@ -265,17 +262,17 @@ msgid "form.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:97
+#: systems/assignment/model.ex:228
 msgid "duration.highlight.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:96
+#: systems/assignment/model.ex:227
 msgid "duration.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:94
+#: systems/assignment/model.ex:225
 msgid "spots.highlight.text"
 msgstr ""
 
@@ -285,41 +282,41 @@ msgid "ethical.review.link"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:32
+#: systems/assignment/model.ex:81
 msgid "task.hero.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:45
+#: systems/assignment/model.ex:175
 msgid "task.completed.subtitle"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:52
+#: systems/assignment/model.ex:178
 msgid "task.completed.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:44
+#: systems/assignment/model.ex:174
 msgid "task.pending.subtitle"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:137
+#: systems/assignment/model.ex:201
 msgid "completed.highlight.default"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:132
+#: systems/assignment/model.ex:196
 msgid "completed.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:124
+#: systems/assignment/model.ex:188
 msgid "started.highlight.default"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:119
+#: systems/assignment/model.ex:183
 msgid "started.highlight.title"
 msgstr ""

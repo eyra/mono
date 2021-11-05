@@ -5,7 +5,10 @@ defmodule Frameworks.Signal.Context do
     Core.Mailer.SignalHandlers,
     Core.WebPush.SignalHandlers,
     Core.APNS.SignalHandlers,
-    Core.Observatory.Switch,
+    Systems.Observatory.Switch,
+    Systems.Assignment.Switch,
+    Systems.Campaign.Switch,
+    Systems.NextAction.Switch
   ]
 
   def dispatch(signal, message) do

@@ -9,28 +9,51 @@ defmodule Systems.Campaign.Context do
   alias Core.Authorization
 
   alias Systems.{
+    Assignment,
     Campaign,
-    Crew
+    Crew,
+    Promotion
   }
   alias Core.Accounts.User
   alias Core.Survey.Tool
   alias Core.DataDonation
-  alias Core.Promotions.Promotion
   alias Core.Pools.Submission
   alias Frameworks.Signal
 
-  # read list(current_user, ...) do
-  # end
+  def get!(id, preload \\ []) do
+    from(c in Campaign.Model,
+      where: c.id == ^id,
+      preload: ^preload
+    )
+    |> Repo.one!()
+  end
 
-  @doc """
-  Returns the list of studies.
+  def get_by_promotion(promotion, preload \\ [])
+  def get_by_promotion(%{id: id}, preload) do
+    get_by_promotion(id, preload)
+  end
 
-  ## Examples
+  def get_by_promotion(promotion_id, preload) do
+    from(c in Campaign.Model,
+      where: c.promotion_id == ^promotion_id,
+      preload: ^preload
+    )
+    |> Repo.one()
+  end
 
-      iex> list()
-      [%Campaign.Model{}, ...]
+  def get_by_promotable(promotable, preload \\ [])
+  def get_by_promotable(%{id: id}, preload) do
+    get_by_promotable(id, preload)
+  end
 
-  """
+  def get_by_promotable(promotable_id, preload) do
+    from(c in Campaign.Model,
+      where: c.promotable_assignment_id == ^promotable_id,
+      preload: ^preload
+    )
+    |> Repo.one()
+  end
+
   def list(opts \\ []) do
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
 
@@ -38,7 +61,6 @@ defmodule Systems.Campaign.Context do
       where: s.id not in ^exclude
     )
     |> Repo.all()
-    |> ensure_crew()
 
     # AUTH: Can be piped through auth filter.
   end
@@ -62,33 +84,17 @@ defmodule Systems.Campaign.Context do
         select: submission.id
       )
 
-    promotions =
-      from(promotion in Promotion,
+    promotion_ids =
+      from(promotion in Promotion.Model,
         where: promotion.id in subquery(accepted_submissions),
         select: promotion.id
       )
 
-    studie_ids =
-      tool_entities
-      |> Enum.map(
-        &from(tool in &1,
-          where: tool.promotion_id in subquery(promotions),
-          select: tool.study_id
-        )
-      )
-      |> Enum.reduce(fn tool_query, query ->
-        union_all(
-          query,
-          ^tool_query
-        )
-      end)
-
     from(campaign in Campaign.Model,
-      where: campaign.id in subquery(studie_ids) and campaign.id not in ^exclude,
+      where: campaign.promotion_id in subquery(promotion_ids) and campaign.id not in ^exclude,
       preload: ^preload
     )
     |> Repo.all()
-    |> ensure_crew()
   end
 
   @doc """
@@ -109,7 +115,6 @@ defmodule Systems.Campaign.Context do
       preload: ^preload
     )
     |> Repo.all()
-    |> ensure_crew()
 
     # AUTH: Can be piped through auth filter (current code does the same thing).
   end
@@ -122,14 +127,13 @@ defmodule Systems.Campaign.Context do
 
     member_ids = from(m in Crew.MemberModel, where: m.user_id == ^user.id, select: m.id)
     crew_ids = from(t in Crew.TaskModel, where: t.member_id in subquery(member_ids), select: t.crew_id)
-    campaign_ids = from(c in Crew.Model, where: c.reference_type == :campaign and c.id in subquery(crew_ids), select: c.reference_id)
+    assigment_ids = from(a in Assignment.Model, where: a.crew_id in subquery(crew_ids), select: a.id)
 
-    from(s in Campaign.Model,
-      where: s.id in subquery(campaign_ids),
+    from(c in Campaign.Model,
+      where: c.promotable_assignment_id in subquery(assigment_ids),
       preload: ^preload
     )
     |> Repo.all()
-    |> ensure_crew()
   end
 
   @doc """
@@ -145,14 +149,13 @@ defmodule Systems.Campaign.Context do
       )
 
     campaign_ids =
-      from(st in DataDonation.Tool, where: st.id in subquery(tool_ids), select: st.study_id)
+      from(st in DataDonation.Tool, where: st.id in subquery(tool_ids), select: st.campaign_id)
 
     from(s in Campaign.Model,
       where: s.id in subquery(campaign_ids),
       preload: ^preload
     )
     |> Repo.all()
-    |> ensure_crew()
   end
 
   def list_owners(%Campaign.Model{} = campaign, preload \\ []) do
@@ -198,29 +201,6 @@ defmodule Systems.Campaign.Context do
     :ok = Authorization.assign_role(user, campaign, :owner)
   end
 
-  @doc """
-  Gets a single campaign.
-
-  Raises `Ecto.NoResultsError` if the Study does not exist.
-
-  ## Examples
-
-      iex> get!(123)
-      %Campaign.Model{}
-
-      iex> get!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get!(id, preload \\ []) do
-    from(c in Campaign.Model,
-      where: c.id == ^id,
-      preload: ^preload
-    )
-    |> Repo.one!()
-    |> ensure_crew()
-  end
-
   def get_changeset(attrs \\ %{}) do
     %Campaign.Model{}
     |> Campaign.Model.changeset(attrs)
@@ -229,21 +209,18 @@ defmodule Systems.Campaign.Context do
   @doc """
   Creates a campaign.
   """
-  def create(%Ecto.Changeset{} = changeset, researcher) do
+  def create(promotion, assignment, researcher, auth_node) do
     with {:ok, campaign} <-
-           changeset
-           |> Ecto.Changeset.put_assoc(:auth_node, Core.Authorization.make_node())
+           %Campaign.Model{}
+           |> Campaign.Model.changeset(%{})
+           |> Ecto.Changeset.put_assoc(:promotion, promotion)
+           |> Ecto.Changeset.put_assoc(:promotable_assignment, assignment)
+           |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
            |> Repo.insert() do
       :ok = Authorization.assign_role(researcher, campaign, :owner)
       Signal.Context.dispatch!(:campaign_created, %{campaign: campaign})
       {:ok, campaign}
     end
-  end
-
-  def create(attrs, researcher) do
-    attrs
-    |> get_changeset()
-    |> create(researcher)
   end
 
   @doc """
@@ -303,7 +280,7 @@ defmodule Systems.Campaign.Context do
     researcher
     |> Campaign.AuthorModel.from_user()
     |> Campaign.AuthorModel.changeset()
-    |> Ecto.Changeset.put_assoc(:study, campaign)
+    |> Ecto.Changeset.put_assoc(:campaign, campaign)
     |> Ecto.Changeset.put_assoc(:user, researcher)
     |> Repo.insert()
   end
@@ -311,68 +288,20 @@ defmodule Systems.Campaign.Context do
   def list_authors(%Campaign.Model{} = campaign) do
     from(
       a in Campaign.AuthorModel,
-      where: a.study_id == ^campaign.id,
+      where: a.campaign_id == ^campaign.id,
       preload: [user: [:profile]]
     )
     |> Repo.all()
   end
 
   def list_survey_tools(%Campaign.Model{} = campaign) do
-    from(s in Tool, where: s.study_id == ^campaign.id)
+    from(s in Tool, where: s.campaign_id == ^campaign.id)
     |> Repo.all()
   end
 
   def list_tools(%Campaign.Model{} = campaign, schema) do
-    from(s in schema, where: s.study_id == ^campaign.id)
+    from(s in schema, where: s.campaign_id == ^campaign.id)
     |> Repo.all()
-  end
-
-
-  # Crew
-
-  defp ensure_crew(list) when is_list(list) do
-    list |> Enum.map(&ensure_crew(&1))
-  end
-
-  defp ensure_crew(%Campaign.Model{} = campaign) do
-    get_or_create_crew!(campaign)
-    campaign
-  end
-
-  defp ensure_crew(term), do: term
-
-  def crew?(campaign) do
-    from(
-      c in Crew.Model,
-      where: c.reference_type == :campaign and c.reference_id == ^campaign.id
-    )
-    |> Repo.exists?()
-  end
-
-  def get_crew(campaign) do
-    from(
-      c in Crew.Model,
-      where: c.reference_type == :campaign and c.reference_id == ^campaign.id
-    )
-    |> Repo.one()
-  end
-
-  def create_crew(campaign) do
-    Crew.Context.create(:campaign, campaign.id, Core.Authorization.make_node(campaign))
-  end
-
-  def get_or_create_crew(campaign) do
-    case crew?(campaign) do
-      false -> create_crew(campaign)
-      true -> {:ok, get_crew(campaign)}
-    end
-  end
-
-  def get_or_create_crew!(campaign) do
-    case get_or_create_crew(campaign) do
-      {:ok, crew} -> crew
-      _ -> nil
-    end
   end
 
 end

@@ -9,18 +9,19 @@ defmodule Systems.NextAction.OverviewPage do
   alias Systems.NextAction
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    observe(
-      socket,
-      next_action_cleared: [user.id],
-      next_action_created: [user.id]
-    )
+    model = %{
+      id: user.id,
+      presenter: Systems.NextAction.Presenter
+    }
 
-    socket =
+    {
+      :ok,
       socket
+      |> assign(model: model)
+      |> observe_view_model()
       |> update_menus()
       |> refresh_next_actions()
-
-    {:ok, socket}
+    }
   end
 
   def refresh_next_actions(%{assigns: %{current_user: user}} = socket) do
@@ -31,11 +32,8 @@ defmodule Systems.NextAction.OverviewPage do
     )
   end
 
-  def handle_observation(socket, :next_action_created, _payload) do
-    refresh_next_actions(socket)
-  end
-
-  def handle_observation(socket, :next_action_cleared, _payload) do
+  defoverridable handle_view_model_updated: 1
+  def handle_view_model_updated(socket) do
     refresh_next_actions(socket)
   end
 
@@ -49,7 +47,7 @@ defmodule Systems.NextAction.OverviewPage do
         title={{ dgettext("eyra-ui", "todo.title") }}
         menus={{ @menus }}
       >
-        <div :if={{Enum.empty?(@next_actions)}} class="h-full">
+        <div :if={{Enum.empty?(@vm.next_actions)}} class="h-full">
           <div class="flex flex-col items-center w-full h-full">
             <div class="flex-grow"></div>
             <div class="flex-none">
@@ -61,8 +59,8 @@ defmodule Systems.NextAction.OverviewPage do
 
         <ContentArea>
           <MarginY id={{:page_top}} />
-          <div :if={{!Enum.empty?(@next_actions)}} class="flex flex-col gap-6 sm:gap-10" id="next-actions">
-            <NextAction.View :for={{action <- @next_actions}} vm={{ action }} />
+          <div :if={{!Enum.empty?(@vm.next_actions)}} class="flex flex-col gap-6 sm:gap-10" id="next-actions">
+            <NextAction.View :for={{action <- @vm.next_actions}} vm={{ action }} />
           </div>
         </ContentArea>
       </Workspace>

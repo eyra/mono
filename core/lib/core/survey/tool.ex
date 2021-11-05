@@ -9,16 +9,10 @@ defmodule Core.Survey.Tool do
   require Core.Enums.Devices
 
   import Ecto.Changeset
-  alias Systems.Campaign.Model, as: Study
-  alias Core.Survey.Task
-  alias Core.Accounts.User
-  alias Core.Promotions.Promotion
 
   schema "survey_tools" do
     belongs_to(:content_node, Core.Content.Node)
     belongs_to(:auth_node, Core.Authorization.Node)
-    belongs_to(:study, Study)
-    belongs_to(:promotion, Promotion)
 
     field(:survey_url, :string)
     field(:current_subject_count, :integer)
@@ -30,8 +24,7 @@ defmodule Core.Survey.Tool do
 
     field(:devices, {:array, Ecto.Enum}, values: Core.Enums.Devices.schema_values())
 
-    has_many(:tasks, Task)
-    many_to_many(:participants, User, join_through: :survey_tool_participants)
+    field(:director, Ecto.Enum, values: [:campaign, :assignment])
 
     timestamps()
   end
@@ -67,6 +60,7 @@ defmodule Core.Survey.Tool do
 
   def changeset(tool, _, params) do
     tool
+    |> cast(params, [:director])
     |> cast(params, @fields)
   end
 
@@ -131,4 +125,42 @@ defmodule Core.Survey.Tool do
     end)
     |> to_string()
   end
+end
+
+defimpl Systems.Assignment.Assignable, for: Core.Survey.Tool do
+  import CoreWeb.Gettext
+
+  def languages(%{language: nil}), do: nil
+  def languages(%{language: language}), do: [language]
+
+  def devices(%{devices: nil}), do: []
+  def devices(%{devices: devices}), do: devices
+
+  def spot_count(%{subject_count: nil}), do: 0
+  def spot_count(%{subject_count: subject_count}), do: subject_count
+  def spot_count(_), do: 0
+
+  def duration(%{duration: duration}), do: duration
+
+  def apply_label(_), do: dgettext("link-survey", "apply.cta.title")
+  def open_label(_), do: dgettext("link-survey", "open.cta.title")
+
+  def path(%{survey_url: nil}, _), do: nil
+
+  def path(%{survey_url: url}, panl_id) do
+    url_components = URI.parse(url)
+
+    query =
+      url_components.query
+      |> decode_query()
+      |> Map.put(:panl_id, panl_id)
+      |> URI.encode_query(:rfc3986)
+
+    url_components
+    |> Map.put(:query, query)
+    |> URI.to_string()
+  end
+
+  defp decode_query(nil), do: %{}
+  defp decode_query(query), do: URI.decode_query(query)
 end

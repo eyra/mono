@@ -646,7 +646,7 @@ CREATE SEQUENCE public.promotions_id_seq
 -- Name: promotions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.promotions_id_seq OWNED BY public.promotions.id;
+ALTER SEQUENCE public.promotions_id_seq OWNED BY public.Promotion.Context.id;
 
 
 --

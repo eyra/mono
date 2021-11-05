@@ -1,13 +1,7 @@
 use Mix.Config
 
 config :core,
-  promotion_plugins: [
-    survey: Link.Survey.PromotionPlugin,
-    lab: Link.Lab.PromotionPlugin
-  ],
-  crew_task_plugins: [
-    online_study: Link.Survey.CrewTaskPlugin
-  ],
+  start_pages: Link.StartPages,
   menu_items: Link.Menu.Items,
   workspace_menu_builder: Link.Layouts.Workspace.MenuBuilder,
   website_menu_builder: Link.Layouts.Website.MenuBuilder,

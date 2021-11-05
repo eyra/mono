@@ -25,11 +25,25 @@ defmodule Core.Content.Nodes do
   def get!(id), do: Repo.get!(Node, id)
   def get(id), do: Repo.get(Node, id)
 
+  def create!(attrs, %Node{} = parent) do
+    case create(attrs, parent) do
+      {:ok, node} -> node
+      _ -> nil
+    end
+  end
+
   def create(attrs, %Node{} = parent) do
     %Node{}
     |> Node.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:parent, parent)
     |> Repo.insert()
+  end
+
+  def create!(attrs) do
+    case create(attrs) do
+      {:ok, node} -> node
+      _ -> nil
+    end
   end
 
   def create(attrs) do

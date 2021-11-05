@@ -1,6 +1,7 @@
 defmodule CoreWeb.DataDonation.Uploader do
   use CoreWeb, :live_view
 
+  alias Core.Accounts
   alias Core.DataDonation.{Tools, Tool, Upload}
 
   alias EyraUI.Hero.HeroSmall
@@ -37,7 +38,9 @@ defmodule CoreWeb.DataDonation.Uploader do
         %{assigns: %{tool: tool, current_user: user}} = socket
       ) do
     Tool.store_results(tool, user, data)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Marketplace))}
+
+    {:noreply,
+     push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))}
   end
 
   def render(assigns) do

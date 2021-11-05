@@ -1,5 +1,4 @@
 defmodule Link.Marketplace.Card do
-  alias Core.Survey.Tools
   alias Core.Pools.Submission
   alias Core.ImageHelpers
   alias CoreWeb.Router.Helpers, as: Routes
@@ -12,16 +11,18 @@ defmodule Link.Marketplace.Card do
   def primary_campaign(
         %{
           id: id,
-          lab_tool: %{
-            id: edit_id,
-            # time_slots: time_slots,
-            # subject_count: subject_count,
-            promotion: %{
-              id: open_id,
-              title: title,
-              image_id: image_id,
-              themes: themes,
-              marks: marks
+          promotion: %{
+            id: open_id,
+            title: title,
+            image_id: image_id,
+            themes: themes,
+            marks: marks
+          },
+          promotable_assignment: %{
+            assignable_lab_tool: %{
+              id: edit_id
+              # time_slots: time_slots,
+              # subject_count: subject_count,
             }
           }
         },
@@ -70,28 +71,30 @@ defmodule Link.Marketplace.Card do
   def primary_campaign(
         %{
           id: id,
-          survey_tool:
-            %{
+          promotion: %{
+            id: open_id,
+            title: title,
+            image_id: image_id,
+            themes: themes,
+            marks: marks,
+            submission: submission
+          },
+          promotable_assignment: %{
+            crew: crew,
+            assignable_survey_tool: %{
               id: edit_id,
               duration: duration,
               language: language,
-              subject_count: subject_count,
-              promotion: %{
-                id: open_id,
-                title: title,
-                image_id: image_id,
-                themes: themes,
-                marks: marks,
-                submission: submission
-              }
-            } = tool
+              subject_count: subject_count
+            }
+          }
         },
         socket
       ) do
     subject_count = if subject_count === nil, do: 0, else: subject_count
     duration = if duration === nil, do: 0, else: duration
 
-    occupied_spot_count = Tools.count_tasks(tool, [:pending, :completed])
+    occupied_spot_count = Crew.Context.count_tasks(crew, [:pending, :completed])
     open_spot_count = subject_count - occupied_spot_count
 
     reward_label = dgettext("eyra-submission", "reward.title")
@@ -139,18 +142,20 @@ defmodule Link.Marketplace.Card do
   def campaign_researcher(
         %{
           id: id,
-          survey_tool: %{
-            id: edit_id,
-            duration: duration,
-            subject_count: subject_count,
-            language: language,
-            promotion: %{
-              id: open_id,
-              title: title,
-              image_id: image_id,
-              themes: themes,
-              marks: marks,
-              submission: submission
+          promotion: %{
+            id: open_id,
+            title: title,
+            image_id: image_id,
+            themes: themes,
+            marks: marks,
+            submission: submission
+          },
+          promotable_assignment: %{
+            crew: crew,
+            assignable_survey_tool: %{
+              duration: duration,
+              subject_count: subject_count,
+              language: language
             }
           }
         },
@@ -159,7 +164,6 @@ defmodule Link.Marketplace.Card do
     subject_count = if subject_count === nil, do: 0, else: subject_count
     duration = if duration === nil, do: 0, else: duration
 
-    crew = Crew.Context.get_by_reference!(:campaign, id)
     occupied_spot_count = Crew.Context.count_tasks(crew, [:pending, :completed])
     open_spot_count = subject_count - occupied_spot_count
 
@@ -194,7 +198,7 @@ defmodule Link.Marketplace.Card do
     %{
       type: type,
       id: id,
-      edit_id: edit_id,
+      edit_id: id,
       open_id: open_id,
       title: title,
       image_info: image_info,
@@ -212,7 +216,6 @@ defmodule Link.Marketplace.Card do
         %{
           id: id,
           lab_tool: %{
-            id: edit_id,
             promotion: %{
               id: open_id,
               title: title,
@@ -234,7 +237,7 @@ defmodule Link.Marketplace.Card do
     %{
       type: type,
       id: id,
-      edit_id: edit_id,
+      edit_id: id,
       open_id: open_id,
       title: title,
       image_info: image_info,

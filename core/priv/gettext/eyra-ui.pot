@@ -32,7 +32,6 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/menu/items-translations.ex:2
-#: lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.marketplace"
 msgstr ""
 
@@ -78,7 +77,7 @@ msgid "menu.item.todo"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:47
+#: lib/core_web/live/dashboard.ex:50
 msgid "dashboard.title"
 msgstr ""
 
@@ -88,7 +87,7 @@ msgid "marketplace.title"
 msgstr ""
 
 #, elixir-format
-#: systems/next_action/overview_page.ex:49
+#: systems/next_action/overview_page.ex:50
 msgid "todo.title"
 msgstr ""
 
@@ -163,7 +162,7 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/pool/submission_page.ex:8
-#: bundles/link/lib/promotions/public.ex:6 lib/core_web/live/admin/ticket.ex:4 systems/campaign/content_page.ex:9
+#: lib/core_web/live/admin/ticket.ex:4 systems/campaign/content_page.ex:9 systems/promotion/landing_page.ex:6
 msgid "cancel.button"
 msgstr ""
 
@@ -184,7 +183,7 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/pool/submission_page.ex:8
-#: bundles/link/lib/promotions/public.ex:6 lib/core_web/live/admin/ticket.ex:4 systems/campaign/content_page.ex:9
+#: lib/core_web/live/admin/ticket.ex:4 systems/campaign/content_page.ex:9 systems/promotion/landing_page.ex:6
 msgid "ok.button"
 msgstr ""
 
@@ -244,4 +243,15 @@ msgstr ""
 #, elixir-format
 #: lib/core_web/controllers/user_auth.ex:138
 msgid "authentication.required.error"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/start_page_translations.ex:2
+#: lib/core_web/live/start_page_translations.ex:2
+msgid "start.page.dashboard"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/start_page_translations.ex:2
+msgid "start.page.marketplace"
 msgstr ""

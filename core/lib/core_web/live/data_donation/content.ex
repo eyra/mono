@@ -12,11 +12,11 @@ defmodule CoreWeb.DataDonation.Content do
 
   alias EyraUI.Hero.HeroSmall
   alias Core.DataDonation.Tools
-  alias Core.Promotions
+  alias Systems.Promotion
 
   alias CoreWeb.ImageCatalogPicker
   alias CoreWeb.DataDonation.Form, as: ToolForm
-  alias CoreWeb.Promotion.Form, as: PromotionForm
+  alias Systems.Promotion.FormView, as: PromotionForm
 
   data(tool_id, :any)
   data(promotion_id, :any)
@@ -51,7 +51,7 @@ defmodule CoreWeb.DataDonation.Content do
   def handle_auto_save_done(socket), do: socket
 
   defp initial_image_query(%{promotion_id: promotion_id}) do
-    promotion = Promotions.get!(promotion_id)
+    promotion = Promotion.Context.get!(promotion_id)
 
     case promotion.themes do
       nil -> ""

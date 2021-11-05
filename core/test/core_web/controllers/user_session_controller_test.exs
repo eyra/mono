@@ -24,7 +24,7 @@ defmodule CoreWeb.UserSessionControllerTest do
 
     test "redirects if already logged in", %{conn: conn} do
       conn = get(conn, Routes.user_session_path(conn, :new))
-      assert redirected_to(conn) == "/marketplace"
+      assert redirected_to(conn) == "/dashboard"
     end
   end
 
@@ -43,7 +43,7 @@ defmodule CoreWeb.UserSessionControllerTest do
       # Now do a logged in request and assert on the menu
       conn = get(conn, "/")
       response = html_response(conn, 200)
-      assert response =~ "Marketplace"
+      assert response =~ "Eyra Next"
     end
 
     test "logs the user in with remember me", %{conn: conn, user: user, password: password} do

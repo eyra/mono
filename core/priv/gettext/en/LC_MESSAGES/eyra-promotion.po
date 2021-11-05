@@ -12,178 +12,153 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core/promotions/promotion.ex:95
-msgid "created.label"
-msgstr "Created"
-
-#, elixir-format
-#: bundles/link/lib/promotions/public.ex:249
-#: lib/core_web/live/promotion/public.ex:178
+#: systems/promotion/landing_page.ex:201
 msgid "back.button.label"
 msgstr "Back"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:199
+#: systems/promotion/form_view.ex:208
 msgid "banner.subtitle.label"
 msgstr "Description"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:186
+#: systems/promotion/form_view.ex:195
 msgid "banner.title"
 msgstr "About you or your team"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:198
+#: systems/promotion/form_view.ex:207
 msgid "banner.title.label"
 msgstr "Name"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:200
+#: systems/promotion/form_view.ex:209
 msgid "banner.url.label"
 msgstr "Website"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:192
+#: systems/promotion/form_view.ex:201
 msgid "choose.banner.photo.file"
 msgstr "Select picture"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:193
+#: systems/promotion/form_view.ex:202
 msgid "choose.other.banner.photo.file"
 msgstr "Choose different photo"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:38 lib/core_web/view_model/card.ex:39
+#: bundles/link/lib/card.ex:43
 msgid "deadline.label"
 msgstr "Still %{days} days available"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:183
+#: systems/promotion/form_view.ex:192
 msgid "description.label"
 msgstr "Provide some background information about this study"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:226
-#: lib/core_web/live/promotion/public.ex:148
+#: systems/promotion/landing_page.ex:178
 msgid "description.public.label"
 msgstr "About this study"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:182
+#: systems/promotion/form_view.ex:191
 msgid "description.title"
 msgstr "Why are you performing this study?"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:240
-#: lib/core_web/live/promotion/public.ex:171
+#: systems/promotion/landing_page.ex:192
 msgid "devices.available.label"
 msgstr "Available on:"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:35 bundles/link/lib/card.ex:94
-#: bundles/link/lib/card.ex:163
+#: bundles/link/lib/card.ex:40 bundles/link/lib/card.ex:101
+#: bundles/link/lib/card.ex:172
 msgid "duration.title"
 msgstr "Duration"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:179
+#: systems/promotion/form_view.ex:188
 msgid "expectations.label"
 msgstr "Describe what is expected of participants"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:222
-#: lib/core_web/live/promotion/public.ex:144
+#: systems/promotion/landing_page.ex:174
 msgid "expectations.public.label"
 msgstr "What to expect?"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:178
+#: systems/promotion/form_view.ex:187
 msgid "expectations.title"
 msgstr "What do participants have to do?"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:167
+#: systems/promotion/form_view.ex:176
 msgid "image.label"
 msgstr "This image is used as a cover image for your promotion page and your marketplace tile."
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:166
+#: systems/promotion/form_view.ex:175
 msgid "image.title"
 msgstr "Cover image"
 
 #, elixir-format
-#: lib/core_web/live/promotion/public.ex:167
-msgid "keep.me.updated.button.label"
-msgstr "Keep me updated"
-
-#, elixir-format
-#: lib/core_web/live/promotion/public.ex:165
-msgid "keep.me.updated.text"
-msgstr "Register here for our newsletter"
-
-#, elixir-format
-#: lib/core_web/live/promotion/public.ex:163
-msgid "keep.me.updated.title"
-msgstr "Curious for the results of this study?"
-
-#, elixir-format
-#: bundles/link/lib/card.ex:37 bundles/link/lib/card.ex:95
-#: bundles/link/lib/card.ex:164 lib/core_web/view_model/card.ex:38
+#: bundles/link/lib/card.ex:42 bundles/link/lib/card.ex:102
+#: bundles/link/lib/card.ex:173
 msgid "open.spots.label"
 msgstr "%{count} open spots"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:36 lib/core_web/view_model/card.ex:37
+#: bundles/link/lib/card.ex:41
 msgid "reward.title"
 msgstr "Credits"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:173
+#: systems/promotion/form_view.ex:182
 msgid "search.different.image.button"
 msgstr "Change cover"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:102
-#: lib/core_web/live/promotion/form.ex:157
+#: systems/campaign/model.ex:92 systems/promotion/form_view.ex:166
 msgid "subtitle.label"
 msgstr "Can you explain in one line what your study is about?"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:161
+#: systems/promotion/form_view.ex:170
 msgid "themes.label"
 msgstr "Which theme fits your study best? You could select multiple."
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:160
+#: systems/promotion/form_view.ex:169
 msgid "themes.title"
 msgstr "Themes"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:156
+#: systems/promotion/form_view.ex:165
 msgid "title.label"
 msgstr "Title"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:152
+#: systems/promotion/form_view.ex:161
 msgid "form.title"
 msgstr "Promotion"
 
 #, elixir-format
-#: lib/core_web/live/promotion/form.ex:153
+#: systems/promotion/form_view.ex:162
 msgid "form.description"
 msgstr "Promotions will be published in the marketplace to recruit participants. Preview the promotion page to view what participants will see when they click your marketplace tile."
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:145
+#: systems/promotion/landing_page.ex:98
 msgid "preview.inform.text"
 msgstr "This feature does not work in preview mode."
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:144
+#: systems/promotion/landing_page.ex:97
 msgid "preview.inform.title"
 msgstr "Preview"
 
 #, elixir-format
-#: bundles/link/lib/promotions/public.ex:241
+#: systems/promotion/landing_page.ex:193
 msgid "languages.available.label"
 msgstr "Language:"

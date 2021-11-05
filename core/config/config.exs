@@ -16,12 +16,13 @@ config :logger, :console,
   metadata: [:request_id]
 
 config :core,
+  start_pages: CoreWeb.StartPages,
   image_catalog: Core.ImageCatalog.Unsplash,
-  promotion_plugins: [data_donation: CoreWeb.DataDonation.PromotionPlugin],
   menu_items: CoreWeb.Menu.Items,
   workspace_menu_builder: CoreWeb.Layouts.Workspace.MenuBuilder,
   website_menu_builder: CoreWeb.Layouts.Website.MenuBuilder,
-  stripped_menu_builder: CoreWeb.Layouts.Stripped.MenuBuilder
+  stripped_menu_builder: CoreWeb.Layouts.Stripped.MenuBuilder,
+  banking_backend: Systems.Banking.Dummy
 
 config :core, CoreWeb.Gettext, default_locale: "nl", locales: ~w(en nl)
 

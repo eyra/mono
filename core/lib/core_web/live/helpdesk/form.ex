@@ -7,6 +7,7 @@ defmodule CoreWeb.Helpdesk.Form do
   alias EyraUI.Button.SubmitButton
   alias Core.Helpdesk
   alias Core.Enums
+  alias Core.Accounts
   alias EyraUI.Selector.Selector
 
   prop(user, :any, required: true)
@@ -65,7 +66,7 @@ defmodule CoreWeb.Helpdesk.Form do
         {:noreply,
          socket
          |> put_flash(:info, dgettext("eyra-support", "ticket_created.info.flash"))
-         |> push_redirect(to: Routes.live_path(socket, CoreWeb.Marketplace))}
+         |> push_redirect(to: Routes.live_path(socket, Accounts.start_page_target(user)))}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}

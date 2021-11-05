@@ -6,18 +6,13 @@ defmodule Core.Lab.Tool do
 
   import Ecto.Changeset
 
-  alias Core.Accounts.User
-  alias Core.Promotions.Promotion
-  alias Systems.Campaign.Model, as: Study
-
   schema "lab_tools" do
     belongs_to(:content_node, Core.Content.Node)
     belongs_to(:auth_node, Core.Authorization.Node)
-    belongs_to(:study, Study)
-    belongs_to(:promotion, Promotion)
 
     has_many(:time_slots, Core.Lab.TimeSlot, preload_order: [asc: :start_time])
-    many_to_many(:participants, User, join_through: :lab_reservations)
+
+    field(:director, Ecto.Enum, values: [:assignment])
 
     timestamps()
   end
@@ -37,6 +32,7 @@ defmodule Core.Lab.Tool do
 
   def changeset(tool, :mount, params) do
     tool
+    |> cast(params, [:director])
     |> cast(params, @fields)
   end
 
@@ -45,4 +41,20 @@ defmodule Core.Lab.Tool do
     |> cast(params, @fields)
     |> validate_required(@required_fields)
   end
+end
+
+defimpl Systems.Assignment.Assignable, for: Core.Lab.Tool do
+  import CoreWeb.Gettext
+
+  def languages(_), do: []
+  def devices(_), do: []
+
+  def spot_count(%{time_slots: nil}), do: 0
+  def spot_count(%{time_slots: time_slots}), do: Enum.count(time_slots)
+  def spot_count(_), do: 0
+
+  def duration(_), do: 0
+  def apply_label(_), do: dgettext("link-lab", "apply.cta.title")
+  def open_label(_), do: dgettext("link-lab", "open.cta.title")
+  def path(_, _panl_id), do: nil
 end
