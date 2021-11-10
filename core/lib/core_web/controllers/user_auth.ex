@@ -158,7 +158,7 @@ defmodule CoreWeb.UserAuth do
     if Accounts.visited?(user, :onboarding) do
       nil
     else
-      onboarding_page = page(:participant_onboarding_page, CoreWeb.Marketplace)
+      onboarding_page = page(:participant_onboarding_page, Accounts.start_page_target(user))
       Routes.live_path(conn, onboarding_page)
     end
   end
@@ -168,13 +168,14 @@ defmodule CoreWeb.UserAuth do
   defp signed_in_path(conn, user),
     do: Routes.live_path(conn, signed_in_page(user))
 
-  defp signed_in_page(%{student: true}),
-    do: page(:participant_signed_in_page, CoreWeb.Marketplace)
+  defp signed_in_page(%{student: true} = user),
+    do: page(:participant_signed_in_page, Accounts.start_page_target(user))
 
   defp signed_in_page(%{researcher: true}),
     do: page(:researcher_signed_in_page, CoreWeb.Dashboard)
 
-  defp signed_in_page(_), do: page(:participant_signed_in_page, CoreWeb.Marketplace)
+  defp signed_in_page(user),
+    do: page(:participant_signed_in_page, Accounts.start_page_target(user))
 
   defp page(key, default), do: auth_config(key, default)
 

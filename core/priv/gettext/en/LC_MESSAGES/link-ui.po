@@ -48,7 +48,7 @@ msgid "delete.button"
 msgstr "Delete"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:174
+#: bundles/link/lib/pool/submission_page.ex:172
 #: systems/campaign/content_page.ex:352 systems/campaign/content_page.ex:358 systems/campaign/content_page.ex:362
 msgid "preview.button"
 msgstr "Preview"
@@ -59,12 +59,12 @@ msgid "submit.button"
 msgstr "Submit"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:180
+#: bundles/link/lib/pool/submission_page.ex:178
 #: systems/campaign/content_page.ex:382
 msgid "retract.button"
 msgstr "Unpublish"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:166
+#: bundles/link/lib/pool/submission_page.ex:164
 msgid "accept.button"
 msgstr "Publish"

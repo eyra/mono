@@ -10,10 +10,12 @@ defmodule CoreWeb.Live.DashboardTest do
 
     test "show the researchers content", %{conn: conn, user: user} do
       data_donation_tool = Factories.insert!(:data_donation_tool)
-      Authorization.assign_role(user, data_donation_tool.study, :owner)
+      assignment = Factories.insert!(:assignment, %{datadonation_tool: data_donation_tool})
+      campaign = Factories.insert!(:campaign, %{assignment: assignment})
+      Authorization.assign_role(user, campaign, :owner)
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Dashboard))
 
-      assert html =~ data_donation_tool.promotion.title
+      assert html =~ campaign.promotion.title
     end
   end
 end

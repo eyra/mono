@@ -8,10 +8,14 @@ defmodule Core.Pools.Submissions do
   alias Core.Repo
   alias Core.Content.{Nodes, Node}
   alias Core.Pools.{Submission, Criteria}
-  alias Core.Promotions.Promotion
   alias Core.Accounts
 
-  alias Systems.NextAction
+  alias Frameworks.Signal
+
+  alias Systems.{
+    Promotion,
+    NextAction
+  }
 
   def list do
     Repo.all(Submission)
@@ -27,7 +31,7 @@ defmodule Core.Pools.Submissions do
 
   def get!(term, preload \\ [:criteria, :promotion, :content_node])
 
-  def get!(%Promotion{} = promotion, preload) do
+  def get!(%Promotion.Model{} = promotion, preload) do
     from(submission in Submission,
       where: submission.promotion_id == ^promotion.id,
       preload: ^preload
@@ -49,6 +53,7 @@ defmodule Core.Pools.Submissions do
            |> Multi.update(:submisson, changeset)
            |> Multi.update(:content_node, node_changeset)
            |> Repo.transaction() do
+      Signal.Context.dispatch!(:submisson_updated, submisson)
       {:ok, notify_when_submitted(submisson, changeset)}
     end
   end
@@ -58,10 +63,10 @@ defmodule Core.Pools.Submissions do
     __MODULE__.update(submisson, changeset)
   end
 
-  def create(promotion, pool, %Node{} = content_node) do
+  def create(%{} = attrs, promotion, pool, %Node{} = content_node) do
     submission_changeset =
       %Submission{}
-      |> Submission.changeset(%{status: :idle})
+      |> Submission.changeset(attrs)
       |> Ecto.Changeset.put_assoc(:promotion, promotion)
       |> Ecto.Changeset.put_assoc(:pool, pool)
       |> Ecto.Changeset.put_assoc(:content_node, content_node)

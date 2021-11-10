@@ -18,21 +18,22 @@ defmodule Core.Authorization do
 
   Core.BundleOverrides.grants()
 
+  grant_access(Systems.Home.LandingPage, [:visitor, :member])
   grant_access(Systems.Notification.OverviewPage, [:member])
   grant_access(Systems.NextAction.OverviewPage, [:member])
   grant_access(Systems.Campaign.OverviewPage, [:researcher])
   grant_access(Systems.Campaign.ContentPage, [:owner])
-  grant_access(Systems.Crew.TaskPage, [:participant])
-  grant_access(Systems.Crew.TaskCompletePage, [:participant])
+  grant_access(Systems.Assignment.LandingPage, [:participant])
+  grant_access(Systems.Assignment.CallbackPage, [:participant])
+  grant_access(Systems.Promotion.LandingPage, [:visitor, :member, :owner])
+  grant_access(Systems.Test.Page, [:visitor, :member])
 
   grant_access(CoreWeb.Admin.Login, [:visitor, :member])
   grant_access(CoreWeb.Admin.Permissions, [:admin])
   grant_access(CoreWeb.Admin.Support, [:admin])
   grant_access(CoreWeb.Admin.Ticket, [:admin])
-  grant_access(CoreWeb.Index, [:visitor, :member])
   grant_access(CoreWeb.Helpdesk.Public, [:member])
   grant_access(CoreWeb.Dashboard, [:researcher])
-  grant_access(CoreWeb.Marketplace, [:member])
   grant_access(CoreWeb.User.Signin, [:visitor])
   grant_access(CoreWeb.User.Signup, [:visitor])
   grant_access(CoreWeb.User.ResetPassword, [:visitor])
@@ -45,7 +46,6 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.FakeSurvey, [:member])
   grant_access(CoreWeb.DataDonation.Content, [:owner, :coordinator])
   grant_access(CoreWeb.DataDonation.Uploader, [:member])
-  grant_access(CoreWeb.Promotion.Public, [:visitor, :member, :owner])
   grant_access(CoreWeb.Lab.Public, [:member])
 
   grant_access(Systems.Campaign.Model, [:visitor, :member])
@@ -85,6 +85,11 @@ defmodule Core.Authorization do
   })
 
   def make_node(), do: %Core.Authorization.Node{}
+
+  def make_node(%Core.Authorization.Node{} = parent) do
+    %Core.Authorization.Node{parent_id: parent.id}
+  end
+
   def make_node(nil), do: make_node()
 
   def make_node(parent_id) when is_integer(parent_id) do
@@ -98,6 +103,13 @@ defmodule Core.Authorization do
   def create_node(parent \\ nil) do
     case make_node(parent) |> Core.Repo.insert() do
       {:ok, node} -> {:ok, node.id}
+      error -> error
+    end
+  end
+
+  def create_node!(parent \\ nil) do
+    case make_node(parent) |> Core.Repo.insert() do
+      {:ok, node} -> node
       error -> error
     end
   end

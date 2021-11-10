@@ -1,5 +1,7 @@
 defmodule Frameworks.Signal.Handler do
-  @callback dispatch(signal :: atom(), message :: any()) :: any()
+  @type signal :: atom | map
+  @type message :: any
+  @callback dispatch(signal, message) :: any()
   defmacro __using__(_opts) do
     quote do
       @behaviour Frameworks.Signal.Handler

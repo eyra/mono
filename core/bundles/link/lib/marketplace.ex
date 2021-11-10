@@ -8,7 +8,7 @@ defmodule Link.Marketplace do
   alias Systems.{
     NextAction,
     Campaign,
-    Crew
+    Assignment
   }
 
   alias Core.ImageHelpers
@@ -39,10 +39,7 @@ defmodule Link.Marketplace do
     next_best_action = NextAction.Context.next_best_action(url_resolver(socket), user)
     user = socket.assigns[:current_user]
 
-    preload = [
-      survey_tool: [promotion: [submission: [:criteria]]],
-      lab_tool: [:promotion, :time_slots]
-    ]
+    preload = Campaign.Model.preload_graph(:full)
 
     subject_campaigns =
       user
@@ -81,13 +78,13 @@ defmodule Link.Marketplace do
     {:ok, socket}
   end
 
-  defp filter(studies, socket) when is_list(studies) do
-    Enum.filter(studies, &filter(&1, socket))
+  defp filter(campaigns, socket) when is_list(campaigns) do
+    Enum.filter(campaigns, &filter(&1, socket))
   end
 
   defp filter(
          %{
-           survey_tool: %{promotion: %{submission: %{criteria: submission_criteria} = submission}}
+           promotion: %{submission: %{criteria: submission_criteria} = submission}
          },
          %{assigns: %{current_user: user}}
        ) do
@@ -110,8 +107,12 @@ defmodule Link.Marketplace do
      )}
   end
 
-  def handle_info({:card_click, %{action: :public, id: id}}, socket) do
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, Link.Promotion.Public, id))}
+  def handle_info(
+        {:card_click, %{action: :public, id: id}},
+        %{assigns: %{uri_path: uri_path}} = socket
+      ) do
+    promotion_path = Routes.live_path(socket, Systems.Promotion.LandingPage, id, back: uri_path)
+    {:noreply, push_redirect(socket, to: promotion_path)}
   end
 
   @impl true
@@ -185,12 +186,13 @@ defmodule Link.Marketplace do
   def convert_to_vm(socket, %{
         id: id,
         updated_at: updated_at,
-        survey_tool: %{
-          promotion: %{
-            title: title,
-            image_id: image_id,
-            submission: submission
-          }
+        promotion: %{
+          title: title,
+          image_id: image_id,
+          submission: submission
+        },
+        promotable_assignment: %{
+          id: assignment_id
         }
       }) do
     tag = Submission.get_tag(submission)
@@ -202,9 +204,9 @@ defmodule Link.Marketplace do
 
     %{
       id: id,
-      path: Routes.live_path(socket, Crew.TaskPage, :campaign, id),
+      path: Routes.live_path(socket, Assignment.LandingPage, assignment_id),
       title: title,
-      subtitle: subtitle || "<no subtitle>",
+      subtitle: subtitle,
       tag: tag,
       level: :critical,
       image: image,

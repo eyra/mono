@@ -6,15 +6,12 @@ defmodule CoreWeb.Live.Routes do
         :helpdesk,
         :data_donation,
         :lab,
-        :promotion,
         :user,
         :admin
       ]
 
       scope "/", CoreWeb do
         pipe_through(:browser)
-        live("/", Index)
-
         get("/switch-language/:locale", LanguageSwitchController, :index)
         live("/fake_survey/:id", FakeSurvey)
       end
@@ -23,7 +20,6 @@ defmodule CoreWeb.Live.Routes do
         pipe_through([:browser, :require_authenticated_user])
         live("/onboarding", Onboarding)
         live("/dashboard", Dashboard)
-        live("/marketplace", Marketplace)
       end
 
       if Mix.env() in [:dev, :test] do
@@ -32,6 +28,13 @@ defmodule CoreWeb.Live.Routes do
         scope "/" do
           pipe_through(:browser)
           live_dashboard("/phoenix-dashboard", metrics: CoreWeb.Telemetry)
+        end
+      end
+
+      if Mix.env() in [:test] do
+        scope "/test", Systems.Test do
+          pipe_through(:browser)
+          live("/page/:id", Page)
         end
       end
     end

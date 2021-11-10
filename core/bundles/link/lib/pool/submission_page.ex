@@ -9,10 +9,9 @@ defmodule Link.Pool.SubmissionPage do
 
   import CoreWeb.Gettext
 
-  alias Core.Survey.Tools
   alias Core.Accounts.User
   alias Systems.Campaign
-  alias Core.Promotions
+  alias Systems.Promotion
   alias Core.Pools.{Submissions, Submission}
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
@@ -36,9 +35,8 @@ defmodule Link.Pool.SubmissionPage do
   @impl true
   def mount(%{"id" => submission_id}, _session, socket) do
     submission = Submissions.get!(submission_id)
-    promotion = Promotions.get!(submission.promotion_id)
-    tool = Tools.get_by_promotion(submission.promotion_id)
-    campaign = Campaign.Context.get!(tool.study_id)
+    promotion = Promotion.Context.get!(submission.promotion_id)
+    campaign = Campaign.Context.get_by_promotion(submission.promotion_id)
     owners = Campaign.Context.list_owners(campaign, [:profile, :features])
     owner = List.first(owners)
     member = to_member(owner, promotion)
@@ -54,7 +52,9 @@ defmodule Link.Pool.SubmissionPage do
     byline = dgettext("eyra-submission", "byline", timestamp: update_at)
 
     preview_path =
-      Routes.live_path(socket, Link.Promotion.Public, submission.promotion_id, preview: true)
+      Routes.live_path(socket, Systems.Promotion.LandingPage, submission.promotion_id,
+        preview: true
+      )
 
     {
       :ok,
@@ -62,6 +62,7 @@ defmodule Link.Pool.SubmissionPage do
       |> assign(
         member: member,
         submission_id: submission_id,
+        promotion_id: submission.promotion_id,
         title: submission.promotion.title,
         byline: byline,
         accepted?: accepted?,
@@ -74,6 +75,19 @@ defmodule Link.Pool.SubmissionPage do
       )
       |> update_menus()
     }
+  end
+
+  defoverridable handle_uri: 1
+
+  @impl true
+  def handle_uri(%{assigns: %{uri_path: uri_path, promotion_id: promotion_id}} = socket) do
+    preview_path =
+      Routes.live_path(socket, Systems.Promotion.LandingPage, promotion_id,
+        preview: true,
+        back: uri_path
+      )
+
+    super(assign(socket, preview_path: preview_path))
   end
 
   @impl true

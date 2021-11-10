@@ -12,21 +12,21 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/crew/task_complete_page.ex:73
+#: systems/assignment/callback_page.ex:73
 msgid "task.completed.message.part1"
 msgstr "Jouw bijdrage wordt automatisch goedgekeurd, maar zal door de auteur van de studie beoordeeld worden. Als je binnen twee weken geen afwijzing ontvangt, wordt de beloning definitief toegekend."
 
 #, elixir-format
-#: systems/crew/task_complete_page.ex:75
+#: systems/assignment/callback_page.ex:75
 msgid "task.completed.message.part2"
 msgstr "Bezoek de marktplaats om jouw bijdragen en andere beschikbare studies te bekijken."
 
 #, elixir-format
-#: systems/crew/task_complete_page.ex:71
+#: systems/assignment/callback_page.ex:71
 msgid "task.completed.title"
 msgstr "Bedankt voor jouw deelname"
 
 #, elixir-format
-#: systems/crew/task_page.ex:92
+#: systems/assignment/landing_page.ex:85
 msgid "withdraw.button"
 msgstr "Afmelden"

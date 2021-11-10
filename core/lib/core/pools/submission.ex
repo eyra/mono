@@ -9,7 +9,7 @@ defmodule Core.Pools.Submission do
   import Ecto.Changeset
 
   alias Core.Pools.{Criteria, Pool}
-  alias Core.Promotions.Promotion
+  alias Systems.Promotion
   alias CoreWeb.UI.Timestamp
 
   schema "pool_submissions" do
@@ -20,10 +20,12 @@ defmodule Core.Pools.Submission do
     field(:schedule_end, :string)
 
     has_one(:criteria, Criteria)
-    belongs_to(:promotion, Promotion)
+    belongs_to(:promotion, Promotion.Model)
     belongs_to(:pool, Pool)
 
     belongs_to(:content_node, Core.Content.Node)
+
+    field(:director, Ecto.Enum, values: [:campaign])
 
     timestamps()
   end
@@ -67,6 +69,7 @@ defmodule Core.Pools.Submission do
 
   def changeset(submission, attrs) do
     submission
+    |> cast(attrs, [:director])
     |> cast(attrs, @fields)
   end
 

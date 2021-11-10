@@ -31,7 +31,7 @@ msgid "menu.item.dashboard"
 msgstr "Dashboard"
 
 #, elixir-format
-#: translations.ex:2 lib/core_web/live/menu/items_translations.ex:2
+#: translations.ex:2
 msgid "menu.item.marketplace"
 msgstr "Marketplace"
 
@@ -72,7 +72,7 @@ msgid "menu.item.todo"
 msgstr "To-do"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:47
+#: lib/core_web/live/dashboard.ex:50
 msgid "dashboard.title"
 msgstr "Dashboard"
 
@@ -82,7 +82,7 @@ msgid "marketplace.title"
 msgstr "Marketplace"
 
 #, elixir-format
-#: systems/next_action/overview_page.ex:49
+#: systems/next_action/overview_page.ex:50
 msgid "todo.title"
 msgstr "To-do"
 
@@ -156,7 +156,7 @@ msgstr "Helpdesk"
 
 #, elixir-format
 #: bundles/link/lib/pool/submission_page.ex:8
-#: bundles/link/lib/promotions/public.ex:6 lib/core_web/live/admin/ticket.ex:4 systems/campaign/content_page.ex:9
+#: lib/core_web/live/admin/ticket.ex:4 systems/campaign/content_page.ex:9 systems/promotion/landing_page.ex:6
 msgid "cancel.button"
 msgstr "Cancel"
 
@@ -177,7 +177,7 @@ msgstr "Delete"
 
 #, elixir-format
 #: bundles/link/lib/pool/submission_page.ex:8
-#: bundles/link/lib/promotions/public.ex:6 lib/core_web/live/admin/ticket.ex:4 systems/campaign/content_page.ex:9
+#: lib/core_web/live/admin/ticket.ex:4 systems/campaign/content_page.ex:9 systems/promotion/landing_page.ex:6
 msgid "ok.button"
 msgstr "OK"
 
@@ -236,3 +236,14 @@ msgstr "Close %{item}?"
 #: lib/core_web/controllers/user_auth.ex:138
 msgid "authentication.required.error"
 msgstr "Please sign in to view this page."
+
+#, elixir-format
+#: bundles/link/lib/start_page_translations.ex:2
+#: lib/core_web/live/start_page_translations.ex:2
+msgid "start.page.dashboard"
+msgstr "Go to dashboard"
+
+#, elixir-format
+#: bundles/link/lib/start_page_translations.ex:2
+msgid "start.page.marketplace"
+msgstr "Go to marketplace"

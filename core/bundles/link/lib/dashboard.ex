@@ -24,10 +24,7 @@ defmodule Link.Dashboard do
   data(next_best_action, :any)
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    preload = [
-      survey_tool: [promotion: [:content_node, :submission]],
-      lab_tool: [promotion: [:content_node, :submission]]
-    ]
+    preload = Campaign.Model.preload_graph(:full)
 
     content_items =
       user
@@ -119,16 +116,18 @@ defmodule Link.Dashboard do
   end
 
   def convert_to_vm(socket, %{
-        id: id,
         updated_at: updated_at,
-        survey_tool: %{
-          id: edit_id,
-          subject_count: target_subject_count,
-          promotion: %{
-            title: title,
-            image_id: image_id,
-            content_node: promotion_content_node,
-            submission: submission
+        promotion: %{
+          title: title,
+          image_id: image_id,
+          content_node: promotion_content_node,
+          submission: submission
+        },
+        promotable_assignment: %{
+          crew: crew,
+          assignable_survey_tool: %{
+            id: edit_id,
+            subject_count: target_subject_count
           }
         }
       }) do
@@ -141,7 +140,6 @@ defmodule Link.Dashboard do
         target_subject_count
       end
 
-    crew = Crew.Context.get_by_reference!(:campaign, id)
     current_subject_count = Crew.Context.count_tasks(crew, [:pending, :completed])
 
     subtitle =
@@ -159,7 +157,7 @@ defmodule Link.Dashboard do
     %{
       path: Routes.live_path(socket, Systems.Campaign.ContentPage, edit_id),
       title: title,
-      subtitle: subtitle || "<no subtitle>",
+      subtitle: subtitle,
       tag: tag,
       level: :critical,
       image: image,
@@ -169,13 +167,15 @@ defmodule Link.Dashboard do
 
   def convert_to_vm(socket, %{
         updated_at: updated_at,
-        lab_tool: %{
-          id: edit_id,
-          promotion: %{
-            title: title,
-            image_id: image_id,
-            content_node: promotion_content_node,
-            submission: submission
+        promotion: %{
+          title: title,
+          image_id: image_id,
+          content_node: promotion_content_node,
+          submission: submission
+        },
+        promotable_assignment: %{
+          assignabel_lab_tool: %{
+            id: edit_id
           }
         }
       }) do

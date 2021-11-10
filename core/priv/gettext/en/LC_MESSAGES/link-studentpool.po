@@ -38,12 +38,12 @@ msgid "students.empty.title"
 msgstr "Students participating in this pool will appear here"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:72
+#: bundles/link/lib/pool/views/campaigns_view.ex:75
 msgid "campaigns.empty.description"
 msgstr "As soon as researchers publish a campaign in your pool to recruit participants for their study it will be added here. You can schedule when campaigns will become available in the marketplace for eligible participants."
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:71
+#: bundles/link/lib/pool/views/campaigns_view.ex:74
 msgid "campaigns.empty.title"
 msgstr "Campaigns in your pool"
 
@@ -58,41 +58,41 @@ msgid "student.tag.incomplete"
 msgstr "Incompleet"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:64
+#: bundles/link/lib/pool/views/campaigns_view.ex:67
 msgid "accepted.title"
 msgstr "Published"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:100
+#: bundles/link/lib/pool/views/campaigns_view.ex:103
 msgid "status.submitted.label"
 msgstr "Pending"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:58
+#: bundles/link/lib/pool/views/campaigns_view.ex:61
 msgid "submitted.title"
 msgstr "Submitted by researchers"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:130
+#: bundles/link/lib/pool/views/campaigns_view.ex:134
 msgid "spots.available"
 msgstr "%{open} out of %{total} spots available"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:199
+#: bundles/link/lib/pool/submission_page.ex:197
 msgid "submission.title"
 msgstr "Campaign"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:118
+#: bundles/link/lib/pool/views/campaigns_view.ex:121
 msgid "status.accepted.closed.label"
 msgstr "Closed"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:112
+#: bundles/link/lib/pool/views/campaigns_view.ex:115
 msgid "status.accepted.online.label"
 msgstr "Online"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:106
+#: bundles/link/lib/pool/views/campaigns_view.ex:109
 msgid "status.accepted.scheduled.label"
 msgstr "Scheduled"

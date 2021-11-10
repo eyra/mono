@@ -22,26 +22,26 @@ msgid "form.title"
 msgstr "Helpdesk"
 
 #, elixir-format
-#: lib/core_web/live/helpdesk/form.ex:91
+#: lib/core_web/live/helpdesk/form.ex:92
 msgid "ticket.description.label"
 msgstr "Description"
 
 #, elixir-format
-#: lib/core_web/live/helpdesk/form.ex:89
+#: lib/core_web/live/helpdesk/form.ex:90
 msgid "ticket.title.label"
 msgstr "Subject"
 
 #, elixir-format
-#: lib/core_web/live/helpdesk/form.ex:93
+#: lib/core_web/live/helpdesk/form.ex:94
 msgid "create_ticket.button"
 msgstr "Submit"
 
 #, elixir-format
-#: lib/core_web/live/helpdesk/form.ex:67
+#: lib/core_web/live/helpdesk/form.ex:68
 msgid "ticket_created.info.flash"
 msgstr "Report is received"
 
 #, elixir-format
-#: lib/core_web/live/helpdesk/form.ex:85
+#: lib/core_web/live/helpdesk/form.ex:86
 msgid "ticket.type"
 msgstr "Form"

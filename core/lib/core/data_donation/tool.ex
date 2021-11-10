@@ -10,24 +10,18 @@ defmodule Core.DataDonation.Tool do
   import Ecto.Changeset
   import EctoCommons.URLValidator
 
-  alias Systems.Campaign.Model, as: Study
-  alias Core.Accounts.User
-  alias Core.Promotions.Promotion
   alias Core.DataDonation.UserData
 
   schema "data_donation_tools" do
     belongs_to(:content_node, Core.Content.Node)
     belongs_to(:auth_node, Core.Authorization.Node)
-    belongs_to(:study, Study, source: :id)
-    belongs_to(:promotion, Promotion)
 
     field(:script, :string)
     field(:reward_currency, Ecto.Enum, values: [:eur, :usd, :gbp, :chf, :nok, :sek])
     field(:reward_value, :integer)
     field(:subject_count, :integer)
 
-    has_many(:tasks, Core.DataDonation.Task)
-    many_to_many(:participants, User, join_through: :data_donation_participants)
+    field(:director, Ecto.Enum, values: [:assignment])
 
     timestamps()
   end
@@ -47,6 +41,7 @@ defmodule Core.DataDonation.Tool do
 
   def changeset(tool, :mount, params) do
     tool
+    |> cast(params, [:director])
     |> cast(params, @fields)
   end
 
@@ -76,4 +71,18 @@ defmodule Core.DataDonation.Tool do
     |> UserData.changeset(%{tool: tool, user: user, data: data})
     |> Repo.insert!()
   end
+end
+
+defimpl Systems.Assignment.Assignable, for: Core.DataDonation.Tool do
+  import CoreWeb.Gettext
+
+  def languages(_), do: []
+  def devices(_), do: []
+  def spot_count(%{subject_count: nil}), do: 0
+  def spot_count(%{subject_count: subject_count}), do: subject_count
+  def spot_count(_), do: 0
+  def duration(_), do: nil
+  def path(_, _), do: nil
+  def apply_label(_), do: dgettext("eyra-data-donation", "apply.cta.title")
+  def open_label(_), do: dgettext("eyra-data-donation", "open.cta.title")
 end

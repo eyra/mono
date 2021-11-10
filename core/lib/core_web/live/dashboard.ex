@@ -7,8 +7,10 @@ defmodule CoreWeb.Dashboard do
 
   alias CoreWeb.UI.ContentListItem
 
-  alias Systems.Campaign
-  alias Systems.NextAction
+  alias Systems.{
+    Campaign,
+    NextAction
+  }
 
   alias EyraUI.Text.{Title2}
   alias Core.ImageHelpers
@@ -20,12 +22,13 @@ defmodule CoreWeb.Dashboard do
   data(next_best_action, :any)
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    preload = [data_donation_tool: [:promotion]]
+    preload = Campaign.Model.preload_graph(:full)
 
     # FIXME: Refactor to use content node
     content_items =
       user
       |> Campaign.Context.list_owned_campaigns(preload: preload)
+      |> Enum.map(&Campaign.Model.flatten(&1))
       |> Enum.map(&convert_to_vm(socket, &1))
 
     socket =
@@ -62,16 +65,21 @@ defmodule CoreWeb.Dashboard do
     """
   end
 
-  def convert_to_vm(socket, %{
-        data_donation_tool: %{
-          id: edit_id,
+  def convert_to_vm(
+        socket,
+        %{
           promotion: %{
             title: title,
             subtitle: subtitle,
             image_id: image_id
+          },
+          promotable: %{
+            assignable_data_donation_tool: %{
+              id: edit_id
+            }
           }
         }
-      }) do
+      ) do
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
     image = %{type: :catalog, info: image_info}
 

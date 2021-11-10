@@ -27,25 +27,22 @@ msgid "duration.label"
 msgstr "Hoeveel minuten schat je in dat deelnemers nodig hebben?"
 
 #, elixir-format
-#: bundles/link/lib/lab/promotion_plugin.ex:50
-#: bundles/link/lib/survey/data/promotion_plugin.ex:76
+#: systems/campaign/model.ex:98 systems/promotion/form_view.ex:115
 msgid "by.author.label"
 msgstr "Door"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:145
-#: bundles/link/lib/survey/data/promotion_plugin.ex:99
+#: systems/promotion/model.ex:141
 msgid "reward.highlight.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:91
+#: systems/assignment/model.ex:222
 msgid "spots.highlight.title"
 msgstr "Beschikbare plekken"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:104
-#: bundles/link/lib/survey/data/promotion_plugin.ex:64
+#: lib/core/survey/tool.ex:145
 msgid "apply.cta.title"
 msgstr "Meld je aan"
 
@@ -55,7 +52,7 @@ msgid "devices.label"
 msgstr "Welke apparaten kunnen door deelnemers gebruikt worden?"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:99
+#: lib/core/survey/tool.ex:146
 msgid "open.cta.title"
 msgstr "Naar vragenlijst"
 
@@ -75,27 +72,27 @@ msgid "devices.title"
 msgstr "Apparaten"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:75
+#: systems/campaign/monitor_view.ex:76
 msgid "completed.label"
 msgstr "Afgeronde taken"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:76
+#: systems/campaign/monitor_view.ex:77
 msgid "pending.label"
 msgstr "Deelnemers bezig"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:72
+#: systems/campaign/monitor_view.ex:73
 msgid "status.title"
 msgstr "Voortgang"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:77
+#: systems/campaign/monitor_view.ex:78
 msgid "vacant.label"
 msgstr "Open taken"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:73
+#: systems/campaign/monitor_view.ex:74
 msgid "status.label"
 msgstr "Volg hieronder de voortgang van je campagne."
 
@@ -105,27 +102,27 @@ msgid "content.title"
 msgstr "Campagne"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:115
+#: systems/campaign/overview_page.ex:62
 msgid "title"
 msgstr "Werving"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:149
+#: systems/campaign/overview_page.ex:96
 msgid "add.first.button"
 msgstr "Start je eerste campagne"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:130
+#: systems/campaign/overview_page.ex:77
 msgid "add.new.button"
 msgstr "Start nieuwe campagne"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:145
+#: systems/campaign/overview_page.ex:92
 msgid "empty.description"
 msgstr "Hier kun je campagnes opzetten en hun status volgen. Een campagne is een georganiseerde werkwijze om een doel te behalen, in dit geval het werven van deelnemers. Het bestaat uit het opzetten van een advertentie voor in de marktplaats, het koppelen van jouw studie details, het bepalen van jouw sample, en het reviewen van de resultaten."
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:144
+#: systems/campaign/overview_page.ex:91
 msgid "empty.title"
 msgstr "Werf deelnemers voor jouw studie"
 
@@ -145,12 +142,12 @@ msgid "tabbar.item.survey"
 msgstr "Studie"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:82
+#: systems/campaign/monitor_view.ex:83
 msgid "monitor.empty.description"
 msgstr "Na publicatie van jouw wervingscampagne, vind je hier een lijst van geanonimiseerde deelnemers, die zich aangemeld hebben voor jouw studie. Je kunt hier hun status bekijken en na afronding van hun taak, de resultaten accepteren of afwijzen."
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:81
+#: systems/campaign/monitor_view.ex:82
 msgid "monitor.empty.title"
 msgstr "Resultaten"
 
@@ -185,7 +182,7 @@ msgid "form.title"
 msgstr "Studie"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:124
+#: systems/campaign/overview_page.ex:71
 msgid "campaign.overview.title"
 msgstr "Campagnes"
 
@@ -266,17 +263,17 @@ msgid "form.description"
 msgstr "Doorloop eerst de stappen in het zwarte kader. Zo zorg je ervoor dat deelnemers vanuit Panl deel kunnen nemen aan jouw online studie en na afloop weer teruggestuurd worden naar Panl."
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:97
+#: systems/assignment/model.ex:228
 msgid "duration.highlight.text"
 msgstr "%{duration} minuten"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:96
+#: systems/assignment/model.ex:227
 msgid "duration.highlight.title"
 msgstr "Duur"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/promotion_plugin.ex:94
+#: systems/assignment/model.ex:225
 msgid "spots.highlight.text"
 msgstr "Nog %{open} van de %{total}"
 
@@ -286,41 +283,41 @@ msgid "ethical.review.link"
 msgstr "ethische checklist"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:32
+#: systems/assignment/model.ex:81
 msgid "task.hero.title"
 msgstr "Online Studie"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:45
+#: systems/assignment/model.ex:175
 msgid "task.completed.subtitle"
 msgstr "Je hebt deze vragenlijst ingevuld"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:52
+#: systems/assignment/model.ex:178
 msgid "task.completed.text"
 msgstr "Jouw bijdrage wordt door de auteur van deze studie beoordeeld. Als je binnen twee weken na afronding van de vragenlijst geen afkeuring hebt ontvangen, is de toegewezen beloning definitief."
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:44
+#: systems/assignment/model.ex:174
 msgid "task.pending.subtitle"
 msgstr "Je bent aangemeld voor deelname"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:137
+#: systems/assignment/model.ex:201
 msgid "completed.highlight.default"
 msgstr "Nog niet afgerond"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:132
+#: systems/assignment/model.ex:196
 msgid "completed.highlight.title"
 msgstr "Afgerond"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:124
+#: systems/assignment/model.ex:188
 msgid "started.highlight.default"
 msgstr "Nog niet gestart"
 
 #, elixir-format
-#: bundles/link/lib/survey/data/crew_task_plugin.ex:119
+#: systems/assignment/model.ex:183
 msgid "started.highlight.title"
 msgstr "Gestart"

@@ -45,7 +45,6 @@ defmodule CoreWeb.Layouts.Workspace.MenuBuilder do
     |> append(live_item(socket, menu_id, :dashboard, active_item))
     |> append(live_item(socket, menu_id, :permissions, active_item), admin?(email))
     |> append(live_item(socket, menu_id, :support, active_item), admin?(email))
-    |> append(live_item(socket, menu_id, :marketplace, active_item))
     |> append(live_item(socket, menu_id, :todo, active_item))
     |> append(live_item(socket, menu_id, :payments, active_item))
   end

@@ -1,10 +1,6 @@
 defmodule Systems.Campaign.MonitorView do
   use CoreWeb.UI.Component
 
-  alias Core.Survey.Tools
-  alias Core.Promotions
-  alias Core.Pools.Submissions
-
   alias Systems.{
     Crew,
     Campaign
@@ -18,12 +14,9 @@ defmodule Systems.Campaign.MonitorView do
 
   # Handle initial update
   def update(%{id: id, props: %{entity_id: entity_id}}, socket) do
-    tool = Tools.get_survey_tool!(entity_id)
-    promotion = Promotions.get!(tool.promotion_id)
-    campaign = Campaign.Context.get!(tool.study_id)
-    crew = Campaign.Context.get_or_create_crew!(campaign)
-
-    monitor_data = create(crew, tool, promotion)
+    preload = Campaign.Model.preload_graph(:full)
+    campaign = Campaign.Context.get!(entity_id, preload)
+    monitor_data = create(campaign)
 
     {
       :ok,
@@ -34,9 +27,18 @@ defmodule Systems.Campaign.MonitorView do
     }
   end
 
-  def create(crew, tool, promotion) do
-    submission = Submissions.get!(promotion)
-    is_active = submission.status === :accepted
+  def create(
+    %{
+      promotion: %{
+        submission: %{status: status}
+      },
+      promotable_assignment: %{
+        crew: crew,
+        assignable_survey_tool: tool
+      }
+    }
+  ) do
+    is_active = status === :accepted
     completed = Crew.Context.count_completed_tasks(crew)
     pending = Crew.Context.count_pending_tasks(crew)
 

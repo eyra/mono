@@ -1,6 +1,7 @@
 defmodule CoreWeb.DataDonation.Form do
   use CoreWeb.LiveForm
 
+  alias Core.Accounts
   alias Core.DataDonation.{Tools, Tool}
 
   alias CoreWeb.Router.Helpers, as: Routes
@@ -51,11 +52,16 @@ defmodule CoreWeb.DataDonation.Form do
   end
 
   @impl true
-  def handle_event("delete", _params, %{assigns: %{entity_id: entity_id}} = socket) do
+  def handle_event(
+        "delete",
+        _params,
+        %{assigns: %{entity_id: entity_id, current_user: user}} = socket
+      ) do
     Tools.get!(entity_id)
     |> Tools.delete()
 
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Marketplace))}
+    {:noreply,
+     push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))}
   end
 
   # Saving

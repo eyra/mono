@@ -9,7 +9,6 @@ defmodule Systems.Crew.TaskModel do
 
   schema "crew_tasks" do
     field(:status, Ecto.Enum, values: [:pending, :completed])
-    field(:plugin, Ecto.Enum, values: [:online_study])
     field(:started_at, :naive_datetime)
     field(:completed_at, :naive_datetime)
 
@@ -22,7 +21,7 @@ defmodule Systems.Crew.TaskModel do
   @doc false
   def changeset(task, attrs) do
     task
-    |> cast(attrs, [:status, :plugin, :started_at, :completed_at])
-    |> validate_required([:status, :plugin])
+    |> cast(attrs, [:status, :started_at, :completed_at])
+    |> validate_required([:status])
   end
 end

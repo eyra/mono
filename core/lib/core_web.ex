@@ -51,7 +51,6 @@ defmodule CoreWeb do
 
   def live_view do
     quote do
-      use Core.Observatory
       use CoreWeb.LiveLocale
       use CoreWeb.LiveUri
       import Core.Authorization, only: [can_access?: 2]
@@ -62,6 +61,8 @@ defmodule CoreWeb do
 
       use Surface.LiveView,
         layout: {CoreWeb.LayoutView, "live.html"}
+
+      use Systems.Observatory.Context
 
       import Phoenix.Controller,
         only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]

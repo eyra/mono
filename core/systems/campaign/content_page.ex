@@ -4,7 +4,7 @@ defmodule Systems.Campaign.ContentPage do
   """
   use CoreWeb, :live_view
   use CoreWeb.MultiFormAutoSave
-  use CoreWeb.Layouts.Workspace.Component, :survey
+  use CoreWeb.Layouts.Workspace.Component, :campaign
   use CoreWeb.UI.Responsive.Viewport
   use CoreWeb.UI.Dialog
 
@@ -14,12 +14,12 @@ defmodule Systems.Campaign.ContentPage do
   alias Link.Enums.Themes
 
   alias Core.Survey.Tools
-  alias Core.Promotions
+  alias Systems.Promotion
   alias Core.Pools.Submissions
   alias Core.Content.Nodes
 
   alias CoreWeb.ImageCatalogPicker
-  alias CoreWeb.Promotion.Form, as: PromotionForm
+  alias Systems.Promotion.FormView, as: PromotionForm
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent, TabbarFooter}
@@ -28,6 +28,11 @@ defmodule Systems.Campaign.ContentPage do
   alias Link.Pool.CampaignSubmissionView, as: SubmissionForm
   import Core.ImageCatalog, only: [image_catalog: 0]
 
+  alias Systems.{
+    Campaign
+  }
+
+  data(campaign_id, :any)
   data(tool_id, :any)
   data(promotion_id, :any)
   data(submission_id, :any)
@@ -43,27 +48,38 @@ defmodule Systems.Campaign.ContentPage do
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
-    Tools.get_survey_tool!(id)
+    Campaign.Context.get!(id)
   end
 
   @impl true
-  def mount(%{"id" => tool_id, "tab" => initial_tab}, _session, socket) do
-    tool = Tools.get_survey_tool!(tool_id)
-    promotion = Promotions.get!(tool.promotion_id)
-    submission = Submissions.get!(promotion)
-    submitted? = submission.status != :idle
+  def mount(%{"id" => id, "tab" => initial_tab}, _session, socket) do
+    preload = Campaign.Model.preload_graph(:full)
+    %{
+      id: campaign_id,
+      promotion: %{
+        submission: %{
+          status: status
+        } = submission
+      } = promotion,
+      promotable_assignment: %{
+        assignable_survey_tool: tool
+      }
+    } = Campaign.Context.get!(id, preload)
+
+    submitted? = status != :idle
     validate? = submitted?
 
     tool_form_ready? = Tools.ready?(tool)
-    promotion_form_ready? = Promotions.ready?(promotion)
-    preview_path = Routes.live_path(socket, Link.Promotion.Public, promotion.id, preview: true)
+    promotion_form_ready? = Promotion.Context.ready?(promotion)
+    preview_path = Routes.live_path(socket, Systems.Promotion.LandingPage, promotion.id, preview: true)
 
     {
       :ok,
       socket
       |> assign(
-        tool_id: tool_id,
-        promotion_id: tool.promotion_id,
+        campaign_id: campaign_id,
+        tool_id: tool.id,
+        promotion_id: promotion.id,
         submission_id: submission.id,
         submitted?: submitted?,
         validate?: validate?,
@@ -94,8 +110,9 @@ defmodule Systems.Campaign.ContentPage do
         %{assigns: %{uri_origin: uri_origin, uri_path: uri_path, promotion_id: promotion_id}} =
           socket
       ) do
+
     preview_path =
-      Routes.live_path(socket, Link.Promotion.Public, promotion_id, preview: true, back: uri_path)
+      Routes.live_path(socket, Systems.Promotion.LandingPage, promotion_id, preview: true, back: uri_path)
 
     socket =
       socket
@@ -116,16 +133,16 @@ defmodule Systems.Campaign.ContentPage do
          %{
            assigns: %{
              uri_origin: uri_origin,
+             campaign_id: campaign_id,
              tool_id: tool_id,
+             promotion_id: promotion_id,
+             submission_id: submission_id,
              validate?: validate?,
              tool_form_ready?: tool_form_ready?,
              promotion_form_ready?: promotion_form_ready?
            }
          } = socket
        ) do
-    tool = Tools.get_survey_tool!(tool_id)
-    promotion = Promotions.get!(tool.promotion_id)
-    submission = Submissions.get!(promotion)
 
     tabs = [
       %{
@@ -136,7 +153,7 @@ defmodule Systems.Campaign.ContentPage do
         type: :fullpage,
         component: PromotionForm,
         props: %{
-          entity_id: promotion.id,
+          entity_id: promotion_id,
           validate?: validate?,
           themes_module: Themes
         }
@@ -149,7 +166,7 @@ defmodule Systems.Campaign.ContentPage do
         type: :fullpage,
         component: ToolForm,
         props: %{
-          entity_id: tool.id,
+          entity_id: tool_id,
           uri_origin: uri_origin,
           validate?: validate?
         }
@@ -161,7 +178,7 @@ defmodule Systems.Campaign.ContentPage do
         type: :fullpage,
         component: SubmissionForm,
         props: %{
-          entity_id: submission.id
+          entity_id: submission_id
         }
       },
       %{
@@ -171,7 +188,7 @@ defmodule Systems.Campaign.ContentPage do
         type: :fullpage,
         component: MonitorView,
         props: %{
-          entity_id: tool.id
+          entity_id: campaign_id
         }
       }
     ]
@@ -190,7 +207,7 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   defp initial_image_query(%{promotion_id: promotion_id}) do
-    promotion = Promotions.get!(promotion_id)
+    promotion = Promotion.Context.get!(promotion_id)
 
     case promotion.themes do
       nil -> ""

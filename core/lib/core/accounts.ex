@@ -1,4 +1,6 @@
 defmodule Core.Accounts do
+  use CoreWeb.StartPageProvider
+
   @moduledoc """
   The Accounts context.
   """

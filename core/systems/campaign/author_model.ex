@@ -4,7 +4,7 @@ defmodule Systems.Campaign.AuthorModel do
   """
   use Ecto.Schema
   import Ecto.Changeset
-  alias Systems.Campaign.Model, as: Study
+  alias Systems.Campaign
   alias Core.Accounts
   alias Core.Accounts.User
 
@@ -13,7 +13,7 @@ defmodule Systems.Campaign.AuthorModel do
     field(:fullname, :string)
     field(:displayname, :string)
 
-    belongs_to(:study, Study)
+    belongs_to(:campaign, Campaign.Model)
     belongs_to(:user, User)
 
     timestamps()
@@ -49,4 +49,5 @@ defmodule Systems.Campaign.AuthorModel do
     |> cast(params, @required_fields)
     |> validate_required(@required_fields)
   end
+
 end

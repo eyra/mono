@@ -48,7 +48,7 @@ msgid "delete.button"
 msgstr "Verwijderen"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:174
+#: bundles/link/lib/pool/submission_page.ex:172
 #: systems/campaign/content_page.ex:352 systems/campaign/content_page.ex:358 systems/campaign/content_page.ex:362
 msgid "preview.button"
 msgstr "Bekijken"
@@ -59,12 +59,12 @@ msgid "submit.button"
 msgstr "Indienen"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:180
+#: bundles/link/lib/pool/submission_page.ex:178
 #: systems/campaign/content_page.ex:382
 msgid "retract.button"
 msgstr "Haal offline"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:166
+#: bundles/link/lib/pool/submission_page.ex:164
 msgid "accept.button"
 msgstr "Publiceren"

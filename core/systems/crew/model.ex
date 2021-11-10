@@ -6,9 +6,6 @@ defmodule Systems.Crew.Model do
   import Ecto.Changeset
 
   schema "crews" do
-    field(:reference_type, Ecto.Enum, values: [:campaign])
-    field(:reference_id, :integer)
-
     has_many(:tasks, Systems.Crew.TaskModel, foreign_key: :crew_id)
     has_many(:members, Systems.Crew.MemberModel, foreign_key: :crew_id)
     belongs_to(:auth_node, Core.Authorization.Node)
@@ -16,7 +13,7 @@ defmodule Systems.Crew.Model do
     timestamps()
   end
 
-  @fields ~w(reference_type reference_id)a
+  @fields ~w()a
 
   defimpl GreenLight.AuthorizationNode do
     def id(crew), do: crew.auth_node_id
