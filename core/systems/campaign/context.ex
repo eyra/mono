@@ -246,32 +246,11 @@ defmodule Systems.Campaign.Context do
     |> update
   end
 
-  @doc """
-  Deletes a get_campaign.
-
-  ## Examples
-
-      iex> delete(campaign)
-      {:ok, %Campaign.Model{}}
-
-      iex> delete(campaign)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete(%Campaign.Model{} = campaign) do
-    Repo.delete(campaign)
-    # AUTH; how to check this.
+  def delete(id) when is_number(id) do
+    get!(id, Campaign.Model.preload_graph(:full))
+    |> Campaign.Assembly.delete()
   end
 
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking campaign changes.
-
-  ## Examples
-
-      iex> change(campaign)
-      %Ecto.Changeset{data: %Campaign.Model{}}
-
-  """
   def change(%Campaign.Model{} = campaign, attrs \\ %{}) do
     Campaign.Model.changeset(campaign, attrs)
   end

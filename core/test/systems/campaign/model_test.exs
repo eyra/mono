@@ -54,7 +54,7 @@ defmodule Systems.Campaign.ModelTest do
 
     test "delete/1 deletes the campaign" do
       campaign = Factories.insert!(:campaign)
-      assert {:ok, %Campaign.Model{}} = Campaign.Context.delete(campaign)
+      assert {:ok, _} = Campaign.Context.delete(campaign.id)
       assert_raise Ecto.NoResultsError, fn -> Campaign.Context.get!(campaign.id) end
     end
 

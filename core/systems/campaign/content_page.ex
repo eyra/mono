@@ -233,10 +233,8 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   @impl true
-  def handle_event("delete_confirm", _params, %{assigns: %{tool_id: tool_id}} = socket) do
-    Tools.get_survey_tool!(tool_id)
-    |> Tools.delete_survey_tool()
-
+  def handle_event("delete_confirm", _params, %{assigns: %{campaign_id: campaign_id}} = socket) do
+    Campaign.Context.delete(campaign_id)
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Dashboard))}
   end
 

@@ -13,6 +13,7 @@ defmodule Core.Authorization do
   use Core.BundleOverrides
 
   import Ecto.Query
+  alias Core.Repo
 
   GreenLight.Permissions.grant(__MODULE__, "test-auth", [:owner])
 
@@ -83,6 +84,8 @@ defmodule Core.Authorization do
   grant_actions(CoreWeb.PageController, %{
     index: [:visitor, :member]
   })
+
+  def get_node!(id), do: Repo.get!(Core.Authorization.Node, id)
 
   def make_node(), do: %Core.Authorization.Node{}
 

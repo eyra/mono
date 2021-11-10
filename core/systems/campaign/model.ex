@@ -49,6 +49,7 @@ defmodule Systems.Campaign.Model do
 
   def preload_graph(:full) do
     [
+      :auth_node,
       authors: [:user],
       promotion: [:content_node, submission: [:criteria]],
       promotable_assignment: Assignment.Model.preload_graph(:full)

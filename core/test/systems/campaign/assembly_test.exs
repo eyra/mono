@@ -2,20 +2,22 @@ defmodule Systems.Campaign.AssemblyTest do
   use CoreWeb.ConnCase
 
   import Mox
+  alias Core.Repo
+  alias Systems.Campaign
+
+  setup_all do
+    Mox.defmock(Systems.Campaign.AssemblyTest.UnsplashMockClient,
+      for: Core.ImageCatalog.Unsplash.Client
+    )
+
+    Application.put_env(:core, :unsplash_client, Campaign.AssemblyTest.UnsplashMockClient)
+    {:ok, mock: Campaign.AssemblyTest.UnsplashMockClient}
+  end
 
   describe "campaign assembly" do
     alias Systems.Campaign
 
     setup [:login_as_researcher]
-
-    setup do
-      Mox.defmock(Systems.Campaign.AssemblyTest.UnsplashMockClient,
-        for: Core.ImageCatalog.Unsplash.Client
-      )
-
-      Application.put_env(:core, :unsplash_client, Campaign.AssemblyTest.UnsplashMockClient)
-      {:ok, mock: Campaign.AssemblyTest.UnsplashMockClient}
-    end
 
     test "create", %{user: researcher, mock: mock} do
       mock
@@ -145,6 +147,45 @@ defmodule Systems.Campaign.AssemblyTest do
              } = Campaign.Context.get!(campaign.id, auth_node: [:role_assignments])
 
       assert principal_id === researcher.id
+    end
+
+    test "delete", %{user: researcher, mock: mock} do
+      mock
+      |> expect(:get, fn _, "/photos/random", "query=abstract" ->
+        {:ok,
+         %{
+           "urls" => %{"raw" => "http://example.org"},
+           "user" => %{"username" => "tester", "name" => "Miss Test"},
+           "blur_hash" => "asdf"
+         }}
+      end)
+
+      campaign = Campaign.Assembly.create(researcher, "New Campaign")
+      Campaign.Assembly.delete(campaign)
+
+      assert Repo.get(Campaign.Model, campaign.id) == nil
+      assert Repo.get(Systems.Promotion.Model, campaign.promotion_id) == nil
+      assert Repo.get(Core.Content.Node, campaign.promotion.content_node_id) == nil
+      assert Repo.get(Core.Authorization.Node, campaign.promotion.auth_node_id) == nil
+      assert Repo.get(Systems.Assignment.Model, campaign.promotable_assignment_id) == nil
+      assert Repo.get(Core.Authorization.Node, campaign.promotable_assignment.auth_node_id) == nil
+      assert Repo.get(Systems.Crew.Model, campaign.promotable_assignment.crew_id) == nil
+
+      assert Repo.get(Core.Authorization.Node, campaign.promotable_assignment.crew.auth_node_id) ==
+               nil
+
+      assert Repo.get(Core.Survey.Tool, campaign.promotable_assignment.assignable_survey_tool_id) ==
+               nil
+
+      assert Repo.get(
+               Core.Authorization.Node,
+               campaign.promotable_assignment.assignable_survey_tool.auth_node_id
+             ) == nil
+
+      assert Repo.get(
+               Core.Content.Node,
+               campaign.promotable_assignment.assignable_survey_tool.content_node_id
+             ) == nil
     end
   end
 end

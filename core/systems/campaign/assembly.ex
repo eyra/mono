@@ -5,6 +5,7 @@ defmodule Systems.Campaign.Assembly do
     Assignment,
     Crew
   }
+  alias Frameworks.Utility.EctoHelper
   alias Core.Content
   alias Systems.Promotion
   alias Core.Submissions
@@ -13,9 +14,33 @@ defmodule Systems.Campaign.Assembly do
   alias Core.Survey.Tools
   alias Core.Accounts
   alias Core.Authorization
+  alias Core.Repo
+  alias Ecto.Multi
 
   import Core.ImageCatalog, only: [image_catalog: 0]
 
+
+  def delete(%Campaign.Model{
+    auth_node: auth_node,
+    promotion: promotion,
+    promotable_assignment: %{
+      crew: crew,
+      assignable_survey_tool: %{
+        content_node_id: content_node_id
+      } = survey_tool
+    }
+  }) do
+
+    content_node = Core.Content.Nodes.get!(content_node_id)
+
+    Multi.new()
+    |> EctoHelper.delete(:promotion, promotion)
+    |> EctoHelper.delete(:survey_tool, survey_tool)
+    |> EctoHelper.delete(:crew, crew)
+    |> Multi.delete(:auth_node, auth_node)
+    |> Multi.delete(:content_node, content_node)
+    |> Repo.transaction()
+  end
 
   def create(user, title) do
     profile = user |> Accounts.get_profile()
