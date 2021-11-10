@@ -116,6 +116,7 @@ defmodule Link.Dashboard do
   end
 
   def convert_to_vm(socket, %{
+        id: edit_id,
         updated_at: updated_at,
         promotion: %{
           title: title,
@@ -126,7 +127,6 @@ defmodule Link.Dashboard do
         promotable_assignment: %{
           crew: crew,
           assignable_survey_tool: %{
-            id: edit_id,
             subject_count: target_subject_count
           }
         }
