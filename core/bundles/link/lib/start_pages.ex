@@ -4,7 +4,7 @@ defmodule Link.StartPages do
   def pages(),
     do: %{
       dashboard: %{id: :dashboard, target: Link.Dashboard, domain: "eyra-ui"},
-      marketplace: %{id: :marketplace, target: Link.Dashboard, domain: "eyra-ui"}
+      marketplace: %{id: :marketplace, target: Link.Marketplace, domain: "eyra-ui"}
     }
 
   @impl true
