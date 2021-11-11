@@ -24,15 +24,17 @@ defmodule Core.SurfConext do
       |> Enum.join(" ")
 
     display_name = Map.get(attrs, "given_name", fullname)
+    email = Map.get(attrs, "email")
 
     sso_info = %{
-      email: Map.get(attrs, "email"),
+      email: email,
       displayname: display_name,
       profile: %{
         fullname: fullname
       },
       researcher: MapSet.member?(affiliation, "employee"),
-      student: MapSet.member?(affiliation, "student")
+      student:
+        MapSet.member?(affiliation, "student") || String.ends_with?(email, "@student.vu.nl")
     }
 
     user = User.sso_changeset(%User{}, sso_info)
