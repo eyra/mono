@@ -80,6 +80,22 @@ defmodule Core.SurfConext.Test do
       assert surf_user.user.student
     end
 
+    test "assign both student and employee role when the user is an employee but has a student email" do
+      sso_info = %{
+        "sub" => Faker.UUID.v4(),
+        "email" => "some-person@student.vu.nl",
+        "preferred_username" => Faker.Person.name(),
+        "schac_home_organization" => "eduid.nl",
+        "eduperson_affiliation" => ["employee"]
+      }
+
+      {:ok, surf_user} = Core.SurfConext.register_user(sso_info)
+
+      assert surf_user.user.researcher
+      # Assigned via the email pattern
+      assert surf_user.user.student
+    end
+
     test "creates next action when the registered user is a student" do
       sso_info = %{
         "sub" => Faker.UUID.v4(),
