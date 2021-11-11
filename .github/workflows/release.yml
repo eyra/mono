@@ -63,6 +63,10 @@ jobs:
           tag: "${{steps.tag.outputs.tag}}"
           force_push_tag: true
 
+      - name: Build banking CLI
+        run: mix escript.build && tar cfj "../banking-setup.tar.bz2" banking_setup
+        working-directory: banking_proxy
+
       - uses: softprops/action-gh-release@v1
         with:
           tag_name: "${{steps.tag.outputs.tag}}"
@@ -70,3 +74,5 @@ jobs:
           fail_on_unmatched_files: true
           files: |
             ${{steps.tag.outputs.tag}}.tar.bz2
+            banking_setup.tar.bz2
+

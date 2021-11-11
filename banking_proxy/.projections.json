@@ -1,0 +1,62 @@
+{
+  "**/email/*.html.eex": {
+    "type": "html-email",
+    "alternate": "{dirname}/email/{basename}.text.eex"
+  },
+  "**/email/*.text.eex": {
+    "type": "text-email",
+    "alternate": "{dirname}/email/{basename}.html.eex"
+  },
+  "test/systems/*_test.exs": {
+    "type": "test",
+    "alternate": "systems/{}.ex",
+    "template": [
+      "defmodule Systems.{camelcase|capitalize|dot}Test do",
+      "  use Core.DataCase, async: true",
+      "  alias Core.Factories",
+      "  alias {camelcase|capitalize|dot}",
+      "",
+      "  describe \"\" do",
+      "    test \"\" do",
+      "    end",
+      "  end",
+      "end"
+    ]
+  },
+  "test/*_test.exs": {
+    "type": "test",
+    "alternate": "lib/{}.ex",
+    "template": [
+      "defmodule {camelcase|capitalize|dot}Test do",
+      "  use Core.DataCase, async: true",
+      "  alias Core.Factories",
+      "  alias {camelcase|capitalize|dot}",
+      "",
+      "  describe \"\" do",
+      "    test \"\" do",
+      "    end",
+      "  end",
+      "end"
+    ]
+  },
+  "systems/*.ex": {
+    "type": "code",
+    "alternate": "test/systems/{}_test.exs"
+  },
+  "lib/*.ex": {
+    "type": "code",
+    "alternate": "test/{}_test.exs"
+  },
+  "lib/*.html.eex": {
+    "type": "template"
+  },
+  "priv/**/migrations/*.exs": {
+    "type": "migration"
+  },
+  "guides/*.md": {
+    "type": "guide"
+  },
+  "config/*.exs": {
+    "type": "config"
+  }
+}
