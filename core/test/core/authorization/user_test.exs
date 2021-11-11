@@ -18,15 +18,17 @@ defmodule Core.GreenLight.PrincipalTest do
 
     test "user gets admin when listed in the config" do
       current_env = Application.get_env(:core, :features, [])
+      current_admins = Application.get_env(:core, :admins, [])
 
       on_exit(fn ->
         Application.put_env(:core, Core.SurfConext, current_env)
+        Application.put_env(:core, :admins, current_admins)
       end)
 
       Application.put_env(
         :core,
         :admins,
-        MapSet.new(["admin@example.org"])
+        Core.Admin.compile(["admin@example.org"])
       )
 
       # Regular member

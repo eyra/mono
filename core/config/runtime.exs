@@ -11,7 +11,10 @@ if config_env() == :prod do
          |> Enum.map(&String.to_existing_atom/1)
          |> Enum.map(&{&1, true})
 
-  config :core, :admins, System.get_env("APP_ADMINS", "") |> String.split() |> MapSet.new()
+  config :core,
+         :admins,
+         System.get_env("APP_ADMINS", "") |> String.split() |> Core.Admin.compile()
+
   config :core, :static_path, System.fetch_env!("STATIC_PATH")
 
   config :core, CoreWeb.Endpoint,
