@@ -76,33 +76,6 @@ defmodule Systems.Crew.ContextTest do
       assert users |> Enum.find(&(&1.id == user.id))
     end
 
-    test "withdraw_member/2 removes user from crew as member and deletes all its tasks" do
-      user1 = Factories.insert!(:member)
-      user2 = Factories.insert!(:member)
-      crew = Factories.insert!(:crew)
-
-      {:ok, %{member: member1}} = Crew.Context.apply_member(crew, user1)
-      {:ok, %{member: member2}} = Crew.Context.apply_member(crew, user2)
-
-      Crew.Context.create_task!(crew, member1)
-      Crew.Context.create_task!(crew, member2)
-
-      assert Crew.Context.get_task(crew, member1)
-      assert Crew.Context.get_task(crew, member2)
-
-      Crew.Context.withdraw_member(crew, user1)
-
-      assert is_nil(Crew.Context.get_task(crew, member1))
-      assert Crew.Context.get_task(crew, member2)
-
-      assert Crew.Context.member?(crew, user1) == false
-      assert Crew.Context.member?(crew, user2) == true
-
-      users = Authorization.users_with_role(crew, :participant)
-      assert is_nil(users |> Enum.find(&(&1.id == user1.id)))
-      assert users |> Enum.find(&(&1.id == user2.id))
-    end
-
     test "list_members_without_task/1 lists freshly applied member" do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
@@ -150,7 +123,7 @@ defmodule Systems.Crew.ContextTest do
       assert is_nil(list |> Enum.find(&(&1.id == member.id)))
     end
 
-    test "list_tasks/2 returns creates task" do
+    test "list_tasks/2 returns all available tasks for the crew" do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
       member = Factories.insert!(:crew_member, %{crew: crew, user: user})
@@ -161,7 +134,7 @@ defmodule Systems.Crew.ContextTest do
       assert list |> Enum.find(&(&1.member_id == member.id))
     end
 
-    test "count_tasks/2 returns creates task" do
+    test "count_tasks/2 returns correct nr of tasks in the crew" do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
       member = Factories.insert!(:crew_member, %{crew: crew, user: user})

@@ -51,11 +51,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
                ],
                subtitle: "Je bent aangemeld voor deelname",
                text: "These are the expectations for the participants",
-               title: "This is a test title",
-               withdraw_redirect: %{
-                 label: "Naar de marktplaats",
-                 target: %{type: :event, value: "marketplace"}
-               }
+               title: "This is a test title"
              } = view_model
     end
 
@@ -80,11 +76,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
                ],
                subtitle: "Je bent aangemeld voor deelname",
                text: "These are the expectations for the participants",
-               title: "This is a test title",
-               withdraw_redirect: %{
-                 label: "Naar de marktplaats",
-                 target: %{type: :event, value: "marketplace"}
-               }
+               title: "This is a test title"
              } = view_model
 
       assert started_at =~ "vandaag om"
@@ -112,11 +104,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
                ],
                subtitle: "Je hebt deze vragenlijst ingevuld",
                text: text,
-               title: "This is a test title",
-               withdraw_redirect: %{
-                 label: "Naar de marktplaats",
-                 target: %{type: :event, value: "marketplace"}
-               }
+               title: "This is a test title"
              } = view_model
 
       assert started_at =~ "vandaag om"

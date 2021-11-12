@@ -267,26 +267,24 @@ defmodule Core.Factories do
 
   def build(:crew_member, %{} = attributes) do
     {user, attributes} = Map.pop(attributes, :user)
-    {crew, _attributes} = Map.pop(attributes, :crew)
+    {crew, attributes} = Map.pop(attributes, :crew)
 
-    build(:crew_member)
-    |> struct!(%{
+    %Crew.MemberModel{
       user: user,
       crew: crew
-    })
+    }
+    |> struct!(attributes)
   end
 
   def build(:crew_task, %{} = attributes) do
-    {status, attributes} = Map.pop(attributes, :status)
     {member, attributes} = Map.pop(attributes, :member)
     {crew, _attributes} = Map.pop(attributes, :crew)
 
-    build(:crew_task)
-    |> struct!(%{
-      status: status,
+    %Crew.TaskModel{
       member: member,
       crew: crew
-    })
+    }
+    |> struct!(attributes)
   end
 
   def build(:member, %{} = attributes) do

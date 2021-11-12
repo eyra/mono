@@ -12,16 +12,36 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:165
+#: bundles/link/lib/marketplace.ex:166
 msgid "empty.description"
 msgstr "There are currently no research studies available to participate in. As soon as one becomes available, it will be added here and you will be notified by email (make sure to check your spam or junk mail folder, just in case)."
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:164
+#: bundles/link/lib/marketplace.ex:165
 msgid "empty.title"
 msgstr "Looking for a study?"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:182
+#: systems/campaign/model.ex:130
 msgid "reward.label"
 msgstr "Reward: %{value} credits"
+
+#, elixir-format
+#: bundles/link/lib/card.ex:112 bundles/link/lib/card.ex:247
+msgid "assignment.status.complete.label"
+msgstr "Closed"
+
+#, elixir-format, fuzzy
+#: systems/campaign/model.ex:126
+msgid "assignment.status.completed.label"
+msgstr "Finished"
+
+#, elixir-format, fuzzy
+#: systems/campaign/model.ex:122
+msgid "assignment.status.expired.label"
+msgstr "Expired"
+
+#, elixir-format, fuzzy
+#: systems/campaign/model.ex:125
+msgid "assignment.status.pending.label"
+msgstr "Pending"

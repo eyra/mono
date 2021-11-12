@@ -93,6 +93,17 @@ defmodule CoreWeb.User.Forms.Debug do
     }
   end
 
+  def handle_event(
+        "save",
+        _params,
+        socket
+      ) do
+    {
+      :noreply,
+      socket
+    }
+  end
+
   def force_save(socket, entity, type, attrs), do: save(socket, entity, type, attrs, false)
   def schedule_save(socket, entity, type, attrs), do: save(socket, entity, type, attrs, true)
 

@@ -86,7 +86,7 @@ msgid "welcome.subtitle"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:43 systems/assignment/model.ex:102
+#: bundles/link/lib/index.ex:43
 msgid "marketplace.button"
 msgstr ""
 

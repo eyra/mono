@@ -10,8 +10,3 @@ msgid ""
 msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
-
-#, elixir-format
-#: systems/campaign/model.ex:83
-msgid "subtitle.label"
-msgstr ""

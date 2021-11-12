@@ -12,21 +12,26 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:73
+#: systems/assignment/callback_page.ex:89
 msgid "task.completed.message.part1"
 msgstr "Jouw bijdrage wordt automatisch goedgekeurd, maar zal door de auteur van de studie beoordeeld worden. Als je binnen twee weken geen afwijzing ontvangt, wordt de beloning definitief toegekend."
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:75
+#: systems/assignment/callback_page.ex:91
 msgid "task.completed.message.part2"
 msgstr "Bezoek de marktplaats om jouw bijdragen en andere beschikbare studies te bekijken."
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:71
+#: systems/assignment/callback_page.ex:87
 msgid "task.completed.title"
 msgstr "Bedankt voor jouw deelname"
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:85
-msgid "withdraw.button"
-msgstr "Afmelden"
+#: systems/assignment/callback_page.ex:82 systems/assignment/model.ex:96
+msgid "task.expired.subtitle"
+msgstr "Helaas is jouw sessie verlopen"
+
+#, elixir-format
+#: systems/assignment/callback_page.ex:84 systems/assignment/model.ex:97
+msgid "task.expired.text"
+msgstr "Is de studie nog open? Dan kun je alsnog meedoen. Is de studie gesloten? Ga dan naar de marktplaats om andere studies te bekijken."

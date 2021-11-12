@@ -17,37 +17,37 @@ msgid "content.title"
 msgstr "Data Donatie"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:103
+#: lib/core_web/live/data_donation/form.ex:108
 msgid "reward.label"
 msgstr "Beloning in euro centen"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:99
+#: lib/core_web/live/data_donation/form.ex:104
 msgid "script.label"
 msgstr "Plak hier je python script"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:107
+#: lib/core_web/live/data_donation/form.ex:112
 msgid "config.nrofsubjects.label"
 msgstr "Aantal gewenste deelnemers"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:106
+#: lib/core_web/live/data_donation/form.ex:111
 msgid "nrofsubjects.title"
 msgstr "Deelnemers"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:102
+#: lib/core_web/live/data_donation/form.ex:107
 msgid "reward.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:98
+#: lib/core_web/live/data_donation/form.ex:103
 msgid "script.title"
 msgstr "Script"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:110
+#: lib/core_web/live/data_donation/form.ex:115
 msgid "delete.button"
 msgstr "Verwijderen"
 
@@ -62,26 +62,26 @@ msgid "open.cta.title"
 msgstr "Doneer je data"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/uploader.ex:46
+#: lib/core_web/live/data_donation/uploader.ex:48
 msgid "uploader.title"
 msgstr "Data Donatie"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:75
+#: lib/core_web/live/data_donation/form.ex:80
 msgid "donations.title"
 msgstr "Ontvangen donaties"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:94
+#: lib/core_web/live/data_donation/form.ex:99
 msgid "download.all.button.label"
 msgstr "Download alles"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:87
+#: lib/core_web/live/data_donation/form.ex:92
 msgid "download.button.label"
 msgstr "Download"
 
 #, elixir-format
-#: lib/core_web/live/data_donation/form.ex:83
+#: lib/core_web/live/data_donation/form.ex:88
 msgid "received.label"
 msgstr "Ontvangen"

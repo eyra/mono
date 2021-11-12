@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/pool/overview_page.ex:40
-#: bundles/link/lib/pool/views/students_view.ex:92
+#: bundles/link/lib/pool/views/students_view.ex:93
 msgid "tabbar.item.students"
 msgstr "Students"
 
@@ -28,37 +28,37 @@ msgid "title"
 msgstr "Student pool"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/students_view.ex:88
+#: bundles/link/lib/pool/views/students_view.ex:89
 msgid "students.empty.description"
 msgstr "There are currently no registered students. You will be notified as soon as students have signed up."
 
 #, elixir-format
-#: bundles/link/lib/pool/views/students_view.ex:87
+#: bundles/link/lib/pool/views/students_view.ex:88
 msgid "students.empty.title"
 msgstr "Students participating in this pool will appear here"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:75
+#: bundles/link/lib/pool/views/campaigns_view.ex:73
 msgid "campaigns.empty.description"
 msgstr "As soon as researchers publish a campaign in your pool to recruit participants for their study it will be added here. You can schedule when campaigns will become available in the marketplace for eligible participants."
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:74
+#: bundles/link/lib/pool/views/campaigns_view.ex:72
 msgid "campaigns.empty.title"
 msgstr "Campaigns in your pool"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/students_view.ex:72
+#: bundles/link/lib/pool/views/students_view.ex:71
 msgid "student.tag.complete"
 msgstr "Ready"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/students_view.ex:73
+#: bundles/link/lib/pool/views/students_view.ex:75
 msgid "student.tag.incomplete"
 msgstr "Incompleet"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:67
+#: bundles/link/lib/pool/views/campaigns_view.ex:65
 msgid "accepted.title"
 msgstr "Published"
 
@@ -68,17 +68,17 @@ msgid "status.submitted.label"
 msgstr "Pending"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:61
+#: bundles/link/lib/pool/views/campaigns_view.ex:59
 msgid "submitted.title"
 msgstr "Submitted by researchers"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:134
+#: bundles/link/lib/pool/views/campaigns_view.ex:132
 msgid "spots.available"
 msgstr "%{open} out of %{total} spots available"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:197
+#: bundles/link/lib/pool/submission_page.ex:213
 msgid "submission.title"
 msgstr "Campaign"
 

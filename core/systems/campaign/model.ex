@@ -40,7 +40,7 @@ defmodule Systems.Campaign.Model do
 
   def flatten(campaign) do
     campaign
-    |> Map.take([:id, :promotion, :authors])
+    |> Map.take([:id, :promotion, :authors, :updated_at])
     |> Map.put(:promotable, promotable(campaign))
   end
 
@@ -69,8 +69,13 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   alias Systems.{
     Campaign,
     Promotion,
-    Assignment
+    Assignment,
+    Crew
   }
+
+  alias Core.Content.Nodes
+  alias Core.ImageHelpers
+  alias Core.Pools.Submission
 
   def view_model(%Campaign.Model{} = campaign, page, user, url_resolver) do
     campaign
@@ -82,7 +87,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     %{id: id}
     |> merge(Builder.view_model(promotion, page, user, url_resolver))
     |> merge(Builder.view_model(promotable, page, user, url_resolver))
-    |> required(:subtitle, dgettext("eyra-assignment", "subtitle.label"))
+    |> required(:subtitle, dgettext("eyra-promotion", "expectations.public.label"))
     |> required(:text, expectations)
   end
 
@@ -100,6 +105,105 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     |> required(:subtitle, dgettext("eyra-promotion", "subtitle.label"))
   end
 
+  defp vm(%{
+    id: id,
+    updated_at: updated_at,
+    promotion: %{
+      title: title,
+      image_id: image_id,
+      submission: %{reward_value: reward_value}
+    },
+    promotable: %{
+      crew: crew
+    } = assignment
+  }, Link.Marketplace, user, url_resolver) do
+
+    task =
+      case Crew.Context.get_member!(crew, user) do
+        nil -> nil
+        member -> Crew.Context.get_task(crew, member)
+      end
+
+    tag =
+      case task do
+        nil -> %{text: dgettext("eyra-marketplace", "assignment.status.expired.label"), type: :disabled}
+        task ->
+          case task.status do
+            :pending -> %{text: dgettext("eyra-marketplace", "assignment.status.pending.label"), type: :warning}
+            :completed -> %{text: dgettext("eyra-marketplace", "assignment.status.completed.label"), type: :success}
+          end
+      end
+
+    subtitle = dgettext("eyra-marketplace", "reward.label", value: reward_value)
+    quick_summary =
+      updated_at
+      |> CoreWeb.UI.Timestamp.apply_timezone()
+      |> CoreWeb.UI.Timestamp.humanize()
+
+    image_info = ImageHelpers.get_image_info(image_id, 120, 115)
+    image = %{type: :catalog, info: image_info}
+
+    %{
+      id: id,
+      path: url_resolver.(Assignment.LandingPage, assignment.id),
+      title: title,
+      subtitle: subtitle,
+      tag: tag,
+      level: :critical,
+      image: image,
+      quick_summary: quick_summary
+    }
+  end
+
+  defp vm(%{
+    id: id,
+    updated_at: updated_at,
+    promotion: %{
+      title: title,
+      image_id: image_id,
+      content_node: promotion_content_node,
+      submission: submission
+    },
+    promotable: %{
+      assignable_survey_tool: %{
+        subject_count: target_subject_count
+      }
+    } = assignment
+  }, Link.Dashboard, _user, url_resolver) do
+    tag = Submission.get_tag(submission)
+
+    target_subject_count =
+      if target_subject_count == nil do
+        0
+      else
+        target_subject_count
+      end
+
+    open_spot_count = Assignment.Context.open_spot_count(assignment)
+
+    subtitle =
+      get_content_list_item_subtitle(
+        submission,
+        promotion_content_node,
+        open_spot_count,
+        target_subject_count
+      )
+
+    quick_summary = get_quick_summary(updated_at)
+    image_info = ImageHelpers.get_image_info(image_id, 120, 115)
+    image = %{type: :catalog, info: image_info}
+
+    %{
+      path: url_resolver.(Systems.Campaign.ContentPage, id),
+      title: title,
+      subtitle: subtitle,
+      tag: tag,
+      level: :critical,
+      image: image,
+      quick_summary: quick_summary
+    }
+  end
+
   defp vm(authors, Promotion.LandingPage) when is_list(authors) do
     %{
       byline:
@@ -108,5 +212,45 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
           |> Enum.map(& &1.fullname)
           |> Enum.join(", "))
     }
+  end
+
+  defp get_quick_summary(updated_at) do
+    updated_at
+    |> CoreWeb.UI.Timestamp.apply_timezone()
+    |> CoreWeb.UI.Timestamp.humanize()
+  end
+
+  defp get_content_list_item_subtitle(
+         submission,
+         promotion_content_node,
+         open_spot_count,
+         target_subject_count
+       ) do
+    case submission.status do
+      :idle ->
+        if Nodes.ready?(promotion_content_node) do
+          dgettext("eyra-submission", "ready.for.submission.message")
+        else
+          dgettext("eyra-submission", "incomplete.forms.message")
+        end
+
+      :submitted ->
+        dgettext("eyra-submission", "waiting.for.coordinator.message")
+
+      :accepted ->
+        case Submission.published_status(submission) do
+          :scheduled ->
+            dgettext("eyra-submission", "accepted.scheduled.message")
+
+          :online ->
+            dgettext("link-dashboard", "quick_summary.%{open_spot_count}.%{target_subject_count}",
+              open_spot_count: open_spot_count,
+              target_subject_count: target_subject_count
+            )
+
+          :closed ->
+            dgettext("eyra-submission", "accepted.closed.message")
+        end
+    end
   end
 end

@@ -4,7 +4,9 @@ defmodule Systems.Assignment.Context do
   """
 
   import Ecto.Query, warn: false
+  alias Ecto.Multi
   alias Core.Repo
+  alias CoreWeb.UI.Timestamp
 
   alias Systems.{
     Assignment,
@@ -53,6 +55,120 @@ defmodule Systems.Assignment.Context do
   defp assignable_field(%Core.Survey.Tool{}), do: :assignable_survey_tool
   defp assignable_field(%Core.Lab.Tool{}), do: :assignable_lab_tool
   defp assignable_field(%Core.DataDonation.Tool{}), do: :assignable_data_donation_tool
+
+  def apply_member(id, user) when is_number(id) do
+    apply(get!(id, [:crew]), user)
+  end
+
+  def apply_member(%{crew: crew} = assignment, user) do
+    member =
+      case Crew.Context.member?(crew, user) do
+        true -> Crew.Context.get_member!(crew, user)
+        false -> apply_user(assignment, user)
+      end
+
+    _task = Crew.Context.get_or_create_task!(crew, member)
+  end
+
+  defp apply_user(%{crew: crew}, user) do
+    Crew.Context.apply_member!(crew, user)
+  end
+
+  @doc """
+  How many new members can be added to the assignment?
+  """
+  def open_spot_count(%{crew: _crew} = assignment) do
+    type = assignment_type(assignment)
+    open_spot_count?(assignment, type)
+  end
+
+  @doc """
+  Is assignment open for new members?
+  """
+  def open?(%{crew: _crew} = assignment) do
+    open_spot_count(assignment) > 0
+  end
+
+  def open?(_), do: true
+
+  defp open_spot_count?(%{crew: crew} = assignment, :one_task) do
+    assignable = Assignment.Model.assignable(assignment)
+    target = Assignment.Assignable.spot_count(assignable)
+    all_non_expired_tasks = Crew.Context.count_tasks(crew, [:pending, :completed])
+
+    max(0, target - all_non_expired_tasks)
+  end
+
+  defp assignment_type(_assignment) do
+    # Some logic (eg: open?) is depending on the type of assignment.
+    # Currently we only support the 1-task assignment: a member has one task todo.
+    # Other types will be:
+    #   N-tasks: a member can voluntaraly pick one or more tasks
+    #   all-tasks: a member has a batch of tasks todo
+
+    :one_task
+  end
+
+  def mark_expired(%{assignable_survey_tool: %{duration: duration}} = assignment, force) do
+    mark_expired(assignment, duration, force)
+  end
+
+  def mark_expired(%{assignable_lab_tool: tool}, _) when tool != nil, do: :noop
+  def mark_expired(%{assignable_donatin_tool: tool}, _) when tool != nil, do: :noop
+
+
+  @min_expiration_timeout 30
+
+  def mark_expired(%{crew_id: crew_id}, duration, force) do
+    expiration_timeout = max(@min_expiration_timeout, duration)
+    task_query =
+      if force do
+        pending_tasks_query(crew_id)
+      else
+        expired_pending_tasks_query(crew_id, expiration_timeout)
+      end
+
+    member_ids = from(t in task_query, select: t.member_id)
+    member_query = from(m in Crew.MemberModel, where: m.id in subquery(member_ids))
+
+    Multi.new()
+    |> Multi.update_all(:members , member_query, set: [expired: true])
+    |> Multi.update_all(:tasks, task_query, set: [expired: true])
+    |> Repo.transaction()
+  end
+
+  def pending_tasks_query(crew_id) do
+    from(t in Crew.TaskModel,
+      where:
+        t.crew_id == ^crew_id and
+        t.status == :pending and
+        t.expired == false
+    )
+  end
+
+  def expired_pending_tasks_query(crew_id, expiration_timeout) when is_binary(expiration_timeout) do
+    expired_pending_tasks_query(crew_id, String.to_integer(expiration_timeout))
+  end
+
+  def expired_pending_tasks_query(crew_id, expiration_timeout) do
+    expiration_timestamp =
+      Timestamp.now
+      |> Timestamp.shift_minutes(expiration_timeout * -1)
+
+    from(t in Crew.TaskModel,
+      where:
+        t.crew_id == ^crew_id and
+        t.status == :pending and
+        t.expired == false and
+        (
+          t.started_at <= ^expiration_timestamp or
+          (
+            is_nil(t.started_at) and t.updated_at <= ^expiration_timestamp
+          )
+        )
+    )
+  end
+
 
   # Crew
   def get_crew(assignment) do

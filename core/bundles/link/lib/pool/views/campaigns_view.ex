@@ -6,7 +6,7 @@ defmodule Link.Pool.CampaignsView do
   alias Systems.{
     NextAction,
     Campaign,
-    Crew
+    Assignment
   }
 
   alias Core.Accounts
@@ -90,12 +90,12 @@ defmodule Link.Pool.CampaignsView do
                status: status
              } = submission
          },
-         promotable_assignment: %{
-           crew: crew,
-           assignable_survey_tool: %{
-             subject_count: target_subject_count
-           }
-         }
+         promotable_assignment:
+           %{
+             assignable_survey_tool: %{
+               subject_count: target_subject_count
+             }
+           } = assignment
        }) do
     tag =
       case status do
@@ -126,12 +126,11 @@ defmodule Link.Pool.CampaignsView do
 
     target_subject_count = guard_nil(target_subject_count, :integer)
 
-    current_subject_count = Crew.Context.count_tasks(crew, [:pending, :completed])
-    open_spots = target_subject_count - current_subject_count
+    open_spot_count = Assignment.Context.open_spot_count(assignment)
 
     subtitle =
       dgettext("link-studentpool", "spots.available",
-        open: open_spots,
+        open: open_spot_count,
         total: target_subject_count
       )
 
@@ -146,7 +145,7 @@ defmodule Link.Pool.CampaignsView do
     %{
       path: Routes.live_path(socket, Link.Pool.SubmissionPage, submission_id),
       title: title,
-      subtitle: subtitle || "<no subtitle>",
+      subtitle: subtitle,
       tag: tag,
       level: :critical,
       image: image,

@@ -67,11 +67,12 @@ defmodule Link.Pool.StudentsView do
     []
   end
 
-  def get_tag(%{study_program_codes: study_program_codes}) do
-    case study_program_codes do
-      [_ | _] -> %{type: :success, text: dgettext("link-studentpool", "student.tag.complete")}
-      _ -> %{type: :delete, text: dgettext("link-studentpool", "student.tag.incomplete")}
-    end
+  def get_tag(%{study_program_codes: [_ | _]}) do
+    %{type: :success, text: dgettext("link-studentpool", "student.tag.complete")}
+  end
+
+  def get_tag(_) do
+    %{type: :delete, text: dgettext("link-studentpool", "student.tag.incomplete")}
   end
 
   def get_photo_url(nil, %{gender: :man}), do: "/images/profile_photo_default_male.svg"
