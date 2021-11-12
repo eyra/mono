@@ -56,7 +56,9 @@ defmodule Core.Factories do
 
   def build(:admin) do
     :member
-    |> build(%{email: Core.Admin.emails() |> Enum.random()})
+    |> build(%{
+      email: "admin1@example.org"
+    })
   end
 
   def build(:student) do

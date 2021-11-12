@@ -54,7 +54,7 @@ defmodule Core.AuthTestHelpers do
   end
 
   def login_as_admin(ctx) do
-    email = Core.Admin.emails() |> Enum.random()
+    email = "admin1@example.org"
 
     user =
       if user = Core.Accounts.get_user_by_email(email) do

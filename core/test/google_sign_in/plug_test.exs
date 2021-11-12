@@ -82,7 +82,7 @@ defmodule GoogleSignIn.CallbackPlug.Test do
   alias GoogleSignIn.CallbackPlug
 
   setup do
-    conf = Application.get_env(:core, :admins, MapSet.new())
+    conf = Application.get_env(:core, :admins, [])
 
     on_exit(fn ->
       Application.put_env(:core, :admins, conf)
@@ -148,7 +148,7 @@ defmodule GoogleSignIn.CallbackPlug.Test do
     end
 
     test "allow admin when member login is disabled" do
-      Application.put_env(:core, :admins, MapSet.new([GoogleSignIn.FakeGoogle.email()]))
+      Application.put_env(:core, :admins, Core.Admin.compile([GoogleSignIn.FakeGoogle.email()]))
       set_feature_flag(:member_google_sign_in, false)
 
       user =

@@ -12,7 +12,7 @@ Application.put_env(:core, :signal_handlers, [Frameworks.Signal.TestHelper])
 Application.put_env(
   :core,
   :admins,
-  MapSet.new([
+  Core.Admin.compile([
     "admin1@example.org",
     "admin2@example.org"
   ])
