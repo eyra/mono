@@ -27,7 +27,7 @@ msgid "duration.label"
 msgstr "Hoeveel minuten schat je in dat deelnemers nodig hebben?"
 
 #, elixir-format
-#: systems/campaign/model.ex:199
+#: systems/campaign/model.ex:203
 msgid "by.author.label"
 msgstr "Door"
 
@@ -258,12 +258,12 @@ msgid "form.description"
 msgstr "Doorloop eerst de stappen in het zwarte kader. Zo zorg je ervoor dat deelnemers vanuit Panl deel kunnen nemen aan jouw online studie en na afloop weer teruggestuurd worden naar Panl."
 
 #, elixir-format
-#: systems/assignment/model.ex:231
+#: systems/assignment/model.ex:232
 msgid "duration.highlight.text"
 msgstr "%{duration} minuten"
 
 #, elixir-format
-#: systems/assignment/model.ex:230
+#: systems/assignment/model.ex:231
 msgid "duration.highlight.title"
 msgstr "Duur"
 
@@ -273,37 +273,37 @@ msgid "ethical.review.link"
 msgstr "ethische checklist"
 
 #, elixir-format
-#: systems/assignment/model.ex:87 systems/assignment/model.ex:95
-#: systems/assignment/model.ex:107
+#: systems/assignment/model.ex:86 systems/assignment/model.ex:94
+#: systems/assignment/model.ex:105
 msgid "task.hero.title"
 msgstr "Online Studie"
 
 #, elixir-format
-#: systems/assignment/model.ex:211
+#: systems/assignment/model.ex:212
 msgid "task.completed.subtitle"
 msgstr "Je hebt deze vragenlijst ingevuld"
 
 #, elixir-format
-#: systems/assignment/model.ex:214
+#: systems/assignment/model.ex:215
 msgid "task.completed.text"
 msgstr "Jouw bijdrage wordt door de auteur van deze studie beoordeeld. Als je binnen twee weken na afronding van de vragenlijst geen afkeuring hebt ontvangen, is de toegewezen beloning definitief."
 
 #, elixir-format
-#: systems/assignment/model.ex:210
+#: systems/assignment/model.ex:211
 msgid "task.pending.subtitle"
 msgstr "Je bent aangemeld voor deelname"
 
 #, elixir-format
-#: systems/assignment/model.ex:227
+#: systems/assignment/model.ex:228
 msgid "status.closed.highlight.text"
 msgstr "Gesloten voor deelname"
 
 #, elixir-format
-#: systems/assignment/model.ex:221
+#: systems/assignment/model.ex:222
 msgid "status.highlight.title"
 msgstr "Status"
 
 #, elixir-format
-#: systems/assignment/model.ex:225
+#: systems/assignment/model.ex:226
 msgid "status.open.highlight.text"
 msgstr "Open voor deelname"

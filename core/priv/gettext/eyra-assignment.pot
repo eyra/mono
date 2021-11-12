@@ -9,8 +9,3 @@
 ## effect: edit them in PO (.po) files instead.
 msgid ""
 msgstr ""
-
-#, elixir-format
-#: systems/campaign/model.ex:89
-msgid "subtitle.label"
-msgstr ""

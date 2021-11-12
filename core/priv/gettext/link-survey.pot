@@ -26,7 +26,7 @@ msgid "duration.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:199
+#: systems/campaign/model.ex:203
 msgid "by.author.label"
 msgstr ""
 
@@ -257,12 +257,12 @@ msgid "form.description"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:231
+#: systems/assignment/model.ex:232
 msgid "duration.highlight.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:230
+#: systems/assignment/model.ex:231
 msgid "duration.highlight.title"
 msgstr ""
 
@@ -272,37 +272,37 @@ msgid "ethical.review.link"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:87 systems/assignment/model.ex:95
-#: systems/assignment/model.ex:107
+#: systems/assignment/model.ex:86 systems/assignment/model.ex:94
+#: systems/assignment/model.ex:105
 msgid "task.hero.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:211
+#: systems/assignment/model.ex:212
 msgid "task.completed.subtitle"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:214
+#: systems/assignment/model.ex:215
 msgid "task.completed.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:210
+#: systems/assignment/model.ex:211
 msgid "task.pending.subtitle"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:227
+#: systems/assignment/model.ex:228
 msgid "status.closed.highlight.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:221
+#: systems/assignment/model.ex:222
 msgid "status.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:225
+#: systems/assignment/model.ex:226
 msgid "status.open.highlight.text"
 msgstr ""

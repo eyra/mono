@@ -69,7 +69,8 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   alias Systems.{
     Campaign,
     Promotion,
-    Assignment
+    Assignment,
+    Crew
   }
 
   alias Core.Content.Nodes
@@ -86,7 +87,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     %{id: id}
     |> merge(Builder.view_model(promotion, page, user, url_resolver))
     |> merge(Builder.view_model(promotable, page, user, url_resolver))
-    |> required(:subtitle, dgettext("eyra-assignment", "subtitle.label"))
+    |> required(:subtitle, dgettext("eyra-promotion", "expectations.public.label"))
     |> required(:text, expectations)
   end
 
@@ -110,17 +111,27 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     promotion: %{
       title: title,
       image_id: image_id,
-      submission: %{reward_value: reward_value} = submission
+      submission: %{reward_value: reward_value}
     },
-    promotable: assignment
-  }, Link.Marketplace, _user, url_resolver) do
-    open? = Assignment.Context.open?(assignment)
+    promotable: %{
+      crew: crew
+    } = assignment
+  }, Link.Marketplace, user, url_resolver) do
+
+    task =
+      case Crew.Context.get_member!(crew, user) do
+        nil -> nil
+        member -> Crew.Context.get_task(crew, member)
+      end
 
     tag =
-      if open? do
-        Submission.get_tag(submission)
-      else
-        %{text: dgettext("eyra-marketplace", "assignment.status.complete.label"), type: :disabled}
+      case task do
+        nil -> %{text: dgettext("eyra-marketplace", "assignment.status.expired.label"), type: :disabled}
+        task ->
+          case task.status do
+            :pending -> %{text: dgettext("eyra-marketplace", "assignment.status.pending.label"), type: :warning}
+            :completed -> %{text: dgettext("eyra-marketplace", "assignment.status.completed.label"), type: :success}
+          end
       end
 
     subtitle = dgettext("eyra-marketplace", "reward.label", value: reward_value)

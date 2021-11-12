@@ -67,8 +67,8 @@ msgid "devices.available.label"
 msgstr "Beschikbaar op:"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:37 bundles/link/lib/card.ex:87
-#: bundles/link/lib/card.ex:157
+#: bundles/link/lib/card.ex:37 bundles/link/lib/card.ex:88
+#: bundles/link/lib/card.ex:159
 msgid "duration.title"
 msgstr "Duur"
 
@@ -78,7 +78,7 @@ msgid "expectations.label"
 msgstr "Beschrijf wat er van de deelnemers wordt verwacht"
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:179
+#: systems/campaign/model.ex:90 systems/promotion/landing_page.ex:179
 msgid "expectations.public.label"
 msgstr "Wat kun je verwachten?"
 
@@ -98,7 +98,7 @@ msgid "image.title"
 msgstr "Omslagafbeelding"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:158
+#: bundles/link/lib/card.ex:160
 msgid "open.spots.label"
 msgstr "%{count} spots open"
 
@@ -113,7 +113,7 @@ msgid "search.different.image.button"
 msgstr "Verander omslag"
 
 #, elixir-format
-#: systems/campaign/model.ex:104 systems/promotion/form_view.ex:156
+#: systems/campaign/model.ex:105 systems/promotion/form_view.ex:156
 msgid "subtitle.label"
 msgstr "Kun je in een zin uitleggen waar je studie over gaat?"
 

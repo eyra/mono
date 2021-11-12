@@ -12,27 +12,27 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:252 lib/core/pools/submission.ex:114
+#: bundles/link/lib/card.ex:254 lib/core/pools/submission.ex:114
 msgid "status.idle.label"
 msgstr "Concept"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:255 lib/core/pools/submission.ex:117
+#: bundles/link/lib/card.ex:257 lib/core/pools/submission.ex:117
 msgid "status.submitted.label"
 msgstr "Ingediend"
 
 #, elixir-format
-#: systems/campaign/model.ex:223
+#: systems/campaign/model.ex:227
 msgid "incomplete.forms.message"
 msgstr "Sommige verplichte velden zijn nog niet ingevuld"
 
 #, elixir-format
-#: systems/campaign/model.ex:221
+#: systems/campaign/model.ex:225
 msgid "ready.for.submission.message"
 msgstr "Alle verplichte velden zijn gevuld, je kunt deze campagne indienen"
 
 #, elixir-format
-#: systems/campaign/model.ex:227
+#: systems/campaign/model.ex:231
 msgid "waiting.for.coordinator.message"
 msgstr "Jouw campagne staat in de wachtrij om door de poolbeheerder in de marktplaats gezet te worden"
 
@@ -67,7 +67,7 @@ msgid "retract.success.title"
 msgstr "Campagne offline"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:86 bundles/link/lib/card.ex:156
+#: bundles/link/lib/card.ex:87 bundles/link/lib/card.ex:158
 msgid "reward.title"
 msgstr "Beloning"
 
@@ -137,26 +137,26 @@ msgid "schedule.title"
 msgstr "Planning"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:270 lib/core/pools/submission.ex:131
+#: bundles/link/lib/card.ex:272 lib/core/pools/submission.ex:131
 msgid "status.accepted.closed.label"
 msgstr "Afgerond"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:266 lib/core/pools/submission.ex:128
+#: bundles/link/lib/card.ex:268 lib/core/pools/submission.ex:128
 msgid "status.accepted.online.label"
 msgstr "Online"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:261 lib/core/pools/submission.ex:123
+#: bundles/link/lib/card.ex:263 lib/core/pools/submission.ex:123
 msgid "status.accepted.scheduled.label"
 msgstr "Ingepland"
 
 #, elixir-format
-#: systems/campaign/model.ex:241
+#: systems/campaign/model.ex:245
 msgid "accepted.closed.message"
 msgstr "Deze campagne is afgerond"
 
 #, elixir-format
-#: systems/campaign/model.ex:232
+#: systems/campaign/model.ex:236
 msgid "accepted.scheduled.message"
 msgstr "Deze campagne staat ingepland voor deelname "

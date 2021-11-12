@@ -156,7 +156,8 @@ msgstr "Helpdesk"
 
 #, elixir-format
 #: bundles/link/lib/pool/submission_page.ex:8
-#: lib/core_web/live/admin/ticket.ex:4 systems/campaign/content_page.ex:9 systems/promotion/landing_page.ex:6
+#: lib/core_web/live/admin/ticket.ex:4 systems/assignment/landing_page.ex:6 systems/campaign/content_page.ex:9
+#: systems/promotion/landing_page.ex:6
 msgid "cancel.button"
 msgstr "Annuleren"
 
@@ -177,8 +178,8 @@ msgstr "Verwijderen"
 
 #, elixir-format
 #: bundles/link/lib/pool/submission_page.ex:8
-#: lib/core_web/live/admin/ticket.ex:4 systems/assignment/model.ex:193 systems/campaign/content_page.ex:9
-#: systems/promotion/landing_page.ex:6
+#: lib/core_web/live/admin/ticket.ex:4 systems/assignment/landing_page.ex:6 systems/assignment/model.ex:194
+#: systems/campaign/content_page.ex:9 systems/promotion/landing_page.ex:6
 msgid "ok.button"
 msgstr "OK"
 

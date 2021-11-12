@@ -32,7 +32,7 @@ msgid "onboarding.welcome.title"
 msgstr "Welkom %{member}"
 
 #, elixir-format
-#: bundles/link/lib/debug.ex:96
+#: bundles/link/lib/debug.ex:116
 msgid "debug.title"
 msgstr "Debug"
 

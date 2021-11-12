@@ -67,8 +67,8 @@ msgid "devices.available.label"
 msgstr "Available on:"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:37 bundles/link/lib/card.ex:87
-#: bundles/link/lib/card.ex:157
+#: bundles/link/lib/card.ex:37 bundles/link/lib/card.ex:88
+#: bundles/link/lib/card.ex:159
 msgid "duration.title"
 msgstr "Duration"
 
@@ -78,7 +78,7 @@ msgid "expectations.label"
 msgstr "Describe what is expected of participants"
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:179
+#: systems/campaign/model.ex:90 systems/promotion/landing_page.ex:179
 msgid "expectations.public.label"
 msgstr "What to expect?"
 
@@ -98,7 +98,7 @@ msgid "image.title"
 msgstr "Cover image"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:158
+#: bundles/link/lib/card.ex:160
 msgid "open.spots.label"
 msgstr "%{count} open spots"
 
@@ -113,7 +113,7 @@ msgid "search.different.image.button"
 msgstr "Change cover"
 
 #, elixir-format
-#: systems/campaign/model.ex:104 systems/promotion/form_view.ex:156
+#: systems/campaign/model.ex:105 systems/promotion/form_view.ex:156
 msgid "subtitle.label"
 msgstr "Can you explain in one line what your study is about?"
 

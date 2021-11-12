@@ -119,10 +119,13 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
   defp assignment_call_to_action(%{crew: crew, assignable: assignable} = assignment, user) do
     if Crew.Context.member?(crew, user) do
       member = Crew.Context.get_member!(crew, user)
-      %{status: status} = Crew.Context.get_task(crew, member)
-      case status do
-        :completed -> forward_call_to_action(user)
-        _ -> open_call_to_action(assignable, member.public_id)
+      case Crew.Context.get_task(crew, member) do
+        nil -> forward_call_to_action(user)
+        task ->
+          case task.status do
+            :pending -> open_call_to_action(assignable, member.public_id)
+            :completed -> forward_call_to_action(user)
+          end
       end
     else
       apply_call_to_action(assignment)
