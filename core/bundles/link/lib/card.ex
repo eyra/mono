@@ -5,7 +5,7 @@ defmodule Link.Marketplace.Card do
   import CoreWeb.Gettext
 
   alias Systems.{
-    Crew
+    Assignment
   }
 
   def primary_campaign(
@@ -32,20 +32,13 @@ defmodule Link.Marketplace.Card do
     reward_currency = :eur
     duration = 0
 
-    occupied_spot_count = 0
-    open_spot_count = 0 - occupied_spot_count
-
     reward_string = CurrencyFormatter.format(reward_value, reward_currency, keep_decimals: true)
 
     duration_label = dgettext("eyra-promotion", "duration.title")
     reward_label = dgettext("eyra-promotion", "reward.title")
-    open_spots_label = dgettext("eyra-promotion", "open.spots.label", count: "#{open_spot_count}")
-    deadline_label = dgettext("eyra-promotion", "deadline.label", days: "3")
 
     info = [
-      "#{duration_label}: #{duration} min. | #{reward_label}: #{reward_string}",
-      "#{open_spots_label}",
-      "#{deadline_label}"
+      "#{duration_label}: #{duration} min. | #{reward_label}: #{reward_string}"
     ]
 
     label = nil
@@ -79,27 +72,20 @@ defmodule Link.Marketplace.Card do
             marks: marks,
             submission: submission
           },
-          promotable_assignment: %{
-            crew: crew,
-            assignable_survey_tool: %{
-              id: edit_id,
-              duration: duration,
-              language: language,
-              subject_count: subject_count
-            }
-          }
+          promotable_assignment:
+            %{
+              assignable_survey_tool: %{
+                duration: duration,
+                language: language
+              }
+            } = assignment
         },
         socket
       ) do
-    subject_count = if subject_count === nil, do: 0, else: subject_count
     duration = if duration === nil, do: 0, else: duration
-
-    occupied_spot_count = Crew.Context.count_tasks(crew, [:pending, :completed])
-    open_spot_count = subject_count - occupied_spot_count
 
     reward_label = dgettext("eyra-submission", "reward.title")
     duration_label = dgettext("eyra-promotion", "duration.title")
-    open_spots_label = dgettext("eyra-promotion", "open.spots.label", count: "#{open_spot_count}")
 
     info1_elements = [
       "#{duration_label}: #{duration} min.",
@@ -115,11 +101,16 @@ defmodule Link.Marketplace.Card do
       end
 
     info1 = Enum.join(info1_elements, " | ")
-    info2 = "#{open_spots_label}"
+    info = [info1]
 
-    info = [info1, info2]
+    open? = Assignment.Context.open?(assignment)
 
-    label = nil
+    label =
+      if open? do
+        nil
+      else
+        %{text: dgettext("eyra-marketplace", "assignment.status.complete.label"), type: :tertiary}
+      end
 
     icon_url = get_icon_url(marks, socket)
     image_info = ImageHelpers.get_image_info(image_id)
@@ -127,7 +118,7 @@ defmodule Link.Marketplace.Card do
 
     %{
       id: id,
-      edit_id: edit_id,
+      edit_id: id,
       open_id: open_id,
       title: title,
       image_info: image_info,
@@ -150,22 +141,19 @@ defmodule Link.Marketplace.Card do
             marks: marks,
             submission: submission
           },
-          promotable_assignment: %{
-            crew: crew,
-            assignable_survey_tool: %{
-              duration: duration,
-              subject_count: subject_count,
-              language: language
-            }
-          }
+          promotable_assignment:
+            %{
+              assignable_survey_tool: %{
+                duration: duration,
+                language: language
+              }
+            } = assignment
         },
         socket
       ) do
-    subject_count = if subject_count === nil, do: 0, else: subject_count
     duration = if duration === nil, do: 0, else: duration
 
-    occupied_spot_count = Crew.Context.count_tasks(crew, [:pending, :completed])
-    open_spot_count = subject_count - occupied_spot_count
+    open_spot_count = Assignment.Context.open_spot_count(assignment)
 
     reward_label = dgettext("eyra-submission", "reward.title")
     duration_label = dgettext("eyra-promotion", "duration.title")
@@ -189,7 +177,7 @@ defmodule Link.Marketplace.Card do
 
     info = [info1, info2]
 
-    label = get_label(submission)
+    label = get_label(assignment, submission)
     icon_url = get_icon_url(marks, socket)
     image_info = ImageHelpers.get_image_info(image_id)
     tags = get_tags(themes)
@@ -228,7 +216,7 @@ defmodule Link.Marketplace.Card do
         },
         socket
       ) do
-    label = get_label(submission)
+    label = nil
     icon_url = get_icon_url(marks, socket)
     image_info = ImageHelpers.get_image_info(image_id)
     tags = get_tags(themes)
@@ -248,6 +236,16 @@ defmodule Link.Marketplace.Card do
       label: label,
       label_type: "secondary"
     }
+  end
+
+  defp get_label(assignment, submission) do
+    open? = Assignment.Context.open?(assignment)
+
+    if open? or submission.status != :accepted do
+      get_label(submission)
+    else
+      %{text: dgettext("eyra-marketplace", "assignment.status.complete.label"), type: :disabled}
+    end
   end
 
   defp get_label(submission) do

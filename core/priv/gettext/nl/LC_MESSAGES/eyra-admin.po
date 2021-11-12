@@ -72,7 +72,7 @@ msgid "role.coordinator"
 msgstr "Pool beheerder"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:240
+#: bundles/link/lib/pool/submission_page.ex:256
 #: lib/core_web/live/admin/ticket.ex:64
 msgid "role.researcher"
 msgstr "Onderzoeker"
@@ -83,7 +83,7 @@ msgid "role.student"
 msgstr "Student"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:252
+#: bundles/link/lib/pool/submission_page.ex:268
 #: lib/core_web/live/admin/ticket.ex:80
 msgid "ticket.mailto.button"
 msgstr "Benaderen"

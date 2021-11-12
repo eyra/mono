@@ -16,7 +16,7 @@ msgstr ""
 msgid "apply.cta.title"
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/core/lab/tool.ex:58
 msgid "open.cta.title"
 msgstr ""

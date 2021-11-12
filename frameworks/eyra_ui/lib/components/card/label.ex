@@ -17,10 +17,11 @@ defmodule EyraUI.Card.Label do
   def bg_color(:primary), do: "bg-primary"
   def bg_color(:secondary), do: "bg-secondary"
   def bg_color(:tertiary), do: "bg-tertiary"
-  def bg_color(:disabled), do: "bg-grey3"
+  def bg_color(:disabled), do: "bg-grey5"
   def bg_color(type), do: "bg-#{type}"
 
   def text_color(:tertiary), do: "text-grey1"
+  def text_color(:disabled), do: "text-grey1"
   def text_color(_), do: "text-white"
 
   def render(assigns) do

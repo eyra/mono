@@ -32,39 +32,39 @@ msgid "onboarding.welcome.title"
 msgstr "Welcome %{member}"
 
 #, elixir-format
-#: bundles/link/lib/debug.ex:67
+#: bundles/link/lib/debug.ex:96
 msgid "debug.title"
 msgstr "Debug"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:210
+#: systems/campaign/content_page.ex:227
 msgid "delete.confirm.campaign"
 msgstr "campaign"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:368 systems/campaign/content_page.ex:372
-#: systems/campaign/content_page.ex:378
+#: systems/campaign/content_page.ex:383 systems/campaign/content_page.ex:387
+#: systems/campaign/content_page.ex:393
 msgid "delete.button"
 msgstr "Delete"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:172
-#: systems/campaign/content_page.ex:352 systems/campaign/content_page.ex:358 systems/campaign/content_page.ex:362
+#: bundles/link/lib/pool/submission_page.ex:188
+#: systems/campaign/content_page.ex:367 systems/campaign/content_page.ex:373 systems/campaign/content_page.ex:377
 msgid "preview.button"
 msgstr "Preview"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:338 systems/campaign/content_page.ex:344
+#: systems/campaign/content_page.ex:353 systems/campaign/content_page.ex:359
 msgid "submit.button"
 msgstr "Submit"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:178
-#: systems/campaign/content_page.ex:382
+#: bundles/link/lib/pool/submission_page.ex:194
+#: systems/campaign/content_page.ex:397
 msgid "retract.button"
 msgstr "Unpublish"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:164
+#: bundles/link/lib/pool/submission_page.ex:180
 msgid "accept.button"
 msgstr "Publish"

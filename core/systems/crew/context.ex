@@ -19,11 +19,6 @@ defmodule Systems.Crew.Context do
     |> Repo.one()
   end
 
-  def get_by_reference!(type, id, preload \\ [:tasks, :members]) do
-    from(c in Crew.Model, where: c.reference_type == ^type and c.reference_id == ^id, preload: ^preload)
-    |> Repo.one()
-  end
-
   def create(auth_node, attrs \\ %{}) do
     %Crew.Model{}
     |> Crew.Model.changeset(attrs)
@@ -35,7 +30,13 @@ defmodule Systems.Crew.Context do
   def get_task(_crew, nil), do: nil
 
   def get_task(crew, member) do
-    Repo.get_by(Crew.TaskModel, crew_id: crew.id, member_id: member.id)
+    from(task in Crew.TaskModel,
+      where:
+        task.crew_id == ^crew.id and
+        task.member_id == ^member.id and
+        task.expired == false
+    )
+    |> Repo.one()
   end
 
   def get_task!(id) do
@@ -75,16 +76,24 @@ defmodule Systems.Crew.Context do
 
   def list_tasks(crew) do
     from(task in Crew.TaskModel,
-      where: task.crew_id == ^crew.id
+      where: task.crew_id == ^crew.id and task.expired == false
     )
     |> Repo.all()
   end
 
   def count_tasks(crew, status_list) do
     from(t in Crew.TaskModel,
-      where: t.crew_id == ^crew.id and t.status in ^status_list,
+      where:
+        t.crew_id == ^crew.id and
+        t.status in ^status_list and
+        t.expired == false,
       select: count(t.id)
     )
+    |> Repo.one()
+  end
+
+  def count_expired_pending_tasks(crew) do
+    from(t in Crew.TaskModel, where: t.crew_id == ^crew.id and t.expired == true, select: count(t.id))
     |> Repo.one()
   end
 
@@ -130,14 +139,21 @@ defmodule Systems.Crew.Context do
   end
 
   def delete_task(%Crew.TaskModel{} = task) do
-    task
-    |> Repo.delete()
+    update_task!(task, %{expired: true})
   end
 
   def delete_task(_), do: nil
 
 
   # Members
+
+  def count_members(crew) do
+    from(m in Crew.MemberModel,
+      where: m.crew_id == ^crew.id and m.expired == false,
+      select: count(m.id)
+    )
+    |> Repo.one()
+  end
 
   def public_id(crew, user) do
     crew
@@ -156,7 +172,7 @@ defmodule Systems.Crew.Context do
 
   def get_member!(crew, user) do
     from(m in Crew.MemberModel,
-      where: m.crew_id == ^crew.id and m.user_id == ^user.id,
+      where: m.crew_id == ^crew.id and m.user_id == ^user.id and m.expired == false,
     )
     |> Repo.one()
   end
@@ -166,7 +182,7 @@ defmodule Systems.Crew.Context do
   end
 
   def list_members_without_task(crew) do
-    member_ids_with_task = from(t in Crew.TaskModel, where: t.crew_id == ^crew.id, select: t.member_id)
+    member_ids_with_task = from(t in Crew.TaskModel, where: t.crew_id == ^crew.id and t.expired == false, select: t.member_id)
 
     from(m in Crew.MemberModel,
       where: m.crew_id == ^crew.id and m.id not in subquery(member_ids_with_task)
@@ -175,19 +191,24 @@ defmodule Systems.Crew.Context do
   end
 
   def apply_member(%Crew.Model{} = crew, %User{} = user) do
-    Multi.new()
-    |> Multi.insert(
-      :member,
-      %Crew.MemberModel{}
-      |> Crew.MemberModel.changeset()
-      |> Ecto.Changeset.put_assoc(:crew, crew)
-      |> Ecto.Changeset.put_assoc(:user, user)
-    )
-    |> Multi.insert(
-      :role_assignment,
-      Authorization.build_role_assignment(user, crew, :participant)
-    )
-    |> Repo.transaction()
+    if member = get_expired_member(crew, user) do
+      member = set_member_expired(member, false)
+      {:ok, %{member: member}}
+    else
+      Multi.new()
+      |> Multi.insert(
+        :member,
+        %Crew.MemberModel{}
+        |> Crew.MemberModel.changeset()
+        |> Ecto.Changeset.put_assoc(:crew, crew)
+        |> Ecto.Changeset.put_assoc(:user, user)
+      )
+      |> Multi.insert(
+        :role_assignment,
+        Authorization.build_role_assignment(user, crew, :participant)
+      )
+      |> Repo.transaction()
+    end
   end
 
   def apply_member!(%Crew.Model{} = crew, %User{} = user) do
@@ -197,52 +218,55 @@ defmodule Systems.Crew.Context do
     end
   end
 
+  def get_expired_member(%Crew.Model{} = crew, %User{} = user) do
+    from(m in Crew.MemberModel,
+      where:
+        m.crew_id == ^crew.id and
+        m.user_id == ^user.id and
+        m.expired == true
+    )
+    |> Repo.one()
+  end
+
+  def set_member_expired(%Crew.MemberModel{} = member, expired) do
+    member_query = from(m in Crew.MemberModel, where: m.id == ^member.id)
+    task_query = from(t in Crew.TaskModel, where: t.member_id == ^member.id)
+
+    Multi.new()
+    |> Multi.update_all(:member , member_query, set: [expired: expired])
+    |> Multi.update_all(:tasks, task_query, set: [expired: expired])
+    |> Repo.transaction()
+
+    from(m in Crew.MemberModel, where: m.id == ^member.id)
+    |> Repo.one()
+  end
+
   def list_members(%Crew.Model{} = crew) do
     from(m in Crew.MemberModel,
-      where: m.crew_id == ^crew.id,
+      where: m.crew_id == ^crew.id and m.expired == false,
       preload: [:user]
     )
     |> Repo.all()
   end
 
-  def withdraw_member(%Crew.Model{} = crew, %User{} = user) do
-    if member?(crew, user) do
-      member = get_member!(crew, user)
-
-      Multi.new()
-      |> Multi.delete_all(
-        :member,
-        from(m in Crew.MemberModel,
-          where: m.crew_id == ^crew.id and m.user_id == ^user.id
-        )
-      )
-      |> Multi.delete_all(
-        :task,
-        from(t in Crew.TaskModel,
-          where: t.crew_id == ^crew.id and t.member_id == ^member.id
-        )
-      )
-      |> Multi.delete_all(
-        :role_assignment,
-        Authorization.query_role_assignment(user, crew, :participant)
-      )
-      |> Repo.transaction()
-    end
-  end
-
-  @spec member?(
-          atom | %{:id => any, optional(any) => any},
-          atom | %{:id => any, optional(any) => any}
-        ) :: boolean
   def member?(crew, user) do
     crew
     |> member_query(user)
     |> Repo.exists?()
   end
 
-  defp member_query(crew, user) do
+  def expired_member?(crew, user) do
+    crew
+    |> member_query(user, true)
+    |> Repo.exists?()
+  end
+
+  defp member_query(crew, user, expired \\ false) do
     from(m in Crew.MemberModel,
-      where: m.crew_id == ^crew.id and m.user_id == ^user.id
+      where:
+        m.crew_id == ^crew.id and
+        m.user_id == ^user.id and
+        m.expired == ^expired
     )
   end
 end

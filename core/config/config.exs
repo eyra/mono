@@ -28,8 +28,13 @@ config :core, CoreWeb.Gettext, default_locale: "nl", locales: ~w(en nl)
 
 config :core, Oban,
   repo: Core.Repo,
-  plugins: [],
-  queues: [default: 5]
+  queues: [default: 5],
+  plugins: [
+    {Oban.Plugins.Cron,
+     crontab: [
+       {"*/5 * * * *", Systems.Campaign.ExpirationWorker}
+     ]}
+  ]
 
 config :core, ecto_repos: [Core.Repo]
 

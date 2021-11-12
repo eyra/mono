@@ -6,6 +6,6 @@ defprotocol Frameworks.Utility.ViewModelBuilder do
   @type url_resolver :: ((atom, list) -> binary)
 
   @spec view_model(model, page, user, url_resolver) :: map
-  def view_model(vm, page, user, url_resolver)
+  def view_model(model, page, user, url_resolver)
 
 end

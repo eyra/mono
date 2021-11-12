@@ -16,7 +16,8 @@ config :core, :features,
   sign_in_with_apple: false,
   member_google_sign_in: false,
   password_sign_in: false,
-  notification_mails: false
+  notification_mails: false,
+  debug_expire_force: false
 
 config :core, Core.SurfConext, limit_schac_home_organization: "vu.nl"
 

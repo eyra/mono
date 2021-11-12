@@ -9,6 +9,7 @@ defmodule Systems.Crew.MemberModel do
 
   schema "crew_members" do
     field(:public_id, :integer)
+    field(:expired, :boolean)
 
     belongs_to(:crew, Crew.Model)
     belongs_to(:user, User)
@@ -19,6 +20,6 @@ defmodule Systems.Crew.MemberModel do
   @doc false
   def changeset(member, attrs \\ %{}) do
     member
-    |> cast(attrs, [:public_id])
+    |> cast(attrs, [:public_id, :expired])
   end
 end

@@ -7,11 +7,11 @@ defmodule Link.Marketplace do
 
   alias Systems.{
     NextAction,
-    Campaign,
-    Assignment
+    Campaign
   }
 
-  alias Core.ImageHelpers
+  alias Frameworks.Utility.ViewModelBuilder
+
   alias Core.Accounts
   alias Core.Pools.{Submission, Criteria}
   alias Core.Survey.Tool, as: SurveyTool
@@ -44,7 +44,7 @@ defmodule Link.Marketplace do
     subject_campaigns =
       user
       |> Campaign.Context.list_subject_campaigns(preload: preload)
-      |> Enum.map(&convert_to_vm(socket, &1))
+      |> Enum.map(&ViewModelBuilder.view_model(&1, __MODULE__, user, url_resolver(socket)))
 
     highlighted_campaigns = subject_campaigns
     highlighted_count = Enum.count(subject_campaigns)
@@ -171,46 +171,5 @@ defmodule Link.Marketplace do
           </ContentArea>
         </Workspace>
     """
-  end
-
-  defp get_quick_summary(updated_at) do
-    updated_at
-    |> CoreWeb.UI.Timestamp.apply_timezone()
-    |> CoreWeb.UI.Timestamp.humanize()
-  end
-
-  defp get_subtitle(%{reward_value: reward_value} = _submission) do
-    dgettext("eyra-marketplace", "reward.label", value: reward_value)
-  end
-
-  def convert_to_vm(socket, %{
-        id: id,
-        updated_at: updated_at,
-        promotion: %{
-          title: title,
-          image_id: image_id,
-          submission: submission
-        },
-        promotable_assignment: %{
-          id: assignment_id
-        }
-      }) do
-    tag = Submission.get_tag(submission)
-
-    subtitle = get_subtitle(submission)
-    quick_summary = get_quick_summary(updated_at)
-    image_info = ImageHelpers.get_image_info(image_id, 120, 115)
-    image = %{type: :catalog, info: image_info}
-
-    %{
-      id: id,
-      path: Routes.live_path(socket, Assignment.LandingPage, assignment_id),
-      title: title,
-      subtitle: subtitle,
-      tag: tag,
-      level: :critical,
-      image: image,
-      quick_summary: quick_summary
-    }
   end
 end

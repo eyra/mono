@@ -33,11 +33,12 @@ defmodule Core.Survey.Tool do
     def id(survey_tool), do: survey_tool.auth_node_id
   end
 
-  @fields ~w(survey_url subject_count duration language ethical_code ethical_approval devices)a
+  @operational_fields ~w(survey_url subject_count duration ethical_code ethical_approval devices)a
+  @fields @operational_fields ++ ~w(language)a
   @required_fields ~w()a
 
   @impl true
-  def operational_fields, do: @fields
+  def operational_fields, do: @operational_fields
 
   @impl true
   def operational_validation(changeset) do

@@ -12,16 +12,11 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/campaign/model.ex:235
-msgid "quick_summary.%{open_spot_count}.%{target_subject_count}"
-msgstr "%{open_spot_count} van %{target_subject_count} plaatsen beschikbaar"
+#: systems/assignment/model.ex:185
+msgid "closed.dialog.text"
+msgstr "Helaas is deze opdracht momenteel gesloten voor deelname"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:59
-msgid "recent-items.title"
-msgstr "Recente items"
-
-#, elixir-format
-#: bundles/link/lib/dashboard.ex:48
-msgid "title"
-msgstr "Dashboard"
+#: systems/assignment/model.ex:184
+msgid "closed.dialog.title"
+msgstr "Gesloten"

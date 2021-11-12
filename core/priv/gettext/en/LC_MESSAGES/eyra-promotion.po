@@ -12,153 +12,147 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:201
+#: systems/promotion/landing_page.ex:206
 msgid "back.button.label"
 msgstr "Back"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:208
+#: systems/promotion/form_view.ex:198
 msgid "banner.subtitle.label"
 msgstr "Description"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:195
+#: systems/promotion/form_view.ex:185
 msgid "banner.title"
 msgstr "About you or your team"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:207
+#: systems/promotion/form_view.ex:197
 msgid "banner.title.label"
 msgstr "Name"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:209
+#: systems/promotion/form_view.ex:199
 msgid "banner.url.label"
 msgstr "Website"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:201
+#: systems/promotion/form_view.ex:191
 msgid "choose.banner.photo.file"
 msgstr "Select picture"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:202
+#: systems/promotion/form_view.ex:192
 msgid "choose.other.banner.photo.file"
 msgstr "Choose different photo"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:43
-msgid "deadline.label"
-msgstr "Still %{days} days available"
-
-#, elixir-format
-#: systems/promotion/form_view.ex:192
+#: systems/promotion/form_view.ex:182
 msgid "description.label"
 msgstr "Provide some background information about this study"
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:178
+#: systems/promotion/landing_page.ex:183
 msgid "description.public.label"
 msgstr "About this study"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:191
+#: systems/promotion/form_view.ex:181
 msgid "description.title"
 msgstr "Why are you performing this study?"
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:192
+#: systems/promotion/landing_page.ex:197
 msgid "devices.available.label"
 msgstr "Available on:"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:40 bundles/link/lib/card.ex:101
-#: bundles/link/lib/card.ex:172
+#: bundles/link/lib/card.ex:37 bundles/link/lib/card.ex:87
+#: bundles/link/lib/card.ex:157
 msgid "duration.title"
 msgstr "Duration"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:188
+#: systems/promotion/form_view.ex:178
 msgid "expectations.label"
 msgstr "Describe what is expected of participants"
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:174
+#: systems/promotion/landing_page.ex:179
 msgid "expectations.public.label"
 msgstr "What to expect?"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:187
+#: systems/promotion/form_view.ex:177
 msgid "expectations.title"
 msgstr "What do participants have to do?"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:176
+#: systems/promotion/form_view.ex:166
 msgid "image.label"
 msgstr "This image is used as a cover image for your promotion page and your marketplace tile."
 
 #, elixir-format
-#: systems/promotion/form_view.ex:175
+#: systems/promotion/form_view.ex:165
 msgid "image.title"
 msgstr "Cover image"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:42 bundles/link/lib/card.ex:102
-#: bundles/link/lib/card.ex:173
+#: bundles/link/lib/card.ex:158
 msgid "open.spots.label"
 msgstr "%{count} open spots"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:41
+#: bundles/link/lib/card.ex:38
 msgid "reward.title"
 msgstr "Credits"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:182
+#: systems/promotion/form_view.ex:172
 msgid "search.different.image.button"
 msgstr "Change cover"
 
 #, elixir-format
-#: systems/campaign/model.ex:92 systems/promotion/form_view.ex:166
+#: systems/campaign/model.ex:104 systems/promotion/form_view.ex:156
 msgid "subtitle.label"
 msgstr "Can you explain in one line what your study is about?"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:170
+#: systems/promotion/form_view.ex:160
 msgid "themes.label"
 msgstr "Which theme fits your study best? You could select multiple."
 
 #, elixir-format
-#: systems/promotion/form_view.ex:169
+#: systems/promotion/form_view.ex:159
 msgid "themes.title"
 msgstr "Themes"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:165
+#: systems/promotion/form_view.ex:155
 msgid "title.label"
 msgstr "Title"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:161
+#: systems/promotion/form_view.ex:151
 msgid "form.title"
 msgstr "Promotion"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:162
+#: systems/promotion/form_view.ex:152
 msgid "form.description"
 msgstr "Promotions will be published in the marketplace to recruit participants. Preview the promotion page to view what participants will see when they click your marketplace tile."
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:98
+#: systems/promotion/landing_page.ex:103
 msgid "preview.inform.text"
 msgstr "This feature does not work in preview mode."
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:97
+#: systems/promotion/landing_page.ex:102
 msgid "preview.inform.title"
 msgstr "Preview"
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:193
+#: systems/promotion/landing_page.ex:198
 msgid "languages.available.label"
 msgstr "Language:"

@@ -72,13 +72,13 @@ defmodule Systems.Promotion.LandingPageTest do
       assert html =~ "About this study"
       assert html =~ "Something about this study"
       assert html =~ "This is a test title"
-      assert html =~ "Apply to participate"
+      assert html =~ "Participate"
       assert html =~ "Duration"
       assert html =~ "10 minutes"
       assert html =~ "Reward"
       assert html =~ "5 credits"
-      assert html =~ "Open spots"
-      assert html =~ "Still 10 out of 10 available"
+      assert html =~ "Status"
+      assert html =~ "Open for participation"
       assert html =~ "Available on:"
       assert html =~ "desktop.svg"
     end
@@ -89,7 +89,7 @@ defmodule Systems.Promotion.LandingPageTest do
       _task = Crew.Context.create_task!(assignment.crew, member)
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Promotion.LandingPage, promotion.id))
-      assert html =~ "Still 9 out of 10 available"
+      assert html =~ "Open for participation"
     end
 
     test "Apply current user", %{conn: conn, promotion: promotion} do

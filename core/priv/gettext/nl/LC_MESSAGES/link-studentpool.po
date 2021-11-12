@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/pool/overview_page.ex:40
-#: bundles/link/lib/pool/views/students_view.ex:92
+#: bundles/link/lib/pool/views/students_view.ex:93
 msgid "tabbar.item.students"
 msgstr "Studenten"
 
@@ -28,71 +28,71 @@ msgid "title"
 msgstr "Studentenpool"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/students_view.ex:88
+#: bundles/link/lib/pool/views/students_view.ex:89
 msgid "students.empty.description"
 msgstr "Op dit moment zijn er nog geen studenten geregistreerd. Je wordt op de hoogte gesteld zodra er studenten zijn die zich  hebben aangemeld."
 
 #, elixir-format
-#: bundles/link/lib/pool/views/students_view.ex:87
+#: bundles/link/lib/pool/views/students_view.ex:88
 msgid "students.empty.title"
 msgstr "Hier vind je straks alle geregistreerde studenten."
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:75
+#: bundles/link/lib/pool/views/campaigns_view.ex:73
 msgid "campaigns.empty.description"
 msgstr "Hier vind je straks de campagnes die onderzoekers in jouw pool beschikbaar willen stellen, om deelnemers te werven voor hun studie. Vervolgens kun je deze campagnes beschikbaar stellen in de marktplaats van de deelnemers die daarvoor in aanmerking komen."
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:74
+#: bundles/link/lib/pool/views/campaigns_view.ex:72
 msgid "campaigns.empty.title"
 msgstr "Campagnes in jouw pool"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/students_view.ex:72
+#: bundles/link/lib/pool/views/students_view.ex:71
 msgid "student.tag.complete"
 msgstr "Gereed"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/students_view.ex:73
+#: bundles/link/lib/pool/views/students_view.ex:75
 msgid "student.tag.incomplete"
 msgstr "Onvolledig"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:67
+#: bundles/link/lib/pool/views/campaigns_view.ex:65
 msgid "accepted.title"
 msgstr "Gepubliceerd"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:103
+#: bundles/link/lib/pool/views/campaigns_view.ex:102
 msgid "status.submitted.label"
 msgstr "In afwachting"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:61
+#: bundles/link/lib/pool/views/campaigns_view.ex:59
 msgid "submitted.title"
 msgstr "Ingediend door onderzoekers"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:134
+#: bundles/link/lib/pool/views/campaigns_view.ex:131
 msgid "spots.available"
 msgstr "%{open} van de %{total} plaatsen beschikbaar"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:197
+#: bundles/link/lib/pool/submission_page.ex:213
 msgid "submission.title"
 msgstr "Campagne"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:121
+#: bundles/link/lib/pool/views/campaigns_view.ex:120
 msgid "status.accepted.closed.label"
 msgstr "Afgerond"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:115
+#: bundles/link/lib/pool/views/campaigns_view.ex:114
 msgid "status.accepted.online.label"
 msgstr "Online"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaigns_view.ex:109
+#: bundles/link/lib/pool/views/campaigns_view.ex:108
 msgid "status.accepted.scheduled.label"
 msgstr "Ingepland"

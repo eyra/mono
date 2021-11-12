@@ -21,6 +21,10 @@ defmodule CoreWeb.UI.Timestamp do
     date |> Timex.shift(days: 7)
   end
 
+  def shift_minutes(date, minutes) do
+    date |> Timex.shift(minutes: minutes)
+  end
+
   def future?(date) when is_binary(date) do
     after?(parse_user_input_date(date), now())
   end

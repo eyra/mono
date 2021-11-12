@@ -11,16 +11,22 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:165
+#: bundles/link/lib/marketplace.ex:166
 msgid "empty.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:164
+#: bundles/link/lib/marketplace.ex:165
 msgid "empty.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:182
+#: systems/campaign/model.ex:126
 msgid "reward.label"
+msgstr ""
+
+#, elixir-format
+#: bundles/link/lib/card.ex:111 bundles/link/lib/card.ex:245
+#: systems/campaign/model.ex:123
+msgid "assignment.status.complete.label"
 msgstr ""

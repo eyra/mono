@@ -11,6 +11,6 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:83
+#: systems/campaign/model.ex:89
 msgid "subtitle.label"
 msgstr ""

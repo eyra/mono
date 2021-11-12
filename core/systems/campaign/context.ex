@@ -92,7 +92,8 @@ defmodule Systems.Campaign.Context do
 
     from(campaign in Campaign.Model,
       where: campaign.promotion_id in subquery(promotion_ids) and campaign.id not in ^exclude,
-      preload: ^preload
+      preload: ^preload,
+      order_by: {:desc, :inserted_at}
     )
     |> Repo.all()
   end
@@ -125,7 +126,7 @@ defmodule Systems.Campaign.Context do
   def list_subject_campaigns(user, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
 
-    member_ids = from(m in Crew.MemberModel, where: m.user_id == ^user.id, select: m.id)
+    member_ids = from(m in Crew.MemberModel, where: m.user_id == ^user.id and m.expired == false, select: m.id)
     crew_ids = from(t in Crew.TaskModel, where: t.member_id in subquery(member_ids), select: t.crew_id)
     assigment_ids = from(a in Assignment.Model, where: a.crew_id in subquery(crew_ids), select: a.id)
 
@@ -281,6 +282,33 @@ defmodule Systems.Campaign.Context do
   def list_tools(%Campaign.Model{} = campaign, schema) do
     from(s in schema, where: s.campaign_id == ^campaign.id)
     |> Repo.all()
+  end
+
+  @doc """
+    Marks expired tasks in online campaigns. If force is true (for debug purposes only),
+    all pending tasks will be marked as expired.
+  """
+  def mark_expired(force \\ false) do
+    online_submissions =
+      from(s in Submission, where: s.status == :accepted)
+      |> Repo.all()
+      |> Enum.filter(&(Submission.published_status(&1) == :online))
+
+    promotion_ids =
+      online_submissions
+      |> Enum.map(&(&1.promotion_id))
+
+    preload = Campaign.Model.preload_graph(:full)
+    from(c in Campaign.Model, preload: ^preload, where: c.promotion_id in ^promotion_ids)
+    |> Repo.all()
+    |> Enum.each(&mark_expired(&1, force))
+  end
+
+  @doc """
+    Marks expired tasks in given campaign
+  """
+  def mark_expired(%{promotable_assignment: assignment}, force) do
+    Assignment.Context.mark_expired(assignment, force)
   end
 
 end
