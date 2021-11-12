@@ -77,7 +77,7 @@ defmodule Systems.Assignment.LandingPageTest do
       assert html =~ "These are the expectations for the participants"
       assert html =~ "Reward"
       assert html =~ "Duration"
-      assert html =~ "Status"
+      assert html =~ "Language"
       assert html =~ "Go to survey"
     end
 
@@ -122,7 +122,7 @@ defmodule Systems.Assignment.LandingPageTest do
       assert html =~ "These are the expectations for the participants"
       assert html =~ "Reward"
       assert html =~ "Duration"
-      assert html =~ "Status"
+      assert html =~ "Language"
       assert html =~ "Go to survey"
     end
 
@@ -143,7 +143,7 @@ defmodule Systems.Assignment.LandingPageTest do
       assert html =~ "Your contribution will be reviewed by the author of this study."
       assert html =~ "Reward"
       assert html =~ "Duration"
-      assert html =~ "Status"
+      assert html =~ "Language"
       assert html =~ "Go to dashboard"
     end
   end

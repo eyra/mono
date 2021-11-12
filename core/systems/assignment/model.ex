@@ -65,6 +65,8 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
   alias CoreWeb.Router.Helpers, as: Routes
   alias Core.Accounts
 
+  alias Link.Enums.OnlineStudyLanguages
+
   alias Systems.{
     Assignment,
     Promotion,
@@ -77,14 +79,14 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
     |> vm(page, user)
   end
 
-  defp vm(%{crew: crew, assignable: assignable} = assignment, Assignment.LandingPage, user) do
+  defp vm(%{crew: crew} = assignment, Assignment.LandingPage, user) do
     if Crew.Context.member?(crew, user) do
       member = Crew.Context.get_member!(crew, user)
       task = Crew.Context.get_task(crew, member)
 
       %{
         hero_title: dgettext("link-survey", "task.hero.title"),
-        highlights: highlights(assignment, assignable),
+        highlights: highlights(assignment, :assignment),
         subtitle: assignment_subtitle(task),
         text: assignment_text(task),
         call_to_action: assignment_call_to_action(assignment, user),
@@ -92,7 +94,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
     else # expired member
       %{
         hero_title: dgettext("link-survey", "task.hero.title"),
-        highlights: highlights(assignment, assignable),
+        highlights: highlights(assignment, :assignment),
         subtitle: dgettext("eyra-crew", "task.expired.subtitle"),
         text: dgettext("eyra-crew", "task.expired.text"),
         call_to_action: forward_call_to_action(user),
@@ -109,7 +111,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
 
   defp vm(%{assignable: assignable} = assignment, Promotion.LandingPage, _user) do
     %{
-      highlights: highlights(assignment, assignable),
+      highlights: highlights(assignment, :promotion),
       call_to_action: apply_call_to_action(assignment),
       languages: Assignment.Assignable.languages(assignable),
       devices: Assignment.Assignable.devices(assignable)
@@ -215,10 +217,31 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
   defp assignment_text(%{status: :completed}), do: dgettext("link-survey", "task.completed.text")
   defp assignment_text(_), do: nil
 
-  def highlights(assignment, assignable) do
-    duration = Assignment.Assignable.duration(assignable)
-    open? = Assignment.Context.open?(assignment)
+  defp highlights(assignment, :assignment) do
+    [
+      highlight(assignment, :duration),
+      highlight(assignment, :language),
+    ]
+  end
 
+  defp highlights(assignment, :promotion) do
+    [
+      highlight(assignment, :duration),
+      highlight(assignment, :status),
+    ]
+  end
+
+  defp highlight(%{assignable: assignable}, :duration) do
+    duration = Assignment.Assignable.duration(assignable)
+
+    duration_title = dgettext("link-survey", "duration.highlight.title")
+    duration_text = dgettext("link-survey", "duration.highlight.text", duration: duration)
+
+    %{title: duration_title, text: duration_text}
+  end
+
+  defp highlight(assignment, :status) do
+    open? = Assignment.Context.open?(assignment)
     status_title = dgettext("link-survey", "status.highlight.title")
 
     status_text =
@@ -228,12 +251,29 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
         dgettext("link-survey", "status.closed.highlight.text")
       end
 
-    duration_title = dgettext("link-survey", "duration.highlight.title")
-    duration_text = dgettext("link-survey", "duration.highlight.text", duration: duration)
-
-    [
-      %{title: duration_title, text: duration_text},
-      %{title: status_title, text: status_text}
-    ]
+    %{title: status_title, text: status_text}
   end
+
+  defp highlight(%{assignable: assignable}, :language) do
+    language_title = dgettext("link-survey", "language.highlight.title")
+
+    language_text =
+      Assignment.Assignable.languages(assignable)
+      |> language_text()
+
+    %{title: language_title, text: language_text}
+  end
+
+  defp language_text([]), do: "?"
+  defp language_text(languages) when is_list(languages) do
+    languages
+    |> Enum.map(&translate(&1))
+    |> Enum.join(" | ")
+  end
+
+  defp translate(nil), do: "?"
+  defp translate(language) do
+    OnlineStudyLanguages.translate(language)
+  end
+
 end
