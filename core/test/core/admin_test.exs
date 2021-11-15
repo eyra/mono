@@ -18,11 +18,20 @@ defmodule Core.AdminTest do
     end
 
     test "pattern-match" do
-      assert Admin.admin?(Admin.compile(["*@example.org"]), "example@example.org")
+      compiled = Admin.compile(["*@example.org"])
+      assert Admin.admin?(compiled, "example@example.org")
+      assert Admin.admin?(compiled, "test.ing@example.org")
+      assert Admin.admin?(compiled, "test-ing@example.org")
+      assert Admin.admin?(compiled, "test_ing@example.org")
     end
 
     test "pattern-match excludes non-matching" do
       refute Admin.admin?(Admin.compile(["*@example.org"]), "example@example.com")
+    end
+
+    test "non-compiled works" do
+      assert Admin.admin?(["*@example.org"], "test@example.org")
+      refute Admin.admin?(["*@example.org"], "test@example.com")
     end
   end
 end

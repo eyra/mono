@@ -66,9 +66,7 @@ config :core,
 
 config :core,
        :admins,
-       MapSet.new([
-         "admin@example.org"
-       ])
+       ["admin@example.org"]
 
 try do
   import_config "dev.secret.exs"
