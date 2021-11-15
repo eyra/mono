@@ -21,17 +21,17 @@ msgid "status.submitted.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:227
+#: systems/campaign/model.ex:234
 msgid "incomplete.forms.message"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:225
+#: systems/campaign/model.ex:232
 msgid "ready.for.submission.message"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:231
+#: systems/campaign/model.ex:238
 msgid "waiting.for.coordinator.message"
 msgstr ""
 
@@ -151,11 +151,11 @@ msgid "status.accepted.scheduled.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:245
+#: systems/campaign/model.ex:252
 msgid "accepted.closed.message"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:236
+#: systems/campaign/model.ex:243
 msgid "accepted.scheduled.message"
 msgstr ""

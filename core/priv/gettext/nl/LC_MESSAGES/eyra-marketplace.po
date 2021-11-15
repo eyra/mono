@@ -22,7 +22,7 @@ msgid "empty.title"
 msgstr "Op zoek naar een studie?"
 
 #, elixir-format
-#: systems/campaign/model.ex:130
+#: systems/campaign/model.ex:137
 msgid "reward.label"
 msgstr "Beloning: %{value} credits"
 
@@ -31,17 +31,17 @@ msgstr "Beloning: %{value} credits"
 msgid "assignment.status.complete.label"
 msgstr "Gesloten"
 
-#, elixir-format, fuzzy
-#: systems/campaign/model.ex:126
+#, elixir-format
+#: systems/campaign/model.ex:133
 msgid "assignment.status.completed.label"
 msgstr "Afgerond"
 
-#, elixir-format, fuzzy
-#: systems/campaign/model.ex:122
+#, elixir-format
+#: systems/campaign/model.ex:129
 msgid "assignment.status.expired.label"
 msgstr "Verlopen"
 
-#, elixir-format, fuzzy
-#: systems/campaign/model.ex:125
+#, elixir-format
+#: systems/campaign/model.ex:132
 msgid "assignment.status.pending.label"
 msgstr "Bezig"
