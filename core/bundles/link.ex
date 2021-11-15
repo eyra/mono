@@ -13,10 +13,8 @@ defmodule Link do
         live("/debug", Debug)
         live("/dashboard", Dashboard)
         live("/onboarding", Onboarding.Wizard)
-        live("/studentpool", Pool.OverviewPage)
         live("/marketplace", Marketplace)
         live("/labstudy/all", LabStudy.Overview)
-        live("/campaign/:id/submission", Pool.SubmissionPage)
       end
     end
   end
@@ -27,8 +25,6 @@ defmodule Link do
       grant_access(Link.Index, [:visitor, :member])
       grant_access(Link.Dashboard, [:researcher])
       grant_access(Link.Onboarding.Wizard, [:member])
-      grant_access(Link.Pool.OverviewPage, [:researcher])
-      grant_access(Link.Pool.SubmissionPage, [:researcher])
       grant_access(Link.Marketplace, [:member])
       grant_access(Link.LabStudy.Overview, [:researcher])
       grant_access(Systems.Promotion.LandingPage, [:visitor, :member, :owner])

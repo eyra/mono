@@ -18,6 +18,10 @@ defmodule Core.Admin do
     Regex.match?(compiled, email)
   end
 
+  def admin?([_ | _] = patterns, email) when is_binary(email) do
+    admin?(compile(patterns), email)
+  end
+
   def admin?(patterns, email) when is_list(patterns) do
     patterns
     |> compile()
@@ -26,6 +30,10 @@ defmodule Core.Admin do
 
   def admin?(compiled, %{email: email}) do
     admin?(compiled, email)
+  end
+
+  def admin?(%{email: email}) do
+    admin?(email)
   end
 
   def admin?(email) do

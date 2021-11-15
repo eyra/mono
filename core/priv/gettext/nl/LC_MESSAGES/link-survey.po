@@ -37,7 +37,7 @@ msgid "reward.highlight.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: lib/core/survey/tool.ex:146
+#: lib/core/survey/tool.ex:151
 msgid "apply.cta.title"
 msgstr "Ik doe mee"
 
@@ -47,9 +47,9 @@ msgid "devices.label"
 msgstr "Welke apparaten kunnen door deelnemers gebruikt worden?"
 
 #, elixir-format
-#: lib/core/survey/tool.ex:147
+#: lib/core/survey/tool.ex:152
 msgid "open.cta.title"
-msgstr "Naar vragenlijst"
+msgstr "Start"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:258
@@ -67,27 +67,27 @@ msgid "devices.title"
 msgstr "Apparaten"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:77
+#: systems/campaign/monitor_view.ex:69
 msgid "completed.label"
 msgstr "Afgeronde taken"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:78
+#: systems/campaign/monitor_view.ex:70
 msgid "pending.label"
 msgstr "Deelnemers bezig"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:74
+#: systems/campaign/monitor_view.ex:66
 msgid "status.title"
-msgstr "Voortgang"
+msgstr "Campagne status"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:79
+#: systems/campaign/monitor_view.ex:71
 msgid "vacant.label"
 msgstr "Open taken"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:75
+#: systems/campaign/monitor_view.ex:67
 msgid "status.label"
 msgstr "Volg hieronder de voortgang van je campagne."
 
@@ -137,12 +137,12 @@ msgid "tabbar.item.survey"
 msgstr "Studie"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:84
+#: systems/campaign/monitor_view.ex:113
 msgid "monitor.empty.description"
 msgstr "Na publicatie van jouw wervingscampagne, vind je hier een lijst van geanonimiseerde deelnemers, die zich aangemeld hebben voor jouw studie. Je kunt hier hun status bekijken en na afronding van hun taak, de resultaten accepteren of afwijzen."
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:83
+#: systems/campaign/monitor_view.ex:112
 msgid "monitor.empty.title"
 msgstr "Resultaten"
 
@@ -258,12 +258,12 @@ msgid "form.description"
 msgstr "Doorloop eerst de stappen in het zwarte kader. Zo zorg je ervoor dat deelnemers vanuit Panl deel kunnen nemen aan jouw online studie en na afloop weer teruggestuurd worden naar Panl."
 
 #, elixir-format
-#: systems/assignment/model.ex:238
+#: systems/assignment/model.ex:231
 msgid "duration.highlight.text"
 msgstr "%{duration} minuten"
 
 #, elixir-format
-#: systems/assignment/model.ex:237
+#: systems/assignment/model.ex:230
 msgid "duration.highlight.title"
 msgstr "Duur"
 
@@ -279,36 +279,36 @@ msgid "task.hero.title"
 msgstr "Online Studie"
 
 #, elixir-format
-#: systems/assignment/model.ex:214
+#: systems/assignment/model.ex:207
 msgid "task.completed.subtitle"
 msgstr "Je hebt deze vragenlijst ingevuld"
 
 #, elixir-format
-#: systems/assignment/model.ex:217
+#: systems/assignment/model.ex:210
 msgid "task.completed.text"
 msgstr "Jouw bijdrage wordt door de auteur van deze studie beoordeeld. Als je binnen twee weken na afronding van de vragenlijst geen afkeuring hebt ontvangen, is de toegewezen beloning definitief."
 
 #, elixir-format
-#: systems/assignment/model.ex:213
+#: systems/assignment/model.ex:206
 msgid "task.pending.subtitle"
-msgstr "Je bent aangemeld voor deelname"
+msgstr "Instructies"
 
 #, elixir-format
-#: systems/assignment/model.ex:251
+#: systems/assignment/model.ex:244
 msgid "status.closed.highlight.text"
 msgstr "Gesloten voor deelname"
 
 #, elixir-format
-#: systems/assignment/model.ex:245
+#: systems/assignment/model.ex:238
 msgid "status.highlight.title"
 msgstr "Status"
 
 #, elixir-format
-#: systems/assignment/model.ex:249
+#: systems/assignment/model.ex:242
 msgid "status.open.highlight.text"
 msgstr "Open voor deelname"
 
-#, elixir-format, fuzzy
-#: systems/assignment/model.ex:258
+#, elixir-format
+#: systems/assignment/model.ex:251
 msgid "language.highlight.title"
 msgstr "Taal"

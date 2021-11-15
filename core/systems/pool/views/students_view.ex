@@ -1,4 +1,4 @@
-defmodule Link.Pool.StudentsView do
+defmodule Systems.Pool.StudentsView do
   use CoreWeb.UI.LiveComponent
 
   alias Core.Accounts
@@ -48,7 +48,7 @@ defmodule Link.Pool.StudentsView do
       |> CoreWeb.UI.Timestamp.humanize()
 
     %{
-      path: Routes.live_path(socket, Link.Pool.OverviewPage),
+      path: Routes.live_path(socket, Systems.Pool.OverviewPage),
       title: fullname,
       subtitle: subtitle,
       quick_summary: quick_summery,

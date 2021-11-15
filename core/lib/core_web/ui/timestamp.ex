@@ -13,6 +13,19 @@ defmodule CoreWeb.UI.Timestamp do
     DateTime.now!(timezone)
   end
 
+  def naive_now() do
+    now()
+    |> DateTime.to_naive()
+    |> NaiveDateTime.truncate(:second)
+  end
+
+  def naive_from_now(shift_minutes) do
+    now()
+    |> shift_minutes(shift_minutes)
+    |> DateTime.to_naive()
+    |> NaiveDateTime.truncate(:second)
+  end
+
   def one_week_after(date) when is_binary(date) do
     one_week_after(parse_user_input_date(date))
   end

@@ -72,67 +72,67 @@ msgid "reward.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:52
+#: systems/pool/submission_page.ex:55
 msgid "byline"
 msgstr "Laatste aanpassing: %{timestamp}"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:147
+#: systems/pool/submission_page.ex:151
 msgid "retract.admin.success.text"
 msgstr "De campagne is niet meer open of ingepland voor deelname in de marktplaats."
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:146
+#: systems/pool/submission_page.ex:150
 msgid "retract.admin.success.title"
 msgstr "Campagne offline"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:131
+#: systems/pool/submission_page.ex:135
 msgid "accept.error.text"
 msgstr "Sommige verplichte velden zijn niet correct ingevuld."
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:130
+#: systems/pool/submission_page.ex:134
 msgid "accept.error.title"
 msgstr "Maak het formulier compleet"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:124
+#: systems/pool/submission_page.ex:128
 msgid "accept.success.text"
 msgstr "De campagne staat open of is ingepland voor deelname in de marktplaats."
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:123
+#: systems/pool/submission_page.ex:127
 msgid "accept.success.title"
 msgstr "Campagne gepubliceerd"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:199
+#: systems/pool/views/submission_view.ex:199
 msgid "reward.value.label"
 msgstr "Credits"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:198
+#: systems/pool/views/submission_view.ex:198
 msgid "reward.label"
 msgstr "Beloning"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:125
+#: systems/pool/views/submission_view.ex:125
 msgid "schedule.end.label"
 msgstr "Offline na"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:115
+#: systems/pool/views/submission_view.ex:115
 msgid "schedule.start.label"
 msgstr "Online op"
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:203
+#: systems/pool/views/submission_view.ex:203
 msgid "schedule.description"
 msgstr "Het plannen van een campagne is optioneel. Als je een campagne online zet, zonder planning, dan is deze meteen beschikbaar op de marktplaats. Je kunt een campagne die online staat op elk moment weer terugtrekken."
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:202
+#: systems/pool/views/submission_view.ex:202
 msgid "schedule.title"
 msgstr "Planning"
 

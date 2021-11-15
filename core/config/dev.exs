@@ -36,6 +36,11 @@ config :core, CoreWeb.Endpoint,
     ]
   ]
 
+config :core,
+  admins: [
+    "*@eyra.co"
+  ]
+
 config :core, Core.ImageCatalog.Unsplash,
   access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
   app_name: System.get_env("UNSPLASH_APP_NAME")

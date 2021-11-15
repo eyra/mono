@@ -12,6 +12,8 @@ defmodule Core.Enums.StudyProgramCodes do
     Atom.to_string(value) |> String.contains?(year_to_string(year))
   end
 
+  def is_first_year_active?(nil), do: false
+
   def is_first_year_active?(active_values) do
     active_values
     # first year is active when no 2nd year value is selected

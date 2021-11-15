@@ -53,7 +53,7 @@ defmodule Systems.Assignment.ContextTest do
       task2 = create_task(crew, :pending, false, 20)
       task3 = create_task(crew, :completed, false, 60)
 
-      Assignment.Context.mark_expired(assignment, false)
+      Assignment.Context.mark_expired_debug(assignment, false)
 
       assert %{expired: true} = Crew.Context.get_member!(task1.member_id)
       assert %{expired: false} = Crew.Context.get_member!(task2.member_id)
@@ -70,7 +70,7 @@ defmodule Systems.Assignment.ContextTest do
       task2 = create_task(crew, :pending, false, 20)
       task3 = create_task(crew, :completed, false, 60)
 
-      Assignment.Context.mark_expired(assignment, true)
+      Assignment.Context.mark_expired_debug(assignment, true)
 
       assert %{expired: true} = Crew.Context.get_member!(task1.member_id)
       assert %{expired: true} = Crew.Context.get_member!(task2.member_id)
@@ -85,7 +85,7 @@ defmodule Systems.Assignment.ContextTest do
       %{crew: crew} = assignment = create_assignment(31, 1)
       task = create_task(crew, :pending, false, 31)
 
-      Assignment.Context.mark_expired(assignment, false)
+      Assignment.Context.mark_expired_debug(assignment, false)
 
       assert %{expired: true} = Crew.Context.get_member!(task.member_id)
       assert %{expired: true} = Crew.Context.get_task!(task.id)
@@ -135,11 +135,7 @@ defmodule Systems.Assignment.ContextTest do
     end
 
     defp create_task(crew, status, expired, minutes_ago \\ 31) when is_boolean(expired) do
-      updated_at =
-        Timestamp.now()
-        |> Timestamp.shift_minutes(minutes_ago * -1)
-        |> DateTime.to_naive()
-        |> NaiveDateTime.truncate(:second)
+      updated_at = Timestamp.naive_from_now(minutes_ago * -1)
 
       user = Factories.insert!(:member)
       member = Factories.insert!(:crew_member, %{crew: crew, user: user})

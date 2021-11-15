@@ -53,6 +53,10 @@ defmodule Core.AuthTestHelpers do
     Factories.insert!(:researcher) |> login(ctx)
   end
 
+  def login_as_coordinator(ctx) do
+    Factories.insert!(:coordinator) |> login(ctx)
+  end
+
   def login_as_admin(ctx) do
     email = "admin1@example.org"
 

@@ -37,7 +37,7 @@ msgid "reward.highlight.title"
 msgstr "Reward"
 
 #, elixir-format
-#: lib/core/survey/tool.ex:146
+#: lib/core/survey/tool.ex:151
 msgid "apply.cta.title"
 msgstr "Participate"
 
@@ -47,9 +47,9 @@ msgid "devices.label"
 msgstr "Which devices can participants use?"
 
 #, elixir-format
-#: lib/core/survey/tool.ex:147
+#: lib/core/survey/tool.ex:152
 msgid "open.cta.title"
-msgstr "Go to survey"
+msgstr "Proceed"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:258
@@ -67,27 +67,27 @@ msgid "devices.title"
 msgstr "Devices"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:77
+#: systems/campaign/monitor_view.ex:69
 msgid "completed.label"
 msgstr "Completed tasks"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:78
+#: systems/campaign/monitor_view.ex:70
 msgid "pending.label"
 msgstr "Participants working"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:74
+#: systems/campaign/monitor_view.ex:66
 msgid "status.title"
-msgstr "Progress"
+msgstr "Campaign status"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:79
+#: systems/campaign/monitor_view.ex:71
 msgid "vacant.label"
 msgstr "Open spots"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:75
+#: systems/campaign/monitor_view.ex:67
 msgid "status.label"
 msgstr "Monitor the progress of your campaign below."
 
@@ -137,12 +137,12 @@ msgid "tabbar.item.survey"
 msgstr "Study"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:84
+#: systems/campaign/monitor_view.ex:113
 msgid "monitor.empty.description"
 msgstr "Here you'll find an overview of anonymised participants, who applied to participate in your study, once your recruitment campaign has been published. You can view their status and accept or reject their results, after they have finished their task."
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:83
+#: systems/campaign/monitor_view.ex:112
 msgid "monitor.empty.title"
 msgstr "Recruitment results"
 
@@ -258,12 +258,12 @@ msgid "form.description"
 msgstr "Follow the steps in the black frame to make sure that participants can start your online study on Panl and are redirected back to Panl after they finish."
 
 #, elixir-format
-#: systems/assignment/model.ex:238
+#: systems/assignment/model.ex:231
 msgid "duration.highlight.text"
 msgstr "%{duration} minutes"
 
 #, elixir-format
-#: systems/assignment/model.ex:237
+#: systems/assignment/model.ex:230
 msgid "duration.highlight.title"
 msgstr "Duration"
 
@@ -279,36 +279,36 @@ msgid "task.hero.title"
 msgstr "Online Study"
 
 #, elixir-format
-#: systems/assignment/model.ex:214
+#: systems/assignment/model.ex:207
 msgid "task.completed.subtitle"
 msgstr "You have completed this survey"
 
 #, elixir-format
-#: systems/assignment/model.ex:217
+#: systems/assignment/model.ex:210
 msgid "task.completed.text"
 msgstr "Your contribution will be reviewed by the author of this study. If you did not receive a rejection within two weeks after the completion of this survey, the assigned reward is final."
 
 #, elixir-format
-#: systems/assignment/model.ex:213
+#: systems/assignment/model.ex:206
 msgid "task.pending.subtitle"
-msgstr "You have applied to participate"
+msgstr "Instructions"
 
 #, elixir-format
-#: systems/assignment/model.ex:251
+#: systems/assignment/model.ex:244
 msgid "status.closed.highlight.text"
 msgstr "Closed for participation"
 
 #, elixir-format
-#: systems/assignment/model.ex:245
+#: systems/assignment/model.ex:238
 msgid "status.highlight.title"
 msgstr "Status"
 
 #, elixir-format
-#: systems/assignment/model.ex:249
+#: systems/assignment/model.ex:242
 msgid "status.open.highlight.text"
 msgstr "Open for participation"
 
-#, elixir-format, fuzzy
-#: systems/assignment/model.ex:258
+#, elixir-format
+#: systems/assignment/model.ex:251
 msgid "language.highlight.title"
 msgstr "Language"

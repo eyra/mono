@@ -1,0 +1,32 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:75
+msgid "attention.title"
+msgstr "Attention"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:184
+msgid "started.at.message"
+msgstr "Started: %{date}"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:85
+msgid "accept.all.button"
+msgstr "Approve all"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:78
+msgid "attention.body"
+msgstr "The participants below started your survey on Qualtrics, but did not return to Panl. Approve the ones that filled in the survey, reject the others."

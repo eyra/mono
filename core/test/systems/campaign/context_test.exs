@@ -10,35 +10,35 @@ defmodule Systems.Campaign.ContextTest do
     alias Core.Factories
     alias CoreWeb.UI.Timestamp
 
-    test "mark_expired?/0 should mark 1 expired task in online campaign" do
+    test "mark_expired_debug?/0 should mark 1 expired task in online campaign" do
       %{promotable_assignment: %{crew: crew}} = create_campaign(:accepted)
       task = create_task(crew, :pending, false, -31)
 
-      Campaign.Context.mark_expired()
+      Campaign.Context.mark_expired_debug()
 
       assert %{expired: true} = Crew.Context.get_task!(task.id)
     end
 
-    test "mark_expired?/0 should mark 0 expired tasks in submitted campaign" do
+    test "mark_expired_debug?/0 should mark 0 expired tasks in submitted campaign" do
       %{promotable_assignment: %{crew: crew}} = create_campaign(:submitted)
       task = create_task(crew, :pending, false, -31)
 
-      Campaign.Context.mark_expired()
+      Campaign.Context.mark_expired_debug()
 
       assert %{expired: false} = Crew.Context.get_task!(task.id)
     end
 
-    test "mark_expired?/0 should mark 0 expired tasks in closed campaign" do
+    test "mark_expired_debug?/0 should mark 0 expired tasks in closed campaign" do
       schedule_end = yesterday() |> Timestamp.format_user_input_date()
       %{promotable_assignment: %{crew: crew}} = create_campaign(:accepted, nil, schedule_end)
       task = create_task(crew, :pending, false, -31)
 
-      Campaign.Context.mark_expired()
+      Campaign.Context.mark_expired_debug()
 
       assert %{expired: false} = Crew.Context.get_task!(task.id)
     end
 
-    test "mark_expired?/1 should mark 1 expired tasks in scheduled campaign" do
+    test "mark_expired_debug?/1 should mark 1 expired tasks in scheduled campaign" do
       schedule_start = tomorrow() |> Timestamp.format_user_input_date()
       schedule_end = next_week() |> Timestamp.format_user_input_date()
 
@@ -47,31 +47,31 @@ defmodule Systems.Campaign.ContextTest do
 
       task = create_task(crew, :pending, false, -31)
 
-      Campaign.Context.mark_expired(true)
+      Campaign.Context.mark_expired_debug(true)
 
       assert %{expired: false} = Crew.Context.get_task!(task.id)
     end
 
-    test "mark_expired?/1 should mark 1 expired tasks in submitted campaign" do
+    test "mark_expired_debug?/1 should mark 1 expired tasks in submitted campaign" do
       %{promotable_assignment: %{crew: crew}} = create_campaign(:submitted)
       task = create_task(crew, :pending, false, -31)
 
-      Campaign.Context.mark_expired(true)
+      Campaign.Context.mark_expired_debug(true)
 
       assert %{expired: false} = Crew.Context.get_task!(task.id)
     end
 
-    test "mark_expired?/1 should mark 1 expired tasks in closed campaign" do
+    test "mark_expired_debug?/1 should mark 1 expired tasks in closed campaign" do
       schedule_end = yesterday() |> Timestamp.format_user_input_date()
       %{promotable_assignment: %{crew: crew}} = create_campaign(:accepted, nil, schedule_end)
       task = create_task(crew, :pending, false, -31)
 
-      Campaign.Context.mark_expired(true)
+      Campaign.Context.mark_expired_debug(true)
 
       assert %{expired: false} = Crew.Context.get_task!(task.id)
     end
 
-    test "mark_expired?/0 should mark 0 expired tasks in scheduled campaign" do
+    test "mark_expired_debug?/0 should mark 0 expired tasks in scheduled campaign" do
       schedule_start = tomorrow() |> Timestamp.format_user_input_date()
       schedule_end = next_week() |> Timestamp.format_user_input_date()
 
@@ -80,7 +80,7 @@ defmodule Systems.Campaign.ContextTest do
 
       task = create_task(crew, :pending, false, -31)
 
-      Campaign.Context.mark_expired()
+      Campaign.Context.mark_expired_debug()
 
       assert %{expired: false} = Crew.Context.get_task!(task.id)
     end

@@ -6,7 +6,7 @@ defmodule Systems.NextAction.HighlightView do
 
   def render(assigns) do
     ~H"""
-    <NextAction.View vm={{ Map.put(@vm, :highlighted?, true) }}  />
+    <NextAction.View vm={{ Map.put(@vm, :style, :tertiary) }}  />
     """
   end
 end

@@ -1,4 +1,4 @@
-defmodule Link.Pool.SubmissionView do
+defmodule Systems.Pool.SubmissionView do
   use CoreWeb.LiveForm
 
   alias EyraUI.Selector.Selector

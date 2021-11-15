@@ -1,4 +1,4 @@
-defmodule Link.Pool.CampaignSubmissionView do
+defmodule Systems.Pool.CampaignSubmissionView do
   use CoreWeb.LiveForm
 
   alias Core.Enums.{StudyYears, StudyProgramCodes, Genders, DominantHands, NativeLanguages}

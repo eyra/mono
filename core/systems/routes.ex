@@ -7,7 +7,8 @@ defmodule Systems.Routes do
         :campaign,
         :next_action,
         :notification,
-        :promotion
+        :promotion,
+        :pool
       ]
     end
   end
