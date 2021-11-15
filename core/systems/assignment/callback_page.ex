@@ -62,12 +62,12 @@ defmodule Systems.Assignment.CallbackPage do
           <MarginY id={{:page_top}} />
           <Title1>{{@vm.title}}</Title1>
           <Spacing value="M" />
-          <div :if={{not @task }}>
+          <div :if={{@task == nil }}>
             <Title3>{{ dgettext("eyra-crew", "task.expired.subtitle") }}</Title3>
             <Spacing value="M" />
             <BodyLarge>{{ dgettext("eyra-crew", "task.expired.text") }}</BodyLarge>
           </div>
-          <div :if={{@task }}>
+          <div :if={{@task != nil }}>
             <Title3>{{ dgettext("eyra-crew", "task.completed.title") }}</Title3>
             <Spacing value="M" />
             <BodyLarge>{{ dgettext("eyra-crew", "task.completed.message.part1") }}</BodyLarge>
