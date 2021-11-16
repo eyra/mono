@@ -61,7 +61,7 @@ defmodule CoreWeb.User.Forms.Study do
     changeset = Features.changeset(entity, type, attrs)
 
     socket
-    |> schedule_save(changeset)
+    |> save(changeset)
     |> update_ui()
   end
 

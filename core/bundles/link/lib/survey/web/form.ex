@@ -39,8 +39,7 @@ defmodule Link.Survey.Form do
     {
       :ok,
       socket
-      # force save
-      |> save(entity, :auto_save, %{ethical_approval: not Enum.empty?(active_item_ids)}, false)
+      |> save(entity, :auto_save, %{ethical_approval: not Enum.empty?(active_item_ids)})
     }
   end
 
@@ -58,8 +57,7 @@ defmodule Link.Survey.Form do
     {
       :ok,
       socket
-      # force save
-      |> save(entity, :auto_save, %{language: language}, false)
+      |> save(entity, :auto_save, %{language: language})
     }
   end
 
@@ -70,8 +68,7 @@ defmodule Link.Survey.Form do
     {
       :ok,
       socket
-      # force save
-      |> save(entity, :auto_save, %{selector_id => active_item_ids}, false)
+      |> save(entity, :auto_save, %{selector_id => active_item_ids})
     }
   end
 
@@ -146,7 +143,7 @@ defmodule Link.Survey.Form do
     {
       :noreply,
       socket
-      |> force_save(entity, :auto_save, attrs)
+      |> save(entity, :auto_save, attrs)
     }
   end
 
@@ -155,19 +152,17 @@ defmodule Link.Survey.Form do
     {
       :noreply,
       socket
-      |> schedule_save(entity, :auto_save, attrs)
+      |> save(entity, :auto_save, attrs)
     }
   end
 
   # Saving
-  def force_save(socket, entity, type, attrs), do: save(socket, entity, type, attrs, false)
-  def schedule_save(socket, entity, type, attrs), do: save(socket, entity, type, attrs, true)
 
-  def save(socket, entity, type, attrs, schedule?) do
+  def save(socket, entity, type, attrs) do
     changeset = Tool.changeset(entity, type, attrs)
 
     socket
-    |> save(changeset, schedule?)
+    |> save(changeset)
     |> validate_for_publish()
   end
 

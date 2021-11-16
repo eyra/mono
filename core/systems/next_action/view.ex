@@ -48,7 +48,6 @@ defmodule Systems.NextAction.View do
 
   def render(assigns) do
     ~H"""
-    Dy
     <DynamicAction vm={{cta_action(@vm)}} >
       <div class="p-4 md:p-6 flex items-center space-x-4 rounded-md {{ colors((@vm)).bg }}">
         <div class="flex-grow">

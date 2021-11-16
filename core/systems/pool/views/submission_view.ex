@@ -58,7 +58,7 @@ defmodule Systems.Pool.SubmissionView do
     {
       :ok,
       socket
-      |> force_save(entity, attrs)
+      |> save(entity, attrs)
     }
   end
 
@@ -83,7 +83,7 @@ defmodule Systems.Pool.SubmissionView do
     {
       :ok,
       socket
-      |> force_save(entity, attrs)
+      |> save(entity, attrs)
     }
   end
 
@@ -175,18 +175,15 @@ defmodule Systems.Pool.SubmissionView do
     {
       :noreply,
       socket
-      |> schedule_save(entity, attrs)
+      |> save(entity, attrs)
     }
   end
 
-  def force_save(socket, entity, attrs), do: save(socket, entity, attrs, false)
-  def schedule_save(socket, entity, attrs), do: save(socket, entity, attrs, true)
-
-  def save(socket, %Submission{} = entity, attrs, schedule?) do
+  def save(socket, %Submission{} = entity, attrs) do
     changeset = Submission.changeset(entity, attrs)
 
     socket
-    |> save(changeset, schedule?)
+    |> save(changeset)
     |> validate_for_publish()
     |> update_ui
   end

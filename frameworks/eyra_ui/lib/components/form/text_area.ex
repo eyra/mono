@@ -29,6 +29,7 @@ defmodule EyraUI.Form.TextArea do
             phx-focus="focus"
             phx-value-field={{ @field }}
             phx-target={{ target }}
+            phx-debounce="1000"
           >{{ html_escape(input_value(form, @field) || "") }}</textarea>
         </Field>
       </Context>

@@ -69,7 +69,7 @@ defmodule CoreWeb.DataDonation.Form do
     changeset = Tool.changeset(entity, type, attrs)
 
     socket
-    |> schedule_save(changeset)
+    |> save(changeset)
   end
 
   def render(assigns) do
