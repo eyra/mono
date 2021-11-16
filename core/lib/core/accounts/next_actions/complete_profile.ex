@@ -8,8 +8,8 @@ defmodule Core.Accounts.NextActions.CompleteProfile do
     %{
       title: dgettext("eyra-nextaction", "complete.profile.title"),
       description: dgettext("eyra-nextaction", "complete.profile.description"),
-      cta: dgettext("eyra-nextaction", "complete.profile.cta"),
-      url: url_resolver.(CoreWeb.User.Profile, [])
+      cta_label: dgettext("eyra-nextaction", "complete.profile.cta"),
+      cta_action: %{type: :redirect, to: url_resolver.(CoreWeb.User.Profile, [])}
     }
   end
 end

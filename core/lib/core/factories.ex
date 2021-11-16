@@ -54,6 +54,14 @@ defmodule Core.Factories do
     })
   end
 
+  def build(:coordinator) do
+    :member
+    |> build(%{
+      researcher: true,
+      coordinator: true
+    })
+  end
+
   def build(:admin) do
     :member
     |> build(%{

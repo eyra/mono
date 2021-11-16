@@ -12,8 +12,8 @@ defmodule Systems.NextAction.ContextTest do
       %{
         title: "Test: #{count}",
         description: "Testing",
-        cta: "Open test",
-        url: url_resolver.()
+        cta_label: "Open test",
+        cta_action: %{type: :redirect, to: url_resolver.()}
       }
     end
   end

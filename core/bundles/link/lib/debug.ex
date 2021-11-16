@@ -87,13 +87,13 @@ defmodule Link.Debug do
 
   @impl true
   def handle_event("expire", _, socket) do
-    Campaign.Context.mark_expired()
+    Campaign.Context.mark_expired_debug()
     {:noreply, socket}
   end
 
   @impl true
   def handle_event("expire_force", _, socket) do
-    Campaign.Context.mark_expired(true)
+    Campaign.Context.mark_expired_debug(true)
     {:noreply, socket}
   end
 

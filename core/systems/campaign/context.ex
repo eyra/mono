@@ -14,6 +14,7 @@ defmodule Systems.Campaign.Context do
     Crew,
     Promotion
   }
+
   alias Core.Accounts.User
   alias Core.Survey.Tool
   alias Core.DataDonation
@@ -285,10 +286,10 @@ defmodule Systems.Campaign.Context do
   end
 
   @doc """
-    Marks expired tasks in online campaigns. If force is true (for debug purposes only),
-    all pending tasks will be marked as expired.
+    Marks expired tasks in online campaigns based on updated_at and estimated duration.
+    If force is true (for debug purposes only), all pending tasks will be marked as expired.
   """
-  def mark_expired(force \\ false) do
+  def mark_expired_debug(force \\ false) do
     online_submissions =
       from(s in Submission, where: s.status == :accepted)
       |> Repo.all()
@@ -301,14 +302,14 @@ defmodule Systems.Campaign.Context do
     preload = Campaign.Model.preload_graph(:full)
     from(c in Campaign.Model, preload: ^preload, where: c.promotion_id in ^promotion_ids)
     |> Repo.all()
-    |> Enum.each(&mark_expired(&1, force))
+    |> Enum.each(&mark_expired_debug(&1, force))
   end
 
   @doc """
     Marks expired tasks in given campaign
   """
-  def mark_expired(%{promotable_assignment: assignment}, force) do
-    Assignment.Context.mark_expired(assignment, force)
+  def mark_expired_debug(%{promotable_assignment: assignment}, force) do
+    Assignment.Context.mark_expired_debug(assignment, force)
   end
 
 end

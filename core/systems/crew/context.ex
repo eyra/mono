@@ -8,6 +8,7 @@ defmodule Systems.Crew.Context do
   alias Systems.Crew
   alias Core.Accounts.User
   alias Core.Authorization
+  alias CoreWeb.UI.Timestamp
 
   def list(preload \\ [:tasks, :members]) do
     from(c in Crew.Model, preload: ^preload)
@@ -43,8 +44,8 @@ defmodule Systems.Crew.Context do
     Repo.get!(Crew.TaskModel, id)
   end
 
-  def create_task(crew, member) do
-    attrs = %{status: :pending}
+  def create_task(crew, member, expire_at) do
+    attrs = %{status: :pending, expire_at: expire_at}
 
     %Crew.TaskModel{}
     |> Crew.TaskModel.changeset(attrs)
@@ -53,22 +54,8 @@ defmodule Systems.Crew.Context do
     |> Repo.insert()
   end
 
-  def create_task!(crew, member) do
-    case create_task(crew, member) do
-      {:ok, task} -> task
-      _ -> nil
-    end
-  end
-
-  def get_or_create_task(crew, member) do
-    case get_task(crew, member) do
-      nil -> create_task(crew, member)
-      task -> {:ok, task}
-    end
-  end
-
-  def get_or_create_task!(crew, member) do
-    case get_or_create_task(crew, member) do
+  def create_task!(crew, member, expire_at) do
+    case create_task(crew, member, expire_at) do
       {:ok, task} -> task
       _ -> nil
     end
@@ -92,9 +79,29 @@ defmodule Systems.Crew.Context do
     |> Repo.one()
   end
 
-  def count_expired_pending_tasks(crew) do
-    from(t in Crew.TaskModel, where: t.crew_id == ^crew.id and t.expired == true, select: count(t.id))
+  def count_pending_started_tasks(crew) do
+    from(t in pending_started_tasks_query(crew),
+      select: count(t.id)
+    )
     |> Repo.one()
+  end
+
+  def pending_started_tasks(crew) do
+    from(t in pending_started_tasks_query(crew))
+    |> Repo.all()
+  end
+
+  defp pending_started_tasks_query(crew) do
+    now = Timestamp.naive_now()
+
+    from(t in Crew.TaskModel,
+      where:
+        t.crew_id == ^crew.id and
+        t.status == :pending and
+        t.expire_at <= ^now and
+        t.expired == false and
+        not is_nil(t.started_at)
+    )
   end
 
   def count_pending_tasks(crew) do
@@ -116,25 +123,27 @@ defmodule Systems.Crew.Context do
   end
 
   def start_task!(%Crew.TaskModel{} = task) do
-    update_task!(task,
-      %{
-        started_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-      }
-    )
+    update_task!(task, %{started_at: Timestamp.naive_now()})
+  end
+
+  def complete_task(%Crew.TaskModel{} = task) do
+    update_task!(task, %{status: :completed, completed_at: Timestamp.naive_now()})
   end
 
   def complete_task!(%Crew.TaskModel{} = task) do
-    update_task!(task,
-      %{
-        status: :completed,
-        completed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-      }
-    )
+    case Crew.Context.complete_task(task) do
+      %Crew.TaskModel{} = task -> task
+      _ -> nil
+    end
+  end
+
+  def complete_task!(id) do
+    get_task!(id)
+    |> complete_task!()
   end
 
   def update_task!(%Crew.TaskModel{} = task, attrs) do
-    task
-    |> Crew.TaskModel.changeset(attrs)
+    Crew.TaskModel.changeset(task, attrs)
     |> Repo.update!()
   end
 
@@ -162,14 +171,6 @@ defmodule Systems.Crew.Context do
     |> Repo.one()
   end
 
-  def create_member(crew, user) do
-    %Crew.MemberModel{}
-    |> Crew.MemberModel.changeset()
-    |> Ecto.Changeset.put_assoc(:crew, crew)
-    |> Ecto.Changeset.put_assoc(:user, user)
-    |> Repo.insert()
-  end
-
   def get_member!(crew, user) do
     from(m in Crew.MemberModel,
       where: m.crew_id == ^crew.id and m.user_id == ^user.id and m.expired == false,
@@ -190,35 +191,53 @@ defmodule Systems.Crew.Context do
     |> Repo.all()
   end
 
-  def apply_member(%Crew.Model{} = crew, %User{} = user) do
-    if member = get_expired_member(crew, user) do
-      member = set_member_expired(member, false)
-      {:ok, %{member: member}}
-    else
-      Multi.new()
-      |> Multi.insert(
-        :member,
-        %Crew.MemberModel{}
-        |> Crew.MemberModel.changeset()
-        |> Ecto.Changeset.put_assoc(:crew, crew)
-        |> Ecto.Changeset.put_assoc(:user, user)
-      )
-      |> Multi.insert(
-        :role_assignment,
-        Authorization.build_role_assignment(user, crew, :participant)
-      )
-      |> Repo.transaction()
-    end
-  end
-
-  def apply_member!(%Crew.Model{} = crew, %User{} = user) do
-    case Crew.Context.apply_member(crew, user) do
+  def apply_member!(%Crew.Model{} = crew, %User{} = user, expire_at \\ nil) do
+    case Crew.Context.apply_member(crew, user, expire_at) do
       {:ok, %{member: member}} -> member
       _ -> nil
     end
   end
 
-  def get_expired_member(%Crew.Model{} = crew, %User{} = user) do
+  def apply_member(%Crew.Model{} = crew, %User{} = user, expire_at \\ nil) do
+    if member = get_expired_member(crew, user) do
+      member = reset_expired_member(member, expire_at)
+      {:ok, %{member: member}}
+    else
+      Multi.new()
+      |> insert(:member, crew, user, %{expire_at: expire_at})
+      |> insert(:task, crew, %{status: :pending, expire_at: expire_at})
+      |> insert(:role_assignment, crew, user, :participant)
+      |> Repo.transaction()
+    end
+  end
+
+  defp insert(multi, :member = name, crew, user, attrs) do
+    Multi.insert(multi, name,
+      %Crew.MemberModel{}
+      |> Crew.MemberModel.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:crew, crew)
+      |> Ecto.Changeset.put_assoc(:user, user)
+    )
+  end
+
+  defp insert(multi, :role_assignment = name, crew, user, role) do
+    Multi.insert(multi, name,
+      Authorization.build_role_assignment(user, crew, role)
+    )
+  end
+
+  defp insert(multi, :task = name , crew, attrs) do
+     Multi.insert(multi, name, fn %{member: member} ->
+      %Crew.TaskModel{}
+      |> Crew.TaskModel.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:crew, crew)
+      |> Ecto.Changeset.put_assoc(:member, member)
+      end
+    )
+  end
+
+
+ def get_expired_member(%Crew.Model{} = crew, %User{} = user) do
     from(m in Crew.MemberModel,
       where:
         m.crew_id == ^crew.id and
@@ -228,13 +247,15 @@ defmodule Systems.Crew.Context do
     |> Repo.one()
   end
 
-  def set_member_expired(%Crew.MemberModel{} = member, expired) do
+  def reset_expired_member(%Crew.MemberModel{} = member, expire_at) do
     member_query = from(m in Crew.MemberModel, where: m.id == ^member.id)
     task_query = from(t in Crew.TaskModel, where: t.member_id == ^member.id)
 
+    attrs = [expired: false, expire_at: expire_at]
+
     Multi.new()
-    |> Multi.update_all(:member , member_query, set: [expired: expired])
-    |> Multi.update_all(:tasks, task_query, set: [expired: expired])
+    |> Multi.update_all(:member , member_query, set: attrs)
+    |> Multi.update_all(:tasks, task_query, set: attrs)
     |> Repo.transaction()
 
     from(m in Crew.MemberModel, where: m.id == ^member.id)
@@ -268,5 +289,55 @@ defmodule Systems.Crew.Context do
         m.user_id == ^user.id and
         m.expired == ^expired
     )
+  end
+
+  @doc """
+    Marks members & tasks as expired when:
+    - expire_at is in the past
+    - started_at is nil
+  """
+  def mark_expired() do
+    now = Timestamp.naive_now()
+
+    # Query expired and not started tasks. Expired, started but not completed tasks are the responsibility
+    # of the researcher since surveys on third party platforms (such as Qualtrics) can have problems where
+    # participants are not redirected to complete the task. This can be caused by
+    #   1. bug in third party platform (not redirecting)
+    #   2. no end of survey configurated (not redirecting)
+    #   3. end of survey pointing to wrong url (redirecting, but to the wrong campaign)
+
+    task_query = from(t in Crew.TaskModel, where: t.expire_at <= ^now and is_nil(t.started_at))
+    member_ids = from(t in task_query, select: t.member_id)
+    member_query = from(m in Crew.MemberModel, where: m.expire_at <= ^now and m.id in subquery(member_ids))
+
+    Multi.new()
+    |> Multi.update_all(:members , member_query, set: [expired: true])
+    |> Multi.update_all(:tasks, task_query, set: [expired: true])
+    |> Repo.transaction()
+  end
+
+  @doc """
+    Marks tasks as expired
+    - expire_at is in the past
+    - completed_at is nil
+  """
+  def mark_expired(task_id) do
+    now = Timestamp.naive_now()
+
+    # Query expired, started but not completed tasks.
+    task_query = from(t in Crew.TaskModel,
+      where:
+        t.id == ^task_id and
+        t.expire_at <= ^now and
+        is_nil(t.completed_at)
+    )
+
+    member_ids = from(t in task_query, select: t.member_id)
+    member_query = from(m in Crew.MemberModel, where: m.expire_at <= ^now and m.id in subquery(member_ids))
+
+    Multi.new()
+    |> Multi.update_all(:members , member_query, set: [expired: true])
+    |> Multi.update_all(:tasks, task_query, set: [expired: true])
+    |> Repo.transaction()
   end
 end

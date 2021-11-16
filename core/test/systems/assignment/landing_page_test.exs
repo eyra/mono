@@ -66,19 +66,18 @@ defmodule Systems.Assignment.LandingPageTest do
       conn: %{assigns: %{current_user: user}} = conn,
       assignment: assignment
     } do
-      member = Crew.Context.apply_member!(assignment.crew, user)
-      _task = Crew.Context.create_task!(assignment.crew, member)
+      _member = Crew.Context.apply_member!(assignment.crew, user)
 
       {:ok, _view, html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
 
       assert html =~ "This is a test title"
-      assert html =~ "You have applied to participate"
+      assert html =~ "Instructions"
       assert html =~ "These are the expectations for the participants"
       assert html =~ "Reward"
       assert html =~ "Duration"
       assert html =~ "Language"
-      assert html =~ "Go to survey"
+      assert html =~ "Proceed"
     end
 
     test "Member starting assignment", %{
@@ -86,7 +85,7 @@ defmodule Systems.Assignment.LandingPageTest do
       assignment: assignment
     } do
       member = Crew.Context.apply_member!(assignment.crew, user)
-      task = Crew.Context.create_task!(assignment.crew, member)
+      task = Crew.Context.get_task(assignment.crew, member)
 
       {:ok, view, _html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
@@ -111,19 +110,19 @@ defmodule Systems.Assignment.LandingPageTest do
       assignment: assignment
     } do
       member = Crew.Context.apply_member!(assignment.crew, user)
-      task = Crew.Context.create_task!(assignment.crew, member)
+      task = Crew.Context.get_task(assignment.crew, member)
       Crew.Context.start_task!(task)
 
       {:ok, _view, html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
 
       assert html =~ "This is a test title"
-      assert html =~ "You have applied to participate"
+      assert html =~ "Instructions"
       assert html =~ "These are the expectations for the participants"
       assert html =~ "Reward"
       assert html =~ "Duration"
       assert html =~ "Language"
-      assert html =~ "Go to survey"
+      assert html =~ "Proceed"
     end
 
     test "Member completed assignment", %{
@@ -131,7 +130,7 @@ defmodule Systems.Assignment.LandingPageTest do
       assignment: assignment
     } do
       member = Crew.Context.apply_member!(assignment.crew, user)
-      task = Crew.Context.create_task!(assignment.crew, member)
+      task = Crew.Context.get_task(assignment.crew, member)
       Crew.Context.start_task!(task)
       Crew.Context.complete_task!(task)
 

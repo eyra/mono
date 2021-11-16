@@ -1,4 +1,4 @@
-defmodule Link.Pool.SubmissionPage do
+defmodule Systems.Pool.SubmissionPage do
   @moduledoc """
    The submission page for a campaign.
   """
@@ -9,17 +9,20 @@ defmodule Link.Pool.SubmissionPage do
 
   import CoreWeb.Gettext
 
+  alias Systems.{
+    Campaign,
+    Promotion
+  }
+
   alias Core.Accounts.User
-  alias Systems.Campaign
-  alias Systems.Promotion
   alias Core.Pools.{Submissions, Submission}
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.UI.Navigation.ButtonBar
   alias CoreWeb.UI.Member
 
-  alias Link.Pool.SubmissionView, as: SubmissionForm
-  alias Link.Pool.SubmissionCriteriaView, as: SubmissionCriteriaForm
+  alias Systems.Pool.SubmissionView, as: SubmissionForm
+  alias Systems.Pool.SubmissionCriteriaView, as: SubmissionCriteriaForm
 
   alias EyraUI.Text.{Title1, SubHead}
 
@@ -63,6 +66,7 @@ defmodule Link.Pool.SubmissionPage do
         member: member,
         submission_id: submission_id,
         promotion_id: submission.promotion_id,
+        campaign_id: campaign.id,
         title: submission.promotion.title,
         byline: byline,
         accepted?: accepted?,

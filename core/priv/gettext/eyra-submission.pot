@@ -71,67 +71,67 @@ msgid "reward.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:52
+#: systems/pool/submission_page.ex:55
 msgid "byline"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:147
+#: systems/pool/submission_page.ex:151
 msgid "retract.admin.success.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:146
+#: systems/pool/submission_page.ex:150
 msgid "retract.admin.success.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:131
+#: systems/pool/submission_page.ex:135
 msgid "accept.error.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:130
+#: systems/pool/submission_page.ex:134
 msgid "accept.error.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:124
+#: systems/pool/submission_page.ex:128
 msgid "accept.success.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:123
+#: systems/pool/submission_page.ex:127
 msgid "accept.success.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:199
+#: systems/pool/views/submission_view.ex:199
 msgid "reward.value.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:198
+#: systems/pool/views/submission_view.ex:198
 msgid "reward.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:125
+#: systems/pool/views/submission_view.ex:125
 msgid "schedule.end.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:115
+#: systems/pool/views/submission_view.ex:115
 msgid "schedule.start.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:203
+#: systems/pool/views/submission_view.ex:203
 msgid "schedule.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:202
+#: systems/pool/views/submission_view.ex:202
 msgid "schedule.title"
 msgstr ""
 

@@ -27,6 +27,8 @@ defmodule Core.Authorization do
   grant_access(Systems.Assignment.LandingPage, [:participant])
   grant_access(Systems.Assignment.CallbackPage, [:participant])
   grant_access(Systems.Promotion.LandingPage, [:visitor, :member, :owner])
+  grant_access(Systems.Pool.OverviewPage, [:researcher])
+  grant_access(Systems.Pool.SubmissionPage, [:researcher])
   grant_access(Systems.Test.Page, [:visitor, :member])
 
   grant_access(CoreWeb.Admin.Login, [:visitor, :member])

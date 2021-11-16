@@ -12,15 +12,15 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/debug.ex:6 bundles/link/lib/onboarding/wizard.ex:6
-#: bundles/link/lib/pool/submission_page.ex:6 lib/core_web/live/data_donation/content.ex:6
-#: lib/core_web/live/user/profile.ex:6 systems/campaign/content_page.ex:6
+#: lib/core_web/live/data_donation/content.ex:6 lib/core_web/live/user/profile.ex:6 systems/campaign/content_page.ex:6
+#: systems/pool/submission_page.ex:6
 msgid "error.flash"
 msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/debug.ex:6 bundles/link/lib/onboarding/wizard.ex:6
-#: bundles/link/lib/pool/submission_page.ex:6 lib/core_web/live/data_donation/content.ex:6
-#: lib/core_web/live/user/profile.ex:6 systems/campaign/content_page.ex:6
+#: lib/core_web/live/data_donation/content.ex:6 lib/core_web/live/user/profile.ex:6 systems/campaign/content_page.ex:6
+#: systems/pool/submission_page.ex:6
 msgid "saved.info.flash"
 msgstr ""
 
@@ -161,9 +161,8 @@ msgid "menu.item.helpdesk"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:8
-#: lib/core_web/live/admin/ticket.ex:4 systems/assignment/landing_page.ex:6 systems/campaign/content_page.ex:9
-#: systems/promotion/landing_page.ex:6
+#: lib/core_web/live/admin/ticket.ex:4 systems/assignment/landing_page.ex:6
+#: systems/campaign/content_page.ex:9 systems/pool/submission_page.ex:8 systems/promotion/landing_page.ex:6
 msgid "cancel.button"
 msgstr ""
 
@@ -183,9 +182,9 @@ msgid "delete.confirm.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:8
-#: lib/core_web/live/admin/ticket.ex:4 systems/assignment/landing_page.ex:6 systems/assignment/model.ex:196
-#: systems/campaign/content_page.ex:9 systems/promotion/landing_page.ex:6
+#: lib/core_web/live/admin/ticket.ex:4 systems/assignment/landing_page.ex:6
+#: systems/assignment/model.ex:189 systems/campaign/content_page.ex:9 systems/pool/submission_page.ex:8
+#: systems/promotion/landing_page.ex:6
 msgid "ok.button"
 msgstr ""
 
@@ -212,18 +211,18 @@ msgid "menu.item.support"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:90 lib/core_web/ui/timestamp.ex:93
-#: lib/core_web/ui/timestamp.ex:98
+#: lib/core_web/ui/timestamp.ex:103 lib/core_web/ui/timestamp.ex:106
+#: lib/core_web/ui/timestamp.ex:111
 msgid "timestamp.at"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:90
+#: lib/core_web/ui/timestamp.ex:103
 msgid "timestamp.today"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:93
+#: lib/core_web/ui/timestamp.ex:106
 msgid "timestamp.yesterday"
 msgstr ""
 

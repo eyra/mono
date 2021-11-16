@@ -9,11 +9,9 @@ defmodule Systems.Assignment.CallbackPage do
   alias EyraUI.Button.PrimaryLiveViewButton
 
   alias Systems.{
-    Assignment,
-    Crew
+    Assignment
   }
 
-  data(expired?, :boolean)
   data(task, :map)
 
   @impl true
@@ -24,26 +22,12 @@ defmodule Systems.Assignment.CallbackPage do
   @impl true
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
     assignment = Assignment.Context.get!(id, [:crew])
-
-    expired? = Crew.Context.expired_member?(assignment.crew, user)
-
-    task =
-      if expired? do
-        nil
-      else
-        member = Crew.Context.get_member!(assignment.crew, user)
-        Crew.Context.get_task(assignment.crew, member)
-      end
-
-    if task do
-      Crew.Context.complete_task!(task)
-    end
+    task = Assignment.Context.complete_task(assignment, user)
 
     {
       :ok,
       socket
       |> assign(
-        expired?: expired?,
         task: task,
         model: assignment
       )
@@ -78,12 +62,12 @@ defmodule Systems.Assignment.CallbackPage do
           <MarginY id={{:page_top}} />
           <Title1>{{@vm.title}}</Title1>
           <Spacing value="M" />
-          <div :if={{@expired? }}>
+          <div :if={{@task == nil }}>
             <Title3>{{ dgettext("eyra-crew", "task.expired.subtitle") }}</Title3>
             <Spacing value="M" />
             <BodyLarge>{{ dgettext("eyra-crew", "task.expired.text") }}</BodyLarge>
           </div>
-          <div :if={{not @expired? }}>
+          <div :if={{@task != nil }}>
             <Title3>{{ dgettext("eyra-crew", "task.completed.title") }}</Title3>
             <Spacing value="M" />
             <BodyLarge>{{ dgettext("eyra-crew", "task.completed.message.part1") }}</BodyLarge>

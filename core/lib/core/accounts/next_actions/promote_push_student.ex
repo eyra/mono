@@ -8,8 +8,8 @@ defmodule Core.Accounts.NextActions.PromotePushStudent do
     %{
       title: dgettext("eyra-nextaction", "promote.push.student.title"),
       description: dgettext("eyra-nextaction", "promote.push.student.description"),
-      cta: dgettext("eyra-nextaction", "promote.push.student.cta"),
-      url: url_resolver.(CoreWeb.User.Settings, [])
+      cta_label: dgettext("eyra-nextaction", "promote.push.student.cta"),
+      cta_action: %{type: :redirect, to: url_resolver.(CoreWeb.User.Settings, [])}
     }
   end
 end

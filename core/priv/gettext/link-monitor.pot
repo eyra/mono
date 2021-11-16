@@ -11,11 +11,21 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:181
-msgid "closed.dialog.text"
+#: systems/campaign/monitor_view.ex:75
+msgid "attention.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:180
-msgid "closed.dialog.title"
+#: systems/campaign/monitor_view.ex:184
+msgid "started.at.message"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:85
+msgid "accept.all.button"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:78
+msgid "attention.body"
 msgstr ""

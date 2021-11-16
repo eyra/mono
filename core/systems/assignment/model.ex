@@ -162,21 +162,14 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
 
   def handle_open(%{assigns: %{current_user: user}} = socket, %{path: path}, %{crew: crew}) do
     member = Crew.Context.get_member!(crew, user)
-    task = Crew.Context.get_or_create_task!(crew, member)
+    task = Crew.Context.get_task(crew, member)
     Crew.Context.start_task!(task)
     LiveView.redirect(socket, external: path)
   end
 
-  def handle_apply(%{assigns: %{current_user: user}} = socket, %{assignment: %{id: id, crew: crew} = assignment}, _) do
+  def handle_apply(%{assigns: %{current_user: user}} = socket, %{assignment: %{id: id} = assignment}, _) do
     if Assignment.Context.open?(assignment) do
-      member =
-        case Crew.Context.member?(crew, user) do
-          true -> Crew.Context.get_member!(crew, user)
-          false -> Crew.Context.apply_member!(crew, user)
-        end
-
-      _task = Crew.Context.get_or_create_task!(crew, member)
-
+      Assignment.Context.apply_member(assignment, user)
       LiveView.push_redirect(socket, to: Routes.live_path(socket, Systems.Assignment.LandingPage, id))
     else
       inform_closed(socket)
@@ -264,6 +257,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
     %{title: language_title, text: language_text}
   end
 
+  defp language_text(nil), do: "?"
   defp language_text([]), do: "?"
   defp language_text(languages) when is_list(languages) do
     languages
