@@ -30,8 +30,7 @@ defmodule Systems.Promotion.FormView do
   @impl true
   def save_file(%{assigns: %{entity: entity}} = socket, uploaded_file) do
     socket
-    # force save
-    |> save(entity, %{banner_photo_url: uploaded_file}, false)
+    |> save(entity, %{banner_photo_url: uploaded_file})
   end
 
   def update(%{image_id: image_id}, %{assigns: %{entity: entity}} = socket) do
@@ -42,8 +41,7 @@ defmodule Systems.Promotion.FormView do
       :ok,
       socket
       |> assign(image_info: image_info)
-      # force save
-      |> save(entity, attrs, false)
+      |> save(entity, attrs)
     }
   end
 
@@ -59,8 +57,7 @@ defmodule Systems.Promotion.FormView do
     {
       :ok,
       socket
-      # force save
-      |> save(entity, %{:themes => active_theme_ids}, false)
+      |> save(entity, %{:themes => active_theme_ids})
     }
   end
 
@@ -109,11 +106,11 @@ defmodule Systems.Promotion.FormView do
   end
 
   # Save
-  defp save(socket, %Promotion.Model{} = entity, attrs, schedule?) do
+  defp save(socket, %Promotion.Model{} = entity, attrs) do
     changeset = Promotion.Model.changeset(entity, :save, attrs)
 
     socket
-    |> save(changeset, schedule?)
+    |> save(changeset)
     |> validate_for_publish()
   end
 
@@ -139,7 +136,7 @@ defmodule Systems.Promotion.FormView do
     {
       :noreply,
       socket
-      |> save(entity, attrs, true)
+      |> save(entity, attrs)
     }
   end
 

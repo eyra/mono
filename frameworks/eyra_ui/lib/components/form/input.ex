@@ -14,6 +14,7 @@ defmodule EyraUI.Form.Input do
   prop(label_color, :css_class, default: "text-grey1")
   prop(background, :atom, default: :light)
   prop(disabled, :boolean, default: false)
+  prop(debounce, :string, default: "1000")
   slot(default)
 
   def render(assigns) do
@@ -46,6 +47,7 @@ defmodule EyraUI.Form.Input do
             phx-focus="focus"
             phx-value-field={{ @field }}
             phx-target={{ target }}
+            phx-debounce={{@debounce}}
           />
         </Field>
       </Context>

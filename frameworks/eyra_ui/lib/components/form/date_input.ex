@@ -11,7 +11,7 @@ defmodule EyraUI.Form.DateInput do
 
   def render(assigns) do
     ~H"""
-      <Input field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}} type="date" disabled={{ @disabled }}/>
+      <Input field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}} type="date" disabled={{ @disabled }} debounce={{ nil }}/>
     """
   end
 end

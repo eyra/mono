@@ -85,7 +85,7 @@ defmodule CoreWeb.User.Forms.Profile do
     changeset = UserProfileEdit.changeset(entity, type, attrs)
 
     socket
-    |> schedule_save(changeset)
+    |> save(changeset)
   end
 
   @impl true

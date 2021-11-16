@@ -29,7 +29,7 @@ defmodule Systems.Pool.SubmissionCriteriaView do
     {
       :ok,
       socket
-      |> force_save(criteria, %{:study_program_codes => study_program_codes})
+      |> save(criteria, %{:study_program_codes => study_program_codes})
       |> assign(study_year_labels: study_year_labels)
       |> assign(study_program_labels: study_program_labels)
     }
@@ -42,7 +42,7 @@ defmodule Systems.Pool.SubmissionCriteriaView do
     {
       :ok,
       socket
-      |> force_save(criteria, %{selector_id => active_item_ids})
+      |> save(criteria, %{selector_id => active_item_ids})
     }
   end
 
@@ -89,15 +89,11 @@ defmodule Systems.Pool.SubmissionCriteriaView do
   end
 
   # Saving
-
-  def force_save(socket, entity, attrs), do: save(socket, entity, attrs, false)
-  def schedule_save(socket, entity, attrs), do: save(socket, entity, attrs, true)
-
-  def save(socket, %Criteria{} = entity, attrs, schedule?) do
+  def save(socket, %Criteria{} = entity, attrs) do
     changeset = Criteria.changeset(entity, attrs)
 
     socket
-    |> save(changeset, schedule?)
+    |> save(changeset)
     |> update_ui()
   end
 
