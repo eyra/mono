@@ -2,9 +2,9 @@ defmodule CoreWeb.Helpdesk.Public do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :helpdesk
 
-  alias EyraUI.Spacing
+  alias Frameworks.Pixel.Spacing
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias EyraUI.Text.{Title2, BodyLarge}
+  alias Frameworks.Pixel.Text.{Title2, BodyLarge}
 
   alias CoreWeb.Helpdesk.Form, as: HelpdeskForm
 

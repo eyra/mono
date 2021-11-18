@@ -5,9 +5,9 @@ defmodule CoreWeb.User.Signup do
   use CoreWeb, :live_view
 
   alias Surface.Components.Form
-  alias EyraUI.Form.{EmailInput, PasswordInput}
-  alias EyraUI.Button.{SubmitWideButton, LinkButton}
-  alias EyraUI.Text.Title2
+  alias Frameworks.Pixel.Form.{EmailInput, PasswordInput}
+  alias Frameworks.Pixel.Button.{SubmitWideButton, LinkButton}
+  alias Frameworks.Pixel.Text.Title2
 
   alias Core.Accounts
   alias Core.Accounts.User

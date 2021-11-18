@@ -6,11 +6,11 @@ defmodule Link.Index do
   use CoreWeb.Layouts.Website.Component, :index
   alias CoreWeb.Layouts.Website.Component, as: Website
 
-  alias EyraUI.Card.PrimaryCTA
-  alias EyraUI.Panel.USP
-  alias EyraUI.Text.{Title1, Intro}
-  alias EyraUI.Grid.{AbsoluteGrid}
-  alias EyraUI.Hero.HeroLarge
+  alias Frameworks.Pixel.Card.PrimaryCTA
+  alias Frameworks.Pixel.Panel.USP
+  alias Frameworks.Pixel.Text.{Title1, Intro}
+  alias Frameworks.Pixel.Grid.{AbsoluteGrid}
+  alias Frameworks.Pixel.Hero.HeroLarge
 
   data(current_user, :any)
 

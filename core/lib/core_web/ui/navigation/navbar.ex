@@ -5,7 +5,7 @@ defmodule CoreWeb.UI.Navigation.Navbar do
   use CoreWeb.UI.Component
 
   alias CoreWeb.UI.Navigation.MenuItem
-  alias EyraUI.Alignment.HorizontalCenter
+  alias Frameworks.Pixel.Alignment.HorizontalCenter
 
   prop(items, :any, required: true)
   prop(path_provider, :any, required: true)

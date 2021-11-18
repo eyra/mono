@@ -2,7 +2,7 @@ defmodule CoreWeb.UI.Navigation.TabbarItem do
   @moduledoc """
     Item that can be used in Menu or Navbar
   """
-  use EyraUI.Component
+  use Frameworks.Pixel.Component
 
   defviewmodel(
     type: :seperated,

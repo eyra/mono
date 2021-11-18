@@ -1,9 +1,9 @@
 defmodule Systems.Pool.SubmissionView do
   use CoreWeb.LiveForm
 
-  alias EyraUI.Selector.Selector
-  alias EyraUI.Text.{Title3, Body}
-  alias EyraUI.Form.{Form, NumberInput, DateInput}
+  alias Frameworks.Pixel.Selector.Selector
+  alias Frameworks.Pixel.Text.{Title3, Body}
+  alias Frameworks.Pixel.Form.{Form, NumberInput, DateInput}
 
   import CoreWeb.UI.Timestamp,
     only: [

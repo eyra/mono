@@ -27,7 +27,6 @@ defmodule CoreWeb.LiveLocale do
 
       def mount(params, %{"locale" => locale} = session, socket) do
         Gettext.put_locale(CoreWeb.Gettext, locale)
-        Gettext.put_locale(EyraUI.Gettext, locale)
         Gettext.get_locale()
         super(params, session, socket)
       end

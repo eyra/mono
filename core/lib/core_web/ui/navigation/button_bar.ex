@@ -2,7 +2,7 @@ defmodule CoreWeb.UI.Navigation.ButtonBar do
   @moduledoc false
   use CoreWeb.UI.Component
 
-  alias EyraUI.Button.DynamicButton
+  alias Frameworks.Pixel.Button.DynamicButton
 
   prop(buttons, :list, required: true)
 

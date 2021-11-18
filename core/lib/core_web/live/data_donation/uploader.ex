@@ -4,9 +4,9 @@ defmodule CoreWeb.DataDonation.Uploader do
   alias Core.Accounts
   alias Core.DataDonation.{Tools, Tool, Upload}
 
-  alias EyraUI.Hero.HeroSmall
-  alias EyraUI.Text.{Title3, Title4, BodyLarge, BodyMedium}
-  alias EyraUI.Panel.Panel
+  alias Frameworks.Pixel.Hero.HeroSmall
+  alias Frameworks.Pixel.Text.{Title3, Title4, BodyLarge, BodyMedium}
+  alias Frameworks.Pixel.Panel.Panel
 
   data(result, :any)
   data(tool, :any)

@@ -5,8 +5,8 @@ defmodule CoreWeb.User.Forms.Features do
   alias Core.Accounts
   alias Core.Accounts.Features
 
-  alias EyraUI.Selector.Selector
-  alias EyraUI.Text.{Title2, Title3, BodyMedium}
+  alias Frameworks.Pixel.Selector.Selector
+  alias Frameworks.Pixel.Text.{Title2, Title3, BodyMedium}
 
   prop(props, :any, required: true)
 

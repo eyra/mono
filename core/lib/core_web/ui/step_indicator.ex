@@ -2,7 +2,7 @@ defmodule CoreWeb.UI.StepIndicator do
   @moduledoc """
     Circle with a number
   """
-  use EyraUI.Component
+  use Frameworks.Pixel.Component
 
   defviewmodel(
     text: nil,

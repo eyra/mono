@@ -2,7 +2,7 @@ defmodule CoreWeb.UI.Navigation.TabbarContent do
   @moduledoc false
   use CoreWeb.UI.Component
 
-  alias EyraUI.Dynamic
+  alias Frameworks.Pixel.Dynamic
   alias CoreWeb.UI.Navigation.Tab
 
   def render(assigns) do

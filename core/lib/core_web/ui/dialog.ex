@@ -1,7 +1,7 @@
 defmodule CoreWeb.UI.Dialog do
   use CoreWeb.UI.Component
 
-  alias EyraUI.Button.DynamicButton
+  alias Frameworks.Pixel.Button.DynamicButton
 
   defviewmodel(
     title: nil,

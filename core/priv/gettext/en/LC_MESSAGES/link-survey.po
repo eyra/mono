@@ -308,7 +308,7 @@ msgstr "Open for participation"
 msgid "language.highlight.title"
 msgstr "Language"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: systems/campaign/monitor_view.ex:90
 msgid "started.label"
 msgstr "Started"

@@ -8,8 +8,8 @@ defmodule CoreWeb.User.Settings do
   alias Core.Accounts
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
-  alias EyraUI.Text.{Title2, Title4}
-  alias EyraUI.Button.PrimaryAlpineButton
+  alias Frameworks.Pixel.Text.{Title2, Title4}
+  alias Frameworks.Pixel.Button.PrimaryAlpineButton
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
     Accounts.mark_as_visited(user, :settings)

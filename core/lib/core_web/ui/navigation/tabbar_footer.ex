@@ -3,7 +3,7 @@ defmodule CoreWeb.UI.Navigation.TabbarFooter do
   use CoreWeb.UI.Component
 
   alias CoreWeb.UI.Container.RestrictedWidthArea
-  alias EyraUI.Button.Face.Forward
+  alias Frameworks.Pixel.Button.Face.Forward
 
   slot(default)
 

@@ -2,7 +2,7 @@ defmodule CoreWeb.UI.Navigation.MenuItem do
   @moduledoc """
     Item that can be used in Menu or Navbar
   """
-  use EyraUI.Component
+  use Frameworks.Pixel.Component
 
   defviewmodel(
     menu_id: nil,
@@ -14,7 +14,7 @@ defmodule CoreWeb.UI.Navigation.MenuItem do
     icon: [name: nil, size: :small]
   )
 
-  alias EyraUI.Navigation.Button
+  alias Frameworks.Pixel.Navigation.Button
 
   prop(vm, :any, required: true)
   prop(text_color, :css_class, default: "text-grey1")

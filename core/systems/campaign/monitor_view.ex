@@ -2,14 +2,14 @@ defmodule Systems.Campaign.MonitorView do
   use CoreWeb.LiveForm
 
   alias CoreWeb.UI.{Timestamp, ProgressBar}
-  alias EyraUI.Container.Wrap
+  alias Frameworks.Pixel.Container.Wrap
 
   alias Systems.{
     Crew,
     Campaign
   }
 
-  alias EyraUI.Text.{Title3, BodyMedium, BodyLarge, Label}
+  alias Frameworks.Pixel.Text.{Title3, BodyMedium, BodyLarge, Label}
 
   prop(props, :map, required: true)
   data(vm, :any)

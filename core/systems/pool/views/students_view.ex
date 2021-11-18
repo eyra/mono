@@ -4,7 +4,7 @@ defmodule Systems.Pool.StudentsView do
   alias Core.Accounts
   alias Core.Enums.StudyProgramCodes
 
-  alias EyraUI.Text.Title2
+  alias Frameworks.Pixel.Text.Title2
   alias CoreWeb.UI.ContentListItem
 
   prop(user, :any, required: true)

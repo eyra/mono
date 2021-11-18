@@ -6,10 +6,10 @@ defmodule CoreWeb.Admin.Ticket do
   alias Core.Helpdesk
   alias Core.Helpdesk.Ticket
 
-  alias EyraUI.Wrap
-  alias EyraUI.Text.Title2
-  alias EyraUI.Button.Face.Secondary
-  alias EyraUI.Button.Action.Send
+  alias Frameworks.Pixel.Wrap
+  alias Frameworks.Pixel.Text.Title2
+  alias Frameworks.Pixel.Button.Face.Secondary
+  alias Frameworks.Pixel.Button.Action.Send
   alias CoreWeb.UI.{Member, ContentTag}
 
   data(ticket, :any)

@@ -57,7 +57,6 @@ defmodule Core.MixProject do
   defp deps do
     [
       {:green_light, path: "../frameworks/green_light"},
-      {:eyra_ui, path: "../frameworks/eyra_ui"},
       {:assent, "~> 0.1.23"},
       {:bcrypt_elixir, "~> 2.0"},
       {:phoenix, "~> 1.5.5"},
@@ -86,6 +85,7 @@ defmodule Core.MixProject do
       {:kadabra, "~> 0.6.0"},
       {:oban, "~> 2.7"},
       {:nimble_parsec, "~> 1.0"},
+      {:typed_struct, "~> 0.2.1"},
       # i18n
       {:ex_cldr, "~> 2.18"},
       {:ex_cldr_numbers, "~> 2.16"},
@@ -106,7 +106,8 @@ defmodule Core.MixProject do
       {:ex_doc, "~> 0.22", only: [:dev, :test], runtime: false},
       {:table_rex, "~> 3.0.0"},
       {:phx_gen_auth, "~> 0.6", only: [:dev], runtime: false},
-      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:browser, "~> 0.4.4"}
     ]
   end
 
@@ -137,6 +138,6 @@ defmodule Core.MixProject do
 
   defp dialyzer_framework_paths do
     env = Mix.env()
-    ["green_light", "eyra_ui"] |> Enum.map(&"_build/#{env}/lib/#{&1}/ebin")
+    ["green_light"] |> Enum.map(&"_build/#{env}/lib/#{&1}/ebin")
   end
 end

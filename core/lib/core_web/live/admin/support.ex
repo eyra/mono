@@ -6,7 +6,7 @@ defmodule CoreWeb.Admin.Support do
   alias Core.Helpdesk.Ticket
   alias Core.ImageHelpers
 
-  alias EyraUI.Text.{Title2}
+  alias Frameworks.Pixel.Text.{Title2}
   alias CoreWeb.UI.ContentListItem
 
   data(tickets, :any)

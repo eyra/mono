@@ -9,11 +9,11 @@ defmodule Systems.Promotion.LandingPage do
 
   import CoreWeb.UI.Responsive.Viewport
 
-  alias EyraUI.CampaignBanner
-  alias EyraUI.Text.{Title1, Title2, BodyLarge}
-  alias EyraUI.Button.{PrimaryLiveViewButton, BackButton}
-  alias EyraUI.Hero.{HeroImage, HeroBanner}
-  alias EyraUI.Card.Highlight
+  alias Frameworks.Pixel.CampaignBanner
+  alias Frameworks.Pixel.Text.{Title1, Title2, BodyLarge}
+  alias Frameworks.Pixel.Button.{PrimaryLiveViewButton, BackButton}
+  alias Frameworks.Pixel.Hero.{HeroImage, HeroBanner}
+  alias Frameworks.Pixel.Card.Highlight
 
   alias Core.ImageHelpers
   alias Core.Accounts

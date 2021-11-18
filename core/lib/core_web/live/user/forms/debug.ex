@@ -4,9 +4,9 @@ defmodule CoreWeb.User.Forms.Debug do
   alias Core.Accounts
   alias Core.Accounts.UserProfileEdit
 
-  alias EyraUI.Text.{Title2}
-  alias EyraUI.Form.{Form}
-  alias EyraUI.Selector.Selector
+  alias Frameworks.Pixel.Text.{Title2}
+  alias Frameworks.Pixel.Form.{Form}
+  alias Frameworks.Pixel.Selector.Selector
 
   prop(user, :any, required: true)
 

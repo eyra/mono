@@ -12,7 +12,7 @@ defmodule CoreWeb.Dashboard do
     NextAction
   }
 
-  alias EyraUI.Text.{Title2}
+  alias Frameworks.Pixel.Text.{Title2}
   alias Core.ImageHelpers
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace

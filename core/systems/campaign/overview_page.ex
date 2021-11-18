@@ -8,14 +8,14 @@ defmodule Systems.Campaign.OverviewPage do
   alias Systems.Campaign
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias EyraUI.Button.PrimaryLiveViewButton
+  alias Frameworks.Pixel.Button.PrimaryLiveViewButton
 
   alias Link.Marketplace.Card, as: CardVM
-  alias EyraUI.Card.DynamicStudy
-  alias EyraUI.Grid.DynamicGrid
-  alias EyraUI.Text.Title2
-  alias EyraUI.Button.Action.Send
-  alias EyraUI.Button.Face.Forward
+  alias Frameworks.Pixel.Card.DynamicStudy
+  alias Frameworks.Pixel.Grid.DynamicGrid
+  alias Frameworks.Pixel.Text.Title2
+  alias Frameworks.Pixel.Button.Action.Send
+  alias Frameworks.Pixel.Button.Face.Forward
 
   data(campaigns, :map, default: [])
 

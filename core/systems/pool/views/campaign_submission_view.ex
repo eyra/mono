@@ -3,8 +3,8 @@ defmodule Systems.Pool.CampaignSubmissionView do
 
   alias Core.Enums.{StudyYears, StudyProgramCodes, Genders, DominantHands, NativeLanguages}
 
-  alias EyraUI.Selector.Selector
-  alias EyraUI.Text.{Title2, Title3, BodyMedium}
+  alias Frameworks.Pixel.Selector.Selector
+  alias Frameworks.Pixel.Text.{Title2, Title3, BodyMedium}
 
   alias Core.Pools.{Submissions, Criteria}
 
