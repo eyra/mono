@@ -106,12 +106,12 @@ msgid "accept.success.title"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/submission_view.ex:199
+#: systems/pool/views/submission_view.ex:196
 msgid "reward.value.label"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/submission_view.ex:198
+#: systems/pool/views/submission_view.ex:195
 msgid "reward.label"
 msgstr ""
 
@@ -126,12 +126,12 @@ msgid "schedule.start.label"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/submission_view.ex:203
+#: systems/pool/views/submission_view.ex:200
 msgid "schedule.description"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/submission_view.ex:202
+#: systems/pool/views/submission_view.ex:199
 msgid "schedule.title"
 msgstr ""
 

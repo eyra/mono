@@ -123,39 +123,39 @@ msgstr "Enkele studies gebruiken specifieke selectie criteria. Als je de onderst
 
 #, elixir-format
 #: lib/core_web/live/user/forms/features.ex:99
-#: systems/pool/views/campaign_submission_view.ex:153
+#: systems/pool/views/campaign_submission_view.ex:149
 msgid "features.dominanthand.title"
 msgstr "Voorkeurshand"
 
 #, elixir-format
 #: lib/core_web/live/user/forms/features.ex:91
-#: systems/pool/views/campaign_submission_view.ex:145
+#: systems/pool/views/campaign_submission_view.ex:141
 msgid "features.gender.title"
 msgstr "Geslacht"
 
 #, elixir-format
 #: lib/core_web/live/user/forms/features.ex:95
-#: systems/pool/views/campaign_submission_view.ex:149
+#: systems/pool/views/campaign_submission_view.ex:145
 msgid "features.nativelanguage.title"
 msgstr "Eerste taal"
 
 #, elixir-format
-#: systems/pool/views/campaign_submission_view.ex:157
+#: systems/pool/views/campaign_submission_view.ex:153
 msgid "features.study.title"
 msgstr "Studenten"
 
 #, elixir-format
-#: systems/pool/views/campaign_submission_view.ex:141
+#: systems/pool/views/campaign_submission_view.ex:137
 msgid "features.title"
 msgstr "Inclusiecriteria"
 
 #, elixir-format
-#: systems/pool/views/campaign_submission_view.ex:158
+#: systems/pool/views/campaign_submission_view.ex:154
 msgid "feature.study.content.description"
 msgstr "Selecteer welke studenten (BK: bedrijfskunde, IBA: international business administration) mee mogen doen aan de studie. Geen selectie betekend dat alle studenten mee mogen doen met de studie."
 
 #, elixir-format
-#: systems/pool/views/campaign_submission_view.ex:142
+#: systems/pool/views/campaign_submission_view.ex:138
 msgid "features.content.description"
 msgstr "Selecteer hieronder de inclusiecriteria voor je studie. Geen selectie betekend dat alle studenten in de pool mee mogen doen met de studie."
 
@@ -200,18 +200,18 @@ msgid "login.surf.message.surfconext.href"
 msgstr "https://wiki.surfnet.nl/display/conextsupport/Inloggen+via+SURFconext"
 
 #, elixir-format
-#: systems/pool/views/campaign_submission_view.ex:165
-#: systems/pool/views/submission_criteria_view.ex:111
+#: systems/pool/views/campaign_submission_view.ex:161
+#: systems/pool/views/submission_criteria_view.ex:107
 msgid "features.study.program"
 msgstr "Opleiding"
 
 #, elixir-format
-#: systems/pool/views/campaign_submission_view.ex:161
-#: systems/pool/views/submission_criteria_view.ex:107
+#: systems/pool/views/campaign_submission_view.ex:157
+#: systems/pool/views/submission_criteria_view.ex:103
 msgid "features.study.year"
 msgstr "Leerjaar"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:322
+#: bundles/link/lib/survey/web/form.ex:317
 msgid "ehtical.code.label"
 msgstr "Code"

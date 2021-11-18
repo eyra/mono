@@ -79,19 +79,12 @@ defmodule Systems.Crew.Context do
     |> Repo.one()
   end
 
-  def count_pending_started_tasks(crew) do
-    from(t in pending_started_tasks_query(crew),
-      select: count(t.id)
-    )
-    |> Repo.one()
-  end
-
-  def pending_started_tasks(crew) do
-    from(t in pending_started_tasks_query(crew))
+  def expired_pending_started_tasks(crew) do
+    from(t in expired_pending_started_tasks_query(crew))
     |> Repo.all()
   end
 
-  defp pending_started_tasks_query(crew) do
+  defp expired_pending_started_tasks_query(crew) do
     now = Timestamp.naive_now()
 
     from(t in Crew.TaskModel,
@@ -102,6 +95,31 @@ defmodule Systems.Crew.Context do
         t.expired == false and
         not is_nil(t.started_at)
     )
+  end
+
+  def count_started_tasks(crew) do
+    from(t in Crew.TaskModel,
+      where:
+        t.crew_id == ^crew.id and
+        t.status == :pending and
+        t.expired == false and
+        not is_nil(t.started_at),
+      select: count(t.id)
+    )
+    |> Repo.one()
+
+  end
+
+  def count_applied_tasks(crew) do
+    from(t in Crew.TaskModel,
+      where:
+        t.crew_id == ^crew.id and
+        t.status == :pending and
+        t.expired == false and
+        is_nil(t.started_at),
+      select: count(t.id)
+    )
+    |> Repo.one()
   end
 
   def count_pending_tasks(crew) do

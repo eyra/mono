@@ -1,7 +1,7 @@
 defmodule Systems.Campaign.MonitorView do
   use CoreWeb.LiveForm
 
-  alias CoreWeb.UI.Timestamp
+  alias CoreWeb.UI.{Timestamp, ProgressBar}
   alias EyraUI.Container.Wrap
 
   alias Systems.{
@@ -9,7 +9,7 @@ defmodule Systems.Campaign.MonitorView do
     Campaign
   }
 
-  alias EyraUI.Text.{Title3, BodyMedium, BodyLarge}
+  alias EyraUI.Text.{Title3, BodyMedium, BodyLarge, Label}
 
   prop(props, :map, required: true)
   data(vm, :any)
@@ -74,13 +74,36 @@ defmodule Systems.Campaign.MonitorView do
         <Case value={{ @vm.is_active }} >
           <True>
             <Title3 margin={{"mb-8"}}>{{dgettext("link-survey", "status.title")}}<span class="text-primary"> {{@vm.completed_count}}/{{@vm.subject_count}}</span></Title3>
-            <BodyLarge>{{dgettext("link-survey", "status.label")}}</BodyLarge>
             <Spacing value="M" />
-            <BodyMedium>{{dgettext("link-survey", "completed.label")}}: <span class="text-success"> {{@vm.completed_count}}</span></BodyMedium>
-            <Spacing value="XS" />
-            <BodyMedium>{{dgettext("link-survey", "pending.label")}}: <span class="text-warning"> {{@vm.pending_count}}</span></BodyMedium>
-            <Spacing value="XS" />
-            <BodyMedium>{{dgettext("link-survey", "vacant.label")}}: <span class="text-delete"> {{@vm.vacant_count}}</span></BodyMedium>
+            <div class="bg-grey6 rounded p-12">
+              <ProgressBar vm={{ @vm.progress }} />
+              <div class="flex flex-row flex-wrap gap-y-4 gap-x-12">
+                <div>
+                  <div class="flex flex-row items-center gap-3">
+                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-success"></div>
+                    <Label>{{dgettext("link-survey", "completed.label")}}: {{@vm.completed_count}}</Label>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex flex-row items-center gap-3">
+                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-warning"></div>
+                    <Label>{{dgettext("link-survey", "started.label")}}: {{@vm.started_count}}</Label>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex flex-row items-center gap-3">
+                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-tertiary"></div>
+                    <Label>{{dgettext("link-survey", "pending.label")}}: {{@vm.applied_count}}</Label>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex flex-row items-center gap-3">
+                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-grey4"></div>
+                    <Label>{{dgettext("link-survey", "vacant.label")}}: {{@vm.vacant_count}}</Label>
+                  </div>
+                </div>
+              </div>
+            </div>
             <Spacing value="XL" />
 
             <Title3 margin={{"mb-8"}}>
@@ -149,33 +172,52 @@ defmodule Systems.Campaign.MonitorView do
   ) do
     is_active = status === :accepted
     completed_count = Crew.Context.count_completed_tasks(crew)
-    pending_count = Crew.Context.count_pending_tasks(crew)
-    vacant_count = tool |> get_vacant_count(completed_count, pending_count)
+    started_count = Crew.Context.count_started_tasks(crew)
+    applied_count = Crew.Context.count_applied_tasks(crew)
+    vacant_count = tool |> get_vacant_count(completed_count, started_count, applied_count)
 
     pending_started_tasks =
-      Crew.Context.pending_started_tasks(crew)
-      |> to_view_model(:pending_started_tasks, target)
+      Crew.Context.expired_pending_started_tasks(crew)
+      |> to_view_model(:expired_pending_started_tasks, target)
 
     %{
       is_active: is_active,
       subject_count: subject_count,
-      pending_count: pending_count,
+      applied_count: applied_count,
+      started_count: started_count,
       completed_count: completed_count,
       vacant_count: vacant_count,
-      pending_started_tasks: pending_started_tasks
+      pending_started_tasks: pending_started_tasks,
+      progress: %{
+        size: subject_count,
+        bars: [
+          %{
+            color: :tertiary,
+            size: completed_count + started_count + applied_count
+          },
+          %{
+            color: :warning,
+            size: completed_count + started_count
+          },
+          %{
+            color: :success,
+            size: completed_count
+          }
+        ]
+      }
     }
   end
 
-  defp get_vacant_count(tool, completed, pending) do
+  defp get_vacant_count(tool, completed, started, applied) do
     case tool.subject_count do
       count when is_nil(count) -> 0
-      count when count > 0 -> count - (completed + pending)
+      count when count > 0 -> count - (completed + started + applied)
       _ -> 0
     end
   end
 
-  defp to_view_model([], :pending_started_tasks, _), do: []
-  defp to_view_model(tasks, :pending_started_tasks, target) do
+  defp to_view_model([], :expired_pending_started_tasks, _), do: []
+  defp to_view_model(tasks, :expired_pending_started_tasks, target) do
     Enum.map(tasks, &to_view_model(&1, :attention, target))
   end
 
