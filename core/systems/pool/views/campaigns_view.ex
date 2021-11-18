@@ -15,7 +15,7 @@ defmodule Systems.Pool.CampaignsView do
 
   alias CoreWeb.UI.ContentListItem
 
-  alias EyraUI.Text.{Title2}
+  alias Frameworks.Pixel.Text.{Title2}
 
   prop(user, :any, required: true)
 

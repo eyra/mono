@@ -3,8 +3,8 @@ defmodule Systems.Pool.SubmissionCriteriaView do
 
   alias Core.Enums.{StudyYears, StudyProgramCodes}
 
-  alias EyraUI.Selector.Selector
-  alias EyraUI.Text.Title3
+  alias Frameworks.Pixel.Selector.Selector
+  alias Frameworks.Pixel.Text.Title3
 
   alias Core.Pools.{Submissions, Criteria}
 

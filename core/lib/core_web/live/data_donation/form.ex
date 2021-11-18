@@ -6,10 +6,10 @@ defmodule CoreWeb.DataDonation.Form do
 
   alias CoreWeb.Router.Helpers, as: Routes
 
-  alias EyraUI.Text.{Title2, Title3}
-  alias EyraUI.Form.{Form, TextArea, NumberInput}
-  alias EyraUI.Button.{SecondaryLiveViewButton, PrimaryButton}
-  alias EyraUI.Panel.Panel
+  alias Frameworks.Pixel.Text.{Title2, Title3}
+  alias Frameworks.Pixel.Form.{Form, TextArea, NumberInput}
+  alias Frameworks.Pixel.Button.{SecondaryLiveViewButton, PrimaryButton}
+  alias Frameworks.Pixel.Panel.Panel
   alias CoreWeb.UI.Timestamp
 
   prop(entity_id, :any, required: true)

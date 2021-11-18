@@ -4,9 +4,9 @@ defmodule CoreWeb.Admin.Permissions do
 
   alias Core.Accounts
 
-  alias EyraUI.Text.{BodyLarge, Title2, Title3}
-  alias EyraUI.Button.Action.Send
-  alias EyraUI.Button.Face.Icon
+  alias Frameworks.Pixel.Text.{BodyLarge, Title2, Title3}
+  alias Frameworks.Pixel.Button.Action.Send
+  alias Frameworks.Pixel.Button.Face.Icon
 
   data(researchers, :any)
   data(pool_admins, :any)

@@ -17,7 +17,7 @@ msgid "attention.title"
 msgstr "Aandacht"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:221
+#: systems/campaign/monitor_view.ex:240
 msgid "started.at.message"
 msgstr "Gestart: %{date}"
 

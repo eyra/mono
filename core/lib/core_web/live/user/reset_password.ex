@@ -7,9 +7,9 @@ defmodule CoreWeb.User.ResetPassword do
   alias Surface.Components.Form
   alias Core.Accounts
   alias Core.Accounts.User
-  alias EyraUI.Text.Title2
-  alias EyraUI.Form.EmailInput
-  alias EyraUI.Button.SubmitButton
+  alias Frameworks.Pixel.Text.Title2
+  alias Frameworks.Pixel.Form.EmailInput
+  alias Frameworks.Pixel.Button.SubmitButton
 
   data(changeset, :any)
 

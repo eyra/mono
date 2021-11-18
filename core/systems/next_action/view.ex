@@ -1,7 +1,7 @@
 defmodule Systems.NextAction.View do
-  use EyraUI.Component
+  use Frameworks.Pixel.Component
 
-  alias EyraUI.Button.DynamicAction
+  alias Frameworks.Pixel.Button.DynamicAction
 
   defviewmodel(
     title: nil,

@@ -10,11 +10,11 @@ defmodule Link.Debug do
   alias CoreWeb.Mail.Forms.Debug, as: MailDebugForm
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
-  alias EyraUI.Spacing
-  alias EyraUI.Button.DynamicButton
+  alias Frameworks.Pixel.Spacing
+  alias Frameworks.Pixel.Button.DynamicButton
 
-  alias EyraUI.Container.{Wrap}
-  alias EyraUI.Text.Title2
+  alias Frameworks.Pixel.Container.{Wrap}
+  alias Frameworks.Pixel.Text.Title2
 
   alias Systems.{
     Campaign

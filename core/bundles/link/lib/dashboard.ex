@@ -14,7 +14,7 @@ defmodule Link.Dashboard do
   alias CoreWeb.UI.ContentListItem
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
-  alias EyraUI.Text.{Title2}
+  alias Frameworks.Pixel.Text.{Title2}
   alias Systems.NextAction
 
   data(content_items, :any)

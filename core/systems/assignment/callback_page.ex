@@ -5,8 +5,8 @@ defmodule Systems.Assignment.CallbackPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :survey
 
-  alias EyraUI.Text.{Title1, Title3, BodyLarge}
-  alias EyraUI.Button.PrimaryLiveViewButton
+  alias Frameworks.Pixel.Text.{Title1, Title3, BodyLarge}
+  alias Frameworks.Pixel.Button.PrimaryLiveViewButton
 
   alias Systems.{
     Assignment

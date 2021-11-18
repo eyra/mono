@@ -1,14 +1,14 @@
 defmodule CoreWeb.Helpdesk.Form do
   use CoreWeb.LiveForm
 
-  alias EyraUI.Spacing
-  alias EyraUI.Form.{Form, TextArea, TextInput}
-  alias EyraUI.Text.{Title3}
-  alias EyraUI.Button.SubmitButton
+  alias Frameworks.Pixel.Spacing
+  alias Frameworks.Pixel.Form.{Form, TextArea, TextInput}
+  alias Frameworks.Pixel.Text.{Title3}
+  alias Frameworks.Pixel.Button.SubmitButton
   alias Core.Helpdesk
   alias Core.Enums
   alias Core.Accounts
-  alias EyraUI.Selector.Selector
+  alias Frameworks.Pixel.Selector.Selector
 
   prop(user, :any, required: true)
 

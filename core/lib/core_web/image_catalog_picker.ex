@@ -1,9 +1,9 @@
 defmodule CoreWeb.ImageCatalogPicker do
   use CoreWeb.UI.LiveComponent
 
-  alias EyraUI.Text.{Title3, BodyLarge, Caption}
-  alias EyraUI.Button.SubmitButton
-  alias EyraUI.Grid.ImageGrid
+  alias Frameworks.Pixel.Text.{Title3, BodyLarge, Caption}
+  alias Frameworks.Pixel.Button.SubmitButton
+  alias Frameworks.Pixel.Grid.ImageGrid
 
   prop(conn, :any, required: true)
   prop(viewport, :any)

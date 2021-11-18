@@ -22,9 +22,9 @@ defmodule Link.Marketplace do
 
   alias Link.Marketplace.Card, as: CardVM
 
-  alias EyraUI.Card.SecondaryStudy
-  alias EyraUI.Text.{Title2}
-  alias EyraUI.Grid.{DynamicGrid}
+  alias Frameworks.Pixel.Card.SecondaryStudy
+  alias Frameworks.Pixel.Text.{Title2}
+  alias Frameworks.Pixel.Grid.{DynamicGrid}
 
   data(next_best_action, :any)
   data(highlighted_count, :any)

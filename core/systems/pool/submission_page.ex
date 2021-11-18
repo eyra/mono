@@ -24,7 +24,7 @@ defmodule Systems.Pool.SubmissionPage do
   alias Systems.Pool.SubmissionView, as: SubmissionForm
   alias Systems.Pool.SubmissionCriteriaView, as: SubmissionCriteriaForm
 
-  alias EyraUI.Text.{Title1, SubHead}
+  alias Frameworks.Pixel.Text.{Title1, SubHead}
 
   data(submission_id, :any)
   data(title, :any)

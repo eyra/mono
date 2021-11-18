@@ -14,7 +14,7 @@ defmodule Link.Onboarding.Wizard do
   alias CoreWeb.User.Forms.Study, as: StudyForm
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
 
-  alias EyraUI.Button.DynamicButton
+  alias Frameworks.Pixel.Button.DynamicButton
   alias CoreWeb.UI.Navigation.{ActionBar, Tabbar, TabbarContent, TabbarFooter, TabbarArea}
 
   data(user_agent, :string, default: "")

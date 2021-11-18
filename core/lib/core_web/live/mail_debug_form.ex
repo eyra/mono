@@ -12,9 +12,9 @@ defmodule CoreWeb.Mail.Forms.Debug do
   use CoreWeb.LiveForm
   import Ecto.Changeset
 
-  alias EyraUI.Text.{Title2}
-  alias EyraUI.Form.{Form, TextInput, TextArea}
-  alias EyraUI.Button.SubmitButton
+  alias Frameworks.Pixel.Text.{Title2}
+  alias Frameworks.Pixel.Form.{Form, TextInput, TextArea}
+  alias Frameworks.Pixel.Button.SubmitButton
   use Bamboo.Phoenix, view: Core.Mailer.EmailView
   import Core.Mailer, only: [base_email: 0, deliver_now!: 1]
 

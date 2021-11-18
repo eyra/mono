@@ -6,8 +6,8 @@ defmodule Systems.Assignment.LandingPage do
   use CoreWeb.UI.Dialog
   use CoreWeb.Layouts.Workspace.Component, :assignment
 
-  alias EyraUI.Text.{Title1, Title3, BodyLarge}
-  alias EyraUI.Card.Highlight
+  alias Frameworks.Pixel.Text.{Title1, Title3, BodyLarge}
+  alias Frameworks.Pixel.Card.Highlight
 
   alias CoreWeb.UI.Navigation.ButtonBar
 

@@ -5,11 +5,11 @@ defmodule Link.Survey.Form do
   alias Link.Enums.OnlineStudyLanguages
   alias Core.Survey.{Tools, Tool}
 
-  alias EyraUI.Selector.Selector
-  alias EyraUI.Panel.Panel
-  alias EyraUI.Text.{Title2, Title3, Title5, Body, BodyLarge, BodyMedium}
-  alias EyraUI.Form.{Form, TextInput, UrlInput, NumberInput, Checkbox}
-  alias EyraUI.Button.Face.LabelIcon
+  alias Frameworks.Pixel.Selector.Selector
+  alias Frameworks.Pixel.Panel.Panel
+  alias Frameworks.Pixel.Text.{Title2, Title3, Title5, Body, BodyLarge, BodyMedium}
+  alias Frameworks.Pixel.Form.{Form, TextInput, UrlInput, NumberInput, Checkbox}
+  alias Frameworks.Pixel.Button.Face.LabelIcon
 
   alias CoreWeb.UI.StepIndicator
 

@@ -2,8 +2,8 @@ defmodule CoreWeb.UI.ContentListItem do
   use CoreWeb.UI.Component
   alias Surface.Components.LiveRedirect
 
-  alias EyraUI.{Image}
-  alias EyraUI.Text.{Label}
+  alias Frameworks.Pixel.{Image}
+  alias Frameworks.Pixel.Text.{Label}
 
   alias CoreWeb.UI.ContentTag
 

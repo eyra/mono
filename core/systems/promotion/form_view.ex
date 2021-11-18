@@ -9,11 +9,11 @@ defmodule Systems.Promotion.FormView do
   alias Core.ImageHelpers
   alias CoreWeb.Router.Helpers, as: Routes
 
-  alias EyraUI.Text.{Title2, Title3, Body, BodyLarge}
-  alias EyraUI.Form.{Form, TextInput, TextArea, PhotoInput, UrlInput}
-  alias EyraUI.Selector.Selector
-  alias EyraUI.ImagePreview
-  alias EyraUI.Button.SecondaryAlpineButton
+  alias Frameworks.Pixel.Text.{Title2, Title3, Body, BodyLarge}
+  alias Frameworks.Pixel.Form.{Form, TextInput, TextArea, PhotoInput, UrlInput}
+  alias Frameworks.Pixel.Selector.Selector
+  alias Frameworks.Pixel.ImagePreview
+  alias Frameworks.Pixel.Button.SecondaryAlpineButton
 
   prop(props, :any, required: true)
 

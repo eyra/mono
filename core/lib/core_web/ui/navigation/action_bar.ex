@@ -3,7 +3,7 @@ defmodule CoreWeb.UI.Navigation.ActionBar do
   use CoreWeb.UI.Component
 
   alias CoreWeb.UI.Navigation.ActionMenu
-  alias EyraUI.Line
+  alias Frameworks.Pixel.Line
 
   prop(right_bar_buttons, :list, default: [])
   prop(more_buttons, :list, default: [])

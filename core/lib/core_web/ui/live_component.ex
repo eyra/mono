@@ -7,12 +7,12 @@ defmodule CoreWeb.UI.LiveComponent do
 
       alias CoreWeb.UI.{Empty, MarginY}
       alias CoreWeb.UI.Container.{ContentArea, FormArea, SheetArea}
-      alias EyraUI.Case.{Case, True, False}
-      alias EyraUI.Button.DynamicButton
-      alias EyraUI.Spacing
+      alias Frameworks.Pixel.Case.{Case, True, False}
+      alias Frameworks.Pixel.Button.DynamicButton
+      alias Frameworks.Pixel.Spacing
 
-      require EyraUI.ViewModel
-      import EyraUI.ViewModel
+      require Frameworks.Pixel.ViewModel
+      import Frameworks.Pixel.ViewModel
 
       alias CoreWeb.Router.Helpers, as: Routes
     end
