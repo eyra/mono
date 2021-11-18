@@ -107,12 +107,12 @@ msgid "accept.success.title"
 msgstr "Campaign published"
 
 #, elixir-format
-#: systems/pool/views/submission_view.ex:199
+#: systems/pool/views/submission_view.ex:196
 msgid "reward.value.label"
 msgstr "Credits"
 
 #, elixir-format
-#: systems/pool/views/submission_view.ex:198
+#: systems/pool/views/submission_view.ex:195
 msgid "reward.label"
 msgstr "Reward"
 
@@ -127,12 +127,12 @@ msgid "schedule.start.label"
 msgstr "Online on"
 
 #, elixir-format
-#: systems/pool/views/submission_view.ex:203
+#: systems/pool/views/submission_view.ex:200
 msgid "schedule.description"
 msgstr "Scheduling is optional. If you publish a campaign without scheduling, it is immediately visible in the marketplace. You can retract a published campaign at any moment in time."
 
 #, elixir-format
-#: systems/pool/views/submission_view.ex:202
+#: systems/pool/views/submission_view.ex:199
 msgid "schedule.title"
 msgstr "Schedule"
 

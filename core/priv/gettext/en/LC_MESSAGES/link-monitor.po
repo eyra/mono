@@ -12,21 +12,21 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:75
+#: systems/campaign/monitor_view.ex:110
 msgid "attention.title"
 msgstr "Attention"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:184
+#: systems/campaign/monitor_view.ex:221
 msgid "started.at.message"
 msgstr "Started: %{date}"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:85
+#: systems/campaign/monitor_view.ex:118
 msgid "accept.all.button"
 msgstr "Approve all"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:78
+#: systems/campaign/monitor_view.ex:113
 msgid "attention.body"
 msgstr "The participants below started your survey on Qualtrics, but did not return to Panl. Approve the ones that filled in the survey, reject the others."

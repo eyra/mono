@@ -19,9 +19,10 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Completed tasks: <span class=\"text-success\"> 0"
-      assert html =~ "Participants working: <span class=\"text-warning\"> 0"
-      assert html =~ "Open spots: <span class=\"text-delete\"> 1"
+      assert html =~ "Completed: 0"
+      assert html =~ "Started: 0"
+      assert html =~ "Applied: 0"
+      assert html =~ "Open: 1"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
     end
 
@@ -39,9 +40,10 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Completed tasks: <span class=\"text-success\"> 0"
-      assert html =~ "Participants working: <span class=\"text-warning\"> 1"
-      assert html =~ "Open spots: <span class=\"text-delete\"> 0"
+      assert html =~ "Completed: 0"
+      assert html =~ "Started: 1"
+      assert html =~ "Applied: 0"
+      assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 1"
       assert html =~ "Subject 1"
       assert html =~ "⚠️ Started:"
@@ -68,9 +70,10 @@ defmodule Systems.Campaign.MonitorViewTest do
         |> element("[phx-click=\"reject\"]")
         |> render_click()
 
-      assert html =~ "Completed tasks: <span class=\"text-success\"> 0"
-      assert html =~ "Participants working: <span class=\"text-warning\"> 0"
-      assert html =~ "Open spots: <span class=\"text-delete\"> 1"
+      assert html =~ "Completed: 0"
+      assert html =~ "Started: 0"
+      assert html =~ "Applied: 0"
+      assert html =~ "Open: 1"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
     end
 
@@ -93,9 +96,10 @@ defmodule Systems.Campaign.MonitorViewTest do
         |> element("[phx-click=\"accept\"]")
         |> render_click()
 
-      assert html =~ "Completed tasks: <span class=\"text-success\"> 1"
-      assert html =~ "Participants working: <span class=\"text-warning\"> 0"
-      assert html =~ "Open spots: <span class=\"text-delete\"> 0"
+      assert html =~ "Completed: 1"
+      assert html =~ "Started: 0"
+      assert html =~ "Applied: 0"
+      assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
     end
 
@@ -126,9 +130,10 @@ defmodule Systems.Campaign.MonitorViewTest do
         |> element("[phx-click=\"accept_all\"]")
         |> render_click()
 
-      assert html =~ "Completed tasks: <span class=\"text-success\"> 2"
-      assert html =~ "Participants working: <span class=\"text-warning\"> 0"
-      assert html =~ "Open spots: <span class=\"text-delete\"> 0"
+      assert html =~ "Completed: 2"
+      assert html =~ "Started: 0"
+      assert html =~ "Applied: 0"
+      assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
     end
 
@@ -140,9 +145,24 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Completed tasks: <span class=\"text-success\"> 1"
-      assert html =~ "Participants working: <span class=\"text-warning\"> 0"
-      assert html =~ "Open spots: <span class=\"text-delete\"> 0"
+      assert html =~ "Completed: 1"
+      assert html =~ "Started: 0"
+      assert html =~ "Applied: 0"
+      assert html =~ "Open: 0"
+      assert html =~ "Attention<span class=\"text-primary\"> 0"
+    end
+
+    test "Member applied", %{conn: %{assigns: %{current_user: user}} = conn} do
+      %{id: id, promotable_assignment: %{crew: crew}} = create_campaign(user, :accepted, 1)
+
+      {:ok, _} = Crew.Context.apply_member(crew, user)
+
+      {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
+
+      assert html =~ "Completed: 0"
+      assert html =~ "Started: 0"
+      assert html =~ "Applied: 1"
+      assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
     end
   end

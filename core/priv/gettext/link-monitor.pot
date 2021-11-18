@@ -11,21 +11,21 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:75
+#: systems/campaign/monitor_view.ex:110
 msgid "attention.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:184
+#: systems/campaign/monitor_view.ex:221
 msgid "started.at.message"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:85
+#: systems/campaign/monitor_view.ex:118
 msgid "accept.all.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:78
+#: systems/campaign/monitor_view.ex:113
 msgid "attention.body"
 msgstr ""

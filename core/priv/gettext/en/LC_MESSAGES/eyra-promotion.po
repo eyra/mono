@@ -17,37 +17,37 @@ msgid "back.button.label"
 msgstr "Back"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:198
+#: systems/promotion/form_view.ex:195
 msgid "banner.subtitle.label"
 msgstr "Description"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:185
+#: systems/promotion/form_view.ex:182
 msgid "banner.title"
 msgstr "About you or your team"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:197
+#: systems/promotion/form_view.ex:194
 msgid "banner.title.label"
 msgstr "Name"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:199
+#: systems/promotion/form_view.ex:196
 msgid "banner.url.label"
 msgstr "Website"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:191
+#: systems/promotion/form_view.ex:188
 msgid "choose.banner.photo.file"
 msgstr "Select picture"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:192
+#: systems/promotion/form_view.ex:189
 msgid "choose.other.banner.photo.file"
 msgstr "Choose different photo"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:182
+#: systems/promotion/form_view.ex:179
 msgid "description.label"
 msgstr "Provide some background information about this study"
 
@@ -57,7 +57,7 @@ msgid "description.public.label"
 msgstr "About this study"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:181
+#: systems/promotion/form_view.ex:178
 msgid "description.title"
 msgstr "Why are you performing this study?"
 
@@ -73,7 +73,7 @@ msgid "duration.title"
 msgstr "Duration"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:178
+#: systems/promotion/form_view.ex:175
 msgid "expectations.label"
 msgstr "Describe what is expected of participants"
 
@@ -83,17 +83,17 @@ msgid "expectations.public.label"
 msgstr "What to expect?"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:177
+#: systems/promotion/form_view.ex:174
 msgid "expectations.title"
 msgstr "What do participants have to do?"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:166
+#: systems/promotion/form_view.ex:163
 msgid "image.label"
 msgstr "This image is used as a cover image for your promotion page and your marketplace tile."
 
 #, elixir-format
-#: systems/promotion/form_view.ex:165
+#: systems/promotion/form_view.ex:162
 msgid "image.title"
 msgstr "Cover image"
 
@@ -108,37 +108,37 @@ msgid "reward.title"
 msgstr "Credits"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:172
+#: systems/promotion/form_view.ex:169
 msgid "search.different.image.button"
 msgstr "Change cover"
 
 #, elixir-format
-#: systems/campaign/model.ex:105 systems/promotion/form_view.ex:156
+#: systems/campaign/model.ex:105 systems/promotion/form_view.ex:153
 msgid "subtitle.label"
 msgstr "Can you explain in one line what your study is about?"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:160
+#: systems/promotion/form_view.ex:157
 msgid "themes.label"
 msgstr "Which theme fits your study best? You could select multiple."
 
 #, elixir-format
-#: systems/promotion/form_view.ex:159
+#: systems/promotion/form_view.ex:156
 msgid "themes.title"
 msgstr "Themes"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:155
+#: systems/promotion/form_view.ex:152
 msgid "title.label"
 msgstr "Title"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:151
+#: systems/promotion/form_view.ex:148
 msgid "form.title"
 msgstr "Promotion"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:152
+#: systems/promotion/form_view.ex:149
 msgid "form.description"
 msgstr "Promotions will be published in the marketplace to recruit participants. Preview the promotion page to view what participants will see when they click your marketplace tile."
 
