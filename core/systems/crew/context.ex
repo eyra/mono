@@ -68,12 +68,17 @@ defmodule Systems.Crew.Context do
     |> Repo.all()
   end
 
-  def count_tasks(crew, status_list) do
+  def task_query(crew, status_list, expired) do
     from(t in Crew.TaskModel,
       where:
         t.crew_id == ^crew.id and
         t.status in ^status_list and
-        t.expired == false,
+        t.expired == ^expired
+    )
+  end
+
+  def count_tasks(crew, status_list) do
+    from(t in task_query(crew, status_list, false),
       select: count(t.id)
     )
     |> Repo.one()
@@ -98,32 +103,19 @@ defmodule Systems.Crew.Context do
   end
 
   def count_started_tasks(crew) do
-    from(t in Crew.TaskModel,
-      where:
-        t.crew_id == ^crew.id and
-        t.status == :pending and
-        t.expired == false and
-        not is_nil(t.started_at),
+    from(t in task_query(crew, [:pending], false),
+      where: not is_nil(t.started_at),
       select: count(t.id)
     )
     |> Repo.one()
-
   end
 
   def count_applied_tasks(crew) do
-    from(t in Crew.TaskModel,
-      where:
-        t.crew_id == ^crew.id and
-        t.status == :pending and
-        t.expired == false and
-        is_nil(t.started_at),
+    from(t in task_query(crew, [:pending], false),
+      where: is_nil(t.started_at),
       select: count(t.id)
     )
     |> Repo.one()
-  end
-
-  def count_pending_tasks(crew) do
-    count_tasks(crew, [:pending])
   end
 
   def count_completed_tasks(crew) do

@@ -12,9 +12,13 @@ defmodule CoreWeb.UI.ProgressBar do
 
   prop(vm, :any, required: true)
 
+  defp hide(0, _), do: true
+
   defp hide(total_size, %{size: size}) do
     size / total_size == 1
   end
+
+  defp width(0, _), do: 0
 
   defp width(total_size, %{size: size}) do
     size / total_size * 100
