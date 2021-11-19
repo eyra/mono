@@ -104,10 +104,14 @@ defmodule Systems.Pool.SubmissionView do
   end
 
   def update(%{id: id, props: %{entity_id: entity_id, validate?: validate?}}, socket) do
-    entity = Submissions.get!(entity_id)
+    %{
+      schedule_start: schedule_start,
+      schedule_end: schedule_end
+    } = entity = Submissions.get!(entity_id)
+
     changeset = Submission.changeset(entity, %{})
 
-    schedule_start_disabled = entity.schedule_start == nil
+    schedule_start_disabled = schedule_start == nil
 
     schedule_start_toggle_labels = [
       %{
@@ -117,7 +121,7 @@ defmodule Systems.Pool.SubmissionView do
       }
     ]
 
-    schedule_end_disabled = entity.schedule_end == nil
+    schedule_end_disabled = schedule_end == nil
 
     schedule_end_toggle_labels = [
       %{
