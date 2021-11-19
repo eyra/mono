@@ -35,7 +35,7 @@ defmodule Core.DataDonation.Tool do
   @impl true
   def operational_validation(changeset), do: changeset
 
-  defimpl GreenLight.AuthorizationNode do
+  defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(data_donation_tool), do: data_donation_tool.auth_node_id
   end
 
@@ -81,7 +81,7 @@ defimpl Systems.Assignment.Assignable, for: Core.DataDonation.Tool do
   def spot_count(%{subject_count: nil}), do: 0
   def spot_count(%{subject_count: subject_count}), do: subject_count
   def spot_count(_), do: 0
-  def duration(_), do: nil
+  def duration(_), do: 0
   def path(_, _), do: nil
   def apply_label(_), do: dgettext("eyra-data-donation", "apply.cta.title")
   def open_label(_), do: dgettext("eyra-data-donation", "open.cta.title")

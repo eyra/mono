@@ -1,4 +1,4 @@
-defmodule GreenLight.Ecto.RoleAssignment do
+defmodule Frameworks.GreenLight.Ecto.RoleAssignment do
   @moduledoc """
   A role assignment entity is used to assign a role to a principal on a
   specific entity.

@@ -24,7 +24,7 @@ defmodule Systems.Assignment.Model do
 
   @fields ~w()a
 
-  defimpl GreenLight.AuthorizationNode do
+  defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(assignment), do: assignment.auth_node_id
   end
 
@@ -257,7 +257,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
     %{title: language_title, text: language_text}
   end
 
-  defp language_text(nil), do: "?"
   defp language_text([]), do: "?"
   defp language_text(languages) when is_list(languages) do
     languages

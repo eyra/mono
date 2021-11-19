@@ -1,11 +1,10 @@
-defmodule GreenLight.Ecto.Query do
+defmodule Frameworks.GreenLight.Ecto.Query do
   @moduledoc """
   Query functions around role assignments.
   """
 
   import Ecto.Query
-  alias GreenLight.AuthorizationNode
-  alias GreenLight.Principal
+  alias Frameworks.GreenLight.{AuthorizationNode, Principal}
 
   defp role_query(role_assignment_schema, principal, entity) do
     from(ra in role_assignment_schema,

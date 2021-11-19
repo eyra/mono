@@ -1,5 +1,5 @@
-defmodule GreenLight.PermissionMapTest do
-  alias GreenLight.PermissionMap
+defmodule Frameworks.GreenLight.PermissionMapTest do
+  alias Frameworks.GreenLight.PermissionMap
   use ExUnit.Case, async: true
 
   test "grant and new create the same structure" do

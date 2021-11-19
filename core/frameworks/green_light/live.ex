@@ -1,4 +1,4 @@
-defmodule GreenLight.Live do
+defmodule Frameworks.GreenLight.Live do
   @moduledoc """
   The Live module enables automatic authorization checks for LiveViews.
   """
@@ -12,12 +12,12 @@ defmodule GreenLight.Live do
   defmacro __using__(auth_module) do
     quote do
       @greenlight_authmodule unquote(auth_module)
-      @behaviour GreenLight.Live
-      @before_compile GreenLight.Live
+      @behaviour Frameworks.GreenLight.Live
+      @before_compile Frameworks.GreenLight.Live
       import Phoenix.LiveView.Helpers
 
       def render(%{authorization_failed: true}) do
-        raise GreenLight.AccessDeniedError, "Authorization failed for #{__MODULE__}"
+        raise Frameworks.GreenLight.AccessDeniedError, "Authorization failed for #{__MODULE__}"
       end
     end
   end

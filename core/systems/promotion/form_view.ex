@@ -84,10 +84,10 @@ defmodule Systems.Promotion.FormView do
         },
         socket
       ) do
-    entity = Promotion.Context.get!(entity_id)
+    %{image_id: image_id} = entity = Promotion.Context.get!(entity_id)
     changeset = Promotion.Model.changeset(entity, :create, %{})
 
-    image_info = ImageHelpers.get_image_info(entity.image_id, 400, 300)
+    image_info = ImageHelpers.get_image_info(image_id, 400, 300)
     theme_labels = themes_module.labels(entity.themes)
 
     {

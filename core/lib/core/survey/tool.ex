@@ -29,7 +29,7 @@ defmodule Core.Survey.Tool do
     timestamps()
   end
 
-  defimpl GreenLight.AuthorizationNode do
+  defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(survey_tool), do: survey_tool.auth_node_id
   end
 
@@ -131,7 +131,7 @@ end
 defimpl Systems.Assignment.Assignable, for: Core.Survey.Tool do
   import CoreWeb.Gettext
 
-  def languages(%{language: nil}), do: nil
+  def languages(%{language: nil}), do: []
   def languages(%{language: language}), do: [language]
 
   def devices(%{devices: nil}), do: []

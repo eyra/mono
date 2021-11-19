@@ -51,9 +51,6 @@ config :core, Core.Mailer,
   adapter: Bamboo.LocalAdapter,
   default_from_email: "no-reply@example.com"
 
-config :exsync,
-  addition_dirs: ["../../frameworks"]
-
 config :web_push_encryption, :vapid_details,
   subject: "mailto:administrator@example.com",
   public_key:

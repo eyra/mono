@@ -21,7 +21,7 @@ msgstr ""
 #: bundles/link/lib/debug.ex:6 bundles/link/lib/onboarding/wizard.ex:6
 #: frameworks/pixel/auto_save.ex:83 lib/core_web/live/data_donation/content.ex:6
 #: lib/core_web/live/user/profile.ex:6 systems/campaign/content_page.ex:6 systems/pool/submission_page.ex:6
-make rumsgid "saved.info.flash"
+msgid "saved.info.flash"
 msgstr ""
 
 #, elixir-format

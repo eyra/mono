@@ -1,6 +1,5 @@
 BUNDLES=$(wildcard core/bundles/*)
-FRAMEWORKS=$(wildcard frameworks/*)
-MIX_PROJECTS=${FRAMEWORKS} core
+MIX_PROJECTS=core
 
 .PHONY: all
 all: test format compile credo deps

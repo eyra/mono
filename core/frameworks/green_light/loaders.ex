@@ -1,4 +1,4 @@
-defmodule GreenLight.Loaders do
+defmodule Frameworks.GreenLight.Loaders do
   @moduledoc """
   This is module that automates the loading of entities based on path parameters.
 
@@ -111,7 +111,7 @@ defmodule GreenLight.Loaders do
 
   # def can?(conn, action, entity \\ nil) do
   #   permission = conn.private.phoenix_controller |> controller_to_permission(action)
-  #   GreenLight.allowed?(conn, permission, entity)
+  #   GreenLight.Context.allowed?(conn, permission, entity)
   # end
 
   # @doc false

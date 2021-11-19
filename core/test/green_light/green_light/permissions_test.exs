@@ -2,9 +2,8 @@ defmodule TestEntity do
   defstruct id: nil
 end
 
-defmodule GreenLight.PermissionsTest do
-  alias GreenLight.Permissions
-  alias GreenLight.PermissionMap
+defmodule Frameworks.GreenLight.PermissionsTest do
+  alias Frameworks.GreenLight.{Permissions, PermissionMap}
   use ExUnit.Case, async: true
 
   test "action_permission returns a permission string" do

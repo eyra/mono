@@ -40,12 +40,12 @@ A role is an Elixir atom that maps on to a set of permissions.
 
 ### Permission Map
 
-The permission map (`GreenLight.PermissionMap`) is the datastructure
+The permission map (`Frameworks.GreenLight.PermissionMap`) is the datastructure
 which is used to map roles to permissions.
 
 ### Role Assignment
 
-A role assignment (`GreenLight.RoleAssignment`) registers the assignment
+A role assignment (`Frameworks.GreenLight.RoleAssignment`) registers the assignment
 of a role to a principal on a specific entity. This is what makes having local
 roles possible.
 
@@ -53,11 +53,11 @@ roles possible.
 
 ### Entity Loaders
 
-The `GreenLight.Plug` authorization module needs entities to enforce it's access rules. The entity loaders are responsible for taking Plug `path_param` and returning the entities.
+The `Frameworks.GreenLight.Plug` authorization module needs entities to enforce it's access rules. The entity loaders are responsible for taking Plug `path_param` and returning the entities.
 
 ### Authorization
 
-The `GreenLight.Plug` automatically enforces permission checks for all
+The `Frameworks.GreenLight.Plug` automatically enforces permission checks for all
 controller actions.
 
 ## Phoenix Integration
@@ -71,12 +71,12 @@ Access to actions is denied unless a principal has sufficient roles to access
 the action. Each action is a seperate permission. Without a mapping of
 permissions to roles all access is denied.
 
-The `GreenLight.Permissions.grant_actions/2` helper macro is provided to setup
+The `Frameworks.GreenLight.Permissions.grant_actions/2` helper macro is provided to setup
 such a mapping.
 
 ### View Helpers
 
-The Phoenix views are extended with the `GreenLight.can?/3`
+The Phoenix views are extended with the `Frameworks.GreenLight.can?/3`
 helper. This allows for easy checking of permissions within a temlate.
 
 ## Mix Tasks
