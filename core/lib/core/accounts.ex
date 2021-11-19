@@ -518,7 +518,7 @@ defimpl Core.Persister, for: Core.Accounts.UserProfileEdit do
   end
 
   defp handle_validation_error(_changeset) do
-    raise "unable to save invalid user profile data"
+    IO.puts("unable to save invalid user profile data")
   end
 
   defp handle_success(user_profile_edit) do
@@ -544,7 +544,7 @@ defimpl Core.Persister, for: Core.Accounts.Features do
   end
 
   defp handle_validation_error(_changeset) do
-    raise "unable to save invalid features data"
+    IO.puts("unable to save invalid features data")
   end
 
   defp handle_success(features, changeset) do

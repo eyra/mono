@@ -15,7 +15,7 @@ defmodule Systems.Crew.Model do
 
   @fields ~w()a
 
-  defimpl GreenLight.AuthorizationNode do
+  defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(crew), do: crew.auth_node_id
   end
 

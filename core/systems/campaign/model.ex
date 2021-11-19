@@ -27,7 +27,7 @@ defmodule Systems.Campaign.Model do
   @optional_fields ~w(updated_at)a
   @fields @required_fields ++ @optional_fields
 
-  defimpl GreenLight.AuthorizationNode do
+  defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(campaign), do: campaign.auth_node_id
   end
 

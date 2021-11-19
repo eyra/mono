@@ -1,4 +1,4 @@
-defmodule GreenLight.PermissionMap do
+defmodule Frameworks.GreenLight.PermissionMap do
   @moduledoc """
   The permission map holds a mapping of permissions to roles. The permission map
   is intended to be an implementation detail of the authorization framework.

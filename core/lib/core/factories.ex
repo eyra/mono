@@ -15,6 +15,10 @@ defmodule Core.Factories do
     Helpdesk
   }
 
+  alias Frameworks.{
+    GreenLight
+  }
+
   alias Systems.{
     Notification,
     Campaign,

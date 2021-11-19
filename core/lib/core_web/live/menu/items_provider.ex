@@ -1,6 +1,5 @@
 defmodule CoreWeb.Menu.ItemsProvider do
-  @type item() :: map()
-  @callback values() :: list(item)
+  @callback values() :: map()
 
   defp menu_items, do: Application.fetch_env!(:core, :menu_items)
 

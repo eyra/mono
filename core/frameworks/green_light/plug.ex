@@ -1,9 +1,9 @@
-defmodule GreenLight.Plug do
+defmodule Frameworks.GreenLight.Plug do
   @moduledoc """
   This Plug validates the permissions before the request is allowed to proceed.
   """
   import Plug.Conn
-  alias GreenLight.Permissions
+  alias Frameworks.GreenLight
   require Logger
 
   def init(auth_module), do: auth_module
@@ -35,7 +35,7 @@ defmodule GreenLight.Plug do
         else
           permission =
             entity.__struct__
-            |> Permissions.access_permission()
+            |> GreenLight.Permissions.access_permission()
 
           if auth_module.allowed?(roles, permission) do
             {:cont, {:ok, Plug.Conn.put_private(conn, :auth_principal_roles, roles)}}
@@ -58,7 +58,7 @@ defmodule GreenLight.Plug do
       {:ok, conn} ->
         conn
         |> ensure_authorization(
-          Permissions.action_permission(phoenix_controller, phoenix_action),
+          GreenLight.Permissions.action_permission(phoenix_controller, phoenix_action),
           auth_module
         )
     end

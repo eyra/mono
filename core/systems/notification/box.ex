@@ -17,7 +17,7 @@ defmodule Systems.Notification.Box do
   @optional_fields ~w()a
   @fields @required_fields ++ @optional_fields
 
-  defimpl GreenLight.AuthorizationNode do
+  defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(box), do: box.auth_node_id
   end
 

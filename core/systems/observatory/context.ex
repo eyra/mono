@@ -88,7 +88,8 @@ defmodule Systems.Observatory.Context do
       end
 
       def handle_view_model_updated(socket) do
-        throw("No handle_observation/1 implemented")
+        IO.puts("No handle_observation/1 implemented")
+        socket
       end
 
     end

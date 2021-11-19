@@ -1,4 +1,4 @@
-defmodule GreenLight.Config do
+defmodule Frameworks.GreenLight.Config do
   defmodule ConfigError do
     @moduledoc false
     defexception [:message]

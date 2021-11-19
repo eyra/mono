@@ -4,7 +4,7 @@ defmodule Systems.Campaign.Context do
   """
 
   import Ecto.Query, warn: false
-  alias GreenLight.Principal
+  alias Frameworks.GreenLight.Principal
   alias Core.Repo
   alias Core.Authorization
 

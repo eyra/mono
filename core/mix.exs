@@ -24,13 +24,13 @@ defmodule Core.MixProject do
       ],
       dialyzer: [
         plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
+        plt_add_apps: [:mix],
         flags: [
           # :unmatched_returns,
           :error_handling,
           :race_conditions,
           :no_opaque
-        ],
-        paths: dialyzer_framework_paths()
+        ]
       ]
     ]
   end
@@ -56,7 +56,6 @@ defmodule Core.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:green_light, path: "../frameworks/green_light"},
       {:assent, "~> 0.1.23"},
       {:bcrypt_elixir, "~> 2.0"},
       {:phoenix, "~> 1.5.5"},
@@ -134,10 +133,5 @@ defmodule Core.MixProject do
       ],
       makedocs: ["deps.get", "docs -o doc/output"]
     ]
-  end
-
-  defp dialyzer_framework_paths do
-    env = Mix.env()
-    ["green_light"] |> Enum.map(&"_build/#{env}/lib/#{&1}/ebin")
   end
 end

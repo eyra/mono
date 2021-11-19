@@ -5,17 +5,19 @@ defmodule Core.Authorization do
   It makes use of the GreenLight framework to manage permissions and
   authorization.
   """
-  use GreenLight,
+  use Frameworks.GreenLight.Context,
     repo: Core.Repo,
     roles: [:visitor, :member, :student, :researcher, :owner, :participant, :coordinator, :admin],
     role_assignment_schema: Core.Authorization.RoleAssignment
 
   use Core.BundleOverrides
 
+  alias Frameworks.GreenLight
+
   import Ecto.Query
   alias Core.Repo
 
-  GreenLight.Permissions.grant(__MODULE__, "test-auth", [:owner])
+  Frameworks.GreenLight.Permissions.grant(__MODULE__, "test-auth", [:owner])
 
   Core.BundleOverrides.grants()
 

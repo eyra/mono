@@ -3,7 +3,7 @@ defmodule CoreWeb.Loaders do
   The loaders for the Link application. They integrate with the GreenLight
   framework.
   """
-  import GreenLight.Loaders, only: [defloader: 2]
+  import Frameworks.GreenLight.Loaders, only: [defloader: 2]
 
   defloader(:campaign, &Systems.Campaign.Context.get!/1)
   defloader(:promotion, &Systems.Promotion.Context.get!/1)

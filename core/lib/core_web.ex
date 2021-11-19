@@ -54,7 +54,7 @@ defmodule CoreWeb do
       use CoreWeb.LiveLocale
       use CoreWeb.LiveUri
       import Core.Authorization, only: [can_access?: 2]
-      use GreenLight.Live, Core.Authorization
+      use Frameworks.GreenLight.Live, Core.Authorization
 
       use CoreWeb.LiveAssignHelper
       import Core.FeatureFlags

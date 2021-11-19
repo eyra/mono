@@ -3,7 +3,7 @@ defmodule Core.AuthorizationTest do
   alias Core.Factories
   use Core.DataCase
   alias Core.Accounts.User
-  alias GreenLight.Principal
+  alias Frameworks.GreenLight.Principal
 
   test "principal returns `visitor` for nil users" do
     assert Principal.id(nil) == nil

@@ -1,4 +1,4 @@
-defprotocol GreenLight.Principal do
+defprotocol Frameworks.GreenLight.Principal do
   @moduledoc """
   The principal is used as a representation for any person / thing that can
   interact with the system.
