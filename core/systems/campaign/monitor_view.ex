@@ -13,6 +13,21 @@ defmodule Systems.Campaign.MonitorView do
 
   prop(props, :map, required: true)
   data(vm, :any)
+  data(reject_task, :number)
+
+  def update(%{reject: :submit, rejection: rejection}, %{assigns: %{reject_task: task_id}} = socket) do
+    Crew.Context.reject_task!(task_id, rejection)
+    {
+      :ok,
+      socket
+      |> assign(reject_task: nil)
+      |> update_vm()
+    }
+  end
+
+  def update(%{reject: :cancel}, socket) do
+    {:ok, socket |> assign(reject_task: nil)}
+  end
 
   # Handle initial update
   def update(%{id: id, props: %{entity_id: entity_id}}, socket) do
@@ -21,7 +36,8 @@ defmodule Systems.Campaign.MonitorView do
       socket
       |> assign(
         id: id,
-        entity_id: entity_id
+        entity_id: entity_id,
+        reject_task: nil
       )
       |> update_vm()
     }
@@ -36,8 +52,18 @@ defmodule Systems.Campaign.MonitorView do
   end
 
   @impl true
-  def handle_event("accept_all", _params, %{assigns: %{vm: %{pending_started_tasks: tasks}}} = socket) do
-    Enum.each(tasks, &Crew.Context.complete_task!(&1.id))
+  def handle_event("accept_all_pending_started", _params, %{assigns: %{vm: %{pending_started_tasks: tasks}}} = socket) do
+    Enum.each(tasks, &Crew.Context.accept_task!(&1.id))
+
+    {
+      :noreply,
+      socket |> update_vm()
+    }
+  end
+
+  @impl true
+  def handle_event("accept_all_completed", _params, %{assigns: %{vm: %{completed_tasks: tasks}}} = socket) do
+    Enum.each(tasks, &Crew.Context.accept_task!(&1.id))
 
     {
       :noreply,
@@ -47,8 +73,7 @@ defmodule Systems.Campaign.MonitorView do
 
   @impl true
   def handle_event("accept", %{"item" => task_id}, socket) do
-    Crew.Context.get_task!(task_id)
-    |> Crew.Context.complete_task!()
+    Crew.Context.accept_task!(task_id)
 
     {
       :noreply,
@@ -58,22 +83,25 @@ defmodule Systems.Campaign.MonitorView do
 
   @impl true
   def handle_event("reject", %{"item" => task_id}, socket) do
-    Crew.Context.mark_expired(task_id)
-
     {
       :noreply,
-      socket |> update_vm()
+      socket |> assign(reject_task: task_id)
     }
   end
 
   @impl true
   def render(assigns) do
     ~H"""
+      <div :if={{ @reject_task != nil }} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
+        <div class="flex flex-row items-center justify-center w-full h-full">
+          <Crew.RejectView id={{ :reject_view_example }} target={{ %{type: __MODULE__, id: @id} }} />
+        </div>
+      </div>
       <ContentArea>
         <MarginY id={{:page_top}} />
         <Case value={{ @vm.is_active }} >
           <True>
-            <Title3 margin={{"mb-8"}}>{{dgettext("link-survey", "status.title")}}<span class="text-primary"> {{@vm.completed_count}}/{{@vm.subject_count}}</span></Title3>
+            <Title3 margin={{"mb-8"}}>{{dgettext("link-survey", "status.title")}}<span class="text-primary"> {{@vm.finished_count}}/{{@vm.subject_count}}</span></Title3>
             <Spacing value="M" />
             <div class="bg-grey6 rounded p-12">
               <ProgressBar :props={{ @vm.progress }} />
@@ -81,7 +109,7 @@ defmodule Systems.Campaign.MonitorView do
                 <div>
                   <div class="flex flex-row items-center gap-3">
                     <div class="flex-shrink-0 w-6 h-6 rounded-full bg-success"></div>
-                    <Label>{{dgettext("link-survey", "completed.label")}}: {{@vm.completed_count}}</Label>
+                    <Label>{{dgettext("link-survey", "completed.label")}}: {{@vm.finished_count}}</Label>
                   </div>
                 </div>
                 <div>
@@ -114,7 +142,7 @@ defmodule Systems.Campaign.MonitorView do
               <Spacing value="M" />
               <Wrap>
                 <DynamicButton vm={{ %{
-                  action: %{ type: :send, target: @myself, event: "accept_all"},
+                  action: %{ type: :send, target: @myself, event: "accept_all_pending_started"},
                   face: %{type: :primary, label: dgettext("link-monitor", "accept.all.button")}
                 } }} />
               </Wrap>
@@ -139,6 +167,77 @@ defmodule Systems.Campaign.MonitorView do
                 </div>
               </div>
             </div>
+            <Spacing value="XL" />
+
+            <Title3 margin={{"mb-8"}}>
+              {{dgettext("link-monitor", "waitinglist.title")}}<span class="text-primary"> {{ Enum.count(@vm.completed_tasks) }}</span>
+            </Title3>
+            <div :if={{ Enum.count(@vm.completed_tasks) > 0 }}>
+              <BodyLarge>{{dgettext("link-monitor", "waitinglist.body")}}</BodyLarge>
+              <Spacing value="M" />
+              <Wrap>
+                <DynamicButton vm={{ %{
+                  action: %{ type: :send, target: @myself, event: "accept_all_completed"},
+                  face: %{type: :primary, label: dgettext("link-monitor", "accept.all.button")}
+                } }} />
+              </Wrap>
+              <Spacing value="M" />
+            </div>
+            <div class="flex flex-col gap-6">
+              <div :for={{ task <- @vm.completed_tasks }}>
+                <div class="flex flex-row gap-5 items-center">
+                  <div class="flex-wrap">
+                    <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
+                  </div>
+                  <div class="flex-grow"></div>
+                  <div class="flex-wrap">
+                    <DynamicButton vm={{task.accept_button}} />
+                  </div>
+                  <div class="flex-wrap">
+                    <DynamicButton vm={{task.reject_button}} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <Spacing value="XL" />
+
+            <Title3 margin={{"mb-8"}}>
+              {{dgettext("link-monitor", "rejected.title")}}<span class="text-primary"> {{ Enum.count(@vm.rejected_tasks) }}</span>
+            </Title3>
+            <div class="flex flex-col gap-6">
+              <div :for={{ task <- @vm.rejected_tasks }}>
+                <div class="flex flex-row gap-5 items-center">
+                  <div class="flex-wrap">
+                    <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
+                  </div>
+                  <div class="flex-wrap">
+                    <BodyMedium color={{"text-warning"}}>⚠️ {{ task.message }}</BodyMedium>
+                  </div>
+                  <div class="flex-grow"></div>
+                  <div class="flex-wrap">
+                    <DynamicButton vm={{task.accept_button}} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <Spacing value="XL" />
+
+            <Title3 margin={{"mb-8"}}>
+              {{dgettext("link-monitor", "accepted.title")}}<span class="text-primary"> {{ Enum.count(@vm.accepted_tasks) }}</span>
+            </Title3>
+            <div class="flex flex-col gap-6">
+              <div :for={{ task <- @vm.accepted_tasks }}>
+                <div class="flex flex-row gap-5 items-center">
+                  <div class="flex-wrap">
+                    <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
+                  </div>
+                  <div class="flex-wrap">
+                    <BodyMedium color={{"text-grey2"}}>{{ task.message }}</BodyMedium>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </True>
           <False>
             <Empty
@@ -171,65 +270,88 @@ defmodule Systems.Campaign.MonitorView do
     }
   ) do
     is_active = status === :accepted
-    completed_count = Crew.Context.count_completed_tasks(crew)
+    finished_count = Crew.Context.count_finished_tasks(crew)
     started_count = Crew.Context.count_started_tasks(crew)
     applied_count = Crew.Context.count_applied_tasks(crew)
-    vacant_count = tool |> get_vacant_count(completed_count, started_count, applied_count)
+    vacant_count = tool |> get_vacant_count(finished_count, started_count, applied_count)
 
     pending_started_tasks =
       Crew.Context.expired_pending_started_tasks(crew)
       |> to_view_model(:expired_pending_started_tasks, target)
+
+    completed_tasks =
+      Crew.Context.completed_tasks(crew)
+      |> to_view_model(:completed_tasks, target)
+
+    rejected_tasks =
+      Crew.Context.rejected_tasks(crew)
+      |> to_view_model(:rejected_tasks, target)
+
+    accepted_tasks =
+      Crew.Context.accepted_tasks(crew)
+      |> to_view_model(:accepted_tasks, target)
 
     %{
       is_active: is_active,
       subject_count: subject_count,
       applied_count: applied_count,
       started_count: started_count,
-      completed_count: completed_count,
+      finished_count: finished_count,
       vacant_count: vacant_count,
       pending_started_tasks: pending_started_tasks,
+      completed_tasks: completed_tasks,
+      rejected_tasks: rejected_tasks,
+      accepted_tasks: accepted_tasks,
       progress: %{
         size: subject_count,
         bars: [
           %{
             color: :tertiary,
-            size: completed_count + started_count + applied_count
+            size: finished_count + started_count + applied_count
           },
           %{
             color: :warning,
-            size: completed_count + started_count
+            size: finished_count + started_count
           },
           %{
             color: :success,
-            size: completed_count
+            size: finished_count
           }
         ]
       }
     }
   end
 
-  defp get_vacant_count(tool, completed, started, applied) do
+  defp get_vacant_count(tool, finished, started, applied) do
     case tool.subject_count do
       count when is_nil(count) -> 0
-      count when count > 0 -> count - (completed + started + applied)
+      count when count > 0 -> count - (finished + started + applied)
       _ -> 0
     end
   end
 
-  defp to_view_model([], :expired_pending_started_tasks, _), do: []
+  defp to_view_model([], _, _), do: []
   defp to_view_model(tasks, :expired_pending_started_tasks, target) do
-    Enum.map(tasks, &to_view_model(&1, :attention, target))
+    Enum.map(tasks, &to_view_model(:attention, target, &1))
   end
 
-  defp to_view_model(
-    %Crew.TaskModel{
-      id: id,
-      started_at: started_at,
-      member_id: member_id
-    },
-    :attention,
-    target
-  ) do
+  defp to_view_model(tasks, :completed_tasks, target) do
+    Enum.map(tasks, &to_view_model(:waitinglist, target, &1))
+  end
+
+  defp to_view_model(tasks, :rejected_tasks, target) do
+    Enum.map(tasks, &to_view_model(:rejected, target, &1))
+  end
+
+  defp to_view_model(tasks, :accepted_tasks, target) do
+    Enum.map(tasks, &to_view_model(:accepted, target, &1))
+  end
+
+  defp to_view_model(:attention, target, %Crew.TaskModel{
+    id: id,
+    started_at: started_at,
+    member_id: member_id
+  }) do
     %{public_id: public_id} = Crew.Context.get_member!(member_id)
 
     date_string = started_at |> Timestamp.humanize()
@@ -238,30 +360,72 @@ defmodule Systems.Campaign.MonitorView do
       id: id,
       member_public_id: public_id,
       message: dgettext("link-monitor", "started.at.message", date: date_string),
-      accept_button: %{
-        action: %{
-          type: :send,
-          item: id,
-          target: target,
-          event: "accept"
-        },
-        face: %{
-          type: :icon,
-          icon: :accept
-        }
-      },
-      reject_button: %{
-        action: %{
-          type: :send,
-          item: id,
-          target: target,
-          event: "reject"
-        },
-        face: %{
-          type: :icon,
-          icon: :reject
-        }
-      }
+      accept_button: accept_button(id, target),
+      reject_button: reject_button(id, target)
     }
   end
+
+  defp to_view_model(:waitinglist, target, %Crew.TaskModel{
+      id: id,
+      member_id: member_id
+  }) do
+    %{public_id: public_id} = Crew.Context.get_member!(member_id)
+
+    %{
+      id: id,
+      member_public_id: public_id,
+      accept_button: accept_button(id, target),
+      reject_button: reject_button(id, target)
+    }
+  end
+
+  defp to_view_model(:rejected, target, %Crew.TaskModel{
+    id: id,
+    rejected_message: rejected_message,
+    member_id: member_id
+  }) do
+    %{public_id: public_id} = Crew.Context.get_member!(member_id)
+
+    %{
+      id: id,
+      member_public_id: public_id,
+      message: rejected_message,
+      accept_button: accept_button(id, target)
+    }
+  end
+
+  defp to_view_model(:accepted, _target, %Crew.TaskModel{
+    id: id,
+    accepted_at: accepted_at,
+    member_id: member_id
+  }) do
+    %{public_id: public_id} = Crew.Context.get_member!(member_id)
+
+    date_string =
+      accepted_at
+      |> Timestamp.humanize()
+      |> String.capitalize()
+
+    %{
+      id: id,
+      message: date_string,
+      member_public_id: public_id
+    }
+  end
+
+
+  defp accept_button(id, target) do
+    %{
+      action: %{type: :send, item: id, target: target, event: "accept"},
+      face: %{type: :icon, icon: :accept}
+    }
+  end
+
+  defp reject_button(id, target) do
+   %{
+      action: %{type: :send, item: id, target: target, event: "reject"},
+      face: %{type: :icon, icon: :reject}
+    }
+  end
+
 end

@@ -8,10 +8,11 @@ defmodule Frameworks.Pixel.Form.TextInput do
   prop(label_color, :css_class, default: "text-grey1")
   prop(background, :atom, default: :light)
   prop(placeholder, :string, default: "")
+  prop(debounce, :string, default: "1000")
 
   def render(assigns) do
     ~H"""
-      <Input field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}} placeholder={{@placeholder}} type="text" />
+      <Input field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}} placeholder={{@placeholder}} debounce={{@debounce}} type="text" />
     """
   end
 end

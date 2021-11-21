@@ -11,21 +11,41 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:110
+#: systems/campaign/monitor_view.ex:128
 msgid "attention.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:240
+#: systems/campaign/monitor_view.ex:340
 msgid "started.at.message"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:118
+#: systems/campaign/monitor_view.ex:136 systems/campaign/monitor_view.ex:171
 msgid "accept.all.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:113
+#: systems/campaign/monitor_view.ex:131
 msgid "attention.body"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:195
+msgid "rejected.title"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:166
+msgid "waitinglist.body"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:163
+msgid "waitinglist.title"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:216
+msgid "accepted.title"
 msgstr ""

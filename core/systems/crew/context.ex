@@ -68,6 +68,14 @@ defmodule Systems.Crew.Context do
     |> Repo.all()
   end
 
+  def task_query(crew, status_list) do
+    from(t in Crew.TaskModel,
+      where:
+        t.crew_id == ^crew.id and
+        t.status in ^status_list
+    )
+  end
+
   def task_query(crew, status_list, expired) do
     from(t in Crew.TaskModel,
       where:
@@ -102,6 +110,21 @@ defmodule Systems.Crew.Context do
     )
   end
 
+  def completed_tasks(crew) do
+    from(t in task_query(crew, [:completed]))
+    |> Repo.all()
+  end
+
+  def rejected_tasks(crew) do
+    from(t in task_query(crew, [:rejected]))
+    |> Repo.all()
+  end
+
+  def accepted_tasks(crew) do
+    from(t in task_query(crew, [:accepted]))
+    |> Repo.all()
+  end
+
   def count_started_tasks(crew) do
     from(t in task_query(crew, [:pending], false),
       where: not is_nil(t.started_at),
@@ -118,8 +141,8 @@ defmodule Systems.Crew.Context do
     |> Repo.one()
   end
 
-  def count_completed_tasks(crew) do
-    count_tasks(crew, [:completed])
+  def count_finished_tasks(crew) do
+    count_tasks(crew, [:completed, :rejected, :accepted])
   end
 
   def setup_tasks_for_members!(members, crew) do
@@ -147,9 +170,30 @@ defmodule Systems.Crew.Context do
     end
   end
 
-  def complete_task!(id) do
+  def reject_task!(%Crew.TaskModel{} = task, %{category: category, message: message}) do
+    update_task!(task, %{
+      status: :rejected,
+      rejected_at: Timestamp.naive_now(),
+      rejected_category: category,
+      rejected_message: message
+    })
+  end
+
+  def reject_task!(id, rejection) do
     get_task!(id)
-    |> complete_task!()
+    |> reject_task!(rejection)
+  end
+
+  def accept_task!(%Crew.TaskModel{} = task) do
+    update_task!(task, %{
+      status: :accepted,
+      accepted_at: Timestamp.naive_now()
+    })
+  end
+
+  def accept_task!(id) do
+    get_task!(id)
+    |> accept_task!()
   end
 
   def update_task!(%Crew.TaskModel{} = task, attrs) do

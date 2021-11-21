@@ -230,3 +230,18 @@ msgstr "Finance"
 #: bundles/link/lib/enums/themes.ex:5
 msgid "themes.operations_analytics"
 msgstr "Operations analytics"
+
+#, elixir-format
+#: systems/crew/reject_categories.ex:5
+msgid "reject_catagories.attention_checks_failed"
+msgstr "Aandachtscontroles gemist"
+
+#, elixir-format
+#: systems/crew/reject_categories.ex:5
+msgid "reject_catagories.not_completed"
+msgstr "Vragenlijst niet compleet"
+
+#, elixir-format
+#: systems/crew/reject_categories.ex:5
+msgid "reject_catagories.other"
+msgstr "Andere reden"
