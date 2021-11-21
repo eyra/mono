@@ -8,7 +8,7 @@ defmodule Core.MixProject do
       source_url: "https://github.com/eyra/eylixir",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:gettext] ++ Mix.compilers(),
+      compilers: [:gettext, :phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -49,7 +49,17 @@ defmodule Core.MixProject do
   defp elixirc_paths(:test),
     do: ["bundles", "apps", "systems", "frameworks", "lib", "test", "test/support"]
 
+  defp elixirc_paths(:dev),
+    do: ["bundles", "apps", "systems", "frameworks", "lib"] ++ catalogues()
+
   defp elixirc_paths(_), do: ["bundles", "apps", "systems", "frameworks", "lib"]
+
+  def catalogues do
+    [
+      "priv/catalogue",
+      "deps/surface/priv/catalogue"
+    ]
+  end
 
   # Specifies your project dependencies.
   #
@@ -72,6 +82,7 @@ defmodule Core.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:faker, "~> 0.16"},
       {:surface, "~> 0.4.0"},
+      {:surface_catalogue, "~> 0.0.7", only: [:dev, :test]},
       {:timex, "~> 3.6"},
       {:bamboo, "~> 2.0.1"},
       {:bamboo_phoenix, "~> 1.0.0"},
@@ -131,7 +142,8 @@ defmodule Core.MixProject do
       i18n: [
         "gettext.extract --merge priv/gettext"
       ],
-      makedocs: ["deps.get", "docs -o doc/output"]
+      makedocs: ["deps.get", "docs -o doc/output"],
+      dev: "run --no-halt dev.exs"
     ]
   end
 end

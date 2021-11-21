@@ -76,7 +76,7 @@ defmodule Systems.Campaign.MonitorView do
             <Title3 margin={{"mb-8"}}>{{dgettext("link-survey", "status.title")}}<span class="text-primary"> {{@vm.completed_count}}/{{@vm.subject_count}}</span></Title3>
             <Spacing value="M" />
             <div class="bg-grey6 rounded p-12">
-              <ProgressBar vm={{ @vm.progress }} />
+              <ProgressBar :props={{ @vm.progress }} />
               <div class="flex flex-row flex-wrap gap-y-4 gap-x-12">
                 <div>
                   <div class="flex flex-row items-center gap-3">
