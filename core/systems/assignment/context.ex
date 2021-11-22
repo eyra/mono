@@ -4,6 +4,8 @@ defmodule Systems.Assignment.Context do
   """
 
   import Ecto.Query, warn: false
+  require Logger
+
   alias Ecto.Multi
   alias Core.Repo
   alias CoreWeb.UI.Timestamp
@@ -80,6 +82,7 @@ defmodule Systems.Assignment.Context do
   end
 
   def cancel(%Assignment.Model{} = assignment, user) do
+    Logger.info("About to cancel user #{user.id} on assignment #{assignment.id}")
     crew = get_crew(assignment)
     Crew.Context.cancel(crew, user)
   end

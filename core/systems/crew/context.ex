@@ -1,6 +1,6 @@
 defmodule Systems.Crew.Context do
-
   import Ecto.Query, warn: false
+  require Logger
 
   alias Ecto.Multi
   alias Core.Repo
@@ -166,15 +166,26 @@ defmodule Systems.Crew.Context do
 
   # Members
   def cancel(crew, user) do
+    Logger.info("About to cancel user #{user.id} on crew #{crew.id}")
     if member?(crew, user) do
       member = get_member!(crew, user)
       task = get_task(crew, member)
 
       # temporary cancel is implemented by expiring the task
-      Multi.new()
-      |> Multi.update(:member, Crew.MemberModel.changeset(member, %{expired: true}))
-      |> Multi.update(:task, Crew.TaskModel.changeset(task, %{expired: true}))
-      |> Repo.transaction()
+      Logger.debug("Member changeset: #{inspect(member)}")
+      Logger.debug("task changeset: #{inspect(task)}")
+
+      result =
+        Multi.new()
+        |> Multi.update(:member, Crew.MemberModel.changeset(member, %{expired: true}))
+        |> Multi.update(:task, Crew.TaskModel.changeset(task, %{expired: true}))
+        |> Repo.transaction()
+
+      Logger.info("Cancel result: #{inspect(result)}")
+
+      result
+    else
+      Logger.warn("Unable to cancel, user #{user.id} is not a member on crew #{crew.id}")
     end
   end
 
@@ -258,8 +269,7 @@ defmodule Systems.Crew.Context do
     )
   end
 
-
- def get_expired_member(%Crew.Model{} = crew, %User{} = user) do
+  def get_expired_member(%Crew.Model{} = crew, %User{} = user) do
     from(m in Crew.MemberModel,
       where:
         m.crew_id == ^crew.id and
