@@ -49,7 +49,7 @@ msgstr "Welke apparaten kunnen door deelnemers gebruikt worden?"
 #, elixir-format
 #: lib/core/survey/tool.ex:152
 msgid "open.cta.title"
-msgstr "Start"
+msgstr "Doorgaan"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:253
@@ -74,7 +74,7 @@ msgstr "Afgerond"
 #, elixir-format
 #: systems/campaign/monitor_view.ex:96
 msgid "pending.label"
-msgstr "Bezig"
+msgstr "Aangemeld"
 
 #, elixir-format
 #: systems/campaign/monitor_view.ex:76
@@ -271,7 +271,7 @@ msgstr "ethische checklist"
 #: systems/assignment/model.ex:88 systems/assignment/model.ex:97
 #: systems/assignment/model.ex:109
 msgid "task.hero.title"
-msgstr "Online Studie"
+msgstr "Studie"
 
 #, elixir-format
 #: systems/assignment/model.ex:219

@@ -74,7 +74,7 @@ msgstr "Completed"
 #, elixir-format
 #: systems/campaign/monitor_view.ex:96
 msgid "pending.label"
-msgstr "Applied"
+msgstr "Enrolled"
 
 #, elixir-format
 #: systems/campaign/monitor_view.ex:76
@@ -271,7 +271,7 @@ msgstr "ethical checklist"
 #: systems/assignment/model.ex:88 systems/assignment/model.ex:97
 #: systems/assignment/model.ex:109
 msgid "task.hero.title"
-msgstr "Online Study"
+msgstr "Study"
 
 #, elixir-format
 #: systems/assignment/model.ex:219

@@ -19,12 +19,12 @@ msgstr "Release spot"
 #, elixir-format
 #: systems/assignment/landing_page.ex:55
 msgid "cancel.confirm.label"
-msgstr "Release"
+msgstr "Confirm"
 
 #, elixir-format
 #: systems/assignment/landing_page.ex:54
 msgid "cancel.confirm.text"
-msgstr "You can always participate again if campaign is still open."
+msgstr "We will release your spot to enable others to participate."
 
 #, elixir-format
 #: systems/assignment/landing_page.ex:53
@@ -34,9 +34,9 @@ msgstr "Release spot?"
 #, elixir-format
 #: systems/assignment/landing_page.ex:156
 msgid "cancel.text"
-msgstr "Please release your spot below. Someone else might have time."
+msgstr "If, for any reason, you decide that you don't want to proceed with your participation. Please release your spot, to give others the opportunity to participate."
 
 #, elixir-format
 #: systems/assignment/landing_page.ex:153
 msgid "cancel.title"
-msgstr "No time to do the assignment?"
+msgstr "Having second thoughts about participating?"

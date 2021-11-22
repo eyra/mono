@@ -14,29 +14,29 @@ msgstr ""
 #, elixir-format
 #: systems/assignment/landing_page.ex:105
 msgid "cancel.button"
-msgstr "Opdracht afzeggen"
+msgstr "Plek vrijgeven "
 
 #, elixir-format
 #: systems/assignment/landing_page.ex:55
 msgid "cancel.confirm.label"
-msgstr "Afzeggen"
+msgstr "Bevestigen"
 
 #, elixir-format
 #: systems/assignment/landing_page.ex:54
 msgid "cancel.confirm.text"
-msgstr "Je kan het afzeggen niet ongedaan maken"
+msgstr "Je geeft je plek vrij, zodat anderen deel kunnen nemen."
 
 #, elixir-format
 #: systems/assignment/landing_page.ex:53
 msgid "cancel.confirm.title"
-msgstr "Opdracht afzeggen?"
+msgstr "Plek vrijgeven?"
 
 #, elixir-format
 #: systems/assignment/landing_page.ex:156
 msgid "cancel.text"
-msgstr "Hieronder kan je de opdracht afzeggen, je plaats zal aan een ander worden gegeven."
+msgstr "Als je, om welke reden dan ook, besluit om niet deel te nemen. Geef anderen dan een kans om mee te doen, door jouw plek vrij te geven."
 
 #, elixir-format
 #: systems/assignment/landing_page.ex:153
 msgid "cancel.title"
-msgstr "Geen tijd om de opdracht uit te voeren?"
+msgstr "Toch niet deelnemen?"

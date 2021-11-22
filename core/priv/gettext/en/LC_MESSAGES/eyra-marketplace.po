@@ -44,4 +44,4 @@ msgstr "Expired"
 #, elixir-format
 #: systems/campaign/model.ex:132
 msgid "assignment.status.pending.label"
-msgstr "Pending"
+msgstr "Enrolled"
