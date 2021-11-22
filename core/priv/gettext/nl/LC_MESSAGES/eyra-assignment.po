@@ -10,3 +10,33 @@ msgid ""
 msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:105
+msgid "cancel.button"
+msgstr "Opdracht afzeggen"
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:55
+msgid "cancel.confirm.label"
+msgstr "Afzeggen"
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:54
+msgid "cancel.confirm.text"
+msgstr "Je kan het afzeggen niet ongedaan maken"
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:53
+msgid "cancel.confirm.title"
+msgstr "Opdracht afzeggen?"
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:156
+msgid "cancel.text"
+msgstr "Hieronder kan je de opdracht afzeggen, je plaats zal aan een ander worden gegeven."
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:153
+msgid "cancel.title"
+msgstr "Geen tijd om de opdracht uit te voeren?"

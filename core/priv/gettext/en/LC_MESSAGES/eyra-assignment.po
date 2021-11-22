@@ -10,3 +10,33 @@ msgid ""
 msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:105
+msgid "cancel.button"
+msgstr "Release spot"
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:55
+msgid "cancel.confirm.label"
+msgstr "Release"
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:54
+msgid "cancel.confirm.text"
+msgstr "You can always participate again if campaign is still open."
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:53
+msgid "cancel.confirm.title"
+msgstr "Release spot?"
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:156
+msgid "cancel.text"
+msgstr "Please release your spot below. Someone else might have time."
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:153
+msgid "cancel.title"
+msgstr "No time to do the assignment?"

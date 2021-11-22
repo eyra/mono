@@ -8,7 +8,7 @@ defmodule Systems.Crew.TaskModel do
   alias Systems.Crew
 
   schema "crew_tasks" do
-    field(:status, Ecto.Enum, values: [:pending, :completed])
+    field(:status, Ecto.Enum, values: [:pending, :completed, :accepted, :rejected])
     field(:started_at, :naive_datetime)
     field(:completed_at, :naive_datetime)
     field(:expire_at, :naive_datetime)
