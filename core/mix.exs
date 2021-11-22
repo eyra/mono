@@ -82,7 +82,7 @@ defmodule Core.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:faker, "~> 0.16"},
       {:surface, "~> 0.4.0"},
-      {:surface_catalogue, "~> 0.0.7", only: [:dev, :test]},
+      {:surface_catalogue, "~> 0.0.7"},
       {:timex, "~> 3.6"},
       {:bamboo, "~> 2.0.1"},
       {:bamboo_phoenix, "~> 1.0.0"},
