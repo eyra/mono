@@ -79,6 +79,15 @@ defmodule Systems.Assignment.Context do
     end
   end
 
+  def cancel(%Assignment.Model{} = assignment, user) do
+    crew = get_crew(assignment)
+    Crew.Context.cancel(crew, user)
+  end
+
+  def cancel(id, user) do
+    get!(id) |> cancel(user)
+  end
+
   def complete_task(%{crew: crew} = _assignment, user) do
     if Crew.Context.expired_member?(crew, user) do nil
     else
@@ -179,7 +188,6 @@ defmodule Systems.Assignment.Context do
         )
     )
   end
-
 
   # Crew
   def get_crew(assignment) do

@@ -90,6 +90,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
         subtitle: assignment_subtitle(task),
         text: assignment_text(task),
         call_to_action: assignment_call_to_action(assignment, user),
+        cancel_enabled?: cancel_enabled?(task)
       }
     else # expired member
       %{
@@ -98,6 +99,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
         subtitle: dgettext("eyra-crew", "task.expired.subtitle"),
         text: dgettext("eyra-crew", "task.expired.text"),
         call_to_action: forward_call_to_action(user),
+        cancel_enabled?: false
       }
     end
   end
@@ -118,6 +120,15 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
     }
   end
 
+  defp cancel_enabled?(%{status: status, started_at: started_at, expired: expired?}) do
+    started? = started_at != nil
+
+    case {status, started?, expired?} do
+      {:pending, true, false} -> true
+      _ -> false
+    end
+  end
+
   defp assignment_call_to_action(%{crew: crew, assignable: assignable} = assignment, user) do
     if Crew.Context.member?(crew, user) do
       member = Crew.Context.get_member!(crew, user)
@@ -126,7 +137,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
         task ->
           case task.status do
             :pending -> open_call_to_action(assignable, member.public_id)
-            :completed -> forward_call_to_action(user)
+            _completed -> forward_call_to_action(user)
           end
       end
     else

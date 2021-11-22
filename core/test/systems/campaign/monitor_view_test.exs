@@ -21,7 +21,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       assert html =~ "Completed: 0"
       assert html =~ "Started: 0"
-      assert html =~ "Applied: 0"
+      assert html =~ "Enrolled: 0"
       assert html =~ "Open: 1"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
     end
@@ -42,7 +42,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       assert html =~ "Completed: 0"
       assert html =~ "Started: 1"
-      assert html =~ "Applied: 0"
+      assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 1"
       assert html =~ "Subject 1"
@@ -72,7 +72,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       assert html =~ "Completed: 0"
       assert html =~ "Started: 0"
-      assert html =~ "Applied: 0"
+      assert html =~ "Enrolled: 0"
       assert html =~ "Open: 1"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
     end
@@ -98,7 +98,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       assert html =~ "Completed: 1"
       assert html =~ "Started: 0"
-      assert html =~ "Applied: 0"
+      assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
     end
@@ -132,7 +132,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       assert html =~ "Completed: 2"
       assert html =~ "Started: 0"
-      assert html =~ "Applied: 0"
+      assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
     end
@@ -147,7 +147,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       assert html =~ "Completed: 1"
       assert html =~ "Started: 0"
-      assert html =~ "Applied: 0"
+      assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
     end
@@ -161,7 +161,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       assert html =~ "Completed: 0"
       assert html =~ "Started: 0"
-      assert html =~ "Applied: 1"
+      assert html =~ "Enrolled: 1"
       assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
     end

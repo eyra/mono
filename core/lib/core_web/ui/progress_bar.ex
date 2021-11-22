@@ -21,8 +21,9 @@ defmodule CoreWeb.UI.ProgressBar do
     size / total_size * 100
   end
 
-  defp min_width(0, _, _index), do: "0px"
-  defp min_width(_, bars, index), do: "#{24 + 12 * (Enum.count(bars) - (index + 1))}px"
+  defp min_width(0, _, _, _index), do: "0px"
+  defp min_width(_, _, %{size: 0}, _index), do: "0px"
+  defp min_width(_, bars, _, index), do: "#{24 + 12 * (Enum.count(bars) - (index + 1))}px"
 
   defp color(%{color: color}), do: "bg-#{color}"
 
@@ -36,8 +37,8 @@ defmodule CoreWeb.UI.ProgressBar do
       <div class="absolute w-full h-6 rounded-full {{ @bg_color }}">
       </div>
       <div :for={{ {bar, index} <- Enum.with_index(sort_by_size(@bars)) }} class="absolute h-6 w-full">
-        <div style="min-width: {{min_width(@size, @bars, index)}}; width: {{width(@size, bar)}}%" class="absolute h-6 rounded-full bg-white ml-2px {{ hide(@size, bar) }}"></div>
-        <div style="min-width: {{min_width(@size, @bars, index)}}; width: {{width(@size, bar)}}%" class="absolute h-6 rounded-full {{color(bar)}}"></div>
+        <div style="min-width: {{min_width(@size, @bars, bar, index)}}; width: {{width(@size, bar)}}%" class="absolute h-6 rounded-full bg-white ml-2px {{ hide(@size, bar) }}"></div>
+        <div style="min-width: {{min_width(@size, @bars, bar, index)}}; width: {{width(@size, bar)}}%" class="absolute h-6 rounded-full {{color(bar)}}"></div>
       </div>
     </div>
     """

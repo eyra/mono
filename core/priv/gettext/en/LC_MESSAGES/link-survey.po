@@ -74,7 +74,7 @@ msgstr "Completed"
 #, elixir-format
 #: systems/campaign/monitor_view.ex:96
 msgid "pending.label"
-msgstr "Applied"
+msgstr "Enrolled"
 
 #, elixir-format
 #: systems/campaign/monitor_view.ex:76
@@ -253,12 +253,12 @@ msgid "form.description"
 msgstr "Follow the steps in the black frame to make sure that participants can start your online study on Panl and are redirected back to Panl after they finish."
 
 #, elixir-format
-#: systems/assignment/model.ex:231
+#: systems/assignment/model.ex:243
 msgid "duration.highlight.text"
 msgstr "%{duration} minutes"
 
 #, elixir-format
-#: systems/assignment/model.ex:230
+#: systems/assignment/model.ex:242
 msgid "duration.highlight.title"
 msgstr "Duration"
 
@@ -268,43 +268,43 @@ msgid "ethical.review.link"
 msgstr "ethical checklist"
 
 #, elixir-format
-#: systems/assignment/model.ex:88 systems/assignment/model.ex:96
-#: systems/assignment/model.ex:107
+#: systems/assignment/model.ex:88 systems/assignment/model.ex:97
+#: systems/assignment/model.ex:109
 msgid "task.hero.title"
-msgstr "Online Study"
+msgstr "Study"
 
 #, elixir-format
-#: systems/assignment/model.ex:207
+#: systems/assignment/model.ex:219
 msgid "task.completed.subtitle"
 msgstr "You have completed this survey"
 
 #, elixir-format
-#: systems/assignment/model.ex:210
+#: systems/assignment/model.ex:222
 msgid "task.completed.text"
 msgstr "Your contribution will be reviewed by the author of this study. If you did not receive a rejection within two weeks after the completion of this survey, the assigned reward is final."
 
 #, elixir-format
-#: systems/assignment/model.ex:206
+#: systems/assignment/model.ex:218
 msgid "task.pending.subtitle"
 msgstr "Instructions"
 
 #, elixir-format
-#: systems/assignment/model.ex:244
+#: systems/assignment/model.ex:256
 msgid "status.closed.highlight.text"
 msgstr "Closed for participation"
 
 #, elixir-format
-#: systems/assignment/model.ex:238
+#: systems/assignment/model.ex:250
 msgid "status.highlight.title"
 msgstr "Status"
 
 #, elixir-format
-#: systems/assignment/model.ex:242
+#: systems/assignment/model.ex:254
 msgid "status.open.highlight.text"
 msgstr "Open for participation"
 
 #, elixir-format
-#: systems/assignment/model.ex:251
+#: systems/assignment/model.ex:263
 msgid "language.highlight.title"
 msgstr "Language"
 

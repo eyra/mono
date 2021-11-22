@@ -130,7 +130,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
         task ->
           case task.status do
             :pending -> %{text: dgettext("eyra-marketplace", "assignment.status.pending.label"), type: :warning}
-            :completed -> %{text: dgettext("eyra-marketplace", "assignment.status.completed.label"), type: :success}
+            _completed -> %{text: dgettext("eyra-marketplace", "assignment.status.completed.label"), type: :success}
           end
       end
 
