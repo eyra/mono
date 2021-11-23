@@ -67,22 +67,22 @@ msgid "devices.title"
 msgstr "Devices"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:102
+#: systems/campaign/monitor_view.ex:113
 msgid "completed.label"
 msgstr "Finished"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:114
+#: systems/campaign/monitor_view.ex:125
 msgid "pending.label"
 msgstr "Enrolled"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:94
+#: systems/campaign/monitor_view.ex:105
 msgid "status.title"
-msgstr "Campaign status"
+msgstr "Finished"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:120
+#: systems/campaign/monitor_view.ex:131
 msgid "vacant.label"
 msgstr "Open"
 
@@ -132,12 +132,12 @@ msgid "tabbar.item.survey"
 msgstr "Study"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:223
+#: systems/campaign/monitor_view.ex:248
 msgid "monitor.empty.description"
 msgstr "Here you'll find an overview of anonymised participants, who applied to participate in your study, once your recruitment campaign has been published. You can view their status and accept or reject their results, after they have finished their task."
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:222
+#: systems/campaign/monitor_view.ex:247
 msgid "monitor.empty.title"
 msgstr "Recruitment results"
 
@@ -253,12 +253,12 @@ msgid "form.description"
 msgstr "Follow the steps in the black frame to make sure that participants can start your online study on Panl and are redirected back to Panl after they finish."
 
 #, elixir-format
-#: systems/assignment/model.ex:243
+#: systems/assignment/model.ex:242
 msgid "duration.highlight.text"
 msgstr "%{duration} minutes"
 
 #, elixir-format
-#: systems/assignment/model.ex:242
+#: systems/assignment/model.ex:241
 msgid "duration.highlight.title"
 msgstr "Duration"
 
@@ -274,41 +274,41 @@ msgid "task.hero.title"
 msgstr "Study"
 
 #, elixir-format
-#: systems/assignment/model.ex:219
+#: systems/assignment/model.ex:218
 msgid "task.completed.subtitle"
 msgstr "You have completed this survey"
 
 #, elixir-format
-#: systems/assignment/model.ex:222
+#: systems/assignment/model.ex:221
 msgid "task.completed.text"
 msgstr "Your contribution will be reviewed by the author of this study. If you did not receive a rejection within two weeks after the completion of this survey, the assigned reward is final."
 
 #, elixir-format
-#: systems/assignment/model.ex:218
+#: systems/assignment/model.ex:217
 msgid "task.pending.subtitle"
 msgstr "Instructions"
 
 #, elixir-format
-#: systems/assignment/model.ex:256
+#: systems/assignment/model.ex:255
 msgid "status.closed.highlight.text"
 msgstr "Closed for participation"
 
 #, elixir-format
-#: systems/assignment/model.ex:250
+#: systems/assignment/model.ex:249
 msgid "status.highlight.title"
 msgstr "Status"
 
 #, elixir-format
-#: systems/assignment/model.ex:254
+#: systems/assignment/model.ex:253
 msgid "status.open.highlight.text"
 msgstr "Open for participation"
 
 #, elixir-format
-#: systems/assignment/model.ex:263
+#: systems/assignment/model.ex:262
 msgid "language.highlight.title"
 msgstr "Language"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:108
+#: systems/campaign/monitor_view.ex:119
 msgid "started.label"
 msgstr "Started"

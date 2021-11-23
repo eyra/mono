@@ -12,41 +12,51 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:128
+#: systems/campaign/monitor_view.ex:142
 msgid "attention.title"
 msgstr "Attention"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:340
+#: systems/campaign/monitor_view.ex:365
 msgid "started.at.message"
 msgstr "Started %{date} but not returned to Panl"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:136 systems/campaign/monitor_view.ex:171
+#: systems/campaign/monitor_view.ex:149 systems/campaign/monitor_view.ex:184
 msgid "accept.all.button"
 msgstr "Approve all"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:131
+#: systems/campaign/monitor_view.ex:144
 msgid "attention.body"
 msgstr "The participants below started your survey on Qualtrics, but did not return to Panl. Approve the ones that filled in the survey, reject the others."
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:195
+#: systems/campaign/monitor_view.ex:208
 msgid "rejected.title"
 msgstr "Rejected"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:166
+#: systems/campaign/monitor_view.ex:179
 msgid "waitinglist.body"
 msgstr "The participants below are waiting for approval."
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:163
+#: systems/campaign/monitor_view.ex:176
 msgid "waitinglist.title"
 msgstr "Waiting"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:216
+#: systems/campaign/monitor_view.ex:229
 msgid "accepted.title"
 msgstr "Accepted"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:104
+msgid "phase1.title"
+msgstr "Progress"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:138
+msgid "phase2.title"
+msgstr "Assignments"

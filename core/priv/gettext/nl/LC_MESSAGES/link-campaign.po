@@ -12,12 +12,12 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/crew/reject_view.ex:110
+#: systems/crew/reject_view.ex:105
 msgid "reject.button"
 msgstr "Contributie afwijzen"
 
 #, elixir-format
-#: systems/crew/reject_view.ex:141
+#: systems/crew/reject_view.ex:136
 msgid "reject.message.label"
 msgstr "Bericht aan de participant"
 

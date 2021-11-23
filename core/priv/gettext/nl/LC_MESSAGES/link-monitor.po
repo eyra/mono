@@ -12,41 +12,51 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:128
+#: systems/campaign/monitor_view.ex:142
 msgid "attention.title"
 msgstr "Aandacht"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:340
+#: systems/campaign/monitor_view.ex:365
 msgid "started.at.message"
 msgstr "Gestart %{date} maar niet teruggekeerd naar Panl"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:136 systems/campaign/monitor_view.ex:171
+#: systems/campaign/monitor_view.ex:149 systems/campaign/monitor_view.ex:184
 msgid "accept.all.button"
 msgstr "Keur alles goed"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:131
+#: systems/campaign/monitor_view.ex:144
 msgid "attention.body"
 msgstr "De onderstaande deelnemers zijn met de vragenlijst begonnen, maar niet teruggekeerd naar Panl. Keur de degene goed die daadwerkelijk de survey hebben ingevuld, wijs de anderen af."
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:195
+#: systems/campaign/monitor_view.ex:208
 msgid "rejected.title"
 msgstr "Afgewezen"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:166
+#: systems/campaign/monitor_view.ex:179
 msgid "waitinglist.body"
 msgstr "Onderstaande deelnemers wachten op goedkeuring van hun werk."
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:163
+#: systems/campaign/monitor_view.ex:176
 msgid "waitinglist.title"
 msgstr "Wachtlijst"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:216
+#: systems/campaign/monitor_view.ex:229
 msgid "accepted.title"
 msgstr "Geaccepteerd"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:104
+msgid "phase1.title"
+msgstr "Voortgang"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:138
+msgid "phase2.title"
+msgstr "Opdrachten"

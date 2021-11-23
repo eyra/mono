@@ -9,7 +9,7 @@ defmodule Systems.Campaign.MonitorView do
     Campaign
   }
 
-  alias Frameworks.Pixel.Text.{Title3, BodyMedium, BodyLarge, Label}
+  alias Frameworks.Pixel.Text.{Title2, Title3, BodyMedium, BodyLarge, Label}
 
   prop(props, :map, required: true)
   data(vm, :any)
@@ -101,6 +101,7 @@ defmodule Systems.Campaign.MonitorView do
         <MarginY id={{:page_top}} />
         <Case value={{ @vm.is_active }} >
           <True>
+            <Title2>{{dgettext("link-monitor", "phase1.title")}}</Title2>
             <Title3 margin={{"mb-8"}}>{{dgettext("link-survey", "status.title")}}<span class="text-primary"> {{@vm.finished_count}}/{{@vm.subject_count}}</span></Title3>
             <Spacing value="M" />
             <div class="bg-grey6 rounded p-12">
@@ -134,10 +135,12 @@ defmodule Systems.Campaign.MonitorView do
             </div>
             <Spacing value="XL" />
 
-            <Title3 margin={{"mb-8"}}>
-              {{dgettext("link-monitor", "attention.title")}}<span class="text-primary"> {{ Enum.count(@vm.pending_started_tasks) }}</span>
-            </Title3>
+            <Title2>{{dgettext("link-monitor", "phase2.title")}}</Title2>
+
             <div :if={{ Enum.count(@vm.pending_started_tasks) > 0 }}>
+              <Title3 margin={{"mb-8"}}>
+                {{dgettext("link-monitor", "attention.title")}}<span class="text-primary"> {{ Enum.count(@vm.pending_started_tasks) }}</span>
+              </Title3>
               <BodyLarge>{{dgettext("link-monitor", "attention.body")}}</BodyLarge>
               <Spacing value="M" />
               <Wrap>
@@ -147,27 +150,27 @@ defmodule Systems.Campaign.MonitorView do
                 } }} />
               </Wrap>
               <Spacing value="M" />
-            </div>
-            <div class="flex flex-col gap-6">
-              <div :for={{ task <- @vm.pending_started_tasks }}>
-                <div class="flex flex-row gap-5 items-center">
-                  <div class="flex-wrap">
-                    <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
-                  </div>
-                  <div class="flex-wrap">
-                    <BodyMedium color={{"text-warning"}}>⚠️ {{ task.message }}</BodyMedium>
-                  </div>
-                  <div class="flex-grow"></div>
-                  <div class="flex-wrap">
-                    <DynamicButton vm={{task.accept_button}} />
-                  </div>
-                  <div class="flex-wrap">
-                    <DynamicButton vm={{task.reject_button}} />
+              <div class="flex flex-col gap-6">
+                <div :for={{ task <- @vm.pending_started_tasks }}>
+                  <div class="flex flex-row gap-5 items-center">
+                    <div class="flex-wrap">
+                      <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
+                    </div>
+                    <div class="flex-wrap">
+                      <BodyMedium color={{"text-warning"}}>⚠️ {{ task.message }}</BodyMedium>
+                    </div>
+                    <div class="flex-grow"></div>
+                    <div class="flex-wrap">
+                      <DynamicButton vm={{task.accept_button}} />
+                    </div>
+                    <div class="flex-wrap">
+                      <DynamicButton vm={{task.reject_button}} />
+                    </div>
                   </div>
                 </div>
               </div>
+              <Spacing value="XL" />
             </div>
-            <Spacing value="XL" />
 
             <Title3 margin={{"mb-8"}}>
               {{dgettext("link-monitor", "waitinglist.title")}}<span class="text-primary"> {{ Enum.count(@vm.completed_tasks) }}</span>
@@ -183,44 +186,54 @@ defmodule Systems.Campaign.MonitorView do
               </Wrap>
               <Spacing value="M" />
             </div>
-            <div class="flex flex-col gap-6">
-              <div :for={{ task <- @vm.completed_tasks }}>
-                <div class="flex flex-row gap-5 items-center">
-                  <div class="flex-wrap">
-                    <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
-                  </div>
-                  <div class="flex-grow"></div>
-                  <div class="flex-wrap">
-                    <DynamicButton vm={{task.accept_button}} />
-                  </div>
-                  <div class="flex-wrap">
-                    <DynamicButton vm={{task.reject_button}} />
+            <div :if={{ Enum.count(@vm.completed_tasks) > 0}}>
+              <div class="flex flex-col gap-6">
+                <div :for={{ task <- @vm.completed_tasks }}>
+                  <div class="flex flex-row gap-5 items-center">
+                    <div class="flex-wrap">
+                      <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
+                    </div>
+                    <div class="flex-grow"></div>
+                    <div class="flex-wrap">
+                      <DynamicButton vm={{task.accept_button}} />
+                    </div>
+                    <div class="flex-wrap">
+                      <DynamicButton vm={{task.reject_button}} />
+                    </div>
                   </div>
                 </div>
               </div>
+              <Spacing value="XL" />
             </div>
-            <Spacing value="XL" />
+            <div :if={{ Enum.count(@vm.completed_tasks) == 0}}>
+              <Spacing value="L" />
+            </div>
 
-            <Title3 margin={{"mb-8"}}>
+            <Title3>
               {{dgettext("link-monitor", "rejected.title")}}<span class="text-primary"> {{ Enum.count(@vm.rejected_tasks) }}</span>
             </Title3>
-            <div class="flex flex-col gap-6">
-              <div :for={{ task <- @vm.rejected_tasks }}>
-                <div class="flex flex-row gap-5 items-center">
-                  <div class="flex-wrap">
-                    <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
-                  </div>
-                  <div class="flex-wrap">
-                    <BodyMedium color={{"text-warning"}}>⚠️ {{ task.message }}</BodyMedium>
-                  </div>
-                  <div class="flex-grow"></div>
-                  <div class="flex-wrap">
-                    <DynamicButton vm={{task.accept_button}} />
+            <div :if={{ Enum.count(@vm.rejected_tasks) > 0}}>
+              <div class="flex flex-col gap-6">
+                <div :for={{ task <- @vm.rejected_tasks }}>
+                  <div class="flex flex-row gap-5 items-center">
+                    <div class="flex-wrap">
+                      <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
+                    </div>
+                    <div class="flex-wrap">
+                      <BodyMedium color={{"text-warning"}}>⚠️ {{ task.message }}</BodyMedium>
+                    </div>
+                    <div class="flex-grow"></div>
+                    <div class="flex-wrap">
+                      <DynamicButton vm={{task.accept_button}} />
+                    </div>
                   </div>
                 </div>
               </div>
+              <Spacing value="XL" />
             </div>
-            <Spacing value="XL" />
+            <div :if={{ Enum.count(@vm.rejected_tasks) == 0}}>
+              <Spacing value="L" />
+            </div>
 
             <Title3 margin={{"mb-8"}}>
               {{dgettext("link-monitor", "accepted.title")}}<span class="text-primary"> {{ Enum.count(@vm.accepted_tasks) }}</span>
