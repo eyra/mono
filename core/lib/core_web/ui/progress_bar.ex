@@ -21,9 +21,9 @@ defmodule CoreWeb.UI.ProgressBar do
     size / total_size * 100
   end
 
-  defp min_width(0, _bars, _bar, _index), do: "0px"
-  defp min_width(_size, _bars, %{size: 0}, _index), do: "0px"
-  defp min_width(_size, bars, _bar, index), do: "#{24 + 12 * (Enum.count(bars) - (index + 1))}px"
+  defp min_width(0, _, _, _index), do: "0px"
+  defp min_width(_, _, %{size: 0}, _index), do: "0px"
+  defp min_width(_, bars, _, index), do: "#{24 + 12 * (Enum.count(bars) - (index + 1))}px"
 
   defp color(%{color: color}), do: "bg-#{color}"
 

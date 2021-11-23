@@ -199,6 +199,25 @@ defmodule Systems.Crew.ContextTest do
       assert not Crew.Context.member?(crew, user1)
       assert Crew.Context.member?(crew, user2)
     end
+
+    test "cancel/2 does expire member" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+
+      {:ok, %{member: %{id: member_id} = member, task: task}} =
+        Crew.Context.apply_member(crew, user, expire_at(-1))
+
+      assert Crew.Context.member?(crew, user)
+      assert [%{id: ^member_id}] = Crew.Context.list_members(crew)
+
+      assert Crew.Context.cancel(crew, user)
+
+      assert %{expired: true} = Crew.Context.get_member!(member.id)
+      assert %{expired: true} = Crew.Context.get_task!(task.id)
+
+      assert not Crew.Context.member?(crew, user)
+      assert [] = Crew.Context.list_members(crew)
+    end
   end
 
   describe "tasks" do

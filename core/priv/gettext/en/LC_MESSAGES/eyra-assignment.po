@@ -10,3 +10,33 @@ msgid ""
 msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:105
+msgid "cancel.button"
+msgstr "Release spot"
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:55
+msgid "cancel.confirm.label"
+msgstr "Confirm"
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:54
+msgid "cancel.confirm.text"
+msgstr "We will release your spot to enable others to participate."
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:53
+msgid "cancel.confirm.title"
+msgstr "Release spot?"
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:156
+msgid "cancel.text"
+msgstr "If, for any reason, you decide that you don't want to proceed with your participation. Please release your spot, to give others the opportunity to participate."
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:153
+msgid "cancel.title"
+msgstr "Having second thoughts about participating?"

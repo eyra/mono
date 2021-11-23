@@ -10,7 +10,7 @@ defmodule Systems.Crew.TaskModel do
   require Crew.RejectCategories
 
   schema "crew_tasks" do
-    field(:status, Ecto.Enum, values: [:pending, :completed, :rejected, :accepted])
+    field(:status, Ecto.Enum, values: [:pending, :completed, :accepted, :rejected])
     field(:started_at, :naive_datetime)
     field(:completed_at, :naive_datetime)
     field(:accepted_at, :naive_datetime)

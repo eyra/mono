@@ -21,7 +21,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       assert html =~ "Finished: 0"
       assert html =~ "Started: 0"
-      assert html =~ "Applied: 0"
+      assert html =~ "Enrolled: 0"
       assert html =~ "Open: 1"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
     end
@@ -42,7 +42,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       assert html =~ "Finished: 0"
       assert html =~ "Started: 1"
-      assert html =~ "Applied: 0"
+      assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 1"
       assert html =~ "Subject 1"
@@ -51,7 +51,7 @@ defmodule Systems.Campaign.MonitorViewTest do
       assert html =~ "reject"
     end
 
-    test "Member applied but expired and not completed: reject ", %{
+    test "Member applied but expired and not completed: reject -> dialog", %{
       conn: %{assigns: %{current_user: user}} = conn
     } do
       %{id: id, promotable_assignment: %{crew: crew}} = create_campaign(user, :accepted, 1)
@@ -95,7 +95,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       assert html =~ "Finished: 1"
       assert html =~ "Started: 0"
-      assert html =~ "Applied: 0"
+      assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
       assert html =~ "Accepted<span class=\"text-primary\"> 1"
@@ -130,7 +130,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       assert html =~ "Finished: 2"
       assert html =~ "Started: 0"
-      assert html =~ "Applied: 0"
+      assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
       assert html =~ "Accepted<span class=\"text-primary\"> 2"
@@ -165,7 +165,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       assert html =~ "Finished: 2"
       assert html =~ "Started: 0"
-      assert html =~ "Applied: 0"
+      assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
       assert html =~ "Accepted<span class=\"text-primary\"> 2"
@@ -181,7 +181,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       assert html =~ "Finished: 1"
       assert html =~ "Started: 0"
-      assert html =~ "Applied: 0"
+      assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
     end
@@ -195,7 +195,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       assert html =~ "Finished: 0"
       assert html =~ "Started: 0"
-      assert html =~ "Applied: 1"
+      assert html =~ "Enrolled: 1"
       assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
     end

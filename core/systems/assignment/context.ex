@@ -4,6 +4,7 @@ defmodule Systems.Assignment.Context do
   """
 
   import Ecto.Query, warn: false
+
   alias Ecto.Multi
   alias Core.Repo
   alias CoreWeb.UI.Timestamp
@@ -77,6 +78,15 @@ defmodule Systems.Assignment.Context do
       expire_at = expiration_timestamp(assignment)
       Crew.Context.apply_member!(crew, user, expire_at)
     end
+  end
+
+  def cancel(%Assignment.Model{} = assignment, user) do
+    crew = get_crew(assignment)
+    Crew.Context.cancel(crew, user)
+  end
+
+  def cancel(id, user) do
+    get!(id) |> cancel(user)
   end
 
   def complete_task(%{crew: crew} = _assignment, user) do
@@ -180,12 +190,11 @@ defmodule Systems.Assignment.Context do
     )
   end
 
-
   # Crew
-  def get_crew(assignment) do
+  def get_crew(%{crew_id: crew_id} = _assignment) do
     from(
       c in Crew.Model,
-      where: c.id == ^assignment.id
+      where: c.id == ^crew_id
     )
     |> Repo.one()
   end

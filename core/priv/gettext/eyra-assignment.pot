@@ -9,3 +9,33 @@
 ## effect: edit them in PO (.po) files instead.
 msgid ""
 msgstr ""
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:105
+msgid "cancel.button"
+msgstr ""
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:55
+msgid "cancel.confirm.label"
+msgstr ""
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:54
+msgid "cancel.confirm.text"
+msgstr ""
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:53
+msgid "cancel.confirm.title"
+msgstr ""
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:156
+msgid "cancel.text"
+msgstr ""
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:153
+msgid "cancel.title"
+msgstr ""

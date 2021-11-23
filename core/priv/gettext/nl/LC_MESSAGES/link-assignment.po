@@ -12,11 +12,11 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/assignment/model.ex:181
+#: systems/assignment/model.ex:193
 msgid "closed.dialog.text"
 msgstr "Helaas is deze opdracht momenteel gesloten voor deelname"
 
 #, elixir-format
-#: systems/assignment/model.ex:180
+#: systems/assignment/model.ex:192
 msgid "closed.dialog.title"
 msgstr "Gesloten"

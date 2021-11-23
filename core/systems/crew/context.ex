@@ -1,6 +1,6 @@
 defmodule Systems.Crew.Context do
-
   import Ecto.Query, warn: false
+  require Logger
 
   alias Ecto.Multi
   alias Core.Repo
@@ -209,6 +209,20 @@ defmodule Systems.Crew.Context do
 
 
   # Members
+  def cancel(crew, user) do
+    if member?(crew, user) do
+      member = get_member!(crew, user)
+      task = get_task(crew, member)
+
+      # temporary cancel is implemented by expiring the task
+      Multi.new()
+      |> Multi.update(:member, Crew.MemberModel.changeset(member, %{expired: true}))
+      |> Multi.update(:task, Crew.TaskModel.changeset(task, %{expired: true}))
+      |> Repo.transaction()
+    else
+      Logger.warn("Unable to cancel, user #{user.id} is not a member on crew #{crew.id}")
+    end
+  end
 
   def count_members(crew) do
     from(m in Crew.MemberModel,
@@ -290,8 +304,7 @@ defmodule Systems.Crew.Context do
     )
   end
 
-
- def get_expired_member(%Crew.Model{} = crew, %User{} = user) do
+  def get_expired_member(%Crew.Model{} = crew, %User{} = user) do
     from(m in Crew.MemberModel,
       where:
         m.crew_id == ^crew.id and
@@ -371,7 +384,7 @@ defmodule Systems.Crew.Context do
   end
 
   @doc """
-    Marks tasks as expired
+    Conditionally marks tasks as expired if:
     - expire_at is in the past
     - completed_at is nil
   """
