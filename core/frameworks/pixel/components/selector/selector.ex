@@ -7,6 +7,7 @@ defmodule Frameworks.Pixel.Selector.Selector do
   prop(items, :list, required: true)
   prop(parent, :map, required: true)
   prop(type, :atom, default: :label)
+  prop(optional?, :boolean, default: true)
   prop(opts, :string, default: "")
 
   prop(current_items, :list)
@@ -32,16 +33,19 @@ defmodule Frameworks.Pixel.Selector.Selector do
     {:ok, socket}
   end
 
-  def update(%{id: id, items: items, parent: parent, type: type, opts: opts}, socket) do
+  def update(%{id: id, items: items, parent: parent, type: type, optional?: optional?, opts: opts}, socket) do
     {
       :ok,
       socket
-      |> assign(id: id)
-      |> assign(items: items)
-      |> assign(current_items: items)
-      |> assign(parent: parent)
-      |> assign(type: type)
-      |> assign(opts: opts)
+      |> assign(
+        id: id,
+        items: items,
+        current_items: items,
+        parent: parent,
+        type: type,
+        optional?: optional?,
+        opts: opts
+      )
     }
   end
 
@@ -71,7 +75,6 @@ defmodule Frameworks.Pixel.Selector.Selector do
       )
     else
       active_item_id = List.first(active_item_ids)
-
       send_update(parent.type,
         id: parent.id,
         selector_id: selector_id,
@@ -88,6 +91,12 @@ defmodule Frameworks.Pixel.Selector.Selector do
     |> Enum.map(& &1.id)
   end
 
+  defp active_count(items) do
+    items
+    |> Enum.filter(& &1.active)
+    |> Enum.count()
+  end
+
   defp update_items(%{assigns: %{current_items: items}} = socket, item_id_to_toggle) do
     items =
       items
@@ -96,11 +105,18 @@ defmodule Frameworks.Pixel.Selector.Selector do
     socket |> assign(current_items: items)
   end
 
-  defp toggle(%{assigns: %{items: items, type: type}}, item, item_id) when is_atom(item_id) do
+  defp toggle(%{assigns: %{items: items, type: type, optional?: optional?}}, item, item_id) when is_atom(item_id) do
+    multiselect? = multiselect?(type, Enum.count(items))
+    active_count = active_count(items)
+
     if item.id === item_id do
-      %{item | active: !item.active}
+      if not item.active or optional? or (multiselect? and active_count > 1)  do
+        %{item | active: !item.active}
+      else
+        item # prevent deselection
+      end
     else
-      if multiselect?(type, Enum.count(items)) do
+      if multiselect? do
         item
       else
         %{item | active: false}
@@ -118,9 +134,9 @@ defmodule Frameworks.Pixel.Selector.Selector do
     ~H"""
     <div class="flex {{ flex_options(@type) }} {{ @opts }}">
       <For each={{ {item, _} <- Enum.with_index(@current_items) }}>
-        <div x-data="{ active: {{ item.active }} }" >
+        <div x-data="{ active: {{ item.active }}, is_optional: {{@optional?}} }" >
           <div
-            x-on:mousedown="active = !active"
+            x-on:mousedown="if (is_optional) { active = !active }"
             class="cursor-pointer select-none"
             :on-click="toggle"
             phx-value-item="{{ item.id }}"

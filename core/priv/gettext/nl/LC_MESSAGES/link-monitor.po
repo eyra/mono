@@ -12,21 +12,41 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:110
+#: systems/campaign/monitor_view.ex:128
 msgid "attention.title"
 msgstr "Aandacht"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:240
+#: systems/campaign/monitor_view.ex:340
 msgid "started.at.message"
-msgstr "Gestart: %{date}"
+msgstr "Gestart %{date} maar niet teruggekeerd naar Panl"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:118
+#: systems/campaign/monitor_view.ex:136 systems/campaign/monitor_view.ex:171
 msgid "accept.all.button"
 msgstr "Keur alles goed"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:113
+#: systems/campaign/monitor_view.ex:131
 msgid "attention.body"
 msgstr "De onderstaande deelnemers zijn met de vragenlijst begonnen, maar niet teruggekeerd naar Panl. Keur de degene goed die daadwerkelijk de survey hebben ingevuld, wijs de anderen af."
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:195
+msgid "rejected.title"
+msgstr "Afgewezen"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:166
+msgid "waitinglist.body"
+msgstr "Onderstaande deelnemers wachten op goedkeuring van hun werk."
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:163
+msgid "waitinglist.title"
+msgstr "Wachtlijst"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:216
+msgid "accepted.title"
+msgstr "Geaccepteerd"

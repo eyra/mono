@@ -1,0 +1,37 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: systems/crew/reject_view.ex:110
+msgid "reject.button"
+msgstr "Contributie afwijzen"
+
+#, elixir-format
+#: systems/crew/reject_view.ex:141
+msgid "reject.message.label"
+msgstr "Bericht aan de participant"
+
+#, elixir-format
+#: systems/crew/reject_view.ex:45
+msgid "reject.text"
+msgstr "Selecteer de reden van afwijzen:"
+
+#, elixir-format
+#: systems/crew/reject_view.ex:44
+msgid "reject.title"
+msgstr "Contributie afwijzen"
+
+#, elixir-format
+#: systems/crew/reject_view.ex:46
+msgid "reject.note"
+msgstr "Let op: Afgewezen deelnemers kunnen niet opnieuw meedoen aan deze campagne."

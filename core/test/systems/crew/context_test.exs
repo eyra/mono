@@ -309,6 +309,60 @@ defmodule Systems.Crew.ContextTest do
       assert Crew.Context.count_tasks(crew, [:completed]) == 1
     end
 
+    test "accept_task/1 marks task accepted" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+
+      assert Crew.Context.count_tasks(crew, [:accepted]) == 0
+
+      task =
+        Factories.insert!(:crew_task, %{
+          crew: crew,
+          member: member,
+          status: :pending
+        })
+
+      assert Crew.Context.count_tasks(crew, [:accepted]) == 0
+
+      assert %{
+               status: :accepted,
+               accepted_at: accepted_at
+             } = Crew.Context.accept_task!(task)
+
+      assert accepted_at != nil
+      assert Crew.Context.count_tasks(crew, [:accepted]) == 1
+    end
+
+    test "reject_task/1 marks task rejected" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+
+      assert Crew.Context.count_tasks(crew, [:rejected]) == 0
+
+      task =
+        Factories.insert!(:crew_task, %{
+          crew: crew,
+          member: member,
+          status: :pending
+        })
+
+      assert Crew.Context.count_tasks(crew, [:rejected]) == 0
+
+      rejection = %{category: :attention_checks_failed, message: "rejection message"}
+
+      assert %{
+               status: :rejected,
+               rejected_at: rejected_at,
+               rejected_category: :attention_checks_failed,
+               rejected_message: "rejection message"
+             } = Crew.Context.reject_task!(task, rejection)
+
+      assert rejected_at != nil
+      assert Crew.Context.count_tasks(crew, [:rejected]) == 1
+    end
+
     test "delete_task/1 " do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)

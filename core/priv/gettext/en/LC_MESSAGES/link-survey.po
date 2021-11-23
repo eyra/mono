@@ -67,22 +67,22 @@ msgid "devices.title"
 msgstr "Devices"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:84
+#: systems/campaign/monitor_view.ex:102
 msgid "completed.label"
-msgstr "Completed"
+msgstr "Finished"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:96
+#: systems/campaign/monitor_view.ex:114
 msgid "pending.label"
 msgstr "Enrolled"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:76
+#: systems/campaign/monitor_view.ex:94
 msgid "status.title"
 msgstr "Campaign status"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:102
+#: systems/campaign/monitor_view.ex:120
 msgid "vacant.label"
 msgstr "Open"
 
@@ -132,12 +132,12 @@ msgid "tabbar.item.survey"
 msgstr "Study"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:146
+#: systems/campaign/monitor_view.ex:223
 msgid "monitor.empty.description"
 msgstr "Here you'll find an overview of anonymised participants, who applied to participate in your study, once your recruitment campaign has been published. You can view their status and accept or reject their results, after they have finished their task."
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:145
+#: systems/campaign/monitor_view.ex:222
 msgid "monitor.empty.title"
 msgstr "Recruitment results"
 
@@ -309,6 +309,6 @@ msgid "language.highlight.title"
 msgstr "Language"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:90
+#: systems/campaign/monitor_view.ex:108
 msgid "started.label"
 msgstr "Started"

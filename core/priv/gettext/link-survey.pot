@@ -66,22 +66,22 @@ msgid "devices.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:84
+#: systems/campaign/monitor_view.ex:102
 msgid "completed.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:96
+#: systems/campaign/monitor_view.ex:114
 msgid "pending.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:76
+#: systems/campaign/monitor_view.ex:94
 msgid "status.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:102
+#: systems/campaign/monitor_view.ex:120
 msgid "vacant.label"
 msgstr ""
 
@@ -131,12 +131,12 @@ msgid "tabbar.item.survey"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:146
+#: systems/campaign/monitor_view.ex:223
 msgid "monitor.empty.description"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:145
+#: systems/campaign/monitor_view.ex:222
 msgid "monitor.empty.title"
 msgstr ""
 
@@ -308,6 +308,6 @@ msgid "language.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:90
+#: systems/campaign/monitor_view.ex:108
 msgid "started.label"
 msgstr ""

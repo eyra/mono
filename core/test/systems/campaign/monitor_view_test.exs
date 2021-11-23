@@ -19,7 +19,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Completed: 0"
+      assert html =~ "Finished: 0"
       assert html =~ "Started: 0"
       assert html =~ "Enrolled: 0"
       assert html =~ "Open: 1"
@@ -40,18 +40,18 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Completed: 0"
+      assert html =~ "Finished: 0"
       assert html =~ "Started: 1"
       assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 1"
       assert html =~ "Subject 1"
-      assert html =~ "⚠️ Started:"
+      assert html =~ "⚠️ Started today at"
       assert html =~ "accept"
       assert html =~ "reject"
     end
 
-    test "Member applied but expired and not completed: reject ", %{
+    test "Member applied but expired and not completed: reject -> dialog", %{
       conn: %{assigns: %{current_user: user}} = conn
     } do
       %{id: id, promotable_assignment: %{crew: crew}} = create_campaign(user, :accepted, 1)
@@ -70,11 +70,8 @@ defmodule Systems.Campaign.MonitorViewTest do
         |> element("[phx-click=\"reject\"]")
         |> render_click()
 
-      assert html =~ "Completed: 0"
-      assert html =~ "Started: 0"
-      assert html =~ "Enrolled: 0"
-      assert html =~ "Open: 1"
-      assert html =~ "Attention<span class=\"text-primary\"> 0"
+      assert html =~ "Reject contribution"
+      assert html =~ "Message to participant"
     end
 
     test "Member applied but expired and not completed: accept ", %{
@@ -96,14 +93,15 @@ defmodule Systems.Campaign.MonitorViewTest do
         |> element("[phx-click=\"accept\"]")
         |> render_click()
 
-      assert html =~ "Completed: 1"
+      assert html =~ "Finished: 1"
       assert html =~ "Started: 0"
       assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
+      assert html =~ "Accepted<span class=\"text-primary\"> 1"
     end
 
-    test "Member applied but expired and not completed: accept_all ", %{
+    test "Member applied but expired and not completed: accept_all", %{
       conn: %{assigns: %{current_user: user}} = conn
     } do
       %{id: id, promotable_assignment: %{crew: crew}} = create_campaign(user, :accepted, 2)
@@ -127,14 +125,50 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       html =
         view
-        |> element("[phx-click=\"accept_all\"]")
+        |> element("[phx-click=\"accept_all_pending_started\"]")
         |> render_click()
 
-      assert html =~ "Completed: 2"
+      assert html =~ "Finished: 2"
       assert html =~ "Started: 0"
       assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 0"
+      assert html =~ "Accepted<span class=\"text-primary\"> 2"
+    end
+
+    test "Member completed: accept_all", %{
+      conn: %{assigns: %{current_user: user}} = conn
+    } do
+      %{id: id, promotable_assignment: %{crew: crew}} = create_campaign(user, :accepted, 2)
+
+      {:ok, %{task: task}} = Crew.Context.apply_member(crew, user)
+
+      Crew.Context.update_task!(task, %{
+        status: :completed,
+        completed_at: Timestamp.naive_now()
+      })
+
+      user2 = Factories.insert!(:member)
+      {:ok, %{task: task2}} = Crew.Context.apply_member(crew, user2)
+
+      Crew.Context.update_task!(task2, %{
+        status: :completed,
+        completed_at: Timestamp.naive_now()
+      })
+
+      {:ok, view, _html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
+
+      html =
+        view
+        |> element("[phx-click=\"accept_all_completed\"]")
+        |> render_click()
+
+      assert html =~ "Finished: 2"
+      assert html =~ "Started: 0"
+      assert html =~ "Enrolled: 0"
+      assert html =~ "Open: 0"
+      assert html =~ "Attention<span class=\"text-primary\"> 0"
+      assert html =~ "Accepted<span class=\"text-primary\"> 2"
     end
 
     test "Member applied and completed", %{conn: %{assigns: %{current_user: user}} = conn} do
@@ -145,7 +179,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Completed: 1"
+      assert html =~ "Finished: 1"
       assert html =~ "Started: 0"
       assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
@@ -159,7 +193,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Completed: 0"
+      assert html =~ "Finished: 0"
       assert html =~ "Started: 0"
       assert html =~ "Enrolled: 1"
       assert html =~ "Open: 0"

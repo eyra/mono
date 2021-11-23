@@ -67,22 +67,22 @@ msgid "devices.title"
 msgstr "Apparaten"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:84
+#: systems/campaign/monitor_view.ex:102
 msgid "completed.label"
 msgstr "Afgerond"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:96
+#: systems/campaign/monitor_view.ex:114
 msgid "pending.label"
 msgstr "Aangemeld"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:76
+#: systems/campaign/monitor_view.ex:94
 msgid "status.title"
 msgstr "Campagne status"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:102
+#: systems/campaign/monitor_view.ex:120
 msgid "vacant.label"
 msgstr "Vrij"
 
@@ -132,12 +132,12 @@ msgid "tabbar.item.survey"
 msgstr "Studie"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:146
+#: systems/campaign/monitor_view.ex:223
 msgid "monitor.empty.description"
 msgstr "Na publicatie van jouw wervingscampagne, vind je hier een lijst van geanonimiseerde deelnemers, die zich aangemeld hebben voor jouw studie. Je kunt hier hun status bekijken en na afronding van hun taak, de resultaten accepteren of afwijzen."
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:145
+#: systems/campaign/monitor_view.ex:222
 msgid "monitor.empty.title"
 msgstr "Resultaten"
 
@@ -309,6 +309,6 @@ msgid "language.highlight.title"
 msgstr "Taal"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:90
+#: systems/campaign/monitor_view.ex:108
 msgid "started.label"
 msgstr "Gestart"
