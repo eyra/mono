@@ -19,29 +19,27 @@ defmodule Systems.NextAction.Context do
 
   @doc """
   """
-  def list_next_actions(url_resolver, %User{} = user, content_node \\ nil)
+  def list_next_actions(url_resolver, %User{} = user)
       when is_function(url_resolver) do
     from(na in NextAction.Model, where: na.user_id == ^user.id, limit: 10)
-    |> filter_by_content_node(content_node)
     |> Repo.all()
     |> Enum.map(&to_view_model(&1, url_resolver))
   end
 
   @doc """
   """
-  def next_best_action(url_resolver, %User{} = user, content_node \\ nil)
+  def next_best_action(url_resolver, %User{} = user)
       when is_function(url_resolver) do
     from(na in NextAction.Model, where: na.user_id == ^user.id, limit: 1)
-    |> filter_by_content_node(content_node)
     |> Repo.one()
     |> to_view_model(url_resolver)
   end
 
   @doc """
   """
-  def next_best_action!(url_resolver, %User{} = user, content_node \\ nil)
+  def next_best_action!(url_resolver, %User{} = user)
       when is_function(url_resolver) do
-    list_next_actions(url_resolver, user, content_node)
+    list_next_actions(url_resolver, user)
     |> List.first()
   end
 
@@ -49,20 +47,20 @@ defmodule Systems.NextAction.Context do
   Creates a next action.
   """
   def create_next_action(%User{} = user, action, opts \\ []) when is_atom(action) do
-    content_node = Keyword.get(opts, :content_node)
+    key = Keyword.get(opts, :key)
 
     conflict_target_fragment =
-      if is_nil(content_node) do
-        "(user_id,action) WHERE content_node_id is NULL"
+      if is_nil(key) do
+        "(user_id,action) WHERE key is NULL"
       else
-        "(user_id,action,content_node_id) WHERE content_node_id is not NULL"
+        "(user_id,action,key) WHERE key is not NULL"
       end
 
     %NextAction.Model{}
     |> NextAction.Model.changeset(%{
       user: user,
       action: Atom.to_string(action),
-      content_node: content_node,
+      key: key,
       params: Keyword.get(opts, :params)
     })
     |> Repo.insert!(
@@ -70,18 +68,22 @@ defmodule Systems.NextAction.Context do
       conflict_target: {:unsafe_fragment, conflict_target_fragment}
     )
     |> tap(
-      &Signal.Context.dispatch!(:next_action_created, %{action_type: action, user: user, action: &1})
+      &Signal.Context.dispatch!(:next_action_created, %{action_type: action, user: user, action: &1, key: key})
     )
   end
 
-  def clear_next_action(user, action, content_node \\ nil) do
+  def clear_next_action(user, action, opts \\ []) do
+    key = Keyword.get(opts, :key)
     action_string = to_string(action)
 
     from(na in NextAction.Model, where: na.user_id == ^user.id and na.action == ^action_string)
-    |> filter_by_content_node(content_node)
+    |> where_key_is(key)
     |> Repo.delete_all()
-    |> tap(fn _ -> Signal.Context.dispatch!(:next_action_cleared, %{user: user, action_type: action}) end)
+    |> tap(fn _ -> Signal.Context.dispatch!(:next_action_cleared, %{user: user, action_type: action, key: key}) end)
   end
+
+  defp where_key_is(query, nil), do: from(na in query, where: is_nil(na.key))
+  defp where_key_is(query, key), do: from(na in query, where: na.key == ^key)
 
   def to_view_model(nil, _url_resolver), do: nil
 
@@ -91,11 +93,5 @@ defmodule Systems.NextAction.Context do
     action_type
     |> apply(:to_view_model, [url_resolver, count, params])
     |> Map.put(:action_type, action_type)
-  end
-
-  defp filter_by_content_node(query, content_node) when is_nil(content_node), do: query
-
-  defp filter_by_content_node(query, content_node) do
-    where(query, [na], na.content_node_id == ^content_node.id)
   end
 end
