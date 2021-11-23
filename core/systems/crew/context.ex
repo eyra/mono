@@ -1,6 +1,6 @@
 defmodule Systems.Crew.Context do
-
   import Ecto.Query, warn: false
+  require Logger
 
   alias Ecto.Multi
   alias Core.Repo
@@ -175,6 +175,8 @@ defmodule Systems.Crew.Context do
       |> Multi.update(:member, Crew.MemberModel.changeset(member, %{expired: true}))
       |> Multi.update(:task, Crew.TaskModel.changeset(task, %{expired: true}))
       |> Repo.transaction()
+    else
+      Logger.warn("Unable to cancel, user #{user.id} is not a member on crew #{crew.id}")
     end
   end
 
@@ -258,8 +260,7 @@ defmodule Systems.Crew.Context do
     )
   end
 
-
- def get_expired_member(%Crew.Model{} = crew, %User{} = user) do
+  def get_expired_member(%Crew.Model{} = crew, %User{} = user) do
     from(m in Crew.MemberModel,
       where:
         m.crew_id == ^crew.id and
