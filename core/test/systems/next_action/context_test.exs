@@ -57,6 +57,7 @@ defmodule Systems.NextAction.ContextTest do
     } do
       Context.create_next_action(user, SomeAction, key: "1")
       Context.create_next_action(user, SomeAction, key: "1")
+
       assert [%{title: "Test: 2"}] = Context.list_next_actions(url_resolver, user)
     end
   end

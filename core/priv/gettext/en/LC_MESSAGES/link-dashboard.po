@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/campaign/model.ex:246
+#: systems/campaign/model.ex:248
 msgid "quick_summary.%{open_spot_count}.%{target_subject_count}"
 msgstr "%{open_spot_count} out of %{target_subject_count} spots available"
 

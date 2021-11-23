@@ -1,6 +1,5 @@
 defmodule Systems.Crew.ContextTest do
   use Core.DataCase
-
   alias Core.Authorization
   alias CoreWeb.UI.Timestamp
 
@@ -154,7 +153,7 @@ defmodule Systems.Crew.ContextTest do
       crew = Factories.insert!(:crew)
 
       {:ok, %{member: member, task: task}} = Crew.Context.apply_member(crew, user, expire_at(-1))
-      Crew.Context.start_task!(task)
+      Crew.Context.start_task(task)
 
       assert Crew.Context.mark_expired()
 
@@ -325,10 +324,13 @@ defmodule Systems.Crew.ContextTest do
 
       assert Crew.Context.count_tasks(crew, [:accepted]) == 0
 
-      assert %{
-               status: :accepted,
-               accepted_at: accepted_at
-             } = Crew.Context.accept_task!(task)
+      assert {:ok,
+              %{
+                task: %{
+                  status: :accepted,
+                  accepted_at: accepted_at
+                }
+              }} = Crew.Context.accept_task(task)
 
       assert accepted_at != nil
       assert Crew.Context.count_tasks(crew, [:accepted]) == 1
@@ -352,12 +354,15 @@ defmodule Systems.Crew.ContextTest do
 
       rejection = %{category: :attention_checks_failed, message: "rejection message"}
 
-      assert %{
-               status: :rejected,
-               rejected_at: rejected_at,
-               rejected_category: :attention_checks_failed,
-               rejected_message: "rejection message"
-             } = Crew.Context.reject_task!(task, rejection)
+      assert {:ok,
+              %{
+                task: %{
+                  status: :rejected,
+                  rejected_at: rejected_at,
+                  rejected_category: :attention_checks_failed,
+                  rejected_message: "rejection message"
+                }
+              }} = Crew.Context.reject_task(task, rejection)
 
       assert rejected_at != nil
       assert Crew.Context.count_tasks(crew, [:rejected]) == 1

@@ -1,5 +1,6 @@
 defmodule Systems.Assignment.ContextTest do
   use Core.DataCase
+  import Systems.NextAction.TestHelper
 
   describe "assignments" do
     alias Core.Accounts
@@ -120,6 +121,37 @@ defmodule Systems.Assignment.ContextTest do
     test "open_spot_count/3 with all open spots" do
       assignment = create_assignment(31, 3)
       assert Assignment.Context.open_spot_count(assignment) == 3
+    end
+
+    test "next_action (Assignment.CheckRejection) after rejection of task" do
+      %{crew: crew} = create_assignment(31, 3)
+      %{id: task_id, member: %{user: user}} = create_task(crew, :pending, false, 10)
+
+      Crew.Context.reject_task(task_id, %{category: :other, message: "rejected"})
+
+      url_resolver = fn target, _ ->
+        case target do
+          Systems.Assignment.LandingPage -> "/assignment"
+        end
+      end
+
+      assert_next_action(user, url_resolver, "/assignment")
+    end
+
+    test "next_action cleared after acceptence of task" do
+      %{crew: crew} = create_assignment(31, 3)
+      %{id: task_id, member: %{user: user}} = create_task(crew, :pending, false, 10)
+
+      Crew.Context.reject_task(task_id, %{category: :other, message: "rejected"})
+      Crew.Context.accept_task(task_id)
+
+      url_resolver = fn target, _ ->
+        case target do
+          Systems.Assignment.LandingPage -> "/assignment"
+        end
+      end
+
+      refute_next_action(user, url_resolver, "/assignment")
     end
 
     defp create_assignment(duration, subject_count) do

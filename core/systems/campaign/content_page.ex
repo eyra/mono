@@ -334,6 +334,10 @@ defmodule Systems.Campaign.ContentPage do
     {:noreply, socket}
   end
 
+  def handle_info({:signal_test, _}, socket) do
+    {:noreply, socket}
+  end
+
   defp margin_x(:mobile), do: "mx-6"
   defp margin_x(_), do: "mx-10"
 

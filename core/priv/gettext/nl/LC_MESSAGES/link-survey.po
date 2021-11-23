@@ -27,7 +27,7 @@ msgid "duration.label"
 msgstr "Hoeveel minuten schat je in dat deelnemers nodig hebben?"
 
 #, elixir-format
-#: systems/campaign/model.ex:210
+#: systems/campaign/model.ex:212
 msgid "by.author.label"
 msgstr "Door"
 

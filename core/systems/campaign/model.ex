@@ -124,16 +124,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
         member -> Crew.Context.get_task(crew, member)
       end
 
-    tag =
-      case task do
-        nil -> %{text: dgettext("eyra-marketplace", "assignment.status.expired.label"), type: :disabled}
-        task ->
-          case task.status do
-            :pending -> %{text: dgettext("eyra-marketplace", "assignment.status.pending.label"), type: :warning}
-            _completed -> %{text: dgettext("eyra-marketplace", "assignment.status.completed.label"), type: :success}
-          end
-      end
-
+    tag = tag(task)
     subtitle = dgettext("eyra-marketplace", "reward.label", value: reward_value)
     quick_summary =
       updated_at
@@ -212,6 +203,18 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
           |> Enum.map(& &1.fullname)
           |> Enum.join(", "))
     }
+  end
+
+  defp tag(nil), do: %{text: dgettext("eyra-marketplace", "assignment.status.expired.label"), type: :disabled}
+
+  defp tag(%{status: status} = _task) do
+    case status do
+      :pending -> %{text: dgettext("eyra-marketplace", "assignment.status.pending.label"), type: :warning}
+      :completed -> %{text: dgettext("eyra-marketplace", "assignment.status.completed.label"), type: :tertiary}
+      :accepted -> %{text: dgettext("eyra-marketplace", "assignment.status.accepted.label"), type: :success}
+      :rejected -> %{text: dgettext("eyra-marketplace", "assignment.status.rejected.label"), type: :delete}
+      _ -> %{text: "?", type: :disabled}
+    end
   end
 
   defp get_quick_summary(updated_at) do

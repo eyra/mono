@@ -23,7 +23,6 @@ defmodule Systems.Campaign.MonitorViewTest do
       assert html =~ "Started: 0"
       assert html =~ "Enrolled: 0"
       assert html =~ "Open: 1"
-      assert html =~ "Attention<span class=\"text-primary\"> 0"
     end
 
     test "Member applied but expired and not completed", %{
@@ -33,7 +32,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, %{task: task}} = Crew.Context.apply_member(crew, user)
 
-      Crew.Context.update_task!(task, %{
+      Crew.Context.update_task(task, %{
         started_at: Timestamp.naive_from_now(-60),
         expire_at: Timestamp.naive_from_now(-31)
       })
@@ -58,7 +57,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, %{task: task}} = Crew.Context.apply_member(crew, user)
 
-      Crew.Context.update_task!(task, %{
+      Crew.Context.update_task(task, %{
         started_at: Timestamp.naive_from_now(-60),
         expire_at: Timestamp.naive_from_now(-31)
       })
@@ -81,7 +80,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, %{task: task}} = Crew.Context.apply_member(crew, user)
 
-      Crew.Context.update_task!(task, %{
+      Crew.Context.update_task(task, %{
         started_at: Timestamp.naive_from_now(-60),
         expire_at: Timestamp.naive_from_now(-31)
       })
@@ -97,7 +96,6 @@ defmodule Systems.Campaign.MonitorViewTest do
       assert html =~ "Started: 0"
       assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
-      assert html =~ "Attention<span class=\"text-primary\"> 0"
       assert html =~ "Accepted<span class=\"text-primary\"> 1"
     end
 
@@ -108,7 +106,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, %{task: task}} = Crew.Context.apply_member(crew, user)
 
-      Crew.Context.update_task!(task, %{
+      Crew.Context.update_task(task, %{
         started_at: Timestamp.naive_from_now(-60),
         expire_at: Timestamp.naive_from_now(-31)
       })
@@ -116,7 +114,7 @@ defmodule Systems.Campaign.MonitorViewTest do
       user2 = Factories.insert!(:member)
       {:ok, %{task: task2}} = Crew.Context.apply_member(crew, user2)
 
-      Crew.Context.update_task!(task2, %{
+      Crew.Context.update_task(task2, %{
         started_at: Timestamp.naive_from_now(-60),
         expire_at: Timestamp.naive_from_now(-31)
       })
@@ -132,7 +130,6 @@ defmodule Systems.Campaign.MonitorViewTest do
       assert html =~ "Started: 0"
       assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
-      assert html =~ "Attention<span class=\"text-primary\"> 0"
       assert html =~ "Accepted<span class=\"text-primary\"> 2"
     end
 
@@ -143,7 +140,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, %{task: task}} = Crew.Context.apply_member(crew, user)
 
-      Crew.Context.update_task!(task, %{
+      Crew.Context.update_task(task, %{
         status: :completed,
         completed_at: Timestamp.naive_now()
       })
@@ -151,7 +148,7 @@ defmodule Systems.Campaign.MonitorViewTest do
       user2 = Factories.insert!(:member)
       {:ok, %{task: task2}} = Crew.Context.apply_member(crew, user2)
 
-      Crew.Context.update_task!(task2, %{
+      Crew.Context.update_task(task2, %{
         status: :completed,
         completed_at: Timestamp.naive_now()
       })
@@ -167,7 +164,6 @@ defmodule Systems.Campaign.MonitorViewTest do
       assert html =~ "Started: 0"
       assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
-      assert html =~ "Attention<span class=\"text-primary\"> 0"
       assert html =~ "Accepted<span class=\"text-primary\"> 2"
     end
 
@@ -175,7 +171,7 @@ defmodule Systems.Campaign.MonitorViewTest do
       %{id: id, promotable_assignment: %{crew: crew}} = create_campaign(user, :accepted, 1)
 
       {:ok, %{task: task}} = Crew.Context.apply_member(crew, user)
-      Crew.Context.complete_task!(task)
+      Crew.Context.complete_task(task)
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
@@ -183,7 +179,6 @@ defmodule Systems.Campaign.MonitorViewTest do
       assert html =~ "Started: 0"
       assert html =~ "Enrolled: 0"
       assert html =~ "Open: 0"
-      assert html =~ "Attention<span class=\"text-primary\"> 0"
     end
 
     test "Member applied", %{conn: %{assigns: %{current_user: user}} = conn} do
@@ -197,7 +192,6 @@ defmodule Systems.Campaign.MonitorViewTest do
       assert html =~ "Started: 0"
       assert html =~ "Enrolled: 1"
       assert html =~ "Open: 0"
-      assert html =~ "Attention<span class=\"text-primary\"> 0"
     end
   end
 

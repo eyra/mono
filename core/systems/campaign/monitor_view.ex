@@ -16,7 +16,7 @@ defmodule Systems.Campaign.MonitorView do
   data(reject_task, :number)
 
   def update(%{reject: :submit, rejection: rejection}, %{assigns: %{reject_task: task_id}} = socket) do
-    Crew.Context.reject_task!(task_id, rejection)
+    Crew.Context.reject_task(task_id, rejection)
     {
       :ok,
       socket
@@ -53,7 +53,7 @@ defmodule Systems.Campaign.MonitorView do
 
   @impl true
   def handle_event("accept_all_pending_started", _params, %{assigns: %{vm: %{pending_started_tasks: tasks}}} = socket) do
-    Enum.each(tasks, &Crew.Context.accept_task!(&1.id))
+    Enum.each(tasks, &Crew.Context.accept_task(&1.id))
 
     {
       :noreply,
@@ -63,7 +63,7 @@ defmodule Systems.Campaign.MonitorView do
 
   @impl true
   def handle_event("accept_all_completed", _params, %{assigns: %{vm: %{completed_tasks: tasks}}} = socket) do
-    Enum.each(tasks, &Crew.Context.accept_task!(&1.id))
+    Enum.each(tasks, &Crew.Context.accept_task(&1.id))
 
     {
       :noreply,
@@ -73,7 +73,7 @@ defmodule Systems.Campaign.MonitorView do
 
   @impl true
   def handle_event("accept", %{"item" => task_id}, socket) do
-    Crew.Context.accept_task!(task_id)
+    Crew.Context.accept_task(task_id)
 
     {
       :noreply,

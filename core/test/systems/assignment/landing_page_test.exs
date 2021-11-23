@@ -111,7 +111,7 @@ defmodule Systems.Assignment.LandingPageTest do
     } do
       member = Crew.Context.apply_member!(assignment.crew, user)
       task = Crew.Context.get_task(assignment.crew, member)
-      Crew.Context.start_task!(task)
+      Crew.Context.start_task(task)
 
       {:ok, _view, html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
@@ -131,8 +131,8 @@ defmodule Systems.Assignment.LandingPageTest do
     } do
       member = Crew.Context.apply_member!(assignment.crew, user)
       task = Crew.Context.get_task(assignment.crew, member)
-      Crew.Context.start_task!(task)
-      Crew.Context.complete_task!(task)
+      Crew.Context.start_task(task)
+      Crew.Context.complete_task(task)
 
       {:ok, _view, html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))

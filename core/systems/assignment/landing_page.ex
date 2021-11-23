@@ -15,7 +15,8 @@ defmodule Systems.Assignment.LandingPage do
   alias Core.Accounts
 
   alias Systems.{
-    Assignment
+    Assignment,
+    NextAction
   }
 
   data(model, :map)
@@ -27,7 +28,9 @@ defmodule Systems.Assignment.LandingPage do
   end
 
   @impl true
-  def mount(%{"id" => id}, _session, socket) do
+  def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
+    NextAction.Context.clear_next_action(user, Assignment.CheckRejection, key: "#{id}", params: %{id: id})
+
     model = Assignment.Context.get!(id, [:crew])
 
     {
@@ -83,6 +86,10 @@ defmodule Systems.Assignment.LandingPage do
   @impl true
   def handle_event("inform_ok", _params, socket) do
     {:noreply, socket |> assign(dialog: nil)}
+  end
+
+  def handle_info({:signal_test, _}, socket) do
+    {:noreply, socket}
   end
 
   defp action_map(%{vm: %{

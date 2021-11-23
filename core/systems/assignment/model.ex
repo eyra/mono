@@ -174,7 +174,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
   def handle_open(%{assigns: %{current_user: user}} = socket, %{path: path}, %{crew: crew}) do
     member = Crew.Context.get_member!(crew, user)
     task = Crew.Context.get_task(crew, member)
-    Crew.Context.start_task!(task)
+    Crew.Context.start_task(task)
     LiveView.redirect(socket, external: path)
   end
 
