@@ -6,8 +6,6 @@ defmodule Systems.Assignment.LandingPage do
   use CoreWeb.UI.Dialog
   use CoreWeb.Layouts.Workspace.Component, :assignment
 
-  require Logger
-
   alias Frameworks.Pixel.Text.{Title1, Title3, BodyLarge}
   alias Frameworks.Pixel.Card.Highlight
   alias Frameworks.Pixel.Panel.Panel
@@ -30,11 +28,7 @@ defmodule Systems.Assignment.LandingPage do
 
   @impl true
   def mount(%{"id" => id}, _session, socket) do
-    Logger.info("mount")
-
     model = Assignment.Context.get!(id, [:crew])
-
-    Logger.info("model: #{inspect(model)}")
 
     {
       :ok,
@@ -56,8 +50,6 @@ defmodule Systems.Assignment.LandingPage do
 
   @impl true
   def handle_event("cancel", _params, socket) do
-    Logger.info("cancel")
-
     title = String.capitalize(dgettext("eyra-assignment", "cancel.confirm.title"))
     text = String.capitalize(dgettext("eyra-assignment", "cancel.confirm.text"))
     confirm_label = dgettext("eyra-assignment", "cancel.confirm.label")
@@ -67,16 +59,12 @@ defmodule Systems.Assignment.LandingPage do
 
   @impl true
   def handle_event("cancel_confirm", _params, %{assigns: %{current_user: user, model: %{id: id}}} = socket) do
-    Logger.info("cancel_confirm")
-
     Assignment.Context.cancel(id, user)
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))}
   end
 
   @impl true
   def handle_event("cancel_cancel", _params, socket) do
-    Logger.info("cancel_cancel")
-
     {:noreply, socket |> assign(dialog: nil)}
   end
 
@@ -94,8 +82,6 @@ defmodule Systems.Assignment.LandingPage do
 
   @impl true
   def handle_event("inform_ok", _params, socket) do
-    Logger.info("inform_ok")
-
     {:noreply, socket |> assign(dialog: nil)}
   end
 

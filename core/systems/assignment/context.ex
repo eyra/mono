@@ -4,7 +4,6 @@ defmodule Systems.Assignment.Context do
   """
 
   import Ecto.Query, warn: false
-  require Logger
 
   alias Ecto.Multi
   alias Core.Repo
@@ -82,7 +81,6 @@ defmodule Systems.Assignment.Context do
   end
 
   def cancel(%Assignment.Model{} = assignment, user) do
-    Logger.info("About to cancel user #{user.id} on assignment #{assignment.id}")
     crew = get_crew(assignment)
     Crew.Context.cancel(crew, user)
   end
@@ -193,10 +191,10 @@ defmodule Systems.Assignment.Context do
   end
 
   # Crew
-  def get_crew(assignment) do
+  def get_crew(%{crew_id: crew_id} = _assignment) do
     from(
       c in Crew.Model,
-      where: c.id == ^assignment.id
+      where: c.id == ^crew_id
     )
     |> Repo.one()
   end
