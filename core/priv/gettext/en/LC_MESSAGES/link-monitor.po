@@ -29,7 +29,7 @@ msgstr "Approve all"
 #, elixir-format
 #: systems/campaign/monitor_view.ex:144
 msgid "attention.body"
-msgstr "The participants below started your survey on Qualtrics, but did not return to Panl. Approve the ones that filled in the survey, reject the others."
+msgstr "Please pay attention to the contributions of the participants below."
 
 #, elixir-format
 #: systems/campaign/monitor_view.ex:188
@@ -59,4 +59,4 @@ msgstr "Progress"
 #, elixir-format
 #: systems/campaign/monitor_view.ex:138
 msgid "phase2.title"
-msgstr "Assignments"
+msgstr "Contributions"
