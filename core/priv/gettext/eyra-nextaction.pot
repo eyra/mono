@@ -69,3 +69,18 @@ msgstr ""
 #: lib/core/pools/next_actions/review_submission.ex:9
 msgid "review.submission.title"
 msgstr ""
+
+#, elixir-format
+#: systems/assignment/check_rejection.ex:11
+msgid "assignment.check.rejection.cta"
+msgstr ""
+
+#, elixir-format
+#: systems/assignment/check_rejection.ex:10
+msgid "assignment.check.rejection.description"
+msgstr ""
+
+#, elixir-format
+#: systems/assignment/check_rejection.ex:9
+msgid "assignment.check.rejection.title"
+msgstr ""

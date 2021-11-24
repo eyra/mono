@@ -11,31 +11,36 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:105
+#: systems/assignment/landing_page.ex:134
 msgid "cancel.button"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:55
+#: systems/assignment/landing_page.ex:57
 msgid "cancel.confirm.label"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:54
+#: systems/assignment/landing_page.ex:56
 msgid "cancel.confirm.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:53
+#: systems/assignment/landing_page.ex:55
 msgid "cancel.confirm.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:156
+#: systems/assignment/landing_page.ex:186
 msgid "cancel.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:153
+#: systems/assignment/landing_page.ex:183
 msgid "cancel.title"
+msgstr ""
+
+#, elixir-format
+#: systems/assignment/landing_page.ex:116
+msgid "contact.button"
 msgstr ""

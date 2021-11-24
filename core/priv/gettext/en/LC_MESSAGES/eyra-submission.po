@@ -22,17 +22,17 @@ msgid "status.submitted.label"
 msgstr "Submitted"
 
 #, elixir-format
-#: systems/campaign/model.ex:234
+#: systems/campaign/model.ex:247
 msgid "incomplete.forms.message"
 msgstr "Some required fields are not filled in yet"
 
 #, elixir-format
-#: systems/campaign/model.ex:232
+#: systems/campaign/model.ex:245
 msgid "ready.for.submission.message"
 msgstr "All required fields are filled, you can submit this campaign"
 
 #, elixir-format
-#: systems/campaign/model.ex:238
+#: systems/campaign/model.ex:251
 msgid "waiting.for.coordinator.message"
 msgstr "Waiting for the pool administrator to publish your campaign in the marketplace"
 
@@ -152,11 +152,11 @@ msgid "status.accepted.scheduled.label"
 msgstr "Scheduled"
 
 #, elixir-format
-#: systems/campaign/model.ex:252
+#: systems/campaign/model.ex:265
 msgid "accepted.closed.message"
 msgstr "This campaign is closed"
 
 #, elixir-format
-#: systems/campaign/model.ex:243
+#: systems/campaign/model.ex:256
 msgid "accepted.scheduled.message"
 msgstr "This campaign is scheduled for participation"

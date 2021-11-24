@@ -133,7 +133,8 @@ defmodule Systems.Campaign.Context do
 
     from(c in Campaign.Model,
       where: c.promotable_assignment_id in subquery(assigment_ids),
-      preload: ^preload
+      preload: ^preload,
+      order_by: [desc: c.updated_at]
     )
     |> Repo.all()
   end

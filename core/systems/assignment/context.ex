@@ -4,10 +4,12 @@ defmodule Systems.Assignment.Context do
   """
 
   import Ecto.Query, warn: false
+  require Logger
 
   alias Ecto.Multi
   alias Core.Repo
   alias CoreWeb.UI.Timestamp
+  alias Core.Authorization
 
   alias Systems.{
     Assignment,
@@ -53,6 +55,23 @@ defmodule Systems.Assignment.Context do
     |> Ecto.Changeset.put_assoc(assignable_field, tool)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Repo.insert()
+  end
+
+  def owner(%Assignment.Model{} = assignment) do
+    owner =
+      assignment
+      |> Authorization.get_parent_nodes()
+      |> List.last()
+      |> Authorization.users_with_role(:owner)
+      |> List.first()
+
+    case owner do
+      nil ->
+        Logger.error("No owner role found for assignment #{assignment.id}")
+        {:error}
+      owner ->
+        {:ok, owner}
+    end
   end
 
   defp assignable_field(%Core.Survey.Tool{}), do: :assignable_survey_tool
@@ -118,7 +137,7 @@ defmodule Systems.Assignment.Context do
   defp open_spot_count?(%{crew: crew} = assignment, :one_task) do
     assignable = Assignment.Model.assignable(assignment)
     target = Assignment.Assignable.spot_count(assignable)
-    all_non_expired_tasks = Crew.Context.count_tasks(crew, [:pending, :completed])
+    all_non_expired_tasks = Crew.Context.count_tasks(crew, Crew.TaskStatus.values())
 
     max(0, target - all_non_expired_tasks)
   end

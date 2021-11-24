@@ -173,7 +173,19 @@ defmodule Core.Authorization do
     can?(principal, entity, GreenLight.Permissions.access_permission(module))
   end
 
-  def users_with_role(entity, role, preload \\ []) do
+  def users_with_role(_, _, preload \\ [])
+
+  def users_with_role(node_id, role, preload) when is_number(node_id) do
+    principal_ids = Core.Authorization.query_principal_ids(node_id: node_id, role: role)
+
+    Ecto.Query.from(u in Core.Accounts.User,
+      where: u.id in subquery(principal_ids),
+      preload: ^preload
+    )
+    |> Core.Repo.all()
+  end
+
+  def users_with_role(entity, role, preload) do
     principal_ids = Core.Authorization.query_principal_ids(role: role, entity: entity)
 
     Ecto.Query.from(u in Core.Accounts.User,

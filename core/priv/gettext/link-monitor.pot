@@ -11,41 +11,51 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:128
+#: systems/campaign/monitor_view.ex:142
 msgid "attention.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:340
+#: systems/campaign/monitor_view.ex:330
 msgid "started.at.message"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:136 systems/campaign/monitor_view.ex:171
+#: systems/campaign/monitor_view.ex:149 systems/campaign/monitor_view.ex:170
 msgid "accept.all.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:131
+#: systems/campaign/monitor_view.ex:144
 msgid "attention.body"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:195
+#: systems/campaign/monitor_view.ex:188
 msgid "rejected.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:166
+#: systems/campaign/monitor_view.ex:165
 msgid "waitinglist.body"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:163
+#: systems/campaign/monitor_view.ex:162
 msgid "waitinglist.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:216
+#: systems/campaign/monitor_view.ex:203
 msgid "accepted.title"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:104
+msgid "phase1.title"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:138
+msgid "phase2.title"
 msgstr ""

@@ -70,3 +70,18 @@ msgstr "Er staan nieuwe canpagnes klaar om in te roosteren"
 #: lib/core/pools/next_actions/review_submission.ex:9
 msgid "review.submission.title"
 msgstr "Nieuwe campagnes"
+
+#, elixir-format
+#: systems/assignment/check_rejection.ex:11
+msgid "assignment.check.rejection.cta"
+msgstr "Ga naar bijdrage"
+
+#, elixir-format
+#: systems/assignment/check_rejection.ex:10
+msgid "assignment.check.rejection.description"
+msgstr "Bezoek de pagina van deze bijdrage voor meer details"
+
+#, elixir-format
+#: systems/assignment/check_rejection.ex:9
+msgid "assignment.check.rejection.title"
+msgstr "Een van je bijdragen is afgekeurd"

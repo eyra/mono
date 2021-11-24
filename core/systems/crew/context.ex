@@ -5,10 +5,17 @@ defmodule Systems.Crew.Context do
   alias Ecto.Multi
   alias Core.Repo
 
-  alias Systems.Crew
   alias Core.Accounts.User
   alias Core.Authorization
   alias CoreWeb.UI.Timestamp
+
+  alias Frameworks.{
+    Signal
+  }
+
+  alias Systems.{
+    Crew
+  }
 
   def list(preload \\ [:tasks, :members]) do
     from(c in Crew.Model, preload: ^preload)
@@ -155,23 +162,26 @@ defmodule Systems.Crew.Context do
     |> Enum.map(&Repo.insert!(&1))
   end
 
-  def start_task!(%Crew.TaskModel{} = task) do
-    update_task!(task, %{started_at: Timestamp.naive_now()})
+  def start_task(%Crew.TaskModel{} = task) do
+    update_task(task, %{started_at: Timestamp.naive_now()})
   end
 
-  def complete_task(%Crew.TaskModel{} = task) do
-    update_task!(task, %{status: :completed, completed_at: Timestamp.naive_now()})
+  def complete_task(%Crew.TaskModel{status: status} = task) do
+    case status do
+      :pending -> update_task(task, %{status: :completed, completed_at: Timestamp.naive_now()})
+      _ -> {:ok, %{task: task}}
+    end
   end
 
   def complete_task!(%Crew.TaskModel{} = task) do
     case Crew.Context.complete_task(task) do
-      %Crew.TaskModel{} = task -> task
+      {:ok, %{task: task}} -> task
       _ -> nil
     end
   end
 
-  def reject_task!(%Crew.TaskModel{} = task, %{category: category, message: message}) do
-    update_task!(task, %{
+  def reject_task(%Crew.TaskModel{} = task, %{category: category, message: message}) do
+    update_task(task, %{
       status: :rejected,
       rejected_at: Timestamp.naive_now(),
       rejected_category: category,
@@ -179,34 +189,42 @@ defmodule Systems.Crew.Context do
     })
   end
 
-  def reject_task!(id, rejection) do
+  def reject_task(id, rejection) do
     get_task!(id)
-    |> reject_task!(rejection)
+    |> reject_task(rejection)
   end
 
-  def accept_task!(%Crew.TaskModel{} = task) do
-    update_task!(task, %{
+  def accept_task(%Crew.TaskModel{} = task) do
+    update_task(task, %{
       status: :accepted,
       accepted_at: Timestamp.naive_now()
     })
   end
 
-  def accept_task!(id) do
+  def accept_task(id) do
     get_task!(id)
-    |> accept_task!()
+    |> accept_task()
   end
 
-  def update_task!(%Crew.TaskModel{} = task, attrs) do
-    Crew.TaskModel.changeset(task, attrs)
-    |> Repo.update!()
+  def update_task(%Crew.TaskModel{} = task, attrs) do
+    changeset = Crew.TaskModel.changeset(task, attrs)
+
+    Multi.new()
+    |> multi_update(:task, changeset)
+    |> Repo.transaction()
+  end
+
+  def multi_update(multi, :task, changeset) do
+    multi
+    |> Multi.update(:task, changeset)
+    |> Signal.Context.multi_dispatch(:crew_task_updated, changeset)
   end
 
   def delete_task(%Crew.TaskModel{} = task) do
-    update_task!(task, %{expired: true})
+    update_task(task, %{expired: true})
   end
 
   def delete_task(_), do: nil
-
 
   # Members
   def cancel(crew, user) do
@@ -217,7 +235,7 @@ defmodule Systems.Crew.Context do
       # temporary cancel is implemented by expiring the task
       Multi.new()
       |> Multi.update(:member, Crew.MemberModel.changeset(member, %{expired: true}))
-      |> Multi.update(:task, Crew.TaskModel.changeset(task, %{expired: true}))
+      |> multi_update(:task, Crew.TaskModel.changeset(task, %{expired: true}))
       |> Repo.transaction()
     else
       Logger.warn("Unable to cancel, user #{user.id} is not a member on crew #{crew.id}")

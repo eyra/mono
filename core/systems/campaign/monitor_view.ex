@@ -9,14 +9,14 @@ defmodule Systems.Campaign.MonitorView do
     Campaign
   }
 
-  alias Frameworks.Pixel.Text.{Title3, BodyMedium, BodyLarge, Label}
+  alias Frameworks.Pixel.Text.{Title2, Title3, BodyLarge, Label}
 
   prop(props, :map, required: true)
   data(vm, :any)
   data(reject_task, :number)
 
   def update(%{reject: :submit, rejection: rejection}, %{assigns: %{reject_task: task_id}} = socket) do
-    Crew.Context.reject_task!(task_id, rejection)
+    Crew.Context.reject_task(task_id, rejection)
     {
       :ok,
       socket
@@ -53,7 +53,7 @@ defmodule Systems.Campaign.MonitorView do
 
   @impl true
   def handle_event("accept_all_pending_started", _params, %{assigns: %{vm: %{pending_started_tasks: tasks}}} = socket) do
-    Enum.each(tasks, &Crew.Context.accept_task!(&1.id))
+    Enum.each(tasks, &Crew.Context.accept_task(&1.id))
 
     {
       :noreply,
@@ -63,7 +63,7 @@ defmodule Systems.Campaign.MonitorView do
 
   @impl true
   def handle_event("accept_all_completed", _params, %{assigns: %{vm: %{completed_tasks: tasks}}} = socket) do
-    Enum.each(tasks, &Crew.Context.accept_task!(&1.id))
+    Enum.each(tasks, &Crew.Context.accept_task(&1.id))
 
     {
       :noreply,
@@ -73,7 +73,7 @@ defmodule Systems.Campaign.MonitorView do
 
   @impl true
   def handle_event("accept", %{"item" => task_id}, socket) do
-    Crew.Context.accept_task!(task_id)
+    Crew.Context.accept_task(task_id)
 
     {
       :noreply,
@@ -101,6 +101,7 @@ defmodule Systems.Campaign.MonitorView do
         <MarginY id={{:page_top}} />
         <Case value={{ @vm.is_active }} >
           <True>
+            <Title2>{{dgettext("link-monitor", "phase1.title")}}</Title2>
             <Title3 margin={{"mb-8"}}>{{dgettext("link-survey", "status.title")}}<span class="text-primary"> {{@vm.finished_count}}/{{@vm.subject_count}}</span></Title3>
             <Spacing value="M" />
             <div class="bg-grey6 rounded p-12">
@@ -134,10 +135,12 @@ defmodule Systems.Campaign.MonitorView do
             </div>
             <Spacing value="XL" />
 
-            <Title3 margin={{"mb-8"}}>
-              {{dgettext("link-monitor", "attention.title")}}<span class="text-primary"> {{ Enum.count(@vm.pending_started_tasks) }}</span>
-            </Title3>
+            <Title2>{{dgettext("link-monitor", "phase2.title")}}</Title2>
+
             <div :if={{ Enum.count(@vm.pending_started_tasks) > 0 }}>
+              <Title3 margin={{"mb-8"}}>
+                {{dgettext("link-monitor", "attention.title")}}<span class="text-primary"> {{ Enum.count(@vm.pending_started_tasks) }}</span>
+              </Title3>
               <BodyLarge>{{dgettext("link-monitor", "attention.body")}}</BodyLarge>
               <Spacing value="M" />
               <Wrap>
@@ -147,27 +150,13 @@ defmodule Systems.Campaign.MonitorView do
                 } }} />
               </Wrap>
               <Spacing value="M" />
-            </div>
-            <div class="flex flex-col gap-6">
-              <div :for={{ task <- @vm.pending_started_tasks }}>
-                <div class="flex flex-row gap-5 items-center">
-                  <div class="flex-wrap">
-                    <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
-                  </div>
-                  <div class="flex-wrap">
-                    <BodyMedium color={{"text-warning"}}>⚠️ {{ task.message }}</BodyMedium>
-                  </div>
-                  <div class="flex-grow"></div>
-                  <div class="flex-wrap">
-                    <DynamicButton vm={{task.accept_button}} />
-                  </div>
-                  <div class="flex-wrap">
-                    <DynamicButton vm={{task.reject_button}} />
-                  </div>
+              <div class="flex flex-col gap-6">
+                <div :for={{ task <- @vm.pending_started_tasks }}>
+                  <Crew.TaskItemView :props={{task}} />
                 </div>
               </div>
+              <Spacing value="XL" />
             </div>
-            <Spacing value="XL" />
 
             <Title3 margin={{"mb-8"}}>
               {{dgettext("link-monitor", "waitinglist.title")}}<span class="text-primary"> {{ Enum.count(@vm.completed_tasks) }}</span>
@@ -183,58 +172,39 @@ defmodule Systems.Campaign.MonitorView do
               </Wrap>
               <Spacing value="M" />
             </div>
-            <div class="flex flex-col gap-6">
-              <div :for={{ task <- @vm.completed_tasks }}>
-                <div class="flex flex-row gap-5 items-center">
-                  <div class="flex-wrap">
-                    <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
-                  </div>
-                  <div class="flex-grow"></div>
-                  <div class="flex-wrap">
-                    <DynamicButton vm={{task.accept_button}} />
-                  </div>
-                  <div class="flex-wrap">
-                    <DynamicButton vm={{task.reject_button}} />
-                  </div>
+            <div :if={{ Enum.count(@vm.completed_tasks) > 0}}>
+              <div class="flex flex-col gap-6">
+                <div :for={{ task <- @vm.completed_tasks }}>
+                  <Crew.TaskItemView :props={{task}} />
                 </div>
               </div>
+              <Spacing value="XL" />
             </div>
-            <Spacing value="XL" />
+            <div :if={{ Enum.count(@vm.completed_tasks) == 0}}>
+              <Spacing value="L" />
+            </div>
 
-            <Title3 margin={{"mb-8"}}>
+            <Title3>
               {{dgettext("link-monitor", "rejected.title")}}<span class="text-primary"> {{ Enum.count(@vm.rejected_tasks) }}</span>
             </Title3>
-            <div class="flex flex-col gap-6">
-              <div :for={{ task <- @vm.rejected_tasks }}>
-                <div class="flex flex-row gap-5 items-center">
-                  <div class="flex-wrap">
-                    <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
-                  </div>
-                  <div class="flex-wrap">
-                    <BodyMedium color={{"text-warning"}}>⚠️ {{ task.message }}</BodyMedium>
-                  </div>
-                  <div class="flex-grow"></div>
-                  <div class="flex-wrap">
-                    <DynamicButton vm={{task.accept_button}} />
-                  </div>
+            <div :if={{ Enum.count(@vm.rejected_tasks) > 0}}>
+              <div class="flex flex-col gap-6">
+                <div :for={{ task <- @vm.rejected_tasks }}>
+                  <Crew.TaskItemView :props={{task}} />
                 </div>
               </div>
+              <Spacing value="XL" />
             </div>
-            <Spacing value="XL" />
+            <div :if={{ Enum.count(@vm.rejected_tasks) == 0}}>
+              <Spacing value="L" />
+            </div>
 
             <Title3 margin={{"mb-8"}}>
               {{dgettext("link-monitor", "accepted.title")}}<span class="text-primary"> {{ Enum.count(@vm.accepted_tasks) }}</span>
             </Title3>
             <div class="flex flex-col gap-6">
               <div :for={{ task <- @vm.accepted_tasks }}>
-                <div class="flex flex-row gap-5 items-center">
-                  <div class="flex-wrap">
-                    <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
-                  </div>
-                  <div class="flex-wrap">
-                    <BodyMedium color={{"text-grey2"}}>{{ task.message }}</BodyMedium>
-                  </div>
-                </div>
+                <Crew.TaskItemView :props={{task}} />
               </div>
             </div>
 
@@ -354,14 +324,16 @@ defmodule Systems.Campaign.MonitorView do
   }) do
     %{public_id: public_id} = Crew.Context.get_member!(member_id)
 
-    date_string = started_at |> Timestamp.humanize()
+    date_string = started_at
+    |> Timestamp.apply_timezone()
+    |> Timestamp.humanize()
+    message_text = dgettext("link-monitor", "started.at.message", date: date_string)
 
     %{
       id: id,
-      member_public_id: public_id,
-      message: dgettext("link-monitor", "started.at.message", date: date_string),
-      accept_button: accept_button(id, target),
-      reject_button: reject_button(id, target)
+      public_id: public_id,
+      message: %{type: :warning, text: message_text},
+      buttons: [accept_button(id, target), reject_button(id, target)]
     }
   end
 
@@ -373,28 +345,34 @@ defmodule Systems.Campaign.MonitorView do
 
     %{
       id: id,
-      member_public_id: public_id,
-      accept_button: accept_button(id, target),
-      reject_button: reject_button(id, target)
+      public_id: public_id,
+      buttons: [accept_button(id, target), reject_button(id, target)]
     }
   end
 
   defp to_view_model(:rejected, target, %Crew.TaskModel{
     id: id,
+    rejected_category: rejected_category,
     rejected_message: rejected_message,
     member_id: member_id
   }) do
     %{public_id: public_id} = Crew.Context.get_member!(member_id)
 
+    message_type =
+      case rejected_category do
+        :other -> :rejected
+        category -> category
+      end
+
     %{
       id: id,
-      member_public_id: public_id,
-      message: rejected_message,
-      accept_button: accept_button(id, target)
+      public_id: public_id,
+      message: %{type: message_type, text: rejected_message},
+      buttons: [accept_button(id, target)]
     }
   end
 
-  defp to_view_model(:accepted, _target, %Crew.TaskModel{
+  defp to_view_model(:accepted, target, %Crew.TaskModel{
     id: id,
     accepted_at: accepted_at,
     member_id: member_id
@@ -403,13 +381,15 @@ defmodule Systems.Campaign.MonitorView do
 
     date_string =
       accepted_at
+      |> Timestamp.apply_timezone()
       |> Timestamp.humanize()
       |> String.capitalize()
 
     %{
       id: id,
-      message: date_string,
-      member_public_id: public_id
+      message: %{text: date_string},
+      public_id: public_id,
+      buttons: [reject_button(id, target)]
     }
   end
 

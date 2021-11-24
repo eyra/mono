@@ -15,7 +15,8 @@ defmodule Systems.Assignment.LandingPage do
   alias Core.Accounts
 
   alias Systems.{
-    Assignment
+    Assignment,
+    NextAction
   }
 
   data(model, :map)
@@ -27,7 +28,9 @@ defmodule Systems.Assignment.LandingPage do
   end
 
   @impl true
-  def mount(%{"id" => id}, _session, socket) do
+  def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
+    NextAction.Context.clear_next_action(user, Assignment.CheckRejection, key: "#{id}", params: %{id: id})
+
     model = Assignment.Context.get!(id, [:crew])
 
     {
@@ -85,18 +88,45 @@ defmodule Systems.Assignment.LandingPage do
     {:noreply, socket |> assign(dialog: nil)}
   end
 
-  defp action_map(%{vm: %{
+  def handle_info({:signal_test, _}, socket) do
+    {:noreply, socket}
+  end
+
+  defp action_map(%{model: assignment, vm: %{
+    public_id: public_id,
+    title: title,
+    contact_enabled?: contact_enabled?,
     call_to_action: %{label: label}
   }}) do
-    %{
+
+    actions = %{
       call_to_action: %{
         action: %{type: :send, event: "call-to-action"},
         face: %{
           type: :primary,
           label: label
         }
-      },
+      }
     }
+
+    {:ok, %{email: email}} = Assignment.Context.owner(assignment)
+    if contact_enabled? and email do
+      actions
+      |> Map.put(:contact, %{
+        action: %{type: :href, href: contact_href(email, title, public_id)},
+        face: %{type: :label, label: dgettext("eyra-assignment", "contact.button")}
+      })
+    else
+      actions
+    end
+  end
+
+  defp contact_href(email, title, nil) do
+    "mailto:#{email}?subject=#{title}"
+  end
+
+  defp contact_href(email, title, public_id) do
+    "mailto:#{email}?subject=[##{public_id}] #{title}"
   end
 
   defp cancel_button() do
@@ -106,6 +136,7 @@ defmodule Systems.Assignment.LandingPage do
     }
   end
 
+  defp create_actions(%{call_to_action: call_to_action, contact: contact}), do: [call_to_action, contact]
   defp create_actions(%{call_to_action: call_to_action}), do: [call_to_action]
 
   defp show_dialog?(nil), do: false

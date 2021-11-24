@@ -74,7 +74,12 @@ defmodule Systems.Campaign.OverviewPage do
               </div>
               <div class="h-full pt-2px lg:pt-1">
                 <Send vm={{ %{event: "create_campaign" } }}>
-                  <Forward vm={{ label: dgettext("link-survey", "add.new.button") }} />
+                  <div class="sm:hidden">
+                    <Forward vm={{ label: dgettext("link-survey", "add.new.button.short") }} />
+                  </div>
+                  <div class="hidden sm:block">
+                    <Forward vm={{ label: dgettext("link-survey", "add.new.button") }} />
+                  </div>
                 </Send>
               </div>
             </div>

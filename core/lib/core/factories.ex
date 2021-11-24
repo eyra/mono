@@ -213,20 +213,25 @@ defmodule Core.Factories do
   end
 
   def build(:campaign, %{} = attributes) do
-    campaign_auth_node = build(:auth_node)
-    promotion_auth_node = build(:auth_node, %{parent: campaign_auth_node})
-    assignment_auth_node = build(:auth_node, %{parent: campaign_auth_node})
+    {campaign_auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
 
     {authors, attributes} = Map.pop(attributes, :authors, many_relationship(:authors, attributes))
 
     {promotion, attributes} =
-      Map.pop(attributes, :promotion, build(:promotion, %{auth_node: promotion_auth_node}))
+      Map.pop(
+        attributes,
+        :promotion,
+        build(:promotion, %{auth_node: build(:auth_node, %{parent: campaign_auth_node})})
+      )
 
     {assignment, attributes} =
       Map.pop(
         attributes,
         :assignment,
-        build(:assignment, %{director: :campaign, auth_node: assignment_auth_node})
+        build(:assignment, %{
+          director: :campaign,
+          auth_node: build(:auth_node, %{parent: campaign_auth_node})
+        })
       )
 
     %Campaign.Model{

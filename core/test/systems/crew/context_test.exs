@@ -1,6 +1,5 @@
 defmodule Systems.Crew.ContextTest do
   use Core.DataCase
-
   alias Core.Authorization
   alias CoreWeb.UI.Timestamp
 
@@ -154,7 +153,7 @@ defmodule Systems.Crew.ContextTest do
       crew = Factories.insert!(:crew)
 
       {:ok, %{member: member, task: task}} = Crew.Context.apply_member(crew, user, expire_at(-1))
-      Crew.Context.start_task!(task)
+      Crew.Context.start_task(task)
 
       assert Crew.Context.mark_expired()
 
@@ -290,7 +289,7 @@ defmodule Systems.Crew.ContextTest do
       assert Crew.Context.count_tasks(crew, [:pending]) == 2
     end
 
-    test "complete_task/1 marks task completed" do
+    test "complete_task/1 marks pending task completed" do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
       member = Factories.insert!(:crew_member, %{crew: crew, user: user})
@@ -309,6 +308,52 @@ defmodule Systems.Crew.ContextTest do
       assert Crew.Context.count_tasks(crew, [:completed]) == 1
     end
 
+    test "complete_task/1 does not mark accepted task completed" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+
+      assert Crew.Context.count_tasks(crew, [:completed]) == 0
+
+      task =
+        Factories.insert!(:crew_task, %{
+          crew: crew,
+          member: member,
+          status: :pending
+        })
+
+      assert Crew.Context.count_tasks(crew, [:completed]) == 0
+      {:ok, %{task: task}} = Crew.Context.accept_task(task)
+      assert %{status: :accepted} = Crew.Context.complete_task!(task)
+      assert Crew.Context.count_tasks(crew, [:completed]) == 0
+    end
+
+    test "complete_task/1 does not mark rejected task completed" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+
+      assert Crew.Context.count_tasks(crew, [:completed]) == 0
+
+      task =
+        Factories.insert!(:crew_task, %{
+          crew: crew,
+          member: member,
+          status: :pending
+        })
+
+      assert Crew.Context.count_tasks(crew, [:completed]) == 0
+
+      {:ok, %{task: task}} =
+        Crew.Context.reject_task(task, %{
+          category: :attention_checks_failed,
+          message: "rejection message"
+        })
+
+      assert %{status: :rejected} = Crew.Context.complete_task!(task)
+      assert Crew.Context.count_tasks(crew, [:completed]) == 0
+    end
+
     test "accept_task/1 marks task accepted" do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
@@ -325,10 +370,13 @@ defmodule Systems.Crew.ContextTest do
 
       assert Crew.Context.count_tasks(crew, [:accepted]) == 0
 
-      assert %{
-               status: :accepted,
-               accepted_at: accepted_at
-             } = Crew.Context.accept_task!(task)
+      assert {:ok,
+              %{
+                task: %{
+                  status: :accepted,
+                  accepted_at: accepted_at
+                }
+              }} = Crew.Context.accept_task(task)
 
       assert accepted_at != nil
       assert Crew.Context.count_tasks(crew, [:accepted]) == 1
@@ -352,12 +400,15 @@ defmodule Systems.Crew.ContextTest do
 
       rejection = %{category: :attention_checks_failed, message: "rejection message"}
 
-      assert %{
-               status: :rejected,
-               rejected_at: rejected_at,
-               rejected_category: :attention_checks_failed,
-               rejected_message: "rejection message"
-             } = Crew.Context.reject_task!(task, rejection)
+      assert {:ok,
+              %{
+                task: %{
+                  status: :rejected,
+                  rejected_at: rejected_at,
+                  rejected_category: :attention_checks_failed,
+                  rejected_message: "rejection message"
+                }
+              }} = Crew.Context.reject_task(task, rejection)
 
       assert rejected_at != nil
       assert Crew.Context.count_tasks(crew, [:rejected]) == 1

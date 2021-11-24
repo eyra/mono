@@ -93,6 +93,7 @@ defmodule Frameworks.GreenLight.Ecto.Query do
           case option do
             :role -> {:role, value}
             :entity -> {:node_id, AuthorizationNode.id(value)}
+            :node_id -> {:node_id, value}
             :principal -> {:principal_id, Principal.id(value)}
           end
 

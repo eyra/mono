@@ -58,6 +58,7 @@ defmodule Systems.Crew.RejectView do
         title: title,
         text: text,
         note: note,
+        category: category,
         categories: categories,
         model: model,
         changeset: changeset
@@ -70,8 +71,9 @@ defmodule Systems.Crew.RejectView do
       {:noreply, socket |> assign(changeset: changeset)}
   end
 
-  def handle_event("reject", %{"reject_model" => reject_model}, %{assigns: %{model: model, target: target}} = socket) do
-    changeset = Crew.RejectModel.changeset(model, :submit, reject_model)
+  def handle_event("reject", %{"reject_model" => %{"message" => message}}, %{assigns: %{model: model, target: target, category: category}} = socket) do
+    attrs = %{category: category, message: message}
+    changeset = Crew.RejectModel.changeset(model, :submit, attrs)
 
     case Ecto.Changeset.apply_action(changeset, :update) do
       {:ok, model} ->
@@ -155,7 +157,7 @@ defmodule Systems.Crew.RejectView.Example do
 
   def render(assigns) do
     ~H"""
-    <RejectView id={{ :reject_view_example }} target={{ %{type: __MODULE__, id: @id} }} />
+    <RejectView id={{ :reject_view_example }} target={{ %{type: __MODULE__, id: self()} }} />
     """
   end
 
