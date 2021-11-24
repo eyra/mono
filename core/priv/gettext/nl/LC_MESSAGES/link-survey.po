@@ -253,12 +253,12 @@ msgid "form.description"
 msgstr "Doorloop eerst de stappen in het zwarte kader. Zo zorg je ervoor dat deelnemers vanuit Panl deel kunnen nemen aan jouw online studie en na afloop weer teruggestuurd worden naar Panl."
 
 #, elixir-format
-#: systems/assignment/model.ex:242
+#: systems/assignment/model.ex:257
 msgid "duration.highlight.text"
 msgstr "%{duration} minuten"
 
 #, elixir-format
-#: systems/assignment/model.ex:241
+#: systems/assignment/model.ex:256
 msgid "duration.highlight.title"
 msgstr "Duur"
 
@@ -268,43 +268,43 @@ msgid "ethical.review.link"
 msgstr "ethische checklist"
 
 #, elixir-format
-#: systems/assignment/model.ex:88 systems/assignment/model.ex:97
-#: systems/assignment/model.ex:109
+#: systems/assignment/model.ex:91 systems/assignment/model.ex:102
+#: systems/assignment/model.ex:115
 msgid "task.hero.title"
 msgstr "Studie"
 
 #, elixir-format
-#: systems/assignment/model.ex:218
+#: systems/assignment/model.ex:227
 msgid "task.completed.subtitle"
 msgstr "Je hebt deze vragenlijst ingevuld"
 
 #, elixir-format
-#: systems/assignment/model.ex:221
+#: systems/assignment/model.ex:232
 msgid "task.completed.text"
 msgstr "Jouw bijdrage wordt door de auteur van deze studie beoordeeld. Als je binnen twee weken na afronding van de vragenlijst geen afkeuring hebt ontvangen, is de toegewezen beloning definitief."
 
 #, elixir-format
-#: systems/assignment/model.ex:217
+#: systems/assignment/model.ex:226
 msgid "task.pending.subtitle"
 msgstr "Instructies"
 
 #, elixir-format
-#: systems/assignment/model.ex:255
+#: systems/assignment/model.ex:270
 msgid "status.closed.highlight.text"
 msgstr "Gesloten voor deelname"
 
 #, elixir-format
-#: systems/assignment/model.ex:249
+#: systems/assignment/model.ex:264
 msgid "status.highlight.title"
 msgstr "Status"
 
 #, elixir-format
-#: systems/assignment/model.ex:253
+#: systems/assignment/model.ex:268
 msgid "status.open.highlight.text"
 msgstr "Open voor deelname"
 
 #, elixir-format
-#: systems/assignment/model.ex:262
+#: systems/assignment/model.ex:277
 msgid "language.highlight.title"
 msgstr "Taal"
 
@@ -313,7 +313,27 @@ msgstr "Taal"
 msgid "started.label"
 msgstr "Gestart"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: systems/campaign/overview_page.ex:78
 msgid "add.new.button.short"
 msgstr "Start"
+
+#, elixir-format
+#: systems/assignment/model.ex:228
+msgid "task.accepted.subtitle"
+msgstr "Gefeliciteerd"
+
+#, elixir-format
+#: systems/assignment/model.ex:233
+msgid "task.accepted.text"
+msgstr "Jouw bijdrage is geaccepteerd door de onderzoeker. Je hebt je beloning verdiend voor deze bijdrage."
+
+#, elixir-format
+#: systems/assignment/model.ex:229
+msgid "task.rejected.subtitle"
+msgstr "Helaas is je bijdrage afgewezen"
+
+#, elixir-format
+#: systems/assignment/model.ex:235
+msgid "task.rejected.text"
+msgstr "De reden voor de afwijzing, zoals door de onderzoeker opgegeven: \"%{reason}\""

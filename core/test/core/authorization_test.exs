@@ -49,6 +49,22 @@ defmodule Core.AuthorizationTest do
     :ok = Authorization.assign_role(%User{id: 1}, node, :owner)
   end
 
+  test "can get user for role" do
+    %{id: id, email: email} = user = Factories.insert!(:researcher)
+    {:ok, node} = Authorization.create_node()
+    :ok = Authorization.assign_role(user, node, :owner)
+
+    assert [%{id: ^id, email: ^email}] = Authorization.users_with_role(node, :owner)
+  end
+
+  test "can't get user for role" do
+    user = Factories.insert!(:researcher)
+    {:ok, node} = Authorization.create_node()
+    :ok = Authorization.assign_role(user, node, :owner)
+
+    assert [] = Authorization.users_with_role(node, :participant)
+  end
+
   test "role intersection on a node" do
     {:ok, node} = Authorization.create_node()
     # Nothing intersects when not assigned

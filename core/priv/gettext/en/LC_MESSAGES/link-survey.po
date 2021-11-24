@@ -253,12 +253,12 @@ msgid "form.description"
 msgstr "Follow the steps in the black frame to make sure that participants can start your online study on Panl and are redirected back to Panl after they finish."
 
 #, elixir-format
-#: systems/assignment/model.ex:242
+#: systems/assignment/model.ex:257
 msgid "duration.highlight.text"
 msgstr "%{duration} minutes"
 
 #, elixir-format
-#: systems/assignment/model.ex:241
+#: systems/assignment/model.ex:256
 msgid "duration.highlight.title"
 msgstr "Duration"
 
@@ -268,43 +268,43 @@ msgid "ethical.review.link"
 msgstr "ethical checklist"
 
 #, elixir-format
-#: systems/assignment/model.ex:88 systems/assignment/model.ex:97
-#: systems/assignment/model.ex:109
+#: systems/assignment/model.ex:91 systems/assignment/model.ex:102
+#: systems/assignment/model.ex:115
 msgid "task.hero.title"
 msgstr "Study"
 
 #, elixir-format
-#: systems/assignment/model.ex:218
+#: systems/assignment/model.ex:227
 msgid "task.completed.subtitle"
 msgstr "You have completed this survey"
 
 #, elixir-format
-#: systems/assignment/model.ex:221
+#: systems/assignment/model.ex:232
 msgid "task.completed.text"
 msgstr "Your contribution will be reviewed by the author of this study. If you did not receive a rejection within two weeks after the completion of this survey, the assigned reward is final."
 
 #, elixir-format
-#: systems/assignment/model.ex:217
+#: systems/assignment/model.ex:226
 msgid "task.pending.subtitle"
 msgstr "Instructions"
 
 #, elixir-format
-#: systems/assignment/model.ex:255
+#: systems/assignment/model.ex:270
 msgid "status.closed.highlight.text"
 msgstr "Closed for participation"
 
 #, elixir-format
-#: systems/assignment/model.ex:249
+#: systems/assignment/model.ex:264
 msgid "status.highlight.title"
 msgstr "Status"
 
 #, elixir-format
-#: systems/assignment/model.ex:253
+#: systems/assignment/model.ex:268
 msgid "status.open.highlight.text"
 msgstr "Open for participation"
 
 #, elixir-format
-#: systems/assignment/model.ex:262
+#: systems/assignment/model.ex:277
 msgid "language.highlight.title"
 msgstr "Language"
 
@@ -313,7 +313,27 @@ msgstr "Language"
 msgid "started.label"
 msgstr "Started"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: systems/campaign/overview_page.ex:78
 msgid "add.new.button.short"
 msgstr "New"
+
+#, elixir-format
+#: systems/assignment/model.ex:228
+msgid "task.accepted.subtitle"
+msgstr "Congratulations"
+
+#, elixir-format
+#: systems/assignment/model.ex:233
+msgid "task.accepted.text"
+msgstr "Your contribution is accepted by the researcher. Your have earned the credits for this study."
+
+#, elixir-format
+#: systems/assignment/model.ex:229
+msgid "task.rejected.subtitle"
+msgstr "Unfortunately your contribution was rejected"
+
+#, elixir-format
+#: systems/assignment/model.ex:235
+msgid "task.rejected.text"
+msgstr "Reason for rejection provided by researcher: \"%{reason}\""

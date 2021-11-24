@@ -9,7 +9,6 @@ defmodule Systems.Assignment.LandingPage do
   alias Frameworks.Pixel.Text.{Title1, Title3, BodyLarge}
   alias Frameworks.Pixel.Card.Highlight
   alias Frameworks.Pixel.Panel.Panel
-  alias Frameworks.Pixel.Wrap
 
   alias CoreWeb.UI.Navigation.ButtonBar
   alias Core.Accounts
@@ -92,18 +91,41 @@ defmodule Systems.Assignment.LandingPage do
     {:noreply, socket}
   end
 
-  defp action_map(%{vm: %{
+  defp action_map(%{model: assignment, vm: %{
+    public_id: public_id,
+    title: title,
+    contact_enabled?: contact_enabled?,
     call_to_action: %{label: label}
   }}) do
-    %{
+
+    actions = %{
       call_to_action: %{
         action: %{type: :send, event: "call-to-action"},
         face: %{
           type: :primary,
           label: label
         }
-      },
+      }
     }
+
+    {:ok, %{email: email}} = Assignment.Context.owner(assignment)
+    if contact_enabled? and email do
+      actions
+      |> Map.put(:contact, %{
+        action: %{type: :href, href: contact_href(email, title, public_id)},
+        face: %{type: :label, label: dgettext("eyra-assignment", "contact.button")}
+      })
+    else
+      actions
+    end
+  end
+
+  defp contact_href(email, title, nil) do
+    "mailto:#{email}?subject=#{title}"
+  end
+
+  defp contact_href(email, title, public_id) do
+    "mailto:#{email}?subject=[##{public_id}] #{title}"
   end
 
   defp cancel_button() do
@@ -113,6 +135,7 @@ defmodule Systems.Assignment.LandingPage do
     }
   end
 
+  defp create_actions(%{call_to_action: call_to_action, contact: contact}), do: [call_to_action, contact]
   defp create_actions(%{call_to_action: call_to_action}), do: [call_to_action]
 
   defp show_dialog?(nil), do: false
@@ -162,9 +185,7 @@ defmodule Systems.Assignment.LandingPage do
           <Spacing value="M" />
           <BodyLarge>{{dgettext("eyra-assignment", "cancel.text")}}</BodyLarge>
           <Spacing value="M" />
-          <Wrap>
-            <DynamicButton vm={{ cancel_button() }} />
-          </Wrap>
+          <DynamicButton vm={{ cancel_button() }} />
         </Panel>
 
       </ContentArea>

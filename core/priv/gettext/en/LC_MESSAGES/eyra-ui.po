@@ -178,7 +178,7 @@ msgstr "Delete"
 
 #, elixir-format
 #: lib/core_web/live/admin/ticket.ex:4 systems/assignment/landing_page.ex:6
-#: systems/assignment/model.ex:200 systems/campaign/content_page.ex:9 systems/pool/submission_page.ex:8
+#: systems/assignment/model.ex:209 systems/campaign/content_page.ex:9 systems/pool/submission_page.ex:8
 #: systems/promotion/landing_page.ex:6
 msgid "ok.button"
 msgstr "OK"

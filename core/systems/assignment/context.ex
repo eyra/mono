@@ -4,10 +4,12 @@ defmodule Systems.Assignment.Context do
   """
 
   import Ecto.Query, warn: false
+  require Logger
 
   alias Ecto.Multi
   alias Core.Repo
   alias CoreWeb.UI.Timestamp
+  alias Core.Authorization
 
   alias Systems.{
     Assignment,
@@ -53,6 +55,23 @@ defmodule Systems.Assignment.Context do
     |> Ecto.Changeset.put_assoc(assignable_field, tool)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Repo.insert()
+  end
+
+  def owner(%Assignment.Model{} = assignment) do
+    owner =
+      assignment
+      |> Authorization.get_parent_nodes()
+      |> List.last()
+      |> Authorization.users_with_role(:owner)
+      |> List.first()
+
+    case owner do
+      nil ->
+        Logger.error("No owner role found for assignment #{assignment.id}")
+        {:error}
+      owner ->
+        {:ok, owner}
+    end
   end
 
   defp assignable_field(%Core.Survey.Tool{}), do: :assignable_survey_tool

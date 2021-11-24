@@ -252,12 +252,12 @@ msgid "form.description"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:242
+#: systems/assignment/model.ex:257
 msgid "duration.highlight.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:241
+#: systems/assignment/model.ex:256
 msgid "duration.highlight.title"
 msgstr ""
 
@@ -267,43 +267,43 @@ msgid "ethical.review.link"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:88 systems/assignment/model.ex:97
-#: systems/assignment/model.ex:109
+#: systems/assignment/model.ex:91 systems/assignment/model.ex:102
+#: systems/assignment/model.ex:115
 msgid "task.hero.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:218
+#: systems/assignment/model.ex:227
 msgid "task.completed.subtitle"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:221
+#: systems/assignment/model.ex:232
 msgid "task.completed.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:217
+#: systems/assignment/model.ex:226
 msgid "task.pending.subtitle"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:255
+#: systems/assignment/model.ex:270
 msgid "status.closed.highlight.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:249
+#: systems/assignment/model.ex:264
 msgid "status.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:253
+#: systems/assignment/model.ex:268
 msgid "status.open.highlight.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:262
+#: systems/assignment/model.ex:277
 msgid "language.highlight.title"
 msgstr ""
 
@@ -315,4 +315,24 @@ msgstr ""
 #, elixir-format
 #: systems/campaign/overview_page.ex:78
 msgid "add.new.button.short"
+msgstr ""
+
+#, elixir-format
+#: systems/assignment/model.ex:228
+msgid "task.accepted.subtitle"
+msgstr ""
+
+#, elixir-format
+#: systems/assignment/model.ex:233
+msgid "task.accepted.text"
+msgstr ""
+
+#, elixir-format
+#: systems/assignment/model.ex:229
+msgid "task.rejected.subtitle"
+msgstr ""
+
+#, elixir-format
+#: systems/assignment/model.ex:235
+msgid "task.rejected.text"
 msgstr ""

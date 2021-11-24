@@ -12,31 +12,36 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:112
+#: systems/assignment/landing_page.ex:134
 msgid "cancel.button"
 msgstr "Release spot"
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:58
+#: systems/assignment/landing_page.ex:57
 msgid "cancel.confirm.label"
 msgstr "Confirm"
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:57
+#: systems/assignment/landing_page.ex:56
 msgid "cancel.confirm.text"
 msgstr "We will release your spot to enable others to participate."
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:56
+#: systems/assignment/landing_page.ex:55
 msgid "cancel.confirm.title"
 msgstr "Release spot?"
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:163
+#: systems/assignment/landing_page.ex:186
 msgid "cancel.text"
 msgstr "If, for any reason, you decide that you don't want to proceed with your participation. Please release your spot, to give others the opportunity to participate."
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:160
+#: systems/assignment/landing_page.ex:183
 msgid "cancel.title"
 msgstr "Having second thoughts about participating?"
+
+#, elixir-format, fuzzy
+#: systems/assignment/landing_page.ex:116
+msgid "contact.button"
+msgstr "Contact researcher"
