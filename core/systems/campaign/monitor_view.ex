@@ -9,7 +9,7 @@ defmodule Systems.Campaign.MonitorView do
     Campaign
   }
 
-  alias Frameworks.Pixel.Text.{Title2, Title3, BodyMedium, BodyLarge, Label}
+  alias Frameworks.Pixel.Text.{Title2, Title3, BodyLarge, Label}
 
   prop(props, :map, required: true)
   data(vm, :any)
@@ -152,21 +152,7 @@ defmodule Systems.Campaign.MonitorView do
               <Spacing value="M" />
               <div class="flex flex-col gap-6">
                 <div :for={{ task <- @vm.pending_started_tasks }}>
-                  <div class="flex flex-row gap-5 items-center">
-                    <div class="flex-wrap">
-                      <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
-                    </div>
-                    <div class="flex-wrap">
-                      <BodyMedium color={{"text-warning"}}>⚠️ {{ task.message }}</BodyMedium>
-                    </div>
-                    <div class="flex-grow"></div>
-                    <div class="flex-wrap">
-                      <DynamicButton vm={{task.accept_button}} />
-                    </div>
-                    <div class="flex-wrap">
-                      <DynamicButton vm={{task.reject_button}} />
-                    </div>
-                  </div>
+                  <Crew.TaskItemView :props={{task}} />
                 </div>
               </div>
               <Spacing value="XL" />
@@ -189,18 +175,7 @@ defmodule Systems.Campaign.MonitorView do
             <div :if={{ Enum.count(@vm.completed_tasks) > 0}}>
               <div class="flex flex-col gap-6">
                 <div :for={{ task <- @vm.completed_tasks }}>
-                  <div class="flex flex-row gap-5 items-center">
-                    <div class="flex-wrap">
-                      <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
-                    </div>
-                    <div class="flex-grow"></div>
-                    <div class="flex-wrap">
-                      <DynamicButton vm={{task.accept_button}} />
-                    </div>
-                    <div class="flex-wrap">
-                      <DynamicButton vm={{task.reject_button}} />
-                    </div>
-                  </div>
+                  <Crew.TaskItemView :props={{task}} />
                 </div>
               </div>
               <Spacing value="XL" />
@@ -215,18 +190,7 @@ defmodule Systems.Campaign.MonitorView do
             <div :if={{ Enum.count(@vm.rejected_tasks) > 0}}>
               <div class="flex flex-col gap-6">
                 <div :for={{ task <- @vm.rejected_tasks }}>
-                  <div class="flex flex-row gap-5 items-center">
-                    <div class="flex-wrap">
-                      <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
-                    </div>
-                    <div class="flex-wrap">
-                      <BodyMedium color={{"text-warning"}}>⚠️ {{ task.message }}</BodyMedium>
-                    </div>
-                    <div class="flex-grow"></div>
-                    <div class="flex-wrap">
-                      <DynamicButton vm={{task.accept_button}} />
-                    </div>
-                  </div>
+                  <Crew.TaskItemView :props={{task}} />
                 </div>
               </div>
               <Spacing value="XL" />
@@ -240,14 +204,7 @@ defmodule Systems.Campaign.MonitorView do
             </Title3>
             <div class="flex flex-col gap-6">
               <div :for={{ task <- @vm.accepted_tasks }}>
-                <div class="flex flex-row gap-5 items-center">
-                  <div class="flex-wrap">
-                    <BodyLarge>Subject {{ task.member_public_id }}</BodyLarge>
-                  </div>
-                  <div class="flex-wrap">
-                    <BodyMedium color={{"text-grey2"}}>{{ task.message }}</BodyMedium>
-                  </div>
-                </div>
+                <Crew.TaskItemView :props={{task}} />
               </div>
             </div>
 
@@ -367,14 +324,16 @@ defmodule Systems.Campaign.MonitorView do
   }) do
     %{public_id: public_id} = Crew.Context.get_member!(member_id)
 
-    date_string = started_at |> Timestamp.humanize()
+    date_string = started_at
+    |> Timestamp.apply_timezone()
+    |> Timestamp.humanize()
+    message_text = dgettext("link-monitor", "started.at.message", date: date_string)
 
     %{
       id: id,
-      member_public_id: public_id,
-      message: dgettext("link-monitor", "started.at.message", date: date_string),
-      accept_button: accept_button(id, target),
-      reject_button: reject_button(id, target)
+      public_id: public_id,
+      message: %{type: :warning, text: message_text},
+      buttons: [accept_button(id, target), reject_button(id, target)]
     }
   end
 
@@ -386,24 +345,30 @@ defmodule Systems.Campaign.MonitorView do
 
     %{
       id: id,
-      member_public_id: public_id,
-      accept_button: accept_button(id, target),
-      reject_button: reject_button(id, target)
+      public_id: public_id,
+      buttons: [accept_button(id, target), reject_button(id, target)]
     }
   end
 
   defp to_view_model(:rejected, target, %Crew.TaskModel{
     id: id,
+    rejected_category: rejected_category,
     rejected_message: rejected_message,
     member_id: member_id
   }) do
     %{public_id: public_id} = Crew.Context.get_member!(member_id)
 
+    message_type =
+      case rejected_category do
+        :other -> :rejected
+        category -> category
+      end
+
     %{
       id: id,
-      member_public_id: public_id,
-      message: rejected_message,
-      accept_button: accept_button(id, target)
+      public_id: public_id,
+      message: %{type: message_type, text: rejected_message},
+      buttons: [accept_button(id, target)]
     }
   end
 
@@ -416,13 +381,14 @@ defmodule Systems.Campaign.MonitorView do
 
     date_string =
       accepted_at
+      |> Timestamp.apply_timezone()
       |> Timestamp.humanize()
       |> String.capitalize()
 
     %{
       id: id,
-      message: date_string,
-      member_public_id: public_id
+      message: %{text: date_string},
+      public_id: public_id
     }
   end
 

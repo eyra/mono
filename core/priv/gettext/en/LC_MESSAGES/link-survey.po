@@ -27,7 +27,7 @@ msgid "duration.label"
 msgstr "How many minutes do you estimate participants will need?"
 
 #, elixir-format
-#: systems/campaign/model.ex:212
+#: systems/campaign/model.ex:201
 msgid "by.author.label"
 msgstr "By"
 
@@ -87,7 +87,7 @@ msgid "vacant.label"
 msgstr "Open"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:505
+#: systems/campaign/content_page.ex:509
 msgid "content.title"
 msgstr "Campaign"
 
@@ -97,22 +97,22 @@ msgid "title"
 msgstr "Recruitment"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:96
+#: systems/campaign/overview_page.ex:101
 msgid "add.first.button"
 msgstr "Start your first campaign"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:77
+#: systems/campaign/overview_page.ex:81
 msgid "add.new.button"
 msgstr "Start new campaign"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:92
+#: systems/campaign/overview_page.ex:97
 msgid "empty.description"
 msgstr "Here you can set-up and follow the status of your campaigns. A campaign is an organized course of action to achieve a goal, in this case to recruit participants. It consists of publishing a promotion in the marketplace, linking your study details, determining your sample and reviewing the results."
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:91
+#: systems/campaign/overview_page.ex:96
 msgid "empty.title"
 msgstr "Recruit participants for your study"
 
@@ -132,12 +132,12 @@ msgid "tabbar.item.survey"
 msgstr "Study"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:248
+#: systems/campaign/monitor_view.ex:215
 msgid "monitor.empty.description"
 msgstr "Here you'll find an overview of anonymised participants, who applied to participate in your study, once your recruitment campaign has been published. You can view their status and accept or reject their results, after they have finished their task."
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:247
+#: systems/campaign/monitor_view.ex:214
 msgid "monitor.empty.title"
 msgstr "Recruitment results"
 
@@ -312,3 +312,8 @@ msgstr "Language"
 #: systems/campaign/monitor_view.ex:119
 msgid "started.label"
 msgstr "Started"
+
+#, elixir-format, fuzzy
+#: systems/campaign/overview_page.ex:78
+msgid "add.new.button.short"
+msgstr "New"

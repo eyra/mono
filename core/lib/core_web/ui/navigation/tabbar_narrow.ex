@@ -7,7 +7,7 @@ defmodule CoreWeb.UI.Navigation.TabbarNarrow do
   def render(assigns) do
     ~H"""
     <Context get={{tabs: tabs}}>
-      <div id="tabbar_dropdown" class="absolute left-0 top-navbar-height w-full h-full">
+      <div id="tabbar_dropdown" class="absolute z-50 left-0 top-navbar-height w-full h-full">
         <TabbarDropdown />
       </div>
       <div id="tabbar_narrow" phx-hook="Toggle" target="tabbar_dropdown" class="flex flex-row cursor-pointer items-center h-full w-full">

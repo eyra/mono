@@ -155,7 +155,7 @@ defmodule Systems.Crew.RejectView.Example do
 
   def render(assigns) do
     ~H"""
-    <RejectView id={{ :reject_view_example }} target={{ %{type: __MODULE__, id: @id} }} />
+    <RejectView id={{ :reject_view_example }} target={{ %{type: __MODULE__, id: self()} }} />
     """
   end
 

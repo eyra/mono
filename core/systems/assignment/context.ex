@@ -118,7 +118,7 @@ defmodule Systems.Assignment.Context do
   defp open_spot_count?(%{crew: crew} = assignment, :one_task) do
     assignable = Assignment.Model.assignable(assignment)
     target = Assignment.Assignable.spot_count(assignable)
-    all_non_expired_tasks = Crew.Context.count_tasks(crew, [:pending, :completed])
+    all_non_expired_tasks = Crew.Context.count_tasks(crew, Crew.TaskStatus.values())
 
     max(0, target - all_non_expired_tasks)
   end

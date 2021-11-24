@@ -21,7 +21,7 @@ msgid "empty.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:139
+#: systems/campaign/model.ex:128
 msgid "reward.label"
 msgstr ""
 
@@ -31,26 +31,26 @@ msgid "assignment.status.complete.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:133
+#: systems/campaign/model.ex:213
 msgid "assignment.status.completed.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:129
+#: systems/campaign/model.ex:208
 msgid "assignment.status.expired.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:132
+#: systems/campaign/model.ex:212
 msgid "assignment.status.pending.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:134
+#: systems/campaign/model.ex:214
 msgid "assignment.status.accepted.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:135
+#: systems/campaign/model.ex:215
 msgid "assignment.status.rejected.label"
 msgstr ""

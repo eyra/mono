@@ -26,7 +26,7 @@ msgid "duration.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:212
+#: systems/campaign/model.ex:201
 msgid "by.author.label"
 msgstr ""
 
@@ -86,7 +86,7 @@ msgid "vacant.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:505
+#: systems/campaign/content_page.ex:509
 msgid "content.title"
 msgstr ""
 
@@ -96,22 +96,22 @@ msgid "title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:96
+#: systems/campaign/overview_page.ex:101
 msgid "add.first.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:77
+#: systems/campaign/overview_page.ex:81
 msgid "add.new.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:92
+#: systems/campaign/overview_page.ex:97
 msgid "empty.description"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:91
+#: systems/campaign/overview_page.ex:96
 msgid "empty.title"
 msgstr ""
 
@@ -131,12 +131,12 @@ msgid "tabbar.item.survey"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:248
+#: systems/campaign/monitor_view.ex:215
 msgid "monitor.empty.description"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:247
+#: systems/campaign/monitor_view.ex:214
 msgid "monitor.empty.title"
 msgstr ""
 
@@ -310,4 +310,9 @@ msgstr ""
 #, elixir-format
 #: systems/campaign/monitor_view.ex:119
 msgid "started.label"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/overview_page.ex:78
+msgid "add.new.button.short"
 msgstr ""

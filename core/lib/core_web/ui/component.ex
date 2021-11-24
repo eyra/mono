@@ -12,7 +12,7 @@ defmodule CoreWeb.UI.Component do
       alias CoreWeb.UI.Container.{ContentArea, FormArea, SheetArea}
       alias Frameworks.Pixel.Case.{Case, True, False}
       alias Frameworks.Pixel.Button.DynamicButton
-      alias Frameworks.Pixel.Spacing
+      alias Frameworks.Pixel.{Spacing, Wrap}
     end
   end
 end
