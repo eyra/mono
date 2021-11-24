@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:249
+#: systems/campaign/model.ex:259
 msgid "quick_summary.%{open_spot_count}.%{target_subject_count}"
 msgstr ""
 

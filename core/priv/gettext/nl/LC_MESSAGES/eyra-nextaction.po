@@ -74,14 +74,14 @@ msgstr "Nieuwe campagnes"
 #, elixir-format
 #: systems/assignment/check_rejection.ex:11
 msgid "assignment.check.rejection.cta"
-msgstr "Ga naar opdracht"
+msgstr "Ga naar bijdrage"
 
 #, elixir-format
 #: systems/assignment/check_rejection.ex:10
 msgid "assignment.check.rejection.description"
-msgstr "Op de opdracht pagina vind je een notitie waarom je bijdrage is afgekeurd"
+msgstr "Bezoek de pagina van deze bijdrage voor meer details"
 
 #, elixir-format
 #: systems/assignment/check_rejection.ex:9
 msgid "assignment.check.rejection.title"
-msgstr "Jou bijdrag is helaas afgekeurd"
+msgstr "Een van je bijdragen is afgekeurd"

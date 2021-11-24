@@ -41,7 +41,7 @@ msgstr "If, for any reason, you decide that you don't want to proceed with your 
 msgid "cancel.title"
 msgstr "Having second thoughts about participating?"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: systems/assignment/landing_page.ex:116
 msgid "contact.button"
 msgstr "Contact researcher"

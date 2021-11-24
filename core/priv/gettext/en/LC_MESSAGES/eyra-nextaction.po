@@ -74,14 +74,14 @@ msgstr "New campaigns"
 #, elixir-format
 #: systems/assignment/check_rejection.ex:11
 msgid "assignment.check.rejection.cta"
-msgstr "Go to assignment"
+msgstr "Go to contribution"
 
 #, elixir-format
 #: systems/assignment/check_rejection.ex:10
 msgid "assignment.check.rejection.description"
-msgstr "On the assignment page you can find a note on the reason of the rejection."
+msgstr "Visit the contribution page for further details"
 
 #, elixir-format
 #: systems/assignment/check_rejection.ex:9
 msgid "assignment.check.rejection.title"
-msgstr "Your contribution has been rejected"
+msgstr "One of your contributions is rejected"

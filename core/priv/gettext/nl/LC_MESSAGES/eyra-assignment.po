@@ -41,7 +41,7 @@ msgstr "Als je, om welke reden dan ook, besluit om niet deel te nemen. Geef ande
 msgid "cancel.title"
 msgstr "Toch niet deelnemen?"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: systems/assignment/landing_page.ex:116
 msgid "contact.button"
-msgstr "Contact met onderzoeker "
+msgstr "E-mail onderzoeker"

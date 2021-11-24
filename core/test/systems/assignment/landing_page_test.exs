@@ -157,8 +157,8 @@ defmodule Systems.Assignment.LandingPageTest do
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
 
       assert html =~ "This is a test title"
-      assert html =~ "You have completed this survey"
-      assert html =~ "Your contribution will be reviewed by the author of this study."
+      assert html =~ "You have contributed to this study"
+      assert html =~ "Your contribution will be reviewed by the author "
       assert html =~ "Reward"
       assert html =~ "Duration"
       assert html =~ "Language"

@@ -166,8 +166,11 @@ defmodule Systems.Crew.Context do
     update_task(task, %{started_at: Timestamp.naive_now()})
   end
 
-  def complete_task(%Crew.TaskModel{} = task) do
-    update_task(task, %{status: :completed, completed_at: Timestamp.naive_now()})
+  def complete_task(%Crew.TaskModel{status: status} = task) do
+    case status do
+      :pending -> update_task(task, %{status: :completed, completed_at: Timestamp.naive_now()})
+      _ -> {:ok, %{task: task}}
+    end
   end
 
   def complete_task!(%Crew.TaskModel{} = task) do

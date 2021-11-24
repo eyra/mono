@@ -9,6 +9,7 @@ defmodule Systems.Assignment.LandingPage do
   alias Frameworks.Pixel.Text.{Title1, Title3, BodyLarge}
   alias Frameworks.Pixel.Card.Highlight
   alias Frameworks.Pixel.Panel.Panel
+  alias Frameworks.Pixel.Wrap
 
   alias CoreWeb.UI.Navigation.ButtonBar
   alias Core.Accounts
@@ -185,7 +186,9 @@ defmodule Systems.Assignment.LandingPage do
           <Spacing value="M" />
           <BodyLarge>{{dgettext("eyra-assignment", "cancel.text")}}</BodyLarge>
           <Spacing value="M" />
-          <DynamicButton vm={{ cancel_button() }} />
+          <Wrap>
+            <DynamicButton vm={{ cancel_button() }} />
+          </Wrap>
         </Panel>
 
       </ContentArea>

@@ -14,12 +14,12 @@ msgstr ""
 #, elixir-format
 #: systems/assignment/callback_page.ex:73
 msgid "task.completed.message.part1"
-msgstr "Your contribution is automatically approved, but will be reviewed by the author of the study. If you do not receive a rejection within two weeks, the assigned reward will be final."
+msgstr "Your contribution will be reviewed by the author of this study and either accepted or rejected."
 
 #, elixir-format
 #: systems/assignment/callback_page.ex:75
 msgid "task.completed.message.part2"
-msgstr "Visit the marketplace to view your contributions and other available studies."
+msgstr "Visit the marketplace to view the status of your contribution."
 
 #, elixir-format
 #: systems/assignment/callback_page.ex:71

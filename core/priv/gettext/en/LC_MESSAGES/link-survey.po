@@ -276,12 +276,12 @@ msgstr "Study"
 #, elixir-format
 #: systems/assignment/model.ex:227
 msgid "task.completed.subtitle"
-msgstr "You have completed this survey"
+msgstr "You have contributed to this study"
 
 #, elixir-format
 #: systems/assignment/model.ex:232
 msgid "task.completed.text"
-msgstr "Your contribution will be reviewed by the author of this study. If you did not receive a rejection within two weeks after the completion of this survey, the assigned reward is final."
+msgstr "Your contribution will be reviewed by the author of this study and either accepted or rejected."
 
 #, elixir-format
 #: systems/assignment/model.ex:226
@@ -321,19 +321,19 @@ msgstr "New"
 #, elixir-format
 #: systems/assignment/model.ex:228
 msgid "task.accepted.subtitle"
-msgstr "Congratulations"
+msgstr "Your contribution has been approved"
 
 #, elixir-format
 #: systems/assignment/model.ex:233
 msgid "task.accepted.text"
-msgstr "Your contribution is accepted by the researcher. Your have earned the credits for this study."
+msgstr "The author of this study reviewed and approved your contribution. Your reward has been awarded. Thank you for participating, your contribution is highly appreciated."
 
 #, elixir-format
 #: systems/assignment/model.ex:229
 msgid "task.rejected.subtitle"
-msgstr "Unfortunately your contribution was rejected"
+msgstr "Unfortunately, your contribution is rejected"
 
 #, elixir-format
 #: systems/assignment/model.ex:235
 msgid "task.rejected.text"
-msgstr "Reason for rejection provided by researcher: \"%{reason}\""
+msgstr "The author of this study reviewed your contribution and wrote the following message: \"%{reason}\""

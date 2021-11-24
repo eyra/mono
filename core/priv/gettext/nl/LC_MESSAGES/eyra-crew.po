@@ -14,12 +14,12 @@ msgstr ""
 #, elixir-format
 #: systems/assignment/callback_page.ex:73
 msgid "task.completed.message.part1"
-msgstr "Jouw bijdrage wordt automatisch goedgekeurd, maar zal door de auteur van de studie beoordeeld worden. Als je binnen twee weken geen afwijzing ontvangt, wordt de beloning definitief toegekend."
+msgstr "Jouw bijdrage wordt door de auteur van deze studie beoordeeld. Afhankelijk van de beoordeling wordt jouw bijdrage goedgekeurd of afgekeurd."
 
 #, elixir-format
 #: systems/assignment/callback_page.ex:75
 msgid "task.completed.message.part2"
-msgstr "Bezoek de marktplaats om jouw bijdragen en andere beschikbare studies te bekijken."
+msgstr "Bezoek de marktplaats om de status van jouw bijdragen te bekijken."
 
 #, elixir-format
 #: systems/assignment/callback_page.ex:71

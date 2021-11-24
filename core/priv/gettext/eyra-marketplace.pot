@@ -21,7 +21,7 @@ msgid "empty.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:128
+#: systems/campaign/model.ex:226
 msgid "reward.label"
 msgstr ""
 
@@ -54,3 +54,25 @@ msgstr ""
 #: systems/campaign/model.ex:215
 msgid "assignment.status.rejected.label"
 msgstr ""
+
+#, elixir-format
+#: systems/campaign/model.ex:223
+msgid "assignment.status.completed.subtitle"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/model.ex:222
+msgid "assignment.status.pending.subtitle"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/model.ex:225
+msgid "assignment.status.rejected.subtitle"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/model.ex:224
+msgid "Awarded 1 credit"
+msgid_plural "Awarded %{count} credits"
+msgstr[0] ""
+msgstr[1] ""

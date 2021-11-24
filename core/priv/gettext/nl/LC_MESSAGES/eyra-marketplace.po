@@ -22,7 +22,7 @@ msgid "empty.title"
 msgstr "Op zoek naar een studie?"
 
 #, elixir-format
-#: systems/campaign/model.ex:128
+#: systems/campaign/model.ex:226
 msgid "reward.label"
 msgstr "Beloning: %{value} credits"
 
@@ -55,3 +55,25 @@ msgstr "Goedgekeurd"
 #: systems/campaign/model.ex:215
 msgid "assignment.status.rejected.label"
 msgstr "Afgekeurd"
+
+#, elixir-format
+#: systems/campaign/model.ex:223
+msgid "assignment.status.completed.subtitle"
+msgstr "Wacht op goedkeuring van de onderzoeker"
+
+#, elixir-format
+#: systems/campaign/model.ex:222
+msgid "assignment.status.pending.subtitle"
+msgstr "In afwachting van jouw bijdrage"
+
+#, elixir-format
+#: systems/campaign/model.ex:225
+msgid "assignment.status.rejected.subtitle"
+msgstr "Geen credits toegekend"
+
+#, elixir-format
+#: systems/campaign/model.ex:224
+msgid "Awarded 1 credit"
+msgid_plural "Awarded %{count} credits"
+msgstr[0] "1 credit verdiend"
+msgstr[1] "%{count} credits verdiend"

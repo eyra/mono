@@ -22,7 +22,7 @@ msgid "empty.title"
 msgstr "Looking for a study?"
 
 #, elixir-format
-#: systems/campaign/model.ex:128
+#: systems/campaign/model.ex:226
 msgid "reward.label"
 msgstr "Reward: %{value} credits"
 
@@ -55,3 +55,25 @@ msgstr "Accepted"
 #: systems/campaign/model.ex:215
 msgid "assignment.status.rejected.label"
 msgstr "Rejected"
+
+#, elixir-format
+#: systems/campaign/model.ex:223
+msgid "assignment.status.completed.subtitle"
+msgstr "Awaiting approval by the researcher"
+
+#, elixir-format
+#: systems/campaign/model.ex:222
+msgid "assignment.status.pending.subtitle"
+msgstr "Awaiting your contribution"
+
+#, elixir-format
+#: systems/campaign/model.ex:225
+msgid "assignment.status.rejected.subtitle"
+msgstr "No credits awarded"
+
+#, elixir-format
+#: systems/campaign/model.ex:224
+msgid "Awarded 1 credit"
+msgid_plural "Awarded %{count} credits"
+msgstr[0] ""
+msgstr[1] ""
