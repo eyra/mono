@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/pool/overview_page.ex:40 systems/pool/views/students_view.ex:93
+#: systems/pool/overview_page.ex:40 systems/pool/views/students_view.ex:102
 msgid "tabbar.item.students"
 msgstr ""
 
@@ -26,12 +26,12 @@ msgid "title"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/students_view.ex:89
+#: systems/pool/views/students_view.ex:97
 msgid "students.empty.description"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/students_view.ex:88
+#: systems/pool/views/students_view.ex:96
 msgid "students.empty.title"
 msgstr ""
 
@@ -46,12 +46,12 @@ msgid "campaigns.empty.title"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/students_view.ex:71
+#: systems/pool/views/students_view.ex:79
 msgid "student.tag.complete"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/students_view.ex:75
+#: systems/pool/views/students_view.ex:83
 msgid "student.tag.incomplete"
 msgstr ""
 

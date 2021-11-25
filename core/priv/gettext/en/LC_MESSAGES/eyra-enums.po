@@ -245,3 +245,28 @@ msgstr "Survey not completed"
 #: systems/crew/reject_categories.ex:5
 msgid "reject_catagories.other"
 msgstr "Other"
+
+#, elixir-format
+#: lib/core/pools/criteria_filters.ex:5
+msgid "criteria_filters.bk"
+msgstr "BK"
+
+#, elixir-format
+#: lib/core/pools/criteria_filters.ex:5
+msgid "criteria_filters.iba"
+msgstr "IBA"
+
+#, elixir-format
+#: lib/core/pools/criteria_filters.ex:5
+msgid "criteria_filters.resit"
+msgstr "Resit"
+
+#, elixir-format
+#: lib/core/pools/criteria_filters.ex:5
+msgid "criteria_filters.year1"
+msgstr "1th year"
+
+#, elixir-format
+#: lib/core/pools/criteria_filters.ex:5
+msgid "criteria_filters.year2"
+msgstr "2nd year"

@@ -162,7 +162,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/core_web/live/admin/ticket.ex:4 systems/assignment/landing_page.ex:6
-#: systems/campaign/content_page.ex:9 systems/crew/reject_view.ex:109 systems/pool/submission_page.ex:8
+#: systems/campaign/content_page.ex:9 systems/crew/reject_view.ex:111 systems/pool/submission_page.ex:8
 #: systems/promotion/landing_page.ex:6
 msgid "cancel.button"
 msgstr ""
