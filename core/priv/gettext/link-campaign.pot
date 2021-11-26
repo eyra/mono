@@ -11,12 +11,12 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/crew/reject_view.ex:105
+#: systems/crew/reject_view.ex:107
 msgid "reject.button"
 msgstr ""
 
 #, elixir-format
-#: systems/crew/reject_view.ex:136
+#: systems/crew/reject_view.ex:138
 msgid "reject.message.label"
 msgstr ""
 

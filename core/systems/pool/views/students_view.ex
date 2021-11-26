@@ -3,23 +3,57 @@ defmodule Systems.Pool.StudentsView do
 
   alias Core.Accounts
   alias Core.Enums.StudyProgramCodes
+  alias Core.Pools.CriteriaFilters
 
   alias Frameworks.Pixel.Text.Title2
+  alias Frameworks.Pixel.Selector.Selector
   alias CoreWeb.UI.ContentListItem
 
   prop(user, :any, required: true)
   data(students, :map)
+  data(filtered_students, :map)
+  data(filter_labels, :list)
 
-  def update(_params, socket) do
-    students =
-      Accounts.list_students([:profile, :features])
-      |> Enum.map(&to_view_model(&1, socket))
+  # Handle Selector Update
+  def update(%{active_item_ids: active_filters, selector_id: :filters}, socket) do
+    {
+      :ok,
+      socket
+      |> assign(active_filters: active_filters)
+      |> prepare_students()
+    }
+  end
+
+  def update(%{id: id} = _params, socket) do
+    students = Accounts.list_students([:profile, :features])
+    filter_labels = CriteriaFilters.labels([])
 
     {
       :ok,
       socket
-      |> assign(students: students)
+      |> assign(
+        id: id,
+        active_filters: [],
+        students: students,
+        filter_labels: filter_labels
+      )
+      |> prepare_students()
     }
+  end
+
+  defp filter(students, nil), do: students
+  defp filter(students, []), do: students
+  defp filter(students, filters) do
+    students|> Enum.filter(&CriteriaFilters.include?(&1.features.study_program_codes, filters))
+  end
+
+  defp prepare_students(%{assigns: %{students: students, active_filters: active_filters}} = socket) do
+    socket
+      |> assign(filtered_students:
+        students
+        |> filter(active_filters)
+        |> Enum.map(&to_view_model(&1, socket))
+      )
   end
 
   defp to_view_model(
@@ -90,8 +124,13 @@ defmodule Systems.Pool.StudentsView do
           illustration="members"
         />
         <div :if={{ not Enum.empty?(@students) }}>
-          <Title2>{{ dgettext("link-studentpool", "tabbar.item.students") }}: <span class="text-primary">{{ Enum.count(@students) }}</span></Title2>
-          <ContentListItem :for={{item <- @students}} vm={{item}} />
+          <div class="flex flex-row gap-3 items-center">
+            <div class="font-label text-label">Filter:</div>
+            <Selector id={{:filters}} items={{ @filter_labels }} parent={{ %{type: __MODULE__, id: @id} }} />
+          </div>
+          <Spacing value="L" />
+          <Title2>{{ dgettext("link-studentpool", "tabbar.item.students") }}: <span class="text-primary">{{ Enum.count(@filtered_students) }}</span></Title2>
+          <ContentListItem :for={{item <- @filtered_students}} vm={{item}} />
         </div>
       </ContentArea>
     """

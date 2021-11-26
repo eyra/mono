@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/pool/overview_page.ex:40 systems/pool/views/students_view.ex:93
+#: systems/pool/overview_page.ex:40 systems/pool/views/students_view.ex:102
 msgid "tabbar.item.students"
 msgstr "Studenten"
 
@@ -27,12 +27,12 @@ msgid "title"
 msgstr "Studentenpool"
 
 #, elixir-format
-#: systems/pool/views/students_view.ex:89
+#: systems/pool/views/students_view.ex:97
 msgid "students.empty.description"
 msgstr "Op dit moment zijn er nog geen studenten geregistreerd. Je wordt op de hoogte gesteld zodra er studenten zijn die zich  hebben aangemeld."
 
 #, elixir-format
-#: systems/pool/views/students_view.ex:88
+#: systems/pool/views/students_view.ex:96
 msgid "students.empty.title"
 msgstr "Hier vind je straks alle geregistreerde studenten."
 
@@ -47,12 +47,12 @@ msgid "campaigns.empty.title"
 msgstr "Campagnes in jouw pool"
 
 #, elixir-format
-#: systems/pool/views/students_view.ex:71
+#: systems/pool/views/students_view.ex:79
 msgid "student.tag.complete"
 msgstr "Gereed"
 
 #, elixir-format
-#: systems/pool/views/students_view.ex:75
+#: systems/pool/views/students_view.ex:83
 msgid "student.tag.incomplete"
 msgstr "Onvolledig"
 

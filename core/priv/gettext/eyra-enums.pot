@@ -244,3 +244,28 @@ msgstr ""
 #: systems/crew/reject_categories.ex:5
 msgid "reject_catagories.other"
 msgstr ""
+
+#, elixir-format
+#: lib/core/pools/criteria_filters.ex:5
+msgid "criteria_filters.bk"
+msgstr ""
+
+#, elixir-format
+#: lib/core/pools/criteria_filters.ex:5
+msgid "criteria_filters.iba"
+msgstr ""
+
+#, elixir-format
+#: lib/core/pools/criteria_filters.ex:5
+msgid "criteria_filters.resit"
+msgstr ""
+
+#, elixir-format
+#: lib/core/pools/criteria_filters.ex:5
+msgid "criteria_filters.year1"
+msgstr ""
+
+#, elixir-format
+#: lib/core/pools/criteria_filters.ex:5
+msgid "criteria_filters.year2"
+msgstr ""
