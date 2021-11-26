@@ -5,8 +5,14 @@ defmodule Core.Pools.CriteriaFilters do
   use Core.Enums.Base,
       {:criteria_filters, [:iba, :bk, :year1, :year2, :resit]}
 
+  def include?(codes, nil) when is_list(codes), do: true
+  def include?(codes, []) when is_list(codes), do: true
+
   def include?(codes, filters) when is_list(codes) and is_list(filters) do
-    Enum.count(Enum.filter(filters, &include?(codes, &1))) > 0
+    filter_count = Enum.count(filters)
+    match_count = Enum.count(Enum.filter(filters, &include?(codes, &1)))
+    # each filter should have at least one match (AND)
+    filter_count == match_count
   end
 
   def include?(codes, filter) when is_list(codes) do
