@@ -9,13 +9,14 @@ defmodule Systems.Assignment.Model do
     Assignment,
     Promotion,
     Survey,
-    Lab
+    Lab,
+    DataDonation
   }
 
   schema "assignments" do
     belongs_to(:assignable_survey_tool, Survey.ToolModel)
     belongs_to(:assignable_lab_tool, Lab.ToolModel)
-    belongs_to(:assignable_data_donation_tool, Core.DataDonation.Tool)
+    belongs_to(:assignable_data_donation_tool, DataDonation.ToolModel)
     belongs_to(:crew, Systems.Crew.Model)
     belongs_to(:auth_node, Core.Authorization.Node)
 

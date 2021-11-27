@@ -1,16 +1,19 @@
-defmodule CoreWeb.DataDonation.Form do
+defmodule Systems.DataDonation.ToolForm do
   use CoreWeb.LiveForm
 
   alias Core.Accounts
-  alias Core.DataDonation.{Tools, Tool}
 
   alias CoreWeb.Router.Helpers, as: Routes
+  alias CoreWeb.UI.Timestamp
 
   alias Frameworks.Pixel.Text.{Title2, Title3}
   alias Frameworks.Pixel.Form.{Form, TextArea, NumberInput}
   alias Frameworks.Pixel.Button.{SecondaryLiveViewButton, PrimaryButton}
   alias Frameworks.Pixel.Panel.Panel
-  alias CoreWeb.UI.Timestamp
+
+  alias Systems.{
+    DataDonation
+  }
 
   prop(entity_id, :any, required: true)
 
@@ -25,9 +28,9 @@ defmodule CoreWeb.DataDonation.Form do
   end
 
   def update(%{id: id, entity_id: entity_id}, socket) do
-    entity = Tools.get!(entity_id)
-    donations = Tools.list_donations(entity)
-    changeset = Tool.changeset(entity, :mount, %{})
+    entity = DataDonation.Context.get!(entity_id)
+    donations = DataDonation.Context.list_donations(entity)
+    changeset = DataDonation.ToolModel.changeset(entity, :mount, %{})
 
     {
       :ok,
@@ -57,16 +60,16 @@ defmodule CoreWeb.DataDonation.Form do
         _params,
         %{assigns: %{entity_id: entity_id, current_user: user}} = socket
       ) do
-    Tools.get!(entity_id)
-    |> Tools.delete()
+    DataDonation.Context.get!(entity_id)
+    |> DataDonation.Context.delete()
 
     {:noreply,
      push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))}
   end
 
   # Saving
-  def save(socket, %Core.DataDonation.Tool{} = entity, type, attrs) do
-    changeset = Tool.changeset(entity, type, attrs)
+  def save(socket, %DataDonation.ToolModel{} = entity, type, attrs) do
+    changeset = DataDonation.ToolModel.changeset(entity, type, attrs)
 
     socket
     |> save(changeset)
@@ -88,7 +91,7 @@ defmodule CoreWeb.DataDonation.Form do
                   {{dgettext("eyra-data-donation", "received.label")}} {{Timestamp.humanize(donation.inserted_at)}}
                 </div>
                 <div class="flex-wrap">
-          <a href={{Routes.data_donation_path(@socket, :download_single, @entity_id, donation.id)}} class="text-primary text-bodymedium font-body hover:text-grey1 underline focus:outline-none" >
+          <a href={{Routes.download_path(@socket, :download_single, @entity_id, donation.id)}} class="text-primary text-bodymedium font-body hover:text-grey1 underline focus:outline-none" >
                   {{dgettext("eyra-data-donation", "download.button.label")}}
                   </a>
                 </div>
@@ -96,7 +99,7 @@ defmodule CoreWeb.DataDonation.Form do
             </div>
           </Panel>
           <Spacing value="S" />
-          <PrimaryButton to={{Routes.data_donation_path(@socket, :download_all, @entity_id )}} label={{dgettext("eyra-data-donation", "download.all.button.label")}} />
+          <PrimaryButton to={{Routes.download_path(@socket, :download_all, @entity_id )}} label={{dgettext("eyra-data-donation", "download.all.button.label")}} />
           <Spacing value="XL" />
         </div>
         <Form id={{@id}} changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>

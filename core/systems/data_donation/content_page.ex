@@ -1,4 +1,4 @@
-defmodule CoreWeb.DataDonation.Content do
+defmodule Systems.DataDonation.ContentPage do
   @moduledoc """
   The cms page for data donation tool
   """
@@ -11,12 +11,13 @@ defmodule CoreWeb.DataDonation.Content do
   import CoreWeb.Gettext
 
   alias Frameworks.Pixel.Hero.HeroSmall
-  alias Core.DataDonation.Tools
-  alias Systems.Promotion
 
   alias CoreWeb.ImageCatalogPicker
-  alias CoreWeb.DataDonation.Form, as: ToolForm
-  alias Systems.Promotion.FormView, as: PromotionForm
+
+  alias Systems.{
+    DataDonation,
+    Promotion
+  }
 
   data(tool_id, :any)
   data(promotion_id, :any)
@@ -25,11 +26,11 @@ defmodule CoreWeb.DataDonation.Content do
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
-    Tools.get!(id)
+    DataDonation.Context.get!(id)
   end
 
   def mount(%{"id" => id}, _session, socket) do
-    tool = Tools.get!(id)
+    tool = DataDonation.Context.get!(id)
 
     {
       :ok,
@@ -61,23 +62,23 @@ defmodule CoreWeb.DataDonation.Content do
 
   @impl true
   def handle_event("reset_focus", _, socket) do
-    send_update(ToolForm, id: :tool_form, focus: "")
-    send_update(PromotionForm, id: :promotion_form, focus: "")
+    send_update(DataDonation.ToolForm, id: :tool_form, focus: "")
+    send_update(Promotion.FormView, id: :promotion_form, focus: "")
     {:noreply, socket}
   end
 
   def handle_info({:claim_focus, :tool_form}, socket) do
-    send_update(PromotionForm, id: :promotion_form, focus: "")
+    send_update(Promotion.FormView, id: :promotion_form, focus: "")
     {:noreply, socket}
   end
 
   def handle_info({:claim_focus, :promotion_form}, socket) do
-    send_update(ToolForm, id: :tool_form, focus: "")
+    send_update(DataDonation.ToolForm, id: :tool_form, focus: "")
     {:noreply, socket}
   end
 
   def handle_info({:image_picker, image_id}, socket) do
-    send_update(PromotionForm, id: :promotion_form, image_id: image_id)
+    send_update(Promotion.FormView, id: :promotion_form, image_id: image_id)
     {:noreply, socket}
   end
 
@@ -93,8 +94,8 @@ defmodule CoreWeb.DataDonation.Content do
             </div>
           </div>
           <HeroSmall title={{ dgettext("eyra-data-donation", "content.title") }} />
-          <ToolForm id={{:tool_form}} entity_id={{@tool_id}} />
-          <PromotionForm id={{:promotion_form}} props={{ %{entity_id: @promotion_id, themes_module: Themes} }} />
+          <DataDonation.ToolForm id={{:tool_form}} entity_id={{@tool_id}} />
+          <Promotion.FormView id={{:promotion_form}} props={{ %{entity_id: @promotion_id, themes_module: Themes} }} />
         </div>
       </div>
     """

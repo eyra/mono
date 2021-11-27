@@ -2,9 +2,7 @@ defmodule CoreWeb.Live.Routes do
   defmacro routes() do
     quote do
       use CoreWeb.Live.Subroutes, [
-        :study,
         :helpdesk,
-        :data_donation,
         :user,
         :admin
       ]

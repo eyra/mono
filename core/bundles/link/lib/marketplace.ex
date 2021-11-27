@@ -7,15 +7,15 @@ defmodule Link.Marketplace do
 
   alias Systems.{
     NextAction,
-    Campaign
+    Campaign,
+    Survey,
+    Lab
   }
 
   alias Frameworks.Utility.ViewModelBuilder
 
   alias Core.Accounts
   alias Core.Pools.{Submission, Criteria}
-  alias Core.Survey.Tool, as: SurveyTool
-  alias Lab.ToolModel, as: LabTool
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.UI.ContentListItem
@@ -55,7 +55,7 @@ defmodule Link.Marketplace do
       |> Enum.into(MapSet.new())
 
     available_campaigns =
-      Campaign.Context.list_accepted_campaigns([LabTool, SurveyTool],
+      Campaign.Context.list_accepted_campaigns([Lab.ToolModel, Survey.ToolModel],
         exclude: exclusion_list,
         preload: preload
       )

@@ -21,6 +21,11 @@ defmodule Core.Authorization do
 
   Core.BundleOverrides.grants()
 
+  grant_access(Systems.Campaign.Model, [:visitor, :member])
+  grant_access(Systems.Survey.ToolModel, [:owner, :coordinator, :participant])
+  grant_access(Systems.Lab.ToolModel, [:owner, :coordinator, :participant])
+  grant_access(Systems.DataDonation.ToolModel, [:owner, :coordinator, :participant])
+
   grant_access(Systems.Home.LandingPage, [:visitor, :member])
   grant_access(Systems.Notification.OverviewPage, [:member])
   grant_access(Systems.NextAction.OverviewPage, [:member])
@@ -33,6 +38,8 @@ defmodule Core.Authorization do
   grant_access(Systems.Pool.OverviewPage, [:researcher])
   grant_access(Systems.Pool.SubmissionPage, [:researcher])
   grant_access(Systems.Test.Page, [:visitor, :member])
+  grant_access(Systems.DataDonation.Content, [:owner, :coordinator])
+  grant_access(Systems.DataDonation.Uploader, [:member])
 
   grant_access(CoreWeb.Admin.Login, [:visitor, :member])
   grant_access(CoreWeb.Admin.Permissions, [:admin])
@@ -50,41 +57,12 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.User.Settings, [:member])
   grant_access(CoreWeb.User.SecuritySettings, [:member])
   grant_access(CoreWeb.FakeSurvey, [:member])
-  grant_access(CoreWeb.DataDonation.Content, [:owner, :coordinator])
-  grant_access(CoreWeb.DataDonation.Uploader, [:member])
-
-  grant_access(Systems.Campaign.Model, [:visitor, :member])
-  grant_access(Core.Survey.Tool, [:owner, :coordinator, :participant])
-  grant_access(Core.DataDonation.Tool, [:owner, :coordinator, :participant])
-  grant_access(Core.DataDonation.Task, [:participant])
-
-  grant_access(CoreWeb.Study.New, [:researcher])
 
   grant_actions(CoreWeb.FakeSurveyController, %{
     index: [:visitor, :member]
   })
 
   grant_actions(CoreWeb.LanguageSwitchController, %{
-    index: [:visitor, :member]
-  })
-
-  grant_actions(CoreWeb.Studies.PermissionsController, %{
-    show: [:owner],
-    change: [:owner],
-    create: [:owner]
-  })
-
-  grant_actions(CoreWeb.ParticipantController, %{
-    index: [:owner],
-    show: [:owner, :participant],
-    new: [:member],
-    create: [:member],
-    edit: [:owner],
-    update: [:owner],
-    delete: [:owner]
-  })
-
-  grant_actions(CoreWeb.PageController, %{
     index: [:visitor, :member]
   })
 

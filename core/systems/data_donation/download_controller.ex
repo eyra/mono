@@ -1,9 +1,12 @@
-defmodule CoreWeb.DataDonationController do
+defmodule Systems.DataDonation.DownloadController do
   use CoreWeb, :controller
-  alias Core.DataDonation.{Tools}
+
+  alias Systems.{
+    DataDonation
+  }
 
   def download(conn, %{"id" => tool_id}) do
-    tool = Tools.get!(tool_id)
+    tool = DataDonation.Context.get!(tool_id)
 
     conn
     |> assign(:script, tool.script)
@@ -11,14 +14,14 @@ defmodule CoreWeb.DataDonationController do
   end
 
   def download_single(conn, %{"id" => tool_id, "donation_id" => donation_id}) do
-    tool = Tools.get!(tool_id)
-    data = Tools.list_donations(tool) |> Enum.filter(&(Integer.to_string(&1.id) == donation_id))
+    tool = DataDonation.Context.get!(tool_id)
+    data = DataDonation.Context.list_donations(tool) |> Enum.filter(&(Integer.to_string(&1.id) == donation_id))
     send_zip(conn, data)
   end
 
   def download_all(conn, %{"id" => tool_id}) do
-    tool = Tools.get!(tool_id)
-    data = Tools.list_donations(tool)
+    tool = DataDonation.Context.get!(tool_id)
+    data = DataDonation.Context.list_donations(tool)
     send_zip(conn, data)
   end
 

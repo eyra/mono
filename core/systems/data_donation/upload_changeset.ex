@@ -1,4 +1,4 @@
-defmodule CoreWeb.DataDonation.UploadChangeset do
+defmodule Systems.DataDonation.UploadChangeset do
   use Ecto.Schema
   import Ecto.Changeset
 

@@ -9,7 +9,8 @@ defmodule Systems.Routes do
         :notification,
         :promotion,
         :pool,
-        :lab
+        :lab,
+        :data_donation
       ]
     end
   end

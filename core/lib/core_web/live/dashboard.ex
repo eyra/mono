@@ -84,7 +84,7 @@ defmodule CoreWeb.Dashboard do
     image = %{type: :catalog, info: image_info}
 
     %{
-      path: Routes.live_path(socket, CoreWeb.DataDonation.Content, edit_id),
+      path: Routes.live_path(socket, Systems.DataDonation.ContentPage, edit_id),
       title: title,
       subtitle: subtitle,
       tag: %{text: "Concept", type: :success},

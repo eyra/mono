@@ -8,7 +8,6 @@ defmodule Core.Factories do
     Content,
     Pools,
     Authorization,
-    DataDonation,
     WebPush,
     Helpdesk
   }
@@ -24,7 +23,8 @@ defmodule Core.Factories do
     Assignment,
     Crew,
     Survey,
-    Lab
+    Lab,
+    DataDonation
   }
 
   alias Core.Repo
@@ -138,7 +138,7 @@ defmodule Core.Factories do
   end
 
   # def build(:client_script) do
-  #   %DataDonation.Tool{
+  #   %DataDonation.ToolModel{
   #     title: Faker.Lorem.sentence(),
   #     script: "print 'hello'"
   #   }
@@ -350,7 +350,7 @@ defmodule Core.Factories do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
     {content_node, attributes} = Map.pop(attributes, :content_node, build(:content_node))
 
-    %DataDonation.Tool{
+    %DataDonation.ToolModel{
       auth_node: auth_node,
       content_node: content_node
     }

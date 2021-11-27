@@ -1,12 +1,15 @@
-defmodule CoreWeb.DataDonation.Uploader do
+defmodule Systems.DataDonation.UploadPage do
   use CoreWeb, :live_view
 
   alias Core.Accounts
-  alias Core.DataDonation.{Tools, Tool, Upload}
 
   alias Frameworks.Pixel.Hero.HeroSmall
   alias Frameworks.Pixel.Text.{Title3, Title4, BodyLarge, BodyMedium}
   alias Frameworks.Pixel.Panel.Panel
+
+  alias Systems.{
+    DataDonation
+  }
 
   data(result, :any)
   data(tool, :any)
@@ -19,13 +22,13 @@ defmodule CoreWeb.DataDonation.Uploader do
   data(extracted, :any, default: "")
 
   def mount(%{"id" => tool_id}, _session, socket) do
-    tool = Tools.get!(tool_id)
+    tool = DataDonation.Context.get!(tool_id)
 
     {:ok,
      socket
      |> assign(:result, nil)
      |> assign(:tool, tool)
-     |> assign(:changeset, Upload.changeset(%{}))}
+     |> assign(:changeset, DataDonation.UploadModel.changeset(%{}))}
   end
 
   @impl true
@@ -37,7 +40,7 @@ defmodule CoreWeb.DataDonation.Uploader do
         %{"data" => data},
         %{assigns: %{tool: tool, current_user: user}} = socket
       ) do
-    Tool.store_results(tool, user, data)
+    DataDonation.ToolModel.store_results(tool, user, data)
 
     {:noreply,
      push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))}

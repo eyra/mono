@@ -1,4 +1,4 @@
-defmodule Core.DataDonation.Tool do
+defmodule Systems.DataDonation.ToolModel do
   @moduledoc """
   The data donation tool schema.
   """
@@ -10,15 +10,15 @@ defmodule Core.DataDonation.Tool do
   import Ecto.Changeset
   import EctoCommons.URLValidator
 
-  alias Core.DataDonation.UserData
+  alias Systems.{
+    DataDonation
+  }
 
   schema "data_donation_tools" do
     belongs_to(:content_node, Core.Content.Node)
     belongs_to(:auth_node, Core.Authorization.Node)
 
     field(:script, :string)
-    field(:reward_currency, Ecto.Enum, values: [:eur, :usd, :gbp, :chf, :nok, :sek])
-    field(:reward_value, :integer)
     field(:subject_count, :integer)
 
     field(:director, Ecto.Enum, values: [:assignment])
@@ -67,13 +67,13 @@ defmodule Core.DataDonation.Tool do
   end
 
   def store_results(%__MODULE__{} = tool, user, data) when is_binary(data) do
-    %UserData{}
-    |> UserData.changeset(%{tool: tool, user: user, data: data})
+    %DataDonation.UserData{}
+    |> DataDonation.UserData.changeset(%{tool: tool, user: user, data: data})
     |> Repo.insert!()
   end
 end
 
-defimpl Systems.Assignment.Assignable, for: Core.DataDonation.Tool do
+defimpl Systems.Assignment.Assignable, for: Systems.DataDonation.ToolModel do
   import CoreWeb.Gettext
 
   def languages(_), do: []

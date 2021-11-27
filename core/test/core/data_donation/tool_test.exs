@@ -1,7 +1,10 @@
-defmodule Core.DataDonation.ToolTest do
+defmodule Systems.DataDonation.ToolTest do
   use Core.DataCase, async: true
   alias Core.Factories
-  alias Core.DataDonation.Tool
+
+  alias Systems.{
+    DataDonation
+  }
 
   describe "store_results/2" do
     setup do
@@ -9,7 +12,7 @@ defmodule Core.DataDonation.ToolTest do
     end
 
     test "create a new record with the given data", %{tool: tool, user: user} do
-      data = Tool.store_results(tool, user, "some data")
+      data = DataDonation.ToolModel.store_results(tool, user, "some data")
       assert data.tool_id == tool.id
       assert data.user_id == user.id
       assert data.data == "some data"

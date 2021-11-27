@@ -17,7 +17,6 @@ defmodule Systems.Campaign.Context do
   }
 
   alias Core.Accounts.User
-  alias Core.DataDonation
   alias Core.Pools.Submission
   alias Frameworks.Signal
 
@@ -135,28 +134,6 @@ defmodule Systems.Campaign.Context do
       where: c.promotable_assignment_id in subquery(assigment_ids),
       preload: ^preload,
       order_by: [desc: c.updated_at]
-    )
-    |> Repo.all()
-  end
-
-  @doc """
-  Returns the list of studies where the user is a data donation subject.
-  """
-  def list_data_donation_subject_campaigns(user, opts \\ []) do
-    preload = Keyword.get(opts, :preload, [])
-
-    tool_ids =
-      from(task in DataDonation.Task,
-        where: task.user_id == ^user.id,
-        select: task.tool_id
-      )
-
-    campaign_ids =
-      from(st in DataDonation.Tool, where: st.id in subquery(tool_ids), select: st.campaign_id)
-
-    from(s in Campaign.Model,
-      where: s.id in subquery(campaign_ids),
-      preload: ^preload
     )
     |> Repo.all()
   end

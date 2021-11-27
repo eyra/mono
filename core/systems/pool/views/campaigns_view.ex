@@ -6,7 +6,8 @@ defmodule Systems.Pool.CampaignsView do
   alias Systems.{
     NextAction,
     Campaign,
-    Assignment
+    Assignment,
+    Survey
   }
 
   alias Core.Accounts
@@ -28,11 +29,11 @@ defmodule Systems.Pool.CampaignsView do
     preload = Campaign.Model.preload_graph(:full)
 
     submitted_campaigns =
-      Campaign.Context.list_submitted_campaigns([Core.Survey.Tool], preload: preload)
+      Campaign.Context.list_submitted_campaigns([Survey.ToolModel], preload: preload)
       |> Enum.map(&convert_to_vm(socket, &1))
 
     accepted_campaigns =
-      Campaign.Context.list_accepted_campaigns([Core.Survey.Tool], preload: preload)
+      Campaign.Context.list_accepted_campaigns([Survey.ToolModel], preload: preload)
       |> Enum.map(&convert_to_vm(socket, &1))
 
     {
