@@ -55,7 +55,6 @@ defmodule Core.Authorization do
 
   grant_access(Systems.Campaign.Model, [:visitor, :member])
   grant_access(Core.Survey.Tool, [:owner, :coordinator, :participant])
-  grant_access(Core.Survey.Task, [:participant])
   grant_access(Core.DataDonation.Tool, [:owner, :coordinator, :participant])
   grant_access(Core.DataDonation.Task, [:participant])
 

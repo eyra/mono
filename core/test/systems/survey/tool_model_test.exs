@@ -1,6 +1,9 @@
-defmodule Core.Survey.ToolTest do
+defmodule Systems.Survey.ToolModelTest do
   use Core.DataCase, async: true
-  alias Core.Survey.Tool
+
+  alias Systems.{
+    Survey
+  }
 
   describe "validate_url" do
     for url <-
@@ -11,7 +14,9 @@ defmodule Core.Survey.ToolTest do
             "https://example.org/test?a=some-NoN-v4r1a8l3"
           ] do
       test "allow #{url}" do
-        changeset = Tool.changeset(%Tool{}, :auto_save, %{survey_url: unquote(url)})
+        changeset =
+          Survey.ToolModel.changeset(%Survey.ToolModel{}, :auto_save, %{survey_url: unquote(url)})
+
         assert changeset.valid?, changeset.errors
       end
     end
@@ -23,7 +28,9 @@ defmodule Core.Survey.ToolTest do
           "http://example.org/survey?d=<unclosed&other=<var>"
         ] do
       test "disallow URL: #{url}" do
-        changeset = Tool.changeset(%Tool{}, :auto_save, %{survey_url: unquote(url)})
+        changeset =
+          Survey.ToolModel.changeset(%Survey.ToolModel{}, :auto_save, %{survey_url: unquote(url)})
+
         refute changeset.valid?
       end
     end
@@ -31,14 +38,17 @@ defmodule Core.Survey.ToolTest do
 
   describe "prepare_survey_url" do
     test "URL without params stays the same" do
-      assert Tool.prepare_url("http://example.org/test?a=b", %{}) ==
+      assert Survey.ToolModel.prepare_url("http://example.org/test?a=b", %{}) ==
                "http://example.org/test?a=b"
     end
 
     test "URL with param has replacement" do
-      assert Tool.prepare_url("http://example.org/test?participant=<participantId>", %{
-               "participantId" => 123
-             }) ==
+      assert Survey.ToolModel.prepare_url(
+               "http://example.org/test?participant=<participantId>",
+               %{
+                 "participantId" => 123
+               }
+             ) ==
                "http://example.org/test?participant=123"
     end
   end

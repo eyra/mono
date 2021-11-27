@@ -7,7 +7,6 @@ defmodule Core.Factories do
   alias Core.{
     Content,
     Pools,
-    Survey,
     Authorization,
     DataDonation,
     WebPush,
@@ -24,6 +23,7 @@ defmodule Core.Factories do
     Promotion,
     Assignment,
     Crew,
+    Survey,
     Lab
   }
 
@@ -361,7 +361,7 @@ defmodule Core.Factories do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
     {content_node, attributes} = Map.pop(attributes, :content_node, build(:content_node))
 
-    %Survey.Tool{
+    %Survey.ToolModel{
       auth_node: auth_node,
       content_node: content_node
     }

@@ -14,7 +14,6 @@ defmodule Link do
         live("/dashboard", Dashboard)
         live("/onboarding", Onboarding.Wizard)
         live("/marketplace", Marketplace)
-        live("/labstudy/all", LabStudy.Overview)
       end
     end
   end
@@ -26,7 +25,6 @@ defmodule Link do
       grant_access(Link.Dashboard, [:researcher])
       grant_access(Link.Onboarding.Wizard, [:member])
       grant_access(Link.Marketplace, [:member])
-      grant_access(Link.LabStudy.Overview, [:researcher])
       grant_access(Systems.Promotion.LandingPage, [:visitor, :member, :owner])
     end
   end

@@ -15,13 +15,6 @@ defmodule Systems.Lab.Context do
     |> Repo.get!(id)
   end
 
-  def get_by_promotion(promotion_id) do
-    from(t in Tool,
-      where: t.promotion_id == ^promotion_id
-    )
-    |> Repo.one()
-  end
-
   def reserve_time_slot(time_slot_id, %User{} = user) when is_integer(time_slot_id) do
     Lab.TimeSlotModel
     |> Repo.get(time_slot_id)

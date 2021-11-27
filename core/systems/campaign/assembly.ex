@@ -3,15 +3,16 @@ defmodule Systems.Campaign.Assembly do
   alias Systems.{
     Campaign,
     Assignment,
+    Survey,
     Crew
   }
+
   alias Frameworks.Utility.EctoHelper
   alias Core.Content
   alias Systems.Promotion
   alias Core.Submissions
   alias Core.Pools
   alias Core.Pools.Submissions
-  alias Core.Survey.Tools
   alias Core.Accounts
   alias Core.Authorization
   alias Core.Repo
@@ -60,7 +61,7 @@ defmodule Systems.Campaign.Assembly do
     promotion_content_node = Content.Nodes.create!(%{ready: false}, tool_content_node)
     submission_content_node = Content.Nodes.create!(%{ready: true}, promotion_content_node)
 
-    with {:ok, tool} <- Tools.create_survey_tool(tool_attrs, tool_auth_node, tool_content_node),
+    with {:ok, tool} <- Survey.Context.create_survey_tool(tool_attrs, tool_auth_node, tool_content_node),
          {:ok, crew} <- Crew.Context.create(crew_auth_node),
          {:ok, assignment} <- Assignment.Context.create(assignment_attrs(), crew, tool, assignment_auth_node),
          {:ok, promotion} <- Promotion.Context.create(promotion_attrs, promotion_auth_node, promotion_content_node),

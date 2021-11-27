@@ -1,4 +1,4 @@
-defmodule Core.Survey.Tools do
+defmodule Systems.Survey.Context do
   @moduledoc """
 
   Survey tools allow a researcher to setup a link to an external survey
@@ -32,16 +32,21 @@ defmodule Core.Survey.Tools do
   import Ecto.Query, warn: false
   alias Ecto.Multi
   alias Core.Repo
-
-  alias Core.Survey.Tool
-  alias Frameworks.Signal
   alias Core.Content.Nodes
+
+  alias Frameworks.{
+    Signal
+  }
+
+  alias Systems.{
+    Survey
+  }
 
   @doc """
   Returns the list of survey_tools.
   """
   def list_survey_tools do
-    Repo.all(Tool)
+    Repo.all(Survey.ToolModel)
   end
 
   @doc """
@@ -49,15 +54,15 @@ defmodule Core.Survey.Tools do
 
   Raises `Ecto.NoResultsError` if the Survey tool does not exist.
   """
-  def get_survey_tool!(id), do: Repo.get!(Tool, id)
-  def get_survey_tool(id), do: Repo.get(Tool, id)
+  def get_survey_tool!(id), do: Repo.get!(Survey.ToolModel, id)
+  def get_survey_tool(id), do: Repo.get(Survey.ToolModel, id)
 
   @doc """
   Creates a survey_tool.
   """
   def create_survey_tool(attrs, auth_node, content_node) do
-    %Tool{}
-    |> Tool.changeset(:mount, attrs)
+    %Survey.ToolModel{}
+    |> Survey.ToolModel.changeset(:mount, attrs)
     |> Ecto.Changeset.put_assoc(:content_node, content_node)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Repo.insert()
@@ -66,9 +71,9 @@ defmodule Core.Survey.Tools do
   @doc """
   Updates a survey_tool.
   """
-  def update_survey_tool(%Tool{} = survey_tool, type, attrs) do
+  def update_survey_tool(%Survey.ToolModel{} = survey_tool, type, attrs) do
     survey_tool
-    |> Tool.changeset(type, attrs)
+    |> Survey.ToolModel.changeset(type, attrs)
     |> update_survey_tool()
   end
 
@@ -76,7 +81,7 @@ defmodule Core.Survey.Tools do
 
   def update_survey_tool(%{data: tool, changes: attrs} = changeset) do
     node = Nodes.get!(tool.content_node_id)
-    node_changeset = Tool.node_changeset(node, tool, attrs)
+    node_changeset = Survey.ToolModel.node_changeset(node, tool, attrs)
 
     # campaign_changeset =
     #   Campaign.Model.changeset(campaign, %{updated_at: NaiveDateTime.utc_now()})
@@ -94,7 +99,7 @@ defmodule Core.Survey.Tools do
   @doc """
   Deletes a survey_tool.
   """
-  def delete_survey_tool(%Tool{} = survey_tool) do
+  def delete_survey_tool(%Survey.ToolModel{} = survey_tool) do
     content_node = Core.Content.Nodes.get!(survey_tool.content_node_id)
 
     Multi.new()
@@ -106,17 +111,17 @@ defmodule Core.Survey.Tools do
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking survey_tool changes.
   """
-  def change_survey_tool(%Tool{} = survey_tool, type, attrs \\ %{}) do
-    Tool.changeset(survey_tool, type, attrs)
+  def change_survey_tool(%Survey.ToolModel{} = survey_tool, type, attrs \\ %{}) do
+    Survey.ToolModel.changeset(survey_tool, type, attrs)
   end
 
-  def ready?(%Tool{} = survey_tool) do
+  def ready?(%Survey.ToolModel{} = survey_tool) do
     Nodes.get!(survey_tool.content_node_id).ready
   end
 end
 
-defimpl Core.Persister, for: Core.Survey.Tool do
+defimpl Core.Persister, for: Systems.Survey.ToolModel do
   def save(_tool, changeset) do
-    Core.Survey.Tools.update_survey_tool(changeset)
+    Systems.Survey.Context.update_survey_tool(changeset)
   end
 end

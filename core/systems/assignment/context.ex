@@ -14,6 +14,7 @@ defmodule Systems.Assignment.Context do
   alias Systems.{
     Assignment,
     Crew,
+    Survey,
     Lab
   }
 
@@ -31,7 +32,7 @@ defmodule Systems.Assignment.Context do
   end
 
   def get_by_assignable(assignable, preload \\ [])
-  def get_by_assignable(%Core.Survey.Tool{id: id}, preload) do
+  def get_by_assignable(%Survey.ToolModel{id: id}, preload) do
     from(a in Assignment.Model, where: a.assignable_survey_tool_id == ^id, preload: ^preload)
     |> Repo.one()
   end
@@ -75,7 +76,7 @@ defmodule Systems.Assignment.Context do
     end
   end
 
-  defp assignable_field(%Core.Survey.Tool{}), do: :assignable_survey_tool
+  defp assignable_field(%Survey.ToolModel{}), do: :assignable_survey_tool
   defp assignable_field(%Lab.ToolModel{}), do: :assignable_lab_tool
   defp assignable_field(%Core.DataDonation.Tool{}), do: :assignable_data_donation_tool
 

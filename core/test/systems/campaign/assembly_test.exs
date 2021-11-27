@@ -3,7 +3,11 @@ defmodule Systems.Campaign.AssemblyTest do
 
   import Mox
   alias Core.Repo
-  alias Systems.Campaign
+
+  alias Systems.{
+    Campaign,
+    Survey
+  }
 
   setup_all do
     Mox.defmock(Systems.Campaign.AssemblyTest.UnsplashMockClient,
@@ -40,7 +44,7 @@ defmodule Systems.Campaign.AssemblyTest do
                promotable_assignment: %Systems.Assignment.Model{
                  assignable_data_donation_tool_id: nil,
                  assignable_lab_tool_id: nil,
-                 assignable_survey_tool: %Core.Survey.Tool{
+                 assignable_survey_tool: %Survey.ToolModel{
                    auth_node: %Core.Authorization.Node{
                      parent_id: survey_tool_auth_node_parent_id
                    },
@@ -174,7 +178,7 @@ defmodule Systems.Campaign.AssemblyTest do
       assert Repo.get(Core.Authorization.Node, campaign.promotable_assignment.crew.auth_node_id) ==
                nil
 
-      assert Repo.get(Core.Survey.Tool, campaign.promotable_assignment.assignable_survey_tool_id) ==
+      assert Repo.get(Survey.ToolModel, campaign.promotable_assignment.assignable_survey_tool_id) ==
                nil
 
       assert Repo.get(

@@ -1,4 +1,4 @@
-defmodule Core.Survey.Tool do
+defmodule Systems.Survey.ToolModel do
   @moduledoc """
   The survey tool schema.
   """
@@ -128,7 +128,7 @@ defmodule Core.Survey.Tool do
   end
 end
 
-defimpl Systems.Assignment.Assignable, for: Core.Survey.Tool do
+defimpl Systems.Assignment.Assignable, for: Systems.Survey.ToolModel do
   import CoreWeb.Gettext
 
   def languages(%{language: nil}), do: []

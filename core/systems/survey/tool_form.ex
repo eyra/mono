@@ -1,9 +1,10 @@
-defmodule Link.Survey.Form do
+defmodule Systems.Survey.ToolForm do
   use CoreWeb.LiveForm
 
   alias Core.Enums.Devices
   alias Link.Enums.OnlineStudyLanguages
-  alias Core.Survey.{Tools, Tool}
+
+  alias CoreWeb.UI.StepIndicator
 
   alias Frameworks.Pixel.Selector.Selector
   alias Frameworks.Pixel.Panel.Panel
@@ -11,9 +12,8 @@ defmodule Link.Survey.Form do
   alias Frameworks.Pixel.Form.{Form, TextInput, UrlInput, NumberInput, Checkbox}
   alias Frameworks.Pixel.Button.Face.LabelIcon
 
-  alias CoreWeb.UI.StepIndicator
-
   alias Systems.{
+    Survey,
     Assignment
   }
 
@@ -93,10 +93,10 @@ defmodule Link.Survey.Form do
         %{id: id, props: %{entity_id: entity_id, uri_origin: uri_origin, validate?: validate?}},
         socket
       ) do
-    entity = Tools.get_survey_tool!(entity_id)
+    entity = Survey.Context.get_survey_tool!(entity_id)
     assignment = Assignment.Context.get_by_assignable(entity)
 
-    changeset = Tool.changeset(entity, :create, %{})
+    changeset = Survey.ToolModel.changeset(entity, :create, %{})
 
     device_labels = Devices.labels(entity.devices)
     language_labels = OnlineStudyLanguages.labels(entity.language)
@@ -159,7 +159,7 @@ defmodule Link.Survey.Form do
   # Saving
 
   def save(socket, entity, type, attrs) do
-    changeset = Tool.changeset(entity, type, attrs)
+    changeset = Survey.ToolModel.changeset(entity, type, attrs)
 
     socket
     |> save(changeset)
@@ -170,7 +170,7 @@ defmodule Link.Survey.Form do
 
   def validate_for_publish(%{assigns: %{id: id, entity: entity, validate?: true}} = socket) do
     changeset =
-      Tool.operational_changeset(entity, %{})
+      Survey.ToolModel.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
 
     send(self(), %{id: id, ready?: changeset.valid?})

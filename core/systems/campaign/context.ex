@@ -9,14 +9,14 @@ defmodule Systems.Campaign.Context do
   alias Core.Authorization
 
   alias Systems.{
-    Assignment,
     Campaign,
-    Crew,
-    Promotion
+    Promotion,
+    Assignment,
+    Survey,
+    Crew
   }
 
   alias Core.Accounts.User
-  alias Core.Survey.Tool
   alias Core.DataDonation
   alias Core.Pools.Submission
   alias Frameworks.Signal
@@ -277,7 +277,7 @@ defmodule Systems.Campaign.Context do
   end
 
   def list_survey_tools(%Campaign.Model{} = campaign) do
-    from(s in Tool, where: s.campaign_id == ^campaign.id)
+    from(s in Survey.ToolModel, where: s.campaign_id == ^campaign.id)
     |> Repo.all()
   end
 

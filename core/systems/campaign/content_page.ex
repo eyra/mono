@@ -13,8 +13,6 @@ defmodule Systems.Campaign.ContentPage do
   require Link.Enums.Themes
   alias Link.Enums.Themes
 
-  alias Core.Survey.Tools
-  alias Systems.Promotion
   alias Core.Pools.Submissions
   alias Core.Content.Nodes
 
@@ -24,12 +22,13 @@ defmodule Systems.Campaign.ContentPage do
 
   alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent, TabbarFooter}
   alias Systems.Campaign.MonitorView
-  alias Link.Survey.Form, as: ToolForm
   alias Systems.Pool.CampaignSubmissionView, as: SubmissionForm
   import Core.ImageCatalog, only: [image_catalog: 0]
 
   alias Systems.{
-    Campaign
+    Campaign,
+    Promotion,
+    Survey
   }
 
   data(campaign_id, :any)
@@ -69,9 +68,9 @@ defmodule Systems.Campaign.ContentPage do
     submitted? = status != :idle
     validate? = submitted?
 
-    tool_form_ready? = Tools.ready?(tool)
+    tool_form_ready? = Survey.Context.ready?(tool)
     promotion_form_ready? = Promotion.Context.ready?(promotion)
-    preview_path = Routes.live_path(socket, Systems.Promotion.LandingPage, promotion.id, preview: true)
+    preview_path = Routes.live_path(socket, Promotion.LandingPage, promotion.id, preview: true)
 
     {
       :ok,
@@ -164,7 +163,7 @@ defmodule Systems.Campaign.ContentPage do
         title: dgettext("link-survey", "tabbar.item.survey"),
         forward_title: dgettext("link-survey", "tabbar.item.survey.forward"),
         type: :fullpage,
-        component: ToolForm,
+        component: Survey.ToolForm,
         props: %{
           entity_id: tool_id,
           uri_origin: uri_origin,
@@ -217,7 +216,7 @@ defmodule Systems.Campaign.ContentPage do
 
   @impl true
   def handle_event("reset_focus", _, socket) do
-    send_update(ToolForm, id: :tool_form, focus: "")
+    send_update(Survey.ToolForm, id: :tool_form, focus: "")
     send_update(PromotionForm, id: :promotion_form, focus: "")
     {:noreply, socket}
   end
@@ -310,7 +309,7 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   def handle_info({:claim_focus, :promotion_form}, socket) do
-    send_update(ToolForm, id: :tool_form, focus: "")
+    send_update(Survey.ToolForm, id: :tool_form, focus: "")
     {:noreply, socket}
   end
 
