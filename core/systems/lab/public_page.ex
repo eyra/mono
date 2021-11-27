@@ -1,17 +1,20 @@
-defmodule CoreWeb.Lab.Public do
+defmodule Systems.Lab.PublicPage do
   @moduledoc """
   The public promotion screen.
   """
   use CoreWeb, :live_view
-  alias Core.Lab.Tools
+
+  alias Systems.{
+    Lab
+  }
 
   data(reservation, :any, default: nil)
 
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
-    tool = Tools.get(id, preload: [:time_slots])
+    tool = Lab.Context.get(id, preload: [:time_slots])
 
     {:ok,
-     socket |> assign(:tool, tool) |> assign(:reservation, Tools.reservation_for_user(tool, user))}
+     socket |> assign(:tool, tool) |> assign(:reservation, Lab.Context.reservation_for_user(tool, user))}
   end
 
   @impl true
@@ -27,7 +30,7 @@ defmodule CoreWeb.Lab.Public do
     {:ok, reservation} =
       time_slot_id
       |> String.to_integer()
-      |> Tools.reserve_time_slot(user)
+      |> Lab.Context.reserve_time_slot(user)
 
     {:noreply, socket |> assign(:reservation, reservation)}
   end
@@ -38,7 +41,7 @@ defmodule CoreWeb.Lab.Public do
         _params,
         %{assigns: %{current_user: user, tool: tool}} = socket
       ) do
-    Tools.cancel_reservation(tool, user)
+    Lab.Context.cancel_reservation(tool, user)
     {:noreply, socket |> assign(:reservation, nil)}
   end
 

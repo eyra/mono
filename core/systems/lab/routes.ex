@@ -1,10 +1,10 @@
-defmodule CoreWeb.Live.Lab.Routes do
+defmodule Systems.Lab.Routes do
   defmacro routes() do
     quote do
-      scope "/", CoreWeb do
+      scope "/", Systems.Lab do
         pipe_through([:browser, :require_authenticated_user])
 
-        live("/lab/:id", Lab.Public)
+        live("/lab/:id", PublicPage)
       end
     end
   end

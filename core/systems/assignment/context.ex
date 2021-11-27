@@ -13,7 +13,8 @@ defmodule Systems.Assignment.Context do
 
   alias Systems.{
     Assignment,
-    Crew
+    Crew,
+    Lab
   }
 
   @min_expiration_timeout 30
@@ -40,7 +41,7 @@ defmodule Systems.Assignment.Context do
     |> Repo.one()
   end
 
-  def get_by_assignable(%Core.Lab.Tool{id: id}, preload) do
+  def get_by_assignable(%Lab.ToolModel{id: id}, preload) do
     from(a in Assignment.Model, where: a.assignable_lab_tool_id == ^id, preload: ^preload)
     |> Repo.one()
   end
@@ -75,7 +76,7 @@ defmodule Systems.Assignment.Context do
   end
 
   defp assignable_field(%Core.Survey.Tool{}), do: :assignable_survey_tool
-  defp assignable_field(%Core.Lab.Tool{}), do: :assignable_lab_tool
+  defp assignable_field(%Lab.ToolModel{}), do: :assignable_lab_tool
   defp assignable_field(%Core.DataDonation.Tool{}), do: :assignable_data_donation_tool
 
   def expiration_timestamp(assignment) do

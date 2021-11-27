@@ -15,7 +15,7 @@ defmodule Link.Marketplace do
   alias Core.Accounts
   alias Core.Pools.{Submission, Criteria}
   alias Core.Survey.Tool, as: SurveyTool
-  alias Core.Lab.Tool, as: LabTool
+  alias Lab.ToolModel, as: LabTool
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.UI.ContentListItem

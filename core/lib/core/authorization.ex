@@ -28,6 +28,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Campaign.ContentPage, [:owner])
   grant_access(Systems.Assignment.LandingPage, [:participant])
   grant_access(Systems.Assignment.CallbackPage, [:participant])
+  grant_access(Systems.Lab.PublicPage, [:member])
   grant_access(Systems.Promotion.LandingPage, [:visitor, :member, :owner])
   grant_access(Systems.Pool.OverviewPage, [:researcher])
   grant_access(Systems.Pool.SubmissionPage, [:researcher])
@@ -51,7 +52,6 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.FakeSurvey, [:member])
   grant_access(CoreWeb.DataDonation.Content, [:owner, :coordinator])
   grant_access(CoreWeb.DataDonation.Uploader, [:member])
-  grant_access(CoreWeb.Lab.Public, [:member])
 
   grant_access(Systems.Campaign.Model, [:visitor, :member])
   grant_access(Core.Survey.Tool, [:owner, :coordinator, :participant])

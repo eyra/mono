@@ -1,4 +1,4 @@
-defmodule Core.Lab.Tool do
+defmodule Systems.Lab.ToolModel do
   use Ecto.Schema
   use Core.Content.Node
 
@@ -10,7 +10,7 @@ defmodule Core.Lab.Tool do
     belongs_to(:content_node, Core.Content.Node)
     belongs_to(:auth_node, Core.Authorization.Node)
 
-    has_many(:time_slots, Core.Lab.TimeSlot, preload_order: [asc: :start_time])
+    has_many(:time_slots, Systems.Lab.TimeSlotModel, foreign_key: :tool_id, preload_order: [asc: :start_time])
 
     field(:director, Ecto.Enum, values: [:assignment])
 
@@ -43,7 +43,7 @@ defmodule Core.Lab.Tool do
   end
 end
 
-defimpl Systems.Assignment.Assignable, for: Core.Lab.Tool do
+defimpl Systems.Assignment.Assignable, for: Lab.ToolModel do
   import CoreWeb.Gettext
 
   def languages(_), do: []

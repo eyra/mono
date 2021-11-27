@@ -12,7 +12,7 @@ defmodule Systems.Assignment.Model do
 
   schema "assignments" do
     belongs_to(:assignable_survey_tool, Core.Survey.Tool)
-    belongs_to(:assignable_lab_tool, Core.Lab.Tool)
+    belongs_to(:assignable_lab_tool, Lab.ToolModel)
     belongs_to(:assignable_data_donation_tool, Core.DataDonation.Tool)
     belongs_to(:crew, Systems.Crew.Model)
     belongs_to(:auth_node, Core.Authorization.Node)

@@ -5,7 +5,6 @@ defmodule CoreWeb.Live.Routes do
         :study,
         :helpdesk,
         :data_donation,
-        :lab,
         :user,
         :admin
       ]

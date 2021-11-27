@@ -1,17 +1,19 @@
-defmodule Core.Lab.TimeSlot do
+defmodule Systems.Lab.TimeSlotModel do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Core.Lab.Tool
-  alias Core.Lab.Reservation
+
+  alias Systems.{
+    Lab
+  }
 
   schema "lab_time_slots" do
-    belongs_to(:tool, Tool)
+    belongs_to(:tool, Lab.ToolModel)
 
     field(:location, :string)
     field(:start_time, :utc_datetime)
     field(:number_of_seats, :integer)
 
-    has_many(:reservations, Reservation)
+    has_many(:reservations, Lab.ReservationModel, foreign_key: :time_slot_id)
 
     timestamps()
   end
