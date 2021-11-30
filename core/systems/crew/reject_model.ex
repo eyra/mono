@@ -1,9 +1,10 @@
 defmodule Systems.Crew.RejectModel do
   use Ecto.Schema
   import Ecto.Changeset
+  require Systems.Crew.RejectCategories
 
   embedded_schema do
-    field(:category, :string)
+    field(:category, Ecto.Enum, values: Systems.Crew.RejectCategories.schema_values())
     field(:message, :string)
   end
 
@@ -11,7 +12,7 @@ defmodule Systems.Crew.RejectModel do
 
   def changeset(model, :init, params) do
     model
-    |> cast(params, [:category, :message])
+    |> cast(params, @fields)
   end
 
   def changeset(model, :submit, params) do

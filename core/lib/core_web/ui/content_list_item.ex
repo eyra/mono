@@ -15,7 +15,7 @@ defmodule CoreWeb.UI.ContentListItem do
     tag: [type: nil, text: nil],
     image: [type: nil, info: nil],
     title_css: "font-title7 text-title7 md:font-title5 md:text-title5 text-grey1",
-    subtitle_css: "text-bodysmall md:text-bodymedium font-body text-grey2"
+    subtitle_css: "text-bodysmall md:text-bodymedium font-body text-grey2 whitespace-pre"
   )
 
   prop(vm, :map, required: true)

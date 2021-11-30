@@ -126,7 +126,7 @@ defmodule Systems.Assignment.LandingPage do
   end
 
   defp contact_href(email, title, public_id) do
-    "mailto:#{email}?subject=[##{public_id}] #{title}"
+    "mailto:#{email}?subject=[panl_id=#{public_id}] #{title}"
   end
 
   defp cancel_button() do

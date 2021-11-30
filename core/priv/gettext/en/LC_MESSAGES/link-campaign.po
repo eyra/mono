@@ -12,26 +12,26 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/crew/reject_view.ex:107
+#: systems/crew/reject_view.ex:105
 msgid "reject.button"
 msgstr "Reject contribution"
 
 #, elixir-format
-#: systems/crew/reject_view.ex:138
+#: systems/crew/reject_view.ex:136
 msgid "reject.message.label"
 msgstr "Message to participant"
 
 #, elixir-format
-#: systems/crew/reject_view.ex:45
+#: systems/crew/reject_view.ex:40
 msgid "reject.text"
 msgstr "Please specify why the contribution of this participant is rejected:"
 
 #, elixir-format
-#: systems/crew/reject_view.ex:44
+#: systems/crew/reject_view.ex:39
 msgid "reject.title"
 msgstr "Reject contribution"
 
 #, elixir-format
-#: systems/crew/reject_view.ex:46
+#: systems/crew/reject_view.ex:41
 msgid "reject.note"
 msgstr "Note: Rejected participants cannot participate in your campaign again."

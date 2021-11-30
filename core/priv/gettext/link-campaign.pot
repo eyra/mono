@@ -11,26 +11,26 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/crew/reject_view.ex:107
+#: systems/crew/reject_view.ex:105
 msgid "reject.button"
 msgstr ""
 
 #, elixir-format
-#: systems/crew/reject_view.ex:138
+#: systems/crew/reject_view.ex:136
 msgid "reject.message.label"
 msgstr ""
 
 #, elixir-format
-#: systems/crew/reject_view.ex:45
+#: systems/crew/reject_view.ex:40
 msgid "reject.text"
 msgstr ""
 
 #, elixir-format
-#: systems/crew/reject_view.ex:44
+#: systems/crew/reject_view.ex:39
 msgid "reject.title"
 msgstr ""
 
 #, elixir-format
-#: systems/crew/reject_view.ex:46
+#: systems/crew/reject_view.ex:41
 msgid "reject.note"
 msgstr ""

@@ -1,6 +1,8 @@
 defmodule Systems.Crew.RejectView do
   use Surface.LiveComponent
 
+  require Logger
+
   alias Frameworks.Pixel.Button.DynamicButton
   alias Frameworks.Pixel.Selector.Selector
   alias Frameworks.Pixel.Form.{Form, TextInput}
@@ -24,14 +26,7 @@ defmodule Systems.Crew.RejectView do
   data changeset, :map
   data focus, :string, default: ""
 
-  def update(%{active_item_id: active_item_id, selector_id: :category}, socket) do
-    category =
-      case active_item_id do
-        nil -> nil
-        item when is_atom(item) -> Atom.to_string(item)
-        _ -> active_item_id
-      end
-
+  def update(%{active_item_id: category, selector_id: :category}, socket) do
     {
       :ok,
       socket
@@ -81,6 +76,9 @@ defmodule Systems.Crew.RejectView do
         {:noreply, socket}
 
       {:error, %Ecto.Changeset{} = changeset} ->
+        Enum.each(changeset.errors, fn {key, {error, _}} ->
+          Logger.error("Reject failed: #{key} -> #{error}")
+        end)
         {:noreply, socket |> assign(focus: "", changeset: changeset)}
     end
   end
