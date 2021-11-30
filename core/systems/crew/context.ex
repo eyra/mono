@@ -34,6 +34,11 @@ defmodule Systems.Crew.Context do
     |> Repo.insert()
   end
 
+  def active?(crew) do
+    from(t in Crew.TaskModel, where: t.crew_id == ^crew.id, select: count(t.id))
+    |> Repo.one() > 0
+  end
+
   # Tasks
   def get_task(_crew, nil), do: nil
 
