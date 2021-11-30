@@ -99,4 +99,4 @@ msgstr "Scheduled"
 #, elixir-format
 #: systems/pool/views/campaigns_view.ex:134
 msgid "sample.size"
-msgstr "%{size} participants"
+msgstr "%{size} spots available"

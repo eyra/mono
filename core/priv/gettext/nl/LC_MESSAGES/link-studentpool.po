@@ -99,4 +99,4 @@ msgstr "Ingepland"
 #, elixir-format
 #: systems/pool/views/campaigns_view.ex:134
 msgid "sample.size"
-msgstr "%{size} deelnemers"
+msgstr "%{size} plaatsen beschikbaar"
