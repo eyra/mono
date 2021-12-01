@@ -99,7 +99,7 @@ defmodule Systems.Campaign.MonitorView do
       </div>
       <ContentArea>
         <MarginY id={{:page_top}} />
-        <Case value={{ @vm.is_active }} >
+        <Case value={{ @vm.active? }} >
           <True>
             <Title2>{{dgettext("link-monitor", "phase1.title")}}</Title2>
             <Title3 margin={{"mb-8"}}>{{dgettext("link-survey", "status.title")}}<span class="text-primary"> {{@vm.finished_count}}/{{@vm.subject_count}}</span></Title3>
@@ -239,11 +239,12 @@ defmodule Systems.Campaign.MonitorView do
       }
     }
   ) do
-    is_active = status === :accepted
     finished_count = Crew.Context.count_finished_tasks(crew)
     started_count = Crew.Context.count_started_tasks(crew)
     applied_count = Crew.Context.count_applied_tasks(crew)
     vacant_count = tool |> get_vacant_count(finished_count, started_count, applied_count)
+
+    active? = status === :accepted or Crew.Context.active?(crew)
 
     pending_started_tasks =
       Crew.Context.expired_pending_started_tasks(crew)
@@ -262,7 +263,7 @@ defmodule Systems.Campaign.MonitorView do
       |> to_view_model(:accepted_tasks, target)
 
     %{
-      is_active: is_active,
+      active?: active?,
       subject_count: subject_count,
       applied_count: applied_count,
       started_count: started_count,

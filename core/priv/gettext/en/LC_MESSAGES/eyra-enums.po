@@ -264,7 +264,7 @@ msgstr "Resit"
 #, elixir-format
 #: lib/core/pools/criteria_filters.ex:5
 msgid "criteria_filters.year1"
-msgstr "1th year"
+msgstr "1st year"
 
 #, elixir-format
 #: lib/core/pools/criteria_filters.ex:5

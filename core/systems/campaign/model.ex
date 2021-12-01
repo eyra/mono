@@ -57,6 +57,15 @@ defmodule Systems.Campaign.Model do
   end
   def preload_graph(_), do: []
 
+  def author_as_string(%{authors: nil}), do: "?"
+  def author_as_string(%{authors: []}), do: "?"
+  def author_as_string(%{authors: [author | _]}) do
+    author_as_string(author)
+  end
+
+  def author_as_string(%{displayname: displayname}), do: displayname
+  def author_as_string(%{fullname: fullname}), do: fullname
+
 end
 
 defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
@@ -107,7 +116,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
   defp vm(%{
     id: id,
-    updated_at: updated_at,
     promotion: %{
       title: title,
       image_id: image_id,
@@ -125,11 +133,17 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
       end
 
     tag = tag(task)
+
     subtitle = subtitle(task, reward_value)
+
     quick_summary =
-      updated_at
-      |> CoreWeb.UI.Timestamp.apply_timezone()
-      |> CoreWeb.UI.Timestamp.humanize()
+      case task do
+        %{updated_at: updated_at} ->
+          updated_at
+          |> CoreWeb.UI.Timestamp.apply_timezone()
+          |> CoreWeb.UI.Timestamp.humanize()
+        _ -> "?"
+      end
 
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
     image = %{type: :catalog, info: image_info}

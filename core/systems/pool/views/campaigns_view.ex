@@ -97,7 +97,7 @@ defmodule Systems.Pool.CampaignsView do
                subject_count: target_subject_count
              }
            } = assignment
-       }) do
+       } = campaign) do
     tag =
       case status do
         :submitted ->
@@ -129,11 +129,21 @@ defmodule Systems.Pool.CampaignsView do
 
     open_spot_count = Assignment.Context.open_spot_count(assignment)
 
-    subtitle =
-      dgettext("link-studentpool", "spots.available",
-        open: open_spot_count,
-        total: target_subject_count
-      )
+    subtitle_part1 = Campaign.Model.author_as_string(campaign)
+
+    subtitle_part2 =
+      if open_spot_count == target_subject_count do
+        dgettext("link-studentpool", "sample.size",
+          size: target_subject_count
+        )
+      else
+        dgettext("link-studentpool", "spots.available",
+          open: open_spot_count,
+          total: target_subject_count
+        )
+      end
+
+    subtitle = subtitle_part1 <> "  |  " <> subtitle_part2
 
     quick_summery =
       updated_at
@@ -153,4 +163,6 @@ defmodule Systems.Pool.CampaignsView do
       quick_summary: quick_summery
     }
   end
+
+
 end
