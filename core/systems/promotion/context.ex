@@ -63,6 +63,18 @@ defmodule Systems.Promotion.Context do
     Repo.delete(promotion)
   end
 
+  def copy(%Promotion.Model{title: title} = promotion, auth_node, content_node) do
+    %Promotion.Model{}
+    |> Promotion.Model.changeset(:copy,
+        promotion
+        |> Map.put(:title, title <> " (copy)")
+        |> Map.from_struct()
+      )
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Ecto.Changeset.put_assoc(:content_node, content_node)
+    |> Repo.insert!()
+  end
+
   def ready?(%Promotion.Model{} = promotion) do
     Nodes.get!(promotion.content_node_id).ready
   end

@@ -19,7 +19,16 @@ defmodule Systems.Campaign.OverviewPage do
 
   data(campaigns, :map, default: [])
 
-  def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
+  def mount(_params, _session, socket) do
+    {
+      :ok,
+      socket
+      |> update_campaigns()
+      |> update_menus()
+    }
+  end
+
+  defp update_campaigns(%{assigns: %{current_user: user}} = socket) do
     preload = Campaign.Model.preload_graph(:full)
 
     campaigns =
@@ -29,14 +38,39 @@ defmodule Systems.Campaign.OverviewPage do
       |> Enum.filter(& &1.promotable_assignment.assignable_survey_tool)
       |> Enum.map(&CardVM.campaign_researcher(&1, socket))
 
-    {:ok,
-     socket
-     |> assign(campaigns: campaigns)
-     |> update_menus()}
+    socket
+    |> assign(campaigns: campaigns)
   end
 
   def handle_auto_save_done(socket) do
     socket |> update_menus()
+  end
+
+  @impl true
+  def handle_event("delete", %{"item" => campaign_id}, socket) do
+    Campaign.Context.delete(String.to_integer(campaign_id))
+
+    {
+      :noreply,
+      socket
+      |> update_campaigns()
+      |> update_menus()
+    }
+  end
+
+  @impl true
+  def handle_event("duplicate",  %{"item" => campaign_id}, socket) do
+    preload = Campaign.Model.preload_graph(:full)
+    campaign = Campaign.Context.get!(String.to_integer(campaign_id), preload)
+
+    Campaign.Assembly.copy(campaign)
+
+    {
+      :noreply,
+      socket
+      |> update_campaigns()
+      |> update_menus()
+    }
   end
 
   @impl true

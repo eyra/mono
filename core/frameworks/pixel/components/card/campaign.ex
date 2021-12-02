@@ -5,7 +5,7 @@ defmodule Frameworks.Pixel.Card.Campaign do
   use Surface.Component
 
   alias Frameworks.Pixel.{Tag, Spacing, Icon}
-  alias Frameworks.Pixel.Text.{SubHead, Label}
+  alias Frameworks.Pixel.Text.SubHead
   alias Frameworks.Pixel.Card.ClickableCard
   alias Frameworks.Pixel.Image
 

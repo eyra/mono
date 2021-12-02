@@ -110,6 +110,14 @@ defmodule Core.Survey.Tools do
     Tool.changeset(survey_tool, type, attrs)
   end
 
+  def copy(%Tool{} = tool, auth_node, content_node) do
+    %Tool{}
+    |> Tool.changeset(:copy, Map.from_struct(tool))
+    |> Ecto.Changeset.put_assoc(:content_node, content_node)
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Repo.insert!()
+  end
+
   def ready?(%Tool{} = survey_tool) do
     Nodes.get!(survey_tool.content_node_id).ready
   end

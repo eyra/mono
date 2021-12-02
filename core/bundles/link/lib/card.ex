@@ -197,18 +197,18 @@ defmodule Link.Marketplace.Card do
       label: label,
       label_type: "secondary",
       left_actions: [
+        # %{
+        #   action: %{type: :send, event: "share", item: "#{id}"},
+        #   face: %{
+        #     type: :label,
+        #     label: "Share",
+        #     font: "text-subhead font-subhead",
+        #     text_color: "text-white",
+        #     wrap: true
+        #   }
+        # },
         %{
-          action: %{type: :send, event: "share", item: "#{id}"},
-          face: %{
-            type: :label,
-            label: "Share",
-            font: "text-subhead font-subhead",
-            text_color: "text-white",
-            wrap: true
-          }
-        },
-        %{
-          action: %{type: :send, event: "duplicate", item: "#{id}"},
+          action: %{type: :send, event: "duplicate", item: id},
           face: %{
             type: :label,
             label: "Duplicate",
@@ -220,7 +220,7 @@ defmodule Link.Marketplace.Card do
       ],
       right_actions: [
         %{
-          action: %{type: :send, event: "delete", item: "#{id}"},
+          action: %{type: :send, event: "delete", item: id},
           face: %{type: :icon, icon: :delete, color: :white}
         }
       ]
