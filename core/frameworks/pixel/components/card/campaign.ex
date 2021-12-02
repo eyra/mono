@@ -40,12 +40,12 @@ defmodule Frameworks.Pixel.Card.Campaign do
       <template slot="image">
         <div class="relative">
           <If condition={{ @card.label }} >
-            <div class="absolute top-6 z-30">
+            <div class="absolute top-6 z-10">
               <Frameworks.Pixel.Card.Label conn={{@socket}} path_provider={{@path_provider}} text={{@card.label.text}} type={{@card.label.type}} />
             </div>
           </If>
           <If condition={{ @card.icon_url }} >
-            <div class="absolute top-6 right-6 z-20">
+            <div class="absolute top-6 right-6 z-10">
               <Icon size="S" src={{ @card.icon_url }} />
             </div>
           </If>

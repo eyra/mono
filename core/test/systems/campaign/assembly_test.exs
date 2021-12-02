@@ -275,7 +275,7 @@ defmodule Systems.Campaign.AssemblyTest do
 
       campaign = Campaign.Context.get!(id, Campaign.Model.preload_graph(:full))
 
-      %{id: id2} = Campaign.Assembly.copy(campaign)
+      {:ok, %{campaign: %{id: id2}}} = Campaign.Assembly.copy(campaign)
       campaign2 = Campaign.Context.get!(id2, Campaign.Model.preload_graph(:full))
 
       assert %{

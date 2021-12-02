@@ -260,7 +260,11 @@ defmodule Systems.Campaign.Context do
 
   def copy(%Campaign.Model{} = campaign, %Promotion.Model{} = promotion, %Assignment.Model{} = assignment, auth_node) do
     %Campaign.Model{}
-    |> Campaign.Model.changeset(Map.from_struct(campaign))
+    |> Campaign.Model.changeset(
+      campaign
+      |> Map.delete(:updated_at)
+      |> Map.from_struct()
+    )
     |> Ecto.Changeset.put_assoc(:promotion, promotion)
     |> Ecto.Changeset.put_assoc(:promotable_assignment, assignment)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)

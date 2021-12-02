@@ -4,6 +4,7 @@ defmodule Systems.Campaign.OverviewPage do
   """
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :recruitment
+  use CoreWeb.UI.Dialog
 
   alias Systems.Campaign
 
@@ -23,6 +24,7 @@ defmodule Systems.Campaign.OverviewPage do
     {
       :ok,
       socket
+      |> assign(dialog: nil)
       |> update_campaigns()
       |> update_menus()
     }
@@ -48,14 +50,38 @@ defmodule Systems.Campaign.OverviewPage do
 
   @impl true
   def handle_event("delete", %{"item" => campaign_id}, socket) do
-    Campaign.Context.delete(String.to_integer(campaign_id))
+    item = dgettext("link-ui", "delete.confirm.campaign")
+    title = String.capitalize(dgettext("eyra-ui", "delete.confirm.title", item: item))
+    text = String.capitalize(dgettext("eyra-ui", "delete.confirm.text", item: item))
+    confirm_label = dgettext("eyra-ui", "delete.confirm.label")
 
     {
       :noreply,
       socket
+      |> assign(campaign_id: String.to_integer(campaign_id))
+      |> confirm("delete", title, text, confirm_label)
+    }
+  end
+
+
+  @impl true
+  def handle_event("delete_confirm", _params, %{assigns: %{campaign_id: campaign_id}} = socket) do
+    Campaign.Context.delete(campaign_id)
+    {
+      :noreply,
+      socket
+      |> assign(
+        campaign_id: nil,
+        dialog: nil
+      )
       |> update_campaigns()
       |> update_menus()
     }
+  end
+
+  @impl true
+  def handle_event("delete_cancel", _params, socket) do
+    {:noreply, socket |> assign(campaign_id: nil, dialog: nil)}
   end
 
   @impl true
@@ -63,14 +89,8 @@ defmodule Systems.Campaign.OverviewPage do
     preload = Campaign.Model.preload_graph(:full)
     campaign = Campaign.Context.get!(String.to_integer(campaign_id), preload)
 
-    Campaign.Assembly.copy(campaign)
-
-    {
-      :noreply,
-      socket
-      |> update_campaigns()
-      |> update_menus()
-    }
+    {:ok, %{tool: tool}} = Campaign.Assembly.copy(campaign)
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, Campaign.ContentPage, tool.id))}
   end
 
   @impl true
@@ -96,6 +116,11 @@ defmodule Systems.Campaign.OverviewPage do
         title={{ dgettext("link-survey", "title") }}
         menus={{ @menus }}
       >
+        <div :if={{ @dialog }} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
+          <div class="flex flex-row items-center justify-center w-full h-full">
+            <Dialog vm={{ @dialog }} />
+          </div>
+        </div>
         <ContentArea>
           <MarginY id={{:page_top}} />
           <Case value={{ Enum.count(@campaigns) > 0 }} >

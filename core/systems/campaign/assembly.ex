@@ -132,13 +132,24 @@ defmodule Systems.Campaign.Assembly do
 
     promotion = Promotion.Context.copy(promotion, promotion_auth_node, promotion_content_node)
     submission = Submissions.copy(submission, promotion, pool, submission_content_node)
-    _criteria = Submissions.copy(criteria, submission)
+    criteria = Submissions.copy(criteria, submission)
     tool = Tools.copy(tool, tool_auth_node, tool_content_node)
     assignment = Assignment.Context.copy(assignment, tool, assignment_auth_node)
     campaign = Campaign.Context.copy(campaign, promotion, assignment, campaign_auth_node)
-    _authors = Campaign.Context.copy(authors, campaign)
+    authors = Campaign.Context.copy(authors, campaign)
 
-    campaign
+    {
+      :ok,
+      %{
+        campaign: campaign,
+        promotion: promotion,
+        submission: submission,
+        criteria: criteria,
+        tool: tool,
+        assignment: assignment,
+        authors: authors
+      }
+    }
   end
 
 end
