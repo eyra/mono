@@ -11,7 +11,7 @@ defmodule Systems.Campaign.OverviewPage do
   alias Frameworks.Pixel.Button.PrimaryLiveViewButton
 
   alias Link.Marketplace.Card, as: CardVM
-  alias Frameworks.Pixel.Card.DynamicStudy
+  alias Frameworks.Pixel.Card.DynamicCampaign
   alias Frameworks.Pixel.Grid.DynamicGrid
   alias Frameworks.Pixel.Text.Title2
   alias Frameworks.Pixel.Button.Action.Send
@@ -86,7 +86,7 @@ defmodule Systems.Campaign.OverviewPage do
             <MarginY id={{:title2_bottom}} />
             <DynamicGrid>
               <div :for={{ campaign <- @campaigns  }} >
-                <DynamicStudy conn={{@socket}} path_provider={{Routes}} card={{campaign}} click_event_data={{%{action: :edit, id: campaign.edit_id } }} />
+                <DynamicCampaign conn={{@socket}} path_provider={{Routes}} card={{campaign}} click_event_data={{%{action: :edit, id: campaign.edit_id } }} />
               </div>
             </DynamicGrid>
             <Spacing value="L" />

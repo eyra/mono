@@ -1,9 +1,9 @@
-defmodule Frameworks.Pixel.Card.PrimaryStudy do
+defmodule Frameworks.Pixel.Card.PrimaryCampaign do
   @moduledoc """
   A large eye-catcher meant to call a user into taking an action.
   """
   use Surface.Component
-  alias Frameworks.Pixel.Card.Study
+  alias Frameworks.Pixel.Card.Campaign
 
   prop(conn, :any, required: true)
   prop(path_provider, :any, required: true)
@@ -13,7 +13,7 @@ defmodule Frameworks.Pixel.Card.PrimaryStudy do
 
   def render(assigns) do
     ~H"""
-    <Study
+    <Campaign
       conn={{@conn}}
       path_provider={{@path_provider}}
       card={{@card}}
