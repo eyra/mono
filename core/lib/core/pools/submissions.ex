@@ -81,6 +81,22 @@ defmodule Core.Pools.Submissions do
     {:ok, criteria.submission}
   end
 
+  def copy(%Submission{} = submission, %Promotion.Model{} = promotion, pool, content_node) do
+    %Submission{}
+    |> Submission.changeset(Map.from_struct(submission))
+    |> Ecto.Changeset.put_assoc(:promotion, promotion)
+    |> Ecto.Changeset.put_assoc(:pool, pool)
+    |> Ecto.Changeset.put_assoc(:content_node, content_node)
+    |> Repo.insert!()
+  end
+
+  def copy(%Criteria{} = criteria, %Submission{} = submission) do
+    %Criteria{}
+    |> Criteria.changeset(Map.from_struct(criteria))
+    |> Ecto.Changeset.put_assoc(:submission, submission)
+    |> Repo.insert!()
+  end
+
   defp notify_when_submitted(%Submission{} = submission, %Ecto.Changeset{} = changeset) do
     if Ecto.Changeset.get_change(changeset, :status) === :submitted do
       for user <- Accounts.list_pool_admins() do

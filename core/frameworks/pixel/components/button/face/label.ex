@@ -8,12 +8,17 @@ defmodule Frameworks.Pixel.Button.Face.Label do
 
   defviewmodel(
     label: nil,
-    text_color: "text-primary"
+    wrap: false,
+    text_color: "text-primary",
+    font: "font-button text-button"
   )
+
+  def padding(%{wrap: true}), do: "pt-1px pb-1px active:pt-2px active:pb-0"
+  def padding(_), do: "pt-13px pb-13px active:pt-14px active:pb-3 pr-4 pl-4"
 
   def render(assigns) do
     ~H"""
-    <div class="pt-13px pb-13px active:pt-14px active:pb-3 font-button text-button rounded bg-opacity-0 pr-4 pl-4 {{text_color(@vm)}}">
+    <div class="rounded bg-opacity-0 {{font(@vm)}} {{padding(@vm)}} {{text_color(@vm)}}">
       {{ label(@vm) }}
     </div>
     """

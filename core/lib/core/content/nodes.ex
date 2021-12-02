@@ -66,4 +66,17 @@ defmodule Core.Content.Nodes do
   def delete(%Node{} = node) do
     Repo.delete(node)
   end
+
+  def copy(%Core.Content.Node{} = content_node) do
+    %Core.Content.Node{}
+    |> Core.Content.Node.changeset(Map.from_struct(content_node))
+    |> Repo.insert!()
+  end
+
+  def copy(%Core.Content.Node{} = content_node, parent) do
+    %Core.Content.Node{}
+    |> Core.Content.Node.changeset(Map.from_struct(content_node))
+    |> Ecto.Changeset.put_assoc(:parent, parent)
+    |> Repo.insert!()
+  end
 end

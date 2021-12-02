@@ -258,6 +258,30 @@ defmodule Systems.Campaign.Context do
     Campaign.Model.changeset(campaign, attrs)
   end
 
+  def copy(%Campaign.Model{} = campaign, %Promotion.Model{} = promotion, %Assignment.Model{} = assignment, auth_node) do
+    %Campaign.Model{}
+    |> Campaign.Model.changeset(
+      campaign
+      |> Map.delete(:updated_at)
+      |> Map.from_struct()
+    )
+    |> Ecto.Changeset.put_assoc(:promotion, promotion)
+    |> Ecto.Changeset.put_assoc(:promotable_assignment, assignment)
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Repo.insert!()
+  end
+
+  def copy(authors, campaign) when is_list(authors) do
+    authors |> Enum.map(&copy(&1, campaign))
+  end
+
+  def copy(%Campaign.AuthorModel{user: user} = author, campaign) do
+    Campaign.AuthorModel.changeset(Map.from_struct(author))
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Ecto.Changeset.put_assoc(:campaign, campaign)
+    |> Repo.insert!()
+  end
+
   def add_author(%Campaign.Model{} = campaign, %User{} = researcher) do
     researcher
     |> Campaign.AuthorModel.from_user()

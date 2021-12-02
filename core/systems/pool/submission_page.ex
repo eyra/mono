@@ -276,7 +276,7 @@ defmodule Systems.Pool.SubmissionPage do
       },
       button_small: %{
         action: action,
-        face: %{type: :icon, icon: :contact_tertiary}
+        face: %{type: :icon, icon: :contact, color: :tertiary}
       }
     }
   end

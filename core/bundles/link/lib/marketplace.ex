@@ -22,7 +22,7 @@ defmodule Link.Marketplace do
 
   alias Link.Marketplace.Card, as: CardVM
 
-  alias Frameworks.Pixel.Card.SecondaryStudy
+  alias Frameworks.Pixel.Card.SecondaryCampaign
   alias Frameworks.Pixel.Text.{Title2}
   alias Frameworks.Pixel.Grid.{DynamicGrid}
 
@@ -155,7 +155,7 @@ defmodule Link.Marketplace do
                 </Title2>
                 <DynamicGrid>
                   <div :for={{ card <- @available_campaigns  }} class="mb-1" >
-                    <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
+                    <SecondaryCampaign conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
                   </div>
                 </DynamicGrid>
               </False>

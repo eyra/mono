@@ -26,6 +26,10 @@ config :core,
 
 config :core, CoreWeb.Gettext, default_locale: "nl", locales: ~w(en nl)
 
+config :phoenix_inline_svg,
+  dir: "./assets/static/images",
+  default_collection: "icons"
+
 config :core, Oban,
   repo: Core.Repo,
   queues: [default: 5],
