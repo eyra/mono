@@ -17,14 +17,19 @@ defmodule Systems.Campaign.OverviewPage do
   alias Frameworks.Pixel.Text.Title2
   alias Frameworks.Pixel.Button.Action.Send
   alias Frameworks.Pixel.Button.Face.Forward
+  alias Frameworks.Pixel.ShareView
 
-  data(campaigns, :map, default: [])
+  data campaigns, :list, default: []
+  data share_dialog, :map
 
   def mount(_params, _session, socket) do
     {
       :ok,
       socket
-      |> assign(dialog: nil)
+      |> assign(
+        dialog: nil,
+        share_dialog: nil
+      )
       |> update_campaigns()
       |> update_menus()
     }
@@ -85,6 +90,39 @@ defmodule Systems.Campaign.OverviewPage do
   end
 
   @impl true
+  def handle_event("close_share_dialog",  _, socket) do
+    IO.puts("close_share_dialog")
+    {:noreply, socket |> assign(share_dialog: nil)}
+  end
+
+  @impl true
+  def handle_event("share",  %{"item" => campaign_id}, %{assigns: %{current_user: user}} = socket) do
+    researchers =
+      Core.Accounts.list_researchers([:profile])
+      |> Enum.filter(&(&1.id != user.id)) # filter current user
+
+    owners =
+      campaign_id
+      |> String.to_integer()
+      |> Campaign.Context.get!()
+      |> Campaign.Context.list_owners([:profile])
+      |> Enum.filter(&(&1.id != user.id)) # filter current user
+
+    share_dialog = %{
+      content_id: campaign_id,
+      content_name: dgettext("eyra-campaign", "share.dialog.content"),
+      group_name: dgettext("eyra-campaign", "share.dialog.group"),
+      users: researchers,
+      shared_users: owners,
+    }
+
+    {
+      :noreply,
+      socket |> assign(share_dialog: share_dialog)
+    }
+  end
+
+  @impl true
   def handle_event("duplicate",  %{"item" => campaign_id}, socket) do
     preload = Campaign.Model.preload_graph(:full)
     campaign = Campaign.Context.get!(String.to_integer(campaign_id), preload)
@@ -105,6 +143,29 @@ defmodule Systems.Campaign.OverviewPage do
      push_redirect(socket, to: CoreWeb.Router.Helpers.live_path(socket, Campaign.ContentPage, id))}
   end
 
+  @impl true
+  def handle_info({:share_view, :close}, socket) do
+    {:noreply, socket |> assign(share_dialog: nil)}
+  end
+
+  @impl true
+  def handle_info({:share_view, %{add: user, content_id: campaign_id}}, socket) do
+    campaign_id
+    |> Campaign.Context.get!()
+    |> Campaign.Context.add_owner!(user)
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info({:share_view, %{remove: user, content_id: campaign_id}}, socket) do
+    campaign_id
+    |> Campaign.Context.get!()
+    |> Campaign.Context.remove_owner!(user)
+
+    {:noreply, socket}
+  end
+
   defp create_campaign(%{assigns: %{current_user: user}} = _socket) do
     title = dgettext("eyra-dashboard", "default.study.title")
     Campaign.Assembly.create(user, title)
@@ -116,6 +177,12 @@ defmodule Systems.Campaign.OverviewPage do
         title={{ dgettext("link-survey", "title") }}
         menus={{ @menus }}
       >
+        <div :if={{ @share_dialog }} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20" phx-click="close_share_dialog">
+          <div class="flex flex-row items-center justify-center w-full h-full">
+            <ShareView id={{ :share_dialog }} :props={{ @share_dialog }} />
+          </div>
+        </div>
+
         <div :if={{ @dialog }} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
           <div class="flex flex-row items-center justify-center w-full h-full">
             <Dialog vm={{ @dialog }} />

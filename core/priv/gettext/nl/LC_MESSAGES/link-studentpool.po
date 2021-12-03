@@ -62,7 +62,7 @@ msgid "accepted.title"
 msgstr "Gepubliceerd"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:104
+#: systems/pool/views/campaigns_view.ex:103
 msgid "status.submitted.label"
 msgstr "In afwachting"
 
@@ -72,7 +72,7 @@ msgid "submitted.title"
 msgstr "Ingediend door onderzoekers"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:138
+#: systems/pool/views/campaigns_view.ex:139
 msgid "spots.available"
 msgstr "%{open} van de %{total} plaatsen beschikbaar"
 
@@ -82,21 +82,21 @@ msgid "submission.title"
 msgstr "Campagne"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:122
+#: systems/pool/views/campaigns_view.ex:121
 msgid "status.accepted.closed.label"
 msgstr "Afgerond"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:116
+#: systems/pool/views/campaigns_view.ex:115
 msgid "status.accepted.online.label"
 msgstr "Online"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:110
+#: systems/pool/views/campaigns_view.ex:109
 msgid "status.accepted.scheduled.label"
 msgstr "Ingepland"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:134
+#: systems/pool/views/campaigns_view.ex:135
 msgid "sample.size"
 msgstr "%{size} plaatsen beschikbaar"
