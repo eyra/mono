@@ -141,6 +141,8 @@ defimpl Systems.Assignment.Assignable, for: Core.Survey.Tool do
   def spot_count(%{subject_count: subject_count}), do: subject_count
   def spot_count(_), do: 0
 
+  def duration(%{duration: nil}), do: 0
+
   def duration(%{duration: duration}) do
     case Integer.parse(duration) do
       :error -> 0

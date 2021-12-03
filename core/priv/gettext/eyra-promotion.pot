@@ -77,7 +77,7 @@ msgid "expectations.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:90 systems/promotion/landing_page.ex:179
+#: systems/campaign/model.ex:99 systems/promotion/landing_page.ex:179
 msgid "expectations.public.label"
 msgstr ""
 
@@ -112,7 +112,7 @@ msgid "search.different.image.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:105 systems/promotion/form_view.ex:153
+#: systems/campaign/model.ex:114 systems/promotion/form_view.ex:153
 msgid "subtitle.label"
 msgstr ""
 

@@ -119,7 +119,7 @@ defmodule Systems.Crew.RejectView do
           <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
             {{@title}}
           </div>
-          <div class="text-bodymedium font-body sm:teçxt-bodylarge">
+          <div class="text-bodymedium font-body sm:text-bodylarge">
             {{@text}}
           </div>
           <div class="flex flex-row gap-3 items-center">

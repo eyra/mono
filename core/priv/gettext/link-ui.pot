@@ -36,7 +36,7 @@ msgid "debug.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:227
+#: systems/campaign/content_page.ex:227 systems/campaign/overview_page.ex:58
 msgid "delete.confirm.campaign"
 msgstr ""
 

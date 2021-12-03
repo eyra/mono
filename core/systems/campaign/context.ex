@@ -204,6 +204,10 @@ defmodule Systems.Campaign.Context do
     :ok = Authorization.assign_role(user, campaign, :owner)
   end
 
+  def remove_owner!(campaign, user) do
+    Authorization.remove_role!(user, campaign, :owner)
+  end
+
   def get_changeset(attrs \\ %{}) do
     %Campaign.Model{}
     |> Campaign.Model.changeset(attrs)

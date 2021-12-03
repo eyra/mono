@@ -12,27 +12,27 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:254 lib/core/pools/submission.ex:114
+#: bundles/link/lib/card.ex:282 lib/core/pools/submission.ex:114
 msgid "status.idle.label"
 msgstr "Concept"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:257 lib/core/pools/submission.ex:117
+#: bundles/link/lib/card.ex:285 lib/core/pools/submission.ex:117
 msgid "status.submitted.label"
 msgstr "Ingediend"
 
 #, elixir-format
-#: systems/campaign/model.ex:247
+#: systems/campaign/model.ex:261
 msgid "incomplete.forms.message"
 msgstr "Sommige verplichte velden zijn nog niet ingevuld"
 
 #, elixir-format
-#: systems/campaign/model.ex:245
+#: systems/campaign/model.ex:259
 msgid "ready.for.submission.message"
 msgstr "Alle verplichte velden zijn gevuld, je kunt deze campagne indienen"
 
 #, elixir-format
-#: systems/campaign/model.ex:251
+#: systems/campaign/model.ex:265
 msgid "waiting.for.coordinator.message"
 msgstr "Jouw campagne staat in de wachtrij om door de poolbeheerder in de marktplaats gezet te worden"
 
@@ -137,26 +137,26 @@ msgid "schedule.title"
 msgstr "Planning"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:272 lib/core/pools/submission.ex:131
+#: bundles/link/lib/card.ex:300 lib/core/pools/submission.ex:131
 msgid "status.accepted.closed.label"
 msgstr "Afgerond"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:268 lib/core/pools/submission.ex:128
+#: bundles/link/lib/card.ex:296 lib/core/pools/submission.ex:128
 msgid "status.accepted.online.label"
 msgstr "Online"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:263 lib/core/pools/submission.ex:123
+#: bundles/link/lib/card.ex:291 lib/core/pools/submission.ex:123
 msgid "status.accepted.scheduled.label"
 msgstr "Ingepland"
 
 #, elixir-format
-#: systems/campaign/model.ex:265
+#: systems/campaign/model.ex:279
 msgid "accepted.closed.message"
 msgstr "Deze campagne is afgerond"
 
 #, elixir-format
-#: systems/campaign/model.ex:256
+#: systems/campaign/model.ex:270
 msgid "accepted.scheduled.message"
 msgstr "Deze campagne staat ingepland voor deelname "
