@@ -98,6 +98,27 @@ defmodule Core.Authorization do
     end
   end
 
+  def copy(%Core.Authorization.Node{role_assignments: role_assignments})
+      when is_list(role_assignments) do
+    auth_node = create_node!()
+
+    role_assignments
+    |> Enum.each(&copy_role(&1, auth_node))
+
+    auth_node
+  end
+
+  def copy(_auth_node, %Core.Authorization.Node{} = parent) do
+    create_node!(parent)
+  end
+
+  def copy_role(%Core.Authorization.RoleAssignment{} = role, node) do
+    %Core.Authorization.RoleAssignment{}
+    |> Core.Authorization.RoleAssignment.changeset(Map.from_struct(role))
+    |> Ecto.Changeset.put_assoc(:node, node)
+    |> Repo.insert!()
+  end
+
   defp parent_node_query(entity) do
     initial_query =
       Core.Authorization.Node |> where([n], n.id == ^GreenLight.AuthorizationNode.id(entity))

@@ -60,6 +60,18 @@ defmodule Systems.Assignment.Context do
     |> Repo.insert()
   end
 
+  def copy(%Assignment.Model{} = assignment, %Survey.ToolModel{} = tool, auth_node) do
+    # don't copy crew, just create a new one
+    {:ok, crew} = Crew.Context.create(auth_node)
+
+    %Assignment.Model{}
+    |> Assignment.Model.changeset(Map.from_struct(assignment))
+    |> Ecto.Changeset.put_assoc(:crew, crew)
+    |> Ecto.Changeset.put_assoc(:assignable_survey_tool, tool)
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Repo.insert!()
+  end
+
   def owner(%Assignment.Model{} = assignment) do
     owner =
       assignment

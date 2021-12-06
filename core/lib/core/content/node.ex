@@ -16,7 +16,7 @@ defmodule Core.Content.Node do
     timestamps()
   end
 
-  @fields ~w(ready parent_id)a
+  @fields ~w(ready)a
   @required_fields ~w(ready)a
 
   @doc false

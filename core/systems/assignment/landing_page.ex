@@ -160,7 +160,7 @@ defmodule Systems.Assignment.LandingPage do
 
       <ContentArea>
         <MarginY id={{:page_top}} />
-        <Title1>{{@vm.title}}</Title1>
+        <Title1>{{@vm.title}}<span class="text-primary"> #{{@vm.public_id}}</span></Title1>
         <Spacing value="L" />
 
         <div class="grid gap-6 sm:gap-8 {{ grid_cols(Enum.count(@vm.highlights)) }}">

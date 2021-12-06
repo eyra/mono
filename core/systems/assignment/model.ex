@@ -53,7 +53,7 @@ defmodule Systems.Assignment.Model do
   end
 
   def preload_graph(:full) do
-    [:crew, :assignable_survey_tool, :assignable_data_donation_tool, assignable_lab_tool: [:time_slots]]
+    [:crew, :assignable_data_donation_tool, assignable_lab_tool: [:time_slots], assignable_survey_tool: [:auth_node, :content_node]]
   end
 
   def preload_graph(_), do: []

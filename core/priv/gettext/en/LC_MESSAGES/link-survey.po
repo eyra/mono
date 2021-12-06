@@ -27,7 +27,7 @@ msgid "duration.label"
 msgstr "How many minutes do you estimate participants will need?"
 
 #, elixir-format
-#: systems/campaign/model.ex:201
+#: systems/campaign/model.ex:215
 msgid "by.author.label"
 msgstr "By"
 
@@ -37,7 +37,7 @@ msgid "reward.highlight.title"
 msgstr "Reward"
 
 #, elixir-format
-#: lib/core/survey/tool.ex:151
+#: lib/core/survey/tool.ex:152
 msgid "apply.cta.title"
 msgstr "Participate"
 
@@ -47,7 +47,7 @@ msgid "devices.label"
 msgstr "Which devices can participants use?"
 
 #, elixir-format
-#: lib/core/survey/tool.ex:152
+#: lib/core/survey/tool.ex:153
 msgid "open.cta.title"
 msgstr "Proceed"
 
@@ -92,27 +92,27 @@ msgid "content.title"
 msgstr "Campaign"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:62
+#: systems/campaign/overview_page.ex:171
 msgid "title"
 msgstr "Recruitment"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:101
+#: systems/campaign/overview_page.ex:221
 msgid "add.first.button"
 msgstr "Start your first campaign"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:81
+#: systems/campaign/overview_page.ex:201
 msgid "add.new.button"
 msgstr "Start new campaign"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:97
+#: systems/campaign/overview_page.ex:217
 msgid "empty.description"
 msgstr "Here you can set-up and follow the status of your campaigns. A campaign is an organized course of action to achieve a goal, in this case to recruit participants. It consists of publishing a promotion in the marketplace, linking your study details, determining your sample and reviewing the results."
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:96
+#: systems/campaign/overview_page.ex:216
 msgid "empty.title"
 msgstr "Recruit participants for your study"
 
@@ -172,7 +172,7 @@ msgid "form.title"
 msgstr "Study"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:71
+#: systems/campaign/overview_page.ex:191
 msgid "campaign.overview.title"
 msgstr "Campaigns"
 
@@ -314,7 +314,7 @@ msgid "started.label"
 msgstr "Started"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:78
+#: systems/campaign/overview_page.ex:198
 msgid "add.new.button.short"
 msgstr "New"
 
