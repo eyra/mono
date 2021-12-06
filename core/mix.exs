@@ -97,6 +97,7 @@ defmodule Core.MixProject do
       {:oban, "~> 2.7"},
       {:nimble_parsec, "~> 1.0"},
       {:typed_struct, "~> 0.2.1"},
+      {:logger_json, "~> 4.3"},
       # i18n
       {:ex_cldr, "~> 2.18"},
       {:ex_cldr_numbers, "~> 2.16"},
