@@ -15,7 +15,7 @@ defmodule CoreWeb.UI.ContentListItem do
     tag: [type: nil, text: nil],
     image: [type: nil, info: nil],
     title_css: "font-title7 text-title7 md:font-title5 md:text-title5 text-grey1",
-    subtitle_css: "text-bodysmall md:text-bodymedium font-body text-grey2 whitespace-pre"
+    subtitle_css: "text-bodysmall md:text-bodymedium font-body text-grey2 whitespace-pre-wrap"
   )
 
   prop(vm, :map, required: true)
@@ -62,13 +62,67 @@ defmodule CoreWeb.UI.ContentListItem do
                 </div>
               </div>
             </div>
-            <div class="flex-wrap flex-shrink-0">
-              <Image :if={{ image_type(@vm) == :catalog }} image={{image_info(@vm)}} corners="rounded-br-md rounded-tr-xl md:rounded-tr-md w-20 md:w-30" />
-              <img :if={{ image_type(@vm) == :avatar }} src={{image_info(@vm)}} class="rounded-full w-20 h-20 my-6 mr-6" alt="" />
+            <div :if={{ image_type(@vm) == :catalog }} class="flex-wrap flex-shrink-0 w-30">
+              <Image  image={{image_info(@vm)}} corners="rounded-br-md rounded-tr-xl md:rounded-tr-md" />
+            </div>
+            <div :if={{ image_type(@vm) == :avatar }} class="flex-wrap flex-shrink-0 w-20 h-20 my-6 mr-6">
+              <img src={{image_info(@vm)}} class="rounded-full" alt="" />
             </div>
           </div>
         </div>
       </LiveRedirect>
+    """
+  end
+end
+
+defmodule CoreWeb.UI.ContentListItem.Example do
+  use Surface.Catalogue.Example,
+    subject: CoreWeb.UI.ContentListItem,
+    catalogue: Frameworks.Pixel.Catalogue,
+    title: "Share view",
+    height: "812px",
+    direction: "vertical",
+    container: {:div, class: ""}
+
+  data(vm1, :map,
+    default: %{
+      path: "/",
+      title: Faker.Lorem.sentence(3),
+      subtitle: Faker.Lorem.sentence(6),
+      quick_summary: Faker.Lorem.sentence(4),
+      tag: %{type: :tertiary, text: Faker.Lorem.word()}
+    }
+  )
+
+  data(vm2, :map,
+    default: %{
+      path: "/",
+      title: Faker.Lorem.sentence(5),
+      subtitle: Faker.Lorem.sentence(12),
+      quick_summary: Faker.Lorem.sentence(4),
+      tag: %{type: :delete, text: Faker.Lorem.word()},
+      image: %{type: :avatar, info: Core.ImageHelpers.get_photo_url(%{photo_url: nil})}
+    }
+  )
+
+  data(vm3, :map,
+    default: %{
+      path: "/",
+      title: Faker.Lorem.sentence(16),
+      subtitle: Faker.Lorem.sentence(24),
+      quick_summary: Faker.Lorem.sentence(4),
+      tag: %{type: :success, text: Faker.Lorem.word()},
+      image: %{type: :avatar, info: Core.ImageHelpers.get_photo_url(%{photo_url: nil})}
+    }
+  )
+
+  def render(assigns) do
+    image_id = Core.ImageCatalog.Unsplash.random(:abstract)
+
+    ~H"""
+    <ContentListItem vm={{@vm1 |> Map.put(:image, %{type: :catalog, info: Core.ImageHelpers.get_image_info(image_id, 400, 300) }) }} />
+    <ContentListItem vm={{@vm2}} />
+    <ContentListItem vm={{@vm3}} />
     """
   end
 end
