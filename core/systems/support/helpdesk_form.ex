@@ -1,11 +1,11 @@
-defmodule CoreWeb.Helpdesk.Form do
+defmodule Systems.Support.HelpdeskForm do
   use CoreWeb.LiveForm
 
   alias Frameworks.Pixel.Spacing
   alias Frameworks.Pixel.Form.{Form, TextArea, TextInput}
   alias Frameworks.Pixel.Text.{Title3}
   alias Frameworks.Pixel.Button.SubmitButton
-  alias Core.Helpdesk
+  alias Systems.Support
   alias Core.Enums
   alias Core.Accounts
   alias Frameworks.Pixel.Selector.Selector
@@ -38,7 +38,7 @@ defmodule CoreWeb.Helpdesk.Form do
 
   # Initial update
   def update(%{id: id, user: user}, socket) do
-    changeset = Helpdesk.new_ticket_changeset()
+    changeset = Support.Context.new_ticket_changeset()
     type = changeset.changes.type
     type_labels = Enums.TicketTypes.labels(type)
 
@@ -47,7 +47,7 @@ defmodule CoreWeb.Helpdesk.Form do
       socket
       |> assign(:id, id)
       |> assign(:user, user)
-      |> assign(:changeset, Helpdesk.new_ticket_changeset())
+      |> assign(:changeset, Support.Context.new_ticket_changeset())
       |> assign(:type_labels, type_labels)
       |> assign(:type, type)
     }
@@ -56,12 +56,12 @@ defmodule CoreWeb.Helpdesk.Form do
   @impl true
   def handle_event(
         "create_ticket",
-        %{"ticket" => data},
+        %{"ticket_model" => data},
         %{assigns: %{user: user, type: type}} = socket
       ) do
     data = data |> Map.put("type", type)
 
-    case Helpdesk.create_ticket(user, data) do
+    case Support.Context.create_ticket(user, data) do
       {:ok, _} ->
         {:noreply,
          socket
@@ -74,8 +74,8 @@ defmodule CoreWeb.Helpdesk.Form do
   end
 
   @impl true
-  def handle_event("store_state", %{"ticket" => ticket}, socket) do
-    {:noreply, assign(socket, :changeset, Helpdesk.new_ticket_changeset(ticket))}
+  def handle_event("store_state", %{"ticket_model" => ticket}, socket) do
+    {:noreply, assign(socket, :changeset, Support.Context.new_ticket_changeset(ticket))}
   end
 
   def render(assigns) do

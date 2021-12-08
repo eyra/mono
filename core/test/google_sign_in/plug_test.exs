@@ -148,7 +148,12 @@ defmodule GoogleSignIn.CallbackPlug.Test do
     end
 
     test "allow admin when member login is disabled" do
-      Application.put_env(:core, :admins, Core.Admin.compile([GoogleSignIn.FakeGoogle.email()]))
+      Application.put_env(
+        :core,
+        :admins,
+        Systems.Admin.Context.compile([GoogleSignIn.FakeGoogle.email()])
+      )
+
       set_feature_flag(:member_google_sign_in, false)
 
       user =

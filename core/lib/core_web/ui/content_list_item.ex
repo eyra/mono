@@ -24,7 +24,7 @@ defmodule CoreWeb.UI.ContentListItem do
 
   def render(assigns) do
     ~H"""
-      <LiveRedirect to={{path(@vm)}} class="block my-6">
+      <LiveRedirect to={{path(@vm)}} class="block">
         <div class="font-sans bg-grey5 flex items-stretch space-x-4 rounded-md">
           <div class="flex flex-row w-full">
             <div class="flex-grow p-4 lg:p-6">
@@ -65,8 +65,8 @@ defmodule CoreWeb.UI.ContentListItem do
             <div :if={{ image_type(@vm) == :catalog }} class="flex-wrap flex-shrink-0 w-30">
               <Image  image={{image_info(@vm)}} corners="rounded-br-md rounded-tr-xl md:rounded-tr-md" />
             </div>
-            <div :if={{ image_type(@vm) == :avatar }} class="flex-wrap flex-shrink-0 w-20 h-20 my-6 mr-6">
-              <img src={{image_info(@vm)}} class="rounded-full" alt="" />
+            <div :if={{ image_type(@vm) == :avatar }} class="flex-wrap flex-shrink-0 my-6 mr-6">
+              <img src={{image_info(@vm)}} class="w-20 h-20 rounded-full" alt="" />
             </div>
           </div>
         </div>
@@ -120,9 +120,11 @@ defmodule CoreWeb.UI.ContentListItem.Example do
     image_id = Core.ImageCatalog.Unsplash.random(:abstract)
 
     ~H"""
-    <ContentListItem vm={{@vm1 |> Map.put(:image, %{type: :catalog, info: Core.ImageHelpers.get_image_info(image_id, 400, 300) }) }} />
-    <ContentListItem vm={{@vm2}} />
-    <ContentListItem vm={{@vm3}} />
+    <div class="flex flex-col gap-10">
+      <ContentListItem vm={{@vm1 |> Map.put(:image, %{type: :catalog, info: Core.ImageHelpers.get_image_info(image_id, 400, 300) }) }} />
+      <ContentListItem vm={{@vm2}} />
+      <ContentListItem vm={{@vm3}} />
+    </div>
     """
   end
 end

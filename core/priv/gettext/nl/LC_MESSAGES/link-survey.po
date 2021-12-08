@@ -37,7 +37,7 @@ msgid "reward.highlight.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: lib/core/survey/tool.ex:152
+#: lib/core/survey/tool.ex:153
 msgid "apply.cta.title"
 msgstr "Ik doe mee"
 
@@ -47,7 +47,7 @@ msgid "devices.label"
 msgstr "Welke apparaten kunnen door deelnemers gebruikt worden?"
 
 #, elixir-format
-#: lib/core/survey/tool.ex:153
+#: lib/core/survey/tool.ex:154
 msgid "open.cta.title"
 msgstr "Doorgaan"
 
@@ -92,27 +92,27 @@ msgid "content.title"
 msgstr "Campagne"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:171
+#: systems/campaign/overview_page.ex:177
 msgid "title"
 msgstr "Werving"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:221
+#: systems/campaign/overview_page.ex:227
 msgid "add.first.button"
 msgstr "Start je eerste campagne"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:201
+#: systems/campaign/overview_page.ex:207
 msgid "add.new.button"
 msgstr "Start nieuwe campagne"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:217
+#: systems/campaign/overview_page.ex:223
 msgid "empty.description"
 msgstr "Hier kun je campagnes opzetten en hun status volgen. Een campagne is een georganiseerde werkwijze om een doel te behalen, in dit geval het werven van deelnemers. Het bestaat uit het opzetten van een advertentie voor in de marktplaats, het koppelen van jouw studie details, het bepalen van jouw sample, en het reviewen van de resultaten."
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:216
+#: systems/campaign/overview_page.ex:222
 msgid "empty.title"
 msgstr "Werf deelnemers voor jouw studie"
 
@@ -172,7 +172,7 @@ msgid "form.title"
 msgstr "Studie"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:191
+#: systems/campaign/overview_page.ex:197
 msgid "campaign.overview.title"
 msgstr "Campagnes"
 
@@ -314,7 +314,7 @@ msgid "started.label"
 msgstr "Gestart"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:198
+#: systems/campaign/overview_page.ex:204
 msgid "add.new.button.short"
 msgstr "Start"
 

@@ -36,7 +36,7 @@ msgid "reward.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core/survey/tool.ex:152
+#: lib/core/survey/tool.ex:153
 msgid "apply.cta.title"
 msgstr ""
 
@@ -46,7 +46,7 @@ msgid "devices.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core/survey/tool.ex:153
+#: lib/core/survey/tool.ex:154
 msgid "open.cta.title"
 msgstr ""
 
@@ -91,27 +91,27 @@ msgid "content.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:171
+#: systems/campaign/overview_page.ex:177
 msgid "title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:221
+#: systems/campaign/overview_page.ex:227
 msgid "add.first.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:201
+#: systems/campaign/overview_page.ex:207
 msgid "add.new.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:217
+#: systems/campaign/overview_page.ex:223
 msgid "empty.description"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:216
+#: systems/campaign/overview_page.ex:222
 msgid "empty.title"
 msgstr ""
 
@@ -171,7 +171,7 @@ msgid "form.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:191
+#: systems/campaign/overview_page.ex:197
 msgid "campaign.overview.title"
 msgstr ""
 
@@ -313,7 +313,7 @@ msgid "started.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:198
+#: systems/campaign/overview_page.ex:204
 msgid "add.new.button.short"
 msgstr ""
 

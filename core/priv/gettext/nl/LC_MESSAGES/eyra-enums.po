@@ -270,3 +270,13 @@ msgstr "1e jaars"
 #: lib/core/pools/criteria_filters.ex:5
 msgid "criteria_filters.year2"
 msgstr "2e jaars"
+
+#, elixir-format
+#: systems/support/ticket_status.ex:5
+msgid "ticket_status.closed"
+msgstr "Gesloten"
+
+#, elixir-format
+#: systems/support/ticket_status.ex:5
+msgid "ticket_status.open"
+msgstr "Open"

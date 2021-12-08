@@ -22,6 +22,11 @@ defmodule Core.Authorization do
   Core.BundleOverrides.grants()
 
   grant_access(Systems.Home.LandingPage, [:visitor, :member])
+  grant_access(Systems.Admin.LoginPage, [:visitor, :member])
+  grant_access(Systems.Admin.PermissionsPage, [:admin])
+  grant_access(Systems.Support.OverviewPage, [:admin])
+  grant_access(Systems.Support.TicketPage, [:admin])
+  grant_access(Systems.Support.HelpdeskPage, [:member])
   grant_access(Systems.Notification.OverviewPage, [:member])
   grant_access(Systems.NextAction.OverviewPage, [:member])
   grant_access(Systems.Campaign.OverviewPage, [:researcher])
@@ -33,11 +38,6 @@ defmodule Core.Authorization do
   grant_access(Systems.Pool.SubmissionPage, [:researcher])
   grant_access(Systems.Test.Page, [:visitor, :member])
 
-  grant_access(CoreWeb.Admin.Login, [:visitor, :member])
-  grant_access(CoreWeb.Admin.Permissions, [:admin])
-  grant_access(CoreWeb.Admin.Support, [:admin])
-  grant_access(CoreWeb.Admin.Ticket, [:admin])
-  grant_access(CoreWeb.Helpdesk.Public, [:member])
   grant_access(CoreWeb.Dashboard, [:researcher])
   grant_access(CoreWeb.User.Signin, [:visitor])
   grant_access(CoreWeb.User.Signup, [:visitor])

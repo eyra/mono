@@ -155,9 +155,9 @@ msgid "menu.item.helpdesk"
 msgstr "Helpdesk"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:4 systems/assignment/landing_page.ex:6
-#: systems/campaign/content_page.ex:9 systems/campaign/overview_page.ex:7 systems/crew/reject_view.ex:109
-#: systems/pool/submission_page.ex:8 systems/promotion/landing_page.ex:6
+#: systems/assignment/landing_page.ex:6 systems/campaign/content_page.ex:9
+#: systems/campaign/overview_page.ex:7 systems/crew/reject_view.ex:109 systems/pool/submission_page.ex:8
+#: systems/promotion/landing_page.ex:6
 msgid "cancel.button"
 msgstr "Cancel"
 
@@ -177,9 +177,9 @@ msgid "delete.confirm.label"
 msgstr "Delete"
 
 #, elixir-format
-#: lib/core_web/live/admin/ticket.ex:4 systems/assignment/landing_page.ex:6
-#: systems/assignment/model.ex:209 systems/campaign/content_page.ex:9 systems/campaign/overview_page.ex:7
-#: systems/pool/submission_page.ex:8 systems/promotion/landing_page.ex:6
+#: systems/assignment/landing_page.ex:6 systems/assignment/model.ex:209
+#: systems/campaign/content_page.ex:9 systems/campaign/overview_page.ex:7 systems/pool/submission_page.ex:8
+#: systems/promotion/landing_page.ex:6
 msgid "ok.button"
 msgstr "OK"
 
@@ -218,21 +218,6 @@ msgstr "today"
 #: lib/core_web/ui/timestamp.ex:106
 msgid "timestamp.yesterday"
 msgstr "yesterday"
-
-#, elixir-format
-#: lib/core_web/live/admin/ticket.ex:97
-msgid "close.confirm.label"
-msgstr "Close"
-
-#, elixir-format
-#: lib/core_web/live/admin/ticket.ex:96
-msgid "close.confirm.text"
-msgstr "This %{item} will be permanently closed."
-
-#, elixir-format
-#: lib/core_web/live/admin/ticket.ex:95
-msgid "close.confirm.title"
-msgstr "Close %{item}?"
 
 #, elixir-format
 #: lib/core_web/controllers/user_auth.ex:138

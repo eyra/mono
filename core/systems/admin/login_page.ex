@@ -1,4 +1,4 @@
-defmodule CoreWeb.Admin.Login do
+defmodule Systems.Admin.LoginPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Stripped.Component, :admin_login
   alias CoreWeb.Layouts.Stripped.Component, as: Stripped

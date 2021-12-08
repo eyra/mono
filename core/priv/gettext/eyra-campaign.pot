@@ -21,11 +21,11 @@ msgid "campaign.subject.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:107
+#: systems/campaign/overview_page.ex:113
 msgid "share.dialog.content"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:108
+#: systems/campaign/overview_page.ex:114
 msgid "share.dialog.group"
 msgstr ""

@@ -9,6 +9,7 @@ defmodule CoreWeb.UI.Navigation.TabbarItem do
     id: nil,
     title: nil,
     ready?: true,
+    count: nil,
     index: nil
   )
 
@@ -21,6 +22,7 @@ defmodule CoreWeb.UI.Navigation.TabbarItem do
   def center_correction_for_number(_), do: ""
 
   def icon_text(_, %{ready?: false}), do: "!"
+  def icon_text(_, %{count: count}) when not is_nil(count), do: "#{count}"
   def icon_text(index, _), do: index + 1
 
   def active_icon(_), do: "bg-primary text-white"

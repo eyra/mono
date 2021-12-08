@@ -1,4 +1,4 @@
-defmodule Core.Admin do
+defmodule Systems.Admin.Context do
   def compile(patterns) do
     combined =
       patterns

@@ -11,7 +11,7 @@ defmodule Link.Dashboard do
 
   alias Frameworks.Utility.ViewModelBuilder
 
-  alias CoreWeb.UI.ContentListItem
+  alias CoreWeb.UI.ContentList
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias Frameworks.Pixel.Text.{Title2}
@@ -58,7 +58,7 @@ defmodule Link.Dashboard do
               <Title2>
                 {{ dgettext("link-dashboard", "recent-items.title") }}
               </Title2>
-              <ContentListItem :for={{item <- @content_items}} vm={{item}} />
+              <ContentList items={{@content_items}} />
             </True>
             <False>
               <Empty
