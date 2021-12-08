@@ -32,7 +32,7 @@ msgid "assignment.status.complete.label"
 msgstr "Closed"
 
 #, elixir-format
-#: systems/campaign/model.ex:227
+#: systems/campaign/model.ex:226
 msgid "assignment.status.completed.label"
 msgstr "Finished"
 
@@ -42,17 +42,17 @@ msgid "assignment.status.expired.label"
 msgstr "Expired"
 
 #, elixir-format
-#: systems/campaign/model.ex:226
+#: systems/campaign/model.ex:225
 msgid "assignment.status.pending.label"
 msgstr "Enrolled"
 
 #, elixir-format
-#: systems/campaign/model.ex:228
+#: systems/campaign/model.ex:227
 msgid "assignment.status.accepted.label"
 msgstr "Accepted"
 
 #, elixir-format
-#: systems/campaign/model.ex:229
+#: systems/campaign/model.ex:228
 msgid "assignment.status.rejected.label"
 msgstr "Rejected"
 

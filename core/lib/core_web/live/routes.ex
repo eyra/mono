@@ -3,11 +3,9 @@ defmodule CoreWeb.Live.Routes do
     quote do
       use CoreWeb.Live.Subroutes, [
         :study,
-        :helpdesk,
         :data_donation,
         :lab,
-        :user,
-        :admin
+        :user
       ]
 
       scope "/", CoreWeb do

@@ -1,7 +1,7 @@
 defmodule CoreWeb.Layouts.Workspace.MenuBuilder do
   @behaviour CoreWeb.Menu.Builder
 
-  import Core.Admin
+  import Systems.Admin.Context
   import CoreWeb.Menu.Helpers
 
   @impl true

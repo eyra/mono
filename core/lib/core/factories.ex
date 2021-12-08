@@ -11,8 +11,7 @@ defmodule Core.Factories do
     Lab,
     Authorization,
     DataDonation,
-    WebPush,
-    Helpdesk
+    WebPush
   }
 
   alias Frameworks.{
@@ -24,7 +23,8 @@ defmodule Core.Factories do
     Campaign,
     Promotion,
     Assignment,
-    Crew
+    Crew,
+    Support
   }
 
   alias Core.Repo
@@ -115,7 +115,7 @@ defmodule Core.Factories do
   end
 
   def build(:helpdesk_ticket) do
-    %Helpdesk.Ticket{
+    %Support.TicketModel{
       title: Faker.Lorem.sentence(),
       description: Faker.Lorem.paragraph(),
       user: build(:member)

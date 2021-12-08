@@ -1,4 +1,4 @@
-defmodule CoreWeb.Helpdesk.Public do
+defmodule Systems.Support.HelpdeskPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :helpdesk
 
@@ -6,7 +6,7 @@ defmodule CoreWeb.Helpdesk.Public do
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias Frameworks.Pixel.Text.{Title2, BodyLarge}
 
-  alias CoreWeb.Helpdesk.Form, as: HelpdeskForm
+  alias Systems.Support.HelpdeskForm
 
   def mount(_params, _session, socket) do
     {:ok,

@@ -28,7 +28,7 @@ defmodule Core.GreenLight.PrincipalTest do
       Application.put_env(
         :core,
         :admins,
-        Core.Admin.compile(["admin@example.org"])
+        Systems.Admin.Context.compile(["admin@example.org"])
       )
 
       # Regular member

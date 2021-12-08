@@ -220,7 +220,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   end
 
   defp tag(nil), do: %{text: dgettext("eyra-marketplace", "assignment.status.expired.label"), type: :disabled}
-
   defp tag(%{status: status} = _task) do
     case status do
       :pending -> %{text: dgettext("eyra-marketplace", "assignment.status.pending.label"), type: :warning}
@@ -231,6 +230,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     end
   end
 
+  defp subtitle(nil, _), do: "?"
   defp subtitle(%{status: status} = _task, reward_value) do
     case status do
       :pending -> dgettext("eyra-marketplace", "assignment.status.pending.subtitle")

@@ -1,4 +1,4 @@
-defmodule CoreWeb.Admin.Permissions do
+defmodule Systems.Admin.PermissionsPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :permissions
 

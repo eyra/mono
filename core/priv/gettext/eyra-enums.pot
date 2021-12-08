@@ -269,3 +269,13 @@ msgstr ""
 #: lib/core/pools/criteria_filters.ex:5
 msgid "criteria_filters.year2"
 msgstr ""
+
+#, elixir-format
+#: systems/support/ticket_status.ex:5
+msgid "ticket_status.closed"
+msgstr ""
+
+#, elixir-format
+#: systems/support/ticket_status.ex:5
+msgid "ticket_status.open"
+msgstr ""

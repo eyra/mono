@@ -4,8 +4,8 @@ defmodule Link.Menu.Items do
   @impl true
   def values() do
     %{
-      permissions: %{target: CoreWeb.Admin.Permissions, domain: "eyra-ui"},
-      support: %{target: CoreWeb.Admin.Support, domain: "eyra-ui"},
+      permissions: %{target: Systems.Admin.PermissionsPage, domain: "eyra-ui"},
+      support: %{target: Systems.Support.OverviewPage, domain: "eyra-ui"},
       link: %{target: Link.Index, size: :large, title: "Panl", domain: "eyra-ui"},
       debug: %{target: Link.Debug, domain: "eyra-ui"},
       dashboard: %{target: Link.Dashboard, domain: "eyra-ui"},
@@ -13,7 +13,7 @@ defmodule Link.Menu.Items do
       studentpool: %{target: Systems.Pool.OverviewPage, domain: "link-ui"},
       recruitment: %{target: Systems.Campaign.OverviewPage, domain: "link-ui"},
       todo: %{target: Systems.NextAction.OverviewPage, domain: "eyra-ui"},
-      helpdesk: %{target: CoreWeb.Helpdesk.Public, domain: "eyra-ui"},
+      helpdesk: %{target: Systems.Support.HelpdeskPage, domain: "eyra-ui"},
       settings: %{target: CoreWeb.User.Settings, domain: "eyra-ui"},
       profile: %{target: CoreWeb.User.Profile, domain: "eyra-ui"},
       signout: %{target: :delete, domain: "eyra-ui"},
