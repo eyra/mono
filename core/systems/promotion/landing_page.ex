@@ -3,7 +3,7 @@ defmodule Systems.Promotion.LandingPage do
   The public promotion screen.
   """
   use CoreWeb, :live_view
-  use CoreWeb.UI.Dialog
+  use CoreWeb.UI.PlainDialog
   use CoreWeb.Layouts.Website.Component, :promotion
   alias CoreWeb.Layouts.Website.Component, as: Website
 
@@ -158,7 +158,7 @@ defmodule Systems.Promotion.LandingPage do
 
         <div :if={{ show_dialog?(@dialog) }} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
           <div class="flex flex-row items-center justify-center w-full h-full">
-            <Dialog vm={{ @dialog }} />
+            <PlainDialog vm={{ @dialog }} />
           </div>
         </div>
 

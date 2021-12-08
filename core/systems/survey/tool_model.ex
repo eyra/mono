@@ -3,7 +3,7 @@ defmodule Systems.Survey.ToolModel do
   The survey tool schema.
   """
   use Ecto.Schema
-  use Core.Content.Node
+  use Frameworks.Utility.Model
   import NimbleParsec
 
   require Core.Enums.Devices
@@ -11,20 +11,10 @@ defmodule Systems.Survey.ToolModel do
   import Ecto.Changeset
 
   schema "survey_tools" do
-    belongs_to(:content_node, Core.Content.Node)
     belongs_to(:auth_node, Core.Authorization.Node)
 
     field(:survey_url, :string)
-    field(:current_subject_count, :integer)
-    field(:subject_count, :integer)
-    field(:duration, :string)
-    field(:language, :string)
-    field(:ethical_approval, :boolean)
-    field(:ethical_code, :string)
-
-    field(:devices, {:array, Ecto.Enum}, values: Core.Enums.Devices.schema_values())
-
-    field(:director, Ecto.Enum, values: [:campaign, :assignment])
+    field(:director, Ecto.Enum, values: [:campaign])
 
     timestamps()
   end
@@ -33,24 +23,15 @@ defmodule Systems.Survey.ToolModel do
     def id(survey_tool), do: survey_tool.auth_node_id
   end
 
-  @operational_fields ~w(survey_url subject_count duration ethical_code ethical_approval devices)a
-  @fields @operational_fields ++ ~w(language)a
+  @operational_fields ~w(survey_url)a
+  @fields @operational_fields
   @required_fields ~w()a
 
   @impl true
   def operational_fields, do: @operational_fields
 
   @impl true
-  def operational_validation(changeset) do
-    validate_true(changeset, :ethical_approval)
-  end
-
-  defp validate_true(changeset, field) do
-    case get_field(changeset, field) do
-      true -> changeset
-      _ -> add_error(changeset, field, "is not true")
-    end
-  end
+  def operational_validation(changeset), do: changeset
 
   def changeset(tool, :auto_save, params) do
     tool
@@ -126,49 +107,4 @@ defmodule Systems.Survey.ToolModel do
     end)
     |> to_string()
   end
-end
-
-defimpl Systems.Assignment.Assignable, for: Systems.Survey.ToolModel do
-  import CoreWeb.Gettext
-
-  def languages(%{language: nil}), do: []
-  def languages(%{language: language}), do: [language]
-
-  def devices(%{devices: nil}), do: []
-  def devices(%{devices: devices}), do: devices
-
-  def spot_count(%{subject_count: nil}), do: 0
-  def spot_count(%{subject_count: subject_count}), do: subject_count
-  def spot_count(_), do: 0
-
-  def duration(%{duration: nil}), do: 0
-
-  def duration(%{duration: duration}) do
-    case Integer.parse(duration) do
-      :error -> 0
-      {duration, _} -> duration
-    end
-  end
-
-  def apply_label(_), do: dgettext("link-survey", "apply.cta.title")
-  def open_label(_), do: dgettext("link-survey", "open.cta.title")
-
-  def path(%{survey_url: nil}, _), do: nil
-
-  def path(%{survey_url: url}, panl_id) do
-    url_components = URI.parse(url)
-
-    query =
-      url_components.query
-      |> decode_query()
-      |> Map.put(:panl_id, panl_id)
-      |> URI.encode_query(:rfc3986)
-
-    url_components
-    |> Map.put(:query, query)
-    |> URI.to_string()
-  end
-
-  defp decode_query(nil), do: %{}
-  defp decode_query(query), do: URI.decode_query(query)
 end

@@ -3,7 +3,7 @@ defmodule Systems.Assignment.LandingPage do
   The  page for an assigned task
   """
   use CoreWeb, :live_view
-  use CoreWeb.UI.Dialog
+  use CoreWeb.UI.PlainDialog
   use CoreWeb.Layouts.Workspace.Component, :assignment
 
   alias Frameworks.Pixel.Text.{Title1, Title3, BodyLarge}
@@ -154,7 +154,7 @@ defmodule Systems.Assignment.LandingPage do
     >
       <div :if={{ show_dialog?(@dialog) }} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
         <div class="flex flex-row items-center justify-center w-full h-full">
-          <Dialog vm={{ @dialog }} />
+          <PlainDialog vm={{ @dialog }} />
         </div>
       </div>
 

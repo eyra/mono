@@ -17,6 +17,14 @@ defmodule Systems.Promotion.LandingPageTest do
           :survey_tool,
           %{
             survey_url: "https://eyra.co/fake_survey",
+          }
+        )
+
+      experiment =
+        Factories.insert!(
+          :experiment,
+          %{
+            survey_tool: survey_tool,
             subject_count: 10,
             duration: "10",
             language: "en",
@@ -28,7 +36,7 @@ defmodule Systems.Promotion.LandingPageTest do
         Factories.insert!(
           :assignment,
           %{
-            survey_tool: survey_tool
+            experiment: experiment
           }
         )
 

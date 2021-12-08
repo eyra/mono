@@ -1,11 +1,11 @@
 defmodule Frameworks.Pixel.Selector.Selector do
   @moduledoc false
-  use Surface.LiveComponent
+  use CoreWeb.UI.LiveComponent
 
   alias Frameworks.Pixel.Dynamic
 
   prop(items, :list, required: true)
-  prop(parent, :map, required: true)
+  prop(parent, :any, required: true)
   prop(type, :atom, default: :label)
   prop(optional?, :boolean, default: true)
   prop(opts, :string, default: "")
@@ -68,17 +68,17 @@ defmodule Frameworks.Pixel.Selector.Selector do
          active_item_ids
        ) do
     if multiselect?(type, Enum.count(items)) do
-      send_update(parent.type,
-        id: parent.id,
-        selector_id: selector_id,
-        active_item_ids: active_item_ids
+      update_target(parent, %{
+          selector_id: selector_id,
+          active_item_ids: active_item_ids
+        }
       )
     else
       active_item_id = List.first(active_item_ids)
-      send_update(parent.type,
-        id: parent.id,
-        selector_id: selector_id,
-        active_item_id: active_item_id
+      update_target(parent, %{
+          selector_id: selector_id,
+          active_item_id: active_item_id
+        }
       )
     end
   end

@@ -291,6 +291,21 @@ defmodule Systems.Campaign.Context do
     |> Repo.all()
   end
 
+  def ready?(id) do
+    # temp solution for checking if campaign is ready to submit,
+    # TBD: replace with signal driven db field
+
+    preload = Campaign.Model.preload_graph(:full)
+
+    %{
+      promotion: promotion,
+      promotable_assignment: assignment
+    } = Campaign.Context.get!(id, preload)
+
+    Promotion.Context.ready?(promotion) &&
+    Assignment.Context.ready?(assignment)
+  end
+
   @doc """
     Marks expired tasks in online campaigns based on updated_at and estimated duration.
     If force is true (for debug purposes only), all pending tasks will be marked as expired.

@@ -74,8 +74,10 @@ defmodule CoreWeb.Dashboard do
             image_id: image_id
           },
           promotable: %{
-            assignable_data_donation_tool: %{
-              id: edit_id
+            assignable_experiment: %{
+              data_donation_tool: %{
+                id: edit_id
+              }
             }
           }
         }

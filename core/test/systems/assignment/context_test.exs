@@ -159,11 +159,17 @@ defmodule Systems.Assignment.ContextTest do
 
       survey_tool =
         Factories.insert!(:survey_tool, %{
+          survey_url: "http://eyra.co/survey/123"
+        })
+
+      experiment =
+        Factories.insert!(:experiment, %{
+          survey_tool: survey_tool,
           duration: Integer.to_string(duration),
           subject_count: subject_count
         })
 
-      Factories.insert!(:assignment, %{survey_tool: survey_tool, crew: crew})
+      Factories.insert!(:assignment, %{experiment: experiment, crew: crew})
     end
 
     defp create_task(crew, status, expired, minutes_ago \\ 31) when is_boolean(expired) do

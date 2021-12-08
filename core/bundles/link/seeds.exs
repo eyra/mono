@@ -218,7 +218,6 @@ Core.Repo.transaction(
           description: ""
         })
 
-      tool_content_node = Core.Factories.insert!(:content_node)
       {tool_type, campaign_data} = Map.pop!(campaign_data, :type)
       {tool_data, campaign_data} = Map.pop!(campaign_data, tool_type)
       {promotion_data, campaign_data} = Map.pop!(campaign_data, :promotion)

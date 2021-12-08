@@ -7,16 +7,11 @@ defmodule Systems.Assignment.Model do
 
   alias Systems.{
     Assignment,
-    Promotion,
-    Survey,
-    Lab,
-    DataDonation
+    Promotion
   }
 
   schema "assignments" do
-    belongs_to(:assignable_survey_tool, Survey.ToolModel)
-    belongs_to(:assignable_lab_tool, Lab.ToolModel)
-    belongs_to(:assignable_data_donation_tool, DataDonation.ToolModel)
+    belongs_to(:assignable_experiment, Assignment.ExperimentModel)
     belongs_to(:crew, Systems.Crew.Model)
     belongs_to(:auth_node, Core.Authorization.Node)
 
@@ -45,15 +40,13 @@ defmodule Systems.Assignment.Model do
   end
 
   def assignable(%{assignable: assignable}) when not is_nil(assignable), do: assignable
-  def assignable(%{assignable_survey_tool: assignable}) when not is_nil(assignable), do: assignable
-  def assignable(%{assignable_lab_tool: assignable}) when not is_nil(assignable), do: assignable
-  def assignable(%{assignable_data_donation_tool: assignable}) when not is_nil(assignable), do: assignable
+  def assignable(%{assignable_experiment: assignable}) when not is_nil(assignable), do: assignable
   def assignable(%{id: id}) do
     raise "no assignable object available for assignment #{id}"
   end
 
   def preload_graph(:full) do
-    [:crew, :assignable_data_donation_tool, assignable_lab_tool: [:time_slots], assignable_survey_tool: [:auth_node, :content_node]]
+    [:crew, assignable_experiment: [lab_tool: [:time_slots], survey_tool: [:auth_node]]]
   end
 
   def preload_graph(_), do: []

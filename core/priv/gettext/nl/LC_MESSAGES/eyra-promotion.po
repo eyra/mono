@@ -78,7 +78,7 @@ msgid "expectations.label"
 msgstr "Beschrijf wat er van de deelnemers wordt verwacht"
 
 #, elixir-format
-#: systems/campaign/model.ex:99 systems/promotion/landing_page.ex:179
+#: systems/campaign/model.ex:98 systems/promotion/landing_page.ex:179
 msgid "expectations.public.label"
 msgstr "Wat kun je verwachten?"
 
@@ -113,7 +113,7 @@ msgid "search.different.image.button"
 msgstr "Verander omslag"
 
 #, elixir-format
-#: systems/campaign/model.ex:114 systems/promotion/form_view.ex:153
+#: systems/campaign/model.ex:113 systems/promotion/form_view.ex:153
 msgid "subtitle.label"
 msgstr "Kun je in een zin uitleggen waar je studie over gaat?"
 

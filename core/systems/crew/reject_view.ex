@@ -1,5 +1,5 @@
 defmodule Systems.Crew.RejectView do
-  use Surface.LiveComponent
+  use CoreWeb.UI.LiveComponent
 
   require Logger
 
@@ -72,7 +72,7 @@ defmodule Systems.Crew.RejectView do
 
     case Ecto.Changeset.apply_action(changeset, :update) do
       {:ok, model} ->
-        send_update(target.type, id: target.id, reject: :submit, rejection: model)
+        update_target(target, %{reject: :submit, rejection: model})
         {:noreply, socket}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -84,7 +84,7 @@ defmodule Systems.Crew.RejectView do
   end
 
   def handle_event("cancel", _params, %{assigns: %{target: target}} = socket) do
-    send_update(target.type, id: target.id, reject: :cancel)
+    update_target(target, %{reject: :cancel})
     {:noreply, socket}
   end
 
@@ -151,11 +151,12 @@ defmodule Systems.Crew.RejectView.Example do
     catalogue: Frameworks.Pixel.Catalogue,
     title: "Reject view",
     height: "640px",
+    direction: "vertical",
     container: {:div, class: ""}
 
   def render(assigns) do
     ~H"""
-    <RejectView id={{ :reject_view_example }} target={{ %{type: __MODULE__, id: self()} }} />
+    <RejectView id={{ :reject_view_example }} target={{ self() }} />
     """
   end
 

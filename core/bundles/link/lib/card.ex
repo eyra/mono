@@ -74,7 +74,7 @@ defmodule Link.Marketplace.Card do
           },
           promotable_assignment:
             %{
-              assignable_survey_tool: %{
+              assignable_experiment: %{
                 duration: duration,
                 language: language
               }
@@ -143,7 +143,7 @@ defmodule Link.Marketplace.Card do
           },
           promotable_assignment:
             %{
-              assignable_survey_tool: %{
+              assignable_experiment: %{
                 duration: duration,
                 language: language
               }

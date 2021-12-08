@@ -32,7 +32,6 @@ defmodule Systems.Survey.Context do
   import Ecto.Query, warn: false
   alias Ecto.Multi
   alias Core.Repo
-  alias Core.Content.Nodes
 
   alias Frameworks.{
     Signal
@@ -60,10 +59,9 @@ defmodule Systems.Survey.Context do
   @doc """
   Creates a survey_tool.
   """
-  def create_survey_tool(attrs, auth_node, content_node) do
+  def create_tool(attrs, auth_node) do
     %Survey.ToolModel{}
     |> Survey.ToolModel.changeset(:mount, attrs)
-    |> Ecto.Changeset.put_assoc(:content_node, content_node)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Repo.insert()
   end
@@ -79,18 +77,12 @@ defmodule Systems.Survey.Context do
 
   def update_survey_tool(_, _, _), do: nil
 
-  def update_survey_tool(%{data: tool, changes: attrs} = changeset) do
-    node = Nodes.get!(tool.content_node_id)
-    node_changeset = Survey.ToolModel.node_changeset(node, tool, attrs)
-
-    # campaign_changeset =
-    #   Campaign.Model.changeset(campaign, %{updated_at: NaiveDateTime.utc_now()})
-
+  def update_survey_tool(changeset) do
     with {:ok, %{tool: tool} = result} <-
            Multi.new()
            |> Multi.update(:tool, changeset)
-           |> Multi.update(:content_node, node_changeset)
-           |> Repo.transaction() do
+           |> Repo.transaction()
+           do
       Signal.Context.dispatch!(:survey_tool_updated, tool)
       {:ok, result}
     end
@@ -100,12 +92,7 @@ defmodule Systems.Survey.Context do
   Deletes a survey_tool.
   """
   def delete_survey_tool(%Survey.ToolModel{} = survey_tool) do
-    content_node = Core.Content.Nodes.get!(survey_tool.content_node_id)
-
-    Multi.new()
-    |> Multi.delete(:survey_tool, survey_tool)
-    |> Multi.delete(:content_node, content_node)
-    |> Repo.transaction()
+    Repo.delete(survey_tool)
   end
 
   @doc """
@@ -115,16 +102,20 @@ defmodule Systems.Survey.Context do
     Survey.ToolModel.changeset(survey_tool, type, attrs)
   end
 
-  def copy(%Survey.ToolModel{} = tool, auth_node, content_node) do
+  def copy(%Survey.ToolModel{} = tool, auth_node) do
     %Survey.ToolModel{}
     |> Survey.ToolModel.changeset(:copy, Map.from_struct(tool))
-    |> Ecto.Changeset.put_assoc(:content_node, content_node)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Repo.insert!()
   end
 
   def ready?(%Survey.ToolModel{} = survey_tool) do
-    Nodes.get!(survey_tool.content_node_id).ready
+    changeset =
+      %Survey.ToolModel{}
+      |> Survey.ToolModel.operational_changeset(Map.from_struct(survey_tool))
+      |> IO.inspect(label: "READY? SURVEY")
+
+    changeset.valid?
   end
 end
 

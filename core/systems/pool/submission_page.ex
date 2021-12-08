@@ -5,7 +5,7 @@ defmodule Systems.Pool.SubmissionPage do
   use CoreWeb, :live_view
   use CoreWeb.MultiFormAutoSave
   use CoreWeb.Layouts.Workspace.Component, :pool_submission
-  use CoreWeb.UI.Dialog
+  use CoreWeb.UI.PlainDialog
 
   import CoreWeb.Gettext
 
@@ -219,7 +219,7 @@ defmodule Systems.Pool.SubmissionPage do
       >
         <div :if={{ show_dialog?(@dialog) }} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
           <div class="flex flex-row items-center justify-center w-full h-full">
-            <Dialog vm={{ @dialog }} />
+            <PlainDialog vm={{ @dialog }} />
           </div>
         </div>
         <div phx-click="reset_focus">

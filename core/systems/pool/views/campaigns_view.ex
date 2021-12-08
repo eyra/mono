@@ -93,7 +93,7 @@ defmodule Systems.Pool.CampaignsView do
          },
          promotable_assignment:
            %{
-             assignable_survey_tool: %{
+             assignable_experiment: %{
                subject_count: target_subject_count
              }
            } = assignment

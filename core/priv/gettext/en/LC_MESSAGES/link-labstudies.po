@@ -10,28 +10,3 @@ msgid ""
 msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
-
-#, elixir-format
-#: bundles/link/lib/lab/overview.ex:25
-msgid "title"
-msgstr "Lab studies"
-
-#, elixir-format
-#: bundles/link/lib/lab/overview.ex:41
-msgid "add.first.button"
-msgstr "Add your first lab study"
-
-#, elixir-format
-#: bundles/link/lib/lab/overview.ex:37
-msgid "empty.description"
-msgstr "There are currently no lab studies created by you. As soon as a you create one, it will be added to this page. Start by clicking on the button below."
-
-#, elixir-format
-#: bundles/link/lib/lab/overview.ex:36
-msgid "empty.title"
-msgstr "Lab studies you create will appear here"
-
-#, elixir-format
-#: bundles/link/lib/lab/overview.ex:32
-msgid "add.new.button"
-msgstr "Add new lab study"

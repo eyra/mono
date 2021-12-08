@@ -97,8 +97,9 @@ defmodule Systems.Campaign.ContextTest do
         })
 
       crew = Factories.insert!(:crew)
-      survey_tool = Factories.insert!(:survey_tool, %{duration: "10", subject_count: 1})
-      assignment = Factories.insert!(:assignment, %{survey_tool: survey_tool, crew: crew})
+      survey_tool = Factories.insert!(:survey_tool)
+      experiment = Factories.insert!(:experiment, %{survey_tool: survey_tool, duration: "10", subject_count: 1})
+      assignment = Factories.insert!(:assignment, %{experiment: experiment, crew: crew})
       Factories.insert!(:campaign, %{assignment: assignment, promotion: promotion})
     end
 

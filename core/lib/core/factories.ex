@@ -5,7 +5,6 @@ defmodule Core.Factories do
   alias Core.Accounts.{User, Profile, Features}
 
   alias Core.{
-    Content,
     Pools,
     Authorization,
     DataDonation,
@@ -166,17 +165,12 @@ defmodule Core.Factories do
     build(:submission, %{})
   end
 
+  def build(:experiment) do
+    build(:experiment, %{})
+  end
+
   def build(:assignment) do
     build(:assignment, %{})
-  end
-
-  def build(:content_node) do
-    %Content.Node{ready: true}
-  end
-
-  def build(:content_node, %{} = attributes) do
-    %Content.Node{}
-    |> struct!(attributes)
   end
 
   def build(:auth_node, %{} = attributes) do
@@ -219,21 +213,29 @@ defmodule Core.Factories do
     {authors, attributes} = Map.pop(attributes, :authors, many_relationship(:authors, attributes))
 
     {promotion, attributes} =
-      Map.pop(
-        attributes,
-        :promotion,
-        build(:promotion, %{auth_node: build(:auth_node, %{parent: campaign_auth_node})})
-      )
+      case Map.pop(attributes, :promotion, nil) do
+        {nil, attributes} -> {
+            build(:promotion, %{auth_node: build(:auth_node, %{parent: campaign_auth_node})}),
+            attributes
+          }
+        {promotion, attributes} -> {promotion, attributes}
+      end
 
     {assignment, attributes} =
-      Map.pop(
-        attributes,
-        :assignment,
-        build(:assignment, %{
-          director: :campaign,
-          auth_node: build(:auth_node, %{parent: campaign_auth_node})
-        })
-      )
+      case Map.pop(attributes, :assignment, nil) do
+        {nil, attributes} ->
+          {
+            build(:assignment, %{
+              director: :campaign,
+              auth_node: build(
+                :auth_node,
+                %{parent: campaign_auth_node}
+              )
+            }),
+            attributes
+          }
+        {experiment, attributes} -> {experiment, attributes}
+      end
 
     %Campaign.Model{
       auth_node: campaign_auth_node,
@@ -250,26 +252,47 @@ defmodule Core.Factories do
     crew_auth_node = build(:auth_node, %{parent: auth_node})
     {crew, attributes} = Map.pop(attributes, :crew, build(:crew, %{auth_node: crew_auth_node}))
 
-    {datadonation_tool, attributes} =
-      if Map.has_key?(attributes, :datadonation_tool) do
-        Map.pop(attributes, :datadonation_tool)
+    experiment_auth_node = build(:auth_node, %{parent: auth_node})
+
+    {experiment, attributes} =
+      case Map.pop(attributes, :experiment, nil) do
+        {nil, attributes} -> {build(:experiment, %{auth_node: experiment_auth_node}), attributes}
+        {experiment, attributes} -> {experiment, attributes}
+      end
+
+    %Assignment.Model{
+      auth_node: auth_node,
+      assignable_experiment: experiment,
+      crew: crew
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:experiment, %{} = attributes) do
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+
+    {lab_tool, attributes} =
+      if Map.has_key?(attributes, :lab_tool) do
+        Map.pop(attributes, :lab_tool)
       else
         {nil, attributes}
       end
 
     {survey_tool, attributes} =
-      if datadonation_tool == nil do
+      if lab_tool == nil do
         tool_auth_node = build(:auth_node, %{parent: auth_node})
-        Map.pop(attributes, :survey_tool, build(:survey_tool, %{auth_node: tool_auth_node}))
+        case Map.pop(attributes, :survey_tool, nil) do
+          {nil, attributes} -> {build(:survey_tool, %{auth_node: tool_auth_node}), attributes}
+          {survey_tool, attributes} -> {survey_tool, attributes}
+        end
       else
         {nil, attributes}
       end
 
-    %Assignment.Model{
+    %Assignment.ExperimentModel{
       auth_node: auth_node,
-      assignable_survey_tool: survey_tool,
-      assignable_data_donation_tool: datadonation_tool,
-      crew: crew
+      survey_tool: survey_tool,
+      lab_tool: lab_tool
     }
     |> struct!(attributes)
   end
@@ -320,7 +343,6 @@ defmodule Core.Factories do
 
   def build(:submission, %{} = attributes) do
     {promotion, attributes} = Map.pop!(attributes, :promotion)
-    content_node = build(:content_node, %{parent: promotion.content_node})
 
     {criteria, attributes} = Map.pop(attributes, :criteria, build(:criteria))
     {pool, attributes} = Map.pop(attributes, :pool, Pools.get_by_name(:vu_students))
@@ -329,19 +351,16 @@ defmodule Core.Factories do
       promotion_id: promotion.id,
       status: :idle,
       criteria: criteria,
-      pool: pool,
-      content_node: content_node
+      pool: pool
     }
     |> struct!(attributes)
   end
 
   def build(:promotion, %{} = attributes) do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
-    {content_node, attributes} = Map.pop(attributes, :content_node, build(:content_node))
 
     %Promotion.Model{
       auth_node: auth_node,
-      content_node: content_node,
       title: Faker.Lorem.sentence()
     }
     |> struct!(attributes)
@@ -349,33 +368,27 @@ defmodule Core.Factories do
 
   def build(:data_donation_tool, %{} = attributes) do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
-    {content_node, attributes} = Map.pop(attributes, :content_node, build(:content_node))
 
     %DataDonation.ToolModel{
-      auth_node: auth_node,
-      content_node: content_node
+      auth_node: auth_node
     }
     |> struct!(attributes)
   end
 
   def build(:survey_tool, %{} = attributes) do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
-    {content_node, attributes} = Map.pop(attributes, :content_node, build(:content_node))
 
     %Survey.ToolModel{
-      auth_node: auth_node,
-      content_node: content_node
+      auth_node: auth_node
     }
     |> struct!(attributes)
   end
 
   def build(:lab_tool, %{} = attributes) do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
-    {content_node, attributes} = Map.pop(attributes, :content_node, build(:content_node))
 
     %Lab.ToolModel{
-      auth_node: auth_node,
-      content_node: content_node
+      auth_node: auth_node
     }
     |> struct!(attributes)
   end

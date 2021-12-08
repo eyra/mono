@@ -24,12 +24,11 @@ defmodule Systems.Survey.ContextTest do
       assert Survey.Context.get_survey_tool!(survey_tool.id).id == survey_tool.id
     end
 
-    test "create_survey_tool/1 with valid data creates a survey_tool" do
+    test "create_tool/1 with valid data creates a survey_tool" do
       auth_node = Factories.insert!(:auth_node)
-      content_node = Factories.insert!(:content_node)
 
       assert {:ok, %Survey.ToolModel{} = _survey_tool} =
-               Survey.Context.create_survey_tool(%{}, auth_node, content_node)
+               Survey.Context.create_tool(%{}, auth_node)
     end
 
     test "update_survey_tool/2 with valid data updates the survey_tool" do

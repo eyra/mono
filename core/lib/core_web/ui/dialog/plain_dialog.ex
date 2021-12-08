@@ -1,7 +1,7 @@
-defmodule CoreWeb.UI.Dialog do
+defmodule CoreWeb.UI.PlainDialog do
   use CoreWeb.UI.Component
 
-  alias Frameworks.Pixel.Button.DynamicButton
+  alias CoreWeb.UI.Dialog
 
   defviewmodel(
     title: nil,
@@ -13,7 +13,7 @@ defmodule CoreWeb.UI.Dialog do
 
   defmacro __using__(_opts) do
     quote do
-      alias CoreWeb.UI.Dialog
+      alias CoreWeb.UI.PlainDialog
 
       data(dialog, :any)
 
@@ -59,19 +59,7 @@ defmodule CoreWeb.UI.Dialog do
 
   def render(assigns) do
     ~H"""
-      <div class="p-8 bg-white shadow-2xl w-dialog-width sm:w-dialog-width-sm rounded">
-        <div class="flex flex-col gap-4 sm:gap-8">
-          <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
-            {{ title(@vm) }}
-          </div>
-          <div class="text-bodymedium font-body sm:text-bodylarge">
-            {{ text(@vm) }}
-          </div>
-          <div class="flex flex-row gap-4">
-            <DynamicButton :for={{ button <- buttons(@vm) }} vm={{ button }} />
-          </div>
-        </div>
-      </div>
+      <Dialog vm={{@vm}}></Dialog>
     """
   end
 end

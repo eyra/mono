@@ -4,11 +4,10 @@ defmodule Systems.Campaign.OverviewPage do
   """
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :recruitment
-  use CoreWeb.UI.Dialog
-
-  alias Systems.Campaign
+  use CoreWeb.UI.PlainDialog
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
+  alias CoreWeb.UI.SelectorDialog
   alias Frameworks.Pixel.Button.PrimaryLiveViewButton
 
   alias Link.Marketplace.Card, as: CardVM
@@ -21,6 +20,11 @@ defmodule Systems.Campaign.OverviewPage do
 
   data campaigns, :list, default: []
   data share_dialog, :map
+
+  alias Systems.{
+    Campaign,
+    Assignment
+  }
 
   def mount(_params, _session, socket) do
     {
@@ -41,12 +45,14 @@ defmodule Systems.Campaign.OverviewPage do
     campaigns =
       user
       |> Campaign.Context.list_owned_campaigns(preload: preload)
-      # Temp: only survey tools for now
-      |> Enum.filter(& &1.promotable_assignment.assignable_survey_tool)
       |> Enum.map(&CardVM.campaign_researcher(&1, socket))
 
     socket
-    |> assign(campaigns: campaigns)
+    |> assign(
+      campaigns: campaigns,
+      share_dialog: nil,
+      dialog: nil
+    )
   end
 
   def handle_auto_save_done(socket) do
@@ -133,8 +139,29 @@ defmodule Systems.Campaign.OverviewPage do
 
   @impl true
   def handle_event("create_campaign", _params, socket) do
-    tool = create_campaign(socket)
+    dialog = %{
+      id: :selector_dialog,
+      title: dgettext("link-campaign", "create.campaign.dialog.title"),
+      text: dgettext("link-campaign", "create.campaign.dialog.text"),
+      items: Assignment.ToolTypes.labels(nil),
+      ok_button_text: dgettext("link-campaign", "create.campaign.dialog.ok.button"),
+      cancel_button_text: dgettext("eyra-ui", "cancel.button"),
+      target: self()
+    }
+
+    {:noreply, socket |> assign(dialog: dialog)}
+  end
+
+  @impl true
+  def handle_info(%{selector: :ok, selected: tool_type}, socket) do
+    tool_type |> IO.inspect(label: "TOOLTYPE")
+    tool = create_campaign(socket, tool_type) |> IO.inspect(label: "TOOL")
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, Campaign.ContentPage, tool.id))}
+  end
+
+  @impl true
+  def handle_info(%{selector: :cancel}, socket) do
+    {:noreply, socket |> assign(dialog: nil)}
   end
 
   @impl true
@@ -166,9 +193,9 @@ defmodule Systems.Campaign.OverviewPage do
     {:noreply, socket}
   end
 
-  defp create_campaign(%{assigns: %{current_user: user}} = _socket) do
+  defp create_campaign(%{assigns: %{current_user: user}} = _socket, tool_type) do
     title = dgettext("eyra-dashboard", "default.study.title")
-    Campaign.Assembly.create(user, title)
+    Campaign.Assembly.create(user, title, tool_type)
   end
 
   def render(assigns) do
@@ -183,9 +210,9 @@ defmodule Systems.Campaign.OverviewPage do
           </div>
         </div>
 
-        <div :if={{ @dialog }} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
+        <div :if={{ @dialog != nil }} class="fixed z-40 left-0 top-0 w-full h-full bg-black bg-opacity-20">
           <div class="flex flex-row items-center justify-center w-full h-full">
-            <Dialog vm={{ @dialog }} />
+            <SelectorDialog :props={{ @dialog }} />
           </div>
         </div>
         <ContentArea>

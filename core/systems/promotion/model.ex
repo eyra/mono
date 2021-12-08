@@ -3,7 +3,7 @@ defmodule Systems.Promotion.Model do
   The promotion schema.
   """
   use Ecto.Schema
-  use Core.Content.Node
+  use Frameworks.Utility.Model
 
   import Ecto.Changeset
   import CoreWeb.Gettext
@@ -30,7 +30,6 @@ defmodule Systems.Promotion.Model do
     field(:director, Ecto.Enum, values: [:campaign])
 
     has_one(:submission, Core.Pools.Submission, foreign_key: :promotion_id)
-    belongs_to(:content_node, Core.Content.Node)
     belongs_to(:auth_node, Core.Authorization.Node)
 
     timestamps()

@@ -1,79 +1,28 @@
 defmodule Systems.Survey.ToolForm do
   use CoreWeb.LiveForm
 
-  alias Core.Enums.Devices
-  alias Link.Enums.OnlineStudyLanguages
-
   alias CoreWeb.UI.StepIndicator
 
-  alias Frameworks.Pixel.Selector.Selector
   alias Frameworks.Pixel.Panel.Panel
-  alias Frameworks.Pixel.Text.{Title2, Title3, Title5, Body, BodyLarge, BodyMedium}
-  alias Frameworks.Pixel.Form.{Form, TextInput, UrlInput, NumberInput, Checkbox}
+  alias Frameworks.Pixel.Text.{Title3, Title5, BodyLarge, BodyMedium}
+  alias Frameworks.Pixel.Form.{Form, UrlInput}
   alias Frameworks.Pixel.Button.Face.LabelIcon
 
   alias Systems.{
-    Survey,
-    Assignment
+    Survey
   }
 
-  prop(props, :map, required: true)
+  prop entity_id, :number, required: true
+  prop callback_url, :string, required: true
+  prop validate?, :boolean, required: true
 
   data(entity, :any)
-  data(entity_id, :any)
-  data(assignment_id, :any)
-  data(uri_origin, :any)
-  data(device_labels, :list)
-  data(language_labels, :list)
-  data(ethical_label, :any)
   data(changeset, :any)
   data(focus, :any, default: "")
   data(panlid_link, :any)
 
-  # Handle selector update
-
-  def update(
-        %{active_item_ids: active_item_ids, selector_id: :ethical_approval},
-        %{assigns: %{entity: entity}} = socket
-      ) do
-    {
-      :ok,
-      socket
-      |> save(entity, :auto_save, %{ethical_approval: not Enum.empty?(active_item_ids)})
-    }
-  end
-
-  def update(
-        %{active_item_id: active_item_id, selector_id: :language},
-        %{assigns: %{entity: entity}} = socket
-      ) do
-    language =
-      case active_item_id do
-        nil -> nil
-        item when is_atom(item) -> Atom.to_string(item)
-        _ -> active_item_id
-      end
-
-    {
-      :ok,
-      socket
-      |> save(entity, :auto_save, %{language: language})
-    }
-  end
-
-  def update(
-        %{active_item_ids: active_item_ids, selector_id: selector_id},
-        %{assigns: %{entity: entity}} = socket
-      ) do
-    {
-      :ok,
-      socket
-      |> save(entity, :auto_save, %{selector_id => active_item_ids})
-    }
-  end
-
   # Handle update from parent after attempt to publish
-  def update(%{props: %{validate?: new}}, %{assigns: %{validate?: current}} = socket)
+  def update(%{validate?: new}, %{assigns: %{validate?: current}} = socket)
       when new != current do
     {
       :ok,
@@ -90,38 +39,24 @@ defmodule Systems.Survey.ToolForm do
 
   # Handle initial update
   def update(
-        %{id: id, props: %{entity_id: entity_id, uri_origin: uri_origin, validate?: validate?}},
+        %{id: id, entity_id: entity_id, validate?: validate?, callback_url: callback_url},
         socket
       ) do
     entity = Survey.Context.get_survey_tool!(entity_id)
-    assignment = Assignment.Context.get_by_assignable(entity)
 
     changeset = Survey.ToolModel.changeset(entity, :create, %{})
-
-    device_labels = Devices.labels(entity.devices)
-    language_labels = OnlineStudyLanguages.labels(entity.language)
-
-    ethical_label = %{
-      id: :statement,
-      value: dgettext("link-survey", "ethical.label"),
-      accent: :tertiary,
-      active: entity.ethical_approval
-    }
 
     {
       :ok,
       socket
-      |> assign(id: id)
-      |> assign(entity_id: entity_id)
-      |> assign(entity: entity)
-      |> assign(assignment_id: assignment.id)
-      |> assign(uri_origin: uri_origin)
-      |> assign(changeset: changeset)
-      |> assign(device_labels: device_labels)
-      |> assign(ethical_label: ethical_label)
-      |> assign(language_labels: language_labels)
-      |> assign(uri_origin: uri_origin)
-      |> assign(validate?: validate?)
+      |> assign(
+        id: id,
+        entity_id: entity_id,
+        entity: entity,
+        callback_url: callback_url,
+        changeset: changeset,
+        validate?: validate?
+      )
       |> validate_for_publish()
     }
   end
@@ -129,26 +64,7 @@ defmodule Systems.Survey.ToolForm do
   # Handle Events
 
   @impl true
-  def handle_event("toggle", %{"checkbox" => checkbox}, %{assigns: %{entity: entity}} = socket) do
-    field = String.to_existing_atom(checkbox)
-
-    new_value =
-      case Map.get(entity, field) do
-        nil -> true
-        value -> not value
-      end
-
-    attrs = %{field => new_value}
-
-    {
-      :noreply,
-      socket
-      |> save(entity, :auto_save, attrs)
-    }
-  end
-
-  @impl true
-  def handle_event("save", %{"tool" => attrs}, %{assigns: %{entity: entity}} = socket) do
+  def handle_event("save", %{"tool_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket
@@ -202,13 +118,6 @@ defmodule Systems.Survey.ToolForm do
     )
   end
 
-  defp ethical_review_link() do
-    link_as_string(
-      dgettext("link-survey", "ethical.review.link"),
-      "https://vueconomics.eu.qualtrics.com/jfe/form/SV_1SKjMzceWRZIk9D"
-    )
-  end
-
   defp link_as_string(label, url) do
     label
     |> Phoenix.HTML.Link.link(
@@ -221,12 +130,12 @@ defmodule Systems.Survey.ToolForm do
 
   def render(assigns) do
     ~H"""
-      <ContentArea class="mb-4" >
-        <MarginY id={{:page_top}} />
-        <Title2>{{dgettext("link-survey", "form.title")}}</Title2>
-        <BodyLarge>{{ dgettext("link-survey", "form.description") }}</BodyLarge>
-        <Spacing value="M" />
+      <div class="-mb-8">
         <Form id={{@id}} changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
+          <Title3>{{dgettext("link-survey", "form.title")}}</Title3>
+          <BodyLarge>{{ dgettext("link-survey", "form.description") }}</BodyLarge>
+          <Spacing value="M" />
+
           <Panel bg_color="bg-grey1">
             <Title3 color="text-white">{{dgettext("link-survey", "setup.title")}}</Title3>
             <Spacing value="M" />
@@ -254,10 +163,10 @@ defmodule Systems.Survey.ToolForm do
                   <Spacing value="XS" />
                   <div class="flex flex-row gap-6 items-center">
                     <div class="flex-wrap">
-                      <BodyMedium color="text-tertiary"><span class="break-all">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Systems.Assignment.CallbackPage, @assignment_id)}}</span></BodyMedium>
+                      <BodyMedium color="text-tertiary"><span class="break-all">{{ @callback_url }}</span></BodyMedium>
                     </div>
                     <div class="flex-wrap flex-shrink-0 mt-1">
-                      <div id="copy-redirect-url" class="cursor-pointer" phx-hook="Clipboard" data-text={{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Systems.Assignment.CallbackPage, @assignment_id)}} >
+                      <div id="copy-redirect-url" class="cursor-pointer" phx-hook="Clipboard" data-text={{ @callback_url }} >
                         <LabelIcon vm={{ %{ label: dgettext("link-survey", "redirect.copy.button"),  icon: :clipboard_tertiary, text_color: "text-tertiary" } }} />
                       </div>
                     </div>
@@ -281,51 +190,8 @@ defmodule Systems.Survey.ToolForm do
           <Spacing value="L" />
 
           <UrlInput field={{:survey_url}} label_text={{dgettext("link-survey", "config.url.label")}} />
-          <Spacing value="M" />
-
-          <NumberInput field={{:duration}} label_text={{dgettext("link-survey", "duration.label")}} />
-          <Spacing value="M" />
-
-          <NumberInput field={{:subject_count}} label_text={{dgettext("link-survey", "config.nrofsubjects.label")}} />
-          <Spacing value="M" />
-
-          <Title3>{{dgettext("link-survey", "language.title")}}</Title3>
-          <Body>{{dgettext("link-survey", "languages.label")}}</Body>
-          <Spacing value="S" />
-          <Selector
-            id={{:language}}
-            items={{ @language_labels }}
-            type={{:radio}}
-            parent={{ %{type: __MODULE__, id: @id} }}
-          />
-          <Spacing value="XL" />
-
-          <Title3>{{dgettext("link-survey", "devices.title")}}</Title3>
-          <Body>{{dgettext("link-survey", "devices.label")}}</Body>
-          <Spacing value="S" />
-          <Selector
-            id={{:devices}}
-            items={{ @device_labels }}
-            parent={{ %{type: __MODULE__, id: @id} }}
-          />
-          <Spacing value="XL" />
-
-          <Panel bg_color="bg-grey1">
-            <Title3 color="text-white" >{{dgettext("link-survey", "ethical.title")}}</Title3>
-            <BodyMedium color="text-white">{{ raw(dgettext("link-survey", "ethical.description", link: ethical_review_link()))}}</BodyMedium>
-            <Spacing value="S" />
-            <TextInput field={{:ethical_code}} placeholder={{dgettext("eyra-account", "ehtical.code.label")}} background={{:dark}} />
-            <Checkbox
-              field={{:ethical_approval}}
-              label_text={{ dgettext("link-survey", "ethical.label")}}
-              label_color="text-white"
-              accent={{:tertiary}}
-              background={{:dark}}
-            />
-          </Panel>
-
         </Form>
-      </ContentArea>
+      </div>
     """
   end
 end

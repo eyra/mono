@@ -3,7 +3,7 @@ defmodule Systems.DataDonation.ToolModel do
   The data donation tool schema.
   """
   use Ecto.Schema
-  use Core.Content.Node
+  use Frameworks.Utility.Model
 
   require Core.Enums.Themes
 
@@ -15,7 +15,6 @@ defmodule Systems.DataDonation.ToolModel do
   }
 
   schema "data_donation_tools" do
-    belongs_to(:content_node, Core.Content.Node)
     belongs_to(:auth_node, Core.Authorization.Node)
 
     field(:script, :string)
@@ -71,18 +70,4 @@ defmodule Systems.DataDonation.ToolModel do
     |> DataDonation.UserData.changeset(%{tool: tool, user: user, data: data})
     |> Repo.insert!()
   end
-end
-
-defimpl Systems.Assignment.Assignable, for: Systems.DataDonation.ToolModel do
-  import CoreWeb.Gettext
-
-  def languages(_), do: []
-  def devices(_), do: []
-  def spot_count(%{subject_count: nil}), do: 0
-  def spot_count(%{subject_count: subject_count}), do: subject_count
-  def spot_count(_), do: 0
-  def duration(_), do: 0
-  def path(_, _), do: nil
-  def apply_label(_), do: dgettext("eyra-data-donation", "apply.cta.title")
-  def open_label(_), do: dgettext("eyra-data-donation", "open.cta.title")
 end

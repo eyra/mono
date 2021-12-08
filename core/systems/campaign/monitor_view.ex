@@ -233,7 +233,7 @@ defmodule Systems.Campaign.MonitorView do
       },
       promotable_assignment: %{
         crew: crew,
-        assignable_survey_tool: %{
+        assignable_experiment: %{
           subject_count: subject_count
         } = tool
       }

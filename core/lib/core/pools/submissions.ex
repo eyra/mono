@@ -6,7 +6,6 @@ defmodule Core.Pools.Submissions do
   alias Ecto.Multi
   alias Ecto.Changeset
   alias Core.Repo
-  alias Core.Content.{Nodes, Node}
   alias Core.Pools.{Submission, Criteria}
   alias Core.Accounts
 
@@ -21,7 +20,7 @@ defmodule Core.Pools.Submissions do
     Repo.all(Submission)
   end
 
-  def list(status, preload \\ [:criteria, :promotion, :content_node]) do
+  def list(status, preload \\ [:criteria, :promotion]) do
     from(submission in Submission,
       where: submission.status == ^status,
       preload: ^preload
@@ -29,7 +28,7 @@ defmodule Core.Pools.Submissions do
     |> Repo.all()
   end
 
-  def get!(term, preload \\ [:criteria, :promotion, :content_node])
+  def get!(term, preload \\ [:criteria, :promotion])
 
   def get!(%Promotion.Model{} = promotion, preload) do
     from(submission in Submission,
@@ -44,14 +43,11 @@ defmodule Core.Pools.Submissions do
     |> Repo.get!(id)
   end
 
-  def update(%Submission{} = submisson, %Changeset{} = changeset) do
-    node = Nodes.get!(submisson.content_node_id)
-    node_changeset = Submission.node_changeset(node, submisson, changeset.changes)
+  def update(%Submission{} = _submisson, %Changeset{} = changeset) do
 
     with {:ok, %{submisson: submisson}} <-
            Multi.new()
            |> Multi.update(:submisson, changeset)
-           |> Multi.update(:content_node, node_changeset)
            |> Repo.transaction() do
       Signal.Context.dispatch!(:submisson_updated, submisson)
       {:ok, notify_when_submitted(submisson, changeset)}
@@ -63,13 +59,12 @@ defmodule Core.Pools.Submissions do
     __MODULE__.update(submisson, changeset)
   end
 
-  def create(%{} = attrs, promotion, pool, %Node{} = content_node) do
+  def create(%{} = attrs, promotion, pool) do
     submission_changeset =
       %Submission{}
       |> Submission.changeset(attrs)
       |> Ecto.Changeset.put_assoc(:promotion, promotion)
       |> Ecto.Changeset.put_assoc(:pool, pool)
-      |> Ecto.Changeset.put_assoc(:content_node, content_node)
 
     criteria_changeset =
       %Criteria{}
@@ -81,12 +76,11 @@ defmodule Core.Pools.Submissions do
     {:ok, criteria.submission}
   end
 
-  def copy(%Submission{} = submission, %Promotion.Model{} = promotion, pool, content_node) do
+  def copy(%Submission{} = submission, %Promotion.Model{} = promotion, pool) do
     %Submission{}
     |> Submission.changeset(Map.from_struct(submission))
     |> Ecto.Changeset.put_assoc(:promotion, promotion)
     |> Ecto.Changeset.put_assoc(:pool, pool)
-    |> Ecto.Changeset.put_assoc(:content_node, content_node)
     |> Repo.insert!()
   end
 
@@ -96,6 +90,8 @@ defmodule Core.Pools.Submissions do
     |> Ecto.Changeset.put_assoc(:submission, submission)
     |> Repo.insert!()
   end
+
+
 
   defp notify_when_submitted(%Submission{} = submission, %Ecto.Changeset{} = changeset) do
     if Ecto.Changeset.get_change(changeset, :status) === :submitted do

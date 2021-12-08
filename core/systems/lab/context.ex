@@ -1,5 +1,8 @@
 defmodule Systems.Lab.Context do
   import Ecto.Query, warn: false
+  alias CoreWeb.UI.Timestamp
+  alias Systems.Lab.VUDaySchedule, as: DaySchedule
+
   alias Core.Repo
 
   alias Systems.{
@@ -14,6 +17,65 @@ defmodule Systems.Lab.Context do
     )
     |> Repo.get!(id)
   end
+
+  def create_tool(attrs, auth_node) do
+    %Lab.ToolModel{}
+    |> Lab.ToolModel.changeset(:mount, attrs)
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Repo.insert()
+  end
+
+  def get_time_slots(id) do
+    from(ts in Lab.TimeSlotModel,
+      where: ts.tool_id == ^id,
+      order_by: {:asc, :start_time}
+    )
+    |> Repo.all()
+  end
+
+
+  def new_day_model(%Lab.ToolModel{id: id}) do
+    time_slots = get_time_slots(id)
+    base_values = DaySchedule.base_values(time_slots)
+
+    date =
+      base_values
+      |> Map.get(:start_time)
+      |> Timestamp.shift_days(1)
+      |> Timestamp.to_date()
+
+    %Lab.DayModel{
+      state: :new,
+      date: date,
+      location: Map.get(base_values, :location),
+      number_of_seats: Map.get(base_values, :number_of_seats),
+      entries: DaySchedule.entries()
+    }
+  end
+
+  def edit_day_model(%Lab.ToolModel{id: id}, date) do
+    date_time_slots =
+      get_time_slots(id)
+      |> Enum.filter(&(Date.compare(Timestamp.to_date(&1.start_time),date) == :eq))
+
+    edit_day_model(date_time_slots, date)
+  end
+
+  def edit_day_model([_ | _] = time_slots, date) do
+    base_values = DaySchedule.base_values(time_slots)
+
+    {
+      :ok,
+      %Lab.DayModel{
+        state: :edit,
+        date: date,
+        location: Map.get(base_values, :location),
+        number_of_seats: Map.get(base_values, :number_of_seats),
+        entries: DaySchedule.entries(time_slots)
+      }
+    }
+  end
+  def edit_day_model(_, date), do: {:error, "No time slots available on #{date}"}
 
   def reserve_time_slot(time_slot_id, %User{} = user) when is_integer(time_slot_id) do
     Lab.TimeSlotModel
@@ -63,5 +125,13 @@ defmodule Systems.Lab.Context do
         reservation.user_id == ^user.id and tool.id == ^tool_id and
           reservation.status == :reserved
     )
+  end
+
+  def ready?(%Lab.ToolModel{} = lab_tool) do
+    changeset =
+      %Lab.ToolModel{}
+      |> Lab.ToolModel.operational_changeset(Map.from_struct(lab_tool))
+
+    changeset.valid?
   end
 end

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:170
+#: systems/campaign/overview_page.ex:197
 msgid "default.study.title"
 msgstr ""
 

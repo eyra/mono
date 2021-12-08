@@ -3,7 +3,7 @@ defmodule Core.Pools.Submission do
   A task (donate data) to be completed by a participant.
   """
   use Ecto.Schema
-  use Core.Content.Node
+  use Frameworks.Utility.Model
 
   import CoreWeb.Gettext
   import Ecto.Changeset
@@ -22,8 +22,6 @@ defmodule Core.Pools.Submission do
     has_one(:criteria, Criteria)
     belongs_to(:promotion, Promotion.Model)
     belongs_to(:pool, Pool)
-
-    belongs_to(:content_node, Core.Content.Node)
 
     field(:director, Ecto.Enum, values: [:campaign])
 

@@ -280,3 +280,13 @@ msgstr "Gesloten"
 #: systems/support/ticket_status.ex:5
 msgid "ticket_status.open"
 msgstr "Open"
+
+#, elixir-format
+#: systems/assignment/tool_types.ex:5
+msgid "tool_types.lab"
+msgstr "Lab studie"
+
+#, elixir-format
+#: systems/assignment/tool_types.ex:5
+msgid "tool_types.online"
+msgstr "Online studie"

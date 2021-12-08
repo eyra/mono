@@ -51,7 +51,7 @@ defmodule Systems.Campaign.Model do
     [
       auth_node: [:role_assignments],
       authors: [:user],
-      promotion: [:content_node, submission: [:content_node, :criteria, :pool]],
+      promotion: [submission: [:criteria, :pool]],
       promotable_assignment: Assignment.Model.preload_graph(:full)
     ]
   end
@@ -82,7 +82,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     Crew
   }
 
-  alias Core.Content.Nodes
   alias Core.ImageHelpers
   alias Core.Pools.Submission
 
@@ -166,15 +165,17 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     promotion: %{
       title: title,
       image_id: image_id,
-      content_node: promotion_content_node,
       submission: submission
-    },
+    } = promotion,
     promotable: %{
-      assignable_survey_tool: %{
+      assignable_experiment: %{
         subject_count: target_subject_count
       }
     } = assignment
   }, Link.Dashboard, _user, url_resolver) do
+
+    promotion_ready? = Promotion.Context.ready?(promotion)
+
     tag = Submission.get_tag(submission)
 
     target_subject_count =
@@ -189,7 +190,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     subtitle =
       get_content_list_item_subtitle(
         submission,
-        promotion_content_node,
+        promotion_ready?,
         open_spot_count,
         target_subject_count
       )
@@ -249,13 +250,13 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
   defp get_content_list_item_subtitle(
          submission,
-         promotion_content_node,
+         promotion_ready?,
          open_spot_count,
          target_subject_count
        ) do
     case submission.status do
       :idle ->
-        if Nodes.ready?(promotion_content_node) do
+        if promotion_ready? do
           dgettext("eyra-submission", "ready.for.submission.message")
         else
           dgettext("eyra-submission", "incomplete.forms.message")
