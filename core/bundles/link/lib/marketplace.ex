@@ -18,7 +18,7 @@ defmodule Link.Marketplace do
   alias Core.Pools.{Submission, Criteria}
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias CoreWeb.UI.ContentListItem
+  alias CoreWeb.UI.ContentList
 
   alias Link.Marketplace.Card, as: CardVM
 
@@ -143,7 +143,7 @@ defmodule Link.Marketplace do
                   {{ dgettext("eyra-campaign", "campaign.subject.title") }}
                   <span class="text-primary"> {{ @subject_count }}</span>
                 </Title2>
-                <ContentListItem :for={{item <- @subject_campaigns}} vm={{item}} />
+                <ContentList items={{@subject_campaigns}} />
               </True>
             </Case>
             <Case value={{ render_empty?(assigns) }} >

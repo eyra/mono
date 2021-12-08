@@ -7,7 +7,7 @@ defmodule Systems.Pool.StudentsView do
 
   alias Frameworks.Pixel.Text.Title2
   alias Frameworks.Pixel.Selector.Selector
-  alias CoreWeb.UI.ContentListItem
+  alias CoreWeb.UI.ContentList
 
   prop(user, :any, required: true)
   data(students, :map)
@@ -130,7 +130,7 @@ defmodule Systems.Pool.StudentsView do
           </div>
           <Spacing value="L" />
           <Title2>{{ dgettext("link-studentpool", "tabbar.item.students") }}: <span class="text-primary">{{ Enum.count(@filtered_students) }}</span></Title2>
-          <ContentListItem :for={{item <- @filtered_students}} vm={{item}} />
+          <ContentList items={{@filtered_students}} />
         </div>
       </ContentArea>
     """

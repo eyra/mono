@@ -4,13 +4,13 @@ defmodule CoreWeb.Menu.Items do
   @impl true
   def values(),
     do: %{
-      support: %{target: CoreWeb.Admin.Support, domain: "eyra-ui"},
-      permissions: %{target: CoreWeb.Admin.Permissions, domain: "eyra-ui"},
+      support: %{target: Systems.Support.OverviewPage, domain: "eyra-ui"},
+      permissions: %{target: Systems.Admin.PermissionsPage, domain: "eyra-ui"},
       eyra: %{target: Systems.Home.LandingPage, size: :large, domain: "eyra-ui"},
       dashboard: %{target: CoreWeb.Dashboard, domain: "eyra-ui"},
       todo: %{target: Systems.NextAction.OverviewPage, domain: "eyra-ui"},
       payments: %{target: CoreWeb.Dashboard, domain: "eyra-ui"},
-      helpdesk: %{target: CoreWeb.Helpdesk.Public, domain: "eyra-ui"},
+      helpdesk: %{target: Systems.Support.HelpdeskPage, domain: "eyra-ui"},
       settings: %{target: CoreWeb.User.Settings, domain: "eyra-ui"},
       profile: %{target: CoreWeb.User.Profile, domain: "eyra-ui"},
       signout: %{target: :delete, domain: "eyra-ui"},

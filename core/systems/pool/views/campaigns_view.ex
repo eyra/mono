@@ -14,7 +14,7 @@ defmodule Systems.Pool.CampaignsView do
   alias Core.ImageHelpers
   alias Core.Pools.Submission
 
-  alias CoreWeb.UI.ContentListItem
+  alias CoreWeb.UI.ContentList
 
   alias Frameworks.Pixel.Text.{Title2}
 
@@ -60,13 +60,13 @@ defmodule Systems.Pool.CampaignsView do
               {{ dgettext("link-studentpool", "submitted.title") }}
               <span class="text-primary"> {{ Enum.count(@submitted_campaigns) }}</span>
             </Title2>
-            <ContentListItem :for={{item <- @submitted_campaigns}} vm={{item}} />
+            <ContentList items={{@submitted_campaigns}} />
             <Spacing value="XL" />
             <Title2>
               {{ dgettext("link-studentpool", "accepted.title") }}
               <span class="text-primary"> {{ Enum.count(@accepted_campaigns) }}</span>
             </Title2>
-            <ContentListItem :for={{item <- @accepted_campaigns}} vm={{item}} />
+            <ContentList items={{@accepted_campaigns}} />
           </True>
           <False>
             <Empty

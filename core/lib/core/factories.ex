@@ -8,8 +8,8 @@ defmodule Core.Factories do
     Content,
     Pools,
     Authorization,
-    WebPush,
-    Helpdesk
+    DataDonation,
+    WebPush
   }
 
   alias Frameworks.{
@@ -22,6 +22,7 @@ defmodule Core.Factories do
     Promotion,
     Assignment,
     Crew,
+    Support,
     Survey,
     Lab,
     DataDonation
@@ -115,7 +116,7 @@ defmodule Core.Factories do
   end
 
   def build(:helpdesk_ticket) do
-    %Helpdesk.Ticket{
+    %Support.TicketModel{
       title: Faker.Lorem.sentence(),
       description: Faker.Lorem.paragraph(),
       user: build(:member)

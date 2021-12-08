@@ -5,7 +5,7 @@ defmodule CoreWeb.Dashboard do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :dashboard
 
-  alias CoreWeb.UI.ContentListItem
+  alias CoreWeb.UI.ContentList
 
   alias Systems.{
     Campaign,
@@ -59,7 +59,7 @@ defmodule CoreWeb.Dashboard do
             <Title2>
               {{ dgettext("eyra-dashboard", "recent-items.title") }}
             </Title2>
-            <ContentListItem :for={{item <- @content_items}} vm={{item}} />
+            <ContentList items={{@content_items}} />
         </ContentArea>
     </Workspace>
     """

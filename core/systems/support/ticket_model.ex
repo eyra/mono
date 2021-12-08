@@ -1,4 +1,4 @@
-defmodule Core.Helpdesk.Ticket do
+defmodule Systems.Support.TicketModel do
   use Ecto.Schema
   import Ecto.Changeset
   require Core.Enums.TicketTypes

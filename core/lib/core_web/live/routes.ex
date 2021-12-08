@@ -2,9 +2,7 @@ defmodule CoreWeb.Live.Routes do
   defmacro routes() do
     quote do
       use CoreWeb.Live.Subroutes, [
-        :helpdesk,
-        :user,
-        :admin
+        :user
       ]
 
       scope "/", CoreWeb do
