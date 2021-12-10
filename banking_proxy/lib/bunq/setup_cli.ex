@@ -71,7 +71,7 @@ defmodule Bunq.SetupCLI do
 
   if Mix.env() == :dev do
     def write_config(api_key, installation_token, device_id) do
-      if String.downcase(IO.gets("(Over)write `config/dev.exs`? [y/n]")) |> IO.inspect() == "y\n" do
+      if String.downcase(IO.gets("(Over)write `config/dev.exs`? [y/n]")) == "y\n" do
         File.write!("config/dev.exs", """
         import Config
 
