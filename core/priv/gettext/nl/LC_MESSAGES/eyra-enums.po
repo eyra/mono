@@ -230,3 +230,53 @@ msgstr "Finance"
 #: bundles/link/lib/enums/themes.ex:5
 msgid "themes.operations_analytics"
 msgstr "Operations analytics"
+
+#, elixir-format
+#: systems/crew/reject_categories.ex:5
+msgid "reject_catagories.attention_checks_failed"
+msgstr "Gefaalde aandacht controles"
+
+#, elixir-format
+#: systems/crew/reject_categories.ex:5
+msgid "reject_catagories.not_completed"
+msgstr "Vragenlijst niet compleet"
+
+#, elixir-format
+#: systems/crew/reject_categories.ex:5
+msgid "reject_catagories.other"
+msgstr "Andere reden"
+
+#, elixir-format
+#: lib/core/pools/criteria_filters.ex:5
+msgid "criteria_filters.bk"
+msgstr "BK"
+
+#, elixir-format
+#: lib/core/pools/criteria_filters.ex:5
+msgid "criteria_filters.iba"
+msgstr "IBA"
+
+#, elixir-format
+#: lib/core/pools/criteria_filters.ex:5
+msgid "criteria_filters.resit"
+msgstr "Herhaling"
+
+#, elixir-format
+#: lib/core/pools/criteria_filters.ex:5
+msgid "criteria_filters.year1"
+msgstr "1e jaars"
+
+#, elixir-format
+#: lib/core/pools/criteria_filters.ex:5
+msgid "criteria_filters.year2"
+msgstr "2e jaars"
+
+#, elixir-format
+#: systems/support/ticket_status.ex:5
+msgid "ticket_status.closed"
+msgstr "Gesloten"
+
+#, elixir-format
+#: systems/support/ticket_status.ex:5
+msgid "ticket_status.open"
+msgstr "Open"

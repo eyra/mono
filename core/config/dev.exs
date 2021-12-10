@@ -36,6 +36,11 @@ config :core, CoreWeb.Endpoint,
     ]
   ]
 
+config :core,
+  admins: [
+    "*@eyra.co"
+  ]
+
 config :core, Core.ImageCatalog.Unsplash,
   access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
   app_name: System.get_env("UNSPLASH_APP_NAME")
@@ -45,9 +50,6 @@ config :core, image_catalog: Core.ImageCatalog.Local
 config :core, Core.Mailer,
   adapter: Bamboo.LocalAdapter,
   default_from_email: "no-reply@example.com"
-
-config :exsync,
-  addition_dirs: ["../../frameworks"]
 
 config :web_push_encryption, :vapid_details,
   subject: "mailto:administrator@example.com",
@@ -66,9 +68,7 @@ config :core,
 
 config :core,
        :admins,
-       MapSet.new([
-         "admin@example.org"
-       ])
+       ["admin@example.org"]
 
 try do
   import_config "dev.secret.exs"

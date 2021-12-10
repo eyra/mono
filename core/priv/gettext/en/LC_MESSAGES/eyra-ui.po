@@ -13,15 +13,15 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/debug.ex:6 bundles/link/lib/onboarding/wizard.ex:6
-#: bundles/link/lib/pool/submission_page.ex:6 lib/core_web/live/data_donation/content.ex:6
-#: lib/core_web/live/user/profile.ex:6 systems/campaign/content_page.ex:6
+#: frameworks/pixel/auto_save.ex:78 lib/core_web/live/data_donation/content.ex:6
+#: lib/core_web/live/user/profile.ex:6 systems/campaign/content_page.ex:6 systems/pool/submission_page.ex:6
 msgid "error.flash"
 msgstr "Something went wrong"
 
 #, elixir-format
 #: bundles/link/lib/debug.ex:6 bundles/link/lib/onboarding/wizard.ex:6
-#: bundles/link/lib/pool/submission_page.ex:6 lib/core_web/live/data_donation/content.ex:6
-#: lib/core_web/live/user/profile.ex:6 systems/campaign/content_page.ex:6
+#: frameworks/pixel/auto_save.ex:83 lib/core_web/live/data_donation/content.ex:6
+#: lib/core_web/live/user/profile.ex:6 systems/campaign/content_page.ex:6 systems/pool/submission_page.ex:6
 msgid "saved.info.flash"
 msgstr "Saved"
 
@@ -155,31 +155,31 @@ msgid "menu.item.helpdesk"
 msgstr "Helpdesk"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:8
-#: lib/core_web/live/admin/ticket.ex:4 systems/assignment/landing_page.ex:6 systems/campaign/content_page.ex:9
+#: systems/assignment/landing_page.ex:6 systems/campaign/content_page.ex:9
+#: systems/campaign/overview_page.ex:7 systems/crew/reject_view.ex:109 systems/pool/submission_page.ex:8
 #: systems/promotion/landing_page.ex:6
 msgid "cancel.button"
 msgstr "Cancel"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:229
+#: systems/campaign/content_page.ex:229 systems/campaign/overview_page.ex:60
 msgid "delete.confirm.text"
 msgstr "This %{item} will be permanently deleted."
 
 #, elixir-format
-#: systems/campaign/content_page.ex:228
+#: systems/campaign/content_page.ex:228 systems/campaign/overview_page.ex:59
 msgid "delete.confirm.title"
 msgstr "Delete %{item}?"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:230
+#: systems/campaign/content_page.ex:230 systems/campaign/overview_page.ex:61
 msgid "delete.confirm.label"
 msgstr "Delete"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:8
-#: lib/core_web/live/admin/ticket.ex:4 systems/assignment/landing_page.ex:6 systems/assignment/model.ex:194
-#: systems/campaign/content_page.ex:9 systems/promotion/landing_page.ex:6
+#: systems/assignment/landing_page.ex:6 systems/assignment/model.ex:209
+#: systems/campaign/content_page.ex:9 systems/campaign/overview_page.ex:7 systems/pool/submission_page.ex:8
+#: systems/promotion/landing_page.ex:6
 msgid "ok.button"
 msgstr "OK"
 
@@ -204,35 +204,20 @@ msgid "menu.item.support"
 msgstr "Support"
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:90 lib/core_web/ui/timestamp.ex:93
-#: lib/core_web/ui/timestamp.ex:98
+#: lib/core_web/ui/timestamp.ex:103 lib/core_web/ui/timestamp.ex:106
+#: lib/core_web/ui/timestamp.ex:111
 msgid "timestamp.at"
 msgstr "at"
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:90
+#: lib/core_web/ui/timestamp.ex:103
 msgid "timestamp.today"
 msgstr "today"
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:93
+#: lib/core_web/ui/timestamp.ex:106
 msgid "timestamp.yesterday"
 msgstr "yesterday"
-
-#, elixir-format
-#: lib/core_web/live/admin/ticket.ex:97
-msgid "close.confirm.label"
-msgstr "Close"
-
-#, elixir-format
-#: lib/core_web/live/admin/ticket.ex:96
-msgid "close.confirm.text"
-msgstr "This %{item} will be permanently closed."
-
-#, elixir-format
-#: lib/core_web/live/admin/ticket.ex:95
-msgid "close.confirm.title"
-msgstr "Close %{item}?"
 
 #, elixir-format
 #: lib/core_web/controllers/user_auth.ex:138
@@ -249,3 +234,18 @@ msgstr "Go to dashboard"
 #: bundles/link/lib/start_page_translations.ex:2
 msgid "start.page.marketplace"
 msgstr "Go to marketplace"
+
+#, elixir-format
+#: bundles/link/lib/card.ex:214
+msgid "duplicate.button"
+msgstr "Duplicate"
+
+#, elixir-format
+#: bundles/link/lib/card.ex:204
+msgid "share.button"
+msgstr "Share"
+
+#, elixir-format
+#: frameworks/pixel/components/share_view.ex:127
+msgid "share.dialog.text"
+msgstr "Share your %{content} with one or more %{group} from the list below."

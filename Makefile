@@ -1,6 +1,5 @@
 BUNDLES=$(wildcard core/bundles/*)
-FRAMEWORKS=$(wildcard frameworks/*)
-MIX_PROJECTS=${FRAMEWORKS} core banking_proxy
+MIX_PROJECTS=core banking_proxy
 
 .PHONY: all
 all: test format compile credo deps

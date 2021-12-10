@@ -6,8 +6,8 @@ defmodule CoreWeb.User.Forms.Profile do
   alias Core.Accounts
   alias Core.Accounts.UserProfileEdit
 
-  alias EyraUI.Text.{Title2}
-  alias EyraUI.Form.{Form, TextInput, PhotoInput}
+  alias Frameworks.Pixel.Text.{Title2}
+  alias Frameworks.Pixel.Form.{Form, TextInput, PhotoInput}
 
   prop(props, :any, required: true)
 
@@ -85,7 +85,7 @@ defmodule CoreWeb.User.Forms.Profile do
     changeset = UserProfileEdit.changeset(entity, type, attrs)
 
     socket
-    |> schedule_save(changeset)
+    |> save(changeset)
   end
 
   @impl true

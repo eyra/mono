@@ -12,7 +12,7 @@ Application.put_env(:core, :signal_handlers, [Frameworks.Signal.TestHelper])
 Application.put_env(
   :core,
   :admins,
-  Core.Admin.compile([
+  Systems.Admin.Context.compile([
     "admin1@example.org",
     "admin2@example.org"
   ])

@@ -11,50 +11,13 @@ defmodule CoreWeb.MultiFormAutoSave do
       alias Core.Persister
       alias Phoenix.LiveView.Socket
 
-      # Schedule Save
-      @save_delay 1
-
-      defp cancel_save_timer(nil), do: nil
-
-      defp cancel_save_timer(%Socket{} = socket) do
-        update_in(socket.assigns.save_timer, fn timer ->
-          cancel_save_timer(timer)
-          Process.send_after(self(), :save, @save_delay * 1_000)
-        end)
-      end
-
-      defp cancel_save_timer(timer), do: Process.cancel_timer(timer)
-
-      def save(%{assigns: %{changesets: changesets}} = socket) do
-        changesets
-        |> Enum.each(fn {_, changeset} ->
-          Persister.save(changeset.data, changeset)
-        end)
+      def auto_save(socket, changeset) do
+        Persister.save(changeset.data, changeset)
 
         socket
-        |> assign(changesets: %{})
         |> put_saved_flash()
         |> schedule_hide_flash()
         |> handle_auto_save_done()
-      end
-
-      def schedule_save(socket, id, changeset) do
-        socket
-        |> cancel_save_timer()
-        |> merge(id, changeset)
-      end
-
-      def force_save(socket, id, changeset) do
-        socket
-        |> cancel_save_timer()
-        |> merge(id, changeset)
-        |> save()
-      end
-
-      defp merge(socket, id, changeset) do
-        update_in(socket.assigns.changesets, fn existing_changesets ->
-          Map.merge(existing_changesets, %{id => changeset})
-        end)
       end
 
       # Schedule Hide Message
@@ -89,11 +52,11 @@ defmodule CoreWeb.MultiFormAutoSave do
 
       # Handle Event
 
-      def handle_info(:save, socket) do
+      def handle_info({:auto_save, changeset}, socket) do
         {
           :noreply,
           socket
-          |> save()
+          |> auto_save(changeset)
         }
       end
 
@@ -120,22 +83,6 @@ defmodule CoreWeb.MultiFormAutoSave do
           socket
           |> put_error_flash()
           |> schedule_hide_flash()
-        }
-      end
-
-      def handle_info({:schedule_save, %{id: id, changeset: changeset}}, socket) do
-        {
-          :noreply,
-          socket
-          |> schedule_save(id, changeset)
-        }
-      end
-
-      def handle_info({:force_save, %{id: id, changeset: changeset}}, socket) do
-        {
-          :noreply,
-          socket
-          |> force_save(id, changeset)
         }
       end
     end

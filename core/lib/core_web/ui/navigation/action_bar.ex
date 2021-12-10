@@ -3,7 +3,7 @@ defmodule CoreWeb.UI.Navigation.ActionBar do
   use CoreWeb.UI.Component
 
   alias CoreWeb.UI.Navigation.ActionMenu
-  alias EyraUI.Line
+  alias Frameworks.Pixel.Line
 
   prop(right_bar_buttons, :list, default: [])
   prop(more_buttons, :list, default: [])
@@ -26,7 +26,7 @@ defmodule CoreWeb.UI.Navigation.ActionBar do
   def render(assigns) do
     ~H"""
     <div class="relative">
-      <div id="action_menu" class="hidden z-30 absolute right-14px -mt-6 top-navbar-height">
+      <div id="action_menu" class="hidden z-50 absolute right-14px -mt-6 top-navbar-height">
         <ActionMenu buttons={{ @more_buttons }} />
       </div>
       <div class="absolute top-0 left-0 w-full">

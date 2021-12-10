@@ -29,7 +29,7 @@ defmodule Core.Survey.Tool do
     timestamps()
   end
 
-  defimpl GreenLight.AuthorizationNode do
+  defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(survey_tool), do: survey_tool.auth_node_id
   end
 
@@ -131,7 +131,7 @@ end
 defimpl Systems.Assignment.Assignable, for: Core.Survey.Tool do
   import CoreWeb.Gettext
 
-  def languages(%{language: nil}), do: nil
+  def languages(%{language: nil}), do: []
   def languages(%{language: language}), do: [language]
 
   def devices(%{devices: nil}), do: []
@@ -141,7 +141,14 @@ defimpl Systems.Assignment.Assignable, for: Core.Survey.Tool do
   def spot_count(%{subject_count: subject_count}), do: subject_count
   def spot_count(_), do: 0
 
-  def duration(%{duration: duration}), do: duration
+  def duration(%{duration: nil}), do: 0
+
+  def duration(%{duration: duration}) do
+    case Integer.parse(duration) do
+      :error -> 0
+      {duration, _} -> duration
+    end
+  end
 
   def apply_label(_), do: dgettext("link-survey", "apply.cta.title")
   def open_label(_), do: dgettext("link-survey", "open.cta.title")

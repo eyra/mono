@@ -16,7 +16,7 @@ defmodule Core.Content.Node do
     timestamps()
   end
 
-  @fields ~w(ready parent_id)a
+  @fields ~w(ready)a
   @required_fields ~w(ready)a
 
   @doc false
@@ -27,7 +27,7 @@ defmodule Core.Content.Node do
   end
 
   @callback operational_fields() :: list(atom())
-  @callback operational_validation(Changeset.t()) :: Changeset.t()
+  @callback operational_validation(Ecto.Changeset.t()) :: Ecto.Changeset.t()
 
   defmacro __using__(_opts) do
     quote do

@@ -18,13 +18,13 @@ defmodule Link.Marketplace do
   alias Core.Lab.Tool, as: LabTool
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias CoreWeb.UI.ContentListItem
+  alias CoreWeb.UI.ContentList
 
   alias Link.Marketplace.Card, as: CardVM
 
-  alias EyraUI.Card.SecondaryStudy
-  alias EyraUI.Text.{Title2}
-  alias EyraUI.Grid.{DynamicGrid}
+  alias Frameworks.Pixel.Card.SecondaryCampaign
+  alias Frameworks.Pixel.Text.{Title2}
+  alias Frameworks.Pixel.Grid.{DynamicGrid}
 
   data(next_best_action, :any)
   data(highlighted_count, :any)
@@ -143,7 +143,7 @@ defmodule Link.Marketplace do
                   {{ dgettext("eyra-campaign", "campaign.subject.title") }}
                   <span class="text-primary"> {{ @subject_count }}</span>
                 </Title2>
-                <ContentListItem :for={{item <- @subject_campaigns}} vm={{item}} />
+                <ContentList items={{@subject_campaigns}} />
               </True>
             </Case>
             <Case value={{ render_empty?(assigns) }} >
@@ -155,7 +155,7 @@ defmodule Link.Marketplace do
                 </Title2>
                 <DynamicGrid>
                   <div :for={{ card <- @available_campaigns  }} class="mb-1" >
-                    <SecondaryStudy conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
+                    <SecondaryCampaign conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
                   </div>
                 </DynamicGrid>
               </False>

@@ -6,13 +6,17 @@ defmodule Systems.Assignment.LandingPage do
   use CoreWeb.UI.Dialog
   use CoreWeb.Layouts.Workspace.Component, :assignment
 
-  alias EyraUI.Text.{Title1, Title3, BodyLarge}
-  alias EyraUI.Card.Highlight
+  alias Frameworks.Pixel.Text.{Title1, Title3, BodyLarge}
+  alias Frameworks.Pixel.Card.Highlight
+  alias Frameworks.Pixel.Panel.Panel
+  alias Frameworks.Pixel.Wrap
 
   alias CoreWeb.UI.Navigation.ButtonBar
+  alias Core.Accounts
 
   alias Systems.{
-    Assignment
+    Assignment,
+    NextAction
   }
 
   data(model, :map)
@@ -24,7 +28,9 @@ defmodule Systems.Assignment.LandingPage do
   end
 
   @impl true
-  def mount(%{"id" => id}, _session, socket) do
+  def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
+    NextAction.Context.clear_next_action(user, Assignment.CheckRejection, key: "#{id}", params: %{id: id})
+
     model = Assignment.Context.get!(id, [:crew])
 
     {
@@ -46,6 +52,26 @@ defmodule Systems.Assignment.LandingPage do
   end
 
   @impl true
+  def handle_event("cancel", _params, socket) do
+    title = String.capitalize(dgettext("eyra-assignment", "cancel.confirm.title"))
+    text = String.capitalize(dgettext("eyra-assignment", "cancel.confirm.text"))
+    confirm_label = dgettext("eyra-assignment", "cancel.confirm.label")
+
+    {:noreply, socket |> confirm("cancel", title, text, confirm_label)}
+  end
+
+  @impl true
+  def handle_event("cancel_confirm", _params, %{assigns: %{current_user: user, model: %{id: id}}} = socket) do
+    Assignment.Context.cancel(id, user)
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))}
+  end
+
+  @impl true
+  def handle_event("cancel_cancel", _params, socket) do
+    {:noreply, socket |> assign(dialog: nil)}
+  end
+
+  @impl true
   def handle_event("call-to-action", _params,
     %{
       assigns: %{
@@ -62,20 +88,55 @@ defmodule Systems.Assignment.LandingPage do
     {:noreply, socket |> assign(dialog: nil)}
   end
 
-  defp action_map(%{vm: %{
+  def handle_info({:signal_test, _}, socket) do
+    {:noreply, socket}
+  end
+
+  defp action_map(%{model: assignment, vm: %{
+    public_id: public_id,
+    title: title,
+    contact_enabled?: contact_enabled?,
     call_to_action: %{label: label}
   }}) do
-    %{
+
+    actions = %{
       call_to_action: %{
         action: %{type: :send, event: "call-to-action"},
         face: %{
           type: :primary,
           label: label
         }
-      },
+      }
+    }
+
+    {:ok, %{email: email}} = Assignment.Context.owner(assignment)
+    if contact_enabled? and email do
+      actions
+      |> Map.put(:contact, %{
+        action: %{type: :href, href: contact_href(email, title, public_id)},
+        face: %{type: :label, label: dgettext("eyra-assignment", "contact.button")}
+      })
+    else
+      actions
+    end
+  end
+
+  defp contact_href(email, title, nil) do
+    "mailto:#{email}?subject=#{title}"
+  end
+
+  defp contact_href(email, title, public_id) do
+    "mailto:#{email}?subject=[panl_id=#{public_id}] #{title}"
+  end
+
+  defp cancel_button() do
+    %{
+      action: %{type: :send, event: "cancel"},
+      face: %{type: :secondary, text_color: "text-delete", label: dgettext("eyra-assignment", "cancel.button")}
     }
   end
 
+  defp create_actions(%{call_to_action: call_to_action, contact: contact}), do: [call_to_action, contact]
   defp create_actions(%{call_to_action: call_to_action}), do: [call_to_action]
 
   defp show_dialog?(nil), do: false
@@ -99,14 +160,16 @@ defmodule Systems.Assignment.LandingPage do
 
       <ContentArea>
         <MarginY id={{:page_top}} />
-        <Title1>{{@vm.title}}</Title1>
+        <Title1>{{@vm.title}}<span class="text-primary"> #{{@vm.public_id}}</span></Title1>
         <Spacing value="L" />
+
         <div class="grid gap-6 sm:gap-8 {{ grid_cols(Enum.count(@vm.highlights)) }}">
           <div :for={{ highlight <- @vm.highlights }} class="bg-grey5 rounded">
             <Highlight title={{highlight.title}} text={{highlight.text}} />
           </div>
         </div>
         <Spacing value="L" />
+
         <Title3>{{@vm.subtitle}}</Title3>
         <Spacing value="M" />
         <BodyLarge>{{@vm.text}}</BodyLarge>
@@ -114,6 +177,20 @@ defmodule Systems.Assignment.LandingPage do
 
         <MarginY id={{:button_bar_top}} />
         <ButtonBar buttons={{create_actions(action_map(assigns))}} />
+        <Spacing value="XL" />
+
+        <Panel :if={{ Map.get(@vm, :cancel_enabled?, false)}}>
+          <template slot="title">
+            <Title3>{{dgettext("eyra-assignment", "cancel.title")}}</Title3>
+          </template>
+          <Spacing value="M" />
+          <BodyLarge>{{dgettext("eyra-assignment", "cancel.text")}}</BodyLarge>
+          <Spacing value="M" />
+          <Wrap>
+            <DynamicButton vm={{ cancel_button() }} />
+          </Wrap>
+        </Panel>
+
       </ContentArea>
     </Workspace>
     """

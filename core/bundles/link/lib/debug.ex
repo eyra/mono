@@ -10,11 +10,11 @@ defmodule Link.Debug do
   alias CoreWeb.Mail.Forms.Debug, as: MailDebugForm
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
-  alias EyraUI.Spacing
-  alias EyraUI.Button.DynamicButton
+  alias Frameworks.Pixel.Spacing
+  alias Frameworks.Pixel.Button.DynamicButton
 
-  alias EyraUI.Container.{Wrap}
-  alias EyraUI.Text.Title2
+  alias Frameworks.Pixel.Container.{Wrap}
+  alias Frameworks.Pixel.Text.Title2
 
   alias Systems.{
     Campaign
@@ -87,13 +87,13 @@ defmodule Link.Debug do
 
   @impl true
   def handle_event("expire", _, socket) do
-    Campaign.Context.mark_expired()
+    Campaign.Context.mark_expired_debug()
     {:noreply, socket}
   end
 
   @impl true
   def handle_event("expire_force", _, socket) do
-    Campaign.Context.mark_expired(true)
+    Campaign.Context.mark_expired_debug(true)
     {:noreply, socket}
   end
 

@@ -4,7 +4,7 @@ defmodule CoreWeb.User.AwaitConfirmation do
   """
   use CoreWeb, :live_view
 
-  alias EyraUI.Text.Title2
+  alias Frameworks.Pixel.Text.Title2
 
   alias Core.Accounts
   alias Core.Accounts.User

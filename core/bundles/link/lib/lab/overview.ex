@@ -7,7 +7,7 @@ defmodule Link.LabStudy.Overview do
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
-  alias EyraUI.Button.PrimaryLiveViewButton
+  alias Frameworks.Pixel.Button.PrimaryLiveViewButton
 
   data(labstudies, :map, default: [])
 

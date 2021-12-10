@@ -7,11 +7,20 @@ defmodule Systems.Crew.TaskModel do
 
   alias Systems.Crew
 
+  require Crew.RejectCategories
+
   schema "crew_tasks" do
-    field(:status, Ecto.Enum, values: [:pending, :completed])
+    field(:status, Ecto.Enum, values: Crew.TaskStatus.values())
     field(:started_at, :naive_datetime)
     field(:completed_at, :naive_datetime)
+    field(:accepted_at, :naive_datetime)
+    field(:rejected_at, :naive_datetime)
+
+    field(:expire_at, :naive_datetime)
     field(:expired, :boolean)
+
+    field(:rejected_category, Ecto.Enum, values: Crew.RejectCategories.schema_values())
+    field(:rejected_message, :string)
 
     belongs_to(:crew, Crew.Model)
     belongs_to(:member, Crew.MemberModel)
@@ -19,10 +28,12 @@ defmodule Systems.Crew.TaskModel do
     timestamps()
   end
 
+  @fields ~w(status started_at completed_at expire_at expired accepted_at rejected_at rejected_category rejected_message)a
+
   @doc false
   def changeset(task, attrs) do
     task
-    |> cast(attrs, [:status, :started_at, :completed_at, :expired])
+    |> cast(attrs, @fields)
     |> validate_required([:status])
   end
 end

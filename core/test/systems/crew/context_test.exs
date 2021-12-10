@@ -1,7 +1,7 @@
 defmodule Systems.Crew.ContextTest do
   use Core.DataCase
-
   alias Core.Authorization
+  alias CoreWeb.UI.Timestamp
 
   describe "crews" do
     alias Systems.Crew
@@ -61,7 +61,22 @@ defmodule Systems.Crew.ContextTest do
       assert Crew.Context.member?(crew, user) == true
     end
 
-    test "apply_member/2 creates particpant role" do
+    test "apply_member/2 creates member + pending task" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+
+      {:ok, %{member: %{id: member_id}, task: task}} = Crew.Context.apply_member(crew, user)
+
+      assert %{
+               status: :pending,
+               expired: nil,
+               started_at: nil,
+               completed_at: nil,
+               member_id: ^member_id
+             } = task
+    end
+
+    test "apply_member/2 creates participant role" do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
@@ -76,13 +91,18 @@ defmodule Systems.Crew.ContextTest do
       assert users |> Enum.find(&(&1.id == user.id))
     end
 
-    test "list_members_without_task/1 lists freshly applied member" do
+    test "apply_member/2 reuses expired member" do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
-      {:ok, %{member: member}} = Crew.Context.apply_member(crew, user)
 
-      list = Crew.Context.list_members_without_task(crew)
-      assert list |> Enum.find(&(&1.id == member.id))
+      {:ok, %{member: member1}} = Crew.Context.apply_member(crew, user, expire_at(-1))
+
+      Crew.Context.mark_expired()
+
+      {:ok, %{member: member2}} = Crew.Context.apply_member(crew, user, expire_at(1))
+
+      assert member1.id == member2.id
+      assert %{expired: false} = member2
     end
 
     test "list_members/1 lists only members from that crew" do
@@ -103,6 +123,100 @@ defmodule Systems.Crew.ContextTest do
       assert Crew.Context.public_id(crew1, user) == 1
       assert Crew.Context.public_id(crew2, user) == 1
     end
+
+    test "mark_expired/0 does not expire member: expire_at is nil" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+
+      {:ok, %{member: member, task: task}} = Crew.Context.apply_member(crew, user, nil)
+
+      assert Crew.Context.mark_expired()
+
+      assert %{expired: false} = Crew.Context.get_member!(member.id)
+      assert %{expired: false} = Crew.Context.get_task!(task.id)
+    end
+
+    test "mark_expired/0 does not expire member: expire_at is the future" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+
+      {:ok, %{member: member, task: task}} = Crew.Context.apply_member(crew, user, expire_at(1))
+
+      assert Crew.Context.mark_expired()
+
+      assert %{expired: false} = Crew.Context.get_member!(member.id)
+      assert %{expired: false} = Crew.Context.get_task!(task.id)
+    end
+
+    test "mark_expired/0 does not expire member: task started" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+
+      {:ok, %{member: member, task: task}} = Crew.Context.apply_member(crew, user, expire_at(-1))
+      Crew.Context.start_task(task)
+
+      assert Crew.Context.mark_expired()
+
+      assert %{expired: false} = Crew.Context.get_member!(member.id)
+      assert %{expired: false} = Crew.Context.get_task!(task.id)
+
+      assert Crew.Context.member?(crew, user)
+    end
+
+    test "mark_expired/0 does expire member: task not started" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+
+      {:ok, %{member: member, task: task}} = Crew.Context.apply_member(crew, user, expire_at(-1))
+
+      assert Crew.Context.mark_expired()
+
+      assert %{expired: true} = Crew.Context.get_member!(member.id)
+      assert %{expired: true} = Crew.Context.get_task!(task.id)
+
+      assert not Crew.Context.member?(crew, user)
+    end
+
+    test "mark_expired/0 does expire member1" do
+      user1 = Factories.insert!(:member)
+      user2 = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+
+      {:ok, %{member: member1, task: task1}} =
+        Crew.Context.apply_member(crew, user1, expire_at(-1))
+
+      {:ok, %{member: member2, task: task2}} =
+        Crew.Context.apply_member(crew, user2, expire_at(1))
+
+      assert Crew.Context.mark_expired()
+
+      assert %{expired: true} = Crew.Context.get_member!(member1.id)
+      assert %{expired: true} = Crew.Context.get_task!(task1.id)
+      assert %{expired: false} = Crew.Context.get_member!(member2.id)
+      assert %{expired: false} = Crew.Context.get_task!(task2.id)
+
+      assert not Crew.Context.member?(crew, user1)
+      assert Crew.Context.member?(crew, user2)
+    end
+
+    test "cancel/2 does expire member" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+
+      {:ok, %{member: %{id: member_id} = member, task: task}} =
+        Crew.Context.apply_member(crew, user, expire_at(-1))
+
+      assert Crew.Context.member?(crew, user)
+      assert [%{id: ^member_id}] = Crew.Context.list_members(crew)
+
+      assert Crew.Context.cancel(crew, user)
+
+      assert %{expired: true} = Crew.Context.get_member!(member.id)
+      assert %{expired: true} = Crew.Context.get_task!(task.id)
+
+      assert not Crew.Context.member?(crew, user)
+      assert [] = Crew.Context.list_members(crew)
+    end
   end
 
   describe "tasks" do
@@ -114,7 +228,7 @@ defmodule Systems.Crew.ContextTest do
       crew = Factories.insert!(:crew)
       member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
-      {:ok, task} = Crew.Context.create_task(crew, member)
+      {:ok, task} = Crew.Context.create_task(crew, member, nil)
 
       assert task.crew_id == crew.id
       assert task.member_id == member.id
@@ -128,7 +242,7 @@ defmodule Systems.Crew.ContextTest do
       crew = Factories.insert!(:crew)
       member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
-      {:ok, _task} = Crew.Context.create_task(crew, member)
+      {:ok, _task} = Crew.Context.create_task(crew, member, nil)
 
       list = Crew.Context.list_tasks(crew)
       assert list |> Enum.find(&(&1.member_id == member.id))
@@ -151,12 +265,15 @@ defmodule Systems.Crew.ContextTest do
       assert Crew.Context.count_tasks(crew, [:completed]) == 1
     end
 
-    test "get_or_create_task/2 succeeds for member" do
+    test "create_task/2 succeeds for member" do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
       member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
-      {:ok, _} = Crew.Context.get_or_create_task(crew, member)
+      assert %{status: :pending, member_id: member_id} =
+               Crew.Context.create_task!(crew, member, nil)
+
+      assert member_id == member.id
     end
 
     test "setup_tasks_for_members/2 " do
@@ -172,7 +289,7 @@ defmodule Systems.Crew.ContextTest do
       assert Crew.Context.count_tasks(crew, [:pending]) == 2
     end
 
-    test "complete_task/1 " do
+    test "complete_task/1 marks pending task completed" do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
       member = Factories.insert!(:crew_member, %{crew: crew, user: user})
@@ -187,9 +304,114 @@ defmodule Systems.Crew.ContextTest do
         })
 
       assert Crew.Context.count_tasks(crew, [:completed]) == 0
-      task = Crew.Context.complete_task!(task)
-      assert task.status == :completed
+      assert %{status: :completed} = Crew.Context.complete_task!(task)
       assert Crew.Context.count_tasks(crew, [:completed]) == 1
+    end
+
+    test "complete_task/1 does not mark accepted task completed" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+
+      assert Crew.Context.count_tasks(crew, [:completed]) == 0
+
+      task =
+        Factories.insert!(:crew_task, %{
+          crew: crew,
+          member: member,
+          status: :pending
+        })
+
+      assert Crew.Context.count_tasks(crew, [:completed]) == 0
+      {:ok, %{task: task}} = Crew.Context.accept_task(task)
+      assert %{status: :accepted} = Crew.Context.complete_task!(task)
+      assert Crew.Context.count_tasks(crew, [:completed]) == 0
+    end
+
+    test "complete_task/1 does not mark rejected task completed" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+
+      assert Crew.Context.count_tasks(crew, [:completed]) == 0
+
+      task =
+        Factories.insert!(:crew_task, %{
+          crew: crew,
+          member: member,
+          status: :pending
+        })
+
+      assert Crew.Context.count_tasks(crew, [:completed]) == 0
+
+      {:ok, %{task: task}} =
+        Crew.Context.reject_task(task, %{
+          category: :attention_checks_failed,
+          message: "rejection message"
+        })
+
+      assert %{status: :rejected} = Crew.Context.complete_task!(task)
+      assert Crew.Context.count_tasks(crew, [:completed]) == 0
+    end
+
+    test "accept_task/1 marks task accepted" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+
+      assert Crew.Context.count_tasks(crew, [:accepted]) == 0
+
+      task =
+        Factories.insert!(:crew_task, %{
+          crew: crew,
+          member: member,
+          status: :pending
+        })
+
+      assert Crew.Context.count_tasks(crew, [:accepted]) == 0
+
+      assert {:ok,
+              %{
+                task: %{
+                  status: :accepted,
+                  accepted_at: accepted_at
+                }
+              }} = Crew.Context.accept_task(task)
+
+      assert accepted_at != nil
+      assert Crew.Context.count_tasks(crew, [:accepted]) == 1
+    end
+
+    test "reject_task/1 marks task rejected" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+
+      assert Crew.Context.count_tasks(crew, [:rejected]) == 0
+
+      task =
+        Factories.insert!(:crew_task, %{
+          crew: crew,
+          member: member,
+          status: :pending
+        })
+
+      assert Crew.Context.count_tasks(crew, [:rejected]) == 0
+
+      rejection = %{category: :attention_checks_failed, message: "rejection message"}
+
+      assert {:ok,
+              %{
+                task: %{
+                  status: :rejected,
+                  rejected_at: rejected_at,
+                  rejected_category: :attention_checks_failed,
+                  rejected_message: "rejection message"
+                }
+              }} = Crew.Context.reject_task(task, rejection)
+
+      assert rejected_at != nil
+      assert Crew.Context.count_tasks(crew, [:rejected]) == 1
     end
 
     test "delete_task/1 " do
@@ -217,5 +439,9 @@ defmodule Systems.Crew.ContextTest do
       list = Crew.Context.list_members_without_task(crew)
       assert list |> Enum.find(&(&1.id == member.id))
     end
+  end
+
+  defp expire_at(minutes) do
+    Timestamp.naive_from_now(minutes)
   end
 end

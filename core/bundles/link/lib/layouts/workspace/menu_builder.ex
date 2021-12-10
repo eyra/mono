@@ -4,10 +4,11 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
 
   import Core.Authorization, only: [can_access?: 2]
   import CoreWeb.Menu.Helpers
-  import Core.Admin
+
+  import Systems.Admin.Context
 
   alias Systems.NextAction
-  alias Core.Helpdesk
+  alias Systems.Support
 
   @impl true
   def build_menu(:desktop_menu = menu_id, socket, user_state, active_item) do
@@ -47,7 +48,7 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
 
   defp build_menu_first_part(socket, menu_id, %{email: email} = user_state, active_item) do
     next_action_count = NextAction.Context.count_next_actions(user_state)
-    support_count = Helpdesk.count_open_tickets()
+    support_count = Support.Context.count_open_tickets()
 
     []
     |> append(

@@ -4,23 +4,28 @@ defmodule Systems.Assignment.Context do
   """
 
   import Ecto.Query, warn: false
+  require Logger
+
   alias Ecto.Multi
   alias Core.Repo
   alias CoreWeb.UI.Timestamp
+  alias Core.Authorization
 
   alias Systems.{
     Assignment,
     Crew
   }
 
+  @min_expiration_timeout 30
 
   def get!(id, preload \\ []) do
     from(a in Assignment.Model, preload: ^preload)
     |> Repo.get!(id)
   end
 
-  def get_by_crew!(crew) do
-    from(a in Assignment.Model, where: a.crew_id == ^crew.id)
+  def get_by_crew!(%{id: crew_id}), do: get_by_crew!(crew_id)
+  def get_by_crew!(crew_id) when is_number(crew_id) do
+    from(a in Assignment.Model, where: a.crew_id == ^crew_id)
     |> Repo.all()
   end
 
@@ -52,26 +57,76 @@ defmodule Systems.Assignment.Context do
     |> Repo.insert()
   end
 
+  def copy(%Assignment.Model{} = assignment, %Core.Survey.Tool{} = tool, auth_node) do
+    # don't copy crew, just create a new one
+    {:ok, crew} = Crew.Context.create(auth_node)
+
+    %Assignment.Model{}
+    |> Assignment.Model.changeset(Map.from_struct(assignment))
+    |> Ecto.Changeset.put_assoc(:crew, crew)
+    |> Ecto.Changeset.put_assoc(:assignable_survey_tool, tool)
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Repo.insert!()
+  end
+
+  def owner(%Assignment.Model{} = assignment) do
+    owner =
+      assignment
+      |> Authorization.get_parent_nodes()
+      |> List.last()
+      |> Authorization.users_with_role(:owner)
+      |> List.first()
+
+    case owner do
+      nil ->
+        Logger.error("No owner role found for assignment #{assignment.id}")
+        {:error}
+      owner ->
+        {:ok, owner}
+    end
+  end
+
   defp assignable_field(%Core.Survey.Tool{}), do: :assignable_survey_tool
   defp assignable_field(%Core.Lab.Tool{}), do: :assignable_lab_tool
   defp assignable_field(%Core.DataDonation.Tool{}), do: :assignable_data_donation_tool
 
+  def expiration_timestamp(assignment) do
+    assignable = Assignment.Model.assignable(assignment)
+    duration = Assignment.Assignable.duration(assignable)
+    timeout = max(@min_expiration_timeout, duration)
+
+    Timestamp.naive_from_now(timeout)
+  end
+
   def apply_member(id, user) when is_number(id) do
-    apply(get!(id, [:crew]), user)
+    apply_member(get!(id, [:crew]), user)
   end
 
   def apply_member(%{crew: crew} = assignment, user) do
-    member =
-      case Crew.Context.member?(crew, user) do
-        true -> Crew.Context.get_member!(crew, user)
-        false -> apply_user(assignment, user)
-      end
-
-    _task = Crew.Context.get_or_create_task!(crew, member)
+    if Crew.Context.member?(crew, user) do
+      Crew.Context.get_member!(crew, user)
+    else
+      expire_at = expiration_timestamp(assignment)
+      Crew.Context.apply_member!(crew, user, expire_at)
+    end
   end
 
-  defp apply_user(%{crew: crew}, user) do
-    Crew.Context.apply_member!(crew, user)
+  def cancel(%Assignment.Model{} = assignment, user) do
+    crew = get_crew(assignment)
+    Crew.Context.cancel(crew, user)
+  end
+
+  def cancel(id, user) do
+    get!(id) |> cancel(user)
+  end
+
+  def complete_task(%{crew: crew} = _assignment, user) do
+    if Crew.Context.expired_member?(crew, user) do nil
+    else
+      member = Crew.Context.get_member!(crew, user)
+      task = Crew.Context.get_task(crew, member)
+      Crew.Context.complete_task!(task)
+    end
   end
 
   @doc """
@@ -94,7 +149,7 @@ defmodule Systems.Assignment.Context do
   defp open_spot_count?(%{crew: crew} = assignment, :one_task) do
     assignable = Assignment.Model.assignable(assignment)
     target = Assignment.Assignable.spot_count(assignable)
-    all_non_expired_tasks = Crew.Context.count_tasks(crew, [:pending, :completed])
+    all_non_expired_tasks = Crew.Context.count_tasks(crew, Crew.TaskStatus.values())
 
     max(0, target - all_non_expired_tasks)
   end
@@ -109,17 +164,14 @@ defmodule Systems.Assignment.Context do
     :one_task
   end
 
-  def mark_expired(%{assignable_survey_tool: %{duration: duration}} = assignment, force) do
-    mark_expired(assignment, duration, force)
+  def mark_expired_debug(%{assignable_survey_tool: %{duration: duration}} = assignment, force) do
+    mark_expired_debug(assignment, duration, force)
   end
 
-  def mark_expired(%{assignable_lab_tool: tool}, _) when tool != nil, do: :noop
-  def mark_expired(%{assignable_donatin_tool: tool}, _) when tool != nil, do: :noop
+  def mark_expired_debug(%{assignable_lab_tool: tool}, _) when tool != nil, do: :noop
+  def mark_expired_debug(%{assignable_donatin_tool: tool}, _) when tool != nil, do: :noop
 
-
-  @min_expiration_timeout 30
-
-  def mark_expired(%{crew_id: crew_id}, duration, force) do
+  def mark_expired_debug(%{crew_id: crew_id}, duration, force) do
     expiration_timeout = max(@min_expiration_timeout, duration)
     task_query =
       if force do
@@ -169,12 +221,11 @@ defmodule Systems.Assignment.Context do
     )
   end
 
-
   # Crew
-  def get_crew(assignment) do
+  def get_crew(%{crew_id: crew_id} = _assignment) do
     from(
       c in Crew.Model,
-      where: c.id == ^assignment.id
+      where: c.id == ^crew_id
     )
     |> Repo.one()
   end

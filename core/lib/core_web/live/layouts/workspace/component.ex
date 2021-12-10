@@ -7,7 +7,7 @@ defmodule CoreWeb.Layouts.Workspace.Component do
   import CoreWeb.UI.OldSkool
 
   alias CoreWeb.UI.Navigation.{DesktopMenu, TabletMenu, MobileNavbar, MobileMenu}
-  alias EyraUI.Hero.HeroSmall
+  alias Frameworks.Pixel.Hero.HeroSmall
 
   prop(title, :string)
   prop(menus, :map)

@@ -70,3 +70,18 @@ msgstr "New campaigns available for publishing"
 #: lib/core/pools/next_actions/review_submission.ex:9
 msgid "review.submission.title"
 msgstr "New campaigns"
+
+#, elixir-format
+#: systems/assignment/check_rejection.ex:11
+msgid "assignment.check.rejection.cta"
+msgstr "Go to contribution"
+
+#, elixir-format
+#: systems/assignment/check_rejection.ex:10
+msgid "assignment.check.rejection.description"
+msgstr "Visit the contribution page for further details"
+
+#, elixir-format
+#: systems/assignment/check_rejection.ex:9
+msgid "assignment.check.rejection.title"
+msgstr "One of your contributions is rejected"

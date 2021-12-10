@@ -195,7 +195,35 @@ defmodule Link.Marketplace.Card do
       info: info,
       icon_url: icon_url,
       label: label,
-      label_type: "secondary"
+      label_type: "secondary",
+      left_actions: [
+        %{
+          action: %{type: :send, event: "share", item: "#{id}"},
+          face: %{
+            type: :label,
+            label: dgettext("eyra-ui", "share.button"),
+            font: "text-subhead font-subhead",
+            text_color: "text-white",
+            wrap: true
+          }
+        },
+        %{
+          action: %{type: :send, event: "duplicate", item: id},
+          face: %{
+            type: :label,
+            label: dgettext("eyra-ui", "duplicate.button"),
+            font: "text-subhead font-subhead",
+            text_color: "text-white",
+            wrap: true
+          }
+        }
+      ],
+      right_actions: [
+        %{
+          action: %{type: :send, event: "delete", item: id},
+          face: %{type: :icon, icon: :delete, color: :white}
+        }
+      ]
     }
   end
 

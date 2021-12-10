@@ -1,6 +1,6 @@
 defmodule Core.GreenLight.PrincipalTest do
   use ExUnit.Case, async: true
-  alias GreenLight.Principal
+  alias Frameworks.GreenLight.Principal
   alias Core.Accounts.User
 
   describe "roles/1" do
@@ -28,7 +28,7 @@ defmodule Core.GreenLight.PrincipalTest do
       Application.put_env(
         :core,
         :admins,
-        Core.Admin.compile(["admin@example.org"])
+        Systems.Admin.Context.compile(["admin@example.org"])
       )
 
       # Regular member

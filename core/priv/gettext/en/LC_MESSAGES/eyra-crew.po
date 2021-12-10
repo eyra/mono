@@ -12,26 +12,26 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:89
+#: systems/assignment/callback_page.ex:73
 msgid "task.completed.message.part1"
-msgstr "Your contribution is automatically approved, but will be reviewed by the author of the study. If you do not receive a rejection within two weeks, the assigned reward will be final."
+msgstr "Your contribution will be reviewed by the author of this study and either accepted or rejected."
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:91
+#: systems/assignment/callback_page.ex:75
 msgid "task.completed.message.part2"
-msgstr "Visit the marketplace to view your contributions and other available studies."
+msgstr "Visit the marketplace to view the status of your contribution."
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:87
+#: systems/assignment/callback_page.ex:71
 msgid "task.completed.title"
 msgstr "Thank you for participating"
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:82 systems/assignment/model.ex:96
+#: systems/assignment/callback_page.ex:66 systems/assignment/model.ex:104
 msgid "task.expired.subtitle"
 msgstr "Unfortunately, your session has expired"
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:84 systems/assignment/model.ex:97
+#: systems/assignment/callback_page.ex:68 systems/assignment/model.ex:105
 msgid "task.expired.text"
 msgstr "If the study is still open, you can participate again. Is the study closed? Visit the marketplace to check for other studies."

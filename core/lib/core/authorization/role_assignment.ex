@@ -4,6 +4,7 @@ defmodule Core.Authorization.RoleAssignment do
   specific entity.
   """
   use Ecto.Schema
+  import Ecto.Changeset
 
   schema "authorization_role_assignments" do
     belongs_to(:node, Core.Authorization.Node)
@@ -15,5 +16,13 @@ defmodule Core.Authorization.RoleAssignment do
     )
 
     timestamps()
+  end
+
+  @fields ~w(role principal_id)a
+
+  def changeset(role_assignment, attrs) do
+    role_assignment
+    |> cast(attrs, @fields)
+    |> validate_required(@fields)
   end
 end

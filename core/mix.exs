@@ -8,7 +8,7 @@ defmodule Core.MixProject do
       source_url: "https://github.com/eyra/eylixir",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:gettext] ++ Mix.compilers(),
+      compilers: [:gettext, :phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -24,13 +24,13 @@ defmodule Core.MixProject do
       ],
       dialyzer: [
         plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
+        plt_add_apps: [:mix],
         flags: [
           # :unmatched_returns,
           :error_handling,
           :race_conditions,
           :no_opaque
-        ],
-        paths: dialyzer_framework_paths()
+        ]
       ]
     ]
   end
@@ -49,31 +49,41 @@ defmodule Core.MixProject do
   defp elixirc_paths(:test),
     do: ["bundles", "apps", "systems", "frameworks", "lib", "test", "test/support"]
 
+  defp elixirc_paths(:dev),
+    do: ["bundles", "apps", "systems", "frameworks", "lib"] ++ catalogues()
+
   defp elixirc_paths(_), do: ["bundles", "apps", "systems", "frameworks", "lib"]
+
+  def catalogues do
+    [
+      "priv/catalogue",
+      "deps/surface/priv/catalogue"
+    ]
+  end
 
   # Specifies your project dependencies.
   #
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:green_light, path: "../frameworks/green_light"},
-      {:eyra_ui, path: "../frameworks/eyra_ui"},
       {:assent, "~> 0.1.23"},
       {:bcrypt_elixir, "~> 2.0"},
       {:phoenix, "~> 1.5.5"},
       {:phoenix_ecto, "~> 4.1"},
       {:phoenix_live_view, "~> 0.15.1"},
-      {:floki, ">= 0.27.0", only: :test},
+      {:floki, ">= 0.27.0"},
       {:ecto_sql, "~> 3.4"},
       {:ecto_commons, "~> 0.3.2"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_dashboard, "~> 0.2"},
+      {:phoenix_inline_svg, "~> 1.4"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:faker, "~> 0.16"},
       {:surface, "~> 0.4.0"},
+      {:surface_catalogue, "~> 0.0.7"},
       {:timex, "~> 3.6"},
       {:bamboo, "~> 2.0.1"},
       {:bamboo_phoenix, "~> 1.0.0"},
@@ -86,6 +96,8 @@ defmodule Core.MixProject do
       {:kadabra, "~> 0.6.0"},
       {:oban, "~> 2.7"},
       {:nimble_parsec, "~> 1.0"},
+      {:typed_struct, "~> 0.2.1"},
+      {:logger_json, "~> 4.3"},
       # i18n
       {:ex_cldr, "~> 2.18"},
       {:ex_cldr_numbers, "~> 2.16"},
@@ -106,7 +118,8 @@ defmodule Core.MixProject do
       {:ex_doc, "~> 0.22", only: [:dev, :test], runtime: false},
       {:table_rex, "~> 3.0.0"},
       {:phx_gen_auth, "~> 0.6", only: [:dev], runtime: false},
-      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:browser, "~> 0.4.4"}
     ]
   end
 
@@ -131,12 +144,8 @@ defmodule Core.MixProject do
       i18n: [
         "gettext.extract --merge priv/gettext"
       ],
-      makedocs: ["deps.get", "docs -o doc/output"]
+      makedocs: ["deps.get", "docs -o doc/output"],
+      dev: "run --no-halt dev.exs"
     ]
-  end
-
-  defp dialyzer_framework_paths do
-    env = Mix.env()
-    ["green_light", "eyra_ui"] |> Enum.map(&"_build/#{env}/lib/#{&1}/ebin")
   end
 end

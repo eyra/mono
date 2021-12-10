@@ -4,7 +4,7 @@ defmodule Systems.Campaign.Context do
   """
 
   import Ecto.Query, warn: false
-  alias GreenLight.Principal
+  alias Frameworks.GreenLight.Principal
   alias Core.Repo
   alias Core.Authorization
 
@@ -14,6 +14,7 @@ defmodule Systems.Campaign.Context do
     Crew,
     Promotion
   }
+
   alias Core.Accounts.User
   alias Core.Survey.Tool
   alias Core.DataDonation
@@ -132,7 +133,8 @@ defmodule Systems.Campaign.Context do
 
     from(c in Campaign.Model,
       where: c.promotable_assignment_id in subquery(assigment_ids),
-      preload: ^preload
+      preload: ^preload,
+      order_by: [desc: c.updated_at]
     )
     |> Repo.all()
   end
@@ -202,6 +204,10 @@ defmodule Systems.Campaign.Context do
     :ok = Authorization.assign_role(user, campaign, :owner)
   end
 
+  def remove_owner!(campaign, user) do
+    Authorization.remove_role!(user, campaign, :owner)
+  end
+
   def get_changeset(attrs \\ %{}) do
     %Campaign.Model{}
     |> Campaign.Model.changeset(attrs)
@@ -256,6 +262,30 @@ defmodule Systems.Campaign.Context do
     Campaign.Model.changeset(campaign, attrs)
   end
 
+  def copy(%Campaign.Model{} = campaign, %Promotion.Model{} = promotion, %Assignment.Model{} = assignment, auth_node) do
+    %Campaign.Model{}
+    |> Campaign.Model.changeset(
+      campaign
+      |> Map.delete(:updated_at)
+      |> Map.from_struct()
+    )
+    |> Ecto.Changeset.put_assoc(:promotion, promotion)
+    |> Ecto.Changeset.put_assoc(:promotable_assignment, assignment)
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Repo.insert!()
+  end
+
+  def copy(authors, campaign) when is_list(authors) do
+    authors |> Enum.map(&copy(&1, campaign))
+  end
+
+  def copy(%Campaign.AuthorModel{user: user} = author, campaign) do
+    Campaign.AuthorModel.changeset(Map.from_struct(author))
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Ecto.Changeset.put_assoc(:campaign, campaign)
+    |> Repo.insert!()
+  end
+
   def add_author(%Campaign.Model{} = campaign, %User{} = researcher) do
     researcher
     |> Campaign.AuthorModel.from_user()
@@ -285,10 +315,10 @@ defmodule Systems.Campaign.Context do
   end
 
   @doc """
-    Marks expired tasks in online campaigns. If force is true (for debug purposes only),
-    all pending tasks will be marked as expired.
+    Marks expired tasks in online campaigns based on updated_at and estimated duration.
+    If force is true (for debug purposes only), all pending tasks will be marked as expired.
   """
-  def mark_expired(force \\ false) do
+  def mark_expired_debug(force \\ false) do
     online_submissions =
       from(s in Submission, where: s.status == :accepted)
       |> Repo.all()
@@ -301,14 +331,14 @@ defmodule Systems.Campaign.Context do
     preload = Campaign.Model.preload_graph(:full)
     from(c in Campaign.Model, preload: ^preload, where: c.promotion_id in ^promotion_ids)
     |> Repo.all()
-    |> Enum.each(&mark_expired(&1, force))
+    |> Enum.each(&mark_expired_debug(&1, force))
   end
 
   @doc """
     Marks expired tasks in given campaign
   """
-  def mark_expired(%{promotable_assignment: assignment}, force) do
-    Assignment.Context.mark_expired(assignment, force)
+  def mark_expired_debug(%{promotable_assignment: assignment}, force) do
+    Assignment.Context.mark_expired_debug(assignment, force)
   end
 
 end

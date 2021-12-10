@@ -10,7 +10,7 @@ defmodule CoreWeb.DataDonation.Content do
 
   import CoreWeb.Gettext
 
-  alias EyraUI.Hero.HeroSmall
+  alias Frameworks.Pixel.Hero.HeroSmall
   alias Core.DataDonation.Tools
   alias Systems.Promotion
 

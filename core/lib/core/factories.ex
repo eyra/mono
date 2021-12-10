@@ -11,8 +11,11 @@ defmodule Core.Factories do
     Lab,
     Authorization,
     DataDonation,
-    WebPush,
-    Helpdesk
+    WebPush
+  }
+
+  alias Frameworks.{
+    GreenLight
   }
 
   alias Systems.{
@@ -20,7 +23,8 @@ defmodule Core.Factories do
     Campaign,
     Promotion,
     Assignment,
-    Crew
+    Crew,
+    Support
   }
 
   alias Core.Repo
@@ -51,6 +55,14 @@ defmodule Core.Factories do
         fullname: Faker.Person.name(),
         photo_url: Faker.Avatar.image_url()
       }
+    })
+  end
+
+  def build(:coordinator) do
+    :member
+    |> build(%{
+      researcher: true,
+      coordinator: true
     })
   end
 
@@ -103,7 +115,7 @@ defmodule Core.Factories do
   end
 
   def build(:helpdesk_ticket) do
-    %Helpdesk.Ticket{
+    %Support.TicketModel{
       title: Faker.Lorem.sentence(),
       description: Faker.Lorem.paragraph(),
       user: build(:member)
@@ -201,20 +213,25 @@ defmodule Core.Factories do
   end
 
   def build(:campaign, %{} = attributes) do
-    campaign_auth_node = build(:auth_node)
-    promotion_auth_node = build(:auth_node, %{parent: campaign_auth_node})
-    assignment_auth_node = build(:auth_node, %{parent: campaign_auth_node})
+    {campaign_auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
 
     {authors, attributes} = Map.pop(attributes, :authors, many_relationship(:authors, attributes))
 
     {promotion, attributes} =
-      Map.pop(attributes, :promotion, build(:promotion, %{auth_node: promotion_auth_node}))
+      Map.pop(
+        attributes,
+        :promotion,
+        build(:promotion, %{auth_node: build(:auth_node, %{parent: campaign_auth_node})})
+      )
 
     {assignment, attributes} =
       Map.pop(
         attributes,
         :assignment,
-        build(:assignment, %{director: :campaign, auth_node: assignment_auth_node})
+        build(:assignment, %{
+          director: :campaign,
+          auth_node: build(:auth_node, %{parent: campaign_auth_node})
+        })
       )
 
     %Campaign.Model{

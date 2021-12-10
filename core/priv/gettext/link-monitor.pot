@@ -1,0 +1,61 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:142
+msgid "attention.title"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:331
+msgid "started.at.message"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:149 systems/campaign/monitor_view.ex:170
+msgid "accept.all.button"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:144
+msgid "attention.body"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:188
+msgid "rejected.title"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:165
+msgid "waitinglist.body"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:162
+msgid "waitinglist.title"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:203
+msgid "accepted.title"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:104
+msgid "phase1.title"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:138
+msgid "phase2.title"
+msgstr ""

@@ -33,7 +33,6 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
 
     test "With applied member", %{campaign: campaign, user: user} do
       member = Crew.Context.apply_member!(campaign.promotable_assignment.crew, user)
-      _task = Crew.Context.get_or_create_task!(campaign.promotable_assignment.crew, member)
 
       view_model = ViewModelBuilder.view_model(campaign, Assignment.LandingPage, user)
 
@@ -57,8 +56,8 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
 
     test "With started member", %{campaign: campaign, user: user} do
       member = Crew.Context.apply_member!(campaign.promotable_assignment.crew, user)
-      task = Crew.Context.get_or_create_task!(campaign.promotable_assignment.crew, member)
-      Crew.Context.start_task!(task)
+      task = Crew.Context.get_task(campaign.promotable_assignment.crew, member)
+      Crew.Context.start_task(task)
 
       view_model = ViewModelBuilder.view_model(campaign, Assignment.LandingPage, user)
 
@@ -84,9 +83,9 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
 
     test "With finished member", %{campaign: campaign, user: user} do
       member = Crew.Context.apply_member!(campaign.promotable_assignment.crew, user)
-      task = Crew.Context.get_or_create_task!(campaign.promotable_assignment.crew, member)
-      Crew.Context.start_task!(task)
-      Crew.Context.complete_task!(task)
+      task = Crew.Context.get_task(campaign.promotable_assignment.crew, member)
+      Crew.Context.start_task(task)
+      Crew.Context.complete_task(task)
 
       view_model = ViewModelBuilder.view_model(campaign, Assignment.LandingPage, user)
 
@@ -224,7 +223,6 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
     test "With 1 application", %{campaign: campaign, user: user} do
       user2 = Factories.insert!(:member)
       member = Crew.Context.apply_member!(campaign.promotable_assignment.crew, user2)
-      _task = Crew.Context.get_or_create_task!(campaign.promotable_assignment.crew, member)
       view_model = ViewModelBuilder.view_model(campaign, Promotion.LandingPage, user)
 
       assert %{

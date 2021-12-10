@@ -2,7 +2,7 @@ defmodule CoreWeb.UI.Navigation.TabbarDropdown do
   use CoreWeb.UI.Component
 
   alias CoreWeb.UI.Navigation.TabbarItem
-  alias EyraUI.Line
+  alias Frameworks.Pixel.Line
 
   def render(assigns) do
     ~H"""

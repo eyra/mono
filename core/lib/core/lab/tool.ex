@@ -26,7 +26,7 @@ defmodule Core.Lab.Tool do
   @impl true
   def operational_validation(changeset), do: changeset
 
-  defimpl GreenLight.AuthorizationNode do
+  defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(lab_tool), do: lab_tool.auth_node_id
   end
 

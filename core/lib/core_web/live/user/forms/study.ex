@@ -5,8 +5,8 @@ defmodule CoreWeb.User.Forms.Study do
   alias Core.Accounts
   alias Core.Accounts.Features
 
-  alias EyraUI.Selector.Selector
-  alias EyraUI.Text.{Title2, BodyMedium}
+  alias Frameworks.Pixel.Selector.Selector
+  alias Frameworks.Pixel.Text.{Title2, BodyMedium}
 
   prop(props, :any, required: true)
 
@@ -61,7 +61,7 @@ defmodule CoreWeb.User.Forms.Study do
     changeset = Features.changeset(entity, type, attrs)
 
     socket
-    |> schedule_save(changeset)
+    |> save(changeset)
     |> update_ui()
   end
 

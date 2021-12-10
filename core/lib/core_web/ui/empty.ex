@@ -4,7 +4,7 @@ defmodule CoreWeb.UI.Empty do
   """
   use CoreWeb.UI.Component
 
-  alias EyraUI.Text.Title1
+  alias Frameworks.Pixel.Text.Title1
 
   prop(title, :string, required: true)
   prop(body, :string, required: true)

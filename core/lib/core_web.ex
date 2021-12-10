@@ -54,7 +54,7 @@ defmodule CoreWeb do
       use CoreWeb.LiveLocale
       use CoreWeb.LiveUri
       import Core.Authorization, only: [can_access?: 2]
-      use GreenLight.Live, Core.Authorization
+      use Frameworks.GreenLight.Live, Core.Authorization
 
       use CoreWeb.LiveAssignHelper
       import Core.FeatureFlags
@@ -71,9 +71,9 @@ defmodule CoreWeb do
 
       alias CoreWeb.UI.{MarginY, Empty}
       alias CoreWeb.UI.Container.{ContentArea, FormArea, SheetArea}
-      alias EyraUI.Spacing
-      alias EyraUI.Case.{Case, True, False}
-      alias EyraUI.Button.DynamicButton
+      alias Frameworks.Pixel.Spacing
+      alias Frameworks.Pixel.Case.{Case, True, False}
+      alias Frameworks.Pixel.Button.DynamicButton
 
       unquote(view_helpers())
     end
@@ -105,7 +105,7 @@ defmodule CoreWeb do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
-      import EyraUI.ErrorHelpers
+      import Frameworks.Pixel.ErrorHelpers
       import CoreWeb.UI.OldSkool
       import CoreWeb.Gettext
       alias CoreWeb.Router.Helpers, as: Routes

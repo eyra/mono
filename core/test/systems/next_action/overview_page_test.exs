@@ -13,8 +13,8 @@ defmodule Systems.NextAction.OverviewPageTest do
       %{
         title: "Test: #{count}",
         description: "Testing",
-        cta: "Open test",
-        url: "http://example.org"
+        cta_label: "Open test",
+        cta_action: %{type: :redirect, to: "http://example.org"}
       }
     end
   end

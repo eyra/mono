@@ -6,8 +6,8 @@ defmodule Systems.Home.LandingPage do
   use CoreWeb.Layouts.Website.Component, :index
   alias CoreWeb.Layouts.Website.Component, as: Website
 
-  alias EyraUI.Text.{Title1, Intro}
-  alias EyraUI.Hero.HeroLarge
+  alias Frameworks.Pixel.Text.{Title1, Intro}
+  alias Frameworks.Pixel.Hero.HeroLarge
 
   data(current_user, :any)
 

@@ -37,34 +37,33 @@ msgid "debug.title"
 msgstr "Debug"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:227
+#: systems/campaign/content_page.ex:227 systems/campaign/overview_page.ex:58
 msgid "delete.confirm.campaign"
 msgstr "campagne"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:383 systems/campaign/content_page.ex:387
-#: systems/campaign/content_page.ex:393
+#: systems/campaign/content_page.ex:387 systems/campaign/content_page.ex:391
+#: systems/campaign/content_page.ex:397
 msgid "delete.button"
 msgstr "Verwijderen"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:188
-#: systems/campaign/content_page.ex:367 systems/campaign/content_page.ex:373 systems/campaign/content_page.ex:377
+#: systems/campaign/content_page.ex:371 systems/campaign/content_page.ex:377
+#: systems/campaign/content_page.ex:381 systems/pool/submission_page.ex:192
 msgid "preview.button"
 msgstr "Bekijken"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:353 systems/campaign/content_page.ex:359
+#: systems/campaign/content_page.ex:357 systems/campaign/content_page.ex:363
 msgid "submit.button"
 msgstr "Indienen"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:194
-#: systems/campaign/content_page.ex:397
+#: systems/campaign/content_page.ex:401 systems/pool/submission_page.ex:198
 msgid "retract.button"
 msgstr "Haal offline"
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:180
+#: systems/pool/submission_page.ex:184
 msgid "accept.button"
 msgstr "Publiceren"

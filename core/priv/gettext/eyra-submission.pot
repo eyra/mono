@@ -11,27 +11,27 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:254 lib/core/pools/submission.ex:114
+#: bundles/link/lib/card.ex:282 lib/core/pools/submission.ex:114
 msgid "status.idle.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:257 lib/core/pools/submission.ex:117
+#: bundles/link/lib/card.ex:285 lib/core/pools/submission.ex:117
 msgid "status.submitted.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:227
+#: systems/campaign/model.ex:261
 msgid "incomplete.forms.message"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:225
+#: systems/campaign/model.ex:259
 msgid "ready.for.submission.message"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:231
+#: systems/campaign/model.ex:265
 msgid "waiting.for.coordinator.message"
 msgstr ""
 
@@ -71,91 +71,91 @@ msgid "reward.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:52
+#: systems/pool/submission_page.ex:55
 msgid "byline"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:147
+#: systems/pool/submission_page.ex:151
 msgid "retract.admin.success.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:146
+#: systems/pool/submission_page.ex:150
 msgid "retract.admin.success.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:131
+#: systems/pool/submission_page.ex:135
 msgid "accept.error.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:130
+#: systems/pool/submission_page.ex:134
 msgid "accept.error.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:124
+#: systems/pool/submission_page.ex:128
 msgid "accept.success.text"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/submission_page.ex:123
+#: systems/pool/submission_page.ex:127
 msgid "accept.success.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:199
+#: systems/pool/views/submission_view.ex:200
 msgid "reward.value.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:198
+#: systems/pool/views/submission_view.ex:199
 msgid "reward.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:125
+#: systems/pool/views/submission_view.ex:129
 msgid "schedule.end.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:115
+#: systems/pool/views/submission_view.ex:119
 msgid "schedule.start.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:203
+#: systems/pool/views/submission_view.ex:204
 msgid "schedule.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/submission_view.ex:202
+#: systems/pool/views/submission_view.ex:203
 msgid "schedule.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:272 lib/core/pools/submission.ex:131
+#: bundles/link/lib/card.ex:300 lib/core/pools/submission.ex:131
 msgid "status.accepted.closed.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:268 lib/core/pools/submission.ex:128
+#: bundles/link/lib/card.ex:296 lib/core/pools/submission.ex:128
 msgid "status.accepted.online.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:263 lib/core/pools/submission.ex:123
+#: bundles/link/lib/card.ex:291 lib/core/pools/submission.ex:123
 msgid "status.accepted.scheduled.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:245
+#: systems/campaign/model.ex:279
 msgid "accepted.closed.message"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:236
+#: systems/campaign/model.ex:270
 msgid "accepted.scheduled.message"
 msgstr ""

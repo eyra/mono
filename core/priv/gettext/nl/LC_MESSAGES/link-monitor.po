@@ -1,0 +1,62 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:142
+msgid "attention.title"
+msgstr "Let op"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:331
+msgid "started.at.message"
+msgstr "Gestart %{date} maar niet teruggekeerd naar Panl"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:149 systems/campaign/monitor_view.ex:170
+msgid "accept.all.button"
+msgstr "Keur alles goed"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:144
+msgid "attention.body"
+msgstr "Zorg dat je de bijdragen van de onderstaande deelnemers controleert."
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:188
+msgid "rejected.title"
+msgstr "Afgekeurd"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:165
+msgid "waitinglist.body"
+msgstr "Onderstaande deelnemers wachten op goedkeuring van hun werk."
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:162
+msgid "waitinglist.title"
+msgstr "Wachtlijst"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:203
+msgid "accepted.title"
+msgstr "Goedgekeurd"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:104
+msgid "phase1.title"
+msgstr "Voortgang"
+
+#, elixir-format
+#: systems/campaign/monitor_view.ex:138
+msgid "phase2.title"
+msgstr "Bijdragen"

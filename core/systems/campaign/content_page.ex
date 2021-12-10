@@ -25,7 +25,7 @@ defmodule Systems.Campaign.ContentPage do
   alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent, TabbarFooter}
   alias Systems.Campaign.MonitorView
   alias Link.Survey.Form, as: ToolForm
-  alias Link.Pool.CampaignSubmissionView, as: SubmissionForm
+  alias Systems.Pool.CampaignSubmissionView, as: SubmissionForm
   import Core.ImageCatalog, only: [image_catalog: 0]
 
   alias Systems.{
@@ -331,6 +331,10 @@ defmodule Systems.Campaign.ContentPage do
         socket
       end
 
+    {:noreply, socket}
+  end
+
+  def handle_info({:signal_test, _}, socket) do
     {:noreply, socket}
   end
 

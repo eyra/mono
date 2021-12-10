@@ -98,4 +98,58 @@ defmodule Systems.Campaign.Assembly do
     }
   end
 
+  # Copy
+
+  def copy(%Campaign.Model{
+    auth_node: campaign_auth_node,
+    authors: authors,
+    promotion: %{
+      auth_node: promotion_auth_node,
+      content_node: promotion_content_node,
+      submission: %{
+        pool: pool,
+        criteria: criteria,
+        content_node: submission_content_node,
+      } = submission
+    } = promotion,
+    promotable_assignment: %{
+      auth_node: assignment_auth_node,
+      assignable_survey_tool: %{
+        auth_node: tool_auth_node,
+        content_node: tool_content_node
+      } = tool
+    } = assignment
+  } = campaign) do
+
+    campaign_auth_node = Authorization.copy(campaign_auth_node)
+    promotion_auth_node = Authorization.copy(promotion_auth_node, campaign_auth_node)
+    assignment_auth_node = Authorization.copy(assignment_auth_node, campaign_auth_node)
+    tool_auth_node = Authorization.copy(tool_auth_node, assignment_auth_node)
+
+    tool_content_node = Content.Nodes.copy(tool_content_node)
+    promotion_content_node = Content.Nodes.copy(promotion_content_node, tool_content_node)
+    submission_content_node = Content.Nodes.copy(submission_content_node, promotion_content_node)
+
+    promotion = Promotion.Context.copy(promotion, promotion_auth_node, promotion_content_node)
+    submission = Submissions.copy(submission, promotion, pool, submission_content_node)
+    criteria = Submissions.copy(criteria, submission)
+    tool = Tools.copy(tool, tool_auth_node, tool_content_node)
+    assignment = Assignment.Context.copy(assignment, tool, assignment_auth_node)
+    campaign = Campaign.Context.copy(campaign, promotion, assignment, campaign_auth_node)
+    authors = Campaign.Context.copy(authors, campaign)
+
+    {
+      :ok,
+      %{
+        campaign: campaign,
+        promotion: promotion,
+        submission: submission,
+        criteria: criteria,
+        tool: tool,
+        assignment: assignment,
+        authors: authors
+      }
+    }
+  end
+
 end

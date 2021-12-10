@@ -4,9 +4,9 @@ defmodule CoreWeb.User.Forms.Debug do
   alias Core.Accounts
   alias Core.Accounts.UserProfileEdit
 
-  alias EyraUI.Text.{Title2}
-  alias EyraUI.Form.{Form}
-  alias EyraUI.Selector.Selector
+  alias Frameworks.Pixel.Text.{Title2}
+  alias Frameworks.Pixel.Form.{Form}
+  alias Frameworks.Pixel.Selector.Selector
 
   prop(user, :any, required: true)
 
@@ -29,7 +29,7 @@ defmodule CoreWeb.User.Forms.Debug do
     {
       :ok,
       socket
-      |> force_save(entity, :auto_save, attrs)
+      |> save(entity, :auto_save, attrs)
       |> update_ui()
     }
   end
@@ -88,7 +88,7 @@ defmodule CoreWeb.User.Forms.Debug do
     {
       :noreply,
       socket
-      |> schedule_save(entity, :auto_save, attrs)
+      |> save(entity, :auto_save, attrs)
       |> update_ui()
     }
   end
@@ -104,14 +104,11 @@ defmodule CoreWeb.User.Forms.Debug do
     }
   end
 
-  def force_save(socket, entity, type, attrs), do: save(socket, entity, type, attrs, false)
-  def schedule_save(socket, entity, type, attrs), do: save(socket, entity, type, attrs, true)
-
-  def save(socket, %Core.Accounts.UserProfileEdit{} = entity, type, attrs, schedule?) do
+  def save(socket, %Core.Accounts.UserProfileEdit{} = entity, type, attrs) do
     changeset = UserProfileEdit.changeset(entity, type, attrs)
 
     socket
-    |> save(changeset, schedule?)
+    |> save(changeset)
   end
 
   @impl true

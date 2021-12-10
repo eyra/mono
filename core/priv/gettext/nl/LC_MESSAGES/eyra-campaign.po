@@ -20,3 +20,13 @@ msgstr "Beschikbare studies"
 #: bundles/link/lib/marketplace.ex:143
 msgid "campaign.subject.title"
 msgstr "Mijn bijdragen"
+
+#, elixir-format
+#: systems/campaign/overview_page.ex:113
+msgid "share.dialog.content"
+msgstr "campagne"
+
+#, elixir-format
+#: systems/campaign/overview_page.ex:114
+msgid "share.dialog.group"
+msgstr "onderzoekers"

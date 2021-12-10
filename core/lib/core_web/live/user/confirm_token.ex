@@ -5,8 +5,8 @@ defmodule CoreWeb.User.ConfirmToken do
   use CoreWeb, :live_view
 
   alias Surface.Components.Form
-  alias EyraUI.Button.SubmitButton
-  alias EyraUI.Form.EmailInput
+  alias Frameworks.Pixel.Button.SubmitButton
+  alias Frameworks.Pixel.Form.EmailInput
 
   alias Core.Accounts
   alias Core.Accounts.User

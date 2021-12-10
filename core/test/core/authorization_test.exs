@@ -3,7 +3,7 @@ defmodule Core.AuthorizationTest do
   alias Core.Factories
   use Core.DataCase
   alias Core.Accounts.User
-  alias GreenLight.Principal
+  alias Frameworks.GreenLight.Principal
 
   test "principal returns `visitor` for nil users" do
     assert Principal.id(nil) == nil
@@ -47,6 +47,22 @@ defmodule Core.AuthorizationTest do
   test "can assign role to authorization node" do
     {:ok, node} = Authorization.create_node()
     :ok = Authorization.assign_role(%User{id: 1}, node, :owner)
+  end
+
+  test "can get user for role" do
+    %{id: id, email: email} = user = Factories.insert!(:researcher)
+    {:ok, node} = Authorization.create_node()
+    :ok = Authorization.assign_role(user, node, :owner)
+
+    assert [%{id: ^id, email: ^email}] = Authorization.users_with_role(node, :owner)
+  end
+
+  test "can't get user for role" do
+    user = Factories.insert!(:researcher)
+    {:ok, node} = Authorization.create_node()
+    :ok = Authorization.assign_role(user, node, :owner)
+
+    assert [] = Authorization.users_with_role(node, :participant)
   end
 
   test "role intersection on a node" do

@@ -3,9 +3,9 @@ defmodule CoreWeb.FakeSurvey do
   The home screen.
   """
   use CoreWeb, :live_view
-  alias EyraUI.Hero.HeroSmall
-  alias EyraUI.Text.{BodyLarge, Title2}
-  alias EyraUI.Button.PrimaryButton
+  alias Frameworks.Pixel.Hero.HeroSmall
+  alias Frameworks.Pixel.Text.{BodyLarge, Title2}
+  alias Frameworks.Pixel.Button.PrimaryButton
 
   data(redirect_url, :string)
 

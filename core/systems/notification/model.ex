@@ -19,7 +19,7 @@ defmodule Systems.Notification.Model do
   @optional_fields ~w(action status)a
   @fields @required_fields ++ @optional_fields
 
-  defimpl GreenLight.AuthorizationNode do
+  defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(notification), do: notification.auth_node_id
   end
 

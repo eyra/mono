@@ -1,12 +1,14 @@
 defmodule Systems.NextAction.View do
-  use EyraUI.Component
+  use Frameworks.Pixel.Component
+
+  alias Frameworks.Pixel.Button.DynamicAction
 
   defviewmodel(
     title: nil,
     description: nil,
-    cta: nil,
-    url: nil,
-    highlighted?: false
+    cta_label: nil,
+    cta_action: nil,
+    style: nil
   )
 
   prop(title_css, :css_class,
@@ -15,15 +17,20 @@ defmodule Systems.NextAction.View do
 
   prop(subtitle_css, :css_class, default: "text-bodysmall md:text-bodymedium font-body text-grey1")
 
-  alias Surface.Components.LiveRedirect
-
-  EyraUI.Button.PrimaryLiveViewButton
-
   prop(vm, :map, required: true)
 
-  def colors(%{highlighted?: true}) do
+  def colors(%{style: :tertiary}) do
     %{
       bg: "bg-tertiary",
+      text: "text-grey1",
+      button: "bg-grey1 text-white",
+      icon: "text-grey1"
+    }
+  end
+
+  def colors(%{style: :warning}) do
+    %{
+      bg: "bg-warning",
       text: "text-grey1",
       button: "bg-grey1 text-white",
       icon: "text-grey1"
@@ -41,7 +48,7 @@ defmodule Systems.NextAction.View do
 
   def render(assigns) do
     ~H"""
-    <LiveRedirect to={{url(@vm)}} class="block">
+    <DynamicAction vm={{cta_action(@vm)}} >
       <div class="p-4 md:p-6 flex items-center space-x-4 rounded-md {{ colors((@vm)).bg }}">
         <div class="flex-grow">
           <div class="{{@title_css}} mb-2">
@@ -52,7 +59,7 @@ defmodule Systems.NextAction.View do
           </div>
         </div>
         <div class="hidden lg:block font-button text-button text-center p-3 rounded-md whitespace-nowrap {{colors(@vm).button}}">
-          {{cta(@vm)}}
+          {{cta_label(@vm)}}
         </div>
         <div class="inline-block lg:hidden self-start mt-2px md:mt-1 ">
           <svg width="8" height="13" viewBox="0 0 8 13" class="fill-current {{colors(@vm).icon}}">
@@ -60,7 +67,7 @@ defmodule Systems.NextAction.View do
           </svg>
         </div>
       </div>
-    </LiveRedirect>
+    </DynamicAction>
     """
   end
 end

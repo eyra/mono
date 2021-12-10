@@ -8,8 +8,11 @@ defmodule Core.Pools.ReviewSubmission do
     %{
       title: dgettext("eyra-nextaction", "review.submission.title"),
       description: dgettext("eyra-nextaction", "review.submission.description"),
-      cta: dgettext("eyra-nextaction", "review.submission.cta"),
-      url: url_resolver.(Link.Pool.OverviewPage, tab: "campaigns")
+      cta_label: dgettext("eyra-nextaction", "review.submission.cta"),
+      cta_action: %{
+        type: :redirect,
+        to: url_resolver.(Systems.Pool.OverviewPage, tab: "campaigns")
+      }
     }
   end
 end

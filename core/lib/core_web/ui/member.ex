@@ -6,7 +6,7 @@ defmodule CoreWeb.UI.Member do
 
   alias Core.ImageHelpers
 
-  alias EyraUI.Button.DynamicButton
+  alias Frameworks.Pixel.Button.DynamicButton
 
   defviewmodel(
     title: nil,

@@ -121,40 +121,40 @@ msgid "features.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaign_submission_view.ex:153
 #: lib/core_web/live/user/forms/features.ex:99
+#: systems/pool/views/campaign_submission_view.ex:149
 msgid "features.dominanthand.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaign_submission_view.ex:145
 #: lib/core_web/live/user/forms/features.ex:91
+#: systems/pool/views/campaign_submission_view.ex:141
 msgid "features.gender.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaign_submission_view.ex:149
 #: lib/core_web/live/user/forms/features.ex:95
+#: systems/pool/views/campaign_submission_view.ex:145
 msgid "features.nativelanguage.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaign_submission_view.ex:157
+#: systems/pool/views/campaign_submission_view.ex:153
 msgid "features.study.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaign_submission_view.ex:141
+#: systems/pool/views/campaign_submission_view.ex:137
 msgid "features.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaign_submission_view.ex:158
+#: systems/pool/views/campaign_submission_view.ex:154
 msgid "feature.study.content.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaign_submission_view.ex:142
+#: systems/pool/views/campaign_submission_view.ex:138
 msgid "features.content.description"
 msgstr ""
 
@@ -199,18 +199,18 @@ msgid "login.surf.message.surfconext.href"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaign_submission_view.ex:165
-#: bundles/link/lib/pool/views/submission_criteria_view.ex:111
+#: systems/pool/views/campaign_submission_view.ex:161
+#: systems/pool/views/submission_criteria_view.ex:107
 msgid "features.study.program"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/pool/views/campaign_submission_view.ex:161
-#: bundles/link/lib/pool/views/submission_criteria_view.ex:107
+#: systems/pool/views/campaign_submission_view.ex:157
+#: systems/pool/views/submission_criteria_view.ex:103
 msgid "features.study.year"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:322
+#: bundles/link/lib/survey/web/form.ex:317
 msgid "ehtical.code.label"
 msgstr ""

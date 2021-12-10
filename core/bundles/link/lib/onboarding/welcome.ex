@@ -1,7 +1,7 @@
 defmodule Link.Onboarding.Welcome do
   use CoreWeb.UI.LiveComponent
 
-  alias EyraUI.Text.{Title2}
+  alias Frameworks.Pixel.Text.{Title2}
 
   prop(user, :any, required: true)
 

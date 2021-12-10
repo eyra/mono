@@ -3,11 +3,14 @@ defmodule Systems.Routes do
     quote do
       use Systems.Subroutes, [
         :home,
+        :admin,
+        :support,
         :assignment,
         :campaign,
         :next_action,
         :notification,
-        :promotion
+        :promotion,
+        :pool
       ]
     end
   end
