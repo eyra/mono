@@ -34,7 +34,7 @@ defmodule BankingProxy.ProtocolTest do
 
     test "handles a message" do
       MockBankingBackend
-      |> expect(:list_payments, fn _ -> nil end)
+      |> expect(:list_payments, fn -> {[], %{}} end)
 
       MockRanchTransport
       # Receive a message
@@ -49,12 +49,15 @@ defmodule BankingProxy.ProtocolTest do
     end
   end
 
-  describe "dispatch_message/1" do
+  describe "dispatch_message/2" do
     test "do list_payments" do
     end
 
     test "return error on unknown call" do
-      assert Protocol.dispatch_message(%{"call" => "undefined_call"}) == %{
+      MockBankingBackend
+      |> expect(:list_payments, fn -> nil end)
+
+      assert Protocol.dispatch_message(MockBankingBackend, %{"call" => "undefined_call"}) == %{
                "error" => %{
                  "type" => "undefined",
                  "message" => "Call `undefined_call` is not supported"

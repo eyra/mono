@@ -6,13 +6,13 @@ defmodule BankingProxy.Server do
     {:ok, pid}
   end
 
-  def init(ref, transport, _opts = []) do
+  def init(ref, transport, _opts) do
     {:ok, socket} = :ranch.handshake(ref)
     loop(socket, transport)
   end
 
   def loop(socket, transport) do
-    case transport.recv(socket, 0, 60000) do
+    case transport.recv(socket, 0, 60_000) do
       {:ok, data} when data != <<4>> ->
         transport.send(socket, data)
         loop(socket, transport)

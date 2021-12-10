@@ -1,5 +1,5 @@
 defmodule Bunq.SetupCLI do
-  @key_file "private_key.pem"
+  @keyfile "private_key.pem"
 
   def main(args) do
     {opts, parsed_args, _} =
@@ -39,7 +39,7 @@ defmodule Bunq.SetupCLI do
     private_key = Bunq.API.generate_key()
     private_pem = :public_key.pem_entry_encode(:RSAPrivateKey, private_key)
     key_pem = :public_key.pem_encode([private_pem])
-    File.write!(@key_file, key_pem)
+    File.write!(@keyfile, key_pem)
     IO.puts("Creating Bunq installation...")
     conn = Bunq.API.create_conn(endpoint(opts), private_key)
 
@@ -49,11 +49,12 @@ defmodule Bunq.SetupCLI do
       |> Bunq.API.register_device()
 
     divider()
-    IO.puts("Private key file:   #{@key_file}")
+    IO.puts("Private key file:   #{@keyfile}")
     IO.puts("API key:   #{api_key}")
     IO.puts("Installation token: #{installation_token}")
     IO.puts("Device id:          #{device_id}")
     divider()
+    write_config(api_key, installation_token, device_id)
   end
 
   defp endpoint(opts) do
@@ -66,5 +67,32 @@ defmodule Bunq.SetupCLI do
 
   defp divider do
     IO.puts(Stream.cycle(["-", "="]) |> Enum.take(80) |> Enum.join())
+  end
+
+  if Mix.env() == :dev do
+    def write_config(api_key, installation_token, device_id) do
+      if String.downcase(IO.gets("(Over)write `config/dev.exs`? [y/n]")) |> IO.inspect() == "y\n" do
+        File.write!("config/dev.exs", """
+        import Config
+
+        config :banking_proxy,
+        banking_bakend: Bunq,
+        backend_params: [
+          endpoint:  "https://api.bunq.com/v1",
+          keyfile: "#{@keyfile}",
+          iban: "<enter full IBAN here>",
+          api_key: "#{api_key}",
+          installation_token: "#{installation_token}",
+          device_id: "#{device_id}"
+        ],
+        certfile: "certs/server_certificate.pem",
+        cacertfile: "certs/ca_certificate.pem",
+        keyfile: "certs/server_key.pem"
+        """)
+      end
+    end
+  else
+    def write_config(_api_key, _installation_token, _device_id) do
+    end
   end
 end

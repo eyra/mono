@@ -24,3 +24,6 @@ banking_proxy-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+banking_setup
+private_key.pem

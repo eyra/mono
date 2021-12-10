@@ -21,7 +21,7 @@ defmodule Bunq do
     account_iban = Keyword.fetch!(opts, :iban)
 
     private_key =
-      Keyword.fetch!(opts, :private_key)
+      Keyword.fetch!(opts, :keyfile)
       |> load_private_key()
 
     installation_token = Keyword.fetch!(opts, :installation_token)
@@ -68,6 +68,7 @@ defmodule Bunq do
 
   defp load_private_key(private_key_pem) do
     private_key_pem
+    |> File.read!()
     |> :public_key.pem_decode()
     |> Enum.map(&:public_key.pem_entry_decode/1)
     |> List.first()

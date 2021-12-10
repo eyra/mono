@@ -21,7 +21,7 @@ defmodule BankingProxy.MixProject do
   end
 
   def escript do
-    [main_module: Bunq.SetupCLI, name: "banking_setup"]
+    [main_module: Bunq.SetupCLI, name: "banking_setup", app: :hackney]
   end
 
   # Run "mix help deps" to learn about dependencies.
@@ -30,7 +30,10 @@ defmodule BankingProxy.MixProject do
       {:httpoison, "~> 1.8"},
       {:jason, "~> 1.2"},
       {:ranch, "~> 2.1"},
-      {:mox, "~> 1.0", only: :test}
+      # Dev and test deps
+      {:mox, "~> 1.0", only: :test},
+      {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
 end

@@ -1,12 +1,7 @@
-name: Release
+name: Release Banking Proxy
 
-on:
-  workflow_dispatch:
-    inputs:
-      bundle:
-        description: 'Bundle ID (link / next etc.)'
-        required: true
-        default: 'link'
+on: workflow_dispatch
+
 jobs:
   tagged-release:
     runs-on: ubuntu-20.04
@@ -18,7 +13,7 @@ jobs:
 
       - name: Tag name
         id: tag
-        run: echo ::set-output "name=TAG::${{github.event.inputs.bundle}}_$(date +%F)_${{github.run_number}}"
+        run: echo ::set-output "name=TAG::banking_proxy_$(date +%F)_${{github.run_number}}"
 
       - id: setup-elixir
         uses: erlef/setup-elixir@v1
@@ -27,31 +22,13 @@ jobs:
           elixir-version: '1.12.1'
 
       - name: Setup the Elixir project
-        run: make deps
-
-      - name: Install Node deps
-        run: npm install
-        working-directory: core/assets
-
-      - name: Update browserslist package
-        run: npx browserslist@latest --update-db
-        working-directory: core/assets
-
-      - name: Build static resources
-        run: npm run deploy
-        working-directory: core/assets
-
-      - name: Build digest
-        run: mix phx.digest
-        working-directory: core
-        env:
-          MIX_ENV: prod
+        run: mix deps.get
+        working-directory: banking_proxy
 
       - name: Build release
         run: mix release --overwrite --path "../${{steps.tag.outputs.tag}}"
-        working-directory: core
+        working-directory: banking_proxy
         env:
-          BUNDLE: ${{github.event.inputs.bundle}}
           VERSION: ${{steps.tag.outputs.tag}}
 
       - name: Archive release
@@ -62,6 +39,10 @@ jobs:
         with:
           tag: "${{steps.tag.outputs.tag}}"
           force_push_tag: true
+
+      - name: Build banking CLI
+        run: mix escript.build && tar cfj "../banking-setup.tar.bz2" banking_setup
+        working-directory: banking_proxy
 
       - uses: softprops/action-gh-release@v1
         with:

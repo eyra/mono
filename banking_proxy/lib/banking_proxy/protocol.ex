@@ -8,8 +8,7 @@ defmodule BankingProxy.Protocol do
     {:ok, pid}
   end
 
-  def init(ref, transport, opts) do
-    banking_backend = Keyword.fetch!(opts, :banking_backend)
+  def init(ref, transport, banking_backend) do
     {:ok, socket} = :ranch.handshake(ref)
     loop(banking_backend, "", socket, transport)
   end

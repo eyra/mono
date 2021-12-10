@@ -440,7 +440,7 @@ defmodule Bunq.API do
   end
 
   def generate_key do
-    :public_key.generate_key({:rsa, 2048, 65537})
+    :public_key.generate_key({:rsa, 2048, 65_537})
   end
 
   def public_key_pem(private_key) do
@@ -554,10 +554,8 @@ defmodule Bunq.API do
       |> Map.fetch!(:body)
       |> Jason.decode!()
 
-    # |> IO.inspect(label: "RAW")
-
     case body do
-      %{"Error" => [%{"error_description" => error}]} -> {:error, error} |> IO.inspect()
+      %{"Error" => [%{"error_description" => error}]} -> {:error, error}
       response -> {:ok, response}
     end
   end
