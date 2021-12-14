@@ -60,6 +60,7 @@ defmodule Link.Marketplace do
         preload: preload
       )
       |> filter(socket)
+      |> sort_by_open_spot_count()
       |> Enum.map(&CardVM.primary_campaign(&1, socket))
 
     subject_count = Enum.count(subject_campaigns)
@@ -76,6 +77,10 @@ defmodule Link.Marketplace do
       |> assign(available_count: available_count)
 
     {:ok, socket}
+  end
+
+  defp sort_by_open_spot_count(campaigns) when is_list(campaigns) do
+    Enum.sort_by(campaigns, &Campaign.Context.open_spot_count/1, :desc)
   end
 
   defp filter(campaigns, socket) when is_list(campaigns) do

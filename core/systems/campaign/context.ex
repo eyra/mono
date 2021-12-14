@@ -161,6 +161,11 @@ defmodule Systems.Campaign.Context do
     |> Repo.all()
   end
 
+  def open_spot_count(%{promotable_assignment: assignment}) do
+    Assignment.Context.open_spot_count(assignment)
+  end
+  def open_spot_count(_campaign), do: 0
+
   def list_owners(%Campaign.Model{} = campaign, preload \\ []) do
     owner_ids =
       campaign
