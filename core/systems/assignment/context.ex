@@ -121,11 +121,12 @@ defmodule Systems.Assignment.Context do
   end
 
   def complete_task(%{crew: crew} = _assignment, user) do
-    if Crew.Context.expired_member?(crew, user) do nil
-    else
+    if Crew.Context.member?(crew, user) do
       member = Crew.Context.get_member!(crew, user)
       task = Crew.Context.get_task(crew, member)
       Crew.Context.complete_task!(task)
+    else
+      nil
     end
   end
 

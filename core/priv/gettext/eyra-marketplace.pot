@@ -11,12 +11,12 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:166
+#: bundles/link/lib/marketplace.ex:171
 msgid "empty.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:165
+#: bundles/link/lib/marketplace.ex:170
 msgid "empty.title"
 msgstr ""
 

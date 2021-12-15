@@ -81,7 +81,7 @@ msgstr "Student"
 msgid "ticket.mailto.button"
 msgstr "Benaderen"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: systems/support/ticket_page.ex:111
 msgid "reopen.ticket.button"
 msgstr "Melding heropenen"
