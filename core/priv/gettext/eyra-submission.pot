@@ -36,32 +36,32 @@ msgid "waiting.for.coordinator.message"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:263
+#: systems/campaign/content_page.ex:265
 msgid "submit.error.text"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:262
+#: systems/campaign/content_page.ex:264
 msgid "submit.error.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:255
+#: systems/campaign/content_page.ex:257
 msgid "submit.success.text"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:254
+#: systems/campaign/content_page.ex:256
 msgid "submit.success.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:280
+#: systems/campaign/content_page.ex:282
 msgid "retract.success.text"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:279
+#: systems/campaign/content_page.ex:281
 msgid "retract.success.title"
 msgstr ""
 

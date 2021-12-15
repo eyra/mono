@@ -82,7 +82,7 @@ msgid "dashboard.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:131
+#: bundles/link/lib/marketplace.ex:136
 msgid "marketplace.title"
 msgstr ""
 
@@ -168,17 +168,17 @@ msgid "cancel.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:229 systems/campaign/overview_page.ex:60
+#: systems/campaign/content_page.ex:231 systems/campaign/overview_page.ex:60
 msgid "delete.confirm.text"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:228 systems/campaign/overview_page.ex:59
+#: systems/campaign/content_page.ex:230 systems/campaign/overview_page.ex:59
 msgid "delete.confirm.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:230 systems/campaign/overview_page.ex:61
+#: systems/campaign/content_page.ex:232 systems/campaign/overview_page.ex:61
 msgid "delete.confirm.label"
 msgstr ""
 
@@ -190,12 +190,12 @@ msgid "ok.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:293
+#: systems/campaign/content_page.ex:295
 msgid "feature.unavailable.text"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:292
+#: systems/campaign/content_page.ex:294
 msgid "feature.unavailable.title"
 msgstr ""
 

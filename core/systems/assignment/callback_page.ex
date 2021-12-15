@@ -12,7 +12,7 @@ defmodule Systems.Assignment.CallbackPage do
     Assignment
   }
 
-  data(task, :map)
+  data(state, :atom)
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
@@ -21,14 +21,24 @@ defmodule Systems.Assignment.CallbackPage do
 
   @impl true
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
-    assignment = Assignment.Context.get!(id, [:crew])
-    task = Assignment.Context.complete_task(assignment, user)
+    %{crew: crew} = assignment = Assignment.Context.get!(id, [:crew])
+
+    state =
+      if Assignment.Context.complete_task(assignment, user) do
+        :participant
+      else
+        if Core.Authorization.user_has_role?(user, crew, :tester) do
+          :tester
+        else
+          :expired
+        end
+      end
 
     {
       :ok,
       socket
       |> assign(
-        task: task,
+        state: state,
         model: assignment
       )
       |> observe_view_model()
@@ -62,12 +72,17 @@ defmodule Systems.Assignment.CallbackPage do
           <MarginY id={{:page_top}} />
           <Title1>{{@vm.title}}</Title1>
           <Spacing value="M" />
-          <div :if={{@task == nil }}>
+          <div :if={{@state == :expired }}>
             <Title3>{{ dgettext("eyra-crew", "task.expired.subtitle") }}</Title3>
             <Spacing value="M" />
             <BodyLarge>{{ dgettext("eyra-crew", "task.expired.text") }}</BodyLarge>
           </div>
-          <div :if={{@task != nil }}>
+          <div :if={{@state == :tester }}>
+            <Title3>{{ dgettext("eyra-crew", "tester.completed.subtitle") }}</Title3>
+            <Spacing value="M" />
+            <BodyLarge>{{ dgettext("eyra-crew", "tester.completed.text") }}</BodyLarge>
+          </div>
+          <div :if={{@state == :participant }}>
             <Title3>{{ dgettext("eyra-crew", "task.completed.title") }}</Title3>
             <Spacing value="M" />
             <BodyLarge>{{ dgettext("eyra-crew", "task.completed.message.part1") }}</BodyLarge>
