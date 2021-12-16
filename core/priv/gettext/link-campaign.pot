@@ -34,3 +34,8 @@ msgstr ""
 #: systems/crew/reject_view.ex:41
 msgid "reject.note"
 msgstr ""
+
+#, elixir-format
+#: systems/campaign/model.ex:234
+msgid "back.to.campaign.button"
+msgstr ""

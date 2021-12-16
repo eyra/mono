@@ -73,7 +73,13 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   import Frameworks.Utility.ViewModel
   import CoreWeb.Gettext
 
+  alias Core.Content.Nodes
+  alias Core.ImageHelpers
+  alias Core.Pools.Submission
+
+  alias CoreWeb.Router.Helpers, as: Routes
   alias Frameworks.Utility.ViewModelBuilder, as: Builder
+  alias Phoenix.LiveView
 
   alias Systems.{
     Campaign,
@@ -81,10 +87,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     Assignment,
     Crew
   }
-
-  alias Core.Content.Nodes
-  alias Core.ImageHelpers
-  alias Core.Pools.Submission
 
   def view_model(%Campaign.Model{} = campaign, page, user, url_resolver) do
     campaign
@@ -101,9 +103,17 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   end
 
   defp vm(%{id: id, promotion: promotion, promotable: promotable}, Assignment.CallbackPage = page, user, url_resolver) do
-    %{id: id}
-    |> merge(Builder.view_model(promotion, page, user, url_resolver))
-    |> merge(Builder.view_model(promotable, page, user, url_resolver))
+    %{state: state} = vm =
+      %{id: id}
+      |> merge(Builder.view_model(promotion, page, user, url_resolver))
+      |> merge(Builder.view_model(promotable, page, user, url_resolver))
+
+    if state == :tester do
+      # override default cta in case of test flow
+      %{vm | call_to_action: back_to_campaign_cta(id)}
+    else
+      vm
+    end
   end
 
   defp vm(%{id: id, authors: authors, promotion: promotion, promotable: promotable}, Promotion.LandingPage = page, user, url_resolver) do
@@ -217,6 +227,18 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
           |> Enum.map(& &1.fullname)
           |> Enum.join(", "))
     }
+  end
+
+  defp back_to_campaign_cta(campaign_id) do
+    %{
+      label: dgettext("link-campaign", "back.to.campaign.button"),
+      campaign_id: campaign_id,
+      handle: &handle_back_to_campaign/3
+    }
+  end
+
+  defp handle_back_to_campaign(socket, %{campaign_id: campaign_id} = _call_to_action, _model) do
+    LiveView.push_redirect(socket, to: Routes.live_path(socket, Campaign.ContentPage, campaign_id))
   end
 
   defp tag(nil), do: %{text: dgettext("eyra-marketplace", "assignment.status.expired.label"), type: :disabled}

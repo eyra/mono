@@ -22,17 +22,17 @@ msgid "status.submitted.label"
 msgstr "Ingediend"
 
 #, elixir-format
-#: systems/campaign/model.ex:261
+#: systems/campaign/model.ex:283
 msgid "incomplete.forms.message"
 msgstr "Sommige verplichte velden zijn nog niet ingevuld"
 
 #, elixir-format
-#: systems/campaign/model.ex:259
+#: systems/campaign/model.ex:281
 msgid "ready.for.submission.message"
 msgstr "Alle verplichte velden zijn gevuld, je kunt deze campagne indienen"
 
 #, elixir-format
-#: systems/campaign/model.ex:265
+#: systems/campaign/model.ex:287
 msgid "waiting.for.coordinator.message"
 msgstr "Jouw campagne staat in de wachtrij om door de poolbeheerder in de marktplaats gezet te worden"
 
@@ -152,11 +152,11 @@ msgid "status.accepted.scheduled.label"
 msgstr "Ingepland"
 
 #, elixir-format
-#: systems/campaign/model.ex:279
+#: systems/campaign/model.ex:301
 msgid "accepted.closed.message"
 msgstr "Deze campagne is afgerond"
 
 #, elixir-format
-#: systems/campaign/model.ex:270
+#: systems/campaign/model.ex:292
 msgid "accepted.scheduled.message"
 msgstr "Deze campagne staat ingepland voor deelname "
