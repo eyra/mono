@@ -12,36 +12,36 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:91
+#: systems/assignment/callback_page.ex:74
 msgid "task.completed.message.part1"
 msgstr "Your contribution will be reviewed by the author of this study and either accepted or rejected."
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:93
+#: systems/assignment/callback_page.ex:76
 msgid "task.completed.message.part2"
 msgstr "Visit the marketplace to view the status of your contribution."
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:89
+#: systems/assignment/callback_page.ex:72
 msgid "task.completed.title"
 msgstr "Thank you for participating"
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:79 systems/assignment/model.ex:104
+#: systems/assignment/callback_page.ex:62 systems/assignment/model.ex:104
 msgid "task.expired.subtitle"
 msgstr "Unfortunately, your session has expired"
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:81 systems/assignment/model.ex:105
+#: systems/assignment/callback_page.ex:64 systems/assignment/model.ex:105
 msgid "task.expired.text"
 msgstr "If the study is still open, you can participate again. Is the study closed? Visit the marketplace to check for other studies."
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:84
+#: systems/assignment/callback_page.ex:67
 msgid "tester.completed.subtitle"
-msgstr "✅ Round trip completed"
+msgstr "✅ Round trip confirmed"
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:86
+#: systems/assignment/callback_page.ex:69
 msgid "tester.completed.text"
-msgstr "Make sure that the title above corresponds with your campaign."
+msgstr "If the title of this page corresponds with the title of your campaign, the roundtrip from Panl to Qualtrics and back was successful."

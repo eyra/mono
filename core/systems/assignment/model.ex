@@ -110,8 +110,20 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
     end
   end
 
-  defp vm(_, Assignment.CallbackPage, user) do
+  defp vm(%{crew: crew} = assignment, Assignment.CallbackPage, user) do
+    state =
+      if Assignment.Context.complete_task(assignment, user) do
+        :participant
+      else
+        if Core.Authorization.user_has_role?(user, crew, :tester) do
+          :tester
+        else
+          :expired
+        end
+      end
+
     %{
+      state: state,
       hero_title: dgettext("link-survey", "task.hero.title"),
       call_to_action: forward_call_to_action(user)
     }
@@ -196,6 +208,10 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
     end
   end
 
+  def handle_forward(%{assigns: %{current_user: user}} = socket, _call_to_action, _model) do
+    LiveView.push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))
+  end
+
   defp inform_closed(socket) do
     title = dgettext("link-assignment", "closed.dialog.title")
     text = dgettext("link-assignment", "closed.dialog.text")
@@ -217,10 +233,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
     }
 
     LiveView.assign(socket, dialog: dialog)
-  end
-
-  def handle_forward(%{assigns: %{current_user: user}} = socket, _call_to_action, _model) do
-    LiveView.push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))
   end
 
   defp assignment_subtitle(%{status: :pending}), do: dgettext("link-survey", "task.pending.subtitle")

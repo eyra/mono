@@ -177,7 +177,7 @@ msgid "delete.confirm.label"
 msgstr "Verwijderen"
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:6 systems/assignment/model.ex:209
+#: systems/assignment/landing_page.ex:6 systems/assignment/model.ex:225
 #: systems/campaign/content_page.ex:9 systems/campaign/overview_page.ex:7 systems/pool/submission_page.ex:8
 #: systems/promotion/landing_page.ex:6
 msgid "ok.button"

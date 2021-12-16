@@ -35,3 +35,8 @@ msgstr "Reject contribution"
 #: systems/crew/reject_view.ex:41
 msgid "reject.note"
 msgstr "Note: Rejected participants cannot participate in your campaign again."
+
+#, elixir-format
+#: systems/campaign/model.ex:234
+msgid "back.to.campaign.button"
+msgstr "Back to campaign"

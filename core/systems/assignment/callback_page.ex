@@ -12,34 +12,20 @@ defmodule Systems.Assignment.CallbackPage do
     Assignment
   }
 
-  data(state, :atom)
-
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
     Assignment.Context.get!(id, [:crew]).crew
   end
 
   @impl true
-  def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
-    %{crew: crew} = assignment = Assignment.Context.get!(id, [:crew])
-
-    state =
-      if Assignment.Context.complete_task(assignment, user) do
-        :participant
-      else
-        if Core.Authorization.user_has_role?(user, crew, :tester) do
-          :tester
-        else
-          :expired
-        end
-      end
+  def mount(%{"id" => id}, _session, socket) do
+    model = Assignment.Context.get!(id, [:crew])
 
     {
       :ok,
       socket
       |> assign(
-        state: state,
-        model: assignment
+        model: model
       )
       |> observe_view_model()
       |> update_menus()
@@ -72,17 +58,17 @@ defmodule Systems.Assignment.CallbackPage do
           <MarginY id={{:page_top}} />
           <Title1>{{@vm.title}}</Title1>
           <Spacing value="M" />
-          <div :if={{@state == :expired }}>
+          <div :if={{@vm.state == :expired }}>
             <Title3>{{ dgettext("eyra-crew", "task.expired.subtitle") }}</Title3>
             <Spacing value="M" />
             <BodyLarge>{{ dgettext("eyra-crew", "task.expired.text") }}</BodyLarge>
           </div>
-          <div :if={{@state == :tester }}>
+          <div :if={{@vm.state == :tester }}>
             <Title3>{{ dgettext("eyra-crew", "tester.completed.subtitle") }}</Title3>
             <Spacing value="M" />
             <BodyLarge>{{ dgettext("eyra-crew", "tester.completed.text") }}</BodyLarge>
           </div>
-          <div :if={{@state == :participant }}>
+          <div :if={{@vm.state == :participant }}>
             <Title3>{{ dgettext("eyra-crew", "task.completed.title") }}</Title3>
             <Spacing value="M" />
             <BodyLarge>{{ dgettext("eyra-crew", "task.completed.message.part1") }}</BodyLarge>

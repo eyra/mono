@@ -12,22 +12,22 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:310
+#: bundles/link/lib/survey/web/form.ex:337
 msgid "config.nrofsubjects.label"
 msgstr "How many participants do you need?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:298
+#: bundles/link/lib/survey/web/form.ex:318
 msgid "config.url.label"
 msgstr "Online study link"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:307
+#: bundles/link/lib/survey/web/form.ex:334
 msgid "duration.label"
 msgstr "How many minutes do you estimate participants will need?"
 
 #, elixir-format
-#: systems/campaign/model.ex:215
+#: systems/campaign/model.ex:225
 msgid "by.author.label"
 msgstr "By"
 
@@ -37,32 +37,32 @@ msgid "reward.highlight.title"
 msgstr "Reward"
 
 #, elixir-format
-#: lib/core/survey/tool.ex:153
+#: lib/core/survey/tool.ex:161
 msgid "apply.cta.title"
 msgstr "Participate"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:325
+#: bundles/link/lib/survey/web/form.ex:352
 msgid "devices.label"
 msgstr "Which devices can participants use?"
 
 #, elixir-format
-#: lib/core/survey/tool.ex:154
+#: lib/core/survey/tool.ex:162
 msgid "open.cta.title"
 msgstr "Proceed"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:268
+#: bundles/link/lib/survey/web/form.ex:288
 msgid "redirect.description"
 msgstr "To redirect participants back to Panl at the end of the survey, copy the redirect URL below and paste it as \"Website URL\" in Qualtrics as %{link}."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:266
+#: bundles/link/lib/survey/web/form.ex:286
 msgid "redirect.title"
 msgstr "Redirect URL (End of Survey)"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:324
+#: bundles/link/lib/survey/web/form.ex:351
 msgid "devices.title"
 msgstr "Devices"
 
@@ -167,7 +167,7 @@ msgid "tabbar.item.criteria.forward"
 msgstr "Determine your sample"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:241
+#: bundles/link/lib/survey/web/form.ex:261
 msgid "form.title"
 msgstr "Study"
 
@@ -177,134 +177,134 @@ msgid "campaign.overview.title"
 msgstr "Campaigns"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:313
+#: bundles/link/lib/survey/web/form.ex:340
 msgid "language.title"
 msgstr "Language"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:314
+#: bundles/link/lib/survey/web/form.ex:341
 msgid "languages.label"
 msgstr "In what language is your online study written?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:108
-#: bundles/link/lib/survey/web/form.ex:341
+#: bundles/link/lib/survey/web/form.ex:117
+#: bundles/link/lib/survey/web/form.ex:368
 msgid "ethical.label"
 msgstr "I hereby state that my study conforms to all ethical standards."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:335
+#: bundles/link/lib/survey/web/form.ex:362
 msgid "ethical.title"
 msgstr "Ethical review"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:257
+#: bundles/link/lib/survey/web/form.ex:277
 msgid "panlid.description"
 msgstr "Panl automatically adds the participant ID to your Qualtrics survey URL. To use this ID in Qualtrics, add an embedded data element field with the name \"panl_id\", as %{link} in \"PART 2\"."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:255
+#: bundles/link/lib/survey/web/form.ex:275
 msgid "panlid.title"
 msgstr "Panl ID"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:246
+#: bundles/link/lib/survey/web/form.ex:266
 msgid "setup.title"
 msgstr "How to set up your survey on Qualtrics?"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:276
+#: bundles/link/lib/survey/web/form.ex:296
 msgid "redirect.copy.button"
 msgstr "Copy"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:336
+#: bundles/link/lib/survey/web/form.ex:363
 msgid "ethical.description"
 msgstr "Make sure that you completed the %{link} and that you have approval from the SBE Ethics Review Board (ERB), if required for your study. Provide your received ERB code."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:290
+#: bundles/link/lib/survey/web/form.ex:310
 msgid "study.link.description"
 msgstr "To obtain the link to your Qualtrics survey, follow %{link}. Paste your link in the  \"Online study link\" field in the form below."
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:288
+#: bundles/link/lib/survey/web/form.ex:308
 msgid "study.link.title"
 msgstr "Anonymous Survey Link"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:208
+#: bundles/link/lib/survey/web/form.ex:228
 msgid "panlid.instructions.link"
 msgstr "explained here"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:201
+#: bundles/link/lib/survey/web/form.ex:221
 msgid "redirect.instructions.link"
 msgstr "instructed here"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:215
+#: bundles/link/lib/survey/web/form.ex:235
 msgid "study.instructions.link"
 msgstr "these instructions"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:242
+#: bundles/link/lib/survey/web/form.ex:262
 msgid "form.description"
 msgstr "Follow the steps in the black frame to make sure that participants can start your online study on Panl and are redirected back to Panl after they finish."
 
 #, elixir-format
-#: systems/assignment/model.ex:257
+#: systems/assignment/model.ex:269
 msgid "duration.highlight.text"
 msgstr "%{duration} minutes"
 
 #, elixir-format
-#: systems/assignment/model.ex:256
+#: systems/assignment/model.ex:268
 msgid "duration.highlight.title"
 msgstr "Duration"
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:222
+#: bundles/link/lib/survey/web/form.ex:242
 msgid "ethical.review.link"
 msgstr "ethical checklist"
 
 #, elixir-format
 #: systems/assignment/model.ex:91 systems/assignment/model.ex:102
-#: systems/assignment/model.ex:115
+#: systems/assignment/model.ex:127
 msgid "task.hero.title"
 msgstr "Study"
 
 #, elixir-format
-#: systems/assignment/model.ex:227
+#: systems/assignment/model.ex:239
 msgid "task.completed.subtitle"
 msgstr "You have contributed to this study"
 
 #, elixir-format
-#: systems/assignment/model.ex:232
+#: systems/assignment/model.ex:244
 msgid "task.completed.text"
 msgstr "Your contribution will be reviewed by the author of this study and either accepted or rejected."
 
 #, elixir-format
-#: systems/assignment/model.ex:226
+#: systems/assignment/model.ex:238
 msgid "task.pending.subtitle"
 msgstr "Instructions"
 
 #, elixir-format
-#: systems/assignment/model.ex:270
+#: systems/assignment/model.ex:282
 msgid "status.closed.highlight.text"
 msgstr "Closed for participation"
 
 #, elixir-format
-#: systems/assignment/model.ex:264
+#: systems/assignment/model.ex:276
 msgid "status.highlight.title"
 msgstr "Status"
 
 #, elixir-format
-#: systems/assignment/model.ex:268
+#: systems/assignment/model.ex:280
 msgid "status.open.highlight.text"
 msgstr "Open for participation"
 
 #, elixir-format
-#: systems/assignment/model.ex:277
+#: systems/assignment/model.ex:289
 msgid "language.highlight.title"
 msgstr "Language"
 
@@ -319,26 +319,36 @@ msgid "add.new.button.short"
 msgstr "New"
 
 #, elixir-format
-#: systems/assignment/model.ex:228
+#: systems/assignment/model.ex:240
 msgid "task.accepted.subtitle"
 msgstr "Your contribution has been approved"
 
 #, elixir-format
-#: systems/assignment/model.ex:233
+#: systems/assignment/model.ex:245
 msgid "task.accepted.text"
 msgstr "The author of this study reviewed and approved your contribution. Your reward has been awarded. Thank you for participating, your contribution is highly appreciated."
 
 #, elixir-format
-#: systems/assignment/model.ex:229
+#: systems/assignment/model.ex:241
 msgid "task.rejected.subtitle"
 msgstr "Unfortunately, your contribution is rejected"
 
 #, elixir-format
-#: systems/assignment/model.ex:235
+#: systems/assignment/model.ex:247
 msgid "task.rejected.text"
 msgstr "The author of this study reviewed your contribution and wrote the following message: \"%{reason}\""
 
 #, elixir-format
-#: bundles/link/lib/survey/web/form.ex:302
+#: bundles/link/lib/survey/web/form.ex:328
 msgid "test.roundtrip.button"
-msgstr "Test online study"
+msgstr "Test redirect URL"
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:323
+msgid "test.roundtrip.text"
+msgstr "Test your redirect URL in Qualtrics. If successful, you will end up on the \"Round trip confirmed\" screen. If not, check your redirect URL in Qualtrics."
+
+#, elixir-format
+#: bundles/link/lib/survey/web/form.ex:321
+msgid "test.roundtrip.title"
+msgstr "Will participants be sent back to Panl?"

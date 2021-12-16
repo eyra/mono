@@ -99,7 +99,12 @@ defmodule Link.Survey.Form do
         socket
       ) do
     entity = Tools.get_survey_tool!(entity_id)
-    assignment = Assignment.Context.get_by_assignable(entity, [:crew])
+    %{crew: crew} = assignment = Assignment.Context.get_by_assignable(entity, [:crew])
+
+    # TBD: improve cleanup of temp roles with TTL or some other generic solution.
+    if Core.Authorization.user_has_role?(user, crew, :tester) do
+      Core.Authorization.remove_role!(user, crew, :tester)
+    end
 
     changeset = Tool.changeset(entity, :create, %{})
 
@@ -148,7 +153,7 @@ defmodule Link.Survey.Form do
         Core.Authorization.assign_role(user, crew, :tester)
       end
 
-      fake_panl_id = Faker.UUID.v4()
+      fake_panl_id = "TEST-" <> Faker.UUID.v4()
       path = Assignment.Assignable.path(entity, fake_panl_id)
 
       {:noreply, LiveView.redirect(socket, external: path)}
@@ -310,12 +315,19 @@ defmodule Link.Survey.Form do
           <Spacing value="L" />
 
           <UrlInput field={{:survey_url}} label_text={{dgettext("link-survey", "config.url.label")}} />
-          <Wrap>
-            <DynamicButton vm={{ %{
-              action: %{type: :send, event: "test-roundtrip", target: @myself},
-              face: %{type: :primary, label: dgettext("link-survey", "test.roundtrip.button"), bg_color: "bg-tertiary", text_color: "text-grey1"}
-            } }} />
-          </Wrap>
+          <Spacing value="S" />
+          <Panel bg_color="bg-grey5">
+            <Title3>{{dgettext("link-survey", "test.roundtrip.title")}}</Title3>
+            <Spacing value="M" />
+            <BodyMedium>{{dgettext("link-survey", "test.roundtrip.text")}}</BodyMedium>
+            <Spacing value="M" />
+            <Wrap>
+              <DynamicButton vm={{ %{
+                action: %{type: :send, event: "test-roundtrip", target: @myself},
+                face: %{type: :primary, label: dgettext("link-survey", "test.roundtrip.button"), bg_color: "bg-tertiary", text_color: "text-grey1"}
+              } }} />
+            </Wrap>
+          </Panel>
           <Spacing value="XL" />
 
           <NumberInput field={{:duration}} label_text={{dgettext("link-survey", "duration.label")}} />
