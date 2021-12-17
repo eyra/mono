@@ -12,7 +12,7 @@ defmodule Core.Authorization.RoleAssignment do
 
     field(:role, Ecto.Enum,
       primary_key: true,
-      values: [:owner, :researcher, :participant, :coordinator]
+      values: [:owner, :researcher, :participant, :coordinator, :tester]
     )
 
     timestamps()

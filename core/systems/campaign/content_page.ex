@@ -132,6 +132,7 @@ defmodule Systems.Campaign.ContentPage do
   defp create_tabs(
          %{
            assigns: %{
+             current_user: user,
              uri_origin: uri_origin,
              campaign_id: campaign_id,
              tool_id: tool_id,
@@ -166,6 +167,7 @@ defmodule Systems.Campaign.ContentPage do
         type: :fullpage,
         component: ToolForm,
         props: %{
+          user: user,
           entity_id: tool_id,
           uri_origin: uri_origin,
           validate?: validate?

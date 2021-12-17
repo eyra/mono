@@ -22,47 +22,47 @@ msgid "status.submitted.label"
 msgstr "Ingediend"
 
 #, elixir-format
-#: systems/campaign/model.ex:261
+#: systems/campaign/model.ex:283
 msgid "incomplete.forms.message"
 msgstr "Sommige verplichte velden zijn nog niet ingevuld"
 
 #, elixir-format
-#: systems/campaign/model.ex:259
+#: systems/campaign/model.ex:281
 msgid "ready.for.submission.message"
 msgstr "Alle verplichte velden zijn gevuld, je kunt deze campagne indienen"
 
 #, elixir-format
-#: systems/campaign/model.ex:265
+#: systems/campaign/model.ex:287
 msgid "waiting.for.coordinator.message"
 msgstr "Jouw campagne staat in de wachtrij om door de poolbeheerder in de marktplaats gezet te worden"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:263
+#: systems/campaign/content_page.ex:265
 msgid "submit.error.text"
 msgstr "Sommige verplichte velden in je campagne zijn niet ingevuld."
 
 #, elixir-format
-#: systems/campaign/content_page.ex:262
+#: systems/campaign/content_page.ex:264
 msgid "submit.error.title"
 msgstr "Maak je campagne compleet"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:255
+#: systems/campaign/content_page.ex:257
 msgid "submit.success.text"
 msgstr "Bedankt voor het indienen. De poolbeheerder zal je campagne bekijken en deze inplannen voor publicatie in de marktplaats."
 
 #, elixir-format
-#: systems/campaign/content_page.ex:254
+#: systems/campaign/content_page.ex:256
 msgid "submit.success.title"
 msgstr "Campagne ingediend"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:280
+#: systems/campaign/content_page.ex:282
 msgid "retract.success.text"
 msgstr "Jouw campagne is niet meer zichtbaar voor de poolbeheerder en in de marktplaats van de deelnemers."
 
 #, elixir-format
-#: systems/campaign/content_page.ex:279
+#: systems/campaign/content_page.ex:281
 msgid "retract.success.title"
 msgstr "Campagne offline"
 
@@ -152,11 +152,11 @@ msgid "status.accepted.scheduled.label"
 msgstr "Ingepland"
 
 #, elixir-format
-#: systems/campaign/model.ex:279
+#: systems/campaign/model.ex:301
 msgid "accepted.closed.message"
 msgstr "Deze campagne is afgerond"
 
 #, elixir-format
-#: systems/campaign/model.ex:270
+#: systems/campaign/model.ex:292
 msgid "accepted.scheduled.message"
 msgstr "Deze campagne staat ingepland voor deelname "

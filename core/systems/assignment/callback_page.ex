@@ -12,24 +12,20 @@ defmodule Systems.Assignment.CallbackPage do
     Assignment
   }
 
-  data(task, :map)
-
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
     Assignment.Context.get!(id, [:crew]).crew
   end
 
   @impl true
-  def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
-    assignment = Assignment.Context.get!(id, [:crew])
-    task = Assignment.Context.complete_task(assignment, user)
+  def mount(%{"id" => id}, _session, socket) do
+    model = Assignment.Context.get!(id, [:crew])
 
     {
       :ok,
       socket
       |> assign(
-        task: task,
-        model: assignment
+        model: model
       )
       |> observe_view_model()
       |> update_menus()
@@ -62,12 +58,17 @@ defmodule Systems.Assignment.CallbackPage do
           <MarginY id={{:page_top}} />
           <Title1>{{@vm.title}}</Title1>
           <Spacing value="M" />
-          <div :if={{@task == nil }}>
+          <div :if={{@vm.state == :expired }}>
             <Title3>{{ dgettext("eyra-crew", "task.expired.subtitle") }}</Title3>
             <Spacing value="M" />
             <BodyLarge>{{ dgettext("eyra-crew", "task.expired.text") }}</BodyLarge>
           </div>
-          <div :if={{@task != nil }}>
+          <div :if={{@vm.state == :tester }}>
+            <Title3>{{ dgettext("eyra-crew", "tester.completed.subtitle") }}</Title3>
+            <Spacing value="M" />
+            <BodyLarge>{{ dgettext("eyra-crew", "tester.completed.text") }}</BodyLarge>
+          </div>
+          <div :if={{@vm.state == :participant }}>
             <Title3>{{ dgettext("eyra-crew", "task.completed.title") }}</Title3>
             <Spacing value="M" />
             <BodyLarge>{{ dgettext("eyra-crew", "task.completed.message.part1") }}</BodyLarge>

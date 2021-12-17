@@ -4,12 +4,14 @@ defmodule Link.Survey.Form do
   alias Core.Enums.Devices
   alias Link.Enums.OnlineStudyLanguages
   alias Core.Survey.{Tools, Tool}
+  alias Phoenix.LiveView
 
   alias Frameworks.Pixel.Selector.Selector
   alias Frameworks.Pixel.Panel.Panel
   alias Frameworks.Pixel.Text.{Title2, Title3, Title5, Body, BodyLarge, BodyMedium}
   alias Frameworks.Pixel.Form.{Form, TextInput, UrlInput, NumberInput, Checkbox}
   alias Frameworks.Pixel.Button.Face.LabelIcon
+  alias Frameworks.Pixel.Wrap
 
   alias CoreWeb.UI.StepIndicator
 
@@ -21,7 +23,7 @@ defmodule Link.Survey.Form do
 
   data(entity, :any)
   data(entity_id, :any)
-  data(assignment_id, :any)
+  data(assignment, :any)
   data(uri_origin, :any)
   data(device_labels, :list)
   data(language_labels, :list)
@@ -90,11 +92,19 @@ defmodule Link.Survey.Form do
 
   # Handle initial update
   def update(
-        %{id: id, props: %{entity_id: entity_id, uri_origin: uri_origin, validate?: validate?}},
+        %{
+          id: id,
+          props: %{user: user, entity_id: entity_id, uri_origin: uri_origin, validate?: validate?}
+        },
         socket
       ) do
     entity = Tools.get_survey_tool!(entity_id)
-    assignment = Assignment.Context.get_by_assignable(entity)
+    %{crew: crew} = assignment = Assignment.Context.get_by_assignable(entity, [:crew])
+
+    # TBD: improve cleanup of temp roles with TTL or some other generic solution.
+    if Core.Authorization.user_has_role?(user, crew, :tester) do
+      Core.Authorization.remove_role!(user, crew, :tester)
+    end
 
     changeset = Tool.changeset(entity, :create, %{})
 
@@ -112,9 +122,10 @@ defmodule Link.Survey.Form do
       :ok,
       socket
       |> assign(id: id)
+      |> assign(user: user)
       |> assign(entity_id: entity_id)
       |> assign(entity: entity)
-      |> assign(assignment_id: assignment.id)
+      |> assign(assignment: assignment)
       |> assign(uri_origin: uri_origin)
       |> assign(changeset: changeset)
       |> assign(device_labels: device_labels)
@@ -127,6 +138,29 @@ defmodule Link.Survey.Form do
   end
 
   # Handle Events
+
+  @impl true
+  def handle_event(
+        "test-roundtrip",
+        _params,
+        %{assigns: %{user: user, changeset: changeset, entity: entity, assignment: %{crew: crew}}} =
+          socket
+      ) do
+    changeset = Tool.validate(changeset, :roundtrip)
+
+    if changeset.valid? do
+      if not Core.Authorization.can_access?(user, crew, Systems.Assignment.CallbackPage) do
+        Core.Authorization.assign_role(user, crew, :tester)
+      end
+
+      fake_panl_id = "TEST-" <> Faker.UUID.v4()
+      path = Assignment.Assignable.path(entity, fake_panl_id)
+
+      {:noreply, LiveView.redirect(socket, external: path)}
+    else
+      {:noreply, socket |> assign(changeset: changeset)}
+    end
+  end
 
   @impl true
   def handle_event("toggle", %{"checkbox" => checkbox}, %{assigns: %{entity: entity}} = socket) do
@@ -254,10 +288,10 @@ defmodule Link.Survey.Form do
                   <Spacing value="XS" />
                   <div class="flex flex-row gap-6 items-center">
                     <div class="flex-wrap">
-                      <BodyMedium color="text-tertiary"><span class="break-all">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Systems.Assignment.CallbackPage, @assignment_id)}}</span></BodyMedium>
+                      <BodyMedium color="text-tertiary"><span class="break-all">{{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Systems.Assignment.CallbackPage, @assignment.id)}}</span></BodyMedium>
                     </div>
                     <div class="flex-wrap flex-shrink-0 mt-1">
-                      <div id="copy-redirect-url" class="cursor-pointer" phx-hook="Clipboard" data-text={{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Systems.Assignment.CallbackPage, @assignment_id)}} >
+                      <div id="copy-redirect-url" class="cursor-pointer" phx-hook="Clipboard" data-text={{ @uri_origin <> CoreWeb.Router.Helpers.live_path(@socket, Systems.Assignment.CallbackPage, @assignment.id)}} >
                         <LabelIcon vm={{ %{ label: dgettext("link-survey", "redirect.copy.button"),  icon: :clipboard_tertiary, text_color: "text-tertiary" } }} />
                       </div>
                     </div>
@@ -281,7 +315,20 @@ defmodule Link.Survey.Form do
           <Spacing value="L" />
 
           <UrlInput field={{:survey_url}} label_text={{dgettext("link-survey", "config.url.label")}} />
-          <Spacing value="M" />
+          <Spacing value="S" />
+          <Panel bg_color="bg-grey5">
+            <Title3>{{dgettext("link-survey", "test.roundtrip.title")}}</Title3>
+            <Spacing value="M" />
+            <BodyMedium>{{dgettext("link-survey", "test.roundtrip.text")}}</BodyMedium>
+            <Spacing value="M" />
+            <Wrap>
+              <DynamicButton vm={{ %{
+                action: %{type: :send, event: "test-roundtrip", target: @myself},
+                face: %{type: :primary, label: dgettext("link-survey", "test.roundtrip.button"), bg_color: "bg-tertiary", text_color: "text-grey1"}
+              } }} />
+            </Wrap>
+          </Panel>
+          <Spacing value="XL" />
 
           <NumberInput field={{:duration}} label_text={{dgettext("link-survey", "duration.label")}} />
           <Spacing value="M" />

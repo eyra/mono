@@ -77,7 +77,7 @@ msgid "dashboard.title"
 msgstr "Dashboard"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:131
+#: bundles/link/lib/marketplace.ex:136
 msgid "marketplace.title"
 msgstr "Marktplaats"
 
@@ -162,34 +162,34 @@ msgid "cancel.button"
 msgstr "Annuleren"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:229 systems/campaign/overview_page.ex:60
+#: systems/campaign/content_page.ex:231 systems/campaign/overview_page.ex:60
 msgid "delete.confirm.text"
 msgstr "De %{item} wordt permanent verwijderd."
 
 #, elixir-format
-#: systems/campaign/content_page.ex:228 systems/campaign/overview_page.ex:59
+#: systems/campaign/content_page.ex:230 systems/campaign/overview_page.ex:59
 msgid "delete.confirm.title"
 msgstr "%{item} verwijderen?"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:230 systems/campaign/overview_page.ex:61
+#: systems/campaign/content_page.ex:232 systems/campaign/overview_page.ex:61
 msgid "delete.confirm.label"
 msgstr "Verwijderen"
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:6 systems/assignment/model.ex:209
+#: systems/assignment/landing_page.ex:6 systems/assignment/model.ex:225
 #: systems/campaign/content_page.ex:9 systems/campaign/overview_page.ex:7 systems/pool/submission_page.ex:8
 #: systems/promotion/landing_page.ex:6
 msgid "ok.button"
 msgstr "OK"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:293
+#: systems/campaign/content_page.ex:295
 msgid "feature.unavailable.text"
 msgstr "Op dit moment werken we nog aan deze functie. We updaten het platform regelmatig. Probeer het later nog eens."
 
 #, elixir-format
-#: systems/campaign/content_page.ex:292
+#: systems/campaign/content_page.ex:294
 msgid "feature.unavailable.title"
 msgstr "Binnenkort beschikbaar"
 

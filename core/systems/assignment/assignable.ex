@@ -12,7 +12,7 @@ defprotocol Systems.Assignment.Assignable do
   @spec duration(map) :: number
   def duration(assignable)
 
-  @spec path(map, number) :: binary | nil
+  @spec path(map, number | binary) :: binary | nil
   def path(assignable, panl_id)
 
   @spec apply_label(map) :: binary

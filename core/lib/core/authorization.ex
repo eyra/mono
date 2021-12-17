@@ -32,7 +32,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Campaign.OverviewPage, [:researcher])
   grant_access(Systems.Campaign.ContentPage, [:owner])
   grant_access(Systems.Assignment.LandingPage, [:participant])
-  grant_access(Systems.Assignment.CallbackPage, [:participant])
+  grant_access(Systems.Assignment.CallbackPage, [:participant, :tester])
   grant_access(Systems.Promotion.LandingPage, [:visitor, :member, :owner])
   grant_access(Systems.Pool.OverviewPage, [:researcher])
   grant_access(Systems.Pool.SubmissionPage, [:researcher])
@@ -214,5 +214,10 @@ defmodule Core.Authorization do
       preload: ^preload
     )
     |> Core.Repo.all()
+  end
+
+  def user_has_role?(user, entity, role) do
+    users_with_role(entity, role)
+    |> Enum.any?(&(&1.id == user.id))
   end
 end

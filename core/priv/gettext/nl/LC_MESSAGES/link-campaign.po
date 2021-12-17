@@ -35,3 +35,8 @@ msgstr "Bijdrage afkeuren"
 #: systems/crew/reject_view.ex:41
 msgid "reject.note"
 msgstr "Let op: Afgewezen deelnemers kunnen niet opnieuw meedoen aan deze campagne."
+
+#, elixir-format
+#: systems/campaign/model.ex:234
+msgid "back.to.campaign.button"
+msgstr "Terug naar campagne"

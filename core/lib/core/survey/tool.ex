@@ -65,6 +65,14 @@ defmodule Core.Survey.Tool do
     |> cast(params, @fields)
   end
 
+  def validate(changeset, :roundtrip) do
+    changeset =
+      changeset
+      |> Ecto.Changeset.validate_required([:survey_url])
+
+    %{changeset | action: :validate_roundtrip}
+  end
+
   variable =
     string("<")
     |> ignore()
