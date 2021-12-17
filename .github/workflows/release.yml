@@ -70,5 +70,4 @@ jobs:
           fail_on_unmatched_files: true
           files: |
             ${{steps.tag.outputs.tag}}.tar.bz2
-            banking_setup.tar.bz2
 
