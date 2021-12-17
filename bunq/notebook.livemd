@@ -1,0 +1,124 @@
+# Bunq
+
+## Setup
+
+```elixir
+Mix.install([
+  {:httpoison, "~> 1.8"},
+  {:jason, "~> 1.2"}
+])
+```
+
+```elixir
+endpoint = "https://public-api.sandbox.bunq.com/v1"
+api_key = "sandbox_032c4c0878deda4221214af33181e25239ca5954a0d41f10d3016be0"
+
+HTTPoison.start()
+```
+
+## Authenticate
+
+```elixir
+%{status_code: 200, body: body} =
+  HTTPoison.post!(endpoint <> "/sandbox-user-company", "", [], recv_timeout: 99_999)
+
+%{"Response" => [%{"ApiKey" => %{"api_key" => api_key}}]} = Jason.decode!(body)
+```
+
+```elixir
+private_key = :public_key.generate_key({:rsa, 2048, 65537}) |> IO.inspect()
+public_key = {:RSAPublicKey, elem(private_key, 2), elem(private_key, 3)}
+
+public_key_pem =
+  :public_key.pem_encode([:public_key.pem_entry_encode(:SubjectPublicKeyInfo, public_key)])
+```
+
+```elixir
+request_body =
+  %{
+    "client_public_key" => public_key_pem
+  }
+  |> Jason.encode!()
+
+%{body: body} =
+  HTTPoison.post!(
+    "#{endpoint}/installation",
+    request_body,
+    []
+    # [{"X-Bunq-Client-Signature", :public_key.sign(body, :sha256, private_key) |> :base64.encode_to_string()}]
+  )
+
+%{"Response" => response_items} = Jason.decode!(body)
+
+%{installation_token: installation_token, server_public_key: server_public_key} =
+  response_items
+  |> Enum.map(fn item ->
+    case item do
+      %{"Token" => %{"token" => token}} ->
+        {:installation_token, token}
+
+      %{"ServerPublicKey" => %{"server_public_key" => server_public_key}} ->
+        {:server_public_key, server_public_key}
+
+      _ ->
+        {nil, nil}
+    end
+  end)
+  |> Enum.into(%{})
+```
+
+```elixir
+
+```
+
+```elixir
+request_body =
+  %{
+    "description" => "Eyra",
+    "secret" => api_key,
+    "permitted_ips" => ["*"]
+  }
+  |> Jason.encode!()
+
+%{body: body} =
+  HTTPoison.post!(
+    "#{endpoint}/device-server",
+    request_body |> IO.inspect(),
+    [
+      {"X-Bunq-Client-Authentication", installation_token}
+      # {"X-Bunq-Client-Signature", :public_key.sign(body, :sha256, private_key) |> :base64.encode_to_string()}
+    ]
+  )
+
+%{"Response" => [%{"Id" => %{"id" => device_id}}]} = Jason.decode!(body)
+```
+
+```elixir
+request_body =
+  %{
+    "secret" => api_key
+  }
+  |> Jason.encode!()
+
+signature = :public_key.sign(request_body, :sha256, private_key) |> Base.encode64()
+:public_key.verify(request_body, :sha256, signature, public_key) |> IO.inspect()
+
+%{body: body} =
+  HTTPoison.post!(
+    endpoint <> "/session-server",
+    request_body,
+    [
+      {"X-Bunq-Client-Authentication", installation_token},
+      {"X-Bunq-Client-Signature", signature},
+      {"X-Bunq-Client-Request-Id", :random.uniform(9_999_999_999_999_999_999_999)}
+    ]
+    #
+  )
+  |> IO.inspect()
+
+Jason.decode!(body)
+```
+
+```elixir
+
+```
