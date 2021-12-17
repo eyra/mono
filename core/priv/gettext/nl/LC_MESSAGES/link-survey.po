@@ -341,14 +341,14 @@ msgstr "De auteur van deze studie heeft jouw bijdrage beoordeeld en wil je het v
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:328
 msgid "test.roundtrip.button"
-msgstr "Test redirect URL"
+msgstr "Controleer"
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:323
 msgid "test.roundtrip.text"
-msgstr "Test jouw \"redirect URL\" in Qualtrics. Als deze klopt, dan eindig je op het scherm \"Round trip bevestigd\". Zo niet, controleer dan de \"redirect URL\" in Qualtrics."
+msgstr "Test of jouw vragenlijst goed opgezet is en controleer of je terugkomt op het scherm \"Round trip bevestigd\"."
 
 #, elixir-format
 #: bundles/link/lib/survey/web/form.ex:321
 msgid "test.roundtrip.title"
-msgstr "Worden deelnemers terug gestuurd naar Panl?"
+msgstr "Is je vragenlijst goed opgezet?"
