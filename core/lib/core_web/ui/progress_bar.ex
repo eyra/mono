@@ -10,6 +10,7 @@ defmodule CoreWeb.UI.ProgressBar do
   prop(bg_color, :string, default: "bg-grey4")
 
   defp hide(0, _), do: true
+  defp hide(nil, _), do: true
   defp hide(_, %{size: 0}), do: true
 
   defp hide(total_size, %{size: size}) do
@@ -17,6 +18,7 @@ defmodule CoreWeb.UI.ProgressBar do
   end
 
   defp width(0, _), do: 0
+  defp width(nil, _), do: 0
   defp width(_, %{size: 0}), do: 0
 
   defp width(total_size, %{size: size}) do
@@ -56,6 +58,8 @@ defmodule CoreWeb.UI.ProgressBar.Example do
 
   def render(assigns) do
     ~H"""
+    <ProgressBar :props={{ %{size: nil, bars: [%{ color: :primary, size: 100}]} }} />
+    <ProgressBar :props={{ %{size: 0, bars: [%{ color: :primary, size: nil}]} }} />
     <ProgressBar :props={{ %{size: 0, bars: [%{ color: :primary, size: 100}]} }} />
     <ProgressBar :props={{ %{size: 100, bars: [%{ color: :primary, size: 100}]} }} />
     <ProgressBar :props={{ %{size: 100, bars: [%{ color: :primary, size: 100}, %{ color: :secondary, size: 50}]} }} />
