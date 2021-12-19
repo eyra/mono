@@ -1,5 +1,4 @@
 defmodule BankingProxy.BankingBackend do
-  @opaque cursor :: map()
   @type payment_alias :: %{
           name: binary(),
           iban: binary()
@@ -20,7 +19,11 @@ defmodule BankingProxy.BankingBackend do
           description: binary()
         }
 
-  @type list_payments_result :: {list(payment()), cursor()}
+  @type list_payments_result :: %{
+          payments: list(payment()),
+          cursor: binary(),
+          has_more?: boolean()
+        }
 
   # @callback connect() :: :ok
   # @callback connect(serialized :: binary()) :: :ok
@@ -28,7 +31,7 @@ defmodule BankingProxy.BankingBackend do
   @callback serialize_connection() :: binary()
 
   @callback list_payments() :: list_payments_result()
-  @callback list_payments(cursor()) :: list_payments_result()
+  @callback list_payments(binary()) :: list_payments_result()
 
   @callback submit_payment(transaction()) :: :ok | {:error, binary()}
 end

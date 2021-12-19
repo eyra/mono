@@ -32,16 +32,19 @@ defmodule BankingProxy.Protocol do
   def parse(buffer, data) do
     {encoded_messages, [buffer]} =
       (buffer <> data)
-      |> :binary.split(<<31>>, [:global])
+      |> :binary.split("\n", [:global])
       |> Enum.split(-1)
 
     messages = Enum.map(encoded_messages, &Jason.decode!/1)
     {buffer, messages}
   end
 
+  def dispatch_message(banking_backend, %{"call" => "list_payments", "cursor" => cursor}) do
+    banking_backend.list_payments(cursor)
+  end
+
   def dispatch_message(banking_backend, %{"call" => "list_payments"}) do
-    {payments, cursor} = banking_backend.list_payments()
-    %{payments: payments, cursor: cursor}
+    banking_backend.list_payments()
   end
 
   def dispatch_message(_banking_backend, %{"call" => undefined_call}) do
@@ -63,6 +66,6 @@ defmodule BankingProxy.Protocol do
   end
 
   def send_response(transport, socket, response) do
-    transport.send(socket, Jason.encode!(response) <> <<31>>)
+    transport.send(socket, Jason.encode!(response) <> "\n")
   end
 end

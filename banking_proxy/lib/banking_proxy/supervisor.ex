@@ -21,9 +21,9 @@ defmodule BankingProxy.Supervisor do
                  port: 5555,
                  certfile: cert(:certfile),
                  cacertfile: cert(:cacertfile),
-                 keyfile: cert(:keyfile)
-                 # fail_if_no_peer_cert: true
-                 # verify: :verify_peer
+                 keyfile: cert(:keyfile),
+                 fail_if_no_peer_cert: true,
+                 verify: :verify_peer
                ]
              },
              BankingProxy.Protocol,
@@ -36,10 +36,10 @@ defmodule BankingProxy.Supervisor do
   end
 
   def cert(config_key) do
-    Application.get_env(:banking_proxy, config_key)
+    Application.fetch_env!(:banking_proxy, config_key)
   end
 
   defp banking_backend do
-    Application.get_env(:banking_proxy, :banking_backend)
+    Application.fetch_env!(:banking_proxy, :banking_backend)
   end
 end

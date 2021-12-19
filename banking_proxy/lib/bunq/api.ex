@@ -3,6 +3,7 @@ defmodule Bunq.API do
   API for interacting with the Bunq bank.
   """
 
+  require Logger
   alias Bunq.{Conn, Cursor}
 
   def create_conn(endpoint, private_key) do
@@ -18,8 +19,8 @@ defmodule Bunq.API do
     }
   end
 
-  def sandbox_endpoint, do: "https://public-api.sandbox.bunq.com/v1"
-  def production_endpoint, do: "https://api.bunq.com/v1"
+  def sandbox_endpoint, do: "https://public-api.sandbox.bunq.com"
+  def production_endpoint, do: "https://api.bunq.com"
 
   def process_request_body(body) when is_binary(body), do: body
 
@@ -36,7 +37,7 @@ defmodule Bunq.API do
 
   def create_sandbox_company(%Conn{} = conn) do
     api_key =
-      request!(conn, :post, "/sandbox-user-company", "", [], recv_timeout: 99_999)
+      request!(conn, :post, "/v1/sandbox-user-company", "", [], recv_timeout: 99_999)
       |> Map.fetch!("Response")
       |> List.first()
       |> Map.fetch!("ApiKey")
@@ -47,7 +48,7 @@ defmodule Bunq.API do
 
   def create_installation(%Conn{private_key: private_key} = conn) do
     results =
-      request!(conn, :post, "/installation", %{
+      request!(conn, :post, "/v1/installation", %{
         "client_public_key" => public_key_pem(private_key)
       })
       |> Map.fetch!("Response")
@@ -75,7 +76,7 @@ defmodule Bunq.API do
       request!(
         conn,
         :post,
-        "/device-server",
+        "/v1/device-server",
         %{
           "description" => "Eyra Bunq",
           "secret" => api_key,
@@ -108,7 +109,7 @@ defmodule Bunq.API do
       request!(
         conn,
         :post,
-        "/session-server",
+        "/v1/session-server",
         body,
         [
           {"X-Bunq-Client-Authentication", installation_token},
@@ -134,7 +135,7 @@ defmodule Bunq.API do
     request!(
       conn,
       :get,
-      "/user/#{company_id}/monetary-account",
+      "/v1/user/#{company_id}/monetary-account",
       "",
       [
         {"X-Bunq-Client-Authentication", session_token}
@@ -163,7 +164,7 @@ defmodule Bunq.API do
     request!(
       conn,
       :get,
-      "/user/#{user_id}/monetary-account/#{account_id}/payment?count=200",
+      "/v1/user/#{user_id}/monetary-account/#{account_id}/payment?count=200",
       "",
       [
         {"X-Bunq-Client-Authentication", session_token}
@@ -212,7 +213,10 @@ defmodule Bunq.API do
           "type" => "IBAN",
           "value" => to_iban,
           "name" => to_name
+          # "display_name" => to_name,
+          # "country" => "NL"
         },
+        # "type" => "BUNQ",
         "description" => description
       })
 
@@ -222,7 +226,7 @@ defmodule Bunq.API do
       http_request(
         conn,
         :post,
-        "/user/#{company_id}/monetary-account/#{account_id}/payment",
+        "/v1/user/#{company_id}/monetary-account/#{account_id}/payment",
         body,
         [
           {"X-Bunq-Client-Authentication", session_token},
@@ -266,7 +270,7 @@ defmodule Bunq.API do
     request!(
       conn,
       :post,
-      "/user/#{user_id}/monetary-account/#{account_id}/request-inquiry",
+      "/v1/user/#{user_id}/monetary-account/#{account_id}/request-inquiry",
       body,
       [
         {"X-Bunq-Client-Authentication", session_token},
@@ -340,7 +344,7 @@ defmodule Bunq.API do
       payment_counterparty_alias: convert_alias(payment_counterparty_alias),
       amount_in_cents: convert_amount(amount_str),
       description: description,
-      date: convert_date(created),
+      date: created,
       id: id
     }
   end
@@ -356,10 +360,6 @@ defmodule Bunq.API do
       |> Enum.map(&String.to_integer/1)
 
     euros * 100 + cents
-  end
-
-  defp convert_date(date_str) do
-    NaiveDateTime.from_iso8601(date_str)
   end
 
   defp http_request(%Conn{endpoint: endpoint}, method, path, body, headers, options \\ []) do
@@ -395,8 +395,12 @@ defmodule Bunq.API do
       |> Jason.decode!()
 
     case body do
-      %{"Error" => [%{"error_description" => error}]} -> {:error, error}
-      response -> {:ok, response}
+      %{"Error" => [%{"error_description" => error}]} ->
+        Logger.error("Bunq error: #{error}")
+        {:error, error}
+
+      response ->
+        {:ok, response}
     end
   end
 end

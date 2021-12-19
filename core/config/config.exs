@@ -91,6 +91,13 @@ config :web_push_encryption, :vapid_details,
 
 config :core, :version, System.get_env("VERSION", "dev")
 
+config :core, BankingClient,
+  host: 'localhost',
+  port: 5555,
+  cacertfile: "../banking_proxy/certs/ca_certificate.pem",
+  certfile: "../banking_proxy/certs/client_certificate.pem",
+  keyfile: "../banking_proxy/certs/client_key.pem"
+
 import_config "#{Mix.env()}.exs"
 
 unless Mix.env() == :test do
