@@ -5,8 +5,8 @@ defmodule Frameworks.Pixel.Catalogue do
 
   use Surface.Catalogue
 
-  load_asset("../../priv/static/js/app.js", as: :app_js)
-  load_asset("../../priv/static/css/app.css", as: :app_css)
+  load_asset("../../assets/js/app.js", as: :app_js)
+  load_asset("../../assets/css/app.css", as: :app_css)
 
   @impl true
   def config() do

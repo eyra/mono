@@ -149,7 +149,7 @@ defmodule Link.Survey.Form do
     changeset = Tool.validate(changeset, :roundtrip)
 
     if changeset.valid? do
-      if not Core.Authorization.can_access?(user, crew, Systems.Assignment.CallbackPage) do
+      if not Core.Authorization.user_has_role?(user, crew, :tester) do
         Core.Authorization.assign_role(user, crew, :tester)
       end
 
