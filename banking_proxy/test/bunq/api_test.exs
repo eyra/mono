@@ -7,8 +7,7 @@ defmodule Bunq.APITest do
     private_key = API.generate_key()
 
     {:ok,
-     private_key: private_key,
-     conn: API.create_conn("https://test.sandbox.bunq.com/v1", private_key)}
+     private_key: private_key, conn: API.create_conn("https://test.sandbox.bunq.com", private_key)}
   end
 
   describe "create_conn/2" do
@@ -94,7 +93,7 @@ defmodule Bunq.APITest do
       expect_signed_request(
         conn,
         :post,
-        "/session-server",
+        "/v1/session-server",
         %{
           "Response" => [
             %{"UserCompany" => %{"id" => 543}},
@@ -111,7 +110,7 @@ defmodule Bunq.APITest do
 
   describe "list_accounts/1" do
     test "returns the session", %{conn: conn} do
-      expect_request(conn, :get, "/user/12/monetary-account", %{
+      expect_request(conn, :get, "/v1/user/12/monetary-account", %{
         "Response" => [
           %{
             "MonetaryAccountBank" => %{
@@ -138,7 +137,7 @@ defmodule Bunq.APITest do
 
   describe "list_payments/1" do
     test "returns payments", %{conn: conn} do
-      expect_request(conn, :get, "/user/12/monetary-account/567/payment?count=200", %{
+      expect_request(conn, :get, "/v1/user/12/monetary-account/567/payment?count=200", %{
         "Pagination" => %{
           "future_url" =>
             "/v1/user/4130495/monetary-account/3962720/payment?count=200&newer_id=624878455",
@@ -182,7 +181,7 @@ defmodule Bunq.APITest do
 
       assert payment == %{
                amount_in_cents: 2500,
-               date: {:ok, ~N[2021-11-19 12:07:37.191877]},
+               date: "2021-11-19 12:07:37.191877",
                description: "Topup account",
                id: 222_222_333,
                payment_alias: %{
@@ -199,7 +198,7 @@ defmodule Bunq.APITest do
 
   describe "list_payments/2" do
     test "pagination", %{conn: conn} do
-      expect_request(conn, :get, "/user/12/monetary-account/567/payment?count=200", %{
+      expect_request(conn, :get, "/v1/user/12/monetary-account/567/payment?count=200", %{
         "Pagination" => %{
           "future_url" => "/more-stuff",
           "newer_url" => nil,
@@ -300,7 +299,7 @@ defmodule Bunq.APITest do
 
   describe "submit_payment/1" do
     test "creates a payment", %{conn: conn} do
-      expect_signed_request(conn, :post, "/user/543/monetary-account/234/payment", [
+      expect_signed_request(conn, :post, "/v1/user/543/monetary-account/234/payment", [
         %{
           "Id" => %{
             "id" => 9876

@@ -76,9 +76,9 @@ defmodule Bunq.SetupCLI do
         import Config
 
         config :banking_proxy,
-        banking_bakend: Bunq,
+        banking_backend: Bunq,
         backend_params: [
-          endpoint:  "https://api.bunq.com/v1",
+          endpoint:  "https://api.bunq.com",
           keyfile: "#{@keyfile}",
           iban: "<enter full IBAN here>",
           api_key: "#{api_key}",

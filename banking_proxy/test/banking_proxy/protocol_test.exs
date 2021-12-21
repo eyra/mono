@@ -5,20 +5,20 @@ defmodule BankingProxy.ProtocolTest do
 
   @list_payments_message Jason.encode!(%{
                            "call" => "list_payments"
-                         }) <> <<31>>
+                         }) <> "\n"
 
   describe "parse/2" do
     test "creates message" do
-      assert Protocol.parse("", ~s({"test": 1}) <> <<31>>) == {"", [%{"test" => 1}]}
+      assert Protocol.parse("", ~s({"test": 1}) <> "\n") == {"", [%{"test" => 1}]}
     end
 
     test "allows partial messages" do
       assert {buffer, []} = Protocol.parse("", ~s({"test": 1))
-      assert {"", [%{"test" => 1}]} = Protocol.parse(buffer, "}" <> <<31>>)
+      assert {"", [%{"test" => 1}]} = Protocol.parse(buffer, "}" <> "\n")
     end
 
     test "can parse multiple messages" do
-      assert Protocol.parse("", ~s({"test": 1}) <> <<31>> <> ~s({"another": "message"}) <> <<31>>) ==
+      assert Protocol.parse("", ~s({"test": 1}) <> "\n" <> ~s({"another": "message"}) <> "\n") ==
                {"", [%{"test" => 1}, %{"another" => "message"}]}
     end
   end
@@ -34,7 +34,7 @@ defmodule BankingProxy.ProtocolTest do
 
     test "handles a message" do
       MockBankingBackend
-      |> expect(:list_payments, fn -> {[], %{}} end)
+      |> expect(:list_payments, fn -> %{payments: [], cursor: "", has_more?: false} end)
 
       MockRanchTransport
       # Receive a message

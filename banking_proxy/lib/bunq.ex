@@ -5,7 +5,7 @@ defmodule Bunq do
   @behaviour BankingProxy.BankingBackend
 
   use Agent
-  alias Bunq.API
+  alias Bunq.{API, Cursor}
 
   # @impl BankingProxy.BankingBackend
   def start_link(opts) do
@@ -36,11 +36,16 @@ defmodule Bunq do
   @impl BankingProxy.BankingBackend
   def list_payments() do
     with_connection(&API.list_payments/1)
+    |> format_list_payment_response()
   end
 
   @impl BankingProxy.BankingBackend
-  def list_payments(cursor) do
+  def list_payments(cursor_string) do
+    cursor_data = Jason.decode!(cursor_string, keys: :atoms!)
+    cursor = struct!(Cursor, cursor_data)
+
     with_connection(&API.list_payments(&1, cursor))
+    |> format_list_payment_response()
   end
 
   @impl BankingProxy.BankingBackend
@@ -72,5 +77,9 @@ defmodule Bunq do
     |> :public_key.pem_decode()
     |> Enum.map(&:public_key.pem_entry_decode/1)
     |> List.first()
+  end
+
+  defp format_list_payment_response({payments, cursor}) do
+    %{payments: payments, cursor: Jason.encode!(cursor), has_more?: cursor.has_more?}
   end
 end

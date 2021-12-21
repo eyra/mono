@@ -1,9 +1,9 @@
 import Config
 
 config :banking_proxy,
-  banking_bakend: Bunq,
+  banking_backend: Bunq,
   backend_params: [
-    endpoint: "https://public-api.sandbox.bunq.com/v1",
+    endpoint: "https://public-api.sandbox.bunq.com",
     keyfile: "test/bunq.pem",
     iban: "<enter full IBAN here>",
     api_key: "12345",

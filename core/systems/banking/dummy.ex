@@ -39,9 +39,9 @@ defmodule Systems.Banking.Dummy do
     batch = payments |> Enum.slice(payment_offset, @payment_batch_size)
 
     %{
-      has_more: Enum.count(payments) > payment_offset + @payment_batch_size,
+      has_more?: Enum.count(payments) > payment_offset + @payment_batch_size,
       payments: batch,
-      marker: payments |> Enum.count() |> to_string()
+      cursor: payments |> Enum.count() |> to_string()
     }
   end
 
