@@ -116,8 +116,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
         :participant
       else
         if Core.Authorization.user_has_role?(user, crew, :tester) do
-          # TBD: improve cleanup of temp roles with TTL or some other generic solution.
-          Core.Authorization.remove_role!(user, crew, :tester)
           :tester
         else
           :expired
