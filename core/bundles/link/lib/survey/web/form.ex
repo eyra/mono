@@ -99,12 +99,7 @@ defmodule Link.Survey.Form do
         socket
       ) do
     entity = Tools.get_survey_tool!(entity_id)
-    %{crew: crew} = assignment = Assignment.Context.get_by_assignable(entity, [:crew])
-
-    # TBD: improve cleanup of temp roles with TTL or some other generic solution.
-    if Core.Authorization.user_has_role?(user, crew, :tester) do
-      Core.Authorization.remove_role!(user, crew, :tester)
-    end
+    assignment = Assignment.Context.get_by_assignable(entity, [:crew])
 
     changeset = Tool.changeset(entity, :create, %{})
 
@@ -149,7 +144,7 @@ defmodule Link.Survey.Form do
     changeset = Tool.validate(changeset, :roundtrip)
 
     if changeset.valid? do
-      if not Core.Authorization.can_access?(user, crew, Systems.Assignment.CallbackPage) do
+      if not Core.Authorization.user_has_role?(user, crew, :tester) do
         Core.Authorization.assign_role(user, crew, :tester)
       end
 
