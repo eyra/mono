@@ -40,43 +40,44 @@ defmodule Systems.Campaign.AssemblyTest do
       campaign = Campaign.Assembly.create(researcher, "New Campaign", :online)
 
       assert %Systems.Campaign.Model{
-              auth_node: %Core.Authorization.Node{
-                id: campaign_auth_node_id,
-                parent_id: nil
-              },
-              promotable_assignment: %Systems.Assignment.Model{
-                director: :campaign,
-                assignable_experiment: %{
-                  devices: [:phone, :tablet, :desktop],
-                  duration: nil,
-                  ethical_approval: nil,
-                  ethical_code: nil,
-                  language: nil,
-                  subject_count: nil,
-                  director: :campaign,
-                  lab_tool_id: nil,
-                  survey_tool: %Survey.ToolModel{
-                    survey_url: nil,
-                    director: :campaign,
-                    auth_node: %Core.Authorization.Node{
-                      parent_id: survey_tool_auth_node_parent_id
-                    }
-                  },
-                  auth_node: %Core.Authorization.Node{
-                    id: experiment_auth_node_id,
-                    parent_id: experiment_auth_node_parent_id
-                  }
-                },
-                auth_node: %Core.Authorization.Node{
-                  id: assignment_auth_node_id,
-                  parent_id: assignment_auth_node_parent_id
-                },
-                crew: %Systems.Crew.Model{
-                  auth_node: %Core.Authorization.Node{
-                    parent_id: crew_auth_node_parent_id
-                  }
-                },
-              } = assignment,
+               auth_node: %Core.Authorization.Node{
+                 id: campaign_auth_node_id,
+                 parent_id: nil
+               },
+               promotable_assignment:
+                 %Systems.Assignment.Model{
+                   director: :campaign,
+                   assignable_experiment: %{
+                     devices: [:phone, :tablet, :desktop],
+                     duration: nil,
+                     ethical_approval: nil,
+                     ethical_code: nil,
+                     language: nil,
+                     subject_count: nil,
+                     director: :campaign,
+                     lab_tool_id: nil,
+                     survey_tool: %Survey.ToolModel{
+                       survey_url: nil,
+                       director: :campaign,
+                       auth_node: %Core.Authorization.Node{
+                         parent_id: survey_tool_auth_node_parent_id
+                       }
+                     },
+                     auth_node: %Core.Authorization.Node{
+                       id: experiment_auth_node_id,
+                       parent_id: experiment_auth_node_parent_id
+                     }
+                   },
+                   auth_node: %Core.Authorization.Node{
+                     id: assignment_auth_node_id,
+                     parent_id: assignment_auth_node_parent_id
+                   },
+                   crew: %Systems.Crew.Model{
+                     auth_node: %Core.Authorization.Node{
+                       parent_id: crew_auth_node_parent_id
+                     }
+                   }
+                 } = assignment,
                promotion: %Systems.Promotion.Model{
                  auth_node: %Core.Authorization.Node{
                    parent_id: promotion_auth_node_parent_id
@@ -168,43 +169,43 @@ defmodule Systems.Campaign.AssemblyTest do
       campaign = Campaign.Assembly.create(researcher, "New Campaign", :lab)
 
       assert %Systems.Campaign.Model{
-              auth_node: %Core.Authorization.Node{
-                id: campaign_auth_node_id,
-                parent_id: nil
-              },
-              promotable_assignment: %Systems.Assignment.Model{
-                director: :campaign,
-                assignable_experiment: %{
-                  devices: [:phone, :tablet, :desktop],
-                  duration: nil,
-                  ethical_approval: nil,
-                  ethical_code: nil,
-                  language: nil,
-                  subject_count: nil,
-                  director: :campaign,
-                  survey_tool_id: nil,
-                  lab_tool: %Lab.ToolModel{
-                    director: :campaign,
-                    time_slots: [],
-                    auth_node: %Core.Authorization.Node{
-                      parent_id: lab_tool_auth_node_parent_id
-                    }
-                  },
-                  auth_node: %Core.Authorization.Node{
-                    id: experiment_auth_node_id,
-                    parent_id: experiment_auth_node_parent_id
-                  }
-                },
-                auth_node: %Core.Authorization.Node{
-                  id: assignment_auth_node_id,
-                  parent_id: assignment_auth_node_parent_id
-                },
-                crew: %Systems.Crew.Model{
-                  auth_node: %Core.Authorization.Node{
-                    parent_id: crew_auth_node_parent_id
-                  }
-                },
-              },
+               auth_node: %Core.Authorization.Node{
+                 id: campaign_auth_node_id,
+                 parent_id: nil
+               },
+               promotable_assignment: %Systems.Assignment.Model{
+                 director: :campaign,
+                 assignable_experiment: %{
+                   devices: [:phone, :tablet, :desktop],
+                   duration: nil,
+                   ethical_approval: nil,
+                   ethical_code: nil,
+                   language: nil,
+                   subject_count: nil,
+                   director: :campaign,
+                   survey_tool_id: nil,
+                   lab_tool: %Lab.ToolModel{
+                     director: :campaign,
+                     time_slots: [],
+                     auth_node: %Core.Authorization.Node{
+                       parent_id: lab_tool_auth_node_parent_id
+                     }
+                   },
+                   auth_node: %Core.Authorization.Node{
+                     id: experiment_auth_node_id,
+                     parent_id: experiment_auth_node_parent_id
+                   }
+                 },
+                 auth_node: %Core.Authorization.Node{
+                   id: assignment_auth_node_id,
+                   parent_id: assignment_auth_node_parent_id
+                 },
+                 crew: %Systems.Crew.Model{
+                   auth_node: %Core.Authorization.Node{
+                     parent_id: crew_auth_node_parent_id
+                   }
+                 }
+               }
              } = campaign
 
       assert assignment_auth_node_parent_id == campaign_auth_node_id
@@ -212,7 +213,6 @@ defmodule Systems.Campaign.AssemblyTest do
       assert crew_auth_node_parent_id == assignment_auth_node_id
       assert lab_tool_auth_node_parent_id == experiment_auth_node_id
     end
-
 
     test "delete", %{user: researcher, mock: mock} do
       mock
@@ -241,7 +241,10 @@ defmodule Systems.Campaign.AssemblyTest do
       assert Repo.get(Core.Authorization.Node, campaign.promotable_assignment.crew.auth_node_id) ==
                nil
 
-      assert Repo.get(Survey.ToolModel, campaign.promotable_assignment.assignable_experiment.survey_tool_id) ==
+      assert Repo.get(
+               Survey.ToolModel,
+               campaign.promotable_assignment.assignable_experiment.survey_tool_id
+             ) ==
                nil
 
       assert Repo.get(
@@ -275,9 +278,10 @@ defmodule Systems.Campaign.AssemblyTest do
         },
         promotable_assignment: %{
           crew: crew1,
-          assignable_experiment: %{
-            survey_tool: tool
-          } = experiment
+          assignable_experiment:
+            %{
+              survey_tool: tool
+            } = experiment
         }
       } = Campaign.Context.get!(id, Campaign.Model.preload_graph(:full))
 
@@ -368,19 +372,19 @@ defmodule Systems.Campaign.AssemblyTest do
                  }
                },
                promotable_assignment: %{
-                  crew: crew2,
-                  assignable_experiment: %{
-                    subject_count: ^subject_count,
-                    duration: ^duration,
-                    language: ^language,
-                    ethical_approval: ^ethical_approval,
-                    ethical_code: ^ethical_code,
-                    devices: ^devices,
-                    director: ^director,
-                    survey_tool: %{
-                      survey_url: ^survey_url,
-                    }
-                  }
+                 crew: crew2,
+                 assignable_experiment: %{
+                   subject_count: ^subject_count,
+                   duration: ^duration,
+                   language: ^language,
+                   ethical_approval: ^ethical_approval,
+                   ethical_code: ^ethical_code,
+                   devices: ^devices,
+                   director: ^director,
+                   survey_tool: %{
+                     survey_url: ^survey_url
+                   }
+                 }
                }
              } = campaign2
 

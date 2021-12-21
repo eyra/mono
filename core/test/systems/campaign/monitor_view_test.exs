@@ -214,7 +214,14 @@ defmodule Systems.Campaign.MonitorViewTest do
 
     crew = Factories.insert!(:crew)
     survey_tool = Factories.insert!(:survey_tool)
-    experiment = Factories.insert!(:experiment, %{survey_tool: survey_tool, duration: "10", subject_count: subject_count})
+
+    experiment =
+      Factories.insert!(:experiment, %{
+        survey_tool: survey_tool,
+        duration: "10",
+        subject_count: subject_count
+      })
+
     assignment = Factories.insert!(:assignment, %{experiment: experiment, crew: crew})
     campaign = Factories.insert!(:campaign, %{assignment: assignment, promotion: promotion})
 

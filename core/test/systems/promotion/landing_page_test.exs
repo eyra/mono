@@ -16,7 +16,7 @@ defmodule Systems.Promotion.LandingPageTest do
         Factories.insert!(
           :survey_tool,
           %{
-            survey_url: "https://eyra.co/fake_survey",
+            survey_url: "https://eyra.co/fake_survey"
           }
         )
 

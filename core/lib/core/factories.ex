@@ -214,11 +214,14 @@ defmodule Core.Factories do
 
     {promotion, attributes} =
       case Map.pop(attributes, :promotion, nil) do
-        {nil, attributes} -> {
+        {nil, attributes} ->
+          {
             build(:promotion, %{auth_node: build(:auth_node, %{parent: campaign_auth_node})}),
             attributes
           }
-        {promotion, attributes} -> {promotion, attributes}
+
+        {promotion, attributes} ->
+          {promotion, attributes}
       end
 
     {assignment, attributes} =
@@ -227,14 +230,17 @@ defmodule Core.Factories do
           {
             build(:assignment, %{
               director: :campaign,
-              auth_node: build(
-                :auth_node,
-                %{parent: campaign_auth_node}
-              )
+              auth_node:
+                build(
+                  :auth_node,
+                  %{parent: campaign_auth_node}
+                )
             }),
             attributes
           }
-        {experiment, attributes} -> {experiment, attributes}
+
+        {experiment, attributes} ->
+          {experiment, attributes}
       end
 
     %Campaign.Model{
@@ -281,6 +287,7 @@ defmodule Core.Factories do
     {survey_tool, attributes} =
       if lab_tool == nil do
         tool_auth_node = build(:auth_node, %{parent: auth_node})
+
         case Map.pop(attributes, :survey_tool, nil) do
           {nil, attributes} -> {build(:survey_tool, %{auth_node: tool_auth_node}), attributes}
           {survey_tool, attributes} -> {survey_tool, attributes}

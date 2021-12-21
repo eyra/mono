@@ -14,12 +14,14 @@ defmodule Systems.Lab.ContextTest do
        Factories.insert!(:lab_tool, %{
          time_slots: [
            %{
-             start_time: Timestamp.tomorrow() |> Timex.set(hour: 9, minute: 0, second: 0, microsecond: 0),
+             start_time:
+               Timestamp.tomorrow() |> Timex.set(hour: 9, minute: 0, second: 0, microsecond: 0),
              location: Faker.Lorem.sentence(),
              number_of_seats: 9
            },
            %{
-             start_time: Timestamp.tomorrow() |> Timex.set(hour: 9, minute: 30, second: 0, microsecond: 0),
+             start_time:
+               Timestamp.tomorrow() |> Timex.set(hour: 9, minute: 30, second: 0, microsecond: 0),
              location: Faker.Lorem.sentence(),
              number_of_seats: 9
            }
@@ -115,11 +117,11 @@ defmodule Systems.Lab.ContextTest do
       lab_tool = Factories.insert!(:lab_tool, %{time_slots: []})
 
       assert %{
-        date: date,
-        location: "SBE Lab",
-        number_of_seats: 8,
-        entries: entries
-      } = Lab.Context.new_day_model(lab_tool)
+               date: date,
+               location: "SBE Lab",
+               number_of_seats: 8,
+               entries: entries
+             } = Lab.Context.new_day_model(lab_tool)
 
       expected_date =
         Timestamp.tomorrow()
@@ -128,52 +130,52 @@ defmodule Systems.Lab.ContextTest do
       assert date |> Timestamp.to_date() == expected_date
 
       assert [
-        %{enabled: true, start_time: 900, type: :time_slot},
-        %{enabled: true, start_time: 930, type: :time_slot},
-        %{enabled: true, start_time: 1000, type: :time_slot},
-        %{enabled: true, start_time: 1030, type: :time_slot},
-        %{type: :break},
-        %{enabled: true, start_time: 1100, type: :time_slot},
-        %{enabled: true, start_time: 1130, type: :time_slot},
-        %{enabled: true, start_time: 1200, type: :time_slot},
-        %{enabled: true, start_time: 1230, type: :time_slot},
-        %{type: :break},
-        %{enabled: true, start_time: 1330, type: :time_slot},
-        %{enabled: true, start_time: 1400, type: :time_slot},
-        %{enabled: true, start_time: 1430, type: :time_slot},
-        %{enabled: true, start_time: 1500, type: :time_slot},
-        %{type: :break},
-        %{enabled: true, start_time: 1530, type: :time_slot},
-        %{enabled: true, start_time: 1600, type: :time_slot},
-        %{enabled: true, start_time: 1630, type: :time_slot},
-        %{enabled: true, start_time: 1700, type: :time_slot},
-        %{type: :break},
-        %{enabled: true, start_time: 1800, type: :time_slot},
-        %{enabled: true, start_time: 1830, type: :time_slot},
-        %{enabled: true, start_time: 1900, type: :time_slot},
-        %{enabled: true, start_time: 1930, type: :time_slot}
-      ] = entries
+               %{enabled: true, start_time: 900, type: :time_slot},
+               %{enabled: true, start_time: 930, type: :time_slot},
+               %{enabled: true, start_time: 1000, type: :time_slot},
+               %{enabled: true, start_time: 1030, type: :time_slot},
+               %{type: :break},
+               %{enabled: true, start_time: 1100, type: :time_slot},
+               %{enabled: true, start_time: 1130, type: :time_slot},
+               %{enabled: true, start_time: 1200, type: :time_slot},
+               %{enabled: true, start_time: 1230, type: :time_slot},
+               %{type: :break},
+               %{enabled: true, start_time: 1330, type: :time_slot},
+               %{enabled: true, start_time: 1400, type: :time_slot},
+               %{enabled: true, start_time: 1430, type: :time_slot},
+               %{enabled: true, start_time: 1500, type: :time_slot},
+               %{type: :break},
+               %{enabled: true, start_time: 1530, type: :time_slot},
+               %{enabled: true, start_time: 1600, type: :time_slot},
+               %{enabled: true, start_time: 1630, type: :time_slot},
+               %{enabled: true, start_time: 1700, type: :time_slot},
+               %{type: :break},
+               %{enabled: true, start_time: 1800, type: :time_slot},
+               %{enabled: true, start_time: 1830, type: :time_slot},
+               %{enabled: true, start_time: 1900, type: :time_slot},
+               %{enabled: true, start_time: 1930, type: :time_slot}
+             ] = entries
     end
 
     test "based on last existing time slot", %{lab_tool: %{time_slots: time_slots} = lab_tool} do
       %{
         start_time: start_time,
         location: location,
-        number_of_seats: number_of_seats,
+        number_of_seats: number_of_seats
       } =
         time_slots
-        |> Enum.sort_by(&(&1.start_time), {:asc, DateTime})
+        |> Enum.sort_by(& &1.start_time, {:asc, DateTime})
         |> List.last()
 
       assert {
-        :ok,
-        %{
-          date: date,
-          location: ^location,
-          number_of_seats: ^number_of_seats,
-          entries: entries
-        }
-      } = Lab.Context.edit_day_model(lab_tool, start_time |> Timestamp.to_date())
+               :ok,
+               %{
+                 date: date,
+                 location: ^location,
+                 number_of_seats: ^number_of_seats,
+                 entries: entries
+               }
+             } = Lab.Context.edit_day_model(lab_tool, start_time |> Timestamp.to_date())
 
       expected_date =
         start_time
@@ -182,33 +184,31 @@ defmodule Systems.Lab.ContextTest do
       assert date |> Timestamp.to_date() == expected_date
 
       assert [
-        %{enabled: true, start_time: 900, type: :time_slot},
-        %{enabled: true, start_time: 930, type: :time_slot},
-        %{enabled: false, start_time: 1000, type: :time_slot},
-        %{enabled: false, start_time: 1030, type: :time_slot},
-        %{type: :break},
-        %{enabled: false, start_time: 1100, type: :time_slot},
-        %{enabled: false, start_time: 1130, type: :time_slot},
-        %{enabled: false, start_time: 1200, type: :time_slot},
-        %{enabled: false, start_time: 1230, type: :time_slot},
-        %{type: :break},
-        %{enabled: false, start_time: 1330, type: :time_slot},
-        %{enabled: false, start_time: 1400, type: :time_slot},
-        %{enabled: false, start_time: 1430, type: :time_slot},
-        %{enabled: false, start_time: 1500, type: :time_slot},
-        %{type: :break},
-        %{enabled: false, start_time: 1530, type: :time_slot},
-        %{enabled: false, start_time: 1600, type: :time_slot},
-        %{enabled: false, start_time: 1630, type: :time_slot},
-        %{enabled: false, start_time: 1700, type: :time_slot},
-        %{type: :break},
-        %{enabled: false, start_time: 1800, type: :time_slot},
-        %{enabled: false, start_time: 1830, type: :time_slot},
-        %{enabled: false, start_time: 1900, type: :time_slot},
-        %{enabled: false, start_time: 1930, type: :time_slot}
-      ] = entries
+               %{enabled: true, start_time: 900, type: :time_slot},
+               %{enabled: true, start_time: 930, type: :time_slot},
+               %{enabled: false, start_time: 1000, type: :time_slot},
+               %{enabled: false, start_time: 1030, type: :time_slot},
+               %{type: :break},
+               %{enabled: false, start_time: 1100, type: :time_slot},
+               %{enabled: false, start_time: 1130, type: :time_slot},
+               %{enabled: false, start_time: 1200, type: :time_slot},
+               %{enabled: false, start_time: 1230, type: :time_slot},
+               %{type: :break},
+               %{enabled: false, start_time: 1330, type: :time_slot},
+               %{enabled: false, start_time: 1400, type: :time_slot},
+               %{enabled: false, start_time: 1430, type: :time_slot},
+               %{enabled: false, start_time: 1500, type: :time_slot},
+               %{type: :break},
+               %{enabled: false, start_time: 1530, type: :time_slot},
+               %{enabled: false, start_time: 1600, type: :time_slot},
+               %{enabled: false, start_time: 1630, type: :time_slot},
+               %{enabled: false, start_time: 1700, type: :time_slot},
+               %{type: :break},
+               %{enabled: false, start_time: 1800, type: :time_slot},
+               %{enabled: false, start_time: 1830, type: :time_slot},
+               %{enabled: false, start_time: 1900, type: :time_slot},
+               %{enabled: false, start_time: 1930, type: :time_slot}
+             ] = entries
     end
-
   end
-
 end

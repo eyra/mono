@@ -26,21 +26,25 @@ defmodule CoreWeb.UI.SelectorDialog do
     }
   end
 
-  def update(%{
-    id: id,
-    title: title,
-    text: text,
-    items: items,
-    ok_button_text: ok_button_text,
-    cancel_button_text: cancel_button_text,
-    target: target
-  }, socket) do
+  def update(
+        %{
+          id: id,
+          title: title,
+          text: text,
+          items: items,
+          ok_button_text: ok_button_text,
+          cancel_button_text: cancel_button_text,
+          target: target
+        },
+        socket
+      ) do
     items = prepare(items)
     active_item_id = active_id(items)
 
     {
       :ok,
-      socket |> assign(
+      socket
+      |> assign(
         id: id,
         title: title,
         text: text,
@@ -55,21 +59,32 @@ defmodule CoreWeb.UI.SelectorDialog do
 
   defp prepare(nil), do: []
   defp prepare([]), do: []
+
   defp prepare(items) do
     items
     |> Enum.with_index()
     |> Enum.map(fn {item, index} ->
-        Map.replace(item, :active, index == 0)
+      Map.replace(item, :active, index == 0)
     end)
   end
 
   defp active_id([]), do: nil
+
   defp active_id(items) do
-    Enum.find_value(items, &(if &1.active do &1.id end))
+    Enum.find_value(
+      items,
+      &if &1.active do
+        &1.id
+      end
+    )
   end
 
   @impl true
-  def handle_event("ok", _params, %{assigns: %{active_item_id: active_item_id, target: target}} = socket) do
+  def handle_event(
+        "ok",
+        _params,
+        %{assigns: %{active_item_id: active_item_id, target: target}} = socket
+      ) do
     update_target(target, %{selector: :ok, selected: active_item_id})
     {:noreply, socket}
   end

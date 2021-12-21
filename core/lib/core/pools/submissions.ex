@@ -44,7 +44,6 @@ defmodule Core.Pools.Submissions do
   end
 
   def update(%Submission{} = _submisson, %Changeset{} = changeset) do
-
     with {:ok, %{submisson: submisson}} <-
            Multi.new()
            |> Multi.update(:submisson, changeset)
@@ -90,8 +89,6 @@ defmodule Core.Pools.Submissions do
     |> Ecto.Changeset.put_assoc(:submission, submission)
     |> Repo.insert!()
   end
-
-
 
   defp notify_when_submitted(%Submission{} = submission, %Ecto.Changeset{} = changeset) do
     if Ecto.Changeset.get_change(changeset, :status) === :submitted do
