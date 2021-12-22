@@ -6,7 +6,6 @@ defmodule Systems.Lab.DayView do
   alias CoreWeb.UI.Timestamp
 
   alias Frameworks.Pixel.Button.DynamicButton
-  alias Frameworks.Pixel.Text.{BodyMedium}
   alias Frameworks.Pixel.Form.{Form, TextInput, NumberInput, DateInput}
   alias Frameworks.Pixel.Spacing
   alias Frameworks.Pixel.Line
@@ -52,7 +51,7 @@ defmodule Systems.Lab.DayView do
       entries
       |> update_entries(start_time, enabled?)
 
-    day_model = %{day_model | entries: entries} |> IO.inspect(label: "DM")
+    day_model = %{day_model | entries: entries}
 
     {
       :ok,
@@ -66,7 +65,7 @@ defmodule Systems.Lab.DayView do
     case entries |> Enum.find_index(&has_start_time(&1, start_time)) do
       nil -> entries
       index ->
-        %{data: data} = entry = Enum.at(entries,index)
+        %{data: data} = entry = Enum.at(entries, index)
 
         entries
         |> List.replace_at(index,
@@ -85,8 +84,6 @@ defmodule Systems.Lab.DayView do
   @impl true
   def handle_event("update", %{"day_model" => new_day_model}, %{assigns: %{day_model: day_model}} = socket) do
     changeset = Lab.DayModel.changeset(day_model, :submit, new_day_model)
-
-    new_day_model |> IO.inspect(label: "NEW_DM")
 
     date =
       new_day_model["date"]

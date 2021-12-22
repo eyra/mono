@@ -56,7 +56,7 @@ defmodule Systems.Lab.Context do
   def edit_day_model(%Lab.ToolModel{id: id}, date) do
     date_time_slots =
       get_time_slots(id)
-      |> Enum.filter(&(Date.compare(Timestamp.to_date(&1.start_time),date) == :eq))
+      |> Enum.filter(&(Date.compare(Timestamp.to_date(&1.start_time), date) == :eq))
 
     edit_day_model(date_time_slots, date)
   end

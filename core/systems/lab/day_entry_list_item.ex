@@ -10,7 +10,7 @@ defmodule Systems.Lab.DayEntryListItem do
   prop target, :any
 
   defp timestamp(%{start_time: start_time}) do
-    hour = start_time/100 |> trunc()
+    hour = start_time / 100 |> trunc()
     minute = "#{rem(start_time, 100)}" |> String.pad_leading(2, "0")
 
     "#{hour}:#{minute}"

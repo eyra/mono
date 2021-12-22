@@ -150,10 +150,10 @@ defmodule Systems.Lab.ContextTest do
                %{enabled: true, start_time: 1630, type: :time_slot},
                %{enabled: true, start_time: 1700, type: :time_slot},
                %{type: :break},
-               %{enabled: true, start_time: 1800, type: :time_slot},
-               %{enabled: true, start_time: 1830, type: :time_slot},
-               %{enabled: true, start_time: 1900, type: :time_slot},
-               %{enabled: true, start_time: 1930, type: :time_slot}
+               %{enabled: false, start_time: 1800, type: :time_slot},
+               %{enabled: false, start_time: 1830, type: :time_slot},
+               %{enabled: false, start_time: 1900, type: :time_slot},
+               %{enabled: false, start_time: 1930, type: :time_slot}
              ] = entries
     end
 

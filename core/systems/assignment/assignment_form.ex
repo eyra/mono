@@ -20,7 +20,7 @@ defmodule Systems.Assignment.AssignmentForm do
     assigns
     |> forms()
     |> filter(form)
-    |> Enum.each( fn %{component: component, props: %{id: id}} ->
+    |> Enum.each(fn %{component: component, props: %{id: id}} ->
       IO.puts("send_update #{component}, #{id}, focus: ''")
       send_update(component, id: id, focus: "")
     end)

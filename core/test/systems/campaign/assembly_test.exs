@@ -176,7 +176,7 @@ defmodule Systems.Campaign.AssemblyTest do
                promotable_assignment: %Systems.Assignment.Model{
                  director: :campaign,
                  assignable_experiment: %{
-                   devices: [:phone, :tablet, :desktop],
+                   devices: [],
                    duration: nil,
                    ethical_approval: nil,
                    ethical_code: nil,
@@ -185,8 +185,8 @@ defmodule Systems.Campaign.AssemblyTest do
                    director: :campaign,
                    survey_tool_id: nil,
                    lab_tool: %Lab.ToolModel{
+                     id: lab_tool_id,
                      director: :campaign,
-                     time_slots: [],
                      auth_node: %Core.Authorization.Node{
                        parent_id: lab_tool_auth_node_parent_id
                      }
@@ -207,6 +207,8 @@ defmodule Systems.Campaign.AssemblyTest do
                  }
                }
              } = campaign
+
+      assert Lab.Context.get_time_slots(lab_tool_id) == []
 
       assert assignment_auth_node_parent_id == campaign_auth_node_id
       assert experiment_auth_node_parent_id == assignment_auth_node_id

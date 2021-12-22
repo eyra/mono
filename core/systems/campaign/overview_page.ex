@@ -154,8 +154,7 @@ defmodule Systems.Campaign.OverviewPage do
 
   @impl true
   def handle_info(%{selector: :ok, selected: tool_type}, socket) do
-    tool_type |> IO.inspect(label: "TOOLTYPE")
-    tool = create_campaign(socket, tool_type) |> IO.inspect(label: "TOOL")
+    tool = create_campaign(socket, tool_type)
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, Campaign.ContentPage, tool.id))}
   end
 

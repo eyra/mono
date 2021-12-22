@@ -1,5 +1,6 @@
 defmodule Systems.Assignment.EthicalForm do
   use CoreWeb.LiveForm
+  use Frameworks.Pixel.Form.Checkbox
 
 
   alias Frameworks.Pixel.Panel.Panel
@@ -61,25 +62,6 @@ defmodule Systems.Assignment.EthicalForm do
   end
 
   # Handle Events
-
-  @impl true
-  def handle_event("toggle", %{"checkbox" => checkbox}, %{assigns: %{entity: entity}} = socket) do
-    field = String.to_existing_atom(checkbox)
-
-    new_value =
-      case Map.get(entity, field) do
-        nil -> true
-        value -> not value
-      end
-
-    attrs = %{field => new_value}
-
-    {
-      :noreply,
-      socket
-      |> save(entity, :auto_save, attrs)
-    }
-  end
 
   @impl true
   def handle_event("save", %{"experiment_model" => attrs}, %{assigns: %{entity: entity}} = socket) do

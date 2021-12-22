@@ -113,7 +113,6 @@ defmodule Systems.Survey.Context do
     changeset =
       %Survey.ToolModel{}
       |> Survey.ToolModel.operational_changeset(Map.from_struct(survey_tool))
-      |> IO.inspect(label: "READY? SURVEY")
 
     changeset.valid?
   end
