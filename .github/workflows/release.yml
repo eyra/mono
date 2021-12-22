@@ -1,0 +1,73 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bundle:
+        description: 'Bundle ID (link / next etc.)'
+        required: true
+        default: 'link'
+jobs:
+  tagged-release:
+    runs-on: ubuntu-20.04
+    env:
+      MIX_ENV: prod
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Tag name
+        id: tag
+        run: echo ::set-output "name=TAG::${{github.event.inputs.bundle}}_$(date +%F)_${{github.run_number}}"
+
+      - id: setup-elixir
+        uses: erlef/setup-elixir@v1
+        with:
+          otp-version: '24.0.1'
+          elixir-version: '1.12.1'
+
+      - name: Setup the Elixir project
+        run: make deps
+
+      - name: Install Node deps
+        run: npm install
+        working-directory: core/assets
+
+      - name: Update browserslist package
+        run: npx browserslist@latest --update-db
+        working-directory: core/assets
+
+      - name: Build static resources
+        run: npm run deploy
+        working-directory: core/assets
+
+      - name: Build digest
+        run: mix phx.digest
+        working-directory: core
+        env:
+          MIX_ENV: prod
+
+      - name: Build release
+        run: mix release --overwrite --path "../${{steps.tag.outputs.tag}}"
+        working-directory: core
+        env:
+          BUNDLE: ${{github.event.inputs.bundle}}
+          VERSION: ${{steps.tag.outputs.tag}}
+
+      - name: Archive release
+        run: tar cfj "${{steps.tag.outputs.tag}}.tar.bz2" "${{steps.tag.outputs.tag}}"
+
+      - name: Tag the build
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag: "${{steps.tag.outputs.tag}}"
+          force_push_tag: true
+
+      - uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "${{steps.tag.outputs.tag}}"
+          prerelease: false
+          fail_on_unmatched_files: true
+          files: |
+            ${{steps.tag.outputs.tag}}.tar.bz2
+
