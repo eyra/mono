@@ -25,14 +25,14 @@ defmodule Frameworks.Pixel.Card.Label do
   def text_color(_), do: "text-white"
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="flex" >
-      <div class="h-14 pl-4 pr-2 {{bg_color(@type)}}">
+      <div class={"h-14 pl-4 pr-2 #{bg_color(@type)}"}>
         <div class="flex flex-row justify-center h-full items-center">
-          <Title5 color={{ text_color(@type) }}>{{@text}}</Title5>
+          <Title5 color={text_color(@type)}>{@text}</Title5>
         </div>
       </div>
-      <img src={{ @path_provider.static_path(@conn, "/images/label-arrow-#{@type}.svg")}} alt={{@text}}/>
+      <img src={@path_provider.static_path(@conn, "/images/label-arrow-#{@type}.svg")} alt={@text}/>
     </div>
     """
   end

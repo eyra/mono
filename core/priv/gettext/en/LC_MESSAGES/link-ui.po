@@ -37,29 +37,29 @@ msgid "debug.title"
 msgstr "Debug"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:229 systems/campaign/overview_page.ex:58
+#: systems/campaign/content_page.ex:226 systems/campaign/overview_page.ex:64
 msgid "delete.confirm.campaign"
 msgstr "campaign"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:389 systems/campaign/content_page.ex:393
-#: systems/campaign/content_page.ex:399
+#: systems/campaign/content_page.ex:391 systems/campaign/content_page.ex:395
+#: systems/campaign/content_page.ex:401
 msgid "delete.button"
 msgstr "Delete"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:373 systems/campaign/content_page.ex:379
-#: systems/campaign/content_page.ex:383 systems/pool/submission_page.ex:192
+#: systems/campaign/content_page.ex:375 systems/campaign/content_page.ex:381
+#: systems/campaign/content_page.ex:385 systems/pool/submission_page.ex:192
 msgid "preview.button"
 msgstr "Preview"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:359 systems/campaign/content_page.ex:365
+#: systems/campaign/content_page.ex:361 systems/campaign/content_page.ex:367
 msgid "submit.button"
 msgstr "Submit"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:403 systems/pool/submission_page.ex:198
+#: systems/campaign/content_page.ex:405 systems/pool/submission_page.ex:198
 msgid "retract.button"
 msgstr "Unpublish"
 

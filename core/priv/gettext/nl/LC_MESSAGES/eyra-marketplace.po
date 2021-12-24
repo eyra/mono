@@ -12,17 +12,17 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:171
+#: bundles/link/lib/marketplace.ex:166
 msgid "empty.description"
 msgstr "Op dit moment zijn er geen onderzoeksstudies beschikbaar. Zodra er een studie beschikbaar komt, wordt deze hier toegevoegd en word je op de hoogte gesteld via e-mail (vergeet niet je spam of junk mail map te checken, voor het geval dat)."
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:170
+#: bundles/link/lib/marketplace.ex:165
 msgid "empty.title"
 msgstr "Op zoek naar een studie?"
 
 #, elixir-format
-#: systems/campaign/model.ex:262
+#: systems/campaign/model.ex:241
 msgid "reward.label"
 msgstr "Beloning: %{value} credits"
 
@@ -32,47 +32,47 @@ msgid "assignment.status.complete.label"
 msgstr "Gesloten"
 
 #, elixir-format
-#: systems/campaign/model.ex:248
+#: systems/campaign/model.ex:227
 msgid "assignment.status.completed.label"
 msgstr "Afgerond"
 
 #, elixir-format
-#: systems/campaign/model.ex:244
+#: systems/campaign/model.ex:223
 msgid "assignment.status.expired.label"
 msgstr "Verlopen"
 
 #, elixir-format
-#: systems/campaign/model.ex:247
+#: systems/campaign/model.ex:226
 msgid "assignment.status.pending.label"
 msgstr "Aangemeld"
 
 #, elixir-format
-#: systems/campaign/model.ex:249
+#: systems/campaign/model.ex:228
 msgid "assignment.status.accepted.label"
 msgstr "Goedgekeurd"
 
 #, elixir-format
-#: systems/campaign/model.ex:250
+#: systems/campaign/model.ex:229
 msgid "assignment.status.rejected.label"
 msgstr "Afgekeurd"
 
 #, elixir-format
-#: systems/campaign/model.ex:259
+#: systems/campaign/model.ex:238
 msgid "assignment.status.completed.subtitle"
 msgstr "Wacht op goedkeuring van de onderzoeker"
 
 #, elixir-format
-#: systems/campaign/model.ex:258
+#: systems/campaign/model.ex:237
 msgid "assignment.status.pending.subtitle"
 msgstr "In afwachting van jouw bijdrage"
 
 #, elixir-format
-#: systems/campaign/model.ex:261
+#: systems/campaign/model.ex:240
 msgid "assignment.status.rejected.subtitle"
 msgstr "Geen credits toegekend"
 
 #, elixir-format
-#: systems/campaign/model.ex:260
+#: systems/campaign/model.ex:239
 msgid "Awarded 1 credit"
 msgid_plural "Awarded %{count} credits"
 msgstr[0] "1 credit verdiend"

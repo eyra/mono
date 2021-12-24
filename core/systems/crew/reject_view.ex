@@ -1,5 +1,5 @@
 defmodule Systems.Crew.RejectView do
-  use Surface.LiveComponent
+  use CoreWeb.UI.LiveComponent
 
   require Logger
 
@@ -72,7 +72,7 @@ defmodule Systems.Crew.RejectView do
 
     case Ecto.Changeset.apply_action(changeset, :update) do
       {:ok, model} ->
-        send_update(target.type, id: target.id, reject: :submit, rejection: model)
+        update_target(target, %{reject: :submit, rejection: model})
         {:noreply, socket}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -84,7 +84,7 @@ defmodule Systems.Crew.RejectView do
   end
 
   def handle_event("cancel", _params, %{assigns: %{target: target}} = socket) do
-    send_update(target.type, id: target.id, reject: :cancel)
+    update_target(target, %{reject: :cancel})
     {:noreply, socket}
   end
 
@@ -113,30 +113,30 @@ defmodule Systems.Crew.RejectView do
 
   @impl true
   def render(assigns) do
-    ~H"""
-      <div class="p-8 bg-white shadow-2xl rounded" phx-click="reset_focus" phx-target={{@myself}}>
+    ~F"""
+      <div class="p-8 bg-white shadow-2xl rounded" phx-click="reset_focus" phx-target={@myself}>
         <div class="flex flex-col gap-4 gap-8">
           <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
-            {{@title}}
+            {@title}
           </div>
           <div class="text-bodymedium font-body sm:text-bodylarge">
-            {{@text}}
+            {@text}
           </div>
           <div class="flex flex-row gap-3 items-center">
             <div class="w-6 h-6 flex-shrink-0 font-caption text-caption text-white rounded-full flex items-center bg-warning">
               <span class="text-center w-full mt-1px">!</span>
             </div>
             <div class="text-button font-button text-warning leading-6">
-              {{@note}}
+              {@note}
             </div>
           </div>
-          <Form id="reject_form" changeset={{@changeset}} change_event="update" submit="reject" target={{@myself}} focus={{@focus}} >
-            <Selector id={{:category}} items={{ @categories }} type={{:radio}} optional?={{false}} parent={{ %{type: __MODULE__, id: @id} }}/>
+          <Form id="reject_form" changeset={@changeset} change_event="update" submit="reject" target={@myself} focus={@focus} >
+            <Selector id={:category} items={@categories} type={:radio} optional?={false} parent={%{type: __MODULE__, id: @id}}/>
             <Spacing value="M"/>
-            <TextInput field={{:message}} label_text={{dgettext("link-campaign", "reject.message.label")}} debounce="0"/>
+            <TextInput field={:message} label_text={dgettext("link-campaign", "reject.message.label")} debounce="0"/>
             <Spacing value="XXS" />
             <div class="flex flex-row gap-4">
-              <DynamicButton :for={{ button <- buttons(@myself) }} vm={{ button }} />
+              <DynamicButton :for={button <- buttons(@myself)} vm={button} />
             </div>
           </Form>
         </div>
@@ -151,11 +151,12 @@ defmodule Systems.Crew.RejectView.Example do
     catalogue: Frameworks.Pixel.Catalogue,
     title: "Reject view",
     height: "640px",
+    direction: "vertical",
     container: {:div, class: ""}
 
   def render(assigns) do
-    ~H"""
-    <RejectView id={{ :reject_view_example }} target={{ %{type: __MODULE__, id: self()} }} />
+    ~F"""
+    <RejectView id={:reject_view_example} target={self()} />
     """
   end
 

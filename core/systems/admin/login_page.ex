@@ -25,13 +25,13 @@ defmodule Systems.Admin.LoginPage do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <Stripped
-      user={{@current_user}}
-      menus={{ @menus }}
+      user={@current_user}
+      menus={@menus}
       >
         <ContentArea>
-          <MarginY id={{:page_top}} />
+          <MarginY id={:page_top} />
           <FormArea>
             <div class="text-title5 font-title5 sm:text-title3 sm:font-title3 lg:text-title2 lg:font-title2 mb-7 lg:mb-9">
               Log in

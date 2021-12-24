@@ -17,9 +17,9 @@ defmodule CoreWeb.UI.StepIndicator do
   def center_correction_for_number(_), do: ""
 
   def render(assigns) do
-    ~H"""
-      <div class="w-6 h-6 font-caption text-caption rounded-full flex items-center {{ bg_color(@vm) }} {{ text_color(@vm) }}">
-        <span class="text-center w-full mt-1px {{center_correction_for_number(text(@vm))}}">{{ text(@vm) }}</span>
+    ~F"""
+      <div class={"w-6 h-6 font-caption text-caption rounded-full flex items-center #{bg_color(@vm)} #{text_color(@vm)}"}>
+        <span class={"text-center w-full mt-1px #{center_correction_for_number(text(@vm))}"}>{text(@vm)}</span>
       </div>
     """
   end

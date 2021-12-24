@@ -71,15 +71,15 @@ defmodule Systems.Support.OverviewPage do
   defp tabbar_size(bp), do: value(bp, :narrow, sm: %{30 => :wide})
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <Workspace
-      title={{ dgettext("eyra-admin", "support.title") }}
-      menus={{ @menus }}
+      title={dgettext("eyra-admin", "support.title")}
+      menus={@menus}
     >
-      <div id={{ :support }} phx-hook="ViewportResize">
-        <TabbarArea tabs={{@tabs}}>
+      <div id={:support} phx-hook="ViewportResize">
+        <TabbarArea tabs={@tabs}>
           <ActionBar>
-            <Tabbar vm={{ %{size: @tabbar_size} }} />
+            <Tabbar vm={%{size: @tabbar_size}} />
           </ActionBar>
           <TabbarContent/>
         </TabbarArea>

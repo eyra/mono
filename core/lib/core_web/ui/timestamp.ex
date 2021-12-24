@@ -9,8 +9,21 @@ defmodule CoreWeb.UI.Timestamp do
     Gettext.get_locale(CoreWeb.Gettext)
   end
 
+  def to_date(%{year: year, month: month, day: day}) do
+    %Date{
+      year: year,
+      month: month,
+      day: day
+    }
+  end
+
   def now(timezone \\ "Etc/UTC") do
     DateTime.now!(timezone)
+  end
+
+  def tomorrow(timezone \\ "Etc/UTC") do
+    DateTime.now!(timezone)
+    |> shift_days(1)
   end
 
   def naive_now() do
@@ -36,6 +49,10 @@ defmodule CoreWeb.UI.Timestamp do
 
   def shift_minutes(date, minutes) do
     date |> Timex.shift(minutes: minutes)
+  end
+
+  def shift_days(date, days) do
+    date |> Timex.shift(days: days)
   end
 
   def future?(date) when is_binary(date) do
@@ -93,6 +110,10 @@ defmodule CoreWeb.UI.Timestamp do
       {:ok, result} -> result
       _ -> nil
     end
+  end
+
+  def humanize_date(%Date{} = date) do
+    Timex.format!(date, "%A %d %b '%y", :strftime)
   end
 
   def humanize(%NaiveDateTime{} = timestamp) do

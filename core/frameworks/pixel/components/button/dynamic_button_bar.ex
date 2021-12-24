@@ -6,9 +6,9 @@ defmodule Frameworks.Pixel.Button.DynamicButtonBar do
   prop(buttons, :list, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="flex flex-row gap-4">
-      <DynamicButton :for={{ button <- @buttons }} vm={{ button }} />
+      <DynamicButton :for={button <- @buttons} vm={button} />
     </div>
     """
   end

@@ -18,12 +18,12 @@ defmodule Frameworks.Pixel.Card.Card do
   prop(click_event_data, :string)
 
   def render(assigns) do
-    ~H"""
-    <div class="relative rounded-lg cursor-pointer {{@bg_color}} {{@size}}">
-      <slot name="image" />
+    ~F"""
+    <div class={"relative rounded-lg cursor-pointer #{@bg_color} #{@size}"}>
+      <#slot name="image" />
       <div class="p-6 lg:pl-8 lg:pr-8 lg:pt-10 lg:pb-10">
-        <slot name="title" />
-        <slot />
+        <#slot name="title" />
+        <#slot />
       </div>
     </div>
     """

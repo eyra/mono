@@ -17,10 +17,10 @@ defmodule CoreWeb.UI.Navigation.Tabbar do
   defp shape(_), do: ""
 
   def render(assigns) do
-    ~H"""
-      <div id="tabbar" data-initial-tab={{initial_tab(@vm)}} phx-hook="Tabbar" class="{{ shape(@vm) }}">
-        <TabbarWide :if={{ size(@vm) == :wide }} id={{ :tabbar_wide }} vm={{ @vm }}/>
-        <TabbarNarrow :if={{ size(@vm) == :narrow }} id={{ :tabbar_narrow }} />
+    ~F"""
+      <div id="tabbar" data-initial-tab={initial_tab(@vm)} phx-hook="Tabbar" class={"#{shape(@vm)}"}>
+        <TabbarWide :if={size(@vm) == :wide} id={:tabbar_wide} vm={@vm}/>
+        <TabbarNarrow :if={size(@vm) == :narrow} id={:tabbar_narrow} />
       </div>
     """
   end

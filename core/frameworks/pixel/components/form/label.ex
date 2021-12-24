@@ -11,11 +11,11 @@ defmodule Frameworks.Pixel.Form.Label do
   prop(background, :atom, default: :light)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="mt-0.5 text-title6 font-title6 leading-snug"
-        x-bind:class="{'{{focus_label_color(@background)}}': focus === '{{@field}}', '{{label_color(assigns, @form, @label_color)}}': focus !== '{{@field}}' }"
+        x-bind:class={"{'#{focus_label_color(@background)}': focus === '#{@field}', '#{label_color(assigns, @form, @label_color)}': focus !== '#{@field}' }"}
     >
-      {{@label_text}}
+      {@label_text}
     </div>
     """
   end

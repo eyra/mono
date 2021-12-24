@@ -24,8 +24,8 @@ defmodule Frameworks.Pixel.Spacing do
   defp spacing("XXS", "l"), do: "ml-2"
 
   def render(assigns) do
-    ~H"""
-    <div class="{{spacing(@value, @direction)}}" />
+    ~F"""
+    <div class={"#{spacing(@value, @direction)}"} />
     """
   end
 end

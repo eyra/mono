@@ -10,10 +10,10 @@ defmodule CoreWeb.UI.Container.FullpageArea do
   slot(default, required: true)
 
   def render(assigns) do
-    ~H"""
-    <div class={{ @class }}>
+    ~F"""
+    <div class={@class}>
       <div>
-        <slot />
+        <#slot />
       </div>
     </div>
     """

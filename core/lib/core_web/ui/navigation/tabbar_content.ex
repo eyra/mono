@@ -6,14 +6,14 @@ defmodule CoreWeb.UI.Navigation.TabbarContent do
   alias CoreWeb.UI.Navigation.Tab
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <div class="h-navbar-height"></div>
-      <Context get={{tabs: tabs}}>
-        <For each={{ tab <- tabs }} >
-          <Tab id={{ tab.id }}>
-            <Dynamic component={{ tab.component }} props={{ %{id: tab.id, props: tab.props } }}/>
+      <Context get={tabs: tabs}>
+        {#for tab <- tabs}
+          <Tab id={tab.id}>
+            <Dynamic component={tab.component} props={%{id: tab.id, props: tab.props }}/>
           </Tab>
-        </For>
+        {/for}
       </Context>
     """
   end

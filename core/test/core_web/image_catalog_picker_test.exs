@@ -7,9 +7,9 @@ defmodule CoreWeb.ImageCatalogPicker.Test.View do
 
   @impl true
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div>
-    <ImageCatalogPicker id="picker" image_catalog={{Core.ImageCatalog.Local}} conn={{@socket}} static_path={{&Routes.static_path/2}}/>
+    <ImageCatalogPicker id="picker" image_catalog={Core.ImageCatalog.Local} conn={@socket} static_path={&Routes.static_path/2}/>
     </div>
     """
   end

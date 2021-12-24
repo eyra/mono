@@ -5,7 +5,7 @@ defmodule Systems.Pool.SubmissionPage do
   use CoreWeb, :live_view
   use CoreWeb.MultiFormAutoSave
   use CoreWeb.Layouts.Workspace.Component, :pool_submission
-  use CoreWeb.UI.Dialog
+  use CoreWeb.UI.PlainDialog
 
   import CoreWeb.Gettext
 
@@ -212,34 +212,34 @@ defmodule Systems.Pool.SubmissionPage do
 
   @impl true
   def render(assigns) do
-    ~H"""
+    ~F"""
       <Workspace
-        title={{ dgettext("link-studentpool", "submission.title") }}
-        menus={{ @menus }}
+        title={dgettext("link-studentpool", "submission.title")}
+        menus={@menus}
       >
-        <div :if={{ show_dialog?(@dialog) }} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
+        <div :if={show_dialog?(@dialog)} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
           <div class="flex flex-row items-center justify-center w-full h-full">
-            <Dialog vm={{ @dialog }} />
+            <PlainDialog vm={@dialog} />
           </div>
         </div>
         <div phx-click="reset_focus">
           <ContentArea>
-            <MarginY id={{:page_top}} />
-            <Member :if={{ @member }} vm={{ @member }} />
+            <MarginY id={:page_top} />
+            <Member :if={@member} vm={@member} />
             <Spacing value="XL" />
-            <Title1>{{@title}}</Title1>
+            <Title1>{@title}</Title1>
             <Spacing value="L" />
-            <SubHead>{{ @byline }}</SubHead>
+            <SubHead>{@byline}</SubHead>
             <Spacing value="L" />
           </ContentArea>
 
-          <SubmissionCriteriaForm id={{:submission_criteria_form}} props={{ %{entity_id: @submission_id, validate?: @validate?} }}/>
+          <SubmissionCriteriaForm id={:submission_criteria_form} props={%{entity_id: @submission_id, validate?: @validate?}}/>
           <Spacing value="XL" />
-          <SubmissionForm id={{:submission_form}} props={{ %{entity_id: @submission_id, validate?: @validate?} }}/>
+          <SubmissionForm id={:submission_form} props={%{entity_id: @submission_id, validate?: @validate?}}/>
         </div>
         <ContentArea>
-          <MarginY id={{:button_bar_top}} />
-          <ButtonBar buttons={{create_actions(assigns)}} />
+          <MarginY id={:button_bar_top} />
+          <ButtonBar buttons={create_actions(assigns)} />
         </ContentArea>
       </Workspace>
     """

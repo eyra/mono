@@ -3,7 +3,7 @@ defmodule Systems.Assignment.LandingPage do
   The  page for an assigned task
   """
   use CoreWeb, :live_view
-  use CoreWeb.UI.Dialog
+  use CoreWeb.UI.PlainDialog
   use CoreWeb.Layouts.Workspace.Component, :assignment
 
   alias Frameworks.Pixel.Text.{Title1, Title3, BodyLarge}
@@ -147,47 +147,47 @@ defmodule Systems.Assignment.LandingPage do
   defp grid_cols(_), do: "grid-cols-1 sm:grid-cols-3"
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <Workspace
-      title={{ @vm.hero_title }}
-      menus={{ @menus }}
+      title={@vm.hero_title}
+      menus={@menus}
     >
-      <div :if={{ show_dialog?(@dialog) }} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
+      <div :if={show_dialog?(@dialog)} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
         <div class="flex flex-row items-center justify-center w-full h-full">
-          <Dialog vm={{ @dialog }} />
+          <PlainDialog vm={@dialog} />
         </div>
       </div>
 
       <ContentArea>
-        <MarginY id={{:page_top}} />
-        <Title1>{{@vm.title}}<span class="text-primary"> #{{@vm.public_id}}</span></Title1>
+        <MarginY id={:page_top} />
+        <Title1>{@vm.title}<span class="text-primary"> #{@vm.public_id}</span></Title1>
         <Spacing value="L" />
 
-        <div class="grid gap-6 sm:gap-8 {{ grid_cols(Enum.count(@vm.highlights)) }}">
-          <div :for={{ highlight <- @vm.highlights }} class="bg-grey5 rounded">
-            <Highlight title={{highlight.title}} text={{highlight.text}} />
+        <div class={"grid gap-6 sm:gap-8 #{grid_cols(Enum.count(@vm.highlights))}"}>
+          <div :for={highlight <- @vm.highlights} class="bg-grey5 rounded">
+            <Highlight title={highlight.title} text={highlight.text} />
           </div>
         </div>
         <Spacing value="L" />
 
-        <Title3>{{@vm.subtitle}}</Title3>
+        <Title3>{@vm.subtitle}</Title3>
         <Spacing value="M" />
-        <BodyLarge>{{@vm.text}}</BodyLarge>
+        <BodyLarge>{@vm.text}</BodyLarge>
         <Spacing value="L" />
 
-        <MarginY id={{:button_bar_top}} />
-        <ButtonBar buttons={{create_actions(action_map(assigns))}} />
+        <MarginY id={:button_bar_top} />
+        <ButtonBar buttons={create_actions(action_map(assigns))} />
         <Spacing value="XL" />
 
-        <Panel :if={{ Map.get(@vm, :cancel_enabled?, false)}}>
-          <template slot="title">
-            <Title3>{{dgettext("eyra-assignment", "cancel.title")}}</Title3>
-          </template>
+        <Panel :if={Map.get(@vm, :cancel_enabled?, false)}>
+          <#template slot="title">
+            <Title3>{dgettext("eyra-assignment", "cancel.title")}</Title3>
+          </#template>
           <Spacing value="M" />
-          <BodyLarge>{{dgettext("eyra-assignment", "cancel.text")}}</BodyLarge>
+          <BodyLarge>{dgettext("eyra-assignment", "cancel.text")}</BodyLarge>
           <Spacing value="M" />
           <Wrap>
-            <DynamicButton vm={{ cancel_button() }} />
+            <DynamicButton vm={cancel_button()} />
           </Wrap>
         </Panel>
 

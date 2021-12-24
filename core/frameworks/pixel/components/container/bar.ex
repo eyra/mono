@@ -10,12 +10,12 @@ defmodule Frameworks.Pixel.Container.Bar do
   prop(gap, :string, default: "XS")
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="flex flex-row items-center">
-    <For each={{ {_, index} <- Enum.with_index(@items) }}>
-      <slot name="items" index={{ index }} />
-      <Spacing value="{{@gap}}" direction="l" />
-    </For>
+    {#for {_, index} <- Enum.with_index(@items)}
+      <#slot name="items" index={index} />
+      <Spacing value={"#{@gap}"} direction="l" />
+    {/for}
     </div>
     """
   end

@@ -142,58 +142,58 @@ defmodule Systems.Promotion.FormView do
 
   @impl true
   def render(assigns) do
-    ~H"""
+    ~F"""
       <ContentArea>
-        <MarginY id={{:page_top}} />
-        <Title2>{{dgettext("eyra-promotion", "form.title")}}</Title2>
-        <BodyLarge>{{dgettext("eyra-promotion", "form.description")}}</BodyLarge>
+        <MarginY id={:page_top} />
+        <Title2>{dgettext("eyra-promotion", "form.title")}</Title2>
+        <BodyLarge>{dgettext("eyra-promotion", "form.description")}</BodyLarge>
         <Spacing value="M" />
-        <Form id={{@id}} changeset={{@changeset}} change_event="save" focus={{@focus}} target={{@myself}}>
-          <TextInput field={{:title}} label_text={{dgettext("eyra-promotion", "title.label")}} />
-          <TextInput field={{:subtitle}} label_text={{dgettext("eyra-promotion", "subtitle.label")}} />
+        <Form id={@id} changeset={@changeset} change_event="save" focus={@focus} target={@myself}>
+          <TextInput field={:title} label_text={dgettext("eyra-promotion", "title.label")} />
+          <TextInput field={:subtitle} label_text={dgettext("eyra-promotion", "subtitle.label")} />
 
           <Spacing value="XL" />
-          <Title3>{{dgettext("eyra-promotion", "themes.title")}}</Title3>
-          <Body>{{dgettext("eyra-promotion", "themes.label")}}</Body>
+          <Title3>{dgettext("eyra-promotion", "themes.title")}</Title3>
+          <Body>{dgettext("eyra-promotion", "themes.label")}</Body>
           <Spacing value="XS" />
-          <Selector id={{:themes}} items={{ @theme_labels }} parent={{ %{type: __MODULE__, id: @id} }} />
+          <Selector id={:themes} items={@theme_labels} parent={%{type: __MODULE__, id: @id}} />
           <Spacing value="XL" />
 
-          <Title3>{{dgettext("eyra-promotion", "image.title")}}</Title3>
-          <Body>{{dgettext("eyra-promotion", "image.label")}}</Body>
+          <Title3>{dgettext("eyra-promotion", "image.title")}</Title3>
+          <Body>{dgettext("eyra-promotion", "image.label")}</Body>
           <Spacing value="XS" />
           <div class="flex flex-row">
-            <ImagePreview image_url={{ @image_info.url }} placeholder="" />
+            <ImagePreview image_url={@image_info.url} placeholder="" />
             <Spacing value="S" direction="l" />
             <div class="flex-wrap">
-              <SecondaryAlpineButton click="$parent.image_picker = true, $parent.$parent.$parent.overlay = true" label={{dgettext("eyra-promotion", "search.different.image.button")}} />
+              <SecondaryAlpineButton click="$parent.image_picker = true, $parent.$parent.$parent.overlay = true" label={dgettext("eyra-promotion", "search.different.image.button")} />
             </div>
           </div>
           <Spacing value="XL" />
 
-          <Title3>{{dgettext("eyra-promotion", "expectations.title")}}</Title3>
-          <TextArea field={{:expectations}} label_text={{dgettext("eyra-promotion", "expectations.label")}} />
+          <Title3>{dgettext("eyra-promotion", "expectations.title")}</Title3>
+          <TextArea field={:expectations} label_text={dgettext("eyra-promotion", "expectations.label")} />
           <Spacing value="L" />
 
-          <Title3>{{dgettext("eyra-promotion", "description.title")}}</Title3>
-          <TextArea field={{:description}} label_text={{dgettext("eyra-promotion", "description.label")}} />
+          <Title3>{dgettext("eyra-promotion", "description.title")}</Title3>
+          <TextArea field={:description} label_text={dgettext("eyra-promotion", "description.label")} />
           <Spacing value="L" />
 
-          <Title3>{{dgettext("eyra-promotion", "banner.title")}}</Title3>
+          <Title3>{dgettext("eyra-promotion", "banner.title")}</Title3>
           <PhotoInput
-            conn={{@socket}}
-            static_path={{&Routes.static_path/2}}
-            photo_url={{@entity.banner_photo_url}}
-            uploads={{@uploads}}
-            primary_button_text={{dgettext("eyra-promotion", "choose.banner.photo.file")}}
-            secondary_button_text={{dgettext("eyra-promotion", "choose.other.banner.photo.file")}}
+            conn={@socket}
+            static_path={&Routes.static_path/2}
+            photo_url={@entity.banner_photo_url}
+            uploads={@uploads}
+            primary_button_text={dgettext("eyra-promotion", "choose.banner.photo.file")}
+            secondary_button_text={dgettext("eyra-promotion", "choose.other.banner.photo.file")}
             />
 
           <Spacing value="S" />
 
-          <TextInput field={{:banner_title}} label_text={{dgettext("eyra-promotion", "banner.title.label")}} />
-          <TextInput field={{:banner_subtitle}} label_text={{dgettext("eyra-promotion", "banner.subtitle.label")}} />
-          <UrlInput field={{:banner_url}} label_text={{dgettext("eyra-promotion", "banner.url.label")}} />
+          <TextInput field={:banner_title} label_text={dgettext("eyra-promotion", "banner.title.label")} />
+          <TextInput field={:banner_subtitle} label_text={dgettext("eyra-promotion", "banner.subtitle.label")} />
+          <UrlInput field={:banner_url} label_text={dgettext("eyra-promotion", "banner.url.label")} />
         </Form>
       </ContentArea>
     """

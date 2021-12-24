@@ -7,10 +7,10 @@ defmodule Frameworks.Pixel.Wrap do
   slot(default)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <div class="flex flex-row">
         <div class="flex-wrap">
-          <slot />
+          <#slot />
         </div>
       </div>
     """

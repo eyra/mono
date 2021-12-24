@@ -12,19 +12,19 @@ defmodule Frameworks.Pixel.Card.SecondaryCampaign do
   prop(click_event_data, :string)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <Campaign
-      conn={{@conn}}
-      path_provider={{@path_provider}}
-      card={{@card}}
+      conn={@conn}
+      path_provider={@path_provider}
+      card={@card}
       bg_color="grey5"
       text_color="text-grey1"
       label_type="primary"
       tag_type="primary"
       info1_color="text-grey1"
       info2_color="text-grey2"
-      click_event_data={{@click_event_data}}
-      click_event_name={{@click_event_name}}
+      click_event_data={@click_event_data}
+      click_event_name={@click_event_name}
     />
     """
   end

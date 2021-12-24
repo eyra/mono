@@ -118,18 +118,18 @@ defmodule Link.Onboarding.Wizard do
 
   @impl true
   def render(assigns) do
-    ~H"""
+    ~F"""
       <Stripped
-        user={{@current_user}}
-        menus={{ @menus }}
+        user={@current_user}
+        menus={@menus}
       >
-        <TabbarArea tabs={{@tabs}}>
+        <TabbarArea tabs={@tabs}>
           <ActionBar>
-            <Tabbar vm={{ %{initial_tab: :welcome} }}/>
+            <Tabbar vm={%{initial_tab: :welcome}}/>
           </ActionBar>
           <TabbarContent />
           <TabbarFooter>
-            <DynamicButton vm={{ @finish_button }} />
+            <DynamicButton vm={@finish_button} />
           </TabbarFooter>
         </TabbarArea>
       </Stripped>

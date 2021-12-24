@@ -15,20 +15,20 @@ defmodule CoreWeb.UI.Navigation.TabbarFooter do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <ContentArea class="mb-8">
-        <MarginY id={{:page_top}} />
-          <Context get={{tabs: tabs}}>
-            <div :for={{ {[tab1, tab2], index} <- Enum.with_index(combine_shifted(tabs)) }} >
-              <RestrictedWidthArea type={{ tab1.type }}>
-                <div class="flex flex-row {{ align(tab1) }}">
-                  <div id="tabbar-footer-item-{{ tab1.id }}" phx-hook="TabbarFooterItem" data-tab-id={{ tab1.id }} data-target-tab-id={{ tab2.id }} class="tabbar-footer-item cursor-pointer hidden">
-                    <Case value={{ index < Enum.count(tabs)-1 }} >
+        <MarginY id={:page_top} />
+          <Context get={tabs: tabs}>
+            <div :for={{[tab1, tab2], index} <- Enum.with_index(combine_shifted(tabs))} >
+              <RestrictedWidthArea type={tab1.type}>
+                <div class={"flex flex-row #{align(tab1)}"}>
+                  <div id={"tabbar-footer-item-#{tab1.id}"} phx-hook="TabbarFooterItem" data-tab-id={tab1.id} data-target-tab-id={tab2.id} class="tabbar-footer-item cursor-pointer hidden">
+                    <Case value={index < Enum.count(tabs)-1} >
                       <True>
-                        <Forward vm={{ %{label: tab2.forward_title} }} />
+                        <Forward vm={%{label: tab2.forward_title}} />
                       </True>
                       <False>
-                        <slot />
+                        <#slot />
                       </False>
                     </Case>
                   </div>

@@ -8,8 +8,8 @@ defmodule Frameworks.Pixel.Status.Info do
   prop(text, :string, required: true)
 
   def render(assigns) do
-    ~H"""
-    <Status text={{@text}} text_color="text-success" bg_color="bg-successlight" bg_opacity="bg-opacity-100" />
+    ~F"""
+    <Status text={@text} text_color="text-success" bg_color="bg-successlight" bg_opacity="bg-opacity-100" />
     """
   end
 end

@@ -12,15 +12,15 @@ msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/debug.ex:6 bundles/link/lib/onboarding/wizard.ex:6
-#: frameworks/pixel/auto_save.ex:78 lib/core_web/live/data_donation/content.ex:6
-#: lib/core_web/live/user/profile.ex:6 systems/campaign/content_page.ex:6 systems/pool/submission_page.ex:6
+#: frameworks/pixel/auto_save.ex:78 lib/core_web/live/user/profile.ex:6 systems/campaign/content_page.ex:6
+#: systems/data_donation/content_page.ex:6 systems/pool/submission_page.ex:6
 msgid "error.flash"
 msgstr ""
 
 #, elixir-format
 #: bundles/link/lib/debug.ex:6 bundles/link/lib/onboarding/wizard.ex:6
-#: frameworks/pixel/auto_save.ex:83 lib/core_web/live/data_donation/content.ex:6
-#: lib/core_web/live/user/profile.ex:6 systems/campaign/content_page.ex:6 systems/pool/submission_page.ex:6
+#: frameworks/pixel/auto_save.ex:83 lib/core_web/live/user/profile.ex:6 systems/campaign/content_page.ex:6
+#: systems/data_donation/content_page.ex:6 systems/pool/submission_page.ex:6
 msgid "saved.info.flash"
 msgstr ""
 
@@ -82,7 +82,7 @@ msgid "dashboard.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:136
+#: bundles/link/lib/marketplace.ex:131
 msgid "marketplace.title"
 msgstr ""
 
@@ -162,40 +162,40 @@ msgstr ""
 
 #, elixir-format
 #: systems/assignment/landing_page.ex:6 systems/campaign/content_page.ex:9
-#: systems/campaign/overview_page.ex:7 systems/crew/reject_view.ex:109 systems/pool/submission_page.ex:8
-#: systems/promotion/landing_page.ex:6
+#: systems/campaign/overview_page.ex:7 systems/campaign/overview_page.ex:148 systems/crew/reject_view.ex:109
+#: systems/pool/submission_page.ex:8 systems/promotion/landing_page.ex:6
 msgid "cancel.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:231 systems/campaign/overview_page.ex:60
+#: systems/campaign/content_page.ex:228 systems/campaign/overview_page.ex:66
 msgid "delete.confirm.text"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:230 systems/campaign/overview_page.ex:59
+#: systems/campaign/content_page.ex:227 systems/campaign/overview_page.ex:65
 msgid "delete.confirm.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:232 systems/campaign/overview_page.ex:61
+#: systems/campaign/content_page.ex:229 systems/campaign/overview_page.ex:67
 msgid "delete.confirm.label"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:6 systems/assignment/model.ex:225
+#: systems/assignment/landing_page.ex:6 systems/assignment/model.ex:205
 #: systems/campaign/content_page.ex:9 systems/campaign/overview_page.ex:7 systems/pool/submission_page.ex:8
 #: systems/promotion/landing_page.ex:6
 msgid "ok.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:295
+#: systems/campaign/content_page.ex:292
 msgid "feature.unavailable.text"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:294
+#: systems/campaign/content_page.ex:291
 msgid "feature.unavailable.title"
 msgstr ""
 
@@ -212,18 +212,18 @@ msgid "menu.item.support"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:103 lib/core_web/ui/timestamp.ex:106
-#: lib/core_web/ui/timestamp.ex:111
+#: lib/core_web/ui/timestamp.ex:124 lib/core_web/ui/timestamp.ex:127
+#: lib/core_web/ui/timestamp.ex:132
 msgid "timestamp.at"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:103
+#: lib/core_web/ui/timestamp.ex:124
 msgid "timestamp.today"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:106
+#: lib/core_web/ui/timestamp.ex:127
 msgid "timestamp.yesterday"
 msgstr ""
 

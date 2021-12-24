@@ -11,9 +11,9 @@ defmodule Frameworks.Pixel.Button.DynamicButton do
   )
 
   def render(assigns) do
-    ~H"""
-    <DynamicAction vm={{action(@vm)}}>
-      <DynamicFace vm={{face(@vm)}} />
+    ~F"""
+    <DynamicAction vm={action(@vm)}>
+      <DynamicFace vm={face(@vm)} />
     </DynamicAction>
     """
   end

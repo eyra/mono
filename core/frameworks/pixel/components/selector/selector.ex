@@ -1,11 +1,11 @@
 defmodule Frameworks.Pixel.Selector.Selector do
   @moduledoc false
-  use Surface.LiveComponent
+  use CoreWeb.UI.LiveComponent
 
   alias Frameworks.Pixel.Dynamic
 
   prop(items, :list, required: true)
-  prop(parent, :map, required: true)
+  prop(parent, :any, required: true)
   prop(type, :atom, default: :label)
   prop(optional?, :boolean, default: true)
   prop(opts, :string, default: "")
@@ -68,17 +68,17 @@ defmodule Frameworks.Pixel.Selector.Selector do
          active_item_ids
        ) do
     if multiselect?(type, Enum.count(items)) do
-      send_update(parent.type,
-        id: parent.id,
-        selector_id: selector_id,
-        active_item_ids: active_item_ids
+      update_target(parent, %{
+          selector_id: selector_id,
+          active_item_ids: active_item_ids
+        }
       )
     else
       active_item_id = List.first(active_item_ids)
-      send_update(parent.type,
-        id: parent.id,
-        selector_id: selector_id,
-        active_item_id: active_item_id
+      update_target(parent, %{
+          selector_id: selector_id,
+          active_item_id: active_item_id
+        }
       )
     end
   end
@@ -131,29 +131,29 @@ defmodule Frameworks.Pixel.Selector.Selector do
   defp item_component(_), do: Frameworks.Pixel.Selector.Label
 
   def render(assigns) do
-    ~H"""
-    <div class="flex {{ flex_options(@type) }} {{ @opts }}">
-      <For each={{ {item, _} <- Enum.with_index(@current_items) }}>
-        <div x-data="{ active: {{ item.active }}, is_optional: {{@optional?}} }" >
+    ~F"""
+    <div class={"flex #{flex_options(@type)} #{@opts}"}>
+      {#for {item, _} <- Enum.with_index(@current_items)}
+        <div x-data={"{ active: #{item.active}, is_optional: #{@optional?} }"} >
           <div
             x-on:mousedown="if (is_optional) { active = !active }"
             class="cursor-pointer select-none"
             :on-click="toggle"
-            phx-value-item="{{ item.id }}"
-            phx-target={{@myself}}
+            phx-value-item={"#{item.id}"}
+            phx-target={@myself}
           >
             <Dynamic
-              component={{ item_component(@type) }}
-              props={{
+              component={item_component(@type)}
+              props={
                 %{
                   item: item,
                   multiselect?: multiselect?(@type, Enum.count(@items))
                 }
-              }}
+              }
             />
           </div>
         </div>
-      </For>
+      {/for}
     </div>
     """
   end

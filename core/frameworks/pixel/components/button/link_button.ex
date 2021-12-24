@@ -8,9 +8,9 @@ defmodule Frameworks.Pixel.Button.LinkButton do
   prop(label, :string, required: true)
 
   def render(assigns) do
-    ~H"""
-    <a href= {{@path}} class="text-primary text-link font-link hover:text-black underline focus:outline-none" >
-       {{@label}}
+    ~F"""
+    <a href= {@path} class="text-primary text-link font-link hover:text-black underline focus:outline-none" >
+       {@label}
     </a>
     """
   end

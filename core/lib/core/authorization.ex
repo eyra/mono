@@ -21,6 +21,11 @@ defmodule Core.Authorization do
 
   Core.BundleOverrides.grants()
 
+  grant_access(Systems.Campaign.Model, [:visitor, :member])
+  grant_access(Systems.Survey.ToolModel, [:owner, :coordinator, :participant])
+  grant_access(Systems.Lab.ToolModel, [:owner, :coordinator, :participant])
+  grant_access(Systems.DataDonation.ToolModel, [:owner, :coordinator, :participant])
+
   grant_access(Systems.Home.LandingPage, [:visitor, :member])
   grant_access(Systems.Admin.LoginPage, [:visitor, :member])
   grant_access(Systems.Admin.PermissionsPage, [:admin])
@@ -32,11 +37,14 @@ defmodule Core.Authorization do
   grant_access(Systems.Campaign.OverviewPage, [:researcher])
   grant_access(Systems.Campaign.ContentPage, [:owner])
   grant_access(Systems.Assignment.LandingPage, [:participant])
-  grant_access(Systems.Assignment.CallbackPage, [:participant, :tester])
+  grant_access(Systems.Assignment.CallbackPage, [:participant])
+  grant_access(Systems.Lab.PublicPage, [:member])
   grant_access(Systems.Promotion.LandingPage, [:visitor, :member, :owner])
   grant_access(Systems.Pool.OverviewPage, [:researcher])
   grant_access(Systems.Pool.SubmissionPage, [:researcher])
   grant_access(Systems.Test.Page, [:visitor, :member])
+  grant_access(Systems.DataDonation.Content, [:owner, :coordinator])
+  grant_access(Systems.DataDonation.Uploader, [:member])
 
   grant_access(CoreWeb.Dashboard, [:researcher])
   grant_access(CoreWeb.User.Signin, [:visitor])
@@ -49,43 +57,12 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.User.Settings, [:member])
   grant_access(CoreWeb.User.SecuritySettings, [:member])
   grant_access(CoreWeb.FakeSurvey, [:member])
-  grant_access(CoreWeb.DataDonation.Content, [:owner, :coordinator])
-  grant_access(CoreWeb.DataDonation.Uploader, [:member])
-  grant_access(CoreWeb.Lab.Public, [:member])
-
-  grant_access(Systems.Campaign.Model, [:visitor, :member])
-  grant_access(Core.Survey.Tool, [:owner, :coordinator, :participant])
-  grant_access(Core.Survey.Task, [:participant])
-  grant_access(Core.DataDonation.Tool, [:owner, :coordinator, :participant])
-  grant_access(Core.DataDonation.Task, [:participant])
-
-  grant_access(CoreWeb.Study.New, [:researcher])
 
   grant_actions(CoreWeb.FakeSurveyController, %{
     index: [:visitor, :member]
   })
 
   grant_actions(CoreWeb.LanguageSwitchController, %{
-    index: [:visitor, :member]
-  })
-
-  grant_actions(CoreWeb.Studies.PermissionsController, %{
-    show: [:owner],
-    change: [:owner],
-    create: [:owner]
-  })
-
-  grant_actions(CoreWeb.ParticipantController, %{
-    index: [:owner],
-    show: [:owner, :participant],
-    new: [:member],
-    create: [:member],
-    edit: [:owner],
-    update: [:owner],
-    delete: [:owner]
-  })
-
-  grant_actions(CoreWeb.PageController, %{
     index: [:visitor, :member]
   })
 

@@ -20,21 +20,21 @@ defmodule Systems.Support.HelpdeskPage do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <Workspace
-        menus={{ @menus }}
+        menus={@menus}
     >
       <ContentArea>
         <FormArea>
-          <MarginY id={{:page_top}} />
-          <Title2>{{dgettext("eyra-support", "form.title")}}</Title2>
-          <BodyLarge>{{dgettext("eyra-support", "form.description")}} </BodyLarge>
+          <MarginY id={:page_top} />
+          <Title2>{dgettext("eyra-support", "form.title")}</Title2>
+          <BodyLarge>{dgettext("eyra-support", "form.description")} </BodyLarge>
         </FormArea>
       </ContentArea>
 
       <Spacing value="XL" />
 
-      <HelpdeskForm id={{ :helpdesk_form }} user={{ @current_user }}/>
+      <HelpdeskForm id={:helpdesk_form} user={@current_user}/>
 
     </Workspace>
     """

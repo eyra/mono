@@ -6,7 +6,8 @@ defmodule Systems.Pool.CampaignsView do
   alias Systems.{
     NextAction,
     Campaign,
-    Assignment
+    Assignment,
+    Survey
   }
 
   alias Core.Accounts
@@ -28,11 +29,11 @@ defmodule Systems.Pool.CampaignsView do
     preload = Campaign.Model.preload_graph(:full)
 
     submitted_campaigns =
-      Campaign.Context.list_submitted_campaigns([Core.Survey.Tool], preload: preload)
+      Campaign.Context.list_submitted_campaigns([Survey.ToolModel], preload: preload)
       |> Enum.map(&convert_to_vm(socket, &1))
 
     accepted_campaigns =
-      Campaign.Context.list_accepted_campaigns([Core.Survey.Tool], preload: preload)
+      Campaign.Context.list_accepted_campaigns([Survey.ToolModel], preload: preload)
       |> Enum.map(&convert_to_vm(socket, &1))
 
     {
@@ -50,27 +51,27 @@ defmodule Systems.Pool.CampaignsView do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <ContentArea>
-        <MarginY id={{:page_top}} />
-        <Case value={{ Enum.count(@submitted_campaigns) + Enum.count(@accepted_campaigns) > 0 }} >
+        <MarginY id={:page_top} />
+        <Case value={Enum.count(@submitted_campaigns) + Enum.count(@accepted_campaigns) > 0} >
           <True>
             <Title2>
-              {{ dgettext("link-studentpool", "submitted.title") }}
-              <span class="text-primary"> {{ Enum.count(@submitted_campaigns) }}</span>
+              {dgettext("link-studentpool", "submitted.title")}
+              <span class="text-primary"> {Enum.count(@submitted_campaigns)}</span>
             </Title2>
-            <ContentList items={{@submitted_campaigns}} />
+            <ContentList items={@submitted_campaigns} />
             <Spacing value="XL" />
             <Title2>
-              {{ dgettext("link-studentpool", "accepted.title") }}
-              <span class="text-primary"> {{ Enum.count(@accepted_campaigns) }}</span>
+              {dgettext("link-studentpool", "accepted.title")}
+              <span class="text-primary"> {Enum.count(@accepted_campaigns)}</span>
             </Title2>
-            <ContentList items={{@accepted_campaigns}} />
+            <ContentList items={@accepted_campaigns} />
           </True>
           <False>
             <Empty
-              title={{ dgettext("link-studentpool", "campaigns.empty.title") }}
-              body={{ dgettext("link-studentpool", "campaigns.empty.description") }}
+              title={dgettext("link-studentpool", "campaigns.empty.title")}
+              body={dgettext("link-studentpool", "campaigns.empty.description")}
               illustration="items"
             />
           </False>
@@ -92,7 +93,7 @@ defmodule Systems.Pool.CampaignsView do
          },
          promotable_assignment:
            %{
-             assignable_survey_tool: %{
+             assignable_experiment: %{
                subject_count: target_subject_count
              }
            } = assignment

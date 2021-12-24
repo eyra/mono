@@ -10,13 +10,13 @@ defmodule Frameworks.Pixel.Button.PrimaryButton do
   prop(bg_color, :string, default: "bg-primary")
 
   def render(assigns) do
-    ~H"""
-    <LiveRedirect to={{ @to }} >
+    ~F"""
+    <LiveRedirect to={@to} >
       <div class="flex">
-        <div class="flex-wrap pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px focus:outline-none rounded {{@bg_color}}">
+        <div class={"flex-wrap pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px focus:outline-none rounded #{@bg_color}"}>
           <div class="flex flex-col justify-center h-full items-center rounded">
             <div class="text-white text-button font-button pl-4 pr-4">
-              {{ @label }}
+              {@label}
             </div>
           </div>
         </div>
@@ -35,7 +35,7 @@ defmodule Frameworks.Pixel.Button.PrimaryButton.Example do
     container: {:div, class: "buttons"}
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <PrimaryButton to="/" label="Primary"/>
     <div class="mb-4"></div>
     <PrimaryButton to="/" label="Secondary" bg_color="bg-secondary"/>
@@ -64,8 +64,8 @@ defmodule Frameworks.Pixel.Button.Primary.Playground do
   }
 
   def render(assigns) do
-    ~H"""
-    <PrimaryButton :props={{ @props }} />
+    ~F"""
+    <PrimaryButton :props={@props} />
     """
   end
 end

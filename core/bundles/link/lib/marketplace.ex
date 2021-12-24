@@ -7,15 +7,15 @@ defmodule Link.Marketplace do
 
   alias Systems.{
     NextAction,
-    Campaign
+    Campaign,
+    Survey,
+    Lab
   }
 
   alias Frameworks.Utility.ViewModelBuilder
 
   alias Core.Accounts
   alias Core.Pools.{Submission, Criteria}
-  alias Core.Survey.Tool, as: SurveyTool
-  alias Core.Lab.Tool, as: LabTool
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.UI.ContentList
@@ -55,7 +55,7 @@ defmodule Link.Marketplace do
       |> Enum.into(MapSet.new())
 
     available_campaigns =
-      Campaign.Context.list_accepted_campaigns([LabTool, SurveyTool],
+      Campaign.Context.list_accepted_campaigns([Lab.ToolModel, Survey.ToolModel],
         exclude: exclusion_list,
         preload: preload
       )
@@ -131,44 +131,44 @@ defmodule Link.Marketplace do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
         <Workspace
-          title={{ dgettext("eyra-ui", "marketplace.title") }}
-          menus={{ @menus }}
+          title={dgettext("eyra-ui", "marketplace.title")}
+          menus={@menus}
         >
           <ContentArea>
-            <MarginY id={{:page_top}} />
-            <div :if={{ @next_best_action }}>
-              <NextAction.HighlightView vm={{ @next_best_action }}/>
+            <MarginY id={:page_top} />
+            <div :if={@next_best_action}>
+              <NextAction.HighlightView vm={@next_best_action}/>
               <div class="mt-6 lg:mt-10"/>
             </div>
-            <Case value={{ @subject_count > 0 }} >
+            <Case value={@subject_count > 0} >
               <True>
                 <Title2>
-                  {{ dgettext("eyra-campaign", "campaign.subject.title") }}
-                  <span class="text-primary"> {{ @subject_count }}</span>
+                  {dgettext("eyra-campaign", "campaign.subject.title")}
+                  <span class="text-primary"> {@subject_count}</span>
                 </Title2>
-                <ContentList items={{@subject_campaigns}} />
+                <ContentList items={@subject_campaigns} />
               </True>
             </Case>
-            <Case value={{ render_empty?(assigns) }} >
+            <Case value={render_empty?(assigns)} >
               <False>
-                <Spacing :if={{ @subject_count > 0 }} value="XL" />
+                <Spacing :if={@subject_count > 0} value="XL" />
                 <Title2>
-                  {{ dgettext("eyra-campaign", "campaign.all.title") }}
-                  <span class="text-primary"> {{ @available_count }}</span>
+                  {dgettext("eyra-campaign", "campaign.all.title")}
+                  <span class="text-primary"> {@available_count}</span>
                 </Title2>
                 <DynamicGrid>
-                  <div :for={{ card <- @available_campaigns  }} class="mb-1" >
-                    <SecondaryCampaign conn={{@socket}} path_provider={{Routes}} card={{card}} click_event_data={{%{action: :public, id: card.open_id } }} />
+                  <div :for={card <- @available_campaigns } class="mb-1" >
+                    <SecondaryCampaign conn={@socket} path_provider={Routes} card={card} click_event_data={%{action: :public, id: card.open_id }} />
                   </div>
                 </DynamicGrid>
               </False>
               <True>
-                <Spacing :if={{ @subject_count > 0 }} value="XXL" />
+                <Spacing :if={@subject_count > 0} value="XXL" />
                 <Empty
-                  title={{ dgettext("eyra-marketplace", "empty.title") }}
-                  body={{ dgettext("eyra-marketplace", "empty.description") }}
+                  title={dgettext("eyra-marketplace", "empty.title")}
+                  body={dgettext("eyra-marketplace", "empty.description")}
                   illustration="cards"
                 />
               </True>

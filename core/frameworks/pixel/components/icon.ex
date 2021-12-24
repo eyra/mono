@@ -20,9 +20,9 @@ defmodule Frameworks.Pixel.Icon do
   defp size("S"), do: "h-14 w-14"
 
   def render(assigns) do
-    ~H"""
-    <div class="{{size(@size)}} rounded-full bg-white border-grey4 border-opacity-100 {{@border_size}}">
-      <img class="rounded-full w-full h-full" src={{@src}} alt=""/>
+    ~F"""
+    <div class={"#{size(@size)} rounded-full bg-white border-grey4 border-opacity-100 #{@border_size}"}>
+      <img class="rounded-full w-full h-full" src={@src} alt=""/>
     </div>
     """
   end

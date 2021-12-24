@@ -49,34 +49,34 @@ defmodule Systems.Assignment.CallbackPage do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <Workspace
-        title={{ @vm.hero_title }}
-        menus={{ @menus }}
+        title={@vm.hero_title}
+        menus={@menus}
       >
         <ContentArea>
-          <MarginY id={{:page_top}} />
-          <Title1>{{@vm.title}}</Title1>
+          <MarginY id={:page_top} />
+          <Title1>{@vm.title}</Title1>
           <Spacing value="M" />
-          <div :if={{@vm.state == :expired }}>
-            <Title3>{{ dgettext("eyra-crew", "task.expired.subtitle") }}</Title3>
+          <div :if={@vm.state == :expired}>
+            <Title3>{dgettext("eyra-crew", "task.expired.subtitle")}</Title3>
             <Spacing value="M" />
-            <BodyLarge>{{ dgettext("eyra-crew", "task.expired.text") }}</BodyLarge>
+            <BodyLarge>{dgettext("eyra-crew", "task.expired.text")}</BodyLarge>
           </div>
-          <div :if={{@vm.state == :tester }}>
-            <Title3>{{ dgettext("eyra-crew", "tester.completed.subtitle") }}</Title3>
+          <div :if={@vm.state == :tester}>
+            <Title3>{dgettext("eyra-crew", "tester.completed.subtitle")}</Title3>
             <Spacing value="M" />
-            <BodyLarge>{{ dgettext("eyra-crew", "tester.completed.text") }}</BodyLarge>
+            <BodyLarge>{dgettext("eyra-crew", "tester.completed.text")}</BodyLarge>
           </div>
-          <div :if={{@vm.state == :participant }}>
-            <Title3>{{ dgettext("eyra-crew", "task.completed.title") }}</Title3>
+          <div :if={@vm.state == :participant}>
+            <Title3>{dgettext("eyra-crew", "task.completed.title")}</Title3>
             <Spacing value="M" />
-            <BodyLarge>{{ dgettext("eyra-crew", "task.completed.message.part1") }}</BodyLarge>
+            <BodyLarge>{dgettext("eyra-crew", "task.completed.message.part1")}</BodyLarge>
             <Spacing value="XS" />
-            <BodyLarge>{{ dgettext("eyra-crew", "task.completed.message.part2") }}</BodyLarge>
+            <BodyLarge>{dgettext("eyra-crew", "task.completed.message.part2")}</BodyLarge>
           </div>
           <Spacing value="L" />
-          <PrimaryLiveViewButton label={{ @vm.call_to_action.label }} event="call-to-action" />
+          <PrimaryLiveViewButton label={@vm.call_to_action.label} event="call-to-action" />
         </ContentArea>
       </Workspace>
     """

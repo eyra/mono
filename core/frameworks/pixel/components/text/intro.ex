@@ -8,9 +8,9 @@ defmodule Frameworks.Pixel.Text.Intro do
   prop(color, :css_class, default: "text-grey1")
 
   def render(assigns) do
-    ~H"""
-    <div class="text-intro lg:text-introdesktop font-intro lg:mb-9 {{@color}}">
-      <slot />
+    ~F"""
+    <div class={"text-intro lg:text-introdesktop font-intro lg:mb-9 #{@color}"}>
+      <#slot />
     </div>
     """
   end

@@ -8,8 +8,8 @@ defmodule Frameworks.Pixel.Status.Warning do
   prop(text, :string, required: true)
 
   def render(assigns) do
-    ~H"""
-    <Status text={{@text}} text_color="text-warning" bg_color="bg-warninglight" bg_opacity="bg-opacity-100" />
+    ~F"""
+    <Status text={@text} text_color="text-warning" bg_color="bg-warninglight" bg_opacity="bg-opacity-100" />
     """
   end
 end

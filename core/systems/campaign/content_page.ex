@@ -6,17 +6,14 @@ defmodule Systems.Campaign.ContentPage do
   use CoreWeb.MultiFormAutoSave
   use CoreWeb.Layouts.Workspace.Component, :campaign
   use CoreWeb.UI.Responsive.Viewport
-  use CoreWeb.UI.Dialog
+  use CoreWeb.UI.PlainDialog
 
   import CoreWeb.Gettext
 
   require Link.Enums.Themes
   alias Link.Enums.Themes
 
-  alias Core.Survey.Tools
-  alias Systems.Promotion
   alias Core.Pools.Submissions
-  alias Core.Content.Nodes
 
   alias CoreWeb.ImageCatalogPicker
   alias Systems.Promotion.FormView, as: PromotionForm
@@ -24,16 +21,17 @@ defmodule Systems.Campaign.ContentPage do
 
   alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent, TabbarFooter}
   alias Systems.Campaign.MonitorView
-  alias Link.Survey.Form, as: ToolForm
   alias Systems.Pool.CampaignSubmissionView, as: SubmissionForm
   import Core.ImageCatalog, only: [image_catalog: 0]
 
   alias Systems.{
-    Campaign
+    Campaign,
+    Promotion,
+    Assignment
   }
 
   data(campaign_id, :any)
-  data(tool_id, :any)
+  data(assignment_id, :any)
   data(promotion_id, :any)
   data(submission_id, :any)
   data(submitted?, :any)
@@ -54,6 +52,7 @@ defmodule Systems.Campaign.ContentPage do
   @impl true
   def mount(%{"id" => id, "tab" => initial_tab}, _session, socket) do
     preload = Campaign.Model.preload_graph(:full)
+
     %{
       id: campaign_id,
       promotion: %{
@@ -61,29 +60,29 @@ defmodule Systems.Campaign.ContentPage do
           status: status
         } = submission
       } = promotion,
-      promotable_assignment: %{
-        assignable_survey_tool: tool
-      }
+      promotable_assignment: assignment
     } = Campaign.Context.get!(id, preload)
+
 
     submitted? = status != :idle
     validate? = submitted?
 
-    tool_form_ready? = Tools.ready?(tool)
+    assignment_form_ready? = Assignment.Context.ready?(assignment)
+
     promotion_form_ready? = Promotion.Context.ready?(promotion)
-    preview_path = Routes.live_path(socket, Systems.Promotion.LandingPage, promotion.id, preview: true)
+    preview_path = Routes.live_path(socket, Promotion.LandingPage, promotion.id, preview: true)
 
     {
       :ok,
       socket
       |> assign(
         campaign_id: campaign_id,
-        tool_id: tool.id,
+        assignment_id: assignment.id,
         promotion_id: promotion.id,
         submission_id: submission.id,
         submitted?: submitted?,
         validate?: validate?,
-        tool_form_ready?: tool_form_ready?,
+        assignment_form_ready?: assignment_form_ready?,
         promotion_form_ready?: promotion_form_ready?,
         preview_path: preview_path,
         initial_tab: initial_tab,
@@ -132,14 +131,13 @@ defmodule Systems.Campaign.ContentPage do
   defp create_tabs(
          %{
            assigns: %{
-             current_user: user,
              uri_origin: uri_origin,
              campaign_id: campaign_id,
-             tool_id: tool_id,
+             assignment_id: assignment_id,
              promotion_id: promotion_id,
              submission_id: submission_id,
              validate?: validate?,
-             tool_form_ready?: tool_form_ready?,
+             assignment_form_ready?: assignment_form_ready?,
              promotion_form_ready?: promotion_form_ready?
            }
          } = socket
@@ -160,15 +158,14 @@ defmodule Systems.Campaign.ContentPage do
         }
       },
       %{
-        id: :tool_form,
-        ready?: !validate? || tool_form_ready?,
-        title: dgettext("link-survey", "tabbar.item.survey"),
-        forward_title: dgettext("link-survey", "tabbar.item.survey.forward"),
+        id: :assignment_form,
+        ready?: !validate? || assignment_form_ready?,
+        title: dgettext("link-survey", "tabbar.item.assignment"),
+        forward_title: dgettext("link-survey", "tabbar.item.assignment.forward"),
         type: :fullpage,
-        component: ToolForm,
+        component: Assignment.AssignmentForm,
         props: %{
-          user: user,
-          entity_id: tool_id,
+          entity_id: assignment_id,
           uri_origin: uri_origin,
           validate?: validate?
         }
@@ -219,7 +216,7 @@ defmodule Systems.Campaign.ContentPage do
 
   @impl true
   def handle_event("reset_focus", _, socket) do
-    send_update(ToolForm, id: :tool_form, focus: "")
+    send_update(Assignment.AssignmentForm, id: :assignment_form, claim_focus: nil)
     send_update(PromotionForm, id: :promotion_form, focus: "")
     {:noreply, socket}
   end
@@ -246,11 +243,11 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   @impl true
-  def handle_event("submit", _params, %{assigns: %{submission_id: submission_id}} = socket) do
-    submission = Submissions.get!(submission_id)
+  def handle_event("submit", _params, %{assigns: %{campaign_id: campaign_id, submission_id: submission_id}} = socket) do
 
     socket =
-      if Nodes.parent_ready?(submission.content_node) do
+      if Campaign.Context.ready?(campaign_id) do
+        submission = Submissions.get!(submission_id)
         {:ok, _submission} = Submissions.update(submission, %{status: :submitted})
 
         title = dgettext("eyra-submission", "submit.success.title")
@@ -306,13 +303,14 @@ defmodule Systems.Campaign.ContentPage do
     {:noreply, socket |> assign(dialog: nil)}
   end
 
-  def handle_info({:claim_focus, :tool_form}, socket) do
-    send_update(PromotionForm, id: :promotion_form, focus: "")
+  def handle_info({:claim_focus, :promotion_form}, socket) do
+    send_update(Assignment.AssignmentForm, id: :assignment_form, claim_focus: :promotion_form)
     {:noreply, socket}
   end
 
-  def handle_info({:claim_focus, :promotion_form}, socket) do
-    send_update(ToolForm, id: :tool_form, focus: "")
+  def handle_info({:claim_focus, form}, socket) do
+    send_update(PromotionForm, id: :promotion_form, focus: "")
+    send_update(Assignment.AssignmentForm, id: :assignment_form, claim_focus: form)
     {:noreply, socket}
   end
 
@@ -320,6 +318,10 @@ defmodule Systems.Campaign.ContentPage do
     send_update(PromotionForm, id: :promotion_form, image_id: image_id)
     {:noreply, socket}
   end
+
+  def handle_info(%{id: :experiment_form, ready?: ready?}, socket), do: handle_info(%{id: :assignment_form, ready?: ready?}, socket)
+  def handle_info(%{id: :ethical_form, ready?: ready?}, socket), do: handle_info(%{id: :assignment_form, ready?: ready?}, socket)
+  def handle_info(%{id: :tool_form, ready?: ready?}, socket), do: handle_info(%{id: :assignment_form, ready?: ready?}, socket)
 
   def handle_info(%{id: form, ready?: ready?}, socket) do
     ready_key = String.to_atom("#{form}_ready?")
@@ -506,36 +508,36 @@ defmodule Systems.Campaign.ContentPage do
   defp show_dialog?(_), do: true
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <Workspace
-      title={{ dgettext("link-survey", "content.title") }}
-      menus={{ @menus }}
+      title={dgettext("link-survey", "content.title")}
+      menus={@menus}
     >
-      <div id={{ :survey_content }} phx-hook="ViewportResize" phx-click="reset_focus">
+      <div id={:survey_content} phx-hook="ViewportResize" phx-click="reset_focus">
         <div x-data="{ image_picker: false, active_tab: 0, dropdown: false }">
           <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="image_picker">
             <div class="flex flex-row items-center justify-center w-full h-full">
-              <div class="{{margin_x(@breakpoint)}} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg" x-on:click.away="image_picker = false, $parent.$parent.overlay = false">
+              <div class={"#{margin_x(@breakpoint)} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg"} x-on:click.away="image_picker = false, $parent.$parent.overlay = false">
                 <ImageCatalogPicker
-                  id={{:image_picker}}
-                  conn={{@socket}}
-                  viewport={{@viewport}}
-                  breakpoint={{@breakpoint}}
-                  static_path={{&Routes.static_path/2}}
-                  initial_query={{initial_image_query(assigns)}}
-                  image_catalog={{image_catalog()}}
+                  id={:image_picker}
+                  conn={@socket}
+                  viewport={@viewport}
+                  breakpoint={@breakpoint}
+                  static_path={&Routes.static_path/2}
+                  initial_query={initial_image_query(assigns)}
+                  image_catalog={image_catalog()}
                 />
               </div>
             </div>
           </div>
-          <div :if={{ show_dialog?(@dialog) }} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
+          <div :if={show_dialog?(@dialog)} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
             <div class="flex flex-row items-center justify-center w-full h-full">
-              <Dialog vm={{ @dialog }} />
+              <PlainDialog vm={@dialog} />
             </div>
           </div>
-          <TabbarArea tabs={{@tabs}}>
-            <ActionBar right_bar_buttons={{ create_actions(assigns) }} more_buttons={{ create_more_actions(assigns) }}>
-              <Tabbar vm={{ %{initial_tab: @initial_tab, size: tabbar_size(@breakpoint)} }} />
+          <TabbarArea tabs={@tabs}>
+            <ActionBar right_bar_buttons={create_actions(assigns)} more_buttons={create_more_actions(assigns)}>
+              <Tabbar vm={%{initial_tab: @initial_tab, size: tabbar_size(@breakpoint)}} />
             </ActionBar>
             <TabbarContent/>
             <TabbarFooter/>

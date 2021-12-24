@@ -13,7 +13,9 @@ defmodule Systems.Assignment.Context do
 
   alias Systems.{
     Assignment,
-    Crew
+    Crew,
+    Survey,
+    Lab
   }
 
   @min_expiration_timeout 30
@@ -30,41 +32,57 @@ defmodule Systems.Assignment.Context do
   end
 
   def get_by_assignable(assignable, preload \\ [])
-  def get_by_assignable(%Core.Survey.Tool{id: id}, preload) do
-    from(a in Assignment.Model, where: a.assignable_survey_tool_id == ^id, preload: ^preload)
+  def get_by_assignable(%Assignment.ExperimentModel{id: id}, preload) do
+    from(a in Assignment.Model, where: a.assignable_experiment_id == ^id, preload: ^preload)
     |> Repo.one()
   end
 
-  def get_by_assignable(%Core.DataDonation.Tool{id: id}, preload) do
-    from(a in Assignment.Model, where: a.assignable_data_donation_tool_id == ^id, preload: ^preload)
-    |> Repo.one()
-  end
+  def create(%{} = attrs, crew, experiment, auth_node) do
 
-  def get_by_assignable(%Core.Lab.Tool{id: id}, preload) do
-    from(a in Assignment.Model, where: a.assignable_lab_tool_id == ^id, preload: ^preload)
-    |> Repo.one()
-  end
-
-  def create(%{} = attrs, crew, tool, auth_node) do
-
-    assignable_field = assignable_field(tool)
+    assignable_field = assignable_field(experiment)
 
     %Assignment.Model{}
     |> Assignment.Model.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:crew, crew)
-    |> Ecto.Changeset.put_assoc(assignable_field, tool)
+    |> Ecto.Changeset.put_assoc(assignable_field, experiment)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Repo.insert()
   end
 
-  def copy(%Assignment.Model{} = assignment, %Core.Survey.Tool{} = tool, auth_node) do
+  def copy(%Assignment.Model{} = assignment, %Assignment.ExperimentModel{} = experiment, auth_node) do
     # don't copy crew, just create a new one
     {:ok, crew} = Crew.Context.create(auth_node)
 
     %Assignment.Model{}
     |> Assignment.Model.changeset(Map.from_struct(assignment))
     |> Ecto.Changeset.put_assoc(:crew, crew)
-    |> Ecto.Changeset.put_assoc(:assignable_survey_tool, tool)
+    |> Ecto.Changeset.put_assoc(:assignable_experiment, experiment)
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Repo.insert!()
+  end
+
+  def create_experiment(%{} = attrs, tool, auth_node) do
+    tool_field = Assignment.ExperimentModel.tool_field(tool)
+
+    %Assignment.ExperimentModel{}
+    |> Assignment.ExperimentModel.changeset(:create, attrs)
+    |> Ecto.Changeset.put_assoc(tool_field, tool)
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Repo.insert()
+  end
+
+  def copy_experiment(%Assignment.ExperimentModel{} = experiment, %Survey.ToolModel{} = tool, auth_node) do
+    %Assignment.ExperimentModel{}
+    |> Assignment.ExperimentModel.changeset(:copy, Map.from_struct(experiment))
+    |> Ecto.Changeset.put_assoc(:survey_tool, tool)
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Repo.insert!()
+  end
+
+  def copy_experiment(%Assignment.ExperimentModel{} = experiment, %Lab.ToolModel{} = tool, auth_node) do
+    %Assignment.ExperimentModel{}
+    |> Assignment.ExperimentModel.changeset(:copy, Map.from_struct(experiment))
+    |> Ecto.Changeset.put_assoc(:lab_tool, tool)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Repo.insert!()
   end
@@ -85,10 +103,6 @@ defmodule Systems.Assignment.Context do
         {:ok, owner}
     end
   end
-
-  defp assignable_field(%Core.Survey.Tool{}), do: :assignable_survey_tool
-  defp assignable_field(%Core.Lab.Tool{}), do: :assignable_lab_tool
-  defp assignable_field(%Core.DataDonation.Tool{}), do: :assignable_data_donation_tool
 
   def expiration_timestamp(assignment) do
     assignable = Assignment.Model.assignable(assignment)
@@ -165,12 +179,9 @@ defmodule Systems.Assignment.Context do
     :one_task
   end
 
-  def mark_expired_debug(%{assignable_survey_tool: %{duration: duration}} = assignment, force) do
+  def mark_expired_debug(%{assignable_experiment: %{duration: duration}} = assignment, force) do
     mark_expired_debug(assignment, duration, force)
   end
-
-  def mark_expired_debug(%{assignable_lab_tool: tool}, _) when tool != nil, do: :noop
-  def mark_expired_debug(%{assignable_donatin_tool: tool}, _) when tool != nil, do: :noop
 
   def mark_expired_debug(%{crew_id: crew_id}, duration, force) do
     expiration_timeout = max(@min_expiration_timeout, duration)
@@ -229,6 +240,43 @@ defmodule Systems.Assignment.Context do
       where: c.id == ^crew_id
     )
     |> Repo.one()
+  end
+
+  # Assignable
+
+  def ready?(%{assignable_experiment: experiment}) do
+    ready?(experiment)
+  end
+
+  def ready?(%Assignment.ExperimentModel{} = experiment) do
+    changeset =
+      %Assignment.ExperimentModel{}
+      |> Assignment.ExperimentModel.operational_changeset(Map.from_struct(experiment))
+
+    changeset.valid? && tool_ready?(experiment)
+  end
+
+  def tool_ready?(%{survey_tool: tool})when not is_nil(tool), do: Survey.Context.ready?(tool)
+  def tool_ready?(%{lab_tool: tool})when not is_nil(tool), do: Lab.Context.ready?(tool)
+
+  defp assignable_field(%Assignment.ExperimentModel{}), do: :assignable_experiment
+
+  # Experiment
+
+  def get_experiment!(id, preload \\ []) do
+    from(a in Assignment.ExperimentModel, preload: ^preload)
+    |> Repo.get!(id)
+  end
+
+  def get_experiment_by_tool!(%{id: tool_id} = tool, preload \\ []) do
+    tool_id_field = Assignment.ExperimentModel.tool_id_field(tool)
+    where = [{tool_id_field, tool_id}]
+
+    from(a in Assignment.ExperimentModel,
+      where: ^where,
+      preload: ^preload
+    )
+    |> Repo.one!()
   end
 
 end

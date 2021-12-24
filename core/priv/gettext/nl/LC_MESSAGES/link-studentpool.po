@@ -37,12 +37,12 @@ msgid "students.empty.title"
 msgstr "Hier vind je straks alle geregistreerde studenten."
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:73
+#: systems/pool/views/campaigns_view.ex:74
 msgid "campaigns.empty.description"
 msgstr "Hier vind je straks de campagnes die onderzoekers in jouw pool beschikbaar willen stellen, om deelnemers te werven voor hun studie. Vervolgens kun je deze campagnes beschikbaar stellen in de marktplaats van de deelnemers die daarvoor in aanmerking komen."
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:72
+#: systems/pool/views/campaigns_view.ex:73
 msgid "campaigns.empty.title"
 msgstr "Campagnes in jouw pool"
 
@@ -57,22 +57,22 @@ msgid "student.tag.incomplete"
 msgstr "Onvolledig"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:65
+#: systems/pool/views/campaigns_view.ex:66
 msgid "accepted.title"
 msgstr "Gepubliceerd"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:103
+#: systems/pool/views/campaigns_view.ex:104
 msgid "status.submitted.label"
 msgstr "In afwachting"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:59
+#: systems/pool/views/campaigns_view.ex:60
 msgid "submitted.title"
 msgstr "Ingediend door onderzoekers"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:139
+#: systems/pool/views/campaigns_view.ex:140
 msgid "spots.available"
 msgstr "%{open} van de %{total} plaatsen beschikbaar"
 
@@ -82,21 +82,21 @@ msgid "submission.title"
 msgstr "Campagne"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:121
+#: systems/pool/views/campaigns_view.ex:122
 msgid "status.accepted.closed.label"
 msgstr "Afgerond"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:115
+#: systems/pool/views/campaigns_view.ex:116
 msgid "status.accepted.online.label"
 msgstr "Online"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:109
+#: systems/pool/views/campaigns_view.ex:110
 msgid "status.accepted.scheduled.label"
 msgstr "Ingepland"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:135
+#: systems/pool/views/campaigns_view.ex:136
 msgid "sample.size"
 msgstr "%{size} plaatsen beschikbaar"

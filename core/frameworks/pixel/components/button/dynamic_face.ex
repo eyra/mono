@@ -20,8 +20,8 @@ defmodule Frameworks.Pixel.Button.DynamicFace do
   defp face(_), do: Primary
 
   def render(assigns) do
-    ~H"""
-      <Dynamic component={{ face(@vm) }} props={{ %{vm: @vm } }} />
+    ~F"""
+      <Dynamic component={face(@vm)} props={%{vm: @vm }} />
     """
   end
 end

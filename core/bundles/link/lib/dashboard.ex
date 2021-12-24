@@ -43,27 +43,27 @@ defmodule Link.Dashboard do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <Workspace
-        title={{ dgettext("link-dashboard", "title") }}
-        menus={{ @menus }}
+        title={dgettext("link-dashboard", "title")}
+        menus={@menus}
       >
         <ContentArea>
-          <MarginY id={{:page_top}} />
-          <div :if={{ @next_best_action }} class="mb-6 md:mb-10">
-            <NextAction.HighlightView vm={{ @next_best_action }}/>
+          <MarginY id={:page_top} />
+          <div :if={@next_best_action} class="mb-6 md:mb-10">
+            <NextAction.HighlightView vm={@next_best_action}/>
           </div>
-          <Case value={{ Enum.count(@content_items) > 0 }} >
+          <Case value={Enum.count(@content_items) > 0} >
             <True>
               <Title2>
-                {{ dgettext("link-dashboard", "recent-items.title") }}
+                {dgettext("link-dashboard", "recent-items.title")}
               </Title2>
-              <ContentList items={{@content_items}} />
+              <ContentList items={@content_items} />
             </True>
             <False>
               <Empty
-                title={{ dgettext("eyra-dashboard", "empty.title") }}
-                body={{ dgettext("eyra-dashboard", "empty.description") }}
+                title={dgettext("eyra-dashboard", "empty.title")}
+                body={dgettext("eyra-dashboard", "empty.description")}
                 illustration="items"
               />
             </False>

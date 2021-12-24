@@ -12,15 +12,15 @@ defmodule CoreWeb.UI.Container.RestrictedWidthArea do
   slot(default, required: true)
 
   def render(assigns) do
-    ~H"""
-    <FormArea :if={{ @type === :form }}>
-      <slot />
+    ~F"""
+    <FormArea :if={@type === :form}>
+      <#slot />
     </FormArea>
-    <SheetArea :if={{ @type === :sheet }}>
-      <slot />
+    <SheetArea :if={@type === :sheet}>
+      <#slot />
     </SheetArea>
-    <FullpageArea :if={{ @type === :fullpage }}>
-      <slot />
+    <FullpageArea :if={@type === :fullpage}>
+      <#slot />
     </FullpageArea>
     """
   end

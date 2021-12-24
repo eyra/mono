@@ -218,7 +218,6 @@ Core.Repo.transaction(
           description: ""
         })
 
-      tool_content_node = Core.Factories.insert!(:content_node)
       {tool_type, campaign_data} = Map.pop!(campaign_data, :type)
       {tool_data, campaign_data} = Map.pop!(campaign_data, tool_type)
       {promotion_data, campaign_data} = Map.pop!(campaign_data, :promotion)
@@ -253,7 +252,7 @@ Core.Repo.transaction(
         participant_count = :random.uniform(tool.subject_count)
 
         for student <- Enum.take_random(students, participant_count) do
-          Core.Survey.Tools.apply_participant(tool, student)
+          Systems.Survey.Context.apply_participant(tool, student)
         end
       end
 

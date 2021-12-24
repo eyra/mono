@@ -11,9 +11,9 @@ defmodule Frameworks.Pixel.Button.Action.Href do
   slot(default, required: true)
 
   def render(assigns) do
-    ~H"""
-    <a href={{href(@vm)}}>
-      <slot />
+    ~F"""
+    <a href={href(@vm)}>
+      <#slot />
     </a>
     """
   end

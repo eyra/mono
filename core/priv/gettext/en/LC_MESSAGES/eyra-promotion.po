@@ -78,7 +78,7 @@ msgid "expectations.label"
 msgstr "Describe what is expected of participants"
 
 #, elixir-format
-#: systems/campaign/model.ex:101 systems/promotion/landing_page.ex:179
+#: systems/campaign/model.ex:98 systems/promotion/landing_page.ex:179
 msgid "expectations.public.label"
 msgstr "What to expect?"
 
@@ -113,7 +113,7 @@ msgid "search.different.image.button"
 msgstr "Change cover"
 
 #, elixir-format
-#: systems/campaign/model.ex:124 systems/promotion/form_view.ex:153
+#: systems/campaign/model.ex:113 systems/promotion/form_view.ex:153
 msgid "subtitle.label"
 msgstr "Can you explain in one line what your study is about?"
 

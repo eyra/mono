@@ -12,8 +12,8 @@ defmodule Frameworks.Pixel.Dynamic do
       |> Map.get(:props)
       |> Map.merge(%{__surface__: %{groups: %{__default__: %{binding: false, size: 0}}}})
 
-    ~H"""
-    {{ live_component(@socket, @component, props) }}
+    ~F"""
+    {live_component(@socket, @component, props)}
     """
   end
 end

@@ -6,9 +6,9 @@ defmodule CoreWeb.UI.ContentList do
   prop(items, :list, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="flex flex-col gap-10">
-      <ContentListItem :for={{item <- @items}} vm={{item}} />
+      <ContentListItem :for={item <- @items} vm={item} />
     </div>
     """
   end

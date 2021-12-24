@@ -13,18 +13,18 @@ defmodule Frameworks.Pixel.Button.Face.Forward do
   )
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="pt-1 pb-1 active:pt-5px active:pb-3px rounded bg-opacity-0 focus:outline-none">
       <div class="flex items-center">
         <div class="focus:outline-none">
           <div class="flex flex-col justify-center h-full items-center">
-            <div class="flex-wrap text-button font-button {{text_color(@vm)}}">
-              {{ label(@vm) }}
+            <div class={"flex-wrap text-button font-button #{text_color(@vm)}"}>
+              {label(@vm)}
             </div>
           </div>
         </div>
         <div>
-            <img class="ml-4 -mt-2px" src={{icon(@vm)}} alt={{label(@vm)}} />
+            <img class="ml-4 -mt-2px" src={icon(@vm)} alt={label(@vm)} />
         </div>
       </div>
     </div>

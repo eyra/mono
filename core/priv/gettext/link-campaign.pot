@@ -36,6 +36,16 @@ msgid "reject.note"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:234
-msgid "back.to.campaign.button"
+#: systems/campaign/overview_page.ex:147
+msgid "create.campaign.dialog.ok.button"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/overview_page.ex:145
+msgid "create.campaign.dialog.text"
+msgstr ""
+
+#, elixir-format
+#: systems/campaign/overview_page.ex:144
+msgid "create.campaign.dialog.title"
 msgstr ""

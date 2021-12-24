@@ -10,10 +10,10 @@ defmodule CoreWeb.UI.Container.SheetArea do
   slot(default, required: true)
 
   def render(assigns) do
-    ~H"""
-    <div class="flex justify-center {{ @class }}">
+    ~F"""
+    <div class={"flex justify-center #{@class}"}>
       <div class="flex-grow sm:max-w-sheet">
-        <slot />
+        <#slot />
       </div>
     </div>
     """

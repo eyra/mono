@@ -10,9 +10,9 @@ defmodule Frameworks.Pixel.Form.UrlInput do
   slot(default)
 
   def render(assigns) do
-    ~H"""
-    <Input  field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}} type="url" >
-      <slot />
+    ~F"""
+    <Input  field={@field} label_text={@label_text} label_color={@label_color} background={@background} type="url" >
+      <#slot />
     </Input>
     """
   end

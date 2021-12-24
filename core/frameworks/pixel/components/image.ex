@@ -19,27 +19,27 @@ defmodule Frameworks.Pixel.Image do
         32
       end
 
-    ~H"""
-    <div id={{ @image.url }}
+    ~F"""
+    <div id={@image.url}
       class="blurhash-wrapper overflow-hidden w-full h-full relative"
       x-data="blurHash()"
       x-init="$nextTick(()=>render())"
-      :if={{@image}}
+      :if={@image}
       >
       <canvas
         x-show="showBlurHash()"
         x-transition:leave="transition ease-in-out duration-500"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
-        width={{canvas_width}}
-        height={{canvas_height}}
-        class={{"absolute", "z-10", "object-cover", "w-full", "h-full", @corners}}
-        data-blurhash={{@image.blur_hash}}
+        width={canvas_width}
+        height={canvas_height}
+        class={"absolute", "z-10", "object-cover", "w-full", "h-full", @corners}
+        data-blurhash={@image.blur_hash}
         />
       <img
-        class={{"object-cover", "w-full", "h-full", @corners}}
-        src={{ @image.url }}
-        srcset={{@image.srcset}}
+        class={"object-cover", "w-full", "h-full", @corners}
+        src={@image.url}
+        srcset={@image.srcset}
         loading="lazy"
         x-on:load="hideBlurHash()"
         alt=""

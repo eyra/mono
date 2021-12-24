@@ -9,9 +9,9 @@ defmodule Frameworks.Pixel.Text.SubHead do
   prop(color, :css_class, default: "text-grey2")
 
   def render(assigns) do
-    ~H"""
-    <div class="text-intro lg:text-subhead font-subhead tracking-wider {{@color}}">
-      <slot />
+    ~F"""
+    <div class={"text-intro lg:text-subhead font-subhead tracking-wider #{@color}"}>
+      <#slot />
     </div>
     """
   end

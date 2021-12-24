@@ -7,9 +7,9 @@ defmodule CoreWeb.UI.Navigation.ActionMenu do
   prop(buttons, :list, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="flex flex-col justify-left -gap-1 p-6 rounded bg-white shadow-2xl w-action_menu-width">
-      <DynamicButton :for={{ button <- @buttons }} vm={{ button }} />
+      <DynamicButton :for={button <- @buttons} vm={button} />
     </div>
     """
   end

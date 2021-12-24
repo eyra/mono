@@ -11,9 +11,9 @@ defmodule Frameworks.Pixel.Button.Action.Submit do
   slot(default, required: true)
 
   def render(assigns) do
-    ~H"""
-    <button @click={{code(@vm)}} type="submit" class="cursor-pointer focus:outline-none">
-      <slot />
+    ~F"""
+    <button @click={code(@vm)} type="submit" class="cursor-pointer focus:outline-none">
+      <#slot />
     </button>
     """
   end

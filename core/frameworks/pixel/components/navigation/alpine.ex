@@ -6,11 +6,11 @@ defmodule Frameworks.Pixel.Navigation.Alpine do
   slot(default, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <div class="focus:outline-none cursor-pointer"
-        @click={{@click_handler}}
+        @click={@click_handler}
       >
-        <slot />
+        <#slot />
       </div>
     """
   end

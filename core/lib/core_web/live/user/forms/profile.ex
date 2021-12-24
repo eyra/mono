@@ -90,27 +90,27 @@ defmodule CoreWeb.User.Forms.Profile do
 
   @impl true
   def render(assigns) do
-    ~H"""
+    ~F"""
       <ContentArea>
-        <MarginY id={{:page_top}} />
+        <MarginY id={:page_top} />
         <FormArea>
-          <Title2>{{dgettext "eyra-account", "profile.title"}}</Title2>
-          <Form id="main_form" changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
+          <Title2>{dgettext "eyra-account", "profile.title"}</Title2>
+          <Form id="main_form" changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
             <PhotoInput
-              conn={{@socket}}
-              static_path={{&Routes.static_path/2}}
-              photo_url={{@entity.photo_url}}
-              uploads={{@uploads}}
-              primary_button_text={{dgettext("eyra-account", "choose.profile.photo.file")}}
-              secondary_button_text={{dgettext("eyra-account", "choose.other.profile.photo.file")}}
+              conn={@socket}
+              static_path={&Routes.static_path/2}
+              photo_url={@entity.photo_url}
+              uploads={@uploads}
+              primary_button_text={dgettext("eyra-account", "choose.profile.photo.file")}
+              secondary_button_text={dgettext("eyra-account", "choose.other.profile.photo.file")}
             />
             <Spacing value="M" />
 
-            <TextInput field={{:fullname}} label_text={{dgettext("eyra-account", "fullname.label")}} />
-            <TextInput field={{:displayname}} label_text={{dgettext("eyra-account", "displayname.label")}} />
+            <TextInput field={:fullname} label_text={dgettext("eyra-account", "fullname.label")} />
+            <TextInput field={:displayname} label_text={dgettext("eyra-account", "displayname.label")} />
 
-            <div :if={{@user.researcher}} >
-              <TextInput field={{:title}} label_text={{dgettext("eyra-account", "professionaltitle.label")}} />
+            <div :if={@user.researcher} >
+              <TextInput field={:title} label_text={dgettext("eyra-account", "professionaltitle.label")} />
             </div>
           </Form>
         </FormArea>

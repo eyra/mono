@@ -12,20 +12,20 @@ defmodule Frameworks.Pixel.Card.PrimaryCTA do
   prop(button_bg_color, :css_class, default: "bg-white")
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <Card bg_color="bg-grey1" id="PrimaryCTA">
-      <template slot="title">
+      <#template slot="title">
         <div class="text-white text-title5 font-title5 lg:text-title3 lg:font-title3">
-            {{ @title }}
+            {@title}
         </div>
-      </template>
+      </#template>
       <div class="mt-6 lg:mt-8">
           <div class="flex items-center">
               <div class="flex-wrap">
-                  <LiveRedirect to={{ @to }} >
-                      <div class={{"flex", "items-center", "active:opacity-80", "focus:outline-none", "pl-4", "pr-4", "h-48px", "font-button", "text-button", "text-primary", "tracker-widest", "rounded",
-                                  @button_bg_color}}>
-                          <div>{{ @button_label }}</div>
+                  <LiveRedirect to={@to} >
+                      <div class={"flex", "items-center", "active:opacity-80", "focus:outline-none", "pl-4", "pr-4", "h-48px", "font-button", "text-button", "text-primary", "tracker-widest", "rounded",
+                                  @button_bg_color}>
+                          <div>{@button_label}</div>
                       </div>
                   </LiveRedirect>
               </div>

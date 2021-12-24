@@ -5,7 +5,7 @@ defmodule Frameworks.Pixel.Line do
   use Surface.Component
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="bg-grey4 h-px"></div>
     """
   end

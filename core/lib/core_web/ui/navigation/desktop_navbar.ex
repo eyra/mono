@@ -10,9 +10,9 @@ defmodule CoreWeb.UI.Navigation.DesktopNavbar do
   prop(path_provider, :any, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="hidden md:block pr-4" >
-      <Navbar items={{@items}} path_provider={{@path_provider}}/>
+      <Navbar items={@items} path_provider={@path_provider}/>
     </div>
     """
   end

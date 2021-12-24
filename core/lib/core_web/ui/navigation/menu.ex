@@ -23,24 +23,24 @@ defmodule CoreWeb.UI.Navigation.Menu do
   defp align(:wide), do: "items-left"
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="h-full">
-      <div class="flex flex-col h-full {{align(@size)}}" >
-        <div class="flex-wrap" :if={{ has_home?(@items) }} >
+      <div class={"flex flex-col h-full #{align(@size)}"} >
+        <div class="flex-wrap" :if={has_home?(@items)} >
            <div class="mb-8">
-              <MenuItem vm={{ @items.home }} path_provider={{@path_provider}} size={{@size}} />
+              <MenuItem vm={@items.home} path_provider={@path_provider} size={@size} />
             </div>
         </div>
         <div class="flex-wrap">
-          <div :for={{ item <- top(@items) }} class="mb-2">
-            <MenuItem vm={{item}} path_provider={{@path_provider}} size={{@size}} />
+          <div :for={item <- top(@items)} class="mb-2">
+            <MenuItem vm={item} path_provider={@path_provider} size={@size} />
           </div>
         </div>
         <div class="flex-grow">
         </div>
         <div class="flex-wrap">
-          <div :for={{ item <- bottom(@items) }} class="mb-2" >
-            <MenuItem vm={{item}} path_provider={{@path_provider}} size={{@size}} />
+          <div :for={item <- bottom(@items)} class="mb-2" >
+            <MenuItem vm={item} path_provider={@path_provider} size={@size} />
           </div>
         </div>
       </div>

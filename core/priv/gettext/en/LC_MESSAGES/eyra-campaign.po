@@ -22,11 +22,11 @@ msgid "campaign.subject.title"
 msgstr "My contributions"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:113
+#: systems/campaign/overview_page.ex:119
 msgid "share.dialog.content"
 msgstr "campaign"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:114
+#: systems/campaign/overview_page.ex:120
 msgid "share.dialog.group"
 msgstr "researchers"

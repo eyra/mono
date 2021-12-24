@@ -115,22 +115,22 @@ defmodule Systems.Pool.StudentsView do
   def get_photo_url(photo_url, _), do: photo_url
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <ContentArea>
-        <MarginY id={{:page_top}} />
-        <Empty :if={{ @students == [] }}
-          title={{ dgettext("link-studentpool", "students.empty.title") }}
-          body={{ dgettext("link-studentpool", "students.empty.description") }}
+        <MarginY id={:page_top} />
+        <Empty :if={@students == []}
+          title={dgettext("link-studentpool", "students.empty.title")}
+          body={dgettext("link-studentpool", "students.empty.description")}
           illustration="members"
         />
-        <div :if={{ not Enum.empty?(@students) }}>
+        <div :if={not Enum.empty?(@students)}>
           <div class="flex flex-row gap-3 items-center">
             <div class="font-label text-label">Filter:</div>
-            <Selector id={{:filters}} items={{ @filter_labels }} parent={{ %{type: __MODULE__, id: @id} }} />
+            <Selector id={:filters} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
           </div>
           <Spacing value="L" />
-          <Title2>{{ dgettext("link-studentpool", "tabbar.item.students") }}: <span class="text-primary">{{ Enum.count(@filtered_students) }}</span></Title2>
-          <ContentList items={{@filtered_students}} />
+          <Title2>{dgettext("link-studentpool", "tabbar.item.students")}: <span class="text-primary">{Enum.count(@filtered_students)}</span></Title2>
+          <ContentList items={@filtered_students} />
         </div>
       </ContentArea>
     """

@@ -12,57 +12,57 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:282 lib/core/pools/submission.ex:114
+#: bundles/link/lib/card.ex:282 lib/core/pools/submission.ex:112
 msgid "status.idle.label"
 msgstr "Concept"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:285 lib/core/pools/submission.ex:117
+#: bundles/link/lib/card.ex:285 lib/core/pools/submission.ex:115
 msgid "status.submitted.label"
 msgstr "Ingediend"
 
 #, elixir-format
-#: systems/campaign/model.ex:283
+#: systems/campaign/model.ex:262
 msgid "incomplete.forms.message"
 msgstr "Sommige verplichte velden zijn nog niet ingevuld"
 
 #, elixir-format
-#: systems/campaign/model.ex:281
+#: systems/campaign/model.ex:260
 msgid "ready.for.submission.message"
 msgstr "Alle verplichte velden zijn gevuld, je kunt deze campagne indienen"
 
 #, elixir-format
-#: systems/campaign/model.ex:287
+#: systems/campaign/model.ex:266
 msgid "waiting.for.coordinator.message"
 msgstr "Jouw campagne staat in de wachtrij om door de poolbeheerder in de marktplaats gezet te worden"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:265
+#: systems/campaign/content_page.ex:262
 msgid "submit.error.text"
 msgstr "Sommige verplichte velden in je campagne zijn niet ingevuld."
 
 #, elixir-format
-#: systems/campaign/content_page.ex:264
+#: systems/campaign/content_page.ex:261
 msgid "submit.error.title"
 msgstr "Maak je campagne compleet"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:257
+#: systems/campaign/content_page.ex:254
 msgid "submit.success.text"
 msgstr "Bedankt voor het indienen. De poolbeheerder zal je campagne bekijken en deze inplannen voor publicatie in de marktplaats."
 
 #, elixir-format
-#: systems/campaign/content_page.ex:256
+#: systems/campaign/content_page.ex:253
 msgid "submit.success.title"
 msgstr "Campagne ingediend"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:282
+#: systems/campaign/content_page.ex:279
 msgid "retract.success.text"
 msgstr "Jouw campagne is niet meer zichtbaar voor de poolbeheerder en in de marktplaats van de deelnemers."
 
 #, elixir-format
-#: systems/campaign/content_page.ex:281
+#: systems/campaign/content_page.ex:278
 msgid "retract.success.title"
 msgstr "Campagne offline"
 
@@ -137,26 +137,26 @@ msgid "schedule.title"
 msgstr "Planning"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:300 lib/core/pools/submission.ex:131
+#: bundles/link/lib/card.ex:300 lib/core/pools/submission.ex:129
 msgid "status.accepted.closed.label"
 msgstr "Afgerond"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:296 lib/core/pools/submission.ex:128
+#: bundles/link/lib/card.ex:296 lib/core/pools/submission.ex:126
 msgid "status.accepted.online.label"
 msgstr "Online"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:291 lib/core/pools/submission.ex:123
+#: bundles/link/lib/card.ex:291 lib/core/pools/submission.ex:121
 msgid "status.accepted.scheduled.label"
 msgstr "Ingepland"
 
 #, elixir-format
-#: systems/campaign/model.ex:301
+#: systems/campaign/model.ex:280
 msgid "accepted.closed.message"
 msgstr "Deze campagne is afgerond"
 
 #, elixir-format
-#: systems/campaign/model.ex:292
+#: systems/campaign/model.ex:271
 msgid "accepted.scheduled.message"
 msgstr "Deze campagne staat ingepland voor deelname "

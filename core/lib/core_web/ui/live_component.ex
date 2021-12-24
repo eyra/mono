@@ -10,11 +10,21 @@ defmodule CoreWeb.UI.LiveComponent do
       alias Frameworks.Pixel.Case.{Case, True, False}
       alias Frameworks.Pixel.Button.DynamicButton
       alias Frameworks.Pixel.Spacing
+      alias Frameworks.Pixel.Wrap
+      alias Frameworks.Pixel.Dynamic
 
       require Frameworks.Pixel.ViewModel
       import Frameworks.Pixel.ViewModel
 
       alias CoreWeb.Router.Helpers, as: Routes
+
+      def update_target(%{type: type, id: id}, message) when is_map(message) do
+        send_update(type, message |> Map.put(:id, id))
+      end
+
+      def update_target(pid, message) when is_pid(pid) do
+        send(pid, message)
+      end
     end
   end
 end

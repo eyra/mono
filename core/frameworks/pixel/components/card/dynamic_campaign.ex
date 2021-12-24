@@ -16,10 +16,10 @@ defmodule Frameworks.Pixel.Card.DynamicCampaign do
   defp campaign(_), do: SecondaryCampaign
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <Dynamic
-        component={{ campaign(@card) }}
-        props={{
+        component={campaign(@card)}
+        props={
           %{
             card: @card,
             conn: @conn,
@@ -27,7 +27,7 @@ defmodule Frameworks.Pixel.Card.DynamicCampaign do
             click_event_name: @click_event_name,
             click_event_data: @click_event_data,
           }
-        }}
+        }
       />
     """
   end
