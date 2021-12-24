@@ -82,18 +82,18 @@ defmodule CoreWeb.DataDonation.Uploader do
           of the package.
           </BodyLarge>
           <Spacing value="S" />
-          <BodyMedium><b>Note:</b> your data package stays at your device and will not be uploaded to a server.</BodyMedium>
+          <BodyMedium><b>Note:</b> your data package stays at your device and will not be uploaded to a server —> Note: your selected data package will not leave your device, only extracted data is sent to a server after your consent.</BodyMedium>
           <Spacing value="S" />
         </div>
 
         <div class="step3" hidden>
           <Spacing value="XL" />
           <Title3>Step 3: Extract data</Title3>
-          <BodyLarge>By clicking the button below, the data that is relevant for this research, will be extracted from your data package. During this process the data package will not leave your device and no data is stored on a server. The extracted data will be shown at step 4 for your consent. For your reference, the script that is used to extract the relevant data from your data package, is shown at the bottom of this page.</BodyLarge>
+          <BodyLarge>The script shown below will be run in your web browser to extract data from your data package. Make sure to use Chrome or Safari and close all other browser windows and tabs to save memory. During the extraction process your data will not leave your device. The extracted data will be presented to you at step 4. The extraction process may take a while.</BodyLarge>
           <Spacing value="S" />
           <div>
             <button class="pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded pr-4 pl-4 bg-primary" data-role="process-trigger">
-              Process data package
+            Extract data
             </button>
           </div>
         </div>
@@ -101,7 +101,7 @@ defmodule CoreWeb.DataDonation.Uploader do
         <div class="step4" hidden>
           <Spacing value="XL" />
           <Title3>Step 4: Donate extracted data</Title3>
-          <BodyLarge>The data that was extracted from your data package is shown below. Make sure, you check this data carefully before pressing the donate button below. If you have checked the extracted data and consent with donating this data for research, press the donate button.</BodyLarge>
+          <BodyLarge>The data extracted from your data package is presented below. Make sure to review your data carefully. If you consent to making this data available for the researcher, click “Donate extracted data”</BodyLarge>
           <Spacing value="S" />
           <Panel bg_color="bg-grey5">
             <template slot="title">
@@ -111,8 +111,8 @@ defmodule CoreWeb.DataDonation.Uploader do
             <BodyMedium><div class="extracted" /></BodyMedium>
           </Panel>
           <Spacing value="S" />
-          <BodyMedium>By pressing the donate button you agree to the following
-            <a href= "https://eyra.co" class="text-bodymedium font-body text-primary hover:text-grey1 underline focus:outline-none" >
+          <BodyMedium>By clicking the button below, you consent to the following
+            <a href= "https://drive.google.com/file/d/1BaIZq89o_qc2MEwFCb8piVmoUbiUltfq/view?usp=sharing" class="text-bodymedium font-body text-primary hover:text-grey1 underline focus:outline-none" >
               terms and conditions
             </a>.
           </BodyMedium>

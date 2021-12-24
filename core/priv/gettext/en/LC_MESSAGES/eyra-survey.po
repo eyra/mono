@@ -204,7 +204,7 @@ msgstr "Select different image"
 #, elixir-format
 #: lib/core_web/live/study/edit.ex:249
 msgid "expectations.label"
-msgstr "What can participants expect from the survey?"
+msgstr "What to expect?"
 
 #, elixir-format
 #: lib/core_web/live/study/edit.ex:287
@@ -245,13 +245,13 @@ msgstr "Subtitle"
 #: lib/core_web/live/promotion/public.ex:98
 #: lib/core_web/live/study/public.ex:125
 msgid "description.public.label"
-msgstr "Estimated duration"
+msgstr "About this study"
 
 #, elixir-format
 #: lib/core_web/live/promotion/public.ex:94
 #: lib/core_web/live/study/public.ex:121
 msgid "expectations.public.label"
-msgstr "What can participants expect from the survey?"
+msgstr "What to expect?"
 
 #, elixir-format
 #: lib/core/studies/study_public.ex:129
