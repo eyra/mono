@@ -82,7 +82,7 @@ defmodule CoreWeb.DataDonation.Uploader do
           of the package.
           </BodyLarge>
           <Spacing value="S" />
-          <BodyMedium><b>Note:</b> your data package stays at your device and will not be uploaded to a server —> Note: your selected data package will not leave your device, only extracted data is sent to a server after your consent.</BodyMedium>
+          <BodyMedium><b>Note:</b> your selected data package will not leave your device, only extracted data is sent to a server after your consent.</BodyMedium>
           <Spacing value="S" />
         </div>
 
