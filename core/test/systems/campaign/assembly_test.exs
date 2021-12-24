@@ -102,8 +102,8 @@ defmodule Systems.Campaign.AssemblyTest do
       assert crew_auth_node_parent_id == assignment_auth_node_id
       assert survey_tool_auth_node_parent_id == assignment_auth_node_id
 
-      assert banner_photo_url =~ "http://"
-      assert banner_title === researcher.displayname
+      assert banner_photo_url == researcher.profile.photo_url
+      assert banner_title == researcher.displayname
 
       # CAMPAIGN AUTHORS
 

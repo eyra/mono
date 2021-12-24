@@ -45,7 +45,7 @@ defmodule Systems.Campaign.Model do
   end
 
   def promotable(%{promotable_assignment: promotable}) when not is_nil(promotable), do: promotable
-  def promotable(%{id: id}), do: raise "no promotable object available for campaign #{id}"
+  def promotable(%{id: id}), do: raise("no promotable object available for campaign #{id}")
 
   def preload_graph(:full) do
     [
@@ -55,21 +55,21 @@ defmodule Systems.Campaign.Model do
       promotable_assignment: Assignment.Model.preload_graph(:full)
     ]
   end
+
   def preload_graph(_), do: []
 
   def author_as_string(%{authors: nil}), do: "?"
   def author_as_string(%{authors: []}), do: "?"
+
   def author_as_string(%{authors: [author | _]}) do
     author_as_string(author)
   end
 
   def author_as_string(%{displayname: displayname}), do: displayname
   def author_as_string(%{fullname: fullname}), do: fullname
-
 end
 
 defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
-
   import Frameworks.Utility.ViewModel
   import CoreWeb.Gettext
 
@@ -94,7 +94,12 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     |> vm(page, user, url_resolver)
   end
 
-  defp vm(%{id: id, promotion: %{expectations: expectations} = promotion, promotable: promotable}, Assignment.LandingPage = page, user, url_resolver) do
+  defp vm(
+         %{id: id, promotion: %{expectations: expectations} = promotion, promotable: promotable},
+         Assignment.LandingPage = page,
+         user,
+         url_resolver
+       ) do
     %{id: id}
     |> merge(Builder.view_model(promotion, page, user, url_resolver))
     |> merge(Builder.view_model(promotable, page, user, url_resolver))
@@ -102,8 +107,14 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     |> required(:text, expectations)
   end
 
-  defp vm(%{id: id, promotion: promotion, promotable: promotable}, Assignment.CallbackPage = page, user, url_resolver) do
-    %{state: state} = vm =
+  defp vm(
+         %{id: id, promotion: promotion, promotable: promotable},
+         Assignment.CallbackPage = page,
+         user,
+         url_resolver
+       ) do
+    %{state: state} =
+      vm =
       %{id: id}
       |> merge(Builder.view_model(promotion, page, user, url_resolver))
       |> merge(Builder.view_model(promotable, page, user, url_resolver))
@@ -116,7 +127,12 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     end
   end
 
-  defp vm(%{id: id, authors: authors, promotion: promotion, promotable: promotable}, Promotion.LandingPage = page, user, url_resolver) do
+  defp vm(
+         %{id: id, authors: authors, promotion: promotion, promotable: promotable},
+         Promotion.LandingPage = page,
+         user,
+         url_resolver
+       ) do
     %{id: id}
     |> merge(vm(authors, page))
     |> merge(Builder.view_model(promotion, page, user, url_resolver))
@@ -124,18 +140,23 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     |> required(:subtitle, dgettext("eyra-promotion", "subtitle.label"))
   end
 
-  defp vm(%{
-    id: id,
-    promotion: %{
-      title: title,
-      image_id: image_id,
-      submission: %{reward_value: reward_value}
-    },
-    promotable: %{
-      crew: crew
-    } = assignment
-  }, Link.Marketplace, user, url_resolver) do
-
+  defp vm(
+         %{
+           id: id,
+           promotion: %{
+             title: title,
+             image_id: image_id,
+             submission: %{reward_value: reward_value}
+           },
+           promotable:
+             %{
+               crew: crew
+             } = assignment
+         },
+         Link.Marketplace,
+         user,
+         url_resolver
+       ) do
     task =
       case Crew.Context.get_member!(crew, user) do
         nil -> nil
@@ -152,7 +173,9 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
           updated_at
           |> CoreWeb.UI.Timestamp.apply_timezone()
           |> CoreWeb.UI.Timestamp.humanize()
-        _ -> "?"
+
+        _ ->
+          "?"
       end
 
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
@@ -170,21 +193,27 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     }
   end
 
-  defp vm(%{
-    id: id,
-    updated_at: updated_at,
-    promotion: %{
-      title: title,
-      image_id: image_id,
-      content_node: promotion_content_node,
-      submission: submission
-    },
-    promotable: %{
-      assignable_survey_tool: %{
-        subject_count: target_subject_count
-      }
-    } = assignment
-  }, Link.Dashboard, _user, url_resolver) do
+  defp vm(
+         %{
+           id: id,
+           updated_at: updated_at,
+           promotion: %{
+             title: title,
+             image_id: image_id,
+             content_node: promotion_content_node,
+             submission: submission
+           },
+           promotable:
+             %{
+               assignable_survey_tool: %{
+                 subject_count: target_subject_count
+               }
+             } = assignment
+         },
+         Link.Dashboard,
+         _user,
+         url_resolver
+       ) do
     tag = Submission.get_tag(submission)
 
     target_subject_count =
@@ -222,10 +251,8 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   defp vm(authors, Promotion.LandingPage) when is_list(authors) do
     %{
       byline:
-        "#{dgettext("link-survey", "by.author.label")}: "
-        <> (authors
-          |> Enum.map(& &1.fullname)
-          |> Enum.join(", "))
+        "#{dgettext("link-survey", "by.author.label")}: " <>
+          Enum.map_join(authors, ", ", & &1.fullname)
     }
   end
 
@@ -241,25 +268,54 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     LiveView.push_redirect(socket, to: Routes.live_path(socket, Campaign.ContentPage, campaign_id))
   end
 
-  defp tag(nil), do: %{text: dgettext("eyra-marketplace", "assignment.status.expired.label"), type: :disabled}
+  defp tag(nil),
+    do: %{text: dgettext("eyra-marketplace", "assignment.status.expired.label"), type: :disabled}
+
   defp tag(%{status: status} = _task) do
     case status do
-      :pending -> %{text: dgettext("eyra-marketplace", "assignment.status.pending.label"), type: :warning}
-      :completed -> %{text: dgettext("eyra-marketplace", "assignment.status.completed.label"), type: :tertiary}
-      :accepted -> %{text: dgettext("eyra-marketplace", "assignment.status.accepted.label"), type: :success}
-      :rejected -> %{text: dgettext("eyra-marketplace", "assignment.status.rejected.label"), type: :delete}
-      _ -> %{text: "?", type: :disabled}
+      :pending ->
+        %{text: dgettext("eyra-marketplace", "assignment.status.pending.label"), type: :warning}
+
+      :completed ->
+        %{
+          text: dgettext("eyra-marketplace", "assignment.status.completed.label"),
+          type: :tertiary
+        }
+
+      :accepted ->
+        %{text: dgettext("eyra-marketplace", "assignment.status.accepted.label"), type: :success}
+
+      :rejected ->
+        %{text: dgettext("eyra-marketplace", "assignment.status.rejected.label"), type: :delete}
+
+      _ ->
+        %{text: "?", type: :disabled}
     end
   end
 
   defp subtitle(nil, _), do: "?"
+
   defp subtitle(%{status: status} = _task, reward_value) do
     case status do
-      :pending -> dgettext("eyra-marketplace", "assignment.status.pending.subtitle")
-      :completed -> dgettext("eyra-marketplace", "assignment.status.completed.subtitle")
-      :accepted -> dngettext("eyra-marketplace", "Awarded 1 credit", "Awarded %{count} credits", reward_value)
-      :rejected -> dgettext("eyra-marketplace", "assignment.status.rejected.subtitle")
-      _ ->  dgettext("eyra-marketplace", "reward.label", value: reward_value)
+      :pending ->
+        dgettext("eyra-marketplace", "assignment.status.pending.subtitle")
+
+      :completed ->
+        dgettext("eyra-marketplace", "assignment.status.completed.subtitle")
+
+      :accepted ->
+        dngettext(
+          "eyra-marketplace",
+          "Awarded 1 credit",
+          "Awarded %{count} credits",
+          reward_value
+        )
+
+      :rejected ->
+        dgettext("eyra-marketplace", "assignment.status.rejected.subtitle")
+
+      _ ->
+        dgettext("eyra-marketplace", "reward.label", value: reward_value)
     end
   end
 

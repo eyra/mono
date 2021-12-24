@@ -1,13 +1,11 @@
 defmodule Systems.Admin.Context do
   def compile(patterns) do
     combined =
-      patterns
-      |> Enum.map(fn pattern ->
+      Enum.map_join(patterns, "|", fn pattern ->
         pattern
         |> Regex.escape()
         |> String.replace("\\*", "[\\w_\.\-]+")
       end)
-      |> Enum.join("|")
 
     Regex.compile!("^#{combined}$")
   end

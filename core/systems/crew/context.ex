@@ -264,7 +264,7 @@ defmodule Systems.Crew.Context do
 
   def get_member!(crew, user) do
     from(m in Crew.MemberModel,
-      where: m.crew_id == ^crew.id and m.user_id == ^user.id and m.expired == false,
+      where: m.crew_id == ^crew.id and m.user_id == ^user.id and m.expired == false
     )
     |> Repo.one()
   end

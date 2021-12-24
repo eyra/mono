@@ -32,7 +32,7 @@ defmodule BankingProxy.MixProject do
       {:ranch, "~> 2.1"},
       # Dev and test deps
       {:mox, "~> 1.0", only: :test},
-      {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:exsync, "~> 0.2", only: :dev},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
     ]

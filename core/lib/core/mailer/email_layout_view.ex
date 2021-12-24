@@ -15,11 +15,9 @@ defmodule Core.Mailer.EmailLayoutView do
       end
 
     srcset =
-      urls_with_scales
-      |> Enum.map(fn {url, scale} ->
+      Enum.map_join(urls_with_scales, ",", fn {url, scale} ->
         "#{url} #{scale}"
       end)
-      |> Enum.join(",")
 
     {:safe, ~s(<img class="#{image_name}" src="#{url}" srcset="#{srcset}">)}
   end
