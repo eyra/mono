@@ -60,7 +60,7 @@ defmodule CoreWeb.DataDonation.Uploader do
       <div id="controls" phx-hook="PythonUploader">
         <Title3>Step 1: Download from Google</Title3>
         <BodyLarge>Go to the
-        <a href= "https://takeout.google.com/u/2/?pli=1" class="text-bodylarge font-body text-primary hover:text-grey1 underline focus:outline-none" >
+        <a href= "https://takeout.google.com/u/2/?pli=1" class="text-bodylarge font-body text-primary hover:text-grey1 underline focus:outline-none" target="_blank">
           Google Takeout page
         </a>
         and follow the indicated steps to download your Google data package.
@@ -112,7 +112,7 @@ defmodule CoreWeb.DataDonation.Uploader do
           </Panel>
           <Spacing value="S" />
           <BodyMedium>By clicking the button below, you consent to the following
-            <a href= "https://drive.google.com/file/d/1BaIZq89o_qc2MEwFCb8piVmoUbiUltfq/view?usp=sharing" class="text-bodymedium font-body text-primary hover:text-grey1 underline focus:outline-none" >
+            <a href= "https://drive.google.com/file/d/1BaIZq89o_qc2MEwFCb8piVmoUbiUltfq/view?usp=sharing" class="text-bodymedium font-body text-primary hover:text-grey1 underline focus:outline-none" target="_blank">
               terms and conditions
             </a>.
           </BodyMedium>
