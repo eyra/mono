@@ -31,9 +31,8 @@ defmodule Core.ImageCatalog.Unsplash.HTTP do
   end
 
   defp parse_response({:ok, 200, _, client_ref}) do
-    with {:ok, body} <- :hackney.body(client_ref),
-         {:ok, json} <- Jason.decode(body) do
-      {:ok, json}
+    with {:ok, body} <- :hackney.body(client_ref) do
+      Jason.decode(body)
     end
   end
 
@@ -107,7 +106,7 @@ defmodule Core.ImageCatalog.Unsplash do
     %{
       id: image_id,
       url: image_url(raw_url, w: width, h: height),
-      srcset: 1..3 |> Enum.map(&srcset_item(raw_url, width, height, &1)) |> Enum.join(","),
+      srcset: 1..3 |> Enum.map_join(",", &srcset_item(raw_url, width, height, &1)),
       blur_hash: blur_hash,
       width: width,
       height: height,
@@ -151,5 +150,7 @@ defmodule Core.ImageCatalog.Unsplash do
   @spec conf() :: %{access_key: binary(), app_name: binary()}
   defp conf, do: Application.fetch_env!(:core, __MODULE__) |> Enum.into(%{})
 
-  defp client, do: Application.get_env(:core, :unsplash_client, Core.ImageCatalog.Unsplash.HTTP)
+  defp client do
+    Application.get_env(:core, :unsplash_client, Core.ImageCatalog.Unsplash.HTTP)
+  end
 end

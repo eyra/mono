@@ -10,8 +10,7 @@ defmodule Frameworks.GreenLight.Permissions do
     |> Atom.to_string()
     |> String.replace_prefix("Elixir.", "")
     |> String.split(".")
-    |> Enum.map(&Macro.underscore/1)
-    |> Enum.join("/")
+    |> Enum.map_join("/", &Macro.underscore/1)
   end
 
   def access_permission(module) do

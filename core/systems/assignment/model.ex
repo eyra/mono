@@ -42,23 +42,32 @@ defmodule Systems.Assignment.Model do
   end
 
   def assignable(%{assignable: assignable}) when not is_nil(assignable), do: assignable
-  def assignable(%{assignable_survey_tool: assignable}) when not is_nil(assignable), do: assignable
+
+  def assignable(%{assignable_survey_tool: assignable}) when not is_nil(assignable),
+    do: assignable
+
   def assignable(%{assignable_lab_tool: assignable}) when not is_nil(assignable), do: assignable
-  def assignable(%{assignable_data_donation_tool: assignable}) when not is_nil(assignable), do: assignable
+
+  def assignable(%{assignable_data_donation_tool: assignable}) when not is_nil(assignable),
+    do: assignable
+
   def assignable(%{id: id}) do
     raise "no assignable object available for assignment #{id}"
   end
 
   def preload_graph(:full) do
-    [:crew, :assignable_data_donation_tool, assignable_lab_tool: [:time_slots], assignable_survey_tool: [:auth_node, :content_node]]
+    [
+      :crew,
+      :assignable_data_donation_tool,
+      assignable_lab_tool: [:time_slots],
+      assignable_survey_tool: [:auth_node, :content_node]
+    ]
   end
 
   def preload_graph(_), do: []
-
 end
 
 defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
-
   import CoreWeb.Gettext
 
   alias Phoenix.LiveView
@@ -80,7 +89,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
   end
 
   defp vm(%{crew: crew} = assignment, Assignment.LandingPage, user) do
-
+    # expired member
     if Crew.Context.member?(crew, user) do
       member = Crew.Context.get_member!(crew, user)
       task = Crew.Context.get_task(crew, member)
@@ -96,7 +105,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
         contact_enabled?: contact_enabled?,
         cancel_enabled?: cancel_enabled?(task)
       }
-    else # expired member
+    else
       %{
         public_id: nil,
         hero_title: dgettext("link-survey", "task.hero.title"),
@@ -153,8 +162,11 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
   defp assignment_call_to_action(%{crew: crew, assignable: assignable} = assignment, user) do
     if Crew.Context.member?(crew, user) do
       member = Crew.Context.get_member!(crew, user)
+
       case Crew.Context.get_task(crew, member) do
-        nil -> forward_call_to_action(user)
+        nil ->
+          forward_call_to_action(user)
+
         task ->
           case task.status do
             :pending -> open_call_to_action(assignable, member.public_id)
@@ -199,10 +211,17 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
     LiveView.redirect(socket, external: path)
   end
 
-  def handle_apply(%{assigns: %{current_user: user}} = socket, %{assignment: %{id: id} = assignment}, _) do
+  def handle_apply(
+        %{assigns: %{current_user: user}} = socket,
+        %{assignment: %{id: id} = assignment},
+        _
+      ) do
     if Assignment.Context.open?(assignment) do
       Assignment.Context.apply_member(assignment, user)
-      LiveView.push_redirect(socket, to: Routes.live_path(socket, Systems.Assignment.LandingPage, id))
+
+      LiveView.push_redirect(socket,
+        to: Routes.live_path(socket, Systems.Assignment.LandingPage, id)
+      )
     else
       inform_closed(socket)
     end
@@ -235,30 +254,40 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
     LiveView.assign(socket, dialog: dialog)
   end
 
-  defp assignment_subtitle(%{status: :pending}), do: dgettext("link-survey", "task.pending.subtitle")
-  defp assignment_subtitle(%{status: :completed}), do: dgettext("link-survey", "task.completed.subtitle")
-  defp assignment_subtitle(%{status: :accepted}), do: dgettext("link-survey", "task.accepted.subtitle")
-  defp assignment_subtitle(%{status: :rejected}), do: dgettext("link-survey", "task.rejected.subtitle")
+  defp assignment_subtitle(%{status: :pending}),
+    do: dgettext("link-survey", "task.pending.subtitle")
+
+  defp assignment_subtitle(%{status: :completed}),
+    do: dgettext("link-survey", "task.completed.subtitle")
+
+  defp assignment_subtitle(%{status: :accepted}),
+    do: dgettext("link-survey", "task.accepted.subtitle")
+
+  defp assignment_subtitle(%{status: :rejected}),
+    do: dgettext("link-survey", "task.rejected.subtitle")
+
   defp assignment_subtitle(_), do: nil
 
   defp assignment_text(%{status: :completed}), do: dgettext("link-survey", "task.completed.text")
   defp assignment_text(%{status: :accepted}), do: dgettext("link-survey", "task.accepted.text")
+
   defp assignment_text(%{status: :rejected, rejected_message: rejected_message}) do
     dgettext("link-survey", "task.rejected.text", reason: rejected_message)
   end
+
   defp assignment_text(_), do: nil
 
   defp highlights(assignment, :assignment) do
     [
       highlight(assignment, :duration),
-      highlight(assignment, :language),
+      highlight(assignment, :language)
     ]
   end
 
   defp highlights(assignment, :promotion) do
     [
       highlight(assignment, :duration),
-      highlight(assignment, :status),
+      highlight(assignment, :status)
     ]
   end
 
@@ -296,15 +325,14 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
   end
 
   defp language_text([]), do: "?"
+
   defp language_text(languages) when is_list(languages) do
-    languages
-    |> Enum.map(&translate(&1))
-    |> Enum.join(" | ")
+    Enum.map_join(languages, " | ", &translate(&1))
   end
 
   defp translate(nil), do: "?"
+
   defp translate(language) do
     OnlineStudyLanguages.translate(language)
   end
-
 end

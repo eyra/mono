@@ -15,8 +15,8 @@ jobs:
       - id: setup-elixir
         uses: erlef/setup-elixir@v1
         with:
-          otp-version: '24.0.1'
-          elixir-version: '1.12.1'
+          otp-version: '24.2'
+          elixir-version: '1.13.1'
 
       - name: Setup the Elixir project
         run: make deps

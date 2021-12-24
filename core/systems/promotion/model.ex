@@ -77,11 +77,9 @@ defmodule Systems.Promotion.Model do
     |> cast(attrs, @fields)
     |> validate_required([:title])
   end
-
 end
 
 defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Promotion.Model do
-
   import Map, only: [take: 2]
   import Frameworks.Utility.ViewModel
   import CoreWeb.Gettext
@@ -106,24 +104,24 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Promotion.Model do
     %{title: title}
   end
 
-  defp vm(%{submission: submission, themes: themes, marks: marks} = promotion, Promotion.LandingPage) do
+  defp vm(
+         %{submission: submission, themes: themes, marks: marks} = promotion,
+         Promotion.LandingPage
+       ) do
     promotion
-    |> take([:image_id | Promotion.Model.plain_fields])
-    |> merge(
-      %{
-        themes: themes(themes, Link.Enums.Themes),
-        organisation: organisation(marks),
-        highlights: highlights(submission)
-      }
-    )
+    |> take([:image_id | Promotion.Model.plain_fields()])
+    |> merge(%{
+      themes: themes(themes, Link.Enums.Themes),
+      organisation: organisation(marks),
+      highlights: highlights(submission)
+    })
   end
 
   defp themes(themes, themes_module) do
     themes
     |> themes_module.labels()
     |> Enum.filter(& &1.active)
-    |> Enum.map(& &1.value)
-    |> Enum.join(", ")
+    |> Enum.map_join(", ", & &1.value)
   end
 
   defp organisation(marks) do
@@ -151,5 +149,4 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Promotion.Model do
 
     [%{title: reward_title, text: reward_text}]
   end
-
 end

@@ -55,7 +55,7 @@ defmodule CoreWeb.DataDonation.Content do
 
     case promotion.themes do
       nil -> ""
-      themes -> themes |> Enum.map(&Atom.to_string(&1)) |> Enum.join(" ")
+      themes -> themes |> Enum.map_join(" ", &Atom.to_string(&1))
     end
   end
 
