@@ -108,16 +108,7 @@ defmodule CoreWeb.Promotion.Public do
             url={{@promotion.banner_url}}
           />
           <Spacing value="L" />
-          <Panel bg_color="bg-grey5" align="text-center">
-            <template slot="title">
-              <Title3>{{ dgettext("eyra-promotion", "keep.me.updated.title") }}</Title3>
-            </template>
-            <Intro>{{ dgettext("eyra-promotion", "keep.me.updated.text") }}</Intro>
-            <Spacing value="M" />
-            <SecondaryLiveViewButton label={{ dgettext("eyra-promotion", "keep.me.updated.button.label") }} event="register" color="text-primary"/>
-          </Panel>
 
-          <Spacing value="L" />
           <Devices label={{ dgettext("eyra-promotion", "devices.available.label") }} devices={{ @plugin_info.devices }}/>
           <Spacing value="XL" />
 
