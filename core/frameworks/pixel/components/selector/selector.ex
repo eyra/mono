@@ -2,8 +2,6 @@ defmodule Frameworks.Pixel.Selector.Selector do
   @moduledoc false
   use CoreWeb.UI.LiveComponent
 
-  alias Frameworks.Pixel.Dynamic
-
   prop(items, :list, required: true)
   prop(parent, :any, required: true)
   prop(type, :atom, default: :label)
@@ -33,7 +31,10 @@ defmodule Frameworks.Pixel.Selector.Selector do
     {:ok, socket}
   end
 
-  def update(%{id: id, items: items, parent: parent, type: type, optional?: optional?, opts: opts}, socket) do
+  def update(
+        %{id: id, items: items, parent: parent, type: type, optional?: optional?, opts: opts},
+        socket
+      ) do
     {
       :ok,
       socket
@@ -69,17 +70,16 @@ defmodule Frameworks.Pixel.Selector.Selector do
        ) do
     if multiselect?(type, Enum.count(items)) do
       update_target(parent, %{
-          selector_id: selector_id,
-          active_item_ids: active_item_ids
-        }
-      )
+        selector_id: selector_id,
+        active_item_ids: active_item_ids
+      })
     else
       active_item_id = List.first(active_item_ids)
+
       update_target(parent, %{
-          selector_id: selector_id,
-          active_item_id: active_item_id
-        }
-      )
+        selector_id: selector_id,
+        active_item_id: active_item_id
+      })
     end
   end
 
@@ -105,15 +105,17 @@ defmodule Frameworks.Pixel.Selector.Selector do
     socket |> assign(current_items: items)
   end
 
-  defp toggle(%{assigns: %{items: items, type: type, optional?: optional?}}, item, item_id) when is_atom(item_id) do
+  defp toggle(%{assigns: %{items: items, type: type, optional?: optional?}}, item, item_id)
+       when is_atom(item_id) do
     multiselect? = multiselect?(type, Enum.count(items))
     active_count = active_count(items)
 
     if item.id === item_id do
-      if not item.active or optional? or (multiselect? and active_count > 1)  do
+      if not item.active or optional? or (multiselect? and active_count > 1) do
         %{item | active: !item.active}
       else
-        item # prevent deselection
+        # prevent deselection
+        item
       end
     else
       if multiselect? do
@@ -142,14 +144,10 @@ defmodule Frameworks.Pixel.Selector.Selector do
             phx-value-item={"#{item.id}"}
             phx-target={@myself}
           >
-            <Dynamic
-              component={item_component(@type)}
-              props={
-                %{
-                  item: item,
-                  multiselect?: multiselect?(@type, Enum.count(@items))
-                }
-              }
+            <Surface.Components.Dynamic.Component
+              module={item_component(@type)}
+                  item={item}
+                  multiselect?={ multiselect?(@type, Enum.count(@items)) }
             />
           </div>
         </div>

@@ -18,7 +18,6 @@ defmodule CoreWeb.UI.Navigation.MenuItem do
 
   prop(vm, :any, required: true)
   prop(text_color, :css_class, default: "text-grey1")
-  prop(path_provider, :any, required: true)
   prop(size, :atom, default: :wide)
 
   defp icon_rect(:large), do: "h-8 sm:h-12"
@@ -51,14 +50,14 @@ defmodule CoreWeb.UI.Navigation.MenuItem do
           <div :if={has_icon?(@vm) && icon_size(@vm) == :large}>
             <div class="flex flex-col items-center justify-center">
               <div>
-                <img class={icon_rect(icon_size(@vm))} src={@path_provider.static_path(@socket, "/images/icons/#{ icon_filename(icon_name(@vm), @size) }.svg")} alt="#{icon_name(@vm)}" />
+                <img class={icon_rect(icon_size(@vm))} src={CoreWeb.Endpoint.static_path("/images/icons/#{ icon_filename(icon_name(@vm), @size) }.svg")} alt="#{icon_name(@vm)}" />
               </div>
             </div>
           </div>
           <div :if={has_icon?(@vm) && icon_size(@vm) == :small}>
             <div class="flex flex-col items-center justify-center">
               <div>
-                <img class={icon_rect(icon_size(@vm))} src={@path_provider.static_path(@socket, "/images/icons/#{ icon_filename(icon_name(@vm), active?(@vm)) }.svg")} alt="" />
+                <img class={icon_rect(icon_size(@vm))} src={CoreWeb.Endpoint.static_path("/images/icons/#{ icon_filename(icon_name(@vm), active?(@vm)) }.svg")} alt="" />
               </div>
             </div>
           </div>

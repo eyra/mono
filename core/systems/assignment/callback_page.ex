@@ -24,9 +24,7 @@ defmodule Systems.Assignment.CallbackPage do
     {
       :ok,
       socket
-      |> assign(
-        model: model
-      )
+      |> assign(model: model)
       |> observe_view_model()
       |> update_menus()
     }
@@ -37,14 +35,16 @@ defmodule Systems.Assignment.CallbackPage do
   def handle_view_model_updated(socket), do: socket
 
   @impl true
-  def handle_event("call-to-action", _params,
-    %{
-      assigns: %{
-        model: model,
-        vm: %{call_to_action: call_to_action}
-      }
-    } = socket
-  ) do
+  def handle_event(
+        "call-to-action",
+        _params,
+        %{
+          assigns: %{
+            model: model,
+            vm: %{call_to_action: call_to_action}
+          }
+        } = socket
+      ) do
     {:noreply, socket |> call_to_action.handle.(call_to_action, model)}
   end
 

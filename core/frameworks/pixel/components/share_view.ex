@@ -3,27 +3,26 @@ defmodule Frameworks.Pixel.ShareView do
 
   alias CoreWeb.UI.UserListItemSmall
 
-  prop content_id, :number, required: true
-  prop content_name, :string, required: true
-  prop group_name, :string, required: true
-  prop users, :list, required: true
-  prop shared_users, :list
+  prop(content_id, :number, required: true)
+  prop(content_name, :string, required: true)
+  prop(group_name, :string, required: true)
+  prop(users, :list, required: true)
+  prop(shared_users, :list)
 
-  data filtered_users, :list
-  data close_button, :map
+  data(filtered_users, :list)
+  data(close_button, :map)
 
   def update(
-    %{
-      id: id,
-      content_id: content_id,
-      content_name: content_name,
-      group_name: group_name,
-      users: users,
-      shared_users: shared_users
-    },
-    %{assigns: %{myself: myself}} = socket
-  ) do
-
+        %{
+          id: id,
+          content_id: content_id,
+          content_name: content_name,
+          group_name: group_name,
+          users: users,
+          shared_users: shared_users
+        },
+        %{assigns: %{myself: myself}} = socket
+      ) do
     close_button = %{
       action: %{type: :send, event: "close", target: myself},
       face: %{type: :icon, icon: :close}
@@ -31,7 +30,8 @@ defmodule Frameworks.Pixel.ShareView do
 
     {
       :ok,
-      socket |> assign(
+      socket
+      |> assign(
         id: id,
         content_id: content_id,
         content_name: content_name,
@@ -48,13 +48,15 @@ defmodule Frameworks.Pixel.ShareView do
 
   defp filter_users(%{assigns: %{users: users, shared_users: shared_users}} = socket) do
     socket
-    |> assign(
-      filtered_users: Enum.filter(users, &(not Enum.member?(shared_users, &1)))
-    )
+    |> assign(filtered_users: Enum.filter(users, &(not Enum.member?(shared_users, &1))))
   end
 
   @impl true
-  def handle_event("add", %{"item" => user_id}, %{assigns: %{users: users, shared_users: shared_users, content_id: content_id}} = socket) do
+  def handle_event(
+        "add",
+        %{"item" => user_id},
+        %{assigns: %{users: users, shared_users: shared_users, content_id: content_id}} = socket
+      ) do
     {
       :noreply,
       if user = users |> Enum.find(&(&1.id == String.to_integer(user_id))) do
@@ -69,7 +71,11 @@ defmodule Frameworks.Pixel.ShareView do
   end
 
   @impl true
-  def handle_event("remove", %{"item" => user_id}, %{assigns: %{shared_users: shared_users, content_id: content_id}} = socket) do
+  def handle_event(
+        "remove",
+        %{"item" => user_id},
+        %{assigns: %{shared_users: shared_users, content_id: content_id}} = socket
+      ) do
     {
       :noreply,
       if user = shared_users |> Enum.find(&(&1.id == String.to_integer(user_id))) do
@@ -89,7 +95,7 @@ defmodule Frameworks.Pixel.ShareView do
   end
 
   defp update_parent(socket, message) do
-    send(self(), {:share_view, message} )
+    send(self(), {:share_view, message})
     socket
   end
 
@@ -152,22 +158,47 @@ defmodule Frameworks.Pixel.ShareView.Example do
     direction: "vertical",
     container: {:div, class: ""}
 
-  data users, :list, default: [
-    %{id: 2, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)} },
-    %{id: 3, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)} },
-    %{id: 4, profile: %{fullname: Faker.Person.name(), photo_url: nil } },
-    %{id: 5, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)} },
-    %{id: 6, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)} },
-    %{id: 7, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)} },
-    %{id: 8, profile: %{fullname: Faker.Person.name(), photo_url: nil } },
-    %{id: 9, profile: %{fullname: Faker.Person.name(), photo_url: nil } },
-    %{id: 10, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)} },
-    %{id: 11, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)} }
-  ]
+  data(users, :list,
+    default: [
+      %{
+        id: 2,
+        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
+      },
+      %{
+        id: 3,
+        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
+      },
+      %{id: 4, profile: %{fullname: Faker.Person.name(), photo_url: nil}},
+      %{
+        id: 5,
+        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
+      },
+      %{
+        id: 6,
+        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
+      },
+      %{
+        id: 7,
+        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
+      },
+      %{id: 8, profile: %{fullname: Faker.Person.name(), photo_url: nil}},
+      %{id: 9, profile: %{fullname: Faker.Person.name(), photo_url: nil}},
+      %{
+        id: 10,
+        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
+      },
+      %{
+        id: 11,
+        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
+      }
+    ]
+  )
 
-  data shared_users, :list, default: [
-    %{id: 1, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url()} }
-  ]
+  data(shared_users, :list,
+    default: [
+      %{id: 1, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url()}}
+    ]
+  )
 
   def render(assigns) do
     ~F"""

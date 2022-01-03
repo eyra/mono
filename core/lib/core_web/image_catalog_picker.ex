@@ -5,7 +5,6 @@ defmodule CoreWeb.ImageCatalogPicker do
   alias Frameworks.Pixel.Button.SubmitButton
   alias Frameworks.Pixel.Grid.ImageGrid
 
-  prop(conn, :any, required: true)
   prop(viewport, :any)
   prop(breakpoint, :any)
   prop(static_path, :any, required: true)
@@ -58,7 +57,6 @@ defmodule CoreWeb.ImageCatalogPicker do
   def update(
         %{
           id: id,
-          conn: conn,
           viewport: viewport,
           breakpoint: breakpoint,
           static_path: static_path,
@@ -72,7 +70,6 @@ defmodule CoreWeb.ImageCatalogPicker do
       :ok,
       socket
       |> assign(id: id)
-      |> assign(conn: conn)
       |> assign(viewport: viewport)
       |> assign(breakpoint: breakpoint)
       |> assign(static_path: static_path)
@@ -135,7 +132,7 @@ defmodule CoreWeb.ImageCatalogPicker do
             <Title3>{dgettext("eyra-imagecatalog", "search.image.title")}</Title3>
           </div>
           <button type="button" class="w-button-sm h-button-sm flex-wrap cursor-pointer active:opacity-50" x-on:click="image_picker = false, $parent.$parent.overlay = false">
-            <img src={@static_path.(@conn, "/images/close.svg")} alt="Close image picker" />
+            <img src={@static_path.("/images/close.svg")} alt="Close image picker" />
           </button>
         </div>
         <div x-data="{ selected: -1 }">

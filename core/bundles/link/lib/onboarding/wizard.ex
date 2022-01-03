@@ -8,6 +8,7 @@ defmodule Link.Onboarding.Wizard do
   alias CoreWeb.Layouts.Stripped.Component, as: Stripped
 
   import CoreWeb.Gettext
+  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Core.Accounts
   alias Link.Onboarding.Welcome, as: Welcome

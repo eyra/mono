@@ -35,8 +35,11 @@ defmodule Frameworks.GreenLight.Context do
 
   defmacro __register_schema_and_roles(config) do
     quote do
-
-      @green_light_role_assignment_schema unquote(Frameworks.GreenLight.Config.role_assignment_schema!(config))
+      @green_light_role_assignment_schema unquote(
+                                            Frameworks.GreenLight.Config.role_assignment_schema!(
+                                              config
+                                            )
+                                          )
       @green_light_roles MapSet.new(unquote(Frameworks.GreenLight.Config.roles!(config)))
 
       def role_assignment_schema do

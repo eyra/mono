@@ -7,8 +7,8 @@ defmodule Systems.Lab.ToolForm do
     Lab
   }
 
-  prop entity_id, :number, required: true
-  prop validate?, :boolean, required: true
+  prop(entity_id, :number, required: true)
+  prop(validate?, :boolean, required: true)
 
   data(entity, :map)
   data(add_day_button, :map)
@@ -17,13 +17,15 @@ defmodule Systems.Lab.ToolForm do
 
   # Handle initial update
   def update(
-    %{id: id, entity_id: entity_id, validate?: validate?}, socket) do
+        %{id: id, entity_id: entity_id, validate?: validate?},
+        socket
+      ) do
     entity = Lab.Context.get(entity_id)
     changeset = Lab.ToolModel.changeset(entity, :create, %{})
 
     add_day_button = %{
       action: %{type: :send, event: "add_day"},
-      face: %{type: :primary, label: dgettext("link-lab", "add.day.button") }
+      face: %{type: :primary, label: dgettext("link-lab", "add.day.button")}
     }
 
     {

@@ -19,7 +19,6 @@ defmodule Systems.Home.LandingPage do
     }
   end
 
-
   def render(assigns) do
     ~F"""
       <Website

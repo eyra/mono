@@ -5,6 +5,7 @@ defmodule Link.Debug do
   use CoreWeb, :live_view
   use CoreWeb.MultiFormAutoSave
   use CoreWeb.Layouts.Workspace.Component, :debug
+  alias CoreWeb.Router.Helpers, as: Routes
 
   alias CoreWeb.User.Forms.Debug, as: UserDebugForm
   alias CoreWeb.Mail.Forms.Debug, as: MailDebugForm

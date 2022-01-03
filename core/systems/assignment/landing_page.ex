@@ -29,7 +29,10 @@ defmodule Systems.Assignment.LandingPage do
 
   @impl true
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
-    NextAction.Context.clear_next_action(user, Assignment.CheckRejection, key: "#{id}", params: %{id: id})
+    NextAction.Context.clear_next_action(user, Assignment.CheckRejection,
+      key: "#{id}",
+      params: %{id: id}
+    )
 
     model = Assignment.Context.get!(id, [:crew])
 
@@ -46,6 +49,7 @@ defmodule Systems.Assignment.LandingPage do
   end
 
   defoverridable handle_view_model_updated: 1
+
   def handle_view_model_updated(socket) do
     socket
     |> update_menus()
@@ -61,9 +65,15 @@ defmodule Systems.Assignment.LandingPage do
   end
 
   @impl true
-  def handle_event("cancel_confirm", _params, %{assigns: %{current_user: user, model: %{id: id}}} = socket) do
+  def handle_event(
+        "cancel_confirm",
+        _params,
+        %{assigns: %{current_user: user, model: %{id: id}}} = socket
+      ) do
     Assignment.Context.cancel(id, user)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))}
+
+    {:noreply,
+     push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))}
   end
 
   @impl true
@@ -72,14 +82,16 @@ defmodule Systems.Assignment.LandingPage do
   end
 
   @impl true
-  def handle_event("call-to-action", _params,
-    %{
-      assigns: %{
-        model: model,
-        vm: %{call_to_action: call_to_action}
-      }
-    } = socket
-  ) do
+  def handle_event(
+        "call-to-action",
+        _params,
+        %{
+          assigns: %{
+            model: model,
+            vm: %{call_to_action: call_to_action}
+          }
+        } = socket
+      ) do
     {:noreply, socket |> call_to_action.handle.(call_to_action, model)}
   end
 
@@ -92,13 +104,15 @@ defmodule Systems.Assignment.LandingPage do
     {:noreply, socket}
   end
 
-  defp action_map(%{model: assignment, vm: %{
-    public_id: public_id,
-    title: title,
-    contact_enabled?: contact_enabled?,
-    call_to_action: %{label: label}
-  }}) do
-
+  defp action_map(%{
+         model: assignment,
+         vm: %{
+           public_id: public_id,
+           title: title,
+           contact_enabled?: contact_enabled?,
+           call_to_action: %{label: label}
+         }
+       }) do
     actions = %{
       call_to_action: %{
         action: %{type: :send, event: "call-to-action"},
@@ -110,6 +124,7 @@ defmodule Systems.Assignment.LandingPage do
     }
 
     {:ok, %{email: email}} = Assignment.Context.owner(assignment)
+
     if contact_enabled? and email do
       actions
       |> Map.put(:contact, %{
@@ -132,11 +147,17 @@ defmodule Systems.Assignment.LandingPage do
   defp cancel_button() do
     %{
       action: %{type: :send, event: "cancel"},
-      face: %{type: :secondary, text_color: "text-delete", label: dgettext("eyra-assignment", "cancel.button")}
+      face: %{
+        type: :secondary,
+        text_color: "text-delete",
+        label: dgettext("eyra-assignment", "cancel.button")
+      }
     }
   end
 
-  defp create_actions(%{call_to_action: call_to_action, contact: contact}), do: [call_to_action, contact]
+  defp create_actions(%{call_to_action: call_to_action, contact: contact}),
+    do: [call_to_action, contact]
+
   defp create_actions(%{call_to_action: call_to_action}), do: [call_to_action]
 
   defp show_dialog?(nil), do: false

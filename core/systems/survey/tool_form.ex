@@ -12,9 +12,9 @@ defmodule Systems.Survey.ToolForm do
     Survey
   }
 
-  prop entity_id, :number, required: true
-  prop callback_url, :string, required: true
-  prop validate?, :boolean, required: true
+  prop(entity_id, :number, required: true)
+  prop(callback_url, :string, required: true)
+  prop(validate?, :boolean, required: true)
 
   data(entity, :any)
   data(changeset, :any)

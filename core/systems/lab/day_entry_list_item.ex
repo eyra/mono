@@ -5,16 +5,17 @@ defmodule Systems.Lab.DayEntryListItem do
   alias Frameworks.Pixel.Selector.Selector
   alias Frameworks.Pixel.Line
 
-  prop type, :atom, required: true
-  prop data, :map
-  prop target, :any
+  prop(type, :atom, required: true)
+  prop(data, :map)
+  prop(target, :any)
 
   defp timestamp(%{start_time: start_time}) do
-    hour = start_time / 100 |> trunc()
+    hour = (start_time / 100) |> trunc()
     minute = "#{rem(start_time, 100)}" |> String.pad_leading(2, "0")
 
     "#{hour}:#{minute}"
   end
+
   defp timestamp(_), do: nil
 
   def render(assigns) do
@@ -52,7 +53,6 @@ defmodule Systems.Lab.DayEntryListItem.Example do
     height: "812px",
     direction: "vertical",
     container: {:div, class: ""}
-
 
   def handle_info(%{active_item_id: nil, selector_id: selector_id}, socket) do
     IO.puts("Disabled #{selector_id}")

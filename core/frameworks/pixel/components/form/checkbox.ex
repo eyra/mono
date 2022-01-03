@@ -58,7 +58,11 @@ defmodule Frameworks.Pixel.Form.Checkbox do
 
   defmacro __using__(_opts) do
     quote do
-      def handle_event("toggle", %{"checkbox" => checkbox}, %{assigns: %{entity: entity}} = socket) do
+      def handle_event(
+            "toggle",
+            %{"checkbox" => checkbox},
+            %{assigns: %{entity: entity}} = socket
+          ) do
         field = String.to_existing_atom(checkbox)
 
         new_value =

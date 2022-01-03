@@ -46,8 +46,8 @@ defmodule Systems.Crew.Context do
     from(task in Crew.TaskModel,
       where:
         task.crew_id == ^crew.id and
-        task.member_id == ^member.id and
-        task.expired == false
+          task.member_id == ^member.id and
+          task.expired == false
     )
     |> Repo.one()
   end
@@ -84,7 +84,7 @@ defmodule Systems.Crew.Context do
     from(t in Crew.TaskModel,
       where:
         t.crew_id == ^crew.id and
-        t.status in ^status_list
+          t.status in ^status_list
     )
   end
 
@@ -92,8 +92,8 @@ defmodule Systems.Crew.Context do
     from(t in Crew.TaskModel,
       where:
         t.crew_id == ^crew.id and
-        t.status in ^status_list and
-        t.expired == ^expired
+          t.status in ^status_list and
+          t.expired == ^expired
     )
   end
 
@@ -115,10 +115,10 @@ defmodule Systems.Crew.Context do
     from(t in Crew.TaskModel,
       where:
         t.crew_id == ^crew.id and
-        t.status == :pending and
-        t.expire_at <= ^now and
-        t.expired == false and
-        not is_nil(t.started_at)
+          t.status == :pending and
+          t.expire_at <= ^now and
+          t.expired == false and
+          not is_nil(t.started_at)
     )
   end
 
@@ -274,7 +274,11 @@ defmodule Systems.Crew.Context do
   end
 
   def list_members_without_task(crew) do
-    member_ids_with_task = from(t in Crew.TaskModel, where: t.crew_id == ^crew.id and t.expired == false, select: t.member_id)
+    member_ids_with_task =
+      from(t in Crew.TaskModel,
+        where: t.crew_id == ^crew.id and t.expired == false,
+        select: t.member_id
+      )
 
     from(m in Crew.MemberModel,
       where: m.crew_id == ^crew.id and m.id not in subquery(member_ids_with_task)
@@ -303,7 +307,9 @@ defmodule Systems.Crew.Context do
   end
 
   defp insert(multi, :member = name, crew, user, attrs) do
-    Multi.insert(multi, name,
+    Multi.insert(
+      multi,
+      name,
       %Crew.MemberModel{}
       |> Crew.MemberModel.changeset(attrs)
       |> Ecto.Changeset.put_assoc(:crew, crew)
@@ -312,27 +318,24 @@ defmodule Systems.Crew.Context do
   end
 
   defp insert(multi, :role_assignment = name, crew, user, role) do
-    Multi.insert(multi, name,
-      Authorization.build_role_assignment(user, crew, role)
-    )
+    Multi.insert(multi, name, Authorization.build_role_assignment(user, crew, role))
   end
 
-  defp insert(multi, :task = name , crew, attrs) do
-     Multi.insert(multi, name, fn %{member: member} ->
+  defp insert(multi, :task = name, crew, attrs) do
+    Multi.insert(multi, name, fn %{member: member} ->
       %Crew.TaskModel{}
       |> Crew.TaskModel.changeset(attrs)
       |> Ecto.Changeset.put_assoc(:crew, crew)
       |> Ecto.Changeset.put_assoc(:member, member)
-      end
-    )
+    end)
   end
 
   def get_expired_member(%Crew.Model{} = crew, %User{} = user) do
     from(m in Crew.MemberModel,
       where:
         m.crew_id == ^crew.id and
-        m.user_id == ^user.id and
-        m.expired == true
+          m.user_id == ^user.id and
+          m.expired == true
     )
     |> Repo.one()
   end
@@ -344,7 +347,7 @@ defmodule Systems.Crew.Context do
     attrs = [expired: false, expire_at: expire_at]
 
     Multi.new()
-    |> Multi.update_all(:member , member_query, set: attrs)
+    |> Multi.update_all(:member, member_query, set: attrs)
     |> Multi.update_all(:tasks, task_query, set: attrs)
     |> Repo.transaction()
 
@@ -376,8 +379,8 @@ defmodule Systems.Crew.Context do
     from(m in Crew.MemberModel,
       where:
         m.crew_id == ^crew.id and
-        m.user_id == ^user.id and
-        m.expired == ^expired
+          m.user_id == ^user.id and
+          m.expired == ^expired
     )
   end
 
@@ -398,10 +401,12 @@ defmodule Systems.Crew.Context do
 
     task_query = from(t in Crew.TaskModel, where: t.expire_at <= ^now and is_nil(t.started_at))
     member_ids = from(t in task_query, select: t.member_id)
-    member_query = from(m in Crew.MemberModel, where: m.expire_at <= ^now and m.id in subquery(member_ids))
+
+    member_query =
+      from(m in Crew.MemberModel, where: m.expire_at <= ^now and m.id in subquery(member_ids))
 
     Multi.new()
-    |> Multi.update_all(:members , member_query, set: [expired: true])
+    |> Multi.update_all(:members, member_query, set: [expired: true])
     |> Multi.update_all(:tasks, task_query, set: [expired: true])
     |> Repo.transaction()
   end
@@ -415,18 +420,21 @@ defmodule Systems.Crew.Context do
     now = Timestamp.naive_now()
 
     # Query expired, started but not completed tasks.
-    task_query = from(t in Crew.TaskModel,
-      where:
-        t.id == ^task_id and
-        t.expire_at <= ^now and
-        is_nil(t.completed_at)
-    )
+    task_query =
+      from(t in Crew.TaskModel,
+        where:
+          t.id == ^task_id and
+            t.expire_at <= ^now and
+            is_nil(t.completed_at)
+      )
 
     member_ids = from(t in task_query, select: t.member_id)
-    member_query = from(m in Crew.MemberModel, where: m.expire_at <= ^now and m.id in subquery(member_ids))
+
+    member_query =
+      from(m in Crew.MemberModel, where: m.expire_at <= ^now and m.id in subquery(member_ids))
 
     Multi.new()
-    |> Multi.update_all(:members , member_query, set: [expired: true])
+    |> Multi.update_all(:members, member_query, set: [expired: true])
     |> Multi.update_all(:tasks, task_query, set: [expired: true])
     |> Repo.transaction()
   end

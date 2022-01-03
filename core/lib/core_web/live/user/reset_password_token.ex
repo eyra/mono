@@ -3,6 +3,7 @@ defmodule CoreWeb.User.ResetPasswordToken do
   The password reset token.
   """
   use CoreWeb, :live_view
+  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Surface.Components.Form
   alias Core.Accounts

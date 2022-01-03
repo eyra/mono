@@ -9,7 +9,6 @@ defmodule Frameworks.Pixel.Card.Campaign do
   alias Frameworks.Pixel.Card.ClickableCard
   alias Frameworks.Pixel.Image
 
-  prop(conn, :any, required: true)
   prop(path_provider, :any, required: true)
   prop(card, :any, required: true)
   prop(bg_color, :css_class, default: "grey1")
@@ -24,7 +23,9 @@ defmodule Frameworks.Pixel.Card.Campaign do
   def left_actions(%{left_actions: left_actions}) when not is_nil(left_actions), do: left_actions
   def left_actions(_), do: []
 
-  def right_actions(%{right_actions: right_actions}) when not is_nil(right_actions), do: right_actions
+  def right_actions(%{right_actions: right_actions}) when not is_nil(right_actions),
+    do: right_actions
+
   def right_actions(_), do: []
 
   def render(assigns) do
@@ -41,7 +42,7 @@ defmodule Frameworks.Pixel.Card.Campaign do
         <div class="relative">
           {#if @card.label}
             <div class="absolute top-6 z-10">
-              <Frameworks.Pixel.Card.Label conn={@socket} path_provider={@path_provider} text={@card.label.text} type={@card.label.type} />
+              <Frameworks.Pixel.Card.Label path_provider={@path_provider} text={@card.label.text} type={@card.label.type} />
             </div>
           {/if}
           {#if @card.icon_url}
@@ -103,8 +104,6 @@ defmodule Frameworks.Pixel.Card.Campaign.Example do
     direction: "vertical",
     container: {:div, class: ""}
 
-  alias CoreWeb.Router.Helpers, as: Routes
-
   def handle_info({:card_click, id}, socket) do
     IO.puts("card_click: campaign ##{id}")
     {:noreply, socket}
@@ -117,7 +116,7 @@ defmodule Frameworks.Pixel.Card.Campaign.Example do
 
   def render(assigns) do
     ~F"""
-    <Campaign conn={@socket} path_provider={Routes} card={
+    <Campaign path_provider={CoreWeb.Endpoint} card={
       %{
         type: :primary,
         id: 777,

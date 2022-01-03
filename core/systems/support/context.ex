@@ -14,6 +14,7 @@ defmodule Systems.Support.Context do
   end
 
   def list_tickets(statu, preload \\ [user: [:profile, :features]])
+
   def list_tickets(:open, preload) do
     from(t in list_ticket_query(preload),
       where: is_nil(t.completed_at)

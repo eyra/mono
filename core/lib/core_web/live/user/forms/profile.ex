@@ -15,7 +15,7 @@ defmodule CoreWeb.User.Forms.Profile do
   data(entity, :any)
   data(study_labels, :any)
   data(uploads, :any)
-  data(changeset, :any)
+  data(changeset, :any, default: nil)
   data(focus, :any, default: "")
 
   @impl true
@@ -97,8 +97,8 @@ defmodule CoreWeb.User.Forms.Profile do
           <Title2>{dgettext "eyra-account", "profile.title"}</Title2>
           <Form id="main_form" changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
             <PhotoInput
-              conn={@socket}
-              static_path={&Routes.static_path/2}
+
+              static_path={&CoreWeb.Endpoint.static_path/1}
               photo_url={@entity.photo_url}
               uploads={@uploads}
               primary_button_text={dgettext("eyra-account", "choose.profile.photo.file")}

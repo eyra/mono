@@ -26,11 +26,11 @@ defmodule CoreWeb.ConnCase do
 
       import Core.TestHelpers
       alias Core.Factories
-      alias CoreWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
       @endpoint CoreWeb.Endpoint
 
+      alias CoreWeb.Router.Helpers, as: Routes
       import Core.AuthTestHelpers
     end
   end

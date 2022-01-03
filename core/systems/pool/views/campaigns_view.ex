@@ -80,24 +80,27 @@ defmodule Systems.Pool.CampaignsView do
     """
   end
 
-  defp convert_to_vm(socket, %{
-         updated_at: updated_at,
-         promotion: %{
-           title: title,
-           image_id: image_id,
-           submission:
+  defp convert_to_vm(
+         socket,
+         %{
+           updated_at: updated_at,
+           promotion: %{
+             title: title,
+             image_id: image_id,
+             submission:
+               %{
+                 id: submission_id,
+                 status: status
+               } = submission
+           },
+           promotable_assignment:
              %{
-               id: submission_id,
-               status: status
-             } = submission
-         },
-         promotable_assignment:
-           %{
-             assignable_experiment: %{
-               subject_count: target_subject_count
-             }
-           } = assignment
-       } = campaign) do
+               assignable_experiment: %{
+                 subject_count: target_subject_count
+               }
+             } = assignment
+         } = campaign
+       ) do
     tag =
       case status do
         :submitted ->
@@ -133,9 +136,7 @@ defmodule Systems.Pool.CampaignsView do
 
     subtitle_part2 =
       if open_spot_count == target_subject_count do
-        dgettext("link-studentpool", "sample.size",
-          size: target_subject_count
-        )
+        dgettext("link-studentpool", "sample.size", size: target_subject_count)
       else
         dgettext("link-studentpool", "spots.available",
           open: open_spot_count,
@@ -163,6 +164,4 @@ defmodule Systems.Pool.CampaignsView do
       quick_summary: quick_summery
     }
   end
-
-
 end

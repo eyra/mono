@@ -1,7 +1,6 @@
 defmodule CoreWeb.ImageCatalogPicker.Test.View do
   use Surface.LiveView
   alias CoreWeb.ImageCatalogPicker
-  alias CoreWeb.Router.Helpers, as: Routes
 
   data(image_id, :string, default: nil)
 
@@ -9,7 +8,7 @@ defmodule CoreWeb.ImageCatalogPicker.Test.View do
   def render(assigns) do
     ~F"""
     <div>
-    <ImageCatalogPicker id="picker" image_catalog={Core.ImageCatalog.Local} conn={@socket} static_path={&Routes.static_path/2}/>
+    <ImageCatalogPicker id="picker" image_catalog={Core.ImageCatalog.Local} static_path={&CoreWeb.Endpoint.static_path/1}/>
     </div>
     """
   end

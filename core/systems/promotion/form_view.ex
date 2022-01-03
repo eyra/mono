@@ -7,7 +7,6 @@ defmodule Systems.Promotion.FormView do
   }
 
   alias Core.ImageHelpers
-  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Frameworks.Pixel.Text.{Title2, Title3, Body, BodyLarge}
   alias Frameworks.Pixel.Form.{Form, TextInput, TextArea, PhotoInput, UrlInput}
@@ -181,8 +180,7 @@ defmodule Systems.Promotion.FormView do
 
           <Title3>{dgettext("eyra-promotion", "banner.title")}</Title3>
           <PhotoInput
-            conn={@socket}
-            static_path={&Routes.static_path/2}
+            static_path={&CoreWeb.Endpoint.static_path/1}
             photo_url={@entity.banner_photo_url}
             uploads={@uploads}
             primary_button_text={dgettext("eyra-promotion", "choose.banner.photo.file")}

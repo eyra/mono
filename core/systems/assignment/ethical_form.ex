@@ -2,7 +2,6 @@ defmodule Systems.Assignment.EthicalForm do
   use CoreWeb.LiveForm
   use Frameworks.Pixel.Form.Checkbox
 
-
   alias Frameworks.Pixel.Panel.Panel
   alias Frameworks.Pixel.Text.{Title3, Title5, BodyMedium}
   alias Frameworks.Pixel.Form.{Form, TextInput, Checkbox}
@@ -11,13 +10,13 @@ defmodule Systems.Assignment.EthicalForm do
     Assignment
   }
 
-  prop entity_id, :number, required: true
-  prop validate?, :boolean, required: true
+  prop(entity_id, :number, required: true)
+  prop(validate?, :boolean, required: true)
 
-  data entity, :any
-  data ethical_label, :any
-  data changeset, :any
-  data focus, :any, default: ""
+  data(entity, :any)
+  data(ethical_label, :any)
+  data(changeset, :any)
+  data(focus, :any, default: "")
 
   # Handle selector update
 
@@ -37,7 +36,6 @@ defmodule Systems.Assignment.EthicalForm do
         %{id: id, entity_id: entity_id, validate?: validate?},
         socket
       ) do
-
     entity = Assignment.Context.get_experiment!(entity_id)
     changeset = Assignment.ExperimentModel.changeset(entity, :create, %{})
 

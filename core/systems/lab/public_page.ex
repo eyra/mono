@@ -14,7 +14,9 @@ defmodule Systems.Lab.PublicPage do
     tool = Lab.Context.get(id, preload: [:time_slots])
 
     {:ok,
-     socket |> assign(:tool, tool) |> assign(:reservation, Lab.Context.reservation_for_user(tool, user))}
+     socket
+     |> assign(:tool, tool)
+     |> assign(:reservation, Lab.Context.reservation_for_user(tool, user))}
   end
 
   @impl true

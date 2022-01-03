@@ -33,7 +33,6 @@ defmodule Systems.Lab.Context do
     |> Repo.all()
   end
 
-
   def new_day_model(%Lab.ToolModel{id: id}) do
     time_slots = get_time_slots(id)
     base_values = DaySchedule.base_values(time_slots)
@@ -75,6 +74,7 @@ defmodule Systems.Lab.Context do
       }
     }
   end
+
   def edit_day_model(_, date), do: {:error, "No time slots available on #{date}"}
 
   def reserve_time_slot(time_slot_id, %User{} = user) when is_integer(time_slot_id) do
@@ -92,7 +92,11 @@ defmodule Systems.Lab.Context do
       cancel_reservations(time_slot.tool_id, user)
 
       %Lab.ReservationModel{}
-      |> Lab.ReservationModel.changeset(%{status: :reserved, user_id: user.id, time_slot_id: time_slot.id})
+      |> Lab.ReservationModel.changeset(%{
+        status: :reserved,
+        user_id: user.id,
+        time_slot_id: time_slot.id
+      })
       |> Repo.insert()
     end
   end

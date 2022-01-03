@@ -13,8 +13,8 @@ defmodule Systems.Assignment.ExperimentForm do
     Assignment
   }
 
-  prop entity_id, :number
-  prop validate?, :boolean
+  prop(entity_id, :number)
+  prop(validate?, :boolean)
 
   data(entity, :any)
   data(device_labels, :list)

@@ -43,17 +43,21 @@ defmodule Systems.Pool.StudentsView do
 
   defp filter(students, nil), do: students
   defp filter(students, []), do: students
+
   defp filter(students, filters) do
-    students|> Enum.filter(&CriteriaFilters.include?(&1.features.study_program_codes, filters))
+    students |> Enum.filter(&CriteriaFilters.include?(&1.features.study_program_codes, filters))
   end
 
-  defp prepare_students(%{assigns: %{students: students, active_filters: active_filters}} = socket) do
+  defp prepare_students(
+         %{assigns: %{students: students, active_filters: active_filters}} = socket
+       ) do
     socket
-      |> assign(filtered_students:
+    |> assign(
+      filtered_students:
         students
         |> filter(active_filters)
         |> Enum.map(&to_view_model(&1, socket))
-      )
+    )
   end
 
   defp to_view_model(

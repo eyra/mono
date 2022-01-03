@@ -33,6 +33,7 @@ defmodule Systems.NextAction.OverviewPage do
   end
 
   defoverridable handle_view_model_updated: 1
+
   def handle_view_model_updated(socket) do
     refresh_next_actions(socket)
   end

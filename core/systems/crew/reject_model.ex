@@ -20,5 +20,4 @@ defmodule Systems.Crew.RejectModel do
     |> cast(params, @fields)
     |> validate_required(@fields)
   end
-
 end

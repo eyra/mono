@@ -58,13 +58,13 @@ defmodule CoreWeb.UI.ProgressBar.Example do
 
   def render(assigns) do
     ~F"""
-    <ProgressBar :props={%{size: nil, bars: [%{ color: :primary, size: 100}]}} />
-    <ProgressBar :props={%{size: 0, bars: [%{ color: :primary, size: nil}]}} />
-    <ProgressBar :props={%{size: 0, bars: [%{ color: :primary, size: 100}]}} />
-    <ProgressBar :props={%{size: 100, bars: [%{ color: :primary, size: 100}]}} />
-    <ProgressBar :props={%{size: 100, bars: [%{ color: :primary, size: 100}, %{ color: :secondary, size: 50}]}} />
-    <ProgressBar :props={%{size: 100, bars: [%{ color: :primary, size: 100}, %{ color: :secondary, size: 50}, %{ color: :tertiary, size: 1}]}} />
-    <ProgressBar :props={%{size: 100, bars: [%{ color: :primary, size: 100}, %{ color: :secondary, size: 50}, %{ color: :tertiary, size: 1}, %{ color: :grey1, size: 1}]}} />
+    <ProgressBar size={nil} bars={[%{ color: :primary, size: 100}]} />
+    <ProgressBar size={0} bars={[%{ color: :primary, size: nil}]} />
+    <ProgressBar size={0} bars={[%{ color: :primary, size: 100}]} />
+    <ProgressBar size={100} bars={[%{ color: :primary, size: 100}]} />
+    <ProgressBar size={100} bars={[%{ color: :primary, size: 100}, %{ color: :secondary, size: 50}]} />
+    <ProgressBar size={100} bars={[%{ color: :primary, size: 100}, %{ color: :secondary, size: 50}, %{ color: :tertiary, size: 1}]} />
+    <ProgressBar size={100} bars={[%{ color: :primary, size: 100}, %{ color: :secondary, size: 50}, %{ color: :tertiary, size: 1}, %{ color: :grey1, size: 1}]} />
     """
   end
 end
@@ -88,7 +88,7 @@ defmodule CoreWeb.UI.ProgressBar.Playground do
 
   def render(assigns) do
     ~F"""
-    <ProgressBar :props={@props} />
+    <ProgressBar {...@props} />
     """
   end
 end

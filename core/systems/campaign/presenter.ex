@@ -37,5 +37,4 @@ defmodule Systems.Campaign.Presenter do
     Signal.Context.dispatch!(%{page: page}, %{id: id, model: campaign})
     campaign
   end
-
 end

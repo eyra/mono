@@ -1,5 +1,4 @@
 defmodule Systems.Assignment.Assignable do
-
   import CoreWeb.Gettext
 
   def languages(%{language: language}) when not is_nil(language), do: [language]
@@ -8,9 +7,10 @@ defmodule Systems.Assignment.Assignable do
   def devices(%{devices: devices}) when not is_nil(devices), do: devices
   def devices(_), do: []
 
-  def spot_count(%{subject_count: subject_count}) when not is_nil(subject_count), do: subject_count
-  def spot_count(_), do: 0
+  def spot_count(%{subject_count: subject_count}) when not is_nil(subject_count),
+    do: subject_count
 
+  def spot_count(_), do: 0
 
   def duration(%{duration: duration}) when not is_nil(duration) do
     case Integer.parse(duration) do
@@ -18,12 +18,17 @@ defmodule Systems.Assignment.Assignable do
       {duration, _} -> duration
     end
   end
+
   def duration(_), do: 0
 
-  def apply_label(%{survey_tool: tool}) when not is_nil(tool), do: dgettext("link-survey", "apply.cta.title")
+  def apply_label(%{survey_tool: tool}) when not is_nil(tool),
+    do: dgettext("link-survey", "apply.cta.title")
+
   def apply_label(_), do: "<apply>"
 
-  def open_label(%{survey_tool: tool}) when not is_nil(tool), do: dgettext("link-survey", "open.cta.title")
+  def open_label(%{survey_tool: tool}) when not is_nil(tool),
+    do: dgettext("link-survey", "open.cta.title")
+
   def open_label(_), do: "<open>"
 
   def ready?(%{survey_tool: tool}) when not is_nil(tool), do: Systems.Survey.Context.ready?(tool)

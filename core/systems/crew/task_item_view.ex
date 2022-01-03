@@ -3,10 +3,10 @@ defmodule Systems.Crew.TaskItemView do
 
   alias Frameworks.Pixel.Line
 
-  prop id, :number
-  prop public_id, :string, required: true
-  prop message, :map
-  prop buttons, :list, default: []
+  prop(id, :number)
+  prop(public_id, :string, required: true)
+  prop(message, :map)
+  prop(buttons, :list, default: [])
 
   defp message_color(%{type: :warning}), do: "text-warning"
   defp message_color(%{type: :alarm}), do: "text-delete"
@@ -76,9 +76,9 @@ defmodule Systems.Crew.TaskItemView.Example do
     ~F"""
     <Title3>Waitinglist</Title3>
 
-    <TaskItemView :props={
-      public_id: "1234",
-      buttons: [
+    <TaskItemView
+      public_id={"1234"}
+      buttons={[
         %{
           action: %{type: :send, item: 1, target: "", event: "accept"},
           face: %{type: :icon, icon: :accept}
@@ -94,10 +94,10 @@ defmodule Systems.Crew.TaskItemView.Example do
 
     <Title3>Attention</Title3>
 
-    <TaskItemView :props={
-      public_id: "777",
-      message: %{type: :warning, text: "Got rejected last assignment"},
-      buttons: [
+    <TaskItemView
+      public_id={"777"}
+      message={%{type: :warning, text: "Got rejected last assignment"}}
+      buttons={[
         %{
           action: %{type: :send, item: 1, target: "", event: "accept"},
           face: %{type: :icon, icon: :accept}
@@ -111,10 +111,10 @@ defmodule Systems.Crew.TaskItemView.Example do
 
     <div class="mb-6"></div>
 
-    <TaskItemView :props={
-      public_id: "112",
-      message: %{type: :alarm, text: "Completed far below estimated duration"},
-      buttons: [
+    <TaskItemView
+      public_id={"112"}
+      message={%{type: :alarm, text: "Completed far below estimated duration"}}
+      buttons={[
         %{
           action: %{type: :send, item: 1, target: "", event: "accept"},
           face: %{type: :icon, icon: :accept}
@@ -130,10 +130,10 @@ defmodule Systems.Crew.TaskItemView.Example do
 
     <Title3>Rejected</Title3>
 
-    <TaskItemView :props={
-      public_id: "63",
-      message: %{type: :attention_checks_failed, text: "Attention checks failed"},
-      buttons: [
+    <TaskItemView
+      public_id={"63"}
+      message={%{type: :attention_checks_failed, text: "Attention checks failed"}}
+      buttons={[
         %{
           action: %{type: :send, item: 1, target: "", event: "accept"},
           face: %{type: :icon, icon: :accept}
@@ -143,10 +143,10 @@ defmodule Systems.Crew.TaskItemView.Example do
 
     <div class="mb-6"></div>
 
-    <TaskItemView :props={
-      public_id: "282",
-      message: %{type: :not_completed, text: "Not completed"},
-      buttons: [
+    <TaskItemView
+      public_id={"282"}
+      message={%{type: :not_completed, text: "Not completed"}}
+      buttons={[
         %{
           action: %{type: :send, item: 1, target: "", event: "accept"},
           face: %{type: :icon, icon: :accept}
@@ -156,10 +156,10 @@ defmodule Systems.Crew.TaskItemView.Example do
 
     <div class="mb-6"></div>
 
-    <TaskItemView :props={
-      public_id: "1349",
-      message: %{type: :rejected, text: "Rejected because of other reasons"},
-      buttons: [
+    <TaskItemView
+      public_id={"1349"}
+      message={%{type: :rejected, text: "Rejected because of other reasons"}}
+      buttons={[
         %{
           action: %{type: :send, item: 1, target: "", event: "accept"},
           face: %{type: :icon, icon: :accept}
@@ -179,5 +179,4 @@ defmodule Systems.Crew.TaskItemView.Example do
     Logger.info("Reject")
     {:noreply, socket}
   end
-
 end

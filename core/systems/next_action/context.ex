@@ -68,7 +68,12 @@ defmodule Systems.NextAction.Context do
       conflict_target: {:unsafe_fragment, conflict_target_fragment}
     )
     |> tap(
-      &Signal.Context.dispatch!(:next_action_created, %{action_type: action, user: user, action: &1, key: key})
+      &Signal.Context.dispatch!(:next_action_created, %{
+        action_type: action,
+        user: user,
+        action: &1,
+        key: key
+      })
     )
   end
 
@@ -79,7 +84,9 @@ defmodule Systems.NextAction.Context do
     from(na in NextAction.Model, where: na.user_id == ^user.id and na.action == ^action_string)
     |> where_key_is(key)
     |> Repo.delete_all()
-    |> tap(fn _ -> Signal.Context.dispatch!(:next_action_cleared, %{user: user, action_type: action, key: key}) end)
+    |> tap(fn _ ->
+      Signal.Context.dispatch!(:next_action_cleared, %{user: user, action_type: action, key: key})
+    end)
   end
 
   defp where_key_is(query, nil), do: from(na in query, where: is_nil(na.key))

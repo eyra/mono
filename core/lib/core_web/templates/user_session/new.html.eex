@@ -14,7 +14,7 @@
                   data-phx-link-state="replace"
                   href="/"
                 >
-                  <img class="h-8 sm:h-12" src=" <%= Routes.static_path(@conn, "/images/icons/#{Meta.bundle(@conn)}.svg") %>" alt="<%= Meta.bundle_title() %> Home" />
+                  <img class="h-8 sm:h-12" src="<%= CoreWeb.Endpoint.static_path("/images/icons/#{Meta.bundle(@conn)}.svg") %>" alt="<%= Meta.bundle_title() %> Home" />
                 </a>
               </div>
             </div>
@@ -136,7 +136,7 @@
             </div>
           </div>
           <div class="bg-white ">
-            <%=  footer Routes.static_path(@conn, "/images/footer-left.svg"), Routes.static_path(@conn, "/images/footer-right.svg") %>
+            <%=  footer CoreWeb.Endpoint.static_path("/images/footer-left.svg"), CoreWeb.Endpoint.static_path("/images/footer-right.svg") %>
           </div>
         </div>
       </div>

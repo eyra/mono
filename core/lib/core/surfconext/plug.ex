@@ -39,6 +39,7 @@ defmodule Core.SurfConext.CallbackController do
   require Logger
   use Phoenix.Controller, namespace: CoreWeb
   alias CoreWeb.Router.Helpers, as: Routes
+
   import Core.SurfConext.PlugUtils
 
   def authenticate(conn, params) do

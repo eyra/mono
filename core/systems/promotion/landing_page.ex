@@ -71,7 +71,10 @@ defmodule Systems.Promotion.LandingPage do
   end
 
   defp update_image_info(%{assigns: %{viewport: %{"width" => 0}}} = socket), do: socket
-  defp update_image_info(%{assigns: %{viewport: %{"width" => viewport_width}, vm: %{image_id: image_id}}} = socket) do
+
+  defp update_image_info(
+         %{assigns: %{viewport: %{"width" => viewport_width}, vm: %{image_id: image_id}}} = socket
+       ) do
     image_width = viewport_width
     image_height = image_width * 0.75
     image_info = ImageHelpers.get_image_info(image_id, image_width, image_height)
@@ -81,6 +84,7 @@ defmodule Systems.Promotion.LandingPage do
   end
 
   defoverridable handle_view_model_updated: 1
+
   def handle_view_model_updated(socket) do
     socket
     |> update_image_info()
@@ -110,7 +114,11 @@ defmodule Systems.Promotion.LandingPage do
   end
 
   @impl true
-  def handle_event("call-to-action", _params, %{assigns: %{model: model, vm: %{call_to_action: call_to_action}}} = socket) do
+  def handle_event(
+        "call-to-action",
+        _params,
+        %{assigns: %{model: model, vm: %{call_to_action: call_to_action}}} = socket
+      ) do
     {
       :noreply,
       socket
@@ -153,7 +161,7 @@ defmodule Systems.Promotion.LandingPage do
               <PrimaryLiveViewButton label={@vm.call_to_action.label} event="call-to-action-1" />
             </#template>
           </HeroImage>
-          <HeroBanner title={@vm.organisation.label} subtitle={@vm.byline} icon_url={Routes.static_path(@socket, "/images/#{@vm.organisation.id}.svg")}/>
+          <HeroBanner title={@vm.organisation.label} subtitle={@vm.byline} icon_url={CoreWeb.Endpoint.static_path("/images/#{@vm.organisation.id}.svg")}/>
         </#template>
 
         <div :if={show_dialog?(@dialog)} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
@@ -187,7 +195,7 @@ defmodule Systems.Promotion.LandingPage do
 
             <CampaignBanner
               photo_url={@vm.banner_photo_url}
-              placeholder_photo_url={Routes.static_path(@socket, "/images/profile_photo_default.svg")}
+              placeholder_photo_url={CoreWeb.Endpoint.static_path("/images/profile_photo_default.svg")}
               title={@vm.banner_title}
               subtitle={@vm.banner_subtitle}
               url={@vm.banner_url}

@@ -1,6 +1,7 @@
 defmodule Systems.Support.TicketPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :ticket
+  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Systems.{
     Support
@@ -101,14 +102,22 @@ defmodule Systems.Support.TicketPage do
   defp button(%{ticket: %{completed_at: completed_at}}) when is_nil(completed_at) do
     %{
       action: %{type: :send, event: "close_ticket"},
-      face: %{type: :secondary, label: dgettext("eyra-admin", "close.ticket.button"), text_color: "text-delete"}
+      face: %{
+        type: :secondary,
+        label: dgettext("eyra-admin", "close.ticket.button"),
+        text_color: "text-delete"
+      }
     }
   end
 
   defp button(_) do
     %{
       action: %{type: :send, event: "reopen_ticket"},
-      face: %{type: :secondary, label: dgettext("eyra-admin", "reopen.ticket.button"), text_color: "text-primary"}
+      face: %{
+        type: :secondary,
+        label: dgettext("eyra-admin", "reopen.ticket.button"),
+        text_color: "text-primary"
+      }
     }
   end
 

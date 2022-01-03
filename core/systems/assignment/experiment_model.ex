@@ -80,5 +80,4 @@ defmodule Systems.Assignment.ExperimentModel do
 
   def tool_id_field(%Survey.ToolModel{}), do: :survey_tool_id
   def tool_id_field(%Lab.ToolModel{}), do: :lab_tool_id
-
 end

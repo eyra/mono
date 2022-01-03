@@ -7,14 +7,14 @@ defmodule Systems.Assignment.AssignmentForm do
     Assignment
   }
 
-  prop props, :map
+  prop(props, :map)
 
-  data entity_id, :number
-  data callback_url, :string
-  data validate?, :boolean
-  data experiment_id, :number
-  data tool_id, :number
-  data tool_form, :number
+  data(entity_id, :number)
+  data(callback_url, :string)
+  data(validate?, :boolean)
+  data(experiment_id, :number)
+  data(tool_id, :number)
+  data(tool_form, :number)
 
   def update(%{claim_focus: form}, %{assigns: assigns} = socket) do
     assigns
@@ -31,9 +31,6 @@ defmodule Systems.Assignment.AssignmentForm do
   # Handle update from parent after attempt to publish
   def update(%{props: %{validate?: new}}, %{assigns: %{validate?: current}} = socket)
       when new != current do
-
-    IO.puts("UPDATE Y")
-
     {
       :ok,
       socket
@@ -52,11 +49,12 @@ defmodule Systems.Assignment.AssignmentForm do
         %{id: id, props: %{entity_id: entity_id, validate?: validate?, uri_origin: uri_origin}},
         socket
       ) do
-
     preload = Assignment.Model.preload_graph(:full)
     %{assignable_experiment: experiment} = Assignment.Context.get!(entity_id, preload)
 
-    callback_path = CoreWeb.Router.Helpers.live_path(socket, Systems.Assignment.CallbackPage, entity_id)
+    callback_path =
+      CoreWeb.Router.Helpers.live_path(socket, Systems.Assignment.CallbackPage, entity_id)
+
     callback_url = uri_origin <> callback_path
 
     tool_id = Assignment.ExperimentModel.tool_id(experiment)
@@ -77,17 +75,16 @@ defmodule Systems.Assignment.AssignmentForm do
 
   @impl true
   def handle_event("reset_focus", _, socket) do
-
     {:noreply, socket |> assign(focus: "")}
   end
 
   defp forms(%{
-    tool_form: tool_form,
-    tool_id: tool_id,
-    experiment_id: experiment_id,
-    validate?: validate?,
-    callback_url: callback_url
-  }) do
+         tool_form: tool_form,
+         tool_id: tool_id,
+         experiment_id: experiment_id,
+         validate?: validate?,
+         callback_url: callback_url
+       }) do
     [
       %{
         component: Assignment.ExperimentForm,
@@ -95,11 +92,20 @@ defmodule Systems.Assignment.AssignmentForm do
       },
       %{
         component: tool_form,
-        props: %{id: :tool_form, entity_id: tool_id, validate?: validate?, callback_url: callback_url}
+        props: %{
+          id: :tool_form,
+          entity_id: tool_id,
+          validate?: validate?,
+          callback_url: callback_url
+        }
       },
       %{
         component: Assignment.EthicalForm,
-        props: %{id: :ethical_form, entity_id: experiment_id, validate?: validate?}
+        props: %{
+          id: :ethical_form,
+          entity_id: experiment_id,
+          validate?: validate?
+        }
       }
     ]
   end
@@ -116,7 +122,10 @@ defmodule Systems.Assignment.AssignmentForm do
         <Spacing value="M" />
 
         <div class="flex flex-col gap-12 lg:gap-16">
-          <Dynamic :for={form <- forms(assigns)} component={form.component} props={form.props} />
+          {#for form <- forms(assigns)}
+          <Surface.Components.Dynamic.LiveComponent
+            module={form.component} {...form.props}  />
+          {/for}
         </div>
       </ContentArea>
     """

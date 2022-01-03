@@ -13,7 +13,10 @@ defmodule Systems.Assignment.Switch do
     NextAction
   }
 
-  def dispatch(:crew_task_updated, %{data: %{status: old_status, member_id: member_id, crew_id: crew_id}, changes: %{status: new_status}}) do
+  def dispatch(:crew_task_updated, %{
+        data: %{status: old_status, member_id: member_id, crew_id: crew_id},
+        changes: %{status: new_status}
+      }) do
     # crew does not have a director (yet), so check if assignment is available to handle signal
     with [%{id: assignment_id} | _] <- Assignment.Context.get_by_crew!(crew_id) do
       %{user_id: user_id} = Crew.Context.get_member!(member_id)
@@ -22,9 +25,14 @@ defmodule Systems.Assignment.Switch do
       opts = [key: "#{assignment_id}", params: %{id: assignment_id}]
 
       case {old_status, new_status} do
-        {_, :rejected} -> NextAction.Context.create_next_action(user, Assignment.CheckRejection, opts)
-        {:rejected, _} -> NextAction.Context.clear_next_action(user, Assignment.CheckRejection, opts)
-        _ -> :nil
+        {_, :rejected} ->
+          NextAction.Context.create_next_action(user, Assignment.CheckRejection, opts)
+
+        {:rejected, _} ->
+          NextAction.Context.clear_next_action(user, Assignment.CheckRejection, opts)
+
+        _ ->
+          nil
       end
     end
   end

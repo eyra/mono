@@ -7,7 +7,6 @@ defmodule Frameworks.Pixel.Form.PhotoInput do
   alias Frameworks.Pixel.Case.{Case, True, False}
   alias Frameworks.Pixel.Button.{PrimaryLabelButton, SecondaryLabelButton}
 
-  prop(conn, :any, required: true)
   prop(static_path, :any, required: true)
   prop(label_text, :string)
   prop(label_color, :css_class, default: "text-grey1")
@@ -22,7 +21,7 @@ defmodule Frameworks.Pixel.Form.PhotoInput do
     <div class="flex flex-row items-center">
       <ImagePreview
         image_url={@photo_url}
-        placeholder={@static_path.(@conn, "/images/profile_photo_default.svg")}
+        placeholder={@static_path.("/images/profile_photo_default.svg")}
         shape="w-image-preview-circle sm:w-image-preview-circle-sm h-image-preview-circle sm:h-image-preview-circle-sm rounded-full" />
       <Spacing value="S" direction="l" />
       <div class="flex-wrap">

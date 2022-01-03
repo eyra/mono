@@ -1,7 +1,7 @@
 defmodule Link.Marketplace.Card do
   alias Core.Pools.Submission
   alias Core.ImageHelpers
-  alias CoreWeb.Router.Helpers, as: Routes
+
   import CoreWeb.Gettext
 
   alias Systems.{
@@ -327,7 +327,7 @@ defmodule Link.Marketplace.Card do
 
   def get_icon_url(marks, socket) do
     case marks do
-      [mark] -> Routes.static_path(socket, "/images/#{mark}.svg")
+      [mark] -> CoreWeb.Endpoint.static_path("/images/#{mark}.svg")
       _ -> nil
     end
   end

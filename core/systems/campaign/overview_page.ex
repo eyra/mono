@@ -18,8 +18,8 @@ defmodule Systems.Campaign.OverviewPage do
   alias Frameworks.Pixel.Button.Face.Forward
   alias Frameworks.Pixel.ShareView
 
-  data campaigns, :list, default: []
-  data share_dialog, :map
+  data(campaigns, :list, default: [])
+  data(share_dialog, :map)
 
   alias Systems.{
     Campaign,
@@ -74,10 +74,10 @@ defmodule Systems.Campaign.OverviewPage do
     }
   end
 
-
   @impl true
   def handle_event("delete_confirm", _params, %{assigns: %{campaign_id: campaign_id}} = socket) do
     Campaign.Context.delete(campaign_id)
+
     {
       :noreply,
       socket
@@ -96,30 +96,32 @@ defmodule Systems.Campaign.OverviewPage do
   end
 
   @impl true
-  def handle_event("close_share_dialog",  _, socket) do
+  def handle_event("close_share_dialog", _, socket) do
     IO.puts("close_share_dialog")
     {:noreply, socket |> assign(share_dialog: nil)}
   end
 
   @impl true
-  def handle_event("share",  %{"item" => campaign_id}, %{assigns: %{current_user: user}} = socket) do
+  def handle_event("share", %{"item" => campaign_id}, %{assigns: %{current_user: user}} = socket) do
     researchers =
       Core.Accounts.list_researchers([:profile])
-      |> Enum.filter(&(&1.id != user.id)) # filter current user
+      # filter current user
+      |> Enum.filter(&(&1.id != user.id))
 
     owners =
       campaign_id
       |> String.to_integer()
       |> Campaign.Context.get!()
       |> Campaign.Context.list_owners([:profile])
-      |> Enum.filter(&(&1.id != user.id)) # filter current user
+      # filter current user
+      |> Enum.filter(&(&1.id != user.id))
 
     share_dialog = %{
       content_id: campaign_id,
       content_name: dgettext("eyra-campaign", "share.dialog.content"),
       group_name: dgettext("eyra-campaign", "share.dialog.group"),
       users: researchers,
-      shared_users: owners,
+      shared_users: owners
     }
 
     {
@@ -129,7 +131,7 @@ defmodule Systems.Campaign.OverviewPage do
   end
 
   @impl true
-  def handle_event("duplicate",  %{"item" => campaign_id}, socket) do
+  def handle_event("duplicate", %{"item" => campaign_id}, socket) do
     preload = Campaign.Model.preload_graph(:full)
     campaign = Campaign.Context.get!(String.to_integer(campaign_id), preload)
 
@@ -205,13 +207,13 @@ defmodule Systems.Campaign.OverviewPage do
       >
         <div :if={@share_dialog} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20" phx-click="close_share_dialog">
           <div class="flex flex-row items-center justify-center w-full h-full">
-            <ShareView id={:share_dialog} :props={@share_dialog} />
+            <ShareView id={:share_dialog} {...@share_dialog} />
           </div>
         </div>
 
         <div :if={@dialog != nil} class="fixed z-40 left-0 top-0 w-full h-full bg-black bg-opacity-20">
           <div class="flex flex-row items-center justify-center w-full h-full">
-            <SelectorDialog :props={@dialog} />
+            <SelectorDialog {...@dialog} />
           </div>
         </div>
         <ContentArea>
@@ -238,7 +240,7 @@ defmodule Systems.Campaign.OverviewPage do
             <MarginY id={:title2_bottom} />
             <DynamicGrid>
               <div :for={campaign <- @campaigns } >
-                <DynamicCampaign conn={@socket} path_provider={Routes} card={campaign} click_event_data={%{action: :edit, id: campaign.edit_id }} />
+                <DynamicCampaign path_provider={CoreWeb.Endpoint} card={campaign} click_event_data={%{action: :edit, id: campaign.edit_id }} />
               </div>
             </DynamicGrid>
             <Spacing value="L" />

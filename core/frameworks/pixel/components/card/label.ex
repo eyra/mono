@@ -6,7 +6,6 @@ defmodule Frameworks.Pixel.Card.Label do
 
   alias Frameworks.Pixel.Text.Title5
 
-  prop(conn, :any, required: true)
   prop(path_provider, :any, required: true)
   prop(text, :string, required: true)
   prop(type, :atom, default: :primary)
@@ -32,7 +31,7 @@ defmodule Frameworks.Pixel.Card.Label do
           <Title5 color={text_color(@type)}>{@text}</Title5>
         </div>
       </div>
-      <img src={@path_provider.static_path(@conn, "/images/label-arrow-#{@type}.svg")} alt={@text}/>
+      <img src={@path_provider.static_path("/images/label-arrow-#{@type}.svg")} alt={@text}/>
     </div>
     """
   end

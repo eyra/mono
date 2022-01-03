@@ -14,17 +14,17 @@ defmodule Systems.Crew.RejectView do
 
   import CoreWeb.Gettext
 
-  prop target, :map, required: true
+  prop(target, :map, required: true)
 
-  data title, :string
-  data text, :string
-  data note, :string
-  data message_input_label, :string
-  data categories, :list
-  data category, :atom
-  data model, :map
-  data changeset, :map
-  data focus, :string, default: ""
+  data(title, :string)
+  data(text, :string)
+  data(note, :string)
+  data(message_input_label, :string)
+  data(categories, :list)
+  data(category, :atom)
+  data(model, :map)
+  data(changeset, :map)
+  data(focus, :string, default: "")
 
   def update(%{active_item_id: category, selector_id: :category}, socket) do
     {
@@ -35,7 +35,6 @@ defmodule Systems.Crew.RejectView do
   end
 
   def update(%{id: id, target: target}, socket) do
-
     title = dgettext("link-campaign", "reject.title")
     text = dgettext("link-campaign", "reject.text")
     note = dgettext("link-campaign", "reject.note")
@@ -47,7 +46,8 @@ defmodule Systems.Crew.RejectView do
 
     {
       :ok,
-      socket |> assign(
+      socket
+      |> assign(
         id: id,
         target: target,
         title: title,
@@ -61,12 +61,20 @@ defmodule Systems.Crew.RejectView do
     }
   end
 
-  def handle_event("update", %{"reject_model" => reject_model}, %{assigns: %{model: model}} = socket) do
-      changeset = Crew.RejectModel.changeset(model, :submit, reject_model)
-      {:noreply, socket |> assign(changeset: changeset)}
+  def handle_event(
+        "update",
+        %{"reject_model" => reject_model},
+        %{assigns: %{model: model}} = socket
+      ) do
+    changeset = Crew.RejectModel.changeset(model, :submit, reject_model)
+    {:noreply, socket |> assign(changeset: changeset)}
   end
 
-  def handle_event("reject", %{"reject_model" => %{"message" => message}}, %{assigns: %{model: model, target: target, category: category}} = socket) do
+  def handle_event(
+        "reject",
+        %{"reject_model" => %{"message" => message}},
+        %{assigns: %{model: model, target: target, category: category}} = socket
+      ) do
     attrs = %{category: category, message: message}
     changeset = Crew.RejectModel.changeset(model, :submit, attrs)
 
@@ -79,6 +87,7 @@ defmodule Systems.Crew.RejectView do
         Enum.each(changeset.errors, fn {key, {error, _}} ->
           Logger.error("Reject failed: #{key} -> #{error}")
         end)
+
         {:noreply, socket |> assign(focus: "", changeset: changeset)}
     end
   end
@@ -102,7 +111,11 @@ defmodule Systems.Crew.RejectView do
     [
       %{
         action: %{type: :submit},
-        face: %{type: :primary, label: dgettext("link-campaign", "reject.button"), bg_color: "bg-delete"}
+        face: %{
+          type: :primary,
+          label: dgettext("link-campaign", "reject.button"),
+          bg_color: "bg-delete"
+        }
       },
       %{
         action: %{type: :send, event: "cancel", target: target},
@@ -169,5 +182,4 @@ defmodule Systems.Crew.RejectView.Example do
     IO.puts("cancel")
     {:ok, socket}
   end
-
 end

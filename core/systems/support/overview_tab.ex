@@ -7,9 +7,9 @@ defmodule Systems.Support.OverviewTab do
 
   alias Systems.Support
 
-  prop status, :atom
+  prop(status, :atom)
 
-  data items, :list
+  data(items, :list)
 
   def update(%{id: id, props: %{tickets: tickets}}, socket) do
     items =
@@ -66,7 +66,7 @@ defmodule Systems.Support.OverviewTab do
       <div>
       <MarginY id={:page_top} />
 
-        <div :if={Enum.empty?(@items)} class="h-full">
+      <div :if={Enum.empty?(@items)} class="h-full">
           <MarginY id={:page_top} />
           <div class="flex flex-col items-center w-full h-full">
             <div class="flex-grow"></div>

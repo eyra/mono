@@ -19,7 +19,6 @@ defmodule Frameworks.Utility.Model do
           |> validate_required(operational_fields())
           |> operational_validation()
       end
-
     end
   end
 end

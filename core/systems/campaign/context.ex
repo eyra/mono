@@ -29,6 +29,7 @@ defmodule Systems.Campaign.Context do
   end
 
   def get_by_promotion(promotion, preload \\ [])
+
   def get_by_promotion(%{id: id}, preload) do
     get_by_promotion(id, preload)
   end
@@ -42,6 +43,7 @@ defmodule Systems.Campaign.Context do
   end
 
   def get_by_promotable(promotable, preload \\ [])
+
   def get_by_promotable(%{id: id}, preload) do
     get_by_promotable(id, preload)
   end
@@ -126,9 +128,17 @@ defmodule Systems.Campaign.Context do
   def list_subject_campaigns(user, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
 
-    member_ids = from(m in Crew.MemberModel, where: m.user_id == ^user.id and m.expired == false, select: m.id)
-    crew_ids = from(t in Crew.TaskModel, where: t.member_id in subquery(member_ids), select: t.crew_id)
-    assigment_ids = from(a in Assignment.Model, where: a.crew_id in subquery(crew_ids), select: a.id)
+    member_ids =
+      from(m in Crew.MemberModel,
+        where: m.user_id == ^user.id and m.expired == false,
+        select: m.id
+      )
+
+    crew_ids =
+      from(t in Crew.TaskModel, where: t.member_id in subquery(member_ids), select: t.crew_id)
+
+    assigment_ids =
+      from(a in Assignment.Model, where: a.crew_id in subquery(crew_ids), select: a.id)
 
     from(c in Campaign.Model,
       where: c.promotable_assignment_id in subquery(assigment_ids),
@@ -239,7 +249,12 @@ defmodule Systems.Campaign.Context do
     Campaign.Model.changeset(campaign, attrs)
   end
 
-  def copy(%Campaign.Model{} = campaign, %Promotion.Model{} = promotion, %Assignment.Model{} = assignment, auth_node) do
+  def copy(
+        %Campaign.Model{} = campaign,
+        %Promotion.Model{} = promotion,
+        %Assignment.Model{} = assignment,
+        auth_node
+      ) do
     %Campaign.Model{}
     |> Campaign.Model.changeset(
       campaign
@@ -303,7 +318,7 @@ defmodule Systems.Campaign.Context do
     } = Campaign.Context.get!(id, preload)
 
     Promotion.Context.ready?(promotion) &&
-    Assignment.Context.ready?(assignment)
+      Assignment.Context.ready?(assignment)
   end
 
   @doc """
@@ -318,9 +333,10 @@ defmodule Systems.Campaign.Context do
 
     promotion_ids =
       online_submissions
-      |> Enum.map(&(&1.promotion_id))
+      |> Enum.map(& &1.promotion_id)
 
     preload = Campaign.Model.preload_graph(:full)
+
     from(c in Campaign.Model, preload: ^preload, where: c.promotion_id in ^promotion_ids)
     |> Repo.all()
     |> Enum.each(&mark_expired_debug(&1, force))
@@ -332,5 +348,4 @@ defmodule Systems.Campaign.Context do
   def mark_expired_debug(%{promotable_assignment: assignment}, force) do
     Assignment.Context.mark_expired_debug(assignment, force)
   end
-
 end

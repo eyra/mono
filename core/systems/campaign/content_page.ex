@@ -7,6 +7,7 @@ defmodule Systems.Campaign.ContentPage do
   use CoreWeb.Layouts.Workspace.Component, :campaign
   use CoreWeb.UI.Responsive.Viewport
   use CoreWeb.UI.PlainDialog
+  alias CoreWeb.Router.Helpers, as: Routes
 
   import CoreWeb.Gettext
 
@@ -55,14 +56,15 @@ defmodule Systems.Campaign.ContentPage do
 
     %{
       id: campaign_id,
-      promotion: %{
-        submission: %{
-          status: status
-        } = submission
-      } = promotion,
+      promotion:
+        %{
+          submission:
+            %{
+              status: status
+            } = submission
+        } = promotion,
       promotable_assignment: assignment
     } = Campaign.Context.get!(id, preload)
-
 
     submitted? = status != :idle
     validate? = submitted?
@@ -109,9 +111,11 @@ defmodule Systems.Campaign.ContentPage do
         %{assigns: %{uri_origin: uri_origin, uri_path: uri_path, promotion_id: promotion_id}} =
           socket
       ) do
-
     preview_path =
-      Routes.live_path(socket, Systems.Promotion.LandingPage, promotion_id, preview: true, back: uri_path)
+      Routes.live_path(socket, Systems.Promotion.LandingPage, promotion_id,
+        preview: true,
+        back: uri_path
+      )
 
     socket =
       socket
@@ -142,7 +146,6 @@ defmodule Systems.Campaign.ContentPage do
            }
          } = socket
        ) do
-
     tabs = [
       %{
         id: :promotion_form,
@@ -243,8 +246,11 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   @impl true
-  def handle_event("submit", _params, %{assigns: %{campaign_id: campaign_id, submission_id: submission_id}} = socket) do
-
+  def handle_event(
+        "submit",
+        _params,
+        %{assigns: %{campaign_id: campaign_id, submission_id: submission_id}} = socket
+      ) do
     socket =
       if Campaign.Context.ready?(campaign_id) do
         submission = Submissions.get!(submission_id)
@@ -319,9 +325,14 @@ defmodule Systems.Campaign.ContentPage do
     {:noreply, socket}
   end
 
-  def handle_info(%{id: :experiment_form, ready?: ready?}, socket), do: handle_info(%{id: :assignment_form, ready?: ready?}, socket)
-  def handle_info(%{id: :ethical_form, ready?: ready?}, socket), do: handle_info(%{id: :assignment_form, ready?: ready?}, socket)
-  def handle_info(%{id: :tool_form, ready?: ready?}, socket), do: handle_info(%{id: :assignment_form, ready?: ready?}, socket)
+  def handle_info(%{id: :experiment_form, ready?: ready?}, socket),
+    do: handle_info(%{id: :assignment_form, ready?: ready?}, socket)
+
+  def handle_info(%{id: :ethical_form, ready?: ready?}, socket),
+    do: handle_info(%{id: :assignment_form, ready?: ready?}, socket)
+
+  def handle_info(%{id: :tool_form, ready?: ready?}, socket),
+    do: handle_info(%{id: :assignment_form, ready?: ready?}, socket)
 
   def handle_info(%{id: form, ready?: ready?}, socket) do
     ready_key = String.to_atom("#{form}_ready?")
@@ -520,10 +531,9 @@ defmodule Systems.Campaign.ContentPage do
               <div class={"#{margin_x(@breakpoint)} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg"} x-on:click.away="image_picker = false, $parent.$parent.overlay = false">
                 <ImageCatalogPicker
                   id={:image_picker}
-                  conn={@socket}
                   viewport={@viewport}
                   breakpoint={@breakpoint}
-                  static_path={&Routes.static_path/2}
+                  static_path={&CoreWeb.Endpoint.static_path/1}
                   initial_query={initial_image_query(assigns)}
                   image_catalog={image_catalog()}
                 />

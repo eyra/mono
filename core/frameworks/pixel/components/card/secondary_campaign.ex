@@ -5,7 +5,6 @@ defmodule Frameworks.Pixel.Card.SecondaryCampaign do
   use Surface.Component
   alias Frameworks.Pixel.Card.Campaign
 
-  prop(conn, :any, required: true)
   prop(path_provider, :any, required: true)
   prop(card, :any, required: true)
   prop(click_event_name, :string)
@@ -14,7 +13,7 @@ defmodule Frameworks.Pixel.Card.SecondaryCampaign do
   def render(assigns) do
     ~F"""
     <Campaign
-      conn={@conn}
+
       path_provider={@path_provider}
       card={@card}
       bg_color="grey5"

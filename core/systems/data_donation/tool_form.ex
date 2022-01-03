@@ -3,7 +3,6 @@ defmodule Systems.DataDonation.ToolForm do
 
   alias Core.Accounts
 
-  alias CoreWeb.Router.Helpers, as: Routes
   alias CoreWeb.UI.Timestamp
 
   alias Frameworks.Pixel.Text.{Title2, Title3}
