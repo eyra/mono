@@ -136,7 +136,7 @@
             </div>
           </div>
           <div class="bg-white ">
-            <%=  footer CoreWeb.Endpoint.static_path("/images/footer-left.svg"), CoreWeb.Endpoint.static_path("/images/footer-right.svg") %>
+            <%=  footer @conn, CoreWeb.Endpoint.static_path("/images/footer-left.svg"), CoreWeb.Endpoint.static_path("/images/footer-right.svg") %>
           </div>
         </div>
       </div>

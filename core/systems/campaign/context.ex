@@ -187,6 +187,12 @@ defmodule Systems.Campaign.Context do
     # of the authorization functions?
   end
 
+  def open_spot_count(%{promotable_assignment: assignment}) do
+    Assignment.Context.open_spot_count(assignment)
+  end
+
+  def open_spot_count(_campaign), do: 0
+
   def add_owner!(campaign, user) do
     :ok = Authorization.assign_role(user, campaign, :owner)
   end

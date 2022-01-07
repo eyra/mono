@@ -76,7 +76,7 @@ defmodule CoreWeb.Layouts.Workspace.Component do
                   </div>
                 </div>
                 <div class="flex-none">
-                  {footer CoreWeb.Endpoint.static_path("/images/footer-left.svg"), CoreWeb.Endpoint.static_path("/images/footer-right.svg")}
+                  {footer assigns, CoreWeb.Endpoint.static_path("/images/footer-left.svg"), CoreWeb.Endpoint.static_path("/images/footer-right.svg")}
                 </div>
               </div>
             </div>

@@ -16,6 +16,7 @@ defmodule Frameworks.Pixel.Card.DynamicCampaign do
   def render(assigns) do
     ~F"""
       <Surface.Components.Dynamic.LiveComponent
+        id={@card.id}
         module={campaign(@card)}
         card={@card}
         path_provider={@path_provider}
