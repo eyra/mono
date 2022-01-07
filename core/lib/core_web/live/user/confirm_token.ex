@@ -3,7 +3,6 @@ defmodule CoreWeb.User.ConfirmToken do
   The home screen.
   """
   use CoreWeb, :live_view
-  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Surface.Components.Form
   alias Frameworks.Pixel.Button.SubmitButton

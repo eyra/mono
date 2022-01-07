@@ -325,7 +325,7 @@ defmodule Link.Marketplace.Card do
     |> Enum.map(&Core.Enums.Themes.translate(&1))
   end
 
-  def get_icon_url(marks, socket) do
+  def get_icon_url(marks, _socket) do
     case marks do
       [mark] -> CoreWeb.Endpoint.static_path("/images/#{mark}.svg")
       _ -> nil

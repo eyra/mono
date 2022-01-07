@@ -4,7 +4,6 @@ defmodule CoreWeb.Dashboard do
   """
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :dashboard
-  alias CoreWeb.Router.Helpers, as: Routes
 
   alias CoreWeb.UI.ContentList
 

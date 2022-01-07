@@ -6,7 +6,6 @@ defmodule Systems.Promotion.Page do
   use CoreWeb.Layouts.Website.Component, :index
   alias CoreWeb.Layouts.Website.Component, as: Website
   alias Core.Accounts
-  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Frameworks.Pixel.Card.PrimaryCTA
   alias Frameworks.Pixel.Panel.USP

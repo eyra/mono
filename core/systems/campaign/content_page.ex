@@ -7,7 +7,6 @@ defmodule Systems.Campaign.ContentPage do
   use CoreWeb.Layouts.Workspace.Component, :campaign
   use CoreWeb.UI.Responsive.Viewport
   use CoreWeb.UI.PlainDialog
-  alias CoreWeb.Router.Helpers, as: Routes
 
   import CoreWeb.Gettext
 

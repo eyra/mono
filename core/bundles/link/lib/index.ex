@@ -5,7 +5,6 @@ defmodule Link.Index do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Website.Component, :index
   alias CoreWeb.Layouts.Website.Component, as: Website
-  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Frameworks.Pixel.Card.PrimaryCTA
   alias Frameworks.Pixel.Panel.USP

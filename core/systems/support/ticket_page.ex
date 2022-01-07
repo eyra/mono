@@ -1,7 +1,6 @@
 defmodule Systems.Support.TicketPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :ticket
-  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Systems.{
     Support

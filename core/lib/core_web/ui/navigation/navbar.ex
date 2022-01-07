@@ -25,16 +25,16 @@ defmodule CoreWeb.UI.Navigation.Navbar do
       <HorizontalCenter>
         <div class="flex-wrap" :if={has_home?(@items)} >
           <div class="ml-6 md:ml-0 mr-8">
-            <MenuItem vm={@items.home} path_provider={@path_provider}/>
+            <MenuItem vm={@items.home}/>
           </div>
         </div>
         <div :for={item <- left(@items) } class="mr-1">
-          <MenuItem vm={item} path_provider={@path_provider}/>
+          <MenuItem vm={item}/>
         </div>
         <div class="flex-grow">
         </div>
         <div :for={item <- right(@items)} class="ml-1" >
-          <MenuItem vm={item} path_provider={@path_provider} />
+          <MenuItem vm={item} />
         </div>
       </HorizontalCenter>
     </div>

@@ -242,9 +242,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     %{
       byline:
         "#{dgettext("link-survey", "by.author.label")}: " <>
-          (authors
-           |> Enum.map(& &1.fullname)
-           |> Enum.join(", "))
+          Enum.map_join(authors, ", ", & &1.fullname)
     }
   end
 

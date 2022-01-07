@@ -3,7 +3,6 @@ defmodule CoreWeb.User.AwaitConfirmation do
   The home screen.
   """
   use CoreWeb, :live_view
-  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Frameworks.Pixel.Text.Title2
 

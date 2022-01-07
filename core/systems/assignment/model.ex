@@ -302,9 +302,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
   defp language_text([]), do: "?"
 
   defp language_text(languages) when is_list(languages) do
-    languages
-    |> Enum.map(&translate(&1))
-    |> Enum.join(" | ")
+    Enum.map_join(languages, " | ", &translate(&1))
   end
 
   defp translate(nil), do: "?"
