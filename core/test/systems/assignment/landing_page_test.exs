@@ -12,28 +12,40 @@ defmodule Systems.Assignment.LandingPageTest do
     setup [:login_as_member]
 
     setup do
+      campaign_auth_node = Factories.insert!(:auth_node)
+      promotion_auth_node = Factories.insert!(:auth_node, %{parent: campaign_auth_node})
+      assignment_auth_node = Factories.insert!(:auth_node, %{parent: campaign_auth_node})
+      experiment_auth_node = Factories.insert!(:auth_node, %{parent: assignment_auth_node})
+
       survey_tool =
         Factories.insert!(
           :survey_tool,
           %{
             survey_url: "https://eyra.co/fake_survey",
-            subject_count: 10,
-            duration: "10",
-            language: "en",
-            devices: [:desktop]
+            director: :campaign
           }
         )
 
-      campaign_auth_node = Factories.insert!(:auth_node)
-      assignment_auth_node = Factories.insert!(:auth_node, %{parent: campaign_auth_node})
-      promotion_auth_node = Factories.insert!(:auth_node, %{parent: campaign_auth_node})
+      experiment =
+        Factories.insert!(
+          :experiment,
+          %{
+            auth_node: experiment_auth_node,
+            survey_tool: survey_tool,
+            subject_count: 10,
+            duration: "10",
+            language: "en",
+            devices: [:desktop],
+            director: :campaign
+          }
+        )
 
       assignment =
         Factories.insert!(
           :assignment,
           %{
             auth_node: assignment_auth_node,
-            survey_tool: survey_tool,
+            experiment: experiment,
             director: :campaign
           }
         )
@@ -129,7 +141,7 @@ defmodule Systems.Assignment.LandingPageTest do
       task = Crew.Context.get_task(assignment.crew, member)
       Crew.Context.start_task(task)
 
-      {:ok, _view, html} =
+      {:ok, view, html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
 
       assert html =~ "This is a test title"

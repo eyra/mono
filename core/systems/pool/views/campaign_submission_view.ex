@@ -129,37 +129,37 @@ defmodule Systems.Pool.CampaignSubmissionView do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <ContentArea>
-        <MarginY id={{:page_top}} />
+        <MarginY id={:page_top} />
         <div class="flex flex-col-reverse xl:flex-row gap-8 xl:gap-14">
           <div class="xl:max-w-form">
-            <Title2>{{dgettext("eyra-account", "features.title")}}</Title2>
-            <BodyMedium>{{dgettext("eyra-account", "features.content.description")}}</BodyMedium>
+            <Title2>{dgettext("eyra-account", "features.title")}</Title2>
+            <BodyMedium>{dgettext("eyra-account", "features.content.description")}</BodyMedium>
             <Spacing value="M" />
 
-            <Title3>{{dgettext("eyra-account", "features.gender.title")}}</Title3>
-            <Selector id={{:genders}} items={{ @gender_labels }} type={{:checkbox}} parent={{ %{type: __MODULE__, id: @id} }} />
+            <Title3>{dgettext("eyra-account", "features.gender.title")}</Title3>
+            <Selector id={:genders} items={@gender_labels} type={:checkbox} parent={%{type: __MODULE__, id: @id}} />
             <Spacing value="XL" />
 
-            <Title3>{{dgettext("eyra-account", "features.nativelanguage.title")}}</Title3>
-            <Selector id={{:native_languages}} items={{ @nativelanguage_labels }} type={{:checkbox}} parent={{ %{type: __MODULE__, id: @id} }} />
+            <Title3>{dgettext("eyra-account", "features.nativelanguage.title")}</Title3>
+            <Selector id={:native_languages} items={@nativelanguage_labels} type={:checkbox} parent={%{type: __MODULE__, id: @id}} />
             <Spacing value="XL" />
 
-            <Title3>{{dgettext("eyra-account", "features.dominanthand.title")}}</Title3>
-            <Selector id={{:dominant_hands}} items={{ @dominanthand_labels }} type={{:checkbox}} parent={{ %{type: __MODULE__, id: @id} }} />
+            <Title3>{dgettext("eyra-account", "features.dominanthand.title")}</Title3>
+            <Selector id={:dominant_hands} items={@dominanthand_labels} type={:checkbox} parent={%{type: __MODULE__, id: @id}} />
           </div>
           <div class="xl:max-w-form">
-            <Title2>{{dgettext("eyra-account", "features.study.title")}}</Title2>
-            <BodyMedium>{{dgettext("eyra-account", "feature.study.content.description")}}</BodyMedium>
+            <Title2>{dgettext("eyra-account", "features.study.title")}</Title2>
+            <BodyMedium>{dgettext("eyra-account", "feature.study.content.description")}</BodyMedium>
             <Spacing value="M" />
 
-            <Title3>{{dgettext("eyra-account", "features.study.year")}}</Title3>
-            <Selector id={{:study_year}} items={{ @study_year_labels }} type={{:radio}} parent={{ %{type: __MODULE__, id: @id} }} />
+            <Title3>{dgettext("eyra-account", "features.study.year")}</Title3>
+            <Selector id={:study_year} items={@study_year_labels} type={:radio} parent={%{type: __MODULE__, id: @id}} />
             <Spacing value="XL" />
 
-            <Title3>{{dgettext("eyra-account", "features.study.program")}}</Title3>
-            <Selector id={{:study_program}} items={{ @study_program_labels }} type={{:checkbox}} parent={{ %{type: __MODULE__, id: @id} }} opts="max-w-form" />
+            <Title3>{dgettext("eyra-account", "features.study.program")}</Title3>
+            <Selector id={:study_program} items={@study_program_labels} type={:checkbox} parent={%{type: __MODULE__, id: @id}} opts="max-w-form" />
             <Spacing value="XL" />
           </div>
         </div>

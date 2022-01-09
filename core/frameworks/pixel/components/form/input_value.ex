@@ -9,9 +9,9 @@ defmodule Frameworks.Pixel.Form.InputValue do
   prop(text_color, :css_class, default: "text-grey2")
 
   def render(assigns) do
-    ~H"""
-    <BodyMedium color={{@text_color}} >
-      {{ input_value(@form, @field) }}
+    ~F"""
+    <BodyMedium color={@text_color} >
+      {input_value(@form, @field)}
     </BodyMedium>
     """
   end

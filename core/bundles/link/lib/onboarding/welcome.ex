@@ -20,17 +20,17 @@ defmodule Link.Onboarding.Welcome do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <ContentArea>
-        <MarginY id={{:page_top}} />
+        <MarginY id={:page_top} />
         <SheetArea>
           <div class="flex flex-col items-center">
             <div class="mb-8 sm:mb-16">
               <img src="/images/illustrations/cards.svg" alt="" />
             </div>
-            <Title2>{{ @title }}</Title2>
+            <Title2>{@title}</Title2>
             <div class="sm:px-2 text-center text-bodymedium sm:text-bodylarge font-body">
-              {{dgettext("link-ui", "onboarding.welcome.description")}}
+              {dgettext("link-ui", "onboarding.welcome.description")}
             </div>
           </div>
         </SheetArea>

@@ -8,9 +8,9 @@ defmodule Frameworks.Pixel.Grid.ImageGrid do
   slot(default, required: true)
 
   def render(assigns) do
-    ~H"""
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 {{@gap}}">
-      <slot />
+    ~F"""
+    <div class={"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 #{@gap}"}>
+      <#slot />
     </div>
     """
   end
@@ -31,28 +31,28 @@ defmodule Frameworks.Pixel.Grid.ImageGrid.Image do
   prop(vm, :any, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <div
-        id="clickable-area-{{index(@vm)}}"
+        id={"clickable-area-#{index(@vm)}"}
         class="relative bg-grey4 ring-4 hover:ring-primary cursor-pointer rounded overflow-hidden"
-        :class="{ 'ring-primary': selected === {{index(@vm)}}, 'ring-white': selected != {{index(@vm)}} }"
-        x-on:click="selected = {{index(@vm)}}"
+        :class={"{ 'ring-primary': selected === #{index(@vm)}, 'ring-white': selected != #{index(@vm)} }"}
+        x-on:click={"selected = #{index(@vm)}"}
         :on-click="select_image"
-        phx-value-image={{id(@vm)}}
-        phx-target={{target(@vm)}}
+        phx-value-image={id(@vm)}
+        phx-target={target(@vm)}
       >
         <div
           class="absolute z-10 w-full h-full bg-primary bg-opacity-50"
-          :class="{ 'visible': selected === {{index(@vm)}}, 'invisible': selected != {{index(@vm)}} }"
+          :class={"{ 'visible': selected === #{index(@vm)}, 'invisible': selected != #{index(@vm)} }"}
         />
         <div
           class="absolute z-20 w-full h-full"
-          :class="{ 'visible': selected === {{index(@vm)}}, 'invisible': selected != {{index(@vm)}} }"
+          :class={"{ 'visible': selected === #{index(@vm)}, 'invisible': selected != #{index(@vm)} }"}
         >
           <img class="w-full h-full object-none" src="/images/checkmark.svg" alt="" />
         </div>
         <div class="w-full h-full">
-          <img class="object-cover w-full h-full image" src={{url(@vm)}} srcset={{srcset(@vm)}}/>
+          <img class="object-cover w-full h-full image" src={url(@vm)} srcset={srcset(@vm)}/>
         </div>
       </div>
     """

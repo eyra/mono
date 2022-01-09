@@ -13,13 +13,13 @@ defmodule Frameworks.Pixel.Form.Form do
   prop(target, :any, default: "")
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div
-      x-data="{ focus: '{{@focus}}' }"
+      x-data={"{ focus: '#{@focus}' }"}
     >
-      <Context put={{target: @target}}>
-        <Form for={{ @changeset }} submit={{@submit}} change={{@change_event}} opts={{ id: @id, phx_target: @target }} >
-          <slot />
+      <Context put={target: @target}>
+        <Form for={@changeset} submit={@submit} change={@change_event} opts={id: @id, phx_target: @target} >
+          <#slot />
         </Form>
       </Context>
     </div>

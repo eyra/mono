@@ -7,10 +7,10 @@ defmodule CoreWeb.UI.Navigation.TabbarArea do
   slot(default, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div>
-      <Context put={{tabs: @tabs}}>
-        <slot />
+      <Context put={tabs: @tabs}>
+        <#slot />
       </Context>
     </div>
     """

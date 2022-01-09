@@ -11,9 +11,9 @@ defmodule Frameworks.Pixel.Button.Action.Click do
   slot(default, required: true)
 
   def render(assigns) do
-    ~H"""
-    <div x-on:click={{code(@vm)}} class="cursor-pointer focus:outline-none">
-      <slot />
+    ~F"""
+    <div x-on:click={code(@vm)} class="cursor-pointer focus:outline-none">
+      <#slot />
     </div>
     """
   end

@@ -37,12 +37,12 @@ msgid "students.empty.title"
 msgstr "Students participating in this pool will appear here"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:73
+#: systems/pool/views/campaigns_view.ex:74
 msgid "campaigns.empty.description"
 msgstr "As soon as researchers publish a campaign in your pool to recruit participants for their study it will be added here. You can schedule when campaigns will become available in the marketplace for eligible participants."
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:72
+#: systems/pool/views/campaigns_view.ex:73
 msgid "campaigns.empty.title"
 msgstr "Campaigns in your pool"
 
@@ -57,22 +57,22 @@ msgid "student.tag.incomplete"
 msgstr "Incompleet"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:65
+#: systems/pool/views/campaigns_view.ex:66
 msgid "accepted.title"
 msgstr "Published"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:103
+#: systems/pool/views/campaigns_view.ex:104
 msgid "status.submitted.label"
 msgstr "Pending"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:59
+#: systems/pool/views/campaigns_view.ex:60
 msgid "submitted.title"
 msgstr "Submitted by researchers"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:139
+#: systems/pool/views/campaigns_view.ex:140
 msgid "spots.available"
 msgstr "%{open} out of %{total} spots available"
 
@@ -82,21 +82,21 @@ msgid "submission.title"
 msgstr "Campaign"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:121
+#: systems/pool/views/campaigns_view.ex:122
 msgid "status.accepted.closed.label"
 msgstr "Closed"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:115
+#: systems/pool/views/campaigns_view.ex:116
 msgid "status.accepted.online.label"
 msgstr "Online"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:109
+#: systems/pool/views/campaigns_view.ex:110
 msgid "status.accepted.scheduled.label"
 msgstr "Scheduled"
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:135
+#: systems/pool/views/campaigns_view.ex:136
 msgid "sample.size"
 msgstr "%{size} spots available"

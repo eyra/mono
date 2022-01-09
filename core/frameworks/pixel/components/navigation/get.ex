@@ -6,14 +6,14 @@ defmodule Frameworks.Pixel.Navigation.Get do
   slot(default, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <a
         class="cursor-pointer"
         data-phx-link="redirect"
         data-phx-link-state="replace"
-        href={{ @path }}
+        href={@path}
       >
-        <slot />
+        <#slot />
       </a>
     """
   end

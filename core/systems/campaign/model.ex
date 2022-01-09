@@ -51,7 +51,7 @@ defmodule Systems.Campaign.Model do
     [
       auth_node: [:role_assignments],
       authors: [:user],
-      promotion: [:content_node, submission: [:content_node, :criteria, :pool]],
+      promotion: [submission: [:criteria, :pool]],
       promotable_assignment: Assignment.Model.preload_graph(:full)
     ]
   end
@@ -73,13 +73,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   import Frameworks.Utility.ViewModel
   import CoreWeb.Gettext
 
-  alias Core.Content.Nodes
-  alias Core.ImageHelpers
-  alias Core.Pools.Submission
-
-  alias CoreWeb.Router.Helpers, as: Routes
   alias Frameworks.Utility.ViewModelBuilder, as: Builder
-  alias Phoenix.LiveView
 
   alias Systems.{
     Campaign,
@@ -87,6 +81,9 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     Assignment,
     Crew
   }
+
+  alias Core.ImageHelpers
+  alias Core.Pools.Submission
 
   def view_model(%Campaign.Model{} = campaign, page, user, url_resolver) do
     campaign
@@ -113,18 +110,9 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
          user,
          url_resolver
        ) do
-    %{state: state} =
-      vm =
-      %{id: id}
-      |> merge(Builder.view_model(promotion, page, user, url_resolver))
-      |> merge(Builder.view_model(promotable, page, user, url_resolver))
-
-    if state == :tester do
-      # override default cta in case of test flow
-      %{vm | call_to_action: back_to_campaign_cta(id)}
-    else
-      vm
-    end
+    %{id: id}
+    |> merge(Builder.view_model(promotion, page, user, url_resolver))
+    |> merge(Builder.view_model(promotable, page, user, url_resolver))
   end
 
   defp vm(
@@ -197,15 +185,15 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
          %{
            id: id,
            updated_at: updated_at,
-           promotion: %{
-             title: title,
-             image_id: image_id,
-             content_node: promotion_content_node,
-             submission: submission
-           },
+           promotion:
+             %{
+               title: title,
+               image_id: image_id,
+               submission: submission
+             } = promotion,
            promotable:
              %{
-               assignable_survey_tool: %{
+               assignable_experiment: %{
                  subject_count: target_subject_count
                }
              } = assignment
@@ -214,6 +202,8 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
          _user,
          url_resolver
        ) do
+    promotion_ready? = Promotion.Context.ready?(promotion)
+
     tag = Submission.get_tag(submission)
 
     target_subject_count =
@@ -228,7 +218,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     subtitle =
       get_content_list_item_subtitle(
         submission,
-        promotion_content_node,
+        promotion_ready?,
         open_spot_count,
         target_subject_count
       )
@@ -254,18 +244,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
         "#{dgettext("link-survey", "by.author.label")}: " <>
           Enum.map_join(authors, ", ", & &1.fullname)
     }
-  end
-
-  defp back_to_campaign_cta(campaign_id) do
-    %{
-      label: dgettext("link-campaign", "back.to.campaign.button"),
-      campaign_id: campaign_id,
-      handle: &handle_back_to_campaign/3
-    }
-  end
-
-  defp handle_back_to_campaign(socket, %{campaign_id: campaign_id} = _call_to_action, _model) do
-    LiveView.push_redirect(socket, to: Routes.live_path(socket, Campaign.ContentPage, campaign_id))
   end
 
   defp tag(nil),
@@ -327,13 +305,13 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
   defp get_content_list_item_subtitle(
          submission,
-         promotion_content_node,
+         promotion_ready?,
          open_spot_count,
          target_subject_count
        ) do
     case submission.status do
       :idle ->
-        if Nodes.ready?(promotion_content_node) do
+        if promotion_ready? do
           dgettext("eyra-submission", "ready.for.submission.message")
         else
           dgettext("eyra-submission", "incomplete.forms.message")

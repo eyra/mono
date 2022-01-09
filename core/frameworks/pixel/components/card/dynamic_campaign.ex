@@ -1,10 +1,8 @@
 defmodule Frameworks.Pixel.Card.DynamicCampaign do
   use Frameworks.Pixel.Component
 
-  alias Frameworks.Pixel.Dynamic
   alias Frameworks.Pixel.Card.{PrimaryCampaign, SecondaryCampaign}
 
-  prop(conn, :any, required: true)
   prop(path_provider, :any, required: true)
   prop(card, :any, required: true)
   prop(click_event_name, :string)
@@ -16,18 +14,14 @@ defmodule Frameworks.Pixel.Card.DynamicCampaign do
   defp campaign(_), do: SecondaryCampaign
 
   def render(assigns) do
-    ~H"""
-      <Dynamic
-        component={{ campaign(@card) }}
-        props={{
-          %{
-            card: @card,
-            conn: @conn,
-            path_provider: @path_provider,
-            click_event_name: @click_event_name,
-            click_event_data: @click_event_data,
-          }
-        }}
+    ~F"""
+      <Surface.Components.Dynamic.LiveComponent
+        id={@card.id}
+        module={campaign(@card)}
+        card={@card}
+        path_provider={@path_provider}
+        click_event_name={@click_event_name}
+        click_event_data={@click_event_data}
       />
     """
   end

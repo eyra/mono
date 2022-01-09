@@ -9,9 +9,9 @@ defmodule Frameworks.Pixel.Text.BodyMedium do
   prop(align, :css_class, default: "text-left")
 
   def render(assigns) do
-    ~H"""
-    <div class="flex-wrap text-bodymedium font-body {{@color}} {{@align}}">
-      <slot />
+    ~F"""
+    <div class={"flex-wrap text-bodymedium font-body #{@color} #{@align}"}>
+      <#slot />
     </div>
     """
   end

@@ -1,11 +1,9 @@
 defmodule Frameworks.Pixel.Selector.Selector do
   @moduledoc false
-  use Surface.LiveComponent
-
-  alias Frameworks.Pixel.Dynamic
+  use CoreWeb.UI.LiveComponent
 
   prop(items, :list, required: true)
-  prop(parent, :map, required: true)
+  prop(parent, :any, required: true)
   prop(type, :atom, default: :label)
   prop(optional?, :boolean, default: true)
   prop(opts, :string, default: "")
@@ -33,7 +31,10 @@ defmodule Frameworks.Pixel.Selector.Selector do
     {:ok, socket}
   end
 
-  def update(%{id: id, items: items, parent: parent, type: type, optional?: optional?, opts: opts}, socket) do
+  def update(
+        %{id: id, items: items, parent: parent, type: type, optional?: optional?, opts: opts},
+        socket
+      ) do
     {
       :ok,
       socket
@@ -68,18 +69,17 @@ defmodule Frameworks.Pixel.Selector.Selector do
          active_item_ids
        ) do
     if multiselect?(type, Enum.count(items)) do
-      send_update(parent.type,
-        id: parent.id,
+      update_target(parent, %{
         selector_id: selector_id,
         active_item_ids: active_item_ids
-      )
+      })
     else
       active_item_id = List.first(active_item_ids)
-      send_update(parent.type,
-        id: parent.id,
+
+      update_target(parent, %{
         selector_id: selector_id,
         active_item_id: active_item_id
-      )
+      })
     end
   end
 
@@ -105,15 +105,17 @@ defmodule Frameworks.Pixel.Selector.Selector do
     socket |> assign(current_items: items)
   end
 
-  defp toggle(%{assigns: %{items: items, type: type, optional?: optional?}}, item, item_id) when is_atom(item_id) do
+  defp toggle(%{assigns: %{items: items, type: type, optional?: optional?}}, item, item_id)
+       when is_atom(item_id) do
     multiselect? = multiselect?(type, Enum.count(items))
     active_count = active_count(items)
 
     if item.id === item_id do
-      if not item.active or optional? or (multiselect? and active_count > 1)  do
+      if not item.active or optional? or (multiselect? and active_count > 1) do
         %{item | active: !item.active}
       else
-        item # prevent deselection
+        # prevent deselection
+        item
       end
     else
       if multiselect? do
@@ -131,29 +133,25 @@ defmodule Frameworks.Pixel.Selector.Selector do
   defp item_component(_), do: Frameworks.Pixel.Selector.Label
 
   def render(assigns) do
-    ~H"""
-    <div class="flex {{ flex_options(@type) }} {{ @opts }}">
-      <For each={{ {item, _} <- Enum.with_index(@current_items) }}>
-        <div x-data="{ active: {{ item.active }}, is_optional: {{@optional?}} }" >
+    ~F"""
+    <div class={"flex #{flex_options(@type)} #{@opts}"}>
+      {#for {item, _} <- Enum.with_index(@current_items)}
+        <div x-data={"{ active: #{item.active}, is_optional: #{@optional?} }"} >
           <div
             x-on:mousedown="if (is_optional) { active = !active }"
             class="cursor-pointer select-none"
             :on-click="toggle"
-            phx-value-item="{{ item.id }}"
-            phx-target={{@myself}}
+            phx-value-item={"#{item.id}"}
+            phx-target={@myself}
           >
-            <Dynamic
-              component={{ item_component(@type) }}
-              props={{
-                %{
-                  item: item,
-                  multiselect?: multiselect?(@type, Enum.count(@items))
-                }
-              }}
+            <Surface.Components.Dynamic.Component
+              module={item_component(@type)}
+                  item={item}
+                  multiselect?={ multiselect?(@type, Enum.count(@items)) }
             />
           </div>
         </div>
-      </For>
+      {/for}
     </div>
     """
   end

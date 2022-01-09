@@ -9,8 +9,8 @@ defmodule Frameworks.Pixel.Form.PasswordInput do
   prop(background, :atom, default: :light)
 
   def render(assigns) do
-    ~H"""
-      <Input field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}} type="password" />
+    ~F"""
+      <Input field={@field} label_text={@label_text} label_color={@label_color} background={@background} type="password" />
     """
   end
 end

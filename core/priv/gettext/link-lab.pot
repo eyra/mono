@@ -11,11 +11,36 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core/lab/tool.ex:57
-msgid "apply.cta.title"
+#: systems/lab/tool_form.ex:26
+msgid "add.day.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core/lab/tool.ex:58
-msgid "open.cta.title"
+#: systems/lab/tool_form.ex:51
+msgid "form.description"
+msgstr ""
+
+#, elixir-format
+#: systems/lab/tool_form.ex:50
+msgid "form.title"
+msgstr ""
+
+#, elixir-format
+#: systems/lab/day_view.ex:99
+msgid "day.schedule.date.label"
+msgstr ""
+
+#, elixir-format
+#: systems/lab/day_view.ex:100
+msgid "day.schedule.location.label"
+msgstr ""
+
+#, elixir-format
+#: systems/lab/day_view.ex:101
+msgid "day.schedule.seats.label"
+msgstr ""
+
+#, elixir-format
+#: systems/lab/day_view.ex:85
+msgid "day.schedule.submit.button"
 msgstr ""

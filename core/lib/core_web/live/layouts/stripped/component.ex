@@ -46,30 +46,30 @@ defmodule CoreWeb.Layouts.Stripped.Component do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <div class="flex flex-row">
         <div class="w-0 md:w-sidepadding flex-shrink-0">
         </div>
         <div class="flex-1">
           <div class="flex flex-col w-full h-viewport">
             <div class="flex-wrap">
-              <MobileNavbar items={{ @menus.mobile_navbar }} path_provider={{ CoreWeb.Router.Helpers }} />
-              <DesktopNavbar items={{ @menus.desktop_navbar }} path_provider={{ CoreWeb.Router.Helpers }} />
+              <MobileNavbar items={@menus.mobile_navbar} path_provider={CoreWeb.Router.Helpers} />
+              <DesktopNavbar items={@menus.desktop_navbar} path_provider={CoreWeb.Router.Helpers} />
             </div>
             <div class="flex-1">
               <div class="flex flex-col h-full border-t border-l border-b border-grey4">
                 <div class="flex-1 bg-white">
                   <div class="flex flex-row">
                     <div class="flex-1">
-                      <slot />
-                      <MarginY id={{:page_footer_top}} />
+                      <#slot />
+                      <MarginY id={:page_footer_top} />
                     </div>
                     <div class="w-0 md:w-sidepadding flex-shrink-0">
                     </div>
                   </div>
                 </div>
                 <div class="bg-white">
-                  {{ footer CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-left.svg"), CoreWeb.Router.Helpers.static_path(@socket, "/images/footer-right.svg") }}
+                  {footer assigns, CoreWeb.Endpoint.static_path("/images/footer-left.svg"), CoreWeb.Endpoint.static_path("/images/footer-right.svg")}
                 </div>
               </div>
             </div>

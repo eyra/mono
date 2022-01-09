@@ -12,9 +12,9 @@ defmodule Frameworks.Pixel.Button.Action.Redirect do
   defviewmodel(to: nil)
 
   def render(assigns) do
-    ~H"""
-    <LiveRedirect to={{ to(@vm) }} class="cursor-pointer focus:outline-none" >
-      <slot />
+    ~F"""
+    <LiveRedirect to={to(@vm)} class="cursor-pointer focus:outline-none" >
+      <#slot />
     </LiveRedirect>
     """
   end

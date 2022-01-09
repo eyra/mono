@@ -5,6 +5,7 @@ defmodule Link.Debug do
   use CoreWeb, :live_view
   use CoreWeb.MultiFormAutoSave
   use CoreWeb.Layouts.Workspace.Component, :debug
+  alias CoreWeb.Router.Helpers, as: Routes
 
   alias CoreWeb.User.Forms.Debug, as: UserDebugForm
   alias CoreWeb.Mail.Forms.Debug, as: MailDebugForm
@@ -111,24 +112,24 @@ defmodule Link.Debug do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <Workspace
-        title={{ dgettext("link-ui", "debug.title") }}
-        menus={{ @menus }}
+        title={dgettext("link-ui", "debug.title")}
+        menus={@menus}
       >
-        <MarginY id={{:page_top}} />
+        <MarginY id={:page_top} />
         <ContentArea>
-          <MarginY id={{:page_top}} />
+          <MarginY id={:page_top} />
             <Title2 margin="">Campaigns</Title2>
             <Spacing value="S" />
             <Wrap>
-              <DynamicButton vm={{ @expire_button }} />
+              <DynamicButton vm={@expire_button} />
             <Spacing value="S" />
             </Wrap>
-            <div :if={{ feature_enabled?(:debug_expire_force) }}>
+            <div :if={feature_enabled?(:debug_expire_force)}>
               <Spacing value="S" />
               <Wrap>
-                <DynamicButton vm={{ @expire_force_button }} />
+                <DynamicButton vm={@expire_force_button} />
               </Wrap>
             </div>
             <Spacing value="XL" />
@@ -136,14 +137,14 @@ defmodule Link.Debug do
             <Title2 margin="">Onboarding</Title2>
             <Spacing value="S" />
             <Wrap>
-              <DynamicButton vm={{ @start_button }} />
+              <DynamicButton vm={@start_button} />
             </Wrap>
         </ContentArea>
 
         <Spacing value="XL" />
-        <UserDebugForm id={{:user_debug}} user={{@current_user }}/>
+        <UserDebugForm id={:user_debug} user={@current_user}/>
         <Spacing value="XL" />
-        <MailDebugForm id={{:mail_debug}} />
+        <MailDebugForm id={:mail_debug} />
 
       </Workspace>
     """

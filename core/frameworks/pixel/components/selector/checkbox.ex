@@ -23,14 +23,14 @@ defmodule Frameworks.Pixel.Selector.Checkbox do
   def check_icon(_), do: "check"
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="flex flex-row gap-3 items-center">
       <div>
-        <img x-show="active" src="/images/icons/{{check_active_icon(@item)}}.svg" alt="{{ value(@item) }} is selected"/>
-        <img x-show="!active" src="/images/icons/{{check_icon(@item)}}.svg" alt="Select {{ value(@item) }}"/>
+        <img x-show="active" src={"/images/icons/#{check_active_icon(@item)}.svg"} alt={"#{value(@item)} is selected"}/>
+        <img x-show="!active" src={"/images/icons/#{check_icon(@item)}.svg"} alt={"Select #{value(@item)}"}/>
       </div>
-      <div class=" select-none mt-1 {{ font(@multiselect?) }} {{ text_color(@item) }}">
-        {{ value(@item) }}
+      <div class={" select-none mt-1 #{font(@multiselect?)} #{text_color(@item)}"}>
+        {value(@item)}
       </div>
     </div>
     """

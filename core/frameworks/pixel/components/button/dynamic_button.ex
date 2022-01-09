@@ -3,7 +3,7 @@ defmodule Frameworks.Pixel.Button.DynamicButton do
 
   alias Frameworks.Pixel.Button.{DynamicAction, DynamicFace}
 
-  prop(vm, :string, required: true)
+  prop(vm, :map, required: true)
 
   defviewmodel(
     action: nil,
@@ -11,9 +11,9 @@ defmodule Frameworks.Pixel.Button.DynamicButton do
   )
 
   def render(assigns) do
-    ~H"""
-    <DynamicAction vm={{action(@vm)}}>
-      <DynamicFace vm={{face(@vm)}} />
+    ~F"""
+    <DynamicAction vm={action(@vm)}>
+      <DynamicFace vm={face(@vm)} />
     </DynamicAction>
     """
   end

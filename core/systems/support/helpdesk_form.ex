@@ -79,19 +79,19 @@ defmodule Systems.Support.HelpdeskForm do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <ContentArea>
       <FormArea>
-        <Form id={{@id}} changeset={{@changeset}} submit="create_ticket" change_event="store_state" target={{@myself}} focus={{@focus}}>
-          <Title3>{{dgettext("eyra-support", "ticket.type")}}</Title3>
-          <Selector id={{:type}} items={{ @type_labels }} type={{:radio}} parent={{ %{type: __MODULE__, id: @id} }} />
+        <Form id={@id} changeset={@changeset} submit="create_ticket" change_event="store_state" target={@myself} focus={@focus}>
+          <Title3>{dgettext("eyra-support", "ticket.type")}</Title3>
+          <Selector id={:type} items={@type_labels} type={:radio} parent={%{type: __MODULE__, id: @id}} />
           <Spacing value="L" />
 
-          <TextInput field={{:title}} label_text={{dgettext("eyra-support", "ticket.title.label")}} />
+          <TextInput field={:title} label_text={dgettext("eyra-support", "ticket.title.label")} />
           <Spacing value="S" />
-          <TextArea field={{:description}} label_text={{dgettext("eyra-support", "ticket.description.label")}} />
+          <TextArea field={:description} label_text={dgettext("eyra-support", "ticket.description.label")} />
 
-          <SubmitButton label={{ dgettext("eyra-support", "create_ticket.button") }} />
+          <SubmitButton label={dgettext("eyra-support", "create_ticket.button")} />
         </Form>
       </FormArea>
     </ContentArea>

@@ -55,38 +55,38 @@ defmodule Systems.Admin.PermissionsPage do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <Workspace
-      title={{ dgettext("eyra-admin", "permissions.title") }}
-      menus={{ @menus }}
+      title={dgettext("eyra-admin", "permissions.title")}
+      menus={@menus}
     >
       <ContentArea class="mb-4" >
-        <MarginY id={{:page_top}} />
-        <Title2>{{ dgettext("eyra-admin", "permissions.pooladmin.title") }}</Title2>
-        <BodyLarge>{{ dgettext("eyra-admin", "permissions.pooladmin.description") }}</BodyLarge>
+        <MarginY id={:page_top} />
+        <Title2>{dgettext("eyra-admin", "permissions.pooladmin.title")}</Title2>
+        <BodyLarge>{dgettext("eyra-admin", "permissions.pooladmin.description")}</BodyLarge>
         <Spacing value="XS" />
         <table class="table-auto">
-          <tr :for={{user <- @pool_admins}}>
+          <tr :for={user <- @pool_admins}>
             <td class="pr-4">
-              <Send vm={{ %{event: "remove_pool_admin_role", item: user.email} }}>
-                <Icon vm={{ %{icon: :remove} }} />
+              <Send vm={%{event: "remove_pool_admin_role", item: user.email}}>
+                <Icon vm={%{icon: :remove}} />
               </Send>
             </td>
-            <td><BodyLarge>{{user.email}}</BodyLarge></td>
+            <td><BodyLarge>{user.email}</BodyLarge></td>
           </tr>
         </table>
-        <div :if={{ Enum.count(@pool_admin_candidates) > 0}}>
+        <div :if={Enum.count(@pool_admin_candidates) > 0}>
           <Spacing value="XL" />
-          <Title3>{{ dgettext("eyra-admin", "permissions.pooladmin.candidates.title") }}</Title3>
+          <Title3>{dgettext("eyra-admin", "permissions.pooladmin.candidates.title")}</Title3>
           <Spacing value="XS" />
           <table class="table-auto">
-            <tr :for={{user <- @pool_admin_candidates}}>
+            <tr :for={user <- @pool_admin_candidates}>
               <td class="pr-4">
-                <Send vm={{ %{event: "assign_pool_admin_role", item: user.email} }}>
-                  <Icon vm={{ %{icon: :add} }} />
+                <Send vm={%{event: "assign_pool_admin_role", item: user.email}}>
+                  <Icon vm={%{icon: :add}} />
                 </Send>
               </td>
-              <td><BodyLarge>{{user.email}}</BodyLarge></td>
+              <td><BodyLarge>{user.email}</BodyLarge></td>
             </tr>
           </table>
         </div>

@@ -10,9 +10,9 @@ defmodule CoreWeb.UI.Navigation.MobileMenu do
   prop(path_provider, :any, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="md:hidden bg-white p-6 h-full" >
-      <Menu items={{@items}} path_provider={{@path_provider}}/>
+      <Menu items={@items} path_provider={@path_provider}/>
     </div>
     """
   end

@@ -17,9 +17,9 @@ defmodule Frameworks.Pixel.Button.Face.Label do
   def padding(_), do: "pt-13px pb-13px active:pt-14px active:pb-3 pr-4 pl-4"
 
   def render(assigns) do
-    ~H"""
-    <div class="rounded bg-opacity-0 {{font(@vm)}} {{padding(@vm)}} {{text_color(@vm)}}">
-      {{ label(@vm) }}
+    ~F"""
+    <div class={"rounded bg-opacity-0 #{font(@vm)} #{padding(@vm)} #{text_color(@vm)}"}>
+      {label(@vm)}
     </div>
     """
   end

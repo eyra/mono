@@ -11,9 +11,7 @@ defmodule Systems.Assignment.Model do
   }
 
   schema "assignments" do
-    belongs_to(:assignable_survey_tool, Core.Survey.Tool)
-    belongs_to(:assignable_lab_tool, Core.Lab.Tool)
-    belongs_to(:assignable_data_donation_tool, Core.DataDonation.Tool)
+    belongs_to(:assignable_experiment, Assignment.ExperimentModel)
     belongs_to(:crew, Systems.Crew.Model)
     belongs_to(:auth_node, Core.Authorization.Node)
 
@@ -42,26 +40,14 @@ defmodule Systems.Assignment.Model do
   end
 
   def assignable(%{assignable: assignable}) when not is_nil(assignable), do: assignable
-
-  def assignable(%{assignable_survey_tool: assignable}) when not is_nil(assignable),
-    do: assignable
-
-  def assignable(%{assignable_lab_tool: assignable}) when not is_nil(assignable), do: assignable
-
-  def assignable(%{assignable_data_donation_tool: assignable}) when not is_nil(assignable),
-    do: assignable
+  def assignable(%{assignable_experiment: assignable}) when not is_nil(assignable), do: assignable
 
   def assignable(%{id: id}) do
     raise "no assignable object available for assignment #{id}"
   end
 
   def preload_graph(:full) do
-    [
-      :crew,
-      :assignable_data_donation_tool,
-      assignable_lab_tool: [:time_slots],
-      assignable_survey_tool: [:auth_node, :content_node]
-    ]
+    [:crew, assignable_experiment: [lab_tool: [:time_slots], survey_tool: [:auth_node]]]
   end
 
   def preload_graph(_), do: []
@@ -69,9 +55,10 @@ end
 
 defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
   import CoreWeb.Gettext
+  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Phoenix.LiveView
-  alias CoreWeb.Router.Helpers, as: Routes
+
   alias Core.Accounts
 
   alias Link.Enums.OnlineStudyLanguages
@@ -119,20 +106,8 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
     end
   end
 
-  defp vm(%{crew: crew} = assignment, Assignment.CallbackPage, user) do
-    state =
-      if Assignment.Context.complete_task(assignment, user) do
-        :participant
-      else
-        if Core.Authorization.user_has_role?(user, crew, :tester) do
-          :tester
-        else
-          :expired
-        end
-      end
-
+  defp vm(_, Assignment.CallbackPage, user) do
     %{
-      state: state,
       hero_title: dgettext("link-survey", "task.hero.title"),
       call_to_action: forward_call_to_action(user)
     }
@@ -227,10 +202,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
     end
   end
 
-  def handle_forward(%{assigns: %{current_user: user}} = socket, _call_to_action, _model) do
-    LiveView.push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))
-  end
-
   defp inform_closed(socket) do
     title = dgettext("link-assignment", "closed.dialog.title")
     text = dgettext("link-assignment", "closed.dialog.text")
@@ -252,6 +223,10 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
     }
 
     LiveView.assign(socket, dialog: dialog)
+  end
+
+  def handle_forward(%{assigns: %{current_user: user}} = socket, _call_to_action, _model) do
+    LiveView.push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))
   end
 
   defp assignment_subtitle(%{status: :pending}),

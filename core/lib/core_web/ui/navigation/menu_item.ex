@@ -18,7 +18,6 @@ defmodule CoreWeb.UI.Navigation.MenuItem do
 
   prop(vm, :any, required: true)
   prop(text_color, :css_class, default: "text-grey1")
-  prop(path_provider, :any, required: true)
   prop(size, :atom, default: :wide)
 
   defp icon_rect(:large), do: "h-8 sm:h-12"
@@ -45,36 +44,36 @@ defmodule CoreWeb.UI.Navigation.MenuItem do
   defp gap(:wide), do: "gap-3"
 
   def render(assigns) do
-    ~H"""
-      <Button id="{{menu_id(@vm)}}_{{id(@vm)}}" vm={{ action(@vm)}} >
-        <div class="flex flex-row items-center justify-start rounded-full focus:outline-none {{ gap(@size) }} {{ bg_color(@vm, @size) }} {{ hover(@vm, @size) }} {{ item_height(icon_size(@vm)) }}">
-          <div :if={{ has_icon?(@vm) && icon_size(@vm) == :large}}>
+    ~F"""
+      <Button id={"#{menu_id(@vm)}_#{id(@vm)}"} vm={action(@vm)} >
+        <div class={"flex flex-row items-center justify-start rounded-full focus:outline-none #{gap(@size)} #{bg_color(@vm, @size)} #{hover(@vm, @size)} #{item_height(icon_size(@vm))}"}>
+          <div :if={has_icon?(@vm) && icon_size(@vm) == :large}>
             <div class="flex flex-col items-center justify-center">
               <div>
-                <img class={{ icon_rect(icon_size(@vm)) }} src={{ @path_provider.static_path(@socket, "/images/icons/#{ icon_filename(icon_name(@vm), @size) }.svg") }} alt="#{icon_name(@vm)}" />
+                <img class={icon_rect(icon_size(@vm))} src={CoreWeb.Endpoint.static_path("/images/icons/#{ icon_filename(icon_name(@vm), @size) }.svg")} alt="#{icon_name(@vm)}" />
               </div>
             </div>
           </div>
-          <div :if={{ has_icon?(@vm) && icon_size(@vm) == :small}}>
+          <div :if={has_icon?(@vm) && icon_size(@vm) == :small}>
             <div class="flex flex-col items-center justify-center">
               <div>
-                <img class={{ icon_rect(icon_size(@vm)) }} src={{ @path_provider.static_path(@socket, "/images/icons/#{ icon_filename(icon_name(@vm), active?(@vm)) }.svg") }} alt="" />
+                <img class={icon_rect(icon_size(@vm))} src={CoreWeb.Endpoint.static_path("/images/icons/#{ icon_filename(icon_name(@vm), active?(@vm)) }.svg")} alt="" />
               </div>
             </div>
           </div>
-          <div :if={{ has_title?(@vm) && @size == :wide }}>
+          <div :if={has_title?(@vm) && @size == :wide}>
             <div class="flex flex-col items-center justify-center">
-              <div class="text-button font-button {{@text_color}} mt-1px" >
-                {{ title(@vm) }}
+              <div class={"text-button font-button #{@text_color} mt-1px"} >
+                {title(@vm)}
               </div>
             </div>
           </div>
-          <div :if={{ has_counter?(@vm) && @size == :wide }} class="flex-grow"></div>
-          <div :if={{ has_counter?(@vm) && @size == :wide }}>
+          <div :if={has_counter?(@vm) && @size == :wide} class="flex-grow"></div>
+          <div :if={has_counter?(@vm) && @size == :wide}>
             <div class="flex flex-col items-center justify-center">
-              <div class="px-6px rounded-full {{counter_color(counter(@vm))}}" >
+              <div class={"px-6px rounded-full #{counter_color(counter(@vm))}"} >
                 <div class="text-captionsmall font-caption text-white mt-2px" >
-                  {{ counter(@vm) }}
+                  {counter(@vm)}
                 </div>
               </div>
             </div>

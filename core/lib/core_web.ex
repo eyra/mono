@@ -24,11 +24,11 @@ defmodule CoreWeb do
       import Plug.Conn
       import CoreWeb.Gettext
       import Core.FeatureFlags
-      alias CoreWeb.Router.Helpers, as: Routes
 
       alias CoreWeb.Loaders
 
       import Phoenix.LiveView.Controller
+      alias CoreWeb.Router.Helpers, as: Routes
     end
   end
 
@@ -41,6 +41,7 @@ defmodule CoreWeb do
         only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
 
       import Core.FeatureFlags
+      alias CoreWeb.Router.Helpers, as: Routes
 
       # Include shared imports and aliases for views
       unquote(view_helpers())
@@ -55,6 +56,7 @@ defmodule CoreWeb do
       use CoreWeb.LiveUri
       import Core.Authorization, only: [can_access?: 2]
       use Frameworks.GreenLight.Live, Core.Authorization
+      alias CoreWeb.Router.Helpers, as: Routes
 
       use CoreWeb.LiveAssignHelper
       import Core.FeatureFlags
@@ -108,7 +110,7 @@ defmodule CoreWeb do
       import Frameworks.Pixel.ErrorHelpers
       import CoreWeb.UI.OldSkool
       import CoreWeb.Gettext
-      alias CoreWeb.Router.Helpers, as: Routes
+
       import Core.Authorization, only: [can?: 4]
       alias CoreWeb.Meta
 

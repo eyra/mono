@@ -9,9 +9,9 @@ defmodule Frameworks.Pixel.Text.Title1 do
   prop(margin, :css_class, default: "mb-7 lg:mb-9")
 
   def render(assigns) do
-    ~H"""
-    <div class="text-title3 font-title3 sm:text-title2 lg:text-title1 lg:font-title1 {{ @margin }}">
-      <slot />
+    ~F"""
+    <div class={"text-title3 font-title3 sm:text-title2 lg:text-title1 lg:font-title1 #{@margin}"}>
+      <#slot />
     </div>
     """
   end

@@ -10,9 +10,9 @@ defmodule Frameworks.Pixel.ImagePreview do
   )
 
   def render(assigns) do
-    ~H"""
-    <div class="overflow-hidden bg-grey4 border-2 border-grey4 {{@shape}}">
-      <img class="object-cover w-full h-full" src="{{ if @image_url do @image_url else @placeholder end }}" alt="Image preview"/>
+    ~F"""
+    <div class={"overflow-hidden bg-grey4 border-2 border-grey4 #{@shape}"}>
+      <img class="object-cover w-full h-full" src={"#{if @image_url do @image_url else @placeholder end}"} alt="Image preview"/>
     </div>
     """
   end

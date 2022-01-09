@@ -11,17 +11,17 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:171
+#: bundles/link/lib/marketplace.ex:166
 msgid "empty.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:170
+#: bundles/link/lib/marketplace.ex:165
 msgid "empty.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:262
+#: systems/campaign/model.ex:241
 msgid "reward.label"
 msgstr ""
 
@@ -31,47 +31,47 @@ msgid "assignment.status.complete.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:248
+#: systems/campaign/model.ex:227
 msgid "assignment.status.completed.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:244
+#: systems/campaign/model.ex:223
 msgid "assignment.status.expired.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:247
+#: systems/campaign/model.ex:226
 msgid "assignment.status.pending.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:249
+#: systems/campaign/model.ex:228
 msgid "assignment.status.accepted.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:250
+#: systems/campaign/model.ex:229
 msgid "assignment.status.rejected.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:259
+#: systems/campaign/model.ex:238
 msgid "assignment.status.completed.subtitle"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:258
+#: systems/campaign/model.ex:237
 msgid "assignment.status.pending.subtitle"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:261
+#: systems/campaign/model.ex:240
 msgid "assignment.status.rejected.subtitle"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:260
+#: systems/campaign/model.ex:239
 msgid "Awarded 1 credit"
 msgid_plural "Awarded %{count} credits"
 msgstr[0] ""

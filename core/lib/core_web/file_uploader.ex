@@ -45,7 +45,7 @@ defmodule CoreWeb.FileUploader do
           file = "#{entry.uuid}.#{ext(entry)}"
           dest = CoreWeb.FileUploader.get_static_path(file)
           File.cp!(path, dest)
-          CoreWeb.Router.Helpers.static_path(socket, "/uploads/#{file}")
+          CoreWeb.Endpoint.static_path("/uploads/#{file}")
         end)
       end
 

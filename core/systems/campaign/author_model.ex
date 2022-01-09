@@ -49,5 +49,4 @@ defmodule Systems.Campaign.AuthorModel do
     |> cast(params, @required_fields)
     |> validate_required(@required_fields)
   end
-
 end

@@ -9,15 +9,14 @@ defmodule Systems.Campaign.Context do
   alias Core.Authorization
 
   alias Systems.{
-    Assignment,
     Campaign,
-    Crew,
-    Promotion
+    Promotion,
+    Assignment,
+    Survey,
+    Crew
   }
 
   alias Core.Accounts.User
-  alias Core.Survey.Tool
-  alias Core.DataDonation
   alias Core.Pools.Submission
   alias Frameworks.Signal
 
@@ -30,6 +29,7 @@ defmodule Systems.Campaign.Context do
   end
 
   def get_by_promotion(promotion, preload \\ [])
+
   def get_by_promotion(%{id: id}, preload) do
     get_by_promotion(id, preload)
   end
@@ -43,6 +43,7 @@ defmodule Systems.Campaign.Context do
   end
 
   def get_by_promotable(promotable, preload \\ [])
+
   def get_by_promotable(%{id: id}, preload) do
     get_by_promotable(id, preload)
   end
@@ -127,9 +128,17 @@ defmodule Systems.Campaign.Context do
   def list_subject_campaigns(user, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
 
-    member_ids = from(m in Crew.MemberModel, where: m.user_id == ^user.id and m.expired == false, select: m.id)
-    crew_ids = from(t in Crew.TaskModel, where: t.member_id in subquery(member_ids), select: t.crew_id)
-    assigment_ids = from(a in Assignment.Model, where: a.crew_id in subquery(crew_ids), select: a.id)
+    member_ids =
+      from(m in Crew.MemberModel,
+        where: m.user_id == ^user.id and m.expired == false,
+        select: m.id
+      )
+
+    crew_ids =
+      from(t in Crew.TaskModel, where: t.member_id in subquery(member_ids), select: t.crew_id)
+
+    assigment_ids =
+      from(a in Assignment.Model, where: a.crew_id in subquery(crew_ids), select: a.id)
 
     from(c in Campaign.Model,
       where: c.promotable_assignment_id in subquery(assigment_ids),
@@ -138,33 +147,6 @@ defmodule Systems.Campaign.Context do
     )
     |> Repo.all()
   end
-
-  @doc """
-  Returns the list of studies where the user is a data donation subject.
-  """
-  def list_data_donation_subject_campaigns(user, opts \\ []) do
-    preload = Keyword.get(opts, :preload, [])
-
-    tool_ids =
-      from(task in DataDonation.Task,
-        where: task.user_id == ^user.id,
-        select: task.tool_id
-      )
-
-    campaign_ids =
-      from(st in DataDonation.Tool, where: st.id in subquery(tool_ids), select: st.campaign_id)
-
-    from(s in Campaign.Model,
-      where: s.id in subquery(campaign_ids),
-      preload: ^preload
-    )
-    |> Repo.all()
-  end
-
-  def open_spot_count(%{promotable_assignment: assignment}) do
-    Assignment.Context.open_spot_count(assignment)
-  end
-  def open_spot_count(_campaign), do: 0
 
   def list_owners(%Campaign.Model{} = campaign, preload \\ []) do
     owner_ids =
@@ -204,6 +186,12 @@ defmodule Systems.Campaign.Context do
     # the user is allowed to manage permissions? Could be implemented as part
     # of the authorization functions?
   end
+
+  def open_spot_count(%{promotable_assignment: assignment}) do
+    Assignment.Context.open_spot_count(assignment)
+  end
+
+  def open_spot_count(_campaign), do: 0
 
   def add_owner!(campaign, user) do
     :ok = Authorization.assign_role(user, campaign, :owner)
@@ -267,7 +255,12 @@ defmodule Systems.Campaign.Context do
     Campaign.Model.changeset(campaign, attrs)
   end
 
-  def copy(%Campaign.Model{} = campaign, %Promotion.Model{} = promotion, %Assignment.Model{} = assignment, auth_node) do
+  def copy(
+        %Campaign.Model{} = campaign,
+        %Promotion.Model{} = promotion,
+        %Assignment.Model{} = assignment,
+        auth_node
+      ) do
     %Campaign.Model{}
     |> Campaign.Model.changeset(
       campaign
@@ -310,13 +303,28 @@ defmodule Systems.Campaign.Context do
   end
 
   def list_survey_tools(%Campaign.Model{} = campaign) do
-    from(s in Tool, where: s.campaign_id == ^campaign.id)
+    from(s in Survey.ToolModel, where: s.campaign_id == ^campaign.id)
     |> Repo.all()
   end
 
   def list_tools(%Campaign.Model{} = campaign, schema) do
     from(s in schema, where: s.campaign_id == ^campaign.id)
     |> Repo.all()
+  end
+
+  def ready?(id) do
+    # temp solution for checking if campaign is ready to submit,
+    # TBD: replace with signal driven db field
+
+    preload = Campaign.Model.preload_graph(:full)
+
+    %{
+      promotion: promotion,
+      promotable_assignment: assignment
+    } = Campaign.Context.get!(id, preload)
+
+    Promotion.Context.ready?(promotion) &&
+      Assignment.Context.ready?(assignment)
   end
 
   @doc """
@@ -331,9 +339,10 @@ defmodule Systems.Campaign.Context do
 
     promotion_ids =
       online_submissions
-      |> Enum.map(&(&1.promotion_id))
+      |> Enum.map(& &1.promotion_id)
 
     preload = Campaign.Model.preload_graph(:full)
+
     from(c in Campaign.Model, preload: ^preload, where: c.promotion_id in ^promotion_ids)
     |> Repo.all()
     |> Enum.each(&mark_expired_debug(&1, force))
@@ -345,5 +354,4 @@ defmodule Systems.Campaign.Context do
   def mark_expired_debug(%{promotable_assignment: assignment}, force) do
     Assignment.Context.mark_expired_debug(assignment, force)
   end
-
 end

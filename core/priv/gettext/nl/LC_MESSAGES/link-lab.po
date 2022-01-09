@@ -12,11 +12,36 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core/lab/tool.ex:57
-msgid "apply.cta.title"
-msgstr ""
+#: systems/lab/tool_form.ex:26
+msgid "add.day.button"
+msgstr "Voeg een dag toe"
 
 #, elixir-format
-#: lib/core/lab/tool.ex:58
-msgid "open.cta.title"
-msgstr ""
+#: systems/lab/tool_form.ex:51
+msgid "form.description"
+msgstr "%{timeslots} tijdslots en %{participants} deelnemers op basis van onderstaand schema."
+
+#, elixir-format
+#: systems/lab/tool_form.ex:50
+msgid "form.title"
+msgstr "Lab schema"
+
+#, elixir-format
+#: systems/lab/day_view.ex:99
+msgid "day.schedule.date.label"
+msgstr "Datum"
+
+#, elixir-format
+#: systems/lab/day_view.ex:100
+msgid "day.schedule.location.label"
+msgstr "Locatie"
+
+#, elixir-format
+#: systems/lab/day_view.ex:101
+msgid "day.schedule.seats.label"
+msgstr "Stoelen"
+
+#, elixir-format
+#: systems/lab/day_view.ex:85
+msgid "day.schedule.submit.button"
+msgstr "Pas dagschema aan"

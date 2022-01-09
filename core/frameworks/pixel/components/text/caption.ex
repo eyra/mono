@@ -12,9 +12,9 @@ defmodule Frameworks.Pixel.Text.Caption do
   prop(margin, :css_class, default: "mb-6")
 
   def render(assigns) do
-    ~H"""
-    <div class="text-caption font-caption {{@padding}} {{@text_alignment}} {{@color}}">
-      <slot />
+    ~F"""
+    <div class={"text-caption font-caption #{@padding} #{@text_alignment} #{@color}"}>
+      <#slot />
     </div>
     """
   end

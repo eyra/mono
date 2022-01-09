@@ -19,26 +19,25 @@ defmodule Systems.Home.LandingPage do
     }
   end
 
-
   def render(assigns) do
-    ~H"""
+    ~F"""
       <Website
-        user={{ @current_user}}
-        user_agent={{ Browser.Ua.to_ua(@socket) }}
-        menus={{ @menus }}
+        user={@current_user}
+        user_agent={Browser.Ua.to_ua(@socket)}
+        menus={@menus}
       >
-        <template slot="hero">
+        <#template slot="hero">
           <HeroLarge
-            title={{ dgettext("eyra-home", "hero.title") }}
-            subtitle={{ dgettext("eyra-home", "hero.subtitle") }}
+            title={dgettext("eyra-home", "hero.title")}
+            subtitle={dgettext("eyra-home", "hero.subtitle")}
           />
-        </template>
+        </#template>
         <ContentArea>
           <Title1>
-            {{ dgettext("eyra-home", "title") }}
+            {dgettext("eyra-home", "title")}
           </Title1>
           <Intro>
-            {{ dgettext("eyra-home", "intro") }}
+            {dgettext("eyra-home", "intro")}
           </Intro>
         </ContentArea>
     </Website>

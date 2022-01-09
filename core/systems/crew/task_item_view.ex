@@ -3,10 +3,10 @@ defmodule Systems.Crew.TaskItemView do
 
   alias Frameworks.Pixel.Line
 
-  prop id, :number
-  prop public_id, :string, required: true
-  prop message, :map
-  prop buttons, :list, default: []
+  prop(id, :number)
+  prop(public_id, :string, required: true)
+  prop(message, :map)
+  prop(buttons, :list, default: [])
 
   defp message_color(%{type: :warning}), do: "text-warning"
   defp message_color(%{type: :alarm}), do: "text-delete"
@@ -25,29 +25,29 @@ defmodule Systems.Crew.TaskItemView do
 
   @impl true
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div>
       <div class="flex flex-row gap-8 sm:items-center">
         <div class="sm:w-32 font-body text-bodymedium sm:text-bodylarge flex-shrink-0">
-          Subject {{ @public_id }}
+          Subject {@public_id}
         </div>
-        <div :if={{@message}} class="hidden sm:block">
-          <div class="font-body text-bodysmall sm:text-bodymedium {{message_color(@message)}}" >
-            {{message_text(@message)}}
+        <div :if={@message} class="hidden sm:block">
+          <div class={"font-body text-bodysmall sm:text-bodymedium #{message_color(@message)}"} >
+            {message_text(@message)}
           </div>
         </div>
         <div class="flex-grow"></div>
         <div class="flex-wrap flex-shrink-0">
           <div class="flex flex-row gap-4">
-            <DynamicButton :for={{ button <- @buttons }} vm={{ button }} />
+            <DynamicButton :for={button <- @buttons} vm={button} />
           </div>
         </div>
       </div>
       <div class="sm:hidden">
         <Spacing value="XS" />
-        <div :if={{@message}} class="flex-wrap">
-          <div class="font-body text-bodysmall {{message_color(@message)}}" >
-            {{message_text(@message)}}
+        <div :if={@message} class="flex-wrap">
+          <div class={"font-body text-bodysmall #{message_color(@message)}"} >
+            {message_text(@message)}
           </div>
         </div>
 
@@ -73,12 +73,12 @@ defmodule Systems.Crew.TaskItemView.Example do
   alias Frameworks.Pixel.Text.Title3
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <Title3>Waitinglist</Title3>
 
-    <TaskItemView :props={{
-      public_id: "1234",
-      buttons: [
+    <TaskItemView
+      public_id={"1234"}
+      buttons={[
         %{
           action: %{type: :send, item: 1, target: "", event: "accept"},
           face: %{type: :icon, icon: :accept}
@@ -88,16 +88,16 @@ defmodule Systems.Crew.TaskItemView.Example do
           face: %{type: :icon, icon: :reject}
         }
       ]
-    }} />
+    } />
 
     <div class="mb-12"></div>
 
     <Title3>Attention</Title3>
 
-    <TaskItemView :props={{
-      public_id: "777",
-      message: %{type: :warning, text: "Got rejected last assignment"},
-      buttons: [
+    <TaskItemView
+      public_id={"777"}
+      message={%{type: :warning, text: "Got rejected last assignment"}}
+      buttons={[
         %{
           action: %{type: :send, item: 1, target: "", event: "accept"},
           face: %{type: :icon, icon: :accept}
@@ -107,14 +107,14 @@ defmodule Systems.Crew.TaskItemView.Example do
           face: %{type: :icon, icon: :reject}
         }
       ]
-    }} />
+    } />
 
     <div class="mb-6"></div>
 
-    <TaskItemView :props={{
-      public_id: "112",
-      message: %{type: :alarm, text: "Completed far below estimated duration"},
-      buttons: [
+    <TaskItemView
+      public_id={"112"}
+      message={%{type: :alarm, text: "Completed far below estimated duration"}}
+      buttons={[
         %{
           action: %{type: :send, item: 1, target: "", event: "accept"},
           face: %{type: :icon, icon: :accept}
@@ -124,48 +124,48 @@ defmodule Systems.Crew.TaskItemView.Example do
           face: %{type: :icon, icon: :reject}
         }
       ]
-    }} />
+    } />
 
     <div class="mb-12"></div>
 
     <Title3>Rejected</Title3>
 
-    <TaskItemView :props={{
-      public_id: "63",
-      message: %{type: :attention_checks_failed, text: "Attention checks failed"},
-      buttons: [
+    <TaskItemView
+      public_id={"63"}
+      message={%{type: :attention_checks_failed, text: "Attention checks failed"}}
+      buttons={[
         %{
           action: %{type: :send, item: 1, target: "", event: "accept"},
           face: %{type: :icon, icon: :accept}
         }
       ]
-    }} />
+    } />
 
     <div class="mb-6"></div>
 
-    <TaskItemView :props={{
-      public_id: "282",
-      message: %{type: :not_completed, text: "Not completed"},
-      buttons: [
+    <TaskItemView
+      public_id={"282"}
+      message={%{type: :not_completed, text: "Not completed"}}
+      buttons={[
         %{
           action: %{type: :send, item: 1, target: "", event: "accept"},
           face: %{type: :icon, icon: :accept}
         }
       ]
-    }} />
+    } />
 
     <div class="mb-6"></div>
 
-    <TaskItemView :props={{
-      public_id: "1349",
-      message: %{type: :rejected, text: "Rejected because of other reasons"},
-      buttons: [
+    <TaskItemView
+      public_id={"1349"}
+      message={%{type: :rejected, text: "Rejected because of other reasons"}}
+      buttons={[
         %{
           action: %{type: :send, item: 1, target: "", event: "accept"},
           face: %{type: :icon, icon: :accept}
         }
       ]
-    }} />
+    } />
 
     """
   end
@@ -179,5 +179,4 @@ defmodule Systems.Crew.TaskItemView.Example do
     Logger.info("Reject")
     {:noreply, socket}
   end
-
 end

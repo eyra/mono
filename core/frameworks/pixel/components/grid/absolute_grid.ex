@@ -8,9 +8,9 @@ defmodule Frameworks.Pixel.Grid.AbsoluteGrid do
   slot(default, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="grid md:grid-cols-3 gap-8">
-      <slot />
+      <#slot />
     </div>
     """
   end

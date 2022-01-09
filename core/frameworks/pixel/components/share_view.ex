@@ -3,27 +3,26 @@ defmodule Frameworks.Pixel.ShareView do
 
   alias CoreWeb.UI.UserListItemSmall
 
-  prop content_id, :number, required: true
-  prop content_name, :string, required: true
-  prop group_name, :string, required: true
-  prop users, :list, required: true
-  prop shared_users, :list
+  prop(content_id, :number, required: true)
+  prop(content_name, :string, required: true)
+  prop(group_name, :string, required: true)
+  prop(users, :list, required: true)
+  prop(shared_users, :list)
 
-  data filtered_users, :list
-  data close_button, :map
+  data(filtered_users, :list)
+  data(close_button, :map)
 
   def update(
-    %{
-      id: id,
-      content_id: content_id,
-      content_name: content_name,
-      group_name: group_name,
-      users: users,
-      shared_users: shared_users
-    },
-    %{assigns: %{myself: myself}} = socket
-  ) do
-
+        %{
+          id: id,
+          content_id: content_id,
+          content_name: content_name,
+          group_name: group_name,
+          users: users,
+          shared_users: shared_users
+        },
+        %{assigns: %{myself: myself}} = socket
+      ) do
     close_button = %{
       action: %{type: :send, event: "close", target: myself},
       face: %{type: :icon, icon: :close}
@@ -31,7 +30,8 @@ defmodule Frameworks.Pixel.ShareView do
 
     {
       :ok,
-      socket |> assign(
+      socket
+      |> assign(
         id: id,
         content_id: content_id,
         content_name: content_name,
@@ -48,13 +48,15 @@ defmodule Frameworks.Pixel.ShareView do
 
   defp filter_users(%{assigns: %{users: users, shared_users: shared_users}} = socket) do
     socket
-    |> assign(
-      filtered_users: Enum.filter(users, &(not Enum.member?(shared_users, &1)))
-    )
+    |> assign(filtered_users: Enum.filter(users, &(not Enum.member?(shared_users, &1))))
   end
 
   @impl true
-  def handle_event("add", %{"item" => user_id}, %{assigns: %{users: users, shared_users: shared_users, content_id: content_id}} = socket) do
+  def handle_event(
+        "add",
+        %{"item" => user_id},
+        %{assigns: %{users: users, shared_users: shared_users, content_id: content_id}} = socket
+      ) do
     {
       :noreply,
       if user = users |> Enum.find(&(&1.id == String.to_integer(user_id))) do
@@ -69,7 +71,11 @@ defmodule Frameworks.Pixel.ShareView do
   end
 
   @impl true
-  def handle_event("remove", %{"item" => user_id}, %{assigns: %{shared_users: shared_users, content_id: content_id}} = socket) do
+  def handle_event(
+        "remove",
+        %{"item" => user_id},
+        %{assigns: %{shared_users: shared_users, content_id: content_id}} = socket
+      ) do
     {
       :noreply,
       if user = shared_users |> Enum.find(&(&1.id == String.to_integer(user_id))) do
@@ -89,14 +95,14 @@ defmodule Frameworks.Pixel.ShareView do
   end
 
   defp update_parent(socket, message) do
-    send(self(), {:share_view, message} )
+    send(self(), {:share_view, message})
     socket
   end
 
   @impl true
   def render(assigns) do
-    ~H"""
-      <div class="p-8 bg-white shadow-2xl rounded" phx-click="reset_focus" phx-target={{@myself}}>
+    ~F"""
+      <div class="p-8 bg-white shadow-2xl rounded" phx-click="reset_focus" phx-target={@myself}>
         <div class="">
           <div class="flex flex-row">
             <div class="flex-grow">
@@ -104,36 +110,36 @@ defmodule Frameworks.Pixel.ShareView do
                 Shared with
               </div>
             </div>
-            <DynamicButton vm={{ @close_button }} />
+            <DynamicButton vm={@close_button} />
           </div>
           <Spacing value="S" />
           <div class="rounded border-2 border-grey3 h-40 overflow-scroll">
             <div class="p-4 flex flex-col gap-3">
-              <div :for={{ user <- @shared_users }} class="flex flex-row items-center gap-3">
-                <UserListItemSmall user={{user}} action_button={{ %{
+              <div :for={user <- @shared_users} class="flex flex-row items-center gap-3">
+                <UserListItemSmall user={user} action_button={%{
                   action: %{type: :send, event: "remove", item: user.id, target: @myself},
                   face: %{type: :icon, icon: :remove}
-                } }} />
+                }} />
               </div>
             </div>
           </div>
           <Spacing value="L" />
 
           <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
-            {{String.capitalize(@group_name)}}
+            {String.capitalize(@group_name)}
           </div>
           <Spacing value="S" />
           <div class="text-bodymedium font-body sm:text-bodylarge">
-            {{ dgettext("eyra-ui", "share.dialog.text", content: @content_name, group: @group_name) }}
+            {dgettext("eyra-ui", "share.dialog.text", content: @content_name, group: @group_name)}
           </div>
           <Spacing value="M" />
           <div class="rounded border-2 border-grey3 h-40 overflow-scroll">
             <div class="p-4 flex flex-col gap-3">
-              <div :for={{ user <- @filtered_users }} class="flex flex-row items-center gap-3">
-                <UserListItemSmall user={{user}} action_button={{ %{
+              <div :for={user <- @filtered_users} class="flex flex-row items-center gap-3">
+                <UserListItemSmall user={user} action_button={%{
                   action: %{type: :send, event: "add", item: user.id, target: @myself},
                   face: %{type: :icon, icon: :add}
-                } }} />
+                }} />
               </div>
             </div>
           </div>
@@ -152,32 +158,57 @@ defmodule Frameworks.Pixel.ShareView.Example do
     direction: "vertical",
     container: {:div, class: ""}
 
-  data users, :list, default: [
-    %{id: 2, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)} },
-    %{id: 3, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)} },
-    %{id: 4, profile: %{fullname: Faker.Person.name(), photo_url: nil } },
-    %{id: 5, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)} },
-    %{id: 6, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)} },
-    %{id: 7, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)} },
-    %{id: 8, profile: %{fullname: Faker.Person.name(), photo_url: nil } },
-    %{id: 9, profile: %{fullname: Faker.Person.name(), photo_url: nil } },
-    %{id: 10, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)} },
-    %{id: 11, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)} }
-  ]
+  data(users, :list,
+    default: [
+      %{
+        id: 2,
+        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
+      },
+      %{
+        id: 3,
+        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
+      },
+      %{id: 4, profile: %{fullname: Faker.Person.name(), photo_url: nil}},
+      %{
+        id: 5,
+        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
+      },
+      %{
+        id: 6,
+        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
+      },
+      %{
+        id: 7,
+        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
+      },
+      %{id: 8, profile: %{fullname: Faker.Person.name(), photo_url: nil}},
+      %{id: 9, profile: %{fullname: Faker.Person.name(), photo_url: nil}},
+      %{
+        id: 10,
+        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
+      },
+      %{
+        id: 11,
+        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
+      }
+    ]
+  )
 
-  data shared_users, :list, default: [
-    %{id: 1, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url()} }
-  ]
+  data(shared_users, :list,
+    default: [
+      %{id: 1, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url()}}
+    ]
+  )
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <ShareView
-      id={{ :reject_view_example }}
-      content_id={{1}}
+      id={:reject_view_example}
+      content_id={1}
       content_name="campaign"
       group_name="researchers"
-      users={{@users}}
-      shared_users={{@shared_users}}
+      users={@users}
+      shared_users={@shared_users}
     />
     """
   end

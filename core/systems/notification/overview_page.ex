@@ -12,12 +12,12 @@ defmodule Systems.Notification.OverviewPage do
   def handle_uri(socket), do: socket
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div>
     Notifications
     <ul>
-    <li :for={{ notification <- @notifications }}>
-      {{ notification.title }}
+    <li :for={notification <- @notifications}>
+      {notification.title}
     </li>
     </ul>
     </div>

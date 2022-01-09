@@ -10,8 +10,8 @@ defmodule Frameworks.Pixel.Form.DateInput do
   prop(disabled, :boolean, default: false)
 
   def render(assigns) do
-    ~H"""
-      <Input field={{@field}} label_text={{@label_text}} label_color={{@label_color}} background={{@background}} type="date" disabled={{ @disabled }} debounce={{ nil }}/>
+    ~F"""
+      <Input field={@field} label_text={@label_text} label_color={@label_color} background={@background} type="date" disabled={@disabled} debounce={nil}/>
     """
   end
 end

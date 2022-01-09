@@ -8,9 +8,9 @@ defmodule Frameworks.Pixel.Text.Label do
   prop(color, :css_class, default: "text-grey1")
 
   def render(assigns) do
-    ~H"""
-    <div class="text-label font-label leading-5 {{@color}}">
-      <slot />
+    ~F"""
+    <div class={"text-label font-label leading-5 #{@color}"}>
+      <#slot />
     </div>
     """
   end

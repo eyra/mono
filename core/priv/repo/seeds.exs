@@ -102,8 +102,6 @@ for campaign_data <- campaigns do
   {tool_type, campaign_data} = Map.pop!(campaign_data, :type)
   {tool_data, campaign_data} = Map.pop!(campaign_data, tool_type)
 
-  tool_content_node = Core.Factories.insert!(:content_node)
-
   # CAMPAIGN
   campaign = Core.Factories.insert!(:campaign, campaign_data)
 
@@ -120,12 +118,12 @@ for campaign_data <- campaigns do
   promotion =
     Core.Factories.insert!(
       :promotion,
-      Map.merge(%{parent_content_node: tool_content_node, campaign: campaign}, promotion_data)
+      Map.merge(%{campaign: campaign}, promotion_data)
     )
 
   # TOOL
   Core.Factories.insert!(
     tool_type,
-    Map.merge(%{content_node: tool_content_node, campaign: campaign, promotion: promotion}, tool_data)
+    Map.merge(%{campaign: campaign, promotion: promotion}, tool_data)
   )
 end

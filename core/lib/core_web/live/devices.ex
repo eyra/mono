@@ -7,14 +7,14 @@ defmodule CoreWeb.Devices do
   prop(label, :string, required: true)
 
   def render(assigns) do
-    ~H"""
-    <div :if={{@devices}} class="text-grey1">
+    ~F"""
+    <div :if={@devices} class="text-grey1">
         <div class="flex flex-row items-center gap-2 h-full">
           <div class="text-title6 font-title6 mr-2">
-            {{@label}}
+            {@label}
           </div>
-          <div :for={{ device <- @devices }}>
-              <img src={{ "/images/#{device}.svg" }} alt="Select {{device}}" />
+          <div :for={device <- @devices}>
+              <img src={"/images/#{device}.svg"} alt={"Select #{device}"} />
           </div>
         </div>
       </div>

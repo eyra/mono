@@ -1,7 +1,7 @@
 defmodule CoreWeb.Router do
   use CoreWeb, :router
 
-  import Surface.Catalogue.Router
+  # import Surface.Catalogue.Router
 
   require Core.BundleOverrides
   require Core.SurfConext
@@ -42,7 +42,7 @@ defmodule CoreWeb.Router do
 
     scope "/" do
       pipe_through(:browser)
-      surface_catalogue("/catalogue")
+      # surface_catalogue("/catalogue")
     end
   end
 end

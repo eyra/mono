@@ -10,11 +10,11 @@ defmodule CoreWeb.UI.Container.ContentArea do
   prop(class, :string, default: "")
 
   def render(assigns) do
-    ~H"""
-    <div class="flex w-full {{ @class }}">
+    ~F"""
+    <div class={"flex w-full #{@class}"}>
       <div class="flex-grow mx-6 lg:mx-14">
         <div class="w-full">
-          <slot />
+          <#slot />
         </div>
       </div>
     </div>

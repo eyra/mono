@@ -15,14 +15,14 @@ defmodule CoreWeb.UI.Navigation.TabbarWide do
   defp gap(:segmented), do: "gap-0"
 
   def render(assigns) do
-    ~H"""
-    <Context get={{tabs: tabs}}>
-      <div class="flex flex-row items-center h-full {{gap(type(@vm))}}">
-        <For each={{ {tab, index} <- Enum.with_index(tabs) }}>
+    ~F"""
+    <Context get={tabs: tabs}>
+      <div class={"flex flex-row items-center h-full #{gap(type(@vm))}"}>
+        {#for {tab, index} <- Enum.with_index(tabs)}
           <div class="flex-shrink-0 h-full">
-            <TabbarItem tabbar="wide" vm={{ tab_vm(type(@vm), tab, index) }} />
+            <TabbarItem tabbar="wide" vm={tab_vm(type(@vm), tab, index)} />
           </div>
-        </For>
+        {/for}
       </div>
     </Context>
     """

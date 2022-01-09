@@ -3,7 +3,7 @@ defmodule Systems.Promotion.LandingPage do
   The public promotion screen.
   """
   use CoreWeb, :live_view
-  use CoreWeb.UI.Dialog
+  use CoreWeb.UI.PlainDialog
   use CoreWeb.Layouts.Website.Component, :promotion
   alias CoreWeb.Layouts.Website.Component, as: Website
 
@@ -71,7 +71,10 @@ defmodule Systems.Promotion.LandingPage do
   end
 
   defp update_image_info(%{assigns: %{viewport: %{"width" => 0}}} = socket), do: socket
-  defp update_image_info(%{assigns: %{viewport: %{"width" => viewport_width}, vm: %{image_id: image_id}}} = socket) do
+
+  defp update_image_info(
+         %{assigns: %{viewport: %{"width" => viewport_width}, vm: %{image_id: image_id}}} = socket
+       ) do
     image_width = viewport_width
     image_height = image_width * 0.75
     image_info = ImageHelpers.get_image_info(image_id, image_width, image_height)
@@ -81,6 +84,7 @@ defmodule Systems.Promotion.LandingPage do
   end
 
   defoverridable handle_view_model_updated: 1
+
   def handle_view_model_updated(socket) do
     socket
     |> update_image_info()
@@ -110,7 +114,11 @@ defmodule Systems.Promotion.LandingPage do
   end
 
   @impl true
-  def handle_event("call-to-action", _params, %{assigns: %{model: model, vm: %{call_to_action: call_to_action}}} = socket) do
+  def handle_event(
+        "call-to-action",
+        _params,
+        %{assigns: %{model: model, vm: %{call_to_action: call_to_action}}} = socket
+      ) do
     {
       :noreply,
       socket
@@ -137,73 +145,73 @@ defmodule Systems.Promotion.LandingPage do
 
   @impl true
   def render(assigns) do
-    ~H"""
+    ~F"""
       <Website
-        user={{ @current_user}}
-        user_agent={{ Browser.Ua.to_ua(@socket) }}
-        menus={{ @menus }}
+        user={@current_user}
+        user_agent={Browser.Ua.to_ua(@socket)}
+        menus={@menus}
       >
-        <template slot="hero">
+        <#template slot="hero">
           <HeroImage
-            title={{@vm.title}}
-            subtitle={{@vm.themes}}
-            image_info={{@image_info}}
+            title={@vm.title}
+            subtitle={@vm.themes}
+            image_info={@image_info}
           >
-            <template slot="call_to_action">
-              <PrimaryLiveViewButton label={{ @vm.call_to_action.label }} event="call-to-action-1" />
-            </template>
+            <#template slot="call_to_action">
+              <PrimaryLiveViewButton label={@vm.call_to_action.label} event="call-to-action-1" />
+            </#template>
           </HeroImage>
-          <HeroBanner title={{@vm.organisation.label}} subtitle={{ @vm.byline }} icon_url={{ Routes.static_path(@socket, "/images/#{@vm.organisation.id}.svg") }}/>
-        </template>
+          <HeroBanner title={@vm.organisation.label} subtitle={@vm.byline} icon_url={CoreWeb.Endpoint.static_path("/images/#{@vm.organisation.id}.svg")}/>
+        </#template>
 
-        <div :if={{ show_dialog?(@dialog) }} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
+        <div :if={show_dialog?(@dialog)} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
           <div class="flex flex-row items-center justify-center w-full h-full">
-            <Dialog vm={{ @dialog }} />
+            <PlainDialog vm={@dialog} />
           </div>
         </div>
 
         <ContentArea>
-            <MarginY id={{:page_top}} />
+            <MarginY id={:page_top} />
             <div class="ml-8 mr-8 text-center">
-              <Title1>{{@vm.subtitle}}</Title1>
+              <Title1>{@vm.subtitle}</Title1>
             </div>
 
             <div class="mb-12 sm:mb-16" />
-            <div class="grid gap-6 sm:gap-8 {{ grid_cols(Enum.count(@vm.highlights)) }}">
-              <div :for={{ highlight <- @vm.highlights }} class="bg-grey5 rounded">
-                <Highlight title={{highlight.title}} text={{highlight.text}} />
+            <div class={"grid gap-6 sm:gap-8 #{grid_cols(Enum.count(@vm.highlights))}"}>
+              <div :for={highlight <- @vm.highlights} class="bg-grey5 rounded">
+                <Highlight title={highlight.title} text={highlight.text} />
               </div>
             </div>
             <div class="mb-12 sm:mb-16" />
 
-            <Title2 margin="">{{dgettext("eyra-promotion", "expectations.public.label")}}</Title2>
+            <Title2 margin="">{dgettext("eyra-promotion", "expectations.public.label")}</Title2>
             <Spacing value="M" />
-            <BodyLarge>{{ @vm.expectations }}</BodyLarge>
+            <BodyLarge>{@vm.expectations}</BodyLarge>
             <Spacing value="M" />
-            <Title2 margin="">{{dgettext("eyra-promotion", "description.public.label")}}</Title2>
+            <Title2 margin="">{dgettext("eyra-promotion", "description.public.label")}</Title2>
             <Spacing value="M" />
-            <BodyLarge>{{ @vm.description }}</BodyLarge>
+            <BodyLarge>{@vm.description}</BodyLarge>
             <Spacing value="L" />
 
             <CampaignBanner
-              photo_url={{@vm.banner_photo_url}}
-              placeholder_photo_url={{ Routes.static_path(@socket, "/images/profile_photo_default.svg") }}
-              title={{@vm.banner_title}}
-              subtitle={{@vm.banner_subtitle}}
-              url={{@vm.banner_url}}
+              photo_url={@vm.banner_photo_url}
+              placeholder_photo_url={CoreWeb.Endpoint.static_path("/images/profile_photo_default.svg")}
+              title={@vm.banner_title}
+              subtitle={@vm.banner_subtitle}
+              url={@vm.banner_url}
             />
             <Spacing value="L" />
             <div class="flex flex-col justify-center sm:flex-row gap-4 sm:gap-8 items-center">
-              <Devices label={{ dgettext("eyra-promotion", "devices.available.label") }} devices={{ @vm.devices }} />
-              <Languages label={{ dgettext("eyra-promotion", "languages.available.label") }} languages={{ @vm.languages }} />
+              <Devices label={dgettext("eyra-promotion", "devices.available.label")} devices={@vm.devices} />
+              <Languages label={dgettext("eyra-promotion", "languages.available.label")} languages={@vm.languages} />
             </div>
             <Spacing value="XL" />
 
-            <PrimaryLiveViewButton label={{ @vm.call_to_action.label }} event="call-to-action-2" />
+            <PrimaryLiveViewButton label={@vm.call_to_action.label} event="call-to-action-2" />
             <Spacing value="M" />
 
             <div class="flex">
-              <BackButton label={{ dgettext("eyra-promotion", "back.button.label") }} path={{ @back_path }}/>
+              <BackButton label={dgettext("eyra-promotion", "back.button.label")} path={@back_path}/>
             </div>
         </ContentArea>
       </Website>

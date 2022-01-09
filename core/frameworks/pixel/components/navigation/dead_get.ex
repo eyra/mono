@@ -6,12 +6,12 @@ defmodule Frameworks.Pixel.Navigation.DeadGet do
   slot(default, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <a
         class="cursor-pointer"
-        href={{ @path }}
+        href={@path}
       >
-        <slot />
+        <#slot />
       </a>
     """
   end

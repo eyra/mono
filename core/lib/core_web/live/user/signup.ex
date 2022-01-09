@@ -3,6 +3,7 @@ defmodule CoreWeb.User.Signup do
   The home screen.
   """
   use CoreWeb, :live_view
+  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Surface.Components.Form
   alias Frameworks.Pixel.Form.{EmailInput, PasswordInput}
@@ -63,21 +64,21 @@ defmodule CoreWeb.User.Signup do
   def handle_uri(socket), do: socket
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <ContentArea>
-        <MarginY id={{:page_top}} />
+        <MarginY id={:page_top} />
         <FormArea>
-          <Title2>{{dgettext "eyra-account", "signup.title"}}</Title2>
-          <div x-data="{ focus: '{{@focus}}' }">
-            <Form for={{@changeset}} submit="signup" change="form_change">
-              <EmailInput field={{:email}} label_text={{dgettext("eyra-account", "email.label")}} />
-              <PasswordInput field={{:password}} label_text={{dgettext("eyra-account", "password.label")}} />
-              <SubmitWideButton label={{ dgettext("eyra-account", "signup.button") }} bg_color="bg-grey1" />
+          <Title2>{dgettext "eyra-account", "signup.title"}</Title2>
+          <div x-data={"{ focus: '#{@focus}' }"}>
+            <Form for={@changeset} submit="signup" change="form_change">
+              <EmailInput field={:email} label_text={dgettext("eyra-account", "email.label")} />
+              <PasswordInput field={:password} label_text={dgettext("eyra-account", "password.label")} />
+              <SubmitWideButton label={dgettext("eyra-account", "signup.button")} bg_color="bg-grey1" />
             </Form>
           </div>
           <div class="mb-8" />
-          {{ dgettext("eyra-account", "signin.label") }}
-          <LinkButton label={{ dgettext("eyra-account", "signin.link") }} path={{Routes.user_session_path(@socket, :new)}} />
+          {dgettext("eyra-account", "signin.label")}
+          <LinkButton label={dgettext("eyra-account", "signin.link")} path={Routes.user_session_path(@socket, :new)} />
         </FormArea>
       </ContentArea>
     """

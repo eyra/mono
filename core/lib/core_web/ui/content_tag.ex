@@ -28,10 +28,10 @@ defmodule CoreWeb.UI.ContentTag do
   def class(_), do: "px-2 py-3px text-caption font-caption"
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="flex flex-row justify-center">
-      <div class="{{text_color(@vm)}} flex-wrap rounded-full {{bg_color(@vm)}} {{class(@vm)}}" >
-        {{text(@vm)}}
+      <div class={"#{text_color(@vm)} flex-wrap rounded-full #{bg_color(@vm)} #{class(@vm)}"} >
+        {text(@vm)}
       </div>
     </div>
     """

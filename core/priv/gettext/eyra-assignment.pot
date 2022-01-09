@@ -44,3 +44,8 @@ msgstr ""
 #: systems/assignment/landing_page.ex:117
 msgid "contact.button"
 msgstr ""
+
+#, elixir-format
+#: systems/assignment/assignment_form.ex:115
+msgid "form.title"
+msgstr ""

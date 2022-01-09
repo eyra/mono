@@ -6,15 +6,15 @@ defmodule Frameworks.Pixel.Navigation.DeadPost do
   slot(default, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <a
         class="cursor-pointer"
-        href={{ @path }}
-        data-to={{ @path }}
+        href={@path}
+        data-to={@path}
         data-method="post"
-        data-csrf={{ Plug.CSRFProtection.get_csrf_token_for(@path) }}
+        data-csrf={Plug.CSRFProtection.get_csrf_token_for(@path)}
       >
-        <slot />
+        <#slot />
       </a>
     """
   end

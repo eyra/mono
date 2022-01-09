@@ -6,9 +6,9 @@ defmodule Frameworks.Pixel.Grid.DynamicGrid do
   slot(default, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-8">
-      <slot />
+      <#slot />
     </div>
     """
   end

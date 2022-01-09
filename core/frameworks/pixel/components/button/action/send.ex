@@ -15,9 +15,9 @@ defmodule Frameworks.Pixel.Button.Action.Send do
   slot(default, required: true)
 
   def render(assigns) do
-    ~H"""
-    <div phx-target={{target(@vm)}} phx-click={{ event(@vm) }} phx-value-item={{item(@vm)}} class="cursor-pointer focus:outline-none">
-      <slot />
+    ~F"""
+    <div phx-target={target(@vm)} phx-click={event(@vm)} phx-value-item={item(@vm)} class="cursor-pointer focus:outline-none">
+      <#slot />
     </div>
     """
   end

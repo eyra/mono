@@ -2,7 +2,7 @@ defmodule Systems.Presenter do
   @type model :: pos_integer() | map
   @type page :: atom()
   @type user :: map
-  @type url_resolver :: ((atom, list) -> binary)
+  @type url_resolver :: (atom, list -> binary)
 
   @callback view_model(model, page, user, url_resolver) :: map()
 

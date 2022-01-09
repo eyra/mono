@@ -11,15 +11,15 @@ defmodule Frameworks.Pixel.Panel.USP do
   prop(description_color, :css_class, default: "text-grey2")
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <Panel size="h-full">
-      <template slot="title">
-        <div class={{"text-title5", "font-title5", "lg:text-title4", "lg:font-title4", "mb-4", "lg:mb-6", @title_color }}>
-              {{ @title }}
+      <#template slot="title">
+        <div class={"text-title5", "font-title5", "lg:text-title4", "lg:font-title4", "mb-4", "lg:mb-6", @title_color}>
+              {@title}
         </div>
-      </template>
-      <div class={{ "text-bodysmall", "lg:text-bodymedium", "font-body", @description_color }}>
-          {{ @description }}
+      </#template>
+      <div class={"text-bodysmall", "lg:text-bodymedium", "font-body", @description_color}>
+          {@description}
       </div>
     </Panel>
     """

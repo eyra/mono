@@ -10,11 +10,11 @@ defmodule Frameworks.Pixel.Tag do
   prop(bg_opacity, :css_class, default: "bg-opacity-20")
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="h-8 bg-white rounded">
-      <div class="flex flex-col justify-center h-full rounded items-center {{@bg_color}} {{@bg_opacity}}">
-        <div class="text-label font-label ml-3 mr-3 {{@text_color}}">
-          {{ @text }}
+      <div class={"flex flex-col justify-center h-full rounded items-center #{@bg_color} #{@bg_opacity}"}>
+        <div class={"text-label font-label ml-3 mr-3 #{@text_color}"}>
+          {@text}
         </div>
       </div>
     </div>
