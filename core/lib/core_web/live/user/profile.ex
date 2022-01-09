@@ -118,12 +118,12 @@ defmodule CoreWeb.User.Profile do
 
   @impl true
   def render(assigns) do
-    ~H"""
-    <Workspace menus={{ @menus }}>
-      <div id={{ :profile }} phx-hook="ViewportResize">
-        <TabbarArea tabs={{@tabs}}>
-          <ActionBar size={{ @bar_size }}>
-            <Tabbar vm={{ %{initial_tab: @initial_tab, size: @bar_size, type: :segmented} }} />
+    ~F"""
+    <Workspace menus={@menus}>
+      <div id={:profile} phx-hook="ViewportResize">
+        <TabbarArea tabs={@tabs}>
+          <ActionBar size={@bar_size}>
+            <Tabbar vm={%{initial_tab: @initial_tab, size: @bar_size, type: :segmented}} />
           </ActionBar>
           <TabbarContent />
           <TabbarFooter/>

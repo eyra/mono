@@ -1,4 +1,4 @@
-defmodule  Systems.Campaign.ExpirationWorker do
+defmodule Systems.Campaign.ExpirationWorker do
   use Oban.Worker
 
   @impl Oban.Worker

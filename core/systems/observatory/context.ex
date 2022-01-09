@@ -17,10 +17,7 @@ defmodule Systems.Observatory.Context do
   end
 
   defp topic_key(signal, key) when is_atom(signal) and is_list(key) do
-    key_str =
-      key
-      |> Enum.map(&to_string/1)
-      |> Enum.join(":")
+    key_str = Enum.map_join(key, ":", &to_string/1)
 
     "signal:#{to_string(signal)}:#{key_str}"
   end
@@ -31,6 +28,7 @@ defmodule Systems.Observatory.Context do
         __MODULE__.subscribe(signal, key)
       end
     end
+
     socket
   end
 
@@ -51,7 +49,13 @@ defmodule Systems.Observatory.Context do
     |> LiveView.assign(vm: vm)
   end
 
-  defp get_view_model(presenter, %{assigns: %{current_user: user}}, model_or_id, page, url_resolver) do
+  defp get_view_model(
+         presenter,
+         %{assigns: %{current_user: user}},
+         model_or_id,
+         page,
+         url_resolver
+       ) do
     presenter
     |> apply(:view_model, [model_or_id, page, user, url_resolver])
   end
@@ -60,6 +64,7 @@ defmodule Systems.Observatory.Context do
 
   defp presenter(director) do
     director = Macro.camelize(director)
+
     "Elixir.Systems.#{director}.Presenter"
     |> String.to_existing_atom()
   end
@@ -91,7 +96,6 @@ defmodule Systems.Observatory.Context do
         IO.puts("No handle_observation/1 implemented")
         socket
       end
-
     end
   end
 end

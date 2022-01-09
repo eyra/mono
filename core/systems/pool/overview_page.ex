@@ -55,14 +55,14 @@ defmodule Systems.Pool.OverviewPage do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <Workspace
-        title={{ dgettext("link-studentpool", "title") }}
-        menus={{ @menus }}
+        title={dgettext("link-studentpool", "title")}
+        menus={@menus}
       >
-        <TabbarArea tabs={{@tabs}}>
+        <TabbarArea tabs={@tabs}>
           <ActionBar>
-            <Tabbar vm={{ %{initial_tab: @initial_tab, size: :wide, type: :segmented} }} />
+            <Tabbar vm={%{initial_tab: @initial_tab, size: :wide, type: :segmented}} />
           </ActionBar>
           <TabbarContent/>
         </TabbarArea>

@@ -1,5 +1,6 @@
 defmodule CoreWeb.UserSessionControllerTest do
   use CoreWeb.ConnCase, async: true
+  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Core.Factories
 

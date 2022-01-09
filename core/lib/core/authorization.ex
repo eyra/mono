@@ -192,4 +192,9 @@ defmodule Core.Authorization do
     )
     |> Core.Repo.all()
   end
+
+  def user_has_role?(user, entity, role) do
+    users_with_role(entity, role)
+    |> Enum.any?(&(&1.id == user.id))
+  end
 end

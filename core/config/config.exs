@@ -1,11 +1,11 @@
 # This file is responsible for configuring your application
-# and its dependencies with the aid of the Mix.Config module.
+# and its dependencies with the aid of the Config module.
 #
 # This configuration file is loaded before any dependency and
 # is restricted to this project.
 
 # General application configuration
-use Mix.Config
+import Config
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
@@ -90,6 +90,13 @@ config :web_push_encryption, :vapid_details,
   private_key: ""
 
 config :core, :version, System.get_env("VERSION", "dev")
+
+config :core, BankingClient,
+  host: 'localhost',
+  port: 5555,
+  cacertfile: "../banking_proxy/certs/ca_certificate.pem",
+  certfile: "../banking_proxy/certs/client_certificate.pem",
+  keyfile: "../banking_proxy/certs/client_key.pem"
 
 import_config "#{Mix.env()}.exs"
 

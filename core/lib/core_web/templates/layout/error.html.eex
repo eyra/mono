@@ -29,12 +29,12 @@
                     <div x-data="{native_menu: false, mobile_menu: false}" @toggle-native-menu.window="native_menu = !native_menu">
                         <div class="flex flex-col w-full h-viewport">
                             <div class="flex-wrap">
-                                <%= stripped_navbar "/images/icons/#{Meta.bundle()}.svg" %>
+                                <%= stripped_navbar @conn, "/images/icons/#{Meta.bundle()}.svg" %>
                             </div>
                             <div class="flex-1">
                                 <div class="flex flex-col h-full border-t border-l border-b border-grey4">
                                     <div class="bg-white">
-                                        <%= hero_small @title %>
+                                        <%= hero_small @conn, @title %>
                                     </div>
                                     <div class="flex-1 bg-white">
                                         <div class="flex flex-row">
@@ -55,7 +55,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <%= page_footer() %>
+                                    <%= page_footer @conn %>
                                 </div>
                             </div>
                             <div class="pb-0 md:pb-10 bg-grey5">

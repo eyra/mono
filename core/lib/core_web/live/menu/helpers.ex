@@ -2,9 +2,7 @@ defmodule CoreWeb.Menu.Helpers do
   use CoreWeb.Menu.ItemsProvider
 
   require CoreWeb.Gettext
-
   alias CoreWeb.Router.Helpers, as: Routes
-
   defp size(%{size: size}), do: size
   defp size(_), do: :small
 

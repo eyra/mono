@@ -45,21 +45,21 @@ defmodule CoreWeb.Dashboard do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <Workspace
-        title={{ dgettext("eyra-ui", "dashboard.title") }}
-        menus={{ @menus }}
+        title={dgettext("eyra-ui", "dashboard.title")}
+        menus={@menus}
       >
         <ContentArea>
-          <MarginY id={{:page_top}} />
-            <div :if={{ @next_best_action }}>
-              <NextAction.HighlightView vm={{ @next_best_action }}/>
+          <MarginY id={:page_top} />
+            <div :if={@next_best_action}>
+              <NextAction.HighlightView vm={@next_best_action}/>
               <Spacing value="XL" />
             </div>
             <Title2>
-              {{ dgettext("eyra-dashboard", "recent-items.title") }}
+              {dgettext("eyra-dashboard", "recent-items.title")}
             </Title2>
-            <ContentList items={{@content_items}} />
+            <ContentList items={@content_items} />
         </ContentArea>
     </Workspace>
     """

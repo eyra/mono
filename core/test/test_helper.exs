@@ -20,3 +20,6 @@ Application.put_env(
 
 Mox.defmock(Systems.Banking.MockBackend, for: Systems.Banking.Backend)
 Application.put_env(:core, :banking_backend, Systems.Banking.MockBackend)
+
+Mox.defmock(BankingClient.MockClient, for: BankingClient.API)
+Application.put_env(:core, BankingClient, client: BankingClient.MockClient)

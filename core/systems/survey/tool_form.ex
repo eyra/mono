@@ -12,9 +12,9 @@ defmodule Systems.Survey.ToolForm do
     Survey
   }
 
-  prop entity_id, :number, required: true
-  prop callback_url, :string, required: true
-  prop validate?, :boolean, required: true
+  prop(entity_id, :number, required: true)
+  prop(callback_url, :string, required: true)
+  prop(validate?, :boolean, required: true)
 
   data(entity, :any)
   data(changeset, :any)
@@ -129,45 +129,45 @@ defmodule Systems.Survey.ToolForm do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <div class="-mb-8">
-        <Form id={{@id}} changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
-          <Title3>{{dgettext("link-survey", "form.title")}}</Title3>
-          <BodyLarge>{{ dgettext("link-survey", "form.description") }}</BodyLarge>
+        <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
+          <Title3>{dgettext("link-survey", "form.title")}</Title3>
+          <BodyLarge>{dgettext("link-survey", "form.description")}</BodyLarge>
           <Spacing value="M" />
 
           <Panel bg_color="bg-grey1">
-            <Title3 color="text-white">{{dgettext("link-survey", "setup.title")}}</Title3>
+            <Title3 color="text-white">{dgettext("link-survey", "setup.title")}</Title3>
             <Spacing value="M" />
             <div class="flex flex-col gap-8">
               <!-- STEP 1 -->
               <div class="flex flex-row gap-4">
                 <div class="flex-wrap">
-                  <StepIndicator vm={{ text: "1", bg_color: "bg-tertiary", text_color: "text-grey1" }} />
+                  <StepIndicator vm={text: "1", bg_color: "bg-tertiary", text_color: "text-grey1"} />
                 </div>
                 <div class="flex-wrap">
-                  <Title5 color="text-white">{{dgettext("link-survey", "panlid.title")}}</Title5>
+                  <Title5 color="text-white">{dgettext("link-survey", "panlid.title")}</Title5>
                   <Spacing value="XS" />
-                  <BodyMedium color="text-white">{{ raw(dgettext("link-survey", "panlid.description", link: panlid_instructions_link())) }}</BodyMedium>
+                  <BodyMedium color="text-white">{raw(dgettext("link-survey", "panlid.description", link: panlid_instructions_link()))}</BodyMedium>
                 </div>
               </div>
               <!-- STEP 2 -->
               <div class="flex flex-row gap-4">
                 <div class="flex-wrap">
-                  <StepIndicator vm={{ text: "2", bg_color: "bg-tertiary", text_color: "text-grey1" }} />
+                  <StepIndicator vm={text: "2", bg_color: "bg-tertiary", text_color: "text-grey1"} />
                 </div>
                 <div class="flex-wrap">
-                  <Title5 color="text-white">{{dgettext("link-survey", "redirect.title")}}</Title5>
+                  <Title5 color="text-white">{dgettext("link-survey", "redirect.title")}</Title5>
                   <Spacing value="XS" />
-                  <BodyMedium color="text-white">{{ raw(dgettext("link-survey", "redirect.description", link: redirect_instructions_link()))}}</BodyMedium>
+                  <BodyMedium color="text-white">{raw(dgettext("link-survey", "redirect.description", link: redirect_instructions_link()))}</BodyMedium>
                   <Spacing value="XS" />
                   <div class="flex flex-row gap-6 items-center">
                     <div class="flex-wrap">
-                      <BodyMedium color="text-tertiary"><span class="break-all">{{ @callback_url }}</span></BodyMedium>
+                      <BodyMedium color="text-tertiary"><span class="break-all">{@callback_url}</span></BodyMedium>
                     </div>
                     <div class="flex-wrap flex-shrink-0 mt-1">
-                      <div id="copy-redirect-url" class="cursor-pointer" phx-hook="Clipboard" data-text={{ @callback_url }} >
-                        <LabelIcon vm={{ %{ label: dgettext("link-survey", "redirect.copy.button"),  icon: :clipboard_tertiary, text_color: "text-tertiary" } }} />
+                      <div id="copy-redirect-url" class="cursor-pointer" phx-hook="Clipboard" data-text={@callback_url} >
+                        <LabelIcon vm={%{ label: dgettext("link-survey", "redirect.copy.button"),  icon: :clipboard_tertiary, text_color: "text-tertiary" }} />
                       </div>
                     </div>
                   </div>
@@ -176,12 +176,12 @@ defmodule Systems.Survey.ToolForm do
               <!-- STEP 3 -->
               <div class="flex flex-row gap-4">
                 <div class="flex-wrap">
-                  <StepIndicator vm={{ text: "3", bg_color: "bg-tertiary", text_color: "text-grey1" }} />
+                  <StepIndicator vm={text: "3", bg_color: "bg-tertiary", text_color: "text-grey1"} />
                 </div>
                 <div class="flex-wrap">
-                  <Title5 color="text-white">{{dgettext("link-survey", "study.link.title")}}</Title5>
+                  <Title5 color="text-white">{dgettext("link-survey", "study.link.title")}</Title5>
                   <Spacing value="XS" />
-                  <BodyMedium color="text-white">{{ raw(dgettext("link-survey", "study.link.description", link: study_instructions_link())) }}</BodyMedium>
+                  <BodyMedium color="text-white">{raw(dgettext("link-survey", "study.link.description", link: study_instructions_link()))}</BodyMedium>
                 </div>
               </div>
             </div>
@@ -189,7 +189,7 @@ defmodule Systems.Survey.ToolForm do
           </Panel>
           <Spacing value="L" />
 
-          <UrlInput field={{:survey_url}} label_text={{dgettext("link-survey", "config.url.label")}} />
+          <UrlInput field={:survey_url} label_text={dgettext("link-survey", "config.url.label")} />
         </Form>
       </div>
     """

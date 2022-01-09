@@ -26,19 +26,20 @@ defmodule Systems.Assignment.Context do
   end
 
   def get_by_crew!(%{id: crew_id}), do: get_by_crew!(crew_id)
+
   def get_by_crew!(crew_id) when is_number(crew_id) do
     from(a in Assignment.Model, where: a.crew_id == ^crew_id)
     |> Repo.all()
   end
 
   def get_by_assignable(assignable, preload \\ [])
+
   def get_by_assignable(%Assignment.ExperimentModel{id: id}, preload) do
     from(a in Assignment.Model, where: a.assignable_experiment_id == ^id, preload: ^preload)
     |> Repo.one()
   end
 
   def create(%{} = attrs, crew, experiment, auth_node) do
-
     assignable_field = assignable_field(experiment)
 
     %Assignment.Model{}
@@ -49,7 +50,11 @@ defmodule Systems.Assignment.Context do
     |> Repo.insert()
   end
 
-  def copy(%Assignment.Model{} = assignment, %Assignment.ExperimentModel{} = experiment, auth_node) do
+  def copy(
+        %Assignment.Model{} = assignment,
+        %Assignment.ExperimentModel{} = experiment,
+        auth_node
+      ) do
     # don't copy crew, just create a new one
     {:ok, crew} = Crew.Context.create(auth_node)
 
@@ -71,7 +76,11 @@ defmodule Systems.Assignment.Context do
     |> Repo.insert()
   end
 
-  def copy_experiment(%Assignment.ExperimentModel{} = experiment, %Survey.ToolModel{} = tool, auth_node) do
+  def copy_experiment(
+        %Assignment.ExperimentModel{} = experiment,
+        %Survey.ToolModel{} = tool,
+        auth_node
+      ) do
     %Assignment.ExperimentModel{}
     |> Assignment.ExperimentModel.changeset(:copy, Map.from_struct(experiment))
     |> Ecto.Changeset.put_assoc(:survey_tool, tool)
@@ -79,7 +88,11 @@ defmodule Systems.Assignment.Context do
     |> Repo.insert!()
   end
 
-  def copy_experiment(%Assignment.ExperimentModel{} = experiment, %Lab.ToolModel{} = tool, auth_node) do
+  def copy_experiment(
+        %Assignment.ExperimentModel{} = experiment,
+        %Lab.ToolModel{} = tool,
+        auth_node
+      ) do
     %Assignment.ExperimentModel{}
     |> Assignment.ExperimentModel.changeset(:copy, Map.from_struct(experiment))
     |> Ecto.Changeset.put_assoc(:lab_tool, tool)
@@ -99,6 +112,7 @@ defmodule Systems.Assignment.Context do
       nil ->
         Logger.error("No owner role found for assignment #{assignment.id}")
         {:error}
+
       owner ->
         {:ok, owner}
     end
@@ -135,11 +149,12 @@ defmodule Systems.Assignment.Context do
   end
 
   def complete_task(%{crew: crew} = _assignment, user) do
-    if Crew.Context.expired_member?(crew, user) do nil
-    else
+    if Crew.Context.member?(crew, user) do
       member = Crew.Context.get_member!(crew, user)
       task = Crew.Context.get_task(crew, member)
       Crew.Context.complete_task!(task)
+    else
+      nil
     end
   end
 
@@ -184,6 +199,7 @@ defmodule Systems.Assignment.Context do
 
   def mark_expired_debug(%{crew_id: crew_id}, duration, force) do
     expiration_timeout = max(@min_expiration_timeout, duration)
+
     task_query =
       if force do
         pending_tasks_query(crew_id)
@@ -195,7 +211,7 @@ defmodule Systems.Assignment.Context do
     member_query = from(m in Crew.MemberModel, where: m.id in subquery(member_ids))
 
     Multi.new()
-    |> Multi.update_all(:members , member_query, set: [expired: true])
+    |> Multi.update_all(:members, member_query, set: [expired: true])
     |> Multi.update_all(:tasks, task_query, set: [expired: true])
     |> Repo.transaction()
   end
@@ -204,31 +220,28 @@ defmodule Systems.Assignment.Context do
     from(t in Crew.TaskModel,
       where:
         t.crew_id == ^crew_id and
-        t.status == :pending and
-        t.expired == false
+          t.status == :pending and
+          t.expired == false
     )
   end
 
-  def expired_pending_tasks_query(crew_id, expiration_timeout) when is_binary(expiration_timeout) do
+  def expired_pending_tasks_query(crew_id, expiration_timeout)
+      when is_binary(expiration_timeout) do
     expired_pending_tasks_query(crew_id, String.to_integer(expiration_timeout))
   end
 
   def expired_pending_tasks_query(crew_id, expiration_timeout) do
     expiration_timestamp =
-      Timestamp.now
+      Timestamp.now()
       |> Timestamp.shift_minutes(expiration_timeout * -1)
 
     from(t in Crew.TaskModel,
       where:
         t.crew_id == ^crew_id and
-        t.status == :pending and
-        t.expired == false and
-        (
-          t.started_at <= ^expiration_timestamp or
-          (
-            is_nil(t.started_at) and t.updated_at <= ^expiration_timestamp
-          )
-        )
+          t.status == :pending and
+          t.expired == false and
+          (t.started_at <= ^expiration_timestamp or
+             (is_nil(t.started_at) and t.updated_at <= ^expiration_timestamp))
     )
   end
 
@@ -255,8 +268,8 @@ defmodule Systems.Assignment.Context do
     changeset.valid? && tool_ready?(experiment)
   end
 
-  def tool_ready?(%{survey_tool: tool})when not is_nil(tool), do: Survey.Context.ready?(tool)
-  def tool_ready?(%{lab_tool: tool})when not is_nil(tool), do: Lab.Context.ready?(tool)
+  def tool_ready?(%{survey_tool: tool}) when not is_nil(tool), do: Survey.Context.ready?(tool)
+  def tool_ready?(%{lab_tool: tool}) when not is_nil(tool), do: Lab.Context.ready?(tool)
 
   defp assignable_field(%Assignment.ExperimentModel{}), do: :assignable_experiment
 
@@ -277,5 +290,4 @@ defmodule Systems.Assignment.Context do
     )
     |> Repo.one!()
   end
-
 end

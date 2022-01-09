@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :core, :features,
   member_google_sign_in: true,

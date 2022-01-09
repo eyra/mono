@@ -9,8 +9,8 @@ defmodule Systems.Banking.DummyTest do
   describe "list_payments/1" do
     test "returns the expected datastructure" do
       assert %{
-               has_more: _more,
-               marker: _marker,
+               has_more?: _more,
+               cursor: _cursor,
                payments: _payments
              } = Dummy.list_payments(nil)
     end
@@ -18,16 +18,16 @@ defmodule Systems.Banking.DummyTest do
     test "since parameter only returns new payments" do
       Dummy.submit_payment(valid_payment())
 
-      assert %{marker: since_marker} = Dummy.list_payments(nil)
+      assert %{cursor: since_cursor} = Dummy.list_payments(nil)
 
       # There are no new payments
-      assert %{payments: []} = Dummy.list_payments(since_marker)
-      # New payments are returned with an updated marker
+      assert %{payments: []} = Dummy.list_payments(since_cursor)
+      # New payments are returned with an updated cursor
       Dummy.submit_payment(Map.put(valid_payment(), :idempotence_key, Faker.String.base64()))
 
-      assert %{marker: new_since_marker, payments: [_payment]} = Dummy.list_payments(since_marker)
+      assert %{cursor: new_since_cursor, payments: [_payment]} = Dummy.list_payments(since_cursor)
 
-      assert new_since_marker != since_marker
+      assert new_since_cursor != since_cursor
     end
 
     test "payments are batched" do
@@ -38,11 +38,11 @@ defmodule Systems.Banking.DummyTest do
           Dummy.submit_payment(Map.put(valid_payment(), :idempotence_key, Faker.String.base64()))
       end
 
-      assert %{marker: since_marker, has_more: true, payments: payments} =
+      assert %{cursor: since_cursor, has_more?: true, payments: payments} =
                Dummy.list_payments(nil)
 
       assert Enum.count(payments) < nr_of_payments
-      assert %{payments: _second_payment_batch} = Dummy.list_payments(since_marker)
+      assert %{payments: _second_payment_batch} = Dummy.list_payments(since_cursor)
     end
   end
 

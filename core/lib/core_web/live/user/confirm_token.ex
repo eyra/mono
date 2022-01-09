@@ -76,14 +76,14 @@ defmodule CoreWeb.User.ConfirmToken do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <ContentArea>
-        <MarginY id={{:page_top}} />
+        <MarginY id={:page_top} />
         <p>Account confirmation link is invalid or it has expired.</p>
         <p>Enter your e-mail to resend the token</p>
-        <Form for={{ @changeset }} submit="resend-token">
-          <EmailInput field={{:email}} label_text={{dgettext("eyra-user", "confirm.token.email.label")}} />
-          <SubmitButton label={{ dgettext("eyra-account", "confirm.token.resend_button") }} />
+        <Form for={@changeset} submit="resend-token">
+          <EmailInput field={:email} label_text={dgettext("eyra-user", "confirm.token.email.label")} />
+          <SubmitButton label={dgettext("eyra-account", "confirm.token.resend_button")} />
         </Form>
       </ContentArea>
     """

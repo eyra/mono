@@ -7,15 +7,15 @@ defmodule CoreWeb.Languages do
   prop(label, :string, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="text-grey1"
-        :if={{@languages}}>
+        :if={@languages}>
         <div class="flex flex-row items-center gap-3 h-full">
           <div class="text-title6 font-title6 mr-1">
-            {{@label}}
+            {@label}
           </div>
-            <div class="" :for={{ language <- @languages }}>
-                <img src={{ "/images/icons/#{language}.svg" }} alt="{{language}}" />
+            <div class="" :for={language <- @languages}>
+                <img src={"/images/icons/#{language}.svg"} alt={"#{language}"} />
             </div>
         </div>
       </div>

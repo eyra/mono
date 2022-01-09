@@ -25,9 +25,9 @@ defmodule Systems.Test.Page do
   def handle_view_model_updated(socket), do: socket
 
   def render(assigns) do
-    ~H"""
-      <div>{{@vm.title}}</div>
-      <div>{{@vm.subtitle}}</div>
+    ~F"""
+      <div>{@vm.title}</div>
+      <div>{@vm.subtitle}</div>
     """
   end
 end

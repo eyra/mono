@@ -10,9 +10,9 @@ defmodule CoreWeb.UI.Navigation.DesktopMenu do
   prop(path_provider, :any, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="fixed z-1 hidden lg:block w-desktop-menu-width h-full pl-10 pr-8 pt-10 pb-10 h-full">
-      <Menu items={{@items}} path_provider={{@path_provider}} size={{ :wide }}/>
+      <Menu items={@items} path_provider={@path_provider} size={:wide}/>
     </div>
     """
   end

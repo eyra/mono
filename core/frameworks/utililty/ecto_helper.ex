@@ -1,5 +1,4 @@
 defmodule Frameworks.Utility.EctoHelper do
-
   import Ecto.Query, only: [from: 2]
   alias Ecto.Multi
 
@@ -11,5 +10,4 @@ defmodule Frameworks.Utility.EctoHelper do
     query = from(t in table, where: t.id == ^id)
     Multi.delete_all(multi, name, query)
   end
-
 end

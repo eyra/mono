@@ -15,8 +15,8 @@ defmodule Systems.NextAction.Presenter do
   @impl true
   def view_model(user_id, NextAction.OverviewPage, user, url_resolver) when is_number(user_id) do
     %{
-        next_actions: NextAction.Context.list_next_actions(url_resolver, user)
-     }
+      next_actions: NextAction.Context.list_next_actions(url_resolver, user)
+    }
   end
 
   def update(model, id, page) do
@@ -24,7 +24,7 @@ defmodule Systems.NextAction.Presenter do
       id: id,
       model: model |> Map.put(:presenter, __MODULE__)
     })
+
     model
   end
-
 end

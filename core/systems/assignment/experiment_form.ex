@@ -13,8 +13,8 @@ defmodule Systems.Assignment.ExperimentForm do
     Assignment
   }
 
-  prop entity_id, :number
-  prop validate?, :boolean
+  prop(entity_id, :number)
+  prop(validate?, :boolean)
 
   data(entity, :any)
   data(device_labels, :list)
@@ -137,32 +137,32 @@ defmodule Systems.Assignment.ExperimentForm do
   def validate_for_publish(socket), do: socket
 
   def render(assigns) do
-    ~H"""
-      <Form id={{@id}} changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
-        <NumberInput field={{:duration}} label_text={{dgettext("link-survey", "duration.label")}} />
+    ~F"""
+      <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
+        <NumberInput field={:duration} label_text={dgettext("link-survey", "duration.label")} />
         <Spacing value="M" />
 
-        <NumberInput field={{:subject_count}} label_text={{dgettext("link-survey", "config.nrofsubjects.label")}} />
+        <NumberInput field={:subject_count} label_text={dgettext("link-survey", "config.nrofsubjects.label")} />
         <Spacing value="M" />
 
-        <Title3>{{dgettext("link-survey", "language.title")}}</Title3>
-        <Body>{{dgettext("link-survey", "languages.label")}}</Body>
+        <Title3>{dgettext("link-survey", "language.title")}</Title3>
+        <Body>{dgettext("link-survey", "languages.label")}</Body>
         <Spacing value="S" />
         <Selector
-          id={{:language}}
-          items={{ @language_labels }}
-          type={{:radio}}
-          parent={{ %{type: __MODULE__, id: @id} }}
+          id={:language}
+          items={@language_labels}
+          type={:radio}
+          parent={%{type: __MODULE__, id: @id}}
         />
         <Spacing value="XL" />
 
-        <Title3>{{dgettext("link-survey", "devices.title")}}</Title3>
-        <Body>{{dgettext("link-survey", "devices.label")}}</Body>
+        <Title3>{dgettext("link-survey", "devices.title")}</Title3>
+        <Body>{dgettext("link-survey", "devices.label")}</Body>
         <Spacing value="S" />
         <Selector
-          id={{:devices}}
-          items={{ @device_labels }}
-          parent={{ %{type: __MODULE__, id: @id} }}
+          id={:devices}
+          items={@device_labels}
+          parent={%{type: __MODULE__, id: @id}}
         />
       </Form>
     """

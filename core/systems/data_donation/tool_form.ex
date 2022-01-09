@@ -3,7 +3,6 @@ defmodule Systems.DataDonation.ToolForm do
 
   alias Core.Accounts
 
-  alias CoreWeb.Router.Helpers, as: Routes
   alias CoreWeb.UI.Timestamp
 
   alias Frameworks.Pixel.Text.{Title2, Title3}
@@ -76,46 +75,46 @@ defmodule Systems.DataDonation.ToolForm do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <ContentArea>
-        <MarginY id={{:page_top}} />
-        <div :if={{ Enum.count(@donations) > 0 }}>
-          <Title2>{{dgettext("eyra-data-donation", "donations.title")}}</Title2>
+        <MarginY id={:page_top} />
+        <div :if={Enum.count(@donations) > 0}>
+          <Title2>{dgettext("eyra-data-donation", "donations.title")}</Title2>
           <Panel bg_color="bg-grey6">
-            <div :for={{ donation <- @donations  }} class="mb-2 w-full">
+            <div :for={donation <- @donations } class="mb-2 w-full">
               <div class="flex flex-row w-full">
                 <div class="flex-wrap text-grey1 text-bodymedium font-body mr-6">
-                  Participant {{donation.user_id}}
+                  Participant {donation.user_id}
                 </div>
                 <div class="flex-grow text-grey2 text-bodymedium font-body">
-                  {{dgettext("eyra-data-donation", "received.label")}} {{Timestamp.humanize(donation.inserted_at)}}
+                  {dgettext("eyra-data-donation", "received.label")} {Timestamp.humanize(donation.inserted_at)}
                 </div>
                 <div class="flex-wrap">
-          <a href={{Routes.download_path(@socket, :download_single, @entity_id, donation.id)}} class="text-primary text-bodymedium font-body hover:text-grey1 underline focus:outline-none" >
-                  {{dgettext("eyra-data-donation", "download.button.label")}}
+          <a href={Routes.download_path(@socket, :download_single, @entity_id, donation.id)} class="text-primary text-bodymedium font-body hover:text-grey1 underline focus:outline-none" >
+                  {dgettext("eyra-data-donation", "download.button.label")}
                   </a>
                 </div>
               </div>
             </div>
           </Panel>
           <Spacing value="S" />
-          <PrimaryButton to={{Routes.download_path(@socket, :download_all, @entity_id )}} label={{dgettext("eyra-data-donation", "download.all.button.label")}} />
+          <PrimaryButton to={Routes.download_path(@socket, :download_all, @entity_id )} label={dgettext("eyra-data-donation", "download.all.button.label")} />
           <Spacing value="XL" />
         </div>
-        <Form id={{@id}} changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
-          <Title3>{{dgettext("eyra-data-donation", "script.title")}}</Title3>
-          <TextArea field={{:script}} label_text={{dgettext("eyra-data-donation", "script.label")}} />
+        <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
+          <Title3>{dgettext("eyra-data-donation", "script.title")}</Title3>
+          <TextArea field={:script} label_text={dgettext("eyra-data-donation", "script.label")} />
           <Spacing value="L" />
 
-          <Title3>{{dgettext("eyra-data-donation", "reward.title")}}</Title3>
-          <NumberInput field={{:reward_value}} label_text={{dgettext("eyra-data-donation", "reward.label")}} />
+          <Title3>{dgettext("eyra-data-donation", "reward.title")}</Title3>
+          <NumberInput field={:reward_value} label_text={dgettext("eyra-data-donation", "reward.label")} />
           <Spacing value="L" />
 
-          <Title3>{{dgettext("eyra-data-donation", "nrofsubjects.title")}}</Title3>
-          <NumberInput field={{:subject_count}} label_text={{dgettext("eyra-data-donation", "config.nrofsubjects.label")}} />
+          <Title3>{dgettext("eyra-data-donation", "nrofsubjects.title")}</Title3>
+          <NumberInput field={:subject_count} label_text={dgettext("eyra-data-donation", "config.nrofsubjects.label")} />
         </Form>
         <Spacing value="M" />
-        <SecondaryLiveViewButton label={{ dgettext("eyra-data-donation", "delete.button") }} event="delete" />
+        <SecondaryLiveViewButton label={dgettext("eyra-data-donation", "delete.button")} event="delete" />
       </ContentArea>
     """
   end

@@ -16,8 +16,8 @@ defmodule CoreWeb.UI.MarginY do
   defp margin(_), do: ""
 
   def render(assigns) do
-    ~H"""
-    <div class={{margin(@id)}} />
+    ~F"""
+    <div class={margin(@id)} />
     """
   end
 end

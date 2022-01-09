@@ -14,7 +14,9 @@ defmodule Systems.Lab.PublicPage do
     tool = Lab.Context.get(id, preload: [:time_slots])
 
     {:ok,
-     socket |> assign(:tool, tool) |> assign(:reservation, Lab.Context.reservation_for_user(tool, user))}
+     socket
+     |> assign(:tool, tool)
+     |> assign(:reservation, Lab.Context.reservation_for_user(tool, user))}
   end
 
   @impl true
@@ -46,24 +48,24 @@ defmodule Systems.Lab.PublicPage do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <ContentArea>
-        <MarginY id={{:page_top}} />
-        <div :if={{@reservation}}>
+        <MarginY id={:page_top} />
+        <div :if={@reservation}>
           You have made a reservation
           <button :on-click="cancel-reservation" data-confirm="Are you sure you want to cancel the reservation?">Cancel</button>
         </div>
 
         <table>
-        <tr :for={{slot <- @tool.time_slots}}>
-        <td>{{slot.start_time}}</td>
-        <td>{{slot.location}}</td>
-        <td>{{slot.number_of_seats}}</td>
+        <tr :for={slot <- @tool.time_slots}>
+        <td>{slot.start_time}</td>
+        <td>{slot.location}</td>
+        <td>{slot.number_of_seats}</td>
           <td>
             <button
-              :if={{is_nil(@reservation) || @reservation.time_slot_id != slot.id }}
-              :on-click="reserve-time-slot" phx-value-time-slot-id={{slot.id}}
-              data-confirm={{not is_nil(@reservation) and "Are you sure you want to switch your reservation?"}}>
+              :if={is_nil(@reservation) || @reservation.time_slot_id != slot.id}
+              :on-click="reserve-time-slot" phx-value-time-slot-id={slot.id}
+              data-confirm={not is_nil(@reservation) and "Are you sure you want to switch your reservation?"}>
                 Apply
             </button>
           </td>

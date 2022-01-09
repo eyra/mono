@@ -17,9 +17,9 @@
     <link rel="manifest" href="/manifest.json">
     <link
       rel="stylesheet"
-      href="<%= Routes.static_path(@conn, "/css/app.css") %>"
+      href="<%= CoreWeb.Endpoint.static_path("/css/app.css") %>"
     />
-    <script src="<%= Routes.static_path(@conn, "/js/app.js") %>" defer></script>
+    <script src="<%= CoreWeb.Endpoint.static_path("/js/app.js") %>" defer></script>
   </head>
   <body class="font-body bg-grey5 scrollbar-hide" x-data="{ overlay: false}" >
     <div class="fixed z-10 w-full h-full bg-black bg-opacity-20" x-show="overlay"></div>

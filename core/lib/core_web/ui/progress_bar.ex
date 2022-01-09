@@ -10,6 +10,7 @@ defmodule CoreWeb.UI.ProgressBar do
   prop(bg_color, :string, default: "bg-grey4")
 
   defp hide(0, _), do: true
+  defp hide(nil, _), do: true
   defp hide(_, %{size: 0}), do: true
 
   defp hide(total_size, %{size: size}) do
@@ -17,6 +18,7 @@ defmodule CoreWeb.UI.ProgressBar do
   end
 
   defp width(0, _), do: 0
+  defp width(nil, _), do: 0
   defp width(_, %{size: 0}), do: 0
 
   defp width(total_size, %{size: size}) do
@@ -34,13 +36,13 @@ defmodule CoreWeb.UI.ProgressBar do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="relative h-6 mb-12">
-      <div class="absolute w-full h-6 rounded-full {{ @bg_color }}">
+      <div class={"absolute w-full h-6 rounded-full #{@bg_color}"}>
       </div>
-      <div :for={{ {bar, index} <- Enum.with_index(sort_by_size(@bars)) }} class="absolute h-6 w-full">
-        <div style="min-width: {{min_width(@size, @bars, bar, index)}}; width: {{width(@size, bar)}}%" class="absolute h-6 rounded-full bg-white ml-2px {{ hide(@size, bar) }}"></div>
-        <div style="min-width: {{min_width(@size, @bars, bar, index)}}; width: {{width(@size, bar)}}%" class="absolute h-6 rounded-full {{color(bar)}}"></div>
+      <div :for={{bar, index} <- Enum.with_index(sort_by_size(@bars))} class="absolute h-6 w-full">
+        <div style={"min-width: #{min_width(@size, @bars, bar, index)}; width: #{width(@size, bar)}%"} class={"absolute h-6 rounded-full bg-white ml-2px #{hide(@size, bar)}"}></div>
+        <div style={"min-width: #{min_width(@size, @bars, bar, index)}; width: #{width(@size, bar)}%"} class={"absolute h-6 rounded-full #{color(bar)}"}></div>
       </div>
     </div>
     """
@@ -55,12 +57,14 @@ defmodule CoreWeb.UI.ProgressBar.Example do
     container: {:div, class: ""}
 
   def render(assigns) do
-    ~H"""
-    <ProgressBar :props={{ %{size: 0, bars: [%{ color: :primary, size: 100}]} }} />
-    <ProgressBar :props={{ %{size: 100, bars: [%{ color: :primary, size: 100}]} }} />
-    <ProgressBar :props={{ %{size: 100, bars: [%{ color: :primary, size: 100}, %{ color: :secondary, size: 50}]} }} />
-    <ProgressBar :props={{ %{size: 100, bars: [%{ color: :primary, size: 100}, %{ color: :secondary, size: 50}, %{ color: :tertiary, size: 1}]} }} />
-    <ProgressBar :props={{ %{size: 100, bars: [%{ color: :primary, size: 100}, %{ color: :secondary, size: 50}, %{ color: :tertiary, size: 1}, %{ color: :grey1, size: 1}]} }} />
+    ~F"""
+    <ProgressBar size={nil} bars={[%{ color: :primary, size: 100}]} />
+    <ProgressBar size={0} bars={[%{ color: :primary, size: nil}]} />
+    <ProgressBar size={0} bars={[%{ color: :primary, size: 100}]} />
+    <ProgressBar size={100} bars={[%{ color: :primary, size: 100}]} />
+    <ProgressBar size={100} bars={[%{ color: :primary, size: 100}, %{ color: :secondary, size: 50}]} />
+    <ProgressBar size={100} bars={[%{ color: :primary, size: 100}, %{ color: :secondary, size: 50}, %{ color: :tertiary, size: 1}]} />
+    <ProgressBar size={100} bars={[%{ color: :primary, size: 100}, %{ color: :secondary, size: 50}, %{ color: :tertiary, size: 1}, %{ color: :grey1, size: 1}]} />
     """
   end
 end
@@ -83,8 +87,8 @@ defmodule CoreWeb.UI.ProgressBar.Playground do
   )
 
   def render(assigns) do
-    ~H"""
-    <ProgressBar :props={{ @props }} />
+    ~F"""
+    <ProgressBar {...@props} />
     """
   end
 end

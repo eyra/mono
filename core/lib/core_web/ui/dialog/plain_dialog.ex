@@ -58,8 +58,8 @@ defmodule CoreWeb.UI.PlainDialog do
   end
 
   def render(assigns) do
-    ~H"""
-      <Dialog vm={{@vm}}></Dialog>
+    ~F"""
+      <Dialog vm={@vm}></Dialog>
     """
   end
 end

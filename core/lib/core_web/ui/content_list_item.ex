@@ -23,21 +23,21 @@ defmodule CoreWeb.UI.ContentListItem do
   data(image_info, :any)
 
   def render(assigns) do
-    ~H"""
-      <LiveRedirect to={{path(@vm)}} class="block">
+    ~F"""
+      <LiveRedirect to={path(@vm)} class="block">
         <div class="font-sans bg-grey5 flex items-stretch space-x-4 rounded-md">
           <div class="flex flex-row w-full">
             <div class="flex-grow p-4 lg:p-6">
               <!-- SMALL VARIANT -->
               <div class="lg:hidden w-full">
                 <div>
-                  <div class={{title_css(@vm)}}>{{title(@vm)}}</div>
+                  <div class={title_css(@vm)}>{title(@vm)}</div>
                   <Spacing value="XXS" />
-                  <div class={{subtitle_css(@vm)}}>{{subtitle(@vm)}}</div>
+                  <div class={subtitle_css(@vm)}>{subtitle(@vm)}</div>
                   <Spacing value="XXS" />
                   <div class="flex flex-row">
                     <div class="flex-wrap">
-                      <ContentTag vm={{ Map.put(tag(@vm), :size, "S" )}} />
+                      <ContentTag vm={Map.put(tag(@vm), :size, "S" )} />
                     </div>
                   </div>
                 </div>
@@ -47,26 +47,26 @@ defmodule CoreWeb.UI.ContentListItem do
                 <div class="flex flex-row w-full h-full gap-4 justify-center">
                   <div class="flex-grow">
                     <div class="flex flex-col gap-2 h-full justify-center">
-                      <div class={{title_css(@vm)}}>{{title(@vm)}}</div>
-                      <div :if={{ has_subtitle?(@vm) }} class={{subtitle_css(@vm)}}>{{subtitle(@vm)}}</div>
+                      <div class={title_css(@vm)}>{title(@vm)}</div>
+                      <div :if={has_subtitle?(@vm)} class={subtitle_css(@vm)}>{subtitle(@vm)}</div>
                     </div>
                   </div>
                   <div class="flex-shrink-0 w-40 place-self-center">
                     <Label color="text-grey2">
-                      {{quick_summary(@vm)}}
+                      {quick_summary(@vm)}
                     </Label>
                   </div>
                   <div class="flex-shrink-0 w-30 place-self-center">
-                    <ContentTag vm={{ Map.put(tag(@vm), :size, "L" )}} />
+                    <ContentTag vm={Map.put(tag(@vm), :size, "L" )} />
                   </div>
                 </div>
               </div>
             </div>
-            <div :if={{ image_type(@vm) == :catalog }} class="flex-wrap flex-shrink-0 w-30">
-              <Image  image={{image_info(@vm)}} corners="rounded-br-md rounded-tr-xl md:rounded-tr-md" />
+            <div :if={image_type(@vm) == :catalog} class="flex-wrap flex-shrink-0 w-30">
+              <Image  image={image_info(@vm)} corners="rounded-br-md rounded-tr-xl md:rounded-tr-md" />
             </div>
-            <div :if={{ image_type(@vm) == :avatar }} class="flex-wrap flex-shrink-0 my-6 mr-6">
-              <img src={{image_info(@vm)}} class="w-20 h-20 rounded-full" alt="" />
+            <div :if={image_type(@vm) == :avatar} class="flex-wrap flex-shrink-0 my-6 mr-6">
+              <img src={image_info(@vm)} class="w-20 h-20 rounded-full" alt="" />
             </div>
           </div>
         </div>
@@ -119,11 +119,11 @@ defmodule CoreWeb.UI.ContentListItem.Example do
   def render(assigns) do
     image_id = Core.ImageCatalog.Unsplash.random(:abstract)
 
-    ~H"""
+    ~F"""
     <div class="flex flex-col gap-10">
-      <ContentListItem vm={{@vm1 |> Map.put(:image, %{type: :catalog, info: Core.ImageHelpers.get_image_info(image_id, 400, 300) }) }} />
-      <ContentListItem vm={{@vm2}} />
-      <ContentListItem vm={{@vm3}} />
+      <ContentListItem vm={@vm1 |> Map.put(:image, %{type: :catalog, info: Core.ImageHelpers.get_image_info(image_id, 400, 300) })} />
+      <ContentListItem vm={@vm2} />
+      <ContentListItem vm={@vm3} />
     </div>
     """
   end

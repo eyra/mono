@@ -10,8 +10,8 @@ defmodule CoreWeb.UI.Navigation.NativeMenu do
   prop(path_provider, :any, required: true)
 
   def render(assigns) do
-    ~H"""
-    <Menu items={{@items}} path_provider={{@path_provider}}/>
+    ~F"""
+    <Menu items={@items} path_provider={@path_provider}/>
     """
   end
 end

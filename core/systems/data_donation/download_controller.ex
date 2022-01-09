@@ -15,7 +15,11 @@ defmodule Systems.DataDonation.DownloadController do
 
   def download_single(conn, %{"id" => tool_id, "donation_id" => donation_id}) do
     tool = DataDonation.Context.get!(tool_id)
-    data = DataDonation.Context.list_donations(tool) |> Enum.filter(&(Integer.to_string(&1.id) == donation_id))
+
+    data =
+      DataDonation.Context.list_donations(tool)
+      |> Enum.filter(&(Integer.to_string(&1.id) == donation_id))
+
     send_zip(conn, data)
   end
 

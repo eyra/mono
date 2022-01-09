@@ -39,7 +39,6 @@ defmodule Systems.Promotion.Context do
   end
 
   def update(%Promotion.Model{} = _promotion, %Changeset{} = changeset) do
-
     with {:ok, %{promotion: promotion} = result} <-
            Multi.new()
            |> Multi.update(:promotion, changeset)
@@ -60,11 +59,12 @@ defmodule Systems.Promotion.Context do
 
   def copy(%Promotion.Model{title: title} = promotion, auth_node) do
     %Promotion.Model{}
-    |> Promotion.Model.changeset(:copy,
-        promotion
-        |> Map.put(:title, title <> " (copy)")
-        |> Map.from_struct()
-      )
+    |> Promotion.Model.changeset(
+      :copy,
+      promotion
+      |> Map.put(:title, title <> " (copy)")
+      |> Map.from_struct()
+    )
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Repo.insert!()
   end

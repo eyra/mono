@@ -81,8 +81,7 @@ defmodule Systems.Survey.Context do
     with {:ok, %{tool: tool} = result} <-
            Multi.new()
            |> Multi.update(:tool, changeset)
-           |> Repo.transaction()
-           do
+           |> Repo.transaction() do
       Signal.Context.dispatch!(:survey_tool_updated, tool)
       {:ok, result}
     end

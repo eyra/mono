@@ -5,8 +5,8 @@
         <div class="text-bodymedium sm:text-bodylarge font-body text-grey1"><%= dgettext("eyra-error","403.body") %></div>
         <div class="mb-6 md:mb-8"></div>
         <div class="flex flex-row gap-4">
-            <%= primary_button dgettext("eyra-error","home.button"), "/" %>
-            <%= secondary_button dgettext("eyra-error","helpdesk.button"), "/helpdesk" %>
+            <%= primary_button @conn, dgettext("eyra-error","home.button"), "/" %>
+            <%= secondary_button @conn, dgettext("eyra-error","helpdesk.button"), "/helpdesk" %>
         </div>
     </div>
     <div class="flex-shrink-0">

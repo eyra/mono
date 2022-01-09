@@ -2,9 +2,9 @@ defmodule CoreWeb.UserAuth do
   import Plug.Conn
   import Phoenix.Controller
   import CoreWeb.Gettext
+  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Core.Accounts
-  alias CoreWeb.Router.Helpers, as: Routes
 
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change

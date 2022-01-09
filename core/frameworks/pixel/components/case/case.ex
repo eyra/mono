@@ -10,12 +10,12 @@ defmodule Frameworks.Pixel.Case.Case do
   prop(value, :boolean, required: true)
 
   def render(assigns) do
-    ~H"""
-    <div :if={{@value && slot_assigned?(:case_if) }}>
-      <slot name="case_if"/>
+    ~F"""
+    <div :if={@value && slot_assigned?(:case_if)}>
+      <#slot name="case_if"/>
     </div>
-    <div :if={{ !@value && slot_assigned?(:case_else) }}>
-      <slot name="case_else"/>
+    <div :if={!@value && slot_assigned?(:case_else)}>
+      <#slot name="case_else"/>
     </div>
     """
   end

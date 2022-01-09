@@ -14,18 +14,18 @@ defmodule CoreWeb.UI.Dialog do
   slot(default)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <div class="p-8 bg-white shadow-2xl min-w-dialog-width sm:min-w-dialog-width-sm rounded">
         <div class="flex flex-col gap-4 sm:gap-8">
           <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
-            {{ title(@vm) }}
+            {title(@vm)}
           </div>
           <div class="text-bodymedium font-body sm:text-bodylarge">
-            {{ text(@vm) }}
+            {text(@vm)}
           </div>
-          <slot />
+          <#slot />
           <div class="flex flex-row gap-4">
-            <DynamicButton :for={{ button <- buttons(@vm) }} vm={{ button }} />
+            <DynamicButton :for={button <- buttons(@vm)} vm={button} />
           </div>
         </div>
       </div>

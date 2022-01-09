@@ -47,10 +47,10 @@ defmodule Systems.DataDonation.UploadPage do
   end
 
   def render(assigns) do
-    ~H"""
-    <HeroSmall title={{ dgettext("eyra-data-donation", "uploader.title") }} />
+    ~F"""
+    <HeroSmall title={dgettext("eyra-data-donation", "uploader.title")} />
     <ContentArea>
-      <MarginY id={{:page_top}} />
+      <MarginY id={:page_top} />
       <div id="controls" phx-hook="PythonUploader">
         <Title3>Step 1: Download from Google</Title3>
         <BodyLarge>Go to the
@@ -98,8 +98,8 @@ defmodule Systems.DataDonation.UploadPage do
           <BodyLarge>The data that was extracted from your data package is shown below. Make sure, you check this data carefully before pressing the donate button below. If you have checked the extracted data and consent with donating this data for research, press the donate button.</BodyLarge>
           <Spacing value="S" />
           <Panel bg_color="bg-grey5">
-            <template slot="title">
-            </template>
+            <#template slot="title">
+            </#template>
             <Title4><div class="summary" /></Title4>
             <Spacing value="S" />
             <BodyMedium><div class="extracted" /></BodyMedium>
@@ -122,10 +122,10 @@ defmodule Systems.DataDonation.UploadPage do
             <Title3 color="text-white">Script</Title3>
             <BodyLarge color="text-white" >The script that is used to extract the relevant data from your data package</BodyLarge>
             <Spacing value="L" />
-            <template slot="title">
-            </template>
+            <#template slot="title">
+            </#template>
             <div class="text-white">
-              <pre><code>{{ @tool.script }}</code></pre>
+              <pre><code>{@tool.script}</code></pre>
             </div>
           </Panel>
         </div>

@@ -10,9 +10,9 @@ defmodule CoreWeb.UI.Navigation.MobileNavbar do
   prop(path_provider, :any, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="md:hidden bg-grey5" >
-      <Navbar items={{@items}} path_provider={{@path_provider}}/>
+      <Navbar items={@items} path_provider={@path_provider}/>
     </div>
     """
   end

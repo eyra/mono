@@ -17,5 +17,4 @@ defmodule Systems.Test.Presenter do
   def update(Systems.Test.Page = page, model) do
     Observatory.Context.local_dispatch(page, [model.id], %{model: model})
   end
-
 end

@@ -2,7 +2,6 @@ defmodule Systems.Assignment.EthicalForm do
   use CoreWeb.LiveForm
   use Frameworks.Pixel.Form.Checkbox
 
-
   alias Frameworks.Pixel.Panel.Panel
   alias Frameworks.Pixel.Text.{Title3, Title5, BodyMedium}
   alias Frameworks.Pixel.Form.{Form, TextInput, Checkbox}
@@ -11,13 +10,13 @@ defmodule Systems.Assignment.EthicalForm do
     Assignment
   }
 
-  prop entity_id, :number, required: true
-  prop validate?, :boolean, required: true
+  prop(entity_id, :number, required: true)
+  prop(validate?, :boolean, required: true)
 
-  data entity, :any
-  data ethical_label, :any
-  data changeset, :any
-  data focus, :any, default: ""
+  data(entity, :any)
+  data(ethical_label, :any)
+  data(changeset, :any)
+  data(focus, :any, default: "")
 
   # Handle selector update
 
@@ -37,7 +36,6 @@ defmodule Systems.Assignment.EthicalForm do
         %{id: id, entity_id: entity_id, validate?: validate?},
         socket
       ) do
-
     entity = Assignment.Context.get_experiment!(entity_id)
     changeset = Assignment.ExperimentModel.changeset(entity, :create, %{})
 
@@ -115,22 +113,22 @@ defmodule Systems.Assignment.EthicalForm do
   end
 
   def render(assigns) do
-    ~H"""
-      <Form id={{@id}} changeset={{@changeset}} change_event="save" target={{@myself}} focus={{@focus}}>
-        <Title3>{{dgettext("link-survey", "ethical.title")}}</Title3>
-        <BodyMedium>{{ raw(dgettext("link-survey", "ethical.description", link: ethical_review_link()))}}</BodyMedium>
+    ~F"""
+      <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
+        <Title3>{dgettext("link-survey", "ethical.title")}</Title3>
+        <BodyMedium>{raw(dgettext("link-survey", "ethical.description", link: ethical_review_link()))}</BodyMedium>
         <Spacing value="M" />
 
         <Panel bg_color="bg-grey1">
           <Title5 color="text-white" >ERB code</Title5>
           <Spacing value="S" />
-          <TextInput field={{:ethical_code}} placeholder={{dgettext("eyra-account", "ehtical.code.label")}} background={{:dark}} />
+          <TextInput field={:ethical_code} placeholder={dgettext("eyra-account", "ehtical.code.label")} background={:dark} />
           <Checkbox
-            field={{:ethical_approval}}
-            label_text={{ dgettext("link-survey", "ethical.label")}}
+            field={:ethical_approval}
+            label_text={dgettext("link-survey", "ethical.label")}
             label_color="text-white"
-            accent={{:tertiary}}
-            background={{:dark}}
+            accent={:tertiary}
+            background={:dark}
           />
         </Panel>
       </Form>

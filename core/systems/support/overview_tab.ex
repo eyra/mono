@@ -7,9 +7,9 @@ defmodule Systems.Support.OverviewTab do
 
   alias Systems.Support
 
-  prop status, :atom
+  prop(status, :atom)
 
-  data items, :list
+  data(items, :list)
 
   def update(%{id: id, props: %{tickets: tickets}}, socket) do
     items =
@@ -62,12 +62,12 @@ defmodule Systems.Support.OverviewTab do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <div>
-      <MarginY id={{:page_top}} />
+      <MarginY id={:page_top} />
 
-        <div :if={{Enum.empty?(@items)}} class="h-full">
-          <MarginY id={{:page_top}} />
+      <div :if={Enum.empty?(@items)} class="h-full">
+          <MarginY id={:page_top} />
           <div class="flex flex-col items-center w-full h-full">
             <div class="flex-grow"></div>
             <div class="flex-none">
@@ -78,7 +78,7 @@ defmodule Systems.Support.OverviewTab do
         </div>
 
         <ContentArea>
-          <ContentList items={{@items}} />
+          <ContentList items={@items} />
         </ContentArea>
       </div>
     """

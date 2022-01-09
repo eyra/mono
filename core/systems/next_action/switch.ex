@@ -14,5 +14,4 @@ defmodule Systems.NextAction.Switch do
     %{cleared: action_type}
     |> NextAction.Presenter.update(user.id, NextAction.OverviewPage)
   end
-
 end

@@ -3,6 +3,7 @@ defmodule CoreWeb.User.ResetPassword do
   The home screen.
   """
   use CoreWeb, :live_view
+  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Surface.Components.Form
   alias Core.Accounts
@@ -49,14 +50,14 @@ defmodule CoreWeb.User.ResetPassword do
   def handle_uri(socket), do: socket
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <ContentArea>
-      <MarginY id={{:page_top}} />
+      <MarginY id={:page_top} />
       <FormArea>
-        <Title2>{{dgettext "eyra-user", "user.password_reset.title"}}</Title2>
-        <Form for={{ @changeset }} submit="reset-password">
-          <EmailInput field={{:email}} label_text={{dgettext("eyra-user", "password_reset.email.label")}} />
-          <SubmitButton label={{ dgettext("eyra-user", "password_reset.reset_button") }} />
+        <Title2>{dgettext "eyra-user", "user.password_reset.title"}</Title2>
+        <Form for={@changeset} submit="reset-password">
+          <EmailInput field={:email} label_text={dgettext("eyra-user", "password_reset.email.label")} />
+          <SubmitButton label={dgettext("eyra-user", "password_reset.reset_button")} />
         </Form>
       </FormArea>
     </ContentArea>

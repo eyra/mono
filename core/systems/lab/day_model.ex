@@ -22,5 +22,4 @@ defmodule Systems.Lab.DayModel do
     |> cast(params, @fields)
     |> validate_required(@fields)
   end
-
 end

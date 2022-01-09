@@ -8,9 +8,9 @@ defmodule Frameworks.Pixel.Alignment.VerticalCenter do
   slot(default, required: true)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="flex flex-col items-center justify-center w-full">
-      <slot />
+      <#slot />
     </div>
     """
   end

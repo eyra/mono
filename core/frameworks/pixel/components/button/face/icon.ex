@@ -19,9 +19,9 @@ defmodule Frameworks.Pixel.Button.Face.Icon do
   def icon_name(%{icon: icon}), do: "#{icon}"
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="active:opacity-80 cursor-pointer h-6 w-6">
-      <img src="/images/icons/{{icon_name(@vm)}}.svg" alt={{alt(@vm)}}/>
+      <img src={"/images/icons/#{icon_name(@vm)}.svg"} alt={alt(@vm)}/>
     </div>
     """
   end

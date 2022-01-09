@@ -5,8 +5,8 @@ defmodule Systems.NextAction.HighlightView do
   prop(vm, :any, required: true)
 
   def render(assigns) do
-    ~H"""
-    <NextAction.View vm={{ Map.put(@vm, :style, :tertiary) }}  />
+    ~F"""
+    <NextAction.View vm={Map.put(@vm, :style, :tertiary)}  />
     """
   end
 end

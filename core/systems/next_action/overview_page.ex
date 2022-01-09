@@ -33,6 +33,7 @@ defmodule Systems.NextAction.OverviewPage do
   end
 
   defoverridable handle_view_model_updated: 1
+
   def handle_view_model_updated(socket) do
     refresh_next_actions(socket)
   end
@@ -42,12 +43,12 @@ defmodule Systems.NextAction.OverviewPage do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <Workspace
-        title={{ dgettext("eyra-ui", "todo.title") }}
-        menus={{ @menus }}
+        title={dgettext("eyra-ui", "todo.title")}
+        menus={@menus}
       >
-        <div :if={{Enum.empty?(@vm.next_actions)}} class="h-full">
+        <div :if={Enum.empty?(@vm.next_actions)} class="h-full">
           <div class="flex flex-col items-center w-full h-full">
             <div class="flex-grow"></div>
             <div class="flex-none">
@@ -58,9 +59,9 @@ defmodule Systems.NextAction.OverviewPage do
         </div>
 
         <ContentArea>
-          <MarginY id={{:page_top}} />
-          <div :if={{!Enum.empty?(@vm.next_actions)}} class="flex flex-col gap-6 sm:gap-10" id="next-actions">
-            <NextAction.View :for={{action <- @vm.next_actions}} vm={{ action }} />
+          <MarginY id={:page_top} />
+          <div :if={!Enum.empty?(@vm.next_actions)} class="flex flex-col gap-6 sm:gap-10" id="next-actions">
+            <NextAction.View :for={action <- @vm.next_actions} vm={action} />
           </div>
         </ContentArea>
       </Workspace>

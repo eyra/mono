@@ -51,27 +51,27 @@ defmodule Systems.Pool.CampaignsView do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <ContentArea>
-        <MarginY id={{:page_top}} />
-        <Case value={{ Enum.count(@submitted_campaigns) + Enum.count(@accepted_campaigns) > 0 }} >
+        <MarginY id={:page_top} />
+        <Case value={Enum.count(@submitted_campaigns) + Enum.count(@accepted_campaigns) > 0} >
           <True>
             <Title2>
-              {{ dgettext("link-studentpool", "submitted.title") }}
-              <span class="text-primary"> {{ Enum.count(@submitted_campaigns) }}</span>
+              {dgettext("link-studentpool", "submitted.title")}
+              <span class="text-primary"> {Enum.count(@submitted_campaigns)}</span>
             </Title2>
-            <ContentList items={{@submitted_campaigns}} />
+            <ContentList items={@submitted_campaigns} />
             <Spacing value="XL" />
             <Title2>
-              {{ dgettext("link-studentpool", "accepted.title") }}
-              <span class="text-primary"> {{ Enum.count(@accepted_campaigns) }}</span>
+              {dgettext("link-studentpool", "accepted.title")}
+              <span class="text-primary"> {Enum.count(@accepted_campaigns)}</span>
             </Title2>
-            <ContentList items={{@accepted_campaigns}} />
+            <ContentList items={@accepted_campaigns} />
           </True>
           <False>
             <Empty
-              title={{ dgettext("link-studentpool", "campaigns.empty.title") }}
-              body={{ dgettext("link-studentpool", "campaigns.empty.description") }}
+              title={dgettext("link-studentpool", "campaigns.empty.title")}
+              body={dgettext("link-studentpool", "campaigns.empty.description")}
               illustration="items"
             />
           </False>
@@ -80,24 +80,27 @@ defmodule Systems.Pool.CampaignsView do
     """
   end
 
-  defp convert_to_vm(socket, %{
-         updated_at: updated_at,
-         promotion: %{
-           title: title,
-           image_id: image_id,
-           submission:
+  defp convert_to_vm(
+         socket,
+         %{
+           updated_at: updated_at,
+           promotion: %{
+             title: title,
+             image_id: image_id,
+             submission:
+               %{
+                 id: submission_id,
+                 status: status
+               } = submission
+           },
+           promotable_assignment:
              %{
-               id: submission_id,
-               status: status
-             } = submission
-         },
-         promotable_assignment:
-           %{
-             assignable_experiment: %{
-               subject_count: target_subject_count
-             }
-           } = assignment
-       } = campaign) do
+               assignable_experiment: %{
+                 subject_count: target_subject_count
+               }
+             } = assignment
+         } = campaign
+       ) do
     tag =
       case status do
         :submitted ->
@@ -133,9 +136,7 @@ defmodule Systems.Pool.CampaignsView do
 
     subtitle_part2 =
       if open_spot_count == target_subject_count do
-        dgettext("link-studentpool", "sample.size",
-          size: target_subject_count
-        )
+        dgettext("link-studentpool", "sample.size", size: target_subject_count)
       else
         dgettext("link-studentpool", "spots.available",
           open: open_spot_count,
@@ -163,6 +164,4 @@ defmodule Systems.Pool.CampaignsView do
       quick_summary: quick_summery
     }
   end
-
-
 end

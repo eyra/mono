@@ -16,11 +16,11 @@ defmodule Frameworks.Pixel.Panel.Panel do
   prop(padding, :string, default: "p-6 lg:p-8")
 
   def render(assigns) do
-    ~H"""
-    <div class={{ @bg_color, @size, "rounded-md" }}>
-      <div class="{{@padding}} {{@align}}">
-        <slot name="title" />
-        <slot />
+    ~F"""
+    <div class={@bg_color, @size, "rounded-md"}>
+      <div class={"#{@padding} #{@align}"}>
+        <#slot name="title" />
+        <#slot />
       </div>
     </div>
     """

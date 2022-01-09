@@ -16,8 +16,8 @@ defmodule Systems.Support.OverviewPage do
     Support
   }
 
-  data tabs, :list
-  data bar_size, :number
+  data(tabs, :list)
+  data(bar_size, :number)
 
   @impl true
   def mount(_params, _session, socket) do
@@ -48,7 +48,7 @@ defmodule Systems.Support.OverviewPage do
   defp create_tabs(socket) do
     tabs =
       Support.TicketStatus.values()
-      |> Enum.map(&({&1, Support.Context.list_tickets(&1)}))
+      |> Enum.map(&{&1, Support.Context.list_tickets(&1)})
       |> Enum.map(fn {status, tickets} ->
         %{
           id: status,
@@ -71,15 +71,15 @@ defmodule Systems.Support.OverviewPage do
   defp tabbar_size(bp), do: value(bp, :narrow, sm: %{30 => :wide})
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <Workspace
-      title={{ dgettext("eyra-admin", "support.title") }}
-      menus={{ @menus }}
+      title={dgettext("eyra-admin", "support.title")}
+      menus={@menus}
     >
-      <div id={{ :support }} phx-hook="ViewportResize">
-        <TabbarArea tabs={{@tabs}}>
+      <div id={:support} phx-hook="ViewportResize">
+        <TabbarArea tabs={@tabs}>
           <ActionBar>
-            <Tabbar vm={{ %{size: @tabbar_size} }} />
+            <Tabbar vm={%{size: @tabbar_size}} />
           </ActionBar>
           <TabbarContent/>
         </TabbarArea>

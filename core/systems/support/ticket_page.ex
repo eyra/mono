@@ -101,43 +101,51 @@ defmodule Systems.Support.TicketPage do
   defp button(%{ticket: %{completed_at: completed_at}}) when is_nil(completed_at) do
     %{
       action: %{type: :send, event: "close_ticket"},
-      face: %{type: :secondary, label: dgettext("eyra-admin", "close.ticket.button"), text_color: "text-delete"}
+      face: %{
+        type: :secondary,
+        label: dgettext("eyra-admin", "close.ticket.button"),
+        text_color: "text-delete"
+      }
     }
   end
 
   defp button(_) do
     %{
       action: %{type: :send, event: "reopen_ticket"},
-      face: %{type: :secondary, label: dgettext("eyra-admin", "reopen.ticket.button"), text_color: "text-primary"}
+      face: %{
+        type: :secondary,
+        label: dgettext("eyra-admin", "reopen.ticket.button"),
+        text_color: "text-primary"
+      }
     }
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <Workspace
-      title={{ dgettext("eyra-admin", "ticket.title") }}
-      menus={{ @menus }}
+      title={dgettext("eyra-admin", "ticket.title")}
+      menus={@menus}
     >
       <ContentArea>
-        <MarginY id={{:page_top}} />
-        <Member :if={{ @member }} vm={{ @member }} />
-        <MarginY id={{:page_top}} />
+        <MarginY id={:page_top} />
+        <Member :if={@member} vm={@member} />
+        <MarginY id={:page_top} />
         <div class="flex flex-row gap-4 items-center">
           <Wrap>
-            <ContentTag vm={{ Support.TicketModel.tag(@ticket) }} />
+            <ContentTag vm={Support.TicketModel.tag(@ticket)} />
           </Wrap>
           <div class="text-label font-label text-grey1">
-            #{{ @ticket.id }}
+            #{@ticket.id}
           </div>
           <div class="text-label font-label text-grey2">
-            {{ @timestamp }}
+            {@timestamp}
           </div>
         </div>
         <Spacing value="S" />
-        <Title2>{{ @ticket.title }}</Title2>
-        <div class="text-bodymedium sm:text-bodylarge font-body mb-6 md:mb-8 lg:mb-10">{{ @ticket.description }}</div>
+        <Title2>{@ticket.title}</Title2>
+        <div class="text-bodymedium sm:text-bodylarge font-body mb-6 md:mb-8 lg:mb-10">{@ticket.description}</div>
         <Wrap>
-          <DynamicButton vm={{button(assigns)}} />
+          <DynamicButton vm={button(assigns)} />
         </Wrap>
       </ContentArea>
     </Workspace>

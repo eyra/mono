@@ -9,7 +9,10 @@ defmodule Systems.Lab.ToolModel do
   schema "lab_tools" do
     belongs_to(:auth_node, Core.Authorization.Node)
 
-    has_many(:time_slots, Systems.Lab.TimeSlotModel, foreign_key: :tool_id, preload_order: [asc: :start_time])
+    has_many(:time_slots, Systems.Lab.TimeSlotModel,
+      foreign_key: :tool_id,
+      preload_order: [asc: :start_time]
+    )
 
     field(:director, Ecto.Enum, values: [:campaign])
 

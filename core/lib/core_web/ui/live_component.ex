@@ -12,11 +12,10 @@ defmodule CoreWeb.UI.LiveComponent do
       alias Frameworks.Pixel.Spacing
       alias Frameworks.Pixel.Wrap
       alias Frameworks.Pixel.Dynamic
+      alias CoreWeb.Router.Helpers, as: Routes
 
       require Frameworks.Pixel.ViewModel
       import Frameworks.Pixel.ViewModel
-
-      alias CoreWeb.Router.Helpers, as: Routes
 
       def update_target(%{type: type, id: id}, message) when is_map(message) do
         send_update(type, message |> Map.put(:id, id))

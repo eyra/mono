@@ -7,8 +7,8 @@ defmodule Systems.Lab.ToolForm do
     Lab
   }
 
-  prop entity_id, :number, required: true
-  prop validate?, :boolean, required: true
+  prop(entity_id, :number, required: true)
+  prop(validate?, :boolean, required: true)
 
   data(entity, :map)
   data(add_day_button, :map)
@@ -17,13 +17,15 @@ defmodule Systems.Lab.ToolForm do
 
   # Handle initial update
   def update(
-    %{id: id, entity_id: entity_id, validate?: validate?}, socket) do
+        %{id: id, entity_id: entity_id, validate?: validate?},
+        socket
+      ) do
     entity = Lab.Context.get(entity_id)
     changeset = Lab.ToolModel.changeset(entity, :create, %{})
 
     add_day_button = %{
       action: %{type: :send, event: "add_day"},
-      face: %{type: :primary, label: dgettext("link-lab", "add.day.button") }
+      face: %{type: :primary, label: dgettext("link-lab", "add.day.button")}
     }
 
     {
@@ -45,13 +47,13 @@ defmodule Systems.Lab.ToolForm do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <div>
-        <Title3>{{dgettext("link-lab", "form.title")}}</Title3>
-        <BodyLarge>{{ dgettext("link-lab", "form.description", timeslots: 14, participants: 112) }}</BodyLarge>
+        <Title3>{dgettext("link-lab", "form.title")}</Title3>
+        <BodyLarge>{dgettext("link-lab", "form.description", timeslots: 14, participants: 112)}</BodyLarge>
         <Spacing value="M" />
         <Wrap>
-          <DynamicButton vm={{@add_day_button}} />
+          <DynamicButton vm={@add_day_button} />
         </Wrap>
       </div>
     """
@@ -68,11 +70,11 @@ defmodule Systems.Lab.ToolForm.Example do
     container: {:div, class: ""}
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <ToolForm
-      id={{ :reject_view_example }}
-      entity_id={{1}}
-      validate?=false
+      id={:reject_view_example}
+      entity_id={1}
+      validate?={false}
     />
     """
   end

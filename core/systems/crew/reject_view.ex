@@ -14,17 +14,17 @@ defmodule Systems.Crew.RejectView do
 
   import CoreWeb.Gettext
 
-  prop target, :map, required: true
+  prop(target, :map, required: true)
 
-  data title, :string
-  data text, :string
-  data note, :string
-  data message_input_label, :string
-  data categories, :list
-  data category, :atom
-  data model, :map
-  data changeset, :map
-  data focus, :string, default: ""
+  data(title, :string)
+  data(text, :string)
+  data(note, :string)
+  data(message_input_label, :string)
+  data(categories, :list)
+  data(category, :atom)
+  data(model, :map)
+  data(changeset, :map)
+  data(focus, :string, default: "")
 
   def update(%{active_item_id: category, selector_id: :category}, socket) do
     {
@@ -35,7 +35,6 @@ defmodule Systems.Crew.RejectView do
   end
 
   def update(%{id: id, target: target}, socket) do
-
     title = dgettext("link-campaign", "reject.title")
     text = dgettext("link-campaign", "reject.text")
     note = dgettext("link-campaign", "reject.note")
@@ -47,7 +46,8 @@ defmodule Systems.Crew.RejectView do
 
     {
       :ok,
-      socket |> assign(
+      socket
+      |> assign(
         id: id,
         target: target,
         title: title,
@@ -61,12 +61,20 @@ defmodule Systems.Crew.RejectView do
     }
   end
 
-  def handle_event("update", %{"reject_model" => reject_model}, %{assigns: %{model: model}} = socket) do
-      changeset = Crew.RejectModel.changeset(model, :submit, reject_model)
-      {:noreply, socket |> assign(changeset: changeset)}
+  def handle_event(
+        "update",
+        %{"reject_model" => reject_model},
+        %{assigns: %{model: model}} = socket
+      ) do
+    changeset = Crew.RejectModel.changeset(model, :submit, reject_model)
+    {:noreply, socket |> assign(changeset: changeset)}
   end
 
-  def handle_event("reject", %{"reject_model" => %{"message" => message}}, %{assigns: %{model: model, target: target, category: category}} = socket) do
+  def handle_event(
+        "reject",
+        %{"reject_model" => %{"message" => message}},
+        %{assigns: %{model: model, target: target, category: category}} = socket
+      ) do
     attrs = %{category: category, message: message}
     changeset = Crew.RejectModel.changeset(model, :submit, attrs)
 
@@ -79,6 +87,7 @@ defmodule Systems.Crew.RejectView do
         Enum.each(changeset.errors, fn {key, {error, _}} ->
           Logger.error("Reject failed: #{key} -> #{error}")
         end)
+
         {:noreply, socket |> assign(focus: "", changeset: changeset)}
     end
   end
@@ -102,7 +111,11 @@ defmodule Systems.Crew.RejectView do
     [
       %{
         action: %{type: :submit},
-        face: %{type: :primary, label: dgettext("link-campaign", "reject.button"), bg_color: "bg-delete"}
+        face: %{
+          type: :primary,
+          label: dgettext("link-campaign", "reject.button"),
+          bg_color: "bg-delete"
+        }
       },
       %{
         action: %{type: :send, event: "cancel", target: target},
@@ -113,30 +126,30 @@ defmodule Systems.Crew.RejectView do
 
   @impl true
   def render(assigns) do
-    ~H"""
-      <div class="p-8 bg-white shadow-2xl rounded" phx-click="reset_focus" phx-target={{@myself}}>
+    ~F"""
+      <div class="p-8 bg-white shadow-2xl rounded" phx-click="reset_focus" phx-target={@myself}>
         <div class="flex flex-col gap-4 gap-8">
           <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
-            {{@title}}
+            {@title}
           </div>
           <div class="text-bodymedium font-body sm:text-bodylarge">
-            {{@text}}
+            {@text}
           </div>
           <div class="flex flex-row gap-3 items-center">
             <div class="w-6 h-6 flex-shrink-0 font-caption text-caption text-white rounded-full flex items-center bg-warning">
               <span class="text-center w-full mt-1px">!</span>
             </div>
             <div class="text-button font-button text-warning leading-6">
-              {{@note}}
+              {@note}
             </div>
           </div>
-          <Form id="reject_form" changeset={{@changeset}} change_event="update" submit="reject" target={{@myself}} focus={{@focus}} >
-            <Selector id={{:category}} items={{ @categories }} type={{:radio}} optional?={{false}} parent={{ %{type: __MODULE__, id: @id} }}/>
+          <Form id="reject_form" changeset={@changeset} change_event="update" submit="reject" target={@myself} focus={@focus} >
+            <Selector id={:category} items={@categories} type={:radio} optional?={false} parent={%{type: __MODULE__, id: @id}}/>
             <Spacing value="M"/>
-            <TextInput field={{:message}} label_text={{dgettext("link-campaign", "reject.message.label")}} debounce="0"/>
+            <TextInput field={:message} label_text={dgettext("link-campaign", "reject.message.label")} debounce="0"/>
             <Spacing value="XXS" />
             <div class="flex flex-row gap-4">
-              <DynamicButton :for={{ button <- buttons(@myself) }} vm={{ button }} />
+              <DynamicButton :for={button <- buttons(@myself)} vm={button} />
             </div>
           </Form>
         </div>
@@ -155,8 +168,8 @@ defmodule Systems.Crew.RejectView.Example do
     container: {:div, class: ""}
 
   def render(assigns) do
-    ~H"""
-    <RejectView id={{ :reject_view_example }} target={{ self() }} />
+    ~F"""
+    <RejectView id={:reject_view_example} target={self()} />
     """
   end
 
@@ -169,5 +182,4 @@ defmodule Systems.Crew.RejectView.Example do
     IO.puts("cancel")
     {:ok, socket}
   end
-
 end

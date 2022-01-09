@@ -1,8 +1,15 @@
 defmodule Frameworks.Pixel.Button.DynamicFace do
   use Frameworks.Pixel.Component
 
-  alias Frameworks.Pixel.Dynamic
-  alias Frameworks.Pixel.Button.Face.{Primary, Secondary, Label, LabelIcon, PrimaryIcon, Icon, Forward}
+  alias Frameworks.Pixel.Button.Face.{
+    Primary,
+    Secondary,
+    Label,
+    LabelIcon,
+    PrimaryIcon,
+    Icon,
+    Forward
+  }
 
   prop(vm, :map, required: true)
 
@@ -20,8 +27,8 @@ defmodule Frameworks.Pixel.Button.DynamicFace do
   defp face(_), do: Primary
 
   def render(assigns) do
-    ~H"""
-      <Dynamic component={{ face(@vm) }} props={{ %{vm: @vm } }} />
+    ~F"""
+      <Surface.Components.Dynamic.Component module={face(@vm)} vm={@vm} />
     """
   end
 end
