@@ -84,7 +84,7 @@ defmodule Core.MixProject do
       {:jason, "~> 1.3"},
       {:plug_cowboy, "~> 2.5"},
       {:faker, "~> 0.17"},
-      {:surface, git: "git@github.com:surface-ui/surface.git", ref: "84417bb"},
+      {:surface, git: "https://github.com/surface-ui/surface.git", ref: "84417bb"},
       # {:surface_catalogue, "~> 0.2"},
       {:timex, "~> 3.7"},
       {:bamboo, "~> 2.2"},

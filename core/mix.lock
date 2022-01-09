@@ -88,7 +88,7 @@
   "socket": {:hex, :socket, "0.3.13", "98a2ab20ce17f95fb512c5cadddba32b57273e0d2dba2d2e5f976c5969d0c632", [:mix], [], "hexpm", "f82ea9833ef49dde272e6568ab8aac657a636acb4cf44a7de8a935acb8957c2e"},
   "sourceror": {:hex, :sourceror, "0.9.0", "77e8f883be9455812d15913582d2985048ef65d7d931072c548e025a6ea58d5a", [:mix], [], "hexpm", "f56fb5b935df7784504f7d1ba074e0aa83299e2ebd64f75268ffcae62a28f331"},
   "ssl_verify_fun": {:hex, :ssl_verify_fun, "1.1.6", "cf344f5692c82d2cd7554f5ec8fd961548d4fd09e7d22f5b62482e5aeaebd4b0", [:make, :mix, :rebar3], [], "hexpm", "bdb0d2471f453c88ff3908e7686f86f9be327d065cc1ec16fa4540197ea04680"},
-  "surface": {:git, "git@github.com:surface-ui/surface.git", "84417bb401226f6dcfc1c385ad87b58b546ea6c6", [ref: "84417bb"]},
+  "surface": {:git, "https://github.com/surface-ui/surface.git", "84417bb401226f6dcfc1c385ad87b58b546ea6c6", [ref: "84417bb"]},
   "sweet_xml": {:hex, :sweet_xml, "0.7.2", "4729f997286811fabdd8288f8474e0840a76573051062f066c4b597e76f14f9f", [:mix], [], "hexpm", "6894e68a120f454534d99045ea3325f7740ea71260bc315f82e29731d570a6e8"},
   "table_rex": {:hex, :table_rex, "3.0.0", "5189b71b3b92ed461358f40f7b7b630dc37716bf6c8ab3e934b2bc63a99028bd", [:mix], [], "hexpm", "582776d24cbe6a4d30a39a7f02035b1bc979b6cd64923d7234dd2f0ad21a18c7"},
   "telemetry": {:hex, :telemetry, "1.0.0", "0f453a102cdf13d506b7c0ab158324c337c41f1cc7548f0bc0e130bbf0ae9452", [:rebar3], [], "hexpm", "73bc09fa59b4a0284efb4624335583c528e07ec9ae76aca96ea0673850aec57a"},
