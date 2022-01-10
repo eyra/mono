@@ -19,12 +19,8 @@ defmodule Systems.Lab.TimeSlotModel do
   end
 
   @doc false
-  def changeset(participant) do
-    participant
-    |> cast(%{}, [])
-    |> validate_number(:number_of_seats, greater_than_or_equal_to: 1)
-
-    # FIXME: Validate number_of_seats greater than or equal to
-    # reservervation count
+  def changeset(time_slot, attrs \\ %{}) do
+    time_slot
+    |> cast(attrs, [:location, :start_time, :number_of_seats])
   end
 end

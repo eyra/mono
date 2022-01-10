@@ -40,7 +40,6 @@ defmodule Systems.Assignment.AssignmentForm do
 
   # Handle update from parent after auto-save, prevents overwrite of current state
   def update(_params, %{assigns: %{entity: _entity}} = socket) do
-    IO.puts("UPDATE DRAIN")
     {:ok, socket}
   end
 

@@ -78,6 +78,53 @@ defmodule Systems.Lab.Context do
 
   def edit_day_model(_, date), do: {:error, "No time slots available on #{date}"}
 
+  def process_day_model(%Lab.ToolModel{} = tool, %{date: date, location: location, entries: entries}) do
+    entries
+    |> Enum.each(&process_day_entry(&1, tool, date, location))
+  end
+
+  defp process_day_entry(%{type: :time_slot, start_time: start_time, number_of_seats: number_of_seats, enabled?: enabled?}, %Lab.ToolModel{} = tool, date, location) do
+    start_date_time = Timestamp.from_date_and_time(date, start_time)
+
+    exists? =  time_slot_exists?(tool, start_date_time, location)
+
+    case {exists?, enabled?} do
+      {false , false} ->
+        :noop
+      {false , true} ->
+        create_time_slot(tool, %{start_time: start_date_time, location: location, number_of_seats: number_of_seats})
+      {true , true} ->
+        # update (reset possible soft delete)
+        :noop
+      {true , false} ->
+        # soft delete
+        :noop
+      end
+  end
+  defp process_day_entry(_, _, _, _), do: :noop
+
+  defp create_time_slot(%Lab.ToolModel{} = tool, attrs) do
+    %Lab.TimeSlotModel{}
+    |> Lab.TimeSlotModel.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:tool, tool)
+    |> Repo.insert()
+  end
+
+  defp time_slot_exists?(%Lab.ToolModel{} = tool, start_time, location) do
+    tool
+    |> time_slot_query(start_time, location)
+    |> Repo.exists?()
+  end
+
+  defp time_slot_query(%Lab.ToolModel{id: tool_id}, start_time, location)  do
+    from(ts in Lab.TimeSlotModel,
+      where:
+        ts.tool_id == ^tool_id and
+        ts.start_time == ^start_time and
+        ts.location == ^location
+    )
+  end
+
   def reserve_time_slot(time_slot_id, %User{} = user) when is_integer(time_slot_id) do
     Lab.TimeSlotModel
     |> Repo.get(time_slot_id)

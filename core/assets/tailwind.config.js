@@ -94,6 +94,13 @@ module.exports = {
         "image-preview-circle": "120px",
         "image-preview-circle-sm": "150px",
         "button-sm": "14px",
+        "card": "376px",
+        "form": "400px",
+        "sheet": "760px",
+        "popup": "480px",
+        "popup-sm": "520px",
+        "popup-md": "730px",
+        "popup-lg": "1228px"
       },
         height: {
         "topbar" : "64px",

@@ -17,15 +17,15 @@ defmodule Systems.Lab.ToolForm do
 
   # Handle initial update
   def update(
-        %{id: id, entity_id: entity_id, validate?: validate?},
+    %{id: id, entity_id: entity_id, validate?: validate?}, %{assigns: %{myself: myself}} = socket) do
         socket
       ) do
     entity = Lab.Context.get(entity_id)
     changeset = Lab.ToolModel.changeset(entity, :create, %{})
 
     add_day_button = %{
-      action: %{type: :send, event: "add_day"},
-      face: %{type: :primary, label: dgettext("link-lab", "add.day.button")}
+      action: %{type: :send, event: "add_day", target: myself},
+      face: %{type: :primary, label: dgettext("link-lab", "add.day.button") }
     }
 
     {
@@ -42,7 +42,24 @@ defmodule Systems.Lab.ToolForm do
     }
   end
 
-  def handle_event("add_day", _params, socket) do
+  def update(%{day_view: :submit, day_model: day_model}, %{assigns: %{entity: entity}} = socket) do
+    Lab.Context.process_day_model(entity, day_model)
+    {:ok, socket}
+  end
+
+  def update(%{day_view: :hide}, socket) do
+    send(self(), {:hide_popup})
+    {:ok, socket}
+  end
+
+  def handle_event("add_day", _params, %{assigns: %{id: id, entity: entity}} = socket) do
+    props = %{
+      id: :day_popup,
+      target: %{type: __MODULE__, id: id},
+      day_model: Lab.Context.new_day_model(entity)
+    }
+
+    send(self(), {:show_popup, %{view: Systems.Lab.DayView, props: props}})
     {:noreply, socket}
   end
 

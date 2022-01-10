@@ -17,6 +17,17 @@ defmodule CoreWeb.UI.Timestamp do
     }
   end
 
+  def from_date_and_time(%Date{} = date, time) when is_integer(time) do
+    hour = (time / 100) |> trunc()
+    minute = rem(time, 100)
+
+    from_date_and_time(date, Time.new!(hour, minute, 0))
+  end
+
+  def from_date_and_time(%Date{} = date, %Time{} = time) do
+    DateTime.new!(date, time)
+  end
+
   def now(timezone \\ "Etc/UTC") do
     DateTime.now!(timezone)
   end

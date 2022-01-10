@@ -71,8 +71,9 @@ defmodule CoreWeb do
 
       import CoreWeb.UrlResolver, only: [url_resolver: 1]
 
-      alias CoreWeb.UI.{MarginY, Empty}
+      alias CoreWeb.UI.{MarginY, Empty, Popup}
       alias CoreWeb.UI.Container.{ContentArea, FormArea, SheetArea}
+      alias Frameworks.Pixel.Dynamic
       alias Frameworks.Pixel.Spacing
       alias Frameworks.Pixel.Case.{Case, True, False}
       alias Frameworks.Pixel.Button.DynamicButton

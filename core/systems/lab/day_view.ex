@@ -188,7 +188,7 @@ defmodule Systems.Lab.DayView do
 
   @impl true
   def handle_event("cancel", _, %{assigns: %{target: target}} = socket) do
-    update_target(target, %{day_view: :cancel})
+    update_target(target, %{day_view: :hide})
     {:noreply, socket}
   end
 
@@ -218,7 +218,7 @@ defmodule Systems.Lab.DayView do
   @impl true
   def render(assigns) do
     ~F"""
-      <div class="p-8 bg-white shadow-2xl rounded" phx-click="reset_focus" phx-target={@myself}>
+      <div class="p-8 w-popup-md bg-white shadow-2xl rounded" phx-click="reset_focus" phx-target={@myself}>
         <div>
           <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
             {@title}
@@ -242,7 +242,7 @@ defmodule Systems.Lab.DayView do
             </SubHead>
             <Spacing value="M" />
             <Line />
-            <div class="h-lab-day-popup-list overflow-y-scroll">
+            <div class="h-lab-day-popup-list overflow-y-scroll overscroll-contain">
               <div class="h-2"></div>
               <div class="w-full">
               <div :for={entry <- @day_model.entries} >
@@ -317,7 +317,7 @@ defmodule Systems.Lab.DayView.Example do
     {:noreply, socket}
   end
 
-  def handle_info(%{day_view: :cancel}, socket) do
+  def handle_info(%{day_view: :hide}, socket) do
     IO.puts("cancel")
     {:noreply, socket}
   end
