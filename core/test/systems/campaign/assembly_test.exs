@@ -187,6 +187,7 @@ defmodule Systems.Campaign.AssemblyTest do
                    lab_tool: %Lab.ToolModel{
                      id: lab_tool_id,
                      director: :campaign,
+                     time_slots: [],
                      auth_node: %Core.Authorization.Node{
                        parent_id: lab_tool_auth_node_parent_id
                      }
