@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:164
+#: systems/assignment/experiment_form.ex:145
 msgid "config.nrofsubjects.label"
 msgstr ""
 
@@ -21,7 +21,7 @@ msgid "config.url.label"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:161
+#: systems/assignment/experiment_form.ex:142
 msgid "duration.label"
 msgstr ""
 
@@ -41,7 +41,7 @@ msgid "apply.cta.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:179
+#: systems/assignment/experiment_form.ex:160
 msgid "devices.label"
 msgstr ""
 
@@ -61,7 +61,7 @@ msgid "redirect.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:178
+#: systems/assignment/experiment_form.ex:159
 msgid "devices.title"
 msgstr ""
 
@@ -91,27 +91,27 @@ msgid "content.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:204
+#: systems/campaign/overview_page.ex:203
 msgid "title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:254
+#: systems/campaign/overview_page.ex:253
 msgid "add.first.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:234
+#: systems/campaign/overview_page.ex:233
 msgid "add.new.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:250
+#: systems/campaign/overview_page.ex:249
 msgid "empty.description"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:249
+#: systems/campaign/overview_page.ex:248
 msgid "empty.title"
 msgstr ""
 
@@ -171,27 +171,27 @@ msgid "form.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:224
+#: systems/campaign/overview_page.ex:223
 msgid "campaign.overview.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:167
+#: systems/assignment/experiment_form.ex:148
 msgid "language.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:168
+#: systems/assignment/experiment_form.ex:149
 msgid "languages.label"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:45 systems/assignment/ethical_form.ex:148
+#: systems/assignment/ethical_form.ex:46 systems/assignment/ethical_form.ex:130
 msgid "ethical.label"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:138
+#: systems/assignment/ethical_form.ex:120
 msgid "ethical.title"
 msgstr ""
 
@@ -216,7 +216,7 @@ msgid "redirect.copy.button"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:139
+#: systems/assignment/ethical_form.ex:121
 msgid "ethical.description"
 msgstr ""
 
@@ -261,7 +261,7 @@ msgid "duration.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:120
+#: systems/assignment/ethical_form.ex:102
 msgid "ethical.review.link"
 msgstr ""
 
@@ -312,7 +312,7 @@ msgid "started.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:231
+#: systems/campaign/overview_page.ex:230
 msgid "add.new.button.short"
 msgstr ""
 

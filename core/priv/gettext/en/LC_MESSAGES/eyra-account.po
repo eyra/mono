@@ -212,6 +212,6 @@ msgid "features.study.year"
 msgstr "Study year"
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:145
+#: systems/assignment/ethical_form.ex:127
 msgid "ehtical.code.label"
 msgstr "Code"

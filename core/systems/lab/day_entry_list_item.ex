@@ -1,46 +1,18 @@
 defmodule Systems.Lab.DayEntryListItem do
   use CoreWeb.UI.Component
 
-  alias Frameworks.Pixel.Text.{BodyMedium}
-  alias Frameworks.Pixel.Selector.Selector
-  alias Frameworks.Pixel.Line
+  alias Systems.Lab.{DayEntryBreakItem, DayEntryTimeSlotItem}
 
   prop(type, :atom, required: true)
   prop(data, :map)
   prop(target, :any)
 
-  defp timestamp(%{start_time: start_time}) do
-    hour = (start_time / 100) |> trunc()
-    minute = "#{rem(start_time, 100)}" |> String.pad_leading(2, "0")
-
-    "#{hour}:#{minute}"
-  end
-
-  defp timestamp(_), do: nil
+  defp item(%{type: :time_slot}), do: DayEntryTimeSlotItem
+  defp item(%{type: :break}), do: DayEntryBreakItem
 
   def render(assigns) do
-    ~F"""
-      <div>
-        <div :if={@type == :break} class="w-full mb-3">
-          <Line />
-        </div>
-        <div :if={@type == :time_slot} class="h-12 w-full">
-          <div class="flex flex-row items-center gap-2">
-            <Selector id={:"#{@data.start_time}"} items={[%{id: :id, active: @data.enabled}]} type={:checkbox} parent={@target}/>
-            <div class="mt-2px w-full">
-              <div class="flex flex-row w-full">
-                <div class="w-24">
-                  <BodyMedium color={if @data.enabled do "text-grey1" else "text-grey2" end}>{timestamp(@data)}</BodyMedium>
-                </div>
-                <BodyMedium>
-                  <span :if={@data.enabled}>10 participants</span>
-                  <span :if={not @data.enabled} class="text-grey2">Not scheduled</span>
-                </BodyMedium>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    ~H"""
+      <Dynamic component={item(@props)} props={@props} />
     """
   end
 end

@@ -3,8 +3,8 @@ defmodule Systems.Lab.DayModel do
   import Ecto.Changeset
 
   embedded_schema do
-    field(:state, Ecto.Enum, values: [:new, :edit])
     field(:date, :date)
+    field(:date_editable?, :boolean)
     field(:location, :string)
     field(:number_of_seats, :integer)
     field(:entries, {:array, :map})

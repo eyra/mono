@@ -110,6 +110,7 @@ module.exports = {
         "header2-lg" : "183px",
         "logo" : "32px",
         "logo-sm" : "48px",
+        "lab-day-popup-list": "392px",
         "image-header": "375px",
         "image-header-sm": "500px",
         "image-card": "200px",

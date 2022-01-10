@@ -26,21 +26,52 @@ msgid "form.title"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/day_view.ex:99
+#: systems/lab/day_view.ex:226
 msgid "day.schedule.date.label"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/day_view.ex:100
+#: systems/lab/day_view.ex:230
 msgid "day.schedule.location.label"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/day_view.ex:101
+#: systems/lab/day_view.ex:233
 msgid "day.schedule.seats.label"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/day_view.ex:85
+#: systems/lab/day_view.ex:205
 msgid "day.schedule.submit.button"
 msgstr ""
+
+#, elixir-format
+#: systems/lab/day_entry_time_slot_item.ex:42
+msgid "time.slot.item.available.label"
+msgstr ""
+
+#, elixir-format
+#: systems/lab/day_entry_time_slot_item.ex:49
+msgid "1 reservation"
+msgid_plural "%{count} reservations"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-format
+#: systems/lab/day_entry_time_slot_item.ex:41 systems/lab/day_view.ex:140
+msgid "1 seat"
+msgid_plural "%{count} seats"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-format
+#: systems/lab/day_view.ex:142
+msgid "day.schedule.byline"
+msgstr ""
+
+#, elixir-format
+#: systems/lab/day_view.ex:139
+msgid "1 time slot"
+msgid_plural "%{count} time slots"
+msgstr[0] ""
+msgstr[1] ""

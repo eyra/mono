@@ -25,10 +25,11 @@ defmodule Systems.Lab.Context do
     |> Repo.insert()
   end
 
-  def get_time_slots(id) do
+  def get_time_slots(id, preload \\ []) do
     from(ts in Lab.TimeSlotModel,
       where: ts.tool_id == ^id,
-      order_by: {:asc, :start_time}
+      order_by: {:asc, :start_time},
+      preload: ^preload
     )
     |> Repo.all()
   end
@@ -44,8 +45,8 @@ defmodule Systems.Lab.Context do
       |> Timestamp.to_date()
 
     %Lab.DayModel{
-      state: :new,
       date: date,
+      date_editable?: true,
       location: Map.get(base_values, :location),
       number_of_seats: Map.get(base_values, :number_of_seats),
       entries: DaySchedule.entries()
@@ -54,7 +55,7 @@ defmodule Systems.Lab.Context do
 
   def edit_day_model(%Lab.ToolModel{id: id}, date) do
     date_time_slots =
-      get_time_slots(id)
+      get_time_slots(id, [:reservations])
       |> Enum.filter(&(Date.compare(Timestamp.to_date(&1.start_time), date) == :eq))
 
     edit_day_model(date_time_slots, date)
@@ -66,8 +67,8 @@ defmodule Systems.Lab.Context do
     {
       :ok,
       %Lab.DayModel{
-        state: :edit,
         date: date,
+        date_editable?: Timestamp.future?(date),
         location: Map.get(base_values, :location),
         number_of_seats: Map.get(base_values, :number_of_seats),
         entries: DaySchedule.entries(time_slots)
@@ -138,4 +139,6 @@ defmodule Systems.Lab.Context do
 
     changeset.valid?
   end
+
+
 end
