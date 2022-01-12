@@ -21,7 +21,6 @@ defmodule Frameworks.Pixel.Form.Input do
     ~F"""
       <Context
         get={Surface.Components.Form, form: form}
-        get={target: target}
       >
         <#slot />
         <Field form={form} field={@field} label_text={@label_text} label_color={@label_color} background={@background}>
@@ -47,7 +46,7 @@ defmodule Frameworks.Pixel.Form.Input do
             x-on:click.stop
             phx-focus="focus"
             phx-value-field={@field}
-            phx-target={target}
+            phx-target={target(form)}
             phx-debounce={@debounce}
           />
         </Field>

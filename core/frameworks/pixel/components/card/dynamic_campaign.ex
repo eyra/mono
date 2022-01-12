@@ -1,6 +1,5 @@
 defmodule Frameworks.Pixel.Card.DynamicCampaign do
   use Frameworks.Pixel.Component
-
   alias Frameworks.Pixel.Card.{PrimaryCampaign, SecondaryCampaign}
 
   prop(path_provider, :any, required: true)
@@ -15,7 +14,7 @@ defmodule Frameworks.Pixel.Card.DynamicCampaign do
 
   def render(assigns) do
     ~F"""
-      <Surface.Components.Dynamic.LiveComponent
+      <Dynamic.LiveComponent
         id={@card.id}
         module={campaign(@card)}
         card={@card}

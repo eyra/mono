@@ -3,13 +3,9 @@ defmodule CoreWeb.UI.PlainDialog do
 
   alias CoreWeb.UI.Dialog
 
-  defviewmodel(
-    title: nil,
-    text: nil,
-    buttons: []
-  )
-
-  prop(vm, :string, required: true)
+  prop(title, :string, required: true)
+  prop(text, :string, required: true)
+  prop(buttons, :string, default: [])
 
   defmacro __using__(_opts) do
     quote do
@@ -59,7 +55,7 @@ defmodule CoreWeb.UI.PlainDialog do
 
   def render(assigns) do
     ~F"""
-      <Dialog vm={@vm}></Dialog>
+      <Dialog title={@title} text={@text} buttons={@buttons}></Dialog>
     """
   end
 end

@@ -106,8 +106,20 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Assignment.Model do
     end
   end
 
-  defp vm(_, Assignment.CallbackPage, user) do
+  defp vm(%{crew: crew} = assignment, Assignment.CallbackPage, user) do
+    state =
+      if Assignment.Context.complete_task(assignment, user) do
+        :participant
+      else
+        if Core.Authorization.user_has_role?(user, crew, :tester) do
+          :tester
+        else
+          :expired
+        end
+      end
+
     %{
+      state: state,
       hero_title: dgettext("link-survey", "task.hero.title"),
       call_to_action: forward_call_to_action(user)
     }

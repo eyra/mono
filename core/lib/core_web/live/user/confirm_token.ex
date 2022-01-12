@@ -33,6 +33,10 @@ defmodule CoreWeb.User.ConfirmToken do
     end
   end
 
+  def handle_info({:delivered_email, _email}, socket) do
+    {:noreply, socket}
+  end
+
   @impl true
   def handle_uri(socket), do: socket
 

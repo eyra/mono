@@ -29,7 +29,6 @@ defmodule Frameworks.Pixel.Form.Checkbox do
     ~F"""
     <Context
       get={Surface.Components.Form, form: form}
-      get={target: target}
     >
       <div
         class="flex flex-row mb-3 gap-5 sm:gap-3 cursor-pointer items-center"
@@ -37,7 +36,7 @@ defmodule Frameworks.Pixel.Form.Checkbox do
         x-on:click={"active = !active, $parent.focus = '#{@field}'"}
         phx-click="toggle"
         phx-value-checkbox={@field}
-        phx-target={target}
+        phx-target={target(form)}
       >
         <div
           class="flex-shrink-0 w-6 h-6 rounded"

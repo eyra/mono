@@ -2,7 +2,7 @@ defmodule Frameworks.Pixel.Form.TextArea do
   @moduledoc false
   use Surface.Component
   alias Frameworks.Pixel.Form.Field
-  import Frameworks.Pixel.FormHelpers, only: [focus_border_color: 1, border_color: 2]
+  import Frameworks.Pixel.FormHelpers
 
   import Phoenix.HTML
   import Phoenix.HTML.Form
@@ -16,7 +16,6 @@ defmodule Frameworks.Pixel.Form.TextArea do
     ~F"""
       <Context
         get={Surface.Components.Form, form: form}
-        get={target: target}
       >
         <Field form={form} field={@field} label_text={@label_text} label_color={@label_color} background={@background} extra_space={false}>
           <textarea
@@ -28,7 +27,7 @@ defmodule Frameworks.Pixel.Form.TextArea do
             x-on:click.stop
             phx-focus="focus"
             phx-value-field={@field}
-            phx-target={target}
+            phx-target={target(form)}
             phx-debounce="1000"
           >{html_escape(input_value(form, @field) || "")}</textarea>
         </Field>

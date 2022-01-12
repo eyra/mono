@@ -14,6 +14,7 @@ defmodule Systems.Lab.VUDaySchedule do
     1130,
     1200,
     1230,
+    1300,
     1330,
     1400,
     1430,
@@ -22,6 +23,7 @@ defmodule Systems.Lab.VUDaySchedule do
     1600,
     1630,
     1700,
+    1730,
     1800,
     1830,
     1900,
@@ -61,19 +63,19 @@ defmodule Systems.Lab.VUDaySchedule do
   end
 
   defp map_entry(%{type: :time_slot, start_time: start_time} = time_slot, existing_time_slots) do
-   existing_time_slot =
-      Enum.find(existing_time_slots, nil,
-        &(time_as_integer(&1.start_time) == start_time)
-      )
+    existing_time_slot =
+      Enum.find(existing_time_slots, nil, &(time_as_integer(&1.start_time) == start_time))
 
     enabled? = existing_time_slot != nil
     number_of_reservations = number_of_reservations(existing_time_slot)
 
     %{time_slot | enabled?: enabled?, number_of_reservations: number_of_reservations}
   end
+
   defp map_entry(entry, _), do: entry
 
   defp number_of_reservations(nil), do: 0
+
   defp number_of_reservations(%Lab.TimeSlotModel{reservations: reservations}) do
     reservations |> Enum.count()
   end

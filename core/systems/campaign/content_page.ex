@@ -30,20 +30,20 @@ defmodule Systems.Campaign.ContentPage do
     Assignment
   }
 
-  data campaign_id, :any
-  data assignment_id, :any
-  data promotion_id, :any
-  data submission_id, :any
-  data submitted?, :any
-  data validate?, :any
-  data preview_path, :any
-  data initial_tab, :any
-  data tabs, :map
-  data actions, :map
-  data changesets, :any
-  data initial_image_query, :any
-  data uri_origin, :any
-  data popup, :map
+  data(campaign_id, :any)
+  data(assignment_id, :any)
+  data(promotion_id, :any)
+  data(submission_id, :any)
+  data(submitted?, :any)
+  data(validate?, :any)
+  data(preview_path, :any)
+  data(initial_tab, :any)
+  data(tabs, :map)
+  data(actions, :map)
+  data(changesets, :any)
+  data(initial_image_query, :any)
+  data(uri_origin, :any)
+  data(popup, :map)
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
@@ -548,10 +548,10 @@ defmodule Systems.Campaign.ContentPage do
             </div>
           </div>
           <Popup :if={@popup} >
-            <Dynamic component={{ @popup.view }} props={{ @popup.props }} />
+            <Dynamic.Component module={@popup.view} props={@popup.props} />
           </Popup>
           <Popup :if={@dialog}>
-            <PlainDialog vm={@dialog} />
+            <PlainDialog {...@dialog} />
           </Popup>
           <TabbarArea tabs={@tabs}>
             <ActionBar right_bar_buttons={create_actions(assigns)} more_buttons={create_more_actions(assigns)}>

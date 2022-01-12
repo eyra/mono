@@ -22,6 +22,7 @@ defmodule Systems.Lab.DayView do
 
   data(date, :date)
   data(title, :string)
+  data(byline, :string)
   data(entity, :map)
   data(changeset, :map)
   data(focus, :string, default: "")
@@ -65,18 +66,29 @@ defmodule Systems.Lab.DayView do
 
   defp update_changed_entry(entries, start_time, enabled?) when is_list(entries) do
     case entries |> Enum.find_index(&has_start_time(&1, start_time)) do
-      nil -> entries
+      nil ->
+        entries
+
       index ->
         entry = Enum.at(entries, index)
 
         entries
-        |> List.replace_at(index,
+        |> List.replace_at(
+          index,
           %{entry | enabled?: enabled?}
         )
     end
   end
 
-  defp update_entries(%{assigns: %{id: id, day_model: %{number_of_seats: number_of_seats, entries: entries} = day_model}} = socket) when is_list(entries) do
+  defp update_entries(
+         %{
+           assigns: %{
+             id: id,
+             day_model: %{number_of_seats: number_of_seats, entries: entries} = day_model
+           }
+         } = socket
+       )
+       when is_list(entries) do
     enabled_timeslots = Enum.filter(entries, &(&1.type == :time_slot and &1.enabled?))
 
     entries =
@@ -88,7 +100,6 @@ defmodule Systems.Lab.DayView do
     socket
     |> assign(day_model: %{day_model | entries: entries})
   end
-
 
   defp find_index(timeslot, timeslots) do
     timeslots
@@ -113,7 +124,7 @@ defmodule Systems.Lab.DayView do
     bullet =
       if timeslot.enabled? do
         index = find_index(timeslot, enabled_timeslots)
-        "#{index+1}."
+        "#{index + 1}."
       else
         "-"
       end
@@ -121,7 +132,11 @@ defmodule Systems.Lab.DayView do
     Map.put(timeslot, :bullet, bullet)
   end
 
-  defp update_entry(:timeslot_number_of_seats, %{type: :time_slot, number_of_reservations: number_of_reservations} = timeslot, number_of_seats) do
+  defp update_entry(
+         :timeslot_number_of_seats,
+         %{type: :time_slot, number_of_reservations: number_of_reservations} = timeslot,
+         number_of_seats
+       ) do
     if number_of_seats >= number_of_reservations do
       Map.put(timeslot, :number_of_seats, number_of_seats)
     else
@@ -136,7 +151,9 @@ defmodule Systems.Lab.DayView do
   defp update_entry(_, entry, _timeslots), do: entry
 
   defp update_byline(socket) do
-    time_slots = dngettext("link-lab", "1 time slot", "%{count} time slots", number_of_time_slots(socket))
+    time_slots =
+      dngettext("link-lab", "1 time slot", "%{count} time slots", number_of_time_slots(socket))
+
     seats = dngettext("link-lab", "1 seat", "%{count} seats", number_of_seats(socket))
 
     byline = dgettext("link-lab", "day.schedule.byline", time_slots: time_slots, seats: seats)
@@ -246,7 +263,7 @@ defmodule Systems.Lab.DayView do
               <div class="h-2"></div>
               <div class="w-full">
               <div :for={entry <- @day_model.entries} >
-                <Lab.DayEntryListItem {...entry} target={%{type: __MODULE__, id: @id}}/>
+                <Lab.DayEntryListItem {...entry} />
                 </div>
               </div>
             </div>
@@ -271,44 +288,46 @@ defmodule Systems.Lab.DayView.Example do
     direction: "vertical",
     container: {:div, class: ""}
 
-  data day_model, :map, default: %Systems.Lab.DayModel{
-    date: ~D[2022-12-13],
-    date_editable?: true,
-    location: "Lab 007, Unit 4.02",
-    number_of_seats: 10,
-    entries: [
-      %{type: :time_slot, enabled?: true, start_time: 900, number_of_reservations: 6},
-      %{type: :time_slot, enabled?: true, start_time: 930, number_of_reservations: 2},
-      %{type: :time_slot, enabled?: true, start_time: 1000, number_of_reservations: 0},
-      %{type: :time_slot, enabled?: false, start_time: 1030, number_of_reservations: 0},
-      %{type: :break},
-      %{type: :time_slot, enabled?: true, start_time: 1100, number_of_reservations: 0},
-      %{type: :time_slot, enabled?: true, start_time: 1130, number_of_reservations: 0},
-      %{type: :time_slot, enabled?: true, start_time: 1200, number_of_reservations: 0},
-      %{type: :time_slot, enabled?: true, start_time: 1230, number_of_reservations: 0},
-      %{type: :break},
-      %{type: :time_slot, enabled?: false, start_time: 1300, number_of_reservations: 0},
-      %{type: :time_slot, enabled?: true, start_time: 1330, number_of_reservations: 0},
-      %{type: :time_slot, enabled?: true, start_time: 1400, number_of_reservations: 0},
-      %{type: :time_slot, enabled?: true, start_time: 1430, number_of_reservations: 0},
-      %{type: :break},
-      %{type: :time_slot, enabled?: false, start_time: 1500, number_of_reservations: 0},
-      %{type: :time_slot, enabled?: true, start_time: 1530, number_of_reservations: 0},
-      %{type: :time_slot, enabled?: true, start_time: 1600, number_of_reservations: 0},
-      %{type: :time_slot, enabled?: true, start_time: 1630, number_of_reservations: 0},
-      %{type: :time_slot, enabled?: true, start_time: 1700, number_of_reservations: 0},
-      %{type: :break},
-      %{type: :time_slot, enabled?: false, start_time: 1730, number_of_reservations: 0},
-      %{type: :time_slot, enabled?: false, start_time: 1800, number_of_reservations: 0},
-      %{type: :time_slot, enabled?: false, start_time: 1830, number_of_reservations: 0},
-      %{type: :time_slot, enabled?: false, start_time: 1900, number_of_reservations: 0},
-      %{type: :time_slot, enabled?: false, start_time: 1930, number_of_reservations: 0}
-    ]
-  }
+  data(day_model, :map,
+    default: %Systems.Lab.DayModel{
+      date: ~D[2022-12-13],
+      date_editable?: true,
+      location: "Lab 007, Unit 4.02",
+      number_of_seats: 10,
+      entries: [
+        %{type: :time_slot, enabled?: true, start_time: 900, number_of_reservations: 6},
+        %{type: :time_slot, enabled?: true, start_time: 930, number_of_reservations: 2},
+        %{type: :time_slot, enabled?: true, start_time: 1000, number_of_reservations: 0},
+        %{type: :time_slot, enabled?: false, start_time: 1030, number_of_reservations: 0},
+        %{type: :break},
+        %{type: :time_slot, enabled?: true, start_time: 1100, number_of_reservations: 0},
+        %{type: :time_slot, enabled?: true, start_time: 1130, number_of_reservations: 0},
+        %{type: :time_slot, enabled?: true, start_time: 1200, number_of_reservations: 0},
+        %{type: :time_slot, enabled?: true, start_time: 1230, number_of_reservations: 0},
+        %{type: :break},
+        %{type: :time_slot, enabled?: false, start_time: 1300, number_of_reservations: 0},
+        %{type: :time_slot, enabled?: true, start_time: 1330, number_of_reservations: 0},
+        %{type: :time_slot, enabled?: true, start_time: 1400, number_of_reservations: 0},
+        %{type: :time_slot, enabled?: true, start_time: 1430, number_of_reservations: 0},
+        %{type: :break},
+        %{type: :time_slot, enabled?: false, start_time: 1500, number_of_reservations: 0},
+        %{type: :time_slot, enabled?: true, start_time: 1530, number_of_reservations: 0},
+        %{type: :time_slot, enabled?: true, start_time: 1600, number_of_reservations: 0},
+        %{type: :time_slot, enabled?: true, start_time: 1630, number_of_reservations: 0},
+        %{type: :time_slot, enabled?: true, start_time: 1700, number_of_reservations: 0},
+        %{type: :break},
+        %{type: :time_slot, enabled?: false, start_time: 1730, number_of_reservations: 0},
+        %{type: :time_slot, enabled?: false, start_time: 1800, number_of_reservations: 0},
+        %{type: :time_slot, enabled?: false, start_time: 1830, number_of_reservations: 0},
+        %{type: :time_slot, enabled?: false, start_time: 1900, number_of_reservations: 0},
+        %{type: :time_slot, enabled?: false, start_time: 1930, number_of_reservations: 0}
+      ]
+    }
+  )
 
   def render(assigns) do
-    ~H"""
-    <DayView id={:day_view_example} day_model={@day_model} target={self()}/>
+    ~F"""
+      <DayView id={:day_view_example} day_model={@day_model} target={self()}/>
     """
   end
 
@@ -321,6 +340,4 @@ defmodule Systems.Lab.DayView.Example do
     IO.puts("cancel")
     {:noreply, socket}
   end
-
 end
-

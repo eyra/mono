@@ -4,10 +4,10 @@ defmodule CoreWeb.UI.Popup do
   slot(default)
 
   def render(assigns) do
-    ~H"""
+    ~F"""
       <div class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
         <div class="flex flex-row items-center justify-center w-full h-full">
-          <slot />
+          <#slot />
         </div>
       </div>
     """
