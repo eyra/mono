@@ -203,7 +203,7 @@ defmodule Frameworks.Pixel.ShareView.Example do
   def render(assigns) do
     ~F"""
     <ShareView
-      id={:reject_view_example}
+      id={:share_view_example}
       content_id={1}
       content_name="campaign"
       group_name="researchers"

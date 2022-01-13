@@ -21,7 +21,6 @@ defmodule Frameworks.Pixel.Form.Input do
     ~F"""
       <Context
         get={Surface.Components.Form, form: form}
-        get={target: target}
       >
         <#slot />
         <Field form={form} field={@field} label_text={@label_text} label_color={@label_color} background={@background}>
@@ -39,6 +38,7 @@ defmodule Frameworks.Pixel.Form.Input do
             id={input_id(form, @field)}
             name={input_name(form, @field)}
             value={input_value(form, @field)}
+            min="0"
             placeholder={@placeholder}
             class="text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid focus:outline-none rounded h-44px"
             x-bind:class={"{ '#{focus_border_color(@background)}': focus === '#{@field}', '#{border_color(assigns, form)}': focus !== '#{@field}' }"}
@@ -46,7 +46,7 @@ defmodule Frameworks.Pixel.Form.Input do
             x-on:click.stop
             phx-focus="focus"
             phx-value-field={@field}
-            phx-target={target}
+            phx-target={target(form)}
             phx-debounce={@debounce}
           />
         </Field>

@@ -8,6 +8,7 @@ defmodule CoreWeb.UI.Component do
 
       import CoreWeb.Gettext
 
+      alias Surface.Components.Dynamic
       alias CoreWeb.UI.{Empty, MarginY}
       alias CoreWeb.UI.Container.{ContentArea, FormArea, SheetArea}
       alias Frameworks.Pixel.Case.{Case, True, False}

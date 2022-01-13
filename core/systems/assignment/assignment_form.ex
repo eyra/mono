@@ -21,7 +21,6 @@ defmodule Systems.Assignment.AssignmentForm do
     |> forms()
     |> filter(form)
     |> Enum.each(fn %{component: component, props: %{id: id}} ->
-      IO.puts("send_update #{component}, #{id}, focus: ''")
       send_update(component, id: id, focus: "")
     end)
 
@@ -40,7 +39,6 @@ defmodule Systems.Assignment.AssignmentForm do
 
   # Handle update from parent after auto-save, prevents overwrite of current state
   def update(_params, %{assigns: %{entity: _entity}} = socket) do
-    IO.puts("UPDATE DRAIN")
     {:ok, socket}
   end
 
@@ -123,7 +121,7 @@ defmodule Systems.Assignment.AssignmentForm do
 
         <div class="flex flex-col gap-12 lg:gap-16">
           {#for form <- forms(assigns)}
-          <Surface.Components.Dynamic.LiveComponent
+          <Dynamic.LiveComponent
             module={form.component} {...form.props}  />
           {/for}
         </div>

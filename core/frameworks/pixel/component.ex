@@ -3,6 +3,8 @@ defmodule Frameworks.Pixel.Component do
     quote do
       use Surface.Component
 
+      alias Surface.Components.Dynamic
+
       require Frameworks.Pixel.ViewModel
       import Frameworks.Pixel.ViewModel
     end

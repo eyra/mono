@@ -43,6 +43,7 @@ defmodule Systems.Campaign.ContentPage do
   data(changesets, :any)
   data(initial_image_query, :any)
   data(uri_origin, :any)
+  data(popup, :map)
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
@@ -90,7 +91,8 @@ defmodule Systems.Campaign.ContentPage do
         changesets: %{},
         save_timer: nil,
         hide_flash_timer: nil,
-        dialog: nil
+        dialog: nil,
+        popup: nil
       )
       |> assign_viewport()
       |> assign_breakpoint()
@@ -169,7 +171,8 @@ defmodule Systems.Campaign.ContentPage do
         props: %{
           entity_id: assignment_id,
           uri_origin: uri_origin,
-          validate?: validate?
+          validate?: validate?,
+          target: self()
         }
       },
       %{
@@ -306,6 +309,14 @@ defmodule Systems.Campaign.ContentPage do
   @impl true
   def handle_event("inform_ok", _params, socket) do
     {:noreply, socket |> assign(dialog: nil)}
+  end
+
+  def handle_info({:show_popup, popup}, socket) do
+    {:noreply, socket |> assign(popup: popup)}
+  end
+
+  def handle_info({:hide_popup}, socket) do
+    {:noreply, socket |> assign(popup: nil)}
   end
 
   def handle_info({:claim_focus, :promotion_form}, socket) do
@@ -514,9 +525,6 @@ defmodule Systems.Campaign.ContentPage do
   defp tabbar_size({:unknown, _}), do: :unknown
   defp tabbar_size(bp), do: value(bp, :narrow, sm: %{30 => :wide})
 
-  defp show_dialog?(nil), do: false
-  defp show_dialog?(_), do: true
-
   def render(assigns) do
     ~F"""
     <Workspace
@@ -539,14 +547,15 @@ defmodule Systems.Campaign.ContentPage do
               </div>
             </div>
           </div>
-          <div :if={show_dialog?(@dialog)} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
-            <div class="flex flex-row items-center justify-center w-full h-full">
-              <PlainDialog vm={@dialog} />
-            </div>
-          </div>
+          <Popup :if={@popup} >
+            <Dynamic.Component module={@popup.view} props={@popup.props} />
+          </Popup>
+          <Popup :if={@dialog}>
+            <PlainDialog {...@dialog} />
+          </Popup>
           <TabbarArea tabs={@tabs}>
             <ActionBar right_bar_buttons={create_actions(assigns)} more_buttons={create_more_actions(assigns)}>
-              <Tabbar vm={%{initial_tab: @initial_tab, size: tabbar_size(@breakpoint)}} />
+              <Tabbar vm={%{initial_tab: @initial_tab, size: tabbar_size(@breakpoint)} } />
             </ActionBar>
             <TabbarContent/>
             <TabbarFooter/>

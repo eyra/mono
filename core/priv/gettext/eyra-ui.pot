@@ -163,7 +163,7 @@ msgstr ""
 #, elixir-format
 #: systems/assignment/landing_page.ex:6 systems/campaign/content_page.ex:9
 #: systems/campaign/overview_page.ex:7 systems/campaign/overview_page.ex:148 systems/crew/reject_view.ex:109
-#: systems/pool/submission_page.ex:8 systems/promotion/landing_page.ex:6
+#: systems/lab/day_view.ex:209 systems/pool/submission_page.ex:8 systems/promotion/landing_page.ex:6
 msgid "cancel.button"
 msgstr ""
 

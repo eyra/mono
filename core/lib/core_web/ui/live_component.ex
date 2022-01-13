@@ -5,13 +5,13 @@ defmodule CoreWeb.UI.LiveComponent do
 
       import CoreWeb.Gettext
 
+      alias Surface.Components.Dynamic
       alias CoreWeb.UI.{Empty, MarginY}
       alias CoreWeb.UI.Container.{ContentArea, FormArea, SheetArea}
       alias Frameworks.Pixel.Case.{Case, True, False}
       alias Frameworks.Pixel.Button.DynamicButton
       alias Frameworks.Pixel.Spacing
       alias Frameworks.Pixel.Wrap
-      alias Frameworks.Pixel.Dynamic
       alias CoreWeb.Router.Helpers, as: Routes
 
       require Frameworks.Pixel.ViewModel

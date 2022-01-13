@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:197
+#: systems/campaign/overview_page.ex:196
 msgid "default.study.title"
 msgstr "Nieuwe studie"
 

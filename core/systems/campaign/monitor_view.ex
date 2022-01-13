@@ -1,7 +1,7 @@
 defmodule Systems.Campaign.MonitorView do
   use CoreWeb.LiveForm
 
-  alias CoreWeb.UI.{Timestamp, ProgressBar}
+  alias CoreWeb.UI.{Timestamp, ProgressBar, Popup}
   alias Frameworks.Pixel.Container.Wrap
 
   alias Systems.{
@@ -104,11 +104,9 @@ defmodule Systems.Campaign.MonitorView do
   @impl true
   def render(assigns) do
     ~F"""
-      <div :if={@reject_task != nil} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
-        <div class="flex flex-row items-center justify-center w-full h-full">
-          <Crew.RejectView id={:reject_view_example} target={%{type: __MODULE__, id: @id}} />
-        </div>
-      </div>
+      <Popup :if={@reject_task != nil}>
+        <Crew.RejectView id={:reject_view_example} target={%{type: __MODULE__, id: @id}} />
+      </Popup>
       <ContentArea>
         <MarginY id={:page_top} />
         <Case value={@vm.active?} >

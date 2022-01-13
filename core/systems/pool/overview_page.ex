@@ -39,7 +39,7 @@ defmodule Systems.Pool.OverviewPage do
         id: :students,
         title: dgettext("link-studentpool", "tabbar.item.students"),
         component: StudentsView,
-        props: nil,
+        props: %{},
         type: :fullpage,
         active: initial_tab === :students
       },
@@ -47,7 +47,7 @@ defmodule Systems.Pool.OverviewPage do
         id: :campaigns,
         title: dgettext("link-studentpool", "tabbar.item.campaigns"),
         component: CampaignsView,
-        props: nil,
+        props: %{},
         type: :fullpage,
         active: initial_tab === :campaigns
       }
