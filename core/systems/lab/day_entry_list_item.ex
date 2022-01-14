@@ -3,15 +3,16 @@ defmodule Systems.Lab.DayEntryListItem do
 
   alias Systems.Lab.{DayEntryBreakItem, DayEntryTimeSlotItem}
 
-  prop(type, :atom, required: true)
-  prop(props, :map, default: %{})
+  prop(entry, :map, required: true)
 
-  defp module(:time_slot), do: DayEntryTimeSlotItem
-  defp module(:break), do: DayEntryBreakItem
+  defp module(%{type: :time_slot}), do: DayEntryTimeSlotItem
+  defp module(%{type: :break}), do: DayEntryBreakItem
+
+  defp props(entry), do: Map.delete(entry, :type)
 
   def render(assigns) do
     ~F"""
-      <Surface.Components.Dynamic.Component module={module(@type)} {...@props} />
+      <Dynamic.Component module={module(@entry)} {...props(@entry)} />
     """
   end
 end
@@ -38,9 +39,9 @@ defmodule Systems.Lab.DayEntryListItem.Example do
   def render(assigns) do
     ~F"""
     <div class="flex flex-col">
-      <DayEntryListItem type={:time_slot} props={%{start_time: 900, enabled: true, target: self()} }  />
-      <DayEntryListItem type={:break} />
-      <DayEntryListItem type={:time_slot} props={%{start_time: 1000, enabled: true, target: self()} } />
+      <DayEntryListItem entry={%{type: :time_slot, start_time: 900, enabled?: true, bullet: "1.", number_of_seats: 1, number_of_reservations: 1, target: self()} }  />
+      <DayEntryListItem entry={%{type: :break}}/>
+      <DayEntryListItem entry={%{type: :time_slot, start_time: 1000, enabled?: true, bullet: "2.", number_of_seats: 1, number_of_reservations: 1, target: self()} } />
     </div>
     """
   end

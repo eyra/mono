@@ -46,10 +46,13 @@ defmodule Systems.Lab.DayView do
   end
 
   def update(
-        %{active_item_id: active_item_id, selector_id: selector_id},
+        %{active_item_id: active_item_id, selector_id: selector_id} = params,
         %{assigns: %{day_model: %{entries: entries} = day_model}} = socket
       ) do
-    start_time = selector_id |> Atom.to_string() |> String.to_integer()
+
+    params |> IO.inspect(label: "PARAMS")
+
+    start_time = selector_id
     enabled? = active_item_id != nil
 
     entries =
@@ -63,6 +66,15 @@ defmodule Systems.Lab.DayView do
       |> update_entries()
     }
   end
+
+  def update(params, socket) do
+    params |> IO.inspect(label: "PAR")
+    {
+      :ok,
+      socket
+    }
+  end
+
 
   defp update_changed_entry(entries, start_time, enabled?) when is_list(entries) do
     case entries |> Enum.find_index(&has_start_time(&1, start_time)) do
@@ -255,15 +267,15 @@ defmodule Systems.Lab.DayView do
               </div>
             </div>
             <SubHead color="text-grey2">
-              {{@byline}}
+              {@byline}
             </SubHead>
             <Spacing value="M" />
             <Line />
             <div class="h-lab-day-popup-list overflow-y-scroll overscroll-contain">
               <div class="h-2"></div>
               <div class="w-full">
-              <div :for={entry <- @day_model.entries} >
-                <Lab.DayEntryListItem {...entry} />
+                <div :for={entry <- @day_model.entries} >
+                  <Lab.DayEntryListItem entry={entry} />
                 </div>
               </div>
             </div>

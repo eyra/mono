@@ -548,7 +548,7 @@ defmodule Systems.Campaign.ContentPage do
             </div>
           </div>
           <Popup :if={@popup} >
-            <Dynamic.Component module={@popup.view} props={@popup.props} />
+            <Dynamic.LiveComponent module={@popup.view} {...@popup.props} />
           </Popup>
           <Popup :if={@dialog}>
             <PlainDialog {...@dialog} />
