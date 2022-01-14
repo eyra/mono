@@ -49,7 +49,6 @@ defmodule Systems.Lab.DayView do
         %{active_item_id: active_item_id, selector_id: selector_id} = params,
         %{assigns: %{day_model: %{entries: entries} = day_model}} = socket
       ) do
-
     params |> IO.inspect(label: "PARAMS")
 
     start_time = selector_id
@@ -69,12 +68,12 @@ defmodule Systems.Lab.DayView do
 
   def update(params, socket) do
     params |> IO.inspect(label: "PAR")
+
     {
       :ok,
       socket
     }
   end
-
 
   defp update_changed_entry(entries, start_time, enabled?) when is_list(entries) do
     case entries |> Enum.find_index(&has_start_time(&1, start_time)) do
