@@ -141,7 +141,7 @@ defmodule Systems.Assignment.LandingPageTest do
       task = Crew.Context.get_task(assignment.crew, member)
       Crew.Context.start_task(task)
 
-      {:ok, view, html} =
+      {:ok, _view, html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
 
       assert html =~ "This is a test title"

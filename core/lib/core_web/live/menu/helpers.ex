@@ -28,7 +28,7 @@ defmodule CoreWeb.Menu.Helpers do
         nil
       end
 
-    path = Routes.live_path(socket, info.target)
+    path = path(socket, info.target)
     action = %{target: path}
 
     %{
@@ -40,6 +40,14 @@ defmodule CoreWeb.Menu.Helpers do
       active?: active_item === id,
       counter: counter
     }
+  end
+
+  defp path(socket, Systems.Home.LandingPage) do
+    Routes.landing_page_path(socket, :show)
+  end
+
+  defp path(socket, target) do
+    Routes.live_path(socket, target)
   end
 
   def account_item(socket, menu_id, is_logged_in, active_item, use_icon \\ true) do

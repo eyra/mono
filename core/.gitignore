@@ -3,3 +3,4 @@ tmp/
 priv/static
 priv/cldr
 .bundle
+deps/

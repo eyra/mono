@@ -26,7 +26,6 @@ defmodule Core.Authorization do
   grant_access(Systems.Lab.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.DataDonation.ToolModel, [:owner, :coordinator, :participant])
 
-  grant_access(Systems.Home.LandingPage, [:visitor, :member])
   grant_access(Systems.Admin.LoginPage, [:visitor, :member])
   grant_access(Systems.Admin.PermissionsPage, [:admin])
   grant_access(Systems.Support.OverviewPage, [:admin])

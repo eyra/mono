@@ -3,7 +3,7 @@ defmodule Systems.Home.Routes do
     quote do
       scope "/", Systems.Home do
         pipe_through([:browser])
-        live("/", LandingPage)
+        get("/", LandingPage, :show)
       end
     end
   end
