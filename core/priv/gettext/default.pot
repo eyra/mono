@@ -11,11 +11,9 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:158
 msgid "Dutch"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:157
 msgid "English"
 msgstr ""

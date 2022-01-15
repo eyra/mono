@@ -11,11 +11,9 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:197
 msgid "closed.dialog.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:196
 msgid "closed.dialog.title"
 msgstr ""

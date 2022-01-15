@@ -11,21 +11,17 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:158
 msgid "campaign.all.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:148
 msgid "campaign.subject.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:119
 msgid "share.dialog.content"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:120
 msgid "share.dialog.group"
 msgstr ""

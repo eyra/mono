@@ -11,147 +11,117 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:206
 msgid "back.button.label"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:195
 msgid "banner.subtitle.label"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:182
 msgid "banner.title"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:194
 msgid "banner.title.label"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:196
 msgid "banner.url.label"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:188
 msgid "choose.banner.photo.file"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:189
 msgid "choose.other.banner.photo.file"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:179
 msgid "description.label"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:183
 msgid "description.public.label"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:178
 msgid "description.title"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:197
 msgid "devices.available.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:37 bundles/link/lib/card.ex:88
-#: bundles/link/lib/card.ex:159
 msgid "duration.title"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:175
 msgid "expectations.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:98 systems/promotion/landing_page.ex:179
 msgid "expectations.public.label"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:174
 msgid "expectations.title"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:163
 msgid "image.label"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:162
 msgid "image.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:160
 msgid "open.spots.label"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/card.ex:38
 msgid "reward.title"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:169
 msgid "search.different.image.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:113 systems/promotion/form_view.ex:153
 msgid "subtitle.label"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:157
 msgid "themes.label"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:156
 msgid "themes.title"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:152
 msgid "title.label"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:148
 msgid "form.title"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/form_view.ex:149
 msgid "form.description"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:103
 msgid "preview.inform.text"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:102
 msgid "preview.inform.title"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:198
 msgid "languages.available.label"
 msgstr ""

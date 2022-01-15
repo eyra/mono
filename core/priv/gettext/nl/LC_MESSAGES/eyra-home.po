@@ -12,21 +12,17 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/home/landing_page.ex:33
 msgid "hero.subtitle"
 msgstr ""
 
 #, elixir-format
-#: systems/home/landing_page.ex:32
 msgid "hero.title"
 msgstr ""
 
 #, elixir-format
-#: systems/home/landing_page.ex:41
 msgid "intro"
 msgstr ""
 
 #, elixir-format
-#: systems/home/landing_page.ex:38
 msgid "title"
 msgstr ""

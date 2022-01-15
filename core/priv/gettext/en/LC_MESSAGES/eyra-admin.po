@@ -12,76 +12,61 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/admin/permissions_page.ex:80
 msgid "permissions.pooladmin.candidates.title"
 msgstr "Researchers"
 
 #, elixir-format
-#: systems/admin/permissions_page.ex:66
 msgid "permissions.pooladmin.description"
 msgstr "Select one or more researchers who will administer the student pool on behalf of the VU."
 
 #, elixir-format
-#: systems/admin/permissions_page.ex:65
 msgid "permissions.pooladmin.title"
 msgstr "Pool administrators"
 
 #, elixir-format
-#: systems/admin/permissions_page.ex:60
 msgid "permissions.title"
 msgstr "Permissions"
 
 #, elixir-format
-#: systems/support/overview_page.ex:76
 msgid "support.title"
 msgstr "Support"
 
 #, elixir-format
-#: systems/support/ticket_model.ex:28
 msgid "ticket.tag.bug"
 msgstr "Bug"
 
 #, elixir-format
-#: systems/support/ticket_model.ex:30
 msgid "ticket.tag.question"
 msgstr "Question"
 
 #, elixir-format
-#: systems/support/ticket_model.ex:29
 msgid "ticket.tag.tip"
 msgstr "Tip"
 
 #, elixir-format
-#: systems/support/ticket_page.ex:104
 msgid "close.ticket.button"
 msgstr "Close ticket"
 
 #, elixir-format
-#: systems/support/ticket_page.ex:118
 msgid "ticket.title"
 msgstr "Ticket"
 
 #, elixir-format
-#: systems/support/ticket_page.ex:60
 msgid "role.coordinator"
 msgstr "Pool administrator"
 
 #, elixir-format
-#: systems/pool/submission_page.ex:260 systems/support/ticket_page.ex:61
 msgid "role.researcher"
 msgstr "Researcher"
 
 #, elixir-format
-#: systems/support/ticket_page.ex:62
 msgid "role.student"
 msgstr "Student"
 
 #, elixir-format
-#: systems/pool/submission_page.ex:272 systems/support/ticket_page.ex:77
 msgid "ticket.mailto.button"
 msgstr "Get in touch"
 
 #, elixir-format
-#: systems/support/ticket_page.ex:111
 msgid "reopen.ticket.button"
 msgstr "Reopen ticket"

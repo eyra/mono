@@ -11,41 +11,33 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:135
 msgid "cancel.button"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:58
 msgid "cancel.confirm.label"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:57
 msgid "cancel.confirm.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:56
 msgid "cancel.confirm.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:187
 msgid "cancel.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:184
 msgid "cancel.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:117
 msgid "contact.button"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/assignment_form.ex:115
 msgid "form.title"
 msgstr ""

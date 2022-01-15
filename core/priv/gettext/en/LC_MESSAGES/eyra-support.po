@@ -12,36 +12,29 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/support/helpdesk_page.ex:31
 msgid "form.description"
 msgstr "Help us to improve the Panl platform. Do you have a question about the Panl platform? Or do you want to give us feedback? Fill out the form below. We will reply by sending an email."
 
 #, elixir-format
-#: systems/support/helpdesk_page.ex:30
 msgid "form.title"
 msgstr "Helpdesk"
 
 #, elixir-format
-#: systems/support/helpdesk_form.ex:92
 msgid "ticket.description.label"
 msgstr "Description"
 
 #, elixir-format
-#: systems/support/helpdesk_form.ex:90
 msgid "ticket.title.label"
 msgstr "Subject"
 
 #, elixir-format
-#: systems/support/helpdesk_form.ex:94
 msgid "create_ticket.button"
 msgstr "Submit"
 
 #, elixir-format
-#: systems/support/helpdesk_form.ex:68
 msgid "ticket_created.info.flash"
 msgstr "Report is received"
 
 #, elixir-format
-#: systems/support/helpdesk_form.ex:86
 msgid "ticket.type"
 msgstr "Form"
