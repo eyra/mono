@@ -11,58 +11,45 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/menu/items-translations.ex:2
 msgid "menu.item.studentpool"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/menu/items-translations.ex:2
 msgid "menu.item.recruitment"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/onboarding/welcome.ex:33
 msgid "onboarding.welcome.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/onboarding/welcome.ex:11
 msgid "onboarding.welcome.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/debug.ex:116
 msgid "debug.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:226 systems/campaign/overview_page.ex:64
 msgid "delete.confirm.campaign"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:391 systems/campaign/content_page.ex:395
-#: systems/campaign/content_page.ex:401
 msgid "delete.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:375 systems/campaign/content_page.ex:381
-#: systems/campaign/content_page.ex:385 systems/pool/submission_page.ex:192
 msgid "preview.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:361 systems/campaign/content_page.ex:367
 msgid "submit.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:405 systems/pool/submission_page.ex:198
 msgid "retract.button"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/submission_page.ex:184
 msgid "accept.button"
 msgstr ""

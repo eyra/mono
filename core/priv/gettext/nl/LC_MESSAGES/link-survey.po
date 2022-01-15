@@ -12,327 +12,261 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:145
 msgid "config.nrofsubjects.label"
 msgstr "Hoeveel deelnemers heb je nodig?"
 
 #, elixir-format
-#: systems/survey/tool_form.ex:192
 msgid "config.url.label"
 msgstr "Qualtrics link"
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:142
 msgid "duration.label"
 msgstr "Hoeveel minuten schat je in dat deelnemers nodig hebben?"
 
 #, elixir-format
-#: systems/campaign/model.ex:216
 msgid "by.author.label"
 msgstr "Door"
 
 #, elixir-format
-#: systems/promotion/model.ex:141
 msgid "reward.highlight.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: systems/assignment/assignable.ex:23
 msgid "apply.cta.title"
 msgstr "Ik doe mee"
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:160
 msgid "devices.label"
 msgstr "Welke apparaten kunnen door deelnemers gebruikt worden?"
 
 #, elixir-format
-#: systems/assignment/assignable.ex:26
 msgid "open.cta.title"
 msgstr "Doorgaan"
 
 #, elixir-format
-#: systems/survey/tool_form.ex:162
 msgid "redirect.description"
 msgstr "De redirect URL zorgt ervoor dat deelnemers teruggestuurd worden naar Panl, aan het einde van de vragenlijst. Kopieer de redirect URL hieronder en plak deze als \"Website URL\" in Qualtrics zoals %{link}."
 
 #, elixir-format
-#: systems/survey/tool_form.ex:160
 msgid "redirect.title"
 msgstr "Redirect URL (End of Survey)"
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:159
 msgid "devices.title"
 msgstr "Apparaten"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:113
 msgid "completed.label"
 msgstr "Afgerond"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:125
 msgid "pending.label"
 msgstr "Aangemeld"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:105
 msgid "status.title"
 msgstr "Afgerond"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:131
 msgid "vacant.label"
 msgstr "Vrij"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:513
 msgid "content.title"
 msgstr "Campagne"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:203
 msgid "title"
 msgstr "Werving"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:253
 msgid "add.first.button"
 msgstr "Start je eerste campagne"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:233
 msgid "add.new.button"
 msgstr "Start nieuwe campagne"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:249
 msgid "empty.description"
 msgstr "Hier kun je campagnes opzetten en hun status volgen. Een campagne is een georganiseerde werkwijze om een doel te behalen, in dit geval het werven van deelnemers. Het bestaat uit het opzetten van een advertentie voor in de marktplaats, het koppelen van jouw studie details, het bepalen van jouw sample, en het reviewen van de resultaten."
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:248
 msgid "empty.title"
 msgstr "Werf deelnemers voor jouw studie"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:185
 msgid "tabbar.item.monitor"
 msgstr "Resultaten"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:150
 msgid "tabbar.item.promotion"
 msgstr "Advertentie"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:163
 msgid "tabbar.item.assignment"
 msgstr "Studie"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:215
 msgid "monitor.empty.description"
 msgstr "Na publicatie van jouw wervingscampagne, vind je hier een lijst van geanonimiseerde deelnemers, die zich aangemeld hebben voor jouw studie. Je kunt hier hun status bekijken en na afronding van hun taak, de resultaten accepteren of afwijzen."
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:214
 msgid "monitor.empty.title"
 msgstr "Resultaten"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:151
 msgid "tabbar.item.promotion.forward"
 msgstr "Maak advertentie aan"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:164
 msgid "tabbar.item.assignment.forward"
 msgstr "Koppel je studie"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:186
 msgid "tabbar.item.monitor.forward"
 msgstr "Bekijk resultaten"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:175
 msgid "tabbar.item.criteria"
 msgstr "Sample"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:176
 msgid "tabbar.item.criteria.forward"
 msgstr "Bepaal je sample"
 
 #, elixir-format
-#: systems/survey/tool_form.ex:135
 msgid "form.title"
 msgstr "Vragenlijst"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:223
 msgid "campaign.overview.title"
 msgstr "Campagnes"
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:148
 msgid "language.title"
 msgstr "Taal"
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:149
 msgid "languages.label"
 msgstr "In welke taal is jouw online studie geschreven?"
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:46 systems/assignment/ethical_form.ex:130
 msgid "ethical.label"
 msgstr "Hierbij verklaar ik dat mijn studie voldoet aan alle ethische standaarden."
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:120
 msgid "ethical.title"
 msgstr "Ethische toetsing"
 
 #, elixir-format
-#: systems/survey/tool_form.ex:151
 msgid "panlid.description"
 msgstr "Panl voegt automatisch een ID van de deelnemer toe aan de URL van je Qualtrics vragenlijst. Om deze ID in Qualtrics te kunnen gebruiken, voeg je een \"embedded data element field\" toe met de naam \"panl_id\". Instructies hiervoor %{link} in \"PART 2\"."
 
 #, elixir-format
-#: systems/survey/tool_form.ex:149
 msgid "panlid.title"
 msgstr "Panl ID"
 
 #, elixir-format
-#: systems/survey/tool_form.ex:140
 msgid "setup.title"
 msgstr "Wat moet ik doen op Qualtrics?"
 
 #, elixir-format
-#: systems/survey/tool_form.ex:170
 msgid "redirect.copy.button"
 msgstr "Kopieer"
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:121
 msgid "ethical.description"
 msgstr "Zorg ervoor dat je de %{link} doorlopen hebt en dat je goedkeuring hebt van de SBE Ethics Review Board (ERB), wanneer dat vereist is voor jouw studie. Vul de ERB code in die je ontvangen hebt."
 
 #, elixir-format
-#: systems/survey/tool_form.ex:184
 msgid "study.link.description"
 msgstr "Volg %{link} om jouw Qualtrics vragenlijst link aan te maken op te halen. Plak deze link in het \"Qualtrics link\" veld van het formulier hieronder."
 
 #, elixir-format
-#: systems/survey/tool_form.ex:182
 msgid "study.link.title"
 msgstr "Anonymous Survey Link"
 
 #, elixir-format
-#: systems/survey/tool_form.ex:109
 msgid "panlid.instructions.link"
 msgstr "vind je hier"
 
 #, elixir-format
-#: systems/survey/tool_form.ex:102
 msgid "redirect.instructions.link"
 msgstr "hier beschreven"
 
 #, elixir-format
-#: systems/survey/tool_form.ex:116
 msgid "study.instructions.link"
 msgstr "deze instructies"
 
 #, elixir-format
-#: systems/survey/tool_form.ex:136
 msgid "form.description"
 msgstr "Doorloop eerst de stappen in het zwarte kader. Zo zorg je ervoor dat deelnemers vanuit Panl deel kunnen nemen aan jouw online studie en na afloop weer teruggestuurd worden naar Panl."
 
 #, elixir-format
-#: systems/assignment/model.ex:253
 msgid "duration.highlight.text"
 msgstr "%{duration} minuten"
 
 #, elixir-format
-#: systems/assignment/model.ex:252
 msgid "duration.highlight.title"
 msgstr "Duur"
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:102
 msgid "ethical.review.link"
 msgstr "ethische checklist"
 
 #, elixir-format
-#: systems/assignment/model.ex:87 systems/assignment/model.ex:98
-#: systems/assignment/model.ex:111
 msgid "task.hero.title"
 msgstr "Studie"
 
 #, elixir-format
-#: systems/assignment/model.ex:223
 msgid "task.completed.subtitle"
 msgstr "Je hebt bijgedragen aan deze studie"
 
 #, elixir-format
-#: systems/assignment/model.ex:228
 msgid "task.completed.text"
 msgstr "Jouw bijdrage wordt door de auteur van deze studie beoordeeld. Afhankelijk van de beoordeling, wordt jouw bijdrage goedgekeurd of afgekeurd."
 
 #, elixir-format
-#: systems/assignment/model.ex:222
 msgid "task.pending.subtitle"
 msgstr "Instructies"
 
 #, elixir-format
-#: systems/assignment/model.ex:266
 msgid "status.closed.highlight.text"
 msgstr "Gesloten voor deelname"
 
 #, elixir-format
-#: systems/assignment/model.ex:260
 msgid "status.highlight.title"
 msgstr "Status"
 
 #, elixir-format
-#: systems/assignment/model.ex:264
 msgid "status.open.highlight.text"
 msgstr "Open voor deelname"
 
 #, elixir-format
-#: systems/assignment/model.ex:273
 msgid "language.highlight.title"
 msgstr "Taal"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:119
 msgid "started.label"
 msgstr "Gestart"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:230
 msgid "add.new.button.short"
 msgstr "Start"
 
 #, elixir-format
-#: systems/assignment/model.ex:224
 msgid "task.accepted.subtitle"
 msgstr "Jouw bijdrage is goedgekeurd"
 
 #, elixir-format
-#: systems/assignment/model.ex:229
 msgid "task.accepted.text"
 msgstr "De auteur van deze studie heeft jouw bijdrage beoordeeld en goedgekeurd. Je ontvangt de beloning voor deze studie. Bedankt voor jouw deelname, jouw bijdrage aan deze studie wordt erg gewaardeerd."
 
 #, elixir-format
-#: systems/assignment/model.ex:225
 msgid "task.rejected.subtitle"
 msgstr "Helaas, jouw bijdrage is afgekeurd"
 
 #, elixir-format
-#: systems/assignment/model.ex:231
 msgid "task.rejected.text"
 msgstr "De auteur van deze studie heeft jouw bijdrage beoordeeld en wil je het volgende laten weten: \"%{reason}\""

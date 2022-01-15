@@ -11,281 +11,225 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/devices.ex:5
 msgid "devices.desktop"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/devices.ex:5
 msgid "devices.phone"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/devices.ex:5
 msgid "devices.tablet"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/genders.ex:5
 msgid "genders.man"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/genders.ex:5
 msgid "genders.woman"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/genders.ex:5
 msgid "genders.x"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/themes.ex:5
 msgid "themes.art"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/themes.ex:5
 msgid "themes.health"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/themes.ex:5
 msgid "themes.history"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/themes.ex:5
 msgid "themes.language"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/themes.ex:5
 msgid "themes.politics"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/themes.ex:5
 msgid "themes.society"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/themes.ex:5
 msgid "themes.technology"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/dominant_hands.ex:5
 msgid "dominant_hands.left"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/dominant_hands.ex:5
 msgid "dominant_hands.right"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/native_languages.ex:5
 msgid "native_languages.en"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/native_languages.ex:5
 msgid "native_languages.nl"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/study_program_codes.ex:5
 msgid "study_pogram_codes.bk_1"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/study_program_codes.ex:5
 msgid "study_pogram_codes.bk_1_h"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/study_program_codes.ex:5
 msgid "study_pogram_codes.bk_2"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/study_program_codes.ex:5
 msgid "study_pogram_codes.bk_2_h"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/study_program_codes.ex:5
 msgid "study_pogram_codes.iba_1"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/study_program_codes.ex:5
 msgid "study_pogram_codes.iba_1_h"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/study_program_codes.ex:5
 msgid "study_pogram_codes.iba_2"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/study_program_codes.ex:5
 msgid "study_pogram_codes.iba_2_h"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/ticket_types.ex:5
 msgid "ticket_types.bug"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/ticket_types.ex:5
 msgid "ticket_types.question"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/ticket_types.ex:5
 msgid "ticket_types.tip"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/study_years.ex:5
 msgid "study_years.first"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/study_years.ex:5
 msgid "study_years.second"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/enums/themes.ex:5
 msgid "themes.accounting"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/enums/themes.ex:5
 msgid "themes.business"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/enums/themes.ex:5
 msgid "themes.economics"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/enums/themes.ex:5
 msgid "themes.management"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/enums/themes.ex:5
 msgid "themes.marketing"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/enums/themes.ex:5
 msgid "themes.organisation"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/enums/online_study_languages.ex:5
 msgid "online_study_languages.en"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/enums/online_study_languages.ex:5
 msgid "online_study_languages.nl"
 msgstr ""
 
 #, elixir-format
-#: lib/core/enums/native_languages.ex:5
 msgid "native_languages.other"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/enums/themes.ex:5
 msgid "themes.data_science"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/enums/themes.ex:5
 msgid "themes.digital_innovation"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/enums/themes.ex:5
 msgid "themes.econometrics"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/enums/themes.ex:5
 msgid "themes.finance"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/enums/themes.ex:5
 msgid "themes.operations_analytics"
 msgstr ""
 
 #, elixir-format
-#: systems/crew/reject_categories.ex:5
 msgid "reject_catagories.attention_checks_failed"
 msgstr ""
 
 #, elixir-format
-#: systems/crew/reject_categories.ex:5
 msgid "reject_catagories.not_completed"
 msgstr ""
 
 #, elixir-format
-#: systems/crew/reject_categories.ex:5
 msgid "reject_catagories.other"
 msgstr ""
 
 #, elixir-format
-#: lib/core/pools/criteria_filters.ex:5
 msgid "criteria_filters.bk"
 msgstr ""
 
 #, elixir-format
-#: lib/core/pools/criteria_filters.ex:5
 msgid "criteria_filters.iba"
 msgstr ""
 
 #, elixir-format
-#: lib/core/pools/criteria_filters.ex:5
 msgid "criteria_filters.resit"
 msgstr ""
 
 #, elixir-format
-#: lib/core/pools/criteria_filters.ex:5
 msgid "criteria_filters.year1"
 msgstr ""
 
 #, elixir-format
-#: lib/core/pools/criteria_filters.ex:5
 msgid "criteria_filters.year2"
 msgstr ""
 
 #, elixir-format
-#: systems/support/ticket_status.ex:5
 msgid "ticket_status.closed"
 msgstr ""
 
 #, elixir-format
-#: systems/support/ticket_status.ex:5
 msgid "ticket_status.open"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/tool_types.ex:5
 msgid "tool_types.lab"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/tool_types.ex:5
 msgid "tool_types.online"
 msgstr ""

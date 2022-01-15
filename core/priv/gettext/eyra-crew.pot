@@ -11,26 +11,29 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:73
 msgid "task.completed.message.part1"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:75
 msgid "task.completed.message.part2"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:71
 msgid "task.completed.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:66 systems/assignment/model.ex:100
 msgid "task.expired.subtitle"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/callback_page.ex:68 systems/assignment/model.ex:101
 msgid "task.expired.text"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "tester.completed.subtitle"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "tester.completed.text"
 msgstr ""

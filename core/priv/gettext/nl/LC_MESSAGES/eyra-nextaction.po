@@ -12,76 +12,61 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core/accounts/next_actions/complete_profile.ex:11
 msgid "complete.profile.cta"
 msgstr "Ga naar profiel"
 
 #, elixir-format
-#: lib/core/accounts/next_actions/complete_profile.ex:10
 msgid "complete.profile.description"
 msgstr "Sommige velden in je profiel zijn niet ingevuld."
 
 #, elixir-format
-#: lib/core/accounts/next_actions/complete_profile.ex:9
 msgid "complete.profile.title"
 msgstr "Maak je profiel compleet"
 
 #, elixir-format
-#: lib/core/accounts/next_actions/promote_push_student.ex:11
 msgid "promote.push.student.cta"
 msgstr "Ga naar instellingen"
 
 #, elixir-format
-#: lib/core/accounts/next_actions/promote_push_student.ex:10
 msgid "promote.push.student.description"
 msgstr "Deze kun je activeren. E-mail notificaties worden automatisch verstuurd."
 
 #, elixir-format
-#: lib/core/accounts/next_actions/promote_push_student.ex:9
 msgid "promote.push.student.title"
 msgstr "Wil je push notificaties ontvangen?"
 
 #, elixir-format
-#: lib/core/accounts/next_actions/select_study_student.ex:11
 msgid "select.study.student.cta"
 msgstr "Ga naar profiel"
 
 #, elixir-format
-#: lib/core/accounts/next_actions/select_study_student.ex:10
 msgid "select.study.student.description"
 msgstr "Om mee te kunnen doen aan onderzoeksstudies."
 
 #, elixir-format
-#: lib/core/accounts/next_actions/select_study_student.ex:9
 msgid "select.study.student.title"
 msgstr "Selecteer je opleiding"
 
 #, elixir-format
-#: lib/core/pools/next_actions/review_submission.ex:11
 msgid "review.submission.cta"
 msgstr "Ga naar wachtrij"
 
 #, elixir-format
-#: lib/core/pools/next_actions/review_submission.ex:10
 msgid "review.submission.description"
 msgstr "Er staan nieuwe canpagnes klaar om in te roosteren"
 
 #, elixir-format
-#: lib/core/pools/next_actions/review_submission.ex:9
 msgid "review.submission.title"
 msgstr "Nieuwe campagnes"
 
 #, elixir-format
-#: systems/assignment/check_rejection.ex:11
 msgid "assignment.check.rejection.cta"
 msgstr "Ga naar bijdrage"
 
 #, elixir-format
-#: systems/assignment/check_rejection.ex:10
 msgid "assignment.check.rejection.description"
 msgstr "Bezoek de pagina van deze bijdrage voor meer details"
 
 #, elixir-format
-#: systems/assignment/check_rejection.ex:9
 msgid "assignment.check.rejection.title"
 msgstr "Een van je bijdragen is afgekeurd"
