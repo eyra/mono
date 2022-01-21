@@ -11,41 +11,41 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/crew/reject_view.ex:105
+#: systems/crew/reject_view.ex:116
 msgid "reject.button"
 msgstr ""
 
 #, elixir-format
-#: systems/crew/reject_view.ex:136
+#: systems/crew/reject_view.ex:149
 msgid "reject.message.label"
 msgstr ""
 
 #, elixir-format
-#: systems/crew/reject_view.ex:40
+#: systems/crew/reject_view.ex:39
 msgid "reject.text"
 msgstr ""
 
 #, elixir-format
-#: systems/crew/reject_view.ex:39
+#: systems/crew/reject_view.ex:38
 msgid "reject.title"
 msgstr ""
 
 #, elixir-format
-#: systems/crew/reject_view.ex:41
+#: systems/crew/reject_view.ex:40
 msgid "reject.note"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:147
+#: systems/campaign/overview_page.ex:149
 msgid "create.campaign.dialog.ok.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:145
+#: systems/campaign/overview_page.ex:147
 msgid "create.campaign.dialog.text"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:144
+#: systems/campaign/overview_page.ex:146
 msgid "create.campaign.dialog.title"
 msgstr ""

@@ -38,6 +38,7 @@ defmodule Systems.Lab.DayView do
       |> assign(
         id: id,
         target: target,
+        og_day_model: day_model,
         day_model: day_model,
         changeset: changeset
       )
@@ -46,11 +47,9 @@ defmodule Systems.Lab.DayView do
   end
 
   def update(
-        %{active_item_id: active_item_id, selector_id: selector_id} = params,
+        %{active_item_id: active_item_id, selector_id: selector_id},
         %{assigns: %{day_model: %{entries: entries} = day_model}} = socket
       ) do
-    params |> IO.inspect(label: "PARAMS")
-
     start_time = selector_id
     enabled? = active_item_id != nil
 
@@ -62,13 +61,11 @@ defmodule Systems.Lab.DayView do
       :ok,
       socket
       |> assign(day_model: %{day_model | entries: entries})
-      |> update_entries()
+      |> update_ui()
     }
   end
 
-  def update(params, socket) do
-    params |> IO.inspect(label: "PAR")
-
+  def update(_params, socket) do
     {
       :ok,
       socket
@@ -209,8 +206,12 @@ defmodule Systems.Lab.DayView do
   end
 
   @impl true
-  def handle_event("submit", _, %{assigns: %{day_model: day_model, target: target}} = socket) do
-    update_target(target, %{day_view: :submit, day_model: day_model})
+  def handle_event(
+        "submit",
+        _,
+        %{assigns: %{og_day_model: og_day_model, day_model: day_model, target: target}} = socket
+      ) do
+    update_target(target, %{day_view: :submit, og_day_model: og_day_model, day_model: day_model})
     {:noreply, socket}
   end
 

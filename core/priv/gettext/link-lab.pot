@@ -11,67 +11,81 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/lab/tool_form.ex:26
+#: systems/lab/tool_form.ex:30
 msgid "add.day.button"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/tool_form.ex:51
+#: systems/lab/tool_form.ex:91
 msgid "form.description"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/tool_form.ex:50
+#: systems/lab/tool_form.ex:90
 msgid "form.title"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/day_view.ex:226
+#: systems/lab/day_view.ex:259
 msgid "day.schedule.date.label"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/day_view.ex:230
+#: systems/lab/day_view.ex:263
 msgid "day.schedule.location.label"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/day_view.ex:233
+#: systems/lab/day_view.ex:266
 msgid "day.schedule.seats.label"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/day_view.ex:205
+#: systems/lab/day_view.ex:238
 msgid "day.schedule.submit.button"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/day_entry_time_slot_item.ex:42
+#: systems/lab/day_entry_time_slot_item.ex:43
 msgid "time.slot.item.available.label"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/day_entry_time_slot_item.ex:49
+#: systems/lab/day_entry_time_slot_item.ex:50
 msgid "1 reservation"
 msgid_plural "%{count} reservations"
 msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-format
-#: systems/lab/day_entry_time_slot_item.ex:41 systems/lab/day_view.ex:140
+#: systems/lab/day_entry_time_slot_item.ex:42
+#: systems/lab/day_list_item.ex:58
+#: systems/lab/day_view.ex:169
 msgid "1 seat"
 msgid_plural "%{count} seats"
 msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-format
-#: systems/lab/day_view.ex:142
+#: systems/lab/day_view.ex:171
 msgid "day.schedule.byline"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/day_view.ex:139
+#: systems/lab/day_view.ex:167
 msgid "1 time slot"
 msgid_plural "%{count} time slots"
 msgstr[0] ""
 msgstr[1] ""
+
+#, elixir-format, ex-autogen
+#: systems/lab/day_list_item.ex:53
+msgid "1 timeslot"
+msgid_plural "%{count} time slots"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-format, ex-autogen
+#: systems/lab/day_list_item.ex:32
+msgid "edit.day.button"
+msgstr ""

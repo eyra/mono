@@ -12,7 +12,8 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:64 systems/promotion/index_page.ex:49
+#: bundles/link/lib/index.ex:64
+#: systems/promotion/index_page.ex:49
 msgid "welcome.title"
 msgstr "Panl"
 
@@ -22,67 +23,80 @@ msgid "dashboard-button"
 msgstr "Naar het dashboard"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:76 systems/promotion/index_page.ex:62
+#: bundles/link/lib/index.ex:76
+#: systems/promotion/index_page.ex:62
 msgid "link.message"
 msgstr "Panl is een marktplaats voor onderzoek. Onderzoekers kunnen hier campagnes opzetten voor het werven van deelnemers aan onderzoeksstudies. Deelnemers kunnen zich opgeven om mee te doen aan deze studies. Op dit moment wordt Panl alleen gebruikt voor student deelname aan onderzoeksstudies van de VU Amsterdam School of Business and Economics (SBE). In 2022 wordt Panl breder beschikbaar gesteld."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:73 systems/promotion/index_page.ex:59
+#: bundles/link/lib/index.ex:73
+#: systems/promotion/index_page.ex:59
 msgid "link.title"
 msgstr "Marktplaats"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:91 systems/promotion/index_page.ex:73
+#: bundles/link/lib/index.ex:91
+#: systems/promotion/index_page.ex:73
 msgid "signup.card.title"
 msgstr "Ben je VU student of medewerker?"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:26 systems/promotion/index_page.ex:27
+#: bundles/link/lib/index.ex:26
+#: systems/promotion/index_page.ex:27
 msgid "member.card.title"
 msgstr "Welkom terug."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:30 systems/promotion/index_page.ex:31
+#: bundles/link/lib/index.ex:30
+#: systems/promotion/index_page.ex:31
 msgid "member.profile.card.title"
 msgstr "Welkom terug %{user}."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:92 systems/promotion/index_page.ex:74
+#: bundles/link/lib/index.ex:92
+#: systems/promotion/index_page.ex:74
 msgid "signup.card.button"
 msgstr "Log hier in"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:96 systems/promotion/index_page.ex:78
+#: bundles/link/lib/index.ex:96
+#: systems/promotion/index_page.ex:78
 msgid "usp1.description"
 msgstr "Ondersteunt een flexibele en efficiënte workflow, inclusief een mobile-first ontwerp voor makkelijk gebruik op mobiel."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:96 systems/promotion/index_page.ex:78
+#: bundles/link/lib/index.ex:96
+#: systems/promotion/index_page.ex:78
 msgid "usp1.title"
 msgstr "Efficiënt voor onderzoekers"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:97 systems/promotion/index_page.ex:79
+#: bundles/link/lib/index.ex:97
+#: systems/promotion/index_page.ex:79
 msgid "usp2.description"
 msgstr "De marktplaats biedt een aantrekkelijk overzicht van beschikbare studies waar deelnemers meer informatie kunnen vinden en deel kunnen nemen aan onderzoek."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:97 systems/promotion/index_page.ex:79
+#: bundles/link/lib/index.ex:97
+#: systems/promotion/index_page.ex:79
 msgid "usp2.title"
 msgstr "Aantrekkelijk voor deelnemers"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:98 systems/promotion/index_page.ex:80
+#: bundles/link/lib/index.ex:98
+#: systems/promotion/index_page.ex:80
 msgid "usp3.description"
 msgstr "Ontwikkeld door onderzoekers van de VU Amsterdam met ervaring in het werven van deelnemers voor onderzoek, in samenwerking met platform ontwikkelaar Eyra en SURF."
 
 #, elixir-format
-#: bundles/link/lib/index.ex:98 systems/promotion/index_page.ex:80
+#: bundles/link/lib/index.ex:98
+#: systems/promotion/index_page.ex:80
 msgid "usp3.title"
 msgstr "Voor en door onderzoekers"
 
 #, elixir-format
-#: bundles/link/lib/index.ex:65 systems/promotion/index_page.ex:50
+#: bundles/link/lib/index.ex:65
+#: systems/promotion/index_page.ex:50
 msgid "welcome.subtitle"
 msgstr "Voor onderzoek"
 

@@ -27,17 +27,17 @@ msgid "duration.label"
 msgstr "Hoeveel minuten schat je in dat deelnemers nodig hebben?"
 
 #, elixir-format
-#: systems/campaign/model.ex:216
+#: systems/campaign/model.ex:244
 msgid "by.author.label"
 msgstr "Door"
 
 #, elixir-format
-#: systems/promotion/model.ex:141
+#: systems/promotion/model.ex:139
 msgid "reward.highlight.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: systems/assignment/assignable.ex:23
+#: systems/assignment/assignable.ex:25
 msgid "apply.cta.title"
 msgstr "Ik doe mee"
 
@@ -47,7 +47,7 @@ msgid "devices.label"
 msgstr "Welke apparaten kunnen door deelnemers gebruikt worden?"
 
 #, elixir-format
-#: systems/assignment/assignable.ex:26
+#: systems/assignment/assignable.ex:30
 msgid "open.cta.title"
 msgstr "Doorgaan"
 
@@ -67,102 +67,102 @@ msgid "devices.title"
 msgstr "Apparaten"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:113
+#: systems/campaign/monitor_view.ex:123
 msgid "completed.label"
 msgstr "Afgerond"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:125
+#: systems/campaign/monitor_view.ex:135
 msgid "pending.label"
 msgstr "Aangemeld"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:105
+#: systems/campaign/monitor_view.ex:115
 msgid "status.title"
 msgstr "Afgerond"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:131
+#: systems/campaign/monitor_view.ex:141
 msgid "vacant.label"
 msgstr "Vrij"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:513
+#: systems/campaign/content_page.ex:531
 msgid "content.title"
 msgstr "Campagne"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:203
+#: systems/campaign/overview_page.ex:205
 msgid "title"
 msgstr "Werving"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:253
+#: systems/campaign/overview_page.ex:255
 msgid "add.first.button"
 msgstr "Start je eerste campagne"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:233
+#: systems/campaign/overview_page.ex:235
 msgid "add.new.button"
 msgstr "Start nieuwe campagne"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:249
+#: systems/campaign/overview_page.ex:251
 msgid "empty.description"
 msgstr "Hier kun je campagnes opzetten en hun status volgen. Een campagne is een georganiseerde werkwijze om een doel te behalen, in dit geval het werven van deelnemers. Het bestaat uit het opzetten van een advertentie voor in de marktplaats, het koppelen van jouw studie details, het bepalen van jouw sample, en het reviewen van de resultaten."
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:248
+#: systems/campaign/overview_page.ex:250
 msgid "empty.title"
 msgstr "Werf deelnemers voor jouw studie"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:185
+#: systems/campaign/content_page.ex:190
 msgid "tabbar.item.monitor"
 msgstr "Resultaten"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:150
+#: systems/campaign/content_page.ex:154
 msgid "tabbar.item.promotion"
 msgstr "Advertentie"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:163
+#: systems/campaign/content_page.ex:167
 msgid "tabbar.item.assignment"
 msgstr "Studie"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:215
+#: systems/campaign/monitor_view.ex:225
 msgid "monitor.empty.description"
 msgstr "Na publicatie van jouw wervingscampagne, vind je hier een lijst van geanonimiseerde deelnemers, die zich aangemeld hebben voor jouw studie. Je kunt hier hun status bekijken en na afronding van hun taak, de resultaten accepteren of afwijzen."
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:214
+#: systems/campaign/monitor_view.ex:224
 msgid "monitor.empty.title"
 msgstr "Resultaten"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:151
+#: systems/campaign/content_page.ex:155
 msgid "tabbar.item.promotion.forward"
 msgstr "Maak advertentie aan"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:164
+#: systems/campaign/content_page.ex:168
 msgid "tabbar.item.assignment.forward"
 msgstr "Koppel je studie"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:186
+#: systems/campaign/content_page.ex:191
 msgid "tabbar.item.monitor.forward"
 msgstr "Bekijk resultaten"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:175
+#: systems/campaign/content_page.ex:180
 msgid "tabbar.item.criteria"
 msgstr "Sample"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:176
+#: systems/campaign/content_page.ex:181
 msgid "tabbar.item.criteria.forward"
 msgstr "Bepaal je sample"
 
@@ -172,7 +172,7 @@ msgid "form.title"
 msgstr "Vragenlijst"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:223
+#: systems/campaign/overview_page.ex:225
 msgid "campaign.overview.title"
 msgstr "Campagnes"
 
@@ -187,12 +187,13 @@ msgid "languages.label"
 msgstr "In welke taal is jouw online studie geschreven?"
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:46 systems/assignment/ethical_form.ex:130
+#: systems/assignment/ethical_form.ex:44
+#: systems/assignment/ethical_form.ex:128
 msgid "ethical.label"
 msgstr "Hierbij verklaar ik dat mijn studie voldoet aan alle ethische standaarden."
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:120
+#: systems/assignment/ethical_form.ex:118
 msgid "ethical.title"
 msgstr "Ethische toetsing"
 
@@ -217,7 +218,7 @@ msgid "redirect.copy.button"
 msgstr "Kopieer"
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:121
+#: systems/assignment/ethical_form.ex:119
 msgid "ethical.description"
 msgstr "Zorg ervoor dat je de %{link} doorlopen hebt en dat je goedkeuring hebt van de SBE Ethics Review Board (ERB), wanneer dat vereist is voor jouw studie. Vul de ERB code in die je ontvangen hebt."
 
@@ -252,87 +253,88 @@ msgid "form.description"
 msgstr "Doorloop eerst de stappen in het zwarte kader. Zo zorg je ervoor dat deelnemers vanuit Panl deel kunnen nemen aan jouw online studie en na afloop weer teruggestuurd worden naar Panl."
 
 #, elixir-format
-#: systems/assignment/model.ex:253
+#: systems/assignment/model.ex:285
 msgid "duration.highlight.text"
 msgstr "%{duration} minuten"
 
 #, elixir-format
-#: systems/assignment/model.ex:252
+#: systems/assignment/model.ex:284
 msgid "duration.highlight.title"
 msgstr "Duur"
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:102
+#: systems/assignment/ethical_form.ex:100
 msgid "ethical.review.link"
 msgstr "ethische checklist"
 
 #, elixir-format
-#: systems/assignment/model.ex:87 systems/assignment/model.ex:98
-#: systems/assignment/model.ex:111
+#: systems/assignment/model.ex:87
+#: systems/assignment/model.ex:98
+#: systems/assignment/model.ex:123
 msgid "task.hero.title"
 msgstr "Studie"
 
 #, elixir-format
-#: systems/assignment/model.ex:223
+#: systems/assignment/model.ex:248
 msgid "task.completed.subtitle"
 msgstr "Je hebt bijgedragen aan deze studie"
 
 #, elixir-format
-#: systems/assignment/model.ex:228
+#: systems/assignment/model.ex:258
 msgid "task.completed.text"
 msgstr "Jouw bijdrage wordt door de auteur van deze studie beoordeeld. Afhankelijk van de beoordeling, wordt jouw bijdrage goedgekeurd of afgekeurd."
 
 #, elixir-format
-#: systems/assignment/model.ex:222
+#: systems/assignment/model.ex:245
 msgid "task.pending.subtitle"
 msgstr "Instructies"
 
 #, elixir-format
-#: systems/assignment/model.ex:266
+#: systems/assignment/model.ex:298
 msgid "status.closed.highlight.text"
 msgstr "Gesloten voor deelname"
 
 #, elixir-format
-#: systems/assignment/model.ex:260
+#: systems/assignment/model.ex:292
 msgid "status.highlight.title"
 msgstr "Status"
 
 #, elixir-format
-#: systems/assignment/model.ex:264
+#: systems/assignment/model.ex:296
 msgid "status.open.highlight.text"
 msgstr "Open voor deelname"
 
 #, elixir-format
-#: systems/assignment/model.ex:273
+#: systems/assignment/model.ex:305
 msgid "language.highlight.title"
 msgstr "Taal"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:119
+#: systems/campaign/monitor_view.ex:129
 msgid "started.label"
 msgstr "Gestart"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:230
+#: systems/campaign/overview_page.ex:232
 msgid "add.new.button.short"
 msgstr "Start"
 
 #, elixir-format
-#: systems/assignment/model.ex:224
+#: systems/assignment/model.ex:251
 msgid "task.accepted.subtitle"
 msgstr "Jouw bijdrage is goedgekeurd"
 
 #, elixir-format
-#: systems/assignment/model.ex:229
+#: systems/assignment/model.ex:259
 msgid "task.accepted.text"
 msgstr "De auteur van deze studie heeft jouw bijdrage beoordeeld en goedgekeurd. Je ontvangt de beloning voor deze studie. Bedankt voor jouw deelname, jouw bijdrage aan deze studie wordt erg gewaardeerd."
 
 #, elixir-format
-#: systems/assignment/model.ex:225
+#: systems/assignment/model.ex:254
 msgid "task.rejected.subtitle"
 msgstr "Helaas, jouw bijdrage is afgekeurd"
 
 #, elixir-format
-#: systems/assignment/model.ex:231
+#: systems/assignment/model.ex:262
 msgid "task.rejected.text"
 msgstr "De auteur van deze studie heeft jouw bijdrage beoordeeld en wil je het volgende laten weten: \"%{reason}\""

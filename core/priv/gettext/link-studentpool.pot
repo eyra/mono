@@ -11,7 +11,8 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/pool/overview_page.ex:40 systems/pool/views/students_view.ex:132
+#: systems/pool/overview_page.ex:40
+#: systems/pool/views/students_view.ex:136
 msgid "tabbar.item.students"
 msgstr ""
 
@@ -26,12 +27,12 @@ msgid "title"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/students_view.ex:123
+#: systems/pool/views/students_view.ex:127
 msgid "students.empty.description"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/students_view.ex:122
+#: systems/pool/views/students_view.ex:126
 msgid "students.empty.title"
 msgstr ""
 
@@ -46,12 +47,12 @@ msgid "campaigns.empty.title"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/students_view.ex:105
+#: systems/pool/views/students_view.ex:109
 msgid "student.tag.complete"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/students_view.ex:109
+#: systems/pool/views/students_view.ex:113
 msgid "student.tag.incomplete"
 msgstr ""
 
@@ -61,7 +62,7 @@ msgid "accepted.title"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:104
+#: systems/pool/views/campaigns_view.ex:107
 msgid "status.submitted.label"
 msgstr ""
 
@@ -71,7 +72,7 @@ msgid "submitted.title"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:140
+#: systems/pool/views/campaigns_view.ex:141
 msgid "spots.available"
 msgstr ""
 
@@ -81,21 +82,21 @@ msgid "submission.title"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:122
+#: systems/pool/views/campaigns_view.ex:125
 msgid "status.accepted.closed.label"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:116
+#: systems/pool/views/campaigns_view.ex:119
 msgid "status.accepted.online.label"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:110
+#: systems/pool/views/campaigns_view.ex:113
 msgid "status.accepted.scheduled.label"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:136
+#: systems/pool/views/campaigns_view.ex:139
 msgid "sample.size"
 msgstr ""

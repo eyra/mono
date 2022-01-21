@@ -16,37 +16,37 @@ msgid "content.title"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:111
+#: systems/data_donation/tool_form.ex:110
 msgid "reward.label"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:107
+#: systems/data_donation/tool_form.ex:106
 msgid "script.label"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:115
+#: systems/data_donation/tool_form.ex:114
 msgid "config.nrofsubjects.label"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:114
+#: systems/data_donation/tool_form.ex:113
 msgid "nrofsubjects.title"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:110
+#: systems/data_donation/tool_form.ex:109
 msgid "reward.title"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:106
+#: systems/data_donation/tool_form.ex:105
 msgid "script.title"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:118
+#: systems/data_donation/tool_form.ex:117
 msgid "delete.button"
 msgstr ""
 
@@ -56,21 +56,21 @@ msgid "uploader.title"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:83
+#: systems/data_donation/tool_form.ex:82
 msgid "donations.title"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:102
+#: systems/data_donation/tool_form.ex:101
 msgid "download.all.button.label"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:95
+#: systems/data_donation/tool_form.ex:94
 msgid "download.button.label"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:91
+#: systems/data_donation/tool_form.ex:90
 msgid "received.label"
 msgstr ""

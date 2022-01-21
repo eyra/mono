@@ -12,62 +12,65 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:282 lib/core/pools/submission.ex:112
+#: bundles/link/lib/card.ex:282
+#: lib/core/pools/submission.ex:112
 msgid "status.idle.label"
 msgstr "Concept"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:285 lib/core/pools/submission.ex:115
+#: bundles/link/lib/card.ex:285
+#: lib/core/pools/submission.ex:115
 msgid "status.submitted.label"
 msgstr "Submitted"
 
 #, elixir-format
-#: systems/campaign/model.ex:262
+#: systems/campaign/model.ex:317
 msgid "incomplete.forms.message"
 msgstr "Some required fields are not filled in yet"
 
 #, elixir-format
-#: systems/campaign/model.ex:260
+#: systems/campaign/model.ex:315
 msgid "ready.for.submission.message"
 msgstr "All required fields are filled, you can submit this campaign"
 
 #, elixir-format
-#: systems/campaign/model.ex:266
+#: systems/campaign/model.ex:321
 msgid "waiting.for.coordinator.message"
 msgstr "Waiting for the pool administrator to publish your campaign in the marketplace"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:262
+#: systems/campaign/content_page.ex:270
 msgid "submit.error.text"
 msgstr "Some required fields in your campaign are not filled in."
 
 #, elixir-format
-#: systems/campaign/content_page.ex:261
+#: systems/campaign/content_page.ex:269
 msgid "submit.error.title"
 msgstr "Complete your campaign"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:254
+#: systems/campaign/content_page.ex:262
 msgid "submit.success.text"
 msgstr "Thank you for your submission. The pool administrator will review your campaign and schedule it for publication in the marketplace."
 
 #, elixir-format
-#: systems/campaign/content_page.ex:253
+#: systems/campaign/content_page.ex:261
 msgid "submit.success.title"
 msgstr "Campaign submitted"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:279
+#: systems/campaign/content_page.ex:287
 msgid "retract.success.text"
 msgstr "Your campaign is no longer visible for the pool administrator and in the marketplace of the participants."
 
 #, elixir-format
-#: systems/campaign/content_page.ex:278
+#: systems/campaign/content_page.ex:286
 msgid "retract.success.title"
 msgstr "Campaign offline"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:87 bundles/link/lib/card.ex:158
+#: bundles/link/lib/card.ex:87
+#: bundles/link/lib/card.ex:158
 msgid "reward.title"
 msgstr "Reward"
 
@@ -137,26 +140,29 @@ msgid "schedule.title"
 msgstr "Schedule"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:300 lib/core/pools/submission.ex:129
+#: bundles/link/lib/card.ex:300
+#: lib/core/pools/submission.ex:129
 msgid "status.accepted.closed.label"
 msgstr "Closed"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:296 lib/core/pools/submission.ex:126
+#: bundles/link/lib/card.ex:296
+#: lib/core/pools/submission.ex:126
 msgid "status.accepted.online.label"
 msgstr "Online"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:291 lib/core/pools/submission.ex:121
+#: bundles/link/lib/card.ex:291
+#: lib/core/pools/submission.ex:121
 msgid "status.accepted.scheduled.label"
 msgstr "Scheduled"
 
 #, elixir-format
-#: systems/campaign/model.ex:280
+#: systems/campaign/model.ex:335
 msgid "accepted.closed.message"
 msgstr "This campaign is closed"
 
 #, elixir-format
-#: systems/campaign/model.ex:271
+#: systems/campaign/model.ex:326
 msgid "accepted.scheduled.message"
 msgstr "This campaign is scheduled for participation"

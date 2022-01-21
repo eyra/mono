@@ -9,6 +9,7 @@ defmodule Systems.Lab.TimeSlotModel do
   schema "lab_time_slots" do
     belongs_to(:tool, Lab.ToolModel)
 
+    field(:enabled?, :boolean)
     field(:location, :string)
     field(:start_time, :utc_datetime)
     field(:number_of_seats, :integer)
@@ -21,6 +22,6 @@ defmodule Systems.Lab.TimeSlotModel do
   @doc false
   def changeset(time_slot, attrs \\ %{}) do
     time_slot
-    |> cast(attrs, [:location, :start_time, :number_of_seats])
+    |> cast(attrs, [:enabled?, :location, :start_time, :number_of_seats])
   end
 end

@@ -27,17 +27,17 @@ msgid "duration.label"
 msgstr "How many minutes do you estimate participants will need?"
 
 #, elixir-format
-#: systems/campaign/model.ex:216
+#: systems/campaign/model.ex:244
 msgid "by.author.label"
 msgstr "By"
 
 #, elixir-format
-#: systems/promotion/model.ex:141
+#: systems/promotion/model.ex:139
 msgid "reward.highlight.title"
 msgstr "Reward"
 
 #, elixir-format
-#: systems/assignment/assignable.ex:23
+#: systems/assignment/assignable.ex:25
 msgid "apply.cta.title"
 msgstr "Participate"
 
@@ -47,7 +47,7 @@ msgid "devices.label"
 msgstr "Which devices can participants use?"
 
 #, elixir-format
-#: systems/assignment/assignable.ex:26
+#: systems/assignment/assignable.ex:30
 msgid "open.cta.title"
 msgstr "Proceed"
 
@@ -67,102 +67,102 @@ msgid "devices.title"
 msgstr "Devices"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:113
+#: systems/campaign/monitor_view.ex:123
 msgid "completed.label"
 msgstr "Finished"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:125
+#: systems/campaign/monitor_view.ex:135
 msgid "pending.label"
 msgstr "Enrolled"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:105
+#: systems/campaign/monitor_view.ex:115
 msgid "status.title"
 msgstr "Finished"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:131
+#: systems/campaign/monitor_view.ex:141
 msgid "vacant.label"
 msgstr "Open"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:513
+#: systems/campaign/content_page.ex:531
 msgid "content.title"
 msgstr "Campaign"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:203
+#: systems/campaign/overview_page.ex:205
 msgid "title"
 msgstr "Recruitment"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:253
+#: systems/campaign/overview_page.ex:255
 msgid "add.first.button"
 msgstr "Start your first campaign"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:233
+#: systems/campaign/overview_page.ex:235
 msgid "add.new.button"
 msgstr "Start new campaign"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:249
+#: systems/campaign/overview_page.ex:251
 msgid "empty.description"
 msgstr "Here you can set-up and follow the status of your campaigns. A campaign is an organized course of action to achieve a goal, in this case to recruit participants. It consists of publishing a promotion in the marketplace, linking your study details, determining your sample and reviewing the results."
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:248
+#: systems/campaign/overview_page.ex:250
 msgid "empty.title"
 msgstr "Recruit participants for your study"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:185
+#: systems/campaign/content_page.ex:190
 msgid "tabbar.item.monitor"
 msgstr "Results"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:150
+#: systems/campaign/content_page.ex:154
 msgid "tabbar.item.promotion"
 msgstr "Promotion"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:163
+#: systems/campaign/content_page.ex:167
 msgid "tabbar.item.assignment"
 msgstr "Study"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:215
+#: systems/campaign/monitor_view.ex:225
 msgid "monitor.empty.description"
 msgstr "Here you'll find an overview of anonymised participants, who applied to participate in your study, once your recruitment campaign has been published. You can view their status and accept or reject their results, after they have finished their task."
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:214
+#: systems/campaign/monitor_view.ex:224
 msgid "monitor.empty.title"
 msgstr "Recruitment results"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:151
+#: systems/campaign/content_page.ex:155
 msgid "tabbar.item.promotion.forward"
 msgstr "Create promotion"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:164
+#: systems/campaign/content_page.ex:168
 msgid "tabbar.item.assignment.forward"
 msgstr "Link your study"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:186
+#: systems/campaign/content_page.ex:191
 msgid "tabbar.item.monitor.forward"
 msgstr "View results"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:175
+#: systems/campaign/content_page.ex:180
 msgid "tabbar.item.criteria"
 msgstr "Sample"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:176
+#: systems/campaign/content_page.ex:181
 msgid "tabbar.item.criteria.forward"
 msgstr "Determine your sample"
 
@@ -172,7 +172,7 @@ msgid "form.title"
 msgstr "Survey"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:223
+#: systems/campaign/overview_page.ex:225
 msgid "campaign.overview.title"
 msgstr "Campaigns"
 
@@ -187,12 +187,13 @@ msgid "languages.label"
 msgstr "In what language is your online study written?"
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:46 systems/assignment/ethical_form.ex:130
+#: systems/assignment/ethical_form.ex:44
+#: systems/assignment/ethical_form.ex:128
 msgid "ethical.label"
 msgstr "I hereby state that my study conforms to all ethical standards."
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:120
+#: systems/assignment/ethical_form.ex:118
 msgid "ethical.title"
 msgstr "Ethical review"
 
@@ -217,7 +218,7 @@ msgid "redirect.copy.button"
 msgstr "Copy"
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:121
+#: systems/assignment/ethical_form.ex:119
 msgid "ethical.description"
 msgstr "Make sure that you completed the %{link} and that you have approval from the SBE Ethics Review Board (ERB), if required for your study. Provide your received ERB code."
 
@@ -252,87 +253,88 @@ msgid "form.description"
 msgstr "Follow the steps in the black frame to make sure that participants can start your online study on Panl and are redirected back to Panl after they finish."
 
 #, elixir-format
-#: systems/assignment/model.ex:253
+#: systems/assignment/model.ex:285
 msgid "duration.highlight.text"
 msgstr "%{duration} minutes"
 
 #, elixir-format
-#: systems/assignment/model.ex:252
+#: systems/assignment/model.ex:284
 msgid "duration.highlight.title"
 msgstr "Duration"
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:102
+#: systems/assignment/ethical_form.ex:100
 msgid "ethical.review.link"
 msgstr "ethical checklist"
 
 #, elixir-format
-#: systems/assignment/model.ex:87 systems/assignment/model.ex:98
-#: systems/assignment/model.ex:111
+#: systems/assignment/model.ex:87
+#: systems/assignment/model.ex:98
+#: systems/assignment/model.ex:123
 msgid "task.hero.title"
 msgstr "Study"
 
 #, elixir-format
-#: systems/assignment/model.ex:223
+#: systems/assignment/model.ex:248
 msgid "task.completed.subtitle"
 msgstr "You have contributed to this study"
 
 #, elixir-format
-#: systems/assignment/model.ex:228
+#: systems/assignment/model.ex:258
 msgid "task.completed.text"
 msgstr "Your contribution will be reviewed by the author of this study and either accepted or rejected."
 
 #, elixir-format
-#: systems/assignment/model.ex:222
+#: systems/assignment/model.ex:245
 msgid "task.pending.subtitle"
 msgstr "Instructions"
 
 #, elixir-format
-#: systems/assignment/model.ex:266
+#: systems/assignment/model.ex:298
 msgid "status.closed.highlight.text"
 msgstr "Closed for participation"
 
 #, elixir-format
-#: systems/assignment/model.ex:260
+#: systems/assignment/model.ex:292
 msgid "status.highlight.title"
 msgstr "Status"
 
 #, elixir-format
-#: systems/assignment/model.ex:264
+#: systems/assignment/model.ex:296
 msgid "status.open.highlight.text"
 msgstr "Open for participation"
 
 #, elixir-format
-#: systems/assignment/model.ex:273
+#: systems/assignment/model.ex:305
 msgid "language.highlight.title"
 msgstr "Language"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:119
+#: systems/campaign/monitor_view.ex:129
 msgid "started.label"
 msgstr "Started"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:230
+#: systems/campaign/overview_page.ex:232
 msgid "add.new.button.short"
 msgstr "New"
 
 #, elixir-format
-#: systems/assignment/model.ex:224
+#: systems/assignment/model.ex:251
 msgid "task.accepted.subtitle"
 msgstr "Your contribution has been approved"
 
 #, elixir-format
-#: systems/assignment/model.ex:229
+#: systems/assignment/model.ex:259
 msgid "task.accepted.text"
 msgstr "The author of this study reviewed and approved your contribution. Your reward has been awarded. Thank you for participating, your contribution is highly appreciated."
 
 #, elixir-format
-#: systems/assignment/model.ex:225
+#: systems/assignment/model.ex:254
 msgid "task.rejected.subtitle"
 msgstr "Unfortunately, your contribution is rejected"
 
 #, elixir-format
-#: systems/assignment/model.ex:231
+#: systems/assignment/model.ex:262
 msgid "task.rejected.text"
 msgstr "The author of this study reviewed your contribution and wrote the following message: \"%{reason}\""

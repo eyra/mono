@@ -11,7 +11,8 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:64 systems/promotion/index_page.ex:49
+#: bundles/link/lib/index.ex:64
+#: systems/promotion/index_page.ex:49
 msgid "welcome.title"
 msgstr ""
 
@@ -21,67 +22,80 @@ msgid "dashboard-button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:76 systems/promotion/index_page.ex:62
+#: bundles/link/lib/index.ex:76
+#: systems/promotion/index_page.ex:62
 msgid "link.message"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:73 systems/promotion/index_page.ex:59
+#: bundles/link/lib/index.ex:73
+#: systems/promotion/index_page.ex:59
 msgid "link.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:91 systems/promotion/index_page.ex:73
+#: bundles/link/lib/index.ex:91
+#: systems/promotion/index_page.ex:73
 msgid "signup.card.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:26 systems/promotion/index_page.ex:27
+#: bundles/link/lib/index.ex:26
+#: systems/promotion/index_page.ex:27
 msgid "member.card.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:30 systems/promotion/index_page.ex:31
+#: bundles/link/lib/index.ex:30
+#: systems/promotion/index_page.ex:31
 msgid "member.profile.card.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:92 systems/promotion/index_page.ex:74
+#: bundles/link/lib/index.ex:92
+#: systems/promotion/index_page.ex:74
 msgid "signup.card.button"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:96 systems/promotion/index_page.ex:78
+#: bundles/link/lib/index.ex:96
+#: systems/promotion/index_page.ex:78
 msgid "usp1.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:96 systems/promotion/index_page.ex:78
+#: bundles/link/lib/index.ex:96
+#: systems/promotion/index_page.ex:78
 msgid "usp1.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:97 systems/promotion/index_page.ex:79
+#: bundles/link/lib/index.ex:97
+#: systems/promotion/index_page.ex:79
 msgid "usp2.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:97 systems/promotion/index_page.ex:79
+#: bundles/link/lib/index.ex:97
+#: systems/promotion/index_page.ex:79
 msgid "usp2.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:98 systems/promotion/index_page.ex:80
+#: bundles/link/lib/index.ex:98
+#: systems/promotion/index_page.ex:80
 msgid "usp3.description"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:98 systems/promotion/index_page.ex:80
+#: bundles/link/lib/index.ex:98
+#: systems/promotion/index_page.ex:80
 msgid "usp3.title"
 msgstr ""
 
 #, elixir-format
-#: bundles/link/lib/index.ex:65 systems/promotion/index_page.ex:50
+#: bundles/link/lib/index.ex:65
+#: systems/promotion/index_page.ex:50
 msgid "welcome.subtitle"
 msgstr ""
 

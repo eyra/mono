@@ -11,7 +11,7 @@ defmodule Systems.Lab.PublicPage do
   data(reservation, :any, default: nil)
 
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
-    tool = Lab.Context.get(id, preload: [:time_slots])
+    tool = Lab.Context.get(id, [:time_slots])
 
     {:ok,
      socket

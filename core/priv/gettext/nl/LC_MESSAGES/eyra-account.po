@@ -17,7 +17,7 @@ msgid "displayname.label"
 msgstr "Schermnaam"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:73
+#: lib/core_web/live/user/signup.ex:74
 msgid "email.label"
 msgstr "E-mail"
 
@@ -27,7 +27,7 @@ msgid "fullname.label"
 msgstr "Volledige naam"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:74
+#: lib/core_web/live/user/signup.ex:75
 msgid "password.label"
 msgstr "Wachtwoord"
 
@@ -37,22 +37,22 @@ msgid "profile.title"
 msgstr "Mijn profiel"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:79
+#: lib/core_web/live/user/signup.ex:80
 msgid "signin.label"
 msgstr "Heb je al een account?"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:80
+#: lib/core_web/live/user/signup.ex:81
 msgid "signin.link"
 msgstr "Log hier in"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:75
+#: lib/core_web/live/user/signup.ex:76
 msgid "signup.button"
 msgstr "Registreer"
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:70
+#: lib/core_web/live/user/signup.ex:71
 msgid "signup.title"
 msgstr "Nieuw account"
 
@@ -62,7 +62,7 @@ msgid "await.confirmation.title"
 msgstr "Confirm you registration"
 
 #, elixir-format
-#: lib/core_web/live/user/confirm_token.ex:86
+#: lib/core_web/live/user/confirm_token.ex:90
 msgid "confirm.token.resend_button"
 msgstr ""
 
@@ -117,24 +117,24 @@ msgid "feature.study.description"
 msgstr "Selecteer je opleiding(en), bedrijfskunde (BK) en/of international business administration (IBA). Heb je RPR vorig jaar niet afgerond, selecteer dan de herkansing variant. Ben je een 2e jaars student (RPR2), maar heb je RPR1 nog niet afgerond, selecteer dan zowel \"2e jaar\" als \"1e jaar (herkansing)\"."
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:88
+#: lib/core_web/live/user/forms/features.ex:89
 msgid "features.description"
 msgstr "Enkele studies gebruiken specifieke selectie criteria. Als je de onderstaande optionele kenmerken invult kun je meedoen aan studies waarvoor jouw kenmerken geselecteerd zijn."
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:99
+#: lib/core_web/live/user/forms/features.ex:100
 #: systems/pool/views/campaign_submission_view.ex:149
 msgid "features.dominanthand.title"
 msgstr "Voorkeurshand"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:91
+#: lib/core_web/live/user/forms/features.ex:92
 #: systems/pool/views/campaign_submission_view.ex:141
 msgid "features.gender.title"
 msgstr "Geslacht"
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:95
+#: lib/core_web/live/user/forms/features.ex:96
 #: systems/pool/views/campaign_submission_view.ex:145
 msgid "features.nativelanguage.title"
 msgstr "Eerste taal"
@@ -212,6 +212,6 @@ msgid "features.study.year"
 msgstr "Leerjaar"
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:127
+#: systems/assignment/ethical_form.ex:125
 msgid "ehtical.code.label"
 msgstr "Code"

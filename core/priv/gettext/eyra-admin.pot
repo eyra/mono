@@ -51,12 +51,12 @@ msgid "ticket.tag.tip"
 msgstr ""
 
 #, elixir-format
-#: systems/support/ticket_page.ex:104
+#: systems/support/ticket_page.ex:106
 msgid "close.ticket.button"
 msgstr ""
 
 #, elixir-format
-#: systems/support/ticket_page.ex:118
+#: systems/support/ticket_page.ex:126
 msgid "ticket.title"
 msgstr ""
 
@@ -66,7 +66,8 @@ msgid "role.coordinator"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/submission_page.ex:260 systems/support/ticket_page.ex:61
+#: systems/pool/submission_page.ex:260
+#: systems/support/ticket_page.ex:61
 msgid "role.researcher"
 msgstr ""
 
@@ -76,11 +77,12 @@ msgid "role.student"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/submission_page.ex:272 systems/support/ticket_page.ex:77
+#: systems/pool/submission_page.ex:272
+#: systems/support/ticket_page.ex:77
 msgid "ticket.mailto.button"
 msgstr ""
 
 #, elixir-format
-#: systems/support/ticket_page.ex:111
+#: systems/support/ticket_page.ex:117
 msgid "reopen.ticket.button"
 msgstr ""

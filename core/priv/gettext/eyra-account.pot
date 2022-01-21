@@ -16,7 +16,7 @@ msgid "displayname.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:73
+#: lib/core_web/live/user/signup.ex:74
 msgid "email.label"
 msgstr ""
 
@@ -26,7 +26,7 @@ msgid "fullname.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:74
+#: lib/core_web/live/user/signup.ex:75
 msgid "password.label"
 msgstr ""
 
@@ -36,22 +36,22 @@ msgid "profile.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:79
+#: lib/core_web/live/user/signup.ex:80
 msgid "signin.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:80
+#: lib/core_web/live/user/signup.ex:81
 msgid "signin.link"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:75
+#: lib/core_web/live/user/signup.ex:76
 msgid "signup.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/signup.ex:70
+#: lib/core_web/live/user/signup.ex:71
 msgid "signup.title"
 msgstr ""
 
@@ -61,7 +61,7 @@ msgid "await.confirmation.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/confirm_token.ex:86
+#: lib/core_web/live/user/confirm_token.ex:90
 msgid "confirm.token.resend_button"
 msgstr ""
 
@@ -116,24 +116,24 @@ msgid "feature.study.description"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:88
+#: lib/core_web/live/user/forms/features.ex:89
 msgid "features.description"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:99
+#: lib/core_web/live/user/forms/features.ex:100
 #: systems/pool/views/campaign_submission_view.ex:149
 msgid "features.dominanthand.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:91
+#: lib/core_web/live/user/forms/features.ex:92
 #: systems/pool/views/campaign_submission_view.ex:141
 msgid "features.gender.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/forms/features.ex:95
+#: lib/core_web/live/user/forms/features.ex:96
 #: systems/pool/views/campaign_submission_view.ex:145
 msgid "features.nativelanguage.title"
 msgstr ""
@@ -211,6 +211,6 @@ msgid "features.study.year"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:127
+#: systems/assignment/ethical_form.ex:125
 msgid "ehtical.code.label"
 msgstr ""

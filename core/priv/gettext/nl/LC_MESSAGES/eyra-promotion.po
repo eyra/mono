@@ -12,88 +12,90 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:206
+#: systems/promotion/landing_page.ex:214
 msgid "back.button.label"
 msgstr "Terug"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:195
+#: systems/promotion/form_view.ex:193
 msgid "banner.subtitle.label"
 msgstr "Omschrijving"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:182
+#: systems/promotion/form_view.ex:181
 msgid "banner.title"
 msgstr "Over jou of jouw team"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:194
+#: systems/promotion/form_view.ex:192
 msgid "banner.title.label"
 msgstr "Naam"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:196
+#: systems/promotion/form_view.ex:194
 msgid "banner.url.label"
 msgstr "Website"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:188
+#: systems/promotion/form_view.ex:186
 msgid "choose.banner.photo.file"
 msgstr "Kies foto"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:189
+#: systems/promotion/form_view.ex:187
 msgid "choose.other.banner.photo.file"
 msgstr "Kies andere foto"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:179
+#: systems/promotion/form_view.ex:178
 msgid "description.label"
 msgstr "Geef wat achtergrond informatie over deze studie"
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:183
+#: systems/promotion/landing_page.ex:191
 msgid "description.public.label"
 msgstr "Over deze studie"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:178
+#: systems/promotion/form_view.ex:177
 msgid "description.title"
 msgstr "Waarom voer je deze study uit?"
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:197
+#: systems/promotion/landing_page.ex:205
 msgid "devices.available.label"
 msgstr "Beschikbaar op:"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:37 bundles/link/lib/card.ex:88
+#: bundles/link/lib/card.ex:37
+#: bundles/link/lib/card.ex:88
 #: bundles/link/lib/card.ex:159
 msgid "duration.title"
 msgstr "Duur"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:175
+#: systems/promotion/form_view.ex:174
 msgid "expectations.label"
 msgstr "Beschrijf wat er van de deelnemers wordt verwacht"
 
 #, elixir-format
-#: systems/campaign/model.ex:98 systems/promotion/landing_page.ex:179
+#: systems/campaign/model.ex:103
+#: systems/promotion/landing_page.ex:187
 msgid "expectations.public.label"
 msgstr "Wat kun je verwachten?"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:174
+#: systems/promotion/form_view.ex:173
 msgid "expectations.title"
 msgstr "Wat moeten deelnemers doen?"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:163
+#: systems/promotion/form_view.ex:162
 msgid "image.label"
 msgstr "Deze afbeelding wordt gebruikt als omslagafbeelding voor jouw advertentiepagina en jouw marktplaats tegel."
 
 #, elixir-format
-#: systems/promotion/form_view.ex:162
+#: systems/promotion/form_view.ex:161
 msgid "image.title"
 msgstr "Omslagafbeelding"
 
@@ -108,51 +110,52 @@ msgid "reward.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:169
+#: systems/promotion/form_view.ex:168
 msgid "search.different.image.button"
 msgstr "Verander omslag"
 
 #, elixir-format
-#: systems/campaign/model.ex:113 systems/promotion/form_view.ex:153
+#: systems/campaign/model.ex:128
+#: systems/promotion/form_view.ex:152
 msgid "subtitle.label"
 msgstr "Kun je in een zin uitleggen waar je studie over gaat?"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:157
+#: systems/promotion/form_view.ex:156
 msgid "themes.label"
 msgstr "Welk thema past het beste bij jou study? Je kan er meerdere selecteren."
 
 #, elixir-format
-#: systems/promotion/form_view.ex:156
+#: systems/promotion/form_view.ex:155
 msgid "themes.title"
 msgstr "Thema's"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:152
+#: systems/promotion/form_view.ex:151
 msgid "title.label"
 msgstr "Titel"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:148
+#: systems/promotion/form_view.ex:147
 msgid "form.title"
 msgstr "Advertentie"
 
 #, elixir-format
-#: systems/promotion/form_view.ex:149
+#: systems/promotion/form_view.ex:148
 msgid "form.description"
 msgstr "Advertenties worden op de marktplaats gezet om deelnemers te werven. Bekijk de voorbeeld pagina om te zien hoe deelnemers jouw advertentie pagina zien als ze op jouw marktplaats tegel klikken."
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:103
+#: systems/promotion/landing_page.ex:107
 msgid "preview.inform.text"
 msgstr "Deze feature werkt niet in preview modus."
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:102
+#: systems/promotion/landing_page.ex:106
 msgid "preview.inform.title"
 msgstr "Preview"
 
 #, elixir-format
-#: systems/promotion/landing_page.ex:198
+#: systems/promotion/landing_page.ex:206
 msgid "languages.available.label"
 msgstr "Taal:"

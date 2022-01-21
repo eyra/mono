@@ -52,12 +52,12 @@ msgid "ticket.tag.tip"
 msgstr "Tip"
 
 #, elixir-format
-#: systems/support/ticket_page.ex:104
+#: systems/support/ticket_page.ex:106
 msgid "close.ticket.button"
 msgstr "Melding sluiten"
 
 #, elixir-format
-#: systems/support/ticket_page.ex:118
+#: systems/support/ticket_page.ex:126
 msgid "ticket.title"
 msgstr "Melding"
 
@@ -67,7 +67,8 @@ msgid "role.coordinator"
 msgstr "Pool beheerder"
 
 #, elixir-format
-#: systems/pool/submission_page.ex:260 systems/support/ticket_page.ex:61
+#: systems/pool/submission_page.ex:260
+#: systems/support/ticket_page.ex:61
 msgid "role.researcher"
 msgstr "Onderzoeker"
 
@@ -77,11 +78,12 @@ msgid "role.student"
 msgstr "Student"
 
 #, elixir-format
-#: systems/pool/submission_page.ex:272 systems/support/ticket_page.ex:77
+#: systems/pool/submission_page.ex:272
+#: systems/support/ticket_page.ex:77
 msgid "ticket.mailto.button"
 msgstr "Benaderen"
 
 #, elixir-format
-#: systems/support/ticket_page.ex:111
+#: systems/support/ticket_page.ex:117
 msgid "reopen.ticket.button"
 msgstr "Melding heropenen"
