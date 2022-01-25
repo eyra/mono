@@ -32,7 +32,7 @@ defmodule Core.Repo.Migrations.MigrateSurveyTool do
     migrate_tools(t, tool_type)
   end
 
-  defp migrate_tool(id, tool_type) do
+  defp migrate_tool([id], tool_type) do
     set_director(id, "#{tool_type}s", :campaign)
   end
 
@@ -43,8 +43,8 @@ defmodule Core.Repo.Migrations.MigrateSurveyTool do
   defp update(table, id, field, value) do
     execute(
     """
-    UPDATE #{table} SET #{field} = #{value} WHERE id = #{id};
+    UPDATE #{table} SET #{field} = '#{value}' WHERE id = #{id};
     """
     )
-end
+  end
 end
