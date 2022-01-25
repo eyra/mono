@@ -17,7 +17,7 @@ msgstr "Add day"
 
 #, elixir-format
 msgid "form.description"
-msgstr "%{time slots} time slots and %{seats} participants based on the schema below."
+msgstr "%{time_slots} time slots and %{seats} participants based on the schema below."
 
 #, elixir-format
 msgid "form.title"
