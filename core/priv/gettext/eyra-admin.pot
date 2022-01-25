@@ -11,78 +11,61 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/admin/permissions_page.ex:80
 msgid "permissions.pooladmin.candidates.title"
 msgstr ""
 
 #, elixir-format
-#: systems/admin/permissions_page.ex:66
 msgid "permissions.pooladmin.description"
 msgstr ""
 
 #, elixir-format
-#: systems/admin/permissions_page.ex:65
 msgid "permissions.pooladmin.title"
 msgstr ""
 
 #, elixir-format
-#: systems/admin/permissions_page.ex:60
 msgid "permissions.title"
 msgstr ""
 
 #, elixir-format
-#: systems/support/overview_page.ex:76
 msgid "support.title"
 msgstr ""
 
 #, elixir-format
-#: systems/support/ticket_model.ex:28
 msgid "ticket.tag.bug"
 msgstr ""
 
 #, elixir-format
-#: systems/support/ticket_model.ex:30
 msgid "ticket.tag.question"
 msgstr ""
 
 #, elixir-format
-#: systems/support/ticket_model.ex:29
 msgid "ticket.tag.tip"
 msgstr ""
 
 #, elixir-format
-#: systems/support/ticket_page.ex:106
 msgid "close.ticket.button"
 msgstr ""
 
 #, elixir-format
-#: systems/support/ticket_page.ex:126
 msgid "ticket.title"
 msgstr ""
 
 #, elixir-format
-#: systems/support/ticket_page.ex:60
 msgid "role.coordinator"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/submission_page.ex:260
-#: systems/support/ticket_page.ex:61
 msgid "role.researcher"
 msgstr ""
 
 #, elixir-format
-#: systems/support/ticket_page.ex:62
 msgid "role.student"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/submission_page.ex:272
-#: systems/support/ticket_page.ex:77
 msgid "ticket.mailto.button"
 msgstr ""
 
 #, elixir-format
-#: systems/support/ticket_page.ex:117
 msgid "reopen.ticket.button"
 msgstr ""

@@ -12,16 +12,13 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/campaign/model.ex:329
 msgid "quick_summary.%{open_spot_count}.%{target_subject_count}"
 msgstr "%{open_spot_count} out of %{target_subject_count} spots available"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:59
 msgid "recent-items.title"
 msgstr "Recent items"
 
 #, elixir-format
-#: bundles/link/lib/dashboard.ex:48
 msgid "title"
 msgstr "Dashboard"

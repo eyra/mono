@@ -12,52 +12,41 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:152
 msgid "attention.title"
 msgstr "Attention"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:345
 msgid "started.at.message"
 msgstr "Started %{date} but not returned to Panl"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:159
-#: systems/campaign/monitor_view.ex:180
 msgid "accept.all.button"
 msgstr "Approve all"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:154
 msgid "attention.body"
 msgstr "Please pay attention to the contributions of the participants below."
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:198
 msgid "rejected.title"
 msgstr "Rejected"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:175
 msgid "waitinglist.body"
 msgstr "The participants below are waiting for approval."
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:172
 msgid "waitinglist.title"
 msgstr "Waiting"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:213
 msgid "accepted.title"
 msgstr "Accepted"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:114
 msgid "phase1.title"
 msgstr "Progress"
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:148
 msgid "phase2.title"
 msgstr "Contributions"

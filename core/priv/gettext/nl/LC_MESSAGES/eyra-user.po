@@ -12,42 +12,33 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/user/confirm_token.ex:89
 msgid "confirm.token.email.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/reset_password.ex:59
 msgid "password_reset.email.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/reset_password_token.ex:57
 msgid "password_reset.password.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/reset_password_token.ex:58
 msgid "password_reset.password_confirmation.label"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/reset_password.ex:60
 msgid "password_reset.reset_button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/reset_password_token.ex:59
 msgid "password_reset.reset_password_button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/live/user/reset_password.ex:57
-#: lib/core_web/live/user/reset_password_token.ex:55
 msgid "user.password_reset.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/controllers/user_session_controller.ex:25
 msgid "Invalid email or password"
 msgstr ""

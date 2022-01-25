@@ -11,329 +11,261 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:145
 msgid "config.nrofsubjects.label"
 msgstr ""
 
 #, elixir-format
-#: systems/survey/tool_form.ex:192
 msgid "config.url.label"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:142
 msgid "duration.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/model.ex:244
 msgid "by.author.label"
 msgstr ""
 
 #, elixir-format
-#: systems/promotion/model.ex:139
 msgid "reward.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/assignable.ex:25
 msgid "apply.cta.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:160
 msgid "devices.label"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/assignable.ex:30
 msgid "open.cta.title"
 msgstr ""
 
 #, elixir-format
-#: systems/survey/tool_form.ex:162
 msgid "redirect.description"
 msgstr ""
 
 #, elixir-format
-#: systems/survey/tool_form.ex:160
 msgid "redirect.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:159
 msgid "devices.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:123
 msgid "completed.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:135
 msgid "pending.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:115
 msgid "status.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:141
 msgid "vacant.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:531
 msgid "content.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:205
 msgid "title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:255
 msgid "add.first.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:235
 msgid "add.new.button"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:251
 msgid "empty.description"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:250
 msgid "empty.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:190
 msgid "tabbar.item.monitor"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:154
 msgid "tabbar.item.promotion"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:167
 msgid "tabbar.item.assignment"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:225
 msgid "monitor.empty.description"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:224
 msgid "monitor.empty.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:155
 msgid "tabbar.item.promotion.forward"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:168
 msgid "tabbar.item.assignment.forward"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:191
 msgid "tabbar.item.monitor.forward"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:180
 msgid "tabbar.item.criteria"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/content_page.ex:181
 msgid "tabbar.item.criteria.forward"
 msgstr ""
 
 #, elixir-format
-#: systems/survey/tool_form.ex:135
 msgid "form.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:225
 msgid "campaign.overview.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:148
 msgid "language.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/experiment_form.ex:149
 msgid "languages.label"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:44
-#: systems/assignment/ethical_form.ex:128
 msgid "ethical.label"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:118
 msgid "ethical.title"
 msgstr ""
 
 #, elixir-format
-#: systems/survey/tool_form.ex:151
 msgid "panlid.description"
 msgstr ""
 
 #, elixir-format
-#: systems/survey/tool_form.ex:149
 msgid "panlid.title"
 msgstr ""
 
 #, elixir-format
-#: systems/survey/tool_form.ex:140
 msgid "setup.title"
 msgstr ""
 
 #, elixir-format
-#: systems/survey/tool_form.ex:170
 msgid "redirect.copy.button"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:119
 msgid "ethical.description"
 msgstr ""
 
 #, elixir-format
-#: systems/survey/tool_form.ex:184
 msgid "study.link.description"
 msgstr ""
 
 #, elixir-format
-#: systems/survey/tool_form.ex:182
 msgid "study.link.title"
 msgstr ""
 
 #, elixir-format
-#: systems/survey/tool_form.ex:109
 msgid "panlid.instructions.link"
 msgstr ""
 
 #, elixir-format
-#: systems/survey/tool_form.ex:102
 msgid "redirect.instructions.link"
 msgstr ""
 
 #, elixir-format
-#: systems/survey/tool_form.ex:116
 msgid "study.instructions.link"
 msgstr ""
 
 #, elixir-format
-#: systems/survey/tool_form.ex:136
 msgid "form.description"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:285
 msgid "duration.highlight.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:284
 msgid "duration.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/ethical_form.ex:100
 msgid "ethical.review.link"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:87
-#: systems/assignment/model.ex:98
-#: systems/assignment/model.ex:123
 msgid "task.hero.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:248
 msgid "task.completed.subtitle"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:258
 msgid "task.completed.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:245
 msgid "task.pending.subtitle"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:298
 msgid "status.closed.highlight.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:292
 msgid "status.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:296
 msgid "status.open.highlight.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:305
 msgid "language.highlight.title"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/monitor_view.ex:129
 msgid "started.label"
 msgstr ""
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:232
 msgid "add.new.button.short"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:251
 msgid "task.accepted.subtitle"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:259
 msgid "task.accepted.text"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:254
 msgid "task.rejected.subtitle"
 msgstr ""
 
 #, elixir-format
-#: systems/assignment/model.ex:262
 msgid "task.rejected.text"
 msgstr ""

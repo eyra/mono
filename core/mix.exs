@@ -22,6 +22,9 @@ defmodule Core.MixProject do
           "../guides/authorization.md"
         ]
       ],
+      gettext: [
+        write_reference_comments: false
+      ],
       dialyzer: [
         plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
         plt_add_apps: [:mix],

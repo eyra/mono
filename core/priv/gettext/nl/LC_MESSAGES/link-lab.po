@@ -12,81 +12,69 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/lab/tool_form.ex:30
 msgid "add.day.button"
 msgstr "Voeg een dag toe"
 
 #, elixir-format
-#: systems/lab/tool_form.ex:91
 msgid "form.description"
 msgstr "%{time_slots} tijdslots en %{seats} deelnemers op basis van onderstaand schema."
 
 #, elixir-format
-#: systems/lab/tool_form.ex:90
 msgid "form.title"
 msgstr "Lab schema"
 
 #, elixir-format
-#: systems/lab/day_view.ex:259
 msgid "day.schedule.date.label"
 msgstr "Selecteer een datum"
 
 #, elixir-format
-#: systems/lab/day_view.ex:263
 msgid "day.schedule.location.label"
 msgstr "Locatie"
 
 #, elixir-format
-#: systems/lab/day_view.ex:266
 msgid "day.schedule.seats.label"
 msgstr "Plaatsen"
 
 #, elixir-format
-#: systems/lab/day_view.ex:238
 msgid "day.schedule.submit.button"
 msgstr "Pas dagschema aan"
 
 #, elixir-format
-#: systems/lab/day_entry_time_slot_item.ex:43
 msgid "time.slot.item.available.label"
 msgstr "Beschikbaar"
 
 #, elixir-format
-#: systems/lab/day_entry_time_slot_item.ex:50
 msgid "1 reservation"
 msgid_plural "%{count} reservations"
 msgstr[0] "1 reservering"
 msgstr[1] "%{count} reserveringen"
 
 #, elixir-format
-#: systems/lab/day_entry_time_slot_item.ex:42
-#: systems/lab/day_list_item.ex:58
-#: systems/lab/day_view.ex:169
 msgid "1 seat"
 msgid_plural "%{count} seats"
 msgstr[0] "1 plaats"
 msgstr[1] "%{count} plaatsen"
 
 #, elixir-format
-#: systems/lab/day_view.ex:171
 msgid "day.schedule.byline"
 msgstr "Je hebt voor deze dag %{time_slots} en %{seats} ingepland."
 
 #, elixir-format
-#: systems/lab/day_view.ex:167
 msgid "1 time slot"
 msgid_plural "%{count} time slots"
 msgstr[0] "1 tijdslot"
 msgstr[1] "%{count} tijdslots"
 
 #, elixir-format, ex-autogen, fuzzy
-#: systems/lab/day_list_item.ex:53
 msgid "1 timeslot"
 msgid_plural "%{count} time slots"
 msgstr[0] "1 tijdslot"
 msgstr[1] "%{count} tijdslots"
 
 #, elixir-format, ex-autogen, fuzzy
-#: systems/lab/day_list_item.ex:32
+msgid "duplicate.day.button"
+msgstr "Bekijk"
+
+#, elixir-format, ex-autogen, fuzzy
 msgid "edit.day.button"
 msgstr "Bekijk"

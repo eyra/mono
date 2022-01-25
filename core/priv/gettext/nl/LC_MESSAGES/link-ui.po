@@ -12,65 +12,45 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: translations.ex:2
 msgid "menu.item.studentpool"
 msgstr "Studentenpool"
 
 #, elixir-format
-#: translations.ex:2
 msgid "menu.item.recruitment"
 msgstr "Werving"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/welcome.ex:33
 msgid "onboarding.welcome.description"
 msgstr "Doorloop de volgende stappen om mee te kunnen doen aan onderzoeksstudies."
 
 #, elixir-format
-#: bundles/link/lib/onboarding/welcome.ex:11
 msgid "onboarding.welcome.title"
 msgstr "Welkom %{member}"
 
 #, elixir-format
-#: bundles/link/lib/debug.ex:117
 msgid "debug.title"
 msgstr "Debug"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:231
-#: systems/campaign/overview_page.ex:64
 msgid "delete.confirm.campaign"
 msgstr "campagne"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:412
-#: systems/campaign/content_page.ex:416
-#: systems/campaign/content_page.ex:422
-#: systems/lab/day_list_item.ex:39
 msgid "delete.button"
 msgstr "Verwijderen"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:396
-#: systems/campaign/content_page.ex:402
-#: systems/campaign/content_page.ex:406
-#: systems/pool/submission_page.ex:192
 msgid "preview.button"
 msgstr "Bekijken"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:382
-#: systems/campaign/content_page.ex:388
 msgid "submit.button"
 msgstr "Indienen"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:426
-#: systems/pool/submission_page.ex:198
 msgid "retract.button"
 msgstr "Haal offline"
 
 #, elixir-format
-#: systems/pool/submission_page.ex:184
 msgid "accept.button"
 msgstr "Publiceren"

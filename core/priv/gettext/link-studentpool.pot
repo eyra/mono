@@ -11,92 +11,73 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/pool/overview_page.ex:40
-#: systems/pool/views/students_view.ex:136
 msgid "tabbar.item.students"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/overview_page.ex:48
 msgid "tabbar.item.campaigns"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/overview_page.ex:60
 msgid "title"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/students_view.ex:127
 msgid "students.empty.description"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/students_view.ex:126
 msgid "students.empty.title"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:74
 msgid "campaigns.empty.description"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:73
 msgid "campaigns.empty.title"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/students_view.ex:109
 msgid "student.tag.complete"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/students_view.ex:113
 msgid "student.tag.incomplete"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:66
 msgid "accepted.title"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:107
 msgid "status.submitted.label"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:60
 msgid "submitted.title"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:141
 msgid "spots.available"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/submission_page.ex:217
 msgid "submission.title"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:125
 msgid "status.accepted.closed.label"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:119
 msgid "status.accepted.online.label"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:113
 msgid "status.accepted.scheduled.label"
 msgstr ""
 
 #, elixir-format
-#: systems/pool/views/campaigns_view.ex:139
 msgid "sample.size"
 msgstr ""

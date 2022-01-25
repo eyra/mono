@@ -12,81 +12,69 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/lab/tool_form.ex:30
 msgid "add.day.button"
 msgstr "Add day"
 
 #, elixir-format
-#: systems/lab/tool_form.ex:91
 msgid "form.description"
-msgstr "%{time_slots} timeslots and %{seats} participants based on the schema below."
+msgstr "%{timeslots} timeslots and %{participants} participants based on the schema below."
 
 #, elixir-format
-#: systems/lab/tool_form.ex:90
 msgid "form.title"
 msgstr "Lab schedule"
 
 #, elixir-format
-#: systems/lab/day_view.ex:259
 msgid "day.schedule.date.label"
 msgstr "Select a date"
 
 #, elixir-format
-#: systems/lab/day_view.ex:263
 msgid "day.schedule.location.label"
 msgstr "Location"
 
 #, elixir-format
-#: systems/lab/day_view.ex:266
 msgid "day.schedule.seats.label"
 msgstr "Seats"
 
 #, elixir-format
-#: systems/lab/day_view.ex:238
 msgid "day.schedule.submit.button"
 msgstr "Submit day schedule"
 
 #, elixir-format
-#: systems/lab/day_entry_time_slot_item.ex:43
 msgid "time.slot.item.available.label"
 msgstr "Available"
 
 #, elixir-format
-#: systems/lab/day_entry_time_slot_item.ex:50
 msgid "1 reservation"
 msgid_plural "%{count} reservations"
 msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-format
-#: systems/lab/day_entry_time_slot_item.ex:42
-#: systems/lab/day_list_item.ex:58
-#: systems/lab/day_view.ex:169
 msgid "1 seat"
 msgid_plural "%{count} seats"
 msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-format
-#: systems/lab/day_view.ex:171
 msgid "day.schedule.byline"
 msgstr "You have scheduled %{time_slots} and %{seats} for this day."
 
 #, elixir-format
-#: systems/lab/day_view.ex:167
 msgid "1 time slot"
 msgid_plural "%{count} time slots"
 msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-format, ex-autogen, fuzzy
-#: systems/lab/day_list_item.ex:53
 msgid "1 timeslot"
 msgid_plural "%{count} time slots"
 msgstr[0] ""
 msgstr[1] ""
 
+#, elixir-format, ex-autogen
+msgid "duplicate.day.button"
+msgstr ""
+
 #, elixir-format, ex-autogen, fuzzy
-#: systems/lab/day_list_item.ex:32
 msgid "edit.day.button"
-msgstr "Edit"
+msgstr "Add day"

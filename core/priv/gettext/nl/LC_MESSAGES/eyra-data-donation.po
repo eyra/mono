@@ -12,66 +12,53 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/data_donation/content_page.ex:96
 msgid "content.title"
 msgstr "Data Donatie"
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:110
 msgid "reward.label"
 msgstr "Beloning in euro centen"
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:106
 msgid "script.label"
 msgstr "Plak hier je python script"
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:114
 msgid "config.nrofsubjects.label"
 msgstr "Aantal gewenste deelnemers"
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:113
 msgid "nrofsubjects.title"
 msgstr "Deelnemers"
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:109
 msgid "reward.title"
 msgstr "Beloning"
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:105
 msgid "script.title"
 msgstr "Script"
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:117
 msgid "delete.button"
 msgstr "Verwijderen"
 
 #, elixir-format
-#: systems/data_donation/upload_page.ex:51
 msgid "uploader.title"
 msgstr "Data Donatie"
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:82
 msgid "donations.title"
 msgstr "Ontvangen donaties"
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:101
 msgid "download.all.button.label"
 msgstr "Download alles"
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:94
 msgid "download.button.label"
 msgstr "Download"
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:90
 msgid "received.label"
 msgstr "Ontvangen"

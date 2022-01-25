@@ -12,11 +12,9 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:156
 msgid "Dutch"
 msgstr "Nederlands"
 
 #, elixir-format
-#: lib/core_web/live/menu/helpers.ex:155
 msgid "English"
 msgstr ""

@@ -12,21 +12,17 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:158
 msgid "campaign.all.title"
 msgstr "Available studies"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:148
 msgid "campaign.subject.title"
 msgstr "My contributions"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:121
 msgid "share.dialog.content"
 msgstr "campaign"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:122
 msgid "share.dialog.group"
 msgstr "researchers"

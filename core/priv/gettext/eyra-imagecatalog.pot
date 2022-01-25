@@ -11,29 +11,24 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/image_catalog_picker.ex:148
 msgid "no.results.found.message"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/image_catalog_picker.ex:143
 msgid "search.image.button"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/image_catalog_picker.ex:132
 msgid "search.image.title"
 msgstr ""
 
 #, elixir-format
-#: lib/core_web/image_catalog_picker.ex:152
 msgid "images.found.message"
 msgid_plural "images.found.message.%{count}"
 msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-format
-#: lib/core_web/image_catalog_picker.ex:162
 msgid "page.info.message"
 msgid_plural "page.info.message.%{count}"
 msgstr[0] ""

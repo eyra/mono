@@ -11,66 +11,53 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/content_page.ex:96
 msgid "content.title"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:110
 msgid "reward.label"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:106
 msgid "script.label"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:114
 msgid "config.nrofsubjects.label"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:113
 msgid "nrofsubjects.title"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:109
 msgid "reward.title"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:105
 msgid "script.title"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:117
 msgid "delete.button"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/upload_page.ex:51
 msgid "uploader.title"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:82
 msgid "donations.title"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:101
 msgid "download.all.button.label"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:94
 msgid "download.button.label"
 msgstr ""
 
 #, elixir-format
-#: systems/data_donation/tool_form.ex:90
 msgid "received.label"
 msgstr ""

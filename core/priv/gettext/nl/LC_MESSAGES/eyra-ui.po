@@ -12,273 +12,181 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: bundles/link/lib/debug.ex:6
-#: bundles/link/lib/onboarding/wizard.ex:6
-#: frameworks/pixel/auto_save.ex:78
-#: lib/core_web/live/user/profile.ex:6
-#: systems/campaign/content_page.ex:6
-#: systems/data_donation/content_page.ex:6
-#: systems/pool/submission_page.ex:6
 msgid "error.flash"
 msgstr "Er is een fout opgetreden"
 
 #, elixir-format
-#: bundles/link/lib/debug.ex:6
-#: bundles/link/lib/onboarding/wizard.ex:6
-#: frameworks/pixel/auto_save.ex:83
-#: lib/core_web/live/user/profile.ex:6
-#: systems/campaign/content_page.ex:6
-#: systems/data_donation/content_page.ex:6
-#: systems/pool/submission_page.ex:6
 msgid "saved.info.flash"
 msgstr "Opgeslagen"
 
 #, elixir-format
-#: translations.ex:2
-#: lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.dashboard"
 msgstr "Dashboard"
 
 #, elixir-format
-#: translations.ex:2
 msgid "menu.item.marketplace"
 msgstr "Marktplaats"
 
 #, elixir-format
-#: translations.ex:2
-#: lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.profile"
 msgstr "Mijn profiel"
 
 #, elixir-format
-#: translations.ex:2
-#: lib/core_web/live/menu/items_translations.ex:2
-#: lib/core_web/live/user/settings.ex:36
 msgid "menu.item.settings"
 msgstr "Instellingen"
 
 #, elixir-format
-#: translations.ex:2
-#: lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.signin"
 msgstr "Inloggen"
 
 #, elixir-format
-#: translations.ex:2
-#: lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.signout"
 msgstr "Uitloggen"
 
 #, elixir-format
-#: translations.ex:2
-#: lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.menu"
 msgstr "Menu"
 
 #, elixir-format
-#: lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.eyra"
 msgstr "Menu"
 
 #, elixir-format
-#: translations.ex:2
-#: lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.todo"
 msgstr "To-do"
 
 #, elixir-format
-#: lib/core_web/live/dashboard.ex:50
 msgid "dashboard.title"
 msgstr "Dashboard"
 
 #, elixir-format
-#: bundles/link/lib/marketplace.ex:136
 msgid "marketplace.title"
 msgstr "Marktplaats"
 
 #, elixir-format
-#: systems/next_action/overview_page.ex:48
 msgid "todo.title"
 msgstr "To-do"
 
 #, elixir-format
-#: lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.payments"
 msgstr "Betalingen"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:103
-#: lib/core_web/live/user/forms/features.ex:88
-#: lib/core_web/live/user/profile.ex:108
 msgid "tabbar.item.features"
 msgstr "Kenmerken"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:88
 msgid "tabbar.item.profile"
 msgstr "Mijn profiel"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:92
-#: lib/core_web/live/user/forms/study.ex:73
-#: lib/core_web/live/user/profile.ex:97
 msgid "tabbar.item.study"
 msgstr "Opleiding"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:104
-#: lib/core_web/live/user/profile.ex:109
 msgid "tabbar.item.features.forward"
 msgstr "Pas kenmerken aan"
 
 #, elixir-format
-#: lib/core_web/live/user/profile.ex:89
 msgid "tabbar.item.profile.forward"
 msgstr "Pas profiel aan"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:93
-#: lib/core_web/live/user/profile.ex:98
 msgid "tabbar.item.study.forward"
 msgstr "Selecteer opleiding"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:34
 msgid "onboarding.forward"
 msgstr "Verder"
 
 #, elixir-format
-#: translations.ex:2
 msgid "menu.item.debug"
 msgstr "Debug"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:82
 msgid "tabbar.item.welcome"
 msgstr "Welkom"
 
 #, elixir-format
-#: bundles/link/lib/onboarding/wizard.ex:83
 msgid "tabbar.item.welcome.forward"
 msgstr "Welkom"
 
 #, elixir-format
-#: translations.ex:2
 msgid "menu.item.link"
 msgstr "Panl"
 
 #, elixir-format
-#: translations.ex:2
-#: lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.helpdesk"
 msgstr "Helpdesk"
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:6
-#: systems/campaign/content_page.ex:9
-#: systems/campaign/overview_page.ex:7
-#: systems/campaign/overview_page.ex:150
-#: systems/crew/reject_view.ex:122
-#: systems/lab/day_view.ex:242
-#: systems/pool/submission_page.ex:8
-#: systems/promotion/landing_page.ex:6
 msgid "cancel.button"
 msgstr "Annuleren"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:233
-#: systems/campaign/overview_page.ex:66
 msgid "delete.confirm.text"
 msgstr "De %{item} wordt permanent verwijderd."
 
 #, elixir-format
-#: systems/campaign/content_page.ex:232
-#: systems/campaign/overview_page.ex:65
 msgid "delete.confirm.title"
 msgstr "%{item} verwijderen?"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:234
-#: systems/campaign/overview_page.ex:67
 msgid "delete.confirm.label"
 msgstr "Verwijderen"
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:6
-#: systems/assignment/model.ex:227
-#: systems/campaign/content_page.ex:9
-#: systems/campaign/overview_page.ex:7
-#: systems/pool/submission_page.ex:8
-#: systems/promotion/landing_page.ex:6
 msgid "ok.button"
 msgstr "OK"
 
 #, elixir-format
-#: systems/campaign/content_page.ex:300
 msgid "feature.unavailable.text"
 msgstr "Op dit moment werken we nog aan deze functie. We updaten het platform regelmatig. Probeer het later nog eens."
 
 #, elixir-format
-#: systems/campaign/content_page.ex:299
 msgid "feature.unavailable.title"
 msgstr "Binnenkort beschikbaar"
 
 #, elixir-format
-#: translations.ex:2
-#: lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.permissions"
 msgstr "Permissies"
 
 #, elixir-format
-#: translations.ex:2
-#: lib/core_web/live/menu/items_translations.ex:2
 msgid "menu.item.support"
 msgstr "Support"
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:139
-#: lib/core_web/ui/timestamp.ex:142
-#: lib/core_web/ui/timestamp.ex:146
 msgid "timestamp.at"
 msgstr "om"
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:139
 msgid "timestamp.today"
 msgstr "vandaag"
 
 #, elixir-format
-#: lib/core_web/ui/timestamp.ex:142
 msgid "timestamp.yesterday"
 msgstr "gisteren"
 
 #, elixir-format
-#: lib/core_web/controllers/user_auth.ex:138
 msgid "authentication.required.error"
 msgstr "Deze pagina bekijken? Log hier eerst in."
 
 #, elixir-format
-#: bundles/link/lib/start_page_translations.ex:2
-#: lib/core_web/live/start_page_translations.ex:2
 msgid "start.page.dashboard"
 msgstr "Ga naar dashboard"
 
 #, elixir-format
-#: bundles/link/lib/start_page_translations.ex:2
 msgid "start.page.marketplace"
 msgstr "Ga naar marktplaats"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:214
 msgid "duplicate.button"
 msgstr "Dupliceren"
 
 #, elixir-format
-#: bundles/link/lib/card.ex:204
 msgid "share.button"
 msgstr "Delen"
 
 #, elixir-format
-#: frameworks/pixel/components/share_view.ex:133
 msgid "share.dialog.text"
 msgstr "Deel je %{content} met een of meer %{group} uit de onderstaande lijst."

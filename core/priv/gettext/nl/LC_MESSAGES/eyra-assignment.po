@@ -12,41 +12,33 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:153
 msgid "cancel.button"
 msgstr "Plek vrijgeven "
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:62
 msgid "cancel.confirm.label"
 msgstr "Bevestigen"
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:61
 msgid "cancel.confirm.text"
 msgstr "Je geeft je plek vrij, zodat anderen deel kunnen nemen."
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:60
 msgid "cancel.confirm.title"
 msgstr "Plek vrijgeven?"
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:208
 msgid "cancel.text"
 msgstr "Als je, om welke reden dan ook, besluit om niet deel te nemen. Geef anderen dan een kans om mee te doen, door jouw plek vrij te geven."
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:205
 msgid "cancel.title"
 msgstr "Toch niet deelnemen?"
 
 #, elixir-format
-#: systems/assignment/landing_page.ex:132
 msgid "contact.button"
 msgstr "E-mail onderzoeker"
 
 #, elixir-format
-#: systems/assignment/assignment_form.ex:119
 msgid "form.title"
 msgstr "Studie"
