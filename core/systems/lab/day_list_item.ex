@@ -53,7 +53,7 @@ defmodule Systems.Lab.DayListItem do
         <td class="p-4"></td>
         <td>
           <BodyMedium color={if @enabled? do "text-grey1" else "text-grey2" end}>
-            {dngettext("link-lab", "1 timeslot", "%{count} time slots", @number_of_timeslots)}
+            {dngettext("link-lab", "1 time slot", "%{count} time slots", @number_of_timeslots)}
           </BodyMedium>
         </td>
         <td class="p-4"></td>

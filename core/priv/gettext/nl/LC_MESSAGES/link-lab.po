@@ -66,14 +66,8 @@ msgstr[0] "1 tijdslot"
 msgstr[1] "%{count} tijdslots"
 
 #, elixir-format, ex-autogen, fuzzy
-msgid "1 timeslot"
-msgid_plural "%{count} time slots"
-msgstr[0] "1 tijdslot"
-msgstr[1] "%{count} tijdslots"
-
-#, elixir-format, ex-autogen, fuzzy
 msgid "duplicate.day.button"
-msgstr "Bekijk"
+msgstr "Dupliceren"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "edit.day.button"

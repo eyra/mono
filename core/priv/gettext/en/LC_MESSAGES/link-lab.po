@@ -17,7 +17,7 @@ msgstr "Add day"
 
 #, elixir-format
 msgid "form.description"
-msgstr "%{timeslots} timeslots and %{participants} participants based on the schema below."
+msgstr "%{time slots} time slots and %{seats} participants based on the schema below."
 
 #, elixir-format
 msgid "form.title"
@@ -65,16 +65,10 @@ msgid_plural "%{count} time slots"
 msgstr[0] ""
 msgstr[1] ""
 
-#, elixir-format, ex-autogen, fuzzy
-msgid "1 timeslot"
-msgid_plural "%{count} time slots"
-msgstr[0] ""
-msgstr[1] ""
-
 #, elixir-format, ex-autogen
 msgid "duplicate.day.button"
-msgstr ""
+msgstr "Duplicate"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "edit.day.button"
-msgstr "Add day"
+msgstr "Edit"
