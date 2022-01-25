@@ -40,7 +40,7 @@ defmodule Core.Repo.Migrations.MigrateSurveyTool do
     update(table, id, :director, director)
   end
 
-  defp update(table, id, field, value) when is_number(value)do
+  defp update(table, id, field, value) do
     execute(
     """
     UPDATE #{table} SET #{field} = #{value} WHERE id = #{id};
