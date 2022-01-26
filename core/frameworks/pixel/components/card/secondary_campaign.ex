@@ -2,7 +2,7 @@ defmodule Frameworks.Pixel.Card.SecondaryCampaign do
   @moduledoc """
   A large eye-catcher meant to call a user into taking an action.
   """
-  use Surface.Component
+  use Surface.LiveComponent
   alias Frameworks.Pixel.Card.Campaign
 
   prop(path_provider, :any, required: true)
