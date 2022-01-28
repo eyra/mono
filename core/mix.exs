@@ -74,6 +74,7 @@ defmodule Core.MixProject do
       # Deps
       {:assent, "~> 0.1.23"},
       {:bcrypt_elixir, "~> 2.0"},
+      {:ex_aws_s3, "~> 2.0"},
       {:phoenix, "~> 1.6.6"},
       {:phoenix_ecto, "~> 4.4"},
       {:phoenix_live_view, "~> 0.17.5"},

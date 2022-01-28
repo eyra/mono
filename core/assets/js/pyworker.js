@@ -78,7 +78,6 @@ def _process_data(data):
     html.append(df.to_html())
     data.append(df.to_dict())
   return {
-    "summary": result["summary"],
     "html": "\\n".join(html),
     "data": json.dumps(data),
   }

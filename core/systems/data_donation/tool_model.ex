@@ -10,10 +10,6 @@ defmodule Systems.DataDonation.ToolModel do
   import Ecto.Changeset
   import EctoCommons.URLValidator
 
-  alias Systems.{
-    DataDonation
-  }
-
   schema "data_donation_tools" do
     belongs_to(:auth_node, Core.Authorization.Node)
 
@@ -65,9 +61,18 @@ defmodule Systems.DataDonation.ToolModel do
     blank?(value)
   end
 
-  def store_results(%__MODULE__{} = tool, user, data) when is_binary(data) do
-    %DataDonation.UserData{}
-    |> DataDonation.UserData.changeset(%{tool: tool, user: user, data: data})
-    |> Repo.insert!()
+  def store_results(%__MODULE__{} = tool, data) when is_binary(data) do
+    storage().store(tool, data)
+    # |> S3.upload("eylixir", "path/on/s3")
+    # |> ExAws.request()
+    # |> IO.inspect()
+
+    # %DataDonation.UserData{}
+    # |> DataDonation.UserData.changeset(%{tool: tool, user: user, data: data})
+    # |> Repo.insert!()
+  end
+
+  defp storage do
+    Application.fetch_env!(:core, :data_donation_storage_backend)
   end
 end

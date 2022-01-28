@@ -1,5 +1,15 @@
 import Config
 
+# Setup for MinIO
+config :ex_aws, :s3,
+  scheme: "http://",
+  host: "localhost",
+  port: 9000
+
+config :ex_aws,
+  access_key_id: ["my_access_key"],
+  secret_access_key: ["a_super_secret"]
+
 # Only in tests, remove the complexity from the password hashing algorithm
 config :bcrypt_elixir, :log_rounds, 1
 

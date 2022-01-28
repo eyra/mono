@@ -45,7 +45,8 @@ defmodule Core.Authorization do
   grant_access(Systems.Pool.SubmissionPage, [:researcher])
   grant_access(Systems.Test.Page, [:visitor, :member])
   grant_access(Systems.DataDonation.Content, [:owner, :coordinator])
-  grant_access(Systems.DataDonation.Uploader, [:member])
+  grant_access(Systems.DataDonation.UploadPage, [:visitor, :member])
+  grant_access(Systems.DataDonation.ThanksPage, [:visitor, :member])
 
   grant_access(CoreWeb.Dashboard, [:researcher])
   grant_access(CoreWeb.User.Signin, [:visitor])

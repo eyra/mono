@@ -66,6 +66,8 @@ config :core, Core.ImageCatalog.Unsplash,
   access_key: "",
   app_name: "Core"
 
+config :core, Systems.DataDonation.S3StorageBackend, bucket: "port"
+
 config :core, CoreWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "QbAmUdYcDMMQ2e7wVp6PSXI8QdUjfDEGR0FTwjwkUIYS4lW1ledjE9Dkhr3pE4Qn",

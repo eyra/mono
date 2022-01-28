@@ -44,10 +44,6 @@ msgid "delete.button"
 msgstr "Delete"
 
 #, elixir-format
-msgid "uploader.title"
-msgstr "Data Donation"
-
-#, elixir-format
 msgid "donations.title"
 msgstr "Received donations"
 
@@ -62,3 +58,71 @@ msgstr "Download"
 #, elixir-format
 msgid "received.label"
 msgstr "Received"
+
+#, elixir-format, ex-autogen
+msgid "data_extraction.processing.description"
+msgstr "A script is currently extracting relevant data from your data package."
+
+#, elixir-format, ex-autogen
+msgid "data_extraction.processing.title"
+msgstr "Extract data"
+
+#, elixir-format, ex-autogen
+msgid "file_selection.file_upload.description"
+msgstr "Select data package"
+
+#, elixir-format, ex-autogen
+msgid "file_selection.welcome.description"
+msgstr "You have downloaded your data package and stored it on your device."
+
+#, elixir-format, ex-autogen
+msgid "file_selection.welcome.title"
+msgstr "Welcome"
+
+#, elixir-format, ex-autogen
+msgid "submit_data.description"
+msgstr "Do you agree to donate your data?"
+
+#, elixir-format, ex-autogen
+msgid "submit_data.title"
+msgstr "Donate Data"
+
+#, elixir-format, ex-autogen
+msgid "tabbar.item.data_extraction"
+msgstr "Extract data"
+
+#, elixir-format, ex-autogen
+msgid "tabbar.item.data_extraction.forward"
+msgstr "Extract data"
+
+#, elixir-format, ex-autogen
+msgid "tabbar.item.file_selection"
+msgstr "Data location"
+
+#, elixir-format, ex-autogen
+msgid "tabbar.item.file_selection.forward"
+msgstr "Extract data"
+
+#, elixir-format, ex-autogen
+msgid "tabbar.item.submit_data"
+msgstr "Donate Data"
+
+#, elixir-format, ex-autogen
+msgid "tabbar.item.submit_data.forward"
+msgstr "Donate Data"
+
+#, elixir-format, ex-autogen
+msgid "data_extraction.processing.loading"
+msgstr "Loading files..."
+
+#, elixir-format, ex-autogen
+msgid "data_extraction.processing.note"
+msgstr "This process may take up to 15 minutes. Your data package will not leave your device and no data is stored on the server."
+
+#, elixir-format, ex-autogen
+msgid "data_extraction.processing.warning"
+msgstr "Please don't close your browser!"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "file_selection.note"
+msgstr "Note: Your data is not sent over the internet, only the file location is temporarily stored."
