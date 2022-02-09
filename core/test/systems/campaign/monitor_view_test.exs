@@ -19,9 +19,8 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Finished: 0"
-      assert html =~ "Started: 0"
-      assert html =~ "Enrolled: 0"
+      assert html =~ "Participated: 0"
+      assert html =~ "Pending: 0"
       assert html =~ "Open: 1"
     end
 
@@ -39,9 +38,8 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Finished: 0"
-      assert html =~ "Started: 1"
-      assert html =~ "Enrolled: 0"
+      assert html =~ "Participated: 0"
+      assert html =~ "Pending: 1"
       assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 1"
       assert html =~ "Subject 1"
@@ -92,9 +90,8 @@ defmodule Systems.Campaign.MonitorViewTest do
         |> element("[phx-click=\"accept\"]")
         |> render_click()
 
-      assert html =~ "Finished: 1"
-      assert html =~ "Started: 0"
-      assert html =~ "Enrolled: 0"
+      assert html =~ "Participated: 1"
+      assert html =~ "Pending: 0"
       assert html =~ "Open: 0"
       assert html =~ "Accepted<span class=\"text-primary\"> 1"
     end
@@ -126,9 +123,8 @@ defmodule Systems.Campaign.MonitorViewTest do
         |> element("[phx-click=\"accept_all_pending_started\"]")
         |> render_click()
 
-      assert html =~ "Finished: 2"
-      assert html =~ "Started: 0"
-      assert html =~ "Enrolled: 0"
+      assert html =~ "Participated: 2"
+      assert html =~ "Pending: 0"
       assert html =~ "Open: 0"
       assert html =~ "Accepted<span class=\"text-primary\"> 2"
     end
@@ -160,9 +156,8 @@ defmodule Systems.Campaign.MonitorViewTest do
         |> element("[phx-click=\"accept_all_completed\"]")
         |> render_click()
 
-      assert html =~ "Finished: 2"
-      assert html =~ "Started: 0"
-      assert html =~ "Enrolled: 0"
+      assert html =~ "Participated: 2"
+      assert html =~ "Pending: 0"
       assert html =~ "Open: 0"
       assert html =~ "Accepted<span class=\"text-primary\"> 2"
     end
@@ -175,9 +170,8 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Finished: 1"
-      assert html =~ "Started: 0"
-      assert html =~ "Enrolled: 0"
+      assert html =~ "Participated: 1"
+      assert html =~ "Pending: 0"
       assert html =~ "Open: 0"
     end
 
@@ -188,9 +182,8 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Finished: 0"
-      assert html =~ "Started: 0"
-      assert html =~ "Enrolled: 1"
+      assert html =~ "Participated: 0"
+      assert html =~ "Pending: 1"
       assert html =~ "Open: 0"
     end
   end

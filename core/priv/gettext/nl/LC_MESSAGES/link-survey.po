@@ -56,16 +56,12 @@ msgid "devices.title"
 msgstr "Apparaten"
 
 #, elixir-format
-msgid "completed.label"
-msgstr "Afgerond"
-
-#, elixir-format
 msgid "pending.label"
-msgstr "Aangemeld"
+msgstr "Bezig"
 
 #, elixir-format
 msgid "status.title"
-msgstr "Afgerond"
+msgstr "Deelnames"
 
 #, elixir-format
 msgid "vacant.label"
@@ -248,10 +244,6 @@ msgid "language.highlight.title"
 msgstr "Taal"
 
 #, elixir-format
-msgid "started.label"
-msgstr "Gestart"
-
-#, elixir-format
 msgid "add.new.button.short"
 msgstr "Start"
 
@@ -270,3 +262,7 @@ msgstr "Helaas, jouw bijdrage is afgekeurd"
 #, elixir-format
 msgid "task.rejected.text"
 msgstr "De auteur van deze studie heeft jouw bijdrage beoordeeld en wil je het volgende laten weten: \"%{reason}\""
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "participated.label"
+msgstr "Deelgenomen"

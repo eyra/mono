@@ -4,6 +4,8 @@ defmodule Systems.Assignment.Context do
   """
 
   import Ecto.Query, warn: false
+  import CoreWeb.Gettext
+
   require Logger
 
   alias Ecto.Multi
@@ -317,6 +319,27 @@ defmodule Systems.Assignment.Context do
       preload: ^preload
     )
     |> Repo.one()
+  end
+
+  def attention_list_enabled?(%{assignable_experiment: %{survey_tool: tool}})
+      when not is_nil(tool),
+      do: true
+
+  def attention_list_enabled?(%{assignable_experiment: %{lab_tool: tool}}) when not is_nil(tool),
+    do: false
+
+  def task_labels(%{assignable_experiment: %{lab_tool: tool}}) when not is_nil(tool) do
+    %{
+      pending: dgettext("link-lab", "pending.label"),
+      participated: dgettext("link-lab", "participated.label")
+    }
+  end
+
+  def task_labels(%{assignable_experiment: %{survey_tool: tool}}) when not is_nil(tool) do
+    %{
+      pending: dgettext("link-survey", "pending.label"),
+      participated: dgettext("link-survey", "participated.label")
+    }
   end
 end
 

@@ -55,10 +55,6 @@ msgid "devices.title"
 msgstr ""
 
 #, elixir-format
-msgid "completed.label"
-msgstr ""
-
-#, elixir-format
 msgid "pending.label"
 msgstr ""
 
@@ -247,10 +243,6 @@ msgid "language.highlight.title"
 msgstr ""
 
 #, elixir-format
-msgid "started.label"
-msgstr ""
-
-#, elixir-format
 msgid "add.new.button.short"
 msgstr ""
 
@@ -268,4 +260,8 @@ msgstr ""
 
 #, elixir-format
 msgid "task.rejected.text"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "participated.label"
 msgstr ""

@@ -104,3 +104,11 @@ msgstr "Kies eerst een tijdslot"
 #, elixir-format, ex-autogen
 msgid "update.warning.time.slot.no.longer.available"
 msgstr "Het geselecteerde tijdslot is helaas niet meer beschikbaar, kies een ander tijdslot"
+
+#, elixir-format, ex-autogen
+msgid "participated.label"
+msgstr "Deelgenomen"
+
+#, elixir-format, ex-autogen
+msgid "pending.label"
+msgstr "Gereserveerd"

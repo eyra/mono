@@ -70,6 +70,8 @@ defmodule Systems.Campaign.ContentPage do
     validate? = submitted?
 
     assignment_form_ready? = Assignment.Context.ready?(assignment)
+    attention_list_enabled? = Assignment.Context.attention_list_enabled?(assignment)
+    task_labels = Assignment.Context.task_labels(assignment)
 
     promotion_form_ready? = Promotion.Context.ready?(promotion)
     preview_path = Routes.live_path(socket, Promotion.LandingPage, promotion.id, preview: true)
@@ -86,6 +88,8 @@ defmodule Systems.Campaign.ContentPage do
         validate?: validate?,
         assignment_form_ready?: assignment_form_ready?,
         promotion_form_ready?: promotion_form_ready?,
+        attention_list_enabled?: attention_list_enabled?,
+        task_labels: task_labels,
         preview_path: preview_path,
         initial_tab: initial_tab,
         changesets: %{},
@@ -141,7 +145,9 @@ defmodule Systems.Campaign.ContentPage do
              submission_id: submission_id,
              validate?: validate?,
              assignment_form_ready?: assignment_form_ready?,
-             promotion_form_ready?: promotion_form_ready?
+             promotion_form_ready?: promotion_form_ready?,
+             attention_list_enabled?: attention_list_enabled?,
+             task_labels: task_labels
            }
          } = socket
        ) do
@@ -190,7 +196,9 @@ defmodule Systems.Campaign.ContentPage do
         type: :fullpage,
         component: MonitorView,
         props: %{
-          entity_id: campaign_id
+          entity_id: campaign_id,
+          attention_list_enabled?: attention_list_enabled?,
+          labels: task_labels
         }
       }
     ]

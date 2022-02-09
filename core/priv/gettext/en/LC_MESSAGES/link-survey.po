@@ -56,16 +56,12 @@ msgid "devices.title"
 msgstr "Devices"
 
 #, elixir-format
-msgid "completed.label"
-msgstr "Finished"
-
-#, elixir-format
 msgid "pending.label"
-msgstr "Enrolled"
+msgstr "Pending"
 
 #, elixir-format
 msgid "status.title"
-msgstr "Finished"
+msgstr "Participations"
 
 #, elixir-format
 msgid "vacant.label"
@@ -248,10 +244,6 @@ msgid "language.highlight.title"
 msgstr "Language"
 
 #, elixir-format
-msgid "started.label"
-msgstr "Started"
-
-#, elixir-format
 msgid "add.new.button.short"
 msgstr "New"
 
@@ -270,3 +262,7 @@ msgstr "Unfortunately, your contribution is rejected"
 #, elixir-format
 msgid "task.rejected.text"
 msgstr "The author of this study reviewed your contribution and wrote the following message: \"%{reason}\""
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "participated.label"
+msgstr "Participated"

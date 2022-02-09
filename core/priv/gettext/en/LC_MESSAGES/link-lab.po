@@ -104,3 +104,11 @@ msgstr "Please select a time slot first"
 #, elixir-format, ex-autogen
 msgid "update.warning.time.slot.no.longer.available"
 msgstr "Selected time slot is no longer available, please select a different one"
+
+#, elixir-format, ex-autogen
+msgid "participated.label"
+msgstr "Participated"
+
+#, elixir-format, ex-autogen
+msgid "pending.label"
+msgstr "Reserved"

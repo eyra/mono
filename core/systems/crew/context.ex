@@ -137,23 +137,14 @@ defmodule Systems.Crew.Context do
     |> Repo.all()
   end
 
-  def count_started_tasks(crew) do
+  def count_pending_tasks(crew) do
     from(t in task_query(crew, [:pending], false),
-      where: not is_nil(t.started_at),
       select: count(t.id)
     )
     |> Repo.one()
   end
 
-  def count_applied_tasks(crew) do
-    from(t in task_query(crew, [:pending], false),
-      where: is_nil(t.started_at),
-      select: count(t.id)
-    )
-    |> Repo.one()
-  end
-
-  def count_finished_tasks(crew) do
+  def count_participated_tasks(crew) do
     count_tasks(crew, [:completed, :rejected, :accepted])
   end
 
