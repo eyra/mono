@@ -167,6 +167,10 @@ defmodule Systems.Crew.Context do
     |> Enum.map(&Repo.insert!(&1))
   end
 
+  def cancel_task(%Crew.TaskModel{} = task) do
+    update_task(task, %{started_at: nil})
+  end
+
   def start_task(%Crew.TaskModel{} = task) do
     update_task(task, %{started_at: Timestamp.naive_now()})
   end
@@ -295,7 +299,7 @@ defmodule Systems.Crew.Context do
 
   def apply_member(%Crew.Model{} = crew, %User{} = user, expire_at \\ nil) do
     if member = get_expired_member(crew, user) do
-      member = reset_expired_member(member, expire_at)
+      member = reset_member(member, expire_at)
       {:ok, %{member: member}}
     else
       Multi.new()
@@ -340,7 +344,15 @@ defmodule Systems.Crew.Context do
     |> Repo.one()
   end
 
-  def reset_expired_member(%Crew.MemberModel{} = member, expire_at) do
+  def list_members(%Crew.Model{} = crew) do
+    from(m in Crew.MemberModel,
+      where: m.crew_id == ^crew.id and m.expired == false,
+      preload: [:user]
+    )
+    |> Repo.all()
+  end
+
+  def reset_member(%Crew.MemberModel{} = member, expire_at) do
     member_query = from(m in Crew.MemberModel, where: m.id == ^member.id)
     task_query = from(t in Crew.TaskModel, where: t.member_id == ^member.id)
 
@@ -353,14 +365,6 @@ defmodule Systems.Crew.Context do
 
     from(m in Crew.MemberModel, where: m.id == ^member.id)
     |> Repo.one()
-  end
-
-  def list_members(%Crew.Model{} = crew) do
-    from(m in Crew.MemberModel,
-      where: m.crew_id == ^crew.id and m.expired == false,
-      preload: [:user]
-    )
-    |> Repo.all()
   end
 
   def member?(crew, user) do

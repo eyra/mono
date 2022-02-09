@@ -151,7 +151,7 @@ defmodule Systems.Campaign.AssemblyTest do
 
       assert principal_id === researcher.id
 
-      {:ok, owner} = Assignment.Context.owner(assignment)
+      owner = Assignment.Context.owner!(assignment)
       assert owner.id == researcher.id
     end
 

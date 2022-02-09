@@ -83,6 +83,7 @@ defmodule Systems.Observatory.Context do
           socket
           |> Context.update_view_model(model, __MODULE__)
           |> handle_view_model_updated()
+          |> Frameworks.Pixel.Flash.put_info("Updated")
         }
       end
 

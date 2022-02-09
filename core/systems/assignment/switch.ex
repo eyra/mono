@@ -39,13 +39,31 @@ defmodule Systems.Assignment.Switch do
 
   def dispatch(:crew_task_updated, _task_changeset), do: :noop
 
+  def dispatch(:lab_reservations_cancelled, %{tool: tool, user: user}) do
+    # reset the membership (with new expiration time), so user has time to reserve a spot on a different time slot
+    if experiment = Assignment.Context.get_experiment_by_tool(tool) do
+      experiment
+      |> Assignment.Context.get_by_assignable([:crew])
+      |> Assignment.Context.reset_member(user)
+
+      handle(:lab_tool_updated, tool)
+    end
+  end
+
   def dispatch(signal, %{director: :assignment} = object) do
     handle(signal, object)
   end
 
-  def handle(:survey_tool_updated, tool), do: handle(:assignable_updated, tool)
-  def handle(:lab_tool_updated, tool), do: handle(:assignable_updated, tool)
-  def handle(:data_donation_tool_updated, tool), do: handle(:assignable_updated, tool)
+  def handle(:survey_tool_updated, tool), do: handle(:tool_updated, tool)
+  def handle(:lab_tool_updated, tool), do: handle(:tool_updated, tool)
+  def handle(:data_donation_tool_updated, tool), do: handle(:tool_updated, tool)
+
+  def handle(:tool_updated, tool) do
+    experiment = Assignment.Context.get_experiment_by_tool(tool)
+    handle(:experiment_updated, experiment)
+  end
+
+  def handle(:experiment_updated, experiment), do: handle(:assignable_updated, experiment)
 
   def handle(:assignable_updated, assignable) do
     assignment = Assignment.Context.get_by_assignable(assignable)

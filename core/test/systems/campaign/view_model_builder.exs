@@ -34,7 +34,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
     test "With applied member", %{campaign: campaign, user: user} do
       member = Crew.Context.apply_member!(campaign.promotable_assignment.crew, user)
 
-      view_model = ViewModelBuilder.view_model(campaign, Assignment.LandingPage, user)
+      view_model = Campaign.Builders.AssignmentLandingPage.view_model(campaign, user)
 
       assert %{
                call_to_action: %{
@@ -59,7 +59,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
       task = Crew.Context.get_task(campaign.promotable_assignment.crew, member)
       Crew.Context.start_task(task)
 
-      view_model = ViewModelBuilder.view_model(campaign, Assignment.LandingPage, user)
+      view_model = Campaign.Builders.AssignmentLandingPage.view_model(campaign, user)
 
       assert %{
                call_to_action: %{
@@ -87,7 +87,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
       Crew.Context.start_task(task)
       Crew.Context.complete_task(task)
 
-      view_model = ViewModelBuilder.view_model(campaign, Assignment.LandingPage, user)
+      view_model = Campaign.Builders.AssignmentLandingPage.view_model(campaign, user)
 
       assert %{
                call_to_action: %{
@@ -117,7 +117,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
       _submission = Factories.insert!(:submission, %{reward_value: 5, promotion: promotion})
 
       campaign = Campaign.Context.get!(id, Campaign.Model.preload_graph(:full))
-      view_model = ViewModelBuilder.view_model(campaign, Assignment.LandingPage, user)
+      view_model = Campaign.Builders.AssignmentLandingPage.view_model(campaign, user)
 
       assert %{
                call_to_action: %{
@@ -186,7 +186,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
     end
 
     test "With 0 applications yet", %{campaign: campaign, user: user, author: author} do
-      view_model = ViewModelBuilder.view_model(campaign, Promotion.LandingPage, user)
+      view_model = Campaign.Builders.PromotionLandingPage.view_model(campaign, user)
 
       assert %{
                banner_photo_url: "https://eyra.co/image/1",
@@ -223,7 +223,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
     test "With 1 application", %{campaign: campaign, user: user} do
       user2 = Factories.insert!(:member)
       member = Crew.Context.apply_member!(campaign.promotable_assignment.crew, user2)
-      view_model = ViewModelBuilder.view_model(campaign, Promotion.LandingPage, user)
+      view_model = Campaign.Builders.PromotionLandingPage.view_model(campaign, user)
 
       assert %{
                highlights: [

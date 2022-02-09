@@ -33,9 +33,7 @@ defmodule CoreWeb.User.Profile do
       |> assign(
         tabs: tabs,
         initial_tab: initial_tab,
-        changesets: %{},
-        save_timer: nil,
-        hide_flash_timer: nil
+        changesets: %{}
       )
       |> assign_viewport()
       |> assign_breakpoint()

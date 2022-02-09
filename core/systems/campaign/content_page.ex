@@ -89,8 +89,6 @@ defmodule Systems.Campaign.ContentPage do
         preview_path: preview_path,
         initial_tab: initial_tab,
         changesets: %{},
-        save_timer: nil,
-        hide_flash_timer: nil,
         dialog: nil,
         popup: nil
       )

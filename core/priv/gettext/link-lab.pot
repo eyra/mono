@@ -71,3 +71,35 @@ msgstr ""
 #, elixir-format, ex-autogen
 msgid "edit.day.button"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "timeslot.selector.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "timeslot.submit.button"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "apply.cta.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "no.reservation.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "open.cta.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "reservation.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "submit.warning.no.selection"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "update.warning.time.slot.no.longer.available"
+msgstr ""

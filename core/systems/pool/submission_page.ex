@@ -73,8 +73,6 @@ defmodule Systems.Pool.SubmissionPage do
         validate?: validate?,
         preview_path: preview_path,
         changesets: %{},
-        save_timer: nil,
-        hide_flash_timer: nil,
         dialog: nil
       )
       |> update_menus()

@@ -61,24 +61,6 @@ defmodule Systems.Lab.ContextTest do
       assert Lab.Context.reservation_for_user(lab_tool, member) == new_reservation
       assert new_reservation != initial_reservation
     end
-
-    test "disallows reservation on time slots that have already started", %{
-      member: member
-    } do
-      lab_tool =
-        Factories.insert!(:lab_tool, %{
-          time_slots: [
-            %{
-              start_time: Faker.DateTime.backward(365) |> DateTime.truncate(:second),
-              location: Faker.Lorem.sentence(),
-              number_of_seats: 9
-            }
-          ]
-        })
-
-      [slot | _] = lab_tool.time_slots
-      assert {:error, :time_slot_is_in_the_past} == Lab.Context.reserve_time_slot(slot, member)
-    end
   end
 
   describe "reservation_for_user/2" do

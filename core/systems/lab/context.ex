@@ -4,6 +4,11 @@ defmodule Systems.Lab.Context do
   alias Systems.Lab.VUDaySchedule, as: DaySchedule
 
   alias Core.Repo
+  alias Ecto.Multi
+
+  alias Frameworks.{
+    Signal
+  }
 
   alias Systems.{
     Lab
@@ -25,6 +30,24 @@ defmodule Systems.Lab.Context do
     |> Repo.insert()
   end
 
+  def update_tool(changeset) do
+    with {:ok, %{tool: tool} = result} <-
+           Multi.new()
+           |> Multi.update(:tool, changeset)
+           |> Repo.transaction() do
+      Signal.Context.dispatch!(:lab_tool_updated, tool)
+      {:ok, result}
+    end
+  end
+
+  def get_time_slot(id, preload \\ []) do
+    from(ts in Lab.TimeSlotModel,
+      where: ts.id == ^id,
+      preload: ^preload
+    )
+    |> Repo.one()
+  end
+
   def get_time_slots(id, preload \\ []) do
     from(ts in Lab.TimeSlotModel,
       where: ts.tool_id == ^id and ts.enabled? == true,
@@ -32,6 +55,11 @@ defmodule Systems.Lab.Context do
       preload: ^preload
     )
     |> Repo.all()
+  end
+
+  def get_available_time_slots(id) do
+    get_time_slots(id, [:reservations])
+    |> Enum.filter(&(&1.number_of_seats > Enum.count(&1.reservations)))
   end
 
   def new_day_model(%Lab.ToolModel{id: id}) do
@@ -141,6 +169,8 @@ defmodule Systems.Lab.Context do
       ) do
     entries
     |> Enum.each(&submit_day_entry(&1, tool, og_date, og_location, date, location))
+
+    Signal.Context.dispatch!(:lab_tool_updated, tool)
   end
 
   defp submit_day_entry(
@@ -186,9 +216,16 @@ defmodule Systems.Lab.Context do
     from = Timestamp.from_date_and_time(date, 0)
     to = Timestamp.from_date_and_time(date, 0) |> Timestamp.shift_days(1)
 
-    tool
-    |> time_slot_query(from, to, location)
-    |> Repo.delete_all()
+    with {count, nil} <-
+           tool
+           |> time_slot_query(from, to, location)
+           |> Repo.update_all(set: [enabled?: false]) do
+      if count > 0 do
+        Signal.Context.dispatch!(:lab_tool_updated, tool)
+      end
+
+      {count, nil}
+    end
   end
 
   defp create_time_slot(%Lab.ToolModel{} = tool, attrs) do
@@ -229,21 +266,22 @@ defmodule Systems.Lab.Context do
     |> reserve_time_slot(user)
   end
 
-  def reserve_time_slot(%Lab.TimeSlotModel{} = time_slot, %User{} = user) do
-    # Disallow reservations for past time slots
-    if DateTime.compare(time_slot.start_time, DateTime.now!("Etc/UTC")) == :lt do
-      {:error, :time_slot_is_in_the_past}
-    else
-      # First cancel any existing reservations for the same lab
-      cancel_reservations(time_slot.tool_id, user)
+  def reserve_time_slot(%Lab.TimeSlotModel{tool_id: tool_id} = time_slot, %User{} = user) do
+    cancel_reservations(time_slot.tool_id, user)
 
-      %Lab.ReservationModel{}
-      |> Lab.ReservationModel.changeset(%{
-        status: :reserved,
-        user_id: user.id,
-        time_slot_id: time_slot.id
-      })
-      |> Repo.insert()
+    with {:ok, reservation} <-
+           %Lab.ReservationModel{}
+           |> Lab.ReservationModel.changeset(%{
+             status: :reserved,
+             user_id: user.id,
+             time_slot_id: time_slot.id
+           })
+           |> Repo.insert(
+             conflict_target: [:user_id, :time_slot_id],
+             on_conflict: {:replace, [:status]}
+           ) do
+      Signal.Context.dispatch!(:lab_tool_updated, get(tool_id))
+      {:ok, reservation}
     end
   end
 
@@ -258,10 +296,15 @@ defmodule Systems.Lab.Context do
 
   defp cancel_reservations(tool_id, %User{} = user) when is_integer(tool_id) do
     query = reservation_query(tool_id, user)
-    {update_count, _} = Repo.update_all(query, set: [status: :cancelled])
 
-    unless update_count < 2 do
-      throw(:more_than_one_reservation_should_not_happen)
+    with {update_count, _} <- Repo.update_all(query, set: [status: :cancelled]) do
+      if update_count > 0 do
+        Signal.Context.dispatch!(:lab_reservations_cancelled, %{tool: get(tool_id), user: user})
+      end
+
+      unless update_count < 2 do
+        throw(:more_than_one_reservation_should_not_happen)
+      end
     end
   end
 
@@ -283,5 +326,11 @@ defmodule Systems.Lab.Context do
       |> Lab.ToolModel.operational_changeset(Map.from_struct(lab_tool))
 
     changeset.valid?
+  end
+end
+
+defimpl Core.Persister, for: Systems.Lab.ToolModel do
+  def save(_tool, changeset) do
+    Systems.Lab.Context.update_tool(changeset)
   end
 end

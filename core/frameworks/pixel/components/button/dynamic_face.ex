@@ -8,7 +8,8 @@ defmodule Frameworks.Pixel.Button.DynamicFace do
     LabelIcon,
     PrimaryIcon,
     Icon,
-    Forward
+    Plain,
+    PlainIcon
   }
 
   prop(vm, :map, required: true)
@@ -22,7 +23,9 @@ defmodule Frameworks.Pixel.Button.DynamicFace do
   defp face(%{type: :label, icon: _icon}), do: LabelIcon
   defp face(%{type: :secondary}), do: Secondary
   defp face(%{type: :label}), do: Label
-  defp face(%{type: :forward}), do: Forward
+  defp face(%{type: :forward}), do: Plain
+  defp face(%{type: :plain, icon: _icon}), do: PlainIcon
+  defp face(%{type: :plain}), do: Plain
   defp face(%{type: :icon}), do: Icon
   defp face(_), do: Primary
 

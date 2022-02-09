@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.LandingPageTest do
-  use CoreWeb.ConnCase
+  use CoreWeb.ConnCase, async: false
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 
@@ -115,15 +115,12 @@ defmodule Systems.Assignment.LandingPageTest do
       {:ok, view, _html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
 
-      assert %Systems.Crew.TaskModel{started_at: started_at} = task
-      assert started_at == nil
-
       html =
         view
         |> element("[phx-click=\"call-to-action\"]")
         |> render_click()
 
-      assert html == {:error, {:redirect, %{to: "https://eyra.co/fake_survey?panl_id=1"}}}
+      assert {:error, {:redirect, %{to: "https://eyra.co/fake_survey?panl_id=1"}}} = html
 
       task = Crew.Context.get_task!(task.id)
       assert %Systems.Crew.TaskModel{started_at: started_at, updated_at: updated_at} = task

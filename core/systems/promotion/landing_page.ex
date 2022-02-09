@@ -117,13 +117,9 @@ defmodule Systems.Promotion.LandingPage do
   def handle_event(
         "call-to-action",
         _params,
-        %{assigns: %{model: model, vm: %{call_to_action: call_to_action}}} = socket
+        %{assigns: %{vm: %{call_to_action: %{handle: handle}}}} = socket
       ) do
-    {
-      :noreply,
-      socket
-      |> call_to_action.handle.(call_to_action, model)
-    }
+    {:noreply, handle.(socket)}
   end
 
   @impl true

@@ -40,12 +40,11 @@ defmodule Systems.Assignment.CallbackPage do
         _params,
         %{
           assigns: %{
-            model: model,
-            vm: %{call_to_action: call_to_action}
+            vm: %{call_to_action: %{handle: handle}}
           }
         } = socket
       ) do
-    {:noreply, socket |> call_to_action.handle.(call_to_action, model)}
+    {:noreply, handle.(socket)}
   end
 
   def render(assigns) do

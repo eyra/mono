@@ -15,7 +15,7 @@ defmodule Systems.Campaign.OverviewPage do
   alias Frameworks.Pixel.Grid.DynamicGrid
   alias Frameworks.Pixel.Text.Title2
   alias Frameworks.Pixel.Button.Action.Send
-  alias Frameworks.Pixel.Button.Face.Forward
+  alias Frameworks.Pixel.Button.Face.PlainIcon
   alias Frameworks.Pixel.ShareView
 
   data(campaigns, :list, default: [])
@@ -229,10 +229,10 @@ defmodule Systems.Campaign.OverviewPage do
               <div class="h-full pt-2px lg:pt-1">
                 <Send vm={%{event: "create_campaign" }}>
                   <div class="sm:hidden">
-                    <Forward vm={label: dgettext("link-survey", "add.new.button.short")} />
+                    <PlainIcon vm={label: dgettext("link-survey", "add.new.button.short"), icon: :forward} />
                   </div>
                   <div class="hidden sm:block">
-                    <Forward vm={label: dgettext("link-survey", "add.new.button")} />
+                    <PlainIcon vm={label: dgettext("link-survey", "add.new.button"), icon: :forward} />
                   </div>
                 </Send>
               </div>

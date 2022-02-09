@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-format
 msgid "cancel.button"
-msgstr "Release spot"
+msgstr "Cancel"
 
 #, elixir-format
 msgid "cancel.confirm.label"
@@ -26,14 +26,6 @@ msgstr "We will release your spot to enable others to participate."
 #, elixir-format
 msgid "cancel.confirm.title"
 msgstr "Release spot?"
-
-#, elixir-format
-msgid "cancel.text"
-msgstr "If, for any reason, you decide that you don't want to proceed with your participation. Please release your spot, to give others the opportunity to participate."
-
-#, elixir-format
-msgid "cancel.title"
-msgstr "Having second thoughts about participating?"
 
 #, elixir-format
 msgid "contact.button"

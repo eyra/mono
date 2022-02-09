@@ -180,6 +180,7 @@ module.exports = {
         "popup-lg": "1228px"
       },
       maxHeight: {
+        "dropdown": "317px",
         "header1": "376px",
         "form": "400px"
       },

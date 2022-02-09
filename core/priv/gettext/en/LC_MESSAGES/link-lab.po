@@ -72,3 +72,35 @@ msgstr "Duplicate"
 #, elixir-format, ex-autogen, fuzzy
 msgid "edit.day.button"
 msgstr "Edit"
+
+#, elixir-format, ex-autogen
+msgid "timeslot.selector.label"
+msgstr "Select a time slot"
+
+#, elixir-format, ex-autogen
+msgid "timeslot.submit.button"
+msgstr "Reserve a seat"
+
+#, elixir-format, ex-autogen
+msgid "apply.cta.title"
+msgstr "Participate"
+
+#, elixir-format, ex-autogen
+msgid "no.reservation.title"
+msgstr "Make a reservation"
+
+#, elixir-format, ex-autogen
+msgid "open.cta.title"
+msgstr "Proceed"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "reservation.title"
+msgstr "Reservation"
+
+#, elixir-format, ex-autogen
+msgid "submit.warning.no.selection"
+msgstr "Please select a time slot first"
+
+#, elixir-format, ex-autogen
+msgid "update.warning.time.slot.no.longer.available"
+msgstr "Selected time slot is no longer available, please select a different one"

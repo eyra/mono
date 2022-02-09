@@ -64,6 +64,7 @@ defmodule CoreWeb do
       use Surface.LiveView,
         layout: {CoreWeb.LayoutView, "live.html"}
 
+      use Frameworks.Pixel.Flash
       use Systems.Observatory.Context
 
       import Phoenix.Controller,

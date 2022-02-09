@@ -72,3 +72,35 @@ msgstr "Dupliceren"
 #, elixir-format, ex-autogen, fuzzy
 msgid "edit.day.button"
 msgstr "Bekijk"
+
+#, elixir-format, ex-autogen
+msgid "timeslot.selector.label"
+msgstr "Selecteer een tijdslot"
+
+#, elixir-format, ex-autogen
+msgid "timeslot.submit.button"
+msgstr "Reserveer een plek"
+
+#, elixir-format, ex-autogen
+msgid "apply.cta.title"
+msgstr "Ik doe mee"
+
+#, elixir-format, ex-autogen
+msgid "no.reservation.title"
+msgstr "Maak een reservering"
+
+#, elixir-format, ex-autogen
+msgid "open.cta.title"
+msgstr "Doorgaan"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "reservation.title"
+msgstr "Reservering"
+
+#, elixir-format, ex-autogen
+msgid "submit.warning.no.selection"
+msgstr "Kies eerst een tijdslot"
+
+#, elixir-format, ex-autogen
+msgid "update.warning.time.slot.no.longer.available"
+msgstr "Het geselecteerde tijdslot is helaas niet meer beschikbaar, kies een ander tijdslot"

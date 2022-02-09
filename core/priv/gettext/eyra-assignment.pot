@@ -27,14 +27,6 @@ msgid "cancel.confirm.title"
 msgstr ""
 
 #, elixir-format
-msgid "cancel.text"
-msgstr ""
-
-#, elixir-format
-msgid "cancel.title"
-msgstr ""
-
-#, elixir-format
 msgid "contact.button"
 msgstr ""
 
