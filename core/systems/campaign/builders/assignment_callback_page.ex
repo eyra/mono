@@ -31,7 +31,7 @@ defmodule Systems.Campaign.Builders.AssignmentCallbackPage do
   end
 
   defp state(%{crew: crew} = assignment, user) do
-    if Assignment.Context.complete_task(assignment, user) do
+    if Assignment.Context.activate_task(assignment, user) do
       :participant
     else
       if Authorization.user_has_role?(user, crew, :tester) do

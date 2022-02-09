@@ -162,19 +162,19 @@ defmodule Systems.Crew.Context do
     update_task(task, %{started_at: nil})
   end
 
-  def start_task(%Crew.TaskModel{} = task) do
+  def lock_task(%Crew.TaskModel{} = task) do
     update_task(task, %{started_at: Timestamp.naive_now()})
   end
 
-  def complete_task(%Crew.TaskModel{status: status} = task) do
+  def activate_task(%Crew.TaskModel{status: status} = task) do
     case status do
       :pending -> update_task(task, %{status: :completed, completed_at: Timestamp.naive_now()})
       _ -> {:ok, %{task: task}}
     end
   end
 
-  def complete_task!(%Crew.TaskModel{} = task) do
-    case Crew.Context.complete_task(task) do
+  def activate_task!(%Crew.TaskModel{} = task) do
+    case Crew.Context.activate_task(task) do
       {:ok, %{task: task}} -> task
       _ -> nil
     end
@@ -347,11 +347,12 @@ defmodule Systems.Crew.Context do
     member_query = from(m in Crew.MemberModel, where: m.id == ^member.id)
     task_query = from(t in Crew.TaskModel, where: t.member_id == ^member.id)
 
-    attrs = [expired: false, expire_at: expire_at]
+    member_attrs = Crew.MemberModel.reset_attrs(expire_at)
+    task_attrs = Crew.TaskModel.reset_attrs(expire_at)
 
     Multi.new()
-    |> Multi.update_all(:member, member_query, set: attrs)
-    |> Multi.update_all(:tasks, task_query, set: attrs)
+    |> Multi.update_all(:member, member_query, set: member_attrs)
+    |> Multi.update_all(:tasks, task_query, set: task_attrs)
     |> Repo.transaction()
 
     from(m in Crew.MemberModel, where: m.id == ^member.id)

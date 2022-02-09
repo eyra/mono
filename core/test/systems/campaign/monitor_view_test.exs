@@ -166,7 +166,7 @@ defmodule Systems.Campaign.MonitorViewTest do
       %{id: id, promotable_assignment: %{crew: crew}} = create_campaign(user, :accepted, 1)
 
       {:ok, %{task: task}} = Crew.Context.apply_member(crew, user)
-      Crew.Context.complete_task(task)
+      Crew.Context.activate_task(task)
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 

@@ -57,7 +57,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
     test "With started member", %{campaign: campaign, user: user} do
       member = Crew.Context.apply_member!(campaign.promotable_assignment.crew, user)
       task = Crew.Context.get_task(campaign.promotable_assignment.crew, member)
-      Crew.Context.start_task(task)
+      Crew.Context.lock_task(task)
 
       view_model = Campaign.Builders.AssignmentLandingPage.view_model(campaign, user)
 
@@ -84,8 +84,8 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
     test "With finished member", %{campaign: campaign, user: user} do
       member = Crew.Context.apply_member!(campaign.promotable_assignment.crew, user)
       task = Crew.Context.get_task(campaign.promotable_assignment.crew, member)
-      Crew.Context.start_task(task)
-      Crew.Context.complete_task(task)
+      Crew.Context.lock_task(task)
+      Crew.Context.activate_task(task)
 
       view_model = Campaign.Builders.AssignmentLandingPage.view_model(campaign, user)
 

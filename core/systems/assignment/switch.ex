@@ -50,6 +50,16 @@ defmodule Systems.Assignment.Switch do
     end
   end
 
+  def dispatch(:lab_reservation_created, %{tool: tool, user: user}) do
+    if experiment = Assignment.Context.get_experiment_by_tool(tool) do
+      experiment
+      |> Assignment.Context.get_by_assignable([:crew])
+      |> Assignment.Context.lock_task(user)
+
+      handle(:lab_tool_updated, tool)
+    end
+  end
+
   def dispatch(signal, %{director: :assignment} = object) do
     handle(signal, object)
   end

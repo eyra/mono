@@ -280,7 +280,14 @@ defmodule Systems.Lab.Context do
              conflict_target: [:user_id, :time_slot_id],
              on_conflict: {:replace, [:status]}
            ) do
-      Signal.Context.dispatch!(:lab_tool_updated, get(tool_id))
+      tool = get(tool_id)
+
+      Signal.Context.dispatch!(:lab_reservation_created, %{
+        tool: tool,
+        user: user,
+        time_slot: time_slot
+      })
+
       {:ok, reservation}
     end
   end

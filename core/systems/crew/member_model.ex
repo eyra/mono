@@ -23,4 +23,11 @@ defmodule Systems.Crew.MemberModel do
     member
     |> cast(attrs, [:public_id, :expire_at, :expired])
   end
+
+  def reset_attrs(expire_at) do
+    [
+      expired: false,
+      expire_at: expire_at
+    ]
+  end
 end

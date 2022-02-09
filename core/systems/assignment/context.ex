@@ -179,13 +179,23 @@ defmodule Systems.Assignment.Context do
     get!(id) |> cancel(user)
   end
 
-  def complete_task(%{crew: crew} = _assignment, user) do
+  def lock_task(%{crew: crew} = _assignment, user) do
     if Crew.Context.member?(crew, user) do
       member = Crew.Context.get_member!(crew, user)
       task = Crew.Context.get_task(crew, member)
-      Crew.Context.complete_task!(task)
+      Crew.Context.lock_task(task)
     else
-      nil
+      Logger.warn("Can not lock task for non member")
+    end
+  end
+
+  def activate_task(%{crew: crew} = _assignment, user) do
+    if Crew.Context.member?(crew, user) do
+      member = Crew.Context.get_member!(crew, user)
+      task = Crew.Context.get_task(crew, member)
+      Crew.Context.activate_task!(task)
+    else
+      Logger.warn("Can not complete task for non member")
     end
   end
 

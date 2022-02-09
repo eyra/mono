@@ -36,4 +36,18 @@ defmodule Systems.Crew.TaskModel do
     |> cast(attrs, @fields)
     |> validate_required([:status])
   end
+
+  def reset_attrs(expire_at) do
+    [
+      status: :pending,
+      started_at: nil,
+      completed_at: nil,
+      accepted_at: nil,
+      rejected_at: nil,
+      expired: false,
+      expire_at: expire_at,
+      rejected_category: nil,
+      rejected_message: nil
+    ]
+  end
 end

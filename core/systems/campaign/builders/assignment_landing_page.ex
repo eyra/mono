@@ -191,7 +191,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
   def handle_open(%{user: user, crew: crew, path: path}, socket) do
     member = Crew.Context.get_member!(crew, user)
     task = Crew.Context.get_task(crew, member)
-    Crew.Context.start_task(task)
+    Crew.Context.lock_task(task)
     LiveView.redirect(socket, external: path)
   end
 
