@@ -6,6 +6,8 @@ defmodule Systems.Lab.SearchSubjectView do
   alias Core.Accounts
   alias Systems.Director
   alias Frameworks.Pixel.Form.{Form, NumberInput}
+  alias Frameworks.Pixel.Panel.Panel
+  alias Frameworks.Pixel.Text.{BodyMedium, Title3}
 
   alias Systems.{
     Lab
@@ -85,34 +87,41 @@ defmodule Systems.Lab.SearchSubjectView do
   def render(assigns) do
     ~F"""
       <div phx-click="reset_focus" phx-target={@myself}>
-        <Form id="search_subject" changeset={@changeset} change_event="update" submit="submit" target={@myself} focus={@focus}>
-          <div class="w-44">
-            <NumberInput field={:query} label_text={dgettext("link-lab", "search.subject.query.label")} reserve_error_space={false} debounce="300" background={:dark} label_color="text-white"/>
-          </div>
-          <div :if={@query != nil}>
-            <div :if={@subject != nil}>
-              <Spacing value="S"/>
-              <div class="flex flex-row gap-8 sm:items-center">
-                <div class="font-body text-bodymedium sm:text-bodylarge flex-wrap text-white">
-                  Subject {@subject.public_id}
-                </div>
-                <div class="font-body text-bodysmall sm:text-bodymedium text-white" >
-                  <span class="whitespace-pre-wrap">{@subject.message}</span>
-                </div>
-                <div class="flex-wrap flex-shrink-0">
-                  <div class="flex flex-row gap-4">
-                    <DynamicButton :for={button <- @subject.buttons} vm={button} />
+        <Panel bg_color="bg-grey1">
+          <Title3 color="text-white">{dgettext("link-lab", "search.subject.title")}</Title3>
+          <Spacing value="M" />
+          <BodyMedium color="text-white">{dgettext("link-lab", "search.subject.body")}</BodyMedium>
+          <Spacing value="S" />
+
+          <Form id="search_subject" changeset={@changeset} change_event="update" submit="submit" target={@myself} focus={@focus}>
+            <div class="w-44">
+              <NumberInput field={:query} label_text={dgettext("link-lab", "search.subject.query.label")} reserve_error_space={false} debounce="300" background={:dark} label_color="text-white"/>
+            </div>
+            <div :if={@query != nil}>
+              <div :if={@subject != nil}>
+                <Spacing value="S"/>
+                <div class="flex flex-row gap-8 sm:items-center">
+                  <div class="font-body text-bodymedium sm:text-bodylarge flex-wrap text-white">
+                    Subject {@subject.public_id}
+                  </div>
+                  <div class="font-body text-bodysmall sm:text-bodymedium text-white" >
+                    <span class="whitespace-pre-wrap">{@subject.message}</span>
+                  </div>
+                  <div class="flex-wrap flex-shrink-0">
+                    <div class="flex flex-row gap-4">
+                      <DynamicButton :for={button <- @subject.buttons} vm={button} />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div :if={@subject == nil}>
-              <div class="text-caption font-caption text-tertiary">
-                {dgettext("link-lab", "search.subject.not.found")}
+              <div :if={@subject == nil}>
+                <div class="text-caption font-caption text-tertiary">
+                  {dgettext("link-lab", "search.subject.not.found")}
+                </div>
               </div>
             </div>
-          </div>
-        </Form>
+          </Form>
+        </Panel>
       </div>
     """
   end

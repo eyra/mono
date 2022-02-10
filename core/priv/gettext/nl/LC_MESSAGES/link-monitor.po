@@ -37,7 +37,7 @@ msgstr "Onderstaande deelnemers wachten op goedkeuring van hun werk."
 
 #, elixir-format
 msgid "waitinglist.title"
-msgstr "Wachtlijst"
+msgstr "Deelgenomen"
 
 #, elixir-format
 msgid "accepted.title"

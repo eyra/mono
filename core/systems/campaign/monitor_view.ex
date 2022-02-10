@@ -3,7 +3,6 @@ defmodule Systems.Campaign.MonitorView do
 
   alias CoreWeb.UI.{Timestamp, ProgressBar, Popup}
   alias Frameworks.Pixel.Container.Wrap
-  alias Frameworks.Pixel.Panel.Panel
 
   alias Systems.{
     Crew,
@@ -11,7 +10,7 @@ defmodule Systems.Campaign.MonitorView do
     Lab
   }
 
-  alias Frameworks.Pixel.Text.{Title2, Title3, Title5, BodyLarge, BodyMedium, Label}
+  alias Frameworks.Pixel.Text.{Title2, Title3, BodyLarge, Label}
 
   prop(props, :map, required: true)
 
@@ -130,14 +129,8 @@ defmodule Systems.Campaign.MonitorView do
         <MarginY id={:page_top} />
         <Case value={@vm.active?} >
           <True>
-           <div :if={lab_tool(@vm.experiment) != nil}>
-            <Panel bg_color="bg-grey1">
-                <Title5 color="text-white">{dgettext("link-lab", "search.subject.title")}</Title5>
-                <Spacing value="M" />
-                <BodyMedium color="text-white">{dgettext("link-lab", "search.subject.body")}</BodyMedium>
-                <Spacing value="S" />
-                <Lab.SearchSubjectView id={:search_subject_view} tool={lab_tool(@vm.experiment)} />
-              </Panel>
+            <div :if={lab_tool(@vm.experiment) != nil}>
+              <Lab.SearchSubjectView id={:search_subject_view} tool={lab_tool(@vm.experiment)} />
               <Spacing value="XL" />
             </div>
 

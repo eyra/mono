@@ -115,7 +115,7 @@ msgstr "Reserved"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.title"
-msgstr "Lab subjects"
+msgstr "Check in"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.query.label"

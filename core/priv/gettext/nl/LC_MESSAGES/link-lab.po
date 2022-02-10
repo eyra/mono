@@ -115,7 +115,7 @@ msgstr "Gereserveerd"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.title"
-msgstr "Lab deelnemer aanmelden"
+msgstr "Inchecken"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.query.label"
