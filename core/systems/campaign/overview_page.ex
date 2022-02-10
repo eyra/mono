@@ -7,6 +7,7 @@ defmodule Systems.Campaign.OverviewPage do
   use CoreWeb.UI.PlainDialog
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
+  alias CoreWeb.UI.PlainDialog
   alias CoreWeb.UI.SelectorDialog
   alias Frameworks.Pixel.Button.PrimaryLiveViewButton
 
@@ -20,6 +21,7 @@ defmodule Systems.Campaign.OverviewPage do
 
   data(campaigns, :list, default: [])
   data(share_dialog, :map)
+  data(selector_dialog, :map)
 
   alias Systems.{
     Campaign,
@@ -32,7 +34,8 @@ defmodule Systems.Campaign.OverviewPage do
       socket
       |> assign(
         dialog: nil,
-        share_dialog: nil
+        share_dialog: nil,
+        selector_dialog: nil
       )
       |> update_campaigns()
       |> update_menus()
@@ -50,8 +53,9 @@ defmodule Systems.Campaign.OverviewPage do
     socket
     |> assign(
       campaigns: campaigns,
+      dialog: nil,
       share_dialog: nil,
-      dialog: nil
+      selector_dialog: nil
     )
   end
 
@@ -135,14 +139,19 @@ defmodule Systems.Campaign.OverviewPage do
     preload = Campaign.Model.preload_graph(:full)
     campaign = Campaign.Context.get!(String.to_integer(campaign_id), preload)
 
-    {:ok, %{tool: tool}} = Campaign.Assembly.copy(campaign)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, Campaign.ContentPage, tool.id))}
+    Campaign.Assembly.copy(campaign)
+
+    {
+      :noreply,
+      socket
+      |> update_campaigns()
+      |> update_menus()
+    }
   end
 
   @impl true
   def handle_event("create_campaign", _params, socket) do
-    dialog = %{
-      id: :selector_dialog,
+    selector_dialog = %{
       title: dgettext("link-campaign", "create.campaign.dialog.title"),
       text: dgettext("link-campaign", "create.campaign.dialog.text"),
       items: Assignment.ToolTypes.labels(nil),
@@ -151,7 +160,7 @@ defmodule Systems.Campaign.OverviewPage do
       target: self()
     }
 
-    {:noreply, socket |> assign(dialog: dialog)}
+    {:noreply, socket |> assign(selector_dialog: selector_dialog)}
   end
 
   @impl true
@@ -213,9 +222,16 @@ defmodule Systems.Campaign.OverviewPage do
 
         <div :if={@dialog != nil} class="fixed z-40 left-0 top-0 w-full h-full bg-black bg-opacity-20">
           <div class="flex flex-row items-center justify-center w-full h-full">
-            <SelectorDialog {...@dialog} />
+            <PlainDialog {...@dialog} />
           </div>
         </div>
+
+        <div :if={@selector_dialog != nil} class="fixed z-40 left-0 top-0 w-full h-full bg-black bg-opacity-20">
+          <div class="flex flex-row items-center justify-center w-full h-full">
+            <SelectorDialog id={:selector_dialog} {...@selector_dialog} />
+          </div>
+        </div>
+
         <ContentArea>
           <MarginY id={:page_top} />
           <Case value={Enum.count(@campaigns) > 0} >

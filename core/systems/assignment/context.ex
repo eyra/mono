@@ -15,7 +15,8 @@ defmodule Systems.Assignment.Context do
   alias Core.Accounts
 
   alias Frameworks.{
-    Signal
+    Signal,
+    Utility
   }
 
   alias Systems.{
@@ -131,6 +132,30 @@ defmodule Systems.Assignment.Context do
     |> Ecto.Changeset.put_assoc(:lab_tool, tool)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Repo.insert!()
+  end
+
+  def copy_tool(
+        %Assignment.ExperimentModel{survey_tool: %{auth_node: tool_auth_node} = tool},
+        experiment_auth_node
+      ) do
+    tool_auth_node = Authorization.copy(tool_auth_node, experiment_auth_node)
+    Survey.Context.copy(tool, tool_auth_node)
+  end
+
+  def copy_tool(
+        %Assignment.ExperimentModel{lab_tool: %{auth_node: tool_auth_node} = tool},
+        experiment_auth_node
+      ) do
+    tool_auth_node = Authorization.copy(tool_auth_node, experiment_auth_node)
+    Lab.Context.copy(tool, tool_auth_node)
+  end
+
+  def delete_tool(multi, %{survey_tool: tool}) when not is_nil(tool) do
+    multi |> Utility.EctoHelper.delete(:survey_tool, tool)
+  end
+
+  def delete_tool(multi, %{lab_tool: tool}) when not is_nil(tool) do
+    multi |> Utility.EctoHelper.delete(:lab_tool, tool)
   end
 
   def owner!(%Assignment.Model{} = assignment), do: parent_owner!(assignment)

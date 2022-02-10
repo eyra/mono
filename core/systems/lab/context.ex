@@ -30,6 +30,13 @@ defmodule Systems.Lab.Context do
     |> Repo.insert()
   end
 
+  def copy(%Lab.ToolModel{} = tool, auth_node) do
+    %Lab.ToolModel{}
+    |> Lab.ToolModel.changeset(:copy, Map.from_struct(tool))
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Repo.insert!()
+  end
+
   def update_tool(changeset) do
     with {:ok, %{tool: tool} = result} <-
            Multi.new()
