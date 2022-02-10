@@ -184,12 +184,6 @@ defmodule Systems.Lab.ToolForm do
         <Wrap>
           <DynamicButton vm={@add_day_button} />
         </Wrap>
-        <Spacing value="XL" />
-        <Title3>{dgettext("link-lab", "search.subject.title")}</Title3>
-        <Spacing value="M" />
-        <BodyLarge>{dgettext("link-lab", "search.subject.body")}</BodyLarge>
-        <Spacing value="S" />
-        <Lab.SearchSubjectView id={:search_subject_view} tool={@entity} />
       </div>
     """
   end

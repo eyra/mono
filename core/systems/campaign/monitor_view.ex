@@ -3,13 +3,15 @@ defmodule Systems.Campaign.MonitorView do
 
   alias CoreWeb.UI.{Timestamp, ProgressBar, Popup}
   alias Frameworks.Pixel.Container.Wrap
+  alias Frameworks.Pixel.Panel.Panel
 
   alias Systems.{
     Crew,
-    Campaign
+    Campaign,
+    Lab
   }
 
-  alias Frameworks.Pixel.Text.{Title2, Title3, BodyLarge, Label}
+  alias Frameworks.Pixel.Text.{Title2, Title3, Title5, BodyLarge, BodyMedium, Label}
 
   prop(props, :map, required: true)
 
@@ -115,6 +117,9 @@ defmodule Systems.Campaign.MonitorView do
     }
   end
 
+  defp lab_tool(%{lab_tool: lab_tool}), do: lab_tool
+  defp lab_tool(_), do: nil
+
   @impl true
   def render(assigns) do
     ~F"""
@@ -125,6 +130,17 @@ defmodule Systems.Campaign.MonitorView do
         <MarginY id={:page_top} />
         <Case value={@vm.active?} >
           <True>
+           <div :if={lab_tool(@vm.experiment) != nil}>
+            <Panel bg_color="bg-grey1">
+                <Title5 color="text-white">{dgettext("link-lab", "search.subject.title")}</Title5>
+                <Spacing value="M" />
+                <BodyMedium color="text-white">{dgettext("link-lab", "search.subject.body")}</BodyMedium>
+                <Spacing value="S" />
+                <Lab.SearchSubjectView id={:search_subject_view} tool={lab_tool(@vm.experiment)} />
+              </Panel>
+              <Spacing value="XL" />
+            </div>
+
             <Title2>{dgettext("link-monitor", "phase1.title")}</Title2>
             <Title3 margin={"mb-8"}>{dgettext("link-survey", "status.title")}<span class="text-primary"> {@vm.participated_count}/{@vm.subject_count}</span></Title3>
             <Spacing value="M" />
@@ -255,13 +271,13 @@ defmodule Systems.Campaign.MonitorView do
              assignable_experiment:
                %{
                  subject_count: subject_count
-               } = tool
+               } = experiment
            }
          }
        ) do
     participated_count = Crew.Context.count_participated_tasks(crew)
     pending_count = Crew.Context.count_pending_tasks(crew)
-    vacant_count = tool |> get_vacant_count(participated_count, pending_count)
+    vacant_count = experiment |> get_vacant_count(participated_count, pending_count)
 
     active? = status === :accepted or Crew.Context.active?(crew)
 
@@ -286,6 +302,7 @@ defmodule Systems.Campaign.MonitorView do
       |> to_view_model(:accepted_tasks, target)
 
     %{
+      experiment: experiment,
       active?: active?,
       subject_count: subject_count,
       pending_count: pending_count,
@@ -311,8 +328,8 @@ defmodule Systems.Campaign.MonitorView do
     }
   end
 
-  defp get_vacant_count(tool, finished, pending) do
-    case tool.subject_count do
+  defp get_vacant_count(%{subject_count: subject_count} = _experiment, finished, pending) do
+    case subject_count do
       count when is_nil(count) -> 0
       count when count > 0 -> count - (finished + pending)
       _ -> 0

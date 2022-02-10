@@ -87,16 +87,16 @@ defmodule Systems.Lab.SearchSubjectView do
       <div phx-click="reset_focus" phx-target={@myself}>
         <Form id="search_subject" changeset={@changeset} change_event="update" submit="submit" target={@myself} focus={@focus}>
           <div class="w-44">
-            <NumberInput field={:query} label_text={dgettext("link-lab", "search.subject.query.label")} reserve_error_space={false} debounce="0" />
+            <NumberInput field={:query} label_text={dgettext("link-lab", "search.subject.query.label")} reserve_error_space={false} debounce="300" background={:dark} label_color="text-white"/>
           </div>
-          <Spacing value="S"/>
           <div :if={@query != nil}>
             <div :if={@subject != nil}>
+              <Spacing value="S"/>
               <div class="flex flex-row gap-8 sm:items-center">
-                <div class="font-body text-bodymedium sm:text-bodylarge flex-wrap">
+                <div class="font-body text-bodymedium sm:text-bodylarge flex-wrap text-white">
                   Subject {@subject.public_id}
                 </div>
-                <div class={"font-body text-bodysmall sm:text-bodymedium"} >
+                <div class="font-body text-bodysmall sm:text-bodymedium text-white" >
                   <span class="whitespace-pre-wrap">{@subject.message}</span>
                 </div>
                 <div class="flex-wrap flex-shrink-0">
@@ -107,7 +107,7 @@ defmodule Systems.Lab.SearchSubjectView do
               </div>
             </div>
             <div :if={@subject == nil}>
-              <div class="font-body text-bodymedium sm:text-bodylarge text-grey2">
+              <div class="text-caption font-caption text-tertiary">
                 {dgettext("link-lab", "search.subject.not.found")}
               </div>
             </div>
@@ -180,6 +180,7 @@ defmodule Systems.Lab.SearchSubjectView do
       face: %{
         type: :icon,
         icon: :add,
+        color: :tertiary,
         label: dgettext("link-lab", "search.subject.accept.button")
       }
     }
