@@ -371,6 +371,15 @@ defmodule Systems.Crew.Context do
     |> Repo.exists?()
   end
 
+  def subject(crew, public_id) when is_integer(public_id) do
+    from(m in Crew.MemberModel,
+      where:
+        m.crew_id == ^crew.id and
+          m.public_id == ^public_id
+    )
+    |> Repo.one()
+  end
+
   defp member_query(crew, user, expired \\ false) do
     from(m in Crew.MemberModel,
       where:

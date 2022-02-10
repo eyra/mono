@@ -114,6 +114,11 @@ defmodule Systems.Lab.ToolForm do
   end
 
   @impl true
+  def handle_event("search_subject", _params, %{assigns: %{entity: _entity}} = socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_event("edit_day", %{"item" => index}, %{assigns: %{entity: entity}} = socket) do
     day = get_day(socket, index)
     day_model = Lab.Context.edit_day_model(entity, day)
@@ -179,6 +184,12 @@ defmodule Systems.Lab.ToolForm do
         <Wrap>
           <DynamicButton vm={@add_day_button} />
         </Wrap>
+        <Spacing value="XL" />
+        <Title3>{dgettext("link-lab", "search.subject.title")}</Title3>
+        <Spacing value="M" />
+        <BodyLarge>{dgettext("link-lab", "search.subject.body")}</BodyLarge>
+        <Spacing value="S" />
+        <Lab.SearchSubjectView id={:search_subject_view} tool={@entity} />
       </div>
     """
   end

@@ -312,6 +312,14 @@ defmodule Systems.Campaign.Context do
     |> Repo.all()
   end
 
+  def search_subject(tool, public_id) do
+    Assignment.Context.search_subject(tool, public_id)
+  end
+
+  def activate_task(tool, user_id) do
+    Assignment.Context.activate_task(tool, user_id)
+  end
+
   def ready?(id) do
     # temp solution for checking if campaign is ready to submit,
     # TBD: replace with signal driven db field

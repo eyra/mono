@@ -12,6 +12,7 @@ defmodule Systems.Assignment.Context do
   alias Core.Repo
   alias CoreWeb.UI.Timestamp
   alias Core.Authorization
+  alias Core.Accounts
 
   alias Frameworks.{
     Signal
@@ -41,15 +42,24 @@ defmodule Systems.Assignment.Context do
   def get_by_assignable(assignable, preload \\ [])
 
   def get_by_assignable(%Assignment.ExperimentModel{id: id}, preload) do
-    from(a in Assignment.Model, where: a.assignable_experiment_id == ^id, preload: ^preload)
+    from(a in Assignment.Model,
+      where: a.assignable_experiment_id == ^id,
+      preload: ^preload
+    )
     |> Repo.one()
   end
 
-  def get_by_experiment!(%{id: experiment_id}), do: get_by_experiment!(experiment_id)
+  def get_by_experiment!(experiment, preload \\ [])
 
-  def get_by_experiment!(experiment_id) when is_number(experiment_id) do
-    from(a in Assignment.Model, where: a.experiment_id == ^experiment_id)
-    |> Repo.all()
+  def get_by_experiment!(%{id: experiment_id}, preload),
+    do: get_by_experiment!(experiment_id, preload)
+
+  def get_by_experiment!(experiment_id, preload) when is_number(experiment_id) do
+    from(a in Assignment.Model,
+      where: a.assignable_experiment_id == ^experiment_id,
+      preload: ^preload
+    )
+    |> Repo.one()
   end
 
   def create(%{} = attrs, crew, experiment, auth_node) do
@@ -196,6 +206,20 @@ defmodule Systems.Assignment.Context do
       Crew.Context.activate_task!(task)
     else
       Logger.warn("Can not complete task for non member")
+    end
+  end
+
+  def activate_task(tool, user_id) do
+    if experiment = get_experiment_by_tool(tool) do
+      %{crew: crew} = get_by_experiment!(experiment, [:crew])
+
+      user = Accounts.get_user!(user_id)
+      member = Crew.Context.get_member!(crew, user)
+
+      Crew.Context.get_task(crew, member)
+      |> Crew.Context.activate_task!()
+    else
+      nil
     end
   end
 
@@ -350,6 +374,15 @@ defmodule Systems.Assignment.Context do
       pending: dgettext("link-survey", "pending.label"),
       participated: dgettext("link-survey", "participated.label")
     }
+  end
+
+  def search_subject(tool, public_id) do
+    if experiment = get_experiment_by_tool(tool) do
+      %{crew: crew} = get_by_experiment!(experiment, [:crew])
+      Crew.Context.subject(crew, public_id)
+    else
+      nil
+    end
   end
 end
 

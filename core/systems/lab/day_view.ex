@@ -254,7 +254,7 @@ defmodule Systems.Lab.DayView do
           </div>
           <Spacing value="XS" />
 
-          <Form id="reject_form" changeset={@changeset} change_event="update" submit="submit" target={@myself} focus={@focus} >
+          <Form id="day_view" changeset={@changeset} change_event="update" submit="submit" target={@myself} focus={@focus} >
             <Wrap>
               <DateInput :if={@day_model.date_editable?} field={:date} label_text={dgettext("link-lab", "day.schedule.date.label")} />
             </Wrap>

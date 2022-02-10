@@ -112,3 +112,27 @@ msgstr "Deelgenomen"
 #, elixir-format, ex-autogen
 msgid "pending.label"
 msgstr "Gereserveerd"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.title"
+msgstr "Lab deelnemer aanmelden"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.query.label"
+msgstr "Panl ID"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.body"
+msgstr "Vraag de deelnemer bij binnenkomst om een geldig Panl ID en voer die hieronder in. De reservering verschijnt eronder waarna je de deelnemer kan aanmelden."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.expired"
+msgstr "Reservering is verlopen"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.not.found"
+msgstr "Subject niet gevonden"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.accept.button"
+msgstr "Aanmelden"

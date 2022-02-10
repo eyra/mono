@@ -111,3 +111,27 @@ msgstr ""
 #, elixir-format, ex-autogen
 msgid "pending.label"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.query.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.body"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.expired"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.not.found"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.accept.button"
+msgstr ""

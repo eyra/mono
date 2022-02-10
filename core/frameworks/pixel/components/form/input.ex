@@ -14,6 +14,7 @@ defmodule Frameworks.Pixel.Form.Input do
   prop(label_color, :css_class, default: "text-grey1")
   prop(background, :atom, default: :light)
   prop(disabled, :boolean, default: false)
+  prop(reserve_error_space, :boolean, default: true)
   prop(debounce, :string, default: "1000")
   slot(default)
 
@@ -23,7 +24,7 @@ defmodule Frameworks.Pixel.Form.Input do
         get={Surface.Components.Form, form: form}
       >
         <#slot />
-        <Field form={form} field={@field} label_text={@label_text} label_color={@label_color} background={@background}>
+        <Field form={form} field={@field} label_text={@label_text} label_color={@label_color} background={@background} reserve_error_space={@reserve_error_space}>
           <input :if={@disabled}
             type={@type}
             id={input_id(form, @field)}
