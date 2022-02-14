@@ -1,4 +1,4 @@
-defmodule Systems.Lab.SearchSubjectView do
+defmodule Systems.Lab.CheckInView do
   use CoreWeb.UI.LiveComponent
   import CoreWeb.Gettext
   require Logger
@@ -14,16 +14,17 @@ defmodule Systems.Lab.SearchSubjectView do
   }
 
   prop(tool, :map, required: true)
+  prop(parent, :any, required: true)
 
   data(changeset, :map)
   data(subject, :map)
   data(query, :string)
   data(focus, :string, default: "")
 
-  def update(%{id: id, tool: tool}, socket) do
+  def update(%{id: id, tool: tool, parent: parent}, socket) do
     changeset =
-      %Lab.SearchSubjectModel{}
-      |> Lab.SearchSubjectModel.changeset(:init, %{})
+      %Lab.CheckInModel{}
+      |> Lab.CheckInModel.changeset(:init, %{})
 
     {
       :ok,
@@ -31,6 +32,7 @@ defmodule Systems.Lab.SearchSubjectView do
       |> assign(
         id: id,
         tool: tool,
+        parent: parent,
         changeset: changeset,
         query: nil,
         subject: nil
@@ -44,15 +46,20 @@ defmodule Systems.Lab.SearchSubjectView do
   end
 
   @impl true
-  def handle_event("accept", _, %{assigns: %{tool: tool, subject: %{user_id: user_id}}} = socket) do
+  def handle_event(
+        "accept",
+        _,
+        %{assigns: %{tool: tool, parent: parent, subject: %{user_id: user_id}}} = socket
+      ) do
     Director.context(tool).activate_task(tool, user_id)
+    update_target(parent, %{checkin: :new_participant})
     {:noreply, socket |> assign(focus: "", query: nil, subject: nil)}
   end
 
   @impl true
   def handle_event(
         "update",
-        %{"search_subject_model" => %{"query" => ""}},
+        %{"check_in_model" => %{"query" => ""}},
         socket
       ) do
     {:noreply, socket |> assign(query: nil, subject: nil)}
@@ -61,7 +68,7 @@ defmodule Systems.Lab.SearchSubjectView do
   @impl true
   def handle_event(
         "update",
-        %{"search_subject_model" => %{"query" => query}},
+        %{"check_in_model" => %{"query" => query}},
         %{assigns: %{tool: tool, myself: myself}} = socket
       ) do
     public_id = String.to_integer(query)

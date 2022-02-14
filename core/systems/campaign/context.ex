@@ -293,10 +293,17 @@ defmodule Systems.Campaign.Context do
     |> Repo.insert()
   end
 
+  def original_author(campaign) do
+    campaign
+    |> list_authors()
+    |> List.first()
+  end
+
   def list_authors(%Campaign.Model{} = campaign) do
     from(
       a in Campaign.AuthorModel,
       where: a.campaign_id == ^campaign.id,
+      order_by: {:asc, :inserted_at},
       preload: [user: [:profile]]
     )
     |> Repo.all()

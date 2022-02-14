@@ -1,6 +1,8 @@
 defmodule Systems.Lab.ExperimentTaskView do
   use CoreWeb.UI.LiveComponent
 
+  alias CoreWeb.UI.Navigation.ButtonBar
+  alias Frameworks.Utility.LiveCommand
   alias Frameworks.Pixel.Text.{Title3, Title6, BodyLarge}
   alias Frameworks.Pixel.Dropdown
 
@@ -9,8 +11,9 @@ defmodule Systems.Lab.ExperimentTaskView do
   }
 
   prop(lab_tool, :map, required: true)
-  prop(contact_enabled?, :boolean, required: true)
+  prop(status, :any, required: true)
   prop(reservation, :any, required: true)
+  prop(actions, :list, required: true)
   prop(user, :map, required: true)
 
   data(selector, :map)
@@ -60,12 +63,24 @@ defmodule Systems.Lab.ExperimentTaskView do
     {:ok, socket |> assign(new_model: new_model)}
   end
 
-  def update(%{model: %{lab_tool: lab_tool, reservation: reservation}}, socket) do
+  def update(
+        %{
+          model: %{
+            lab_tool: lab_tool,
+            status: status,
+            actions: actions,
+            reservation: reservation
+          }
+        },
+        socket
+      ) do
     {
       :ok,
       socket
       |> assign(
         lab_tool: lab_tool,
+        status: status,
+        actions: actions,
         reservation: reservation
       )
       |> update_time_slots()
@@ -78,7 +93,8 @@ defmodule Systems.Lab.ExperimentTaskView do
         %{
           id: id,
           lab_tool: lab_tool,
-          contact_enabled?: contact_enabled?,
+          status: status,
+          actions: actions,
           reservation: reservation,
           user: user
         },
@@ -90,7 +106,8 @@ defmodule Systems.Lab.ExperimentTaskView do
       |> assign(
         id: id,
         lab_tool: lab_tool,
-        contact_enabled?: contact_enabled?,
+        status: status,
+        actions: actions,
         reservation: reservation,
         user: user,
         lock_ui: false
@@ -99,6 +116,8 @@ defmodule Systems.Lab.ExperimentTaskView do
       |> init_selector()
     }
   end
+
+  # Updating
 
   defp handle_delayed_update(
          %{assigns: %{new_model: %{lab_tool: lab_tool, reservation: reservation}}} = socket
@@ -156,47 +175,9 @@ defmodule Systems.Lab.ExperimentTaskView do
     }
   end
 
-  def handle_event("submit", _params, %{assigns: %{selected_time_slot: nil}} = socket) do
-    warning = dgettext("link-lab", "submit.warning.no.selection")
-    send_update(Dropdown.Selector, id: :dropdown_selector, model: %{warning: warning})
-    {:noreply, socket}
-  end
-
   @impl true
-  def handle_event(
-        "submit",
-        _params,
-        %{assigns: %{selected_time_slot: time_slot, user: user}} = socket
-      ) do
-    Lab.Context.reserve_time_slot(time_slot, user)
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("cancel", _params, %{assigns: %{lab_tool: lab_tool, user: user}} = socket) do
-    Lab.Context.cancel_reservation(lab_tool, user)
-    {:noreply, socket |> assign(selected_time_slot: nil)}
-  end
-
-  defp submit_button(%{myself: myself}) do
-    %{
-      action: %{type: :send, event: "submit", target: myself},
-      face: %{
-        type: :primary,
-        label: dgettext("link-lab", "timeslot.submit.button")
-      }
-    }
-  end
-
-  defp cancel_button(%{myself: myself}) do
-    %{
-      action: %{type: :send, event: "cancel", target: myself},
-      face: %{
-        type: :secondary,
-        text_color: "text-delete",
-        label: dgettext("eyra-assignment", "cancel.button")
-      }
-    }
+  def handle_event(event, _params, socket) do
+    {:noreply, LiveCommand.execute(event, socket)}
   end
 
   defp reservation_text(%{time_slot_id: time_slot_id} = _reservation) do
@@ -208,6 +189,10 @@ defmodule Systems.Lab.ExperimentTaskView do
     "🗓  #{label}"
   end
 
+  defp action_buttons(%{actions: actions, myself: target}) do
+    LiveCommand.action_buttons(actions, target)
+  end
+
   def render(assigns) do
     ~F"""
     <div>
@@ -217,20 +202,15 @@ defmodule Systems.Lab.ExperimentTaskView do
         <Title6>{dgettext("link-lab", "timeslot.selector.label")}</Title6>
         <Spacing value="XXS" />
         <Dropdown.Selector {...@selector} />
-        <Spacing value="S" />
-        <Wrap>
-          <DynamicButton vm={submit_button(assigns)} />
-        </Wrap>
       </div>
-      <div :if={@reservation}>
+      <div :if={@reservation != nil and @status == :pending}>
         <Title3>{dgettext("link-lab", "reservation.title")}</Title3>
         <Spacing value="M" />
         <BodyLarge><span class="whitespace-pre-wrap">{reservation_text(@reservation)}</span></BodyLarge>
         <Spacing value="S" />
-        <Wrap>
-          <DynamicButton vm={cancel_button(assigns)} />
-        </Wrap>
-        </div>
+      </div>
+      <MarginY id={:button_bar_top} />
+      <ButtonBar buttons={action_buttons(assigns)} />
     </div>
     """
   end

@@ -1,4 +1,4 @@
-defmodule Systems.Lab.SearchSubjectModel do
+defmodule Systems.Lab.CheckInModel do
   use Ecto.Schema
   import Ecto.Changeset
 

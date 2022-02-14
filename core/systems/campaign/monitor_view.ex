@@ -18,6 +18,13 @@ defmodule Systems.Campaign.MonitorView do
   data(reject_task, :number)
   data(labels, :list)
 
+  def update(%{checkin: :new_participant}, socket) do
+    {
+      :ok,
+      socket |> update_vm()
+    }
+  end
+
   def update(
         %{reject: :submit, rejection: rejection},
         %{assigns: %{reject_task: task_id}} = socket
@@ -130,7 +137,7 @@ defmodule Systems.Campaign.MonitorView do
         <Case value={@vm.active?} >
           <True>
             <div :if={lab_tool(@vm.experiment) != nil}>
-              <Lab.SearchSubjectView id={:search_subject_view} tool={lab_tool(@vm.experiment)} />
+              <Lab.CheckInView id={:search_subject_view} tool={lab_tool(@vm.experiment)} parent={%{type: __MODULE__, id: @id}} />
               <Spacing value="XL" />
             </div>
 

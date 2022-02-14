@@ -18,7 +18,7 @@ defmodule Systems.Assignment.Switch do
         changes: %{status: new_status}
       }) do
     # crew does not have a director (yet), so check if assignment is available to handle signal
-    with [%{id: assignment_id} | _] <- Assignment.Context.get_by_crew!(crew_id) do
+    with [%{id: assignment_id} = assignment | _] <- Assignment.Context.get_by_crew!(crew_id) do
       %{user_id: user_id} = Crew.Context.get_member!(member_id)
       user = Accounts.get_user!(user_id)
 
@@ -34,6 +34,8 @@ defmodule Systems.Assignment.Switch do
         _ ->
           nil
       end
+
+      Signal.Context.dispatch!(:assignment_updated, assignment)
     end
   end
 

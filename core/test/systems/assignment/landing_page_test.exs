@@ -68,7 +68,8 @@ defmodule Systems.Assignment.LandingPageTest do
         )
 
       _submission = Factories.insert!(:submission, %{reward_value: 5, promotion: promotion})
-      author = Factories.build(:author)
+      researcher = Factories.build(:researcher)
+      author = Factories.build(:author, %{researcher: researcher})
 
       campaign =
         Factories.insert!(:campaign, %{
@@ -117,7 +118,7 @@ defmodule Systems.Assignment.LandingPageTest do
 
       html =
         view
-        |> element("[phx-click=\"call-to-action\"]")
+        |> element("[phx-click=\"open\"]")
         |> render_click()
 
       assert {:error, {:redirect, %{to: "https://eyra.co/fake_survey?panl_id=1"}}} = html
