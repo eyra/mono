@@ -12,10 +12,9 @@ loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.19.0/full/" }).then
 let file = undefined
 
 onmessage = (event) => {
-  console.log("onmessage", JSON.stringify(event.data))
   const { eventType } = event.data;
   if (eventType === "runPython") {
-    console.log("ADFDASF", self.pyodide.runPython(event.data.script))
+    self.pyodide.runPython(event.data.script)
   } else if (eventType === "initData") {
     file = self.pyodide.FS.open("user-data", "w")
     // data = new ChunkedFile(event.data.size);
