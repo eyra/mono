@@ -6,21 +6,6 @@ loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.19.0/full/" }).then
   self.pyodide = pyodide;
   return self.pyodide.loadPackage(["micropip", "numpy", "pandas"]);
 }).then(() => {
-  console.log("test",
-    self.pyodide.runPython(`
-def _process_data():
-  import json
-  result = process(open("user-data", "rb"))
-  data = []
-  html = []
-  for df in result.get("data_frames", []):
-    html.append(df.to_html(classes=["data-donation-extraction-results"], justify="left"))
-    data.append(df.to_dict())
-  return {
-    "html": "\\n".join(html),
-    "data": json.dumps(data),
-  }
-  `));
   self.postMessage({ eventType: "initialized" });
 });
 
@@ -38,10 +23,23 @@ onmessage = (event) => {
     self.pyodide.FS.write(file, event.data.chunk, 0, event.data.chunk.length)
     // data.writeChunk(event.data.chunk);
   } else if (eventType === "processData") {
-    const proxy = self.pyodide.globals.get("_process_data")
-    const resultProxy = proxy()
-    const result = resultProxy.toJs({ create_proxies: false, dict_converter: Object.fromEntries });
-    [proxy, resultProxy].forEach(p => p.destroy())
-    self.postMessage({ eventType: "result", result });
+    const result = self.pyodide.runPython(`
+    def _process_data():
+      import json
+      import html
+      result = process(open("user-data", "rb"))
+      data_output = []
+      html_output = []
+      for data in result:
+        html_output.append(f"""<h1 class="text-title4 font-title4 sm:text-title3 sm:font-title3 lg:text-title2 lg:font-title2 mb-6 md:mb-8 lg:mb-10 text-grey1">{html.escape(data['title'])}</h1>""")
+        df = data['data_frame']
+        html_output.append(df.to_html(classes=["data-donation-extraction-results"], justify="left"))
+        data_output.append(df.to_dict())
+      return {
+        "html": "\\n".join(html_output),
+        "data": json.dumps(data_output),
+      }
+    _process_data()`);
+    self.postMessage({ eventType: "result", result: result.toJs({ create_proxies: false, dict_converter: Object.fromEntries }) });
   }
 };

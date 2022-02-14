@@ -11,8 +11,9 @@ def process(file_data):
         info = zfile.getinfo(name)
         data.append((name, info.compress_size, info.file_size))
 
-    return {
-        "summary": f"The following files where read:",
-        "data_frames": [
-            pd.DataFrame(data, columns=["filename", "compressed size", "size"])
-    ]}
+    return [
+        {
+            "title": "Files in the ZIP",
+            "data_frame": pd.DataFrame(data, columns=["filename", "compressed size", "size"])
+        }
+    ]
