@@ -47,7 +47,7 @@ defmodule Systems.Lab.DayView do
   end
 
   def update(
-        %{active_item_id: active_item_id, selector_id: selector_id} = params,
+        %{active_item_id: active_item_id, selector_id: selector_id},
         %{assigns: %{day_model: %{entries: entries} = day_model}} = socket
       ) do
     start_time = selector_id
@@ -66,15 +66,6 @@ defmodule Systems.Lab.DayView do
   end
 
   def update(_params, socket) do
-    {
-      :ok,
-      socket
-    }
-  end
-
-  def update(params, socket) do
-    params |> IO.inspect(label: "PAR")
-
     {
       :ok,
       socket

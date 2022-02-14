@@ -7,10 +7,6 @@ defmodule Systems.DataDonation.UploadPage do
 
   alias Systems.DataDonation.{WelcomeForm, FileSelectionForm, SubmitDataForm}
 
-  alias Systems.{
-    DataDonation
-  }
-
   alias Systems.DataDonation.ThanksPage
 
   @script Application.app_dir(:core, "priv/repo")
