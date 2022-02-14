@@ -6,7 +6,7 @@ defmodule Systems.DataDonation.S3StorageBackendTest do
 
   describe "path/1" do
     test "generates a unique path" do
-      assert S3StorageBackend.path() != S3StorageBackend.path()
+      assert S3StorageBackend.path("a-participant") != S3StorageBackend.path("a-participant")
     end
   end
 end

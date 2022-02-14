@@ -12,16 +12,9 @@ export const PythonUploader = {
 
         // First hide the next button (requires selected file)
         this.el.querySelector(this.nextButtonSelector).hidden = true
-
-        // Hook up the process button to the worker
-        const fileInput = this.el.querySelector("input[type=file]")
-        fileInput.addEventListener("change", () => {
-            this.el.querySelector(this.nextButtonSelector).hidden = false;
-            const filenameInfo = this.el.querySelector(".selected-filename");
-            filenameInfo.innerText = fileInput.files[0].name;
-            filenameInfo.classList.remove("hidden")
-        })
-        this.el.querySelector("#tab_data_extraction").addEventListener("tab-activated", () => {
+        this.el.querySelector(".extract-data-button").addEventListener("click", () => {
+            this.el.querySelector(".file-selection").classList.add("hidden")
+            this.el.querySelector(".data-extraction").classList.remove("hidden")
             const script = this.el.getElementsByTagName("code")[0].innerText
             uploader.process(script).then((result) => {
                 uploader.result = result;
@@ -30,6 +23,16 @@ export const PythonUploader = {
                 console.log("done", result)
                 Tabbar.show("tab_" + this.el.dataset.afterCompletionTab, true)
             })
+        });
+
+        // Hook up the process button to the worker
+        const fileInput = this.el.querySelector("input[type=file]")
+        fileInput.addEventListener("change", () => {
+            // this.el.querySelector(this.nextButtonSelector).hidden = false;
+            this.el.querySelector(".extract-data-button").classList.remove("hidden");
+            const filenameInfo = this.el.querySelector(".selected-filename");
+            filenameInfo.innerText = fileInput.files[0].name;
+            filenameInfo.classList.remove("hidden")
         })
     },
     process(script) {

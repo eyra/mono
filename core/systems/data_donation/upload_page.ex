@@ -5,7 +5,7 @@ defmodule Systems.DataDonation.UploadPage do
   alias CoreWeb.Layouts.Stripped.Component, as: Stripped
   alias CoreWeb.UI.Navigation.{ActionBar, Tabbar, TabbarContent, TabbarFooter, TabbarArea}
 
-  alias Systems.DataDonation.{FileSelectionForm, DataExtractionForm, SubmitDataForm}
+  alias Systems.DataDonation.{WelcomeForm, FileSelectionForm, SubmitDataForm}
 
   alias Systems.{
     DataDonation
@@ -28,7 +28,11 @@ defmodule Systems.DataDonation.UploadPage do
   data(extracted, :any, default: "")
   data(tabs, :any)
 
-  def mount(%{}, _session, socket) do
+  def mount(%{"participant_id" => participant_id}, _session, socket) do
+    unless String.match?(participant_id, ~r/[a-zA-Z0-9_\-]+/) do
+      throw(:invalid_participant_id)
+    end
+
     tabs = create_tabs()
 
     finish_button = %{
@@ -43,27 +47,27 @@ defmodule Systems.DataDonation.UploadPage do
     }
 
     {:ok,
-     assign(socket, tabs: tabs, finish_button: finish_button)
+     assign(socket, tabs: tabs, finish_button: finish_button, participant_id: participant_id)
      |> update_menus()}
   end
 
   defp create_tabs() do
     [
       %{
+        id: :welcome,
+        action: nil,
+        title: dgettext("eyra-data-donation", "tabbar.item.welcome"),
+        forward_title: dgettext("eyra-data-donation", "tabbar.item.welcome.forward"),
+        component: WelcomeForm,
+        props: %{},
+        type: :form
+      },
+      %{
         id: :file_selection,
         action: nil,
         title: dgettext("eyra-data-donation", "tabbar.item.file_selection"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.file_selection.forward"),
         component: FileSelectionForm,
-        props: %{},
-        type: :form
-      },
-      %{
-        id: :data_extraction,
-        action: nil,
-        title: dgettext("eyra-data-donation", "tabbar.item.data_extraction"),
-        forward_title: dgettext("eyra-data-donation", "tabbar.item.data_extraction.forward"),
-        component: DataExtractionForm,
         props: %{script: @script},
         type: :form
       },
@@ -83,9 +87,9 @@ defmodule Systems.DataDonation.UploadPage do
   def handle_event(
         "donate",
         %{"data" => data},
-        %{assigns: %{}} = socket
+        %{assigns: %{participant_id: participant_id}} = socket
       ) do
-    store_results(data)
+    store_results(participant_id, data)
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, ThanksPage))}
   end
 
@@ -96,7 +100,7 @@ defmodule Systems.DataDonation.UploadPage do
            data-after-completion-tab="submit_data">
         <TabbarArea tabs={@tabs}>
           <ActionBar>
-            <Tabbar vm={%{initial_tab: :file_selection}}/>
+            <Tabbar vm={%{initial_tab: :welcome}}/>
           </ActionBar>
           <TabbarContent />
           <TabbarFooter>
@@ -108,8 +112,8 @@ defmodule Systems.DataDonation.UploadPage do
     """
   end
 
-  def store_results(data) when is_binary(data) do
-    storage().store(data)
+  def store_results(participant_id, data) when is_binary(data) do
+    storage().store(participant_id, data)
   end
 
   defp storage do
