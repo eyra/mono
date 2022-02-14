@@ -5,8 +5,8 @@ defmodule Systems.DataDonation.S3StorageBackendTest do
   alias Systems.DataDonation.ToolModel
 
   describe "path/1" do
-    test "generates a unique path based on the tool" do
-      assert S3StorageBackend.path(%ToolModel{id: 2}) =~ "2/"
+    test "generates a unique path" do
+      assert S3StorageBackend.path() != S3StorageBackend.path()
     end
   end
 end

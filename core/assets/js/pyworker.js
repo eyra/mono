@@ -14,7 +14,7 @@ def _process_data():
   data = []
   html = []
   for df in result.get("data_frames", []):
-    html.append(df.to_html())
+    html.append(df.to_html(classes=["data-donation-extraction-results"], justify="left"))
     data.append(df.to_dict())
   return {
     "html": "\\n".join(html),

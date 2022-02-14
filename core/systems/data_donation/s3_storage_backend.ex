@@ -1,12 +1,11 @@
 defmodule Systems.DataDonation.S3StorageBackend do
   @behaviour Systems.DataDonation.StorageBackend
 
-  alias Systems.DataDonation.ToolModel
   alias ExAws.S3
 
-  def store(%ToolModel{} = tool, data) do
+  def store(data) do
     [data]
-    |> S3.upload(bucket(), path(tool))
+    |> S3.upload(bucket(), path())
     |> ExAws.request()
   end
 
@@ -16,9 +15,8 @@ defmodule Systems.DataDonation.S3StorageBackend do
     |> Keyword.fetch!(:bucket)
   end
 
-  def path(tool) do
-    tool_id = Integer.to_string(tool.id)
+  def path do
     timestamp = "Europe/Amsterdam" |> DateTime.now!() |> DateTime.to_iso8601(:basic)
-    "#{tool_id}/#{timestamp}.json"
+    "#{timestamp}.json"
   end
 end

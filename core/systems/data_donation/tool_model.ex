@@ -60,19 +60,4 @@ defmodule Systems.DataDonation.ToolModel do
     value = Map.get(changes, field)
     blank?(value)
   end
-
-  def store_results(%__MODULE__{} = tool, data) when is_binary(data) do
-    storage().store(tool, data)
-    # |> S3.upload("eylixir", "path/on/s3")
-    # |> ExAws.request()
-    # |> IO.inspect()
-
-    # %DataDonation.UserData{}
-    # |> DataDonation.UserData.changeset(%{tool: tool, user: user, data: data})
-    # |> Repo.insert!()
-  end
-
-  defp storage do
-    Application.fetch_env!(:core, :data_donation_storage_backend)
-  end
 end

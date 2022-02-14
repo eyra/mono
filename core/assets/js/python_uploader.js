@@ -16,7 +16,10 @@ export const PythonUploader = {
         // Hook up the process button to the worker
         const fileInput = this.el.querySelector("input[type=file]")
         fileInput.addEventListener("change", () => {
-            this.el.querySelector(this.nextButtonSelector).hidden = false
+            this.el.querySelector(this.nextButtonSelector).hidden = false;
+            const filenameInfo = this.el.querySelector(".selected-filename");
+            filenameInfo.innerText = fileInput.files[0].name;
+            filenameInfo.classList.remove("hidden")
         })
         this.el.querySelector("#tab_data_extraction").addEventListener("tab-activated", () => {
             const script = this.el.getElementsByTagName("code")[0].innerText
@@ -30,7 +33,6 @@ export const PythonUploader = {
         })
     },
     process(script) {
-        console.log("PPPPPPPPPPPPPPPP")
         return new Promise((resolve) => {
             // Initialize the Python worker
             const worker = new Worker("/js/pyworker.js");

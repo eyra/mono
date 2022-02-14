@@ -16,9 +16,3 @@ def process(file_data):
         "data_frames": [
             pd.DataFrame(data, columns=["filename", "compressed size", "size"])
     ]}
-
-if __name__ == "__main__" and len(sys.arv) >= 1:
-    from pprint import pprint
-    pprint(
-        process(sys.argv[1])
-    )

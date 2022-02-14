@@ -13,6 +13,10 @@ defmodule Systems.DataDonation.UploadPage do
 
   alias Systems.DataDonation.ThanksPage
 
+  @script Application.app_dir(:core, "priv/repo")
+          |> Path.join("script.py")
+          |> File.read!()
+
   data(result, :any)
   data(tool, :any)
   data(user, :any)
@@ -24,9 +28,8 @@ defmodule Systems.DataDonation.UploadPage do
   data(extracted, :any, default: "")
   data(tabs, :any)
 
-  def mount(%{"id" => tool_id}, _session, socket) do
-    tool = DataDonation.Context.get!(tool_id)
-    tabs = create_tabs(tool)
+  def mount(%{}, _session, socket) do
+    tabs = create_tabs()
 
     finish_button = %{
       action: %{
@@ -40,17 +43,11 @@ defmodule Systems.DataDonation.UploadPage do
     }
 
     {:ok,
-     assign(socket, tabs: tabs, finish_button: finish_button, tool: tool)
+     assign(socket, tabs: tabs, finish_button: finish_button)
      |> update_menus()}
-
-    # {:ok,
-    #  socket
-    #  |> assign(:result, nil)
-    #  |> assign(:tool, tool)
-    #  |> assign(:changeset, DataDonation.UploadModel.changeset(%{}))}
   end
 
-  defp create_tabs(tool) do
+  defp create_tabs() do
     [
       %{
         id: :file_selection,
@@ -67,7 +64,7 @@ defmodule Systems.DataDonation.UploadPage do
         title: dgettext("eyra-data-donation", "tabbar.item.data_extraction"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.data_extraction.forward"),
         component: DataExtractionForm,
-        props: %{script: tool.script},
+        props: %{script: @script},
         type: :form
       },
       %{
@@ -86,10 +83,10 @@ defmodule Systems.DataDonation.UploadPage do
   def handle_event(
         "donate",
         %{"data" => data},
-        %{assigns: %{tool: tool}} = socket
+        %{assigns: %{}} = socket
       ) do
-    DataDonation.ToolModel.store_results(tool, data)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, ThanksPage, tool.id))}
+    store_results(data)
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, ThanksPage))}
   end
 
   def render(assigns) do
@@ -109,5 +106,13 @@ defmodule Systems.DataDonation.UploadPage do
     </Stripped>
 
     """
+  end
+
+  def store_results(data) when is_binary(data) do
+    storage().store(data)
+  end
+
+  defp storage do
+    Application.fetch_env!(:core, :data_donation_storage_backend)
   end
 end
