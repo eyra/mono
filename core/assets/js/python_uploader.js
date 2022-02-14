@@ -30,6 +30,7 @@ export const PythonUploader = {
         })
     },
     process(script) {
+        console.log("PPPPPPPPPPPPPPPP")
         return new Promise((resolve) => {
             // Initialize the Python worker
             const worker = new Worker("/js/pyworker.js");

@@ -1,3 +1,4 @@
+import sys
 import zipfile
 import pandas as pd
 
@@ -16,8 +17,7 @@ def process(file_data):
             pd.DataFrame(data, columns=["filename", "compressed size", "size"])
     ]}
 
-if __name__ == "__main__":
-    import sys
+if __name__ == "__main__" and len(sys.arv) >= 1:
     from pprint import pprint
     pprint(
         process(sys.argv[1])

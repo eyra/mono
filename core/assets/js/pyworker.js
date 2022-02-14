@@ -1,77 +1,16 @@
-self.languagePluginUrl = "https://cdn.jsdelivr.net/pyodide/v0.16.1/full/";
-importScripts("https://cdn.jsdelivr.net/pyodide/v0.16.1/full/pyodide.js");
-
-class ChunkedFile {
-  constructor(size) {
-    this.data = [];
-    this.offset = 0;
-    this.size = size;
-    this.buffer = new Uint8Array(new ArrayBuffer(size));
-  }
-  tell() {
-    return this.offset;
-  }
-  read(size) {
-    if (size === undefined) {
-      size = this.size - this.offset;
-    }
-    if (this.offset >= this.size) {
-      return null;
-    }
-    const readOffset = this.offset;
-    this.offset += size;
-    return this.buffer.slice(readOffset, readOffset + size);
-  }
-  seek(offset, whence) {
-    switch (whence) {
-      case 0:
-        this.offset = offset;
-        break;
-      case 1:
-        this.offset += offset;
-        break;
-      case 2:
-        this.offset = this.size + offset;
-        break;
-    }
-  }
-  writeChunk(chunk) {
-    this.buffer.set(chunk, this.offset);
-    this.offset = this.offset + chunk.length;
-  }
-}
+importScripts("https://cdn.jsdelivr.net/pyodide/v0.19.0/full/pyodide.js");
 
 var data = undefined;
 
-languagePluginLoader
-  .then(() => {
-    return pyodide.loadPackage(["micropip", "numpy", "pandas"]);
-  })
-  .then(() => {
+loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.19.0/full/" }).then((pyodide) => {
+  self.pyodide = pyodide;
+  return self.pyodide.loadPackage(["micropip", "numpy", "pandas"]);
+}).then(() => {
+  console.log("test",
     self.pyodide.runPython(`
-class _ChunkedFile:
-  def __init__(self, proxy):
-    self.proxy = proxy
-
-  def seekable(self):
-    return True
-
-  def seek(self, offset, whence=0):
-    self.proxy.seek(offset, whence)
-
-  def tell(self):
-    return self.proxy.tell()
-
-  def read(self, size=None):
-    data = self.proxy.read(size)
-    if data:
-      return data.tobytes()
-
-
-def _process_data(data):
+def _process_data():
   import json
-  file_data = _ChunkedFile(data)
-  result = process(file_data)
+  result = process(open("user-data", "rb"))
   data = []
   html = []
   for df in result.get("data_frames", []):
@@ -81,20 +20,28 @@ def _process_data(data):
     "html": "\\n".join(html),
     "data": json.dumps(data),
   }
-  `);
-    self.postMessage({ eventType: "initialized" });
-  });
+  `));
+  self.postMessage({ eventType: "initialized" });
+});
+
+let file = undefined
 
 onmessage = (event) => {
+  console.log("onmessage", JSON.stringify(event.data))
   const { eventType } = event.data;
   if (eventType === "runPython") {
-    self.pyodide.runPython(event.data.script)
+    console.log("ADFDASF", self.pyodide.runPython(event.data.script))
   } else if (eventType === "initData") {
-    data = new ChunkedFile(event.data.size);
+    file = self.pyodide.FS.open("user-data", "w")
+    // data = new ChunkedFile(event.data.size);
   } else if (eventType === "data") {
-    data.writeChunk(event.data.chunk);
+    self.pyodide.FS.write(file, event.data.chunk, 0, event.data.chunk.length)
+    // data.writeChunk(event.data.chunk);
   } else if (eventType === "processData") {
-    const result = self.pyodide.globals._process_data(data);
+    const proxy = self.pyodide.globals.get("_process_data")
+    const resultProxy = proxy()
+    const result = resultProxy.toJs({ create_proxies: false, dict_converter: Object.fromEntries });
+    [proxy, resultProxy].forEach(p => p.destroy())
     self.postMessage({ eventType: "result", result });
   }
 };
