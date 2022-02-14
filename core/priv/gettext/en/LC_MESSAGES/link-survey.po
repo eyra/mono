@@ -93,7 +93,7 @@ msgstr "Recruit participants for your study"
 
 #, elixir-format
 msgid "tabbar.item.monitor"
-msgstr "Results"
+msgstr "Dashboard"
 
 #, elixir-format
 msgid "tabbar.item.promotion"
@@ -105,11 +105,11 @@ msgstr "Study"
 
 #, elixir-format
 msgid "monitor.empty.description"
-msgstr "Here you'll find an overview of anonymised participants, who applied to participate in your study, once your recruitment campaign has been published. You can view their status and accept or reject their results, after they have finished their task."
+msgstr "Submit your campaign and wait for the pool administrator to publish your campaign. Check out the preview to see what your campaign will look like for participants. Once your campaign is online, you can use this dashboard to manage your participants."
 
 #, elixir-format
 msgid "monitor.empty.title"
-msgstr "Recruitment results"
+msgstr "Campaign submitted?"
 
 #, elixir-format
 msgid "tabbar.item.promotion.forward"
@@ -117,11 +117,11 @@ msgstr "Create promotion"
 
 #, elixir-format
 msgid "tabbar.item.assignment.forward"
-msgstr "Link your study"
+msgstr "Your study"
 
 #, elixir-format
 msgid "tabbar.item.monitor.forward"
-msgstr "View results"
+msgstr "Go to dashboard"
 
 #, elixir-format
 msgid "tabbar.item.criteria"
@@ -129,7 +129,7 @@ msgstr "Sample"
 
 #, elixir-format
 msgid "tabbar.item.criteria.forward"
-msgstr "Determine your sample"
+msgstr "Sample characteristics"
 
 #, elixir-format
 msgid "form.title"
@@ -145,7 +145,7 @@ msgstr "Language"
 
 #, elixir-format
 msgid "languages.label"
-msgstr "In what language is your online study written?"
+msgstr "In what language is your study written?"
 
 #, elixir-format
 msgid "ethical.label"

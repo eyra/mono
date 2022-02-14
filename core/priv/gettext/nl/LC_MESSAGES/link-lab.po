@@ -13,15 +13,15 @@ msgstr ""
 
 #, elixir-format
 msgid "add.day.button"
-msgstr "Voeg een dag toe"
+msgstr "Dag toevoegen"
 
 #, elixir-format
 msgid "form.description"
-msgstr "%{time_slots} tijdslots en %{seats} deelnemers op basis van onderstaand schema."
+msgstr "Op dit moment staan er %{time_slots} tijdslots met ruimte voor %{seats} deelnemers in totaal ingepland."
 
 #, elixir-format
 msgid "form.title"
-msgstr "Lab schema"
+msgstr "Lab planning"
 
 #, elixir-format
 msgid "day.schedule.date.label"
@@ -37,11 +37,11 @@ msgstr "Plaatsen"
 
 #, elixir-format
 msgid "day.schedule.submit.button"
-msgstr "Pas dagschema aan"
+msgstr "Bevestig planning"
 
 #, elixir-format
 msgid "time.slot.item.available.label"
-msgstr "Beschikbaar"
+msgstr "Niet ingepland"
 
 #, elixir-format
 msgid "1 reservation"
@@ -57,7 +57,7 @@ msgstr[1] "%{count} plaatsen"
 
 #, elixir-format
 msgid "day.schedule.byline"
-msgstr "Je hebt voor deze dag %{time_slots} en %{seats} ingepland."
+msgstr "Dagplanning: %{time_slots} tijdslots met ruimte voor %{seats} deelnemers."
 
 #, elixir-format
 msgid "1 time slot"
@@ -79,7 +79,7 @@ msgstr "Selecteer een tijdslot"
 
 #, elixir-format, ex-autogen
 msgid "timeslot.submit.button"
-msgstr "Reserveer een plek"
+msgstr "Plek reserveren"
 
 #, elixir-format, ex-autogen
 msgid "apply.cta.title"
@@ -87,7 +87,7 @@ msgstr "Ik doe mee"
 
 #, elixir-format, ex-autogen
 msgid "no.reservation.title"
-msgstr "Maak een reservering"
+msgstr "Lab sessie boeken"
 
 #, elixir-format, ex-autogen
 msgid "open.cta.title"
@@ -95,7 +95,7 @@ msgstr "Doorgaan"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "reservation.title"
-msgstr "Reservering"
+msgstr "Geboekte lab sessie"
 
 #, elixir-format, ex-autogen
 msgid "submit.warning.no.selection"

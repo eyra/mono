@@ -17,7 +17,7 @@ msgstr "Add day"
 
 #, elixir-format
 msgid "form.description"
-msgstr "%{time_slots} time slots and %{seats} participants based on the schema below."
+msgstr "You currently planned %{time_slots} time slots with room for in total %{seats} participants."
 
 #, elixir-format
 msgid "form.title"
@@ -37,11 +37,11 @@ msgstr "Seats"
 
 #, elixir-format
 msgid "day.schedule.submit.button"
-msgstr "Submit day schedule"
+msgstr "Confirm schedule"
 
 #, elixir-format
 msgid "time.slot.item.available.label"
-msgstr "Available"
+msgstr "Not planned"
 
 #, elixir-format
 msgid "1 reservation"
@@ -57,7 +57,7 @@ msgstr[1] ""
 
 #, elixir-format
 msgid "day.schedule.byline"
-msgstr "You have scheduled %{time_slots} and %{seats} for this day."
+msgstr "Day schedule: %{time_slots} time slots with room for %{seats} participants."
 
 #, elixir-format
 msgid "1 time slot"
@@ -87,7 +87,7 @@ msgstr "Participate"
 
 #, elixir-format, ex-autogen
 msgid "no.reservation.title"
-msgstr "Make a reservation"
+msgstr "Book lab session"
 
 #, elixir-format, ex-autogen
 msgid "open.cta.title"
@@ -95,7 +95,7 @@ msgstr "Proceed"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "reservation.title"
-msgstr "Reservation"
+msgstr "Booked lab session"
 
 #, elixir-format, ex-autogen
 msgid "submit.warning.no.selection"

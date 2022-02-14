@@ -37,8 +37,8 @@ msgstr "Doorgaan"
 
 #, elixir-format
 msgid "create.campaign.dialog.text"
-msgstr "Lorem ipsum."
+msgstr "Wat voor soort studie wil je opzetten?"
 
 #, elixir-format
 msgid "create.campaign.dialog.title"
-msgstr "Type studie"
+msgstr "Soort studie"
