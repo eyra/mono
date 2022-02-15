@@ -77,7 +77,9 @@ defmodule Systems.Lab.VUDaySchedule do
   defp number_of_reservations(nil), do: 0
 
   defp number_of_reservations(%Lab.TimeSlotModel{reservations: reservations}) do
-    reservations |> Enum.count()
+    reservations
+    |> Enum.filter(&(&1.status != :cancelled))
+    |> Enum.count()
   end
 
   def base_values(time_slots) do

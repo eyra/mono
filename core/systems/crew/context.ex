@@ -137,23 +137,14 @@ defmodule Systems.Crew.Context do
     |> Repo.all()
   end
 
-  def count_started_tasks(crew) do
+  def count_pending_tasks(crew) do
     from(t in task_query(crew, [:pending], false),
-      where: not is_nil(t.started_at),
       select: count(t.id)
     )
     |> Repo.one()
   end
 
-  def count_applied_tasks(crew) do
-    from(t in task_query(crew, [:pending], false),
-      where: is_nil(t.started_at),
-      select: count(t.id)
-    )
-    |> Repo.one()
-  end
-
-  def count_finished_tasks(crew) do
+  def count_participated_tasks(crew) do
     count_tasks(crew, [:completed, :rejected, :accepted])
   end
 
@@ -167,19 +158,23 @@ defmodule Systems.Crew.Context do
     |> Enum.map(&Repo.insert!(&1))
   end
 
-  def start_task(%Crew.TaskModel{} = task) do
+  def cancel_task(%Crew.TaskModel{} = task) do
+    update_task(task, %{started_at: nil})
+  end
+
+  def lock_task(%Crew.TaskModel{} = task) do
     update_task(task, %{started_at: Timestamp.naive_now()})
   end
 
-  def complete_task(%Crew.TaskModel{status: status} = task) do
+  def activate_task(%Crew.TaskModel{status: status} = task) do
     case status do
       :pending -> update_task(task, %{status: :completed, completed_at: Timestamp.naive_now()})
       _ -> {:ok, %{task: task}}
     end
   end
 
-  def complete_task!(%Crew.TaskModel{} = task) do
-    case Crew.Context.complete_task(task) do
+  def activate_task!(%Crew.TaskModel{} = task) do
+    case Crew.Context.activate_task(task) do
       {:ok, %{task: task}} -> task
       _ -> nil
     end
@@ -295,7 +290,7 @@ defmodule Systems.Crew.Context do
 
   def apply_member(%Crew.Model{} = crew, %User{} = user, expire_at \\ nil) do
     if member = get_expired_member(crew, user) do
-      member = reset_expired_member(member, expire_at)
+      member = reset_member(member, expire_at)
       {:ok, %{member: member}}
     else
       Multi.new()
@@ -340,27 +335,28 @@ defmodule Systems.Crew.Context do
     |> Repo.one()
   end
 
-  def reset_expired_member(%Crew.MemberModel{} = member, expire_at) do
-    member_query = from(m in Crew.MemberModel, where: m.id == ^member.id)
-    task_query = from(t in Crew.TaskModel, where: t.member_id == ^member.id)
-
-    attrs = [expired: false, expire_at: expire_at]
-
-    Multi.new()
-    |> Multi.update_all(:member, member_query, set: attrs)
-    |> Multi.update_all(:tasks, task_query, set: attrs)
-    |> Repo.transaction()
-
-    from(m in Crew.MemberModel, where: m.id == ^member.id)
-    |> Repo.one()
-  end
-
   def list_members(%Crew.Model{} = crew) do
     from(m in Crew.MemberModel,
       where: m.crew_id == ^crew.id and m.expired == false,
       preload: [:user]
     )
     |> Repo.all()
+  end
+
+  def reset_member(%Crew.MemberModel{} = member, expire_at) do
+    member_query = from(m in Crew.MemberModel, where: m.id == ^member.id)
+    task_query = from(t in Crew.TaskModel, where: t.member_id == ^member.id)
+
+    member_attrs = Crew.MemberModel.reset_attrs(expire_at)
+    task_attrs = Crew.TaskModel.reset_attrs(expire_at)
+
+    Multi.new()
+    |> Multi.update_all(:member, member_query, set: member_attrs)
+    |> Multi.update_all(:tasks, task_query, set: task_attrs)
+    |> Repo.transaction()
+
+    from(m in Crew.MemberModel, where: m.id == ^member.id)
+    |> Repo.one()
   end
 
   def member?(crew, user) do
@@ -373,6 +369,15 @@ defmodule Systems.Crew.Context do
     crew
     |> member_query(user, true)
     |> Repo.exists?()
+  end
+
+  def subject(crew, public_id) when is_integer(public_id) do
+    from(m in Crew.MemberModel,
+      where:
+        m.crew_id == ^crew.id and
+          m.public_id == ^public_id
+    )
+    |> Repo.one()
   end
 
   defp member_query(crew, user, expired \\ false) do

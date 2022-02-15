@@ -160,7 +160,7 @@ defmodule Link.Marketplace do
                 </Title2>
                 <DynamicGrid>
                   <div :for={card <- @available_campaigns } class="mb-1" >
-                    <SecondaryCampaign path_provider={CoreWeb.Endpoint} card={card} click_event_data={%{action: :public, id: card.open_id }} />
+                    <SecondaryCampaign id={card.id} path_provider={CoreWeb.Endpoint} card={card} click_event_data={%{action: :public, id: card.open_id }} />
                   </div>
                 </DynamicGrid>
               </False>

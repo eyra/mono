@@ -134,7 +134,7 @@ defmodule CoreWeb.UI.SelectorDialog.Example do
       title="Selector dialog title"
       text="Selector dialog text"
       items={Core.Enums.Themes.labels(nil)}
-      ok_button_text="Continue"
+      ok_button_text="Proceed"
       cancel_button_text="Cancel"
       target={self()} />
     """

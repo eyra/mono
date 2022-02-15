@@ -38,6 +38,7 @@ defmodule Systems.Lab.DayView do
       |> assign(
         id: id,
         target: target,
+        og_day_model: day_model,
         day_model: day_model,
         changeset: changeset
       )
@@ -49,7 +50,7 @@ defmodule Systems.Lab.DayView do
         %{active_item_id: active_item_id, selector_id: selector_id},
         %{assigns: %{day_model: %{entries: entries} = day_model}} = socket
       ) do
-    start_time = selector_id |> Atom.to_string() |> String.to_integer()
+    start_time = selector_id
     enabled? = active_item_id != nil
 
     entries =
@@ -60,7 +61,14 @@ defmodule Systems.Lab.DayView do
       :ok,
       socket
       |> assign(day_model: %{day_model | entries: entries})
-      |> update_entries()
+      |> update_ui()
+    }
+  end
+
+  def update(_params, socket) do
+    {
+      :ok,
+      socket
     }
   end
 
@@ -198,8 +206,12 @@ defmodule Systems.Lab.DayView do
   end
 
   @impl true
-  def handle_event("submit", _, %{assigns: %{day_model: day_model, target: target}} = socket) do
-    update_target(target, %{day_view: :submit, day_model: day_model})
+  def handle_event(
+        "submit",
+        _,
+        %{assigns: %{og_day_model: og_day_model, day_model: day_model, target: target}} = socket
+      ) do
+    update_target(target, %{day_view: :submit, og_day_model: og_day_model, day_model: day_model})
     {:noreply, socket}
   end
 
@@ -242,7 +254,7 @@ defmodule Systems.Lab.DayView do
           </div>
           <Spacing value="XS" />
 
-          <Form id="reject_form" changeset={@changeset} change_event="update" submit="submit" target={@myself} focus={@focus} >
+          <Form id="day_view" changeset={@changeset} change_event="update" submit="submit" target={@myself} focus={@focus} >
             <Wrap>
               <DateInput :if={@day_model.date_editable?} field={:date} label_text={dgettext("link-lab", "day.schedule.date.label")} />
             </Wrap>
@@ -255,15 +267,15 @@ defmodule Systems.Lab.DayView do
               </div>
             </div>
             <SubHead color="text-grey2">
-              {{@byline}}
+              {@byline}
             </SubHead>
             <Spacing value="M" />
             <Line />
             <div class="h-lab-day-popup-list overflow-y-scroll overscroll-contain">
               <div class="h-2"></div>
               <div class="w-full">
-              <div :for={entry <- @day_model.entries} >
-                <Lab.DayEntryListItem {...entry} />
+                <div :for={entry <- @day_model.entries} >
+                  <Lab.DayEntryListItem entry={entry} />
                 </div>
               </div>
             </div>

@@ -70,10 +70,7 @@ defmodule Systems.Campaign.Model do
 end
 
 defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
-  import Frameworks.Utility.ViewModel
   import CoreWeb.Gettext
-
-  alias Frameworks.Utility.ViewModelBuilder, as: Builder
 
   alias Systems.{
     Campaign,
@@ -89,43 +86,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     campaign
     |> Campaign.Model.flatten()
     |> vm(page, user, url_resolver)
-  end
-
-  defp vm(
-         %{id: id, promotion: %{expectations: expectations} = promotion, promotable: promotable},
-         Assignment.LandingPage = page,
-         user,
-         url_resolver
-       ) do
-    %{id: id}
-    |> merge(Builder.view_model(promotion, page, user, url_resolver))
-    |> merge(Builder.view_model(promotable, page, user, url_resolver))
-    |> required(:subtitle, dgettext("eyra-promotion", "expectations.public.label"))
-    |> required(:text, expectations)
-  end
-
-  defp vm(
-         %{id: id, promotion: promotion, promotable: promotable},
-         Assignment.CallbackPage = page,
-         user,
-         url_resolver
-       ) do
-    %{id: id}
-    |> merge(Builder.view_model(promotion, page, user, url_resolver))
-    |> merge(Builder.view_model(promotable, page, user, url_resolver))
-  end
-
-  defp vm(
-         %{id: id, authors: authors, promotion: promotion, promotable: promotable},
-         Promotion.LandingPage = page,
-         user,
-         url_resolver
-       ) do
-    %{id: id}
-    |> merge(vm(authors, page))
-    |> merge(Builder.view_model(promotion, page, user, url_resolver))
-    |> merge(Builder.view_model(promotable, page, user, url_resolver))
-    |> required(:subtitle, dgettext("eyra-promotion", "subtitle.label"))
   end
 
   defp vm(
@@ -235,14 +195,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
       level: :critical,
       image: image,
       quick_summary: quick_summary
-    }
-  end
-
-  defp vm(authors, Promotion.LandingPage) when is_list(authors) do
-    %{
-      byline:
-        "#{dgettext("link-survey", "by.author.label")}: " <>
-          Enum.map_join(authors, ", ", & &1.fullname)
     }
   end
 

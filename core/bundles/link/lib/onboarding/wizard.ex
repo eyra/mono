@@ -41,9 +41,7 @@ defmodule Link.Onboarding.Wizard do
       |> assign(
         tabs: tabs,
         finish_button: finish_button,
-        changesets: %{},
-        save_timer: nil,
-        hide_flash_timer: nil
+        changesets: %{}
       )
       |> update_menus()
     }

@@ -56,16 +56,12 @@ msgid "devices.title"
 msgstr "Apparaten"
 
 #, elixir-format
-msgid "completed.label"
-msgstr "Afgerond"
-
-#, elixir-format
 msgid "pending.label"
-msgstr "Aangemeld"
+msgstr "Bezig"
 
 #, elixir-format
 msgid "status.title"
-msgstr "Afgerond"
+msgstr "Deelnames"
 
 #, elixir-format
 msgid "vacant.label"
@@ -97,7 +93,7 @@ msgstr "Werf deelnemers voor jouw studie"
 
 #, elixir-format
 msgid "tabbar.item.monitor"
-msgstr "Resultaten"
+msgstr "Dashboard"
 
 #, elixir-format
 msgid "tabbar.item.promotion"
@@ -109,11 +105,11 @@ msgstr "Studie"
 
 #, elixir-format
 msgid "monitor.empty.description"
-msgstr "Na publicatie van jouw wervingscampagne, vind je hier een lijst van geanonimiseerde deelnemers, die zich aangemeld hebben voor jouw studie. Je kunt hier hun status bekijken en na afronding van hun taak, de resultaten accepteren of afwijzen."
+msgstr "Dien je campagne in en wacht tot de poolbeheerder je campagne heeft gepubliceerd. Bekijk het voorbeeld om te zien hoe je campagne er uit komt te zien voor de deelnemers. Zodra je campagne online staat, kun je dit dashboard gebruiken om je deelnemers te beheren."
 
 #, elixir-format
 msgid "monitor.empty.title"
-msgstr "Resultaten"
+msgstr "Campagne ingediend?"
 
 #, elixir-format
 msgid "tabbar.item.promotion.forward"
@@ -121,11 +117,11 @@ msgstr "Maak advertentie aan"
 
 #, elixir-format
 msgid "tabbar.item.assignment.forward"
-msgstr "Koppel je studie"
+msgstr "Jouw studie"
 
 #, elixir-format
 msgid "tabbar.item.monitor.forward"
-msgstr "Bekijk resultaten"
+msgstr "Naar dashboard"
 
 #, elixir-format
 msgid "tabbar.item.criteria"
@@ -133,7 +129,7 @@ msgstr "Sample"
 
 #, elixir-format
 msgid "tabbar.item.criteria.forward"
-msgstr "Bepaal je sample"
+msgstr "Sample kenmerken"
 
 #, elixir-format
 msgid "form.title"
@@ -149,7 +145,7 @@ msgstr "Taal"
 
 #, elixir-format
 msgid "languages.label"
-msgstr "In welke taal is jouw online studie geschreven?"
+msgstr "In welke taal is jouw studie geschreven?"
 
 #, elixir-format
 msgid "ethical.label"
@@ -248,10 +244,6 @@ msgid "language.highlight.title"
 msgstr "Taal"
 
 #, elixir-format
-msgid "started.label"
-msgstr "Gestart"
-
-#, elixir-format
 msgid "add.new.button.short"
 msgstr "Start"
 
@@ -270,3 +262,7 @@ msgstr "Helaas, jouw bijdrage is afgekeurd"
 #, elixir-format
 msgid "task.rejected.text"
 msgstr "De auteur van deze studie heeft jouw bijdrage beoordeeld en wil je het volgende laten weten: \"%{reason}\""
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "participated.label"
+msgstr "Deelgenomen"

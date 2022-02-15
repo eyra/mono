@@ -21,4 +21,4 @@ msgstr "Recent items"
 
 #, elixir-format
 msgid "title"
-msgstr "Dashboard"
+msgstr "My console"

@@ -5,15 +5,14 @@ defmodule Frameworks.Pixel.Catalogue do
 
   use Surface.Catalogue
 
-  load_asset("../../assets/js/app.js", as: :app_js)
-  load_asset("../../assets/css/app.css", as: :app_css)
-
   @impl true
   def config() do
     [
       head_css: """
-      <script type="text/javascript">#{@app_js}</script>
-      <style>#{@app_css}</style>
+      <link phx-track-static rel="stylesheet" href="/css/app.css"/>
+      """,
+      head_js: """
+      <script defer type="module" src="/js/app.js"></script>
       """,
       playground: [
         body: [

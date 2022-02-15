@@ -33,12 +33,12 @@ msgstr "Note: Rejected participants cannot participate in your campaign again."
 
 #, elixir-format
 msgid "create.campaign.dialog.ok.button"
-msgstr "Continue"
+msgstr "Proceed"
 
 #, elixir-format
 msgid "create.campaign.dialog.text"
-msgstr "Lorem ipsum."
+msgstr "What type of study would you like to set up?"
 
 #, elixir-format
 msgid "create.campaign.dialog.title"
-msgstr "Type of study"
+msgstr "Study type"

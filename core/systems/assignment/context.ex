@@ -4,12 +4,20 @@ defmodule Systems.Assignment.Context do
   """
 
   import Ecto.Query, warn: false
+  import CoreWeb.Gettext
+
   require Logger
 
   alias Ecto.Multi
   alias Core.Repo
   alias CoreWeb.UI.Timestamp
   alias Core.Authorization
+  alias Core.Accounts
+
+  alias Frameworks.{
+    Signal,
+    Utility
+  }
 
   alias Systems.{
     Assignment,
@@ -35,7 +43,23 @@ defmodule Systems.Assignment.Context do
   def get_by_assignable(assignable, preload \\ [])
 
   def get_by_assignable(%Assignment.ExperimentModel{id: id}, preload) do
-    from(a in Assignment.Model, where: a.assignable_experiment_id == ^id, preload: ^preload)
+    from(a in Assignment.Model,
+      where: a.assignable_experiment_id == ^id,
+      preload: ^preload
+    )
+    |> Repo.one()
+  end
+
+  def get_by_experiment!(experiment, preload \\ [])
+
+  def get_by_experiment!(%{id: experiment_id}, preload),
+    do: get_by_experiment!(experiment_id, preload)
+
+  def get_by_experiment!(experiment_id, preload) when is_number(experiment_id) do
+    from(a in Assignment.Model,
+      where: a.assignable_experiment_id == ^experiment_id,
+      preload: ^preload
+    )
     |> Repo.one()
   end
 
@@ -64,6 +88,16 @@ defmodule Systems.Assignment.Context do
     |> Ecto.Changeset.put_assoc(:assignable_experiment, experiment)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Repo.insert!()
+  end
+
+  def update_experiment(changeset) do
+    with {:ok, %{experiment: experiment} = result} <-
+           Multi.new()
+           |> Multi.update(:experiment, changeset)
+           |> Repo.transaction() do
+      Signal.Context.dispatch!(:experiment_updated, experiment)
+      {:ok, result}
+    end
   end
 
   def create_experiment(%{} = attrs, tool, auth_node) do
@@ -100,27 +134,48 @@ defmodule Systems.Assignment.Context do
     |> Repo.insert!()
   end
 
-  def owner(%Assignment.Model{} = assignment) do
-    owner =
-      assignment
-      |> Authorization.get_parent_nodes()
-      |> List.last()
-      |> Authorization.users_with_role(:owner)
-      |> List.first()
+  def copy_tool(
+        %Assignment.ExperimentModel{survey_tool: %{auth_node: tool_auth_node} = tool},
+        experiment_auth_node
+      ) do
+    tool_auth_node = Authorization.copy(tool_auth_node, experiment_auth_node)
+    Survey.Context.copy(tool, tool_auth_node)
+  end
 
-    case owner do
-      nil ->
-        Logger.error("No owner role found for assignment #{assignment.id}")
-        {:error}
+  def copy_tool(
+        %Assignment.ExperimentModel{lab_tool: %{auth_node: tool_auth_node} = tool},
+        experiment_auth_node
+      ) do
+    tool_auth_node = Authorization.copy(tool_auth_node, experiment_auth_node)
+    Lab.Context.copy(tool, tool_auth_node)
+  end
 
-      owner ->
-        {:ok, owner}
+  def delete_tool(multi, %{survey_tool: tool}) when not is_nil(tool) do
+    multi |> Utility.EctoHelper.delete(:survey_tool, tool)
+  end
+
+  def delete_tool(multi, %{lab_tool: tool}) when not is_nil(tool) do
+    multi |> Utility.EctoHelper.delete(:lab_tool, tool)
+  end
+
+  def owner!(%Assignment.Model{} = assignment), do: parent_owner!(assignment)
+  def owner!(%Assignment.ExperimentModel{} = experiment), do: parent_owner!(experiment)
+
+  defp parent_owner!(entity) do
+    case parent_owner(entity) do
+      {:ok, user} -> user
+      _ -> nil
     end
   end
 
-  def expiration_timestamp(assignment) do
-    assignable = Assignment.Model.assignable(assignment)
-    duration = Assignment.Assignable.duration(assignable)
+  defp parent_owner(%{auth_node_id: _auth_node_id} = entity) do
+    entity
+    |> Authorization.top_entity()
+    |> Authorization.first_user_with_role(:owner, [])
+  end
+
+  def expiration_timestamp(%{assignable_experiment: experiment}) do
+    duration = Assignment.ExperimentModel.duration(experiment)
     timeout = max(@min_expiration_timeout, duration)
 
     Timestamp.naive_from_now(timeout)
@@ -139,6 +194,17 @@ defmodule Systems.Assignment.Context do
     end
   end
 
+  def reset_member(%{crew: crew} = assignment, user) do
+    if Crew.Context.member?(crew, user) do
+      expire_at = expiration_timestamp(assignment)
+
+      Crew.Context.get_member!(crew, user)
+      |> Crew.Context.reset_member(expire_at)
+    else
+      Logger.warn("Unable to reset, user #{user.id} is not a member on crew #{crew.id}")
+    end
+  end
+
   def cancel(%Assignment.Model{} = assignment, user) do
     crew = get_crew(assignment)
     Crew.Context.cancel(crew, user)
@@ -148,11 +214,35 @@ defmodule Systems.Assignment.Context do
     get!(id) |> cancel(user)
   end
 
-  def complete_task(%{crew: crew} = _assignment, user) do
+  def lock_task(%{crew: crew} = _assignment, user) do
     if Crew.Context.member?(crew, user) do
       member = Crew.Context.get_member!(crew, user)
       task = Crew.Context.get_task(crew, member)
-      Crew.Context.complete_task!(task)
+      Crew.Context.lock_task(task)
+    else
+      Logger.warn("Can not lock task for non member")
+    end
+  end
+
+  def activate_task(%{crew: crew} = _assignment, user) do
+    if Crew.Context.member?(crew, user) do
+      member = Crew.Context.get_member!(crew, user)
+      task = Crew.Context.get_task(crew, member)
+      Crew.Context.activate_task!(task)
+    else
+      Logger.warn("Can not complete task for non member")
+    end
+  end
+
+  def activate_task(tool, user_id) do
+    if experiment = get_experiment_by_tool(tool) do
+      %{crew: crew} = get_by_experiment!(experiment, [:crew])
+
+      user = Accounts.get_user!(user_id)
+      member = Crew.Context.get_member!(crew, user)
+
+      Crew.Context.get_task(crew, member)
+      |> Crew.Context.activate_task!()
     else
       nil
     end
@@ -175,9 +265,8 @@ defmodule Systems.Assignment.Context do
 
   def open?(_), do: true
 
-  defp open_spot_count?(%{crew: crew} = assignment, :one_task) do
-    assignable = Assignment.Model.assignable(assignment)
-    target = Assignment.Assignable.spot_count(assignable)
+  defp open_spot_count?(%{crew: crew, assignable_experiment: experiment}, :one_task) do
+    target = Assignment.ExperimentModel.spot_count(experiment)
     all_non_expired_tasks = Crew.Context.count_tasks(crew, Crew.TaskStatus.values())
 
     max(0, target - all_non_expired_tasks)
@@ -280,7 +369,7 @@ defmodule Systems.Assignment.Context do
     |> Repo.get!(id)
   end
 
-  def get_experiment_by_tool!(%{id: tool_id} = tool, preload \\ []) do
+  def get_experiment_by_tool(%{id: tool_id} = tool, preload \\ []) do
     tool_id_field = Assignment.ExperimentModel.tool_id_field(tool)
     where = [{tool_id_field, tool_id}]
 
@@ -288,6 +377,42 @@ defmodule Systems.Assignment.Context do
       where: ^where,
       preload: ^preload
     )
-    |> Repo.one!()
+    |> Repo.one()
+  end
+
+  def attention_list_enabled?(%{assignable_experiment: %{survey_tool: tool}})
+      when not is_nil(tool),
+      do: true
+
+  def attention_list_enabled?(%{assignable_experiment: %{lab_tool: tool}}) when not is_nil(tool),
+    do: false
+
+  def task_labels(%{assignable_experiment: %{lab_tool: tool}}) when not is_nil(tool) do
+    %{
+      pending: dgettext("link-lab", "pending.label"),
+      participated: dgettext("link-lab", "participated.label")
+    }
+  end
+
+  def task_labels(%{assignable_experiment: %{survey_tool: tool}}) when not is_nil(tool) do
+    %{
+      pending: dgettext("link-survey", "pending.label"),
+      participated: dgettext("link-survey", "participated.label")
+    }
+  end
+
+  def search_subject(tool, public_id) do
+    if experiment = get_experiment_by_tool(tool) do
+      %{crew: crew} = get_by_experiment!(experiment, [:crew])
+      Crew.Context.subject(crew, public_id)
+    else
+      nil
+    end
+  end
+end
+
+defimpl Core.Persister, for: Systems.Assignment.ExperimentModel do
+  def save(_model, changeset) do
+    Systems.Assignment.Context.update_experiment(changeset)
   end
 end

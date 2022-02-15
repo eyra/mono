@@ -5,10 +5,6 @@ defmodule CoreWeb.UI.Timestamp do
   use Timex
   import CoreWeb.Gettext
 
-  def locale do
-    Gettext.get_locale(CoreWeb.Gettext)
-  end
-
   def to_date(%{year: year, month: month, day: day}) do
     %Date{
       year: year,
@@ -89,7 +85,11 @@ defmodule CoreWeb.UI.Timestamp do
     )
   end
 
-  def after?(date1, date2) do
+  def after?(%Date{} = date1, %DateTime{} = date2) do
+    Date.compare(date1, to_date(date2)) == :gt
+  end
+
+  def after?(%DateTime{} = date1, %DateTime{} = date2) do
     DateTime.compare(date1, date2) == :gt
   end
 
@@ -100,7 +100,11 @@ defmodule CoreWeb.UI.Timestamp do
     )
   end
 
-  def before?(date1, date2) do
+  def before?(%Date{} = date1, %DateTime{} = date2) do
+    Date.compare(date1, to_date(date2)) == :lt
+  end
+
+  def before?(%DateTime{} = date1, %DateTime{} = date2) do
     DateTime.compare(date1, date2) == :lt
   end
 
@@ -123,6 +127,10 @@ defmodule CoreWeb.UI.Timestamp do
     end
   end
 
+  def humanize_time(timestamp) do
+    Timex.format!(timestamp, "%H:%M", :strftime)
+  end
+
   def humanize_date(%Date{} = date) do
     Timex.format!(date, "%A %d %b '%y", :strftime)
   end
@@ -139,23 +147,17 @@ defmodule CoreWeb.UI.Timestamp do
 
       Timex.before?(Timex.shift(Timex.today(), days: -8), NaiveDateTime.to_date(timestamp)) ->
         weekday = Timex.format!(timestamp, "%A", :strftime)
-        translated_weekday = Timex.Translator.translate(locale(), "weekdays", weekday)
-        "#{translated_weekday} #{dgettext("eyra-ui", "timestamp.at")} #{time}"
+        "#{weekday} #{dgettext("eyra-ui", "timestamp.at")} #{time}"
 
       true ->
         weekday = Timex.format!(timestamp, "%A", :strftime)
-        translated_weekday = Timex.Translator.translate(locale(), "weekdays", weekday)
         month = Timex.format!(timestamp, "%B", :strftime)
-        translated_month = Timex.Translator.translate(locale(), "months", month)
         day_of_month = Timex.format!(timestamp, "%e", :strftime)
 
-        translated_day_of_month =
-          Timex.Translator.translate(locale(), "days_of_month", day_of_month)
-
-        if locale() == "nl" do
-          "#{translated_weekday}, #{translated_day_of_month} #{translated_month}"
+        if Timex.Translator.current_locale() == "nl" do
+          "#{weekday}, #{day_of_month} #{month}"
         else
-          "#{translated_weekday}, #{translated_month} #{translated_day_of_month}"
+          "#{weekday}, #{month} #{day_of_month}"
         end
     end
   end

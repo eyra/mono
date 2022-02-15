@@ -1,0 +1,16 @@
+defmodule Systems.Director do
+  def context(director), do: module(director, "Context")
+  def presenter(director), do: module(director, "Presenter")
+
+  defp module(%{director: director}, name) when is_atom(director),
+    do: module(Atom.to_string(director), name)
+
+  defp module(director, name) when is_atom(director), do: module(Atom.to_string(director), name)
+
+  defp module(director, name) do
+    director = Macro.camelize(director)
+
+    "Elixir.Systems.#{director}.#{name}"
+    |> String.to_existing_atom()
+  end
+end

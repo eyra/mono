@@ -4,6 +4,11 @@ defmodule Systems.Lab.Context do
   alias Systems.Lab.VUDaySchedule, as: DaySchedule
 
   alias Core.Repo
+  alias Ecto.Multi
+
+  alias Frameworks.{
+    Signal
+  }
 
   alias Systems.{
     Lab
@@ -11,9 +16,9 @@ defmodule Systems.Lab.Context do
 
   alias Core.Accounts.User
 
-  def get(id, opts \\ []) do
+  def get(id, preload \\ []) do
     from(lab_tool in Lab.ToolModel,
-      preload: ^Keyword.get(opts, :preload, [])
+      preload: ^preload
     )
     |> Repo.get!(id)
   end
@@ -25,13 +30,43 @@ defmodule Systems.Lab.Context do
     |> Repo.insert()
   end
 
+  def copy(%Lab.ToolModel{} = tool, auth_node) do
+    %Lab.ToolModel{}
+    |> Lab.ToolModel.changeset(:copy, Map.from_struct(tool))
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Repo.insert!()
+  end
+
+  def update_tool(changeset) do
+    with {:ok, %{tool: tool} = result} <-
+           Multi.new()
+           |> Multi.update(:tool, changeset)
+           |> Repo.transaction() do
+      Signal.Context.dispatch!(:lab_tool_updated, tool)
+      {:ok, result}
+    end
+  end
+
+  def get_time_slot(id, preload \\ []) do
+    from(ts in Lab.TimeSlotModel,
+      where: ts.id == ^id,
+      preload: ^preload
+    )
+    |> Repo.one()
+  end
+
   def get_time_slots(id, preload \\ []) do
     from(ts in Lab.TimeSlotModel,
-      where: ts.tool_id == ^id,
+      where: ts.tool_id == ^id and ts.enabled? == true,
       order_by: {:asc, :start_time},
       preload: ^preload
     )
     |> Repo.all()
+  end
+
+  def get_available_time_slots(id) do
+    get_time_slots(id, [:reservations])
+    |> Enum.filter(&(&1.number_of_seats > Enum.count(&1.reservations)))
   end
 
   def new_day_model(%Lab.ToolModel{id: id}) do
@@ -53,41 +88,99 @@ defmodule Systems.Lab.Context do
     }
   end
 
-  def edit_day_model(%Lab.ToolModel{id: id}, date) do
-    date_time_slots =
-      get_time_slots(id, [:reservations])
-      |> Enum.filter(&(Date.compare(Timestamp.to_date(&1.start_time), date) == :eq))
+  def duplicate_day_model(%Lab.ToolModel{id: id}, %{date: date, location: location}) do
+    all_time_slots = get_time_slots(id, [:reservations])
+    base_values = DaySchedule.base_values(all_time_slots)
 
-    edit_day_model(date_time_slots, date)
-  end
+    time_slots =
+      all_time_slots
+      |> Enum.filter(
+        &(Date.compare(Timestamp.to_date(&1.start_time), date) == :eq and
+            &1.location == location)
+      )
 
-  def edit_day_model([_ | _] = time_slots, date) do
-    base_values = DaySchedule.base_values(time_slots)
+    entries = time_slots |> DaySchedule.entries()
 
-    {
-      :ok,
-      %Lab.DayModel{
-        date: date,
-        date_editable?: Timestamp.future?(date),
-        location: Map.get(base_values, :location),
-        number_of_seats: Map.get(base_values, :number_of_seats),
-        entries: DaySchedule.entries(time_slots)
-      }
+    number_of_seats =
+      time_slots
+      |> Enum.reduce(
+        0,
+        fn %{number_of_seats: number_of_seats}, acc ->
+          if number_of_seats > acc do
+            number_of_seats
+          else
+            acc
+          end
+        end
+      )
+
+    new_date =
+      base_values
+      |> Map.get(:start_time)
+      |> Timestamp.shift_days(1)
+      |> Timestamp.to_date()
+
+    %Lab.DayModel{
+      date: new_date,
+      date_editable?: true,
+      location: location,
+      number_of_seats: number_of_seats,
+      entries: entries
     }
   end
 
-  def edit_day_model(_, date), do: {:error, "No time slots available on #{date}"}
+  def edit_day_model(%Lab.ToolModel{id: id}, %{date: date, location: location}) do
+    time_slots =
+      get_time_slots(id, [:reservations])
+      |> Enum.filter(
+        &(Date.compare(Timestamp.to_date(&1.start_time), date) == :eq and
+            &1.location == location)
+      )
 
-  def process_day_model(%Lab.ToolModel{} = tool, %{
-        date: date,
-        location: location,
-        entries: entries
-      }) do
-    entries
-    |> Enum.each(&process_day_entry(&1, tool, date, location))
+    date_editable? = Timestamp.future?(date)
+    entries = time_slots |> DaySchedule.entries()
+
+    number_of_seats =
+      time_slots
+      |> Enum.reduce(
+        0,
+        fn %{number_of_seats: number_of_seats}, acc ->
+          if number_of_seats > acc do
+            number_of_seats
+          else
+            acc
+          end
+        end
+      )
+
+    %Lab.DayModel{
+      date: date,
+      date_editable?: date_editable?,
+      location: location,
+      number_of_seats: number_of_seats,
+      entries: entries
+    }
   end
 
-  defp process_day_entry(
+  def submit_day_model(
+        %Lab.ToolModel{} = tool,
+        %{
+          date: og_date,
+          location: og_location
+        },
+        %{
+          date: date,
+          location: location,
+          entries: entries
+        }
+      ) do
+    entries
+    |> Enum.each(&submit_day_entry(&1, tool, og_date, og_location, date, location))
+
+    Signal.Context.dispatch!(:lab_tool_updated, tool)
+  end
+
+  defp submit_day_entry(
          %{
            type: :time_slot,
            start_time: start_time,
@@ -95,35 +188,52 @@ defmodule Systems.Lab.Context do
            enabled?: enabled?
          },
          %Lab.ToolModel{} = tool,
+         og_date,
+         og_location,
          date,
          location
        ) do
-    start_date_time = Timestamp.from_date_and_time(date, start_time)
+    og_start_time = Timestamp.from_date_and_time(og_date, start_time)
+    start_time = Timestamp.from_date_and_time(date, start_time)
 
-    exists? = time_slot_exists?(tool, start_date_time, location)
-
-    case {exists?, enabled?} do
-      {false, false} ->
-        :noop
-
-      {false, true} ->
-        create_time_slot(tool, %{
-          start_time: start_date_time,
-          location: location,
-          number_of_seats: number_of_seats
-        })
-
-      {true, true} ->
-        # update (reset possible soft delete)
-        :noop
-
-      {true, false} ->
-        # soft delete
-        :noop
-    end
+    tool
+    |> time_slot_query(og_start_time, og_location)
+    |> Repo.one()
+    |> submit_time_slot(tool, %{
+      enabled?: enabled?,
+      start_time: start_time,
+      location: location,
+      number_of_seats: number_of_seats
+    })
   end
 
-  defp process_day_entry(_, _, _, _), do: :noop
+  defp submit_day_entry(_, _, _, _, _, _), do: :noop
+
+  defp submit_time_slot(nil, _tool, %{enabled?: false}), do: nil
+
+  defp submit_time_slot(nil, tool, attrs) do
+    create_time_slot(tool, attrs)
+  end
+
+  defp submit_time_slot(time_slot, _tool, attrs) do
+    update_time_slot(time_slot, attrs)
+  end
+
+  def remove_day(%Lab.ToolModel{} = tool, %{date: date, location: location}) do
+    from = Timestamp.from_date_and_time(date, 0)
+    to = Timestamp.from_date_and_time(date, 0) |> Timestamp.shift_days(1)
+
+    with {count, nil} <-
+           tool
+           |> time_slot_query(from, to, location)
+           |> Repo.update_all(set: [enabled?: false]) do
+      if count > 0 do
+        Signal.Context.dispatch!(:lab_tool_updated, tool)
+      end
+
+      {count, nil}
+    end
+  end
 
   defp create_time_slot(%Lab.ToolModel{} = tool, attrs) do
     %Lab.TimeSlotModel{}
@@ -132,10 +242,10 @@ defmodule Systems.Lab.Context do
     |> Repo.insert()
   end
 
-  defp time_slot_exists?(%Lab.ToolModel{} = tool, start_time, location) do
-    tool
-    |> time_slot_query(start_time, location)
-    |> Repo.exists?()
+  defp update_time_slot(%Lab.TimeSlotModel{} = time_slot, attrs) do
+    time_slot
+    |> Lab.TimeSlotModel.changeset(attrs)
+    |> Repo.update!()
   end
 
   defp time_slot_query(%Lab.ToolModel{id: tool_id}, start_time, location) do
@@ -147,27 +257,45 @@ defmodule Systems.Lab.Context do
     )
   end
 
+  defp time_slot_query(%Lab.ToolModel{id: tool_id}, from, to, location) do
+    from(ts in Lab.TimeSlotModel,
+      where:
+        ts.tool_id == ^tool_id and
+          ts.start_time >= ^from and
+          ts.start_time < ^to and
+          ts.location == ^location
+    )
+  end
+
   def reserve_time_slot(time_slot_id, %User{} = user) when is_integer(time_slot_id) do
     Lab.TimeSlotModel
     |> Repo.get(time_slot_id)
     |> reserve_time_slot(user)
   end
 
-  def reserve_time_slot(%Lab.TimeSlotModel{} = time_slot, %User{} = user) do
-    # Disallow reservations for past time slots
-    if DateTime.compare(time_slot.start_time, DateTime.now!("Etc/UTC")) == :lt do
-      {:error, :time_slot_is_in_the_past}
-    else
-      # First cancel any existing reservations for the same lab
-      cancel_reservations(time_slot.tool_id, user)
+  def reserve_time_slot(%Lab.TimeSlotModel{tool_id: tool_id} = time_slot, %User{} = user) do
+    cancel_reservations(time_slot.tool_id, user)
 
-      %Lab.ReservationModel{}
-      |> Lab.ReservationModel.changeset(%{
-        status: :reserved,
-        user_id: user.id,
-        time_slot_id: time_slot.id
+    with {:ok, reservation} <-
+           %Lab.ReservationModel{}
+           |> Lab.ReservationModel.changeset(%{
+             status: :reserved,
+             user_id: user.id,
+             time_slot_id: time_slot.id
+           })
+           |> Repo.insert(
+             conflict_target: [:user_id, :time_slot_id],
+             on_conflict: {:replace, [:status]}
+           ) do
+      tool = get(tool_id)
+
+      Signal.Context.dispatch!(:lab_reservation_created, %{
+        tool: tool,
+        user: user,
+        time_slot: time_slot
       })
-      |> Repo.insert()
+
+      {:ok, reservation}
     end
   end
 
@@ -182,10 +310,15 @@ defmodule Systems.Lab.Context do
 
   defp cancel_reservations(tool_id, %User{} = user) when is_integer(tool_id) do
     query = reservation_query(tool_id, user)
-    {update_count, _} = Repo.update_all(query, set: [status: :cancelled])
 
-    unless update_count < 2 do
-      throw(:more_than_one_reservation_should_not_happen)
+    with {update_count, _} <- Repo.update_all(query, set: [status: :cancelled]) do
+      if update_count > 0 do
+        Signal.Context.dispatch!(:lab_reservations_cancelled, %{tool: get(tool_id), user: user})
+      end
+
+      unless update_count < 2 do
+        throw(:more_than_one_reservation_should_not_happen)
+      end
     end
   end
 
@@ -207,5 +340,11 @@ defmodule Systems.Lab.Context do
       |> Lab.ToolModel.operational_changeset(Map.from_struct(lab_tool))
 
     changeset.valid?
+  end
+end
+
+defimpl Core.Persister, for: Systems.Lab.ToolModel do
+  def save(_tool, changeset) do
+    Systems.Lab.Context.update_tool(changeset)
   end
 end

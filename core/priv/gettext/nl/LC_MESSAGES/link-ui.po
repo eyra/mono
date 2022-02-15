@@ -41,7 +41,7 @@ msgstr "Verwijderen"
 
 #, elixir-format
 msgid "preview.button"
-msgstr "Bekijken"
+msgstr "Voorbeeld"
 
 #, elixir-format
 msgid "submit.button"

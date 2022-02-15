@@ -15,7 +15,7 @@ defmodule Frameworks.Pixel.Button.Face.Icon do
   )
 
   def icon_name(%{icon: icon, color: nil}), do: "#{icon}"
-  def icon_name(%{icon: icon, color: color}), do: "#{icon}-#{color}"
+  def icon_name(%{icon: icon, color: color}), do: "#{icon}_#{color}"
   def icon_name(%{icon: icon}), do: "#{icon}"
 
   def render(assigns) do

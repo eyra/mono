@@ -24,30 +24,30 @@ defmodule Systems.Lab.DayEntryTimeSlotItem do
     ~F"""
       <div class="flex flex-row items-center h-12 w-full">
         <div class="w-10">
-          <Selector id={:"#{@start_time}"} items={[%{id: :id, active: @enabled?}]} type={:checkbox} parent={@target}/>
+          <Selector id={@start_time} items={[%{id: :id, active: @enabled?}]} type={:checkbox} parent={@target}/>
         </div>
         <div class="w-12">
           <BodyLarge color={if @enabled? do "text-grey1" else "text-grey2" end}>
-            {{@bullet}}
+            {@bullet}
           </BodyLarge>
         </div>
         <div class="w-16">
           <BodyMedium color={if @enabled? do "text-grey1" else "text-grey2" end}>
-            {{timestamp(@start_time)}}
+            {timestamp(@start_time)}
           </BodyMedium>
         </div>
         <div class="flex-grow"></div>
         <div>
           <BodyMedium>
-            <span :if={@enabled?}>{{dngettext("link-lab", "1 seat", "%{count} seats", @number_of_seats)}}</span>
-            <span :if={not @enabled?} class="text-grey2">{{dgettext("link-lab", "time.slot.item.available.label")}}</span>
+            <span :if={@enabled?}>{dngettext("link-lab", "1 seat", "%{count} seats", @number_of_seats)}</span>
+            <span :if={not @enabled?} class="text-grey2">{dgettext("link-lab", "time.slot.item.available.label")}</span>
           </BodyMedium>
         </div>
         <div class="flex-grow"></div>
         <div class="w-32">
           <div :if={@number_of_reservations > 0}>
             <BodyMedium align="text-right" color="text-warning">
-              {{dngettext("link-lab", "1 reservation", "%{count} reservations", @number_of_reservations)}}
+              {dngettext("link-lab", "1 reservation", "%{count} reservations", @number_of_reservations)}
             </BodyMedium>
           </div>
         </div>

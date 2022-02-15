@@ -1,4 +1,5 @@
 defmodule Systems.Observatory.Context do
+  alias Systems.Director
   alias CoreWeb.Endpoint
   alias Phoenix.LiveView
 
@@ -32,12 +33,12 @@ defmodule Systems.Observatory.Context do
     socket
   end
 
-  def update_view_model(%{assigns: %{model: %{director: director}}} = socket, model_or_id, page) do
-    update_view_model(socket, presenter(director), model_or_id, page)
-  end
-
   def update_view_model(%{assigns: %{model: %{presenter: presenter}}} = socket, model_or_id, page) do
     update_view_model(socket, presenter, model_or_id, page)
+  end
+
+  def update_view_model(%{assigns: %{model: model}} = socket, model_or_id, page) do
+    update_view_model(socket, Director.presenter(model), model_or_id, page)
   end
 
   defp update_view_model(socket, presenter, model_or_id, page) do
@@ -60,15 +61,6 @@ defmodule Systems.Observatory.Context do
     |> apply(:view_model, [model_or_id, page, user, url_resolver])
   end
 
-  defp presenter(director) when is_atom(director), do: presenter(Atom.to_string(director))
-
-  defp presenter(director) do
-    director = Macro.camelize(director)
-
-    "Elixir.Systems.#{director}.Presenter"
-    |> String.to_existing_atom()
-  end
-
   defmacro __using__(_opts \\ []) do
     quote do
       import unquote(__MODULE__), only: [observe: 2]
@@ -83,6 +75,7 @@ defmodule Systems.Observatory.Context do
           socket
           |> Context.update_view_model(model, __MODULE__)
           |> handle_view_model_updated()
+          |> Frameworks.Pixel.Flash.put_info("Updated")
         }
       end
 

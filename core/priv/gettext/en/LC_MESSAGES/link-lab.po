@@ -17,7 +17,7 @@ msgstr "Add day"
 
 #, elixir-format
 msgid "form.description"
-msgstr "%{timeslots} timeslots and %{participants} participants based on the schema below."
+msgstr "You currently planned %{time_slots} time slots with room for in total %{seats} participants."
 
 #, elixir-format
 msgid "form.title"
@@ -37,11 +37,11 @@ msgstr "Seats"
 
 #, elixir-format
 msgid "day.schedule.submit.button"
-msgstr "Submit day schedule"
+msgstr "Confirm schedule"
 
 #, elixir-format
 msgid "time.slot.item.available.label"
-msgstr "Available"
+msgstr "Not planned"
 
 #, elixir-format
 msgid "1 reservation"
@@ -57,10 +57,86 @@ msgstr[1] ""
 
 #, elixir-format
 msgid "day.schedule.byline"
-msgstr "You have scheduled %{time_slots} and %{seats} for this day."
+msgstr "Day schedule: %{time_slots} with %{seats} in total."
 
 #, elixir-format
 msgid "1 time slot"
 msgid_plural "%{count} time slots"
 msgstr[0] ""
 msgstr[1] ""
+
+#, elixir-format, ex-autogen
+msgid "duplicate.day.button"
+msgstr "Duplicate"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "edit.day.button"
+msgstr "Edit"
+
+#, elixir-format, ex-autogen
+msgid "timeslot.selector.label"
+msgstr "Select a time slot"
+
+#, elixir-format, ex-autogen
+msgid "timeslot.submit.button"
+msgstr "Reserve a seat"
+
+#, elixir-format, ex-autogen
+msgid "apply.cta.title"
+msgstr "Participate"
+
+#, elixir-format, ex-autogen
+msgid "no.reservation.title"
+msgstr "Book lab session"
+
+#, elixir-format, ex-autogen
+msgid "open.cta.title"
+msgstr "Proceed"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "reservation.title"
+msgstr "Booked lab session"
+
+#, elixir-format, ex-autogen
+msgid "submit.warning.no.selection"
+msgstr "Please select a time slot first"
+
+#, elixir-format, ex-autogen
+msgid "update.warning.time.slot.no.longer.available"
+msgstr "Selected time slot is no longer available, please select a different one"
+
+#, elixir-format, ex-autogen
+msgid "participated.label"
+msgstr "Participated"
+
+#, elixir-format, ex-autogen
+msgid "pending.label"
+msgstr "Reserved"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.title"
+msgstr "Lab check in"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.query.label"
+msgstr "Panl ID"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.body"
+msgstr "On arrival, enter the participant Panl ID below. Their reserved time slot will appear and you can check them in."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.expired"
+msgstr "Reservation has been expired"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.not.found"
+msgstr "Subject not found"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.accept.button"
+msgstr "Sign up"
+
+#, elixir-format, ex-autogen
+msgid "experiment.checkin.label"
+msgstr "Check in with Panl ID:"

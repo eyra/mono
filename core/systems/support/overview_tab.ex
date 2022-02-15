@@ -7,7 +7,7 @@ defmodule Systems.Support.OverviewTab do
 
   alias Systems.Support
 
-  prop(status, :atom)
+  prop(props, :map)
 
   data(items, :list)
 

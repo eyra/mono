@@ -6,14 +6,24 @@ defmodule Systems.Campaign.MonitorView do
 
   alias Systems.{
     Crew,
-    Campaign
+    Campaign,
+    Lab
   }
 
   alias Frameworks.Pixel.Text.{Title2, Title3, BodyLarge, Label}
 
   prop(props, :map, required: true)
+
   data(vm, :any)
   data(reject_task, :number)
+  data(labels, :list)
+
+  def update(%{checkin: :new_participant}, socket) do
+    {
+      :ok,
+      socket |> update_vm()
+    }
+  end
 
   def update(
         %{reject: :submit, rejection: rejection},
@@ -34,13 +44,25 @@ defmodule Systems.Campaign.MonitorView do
   end
 
   # Handle initial update
-  def update(%{id: id, props: %{entity_id: entity_id}}, socket) do
+  def update(
+        %{
+          id: id,
+          props: %{
+            entity_id: entity_id,
+            attention_list_enabled?: attention_list_enabled?,
+            labels: labels
+          }
+        },
+        socket
+      ) do
     {
       :ok,
       socket
       |> assign(
         id: id,
         entity_id: entity_id,
+        attention_list_enabled?: attention_list_enabled?,
+        labels: labels,
         reject_task: nil
       )
       |> update_vm()
@@ -59,7 +81,7 @@ defmodule Systems.Campaign.MonitorView do
   def handle_event(
         "accept_all_pending_started",
         _params,
-        %{assigns: %{vm: %{pending_started_tasks: tasks}}} = socket
+        %{assigns: %{vm: %{attention_tasks: tasks}}} = socket
       ) do
     Enum.each(tasks, &Crew.Context.accept_task(&1.id))
 
@@ -101,6 +123,9 @@ defmodule Systems.Campaign.MonitorView do
     }
   end
 
+  defp lab_tool(%{lab_tool: lab_tool}), do: lab_tool
+  defp lab_tool(_), do: nil
+
   @impl true
   def render(assigns) do
     ~F"""
@@ -111,8 +136,13 @@ defmodule Systems.Campaign.MonitorView do
         <MarginY id={:page_top} />
         <Case value={@vm.active?} >
           <True>
+            <div :if={lab_tool(@vm.experiment) != nil}>
+              <Lab.CheckInView id={:search_subject_view} tool={lab_tool(@vm.experiment)} parent={%{type: __MODULE__, id: @id}} />
+              <Spacing value="XL" />
+            </div>
+
             <Title2>{dgettext("link-monitor", "phase1.title")}</Title2>
-            <Title3 margin={"mb-8"}>{dgettext("link-survey", "status.title")}<span class="text-primary"> {@vm.finished_count}/{@vm.subject_count}</span></Title3>
+            <Title3 margin={"mb-8"}>{dgettext("link-survey", "status.title")}<span class="text-primary"> {@vm.participated_count}/{@vm.subject_count}</span></Title3>
             <Spacing value="M" />
             <div class="bg-grey6 rounded p-12">
               <ProgressBar {...@vm.progress} />
@@ -120,19 +150,13 @@ defmodule Systems.Campaign.MonitorView do
                 <div>
                   <div class="flex flex-row items-center gap-3">
                     <div class="flex-shrink-0 w-6 h-6 rounded-full bg-success"></div>
-                    <Label>{dgettext("link-survey", "completed.label")}: {@vm.finished_count}</Label>
+                    <Label>{@labels.participated}: {@vm.participated_count}</Label>
                   </div>
                 </div>
                 <div>
                   <div class="flex flex-row items-center gap-3">
                     <div class="flex-shrink-0 w-6 h-6 rounded-full bg-warning"></div>
-                    <Label>{dgettext("link-survey", "started.label")}: {@vm.started_count}</Label>
-                  </div>
-                </div>
-                <div>
-                  <div class="flex flex-row items-center gap-3">
-                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-tertiary"></div>
-                    <Label>{dgettext("link-survey", "pending.label")}: {@vm.applied_count}</Label>
+                    <Label>{@labels.pending}: {@vm.pending_count}</Label>
                   </div>
                 </div>
                 <div>
@@ -147,9 +171,9 @@ defmodule Systems.Campaign.MonitorView do
 
             <Title2>{dgettext("link-monitor", "phase2.title")}</Title2>
 
-            <div :if={Enum.count(@vm.pending_started_tasks) > 0}>
+            <div :if={Enum.count(@vm.attention_tasks) > 0}>
               <Title3 margin={"mb-8"}>
-                {dgettext("link-monitor", "attention.title")}<span class="text-primary"> {Enum.count(@vm.pending_started_tasks)}</span>
+                {dgettext("link-monitor", "attention.title")}<span class="text-primary"> {Enum.count(@vm.attention_tasks)}</span>
               </Title3>
               <BodyLarge>{dgettext("link-monitor", "attention.body")}</BodyLarge>
               <Spacing value="M" />
@@ -161,7 +185,7 @@ defmodule Systems.Campaign.MonitorView do
               </Wrap>
               <Spacing value="M" />
               <div class="flex flex-col gap-6">
-                <div :for={task <- @vm.pending_started_tasks}>
+                <div :for={task <- @vm.attention_tasks}>
                   <Crew.TaskItemView {...task} />
                 </div>
               </div>
@@ -234,6 +258,7 @@ defmodule Systems.Campaign.MonitorView do
   defp to_view_model(
          %{
            assigns: %{
+             attention_list_enabled?: attention_list_enabled?,
              myself: target
            }
          },
@@ -246,20 +271,23 @@ defmodule Systems.Campaign.MonitorView do
              assignable_experiment:
                %{
                  subject_count: subject_count
-               } = tool
+               } = experiment
            }
          }
        ) do
-    finished_count = Crew.Context.count_finished_tasks(crew)
-    started_count = Crew.Context.count_started_tasks(crew)
-    applied_count = Crew.Context.count_applied_tasks(crew)
-    vacant_count = tool |> get_vacant_count(finished_count, started_count, applied_count)
+    participated_count = Crew.Context.count_participated_tasks(crew)
+    pending_count = Crew.Context.count_pending_tasks(crew)
+    vacant_count = experiment |> get_vacant_count(participated_count, pending_count)
 
     active? = status === :accepted or Crew.Context.active?(crew)
 
-    pending_started_tasks =
-      Crew.Context.expired_pending_started_tasks(crew)
-      |> to_view_model(:expired_pending_started_tasks, target)
+    attention_tasks =
+      if attention_list_enabled? do
+        Crew.Context.expired_pending_started_tasks(crew)
+        |> to_view_model(:attention_tasks, target)
+      else
+        []
+      end
 
     completed_tasks =
       Crew.Context.completed_tasks(crew)
@@ -274,13 +302,13 @@ defmodule Systems.Campaign.MonitorView do
       |> to_view_model(:accepted_tasks, target)
 
     %{
+      experiment: experiment,
       active?: active?,
       subject_count: subject_count,
-      applied_count: applied_count,
-      started_count: started_count,
-      finished_count: finished_count,
+      pending_count: pending_count,
+      participated_count: participated_count,
       vacant_count: vacant_count,
-      pending_started_tasks: pending_started_tasks,
+      attention_tasks: attention_tasks,
       completed_tasks: completed_tasks,
       rejected_tasks: rejected_tasks,
       accepted_tasks: accepted_tasks,
@@ -288,33 +316,29 @@ defmodule Systems.Campaign.MonitorView do
         size: subject_count,
         bars: [
           %{
-            color: :tertiary,
-            size: finished_count + started_count + applied_count
-          },
-          %{
             color: :warning,
-            size: finished_count + started_count
+            size: participated_count + pending_count
           },
           %{
             color: :success,
-            size: finished_count
+            size: participated_count
           }
         ]
       }
     }
   end
 
-  defp get_vacant_count(tool, finished, started, applied) do
-    case tool.subject_count do
+  defp get_vacant_count(%{subject_count: subject_count} = _experiment, finished, pending) do
+    case subject_count do
       count when is_nil(count) -> 0
-      count when count > 0 -> count - (finished + started + applied)
+      count when count > 0 -> count - (finished + pending)
       _ -> 0
     end
   end
 
   defp to_view_model([], _, _), do: []
 
-  defp to_view_model(tasks, :expired_pending_started_tasks, target) do
+  defp to_view_model(tasks, :attention_tasks, target) do
     Enum.map(tasks, &to_view_model(:attention, target, &1))
   end
 

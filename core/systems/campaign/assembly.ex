@@ -24,14 +24,12 @@ defmodule Systems.Campaign.Assembly do
         promotion: promotion,
         promotable_assignment: %{
           crew: crew,
-          assignable_experiment: %{
-            survey_tool: survey_tool
-          }
+          assignable_experiment: experiment
         }
       }) do
     Multi.new()
     |> EctoHelper.delete(:promotion, promotion)
-    |> EctoHelper.delete(:survey_tool, survey_tool)
+    |> Assignment.Context.delete_tool(experiment)
     |> EctoHelper.delete(:crew, crew)
     |> Multi.delete(:auth_node, auth_node)
     |> Repo.transaction()
@@ -136,11 +134,7 @@ defmodule Systems.Campaign.Assembly do
               auth_node: assignment_auth_node,
               assignable_experiment:
                 %{
-                  auth_node: experiment_auth_node,
-                  survey_tool:
-                    %{
-                      auth_node: tool_auth_node
-                    } = tool
+                  auth_node: experiment_auth_node
                 } = experiment
             } = assignment
         } = campaign
@@ -149,12 +143,11 @@ defmodule Systems.Campaign.Assembly do
     promotion_auth_node = Authorization.copy(promotion_auth_node, campaign_auth_node)
     assignment_auth_node = Authorization.copy(assignment_auth_node, campaign_auth_node)
     experiment_auth_node = Authorization.copy(experiment_auth_node, assignment_auth_node)
-    tool_auth_node = Authorization.copy(tool_auth_node, experiment_auth_node)
 
     promotion = Promotion.Context.copy(promotion, promotion_auth_node)
     submission = Submissions.copy(submission, promotion, pool)
     criteria = Submissions.copy(criteria, submission)
-    tool = Survey.Context.copy(tool, tool_auth_node)
+    tool = Assignment.Context.copy_tool(experiment, experiment_auth_node)
     experiment = Assignment.Context.copy_experiment(experiment, tool, experiment_auth_node)
     assignment = Assignment.Context.copy(assignment, experiment, assignment_auth_node)
     campaign = Campaign.Context.copy(campaign, promotion, assignment, campaign_auth_node)

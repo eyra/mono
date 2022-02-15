@@ -1,4 +1,5 @@
 defprotocol Frameworks.Utility.ViewModelBuilder do
+  @type accumulator :: map
   @type model :: map | list
   @type page :: atom()
   @type user :: map
