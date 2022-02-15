@@ -358,7 +358,7 @@ defmodule Systems.Campaign.AssemblyTest do
                promotion: %{
                  title: "New Campaign (copy)",
                  submission: %{
-                   reward_value: ^reward_value,
+                   reward_value: nil,
                    schedule_end: ^schedule_end,
                    schedule_start: ^schedule_start,
                    criteria: %{
@@ -370,7 +370,7 @@ defmodule Systems.Campaign.AssemblyTest do
                    pool: %{
                      name: ^pool_name
                    },
-                   status: ^status
+                   status: :idle
                  }
                },
                promotable_assignment: %{

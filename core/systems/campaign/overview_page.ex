@@ -171,7 +171,7 @@ defmodule Systems.Campaign.OverviewPage do
 
   @impl true
   def handle_info(%{selector: :cancel}, socket) do
-    {:noreply, socket |> assign(dialog: nil)}
+    {:noreply, socket |> assign(selector_dialog: nil)}
   end
 
   @impl true

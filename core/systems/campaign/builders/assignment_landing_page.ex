@@ -139,6 +139,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
       id: :experiment_task_view,
       view: Lab.ExperimentTaskView,
       model: %{
+        public_id: member.public_id,
         status: task.status,
         reservation: reservation,
         lab_tool: lab_tool,

@@ -135,3 +135,7 @@ msgstr ""
 #, elixir-format, ex-autogen
 msgid "search.subject.accept.button"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "experiment.checkin.label"
+msgstr ""

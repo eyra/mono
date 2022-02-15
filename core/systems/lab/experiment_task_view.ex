@@ -3,7 +3,7 @@ defmodule Systems.Lab.ExperimentTaskView do
 
   alias CoreWeb.UI.Navigation.ButtonBar
   alias Frameworks.Utility.LiveCommand
-  alias Frameworks.Pixel.Text.{Title3, Title6, BodyLarge}
+  alias Frameworks.Pixel.Text.{Title3, Title6, Body}
   alias Frameworks.Pixel.Dropdown
 
   alias Systems.{
@@ -11,6 +11,7 @@ defmodule Systems.Lab.ExperimentTaskView do
   }
 
   prop(lab_tool, :map, required: true)
+  prop(public_id, :any, required: true)
   prop(status, :any, required: true)
   prop(reservation, :any, required: true)
   prop(actions, :list, required: true)
@@ -92,6 +93,7 @@ defmodule Systems.Lab.ExperimentTaskView do
   def update(
         %{
           id: id,
+          public_id: public_id,
           lab_tool: lab_tool,
           status: status,
           actions: actions,
@@ -105,6 +107,7 @@ defmodule Systems.Lab.ExperimentTaskView do
       socket
       |> assign(
         id: id,
+        public_id: public_id,
         lab_tool: lab_tool,
         status: status,
         actions: actions,
@@ -159,15 +162,10 @@ defmodule Systems.Lab.ExperimentTaskView do
     socket
   end
 
-  defp to_option(%Lab.TimeSlotModel{id: id, start_time: start_time, location: location}) do
-    date =
-      start_time
-      |> CoreWeb.UI.Timestamp.to_date()
-      |> CoreWeb.UI.Timestamp.humanize_date()
-
-    time =
-      start_time
-      |> CoreWeb.UI.Timestamp.humanize_time()
+  defp to_option(%Lab.TimeSlotModel{id: id} = time_slot) do
+    date = date(time_slot)
+    time = time(time_slot)
+    location = location(time_slot)
 
     %{
       id: id,
@@ -175,18 +173,33 @@ defmodule Systems.Lab.ExperimentTaskView do
     }
   end
 
+  defp date(%Lab.TimeSlotModel{start_time: start_time}) do
+    start_time
+    |> CoreWeb.UI.Timestamp.to_date()
+    |> CoreWeb.UI.Timestamp.humanize_date()
+  end
+
+  defp time(%Lab.TimeSlotModel{start_time: start_time}) do
+    start_time
+    |> CoreWeb.UI.Timestamp.humanize_time()
+  end
+
+  defp location(%Lab.TimeSlotModel{location: location}), do: location
+
+  defp time_slot(%{time_slot_id: time_slot_id}) do
+    Lab.Context.get_time_slot(time_slot_id)
+  end
+
+  defp id_text(public_id) do
+    label = dgettext("link-lab", "experiment.checkin.label")
+    "🆔  #{label}  #{public_id}"
+  end
+
+  # Actions
+
   @impl true
   def handle_event(event, _params, socket) do
     {:noreply, LiveCommand.execute(event, socket)}
-  end
-
-  defp reservation_text(%{time_slot_id: time_slot_id} = _reservation) do
-    label =
-      Lab.Context.get_time_slot(time_slot_id)
-      |> to_option()
-      |> Map.get(:label)
-
-    "🗓  #{label}"
   end
 
   defp action_buttons(%{actions: actions, myself: target}) do
@@ -206,7 +219,13 @@ defmodule Systems.Lab.ExperimentTaskView do
       <div :if={@reservation != nil and @status == :pending}>
         <Title3>{dgettext("link-lab", "reservation.title")}</Title3>
         <Spacing value="M" />
-        <BodyLarge><span class="whitespace-pre-wrap">{reservation_text(@reservation)}</span></BodyLarge>
+        <div class="flex flex-col sm:flex-row gap-x-4 gap-y-3">
+          <Body><span class="whitespace-pre-wrap">🗓  {date(time_slot(@reservation))}</span></Body>
+          <Body><span class="whitespace-pre-wrap">🕙  {time(time_slot(@reservation))}</span></Body>
+          <Body><span class="whitespace-pre-wrap">📍 {location(time_slot(@reservation))}</span></Body>
+        </div>
+        <Spacing value="XXS" />
+        <Body><span class="whitespace-pre-wrap">{id_text(@public_id)}</span></Body>
         <Spacing value="S" />
       </div>
       <MarginY id={:button_bar_top} />

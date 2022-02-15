@@ -76,8 +76,14 @@ defmodule Core.Pools.Submissions do
   end
 
   def copy(%Submission{} = submission, %Promotion.Model{} = promotion, pool) do
+    attrs =
+      submission
+      |> Map.from_struct()
+      |> Map.put(:status, :idle)
+      |> Map.put(:reward_value, nil)
+
     %Submission{}
-    |> Submission.changeset(Map.from_struct(submission))
+    |> Submission.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:promotion, promotion)
     |> Ecto.Changeset.put_assoc(:pool, pool)
     |> Repo.insert!()

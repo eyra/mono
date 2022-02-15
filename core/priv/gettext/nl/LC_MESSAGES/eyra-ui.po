@@ -21,7 +21,7 @@ msgstr "Opgeslagen"
 
 #, elixir-format
 msgid "menu.item.dashboard"
-msgstr "Recent"
+msgstr "Mijn console"
 
 #, elixir-format
 msgid "menu.item.marketplace"
@@ -57,7 +57,7 @@ msgstr "To-do"
 
 #, elixir-format
 msgid "dashboard.title"
-msgstr "Recent"
+msgstr "Mijn console"
 
 #, elixir-format
 msgid "marketplace.title"

@@ -57,7 +57,7 @@ msgstr[1] ""
 
 #, elixir-format
 msgid "day.schedule.byline"
-msgstr "Day schedule: %{time_slots} time slots with room for %{seats} participants."
+msgstr "Day schedule: %{time_slots} with %{seats} in total."
 
 #, elixir-format
 msgid "1 time slot"
@@ -115,7 +115,7 @@ msgstr "Reserved"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.title"
-msgstr "Check in"
+msgstr "Lab check in"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.query.label"
@@ -123,7 +123,7 @@ msgstr "Panl ID"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.body"
-msgstr "On arrival ask the participant for a valid Panl ID and enter this in the input field below. The reservation will appear so you can sign up the participant."
+msgstr "On arrival, enter the participant Panl ID below. Their reserved time slot will appear and you can check them in."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.expired"
@@ -136,3 +136,7 @@ msgstr "Subject not found"
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.accept.button"
 msgstr "Sign up"
+
+#, elixir-format, ex-autogen
+msgid "experiment.checkin.label"
+msgstr "Check in with Panl ID:"
