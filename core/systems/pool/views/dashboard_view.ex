@@ -39,32 +39,43 @@ defmodule Systems.Pool.DashboardView do
       title: dgettext("link-studentpool", "year.label", year: year_string),
       rows: [
         %{
+          icon: "💤",
           title: dgettext("link-studentpool", "inactive.students"),
           value: Enum.count(inactive_students)
         },
         %{
+          icon: "↓",
           title: dgettext("link-studentpool", "min.credits.earned.label"),
-          value: Statistics.min(credits)
+          value: Statistics.min(credits) |> do_round()
         },
         %{
+          icon: "↑",
           title: dgettext("link-studentpool", "max.credits.earned.label"),
-          value: Statistics.max(credits)
+          value: Statistics.max(credits) |> do_round()
         },
         %{
+          icon: "➗",
           title: dgettext("link-studentpool", "mean.credits.earned.label"),
-          value: Statistics.mean(credits)
+          value: Statistics.mean(credits) |> do_round()
         },
         %{
+          icon: "┅",
           title: dgettext("link-studentpool", "median.credits.earned.label"),
-          value: Statistics.median(credits)
+          value: Statistics.median(credits) |> do_round()
         },
         %{
+          icon: "💯",
           title: dgettext("link-studentpool", "total.credits.earned.label"),
-          value: Statistics.sum(credits)
+          value: Statistics.sum(credits) |> do_round()
         }
       ]
     }
   end
+
+  defp do_round(number) when is_float(number),
+    do: number |> Decimal.from_float() |> Decimal.round(2)
+
+  defp do_round(number), do: number
 
   def render(assigns) do
     ~F"""
@@ -74,6 +85,7 @@ defmodule Systems.Pool.DashboardView do
           <Title2>{year.title}</Title2>
           <table class="table-auto">
             <tr :for={row <- year.rows}>
+              <td class="pr-4"><Body>{row.icon}</Body></td>
               <td class="pr-4"><Body>{row.title}</Body></td>
               <td><Body>{row.value}</Body></td>
             </tr>
