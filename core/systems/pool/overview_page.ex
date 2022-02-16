@@ -52,15 +52,15 @@ defmodule Systems.Pool.OverviewPage do
         props: %{},
         type: :fullpage,
         active: initial_tab === :campaigns
-      },
-      %{
-        id: :dashboard,
-        title: dgettext("link-studentpool", "tabbar.item.dashboard"),
-        component: Pool.DashboardView,
-        props: %{},
-        type: :fullpage,
-        active: initial_tab === :dashboard
       }
+      # %{
+      #   id: :dashboard,
+      #   title: dgettext("link-studentpool", "tabbar.item.dashboard"),
+      #   component: Pool.DashboardView,
+      #   props: %{},
+      #   type: :fullpage,
+      #   active: initial_tab === :dashboard
+      # }
     ]
   end
 
