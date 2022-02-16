@@ -7,6 +7,7 @@ defmodule Systems.Campaign.Context do
   alias Frameworks.GreenLight.Principal
   alias Core.Repo
   alias Core.Authorization
+  alias Core.Pools
 
   alias Systems.{
     Campaign,
@@ -65,6 +66,61 @@ defmodule Systems.Campaign.Context do
     |> Repo.all()
 
     # AUTH: Can be piped through auth filter.
+  end
+
+  def list_user_rewards(%Pools.Pool{} = pool, %{study_program_codes: _} = criteria) do
+    promotion_ids =
+      from(s in Pools.Submissions.query_submissions(pool, criteria), select: s.promotion_id)
+
+    from(member in Crew.MemberModel,
+      join: task in Crew.TaskModel,
+      on: task.crew_id == member.crew_id,
+      join: assignment in Assignment.Model,
+      on: assignment.crew_id == member.crew_id,
+      join: campaign in Campaign.Model,
+      on: campaign.promotable_assignment_id == assignment.id,
+      join: submission in Pools.Submission,
+      on: campaign.promotion_id == submission.promotion_id,
+      where: campaign.promotion_id in subquery(promotion_ids) and task.status == :accepted,
+      group_by: member.user_id,
+      select: sum(submission.reward_value)
+    )
+    |> Repo.all()
+  end
+
+  def list_inactive_users(%{study_program_codes: _} = features) do
+    active_user_ids =
+      from(member in Crew.MemberModel,
+        join: task in Crew.TaskModel,
+        on: task.crew_id == member.crew_id,
+        where: task.status == :accepted,
+        select: member.user_id
+      )
+
+    user_ids_with_features = from(u in query_users(features), select: u.id)
+
+    from(user in Core.Accounts.User,
+      where:
+        user.id in subquery(user_ids_with_features) and user.id not in subquery(active_user_ids),
+      select: user.id
+    )
+    |> Repo.all()
+  end
+
+  def query_users(%{study_program_codes: study_program_codes})
+      when is_list(study_program_codes) do
+    where =
+      study_program_codes
+      |> Enum.map(&Atom.to_string(&1))
+      |> Enum.map(&"%#{&1}%")
+      |> Enum.reduce(false, fn code, acc ->
+        dynamic(
+          [features],
+          fragment("?::text like ?", features.study_program_codes, ^code) or ^acc
+        )
+      end)
+
+    from(features in Core.Accounts.Features, where: ^where)
   end
 
   def list_submitted_campaigns(tool_entities, opts \\ []) do

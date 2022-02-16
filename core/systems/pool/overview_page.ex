@@ -7,7 +7,9 @@ defmodule Systems.Pool.OverviewPage do
 
   import CoreWeb.Gettext
 
-  alias Systems.Pool.{StudentsView, CampaignsView}
+  alias Systems.{
+    Pool
+  }
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent}
@@ -38,7 +40,7 @@ defmodule Systems.Pool.OverviewPage do
       %{
         id: :students,
         title: dgettext("link-studentpool", "tabbar.item.students"),
-        component: StudentsView,
+        component: Pool.StudentsView,
         props: %{},
         type: :fullpage,
         active: initial_tab === :students
@@ -46,10 +48,18 @@ defmodule Systems.Pool.OverviewPage do
       %{
         id: :campaigns,
         title: dgettext("link-studentpool", "tabbar.item.campaigns"),
-        component: CampaignsView,
+        component: Pool.CampaignsView,
         props: %{},
         type: :fullpage,
         active: initial_tab === :campaigns
+      },
+      %{
+        id: :dashboard,
+        title: dgettext("link-studentpool", "tabbar.item.dashboard"),
+        component: Pool.DashboardView,
+        props: %{},
+        type: :fullpage,
+        active: initial_tab === :dashboard
       }
     ]
   end

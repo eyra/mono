@@ -81,3 +81,35 @@ msgstr ""
 #, elixir-format
 msgid "sample.size"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "tabbar.item.dashboard"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "max.credits.earned.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "mean.credits.earned.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "median.credits.earned.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "min.credits.earned.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "total.credits.earned.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "year.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "inactive.students"
+msgstr ""

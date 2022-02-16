@@ -28,6 +28,30 @@ defmodule Core.Pools.Submissions do
     |> Repo.all()
   end
 
+  def query_submissions(%{id: pool_id} = _pool, criteria) do
+    submission_ids = from(c in query_criteria(criteria), select: c.submission_id)
+
+    from(submission in Submission,
+      where: submission.id in subquery(submission_ids) and submission.pool_id == ^pool_id
+    )
+  end
+
+  def query_criteria(%{study_program_codes: study_program_codes})
+      when is_list(study_program_codes) do
+    where =
+      study_program_codes
+      |> Enum.map(&Atom.to_string(&1))
+      |> Enum.map(&"%#{&1}%")
+      |> Enum.reduce(false, fn code, acc ->
+        dynamic(
+          [criteria],
+          fragment("?::text like ?", criteria.study_program_codes, ^code) or ^acc
+        )
+      end)
+
+    from(c0 in Criteria, where: ^where)
+  end
+
   def get!(term, preload \\ [:criteria, :promotion])
 
   def get!(%Promotion.Model{} = promotion, preload) do
