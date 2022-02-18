@@ -23,10 +23,11 @@ defmodule Systems.DataDonation.FileSelectionForm do
             <div class="selected-filename bg-grey5 p-2 text-grey1 hidden"></div>
 
             <div class="mb-3 w-96">
-              <label for="input-data-file"
+              <button id="file-selection-button"
+                onclick="document.querySelector('#input-data-file').click()"
                 class="text-bodylarge font-body text-primary hover:text-grey1 underline focus:outline-none cursor-pointer">
                 {dgettext("eyra-data-donation", "file_selection.file_upload.description")}
-              </label>
+              </button>
               <input class="hidden" type="file" id="input-data-file"
                      accept="application/zip">
             </div>

@@ -28,7 +28,6 @@ export const PythonUploader = {
         // Hook up the process button to the worker
         const fileInput = this.el.querySelector("input[type=file]")
         fileInput.addEventListener("change", () => {
-            // this.el.querySelector(this.nextButtonSelector).hidden = false;
             this.el.querySelector(".extract-data-button").classList.remove("hidden");
             const filenameInfo = this.el.querySelector(".selected-filename");
             filenameInfo.innerText = fileInput.files[0].name;

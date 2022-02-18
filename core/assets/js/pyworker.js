@@ -17,10 +17,8 @@ onmessage = (event) => {
     self.pyodide.runPython(event.data.script)
   } else if (eventType === "initData") {
     file = self.pyodide.FS.open("user-data", "w")
-    // data = new ChunkedFile(event.data.size);
   } else if (eventType === "data") {
     self.pyodide.FS.write(file, event.data.chunk, 0, event.data.chunk.length)
-    // data.writeChunk(event.data.chunk);
   } else if (eventType === "processData") {
     const result = self.pyodide.runPython(`
     def _process_data():
