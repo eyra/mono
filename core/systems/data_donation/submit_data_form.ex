@@ -1,11 +1,40 @@
-defmodule Systems.DataDonation.SubmitDataForm do
+defmodule Systems.DataDonation.SubmitDataSheet do
   use CoreWeb.UI.LiveComponent
   alias Surface
 
-  alias Frameworks.Pixel.Text.{Title2}
+  alias Frameworks.Pixel.Text.{Title1, Body, Label}
+  alias Frameworks.Pixel.Line
+
+  prop(props, :map, required: true)
 
   def update(%{id: id}, socket) do
     {:ok, assign(socket, id: id)}
+  end
+
+  defp submit_button() do
+    label = dgettext("eyra-data-donation", "submit.data.button")
+
+    %{
+      action: %{type: :submit},
+      face: %{type: :primary, label: label}
+    }
+  end
+
+  defp terms_link() do
+    link_as_string(
+      dgettext("eyra-ui", "terms.link"),
+      "/gebruikersvoorwaarden-port.pdf"
+    )
+  end
+
+  defp link_as_string(label, url) do
+    label
+    |> Phoenix.HTML.Link.link(
+      class: "text-primary underline",
+      target: "_blank",
+      to: url
+    )
+    |> Phoenix.HTML.safe_to_string()
   end
 
   def render(assigns) do
@@ -13,26 +42,40 @@ defmodule Systems.DataDonation.SubmitDataForm do
       <ContentArea>
         <MarginY id={:page_top} />
         <SheetArea>
-          <div class="flex flex-col items-center">
-            <Title2>{dgettext("eyra-data-donation", "submit_data.title")}</Title2>
-            <div class="sm:px-2 text-center text-bodymedium sm:text-bodylarge font-body">
-              {dgettext("eyra-data-donation", "submit_data.description")}
+          <div class="flex flex-col">
+            <Title1>{dgettext("eyra-data-donation", "submit_data.title")}</Title1>
+            <div class="no-extraction-data-yet">
+              <Body>
+                {dgettext("eyra-data-donation", "no.extraction.data.yet.description")}
+              </Body>
             </div>
-
-            <p class="extracted">...</p>
-
-            <p>
-            By pressing the donate button you agree to the following
-            <a href= "https://eyra.co" class="text-bodymedium font-body text-primary hover:text-grey1 underline focus:outline-none" >
-              terms and conditions
-            </a>.
-            </p>
-
-            <form :on-submit={"donate", target: :live_view}>
+            <form class="donate-form hidden" :on-submit={"donate", target: :live_view}>
               <input type="hidden" name="data" value="...">
-              <button type="submit">Submit</button>
+              <Body>
+                {dgettext("eyra-data-donation", "submit_data.description")}
+              </Body>
+              <Spacing value="M" />
+              <Label>
+                {raw(dgettext("eyra-data-donation", "terms.description", link: terms_link()))}
+              </Label>
+              <Spacing value="S" />
+              <Wrap>
+                <DynamicButton vm={submit_button()} />
+              </Wrap>
+              <Spacing value="L" />
+
+              <Line />
+              <Spacing value="M" />
+              <p class="extracted overflow-scroll">...</p>
+              <Spacing value="M" />
+              <Line />
+              <Spacing value="M" />
+
+              <Wrap>
+                <DynamicButton vm={submit_button()} />
+              </Wrap>
             </form>
-         </div>
+          </div>
         </SheetArea>
       </ContentArea>
     """

@@ -13,26 +13,45 @@ export const PythonUploader = {
         // First hide the next button (requires selected file)
         this.el.querySelector(this.nextButtonSelector).hidden = true
         this.el.querySelector(".extract-data-button").addEventListener("click", () => {
-            this.el.querySelector(".file-selection").classList.add("hidden")
+            this.el.querySelector(".select-file").classList.add("hidden")
+            this.el.querySelector(".extract-data").classList.add("hidden")
             this.el.querySelector(".data-extraction").classList.remove("hidden")
             const script = this.el.getElementsByTagName("code")[0].innerText
             uploader.process(script).then((result) => {
                 uploader.result = result;
+                uploader.el.querySelector(".no-extraction-data-yet").classList.add("hidden")
+                uploader.el.querySelector(".donate-form").classList.remove("hidden")
                 uploader.el.querySelector(".extracted").innerHTML = result.html;
                 uploader.el.querySelector("input[name='data']").value = result.data;
                 console.log("done", result)
                 Tabbar.show("tab_" + this.el.dataset.afterCompletionTab, true)
+                this.el.querySelector(".extract-data").classList.remove("hidden")
+                this.el.querySelector(".data-extraction").classList.add("hidden")
             })
         });
 
         // Hook up the process button to the worker
         const fileInput = this.el.querySelector("input[type=file]")
         fileInput.addEventListener("change", () => {
-            this.el.querySelector(".extract-data-button").classList.remove("hidden");
+            console.log("File input changed")
+            this.el.querySelector(".select-file").classList.add("hidden");
+            this.el.querySelector(".extract-data").classList.remove("hidden");
             const filenameInfo = this.el.querySelector(".selected-filename");
             filenameInfo.innerText = fileInput.files[0].name;
             filenameInfo.classList.remove("hidden")
         })
+
+
+        this.el.querySelector(".reset-button").addEventListener("click", () => {
+            // clear current selected file
+            const fileInput = this.el.querySelector("input[type=file]")
+            fileInput.type= "text"
+            fileInput.type= "file"
+
+            // show select file panel
+            this.el.querySelector(".select-file").classList.remove("hidden")
+            this.el.querySelector(".extract-data").classList.add("hidden")
+        });
     },
     process(script) {
         return new Promise((resolve) => {

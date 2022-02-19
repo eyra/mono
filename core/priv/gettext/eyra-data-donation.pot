@@ -59,14 +59,6 @@ msgid "received.label"
 msgstr ""
 
 #, elixir-format, ex-autogen
-msgid "data_extraction.processing.description"
-msgstr ""
-
-#, elixir-format, ex-autogen
-msgid "data_extraction.processing.title"
-msgstr ""
-
-#, elixir-format, ex-autogen
 msgid "file_selection.file_upload.description"
 msgstr ""
 
@@ -75,23 +67,11 @@ msgid "file_selection.welcome.description"
 msgstr ""
 
 #, elixir-format, ex-autogen
-msgid "file_selection.welcome.title"
-msgstr ""
-
-#, elixir-format, ex-autogen
 msgid "submit_data.description"
 msgstr ""
 
 #, elixir-format, ex-autogen
 msgid "submit_data.title"
-msgstr ""
-
-#, elixir-format, ex-autogen
-msgid "tabbar.item.data_extraction"
-msgstr ""
-
-#, elixir-format, ex-autogen
-msgid "tabbar.item.data_extraction.forward"
 msgstr ""
 
 #, elixir-format, ex-autogen
@@ -115,13 +95,45 @@ msgid "data_extraction.processing.loading"
 msgstr ""
 
 #, elixir-format, ex-autogen
-msgid "data_extraction.processing.note"
-msgstr ""
-
-#, elixir-format, ex-autogen
-msgid "data_extraction.processing.warning"
-msgstr ""
-
-#, elixir-format, ex-autogen
 msgid "file_selection.note"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "tabbar.item.welcome"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "tabbar.item.welcome.forward"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "welcome.description"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "welcome.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "extract.data.button"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "selected.file.description"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "file.extracton.description"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "submit.data.button"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "terms.description"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "no.extraction.data.yet.description"
 msgstr ""

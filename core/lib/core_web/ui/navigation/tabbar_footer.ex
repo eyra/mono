@@ -7,6 +7,8 @@ defmodule CoreWeb.UI.Navigation.TabbarFooter do
 
   slot(default)
 
+  defp align(%{align: :left}), do: "justify-left"
+  defp align(%{align: :center}), do: "justify-center"
   defp align(%{type: :sheet}), do: "justify-center"
   defp align(_), do: "justify-left"
 

@@ -60,52 +60,32 @@ msgid "received.label"
 msgstr "Ontvangen"
 
 #, elixir-format, ex-autogen
-msgid "data_extraction.processing.description"
-msgstr "Het script stelt nu de relevante data samen."
-
-#, elixir-format, ex-autogen
-msgid "data_extraction.processing.title"
-msgstr "Data verwerken"
-
-#, elixir-format, ex-autogen
 msgid "file_selection.file_upload.description"
 msgstr "Selecteer het bestand"
 
 #, elixir-format, ex-autogen
 msgid "file_selection.welcome.description"
-msgstr "Selecteer je data voor verwerking."
-
-#, elixir-format, ex-autogen
-msgid "file_selection.welcome.title"
-msgstr "Welkom"
+msgstr "Selecteer het %{file} dat je hebt gedownload en opgeslagen op dit apparaat."
 
 #, elixir-format, ex-autogen
 msgid "submit_data.description"
-msgstr "Ben je akkoord met het doneren van je data?"
+msgstr "Hieronder vind je een overzicht van de verzamelde data. Ben je akkoord met het doneren van je deze data?"
 
 #, elixir-format, ex-autogen
 msgid "submit_data.title"
 msgstr "Data Doneren"
 
 #, elixir-format, ex-autogen
-msgid "tabbar.item.data_extraction"
+msgid "tabbar.item.file_selection"
 msgstr "Data verzamelen"
 
 #, elixir-format, ex-autogen
-msgid "tabbar.item.data_extraction.forward"
-msgstr "Volgende"
-
-#, elixir-format, ex-autogen
-msgid "tabbar.item.file_selection"
-msgstr "Data selecteren"
-
-#, elixir-format, ex-autogen
 msgid "tabbar.item.file_selection.forward"
-msgstr "Start verwerking"
+msgstr "Ga verder"
 
 #, elixir-format, ex-autogen
 msgid "tabbar.item.submit_data"
-msgstr "Data Doneren"
+msgstr "Data doneren"
 
 #, elixir-format, ex-autogen
 msgid "tabbar.item.submit_data.forward"
@@ -113,16 +93,48 @@ msgstr "Doneren"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "data_extraction.processing.loading"
-msgstr "Verwerken..."
-
-#, elixir-format, ex-autogen, fuzzy
-msgid "data_extraction.processing.note"
-msgstr "De verwerking kan een kwartier duren. Je data blijft enkel op jouw apparaat en word nog niet verstuurd naar de server."
-
-#, elixir-format, ex-autogen, fuzzy
-msgid "data_extraction.processing.warning"
-msgstr "Sluit a.u.b. dit venster niet!"
+msgstr "Verwerken data package..."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "file_selection.note"
-msgstr "Notitie: Je gegevens gaan niet over het internet."
+msgstr "Wees gerust: er gaan nog geen gegevens van jou over het internet."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "tabbar.item.welcome"
+msgstr "Uitleg"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "tabbar.item.welcome.forward"
+msgstr "Ga verder"
+
+#, elixir-format, ex-autogen
+msgid "welcome.description"
+msgstr "Fijn dat je %{researcher} wilt helpen in %{pronoun} onderzoek naar '%{research_topic}'. Je zal worden gevraagd een bestand te selecteren waaruit alleen data wordt verzamelt dat nuttig is voor dit specifieke onderzoek. De verzamelde data wordt eerst aan jou getoond alvorens je kan besluiten deze data te doneren."
+
+#, elixir-format, ex-autogen
+msgid "welcome.title"
+msgstr "Welkom"
+
+#, elixir-format, ex-autogen
+msgid "extract.data.button"
+msgstr "Start extractie"
+
+#, elixir-format, ex-autogen
+msgid "selected.file.description"
+msgstr "Je hebt het volgende bestand geselecteerd:"
+
+#, elixir-format, ex-autogen
+msgid "file.extracton.description"
+msgstr "Een script is momenteel relevante gegevens uit jouw data package aan het verzamelen."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "submit.data.button"
+msgstr "Data Doneren"
+
+#, elixir-format, ex-autogen
+msgid "terms.description"
+msgstr "Door op de doneer knop te klikken ga je akkoord met de volgende %{link}."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "no.extraction.data.yet.description"
+msgstr "Ga eerst naar stap 2 om data te verzamelen."

@@ -5,7 +5,11 @@ defmodule Systems.DataDonation.UploadPage do
   alias CoreWeb.Layouts.Stripped.Component, as: Stripped
   alias CoreWeb.UI.Navigation.{ActionBar, Tabbar, TabbarContent, TabbarFooter, TabbarArea}
 
-  alias Systems.DataDonation.{WelcomeForm, FileSelectionForm, SubmitDataForm}
+  alias Systems.DataDonation.{
+    WelcomeSheet,
+    FileSelectionSheet,
+    SubmitDataSheet
+  }
 
   alias Systems.DataDonation.ThanksPage
 
@@ -48,33 +52,39 @@ defmodule Systems.DataDonation.UploadPage do
   end
 
   defp create_tabs() do
+    researcher = "Dr. Bella Struminskaya"
+    pronoun = dgettext("eyra-ui", "pronoun.her")
+    research_topic = "Local processing of digital trace data"
+    file_type = "Google Data Package"
+
     [
       %{
         id: :welcome,
         action: nil,
         title: dgettext("eyra-data-donation", "tabbar.item.welcome"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.welcome.forward"),
-        component: WelcomeForm,
-        props: %{},
-        type: :form
+        component: WelcomeSheet,
+        props: %{researcher: researcher, pronoun: pronoun, research_topic: research_topic},
+        type: :sheet,
+        align: :left
       },
       %{
         id: :file_selection,
         action: nil,
         title: dgettext("eyra-data-donation", "tabbar.item.file_selection"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.file_selection.forward"),
-        component: FileSelectionForm,
-        props: %{script: @script},
-        type: :form
+        component: FileSelectionSheet,
+        props: %{script: @script, file_type: file_type},
+        type: :sheet
       },
       %{
         id: :submit_data,
         action: nil,
         title: dgettext("eyra-data-donation", "tabbar.item.submit_data"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.submit_data.forward"),
-        component: SubmitDataForm,
+        component: SubmitDataSheet,
         props: %{},
-        type: :form
+        type: :sheet
       }
     ]
   end

@@ -189,3 +189,11 @@ msgstr ""
 #, elixir-format
 msgid "share.dialog.text"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "pronoun.her"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "terms.link"
+msgstr ""

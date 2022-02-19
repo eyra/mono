@@ -4,7 +4,7 @@ defmodule Systems.DataDonation.UploadPageTest do
   import Phoenix.LiveViewTest
   import Mox
 
-  alias Systems.DataDonation.{UploadPage, ToolModel}
+  alias Systems.DataDonation.{UploadPage}
 
   describe "public page" do
     test "embedding of Python code on the page", %{conn: conn} do
