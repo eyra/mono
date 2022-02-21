@@ -6,11 +6,8 @@
         {
             "label": "Run PostgreSQL",
             "type": "shell",
-            "command": "echo",
+            "command": "podman run -d --name=postgresql --replace --rm -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=link_dev docker.io/postgres",
             "group": "none",
-            "linux": {
-                "command": "podman run -d --name=postgresql --replace --rm -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=link_dev docker.io/postgres"
-            },
             "presentation": {
                 "reveal": "never",
                 "panel": "dedicated"
@@ -23,11 +20,8 @@
         {
             "label": "Run MinIO",
             "type": "shell",
-            "command": "echo",
+            "command": "./scripts/minio",
             "group": "none",
-            "linux": {
-                "command": "./scripts/minio"
-            },
             "presentation": {
                 "reveal": "never",
                 "panel": "dedicated"
