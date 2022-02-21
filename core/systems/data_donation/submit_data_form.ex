@@ -2,7 +2,7 @@ defmodule Systems.DataDonation.SubmitDataSheet do
   use CoreWeb.UI.LiveComponent
   alias Surface
 
-  alias Frameworks.Pixel.Text.{Title1, Body, Label}
+  alias Frameworks.Pixel.Text.{Title1, Body}
   alias Frameworks.Pixel.Line
 
   prop(props, :map, required: true)
@@ -18,23 +18,6 @@ defmodule Systems.DataDonation.SubmitDataSheet do
       action: %{type: :submit},
       face: %{type: :primary, label: label}
     }
-  end
-
-  defp terms_link() do
-    link_as_string(
-      dgettext("eyra-ui", "terms.link"),
-      "/gebruikersvoorwaarden-port.pdf"
-    )
-  end
-
-  defp link_as_string(label, url) do
-    label
-    |> Phoenix.HTML.Link.link(
-      class: "text-primary underline",
-      target: "_blank",
-      to: url
-    )
-    |> Phoenix.HTML.safe_to_string()
   end
 
   def render(assigns) do
@@ -55,10 +38,6 @@ defmodule Systems.DataDonation.SubmitDataSheet do
                 {dgettext("eyra-data-donation", "submit_data.description")}
               </Body>
               <Spacing value="M" />
-              <Label>
-                {raw(dgettext("eyra-data-donation", "terms.description", link: terms_link()))}
-              </Label>
-              <Spacing value="S" />
               <Wrap>
                 <DynamicButton vm={submit_button()} />
               </Wrap>

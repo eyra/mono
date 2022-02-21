@@ -11,7 +11,9 @@ defmodule Systems.DataDonation.UploadPage do
     SubmitDataSheet
   }
 
-  alias Systems.DataDonation.ThanksPage
+  alias Systems.{
+    DataDonation
+  }
 
   @script Application.app_dir(:core, "priv/repo")
           |> Path.join("script.py")
@@ -52,10 +54,7 @@ defmodule Systems.DataDonation.UploadPage do
   end
 
   defp create_tabs() do
-    researcher = "Dr. Bella Struminskaya"
-    pronoun = dgettext("eyra-ui", "pronoun.her")
-    research_topic = "Local processing of digital trace data"
-    file_type = "Google Data Package"
+    pilot_model = DataDonation.PilotModel.view_model()
 
     [
       %{
@@ -64,7 +63,7 @@ defmodule Systems.DataDonation.UploadPage do
         title: dgettext("eyra-data-donation", "tabbar.item.welcome"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.welcome.forward"),
         component: WelcomeSheet,
-        props: %{researcher: researcher, pronoun: pronoun, research_topic: research_topic},
+        props: pilot_model,
         type: :sheet,
         align: :left
       },
@@ -74,7 +73,7 @@ defmodule Systems.DataDonation.UploadPage do
         title: dgettext("eyra-data-donation", "tabbar.item.file_selection"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.file_selection.forward"),
         component: FileSelectionSheet,
-        props: %{script: @script, file_type: file_type},
+        props: %{script: @script, file_type: pilot_model.file_type},
         type: :sheet
       },
       %{
@@ -96,7 +95,7 @@ defmodule Systems.DataDonation.UploadPage do
         %{assigns: %{participant_id: participant_id}} = socket
       ) do
     store_results(participant_id, data)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, ThanksPage))}
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, DataDonation.ThanksPage))}
   end
 
   def render(assigns) do

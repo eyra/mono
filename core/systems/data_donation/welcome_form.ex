@@ -8,11 +8,21 @@ defmodule Systems.DataDonation.WelcomeSheet do
   data(researcher, :string)
   data(pronoun, :string)
   data(research_topic, :string)
+  data(job_title, :string)
+  data(image, :string)
+  data(institution, :string)
 
   def update(
         %{
           id: id,
-          props: %{researcher: researcher, pronoun: pronoun, research_topic: research_topic}
+          props: %{
+            researcher: researcher,
+            pronoun: pronoun,
+            research_topic: research_topic,
+            job_title: job_title,
+            image: image,
+            institution: institution
+          }
         },
         socket
       ) do
@@ -23,7 +33,10 @@ defmodule Systems.DataDonation.WelcomeSheet do
         id: id,
         researcher: researcher,
         pronoun: pronoun,
-        research_topic: research_topic
+        research_topic: research_topic,
+        job_title: job_title,
+        image: image,
+        institution: institution
       )
     }
   end
@@ -42,13 +55,13 @@ defmodule Systems.DataDonation.WelcomeSheet do
             </div>
             <div class="flex-shrink-0">
               <div class="rounded-lg bg-grey5">
-                <img src={"/images/uu_card.svg"} alt="University Utrecht" />
+                <img src={@image} alt={@institution} />
                 <div class="flex flex-col gap-3 p-4">
                   <div class="text-title7 font-title7 text-grey1">
                     {@researcher}
                   </div>
                   <div class="text-caption font-caption text-grey1">
-                    Assistant Professor
+                    {@job_title}
                   </div>
                 </div>
               </div>
