@@ -3,5 +3,5 @@
 podman run -d --name=minio --replace --rm -p 9000:9000 -p 9001:9001 \
   -e "MINIO_ROOT_USER=my_access_key" \
   -e "MINIO_ROOT_PASSWORD=a_super_secret" \
-  -v ./minio:/data:z \
+  -v minio:/data:z \
   quay.io/minio/minio server /data --console-address ":9001"
