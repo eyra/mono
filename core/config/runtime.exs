@@ -38,6 +38,10 @@ if config_env() == :prod do
       ]
   end
 
+  config :core,
+         :data_donation_storage_backend,
+         Systems.DataDonation.S3StorageBackend
+
   if bucket = System.get_env("AWS_S3_BUCKET") do
     config :core, Systems.DataDonation.S3StorageBackend, bucket: bucket
   end
