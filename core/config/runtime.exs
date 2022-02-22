@@ -38,11 +38,21 @@ if config_env() == :prod do
       ]
   end
 
-  if System.get_env("AWS_ACCESS_KEY_ID") do
+  if bucket = System.get_env("AWS_S3_BUCKET") do
+    config :core, Systems.DataDonation.S3StorageBackend, bucket: bucket
+  end
+
+  if aws_access_key_id = System.get_env("AWS_ACCESS_KEY_ID") do
+    config :ex_aws, access_key_id: aws_access_key_id
+
     config :core, Core.Mailer,
       adapter: Bamboo.SesAdapter,
       domain: host,
       default_from_email: "no-reply@#{host}"
+  end
+
+  if secret_access_key = System.get_env("AWS_SECRET_ACCESS_KEY") do
+    config :ex_aws, secret_access_key: secret_access_key
   end
 
   if aws_region = System.get_env("AWS_REGION") do
