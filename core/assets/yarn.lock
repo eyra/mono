@@ -4827,7 +4827,7 @@
 
 "phoenix_live_view@file:../deps/phoenix_live_view":
   "resolved" "file:../deps/phoenix_live_view"
-  "version" "0.17.7"
+  "version" "0.17.6"
 
 "phoenix@file:../deps/phoenix":
   "resolved" "file:../deps/phoenix"
