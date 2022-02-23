@@ -42,6 +42,11 @@ defmodule Systems.DataDonation.ThanksPage do
     |> Phoenix.HTML.safe_to_string()
   end
 
+  defp descriptions(participant_id) do
+    dgettext("eyra-data-donation", "thanks.description", survey_link: survey_link(participant_id))
+    |> String.split("<br>")
+  end
+
   def render(assigns) do
     ~F"""
     <Stripped user={@current_user} menus={@menus}>
@@ -52,14 +57,8 @@ defmodule Systems.DataDonation.ThanksPage do
             <div>
               <Title1>{dgettext("eyra-data-donation", "thanks.title")}</Title1>
               <div class="flex flex-col gap-4">
-                <div class="text-bodylarge font-body">
-                  {dgettext("eyra-data-donation", "thanks.description.1")}
-                </div>
-                <div class="text-bodylarge font-body">
-                  {raw(dgettext("eyra-data-donation", "thanks.description.2", survey_link: survey_link(@participant_id)))}
-                </div>
-                <div class="text-bodylarge font-body">
-                  {dgettext("eyra-data-donation", "thanks.description.3")}
+                <div :for={description <- descriptions(@participant_id)} class="text-bodylarge font-body">
+                  {raw(description)}
                 </div>
               </div>
             </div>

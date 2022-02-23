@@ -44,6 +44,14 @@ defmodule Systems.DataDonation.WelcomeSheet do
     }
   end
 
+  defp descriptions(researcher, file_type) do
+    dgettext("eyra-data-donation", "welcome.description",
+      researcher: researcher,
+      file_type: file_type
+    )
+    |> String.split("<br>")
+  end
+
   def render(assigns) do
     ~F"""
       <ContentArea>
@@ -53,14 +61,8 @@ defmodule Systems.DataDonation.WelcomeSheet do
             <div>
               <Title1>{dgettext("eyra-data-donation", "welcome.title")}</Title1>
               <div class="flex flex-col gap-4">
-                <div class="text-bodylarge font-body">
-                  {dgettext("eyra-data-donation", "welcome.description.1", researcher: @researcher, file_type: @file_type)}
-                </div>
-                <div class="text-bodylarge font-body">
-                  {dgettext("eyra-data-donation", "welcome.description.2", researcher: @researcher, file_type: @file_type)}
-                </div>
-                <div class="text-bodylarge font-body">
-                  {dgettext("eyra-data-donation", "welcome.description.3", researcher: @researcher, file_type: @file_type)}
+                <div :for={description <- descriptions(@researcher, @file_type)} class="text-bodylarge font-body">
+                  {raw(description)}
                 </div>
               </div>
             </div>
