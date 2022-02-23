@@ -1,46 +1,18 @@
 defmodule Systems.Lab.DayEntryListItem do
   use CoreWeb.UI.Component
 
-  alias Frameworks.Pixel.Text.{BodyMedium}
-  alias Frameworks.Pixel.Selector.Selector
-  alias Frameworks.Pixel.Line
+  alias Systems.Lab.{DayEntryBreakItem, DayEntryTimeSlotItem}
 
-  prop(type, :atom, required: true)
-  prop(data, :map)
-  prop(target, :any)
+  prop(entry, :map, required: true)
 
-  defp timestamp(%{start_time: start_time}) do
-    hour = (start_time / 100) |> trunc()
-    minute = "#{rem(start_time, 100)}" |> String.pad_leading(2, "0")
+  defp module(%{type: :time_slot}), do: DayEntryTimeSlotItem
+  defp module(%{type: :break}), do: DayEntryBreakItem
 
-    "#{hour}:#{minute}"
-  end
-
-  defp timestamp(_), do: nil
+  defp props(entry), do: Map.delete(entry, :type)
 
   def render(assigns) do
     ~F"""
-      <div>
-        <div :if={@type == :break} class="w-full mb-3">
-          <Line />
-        </div>
-        <div :if={@type == :time_slot} class="h-12 w-full">
-          <div class="flex flex-row items-center gap-2">
-            <Selector id={:"#{@data.start_time}"} items={[%{id: :id, active: @data.enabled}]} type={:checkbox} parent={@target}/>
-            <div class="mt-2px w-full">
-              <div class="flex flex-row w-full">
-                <div class="w-24">
-                  <BodyMedium color={if @data.enabled do "text-grey1" else "text-grey2" end}>{timestamp(@data)}</BodyMedium>
-                </div>
-                <BodyMedium>
-                  <span :if={@data.enabled}>10 participants</span>
-                  <span :if={not @data.enabled} class="text-grey2">Not scheduled</span>
-                </BodyMedium>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Dynamic.Component module={module(@entry)} {...props(@entry)} />
     """
   end
 end
@@ -67,9 +39,9 @@ defmodule Systems.Lab.DayEntryListItem.Example do
   def render(assigns) do
     ~F"""
     <div class="flex flex-col">
-      <DayEntryListItem type={:time_slot} data={%{start_time: 900, enabled: true}} target={self()} />
-      <DayEntryListItem type={:break} />
-      <DayEntryListItem type={:time_slot} data={%{start_time: 1000, enabled: true}} target={self()} />
+      <DayEntryListItem entry={%{type: :time_slot, start_time: 900, enabled?: true, bullet: "1.", number_of_seats: 1, number_of_reservations: 1, target: self()} }  />
+      <DayEntryListItem entry={%{type: :break}}/>
+      <DayEntryListItem entry={%{type: :time_slot, start_time: 1000, enabled?: true, bullet: "2.", number_of_seats: 1, number_of_reservations: 1, target: self()} } />
     </div>
     """
   end

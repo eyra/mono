@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.LandingPageTest do
-  use CoreWeb.ConnCase
+  use CoreWeb.ConnCase, async: false
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 
@@ -68,7 +68,8 @@ defmodule Systems.Assignment.LandingPageTest do
         )
 
       _submission = Factories.insert!(:submission, %{reward_value: 5, promotion: promotion})
-      author = Factories.build(:author)
+      researcher = Factories.build(:researcher)
+      author = Factories.build(:author, %{researcher: researcher})
 
       campaign =
         Factories.insert!(:campaign, %{
@@ -115,15 +116,12 @@ defmodule Systems.Assignment.LandingPageTest do
       {:ok, view, _html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
 
-      assert %Systems.Crew.TaskModel{started_at: started_at} = task
-      assert started_at == nil
-
       html =
         view
-        |> element("[phx-click=\"call-to-action\"]")
+        |> element("[phx-click=\"open\"]")
         |> render_click()
 
-      assert html == {:error, {:redirect, %{to: "https://eyra.co/fake_survey?panl_id=1"}}}
+      assert {:error, {:redirect, %{to: "https://eyra.co/fake_survey?panl_id=1"}}} = html
 
       task = Crew.Context.get_task!(task.id)
       assert %Systems.Crew.TaskModel{started_at: started_at, updated_at: updated_at} = task
@@ -139,7 +137,7 @@ defmodule Systems.Assignment.LandingPageTest do
 
       member = Crew.Context.apply_member!(assignment.crew, user)
       task = Crew.Context.get_task(assignment.crew, member)
-      Crew.Context.start_task(task)
+      Crew.Context.lock_task(task)
 
       {:ok, _view, html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
@@ -162,8 +160,8 @@ defmodule Systems.Assignment.LandingPageTest do
 
       member = Crew.Context.apply_member!(assignment.crew, user)
       task = Crew.Context.get_task(assignment.crew, member)
-      Crew.Context.start_task(task)
-      Crew.Context.complete_task(task)
+      Crew.Context.lock_task(task)
+      Crew.Context.activate_task(task)
 
       {:ok, _view, html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))

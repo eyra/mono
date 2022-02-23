@@ -1,6 +1,6 @@
-defmodule Frameworks.Pixel.Button.Face.Forward do
+defmodule Frameworks.Pixel.Button.Face.Plain do
   @moduledoc """
-    A text button with a forward arrow on the right
+    A plain text button
   """
   use Frameworks.Pixel.Component
 
@@ -8,7 +8,6 @@ defmodule Frameworks.Pixel.Button.Face.Forward do
 
   defviewmodel(
     label: nil,
-    icon: "/images/forward.svg",
     text_color: "text-grey1"
   )
 
@@ -19,12 +18,9 @@ defmodule Frameworks.Pixel.Button.Face.Forward do
         <div class="focus:outline-none">
           <div class="flex flex-col justify-center h-full items-center">
             <div class={"flex-wrap text-button font-button #{text_color(@vm)}"}>
-              {label(@vm)}
+              <span class="whitespace-pre-wrap">{label(@vm)}</span>
             </div>
           </div>
-        </div>
-        <div>
-            <img class="ml-4 -mt-2px" src={icon(@vm)} alt={label(@vm)} />
         </div>
       </div>
     </div>

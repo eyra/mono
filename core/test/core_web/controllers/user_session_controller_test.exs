@@ -44,7 +44,7 @@ defmodule CoreWeb.UserSessionControllerTest do
       # Now do a logged in request and assert on the menu
       conn = get(conn, "/")
       response = html_response(conn, 200)
-      assert response =~ "Science"
+      assert response =~ "Eyra"
     end
 
     test "logs the user in with remember me", %{conn: conn, user: user, password: password} do

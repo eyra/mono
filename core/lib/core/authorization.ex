@@ -12,10 +12,11 @@ defmodule Core.Authorization do
 
   use Core.BundleOverrides
 
-  alias Frameworks.GreenLight
+  require Logger
 
   import Ecto.Query
   alias Core.Repo
+  alias Frameworks.GreenLight
 
   Frameworks.GreenLight.Permissions.grant(__MODULE__, "test-auth", [:owner])
 
@@ -43,7 +44,8 @@ defmodule Core.Authorization do
   grant_access(Systems.Pool.SubmissionPage, [:researcher])
   grant_access(Systems.Test.Page, [:visitor, :member])
   grant_access(Systems.DataDonation.Content, [:owner, :coordinator])
-  grant_access(Systems.DataDonation.Uploader, [:member])
+  grant_access(Systems.DataDonation.UploadPage, [:visitor, :member])
+  grant_access(Systems.DataDonation.ThanksPage, [:visitor, :member])
 
   grant_access(CoreWeb.Dashboard, [:researcher])
   grant_access(CoreWeb.User.Signin, [:visitor])
@@ -195,5 +197,27 @@ defmodule Core.Authorization do
   def user_has_role?(user, entity, role) do
     users_with_role(entity, role)
     |> Enum.any?(&(&1.id == user.id))
+  end
+
+  def first_user_with_role(entity, role, preload) do
+    user =
+      entity
+      |> users_with_role(role, preload)
+      |> List.first()
+
+    case user do
+      nil ->
+        Logger.error("No user found with role #{role} for #{entity}")
+        {:error}
+
+      user ->
+        {:ok, user}
+    end
+  end
+
+  def top_entity(%{auth_node_id: _auth_node_id} = entity) do
+    entity
+    |> get_parent_nodes()
+    |> List.last()
   end
 end

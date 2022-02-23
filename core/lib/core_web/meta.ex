@@ -4,7 +4,7 @@ defmodule CoreWeb.Meta do
   def fetch_meta_info(conn, _opts) do
     config = config()
 
-    bundle_title = Keyword.get(config, :bundle_title, "Eyra Next")
+    bundle_title = Keyword.get(config, :bundle_title, "Eyra")
     bundle = Keyword.get(config, :bundle, :eyra)
 
     conn
@@ -19,7 +19,7 @@ defmodule CoreWeb.Meta do
   end
 
   def bundle_title do
-    Keyword.get(config(), :bundle_title, "Eyra Next")
+    Keyword.get(config(), :bundle_title, "Eyra")
   end
 
   def bundle(%{assigns: %{bundle: bundle}} = _conn) do

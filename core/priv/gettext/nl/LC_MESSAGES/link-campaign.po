@@ -12,41 +12,33 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: systems/crew/reject_view.ex:105
 msgid "reject.button"
 msgstr "Bijdrage afkeuren"
 
 #, elixir-format
-#: systems/crew/reject_view.ex:136
 msgid "reject.message.label"
 msgstr "Bericht aan de deelnemer (in het Engels)"
 
 #, elixir-format
-#: systems/crew/reject_view.ex:40
 msgid "reject.text"
 msgstr "Geef aan waarom je deze bijdrage afkeurt:"
 
 #, elixir-format
-#: systems/crew/reject_view.ex:39
 msgid "reject.title"
 msgstr "Bijdrage afkeuren"
 
 #, elixir-format
-#: systems/crew/reject_view.ex:41
 msgid "reject.note"
 msgstr "Let op: Afgewezen deelnemers kunnen niet opnieuw meedoen aan deze campagne."
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:147
 msgid "create.campaign.dialog.ok.button"
 msgstr "Doorgaan"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:145
 msgid "create.campaign.dialog.text"
-msgstr "Lorem ipsum."
+msgstr "Wat voor soort studie wil je opzetten?"
 
 #, elixir-format
-#: systems/campaign/overview_page.ex:144
 msgid "create.campaign.dialog.title"
-msgstr "Type studie"
+msgstr "Soort studie"

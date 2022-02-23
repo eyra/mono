@@ -117,13 +117,9 @@ defmodule Systems.Promotion.LandingPage do
   def handle_event(
         "call-to-action",
         _params,
-        %{assigns: %{model: model, vm: %{call_to_action: call_to_action}}} = socket
+        %{assigns: %{vm: %{call_to_action: %{handle: handle}}}} = socket
       ) do
-    {
-      :noreply,
-      socket
-      |> call_to_action.handle.(call_to_action, model)
-    }
+    {:noreply, handle.(socket)}
   end
 
   @impl true
@@ -166,7 +162,7 @@ defmodule Systems.Promotion.LandingPage do
 
         <div :if={show_dialog?(@dialog)} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
           <div class="flex flex-row items-center justify-center w-full h-full">
-            <PlainDialog vm={@dialog} />
+            <PlainDialog {...@dialog} />
           </div>
         </div>
 

@@ -6,11 +6,6 @@ defmodule Systems.Promotion.Model do
   use Frameworks.Utility.Model
 
   import Ecto.Changeset
-  import CoreWeb.Gettext
-
-  alias Systems.{
-    Promotion
-  }
 
   schema "promotions" do
     # Plain Content
@@ -75,77 +70,5 @@ defmodule Systems.Promotion.Model do
     |> cast(attrs, [:director])
     |> cast(attrs, @fields)
     |> validate_required([:title])
-  end
-end
-
-defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Promotion.Model do
-  import Map, only: [take: 2]
-  import Frameworks.Utility.ViewModel
-  import CoreWeb.Gettext
-
-  alias Core.Marks
-
-  alias Systems.{
-    Promotion,
-    Assignment
-  }
-
-  def view_model(%Promotion.Model{} = promotion, page, _user, _url_resolver) do
-    promotion
-    |> vm(page)
-  end
-
-  defp vm(%{title: title, submission: submission}, Assignment.LandingPage) do
-    %{title: title, highlights: highlights(submission)}
-  end
-
-  defp vm(%{title: title}, Assignment.CallbackPage) do
-    %{title: title}
-  end
-
-  defp vm(
-         %{submission: submission, themes: themes, marks: marks} = promotion,
-         Promotion.LandingPage
-       ) do
-    promotion
-    |> take([:image_id | Promotion.Model.plain_fields()])
-    |> merge(%{
-      themes: themes(themes, Link.Enums.Themes),
-      organisation: organisation(marks),
-      highlights: highlights(submission)
-    })
-  end
-
-  defp themes(themes, themes_module) do
-    themes
-    |> themes_module.labels()
-    |> Enum.filter(& &1.active)
-    |> Enum.map_join(", ", & &1.value)
-  end
-
-  defp organisation(marks) do
-    if id = organisation_id(marks) do
-      Enum.find(
-        Marks.instances(),
-        &(&1.id == id)
-      )
-    end
-  end
-
-  defp organisation_id([first_mark | _]), do: first_mark
-  defp organisation_id(_), do: nil
-
-  defp highlights(%{reward_value: reward_value}) do
-    reward_title = dgettext("link-survey", "reward.highlight.title")
-
-    reward_value =
-      case reward_value do
-        nil -> "?"
-        value -> value
-      end
-
-    reward_text = "#{reward_value} credits"
-
-    [%{title: reward_title, text: reward_text}]
   end
 end

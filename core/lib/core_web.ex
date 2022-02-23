@@ -64,6 +64,7 @@ defmodule CoreWeb do
       use Surface.LiveView,
         layout: {CoreWeb.LayoutView, "live.html"}
 
+      use Frameworks.Pixel.Flash
       use Systems.Observatory.Context
 
       import Phoenix.Controller,
@@ -71,7 +72,8 @@ defmodule CoreWeb do
 
       import CoreWeb.UrlResolver, only: [url_resolver: 1]
 
-      alias CoreWeb.UI.{MarginY, Empty}
+      alias Surface.Components.Dynamic
+      alias CoreWeb.UI.{MarginY, Empty, Popup}
       alias CoreWeb.UI.Container.{ContentArea, FormArea, SheetArea}
       alias Frameworks.Pixel.Spacing
       alias Frameworks.Pixel.Case.{Case, True, False}

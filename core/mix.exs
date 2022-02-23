@@ -22,6 +22,9 @@ defmodule Core.MixProject do
           "../guides/authorization.md"
         ]
       ],
+      gettext: [
+        write_reference_comments: false
+      ],
       dialyzer: [
         plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
         plt_add_apps: [:mix],
@@ -71,21 +74,22 @@ defmodule Core.MixProject do
       # Deps
       {:assent, "~> 0.1.23"},
       {:bcrypt_elixir, "~> 2.0"},
-      {:phoenix, "~> 1.6.5"},
+      {:ex_aws_s3, "~> 2.0"},
+      {:phoenix, "~> 1.6.6"},
       {:phoenix_ecto, "~> 4.4"},
-      {:phoenix_live_view, "~> 0.16.0"},
+      {:phoenix_live_view, "~> 0.17.5"},
+      {:phoenix_html, "~> 3.2"},
+      {:phoenix_inline_svg, "~> 1.4"},
+      {:surface, "~> 0.7.0"},
+      {:surface_catalogue, "~> 0.2"},
       {:floki, ">= 0.27.0"},
       {:ecto_sql, "~> 3.7"},
       {:ecto_commons, "~> 0.3.3"},
       {:postgrex, ">= 0.15.13"},
-      {:phoenix_html, "~> 3.2"},
-      {:phoenix_inline_svg, "~> 1.4"},
       {:gettext, "~> 0.19"},
       {:jason, "~> 1.3"},
       {:plug_cowboy, "~> 2.5"},
       {:faker, "~> 0.17"},
-      {:surface, git: "https://github.com/surface-ui/surface.git", ref: "84417bb"},
-      # {:surface_catalogue, "~> 0.2"},
       {:timex, "~> 3.7"},
       {:bamboo, "~> 2.2"},
       {:bamboo_phoenix, "~> 1.0.0"},

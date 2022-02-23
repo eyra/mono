@@ -11,16 +11,17 @@ defmodule Frameworks.Pixel.Button.Face.Icon do
   defviewmodel(
     icon: nil,
     color: nil,
-    alt: ""
+    alt: "",
+    size: "h-6 w-6"
   )
 
   def icon_name(%{icon: icon, color: nil}), do: "#{icon}"
-  def icon_name(%{icon: icon, color: color}), do: "#{icon}-#{color}"
+  def icon_name(%{icon: icon, color: color}), do: "#{icon}_#{color}"
   def icon_name(%{icon: icon}), do: "#{icon}"
 
   def render(assigns) do
     ~F"""
-    <div class="active:opacity-80 cursor-pointer h-6 w-6">
+    <div class={"active:opacity-80 cursor-pointer #{size(@vm)}"}>
       <img src={"/images/icons/#{icon_name(@vm)}.svg"} alt={alt(@vm)}/>
     </div>
     """

@@ -61,24 +61,6 @@ defmodule Systems.Lab.ContextTest do
       assert Lab.Context.reservation_for_user(lab_tool, member) == new_reservation
       assert new_reservation != initial_reservation
     end
-
-    test "disallows reservation on time slots that have already started", %{
-      member: member
-    } do
-      lab_tool =
-        Factories.insert!(:lab_tool, %{
-          time_slots: [
-            %{
-              start_time: Faker.DateTime.backward(365) |> DateTime.truncate(:second),
-              location: Faker.Lorem.sentence(),
-              number_of_seats: 9
-            }
-          ]
-        })
-
-      [slot | _] = lab_tool.time_slots
-      assert {:error, :time_slot_is_in_the_past} == Lab.Context.reserve_time_slot(slot, member)
-    end
   end
 
   describe "reservation_for_user/2" do
@@ -130,30 +112,32 @@ defmodule Systems.Lab.ContextTest do
       assert date |> Timestamp.to_date() == expected_date
 
       assert [
-               %{enabled: true, start_time: 900, type: :time_slot},
-               %{enabled: true, start_time: 930, type: :time_slot},
-               %{enabled: true, start_time: 1000, type: :time_slot},
-               %{enabled: true, start_time: 1030, type: :time_slot},
+               %{enabled?: true, start_time: 900, type: :time_slot},
+               %{enabled?: true, start_time: 930, type: :time_slot},
+               %{enabled?: true, start_time: 1000, type: :time_slot},
+               %{enabled?: false, start_time: 1030, type: :time_slot},
                %{type: :break},
-               %{enabled: true, start_time: 1100, type: :time_slot},
-               %{enabled: true, start_time: 1130, type: :time_slot},
-               %{enabled: true, start_time: 1200, type: :time_slot},
-               %{enabled: true, start_time: 1230, type: :time_slot},
+               %{enabled?: true, start_time: 1100, type: :time_slot},
+               %{enabled?: true, start_time: 1130, type: :time_slot},
+               %{enabled?: true, start_time: 1200, type: :time_slot},
+               %{enabled?: true, start_time: 1230, type: :time_slot},
                %{type: :break},
-               %{enabled: true, start_time: 1330, type: :time_slot},
-               %{enabled: true, start_time: 1400, type: :time_slot},
-               %{enabled: true, start_time: 1430, type: :time_slot},
-               %{enabled: true, start_time: 1500, type: :time_slot},
+               %{enabled?: false, start_time: 1300, type: :time_slot},
+               %{enabled?: true, start_time: 1330, type: :time_slot},
+               %{enabled?: true, start_time: 1400, type: :time_slot},
+               %{enabled?: true, start_time: 1430, type: :time_slot},
                %{type: :break},
-               %{enabled: true, start_time: 1530, type: :time_slot},
-               %{enabled: true, start_time: 1600, type: :time_slot},
-               %{enabled: true, start_time: 1630, type: :time_slot},
-               %{enabled: true, start_time: 1700, type: :time_slot},
+               %{enabled?: false, start_time: 1500, type: :time_slot},
+               %{enabled?: true, start_time: 1530, type: :time_slot},
+               %{enabled?: true, start_time: 1600, type: :time_slot},
+               %{enabled?: true, start_time: 1630, type: :time_slot},
+               %{enabled?: true, start_time: 1700, type: :time_slot},
                %{type: :break},
-               %{enabled: false, start_time: 1800, type: :time_slot},
-               %{enabled: false, start_time: 1830, type: :time_slot},
-               %{enabled: false, start_time: 1900, type: :time_slot},
-               %{enabled: false, start_time: 1930, type: :time_slot}
+               %{enabled?: false, start_time: 1730, type: :time_slot},
+               %{enabled?: false, start_time: 1800, type: :time_slot},
+               %{enabled?: false, start_time: 1830, type: :time_slot},
+               %{enabled?: false, start_time: 1900, type: :time_slot},
+               %{enabled?: false, start_time: 1930, type: :time_slot}
              ] = entries
     end
 
@@ -167,47 +151,47 @@ defmodule Systems.Lab.ContextTest do
         |> Enum.sort_by(& &1.start_time, {:asc, DateTime})
         |> List.last()
 
-      assert {
-               :ok,
-               %{
-                 date: date,
-                 location: ^location,
-                 number_of_seats: ^number_of_seats,
-                 entries: entries
-               }
-             } = Lab.Context.edit_day_model(lab_tool, start_time |> Timestamp.to_date())
+      assert %{
+               date: date,
+               location: ^location,
+               number_of_seats: ^number_of_seats,
+               entries: entries
+             } = Lab.Context.new_day_model(lab_tool)
 
       expected_date =
         start_time
+        |> Timestamp.shift_days(1)
         |> Timestamp.to_date()
 
-      assert date |> Timestamp.to_date() == expected_date
+      assert date == expected_date
 
       assert [
-               %{enabled: true, start_time: 900, type: :time_slot},
-               %{enabled: true, start_time: 930, type: :time_slot},
-               %{enabled: false, start_time: 1000, type: :time_slot},
-               %{enabled: false, start_time: 1030, type: :time_slot},
+               %{enabled?: true, start_time: 900},
+               %{enabled?: true, start_time: 930},
+               %{enabled?: true, start_time: 1000},
+               %{enabled?: false, start_time: 1030},
                %{type: :break},
-               %{enabled: false, start_time: 1100, type: :time_slot},
-               %{enabled: false, start_time: 1130, type: :time_slot},
-               %{enabled: false, start_time: 1200, type: :time_slot},
-               %{enabled: false, start_time: 1230, type: :time_slot},
+               %{enabled?: true, start_time: 1100},
+               %{enabled?: true, start_time: 1130},
+               %{enabled?: true, start_time: 1200},
+               %{enabled?: true, start_time: 1230},
                %{type: :break},
-               %{enabled: false, start_time: 1330, type: :time_slot},
-               %{enabled: false, start_time: 1400, type: :time_slot},
-               %{enabled: false, start_time: 1430, type: :time_slot},
-               %{enabled: false, start_time: 1500, type: :time_slot},
+               %{enabled?: false, start_time: 1300},
+               %{enabled?: true, start_time: 1330},
+               %{enabled?: true, start_time: 1400},
+               %{enabled?: true, start_time: 1430},
                %{type: :break},
-               %{enabled: false, start_time: 1530, type: :time_slot},
-               %{enabled: false, start_time: 1600, type: :time_slot},
-               %{enabled: false, start_time: 1630, type: :time_slot},
-               %{enabled: false, start_time: 1700, type: :time_slot},
+               %{enabled?: false, start_time: 1500},
+               %{enabled?: true, start_time: 1530},
+               %{enabled?: true, start_time: 1600},
+               %{enabled?: true, start_time: 1630},
+               %{enabled?: true, start_time: 1700},
                %{type: :break},
-               %{enabled: false, start_time: 1800, type: :time_slot},
-               %{enabled: false, start_time: 1830, type: :time_slot},
-               %{enabled: false, start_time: 1900, type: :time_slot},
-               %{enabled: false, start_time: 1930, type: :time_slot}
+               %{enabled?: false, start_time: 1730},
+               %{enabled?: false, start_time: 1800},
+               %{enabled?: false, start_time: 1830},
+               %{enabled?: false, start_time: 1900},
+               %{enabled?: false, start_time: 1930}
              ] = entries
     end
   end

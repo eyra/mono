@@ -12,46 +12,33 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/core_web/templates/error/403_page.html.eex:5
 msgid "403.body"
 msgstr "Je hebt helaas geen toegang tot deze pagina. Is dit volgens jou een fout? Dan horen we dat graag. Laat  een melding achter bij onze helpdesk. Zo niet, klik dan op \"Home\" om terug te gaan naar de home pagina van Panl."
 
 #, elixir-format
-#: lib/core_web/templates/error/404_page.html.eex:5
 msgid "404.body"
 msgstr "Deze pagina is helaas niet beschikbaar. Is dit volgens jou een fout? Dan horen we dat graag. Laat een melding achter bij onze helpdesk. Zo niet, klik dan op \"Home\" om terug te gaan naar de home pagina van Panl."
 
 #, elixir-format
-#: lib/core_web/templates/error/500_page.html.eex:5
 msgid "500.body"
 msgstr "Deze pagina is op dit moment helaas niet bereikbaar. Als we hiervan op de hoogte zijn dan doen we ons uiterste best om de pagina zo snel mogelijk weer bereikbaar te maken. Probeer het later nog eens. Blijft deze melding verschijnen? Dan horen we het graag. Neem even contact met ons op. Alvast bedankt."
 
 #, elixir-format
-#: lib/core_web/templates/error/503_page.html.eex:5
 msgid "503.body"
 msgstr "Deze pagina is op dit moment helaas niet bereikbaar. Als we hiervan op de hoogte zijn dan doen we ons uiterste best om de pagina zo snel mogelijk weer bereikbaar te maken. Probeer het later nog eens. Blijft deze melding verschijnen? Dan horen we het graag. Neem even contact met ons op. Alvast bedankt."
 
 #, elixir-format
-#: lib/core_web/templates/error/403_page.html.eex:9
-#: lib/core_web/templates/error/404_page.html.eex:9
 msgid "helpdesk.button"
 msgstr "Helpdesk"
 
 #, elixir-format
-#: lib/core_web/templates/error/403_page.html.eex:8
-#: lib/core_web/templates/error/404_page.html.eex:8
 msgid "home.button"
 msgstr "Home"
 
 #, elixir-format
-#: lib/core_web/templates/error/500_page.html.eex:7
-#: lib/core_web/templates/error/503_page.html.eex:7
 msgid "mail.button"
 msgstr "Contact"
 
 #, elixir-format
-#: lib/core_web/templates/error/403_page.html.eex:3
-#: lib/core_web/templates/error/404_page.html.eex:3 lib/core_web/templates/error/500_page.html.eex:3
-#: lib/core_web/templates/error/503_page.html.eex:3
 msgid "page.title"
 msgstr "Sorry"

@@ -12,7 +12,16 @@ defmodule Systems.Campaign.Switch do
   end
 
   def handle(:survey_tool_updated, survey_tool) do
-    experiment = Assignment.Context.get_experiment_by_tool!(survey_tool)
+    experiment = Assignment.Context.get_experiment_by_tool(survey_tool)
+    handle(:experiment_updated, experiment)
+  end
+
+  def handle(:lab_tool_updated, lab_tool) do
+    experiment = Assignment.Context.get_experiment_by_tool(lab_tool)
+    handle(:experiment_updated, experiment)
+  end
+
+  def handle(:experiment_updated, experiment) do
     assignment = Assignment.Context.get_by_assignable(experiment)
     handle(:assignment_updated, assignment)
   end

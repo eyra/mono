@@ -15,7 +15,7 @@ This will setup all required dependencies.
 
 ## Pre-commit
 
-The project has several code quality tools in place. These can be  automatically executed on commit & push. Install [pre-commit](https://pre-commit.com/#install) to enable this. Then run:
+The project has several code quality tools in place. These can be automatically executed on commit & push. Install [pre-commit](https://pre-commit.com/#install) to enable this. Then run:
 
     pre-commit install
 
@@ -30,12 +30,20 @@ Now run the migrations with:
 
     mix ecto.migrate
 
+## MinIO
+
+Run it using Podman:
+
+./core/scripts/minio
+
+Open the [management interface](http://localhost:9001). Use `my_access_key` & `a_super_secret` to login. Create the `eylixir` bucket.
+
 ## Phoenix
 
 The application is written in Elixir with use of the Phoenix web-framework. To
 start your Phoenix server:
 
-  * Start Phoenix endpoint with `mix phx.server`
+- Start Phoenix endpoint with `mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
@@ -83,8 +91,7 @@ deployment key run:
 
     ssh-keygen -t rsa -b 4096 -N "" -f deployment.key
 
-This creates two files `deployment.key` and `deployment.key.pub`. Run `code
-deployment.key` to open the private key and paste it's contents into a the
+This creates two files `deployment.key` and `deployment.key.pub`. Run `code deployment.key` to open the private key and paste it's contents into a the
 GitHub secret called `SSH_PRIVATE_KEY`.
 
 Run the following command to enable the key in Gigalixir.

@@ -8,10 +8,7 @@ defmodule Systems.Assignment.LandingPage do
 
   alias Frameworks.Pixel.Text.{Title1, Title3, BodyLarge}
   alias Frameworks.Pixel.Card.Highlight
-  alias Frameworks.Pixel.Panel.Panel
-  alias Frameworks.Pixel.Wrap
 
-  alias CoreWeb.UI.Navigation.ButtonBar
   alias Core.Accounts
 
   alias Systems.{
@@ -21,6 +18,8 @@ defmodule Systems.Assignment.LandingPage do
 
   data(model, :map)
   data(task, :map)
+  data(tool_view_model, :map)
+  data(experiment, :map)
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
@@ -44,6 +43,7 @@ defmodule Systems.Assignment.LandingPage do
         dialog: nil
       )
       |> observe_view_model()
+      |> update_experiment_view()
       |> update_menus()
     }
   end
@@ -52,16 +52,44 @@ defmodule Systems.Assignment.LandingPage do
 
   def handle_view_model_updated(socket) do
     socket
+    |> update_experiment_view()
     |> update_menus()
+  end
+
+  defp update_experiment_view(
+         %{
+           assigns: %{
+             vm: %{experiment: %{view: view, id: id, model: model}},
+             experiment: experiment
+           }
+         } = socket
+       )
+       when not is_nil(experiment) do
+    # send update message to existing experiment view
+    send_update(view, id: id, model: model)
+    socket
+  end
+
+  defp update_experiment_view(%{assigns: %{vm: %{experiment: experiment}}} = socket) do
+    # initialize experiment view
+    socket |> assign(experiment: experiment)
+  end
+
+  defp update_experiment_view(socket) do
+    # disable experiment view
+    socket |> assign(experiment: nil)
+  end
+
+  defp cancel(socket) do
+    title = String.capitalize(dgettext("eyra-assignment", "cancel.confirm.title"))
+    text = String.capitalize(dgettext("eyra-assignment", "cancel.confirm.text"))
+    confirm_label = dgettext("eyra-assignment", "cancel.confirm.label")
+    socket |> confirm("cancel", title, text, confirm_label)
   end
 
   @impl true
   def handle_event("cancel", _params, socket) do
-    title = String.capitalize(dgettext("eyra-assignment", "cancel.confirm.title"))
-    text = String.capitalize(dgettext("eyra-assignment", "cancel.confirm.text"))
-    confirm_label = dgettext("eyra-assignment", "cancel.confirm.label")
-
-    {:noreply, socket |> confirm("cancel", title, text, confirm_label)}
+    {:noreply, socket |> cancel()}
   end
 
   @impl true
@@ -82,83 +110,17 @@ defmodule Systems.Assignment.LandingPage do
   end
 
   @impl true
-  def handle_event(
-        "call-to-action",
-        _params,
-        %{
-          assigns: %{
-            model: model,
-            vm: %{call_to_action: call_to_action}
-          }
-        } = socket
-      ) do
-    {:noreply, socket |> call_to_action.handle.(call_to_action, model)}
-  end
-
-  @impl true
   def handle_event("inform_ok", _params, socket) do
     {:noreply, socket |> assign(dialog: nil)}
+  end
+
+  def handle_info(:cancel, socket) do
+    {:noreply, socket |> cancel()}
   end
 
   def handle_info({:signal_test, _}, socket) do
     {:noreply, socket}
   end
-
-  defp action_map(%{
-         model: assignment,
-         vm: %{
-           public_id: public_id,
-           title: title,
-           contact_enabled?: contact_enabled?,
-           call_to_action: %{label: label}
-         }
-       }) do
-    actions = %{
-      call_to_action: %{
-        action: %{type: :send, event: "call-to-action"},
-        face: %{
-          type: :primary,
-          label: label
-        }
-      }
-    }
-
-    {:ok, %{email: email}} = Assignment.Context.owner(assignment)
-
-    if contact_enabled? and email do
-      actions
-      |> Map.put(:contact, %{
-        action: %{type: :href, href: contact_href(email, title, public_id)},
-        face: %{type: :label, label: dgettext("eyra-assignment", "contact.button")}
-      })
-    else
-      actions
-    end
-  end
-
-  defp contact_href(email, title, nil) do
-    "mailto:#{email}?subject=#{title}"
-  end
-
-  defp contact_href(email, title, public_id) do
-    "mailto:#{email}?subject=[panl_id=#{public_id}] #{title}"
-  end
-
-  defp cancel_button() do
-    %{
-      action: %{type: :send, event: "cancel"},
-      face: %{
-        type: :secondary,
-        text_color: "text-delete",
-        label: dgettext("eyra-assignment", "cancel.button")
-      }
-    }
-  end
-
-  defp create_actions(%{call_to_action: call_to_action, contact: contact}),
-    do: [call_to_action, contact]
-
-  defp create_actions(%{call_to_action: call_to_action}), do: [call_to_action]
 
   defp show_dialog?(nil), do: false
   defp show_dialog?(_), do: true
@@ -166,6 +128,9 @@ defmodule Systems.Assignment.LandingPage do
   defp grid_cols(1), do: "grid-cols-1 sm:grid-cols-1"
   defp grid_cols(2), do: "grid-cols-1 sm:grid-cols-2"
   defp grid_cols(_), do: "grid-cols-1 sm:grid-cols-3"
+
+  defp title_ext(%{public_id: public_id}), do: " ##{public_id}"
+  defp title_ext(_), do: ""
 
   def render(assigns) do
     ~F"""
@@ -175,13 +140,13 @@ defmodule Systems.Assignment.LandingPage do
     >
       <div :if={show_dialog?(@dialog)} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
         <div class="flex flex-row items-center justify-center w-full h-full">
-          <PlainDialog vm={@dialog} />
+          <PlainDialog {...@dialog} />
         </div>
       </div>
 
       <ContentArea>
         <MarginY id={:page_top} />
-        <Title1>{@vm.title}<span class="text-primary"> #{@vm.public_id}</span></Title1>
+        <Title1>{@vm.title}<span class="text-primary">{title_ext(@vm)}</span></Title1>
         <Spacing value="L" />
 
         <div class={"grid gap-6 sm:gap-8 #{grid_cols(Enum.count(@vm.highlights))}"}>
@@ -196,21 +161,11 @@ defmodule Systems.Assignment.LandingPage do
         <BodyLarge>{@vm.text}</BodyLarge>
         <Spacing value="L" />
 
-        <MarginY id={:button_bar_top} />
-        <ButtonBar buttons={create_actions(action_map(assigns))} />
-        <Spacing value="XL" />
-
-        <Panel :if={Map.get(@vm, :cancel_enabled?, false)}>
-          <#template slot="title">
-            <Title3>{dgettext("eyra-assignment", "cancel.title")}</Title3>
-          </#template>
-          <Spacing value="M" />
-          <BodyLarge>{dgettext("eyra-assignment", "cancel.text")}</BodyLarge>
-          <Spacing value="M" />
-          <Wrap>
-            <DynamicButton vm={cancel_button()} />
-          </Wrap>
-        </Panel>
+        <Dynamic.LiveComponent :if={@experiment != nil}
+          id={@experiment.id}
+          module={@experiment.view}
+          {...@experiment.model}
+        />
 
       </ContentArea>
     </Workspace>

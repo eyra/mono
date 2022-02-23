@@ -68,8 +68,6 @@ defmodule CoreWeb.LiveForm do
       end
 
       defp claim_focus(%{assigns: %{id: id}}) do
-        IO.puts("CLAIM XY")
-
         send(self(), {:claim_focus, id})
       end
     end

@@ -7,11 +7,12 @@ defmodule Frameworks.Pixel.Form.NumberInput do
   prop(label_text, :string)
   prop(label_color, :css_class, default: "text-grey1")
   prop(background, :atom, default: :light)
+  prop(reserve_error_space, :boolean, default: true)
   prop(debounce, :string, default: "1000")
 
   def render(assigns) do
     ~F"""
-      <Input field={@field} label_text={@label_text} label_color={@label_color} background={@background} debounce={@debounce} type="number" />
+      <Input field={@field} label_text={@label_text} label_color={@label_color} background={@background} reserve_error_space={@reserve_error_space} debounce={@debounce} type="number" />
     """
   end
 end

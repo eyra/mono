@@ -11,36 +11,131 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: systems/lab/tool_form.ex:26
 msgid "add.day.button"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/tool_form.ex:51
 msgid "form.description"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/tool_form.ex:50
 msgid "form.title"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/day_view.ex:99
 msgid "day.schedule.date.label"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/day_view.ex:100
 msgid "day.schedule.location.label"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/day_view.ex:101
 msgid "day.schedule.seats.label"
 msgstr ""
 
 #, elixir-format
-#: systems/lab/day_view.ex:85
 msgid "day.schedule.submit.button"
+msgstr ""
+
+#, elixir-format
+msgid "time.slot.item.available.label"
+msgstr ""
+
+#, elixir-format
+msgid "1 reservation"
+msgid_plural "%{count} reservations"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-format
+msgid "1 seat"
+msgid_plural "%{count} seats"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-format
+msgid "day.schedule.byline"
+msgstr ""
+
+#, elixir-format
+msgid "1 time slot"
+msgid_plural "%{count} time slots"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-format, ex-autogen
+msgid "duplicate.day.button"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "edit.day.button"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "timeslot.selector.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "timeslot.submit.button"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "apply.cta.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "no.reservation.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "open.cta.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "reservation.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "submit.warning.no.selection"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "update.warning.time.slot.no.longer.available"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "participated.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "pending.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.query.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.body"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.expired"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.not.found"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.accept.button"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "experiment.checkin.label"
 msgstr ""

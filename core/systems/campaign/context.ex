@@ -293,10 +293,17 @@ defmodule Systems.Campaign.Context do
     |> Repo.insert()
   end
 
+  def original_author(campaign) do
+    campaign
+    |> list_authors()
+    |> List.first()
+  end
+
   def list_authors(%Campaign.Model{} = campaign) do
     from(
       a in Campaign.AuthorModel,
       where: a.campaign_id == ^campaign.id,
+      order_by: {:asc, :inserted_at},
       preload: [user: [:profile]]
     )
     |> Repo.all()
@@ -310,6 +317,14 @@ defmodule Systems.Campaign.Context do
   def list_tools(%Campaign.Model{} = campaign, schema) do
     from(s in schema, where: s.campaign_id == ^campaign.id)
     |> Repo.all()
+  end
+
+  def search_subject(tool, public_id) do
+    Assignment.Context.search_subject(tool, public_id)
+  end
+
+  def activate_task(tool, user_id) do
+    Assignment.Context.activate_task(tool, user_id)
   end
 
   def ready?(id) do

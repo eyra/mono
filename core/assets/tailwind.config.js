@@ -94,6 +94,13 @@ module.exports = {
         "image-preview-circle": "120px",
         "image-preview-circle-sm": "150px",
         "button-sm": "14px",
+        "card": "376px",
+        "form": "400px",
+        "sheet": "760px",
+        "popup": "480px",
+        "popup-sm": "520px",
+        "popup-md": "730px",
+        "popup-lg": "1228px"
       },
         height: {
         "topbar" : "64px",
@@ -110,6 +117,7 @@ module.exports = {
         "header2-lg" : "183px",
         "logo" : "32px",
         "logo-sm" : "48px",
+        "lab-day-popup-list": "392px",
         "image-header": "375px",
         "image-header-sm": "500px",
         "image-card": "200px",
@@ -172,6 +180,7 @@ module.exports = {
         "popup-lg": "1228px"
       },
       maxHeight: {
+        "dropdown": "317px",
         "header1": "376px",
         "form": "400px"
       },

@@ -49,6 +49,9 @@ export const Tabbar = {
         tabs.forEach(tab => {
             var isVisible = tab.id === nextTabId
             setVisible(tab, isVisible)
+            if (isVisible) {
+                tab.dispatchEvent(new Event("tab-activated"))
+            }
         });
 
         // Activate tabbar item for active tab

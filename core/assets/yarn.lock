@@ -4823,15 +4823,15 @@
 
 "phoenix_html@file:../deps/phoenix_html":
   "resolved" "file:../deps/phoenix_html"
-  "version" "2.14.3"
+  "version" "3.2.0"
 
 "phoenix_live_view@file:../deps/phoenix_live_view":
   "resolved" "file:../deps/phoenix_live_view"
-  "version" "0.15.7"
+  "version" "0.17.6"
 
 "phoenix@file:../deps/phoenix":
   "resolved" "file:../deps/phoenix"
-  "version" "1.5.9"
+  "version" "1.6.6"
 
 "picomatch@^2.0.4", "picomatch@^2.0.5", "picomatch@^2.2.1", "picomatch@^2.2.2":
   "integrity" "sha512-q0M/9eZHzmr0AulXyPwNfZjtwZ/RBZlbN3K3CErVrk50T2ASYI7Bye0EvekFY3IP1Nt2DHu0re+V2ZHIpMkuWg=="
@@ -5381,10 +5381,10 @@
     "source-map" "^0.6.1"
     "supports-color" "^6.1.0"
 
-"postcss@^8.1.6", "postcss@^8.2.1", "postcss@^8.2.9":
-  "integrity" "sha512-b+TmuIL4jGtCHtoLi+G/PisuIl9avxs8IZMSmlABRwNz5RLUUACrC+ws81dcomz1nRezm5YPdXiMEzBEKgYn+Q=="
-  "resolved" "https://registry.npmjs.org/postcss/-/postcss-8.2.9.tgz"
-  "version" "8.2.9"
+"postcss@^8.1.6", "postcss@^8.2.1", "postcss@^8.2.13":
+  "integrity" "sha512-FCE5xLH+hjbzRdpbRb1IMCvPv9yZx2QnDarBEYSN0N0HYk+TcXsEhwdFcFb+SRWOKzKGErhIEbBK2ogyLdTtfQ=="
+  "resolved" "https://registry.npmjs.org/postcss/-/postcss-8.2.13.tgz"
+  "version" "8.2.13"
   dependencies:
     "colorette" "^1.2.2"
     "nanoid" "^3.1.22"

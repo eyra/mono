@@ -67,9 +67,7 @@ defmodule Link.Debug do
         start_button: start_button,
         expire_button: expire_button,
         expire_force_button: expire_force_button,
-        changesets: %{},
-        save_timer: nil,
-        hide_flash_timer: nil
+        changesets: %{}
       )
       |> update_menus()
     }

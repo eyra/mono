@@ -51,6 +51,9 @@ defmodule Frameworks.Pixel.FormHelpers do
     end
   end
 
+  def target(%{options: options} = _form), do: options[:phx_target]
+  def target(_form), do: nil
+
   defp context(assigns) do
     assigns[:__context__]
   end

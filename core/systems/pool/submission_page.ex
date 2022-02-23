@@ -73,8 +73,6 @@ defmodule Systems.Pool.SubmissionPage do
         validate?: validate?,
         preview_path: preview_path,
         changesets: %{},
-        save_timer: nil,
-        hide_flash_timer: nil,
         dialog: nil
       )
       |> update_menus()
@@ -219,7 +217,7 @@ defmodule Systems.Pool.SubmissionPage do
       >
         <div :if={show_dialog?(@dialog)} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
           <div class="flex flex-row items-center justify-center w-full h-full">
-            <PlainDialog vm={@dialog} />
+            <PlainDialog {...@dialog} />
           </div>
         </div>
         <div phx-click="reset_focus">

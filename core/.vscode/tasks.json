@@ -1,0 +1,45 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run PostgreSQL",
+            "type": "shell",
+            "command": "podman run -d --name=postgresql --replace --rm -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=link_dev docker.io/postgres",
+            "group": "none",
+            "presentation": {
+                "reveal": "never",
+                "panel": "dedicated"
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run MinIO",
+            "type": "shell",
+            "command": "./scripts/minio",
+            "group": "none",
+            "presentation": {
+                "reveal": "never",
+                "panel": "dedicated"
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run tests for file",
+            "type": "shell",
+            "command": "mix test test/${relativeFileDirname}/${fileBasename}s",
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            }
+        }
+    ]
+}

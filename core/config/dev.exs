@@ -1,5 +1,11 @@
 import Config
 
+# Setup for MinIO
+config :ex_aws, :s3,
+  scheme: "http://",
+  host: "localhost",
+  port: 9000
+
 # Only in tests, remove the complexity from the password hashing algorithm
 config :bcrypt_elixir, :log_rounds, 1
 # Configure your database
@@ -69,6 +75,17 @@ config :core,
 config :core,
        :admins,
        ["admin@example.org"]
+
+config :core, Systems.DataDonation.S3StorageBackend, bucket: "eylixir"
+
+config :core,
+       :data_donation_storage_backend,
+       Systems.DataDonation.S3StorageBackend
+
+#  For Minio (local S3)
+config :ex_aws,
+  access_key_id: "my_access_key",
+  secret_access_key: "a_super_secret"
 
 try do
   import_config "dev.secret.exs"

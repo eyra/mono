@@ -137,6 +137,10 @@ defmodule Core.Factories do
     build(:lab_tool, %{})
   end
 
+  def build(:time_slot) do
+    build(:time_slot, %{})
+  end
+
   # def build(:client_script) do
   #   %DataDonation.ToolModel{
   #     title: Faker.Lorem.sentence(),
@@ -396,6 +400,17 @@ defmodule Core.Factories do
 
     %Lab.ToolModel{
       auth_node: auth_node
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:time_slot, %{} = attributes) do
+    {lab_tool, attributes} = Map.pop(attributes, :lab_tool, build(:lab_tool))
+    {reservations, attributes} = Map.pop(attributes, :reservations, [])
+
+    %Lab.TimeSlotModel{
+      tool: lab_tool,
+      reservations: reservations
     }
     |> struct!(attributes)
   end

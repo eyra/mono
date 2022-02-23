@@ -4,6 +4,7 @@ defmodule CoreWeb.ImageCatalogPicker do
   alias Frameworks.Pixel.Text.{Title3, BodyLarge, Caption}
   alias Frameworks.Pixel.Button.SubmitButton
   alias Frameworks.Pixel.Grid.ImageGrid
+  alias Surface.Components.Form
 
   prop(viewport, :any)
   prop(breakpoint, :any)
@@ -136,13 +137,13 @@ defmodule CoreWeb.ImageCatalogPicker do
           </button>
         </div>
         <div x-data="{ selected: -1 }">
-          <form id="image_catalog_picker_form" :on-submit="search">
+          <Form for={:x} submit="search" opts={id: "image_catalog_picker_form", phx_target: @myself}>
             <div class="flex flex-row">
               <input value={@initial_query} class="text-grey1 text-bodymedium font-body pl-3 pr-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-48px" name="q" type="search" />
               <Spacing value="XS" direction="l" />
               <SubmitButton label={"#{dgettext("eyra-imagecatalog", "search.image.button")}"} alpine_onclick="selected = -1" />
             </div>
-          </form>
+          </Form>
           <div :if={@search_results == [] && @query != ""}>
             <Spacing value="S" />
             <BodyLarge>{dgettext("eyra-imagecatalog", "no.results.found.message")}</BodyLarge>

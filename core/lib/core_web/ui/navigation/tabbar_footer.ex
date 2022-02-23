@@ -3,10 +3,12 @@ defmodule CoreWeb.UI.Navigation.TabbarFooter do
   use CoreWeb.UI.Component
 
   alias CoreWeb.UI.Container.RestrictedWidthArea
-  alias Frameworks.Pixel.Button.Face.Forward
+  alias Frameworks.Pixel.Button.Face.PlainIcon
 
   slot(default)
 
+  defp align(%{align: :left}), do: "justify-left"
+  defp align(%{align: :center}), do: "justify-center"
   defp align(%{type: :sheet}), do: "justify-center"
   defp align(_), do: "justify-left"
 
@@ -25,7 +27,7 @@ defmodule CoreWeb.UI.Navigation.TabbarFooter do
                   <div id={"tabbar-footer-item-#{tab1.id}"} phx-hook="TabbarFooterItem" data-tab-id={tab1.id} data-target-tab-id={tab2.id} class="tabbar-footer-item cursor-pointer hidden">
                     <Case value={index < Enum.count(tabs)-1} >
                       <True>
-                        <Forward vm={%{label: tab2.forward_title}} />
+                        <PlainIcon vm={%{label: tab2.forward_title, icon: :forward}} />
                       </True>
                       <False>
                         <#slot />

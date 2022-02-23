@@ -10,7 +10,7 @@ defmodule CoreWeb.UI.Navigation.TabbarContent do
       <Context get={tabs: tabs}>
         {#for tab <- tabs}
           <Tab id={tab.id}>
-            <Surface.Components.Dynamic.LiveComponent id={tab.id} module={tab.component} props={Map.put(tab.props, :id, tab.id)}/>
+            <Dynamic.LiveComponent id={tab.id} module={tab.component} props={tab.props} />
           </Tab>
         {/for}
       </Context>

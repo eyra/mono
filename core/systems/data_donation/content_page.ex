@@ -38,9 +38,7 @@ defmodule Systems.DataDonation.ContentPage do
       |> assign(
         tool_id: id,
         promotion_id: tool.promotion_id,
-        changesets: %{},
-        save_timer: nil,
-        hide_flash_timer: nil
+        changesets: %{}
       )
     }
   end
