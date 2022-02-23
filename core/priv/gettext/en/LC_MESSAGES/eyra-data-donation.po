@@ -61,23 +61,23 @@ msgstr "Received"
 
 #, elixir-format, ex-autogen
 msgid "file_selection.file_upload.description"
-msgstr "Select data package"
+msgstr "Select file"
 
 #, elixir-format, ex-autogen
 msgid "file_selection.welcome.description"
-msgstr "Please select the %{file} you have downloaded and stored on your device."
+msgstr "Please select the data package file that you received from %{file}."
 
 #, elixir-format, ex-autogen
 msgid "submit_data.description"
-msgstr "Below you can find an overview of the extracted data. Do you agree to donate this data?"
+msgstr "On your consent, the data below will be made available to %{researcher}. Please review the data carefully. Do you consent to donating this data?"
 
 #, elixir-format, ex-autogen
 msgid "submit_data.title"
-msgstr "Donate Data"
+msgstr "Donate data"
 
 #, elixir-format, ex-autogen
 msgid "tabbar.item.file_selection"
-msgstr "Extract Data"
+msgstr "Extract data"
 
 #, elixir-format, ex-autogen
 msgid "tabbar.item.file_selection.forward"
@@ -85,11 +85,11 @@ msgstr "Proceed"
 
 #, elixir-format, ex-autogen
 msgid "tabbar.item.submit_data"
-msgstr "Donate Data"
+msgstr "Donate data"
 
 #, elixir-format, ex-autogen
 msgid "tabbar.item.submit_data.forward"
-msgstr "Donate Data"
+msgstr "Donate data"
 
 #, elixir-format, ex-autogen
 msgid "data_extraction.processing.loading"
@@ -97,19 +97,15 @@ msgstr "Processing data package..."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "file_selection.note"
-msgstr "Please be assured: your data is not yet sent over the internet."
+msgstr "Note: Data extraction is performed locally, the data does not leave your device during this process."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "tabbar.item.welcome"
-msgstr "Explanation"
+msgstr "Welcome"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "tabbar.item.welcome.forward"
 msgstr "Extract data"
-
-#, elixir-format, ex-autogen
-msgid "welcome.description"
-msgstr "Great to see you here supporting %{researcher} with her research on '%{research_topic}'. You will be asked to select a file from which data will be collected that is needed for this study only. The collected data will be presented to you after which you can decide to upload the data or not."
 
 #, elixir-format, ex-autogen
 msgid "welcome.title"
@@ -125,16 +121,48 @@ msgstr "You have selected the following file:"
 
 #, elixir-format, ex-autogen
 msgid "file.extracton.description"
-msgstr "A script is currently extracting relevant data from your data package."
+msgstr "Relevant data is being extracted from your data file. This may take a while, please do not close your browser during this process. Once finished, you are automatically forwarded to step 3."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "submit.data.button"
-msgstr "Donate Data"
-
-#, elixir-format, ex-autogen
-msgid "terms.description"
-msgstr "By pressing the donate button you agree to the following %{link}."
+msgstr "I consent"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "no.extraction.data.yet.description"
 msgstr "Please go to step 2 and make sure to extract some data first."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "extract.data.title"
+msgstr "Extract data"
+
+#, elixir-format, ex-autogen
+msgid "thanks.title"
+msgstr "Thank you"
+
+#, elixir-format, ex-autogen
+msgid "survey.link"
+msgstr "this survey"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "welcome.description.1"
+msgstr "You are about to start the process of donating your data for the study of %{researcher}."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "welcome.description.2"
+msgstr "This study examines the amount of time spent in activities, such as walking and biking, before and during the COVID-19 pandemic (years 2016-2021). We will extract this data from your %{file_type} data package file."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "welcome.description.3"
+msgstr "During this process, we do not save any cookies or personal data. The data that is extracted from your data package is fully anonymised and presented to you in step 3. After your consent, this data is saved on a secure server and made available to %{researcher}."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "thanks.description.1"
+msgstr "We greatly appreciate your contribution and would love to hear how you experienced the data donation process."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "thanks.description.2"
+msgstr "Let us know by filling out %{survey_link}."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "thanks.description.3"
+msgstr "Thanks in advance."

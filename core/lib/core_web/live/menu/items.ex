@@ -6,7 +6,7 @@ defmodule CoreWeb.Menu.Items do
     do: %{
       support: %{target: Systems.Support.OverviewPage, domain: "eyra-ui"},
       permissions: %{target: Systems.Admin.PermissionsPage, domain: "eyra-ui"},
-      eyra: %{target: CoreWeb.Dashboard, size: :large, title: "Eyra", domain: "eyra-ui"},
+      eyra: %{target: Systems.Home.LandingPage, size: :large, title: "Eyra", domain: "eyra-ui"},
       dashboard: %{target: CoreWeb.Dashboard, domain: "eyra-ui"},
       todo: %{target: Systems.NextAction.OverviewPage, domain: "eyra-ui"},
       payments: %{target: CoreWeb.Dashboard, domain: "eyra-ui"},

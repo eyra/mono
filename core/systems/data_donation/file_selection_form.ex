@@ -42,7 +42,7 @@ defmodule Systems.DataDonation.FileSelectionSheet do
       <ContentArea>
         <MarginY id={:page_top} />
         <SheetArea>
-          <Title1>{@file_type}</Title1>
+          <Title1>{dgettext("eyra-data-donation", "extract.data.title")}</Title1>
 
           <div class="select-file">
             <BodyLarge>

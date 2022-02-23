@@ -68,10 +68,6 @@ msgid "todo.title"
 msgstr "To-do"
 
 #, elixir-format
-msgid "menu.item.payments"
-msgstr "Betalingen"
-
-#, elixir-format
 msgid "tabbar.item.features"
 msgstr "Kenmerken"
 
@@ -194,7 +190,3 @@ msgstr "Deel je %{content} met een of meer %{group} uit de onderstaande lijst."
 #, elixir-format, ex-autogen
 msgid "pronoun.her"
 msgstr "haar"
-
-#, elixir-format, ex-autogen
-msgid "terms.link"
-msgstr "algemene voorwaarden"

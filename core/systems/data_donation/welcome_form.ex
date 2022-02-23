@@ -11,6 +11,7 @@ defmodule Systems.DataDonation.WelcomeSheet do
   data(job_title, :string)
   data(image, :string)
   data(institution, :string)
+  data(file_type, :string)
 
   def update(
         %{
@@ -21,7 +22,8 @@ defmodule Systems.DataDonation.WelcomeSheet do
             research_topic: research_topic,
             job_title: job_title,
             image: image,
-            institution: institution
+            institution: institution,
+            file_type: file_type
           }
         },
         socket
@@ -36,7 +38,8 @@ defmodule Systems.DataDonation.WelcomeSheet do
         research_topic: research_topic,
         job_title: job_title,
         image: image,
-        institution: institution
+        institution: institution,
+        file_type: file_type
       )
     }
   end
@@ -49,8 +52,16 @@ defmodule Systems.DataDonation.WelcomeSheet do
           <div class="flex flex-col sm:flex-row gap-10 ">
             <div>
               <Title1>{dgettext("eyra-data-donation", "welcome.title")}</Title1>
-              <div class="text-bodylarge font-body">
-                {dgettext("eyra-data-donation", "welcome.description", researcher: @researcher, pronoun: @pronoun, research_topic: @research_topic)}
+              <div class="flex flex-col gap-4">
+                <div class="text-bodylarge font-body">
+                  {dgettext("eyra-data-donation", "welcome.description.1", researcher: @researcher, file_type: @file_type)}
+                </div>
+                <div class="text-bodylarge font-body">
+                  {dgettext("eyra-data-donation", "welcome.description.2", researcher: @researcher, file_type: @file_type)}
+                </div>
+                <div class="text-bodylarge font-body">
+                  {dgettext("eyra-data-donation", "welcome.description.3", researcher: @researcher, file_type: @file_type)}
+                </div>
               </div>
             </div>
             <div class="flex-shrink-0">

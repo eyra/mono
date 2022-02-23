@@ -13,13 +13,33 @@ defmodule Systems.DataDonation.ThanksPage do
 
   data(tool, :any)
 
-  def mount(_, _session, socket) do
+  def mount(%{"participant_id" => participant_id}, _session, socket) do
     {
       :ok,
       socket
-      |> assign(vm: DataDonation.PilotModel.view_model())
+      |> assign(
+        participant_id: participant_id,
+        vm: DataDonation.PilotModel.view_model()
+      )
       |> update_menus()
     }
+  end
+
+  defp survey_link(participant_id) do
+    link_as_string(
+      dgettext("eyra-data-donation", "survey.link"),
+      "https://survey.uu.nl/jfe/form/SV_aeFIXlMaKK7wZkq?participant_id=#{participant_id}"
+    )
+  end
+
+  defp link_as_string(label, url) do
+    label
+    |> Phoenix.HTML.Link.link(
+      class: "text-primary underline",
+      target: "_blank",
+      to: url
+    )
+    |> Phoenix.HTML.safe_to_string()
   end
 
   def render(assigns) do
@@ -31,8 +51,16 @@ defmodule Systems.DataDonation.ThanksPage do
           <div class="flex flex-col sm:flex-row gap-10 ">
             <div>
               <Title1>{dgettext("eyra-data-donation", "thanks.title")}</Title1>
-              <div class="text-bodylarge font-body">
-                {dgettext("eyra-data-donation", "thanks.description")}
+              <div class="flex flex-col gap-4">
+                <div class="text-bodylarge font-body">
+                  {dgettext("eyra-data-donation", "thanks.description.1")}
+                </div>
+                <div class="text-bodylarge font-body">
+                  {raw(dgettext("eyra-data-donation", "thanks.description.2", survey_link: survey_link(@participant_id)))}
+                </div>
+                <div class="text-bodylarge font-body">
+                  {dgettext("eyra-data-donation", "thanks.description.3")}
+                </div>
               </div>
             </div>
             <div class="flex-shrink-0">

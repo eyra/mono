@@ -10,19 +10,3 @@ msgid ""
 msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2\n"
-
-#, elixir-format
-msgid "hero.subtitle"
-msgstr ""
-
-#, elixir-format
-msgid "hero.title"
-msgstr ""
-
-#, elixir-format
-msgid "intro"
-msgstr ""
-
-#, elixir-format
-msgid "title"
-msgstr ""

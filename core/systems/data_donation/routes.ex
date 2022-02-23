@@ -13,7 +13,7 @@ defmodule Systems.DataDonation.Routes do
       scope "/data-donation", Systems.DataDonation do
         pipe_through([:browser])
         live("/pilot/donate/:participant_id", UploadPage)
-        live("/pilot/thanks", ThanksPage)
+        live("/pilot/thanks/:participant_id", ThanksPage)
       end
     end
   end

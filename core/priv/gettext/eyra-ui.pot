@@ -67,10 +67,6 @@ msgid "todo.title"
 msgstr ""
 
 #, elixir-format
-msgid "menu.item.payments"
-msgstr ""
-
-#, elixir-format
 msgid "tabbar.item.features"
 msgstr ""
 
@@ -192,8 +188,4 @@ msgstr ""
 
 #, elixir-format, ex-autogen
 msgid "pronoun.her"
-msgstr ""
-
-#, elixir-format, ex-autogen
-msgid "terms.link"
 msgstr ""

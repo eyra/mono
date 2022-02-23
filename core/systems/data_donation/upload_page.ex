@@ -82,7 +82,7 @@ defmodule Systems.DataDonation.UploadPage do
         title: dgettext("eyra-data-donation", "tabbar.item.submit_data"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.submit_data.forward"),
         component: SubmitDataSheet,
-        props: %{},
+        props: pilot_model,
         type: :sheet
       }
     ]
@@ -95,7 +95,9 @@ defmodule Systems.DataDonation.UploadPage do
         %{assigns: %{participant_id: participant_id}} = socket
       ) do
     store_results(participant_id, data)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, DataDonation.ThanksPage))}
+
+    {:noreply,
+     push_redirect(socket, to: Routes.live_path(socket, DataDonation.ThanksPage, participant_id))}
   end
 
   def render(assigns) do
