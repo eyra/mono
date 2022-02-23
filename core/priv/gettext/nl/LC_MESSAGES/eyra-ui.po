@@ -105,7 +105,7 @@ msgstr "Debug"
 
 #, elixir-format
 msgid "tabbar.item.welcome"
-msgstr "Welkom"
+msgstr "Toelichting"
 
 #, elixir-format
 msgid "tabbar.item.welcome.forward"
@@ -190,3 +190,11 @@ msgstr "Delen"
 #, elixir-format
 msgid "share.dialog.text"
 msgstr "Deel je %{content} met een of meer %{group} uit de onderstaande lijst."
+
+#, elixir-format, ex-autogen
+msgid "pronoun.her"
+msgstr "haar"
+
+#, elixir-format, ex-autogen
+msgid "terms.link"
+msgstr "algemene voorwaarden"

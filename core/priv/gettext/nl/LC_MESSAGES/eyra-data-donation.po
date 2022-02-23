@@ -44,10 +44,6 @@ msgid "delete.button"
 msgstr "Verwijderen"
 
 #, elixir-format
-msgid "uploader.title"
-msgstr "Data Donatie"
-
-#, elixir-format
 msgid "donations.title"
 msgstr "Ontvangen donaties"
 
@@ -62,3 +58,83 @@ msgstr "Download"
 #, elixir-format
 msgid "received.label"
 msgstr "Ontvangen"
+
+#, elixir-format, ex-autogen
+msgid "file_selection.file_upload.description"
+msgstr "Selecteer het bestand"
+
+#, elixir-format, ex-autogen
+msgid "file_selection.welcome.description"
+msgstr "Selecteer het %{file} dat je hebt gedownload en opgeslagen op dit apparaat."
+
+#, elixir-format, ex-autogen
+msgid "submit_data.description"
+msgstr "Hieronder vind je een overzicht van de verzamelde data. Ben je akkoord met het doneren van je deze data?"
+
+#, elixir-format, ex-autogen
+msgid "submit_data.title"
+msgstr "Data Doneren"
+
+#, elixir-format, ex-autogen
+msgid "tabbar.item.file_selection"
+msgstr "Data verzamelen"
+
+#, elixir-format, ex-autogen
+msgid "tabbar.item.file_selection.forward"
+msgstr "Ga verder"
+
+#, elixir-format, ex-autogen
+msgid "tabbar.item.submit_data"
+msgstr "Data doneren"
+
+#, elixir-format, ex-autogen
+msgid "tabbar.item.submit_data.forward"
+msgstr "Doneren"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "data_extraction.processing.loading"
+msgstr "Verwerken data package..."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "file_selection.note"
+msgstr "Wees gerust: er gaan nog geen gegevens van jou over het internet."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "tabbar.item.welcome"
+msgstr "Uitleg"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "tabbar.item.welcome.forward"
+msgstr "Ga verder"
+
+#, elixir-format, ex-autogen
+msgid "welcome.description"
+msgstr "Fijn dat je %{researcher} wilt helpen in %{pronoun} onderzoek naar '%{research_topic}'. Je zal worden gevraagd een bestand te selecteren waaruit alleen data wordt verzamelt dat nuttig is voor dit specifieke onderzoek. De verzamelde data wordt eerst aan jou getoond alvorens je kan besluiten deze data te doneren."
+
+#, elixir-format, ex-autogen
+msgid "welcome.title"
+msgstr "Welkom"
+
+#, elixir-format, ex-autogen
+msgid "extract.data.button"
+msgstr "Start extractie"
+
+#, elixir-format, ex-autogen
+msgid "selected.file.description"
+msgstr "Je hebt het volgende bestand geselecteerd:"
+
+#, elixir-format, ex-autogen
+msgid "file.extracton.description"
+msgstr "Een script is momenteel relevante gegevens uit jouw data package aan het verzamelen."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "submit.data.button"
+msgstr "Data Doneren"
+
+#, elixir-format, ex-autogen
+msgid "terms.description"
+msgstr "Door op de doneer knop te klikken ga je akkoord met de volgende %{link}."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "no.extraction.data.yet.description"
+msgstr "Ga eerst naar stap 2 om data te verzamelen."

@@ -1,101 +1,42 @@
-self.languagePluginUrl = "https://cdn.jsdelivr.net/pyodide/v0.16.1/full/";
-importScripts("https://cdn.jsdelivr.net/pyodide/v0.16.1/full/pyodide.js");
-
-class ChunkedFile {
-  constructor(size) {
-    this.data = [];
-    this.offset = 0;
-    this.size = size;
-    this.buffer = new Uint8Array(new ArrayBuffer(size));
-  }
-  tell() {
-    return this.offset;
-  }
-  read(size) {
-    if (size === undefined) {
-      size = this.size - this.offset;
-    }
-    if (this.offset >= this.size) {
-      return null;
-    }
-    const readOffset = this.offset;
-    this.offset += size;
-    return this.buffer.slice(readOffset, readOffset + size);
-  }
-  seek(offset, whence) {
-    switch (whence) {
-      case 0:
-        this.offset = offset;
-        break;
-      case 1:
-        this.offset += offset;
-        break;
-      case 2:
-        this.offset = this.size + offset;
-        break;
-    }
-  }
-  writeChunk(chunk) {
-    this.buffer.set(chunk, this.offset);
-    this.offset = this.offset + chunk.length;
-  }
-}
+importScripts("https://cdn.jsdelivr.net/pyodide/v0.19.0/full/pyodide.js");
 
 var data = undefined;
 
-languagePluginLoader
-  .then(() => {
-    return pyodide.loadPackage(["micropip", "numpy", "pandas"]);
-  })
-  .then(() => {
-    self.pyodide.runPython(`
-class _ChunkedFile:
-  def __init__(self, proxy):
-    self.proxy = proxy
+loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.19.0/full/" }).then((pyodide) => {
+  self.pyodide = pyodide;
+  return self.pyodide.loadPackage(["micropip", "numpy", "pandas"]);
+}).then(() => {
+  self.postMessage({ eventType: "initialized" });
+});
 
-  def seekable(self):
-    return True
-
-  def seek(self, offset, whence=0):
-    self.proxy.seek(offset, whence)
-
-  def tell(self):
-    return self.proxy.tell()
-
-  def read(self, size=None):
-    data = self.proxy.read(size)
-    if data:
-      return data.tobytes()
-
-
-def _process_data(data):
-  import json
-  file_data = _ChunkedFile(data)
-  result = process(file_data)
-  data = []
-  html = []
-  for df in result.get("data_frames", []):
-    html.append(df.to_html())
-    data.append(df.to_dict())
-  return {
-    "summary": result["summary"],
-    "html": "\\n".join(html),
-    "data": json.dumps(data),
-  }
-  `);
-    self.postMessage({ eventType: "initialized" });
-  });
+let file = undefined
 
 onmessage = (event) => {
   const { eventType } = event.data;
   if (eventType === "runPython") {
     self.pyodide.runPython(event.data.script)
   } else if (eventType === "initData") {
-    data = new ChunkedFile(event.data.size);
+    file = self.pyodide.FS.open("user-data", "w")
   } else if (eventType === "data") {
-    data.writeChunk(event.data.chunk);
+    self.pyodide.FS.write(file, event.data.chunk, 0, event.data.chunk.length)
   } else if (eventType === "processData") {
-    const result = self.pyodide.globals._process_data(data);
-    self.postMessage({ eventType: "result", result });
+    const result = self.pyodide.runPython(`
+    def _process_data():
+      import json
+      import html
+      result = process(open("user-data", "rb"))
+      data_output = []
+      html_output = []
+      for data in result:
+        html_output.append(f"""<h1 class="text-title4 font-title4 sm:text-title3 sm:font-title3 mb-6 md:mb-8 text-grey1">{html.escape(data['title'])}</h1>""")
+        df = data['data_frame']
+        html_output.append(df.to_html(classes=["data-donation-extraction-results"], justify="left"))
+        data_output.append(df.to_dict())
+      return {
+        "html": "\\n".join(html_output),
+        "data": json.dumps(data_output),
+      }
+    _process_data()`);
+    self.postMessage({ eventType: "result", result: result.toJs({ create_proxies: false, dict_converter: Object.fromEntries }) });
   }
 };

@@ -26,6 +26,7 @@ import "./100vh-fix";
 import { ViewportResize } from "./viewport_resize"
 import { Toggle } from "./toggle"
 import { Tabbar, TabbarItem, TabbarFooterItem } from "./tabbar"
+import { PythonUploader} from "./python_uploader"
 import { Clipboard } from "./clipboard"
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
@@ -88,69 +89,7 @@ Hooks.NativeWrapper = {
   }
 }
 
-Hooks.PythonUploader = {
-  destroyed(){
-    this.worker && this.worker.terminate();
-  },
-  mounted(){
-    console.log("PythonUploader mounted")
-
-    this.worker = new Worker("/js/pyworker.js");
-    this.worker.onerror = console.log;
-    this.worker.onmessage = (event) => {
-      const { eventType } = event.data;
-      if (eventType === "initialized") {
-        const script = this.el.getElementsByTagName("code")[0].innerText
-        this.worker.postMessage({eventType: "runPython", script })
-        // Let the LiveView know everything is ready
-        this.el.querySelector(".loading-indicator").hidden = true;
-        this.el.querySelector(".step2").hidden = false;
-      }
-      else if (eventType === "result") {
-        this.result = event.data.result;
-        this.el.querySelector(".summary").innerText = this.result.summary;
-        this.el.querySelector(".extracted").innerHTML = this.result.html;
-        this.el.querySelector(".step4").hidden = false;
-      }
-    }
-    // Hook up the process button to the worker
-    this.el.addEventListener("click", (event)=>{
-      if (event.target.dataset.role !== "process-trigger") {
-        return;
-      }
-      const fileInput = this.el.querySelector("input[type=file]")
-      const file = fileInput.files[0];
-      const reader = file.stream().getReader();
-      const sendToWorker = ({ done, value }) => {
-        if (done) {
-          this.worker.postMessage({ eventType: "processData" });
-          return;
-        }
-        this.worker.postMessage({ eventType: "data", chunk: value });
-        reader.read().then(sendToWorker);
-      };
-      this.worker.postMessage({ eventType: "initData", size: file.size });
-      reader.read().then(sendToWorker);
-    })
-    // Hook up the share results button
-    this.el.addEventListener("change", (event)=>{
-      if (event.target.dataset.role !== "file-input") {
-        return;
-      }
-
-      this.el.querySelector(".step4").hidden = true;
-      this.el.querySelector(".step3").hidden = false;
-      this.el.querySelector(".script").hidden = false;
-    })
-    // Hook up the share results button
-    this.el.addEventListener("click", (event)=>{
-      if (event.target.dataset.role !== "donate-trigger") {
-        return;
-      }
-      this.pushEvent("donate", this.result);
-    })
-  }
-}
+Hooks.PythonUploader = PythonUploader
 
 let liveSocket = new LiveSocket('/live', Socket, {
   dom: {

@@ -52,26 +52,24 @@ data_donation_promotions =
     }
   end)
 
-data_donation_tools =
-  Enum.map(data_donation_promotions, fn promotion ->
-    %{
+  Enum.each(data_donation_promotions, fn promotion ->
+    data = %{
       script: File.read!(Path.join([:code.priv_dir(:core), "repo", "script.py"])),
-      reward_currency: :eur,
-      reward_value: 375,
       subject_count: 400,
-      promotion: promotion
+      # promotion: promotion
     }
+    Core.Factories.insert!(:data_donation_tool, data)
   end)
 
-  campaigns =
-  Enum.map(data_donation_tools, fn data_donation_tool ->
-    %{
-      title: Faker.Lorem.sentence(),
-      description: Faker.Lorem.paragraph(),
-      type: :data_donation_tool,
-      data_donation_tool: data_donation_tool
-    }
-  end)
+  # campaigns =
+  # Enum.map(data_donation_tools, fn data_donation_tool ->
+  #   %{
+  #     title: Faker.Lorem.sentence(),
+  #     description: Faker.Lorem.paragraph(),
+  #     type: :data_donation_tool,
+  #     data_donation_tool: data_donation_tool
+  #   }
+  # end)
 
 password = "asdf;lkjASDF0987"
 
@@ -98,32 +96,31 @@ researcher =
 
 Systems.NextAction.Context.create_next_action(researcher, Core.Accounts.NextActions.CompleteProfile)
 
-for campaign_data <- campaigns do
-  {tool_type, campaign_data} = Map.pop!(campaign_data, :type)
-  {tool_data, campaign_data} = Map.pop!(campaign_data, tool_type)
+# for campaign_data <- campaigns do
+#   {tool_type, campaign_data} = Map.pop!(campaign_data, :type)
+#   {tool_data, campaign_data} = Map.pop!(campaign_data, tool_type)
 
-  # CAMPAIGN
-  campaign = Core.Factories.insert!(:campaign, campaign_data)
+#   # CAMPAIGN
+#   campaign = Core.Factories.insert!(:campaign, campaign_data)
 
-  Core.Authorization.assign_role(
-    researcher,
-    campaign,
-    :owner
-  )
+#   Core.Authorization.assign_role(
+#     researcher,
+#     campaign,
+#     :owner
+#   )
 
-  # PROMOTION
+#   # PROMOTION
 
-  {promotion_data, tool_data} = Map.pop!(tool_data, :promotion)
+#   # {promotion_data, tool_data} = Map.pop!(tool_data, :promotion)
+#   # promotion =
+#   #   Core.Factories.insert!(
+#   #     :promotion,
+#   #     Map.merge(%{campaign: campaign}, promotion_data)
+#   #   )
 
-  promotion =
-    Core.Factories.insert!(
-      :promotion,
-      Map.merge(%{campaign: campaign}, promotion_data)
-    )
-
-  # TOOL
-  Core.Factories.insert!(
-    tool_type,
-    Map.merge(%{campaign: campaign, promotion: promotion}, tool_data)
-  )
-end
+#   # # TOOL
+#   # Core.Factories.insert!(
+#   #   tool_type,
+#   #   Map.merge(%{campaign: campaign, promotion: promotion}, tool_data)
+#   # )
+# end
