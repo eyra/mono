@@ -34,15 +34,7 @@ MONTHS = [
     "DECEMBER",
 ]
 
-TEXT = "This study examines the total amount of time spent in activities before and during the COVID-19 pandemic. \
-We therefore examined your Google semantic Location History data for 2016, 2017, 2018, 2019, \
-2020, and 2021. To be precise, we extracted per month and per year the total hours spent in activities as those were \
-recorded by Google such as walking, cycling and running. Also, we extracted \
-the number of days spent travelling and the distance travelled in km per month. Finally, you can see the \
-number of hours spent travelling per activity and per month and year. \
-All the information we extracted is visible on the following tables. "
-
-ERRORS = []
+MESSAGES = []
 activitiesAll = []
 
 
@@ -158,7 +150,7 @@ def process(file_data):
                                 + " "
                                 + str(year)
                             )
-                            ERRORS.append(error_message)
+                            MESSAGES.append(error_message)
                             break
 
                         activities = _activity_type_duration(data)
@@ -181,7 +173,7 @@ def process(file_data):
     DF_dict = dict()
 
     if data_frame.empty:
-        ERRORS.append("Empty dataframe")
+        MESSAGES.append("No relevant data available")
     else:
         activitiesSet = set(activitiesAll)
         data_frame_overall = data_frame[
@@ -199,18 +191,10 @@ def process(file_data):
             )
             data_frame_activity = data_frame_activity.round(2)
 
-            activityName = activity.lower()
-            if "_" in activityName:
-                activityName = activityName.split("_")[1]
-                activityName = "Travelled by " + activityName
-                if "passenger" in activityName:
-                    activityName = "Travelled by passenger vehicle"
-                if activityName == "Travelled by activity":
-                    activityName = "unknown activity type"
-            elif activityName == "cycling":
-                activityName = "Travelled by bike"
-            elif activityName == "flying":
-                activityName = "Travelled by plane"
+            activityName = activity.lower().capitalize()
+            activityName = activityName.replace("_", " ")
+            if activityName == "":
+                activityName = "No activity type"
 
             DF_dict[activityName] = data_frame_activity.fillna(0)
 
@@ -229,11 +213,11 @@ def process(file_data):
         results.append(
             {"title": activityName, "data_frame": data_frame}
         )
-    if ERRORS:
+    if MESSAGES:
         results.append(
             {
-                "title": "Errors",
-                "data_frame": pd.DataFrame(pd.Series(ERRORS, name="message")),
+                "title": "Extraction log",
+                "data_frame": pd.DataFrame(pd.Series(MESSAGES, name="Message")),
             }
         )
     return results
