@@ -28,7 +28,7 @@ onmessage = (event) => {
       data_output = []
       html_output = []
       for data in result:
-        html_output.append(f"""<h1 class="text-title4 font-title4 sm:text-title3 sm:font-title3 mb-6 md:mb-8 text-grey1">{html.escape(data['title'])}</h1>""")
+        html_output.append(f"""<h1 class="text-title4 font-title4 sm:text-title3 sm:font-title3 mt-12 mb-6 text-grey1">{html.escape(data['title'])}</h1>""")
         df = data['data_frame']
         html_output.append(df.to_html(classes=["data-donation-extraction-results"], justify="left"))
         data_output.append(df.to_dict())

@@ -69,7 +69,7 @@ msgstr "Please select the data package file that you received from %{file}."
 
 #, elixir-format, ex-autogen
 msgid "submit_data.description"
-msgstr "On your consent, the data below will be made available to %{researcher}. Please review the data carefully. Do you consent to donating this data?"
+msgstr "On your consent, the data below will be made available to %{researcher}. Please review the data carefully. Extraction log data is relevant feedback from the extraction script that is valuable to donate as well. Do you consent to donating the data below?"
 
 #, elixir-format, ex-autogen
 msgid "submit_data.title"
@@ -145,7 +145,7 @@ msgstr "this survey"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "welcome.description"
-msgstr "You are about to start the process of donating your data for the study of %{researcher}.<br>This study examines the amount of time spent in activities, such as walking and biking, before and during the COVID-19 pandemic (years 2016-2021). We will extract this data from your %{file_type} data package file.<br>During this process, we do not save any cookies or personal data. The data that is extracted from your data package is fully anonymised and presented to you in step 3. After your consent, this data is saved on a secure server and made available to %{researcher}."
+msgstr "You are about to start the process of donating your data for the study of %{researcher}.<br>This study examines the amount of time spent in activities, such as walking and biking, before and during the COVID-19 pandemic (years 2016-2021). We will extract this data from your %{file_type} data package file.<br>During this process, we do not save any cookies or personal data. The data that is extracted from your data package will not contain personal identifiable information and will be presented to you in step 3. After your consent, this data is saved on a secure server and made available to %{researcher}."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "welcome.description.2"

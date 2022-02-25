@@ -46,7 +46,6 @@ defmodule Systems.DataDonation.SubmitDataSheet do
               <Spacing value="L" />
 
               <Line />
-              <Spacing value="M" />
               <p class="extracted overflow-scroll">...</p>
               <Spacing value="M" />
               <Line />
