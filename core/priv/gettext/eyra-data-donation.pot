@@ -107,10 +107,6 @@ msgid "tabbar.item.welcome.forward"
 msgstr ""
 
 #, elixir-format, ex-autogen
-msgid "welcome.description"
-msgstr ""
-
-#, elixir-format, ex-autogen
 msgid "welcome.title"
 msgstr ""
 
@@ -131,9 +127,41 @@ msgid "submit.data.button"
 msgstr ""
 
 #, elixir-format, ex-autogen
-msgid "terms.description"
+msgid "no.extraction.data.yet.description"
 msgstr ""
 
 #, elixir-format, ex-autogen
-msgid "no.extraction.data.yet.description"
+msgid "extract.data.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "thanks.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "survey.link"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "welcome.description"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "welcome.description.2"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "welcome.description.3"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "thanks.description.1"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "thanks.description"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "thanks.description.3"
 msgstr ""

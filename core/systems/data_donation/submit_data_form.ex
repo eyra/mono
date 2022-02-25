@@ -7,8 +7,10 @@ defmodule Systems.DataDonation.SubmitDataSheet do
 
   prop(props, :map, required: true)
 
-  def update(%{id: id}, socket) do
-    {:ok, assign(socket, id: id)}
+  data(researcher, :string)
+
+  def update(%{id: id, props: %{researcher: researcher}}, socket) do
+    {:ok, socket |> assign(id: id, researcher: researcher)}
   end
 
   defp submit_button() do
@@ -35,7 +37,7 @@ defmodule Systems.DataDonation.SubmitDataSheet do
             <form class="donate-form hidden" :on-submit={"donate", target: :live_view}>
               <input type="hidden" name="data" value="...">
               <Body>
-                {dgettext("eyra-data-donation", "submit_data.description")}
+                {dgettext("eyra-data-donation", "submit_data.description", researcher: @researcher)}
               </Body>
               <Spacing value="M" />
               <Wrap>

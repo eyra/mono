@@ -9,19 +9,3 @@
 ## effect: edit them in PO (.po) files instead.
 msgid ""
 msgstr ""
-
-#, elixir-format
-msgid "hero.subtitle"
-msgstr ""
-
-#, elixir-format
-msgid "hero.title"
-msgstr ""
-
-#, elixir-format
-msgid "intro"
-msgstr ""
-
-#, elixir-format
-msgid "title"
-msgstr ""
