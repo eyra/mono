@@ -5,6 +5,7 @@ import json
 import itertools
 import re
 import zipfile
+import traceback
 
 import pandas as pd
 
@@ -143,29 +144,32 @@ def process(file_data):
                         # check if there is a problem in processing a json files
                         try:
                             data = json.loads(zfile.read(name).decode("utf8"))
+                            activities = _activity_type_duration(data)
+                            activitiesAll.extend(activities.keys())
+
+                            type = dict(itertools.islice(activities.items(), 50))
+                            days = round(_activity_duration(data), 2)
+                            km = round(_activity_distance(data), 2)
+
+                            results.append(
+                                {
+                                    "Year": year,
+                                    "Month": month,
+                                    "Type": type,
+                                    "Duration [days]": days,
+                                    "Distance [km]": km,
+                                }
+                            )
                         except:
                             error_message = (
-                                "There was a problem in processing the data regarding "
+                                "Error processing "
                                 + month
                                 + " "
                                 + str(year)
+                                + ", "
+                                + traceback.format_exc()
                             )
                             MESSAGES.append(error_message)
-                            break
-
-                        activities = _activity_type_duration(data)
-                        activitiesAll.extend(activities.keys())
-
-                        results.append(
-                            {
-                                "Year": year,
-                                "Month": month,
-                                "Type": dict(itertools.islice(activities.items(), 50)),
-                                "Duration [days]": round(_activity_duration(data), 2),
-                                "Distance [km]": round(_activity_distance(data), 2),
-                            }
-                        )
-                        break
 
     # Put results in DataFrame
     data_frame = pd.json_normalize(results)
