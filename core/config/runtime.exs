@@ -102,7 +102,7 @@ if config_env() == :prod do
     app_name: System.get_env("UNSPLASH_APP_NAME")
 
   config :core, :ssl,
-    domains: [host],
+    domains: [host, "www.#{host}"],
     emails: [System.get_env("LETS_ENCRYPT_EMAIL", "admin@#{host}")],
     directory_url: System.get_env("LETS_ENCRYPT_DIRECTORY_URL"),
     db_folder: System.get_env("LETS_ENCRYPT_DB")
