@@ -14,9 +14,8 @@ defmodule Frameworks.Pixel.Selector.Selector do
   defp flex_options(:checkbox), do: "flex-row flex-wrap gap-x-8 gap-y-3 items-center"
   defp flex_options(_), do: "flex-row flex-wrap gap-3 items-center"
 
-  defp multiselect?(:radio, _), do: false
-  defp multiselect?(_, 1), do: false
-  defp multiselect?(_, _), do: true
+  defp multiselect?(:radio), do: false
+  defp multiselect?(_), do: true
 
   def update(%{reset: new_items}, socket) do
     {
@@ -65,20 +64,22 @@ defmodule Frameworks.Pixel.Selector.Selector do
   end
 
   defp update_parent(
-         %{assigns: %{type: type, parent: parent, items: items, id: selector_id}},
+         %{assigns: %{type: type, parent: parent, current_items: current_items, id: selector_id}},
          active_item_ids
        ) do
-    if multiselect?(type, Enum.count(items)) do
+    if multiselect?(type) do
       update_target(parent, %{
         selector_id: selector_id,
-        active_item_ids: active_item_ids
+        active_item_ids: active_item_ids,
+        current_items: current_items
       })
     else
       active_item_id = List.first(active_item_ids)
 
       update_target(parent, %{
         selector_id: selector_id,
-        active_item_id: active_item_id
+        active_item_id: active_item_id,
+        current_items: current_items
       })
     end
   end
@@ -107,10 +108,10 @@ defmodule Frameworks.Pixel.Selector.Selector do
 
   defp toggle(%{assigns: %{items: items, type: type, optional?: optional?}}, item, item_id)
        when is_atom(item_id) do
-    multiselect? = multiselect?(type, Enum.count(items))
+    multiselect? = multiselect?(type)
     active_count = active_count(items)
 
-    if item.id === item_id do
+    if is_same_id?(item.id, item_id) do
       if not item.active or optional? or (multiselect? and active_count > 1) do
         %{item | active: !item.active}
       else
@@ -127,6 +128,18 @@ defmodule Frameworks.Pixel.Selector.Selector do
   end
 
   defp toggle(socket, item, item_id), do: toggle(socket, item, String.to_atom(item_id))
+
+  defp is_same_id?(left, right) when is_number(left) and is_atom(right) do
+    "#{left}" == Atom.to_string(right)
+  end
+
+  defp is_same_id?(left, right) when is_binary(left) and is_atom(right) do
+    left == Atom.to_string(right)
+  end
+
+  defp is_same_id?(left, right) do
+    left == right
+  end
 
   defp item_component(:radio), do: Frameworks.Pixel.Selector.Radio
   defp item_component(:checkbox), do: Frameworks.Pixel.Selector.Checkbox
@@ -147,7 +160,7 @@ defmodule Frameworks.Pixel.Selector.Selector do
             <Surface.Components.Dynamic.Component
               module={item_component(@type)}
                   item={item}
-                  multiselect?={ multiselect?(@type, Enum.count(@items)) }
+                  multiselect?={ multiselect?(@type) }
             />
           </div>
         </div>

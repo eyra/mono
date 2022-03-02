@@ -25,7 +25,7 @@ defmodule Frameworks.Pixel.Selector.Checkbox do
   def render(assigns) do
     ~F"""
     <div class="flex flex-row gap-3 items-center">
-      <div>
+      <div class="flex-shrink-0">
         <img x-show="active" src={"/images/icons/#{check_active_icon(@item)}.svg"} alt={"#{value(@item)} is selected"}/>
         <img x-show="!active" src={"/images/icons/#{check_icon(@item)}.svg"} alt={"Select #{value(@item)}"}/>
       </div>

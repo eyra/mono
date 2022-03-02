@@ -112,16 +112,8 @@ msgid "features.nativelanguage.title"
 msgstr "First language"
 
 #, elixir-format
-msgid "features.study.title"
-msgstr "Students"
-
-#, elixir-format
 msgid "features.title"
-msgstr "Inclusion criteria"
-
-#, elixir-format
-msgid "feature.study.content.description"
-msgstr "Select which students (BK: bedrijfskunde, IBA: international business administration) are eligible to participate. If nothing is selected, all students in the pool are eligible to participate."
+msgstr "Inclusion"
 
 #, elixir-format
 msgid "features.content.description"

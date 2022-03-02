@@ -46,11 +46,13 @@ defmodule Link.Marketplace do
       |> Campaign.Context.list_subject_campaigns(preload: preload)
       |> Enum.map(&ViewModelBuilder.view_model(&1, __MODULE__, user, url_resolver(socket)))
 
-    highlighted_campaigns = subject_campaigns
     highlighted_count = Enum.count(subject_campaigns)
 
+    excluded_campaigns =
+      subject_campaigns ++ Campaign.Context.list_excluded_campaigns(subject_campaigns)
+
     exclusion_list =
-      highlighted_campaigns
+      excluded_campaigns
       |> Stream.map(fn campaign -> campaign.id end)
       |> Enum.into(MapSet.new())
 

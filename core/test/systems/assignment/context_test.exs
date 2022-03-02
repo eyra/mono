@@ -154,6 +154,102 @@ defmodule Systems.Assignment.ContextTest do
       refute_next_action(user, url_resolver, "/assignment")
     end
 
+    test "exclude/2" do
+      %{id: id1} = assignment1 = create_assignment(31, 2)
+      %{id: id2} = assignment2 = create_assignment(31, 2)
+
+      Assignment.Context.exclude(assignment1, assignment2)
+
+      assert %{
+               excluded: [%Systems.Assignment.Model{id: ^id2}]
+             } = Assignment.Context.get!(assignment1.id, [:excluded])
+
+      assert %{
+               excluded: [%Systems.Assignment.Model{id: ^id1}]
+             } = Assignment.Context.get!(assignment2.id, [:excluded])
+    end
+
+    test "include/2" do
+      assignment1 = create_assignment(31, 2)
+      assignment2 = create_assignment(31, 2)
+
+      {:ok, _} = Assignment.Context.exclude(assignment1, assignment2)
+
+      assignment1 = Assignment.Context.get!(assignment1.id, [:excluded])
+      assignment2 = Assignment.Context.get!(assignment2.id, [:excluded])
+
+      {:ok, _} = Assignment.Context.include(assignment1, assignment2)
+
+      assert %{
+               excluded: []
+             } = Assignment.Context.get!(assignment1.id, [:excluded])
+
+      assert %{
+               excluded: []
+             } = Assignment.Context.get!(assignment2.id, [:excluded])
+    end
+
+    test "excluded?/2 false: user has no task on excluded assignment" do
+      assignment1 = create_assignment(31, 2)
+      assignment2 = create_assignment(31, 2)
+
+      user = Factories.insert!(:member)
+
+      Assignment.Context.exclude(assignment1, assignment2)
+      assert Assignment.Context.excluded?(assignment2, user) == false
+    end
+
+    test "excluded?/2 false: user has task on non-excluded assignment" do
+      %{crew: crew1} = create_assignment(31, 2)
+      assignment2 = create_assignment(31, 2)
+
+      %{member: %{user: user}} = create_task(crew1, :pending, false, 10)
+      assert Assignment.Context.excluded?(assignment2, user) == false
+    end
+
+    test "excluded?/2 true: user has task on excluded assignment" do
+      %{crew: crew1} = assignment1 = create_assignment(31, 2)
+      assignment2 = create_assignment(31, 2)
+
+      %{member: %{user: user}} = create_task(crew1, :pending, false, 10)
+
+      Assignment.Context.exclude(assignment1, assignment2)
+      assert Assignment.Context.excluded?(assignment2, user) == true
+    end
+
+    test "excluded?/2 user has task on multiple excluded assignment" do
+      %{crew: crew1} = assignment1 = create_assignment(31, 2)
+      assignment2 = create_assignment(31, 2)
+      assignment3 = create_assignment(31, 2)
+      assignment4 = create_assignment(31, 2)
+
+      %{member: %{user: user}} = create_task(crew1, :pending, false, 10)
+
+      Assignment.Context.exclude(assignment1, assignment2)
+      Assignment.Context.exclude(assignment1, assignment3)
+
+      assert Assignment.Context.excluded?(assignment2, user) == true
+      assert Assignment.Context.excluded?(assignment3, user) == true
+      assert Assignment.Context.excluded?(assignment4, user) == false
+    end
+
+    test "excluded?/2 user has no task on multiple excluded assignment" do
+      %{crew: crew1} = assignment1 = create_assignment(31, 2)
+      assignment2 = create_assignment(31, 2)
+      assignment3 = create_assignment(31, 2)
+      assignment4 = create_assignment(31, 2)
+
+      %{member: %{user: user}} = create_task(crew1, :pending, false, 10)
+
+      Assignment.Context.exclude(assignment4, assignment2)
+      Assignment.Context.exclude(assignment4, assignment3)
+
+      assert Assignment.Context.excluded?(assignment1, user) == false
+      assert Assignment.Context.excluded?(assignment2, user) == false
+      assert Assignment.Context.excluded?(assignment3, user) == false
+      assert Assignment.Context.excluded?(assignment4, user) == false
+    end
+
     defp create_assignment(duration, subject_count) do
       crew = Factories.insert!(:crew)
 

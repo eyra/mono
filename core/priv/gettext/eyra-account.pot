@@ -111,15 +111,7 @@ msgid "features.nativelanguage.title"
 msgstr ""
 
 #, elixir-format
-msgid "features.study.title"
-msgstr ""
-
-#, elixir-format
 msgid "features.title"
-msgstr ""
-
-#, elixir-format
-msgid "feature.study.content.description"
 msgstr ""
 
 #, elixir-format

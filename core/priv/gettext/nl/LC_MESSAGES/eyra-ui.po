@@ -190,3 +190,7 @@ msgstr "Deel je %{content} met een of meer %{group} uit de onderstaande lijst."
 #, elixir-format, ex-autogen
 msgid "pronoun.her"
 msgstr "haar"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "menu.item.payments"
+msgstr "Menu"

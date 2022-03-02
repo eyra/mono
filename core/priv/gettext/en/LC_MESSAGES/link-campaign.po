@@ -42,3 +42,27 @@ msgstr "What type of study would you like to set up?"
 #, elixir-format
 msgid "create.campaign.dialog.title"
 msgstr "Study type"
+
+#, elixir-format, ex-autogen
+msgid "exclusion.description"
+msgstr "Exclude participants that participated in previous campaigns."
+
+#, elixir-format, ex-autogen
+msgid "exclusion.select.label"
+msgstr "Campaigns"
+
+#, elixir-format, ex-autogen
+msgid "exclusion.title"
+msgstr "Exclusion"
+
+#, elixir-format, ex-autogen
+msgid "no.previous.campaigns.available"
+msgstr "No previous campaigns available yet"
+
+#, elixir-format, ex-autogen
+msgid "submission.criteria.status"
+msgstr "%{sample} of %{total} participants available based on the selections below."
+
+#, elixir-format, ex-autogen
+msgid "submission.criteria.title"
+msgstr "Criteria"

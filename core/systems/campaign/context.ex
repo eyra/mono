@@ -6,6 +6,7 @@ defmodule Systems.Campaign.Context do
   import Ecto.Query, warn: false
   alias Frameworks.GreenLight.Principal
   alias Core.Repo
+  alias Core.Accounts.User
   alias Core.Authorization
 
   alias Systems.{
@@ -26,6 +27,14 @@ defmodule Systems.Campaign.Context do
       preload: ^preload
     )
     |> Repo.one!()
+  end
+
+  def all(ids, preload \\ []) do
+    from(c in Campaign.Model,
+      where: c.id in ^ids,
+      preload: ^preload
+    )
+    |> Repo.all()
   end
 
   def get_by_promotion(promotion, preload \\ [])
@@ -54,6 +63,14 @@ defmodule Systems.Campaign.Context do
       preload: ^preload
     )
     |> Repo.one()
+  end
+
+  def get_by_promotables(promotable_ids, preload) when is_list(promotable_ids) do
+    from(c in Campaign.Model,
+      where: c.promotable_assignment_id in ^promotable_ids,
+      preload: ^preload
+    )
+    |> Repo.all()
   end
 
   def list(opts \\ []) do
@@ -147,6 +164,36 @@ defmodule Systems.Campaign.Context do
     )
     |> Repo.all()
   end
+
+  def list_excluded_user_ids(campaign_ids) when is_list(campaign_ids) do
+    from(u in User,
+      join: m in Crew.MemberModel,
+      on: m.user_id == u.id,
+      join: a in Assignment.Model,
+      on: a.crew_id == m.crew_id,
+      join: c in Campaign.Model,
+      on: c.promotable_assignment_id == a.id,
+      where: c.id in ^campaign_ids,
+      select: u.id
+    )
+    |> Repo.all()
+  end
+
+  def list_excluded_campaigns(campaigns) when is_list(campaigns) do
+    campaigns
+    |> Enum.reduce([], fn campaign, acc ->
+      acc ++ list_excluded_assignment_ids(campaign)
+    end)
+    |> get_by_promotables([])
+  end
+
+  defp list_excluded_assignment_ids(%Campaign.Model{promotable_assignment: %{excluded: excluded}})
+       when is_list(excluded) do
+    excluded
+    |> Enum.map(& &1.id)
+  end
+
+  defp list_excluded_assignment_ids(_), do: []
 
   def list_owners(%Campaign.Model{} = campaign, preload \\ []) do
     owner_ids =

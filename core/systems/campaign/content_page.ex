@@ -147,7 +147,8 @@ defmodule Systems.Campaign.ContentPage do
              assignment_form_ready?: assignment_form_ready?,
              promotion_form_ready?: promotion_form_ready?,
              attention_list_enabled?: attention_list_enabled?,
-             task_labels: task_labels
+             task_labels: task_labels,
+             current_user: user
            }
          } = socket
        ) do
@@ -186,7 +187,8 @@ defmodule Systems.Campaign.ContentPage do
         type: :fullpage,
         component: SubmissionForm,
         props: %{
-          entity_id: submission_id
+          entity_id: submission_id,
+          user: user
         }
       },
       %{
