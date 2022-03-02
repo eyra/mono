@@ -59,9 +59,9 @@ defmodule Core.Pools do
 
     study_program_codes
     |> query_count_eligitable_users(exclude)
-    |> optional_where(:genders, genders)
-    |> optional_where(:dominant_hands, dominant_hands)
-    |> optional_where(:native_languages, native_languages)
+    |> optional_where(:gender, genders)
+    |> optional_where(:dominant_hand, dominant_hands)
+    |> optional_where(:native_language, native_languages)
     |> Repo.one()
   end
 
@@ -83,24 +83,7 @@ defmodule Core.Pools do
   defp optional_where(query, type, values)
   defp optional_where(query, _, []), do: query
 
-  defp optional_where(query, :genders, values) do
-    query
-    |> where([user, features], is_nil(features.gender) or features.gender in ^values)
-  end
-
-  defp optional_where(query, :dominant_hands, values) do
-    query
-    |> where(
-      [user, features],
-      is_nil(features.dominant_hand) or features.dominant_hand in ^values
-    )
-  end
-
-  defp optional_where(query, :native_languages, values) do
-    query
-    |> where(
-      [user, features],
-      is_nil(features.native_language) or features.native_language in ^values
-    )
+  defp optional_where(query, field_name, values) do
+    where(query, [user, features], field(features, ^field_name) in ^values)
   end
 end
