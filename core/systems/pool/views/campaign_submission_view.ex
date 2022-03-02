@@ -148,7 +148,7 @@ defmodule Systems.Pool.CampaignSubmissionView do
     dominanthand_labels = DominantHands.labels(criteria.dominant_hands)
     nativelanguage_labels = NativeLanguages.labels(criteria.native_languages)
 
-    pool_size = Pools.count_eligitable_users(criteria.study_program_codes, excluded_user_ids)
+    pool_size = Pools.count_eligitable_users(criteria.study_program_codes)
     sample_size = Pools.count_eligitable_users(criteria, excluded_user_ids)
 
     socket
