@@ -63,6 +63,26 @@ defmodule Systems.Assignment.Context do
     |> Repo.one()
   end
 
+  def get_by_tool(%Survey.ToolModel{id: id}, preload) do
+    query_by_tool(preload)
+    |> where([assignment, experiment], experiment.survey_tool_id == ^id)
+    |> Repo.one()
+  end
+
+  def get_by_tool(%Lab.ToolModel{id: id}, preload) do
+    query_by_tool(preload)
+    |> where([assignment, experiment], experiment.lab_tool_id == ^id)
+    |> Repo.one()
+  end
+
+  defp query_by_tool(preload) do
+    from(assignment in Assignment.Model,
+      join: experiment in Assignment.ExperimentModel,
+      on: assignment.assignable_experiment_id == experiment.id,
+      preload: ^preload
+    )
+  end
+
   def list_user_ids(assignment_ids) when is_list(assignment_ids) do
     from(u in Accounts.User,
       join: m in Crew.MemberModel,
@@ -187,6 +207,14 @@ defmodule Systems.Assignment.Context do
   def owner!(%Assignment.Model{} = assignment), do: parent_owner!(assignment)
   def owner!(%Assignment.ExperimentModel{} = experiment), do: parent_owner!(experiment)
 
+  def assign_tester_role(tool, user) do
+    %{crew: crew} = get_by_tool(tool, [:crew])
+
+    if not Core.Authorization.user_has_role?(user, crew, :tester) do
+      Core.Authorization.assign_role(user, crew, :tester)
+    end
+  end
+
   defp parent_owner!(entity) do
     case parent_owner(entity) do
       {:ok, user} -> user
@@ -257,6 +285,7 @@ defmodule Systems.Assignment.Context do
       Crew.Context.activate_task!(task)
     else
       Logger.warn("Can not complete task for non member")
+      nil
     end
   end
 

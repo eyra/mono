@@ -197,7 +197,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
 
   defp open_action(user, experiment, crew, panl_id) do
     label = Assignment.ExperimentModel.open_label(experiment)
-    path = Assignment.ExperimentModel.path(experiment, panl_id)
+    path = Assignment.ExperimentModel.external_path(experiment, panl_id)
 
     %{
       id: :open,

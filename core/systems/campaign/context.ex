@@ -374,6 +374,10 @@ defmodule Systems.Campaign.Context do
     Assignment.Context.activate_task(tool, user_id)
   end
 
+  def assign_tester_role(tool, user) do
+    Assignment.Context.assign_tester_role(tool, user)
+  end
+
   def ready?(id) do
     # temp solution for checking if campaign is ready to submit,
     # TBD: replace with signal driven db field

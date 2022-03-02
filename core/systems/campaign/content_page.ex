@@ -177,6 +177,7 @@ defmodule Systems.Campaign.ContentPage do
           entity_id: assignment_id,
           uri_origin: uri_origin,
           validate?: validate?,
+          user: user,
           target: self()
         }
       },
