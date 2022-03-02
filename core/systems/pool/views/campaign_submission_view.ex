@@ -213,7 +213,13 @@ defmodule Systems.Pool.CampaignSubmissionView do
               <Title6 color="text-grey2" margin="m-0">{dgettext("link-campaign", "no.previous.campaigns.available")}</Title6>
             </div>
             <div :if={Enum.count(@campaign_labels) > 0}>
-              <Selector id={:exclude_campaigns} items={@campaign_labels} type={:checkbox} parent={%{type: __MODULE__, id: @id}} />
+              <Selector
+                grid_options="flex flex-col flex-wrap gap-y-3"
+                id={:exclude_campaigns}
+                items={@campaign_labels}
+                type={:checkbox}
+                parent={%{type: __MODULE__, id: @id}}
+               />
             </div>
             <Spacing value="XL" />
           </div>

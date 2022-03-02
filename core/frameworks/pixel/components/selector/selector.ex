@@ -6,13 +6,15 @@ defmodule Frameworks.Pixel.Selector.Selector do
   prop(parent, :any, required: true)
   prop(type, :atom, default: :label)
   prop(optional?, :boolean, default: true)
+  prop(grid_options, :string, default: "")
   prop(opts, :string, default: "")
 
   prop(current_items, :list)
 
-  defp flex_options(:radio), do: "flex-col gap-3"
-  defp flex_options(:checkbox), do: "flex-row flex-wrap gap-x-8 gap-y-3 items-center"
-  defp flex_options(_), do: "flex-row flex-wrap gap-3 items-center"
+  defp grid_options(_, grid_options) when grid_options != "", do: grid_options
+  defp grid_options(:radio, _), do: "flex flex-col gap-3"
+  defp grid_options(:checkbox, _), do: "flex flex-row flex-wrap gap-x-8 gap-y-3 items-center"
+  defp grid_options(_, _), do: "flex flex-row flex-wrap gap-3 items-center"
 
   defp multiselect?(:radio), do: false
   defp multiselect?(_), do: true
@@ -31,7 +33,15 @@ defmodule Frameworks.Pixel.Selector.Selector do
   end
 
   def update(
-        %{id: id, items: items, parent: parent, type: type, optional?: optional?, opts: opts},
+        %{
+          id: id,
+          items: items,
+          parent: parent,
+          type: type,
+          optional?: optional?,
+          grid_options: grid_options,
+          opts: opts
+        },
         socket
       ) do
     {
@@ -44,6 +54,7 @@ defmodule Frameworks.Pixel.Selector.Selector do
         parent: parent,
         type: type,
         optional?: optional?,
+        grid_options: grid_options,
         opts: opts
       )
     }
@@ -147,7 +158,7 @@ defmodule Frameworks.Pixel.Selector.Selector do
 
   def render(assigns) do
     ~F"""
-    <div class={"flex #{flex_options(@type)} #{@opts}"}>
+    <div class={"#{grid_options(@type, @grid_options)} #{@opts}"}>
       {#for {item, _} <- Enum.with_index(@current_items)}
         <div x-data={"{ active: #{item.active}, is_optional: #{@optional?} }"} >
           <div
