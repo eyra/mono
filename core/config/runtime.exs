@@ -3,6 +3,11 @@ import Config
 if config_env() == :prod do
   host = System.fetch_env!("BUNDLE_DOMAIN")
 
+  ssl_domains =
+    System.fetch_env!("SSL_DOMAINS")
+    |> String.replace(" ", "")
+    |> String.split(",")
+
   # Allow enabling of features from an environment variable
   config :core,
          :features,
@@ -102,7 +107,7 @@ if config_env() == :prod do
     app_name: System.get_env("UNSPLASH_APP_NAME")
 
   config :core, :ssl,
-    domains: [host, "www.#{host}"],
+    domains: ssl_domains,
     emails: [System.get_env("LETS_ENCRYPT_EMAIL", "admin@#{host}")],
     directory_url: System.get_env("LETS_ENCRYPT_DIRECTORY_URL"),
     db_folder: System.get_env("LETS_ENCRYPT_DB")
