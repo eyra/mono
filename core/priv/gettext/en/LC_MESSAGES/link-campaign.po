@@ -45,7 +45,7 @@ msgstr "Study type"
 
 #, elixir-format, ex-autogen
 msgid "exclusion.description"
-msgstr "Exclude participants that participated in previous campaigns."
+msgstr "If you would like to exclude participants that you recruited in previous campaigns, select one or more campaigns below."
 
 #, elixir-format, ex-autogen
 msgid "exclusion.select.label"
@@ -61,7 +61,7 @@ msgstr "No previous campaigns available yet"
 
 #, elixir-format, ex-autogen
 msgid "submission.criteria.status"
-msgstr "%{sample} of %{total} participants available based on the selections below."
+msgstr "Based on the selected criteria, %{sample} out of %{total} people in the pool can participate in your study."
 
 #, elixir-format, ex-autogen
 msgid "submission.criteria.title"

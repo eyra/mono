@@ -117,7 +117,7 @@ msgstr "Inclusion"
 
 #, elixir-format
 msgid "features.content.description"
-msgstr "Select the inclusion criteria for your study. If nothing is selected, all students in the pool are eligible to participate."
+msgstr "Select the inclusion criteria for your study. If nothing is selected, everyone in the pool is eligible to participate."
 
 #, elixir-format
 msgid "push.unavailable.label"

@@ -45,7 +45,7 @@ msgstr "Soort studie"
 
 #, elixir-format, ex-autogen
 msgid "exclusion.description"
-msgstr "Sluit participanten uit die deelgenomen hebben aan specifieke campagnes."
+msgstr "Wil je deelnemers die je in voorgaande campagnes geworven hebt excluderen? Selecteer dan één of meerdere campagnes hieronder."
 
 #, elixir-format, ex-autogen
 msgid "exclusion.select.label"
@@ -57,11 +57,11 @@ msgstr "Exclusie"
 
 #, elixir-format, ex-autogen
 msgid "no.previous.campaigns.available"
-msgstr "Nog geen andere campagnes beschikbaar"
+msgstr "Nog geen voorgaande campagnes beschikbaar"
 
 #, elixir-format, ex-autogen
 msgid "submission.criteria.status"
-msgstr "%{sample} van de %{total} deelnemers beschikbaar op basis van onderstaande selectie."
+msgstr "Op basis van de geselecteerde criteria, kunnen %{sample} van de %{total} mensen in de pool meedoen aan jouw studie."
 
 #, elixir-format, ex-autogen
 msgid "submission.criteria.title"
