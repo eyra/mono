@@ -126,4 +126,10 @@ defmodule Systems.DataDonation.UploadPage do
   defp storage do
     Application.fetch_env!(:core, :data_donation_storage_backend)
   end
+
+  def __mix_recompile__?() do
+    Application.app_dir(:core, "priv/repo")
+          |> Path.join("script.py")
+          |> File.read!() != unquote(@script)
+  end
 end
