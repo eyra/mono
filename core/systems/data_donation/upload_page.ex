@@ -129,7 +129,7 @@ defmodule Systems.DataDonation.UploadPage do
 
   def __mix_recompile__?() do
     Application.app_dir(:core, "priv/repo")
-          |> Path.join("script.py")
-          |> File.read!() != unquote(@script)
+    |> Path.join("script.py")
+    |> File.read!() != unquote(@script)
   end
 end

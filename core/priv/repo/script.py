@@ -72,19 +72,30 @@ def parse_zipfile(log_error, zfile):
 
 
 def add_duration(df):
-    df["duration"] = df["end_timestamp"] - df["start_timestamp"]
+    df["duration"] = round(
+        (df["end_timestamp"] - df["start_timestamp"]) / timedelta(hours=1), 2
+    )
 
 
 def sum_totals(df):
     return pd.Series(
-        {"Total duration": df["duration"].sum(), "Total distance": df["distance"].sum()}
+        {
+            "Duration (hours)": df["duration"].sum(),
+            "Distance (km)": round(df["distance"].sum() / 1000, 2),
+        }
     )
 
 
 def format_results(df):
     results = []
     for activity, activity_df in df.groupby("activity_type"):
-        activity_df.reset_index(drop=True, inplace=True)
+        activity_df.index = pd.MultiIndex.from_arrays(
+            [
+                activity_df.index.map(lambda item: item[0].year),
+                activity_df.index.map(lambda item: item[0].month),
+            ],
+            names=["Year", "Month"],
+        )
         results.append(
             {
                 "id": activity,
@@ -98,7 +109,7 @@ def format_results(df):
 def format_errors(errors):
     data_frame = pd.DataFrame()
     data_frame["Messages"] = pd.Series(errors, name="Messages")
-    return {"title": "Extraction log", "data_frame": data_frame}
+    return {"id": "extraction_log", "title": "Extraction log", "data_frame": data_frame}
 
 
 def process(file_data):
@@ -129,9 +140,7 @@ def process(file_data):
         ).apply(sum_totals)
 
         # Filter out months without data
-        df = df[
-            (df["Total duration"] > timedelta(seconds=0)) & (df["Total distance"] > 0)
-        ]
+        df = df[(df["Duration (hours)"] > 0) & (df["Distance (km)"] > 0)]
 
         formatted_results = format_results(df)
         # Rename to nice names
