@@ -81,8 +81,18 @@ def sum_totals(df):
     )
 
 
-def format_result(df):
-    return {"title": "Data", "data_frame": df}
+def format_results(df):
+    results = []
+    for activity, activity_df in df.groupby("activity_type"):
+        activity_df.reset_index(drop=True, inplace=True)
+        results.append(
+            {
+                "id": activity,
+                "title": activity.title().replace("_", " "),
+                "data_frame": activity_df,
+            }
+        )
+    return results
 
 
 def format_errors(errors):
@@ -123,9 +133,9 @@ def process(file_data):
             (df["Total duration"] > timedelta(seconds=0)) & (df["Total distance"] > 0)
         ]
 
+        formatted_results = format_results(df)
         # Rename to nice names
-        df.index.names = ["End of month", "Activity type"]
 
         if errors:
-            return [format_errors(errors)] + [format_result(df)]
-        return [format_result(df)]
+            return [format_errors(errors)] + formatted_results
+        return formatted_results
