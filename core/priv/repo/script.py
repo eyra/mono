@@ -6,6 +6,7 @@ import re
 import zipfile
 from datetime import datetime, timedelta
 
+import numpy as np
 import pandas as pd
 
 file_re = re.compile(r"^(?:.*\/)?\d+_[A-Z]+.json$")
@@ -125,6 +126,11 @@ def process(file_data):
             columns=["activity_type", "distance", "start_timestamp", "end_timestamp"],
         )
 
+        df = df[
+            (df["start_timestamp"] >= np.datetime64("2016-01-01"))
+            & (df["start_timestamp"] < np.datetime64("2022-01-01"))
+        ]
+
         add_duration(df)
 
         df.sort_values(
@@ -146,5 +152,5 @@ def process(file_data):
         # Rename to nice names
 
         if errors:
-            return [format_errors(errors)] + formatted_results
+            return formatted_results + [format_errors(errors)]
         return formatted_results
