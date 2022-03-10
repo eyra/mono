@@ -152,5 +152,5 @@ def process(file_data):
         # Rename to nice names
 
         if errors:
-            return [format_errors(errors)] + formatted_results
+            return formatted_results + [format_errors(errors)]
         return formatted_results
