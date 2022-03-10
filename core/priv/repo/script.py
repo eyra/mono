@@ -39,7 +39,7 @@ def parse_activity_segment(segment):
     if distance is None:
         return
     return (
-        segment.get("activityType", "NO_ACTIVITY_TYPE_DETECTED"),
+        segment.get("activityType") or "NO_ACTIVITY_TYPE_DETECTED",
         distance,
     ) + parse_duration(segment["duration"])
 
