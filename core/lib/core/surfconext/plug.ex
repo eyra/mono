@@ -49,9 +49,9 @@ defmodule Core.SurfConext.CallbackController do
     config = config(:core) |> Keyword.put(:session_params, session_params)
 
     {:ok, %{user: surf_user, token: token}} = oidc_module(config).callback(config, params)
-    Logger.debug("SURFconext user: #{inspect(surf_user)}")
+    Logger.info("SURFconext user: #{inspect(surf_user)}")
 
-    Logger.debug(
+    Logger.info(
       "SURFconext oidc info: #{inspect(oidc_module(config).fetch_userinfo(config, token))}"
     )
 
