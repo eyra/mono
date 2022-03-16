@@ -51,7 +51,7 @@ config :core, Core.ImageCatalog.Unsplash,
   access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
   app_name: System.get_env("UNSPLASH_APP_NAME")
 
-config :core, image_catalog: Core.ImageCatalog.Local
+config :core, image_catalog: Core.ImageCatalog.Unsplash
 
 config :core, Core.Mailer,
   adapter: Bamboo.LocalAdapter,
