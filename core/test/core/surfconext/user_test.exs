@@ -20,12 +20,16 @@ defmodule Core.SurfConext.UserTest do
         Keyword.put(conf, :limit_schac_home_organization, "my-org")
       )
 
-      changeset = User.changeset(%User{}, %{sub: "tst", schac_home_organization: "wrong-org"})
+      changeset =
+        User.register_changeset(%User{}, %{sub: "tst", schac_home_organization: "wrong-org"})
+
       refute changeset.valid?
     end
 
     test "allow any schac_home_organization when no filter is set" do
-      changeset = User.changeset(%User{}, %{sub: "tst", schac_home_organization: "some-org"})
+      changeset =
+        User.register_changeset(%User{}, %{sub: "tst", schac_home_organization: "some-org"})
+
       assert changeset.valid?
     end
   end
