@@ -273,7 +273,8 @@ defmodule Core.Factories do
     %Assignment.Model{
       auth_node: auth_node,
       assignable_experiment: experiment,
-      crew: crew
+      crew: crew,
+      excluded: []
     }
     |> struct!(attributes)
   end

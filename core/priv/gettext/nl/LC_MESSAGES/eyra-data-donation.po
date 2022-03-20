@@ -148,21 +148,5 @@ msgid "welcome.description"
 msgstr "Je staat op het punt om het proces van data donatie te starten voor de studie van %{researcher}.<br>Deze studie onderzoekt de hoeveelheid tijd die besteed werd aan activiteiten, zoals lopen en fietsen, voor en tijdens de COVID-19 pandemie.<br>Tijdens dit proces, slaan we geen cookies of persoonlijke data op. De data die uit jouw pakket word gehaald zal geen informatie bevatten die naar personen te herleiden valt en kun je in stap 3 bekijken. Na jouw goedkeuring, wordt de data opgeslagen op een beveiligde server en beschikbaar gesteld aan %{researcher}."
 
 #, elixir-format, ex-autogen, fuzzy
-msgid "welcome.description.2"
-msgstr ""
-
-#, elixir-format, ex-autogen, fuzzy
-msgid "welcome.description.3"
-msgstr ""
-
-#, elixir-format, ex-autogen, fuzzy
-msgid "thanks.description.1"
-msgstr ""
-
-#, elixir-format, ex-autogen, fuzzy
 msgid "thanks.description"
 msgstr "We stellen je bijdrage erg op prijs en horen graag hoe je het data donatie proces ervaren hebt.<br>Laat het ons weten door %{survey_link} in te vullen.<br>Alvast hartelijk dank."
-
-#, elixir-format, ex-autogen, fuzzy
-msgid "thanks.description.3"
-msgstr ""

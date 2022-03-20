@@ -3,12 +3,14 @@ defmodule Systems.Survey.ToolForm do
 
   alias CoreWeb.UI.StepIndicator
 
+  alias Phoenix.LiveView
   alias Frameworks.Pixel.Panel.Panel
   alias Frameworks.Pixel.Text.{Title3, Title5, BodyLarge, BodyMedium}
   alias Frameworks.Pixel.Form.{Form, UrlInput}
   alias Frameworks.Pixel.Button.Face.LabelIcon
 
   alias Systems.{
+    Director,
     Survey
   }
 
@@ -39,7 +41,13 @@ defmodule Systems.Survey.ToolForm do
 
   # Handle initial update
   def update(
-        %{id: id, entity_id: entity_id, validate?: validate?, callback_url: callback_url},
+        %{
+          id: id,
+          entity_id: entity_id,
+          validate?: validate?,
+          callback_url: callback_url,
+          user: user
+        },
         socket
       ) do
     entity = Survey.Context.get_survey_tool!(entity_id)
@@ -55,13 +63,34 @@ defmodule Systems.Survey.ToolForm do
         entity: entity,
         callback_url: callback_url,
         changeset: changeset,
-        validate?: validate?
+        validate?: validate?,
+        user: user
       )
       |> validate_for_publish()
     }
   end
 
   # Handle Events
+
+  @impl true
+  def handle_event(
+        "test-roundtrip",
+        _params,
+        %{assigns: %{user: user, changeset: changeset, entity: entity}} = socket
+      ) do
+    changeset = Survey.ToolModel.validate(changeset, :roundtrip)
+
+    if changeset.valid? do
+      Director.context(entity).assign_tester_role(entity, user)
+
+      fake_panl_id = "TEST-" <> Faker.UUID.v4()
+      external_path = Survey.ToolModel.external_path(entity, fake_panl_id)
+
+      {:noreply, LiveView.redirect(socket, external: external_path)}
+    else
+      {:noreply, socket |> assign(changeset: changeset)}
+    end
+  end
 
   @impl true
   def handle_event("save", %{"tool_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
@@ -190,6 +219,20 @@ defmodule Systems.Survey.ToolForm do
           <Spacing value="L" />
 
           <UrlInput field={:survey_url} label_text={dgettext("link-survey", "config.url.label")} />
+          <Spacing value="S" />
+          <Panel bg_color="bg-grey5">
+            <Title3>{dgettext("link-survey", "test.roundtrip.title")}</Title3>
+            <Spacing value="M" />
+            <BodyMedium>{dgettext("link-survey", "test.roundtrip.text")}</BodyMedium>
+            <Spacing value="M" />
+            <Wrap>
+              <DynamicButton vm={ %{
+                action: %{type: :send, event: "test-roundtrip", target: @myself},
+                face: %{type: :primary, label: dgettext("link-survey", "test.roundtrip.button"), bg_color: "bg-tertiary", text_color: "text-grey1"}
+              }} />
+            </Wrap>
+          </Panel>
+          <Spacing value="XL" />
         </Form>
       </div>
     """

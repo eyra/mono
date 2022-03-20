@@ -63,6 +63,38 @@ defmodule Systems.Assignment.Context do
     |> Repo.one()
   end
 
+  def get_by_tool(%Survey.ToolModel{id: id}, preload) do
+    query_by_tool(preload)
+    |> where([assignment, experiment], experiment.survey_tool_id == ^id)
+    |> Repo.one()
+  end
+
+  def get_by_tool(%Lab.ToolModel{id: id}, preload) do
+    query_by_tool(preload)
+    |> where([assignment, experiment], experiment.lab_tool_id == ^id)
+    |> Repo.one()
+  end
+
+  defp query_by_tool(preload) do
+    from(assignment in Assignment.Model,
+      join: experiment in Assignment.ExperimentModel,
+      on: assignment.assignable_experiment_id == experiment.id,
+      preload: ^preload
+    )
+  end
+
+  def list_user_ids(assignment_ids) when is_list(assignment_ids) do
+    from(u in Accounts.User,
+      join: m in Crew.MemberModel,
+      on: m.user_id == u.id,
+      join: a in Assignment.Model,
+      on: a.crew_id == m.crew_id,
+      where: a.id in ^assignment_ids,
+      select: u.id
+    )
+    |> Repo.all()
+  end
+
   def create(%{} = attrs, crew, experiment, auth_node) do
     assignable_field = assignable_field(experiment)
 
@@ -88,6 +120,20 @@ defmodule Systems.Assignment.Context do
     |> Ecto.Changeset.put_assoc(:assignable_experiment, experiment)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Repo.insert!()
+  end
+
+  def exclude(%Assignment.Model{} = assignment1, %Assignment.Model{} = assignment2) do
+    Multi.new()
+    |> Assignment.ExcludeModel.exclude(assignment1, assignment2)
+    |> Assignment.ExcludeModel.exclude(assignment2, assignment1)
+    |> Repo.transaction()
+  end
+
+  def include(%Assignment.Model{} = assignment1, %Assignment.Model{} = assignment2) do
+    Multi.new()
+    |> Assignment.ExcludeModel.include(assignment1, assignment2)
+    |> Assignment.ExcludeModel.include(assignment2, assignment1)
+    |> Repo.transaction()
   end
 
   def update_experiment(changeset) do
@@ -161,6 +207,14 @@ defmodule Systems.Assignment.Context do
   def owner!(%Assignment.Model{} = assignment), do: parent_owner!(assignment)
   def owner!(%Assignment.ExperimentModel{} = experiment), do: parent_owner!(experiment)
 
+  def assign_tester_role(tool, user) do
+    %{crew: crew} = get_by_tool(tool, [:crew])
+
+    if not Core.Authorization.user_has_role?(user, crew, :tester) do
+      Core.Authorization.assign_role(user, crew, :tester)
+    end
+  end
+
   defp parent_owner!(entity) do
     case parent_owner(entity) do
       {:ok, user} -> user
@@ -231,6 +285,7 @@ defmodule Systems.Assignment.Context do
       Crew.Context.activate_task!(task)
     else
       Logger.warn("Can not complete task for non member")
+      nil
     end
   end
 
@@ -254,6 +309,38 @@ defmodule Systems.Assignment.Context do
   def open_spot_count(%{crew: _crew} = assignment) do
     type = assignment_type(assignment)
     open_spot_count?(assignment, type)
+  end
+
+  @doc """
+    Can this user apply for this assignment: is assignment open and is user not excluded?
+  """
+  def can_apply_as_member?(assignment, user) do
+    if open?(assignment) do
+      if excluded?(assignment, user) do
+        {:error, :excluded}
+      else
+        {:ok}
+      end
+    else
+      {:error, :closed}
+    end
+  end
+
+  @doc """
+    Is user excluded? from joining given assignment
+  """
+  def excluded?(%{id: to_id} = _assignment, %{id: user_id}) do
+    from(assignment in Assignment.Model,
+      join: exclude in Assignment.ExcludeModel,
+      on: exclude.to_id == ^to_id,
+      join: crew in Crew.Model,
+      on: crew.id == assignment.crew_id,
+      join: member in Crew.MemberModel,
+      on: member.user_id == ^user_id,
+      where: exclude.from_id == assignment.id and crew.id == member.crew_id,
+      preload: [crew: [:members]]
+    )
+    |> Repo.exists?()
   end
 
   @doc """

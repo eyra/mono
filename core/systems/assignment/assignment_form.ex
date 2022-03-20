@@ -15,6 +15,7 @@ defmodule Systems.Assignment.AssignmentForm do
   data(experiment_id, :number)
   data(tool_id, :number)
   data(tool_form, :number)
+  data(user, :map)
 
   def update(%{claim_focus: form}, %{assigns: assigns} = socket) do
     assigns
@@ -44,7 +45,10 @@ defmodule Systems.Assignment.AssignmentForm do
 
   # Handle initial update
   def update(
-        %{id: id, props: %{entity_id: entity_id, validate?: validate?, uri_origin: uri_origin}},
+        %{
+          id: id,
+          props: %{entity_id: entity_id, validate?: validate?, uri_origin: uri_origin, user: user}
+        },
         socket
       ) do
     preload = Assignment.Model.preload_graph(:full)
@@ -61,13 +65,16 @@ defmodule Systems.Assignment.AssignmentForm do
     {
       :ok,
       socket
-      |> assign(id: id)
-      |> assign(entity_id: entity_id)
-      |> assign(experiment_id: experiment.id)
-      |> assign(callback_url: callback_url)
-      |> assign(tool_id: tool_id)
-      |> assign(tool_form: tool_form)
-      |> assign(validate?: validate?)
+      |> assign(
+        id: id,
+        entity_id: entity_id,
+        experiment_id: experiment.id,
+        callback_url: callback_url,
+        tool_id: tool_id,
+        tool_form: tool_form,
+        validate?: validate?,
+        user: user
+      )
     }
   end
 
@@ -81,7 +88,8 @@ defmodule Systems.Assignment.AssignmentForm do
          tool_id: tool_id,
          experiment_id: experiment_id,
          validate?: validate?,
-         callback_url: callback_url
+         callback_url: callback_url,
+         user: user
        }) do
     [
       %{
@@ -94,7 +102,8 @@ defmodule Systems.Assignment.AssignmentForm do
           id: :tool_form,
           entity_id: tool_id,
           validate?: validate?,
-          callback_url: callback_url
+          callback_url: callback_url,
+          user: user
         }
       },
       %{
