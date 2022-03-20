@@ -147,21 +147,5 @@ msgid "welcome.description"
 msgstr ""
 
 #, elixir-format, ex-autogen
-msgid "welcome.description.2"
-msgstr ""
-
-#, elixir-format, ex-autogen
-msgid "welcome.description.3"
-msgstr ""
-
-#, elixir-format, ex-autogen
-msgid "thanks.description.1"
-msgstr ""
-
-#, elixir-format, ex-autogen
 msgid "thanks.description"
-msgstr ""
-
-#, elixir-format, ex-autogen
-msgid "thanks.description.3"
 msgstr ""

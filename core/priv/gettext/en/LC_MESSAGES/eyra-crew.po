@@ -33,8 +33,8 @@ msgstr "If the study is still open, you can participate again. Is the study clos
 
 #, elixir-format, ex-autogen
 msgid "tester.completed.subtitle"
-msgstr ""
+msgstr "✅ Round trip confirmed"
 
 #, elixir-format, ex-autogen
 msgid "tester.completed.text"
-msgstr ""
+msgstr "If the title of this page corresponds with the title of your campaign, the roundtrip from Panl to Qualtrics and back was successful."

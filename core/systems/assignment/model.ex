@@ -14,6 +14,14 @@ defmodule Systems.Assignment.Model do
     belongs_to(:crew, Systems.Crew.Model)
     belongs_to(:auth_node, Core.Authorization.Node)
 
+    many_to_many(
+      :excluded,
+      Assignment.Model,
+      join_through: Assignment.ExcludeModel,
+      join_keys: [to_id: :id, from_id: :id],
+      on_replace: :delete
+    )
+
     field(:director, Ecto.Enum, values: [:campaign])
 
     timestamps()
@@ -34,7 +42,7 @@ defmodule Systems.Assignment.Model do
 
   def flatten(assignment) do
     assignment
-    |> Map.take([:id, :crew, :director])
+    |> Map.take([:id, :crew, :excluded, :director])
     |> Map.put(:assignable, assignable(assignment))
   end
 
@@ -46,7 +54,11 @@ defmodule Systems.Assignment.Model do
   end
 
   def preload_graph(:full) do
-    [:crew, assignable_experiment: [lab_tool: [:time_slots], survey_tool: [:auth_node]]]
+    [
+      :crew,
+      :excluded,
+      assignable_experiment: [lab_tool: [:time_slots], survey_tool: [:auth_node]]
+    ]
   end
 
   def preload_graph(_), do: []

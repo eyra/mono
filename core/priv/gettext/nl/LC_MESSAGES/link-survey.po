@@ -266,3 +266,15 @@ msgstr "De auteur van deze studie heeft jouw bijdrage beoordeeld en wil je het v
 #, elixir-format, ex-autogen, fuzzy
 msgid "participated.label"
 msgstr "Deelgenomen"
+
+#, elixir-format, ex-autogen
+msgid "test.roundtrip.button"
+msgstr "Controleer"
+
+#, elixir-format, ex-autogen
+msgid "test.roundtrip.text"
+msgstr "Test of jouw vragenlijst goed opgezet is en controleer of je terugkomt op het scherm \"Round trip bevestigd\"."
+
+#, elixir-format, ex-autogen
+msgid "test.roundtrip.title"
+msgstr "Is je vragenlijst goed opgezet?"

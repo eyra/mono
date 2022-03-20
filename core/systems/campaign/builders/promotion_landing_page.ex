@@ -90,20 +90,28 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
           }
         } = socket
       ) do
-    if Assignment.Context.open?(assignment) do
-      Assignment.Context.apply_member(assignment, user)
+    case Assignment.Context.can_apply_as_member?(assignment, user) do
+      {:error, error} ->
+        inform(error, socket)
 
-      LiveView.push_redirect(socket,
-        to: Routes.live_path(socket, Systems.Assignment.LandingPage, id)
-      )
-    else
-      inform_closed(socket)
+      {:ok} ->
+        Assignment.Context.apply_member(assignment, user)
+
+        LiveView.push_redirect(socket,
+          to: Routes.live_path(socket, Systems.Assignment.LandingPage, id)
+        )
     end
   end
 
-  defp inform_closed(socket) do
+  defp inform(:closed, socket) do
     title = dgettext("link-assignment", "closed.dialog.title")
     text = dgettext("link-assignment", "closed.dialog.text")
+    inform(socket, title, text)
+  end
+
+  defp inform(:excluded, socket) do
+    title = dgettext("link-assignment", "excluded.dialog.title")
+    text = dgettext("link-assignment", "excluded.dialog.text")
     inform(socket, title, text)
   end
 

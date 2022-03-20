@@ -14,6 +14,11 @@ defmodule Core.SurfConext do
     |> Repo.one()
   end
 
+  def get_surfconext_user_by_user(%User{id: id}) do
+    from(surfconext_user in Core.SurfConext.User, where: surfconext_user.user_id == ^id)
+    |> Repo.one!()
+  end
+
   def register_user(attrs) do
     affiliation = attrs |> Map.get("eduperson_affiliation", []) |> MapSet.new()
 
@@ -41,12 +46,18 @@ defmodule Core.SurfConext do
 
     with {:ok, surf_user} <-
            %Core.SurfConext.User{}
-           |> Core.SurfConext.User.changeset(attrs)
+           |> Core.SurfConext.User.register_changeset(attrs)
            |> Ecto.Changeset.put_assoc(:user, user)
            |> Repo.insert() do
       Signal.Context.dispatch!(:user_created, %{user: surf_user.user})
       {:ok, surf_user}
     end
+  end
+
+  def update_user(%User{} = user, attrs) do
+    get_surfconext_user_by_user(user)
+    |> Core.SurfConext.User.update_changeset(attrs)
+    |> Repo.update!()
   end
 
   defmacro routes(otp_app) do

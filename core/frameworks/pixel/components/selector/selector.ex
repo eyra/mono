@@ -6,17 +6,18 @@ defmodule Frameworks.Pixel.Selector.Selector do
   prop(parent, :any, required: true)
   prop(type, :atom, default: :label)
   prop(optional?, :boolean, default: true)
+  prop(grid_options, :string, default: "")
   prop(opts, :string, default: "")
 
   prop(current_items, :list)
 
-  defp flex_options(:radio), do: "flex-col gap-3"
-  defp flex_options(:checkbox), do: "flex-row flex-wrap gap-x-8 gap-y-3 items-center"
-  defp flex_options(_), do: "flex-row flex-wrap gap-3 items-center"
+  defp grid_options(_, grid_options) when grid_options != "", do: grid_options
+  defp grid_options(:radio, _), do: "flex flex-col gap-3"
+  defp grid_options(:checkbox, _), do: "flex flex-row flex-wrap gap-x-8 gap-y-3 items-center"
+  defp grid_options(_, _), do: "flex flex-row flex-wrap gap-3 items-center"
 
-  defp multiselect?(:radio, _), do: false
-  defp multiselect?(_, 1), do: false
-  defp multiselect?(_, _), do: true
+  defp multiselect?(:radio), do: false
+  defp multiselect?(_), do: true
 
   def update(%{reset: new_items}, socket) do
     {
@@ -32,7 +33,15 @@ defmodule Frameworks.Pixel.Selector.Selector do
   end
 
   def update(
-        %{id: id, items: items, parent: parent, type: type, optional?: optional?, opts: opts},
+        %{
+          id: id,
+          items: items,
+          parent: parent,
+          type: type,
+          optional?: optional?,
+          grid_options: grid_options,
+          opts: opts
+        },
         socket
       ) do
     {
@@ -45,6 +54,7 @@ defmodule Frameworks.Pixel.Selector.Selector do
         parent: parent,
         type: type,
         optional?: optional?,
+        grid_options: grid_options,
         opts: opts
       )
     }
@@ -65,20 +75,22 @@ defmodule Frameworks.Pixel.Selector.Selector do
   end
 
   defp update_parent(
-         %{assigns: %{type: type, parent: parent, items: items, id: selector_id}},
+         %{assigns: %{type: type, parent: parent, current_items: current_items, id: selector_id}},
          active_item_ids
        ) do
-    if multiselect?(type, Enum.count(items)) do
+    if multiselect?(type) do
       update_target(parent, %{
         selector_id: selector_id,
-        active_item_ids: active_item_ids
+        active_item_ids: active_item_ids,
+        current_items: current_items
       })
     else
       active_item_id = List.first(active_item_ids)
 
       update_target(parent, %{
         selector_id: selector_id,
-        active_item_id: active_item_id
+        active_item_id: active_item_id,
+        current_items: current_items
       })
     end
   end
@@ -107,10 +119,10 @@ defmodule Frameworks.Pixel.Selector.Selector do
 
   defp toggle(%{assigns: %{items: items, type: type, optional?: optional?}}, item, item_id)
        when is_atom(item_id) do
-    multiselect? = multiselect?(type, Enum.count(items))
+    multiselect? = multiselect?(type)
     active_count = active_count(items)
 
-    if item.id === item_id do
+    if is_same_id?(item.id, item_id) do
       if not item.active or optional? or (multiselect? and active_count > 1) do
         %{item | active: !item.active}
       else
@@ -128,13 +140,25 @@ defmodule Frameworks.Pixel.Selector.Selector do
 
   defp toggle(socket, item, item_id), do: toggle(socket, item, String.to_atom(item_id))
 
+  defp is_same_id?(left, right) when is_number(left) and is_atom(right) do
+    "#{left}" == Atom.to_string(right)
+  end
+
+  defp is_same_id?(left, right) when is_binary(left) and is_atom(right) do
+    left == Atom.to_string(right)
+  end
+
+  defp is_same_id?(left, right) do
+    left == right
+  end
+
   defp item_component(:radio), do: Frameworks.Pixel.Selector.Radio
   defp item_component(:checkbox), do: Frameworks.Pixel.Selector.Checkbox
   defp item_component(_), do: Frameworks.Pixel.Selector.Label
 
   def render(assigns) do
     ~F"""
-    <div class={"flex #{flex_options(@type)} #{@opts}"}>
+    <div class={"#{grid_options(@type, @grid_options)} #{@opts}"}>
       {#for {item, _} <- Enum.with_index(@current_items)}
         <div x-data={"{ active: #{item.active}, is_optional: #{@optional?} }"} >
           <div
@@ -147,7 +171,7 @@ defmodule Frameworks.Pixel.Selector.Selector do
             <Surface.Components.Dynamic.Component
               module={item_component(@type)}
                   item={item}
-                  multiselect?={ multiselect?(@type, Enum.count(@items)) }
+                  multiselect?={ multiselect?(@type) }
             />
           </div>
         </div>

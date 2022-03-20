@@ -15,6 +15,9 @@ defmodule Core.SurfConext.FakeOIDC do
       config
       |> base_user()
       |> Map.put("eduperson_affiliation", ["student"])
+      |> Map.put("schac_personal_unique_code", [
+        "urn:schac:personalUniqueCode:nl:local:vu.nl:studentid:1234567"
+      ])
 
     {:ok, user}
   end
@@ -190,6 +193,35 @@ defmodule Core.SurfConext.CallbackController.Test do
       conn = conn |> get("/surfconext/auth")
       # onboarding only on link yet
       assert redirected_to(conn) == "/dashboard"
+    end
+
+    test "updates an existing student", %{conn: conn, conf: conf} do
+      email = Faker.Internet.email()
+
+      Core.SurfConext.register_user(%{
+        "sub" => "student",
+        "email" => email,
+        "preferred_username" => Faker.Person.name(),
+        "eduperson_affiliation" => ["student"]
+      })
+
+      conf =
+        conf
+        |> Keyword.put(:sub, "student")
+        |> Keyword.put(:token, "student-token")
+
+      Application.put_env(:core, Core.SurfConext, conf)
+
+      conn = conn |> get("/surfconext/auth")
+
+      user = Core.SurfConext.get_user_by_sub("student")
+      surfconext_user = Core.SurfConext.get_surfconext_user_by_user(user)
+
+      assert redirected_to(conn) == "/dashboard"
+
+      assert surfconext_user.schac_personal_unique_code == [
+               "urn:schac:personalUniqueCode:nl:local:vu.nl:studentid:1234567"
+             ]
     end
   end
 end

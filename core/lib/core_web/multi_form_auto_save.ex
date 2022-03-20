@@ -43,7 +43,6 @@ defmodule CoreWeb.MultiFormAutoSave do
 
       def put_saved_flash(socket) do
         MultiFormAutoSave.put_saved_flash(socket)
-        socket
       end
 
       # Handle Event

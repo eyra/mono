@@ -115,4 +115,23 @@ defmodule Systems.Survey.ToolModel do
     end)
     |> to_string()
   end
+
+  def external_path(%{survey_url: survey_url}, panl_id) when not is_nil(survey_url) do
+    url_components = URI.parse(survey_url)
+
+    query =
+      url_components.query
+      |> decode_query()
+      |> Map.put(:panl_id, panl_id)
+      |> URI.encode_query(:rfc3986)
+
+    url_components
+    |> Map.put(:query, query)
+    |> URI.to_string()
+  end
+
+  def external_path(_, _), do: nil
+
+  defp decode_query(nil), do: %{}
+  defp decode_query(query), do: URI.decode_query(query)
 end

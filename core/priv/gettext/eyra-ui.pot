@@ -189,3 +189,7 @@ msgstr ""
 #, elixir-format, ex-autogen
 msgid "pronoun.her"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "menu.item.payments"
+msgstr ""

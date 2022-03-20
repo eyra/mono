@@ -49,29 +49,47 @@ defmodule Core.SurfConext.CallbackController do
     config = config(:core) |> Keyword.put(:session_params, session_params)
 
     {:ok, %{user: surf_user, token: token}} = oidc_module(config).callback(config, params)
-    Logger.info("SURFconext user: #{inspect(surf_user)}")
+    Logger.debug("SURFconext user: #{inspect(surf_user)}")
 
-    Logger.info(
+    Logger.debug(
       "SURFconext oidc info: #{inspect(oidc_module(config).fetch_userinfo(config, token))}"
     )
 
-    Core.SurfConext.get_user_by_sub(surf_user["sub"])
+    authenticate(config, conn, token, surf_user)
+  end
 
+  defp authenticate(config, conn, token, surf_user) do
     if user = Core.SurfConext.get_user_by_sub(surf_user["sub"]) do
-      log_in_user(config, conn, user, false)
+      update_user(config, conn, user, token)
     else
-      with {:ok, userinfo} <- oidc_module(config).fetch_userinfo(config, token) do
-        case(Core.SurfConext.register_user(userinfo)) do
-          {:ok, surfconext_user} ->
-            log_in_user(config, conn, surfconext_user.user, true)
+      register_user(config, conn, token)
+    end
+  end
 
-          {:error, changeset} ->
-            Enum.reduce(changeset.errors, conn, fn {_, {message, _}}, conn ->
-              put_flash(conn, :error, message)
-            end)
-            |> redirect(to: Routes.user_session_path(conn, :new))
-        end
+  defp update_user(config, conn, user, token) do
+    with {:ok, userinfo} <- fetch_userinfo(config, token) do
+      Core.SurfConext.update_user(user, userinfo)
+    end
+
+    log_in_user(config, conn, user, false)
+  end
+
+  defp register_user(config, conn, token) do
+    with {:ok, userinfo} <- fetch_userinfo(config, token) do
+      case(Core.SurfConext.register_user(userinfo)) do
+        {:ok, surfconext_user} ->
+          log_in_user(config, conn, surfconext_user.user, true)
+
+        {:error, changeset} ->
+          Enum.reduce(changeset.errors, conn, fn {_, {message, _}}, conn ->
+            put_flash(conn, :error, message)
+          end)
+          |> redirect(to: Routes.user_session_path(conn, :new))
       end
     end
+  end
+
+  defp fetch_userinfo(config, token) do
+    oidc_module(config).fetch_userinfo(config, token)
   end
 end

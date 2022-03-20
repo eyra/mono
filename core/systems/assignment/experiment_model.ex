@@ -108,24 +108,11 @@ defmodule Systems.Assignment.ExperimentModel do
   def ready?(%{survey_tool: tool}) when not is_nil(tool), do: Systems.Survey.Context.ready?(tool)
   def ready?(%{lab_tool: tool}) when not is_nil(tool), do: Systems.Lab.Context.ready?(tool)
 
-  def path(%{survey_tool: %{survey_url: survey_url}}, panl_id) when not is_nil(survey_url) do
-    url_components = URI.parse(survey_url)
-
-    query =
-      url_components.query
-      |> decode_query()
-      |> Map.put(:panl_id, panl_id)
-      |> URI.encode_query(:rfc3986)
-
-    url_components
-    |> Map.put(:query, query)
-    |> URI.to_string()
+  def external_path(%{survey_tool: survey_tool}, panl_id) do
+    Survey.ToolModel.external_path(survey_tool, panl_id)
   end
 
-  def path(_, _), do: nil
-
-  defp decode_query(nil), do: %{}
-  defp decode_query(query), do: URI.decode_query(query)
+  def external_path(_, _), do: nil
 
   # Tool
   def tool_id(%{survey_tool_id: tool_id}) when not is_nil(tool_id), do: tool_id
