@@ -3,7 +3,7 @@ defmodule Systems.Bookkeeping.LineModel do
 
   schema "book_entry_lines" do
     belongs_to(:entry, Systems.Bookkeeping.EntryModel)
-    belongs_to(:book, Systems.Bookkeeping.BookModel)
+    belongs_to(:account, Systems.Bookkeeping.AccountModel)
     field(:debit, :integer)
     field(:credit, :integer)
   end

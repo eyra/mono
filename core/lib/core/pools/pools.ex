@@ -5,8 +5,12 @@ defmodule Core.Pools do
   alias Core.Repo
   alias Core.Accounts.User
 
+  alias Systems.{
+    Bookkeeping
+  }
+
   def list() do
-    ensure_student_pool()
+    ensure_sbe_2021_pool()
     Repo.all(Pool)
   end
 
@@ -16,19 +20,21 @@ defmodule Core.Pools do
   def get_by_name(name) when is_atom(name), do: get_by_name(Atom.to_string(name))
 
   def get_by_name(name) do
-    ensure_student_pool()
+    ensure_sbe_2021_pool()
     Repo.get_by(Pool, name: name)
   end
 
-  defp ensure_student_pool() do
-    case Repo.get_by(Pool, name: "vu_students") do
-      nil -> create_student_pool()
+  defp ensure_sbe_2021_pool() do
+    name = "sbe_2021"
+
+    case Repo.get_by(Pool, name: name) do
+      nil -> create_pool(name)
       pool -> {:ok, pool}
     end
   end
 
-  defp create_student_pool() do
-    %Pool{name: "vu_students"}
+  defp create_pool(name) do
+    %Pool{name: name}
     |> Repo.insert!()
   end
 

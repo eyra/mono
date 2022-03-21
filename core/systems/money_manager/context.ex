@@ -5,14 +5,14 @@ defmodule Systems.MoneyManager.Context do
   alias Systems.MoneyManager.TransactionMarkerModel
   import Ecto.Query
 
-  @books %{
+  @accounts %{
     money_box: "MB",
     wallet: "W"
   }
-  @book_map Enum.map(@books, fn {k, v} -> {v, k} end) |> Enum.into(%{})
+  @account_map Enum.map(@accounts, fn {k, v} -> {v, k} end) |> Enum.into(%{})
 
-  @book_patterns Map.keys(@book_map) |> Enum.join("|")
-  @description_re Regex.compile!("(#{@book_patterns})\\s*(\\d+)\\s*\\/\\s*(\\w+)")
+  @account_patterns Map.keys(@account_map) |> Enum.join("|")
+  @description_re Regex.compile!("(#{@account_patterns})\\s*(\\d+)\\s*\\/\\s*(\\w+)")
 
   def process_bank_transactions do
     %{marker: new_marker, transactions: transactions} =
@@ -29,20 +29,20 @@ defmodule Systems.MoneyManager.Context do
   def process_bank_transaction(
         %{id: id, amount: amount, date: date, description: description, type: type} = transaction
       ) do
-    book = map_to_book(description)
+    account = map_to_account(description)
 
     lines =
       case type do
         :received ->
           [
-            %{book: :bank, debit: amount},
-            %{book: book, credit: amount}
+            %{account: :bank, debit: amount},
+            %{account: account, credit: amount}
           ]
 
         :payed ->
           [
-            %{book: book, debit: amount},
-            %{book: :bank, credit: amount}
+            %{account: account, debit: amount},
+            %{account: :bank, credit: amount}
           ]
       end
 
@@ -54,20 +54,20 @@ defmodule Systems.MoneyManager.Context do
     })
   end
 
-  def map_to_book(description) do
+  def map_to_account(description) do
     case Regex.run(@description_re, String.upcase(description, :ascii)) do
-      [_, type, id, checksum] -> map_to_book(type, id, checksum)
+      [_, type, id, checksum] -> map_to_account(type, id, checksum)
       _ -> :assorted
     end
   end
 
-  def map_to_book(type_str, id_str, checksum) do
-    type = Map.fetch!(@book_map, type_str)
+  def map_to_account(type_str, id_str, checksum) do
+    type = Map.fetch!(@account_map, type_str)
     id = String.to_integer(id_str)
-    book = {type, id}
+    account = {type, id}
 
-    if valid_checksum?(book, checksum) do
-      book
+    if valid_checksum?(account, checksum) do
+      account
     else
       Logger.error("Checksum mismatch detected for: #{type_str}#{id_str}/#{checksum}")
       :unidentified
@@ -77,7 +77,7 @@ defmodule Systems.MoneyManager.Context do
   def submit_payment(%{
         idempotence_key: idempotence_key,
         to_iban: to,
-        book: book,
+        account: account,
         amount: amount,
         description: description
       }) do
@@ -85,16 +85,16 @@ defmodule Systems.MoneyManager.Context do
       idempotence_key: idempotence_key,
       to: to,
       amount: amount,
-      description: "#{description} #{encode_book(book)}"
+      description: "#{description} #{encode_account(account)}"
     })
   end
 
-  def encode_book({type, book_id} = book) do
-    "#{map_book_type(type)}#{book_id}/#{checksum(book)}"
+  def encode_account({type, account_id} = account) do
+    "#{map_account_type(type)}#{account_id}/#{checksum(account)}"
   end
 
-  defp map_book_type(type) do
-    Map.fetch!(@books, type)
+  defp map_account_type(type) do
+    Map.fetch!(@accounts, type)
   end
 
   def checksum({type, id}) do
@@ -103,8 +103,8 @@ defmodule Systems.MoneyManager.Context do
     |> Integer.to_string(32)
   end
 
-  def valid_checksum?(book, checksum) do
-    checksum(book) == checksum
+  def valid_checksum?(account, checksum) do
+    checksum(account) == checksum
   end
 
   def last_transaction_marker do

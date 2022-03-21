@@ -12,11 +12,11 @@ defmodule Systems.Bookkeeping.ContextTest do
           journal_message: "Bank transaction: 123, received: 123,45 for money box: 89",
           lines: [
             %{
-              book: :bank,
+              account: :bank,
               debit: amount
             },
             %{
-              book: {:money_box_budget, 89},
+              account: {:money_box_budget, 89},
               credit: amount
             }
           ]
@@ -26,7 +26,7 @@ defmodule Systems.Bookkeeping.ContextTest do
       assert %{credit: ^amount} = Bookkeeping.Context.balance({:money_box_budget, 89})
     end
 
-    test "enter multiple bookings partialy, for the same books" do
+    test "enter multiple bookings partialy, for the same accounts" do
       money_box_one = :rand.uniform(100)
       money_box_two = :rand.uniform(100) + 200
       first_amount = :rand.uniform(10_000)
@@ -38,11 +38,11 @@ defmodule Systems.Bookkeeping.ContextTest do
           journal_message: "Bank transaction",
           lines: [
             %{
-              book: :bank,
+              account: :bank,
               debit: first_amount
             },
             %{
-              book: {:money_box_budget, money_box_one},
+              account: {:money_box_budget, money_box_one},
               credit: first_amount
             }
           ]
@@ -54,11 +54,11 @@ defmodule Systems.Bookkeeping.ContextTest do
           journal_message: "Bank transaction",
           lines: [
             %{
-              book: :bank,
+              account: :bank,
               debit: second_amount
             },
             %{
-              book: {:money_box_budget, money_box_two},
+              account: {:money_box_budget, money_box_two},
               credit: second_amount
             }
           ]
@@ -82,11 +82,11 @@ defmodule Systems.Bookkeeping.ContextTest do
             journal_message: "",
             lines: [
               %{
-                book: :bank,
+                account: :bank,
                 debit: unquote(debit)
               },
               %{
-                book: {:money_box_budget, 1},
+                account: {:money_box_budget, 1},
                 credit: unquote(credit)
               }
             ]
@@ -103,12 +103,12 @@ defmodule Systems.Bookkeeping.ContextTest do
           journal_message: "",
           lines: [
             %{
-              book: :bank,
+              account: :bank,
               debit: 1,
               credit: 1
             },
             %{
-              book: {:money_box_budget, 1},
+              account: {:money_box_budget, 1},
               credit: 0
             }
           ]
@@ -124,11 +124,11 @@ defmodule Systems.Bookkeeping.ContextTest do
           journal_message: "Testing",
           lines: [
             %{
-              book: :bank,
+              account: :bank,
               debit: 1
             },
             %{
-              book: {:money_box_budget, 1},
+              account: {:money_box_budget, 1},
               credit: 1
             }
           ]
@@ -140,11 +140,11 @@ defmodule Systems.Bookkeeping.ContextTest do
           journal_message: "Testing 2",
           lines: [
             %{
-              book: :bank,
+              account: :bank,
               debit: 1
             },
             %{
-              book: {:money_box_budget, 1},
+              account: {:money_box_budget, 1},
               credit: 1
             }
           ]
@@ -155,7 +155,7 @@ defmodule Systems.Bookkeeping.ContextTest do
   end
 
   describe "list_lines/1" do
-    test "listing of an unknown book returns empty list" do
+    test "listing of an unknown account returns empty list" do
       assert Bookkeeping.Context.list_entries(:bank) == []
     end
 
@@ -166,11 +166,11 @@ defmodule Systems.Bookkeeping.ContextTest do
           journal_message: "Bank transaction: 123, received: 123,45 for money box: 89",
           lines: [
             %{
-              book: :bank,
+              account: :bank,
               debit: 1
             },
             %{
-              book: {:money_box_budget, 1},
+              account: {:money_box_budget, 1},
               credit: 1
             }
           ]
@@ -182,11 +182,11 @@ defmodule Systems.Bookkeeping.ContextTest do
           journal_message: "Bank transaction: 123, received: 123,45 for money box: 89",
           lines: [
             %{
-              book: :bank,
+              account: :bank,
               debit: 2
             },
             %{
-              book: {:money_box_budget, 2},
+              account: {:money_box_budget, 2},
               credit: 2
             }
           ]

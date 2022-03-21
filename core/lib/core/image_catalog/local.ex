@@ -45,8 +45,6 @@ defmodule Core.ImageCatalog.Local do
   end
 
   def info(image_id, _opts) do
-    IO.puts("local image cat")
-
     if info = Map.get(image_map(), image_id) do
       url = "/image-catalog/#{info.file_name}"
 
