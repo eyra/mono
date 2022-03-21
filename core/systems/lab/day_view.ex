@@ -47,11 +47,11 @@ defmodule Systems.Lab.DayView do
   end
 
   def update(
-        %{active_item_id: active_item_id, selector_id: selector_id},
+        %{active_item_ids: active_item_ids, selector_id: selector_id},
         %{assigns: %{day_model: %{entries: entries} = day_model}} = socket
       ) do
     start_time = selector_id
-    enabled? = active_item_id != nil
+    enabled? = not Enum.empty?(active_item_ids)
 
     entries =
       entries
