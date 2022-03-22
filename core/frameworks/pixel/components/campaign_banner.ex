@@ -10,6 +10,8 @@ defmodule Frameworks.Pixel.CampaignBanner do
   prop(subtitle, :string, required: true)
   prop(url, :string, required: true)
 
+  defp sanitize(nil), do: nil
+  defp sanitize(""), do: nil
   defp sanitize("http://" <> _rest = url), do: url
   defp sanitize("https://" <> _rest = url), do: url
   defp sanitize(url), do: "https://" <> url
@@ -26,7 +28,7 @@ defmodule Frameworks.Pixel.CampaignBanner do
           <div class="mb-2"></div>
           <div class="text-title6 font-title6 sm:text-title5 sm:font-title5 text-white">{@subtitle}</div>
           <div class="mb-2"></div>
-          <a class="text-white text-body font-bodylinkmedium underline" href={"#{sanitize(@url)}"} >
+          <a :if={sanitize(@url) != nil} class="text-white text-body font-bodylinkmedium underline" href={"#{sanitize(@url)}"} >
             Bezoek website
           </a>
         </div>
