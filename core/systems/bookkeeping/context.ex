@@ -58,6 +58,13 @@ defmodule Systems.Bookkeeping.Context do
     end)
   end
 
+  def account_query(account_template) do
+    from(account in AccountModel,
+      where: fragment("?::text[] @> ?", account.identifier, ^account_template)
+    )
+    |> Repo.all()
+  end
+
   defp update_records(%{lines: lines} = entry) do
     Multi.new()
     |> update_accounts(lines)

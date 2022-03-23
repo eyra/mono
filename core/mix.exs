@@ -104,6 +104,7 @@ defmodule Core.MixProject do
       {:nimble_parsec, "~> 1.2"},
       {:typed_struct, "~> 0.2.1"},
       {:logger_json, "~> 4.3"},
+      {:statistics, "~> 0.6.2"},
       # i18n
       {:ex_cldr, "~> 2.25"},
       {:ex_cldr_numbers, "~> 2.23"},

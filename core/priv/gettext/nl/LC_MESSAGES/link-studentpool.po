@@ -82,3 +82,31 @@ msgstr "Ingepland"
 #, elixir-format
 msgid "sample.size"
 msgstr "%{size} plaatsen beschikbaar"
+
+#, elixir-format, ex-autogen
+msgid "max.credits.earned.label"
+msgstr "Meeste credits verdiend"
+
+#, elixir-format, ex-autogen
+msgid "mean.credits.earned.label"
+msgstr "Gemiddeld aantal credits verdiend"
+
+#, elixir-format, ex-autogen
+msgid "median.credits.earned.label"
+msgstr "Mediaan credits verdiend"
+
+#, elixir-format, ex-autogen
+msgid "min.credits.earned.label"
+msgstr "Minste credits verdiend"
+
+#, elixir-format, ex-autogen
+msgid "tabbar.item.dashboard"
+msgstr "Dashboard"
+
+#, elixir-format, ex-autogen
+msgid "total.credits.earned.label"
+msgstr "Totaal aantal credits verdiend"
+
+#, elixir-format, ex-autogen
+msgid "year.label"
+msgstr "Jaar %{year}"
