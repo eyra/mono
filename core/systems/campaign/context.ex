@@ -423,6 +423,21 @@ defmodule Systems.Campaign.Context do
     Assignment.Context.mark_expired_debug(assignment, force)
   end
 
+  def reward_student(%{id: assignment_id} = _assignment, %{id: student_id} = _student) do
+    {credits, study_program_codes} =
+      from(c in Campaign.Model,
+        inner_join: s in Submission,
+        on: s.promotion_id == c.promotion_id,
+        inner_join: ec in Criteria,
+        on: ec.submission_id == s.id,
+        where: c.promotable_assignment_id == ^assignment_id,
+        select: {s.reward_value, ec.study_program_codes}
+      )
+      |> Repo.one!()
+
+    reward_student({student_id, assignment_id, credits, study_program_codes})
+  end
+
   @doc """
     Synchronizes accepted student tasks with with bookkeeping.
   """
@@ -470,16 +485,24 @@ defmodule Systems.Campaign.Context do
       %{account: wallet, credit: credits}
     ]
 
-    result =
-      Bookkeeping.Context.enter(%{
-        idempotence_key: idempotence_key,
-        journal_message:
-          "Credit transaction: #{idempotence_key} credits: #{credits} from: {fund, #{pool}} to: Wallet {wallet, #{pool}, #{student_id}}",
-        lines: lines
-      })
+    if Bookkeeping.Context.exists?(idempotence_key) do
+      Logger.warn(
+        "Credit transaction skipped: credits=#{credits} idempotence_key=#{idempotence_key} from={fund, #{pool}} to={wallet, #{pool}, #{student_id}}"
+      )
+    else
+      result =
+        Bookkeeping.Context.enter(%{
+          idempotence_key: idempotence_key,
+          journal_message:
+            "Credit transaction: #{credits} from: {fund, #{pool}} to: {wallet, #{pool}, #{student_id}}",
+          lines: lines
+        })
 
-    with {:error, error} <- result do
-      Logger.warn("Credit transaction failed: idempotence_key=#{idempotence_key}, error=#{error}")
+      with {:error, error} <- result do
+        Logger.warn(
+          "Credit transaction failed: idempotence_key=#{idempotence_key}, error=#{error}"
+        )
+      end
     end
   end
 

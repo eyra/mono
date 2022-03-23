@@ -36,6 +36,18 @@ defmodule Systems.Campaign.Switch do
     |> Campaign.Presenter.update(assignment.id, Assignment.LandingPage)
   end
 
+  def handle(:assignment_accepted, %{assignment: assignment, user: user}) do
+    handle(:assignment_updated, assignment)
+
+    if user.student do
+      Campaign.Context.reward_student(assignment, user)
+    end
+  end
+
+  def handle(:assignment_rejected, %{assignment: assignment, user: _user}) do
+    handle(:assignment_updated, assignment)
+  end
+
   def handle(:promotion_updated, promotion) do
     campaign = Campaign.Context.get_by_promotion(promotion, Campaign.Model.preload_graph(:full))
     promotable = Campaign.Model.promotable(campaign)

@@ -9,6 +9,13 @@ defmodule Systems.Bookkeeping.Context do
   import Ecto.Changeset
   alias Ecto.Multi
 
+  def exists?(idempotence_key) do
+    from(entry in EntryModel,
+      where: entry.idempotence_key == ^idempotence_key
+    )
+    |> Repo.exists?()
+  end
+
   def enter(%{lines: lines} = entry) when is_list(lines) do
     with :ok <- validate_entry_balance(lines),
          :ok <- validate_either_credit_or_debit_is_used(lines) do

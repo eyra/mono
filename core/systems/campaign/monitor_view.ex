@@ -411,7 +411,7 @@ defmodule Systems.Campaign.MonitorView do
     }
   end
 
-  defp to_view_model(:accepted, target, %Crew.TaskModel{
+  defp to_view_model(:accepted, _target, %Crew.TaskModel{
          id: id,
          accepted_at: accepted_at,
          member_id: member_id
@@ -428,7 +428,7 @@ defmodule Systems.Campaign.MonitorView do
       id: id,
       message: %{text: date_string},
       public_id: public_id,
-      buttons: [reject_button(id, target)]
+      buttons: []
     }
   end
 
