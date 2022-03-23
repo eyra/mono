@@ -4,6 +4,7 @@ defmodule Systems.Campaign.Context do
   """
 
   import Ecto.Query, warn: false
+  require Logger
   alias Frameworks.GreenLight.Principal
   alias Core.Repo
   alias Core.Accounts.User
@@ -14,11 +15,12 @@ defmodule Systems.Campaign.Context do
     Promotion,
     Assignment,
     Survey,
-    Crew
+    Crew,
+    Bookkeeping
   }
 
   alias Core.Accounts.User
-  alias Core.Pools.Submission
+  alias Core.Pools.{Submission, Criteria}
   alias Frameworks.Signal
 
   def get!(id, preload \\ []) do
@@ -419,5 +421,73 @@ defmodule Systems.Campaign.Context do
   """
   def mark_expired_debug(%{promotable_assignment: assignment}, force) do
     Assignment.Context.mark_expired_debug(assignment, force)
+  end
+
+  @doc """
+    Synchronizes accepted student tasks with with bookkeeping.
+  """
+  def sync_student_credits() do
+    from(u in User,
+      inner_join: m in Crew.MemberModel,
+      on: m.user_id == u.id,
+      inner_join: t in Crew.TaskModel,
+      on: t.member_id == m.id,
+      inner_join: a in Assignment.Model,
+      on: a.crew_id == t.crew_id,
+      inner_join: c in Campaign.Model,
+      on: c.promotable_assignment_id == a.id,
+      inner_join: s in Submission,
+      on: s.promotion_id == c.promotion_id,
+      inner_join: ec in Criteria,
+      on: ec.submission_id == s.id,
+      where: t.status == :accepted and u.student == true,
+      select: {u.id, a.id, s.reward_value, ec.study_program_codes}
+    )
+    |> Repo.all()
+    |> Enum.each(&reward_student(&1))
+  end
+
+  defp reward_student({student_id, assignment_id, credits, study_program_codes}) do
+    idempotence_key = "assignment=#{assignment_id},user=#{student_id}"
+
+    year =
+      if is_year?("1", study_program_codes) do
+        "1"
+      else
+        "2"
+      end
+
+    create_student_credit_transaction(student_id, credits, year, idempotence_key)
+  end
+
+  defp create_student_credit_transaction(student_id, credits, year, idempotence_key) do
+    pool = "sbe_year#{year}_2021"
+    fund = {:fund, pool}
+    wallet = {:wallet, pool, student_id}
+
+    lines = [
+      %{account: fund, debit: credits},
+      %{account: wallet, credit: credits}
+    ]
+
+    result =
+      Bookkeeping.Context.enter(%{
+        idempotence_key: idempotence_key,
+        journal_message:
+          "Credit transaction: #{idempotence_key} credits: #{credits} from: {fund, #{pool}} to: Wallet {wallet, #{pool}, #{student_id}}",
+        lines: lines
+      })
+
+    with {:error, error} <- result do
+      Logger.warn("Credit transaction failed: idempotence_key=#{idempotence_key}, error=#{error}")
+    end
+  end
+
+  defp is_year?(year, study_program_codes) when is_list(study_program_codes) do
+    study_program_codes |> Enum.find(&is_year?(year, &1)) != nil
+  end
+
+  defp is_year?(year, study_program_code) when is_atom(study_program_code) do
+    Atom.to_string(study_program_code) |> String.contains?(year)
   end
 end

@@ -5,10 +5,6 @@ defmodule Core.Pools do
   alias Core.Repo
   alias Core.Accounts.User
 
-  alias Systems.{
-    Bookkeeping
-  }
-
   def list() do
     ensure_sbe_2021_pool()
     Repo.all(Pool)

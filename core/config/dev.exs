@@ -74,7 +74,7 @@ config :core,
 
 config :core,
        :admins,
-       ["admin@example.org"]
+       ["e.vanderveen@eyra.co"]
 
 config :core, Systems.DataDonation.S3StorageBackend, bucket: "eylixir"
 

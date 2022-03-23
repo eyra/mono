@@ -119,6 +119,15 @@ defmodule Systems.Bookkeeping.Context do
     )
   end
 
+  defp to_identifier({type, subtype, id})
+       when is_atom(type) and is_binary(subtype) and is_integer(id) do
+    [Atom.to_string(type), subtype, Integer.to_string(id)]
+  end
+
+  defp to_identifier({type, subtype}) when is_atom(type) and is_binary(subtype) do
+    [Atom.to_string(type), subtype]
+  end
+
   defp to_identifier({type, id}) when is_binary(type) and is_integer(id) do
     [type, Integer.to_string(id)]
   end
