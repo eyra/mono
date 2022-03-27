@@ -1,7 +1,8 @@
 defmodule Systems.Pool.DashboardView do
   use CoreWeb.UI.LiveComponent
 
-  alias Frameworks.Pixel.Text.{Title2, Body}
+  alias Frameworks.Pixel.Text.{Title2}
+  alias Frameworks.Pixel.Widget.{Metric, ValueDistribution}
 
   alias Systems.{
     Bookkeeping
@@ -36,40 +37,65 @@ defmodule Systems.Pool.DashboardView do
   end
 
   defp create_year(year, credits) do
+    study_program_codes = Core.Enums.StudyProgramCodes.values_by_year(year)
     year_string = Core.Enums.StudyProgramCodes.year_to_string(year)
+
+    total_student_count = Core.Pools.count_students(study_program_codes)
+    active_student_count = credits |> Enum.filter(&(&1 > 0)) |> Enum.count()
+    inactive_student_count = total_student_count - active_student_count
+
+    min_credits = Enum.min(credits, fn -> 0 end)
+    max_credits = Enum.max(credits, fn -> 0 end)
+    total_credits = Statistics.sum(credits) |> do_round()
 
     %{
       title: dgettext("link-studentpool", "year.label", year: year_string),
-      rows: [
-        # %{
-        #   icon: "💤",
-        #   title: dgettext("link-studentpool", "inactive.students"),
-        #   value: Enum.count(inactive_students)
-        # },
+      credits: credits,
+      metrics: [
         %{
-          icon: "↓",
-          title: dgettext("link-studentpool", "min.credits.earned.label"),
-          value: Statistics.min(credits) |> do_round()
+          label: dgettext("link-studentpool", "inactive.students"),
+          number: inactive_student_count,
+          color:
+            if inactive_student_count == 0 do
+              :positive
+            else
+              :negative
+            end
         },
         %{
-          icon: "↑",
-          title: dgettext("link-studentpool", "max.credits.earned.label"),
-          value: Statistics.max(credits) |> do_round()
+          label: dgettext("link-studentpool", "active.students"),
+          number: active_student_count,
+          color:
+            if active_student_count == 0 do
+              :negative
+            else
+              :primary
+            end
         },
         %{
-          icon: "➗",
-          title: dgettext("link-studentpool", "mean.credits.earned.label"),
-          value: Statistics.mean(credits) |> do_round()
+          label: dgettext("link-studentpool", "min.credits.earned.label"),
+          number: min_credits,
+          color:
+            if min_credits < 60 do
+              :negative
+            else
+              :positive
+            end
         },
         %{
-          icon: "┅",
-          title: dgettext("link-studentpool", "median.credits.earned.label"),
-          value: Statistics.median(credits) |> do_round()
+          label: dgettext("link-studentpool", "max.credits.earned.label"),
+          number: max_credits,
+          color:
+            if max_credits < 60 do
+              :warning
+            else
+              :positive
+            end
         },
         %{
-          icon: "💯",
-          title: dgettext("link-studentpool", "total.credits.earned.label"),
-          value: Statistics.sum(credits) |> do_round()
+          label: dgettext("link-studentpool", "total.credits.earned.label"),
+          number: total_credits,
+          color: :primary
         }
       ]
     }
@@ -86,14 +112,15 @@ defmodule Systems.Pool.DashboardView do
         <MarginY id={:page_top} />
         <div :for={year <- @years}>
           <Title2>{year.title}</Title2>
-          <table class="table-auto">
-            <tr :for={row <- year.rows}>
-              <td class="pr-4"><Body>{row.icon}</Body></td>
-              <td class="pr-4"><Body>{row.title}</Body></td>
-              <td><Body>{row.value}</Body></td>
-            </tr>
-          </table>
-          <Spacing value="XL" />
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-8 h-full">
+            <div class="col-span-2 row-span-2">
+              <ValueDistribution scale={10} values={year.credits}/>
+            </div>
+            <div :for={metric <- year.metrics}>
+              <Metric {...metric}/>
+            </div>
+          </div>
+          <Spacing value="XXL" />
         </div>
       </ContentArea>
     """

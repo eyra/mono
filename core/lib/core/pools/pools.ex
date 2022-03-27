@@ -67,6 +67,15 @@ defmodule Core.Pools do
     |> Repo.one()
   end
 
+  def count_students(study_program_codes) do
+    study_program_codes = study_program_codes |> to_string_list()
+
+    study_program_codes
+    |> query_count_eligitable_users([])
+    |> where([user, features], user.student == true)
+    |> Repo.one()
+  end
+
   defp query_count_eligitable_users(study_program_codes, exclude) do
     from(user in User,
       join: features in assoc(user, :features),

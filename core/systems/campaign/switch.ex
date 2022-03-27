@@ -39,9 +39,7 @@ defmodule Systems.Campaign.Switch do
   def handle(:assignment_accepted, %{assignment: assignment, user: user}) do
     handle(:assignment_updated, assignment)
 
-    if user.student do
-      Campaign.Context.reward_student(assignment, user)
-    end
+    Campaign.Context.reward_student(assignment, user)
   end
 
   def handle(:assignment_rejected, %{assignment: assignment, user: _user}) do

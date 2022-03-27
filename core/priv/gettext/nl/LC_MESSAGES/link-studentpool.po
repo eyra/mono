@@ -88,14 +88,6 @@ msgid "max.credits.earned.label"
 msgstr "Meeste credits verdiend"
 
 #, elixir-format, ex-autogen
-msgid "mean.credits.earned.label"
-msgstr "Gemiddeld aantal credits verdiend"
-
-#, elixir-format, ex-autogen
-msgid "median.credits.earned.label"
-msgstr "Mediaan credits verdiend"
-
-#, elixir-format, ex-autogen
 msgid "min.credits.earned.label"
 msgstr "Minste credits verdiend"
 
@@ -109,4 +101,12 @@ msgstr "Totaal aantal credits verdiend"
 
 #, elixir-format, ex-autogen
 msgid "year.label"
-msgstr "Jaar %{year}"
+msgstr "SBE Jaar %{year}"
+
+#, elixir-format, ex-autogen
+msgid "active.students"
+msgstr "Actieve studenten"
+
+#, elixir-format, ex-autogen
+msgid "inactive.students"
+msgstr "Inactieve studenten"

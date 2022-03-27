@@ -88,14 +88,6 @@ msgid "max.credits.earned.label"
 msgstr "Most credits earned"
 
 #, elixir-format, ex-autogen
-msgid "mean.credits.earned.label"
-msgstr "Mean credits earned"
-
-#, elixir-format, ex-autogen
-msgid "median.credits.earned.label"
-msgstr "Median credits earned"
-
-#, elixir-format, ex-autogen
 msgid "min.credits.earned.label"
 msgstr "Least credits earned"
 
@@ -109,4 +101,12 @@ msgstr "Total credits earned"
 
 #, elixir-format, ex-autogen
 msgid "year.label"
-msgstr "Year %{year}"
+msgstr "SBE Year %{year}"
+
+#, elixir-format, ex-autogen
+msgid "active.students"
+msgstr "Active students"
+
+#, elixir-format, ex-autogen
+msgid "inactive.students"
+msgstr "Inactive students"

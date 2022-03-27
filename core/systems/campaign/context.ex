@@ -455,7 +455,7 @@ defmodule Systems.Campaign.Context do
       on: s.promotion_id == c.promotion_id,
       inner_join: ec in Criteria,
       on: ec.submission_id == s.id,
-      where: t.status == :accepted and u.student == true,
+      where: t.status == :accepted,
       select: {u.id, a.id, s.reward_value, ec.study_program_codes}
     )
     |> Repo.all()
@@ -463,8 +463,6 @@ defmodule Systems.Campaign.Context do
   end
 
   defp reward_student({student_id, assignment_id, credits, study_program_codes}) do
-    idempotence_key = "assignment=#{assignment_id},user=#{student_id}"
-
     year =
       if is_year?("1", study_program_codes) do
         "1"
@@ -472,10 +470,12 @@ defmodule Systems.Campaign.Context do
         "2"
       end
 
-    create_student_credit_transaction(student_id, credits, year, idempotence_key)
+    create_student_credit_transaction(student_id, assignment_id, credits, year)
   end
 
-  defp create_student_credit_transaction(student_id, credits, year, idempotence_key) do
+  defp create_student_credit_transaction(student_id, assignment_id, credits, year) do
+    idempotence_key = "assignment=#{assignment_id},user=#{student_id}"
+
     pool = "sbe_year#{year}_2021"
     fund = {:fund, pool}
     wallet = {:wallet, pool, student_id}
@@ -494,7 +494,7 @@ defmodule Systems.Campaign.Context do
         Bookkeeping.Context.enter(%{
           idempotence_key: idempotence_key,
           journal_message:
-            "Credit transaction: #{credits} from: {fund, #{pool}} to: {wallet, #{pool}, #{student_id}}",
+            "Student #{student_id} earned #{credits} credits by completing assignment #{assignment_id}",
           lines: lines
         })
 
