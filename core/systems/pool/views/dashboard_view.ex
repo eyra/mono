@@ -22,8 +22,8 @@ defmodule Systems.Pool.DashboardView do
       |> Enum.map(& &1.balance_credit)
 
     years = [
-      create_year(:first, first_year_rewards),
-      create_year(:second, second_year_rewards)
+      create_year(:first, first_year_rewards, 10, 7),
+      create_year(:second, second_year_rewards, 1, 7)
     ]
 
     {
@@ -32,7 +32,7 @@ defmodule Systems.Pool.DashboardView do
     }
   end
 
-  defp create_year(year, credits) do
+  defp create_year(year, credits, default_scale, max_bar_count) do
     study_program_codes = Core.Enums.StudyProgramCodes.values_by_year(year)
     year_string = Core.Enums.StudyProgramCodes.year_to_string(year)
 
@@ -44,9 +44,14 @@ defmodule Systems.Pool.DashboardView do
     max_credits = Enum.max(credits, fn -> 0 end)
     total_credits = Statistics.sum(credits) |> do_round()
 
+    scale = determine_scale(default_scale, max_credits, max_bar_count)
+
     %{
       title: dgettext("link-studentpool", "year.label", year: year_string),
-      credits: credits,
+      credits: %{
+        values: credits,
+        scale: scale
+      },
       metrics: [
         %{
           label: dgettext("link-studentpool", "inactive.students"),
@@ -97,6 +102,14 @@ defmodule Systems.Pool.DashboardView do
     }
   end
 
+  defp determine_scale(scale, max_credits, max_bar_count) do
+    if max_credits / scale > max_bar_count do
+      determine_scale(scale + 1, max_credits, max_bar_count)
+    else
+      scale
+    end
+  end
+
   defp do_round(number) when is_float(number),
     do: number |> Decimal.from_float() |> Decimal.round(2)
 
@@ -110,7 +123,7 @@ defmodule Systems.Pool.DashboardView do
           <Title2>{year.title}</Title2>
           <div class="grid grid-cols-2 md:grid-cols-3 gap-8 h-full">
             <div class="col-span-2 row-span-2">
-              <ValueDistribution scale={10} values={year.credits}/>
+              <ValueDistribution scale={year.credits.scale} values={year.credits.values}/>
             </div>
             <div :for={metric <- year.metrics}>
               <Metric {...metric}/>

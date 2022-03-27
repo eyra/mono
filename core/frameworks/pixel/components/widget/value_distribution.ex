@@ -1,6 +1,8 @@
 defmodule Frameworks.Pixel.Widget.ValueDistribution do
   use Frameworks.Pixel.Component
 
+  @bar_height 200
+
   prop(scale, :integer, required: true)
   prop(values, :list, required: true)
 
@@ -43,8 +45,9 @@ defmodule Frameworks.Pixel.Widget.ValueDistribution do
     values |> Enum.filter(&(&1 >= from and &1 < to)) |> Enum.count()
   end
 
-  defp bar_top_height(%{height: height}), do: 200 - floor(200 * height)
-  defp bar_height(%{height: height}), do: floor(200 * height)
+  defp bar_top_height(%{height: height}) when height <= 0, do: @bar_height - 2
+  defp bar_top_height(%{height: height}), do: @bar_height - floor(@bar_height * height)
+  defp bar_height(%{height: height}), do: floor(@bar_height * height)
 
   defp bar_width(scale, values) do
     bar_width = floor(100 / Enum.count(bars(scale, values)))
@@ -62,7 +65,7 @@ defmodule Frameworks.Pixel.Widget.ValueDistribution do
                 <div style={"height: #{bar_top_height(bar)}px"}></div>
                 <div class="pb-1 text-caption font-caption text-grey1">{bar.value_count}</div>
                 <div :if={bar_height(bar) > 0} style={"height: #{bar_height(bar)}px"} class="flex-grow bg-primary w-full rounded-t-lg"></div>
-                <div :if={bar_height(bar) <= 0} class="flex-grow bg-grey4 w-full h-2px"></div>
+                <div :if={bar_height(bar) <= 0} class="bg-grey4 w-full h-2px"></div>
               </div>
               <div class="text-caption font-caption text-grey2">{bar.range}</div>
             </div>
