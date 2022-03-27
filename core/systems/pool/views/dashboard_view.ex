@@ -17,13 +17,9 @@ defmodule Systems.Pool.DashboardView do
       Bookkeeping.Context.account_query(["wallet", "sbe_year1_2021"])
       |> Enum.map(& &1.balance_credit)
 
-    # first_year_inactive_students = Campaign.Context.list_inactive_users(first_year_criteria)
-
     second_year_rewards =
       Bookkeeping.Context.account_query(["wallet", "sbe_year2_2021"])
       |> Enum.map(& &1.balance_credit)
-
-    # second_year_inactive_students = Campaign.Context.list_inactive_users(second_year_criteria)
 
     years = [
       create_year(:first, first_year_rewards),

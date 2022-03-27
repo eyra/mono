@@ -46,12 +46,17 @@ defmodule Frameworks.Pixel.Widget.ValueDistribution do
   defp bar_top_height(%{height: height}), do: 200 - floor(200 * height)
   defp bar_height(%{height: height}), do: floor(200 * height)
 
+  defp bar_width(scale, values) do
+    bar_width = floor(100 / Enum.count(bars(scale, values)))
+    "#{bar_width}%"
+  end
+
   def render(assigns) do
     ~F"""
     <div class="rounded-lg shadow-2xl p-6 h-full">
       <div class="flex flex-col">
         <div class="flex flex-row gap-4">
-          <div :for={bar <- bars(@scale, @values)} class="flex-grow">
+          <div :for={bar <- bars(@scale, @values)} style={"width: #{bar_width(@scale, @values)}"}>
             <div class="flex flex-col items-center gap-2 w-full">
               <div class="flex flex-col items-center w-full">
                 <div style={"height: #{bar_top_height(bar)}px"}></div>
