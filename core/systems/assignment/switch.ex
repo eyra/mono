@@ -39,8 +39,14 @@ defmodule Systems.Assignment.Switch do
             user: user
           })
 
+        :pending ->
+          nil
+
+        :completed ->
+          nil
+
         _ ->
-          Logger.error("Unknown crew task status: #{new_status}")
+          Logger.warning("Unknown crew task status: #{new_status}")
       end
     end
   end

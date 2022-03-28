@@ -455,7 +455,7 @@ defmodule Systems.Campaign.Context do
       on: s.promotion_id == c.promotion_id,
       inner_join: ec in Criteria,
       on: ec.submission_id == s.id,
-      where: t.status == :accepted,
+      where: t.status == :accepted and u.student == true,
       select: {u.id, a.id, s.reward_value, ec.study_program_codes}
     )
     |> Repo.all()
