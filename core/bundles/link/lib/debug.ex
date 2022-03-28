@@ -22,6 +22,7 @@ defmodule Link.Debug do
   }
 
   data(expire_button, :map)
+  data(reward_button, :map)
   data(expire_force_button, :map)
   data(start_button, :map)
 
@@ -49,6 +50,17 @@ defmodule Link.Debug do
       }
     }
 
+    reward_button = %{
+      action: %{
+        type: :send,
+        event: "reward"
+      },
+      face: %{
+        type: :primary,
+        label: "Sync student credits"
+      }
+    }
+
     start_button = %{
       action: %{
         type: :redirect,
@@ -66,6 +78,7 @@ defmodule Link.Debug do
       |> assign(
         start_button: start_button,
         expire_button: expire_button,
+        reward_button: reward_button,
         expire_force_button: expire_force_button,
         changesets: %{}
       )
@@ -87,6 +100,12 @@ defmodule Link.Debug do
   @impl true
   def handle_event("expire", _, socket) do
     Campaign.Context.mark_expired_debug()
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("reward", _, socket) do
+    Campaign.Context.sync_student_credits()
     {:noreply, socket}
   end
 
@@ -121,8 +140,12 @@ defmodule Link.Debug do
             <Title2 margin="">Campaigns</Title2>
             <Spacing value="S" />
             <Wrap>
+              <DynamicButton vm={@reward_button} />
+              <Spacing value="S" />
+            </Wrap>
+            <Wrap>
               <DynamicButton vm={@expire_button} />
-            <Spacing value="S" />
+              <Spacing value="S" />
             </Wrap>
             <div :if={feature_enabled?(:debug_expire_force)}>
               <Spacing value="S" />

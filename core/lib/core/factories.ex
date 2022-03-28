@@ -158,7 +158,7 @@ defmodule Core.Factories do
   end
 
   def build(:pool) do
-    %Pools.Pool{name: :vu_students}
+    %Pools.Pool{name: :sbe_2021}
   end
 
   def build(:criteria) do
@@ -357,7 +357,7 @@ defmodule Core.Factories do
     {promotion, attributes} = Map.pop!(attributes, :promotion)
 
     {criteria, attributes} = Map.pop(attributes, :criteria, build(:criteria))
-    {pool, attributes} = Map.pop(attributes, :pool, Pools.get_by_name(:vu_students))
+    {pool, attributes} = Map.pop(attributes, :pool, Pools.get_by_name(:sbe_2021))
 
     %Pools.Submission{
       promotion_id: promotion.id,

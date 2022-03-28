@@ -82,3 +82,31 @@ msgstr "Scheduled"
 #, elixir-format
 msgid "sample.size"
 msgstr "%{size} spots available"
+
+#, elixir-format, ex-autogen
+msgid "max.credits.earned.label"
+msgstr "Most credits earned"
+
+#, elixir-format, ex-autogen
+msgid "min.credits.earned.label"
+msgstr "Least credits earned"
+
+#, elixir-format, ex-autogen
+msgid "tabbar.item.dashboard"
+msgstr "Dashboard"
+
+#, elixir-format, ex-autogen
+msgid "total.credits.earned.label"
+msgstr "Total credits earned"
+
+#, elixir-format, ex-autogen
+msgid "year.label"
+msgstr "SBE Year %{year}"
+
+#, elixir-format, ex-autogen
+msgid "active.students"
+msgstr "Active students"
+
+#, elixir-format, ex-autogen
+msgid "inactive.students"
+msgstr "Inactive students"

@@ -4,10 +4,17 @@ defmodule Systems.Bookkeeping.Context do
   """
 
   alias Core.Repo
-  alias Systems.Bookkeeping.{BookModel, EntryModel, LineModel}
+  alias Systems.Bookkeeping.{AccountModel, EntryModel, LineModel}
   import Ecto.Query
   import Ecto.Changeset
   alias Ecto.Multi
+
+  def exists?(idempotence_key) do
+    from(entry in EntryModel,
+      where: entry.idempotence_key == ^idempotence_key
+    )
+    |> Repo.exists?()
+  end
 
   def enter(%{lines: lines} = entry) when is_list(lines) do
     with :ok <- validate_entry_balance(lines),
@@ -19,23 +26,23 @@ defmodule Systems.Bookkeeping.Context do
     end
   end
 
-  def balance(book) do
-    case Repo.get_by(BookModel, identifier: to_identifier(book)) do
+  def balance(account) do
+    case Repo.get_by(AccountModel, identifier: to_identifier(account)) do
       nil -> %{debit: 0, credit: 0}
       %{balance_debit: debit, balance_credit: credit} -> %{debit: debit, credit: credit}
     end
   end
 
-  def list_entries(book) do
-    book_identifier = to_identifier(book)
+  def list_entries(account) do
+    account_identifier = to_identifier(account)
 
     from(line in LineModel,
       join: entry in EntryModel,
       on: entry.id == line.entry_id,
-      join: book in BookModel,
-      on: book.id == line.book_id,
-      where: book.identifier == ^book_identifier,
-      preload: [:book, :entry]
+      join: account in AccountModel,
+      on: account.id == line.account_id,
+      where: account.identifier == ^account_identifier,
+      preload: [:account, :entry]
     )
     |> Repo.all()
     |> Enum.chunk_by(& &1.entry.id)
@@ -51,21 +58,28 @@ defmodule Systems.Bookkeeping.Context do
     end)
   end
 
+  def account_query(account_template) do
+    from(account in AccountModel,
+      where: fragment("?::text[] @> ?", account.identifier, ^account_template)
+    )
+    |> Repo.all()
+  end
+
   defp update_records(%{lines: lines} = entry) do
     Multi.new()
-    |> update_books(lines)
+    |> update_accounts(lines)
     |> insert_entry(entry)
     |> insert_lines(lines)
     |> Repo.transaction()
   end
 
-  defp insert_line(multi, %{book: book} = line) do
+  defp insert_line(multi, %{account: account} = line) do
     multi
-    |> Multi.run("line-#{to_identifier(book)}", fn repo, %{entry: entry} = changes ->
+    |> Multi.run("line-#{to_identifier(account)}", fn repo, %{entry: entry} = changes ->
       repo.insert(
         %LineModel{}
         |> cast(line, [:debit, :credit])
-        |> put_assoc(:book, Map.fetch!(changes, book))
+        |> put_assoc(:account, Map.fetch!(changes, account))
         |> put_assoc(:entry, entry)
       )
     end)
@@ -96,21 +110,21 @@ defmodule Systems.Bookkeeping.Context do
     end
   end
 
-  defp update_books(multi, lines) when is_list(lines) do
+  defp update_accounts(multi, lines) when is_list(lines) do
     Enum.reduce(lines, multi, fn line, multi ->
-      update_book(multi, line)
+      update_account(multi, line)
     end)
   end
 
-  defp update_book(multi, %{book: book} = line) do
+  defp update_account(multi, %{account: account} = line) do
     debit = Map.get(line, :debit, 0)
     credit = Map.get(line, :credit, 0)
 
     multi
     |> Multi.insert(
-      book,
-      %BookModel{
-        identifier: to_identifier(book),
+      account,
+      %AccountModel{
+        identifier: to_identifier(account),
         balance_debit: debit,
         balance_credit: credit
       },
@@ -119,8 +133,25 @@ defmodule Systems.Bookkeeping.Context do
     )
   end
 
-  defp to_identifier({type, id}) do
+  defp to_identifier({type, subtype, id})
+       when is_atom(type) and is_binary(subtype) and is_integer(id) do
+    [Atom.to_string(type), subtype, Integer.to_string(id)]
+  end
+
+  defp to_identifier({type, subtype}) when is_atom(type) and is_binary(subtype) do
+    [Atom.to_string(type), subtype]
+  end
+
+  defp to_identifier({type, id}) when is_binary(type) and is_integer(id) do
+    [type, Integer.to_string(id)]
+  end
+
+  defp to_identifier({type, id}) when is_atom(type) and is_integer(id) do
     [Atom.to_string(type), Integer.to_string(id)]
+  end
+
+  defp to_identifier(type) when is_binary(type) do
+    [type]
   end
 
   defp to_identifier(type) when is_atom(type) do

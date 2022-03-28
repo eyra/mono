@@ -33,7 +33,7 @@ defmodule Systems.MoneyManager.ContextTest do
           id: 1,
           date: DateTime.utc_now(),
           description:
-            "A transaction with #{MoneyManager.Context.encode_book({:money_box, 123})}",
+            "A transaction with #{MoneyManager.Context.encode_account({:money_box, 123})}",
           amount: 89,
           type: :received,
           from_iban: "2342",
@@ -80,7 +80,7 @@ defmodule Systems.MoneyManager.ContextTest do
         MoneyManager.Context.process_bank_transaction(%{
           id: 1,
           date: DateTime.utc_now(),
-          description: "A description #{MoneyManager.Context.encode_book({:wallet, 123})}",
+          description: "A description #{MoneyManager.Context.encode_account({:wallet, 123})}",
           amount: 789,
           type: :payed,
           from_iban: "1",
@@ -91,10 +91,10 @@ defmodule Systems.MoneyManager.ContextTest do
     end
 
     # received is a problem, outgoing can be booked on assorted
-    test "book non-matching checksum into unidentified" do
-      book_id =
+    test "account non-matching checksum into unidentified" do
+      account_id =
         {:wallet, 123}
-        |> MoneyManager.Context.encode_book()
+        |> MoneyManager.Context.encode_account()
         |> String.replace("123", "223")
 
       assert capture_log(fn ->
@@ -102,7 +102,7 @@ defmodule Systems.MoneyManager.ContextTest do
                  MoneyManager.Context.process_bank_transaction(%{
                    id: 1,
                    date: DateTime.utc_now(),
-                   description: "A description #{book_id}",
+                   description: "A description #{account_id}",
                    amount: 789,
                    type: :payed,
                    from_iban: "1",
@@ -113,7 +113,7 @@ defmodule Systems.MoneyManager.ContextTest do
       # The wallet should not have been altered
       assert Bookkeeping.Context.balance({:wallet, 123}) == %{credit: 0, debit: 0}
       assert Bookkeeping.Context.balance({:wallet, 223}) == %{credit: 0, debit: 0}
-      # A booking should have been made on the unidentified book
+      # A booking should have been made on the unidentified account
       assert Bookkeeping.Context.balance(:unidentified) == %{credit: 0, debit: 789}
     end
   end
@@ -129,26 +129,26 @@ defmodule Systems.MoneyManager.ContextTest do
                                       amount: 5432,
                                       description: description
                                     } ->
-        assert description =~ MoneyManager.Context.encode_book({:wallet, 888})
+        assert description =~ MoneyManager.Context.encode_account({:wallet, 888})
       end)
 
       MoneyManager.Context.submit_payment(%{
         idempotence_key: idempotence_key,
         to_iban: "987",
-        book: {:wallet, 888},
+        account: {:wallet, 888},
         amount: 5432,
         description: "A payment"
       })
     end
   end
 
-  describe "encode_book/1" do
-    for {{type, id} = book, expected} <- [
+  describe "encode_account/1" do
+    for {{type, id} = account, expected} <- [
           {{:wallet, 2345}, "W2345/2PAGT64"},
           {{:money_box, 3456}, "MB3456/1SLJRQK"}
         ] do
-      test "encode book: #{type}, #{id}" do
-        assert MoneyManager.Context.encode_book(unquote(book)) == unquote(expected)
+      test "encode account: #{type}, #{id}" do
+        assert MoneyManager.Context.encode_account(unquote(account)) == unquote(expected)
       end
     end
   end

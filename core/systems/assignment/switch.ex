@@ -18,24 +18,36 @@ defmodule Systems.Assignment.Switch do
         changes: %{status: new_status}
       }) do
     # crew does not have a director (yet), so check if assignment is available to handle signal
-    with [%{id: assignment_id} = assignment | _] <- Assignment.Context.get_by_crew!(crew_id) do
+    with [%{director: director} = assignment | _] <- Assignment.Context.get_by_crew!(crew_id) do
       %{user_id: user_id} = Crew.Context.get_member!(member_id)
       user = Accounts.get_user!(user_id)
 
-      opts = [key: "#{assignment_id}", params: %{id: assignment_id}]
+      handle_next_action_check_rejection(old_status, new_status, assignment, user)
 
-      case {old_status, new_status} do
-        {_, :rejected} ->
-          NextAction.Context.create_next_action(user, Assignment.CheckRejection, opts)
+      case new_status do
+        :accepted ->
+          Signal.Context.dispatch!(:assignment_accepted, %{
+            director: director,
+            assignment: assignment,
+            user: user
+          })
 
-        {:rejected, _} ->
-          NextAction.Context.clear_next_action(user, Assignment.CheckRejection, opts)
+        :rejected ->
+          Signal.Context.dispatch!(:assignment_rejected, %{
+            director: director,
+            assignment: assignment,
+            user: user
+          })
+
+        :pending ->
+          nil
+
+        :completed ->
+          nil
 
         _ ->
-          nil
+          Logger.warning("Unknown crew task status: #{new_status}")
       end
-
-      Signal.Context.dispatch!(:assignment_updated, assignment)
     end
   end
 
@@ -80,5 +92,25 @@ defmodule Systems.Assignment.Switch do
   def handle(:assignable_updated, assignable) do
     assignment = Assignment.Context.get_by_assignable(assignable)
     Signal.Context.dispatch!(:assignment_updated, assignment)
+  end
+
+  defp handle_next_action_check_rejection(
+         old_status,
+         new_status,
+         %{id: assignment_id} = _assignment,
+         user
+       ) do
+    opts = [key: "#{assignment_id}", params: %{id: assignment_id}]
+
+    case {old_status, new_status} do
+      {_, :rejected} ->
+        NextAction.Context.create_next_action(user, Assignment.CheckRejection, opts)
+
+      {:rejected, _} ->
+        NextAction.Context.clear_next_action(user, Assignment.CheckRejection, opts)
+
+      _ ->
+        nil
+    end
   end
 end

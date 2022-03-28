@@ -10,6 +10,7 @@ defmodule Systems.Lab.ToolForm do
   prop(entity_id, :number, required: true)
   prop(validate?, :boolean, required: true)
   prop(callback_url, :string)
+  prop(user, :map)
 
   data(entity, :map)
   data(byline, :string)

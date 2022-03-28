@@ -13,7 +13,7 @@ module.exports = {
     boxShadow: {
       top4px: 'inset 0 4px 0 0 rgba(0, 0, 0, 0.15)',
       top2px: 'inset 0 2px 0 0 rgba(0, 0, 0, 0.15)',
-      '2xl': '0 5px 20px 0px rgba(0, 0, 0, 0.20)',
+      '2xl': '0 5px 20px 0px rgba(0, 0, 0, 0.10)',
     },
     colors: {
       primary: '#4272EF',
@@ -66,6 +66,8 @@ module.exports = {
         "48px" : "48px",
         "44px" : "44px",
         "84px" : "84px",
+        "200px" : "200px",
+        "224px" : "224px",
         "30" : "120px",
         "34" : "136px",
         "35" : "140px",

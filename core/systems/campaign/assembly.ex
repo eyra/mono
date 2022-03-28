@@ -40,7 +40,7 @@ defmodule Systems.Campaign.Assembly do
 
     promotion_attrs = create_promotion_attrs(title, user, profile)
 
-    pool = Pools.get_by_name(:vu_students)
+    pool = Pools.get_by_name(:sbe_2021)
 
     campaign_auth_node = Authorization.create_node!()
     promotion_auth_node = Authorization.create_node!(campaign_auth_node)
