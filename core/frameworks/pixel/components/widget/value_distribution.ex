@@ -33,7 +33,12 @@ defmodule Frameworks.Pixel.Widget.ValueDistribution do
 
   defp range_label(index, scale) do
     {from, to} = range(index, scale)
-    "#{from} - #{to - 1}"
+
+    if from == to - 1 do
+      "#{from}"
+    else
+      "#{from} - #{to - 1}"
+    end
   end
 
   defp range(index, scale) do
@@ -45,9 +50,11 @@ defmodule Frameworks.Pixel.Widget.ValueDistribution do
     values |> Enum.filter(&(&1 >= from and &1 < to)) |> Enum.count()
   end
 
-  defp bar_top_height(%{height: height}) when height <= 0, do: @bar_height - 2
-  defp bar_top_height(%{height: height}), do: @bar_height - floor(@bar_height * height)
-  defp bar_height(%{height: height}), do: floor(@bar_height * height)
+  defp bar_top_height(%{value_count: 0}), do: @bar_height - 2
+  defp bar_top_height(bar), do: @bar_height - bar_height(bar)
+
+  defp bar_height(%{value_count: 0}), do: 0
+  defp bar_height(%{height: height}), do: max(ceil(@bar_height * height), 4)
 
   defp bar_width(scale, values) do
     bar_width = floor(100 / Enum.count(bars(scale, values)))
