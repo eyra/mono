@@ -42,8 +42,10 @@ defmodule CoreWeb.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(Core.Repo, {:shared, self()})
     end
 
-    conn = Phoenix.ConnTest.build_conn()
+    conn = CoreWeb.ConnCase.build_conn()
 
     {:ok, conn: conn}
   end
+
+  def build_conn(), do: Phoenix.ConnTest.build_conn(:get, "https://eyra.co", nil)
 end
