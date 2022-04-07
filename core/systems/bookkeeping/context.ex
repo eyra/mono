@@ -21,7 +21,7 @@ defmodule Systems.Bookkeeping.Context do
       where: entry.idempotence_key == ^idempotence_key,
       preload: ^preload
     )
-    |> Repo.one!()
+    |> Repo.one()
   end
 
   def enter(%{lines: lines} = entry) when is_list(lines) do
