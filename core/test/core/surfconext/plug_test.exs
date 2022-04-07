@@ -106,7 +106,9 @@ defmodule Core.SurfConext.CallbackController.Test do
 
     Application.put_env(:core, Core.SurfConext, test_conf)
 
-    {:ok, conn: build_conn(), conf: test_conf}
+    conn = CoreWeb.ConnCase.build_conn()
+
+    {:ok, conn: conn, conf: test_conf}
   end
 
   describe "authenticate/1" do

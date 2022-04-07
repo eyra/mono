@@ -14,7 +14,7 @@ defmodule CoreWeb.UserSettingsControllerTest do
     end
 
     test "redirects if user is not logged in" do
-      conn = Phoenix.ConnTest.build_conn()
+      conn = CoreWeb.ConnCase.build_conn()
       conn = get(conn, Routes.user_settings_path(conn, :edit))
       assert redirected_to(conn) == Routes.user_session_path(conn, :new)
     end
@@ -129,7 +129,7 @@ defmodule CoreWeb.UserSettingsControllerTest do
     end
 
     test "redirects if user is not logged in", %{token: token} do
-      conn = Phoenix.ConnTest.build_conn()
+      conn = CoreWeb.ConnCase.build_conn()
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
       assert redirected_to(conn) == Routes.user_session_path(conn, :new)
     end

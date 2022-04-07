@@ -16,6 +16,8 @@ defmodule CoreWeb.Endpoint do
     longpoll: false
   )
 
+  plug(CoreWeb.WWWRedirect)
+
   socket("/live", Phoenix.LiveView.Socket,
     websocket: [connect_info: [:user_agent, session: @session_options]]
   )

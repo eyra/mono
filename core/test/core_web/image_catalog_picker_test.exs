@@ -24,7 +24,9 @@ defmodule CoreWeb.ImageCatalogPicker.Test do
   import Phoenix.LiveViewTest
   alias CoreWeb.ImageCatalogPicker
 
-  setup %{conn: conn} do
+  setup do
+    conn = Phoenix.ConnTest.build_conn(:get, "/", nil)
+
     {:ok, view, html} =
       live_isolated(conn, ImageCatalogPicker.Test.View, connect_params: %{testing: 1124})
 
