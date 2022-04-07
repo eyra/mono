@@ -16,6 +16,14 @@ defmodule Systems.Bookkeeping.Context do
     |> Repo.exists?()
   end
 
+  def get_entry(idempotence_key, preload \\ [:lines]) do
+    from(entry in EntryModel,
+      where: entry.idempotence_key == ^idempotence_key,
+      preload: ^preload
+    )
+    |> Repo.one!()
+  end
+
   def enter(%{lines: lines} = entry) when is_list(lines) do
     with :ok <- validate_entry_balance(lines),
          :ok <- validate_either_credit_or_debit_is_used(lines) do
