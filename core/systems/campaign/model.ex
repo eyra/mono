@@ -93,8 +93,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
            id: id,
            promotion: %{
              title: title,
-             image_id: image_id,
-             submission: %{reward_value: reward_value}
+             image_id: image_id
            },
            promotable:
              %{
@@ -113,7 +112,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
     tag = tag(task)
 
-    subtitle = subtitle(task, reward_value)
+    subtitle = subtitle(task, user, assignment)
 
     quick_summary =
       case task do
@@ -223,9 +222,13 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     end
   end
 
-  defp subtitle(nil, _), do: "?"
+  defp subtitle(nil, _, _), do: "?"
 
-  defp subtitle(%{status: status} = _task, reward_value) do
+  defp subtitle(
+         %{status: status} = _task,
+         %{id: user_id} = _user,
+         %{id: assignment_id} = _assignment
+       ) do
     case status do
       :pending ->
         dgettext("eyra-marketplace", "assignment.status.pending.subtitle")
@@ -234,18 +237,20 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
         dgettext("eyra-marketplace", "assignment.status.completed.subtitle")
 
       :accepted ->
+        rewarded_value = Campaign.Context.rewarded_value(assignment_id, user_id)
+
         dngettext(
           "eyra-marketplace",
           "Awarded 1 credit",
           "Awarded %{count} credits",
-          reward_value
+          rewarded_value
         )
 
       :rejected ->
         dgettext("eyra-marketplace", "assignment.status.rejected.subtitle")
 
       _ ->
-        dgettext("eyra-marketplace", "reward.label", value: reward_value)
+        dgettext("eyra-marketplace", "reward.label", value: 0)
     end
   end
 

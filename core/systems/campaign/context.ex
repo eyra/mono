@@ -438,6 +438,20 @@ defmodule Systems.Campaign.Context do
     reward_student({student_id, assignment_id, credits, study_program_codes})
   end
 
+  def rewarded_value(assignment_id, user_id) do
+    idempotence_key = idempotence_key(assignment_id, user_id)
+
+    case Bookkeeping.Context.get_entry(idempotence_key) do
+      %{lines: lines} -> rewarded_value(lines)
+      _ -> 0
+    end
+  end
+
+  defp rewarded_value([first_line | _]), do: rewarded_value(first_line)
+  defp rewarded_value(%{debit: debit, credit: nil}), do: debit
+  defp rewarded_value(%{debit: nil, credit: credit}), do: credit
+  defp rewarded_value(_), do: 0
+
   @doc """
     Synchronizes accepted student tasks with with bookkeeping.
   """
@@ -474,7 +488,7 @@ defmodule Systems.Campaign.Context do
   end
 
   defp create_student_credit_transaction(student_id, assignment_id, credits, year) do
-    idempotence_key = "assignment=#{assignment_id},user=#{student_id}"
+    idempotence_key = idempotence_key(assignment_id, student_id)
 
     pool = "sbe_year#{year}_2021"
     fund = {:fund, pool}
@@ -504,6 +518,10 @@ defmodule Systems.Campaign.Context do
         )
       end
     end
+  end
+
+  defp idempotence_key(assignment_id, user_id) do
+    "assignment=#{assignment_id},user=#{user_id}"
   end
 
   defp is_year?(year, study_program_codes) when is_list(study_program_codes) do
