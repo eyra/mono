@@ -172,7 +172,7 @@ defmodule Systems.Assignment.LandingPageTest do
       assert html =~ "Reward"
       assert html =~ "Duration"
       assert html =~ "Language"
-      assert html =~ "Go to dashboard"
+      assert html =~ "Go to console"
     end
   end
 end

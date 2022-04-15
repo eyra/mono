@@ -1,9 +1,9 @@
-defmodule CoreWeb.Dashboard do
+defmodule CoreWeb.Console do
   @moduledoc """
-  The dashboard screen.
+  The console screen.
   """
   use CoreWeb, :live_view
-  use CoreWeb.Layouts.Workspace.Component, :dashboard
+  use CoreWeb.Layouts.Workspace.Component, :console
 
   alias CoreWeb.UI.ContentList
 

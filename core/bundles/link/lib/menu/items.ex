@@ -8,7 +8,7 @@ defmodule Link.Menu.Items do
       support: %{target: Systems.Support.OverviewPage, domain: "eyra-ui"},
       link: %{target: Link.Index, size: :large, title: "Panl", domain: "eyra-ui"},
       debug: %{target: Link.Debug, domain: "eyra-ui"},
-      dashboard: %{target: Link.Dashboard, domain: "eyra-ui"},
+      console: %{target: Link.Console, domain: "eyra-ui"},
       marketplace: %{target: Link.Marketplace, domain: "eyra-ui"},
       studentpool: %{target: Systems.Pool.OverviewPage, domain: "link-ui"},
       recruitment: %{target: Systems.Campaign.OverviewPage, domain: "link-ui"},

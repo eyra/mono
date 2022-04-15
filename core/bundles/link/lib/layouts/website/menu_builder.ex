@@ -34,8 +34,8 @@ defmodule Link.Layouts.Website.MenuBuilder do
   defp build_menu_first_part(socket, menu_id, user_state, active_item, use_icon \\ true) do
     []
     |> append(
-      live_item(socket, menu_id, :dashboard, active_item, use_icon),
-      can_access?(user_state, Link.Dashboard)
+      live_item(socket, menu_id, :console, active_item, use_icon),
+      can_access?(user_state, Link.Console)
     )
     |> append(live_item(socket, menu_id, :marketplace, active_item, use_icon))
   end

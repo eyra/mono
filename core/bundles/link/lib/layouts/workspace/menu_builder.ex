@@ -52,8 +52,8 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
 
     []
     |> append(
-      live_item(socket, menu_id, :dashboard, active_item),
-      can_access?(user_state, Link.Dashboard)
+      live_item(socket, menu_id, :console, active_item),
+      can_access?(user_state, Link.Console)
     )
     |> append(live_item(socket, menu_id, :permissions, active_item), admin?(email))
     |> append(

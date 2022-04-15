@@ -32,7 +32,7 @@ defmodule CoreWeb.Layouts.Website.MenuBuilder do
 
   defp build_menu_first_part(socket, menu_id, active_item, use_icon \\ true) do
     [
-      live_item(socket, menu_id, :dashboard, active_item, use_icon)
+      live_item(socket, menu_id, :console, active_item, use_icon)
     ]
   end
 

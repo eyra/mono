@@ -15,7 +15,7 @@ msgid "welcome.title"
 msgstr ""
 
 #, elixir-format
-msgid "dashboard-button"
+msgid "console-button"
 msgstr ""
 
 #, elixir-format

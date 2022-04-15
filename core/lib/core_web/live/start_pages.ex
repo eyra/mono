@@ -3,16 +3,16 @@ defmodule CoreWeb.StartPages do
 
   def pages(),
     do: %{
-      dashboard: %{id: :dashboard, target: CoreWeb.Dashboard, domain: "eyra-ui"}
+      console: %{id: :console, target: CoreWeb.Console, domain: "eyra-ui"}
     }
 
   @impl true
   def values(),
     do: %{
-      researcher: pages().dashboard,
-      student: pages().dashboard,
-      coordinator: pages().dashboard,
-      member: pages().dashboard
+      researcher: pages().console,
+      student: pages().console,
+      coordinator: pages().console,
+      member: pages().console
     }
 
   defmacro __using__(_opts) do

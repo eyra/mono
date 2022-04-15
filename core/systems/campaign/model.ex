@@ -157,7 +157,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
                }
              } = assignment
          },
-         Link.Dashboard,
+         Link.Console,
          _user,
          url_resolver
        ) do
