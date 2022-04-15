@@ -10,4 +10,3 @@ defmodule Systems.Admin.Routes do
     end
   end
 end
-U
