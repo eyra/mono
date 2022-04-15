@@ -13,7 +13,7 @@ let file = undefined
 
 onmessage = (event) => {
   const { eventType } = event.data;
-  if (eventType === "runPython") {
+  if (eventType === "loadScript") {
     self.pyodide.runPython(event.data.script)
   } else if (eventType === "initData") {
     file = self.pyodide.FS.open("user-data", "w")

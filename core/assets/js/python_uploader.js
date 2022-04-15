@@ -61,7 +61,7 @@ export const PythonUploader = {
             worker.onmessage = (event) => {
                 const { eventType } = event.data;
                 if (eventType === "initialized") {
-                    worker.postMessage({ eventType: "runPython", script })
+                    worker.postMessage({ eventType: "loadScript", script })
                     this.sendDataToWorker(worker)
                 }
                 else if (eventType === "result") {
