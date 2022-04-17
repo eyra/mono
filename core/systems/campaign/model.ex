@@ -100,7 +100,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
                crew: crew
              } = assignment
          },
-         Link.Marketplace,
+         {Link.Marketplace, _},
          user,
          url_resolver
        ) do
@@ -157,10 +157,16 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
                }
              } = assignment
          },
-         Link.Console,
+         {Link.Console, campaign_type},
          _user,
          url_resolver
        ) do
+    path =
+      case campaign_type do
+        :content -> url_resolver.(Systems.Campaign.ContentPage, id)
+        :contribution -> url_resolver.(Systems.Assignment.LandingPage, assignment.id)
+      end
+
     promotion_ready? = Promotion.Context.ready?(promotion)
 
     tag = Submission.get_tag(submission)
@@ -187,7 +193,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     image = %{type: :catalog, info: image_info}
 
     %{
-      path: url_resolver.(Systems.Campaign.ContentPage, id),
+      path: path,
       title: title,
       subtitle: subtitle,
       tag: tag,

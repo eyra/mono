@@ -18,7 +18,6 @@ defmodule Link.Marketplace do
   alias Core.Pools.{Submission, Criteria}
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias CoreWeb.UI.ContentList
 
   alias Link.Marketplace.Card, as: CardVM
 
@@ -44,7 +43,9 @@ defmodule Link.Marketplace do
     subject_campaigns =
       user
       |> Campaign.Context.list_subject_campaigns(preload: preload)
-      |> Enum.map(&ViewModelBuilder.view_model(&1, __MODULE__, user, url_resolver(socket)))
+      |> Enum.map(
+        &ViewModelBuilder.view_model(&1, {__MODULE__, :contributions}, user, url_resolver(socket))
+      )
 
     highlighted_count = Enum.count(subject_campaigns)
 
@@ -65,7 +66,6 @@ defmodule Link.Marketplace do
       |> sort_by_open_spot_count()
       |> Enum.map(&CardVM.primary_campaign(&1, socket))
 
-    subject_count = Enum.count(subject_campaigns)
     available_count = Enum.count(available_campaigns)
 
     socket =
@@ -74,7 +74,6 @@ defmodule Link.Marketplace do
       |> assign(next_best_action: next_best_action)
       |> assign(highlighted_count: highlighted_count)
       |> assign(subject_campaigns: subject_campaigns)
-      |> assign(subject_count: subject_count)
       |> assign(available_campaigns: available_campaigns)
       |> assign(available_count: available_count)
 
@@ -146,11 +145,6 @@ defmodule Link.Marketplace do
             </div>
             <Case value={@subject_count > 0} >
               <True>
-                <Title2>
-                  {dgettext("eyra-campaign", "campaign.subject.title")}
-                  <span class="text-primary"> {@subject_count}</span>
-                </Title2>
-                <ContentList items={@subject_campaigns} />
               </True>
             </Case>
             <Case value={render_empty?(assigns)} >

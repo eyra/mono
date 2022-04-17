@@ -1,7 +1,7 @@
 defprotocol Frameworks.Utility.ViewModelBuilder do
   @type accumulator :: map
   @type model :: map | list
-  @type page :: atom()
+  @type page :: atom() | tuple()
   @type user :: map
   @type url_resolver :: (atom, list -> binary)
 
