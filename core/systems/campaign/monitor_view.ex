@@ -146,7 +146,7 @@ defmodule Systems.Campaign.MonitorView do
             <Spacing value="M" />
             <div class="bg-grey6 rounded p-12">
               <ProgressBar {...@vm.progress} />
-              <div class="flex flex-row flex-wrap gap-y-4 gap-x-12">
+              <div class="flex flex-row flex-wrap gap-y-4 gap-x-12 mt-12">
                 <div>
                   <div class="flex flex-row items-center gap-3">
                     <div class="flex-shrink-0 w-6 h-6 rounded-full bg-success"></div>

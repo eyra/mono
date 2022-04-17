@@ -11,6 +11,7 @@ end
 
 defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Bookkeeping.AccountModel do
   alias Systems.{
+    Campaign,
     Bookkeeping
   }
 
@@ -19,29 +20,30 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Bookkeeping.AccountMod
           id: id
         } = account,
         Link.Console,
-        _user,
+        user,
         _url_resolver
       ) do
     title = title(account)
 
+    target = target(account)
+
     subtitle =
-      case target(account) do
+      case target do
         target when target > 0 -> "#{target} credits needed"
         _ -> ""
       end
 
     balance = balance(account)
-    quick_summary = "Balance: #{balance} credits"
+
+    expected_rewards = Campaign.Context.expected_rewards(user, year(account))
 
     %{
       id: id,
-      path: nil,
       title: title,
       subtitle: subtitle,
-      tag: %{type: nil, text: nil},
-      level: nil,
-      image: nil,
-      quick_summary: quick_summary
+      target: target,
+      earned_amount: balance,
+      expected_amount: expected_rewards
     }
   end
 
@@ -52,4 +54,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Bookkeeping.AccountMod
   defp target(%{identifier: [_ | ["sbe_year1_2021" | _]]}), do: 60
   defp target(%{identifier: [_ | ["sbe_year2_2021" | _]]}), do: 3
   defp target(_), do: -1
+
+  defp year(%{identifier: [_ | ["sbe_year1_2021" | _]]}), do: :first
+  defp year(%{identifier: [_ | ["sbe_year2_2021" | _]]}), do: :second
 end

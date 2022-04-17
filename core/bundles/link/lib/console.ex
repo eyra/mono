@@ -12,13 +12,13 @@ defmodule Link.Console do
 
   alias Frameworks.Utility.ViewModelBuilder
 
-  alias CoreWeb.UI.ContentList
+  alias CoreWeb.UI.{WalletList, ContentList}
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias Frameworks.Pixel.Text.{Title2}
   alias Systems.NextAction
 
-  data(book_accounts, :any)
+  data(wallets, :any)
   data(contributions, :any)
   data(content_items, :any)
   data(current_user, :any)
@@ -29,7 +29,7 @@ defmodule Link.Console do
 
     next_best_action = NextAction.Context.next_best_action(url_resolver(socket), user)
 
-    book_accounts =
+    wallets =
       Bookkeeping.Context.account_query(["wallet", "#{user.id}"])
       |> Enum.map(&ViewModelBuilder.view_model(&1, __MODULE__, user, url_resolver(socket)))
 
@@ -52,7 +52,7 @@ defmodule Link.Console do
       |> update_menus()
       |> assign(
         next_best_action: next_best_action,
-        book_accounts: book_accounts,
+        wallets: wallets,
         contributions: contributions,
         content_items: content_items
       )
@@ -75,12 +75,12 @@ defmodule Link.Console do
           <div :if={@next_best_action} class="mb-6 md:mb-10">
             <NextAction.HighlightView vm={@next_best_action}/>
           </div>
-          <div :if={Enum.count(@book_accounts) > 0} >
+          <div :if={Enum.count(@wallets) > 0} >
             <Title2>
               {dgettext("link-dashboard", "book.accounts.title")}
-              <span class="text-primary"> {Enum.count(@book_accounts)}</span>
+              <span class="text-primary"> {Enum.count(@wallets)}</span>
             </Title2>
-            <ContentList items={@book_accounts} />
+            <WalletList items={@wallets} />
             <Spacing value="XL" />
           </div>
           <div :if={Enum.count(@contributions) > 0} >
