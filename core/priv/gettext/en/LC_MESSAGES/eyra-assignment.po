@@ -34,3 +34,7 @@ msgstr "Contact researcher"
 #, elixir-format
 msgid "form.title"
 msgstr "Study"
+
+#, elixir-format, ex-autogen
+msgid "ticket.title"
+msgstr "Your Panl ID"

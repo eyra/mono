@@ -8,6 +8,7 @@ defmodule Systems.Assignment.LandingPage do
 
   alias Frameworks.Pixel.Text.{Title1, Title3, BodyLarge}
   alias Frameworks.Pixel.Card.Highlight
+  alias Frameworks.Pixel.Wrap
 
   alias Core.Accounts
 
@@ -129,9 +130,6 @@ defmodule Systems.Assignment.LandingPage do
   defp grid_cols(2), do: "grid-cols-1 sm:grid-cols-2"
   defp grid_cols(_), do: "grid-cols-1 sm:grid-cols-3"
 
-  defp title_ext(%{public_id: public_id}), do: " ##{public_id}"
-  defp title_ext(_), do: ""
-
   def render(assigns) do
     ~F"""
     <Workspace
@@ -146,7 +144,7 @@ defmodule Systems.Assignment.LandingPage do
 
       <ContentArea>
         <MarginY id={:page_top} />
-        <Title1>{@vm.title}<span class="text-primary">{title_ext(@vm)}</span></Title1>
+        <Title1>{@vm.title}</Title1>
         <Spacing value="L" />
 
         <div class={"grid gap-6 sm:gap-8 #{grid_cols(Enum.count(@vm.highlights))}"}>
@@ -158,6 +156,12 @@ defmodule Systems.Assignment.LandingPage do
 
         <Title3>{@vm.subtitle}</Title3>
         <Spacing value="M" />
+
+        <Wrap>
+          <Assignment.TicketView public_id={@vm.public_id} />
+        </Wrap>
+        <Spacing value="M" />
+
         <BodyLarge>{@vm.text}</BodyLarge>
         <Spacing value="L" />
 

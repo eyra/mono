@@ -249,7 +249,7 @@ msgstr "New"
 
 #, elixir-format
 msgid "task.accepted.subtitle"
-msgstr "Your contribution has been approved"
+msgstr "Your contribution has been approved ✅"
 
 #, elixir-format
 msgid "task.accepted.text"
