@@ -21,3 +21,7 @@ msgstr ""
 #, elixir-format
 msgid "title"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "book.accounts.title"
+msgstr ""

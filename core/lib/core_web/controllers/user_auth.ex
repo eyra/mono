@@ -172,7 +172,7 @@ defmodule CoreWeb.UserAuth do
     do: page(:participant_signed_in_page, Accounts.start_page_target(user))
 
   defp signed_in_page(%{researcher: true}),
-    do: page(:researcher_signed_in_page, CoreWeb.Dashboard)
+    do: page(:researcher_signed_in_page, CoreWeb.Console)
 
   defp signed_in_page(user),
     do: page(:participant_signed_in_page, Accounts.start_page_target(user))

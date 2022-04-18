@@ -17,7 +17,7 @@ msgstr "Available studies"
 
 #, elixir-format
 msgid "campaign.subject.title"
-msgstr "My contributions"
+msgstr "Contributions"
 
 #, elixir-format
 msgid "share.dialog.content"

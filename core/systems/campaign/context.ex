@@ -9,6 +9,7 @@ defmodule Systems.Campaign.Context do
   alias Core.Repo
   alias Core.Accounts.User
   alias Core.Authorization
+  alias Core.Enums.StudyProgramCodes
 
   alias Systems.{
     Campaign,
@@ -451,6 +452,29 @@ defmodule Systems.Campaign.Context do
   defp rewarded_value(%{debit: debit, credit: nil}), do: debit
   defp rewarded_value(%{debit: nil, credit: credit}), do: credit
   defp rewarded_value(_), do: 0
+
+  def pending_rewards(%{id: student_id} = _student, year) when is_atom(year) do
+    study_program_codes =
+      StudyProgramCodes.values_by_year(year)
+      |> Enum.map(&Atom.to_string(&1))
+
+    from(c in Campaign.Model,
+      inner_join: s in Submission,
+      on: s.promotion_id == c.promotion_id,
+      inner_join: ec in Criteria,
+      on: ec.submission_id == s.id,
+      inner_join: a in Assignment.Model,
+      on: a.id == c.promotable_assignment_id,
+      inner_join: m in Crew.MemberModel,
+      on: m.crew_id == a.crew_id,
+      inner_join: t in Crew.TaskModel,
+      on: t.crew_id == a.crew_id,
+      where: m.user_id == ^student_id and t.status == :completed,
+      where: fragment("? && ?", ec.study_program_codes, ^study_program_codes),
+      select: sum(s.reward_value)
+    )
+    |> Repo.one!()
+  end
 
   @doc """
     Synchronizes accepted student tasks with with bookkeeping.

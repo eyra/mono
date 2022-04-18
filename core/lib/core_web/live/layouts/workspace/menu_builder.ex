@@ -42,7 +42,7 @@ defmodule CoreWeb.Layouts.Workspace.MenuBuilder do
 
   defp build_menu_first_part(socket, menu_id, %{email: email} = _user, active_item) do
     []
-    # |> append(live_item(socket, menu_id, :dashboard, active_item))
+    # |> append(live_item(socket, menu_id, :console, active_item))
     |> append(live_item(socket, menu_id, :permissions, active_item), admin?(email))
     |> append(live_item(socket, menu_id, :support, active_item), admin?(email))
     |> append(live_item(socket, menu_id, :todo, active_item))

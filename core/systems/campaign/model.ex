@@ -100,18 +100,12 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
                crew: crew
              } = assignment
          },
-         Link.Marketplace,
+         {Link.Marketplace, _},
          user,
          url_resolver
        ) do
-    task =
-      case Crew.Context.get_member!(crew, user) do
-        nil -> nil
-        member -> Crew.Context.get_task(crew, member)
-      end
-
+    task = task(crew, user)
     tag = tag(task)
-
     subtitle = subtitle(task, user, assignment)
 
     quick_summary =
@@ -152,18 +146,31 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
              } = promotion,
            promotable:
              %{
+               crew: crew,
                assignable_experiment: %{
                  subject_count: target_subject_count
                }
              } = assignment
          },
-         Link.Dashboard,
-         _user,
+         {Link.Console, campaign_type},
+         user,
          url_resolver
        ) do
-    promotion_ready? = Promotion.Context.ready?(promotion)
+    task = task(crew, user)
 
-    tag = Submission.get_tag(submission)
+    path =
+      case campaign_type do
+        :content -> url_resolver.(Systems.Campaign.ContentPage, id)
+        :contribution -> url_resolver.(Systems.Assignment.LandingPage, assignment.id)
+      end
+
+    tag =
+      case campaign_type do
+        :content -> Submission.get_tag(submission)
+        :contribution -> tag(task)
+      end
+
+    promotion_ready? = Promotion.Context.ready?(promotion)
 
     target_subject_count =
       if target_subject_count == nil do
@@ -187,7 +194,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     image = %{type: :catalog, info: image_info}
 
     %{
-      path: url_resolver.(Systems.Campaign.ContentPage, id),
+      path: path,
       title: title,
       subtitle: subtitle,
       tag: tag,
@@ -195,6 +202,13 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
       image: image,
       quick_summary: quick_summary
     }
+  end
+
+  defp task(crew, user) do
+    case Crew.Context.get_member!(crew, user) do
+      nil -> nil
+      member -> Crew.Context.get_task(crew, member)
+    end
   end
 
   defp tag(nil),

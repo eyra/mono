@@ -20,7 +20,7 @@ msgid "saved.info.flash"
 msgstr "Saved"
 
 #, elixir-format
-msgid "menu.item.dashboard"
+msgid "menu.item.console"
 msgstr "My console"
 
 #, elixir-format
@@ -168,8 +168,8 @@ msgid "authentication.required.error"
 msgstr "Please sign in to view this page."
 
 #, elixir-format
-msgid "start.page.dashboard"
-msgstr "Go to dashboard"
+msgid "start.page.console"
+msgstr "Go to console"
 
 #, elixir-format
 msgid "start.page.marketplace"

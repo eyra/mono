@@ -248,7 +248,7 @@ defmodule Systems.Campaign.ContentPage do
   @impl true
   def handle_event("delete_confirm", _params, %{assigns: %{campaign_id: campaign_id}} = socket) do
     Campaign.Context.delete(campaign_id)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Dashboard))}
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Console))}
   end
 
   @impl true

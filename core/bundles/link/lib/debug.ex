@@ -1,6 +1,6 @@
 defmodule Link.Debug do
   @moduledoc """
-  The dashboard screen.
+  The debug screen.
   """
   use CoreWeb, :live_view
   use CoreWeb.MultiFormAutoSave

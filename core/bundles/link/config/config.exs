@@ -8,8 +8,8 @@ config :core,
   stripped_menu_builder: Link.Layouts.Stripped.MenuBuilder
 
 config :core, CoreWeb.UserAuth,
-  researcher_signed_in_page: Link.Dashboard,
-  participant_signed_in_page: Link.Marketplace,
+  researcher_signed_in_page: Link.Console,
+  participant_signed_in_page: Link.Console,
   participant_onboarding_page: Link.Onboarding.Wizard
 
 config :core, :features,

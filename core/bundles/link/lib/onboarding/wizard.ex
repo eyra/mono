@@ -111,7 +111,7 @@ defmodule Link.Onboarding.Wizard do
     Routes.live_path(socket, page)
   end
 
-  defp forward_page(%{assigns: %{current_user: %{researcher: true}}}), do: Link.Dashboard
+  defp forward_page(%{assigns: %{current_user: %{researcher: true}}}), do: Link.Console
   defp forward_page(_), do: Link.Marketplace
 
   @impl true

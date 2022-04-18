@@ -3,17 +3,17 @@ defmodule Link.StartPages do
 
   def pages(),
     do: %{
-      dashboard: %{id: :dashboard, target: Link.Dashboard, domain: "eyra-ui"},
+      console: %{id: :console, target: Link.Console, domain: "eyra-ui"},
       marketplace: %{id: :marketplace, target: Link.Marketplace, domain: "eyra-ui"}
     }
 
   @impl true
   def values(),
     do: %{
-      researcher: pages().dashboard,
-      student: pages().marketplace,
-      coordinator: pages().dashboard,
-      member: pages().marketplace
+      researcher: pages().console,
+      student: pages().console,
+      coordinator: pages().console,
+      member: pages().console
     }
 
   defmacro __using__(_opts) do

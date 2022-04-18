@@ -33,7 +33,7 @@ defmodule CoreWeb.UserAuthTest do
       conn = UserAuth.log_in_user(conn, user, false)
       assert token = get_session(conn, :user_token)
       assert get_session(conn, :live_socket_id) == "users_sessions:#{Base.url_encode64(token)}"
-      assert redirected_to(conn) == "/dashboard"
+      assert redirected_to(conn) == "/console"
       assert Accounts.get_user_by_session_token(token)
     end
 
@@ -71,12 +71,12 @@ defmodule CoreWeb.UserAuthTest do
       assert redirected_to(conn) == "/user/profile"
     end
 
-    test "researcher first time redirects to dashboard", %{conn: conn, user: user} do
+    test "researcher first time redirects to console", %{conn: conn, user: user} do
       first_time? = true
       user = user |> Map.put(:researcher, first_time?)
       conn = conn |> UserAuth.log_in_user(user, true, %{})
 
-      assert redirected_to(conn) == "/dashboard"
+      assert redirected_to(conn) == "/console"
     end
   end
 
@@ -155,7 +155,7 @@ defmodule CoreWeb.UserAuthTest do
     test "redirects if user is authenticated", %{conn: conn, user: user} do
       conn = conn |> assign(:current_user, user) |> UserAuth.redirect_if_user_is_authenticated([])
       assert conn.halted
-      assert redirected_to(conn) == "/dashboard"
+      assert redirected_to(conn) == "/console"
     end
 
     test "does not redirect if user is not authenticated", %{conn: conn} do

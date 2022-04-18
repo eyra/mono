@@ -37,7 +37,7 @@ defmodule CoreWeb.UI.ProgressBar do
 
   def render(assigns) do
     ~F"""
-    <div class="relative h-6 mb-12">
+    <div class="relative h-6">
       <div class={"absolute w-full h-6 rounded-full #{@bg_color}"}>
       </div>
       <div :for={{bar, index} <- Enum.with_index(sort_by_size(@bars))} class="absolute h-6 w-full">

@@ -19,7 +19,7 @@ msgid "saved.info.flash"
 msgstr ""
 
 #, elixir-format
-msgid "menu.item.dashboard"
+msgid "menu.item.console"
 msgstr ""
 
 #, elixir-format
@@ -167,7 +167,7 @@ msgid "authentication.required.error"
 msgstr ""
 
 #, elixir-format
-msgid "start.page.dashboard"
+msgid "start.page.console"
 msgstr ""
 
 #, elixir-format

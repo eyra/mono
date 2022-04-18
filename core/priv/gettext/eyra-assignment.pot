@@ -33,3 +33,31 @@ msgstr ""
 #, elixir-format
 msgid "form.title"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "ticket.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "earned.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "pending.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "togo.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "student.account.target"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "first.year"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "second.year"
+msgstr ""

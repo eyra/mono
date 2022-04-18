@@ -114,7 +114,7 @@ defmodule Core.SurfConext.CallbackController.Test do
   describe "authenticate/1" do
     test "creates a user", %{conn: conn} do
       conn = conn |> get("/surfconext/auth")
-      assert redirected_to(conn) == "/dashboard"
+      assert redirected_to(conn) == "/console"
     end
 
     test "redirects when the changeset is invalid", %{conn: conn, conf: conf} do
@@ -140,7 +140,7 @@ defmodule Core.SurfConext.CallbackController.Test do
       })
 
       conn = conn |> get("/surfconext/auth")
-      assert redirected_to(conn) == "/dashboard"
+      assert redirected_to(conn) == "/console"
     end
 
     test "authenticates an existing researcher", %{conn: conn} do
@@ -154,7 +154,7 @@ defmodule Core.SurfConext.CallbackController.Test do
       })
 
       conn = conn |> get("/surfconext/auth")
-      assert redirected_to(conn) == "/dashboard"
+      assert redirected_to(conn) == "/console"
     end
 
     test "authenticates an existing student", %{conn: conn} do
@@ -168,7 +168,7 @@ defmodule Core.SurfConext.CallbackController.Test do
       })
 
       conn = conn |> get("/surfconext/auth")
-      assert redirected_to(conn) == "/dashboard"
+      assert redirected_to(conn) == "/console"
     end
 
     test "authenticates new researcher", %{conn: conn, conf: conf} do
@@ -181,7 +181,7 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       conn = conn |> get("/surfconext/auth")
       # no onboarding yet for researchers
-      assert redirected_to(conn) == "/dashboard"
+      assert redirected_to(conn) == "/console"
     end
 
     test "authenticates new student", %{conn: conn, conf: conf} do
@@ -194,7 +194,7 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       conn = conn |> get("/surfconext/auth")
       # onboarding only on link yet
-      assert redirected_to(conn) == "/dashboard"
+      assert redirected_to(conn) == "/console"
     end
 
     test "updates an existing student", %{conn: conn, conf: conf} do
@@ -219,7 +219,7 @@ defmodule Core.SurfConext.CallbackController.Test do
       user = Core.SurfConext.get_user_by_sub("student")
       surfconext_user = Core.SurfConext.get_surfconext_user_by_user(user)
 
-      assert redirected_to(conn) == "/dashboard"
+      assert redirected_to(conn) == "/console"
 
       assert surfconext_user.schac_personal_unique_code == [
                "urn:schac:personalUniqueCode:nl:local:vu.nl:studentid:1234567"

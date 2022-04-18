@@ -57,12 +57,6 @@ jobs:
       - name: Archive release
         run: tar cfj "${{steps.tag.outputs.tag}}.tar.bz2" "${{steps.tag.outputs.tag}}"
 
-      - name: Tag the build
-        uses: rickstaa/action-create-tag@v1
-        with:
-          tag: "${{steps.tag.outputs.tag}}"
-          force_push_tag: true
-
       - uses: softprops/action-gh-release@v1
         with:
           tag_name: "${{steps.tag.outputs.tag}}"

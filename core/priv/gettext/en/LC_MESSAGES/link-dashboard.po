@@ -22,3 +22,7 @@ msgstr "Recent items"
 #, elixir-format
 msgid "title"
 msgstr "My console"
+
+#, elixir-format, ex-autogen
+msgid "book.accounts.title"
+msgstr "Rewards"

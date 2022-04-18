@@ -16,8 +16,8 @@ msgid "welcome.title"
 msgstr "Panl"
 
 #, elixir-format
-msgid "dashboard-button"
-msgstr "Naar het dashboard"
+msgid "console-button"
+msgstr "Naar het console"
 
 #, elixir-format
 msgid "link.message"

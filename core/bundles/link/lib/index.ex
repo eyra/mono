@@ -38,7 +38,7 @@ defmodule Link.Index do
 
   def primary_cta_button_label(current_user) do
     if current_user.researcher do
-      dgettext("eyra-link", "dashboard-button")
+      dgettext("eyra-link", "console-button")
     else
       dgettext("eyra-link", "marketplace.button")
     end
@@ -46,7 +46,7 @@ defmodule Link.Index do
 
   def primary_cta_path(socket, current_user) do
     if current_user.researcher do
-      Routes.live_path(socket, Link.Dashboard)
+      Routes.live_path(socket, Link.Console)
     else
       Routes.live_path(socket, Link.Marketplace)
     end
