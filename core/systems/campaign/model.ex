@@ -170,24 +170,30 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
         :contribution -> tag(task)
       end
 
-    promotion_ready? = Promotion.Context.ready?(promotion)
-
-    target_subject_count =
-      if target_subject_count == nil do
-        0
-      else
-        target_subject_count
-      end
-
-    open_spot_count = Assignment.Context.open_spot_count(assignment)
-
     subtitle =
-      get_content_list_item_subtitle(
-        submission,
-        promotion_ready?,
-        open_spot_count,
-        target_subject_count
-      )
+      case campaign_type do
+        :contribution ->
+          subtitle(task, user, assignment)
+
+        :content ->
+          promotion_ready? = Promotion.Context.ready?(promotion)
+
+          target_subject_count =
+            if target_subject_count == nil do
+              0
+            else
+              target_subject_count
+            end
+
+          open_spot_count = Assignment.Context.open_spot_count(assignment)
+
+          get_content_list_item_subtitle(
+            submission,
+            promotion_ready?,
+            open_spot_count,
+            target_subject_count
+          )
+      end
 
     quick_summary = get_quick_summary(updated_at)
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
