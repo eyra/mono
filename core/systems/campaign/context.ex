@@ -453,7 +453,7 @@ defmodule Systems.Campaign.Context do
   defp rewarded_value(%{debit: nil, credit: credit}), do: credit
   defp rewarded_value(_), do: 0
 
-  def expected_rewards(%{id: student_id} = _student, year) when is_atom(year) do
+  def pending_rewards(%{id: student_id} = _student, year) when is_atom(year) do
     study_program_codes =
       StudyProgramCodes.values_by_year(year)
       |> Enum.map(&Atom.to_string(&1))

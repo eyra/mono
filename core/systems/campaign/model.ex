@@ -104,14 +104,8 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
          user,
          url_resolver
        ) do
-    task =
-      case Crew.Context.get_member!(crew, user) do
-        nil -> nil
-        member -> Crew.Context.get_task(crew, member)
-      end
-
+    task = task(crew, user)
     tag = tag(task)
-
     subtitle = subtitle(task, user, assignment)
 
     quick_summary =
@@ -152,24 +146,31 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
              } = promotion,
            promotable:
              %{
+               crew: crew,
                assignable_experiment: %{
                  subject_count: target_subject_count
                }
              } = assignment
          },
          {Link.Console, campaign_type},
-         _user,
+         user,
          url_resolver
        ) do
+    task = task(crew, user)
+
     path =
       case campaign_type do
         :content -> url_resolver.(Systems.Campaign.ContentPage, id)
         :contribution -> url_resolver.(Systems.Assignment.LandingPage, assignment.id)
       end
 
-    promotion_ready? = Promotion.Context.ready?(promotion)
+    tag =
+      case campaign_type do
+        :content -> Submission.get_tag(submission)
+        :contribution -> tag(task)
+      end
 
-    tag = Submission.get_tag(submission)
+    promotion_ready? = Promotion.Context.ready?(promotion)
 
     target_subject_count =
       if target_subject_count == nil do
@@ -201,6 +202,13 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
       image: image,
       quick_summary: quick_summary
     }
+  end
+
+  defp task(crew, user) do
+    case Crew.Context.get_member!(crew, user) do
+      nil -> nil
+      member -> Crew.Context.get_task(crew, member)
+    end
   end
 
   defp tag(nil),

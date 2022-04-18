@@ -25,4 +25,4 @@ msgstr "My console"
 
 #, elixir-format, ex-autogen
 msgid "book.accounts.title"
-msgstr "Wallets"
+msgstr "Rewards"

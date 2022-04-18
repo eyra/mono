@@ -21,8 +21,8 @@ msgstr "Recent items:"
 
 #, elixir-format
 msgid "empty.description"
-msgstr "Once you start working with Panl, you will find the items you recently worked on here. This dashboard is the place to be, to quickly pick up where you left off the last time that you visited Panl."
+msgstr "Start working with Panl and this console will provide an overview of your activities. It is the place to be, to quickly pick up where you left off during your last visit."
 
 #, elixir-format
 msgid "empty.title"
-msgstr "Looking for recent items?"
+msgstr "Not active yet?"

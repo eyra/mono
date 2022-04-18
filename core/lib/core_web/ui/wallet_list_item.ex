@@ -1,18 +1,24 @@
 defmodule CoreWeb.UI.WalletListItem do
   use CoreWeb.UI.Component
 
+  import CoreWeb.Gettext
+
   alias Frameworks.Pixel.Text.Label
   alias CoreWeb.UI.ProgressBar
 
   defviewmodel(
     title: nil,
     subtitle: nil,
-    target: 0,
+    target_amount: 0,
     earned_amount: 0,
-    expected_amount: 0,
+    pending_amount: 0,
     title_css: "font-title7 text-title7 md:font-title5 md:text-title5 text-grey1",
     subtitle_css: "text-bodysmall md:text-bodymedium font-body text-grey2 whitespace-pre-wrap"
   )
+
+  defp togo_amount(vm) do
+    target_amount(vm) - (earned_amount(vm) + pending_amount(vm))
+  end
 
   prop(vm, :map, required: true)
 
@@ -34,29 +40,29 @@ defmodule CoreWeb.UI.WalletListItem do
                 <div class="flex-grow">
                   <ProgressBar
                     bg_color={"bg-grey3"}
-                    size={max(target(@vm), earned_amount(@vm) + expected_amount(@vm))}
+                    size={max(target_amount(@vm), earned_amount(@vm) + pending_amount(@vm))}
                     bars={[
-                      %{ color: :warning, size: earned_amount(@vm) + expected_amount(@vm)},
+                      %{ color: :warning, size: earned_amount(@vm) + pending_amount(@vm)},
                       %{ color: :success, size: earned_amount(@vm)}
                     ]} />
 
                   <div class="flex flex-row flex-wrap gap-y-4 gap-x-8 mt-6">
-                    <div>
+                    <div :if={earned_amount(@vm) > 0}>
                       <div class="flex flex-row items-center gap-3">
                         <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-success"></div>
-                        <Label>{earned_amount(@vm)} earned</Label>
+                        <Label>{earned_amount(@vm)} {dgettext("eyra-assignment", "earned.label")}</Label>
                       </div>
                     </div>
-                    <div>
+                    <div :if={pending_amount(@vm) > 0}>
                       <div class="flex flex-row items-center gap-3">
                         <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-warning"></div>
-                        <Label>{expected_amount(@vm)} expected</Label>
+                        <Label>{pending_amount(@vm)} {dgettext("eyra-assignment", "pending.label")}</Label>
                       </div>
                     </div>
-                    <div>
+                    <div :if={togo_amount(@vm) > 0}>
                       <div class="flex flex-row items-center gap-3">
                         <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-grey3"></div>
-                        <Label>{target(@vm) - (earned_amount(@vm) + expected_amount(@vm))} to go</Label>
+                        <Label>{togo_amount(@vm)} {dgettext("eyra-assignment", "togo.label")}</Label>
                       </div>
                     </div>
                   </div>
@@ -84,7 +90,7 @@ defmodule CoreWeb.UI.WalletListItem.Example do
       title: Faker.Lorem.sentence(3),
       subtitle: Faker.Lorem.sentence(6),
       earned_amount: 30,
-      expected_amount: 4
+      pending_amount: 4
     }
   )
 

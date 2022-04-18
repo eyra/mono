@@ -78,7 +78,6 @@ defmodule Link.Console do
           <div :if={Enum.count(@wallets) > 0} >
             <Title2>
               {dgettext("link-dashboard", "book.accounts.title")}
-              <span class="text-primary"> {Enum.count(@wallets)}</span>
             </Title2>
             <WalletList items={@wallets} />
             <Spacing value="XL" />

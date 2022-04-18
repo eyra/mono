@@ -28,7 +28,6 @@ defmodule Link.Marketplace do
   data(next_best_action, :any)
   data(highlighted_count, :any)
   data(owned_campaigns, :any)
-  data(subject_campaigns, :any)
   data(subject_count, :any)
   data(available_campaigns, :any)
   data(available_count, :any)
@@ -66,6 +65,7 @@ defmodule Link.Marketplace do
       |> sort_by_open_spot_count()
       |> Enum.map(&CardVM.primary_campaign(&1, socket))
 
+    subject_count = Enum.count(subject_campaigns)
     available_count = Enum.count(available_campaigns)
 
     socket =
@@ -73,7 +73,7 @@ defmodule Link.Marketplace do
       |> update_menus()
       |> assign(next_best_action: next_best_action)
       |> assign(highlighted_count: highlighted_count)
-      |> assign(subject_campaigns: subject_campaigns)
+      |> assign(subject_count: subject_count)
       |> assign(available_campaigns: available_campaigns)
       |> assign(available_count: available_count)
 

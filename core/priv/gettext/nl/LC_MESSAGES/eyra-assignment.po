@@ -38,3 +38,27 @@ msgstr "Studie"
 #, elixir-format, ex-autogen
 msgid "ticket.title"
 msgstr "Jouw Panl ID"
+
+#, elixir-format, ex-autogen
+msgid "earned.label"
+msgstr "verdiend"
+
+#, elixir-format, ex-autogen
+msgid "pending.label"
+msgstr "in afwachting"
+
+#, elixir-format, ex-autogen
+msgid "togo.label"
+msgstr "te gaan"
+
+#, elixir-format, ex-autogen
+msgid "student.account.target"
+msgstr "%{target} credits vereist"
+
+#, elixir-format, ex-autogen
+msgid "first.year"
+msgstr "1e jaar"
+
+#, elixir-format, ex-autogen
+msgid "second.year"
+msgstr "2e jaar"

@@ -10,6 +10,8 @@ defmodule Systems.Bookkeeping.AccountModel do
 end
 
 defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Bookkeeping.AccountModel do
+  import CoreWeb.Gettext
+
   alias Systems.{
     Campaign,
     Bookkeeping
@@ -29,25 +31,34 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Bookkeeping.AccountMod
 
     subtitle =
       case target do
-        target when target > 0 -> "#{target} credits needed"
-        _ -> ""
+        target when target > 0 ->
+          dgettext("eyra-assignment", "student.account.target", target: target)
+
+        _ ->
+          ""
       end
 
     balance = balance(account)
 
-    expected_rewards = Campaign.Context.expected_rewards(user, year(account))
+    pending_rewards = Campaign.Context.pending_rewards(user, year(account))
 
     %{
       id: id,
       title: title,
       subtitle: subtitle,
-      target: target,
+      target_amount: target,
       earned_amount: balance,
-      expected_amount: expected_rewards
+      pending_amount: pending_rewards
     }
   end
 
   defp balance(%{balance_debit: debit, balance_credit: credit}), do: credit - debit
+
+  defp title(%{identifier: [_ | ["sbe_year1_2021" | _]]}),
+    do: dgettext("eyra-assignment", "first.year") <> " SBE RPR"
+
+  defp title(%{identifier: [_ | ["sbe_year2_2021" | _]]}),
+    do: dgettext("eyra-assignment", "second.year") <> " SBE RPR"
 
   defp title(%{identifier: [_ | [name | _]]}), do: name
 
