@@ -17,7 +17,7 @@ msgstr "Jouw bijdrage wordt door de auteur van deze studie beoordeeld. Afhankeli
 
 #, elixir-format
 msgid "task.completed.message.part2"
-msgstr "Bezoek de marktplaats om de status van jouw bijdragen te bekijken."
+msgstr "Bezoek jouw console om de status van jouw bijdragen te bekijken."
 
 #, elixir-format
 msgid "task.completed.title"

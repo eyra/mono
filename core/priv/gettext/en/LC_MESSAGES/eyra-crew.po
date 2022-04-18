@@ -17,7 +17,7 @@ msgstr "Your contribution will be reviewed by the author of this study and eithe
 
 #, elixir-format
 msgid "task.completed.message.part2"
-msgstr "Visit the marketplace to view the status of your contribution."
+msgstr "Visit your console to view the status of your contribution."
 
 #, elixir-format
 msgid "task.completed.title"
