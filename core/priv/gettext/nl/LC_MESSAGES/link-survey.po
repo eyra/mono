@@ -249,7 +249,7 @@ msgstr "Start"
 
 #, elixir-format
 msgid "task.accepted.subtitle"
-msgstr "Jouw bijdrage is goedgekeurd"
+msgstr "Jouw bijdrage is goedgekeurd ✅"
 
 #, elixir-format
 msgid "task.accepted.text"

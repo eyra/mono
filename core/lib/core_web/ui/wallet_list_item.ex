@@ -31,7 +31,7 @@ defmodule CoreWeb.UI.WalletListItem do
           <div class="flex-grow p-4 lg:p-6">
             <div class="w-full h-full">
               <div class="flex flex-col sm:flex-row  w-full h-full gap-x-4 gap-y-8 justify-center">
-                <div class="flex-grow">
+                <div class="flex-wrap md:w-48 lg:w-56">
                   <div class="flex flex-col gap-2 h-full justify-center">
                     <div class={title_css(@vm)}>{title(@vm)}</div>
                     <div :if={has_subtitle?(@vm)} class={subtitle_css(@vm)}>{subtitle(@vm)}</div>
