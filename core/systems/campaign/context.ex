@@ -468,7 +468,7 @@ defmodule Systems.Campaign.Context do
       inner_join: m in Crew.MemberModel,
       on: m.crew_id == a.crew_id,
       inner_join: t in Crew.TaskModel,
-      on: t.crew_id == a.crew_id,
+      on: t.member_id == m.id,
       where: m.user_id == ^student_id and t.status == :completed,
       where: fragment("? && ?", ec.study_program_codes, ^study_program_codes),
       select: sum(s.reward_value)
