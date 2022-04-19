@@ -13,7 +13,7 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
   @impl true
   def build_menu(:desktop_menu = menu_id, socket, user_state, active_item) do
     %{
-      home: live_item(socket, menu_id, :link, active_item),
+      home: live_item(socket, menu_id, :link, user_state, active_item),
       top: build_menu_first_part(socket, menu_id, user_state, active_item),
       bottom: build_menu_second_part(socket, menu_id, user_state, active_item)
     }
@@ -22,16 +22,16 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
   @impl true
   def build_menu(:tablet_menu = menu_id, socket, user_state, active_item) do
     %{
-      home: live_item(socket, menu_id, :link, active_item),
+      home: live_item(socket, menu_id, :link, user_state, active_item),
       top: build_menu_first_part(socket, menu_id, user_state, active_item),
       bottom: build_menu_second_part(socket, menu_id, user_state, active_item)
     }
   end
 
   @impl true
-  def build_menu(:mobile_navbar = menu_id, socket, _user, active_item) do
+  def build_menu(:mobile_navbar = menu_id, socket, user_state, active_item) do
     %{
-      home: live_item(socket, menu_id, :link, active_item),
+      home: live_item(socket, menu_id, :link, user_state, active_item),
       right: [
         alpine_item(menu_id, :menu, active_item, false, true)
       ]
@@ -52,32 +52,35 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
 
     []
     |> append(
-      live_item(socket, menu_id, :console, active_item),
+      live_item(socket, menu_id, :console, user_state, active_item),
       can_access?(user_state, Link.Console)
     )
-    |> append(live_item(socket, menu_id, :permissions, active_item), admin?(email))
+    |> append(live_item(socket, menu_id, :permissions, user_state, active_item), admin?(email))
     |> append(
-      live_item(socket, menu_id, :support, active_item, true, support_count),
+      live_item(socket, menu_id, :support, user_state, active_item, true, support_count),
       admin?(email)
     )
     |> append(
-      live_item(socket, menu_id, :recruitment, active_item),
+      live_item(socket, menu_id, :recruitment, user_state, active_item),
       user_state.researcher
     )
-    |> append(live_item(socket, menu_id, :studentpool, active_item), user_state.coordinator)
-    |> append(live_item(socket, menu_id, :marketplace, active_item))
-    |> append(live_item(socket, menu_id, :todo, active_item, true, next_action_count))
+    |> append(
+      live_item(socket, menu_id, :studentpool, user_state, active_item),
+      user_state.coordinator
+    )
+    |> append(live_item(socket, menu_id, :marketplace, user_state, active_item))
+    |> append(live_item(socket, menu_id, :todo, user_state, active_item, true, next_action_count))
   end
 
-  defp build_menu_second_part(socket, menu_id, %{email: email} = _user_state, active_item) do
+  defp build_menu_second_part(socket, menu_id, %{email: email} = user_state, active_item) do
     [
       language_switch_item(socket, menu_id),
-      live_item(socket, menu_id, :helpdesk, active_item),
-      live_item(socket, menu_id, :settings, active_item),
-      live_item(socket, menu_id, :profile, active_item),
+      live_item(socket, menu_id, :helpdesk, user_state, active_item),
+      live_item(socket, menu_id, :settings, user_state, active_item),
+      live_item(socket, menu_id, :profile, user_state, active_item),
       user_session_item(socket, menu_id, :signout, active_item)
     ]
-    |> append(live_item(socket, menu_id, :debug, active_item), admin?(email))
+    |> append(live_item(socket, menu_id, :debug, user_state, active_item), admin?(email))
   end
 
   defp append(list, extra, condition \\ true) do

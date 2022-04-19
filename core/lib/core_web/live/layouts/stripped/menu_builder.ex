@@ -4,17 +4,17 @@ defmodule CoreWeb.Layouts.Stripped.MenuBuilder do
   import CoreWeb.Menu.Helpers
 
   @impl true
-  def build_menu(:desktop_navbar = menu_id, socket, _user_state, active_item) do
+  def build_menu(:desktop_navbar = menu_id, socket, user_state, active_item) do
     %{
-      home: live_item(socket, menu_id, :eyra, active_item),
+      home: live_item(socket, menu_id, :eyra, user_state, active_item),
       right: build_menu_second_part(socket, menu_id)
     }
   end
 
   @impl true
-  def build_menu(:mobile_navbar = menu_id, socket, _user_state, active_item) do
+  def build_menu(:mobile_navbar = menu_id, socket, user_state, active_item) do
     %{
-      home: live_item(socket, menu_id, :eyra, active_item),
+      home: live_item(socket, menu_id, :eyra, user_state, active_item),
       right: build_menu_second_part(socket, menu_id)
     }
   end

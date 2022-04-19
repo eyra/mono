@@ -35,7 +35,7 @@ defmodule CoreWeb.UI.OldSkool do
 
     ~H"""
     <a href={path}>
-      <img src="/images/icons/{locale.id}.svg" alt="Switch language to {locale.name}"/>
+      <img src={"/images/icons/#{locale.id}.svg"} alt={"Switch language to #{locale.name}"}/>
     </a>
     """
   end
