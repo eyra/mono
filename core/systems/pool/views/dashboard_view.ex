@@ -65,7 +65,7 @@ defmodule Systems.Pool.DashboardView do
       title: dgettext("link-studentpool", "year.label", year: year_string),
       credits: %{
         label: dgettext("link-studentpool", "credit.distribution.title"),
-        values: credits,
+        values: active_credits,
         scale: scale
       },
       progress: %{
