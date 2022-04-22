@@ -12,7 +12,14 @@ defmodule CoreWeb.UserSessionController do
   end
 
   def new(conn, _params) do
-    render(conn, "new.html")
+    conn
+    |> set_return_to()
+    |> render("new.html")
+  end
+
+  defp set_return_to(conn) do
+    return_to = Map.get(conn.query_params, "return_to")
+    if return_to, do: put_session(conn, :user_return_to, return_to), else: conn
   end
 
   def create(conn, %{"user" => user_params}) do

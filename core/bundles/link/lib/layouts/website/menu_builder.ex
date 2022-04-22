@@ -7,7 +7,7 @@ defmodule Link.Layouts.Website.MenuBuilder do
   @impl true
   def build_menu(:desktop_navbar = menu_id, socket, user_state, active_item) do
     %{
-      home: live_item(socket, menu_id, :link, active_item),
+      home: live_item(socket, menu_id, :link, user_state, active_item),
       left: build_menu_first_part(socket, menu_id, user_state, active_item, false),
       right: build_menu_second_part(socket, menu_id, user_state, active_item, true)
     }
@@ -22,9 +22,9 @@ defmodule Link.Layouts.Website.MenuBuilder do
   end
 
   @impl true
-  def build_menu(:mobile_navbar = menu_id, socket, _user, active_item) do
+  def build_menu(:mobile_navbar = menu_id, socket, user_state, active_item) do
     %{
-      home: live_item(socket, menu_id, :link, active_item),
+      home: live_item(socket, menu_id, :link, user_state, active_item),
       right: [
         alpine_item(menu_id, :menu, active_item, false, true)
       ]
@@ -34,17 +34,15 @@ defmodule Link.Layouts.Website.MenuBuilder do
   defp build_menu_first_part(socket, menu_id, user_state, active_item, use_icon \\ true) do
     []
     |> append(
-      live_item(socket, menu_id, :console, active_item, use_icon),
+      live_item(socket, menu_id, :console, user_state, active_item, use_icon),
       can_access?(user_state, Link.Console)
     )
-    |> append(live_item(socket, menu_id, :marketplace, active_item, use_icon))
+    |> append(live_item(socket, menu_id, :marketplace, user_state, active_item, use_icon))
   end
 
   defp build_menu_second_part(socket, menu_id, user_state, active_item, navbar?) do
-    is_logged_in = user_state != nil
-
     [
-      account_item(socket, menu_id, is_logged_in, active_item, not navbar?),
+      account_item(socket, menu_id, user_state, active_item, not navbar?),
       language_switch_item(socket, menu_id, navbar?)
     ]
   end

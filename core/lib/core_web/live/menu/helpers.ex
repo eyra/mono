@@ -6,7 +6,7 @@ defmodule CoreWeb.Menu.Helpers do
   defp size(%{size: size}), do: size
   defp size(_), do: :small
 
-  def live_item(socket, menu_id, id, active_item, use_icon \\ true, counter \\ nil)
+  def live_item(socket, menu_id, id, user, active_item, use_icon \\ true, counter \\ nil)
       when is_atom(id) do
     info = info(id)
     size = size(info)
@@ -29,7 +29,7 @@ defmodule CoreWeb.Menu.Helpers do
       end
 
     path = path(socket, info.target)
-    action = %{target: path}
+    action = %{target: path, dead?: user == nil}
 
     %{
       menu_id: menu_id,
@@ -50,9 +50,9 @@ defmodule CoreWeb.Menu.Helpers do
     Routes.live_path(socket, target)
   end
 
-  def account_item(socket, menu_id, is_logged_in, active_item, use_icon \\ true) do
-    if is_logged_in do
-      live_item(socket, menu_id, :profile, active_item, use_icon)
+  def account_item(socket, menu_id, user, active_item, use_icon \\ true) do
+    if user != nil do
+      live_item(socket, menu_id, :profile, user, active_item, use_icon)
     else
       user_session_item(socket, menu_id, :signin, use_icon)
     end
