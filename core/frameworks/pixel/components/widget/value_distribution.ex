@@ -1,8 +1,11 @@
 defmodule Frameworks.Pixel.Widget.ValueDistribution do
   use Frameworks.Pixel.Component
 
+  alias Frameworks.Pixel.Text.Title5
+
   @bar_height 200
 
+  prop(label, :string, required: true)
   prop(scale, :integer, required: true)
   prop(values, :list, required: true)
 
@@ -64,6 +67,8 @@ defmodule Frameworks.Pixel.Widget.ValueDistribution do
   def render(assigns) do
     ~F"""
     <div class="rounded-lg shadow-2xl p-6 h-full">
+      <Title5>{@label}</Title5>
+      <div class="mt-4" />
       <div class="flex flex-col">
         <div class="flex flex-row gap-4">
           <div :for={bar <- bars(@scale, @values)} style={"width: #{bar_width(@scale, @values)}"}>
@@ -100,7 +105,7 @@ defmodule Framworks.Pixel.Widget.ValueDistribution.Example do
   def render(assigns) do
     ~F"""
       <div class="flex flex-col gap-8">
-        <ValueDistribution scale={10} values={[0,0,1,1,2,3,4,5,6,7,8,9,10,16,17,18,20,22,34,37,40,41,42,44,50,51,52,53,54,55,56,57,58,59,59,59,59,60]} />
+        <ValueDistribution label="Credit distribution" scale={10} values={[0,0,1,1,2,3,4,5,6,7,8,9,10,16,17,18,20,22,34,37,40,41,42,44,50,51,52,53,54,55,56,57,58,59,59,59,59,60]} />
       </div>
     """
   end

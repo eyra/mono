@@ -62,8 +62,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Bookkeeping.AccountMod
 
   defp title(%{identifier: [_ | [name | _]]}), do: name
 
-  defp target(%{identifier: [_ | ["sbe_year1_2021" | _]]}), do: 60
-  defp target(%{identifier: [_ | ["sbe_year2_2021" | _]]}), do: 3
+  defp target(%{identifier: [_ | [pool_name | _]]}), do: Core.Pools.target(pool_name)
   defp target(_), do: -1
 
   defp year(%{identifier: [_ | ["sbe_year1_2021" | _]]}), do: :first

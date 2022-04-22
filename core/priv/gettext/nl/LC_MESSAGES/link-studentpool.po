@@ -96,10 +96,6 @@ msgid "tabbar.item.dashboard"
 msgstr "Dashboard"
 
 #, elixir-format, ex-autogen
-msgid "total.credits.earned.label"
-msgstr "Totaal aantal credits verdiend"
-
-#, elixir-format, ex-autogen
 msgid "year.label"
 msgstr "SBE Jaar %{year}"
 
@@ -110,3 +106,15 @@ msgstr "Actieve studenten"
 #, elixir-format, ex-autogen
 msgid "inactive.students"
 msgstr "Inactieve studenten"
+
+#, elixir-format, ex-autogen
+msgid "credit.distribution.title"
+msgstr "Credit verdeling"
+
+#, elixir-format, ex-autogen
+msgid "credit.progress.title"
+msgstr "Credit progressie"
+
+#, elixir-format, ex-autogen
+msgid "passed.students"
+msgstr "Geslaagde studenten"

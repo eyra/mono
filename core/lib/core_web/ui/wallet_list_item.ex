@@ -12,7 +12,7 @@ defmodule CoreWeb.UI.WalletListItem do
     target_amount: 0,
     earned_amount: 0,
     pending_amount: 0,
-    title_css: "font-title7 text-title7 md:font-title5 md:text-title5 text-grey1",
+    title_css: "font-title7 text-title7 md:font-title5z md:text-title5 text-grey1",
     subtitle_css: "text-bodysmall md:text-bodymedium font-body text-grey2 whitespace-pre-wrap"
   )
 
