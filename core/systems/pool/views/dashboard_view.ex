@@ -1,6 +1,8 @@
 defmodule Systems.Pool.DashboardView do
   use CoreWeb.UI.LiveComponent
 
+  import CoreWeb.UI.Responsive.Breakpoint
+
   alias Frameworks.Pixel.Text.{Title2}
   alias Frameworks.Pixel.Widget.{Metric, ValueDistribution, Progress}
 
@@ -9,11 +11,11 @@ defmodule Systems.Pool.DashboardView do
     Bookkeeping
   }
 
-  prop(user, :any, required: true)
+  prop(props, :map, required: true)
 
   data(years, :map)
 
-  def update(_params, socket) do
+  def update(%{props: %{breakpoint: breakpoint}} = _params, socket) do
     first_year_rewards =
       Bookkeeping.Context.account_query(["wallet", "sbe_year1_2021"])
       |> Enum.map(& &1.balance_credit)
@@ -23,8 +25,8 @@ defmodule Systems.Pool.DashboardView do
       |> Enum.map(& &1.balance_credit)
 
     years = [
-      create_year(:first, first_year_rewards, 10),
-      create_year(:second, second_year_rewards, 1)
+      create_year(:first, first_year_rewards, scale(:first, breakpoint)),
+      create_year(:second, second_year_rewards, scale(:second, breakpoint))
     ]
 
     {
@@ -32,6 +34,10 @@ defmodule Systems.Pool.DashboardView do
       socket |> assign(years: years)
     }
   end
+
+  defp scale(:first, {:unknown, _}), do: 5
+  defp scale(:first, breakpoint), do: value(breakpoint, 10, md: %{0 => 5})
+  defp scale(:second, _), do: 1
 
   defp create_year(year, credits, scale) do
     study_program_codes = Core.Enums.StudyProgramCodes.values_by_year(year)
@@ -71,8 +77,11 @@ defmodule Systems.Pool.DashboardView do
       progress: %{
         label: dgettext("link-studentpool", "credit.progress.title"),
         target_amount: target_credits,
-        earned_amount: total_credits,
-        pending_amount: pending_credits
+        done_amount: total_credits,
+        pending_amount: pending_credits,
+        done_label: dgettext("eyra-pool", "progress.done.label"),
+        pending_label: dgettext("eyra-pool", "progress.pending.label"),
+        left_over_label: dgettext("eyra-pool", "progress.leftover.label")
       },
       metrics: [
         %{

@@ -83,14 +83,6 @@ msgid "sample.size"
 msgstr ""
 
 #, elixir-format, ex-autogen
-msgid "max.credits.earned.label"
-msgstr ""
-
-#, elixir-format, ex-autogen
-msgid "min.credits.earned.label"
-msgstr ""
-
-#, elixir-format, ex-autogen
 msgid "tabbar.item.dashboard"
 msgstr ""
 

@@ -84,14 +84,6 @@ msgid "sample.size"
 msgstr "%{size} spots available"
 
 #, elixir-format, ex-autogen
-msgid "max.credits.earned.label"
-msgstr "Most credits earned"
-
-#, elixir-format, ex-autogen
-msgid "min.credits.earned.label"
-msgstr "Least credits earned"
-
-#, elixir-format, ex-autogen
 msgid "tabbar.item.dashboard"
 msgstr "Dashboard"
 
@@ -109,11 +101,11 @@ msgstr "Inactive students"
 
 #, elixir-format, ex-autogen
 msgid "credit.distribution.title"
-msgstr "Credit distribution"
+msgstr "Credit distribution (Active students)"
 
 #, elixir-format, ex-autogen
 msgid "credit.progress.title"
-msgstr "Credit progress"
+msgstr "Pool credit budget"
 
 #, elixir-format, ex-autogen
 msgid "passed.students"

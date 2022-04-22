@@ -18,7 +18,7 @@ defmodule Systems.Pool.CampaignsView do
 
   alias Frameworks.Pixel.Text.{Title2}
 
-  prop(user, :any, required: true)
+  prop(props, :map, required: true)
 
   data(submitted_campaigns, :list)
   data(accepted_campaigns, :list)
