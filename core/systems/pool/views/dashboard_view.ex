@@ -1,18 +1,21 @@
 defmodule Systems.Pool.DashboardView do
   use CoreWeb.UI.LiveComponent
 
+  import CoreWeb.UI.Responsive.Breakpoint
+
   alias Frameworks.Pixel.Text.{Title2}
-  alias Frameworks.Pixel.Widget.{Metric, ValueDistribution}
+  alias Frameworks.Pixel.Widget.{Metric, ValueDistribution, Progress}
 
   alias Systems.{
+    Campaign,
     Bookkeeping
   }
 
-  prop(user, :any, required: true)
+  prop(props, :map, required: true)
 
   data(years, :map)
 
-  def update(_params, socket) do
+  def update(%{props: %{breakpoint: breakpoint}} = _params, socket) do
     first_year_rewards =
       Bookkeeping.Context.account_query(["wallet", "sbe_year1_2021"])
       |> Enum.map(& &1.balance_credit)
@@ -22,8 +25,8 @@ defmodule Systems.Pool.DashboardView do
       |> Enum.map(& &1.balance_credit)
 
     years = [
-      create_year(:first, first_year_rewards, 10, 7),
-      create_year(:second, second_year_rewards, 1, 7)
+      create_year(:first, first_year_rewards, scale(:first, breakpoint)),
+      create_year(:second, second_year_rewards, scale(:second, breakpoint))
     ]
 
     {
@@ -32,25 +35,53 @@ defmodule Systems.Pool.DashboardView do
     }
   end
 
-  defp create_year(year, credits, default_scale, max_bar_count) do
+  defp scale(:first, {:unknown, _}), do: 5
+  defp scale(:first, breakpoint), do: value(breakpoint, 10, md: %{0 => 5})
+  defp scale(:second, _), do: 1
+
+  defp create_year(year, credits, scale) do
     study_program_codes = Core.Enums.StudyProgramCodes.values_by_year(year)
     year_string = Core.Enums.StudyProgramCodes.year_to_string(year)
 
+    target = Core.Pools.target(year)
+
+    active_credits = credits |> Enum.filter(&(&1 > 0 and &1 < target))
+    passed_credits = credits |> Enum.filter(&(&1 >= target))
+
+    truncated_credits =
+      credits
+      |> Enum.map(
+        &if &1 < target do
+          &1
+        else
+          target
+        end
+      )
+
     total_student_count = Core.Pools.count_students(study_program_codes)
-    active_student_count = credits |> Enum.filter(&(&1 > 0)) |> Enum.count()
-    inactive_student_count = total_student_count - active_student_count
+    active_student_count = active_credits |> Enum.count()
+    passed_student_count = passed_credits |> Enum.count()
+    inactive_student_count = total_student_count - (active_student_count + passed_student_count)
 
-    min_credits = Enum.min(credits, fn -> 0 end)
-    max_credits = Enum.max(credits, fn -> 0 end)
-    total_credits = Statistics.sum(credits) |> do_round()
-
-    scale = determine_scale(default_scale, max_credits, max_bar_count)
+    total_credits = Statistics.sum(truncated_credits) |> do_round()
+    pending_credits = Campaign.Context.pending_rewards(year)
+    target_credits = total_student_count * target
 
     %{
       title: dgettext("link-studentpool", "year.label", year: year_string),
       credits: %{
-        values: credits,
+        label: dgettext("link-studentpool", "credit.distribution.title"),
+        values: active_credits,
         scale: scale
+      },
+      progress: %{
+        label: dgettext("link-studentpool", "credit.progress.title"),
+        target_amount: target_credits,
+        done_amount: total_credits,
+        pending_amount: pending_credits,
+        done_label: dgettext("eyra-pool", "progress.done.label"),
+        pending_label: dgettext("eyra-pool", "progress.pending.label"),
+        left_over_label: dgettext("eyra-pool", "progress.leftover.label")
       },
       metrics: [
         %{
@@ -74,40 +105,17 @@ defmodule Systems.Pool.DashboardView do
             end
         },
         %{
-          label: dgettext("link-studentpool", "min.credits.earned.label"),
-          number: min_credits,
+          label: dgettext("link-studentpool", "passed.students"),
+          number: passed_student_count,
           color:
-            if min_credits < 60 do
+            if passed_student_count == 0 do
               :negative
             else
               :positive
             end
-        },
-        %{
-          label: dgettext("link-studentpool", "max.credits.earned.label"),
-          number: max_credits,
-          color:
-            if max_credits < 60 do
-              :warning
-            else
-              :positive
-            end
-        },
-        %{
-          label: dgettext("link-studentpool", "total.credits.earned.label"),
-          number: total_credits,
-          color: :primary
         }
       ]
     }
-  end
-
-  defp determine_scale(scale, max_credits, max_bar_count) do
-    if max_credits / scale > max_bar_count do
-      determine_scale(scale + 1, max_credits, max_bar_count)
-    else
-      scale
-    end
   end
 
   defp do_round(number) when is_float(number),
@@ -122,11 +130,14 @@ defmodule Systems.Pool.DashboardView do
         <div :for={year <- @years}>
           <Title2>{year.title}</Title2>
           <div class="grid grid-cols-2 md:grid-cols-3 gap-8 h-full">
-            <div class="col-span-2 row-span-2">
-              <ValueDistribution scale={year.credits.scale} values={year.credits.values}/>
-            </div>
             <div :for={metric <- year.metrics}>
               <Metric {...metric}/>
+            </div>
+            <div class="col-span-3">
+              <ValueDistribution {...year.credits} />
+            </div>
+            <div class="col-span-3">
+              <Progress {...year.progress} />
             </div>
           </div>
           <Spacing value="XXL" />

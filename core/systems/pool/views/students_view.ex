@@ -9,7 +9,8 @@ defmodule Systems.Pool.StudentsView do
   alias Frameworks.Pixel.Selector.Selector
   alias CoreWeb.UI.ContentList
 
-  prop(user, :any, required: true)
+  prop(props, :map, required: true)
+
   data(students, :map)
   data(filtered_students, :map)
   data(filter_labels, :list)

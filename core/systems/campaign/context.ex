@@ -453,7 +453,24 @@ defmodule Systems.Campaign.Context do
   defp rewarded_value(%{debit: nil, credit: credit}), do: credit
   defp rewarded_value(_), do: 0
 
+  defp guard_number_nil(nil), do: 0
+  defp guard_number_nil(number), do: number
+
   def pending_rewards(%{id: student_id} = _student, year) when is_atom(year) do
+    from([_, _, _, _, m] in pending_rewards_query(year),
+      where: m.user_id == ^student_id
+    )
+    |> Repo.one!()
+    |> guard_number_nil()
+  end
+
+  def pending_rewards(year) when is_atom(year) do
+    from(c in pending_rewards_query(year))
+    |> Repo.one!()
+    |> guard_number_nil()
+  end
+
+  def pending_rewards_query(year) when is_atom(year) do
     study_program_codes =
       StudyProgramCodes.values_by_year(year)
       |> Enum.map(&Atom.to_string(&1))
@@ -469,11 +486,10 @@ defmodule Systems.Campaign.Context do
       on: m.crew_id == a.crew_id,
       inner_join: t in Crew.TaskModel,
       on: t.member_id == m.id,
-      where: m.user_id == ^student_id and t.status == :completed,
+      where: t.status == :completed,
       where: fragment("? && ?", ec.study_program_codes, ^study_program_codes),
       select: sum(s.reward_value)
     )
-    |> Repo.one!()
   end
 
   @doc """

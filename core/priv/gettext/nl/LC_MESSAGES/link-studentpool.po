@@ -84,20 +84,8 @@ msgid "sample.size"
 msgstr "%{size} plaatsen beschikbaar"
 
 #, elixir-format, ex-autogen
-msgid "max.credits.earned.label"
-msgstr "Meeste credits verdiend"
-
-#, elixir-format, ex-autogen
-msgid "min.credits.earned.label"
-msgstr "Minste credits verdiend"
-
-#, elixir-format, ex-autogen
 msgid "tabbar.item.dashboard"
 msgstr "Dashboard"
-
-#, elixir-format, ex-autogen
-msgid "total.credits.earned.label"
-msgstr "Totaal aantal credits verdiend"
 
 #, elixir-format, ex-autogen
 msgid "year.label"
@@ -110,3 +98,15 @@ msgstr "Actieve studenten"
 #, elixir-format, ex-autogen
 msgid "inactive.students"
 msgstr "Inactieve studenten"
+
+#, elixir-format, ex-autogen
+msgid "credit.distribution.title"
+msgstr "Credit verdeling (Actieve studenten)"
+
+#, elixir-format, ex-autogen
+msgid "credit.progress.title"
+msgstr "Pool credit budget"
+
+#, elixir-format, ex-autogen
+msgid "passed.students"
+msgstr "Geslaagde studenten"

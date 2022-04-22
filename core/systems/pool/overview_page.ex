@@ -4,6 +4,7 @@ defmodule Systems.Pool.OverviewPage do
   """
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :studentpool
+  use CoreWeb.UI.Responsive.Viewport
 
   import CoreWeb.Gettext
 
@@ -17,13 +18,13 @@ defmodule Systems.Pool.OverviewPage do
 
   @impl true
   def mount(%{"tab" => initial_tab}, _session, socket) do
-    tabs = create_tabs(initial_tab)
-
     {
       :ok,
       socket
-      |> assign(tabs: tabs)
+      |> assign_viewport()
+      |> assign_breakpoint()
       |> assign(initial_tab: initial_tab)
+      |> update_tabs()
       |> update_menus()
     }
   end
@@ -33,8 +34,13 @@ defmodule Systems.Pool.OverviewPage do
     mount(%{"tab" => nil}, session, socket)
   end
 
-  defp create_tabs(initial_tab) do
-    [
+  @impl true
+  def handle_resize(socket) do
+    socket |> update_tabs()
+  end
+
+  defp update_tabs(%{assigns: %{breakpoint: breakpoint, initial_tab: initial_tab}} = socket) do
+    tabs = [
       %{
         id: :students,
         title: dgettext("link-studentpool", "tabbar.item.students"),
@@ -55,11 +61,13 @@ defmodule Systems.Pool.OverviewPage do
         id: :dashboard,
         title: dgettext("link-studentpool", "tabbar.item.dashboard"),
         component: DashboardView,
-        props: %{},
+        props: %{breakpoint: breakpoint},
         type: :fullpage,
         active: initial_tab === :dashboard
       }
     ]
+
+    socket |> assign(tabs: tabs)
   end
 
   def render(assigns) do
@@ -68,12 +76,14 @@ defmodule Systems.Pool.OverviewPage do
         title={dgettext("link-studentpool", "title")}
         menus={@menus}
       >
-        <TabbarArea tabs={@tabs}>
-          <ActionBar>
-            <Tabbar vm={%{initial_tab: @initial_tab, size: :wide, type: :segmented}} />
-          </ActionBar>
-          <TabbarContent/>
-        </TabbarArea>
+        <div id={:pool_overview} phx-hook="ViewportResize">
+          <TabbarArea tabs={@tabs}>
+            <ActionBar>
+              <Tabbar vm={%{initial_tab: @initial_tab, size: :wide, type: :segmented}} />
+            </ActionBar>
+            <TabbarContent/>
+          </TabbarArea>
+        </div>
       </Workspace>
     """
   end
