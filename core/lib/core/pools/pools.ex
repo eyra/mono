@@ -101,6 +101,6 @@ defmodule Core.Pools do
   def target("sbe_year1_2021"), do: target(:first)
   def target("sbe_year2_2021"), do: target(:second)
   def target(:first), do: 60
-  def target(:second), do: 60
+  def target(:second), do: 3
   def target(_), do: -1
 end
