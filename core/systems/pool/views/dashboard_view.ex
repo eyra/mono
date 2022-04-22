@@ -34,19 +34,30 @@ defmodule Systems.Pool.DashboardView do
   end
 
   defp create_year(year, credits, scale) do
-    target = Core.Pools.target(year)
-
     study_program_codes = Core.Enums.StudyProgramCodes.values_by_year(year)
     year_string = Core.Enums.StudyProgramCodes.year_to_string(year)
 
-    total_student_count = Core.Pools.count_students(study_program_codes)
-    active_student_count = credits |> Enum.filter(&(&1 > 0)) |> Enum.count()
-    inactive_student_count = total_student_count - active_student_count
-    passed_student_count = credits |> Enum.filter(&(&1 >= target)) |> Enum.count()
+    target = Core.Pools.target(year)
 
-    min_credits = Enum.min(credits, fn -> 0 end)
-    max_credits = Enum.max(credits, fn -> 0 end)
-    total_credits = Statistics.sum(credits) |> do_round()
+    active_credits = credits |> Enum.filter(&(&1 > 0 and &1 < target))
+    passed_credits = credits |> Enum.filter(&(&1 >= target))
+
+    truncated_credits =
+      credits
+      |> Enum.map(
+        &if &1 < target do
+          &1
+        else
+          target
+        end
+      )
+
+    total_student_count = Core.Pools.count_students(study_program_codes)
+    active_student_count = active_credits |> Enum.count()
+    passed_student_count = passed_credits |> Enum.count()
+    inactive_student_count = total_student_count - (active_student_count + passed_student_count)
+
+    total_credits = Statistics.sum(truncated_credits) |> do_round()
     pending_credits = Campaign.Context.pending_rewards(year)
     target_credits = total_student_count * target
 
@@ -93,26 +104,6 @@ defmodule Systems.Pool.DashboardView do
             else
               :positive
             end
-        },
-        %{
-          label: dgettext("link-studentpool", "min.credits.earned.label"),
-          number: min_credits,
-          color:
-            if min_credits < 60 do
-              :negative
-            else
-              :positive
-            end
-        },
-        %{
-          label: dgettext("link-studentpool", "max.credits.earned.label"),
-          number: max_credits,
-          color:
-            if max_credits < 60 do
-              :warning
-            else
-              :positive
-            end
         }
       ]
     }
@@ -130,14 +121,14 @@ defmodule Systems.Pool.DashboardView do
         <div :for={year <- @years}>
           <Title2>{year.title}</Title2>
           <div class="grid grid-cols-2 md:grid-cols-3 gap-8 h-full">
+            <div :for={metric <- year.metrics}>
+              <Metric {...metric}/>
+            </div>
             <div class="col-span-3">
               <ValueDistribution {...year.credits} />
             </div>
             <div class="col-span-3">
               <Progress {...year.progress} />
-            </div>
-            <div :for={metric <- year.metrics}>
-              <Metric {...metric}/>
             </div>
           </div>
           <Spacing value="XXL" />
