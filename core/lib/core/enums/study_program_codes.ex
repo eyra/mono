@@ -15,9 +15,13 @@ defmodule Core.Enums.StudyProgramCodes do
   def is_first_year_active?(nil), do: false
 
   def is_first_year_active?(active_values) do
-    active_values
     # first year is active when no 2nd year value is selected
-    |> Enum.find(&is_year?(&1, :second)) == nil
+    not contains_year?(active_values, :second)
+  end
+
+  def contains_year?(values, year) do
+    values
+    |> Enum.find(&is_year?(&1, year)) != nil
   end
 
   def values_by_year(year) do

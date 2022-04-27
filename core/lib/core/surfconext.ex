@@ -4,6 +4,19 @@ defmodule Core.SurfConext do
   alias Frameworks.Signal
   import Ecto.Query, warn: false
 
+  def get_user_by_student_id(student_id) do
+    student_id_code = "urn:schac:personalUniqueCode:nl:local:vu.nl:studentid:#{student_id}"
+
+    surfconext_query =
+      from(sc in Core.SurfConext.User,
+        where: ^student_id_code in sc.schac_personal_unique_code,
+        select: sc.user_id
+      )
+
+    from(u in User, where: u.id in subquery(surfconext_query))
+    |> Repo.one()
+  end
+
   def get_user_by_sub(sub) do
     from(u in User,
       where:

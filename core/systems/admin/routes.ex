@@ -6,6 +6,7 @@ defmodule Systems.Admin.Routes do
 
         live("/login", LoginPage)
         live("/permissions", PermissionsPage)
+        live("/import/rewards", ImportRewardsPage)
       end
     end
   end

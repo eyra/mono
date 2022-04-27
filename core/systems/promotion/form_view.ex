@@ -1,6 +1,6 @@
 defmodule Systems.Promotion.FormView do
   use CoreWeb.LiveForm
-  use CoreWeb.FileUploader
+  use CoreWeb.FileUploader, ~w(.png .jpg .jpeg)
 
   alias Systems.{
     Promotion
@@ -27,7 +27,7 @@ defmodule Systems.Promotion.FormView do
   data(theme_labels, :list)
 
   @impl true
-  def save_file(%{assigns: %{entity: entity}} = socket, uploaded_file) do
+  def process_file(%{assigns: %{entity: entity}} = socket, uploaded_file) do
     socket
     |> save(entity, %{banner_photo_url: uploaded_file})
   end
