@@ -19,6 +19,8 @@ defmodule Core.Enums.StudyProgramCodes do
     not contains_year?(active_values, :second)
   end
 
+  def contains_year?(nil, _), do: false
+
   def contains_year?(values, year) do
     values
     |> Enum.find(&is_year?(&1, year)) != nil
