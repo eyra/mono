@@ -4,7 +4,7 @@ defmodule CoreWeb.FileUploader do
 
   @allowed_filename_pattern ~r"^[a-z0-9][a-z0-9\-]+[a-z0-9]\.[a-z]{3,4}$"
 
-  @callback save_file(socket :: Socket.t(), uploaded_file :: any()) :: Socket.t()
+  @callback process_file(socket :: Socket.t(), uploaded_file :: any()) :: Socket.t()
 
   def get_static_path(filename) do
     unless Regex.match?(@allowed_filename_pattern, filename) do
@@ -15,37 +15,39 @@ defmodule CoreWeb.FileUploader do
     Path.join(root, filename)
   end
 
-  defmacro __using__(_opts) do
+  defmacro __using__(accept) do
     quote do
       @behaviour CoreWeb.FileUploader
 
       def init_file_uploader(socket, key) do
         socket
         |> allow_upload(key,
-          accept: ~w(.png .jpg .jpeg),
+          accept: unquote(accept),
           progress: &handle_progress/3,
           auto_upload: true
         )
       end
 
       def handle_progress(_key, entry, socket) do
-        if entry.done? do
-          uploaded_file =
-            socket
-            |> consume_file(entry)
+        IO.puts("handle_progress")
 
-          {:noreply, socket |> save_file(uploaded_file)}
+        if entry.done? do
+          upload_result = consume_file(socket, entry)
+          {:noreply, socket |> process_file(upload_result)}
         else
           {:noreply, socket}
         end
       end
 
       def consume_file(socket, entry) do
+        IO.puts("consume_file")
+
         consume_uploaded_entry(socket, entry, fn %{path: path} ->
           file = "#{entry.uuid}.#{ext(entry)}"
           dest = CoreWeb.FileUploader.get_static_path(file)
           File.cp!(path, dest)
-          CoreWeb.Endpoint.static_path("/uploads/#{file}")
+          path = CoreWeb.Endpoint.static_path("/uploads/#{file}")
+          {:ok, {dest, entry.client_name}}
         end)
       end
 

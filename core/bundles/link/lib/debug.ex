@@ -21,8 +21,9 @@ defmodule Link.Debug do
     Campaign
   }
 
+  data(import_rewards_button, :map)
+  data(sync_rewards_button, :map)
   data(expire_button, :map)
-  data(reward_button, :map)
   data(expire_force_button, :map)
   data(start_button, :map)
 
@@ -50,10 +51,21 @@ defmodule Link.Debug do
       }
     }
 
-    reward_button = %{
+    import_rewards_button = %{
       action: %{
         type: :send,
-        event: "reward"
+        event: "import_rewards"
+      },
+      face: %{
+        type: :primary,
+        label: "Import student rewards"
+      }
+    }
+
+    sync_rewards_button = %{
+      action: %{
+        type: :send,
+        event: "sync_rewards"
       },
       face: %{
         type: :primary,
@@ -76,9 +88,10 @@ defmodule Link.Debug do
       :ok,
       socket
       |> assign(
+        import_rewards_button: import_rewards_button,
+        sync_rewards_button: sync_rewards_button,
         start_button: start_button,
         expire_button: expire_button,
-        reward_button: reward_button,
         expire_force_button: expire_force_button,
         changesets: %{}
       )
@@ -104,7 +117,15 @@ defmodule Link.Debug do
   end
 
   @impl true
-  def handle_event("reward", _, socket) do
+  def handle_event("import_rewards", _, %{assigns: %{uri_path: uri_path}} = socket) do
+    {:noreply,
+     push_redirect(socket,
+       to: Routes.live_path(socket, Systems.Admin.ImportRewardsPage, back: uri_path)
+     )}
+  end
+
+  @impl true
+  def handle_event("sync_rewards", _, socket) do
     Campaign.Context.sync_student_credits()
     {:noreply, socket}
   end
@@ -137,18 +158,23 @@ defmodule Link.Debug do
         <MarginY id={:page_top} />
         <ContentArea>
           <MarginY id={:page_top} />
-            <Title2 margin="">Campaigns</Title2>
+            <Title2 margin="">Book keeping</Title2>
             <Spacing value="S" />
             <Wrap>
-              <DynamicButton vm={@reward_button} />
+              <DynamicButton vm={@import_rewards_button} />
               <Spacing value="S" />
             </Wrap>
+            <Wrap>
+              <DynamicButton vm={@sync_rewards_button} />
+            </Wrap>
+            <Spacing value="XL" />
+            <Title2 margin="">Campaigns</Title2>
+            <Spacing value="S" />
             <Wrap>
               <DynamicButton vm={@expire_button} />
               <Spacing value="S" />
             </Wrap>
             <div :if={feature_enabled?(:debug_expire_force)}>
-              <Spacing value="S" />
               <Wrap>
                 <DynamicButton vm={@expire_force_button} />
               </Wrap>

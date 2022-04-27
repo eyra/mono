@@ -5,6 +5,7 @@ defmodule Frameworks.Pixel.Selector.Selector do
   prop(items, :list, required: true)
   prop(parent, :any, required: true)
   prop(type, :atom, default: :label)
+  prop(background, :atom, default: :light)
   prop(optional?, :boolean, default: true)
   prop(grid_options, :string, default: "")
   prop(opts, :string, default: "")
@@ -38,6 +39,7 @@ defmodule Frameworks.Pixel.Selector.Selector do
           items: items,
           parent: parent,
           type: type,
+          background: background,
           optional?: optional?,
           grid_options: grid_options,
           opts: opts
@@ -53,6 +55,7 @@ defmodule Frameworks.Pixel.Selector.Selector do
         current_items: items,
         parent: parent,
         type: type,
+        background: background,
         optional?: optional?,
         grid_options: grid_options,
         opts: opts
@@ -94,8 +97,6 @@ defmodule Frameworks.Pixel.Selector.Selector do
       })
     end
   end
-
-  BUN
 
   defp get_active_item_ids(%{assigns: %{current_items: items}}) do
     items
@@ -170,8 +171,9 @@ defmodule Frameworks.Pixel.Selector.Selector do
           >
             <Surface.Components.Dynamic.Component
               module={item_component(@type)}
-                  item={item}
-                  multiselect?={ multiselect?(@type) }
+              item={item}
+              multiselect?={ multiselect?(@type) }
+              background={@background}
             />
           </div>
         </div>

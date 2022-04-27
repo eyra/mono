@@ -29,6 +29,7 @@ defmodule Core.Authorization do
 
   grant_access(Systems.Admin.LoginPage, [:visitor, :member])
   grant_access(Systems.Admin.PermissionsPage, [:admin])
+  grant_access(Systems.Admin.ImportRewardsPage, [:admin])
   grant_access(Systems.Support.OverviewPage, [:admin])
   grant_access(Systems.Support.TicketPage, [:admin])
   grant_access(Systems.Support.HelpdeskPage, [:member])

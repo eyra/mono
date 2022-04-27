@@ -105,6 +105,7 @@ defmodule Core.MixProject do
       {:typed_struct, "~> 0.2.1"},
       {:logger_json, "~> 4.3"},
       {:statistics, "~> 0.6.2"},
+      {:csv, "~> 2.4"},
       # i18n
       {:ex_cldr, "~> 2.25"},
       {:ex_cldr_numbers, "~> 2.23"},

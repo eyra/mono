@@ -4,6 +4,7 @@ defmodule Frameworks.Pixel.Selector.Label do
 
   prop(item, :map, required: true)
   prop(multiselect?, :boolean, default: true)
+  prop(background, :atom, default: :light)
 
   def render(assigns) do
     ~F"""

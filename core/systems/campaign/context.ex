@@ -440,7 +440,7 @@ defmodule Systems.Campaign.Context do
   end
 
   def rewarded_value(assignment_id, user_id) do
-    idempotence_key = idempotence_key(assignment_id, user_id)
+    idempotence_key = assignment_idempotence_key(assignment_id, user_id)
 
     case Bookkeeping.Context.get_entry(idempotence_key) do
       %{lines: lines} -> rewarded_value(lines)
@@ -524,12 +524,36 @@ defmodule Systems.Campaign.Context do
         "2"
       end
 
-    create_student_credit_transaction(student_id, assignment_id, credits, year)
+    idempotence_key = assignment_idempotence_key(assignment_id, student_id)
+
+    journal_message =
+      "Student #{student_id} earned #{credits} credits by completing assignment #{assignment_id}"
+
+    create_student_credit_transaction(student_id, credits, year, idempotence_key, journal_message)
   end
 
-  defp create_student_credit_transaction(student_id, assignment_id, credits, year) do
-    idempotence_key = idempotence_key(assignment_id, student_id)
+  def import_student_reward(student_id, credits, session_key, year) when is_atom(year) do
+    idempotence_key = import_idempotence_key(session_key, student_id)
+    year = year_to_string(year)
 
+    journal_message =
+      "Student #{student_id} earned #{credits} by import during session '#{session_key}'"
+
+    create_student_credit_transaction(student_id, credits, year, idempotence_key, journal_message)
+  end
+
+  def import_student_reward_exists?(student_id, session_key) do
+    idempotence_key = import_idempotence_key(session_key, student_id)
+    Bookkeeping.Context.exists?(idempotence_key)
+  end
+
+  defp create_student_credit_transaction(
+         student_id,
+         credits,
+         year,
+         idempotence_key,
+         journal_message
+       ) do
     pool = "sbe_year#{year}_2021"
     fund = {:fund, pool}
     wallet = {:wallet, pool, student_id}
@@ -547,8 +571,7 @@ defmodule Systems.Campaign.Context do
       result =
         Bookkeeping.Context.enter(%{
           idempotence_key: idempotence_key,
-          journal_message:
-            "Student #{student_id} earned #{credits} credits by completing assignment #{assignment_id}",
+          journal_message: journal_message,
           lines: lines
         })
 
@@ -560,8 +583,12 @@ defmodule Systems.Campaign.Context do
     end
   end
 
-  defp idempotence_key(assignment_id, user_id) do
+  defp assignment_idempotence_key(assignment_id, user_id) do
     "assignment=#{assignment_id},user=#{user_id}"
+  end
+
+  defp import_idempotence_key(session_key, user_id) do
+    "import=#{session_key},user=#{user_id}"
   end
 
   defp is_year?(year, study_program_codes) when is_list(study_program_codes) do
@@ -571,4 +598,7 @@ defmodule Systems.Campaign.Context do
   defp is_year?(year, study_program_code) when is_atom(study_program_code) do
     Atom.to_string(study_program_code) |> String.contains?(year)
   end
+
+  defp year_to_string(:first), do: "1"
+  defp year_to_string(:second), do: "2"
 end

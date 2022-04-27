@@ -1,6 +1,6 @@
 defmodule CoreWeb.User.Forms.Profile do
   use CoreWeb.LiveForm
-  use CoreWeb.FileUploader
+  use CoreWeb.FileUploader, ~w(.png .jpg .jpeg)
 
   alias Core.Enums.StudyProgramCodes
   alias Core.Accounts
@@ -19,7 +19,7 @@ defmodule CoreWeb.User.Forms.Profile do
   data(focus, :any, default: "")
 
   @impl true
-  def save_file(%{assigns: %{entity: entity}} = socket, uploaded_file) do
+  def process_file(%{assigns: %{entity: entity}} = socket, uploaded_file) do
     save(socket, entity, :auto_save, %{photo_url: uploaded_file})
   end
 
