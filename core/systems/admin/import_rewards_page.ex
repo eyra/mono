@@ -84,7 +84,7 @@ defmodule Systems.Admin.ImportRewardsPage do
   end
 
   def validate(
-        line,
+        %{"credits" => credits} = line,
         user,
         %{assigns: %{session_key: session_key, study_year: study_year}} = _socket
       ) do
@@ -93,7 +93,13 @@ defmodule Systems.Admin.ImportRewardsPage do
         if transaction_exists?(user, session_key) do
           {:transaction_exists, "Import done"}
         else
-          {:ready_to_import, ""}
+          credits = String.to_integer(credits)
+
+          if credits <= 0 do
+            {:zero_credits, "Zero credits"}
+          else
+            {:ready_to_import, ""}
+          end
         end
       else
         {:incorrect_study_year, "Student is not part of #{study_year} study year"}
@@ -306,8 +312,9 @@ defmodule Systems.Admin.ImportRewardsPage do
     }
   end
 
-  defp message_color(%{status: :incorrect_study_year}), do: "text-warning"
+  defp message_color(%{status: :incorrect_study_year}), do: "text-delete"
   defp message_color(%{status: :transaction_exists}), do: "text-grey1"
+  defp message_color(%{status: :zero_credits}), do: "text-warning"
   defp message_color(_), do: "text-grey1"
 
   defp opacity(%{status: :transaction_exists}), do: "opacity-30"
