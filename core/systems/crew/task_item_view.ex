@@ -1,60 +1,38 @@
 defmodule Systems.Crew.TaskItemView do
   use CoreWeb.UI.Component
 
-  alias Frameworks.Pixel.Line
-
   prop(id, :number)
   prop(public_id, :string, required: true)
+  prop(description, :string)
   prop(message, :map)
   prop(buttons, :list, default: [])
 
-  defp message_color(%{type: :warning}), do: "text-warning"
+  defp message_color(%{type: :warning}), do: "text-grey1"
   defp message_color(%{type: :alarm}), do: "text-delete"
-  defp message_color(%{type: :rejected}), do: "text-delete"
-  defp message_color(%{type: :attention_checks_failed}), do: "text-warning"
   defp message_color(_), do: "text-grey2"
 
-  defp message_icon(:warning), do: "⚠️"
-  defp message_icon(:alarm), do: "🚨"
-  defp message_icon(:rejected), do: "🚫"
-  defp message_icon(:attention_checks_failed), do: "🚦"
-  defp message_icon(:not_completed), do: "🚧"
-
-  defp message_text(%{text: text, type: type}), do: "#{message_icon(type)} #{text}"
   defp message_text(%{text: text}), do: "#{text}"
+  defp message_text(_), do: ""
 
   @impl true
   def render(assigns) do
     ~F"""
-    <div>
-      <div class="flex flex-row gap-8 sm:items-center">
-        <div class="sm:w-32 font-body text-bodymedium sm:text-bodylarge flex-shrink-0">
-          Subject {@public_id}
+    <tr class="h-12">
+      <td class="pl-0 font-body text-bodymedium sm:text-bodylarge">
+        Subject {@public_id}
+      </td>
+      <td :if={@description} class="pl-8 font-body text-bodysmall sm:text-bodymedium text-grey1">
+        {@description}
+      </td>
+      <td class={"pl-8 font-body text-bodysmall sm:text-bodymedium #{message_color(@message)}"}>
+        {message_text(@message)}
+      </td>
+      <td class="pl-12">
+        <div class="flex flex-row gap-4">
+          <DynamicButton :for={button <- @buttons} vm={button} />
         </div>
-        <div :if={@message} class="hidden sm:block">
-          <div class={"font-body text-bodysmall sm:text-bodymedium #{message_color(@message)}"} >
-            {message_text(@message)}
-          </div>
-        </div>
-        <div class="flex-grow"></div>
-        <div class="flex-wrap flex-shrink-0">
-          <div class="flex flex-row gap-4">
-            <DynamicButton :for={button <- @buttons} vm={button} />
-          </div>
-        </div>
-      </div>
-      <div class="sm:hidden">
-        <Spacing value="XS" />
-        <div :if={@message} class="flex-wrap">
-          <div class={"font-body text-bodysmall #{message_color(@message)}"} >
-            {message_text(@message)}
-          </div>
-        </div>
-
-        <Spacing value="XS" />
-        <Line />
-      </div>
-    </div>
+      </td>
+    </tr>
     """
   end
 end

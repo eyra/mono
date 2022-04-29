@@ -24,4 +24,17 @@ defmodule Systems.Lab.TimeSlotModel do
     time_slot
     |> cast(attrs, [:enabled?, :location, :start_time, :number_of_seats])
   end
+
+  def message(%{start_time: start_time, location: location}) do
+    date =
+      start_time
+      |> CoreWeb.UI.Timestamp.to_date()
+      |> CoreWeb.UI.Timestamp.humanize_date()
+
+    time =
+      start_time
+      |> CoreWeb.UI.Timestamp.humanize_time()
+
+    " #{date}  |  #{time}  |  #{location}" |> Macro.camelize()
+  end
 end

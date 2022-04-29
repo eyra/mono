@@ -278,29 +278,47 @@ defmodule Systems.Assignment.Context do
     end
   end
 
-  def activate_task(%{crew: crew} = _assignment, user) do
-    if Crew.Context.member?(crew, user) do
-      member = Crew.Context.get_member!(crew, user)
-      task = Crew.Context.get_task(crew, member)
-      Crew.Context.activate_task!(task)
-    else
-      Logger.warn("Can not complete task for non member")
-      nil
-    end
-  end
+  def activate_task(crew_ref, user, force_apply_as_member? \\ false)
 
-  def activate_task(tool, user_id) do
+  def activate_task(%{} = tool, user_id, force_apply_as_member?) when is_integer(user_id) do
     if experiment = get_experiment_by_tool(tool) do
       %{crew: crew} = get_by_experiment!(experiment, [:crew])
 
       user = Accounts.get_user!(user_id)
-      member = Crew.Context.get_member!(crew, user)
-
-      Crew.Context.get_task(crew, member)
-      |> Crew.Context.activate_task!()
+      activate_task(crew, user, force_apply_as_member?)
     else
       nil
     end
+  end
+
+  def activate_task(
+        %Assignment.Model{crew: crew},
+        %Core.Accounts.User{} = user,
+        force_apply_as_member?
+      ) do
+    activate_task(crew, user, force_apply_as_member?)
+  end
+
+  def activate_task(%Crew.Model{} = crew, %Core.Accounts.User{} = user, force_apply_as_member?) do
+    member =
+      if Crew.Context.member?(crew, user) do
+        Crew.Context.get_member!(crew, user)
+      else
+        if force_apply_as_member? do
+          Crew.Context.apply_member!(crew, user)
+        else
+          Logger.warn("Can not complete task for non member")
+        end
+      end
+
+    _activate_task(crew, member)
+  end
+
+  defp _activate_task(%Crew.Model{} = _crew, nil), do: nil
+
+  defp _activate_task(%Crew.Model{} = crew, %Crew.MemberModel{} = member) do
+    Crew.Context.get_task(crew, member)
+    |> Crew.Context.activate_task!()
   end
 
   @doc """
@@ -486,6 +504,15 @@ defmodule Systems.Assignment.Context do
       pending: dgettext("link-survey", "pending.label"),
       participated: dgettext("link-survey", "participated.label")
     }
+  end
+
+  def search_subject(tool, %Core.Accounts.User{} = user) do
+    if experiment = get_experiment_by_tool(tool) do
+      %{crew: crew} = get_by_experiment!(experiment, [:crew])
+      Crew.Context.get_member!(crew, user)
+    else
+      nil
+    end
   end
 
   def search_subject(tool, public_id) do

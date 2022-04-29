@@ -119,11 +119,11 @@ msgstr "Lab check in"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.query.label"
-msgstr "Panl ID"
+msgstr "Search participant"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.body"
-msgstr "On arrival, enter the participant Panl ID below. Their reserved time slot will appear and you can check them in."
+msgstr "On arrival, enter the participant Panl ID or email below. Their reserved time slot will appear and you can check them in."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.expired"
@@ -131,7 +131,7 @@ msgstr "Reservation has been expired"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.not.found"
-msgstr "Subject not found"
+msgstr "No results"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.accept.button"
