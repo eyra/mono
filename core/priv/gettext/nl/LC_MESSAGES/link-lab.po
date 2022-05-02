@@ -133,10 +133,10 @@ msgstr "Reservering is verlopen"
 msgid "search.subject.not.found"
 msgstr "Geen resultaten"
 
-#, elixir-format, ex-autogen, fuzzy
-msgid "search.subject.accept.button"
-msgstr "Aanmelden"
-
 #, elixir-format, ex-autogen
 msgid "experiment.checkin.label"
 msgstr "Inchecken met Panl ID:"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.email.not.found"
+msgstr "Geen resultaten"

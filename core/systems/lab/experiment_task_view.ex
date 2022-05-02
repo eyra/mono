@@ -209,14 +209,14 @@ defmodule Systems.Lab.ExperimentTaskView do
   def render(assigns) do
     ~F"""
     <div>
-      <div :if={@reservation == nil}>
+      <div :if={@reservation == nil and @status == :pending}>
         <Title3>{dgettext("link-lab", "no.reservation.title")}</Title3>
         <Spacing value="M" />
         <Title6>{dgettext("link-lab", "timeslot.selector.label")}</Title6>
         <Spacing value="XXS" />
         <Dropdown.Selector {...@selector} />
       </div>
-      <div :if={@reservation != nil and @status == :pending}>
+      <div :if={@reservation != nil}>
         <Title3>{dgettext("link-lab", "reservation.title")}</Title3>
         <Spacing value="M" />
         <div class="flex flex-col sm:flex-row gap-x-4 gap-y-3">

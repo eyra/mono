@@ -2,6 +2,7 @@ defmodule Systems.Lab.CheckInItem do
   use CoreWeb.UI.Component
 
   import CoreWeb.Gettext
+  alias CoreWeb.UI.Timestamp
 
   alias Systems.{
     Lab
@@ -12,6 +13,7 @@ defmodule Systems.Lab.CheckInItem do
   prop(email, :string)
   prop(subject, :integer)
   prop(time_slot, :any)
+  prop(check_in_date, :any)
   prop(target, :any)
 
   defp title(%{email: nil, subject: subject}), do: "Subject #{subject}"
@@ -21,15 +23,33 @@ defmodule Systems.Lab.CheckInItem do
     do: time_slot_message(time_slot)
 
   defp message(%{status: :reservation_not_found}), do: "❔ No reservation available"
-  defp message(%{status: :reservation_canceled}), do: "❌ Reservation canceled"
+  defp message(%{status: :reservation_cancelled}), do: "❌ Reservation cancelled"
 
   defp message(%{status: :reservation_expired}),
     do: "❔ " <> dgettext("link-lab", "search.subject.expired")
 
-  defp message(%{status: :signed_up_already, subject: %{public_id: public_id}}),
-    do: "✅ Subject #{public_id}"
+  defp message(%{
+         status: :signed_up_already,
+         email: email,
+         subject: subject,
+         check_in_date: check_in_date
+       })
+       when email != nil,
+       do: "✅ Checked in#{date_string(check_in_date)} as subject #{subject}"
 
-  defp message(%{status: :signed_up_already}), do: "✅ Signed up"
+  defp message(%{status: :signed_up_already, check_in_date: check_in_date}),
+    do: "✅ Checked in#{date_string(check_in_date)}"
+
+  defp date_string(nil), do: ""
+
+  defp date_string(date) do
+    date_string =
+      date
+      |> Timestamp.apply_timezone()
+      |> Timestamp.humanize()
+
+    " #{date_string}"
+  end
 
   defp time_slot_message(nil), do: "🗓 Reservation found"
   defp time_slot_message(time_slot), do: "🗓  " <> Lab.TimeSlotModel.message(time_slot)
@@ -100,7 +120,7 @@ defmodule Systems.Lab.CheckInItem.Example do
     default: %{
       id: 3,
       subject: 123,
-      status: :reservation_canceled,
+      status: :reservation_cancelled,
       time_slot: %{location: "SBE lab", start_time: CoreWeb.UI.Timestamp.now()}
     }
   )
@@ -144,7 +164,7 @@ defmodule Systems.Lab.CheckInItem.Example do
     default: %{
       id: 8,
       email: "e.vanderveen@eyra.co",
-      status: :reservation_canceled,
+      status: :reservation_cancelled,
       time_slot: %{location: "SBE lab", start_time: CoreWeb.UI.Timestamp.now()}
     }
   )

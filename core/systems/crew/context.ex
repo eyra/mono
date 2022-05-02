@@ -123,17 +123,17 @@ defmodule Systems.Crew.Context do
   end
 
   def completed_tasks(crew) do
-    from(t in task_query(crew, [:completed]))
+    from(t in task_query(crew, [:completed]), order_by: {:desc, :completed_at})
     |> Repo.all()
   end
 
   def rejected_tasks(crew) do
-    from(t in task_query(crew, [:rejected]))
+    from(t in task_query(crew, [:rejected]), order_by: {:desc, :rejected_at})
     |> Repo.all()
   end
 
   def accepted_tasks(crew) do
-    from(t in task_query(crew, [:accepted]))
+    from(t in task_query(crew, [:accepted]), order_by: {:desc, :accepted_at})
     |> Repo.all()
   end
 
@@ -166,10 +166,25 @@ defmodule Systems.Crew.Context do
     update_task(task, %{started_at: Timestamp.naive_now()})
   end
 
-  def activate_task(%Crew.TaskModel{status: status} = task) do
+  def activate_task(%Crew.TaskModel{status: status, started_at: started_at} = task) do
+    timestamp = Timestamp.naive_now()
+
     case status do
-      :pending -> update_task(task, %{status: :completed, completed_at: Timestamp.naive_now()})
-      _ -> {:ok, %{task: task}}
+      :pending ->
+        case started_at do
+          nil ->
+            update_task(task, %{
+              status: :completed,
+              started_at: timestamp,
+              completed_at: timestamp
+            })
+
+          _ ->
+            update_task(task, %{status: :completed, completed_at: timestamp})
+        end
+
+      _ ->
+        {:ok, %{task: task}}
     end
   end
 

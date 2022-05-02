@@ -509,7 +509,9 @@ defmodule Systems.Assignment.Context do
   def search_subject(tool, %Core.Accounts.User{} = user) do
     if experiment = get_experiment_by_tool(tool) do
       %{crew: crew} = get_by_experiment!(experiment, [:crew])
-      Crew.Context.get_member!(crew, user)
+      member = Crew.Context.get_member!(crew, user)
+      task = Crew.Context.get_task(crew, member)
+      {member, task}
     else
       nil
     end
@@ -518,7 +520,9 @@ defmodule Systems.Assignment.Context do
   def search_subject(tool, public_id) do
     if experiment = get_experiment_by_tool(tool) do
       %{crew: crew} = get_by_experiment!(experiment, [:crew])
-      Crew.Context.subject(crew, public_id)
+      member = Crew.Context.subject(crew, public_id)
+      task = Crew.Context.get_task(crew, member)
+      {member, task}
     else
       nil
     end

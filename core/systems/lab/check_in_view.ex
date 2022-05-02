@@ -165,68 +165,78 @@ defmodule Systems.Lab.CheckInView do
   end
 
   defp to_view_model(nil, _tool), do: nil
+  defp to_view_model({nil, nil}, _tool), do: nil
 
   defp to_view_model(%Core.Accounts.User{id: user_id, email: email} = user, tool) do
-    reservation = reservation(tool, user_id)
+    reservation = reservation(user, tool)
     time_slot = time_slot(reservation)
 
-    subject = Director.context(tool).search_subject(tool, user)
+    search_result = Director.context(tool).search_subject(tool, user)
 
     status =
-      if subject do
-        :signed_up_already
-      else
-        if reservation do
-          case reservation.status do
-            :cancelled -> :reservation_canceled
-            _ -> :reservation_available
-          end
-        else
-          :reservation_not_found
-        end
+      case search_result do
+        {_, task} -> item_status(task, reservation)
+        _ -> :reservation_not_found
+      end
+
+    public_id =
+      case search_result do
+        {%{public_id: public_id}, _} -> public_id
+        _ -> nil
+      end
+
+    check_in_date =
+      case search_result do
+        {_, %{completed_at: completed_at}} -> completed_at
+        _ -> nil
       end
 
     %{
       id: user_id,
       email: email,
       status: status,
-      subject: subject,
-      time_slot: time_slot
+      subject: public_id,
+      time_slot: time_slot,
+      check_in_date: check_in_date
     }
   end
 
   defp to_view_model(
-         %{
-           user_id: user_id,
-           public_id: public_id,
-           expired: expired?
+         {
+           %{
+             user_id: user_id,
+             public_id: public_id
+           } = _member,
+           %{completed_at: completed_at} = task
          },
          tool
        ) do
-    reservation = reservation(tool, user_id)
+    reservation = reservation(user_id, tool)
     time_slot = time_slot(reservation)
-
-    status =
-      if reservation != nil and reservation.status == :cancelled do
-        :reservation_canceled
-      else
-        if expired? do
-          :reservation_expired
-        else
-          :signed_up_already
-        end
-      end
+    status = item_status(task, reservation)
 
     %{
       id: user_id,
       subject: public_id,
       status: status,
-      time_slot: time_slot
+      time_slot: time_slot,
+      check_in_date: completed_at
     }
   end
 
-  defp reservation(tool, user_id) do
-    user = Accounts.get_user!(user_id)
+  defp item_status(%{status: :completed} = _task, _reservation), do: :signed_up_already
+  defp item_status(%{expired: true} = _task, _reservation), do: :reservation_expired
+  defp item_status(_task, nil), do: :reservation_not_found
+  defp item_status(_task, %{status: :cancelled}), do: :reservation_cancelled
+  defp item_status(_task, reservation) when reservation != nil, do: :reservation_available
+
+  defp reservation(user_id, tool) when is_integer(user_id) do
+    user_id
+    |> Accounts.get_user!()
+    |> reservation(tool)
+  end
+
+  defp reservation(%Accounts.User{} = user, tool) do
     Lab.Context.reservation_for_user(tool, user)
   end
 
