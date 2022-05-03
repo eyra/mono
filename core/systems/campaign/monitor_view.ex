@@ -345,7 +345,11 @@ defmodule Systems.Campaign.MonitorView do
   defp to_view_model([], _, _, _), do: {[], []}
 
   defp to_view_model(tasks, :attention_tasks, target, experiment) do
-    columns = ["Subject", "Message"]
+    columns = [
+      dgettext("link-monitor", "column.participant"),
+      dgettext("link-monitor", "column.message")
+    ]
+
     tasks = Enum.map(tasks, &to_view_model(:attention, target, experiment, &1))
     {columns, tasks}
   end
@@ -353,7 +357,11 @@ defmodule Systems.Campaign.MonitorView do
   defp to_view_model(tasks, :completed_tasks, target, experiment) do
     columns =
       if is_lab_experiment(experiment) do
-        ["Subject", "Reservation", "Checked in"]
+        [
+          dgettext("link-monitor", "column.participant"),
+          dgettext("link-monitor", "column.reservation"),
+          dgettext("link-monitor", "column.checkedin")
+        ]
       else
         ["Subject", "Finished"]
       end
@@ -364,13 +372,22 @@ defmodule Systems.Campaign.MonitorView do
   end
 
   defp to_view_model(tasks, :rejected_tasks, target, experiment) do
-    columns = ["Subject", "Reason", "Rejected"]
+    columns = [
+      dgettext("link-monitor", "column.participant"),
+      dgettext("link-monitor", "column.reason"),
+      dgettext("link-monitor", "column.rejected")
+    ]
+
     tasks = Enum.map(tasks, &to_view_model(:rejected, target, experiment, &1))
     {columns, tasks}
   end
 
   defp to_view_model(tasks, :accepted_tasks, target, experiment) do
-    columns = ["Subject", "Accepted"]
+    columns = [
+      dgettext("link-monitor", "column.participant"),
+      dgettext("link-monitor", "column.accepted")
+    ]
+
     tasks = Enum.map(tasks, &to_view_model(:accepted, target, experiment, &1))
     {columns, tasks}
   end

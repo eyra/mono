@@ -127,7 +127,7 @@ msgstr "On arrival, enter the participant Panl ID or email below. Their reserved
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.expired"
-msgstr "Reservation has been expired"
+msgstr "Reservation expired"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.not.found"
@@ -140,3 +140,31 @@ msgstr "Check in with Panl ID:"
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.email.not.found"
 msgstr "No results"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.email.found"
+msgstr "%{count} matches"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.email.found.more"
+msgstr "First %{max} out of %{count} matches visible"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.cancelled"
+msgstr "Reservation cancelled"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.noreservation"
+msgstr "No reservation available"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.checkedin.full"
+msgstr "Checked in %{date} as subject %{subject}"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.checkedin.short"
+msgstr "Checked in %{date}"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.reservation"
+msgstr "Reservation found"

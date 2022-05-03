@@ -139,3 +139,31 @@ msgstr ""
 #, elixir-format, ex-autogen
 msgid "search.email.not.found"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.email.found"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.email.found.more"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.cancelled"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.noreservation"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.checkedin.full"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.checkedin.short"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "search.subject.reservation"
+msgstr ""

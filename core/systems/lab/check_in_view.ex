@@ -121,13 +121,13 @@ defmodule Systems.Lab.CheckInView do
           dgettext("link-lab", "search.email.not.found")
 
         count when count > @max_search_results ->
-          "Showing #{@max_search_results} of #{count} users found"
+          dgettext("link-lab", "search.email.found.more", count: count, max: @max_search_results)
 
         count when count == 1 ->
           nil
 
         count ->
-          "#{count} users found"
+          dgettext("link-lab", "search.email.found", count: count)
       end
 
     {items |> Enum.take(@max_search_results), message}
