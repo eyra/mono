@@ -8,6 +8,8 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
   import Frameworks.Utility.LiveCommand, only: [live_command: 2]
   import Frameworks.Utility.List
 
+  alias Frameworks.Pixel.Dropdown
+
   alias Systems.{
     Campaign,
     Assignment,

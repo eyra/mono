@@ -369,12 +369,16 @@ defmodule Systems.Campaign.Context do
     |> Repo.all()
   end
 
+  def search_subject(tool, %Core.Accounts.User{} = user) do
+    Assignment.Context.search_subject(tool, user)
+  end
+
   def search_subject(tool, public_id) do
     Assignment.Context.search_subject(tool, public_id)
   end
 
-  def activate_task(tool, user_id) do
-    Assignment.Context.activate_task(tool, user_id)
+  def activate_task(tool, user_id, force_apply_as_member? \\ false) do
+    Assignment.Context.activate_task(tool, user_id, force_apply_as_member?)
   end
 
   def assign_tester_role(tool, user) do

@@ -43,7 +43,7 @@ defmodule Systems.Campaign.MonitorViewTest do
       assert html =~ "Open: 0"
       assert html =~ "Attention<span class=\"text-primary\"> 1"
       assert html =~ "Subject 1"
-      assert html =~ "⚠️ Started today at"
+      assert html =~ "Started today at"
       assert html =~ "accept"
       assert html =~ "reject"
     end

@@ -40,6 +40,19 @@ defmodule Core.Accounts do
     |> Repo.all()
   end
 
+  ## Search
+
+  def search(query, preload \\ []) do
+    email_fragment = "%#{query}%"
+
+    from(u in User,
+      where: like(u.email, ^email_fragment),
+      order_by: {:desc, :inserted_at},
+      preload: ^preload
+    )
+    |> Repo.all()
+  end
+
   ## Database getters
 
   @doc """

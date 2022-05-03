@@ -119,24 +119,52 @@ msgstr "Lab check-in"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.query.label"
-msgstr "Panl ID"
+msgstr "Zoek deelnemer"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.body"
-msgstr "Voer hieronder, bij aankomst, het Panl ID van de deelnemer in. Het gereserveerde tijdslot wordt getoond en je kunt de deelnemer inchecken."
+msgstr "Voer hieronder, bij aankomst, het Panl ID of e-mail adres van de deelnemer in. Het gereserveerde tijdslot wordt getoond en je kunt de deelnemer inchecken."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.expired"
-msgstr "Reservering is verlopen"
+msgstr "Reservering verlopen"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.not.found"
-msgstr "Subject niet gevonden"
-
-#, elixir-format, ex-autogen, fuzzy
-msgid "search.subject.accept.button"
-msgstr "Aanmelden"
+msgstr "Geen resultaten"
 
 #, elixir-format, ex-autogen
 msgid "experiment.checkin.label"
 msgstr "Inchecken met Panl ID:"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.email.not.found"
+msgstr "Geen resultaten"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.email.found"
+msgstr "%{count} gevonden"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.email.found.more"
+msgstr "Eerste %{max} van in totaal %{count} zichtbaar"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.cancelled"
+msgstr "Reservering geannuleerd"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.noreservation"
+msgstr "Geen reservering beschikbaar"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.checkedin.full"
+msgstr "Ingecheckt %{date} als subject %{subject}"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.checkedin.short"
+msgstr "Ingecheckt %{date}"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.subject.reservation"
+msgstr "Reserving gevonden"

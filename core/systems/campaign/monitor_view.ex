@@ -142,7 +142,7 @@ defmodule Systems.Campaign.MonitorView do
             </div>
 
             <Title2>{dgettext("link-monitor", "phase1.title")}</Title2>
-            <Title3 margin={"mb-8"}>{dgettext("link-survey", "status.title")}<span class="text-primary"> {@vm.participated_count}/{@vm.subject_count}</span></Title3>
+            <Title3 margin={"mb-8"}>{dgettext("link-survey", "status.title")}<span class="text-primary"> {@vm.participated_count}/{@vm.progress.size}</span></Title3>
             <Spacing value="M" />
             <div class="bg-grey6 rounded p-12">
               <ProgressBar {...@vm.progress} />
@@ -177,18 +177,14 @@ defmodule Systems.Campaign.MonitorView do
               </Title3>
               <BodyLarge>{dgettext("link-monitor", "attention.body")}</BodyLarge>
               <Spacing value="M" />
+              <Campaign.MonitorTableView columns={@vm.attention_columns} tasks={@vm.attention_tasks} />
+              <Spacing value="M" />
               <Wrap>
                 <DynamicButton vm={%{
                   action: %{ type: :send, target: @myself, event: "accept_all_pending_started"},
                   face: %{type: :primary, label: dgettext("link-monitor", "accept.all.button")}
                 }} />
               </Wrap>
-              <Spacing value="M" />
-              <div class="flex flex-col gap-6">
-                <div :for={task <- @vm.attention_tasks}>
-                  <Crew.TaskItemView {...task} />
-                </div>
-              </div>
               <Spacing value="XL" />
             </div>
 
@@ -198,20 +194,14 @@ defmodule Systems.Campaign.MonitorView do
             <div :if={Enum.count(@vm.completed_tasks) > 0}>
               <BodyLarge>{dgettext("link-monitor", "waitinglist.body")}</BodyLarge>
               <Spacing value="M" />
+              <Campaign.MonitorTableView columns={@vm.completed_columns} tasks={@vm.completed_tasks} />
+              <Spacing value="M" />
               <Wrap>
                 <DynamicButton vm={%{
                   action: %{ type: :send, target: @myself, event: "accept_all_completed"},
                   face: %{type: :primary, label: dgettext("link-monitor", "accept.all.button")}
                 }} />
               </Wrap>
-              <Spacing value="M" />
-            </div>
-            <div :if={Enum.count(@vm.completed_tasks) > 0}>
-              <div class="flex flex-col gap-6">
-                <div :for={task <- @vm.completed_tasks}>
-                  <Crew.TaskItemView {...task} />
-                </div>
-              </div>
               <Spacing value="XL" />
             </div>
             <div :if={Enum.count(@vm.completed_tasks) == 0}>
@@ -222,11 +212,7 @@ defmodule Systems.Campaign.MonitorView do
               {dgettext("link-monitor", "rejected.title")}<span class="text-primary"> {Enum.count(@vm.rejected_tasks)}</span>
             </Title3>
             <div :if={Enum.count(@vm.rejected_tasks) > 0}>
-              <div class="flex flex-col gap-6">
-                <div :for={task <- @vm.rejected_tasks}>
-                  <Crew.TaskItemView {...task} />
-                </div>
-              </div>
+              <Campaign.MonitorTableView columns={@vm.rejected_columns} tasks={@vm.rejected_tasks} />
               <Spacing value="XL" />
             </div>
             <div :if={Enum.count(@vm.rejected_tasks) == 0}>
@@ -236,12 +222,9 @@ defmodule Systems.Campaign.MonitorView do
             <Title3 margin={"mb-8"}>
               {dgettext("link-monitor", "accepted.title")}<span class="text-primary"> {Enum.count(@vm.accepted_tasks)}</span>
             </Title3>
-            <div class="flex flex-col gap-6">
-              <div :for={task <- @vm.accepted_tasks}>
-                <Crew.TaskItemView {...task} />
-              </div>
+            <div :if={Enum.count(@vm.accepted_tasks) > 0}>
+              <Campaign.MonitorTableView columns={@vm.accepted_columns} tasks={@vm.accepted_tasks} />
             </div>
-
           </True>
           <False>
             <Empty
@@ -281,25 +264,25 @@ defmodule Systems.Campaign.MonitorView do
 
     active? = status === :accepted or Crew.Context.active?(crew)
 
-    attention_tasks =
+    {attention_columns, attention_tasks} =
       if attention_list_enabled? do
         Crew.Context.expired_pending_started_tasks(crew)
-        |> to_view_model(:attention_tasks, target)
+        |> to_view_model(:attention_tasks, target, experiment)
       else
-        []
+        {[], []}
       end
 
-    completed_tasks =
+    {completed_columns, completed_tasks} =
       Crew.Context.completed_tasks(crew)
-      |> to_view_model(:completed_tasks, target)
+      |> to_view_model(:completed_tasks, target, experiment)
 
-    rejected_tasks =
+    {rejected_columns, rejected_tasks} =
       Crew.Context.rejected_tasks(crew)
-      |> to_view_model(:rejected_tasks, target)
+      |> to_view_model(:rejected_tasks, target, experiment)
 
-    accepted_tasks =
+    {accepted_columns, accepted_tasks} =
       Crew.Context.accepted_tasks(crew)
-      |> to_view_model(:accepted_tasks, target)
+      |> to_view_model(:accepted_tasks, target, experiment)
 
     %{
       experiment: experiment,
@@ -308,12 +291,16 @@ defmodule Systems.Campaign.MonitorView do
       pending_count: pending_count,
       participated_count: participated_count,
       vacant_count: vacant_count,
+      attention_columns: attention_columns,
       attention_tasks: attention_tasks,
+      completed_columns: completed_columns,
       completed_tasks: completed_tasks,
+      rejected_columns: rejected_columns,
       rejected_tasks: rejected_tasks,
+      accepted_columns: accepted_columns,
       accepted_tasks: accepted_tasks,
       progress: %{
-        size: subject_count,
+        size: max(subject_count, participated_count + pending_count),
         bars: [
           %{
             color: :warning,
@@ -331,30 +318,81 @@ defmodule Systems.Campaign.MonitorView do
   defp get_vacant_count(%{subject_count: subject_count} = _experiment, finished, pending) do
     case subject_count do
       count when is_nil(count) -> 0
-      count when count > 0 -> count - (finished + pending)
+      count when count > 0 -> max(0, count - (finished + pending))
       _ -> 0
     end
   end
 
-  defp to_view_model([], _, _), do: []
+  defp is_lab_experiment(%{lab_tool_id: lab_tool_id} = _experiment), do: lab_tool_id != nil
 
-  defp to_view_model(tasks, :attention_tasks, target) do
-    Enum.map(tasks, &to_view_model(:attention, target, &1))
+  defp reservation(%{lab_tool_id: lab_tool_id} = _experiment, user_id) when lab_tool_id != nil do
+    tool = Lab.Context.get(lab_tool_id)
+    user = Core.Accounts.get_user!(user_id)
+    Lab.Context.reservation_for_user(tool, user)
   end
 
-  defp to_view_model(tasks, :completed_tasks, target) do
-    Enum.map(tasks, &to_view_model(:waitinglist, target, &1))
+  defp reservation(_experiment, _user_id), do: nil
+
+  defp time_slot(nil), do: nil
+
+  defp time_slot(%{time_slot_id: time_slot_id} = _reservation) do
+    Lab.Context.get_time_slot(time_slot_id)
   end
 
-  defp to_view_model(tasks, :rejected_tasks, target) do
-    Enum.map(tasks, &to_view_model(:rejected, target, &1))
+  defp time_slot_message(nil), do: "Participated without reservation"
+  defp time_slot_message(time_slot), do: "🗓  " <> Lab.TimeSlotModel.message(time_slot)
+
+  defp to_view_model([], _, _, _), do: {[], []}
+
+  defp to_view_model(tasks, :attention_tasks, target, experiment) do
+    columns = [
+      dgettext("link-monitor", "column.participant"),
+      dgettext("link-monitor", "column.message")
+    ]
+
+    tasks = Enum.map(tasks, &to_view_model(:attention, target, experiment, &1))
+    {columns, tasks}
   end
 
-  defp to_view_model(tasks, :accepted_tasks, target) do
-    Enum.map(tasks, &to_view_model(:accepted, target, &1))
+  defp to_view_model(tasks, :completed_tasks, target, experiment) do
+    columns =
+      if is_lab_experiment(experiment) do
+        [
+          dgettext("link-monitor", "column.participant"),
+          dgettext("link-monitor", "column.reservation"),
+          dgettext("link-monitor", "column.checkedin")
+        ]
+      else
+        ["Subject", "Finished"]
+      end
+
+    tasks = Enum.map(tasks, &to_view_model(:waitinglist, target, experiment, &1))
+
+    {columns, tasks}
   end
 
-  defp to_view_model(:attention, target, %Crew.TaskModel{
+  defp to_view_model(tasks, :rejected_tasks, target, experiment) do
+    columns = [
+      dgettext("link-monitor", "column.participant"),
+      dgettext("link-monitor", "column.reason"),
+      dgettext("link-monitor", "column.rejected")
+    ]
+
+    tasks = Enum.map(tasks, &to_view_model(:rejected, target, experiment, &1))
+    {columns, tasks}
+  end
+
+  defp to_view_model(tasks, :accepted_tasks, target, experiment) do
+    columns = [
+      dgettext("link-monitor", "column.participant"),
+      dgettext("link-monitor", "column.accepted")
+    ]
+
+    tasks = Enum.map(tasks, &to_view_model(:accepted, target, experiment, &1))
+    {columns, tasks}
+  end
+
+  defp to_view_model(:attention, target, _experiment, %Crew.TaskModel{
          id: id,
          started_at: started_at,
          member_id: member_id
@@ -376,42 +414,68 @@ defmodule Systems.Campaign.MonitorView do
     }
   end
 
-  defp to_view_model(:waitinglist, target, %Crew.TaskModel{
+  defp to_view_model(:waitinglist, target, experiment, %Crew.TaskModel{
          id: id,
+         completed_at: completed_at,
          member_id: member_id
        }) do
-    %{public_id: public_id} = Crew.Context.get_member!(member_id)
+    %{user_id: user_id, public_id: public_id} = Crew.Context.get_member!(member_id)
+
+    description =
+      if is_lab_experiment(experiment) do
+        if reservation = reservation(experiment, user_id) do
+          time_slot(reservation)
+          |> time_slot_message()
+        else
+          "-"
+        end
+      else
+        nil
+      end
+
+    date_string =
+      completed_at
+      |> Timestamp.apply_timezone()
+      |> Timestamp.humanize()
+      |> String.capitalize()
 
     %{
       id: id,
       public_id: public_id,
+      description: description,
+      message: %{text: date_string},
       buttons: [accept_button(id, target), reject_button(id, target)]
     }
   end
 
-  defp to_view_model(:rejected, target, %Crew.TaskModel{
+  defp to_view_model(:rejected, target, _experiment, %Crew.TaskModel{
          id: id,
          rejected_category: rejected_category,
          rejected_message: rejected_message,
+         rejected_at: rejected_at,
          member_id: member_id
        }) do
     %{public_id: public_id} = Crew.Context.get_member!(member_id)
 
-    message_type =
-      case rejected_category do
-        :other -> :rejected
-        category -> category
-      end
+    date_string =
+      rejected_at
+      |> Timestamp.apply_timezone()
+      |> Timestamp.humanize()
+      |> String.capitalize()
+
+    icon = Crew.RejectCategories.icon(rejected_category)
+    description = "#{icon} #{rejected_message}"
 
     %{
       id: id,
       public_id: public_id,
-      message: %{type: message_type, text: rejected_message},
+      description: description,
+      message: %{text: date_string},
       buttons: [accept_button(id, target)]
     }
   end
 
-  defp to_view_model(:accepted, _target, %Crew.TaskModel{
+  defp to_view_model(:accepted, _target, _experiment, %Crew.TaskModel{
          id: id,
          accepted_at: accepted_at,
          member_id: member_id

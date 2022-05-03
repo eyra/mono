@@ -220,6 +220,8 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   defp tag(nil),
     do: %{text: dgettext("eyra-marketplace", "assignment.status.expired.label"), type: :disabled}
 
+  # defp tag(%{expired: true} = _task), do: %{text: dgettext("eyra-marketplace", "assignment.status.expired.label"), type: :disabled}
+
   defp tag(%{status: status} = _task) do
     case status do
       :pending ->
