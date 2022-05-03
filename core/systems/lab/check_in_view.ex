@@ -225,6 +225,8 @@ defmodule Systems.Lab.CheckInView do
   end
 
   defp item_status(%{status: :completed} = _task, _reservation), do: :signed_up_already
+  defp item_status(%{status: :rejected} = _task, _reservation), do: :signed_up_already
+  defp item_status(%{status: :accepted} = _task, _reservation), do: :signed_up_already
   defp item_status(%{expired: true} = _task, _reservation), do: :reservation_expired
   defp item_status(_task, nil), do: :reservation_not_found
   defp item_status(_task, %{status: :cancelled}), do: :reservation_cancelled

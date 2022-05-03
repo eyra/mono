@@ -446,7 +446,7 @@ defmodule Systems.Campaign.MonitorView do
       |> Timestamp.humanize()
       |> String.capitalize()
 
-    icon = rejection_icon(rejected_category)
+    icon = Crew.RejectCategories.icon(rejected_category)
     description = "#{icon} #{rejected_message}"
 
     %{
@@ -492,8 +492,4 @@ defmodule Systems.Campaign.MonitorView do
       face: %{type: :icon, icon: :reject}
     }
   end
-
-  defp rejection_icon(:rejected), do: "🚫"
-  defp rejection_icon(:attention_checks_failed), do: "🚦"
-  defp rejection_icon(:not_completed), do: "🚧"
 end
