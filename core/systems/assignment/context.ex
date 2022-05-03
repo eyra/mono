@@ -308,6 +308,7 @@ defmodule Systems.Assignment.Context do
           Crew.Context.apply_member!(crew, user)
         else
           Logger.warn("Can not complete task for non member")
+          nil
         end
       end
 
