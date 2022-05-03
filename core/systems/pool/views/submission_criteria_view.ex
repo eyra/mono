@@ -105,7 +105,7 @@ defmodule Systems.Pool.SubmissionCriteriaView do
         <Spacing value="L" />
 
         <Title3 margin="mb-5 sm:mb-8">{dgettext("eyra-account", "features.study.program")}</Title3>
-        <Selector id={:study_program} items={@study_program_labels} type={:checkbox} parent={%{type: __MODULE__, id: @id}} opts="max-w-form" />
+        <Selector id={:study_program_codes} items={@study_program_labels} type={:checkbox} parent={%{type: __MODULE__, id: @id}} opts="max-w-form" />
       </ContentArea>
     """
   end
