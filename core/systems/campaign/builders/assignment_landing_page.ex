@@ -56,6 +56,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
       else
         # probably expired member
         %{
+          public_id: nil,
           subtitle: dgettext("eyra-crew", "task.expired.subtitle"),
           text: dgettext("eyra-crew", "task.expired.text"),
           experiment: nil

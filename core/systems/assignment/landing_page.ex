@@ -157,7 +157,7 @@ defmodule Systems.Assignment.LandingPage do
         <Title3>{@vm.subtitle}</Title3>
         <Spacing value="M" />
 
-        <Wrap>
+        <Wrap :if={@vm.public_id}>
           <Assignment.TicketView public_id={@vm.public_id} />
         </Wrap>
         <Spacing value="M" />
