@@ -28,6 +28,8 @@ defmodule Systems.Lab.DayView do
   data(focus, :string, default: "")
 
   def update(%{id: id, day_model: day_model, target: target}, socket) do
+    IO.puts("update A")
+
     changeset =
       day_model
       |> Lab.DayModel.changeset(:init, %{})
@@ -188,15 +190,14 @@ defmodule Systems.Lab.DayView do
   def handle_event(
         "update",
         %{"day_model" => new_day_model},
-        %{assigns: %{day_model: day_model}} = socket
+        %{assigns: %{og_day_model: og_day_model}} = socket
       ) do
-    changeset = Lab.DayModel.changeset(day_model, :submit, new_day_model)
+    changeset = Lab.DayModel.changeset(og_day_model, :submit, new_day_model)
 
     socket =
       case Ecto.Changeset.apply_action(changeset, :update) do
-        {:ok, new_day_model} ->
-          changeset = Lab.DayModel.changeset(new_day_model, :submit, %{})
-          socket |> assign(changeset: changeset, day_model: new_day_model)
+        {:ok, day_model} ->
+          socket |> assign(changeset: changeset, day_model: day_model)
 
         {:error, %Ecto.Changeset{} = changeset} ->
           socket |> assign(changeset: changeset, focus: "")
@@ -209,9 +210,12 @@ defmodule Systems.Lab.DayView do
   def handle_event(
         "submit",
         _,
-        %{assigns: %{og_day_model: og_day_model, day_model: day_model, target: target}} = socket
+        %{assigns: %{changeset: changeset, og_day_model: og_day_model, day_model: day_model, target: target}} = socket
       ) do
-    update_target(target, %{day_view: :submit, og_day_model: og_day_model, day_model: day_model})
+    IO.puts("SUBMIT")
+    if changeset.valid? do
+      update_target(target, %{day_view: :submit, og_day_model: og_day_model, day_model: day_model})
+    end
     {:noreply, socket}
   end
 
@@ -222,8 +226,9 @@ defmodule Systems.Lab.DayView do
   end
 
   @impl true
-  def handle_event("focus", %{"field" => field}, socket) do
-    {:noreply, socket |> assign(focus: field)}
+  def handle_event("focus", %{"field" => _field}, socket) do
+    # ignore focus event for now to prevent date input looses its value (real fix later when redesign date picker)
+    {:noreply, socket}
   end
 
   @impl true
@@ -302,6 +307,7 @@ defmodule Systems.Lab.DayView.Example do
 
   data(day_model, :map,
     default: %Systems.Lab.DayModel{
+      tool_id: 1,
       date: ~D[2022-12-13],
       date_editable?: true,
       location: "Lab 007, Unit 4.02",
