@@ -21,6 +21,7 @@ defmodule Systems.Lab.Context do
       preload: ^preload
     )
     |> Repo.get!(id)
+    |> filter_double_time_slots()
   end
 
   def create_tool(attrs, auth_node) do
@@ -58,10 +59,11 @@ defmodule Systems.Lab.Context do
   def get_time_slots(id, preload \\ []) do
     from(ts in Lab.TimeSlotModel,
       where: ts.tool_id == ^id and ts.enabled? == true,
-      order_by: {:asc, :start_time},
+      order_by: [asc: :start_time, asc: :id],
       preload: ^preload
     )
     |> Repo.all()
+    |> filter_double_time_slots()
   end
 
   def get_available_time_slots(id) do
@@ -80,6 +82,7 @@ defmodule Systems.Lab.Context do
       |> Timestamp.to_date()
 
     %Lab.DayModel{
+      tool_id: id,
       date: date,
       date_editable?: true,
       location: Map.get(base_values, :location),
@@ -121,6 +124,7 @@ defmodule Systems.Lab.Context do
       |> Timestamp.to_date()
 
     %Lab.DayModel{
+      tool_id: id,
       date: new_date,
       date_editable?: true,
       location: location,
@@ -154,6 +158,7 @@ defmodule Systems.Lab.Context do
       )
 
     %Lab.DayModel{
+      tool_id: id,
       date: date,
       date_editable?: date_editable?,
       location: location,
@@ -198,7 +203,8 @@ defmodule Systems.Lab.Context do
 
     tool
     |> time_slot_query(og_start_time, og_location)
-    |> Repo.one()
+    |> Repo.all()
+    |> List.first()
     |> submit_time_slot(tool, %{
       enabled?: enabled?,
       start_time: start_time,
@@ -233,6 +239,29 @@ defmodule Systems.Lab.Context do
 
       {count, nil}
     end
+  end
+
+  def filter_double_time_slots(%Lab.ToolModel{} = tool) do
+    if Ecto.assoc_loaded?(tool.time_slots) do
+      filtered_time_slots = filter_double_time_slots(tool.time_slots)
+
+      tool
+      |> Map.put(:time_slots, filtered_time_slots)
+    else
+      tool
+    end
+  end
+
+  def filter_double_time_slots(time_slots) do
+    time_slots
+    |> Enum.reduce([], fn ts, acc ->
+      if acc |> Enum.find(&(DateTime.compare(&1.start_time, ts.start_time) == :eq)) do
+        acc
+      else
+        [ts | acc]
+      end
+    end)
+    |> Enum.reverse()
   end
 
   defp create_time_slot(%Lab.ToolModel{} = tool, attrs) do
