@@ -66,7 +66,6 @@ defmodule Systems.Lab.Context do
     |> filter_double_time_slots()
   end
 
-
   def get_available_time_slots(id) do
     get_time_slots(id, [:reservations])
     |> Enum.filter(&(&1.number_of_seats > Enum.count(&1.reservations)))
@@ -256,7 +255,7 @@ defmodule Systems.Lab.Context do
   def filter_double_time_slots(time_slots) do
     time_slots
     |> Enum.reduce([], fn ts, acc ->
-      if acc |> Enum.find(&DateTime.compare(&1.start_time, ts.start_time) == :eq)  do
+      if acc |> Enum.find(&(DateTime.compare(&1.start_time, ts.start_time) == :eq)) do
         acc
       else
         [ts | acc]

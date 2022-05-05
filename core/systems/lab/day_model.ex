@@ -30,23 +30,25 @@ defmodule Systems.Lab.DayModel do
   end
 
   defp validate_unused_date(changeset) do
-    tool_id = get_field(changeset, :tool_id) |> IO.inspect(label: "TOOL_ID")
-    date = get_field(changeset, :date) |> IO.inspect(label: "DATE")
-    location = get_field(changeset, :location) |> IO.inspect(label: "LOCATION")
+    tool_id = get_field(changeset, :tool_id)
+    date = get_field(changeset, :date)
+    location = get_field(changeset, :location)
 
     time_slots =
       tool_id
       |> Lab.Context.get_time_slots()
-      |> Enum.filter(& &1.location == location)
-      |> Enum.filter(& CoreWeb.UI.Timestamp.to_date(&1.start_time) == date)
-      |> IO.inspect(label: "TIMESLOTS LEFT")
+      |> Enum.filter(
+        &(&1.location == location and CoreWeb.UI.Timestamp.to_date(&1.start_time) == date)
+      )
 
     if Enum.empty?(time_slots) do
       changeset
     else
-      %Ecto.Changeset{changeset |> add_error(:location, "lab location is already booked on the selected date") | action: :validate}
-      |> IO.inspect(label: "CHSS")
+      %Ecto.Changeset{
+        (changeset
+         |> add_error(:location, "lab location is already booked on the selected date"))
+        | action: :validate
+      }
     end
   end
-
 end

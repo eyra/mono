@@ -210,12 +210,21 @@ defmodule Systems.Lab.DayView do
   def handle_event(
         "submit",
         _,
-        %{assigns: %{changeset: changeset, og_day_model: og_day_model, day_model: day_model, target: target}} = socket
+        %{
+          assigns: %{
+            changeset: changeset,
+            og_day_model: og_day_model,
+            day_model: day_model,
+            target: target
+          }
+        } = socket
       ) do
     IO.puts("SUBMIT")
+
     if changeset.valid? do
       update_target(target, %{day_view: :submit, og_day_model: og_day_model, day_model: day_model})
     end
+
     {:noreply, socket}
   end
 
