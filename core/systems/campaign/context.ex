@@ -100,22 +100,15 @@ defmodule Systems.Campaign.Context do
     preload = Keyword.get(opts, :preload, [])
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
 
-    accepted_submissions =
-      from(submission in Submission,
-        where: submission.status == ^submission_status,
-        select: submission.id
-      )
-
-    promotion_ids =
-      from(promotion in Promotion.Model,
-        where: promotion.id in subquery(accepted_submissions),
-        select: promotion.id
-      )
-
-    from(campaign in Campaign.Model,
-      where: campaign.promotion_id in subquery(promotion_ids) and campaign.id not in ^exclude,
+    from(c in Campaign.Model,
+      join: p in Promotion.Model,
+      on: p.id == c.promotion_id,
+      join: s in Submission,
+      on: s.promotion_id == p.id,
+      where: c.id not in ^exclude and s.status == ^submission_status,
       preload: ^preload,
-      order_by: {:desc, :inserted_at}
+      order_by: [desc: s.updated_at],
+      select: c
     )
     |> Repo.all()
   end
@@ -132,9 +125,9 @@ defmodule Systems.Campaign.Context do
         principal: user
       )
 
-    from(s in Campaign.Model,
-      where: s.auth_node_id in subquery(node_ids),
-      order_by: [desc: s.updated_at],
+    from(c in Campaign.Model,
+      where: c.auth_node_id in subquery(node_ids),
+      order_by: [desc: c.updated_at],
       preload: ^preload
     )
     |> Repo.all()
@@ -148,22 +141,17 @@ defmodule Systems.Campaign.Context do
   def list_subject_campaigns(user, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
 
-    member_ids =
-      from(m in Crew.MemberModel,
-        where: m.user_id == ^user.id and m.expired == false,
-        select: m.id
-      )
-
-    crew_ids =
-      from(t in Crew.TaskModel, where: t.member_id in subquery(member_ids), select: t.crew_id)
-
-    assigment_ids =
-      from(a in Assignment.Model, where: a.crew_id in subquery(crew_ids), select: a.id)
-
     from(c in Campaign.Model,
-      where: c.promotable_assignment_id in subquery(assigment_ids),
+      join: m in Crew.MemberModel,
+      on: m.user_id == ^user.id,
+      join: t in Crew.TaskModel,
+      on: t.member_id == m.id,
+      join: a in Assignment.Model,
+      on: a.crew_id == m.crew_id,
+      where: c.promotable_assignment_id == a.id and m.expired == false,
       preload: ^preload,
-      order_by: [desc: c.updated_at]
+      order_by: [desc: t.updated_at],
+      select: c
     )
     |> Repo.all()
   end
