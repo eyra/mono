@@ -83,14 +83,14 @@ defmodule Systems.Pool.CampaignsView do
   defp convert_to_vm(
          socket,
          %{
-           updated_at: updated_at,
            promotion: %{
              title: title,
              image_id: image_id,
              submission:
                %{
                  id: submission_id,
-                 status: status
+                 status: status,
+                 updated_at: updated_at
                } = submission
            },
            promotable_assignment:

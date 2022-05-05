@@ -16,7 +16,13 @@ defmodule Frameworks.Pixel.Form.Input do
   prop(disabled, :boolean, default: false)
   prop(reserve_error_space, :boolean, default: true)
   prop(debounce, :string, default: "1000")
+  prop(value, :any, default: nil)
   slot(default)
+
+  # Under some conditions a Frameworks.Pixel.Form.DateInput has its value reset to original value when using Phoenix.HTML.Form.input_value/2.
+  # By inserting the value directly it always keeps the correct value.
+  defp value(form, %{value: nil, field: field}), do: input_value(form, field)
+  defp value(_form, %{value: value}), do: value
 
   def render(assigns) do
     ~F"""
@@ -29,7 +35,7 @@ defmodule Frameworks.Pixel.Form.Input do
             type={@type}
             id={input_id(form, @field)}
             name={input_name(form, @field)}
-            value={input_value(form, @field)}
+            value={value(form, assigns)}
             placeholder={@placeholder}
             class="text-grey3 bg-white placeholder-grey3 text-bodymedium font-body pl-3 w-full disabled:border-grey3 border-2 border-solid focus:outline-none rounded h-44px"
             disabled
@@ -38,7 +44,7 @@ defmodule Frameworks.Pixel.Form.Input do
             type={@type}
             id={input_id(form, @field)}
             name={input_name(form, @field)}
-            value={input_value(form, @field)}
+            value={value(form, assigns)}
             min="0"
             placeholder={@placeholder}
             class="text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid focus:outline-none rounded h-44px"

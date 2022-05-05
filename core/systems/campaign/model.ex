@@ -146,55 +146,71 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
              } = promotion,
            promotable:
              %{
-               crew: crew,
                assignable_experiment: %{
                  subject_count: target_subject_count
                }
              } = assignment
          },
-         {Link.Console, campaign_type},
+         {Link.Console, :content},
+         _user,
+         url_resolver
+       ) do
+    path = url_resolver.(Systems.Campaign.ContentPage, id)
+    tag = Submission.get_tag(submission)
+
+    promotion_ready? = Promotion.Context.ready?(promotion)
+
+    target_subject_count =
+      if target_subject_count == nil do
+        0
+      else
+        target_subject_count
+      end
+
+    open_spot_count = Assignment.Context.open_spot_count(assignment)
+
+    subtitle =
+      get_content_list_item_subtitle(
+        submission,
+        promotion_ready?,
+        open_spot_count,
+        target_subject_count
+      )
+
+    quick_summary = get_quick_summary(updated_at)
+    image_info = ImageHelpers.get_image_info(image_id, 120, 115)
+    image = %{type: :catalog, info: image_info}
+
+    %{
+      path: path,
+      title: title,
+      subtitle: subtitle,
+      tag: tag,
+      level: :critical,
+      image: image,
+      quick_summary: quick_summary
+    }
+  end
+
+  defp vm(
+         %{
+           promotion: %{
+             title: title,
+             image_id: image_id
+           },
+           promotable:
+             %{
+               crew: crew
+             } = assignment
+         },
+         {Link.Console, :contribution},
          user,
          url_resolver
        ) do
-    task = task(crew, user)
-
-    path =
-      case campaign_type do
-        :content -> url_resolver.(Systems.Campaign.ContentPage, id)
-        :contribution -> url_resolver.(Systems.Assignment.LandingPage, assignment.id)
-      end
-
-    tag =
-      case campaign_type do
-        :content -> Submission.get_tag(submission)
-        :contribution -> tag(task)
-      end
-
-    subtitle =
-      case campaign_type do
-        :contribution ->
-          subtitle(task, user, assignment)
-
-        :content ->
-          promotion_ready? = Promotion.Context.ready?(promotion)
-
-          target_subject_count =
-            if target_subject_count == nil do
-              0
-            else
-              target_subject_count
-            end
-
-          open_spot_count = Assignment.Context.open_spot_count(assignment)
-
-          get_content_list_item_subtitle(
-            submission,
-            promotion_ready?,
-            open_spot_count,
-            target_subject_count
-          )
-      end
-
+    %{updated_at: updated_at} = task = task(crew, user)
+    path = url_resolver.(Systems.Assignment.LandingPage, assignment.id)
+    tag = tag(task)
+    subtitle = subtitle(task, user, assignment)
     quick_summary = get_quick_summary(updated_at)
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
     image = %{type: :catalog, info: image_info}
