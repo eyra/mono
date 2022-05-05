@@ -25,6 +25,7 @@ defmodule Systems.Lab.DayView do
   data(byline, :string)
   data(entity, :map)
   data(changeset, :map)
+  data(error, :any, default: nil)
   data(focus, :string, default: "")
 
   def update(%{id: id, day_model: day_model, target: target}, socket) do
@@ -186,18 +187,40 @@ defmodule Systems.Lab.DayView do
     |> Enum.reduce(0, &(&2 + &1.number_of_seats))
   end
 
+  defp validate_unused_date(
+         %{assigns: %{day_model: %{tool_id: tool_id, date: date, location: location}}} = socket
+       ) do
+    time_slots =
+      tool_id
+      |> Lab.Context.get_time_slots()
+      |> Enum.filter(
+        &(&1.location == location and CoreWeb.UI.Timestamp.to_date(&1.start_time) == date)
+      )
+
+    error =
+      if Enum.empty?(time_slots) do
+        nil
+      else
+        dgettext("link-lab", "date.location.error")
+      end
+
+    socket |> assign(error: error)
+  end
+
   @impl true
   def handle_event(
         "update",
         %{"day_model" => new_day_model},
-        %{assigns: %{og_day_model: og_day_model}} = socket
+        %{assigns: %{day_model: day_model}} = socket
       ) do
-    changeset = Lab.DayModel.changeset(og_day_model, :submit, new_day_model)
+    changeset = Lab.DayModel.changeset(day_model, :submit, new_day_model)
 
     socket =
       case Ecto.Changeset.apply_action(changeset, :update) do
         {:ok, day_model} ->
-          socket |> assign(changeset: changeset, day_model: day_model)
+          socket
+          |> assign(changeset: changeset, day_model: day_model)
+          |> validate_unused_date()
 
         {:error, %Ecto.Changeset{} = changeset} ->
           socket |> assign(changeset: changeset, focus: "")
@@ -212,6 +235,7 @@ defmodule Systems.Lab.DayView do
         _,
         %{
           assigns: %{
+            error: nil,
             changeset: changeset,
             og_day_model: og_day_model,
             day_model: day_model,
@@ -219,12 +243,15 @@ defmodule Systems.Lab.DayView do
           }
         } = socket
       ) do
-    IO.puts("SUBMIT")
-
     if changeset.valid? do
       update_target(target, %{day_view: :submit, og_day_model: og_day_model, day_model: day_model})
     end
 
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("submit", _, socket) do
     {:noreply, socket}
   end
 
@@ -263,14 +290,17 @@ defmodule Systems.Lab.DayView do
     ~F"""
       <div class="p-8 w-popup-md bg-white shadow-2xl rounded" phx-click="reset_focus" phx-target={@myself}>
         <div>
+          <div class="text-button font-button text-warning leading-6">
+            {@error}
+          </div>
+          <Spacing :if={@error} value="XS" />
           <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
             {@title}
           </div>
           <Spacing value="XS" />
-
           <Form id="day_view" changeset={@changeset} change_event="update" submit="submit" target={@myself} focus={@focus} >
             <Wrap>
-              <DateInput :if={@day_model.date_editable?} field={:date} label_text={dgettext("link-lab", "day.schedule.date.label")} />
+              <DateInput :if={@day_model.date_editable?} field={:date} label_text={dgettext("link-lab", "day.schedule.date.label")} value={@day_model.date}/>
             </Wrap>
             <div class="flex flex-row gap-8">
               <div class="flex-grow">

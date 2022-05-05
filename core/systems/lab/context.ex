@@ -255,7 +255,10 @@ defmodule Systems.Lab.Context do
   def filter_double_time_slots(time_slots) do
     time_slots
     |> Enum.reduce([], fn ts, acc ->
-      if acc |> Enum.find(&(DateTime.compare(&1.start_time, ts.start_time) == :eq)) do
+      if acc
+         |> Enum.find(
+           &(DateTime.compare(&1.start_time, ts.start_time) == :eq and &1.location == ts.location)
+         ) do
         acc
       else
         [ts | acc]
