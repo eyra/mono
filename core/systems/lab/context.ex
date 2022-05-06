@@ -254,17 +254,24 @@ defmodule Systems.Lab.Context do
 
   def filter_double_time_slots(time_slots) do
     time_slots
-    |> Enum.reduce([], fn ts, acc ->
-      if acc
-         |> Enum.find(
-           &(DateTime.compare(&1.start_time, ts.start_time) == :eq and &1.location == ts.location)
-         ) do
-        acc
-      else
-        [ts | acc]
-      end
-    end)
+    |> Enum.reduce([], &filter_double_time_slots_reduce(&1, &2))
     |> Enum.reverse()
+  end
+
+  defp filter_double_time_slots_reduce(%{enabled?: false}, acc), do: acc
+
+  defp filter_double_time_slots_reduce(ts, acc) do
+    exists? =
+      Enum.find(
+        acc,
+        &(DateTime.compare(&1.start_time, ts.start_time) == :eq and &1.location == ts.location)
+      )
+
+    if exists? do
+      acc
+    else
+      [ts | acc]
+    end
   end
 
   defp create_time_slot(%Lab.ToolModel{} = tool, attrs) do
