@@ -168,3 +168,7 @@ msgstr "Ingecheckt %{date}"
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.reservation"
 msgstr "Reserving gevonden"
+
+#, elixir-format, ex-autogen
+msgid "date.location.error"
+msgstr "Deze locatie is al geboekt op de geselecteerde datum"

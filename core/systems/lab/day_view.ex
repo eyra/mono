@@ -29,8 +29,6 @@ defmodule Systems.Lab.DayView do
   data(focus, :string, default: "")
 
   def update(%{id: id, day_model: day_model, target: target}, socket) do
-    IO.puts("update A")
-
     changeset =
       day_model
       |> Lab.DayModel.changeset(:init, %{})
@@ -188,7 +186,12 @@ defmodule Systems.Lab.DayView do
   end
 
   defp validate_unused_date(
-         %{assigns: %{day_model: %{tool_id: tool_id, date: date, location: location}}} = socket
+         %{
+           assigns: %{
+             og_day_model: %{date: og_date, location: og_location},
+             day_model: %{action: action, tool_id: tool_id, date: date, location: location}
+           }
+         } = socket
        ) do
     time_slots =
       tool_id
@@ -198,7 +201,8 @@ defmodule Systems.Lab.DayView do
       )
 
     error =
-      if Enum.empty?(time_slots) do
+      if Enum.empty?(time_slots) or
+           (action == :edit and og_date == date and og_location == location) do
         nil
       else
         dgettext("link-lab", "date.location.error")
@@ -346,6 +350,7 @@ defmodule Systems.Lab.DayView.Example do
 
   data(day_model, :map,
     default: %Systems.Lab.DayModel{
+      action: :new,
       tool_id: 1,
       date: ~D[2022-12-13],
       date_editable?: true,

@@ -167,3 +167,7 @@ msgstr ""
 #, elixir-format, ex-autogen
 msgid "search.subject.reservation"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "date.location.error"
+msgstr ""

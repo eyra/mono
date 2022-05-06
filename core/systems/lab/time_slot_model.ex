@@ -37,4 +37,20 @@ defmodule Systems.Lab.TimeSlotModel do
 
     " #{date}  |  #{time}  |  #{location}" |> Macro.camelize()
   end
+
+  def count_reservations(timeslot, included) do
+    timeslot
+    |> filter_reservations(included)
+    |> Enum.count()
+  end
+
+  def filter_reservations(%{reservations: reservations}, included) when is_list(included) do
+    reservations
+    |> Enum.filter(&Enum.member?(included, &1.status))
+  end
+
+  def filter_reservations(%{reservations: reservations}, included) when is_atom(included) do
+    reservations
+    |> Enum.filter(&(&1.status == included))
+  end
 end

@@ -168,3 +168,7 @@ msgstr "Checked in %{date}"
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.reservation"
 msgstr "Reservation found"
+
+#, elixir-format, ex-autogen
+msgid "date.location.error"
+msgstr "Location already booked on the selected date"

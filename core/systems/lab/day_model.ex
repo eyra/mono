@@ -3,6 +3,7 @@ defmodule Systems.Lab.DayModel do
   import Ecto.Changeset
 
   embedded_schema do
+    field(:action, Ecto.Enum, values: [:new, :duplicate, :edit])
     field(:tool_id, :integer)
     field(:date, :date)
     field(:date_editable?, :boolean)

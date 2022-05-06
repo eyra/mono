@@ -68,7 +68,12 @@ defmodule Systems.Lab.Context do
 
   def get_available_time_slots(id) do
     get_time_slots(id, [:reservations])
-    |> Enum.filter(&(&1.number_of_seats > Enum.count(&1.reservations)))
+    |> Enum.filter(fn time_slot ->
+      reservation_count = Lab.TimeSlotModel.count_reservations(time_slot, [:reserved, :completed])
+
+      time_slot.number_of_seats > reservation_count &&
+        time_slot.start_time >= CoreWeb.UI.Timestamp.now()
+    end)
   end
 
   def new_day_model(%Lab.ToolModel{id: id}) do
@@ -82,6 +87,7 @@ defmodule Systems.Lab.Context do
       |> Timestamp.to_date()
 
     %Lab.DayModel{
+      action: :new,
       tool_id: id,
       date: date,
       date_editable?: true,
@@ -124,6 +130,7 @@ defmodule Systems.Lab.Context do
       |> Timestamp.to_date()
 
     %Lab.DayModel{
+      action: :duplicate,
       tool_id: id,
       date: new_date,
       date_editable?: true,
@@ -141,7 +148,6 @@ defmodule Systems.Lab.Context do
             &1.location == location)
       )
 
-    date_editable? = Timestamp.future?(date)
     entries = time_slots |> DaySchedule.entries()
 
     number_of_seats =
@@ -158,9 +164,10 @@ defmodule Systems.Lab.Context do
       )
 
     %Lab.DayModel{
+      action: :edit,
       tool_id: id,
       date: date,
-      date_editable?: date_editable?,
+      date_editable?: false,
       location: location,
       number_of_seats: number_of_seats,
       entries: entries
