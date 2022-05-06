@@ -87,6 +87,7 @@ defmodule Systems.Lab.Context do
       |> Timestamp.to_date()
 
     %Lab.DayModel{
+      action: :new,
       tool_id: id,
       date: date,
       date_editable?: true,
@@ -129,6 +130,7 @@ defmodule Systems.Lab.Context do
       |> Timestamp.to_date()
 
     %Lab.DayModel{
+      action: :duplicate,
       tool_id: id,
       date: new_date,
       date_editable?: true,
@@ -146,7 +148,6 @@ defmodule Systems.Lab.Context do
             &1.location == location)
       )
 
-    date_editable? = Timestamp.future?(date)
     entries = time_slots |> DaySchedule.entries()
 
     number_of_seats =
@@ -163,9 +164,10 @@ defmodule Systems.Lab.Context do
       )
 
     %Lab.DayModel{
+      action: :edit,
       tool_id: id,
       date: date,
-      date_editable?: date_editable?,
+      date_editable?: false,
       location: location,
       number_of_seats: number_of_seats,
       entries: entries
