@@ -15,6 +15,18 @@ defmodule Systems.Lab.ContextTest do
          time_slots: [
            %{
              start_time:
+               Timestamp.yesterday() |> Timex.set(hour: 9, minute: 0, second: 0, microsecond: 0),
+             location: Faker.Lorem.sentence(),
+             number_of_seats: 2
+           },
+           %{
+             start_time:
+               Timestamp.yesterday() |> Timex.set(hour: 9, minute: 30, second: 0, microsecond: 0),
+             location: Faker.Lorem.sentence(),
+             number_of_seats: 2
+           },
+           %{
+             start_time:
                Timestamp.tomorrow() |> Timex.set(hour: 9, minute: 0, second: 0, microsecond: 0),
              location: Faker.Lorem.sentence(),
              number_of_seats: 9
@@ -193,6 +205,41 @@ defmodule Systems.Lab.ContextTest do
                %{enabled?: false, start_time: 1900},
                %{enabled?: false, start_time: 1930}
              ] = entries
+    end
+  end
+
+  describe "get_available_time_slots/2" do
+    test "return present and future time_slots", %{lab_tool: %{id: id} = _lab_tool} do
+      assert [_slot1, _slot2] = Lab.Context.get_available_time_slots(id)
+    end
+
+    test "return time_slots with open spots for reservations", %{lab_tool: %{id: id} = _lab_tool} do
+      [slot1, %{id: slot2_id}] = Lab.Context.get_available_time_slots(id)
+
+      0..slot1.number_of_seats
+      |> Enum.each(fn _ ->
+        member = Factories.insert!(:member)
+        Lab.Context.reserve_time_slot(slot1, member)
+      end)
+
+      assert [%{id: ^slot2_id}] = Lab.Context.get_available_time_slots(id)
+    end
+
+    test "return time_slots with cancelled reservation", %{lab_tool: %{id: id} = lab_tool} do
+      [%{id: slot1_id} = slot1, %{id: slot2_id}] = Lab.Context.get_available_time_slots(id)
+
+      members =
+        1..slot1.number_of_seats
+        |> Enum.map(fn _ ->
+          member = Factories.insert!(:member)
+          {:ok, _} = Lab.Context.reserve_time_slot(slot1, member)
+          member
+        end)
+
+      first_member = List.first(members)
+      Lab.Context.cancel_reservation(lab_tool, first_member)
+      Lab.Context.get(id, time_slots: [:reservations])
+      assert [%{id: ^slot1_id}, %{id: ^slot2_id}] = Lab.Context.get_available_time_slots(id)
     end
   end
 end

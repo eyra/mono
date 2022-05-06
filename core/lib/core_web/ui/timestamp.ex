@@ -33,6 +33,11 @@ defmodule CoreWeb.UI.Timestamp do
     |> shift_days(1)
   end
 
+  def yesterday(timezone \\ "Etc/UTC") do
+    DateTime.now!(timezone)
+    |> shift_days(-1)
+  end
+
   def naive_now() do
     now()
     |> DateTime.to_naive()
