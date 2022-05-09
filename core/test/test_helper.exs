@@ -29,5 +29,6 @@ Mox.defmock(Systems.DataDonation.MockStorageBackend, for: Systems.DataDonation.S
 Application.put_env(
   :core,
   :data_donation_storage_backend,
-  Systems.DataDonation.MockStorageBackend
+  s3: Systems.DataDonation.MockStorageBackend,
+  centerdata: Systems.DataDonation.MockStorageBackend
 )

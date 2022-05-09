@@ -26,11 +26,11 @@ defmodule Systems.DataDonation.ContentPage do
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
-    DataDonation.Context.get!(id)
+    DataDonation.Context.get_tool!(id)
   end
 
   def mount(%{"id" => id}, _session, socket) do
-    tool = DataDonation.Context.get!(id)
+    tool = DataDonation.Context.get_tool!(id)
 
     {
       :ok,

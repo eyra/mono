@@ -1,3 +1,7 @@
 defmodule Systems.DataDonation.StorageBackend do
-  @callback store(participant_id :: binary(), data :: binary()) :: nil
+  @callback store(
+              storage_info :: map(),
+              vm :: map(),
+              data :: binary()
+            ) :: nil
 end

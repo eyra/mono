@@ -6,7 +6,7 @@ defmodule Systems.DataDonation.DownloadController do
   }
 
   def download(conn, %{"id" => tool_id}) do
-    tool = DataDonation.Context.get!(tool_id)
+    tool = DataDonation.Context.get_tool!(tool_id)
 
     conn
     |> assign(:script, tool.script)
@@ -14,7 +14,7 @@ defmodule Systems.DataDonation.DownloadController do
   end
 
   def download_single(conn, %{"id" => tool_id, "donation_id" => donation_id}) do
-    tool = DataDonation.Context.get!(tool_id)
+    tool = DataDonation.Context.get_tool!(tool_id)
 
     data =
       DataDonation.Context.list_donations(tool)
@@ -24,7 +24,7 @@ defmodule Systems.DataDonation.DownloadController do
   end
 
   def download_all(conn, %{"id" => tool_id}) do
-    tool = DataDonation.Context.get!(tool_id)
+    tool = DataDonation.Context.get_tool!(tool_id)
     data = DataDonation.Context.list_donations(tool)
     send_zip(conn, data)
   end

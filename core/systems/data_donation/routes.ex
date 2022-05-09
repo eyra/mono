@@ -12,8 +12,16 @@ defmodule Systems.DataDonation.Routes do
 
       scope "/data-donation", Systems.DataDonation do
         pipe_through([:browser])
-        live("/pilot/donate/:participant_id", UploadPage)
-        live("/pilot/thanks/:participant_id", ThanksPage)
+        live("/donate", UploadPage)
+        live("/thanks", ThanksPage)
+
+        get("/:flow/donate/:participant", DefaultController, :create)
+        get("/centerdata/:id", CenterdataController, :create)
+      end
+
+      scope "/data-donation", Systems.DataDonation do
+        pipe_through([:browser_unprotected])
+        post("/centerdata/:id", CenterdataController, :create)
       end
     end
   end
