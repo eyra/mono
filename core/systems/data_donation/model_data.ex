@@ -33,7 +33,7 @@ defmodule Systems.DataDonation.ModelData do
         institution: "University Utrecht",
         redirect_to: nil,
         storage: :centerdata,
-        storage_info: %{quest: "quest"},
+        storage_info: %{quest: "test_arnaud"},
         script: "zip_contents.py"
       }
     ]

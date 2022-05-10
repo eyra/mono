@@ -4,8 +4,13 @@ defmodule Systems.DataDonation.CenterdataStorageBackend do
   require Logger
 
   def store(
-        %{url: url, varname1: varname1, page: page, respondent: respondent, token: token} =
-          _storage_info,
+        %{
+          "url" => url,
+          "varname1" => varname1,
+          "page" => page,
+          "respondent" => respondent,
+          "token" => token
+        } = _session,
         %{storage_info: %{quest: quest}} = _vm,
         data
       ) do
@@ -16,6 +21,7 @@ defmodule Systems.DataDonation.CenterdataStorageBackend do
   end
 
   defp post(url, body) do
+    Logger.info("Centerdata post: #{url} => #{body}")
     response = http_request(:post, url, body, [{"Content-type", "application/json"}])
     Logger.info("Centerdata post response status: #{response.status_code}")
 

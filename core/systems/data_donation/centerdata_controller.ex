@@ -1,27 +1,23 @@
 defmodule Systems.DataDonation.CenterdataController do
   use CoreWeb, :controller
 
-  alias Systems.{
-    DataDonation
-  }
-
   def create(
         conn,
         %{
-          "id" => id,
-          "url" => url,
-          "page" => page,
-          "varname1" => varname1,
-          "varvalue1" => varvalue1,
-          "questiontext1" => questiontext1,
           "error1" => error1,
-          "respondent" => respondent,
-          "mobile" => mobile,
+          "id" => id,
           "lang" => lang,
-          "token" => token
+          "mobile" => mobile,
+          "page" => page,
+          "questiontext1" => questiontext1,
+          "respondent" => respondent,
+          "token" => token,
+          "url" => url,
+          "varname1" => varname1,
+          "varvalue1" => varvalue1
         }
       ) do
-    storage_info = %{
+    session = %{
       url: url,
       page: page,
       varname1: varname1,
@@ -34,13 +30,7 @@ defmodule Systems.DataDonation.CenterdataController do
       token: token
     }
 
-    conn
-    |> live_render(
-      DataDonation.UploadPage,
-      session: %{
-        "flow" => id,
-        "storage_info" => storage_info
-      }
-    )
+    path = Routes.live_path(conn, Systems.DataDonation.UploadPage, id, session: session)
+    redirect(conn, to: path)
   end
 end

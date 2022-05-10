@@ -12,11 +12,12 @@ defmodule Systems.DataDonation.Routes do
 
       scope "/data-donation", Systems.DataDonation do
         pipe_through([:browser])
-        live("/donate", UploadPage)
-        live("/thanks", ThanksPage)
-
-        get("/:flow/donate/:participant", DefaultController, :create)
+        get("/:id/donate/:participant", DefaultController, :create)
+        get("/donate/:id/:participant", DefaultController, :create)
         get("/centerdata/:id", CenterdataController, :create)
+
+        live("/donate/:id", UploadPage)
+        live("/thanks/:id/:participant", ThanksPage)
       end
 
       scope "/data-donation", Systems.DataDonation do

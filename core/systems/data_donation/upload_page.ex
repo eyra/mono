@@ -38,8 +38,8 @@ defmodule Systems.DataDonation.UploadPage do
   data(tabs, :any)
 
   @impl true
-  def mount(_params, %{"flow" => flow, "storage_info" => storage_info} = _session, socket) do
-    vm = DataDonation.Context.get(flow)
+  def mount(%{"id" => id, "session" => session} = _params, _session, socket) do
+    vm = DataDonation.Context.get(id)
     tabs = create_tabs(vm)
 
     finish_button = %{
@@ -54,7 +54,7 @@ defmodule Systems.DataDonation.UploadPage do
     }
 
     {:ok,
-     assign(socket, vm: vm, storage_info: storage_info, tabs: tabs, finish_button: finish_button)
+     assign(socket, id: id, vm: vm, session: session, tabs: tabs, finish_button: finish_button)
      |> update_menus()}
   end
 
@@ -97,17 +97,27 @@ defmodule Systems.DataDonation.UploadPage do
   def handle_event(
         "donate",
         %{"data" => data},
-        %{assigns: %{vm: %{redirect_to: redirect_to}}} = socket
+        socket
       ) do
     store_results(socket, data)
+    {:noreply, socket |> next_action()}
+  end
 
-    socket =
-      case redirect_to do
-        :thanks -> push_redirect(socket, to: Routes.live_path(socket, DataDonation.ThanksPage))
-        _ -> socket
-      end
+  defp next_action(
+         %{
+           assigns: %{
+             id: id,
+             session: %{"participant" => participant},
+             vm: %{redirect_to: :thanks}
+           }
+         } = socket
+       ) do
+    push_redirect(socket, to: Routes.live_path(socket, DataDonation.ThanksPage, id, participant))
+  end
 
-    {:noreply, socket}
+  defp next_action(socket) do
+    IO.puts("NO PUSH")
+    socket
   end
 
   @impl true
@@ -130,12 +140,12 @@ defmodule Systems.DataDonation.UploadPage do
   end
 
   def store_results(
-        %{assigns: %{vm: %{storage: storage_key} = vm, storage_info: storage_info}} = _socket,
+        %{assigns: %{session: session, vm: %{storage: storage_key} = vm}} = _socket,
         data
       )
       when is_binary(data) do
     storage = storage(storage_key)
-    storage.store(storage_info, vm, data)
+    storage.store(session, vm, data)
   end
 
   defp storage(storage_key) do

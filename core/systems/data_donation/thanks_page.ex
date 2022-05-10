@@ -21,13 +21,13 @@ defmodule Systems.DataDonation.ThanksPage do
   data(tool, :any)
   data(participant, :any)
 
-  def mount(_params, %{"flow" => flow, "participant" => participant} = _session, socket) do
+  def mount(%{"id" => id, "participant" => participant} = _params, _session, socket) do
     {
       :ok,
       socket
       |> assign(
         participant: participant,
-        vm: DataDonation.Context.get(flow)
+        vm: DataDonation.Context.get(id)
       )
       |> update_menus()
     }

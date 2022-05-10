@@ -3,7 +3,7 @@ defmodule Systems.DataDonation.S3StorageBackend do
 
   alias ExAws.S3
 
-  def store(%{participant: participant} = _storage_info, _vm, data) do
+  def store(%{participant: participant} = _state, _vm, data) do
     [data]
     |> S3.upload(bucket(), path(participant))
     |> ExAws.request()

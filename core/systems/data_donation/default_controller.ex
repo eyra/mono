@@ -4,7 +4,7 @@ defmodule Systems.DataDonation.DefaultController do
   def create(
         conn,
         %{
-          "flow" => flow,
+          "id" => id,
           "participant" => participant
         }
       ) do
@@ -12,11 +12,11 @@ defmodule Systems.DataDonation.DefaultController do
       throw(:invalid_participant_id)
     end
 
-    storage_info = %{participant: participant}
+    path =
+      Routes.live_path(conn, Systems.DataDonation.UploadPage, id,
+        session: %{participant: participant}
+      )
 
-    conn
-    |> live_render(Systems.DataDonation.UploadPage,
-      session: %{"flow" => flow, "storage_info" => storage_info}
-    )
+    redirect(conn, to: path)
   end
 end
