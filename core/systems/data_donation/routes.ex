@@ -16,6 +16,8 @@ defmodule Systems.DataDonation.Routes do
         get("/donate/:id/:participant", DefaultController, :create)
         get("/centerdata/:id", CenterdataController, :create)
 
+        live("/centerdata_submit_test", CenterdataUploadPage)
+
         live("/donate/:id", UploadPage)
         live("/thanks/:id/:participant", ThanksPage)
       end

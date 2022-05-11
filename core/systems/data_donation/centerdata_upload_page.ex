@@ -59,7 +59,7 @@ defmodule Systems.DataDonation.CenterdataUploadPage do
           <input value={@respondent} name="_respondent"/>
           <input value={@token} name="token"/>
           <input value={@quest} name="quest"/>
-          <input type="hidden" value={@button_next} name="button_next"/>
+          <input value={@button_next} name="button_next"/>
         </div>
         <div class="buttons">
           <div class="next_button">
