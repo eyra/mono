@@ -40,7 +40,7 @@ defmodule Systems.DataDonation.UploadPage do
   @impl true
   def mount(%{"id" => id, "session" => session} = _params, _session, socket) do
     vm = DataDonation.Context.get(id)
-    tabs = create_tabs(vm)
+    tabs = create_tabs(vm, session)
 
     finish_button = %{
       action: %{
@@ -58,7 +58,7 @@ defmodule Systems.DataDonation.UploadPage do
      |> update_menus()}
   end
 
-  defp create_tabs(%{file_type: file_type} = vm) do
+  defp create_tabs(%{file_type: file_type} = vm, session) do
     script_content = read_script(vm)
 
     [
@@ -87,7 +87,7 @@ defmodule Systems.DataDonation.UploadPage do
         title: dgettext("eyra-data-donation", "tabbar.item.submit_data"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.submit_data.forward"),
         component: SubmitDataSheet,
-        props: vm,
+        props: Map.put(vm, :session, session),
         type: :sheet
       }
     ]

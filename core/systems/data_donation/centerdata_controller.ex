@@ -5,7 +5,7 @@ defmodule Systems.DataDonation.CenterdataController do
         conn,
         %{
           "error1" => error1,
-          "id" => _id,
+          "id" => id,
           "lang" => lang,
           "mobile" => mobile,
           "page" => page,
@@ -30,21 +30,7 @@ defmodule Systems.DataDonation.CenterdataController do
       token: token
     }
 
-    # data = "{\"some_key\": \"some_value\"}"
-
-    # conn
-    # |> render("upload.html",
-    #   url: url,
-    #   varname1: varname1,
-    #   respondent: respondent,
-    #   page: page,
-    #   token: token,
-    #   quest: "test_arnaud",
-    #   button_next: "Verder",
-    #   data: data
-    # )
-
-    path = Routes.live_path(conn, Systems.DataDonation.CenterdataUploadPage, session: session)
+    path = Routes.live_path(conn, Systems.DataDonation.UploadPage, id, session: session)
     redirect(conn, to: path)
   end
 end

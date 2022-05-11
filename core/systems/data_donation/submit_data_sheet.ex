@@ -5,12 +5,30 @@ defmodule Systems.DataDonation.SubmitDataSheet do
   alias Frameworks.Pixel.Text.{Title1, Body}
   alias Frameworks.Pixel.Line
 
+  alias Surface.Components.Dynamic
+
   prop(props, :map, required: true)
 
   data(researcher, :string)
+  data(form, :any)
 
-  def update(%{id: id, props: %{researcher: researcher}}, socket) do
-    {:ok, socket |> assign(id: id, researcher: researcher)}
+  def update(%{id: id, props: %{researcher: researcher} = props}, socket) do
+    form = get_form(props)
+    {:ok, socket |> assign(id: id, researcher: researcher, form: form)}
+  end
+
+  defp get_form(%{storage: :s3}) do
+    %{
+      module: Systems.DataDonation.S3Form,
+      props: %{}
+    }
+  end
+
+  defp get_form(%{storage: :centerdata, session: session}) do
+    %{
+      module: Systems.DataDonation.CenterdataForm,
+      props: %{session: session}
+    }
   end
 
   defp submit_button() do
@@ -34,27 +52,24 @@ defmodule Systems.DataDonation.SubmitDataSheet do
                 {dgettext("eyra-data-donation", "no.extraction.data.yet.description")}
               </Body>
             </div>
-            <form class="donate-form hidden" :on-submit={"donate", target: :live_view}>
-              <input type="hidden" name="data" value="...">
-              <Body>
-                {dgettext("eyra-data-donation", "submit_data.description", researcher: @researcher)}
-              </Body>
-              <Spacing value="M" />
-              <Wrap>
-                <DynamicButton vm={submit_button()} />
-              </Wrap>
-              <Spacing value="L" />
+            <Dynamic.Component module={@form.module} {...@form.props} >
+              <div>
+                <Body>
+                  {dgettext("eyra-data-donation", "submit_data.description", researcher: @researcher)}
+                </Body>
+                <Spacing value="L" />
 
-              <Line />
-              <p class="extracted overflow-scroll">...</p>
-              <Spacing value="M" />
-              <Line />
-              <Spacing value="M" />
+                <Line />
+                <p class="extracted overflow-scroll">...</p>
+                <Spacing value="M" />
+                <Line />
+                <Spacing value="M" />
 
-              <Wrap>
-                <DynamicButton vm={submit_button()} />
-              </Wrap>
-            </form>
+                <Wrap>
+                  <DynamicButton vm={submit_button()} />
+                </Wrap>
+              </div>
+            </Dynamic.Component>
           </div>
         </SheetArea>
       </ContentArea>
