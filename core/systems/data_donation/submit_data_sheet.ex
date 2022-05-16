@@ -24,10 +24,10 @@ defmodule Systems.DataDonation.SubmitDataSheet do
     }
   end
 
-  defp get_form(%{storage: :centerdata, session: session}) do
+  defp get_form(%{storage: :centerdata, storage_info: storage_info, session: session}) do
     %{
       module: Systems.DataDonation.CenterdataForm,
-      props: %{session: session}
+      props: %{session: session, storage_info: storage_info}
     }
   end
 

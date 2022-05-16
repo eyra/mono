@@ -2,6 +2,7 @@ defmodule Systems.DataDonation.CenterdataForm do
   use Frameworks.Pixel.Component
 
   prop(session, :any, required: true)
+  prop(storage_info, :any, required: true)
   slot(default, required: true)
 
   @impl true
@@ -13,7 +14,7 @@ defmodule Systems.DataDonation.CenterdataForm do
         <input type="hidden" name="_respondent" value={@session["respondent"]}>
         <input type="hidden" name="token" value={@session["token"]}>
         <input type="hidden" name="button_next" value="Verder">
-        <input type="hidden" name="quest" value="test_arnaud">
+        <input type="hidden" name="quest" value={@storage_info.quest}">
         <#slot />
       </form>
     """
