@@ -11,7 +11,7 @@ defmodule Systems.Pool.CampaignSubmissionView do
     Assignment
   }
 
-  alias Core.Pools.{Submissions, Criteria}
+  alias Core.Pools.{Criteria}
 
   prop(props, :any, required: true)
 
@@ -71,17 +71,19 @@ defmodule Systems.Pool.CampaignSubmissionView do
     }
   end
 
-  # Handle update from parent after auto-save, prevents overwrite of current state
-  def update(_params, %{assigns: %{submission: _submission}} = socket) do
-    {:ok, socket}
-  end
-
   # Initial update
-  def update(%{id: id, props: %{entity_id: entity_id, user: user}}, socket) do
-    %{criteria: criteria, promotion: promotion} = submission = Submissions.get!(entity_id)
-
+  def update(
+        %{
+          id: id,
+          props: %{
+            entity: %{criteria: criteria, promotion_id: promotion_id} = submission,
+            user: user
+          }
+        },
+        socket
+      ) do
     %{promotable_assignment: %{excluded: excluded_assignments} = assignment} =
-      Campaign.Context.get_by_promotion(promotion, promotable_assignment: [:excluded])
+      Campaign.Context.get_by_promotion(promotion_id, promotable_assignment: [:excluded])
 
     excluded_assignment_ids =
       excluded_assignments

@@ -39,13 +39,16 @@ defmodule Systems.Lab.Context do
   end
 
   def update_tool(changeset) do
-    with {:ok, %{tool: tool} = result} <-
-           Multi.new()
-           |> Multi.update(:tool, changeset)
-           |> Repo.transaction() do
+    result =
+      Multi.new()
+      |> Repo.multi_update(:tool, changeset)
+      |> Repo.transaction()
+
+    with {:ok, %{tool: tool}} <- result do
       Signal.Context.dispatch!(:lab_tool_updated, tool)
-      {:ok, result}
     end
+
+    result
   end
 
   def get_time_slot(id, preload \\ []) do
@@ -391,6 +394,9 @@ end
 
 defimpl Core.Persister, for: Systems.Lab.ToolModel do
   def save(_tool, changeset) do
-    Systems.Lab.Context.update_tool(changeset)
+    case Systems.Lab.Context.update_tool(changeset) do
+      {:ok, %{tool: tool}} -> {:ok, tool}
+      _ -> {:error, changeset}
+    end
   end
 end

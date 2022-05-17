@@ -3,7 +3,6 @@ defmodule Systems.Pool.SubmissionPage do
    The submission page for a campaign.
   """
   use CoreWeb, :live_view
-  use CoreWeb.MultiFormAutoSave
   use CoreWeb.Layouts.Workspace.Component, :pool_submission
   use CoreWeb.UI.PlainDialog
 
@@ -92,9 +91,8 @@ defmodule Systems.Pool.SubmissionPage do
     super(assign(socket, preview_path: preview_path))
   end
 
-  @impl true
-  def handle_auto_save_done(socket) do
-    socket |> update_menus()
+  def handle_info({:handle_auto_save_done, _}, socket) do
+    {:noreply, socket |> update_menus()}
   end
 
   def handle_info({:claim_focus, :submission_form}, socket) do

@@ -18,7 +18,7 @@ defmodule CoreWeb.LiveUri do
         {:noreply, socket}
       end
 
-      def handle_params(_unsigned_params, uri, socket) do
+      def handle_params(unsigned_params, uri, socket) do
         parsed_uri = URI.parse(uri)
         uri_origin = "#{parsed_uri.scheme}://#{parsed_uri.authority}"
 
@@ -31,6 +31,7 @@ defmodule CoreWeb.LiveUri do
         {
           :noreply,
           socket
+          |> assign(:params, unsigned_params)
           |> assign(:uri, uri)
           |> assign(:uri_origin, uri_origin)
           |> assign(:uri_path, uri_path)

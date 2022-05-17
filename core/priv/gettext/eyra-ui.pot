@@ -15,7 +15,7 @@ msgid "error.flash"
 msgstr ""
 
 #, elixir-format
-msgid "saved.info.flash"
+msgid "persister.saved.flash"
 msgstr ""
 
 #, elixir-format
@@ -192,4 +192,8 @@ msgstr ""
 
 #, elixir-format, ex-autogen
 msgid "menu.item.payments"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "persister.error.flash"
 msgstr ""

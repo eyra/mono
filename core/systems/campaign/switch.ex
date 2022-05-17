@@ -34,6 +34,7 @@ defmodule Systems.Campaign.Switch do
     campaign
     |> Campaign.Presenter.update(promotion.id, Promotion.LandingPage)
     |> Campaign.Presenter.update(assignment.id, Assignment.LandingPage)
+    |> Campaign.Presenter.update(campaign.id, Campaign.ContentPage)
   end
 
   def handle(:assignment_accepted, %{assignment: assignment, user: user}) do
@@ -55,6 +56,7 @@ defmodule Systems.Campaign.Switch do
     campaign
     |> Campaign.Presenter.update(promotion.id, Promotion.LandingPage)
     |> Campaign.Presenter.update(promotable.id, Assignment.LandingPage)
+    |> Campaign.Presenter.update(campaign.id, Campaign.ContentPage)
   end
 
   def handle(:submisson_updated, submission) do
@@ -68,5 +70,6 @@ defmodule Systems.Campaign.Switch do
     campaign
     |> Campaign.Presenter.update(promotion_id, Promotion.LandingPage)
     |> Campaign.Presenter.update(promotable_assignment_id, Assignment.LandingPage)
+    |> Campaign.Presenter.update(campaign.id, Campaign.ContentPage)
   end
 end

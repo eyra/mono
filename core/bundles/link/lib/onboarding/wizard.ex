@@ -3,7 +3,6 @@ defmodule Link.Onboarding.Wizard do
   The home screen.
   """
   use CoreWeb, :live_view
-  use CoreWeb.MultiFormAutoSave
   use CoreWeb.Layouts.Stripped.Component, :onboarding
   alias CoreWeb.Layouts.Stripped.Component, as: Stripped
 
@@ -48,11 +47,6 @@ defmodule Link.Onboarding.Wizard do
   end
 
   @impl true
-  def handle_auto_save_done(socket) do
-    socket |> update_menus()
-  end
-
-  @impl true
   def handle_event("reset_focus", _, socket) do
     send_update(ProfileForm, id: :profile, focus: "")
     {:noreply, socket}
@@ -62,6 +56,11 @@ defmodule Link.Onboarding.Wizard do
   def handle_event("finish", _, %{assigns: %{current_user: current_user}} = socket) do
     Accounts.mark_as_visited(current_user, :onboarding)
     {:noreply, push_redirect(socket, to: forward_path(socket))}
+  end
+
+  def handle_info({:handle_auto_save_done, _}, socket) do
+    socket |> update_menus()
+    {:noreply, socket}
   end
 
   def handle_info({:claim_focus, :profile}, socket) do

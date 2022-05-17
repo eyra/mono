@@ -46,11 +46,6 @@ defmodule Systems.Pool.SubmissionCriteriaView do
     }
   end
 
-  # Handle update from parent after auto-save, prevents overwrite of current state
-  def update(_params, %{assigns: %{submission: _submission}} = socket) do
-    {:ok, socket}
-  end
-
   def update(%{id: id, props: %{entity_id: entity_id}}, socket) do
     criteria = Submissions.get!(entity_id).criteria
 

@@ -35,7 +35,8 @@ defmodule Systems.Admin.PermissionsPage do
   @impl true
   def handle_event("assign_pool_admin_role", %{"item" => email}, socket) do
     user = Accounts.get_user_by_email(email)
-    Accounts.update_user_profile(user, %{coordinator: true}, %{})
+    user_changeset = Accounts.User.user_profile_changeset(user, %{coordinator: true})
+    Accounts.update_user(user_changeset)
 
     {
       :noreply,
@@ -46,7 +47,8 @@ defmodule Systems.Admin.PermissionsPage do
   @impl true
   def handle_event("remove_pool_admin_role", %{"item" => email}, socket) do
     user = Accounts.get_user_by_email(email)
-    Accounts.update_user_profile(user, %{coordinator: false}, %{})
+    user_changeset = Accounts.User.user_profile_changeset(user, %{coordinator: false})
+    Accounts.update_user(user_changeset)
 
     {
       :noreply,

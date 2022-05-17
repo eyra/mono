@@ -18,7 +18,7 @@ defmodule Systems.Campaign.Builders.AssignmentCallbackPage do
           },
           promotable_assignment: assignment
         },
-        user,
+        %{current_user: user} = _assigns,
         _url_resolver
       ) do
     %{

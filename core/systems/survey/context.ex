@@ -75,16 +75,19 @@ defmodule Systems.Survey.Context do
     |> update_survey_tool()
   end
 
-  def update_survey_tool(_, _, _), do: nil
+  def update_survey_tool(_, _, _), do: {:error, nil}
 
   def update_survey_tool(changeset) do
-    with {:ok, %{tool: tool} = result} <-
-           Multi.new()
-           |> Multi.update(:tool, changeset)
-           |> Repo.transaction() do
+    result =
+      Multi.new()
+      |> Repo.multi_update(:tool, changeset)
+      |> Repo.transaction()
+
+    with {:ok, %{tool: tool}} <- result do
       Signal.Context.dispatch!(:survey_tool_updated, tool)
-      {:ok, result}
     end
+
+    result
   end
 
   @doc """
@@ -119,6 +122,9 @@ end
 
 defimpl Core.Persister, for: Systems.Survey.ToolModel do
   def save(_tool, changeset) do
-    Systems.Survey.Context.update_survey_tool(changeset)
+    case Systems.Survey.Context.update_survey_tool(changeset) do
+      {:ok, %{tool: tool}} -> {:ok, tool}
+      _ -> {:error, changeset}
+    end
   end
 end

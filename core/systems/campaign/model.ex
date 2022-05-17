@@ -124,7 +124,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
     %{
       id: id,
-      path: url_resolver.(Assignment.LandingPage, assignment.id),
+      path: url_resolver.(Assignment.LandingPage, id: assignment.id),
       title: title,
       subtitle: subtitle,
       tag: tag,
@@ -155,7 +155,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
          _user,
          url_resolver
        ) do
-    path = url_resolver.(Systems.Campaign.ContentPage, id)
+    path = url_resolver.(Systems.Campaign.ContentPage, id: id)
     tag = Submission.get_tag(submission)
 
     promotion_ready? = Promotion.Context.ready?(promotion)
@@ -208,7 +208,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
          url_resolver
        ) do
     %{updated_at: updated_at} = task = task(crew, user)
-    path = url_resolver.(Systems.Assignment.LandingPage, assignment.id)
+    path = url_resolver.(Systems.Assignment.LandingPage, id: assignment.id)
     tag = tag(task)
     subtitle = subtitle(task, user, assignment)
     quick_summary = get_quick_summary(updated_at)

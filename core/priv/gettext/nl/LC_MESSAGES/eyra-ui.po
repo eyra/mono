@@ -16,7 +16,7 @@ msgid "error.flash"
 msgstr "Er is een fout opgetreden"
 
 #, elixir-format
-msgid "saved.info.flash"
+msgid "persister.saved.flash"
 msgstr "Opgeslagen"
 
 #, elixir-format
@@ -194,3 +194,7 @@ msgstr "haar"
 #, elixir-format, ex-autogen, fuzzy
 msgid "menu.item.payments"
 msgstr "Menu"
+
+#, elixir-format, ex-autogen
+msgid "persister.error.flash"
+msgstr "Opslaan mislukt, refresh de pagina en probeer het opnieuw"

@@ -10,10 +10,9 @@ defmodule Systems.Assignment.EthicalForm do
     Assignment
   }
 
-  prop(entity_id, :number, required: true)
+  prop(entity, :map, required: true)
   prop(validate?, :boolean, required: true)
 
-  data(entity, :any)
   data(ethical_label, :any)
   data(changeset, :any)
   data(focus, :any, default: "")
@@ -33,10 +32,9 @@ defmodule Systems.Assignment.EthicalForm do
 
   # Handle initial update
   def update(
-        %{id: id, entity_id: entity_id, validate?: validate?},
+        %{id: id, entity: entity, validate?: validate?},
         socket
       ) do
-    entity = Assignment.Context.get_experiment!(entity_id)
     changeset = Assignment.ExperimentModel.changeset(entity, :create, %{})
 
     ethical_label = %{
@@ -50,7 +48,6 @@ defmodule Systems.Assignment.EthicalForm do
       :ok,
       socket
       |> assign(id: id)
-      |> assign(entity_id: entity_id)
       |> assign(entity: entity)
       |> assign(changeset: changeset)
       |> assign(ethical_label: ethical_label)

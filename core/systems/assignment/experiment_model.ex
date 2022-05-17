@@ -114,7 +114,6 @@ defmodule Systems.Assignment.ExperimentModel do
 
   def external_path(_, _), do: nil
 
-  # Tool
   def tool_id(%{survey_tool_id: tool_id}) when not is_nil(tool_id), do: tool_id
   def tool_id(%{lab_tool_id: tool_id}) when not is_nil(tool_id), do: tool_id
 

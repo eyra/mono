@@ -31,7 +31,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
               crew: crew
             } = assignment
         } = campaign,
-        user,
+        %{current_user: user} = _assigns,
         _url_resolver
       ) do
     base = %{

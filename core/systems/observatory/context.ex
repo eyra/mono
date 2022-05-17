@@ -52,13 +52,13 @@ defmodule Systems.Observatory.Context do
 
   defp get_view_model(
          presenter,
-         %{assigns: %{current_user: user}},
+         %{assigns: assigns} = _socket,
          model_or_id,
          page,
          url_resolver
        ) do
     presenter
-    |> apply(:view_model, [model_or_id, page, user, url_resolver])
+    |> apply(:view_model, [model_or_id, page, assigns, url_resolver])
   end
 
   defmacro __using__(_opts \\ []) do
@@ -82,6 +82,11 @@ defmodule Systems.Observatory.Context do
       def observe_view_model(%{assigns: %{model: %{id: id}}} = socket) do
         socket
         |> Context.observe([{__MODULE__, [id]}])
+        |> Context.update_view_model(id, __MODULE__)
+      end
+
+      def update_view_model(%{assigns: %{model: %{id: id}}} = socket) do
+        socket
         |> Context.update_view_model(id, __MODULE__)
       end
 

@@ -102,8 +102,9 @@ defmodule Link.Marketplace do
     online? and eligitable?
   end
 
-  def handle_auto_save_done(socket) do
+  def handle_info({:handle_auto_save_done, _}, socket) do
     socket |> update_menus()
+    {:noreply, socket}
   end
 
   def handle_info({:card_click, %{action: :edit, id: id}}, socket) do

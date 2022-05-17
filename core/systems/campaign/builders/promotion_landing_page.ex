@@ -25,7 +25,7 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
               assignable_experiment: experiment
             } = assignment
         },
-        _user,
+        _assigns,
         _url_resolver
       ) do
     %{

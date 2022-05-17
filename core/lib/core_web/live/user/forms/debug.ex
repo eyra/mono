@@ -34,11 +34,6 @@ defmodule CoreWeb.User.Forms.Debug do
     }
   end
 
-  # Handle update from parent after auto-save, prevents overwrite of current state
-  def update(_params, %{assigns: %{entity: _entity}} = socket) do
-    {:ok, socket}
-  end
-
   def update(%{id: id, user: user}, socket) do
     profile = Accounts.get_profile(user)
     entity = UserProfileEdit.create(user, profile)

@@ -28,7 +28,7 @@ msgstr "The page could not be saved."
 
 #, elixir-format
 #: lib/auto_save.ex:83
-msgid "saved.info.flash"
+msgid "persister.saved.flash"
 msgstr "Saved"
 
 #, elixir-format, fuzzy

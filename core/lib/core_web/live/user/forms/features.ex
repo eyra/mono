@@ -30,12 +30,6 @@ defmodule CoreWeb.User.Forms.Features do
     }
   end
 
-  # Handle update from parent after auto-save, prevents overwrite of current state
-  # def update(_params, %{assigns: %{entity: _entity}} = socket) do
-  #   FIXME: Is it ok to disable this function? It makes the tests pass?
-  #   {:ok, socket}
-  # end
-
   def update(%{id: id, props: %{user: user}}, socket) do
     entity = Accounts.get_features(user)
 
