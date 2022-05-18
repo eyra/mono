@@ -1,7 +1,6 @@
 defmodule Systems.Pool.StudentsView do
   use CoreWeb.UI.LiveComponent
 
-  alias Core.Accounts
   alias Core.Enums.StudyProgramCodes
   alias Core.Pools.CriteriaFilters
 
@@ -25,8 +24,18 @@ defmodule Systems.Pool.StudentsView do
     }
   end
 
-  def update(%{id: id} = _params, socket) do
-    students = Accounts.list_students([:profile, :features])
+  # View model update
+  def update(%{props: %{students: students}} = _params, %{assigns: %{id: _id}} = socket) do
+    {
+      :ok,
+      socket
+      |> assign(students: students)
+      |> prepare_students()
+    }
+  end
+
+  # Initial update
+  def update(%{id: id, props: %{students: students}} = _params, socket) do
     filter_labels = CriteriaFilters.labels([])
 
     {

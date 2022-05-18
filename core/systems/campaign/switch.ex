@@ -59,7 +59,7 @@ defmodule Systems.Campaign.Switch do
     |> Campaign.Presenter.update(campaign.id, Campaign.ContentPage)
   end
 
-  def handle(:submisson_updated, submission) do
+  def handle(:submission_updated, submission) do
     %{promotion_id: promotion_id, promotable_assignment_id: promotable_assignment_id} =
       campaign =
       Campaign.Context.get_by_promotion(

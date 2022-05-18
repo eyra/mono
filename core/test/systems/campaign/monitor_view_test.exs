@@ -88,7 +88,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, view, _html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      html =
+      _html =
         view
         |> element("[phx-click=\"accept\"]")
         |> render_click()
@@ -118,7 +118,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, view, _html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      html =
+      _html =
         view
         |> element("[phx-click=\"accept_all_pending_started\"]")
         |> render_click()
@@ -148,7 +148,7 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, view, _html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      html =
+      _html =
         view
         |> element("[phx-click=\"accept_all_completed\"]")
         |> render_click()

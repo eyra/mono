@@ -91,7 +91,7 @@ defmodule Systems.Pool.CampaignSubmissionView do
 
     campaign_labels =
       Campaign.Context.list_owned_campaigns(user, preload: [:promotion, :promotable_assignment])
-      |> Enum.filter(&(&1.promotion_id != submission.promotion_id))
+      |> Enum.filter(&(&1.promotion_id != promotion_id))
       |> Enum.map(&to_label(&1, excluded_assignment_ids))
 
     excluded_user_ids = Assignment.Context.list_user_ids(excluded_assignment_ids)

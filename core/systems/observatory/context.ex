@@ -10,11 +10,19 @@ defmodule Systems.Observatory.Context do
   end
 
   def dispatch(signal, key, data) do
-    Endpoint.broadcast(topic_key(signal, key), "observation", {signal, data})
+    Endpoint.broadcast(
+      topic_key(signal, key),
+      "observation",
+      {signal, data}
+    )
   end
 
   def local_dispatch(signal, key, data) do
-    Endpoint.local_broadcast(topic_key(signal, key), "observation", {signal, data})
+    Endpoint.local_broadcast(
+      topic_key(signal, key),
+      "observation",
+      {signal, data}
+    )
   end
 
   defp topic_key(signal, key) when is_atom(signal) and is_list(key) do

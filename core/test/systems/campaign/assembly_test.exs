@@ -293,7 +293,7 @@ defmodule Systems.Campaign.AssemblyTest do
       schedule_start = Timestamp.now() |> Timestamp.format_user_input_date()
       schedule_end = Timestamp.now() |> Timestamp.format_user_input_date()
 
-      {:ok, %{criteria: criteria}} =
+      {:ok, %{submission: %{criteria: criteria}}} =
         Core.Pools.Submissions.update(submission, %{
           reward_value: reward_value,
           status: status,

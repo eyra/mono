@@ -7,6 +7,7 @@ defmodule Frameworks.Signal.Context do
     Core.APNS.SignalHandlers,
     Systems.Observatory.Switch,
     Systems.Assignment.Switch,
+    Systems.Pool.Switch,
     Systems.Campaign.Switch,
     Systems.NextAction.Switch
   ]
