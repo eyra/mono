@@ -78,13 +78,20 @@ defmodule Systems.Observatory.Context do
 
       data(vm, :map)
 
+      def handle_info(%{auto_save: status}, socket) do
+        {
+          :noreply,
+          socket |> assign(auto_save_status: status)
+        }
+      end
+
       def handle_info(%{topic: _topic, payload: {signal, %{model: model}}} = payload, socket) do
         {
           :noreply,
           socket
           |> Context.update_view_model(model, __MODULE__)
           |> handle_view_model_updated()
-          |> Frameworks.Pixel.Flash.put_info("Updated")
+          |> put_updated_info_flash()
         }
       end
 
@@ -102,6 +109,14 @@ defmodule Systems.Observatory.Context do
       def handle_view_model_updated(socket) do
         IO.puts("No handle_observation/1 implemented")
         socket
+      end
+
+      def put_updated_info_flash(%{assigns: %{auto_save_status: :active}} = socket) do
+        socket
+      end
+
+      def put_updated_info_flash(socket) do
+        socket |> Frameworks.Pixel.Flash.put_info("Updated")
       end
     end
   end

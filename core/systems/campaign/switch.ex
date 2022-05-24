@@ -49,6 +49,10 @@ defmodule Systems.Campaign.Switch do
     handle(:assignment_updated, assignment)
   end
 
+  def handle(:assignment_completed, %{assignment: assignment, user: _user}) do
+    handle(:assignment_updated, assignment)
+  end
+
   def handle(:promotion_updated, promotion) do
     campaign = Campaign.Context.get_by_promotion(promotion, Campaign.Model.preload_graph(:full))
     promotable = Campaign.Model.promotable(campaign)

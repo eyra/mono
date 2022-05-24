@@ -13,10 +13,13 @@ defmodule Systems.Assignment.Switch do
     NextAction
   }
 
-  def dispatch(:crew_task_updated, %{
-        data: %{status: old_status, member_id: member_id, crew_id: crew_id},
-        changes: %{status: new_status}
-      }) do
+  def dispatch(
+        :crew_task_updated,
+        %{
+          data: %{status: old_status, member_id: member_id, crew_id: crew_id},
+          changes: %{status: new_status}
+        }
+      ) do
     # crew does not have a director (yet), so check if assignment is available to handle signal
     with [%{director: director} = assignment | _] <- Assignment.Context.get_by_crew!(crew_id) do
       %{user_id: user_id} = Crew.Context.get_member!(member_id)
@@ -43,7 +46,11 @@ defmodule Systems.Assignment.Switch do
           nil
 
         :completed ->
-          nil
+          Signal.Context.dispatch!(:assignment_completed, %{
+            director: director,
+            assignment: assignment,
+            user: user
+          })
 
         _ ->
           Logger.warning("Unknown crew task status: #{new_status}")

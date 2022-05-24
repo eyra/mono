@@ -37,16 +37,22 @@ defmodule Systems.Pool.CampaignSubmissionView do
         },
         %{assigns: %{assignment: assignment}} = socket
       ) do
-    Campaign.Context.handle_exclusion(assignment, current_items)
+    socket =
+      socket
+      |> save_closure(fn socket ->
+        Campaign.Context.handle_exclusion(assignment, current_items)
 
-    excluded_user_ids = Campaign.Context.list_excluded_user_ids(excluded_campaign_ids)
+        excluded_user_ids = Campaign.Context.list_excluded_user_ids(excluded_campaign_ids)
+
+        socket
+        |> assign(excluded_user_ids: excluded_user_ids)
+        |> update_ui()
+        |> flash_persister_saved()
+      end)
 
     {
       :ok,
       socket
-      |> assign(excluded_user_ids: excluded_user_ids)
-      |> update_ui()
-      |> flash_persister_saved()
     }
   end
 

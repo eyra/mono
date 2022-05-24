@@ -45,15 +45,23 @@ defmodule CoreWeb.LiveForm do
 
       def save(socket, changeset) do
         socket
+        |> save_closure(fn socket ->
+          case Ecto.Changeset.apply_action(changeset, :update) do
+            {:ok, entity} ->
+              handle_success(socket, changeset, entity)
+
+            {:error, %Ecto.Changeset{} = changeset} ->
+              handle_validation_error(socket, changeset)
+          end
+        end)
+      end
+
+      def save_closure(socket, closure) do
+        socket
+        |> auto_save_begin()
         |> hide_flash()
-
-        case Ecto.Changeset.apply_action(changeset, :update) do
-          {:ok, entity} ->
-            handle_success(socket, changeset, entity)
-
-          {:error, %Ecto.Changeset{} = changeset} ->
-            handle_validation_error(socket, changeset)
-        end
+        |> closure.()
+        |> auto_save_end()
       end
 
       defp handle_validation_error(socket, changeset) do
@@ -89,6 +97,16 @@ defmodule CoreWeb.LiveForm do
 
       defp claim_focus(%{assigns: %{id: id}}) do
         send(self(), {:claim_focus, id})
+      end
+
+      def auto_save_begin(socket) do
+        send(self(), %{auto_save: :active})
+        socket
+      end
+
+      def auto_save_end(socket) do
+        send(self(), %{auto_save: :idle})
+        socket
       end
     end
   end
