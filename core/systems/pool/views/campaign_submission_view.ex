@@ -37,7 +37,7 @@ defmodule Systems.Pool.CampaignSubmissionView do
         },
         %{assigns: %{assignment: assignment}} = socket
       ) do
-    handle_exclusion(assignment, current_items)
+    Campaign.Context.handle_exclusion(assignment, current_items)
 
     excluded_user_ids = Campaign.Context.list_excluded_user_ids(excluded_campaign_ids)
 
@@ -46,6 +46,7 @@ defmodule Systems.Pool.CampaignSubmissionView do
       socket
       |> assign(excluded_user_ids: excluded_user_ids)
       |> update_ui()
+      |> flash_persister_saved()
     }
   end
 
@@ -107,26 +108,6 @@ defmodule Systems.Pool.CampaignSubmissionView do
       |> assign(excluded_user_ids: excluded_user_ids)
       |> update_ui()
     }
-  end
-
-  defp handle_exclusion(assignment, items) when is_list(items) do
-    items |> Enum.each(&handle_exclusion(assignment, &1))
-  end
-
-  defp handle_exclusion(assignment, %{id: id, active: active} = _item) do
-    handle_exclusion(assignment, Campaign.Context.get!(id, [:promotable_assignment]), active)
-  end
-
-  defp handle_exclusion(assignment, %Campaign.Model{promotable_assignment: other}, active) do
-    handle_exclusion(assignment, other, active)
-  end
-
-  defp handle_exclusion(assignment, %Assignment.Model{} = other, true) do
-    Assignment.Context.exclude(assignment, other)
-  end
-
-  defp handle_exclusion(assignment, %Assignment.Model{} = other, false) do
-    Assignment.Context.include(assignment, other)
   end
 
   defp to_label(

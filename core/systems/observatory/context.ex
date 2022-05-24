@@ -73,6 +73,7 @@ defmodule Systems.Observatory.Context do
     quote do
       import unquote(__MODULE__), only: [observe: 2]
 
+      import CoreWeb.Gettext
       alias Systems.Observatory.Context
 
       data(vm, :map)
