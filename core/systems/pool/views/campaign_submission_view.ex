@@ -169,7 +169,6 @@ defmodule Systems.Pool.CampaignSubmissionView do
 
     socket
     |> save(changeset)
-    |> update_ui()
   end
 
   def render(assigns) do

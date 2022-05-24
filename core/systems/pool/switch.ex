@@ -2,13 +2,15 @@ defmodule Systems.Pool.Switch do
   use Frameworks.Signal.Handler
 
   alias Core.Pools
+  alias Frameworks.Signal
 
   alias Systems.{
     Pool
   }
 
   def dispatch(:criteria_updated, %{submission_id: submission_id} = _criteria) do
-    dispatch(:submission_updated, Pools.Submissions.get!(submission_id))
+    submission = Pools.Submissions.get!(submission_id)
+    Signal.Context.dispatch!(:submission_updated, submission)
   end
 
   def dispatch(:submission_updated, submission) do

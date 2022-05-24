@@ -65,7 +65,6 @@ defmodule CoreWeb.LiveForm do
       defp handle_success(socket, changeset, entity) do
         socket
         |> auto_save(changeset)
-        |> assign(changeset: changeset)
       end
 
       defp auto_save(socket, changeset) do
