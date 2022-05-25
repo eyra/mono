@@ -430,11 +430,13 @@ defmodule Core.Accounts do
     |> Repo.update()
   end
 
-  def update_user_profile(%User{} = user, user_attrs, profile_attrs) do
-    profile = get_profile(user)
-    profile_changeset = Profile.changeset(profile, profile_attrs)
-    user_changeset = User.user_profile_changeset(user, user_attrs)
+  def update_user(user_changeset) do
+    Multi.new()
+    |> Multi.update(:user, user_changeset)
+    |> Repo.transaction()
+  end
 
+  def update_user_profile(user_changeset, profile_changeset) do
     Multi.new()
     |> Multi.update(:profile, profile_changeset)
     |> Multi.update(:user, user_changeset)
@@ -473,7 +475,7 @@ defmodule Core.Accounts do
 
   def update_features(%Features{} = features, changeset) do
     Multi.new()
-    |> Multi.update(:features, changeset)
+    |> Repo.multi_update(:features, changeset)
     |> Signal.Context.multi_dispatch(:features_updated, %{
       features: features,
       features_changeset: changeset
@@ -520,26 +522,22 @@ defimpl Core.Persister, for: Core.Accounts.UserProfileEdit do
   alias Core.Accounts
   alias Core.Accounts.UserProfileEdit
 
-  def save(_user_profile_edit, changeset) do
-    case Ecto.Changeset.apply_action(changeset, :update) do
-      {:ok, user_profile_edit} ->
-        handle_success(user_profile_edit)
+  def save(%{user_id: user_id} = _user_profile_edit, %{changes: changes} = changeset) do
+    user = Accounts.get_user!(user_id)
+    user_attrs = UserProfileEdit.to_user(changes)
+    user_changeset = Accounts.User.user_profile_changeset(user, user_attrs)
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        handle_validation_error(changeset)
+    profile = Accounts.get_profile(user_id)
+    profile_attrs = UserProfileEdit.to_profile(changes)
+    profile_changeset = Accounts.Profile.changeset(profile, profile_attrs)
+
+    case Accounts.update_user_profile(user_changeset, profile_changeset) do
+      {:ok, %{user: user, profile: profile}} ->
+        {:ok, UserProfileEdit.create(user, profile)}
+
+      _ ->
+        {:error, changeset}
     end
-  end
-
-  defp handle_validation_error(_changeset) do
-    IO.puts("unable to save invalid user profile data")
-  end
-
-  defp handle_success(user_profile_edit) do
-    user = Accounts.get_user!(user_profile_edit.user_id)
-    user_attrs = UserProfileEdit.to_user(user_profile_edit)
-    profile_attrs = UserProfileEdit.to_profile(user_profile_edit)
-
-    Accounts.update_user_profile(user, user_attrs, profile_attrs)
   end
 end
 
@@ -547,20 +545,9 @@ defimpl Core.Persister, for: Core.Accounts.Features do
   alias Core.Accounts
 
   def save(features, changeset) do
-    case Ecto.Changeset.apply_action(changeset, :update) do
-      {:ok, _} ->
-        handle_success(features, changeset)
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        handle_validation_error(changeset)
+    case Accounts.update_features(features, changeset) do
+      {:ok, %{features: features}} -> {:ok, features}
+      _ -> {:error, changeset}
     end
-  end
-
-  defp handle_validation_error(_changeset) do
-    IO.puts("unable to save invalid features data")
-  end
-
-  defp handle_success(features, changeset) do
-    Accounts.update_features(features, changeset)
   end
 end

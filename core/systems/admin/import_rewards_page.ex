@@ -37,7 +37,10 @@ defmodule Systems.Admin.ImportRewardsPage do
   data(focus, :any, default: "")
 
   @impl true
-  def process_file(%{assigns: %{entity: entity}} = socket, {local_file, remote_file}) do
+  def process_file(
+        %{assigns: %{entity: entity}} = socket,
+        {_local_relative_path, local_full_path, remote_file}
+      ) do
     changeset =
       entity |> Admin.ImportRewardsModel.changeset(%{session_key: Path.rootname(remote_file)})
 
@@ -47,7 +50,7 @@ defmodule Systems.Admin.ImportRewardsPage do
       lines_error: [],
       lines_unknown: [],
       lines_valid: [],
-      local_file: local_file,
+      local_file: local_full_path,
       uploaded_file: remote_file
     )
   end

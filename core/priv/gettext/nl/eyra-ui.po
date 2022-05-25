@@ -28,7 +28,7 @@ msgstr "De pagina kon niet worden opgeslagen."
 
 #, elixir-format
 #: lib/auto_save.ex:83
-msgid "saved.info.flash"
+msgid "persister.saved.flash"
 msgstr "Opgeslagen"
 
 #, elixir-format, fuzzy

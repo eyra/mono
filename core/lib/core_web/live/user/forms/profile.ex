@@ -19,8 +19,11 @@ defmodule CoreWeb.User.Forms.Profile do
   data(focus, :any, default: "")
 
   @impl true
-  def process_file(%{assigns: %{entity: entity}} = socket, uploaded_file) do
-    save(socket, entity, :auto_save, %{photo_url: uploaded_file})
+  def process_file(
+        %{assigns: %{entity: entity}} = socket,
+        {local_relative_path, _local_full_path, _remote_file}
+      ) do
+    save(socket, entity, :auto_save, %{photo_url: local_relative_path})
   end
 
   # Handle Selector Update
@@ -29,11 +32,6 @@ defmodule CoreWeb.User.Forms.Profile do
         %{assigns: %{entity: entity}} = socket
       ) do
     {:ok, socket |> save(entity, :auto_save, %{selector_id => active_item_ids})}
-  end
-
-  # Handle update from parent after auto-save, prevents overwrite of current state
-  def update(_params, %{assigns: %{entity: _entity}} = socket) do
-    {:ok, socket}
   end
 
   def update(%{id: id, props: %{user: user}}, socket) do
@@ -85,7 +83,7 @@ defmodule CoreWeb.User.Forms.Profile do
     changeset = UserProfileEdit.changeset(entity, type, attrs)
 
     socket
-    |> save(changeset)
+    |> auto_save(changeset)
   end
 
   @impl true

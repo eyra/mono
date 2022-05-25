@@ -10,11 +10,19 @@ defmodule Systems.Observatory.Context do
   end
 
   def dispatch(signal, key, data) do
-    Endpoint.broadcast(topic_key(signal, key), "observation", {signal, data})
+    Endpoint.broadcast(
+      topic_key(signal, key),
+      "observation",
+      {signal, data}
+    )
   end
 
   def local_dispatch(signal, key, data) do
-    Endpoint.local_broadcast(topic_key(signal, key), "observation", {signal, data})
+    Endpoint.local_broadcast(
+      topic_key(signal, key),
+      "observation",
+      {signal, data}
+    )
   end
 
   defp topic_key(signal, key) when is_atom(signal) and is_list(key) do
@@ -52,22 +60,30 @@ defmodule Systems.Observatory.Context do
 
   defp get_view_model(
          presenter,
-         %{assigns: %{current_user: user}},
+         %{assigns: assigns} = _socket,
          model_or_id,
          page,
          url_resolver
        ) do
     presenter
-    |> apply(:view_model, [model_or_id, page, user, url_resolver])
+    |> apply(:view_model, [model_or_id, page, assigns, url_resolver])
   end
 
   defmacro __using__(_opts \\ []) do
     quote do
       import unquote(__MODULE__), only: [observe: 2]
 
+      import CoreWeb.Gettext
       alias Systems.Observatory.Context
 
       data(vm, :map)
+
+      def handle_info(%{auto_save: status}, socket) do
+        {
+          :noreply,
+          socket |> assign(auto_save_status: status)
+        }
+      end
 
       def handle_info(%{topic: _topic, payload: {signal, %{model: model}}} = payload, socket) do
         {
@@ -75,7 +91,7 @@ defmodule Systems.Observatory.Context do
           socket
           |> Context.update_view_model(model, __MODULE__)
           |> handle_view_model_updated()
-          |> Frameworks.Pixel.Flash.put_info("Updated")
+          |> put_updated_info_flash()
         }
       end
 
@@ -85,9 +101,22 @@ defmodule Systems.Observatory.Context do
         |> Context.update_view_model(id, __MODULE__)
       end
 
+      def update_view_model(%{assigns: %{model: %{id: id}}} = socket) do
+        socket
+        |> Context.update_view_model(id, __MODULE__)
+      end
+
       def handle_view_model_updated(socket) do
         IO.puts("No handle_observation/1 implemented")
         socket
+      end
+
+      def put_updated_info_flash(%{assigns: %{auto_save_status: :active}} = socket) do
+        socket
+      end
+
+      def put_updated_info_flash(socket) do
+        socket |> Frameworks.Pixel.Flash.put_info("Updated")
       end
     end
   end

@@ -34,6 +34,7 @@ defmodule Systems.Campaign.Switch do
     campaign
     |> Campaign.Presenter.update(promotion.id, Promotion.LandingPage)
     |> Campaign.Presenter.update(assignment.id, Assignment.LandingPage)
+    |> Campaign.Presenter.update(campaign.id, Campaign.ContentPage)
   end
 
   def handle(:assignment_accepted, %{assignment: assignment, user: user}) do
@@ -48,6 +49,10 @@ defmodule Systems.Campaign.Switch do
     handle(:assignment_updated, assignment)
   end
 
+  def handle(:assignment_completed, %{assignment: assignment, user: _user}) do
+    handle(:assignment_updated, assignment)
+  end
+
   def handle(:promotion_updated, promotion) do
     campaign = Campaign.Context.get_by_promotion(promotion, Campaign.Model.preload_graph(:full))
     promotable = Campaign.Model.promotable(campaign)
@@ -55,9 +60,10 @@ defmodule Systems.Campaign.Switch do
     campaign
     |> Campaign.Presenter.update(promotion.id, Promotion.LandingPage)
     |> Campaign.Presenter.update(promotable.id, Assignment.LandingPage)
+    |> Campaign.Presenter.update(campaign.id, Campaign.ContentPage)
   end
 
-  def handle(:submisson_updated, submission) do
+  def handle(:submission_updated, submission) do
     %{promotion_id: promotion_id, promotable_assignment_id: promotable_assignment_id} =
       campaign =
       Campaign.Context.get_by_promotion(
@@ -68,5 +74,6 @@ defmodule Systems.Campaign.Switch do
     campaign
     |> Campaign.Presenter.update(promotion_id, Promotion.LandingPage)
     |> Campaign.Presenter.update(promotable_assignment_id, Assignment.LandingPage)
+    |> Campaign.Presenter.update(campaign.id, Campaign.ContentPage)
   end
 end

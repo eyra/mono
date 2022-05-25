@@ -11,7 +11,7 @@ defmodule Systems.Pool.CampaignSubmissionView do
     Assignment
   }
 
-  alias Core.Pools.{Submissions, Criteria}
+  alias Core.Pools.{Criteria}
 
   prop(props, :any, required: true)
 
@@ -37,15 +37,22 @@ defmodule Systems.Pool.CampaignSubmissionView do
         },
         %{assigns: %{assignment: assignment}} = socket
       ) do
-    handle_exclusion(assignment, current_items)
+    socket =
+      socket
+      |> save_closure(fn socket ->
+        Campaign.Context.handle_exclusion(assignment, current_items)
 
-    excluded_user_ids = Campaign.Context.list_excluded_user_ids(excluded_campaign_ids)
+        excluded_user_ids = Campaign.Context.list_excluded_user_ids(excluded_campaign_ids)
+
+        socket
+        |> assign(excluded_user_ids: excluded_user_ids)
+        |> update_ui()
+        |> flash_persister_saved()
+      end)
 
     {
       :ok,
       socket
-      |> assign(excluded_user_ids: excluded_user_ids)
-      |> update_ui()
     }
   end
 
@@ -71,17 +78,19 @@ defmodule Systems.Pool.CampaignSubmissionView do
     }
   end
 
-  # Handle update from parent after auto-save, prevents overwrite of current state
-  def update(_params, %{assigns: %{submission: _submission}} = socket) do
-    {:ok, socket}
-  end
-
   # Initial update
-  def update(%{id: id, props: %{entity_id: entity_id, user: user}}, socket) do
-    %{criteria: criteria, promotion: promotion} = submission = Submissions.get!(entity_id)
-
+  def update(
+        %{
+          id: id,
+          props: %{
+            entity: %{criteria: criteria, promotion_id: promotion_id} = submission,
+            user: user
+          }
+        },
+        socket
+      ) do
     %{promotable_assignment: %{excluded: excluded_assignments} = assignment} =
-      Campaign.Context.get_by_promotion(promotion, promotable_assignment: [:excluded])
+      Campaign.Context.get_by_promotion(promotion_id, promotable_assignment: [:excluded])
 
     excluded_assignment_ids =
       excluded_assignments
@@ -89,7 +98,7 @@ defmodule Systems.Pool.CampaignSubmissionView do
 
     campaign_labels =
       Campaign.Context.list_owned_campaigns(user, preload: [:promotion, :promotable_assignment])
-      |> Enum.filter(&(&1.promotion_id != submission.promotion_id))
+      |> Enum.filter(&(&1.promotion_id != promotion_id))
       |> Enum.map(&to_label(&1, excluded_assignment_ids))
 
     excluded_user_ids = Assignment.Context.list_user_ids(excluded_assignment_ids)
@@ -105,26 +114,6 @@ defmodule Systems.Pool.CampaignSubmissionView do
       |> assign(excluded_user_ids: excluded_user_ids)
       |> update_ui()
     }
-  end
-
-  defp handle_exclusion(assignment, items) when is_list(items) do
-    items |> Enum.each(&handle_exclusion(assignment, &1))
-  end
-
-  defp handle_exclusion(assignment, %{id: id, active: active} = _item) do
-    handle_exclusion(assignment, Campaign.Context.get!(id, [:promotable_assignment]), active)
-  end
-
-  defp handle_exclusion(assignment, %Campaign.Model{promotable_assignment: other}, active) do
-    handle_exclusion(assignment, other, active)
-  end
-
-  defp handle_exclusion(assignment, %Assignment.Model{} = other, true) do
-    Assignment.Context.exclude(assignment, other)
-  end
-
-  defp handle_exclusion(assignment, %Assignment.Model{} = other, false) do
-    Assignment.Context.include(assignment, other)
   end
 
   defp to_label(
@@ -167,7 +156,6 @@ defmodule Systems.Pool.CampaignSubmissionView do
 
     socket
     |> save(changeset)
-    |> update_ui()
   end
 
   def render(assigns) do

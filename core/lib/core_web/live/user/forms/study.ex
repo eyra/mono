@@ -25,11 +25,6 @@ defmodule CoreWeb.User.Forms.Study do
     {:ok, socket |> save(entity, :auto_save, %{selector_id => active_item_ids})}
   end
 
-  # Handle update from parent after auto-save, prevents overwrite of current state
-  def update(_params, %{assigns: %{entity: _entity}} = socket) do
-    {:ok, socket}
-  end
-
   def update(%{id: id, props: %{user: user}}, socket) do
     entity = Accounts.get_features(user)
 

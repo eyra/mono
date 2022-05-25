@@ -388,6 +388,31 @@ defmodule Systems.Campaign.Context do
       Assignment.Context.ready?(assignment)
   end
 
+  def handle_exclusion(%Assignment.Model{} = assignment, items) when is_list(items) do
+    items |> Enum.each(&handle_exclusion(assignment, &1))
+    Signal.Context.dispatch!(:assignment_updated, assignment)
+  end
+
+  def handle_exclusion(%Assignment.Model{} = assignment, %{id: id, active: active} = _item) do
+    handle_exclusion(assignment, Campaign.Context.get!(id, [:promotable_assignment]), active)
+  end
+
+  defp handle_exclusion(
+         %Assignment.Model{} = assignment,
+         %Campaign.Model{promotable_assignment: other},
+         active
+       ) do
+    handle_exclusion(assignment, other, active)
+  end
+
+  defp handle_exclusion(%Assignment.Model{} = assignment, %Assignment.Model{} = other, true) do
+    Assignment.Context.exclude(assignment, other)
+  end
+
+  defp handle_exclusion(%Assignment.Model{} = assignment, %Assignment.Model{} = other, false) do
+    Assignment.Context.include(assignment, other)
+  end
+
   @doc """
     Marks expired tasks in online campaigns based on updated_at and estimated duration.
     If force is true (for debug purposes only), all pending tasks will be marked as expired.

@@ -3,7 +3,6 @@ defmodule CoreWeb.User.Profile do
   The home screen.
   """
   use CoreWeb, :live_view
-  use CoreWeb.MultiFormAutoSave
   use CoreWeb.Layouts.Workspace.Component, :profile
   use CoreWeb.UI.Responsive.Viewport
 
@@ -48,11 +47,6 @@ defmodule CoreWeb.User.Profile do
   end
 
   @impl true
-  def handle_auto_save_done(socket) do
-    socket |> update_menus()
-  end
-
-  @impl true
   def handle_event("reset_focus", _, socket) do
     send_update(ProfileForm, id: :profile, focus: "")
     {:noreply, socket}
@@ -68,6 +62,11 @@ defmodule CoreWeb.User.Profile do
 
     socket
     |> assign(bar_size: bar_size)
+  end
+
+  def handle_info({:handle_auto_save_done, _}, socket) do
+    socket |> update_menus()
+    {:noreply, socket}
   end
 
   def handle_info({:claim_focus, :profile}, socket) do

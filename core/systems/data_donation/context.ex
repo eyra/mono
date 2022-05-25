@@ -45,7 +45,7 @@ defmodule Systems.DataDonation.Context do
 
   def update(changeset) do
     Multi.new()
-    |> Multi.update(:tool, changeset)
+    |> Repo.multi_update(:tool, changeset)
     |> Repo.transaction()
   end
 
@@ -66,6 +66,9 @@ end
 
 defimpl Core.Persister, for: Systems.DataDonation.ToolModel do
   def save(_tool, changeset) do
-    Systems.DataDonation.Context.update(changeset)
+    case Systems.DataDonation.Context.update(changeset) do
+      {:ok, %{tool: tool}} -> {:ok, tool}
+      _ -> {:error, changeset}
+    end
   end
 end

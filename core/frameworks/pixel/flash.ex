@@ -49,6 +49,10 @@ defmodule Frameworks.Pixel.Flash do
     send(self(), {:show_flash, %{type: type, message: message, auto_hide: auto_hide}})
   end
 
+  def push_hide() do
+    send(self(), :hide_flash)
+  end
+
   defp cancel_hide_timer(%{assigns: %{hide_timer: hide_timer}} = socket)
        when not is_nil(hide_timer) do
     Process.cancel_timer(hide_timer)

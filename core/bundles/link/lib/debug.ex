@@ -3,7 +3,6 @@ defmodule Link.Debug do
   The debug screen.
   """
   use CoreWeb, :live_view
-  use CoreWeb.MultiFormAutoSave
   use CoreWeb.Layouts.Workspace.Component, :debug
   alias CoreWeb.Router.Helpers, as: Routes
 
@@ -100,11 +99,6 @@ defmodule Link.Debug do
   end
 
   @impl true
-  def handle_auto_save_done(socket) do
-    socket |> update_menus()
-  end
-
-  @impl true
   def handle_event("reset_focus", _, socket) do
     send_update(UserDebugForm, id: :user_debug, focus: "")
     {:noreply, socket}
@@ -137,6 +131,11 @@ defmodule Link.Debug do
   end
 
   def handle_event("save", _, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_info({:handle_auto_save_done, _}, socket) do
+    socket |> update_menus()
     {:noreply, socket}
   end
 

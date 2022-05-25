@@ -39,13 +39,16 @@ defmodule Systems.Promotion.Context do
   end
 
   def update(%Promotion.Model{} = _promotion, %Changeset{} = changeset) do
-    with {:ok, %{promotion: promotion} = result} <-
-           Multi.new()
-           |> Multi.update(:promotion, changeset)
-           |> Repo.transaction() do
+    result =
+      Multi.new()
+      |> Repo.multi_update(:promotion, changeset)
+      |> Repo.transaction()
+
+    with {:ok, %{promotion: promotion}} <- result do
       Signal.Context.dispatch!(:promotion_updated, promotion)
-      {:ok, result}
     end
+
+    result
   end
 
   def update(%Promotion.Model{} = promotion, attrs) do
@@ -85,6 +88,9 @@ end
 
 defimpl Core.Persister, for: Systems.Promotion.Model do
   def save(promotion, changeset) do
-    Systems.Promotion.Context.update(promotion, changeset)
+    case Systems.Promotion.Context.update(promotion, changeset) do
+      {:ok, %{promotion: promotion}} -> {:ok, promotion}
+      _ -> {:error, changeset}
+    end
   end
 end
