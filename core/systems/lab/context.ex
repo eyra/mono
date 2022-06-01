@@ -75,7 +75,7 @@ defmodule Systems.Lab.Context do
       reservation_count = Lab.TimeSlotModel.count_reservations(time_slot, [:reserved, :completed])
 
       time_slot.number_of_seats > reservation_count &&
-        time_slot.start_time >= CoreWeb.UI.Timestamp.now()
+        not CoreWeb.UI.Timestamp.past?(time_slot.start_time)
     end)
   end
 
