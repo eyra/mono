@@ -11,8 +11,6 @@ defmodule Link.Marketplace do
     Campaign
   }
 
-  alias Frameworks.Utility.ViewModelBuilder
-
   alias Core.Accounts
   alias Core.Pools.Criteria
 
@@ -38,20 +36,16 @@ defmodule Link.Marketplace do
 
     preload = Campaign.Model.preload_graph(:full)
 
-    subject_campaigns =
-      user
-      |> Campaign.Context.list_subject_campaigns(preload: preload)
-      |> Enum.map(
-        &ViewModelBuilder.view_model(&1, {__MODULE__, :contributions}, user, url_resolver(socket))
-      )
+    subject_campaigns = Campaign.Context.list_subject_campaigns(user, preload: preload)
 
     highlighted_count = Enum.count(subject_campaigns)
 
-    excluded_campaigns =
-      subject_campaigns ++ Campaign.Context.list_excluded_campaigns(subject_campaigns)
+    excluded_campaigns = Campaign.Context.list_excluded_campaigns(subject_campaigns)
+
+    exclude = subject_campaigns ++ excluded_campaigns
 
     exclusion_list =
-      excluded_campaigns
+      exclude
       |> Stream.map(fn campaign -> campaign.id end)
       |> Enum.into(MapSet.new())
 
