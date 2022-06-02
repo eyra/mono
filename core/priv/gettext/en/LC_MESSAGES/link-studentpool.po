@@ -48,36 +48,12 @@ msgid "student.tag.incomplete"
 msgstr "Incompleet"
 
 #, elixir-format
-msgid "accepted.title"
-msgstr "Published"
-
-#, elixir-format
-msgid "status.submitted.label"
-msgstr "Pending"
-
-#, elixir-format
-msgid "submitted.title"
-msgstr "Submitted by researchers"
-
-#, elixir-format
 msgid "spots.available"
 msgstr "%{open} out of %{total} spots available"
 
 #, elixir-format
 msgid "submission.title"
 msgstr "Campaign"
-
-#, elixir-format
-msgid "status.accepted.closed.label"
-msgstr "Closed"
-
-#, elixir-format
-msgid "status.accepted.online.label"
-msgstr "Online"
-
-#, elixir-format
-msgid "status.accepted.scheduled.label"
-msgstr "Scheduled"
 
 #, elixir-format
 msgid "sample.size"

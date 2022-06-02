@@ -7,6 +7,7 @@ defmodule Systems.Campaign.Context do
   require Logger
   alias Frameworks.GreenLight.Principal
   alias Core.Repo
+  alias Core.Pools
   alias Core.Accounts.User
   alias Core.Authorization
   alias Core.Enums.StudyProgramCodes
@@ -87,16 +88,7 @@ defmodule Systems.Campaign.Context do
     # AUTH: Can be piped through auth filter.
   end
 
-  def list_submitted_campaigns(tool_entities, opts \\ []) do
-    list_by_submission_status(tool_entities, :submitted, opts)
-  end
-
-  def list_accepted_campaigns(tool_entities, opts \\ []) do
-    list_by_submission_status(tool_entities, :accepted, opts)
-  end
-
-  def list_by_submission_status(tool_entities, submission_status, opts \\ [])
-      when is_list(tool_entities) do
+  def list_by_submission_status(submission_status, opts \\ []) when is_list(submission_status) do
     preload = Keyword.get(opts, :preload, [])
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
 
@@ -105,7 +97,27 @@ defmodule Systems.Campaign.Context do
       on: p.id == c.promotion_id,
       join: s in Submission,
       on: s.promotion_id == p.id,
-      where: c.id not in ^exclude and s.status == ^submission_status,
+      where: c.id not in ^exclude and s.status in ^submission_status,
+      preload: ^preload,
+      order_by: [desc: s.updated_at],
+      select: c
+    )
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of studies submitted at least once.
+  """
+  def list_submitted(opts \\ []) do
+    preload = Keyword.get(opts, :preload, [])
+    exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
+
+    from(c in Campaign.Model,
+      join: p in Promotion.Model,
+      on: p.id == c.promotion_id,
+      join: s in Submission,
+      on: s.promotion_id == p.id,
+      where: c.id not in ^exclude and (s.status != :idle or not is_nil(s.submitted_at)),
       preload: ^preload,
       order_by: [desc: s.updated_at],
       select: c
@@ -413,18 +425,28 @@ defmodule Systems.Campaign.Context do
     Assignment.Context.include(assignment, other)
   end
 
+  def open?(%Campaign.Model{promotable_assignment_id: assignment_id}) do
+    Assignment.Context.get!(assignment_id, Assignment.Model.preload_graph(:full))
+    |> Assignment.Context.open?()
+  end
+
+  def open?(%Pools.Submission{promotion_id: promotion_id}) do
+    Promotion.Context.get!(promotion_id)
+    |> get_by_promotion(Campaign.Model.preload_graph(:full))
+    |> open?()
+  end
+
   @doc """
     Marks expired tasks in online campaigns based on updated_at and estimated duration.
     If force is true (for debug purposes only), all pending tasks will be marked as expired.
   """
   def mark_expired_debug(force \\ false) do
-    online_submissions =
+    submitted_submissions =
       from(s in Submission, where: s.status == :accepted)
       |> Repo.all()
-      |> Enum.filter(&(Submission.published_status(&1) == :online))
 
     promotion_ids =
-      online_submissions
+      submitted_submissions
       |> Enum.map(& &1.promotion_id)
 
     preload = Campaign.Model.preload_graph(:full)

@@ -13,6 +13,7 @@ defmodule Systems.Pool.SubmissionPage do
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.UI.Navigation.ButtonBar
   alias CoreWeb.UI.Member
+  alias CoreWeb.UI.Timestamp
 
   alias Systems.Pool.SubmissionView, as: SubmissionForm
   alias Systems.Pool.SubmissionCriteriaView, as: SubmissionCriteriaForm
@@ -83,20 +84,19 @@ defmodule Systems.Pool.SubmissionPage do
   def handle_event("accept", _params, %{assigns: %{vm: %{submission: submission}}} = socket) do
     socket =
       if ready_for_publish?(submission) do
-        {:ok, _submission} = Submissions.update(submission, %{status: :accepted})
+        {:ok, _submission} =
+          Submissions.update(submission, %{status: :accepted, accepted_at: Timestamp.naive_now()})
 
         title = dgettext("eyra-submission", "accept.success.title")
         text = dgettext("eyra-submission", "accept.success.text")
 
         socket
-        |> assign(accepted?: true)
         |> inform(title, text)
       else
         title = dgettext("eyra-submission", "accept.error.title")
         text = dgettext("eyra-submission", "accept.error.text")
 
         socket
-        |> assign(validate?: true)
         |> inform(title, text)
       end
 
@@ -105,10 +105,25 @@ defmodule Systems.Pool.SubmissionPage do
 
   @impl true
   def handle_event("retract", _params, %{assigns: %{vm: %{submission: submission}}} = socket) do
-    {:ok, _submission} = Submissions.update(submission, %{status: :submitted})
+    {:ok, _submission} = Submissions.update(submission, %{status: :idle})
 
     title = dgettext("eyra-submission", "retract.admin.success.title")
     text = dgettext("eyra-submission", "retract.admin.success.text")
+
+    {
+      :noreply,
+      socket
+      |> inform(title, text)
+    }
+  end
+
+  @impl true
+  def handle_event("complete", _params, %{assigns: %{vm: %{submission: submission}}} = socket) do
+    {:ok, _submission} =
+      Submissions.update(submission, %{status: :completed, completed_at: Timestamp.naive_now()})
+
+    title = dgettext("eyra-submission", "complete.admin.success.title")
+    text = dgettext("eyra-submission", "complete.admin.success.text")
 
     {
       :noreply,
@@ -135,6 +150,7 @@ defmodule Systems.Pool.SubmissionPage do
     preview_action = %{type: :redirect, to: preview_path}
     accept_action = %{type: :send, event: "accept"}
     retract_action = %{type: :send, event: "retract"}
+    complete_action = %{type: :send, event: "complete"}
 
     %{
       accept: %{
@@ -156,16 +172,28 @@ defmodule Systems.Pool.SubmissionPage do
       retract: %{
         action: retract_action,
         face: %{type: :icon, icon: :retract, alt: dgettext("link-ui", "retract.button")}
+      },
+      complete: %{
+        action: complete_action,
+        face: %{
+          type: :primary,
+          label: dgettext("link-ui", "complete.button"),
+          text_color: "text-grey1",
+          bg_color: "bg-tertiary"
+        }
       }
     }
   end
 
-  defp create_actions(%{vm: %{accepted?: accepted?}} = assigns) do
-    create_actions(action_map(assigns), accepted?)
+  defp create_actions(%{vm: %{accepted?: accepted?, completed?: completed?}} = assigns) do
+    create_actions(action_map(assigns), accepted?, completed?)
   end
 
-  defp create_actions(%{accept: accept, preview: preview}, false), do: [accept, preview]
-  defp create_actions(%{preview: preview, retract: retract}, true), do: [preview, retract]
+  defp create_actions(%{accept: accept, preview: preview}, false, _), do: [accept, preview]
+  defp create_actions(%{accept: accept, preview: preview}, _, true), do: [accept, preview]
+
+  defp create_actions(%{preview: preview, retract: retract, complete: complete}, true, false),
+    do: [complete, preview, retract]
 
   defp show_dialog?(nil), do: false
   defp show_dialog?(_), do: true

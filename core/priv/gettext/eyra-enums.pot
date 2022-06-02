@@ -233,3 +233,43 @@ msgstr ""
 #, elixir-format
 msgid "tool_types.online"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "submission_status.accepted"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "submission_status.completed"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "submission_status.idle"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "submission_status.submitted"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "pool_campaign_status.closed"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "pool_campaign_status.completed"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "pool_campaign_status.drafted"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "pool_campaign_status.released"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "pool_campaign_status.scheduled"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "pool_campaign_status.submitted"
+msgstr ""

@@ -129,3 +129,19 @@ msgstr ""
 #, elixir-format
 msgid "accepted.scheduled.message"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "complete.admin.success.text"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "complete.admin.success.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "status.completed.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "status.retracted.label"
+msgstr ""
