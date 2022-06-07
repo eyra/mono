@@ -57,4 +57,4 @@ msgstr "Publish"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "complete.button"
-msgstr "Complete"
+msgstr "Finish up"

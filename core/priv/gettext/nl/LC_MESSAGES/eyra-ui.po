@@ -197,4 +197,4 @@ msgstr "Menu"
 
 #, elixir-format, ex-autogen
 msgid "persister.error.flash"
-msgstr "Opslaan mislukt, refresh de pagina en probeer het opnieuw"
+msgstr "Niet opgeslagen, herlaad en probeer het opnieuw"

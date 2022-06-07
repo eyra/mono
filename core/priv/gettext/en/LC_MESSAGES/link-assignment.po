@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-format
 msgid "closed.dialog.text"
-msgstr "Unfortunately, this assignment is currently closed for participation"
+msgstr "Unfortunately, this assignment is currently closed for participation."
 
 #, elixir-format
 msgid "closed.dialog.title"
@@ -21,8 +21,8 @@ msgstr "Closed"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "excluded.dialog.text"
-msgstr "Unfortunately, you already participated on an affiliated unmixable assignment"
+msgstr "The researcher excluded you based on your participation in a previous study."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "excluded.dialog.title"
-msgstr "Unmixable assignment"
+msgstr "Unfortunately you cannot participate"

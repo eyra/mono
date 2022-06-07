@@ -330,6 +330,9 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
           :closed ->
             dgettext("eyra-submission", "accepted.closed.message")
         end
+
+      :completed ->
+        dgettext("eyra-submission", "submission.completed.message")
     end
   end
 end

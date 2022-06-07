@@ -1,4 +1,5 @@
 defmodule Systems.Pool.CampaignStatus do
   use Core.Enums.Base,
-      {:pool_campaign_status, [:drafted, :submitted, :scheduled, :released, :closed, :completed]}
+      {:pool_campaign_status,
+       [:submitted, :scheduled, :released, :closed, :retracted, :completed]}
 end

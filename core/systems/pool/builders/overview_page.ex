@@ -233,8 +233,8 @@ defmodule Systems.Pool.Builders.OverviewPage do
 
     type =
       case status do
-        :drafted -> :tertiary
-        :submitted -> :delete
+        :retracted -> :delete
+        :submitted -> :tertiary
         :scheduled -> :warning
         :released -> :success
         :closed -> :disabled
@@ -251,7 +251,7 @@ defmodule Systems.Pool.Builders.OverviewPage do
   defp campaign_status(%{status: status} = submission) do
     case status do
       :accepted -> Pool.Context.published_status(submission)
-      :idle -> :drafted
+      :idle -> :retracted
       :submitted -> :submitted
       :completed -> :completed
     end

@@ -259,7 +259,7 @@ msgid "pool_campaign_status.completed"
 msgstr ""
 
 #, elixir-format, ex-autogen
-msgid "pool_campaign_status.drafted"
+msgid "pool_campaign_status.retracted"
 msgstr ""
 
 #, elixir-format, ex-autogen

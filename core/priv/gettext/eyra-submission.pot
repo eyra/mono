@@ -145,3 +145,7 @@ msgstr ""
 #, elixir-format, ex-autogen
 msgid "status.retracted.label"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "submission.completed.message"
+msgstr ""

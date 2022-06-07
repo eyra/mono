@@ -260,12 +260,12 @@ msgid "pool_campaign_status.completed"
 msgstr "Afgerond"
 
 #, elixir-format, ex-autogen
-msgid "pool_campaign_status.drafted"
+msgid "pool_campaign_status.retracted"
 msgstr "Ingetrokken"
 
 #, elixir-format, ex-autogen
 msgid "pool_campaign_status.released"
-msgstr "Vrijgegeven"
+msgstr "Open"
 
 #, elixir-format, ex-autogen
 msgid "pool_campaign_status.scheduled"

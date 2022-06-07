@@ -8,7 +8,7 @@ defmodule Systems.Pool.Context do
         %{text: dgettext("eyra-submission", "status.idle.label"), type: :tertiary}
 
       {:idle, _} ->
-        %{text: dgettext("eyra-submission", "status.retracted.label"), type: :tertiary}
+        %{text: dgettext("eyra-submission", "status.retracted.label"), type: :delete}
 
       {:submitted, _} ->
         %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary}

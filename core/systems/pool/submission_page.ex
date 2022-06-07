@@ -189,11 +189,14 @@ defmodule Systems.Pool.SubmissionPage do
     create_actions(action_map(assigns), accepted?, completed?)
   end
 
-  defp create_actions(%{accept: accept, preview: preview}, false, _), do: [accept, preview]
-  defp create_actions(%{accept: accept, preview: preview}, _, true), do: [accept, preview]
+  defp create_actions(%{accept: accept, preview: preview, complete: complete}, false, false),
+    do: [preview, accept, complete]
+
+  defp create_actions(%{accept: accept, preview: preview}, false, _), do: [preview, accept]
+  defp create_actions(%{accept: accept, preview: preview}, _, true), do: [preview, accept]
 
   defp create_actions(%{preview: preview, retract: retract, complete: complete}, true, false),
-    do: [complete, preview, retract]
+    do: [preview, complete, retract]
 
   defp show_dialog?(nil), do: false
   defp show_dialog?(_), do: true

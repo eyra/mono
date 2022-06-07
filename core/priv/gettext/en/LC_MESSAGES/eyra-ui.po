@@ -197,4 +197,4 @@ msgstr "Menu"
 
 #, elixir-format, ex-autogen
 msgid "persister.error.flash"
-msgstr "Saving failed, please refresh an retry"
+msgstr "Not saved, please reload and try again"

@@ -241,7 +241,7 @@ msgstr "Published"
 
 #, elixir-format, ex-autogen
 msgid "submission_status.completed"
-msgstr "Completed"
+msgstr "Finished"
 
 #, elixir-format, ex-autogen
 msgid "submission_status.idle"
@@ -257,15 +257,15 @@ msgstr "Closed"
 
 #, elixir-format, ex-autogen
 msgid "pool_campaign_status.completed"
-msgstr "Completed"
+msgstr "Finished"
 
 #, elixir-format, ex-autogen
-msgid "pool_campaign_status.drafted"
-msgstr "Retracted"
+msgid "pool_campaign_status.retracted"
+msgstr "Withdrawn"
 
 #, elixir-format, ex-autogen
 msgid "pool_campaign_status.released"
-msgstr "Released"
+msgstr "Open"
 
 #, elixir-format, ex-autogen
 msgid "pool_campaign_status.scheduled"
