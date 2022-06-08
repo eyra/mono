@@ -14,7 +14,7 @@ defmodule Systems.Pool.SubmissionView do
       before?: 2
     ]
 
-  alias Core.Pools.{Submissions, Submission}
+  alias Core.Pools.Submission
 
   prop(props, :any, required: true)
 
@@ -39,15 +39,21 @@ defmodule Systems.Pool.SubmissionView do
   end
 
   def update(
-        %{active_item_id: active_item_id, selector_id: :schedule_start_toggle},
+        %{active_item_ids: [], selector_id: :schedule_start_toggle},
         %{assigns: %{entity: entity}} = socket
       ) do
-    schedule_start =
-      case active_item_id do
-        nil -> nil
-        _ -> format_user_input_date(now())
-      end
+    {
+      :ok,
+      socket
+      |> save(entity, %{schedule_start: nil})
+    }
+  end
 
+  def update(
+        %{active_item_ids: [_], selector_id: :schedule_start_toggle},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    schedule_start = format_user_input_date(now())
     schedule_end = determine_new_end(schedule_start, entity.schedule_end)
 
     attrs = %{
@@ -63,7 +69,18 @@ defmodule Systems.Pool.SubmissionView do
   end
 
   def update(
-        %{active_item_id: active_item_id, selector_id: :schedule_end_toggle},
+        %{active_item_ids: [], selector_id: :schedule_end_toggle},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    {
+      :ok,
+      socket
+      |> save(entity, %{schedule_end: nil})
+    }
+  end
+
+  def update(
+        %{active_item_ids: [_], selector_id: :schedule_end_toggle},
         %{assigns: %{entity: entity}} = socket
       ) do
     base_date =
@@ -72,12 +89,7 @@ defmodule Systems.Pool.SubmissionView do
         date -> parse_user_input_date(date)
       end
 
-    schedule_end =
-      case active_item_id do
-        nil -> nil
-        _ -> format_user_input_date(one_week_after(base_date))
-      end
-
+    schedule_end = format_user_input_date(one_week_after(base_date))
     attrs = %{schedule_end: schedule_end}
 
     {
@@ -98,16 +110,11 @@ defmodule Systems.Pool.SubmissionView do
     }
   end
 
-  # Handle update from parent after auto-save, prevents overwrite of current state
-  def update(_params, %{assigns: %{submission: _submission}} = socket) do
-    {:ok, socket}
-  end
-
-  def update(%{id: id, props: %{entity_id: entity_id, validate?: validate?}}, socket) do
+  def update(%{id: id, props: %{entity: entity, validate?: validate?}}, socket) do
     %{
       schedule_start: schedule_start,
       schedule_end: schedule_end
-    } = entity = Submissions.get!(entity_id)
+    } = entity
 
     changeset = Submission.changeset(entity, %{})
 

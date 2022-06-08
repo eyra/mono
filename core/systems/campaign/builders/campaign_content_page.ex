@@ -1,0 +1,125 @@
+defmodule Systems.Campaign.Builders.CampaignContentPage do
+  import CoreWeb.Gettext
+
+  require Link.Enums.Themes
+  alias Link.Enums.Themes
+
+  alias Systems.Promotion.FormView, as: PromotionForm
+  alias Systems.Campaign.MonitorView
+  alias Systems.Pool.CampaignSubmissionView, as: SubmissionForm
+
+  alias Systems.{
+    Assignment,
+    Promotion
+  }
+
+  def view_model(
+        %{
+          id: campaign_id,
+          promotion:
+            %{
+              id: promotion_id,
+              submission: %{
+                status: status
+              }
+            } = promotion
+        } = campaign,
+        %{uri_path: uri_path} = assigns,
+        url_resolver
+      ) do
+    submitted? = status != :idle
+
+    tabs = create_tabs(campaign, assigns, url_resolver)
+
+    preview_path =
+      url_resolver.(Promotion.LandingPage, id: promotion_id, preview: true, back: uri_path)
+
+    %{
+      id: campaign_id,
+      promotion: promotion,
+      tabs: tabs,
+      submitted?: submitted?,
+      preview_path: preview_path
+    }
+  end
+
+  defp create_tabs(
+         %{
+           promotion:
+             %{
+               submission:
+                 %{
+                   status: status
+                 } = submission
+             } = promotion,
+           promotable_assignment: assignment
+         } = campaign,
+         %{current_user: user, uri_origin: uri_origin, validate?: validate?},
+         _url_resolver
+       ) do
+    submitted? = status != :idle
+    validate? = validate? or submitted?
+
+    assignment_form_ready? = Assignment.Context.ready?(assignment)
+    attention_list_enabled? = Assignment.Context.attention_list_enabled?(assignment)
+    task_labels = Assignment.Context.task_labels(assignment)
+
+    promotion_form_ready? = Promotion.Context.ready?(promotion)
+
+    [
+      %{
+        id: :promotion_form,
+        ready?: !validate? || promotion_form_ready?,
+        title: dgettext("link-survey", "tabbar.item.promotion"),
+        forward_title: dgettext("link-survey", "tabbar.item.promotion.forward"),
+        type: :fullpage,
+        component: PromotionForm,
+        props: %{
+          entity: promotion,
+          validate?: validate?,
+          themes_module: Themes
+        }
+      },
+      %{
+        id: :assignment_form,
+        ready?: !validate? || assignment_form_ready?,
+        title: dgettext("link-survey", "tabbar.item.assignment"),
+        forward_title: dgettext("link-survey", "tabbar.item.assignment.forward"),
+        type: :fullpage,
+        component: Assignment.AssignmentForm,
+        props: %{
+          entity: assignment,
+          uri_origin: uri_origin,
+          validate?: validate?,
+          user: user,
+          target: self()
+        }
+      },
+      %{
+        id: :criteria_form,
+        title: dgettext("link-survey", "tabbar.item.criteria"),
+        forward_title: dgettext("link-survey", "tabbar.item.criteria.forward"),
+        type: :fullpage,
+        component: SubmissionForm,
+        props: %{
+          entity: submission,
+          user: user
+        }
+      },
+      %{
+        id: :monitor,
+        title: dgettext("link-survey", "tabbar.item.monitor"),
+        forward_title: dgettext("link-survey", "tabbar.item.monitor.forward"),
+        type: :fullpage,
+        component: MonitorView,
+        props: %{
+          entity: campaign,
+          attention_list_enabled?: attention_list_enabled?,
+          labels: task_labels
+        }
+      }
+    ]
+  end
+
+  defp create_tabs(_, _, _), do: []
+end

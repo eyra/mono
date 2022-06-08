@@ -9,10 +9,10 @@ defmodule Systems.Assignment.AssignmentForm do
 
   prop(props, :map)
 
-  data(entity_id, :number)
+  data(entity, :map)
   data(callback_url, :string)
   data(validate?, :boolean)
-  data(experiment_id, :number)
+  data(experiment, :map)
   data(tool_id, :number)
   data(tool_form, :number)
   data(user, :map)
@@ -38,22 +38,19 @@ defmodule Systems.Assignment.AssignmentForm do
     }
   end
 
-  # Handle update from parent after auto-save, prevents overwrite of current state
-  def update(_params, %{assigns: %{entity: _entity}} = socket) do
-    {:ok, socket}
-  end
-
   # Handle initial update
   def update(
         %{
           id: id,
-          props: %{entity_id: entity_id, validate?: validate?, uri_origin: uri_origin, user: user}
+          props: %{
+            entity: %{id: entity_id, assignable_experiment: experiment} = entity,
+            validate?: validate?,
+            user: user,
+            uri_origin: uri_origin
+          }
         },
         socket
       ) do
-    preload = Assignment.Model.preload_graph(:full)
-    %{assignable_experiment: experiment} = Assignment.Context.get!(entity_id, preload)
-
     callback_path =
       CoreWeb.Router.Helpers.live_path(socket, Systems.Assignment.CallbackPage, entity_id)
 
@@ -67,13 +64,13 @@ defmodule Systems.Assignment.AssignmentForm do
       socket
       |> assign(
         id: id,
-        entity_id: entity_id,
-        experiment_id: experiment.id,
-        callback_url: callback_url,
+        entity: entity,
+        experiment: experiment,
         tool_id: tool_id,
         tool_form: tool_form,
         validate?: validate?,
-        user: user
+        user: user,
+        callback_url: callback_url
       )
     }
   end
@@ -86,7 +83,7 @@ defmodule Systems.Assignment.AssignmentForm do
   defp forms(%{
          tool_form: tool_form,
          tool_id: tool_id,
-         experiment_id: experiment_id,
+         experiment: experiment,
          validate?: validate?,
          callback_url: callback_url,
          user: user
@@ -94,7 +91,11 @@ defmodule Systems.Assignment.AssignmentForm do
     [
       %{
         component: Assignment.ExperimentForm,
-        props: %{id: :experiment_form, entity_id: experiment_id, validate?: validate?}
+        props: %{
+          id: :experiment_form,
+          entity: experiment,
+          validate?: validate?
+        }
       },
       %{
         component: tool_form,
@@ -110,12 +111,14 @@ defmodule Systems.Assignment.AssignmentForm do
         component: Assignment.EthicalForm,
         props: %{
           id: :ethical_form,
-          entity_id: experiment_id,
+          entity: experiment,
           validate?: validate?
         }
       }
     ]
   end
+
+  defp forms(_), do: []
 
   defp filter(forms, exclude_form_id) do
     Enum.filter(forms, &(&1.props.id != exclude_form_id))

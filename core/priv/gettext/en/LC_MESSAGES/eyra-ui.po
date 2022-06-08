@@ -16,7 +16,7 @@ msgid "error.flash"
 msgstr "Something went wrong"
 
 #, elixir-format
-msgid "saved.info.flash"
+msgid "persister.saved.flash"
 msgstr "Saved"
 
 #, elixir-format
@@ -194,3 +194,7 @@ msgstr "her"
 #, elixir-format, ex-autogen, fuzzy
 msgid "menu.item.payments"
 msgstr "Menu"
+
+#, elixir-format, ex-autogen
+msgid "persister.error.flash"
+msgstr "Not saved, please reload and try again"

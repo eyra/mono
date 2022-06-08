@@ -27,9 +27,12 @@ defmodule Systems.Promotion.FormView do
   data(theme_labels, :list)
 
   @impl true
-  def process_file(%{assigns: %{entity: entity}} = socket, uploaded_file) do
+  def process_file(
+        %{assigns: %{entity: entity}} = socket,
+        {local_relative_path, _local_full_path, _remote_file}
+      ) do
     socket
-    |> save(entity, %{banner_photo_url: uploaded_file})
+    |> save(entity, %{banner_photo_url: local_relative_path})
   end
 
   def update(%{image_id: image_id}, %{assigns: %{entity: entity}} = socket) do
@@ -71,21 +74,18 @@ defmodule Systems.Promotion.FormView do
     }
   end
 
-  # Handle update from parent after auto-save, prevents overwrite of current state
-  def update(_params, %{assigns: %{entity: _entity}} = socket) do
-    {:ok, socket}
-  end
-
   def update(
         %{
           id: id,
-          props: %{entity_id: entity_id, validate?: validate?, themes_module: themes_module}
+          props: %{
+            entity: %{image_id: image_id} = entity,
+            validate?: validate?,
+            themes_module: themes_module
+          }
         },
         socket
       ) do
-    %{image_id: image_id} = entity = Promotion.Context.get!(entity_id)
     changeset = Promotion.Model.changeset(entity, :create, %{})
-
     image_info = ImageHelpers.get_image_info(image_id, 400, 300)
     theme_labels = themes_module.labels(entity.themes)
 
@@ -94,7 +94,6 @@ defmodule Systems.Promotion.FormView do
       socket
       |> init_file_uploader(:photo)
       |> assign(id: id)
-      |> assign(entity_id: entity_id)
       |> assign(entity: entity)
       |> assign(changeset: changeset)
       |> assign(image_info: image_info)

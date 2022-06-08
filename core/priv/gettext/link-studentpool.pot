@@ -47,35 +47,11 @@ msgid "student.tag.incomplete"
 msgstr ""
 
 #, elixir-format
-msgid "accepted.title"
-msgstr ""
-
-#, elixir-format
-msgid "status.submitted.label"
-msgstr ""
-
-#, elixir-format
-msgid "submitted.title"
-msgstr ""
-
-#, elixir-format
 msgid "spots.available"
 msgstr ""
 
 #, elixir-format
 msgid "submission.title"
-msgstr ""
-
-#, elixir-format
-msgid "status.accepted.closed.label"
-msgstr ""
-
-#, elixir-format
-msgid "status.accepted.online.label"
-msgstr ""
-
-#, elixir-format
-msgid "status.accepted.scheduled.label"
 msgstr ""
 
 #, elixir-format

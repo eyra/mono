@@ -3,7 +3,7 @@ defmodule Frameworks.Signal.TestHelper do
 
   defmacro assert_signal_dispatched(signal) do
     quote bind_quoted: [signal: signal] do
-      {_, {_, message}} = assert_received({:signal_test, {^signal, _}})
+      {_, {_, message}} = assert_receive({:signal_test, {^signal, _}}, 1000)
       message
     end
   end

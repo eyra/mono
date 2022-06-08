@@ -35,11 +35,6 @@ defmodule Systems.Survey.ToolForm do
     }
   end
 
-  # Handle update from parent after auto-save, prevents overwrite of current state
-  def update(_params, %{assigns: %{entity: _entity}} = socket) do
-    {:ok, socket}
-  end
-
   # Handle initial update
   def update(
         %{

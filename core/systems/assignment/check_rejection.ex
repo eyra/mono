@@ -11,7 +11,7 @@ defmodule Systems.Assignment.CheckRejection do
       cta_label: dgettext("eyra-nextaction", "assignment.check.rejection.cta"),
       cta_action: %{
         type: :redirect,
-        to: url_resolver.(Systems.Assignment.LandingPage, id)
+        to: url_resolver.(Systems.Assignment.LandingPage, id: id)
       }
     }
   end

@@ -54,3 +54,7 @@ msgstr "Unpublish"
 #, elixir-format
 msgid "accept.button"
 msgstr "Publish"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "complete.button"
+msgstr "Finish up"

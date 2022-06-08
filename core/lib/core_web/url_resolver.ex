@@ -6,6 +6,17 @@ defmodule CoreWeb.UrlResolver do
   but needs to generate URLs.
   """
   def url_resolver(socket) do
-    fn view, args -> CoreWeb.Router.Helpers.live_path(socket, view, args) end
+    fn view, args -> resolve(socket, view, args) end
+  end
+
+  defp resolve(socket, view, args) when is_integer(args) do
+    CoreWeb.Router.Helpers.live_path(socket, view, args)
+  end
+
+  defp resolve(socket, view, args) do
+    case Keyword.pop(args, :id) do
+      {nil, args} -> CoreWeb.Router.Helpers.live_path(socket, view, args)
+      {id, args} -> CoreWeb.Router.Helpers.live_path(socket, view, id, args)
+    end
   end
 end

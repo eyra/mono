@@ -3,15 +3,12 @@ defmodule Systems.Campaign.ContentPage do
   The cms page for survey tool
   """
   use CoreWeb, :live_view
-  use CoreWeb.MultiFormAutoSave
   use CoreWeb.Layouts.Workspace.Component, :campaign
   use CoreWeb.UI.Responsive.Viewport
   use CoreWeb.UI.PlainDialog
 
   import CoreWeb.Gettext
-
-  require Link.Enums.Themes
-  alias Link.Enums.Themes
+  import Core.ImageCatalog, only: [image_catalog: 0]
 
   alias Core.Pools.Submissions
 
@@ -19,26 +16,16 @@ defmodule Systems.Campaign.ContentPage do
   alias Systems.Promotion.FormView, as: PromotionForm
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
+  alias CoreWeb.UI.Timestamp
   alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent, TabbarFooter}
-  alias Systems.Campaign.MonitorView
-  alias Systems.Pool.CampaignSubmissionView, as: SubmissionForm
-  import Core.ImageCatalog, only: [image_catalog: 0]
 
   alias Systems.{
     Campaign,
-    Promotion,
     Assignment
   }
 
-  data(campaign_id, :any)
-  data(assignment_id, :any)
-  data(promotion_id, :any)
-  data(submission_id, :any)
-  data(submitted?, :any)
-  data(validate?, :any)
-  data(preview_path, :any)
+  data(validate?, :boolean, default: false)
   data(initial_tab, :any)
-  data(tabs, :map)
   data(actions, :map)
   data(changesets, :any)
   data(initial_image_query, :any)
@@ -52,45 +39,13 @@ defmodule Systems.Campaign.ContentPage do
 
   @impl true
   def mount(%{"id" => id, "tab" => initial_tab}, _session, socket) do
-    preload = Campaign.Model.preload_graph(:full)
-
-    %{
-      id: campaign_id,
-      promotion:
-        %{
-          submission:
-            %{
-              status: status
-            } = submission
-        } = promotion,
-      promotable_assignment: assignment
-    } = Campaign.Context.get!(id, preload)
-
-    submitted? = status != :idle
-    validate? = submitted?
-
-    assignment_form_ready? = Assignment.Context.ready?(assignment)
-    attention_list_enabled? = Assignment.Context.attention_list_enabled?(assignment)
-    task_labels = Assignment.Context.task_labels(assignment)
-
-    promotion_form_ready? = Promotion.Context.ready?(promotion)
-    preview_path = Routes.live_path(socket, Promotion.LandingPage, promotion.id, preview: true)
+    model = %{id: String.to_integer(id), director: :campaign}
 
     {
       :ok,
       socket
       |> assign(
-        campaign_id: campaign_id,
-        assignment_id: assignment.id,
-        promotion_id: promotion.id,
-        submission_id: submission.id,
-        submitted?: submitted?,
-        validate?: validate?,
-        assignment_form_ready?: assignment_form_ready?,
-        promotion_form_ready?: promotion_form_ready?,
-        attention_list_enabled?: attention_list_enabled?,
-        task_labels: task_labels,
-        preview_path: preview_path,
+        model: model,
         initial_tab: initial_tab,
         changesets: %{},
         dialog: nil,
@@ -110,24 +65,19 @@ defmodule Systems.Campaign.ContentPage do
   defoverridable handle_uri: 1
 
   @impl true
-  def handle_uri(
-        %{assigns: %{uri_origin: uri_origin, uri_path: uri_path, promotion_id: promotion_id}} =
-          socket
-      ) do
-    preview_path =
-      Routes.live_path(socket, Systems.Promotion.LandingPage, promotion_id,
-        preview: true,
-        back: uri_path
-      )
-
+  def handle_uri(socket) do
     socket =
       socket
-      |> assign(uri_origin: uri_origin)
-      |> assign(preview_path: preview_path)
-      |> create_tabs()
+      |> observe_view_model()
       |> update_menus()
 
     super(socket)
+  end
+
+  defoverridable handle_view_model_updated: 1
+
+  def handle_view_model_updated(socket) do
+    socket
   end
 
   @impl true
@@ -135,93 +85,7 @@ defmodule Systems.Campaign.ContentPage do
     socket |> update_menus()
   end
 
-  defp create_tabs(
-         %{
-           assigns: %{
-             uri_origin: uri_origin,
-             campaign_id: campaign_id,
-             assignment_id: assignment_id,
-             promotion_id: promotion_id,
-             submission_id: submission_id,
-             validate?: validate?,
-             assignment_form_ready?: assignment_form_ready?,
-             promotion_form_ready?: promotion_form_ready?,
-             attention_list_enabled?: attention_list_enabled?,
-             task_labels: task_labels,
-             current_user: user
-           }
-         } = socket
-       ) do
-    tabs = [
-      %{
-        id: :promotion_form,
-        ready?: !validate? || promotion_form_ready?,
-        title: dgettext("link-survey", "tabbar.item.promotion"),
-        forward_title: dgettext("link-survey", "tabbar.item.promotion.forward"),
-        type: :fullpage,
-        component: PromotionForm,
-        props: %{
-          entity_id: promotion_id,
-          validate?: validate?,
-          themes_module: Themes
-        }
-      },
-      %{
-        id: :assignment_form,
-        ready?: !validate? || assignment_form_ready?,
-        title: dgettext("link-survey", "tabbar.item.assignment"),
-        forward_title: dgettext("link-survey", "tabbar.item.assignment.forward"),
-        type: :fullpage,
-        component: Assignment.AssignmentForm,
-        props: %{
-          entity_id: assignment_id,
-          uri_origin: uri_origin,
-          validate?: validate?,
-          user: user,
-          target: self()
-        }
-      },
-      %{
-        id: :criteria_form,
-        title: dgettext("link-survey", "tabbar.item.criteria"),
-        forward_title: dgettext("link-survey", "tabbar.item.criteria.forward"),
-        type: :fullpage,
-        component: SubmissionForm,
-        props: %{
-          entity_id: submission_id,
-          user: user
-        }
-      },
-      %{
-        id: :monitor,
-        title: dgettext("link-survey", "tabbar.item.monitor"),
-        forward_title: dgettext("link-survey", "tabbar.item.monitor.forward"),
-        type: :fullpage,
-        component: MonitorView,
-        props: %{
-          entity_id: campaign_id,
-          attention_list_enabled?: attention_list_enabled?,
-          labels: task_labels
-        }
-      }
-    ]
-
-    socket
-    |> assign(tabs: tabs)
-  end
-
-  defp create_tabs(socket) do
-    socket
-  end
-
-  @impl true
-  def handle_auto_save_done(socket) do
-    socket |> update_menus()
-  end
-
-  defp initial_image_query(%{promotion_id: promotion_id}) do
-    promotion = Promotion.Context.get!(promotion_id)
-
+  defp initial_image_query(%{vm: %{promotion: promotion}}) do
     case promotion.themes do
       nil -> ""
       themes -> themes |> Enum.join(" ")
@@ -246,7 +110,7 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   @impl true
-  def handle_event("delete_confirm", _params, %{assigns: %{campaign_id: campaign_id}} = socket) do
+  def handle_event("delete_confirm", _params, %{assigns: %{vm: %{id: campaign_id}}} = socket) do
     Campaign.Context.delete(campaign_id)
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Console))}
   end
@@ -260,19 +124,20 @@ defmodule Systems.Campaign.ContentPage do
   def handle_event(
         "submit",
         _params,
-        %{assigns: %{campaign_id: campaign_id, submission_id: submission_id}} = socket
+        %{assigns: %{vm: %{id: campaign_id, promotion: %{submission: submission}}}} = socket
       ) do
     socket =
       if Campaign.Context.ready?(campaign_id) do
-        submission = Submissions.get!(submission_id)
-        {:ok, _submission} = Submissions.update(submission, %{status: :submitted})
+        {:ok, _submission} =
+          Submissions.update(submission, %{
+            status: :submitted,
+            submitted_at: Timestamp.naive_now()
+          })
 
         title = dgettext("eyra-submission", "submit.success.title")
         text = dgettext("eyra-submission", "submit.success.text")
 
         socket
-        |> assign(submitted?: true)
-        |> create_tabs()
         |> inform(title, text)
       else
         title = dgettext("eyra-submission", "submit.error.title")
@@ -280,7 +145,7 @@ defmodule Systems.Campaign.ContentPage do
 
         socket
         |> assign(validate?: true)
-        |> create_tabs()
+        |> update_view_model()
         |> inform(title, text)
       end
 
@@ -288,8 +153,11 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   @impl true
-  def handle_event("retract", _params, %{assigns: %{submission_id: submission_id}} = socket) do
-    submission = Submissions.get!(submission_id)
+  def handle_event(
+        "retract",
+        _params,
+        %{assigns: %{vm: %{promotion: %{submission: submission}}}} = socket
+      ) do
     {:ok, _submission} = Submissions.update(submission, %{status: :idle})
 
     title = dgettext("eyra-submission", "retract.success.title")
@@ -298,7 +166,6 @@ defmodule Systems.Campaign.ContentPage do
     {
       :noreply,
       socket
-      |> assign(submitted?: false)
       |> inform(title, text)
     }
   end
@@ -320,39 +187,60 @@ defmodule Systems.Campaign.ContentPage do
     {:noreply, socket |> assign(dialog: nil)}
   end
 
+  @impl true
+  def handle_info({:handle_auto_save_done, _}, socket) do
+    socket |> update_menus()
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info({:flash, type, message}, socket) do
+    socket |> Flash.put(type, message, true)
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_info({:show_popup, popup}, socket) do
     {:noreply, socket |> assign(popup: popup)}
   end
 
+  @impl true
   def handle_info({:hide_popup}, socket) do
     {:noreply, socket |> assign(popup: nil)}
   end
 
+  @impl true
   def handle_info({:claim_focus, :promotion_form}, socket) do
     send_update(Assignment.AssignmentForm, id: :assignment_form, claim_focus: :promotion_form)
     {:noreply, socket}
   end
 
+  @impl true
   def handle_info({:claim_focus, form}, socket) do
     send_update(PromotionForm, id: :promotion_form, focus: "")
     send_update(Assignment.AssignmentForm, id: :assignment_form, claim_focus: form)
     {:noreply, socket}
   end
 
+  @impl true
   def handle_info({:image_picker, image_id}, socket) do
     send_update(PromotionForm, id: :promotion_form, image_id: image_id)
     {:noreply, socket}
   end
 
+  @impl true
   def handle_info(%{id: :experiment_form, ready?: ready?}, socket),
     do: handle_info(%{id: :assignment_form, ready?: ready?}, socket)
 
+  @impl true
   def handle_info(%{id: :ethical_form, ready?: ready?}, socket),
     do: handle_info(%{id: :assignment_form, ready?: ready?}, socket)
 
+  @impl true
   def handle_info(%{id: :tool_form, ready?: ready?}, socket),
     do: handle_info(%{id: :assignment_form, ready?: ready?}, socket)
 
+  @impl true
   def handle_info(%{id: form, ready?: ready?}, socket) do
     ready_key = String.to_atom("#{form}_ready?")
 
@@ -360,7 +248,8 @@ defmodule Systems.Campaign.ContentPage do
       if socket.assigns[ready_key] != ready? do
         socket
         |> assign(ready_key, ready?)
-        |> create_tabs()
+
+        # |> create_tabs()
       else
         socket
       end
@@ -368,6 +257,7 @@ defmodule Systems.Campaign.ContentPage do
     {:noreply, socket}
   end
 
+  @impl true
   def handle_info({:signal_test, _}, socket) do
     {:noreply, socket}
   end
@@ -375,7 +265,7 @@ defmodule Systems.Campaign.ContentPage do
   defp margin_x(:mobile), do: "mx-6"
   defp margin_x(_), do: "mx-10"
 
-  defp action_map(%{preview_path: preview_path}) do
+  defp action_map(%{vm: %{preview_path: preview_path}}) do
     preview_action = %{type: :redirect, to: preview_path}
     submit_action = %{type: :send, event: "submit"}
     delete_action = %{type: :send, event: "delete"}
@@ -444,7 +334,7 @@ defmodule Systems.Campaign.ContentPage do
     }
   end
 
-  defp create_actions(%{breakpoint: breakpoint, submitted?: submitted?} = assigns) do
+  defp create_actions(%{breakpoint: breakpoint, vm: %{submitted?: submitted?}} = assigns) do
     create_actions(action_map(assigns), breakpoint, submitted?)
   end
 
@@ -511,7 +401,7 @@ defmodule Systems.Campaign.ContentPage do
     |> Enum.filter(&(not is_nil(&1)))
   end
 
-  defp create_more_actions(%{submitted?: submitted?} = assigns) do
+  defp create_more_actions(%{vm: %{submitted?: submitted?}} = assigns) do
     create_more_actions(action_map(assigns), submitted?)
   end
 
@@ -562,7 +452,7 @@ defmodule Systems.Campaign.ContentPage do
           <Popup :if={@dialog}>
             <PlainDialog {...@dialog} />
           </Popup>
-          <TabbarArea tabs={@tabs}>
+          <TabbarArea tabs={@vm.tabs}>
             <ActionBar right_bar_buttons={create_actions(assigns)} more_buttons={create_more_actions(assigns)}>
               <Tabbar vm={%{initial_tab: @initial_tab, size: tabbar_size(@breakpoint)} } />
             </ActionBar>

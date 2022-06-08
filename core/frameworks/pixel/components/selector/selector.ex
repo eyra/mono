@@ -28,11 +28,6 @@ defmodule Frameworks.Pixel.Selector.Selector do
     }
   end
 
-  # Handle update from parent after auto-save, prevents overwrite of current state
-  def update(_params, %{assigns: %{current_items: _current_items}} = socket) do
-    {:ok, socket}
-  end
-
   def update(
         %{
           id: id,

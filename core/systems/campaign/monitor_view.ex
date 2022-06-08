@@ -18,12 +18,12 @@ defmodule Systems.Campaign.MonitorView do
   data(reject_task, :number)
   data(labels, :list)
 
-  def update(%{checkin: :new_participant}, socket) do
-    {
-      :ok,
-      socket |> update_vm()
-    }
-  end
+  # def update(%{checkin: :new_participant}, socket) do
+  #   {
+  #     :ok,
+  #     socket |> update_vm()
+  #   }
+  # end
 
   def update(
         %{reject: :submit, rejection: rejection},
@@ -35,7 +35,6 @@ defmodule Systems.Campaign.MonitorView do
       :ok,
       socket
       |> assign(reject_task: nil)
-      |> update_vm()
     }
   end
 
@@ -48,33 +47,27 @@ defmodule Systems.Campaign.MonitorView do
         %{
           id: id,
           props: %{
-            entity_id: entity_id,
+            entity: entity,
             attention_list_enabled?: attention_list_enabled?,
             labels: labels
           }
         },
         socket
       ) do
+    vm = to_view_model(socket, entity, attention_list_enabled?)
+
     {
       :ok,
       socket
       |> assign(
         id: id,
-        entity_id: entity_id,
+        entity: entity,
+        vm: vm,
         attention_list_enabled?: attention_list_enabled?,
         labels: labels,
         reject_task: nil
       )
-      |> update_vm()
     }
-  end
-
-  defp update_vm(%{assigns: %{entity_id: entity_id}} = socket) do
-    preload = Campaign.Model.preload_graph(:full)
-    campaign = Campaign.Context.get!(entity_id, preload)
-    vm = to_view_model(socket, campaign)
-
-    assign(socket, vm: vm)
   end
 
   @impl true
@@ -84,11 +77,7 @@ defmodule Systems.Campaign.MonitorView do
         %{assigns: %{vm: %{attention_tasks: tasks}}} = socket
       ) do
     Enum.each(tasks, &Crew.Context.accept_task(&1.id))
-
-    {
-      :noreply,
-      socket |> update_vm()
-    }
+    {:noreply, socket}
   end
 
   @impl true
@@ -98,21 +87,13 @@ defmodule Systems.Campaign.MonitorView do
         %{assigns: %{vm: %{completed_tasks: tasks}}} = socket
       ) do
     Enum.each(tasks, &Crew.Context.accept_task(&1.id))
-
-    {
-      :noreply,
-      socket |> update_vm()
-    }
+    {:noreply, socket}
   end
 
   @impl true
   def handle_event("accept", %{"item" => task_id}, socket) do
     Crew.Context.accept_task(task_id)
-
-    {
-      :noreply,
-      socket |> update_vm()
-    }
+    {:noreply, socket}
   end
 
   @impl true
@@ -241,7 +222,6 @@ defmodule Systems.Campaign.MonitorView do
   defp to_view_model(
          %{
            assigns: %{
-             attention_list_enabled?: attention_list_enabled?,
              myself: target
            }
          },
@@ -256,7 +236,8 @@ defmodule Systems.Campaign.MonitorView do
                  subject_count: subject_count
                } = experiment
            }
-         }
+         },
+         attention_list_enabled?
        ) do
     participated_count = Crew.Context.count_participated_tasks(crew)
     pending_count = Crew.Context.count_pending_tasks(crew)

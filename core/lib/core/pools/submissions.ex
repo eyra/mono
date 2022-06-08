@@ -43,19 +43,36 @@ defmodule Core.Pools.Submissions do
     |> Repo.get!(id)
   end
 
-  def update(%Submission{} = _submisson, %Changeset{} = changeset) do
-    with {:ok, %{submisson: submisson}} <-
-           Multi.new()
-           |> Multi.update(:submisson, changeset)
-           |> Repo.transaction() do
-      Signal.Context.dispatch!(:submisson_updated, submisson)
-      {:ok, notify_when_submitted(submisson, changeset)}
+  def update(%Submission{} = _submission, %Changeset{} = changeset) do
+    result =
+      Multi.new()
+      |> Multi.update(:submission, changeset)
+      |> Repo.transaction()
+
+    with {:ok, %{submission: submission}} <- result do
+      Signal.Context.dispatch!(:submission_updated, submission)
+      {:ok, notify_when_submitted(submission, changeset)}
     end
+
+    result
   end
 
-  def update(%Submission{} = submisson, attrs) do
-    changeset = Submission.changeset(submisson, attrs)
-    __MODULE__.update(submisson, changeset)
+  def update(%Submission{} = submission, attrs) do
+    changeset = Submission.changeset(submission, attrs)
+    __MODULE__.update(submission, changeset)
+  end
+
+  def update(%Criteria{} = _criteria, %Changeset{} = changeset) do
+    result =
+      Multi.new()
+      |> Multi.update(:criteria, changeset)
+      |> Repo.transaction()
+
+    with {:ok, %{criteria: criteria}} <- result do
+      Signal.Context.dispatch!(:criteria_updated, criteria)
+    end
+
+    result
   end
 
   def create(%{} = attrs, promotion, pool) do
@@ -109,6 +126,18 @@ end
 
 defimpl Core.Persister, for: Core.Pools.Submission do
   def save(submission, changeset) do
-    Core.Pools.Submissions.update(submission, changeset)
+    case Core.Pools.Submissions.update(submission, changeset) do
+      {:ok, %{submission: submission}} -> {:ok, submission}
+      _ -> {:error, changeset}
+    end
+  end
+end
+
+defimpl Core.Persister, for: Core.Pools.Criteria do
+  def save(criteria, changeset) do
+    case Core.Pools.Submissions.update(criteria, changeset) do
+      {:ok, %{criteria: criteria}} -> {:ok, criteria}
+      _ -> {:error, changeset}
+    end
   end
 end

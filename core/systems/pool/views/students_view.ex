@@ -1,7 +1,6 @@
 defmodule Systems.Pool.StudentsView do
   use CoreWeb.UI.LiveComponent
 
-  alias Core.Accounts
   alias Core.Enums.StudyProgramCodes
   alias Core.Pools.CriteriaFilters
 
@@ -16,7 +15,7 @@ defmodule Systems.Pool.StudentsView do
   data(filter_labels, :list)
 
   # Handle Selector Update
-  def update(%{active_item_ids: active_filters, selector_id: :filters}, socket) do
+  def update(%{active_item_ids: active_filters, selector_id: :student_filters}, socket) do
     {
       :ok,
       socket
@@ -25,8 +24,18 @@ defmodule Systems.Pool.StudentsView do
     }
   end
 
-  def update(%{id: id} = _params, socket) do
-    students = Accounts.list_students([:profile, :features])
+  # View model update
+  def update(%{props: %{students: students}} = _params, %{assigns: %{id: _id}} = socket) do
+    {
+      :ok,
+      socket
+      |> assign(students: students)
+      |> prepare_students()
+    }
+  end
+
+  # Initial update
+  def update(%{id: id, props: %{students: students}} = _params, socket) do
     filter_labels = CriteriaFilters.labels([])
 
     {
@@ -34,8 +43,8 @@ defmodule Systems.Pool.StudentsView do
       socket
       |> assign(
         id: id,
-        active_filters: [],
         students: students,
+        active_filters: [],
         filter_labels: filter_labels
       )
       |> prepare_students()
@@ -131,7 +140,7 @@ defmodule Systems.Pool.StudentsView do
         <div :if={not Enum.empty?(@students)}>
           <div class="flex flex-row gap-3 items-center">
             <div class="font-label text-label">Filter:</div>
-            <Selector id={:filters} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
+            <Selector id={:student_filters} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
           </div>
           <Spacing value="L" />
           <Title2>{dgettext("link-studentpool", "tabbar.item.students")}: <span class="text-primary">{Enum.count(@filtered_students)}</span></Title2>

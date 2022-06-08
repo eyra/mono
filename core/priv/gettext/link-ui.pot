@@ -53,3 +53,7 @@ msgstr ""
 #, elixir-format
 msgid "accept.button"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "complete.button"
+msgstr ""

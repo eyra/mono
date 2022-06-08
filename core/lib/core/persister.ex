@@ -1,6 +1,6 @@
 defprotocol Core.Persister do
   @fallback_to_any true
-  @spec save(any, map) :: :ok | {:error | String.t()}
+  @spec save(any, map) :: {:ok, Ecto.Schema.t()} | {:error, Ecto.Changeset.t()}
   def save(state, changeset)
 end
 

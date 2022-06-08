@@ -3,7 +3,6 @@ defmodule Systems.DataDonation.ContentPage do
   The cms page for data donation tool
   """
   use CoreWeb, :live_view
-  use CoreWeb.MultiFormAutoSave
 
   require Core.Enums.Themes
   alias Core.Enums.Themes
@@ -46,9 +45,6 @@ defmodule Systems.DataDonation.ContentPage do
   @impl true
   def handle_uri(socket), do: socket
 
-  @impl true
-  def handle_auto_save_done(socket), do: socket
-
   defp initial_image_query(%{promotion_id: promotion_id}) do
     promotion = Promotion.Context.get!(promotion_id)
 
@@ -62,6 +58,10 @@ defmodule Systems.DataDonation.ContentPage do
   def handle_event("reset_focus", _, socket) do
     send_update(DataDonation.ToolForm, id: :tool_form, focus: "")
     send_update(Promotion.FormView, id: :promotion_form, focus: "")
+    {:noreply, socket}
+  end
+
+  def handle_info({:handle_auto_save_done, _}, socket) do
     {:noreply, socket}
   end
 

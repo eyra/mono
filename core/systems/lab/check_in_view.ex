@@ -51,12 +51,12 @@ defmodule Systems.Lab.CheckInView do
   def handle_event(
         "accept",
         %{"item" => user_id},
-        %{assigns: %{tool: tool, parent: parent}} = socket
+        %{assigns: %{tool: tool, parent: _parent}} = socket
       ) do
     user_id = String.to_integer(user_id)
 
     Director.context(tool).activate_task(tool, user_id, true)
-    update_target(parent, %{checkin: :new_participant})
+    # update_target(parent, %{checkin: :new_participant})
     {:noreply, socket |> assign(focus: "", query: nil, message: nil)}
   end
 

@@ -1,7 +1,10 @@
 defmodule Systems.Campaign.MonitorViewTest do
-  use CoreWeb.ConnCase
+  use CoreWeb.ConnCase, async: false
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
+  import Frameworks.Signal.TestHelper
+
+  import ExUnit.Assertions
 
   alias Core.Authorization
   alias CoreWeb.UI.Timestamp
@@ -85,15 +88,12 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, view, _html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      html =
+      _html =
         view
         |> element("[phx-click=\"accept\"]")
         |> render_click()
 
-      assert html =~ "Participated: 1"
-      assert html =~ "Pending: 0"
-      assert html =~ "Open: 0"
-      assert html =~ "Accepted<span class=\"text-primary\"> 1"
+      assert_signals_dispatched(:crew_task_updated, 1)
     end
 
     test "Member applied but expired and not completed: accept_all", %{
@@ -118,15 +118,12 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, view, _html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      html =
+      _html =
         view
         |> element("[phx-click=\"accept_all_pending_started\"]")
         |> render_click()
 
-      assert html =~ "Participated: 2"
-      assert html =~ "Pending: 0"
-      assert html =~ "Open: 0"
-      assert html =~ "Accepted<span class=\"text-primary\"> 2"
+      assert_signals_dispatched(:crew_task_updated, 2)
     end
 
     test "Member completed: accept_all", %{
@@ -151,15 +148,12 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, view, _html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      html =
+      _html =
         view
         |> element("[phx-click=\"accept_all_completed\"]")
         |> render_click()
 
-      assert html =~ "Participated: 2"
-      assert html =~ "Pending: 0"
-      assert html =~ "Open: 0"
-      assert html =~ "Accepted<span class=\"text-primary\"> 2"
+      assert_signals_dispatched(:crew_task_updated, 2)
     end
 
     test "Member applied and completed", %{conn: %{assigns: %{current_user: user}} = conn} do

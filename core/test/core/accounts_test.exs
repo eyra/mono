@@ -579,8 +579,12 @@ defmodule Core.AccountsTest do
     test "update_user_profile/2 updates the user profile", %{
       user: user
     } do
-      {:ok, _} =
-        Accounts.update_user_profile(user, %{}, %{fullname: "Update Test", displayname: "Update"})
+      user_changeset = Accounts.User.user_profile_changeset(user, %{})
+
+      profile_changeset =
+        Accounts.Profile.changeset(user.profile, %{fullname: "Update Test", displayname: "Update"})
+
+      {:ok, _} = Accounts.update_user_profile(user_changeset, profile_changeset)
 
       assert user |> Accounts.get_profile() |> Map.get(:fullname) == "Update Test"
       assert_signal_dispatched(:user_profile_updated)
@@ -604,7 +608,9 @@ defmodule Core.AccountsTest do
     test "mark_as_visited/2 updates the user", %{
       user: user
     } do
-      {:ok, %{user: user}} = Accounts.update_user_profile(user, %{student: true}, %{})
+      user_changeset = Accounts.User.user_profile_changeset(user, %{student: true})
+
+      {:ok, %{user: user}} = Accounts.update_user(user_changeset)
       {:ok, %{user: user}} = Accounts.mark_as_visited(user, :settings)
 
       assert user |> Map.get(:visited_pages) == ["settings"]
@@ -615,7 +621,8 @@ defmodule Core.AccountsTest do
       user: user,
       url_resolver: url_resolver
     } do
-      {:ok, %{user: user}} = Accounts.update_user_profile(user, %{student: true}, %{})
+      user_changeset = Accounts.User.user_profile_changeset(user, %{student: true})
+      {:ok, %{user: user}} = Accounts.update_user(user_changeset)
 
       NextAction.Context.create_next_action(user, PromotePushStudent)
       assert_next_action(user, url_resolver, "/settings")

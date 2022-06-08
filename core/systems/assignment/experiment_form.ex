@@ -13,10 +13,9 @@ defmodule Systems.Assignment.ExperimentForm do
     Assignment
   }
 
-  prop(entity_id, :number)
+  prop(entity, :map)
   prop(validate?, :boolean)
 
-  data(entity, :any)
   data(device_labels, :list)
   data(language_labels, :list)
   data(ethical_label, :any)
@@ -65,27 +64,21 @@ defmodule Systems.Assignment.ExperimentForm do
     }
   end
 
-  # Handle update from parent after auto-save, prevents overwrite of current state
-  def update(_params, %{assigns: %{entity: _entity}} = socket) do
-    {:ok, socket}
-  end
-
   # Handle initial update
   def update(
-        %{id: id, entity_id: entity_id, validate?: validate?},
+        %{id: id, entity: entity, validate?: validate?},
         socket
       ) do
-    entity = Assignment.Context.get_experiment!(entity_id)
     changeset = Assignment.ExperimentModel.changeset(entity, :create, %{})
 
     device_labels = Devices.labels(entity.devices)
+
     language_labels = OnlineStudyLanguages.labels(entity.language)
 
     {
       :ok,
       socket
       |> assign(id: id)
-      |> assign(entity_id: entity_id)
       |> assign(entity: entity)
       |> assign(changeset: changeset)
       |> assign(device_labels: device_labels)

@@ -137,13 +137,16 @@ defmodule Systems.Assignment.Context do
   end
 
   def update_experiment(changeset) do
-    with {:ok, %{experiment: experiment} = result} <-
-           Multi.new()
-           |> Multi.update(:experiment, changeset)
-           |> Repo.transaction() do
+    result =
+      Multi.new()
+      |> Repo.multi_update(:experiment, changeset)
+      |> Repo.transaction()
+
+    with {:ok, %{experiment: experiment}} <- result do
       Signal.Context.dispatch!(:experiment_updated, experiment)
-      {:ok, result}
     end
+
+    result
   end
 
   def create_experiment(%{} = attrs, tool, auth_node) do
@@ -532,6 +535,9 @@ end
 
 defimpl Core.Persister, for: Systems.Assignment.ExperimentModel do
   def save(_model, changeset) do
-    Systems.Assignment.Context.update_experiment(changeset)
+    case Systems.Assignment.Context.update_experiment(changeset) do
+      {:ok, %{experiment: experiment}} -> {:ok, experiment}
+      _ -> {:error, changeset}
+    end
   end
 end

@@ -40,8 +40,9 @@ defmodule CoreWeb.Console do
     {:ok, socket}
   end
 
-  def handle_auto_save_done(socket) do
+  def handle_info({:handle_auto_save_done, _}, socket) do
     socket |> update_menus()
+    {:noreply, socket}
   end
 
   def render(assigns) do

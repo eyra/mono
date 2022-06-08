@@ -31,11 +31,6 @@ defmodule Systems.Support.HelpdeskForm do
     }
   end
 
-  # Handle update from parent, prevents overwrite of current state
-  def update(_params, %{assigns: %{changeset: _changeset}} = socket) do
-    {:ok, socket}
-  end
-
   # Initial update
   def update(%{id: id, user: user}, socket) do
     changeset = Support.Context.new_ticket_changeset()

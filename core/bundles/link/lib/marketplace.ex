@@ -6,16 +6,13 @@ defmodule Link.Marketplace do
   use CoreWeb.Layouts.Workspace.Component, :marketplace
 
   alias Systems.{
+    Pool,
     NextAction,
-    Campaign,
-    Survey,
-    Lab
+    Campaign
   }
 
-  alias Frameworks.Utility.ViewModelBuilder
-
   alias Core.Accounts
-  alias Core.Pools.{Submission, Criteria}
+  alias Core.Pools.Criteria
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
@@ -39,25 +36,21 @@ defmodule Link.Marketplace do
 
     preload = Campaign.Model.preload_graph(:full)
 
-    subject_campaigns =
-      user
-      |> Campaign.Context.list_subject_campaigns(preload: preload)
-      |> Enum.map(
-        &ViewModelBuilder.view_model(&1, {__MODULE__, :contributions}, user, url_resolver(socket))
-      )
+    subject_campaigns = Campaign.Context.list_subject_campaigns(user, preload: preload)
 
     highlighted_count = Enum.count(subject_campaigns)
 
-    excluded_campaigns =
-      subject_campaigns ++ Campaign.Context.list_excluded_campaigns(subject_campaigns)
+    excluded_campaigns = Campaign.Context.list_excluded_campaigns(subject_campaigns)
+
+    exclude = subject_campaigns ++ excluded_campaigns
 
     exclusion_list =
-      excluded_campaigns
+      exclude
       |> Stream.map(fn campaign -> campaign.id end)
       |> Enum.into(MapSet.new())
 
     available_campaigns =
-      Campaign.Context.list_accepted_campaigns([Lab.ToolModel, Survey.ToolModel],
+      Campaign.Context.list_by_submission_status([:accepted],
         exclude: exclusion_list,
         preload: preload
       )
@@ -96,14 +89,15 @@ defmodule Link.Marketplace do
        ) do
     user_features = Accounts.get_features(user)
 
-    online? = Submission.published_status(submission) == :online
+    released? = Pool.Context.published_status(submission) == :released
     eligitable? = Criteria.eligitable?(submission_criteria, user_features)
 
-    online? and eligitable?
+    released? and eligitable?
   end
 
-  def handle_auto_save_done(socket) do
+  def handle_info({:handle_auto_save_done, _}, socket) do
     socket |> update_menus()
+    {:noreply, socket}
   end
 
   def handle_info({:card_click, %{action: :edit, id: id}}, socket) do

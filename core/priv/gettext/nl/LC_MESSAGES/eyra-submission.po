@@ -117,7 +117,7 @@ msgstr "Afgerond"
 
 #, elixir-format
 msgid "status.accepted.online.label"
-msgstr "Online"
+msgstr "Open"
 
 #, elixir-format
 msgid "status.accepted.scheduled.label"
@@ -130,3 +130,23 @@ msgstr "Deze campagne is afgerond"
 #, elixir-format
 msgid "accepted.scheduled.message"
 msgstr "Deze campagne staat ingepland voor deelname "
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "complete.admin.success.text"
+msgstr "Deze campagne is gemarkeerd als afgerond en niet meer beschikbaar in de marktplaats."
+
+#, elixir-format, ex-autogen, fuzzyetracted
+msgid "complete.admin.success.title"
+msgstr "Campagne afgerond"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "status.completed.label"
+msgstr "Afgerond"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "status.retracted.label"
+msgstr "Ingetrokken"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "submission.completed.message"
+msgstr "Campagne is afgerond"

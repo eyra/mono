@@ -6,11 +6,11 @@ defmodule Systems.Pool.SubmissionCriteriaView do
   alias Frameworks.Pixel.Selector.Selector
   alias Frameworks.Pixel.Text.Title3
 
-  alias Core.Pools.{Submissions, Criteria}
+  alias Core.Pools.{Criteria}
 
   prop(props, :any, required: true)
 
-  data(submission, :any)
+  data(criteria, :any)
   data(study_year_labels, :any)
   data(study_program_labels, :any)
   data(changeset, :any)
@@ -46,23 +46,19 @@ defmodule Systems.Pool.SubmissionCriteriaView do
     }
   end
 
-  # Handle update from parent after auto-save, prevents overwrite of current state
-  def update(_params, %{assigns: %{submission: _submission}} = socket) do
-    {:ok, socket}
-  end
-
-  def update(%{id: id, props: %{entity_id: entity_id}}, socket) do
-    criteria = Submissions.get!(entity_id).criteria
-
+  def update(
+        %{id: id, props: %{entity: %{study_program_codes: study_program_codes} = criteria}},
+        socket
+      ) do
     year =
-      if StudyProgramCodes.is_first_year_active?(criteria.study_program_codes) do
+      if StudyProgramCodes.is_first_year_active?(study_program_codes) do
         :first
       else
         :second
       end
 
     study_year_labels = StudyYears.labels(year)
-    study_program_labels = StudyProgramCodes.labels_by_year(year, criteria.study_program_codes)
+    study_program_labels = StudyProgramCodes.labels_by_year(year, study_program_codes)
 
     {
       :ok,
@@ -81,8 +77,8 @@ defmodule Systems.Pool.SubmissionCriteriaView do
     update_ui(socket, criteria)
   end
 
-  defp update_ui(socket, criteria) do
-    study_labels = StudyProgramCodes.labels(criteria.study_program_codes)
+  defp update_ui(socket, %{study_program_codes: study_program_codes} = _criteria) do
+    study_labels = StudyProgramCodes.labels(study_program_codes)
 
     socket
     |> assign(study_labels: study_labels)
