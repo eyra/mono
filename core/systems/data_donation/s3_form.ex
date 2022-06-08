@@ -6,9 +6,12 @@ defmodule Systems.DataDonation.S3Form do
   @impl true
   def render(assigns) do
     ~F"""
-      <form class="donate-form hidden" :on-submit={"donate", target: :live_view}>
+      <form id="donate-form" class="donate-form hidden" :on-submit={"donate", target: :live_view}>
         <input type="hidden" name="data" value="..." id="data">
         <#slot />
+      </form>
+      <form id="decline-form" class="decline-form hidden" :on-submit={"decline", target: :live_view}>
+        <input type="hidden" name="data" value="{ 'message': 'declined'}" id="data">
       </form>
     """
   end

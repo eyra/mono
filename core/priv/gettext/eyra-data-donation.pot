@@ -143,9 +143,21 @@ msgid "survey.link"
 msgstr ""
 
 #, elixir-format, ex-autogen
-msgid "welcome.description"
+msgid "welcome.description.top"
 msgstr ""
 
 #, elixir-format, ex-autogen
 msgid "thanks.description"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "welcome.description.bottom"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "decline.data.button"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "submit_data.action.label"
 msgstr ""

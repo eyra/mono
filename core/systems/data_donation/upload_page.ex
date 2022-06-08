@@ -7,6 +7,7 @@ defmodule Systems.DataDonation.UploadPage do
   import Phoenix.LiveView
 
   use Surface.LiveView, layout: {CoreWeb.LayoutView, "live.html"}
+  use CoreWeb.LiveUri
   use CoreWeb.LiveLocale
   use CoreWeb.LiveAssignHelper
   use CoreWeb.Layouts.Stripped.Component, :data_donation
@@ -42,23 +43,12 @@ defmodule Systems.DataDonation.UploadPage do
     vm = DataDonation.Context.get(id)
     tabs = create_tabs(vm, session)
 
-    finish_button = %{
-      action: %{
-        type: :send,
-        event: "donate"
-      },
-      face: %{
-        type: :primary,
-        label: dgettext("eyra-ui", "onboarding.forward")
-      }
-    }
-
     {:ok,
-     assign(socket, id: id, vm: vm, session: session, tabs: tabs, finish_button: finish_button)
+     assign(socket, id: id, vm: vm, session: session, tabs: tabs)
      |> update_menus()}
   end
 
-  defp create_tabs(%{file_type: file_type} = vm, session) do
+  defp create_tabs(%{platform: platform} = vm, session) do
     script_content = read_script(vm)
 
     [
@@ -78,7 +68,7 @@ defmodule Systems.DataDonation.UploadPage do
         title: dgettext("eyra-data-donation", "tabbar.item.file_selection"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.file_selection.forward"),
         component: FileSelectionSheet,
-        props: %{script: script_content, file_type: file_type},
+        props: %{script: script_content, platform: platform},
         type: :sheet
       },
       %{
@@ -96,6 +86,16 @@ defmodule Systems.DataDonation.UploadPage do
   @impl true
   def handle_event(
         "donate",
+        %{"data" => data},
+        socket
+      ) do
+    store_results(socket, data)
+    {:noreply, socket |> next_action()}
+  end
+
+  @impl true
+  def handle_event(
+        "decline",
         %{"data" => data},
         socket
       ) do

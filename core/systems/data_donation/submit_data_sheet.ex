@@ -9,12 +9,25 @@ defmodule Systems.DataDonation.SubmitDataSheet do
 
   prop(props, :map, required: true)
 
-  data(researcher, :string)
+  data(recipient, :any)
   data(form, :any)
+  data(buttons, :any)
 
-  def update(%{id: id, props: %{researcher: researcher} = props}, socket) do
-    form = get_form(props)
-    {:ok, socket |> assign(id: id, researcher: researcher, form: form)}
+  def update(%{id: id, props: %{recipient: recipient} = props}, socket) do
+    {
+      :ok,
+      socket
+      |> assign(
+        id: id,
+        recipient: recipient
+      )
+      |> update_form(props)
+      |> update_buttons()
+    }
+  end
+
+  defp update_form(socket, props) do
+    socket |> assign(form: get_form(props))
   end
 
   defp get_form(%{storage: :s3}) do
@@ -31,12 +44,25 @@ defmodule Systems.DataDonation.SubmitDataSheet do
     }
   end
 
-  defp submit_button() do
+  defp update_buttons(socket) do
+    socket |> assign(buttons: [donate_button(), decline_button()])
+  end
+
+  defp donate_button() do
     label = dgettext("eyra-data-donation", "submit.data.button")
 
     %{
-      action: %{type: :submit},
+      action: %{type: :submit, form_id: "donate-form"},
       face: %{type: :primary, label: label}
+    }
+  end
+
+  defp decline_button() do
+    label = dgettext("eyra-data-donation", "decline.data.button")
+
+    %{
+      action: %{type: :submit, form_id: "decline-form"},
+      face: %{type: :secondary, text_color: "text-delete", label: label}
     }
   end
 
@@ -55,7 +81,7 @@ defmodule Systems.DataDonation.SubmitDataSheet do
             <Dynamic.Component module={@form.module} {...@form.props} >
               <div>
                 <Body>
-                  {dgettext("eyra-data-donation", "submit_data.description", researcher: @researcher)}
+                  {dgettext("eyra-data-donation", "submit_data.description")}
                 </Body>
                 <Spacing value="L" />
 
@@ -63,11 +89,14 @@ defmodule Systems.DataDonation.SubmitDataSheet do
                 <p class="extracted overflow-scroll">...</p>
                 <Spacing value="M" />
                 <Line />
-                <Spacing value="M" />
-
-                <Wrap>
-                  <DynamicButton vm={submit_button()} />
-                </Wrap>
+                <Spacing value="L" />
+              </div>
+              <Body>
+                {dgettext("eyra-data-donation", "submit_data.action.label", recipient: @recipient)}
+              </Body>
+              <Spacing value="M" />
+              <div class="flex flex-row gap-4">
+                <DynamicButton :for={button <- @buttons} vm={button} />
               </div>
             </Dynamic.Component>
           </div>

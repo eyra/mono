@@ -6,31 +6,47 @@ defmodule Systems.DataDonation.ModelData do
 
   import CoreWeb.Gettext
 
+  alias Systems.DataDonation.{Model, ResearcherModel, InstitutionModel}
+
   defp data(),
     do: [
-      %Systems.DataDonation.Model{
+      %Model{
         id: 1,
-        researcher: "dr. Bella Struminskaya",
-        pronoun: dgettext("eyra-ui", "pronoun.her"),
+        recipient: "University Utrecht",
+        researcher: %ResearcherModel{
+          name: "dr. Bella Struminskaya",
+          pronoun: dgettext("eyra-ui", "pronoun.her"),
+          job_title: "Assistant Professor",
+          institution: %InstitutionModel{
+            name: "University Utrecht",
+            image: "/images/uu_card.svg"
+          }
+        },
         research_topic: "Local processing of digital trace data",
-        file_type: "Google",
-        job_title: "Assistant Professor",
-        image: "/images/uu_card.svg",
-        institution: "University Utrecht",
+        research_description: %{
+          "nl" =>
+            "De gegevens die we u vragen te doneren zullen worden gebruikt om te onderzoeken hoeveel tijd mensen besteden aan activiteiten (zoals lopen en fietsen) en het verschil hierin voor en tijdens de corona periode.",
+          "en" =>
+            "The data that we ask you to donate will be used to investigate how much time people spent in activities (such as walking and biking), before and during the COVID-19 pandemic."
+        },
+        platform: "Google",
         redirect_to: :thanks,
         storage: :s3,
         storage_info: %{},
         script: "script.py"
       },
-      %Systems.DataDonation.Model{
+      %Model{
         id: 2,
-        researcher: "dr. Bella Struminskaya",
-        pronoun: dgettext("eyra-ui", "pronoun.her"),
+        recipient: "Centerdata",
+        researcher: nil,
         research_topic: "Local processing of digital trace data",
-        file_type: "Google",
-        job_title: "Assistant Professor",
-        image: "/images/uu_card.svg",
-        institution: "University Utrecht",
+        research_description: %{
+          "nl" =>
+            "De gegevens die we u vragen te doneren zullen worden gebruikt om te onderzoeken hoeveel tijd mensen besteden aan activiteiten (zoals lopen en fietsen) en het verschil hierin voor en tijdens de corona periode.",
+          "en" =>
+            "The data that we ask you to donate will be used to investigate how much time people spent in activities (such as walking and biking), before and during the COVID-19 pandemic."
+        },
+        platform: "Google",
         redirect_to: nil,
         storage: :centerdata,
         storage_info: %{quest: "C_Datadonation_pilot"},

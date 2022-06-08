@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-format
 msgid "content.title"
-msgstr "Data doneren"
+msgstr "Controleren"
 
 #, elixir-format
 msgid "reward.label"
@@ -65,67 +65,67 @@ msgstr "Selecteer bestand"
 
 #, elixir-format, ex-autogen
 msgid "file_selection.welcome.description"
-msgstr "Selecteer het data pakket bestand dat je ontvangen hebt van %{file}."
+msgstr "Klik op ‘Selecteer bestand’ om het bestand dat u ontvangen hebt van %{platform} te kiezen."
 
 #, elixir-format, ex-autogen
 msgid "submit_data.description"
-msgstr "Na jouw toestemming, wordt de onderstaande data beschikbaar gesteld aan %{researcher}. Bekijk de data nauwkeurig. Extraction log data is belangrijke feedback vanuit het extractie script, die ook waardevol is om te doneren. Stem je toe om de onderstaande data beschikbaar te stellen?"
+msgstr "Hieronder staan de gegevens die uit uw bestand zijn gehaald en waardevol zijn voor het onderzoek. Bekijk de gegevens goed en beslis of u deze wilt doneren. Alvast hartelijk bedankt!"
 
 #, elixir-format, ex-autogen
 msgid "submit_data.title"
-msgstr "Data doneren"
+msgstr "Controleren"
 
 #, elixir-format, ex-autogen
 msgid "tabbar.item.file_selection"
-msgstr "Data extractie"
+msgstr "Uitvoeren"
 
 #, elixir-format, ex-autogen
 msgid "tabbar.item.file_selection.forward"
-msgstr "Doorgaan"
+msgstr "Stap 2"
 
 #, elixir-format, ex-autogen
 msgid "tabbar.item.submit_data"
-msgstr "Data doneren"
+msgstr "Controleren"
 
 #, elixir-format, ex-autogen
 msgid "tabbar.item.submit_data.forward"
-msgstr "Doneren"
+msgstr "Controleren"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "data_extraction.processing.loading"
-msgstr "Verwerken data package..."
+msgstr "Verwerken bestand..."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "file_selection.note"
-msgstr "NB: De data extractie vind lokaal plaats, tijdens dit proces verlaat de data jouw apparaat niet."
+msgstr "NB: Het proces om de juiste gegevens uit het bestand te halen gebeurt op uw eigen computer. Er worden nog geen gegevens opgeslagen of verstuurd."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "tabbar.item.welcome"
-msgstr "Welkom"
+msgstr "Inleiding"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "tabbar.item.welcome.forward"
-msgstr "Doorgaan"
+msgstr "Inleiding"
 
 #, elixir-format, ex-autogen
 msgid "welcome.title"
-msgstr "Welkom"
+msgstr "Inleiding"
 
 #, elixir-format, ex-autogen
 msgid "extract.data.button"
-msgstr "Start extractie"
+msgstr "Start"
 
 #, elixir-format, ex-autogen
 msgid "selected.file.description"
-msgstr "Je hebt het volgende bestand geselecteerd:"
+msgstr "Klik op ‘Start’ om de gegevens die nodig zijn uit het volgende bestand te halen:"
 
 #, elixir-format, ex-autogen
 msgid "file.extracton.description"
-msgstr "Op dit moment wordt relevante data uit jouw data bestand gehaald. Dit kan even duren, sluit je browser niet af gedurende dit proces. Als dit afgerond is, ga je automatisch naar stap 3."
+msgstr "De gegevens die gebruikt kunnen worden voor het onderzoek worden uit uw bestand gehaald. Dit kan even duren, sluit uw browser niet af tijdens dit proces en wacht rustig af. U wordt automatisch naar de volgende stap gestuurd."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "submit.data.button"
-msgstr "Ik stem toe"
+msgstr "Ja"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "no.extraction.data.yet.description"
@@ -133,7 +133,7 @@ msgstr "Ga eerst naar stap 2 om data te verzamelen."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "extract.data.title"
-msgstr "Data extractie"
+msgstr "Uitvoeren"
 
 #, elixir-format, ex-autogen
 msgid "thanks.title"
@@ -144,9 +144,21 @@ msgid "survey.link"
 msgstr "deze vragenlijst"
 
 #, elixir-format, ex-autogen, fuzzy
-msgid "welcome.description"
-msgstr "Je staat op het punt om het proces van data donatie te starten voor de studie van %{researcher}.<br>Deze studie onderzoekt de hoeveelheid tijd die besteed werd aan activiteiten, zoals lopen en fietsen, voor en tijdens de COVID-19 pandemie.<br>Tijdens dit proces, slaan we geen cookies of persoonlijke data op. De data die uit jouw pakket word gehaald zal geen informatie bevatten die naar personen te herleiden valt en kun je in stap 3 bekijken. Na jouw goedkeuring, wordt de data opgeslagen op een beveiligde server en beschikbaar gesteld aan %{researcher}."
+msgid "welcome.description.top"
+msgstr "U kunt zo uw gegevens gaan doneren aan %{recipient}. We leggen u stap voor stap uit hoe u dit doet."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "thanks.description"
 msgstr "We stellen je bijdrage erg op prijs en horen graag hoe je het data donatie proces ervaren hebt.<br>Laat het ons weten door %{survey_link} in te vullen.<br>Alvast hartelijk dank."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "welcome.description.bottom"
+msgstr "Bij stap 2 kiest u het gegevenspakket dat uw van %{platform} hebt ontvangen. Er worden dan nog geen gegevens opgeslagen of verstuurd. Bij stap 3 kunt u eerst uw gegevens controleren en daarna beslissen of u deze wel of niet wilt doneren aan %{recipient}."
+
+#, elixir-format, ex-autogen
+msgid "decline.data.button"
+msgstr "Nee"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "submit_data.action.label"
+msgstr "Wilt u de gegevens hierboven doneren aan %{recipient}?"

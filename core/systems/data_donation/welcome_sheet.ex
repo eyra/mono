@@ -5,25 +5,19 @@ defmodule Systems.DataDonation.WelcomeSheet do
 
   prop(props, :map, required: true)
 
-  data(researcher, :string)
-  data(pronoun, :string)
-  data(research_topic, :string)
-  data(job_title, :string)
-  data(image, :string)
-  data(institution, :string)
-  data(file_type, :string)
+  data(recipient, :string)
+  data(researcher, :map)
+  data(research_description, :map)
+  data(platform, :string)
 
   def update(
         %{
           id: id,
           props: %{
+            recipient: recipient,
             researcher: researcher,
-            pronoun: pronoun,
-            research_topic: research_topic,
-            job_title: job_title,
-            image: image,
-            institution: institution,
-            file_type: file_type
+            research_description: research_description,
+            platform: platform
           }
         },
         socket
@@ -33,23 +27,39 @@ defmodule Systems.DataDonation.WelcomeSheet do
       socket
       |> assign(
         id: id,
+        recipient: recipient,
         researcher: researcher,
-        pronoun: pronoun,
-        research_topic: research_topic,
-        job_title: job_title,
-        image: image,
-        institution: institution,
-        file_type: file_type
+        research_description: research_description,
+        platform: platform
       )
     }
   end
 
-  defp descriptions(researcher, file_type) do
-    dgettext("eyra-data-donation", "welcome.description",
-      researcher: researcher,
-      file_type: file_type
-    )
+  defp descriptions(assigns) do
+    [
+      descriptions_top(assigns),
+      descriptions_middle(assigns),
+      descriptions_bottom(assigns)
+    ]
+    |> Enum.join("<br>")
+    # the split below also splits the original descriptions (if they contain <br> tags)
     |> String.split("<br>")
+  end
+
+  defp descriptions_top(%{recipient: recipient}) do
+    dgettext("eyra-data-donation", "welcome.description.top", recipient: recipient)
+  end
+
+  defp descriptions_middle(%{research_description: research_description}) do
+    current_locale = Gettext.get_locale(CoreWeb.Gettext)
+    Map.get(research_description, current_locale)
+  end
+
+  defp descriptions_bottom(%{recipient: recipient, platform: platform}) do
+    dgettext("eyra-data-donation", "welcome.description.bottom",
+      recipient: recipient,
+      platform: platform
+    )
   end
 
   def render(assigns) do
@@ -61,20 +71,20 @@ defmodule Systems.DataDonation.WelcomeSheet do
             <div>
               <Title1>{dgettext("eyra-data-donation", "welcome.title")}</Title1>
               <div class="flex flex-col gap-4">
-                <div :for={description <- descriptions(@researcher, @file_type)} class="text-bodylarge font-body">
+                <div :for={description <- descriptions(assigns)} class="text-bodylarge font-body">
                   {raw(description)}
                 </div>
               </div>
             </div>
-            <div class="flex-shrink-0">
+            <div class="flex-shrink-0" :if={@researcher}>
               <div class="rounded-lg bg-grey5">
-                <img src={@image} alt={@institution} />
+                <img src={@researcher.institution.image} alt={@researcher.institution.name} />
                 <div class="flex flex-col gap-3 p-4">
                   <div class="text-title7 font-title7 text-grey1">
-                    {@researcher}
+                    {@researcher.name}
                   </div>
                   <div class="text-caption font-caption text-grey1">
-                    {@job_title}
+                    {@researcher.job_title}
                   </div>
                 </div>
               </div>

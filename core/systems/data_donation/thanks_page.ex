@@ -72,13 +72,13 @@ defmodule Systems.DataDonation.ThanksPage do
             </div>
             <div class="flex-shrink-0">
               <div class="rounded-lg bg-grey5">
-                <img src={@vm.image} alt={@vm.institution} />
+                <img src={@vm.researcher.institution.image} alt={@vm.researcher.institution.name} />
                 <div class="flex flex-col gap-3 p-4">
                   <div class="text-title7 font-title7 text-grey1">
-                    {@vm.researcher}
+                    {@vm.researcher.name}
                   </div>
                   <div class="text-caption font-caption text-grey1">
-                    {@vm.job_title}
+                    {@vm.researcher.job_title}
                   </div>
                 </div>
               </div>

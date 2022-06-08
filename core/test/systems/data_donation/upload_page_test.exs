@@ -14,7 +14,7 @@ defmodule Systems.DataDonation.UploadPageTest do
       assert html =~ "import pandas"
     end
 
-    test "redirect after upload", %{conn: conn} do
+    test "redirect after donate", %{conn: conn} do
       Systems.DataDonation.MockStorageBackend
       |> expect(:store, fn _state, _vm, "Some extracted data" -> nil end)
 
@@ -23,7 +23,20 @@ defmodule Systems.DataDonation.UploadPageTest do
 
       assert {:error, {:live_redirect, %{kind: :push}}} =
                view
-               |> element("form")
+               |> element("#donate-form")
+               |> render_submit(%{data: "Some extracted data"})
+    end
+
+    test "redirect after decline", %{conn: conn} do
+      Systems.DataDonation.MockStorageBackend
+      |> expect(:store, fn _state, _vm, "Some extracted data" -> nil end)
+
+      path = Routes.live_path(conn, UploadPage, 1, session: %{participant: 1})
+      {:ok, view, _html} = live(conn, path)
+
+      assert {:error, {:live_redirect, %{kind: :push}}} =
+               view
+               |> element("#decline-form")
                |> render_submit(%{data: "Some extracted data"})
     end
   end

@@ -6,10 +6,10 @@ defmodule Systems.DataDonation.FileSelectionSheet do
   prop(props, :map, required: true)
 
   data(script, :string)
-  data(file_type, :string)
+  data(platform, :string)
 
-  def update(%{id: id, props: %{script: script, file_type: file_type}}, socket) do
-    {:ok, assign(socket, id: id, script: script, file_type: file_type)}
+  def update(%{id: id, props: %{script: script, platform: platform}}, socket) do
+    {:ok, assign(socket, id: id, script: script, platform: platform)}
   end
 
   defp select_button() do
@@ -46,7 +46,7 @@ defmodule Systems.DataDonation.FileSelectionSheet do
 
           <div class="select-file">
             <BodyLarge>
-              {dgettext("eyra-data-donation", "file_selection.welcome.description", file: @file_type)}
+              {dgettext("eyra-data-donation", "file_selection.welcome.description", platform: @platform)}
             </BodyLarge>
             <Spacing value="M" />
             <div class="mb-3 w-96">
