@@ -8,7 +8,10 @@ defmodule CoreWeb.UI.ContentList do
   def render(assigns) do
     ~F"""
     <div class="flex flex-col gap-10">
-      <ContentListItem :for={item <- @items} vm={item} />
+      <ContentListItem :for={{item, index} <- Enum.with_index(@items)}
+        id={index}
+        vm={item}
+      />
     </div>
     """
   end

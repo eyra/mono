@@ -4,6 +4,7 @@ defmodule Frameworks.Pixel.Image do
   """
   use Surface.Component
 
+  prop(id, :any, required: true)
   prop(image, :any, required: true)
   prop(corners, :css_class, default: "")
   prop(transition, :css_class, default: "duration-500")
@@ -20,7 +21,7 @@ defmodule Frameworks.Pixel.Image do
       end
 
     ~F"""
-    <div id={@image.url}
+    <div id={@id}
       class="blurhash-wrapper overflow-hidden w-full h-full relative"
       x-data="blurHash()"
       x-init="$nextTick(()=>render())"
