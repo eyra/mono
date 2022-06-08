@@ -20,7 +20,7 @@ defmodule Frameworks.Pixel.Hero.HeroImage do
     <div class="w-full"
        data-native-title={@title}>
       <div class="relative overflow-hidden w-full h-image-header sm:h-image-header-sm bg-grey4">
-        <Image image={@image_info} transition="duration-1000"/>
+        <Image id={"hero"} image={@image_info} transition="duration-1000"/>
         <div class="absolute z-20 top-0 left-0 w-full h-full flex items-center  bg-opacity-20 bg-black">
           <div class="ml-6 mr-6 sm:ml-20 sm:mr-20 text-shadow-md flex-wrap">
             <Title0 color="text-white">{@title}</Title0>
