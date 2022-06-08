@@ -5,19 +5,22 @@ defmodule Core.Pools.Submission do
   use Ecto.Schema
   use Frameworks.Utility.Model
 
-  import CoreWeb.Gettext
   import Ecto.Changeset
 
-  alias Core.Pools.{Criteria, Pool}
+  alias Core.Pools.{Criteria, Pool, SubmissionStatus}
   alias Systems.Promotion
   alias CoreWeb.UI.Timestamp
 
   schema "pool_submissions" do
-    field(:status, Ecto.Enum, values: [:idle, :submitted, :accepted])
+    field(:status, Ecto.Enum, values: SubmissionStatus.values())
     field(:reward_value, :integer)
     field(:reward_currency, :string)
     field(:schedule_start, :string)
     field(:schedule_end, :string)
+
+    field(:submitted_at, :naive_datetime)
+    field(:accepted_at, :naive_datetime)
+    field(:completed_at, :naive_datetime)
 
     has_one(:criteria, Criteria)
     belongs_to(:promotion, Promotion.Model)
@@ -28,7 +31,7 @@ defmodule Core.Pools.Submission do
     timestamps()
   end
 
-  @fields ~w(status reward_value schedule_start schedule_end)a
+  @fields ~w(status reward_value schedule_start schedule_end submitted_at accepted_at completed_at)a
 
   @impl true
   def operational_fields, do: ~w(status reward_value)a
@@ -71,23 +74,11 @@ defmodule Core.Pools.Submission do
     |> cast(attrs, @fields)
   end
 
-  def published_status(submission) do
-    if closed?(submission) do
-      :closed
-    else
-      if scheduled?(submission) do
-        :scheduled
-      else
-        :online
-      end
-    end
-  end
-
-  defp closed?(%{schedule_end: schedule_end}) do
+  def schedule_ended?(%{schedule_end: schedule_end}) do
     past?(schedule_end)
   end
 
-  defp scheduled?(%{schedule_start: schedule_start}) do
+  def scheduled?(%{schedule_start: schedule_start}) do
     future?(schedule_start)
   end
 
@@ -104,30 +95,5 @@ defmodule Core.Pools.Submission do
 
   defp future?(schedule_start) do
     Timestamp.future?(schedule_start)
-  end
-
-  def get_tag(%{status: status} = submission) do
-    case status do
-      :idle ->
-        %{text: dgettext("eyra-submission", "status.idle.label"), type: :tertiary}
-
-      :submitted ->
-        %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary}
-
-      :accepted ->
-        case published_status(submission) do
-          :scheduled ->
-            %{
-              text: dgettext("eyra-submission", "status.accepted.scheduled.label"),
-              type: :tertiary
-            }
-
-          :online ->
-            %{text: dgettext("eyra-submission", "status.accepted.online.label"), type: :success}
-
-          :closed ->
-            %{text: dgettext("eyra-submission", "status.accepted.closed.label"), type: :disabled}
-        end
-    end
   end
 end

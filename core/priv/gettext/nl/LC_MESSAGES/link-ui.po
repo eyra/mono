@@ -54,3 +54,7 @@ msgstr "Haal offline"
 #, elixir-format
 msgid "accept.button"
 msgstr "Publiceren"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "complete.button"
+msgstr "Afronden"

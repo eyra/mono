@@ -9,7 +9,8 @@ defmodule Systems.Campaign.Model do
   alias Systems.{
     Campaign,
     Promotion,
-    Assignment
+    Assignment,
+    Pool
   }
 
   schema "campaigns" do
@@ -76,11 +77,11 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     Campaign,
     Promotion,
     Assignment,
-    Crew
+    Crew,
+    Pool
   }
 
   alias Core.ImageHelpers
-  alias Core.Pools.Submission
 
   def view_model(%Campaign.Model{} = campaign, page, user, url_resolver) do
     campaign
@@ -156,7 +157,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
          url_resolver
        ) do
     path = url_resolver.(Systems.Campaign.ContentPage, id: id)
-    tag = Submission.get_tag(submission)
+    tag = Pool.Context.get_tag(submission)
 
     promotion_ready? = Promotion.Context.ready?(promotion)
 
@@ -316,11 +317,11 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
         dgettext("eyra-submission", "waiting.for.coordinator.message")
 
       :accepted ->
-        case Submission.published_status(submission) do
+        case Pool.Context.published_status(submission) do
           :scheduled ->
             dgettext("eyra-submission", "accepted.scheduled.message")
 
-          :online ->
+          :released ->
             dgettext("link-dashboard", "quick_summary.%{open_spot_count}.%{target_subject_count}",
               open_spot_count: open_spot_count,
               target_subject_count: target_subject_count
@@ -329,6 +330,9 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
           :closed ->
             dgettext("eyra-submission", "accepted.closed.message")
         end
+
+      :completed ->
+        dgettext("eyra-submission", "submission.completed.message")
     end
   end
 end

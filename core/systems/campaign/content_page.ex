@@ -8,6 +8,7 @@ defmodule Systems.Campaign.ContentPage do
   use CoreWeb.UI.PlainDialog
 
   import CoreWeb.Gettext
+  import Core.ImageCatalog, only: [image_catalog: 0]
 
   alias Core.Pools.Submissions
 
@@ -15,8 +16,8 @@ defmodule Systems.Campaign.ContentPage do
   alias Systems.Promotion.FormView, as: PromotionForm
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
+  alias CoreWeb.UI.Timestamp
   alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent, TabbarFooter}
-  import Core.ImageCatalog, only: [image_catalog: 0]
 
   alias Systems.{
     Campaign,
@@ -127,7 +128,12 @@ defmodule Systems.Campaign.ContentPage do
       ) do
     socket =
       if Campaign.Context.ready?(campaign_id) do
-        {:ok, _submission} = Submissions.update(submission, %{status: :submitted})
+        {:ok, _submission} =
+          Submissions.update(submission, %{
+            status: :submitted,
+            submitted_at: Timestamp.naive_now()
+          })
+
         title = dgettext("eyra-submission", "submit.success.title")
         text = dgettext("eyra-submission", "submit.success.text")
 

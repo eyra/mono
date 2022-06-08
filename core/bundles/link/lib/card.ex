@@ -1,10 +1,10 @@
 defmodule Link.Marketplace.Card do
-  alias Core.Pools.Submission
   alias Core.ImageHelpers
 
   import CoreWeb.Gettext
 
   alias Systems.{
+    Pool,
     Assignment
   }
 
@@ -177,7 +177,7 @@ defmodule Link.Marketplace.Card do
 
     info = [info1, info2]
 
-    label = get_label(assignment, submission)
+    label = Pool.Context.get_tag(submission)
     icon_url = get_icon_url(marks, socket)
     image_info = ImageHelpers.get_image_info(image_id)
     tags = get_tags(themes)
@@ -227,92 +227,16 @@ defmodule Link.Marketplace.Card do
     }
   end
 
-  # lab study
-  def campaign_researcher(
-        %{
-          id: id,
-          lab_tool: %{
-            promotion: %{
-              id: open_id,
-              title: title,
-              image_id: image_id,
-              themes: themes,
-              marks: marks,
-              submission: submission
-            }
-          }
-        },
-        socket
-      ) do
-    label = nil
-    icon_url = get_icon_url(marks, socket)
-    image_info = ImageHelpers.get_image_info(image_id)
-    tags = get_tags(themes)
-    type = get_type(submission)
-
-    %{
-      type: type,
-      id: id,
-      edit_id: id,
-      open_id: open_id,
-      title: title,
-      image_info: image_info,
-      tags: tags,
-      duration: "-",
-      info: ["-"],
-      icon_url: icon_url,
-      label: label,
-      label_type: "secondary"
-    }
-  end
-
-  defp get_label(assignment, submission) do
-    open? = Assignment.Context.open?(assignment)
-
-    if open? or submission.status != :accepted do
-      get_label(submission)
-    else
-      %{text: dgettext("eyra-marketplace", "assignment.status.complete.label"), type: :disabled}
-    end
-  end
-
-  defp get_label(submission) do
-    case submission.status do
-      :idle ->
-        %{text: dgettext("eyra-submission", "status.idle.label"), type: :tertiary}
-
-      :submitted ->
-        %{text: dgettext("eyra-submission", "status.submitted.label"), type: :tertiary}
-
-      :accepted ->
-        case Submission.published_status(submission) do
-          :scheduled ->
-            %{
-              text: dgettext("eyra-submission", "status.accepted.scheduled.label"),
-              type: :tertiary
-            }
-
-          :online ->
-            %{text: dgettext("eyra-submission", "status.accepted.online.label"), type: :success}
-
-          :closed ->
-            %{
-              text: dgettext("eyra-submission", "status.accepted.closed.label"),
-              type: :disabled
-            }
-        end
-    end
-  end
-
-  defp closed?(%{status: status} = submission) do
+  defp completed?(%{status: status} = submission) do
     case status do
-      :accepted -> Submission.published_status(submission) == :closed
+      :completed -> true
+      :accepted -> Pool.Context.published_status(submission) == :closed
       _ -> false
     end
   end
 
   def get_type(submission) do
-    case closed?(submission) do
+    case completed?(submission) do
       true -> :secondary
       false -> :primary
     end

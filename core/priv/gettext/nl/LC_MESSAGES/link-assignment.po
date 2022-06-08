@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-format
 msgid "closed.dialog.text"
-msgstr "Helaas is deze opdracht momenteel gesloten voor deelname"
+msgstr "Helaas is deze opdracht momenteel gesloten voor deelname."
 
 #, elixir-format
 msgid "closed.dialog.title"
@@ -21,8 +21,8 @@ msgstr "Gesloten"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "excluded.dialog.text"
-msgstr "Helaas is deze opdracht onverenigbaar met een opdracht waar je eerder aan deelgenomen hebt."
+msgstr "De onderzoeker heeft je uitgesloten op basis van je deelname aan een andere studie."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "excluded.dialog.title"
-msgstr "Onverenigbare opdracht"
+msgstr " Helaas kun je niet meedoen"

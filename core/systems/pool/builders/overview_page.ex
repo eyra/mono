@@ -61,18 +61,8 @@ defmodule Systems.Pool.Builders.OverviewPage do
   defp load_campaigns(url_resolver) do
     preload = Campaign.Model.preload_graph(:full)
 
-    submitted_campaigns =
-      Campaign.Context.list_submitted_campaigns([Survey.ToolModel], preload: preload)
-      |> Enum.map(&convert_to_vm(url_resolver, &1))
-
-    accepted_campaigns =
-      Campaign.Context.list_accepted_campaigns([Survey.ToolModel], preload: preload)
-      |> Enum.map(&convert_to_vm(url_resolver, &1))
-
-    %{
-      submitted: submitted_campaigns,
-      accepted: accepted_campaigns
-    }
+    Campaign.Context.list_submitted(preload: preload)
+    |> Enum.map(&convert_to_vm(url_resolver, &1))
   end
 
   defp load_years(%{breakpoint: breakpoint} = _assigns) do
@@ -187,7 +177,6 @@ defmodule Systems.Pool.Builders.OverviewPage do
              submission:
                %{
                  id: submission_id,
-                 status: status,
                  updated_at: updated_at
                } = submission
            },
@@ -199,32 +188,7 @@ defmodule Systems.Pool.Builders.OverviewPage do
              } = assignment
          } = campaign
        ) do
-    tag =
-      case status do
-        :submitted ->
-          %{text: dgettext("link-studentpool", "status.submitted.label"), type: :delete}
-
-        :accepted ->
-          case Pools.Submission.published_status(submission) do
-            :scheduled ->
-              %{
-                text: dgettext("link-studentpool", "status.accepted.scheduled.label"),
-                type: :warning
-              }
-
-            :online ->
-              %{
-                text: dgettext("link-studentpool", "status.accepted.online.label"),
-                type: :success
-              }
-
-            :closed ->
-              %{
-                text: dgettext("link-studentpool", "status.accepted.closed.label"),
-                type: :disabled
-              }
-          end
-      end
+    tag = tag(submission)
 
     target_subject_count = guard_nil(target_subject_count, :integer)
 
@@ -261,5 +225,35 @@ defmodule Systems.Pool.Builders.OverviewPage do
       image: image,
       quick_summary: quick_summery
     }
+  end
+
+  defp tag(submission) do
+    status = campaign_status(submission)
+    text = Pool.CampaignStatus.translate(status)
+
+    type =
+      case status do
+        :retracted -> :delete
+        :submitted -> :tertiary
+        :scheduled -> :warning
+        :released -> :success
+        :closed -> :disabled
+        :completed -> :disabled
+      end
+
+    %{
+      id: status,
+      text: text,
+      type: type
+    }
+  end
+
+  defp campaign_status(%{status: status} = submission) do
+    case status do
+      :accepted -> Pool.Context.published_status(submission)
+      :idle -> :retracted
+      :submitted -> :submitted
+      :completed -> :completed
+    end
   end
 end

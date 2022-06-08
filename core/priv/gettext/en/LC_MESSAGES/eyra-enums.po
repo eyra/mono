@@ -234,3 +234,43 @@ msgstr "Lab study"
 #, elixir-format
 msgid "tool_types.online"
 msgstr "Online study"
+
+#, elixir-format, ex-autogen
+msgid "submission_status.accepted"
+msgstr "Published"
+
+#, elixir-format, ex-autogen
+msgid "submission_status.completed"
+msgstr "Finished"
+
+#, elixir-format, ex-autogen
+msgid "submission_status.idle"
+msgstr "Concept"
+
+#, elixir-format, ex-autogen
+msgid "submission_status.submitted"
+msgstr "Submitted"
+
+#, elixir-format, ex-autogen
+msgid "pool_campaign_status.closed"
+msgstr "Closed"
+
+#, elixir-format, ex-autogen
+msgid "pool_campaign_status.completed"
+msgstr "Finished"
+
+#, elixir-format, ex-autogen
+msgid "pool_campaign_status.retracted"
+msgstr "Withdrawn"
+
+#, elixir-format, ex-autogen
+msgid "pool_campaign_status.released"
+msgstr "Open"
+
+#, elixir-format, ex-autogen
+msgid "pool_campaign_status.scheduled"
+msgstr "Scheduled"
+
+#, elixir-format, ex-autogen
+msgid "pool_campaign_status.submitted"
+msgstr "Submitted"

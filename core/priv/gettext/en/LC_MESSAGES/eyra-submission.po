@@ -117,7 +117,7 @@ msgstr "Closed"
 
 #, elixir-format
 msgid "status.accepted.online.label"
-msgstr "Online"
+msgstr "Open"
 
 #, elixir-format
 msgid "status.accepted.scheduled.label"
@@ -130,3 +130,23 @@ msgstr "This campaign is closed"
 #, elixir-format
 msgid "accepted.scheduled.message"
 msgstr "This campaign is scheduled for participation"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "complete.admin.success.text"
+msgstr "This campaign is marked as finished and no longer available in the marketplace."
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "complete.admin.success.title"
+msgstr "Campaign finished"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "status.completed.label"
+msgstr "Finished"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "status.retracted.label"
+msgstr "Withdrawn"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "submission.completed.message"
+msgstr "Campaign is finished"

@@ -15,7 +15,8 @@ defmodule Systems.Pool.Builders.SubmissionPage do
     member = to_member(owner, promotion)
 
     accepted? = submission.status == :accepted
-    validate? = accepted?
+    completed? = submission.status == :completed
+    validate? = accepted? or completed?
 
     update_at =
       campaign.updated_at
@@ -33,6 +34,7 @@ defmodule Systems.Pool.Builders.SubmissionPage do
       title: submission.promotion.title,
       byline: byline,
       accepted?: accepted?,
+      completed?: completed?,
       validate?: validate?,
       preview_path: preview_path
     }
