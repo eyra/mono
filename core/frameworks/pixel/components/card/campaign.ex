@@ -51,7 +51,7 @@ defmodule Frameworks.Pixel.Card.Campaign do
             </div>
           {/if}
         <div class="h-image-card">
-          <Image id={@card.id} image={@card.image_info} transition="duration-500" corners="rounded-t-lg"/>
+          <Image id={Integer.to_string(@card.id)} image={@card.image_info} transition="duration-500" corners="rounded-t-lg"/>
           </div>
         </div>
       </#template>
