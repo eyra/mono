@@ -117,7 +117,7 @@ msgstr "Start"
 
 #, elixir-format, ex-autogen
 msgid "selected.file.description"
-msgstr "Klik op ‘Start’ om de gegevens die nodig zijn uit het volgende bestand te halen:"
+msgstr "Uw gegevens die nodig zijn uit het volgende bestand te halen:"
 
 #, elixir-format, ex-autogen
 msgid "file.extracton.description"
@@ -125,7 +125,7 @@ msgstr "De gegevens die gebruikt kunnen worden voor het onderzoek worden uit uw 
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "submit.data.button"
-msgstr "Ja"
+msgstr "Ja, doneer"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "no.extraction.data.yet.description"
@@ -153,7 +153,7 @@ msgstr "We stellen je bijdrage erg op prijs en horen graag hoe je het data donat
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "welcome.description.bottom"
-msgstr "Bij stap 2 kiest u het gegevenspakket dat uw van %{platform} hebt ontvangen. Er worden dan nog geen gegevens opgeslagen of verstuurd. Bij stap 3 kunt u eerst uw gegevens controleren en daarna beslissen of u deze wel of niet wilt doneren aan %{recipient}."
+msgstr "Bij stap 2 kiest u het gegevenspakket dat u van %{platform} hebt ontvangen. Er worden dan nog geen gegevens opgeslagen of verstuurd. Bij stap 3 kunt u eerst uw gegevens controleren en daarna beslissen of u deze wel of niet wilt doneren aan %{recipient}."
 
 #, elixir-format, ex-autogen
 msgid "decline.data.button"

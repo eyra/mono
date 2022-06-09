@@ -97,7 +97,7 @@ msgstr "Processing file..."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "file_selection.note"
-msgstr "NB: The proces to extract the required data from the file is performed on your own device, no data is saved or sent during this proces."
+msgstr "NB: The process to extract the required data from the file is performed on your own device, no data is saved or sent during this process."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "tabbar.item.welcome"
@@ -117,7 +117,7 @@ msgstr "Start"
 
 #, elixir-format, ex-autogen
 msgid "selected.file.description"
-msgstr "Click ‘Start’ to extract the required data from the following file:"
+msgstr "The required data will be extracted from the following file:"
 
 #, elixir-format, ex-autogen
 msgid "file.extracton.description"
@@ -125,7 +125,7 @@ msgstr "The data that can be used for research are being extracted from your fil
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "submit.data.button"
-msgstr "Yes"
+msgstr "Yes, donate"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "no.extraction.data.yet.description"

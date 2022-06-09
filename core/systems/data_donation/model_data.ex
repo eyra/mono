@@ -50,7 +50,7 @@ defmodule Systems.DataDonation.ModelData do
         redirect_to: nil,
         storage: :centerdata,
         storage_info: %{quest: "C_Datadonation_pilot"},
-        script: "zip_contents.py"
+        script: "script.py"
       }
     ]
 
