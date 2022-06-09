@@ -18,7 +18,7 @@ defmodule CoreWeb.UI.ContentListItem do
     subtitle_css: "text-bodysmall md:text-bodymedium font-body text-grey2 whitespace-pre-wrap"
   )
 
-  prop(id, :any)
+  prop(id, :string)
   prop(vm, :map, required: true)
 
   data(image_info, :any)
@@ -122,9 +122,9 @@ defmodule CoreWeb.UI.ContentListItem.Example do
 
     ~F"""
     <div class="flex flex-col gap-10">
-      <ContentListItem id={1} vm={@vm1 |> Map.put(:image, %{type: :catalog, info: Core.ImageHelpers.get_image_info(image_id, 400, 300) })} />
-      <ContentListItem id={2} vm={@vm2} />
-      <ContentListItem id={3} vm={@vm3} />
+      <ContentListItem id="1" vm={@vm1 |> Map.put(:image, %{type: :catalog, info: Core.ImageHelpers.get_image_info(image_id, 400, 300) })} />
+      <ContentListItem id="2" vm={@vm2} />
+      <ContentListItem id="3" vm={@vm3} />
     </div>
     """
   end

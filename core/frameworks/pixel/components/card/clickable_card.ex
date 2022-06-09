@@ -116,7 +116,7 @@ defmodule Frameworks.Pixel.Card.ClickableCard.Example do
     >
       <#template slot="image">
         <div class="h-image-card">
-          <Image id={23} image={Core.ImageHelpers.get_image_info(nil, 400, 300)} transition="duration-500" corners="rounded-t-lg"/>
+          <Image id="23" image={Core.ImageHelpers.get_image_info(nil, 400, 300)} transition="duration-500" corners="rounded-t-lg"/>
         </div>
       </#template>
       <#template slot="title">

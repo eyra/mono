@@ -9,7 +9,7 @@ defmodule CoreWeb.UI.ContentList do
     ~F"""
     <div class="flex flex-col gap-10">
       <ContentListItem :for={{item, index} <- Enum.with_index(@items)}
-        id={index}
+        id={Integer.to_string(index)}
         vm={item}
       />
     </div>
