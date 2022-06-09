@@ -22,7 +22,7 @@ defmodule Systems.DataDonation.ToolForm do
   data(focus, :any, default: "")
 
   def update(%{id: id, entity_id: entity_id}, socket) do
-    entity = DataDonation.Context.get!(entity_id)
+    entity = DataDonation.Context.get_tool!(entity_id)
     donations = DataDonation.Context.list_donations(entity)
     changeset = DataDonation.ToolModel.changeset(entity, :mount, %{})
 
@@ -54,7 +54,7 @@ defmodule Systems.DataDonation.ToolForm do
         _params,
         %{assigns: %{entity_id: entity_id, current_user: user}} = socket
       ) do
-    DataDonation.Context.get!(entity_id)
+    DataDonation.Context.get_tool!(entity_id)
     |> DataDonation.Context.delete()
 
     {:noreply,

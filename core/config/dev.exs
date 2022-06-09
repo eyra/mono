@@ -80,7 +80,8 @@ config :core, Systems.DataDonation.S3StorageBackend, bucket: "eylixir"
 
 config :core,
        :data_donation_storage_backend,
-       Systems.DataDonation.S3StorageBackend
+       s3: Systems.DataDonation.S3StorageBackend,
+       centerdata: Systems.DataDonation.CenterdataStorageBackend
 
 #  For Minio (local S3)
 config :ex_aws,

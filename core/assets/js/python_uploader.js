@@ -22,7 +22,7 @@ export const PythonUploader = {
                 uploader.el.querySelector(".no-extraction-data-yet").classList.add("hidden")
                 uploader.el.querySelector(".donate-form").classList.remove("hidden")
                 uploader.el.querySelector(".extracted").innerHTML = result.html;
-                uploader.el.querySelector("input[name='data']").value = result.data;
+                uploader.el.querySelector("input[id='data']").value = result.data;
                 console.log("done", result)
                 Tabbar.show("tab_" + this.el.dataset.afterCompletionTab, true)
                 this.el.querySelector(".extract-data").classList.remove("hidden")

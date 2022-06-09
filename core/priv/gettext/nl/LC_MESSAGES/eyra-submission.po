@@ -135,7 +135,7 @@ msgstr "Deze campagne staat ingepland voor deelname "
 msgid "complete.admin.success.text"
 msgstr "Deze campagne is gemarkeerd als afgerond en niet meer beschikbaar in de marktplaats."
 
-#, elixir-format, ex-autogen, fuzzyetracted
+#, elixir-format, ex-autogen
 msgid "complete.admin.success.title"
 msgstr "Campagne afgerond"
 

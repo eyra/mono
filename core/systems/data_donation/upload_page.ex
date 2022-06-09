@@ -1,7 +1,19 @@
 defmodule Systems.DataDonation.UploadPage do
-  use CoreWeb, :live_view
+  defmodule StoreResultsError do
+    @moduledoc false
+    defexception [:message]
+  end
+
+  import Phoenix.LiveView
+
+  use Surface.LiveView, layout: {CoreWeb.LayoutView, "live.html"}
+  use CoreWeb.LiveUri
+  use CoreWeb.LiveLocale
+  use CoreWeb.LiveAssignHelper
   use CoreWeb.Layouts.Stripped.Component, :data_donation
 
+  import CoreWeb.Gettext
+  alias CoreWeb.Router.Helpers, as: Routes
   alias CoreWeb.Layouts.Stripped.Component, as: Stripped
   alias CoreWeb.UI.Navigation.{ActionBar, Tabbar, TabbarContent, TabbarFooter, TabbarArea}
 
@@ -15,10 +27,6 @@ defmodule Systems.DataDonation.UploadPage do
     DataDonation
   }
 
-  @script Application.app_dir(:core, "priv/repo")
-          |> Path.join("script.py")
-          |> File.read!()
-
   data(result, :any)
   data(tool, :any)
   data(user, :any)
@@ -30,31 +38,18 @@ defmodule Systems.DataDonation.UploadPage do
   data(extracted, :any, default: "")
   data(tabs, :any)
 
-  def mount(%{"participant_id" => participant_id}, _session, socket) do
-    unless String.match?(participant_id, ~r/[a-zA-Z0-9_\-]+/) do
-      throw(:invalid_participant_id)
-    end
-
-    tabs = create_tabs()
-
-    finish_button = %{
-      action: %{
-        type: :send,
-        event: "donate"
-      },
-      face: %{
-        type: :primary,
-        label: dgettext("eyra-ui", "onboarding.forward")
-      }
-    }
+  @impl true
+  def mount(%{"id" => id, "session" => session} = _params, _session, socket) do
+    vm = DataDonation.Context.get(id)
+    tabs = create_tabs(vm, session)
 
     {:ok,
-     assign(socket, tabs: tabs, finish_button: finish_button, participant_id: participant_id)
+     assign(socket, id: id, vm: vm, session: session, tabs: tabs)
      |> update_menus()}
   end
 
-  defp create_tabs() do
-    pilot_model = DataDonation.PilotModel.view_model()
+  defp create_tabs(%{platform: platform} = vm, session) do
+    script_content = read_script(vm)
 
     [
       %{
@@ -63,7 +58,7 @@ defmodule Systems.DataDonation.UploadPage do
         title: dgettext("eyra-data-donation", "tabbar.item.welcome"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.welcome.forward"),
         component: WelcomeSheet,
-        props: pilot_model,
+        props: vm,
         type: :sheet,
         align: :left
       },
@@ -73,7 +68,7 @@ defmodule Systems.DataDonation.UploadPage do
         title: dgettext("eyra-data-donation", "tabbar.item.file_selection"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.file_selection.forward"),
         component: FileSelectionSheet,
-        props: %{script: @script, file_type: pilot_model.file_type},
+        props: %{script: script_content, platform: platform},
         type: :sheet
       },
       %{
@@ -82,7 +77,7 @@ defmodule Systems.DataDonation.UploadPage do
         title: dgettext("eyra-data-donation", "tabbar.item.submit_data"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.submit_data.forward"),
         component: SubmitDataSheet,
-        props: pilot_model,
+        props: Map.put(vm, :session, session),
         type: :sheet
       }
     ]
@@ -92,14 +87,40 @@ defmodule Systems.DataDonation.UploadPage do
   def handle_event(
         "donate",
         %{"data" => data},
-        %{assigns: %{participant_id: participant_id}} = socket
+        socket
       ) do
-    store_results(participant_id, data)
-
-    {:noreply,
-     push_redirect(socket, to: Routes.live_path(socket, DataDonation.ThanksPage, participant_id))}
+    store_results(socket, data)
+    {:noreply, socket |> next_action()}
   end
 
+  @impl true
+  def handle_event(
+        "decline",
+        %{"data" => data},
+        socket
+      ) do
+    store_results(socket, data)
+    {:noreply, socket |> next_action()}
+  end
+
+  defp next_action(
+         %{
+           assigns: %{
+             id: id,
+             session: %{"participant" => participant},
+             vm: %{redirect_to: :thanks}
+           }
+         } = socket
+       ) do
+    push_redirect(socket, to: Routes.live_path(socket, DataDonation.ThanksPage, id, participant))
+  end
+
+  defp next_action(socket) do
+    IO.puts("NO PUSH")
+    socket
+  end
+
+  @impl true
   def render(assigns) do
     ~F"""
     <Stripped user={@current_user} menus={@menus}>
@@ -115,21 +136,42 @@ defmodule Systems.DataDonation.UploadPage do
         </TabbarArea>
       </div>
     </Stripped>
-
     """
   end
 
-  def store_results(participant_id, data) when is_binary(data) do
-    storage().store(participant_id, data)
+  def store_results(
+        %{assigns: %{session: session, vm: %{storage: storage_key} = vm}} = _socket,
+        data
+      )
+      when is_binary(data) do
+    storage = storage(storage_key)
+    storage.store(session, vm, data)
   end
 
-  defp storage do
+  defp storage(storage_key) do
+    config = config()
+
+    case Keyword.get(config, storage_key) do
+      nil ->
+        raise StoreResultsError, "Could not store the results, invalid config for #{storage_key}"
+
+      value ->
+        value
+    end
+  end
+
+  defp config() do
     Application.fetch_env!(:core, :data_donation_storage_backend)
   end
 
-  def __mix_recompile__?() do
+  defp read_script(%{script: script}) do
     Application.app_dir(:core, "priv/repo")
-    |> Path.join("script.py")
-    |> File.read!() != unquote(@script)
+    |> Path.join(script)
+    |> File.read!()
   end
+end
+
+defimpl Plug.Exception, for: Systems.DataDonation.UploadPage.StoreResultsError do
+  def status(_exception), do: 500
+  def actions(_), do: []
 end

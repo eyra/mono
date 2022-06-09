@@ -24,15 +24,10 @@ defmodule Systems.DataDonation.Context do
     Repo.all(DataDonation.ToolModel)
   end
 
-  def get!(id), do: Repo.get!(DataDonation.ToolModel, id)
-  def get(id), do: Repo.get(DataDonation.ToolModel, id)
+  def get(id), do: DataDonation.ModelData.get(id)
 
-  def get_by_promotion(promotion_id) do
-    from(t in DataDonation.ToolModel,
-      where: t.promotion_id == ^promotion_id
-    )
-    |> Repo.one()
-  end
+  def get_tool!(id), do: Repo.get!(DataDonation.ToolModel, id)
+  def get_tool(id), do: Repo.get(DataDonation.ToolModel, id)
 
   def create(attrs, campaign, promotion) do
     %DataDonation.ToolModel{}

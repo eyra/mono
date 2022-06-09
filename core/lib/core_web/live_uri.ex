@@ -7,7 +7,7 @@ defmodule CoreWeb.LiveUri do
     quote do
       @behaviour CoreWeb.LiveUri
 
-      import Phoenix.LiveView, only: [assign: 3]
+      import Phoenix.LiveView
 
       def handle_params(
             _unsigned_params,
