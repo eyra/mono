@@ -24,7 +24,15 @@ onmessage = (event) => {
     def _process_data():
       import json
       import html
+      import pandas as pd
+
       result = process(open("user-data", "rb"))
+
+      if not result:
+        data_frame = pd.DataFrame()
+        data_frame["Messages"] = pd.Series(["Unfortunately, no data could be extracted from the selected file."], name="Messages")
+        result = [{"id": "important_feedback", "title": "Important feedback", "data_frame": data_frame}]
+
       data_output = []
       html_output = []
       for data in result:
@@ -32,6 +40,7 @@ onmessage = (event) => {
         df = data['data_frame']
         html_output.append(df.to_html(classes=["data-donation-extraction-results"], justify="left"))
         data_output.append({"id": data["id"], "data_frame": df.to_json()})
+
       return {
         "html": "\\n".join(html_output),
         "data": json.dumps(data_output),
