@@ -25,9 +25,9 @@ defmodule Systems.DataDonation.ModelData do
         research_topic: "Local processing of digital trace data",
         research_description: %{
           "nl" =>
-            "De gegevens die we u vragen te doneren zullen worden gebruikt om te onderzoeken hoeveel tijd mensen besteden aan activiteiten (zoals lopen en fietsen) en het verschil hierin voor en tijdens de corona periode.",
+            "De gegevens die we u vragen te doneren kunnen worden gebruikt om te onderzoeken hoeveel tijd mensen besteden aan activiteiten (zoals lopen en fietsen) en het verschil hierin voor en tijdens de corona periode.",
           "en" =>
-            "The data that we ask you to donate will be used to investigate how much time people spent in activities (such as walking and biking), before and during the COVID-19 pandemic."
+            "The data that we ask you to donate could be used to investigate how much time people spent in activities (such as walking and biking), before and during the COVID-19 pandemic."
         },
         platform: "Google",
         redirect_to: :thanks,
@@ -42,9 +42,9 @@ defmodule Systems.DataDonation.ModelData do
         research_topic: "Local processing of digital trace data",
         research_description: %{
           "nl" =>
-            "De gegevens die we u vragen te doneren zullen worden gebruikt om te onderzoeken hoeveel tijd mensen besteden aan activiteiten (zoals lopen en fietsen) en het verschil hierin voor en tijdens de corona periode.",
+            "De gegevens die we u vragen te doneren kunnen worden gebruikt om te onderzoeken hoeveel tijd mensen besteden aan activiteiten (zoals lopen en fietsen) en het verschil hierin voor en tijdens de corona periode.",
           "en" =>
-            "The data that we ask you to donate will be used to investigate how much time people spent in activities (such as walking and biking), before and during the COVID-19 pandemic."
+            "The data that we ask you to donate could be used to investigate how much time people spent in activities (such as walking and biking), before and during the COVID-19 pandemic."
         },
         platform: "Google",
         redirect_to: nil,
