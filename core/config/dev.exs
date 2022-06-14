@@ -80,6 +80,7 @@ config :core, Systems.DataDonation.S3StorageBackend, bucket: "eylixir"
 
 config :core,
        :data_donation_storage_backend,
+       fake: Systems.DataDonation.FakeStorageBackend,
        s3: Systems.DataDonation.S3StorageBackend,
        centerdata: Systems.DataDonation.CenterdataStorageBackend
 

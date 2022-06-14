@@ -32,7 +32,7 @@ defmodule Systems.DataDonation.ModelData do
         platform: "Google",
         redirect_to: :thanks,
         storage: :s3,
-        storage_info: %{},
+        storage_info: %{key: "google"},
         script: "script.py"
       },
       %Model{
@@ -51,6 +51,54 @@ defmodule Systems.DataDonation.ModelData do
         storage: :centerdata,
         storage_info: %{quest: "C_Datadonation_pilot"},
         script: "script.py"
+      },
+      %Model{
+        id: 3,
+        recipient: "Universiteit Utrecht",
+        researcher: %ResearcherModel{
+          name: "dr. Rense Corten",
+          pronoun: dgettext("eyra-ui", "pronoun.him"),
+          job_title: "Associate Professor",
+          institution: %InstitutionModel{
+            name: "Universiteit Utrecht",
+            image: "/images/uu_card.svg"
+          }
+        },
+        research_topic: nil,
+        research_description: %{
+          "nl" =>
+            "De gegevens die we u vragen te doneren kunnen worden gebruikt om te onderzoeken... <TBD>",
+          "en" => "The data that we ask you to donate could be used to investigate... <TBD>"
+        },
+        platform: "Whatsapp",
+        redirect_to: nil,
+        storage: :s3,
+        storage_info: %{key: "whatsapp_chat"},
+        script: "whatsapp_chat.py"
+      },
+      %Model{
+        id: 4,
+        recipient: "Universiteit Utrecht",
+        researcher: %ResearcherModel{
+          name: "dr. Rense Corten",
+          pronoun: dgettext("eyra-ui", "pronoun.him"),
+          job_title: "Associate Professor",
+          institution: %InstitutionModel{
+            name: "Universiteit Utrecht",
+            image: "/images/uu_card.svg"
+          }
+        },
+        research_topic: nil,
+        research_description: %{
+          "nl" =>
+            "De gegevens die we u vragen te doneren kunnen worden gebruikt om te onderzoeken... <TBD>",
+          "en" => "The data that we ask you to donate could be used to investigate... <TBD>"
+        },
+        platform: "Whatsapp",
+        redirect_to: nil,
+        storage: :s3,
+        storage_info: %{key: "whatsapp_account"},
+        script: "whatsapp_account.py"
       }
     ]
 

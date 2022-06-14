@@ -54,7 +54,7 @@ defmodule Systems.DataDonation.FileSelectionSheet do
                 <DynamicButton vm={select_button()} />
               </Wrap>
               <input class="hidden" type="file" id="input-data-file"
-                     accept="application/zip">
+                     accept="application/zip, text/plain">
             </div>
             <Spacing value="M" />
           </div>
