@@ -73,10 +73,10 @@ defmodule Systems.Support.TicketPage do
       button_large: %{
         action: action,
         face: %{
-          type: :secondary,
-          label: dgettext("eyra-admin", "ticket.mailto.button"),
-          border_color: "border-white",
-          text_color: "text-white"
+          type: :primary,
+          label: dgettext("eyra-ui", "mailto.button"),
+          bg_color: "bg-tertiary",
+          text_color: "text-grey1"
         }
       },
       button_small: %{

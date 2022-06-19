@@ -63,9 +63,5 @@ msgid "role.student"
 msgstr ""
 
 #, elixir-format
-msgid "ticket.mailto.button"
-msgstr ""
-
-#, elixir-format
 msgid "reopen.ticket.button"
 msgstr ""
