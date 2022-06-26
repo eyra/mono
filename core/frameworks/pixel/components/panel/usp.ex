@@ -13,13 +13,21 @@ defmodule Frameworks.Pixel.Panel.USP do
   def render(assigns) do
     ~F"""
     <Panel size="h-full">
-      <#template slot="title">
-        <div class={"text-title5", "font-title5", "lg:text-title4", "lg:font-title4", "mb-4", "lg:mb-6", @title_color}>
-              {@title}
+      <:title>
+        <div class={
+          "text-title5",
+          "font-title5",
+          "lg:text-title4",
+          "lg:font-title4",
+          "mb-4",
+          "lg:mb-6",
+          @title_color
+        }>
+          {@title}
         </div>
-      </#template>
+      </:title>
       <div class={"text-bodysmall", "lg:text-bodymedium", "font-body", @description_color}>
-          {@description}
+        {@description}
       </div>
     </Panel>
     """

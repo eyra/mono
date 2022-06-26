@@ -18,27 +18,33 @@ defmodule CoreWeb.UI.Navigation.TabbarFooter do
 
   def render(assigns) do
     ~F"""
-      <ContentArea class="mb-8">
-        <MarginY id={:page_top} />
-          <Context get={tabs: tabs}>
-            <div :for={{[tab1, tab2], index} <- Enum.with_index(combine_shifted(tabs))} >
-              <RestrictedWidthArea type={tab1.type}>
-                <div class={"flex flex-row #{align(tab1)}"}>
-                  <div id={"tabbar-footer-item-#{tab1.id}"} phx-hook="TabbarFooterItem" data-tab-id={tab1.id} data-target-tab-id={tab2.id} class="tabbar-footer-item cursor-pointer hidden">
-                    <Case value={index < Enum.count(tabs)-1} >
-                      <True>
-                        <PlainIcon vm={%{label: tab2.forward_title, icon: :forward}} />
-                      </True>
-                      <False>
-                        <#slot />
-                      </False>
-                    </Case>
-                  </div>
-                </div>
-              </RestrictedWidthArea>
+    <ContentArea class="mb-8">
+      <MarginY id={:page_top} />
+      <Context get={tabs: tabs}>
+        <div :for={{[tab1, tab2], index} <- Enum.with_index(combine_shifted(tabs))}>
+          <RestrictedWidthArea type={tab1.type}>
+            <div class={"flex flex-row #{align(tab1)}"}>
+              <div
+                id={"tabbar-footer-item-#{tab1.id}"}
+                phx-hook="TabbarFooterItem"
+                data-tab-id={tab1.id}
+                data-target-tab-id={tab2.id}
+                class="tabbar-footer-item cursor-pointer hidden"
+              >
+                <Case value={index < Enum.count(tabs) - 1}>
+                  <True>
+                    <PlainIcon vm={%{label: tab2.forward_title, icon: :forward}} />
+                  </True>
+                  <False>
+                    <#slot />
+                  </False>
+                </Case>
+              </div>
             </div>
-        </Context>
-      </ContentArea>
+          </RestrictedWidthArea>
+        </div>
+      </Context>
+    </ContentArea>
     """
   end
 end

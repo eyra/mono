@@ -55,7 +55,7 @@ defmodule Systems.Crew.TaskItemView.Example do
     <Title3>Waitinglist</Title3>
 
     <TaskItemView
-      public_id={"1234"}
+      public_id="1234"
       buttons={[
         %{
           action: %{type: :send, item: 1, target: "", event: "accept"},
@@ -65,15 +65,15 @@ defmodule Systems.Crew.TaskItemView.Example do
           action: %{type: :send, item: 1, target: "", event: "reject"},
           face: %{type: :icon, icon: :reject}
         }
-      ]
-    } />
+      ]}
+    />
 
-    <div class="mb-12"></div>
+    <div class="mb-12" />
 
     <Title3>Attention</Title3>
 
     <TaskItemView
-      public_id={"777"}
+      public_id="777"
       message={%{type: :warning, text: "Got rejected last assignment"}}
       buttons={[
         %{
@@ -84,13 +84,13 @@ defmodule Systems.Crew.TaskItemView.Example do
           action: %{type: :send, item: 1, target: "", event: "reject"},
           face: %{type: :icon, icon: :reject}
         }
-      ]
-    } />
+      ]}
+    />
 
-    <div class="mb-6"></div>
+    <div class="mb-6" />
 
     <TaskItemView
-      public_id={"112"}
+      public_id="112"
       message={%{type: :alarm, text: "Completed far below estimated duration"}}
       buttons={[
         %{
@@ -101,50 +101,49 @@ defmodule Systems.Crew.TaskItemView.Example do
           action: %{type: :send, item: 1, target: "", event: "reject"},
           face: %{type: :icon, icon: :reject}
         }
-      ]
-    } />
+      ]}
+    />
 
-    <div class="mb-12"></div>
+    <div class="mb-12" />
 
     <Title3>Rejected</Title3>
 
     <TaskItemView
-      public_id={"63"}
+      public_id="63"
       message={%{type: :attention_checks_failed, text: "Attention checks failed"}}
       buttons={[
         %{
           action: %{type: :send, item: 1, target: "", event: "accept"},
           face: %{type: :icon, icon: :accept}
         }
-      ]
-    } />
+      ]}
+    />
 
-    <div class="mb-6"></div>
+    <div class="mb-6" />
 
     <TaskItemView
-      public_id={"282"}
+      public_id="282"
       message={%{type: :not_completed, text: "Not completed"}}
       buttons={[
         %{
           action: %{type: :send, item: 1, target: "", event: "accept"},
           face: %{type: :icon, icon: :accept}
         }
-      ]
-    } />
+      ]}
+    />
 
-    <div class="mb-6"></div>
+    <div class="mb-6" />
 
     <TaskItemView
-      public_id={"1349"}
+      public_id="1349"
       message={%{type: :rejected, text: "Rejected because of other reasons"}}
       buttons={[
         %{
           action: %{type: :send, item: 1, target: "", event: "accept"},
           face: %{type: :icon, icon: :accept}
         }
-      ]
-    } />
-
+      ]}
+    />
     """
   end
 

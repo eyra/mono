@@ -26,44 +26,44 @@ defmodule CoreWeb.UI.WalletListItem do
 
   def render(assigns) do
     ~F"""
-      <div class="font-sans bg-grey5 flex items-stretch space-x-4 rounded-md">
-        <div class="flex flex-row w-full">
-          <div class="flex-grow p-4 lg:p-6">
-            <div class="w-full h-full">
-              <div class="flex flex-col sm:flex-row  w-full h-full gap-x-4 gap-y-8 justify-center">
-                <div class="flex-wrap md:w-48 lg:w-56">
-                  <div class="flex flex-col gap-2 h-full justify-center">
-                    <div class={title_css(@vm)}>{title(@vm)}</div>
-                    <div :if={has_subtitle?(@vm)} class={subtitle_css(@vm)}>{subtitle(@vm)}</div>
-                  </div>
+    <div class="font-sans bg-grey5 flex items-stretch space-x-4 rounded-md">
+      <div class="flex flex-row w-full">
+        <div class="flex-grow p-4 lg:p-6">
+          <div class="w-full h-full">
+            <div class="flex flex-col sm:flex-row  w-full h-full gap-x-4 gap-y-8 justify-center">
+              <div class="flex-wrap md:w-48 lg:w-56">
+                <div class="flex flex-col gap-2 h-full justify-center">
+                  <div class={title_css(@vm)}>{title(@vm)}</div>
+                  <div :if={has_subtitle?(@vm)} class={subtitle_css(@vm)}>{subtitle(@vm)}</div>
                 </div>
-                <div class="flex-grow">
-                  <ProgressBar
-                    bg_color={"bg-grey3"}
-                    size={max(target_amount(@vm), earned_amount(@vm) + pending_amount(@vm))}
-                    bars={[
-                      %{ color: :warning, size: earned_amount(@vm) + pending_amount(@vm)},
-                      %{ color: :success, size: earned_amount(@vm)}
-                    ]} />
+              </div>
+              <div class="flex-grow">
+                <ProgressBar
+                  bg_color="bg-grey3"
+                  size={max(target_amount(@vm), earned_amount(@vm) + pending_amount(@vm))}
+                  bars={[
+                    %{color: :warning, size: earned_amount(@vm) + pending_amount(@vm)},
+                    %{color: :success, size: earned_amount(@vm)}
+                  ]}
+                />
 
-                  <div class="flex flex-row flex-wrap gap-y-4 gap-x-8 mt-6">
-                    <div :if={earned_amount(@vm) > 0}>
-                      <div class="flex flex-row items-center gap-3">
-                        <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-success"></div>
-                        <Label>{earned_amount(@vm)} {dgettext("eyra-assignment", "earned.label")}</Label>
-                      </div>
+                <div class="flex flex-row flex-wrap gap-y-4 gap-x-8 mt-6">
+                  <div :if={earned_amount(@vm) > 0}>
+                    <div class="flex flex-row items-center gap-3">
+                      <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-success" />
+                      <Label>{earned_amount(@vm)} {dgettext("eyra-assignment", "earned.label")}</Label>
                     </div>
-                    <div :if={pending_amount(@vm) > 0}>
-                      <div class="flex flex-row items-center gap-3">
-                        <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-warning"></div>
-                        <Label>{pending_amount(@vm)} {dgettext("eyra-assignment", "pending.label")}</Label>
-                      </div>
+                  </div>
+                  <div :if={pending_amount(@vm) > 0}>
+                    <div class="flex flex-row items-center gap-3">
+                      <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-warning" />
+                      <Label>{pending_amount(@vm)} {dgettext("eyra-assignment", "pending.label")}</Label>
                     </div>
-                    <div :if={togo_amount(@vm) > 0}>
-                      <div class="flex flex-row items-center gap-3">
-                        <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-grey3"></div>
-                        <Label>{togo_amount(@vm)} {dgettext("eyra-assignment", "togo.label")}</Label>
-                      </div>
+                  </div>
+                  <div :if={togo_amount(@vm) > 0}>
+                    <div class="flex flex-row items-center gap-3">
+                      <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-grey3" />
+                      <Label>{togo_amount(@vm)} {dgettext("eyra-assignment", "togo.label")}</Label>
                     </div>
                   </div>
                 </div>
@@ -72,6 +72,7 @@ defmodule CoreWeb.UI.WalletListItem do
           </div>
         </div>
       </div>
+    </div>
     """
   end
 end

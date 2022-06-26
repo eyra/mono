@@ -204,35 +204,41 @@ defmodule Systems.Pool.SubmissionPage do
   @impl true
   def render(assigns) do
     ~F"""
-      <Workspace
-        title={dgettext("link-studentpool", "submission.title")}
-        menus={@menus}
+    <Workspace title={dgettext("link-studentpool", "submission.title")} menus={@menus}>
+      <div
+        :if={show_dialog?(@dialog)}
+        class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20"
       >
-        <div :if={show_dialog?(@dialog)} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
-          <div class="flex flex-row items-center justify-center w-full h-full">
-            <PlainDialog {...@dialog} />
-          </div>
+        <div class="flex flex-row items-center justify-center w-full h-full">
+          <PlainDialog {...@dialog} />
         </div>
-        <div phx-click="reset_focus">
-          <ContentArea>
-            <MarginY id={:page_top} />
-            <Member :if={@vm.member} vm={@vm.member} />
-            <Spacing value="XL" />
-            <Title1>{@vm.title}</Title1>
-            <Spacing value="L" />
-            <SubHead>{@vm.byline}</SubHead>
-            <Spacing value="L" />
-          </ContentArea>
-
-          <SubmissionCriteriaForm id={:submission_criteria_form} props={%{entity: @vm.submission.criteria}}/>
-          <Spacing value="XL" />
-          <SubmissionForm id={:submission_form} props={%{entity: @vm.submission, validate?: @vm.validate?}}/>
-        </div>
+      </div>
+      <div phx-click="reset_focus">
         <ContentArea>
-          <MarginY id={:button_bar_top} />
-          <ButtonBar buttons={create_actions(assigns)} />
+          <MarginY id={:page_top} />
+          <Member :if={@vm.member} vm={@vm.member} />
+          <Spacing value="XL" />
+          <Title1>{@vm.title}</Title1>
+          <Spacing value="L" />
+          <SubHead>{@vm.byline}</SubHead>
+          <Spacing value="L" />
         </ContentArea>
-      </Workspace>
+
+        <SubmissionCriteriaForm
+          id={:submission_criteria_form}
+          props={%{entity: @vm.submission.criteria}}
+        />
+        <Spacing value="XL" />
+        <SubmissionForm
+          id={:submission_form}
+          props={%{entity: @vm.submission, validate?: @vm.validate?}}
+        />
+      </div>
+      <ContentArea>
+        <MarginY id={:button_bar_top} />
+        <ButtonBar buttons={create_actions(assigns)} />
+      </ContentArea>
+    </Workspace>
     """
   end
 end

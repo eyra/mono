@@ -13,7 +13,7 @@ defmodule Frameworks.Pixel.Button.Action.Redirect do
 
   def render(assigns) do
     ~F"""
-    <LiveRedirect to={to(@vm)} class="cursor-pointer focus:outline-none" >
+    <LiveRedirect to={to(@vm)} class="cursor-pointer focus:outline-none">
       <#slot />
     </LiveRedirect>
     """

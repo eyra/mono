@@ -12,7 +12,7 @@ defmodule CoreWeb.UI.Navigation.TabletMenu do
   def render(assigns) do
     ~F"""
     <div class="fixed z-1 hidden md:block lg:hidden w-tablet-menu-width h-full pt-10 pb-10 h-full">
-      <Menu items={@items} path_provider={@path_provider} size={:narrow}/>
+      <Menu items={@items} path_provider={@path_provider} size={:narrow} />
     </div>
     """
   end

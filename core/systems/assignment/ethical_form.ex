@@ -111,24 +111,28 @@ defmodule Systems.Assignment.EthicalForm do
 
   def render(assigns) do
     ~F"""
-      <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
-        <Title3>{dgettext("link-survey", "ethical.title")}</Title3>
-        <BodyMedium>{raw(dgettext("link-survey", "ethical.description", link: ethical_review_link()))}</BodyMedium>
-        <Spacing value="M" />
+    <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
+      <Title3>{dgettext("link-survey", "ethical.title")}</Title3>
+      <BodyMedium>{raw(dgettext("link-survey", "ethical.description", link: ethical_review_link()))}</BodyMedium>
+      <Spacing value="M" />
 
-        <Panel bg_color="bg-grey1">
-          <Title5 color="text-white" >ERB code</Title5>
-          <Spacing value="S" />
-          <TextInput field={:ethical_code} placeholder={dgettext("eyra-account", "ehtical.code.label")} background={:dark} />
-          <Checkbox
-            field={:ethical_approval}
-            label_text={dgettext("link-survey", "ethical.label")}
-            label_color="text-white"
-            accent={:tertiary}
-            background={:dark}
-          />
-        </Panel>
-      </Form>
+      <Panel bg_color="bg-grey1">
+        <Title5 color="text-white">ERB code</Title5>
+        <Spacing value="S" />
+        <TextInput
+          field={:ethical_code}
+          placeholder={dgettext("eyra-account", "ehtical.code.label")}
+          background={:dark}
+        />
+        <Checkbox
+          field={:ethical_approval}
+          label_text={dgettext("link-survey", "ethical.label")}
+          label_color="text-white"
+          accent={:tertiary}
+          background={:dark}
+        />
+      </Panel>
+    </Form>
     """
   end
 end

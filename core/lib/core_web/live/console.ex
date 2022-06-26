@@ -47,21 +47,18 @@ defmodule CoreWeb.Console do
 
   def render(assigns) do
     ~F"""
-      <Workspace
-        title={dgettext("eyra-ui", "dashboard.title")}
-        menus={@menus}
-      >
-        <ContentArea>
-          <MarginY id={:page_top} />
-            <div :if={@next_best_action}>
-              <NextAction.HighlightView vm={@next_best_action}/>
-              <Spacing value="XL" />
-            </div>
-            <Title2>
-              {dgettext("eyra-dashboard", "recent-items.title")}
-            </Title2>
-            <ContentList items={@content_items} />
-        </ContentArea>
+    <Workspace title={dgettext("eyra-ui", "dashboard.title")} menus={@menus}>
+      <ContentArea>
+        <MarginY id={:page_top} />
+        <div :if={@next_best_action}>
+          <NextAction.HighlightView vm={@next_best_action} />
+          <Spacing value="XL" />
+        </div>
+        <Title2>
+          {dgettext("eyra-dashboard", "recent-items.title")}
+        </Title2>
+        <ContentList items={@content_items} />
+      </ContentArea>
     </Workspace>
     """
   end

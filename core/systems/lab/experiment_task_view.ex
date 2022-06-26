@@ -220,8 +220,8 @@ defmodule Systems.Lab.ExperimentTaskView do
         <Title3>{dgettext("link-lab", "reservation.title")}</Title3>
         <Spacing value="M" />
         <div class="flex flex-col sm:flex-row gap-x-4 gap-y-3">
-          <Body><span class="whitespace-pre-wrap">🗓  {date(time_slot(@reservation))}</span></Body>
-          <Body><span class="whitespace-pre-wrap">🕙  {time(time_slot(@reservation))}</span></Body>
+          <Body><span class="whitespace-pre-wrap">🗓 {date(time_slot(@reservation))}</span></Body>
+          <Body><span class="whitespace-pre-wrap">🕙 {time(time_slot(@reservation))}</span></Body>
           <Body><span class="whitespace-pre-wrap">📍 {location(time_slot(@reservation))}</span></Body>
         </div>
         <Spacing value="XXS" />

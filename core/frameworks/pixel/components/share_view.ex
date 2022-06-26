@@ -102,49 +102,55 @@ defmodule Frameworks.Pixel.ShareView do
   @impl true
   def render(assigns) do
     ~F"""
-      <div class="p-8 bg-white shadow-2xl rounded" phx-click="reset_focus" phx-target={@myself}>
-        <div class="">
-          <div class="flex flex-row">
-            <div class="flex-grow">
-              <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
-                Shared with
-              </div>
+    <div class="p-8 bg-white shadow-2xl rounded" phx-click="reset_focus" phx-target={@myself}>
+      <div class="">
+        <div class="flex flex-row">
+          <div class="flex-grow">
+            <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
+              Shared with
             </div>
-            <DynamicButton vm={@close_button} />
           </div>
-          <Spacing value="S" />
-          <div class="rounded border-2 border-grey3 h-40 overflow-scroll">
-            <div class="p-4 flex flex-col gap-3">
-              <div :for={user <- @shared_users} class="flex flex-row items-center gap-3">
-                <UserListItemSmall user={user} action_button={%{
+          <DynamicButton vm={@close_button} />
+        </div>
+        <Spacing value="S" />
+        <div class="rounded border-2 border-grey3 h-40 overflow-scroll">
+          <div class="p-4 flex flex-col gap-3">
+            <div :for={user <- @shared_users} class="flex flex-row items-center gap-3">
+              <UserListItemSmall
+                user={user}
+                action_button={%{
                   action: %{type: :send, event: "remove", item: user.id, target: @myself},
                   face: %{type: :icon, icon: :remove}
-                }} />
-              </div>
+                }}
+              />
             </div>
           </div>
-          <Spacing value="L" />
+        </div>
+        <Spacing value="L" />
 
-          <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
-            {String.capitalize(@group_name)}
-          </div>
-          <Spacing value="S" />
-          <div class="text-bodymedium font-body sm:text-bodylarge">
-            {dgettext("eyra-ui", "share.dialog.text", content: @content_name, group: @group_name)}
-          </div>
-          <Spacing value="M" />
-          <div class="rounded border-2 border-grey3 h-40 overflow-scroll">
-            <div class="p-4 flex flex-col gap-3">
-              <div :for={user <- @filtered_users} class="flex flex-row items-center gap-3">
-                <UserListItemSmall user={user} action_button={%{
+        <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
+          {String.capitalize(@group_name)}
+        </div>
+        <Spacing value="S" />
+        <div class="text-bodymedium font-body sm:text-bodylarge">
+          {dgettext("eyra-ui", "share.dialog.text", content: @content_name, group: @group_name)}
+        </div>
+        <Spacing value="M" />
+        <div class="rounded border-2 border-grey3 h-40 overflow-scroll">
+          <div class="p-4 flex flex-col gap-3">
+            <div :for={user <- @filtered_users} class="flex flex-row items-center gap-3">
+              <UserListItemSmall
+                user={user}
+                action_button={%{
                   action: %{type: :send, event: "add", item: user.id, target: @myself},
                   face: %{type: :icon, icon: :add}
-                }} />
-              </div>
+                }}
+              />
             </div>
           </div>
         </div>
       </div>
+    </div>
     """
   end
 end

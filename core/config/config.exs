@@ -30,6 +30,14 @@ config :phoenix_inline_svg,
   dir: "./assets/static/images",
   default_collection: "icons"
 
+config :esbuild,
+  catalogue: [
+    args:
+      ~w(../deps/surface_catalogue/assets/js/app.js --bundle --target=es2016 --minify --outdir=../priv/static/assets/catalogue),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ]
+
 config :core, Oban,
   repo: Core.Repo,
   queues: [default: 5],

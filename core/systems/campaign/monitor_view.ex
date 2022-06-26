@@ -110,112 +110,121 @@ defmodule Systems.Campaign.MonitorView do
   @impl true
   def render(assigns) do
     ~F"""
-      <Popup :if={@reject_task != nil}>
-        <Crew.RejectView id={:reject_view_example} target={%{type: __MODULE__, id: @id}} />
-      </Popup>
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <Case value={@vm.active?} >
-          <True>
-            <div :if={lab_tool(@vm.experiment) != nil}>
-              <Lab.CheckInView id={:search_subject_view} tool={lab_tool(@vm.experiment)} parent={%{type: __MODULE__, id: @id}} />
-              <Spacing value="XL" />
-            </div>
+    <Popup :if={@reject_task != nil}>
+      <Crew.RejectView id={:reject_view_example} target={%{type: __MODULE__, id: @id}} />
+    </Popup>
+    <ContentArea>
+      <MarginY id={:page_top} />
+      <Case value={@vm.active?}>
+        <True>
+          <div :if={lab_tool(@vm.experiment) != nil}>
+            <Lab.CheckInView
+              id={:search_subject_view}
+              tool={lab_tool(@vm.experiment)}
+              parent={%{type: __MODULE__, id: @id}}
+            />
+            <Spacing value="XL" />
+          </div>
 
-            <Title2>{dgettext("link-monitor", "phase1.title")}</Title2>
-            <Title3 margin={"mb-8"}>{dgettext("link-survey", "status.title")}<span class="text-primary"> {@vm.participated_count}/{@vm.progress.size}</span></Title3>
-            <Spacing value="M" />
-            <div class="bg-grey6 rounded p-12">
-              <ProgressBar {...@vm.progress} />
-              <div class="flex flex-row flex-wrap gap-y-4 gap-x-12 mt-12">
-                <div>
-                  <div class="flex flex-row items-center gap-3">
-                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-success"></div>
-                    <Label>{@labels.participated}: {@vm.participated_count}</Label>
-                  </div>
+          <Title2>{dgettext("link-monitor", "phase1.title")}</Title2>
+          <Title3 margin="mb-8">{dgettext("link-survey", "status.title")}<span class="text-primary">
+              {@vm.participated_count}/{@vm.progress.size}</span></Title3>
+          <Spacing value="M" />
+          <div class="bg-grey6 rounded p-12">
+            <ProgressBar {...@vm.progress} />
+            <div class="flex flex-row flex-wrap gap-y-4 gap-x-12 mt-12">
+              <div>
+                <div class="flex flex-row items-center gap-3">
+                  <div class="flex-shrink-0 w-6 h-6 rounded-full bg-success" />
+                  <Label>{@labels.participated}: {@vm.participated_count}</Label>
                 </div>
-                <div>
-                  <div class="flex flex-row items-center gap-3">
-                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-warning"></div>
-                    <Label>{@labels.pending}: {@vm.pending_count}</Label>
-                  </div>
+              </div>
+              <div>
+                <div class="flex flex-row items-center gap-3">
+                  <div class="flex-shrink-0 w-6 h-6 rounded-full bg-warning" />
+                  <Label>{@labels.pending}: {@vm.pending_count}</Label>
                 </div>
-                <div>
-                  <div class="flex flex-row items-center gap-3">
-                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-grey4"></div>
-                    <Label>{dgettext("link-survey", "vacant.label")}: {@vm.vacant_count}</Label>
-                  </div>
+              </div>
+              <div>
+                <div class="flex flex-row items-center gap-3">
+                  <div class="flex-shrink-0 w-6 h-6 rounded-full bg-grey4" />
+                  <Label>{dgettext("link-survey", "vacant.label")}: {@vm.vacant_count}</Label>
                 </div>
               </div>
             </div>
+          </div>
+          <Spacing value="XL" />
+
+          <Title2>{dgettext("link-monitor", "phase2.title")}</Title2>
+
+          <div :if={Enum.count(@vm.attention_tasks) > 0}>
+            <Title3 margin="mb-8">
+              {dgettext("link-monitor", "attention.title")}<span class="text-primary">
+                {Enum.count(@vm.attention_tasks)}</span>
+            </Title3>
+            <BodyLarge>{dgettext("link-monitor", "attention.body")}</BodyLarge>
+            <Spacing value="M" />
+            <Campaign.MonitorTableView columns={@vm.attention_columns} tasks={@vm.attention_tasks} />
+            <Spacing value="M" />
+            <Wrap>
+              <DynamicButton vm={%{
+                action: %{type: :send, target: @myself, event: "accept_all_pending_started"},
+                face: %{type: :primary, label: dgettext("link-monitor", "accept.all.button")}
+              }} />
+            </Wrap>
             <Spacing value="XL" />
+          </div>
 
-            <Title2>{dgettext("link-monitor", "phase2.title")}</Title2>
+          <Title3 margin="mb-8">
+            {dgettext("link-monitor", "waitinglist.title")}<span class="text-primary">
+              {Enum.count(@vm.completed_tasks)}</span>
+          </Title3>
+          <div :if={Enum.count(@vm.completed_tasks) > 0}>
+            <BodyLarge>{dgettext("link-monitor", "waitinglist.body")}</BodyLarge>
+            <Spacing value="M" />
+            <Campaign.MonitorTableView columns={@vm.completed_columns} tasks={@vm.completed_tasks} />
+            <Spacing value="M" />
+            <Wrap>
+              <DynamicButton vm={%{
+                action: %{type: :send, target: @myself, event: "accept_all_completed"},
+                face: %{type: :primary, label: dgettext("link-monitor", "accept.all.button")}
+              }} />
+            </Wrap>
+            <Spacing value="XL" />
+          </div>
+          <div :if={Enum.count(@vm.completed_tasks) == 0}>
+            <Spacing value="L" />
+          </div>
 
-            <div :if={Enum.count(@vm.attention_tasks) > 0}>
-              <Title3 margin={"mb-8"}>
-                {dgettext("link-monitor", "attention.title")}<span class="text-primary"> {Enum.count(@vm.attention_tasks)}</span>
-              </Title3>
-              <BodyLarge>{dgettext("link-monitor", "attention.body")}</BodyLarge>
-              <Spacing value="M" />
-              <Campaign.MonitorTableView columns={@vm.attention_columns} tasks={@vm.attention_tasks} />
-              <Spacing value="M" />
-              <Wrap>
-                <DynamicButton vm={%{
-                  action: %{ type: :send, target: @myself, event: "accept_all_pending_started"},
-                  face: %{type: :primary, label: dgettext("link-monitor", "accept.all.button")}
-                }} />
-              </Wrap>
-              <Spacing value="XL" />
-            </div>
+          <Title3>
+            {dgettext("link-monitor", "rejected.title")}<span class="text-primary">
+              {Enum.count(@vm.rejected_tasks)}</span>
+          </Title3>
+          <div :if={Enum.count(@vm.rejected_tasks) > 0}>
+            <Campaign.MonitorTableView columns={@vm.rejected_columns} tasks={@vm.rejected_tasks} />
+            <Spacing value="XL" />
+          </div>
+          <div :if={Enum.count(@vm.rejected_tasks) == 0}>
+            <Spacing value="L" />
+          </div>
 
-            <Title3 margin={"mb-8"}>
-              {dgettext("link-monitor", "waitinglist.title")}<span class="text-primary"> {Enum.count(@vm.completed_tasks)}</span>
-            </Title3>
-            <div :if={Enum.count(@vm.completed_tasks) > 0}>
-              <BodyLarge>{dgettext("link-monitor", "waitinglist.body")}</BodyLarge>
-              <Spacing value="M" />
-              <Campaign.MonitorTableView columns={@vm.completed_columns} tasks={@vm.completed_tasks} />
-              <Spacing value="M" />
-              <Wrap>
-                <DynamicButton vm={%{
-                  action: %{ type: :send, target: @myself, event: "accept_all_completed"},
-                  face: %{type: :primary, label: dgettext("link-monitor", "accept.all.button")}
-                }} />
-              </Wrap>
-              <Spacing value="XL" />
-            </div>
-            <div :if={Enum.count(@vm.completed_tasks) == 0}>
-              <Spacing value="L" />
-            </div>
-
-            <Title3>
-              {dgettext("link-monitor", "rejected.title")}<span class="text-primary"> {Enum.count(@vm.rejected_tasks)}</span>
-            </Title3>
-            <div :if={Enum.count(@vm.rejected_tasks) > 0}>
-              <Campaign.MonitorTableView columns={@vm.rejected_columns} tasks={@vm.rejected_tasks} />
-              <Spacing value="XL" />
-            </div>
-            <div :if={Enum.count(@vm.rejected_tasks) == 0}>
-              <Spacing value="L" />
-            </div>
-
-            <Title3 margin={"mb-8"}>
-              {dgettext("link-monitor", "accepted.title")}<span class="text-primary"> {Enum.count(@vm.accepted_tasks)}</span>
-            </Title3>
-            <div :if={Enum.count(@vm.accepted_tasks) > 0}>
-              <Campaign.MonitorTableView columns={@vm.accepted_columns} tasks={@vm.accepted_tasks} />
-            </div>
-          </True>
-          <False>
-            <Empty
-              title={dgettext("link-survey", "monitor.empty.title")}
-              body={dgettext("link-survey", "monitor.empty.description")}
-              illustration="members"
-            />
-          </False>
-        </Case>
-      </ContentArea>
+          <Title3 margin="mb-8">
+            {dgettext("link-monitor", "accepted.title")}<span class="text-primary">
+              {Enum.count(@vm.accepted_tasks)}</span>
+          </Title3>
+          <div :if={Enum.count(@vm.accepted_tasks) > 0}>
+            <Campaign.MonitorTableView columns={@vm.accepted_columns} tasks={@vm.accepted_tasks} />
+          </div>
+        </True>
+        <False>
+          <Empty
+            title={dgettext("link-survey", "monitor.empty.title")}
+            body={dgettext("link-survey", "monitor.empty.description")}
+            illustration="members"
+          />
+        </False>
+      </Case>
+    </ContentArea>
     """
   end
 

@@ -132,11 +132,11 @@ defmodule Systems.Assignment.LandingPage do
 
   def render(assigns) do
     ~F"""
-    <Workspace
-      title={@vm.hero_title}
-      menus={@menus}
-    >
-      <div :if={show_dialog?(@dialog)} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
+    <Workspace title={@vm.hero_title} menus={@menus}>
+      <div
+        :if={show_dialog?(@dialog)}
+        class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20"
+      >
         <div class="flex flex-row items-center justify-center w-full h-full">
           <PlainDialog {...@dialog} />
         </div>
@@ -165,12 +165,12 @@ defmodule Systems.Assignment.LandingPage do
         <BodyLarge>{@vm.text}</BodyLarge>
         <Spacing value="L" />
 
-        <Dynamic.LiveComponent :if={@experiment != nil}
+        <Dynamic.LiveComponent
+          :if={@experiment != nil}
           id={@experiment.id}
           module={@experiment.view}
           {...@experiment.model}
         />
-
       </ContentArea>
     </Workspace>
     """

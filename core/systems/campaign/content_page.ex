@@ -426,15 +426,15 @@ defmodule Systems.Campaign.ContentPage do
 
   def render(assigns) do
     ~F"""
-    <Workspace
-      title={dgettext("link-survey", "content.title")}
-      menus={@menus}
-    >
+    <Workspace title={dgettext("link-survey", "content.title")} menus={@menus}>
       <div id={:survey_content} phx-hook="ViewportResize" phx-click="reset_focus">
         <div x-data="{ image_picker: false, active_tab: 0, dropdown: false }">
           <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="image_picker">
             <div class="flex flex-row items-center justify-center w-full h-full">
-              <div class={"#{margin_x(@breakpoint)} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg"} x-on:click.away="image_picker = false, $parent.$parent.overlay = false">
+              <div
+                class={"#{margin_x(@breakpoint)} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg"}
+                x-on:click.away="image_picker = false, $parent.$parent.overlay = false"
+              >
                 <ImageCatalogPicker
                   id={:image_picker}
                   viewport={@viewport}
@@ -446,18 +446,21 @@ defmodule Systems.Campaign.ContentPage do
               </div>
             </div>
           </div>
-          <Popup :if={@popup} >
+          <Popup :if={@popup}>
             <Dynamic.LiveComponent module={@popup.view} {...@popup.props} />
           </Popup>
           <Popup :if={@dialog}>
             <PlainDialog {...@dialog} />
           </Popup>
           <TabbarArea tabs={@vm.tabs}>
-            <ActionBar right_bar_buttons={create_actions(assigns)} more_buttons={create_more_actions(assigns)}>
-              <Tabbar vm={%{initial_tab: @initial_tab, size: tabbar_size(@breakpoint)} } />
+            <ActionBar
+              right_bar_buttons={create_actions(assigns)}
+              more_buttons={create_more_actions(assigns)}
+            >
+              <Tabbar vm={%{initial_tab: @initial_tab, size: tabbar_size(@breakpoint)}} />
             </ActionBar>
-            <TabbarContent/>
-            <TabbarFooter/>
+            <TabbarContent />
+            <TabbarFooter />
           </TabbarArea>
         </div>
       </div>

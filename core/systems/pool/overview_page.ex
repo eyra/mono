@@ -50,19 +50,16 @@ defmodule Systems.Pool.OverviewPage do
 
   def render(assigns) do
     ~F"""
-      <Workspace
-        title={dgettext("link-studentpool", "title")}
-        menus={@menus}
-      >
-        <div id={:pool_overview} phx-hook="ViewportResize">
-          <TabbarArea tabs={@vm.tabs}>
-            <ActionBar>
-              <Tabbar vm={%{initial_tab: @initial_tab, size: :wide, type: :segmented}} />
-            </ActionBar>
-            <TabbarContent/>
-          </TabbarArea>
-        </div>
-      </Workspace>
+    <Workspace title={dgettext("link-studentpool", "title")} menus={@menus}>
+      <div id={:pool_overview} phx-hook="ViewportResize">
+        <TabbarArea tabs={@vm.tabs}>
+          <ActionBar>
+            <Tabbar vm={%{initial_tab: @initial_tab, size: :wide, type: :segmented}} />
+          </ActionBar>
+          <TabbarContent />
+        </TabbarArea>
+      </div>
+    </Workspace>
     """
   end
 end

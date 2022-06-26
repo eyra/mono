@@ -210,31 +210,35 @@ defmodule Systems.Campaign.OverviewPage do
 
   def render(assigns) do
     ~F"""
-      <Workspace
-        title={dgettext("link-survey", "title")}
-        menus={@menus}
+    <Workspace title={dgettext("link-survey", "title")} menus={@menus}>
+      <div
+        :if={@share_dialog}
+        class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20"
+        phx-click="close_share_dialog"
       >
-        <div :if={@share_dialog} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20" phx-click="close_share_dialog">
-          <div class="flex flex-row items-center justify-center w-full h-full">
-            <ShareView id={:share_dialog} {...@share_dialog} />
-          </div>
+        <div class="flex flex-row items-center justify-center w-full h-full">
+          <ShareView id={:share_dialog} {...@share_dialog} />
         </div>
+      </div>
 
-        <div :if={@dialog != nil} class="fixed z-40 left-0 top-0 w-full h-full bg-black bg-opacity-20">
-          <div class="flex flex-row items-center justify-center w-full h-full">
-            <PlainDialog {...@dialog} />
-          </div>
+      <div :if={@dialog != nil} class="fixed z-40 left-0 top-0 w-full h-full bg-black bg-opacity-20">
+        <div class="flex flex-row items-center justify-center w-full h-full">
+          <PlainDialog {...@dialog} />
         </div>
+      </div>
 
-        <div :if={@selector_dialog != nil} class="fixed z-40 left-0 top-0 w-full h-full bg-black bg-opacity-20">
-          <div class="flex flex-row items-center justify-center w-full h-full">
-            <SelectorDialog id={:selector_dialog} {...@selector_dialog} />
-          </div>
+      <div
+        :if={@selector_dialog != nil}
+        class="fixed z-40 left-0 top-0 w-full h-full bg-black bg-opacity-20"
+      >
+        <div class="flex flex-row items-center justify-center w-full h-full">
+          <SelectorDialog id={:selector_dialog} {...@selector_dialog} />
         </div>
+      </div>
 
-        <ContentArea>
-          <MarginY id={:page_top} />
-          <Case value={Enum.count(@campaigns) > 0} >
+      <ContentArea>
+        <MarginY id={:page_top} />
+        <Case value={Enum.count(@campaigns) > 0}>
           <True>
             <div class="flex flex-row items-center">
               <div class="h-full">
@@ -243,7 +247,7 @@ defmodule Systems.Campaign.OverviewPage do
               <div class="flex-grow">
               </div>
               <div class="h-full pt-2px lg:pt-1">
-                <Send vm={%{event: "create_campaign" }}>
+                <Send vm={%{event: "create_campaign"}}>
                   <div class="sm:hidden">
                     <PlainIcon vm={label: dgettext("link-survey", "add.new.button.short"), icon: :forward} />
                   </div>
@@ -255,8 +259,12 @@ defmodule Systems.Campaign.OverviewPage do
             </div>
             <MarginY id={:title2_bottom} />
             <DynamicGrid>
-              <div :for={campaign <- @campaigns } >
-                <DynamicCampaign path_provider={CoreWeb.Endpoint} card={campaign} click_event_data={%{action: :edit, id: campaign.edit_id }} />
+              <div :for={campaign <- @campaigns}>
+                <DynamicCampaign
+                  path_provider={CoreWeb.Endpoint}
+                  card={campaign}
+                  click_event_data={%{action: :edit, id: campaign.edit_id}}
+                />
               </div>
             </DynamicGrid>
             <Spacing value="L" />
@@ -268,11 +276,14 @@ defmodule Systems.Campaign.OverviewPage do
               illustration="cards"
             />
             <Spacing value="L" />
-            <PrimaryLiveViewButton label={dgettext("link-survey", "add.first.button")} event="create_campaign"/>
+            <PrimaryLiveViewButton
+              label={dgettext("link-survey", "add.first.button")}
+              event="create_campaign"
+            />
           </False>
-          </Case>
-        </ContentArea>
-      </Workspace>
+        </Case>
+      </ContentArea>
+    </Workspace>
     """
   end
 end

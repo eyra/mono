@@ -111,9 +111,9 @@ defmodule CoreWeb.UI.SelectorDialog do
   @impl true
   def render(assigns) do
     ~F"""
-      <Dialog {...%{ title: @title, text: @text, buttons: buttons(assigns, @myself) }}>
-        <Selector id={:type} items={@items} type={:radio} parent={%{type: __MODULE__, id: @id}} />
-      </Dialog>
+    <Dialog {...%{title: @title, text: @text, buttons: buttons(assigns, @myself)}}>
+      <Selector id={:type} items={@items} type={:radio} parent={%{type: __MODULE__, id: @id}} />
+    </Dialog>
     """
   end
 end
@@ -136,7 +136,8 @@ defmodule CoreWeb.UI.SelectorDialog.Example do
       items={Core.Enums.Themes.labels(nil)}
       ok_button_text="Proceed"
       cancel_button_text="Cancel"
-      target={self()} />
+      target={self()}
+    />
     """
   end
 

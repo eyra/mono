@@ -18,6 +18,7 @@ config :core, Core.Repo,
   pool_size: 10
 
 config :core, CoreWeb.Endpoint,
+  reloadable_compilers: [:gettext, :elixir, :surface],
   force_ssl: false,
   debug_errors: true,
   code_reloader: true,
@@ -26,13 +27,15 @@ config :core, CoreWeb.Endpoint,
     patterns: [
       ~r"priv/static/(?!uploads)/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/core_web/(live|views)/.*(ex)$",
+      ~r"lib/core_web/(live|views|components)/.*(ex|sface|js)$",
       ~r"lib/core_web/templates/*/.*(eex)$",
       ~r"bundles/*/.*(ex)$",
-      ~r"bundles/*/templates/.*(eex)$"
+      ~r"bundles/*/templates/.*(eex)$",
+      ~r"priv/catalogue/.*(ex)$"
     ]
   ],
   watchers: [
+    esbuild: {Esbuild, :install_and_run, [:catalogue, ~w(--sourcemap=inline --watch)]},
     node: [
       "node_modules/webpack/bin/webpack.js",
       "--mode",

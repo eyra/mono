@@ -52,10 +52,16 @@ defmodule CoreWeb.User.ResetPasswordToken do
     <ContentArea>
       <MarginY id={:page_top} />
       <FormArea>
-        <Title2>{dgettext "eyra-user", "user.password_reset.title"}</Title2>
+        <Title2>{dgettext("eyra-user", "user.password_reset.title")}</Title2>
         <Form for={@changeset} submit="reset-password">
-          <PasswordInput field={:password} label_text={dgettext("eyra-user", "password_reset.password.label")} />
-          <PasswordInput field={:password_confirmation} label_text={dgettext("eyra-user", "password_reset.password_confirmation.label")} />
+          <PasswordInput
+            field={:password}
+            label_text={dgettext("eyra-user", "password_reset.password.label")}
+          />
+          <PasswordInput
+            field={:password_confirmation}
+            label_text={dgettext("eyra-user", "password_reset.password_confirmation.label")}
+          />
           <SubmitButton label={dgettext("eyra-user", "password_reset.reset_password_button")} />
         </Form>
       </FormArea>

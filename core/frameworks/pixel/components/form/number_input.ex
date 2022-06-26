@@ -12,7 +12,15 @@ defmodule Frameworks.Pixel.Form.NumberInput do
 
   def render(assigns) do
     ~F"""
-      <Input field={@field} label_text={@label_text} label_color={@label_color} background={@background} reserve_error_space={@reserve_error_space} debounce={@debounce} type="number" />
+    <Input
+      field={@field}
+      label_text={@label_text}
+      label_color={@label_color}
+      background={@background}
+      reserve_error_space={@reserve_error_space}
+      debounce={@debounce}
+      type="number"
+    />
     """
   end
 end

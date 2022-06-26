@@ -13,7 +13,16 @@ defmodule Frameworks.Pixel.Form.TextInput do
 
   def render(assigns) do
     ~F"""
-      <Input field={@field} label_text={@label_text} label_color={@label_color} background={@background} placeholder={@placeholder} reserve_error_space={@reserve_error_space} debounce={@debounce} type="text" />
+    <Input
+      field={@field}
+      label_text={@label_text}
+      label_color={@label_color}
+      background={@background}
+      placeholder={@placeholder}
+      reserve_error_space={@reserve_error_space}
+      debounce={@debounce}
+      type="text"
+    />
     """
   end
 end

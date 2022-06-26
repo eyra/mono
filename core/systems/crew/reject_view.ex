@@ -127,33 +127,50 @@ defmodule Systems.Crew.RejectView do
   @impl true
   def render(assigns) do
     ~F"""
-      <div class="p-8 bg-white shadow-2xl rounded" phx-click="reset_focus" phx-target={@myself}>
-        <div class="flex flex-col gap-4 gap-8">
-          <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
-            {@title}
-          </div>
-          <div class="text-bodymedium font-body sm:text-bodylarge">
-            {@text}
-          </div>
-          <div class="flex flex-row gap-3 items-center">
-            <div class="w-6 h-6 flex-shrink-0 font-caption text-caption text-white rounded-full flex items-center bg-warning">
-              <span class="text-center w-full mt-1px">!</span>
-            </div>
-            <div class="text-button font-button text-warning leading-6">
-              {@note}
-            </div>
-          </div>
-          <Form id="reject_form" changeset={@changeset} change_event="update" submit="reject" target={@myself} focus={@focus} >
-            <Selector id={:category} items={@categories} type={:radio} optional?={false} parent={%{type: __MODULE__, id: @id}}/>
-            <Spacing value="M"/>
-            <TextInput field={:message} label_text={dgettext("link-campaign", "reject.message.label")} debounce="0"/>
-            <Spacing value="XXS" />
-            <div class="flex flex-row gap-4">
-              <DynamicButton :for={button <- buttons(@myself)} vm={button} />
-            </div>
-          </Form>
+    <div class="p-8 bg-white shadow-2xl rounded" phx-click="reset_focus" phx-target={@myself}>
+      <div class="flex flex-col gap-4 gap-8">
+        <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
+          {@title}
         </div>
+        <div class="text-bodymedium font-body sm:text-bodylarge">
+          {@text}
+        </div>
+        <div class="flex flex-row gap-3 items-center">
+          <div class="w-6 h-6 flex-shrink-0 font-caption text-caption text-white rounded-full flex items-center bg-warning">
+            <span class="text-center w-full mt-1px">!</span>
+          </div>
+          <div class="text-button font-button text-warning leading-6">
+            {@note}
+          </div>
+        </div>
+        <Form
+          id="reject_form"
+          changeset={@changeset}
+          change_event="update"
+          submit="reject"
+          target={@myself}
+          focus={@focus}
+        >
+          <Selector
+            id={:category}
+            items={@categories}
+            type={:radio}
+            optional?={false}
+            parent={%{type: __MODULE__, id: @id}}
+          />
+          <Spacing value="M" />
+          <TextInput
+            field={:message}
+            label_text={dgettext("link-campaign", "reject.message.label")}
+            debounce="0"
+          />
+          <Spacing value="XXS" />
+          <div class="flex flex-row gap-4">
+            <DynamicButton :for={button <- buttons(@myself)} vm={button} />
+          </div>
+        </Form>
       </div>
+    </div>
     """
   end
 end

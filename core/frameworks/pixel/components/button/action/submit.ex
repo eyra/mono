@@ -15,10 +15,21 @@ defmodule Frameworks.Pixel.Button.Action.Submit do
 
   def render(assigns) do
     ~F"""
-    <button :if={not has_form_id?(@vm)} @click={code(@vm)} type="submit" class="cursor-pointer focus:outline-none">
+    <button
+      :if={not has_form_id?(@vm)}
+      @click={code(@vm)}
+      type="submit"
+      class="cursor-pointer focus:outline-none"
+    >
       <#slot />
     </button>
-    <button :if={has_form_id?(@vm)} @click={code(@vm)} type="submit" class="cursor-pointer focus:outline-none" form={form_id(@vm)}>
+    <button
+      :if={has_form_id?(@vm)}
+      @click={code(@vm)}
+      type="submit"
+      class="cursor-pointer focus:outline-none"
+      form={form_id(@vm)}
+    >
       <#slot />
     </button>
     """

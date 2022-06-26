@@ -6,7 +6,7 @@ defmodule Frameworks.Pixel.Line do
 
   def render(assigns) do
     ~F"""
-    <div class="bg-grey4 h-px"></div>
+    <div class="bg-grey4 h-px" />
     """
   end
 end

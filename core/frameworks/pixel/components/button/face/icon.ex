@@ -22,7 +22,7 @@ defmodule Frameworks.Pixel.Button.Face.Icon do
   def render(assigns) do
     ~F"""
     <div class={"active:opacity-80 cursor-pointer #{size(@vm)}"}>
-      <img src={"/images/icons/#{icon_name(@vm)}.svg"} alt={alt(@vm)}/>
+      <img src={"/images/icons/#{icon_name(@vm)}.svg"} alt={alt(@vm)}>
     </div>
     """
   end

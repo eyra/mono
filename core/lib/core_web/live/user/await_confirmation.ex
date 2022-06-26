@@ -45,11 +45,11 @@ defmodule CoreWeb.User.AwaitConfirmation do
 
   def render(assigns) do
     ~F"""
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <Title2>{dgettext "eyra-account", "await.confirmation.title"}</Title2>
-        <p>Please check your e-mail for a confirmation link.</p>
-      </ContentArea>
+    <ContentArea>
+      <MarginY id={:page_top} />
+      <Title2>{dgettext("eyra-account", "await.confirmation.title")}</Title2>
+      <p>Please check your e-mail for a confirmation link.</p>
+    </ContentArea>
     """
   end
 end

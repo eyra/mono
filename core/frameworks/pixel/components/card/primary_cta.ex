@@ -14,23 +14,36 @@ defmodule Frameworks.Pixel.Card.PrimaryCTA do
   def render(assigns) do
     ~F"""
     <Card bg_color="bg-grey1" id="PrimaryCTA">
-      <#template slot="title">
+      <:title>
         <div class="text-white text-title5 font-title5 lg:text-title3 lg:font-title3">
-            {@title}
+          {@title}
         </div>
-      </#template>
+      </:title>
       <div class="mt-6 lg:mt-8">
-          <div class="flex items-center">
-              <div class="flex-wrap">
-                  <LiveRedirect to={@to} >
-                      <div class={"flex", "items-center", "active:opacity-80", "focus:outline-none", "pl-4", "pr-4", "h-48px", "font-button", "text-button", "text-primary", "tracker-widest", "rounded",
-                                  @button_bg_color}>
-                          <div>{@button_label}</div>
-                      </div>
-                  </LiveRedirect>
+        <div class="flex items-center">
+          <div class="flex-wrap">
+            <LiveRedirect to={@to}>
+              <div class={
+                "flex",
+                "items-center",
+                "active:opacity-80",
+                "focus:outline-none",
+                "pl-4",
+                "pr-4",
+                "h-48px",
+                "font-button",
+                "text-button",
+                "text-primary",
+                "tracker-widest",
+                "rounded",
+                @button_bg_color
+              }>
+                <div>{@button_label}</div>
               </div>
-              <div class="flex-grow"></div>
+            </LiveRedirect>
           </div>
+          <div class="flex-grow" />
+        </div>
       </div>
     </Card>
     """

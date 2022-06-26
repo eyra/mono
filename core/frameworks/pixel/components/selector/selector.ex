@@ -156,7 +156,7 @@ defmodule Frameworks.Pixel.Selector.Selector do
     ~F"""
     <div class={"#{grid_options(@type, @grid_options)} #{@opts}"}>
       {#for {item, _} <- Enum.with_index(@current_items)}
-        <div x-data={"{ active: #{item.active}, is_optional: #{@optional?} }"} >
+        <div x-data={"{ active: #{item.active}, is_optional: #{@optional?} }"}>
           <div
             x-on:mousedown="if (is_optional) { active = !active }"
             class="cursor-pointer select-none"
@@ -167,7 +167,7 @@ defmodule Frameworks.Pixel.Selector.Selector do
             <Surface.Components.Dynamic.Component
               module={item_component(@type)}
               item={item}
-              multiselect?={ multiselect?(@type) }
+              multiselect?={multiselect?(@type)}
               background={@background}
             />
           </div>

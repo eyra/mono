@@ -48,8 +48,8 @@ defmodule Systems.NextAction.View do
 
   def render(assigns) do
     ~F"""
-    <DynamicAction vm={cta_action(@vm)} >
-      <div class={"p-4 md:p-6 flex items-center space-x-4 rounded-md #{colors((@vm)).bg}"}>
+    <DynamicAction vm={cta_action(@vm)}>
+      <div class={"p-4 md:p-6 flex items-center space-x-4 rounded-md #{colors(@vm).bg}"}>
         <div class="flex-grow">
           <div class={"#{@title_css} mb-2"}>
             {title(@vm)}
@@ -61,7 +61,7 @@ defmodule Systems.NextAction.View do
         <div class={"hidden lg:block font-button text-button text-center p-3 rounded-md whitespace-nowrap #{colors(@vm).button}"}>
           {cta_label(@vm)}
         </div>
-        <div class="inline-block lg:hidden self-start mt-2px md:mt-1 ">
+        <div class="inline-block lg:hidden self-start mt-2px md:mt-1">
           <svg width="8" height="13" viewBox="0 0 8 13" class={"fill-current #{colors(@vm).icon}"}>
             <path d="M0.263916 11.34L4.84392 6.75L0.263916 2.16L1.67392 0.75L7.67392 6.75L1.67392 12.75L0.263916 11.34Z" />
           </svg>

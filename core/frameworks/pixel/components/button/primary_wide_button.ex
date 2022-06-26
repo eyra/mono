@@ -11,7 +11,7 @@ defmodule Frameworks.Pixel.Button.PrimaryWideButton do
 
   def render(assigns) do
     ~F"""
-    <LiveRedirect to={@to} >
+    <LiveRedirect to={@to}>
       <div class={"flex w-full #{@bg_color} rounded justify-center items-center pl-4 pr-4"}>
         <div class="pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px focus:outline-none">
           <div class="flex flex-col justify-center h-full items-center rounded">

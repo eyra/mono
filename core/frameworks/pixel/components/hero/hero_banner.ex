@@ -20,19 +20,19 @@ defmodule Frameworks.Pixel.Hero.HeroBanner do
         <div class={"flex-wrap ml-6 sm:ml-14 #{@bg_color} bg-opacity-50 z-20 rounded-lg"}>
           <div class="flex items-center">
             <div class="">
-              <Icon size="L" src={@icon_url} border_size="border-2"/>
+              <Icon size="L" src={@icon_url} border_size="border-2" />
             </div>
             <div class="ml-6 mr-4 sm:ml-8">
               <Title4 color="text-white">
                 <div>{@title}</div>
-                <div class="mb-1"></div>
+                <div class="mb-1" />
                 <div>{@subtitle}</div>
               </Title4>
             </div>
           </div>
         </div>
         <div class="absolute z-10 bottom-0 right-0 object-scale-down flex-wrap h-full flex-shrink-0">
-          <img class="object-scale-down h-full" src={@illustration} alt="" />
+          <img class="object-scale-down h-full" src={@illustration} alt="">
         </div>
       </div>
     </div>

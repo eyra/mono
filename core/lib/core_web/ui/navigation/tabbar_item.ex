@@ -48,39 +48,36 @@ defmodule CoreWeb.UI.Navigation.TabbarItem do
 
   def render(assigns) do
     ~F"""
+    <div
+      id={"tabbar-#{@tabbar}-#{id(@vm)}"}
+      data-tab-id={id(@vm)}
+      phx-hook="TabbarItem"
+      class={"tabbar-item flex flex-row items-center justify-start focus:outline-none cursor-pointer #{@opts}"}
+      idle-class={idle_shape(@tabbar, @vm)}
+      active-class={active_shape(@tabbar, @vm)}
+    >
       <div
-        id={"tabbar-#{@tabbar}-#{id(@vm)}"}
-        data-tab-id={id(@vm)}
-        phx-hook="TabbarItem"
-        class={"tabbar-item flex flex-row items-center justify-start focus:outline-none cursor-pointer #{@opts}"}
-        idle-class={idle_shape(@tabbar, @vm)}
-        active-class={active_shape(@tabbar, @vm)}
+        :if={has_index?(@vm)}
+        class="icon w-6 h-6 font-caption text-caption rounded-full flex items-center"
+        idle-class={idle_icon(@vm)}
+        active-class={active_icon(@vm)}
       >
-        <div
-          :if={has_index?(@vm)}
-          class="icon w-6 h-6 font-caption text-caption rounded-full flex items-center"
-          idle-class={idle_icon(@vm)}
-          active-class={active_icon(@vm)}
-        >
-          <span class={"text-center w-full mt-1px #{center_correction_for_number(icon_text(index(@vm), @vm))}"}>{icon_text( index(@vm), @vm)}</span>
-        </div>
-        <div
-          :if={has_title?(@vm) && has_index?(@vm)}
-          class="ml-3"
-        >
-        </div>
-        <div :if={has_title?(@vm)}>
-          <div class="flex flex-col items-center justify-center">
-            <div
-              class={"title text-button font-button #{title_inset(@vm)}"}
-              idle-class={idle_title(@vm)}
-              active-class={active_title(@vm)}
-            >
-              {title(@vm)}
-            </div>
+        <span class={"text-center w-full mt-1px #{center_correction_for_number(icon_text(index(@vm), @vm))}"}>{icon_text(index(@vm), @vm)}</span>
+      </div>
+      <div :if={has_title?(@vm) && has_index?(@vm)} class="ml-3">
+      </div>
+      <div :if={has_title?(@vm)}>
+        <div class="flex flex-col items-center justify-center">
+          <div
+            class={"title text-button font-button #{title_inset(@vm)}"}
+            idle-class={idle_title(@vm)}
+            active-class={active_title(@vm)}
+          >
+            {title(@vm)}
           </div>
         </div>
       </div>
+    </div>
     """
   end
 end

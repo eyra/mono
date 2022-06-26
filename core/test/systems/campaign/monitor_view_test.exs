@@ -44,7 +44,7 @@ defmodule Systems.Campaign.MonitorViewTest do
       assert html =~ "Participated: 0"
       assert html =~ "Pending: 1"
       assert html =~ "Open: 0"
-      assert html =~ "Attention<span class=\"text-primary\"> 1"
+      assert html =~ "Attention<span class=\"text-primary\">\n            1"
       assert html =~ "Subject 1"
       assert html =~ "Started today at"
       assert html =~ "accept"

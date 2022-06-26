@@ -19,12 +19,18 @@ defmodule Frameworks.Pixel.Form.Field do
   def render(assigns) do
     ~F"""
     <div :if={@label_text}>
-      <Label form={@form} field={@field} label_text={@label_text} label_color={@label_color} background={@background} />
+      <Label
+        form={@form}
+        field={@field}
+        label_text={@label_text}
+        label_color={@label_color}
+        background={@background}
+      />
       <Spacing value="XXS" />
     </div>
     <#slot />
     <Spacing :if={@extra_space} value="XXS" />
-    <ValidationErrors form={@form} field={@field} reserve_error_space={@reserve_error_space}/>
+    <ValidationErrors form={@form} field={@field} reserve_error_space={@reserve_error_space} />
     """
   end
 end

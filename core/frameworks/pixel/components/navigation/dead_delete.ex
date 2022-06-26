@@ -7,15 +7,15 @@ defmodule Frameworks.Pixel.Navigation.DeadDelete do
 
   def render(assigns) do
     ~F"""
-      <a
-        class="cursor-pointer"
-        href={@path}
-        data-to={@path}
-        data-method="delete"
-        data-csrf={Plug.CSRFProtection.get_csrf_token_for(@path)}
-      >
-        <#slot />
-      </a>
+    <a
+      class="cursor-pointer"
+      href={@path}
+      data-to={@path}
+      data-method="delete"
+      data-csrf={Plug.CSRFProtection.get_csrf_token_for(@path)}
+    >
+      <#slot />
+    </a>
     """
   end
 end

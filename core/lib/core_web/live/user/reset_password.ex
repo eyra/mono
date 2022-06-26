@@ -54,7 +54,7 @@ defmodule CoreWeb.User.ResetPassword do
     <ContentArea>
       <MarginY id={:page_top} />
       <FormArea>
-        <Title2>{dgettext "eyra-user", "user.password_reset.title"}</Title2>
+        <Title2>{dgettext("eyra-user", "user.password_reset.title")}</Title2>
         <Form for={@changeset} submit="reset-password">
           <EmailInput field={:email} label_text={dgettext("eyra-user", "password_reset.email.label")} />
           <SubmitButton label={dgettext("eyra-user", "password_reset.reset_button")} />

@@ -58,11 +58,8 @@ defmodule Systems.Admin.PermissionsPage do
 
   def render(assigns) do
     ~F"""
-    <Workspace
-      title={dgettext("eyra-admin", "permissions.title")}
-      menus={@menus}
-    >
-      <ContentArea class="mb-4" >
+    <Workspace title={dgettext("eyra-admin", "permissions.title")} menus={@menus}>
+      <ContentArea class="mb-4">
         <MarginY id={:page_top} />
         <Title2>{dgettext("eyra-admin", "permissions.pooladmin.title")}</Title2>
         <BodyLarge>{dgettext("eyra-admin", "permissions.pooladmin.description")}</BodyLarge>

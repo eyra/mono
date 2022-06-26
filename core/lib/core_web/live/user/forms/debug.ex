@@ -109,12 +109,17 @@ defmodule CoreWeb.User.Forms.Debug do
   @impl true
   def render(assigns) do
     ~F"""
-        <ContentArea>
-          <Title2>User roles</Title2>
-          <Form id="main_form" changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
-            <Selector id={:role_selector} items={@role_labels} type={:radio} parent={%{type: __MODULE__, id: @id}} />
-          </Form>
-        </ContentArea>
+    <ContentArea>
+      <Title2>User roles</Title2>
+      <Form id="main_form" changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
+        <Selector
+          id={:role_selector}
+          items={@role_labels}
+          type={:radio}
+          parent={%{type: __MODULE__, id: @id}}
+        />
+      </Form>
+    </ContentArea>
     """
   end
 end

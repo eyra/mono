@@ -26,38 +26,45 @@ defmodule Frameworks.Pixel.Form.Input do
 
   def render(assigns) do
     ~F"""
-      <Context
-        get={Surface.Components.Form, form: form}
+    <Context get={Surface.Components.Form, form: form}>
+      <#slot />
+      <Field
+        form={form}
+        field={@field}
+        label_text={@label_text}
+        label_color={@label_color}
+        background={@background}
+        reserve_error_space={@reserve_error_space}
       >
-        <#slot />
-        <Field form={form} field={@field} label_text={@label_text} label_color={@label_color} background={@background} reserve_error_space={@reserve_error_space}>
-          <input :if={@disabled}
-            type={@type}
-            id={input_id(form, @field)}
-            name={input_name(form, @field)}
-            value={value(form, assigns)}
-            placeholder={@placeholder}
-            class="text-grey3 bg-white placeholder-grey3 text-bodymedium font-body pl-3 w-full disabled:border-grey3 border-2 border-solid focus:outline-none rounded h-44px"
-            disabled
-          />
-          <input :if={not @disabled}
-            type={@type}
-            id={input_id(form, @field)}
-            name={input_name(form, @field)}
-            value={value(form, assigns)}
-            min="0"
-            placeholder={@placeholder}
-            class="text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid focus:outline-none rounded h-44px"
-            x-bind:class={"{ '#{focus_border_color(@background)}': focus === '#{@field}', '#{border_color(assigns, form)}': focus !== '#{@field}' }"}
-            x-on:focus={"focus = '#{@field}'"}
-            x-on:click.stop
-            phx-focus="focus"
-            phx-value-field={@field}
-            phx-target={target(form)}
-            phx-debounce={@debounce}
-          />
-        </Field>
-      </Context>
+        <input
+          :if={@disabled}
+          type={@type}
+          id={input_id(form, @field)}
+          name={input_name(form, @field)}
+          value={value(form, assigns)}
+          placeholder={@placeholder}
+          class="text-grey3 bg-white placeholder-grey3 text-bodymedium font-body pl-3 w-full disabled:border-grey3 border-2 border-solid focus:outline-none rounded h-44px"
+          disabled
+        />
+        <input
+          :if={not @disabled}
+          type={@type}
+          id={input_id(form, @field)}
+          name={input_name(form, @field)}
+          value={value(form, assigns)}
+          min="0"
+          placeholder={@placeholder}
+          class="text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid focus:outline-none rounded h-44px"
+          x-bind:class={"{ '#{focus_border_color(@background)}': focus === '#{@field}', '#{border_color(assigns, form)}': focus !== '#{@field}' }"}
+          x-on:focus={"focus = '#{@field}'"}
+          x-on:click.stop
+          phx-focus="focus"
+          phx-value-field={@field}
+          phx-target={target(form)}
+          phx-debounce={@debounce}
+        />
+      </Field>
+    </Context>
     """
   end
 end

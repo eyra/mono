@@ -40,14 +40,15 @@ defmodule Frameworks.Pixel.Card.ClickableCard do
     ~F"""
     <div
       x-data="{actions: false}"
-      class={"rounded-lg cursor-pointer bg-#{@bg_color} #{@size}"} :on-click="card_click"
+      class={"rounded-lg cursor-pointer bg-#{@bg_color} #{@size}"}
+      :on-click="card_click"
     >
       <div class="flex flex-col h-full">
         <#slot name="image" />
-        <div class="p-6 lg:pl-8 lg:pr-8 lg:pt-8" >
+        <div class="p-6 lg:pl-8 lg:pr-8 lg:pt-8">
           <#slot name="title" />
         </div>
-        <div class="flex-grow"></div>
+        <div class="flex-grow" />
         <div>
           <div
             x-on:mouseover={"actions = #{has_actions?(assigns)}"}
@@ -60,7 +61,7 @@ defmodule Frameworks.Pixel.Card.ClickableCard do
             >
               <div class="flex flex-row gap-4 items-center">
                 <DynamicButton :for={button <- @left_actions} vm={button} />
-                <div class="flex-grow"></div>
+                <div class="flex-grow" />
                 <DynamicButton :for={button <- @right_actions} vm={button} />
               </div>
             </div>
@@ -96,15 +97,29 @@ defmodule Frameworks.Pixel.Card.ClickableCard.Example do
 
   def render(assigns) do
     ~F"""
-    <ClickableCard id={23} bg_color="grey1"
+    <ClickableCard
+      id={23}
+      bg_color="grey1"
       left_actions={[
         %{
           action: %{type: :send, event: "action1", item: "1"},
-          face: %{type: :label, label: "Action1", font: "text-subhead font-subhead", text_color: "text-white", wrap: true}
+          face: %{
+            type: :label,
+            label: "Action1",
+            font: "text-subhead font-subhead",
+            text_color: "text-white",
+            wrap: true
+          }
         },
         %{
           action: %{type: :send, event: "action2", item: "1"},
-          face: %{type: :label, label: "Action2", font: "text-subhead font-subhead", text_color: "text-white", wrap: true}
+          face: %{
+            type: :label,
+            label: "Action2",
+            font: "text-subhead font-subhead",
+            text_color: "text-white",
+            wrap: true
+          }
         }
       ]}
       right_actions={[
@@ -114,16 +129,21 @@ defmodule Frameworks.Pixel.Card.ClickableCard.Example do
         }
       ]}
     >
-      <#template slot="image">
+      <:image>
         <div class="h-image-card">
-          <Image id="23" image={Core.ImageHelpers.get_image_info(nil, 400, 300)} transition="duration-500" corners="rounded-t-lg"/>
+          <Image
+            id="23"
+            image={Core.ImageHelpers.get_image_info(nil, 400, 300)}
+            transition="duration-500"
+            corners="rounded-t-lg"
+          />
         </div>
-      </#template>
-      <#template slot="title">
+      </:image>
+      <:title>
         <div class="text-title5 font-title5 lg:text-title3 lg:font-title3 text-white">
           This is an example title
         </div>
-      </#template>
+      </:title>
       <div>
       </div>
     </ClickableCard>
