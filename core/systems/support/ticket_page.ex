@@ -122,10 +122,7 @@ defmodule Systems.Support.TicketPage do
 
   def render(assigns) do
     ~F"""
-    <Workspace
-      title={dgettext("eyra-admin", "ticket.title")}
-      menus={@menus}
-    >
+    <Workspace title={dgettext("eyra-admin", "ticket.title")} menus={@menus}>
       <ContentArea>
         <MarginY id={:page_top} />
         <Member :if={@member} vm={@member} />

@@ -51,14 +51,18 @@ defmodule CoreWeb.Layouts.Workspace.Component do
   def render(assigns) do
     ~F"""
     <div class="w-full h-viewport" x-data="{mobile_menu: false}">
-      <div class="fixed z-40 right-0 top-0 w-mobile-menu-width h-viewport" x-show="mobile_menu" @click.away="mobile_menu = !mobile_menu, $parent.overlay = false">
+      <div
+        class="fixed z-40 right-0 top-0 w-mobile-menu-width h-viewport"
+        x-show="mobile_menu"
+        @click.away="mobile_menu = !mobile_menu, $parent.overlay = false"
+      >
         <MobileMenu items={@menus.mobile_menu} path_provider={CoreWeb.Endpoint} />
       </div>
       <TabletMenu items={@menus.tablet_menu} path_provider={CoreWeb.Endpoint} />
       <DesktopMenu items={@menus.desktop_menu} path_provider={CoreWeb.Endpoint} />
       <div class="w-full h-full md:pl-tablet-menu-width lg:pl-desktop-menu-width z-2">
         <div class="pt-0 md:pt-10 h-full">
-          <div class="flex flex-col bg-white h-full ">
+          <div class="flex flex-col bg-white h-full">
             <div class="flex-wrap">
               <MobileNavbar items={@menus.mobile_navbar} path_provider={CoreWeb.Endpoint} />
             </div>
@@ -76,7 +80,11 @@ defmodule CoreWeb.Layouts.Workspace.Component do
                   </div>
                 </div>
                 <div class="flex-none">
-                  {footer assigns, CoreWeb.Endpoint.static_path("/images/footer-left.svg"), CoreWeb.Endpoint.static_path("/images/footer-right.svg")}
+                  {footer(
+                    assigns,
+                    CoreWeb.Endpoint.static_path("/images/footer-left.svg"),
+                    CoreWeb.Endpoint.static_path("/images/footer-right.svg")
+                  )}
                 </div>
               </div>
             </div>

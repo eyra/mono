@@ -142,75 +142,77 @@ defmodule Systems.Promotion.LandingPage do
   @impl true
   def render(assigns) do
     ~F"""
-      <Website
-        user={@current_user}
-        user_agent={Browser.Ua.to_ua(@socket)}
-        menus={@menus}
-      >
-        <#template slot="hero">
-          <HeroImage
-            title={@vm.title}
-            subtitle={@vm.themes}
-            image_info={@image_info}
-          >
-            <#template slot="call_to_action">
-              <PrimaryLiveViewButton label={@vm.call_to_action.label} event="call-to-action-1" />
-            </#template>
-          </HeroImage>
-          <HeroBanner title={@vm.organisation.label} subtitle={@vm.byline} icon_url={CoreWeb.Endpoint.static_path("/images/#{@vm.organisation.id}.svg")}/>
-        </#template>
+    <Website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus}>
+      <:hero>
+        <HeroImage title={@vm.title} subtitle={@vm.themes} image_info={@image_info}>
+          <:call_to_action>
+            <PrimaryLiveViewButton label={@vm.call_to_action.label} event="call-to-action-1" />
+          </:call_to_action>
+        </HeroImage>
+        <HeroBanner
+          title={@vm.organisation.label}
+          subtitle={@vm.byline}
+          icon_url={CoreWeb.Endpoint.static_path("/images/#{@vm.organisation.id}.svg")}
+        />
+      </:hero>
 
-        <div :if={show_dialog?(@dialog)} class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
-          <div class="flex flex-row items-center justify-center w-full h-full">
-            <PlainDialog {...@dialog} />
-          </div>
+      <div
+        :if={show_dialog?(@dialog)}
+        class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20"
+      >
+        <div class="flex flex-row items-center justify-center w-full h-full">
+          <PlainDialog {...@dialog} />
+        </div>
+      </div>
+
+      <ContentArea>
+        <MarginY id={:page_top} />
+        <div class="ml-8 mr-8 text-center">
+          <Title1>{@vm.subtitle}</Title1>
         </div>
 
-        <ContentArea>
-            <MarginY id={:page_top} />
-            <div class="ml-8 mr-8 text-center">
-              <Title1>{@vm.subtitle}</Title1>
-            </div>
+        <div class="mb-12 sm:mb-16" />
+        <div class={"grid gap-6 sm:gap-8 #{grid_cols(Enum.count(@vm.highlights))}"}>
+          <div :for={highlight <- @vm.highlights} class="bg-grey5 rounded">
+            <Highlight title={highlight.title} text={highlight.text} />
+          </div>
+        </div>
+        <div class="mb-12 sm:mb-16" />
 
-            <div class="mb-12 sm:mb-16" />
-            <div class={"grid gap-6 sm:gap-8 #{grid_cols(Enum.count(@vm.highlights))}"}>
-              <div :for={highlight <- @vm.highlights} class="bg-grey5 rounded">
-                <Highlight title={highlight.title} text={highlight.text} />
-              </div>
-            </div>
-            <div class="mb-12 sm:mb-16" />
+        <Title2 margin="">{dgettext("eyra-promotion", "expectations.public.label")}</Title2>
+        <Spacing value="M" />
+        <BodyLarge>{@vm.expectations}</BodyLarge>
+        <Spacing value="M" />
+        <Title2 margin="">{dgettext("eyra-promotion", "description.public.label")}</Title2>
+        <Spacing value="M" />
+        <BodyLarge>{@vm.description}</BodyLarge>
+        <Spacing value="L" />
 
-            <Title2 margin="">{dgettext("eyra-promotion", "expectations.public.label")}</Title2>
-            <Spacing value="M" />
-            <BodyLarge>{@vm.expectations}</BodyLarge>
-            <Spacing value="M" />
-            <Title2 margin="">{dgettext("eyra-promotion", "description.public.label")}</Title2>
-            <Spacing value="M" />
-            <BodyLarge>{@vm.description}</BodyLarge>
-            <Spacing value="L" />
+        <CampaignBanner
+          photo_url={@vm.banner_photo_url}
+          placeholder_photo_url={CoreWeb.Endpoint.static_path("/images/profile_photo_default.svg")}
+          title={@vm.banner_title}
+          subtitle={@vm.banner_subtitle}
+          url={@vm.banner_url}
+        />
+        <Spacing value="L" />
+        <div class="flex flex-col justify-center sm:flex-row gap-4 sm:gap-8 items-center">
+          <Devices label={dgettext("eyra-promotion", "devices.available.label")} devices={@vm.devices} />
+          <Languages
+            label={dgettext("eyra-promotion", "languages.available.label")}
+            languages={@vm.languages}
+          />
+        </div>
+        <Spacing value="XL" />
 
-            <CampaignBanner
-              photo_url={@vm.banner_photo_url}
-              placeholder_photo_url={CoreWeb.Endpoint.static_path("/images/profile_photo_default.svg")}
-              title={@vm.banner_title}
-              subtitle={@vm.banner_subtitle}
-              url={@vm.banner_url}
-            />
-            <Spacing value="L" />
-            <div class="flex flex-col justify-center sm:flex-row gap-4 sm:gap-8 items-center">
-              <Devices label={dgettext("eyra-promotion", "devices.available.label")} devices={@vm.devices} />
-              <Languages label={dgettext("eyra-promotion", "languages.available.label")} languages={@vm.languages} />
-            </div>
-            <Spacing value="XL" />
+        <PrimaryLiveViewButton label={@vm.call_to_action.label} event="call-to-action-2" />
+        <Spacing value="M" />
 
-            <PrimaryLiveViewButton label={@vm.call_to_action.label} event="call-to-action-2" />
-            <Spacing value="M" />
-
-            <div class="flex">
-              <BackButton label={dgettext("eyra-promotion", "back.button.label")} path={@back_path}/>
-            </div>
-        </ContentArea>
-      </Website>
+        <div class="flex">
+          <BackButton label={dgettext("eyra-promotion", "back.button.label")} path={@back_path} />
+        </div>
+      </ContentArea>
+    </Website>
     """
   end
 end

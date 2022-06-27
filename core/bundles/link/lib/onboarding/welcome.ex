@@ -21,20 +21,20 @@ defmodule Link.Onboarding.Welcome do
 
   def render(assigns) do
     ~F"""
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <SheetArea>
-          <div class="flex flex-col items-center">
-            <div class="mb-8 sm:mb-16">
-              <img src="/images/illustrations/cards.svg" alt="" />
-            </div>
-            <Title2>{@title}</Title2>
-            <div class="sm:px-2 text-center text-bodymedium sm:text-bodylarge font-body">
-              {dgettext("link-ui", "onboarding.welcome.description")}
-            </div>
+    <ContentArea>
+      <MarginY id={:page_top} />
+      <SheetArea>
+        <div class="flex flex-col items-center">
+          <div class="mb-8 sm:mb-16">
+            <img src="/images/illustrations/cards.svg" alt="">
           </div>
-        </SheetArea>
-      </ContentArea>
+          <Title2>{@title}</Title2>
+          <div class="sm:px-2 text-center text-bodymedium sm:text-bodylarge font-body">
+            {dgettext("link-ui", "onboarding.welcome.description")}
+          </div>
+        </div>
+      </SheetArea>
+    </ContentArea>
     """
   end
 end

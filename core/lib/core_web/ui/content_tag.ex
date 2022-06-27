@@ -30,7 +30,7 @@ defmodule CoreWeb.UI.ContentTag do
   def render(assigns) do
     ~F"""
     <div class="flex flex-row justify-center">
-      <div class={"#{text_color(@vm)} flex-wrap rounded-full #{bg_color(@vm)} #{class(@vm)}"} >
+      <div class={"#{text_color(@vm)} flex-wrap rounded-full #{bg_color(@vm)} #{class(@vm)}"}>
         {text(@vm)}
       </div>
     </div>

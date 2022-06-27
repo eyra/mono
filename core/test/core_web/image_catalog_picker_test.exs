@@ -8,7 +8,11 @@ defmodule CoreWeb.ImageCatalogPicker.Test.View do
   def render(assigns) do
     ~F"""
     <div>
-    <ImageCatalogPicker id="picker" image_catalog={Core.ImageCatalog.Local} static_path={&CoreWeb.Endpoint.static_path/1}/>
+      <ImageCatalogPicker
+        id="picker"
+        image_catalog={Core.ImageCatalog.Local}
+        static_path={&CoreWeb.Endpoint.static_path/1}
+      />
     </div>
     """
   end

@@ -12,7 +12,7 @@ defmodule Frameworks.Pixel.Button.PrimaryLabelButton do
   def render(assigns) do
     ~F"""
     <label for={@field}>
-      <div class={"cursor-pointer pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px leading-none font-button text-button focus:outline-none rounded pr-4 pl-4 #{@bg_color} #{@text_color}"} >
+      <div class={"cursor-pointer pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px leading-none font-button text-button focus:outline-none rounded pr-4 pl-4 #{@bg_color} #{@text_color}"}>
         {@label}
       </div>
     </label>

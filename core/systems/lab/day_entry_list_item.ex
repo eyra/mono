@@ -12,7 +12,7 @@ defmodule Systems.Lab.DayEntryListItem do
 
   def render(assigns) do
     ~F"""
-      <Dynamic.Component module={module(@entry)} {...props(@entry)} />
+    <Dynamic.Component module={module(@entry)} {...props(@entry)} />
     """
   end
 end
@@ -39,9 +39,25 @@ defmodule Systems.Lab.DayEntryListItem.Example do
   def render(assigns) do
     ~F"""
     <div class="flex flex-col">
-      <DayEntryListItem entry={%{type: :time_slot, start_time: 900, enabled?: true, bullet: "1.", number_of_seats: 1, number_of_reservations: 1, target: self()} }  />
-      <DayEntryListItem entry={%{type: :break}}/>
-      <DayEntryListItem entry={%{type: :time_slot, start_time: 1000, enabled?: true, bullet: "2.", number_of_seats: 1, number_of_reservations: 1, target: self()} } />
+      <DayEntryListItem entry={%{
+        type: :time_slot,
+        start_time: 900,
+        enabled?: true,
+        bullet: "1.",
+        number_of_seats: 1,
+        number_of_reservations: 1,
+        target: self()
+      }} />
+      <DayEntryListItem entry={%{type: :break}} />
+      <DayEntryListItem entry={%{
+        type: :time_slot,
+        start_time: 1000,
+        enabled?: true,
+        bullet: "2.",
+        number_of_seats: 1,
+        number_of_reservations: 1,
+        target: self()
+      }} />
     </div>
     """
   end

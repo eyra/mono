@@ -44,27 +44,24 @@ defmodule Systems.NextAction.OverviewPage do
 
   def render(assigns) do
     ~F"""
-      <Workspace
-        title={dgettext("eyra-ui", "todo.title")}
-        menus={@menus}
-      >
-        <div :if={Enum.empty?(@vm.next_actions)} class="h-full">
-          <div class="flex flex-col items-center w-full h-full">
-            <div class="flex-grow"></div>
-            <div class="flex-none">
-              <img src="/images/illustrations/zero-todo.svg" id="zero-todos" alt="All done" />
-            </div>
-            <div class="flex-grow"></div>
+    <Workspace title={dgettext("eyra-ui", "todo.title")} menus={@menus}>
+      <div :if={Enum.empty?(@vm.next_actions)} class="h-full">
+        <div class="flex flex-col items-center w-full h-full">
+          <div class="flex-grow" />
+          <div class="flex-none">
+            <img src="/images/illustrations/zero-todo.svg" id="zero-todos" alt="All done">
           </div>
+          <div class="flex-grow" />
         </div>
+      </div>
 
-        <ContentArea>
-          <MarginY id={:page_top} />
-          <div :if={!Enum.empty?(@vm.next_actions)} class="flex flex-col gap-6 sm:gap-10" id="next-actions">
-            <NextAction.View :for={action <- @vm.next_actions} vm={action} />
-          </div>
-        </ContentArea>
-      </Workspace>
+      <ContentArea>
+        <MarginY id={:page_top} />
+        <div :if={!Enum.empty?(@vm.next_actions)} class="flex flex-col gap-6 sm:gap-10" id="next-actions">
+          <NextAction.View :for={action <- @vm.next_actions} vm={action} />
+        </div>
+      </ContentArea>
+    </Workspace>
     """
   end
 end

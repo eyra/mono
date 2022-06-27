@@ -116,20 +116,17 @@ defmodule Link.Onboarding.Wizard do
   @impl true
   def render(assigns) do
     ~F"""
-      <Stripped
-        user={@current_user}
-        menus={@menus}
-      >
-        <TabbarArea tabs={@tabs}>
-          <ActionBar>
-            <Tabbar vm={%{initial_tab: :welcome}}/>
-          </ActionBar>
-          <TabbarContent />
-          <TabbarFooter>
-            <DynamicButton vm={@finish_button} />
-          </TabbarFooter>
-        </TabbarArea>
-      </Stripped>
+    <Stripped user={@current_user} menus={@menus}>
+      <TabbarArea tabs={@tabs}>
+        <ActionBar>
+          <Tabbar vm={%{initial_tab: :welcome}} />
+        </ActionBar>
+        <TabbarContent />
+        <TabbarFooter>
+          <DynamicButton vm={@finish_button} />
+        </TabbarFooter>
+      </TabbarArea>
+    </Stripped>
     """
   end
 end

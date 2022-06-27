@@ -1,4 +1,4 @@
-defmodule Systems.DataDonation.S3Form do
+defmodule Systems.DataDonation.FakeForm do
   use Frameworks.Pixel.Component
 
   slot(default, required: true)

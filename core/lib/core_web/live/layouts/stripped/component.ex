@@ -47,37 +47,41 @@ defmodule CoreWeb.Layouts.Stripped.Component do
 
   def render(assigns) do
     ~F"""
-      <div class="flex flex-row">
-        <div class="w-0 md:w-sidepadding flex-shrink-0">
-        </div>
-        <div class="flex-1">
-          <div class="flex flex-col w-full h-viewport">
-            <div class="flex-wrap">
-              <MobileNavbar items={@menus.mobile_navbar} path_provider={CoreWeb.Router.Helpers} />
-              <DesktopNavbar items={@menus.desktop_navbar} path_provider={CoreWeb.Router.Helpers} />
-            </div>
-            <div class="flex-1">
-              <div class="flex flex-col h-full border-t border-l border-b border-grey4">
-                <div class="flex-1 bg-white">
-                  <div class="flex flex-row">
-                    <div class="flex-1">
-                      <#slot />
-                      <MarginY id={:page_footer_top} />
-                    </div>
-                    <div class="w-0 md:w-sidepadding flex-shrink-0">
-                    </div>
+    <div class="flex flex-row">
+      <div class="w-0 md:w-sidepadding flex-shrink-0">
+      </div>
+      <div class="flex-1">
+        <div class="flex flex-col w-full h-viewport">
+          <div class="flex-wrap">
+            <MobileNavbar items={@menus.mobile_navbar} path_provider={CoreWeb.Router.Helpers} />
+            <DesktopNavbar items={@menus.desktop_navbar} path_provider={CoreWeb.Router.Helpers} />
+          </div>
+          <div class="flex-1">
+            <div class="flex flex-col h-full border-t border-l border-b border-grey4">
+              <div class="flex-1 bg-white">
+                <div class="flex flex-row">
+                  <div class="flex-1">
+                    <#slot />
+                    <MarginY id={:page_footer_top} />
+                  </div>
+                  <div class="w-0 md:w-sidepadding flex-shrink-0">
                   </div>
                 </div>
-                <div class="bg-white">
-                  {footer assigns, CoreWeb.Endpoint.static_path("/images/footer-left.svg"), CoreWeb.Endpoint.static_path("/images/footer-right.svg")}
-                </div>
+              </div>
+              <div class="bg-white">
+                {footer(
+                  assigns,
+                  CoreWeb.Endpoint.static_path("/images/footer-left.svg"),
+                  CoreWeb.Endpoint.static_path("/images/footer-right.svg")
+                )}
               </div>
             </div>
-            <div class="pb-0 md:pb-10 bg-grey5">
-            </div>
+          </div>
+          <div class="pb-0 md:pb-10 bg-grey5">
           </div>
         </div>
       </div>
+    </div>
     """
   end
 end

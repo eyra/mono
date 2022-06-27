@@ -10,7 +10,13 @@ defmodule Frameworks.Pixel.Form.EmailInput do
 
   def render(assigns) do
     ~F"""
-      <Input field={@field} label_text={@label_text} label_color={@label_color} background={@background} type="email" />
+    <Input
+      field={@field}
+      label_text={@label_text}
+      label_color={@label_color}
+      background={@background}
+      type="email"
+    />
     """
   end
 end

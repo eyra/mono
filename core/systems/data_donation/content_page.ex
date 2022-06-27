@@ -82,20 +82,31 @@ defmodule Systems.DataDonation.ContentPage do
 
   def render(assigns) do
     ~F"""
-      <div phx-click="reset_focus">
-        <div x-data="{ open: false }">
-          <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="open">
-            <div class="flex flex-row items-center justify-center w-full h-full">
-              <div class="w-5/6 md:w-popup-md lg:w-popup-lg" @click.away="open = false, $parent.overlay = false">
-                <ImageCatalogPicker static_path={&CoreWeb.Endpoint.static_path/1} initial_query={initial_image_query(assigns)} id={:image_picker} image_catalog={Core.ImageCatalog.Unsplash} />
-              </div>
+    <div phx-click="reset_focus">
+      <div x-data="{ open: false }">
+        <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="open">
+          <div class="flex flex-row items-center justify-center w-full h-full">
+            <div
+              class="w-5/6 md:w-popup-md lg:w-popup-lg"
+              @click.away="open = false, $parent.overlay = false"
+            >
+              <ImageCatalogPicker
+                static_path={&CoreWeb.Endpoint.static_path/1}
+                initial_query={initial_image_query(assigns)}
+                id={:image_picker}
+                image_catalog={Core.ImageCatalog.Unsplash}
+              />
             </div>
           </div>
-          <HeroSmall title={dgettext("eyra-data-donation", "content.title")} />
-          <DataDonation.ToolForm id={:tool_form} entity_id={@tool_id} />
-          <Promotion.FormView id={:promotion_form} props={%{entity_id: @promotion_id, themes_module: Themes}} />
         </div>
+        <HeroSmall title={dgettext("eyra-data-donation", "content.title")} />
+        <DataDonation.ToolForm id={:tool_form} entity_id={@tool_id} />
+        <Promotion.FormView
+          id={:promotion_form}
+          props={%{entity_id: @promotion_id, themes_module: Themes}}
+        />
       </div>
+    </div>
     """
   end
 end

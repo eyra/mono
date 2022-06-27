@@ -72,16 +72,13 @@ defmodule Systems.Support.OverviewPage do
 
   def render(assigns) do
     ~F"""
-    <Workspace
-      title={dgettext("eyra-admin", "support.title")}
-      menus={@menus}
-    >
+    <Workspace title={dgettext("eyra-admin", "support.title")} menus={@menus}>
       <div id={:support} phx-hook="ViewportResize">
         <TabbarArea tabs={@tabs}>
           <ActionBar>
             <Tabbar vm={%{size: @tabbar_size}} />
           </ActionBar>
-          <TabbarContent/>
+          <TabbarContent />
         </TabbarArea>
       </div>
     </Workspace>

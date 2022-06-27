@@ -9,7 +9,10 @@ defmodule Frameworks.Pixel.Button.SubmitWideButton do
 
   def render(assigns) do
     ~F"""
-    <button class={"w-full pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded pr-4 pl-4 #{@bg_color}"} type="submit">
+    <button
+      class={"w-full pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded pr-4 pl-4 #{@bg_color}"}
+      type="submit"
+    >
       {@label}
     </button>
     """

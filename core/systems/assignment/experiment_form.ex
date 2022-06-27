@@ -131,33 +131,32 @@ defmodule Systems.Assignment.ExperimentForm do
 
   def render(assigns) do
     ~F"""
-      <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
-        <NumberInput field={:duration} label_text={dgettext("link-survey", "duration.label")} />
-        <Spacing value="M" />
+    <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
+      <NumberInput field={:duration} label_text={dgettext("link-survey", "duration.label")} />
+      <Spacing value="M" />
 
-        <NumberInput field={:subject_count} label_text={dgettext("link-survey", "config.nrofsubjects.label")} />
-        <Spacing value="M" />
+      <NumberInput
+        field={:subject_count}
+        label_text={dgettext("link-survey", "config.nrofsubjects.label")}
+      />
+      <Spacing value="M" />
 
-        <Title3>{dgettext("link-survey", "language.title")}</Title3>
-        <Body>{dgettext("link-survey", "languages.label")}</Body>
-        <Spacing value="S" />
-        <Selector
-          id={:language}
-          items={@language_labels}
-          type={:radio}
-          parent={%{type: __MODULE__, id: @id}}
-        />
-        <Spacing value="XL" />
+      <Title3>{dgettext("link-survey", "language.title")}</Title3>
+      <Body>{dgettext("link-survey", "languages.label")}</Body>
+      <Spacing value="S" />
+      <Selector
+        id={:language}
+        items={@language_labels}
+        type={:radio}
+        parent={%{type: __MODULE__, id: @id}}
+      />
+      <Spacing value="XL" />
 
-        <Title3>{dgettext("link-survey", "devices.title")}</Title3>
-        <Body>{dgettext("link-survey", "devices.label")}</Body>
-        <Spacing value="S" />
-        <Selector
-          id={:devices}
-          items={@device_labels}
-          parent={%{type: __MODULE__, id: @id}}
-        />
-      </Form>
+      <Title3>{dgettext("link-survey", "devices.title")}</Title3>
+      <Body>{dgettext("link-survey", "devices.label")}</Body>
+      <Spacing value="S" />
+      <Selector id={:devices} items={@device_labels} parent={%{type: __MODULE__, id: @id}} />
+    </Form>
     """
   end
 end

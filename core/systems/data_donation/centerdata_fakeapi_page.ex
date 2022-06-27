@@ -45,32 +45,32 @@ defmodule Systems.DataDonation.CenterdataFakeApiPage do
   @impl true
   def render(assigns) do
     ~F"""
-      <table>
-        <tr>
-          <td>page:</td>
-          <td>{@page}</td>
-        </tr>
-        <tr>
-          <td>_respondent:</td>
-          <td>{@respondent}</td>
-        </tr>
-        <tr>
-          <td>button_next:</td>
-          <td>{@button_next}</td>
-        </tr>
-        <tr>
-          <td>token:</td>
-          <td>{@token}</td>
-        </tr>
-        <tr>
-          <td>quest:</td>
-          <td>{@quest}</td>
-        </tr>
-        <tr>
-          <td>qu_1:</td>
-          <td>{@qu_1}</td>
-        </tr>
-      </table>
+    <table>
+      <tr>
+        <td>page:</td>
+        <td>{@page}</td>
+      </tr>
+      <tr>
+        <td>_respondent:</td>
+        <td>{@respondent}</td>
+      </tr>
+      <tr>
+        <td>button_next:</td>
+        <td>{@button_next}</td>
+      </tr>
+      <tr>
+        <td>token:</td>
+        <td>{@token}</td>
+      </tr>
+      <tr>
+        <td>quest:</td>
+        <td>{@quest}</td>
+      </tr>
+      <tr>
+        <td>qu_1:</td>
+        <td>{@qu_1}</td>
+      </tr>
+    </table>
     """
   end
 end

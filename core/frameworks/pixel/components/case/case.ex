@@ -12,10 +12,10 @@ defmodule Frameworks.Pixel.Case.Case do
   def render(assigns) do
     ~F"""
     <div :if={@value && slot_assigned?(:case_if)}>
-      <#slot name="case_if"/>
+      <#slot name="case_if" />
     </div>
     <div :if={!@value && slot_assigned?(:case_else)}>
-      <#slot name="case_else"/>
+      <#slot name="case_else" />
     </div>
     """
   end

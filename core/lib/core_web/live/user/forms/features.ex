@@ -76,25 +76,40 @@ defmodule CoreWeb.User.Forms.Features do
 
   def render(assigns) do
     ~F"""
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <FormArea>
-          <Title2>{dgettext("eyra-ui", "tabbar.item.features")}</Title2>
-          <BodyMedium>{dgettext("eyra-account", "features.description")}</BodyMedium>
-          <Spacing value="XL" />
+    <ContentArea>
+      <MarginY id={:page_top} />
+      <FormArea>
+        <Title2>{dgettext("eyra-ui", "tabbar.item.features")}</Title2>
+        <BodyMedium>{dgettext("eyra-account", "features.description")}</BodyMedium>
+        <Spacing value="XL" />
 
-          <Title3>{dgettext("eyra-account", "features.gender.title")}</Title3>
-          <Selector id={:gender} items={@gender_labels} type={:radio} parent={%{type: __MODULE__, id: @id}} />
-          <Spacing value="XL" />
+        <Title3>{dgettext("eyra-account", "features.gender.title")}</Title3>
+        <Selector
+          id={:gender}
+          items={@gender_labels}
+          type={:radio}
+          parent={%{type: __MODULE__, id: @id}}
+        />
+        <Spacing value="XL" />
 
-          <Title3>{dgettext("eyra-account", "features.nativelanguage.title")}</Title3>
-          <Selector id={:native_language} items={@nativelanguage_labels} type={:radio} parent={%{type: __MODULE__, id: @id}} />
-          <Spacing value="XL" />
+        <Title3>{dgettext("eyra-account", "features.nativelanguage.title")}</Title3>
+        <Selector
+          id={:native_language}
+          items={@nativelanguage_labels}
+          type={:radio}
+          parent={%{type: __MODULE__, id: @id}}
+        />
+        <Spacing value="XL" />
 
-          <Title3>{dgettext("eyra-account", "features.dominanthand.title")}</Title3>
-          <Selector id={:dominant_hand} items={@dominanthand_labels} type={:radio} parent={%{type: __MODULE__, id: @id}} />
-        </FormArea>
-      </ContentArea>
+        <Title3>{dgettext("eyra-account", "features.dominanthand.title")}</Title3>
+        <Selector
+          id={:dominant_hand}
+          items={@dominanthand_labels}
+          type={:radio}
+          parent={%{type: __MODULE__, id: @id}}
+        />
+      </FormArea>
+    </ContentArea>
     """
   end
 end

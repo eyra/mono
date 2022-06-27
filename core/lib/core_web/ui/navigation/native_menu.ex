@@ -11,7 +11,7 @@ defmodule CoreWeb.UI.Navigation.NativeMenu do
 
   def render(assigns) do
     ~F"""
-    <Menu items={@items} path_provider={@path_provider}/>
+    <Menu items={@items} path_provider={@path_provider} />
     """
   end
 end

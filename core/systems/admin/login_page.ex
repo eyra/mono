@@ -26,36 +26,33 @@ defmodule Systems.Admin.LoginPage do
 
   def render(assigns) do
     ~F"""
-    <Stripped
-      user={@current_user}
-      menus={@menus}
-      >
-        <ContentArea>
-          <MarginY id={:page_top} />
-          <FormArea>
-            <div class="text-title5 font-title5 sm:text-title3 sm:font-title3 lg:text-title2 lg:font-title2 mb-7 lg:mb-9">
-              Log in
-            </div>
-            <div class="mb-6"></div>
-              <a href="/google-sign-in">
-                <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-grey1 rounded pl-4 pr-4">
-                  <div class="flex w-full justify-center items-center">
-                    <div>
-                      <img class="mr-3 -mt-1" src="/images/google.svg" alt="">
-                    </div>
-                    <div class="h-11 focus:outline-none">
-                      <div class="flex flex-col justify-center h-full items-center rounded">
-                        <div class="text-white text-button font-button">
-                          Sign in with Eyra account
-                        </div>
-                      </div>
+    <Stripped user={@current_user} menus={@menus}>
+      <ContentArea>
+        <MarginY id={:page_top} />
+        <FormArea>
+          <div class="text-title5 font-title5 sm:text-title3 sm:font-title3 lg:text-title2 lg:font-title2 mb-7 lg:mb-9">
+            Log in
+          </div>
+          <div class="mb-6" />
+          <a href="/google-sign-in">
+            <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-grey1 rounded pl-4 pr-4">
+              <div class="flex w-full justify-center items-center">
+                <div>
+                  <img class="mr-3 -mt-1" src="/images/google.svg" alt="">
+                </div>
+                <div class="h-11 focus:outline-none">
+                  <div class="flex flex-col justify-center h-full items-center rounded">
+                    <div class="text-white text-button font-button">
+                      Sign in with Eyra account
                     </div>
                   </div>
                 </div>
-              </a>
-          </FormArea>
-        </ContentArea>
-      </Stripped>
+              </div>
+            </div>
+          </a>
+        </FormArea>
+      </ContentArea>
+    </Stripped>
     """
   end
 end

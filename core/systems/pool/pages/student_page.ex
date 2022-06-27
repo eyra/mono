@@ -92,31 +92,29 @@ defmodule Systems.Pool.StudentPage do
   @impl true
   def render(assigns) do
     ~F"""
-      <Workspace
-        title={dgettext("link-studentpool", "student.title")}
-        menus={@menus}
-      >
-        <ContentArea>
-          <MarginY id={:page_top} />
-          <Member :if={@member} vm={@member} />
-          <MarginY id={:page_top} />
-          <div :if={Enum.count(@wallets) > 0} >
-            <Title2>
-              {dgettext("link-dashboard", "book.accounts.title")}
-            </Title2>
-            <WalletList items={@wallets} />
-            <Spacing value="XL" />
-          </div>
-          <div :if={Enum.count(@contributions) > 0} >
-            <Title2>
-              {dgettext("eyra-campaign", "campaign.subject.title")}
-              <span class="text-primary"> {Enum.count(@contributions)}</span>
-            </Title2>
-            <ContentList items={@contributions} />
-            <Spacing value="XL" />
-          </div>
-        </ContentArea>
-      </Workspace>
+    <Workspace title={dgettext("link-studentpool", "student.title")} menus={@menus}>
+      <ContentArea>
+        <MarginY id={:page_top} />
+        <Member :if={@member} vm={@member} />
+        <MarginY id={:page_top} />
+        <div :if={Enum.count(@wallets) > 0}>
+          <Title2>
+            {dgettext("link-dashboard", "book.accounts.title")}
+          </Title2>
+          <WalletList items={@wallets} />
+          <Spacing value="XL" />
+        </div>
+        <div :if={Enum.count(@contributions) > 0}>
+          <Title2>
+            {dgettext("eyra-campaign", "campaign.subject.title")}
+            <span class="text-primary">
+              {Enum.count(@contributions)}</span>
+          </Title2>
+          <ContentList items={@contributions} />
+          <Spacing value="XL" />
+        </div>
+      </ContentArea>
+    </Workspace>
     """
   end
 end

@@ -4,13 +4,17 @@ defmodule Systems.Pool.StudentsView do
   alias Core.Accounts.Features
   alias Core.Pools.CriteriaFilters
 
+  alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text.Title2
   alias Frameworks.Pixel.Selector.Selector
   alias CoreWeb.UI.ContentList
+  alias Core.Enums.StudyProgramCodes
 
   prop(props, :map, required: true)
 
   data(students, :map)
+  data(query, :any, default: nil)
+  data(query_string, :string, default: "")
   data(filtered_students, :map)
   data(filter_labels, :list)
 
@@ -20,6 +24,19 @@ defmodule Systems.Pool.StudentsView do
       :ok,
       socket
       |> assign(active_filters: active_filters)
+      |> prepare_students()
+    }
+  end
+
+  # Handle Search Bar Update
+  def update(%{search_bar: :student_search_bar, query_string: query_string, query: query}, socket) do
+    {
+      :ok,
+      socket
+      |> assign(
+        query: query,
+        query_string: query_string
+      )
       |> prepare_students()
     }
   end
@@ -55,17 +72,48 @@ defmodule Systems.Pool.StudentsView do
   defp filter(students, []), do: students
 
   defp filter(students, filters) do
-    students |> Enum.filter(&CriteriaFilters.include?(&1.features.study_program_codes, filters))
+    students
+    |> Enum.filter(&CriteriaFilters.include?(&1.features.study_program_codes, filters))
+  end
+
+  defp query(students, nil), do: students
+  defp query(students, []), do: students
+
+  defp query(students, query) when is_list(query) do
+    students
+    |> Enum.filter(&include?(&1, query))
+  end
+
+  defp include?(_student, []), do: true
+
+  defp include?(student, [word]) do
+    include?(student, word)
+  end
+
+  defp include?(student, [word | rest]) do
+    include?(student, word) and include?(student, rest)
+  end
+
+  defp include?(_student, ""), do: true
+
+  defp include?(student, word) when is_binary(word) do
+    word = String.downcase(word)
+
+    String.contains?(student.profile.fullname |> String.downcase(), word) or
+      String.contains?(student.email |> String.downcase(), word) or
+      StudyProgramCodes.contains_study_program?(student.features.study_program_codes, word) or
+      StudyProgramCodes.contains_year?(student.features.study_program_codes, word)
   end
 
   defp prepare_students(
-         %{assigns: %{students: students, active_filters: active_filters}} = socket
+         %{assigns: %{students: students, active_filters: active_filters, query: query}} = socket
        ) do
     socket
     |> assign(
       filtered_students:
         students
         |> filter(active_filters)
+        |> query(query)
         |> Enum.map(&to_view_model(&1, socket))
     )
   end
@@ -121,23 +169,32 @@ defmodule Systems.Pool.StudentsView do
 
   def render(assigns) do
     ~F"""
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <Empty :if={@students == []}
-          title={dgettext("link-studentpool", "students.empty.title")}
-          body={dgettext("link-studentpool", "students.empty.description")}
-          illustration="members"
-        />
-        <div :if={not Enum.empty?(@students)}>
-          <div class="flex flex-row gap-3 items-center">
-            <div class="font-label text-label">Filter:</div>
-            <Selector id={:student_filters} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
-          </div>
-          <Spacing value="L" />
-          <Title2>{dgettext("link-studentpool", "tabbar.item.students")}: <span class="text-primary">{Enum.count(@filtered_students)}</span></Title2>
-          <ContentList items={@filtered_students} />
+    <ContentArea>
+      <MarginY id={:page_top} />
+      <Empty
+        :if={@students == []}
+        title={dgettext("link-studentpool", "students.empty.title")}
+        body={dgettext("link-studentpool", "students.empty.description")}
+        illustration="members"
+      />
+      <div :if={not Enum.empty?(@students)}>
+        <div class="flex flex-row gap-3 items-center">
+          <div class="font-label text-label">Filter:</div>
+          <Selector id={:student_filters} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
+          <div class="flex-grow" />
+          <SearchBar
+            id={:student_search_bar}
+            query_string={@query_string}
+            placeholder={dgettext("link-studentpool", "search.placeholder")}
+            debounce="200"
+            parent={%{type: __MODULE__, id: @id}}
+          />
         </div>
-      </ContentArea>
+        <Spacing value="L" />
+        <Title2>{dgettext("link-studentpool", "tabbar.item.students")}: <span class="text-primary">{Enum.count(@filtered_students)}</span></Title2>
+        <ContentList items={@filtered_students} />
+      </div>
+    </ContentArea>
     """
   end
 end

@@ -45,6 +45,7 @@ defmodule CoreWeb do
 
       # Include shared imports and aliases for views
       unquote(view_helpers())
+      import Surface
 
       # use Core.Authorization.Controller, :view
     end

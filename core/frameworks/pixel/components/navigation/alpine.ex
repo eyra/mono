@@ -7,11 +7,9 @@ defmodule Frameworks.Pixel.Navigation.Alpine do
 
   def render(assigns) do
     ~F"""
-      <div class="focus:outline-none cursor-pointer"
-        @click={@click_handler}
-      >
-        <#slot />
-      </div>
+    <div class="focus:outline-none cursor-pointer" @click={@click_handler}>
+      <#slot />
+    </div>
     """
   end
 end

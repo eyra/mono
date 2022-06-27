@@ -62,21 +62,21 @@ defmodule CoreWeb.User.Forms.Study do
 
   def render(assigns) do
     ~F"""
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <FormArea>
-          <Title2>{dgettext("eyra-ui", "tabbar.item.study")}</Title2>
-          <BodyMedium>{dgettext("eyra-account", "feature.study.description")}</BodyMedium>
-          <Spacing value="S" />
-          <Selector
-            grid_options="grid grid-cols-2 gap-y-3"
-            id={:study_program_codes}
-            items={@study_labels}
-            type={:checkbox}
-            parent={%{type: __MODULE__, id: @id}}
-          />
-        </FormArea>
-      </ContentArea>
+    <ContentArea>
+      <MarginY id={:page_top} />
+      <FormArea>
+        <Title2>{dgettext("eyra-ui", "tabbar.item.study")}</Title2>
+        <BodyMedium>{dgettext("eyra-account", "feature.study.description")}</BodyMedium>
+        <Spacing value="S" />
+        <Selector
+          grid_options="grid grid-cols-2 gap-y-3"
+          id={:study_program_codes}
+          items={@study_labels}
+          type={:checkbox}
+          parent={%{type: __MODULE__, id: @id}}
+        />
+      </FormArea>
+    </ContentArea>
     """
   end
 end

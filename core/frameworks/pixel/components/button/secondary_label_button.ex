@@ -12,7 +12,7 @@ defmodule Frameworks.Pixel.Button.SecondaryLabelButton do
   def render(assigns) do
     ~F"""
     <label for={@field}>
-      <div class={"cursor-pointer pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 leading-none font-button text-button focus:outline-none rounded pr-4 pl-4 #{@border_color} #{@text_color}"} >
+      <div class={"cursor-pointer pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 leading-none font-button text-button focus:outline-none rounded pr-4 pl-4 #{@border_color} #{@text_color}"}>
         {@label}
       </div>
     </label>

@@ -11,7 +11,11 @@ defmodule Frameworks.Pixel.Button.PrimaryLiveViewButton do
 
   def render(assigns) do
     ~F"""
-    <button phx-target={@target} phx-click={@event} class={"pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded bg-primary #{@width}"}>
+    <button
+      phx-target={@target}
+      phx-click={@event}
+      class={"pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded bg-primary #{@width}"}
+    >
       {@label}
     </button>
     """

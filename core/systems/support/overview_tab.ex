@@ -63,24 +63,24 @@ defmodule Systems.Support.OverviewTab do
 
   def render(assigns) do
     ~F"""
-      <div>
+    <div>
       <MarginY id={:page_top} />
 
       <div :if={Enum.empty?(@items)} class="h-full">
-          <MarginY id={:page_top} />
-          <div class="flex flex-col items-center w-full h-full">
-            <div class="flex-grow"></div>
-            <div class="flex-none">
-              <img src="/images/illustrations/zero-todo.svg" id="zero-todos" alt="All done" />
-            </div>
-            <div class="flex-grow"></div>
+        <MarginY id={:page_top} />
+        <div class="flex flex-col items-center w-full h-full">
+          <div class="flex-grow" />
+          <div class="flex-none">
+            <img src="/images/illustrations/zero-todo.svg" id="zero-todos" alt="All done">
           </div>
+          <div class="flex-grow" />
         </div>
-
-        <ContentArea>
-          <ContentList items={@items} />
-        </ContentArea>
       </div>
+
+      <ContentArea>
+        <ContentList items={@items} />
+      </ContentArea>
+    </div>
     """
   end
 end

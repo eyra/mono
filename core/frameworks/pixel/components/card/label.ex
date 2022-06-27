@@ -25,13 +25,13 @@ defmodule Frameworks.Pixel.Card.Label do
 
   def render(assigns) do
     ~F"""
-    <div class="flex" >
+    <div class="flex">
       <div class={"h-14 pl-4 pr-2 #{bg_color(@type)}"}>
         <div class="flex flex-row justify-center h-full items-center">
           <Title5 color={text_color(@type)}>{@text}</Title5>
         </div>
       </div>
-      <img src={@path_provider.static_path("/images/label-arrow-#{@type}.svg")} alt={@text}/>
+      <img src={@path_provider.static_path("/images/label-arrow-#{@type}.svg")} alt={@text}>
     </div>
     """
   end

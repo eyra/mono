@@ -74,6 +74,10 @@ defmodule CoreWeb.User.Profile do
     {:noreply, socket}
   end
 
+  def handle_info({:signal_test, _}, socket) do
+    {:noreply, socket}
+  end
+
   defp append(list, extra, cond \\ true) do
     if cond, do: list ++ [extra], else: list
   end
@@ -123,7 +127,7 @@ defmodule CoreWeb.User.Profile do
             <Tabbar vm={%{initial_tab: @initial_tab, size: @bar_size, type: :segmented}} />
           </ActionBar>
           <TabbarContent />
-          <TabbarFooter/>
+          <TabbarFooter />
         </TabbarArea>
       </div>
     </Workspace>

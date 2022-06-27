@@ -7,14 +7,9 @@ defmodule Frameworks.Pixel.Navigation.Get do
 
   def render(assigns) do
     ~F"""
-      <a
-        class="cursor-pointer"
-        data-phx-link="redirect"
-        data-phx-link-state="replace"
-        href={@path}
-      >
-        <#slot />
-      </a>
+    <a class="cursor-pointer" data-phx-link="redirect" data-phx-link-state="replace" href={@path}>
+      <#slot />
+    </a>
     """
   end
 end

@@ -167,8 +167,8 @@ defmodule Frameworks.Pixel.Dropdown.Selector do
       <div class={"text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid rounded h-44px #{border_color(assigns)}"}>
         <div class="flex flex-row items-center h-full w-full cursor-pointer">
           <BodyMedium><span class="whitespace-pre-wrap">{@selector_text}</span></BodyMedium>
-          <div class="flex-grow"></div>
-          <img class="mr-3" src={"/images/icons/#{icon(assigns)}.svg"} alt="Dropdown" />
+          <div class="flex-grow" />
+          <img class="mr-3" src={"/images/icons/#{icon(assigns)}.svg"} alt="Dropdown">
         </div>
       </div>
       <div :if={@warning != nil}>
@@ -176,7 +176,7 @@ defmodule Frameworks.Pixel.Dropdown.Selector do
         <div class="text-warning text-caption font-caption">{@warning}</div>
       </div>
       <div :if={@show_options?} class="absolute z-20 left-0 top-48px bg-black bg-opacity-20 w-full">
-        <Dropdown.OptionsView options={@options} target={@myself}/>
+        <Dropdown.OptionsView options={@options} target={@myself} />
       </div>
     </div>
     """
@@ -214,23 +214,21 @@ defmodule Frameworks.Pixel.Dropdown.Selector.Example do
       field={:dropdown_selector}
       selected_option_index={nil}
       parent={self()}
-      options={
-        [
-          %{id: 1, label: "Dropdown item 1"},
-          %{id: 2, label: "Dropdown item 2"},
-          %{id: 3, label: "Dropdown item 3"},
-          %{id: 4, label: "Dropdown item 4"},
-          %{id: 5, label: "Dropdown item 5"},
-          %{id: 6, label: "Dropdown item 6"},
-          %{id: 7, label: "Dropdown item 7"},
-          %{id: 8, label: "Dropdown item 8"},
-          %{id: 9, label: "Dropdown item 9"},
-          %{id: 10, label: "Dropdown item 10"},
-          %{id: 11, label: "Dropdown item 11"},
-          %{id: 12, label: "Dropdown item 12"},
-          %{id: 13, label: "Dropdown item 13"}
-        ]
-      }
+      options={[
+        %{id: 1, label: "Dropdown item 1"},
+        %{id: 2, label: "Dropdown item 2"},
+        %{id: 3, label: "Dropdown item 3"},
+        %{id: 4, label: "Dropdown item 4"},
+        %{id: 5, label: "Dropdown item 5"},
+        %{id: 6, label: "Dropdown item 6"},
+        %{id: 7, label: "Dropdown item 7"},
+        %{id: 8, label: "Dropdown item 8"},
+        %{id: 9, label: "Dropdown item 9"},
+        %{id: 10, label: "Dropdown item 10"},
+        %{id: 11, label: "Dropdown item 11"},
+        %{id: 12, label: "Dropdown item 12"},
+        %{id: 13, label: "Dropdown item 13"}
+      ]}
     />
     """
   end
