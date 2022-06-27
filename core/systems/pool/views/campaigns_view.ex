@@ -75,27 +75,27 @@ defmodule Systems.Pool.CampaignsView do
 
   def render(assigns) do
     ~F"""
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <div class="flex flex-row gap-3 items-center">
-          <div class="font-label text-label">Filter:</div>
-          <Selector id={:campaign_filters} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
-        </div>
-        <Spacing value="L" />
-        <Title2>{dgettext("link-studentpool", "tabbar.item.campaigns")}: <span class="text-primary">{Enum.count(@filtered_campaigns)}</span></Title2>
-        <Case value={Enum.count(@campaigns) > 0} >
-          <True>
-            <ContentList items={@filtered_campaigns} />
-          </True>
-          <False>
-            <Empty
-              title={dgettext("link-studentpool", "campaigns.empty.title")}
-              body={dgettext("link-studentpool", "campaigns.empty.description")}
-              illustration="items"
-            />
-          </False>
-        </Case>
-      </ContentArea>
+    <ContentArea>
+      <MarginY id={:page_top} />
+      <div class="flex flex-row gap-3 items-center">
+        <div class="font-label text-label">Filter:</div>
+        <Selector id={:campaign_filters} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
+      </div>
+      <Spacing value="L" />
+      <Title2>{dgettext("link-studentpool", "tabbar.item.campaigns")}: <span class="text-primary">{Enum.count(@filtered_campaigns)}</span></Title2>
+      <Case value={Enum.count(@campaigns) > 0}>
+        <True>
+          <ContentList items={@filtered_campaigns} />
+        </True>
+        <False>
+          <Empty
+            title={dgettext("link-studentpool", "campaigns.empty.title")}
+            body={dgettext("link-studentpool", "campaigns.empty.description")}
+            illustration="items"
+          />
+        </False>
+      </Case>
+    </ContentArea>
     """
   end
 end

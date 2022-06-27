@@ -66,15 +66,22 @@ defmodule CoreWeb.Mail.Forms.Debug do
   @impl true
   def render(assigns) do
     ~F"""
-        <ContentArea>
-          <Title2>Mail</Title2>
-          <Form id="mail_form" changeset={@changeset} change_event="update" submit="send" target={@myself} focus={@focus}>
-            <TextInput field={:to} label_text="To"/>
-            <TextInput field={:subject} label_text="Subject"/>
-            <TextArea field={:message} label_text="Message"/>
-            <SubmitButton label="Send" />
-          </Form>
-        </ContentArea>
+    <ContentArea>
+      <Title2>Mail</Title2>
+      <Form
+        id="mail_form"
+        changeset={@changeset}
+        change_event="update"
+        submit="send"
+        target={@myself}
+        focus={@focus}
+      >
+        <TextInput field={:to} label_text="To" />
+        <TextInput field={:subject} label_text="Subject" />
+        <TextArea field={:message} label_text="Message" />
+        <SubmitButton label="Send" />
+      </Form>
+    </ContentArea>
     """
   end
 

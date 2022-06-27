@@ -24,7 +24,11 @@ defmodule CoreWeb.UI.Member do
     <div class="bg-grey1 rounded-md p-6 sm:p-8">
       <div class="flex flex-row gap-4 md:gap-8 h-full">
         <div class="flex-shrink-0">
-          <img src={ImageHelpers.get_photo_url(@vm)} class="rounded-full w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-32 lg:h-32" alt="" />
+          <img
+            src={ImageHelpers.get_photo_url(@vm)}
+            class="rounded-full w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-32 lg:h-32"
+            alt=""
+          />
         </div>
         <div>
           <div class="h-full">

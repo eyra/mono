@@ -41,11 +41,11 @@ defmodule Framworks.Pixel.Widget.Metric.Example do
 
   def render(assigns) do
     ~F"""
-      <div class="flex flex-col gap-8 h-full">
-        <Metric number={7} label={"Pool size"} />
-        <Metric number={7} label={"Pool size"} color={:positive}/>
-        <Metric number={7} label={"Pool size"} color={:negative}/>
-      </div>
+    <div class="flex flex-col gap-8 h-full">
+      <Metric number={7} label="Pool size" />
+      <Metric number={7} label="Pool size" color={:positive} />
+      <Metric number={7} label="Pool size" color={:negative} />
+    </div>
     """
   end
 end

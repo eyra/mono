@@ -82,19 +82,19 @@ defmodule Systems.Lab.CheckInItem do
   @impl true
   def render(assigns) do
     ~F"""
-      <tr class="h-12">
-        <td class="pr-8 font-body text-bodymedium sm:text-bodylarge flex-wrap text-white">
-          {title(assigns)}
-        </td>
-        <td class="pr-8 font-body text-bodysmall sm:text-bodymedium text-white" >
-          <span class="whitespace-pre-wrap">{message(assigns)}</span>
-        </td>
-        <td>
-          <div class="flex flex-row gap-4">
-            <DynamicButton :for={button <- buttons(assigns)} vm={button} />
-          </div>
-        </td>
-      </tr>
+    <tr class="h-12">
+      <td class="pr-8 font-body text-bodymedium sm:text-bodylarge flex-wrap text-white">
+        {title(assigns)}
+      </td>
+      <td class="pr-8 font-body text-bodysmall sm:text-bodymedium text-white">
+        <span class="whitespace-pre-wrap">{message(assigns)}</span>
+      </td>
+      <td>
+        <div class="flex flex-row gap-4">
+          <DynamicButton :for={button <- buttons(assigns)} vm={button} />
+        </div>
+      </td>
+    </tr>
     """
   end
 end
@@ -189,7 +189,7 @@ defmodule Systems.Lab.CheckInItem.Example do
   @impl true
   def render(assigns) do
     ~F"""
-    <div class="p-8 rounded-lg bg-grey1 ">
+    <div class="p-8 rounded-lg bg-grey1">
       <table>
         <CheckInItem {...@item1} />
         <CheckInItem {...@item2} />

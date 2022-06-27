@@ -160,59 +160,76 @@ defmodule Systems.Pool.CampaignSubmissionView do
 
   def render(assigns) do
     ~F"""
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <Title2 margin="">{dgettext("link-campaign", "submission.criteria.title")}</Title2>
-        <Spacing value="M" />
-        <SubHead color="text-grey1">
-          {raw(dgettext("link-campaign", "submission.criteria.status",
+    <ContentArea>
+      <MarginY id={:page_top} />
+      <Title2 margin="">{dgettext("link-campaign", "submission.criteria.title")}</Title2>
+      <Spacing value="M" />
+      <SubHead color="text-grey1">
+        {raw(
+          dgettext("link-campaign", "submission.criteria.status",
             sample: "<span class=\"text-primary\">#{@sample_size}</span>",
             total: @pool_size
-          ))}
-        </SubHead>
-        <Spacing value="M" />
-        <div class="flex flex-col-reverse xl:flex-row gap-8 xl:gap-14">
-          <div class="xl:max-w-form">
-            <Title3>{dgettext("eyra-account", "features.title")}</Title3>
-            <BodyMedium>{dgettext("eyra-account", "features.content.description")}</BodyMedium>
-            <Spacing value="M" />
+          )
+        )}
+      </SubHead>
+      <Spacing value="M" />
+      <div class="flex flex-col-reverse xl:flex-row gap-8 xl:gap-14">
+        <div class="xl:max-w-form">
+          <Title3>{dgettext("eyra-account", "features.title")}</Title3>
+          <BodyMedium>{dgettext("eyra-account", "features.content.description")}</BodyMedium>
+          <Spacing value="M" />
 
-            <Title4>{dgettext("eyra-account", "features.gender.title")}</Title4>
-            <Spacing value="S" />
-            <Selector id={:genders} items={@gender_labels} type={:checkbox} parent={%{type: __MODULE__, id: @id}} />
-            <Spacing value="XL" />
+          <Title4>{dgettext("eyra-account", "features.gender.title")}</Title4>
+          <Spacing value="S" />
+          <Selector
+            id={:genders}
+            items={@gender_labels}
+            type={:checkbox}
+            parent={%{type: __MODULE__, id: @id}}
+          />
+          <Spacing value="XL" />
 
-            <Title4>{dgettext("eyra-account", "features.nativelanguage.title")}</Title4>
-            <Spacing value="S" />
-            <Selector id={:native_languages} items={@nativelanguage_labels} type={:checkbox} parent={%{type: __MODULE__, id: @id}} />
-            <Spacing value="XL" />
+          <Title4>{dgettext("eyra-account", "features.nativelanguage.title")}</Title4>
+          <Spacing value="S" />
+          <Selector
+            id={:native_languages}
+            items={@nativelanguage_labels}
+            type={:checkbox}
+            parent={%{type: __MODULE__, id: @id}}
+          />
+          <Spacing value="XL" />
 
-            <Title4>{dgettext("eyra-account", "features.dominanthand.title")}</Title4>
-            <Spacing value="S" />
-            <Selector id={:dominant_hands} items={@dominanthand_labels} type={:checkbox} parent={%{type: __MODULE__, id: @id}} />
-          </div>
-          <div class="xl:max-w-form">
-            <Title3>{dgettext("link-campaign", "exclusion.title")}</Title3>
-            <BodyMedium>{dgettext("link-campaign", "exclusion.description")}</BodyMedium>
-            <Spacing value="M" />
-            <Title4>{dgettext("link-campaign", "exclusion.select.label")}</Title4>
-            <Spacing value="S" />
-            <div :if={Enum.count(@campaign_labels) == 0}>
-              <Title6 color="text-grey2" margin="m-0">{dgettext("link-campaign", "no.previous.campaigns.available")}</Title6>
-            </div>
-            <div :if={Enum.count(@campaign_labels) > 0}>
-              <Selector
-                grid_options="flex flex-col flex-wrap gap-y-3"
-                id={:exclude_campaigns}
-                items={@campaign_labels}
-                type={:checkbox}
-                parent={%{type: __MODULE__, id: @id}}
-               />
-            </div>
-            <Spacing value="XL" />
-          </div>
+          <Title4>{dgettext("eyra-account", "features.dominanthand.title")}</Title4>
+          <Spacing value="S" />
+          <Selector
+            id={:dominant_hands}
+            items={@dominanthand_labels}
+            type={:checkbox}
+            parent={%{type: __MODULE__, id: @id}}
+          />
         </div>
-      </ContentArea>
+        <div class="xl:max-w-form">
+          <Title3>{dgettext("link-campaign", "exclusion.title")}</Title3>
+          <BodyMedium>{dgettext("link-campaign", "exclusion.description")}</BodyMedium>
+          <Spacing value="M" />
+          <Title4>{dgettext("link-campaign", "exclusion.select.label")}</Title4>
+          <Spacing value="S" />
+          <div :if={Enum.count(@campaign_labels) == 0}>
+            <Title6 color="text-grey2" margin="m-0">{dgettext("link-campaign", "no.previous.campaigns.available")}</Title6>
+          </div>
+          <div :if={Enum.count(@campaign_labels) > 0}>
+            <Selector
+              grid_options="flex flex-col flex-wrap gap-y-3"
+              id={:exclude_campaigns}
+              items={@campaign_labels}
+              type={:checkbox}
+              parent={%{type: __MODULE__, id: @id}}
+            />
+          </div>
+          <Spacing value="XL" />
+        </div>
+      </div>
+    </ContentArea>
     """
   end
 end

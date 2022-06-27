@@ -44,41 +44,57 @@ defmodule Systems.Lab.DayListItem do
 
   def render(assigns) do
     ~F"""
-      <tr>
-        <td>
-          <BodyMedium color={if @enabled? do "text-grey1" else "text-grey2" end}>
-            {datestamp(@date)}
-          </BodyMedium>
-        </td>
-        <td class="p-4"></td>
-        <td>
-          <BodyMedium color={if @enabled? do "text-grey1" else "text-grey2" end}>
-            {dngettext("link-lab", "1 time slot", "%{count} time slots", @number_of_timeslots)}
-          </BodyMedium>
-        </td>
-        <td class="p-4"></td>
-        <td>
-          <BodyMedium color={if @enabled? do "text-grey1" else "text-grey2" end}>
-            {dngettext("link-lab", "1 seat", "%{count} seats", @number_of_seats)}
-          </BodyMedium>
-        </td>
-        <td class="p-4"></td>
-        <td>
-          <BodyMedium color={if @enabled? do "text-grey1" else "text-grey2" end}>
-            {@location}
-          </BodyMedium>
-        </td>
-        <td class="p-4"></td>
-        <td>
-          <DynamicButton vm={edit_button(assigns)} />
-        </td>
-        <td class="p-4"></td>
-        <td>
-          <div class="flex flex-row gap-4 items-center">
-            <DynamicButton :for={button <- right_buttons(assigns)} vm={button} />
-          </div>
-        </td>
-      </tr>
+    <tr>
+      <td>
+        <BodyMedium color={if @enabled? do
+          "text-grey1"
+        else
+          "text-grey2"
+        end}>
+          {datestamp(@date)}
+        </BodyMedium>
+      </td>
+      <td class="p-4" />
+      <td>
+        <BodyMedium color={if @enabled? do
+          "text-grey1"
+        else
+          "text-grey2"
+        end}>
+          {dngettext("link-lab", "1 time slot", "%{count} time slots", @number_of_timeslots)}
+        </BodyMedium>
+      </td>
+      <td class="p-4" />
+      <td>
+        <BodyMedium color={if @enabled? do
+          "text-grey1"
+        else
+          "text-grey2"
+        end}>
+          {dngettext("link-lab", "1 seat", "%{count} seats", @number_of_seats)}
+        </BodyMedium>
+      </td>
+      <td class="p-4" />
+      <td>
+        <BodyMedium color={if @enabled? do
+          "text-grey1"
+        else
+          "text-grey2"
+        end}>
+          {@location}
+        </BodyMedium>
+      </td>
+      <td class="p-4" />
+      <td>
+        <DynamicButton vm={edit_button(assigns)} />
+      </td>
+      <td class="p-4" />
+      <td>
+        <div class="flex flex-row gap-4 items-center">
+          <DynamicButton :for={button <- right_buttons(assigns)} vm={button} />
+        </div>
+      </td>
+    </tr>
     """
   end
 end
@@ -95,7 +111,15 @@ defmodule Systems.Lab.DayListItem.Example do
   def render(assigns) do
     ~F"""
     <div class="w-full">
-      <DayListItem id={"1"} target={@myself} enabled?={true} date={~D[2022-01-14]} location={"SBE lab (HG 04.48)"} number_of_timeslots={1} number_of_seats={1} />
+      <DayListItem
+        id="1"
+        target={@myself}
+        enabled?
+        date={~D[2022-01-14]}
+        location="SBE lab (HG 04.48)"
+        number_of_timeslots={1}
+        number_of_seats={1}
+      />
     </div>
     """
   end

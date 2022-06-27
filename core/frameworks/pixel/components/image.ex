@@ -21,12 +21,13 @@ defmodule Frameworks.Pixel.Image do
       end
 
     ~F"""
-    <div id={@id}
+    <div
+      id={@id}
       class="blurhash-wrapper overflow-hidden w-full h-full relative"
       x-data="blurHash()"
       x-init="$nextTick(()=>render())"
       :if={@image}
-      >
+    >
       <canvas
         x-show="showBlurHash()"
         x-transition:leave="transition ease-in-out duration-500"
@@ -36,7 +37,7 @@ defmodule Frameworks.Pixel.Image do
         height={canvas_height}
         class={"absolute", "z-10", "object-cover", "w-full", "h-full", @corners}
         data-blurhash={@image.blur_hash}
-        />
+      />
       <img
         class={"object-cover", "w-full", "h-full", @corners}
         src={@image.url}

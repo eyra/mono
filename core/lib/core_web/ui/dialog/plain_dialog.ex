@@ -55,7 +55,7 @@ defmodule CoreWeb.UI.PlainDialog do
 
   def render(assigns) do
     ~F"""
-      <Dialog title={@title} text={@text} buttons={@buttons}></Dialog>
+    <Dialog title={@title} text={@text} buttons={@buttons} />
     """
   end
 end

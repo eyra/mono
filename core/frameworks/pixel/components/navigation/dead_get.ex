@@ -7,12 +7,9 @@ defmodule Frameworks.Pixel.Navigation.DeadGet do
 
   def render(assigns) do
     ~F"""
-      <a
-        class="cursor-pointer"
-        href={@path}
-      >
-        <#slot />
-      </a>
+    <a class="cursor-pointer" href={@path}>
+      <#slot />
+    </a>
     """
   end
 end

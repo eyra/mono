@@ -24,7 +24,7 @@ defmodule Frameworks.Pixel.Button.Face.PlainIcon do
           </div>
         </div>
         <div>
-          <img class="ml-4 -mt-2px" src={"/images/icons/#{icon(@vm)}.svg"} alt={label(@vm)} />
+          <img class="ml-4 -mt-2px" src={"/images/icons/#{icon(@vm)}.svg"} alt={label(@vm)}>
         </div>
       </div>
     </div>

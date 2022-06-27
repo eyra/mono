@@ -33,17 +33,20 @@ defmodule CoreWeb.User.Settings do
       <ContentArea>
         <MarginY id={:page_top} />
         <FormArea>
-          <Title2>{dgettext "eyra-ui", "menu.item.settings"}</Title2>
+          <Title2>{dgettext("eyra-ui", "menu.item.settings")}</Title2>
           <Spacing value="XL" />
           <div x-data>
-            <Title4>{dgettext "eyra-account", "push.registration.title"}</Title4>
+            <Title4>{dgettext("eyra-account", "push.registration.title")}</Title4>
             <Spacing value="XS" />
-            <div class="text-bodymedium sm:text-bodylarge font-body" :if={not is_push_supported?(@socket)} >{dgettext("eyra-account", "push.unavailable.label")}</div>
+            <div class="text-bodymedium sm:text-bodylarge font-body" :if={not is_push_supported?(@socket)}>{dgettext("eyra-account", "push.unavailable.label")}</div>
             <div :if={is_push_supported?(@socket)}>
               <div x-show="$store.push.registration === 'not-registered'">
                 <div class="text-bodymedium sm:text-bodylarge font-body">{dgettext("eyra-account", "push.registration.label")}</div>
                 <Spacing value="XS" />
-                <PrimaryAlpineButton click="registerForPush()" label={dgettext("eyra-account", "push.registration.button")} />
+                <PrimaryAlpineButton
+                  click="registerForPush()"
+                  label={dgettext("eyra-account", "push.registration.button")}
+                />
               </div>
               <div class="text-bodymedium sm:text-bodylarge font-body">
                 <span x-show="$store.push.registration === 'pending'">{dgettext("eyra-account", "push.registration.pending")}</span>

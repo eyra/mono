@@ -136,31 +136,45 @@ defmodule Systems.Lab.CheckInView do
   @impl true
   def render(assigns) do
     ~F"""
-      <div phx-click="reset_focus" phx-target={@myself}>
-        <Panel bg_color="bg-grey1">
-          <Title3 color="text-white">{dgettext("link-lab", "search.subject.title")}</Title3>
-          <Spacing value="M" />
-          <BodyMedium color="text-white">{dgettext("link-lab", "search.subject.body")}</BodyMedium>
-          <Spacing value="S" />
+    <div phx-click="reset_focus" phx-target={@myself}>
+      <Panel bg_color="bg-grey1">
+        <Title3 color="text-white">{dgettext("link-lab", "search.subject.title")}</Title3>
+        <Spacing value="M" />
+        <BodyMedium color="text-white">{dgettext("link-lab", "search.subject.body")}</BodyMedium>
+        <Spacing value="S" />
 
-          <Form id="search_subject" changeset={@changeset} change_event="update" submit="submit" target={@myself} focus={@focus}>
-            <div class="w-form">
-              <TextInput field={:query} label_text={dgettext("link-lab", "search.subject.query.label")} reserve_error_space={false} debounce="300" background={:dark} label_color="text-white"/>
+        <Form
+          id="search_subject"
+          changeset={@changeset}
+          change_event="update"
+          submit="submit"
+          target={@myself}
+          focus={@focus}
+        >
+          <div class="w-form">
+            <TextInput
+              field={:query}
+              label_text={dgettext("link-lab", "search.subject.query.label")}
+              reserve_error_space={false}
+              debounce="300"
+              background={:dark}
+              label_color="text-white"
+            />
+          </div>
+          <div :if={@message}>
+            <div class="text-caption font-caption text-tertiary">
+              {@message}
             </div>
-            <div :if={@message}>
-              <div class="text-caption font-caption text-tertiary">
-                {@message}
-              </div>
-            </div>
-            <div :if={@query}>
-              <Spacing value="S" />
-              <table>
-                <Lab.CheckInItem :for={item <- @items} {...item} target={@myself}/>
-              </table>
-            </div>
-          </Form>
-        </Panel>
-      </div>
+          </div>
+          <div :if={@query}>
+            <Spacing value="S" />
+            <table>
+              <Lab.CheckInItem :for={item <- @items} {...item} target={@myself} />
+            </table>
+          </div>
+        </Form>
+      </Panel>
+    </div>
     """
   end
 

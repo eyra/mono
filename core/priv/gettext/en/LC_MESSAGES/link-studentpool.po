@@ -86,3 +86,7 @@ msgstr "Pool credit budget"
 #, elixir-format, ex-autogen
 msgid "passed.students"
 msgstr "Passed students"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "search.placeholder"
+msgstr "Search"

@@ -67,46 +67,44 @@ defmodule Link.Console do
 
   def render(assigns) do
     ~F"""
-      <Workspace
-        title={dgettext("link-dashboard", "title")}
-        menus={@menus}
-      >
-        <ContentArea>
-          <MarginY id={:page_top} />
-          <div :if={@next_best_action} class="mb-6 md:mb-10">
-            <NextAction.HighlightView vm={@next_best_action}/>
-          </div>
-          <div :if={Enum.count(@wallets) > 0} >
-            <Title2>
-              {dgettext("link-dashboard", "book.accounts.title")}
-            </Title2>
-            <WalletList items={@wallets} />
-            <Spacing value="XL" />
-          </div>
-          <div :if={Enum.count(@contributions) > 0} >
-            <Title2>
-              {dgettext("eyra-campaign", "campaign.subject.title")}
-              <span class="text-primary"> {Enum.count(@contributions)}</span>
-            </Title2>
-            <ContentList items={@contributions} />
-            <Spacing value="XL" />
-          </div>
-          <div :if={Enum.count(@content_items) > 0} >
-            <Title2>
-              {dgettext("link-dashboard", "recent-items.title")}
-            </Title2>
-            <ContentList items={@content_items} />
-            <Spacing value="XL" />
-          </div>
-          <div :if={Enum.count(@contributions) + Enum.count(@content_items) == 0} >
-            <Empty
-              title={dgettext("eyra-dashboard", "empty.title")}
-              body={dgettext("eyra-dashboard", "empty.description")}
-              illustration="items"
-            />
-          </div>
-        </ContentArea>
-      </Workspace>
+    <Workspace title={dgettext("link-dashboard", "title")} menus={@menus}>
+      <ContentArea>
+        <MarginY id={:page_top} />
+        <div :if={@next_best_action} class="mb-6 md:mb-10">
+          <NextAction.HighlightView vm={@next_best_action} />
+        </div>
+        <div :if={Enum.count(@wallets) > 0}>
+          <Title2>
+            {dgettext("link-dashboard", "book.accounts.title")}
+          </Title2>
+          <WalletList items={@wallets} />
+          <Spacing value="XL" />
+        </div>
+        <div :if={Enum.count(@contributions) > 0}>
+          <Title2>
+            {dgettext("eyra-campaign", "campaign.subject.title")}
+            <span class="text-primary">
+              {Enum.count(@contributions)}</span>
+          </Title2>
+          <ContentList items={@contributions} />
+          <Spacing value="XL" />
+        </div>
+        <div :if={Enum.count(@content_items) > 0}>
+          <Title2>
+            {dgettext("link-dashboard", "recent-items.title")}
+          </Title2>
+          <ContentList items={@content_items} />
+          <Spacing value="XL" />
+        </div>
+        <div :if={Enum.count(@contributions) + Enum.count(@content_items) == 0}>
+          <Empty
+            title={dgettext("eyra-dashboard", "empty.title")}
+            body={dgettext("eyra-dashboard", "empty.description")}
+            illustration="items"
+          />
+        </div>
+      </ContentArea>
+    </Workspace>
     """
   end
 end

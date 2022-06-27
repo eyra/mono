@@ -26,8 +26,8 @@ defmodule Systems.Test.Page do
 
   def render(assigns) do
     ~F"""
-      <div>{@vm.title}</div>
-      <div>{@vm.subtitle}</div>
+    <div>{@vm.title}</div>
+    <div>{@vm.subtitle}</div>
     """
   end
 end

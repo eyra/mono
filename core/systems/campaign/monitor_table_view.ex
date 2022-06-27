@@ -16,18 +16,18 @@ defmodule Systems.Campaign.MonitorTableView do
   @impl true
   def render(assigns) do
     ~F"""
-      <table>
-        <thead>
-          <tr class="text-left">
-            <th :for={{column, index} <- Enum.with_index(@columns)} class={"#{padding(index)}"} >
-              <Title6>{column}</Title6>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <Crew.TaskItemView :for={task <- @tasks} {...task} />
-        </tbody>
-      </table>
+    <table>
+      <thead>
+        <tr class="text-left">
+          <th :for={{column, index} <- Enum.with_index(@columns)} class={"#{padding(index)}"}>
+            <Title6>{column}</Title6>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <Crew.TaskItemView :for={task <- @tasks} {...task} />
+      </tbody>
+    </table>
     """
   end
 end

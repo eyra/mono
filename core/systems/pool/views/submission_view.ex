@@ -201,39 +201,52 @@ defmodule Systems.Pool.SubmissionView do
 
   def render(assigns) do
     ~F"""
-      <ContentArea>
-        <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
-          <Title3 margin="mb-5 sm:mb-8">{dgettext("eyra-submission", "reward.label")}</Title3>
-          <NumberInput field={:reward_value} label_text={dgettext("eyra-submission", "reward.value.label")} />
-          <Spacing value="M" />
+    <ContentArea>
+      <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
+        <Title3 margin="mb-5 sm:mb-8">{dgettext("eyra-submission", "reward.label")}</Title3>
+        <NumberInput
+          field={:reward_value}
+          label_text={dgettext("eyra-submission", "reward.value.label")}
+        />
+        <Spacing value="M" />
 
-          <Title3 margin="mb-5 sm:mb-8">{dgettext("eyra-submission", "schedule.title")}</Title3>
-          <Body>{dgettext("eyra-submission", "schedule.description")}</Body>
-          <Spacing value="S" />
+        <Title3 margin="mb-5 sm:mb-8">{dgettext("eyra-submission", "schedule.title")}</Title3>
+        <Body>{dgettext("eyra-submission", "schedule.description")}</Body>
+        <Spacing value="S" />
 
-          <div class="flex flex-col gap-y-2 sm:flex-row items-left w-full sm:w-form">
-            <div class="flex-wrap mt-2">
-              <Selector id={:schedule_start_toggle} items={@schedule_start_toggle_labels} type={:checkbox} parent={%{type: __MODULE__, id: @id}} />
-            </div>
-            <div class="flex-grow">
-            </div>
-            <div class="flex-wrap h-full">
-              <DateInput field={:schedule_start} disabled={@schedule_start_disabled} />
-            </div>
+        <div class="flex flex-col gap-y-2 sm:flex-row items-left w-full sm:w-form">
+          <div class="flex-wrap mt-2">
+            <Selector
+              id={:schedule_start_toggle}
+              items={@schedule_start_toggle_labels}
+              type={:checkbox}
+              parent={%{type: __MODULE__, id: @id}}
+            />
           </div>
-
-          <div class="flex flex-col gap-y-2 sm:flex-row items-left w-full sm:w-form">
-            <div class="flex-wrap mt-2">
-              <Selector id={:schedule_end_toggle} items={@schedule_end_toggle_labels} type={:checkbox} parent={%{type: __MODULE__, id: @id}} />
-            </div>
-            <div class="flex-grow">
-            </div>
-            <div class="flex-wrap h-full">
-              <DateInput field={:schedule_end} disabled={@schedule_end_disabled} />
-            </div>
+          <div class="flex-grow">
           </div>
-        </Form>
-      </ContentArea>
+          <div class="flex-wrap h-full">
+            <DateInput field={:schedule_start} disabled={@schedule_start_disabled} />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-y-2 sm:flex-row items-left w-full sm:w-form">
+          <div class="flex-wrap mt-2">
+            <Selector
+              id={:schedule_end_toggle}
+              items={@schedule_end_toggle_labels}
+              type={:checkbox}
+              parent={%{type: __MODULE__, id: @id}}
+            />
+          </div>
+          <div class="flex-grow">
+          </div>
+          <div class="flex-wrap h-full">
+            <DateInput field={:schedule_end} disabled={@schedule_end_disabled} />
+          </div>
+        </div>
+      </Form>
+    </ContentArea>
     """
   end
 end

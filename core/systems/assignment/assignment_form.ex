@@ -126,18 +126,17 @@ defmodule Systems.Assignment.AssignmentForm do
 
   def render(assigns) do
     ~F"""
-      <ContentArea class="mb-4">
-        <MarginY id={:page_top} />
-        <Title2>{dgettext("eyra-assignment", "form.title")}</Title2>
-        <Spacing value="M" />
+    <ContentArea class="mb-4">
+      <MarginY id={:page_top} />
+      <Title2>{dgettext("eyra-assignment", "form.title")}</Title2>
+      <Spacing value="M" />
 
-        <div class="flex flex-col gap-12 lg:gap-16">
-          {#for form <- forms(assigns)}
-          <Dynamic.LiveComponent
-            module={form.component} {...form.props}  />
-          {/for}
-        </div>
-      </ContentArea>
+      <div class="flex flex-col gap-12 lg:gap-16">
+        {#for form <- forms(assigns)}
+          <Dynamic.LiveComponent module={form.component} {...form.props} />
+        {/for}
+      </div>
+    </ContentArea>
     """
   end
 end

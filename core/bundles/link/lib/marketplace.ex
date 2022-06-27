@@ -127,44 +127,47 @@ defmodule Link.Marketplace do
 
   def render(assigns) do
     ~F"""
-        <Workspace
-          title={dgettext("eyra-ui", "marketplace.title")}
-          menus={@menus}
-        >
-          <ContentArea>
-            <MarginY id={:page_top} />
-            <div :if={@next_best_action}>
-              <NextAction.HighlightView vm={@next_best_action}/>
-              <div class="mt-6 lg:mt-10"/>
-            </div>
-            <Case value={@subject_count > 0} >
-              <True>
-              </True>
-            </Case>
-            <Case value={render_empty?(assigns)} >
-              <False>
-                <Spacing :if={@subject_count > 0} value="XL" />
-                <Title2>
-                  {dgettext("eyra-campaign", "campaign.all.title")}
-                  <span class="text-primary"> {@available_count}</span>
-                </Title2>
-                <DynamicGrid>
-                  <div :for={card <- @available_campaigns } class="mb-1" >
-                    <SecondaryCampaign id={card.id} path_provider={CoreWeb.Endpoint} card={card} click_event_data={%{action: :public, id: card.open_id }} />
-                  </div>
-                </DynamicGrid>
-              </False>
-              <True>
-                <Spacing :if={@subject_count > 0} value="XXL" />
-                <Empty
-                  title={dgettext("eyra-marketplace", "empty.title")}
-                  body={dgettext("eyra-marketplace", "empty.description")}
-                  illustration="cards"
+    <Workspace title={dgettext("eyra-ui", "marketplace.title")} menus={@menus}>
+      <ContentArea>
+        <MarginY id={:page_top} />
+        <div :if={@next_best_action}>
+          <NextAction.HighlightView vm={@next_best_action} />
+          <div class="mt-6 lg:mt-10" />
+        </div>
+        <Case value={@subject_count > 0}>
+          <True>
+          </True>
+        </Case>
+        <Case value={render_empty?(assigns)}>
+          <False>
+            <Spacing :if={@subject_count > 0} value="XL" />
+            <Title2>
+              {dgettext("eyra-campaign", "campaign.all.title")}
+              <span class="text-primary">
+                {@available_count}</span>
+            </Title2>
+            <DynamicGrid>
+              <div :for={card <- @available_campaigns} class="mb-1">
+                <SecondaryCampaign
+                  id={card.id}
+                  path_provider={CoreWeb.Endpoint}
+                  card={card}
+                  click_event_data={%{action: :public, id: card.open_id}}
                 />
-              </True>
-            </Case>
-          </ContentArea>
-        </Workspace>
+              </div>
+            </DynamicGrid>
+          </False>
+          <True>
+            <Spacing :if={@subject_count > 0} value="XXL" />
+            <Empty
+              title={dgettext("eyra-marketplace", "empty.title")}
+              body={dgettext("eyra-marketplace", "empty.description")}
+              illustration="cards"
+            />
+          </True>
+        </Case>
+      </ContentArea>
+    </Workspace>
     """
   end
 end

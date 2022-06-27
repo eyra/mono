@@ -11,7 +11,11 @@ defmodule Frameworks.Pixel.Button.PrimaryAlpineButton do
 
   def render(assigns) do
     ~F"""
-    <button @click={@click} class={"pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px leading-none font-button text-button focus:outline-none rounded pr-4 pl-4 #{@bg_color} #{@text_color}"} type="button">
+    <button
+      @click={@click}
+      class={"pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px leading-none font-button text-button focus:outline-none rounded pr-4 pl-4 #{@bg_color} #{@text_color}"}
+      type="button"
+    >
       {@label}
     </button>
     """

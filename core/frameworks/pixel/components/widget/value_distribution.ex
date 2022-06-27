@@ -74,10 +74,14 @@ defmodule Frameworks.Pixel.Widget.ValueDistribution do
           <div :for={bar <- bars(@scale, @values)} style={"width: #{bar_width(@scale, @values)}"}>
             <div class="flex flex-col items-center gap-2 w-full">
               <div class="flex flex-col items-center w-full">
-                <div style={"height: #{bar_top_height(bar)}px"}></div>
+                <div style={"height: #{bar_top_height(bar)}px"} />
                 <div class="pb-1 text-caption font-caption text-grey1">{bar.value_count}</div>
-                <div :if={bar_height(bar) > 0} style={"height: #{bar_height(bar)}px"} class="flex-grow bg-primary w-full rounded-t-lg"></div>
-                <div :if={bar_height(bar) <= 0} class="bg-grey4 w-full h-2px"></div>
+                <div
+                  :if={bar_height(bar) > 0}
+                  style={"height: #{bar_height(bar)}px"}
+                  class="flex-grow bg-primary w-full rounded-t-lg"
+                />
+                <div :if={bar_height(bar) <= 0} class="bg-grey4 w-full h-2px" />
               </div>
               <div class="text-caption font-caption text-grey2">{bar.range}</div>
             </div>
@@ -104,9 +108,52 @@ defmodule Framworks.Pixel.Widget.ValueDistribution.Example do
 
   def render(assigns) do
     ~F"""
-      <div class="flex flex-col gap-8">
-        <ValueDistribution label="Credit distribution" scale={10} values={[0,0,1,1,2,3,4,5,6,7,8,9,10,16,17,18,20,22,34,37,40,41,42,44,50,51,52,53,54,55,56,57,58,59,59,59,59,60]} />
-      </div>
+    <div class="flex flex-col gap-8">
+      <ValueDistribution
+        label="Credit distribution"
+        scale={10}
+        values={[
+          0,
+          0,
+          1,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          16,
+          17,
+          18,
+          20,
+          22,
+          34,
+          37,
+          40,
+          41,
+          42,
+          44,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          59,
+          59,
+          59,
+          60
+        ]}
+      />
+    </div>
     """
   end
 end
