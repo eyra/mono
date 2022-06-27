@@ -33,4 +33,14 @@ defmodule Core.Accounts.Features do
     |> cast(params, @fields)
     |> validate_required(@required_fields)
   end
+
+  def get_study_programs(%{study_program_codes: study_program_codes})
+      when is_list(study_program_codes) and study_program_codes != [] do
+    study_program_codes
+    |> Enum.map(&StudyProgramCodes.translate(&1))
+  end
+
+  def get_study_programs(_) do
+    []
+  end
 end

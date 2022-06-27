@@ -198,3 +198,7 @@ msgstr "Menu"
 #, elixir-format, ex-autogen
 msgid "persister.error.flash"
 msgstr "Not saved, please reload and try again"
+
+#, elixir-format, ex-autogen
+msgid "mailto.button"
+msgstr "Get in touch"

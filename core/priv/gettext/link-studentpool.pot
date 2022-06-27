@@ -87,5 +87,9 @@ msgid "passed.students"
 msgstr ""
 
 #, elixir-format, ex-autogen
+msgid "student.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
 msgid "search.placeholder"
 msgstr ""

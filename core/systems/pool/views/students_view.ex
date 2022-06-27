@@ -1,13 +1,14 @@
 defmodule Systems.Pool.StudentsView do
   use CoreWeb.UI.LiveComponent
 
-  alias Core.Enums.StudyProgramCodes
+  alias Core.Accounts.Features
   alias Core.Pools.CriteriaFilters
 
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text.Title2
   alias Frameworks.Pixel.Selector.Selector
   alias CoreWeb.UI.ContentList
+  alias Core.Enums.StudyProgramCodes
 
   prop(props, :map, required: true)
 
@@ -119,6 +120,7 @@ defmodule Systems.Pool.StudentsView do
 
   defp to_view_model(
          %{
+           id: user_id,
            email: email,
            inserted_at: inserted_at,
            profile: %{
@@ -130,7 +132,7 @@ defmodule Systems.Pool.StudentsView do
          socket
        ) do
     subtitle =
-      [email | get_study_programs(features)]
+      [email | Features.get_study_programs(features)]
       |> Enum.join(" ▪︎ ")
 
     tag = get_tag(features)
@@ -143,23 +145,13 @@ defmodule Systems.Pool.StudentsView do
       |> CoreWeb.UI.Timestamp.humanize()
 
     %{
-      path: Routes.live_path(socket, Systems.Pool.OverviewPage),
+      path: Routes.live_path(socket, Systems.Pool.StudentPage, user_id),
       title: fullname,
       subtitle: subtitle,
       quick_summary: quick_summery,
       tag: tag,
       image: image
     }
-  end
-
-  defp get_study_programs(%{study_program_codes: study_program_codes})
-       when is_list(study_program_codes) and study_program_codes != [] do
-    study_program_codes
-    |> Enum.map(&StudyProgramCodes.translate(&1))
-  end
-
-  defp get_study_programs(_) do
-    []
   end
 
   def get_tag(%{study_program_codes: [_ | _]}) do
