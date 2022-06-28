@@ -21,6 +21,8 @@ defmodule Systems.Pool.OverviewPage do
 
   @impl true
   def mount(%{"tab" => initial_tab}, _session, socket) do
+    IO.puts("MOUNT")
+
     model = %{id: :sbe_2021, director: :pool}
 
     {
@@ -46,6 +48,7 @@ defmodule Systems.Pool.OverviewPage do
   defoverridable handle_view_model_updated: 1
 
   def handle_view_model_updated(socket) do
+    IO.puts("handle_view_model_updated")
     socket |> update_menus()
   end
 
@@ -99,7 +102,8 @@ defmodule Systems.Pool.OverviewPage do
 
   @impl true
   def handle_resize(socket) do
-    socket |> update_view_model()
+    socket
+    |> update_menus()
   end
 
   defp close_email_dialog(socket) do
