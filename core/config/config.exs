@@ -50,7 +50,9 @@ config :core, Oban,
 
 config :core, ecto_repos: [Core.Repo]
 
-config :core, Core.Mailer, adapter: Bamboo.TestAdapter, default_from_email: "no-reply@example.com"
+config :core, Systems.Email.Mailer,
+  adapter: Bamboo.TestAdapter,
+  default_from_email: "no-reply@example.com"
 
 config :core, Core.SurfConext,
   client_id: "not-set",

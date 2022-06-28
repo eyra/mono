@@ -4,6 +4,8 @@ defmodule CoreWeb.LiveForm do
       use CoreWeb.UI.LiveComponent
 
       def update(%{focus: focus}, socket) do
+        IO.puts("Update focus")
+
         {
           :ok,
           socket
@@ -12,6 +14,8 @@ defmodule CoreWeb.LiveForm do
       end
 
       def handle_event("focus", %{"field" => field}, socket) do
+        IO.puts("Event focus")
+
         claim_focus(socket)
 
         {

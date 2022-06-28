@@ -14,8 +14,10 @@ defmodule Systems.Pool.StudentsView do
   data(students, :map)
   data(query, :any, default: nil)
   data(query_string, :string, default: "")
-  data(filtered_students, :map)
+  data(filtered_students, :list)
+  data(filtered_student_items, :list)
   data(filter_labels, :list)
+  data(email_button, :map)
 
   # Handle Selector Update
   def update(%{active_item_ids: active_filters, selector_id: :student_filters}, socket) do
@@ -51,8 +53,16 @@ defmodule Systems.Pool.StudentsView do
   end
 
   # Initial update
-  def update(%{id: id, props: %{students: students}} = _params, socket) do
+  def update(
+        %{id: id, props: %{students: students}} = _params,
+        %{assigns: %{myself: target}} = socket
+      ) do
     filter_labels = CriteriaFilters.labels([])
+
+    email_button = %{
+      action: %{type: :send, event: "email", target: target},
+      face: %{type: :label, label: "Email all", icon: :mail}
+    }
 
     {
       :ok,
@@ -61,10 +71,21 @@ defmodule Systems.Pool.StudentsView do
         id: id,
         students: students,
         active_filters: [],
-        filter_labels: filter_labels
+        filter_labels: filter_labels,
+        email_button: email_button
       )
       |> prepare_students()
     }
+  end
+
+  @impl true
+  def handle_event("email", _, %{assigns: %{filtered_students: filtered_students}} = socket) do
+    recipients =
+      filtered_students
+      |> Enum.map(& &1.email)
+
+    send(self(), {:email_dialog, %{recipients: recipients}})
+    {:noreply, socket}
   end
 
   defp filter(students, nil), do: students
@@ -107,13 +128,19 @@ defmodule Systems.Pool.StudentsView do
   defp prepare_students(
          %{assigns: %{students: students, active_filters: active_filters, query: query}} = socket
        ) do
+    filtered_students =
+      students
+      |> filter(active_filters)
+      |> query(query)
+
+    filtered_student_items =
+      filtered_students
+      |> Enum.map(&to_view_model(&1, socket))
+
     socket
     |> assign(
-      filtered_students:
-        students
-        |> filter(active_filters)
-        |> query(query)
-        |> Enum.map(&to_view_model(&1, socket))
+      filtered_students: filtered_students,
+      filtered_student_items: filtered_student_items
     )
   end
 
@@ -199,8 +226,12 @@ defmodule Systems.Pool.StudentsView do
           />
         </div>
         <Spacing value="L" />
-        <Title2>{dgettext("link-studentpool", "tabbar.item.students")}: <span class="text-primary">{Enum.count(@filtered_students)}</span></Title2>
-        <ContentList items={@filtered_students} />
+        <div class="flex flex-row">
+          <Title2>{dgettext("link-studentpool", "tabbar.item.students")}: <span class="text-primary">{Enum.count(@filtered_students)}</span></Title2>
+          <div class="flex-grow" />
+          <DynamicButton vm={@email_button} />
+        </div>
+        <ContentList items={@filtered_student_items} />
       </div>
     </ContentArea>
     """

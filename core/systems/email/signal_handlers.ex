@@ -1,8 +1,8 @@
 defmodule Core.Mailer.SignalHandlers do
   use Frameworks.Signal.Handler
-  use Bamboo.Phoenix, view: Core.Mailer.EmailView
+  use Bamboo.Phoenix, view: Systems.Email.EmailView
   import Core.FeatureFlags
-  import Core.Mailer, only: [base_email: 0, deliver_later: 1]
+  alias Systems.Email
   alias Systems.Notification.Box
 
   @impl true
@@ -12,7 +12,7 @@ defmodule Core.Mailer.SignalHandlers do
         mail
         |> subject(title)
         |> render(:new_notification, title: title)
-        |> deliver_later()
+        |> Email.Context.deliver_later()
       end
     end
   end
@@ -24,6 +24,6 @@ defmodule Core.Mailer.SignalHandlers do
   end
 
   defp user_email(user) do
-    base_email() |> to(user.email) |> assign(:user, user)
+    Email.Context.base_email() |> to(user.email) |> assign(:user, user)
   end
 end

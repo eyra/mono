@@ -1,5 +1,5 @@
-defmodule Core.Mailer.EmailLayoutView do
-  use Phoenix.View, root: "lib/core/mailer/templates", namespace: Core.Mailer
+defmodule Systems.Email.EmailLayoutView do
+  use Phoenix.View, root: "systems/email/templates", namespace: Systems.Email
 
   @scales ["", "@2x", "@3x"]
   def header_image_tag(name) do

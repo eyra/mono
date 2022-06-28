@@ -1,0 +1,6 @@
+<h1>Hi <%= @to_user.displayname %>,</h1>
+
+<%= @body %>
+
+Kind regards,
+<%= @from_user.displayname %>

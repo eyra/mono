@@ -56,7 +56,7 @@ config :core, Core.ImageCatalog.Unsplash,
 
 config :core, image_catalog: Core.ImageCatalog.Unsplash
 
-config :core, Core.Mailer,
+config :core, Systems.Email.Mailer,
   adapter: Bamboo.LocalAdapter,
   default_from_email: "no-reply@example.com"
 
