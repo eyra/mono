@@ -11,6 +11,7 @@ defmodule CoreWeb.UI.Member do
   defviewmodel(
     title: nil,
     subtitle: nil,
+    subtitle_color: "text-grey4",
     photo_url: nil,
     button_large: nil,
     button_small: nil,
@@ -37,7 +38,7 @@ defmodule CoreWeb.UI.Member do
                 <div class="text-title6 font-title6 sm:text-title5 sm:font-title5 md:text-title4 md:font-title4 lg:text-title3 lg:font-title3 text-white">{title(@vm)}</div>
               </div>
               <div>
-                <div class="text-bodysmall sm:text-bodymedium lg:text-subhead font-subhead tracking-wider text-white">{subtitle(@vm)}</div>
+                <div class={"text-bodysmall sm:text-bodymedium lg:text-subhead font-subhead tracking-wider #{subtitle_color(@vm)}"}>{subtitle(@vm)}</div>
               </div>
             </div>
           </div>
