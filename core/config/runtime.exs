@@ -76,7 +76,7 @@ if config_env() == :prod do
       api_key: mailgun_api_key,
       domain: host,
       default_from_email: "no-reply@#{host}",
-      hackney_opts: [recv_timeout: :timer.minutes(0)]
+      hackney_opts: [recv_timeout: :timer.minutes(1)]
   end
 
   config :core, Core.Repo,
