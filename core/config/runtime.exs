@@ -55,7 +55,7 @@ if config_env() == :prod do
   if aws_access_key_id = System.get_env("AWS_ACCESS_KEY_ID") do
     config :ex_aws, access_key_id: aws_access_key_id
 
-    config :core, Systems.Email.Context,
+    config :core, Systems.Email.Mailer,
       adapter: Bamboo.SesAdapter,
       domain: host,
       default_from_email: "no-reply@#{host}"
