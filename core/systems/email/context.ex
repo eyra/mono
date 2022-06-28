@@ -18,9 +18,13 @@ defmodule Systems.Email.Context do
     |> assign(:email_header_image, "notification")
   end
 
-  def deliver_later(%Email.Model{subject: subject, message: message, from: from, to: to}) do
+  def deliver_later!(%Email.Model{subject: subject, message: message, from: from, to: to}) do
     Accounts.Email.admin(subject, message, from, to)
     |> deliver_later()
+  end
+
+  def deliver_later!(email) do
+    Email.Mailer.deliver_later!(email)
   end
 
   def deliver_later(email) do

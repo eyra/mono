@@ -62,7 +62,7 @@ defmodule Systems.Pool.OverviewPage do
   end
 
   def handle_info({:email_dialog, %Systems.Email.Model{} = email}, socket) do
-    Email.Context.deliver_now!(email)
+    Email.Context.deliver_later!(email)
 
     {
       :noreply,
