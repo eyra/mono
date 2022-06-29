@@ -48,17 +48,20 @@ defmodule Core.Accounts.Email do
     |> render(:account_created)
   end
 
-  def debug(subject, body, from_user, to_user) do
+  def debug(subject, message, from_user, to_user) do
     mail_user(to_user)
     |> from(from_user.email)
     |> subject(subject)
-    |> render(:debug_message, body: body, from_user: from_user, to_user: to_user)
+    |> render(:debug_message, message: message, from_user: from_user, to_user: to_user)
   end
 
-  def admin(subject, body, from, to) when is_binary(from) do
+  def admin(subject, message, from, to) when is_binary(from) do
+    text_message = message
+    html_message = message |> String.replace("\n", "<br>")
+
     mail_user(to)
     |> from(from)
     |> subject(subject)
-    |> render(:admin_message, body: body)
+    |> render(:admin_message, text_message: text_message, html_message: html_message)
   end
 end

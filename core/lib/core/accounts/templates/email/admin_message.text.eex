@@ -1,1 +1,1 @@
-<%= @body %>
+<%= @text_message %>
