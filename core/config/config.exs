@@ -40,7 +40,7 @@ config :esbuild,
 
 config :core, Oban,
   repo: Core.Repo,
-  queues: [default: 5],
+  queues: [default: 5, email_dispatchers: 1, email_delivery: 1],
   plugins: [
     {Oban.Plugins.Cron,
      crontab: [

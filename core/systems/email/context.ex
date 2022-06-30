@@ -18,25 +18,27 @@ defmodule Systems.Email.Context do
     |> assign(:email_header_image, "notification")
   end
 
-  def deliver_later!(%Email.Model{subject: subject, message: message, from: from, to: to}) do
-    Accounts.Email.admin(subject, message, from, to)
-    |> deliver_later()
-  end
-
-  def deliver_later!(email) do
-    Email.Mailer.deliver_later!(email)
-  end
-
-  def deliver_later(email) do
-    Email.Mailer.deliver_later(email)
-  end
+  def deliver_later!(%Email.Model{} = email), do: dispatch(email)
+  def deliver_later!(email), do: Email.Mailer.deliver_later!(email)
+  def deliver_later(email), do: Email.Mailer.deliver_later(email)
 
   def deliver_now!(%Email.Model{subject: subject, message: message, from: from, to: to}) do
     Accounts.Email.admin(subject, message, from, to)
     |> deliver_now!()
   end
 
-  def deliver_now!(email) do
-    Email.Mailer.deliver_now!(email)
+  def deliver_now!(email), do: Email.Mailer.deliver_now!(email)
+
+  def deliver_now(%Email.Model{subject: subject, message: message, from: from, to: to}) do
+    Accounts.Email.admin(subject, message, from, to)
+    |> deliver_now()
+  end
+
+  def deliver_now(email), do: Email.Mailer.deliver_now(email)
+
+  defp dispatch(email) when is_struct(email) do
+    email
+    |> Email.Dispatcher.new()
+    |> Oban.insert()
   end
 end

@@ -3,6 +3,7 @@ defmodule Systems.Email.Model do
   import Ecto.Changeset
 
   embedded_schema do
+    @derive Jason.Encoder
     field(:from, :string)
     field(:to, {:array, :string})
     field(:subject, :string)
