@@ -55,13 +55,26 @@ defmodule Core.Accounts.Email do
     |> render(:debug_message, message: message, from_user: from_user, to_user: to_user)
   end
 
-  def admin(subject, message, from, to) when is_binary(from) do
+  def notification(subject, message, from, to) when is_binary(from) do
     text_message = message
-    html_message = message |> String.replace("\n", "<br>")
+    html_message = message |> to_html()
 
     mail_user(to)
     |> from(from)
     |> subject(subject)
-    |> render(:admin_message, text_message: text_message, html_message: html_message)
+    |> render(:notification,
+      text_message: text_message,
+      html_message: html_message,
+      subject: subject
+    )
+  end
+
+  defp to_html(message) do
+    message
+    |> String.split("\n\n")
+    |> Enum.map(&String.trim(&1))
+    |> Enum.map(&String.replace(&1, "\n", "<br>"))
+    |> Enum.filter(&(byte_size(&1) != 0))
+    |> Enum.map_join(&"<p>#{&1}</p>")
   end
 end

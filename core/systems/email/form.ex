@@ -33,7 +33,9 @@ defmodule Systems.Email.Form do
 
   # Handle initial update
   def update(%{id: id, users: users, from_user: %{email: from} = from_user}, socket) do
-    model = %Email.Model{from: from, to: [from | users]}
+    # send also copy to sender, append to end of list
+    to = Enum.reverse([from | Enum.reverse(users)])
+    model = %Email.Model{from: from, to: to}
     changeset = Email.Model.changeset(:init, model, %{})
 
     {

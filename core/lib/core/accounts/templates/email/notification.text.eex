@@ -1,1 +1,3 @@
+<%= @subject %>
+
 <%= @text_message %>
