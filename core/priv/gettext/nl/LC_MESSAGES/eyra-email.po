@@ -20,8 +20,8 @@ msgid "recipients.label"
 msgstr "Ontvangers"
 
 #, elixir-format, ex-autogen
-msgid "subject.label"
-msgstr "Onderwerp"
+msgid "title.label"
+msgstr "Titel"
 
 #, elixir-format, ex-autogen
 msgid "send.button"
@@ -29,4 +29,4 @@ msgstr "Verstuur"
 
 #, elixir-format, ex-autogen
 msgid "dialog.title"
-msgstr "E-mail"
+msgstr "Notifcatie via e-mail"

@@ -6,11 +6,12 @@ defmodule Systems.Email.Model do
     @derive Jason.Encoder
     field(:from, :string)
     field(:to, {:array, :string})
-    field(:subject, :string)
+    field(:title, :string)
+    field(:byline, :string)
     field(:message, :string)
   end
 
-  @fields ~w(from to subject message)a
+  @fields ~w(from to title byline message)a
 
   def changeset(:init, %Systems.Email.Model{} = email, attrs) do
     email

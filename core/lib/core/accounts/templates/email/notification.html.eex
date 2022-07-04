@@ -1,3 +1,4 @@
-<h1><%= @subject %></h1>
+<h2><%= @title %></h2>
+<div class="subheader"><%= @byline %></div>
 
 <%= Phoenix.HTML.raw(@html_message) %>

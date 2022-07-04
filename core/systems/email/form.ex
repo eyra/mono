@@ -2,6 +2,8 @@ defmodule Systems.Email.Form do
   use CoreWeb.UI.LiveComponent
   import Phoenix.LiveView
 
+  alias Core.Accounts
+  alias CoreWeb.UI.Timestamp
   alias Frameworks.Pixel.Tag
   alias Frameworks.Pixel.Form.{Form, TextInput, TextArea}
   alias Frameworks.Pixel.Button.SubmitButton
@@ -33,9 +35,14 @@ defmodule Systems.Email.Form do
 
   # Handle initial update
   def update(%{id: id, users: users, from_user: %{email: from} = from_user}, socket) do
-    # send also copy to sender, append to end of list
+    # send a copy to sender, append email to end of list
     to = Enum.reverse([from | Enum.reverse(users)])
-    model = %Email.Model{from: from, to: to}
+
+    %{fullname: fullname} = Accounts.get_profile(from_user)
+    timestamp = Timestamp.humanize_en(Timestamp.naive_now())
+    byline = "#{fullname} | #{timestamp}"
+
+    model = %Email.Model{from: from, to: to, byline: byline}
     changeset = Email.Model.changeset(:init, model, %{})
 
     {
@@ -135,7 +142,7 @@ defmodule Systems.Email.Form do
       </div>
       <Spacing value="S" />
 
-      <TextInput field={:subject} label_text={dgettext("eyra-email", "subject.label")} debounce="0" />
+      <TextInput field={:title} label_text={dgettext("eyra-email", "title.label")} debounce="0" />
       <TextArea field={:message} label_text={dgettext("eyra-email", "message.label")} debounce="0" />
       <SubmitButton label={dgettext("eyra-email", "send.button")} />
     </Form>

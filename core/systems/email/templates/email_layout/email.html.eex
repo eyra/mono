@@ -5,7 +5,9 @@
             body,h1,h2,h3,p,table,tr,td { padding: 0; margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 20px; line-height: 150%; font-weight: normal; }
             table {background-color: #4272EF; width: 100%; padding: 0; font-size: 24px; font-weight: bold; border: none}
             table, tr, td {border: none; margin: 0; padding: 0}
-            h1,h2 { font-size: 32px; font-weight: bold; margin-top: 8px; margin-bottom: 8px; line-height: 120%; }
+            h1 { font-size: 32px; font-weight: bold; margin-top: 8px; margin-bottom: 8px; line-height: 120%; }
+            h2 { font-size: 24px; font-weight: bold; margin-top: 6px; margin-bottom: 6px; line-height: 120%; }
+            .subheader { font-size: 20px; font-weight: bold; margin-top: 4px; margin-bottom: 4px; line-height: 120%; color:#999; }
             .header-title { font-size: 24px; font-weight: bold; line-height: 120%; }
             .header-title {color: #FFFFFF; font-weight: bold; }
             p { margin-top: 12px; margin-bottom: 12px; }
@@ -21,7 +23,6 @@
             .footer-images td { line-height: 0 }
             .footer-contact { background-color: #F6F6F6; color: #999999; }
             .footer-contact td { font-size: 16px; padding-top: 24px; padding-bottom: 24px; }
-
         </style>
     </head>
     <body>

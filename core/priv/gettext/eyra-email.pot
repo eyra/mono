@@ -19,7 +19,7 @@ msgid "recipients.label"
 msgstr ""
 
 #, elixir-format, ex-autogen
-msgid "subject.label"
+msgid "title.label"
 msgstr ""
 
 #, elixir-format, ex-autogen

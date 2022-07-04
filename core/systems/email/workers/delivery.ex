@@ -19,11 +19,18 @@ defmodule Systems.Email.Delivery do
     end
   end
 
-  defp deliver(%{"to" => to, "from" => from, "subject" => subject, "message" => message}) do
+  defp deliver(%{
+         "to" => to,
+         "from" => from,
+         "title" => title,
+         "byline" => byline,
+         "message" => message
+       }) do
     deliver(%Email.Model{
       to: to,
       from: from,
-      subject: subject,
+      title: title,
+      byline: byline,
       message: message
     })
   end
