@@ -60,7 +60,6 @@ defmodule Core.Accounts.Email do
     html_message = message |> to_html()
 
     mail_user(to)
-    |> from(from)
     |> subject("Panl notification")
     |> render(:notification,
       title: title,
