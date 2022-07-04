@@ -33,13 +33,15 @@ defmodule Core.Pools.StudentFilters do
 
   defp state([] = _wallets), do: :inactive
 
-  defp state([wallet] = _wallets) do
+  defp state(%Bookkeeping.AccountModel{} = wallet) do
     if Core.Pools.is_target_achieved?(wallet) do
       :passed
     else
       :active
     end
   end
+
+  defp state([wallet] = _wallets), do: state(wallet)
 
   defp state([wallet, tail] = _wallets) do
     if state(wallet) == :passed do
