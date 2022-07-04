@@ -89,12 +89,12 @@ defmodule Systems.Email.Dialog.Example do
     <Dialog
       id={:email_dialog_example}
       users={[
-        "e.vanderveen@eyra.co",
-        "a.m.mendrik@eyra.co",
-        "emielvdveen@gmail.com",
-        "pietje.puk@gmail.com",
-        "jantje.paardehaar@gmail.com",
-        "jantje.smid@gmail.com"
+        %{email: "e.vanderveen@eyra.co", profile: %{fullname: "Emiel van der Veen"}},
+        %{email: "a.m.mendrik@eyra.co", profile: %{fullname: "Adrienne Mendrik"}},
+        %{email: "emielvdveen@gmail.com", profile: %{fullname: "Emiel van der Veen"}},
+        %{email: "pietje.puk@gmail.com", profile: %{fullname: "Pietje Puk"}},
+        %{email: "jantje.paardehaar@gmail.com", profile: %{fullname: "Jantje Paardehaar"}},
+        %{email: "jantje.smid@gmail.com", profile: %{fullname: "Jantje Smid"}}
       ]}
       current_user={%{email: "admin@eyra.co", displayname: "Ad Min"}}
     />

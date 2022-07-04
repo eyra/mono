@@ -61,6 +61,7 @@ config :core, image_catalog: Core.ImageCatalog.Unsplash
 
 config :core, Systems.Email.Mailer,
   adapter: Bamboo.LocalAdapter,
+  open_email_in_browser_url: "http://localhost:4000/sent_emails",
   default_from_email: "no-reply@example.com"
 
 config :web_push_encryption, :vapid_details,

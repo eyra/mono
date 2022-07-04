@@ -34,15 +34,16 @@ defmodule Systems.Email.Form do
   end
 
   # Handle initial update
-  def update(%{id: id, users: users, from_user: %{email: from} = from_user}, socket) do
+  def update(%{id: id, users: users, from_user: %{email: from_email} = from_user}, socket) do
     # send a copy to sender, append email to end of list
-    to = Enum.reverse([from | Enum.reverse(users)])
+    user_emails = users |> Enum.map(& &1.email)
+    to = Enum.reverse([from_email | Enum.reverse(user_emails)])
 
     %{fullname: fullname} = Accounts.get_profile(from_user)
     timestamp = Timestamp.humanize_en(Timestamp.apply_timezone(Timestamp.naive_now()))
     byline = "#{fullname} | #{timestamp}"
 
-    model = %Email.Model{from: from, to: to, byline: byline}
+    model = %Email.Model{from: from_email, to: to, byline: byline}
     changeset = Email.Model.changeset(:init, model, %{})
 
     {
@@ -117,9 +118,13 @@ defmodule Systems.Email.Form do
     {:noreply, socket}
   end
 
+  defp username(%{profile: %{fullname: fullname}}), do: fullname
+  defp username(%{email: email, displayname: nil}), do: String.split(email, "@")
+  defp username(%{displayname: displayname}), do: displayname
+
   defp tags(%{users: users}) when is_list(users) do
     users
-    |> Enum.map(&(String.split(&1, "@") |> Enum.at(0)))
+    |> Enum.map(&username(&1))
   end
 
   @impl true

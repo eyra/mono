@@ -273,3 +273,15 @@ msgstr ""
 #, elixir-format, ex-autogen
 msgid "pool_campaign_status.submitted"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "student_filters.active"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "student_filters.inactive"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "student_filters.passed"
+msgstr ""

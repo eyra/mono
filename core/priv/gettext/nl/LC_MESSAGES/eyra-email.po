@@ -29,4 +29,4 @@ msgstr "Verstuur"
 
 #, elixir-format, ex-autogen
 msgid "dialog.title"
-msgstr "Notifcatie via e-mail"
+msgstr "Notificatie via e-mail"

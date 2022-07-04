@@ -29,4 +29,4 @@ msgstr "Send"
 
 #, elixir-format, ex-autogen
 msgid "dialog.title"
-msgstr "Notification by email"
+msgstr "Notify by email"

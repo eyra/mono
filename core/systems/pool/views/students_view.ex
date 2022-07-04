@@ -2,7 +2,7 @@ defmodule Systems.Pool.StudentsView do
   use CoreWeb.UI.LiveComponent
 
   alias Core.Accounts.Features
-  alias Core.Pools.CriteriaFilters
+  alias Core.Pools.{CriteriaFilters, StudentFilters}
 
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text.Title2
@@ -58,11 +58,11 @@ defmodule Systems.Pool.StudentsView do
         %{id: id, props: %{students: students}} = _params,
         %{assigns: %{myself: target}} = socket
       ) do
-    filter_labels = CriteriaFilters.labels([])
+    filter_labels = CriteriaFilters.labels([]) ++ StudentFilters.labels([])
 
     email_button = %{
       action: %{type: :send, event: "email", target: target},
-      face: %{type: :label, label: "Email all", icon: :mail}
+      face: %{type: :label, label: dgettext("eyra-ui", "notify.all"), icon: :chat}
     }
 
     {
@@ -81,11 +81,7 @@ defmodule Systems.Pool.StudentsView do
 
   @impl true
   def handle_event("email", _, %{assigns: %{filtered_students: filtered_students}} = socket) do
-    recipients =
-      filtered_students
-      |> Enum.map(& &1.email)
-
-    send(self(), {:email_dialog, %{recipients: recipients}})
+    send(self(), {:email_dialog, %{recipients: filtered_students}})
     {:noreply, socket}
   end
 
@@ -94,7 +90,10 @@ defmodule Systems.Pool.StudentsView do
 
   defp filter(students, filters) do
     students
-    |> Enum.filter(&CriteriaFilters.include?(&1.features.study_program_codes, filters))
+    |> Enum.filter(
+      &(CriteriaFilters.include?(&1.features.study_program_codes, filters) and
+          StudentFilters.include?(&1, filters))
+    )
   end
 
   defp query(students, nil), do: students
@@ -209,13 +208,15 @@ defmodule Systems.Pool.StudentsView do
           <div class="font-label text-label">Filter:</div>
           <Selector id={:student_filters} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
           <div class="flex-grow" />
-          <SearchBar
-            id={:student_search_bar}
-            query_string={@query_string}
-            placeholder={dgettext("link-studentpool", "search.placeholder")}
-            debounce="200"
-            parent={%{type: __MODULE__, id: @id}}
-          />
+          <div class="flex-shrink-0">
+            <SearchBar
+              id={:student_search_bar}
+              query_string={@query_string}
+              placeholder={dgettext("link-studentpool", "search.placeholder")}
+              debounce="200"
+              parent={%{type: __MODULE__, id: @id}}
+            />
+          </div>
         </div>
         <Spacing value="L" />
         <div class="flex flex-row">

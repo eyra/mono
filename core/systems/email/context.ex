@@ -26,17 +26,16 @@ defmodule Systems.Email.Context do
         title: title,
         byline: byline,
         message: message,
-        from: from,
         to: to
       }) do
-    Accounts.Email.notification(title, byline, message, from, to)
+    Accounts.Email.notification(title, byline, message, to)
     |> deliver_now!()
   end
 
   def deliver_now!(email), do: Email.Mailer.deliver_now!(email)
 
-  def deliver_now(%Email.Model{title: title, byline: byline, message: message, from: from, to: to}) do
-    Accounts.Email.notification(title, byline, message, from, to)
+  def deliver_now(%Email.Model{title: title, byline: byline, message: message, to: to}) do
+    Accounts.Email.notification(title, byline, message, to)
     |> deliver_now()
   end
 

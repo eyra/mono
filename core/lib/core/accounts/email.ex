@@ -55,7 +55,7 @@ defmodule Core.Accounts.Email do
     |> render(:debug_message, message: message, from_user: from_user, to_user: to_user)
   end
 
-  def notification(title, byline, message, from, to) when is_binary(from) do
+  def notification(title, byline, message, to) do
     text_message = message
     html_message = message |> to_html()
 

@@ -274,3 +274,15 @@ msgstr "Scheduled"
 #, elixir-format, ex-autogen
 msgid "pool_campaign_status.submitted"
 msgstr "Submitted"
+
+#, elixir-format, ex-autogen
+msgid "student_filters.active"
+msgstr "Active"
+
+#, elixir-format, ex-autogen
+msgid "student_filters.inactive"
+msgstr "Inactive"
+
+#, elixir-format, ex-autogen
+msgid "student_filters.passed"
+msgstr "Passed"
