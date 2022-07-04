@@ -39,7 +39,7 @@ defmodule Systems.Email.Form do
     to = Enum.reverse([from | Enum.reverse(users)])
 
     %{fullname: fullname} = Accounts.get_profile(from_user)
-    timestamp = Timestamp.humanize_en(Timestamp.naive_now())
+    timestamp = Timestamp.humanize_en(Timestamp.apply_timezone(Timestamp.naive_now()))
     byline = "#{fullname} | #{timestamp}"
 
     model = %Email.Model{from: from, to: to, byline: byline}
