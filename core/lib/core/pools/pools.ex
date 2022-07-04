@@ -103,4 +103,12 @@ defmodule Core.Pools do
   def target(:first), do: 60
   def target(:second), do: 3
   def target(_), do: -1
+
+  def is_target_achieved?(
+        %{identifier: ["wallet" | [pool_id, _user_id]], balance_credit: balance_credit} = _account
+      ) do
+    balance_credit >= target(pool_id)
+  end
+
+  def is_target_achieved?(_), do: false
 end

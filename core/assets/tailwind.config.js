@@ -172,6 +172,10 @@ module.exports = {
         "bodylinkmedium": ['30px', '30px'],
         "link": ['16px', '24px'],
       },
+      minWidth: {
+        '1/2': '50%',
+        '3/4': '75%'
+      },
       maxWidth: {
         "card": "376px",
         "form": "400px",
@@ -179,12 +183,15 @@ module.exports = {
         "popup": "480px",
         "popup-sm": "520px",
         "popup-md": "730px",
-        "popup-lg": "1228px"
+        "popup-lg": "1228px",
+        '3/4': '75%',
+        '9/10': '90%'
       },
       maxHeight: {
         "dropdown": "317px",
         "header1": "376px",
-        "form": "400px"
+        "form": "400px",
+        "mailto": "128px"
       },
     },
   },

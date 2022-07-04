@@ -1,4 +1,4 @@
-defmodule CoreWeb.Mail.Forms.DebugSchema do
+defmodule Systems.Email.DebugModel do
   use Ecto.Schema
 
   embedded_schema do
@@ -8,15 +8,23 @@ defmodule CoreWeb.Mail.Forms.DebugSchema do
   end
 end
 
-defmodule CoreWeb.Mail.Forms.Debug do
+defmodule Systems.Email.DebugForm do
   use CoreWeb.LiveForm
   import Ecto.Changeset
 
+  alias Core.Accounts
+
+  alias Phoenix.LiveView
   alias Frameworks.Pixel.Text.{Title2}
   alias Frameworks.Pixel.Form.{Form, TextInput, TextArea}
   alias Frameworks.Pixel.Button.SubmitButton
-  use Bamboo.Phoenix, view: Core.Mailer.EmailView
-  import Core.Mailer, only: [base_email: 0, deliver_now!: 1]
+  use Bamboo.Phoenix, view: Systems.Email.EmailView
+
+  alias Systems.{
+    Email
+  }
+
+  prop(user, :map)
 
   data(to, :string)
   data(subject, :string)
@@ -25,32 +33,35 @@ defmodule CoreWeb.Mail.Forms.Debug do
   data(changeset, :any)
 
   # Handle update from parent after auto-save, prevents overwrite of current state
-  def update(%{id: id} = params, socket) do
+  def update(%{id: id, user: user} = params, socket) do
     {:ok,
      socket
-     |> Phoenix.LiveView.assign(:id, id)
-     |> Phoenix.LiveView.assign(:changeset, changeset(params))}
+     |> LiveView.assign(:id, id)
+     |> LiveView.assign(user: user)
+     |> LiveView.assign(:changeset, changeset(params))}
   end
 
   @impl true
   def handle_event(
         "update",
-        %{"debug_schema" => mail_data},
+        %{"debug_model" => mail_data},
         socket
       ) do
-    {:noreply, Phoenix.LiveView.assign(socket, :changeset, changeset(mail_data))}
+    {:noreply, LiveView.assign(socket, :changeset, changeset(mail_data))}
   end
 
   @impl true
   def handle_event(
         "send",
-        %{"debug_schema" => mail_data},
-        socket
+        %{"debug_model" => mail_data},
+        %{assigns: %{user: from_user}} = socket
       ) do
     changeset =
       case changeset(mail_data) do
         %{valid?: true, changes: %{to: to, subject: subject, message: message}} ->
-          send_mail(to, subject, message)
+          to_user = Accounts.get_user_by_email(to)
+
+          send_mail(subject, message, from_user, to_user)
           changeset(%{})
 
         changeset ->
@@ -67,7 +78,7 @@ defmodule CoreWeb.Mail.Forms.Debug do
   def render(assigns) do
     ~F"""
     <ContentArea>
-      <Title2>Mail</Title2>
+      <Title2>Email</Title2>
       <Form
         id="mail_form"
         changeset={@changeset}
@@ -86,16 +97,12 @@ defmodule CoreWeb.Mail.Forms.Debug do
   end
 
   defp changeset(params) do
-    %CoreWeb.Mail.Forms.DebugSchema{}
+    %Systems.Email.DebugModel{}
     |> cast(params, [:to, :subject, :message])
   end
 
-  defp send_mail(to, subject, message) do
-    base_email()
-    |> to(to)
-    |> subject(subject)
-    |> Map.put(:text_body, message)
-    |> Map.put(:html_body, message)
-    |> deliver_now!()
+  defp send_mail(subject, message, from_user, to_user) do
+    Accounts.Email.debug(subject, message, from_user, to_user)
+    |> Email.Context.deliver_now!()
   end
 end

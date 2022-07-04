@@ -7,7 +7,7 @@ defmodule Link.Debug do
   alias CoreWeb.Router.Helpers, as: Routes
 
   alias CoreWeb.User.Forms.Debug, as: UserDebugForm
-  alias CoreWeb.Mail.Forms.Debug, as: MailDebugForm
+  alias Systems.Email.DebugForm, as: EmailDebugForm
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias Frameworks.Pixel.Spacing
@@ -187,7 +187,7 @@ defmodule Link.Debug do
       <Spacing value="XL" />
       <UserDebugForm id={:user_debug} user={@current_user} />
       <Spacing value="XL" />
-      <MailDebugForm id={:mail_debug} />
+      <EmailDebugForm id={:mail_debug} user={@current_user} />
     </Workspace>
     """
   end

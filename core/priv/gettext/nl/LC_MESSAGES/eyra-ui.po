@@ -202,3 +202,7 @@ msgstr "Niet opgeslagen, herlaad en probeer het opnieuw"
 #, elixir-format, ex-autogen
 msgid "mailto.button"
 msgstr "Benaderen"
+
+#, elixir-format, ex-autogen
+msgid "notify.all"
+msgstr "Stuur notificatie"

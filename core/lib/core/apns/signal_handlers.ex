@@ -1,6 +1,6 @@
 defmodule Core.APNS.SignalHandlers do
   use Frameworks.Signal.Handler
-  use Bamboo.Phoenix, view: Core.Mailer.EmailView
+  use Bamboo.Phoenix, view: Systems.Email.EmailView
   import Core.APNS, only: [send_notification: 2]
 
   @impl true

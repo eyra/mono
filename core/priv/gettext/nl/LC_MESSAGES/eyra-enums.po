@@ -274,3 +274,15 @@ msgstr "Ingepland"
 #, elixir-format, ex-autogen
 msgid "pool_campaign_status.submitted"
 msgstr "Ingediend"
+
+#, elixir-format, ex-autogen
+msgid "student_filters.active"
+msgstr "Actief"
+
+#, elixir-format, ex-autogen
+msgid "student_filters.inactive"
+msgstr "Inactief"
+
+#, elixir-format, ex-autogen
+msgid "student_filters.passed"
+msgstr "Geslaagd"

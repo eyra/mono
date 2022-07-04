@@ -8,6 +8,9 @@ config :ex_aws, :s3,
 
 # Only in tests, remove the complexity from the password hashing algorithm
 config :bcrypt_elixir, :log_rounds, 1
+
+config :logger, level: :debug
+
 # Configure your database
 config :core, Core.Repo,
   username: "postgres",
@@ -56,8 +59,9 @@ config :core, Core.ImageCatalog.Unsplash,
 
 config :core, image_catalog: Core.ImageCatalog.Unsplash
 
-config :core, Core.Mailer,
+config :core, Systems.Email.Mailer,
   adapter: Bamboo.LocalAdapter,
+  open_email_in_browser_url: "http://localhost:4000/sent_emails",
   default_from_email: "no-reply@example.com"
 
 config :web_push_encryption, :vapid_details,

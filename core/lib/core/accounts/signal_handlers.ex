@@ -2,9 +2,13 @@ defmodule Core.Accounts.SignalHandlers do
   use Frameworks.Signal.Handler
   import Ecto.Changeset
   alias Core.Accounts
-  alias Systems.NextAction
+
+  alias Systems.{
+    NextAction,
+    Email
+  }
+
   alias Core.Accounts.NextActions.{CompleteProfile, PromotePushStudent, SelectStudyStudent}
-  alias Core.Accounts.Email
 
   @impl true
   def dispatch(:user_profile_updated, %{
@@ -62,7 +66,7 @@ defmodule Core.Accounts.SignalHandlers do
       NextAction.Context.create_next_action(user, PromotePushStudent)
     end
 
-    Email.account_created(user)
-    |> Core.Mailer.deliver_later()
+    Accounts.Email.account_created(user)
+    |> Email.Context.deliver_later()
   end
 end

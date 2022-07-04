@@ -40,7 +40,7 @@ config :esbuild,
 
 config :core, Oban,
   repo: Core.Repo,
-  queues: [default: 5],
+  queues: [default: 5, email_dispatchers: 1, email_delivery: 1],
   plugins: [
     {Oban.Plugins.Cron,
      crontab: [
@@ -50,7 +50,9 @@ config :core, Oban,
 
 config :core, ecto_repos: [Core.Repo]
 
-config :core, Core.Mailer, adapter: Bamboo.TestAdapter, default_from_email: "no-reply@example.com"
+config :core, Systems.Email.Mailer,
+  adapter: Bamboo.TestAdapter,
+  default_from_email: "no-reply@example.com"
 
 config :core, Core.SurfConext,
   client_id: "not-set",

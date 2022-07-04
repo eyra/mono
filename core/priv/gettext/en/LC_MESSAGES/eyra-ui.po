@@ -202,3 +202,7 @@ msgstr "Not saved, please reload and try again"
 #, elixir-format, ex-autogen
 msgid "mailto.button"
 msgstr "Get in touch"
+
+#, elixir-format, ex-autogen
+msgid "notify.all"
+msgstr "Send notification"

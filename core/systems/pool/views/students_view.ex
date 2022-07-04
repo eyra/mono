@@ -2,7 +2,7 @@ defmodule Systems.Pool.StudentsView do
   use CoreWeb.UI.LiveComponent
 
   alias Core.Accounts.Features
-  alias Core.Pools.CriteriaFilters
+  alias Core.Pools.{CriteriaFilters, StudentFilters}
 
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text.Title2
@@ -15,8 +15,10 @@ defmodule Systems.Pool.StudentsView do
   data(students, :map)
   data(query, :any, default: nil)
   data(query_string, :string, default: "")
-  data(filtered_students, :map)
+  data(filtered_students, :list)
+  data(filtered_student_items, :list)
   data(filter_labels, :list)
+  data(email_button, :map)
 
   # Handle Selector Update
   def update(%{active_item_ids: active_filters, selector_id: :student_filters}, socket) do
@@ -52,8 +54,16 @@ defmodule Systems.Pool.StudentsView do
   end
 
   # Initial update
-  def update(%{id: id, props: %{students: students}} = _params, socket) do
-    filter_labels = CriteriaFilters.labels([])
+  def update(
+        %{id: id, props: %{students: students}} = _params,
+        %{assigns: %{myself: target}} = socket
+      ) do
+    filter_labels = CriteriaFilters.labels([]) ++ StudentFilters.labels([])
+
+    email_button = %{
+      action: %{type: :send, event: "email", target: target},
+      face: %{type: :label, label: dgettext("eyra-ui", "notify.all"), icon: :chat}
+    }
 
     {
       :ok,
@@ -62,10 +72,17 @@ defmodule Systems.Pool.StudentsView do
         id: id,
         students: students,
         active_filters: [],
-        filter_labels: filter_labels
+        filter_labels: filter_labels,
+        email_button: email_button
       )
       |> prepare_students()
     }
+  end
+
+  @impl true
+  def handle_event("email", _, %{assigns: %{filtered_students: filtered_students}} = socket) do
+    send(self(), {:email_dialog, %{recipients: filtered_students}})
+    {:noreply, socket}
   end
 
   defp filter(students, nil), do: students
@@ -73,7 +90,10 @@ defmodule Systems.Pool.StudentsView do
 
   defp filter(students, filters) do
     students
-    |> Enum.filter(&CriteriaFilters.include?(&1.features.study_program_codes, filters))
+    |> Enum.filter(
+      &(CriteriaFilters.include?(&1.features.study_program_codes, filters) and
+          StudentFilters.include?(&1, filters))
+    )
   end
 
   defp query(students, nil), do: students
@@ -108,13 +128,19 @@ defmodule Systems.Pool.StudentsView do
   defp prepare_students(
          %{assigns: %{students: students, active_filters: active_filters, query: query}} = socket
        ) do
+    filtered_students =
+      students
+      |> filter(active_filters)
+      |> query(query)
+
+    filtered_student_items =
+      filtered_students
+      |> Enum.map(&to_view_model(&1, socket))
+
     socket
     |> assign(
-      filtered_students:
-        students
-        |> filter(active_filters)
-        |> query(query)
-        |> Enum.map(&to_view_model(&1, socket))
+      filtered_students: filtered_students,
+      filtered_student_items: filtered_student_items
     )
   end
 
@@ -182,17 +208,23 @@ defmodule Systems.Pool.StudentsView do
           <div class="font-label text-label">Filter:</div>
           <Selector id={:student_filters} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
           <div class="flex-grow" />
-          <SearchBar
-            id={:student_search_bar}
-            query_string={@query_string}
-            placeholder={dgettext("link-studentpool", "search.placeholder")}
-            debounce="200"
-            parent={%{type: __MODULE__, id: @id}}
-          />
+          <div class="flex-shrink-0">
+            <SearchBar
+              id={:student_search_bar}
+              query_string={@query_string}
+              placeholder={dgettext("link-studentpool", "search.placeholder")}
+              debounce="200"
+              parent={%{type: __MODULE__, id: @id}}
+            />
+          </div>
         </div>
         <Spacing value="L" />
-        <Title2>{dgettext("link-studentpool", "tabbar.item.students")}: <span class="text-primary">{Enum.count(@filtered_students)}</span></Title2>
-        <ContentList items={@filtered_students} />
+        <div class="flex flex-row">
+          <Title2>{dgettext("link-studentpool", "tabbar.item.students")}: <span class="text-primary">{Enum.count(@filtered_students)}</span></Title2>
+          <div class="flex-grow" />
+          <DynamicButton vm={@email_button} />
+        </div>
+        <ContentList items={@filtered_student_items} />
       </div>
     </ContentArea>
     """
