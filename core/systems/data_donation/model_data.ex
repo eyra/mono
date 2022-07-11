@@ -92,11 +92,12 @@ defmodule Systems.DataDonation.ModelData do
         research_topic: nil,
         research_description: %{
           "nl" =>
-            "De gegevens die we u vragen te doneren kunnen worden gebruikt om te onderzoeken... <TBD>",
-          "en" => "The data that we ask you to donate could be used to investigate... <TBD>"
+            "De gegevens die we u vragen te doneren kunnen worden gebruikt om te onderzoeken hoe mensen WhatsApp gebruiken. Gegevens, zoals het aantal WhatsApp groepen waar u in zit en het aantal WhatsApp contacten, zullen uit uw WhatsApp account bestand gehaald worden. Dit zijn echter geen gegevens die te herleiden zijn naar personen.",
+          "en" =>
+            "The data that we ask you to donate could be used to investigate how people use WhatsApp. Information, such as the number of WhatsApp groups you participate in and the number of contacts you interact with, will be extracted from your WhatsApp account information. However, no personal identifiable information will be extracted."
         },
         platform: "Whatsapp",
-        redirect_to: nil,
+        redirect_to: :thanks_whatsapp_account,
         storage: :s3,
         storage_info: %{key: "whatsapp_account"},
         script: "whatsapp_account.py"

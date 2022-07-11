@@ -165,4 +165,4 @@ msgstr "Wilt u de gegevens hierboven doneren aan %{recipient}?"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "thanks.whatsappchat.description"
-msgstr "Hartelijk dank voor uw deelname. Als volgende stap zouden we u willen vragen om gegevens te doneren over uw Whatsapp gebruik uit uw Whatsapp account bestand. In de uitnodiging e-mail die u ontvangen heeft kunt u lezen wat u hiervoor moet doen. Alvast hartelijk dank."
+msgstr "Hartelijk dank voor uw donatie. We zijn benieuwd hoe u het doneren van de data heeft ervaren. Zou u deze vragenlijst "

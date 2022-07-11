@@ -19,6 +19,7 @@ defmodule Systems.DataDonation.Routes do
 
         live("/thanks/:id/:participant", ThanksPage)
         live("/thankswhatsappchat/:id/:participant", ThanksWhatsappChatPage)
+        live("/thankswhatsappaccount/:id/:participant", ThanksWhatsappAccountPage)
 
         get("/centerdata/:id", CenterdataController, :create)
         live("/centerdata/fakeapi/page", CenterdataFakeApiPage)

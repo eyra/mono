@@ -141,7 +141,7 @@ msgstr "Thank you"
 
 #, elixir-format, ex-autogen
 msgid "survey.link"
-msgstr "this survey"
+msgstr "the following survey"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "welcome.description.top"
@@ -149,7 +149,7 @@ msgstr "You will be able to donate your data to %{recipient} in a minute. We wil
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "thanks.description"
-msgstr "We greatly appreciate your contribution and would love to hear how you experienced the data donation process.<br>Let us know by filling out %{survey_link}.<br>Thanks in advance."
+msgstr "Thank you for your participation. We would love to hear how you experienced the data donation process.<br>Please let us know by filling out %{survey_link}.<br>Thank you in advance."
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "welcome.description.bottom"
