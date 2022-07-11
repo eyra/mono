@@ -197,3 +197,7 @@ msgstr ""
 #, elixir-format, ex-autogen
 msgid "persister.error.flash"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "pronoun.him"
+msgstr ""

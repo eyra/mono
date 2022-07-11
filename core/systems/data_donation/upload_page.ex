@@ -108,17 +108,21 @@ defmodule Systems.DataDonation.UploadPage do
            assigns: %{
              id: id,
              session: %{"participant" => participant},
-             vm: %{redirect_to: :thanks}
+             vm: %{redirect_to: redirect_to}
            }
          } = socket
        ) do
-    push_redirect(socket, to: Routes.live_path(socket, DataDonation.ThanksPage, id, participant))
+    thanks_page = thanks_page(redirect_to)
+    push_redirect(socket, to: Routes.live_path(socket, thanks_page, id, participant))
   end
 
   defp next_action(socket) do
     IO.puts("NO PUSH")
     socket
   end
+
+  defp thanks_page(:thanks), do: DataDonation.ThanksPage
+  defp thanks_page(:thanks_whatsapp_chat), do: DataDonation.ThanksWhatsappChatPage
 
   @impl true
   def render(assigns) do

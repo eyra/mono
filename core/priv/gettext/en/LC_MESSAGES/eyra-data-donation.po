@@ -162,3 +162,7 @@ msgstr "No"
 #, elixir-format, ex-autogen, fuzzy
 msgid "submit_data.action.label"
 msgstr "Do you want to donate the data above to %{recipient}?"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "thanks.whatsappchat.description"
+msgstr "Thank you for your donation. Next we would like to ask you to donate information on Whatsapp use from your Whatsapp account file. Please return to the invitation email for more information. Thank you in advance."
