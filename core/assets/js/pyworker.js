@@ -10,13 +10,15 @@ loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.19.0/full/" }).then
 });
 
 let file = undefined
+var filename = undefined
 
 onmessage = (event) => {
   const { eventType } = event.data;
   if (eventType === "loadScript") {
     self.pyodide.runPython(event.data.script)
   } else if (eventType === "initData") {
-    file = self.pyodide.FS.open("user-data", "w")
+    filename = event.data.filename
+    file = self.pyodide.FS.open(filename, "w")
   } else if (eventType === "data") {
     self.pyodide.FS.write(file, event.data.chunk, 0, event.data.chunk.length)
   } else if (eventType === "processData") {
@@ -26,7 +28,7 @@ onmessage = (event) => {
       import html
       import pandas as pd
 
-      result = process(open("user-data", "rb"))
+      result = process("${filename}")
 
       if not result:
         data_frame = pd.DataFrame()
