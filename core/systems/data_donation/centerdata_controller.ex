@@ -2,6 +2,7 @@ defmodule Systems.DataDonation.CenterdataController do
   use CoreWeb, :controller
 
   @supported_locales ~w(nl en)
+  @url "https://quest.centerdata.nl/eyra/dd.php"
 
   def create(conn, %{"id" => id} = params) do
     []
@@ -20,13 +21,12 @@ defmodule Systems.DataDonation.CenterdataController do
            "questiontext1" => questiontext1,
            "respondent" => respondent,
            "token" => token,
-           "url" => url,
            "varname1" => varname1,
            "varvalue1" => varvalue1
          }
        ) do
     session = %{
-      url: url,
+      url: @url,
       page: page,
       varname1: varname1,
       varvalue1: varvalue1,
