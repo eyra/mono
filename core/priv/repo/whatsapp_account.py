@@ -6,7 +6,8 @@ import pandas as pd
 import json
 
 HIDDEN_FILE_RE = re.compile(r".*__MACOSX*")
-FILE_RE = re.compile(r".*.json$")
+JSON_FILE_RE = re.compile(r".*.json$")
+TXT_FILE_RE = re.compile(r".*.txt$")
 
 
 class ColnamesDf:
@@ -33,9 +34,11 @@ def format_results(df):
 
 
 def format_errors(errors):
+    if len(errors) == 0:
+        return []
     data_frame = pd.DataFrame()
     data_frame["Messages"] = pd.Series(errors, name="Messages")
-    return {"id": "extraction_log", "title": "Extraction log", "data_frame": data_frame}
+    return [{"id": "extraction_log", "title": "Extraction log", "data_frame": data_frame}]
 
 
 def extract_data(log_error, data):
@@ -70,7 +73,7 @@ def parse_zipfile(log_error, zfile):
     for name in zfile.namelist():
         if HIDDEN_FILE_RE.match(name):
             continue
-        if not FILE_RE.match(name):
+        if not JSON_FILE_RE.match(name):
             continue
         return parse_records(log_error, zfile.open(name))
     log_error("No Json file is available")
@@ -79,17 +82,27 @@ def parse_zipfile(log_error, zfile):
 def process(file_data):
     errors = []
     log_error = errors.append
-    zfile = zipfile.ZipFile(file_data)
-    data = parse_zipfile(log_error, zfile)
+
+    try:
+        zfile = zipfile.ZipFile(file_data)
+    except:
+        if TXT_FILE_RE.match(file_data):
+            tfile = open(file_data, encoding="utf8")
+            data = parse_records(log_error, tfile)
+
+        else:
+            log_error("There is not a valid file format.")
+            return format_errors(errors)
+    else:
+        data = parse_zipfile(log_error, zfile)
 
     if data is not None:
         groups_no, contacts_no = extract_data(log_error, data)
-
-    if errors:
-        return [format_errors(errors)]
-
-    d = {'number_of_groups': [groups_no], 'number_of_contacts': [contacts_no]}
-    df = pd.DataFrame(data=d)
-    formatted_results = format_results(df)
-
-    return formatted_results
+        d = {
+            'number_of_groups': [groups_no],
+            'number_of_contacts': [contacts_no]
+            }
+        df = pd.DataFrame(data=d)
+        return format_results(df) + format_errors(errors)
+    else:
+        return format_errors(errors)
