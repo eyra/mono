@@ -74,6 +74,7 @@ export const PythonUploader = {
     sendDataToWorker(worker) {
         const fileInput = this.el.querySelector("input[type=file]")
         const file = fileInput.files[0];
+        const filename = file.name
         const reader = file.stream().getReader();
         const sendToWorker = ({ done, value }) => {
             if (done) {
@@ -83,7 +84,7 @@ export const PythonUploader = {
             worker.postMessage({ eventType: "data", chunk: value });
             reader.read().then(sendToWorker);
         };
-        worker.postMessage({ eventType: "initData", size: file.size });
+        worker.postMessage({ eventType: "initData", filename: filename, size: file.size });
         reader.read().then(sendToWorker);
     }
 }

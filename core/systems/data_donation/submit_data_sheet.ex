@@ -30,6 +30,13 @@ defmodule Systems.DataDonation.SubmitDataSheet do
     socket |> assign(form: get_form(props))
   end
 
+  defp get_form(%{storage: :fake}) do
+    %{
+      module: Systems.DataDonation.FakeForm,
+      props: %{}
+    }
+  end
+
   defp get_form(%{storage: :s3}) do
     %{
       module: Systems.DataDonation.S3Form,

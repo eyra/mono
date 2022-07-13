@@ -3,9 +3,9 @@ defmodule Systems.DataDonation.S3StorageBackend do
 
   alias ExAws.S3
 
-  def store(%{"participant" => participant} = _state, _vm, data) do
+  def store(%{"participant" => participant} = _state, %{storage_info: %{key: key}} = _vm, data) do
     [data]
-    |> S3.upload(bucket(), path(participant))
+    |> S3.upload(bucket(), path(key, participant))
     |> ExAws.request()
   end
 
@@ -15,8 +15,8 @@ defmodule Systems.DataDonation.S3StorageBackend do
     |> Keyword.fetch!(:bucket)
   end
 
-  def path(participant) do
+  def path(key, participant) do
     timestamp = "Europe/Amsterdam" |> DateTime.now!() |> DateTime.to_iso8601(:basic)
-    "#{participant}/#{timestamp}.json"
+    "#{key}/#{participant}/#{timestamp}.json"
   end
 end

@@ -32,7 +32,7 @@ defmodule Systems.DataDonation.ModelData do
         platform: "Google",
         redirect_to: :thanks,
         storage: :s3,
-        storage_info: %{},
+        storage_info: %{key: "google"},
         script: "script.py"
       },
       %Model{
@@ -51,6 +51,56 @@ defmodule Systems.DataDonation.ModelData do
         storage: :centerdata,
         storage_info: %{quest: "C_Datadonation_pilot"},
         script: "script.py"
+      },
+      %Model{
+        id: 3,
+        recipient: "Universiteit Utrecht",
+        researcher: %ResearcherModel{
+          name: "dr. Rense Corten",
+          pronoun: dgettext("eyra-ui", "pronoun.him"),
+          job_title: "Associate Professor",
+          institution: %InstitutionModel{
+            name: "Universiteit Utrecht",
+            image: "/images/uu_card.svg"
+          }
+        },
+        research_topic: nil,
+        research_description: %{
+          "nl" =>
+            "De gegevens die we u vragen te doneren kunnen worden gebruikt om te onderzoeken hoe mensen Whatsapp groepen gebruiken. Gegevens, zoals aantal berichten per persoon, zullen uit uw WhatsApp groep bestand gehaald worden. Dit zijn echter geen gegevens die te herleiden zijn naar personen.",
+          "en" =>
+            "The data that we ask you to donate could be used to investigate how people use Whatsapp groups. Information, such as number of messages per person, will be extracted from your WhatsApp group data. However, no personal identifiable information will be extracted."
+        },
+        platform: "Whatsapp",
+        redirect_to: :thanks_whatsapp_chat,
+        storage: :s3,
+        storage_info: %{key: "whatsapp_chat"},
+        script: "whatsapp_chat.py"
+      },
+      %Model{
+        id: 4,
+        recipient: "Universiteit Utrecht",
+        researcher: %ResearcherModel{
+          name: "dr. Rense Corten",
+          pronoun: dgettext("eyra-ui", "pronoun.him"),
+          job_title: "Associate Professor",
+          institution: %InstitutionModel{
+            name: "Universiteit Utrecht",
+            image: "/images/uu_card.svg"
+          }
+        },
+        research_topic: nil,
+        research_description: %{
+          "nl" =>
+            "De gegevens die we u vragen te doneren kunnen worden gebruikt om te onderzoeken hoe mensen WhatsApp gebruiken. Gegevens, zoals het aantal WhatsApp groepen waar u in zit en het aantal WhatsApp contacten, zullen uit uw WhatsApp account bestand gehaald worden. Dit zijn echter geen gegevens die te herleiden zijn naar personen.",
+          "en" =>
+            "The data that we ask you to donate could be used to investigate how people use WhatsApp. Information, such as the number of WhatsApp groups you participate in and the number of contacts you interact with, will be extracted from your WhatsApp account information. However, no personal identifiable information will be extracted."
+        },
+        platform: "Whatsapp",
+        redirect_to: :thanks_whatsapp_account,
+        storage: :s3,
+        storage_info: %{key: "whatsapp_account"},
+        script: "whatsapp_account.py"
       }
     ]
 

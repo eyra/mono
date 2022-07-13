@@ -200,6 +200,10 @@ msgid "persister.error.flash"
 msgstr "Not saved, please reload and try again"
 
 #, elixir-format, ex-autogen
+msgid "pronoun.him"
+msgstr "him"
+
+#, elixir-format, ex-autogen
 msgid "mailto.button"
 msgstr "Get in touch"
 

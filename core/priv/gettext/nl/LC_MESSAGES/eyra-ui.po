@@ -206,3 +206,7 @@ msgstr "Benaderen"
 #, elixir-format, ex-autogen
 msgid "notify.all"
 msgstr "Stuur notificatie"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "pronoun.him"
+msgstr "haar"
