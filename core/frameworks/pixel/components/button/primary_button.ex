@@ -11,7 +11,7 @@ defmodule Frameworks.Pixel.Button.PrimaryButton do
 
   def render(assigns) do
     ~F"""
-    <LiveRedirect to={@to} >
+    <LiveRedirect to={@to}>
       <div class="flex">
         <div class={"flex-wrap pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px focus:outline-none rounded #{@bg_color}"}>
           <div class="flex flex-col justify-center h-full items-center rounded">
@@ -36,17 +36,17 @@ defmodule Frameworks.Pixel.Button.PrimaryButton.Example do
 
   def render(assigns) do
     ~F"""
-    <PrimaryButton to="/" label="Primary"/>
-    <div class="mb-4"></div>
-    <PrimaryButton to="/" label="Secondary" bg_color="bg-secondary"/>
-    <div class="mb-4"></div>
-    <PrimaryButton to="/" label="Tertiary" bg_color="bg-tertiary"/>
-    <div class="mb-4"></div>
-    <PrimaryButton to="/" label="Grey1" bg_color="bg-grey1"/>
-    <div class="mb-4"></div>
-    <PrimaryButton to="/" label="Delete" bg_color="bg-delete"/>
-    <div class="mb-4"></div>
-    <PrimaryButton to="/" label="Success" bg_color="bg-success"/>
+    <PrimaryButton to="/" label="Primary" />
+    <div class="mb-4" />
+    <PrimaryButton to="/" label="Secondary" bg_color="bg-secondary" />
+    <div class="mb-4" />
+    <PrimaryButton to="/" label="Tertiary" bg_color="bg-tertiary" />
+    <div class="mb-4" />
+    <PrimaryButton to="/" label="Grey1" bg_color="bg-grey1" />
+    <div class="mb-4" />
+    <PrimaryButton to="/" label="Delete" bg_color="bg-delete" />
+    <div class="mb-4" />
+    <PrimaryButton to="/" label="Success" bg_color="bg-success" />
     """
   end
 end

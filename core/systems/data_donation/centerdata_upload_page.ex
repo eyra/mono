@@ -52,21 +52,21 @@ defmodule Systems.DataDonation.CenterdataUploadPage do
   @impl true
   def render(assigns) do
     ~F"""
-      <form action={@url} method="post">
-        <div class="content">
-          <input value={@page} name="page"/>
-          <input value={@data} name={@varname1}/>
-          <input value={@respondent} name="_respondent"/>
-          <input value={@token} name="token"/>
-          <input value={@quest} name="quest"/>
-          <input value={@button_next} name="button_next"/>
+    <form action={@url} method="post">
+      <div class="content">
+        <input value={@page} name="page">
+        <input value={@data} name={@varname1}>
+        <input value={@respondent} name="_respondent">
+        <input value={@token} name="token">
+        <input value={@quest} name="quest">
+        <input value={@button_next} name="button_next">
+      </div>
+      <div class="buttons">
+        <div class="next_button">
+          <input type="submit" value="Verder" name="button_next" class="button" id="button_next">
         </div>
-        <div class="buttons">
-          <div class="next_button">
-            <input type="submit" value="Verder" name="button_next" class="button" id="button_next" />
-          </div>
-        </div>
-      </form>
+      </div>
+    </form>
     """
   end
 end

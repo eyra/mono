@@ -27,9 +27,7 @@ defmodule Frameworks.Pixel.Form.Checkbox do
 
   def render(assigns) do
     ~F"""
-    <Context
-      get={Surface.Components.Form, form: form}
-    >
+    <Context get={Surface.Components.Form, form: form}>
       <div
         class="flex flex-row mb-3 gap-5 sm:gap-3 cursor-pointer items-center"
         x-data={"{ active: #{check_value(form, @field)} }"}
@@ -42,7 +40,11 @@ defmodule Frameworks.Pixel.Form.Checkbox do
           class="flex-shrink-0 w-6 h-6 rounded"
           x-bind:class={"{ '#{active_bg_color(@accent)}': active, '#{inactive_bg_color(@background)} border-2 #{border_color(assigns, form, default_border_color(@accent))}': !active }"}
         >
-          <img x-show="active" src={"/images/icons/#{check_icon(@background)}.svg"} alt={"#{@field} is selected"}/>
+          <img
+            x-show="active"
+            src={"/images/icons/#{check_icon(@background)}.svg"}
+            alt={"#{@field} is selected"}
+          />
         </div>
         <div
           class="mt-0.5 text-title6 font-title6 leading-snug"

@@ -1,6 +1,6 @@
 defmodule Frameworks.Pixel.Wrap do
   @moduledoc """
-    Wraps an element.
+    Wraps an element x.
   """
   use Surface.Component
 
@@ -8,11 +8,11 @@ defmodule Frameworks.Pixel.Wrap do
 
   def render(assigns) do
     ~F"""
-      <div class="flex flex-row">
-        <div class="flex-wrap">
-          <#slot />
-        </div>
+    <div class="flex flex-row">
+      <div class="flex-wrap">
+        <#slot />
       </div>
+    </div>
     """
   end
 end

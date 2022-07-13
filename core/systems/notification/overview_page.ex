@@ -14,12 +14,12 @@ defmodule Systems.Notification.OverviewPage do
   def render(assigns) do
     ~F"""
     <div>
-    Notifications
-    <ul>
-    <li :for={notification <- @notifications}>
-      {notification.title}
-    </li>
-    </ul>
+      Notifications
+      <ul>
+        <li :for={notification <- @notifications}>
+          {notification.title}
+        </li>
+      </ul>
     </div>
     """
   end

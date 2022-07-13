@@ -18,8 +18,16 @@ defmodule Frameworks.Pixel.Selector.Radio do
     ~F"""
     <div class="flex flex-row gap-3 items-center">
       <div>
-        <img x-show="active" src={"/images/icons/#{active_icon(assigns)}.svg"} alt={"#{@item.value} is selected"} />
-        <img x-show="!active" src={"/images/icons/#{inactive_icon(assigns)}.svg"} alt={"Select #{@item.value}"} />
+        <img
+          x-show="active"
+          src={"/images/icons/#{active_icon(assigns)}.svg"}
+          alt={"#{@item.value} is selected"}
+        />
+        <img
+          x-show="!active"
+          src={"/images/icons/#{inactive_icon(assigns)}.svg"}
+          alt={"Select #{@item.value}"}
+        />
       </div>
       <div class={"#{label_color(assigns)} text-label font-label select-none mt-1"}>
         {@item.value}

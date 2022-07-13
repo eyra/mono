@@ -75,40 +75,40 @@ defmodule Systems.DataDonation.SubmitDataSheet do
 
   def render(assigns) do
     ~F"""
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <SheetArea>
-          <div class="flex flex-col">
-            <Title1>{dgettext("eyra-data-donation", "submit_data.title")}</Title1>
-            <div class="no-extraction-data-yet">
-              <Body>
-                {dgettext("eyra-data-donation", "no.extraction.data.yet.description")}
-              </Body>
-            </div>
-            <Dynamic.Component module={@form.module} {...@form.props} >
-              <div>
-                <Body>
-                  {dgettext("eyra-data-donation", "submit_data.description")}
-                </Body>
-                <Spacing value="L" />
-
-                <Line />
-                <p class="extracted overflow-scroll">...</p>
-                <Spacing value="M" />
-                <Line />
-                <Spacing value="L" />
-              </div>
-              <Body>
-                {dgettext("eyra-data-donation", "submit_data.action.label", recipient: @recipient)}
-              </Body>
-              <Spacing value="M" />
-              <div class="flex flex-row gap-4">
-                <DynamicButton :for={button <- @buttons} vm={button} />
-              </div>
-            </Dynamic.Component>
+    <ContentArea>
+      <MarginY id={:page_top} />
+      <SheetArea>
+        <div class="flex flex-col">
+          <Title1>{dgettext("eyra-data-donation", "submit_data.title")}</Title1>
+          <div class="no-extraction-data-yet">
+            <Body>
+              {dgettext("eyra-data-donation", "no.extraction.data.yet.description")}
+            </Body>
           </div>
-        </SheetArea>
-      </ContentArea>
+          <Dynamic.Component module={@form.module} {...@form.props}>
+            <div>
+              <Body>
+                {dgettext("eyra-data-donation", "submit_data.description")}
+              </Body>
+              <Spacing value="L" />
+
+              <Line />
+              <p class="extracted overflow-scroll">...</p>
+              <Spacing value="M" />
+              <Line />
+              <Spacing value="L" />
+            </div>
+            <Body>
+              {dgettext("eyra-data-donation", "submit_data.action.label", recipient: @recipient)}
+            </Body>
+            <Spacing value="M" />
+            <div class="flex flex-row gap-4">
+              <DynamicButton :for={button <- @buttons} vm={button} />
+            </div>
+          </Dynamic.Component>
+        </div>
+      </SheetArea>
+    </ContentArea>
     """
   end
 end

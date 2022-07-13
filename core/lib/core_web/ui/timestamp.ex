@@ -171,6 +171,23 @@ defmodule CoreWeb.UI.Timestamp do
     "?"
   end
 
+  def humanize_en(%NaiveDateTime{} = timestamp) do
+    time = Timex.format!(timestamp, "%H:%M", :strftime)
+
+    cond do
+      Timex.before?(Timex.shift(Timex.today(), days: -1), NaiveDateTime.to_date(timestamp)) ->
+        "Today at #{time}"
+
+      Timex.before?(Timex.shift(Timex.today(), days: -2), NaiveDateTime.to_date(timestamp)) ->
+        "Yesterday at #{time}"
+
+      true ->
+        month = Timex.lformat!(timestamp, "%B", "en", :strftime)
+        day_of_month = Timex.lformat!(timestamp, "%e", "en", :strftime)
+        "#{month} #{day_of_month} at #{time}"
+    end
+  end
+
   # FIXME: Replace hard coded Timezone with user settings
   def apply_timezone(%NaiveDateTime{} = timestamp, timezone \\ "Europe/Amsterdam") do
     tz_offset =

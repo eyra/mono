@@ -11,8 +11,8 @@ defmodule CoreWeb.UI.Navigation.MobileMenu do
 
   def render(assigns) do
     ~F"""
-    <div class="md:hidden bg-white p-6 h-full" >
-      <Menu items={@items} path_provider={@path_provider}/>
+    <div class="md:hidden bg-white p-6 h-full">
+      <Menu items={@items} path_provider={@path_provider} />
     </div>
     """
   end

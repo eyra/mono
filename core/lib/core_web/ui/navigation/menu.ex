@@ -25,11 +25,11 @@ defmodule CoreWeb.UI.Navigation.Menu do
   def render(assigns) do
     ~F"""
     <div class="h-full">
-      <div class={"flex flex-col h-full #{align(@size)}"} >
-        <div class="flex-wrap" :if={has_home?(@items)} >
-           <div class="mb-8">
-              <MenuItem vm={@items.home} size={@size} />
-            </div>
+      <div class={"flex flex-col h-full #{align(@size)}"}>
+        <div class="flex-wrap" :if={has_home?(@items)}>
+          <div class="mb-8">
+            <MenuItem vm={@items.home} size={@size} />
+          </div>
         </div>
         <div class="flex-wrap">
           <div :for={item <- top(@items)} class="mb-2">
@@ -39,7 +39,7 @@ defmodule CoreWeb.UI.Navigation.Menu do
         <div class="flex-grow">
         </div>
         <div class="flex-wrap">
-          <div :for={item <- bottom(@items)} class="mb-2" >
+          <div :for={item <- bottom(@items)} class="mb-2">
             <MenuItem vm={item} size={@size} />
           </div>
         </div>

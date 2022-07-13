@@ -14,14 +14,33 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Bookkeeping.AccountMod
 
   alias Systems.{
     Campaign,
+    Pool,
     Bookkeeping
   }
+
+  def view_model(
+        %Bookkeeping.AccountModel{} = account,
+        Link.Console,
+        user,
+        url_resolver
+      ) do
+    view_model(account, :student, user, url_resolver)
+  end
+
+  def view_model(
+        %Bookkeeping.AccountModel{} = account,
+        Pool.StudentPage,
+        user,
+        url_resolver
+      ) do
+    view_model(account, :student, user, url_resolver)
+  end
 
   def view_model(
         %Bookkeeping.AccountModel{
           id: id
         } = account,
-        Link.Console,
+        :student,
         user,
         _url_resolver
       ) do

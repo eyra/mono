@@ -13,7 +13,6 @@ defmodule Frameworks.Pixel.Card.SecondaryCampaign do
   def render(assigns) do
     ~F"""
     <Campaign
-
       path_provider={@path_provider}
       card={@card}
       bg_color="grey5"

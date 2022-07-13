@@ -44,7 +44,7 @@ defmodule Systems.DataDonation.ThanksWhatsappChatPage do
       <ContentArea>
         <MarginY id={:page_top} />
         <SheetArea>
-          <div class="flex flex-col sm:flex-row gap-10 ">
+          <div class="flex flex-col sm:flex-row gap-10">
             <div>
               <Title1>{dgettext("eyra-data-donation", "thanks.title")}</Title1>
               <div class="flex flex-col gap-4">
@@ -55,7 +55,7 @@ defmodule Systems.DataDonation.ThanksWhatsappChatPage do
             </div>
             <div class="flex-shrink-0">
               <div class="rounded-lg bg-grey5">
-                <img src={@vm.researcher.institution.image} alt={@vm.researcher.institution.name} />
+                <img src={@vm.researcher.institution.image} alt={@vm.researcher.institution.name}>
                 <div class="flex flex-col gap-3 p-4">
                   <div class="text-title7 font-title7 text-grey1">
                     {@vm.researcher.name}

@@ -1,9 +1,20 @@
 defmodule Core.Accounts.Email do
   use Bamboo.Phoenix, view: Core.Accounts.EmailView
-  import Core.Mailer, only: [base_email: 0]
 
-  def mail_user(user) do
-    base_email() |> to(user.email) |> assign(:user, user)
+  alias Systems.{
+    Email
+  }
+
+  def mail_user(emails) when is_list(emails) do
+    Email.Context.base_email() |> to(emails)
+  end
+
+  def mail_user(email) when is_binary(email) do
+    Email.Context.base_email() |> to(email)
+  end
+
+  def mail_user(%{email: email} = user) do
+    mail_user(email) |> assign(:user, user)
   end
 
   def account_confirmation_instructions(user, url) do
@@ -35,5 +46,35 @@ defmodule Core.Accounts.Email do
     |> assign(:email_header_image, "welcome")
     |> subject("Welcome to Panl")
     |> render(:account_created)
+  end
+
+  def debug(subject, message, from_user, to_user) do
+    mail_user(to_user)
+    |> from(from_user.email)
+    |> subject(subject)
+    |> render(:debug_message, message: message, from_user: from_user, to_user: to_user)
+  end
+
+  def notification(title, byline, message, to) do
+    text_message = message
+    html_message = message |> to_html()
+
+    mail_user(to)
+    |> subject("Panl notification")
+    |> render(:notification,
+      title: title,
+      byline: byline,
+      text_message: text_message,
+      html_message: html_message
+    )
+  end
+
+  defp to_html(message) do
+    message
+    |> String.split("\n\n")
+    |> Enum.map(&String.trim(&1))
+    |> Enum.map(&String.replace(&1, "\n", "<br>"))
+    |> Enum.filter(&(byte_size(&1) != 0))
+    |> Enum.map_join(&"<p>#{&1}</p>")
   end
 end

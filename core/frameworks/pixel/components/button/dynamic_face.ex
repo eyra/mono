@@ -31,7 +31,7 @@ defmodule Frameworks.Pixel.Button.DynamicFace do
 
   def render(assigns) do
     ~F"""
-      <Surface.Components.Dynamic.Component module={face(@vm)} vm={@vm} />
+    <Surface.Components.Dynamic.Component module={face(@vm)} vm={@vm} />
     """
   end
 end

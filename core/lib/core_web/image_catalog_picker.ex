@@ -132,16 +132,28 @@ defmodule CoreWeb.ImageCatalogPicker do
           <div class="flex-grow">
             <Title3>{dgettext("eyra-imagecatalog", "search.image.title")}</Title3>
           </div>
-          <button type="button" class="w-button-sm h-button-sm flex-wrap cursor-pointer active:opacity-50" x-on:click="image_picker = false, $parent.$parent.overlay = false">
-            <img src={@static_path.("/images/close.svg")} alt="Close image picker" />
+          <button
+            type="button"
+            class="w-button-sm h-button-sm flex-wrap cursor-pointer active:opacity-50"
+            x-on:click="image_picker = false, $parent.$parent.overlay = false"
+          >
+            <img src={@static_path.("/images/close.svg")} alt="Close image picker">
           </button>
         </div>
         <div x-data="{ selected: -1 }">
           <Form for={:x} submit="search" opts={id: "image_catalog_picker_form", phx_target: @myself}>
             <div class="flex flex-row">
-              <input value={@initial_query} class="text-grey1 text-bodymedium font-body pl-3 pr-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-48px" name="q" type="search" />
+              <input
+                value={@initial_query}
+                class="text-grey1 text-bodymedium font-body pl-3 pr-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-48px"
+                name="q"
+                type="search"
+              />
               <Spacing value="XS" direction="l" />
-              <SubmitButton label={"#{dgettext("eyra-imagecatalog", "search.image.button")}"} alpine_onclick="selected = -1" />
+              <SubmitButton
+                label={"#{dgettext("eyra-imagecatalog", "search.image.button")}"}
+                alpine_onclick="selected = -1"
+              />
             </div>
           </Form>
           <div :if={@search_results == [] && @query != ""}>
@@ -150,20 +162,32 @@ defmodule CoreWeb.ImageCatalogPicker do
           </div>
           <div :if={@search_results && @search_results != []}>
             <Spacing value="S" />
-            <BodyLarge>{dngettext("eyra-imagecatalog", "images.found.message", "images.found.message.%{count}",  @meta.image_count )}</BodyLarge>
+            <BodyLarge>{dngettext(
+                "eyra-imagecatalog",
+                "images.found.message",
+                "images.found.message.%{count}",
+                @meta.image_count
+              )}</BodyLarge>
             <Spacing value="S" />
             <ImageGrid gap={gap(@viewport, @breakpoint)}>
               <div :for={{image, index} <- Enum.with_index(@search_results)}>
-                <ImageGrid.Image vm={Map.merge(image, %{index: index, target: @myself })} />
+                <ImageGrid.Image vm={Map.merge(image, %{index: index, target: @myself})} />
               </div>
             </ImageGrid>
             <Spacing value="S" />
             <div class="flex flex-row">
               <div class="flex-grow">
-                <Caption text_alignment="left" padding="p-0" margin="m-0" color="text-grey2">{dngettext("eyra-imagecatalog", "page.info.message", "page.info.message.%{count}", @meta.image_count, begin: @meta.begin, end: @meta.end)}</Caption>
+                <Caption text_alignment="left" padding="p-0" margin="m-0" color="text-grey2">{dngettext(
+                    "eyra-imagecatalog",
+                    "page.info.message",
+                    "page.info.message.%{count}",
+                    @meta.image_count,
+                    begin: @meta.begin,
+                    end: @meta.end
+                  )}</Caption>
               </div>
               <div class="flex-wrap">
-                <div class="flex flex-row w-full gap-4" x-data={"{ selected_page: #{@meta.page} }"} >
+                <div class="flex flex-row w-full gap-4" x-data={"{ selected_page: #{@meta.page} }"}>
                   {#for page <- 1..Enum.min([page_count(@viewport, @breakpoint), @meta.page_count])}
                     <div
                       class="rounded w-8 h-8 cursor-pointer flex-shrink-0 overflow-hidden"
@@ -173,7 +197,10 @@ defmodule CoreWeb.ImageCatalogPicker do
                       phx-value-page={page}
                     >
                       <div class="flex flex-row items-center justify-center w-full h-full">
-                        <div class="text-label font-label" :class={"{ 'text-white': selected_page === #{page}, 'text-grey2': selected_page != #{page} }"}>
+                        <div
+                          class="text-label font-label"
+                          :class={"{ 'text-white': selected_page === #{page}, 'text-grey2': selected_page != #{page} }"}
+                        >
                           {page}
                         </div>
                       </div>

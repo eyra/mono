@@ -6,14 +6,14 @@ defmodule CoreWeb.UI.Navigation.TabbarContent do
 
   def render(assigns) do
     ~F"""
-      <div class="h-navbar-height"></div>
-      <Context get={tabs: tabs}>
-        {#for tab <- tabs}
-          <Tab id={tab.id}>
-            <Dynamic.LiveComponent id={tab.id} module={tab.component} props={tab.props} />
-          </Tab>
-        {/for}
-      </Context>
+    <div class="h-navbar-height" />
+    <Context get={tabs: tabs}>
+      {#for tab <- tabs}
+        <Tab id={tab.id}>
+          <Dynamic.LiveComponent id={tab.id} module={tab.component} props={tab.props} />
+        </Tab>
+      {/for}
+    </Context>
     """
   end
 end

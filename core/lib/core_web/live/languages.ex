@@ -8,17 +8,16 @@ defmodule CoreWeb.Languages do
 
   def render(assigns) do
     ~F"""
-    <div class="text-grey1"
-        :if={@languages}>
-        <div class="flex flex-row items-center gap-3 h-full">
-          <div class="text-title6 font-title6 mr-1">
-            {@label}
-          </div>
-            <div class="" :for={language <- @languages}>
-                <img src={"/images/icons/#{language}.svg"} alt={"#{language}"} />
-            </div>
+    <div class="text-grey1" :if={@languages}>
+      <div class="flex flex-row items-center gap-3 h-full">
+        <div class="text-title6 font-title6 mr-1">
+          {@label}
+        </div>
+        <div class="" :for={language <- @languages}>
+          <img src={"/images/icons/#{language}.svg"} alt={"#{language}"}>
         </div>
       </div>
+    </div>
     """
   end
 end

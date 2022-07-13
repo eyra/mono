@@ -10,7 +10,7 @@ defmodule Frameworks.Pixel.Form.InputValue do
 
   def render(assigns) do
     ~F"""
-    <BodyMedium color={@text_color} >
+    <BodyMedium color={@text_color}>
       {input_value(@form, @field)}
     </BodyMedium>
     """

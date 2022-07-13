@@ -39,47 +39,55 @@ defmodule Systems.Promotion.Page do
 
   def render(assigns) do
     ~F"""
-      <Website
-        user={@current_user}
-        user_agent={Browser.Ua.to_ua(@socket)}
-        menus={@menus}
-      >
-        <#template slot="hero">
-          <HeroLarge
-            title={dgettext("eyra-link", "welcome.title")}
-            subtitle={dgettext("eyra-link", "welcome.subtitle")}
-          />
-        </#template>
+    <Website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus}>
+      <:hero>
+        <HeroLarge
+          title={dgettext("eyra-link", "welcome.title")}
+          subtitle={dgettext("eyra-link", "welcome.subtitle")}
+        />
+      </:hero>
 
-        <ContentArea>
-          <MarginY id={:page_top} />
-          <AbsoluteGrid>
-            <div class="md:col-span-2">
-              <Title1>
-                {dgettext("eyra-link", "link.title")}
-              </Title1>
-              <Intro>
-                {dgettext("eyra-link", "link.message")}
-              </Intro>
+      <ContentArea>
+        <MarginY id={:page_top} />
+        <AbsoluteGrid>
+          <div class="md:col-span-2">
+            <Title1>
+              {dgettext("eyra-link", "link.title")}
+            </Title1>
+            <Intro>
+              {dgettext("eyra-link", "link.message")}
+            </Intro>
+          </div>
+          <div>
+            <div :if={@current_user != nil}>
+              <PrimaryCTA
+                title={cta_title(@current_user)}
+                button_label={Accounts.start_page_title(@current_user)}
+                to={Routes.live_path(@socket, Accounts.start_page_target(@current_user))}
+              />
             </div>
-            <div>
-              <div :if={@current_user != nil}>
-                <PrimaryCTA
-                  title={cta_title(@current_user)}
-                  button_label={Accounts.start_page_title(@current_user)}
-                  to={Routes.live_path(@socket, Accounts.start_page_target(@current_user))} />
-              </div>
-              <div :if={@current_user == nil}>
-                <PrimaryCTA title={dgettext("eyra-link", "signup.card.title")}
-                  button_label={dgettext("eyra-link", "signup.card.button")}
-                  to={Routes.live_path(@socket, CoreWeb.User.Signup)} />
-              </div>
+            <div :if={@current_user == nil}>
+              <PrimaryCTA
+                title={dgettext("eyra-link", "signup.card.title")}
+                button_label={dgettext("eyra-link", "signup.card.button")}
+                to={Routes.live_path(@socket, CoreWeb.User.Signup)}
+              />
             </div>
-            <USP title={dgettext("eyra-link", "usp1.title")} description={dgettext("eyra-link", "usp1.description")} />
-            <USP title={dgettext("eyra-link", "usp2.title")} description={dgettext("eyra-link", "usp2.description")} />
-            <USP title={dgettext("eyra-link", "usp3.title")} description={dgettext("eyra-link", "usp3.description")} />
-          </AbsoluteGrid>
-        </ContentArea>
+          </div>
+          <USP
+            title={dgettext("eyra-link", "usp1.title")}
+            description={dgettext("eyra-link", "usp1.description")}
+          />
+          <USP
+            title={dgettext("eyra-link", "usp2.title")}
+            description={dgettext("eyra-link", "usp2.description")}
+          />
+          <USP
+            title={dgettext("eyra-link", "usp3.title")}
+            description={dgettext("eyra-link", "usp3.description")}
+          />
+        </AbsoluteGrid>
+      </ContentArea>
     </Website>
     """
   end

@@ -194,6 +194,26 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   end
 
   defp vm(
+         %{promotable: assignment} = campaign,
+         {Link.Console, :contribution},
+         user,
+         url_resolver
+       ) do
+    path = url_resolver.(Systems.Assignment.LandingPage, id: assignment.id)
+    vm(campaign, :contribution, user, path)
+  end
+
+  defp vm(
+         %{promotion: %{submission: submission}} = campaign,
+         {Pool.StudentPage, :contribution},
+         user,
+         url_resolver
+       ) do
+    path = url_resolver.(Systems.Pool.SubmissionPage, id: submission.id)
+    vm(campaign, :contribution, user, path)
+  end
+
+  defp vm(
          %{
            promotion: %{
              title: title,
@@ -204,12 +224,11 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
                crew: crew
              } = assignment
          },
-         {Link.Console, :contribution},
+         :contribution,
          user,
-         url_resolver
+         path
        ) do
     %{updated_at: updated_at} = task = task(crew, user)
-    path = url_resolver.(Systems.Assignment.LandingPage, id: assignment.id)
     tag = tag(task)
     subtitle = subtitle(task, user, assignment)
     quick_summary = get_quick_summary(updated_at)

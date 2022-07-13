@@ -129,11 +129,10 @@ defmodule Systems.DataDonation.UploadPage do
   def render(assigns) do
     ~F"""
     <Stripped user={@current_user} menus={@menus}>
-      <div id="data-donation" phx-hook="PythonUploader"
-           data-after-completion-tab="submit_data">
+      <div id="data-donation" phx-hook="PythonUploader" data-after-completion-tab="submit_data">
         <TabbarArea tabs={@tabs}>
           <ActionBar>
-            <Tabbar vm={%{initial_tab: :welcome}}/>
+            <Tabbar vm={%{initial_tab: :welcome}} />
           </ActionBar>
           <TabbarContent />
           <TabbarFooter>

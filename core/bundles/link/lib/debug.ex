@@ -7,7 +7,7 @@ defmodule Link.Debug do
   alias CoreWeb.Router.Helpers, as: Routes
 
   alias CoreWeb.User.Forms.Debug, as: UserDebugForm
-  alias CoreWeb.Mail.Forms.Debug, as: MailDebugForm
+  alias Systems.Email.DebugForm, as: EmailDebugForm
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias Frameworks.Pixel.Spacing
@@ -150,49 +150,45 @@ defmodule Link.Debug do
 
   def render(assigns) do
     ~F"""
-      <Workspace
-        title={dgettext("link-ui", "debug.title")}
-        menus={@menus}
-      >
+    <Workspace title={dgettext("link-ui", "debug.title")} menus={@menus}>
+      <MarginY id={:page_top} />
+      <ContentArea>
         <MarginY id={:page_top} />
-        <ContentArea>
-          <MarginY id={:page_top} />
-            <Title2 margin="">Book keeping</Title2>
-            <Spacing value="S" />
-            <Wrap>
-              <DynamicButton vm={@import_rewards_button} />
-              <Spacing value="S" />
-            </Wrap>
-            <Wrap>
-              <DynamicButton vm={@sync_rewards_button} />
-            </Wrap>
-            <Spacing value="XL" />
-            <Title2 margin="">Campaigns</Title2>
-            <Spacing value="S" />
-            <Wrap>
-              <DynamicButton vm={@expire_button} />
-              <Spacing value="S" />
-            </Wrap>
-            <div :if={feature_enabled?(:debug_expire_force)}>
-              <Wrap>
-                <DynamicButton vm={@expire_force_button} />
-              </Wrap>
-            </div>
-            <Spacing value="XL" />
-
-            <Title2 margin="">Onboarding</Title2>
-            <Spacing value="S" />
-            <Wrap>
-              <DynamicButton vm={@start_button} />
-            </Wrap>
-        </ContentArea>
-
+        <Title2 margin="">Book keeping</Title2>
+        <Spacing value="S" />
+        <Wrap>
+          <DynamicButton vm={@import_rewards_button} />
+          <Spacing value="S" />
+        </Wrap>
+        <Wrap>
+          <DynamicButton vm={@sync_rewards_button} />
+        </Wrap>
         <Spacing value="XL" />
-        <UserDebugForm id={:user_debug} user={@current_user}/>
+        <Title2 margin="">Campaigns</Title2>
+        <Spacing value="S" />
+        <Wrap>
+          <DynamicButton vm={@expire_button} />
+          <Spacing value="S" />
+        </Wrap>
+        <div :if={feature_enabled?(:debug_expire_force)}>
+          <Wrap>
+            <DynamicButton vm={@expire_force_button} />
+          </Wrap>
+        </div>
         <Spacing value="XL" />
-        <MailDebugForm id={:mail_debug} />
 
-      </Workspace>
+        <Title2 margin="">Onboarding</Title2>
+        <Spacing value="S" />
+        <Wrap>
+          <DynamicButton vm={@start_button} />
+        </Wrap>
+      </ContentArea>
+
+      <Spacing value="XL" />
+      <UserDebugForm id={:user_debug} user={@current_user} />
+      <Spacing value="XL" />
+      <EmailDebugForm id={:mail_debug} user={@current_user} />
+    </Workspace>
     """
   end
 end

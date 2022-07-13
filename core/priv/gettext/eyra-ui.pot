@@ -199,5 +199,13 @@ msgid "persister.error.flash"
 msgstr ""
 
 #, elixir-format, ex-autogen
+msgid "mailto.button"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "notify.all"
+msgstr ""
+
+#, elixir-format, ex-autogen
 msgid "pronoun.him"
 msgstr ""

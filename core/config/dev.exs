@@ -8,6 +8,9 @@ config :ex_aws, :s3,
 
 # Only in tests, remove the complexity from the password hashing algorithm
 config :bcrypt_elixir, :log_rounds, 1
+
+config :logger, level: :debug
+
 # Configure your database
 config :core, Core.Repo,
   username: "postgres",
@@ -18,6 +21,7 @@ config :core, Core.Repo,
   pool_size: 10
 
 config :core, CoreWeb.Endpoint,
+  reloadable_compilers: [:gettext, :elixir, :surface],
   force_ssl: false,
   debug_errors: true,
   code_reloader: true,
@@ -26,13 +30,15 @@ config :core, CoreWeb.Endpoint,
     patterns: [
       ~r"priv/static/(?!uploads)/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/core_web/(live|views)/.*(ex)$",
+      ~r"lib/core_web/(live|views|components)/.*(ex|sface|js)$",
       ~r"lib/core_web/templates/*/.*(eex)$",
       ~r"bundles/*/.*(ex)$",
-      ~r"bundles/*/templates/.*(eex)$"
+      ~r"bundles/*/templates/.*(eex)$",
+      ~r"priv/catalogue/.*(ex)$"
     ]
   ],
   watchers: [
+    esbuild: {Esbuild, :install_and_run, [:catalogue, ~w(--sourcemap=inline --watch)]},
     node: [
       "node_modules/webpack/bin/webpack.js",
       "--mode",
@@ -53,8 +59,9 @@ config :core, Core.ImageCatalog.Unsplash,
 
 config :core, image_catalog: Core.ImageCatalog.Unsplash
 
-config :core, Core.Mailer,
+config :core, Systems.Email.Mailer,
   adapter: Bamboo.LocalAdapter,
+  open_email_in_browser_url: "http://localhost:4000/sent_emails",
   default_from_email: "no-reply@example.com"
 
 config :web_push_encryption, :vapid_details,

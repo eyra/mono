@@ -9,7 +9,12 @@ defmodule Frameworks.Pixel.Status.Warning do
 
   def render(assigns) do
     ~F"""
-    <Status text={@text} text_color="text-warning" bg_color="bg-warninglight" bg_opacity="bg-opacity-100" />
+    <Status
+      text={@text}
+      text_color="text-warning"
+      bg_color="bg-warninglight"
+      bg_opacity="bg-opacity-100"
+    />
     """
   end
 end

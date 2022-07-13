@@ -18,9 +18,9 @@ defmodule CoreWeb.UI.StepIndicator do
 
   def render(assigns) do
     ~F"""
-      <div class={"w-6 h-6 font-caption text-caption rounded-full flex items-center #{bg_color(@vm)} #{text_color(@vm)}"}>
-        <span class={"text-center w-full mt-1px #{center_correction_for_number(text(@vm))}"}>{text(@vm)}</span>
-      </div>
+    <div class={"w-6 h-6 font-caption text-caption rounded-full flex items-center #{bg_color(@vm)} #{text_color(@vm)}"}>
+      <span class={"text-center w-full mt-1px #{center_correction_for_number(text(@vm))}"}>{text(@vm)}</span>
+    </div>
     """
   end
 end

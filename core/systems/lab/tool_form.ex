@@ -173,19 +173,24 @@ defmodule Systems.Lab.ToolForm do
 
   def render(assigns) do
     ~F"""
-      <div>
-        <Title3>{dgettext("link-lab", "form.title")}</Title3>
-        <Spacing value="M" />
-        <BodyLarge>{@byline}</BodyLarge>
-        <Spacing value="S" />
-        <table class="table-auto">
-          <Lab.DayListItem :for={{day_list_item, index} <- Enum.with_index(@day_list_items)} id={index} target={@myself} {...day_list_item} />
-        </table>
-        <Spacing value="S" />
-        <Wrap>
-          <DynamicButton vm={@add_day_button} />
-        </Wrap>
-      </div>
+    <div>
+      <Title3>{dgettext("link-lab", "form.title")}</Title3>
+      <Spacing value="M" />
+      <BodyLarge>{@byline}</BodyLarge>
+      <Spacing value="S" />
+      <table class="table-auto">
+        <Lab.DayListItem
+          :for={{day_list_item, index} <- Enum.with_index(@day_list_items)}
+          id={index}
+          target={@myself}
+          {...day_list_item}
+        />
+      </table>
+      <Spacing value="S" />
+      <Wrap>
+        <DynamicButton vm={@add_day_button} />
+      </Wrap>
+    </div>
     """
   end
 end
@@ -201,11 +206,7 @@ defmodule Systems.Lab.ToolForm.Example do
 
   def render(assigns) do
     ~F"""
-    <ToolForm
-      id={:reject_view_example}
-      entity_id={1}
-      validate?={false}
-    />
+    <ToolForm id={:reject_view_example} entity_id={1} validate?={false} />
     """
   end
 

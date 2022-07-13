@@ -16,7 +16,12 @@ defmodule Frameworks.Pixel.Button.Action.Send do
 
   def render(assigns) do
     ~F"""
-    <div phx-target={target(@vm)} phx-click={event(@vm)} phx-value-item={item(@vm)} class="cursor-pointer focus:outline-none">
+    <div
+      phx-target={target(@vm)}
+      phx-click={event(@vm)}
+      phx-value-item={item(@vm)}
+      class="cursor-pointer focus:outline-none"
+    >
       <#slot />
     </div>
     """

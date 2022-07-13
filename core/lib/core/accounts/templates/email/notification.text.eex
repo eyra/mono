@@ -1,0 +1,5 @@
+<%= @title %>
+
+<%= @byline %>
+
+<%= @text_message %>

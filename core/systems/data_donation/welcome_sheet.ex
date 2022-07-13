@@ -64,34 +64,34 @@ defmodule Systems.DataDonation.WelcomeSheet do
 
   def render(assigns) do
     ~F"""
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <SheetArea>
-          <div class="flex flex-col sm:flex-row gap-10 ">
-            <div>
-              <Title1>{dgettext("eyra-data-donation", "welcome.title")}</Title1>
-              <div class="flex flex-col gap-4">
-                <div :for={description <- descriptions(assigns)} class="text-bodylarge font-body">
-                  {raw(description)}
-                </div>
+    <ContentArea>
+      <MarginY id={:page_top} />
+      <SheetArea>
+        <div class="flex flex-col sm:flex-row gap-10">
+          <div>
+            <Title1>{dgettext("eyra-data-donation", "welcome.title")}</Title1>
+            <div class="flex flex-col gap-4">
+              <div :for={description <- descriptions(assigns)} class="text-bodylarge font-body">
+                {raw(description)}
               </div>
             </div>
-            <div class="flex-shrink-0" :if={@researcher}>
-              <div class="rounded-lg bg-grey5">
-                <img src={@researcher.institution.image} alt={@researcher.institution.name} />
-                <div class="flex flex-col gap-3 p-4">
-                  <div class="text-title7 font-title7 text-grey1">
-                    {@researcher.name}
-                  </div>
-                  <div class="text-caption font-caption text-grey1">
-                    {@researcher.job_title}
-                  </div>
+          </div>
+          <div class="flex-shrink-0" :if={@researcher}>
+            <div class="rounded-lg bg-grey5">
+              <img src={@researcher.institution.image} alt={@researcher.institution.name}>
+              <div class="flex flex-col gap-3 p-4">
+                <div class="text-title7 font-title7 text-grey1">
+                  {@researcher.name}
+                </div>
+                <div class="text-caption font-caption text-grey1">
+                  {@researcher.job_title}
                 </div>
               </div>
             </div>
           </div>
-        </SheetArea>
-      </ContentArea>
+        </div>
+      </SheetArea>
+    </ContentArea>
     """
   end
 end

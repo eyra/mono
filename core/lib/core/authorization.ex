@@ -43,6 +43,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Promotion.LandingPage, [:visitor, :member, :owner])
   grant_access(Systems.Pool.OverviewPage, [:researcher])
   grant_access(Systems.Pool.SubmissionPage, [:researcher])
+  grant_access(Systems.Pool.StudentPage, [:researcher])
   grant_access(Systems.Test.Page, [:visitor, :member])
   grant_access(Systems.DataDonation.Content, [:owner, :coordinator])
   grant_access(Systems.DataDonation.UploadPage, [:visitor, :member])

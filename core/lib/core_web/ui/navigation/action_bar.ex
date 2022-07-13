@@ -33,20 +33,24 @@ defmodule CoreWeb.UI.Navigation.ActionBar do
         <ContentArea>
           <div class="overflow-scroll scrollbar-hide w-full">
             <div class="flex flex-row items-center w-full h-navbar-height">
-              <div class="flex-grow" :if={centralize?(assigns)} >
+              <div class="flex-grow" :if={centralize?(assigns)}>
               </div>
-              <div class={"#{if centralize?(assigns) do "flex-wrap" else "flex-grow" end}"}>
-                <#slot/> <!-- tabbar -->
+              <div class={"#{if centralize?(assigns) do
+                "flex-wrap"
+              else
+                "flex-grow"
+              end}"}>
+                <#slot /> <!-- tabbar -->
               </div>
               <div class="flex-wrap px-4" :if={has_right_bar_buttons?(assigns) && !@hide_seperator}>
-                <img src="/images/icons/bar_seperator.svg" alt="" />
+                <img src="/images/icons/bar_seperator.svg" alt="">
               </div>
-              <div class="flex-wrap h-full" :if={has_right_bar_buttons?(assigns)} >
+              <div class="flex-wrap h-full" :if={has_right_bar_buttons?(assigns)}>
                 <div class="flex flex-row gap-6 h-full">
                   <DynamicButton :for={button <- @right_bar_buttons} vm={button} />
                 </div>
               </div>
-              <div class="flex-grow" :if={centralize?(assigns)} >
+              <div class="flex-grow" :if={centralize?(assigns)}>
               </div>
             </div>
           </div>

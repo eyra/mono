@@ -292,49 +292,73 @@ defmodule Systems.Lab.DayView do
   @impl true
   def render(assigns) do
     ~F"""
-      <div class="p-8 w-popup-md bg-white shadow-2xl rounded" phx-click="reset_focus" phx-target={@myself}>
-        <div>
-          <div class="text-button font-button text-warning leading-6">
-            {@error}
-          </div>
-          <Spacing :if={@error} value="XS" />
-          <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
-            {@title}
-          </div>
-          <Spacing value="XS" />
-          <Form id="day_view" changeset={@changeset} change_event="update" submit="submit" target={@myself} focus={@focus} >
-            <Wrap>
-              <DateInput :if={@day_model.date_editable?} field={:date} label_text={dgettext("link-lab", "day.schedule.date.label")} value={@day_model.date}/>
-            </Wrap>
-            <div class="flex flex-row gap-8">
-              <div class="flex-grow">
-                <TextInput field={:location} label_text={dgettext("link-lab", "day.schedule.location.label")} debounce="0"/>
-              </div>
-              <div class="w-24">
-                <NumberInput field={:number_of_seats} label_text={dgettext("link-lab", "day.schedule.seats.label")} debounce="0"/>
-              </div>
-            </div>
-            <SubHead color="text-grey2">
-              {@byline}
-            </SubHead>
-            <Spacing value="M" />
-            <Line />
-            <div class="h-lab-day-popup-list overflow-y-scroll overscroll-contain">
-              <div class="h-2"></div>
-              <div class="w-full">
-                <div :for={entry <- @day_model.entries} >
-                  <Lab.DayEntryListItem entry={entry} />
-                </div>
-              </div>
-            </div>
-            <Line />
-            <Spacing value="M" />
-            <div class="flex flex-row gap-4">
-              <DynamicButton :for={button <- buttons(assigns)} vm={button} />
-            </div>
-          </Form>
+    <div
+      class="p-8 w-popup-md bg-white shadow-2xl rounded"
+      phx-click="reset_focus"
+      phx-target={@myself}
+    >
+      <div>
+        <div class="text-button font-button text-warning leading-6">
+          {@error}
         </div>
+        <Spacing :if={@error} value="XS" />
+        <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
+          {@title}
+        </div>
+        <Spacing value="XS" />
+        <Form
+          id="day_view"
+          changeset={@changeset}
+          change_event="update"
+          submit="submit"
+          target={@myself}
+          focus={@focus}
+        >
+          <Wrap>
+            <DateInput
+              :if={@day_model.date_editable?}
+              field={:date}
+              label_text={dgettext("link-lab", "day.schedule.date.label")}
+              value={@day_model.date}
+            />
+          </Wrap>
+          <div class="flex flex-row gap-8">
+            <div class="flex-grow">
+              <TextInput
+                field={:location}
+                label_text={dgettext("link-lab", "day.schedule.location.label")}
+                debounce="0"
+              />
+            </div>
+            <div class="w-24">
+              <NumberInput
+                field={:number_of_seats}
+                label_text={dgettext("link-lab", "day.schedule.seats.label")}
+                debounce="0"
+              />
+            </div>
+          </div>
+          <SubHead color="text-grey2">
+            {@byline}
+          </SubHead>
+          <Spacing value="M" />
+          <Line />
+          <div class="h-lab-day-popup-list overflow-y-scroll overscroll-contain">
+            <div class="h-2" />
+            <div class="w-full">
+              <div :for={entry <- @day_model.entries}>
+                <Lab.DayEntryListItem entry={entry} />
+              </div>
+            </div>
+          </div>
+          <Line />
+          <Spacing value="M" />
+          <div class="flex flex-row gap-4">
+            <DynamicButton :for={button <- buttons(assigns)} vm={button} />
+          </div>
+        </Form>
       </div>
+    </div>
     """
   end
 end
@@ -389,7 +413,7 @@ defmodule Systems.Lab.DayView.Example do
 
   def render(assigns) do
     ~F"""
-      <DayView id={:day_view_example} day_model={@day_model} target={self()}/>
+    <DayView id={:day_view_example} day_model={@day_model} target={self()} />
     """
   end
 

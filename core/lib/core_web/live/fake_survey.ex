@@ -24,15 +24,15 @@ defmodule CoreWeb.FakeSurvey do
 
   def render(assigns) do
     ~F"""
-      <HeroSmall title="Fake survey" bg_color="bg-grey1"/>
+    <HeroSmall title="Fake survey" bg_color="bg-grey1" />
 
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <Title2>Fake survey</Title2>
-        <BodyLarge>This fake survey is used to validate the survey tool flow with an external tool.</BodyLarge>
-        <Spacing value="M" />
-        <PrimaryButton label="Complete survey (go back)" to={@redirect_url} bg_color="bg-grey1" />
-      </ContentArea>
+    <ContentArea>
+      <MarginY id={:page_top} />
+      <Title2>Fake survey</Title2>
+      <BodyLarge>This fake survey is used to validate the survey tool flow with an external tool.</BodyLarge>
+      <Spacing value="M" />
+      <PrimaryButton label="Complete survey (go back)" to={@redirect_url} bg_color="bg-grey1" />
+    </ContentArea>
     """
   end
 end

@@ -105,7 +105,10 @@ defmodule Core.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id, preload \\ []) do
+    from(user in User, preload: ^preload)
+    |> Repo.get!(id)
+  end
 
   ## User registration
 

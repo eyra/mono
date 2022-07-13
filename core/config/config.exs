@@ -30,9 +30,17 @@ config :phoenix_inline_svg,
   dir: "./assets/static/images",
   default_collection: "icons"
 
+config :esbuild,
+  catalogue: [
+    args:
+      ~w(../deps/surface_catalogue/assets/js/app.js --bundle --target=es2016 --minify --outdir=../priv/static/assets/catalogue),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ]
+
 config :core, Oban,
   repo: Core.Repo,
-  queues: [default: 5],
+  queues: [default: 5, email_dispatchers: 1, email_delivery: 1],
   plugins: [
     {Oban.Plugins.Cron,
      crontab: [
@@ -42,7 +50,9 @@ config :core, Oban,
 
 config :core, ecto_repos: [Core.Repo]
 
-config :core, Core.Mailer, adapter: Bamboo.TestAdapter, default_from_email: "no-reply@example.com"
+config :core, Systems.Email.Mailer,
+  adapter: Bamboo.TestAdapter,
+  default_from_email: "no-reply@example.com"
 
 config :core, Core.SurfConext,
   client_id: "not-set",

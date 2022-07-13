@@ -73,10 +73,10 @@ defmodule Systems.Support.TicketPage do
       button_large: %{
         action: action,
         face: %{
-          type: :secondary,
-          label: dgettext("eyra-admin", "ticket.mailto.button"),
-          border_color: "border-white",
-          text_color: "text-white"
+          type: :primary,
+          label: dgettext("eyra-ui", "mailto.button"),
+          bg_color: "bg-tertiary",
+          text_color: "text-grey1"
         }
       },
       button_small: %{
@@ -122,10 +122,7 @@ defmodule Systems.Support.TicketPage do
 
   def render(assigns) do
     ~F"""
-    <Workspace
-      title={dgettext("eyra-admin", "ticket.title")}
-      menus={@menus}
-    >
+    <Workspace title={dgettext("eyra-admin", "ticket.title")} menus={@menus}>
       <ContentArea>
         <MarginY id={:page_top} />
         <Member :if={@member} vm={@member} />
