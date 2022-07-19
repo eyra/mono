@@ -1,4 +1,4 @@
-defmodule Core.Pools.StudentFilters do
+defmodule Systems.Pool.StudentFilters do
   @moduledoc """
   Defines filters used to filter students in the overview page of the pool.
   """
@@ -6,7 +6,8 @@ defmodule Core.Pools.StudentFilters do
       {:student_filters, [:inactive, :active, :passed]}
 
   alias Systems.{
-    Bookkeeping
+    Bookkeeping,
+    Pool
   }
 
   def include?(_student, nil), do: true
@@ -34,7 +35,7 @@ defmodule Core.Pools.StudentFilters do
   defp state([] = _wallets), do: :inactive
 
   defp state(%Bookkeeping.AccountModel{} = wallet) do
-    if Core.Pools.is_target_achieved?(wallet) do
+    if Pool.Context.is_target_achieved?(wallet) do
       :passed
     else
       :active

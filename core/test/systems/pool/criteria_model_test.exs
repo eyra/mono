@@ -1,7 +1,8 @@
-defmodule Core.Pools.CriteriaTest do
+defmodule Systems.Pool.CriteriaModelTest do
   use Core.DataCase, async: true
-  alias Core.Pools.Criteria
   alias Core.Accounts.Features
+
+  alias Systems.Pool.CriteriaModel
 
   describe "eligitible?/2" do
     setup do
@@ -16,102 +17,102 @@ defmodule Core.Pools.CriteriaTest do
     end
 
     test "eligitable without criteria", %{features: features} do
-      criteria = %Criteria{
+      criteria = %CriteriaModel{
         genders: nil,
         dominant_hands: nil,
         native_languages: nil,
         study_program_codes: nil
       }
 
-      assert Criteria.eligitable?(criteria, features)
+      assert CriteriaModel.eligitable?(criteria, features)
     end
 
     test "eligitable with matching gender", %{features: features} do
-      criteria = %Criteria{
+      criteria = %CriteriaModel{
         genders: [:m],
         dominant_hands: nil,
         native_languages: nil,
         study_program_codes: nil
       }
 
-      assert Criteria.eligitable?(criteria, features)
+      assert CriteriaModel.eligitable?(criteria, features)
     end
 
     test "not eligitable without matching gender", %{features: features} do
-      criteria = %Criteria{
+      criteria = %CriteriaModel{
         genders: [:v],
         dominant_hands: nil,
         native_languages: nil,
         study_program_codes: nil
       }
 
-      assert not Criteria.eligitable?(criteria, features)
+      assert not CriteriaModel.eligitable?(criteria, features)
     end
 
     test "eligitable with matching dominant hand", %{features: features} do
-      criteria = %Criteria{
+      criteria = %CriteriaModel{
         genders: [:m],
         dominant_hands: [:right],
         native_languages: nil,
         study_program_codes: nil
       }
 
-      assert Criteria.eligitable?(criteria, features)
+      assert CriteriaModel.eligitable?(criteria, features)
     end
 
     test "not eligitable without matching dominant hand", %{features: features} do
-      criteria = %Criteria{
+      criteria = %CriteriaModel{
         genders: [:m],
         dominant_hands: [:left],
         native_languages: nil,
         study_program_codes: nil
       }
 
-      assert not Criteria.eligitable?(criteria, features)
+      assert not CriteriaModel.eligitable?(criteria, features)
     end
 
     test "eligitable with matching native language", %{features: features} do
-      criteria = %Criteria{
+      criteria = %CriteriaModel{
         genders: [:m],
         dominant_hands: [:right],
         native_languages: [:nl, :en],
         study_program_codes: nil
       }
 
-      assert Criteria.eligitable?(criteria, features)
+      assert CriteriaModel.eligitable?(criteria, features)
     end
 
     test "not eligitable without matching native language", %{features: features} do
-      criteria = %Criteria{
+      criteria = %CriteriaModel{
         genders: [:m],
         dominant_hands: [:right],
         native_languages: [:en],
         study_program_codes: nil
       }
 
-      assert not Criteria.eligitable?(criteria, features)
+      assert not CriteriaModel.eligitable?(criteria, features)
     end
 
     test "eligitable with matching study_program_codes", %{features: features} do
-      criteria = %Criteria{
+      criteria = %CriteriaModel{
         genders: [:m],
         dominant_hands: [:right],
         native_languages: [:nl, :en],
         study_program_codes: [:bk_1, :bk_2]
       }
 
-      assert Criteria.eligitable?(criteria, features)
+      assert CriteriaModel.eligitable?(criteria, features)
     end
 
     test "not eligitable without matching study_program_codes", %{features: features} do
-      criteria = %Criteria{
+      criteria = %CriteriaModel{
         genders: [:m],
         dominant_hands: [:right],
         native_languages: [:en],
         study_program_codes: [:bk_2, :bk_2_h]
       }
 
-      assert not Criteria.eligitable?(criteria, features)
+      assert not CriteriaModel.eligitable?(criteria, features)
     end
   end
 end

@@ -12,7 +12,6 @@ defmodule Link.Marketplace do
   }
 
   alias Core.Accounts
-  alias Core.Pools.Criteria
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
@@ -90,7 +89,7 @@ defmodule Link.Marketplace do
     user_features = Accounts.get_features(user)
 
     released? = Pool.Context.published_status(submission) == :released
-    eligitable? = Criteria.eligitable?(submission_criteria, user_features)
+    eligitable? = Pool.CriteriaModel.eligitable?(submission_criteria, user_features)
 
     released? and eligitable?
   end

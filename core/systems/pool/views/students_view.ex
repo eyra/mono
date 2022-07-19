@@ -2,13 +2,16 @@ defmodule Systems.Pool.StudentsView do
   use CoreWeb.UI.LiveComponent
 
   alias Core.Accounts.Features
-  alias Core.Pools.{CriteriaFilters, StudentFilters}
 
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text.Title2
   alias Frameworks.Pixel.Selector.Selector
   alias CoreWeb.UI.ContentList
   alias Core.Enums.StudyProgramCodes
+
+  alias Systems.{
+    Pool
+  }
 
   prop(props, :map, required: true)
 
@@ -58,7 +61,7 @@ defmodule Systems.Pool.StudentsView do
         %{id: id, props: %{students: students}} = _params,
         %{assigns: %{myself: target}} = socket
       ) do
-    filter_labels = CriteriaFilters.labels([]) ++ StudentFilters.labels([])
+    filter_labels = Pool.CriteriaFilters.labels([]) ++ Pool.StudentFilters.labels([])
 
     email_button = %{
       action: %{type: :send, event: "email", target: target},
@@ -91,8 +94,8 @@ defmodule Systems.Pool.StudentsView do
   defp filter(students, filters) do
     students
     |> Enum.filter(
-      &(CriteriaFilters.include?(&1.features.study_program_codes, filters) and
-          StudentFilters.include?(&1, filters))
+      &(Pool.CriteriaFilters.include?(&1.features.study_program_codes, filters) and
+          Pool.StudentFilters.include?(&1, filters))
     )
   end
 

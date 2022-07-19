@@ -6,7 +6,9 @@ defmodule Systems.Pool.SubmissionCriteriaView do
   alias Frameworks.Pixel.Selector.Selector
   alias Frameworks.Pixel.Text.Title3
 
-  alias Core.Pools.{Criteria}
+  alias Systems.{
+    Pool
+  }
 
   prop(props, :any, required: true)
 
@@ -85,8 +87,8 @@ defmodule Systems.Pool.SubmissionCriteriaView do
   end
 
   # Saving
-  def save(socket, %Criteria{} = entity, attrs) do
-    changeset = Criteria.changeset(entity, attrs)
+  def save(socket, %Pool.CriteriaModel{} = entity, attrs) do
+    changeset = Pool.CriteriaModel.changeset(entity, attrs)
 
     socket
     |> save(changeset)

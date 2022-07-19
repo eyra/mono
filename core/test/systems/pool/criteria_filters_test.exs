@@ -1,6 +1,6 @@
-defmodule Core.Pools.CriteriaFiltersTest do
+defmodule Systems.Pool.CriteriaFiltersTest do
   use Core.DataCase, async: true
-  alias Core.Pools.CriteriaFilters
+  alias Systems.Pool.CriteriaFilters
 
   describe "include?/2" do
     test "include with nil filters, 2 codes: true" do

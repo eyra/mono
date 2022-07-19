@@ -5,10 +5,10 @@ defmodule Core.Factories do
   alias Core.Accounts.{User, Profile, Features}
 
   alias Core.{
-    Pools,
     Authorization,
     DataDonation,
-    WebPush
+    WebPush,
+    Repo
   }
 
   alias Frameworks.{
@@ -24,10 +24,9 @@ defmodule Core.Factories do
     Support,
     Survey,
     Lab,
-    DataDonation
+    DataDonation,
+    Pool
   }
-
-  alias Core.Repo
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
 
@@ -158,11 +157,11 @@ defmodule Core.Factories do
   end
 
   def build(:pool) do
-    %Pools.Pool{name: :sbe_2021}
+    %Pool.Model{name: :sbe_2021}
   end
 
   def build(:criteria) do
-    %Pools.Criteria{}
+    %Pool.CriteriaModel{}
   end
 
   def build(:submission) do
@@ -357,9 +356,9 @@ defmodule Core.Factories do
     {promotion, attributes} = Map.pop!(attributes, :promotion)
 
     {criteria, attributes} = Map.pop(attributes, :criteria, build(:criteria))
-    {pool, attributes} = Map.pop(attributes, :pool, Pools.get_by_name(:sbe_2021))
+    {pool, attributes} = Map.pop(attributes, :pool, Pool.Context.get_by_name(:sbe_2021))
 
-    %Pools.Submission{
+    %Pool.SubmissionModel{
       promotion_id: promotion.id,
       status: :idle,
       criteria: criteria,

@@ -1,10 +1,11 @@
-defmodule Core.Pools.SignalHandlersTest do
+defmodule Systems.Pool.SwitchTest do
   use Core.DataCase, async: true
   alias Core.Factories
-  alias Core.Pools.SignalHandlers
   alias Core.Authorization
   alias Ecto.Changeset
   alias Core.Accounts.User
+
+  alias Systems.Pool.Switch
 
   setup do
     {:ok,
@@ -19,7 +20,7 @@ defmodule Core.Pools.SignalHandlersTest do
       campaign: campaign,
       coordinator: coordinator
     } do
-      SignalHandlers.dispatch(:campaign_created, %{
+      Switch.dispatch(:campaign_created, %{
         campaign: campaign
       })
 
@@ -34,7 +35,7 @@ defmodule Core.Pools.SignalHandlersTest do
       campaign: campaign,
       coordinator: coordinator
     } do
-      SignalHandlers.dispatch(:user_profile_updated, %{
+      Switch.dispatch(:user_profile_updated, %{
         user: coordinator,
         user_changeset: Changeset.cast(%User{}, %{coordinator: true}, [:coordinator])
       })
@@ -49,7 +50,7 @@ defmodule Core.Pools.SignalHandlersTest do
     } do
       student = Factories.insert!(:member, %{student: true})
 
-      SignalHandlers.dispatch(:user_profile_updated, %{
+      Switch.dispatch(:user_profile_updated, %{
         user: student,
         user_changeset: Changeset.cast(%User{}, %{coordinator: false}, [:coordinator])
       })
@@ -63,7 +64,7 @@ defmodule Core.Pools.SignalHandlersTest do
       user = Factories.insert!(:member)
       Authorization.assign_role(user, campaign, :coordinator)
 
-      SignalHandlers.dispatch(:user_profile_updated, %{
+      Switch.dispatch(:user_profile_updated, %{
         user: user,
         user_changeset: Changeset.cast(%User{}, %{coordinator: false}, [:coordinator])
       })

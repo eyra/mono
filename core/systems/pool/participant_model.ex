@@ -1,4 +1,4 @@
-defmodule Core.Pools.Participant do
+defmodule Systems.Pool.ParticipantModel do
   @moduledoc """
   A task (donate data) to be completed by a participant.
   """
@@ -6,9 +6,13 @@ defmodule Core.Pools.Participant do
 
   alias Core.Accounts.User
 
+  alias Systems.{
+    Pool
+  }
+
   schema "pool_participants" do
     belongs_to(:user, User)
-    belongs_to(:pool, Pool)
+    belongs_to(:pool, Pool.Model)
 
     timestamps()
   end

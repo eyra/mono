@@ -1,11 +1,11 @@
-defmodule Core.Pools.Criteria do
+defmodule Systems.Pool.CriteriaModel do
   @moduledoc """
   This schema contains features of members.
   """
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Core.Pools.Submission
+  alias Systems.Pool.SubmissionModel
 
   alias Core.Enums.{Genders, DominantHands, NativeLanguages, StudyProgramCodes}
   require Core.Enums.{Genders, DominantHands, NativeLanguages, StudyProgramCodes}
@@ -16,7 +16,7 @@ defmodule Core.Pools.Criteria do
     field(:native_languages, {:array, Ecto.Enum}, values: NativeLanguages.schema_values())
     field(:study_program_codes, {:array, Ecto.Enum}, values: StudyProgramCodes.schema_values())
 
-    belongs_to(:submission, Submission)
+    belongs_to(:submission, SubmissionModel)
 
     timestamps()
   end

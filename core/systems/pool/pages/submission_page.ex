@@ -8,8 +8,6 @@ defmodule Systems.Pool.SubmissionPage do
 
   import CoreWeb.Gettext
 
-  alias Core.Pools.{Submissions, Submission}
-
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.UI.Navigation.ButtonBar
   alias CoreWeb.UI.Member
@@ -19,6 +17,10 @@ defmodule Systems.Pool.SubmissionPage do
   alias Systems.Pool.SubmissionCriteriaView, as: SubmissionCriteriaForm
 
   alias Frameworks.Pixel.Text.{Title1, SubHead}
+
+  alias Systems.{
+    Pool
+  }
 
   @impl true
   def mount(%{"id" => submission_id}, _session, socket) do
@@ -85,7 +87,7 @@ defmodule Systems.Pool.SubmissionPage do
     socket =
       if ready_for_publish?(submission) do
         {:ok, _submission} =
-          Submissions.update(submission, %{status: :accepted, accepted_at: Timestamp.naive_now()})
+          Pool.Context.update(submission, %{status: :accepted, accepted_at: Timestamp.naive_now()})
 
         title = dgettext("eyra-submission", "accept.success.title")
         text = dgettext("eyra-submission", "accept.success.text")
@@ -105,7 +107,7 @@ defmodule Systems.Pool.SubmissionPage do
 
   @impl true
   def handle_event("retract", _params, %{assigns: %{vm: %{submission: submission}}} = socket) do
-    {:ok, _submission} = Submissions.update(submission, %{status: :idle})
+    {:ok, _submission} = Pool.Context.update(submission, %{status: :idle})
 
     title = dgettext("eyra-submission", "retract.admin.success.title")
     text = dgettext("eyra-submission", "retract.admin.success.text")
@@ -120,7 +122,7 @@ defmodule Systems.Pool.SubmissionPage do
   @impl true
   def handle_event("complete", _params, %{assigns: %{vm: %{submission: submission}}} = socket) do
     {:ok, _submission} =
-      Submissions.update(submission, %{status: :completed, completed_at: Timestamp.naive_now()})
+      Pool.Context.update(submission, %{status: :completed, completed_at: Timestamp.naive_now()})
 
     title = dgettext("eyra-submission", "complete.admin.success.title")
     text = dgettext("eyra-submission", "complete.admin.success.text")
@@ -140,8 +142,8 @@ defmodule Systems.Pool.SubmissionPage do
 
   defp ready_for_publish?(submission) do
     changeset =
-      Submission.operational_changeset(submission, %{})
-      |> Submission.operational_validation()
+      Pool.SubmissionModel.operational_changeset(submission, %{})
+      |> Pool.SubmissionModel.operational_validation()
 
     changeset.valid?
   end

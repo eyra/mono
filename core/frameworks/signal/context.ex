@@ -1,7 +1,6 @@
 defmodule Frameworks.Signal.Context do
   @signal_handlers [
     Core.Accounts.SignalHandlers,
-    Core.Pools.SignalHandlers,
     Core.Mailer.SignalHandlers,
     Core.WebPush.SignalHandlers,
     Core.APNS.SignalHandlers,

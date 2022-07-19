@@ -51,7 +51,7 @@ defmodule Systems.Pool.CampaignsView do
 
   defp clear_review_submission_next_action do
     for user <- Accounts.list_pool_admins() do
-      NextAction.Context.clear_next_action(user, Core.Pools.ReviewSubmission)
+      NextAction.Context.clear_next_action(user, Pool.ReviewSubmission)
     end
   end
 

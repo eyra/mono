@@ -10,8 +10,6 @@ defmodule Systems.Campaign.ContentPage do
   import CoreWeb.Gettext
   import Core.ImageCatalog, only: [image_catalog: 0]
 
-  alias Core.Pools.Submissions
-
   alias CoreWeb.ImageCatalogPicker
   alias Systems.Promotion.FormView, as: PromotionForm
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
@@ -21,7 +19,8 @@ defmodule Systems.Campaign.ContentPage do
 
   alias Systems.{
     Campaign,
-    Assignment
+    Assignment,
+    Pool
   }
 
   data(validate?, :boolean, default: false)
@@ -129,7 +128,7 @@ defmodule Systems.Campaign.ContentPage do
     socket =
       if Campaign.Context.ready?(campaign_id) do
         {:ok, _submission} =
-          Submissions.update(submission, %{
+          Pool.Context.update(submission, %{
             status: :submitted,
             submitted_at: Timestamp.naive_now()
           })
@@ -158,7 +157,7 @@ defmodule Systems.Campaign.ContentPage do
         _params,
         %{assigns: %{vm: %{promotion: %{submission: submission}}}} = socket
       ) do
-    {:ok, _submission} = Submissions.update(submission, %{status: :idle})
+    {:ok, _submission} = Pool.Context.update(submission, %{status: :idle})
 
     title = dgettext("eyra-submission", "retract.success.title")
     text = dgettext("eyra-submission", "retract.success.text")

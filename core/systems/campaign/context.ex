@@ -7,7 +7,6 @@ defmodule Systems.Campaign.Context do
   require Logger
   alias Frameworks.GreenLight.Principal
   alias Core.Repo
-  alias Core.Pools
   alias Core.Accounts.User
   alias Core.Authorization
   alias Core.Enums.StudyProgramCodes
@@ -18,11 +17,11 @@ defmodule Systems.Campaign.Context do
     Assignment,
     Survey,
     Crew,
-    Bookkeeping
+    Bookkeeping,
+    Pool
   }
 
   alias Core.Accounts.User
-  alias Core.Pools.{Submission, Criteria}
   alias Frameworks.Signal
 
   def get!(id, preload \\ []) do
@@ -95,7 +94,7 @@ defmodule Systems.Campaign.Context do
     from(c in Campaign.Model,
       join: p in Promotion.Model,
       on: p.id == c.promotion_id,
-      join: s in Submission,
+      join: s in Pool.SubmissionModel,
       on: s.promotion_id == p.id,
       where: c.id not in ^exclude and s.status in ^submission_status,
       preload: ^preload,
@@ -115,7 +114,7 @@ defmodule Systems.Campaign.Context do
     from(c in Campaign.Model,
       join: p in Promotion.Model,
       on: p.id == c.promotion_id,
-      join: s in Submission,
+      join: s in Pool.SubmissionModel,
       on: s.promotion_id == p.id,
       where: c.id not in ^exclude and (s.status != :idle or not is_nil(s.submitted_at)),
       preload: ^preload,
@@ -430,7 +429,7 @@ defmodule Systems.Campaign.Context do
     |> Assignment.Context.open?()
   end
 
-  def open?(%Pools.Submission{promotion_id: promotion_id}) do
+  def open?(%Pool.SubmissionModel{promotion_id: promotion_id}) do
     Promotion.Context.get!(promotion_id)
     |> get_by_promotion(Campaign.Model.preload_graph(:full))
     |> open?()
@@ -442,7 +441,7 @@ defmodule Systems.Campaign.Context do
   """
   def mark_expired_debug(force \\ false) do
     submitted_submissions =
-      from(s in Submission, where: s.status == :accepted)
+      from(s in Pool.SubmissionModel, where: s.status == :accepted)
       |> Repo.all()
 
     promotion_ids =
@@ -466,9 +465,9 @@ defmodule Systems.Campaign.Context do
   def reward_student(%{id: assignment_id} = _assignment, %{id: student_id} = _student) do
     {credits, study_program_codes} =
       from(c in Campaign.Model,
-        inner_join: s in Submission,
+        inner_join: s in Pool.SubmissionModel,
         on: s.promotion_id == c.promotion_id,
-        inner_join: ec in Criteria,
+        inner_join: ec in Pool.CriteriaModel,
         on: ec.submission_id == s.id,
         where: c.promotable_assignment_id == ^assignment_id,
         select: {s.reward_value, ec.study_program_codes}
@@ -515,9 +514,9 @@ defmodule Systems.Campaign.Context do
       |> Enum.map(&Atom.to_string(&1))
 
     from(c in Campaign.Model,
-      inner_join: s in Submission,
+      inner_join: s in Pool.SubmissionModel,
       on: s.promotion_id == c.promotion_id,
-      inner_join: ec in Criteria,
+      inner_join: ec in Pool.CriteriaModel,
       on: ec.submission_id == s.id,
       inner_join: a in Assignment.Model,
       on: a.id == c.promotable_assignment_id,
@@ -544,9 +543,9 @@ defmodule Systems.Campaign.Context do
       on: a.crew_id == t.crew_id,
       inner_join: c in Campaign.Model,
       on: c.promotable_assignment_id == a.id,
-      inner_join: s in Submission,
+      inner_join: s in Pool.SubmissionModel,
       on: s.promotion_id == c.promotion_id,
-      inner_join: ec in Criteria,
+      inner_join: ec in Pool.CriteriaModel,
       on: ec.submission_id == s.id,
       where: t.status == :accepted and u.student == true,
       select: {u.id, a.id, s.reward_value, ec.study_program_codes}

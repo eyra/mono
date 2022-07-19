@@ -1,11 +1,14 @@
-defmodule Core.Pools.Pool do
+defmodule Systems.Pool.Model do
   @moduledoc """
   The pool schema.
   """
   use Ecto.Schema
 
   alias Core.Accounts.User
-  alias Systems.Promotion
+
+  alias Systems.{
+    Promotion
+  }
 
   schema "pools" do
     field(:name, :string)

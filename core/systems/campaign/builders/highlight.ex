@@ -4,10 +4,11 @@ defmodule Systems.Campaign.Builders.Highlight do
   alias Link.Enums.OnlineStudyLanguages
 
   alias Systems.{
-    Assignment
+    Assignment,
+    Pool
   }
 
-  def view_model(%Core.Pools.Submission{reward_value: reward_value}, :reward) do
+  def view_model(%Pool.SubmissionModel{reward_value: reward_value}, :reward) do
     reward_title = dgettext("link-survey", "reward.highlight.title")
 
     reward_value =

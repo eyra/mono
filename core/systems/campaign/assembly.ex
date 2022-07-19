@@ -4,14 +4,12 @@ defmodule Systems.Campaign.Assembly do
     Assignment,
     Survey,
     Lab,
-    Crew
+    Crew,
+    Pool
   }
 
   alias Frameworks.Utility.EctoHelper
   alias Systems.Promotion
-  alias Core.Submissions
-  alias Core.Pools
-  alias Core.Pools.Submissions
   alias Core.Accounts
   alias Core.Authorization
   alias Core.Repo
@@ -40,7 +38,7 @@ defmodule Systems.Campaign.Assembly do
 
     promotion_attrs = create_promotion_attrs(title, user, profile)
 
-    pool = Pools.get_by_name(:sbe_2021)
+    pool = Pool.Context.get_by_name(:sbe_2021)
 
     campaign_auth_node = Authorization.create_node!()
     promotion_auth_node = Authorization.create_node!(campaign_auth_node)
@@ -60,7 +58,8 @@ defmodule Systems.Campaign.Assembly do
          {:ok, assignment} <-
            Assignment.Context.create(assignment_attrs(), crew, experiment, assignment_auth_node),
          {:ok, promotion} <- Promotion.Context.create(promotion_attrs, promotion_auth_node),
-         {:ok, _submission} <- Submissions.create(submission_attrs(), promotion, pool),
+         {:ok, _submission} <-
+           Pool.Context.create_submission(submission_attrs(), promotion, pool),
          {:ok, campaign} <-
            Campaign.Context.create(promotion, assignment, user, campaign_auth_node),
          {:ok, _author} <- Campaign.Context.add_author(campaign, user) do
@@ -145,8 +144,8 @@ defmodule Systems.Campaign.Assembly do
     experiment_auth_node = Authorization.copy(experiment_auth_node, assignment_auth_node)
 
     promotion = Promotion.Context.copy(promotion, promotion_auth_node)
-    submission = Submissions.copy(submission, promotion, pool)
-    criteria = Submissions.copy(criteria, submission)
+    submission = Pool.Context.copy(submission, promotion, pool)
+    criteria = Pool.Context.copy(criteria, submission)
     tool = Assignment.Context.copy_tool(experiment, experiment_auth_node)
     experiment = Assignment.Context.copy_experiment(experiment, tool, experiment_auth_node)
     assignment = Assignment.Context.copy(assignment, experiment, assignment_auth_node)

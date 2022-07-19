@@ -6,7 +6,6 @@ defmodule Systems.Pool.Builders.OverviewPage do
 
   alias Core.Accounts
   alias Core.ImageHelpers
-  alias Core.Pools
 
   alias Systems.{
     Pool,
@@ -88,7 +87,7 @@ defmodule Systems.Pool.Builders.OverviewPage do
     study_program_codes = Core.Enums.StudyProgramCodes.values_by_year(year)
     year_string = Core.Enums.StudyProgramCodes.year_to_string(year)
 
-    target = Pools.target(year)
+    target = Pool.Context.target(year)
 
     active_credits = credits |> Enum.filter(&(&1 > 0 and &1 < target))
     passed_credits = credits |> Enum.filter(&(&1 >= target))
@@ -103,7 +102,7 @@ defmodule Systems.Pool.Builders.OverviewPage do
         end
       )
 
-    total_student_count = Pools.count_students(study_program_codes)
+    total_student_count = Pool.Context.count_students(study_program_codes)
     active_student_count = active_credits |> Enum.count()
     passed_student_count = passed_credits |> Enum.count()
     inactive_student_count = total_student_count - (active_student_count + passed_student_count)

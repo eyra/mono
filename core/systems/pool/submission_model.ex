@@ -1,4 +1,4 @@
-defmodule Core.Pools.Submission do
+defmodule Systems.Pool.SubmissionModel do
   @moduledoc """
   A task (donate data) to be completed by a participant.
   """
@@ -7,12 +7,15 @@ defmodule Core.Pools.Submission do
 
   import Ecto.Changeset
 
-  alias Core.Pools.{Criteria, Pool, SubmissionStatus}
-  alias Systems.Promotion
+  alias Systems.{
+    Pool,
+    Promotion
+  }
+
   alias CoreWeb.UI.Timestamp
 
   schema "pool_submissions" do
-    field(:status, Ecto.Enum, values: SubmissionStatus.values())
+    field(:status, Ecto.Enum, values: Pool.SubmissionStatus.values())
     field(:reward_value, :integer)
     field(:reward_currency, :string)
     field(:schedule_start, :string)
@@ -22,9 +25,9 @@ defmodule Core.Pools.Submission do
     field(:accepted_at, :naive_datetime)
     field(:completed_at, :naive_datetime)
 
-    has_one(:criteria, Criteria)
+    has_one(:criteria, Pool.CriteriaModel, foreign_key: :submission_id)
     belongs_to(:promotion, Promotion.Model)
-    belongs_to(:pool, Pool)
+    belongs_to(:pool, Pool.Model)
 
     field(:director, Ecto.Enum, values: [:campaign])
 

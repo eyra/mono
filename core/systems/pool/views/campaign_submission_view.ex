@@ -1,17 +1,15 @@
 defmodule Systems.Pool.CampaignSubmissionView do
   use CoreWeb.LiveForm
 
-  alias Core.Pools
   alias Core.Enums.{Genders, DominantHands, NativeLanguages}
   alias Frameworks.Pixel.Selector.Selector
   alias Frameworks.Pixel.Text.{Title2, Title3, Title4, Title6, BodyMedium, SubHead}
 
   alias Systems.{
     Campaign,
-    Assignment
+    Assignment,
+    Pool
   }
-
-  alias Core.Pools.{Criteria}
 
   prop(props, :any, required: true)
 
@@ -137,8 +135,8 @@ defmodule Systems.Pool.CampaignSubmissionView do
     dominanthand_labels = DominantHands.labels(criteria.dominant_hands)
     nativelanguage_labels = NativeLanguages.labels(criteria.native_languages)
 
-    pool_size = Pools.count_eligitable_users(criteria.study_program_codes)
-    sample_size = Pools.count_eligitable_users(criteria, excluded_user_ids)
+    pool_size = Pool.Context.count_eligitable_users(criteria.study_program_codes)
+    sample_size = Pool.Context.count_eligitable_users(criteria, excluded_user_ids)
 
     socket
     |> assign(
@@ -151,8 +149,8 @@ defmodule Systems.Pool.CampaignSubmissionView do
   end
 
   # Saving
-  def save(socket, %Criteria{} = entity, attrs) do
-    changeset = Criteria.changeset(entity, attrs)
+  def save(socket, %Pool.CriteriaModel{} = entity, attrs) do
+    changeset = Pool.CriteriaModel.changeset(entity, attrs)
 
     socket
     |> save(changeset)

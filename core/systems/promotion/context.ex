@@ -9,10 +9,10 @@ defmodule Systems.Promotion.Context do
   alias Ecto.Changeset
   alias Core.Repo
   alias Frameworks.Signal
-  alias Core.Pools.Submission
 
   alias Systems.{
-    Promotion
+    Promotion,
+    Pool
   }
 
   def list do
@@ -81,7 +81,9 @@ defmodule Systems.Promotion.Context do
   end
 
   def has_submission?(promotion_id, pool_id) do
-    from(s in Submission, where: s.promotion_id == ^promotion_id and s.pool_id == ^pool_id)
+    from(s in Pool.SubmissionModel,
+      where: s.promotion_id == ^promotion_id and s.pool_id == ^pool_id
+    )
     |> Repo.exists?()
   end
 end

@@ -1,4 +1,4 @@
-defmodule Core.Pools.ReviewSubmission do
+defmodule Systems.Pool.ReviewSubmission do
   @behaviour Systems.NextAction.ViewModel
 
   import CoreWeb.Gettext

@@ -9,7 +9,8 @@ defmodule Systems.Campaign.AssemblyTest do
     Campaign,
     Assignment,
     Survey,
-    Lab
+    Lab,
+    Pool
   }
 
   setup_all do
@@ -294,7 +295,7 @@ defmodule Systems.Campaign.AssemblyTest do
       schedule_end = Timestamp.now() |> Timestamp.format_user_input_date()
 
       {:ok, %{submission: %{criteria: criteria}}} =
-        Core.Pools.Submissions.update(submission, %{
+        Pool.Context.update(submission, %{
           reward_value: reward_value,
           status: status,
           schedule_start: schedule_start,
@@ -308,7 +309,7 @@ defmodule Systems.Campaign.AssemblyTest do
 
       # Update Criteria
       criteria
-      |> Core.Pools.Criteria.changeset(%{
+      |> Pool.CriteriaModel.changeset(%{
         study_program_codes: study_program_codes,
         genders: genders,
         dominant_hands: dominant_hands,

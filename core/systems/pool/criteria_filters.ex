@@ -1,4 +1,4 @@
-defmodule Core.Pools.CriteriaFilters do
+defmodule Systems.Pool.CriteriaFilters do
   @moduledoc """
   Defines filters used to filter students in the overview page of the pool.
   """
