@@ -10,6 +10,7 @@ import pandas as pd
 import zipfile
 
 
+
 URL_PATTERN = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)" \
               r"(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|" \
               r"(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
@@ -21,8 +22,16 @@ ATTACH_FILE_PATTERN = r'(<attached: \S+>)|(<Media (weggelaten|omitted)>)|' \
 FILE_RE = re.compile(r".*.txt$")
 HIDDEN_FILE_RE = re.compile(r".*__MACOSX*")
 
+
 SYSTEM_MESSAGES = ['end-to-end','WhatsApp']
-hformats = ['%m/%d/%y, %H:%M - %name:', '[%d/%m/%y, %H:%M:%S] %name:', '%d-%m-%y %H:%M - %name:', '[%d-%m-%y %H:%M:%S] %name:']
+hformats = ['%m/%d/%y, %H:%M - %name:', '[%d/%m/%y, %H:%M:%S] %name:', '%d-%m-%y %H:%M - %name:',
+            '[%d-%m-%y %H:%M:%S] %name:', '[%m/%d/%y, %H:%M:%S] %name:', '%d/%m/%y, %H:%M – %name:',
+            '%d.%m.%y, %H:%M – %name:','[%d/%m/%y, %H:%M:%S %P] %name:','[%m/%d/%y, %H:%M:%S %P] %name:',
+            '[%d.%m.%y, %H:%M:%S] %name:', '[%m/%d/%y %H:%M:%S] %name:', '[%m-%d-%y, %H:%M:%S] %name:',
+            '[%m-%d-%y %H:%M:%S] %name:','%m-%d-%y %H:%M - %name:','%m-%d-%y, %H:%M - %name:',
+            '%m-%d-%y, %H:%M , %name:', '%m/%d/%y, %H:%M , %name:','%d-%m-%y, %H:%M , %name:','%d/%m/%y, %H:%M , %name:',
+            '%d.%m.%y %H:%M – %name:', '%m.%d.%y, %H:%M – %name:', '%m.%d.%y %H:%M – %name:',
+            '[%d.%m.%y %H:%M:%S] %name:','[%m.%d.%y, %H:%M:%S] %name:', '[%m.%d.%y %H:%M:%S] %name:']
 
 
 class ColnamesDf:
@@ -282,7 +291,8 @@ def parse_text(text, regex):
     Returns
     -------
     pandas.DataFrame
-        pandas.DataFrame with messages sent by users, index is the date the messages was sent.
+        pandas.DataFrame with messages sent by users
+
     Raises
     ------
     RegexError
@@ -306,6 +316,67 @@ def parse_text(text, regex):
 
     return df_chat
 
+def make_df_general_regx(log_error,text):
+    """Use a general regex to load chat as a DataFrame.
+        Parameters
+        ----------
+        log_error : list
+            List of error messages
+        text : str
+            Text of the chat
+
+        Returns
+        -------
+        pandas.DataFrame
+            pandas.DataFrame with messages sent by users
+
+        """
+
+    expr_to_test = re.compile(r"^(.*?)(?:\] | - )(.*?): (.*?$)", flags=re.DOTALL)
+    lines = text.split("\n")
+    result = []
+    line_counts = len(lines)
+    for l in lines:
+        try:
+
+            res = expr_to_test.match(l)
+
+            timestamp = res.group(1)
+            username = res.group(2)
+            message = res.group(3)
+
+            # clean timestamp
+            timestamp = timestamp.replace('[','').replace(',','')
+            timestamp = timestamp.strip('\u202c')
+            timestamp = timestamp.strip('\u200e')
+
+            timestamp = pd.to_datetime(timestamp)
+
+
+            line_dict = {
+                COLNAMES_DF.DATE: timestamp,
+                COLNAMES_DF.USERNAME: username,
+                COLNAMES_DF.MESSAGE: message
+            }
+
+            result.append(line_dict)
+
+        except:
+            pass
+
+    df_chat = pd.DataFrame.from_records(result)
+    df_chat = df_chat[[COLNAMES_DF.DATE, COLNAMES_DF.USERNAME, COLNAMES_DF.MESSAGE]]
+
+    # clean username
+    df_chat[COLNAMES_DF.USERNAME] = df_chat[COLNAMES_DF.USERNAME].apply(lambda u: u.strip('\u202c'))
+
+    # log unprocessed_line_no= the number of lines in multiline messages + the number of system messages
+    unprocessed_line_no = line_counts - df_chat.shape[0]
+
+    if unprocessed_line_no > 0:
+        log_error("Number of unprocessed lines: " + str(unprocessed_line_no))
+
+    return df_chat
 
 def make_chat_df(log_error, text, hformat):
     """Load chat as a DataFrame.
@@ -317,6 +388,7 @@ def make_chat_df(log_error, text, hformat):
         Text of the chat
     hformat : str
         Simplified syntax for the header, e.g. ``'%y-%m-%d, %H:%M:%S - %name:'``
+
     Returns
     -------
     pandas.DataFrame
@@ -361,7 +433,12 @@ def parse_chat(log_error, data):
         df = make_chat_df(log_error, data, hformat)
         if df is not None:
              return df
-    log_error("hformats did not match the provided text. No match was found")
+    log_error("hformats did not match the provided text. We try to use a general regex to read the chat file. ")
+    # If header format is unknown to our script we use a loose regular expression to detect
+    df = make_df_general_regx(log_error,data)
+    if df.shape[0] > 0:
+        return df
+    log_error("Failed to read the Chat file.")
     return None
 
 
@@ -605,7 +682,7 @@ def remove_system_messages(log_error, chat):
     is_system_message = True if all(s in message0 for s in SYSTEM_MESSAGES) else False
     if is_system_message:
         group_name = chat.loc[0, COLNAMES_DF.USERNAME]
-        log_error("Identified group name:"+group_name)
+        #log_error("Identified group name:"+group_name)
         chat = chat.loc[chat[COLNAMES_DF.USERNAME] != group_name,]
 
     return chat
@@ -693,7 +770,7 @@ def process(file_data):
     try:
         zfile = zipfile.ZipFile(file_data)
     except:
-        if FILE_RE.match(file_data):
+        if FILE_RE.match(file_data.name):
             tfile = open(file_data, encoding="utf8")
             chat = parse_chat(log_error, tfile.read())
 
