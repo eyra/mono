@@ -7,6 +7,7 @@ defmodule Frameworks.Signal.Context do
     Systems.Observatory.Switch,
     Systems.Assignment.Switch,
     Systems.Pool.Switch,
+    Systems.Scholar.Switch,
     Systems.Campaign.Switch,
     Systems.NextAction.Switch
   ]

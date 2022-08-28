@@ -57,17 +57,18 @@ defmodule Systems.Promotion.LandingPageTest do
           }
         )
 
-      _submission = Factories.insert!(:submission, %{reward_value: 5, promotion: promotion})
+      submission = Factories.insert!(:submission, %{reward_value: 5})
       author = Factories.build(:author)
 
       _campaign =
         Factories.insert!(:campaign, %{
           assignment: assignment,
           promotion: promotion,
-          authors: [author]
+          authors: [author],
+          submissions: [submission]
         })
 
-      %{promotion: promotion, assignment: assignment}
+      %{promotion: promotion, assignment: assignment, submissions: [submission]}
     end
 
     test "Initial", %{conn: conn, promotion: promotion} do

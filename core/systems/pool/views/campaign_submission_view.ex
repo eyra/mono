@@ -81,14 +81,14 @@ defmodule Systems.Pool.CampaignSubmissionView do
         %{
           id: id,
           props: %{
-            entity: %{criteria: criteria, promotion_id: promotion_id} = submission,
+            entity: %{criteria: criteria} = submission,
             user: user
           }
         },
         socket
       ) do
-    %{promotable_assignment: %{excluded: excluded_assignments} = assignment} =
-      Campaign.Context.get_by_promotion(promotion_id, promotable_assignment: [:excluded])
+    %{id: campaign_id, promotable_assignment: %{excluded: excluded_assignments} = assignment} =
+      Campaign.Context.get_by_submission(submission, promotable_assignment: [:excluded])
 
     excluded_assignment_ids =
       excluded_assignments
@@ -96,7 +96,7 @@ defmodule Systems.Pool.CampaignSubmissionView do
 
     campaign_labels =
       Campaign.Context.list_owned_campaigns(user, preload: [:promotion, :promotable_assignment])
-      |> Enum.filter(&(&1.promotion_id != promotion_id))
+      |> Enum.filter(&(&1.id != campaign_id))
       |> Enum.map(&to_label(&1, excluded_assignment_ids))
 
     excluded_user_ids = Assignment.Context.list_user_ids(excluded_assignment_ids)

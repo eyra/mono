@@ -11,20 +11,41 @@ defmodule Systems.Pool.Context do
 
   alias Systems.{
     Pool,
-    Promotion,
-    NextAction
+    NextAction,
+    Org
   }
 
-  def list() do
-    ensure_sbe_2021_pool()
-    Repo.all(Pool.Model)
+  def list(preload \\ []) do
+    Repo.all(Pool.Model) |> Repo.preload(preload)
+  end
+
+  def list_by_org(org_identifier, preload \\ []) when is_list(org_identifier) do
+    from(p in Pool.Model,
+      inner_join: o in Org.NodeModel,
+      on: o.id == p.org_id,
+      where: o.identifier == ^org_identifier,
+      preload: ^preload
+    )
+    |> Repo.all()
+  end
+
+  def list_by_currency(%{id: currency_id}) do
+    list_by_currency(currency_id)
+  end
+
+  def list_by_currency(currency_id, preload \\ []) do
+    from(pool in Pool.Model,
+      where: pool.currency_id == ^currency_id,
+      preload: ^preload
+    )
+    |> Repo.all()
   end
 
   def list_submissions do
     Repo.all(Pool.SubmissionModel)
   end
 
-  def list_submissions(status, preload \\ [:criteria, :promotion]) do
+  def list_submissions(status, preload \\ [:criteria]) do
     from(submission in Pool.SubmissionModel,
       where: submission.status == ^status,
       preload: ^preload
@@ -32,38 +53,64 @@ defmodule Systems.Pool.Context do
     |> Repo.all()
   end
 
-  def get!(id), do: Repo.get!(Pool.Model, id)
-  def get(id), do: Repo.get(Pool.Model, id)
+  def get!(id, preload \\ []), do: Repo.get!(Pool.Model, id) |> Repo.preload(preload)
+  def get(id, preload \\ []), do: Repo.get(Pool.Model, id) |> Repo.preload(preload)
 
-  def get_by_name(name) when is_atom(name), do: get_by_name(Atom.to_string(name))
+  def get_by_name(name, preload \\ [])
 
-  def get_by_name(name) do
-    ensure_sbe_2021_pool()
+  def get_by_name(name, preload) when is_atom(name),
+    do: get_by_name(Atom.to_string(name), preload)
+
+  def get_by_name(name, preload) do
     Repo.get_by(Pool.Model, name: name)
+    |> Repo.preload(preload)
   end
 
-  def get_submission!(term, preload \\ [:criteria, :promotion])
+  def get_by_names(names, preload \\ []) do
+    names = map_string(names)
 
-  def get_submission!(%Promotion.Model{} = promotion, preload) do
-    from(submission in Pool.SubmissionModel,
-      where: submission.promotion_id == ^promotion.id,
+    from(p in Pool.Model,
+      where: p.name in ^names,
+      preload: ^preload
+    )
+    |> Repo.all()
+  end
+
+  defp map_string(term) when is_list(term), do: Enum.map(term, &map_string(&1))
+  defp map_string(term) when is_atom(term), do: Atom.to_string(term)
+  defp map_string(term) when is_binary(term), do: term
+
+  def get_participant!(%Pool.Model{} = pool, %Accounts.User{} = user, preload \\ []) do
+    from(participant in Pool.ParticipantModel,
+      where: participant.pool_id == ^pool.id,
+      where: participant.user_id == ^user.id,
       preload: ^preload
     )
     |> Repo.one!()
   end
 
+  def link!(%Pool.Model{} = pool, %Accounts.User{} = user) do
+    %Pool.ParticipantModel{}
+    |> Pool.ParticipantModel.changeset(pool, user)
+    |> Repo.insert!(
+      on_conflict: :nothing,
+      conflict_target: [:pool_id, :user_id]
+    )
+  end
+
+  def unlink!(%Pool.Model{} = pool, %Accounts.User{} = user) do
+    from(p in Pool.ParticipantModel,
+      where: p.pool_id == ^pool.id,
+      where: p.user_id == ^user.id
+    )
+    |> Repo.delete_all()
+  end
+
+  def get_submission!(term, preload \\ [:criteria])
+
   def get_submission!(id, preload) do
     from(submission in Pool.SubmissionModel, preload: ^preload)
     |> Repo.get!(id)
-  end
-
-  defp ensure_sbe_2021_pool() do
-    name = "sbe_2021"
-
-    case Repo.get_by(Pool.Model, name: name) do
-      nil -> create(name)
-      pool -> {:ok, pool}
-    end
   end
 
   def create(name) do
@@ -71,16 +118,17 @@ defmodule Systems.Pool.Context do
     |> Repo.insert!()
   end
 
-  def create_submission(%{} = attrs, promotion, pool) do
+  def create_submission(%{} = attrs, pool) do
     submission_changeset =
       %Pool.SubmissionModel{}
       |> Pool.SubmissionModel.changeset(attrs)
-      |> Ecto.Changeset.put_assoc(:promotion, promotion)
       |> Ecto.Changeset.put_assoc(:pool, pool)
 
     criteria_changeset =
       %Pool.CriteriaModel{}
-      |> Pool.CriteriaModel.changeset(%{study_program_codes: [:bk_1, :bk_1_h, :iba_1, :iba_1_h]})
+      |> Pool.CriteriaModel.changeset(%{
+        study_program_codes: [:vu_sbe_bk_1, :vu_sbe_bk_1_h, :vu_sbe_iba_1, :vu_sbe_iba_1_h]
+      })
       |> Ecto.Changeset.put_assoc(:submission, submission_changeset)
 
     criteria = Repo.insert!(criteria_changeset)
@@ -88,24 +136,25 @@ defmodule Systems.Pool.Context do
     {:ok, criteria.submission}
   end
 
-  def copy(%Pool.SubmissionModel{} = submission, %Promotion.Model{} = promotion, pool) do
+  def copy(submissions) when is_list(submissions) do
+    Enum.map(submissions, &copy(&1))
+  end
+
+  def copy(%Pool.SubmissionModel{pool: pool, criteria: criteria} = submission) do
     attrs =
       submission
       |> Map.from_struct()
       |> Map.put(:status, :idle)
       |> Map.put(:reward_value, nil)
 
+    criteria_copy =
+      %Pool.CriteriaModel{}
+      |> Pool.CriteriaModel.changeset(Map.from_struct(criteria))
+
     %Pool.SubmissionModel{}
     |> Pool.SubmissionModel.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:promotion, promotion)
+    |> Ecto.Changeset.put_assoc(:criteria, criteria_copy)
     |> Ecto.Changeset.put_assoc(:pool, pool)
-    |> Repo.insert!()
-  end
-
-  def copy(%Pool.CriteriaModel{} = criteria, %Pool.SubmissionModel{} = submission) do
-    %Pool.CriteriaModel{}
-    |> Pool.CriteriaModel.changeset(Map.from_struct(criteria))
-    |> Ecto.Changeset.put_assoc(:submission, submission)
     |> Repo.insert!()
   end
 
@@ -139,6 +188,21 @@ defmodule Systems.Pool.Context do
     end
 
     result
+  end
+
+  def select(nil, _user), do: nil
+  def select([], _user), do: nil
+
+  def select(submissions, user) when is_list(submissions) do
+    case Enum.find(submissions, &__MODULE__.select(&1, user)) do
+      nil -> List.first(submissions)
+      submission -> submission
+    end
+  end
+
+  def select(%Pool.SubmissionModel{criteria: submission_criteria}, user) do
+    user_features = Accounts.get_features(user)
+    Pool.CriteriaModel.eligitable?(submission_criteria, user_features)
   end
 
   def count_eligitable_users(study_program_codes, exclude \\ [])
@@ -205,34 +269,45 @@ defmodule Systems.Pool.Context do
     where(query, [user, features], field(features, ^field_name) in ^values)
   end
 
-  def target("sbe_year1_2021"), do: target(:first)
-  def target("sbe_year2_2021"), do: target(:second)
+  def target("vu_sbe_rpr_year1_2021"), do: target(:first)
+  def target("vu_sbe_rpr_year2_2021"), do: target(:second)
   def target(:first), do: 60
   def target(:second), do: 3
   def target(_), do: -1
 
   def is_target_achieved?(
-        %{identifier: ["wallet" | [pool_id, _user_id]], balance_credit: balance_credit} = _account
+        %{identifier: ["wallet" | [currency, _user_id]], balance_credit: balance_credit} =
+          _account
       ) do
-    balance_credit >= target(pool_id)
+    balance_credit >= target(currency)
   end
 
   def is_target_achieved?(_), do: false
 
-  defp notify_when_submitted(%Pool.SubmissionModel{} = submission, %Ecto.Changeset{} = changeset) do
+  defp notify_when_submitted(
+         %Pool.SubmissionModel{pool_id: pool_id} = submission,
+         %Ecto.Changeset{} = changeset
+       ) do
     if Ecto.Changeset.get_change(changeset, :status) === :submitted do
       for user <- Accounts.list_pool_admins() do
-        NextAction.Context.create_next_action(user, Pool.ReviewSubmission)
+        NextAction.Context.create_next_action(user, Pool.ReviewSubmission,
+          key: pool_id,
+          params: %{id: pool_id}
+        )
       end
     end
 
     submission
   end
 
+  def get_tag(nil) do
+    %{text: dgettext("eyra-submission", "status.idle.label"), type: :tertiary}
+  end
+
   def get_tag(%Pool.SubmissionModel{status: status, submitted_at: submitted_at} = submission) do
     case {status, submitted_at} do
       {:idle, nil} ->
-        %{text: dgettext("eyra-submission", "status.idle.label"), type: :tertiary}
+        get_tag(nil)
 
       {:idle, _} ->
         %{text: dgettext("eyra-submission", "status.retracted.label"), type: :delete}

@@ -17,8 +17,9 @@ defmodule Systems.Pool.Switch do
     Signal.Context.dispatch!(:submission_updated, submission)
   end
 
-  def dispatch(:submission_updated, submission) do
-    Pool.Presenter.update(Pool.OverviewPage)
+  def dispatch(:submission_updated, %{pool_id: pool_id} = submission) do
+    Pool.Context.get!(pool_id)
+    |> Pool.Presenter.update(pool_id, Pool.DetailPage)
 
     submission
     |> Pool.Presenter.update(submission.id, Pool.SubmissionPage)

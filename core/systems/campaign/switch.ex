@@ -7,6 +7,16 @@ defmodule Systems.Campaign.Switch do
     Assignment
   }
 
+  @impl true
+  def dispatch(:scholar_class_updated, %{
+        user: user,
+        added_to: added_to_classes,
+        deleted_from: deleted_from_classes
+      }) do
+    Campaign.Context.update_pool_participations(user, added_to_classes, deleted_from_classes)
+  end
+
+  @impl true
   def dispatch(signal, %{director: :campaign} = object) do
     handle(signal, object)
   end
@@ -41,7 +51,7 @@ defmodule Systems.Campaign.Switch do
     handle(:assignment_updated, assignment)
 
     if user.student == true do
-      Campaign.Context.reward_student(assignment, user)
+      Campaign.Context.payout_participant(assignment, user)
     end
   end
 
@@ -66,10 +76,7 @@ defmodule Systems.Campaign.Switch do
   def handle(:submission_updated, submission) do
     %{promotion_id: promotion_id, promotable_assignment_id: promotable_assignment_id} =
       campaign =
-      Campaign.Context.get_by_promotion(
-        submission.promotion_id,
-        Campaign.Model.preload_graph(:full)
-      )
+      Campaign.Context.get_by_submission(submission, Campaign.Model.preload_graph(:full))
 
     campaign
     |> Campaign.Presenter.update(promotion_id, Promotion.LandingPage)

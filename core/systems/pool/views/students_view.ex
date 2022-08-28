@@ -1,16 +1,14 @@
 defmodule Systems.Pool.StudentsView do
   use CoreWeb.UI.LiveComponent
 
-  alias Core.Accounts.Features
-
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text.Title2
   alias Frameworks.Pixel.Selector.Selector
   alias CoreWeb.UI.ContentList
-  alias Core.Enums.StudyProgramCodes
 
   alias Systems.{
-    Pool
+    Pool,
+    Scholar
   }
 
   prop(props, :map, required: true)
@@ -124,8 +122,7 @@ defmodule Systems.Pool.StudentsView do
 
     String.contains?(student.profile.fullname |> String.downcase(), word) or
       String.contains?(student.email |> String.downcase(), word) or
-      StudyProgramCodes.contains_study_program?(student.features.study_program_codes, word) or
-      StudyProgramCodes.contains_year?(student.features.study_program_codes, word)
+      Scholar.Codes.contains_study_program?(student.features.study_program_codes, word)
   end
 
   defp prepare_students(
@@ -160,9 +157,7 @@ defmodule Systems.Pool.StudentsView do
          },
          socket
        ) do
-    subtitle =
-      [email | Features.get_study_programs(features)]
-      |> Enum.join(" ▪︎ ")
+    subtitle = email
 
     tag = get_tag(features)
     photo_url = get_photo_url(photo_url, features)

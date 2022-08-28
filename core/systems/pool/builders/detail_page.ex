@@ -1,36 +1,39 @@
-defmodule Systems.Pool.Builders.OverviewPage do
+defmodule Systems.Pool.Builders.DetailPage do
   import CoreWeb.Gettext
   import Frameworks.Utility.Guards
 
   import CoreWeb.UI.Responsive.Breakpoint
 
-  alias Core.Accounts
   alias Core.ImageHelpers
 
   alias Systems.{
     Pool,
     Assignment,
     Campaign,
-    Bookkeeping
+    Budget
   }
 
-  def view_model(_pool, assigns, url_resolver) do
+  def view_model(pool, assigns, url_resolver) do
     %{
-      tabs: create_tabs(assigns, url_resolver)
+      title: Pool.Model.title(pool),
+      tabs: create_tabs(assigns, url_resolver, pool)
     }
   end
 
-  defp create_tabs(%{initial_tab: initial_tab} = assigns, url_resolver) do
-    students = load_students()
-    campaigns = load_campaigns(url_resolver)
-    years = load_years(assigns)
+  defp create_tabs(
+         %{initial_tab: initial_tab} = assigns,
+         url_resolver,
+         %{participants: participants} = pool
+       ) do
+    campaigns = load_campaigns(url_resolver, pool)
+    dashboard = load_dashboard(assigns, pool)
 
     [
       %{
         id: :students,
         title: dgettext("link-studentpool", "tabbar.item.students"),
         component: Pool.StudentsView,
-        props: %{students: students},
+        props: %{students: participants},
         type: :fullpage,
         active: initial_tab === :students
       },
@@ -46,48 +49,34 @@ defmodule Systems.Pool.Builders.OverviewPage do
         id: :dashboard,
         title: dgettext("link-studentpool", "tabbar.item.dashboard"),
         component: Pool.DashboardView,
-        props: %{years: years},
+        props: dashboard,
         type: :fullpage,
         active: initial_tab === :dashboard
       }
     ]
   end
 
-  defp load_students() do
-    Accounts.list_students([:profile, :features])
-  end
-
-  defp load_campaigns(url_resolver) do
+  defp load_campaigns(url_resolver, pool) do
     preload = Campaign.Model.preload_graph(:full)
 
-    Campaign.Context.list_submitted(preload: preload)
+    Campaign.Context.list_submitted(pool, preload: preload)
+    |> Enum.map(&Campaign.Model.flatten(&1))
     |> Enum.map(&convert_to_vm(url_resolver, &1))
   end
 
-  defp load_years(%{breakpoint: breakpoint} = _assigns) do
-    first_year_rewards =
-      Bookkeeping.Context.account_query(["wallet", "sbe_year1_2021"])
+  defp scale({:unknown, _}), do: 5
+  defp scale(breakpoint), do: value(breakpoint, 10, md: %{0 => 5})
+
+  defp load_dashboard(%{breakpoint: breakpoint}, %{
+         target: target,
+         currency: currency,
+         participants: participants
+       }) do
+    scale = scale(breakpoint)
+
+    credits =
+      Budget.Context.list_wallets(currency)
       |> Enum.map(& &1.balance_credit)
-
-    second_year_rewards =
-      Bookkeeping.Context.account_query(["wallet", "sbe_year2_2021"])
-      |> Enum.map(& &1.balance_credit)
-
-    [
-      create_year(:first, first_year_rewards, scale(:first, breakpoint)),
-      create_year(:second, second_year_rewards, scale(:second, breakpoint))
-    ]
-  end
-
-  defp scale(:first, {:unknown, _}), do: 5
-  defp scale(:first, breakpoint), do: value(breakpoint, 10, md: %{0 => 5})
-  defp scale(:second, _), do: 1
-
-  defp create_year(year, credits, scale) do
-    study_program_codes = Core.Enums.StudyProgramCodes.values_by_year(year)
-    year_string = Core.Enums.StudyProgramCodes.year_to_string(year)
-
-    target = Pool.Context.target(year)
 
     active_credits = credits |> Enum.filter(&(&1 > 0 and &1 < target))
     passed_credits = credits |> Enum.filter(&(&1 >= target))
@@ -102,17 +91,16 @@ defmodule Systems.Pool.Builders.OverviewPage do
         end
       )
 
-    total_student_count = Pool.Context.count_students(study_program_codes)
+    total_student_count = participants |> Enum.count()
     active_student_count = active_credits |> Enum.count()
     passed_student_count = passed_credits |> Enum.count()
     inactive_student_count = total_student_count - (active_student_count + passed_student_count)
 
     total_credits = Statistics.sum(truncated_credits) |> do_round()
-    pending_credits = Campaign.Context.pending_rewards(year)
+    pending_credits = Budget.Context.pending_rewards(currency)
     target_credits = total_student_count * target
 
     %{
-      title: dgettext("link-studentpool", "year.label", year: year_string),
       credits: %{
         label: dgettext("link-studentpool", "credit.distribution.title"),
         values: active_credits,
@@ -170,16 +158,12 @@ defmodule Systems.Pool.Builders.OverviewPage do
   defp convert_to_vm(
          url_resolver,
          %{
+           submission: %{id: submission_id, updated_at: updated_at} = submission,
            promotion: %{
              title: title,
-             image_id: image_id,
-             submission:
-               %{
-                 id: submission_id,
-                 updated_at: updated_at
-               } = submission
+             image_id: image_id
            },
-           promotable_assignment:
+           promotable:
              %{
                assignable_experiment: %{
                  subject_count: target_subject_count
@@ -247,8 +231,8 @@ defmodule Systems.Pool.Builders.OverviewPage do
     }
   end
 
-  defp campaign_status(%{status: status} = submission) do
-    case status do
+  defp campaign_status(submission) do
+    case Pool.SubmissionModel.status(submission) do
       :accepted -> Pool.Context.published_status(submission)
       :idle -> :retracted
       :submitted -> :submitted

@@ -76,7 +76,7 @@ msgid "tabbar.item.profile"
 msgstr "Mijn profiel"
 
 #, elixir-format
-msgid "tabbar.item.study"
+msgid "tabbar.item.scholar"
 msgstr "Opleiding"
 
 #, elixir-format
@@ -88,7 +88,7 @@ msgid "tabbar.item.profile.forward"
 msgstr "Pas profiel aan"
 
 #, elixir-format
-msgid "tabbar.item.study.forward"
+msgid "tabbar.item.scholar.forward"
 msgstr "Selecteer opleiding"
 
 #, elixir-format

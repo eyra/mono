@@ -13,14 +13,22 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
   }
 
   def view_model(
+        %Campaign.Model{} = campaign,
+        assigns,
+        url_resolver
+      ) do
+    campaign
+    |> Campaign.Model.flatten()
+    |> view_model(assigns, url_resolver)
+  end
+
+  def view_model(
         %{
           id: id,
           authors: authors,
-          promotion:
-            %{
-              submission: submission
-            } = promotion,
-          promotable_assignment:
+          submission: submission,
+          promotion: promotion,
+          promotable:
             %{
               assignable_experiment: experiment
             } = assignment
@@ -95,7 +103,8 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
         inform(error, socket)
 
       {:ok} ->
-        Assignment.Context.apply_member(assignment, user)
+        reward_amount = Campaign.Context.reward_amount(assignment)
+        Assignment.Context.apply_member(assignment, user, reward_amount)
 
         LiveView.push_redirect(socket,
           to: Routes.live_path(socket, Systems.Assignment.LandingPage, id)

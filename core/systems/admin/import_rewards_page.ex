@@ -18,7 +18,9 @@ defmodule Systems.Admin.ImportRewardsPage do
 
   alias Systems.{
     Campaign,
-    Admin
+    Admin,
+    Scholar,
+    Org
   }
 
   data(back_path, :any)
@@ -27,7 +29,7 @@ defmodule Systems.Admin.ImportRewardsPage do
   data(entity, :any)
   data(changeset, :any)
 
-  data(study_year, :atom, default: :first)
+  data(currency, :atom, default: :first)
   data(local_file, :any, default: nil)
   data(session_key, :string, default: "")
   data(uploaded_file, :string, default: "-")
@@ -59,7 +61,7 @@ defmodule Systems.Admin.ImportRewardsPage do
   def filter_ok(_), do: false
 
   def filter_valid(%{:status => :ready_to_import}), do: true
-  def filter_valid(%{:status => :incorrect_study_year}), do: true
+  def filter_valid(%{:status => :incorrect_currency}), do: true
   def filter_valid(%{:status => :transaction_exists}), do: true
   def filter_valid(_), do: false
 
@@ -89,10 +91,10 @@ defmodule Systems.Admin.ImportRewardsPage do
   def validate(
         %{"credits" => credits} = line,
         user,
-        %{assigns: %{session_key: session_key, study_year: study_year}} = _socket
+        %{assigns: %{session_key: session_key, currency: currency}} = _socket
       ) do
     {status, message} =
-      if student_in_year?(user, study_year) do
+      if Campaign.Context.user_has_currency?(user, currency) do
         if transaction_exists?(user, session_key) do
           {:transaction_exists, "Import done"}
         else
@@ -105,7 +107,7 @@ defmodule Systems.Admin.ImportRewardsPage do
           end
         end
       else
-        {:incorrect_study_year, "Student is not part of #{study_year} study year"}
+        {:incorrect_currency, "Student is not part of #{currency}"}
       end
 
     line
@@ -113,18 +115,6 @@ defmodule Systems.Admin.ImportRewardsPage do
     |> Map.put(:message, message)
     |> Map.put(:user_id, user.id)
   end
-
-  defp student_in_year?(%Core.Accounts.User{} = user, study_year) do
-    user
-    |> Core.Accounts.get_features()
-    |> student_in_year?(study_year)
-  end
-
-  defp student_in_year?(%{study_program_codes: study_program_codes}, study_year) do
-    Core.Enums.StudyProgramCodes.contains_year?(study_program_codes, study_year)
-  end
-
-  defp student_in_year?(_, _), do: false
 
   defp transaction_exists?(user, session_key) do
     Campaign.Context.import_student_reward_exists?(user.id, session_key)
@@ -182,17 +172,17 @@ defmodule Systems.Admin.ImportRewardsPage do
   end
 
   defp import_single(
-         %{assigns: %{session_key: session_key, study_year: study_year}} = socket,
+         %{assigns: %{session_key: session_key, currency: currency}} = socket,
          %{:user_id => user_id, "credits" => credits} = _line
        ) do
     credits = String.to_integer(credits)
-    Campaign.Context.import_student_reward(user_id, credits, session_key, study_year)
+    Campaign.Context.import_student_reward(user_id, credits, session_key, currency)
 
     socket
   end
 
-  def handle_info(%{active_item_id: study_year, selector_id: :study_year}, socket) do
-    {:noreply, socket |> assign(study_year: study_year)}
+  def handle_info(%{active_item_id: currency, selector_id: :currency}, socket) do
+    {:noreply, socket |> assign(currency: currency)}
   end
 
   @impl true
@@ -294,7 +284,10 @@ defmodule Systems.Admin.ImportRewardsPage do
       }
     }
 
-    study_year_labels = Core.Enums.StudyYears.labels(:first)
+    currency_labels =
+      Org.Context.list_nodes(:scholar_course, ["vu", ":2021"])
+      |> Enum.map(&Scholar.Course.currency(&1.identifier))
+      |> Enum.map(&%{id: &1, value: &1, active: false})
 
     {
       :ok,
@@ -305,7 +298,7 @@ defmodule Systems.Admin.ImportRewardsPage do
         changeset: changeset,
         process_button: process_button,
         import_button: import_button,
-        study_year_labels: study_year_labels,
+        currency_labels: currency_labels,
         back_path: back,
         lines_valid: [],
         lines_unknown: [],
@@ -315,7 +308,7 @@ defmodule Systems.Admin.ImportRewardsPage do
     }
   end
 
-  defp message_color(%{status: :incorrect_study_year}), do: "text-delete"
+  defp message_color(%{status: :incorrect_currency}), do: "text-delete"
   defp message_color(%{status: :transaction_exists}), do: "text-grey1"
   defp message_color(%{status: :zero_credits}), do: "text-warning"
   defp message_color(_), do: "text-grey1"
@@ -354,11 +347,11 @@ defmodule Systems.Admin.ImportRewardsPage do
                 label_color="text-white"
               />
               <Spacing value="XS" />
-              <Title6 color="text-white">{dgettext("eyra-account", "features.study.year")}</Title6>
+              <Title6 color="text-white">Currency</Title6>
               <Spacing value="XS" />
               <Selector
-                id={:study_year}
-                items={@study_year_labels}
+                id={:currency}
+                items={@currency_labels}
                 type={:radio}
                 parent={self()}
                 background={:dark}
@@ -383,7 +376,7 @@ defmodule Systems.Admin.ImportRewardsPage do
               </tr>
               <tr>
                 <td class="pr-4"><BodyLarge>Study year</BodyLarge></td>
-                <td><BodyLarge><span class="text-primary font-button">{String.downcase(Core.Enums.StudyYears.translate(@study_year))}</span></BodyLarge></td>
+                <td><BodyLarge><span class="text-primary font-button">{@currency}</span></BodyLarge></td>
               </tr>
             </table>
           </Panel>

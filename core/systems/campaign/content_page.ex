@@ -123,10 +123,11 @@ defmodule Systems.Campaign.ContentPage do
   def handle_event(
         "submit",
         _params,
-        %{assigns: %{vm: %{id: campaign_id, promotion: %{submission: submission}}}} = socket
+        %{assigns: %{vm: %{id: campaign_id, submission: submission}}} = socket
       ) do
     socket =
       if Campaign.Context.ready?(campaign_id) do
+        # FIXME: POOL adapt to multple submissions
         {:ok, _submission} =
           Pool.Context.update(submission, %{
             status: :submitted,
@@ -155,10 +156,9 @@ defmodule Systems.Campaign.ContentPage do
   def handle_event(
         "retract",
         _params,
-        %{assigns: %{vm: %{promotion: %{submission: submission}}}} = socket
+        %{assigns: %{vm: %{submission: submission}}} = socket
       ) do
     {:ok, _submission} = Pool.Context.update(submission, %{status: :idle})
-
     title = dgettext("eyra-submission", "retract.success.title")
     text = dgettext("eyra-submission", "retract.success.text")
 

@@ -29,7 +29,7 @@ password = "asdf;lkjASDF0987"
         student: true,
         password: password,
         features: %Core.Accounts.Features{
-          study_program_codes: [:bk_1]
+          study_program_codes: [:vu_sbe_bk_1]
         }
       }
 
@@ -41,7 +41,7 @@ password = "asdf;lkjASDF0987"
         student: true,
         password: password,
         features: %Core.Accounts.Features{
-          study_program_codes: [:bk_1_h]
+          study_program_codes: [:vu_sbe_bk_1_h]
         }
       }
 

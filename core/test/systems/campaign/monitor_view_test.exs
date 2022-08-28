@@ -191,9 +191,8 @@ defmodule Systems.Campaign.MonitorViewTest do
        ) do
     promotion = Factories.insert!(:promotion)
 
-    _submission =
+    submission =
       Factories.insert!(:submission, %{
-        promotion: promotion,
         status: status,
         schedule_start: schedule_start,
         schedule_end: schedule_end
@@ -210,7 +209,13 @@ defmodule Systems.Campaign.MonitorViewTest do
       })
 
     assignment = Factories.insert!(:assignment, %{experiment: experiment, crew: crew})
-    campaign = Factories.insert!(:campaign, %{assignment: assignment, promotion: promotion})
+
+    campaign =
+      Factories.insert!(:campaign, %{
+        assignment: assignment,
+        promotion: promotion,
+        submissions: [submission]
+      })
 
     :ok = Authorization.assign_role(researcher, campaign, :owner)
 

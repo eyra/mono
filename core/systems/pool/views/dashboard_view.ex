@@ -1,17 +1,26 @@
 defmodule Systems.Pool.DashboardView do
   use CoreWeb.UI.LiveComponent
 
-  alias Frameworks.Pixel.Text.{Title2}
   alias Frameworks.Pixel.Widget.{Metric, ValueDistribution, Progress}
 
   prop(props, :map, required: true)
 
-  data(years, :map)
+  data(metrics, :list)
+  data(credits, :map)
+  data(progress, :map)
 
-  def update(%{props: %{years: years}} = _params, socket) do
+  def update(
+        %{props: %{metrics: metrics, credits: credits, progress: progress}} = _params,
+        socket
+      ) do
     {
       :ok,
-      socket |> assign(years: years)
+      socket
+      |> assign(
+        metrics: metrics,
+        credits: credits,
+        progress: progress
+      )
     }
   end
 
@@ -19,20 +28,16 @@ defmodule Systems.Pool.DashboardView do
     ~F"""
     <ContentArea>
       <MarginY id={:page_top} />
-      <div :for={year <- @years}>
-        <Title2>{year.title}</Title2>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-8 h-full">
-          <div :for={metric <- year.metrics}>
-            <Metric {...metric} />
-          </div>
-          <div class="col-span-3">
-            <ValueDistribution {...year.credits} />
-          </div>
-          <div class="col-span-3">
-            <Progress {...year.progress} />
-          </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-8 h-full">
+        <div :for={metric <- @metrics}>
+          <Metric {...metric} />
         </div>
-        <Spacing value="XXL" />
+        <div class="col-span-3">
+          <ValueDistribution {...@credits} />
+        </div>
+        <div class="col-span-3">
+          <Progress {...@progress} />
+        </div>
       </div>
     </ContentArea>
     """

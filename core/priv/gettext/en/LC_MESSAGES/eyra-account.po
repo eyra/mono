@@ -152,13 +152,5 @@ msgid "login.surf.message.surfconext.href"
 msgstr "https://wiki.surfnet.nl/display/conextsupport/Log+in+SURFconext"
 
 #, elixir-format
-msgid "features.study.program"
-msgstr "Study program"
-
-#, elixir-format
-msgid "features.study.year"
-msgstr "Study year"
-
-#, elixir-format
 msgid "ehtical.code.label"
 msgstr "Code"

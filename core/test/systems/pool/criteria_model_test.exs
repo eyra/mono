@@ -10,7 +10,7 @@ defmodule Systems.Pool.CriteriaModelTest do
         gender: :m,
         dominant_hand: :right,
         native_language: :nl,
-        study_program_codes: [:bk_1, :bk_1_h]
+        study_program_codes: [:vu_sbe_bk_1, :vu_sbe_bk_1_h]
       }
 
       {:ok, features: features}
@@ -98,7 +98,7 @@ defmodule Systems.Pool.CriteriaModelTest do
         genders: [:m],
         dominant_hands: [:right],
         native_languages: [:nl, :en],
-        study_program_codes: [:bk_1, :bk_2]
+        study_program_codes: [:vu_sbe_bk_1, :vu_sbe_bk_2]
       }
 
       assert CriteriaModel.eligitable?(criteria, features)
@@ -109,7 +109,7 @@ defmodule Systems.Pool.CriteriaModelTest do
         genders: [:m],
         dominant_hands: [:right],
         native_languages: [:en],
-        study_program_codes: [:bk_2, :bk_2_h]
+        study_program_codes: [:vu_sbe_bk_2, :vu_sbe_bk_2_h]
       }
 
       assert not CriteriaModel.eligitable?(criteria, features)

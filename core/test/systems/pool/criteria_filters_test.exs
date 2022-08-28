@@ -12,19 +12,19 @@ defmodule Systems.Pool.CriteriaFiltersTest do
     end
 
     test "include with 1 filter and 1 match: true" do
-      assert CriteriaFilters.include?([:iba_1], [:year1])
+      assert CriteriaFilters.include?([:iba_1], [:iba])
     end
 
     test "include with 2 filters and 1 match: false" do
-      assert not CriteriaFilters.include?([:iba_1], [:year1, :year2])
+      assert not CriteriaFilters.include?([:iba_1], [:iba, :resit])
     end
 
     test "include with 2 filters, 2 codes and 1 match: false" do
-      assert not CriteriaFilters.include?([:iba_1, :iba_1_h], [:year1, :year2])
+      assert not CriteriaFilters.include?([:iba_1, :iba_1_h], [:iba, :bk])
     end
 
     test "include with 2 filters, 2 codes and 2 match: true" do
-      assert CriteriaFilters.include?([:iba_1, :iba_1_h], [:year1, :resit])
+      assert CriteriaFilters.include?([:iba_1, :iba_1_h], [:iba, :resit])
     end
   end
 end

@@ -7,7 +7,8 @@ defmodule Link.Console do
 
   alias Systems.{
     Campaign,
-    Bookkeeping
+    Budget,
+    Pool
   }
 
   alias Frameworks.Utility.ViewModelBuilder
@@ -30,8 +31,8 @@ defmodule Link.Console do
     next_best_action = NextAction.Context.next_best_action(url_resolver(socket), user)
 
     wallets =
-      Bookkeeping.Context.account_query(["wallet", "#{user.id}"])
-      |> Enum.map(&ViewModelBuilder.view_model(&1, __MODULE__, user, url_resolver(socket)))
+      Budget.Context.list_wallets(user)
+      |> Enum.map(&Pool.Builders.Wallet.view_model(&1, user, url_resolver(socket)))
 
     contributions =
       user

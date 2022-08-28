@@ -212,10 +212,17 @@ studies = labs ++ surveys
 Core.Repo.transaction(
   fn ->
     for campaign_data <- campaigns do
+      submission =
+        Core.Factories.build(:submission, %{
+          parent_content_node: tool_content_node,
+          status: :accepted
+        })
+
       campaign =
         Core.Factories.insert!(:campaign, %{
           title: campaign_data.promotion.title,
-          description: ""
+          description: "",
+          submissions: [submission]
         })
 
       {tool_type, campaign_data} = Map.pop!(campaign_data, :type)
@@ -228,12 +235,7 @@ Core.Repo.transaction(
           Map.merge(
             %{
               parent_content_node: tool_content_node,
-              campaign: campaign,
-              submission:
-                Core.Factories.build(:submission, %{
-                  parent_content_node: tool_content_node,
-                  status: :accepted
-                })
+              campaign: campaign
             },
             promotion_data
           )

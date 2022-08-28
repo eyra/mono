@@ -67,7 +67,7 @@ defmodule Systems.Assignment.LandingPageTest do
           }
         )
 
-      _submission = Factories.insert!(:submission, %{reward_value: 5, promotion: promotion})
+      submission = Factories.insert!(:submission, %{reward_value: 5})
       researcher = Factories.build(:researcher)
       author = Factories.build(:author, %{researcher: researcher})
 
@@ -76,6 +76,7 @@ defmodule Systems.Assignment.LandingPageTest do
           auth_node: campaign_auth_node,
           assignment: assignment,
           promotion: promotion,
+          submissions: [submission],
           authors: [author]
         })
 

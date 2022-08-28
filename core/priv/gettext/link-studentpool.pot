@@ -19,10 +19,6 @@ msgid "tabbar.item.campaigns"
 msgstr ""
 
 #, elixir-format
-msgid "title"
-msgstr ""
-
-#, elixir-format
 msgid "students.empty.description"
 msgstr ""
 
@@ -63,10 +59,6 @@ msgid "tabbar.item.dashboard"
 msgstr ""
 
 #, elixir-format, ex-autogen
-msgid "year.label"
-msgstr ""
-
-#, elixir-format, ex-autogen
 msgid "active.students"
 msgstr ""
 
@@ -92,4 +84,20 @@ msgstr ""
 
 #, elixir-format, ex-autogen
 msgid "search.placeholder"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "submission.selector.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "overview.title"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "campaigns.label"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "participants.label"
 msgstr ""

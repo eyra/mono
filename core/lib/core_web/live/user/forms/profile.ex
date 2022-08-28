@@ -2,7 +2,6 @@ defmodule CoreWeb.User.Forms.Profile do
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader, ~w(.png .jpg .jpeg)
 
-  alias Core.Enums.StudyProgramCodes
   alias Core.Accounts
   alias Core.Accounts.UserProfileEdit
 
@@ -13,7 +12,6 @@ defmodule CoreWeb.User.Forms.Profile do
 
   data(user, :any)
   data(entity, :any)
-  data(study_labels, :any)
   data(uploads, :any)
   data(changeset, :any, default: nil)
   data(focus, :any, default: "")
@@ -38,15 +36,12 @@ defmodule CoreWeb.User.Forms.Profile do
     profile = Accounts.get_profile(user)
     entity = UserProfileEdit.create(user, profile)
 
-    study_labels = StudyProgramCodes.labels([])
-
     {
       :ok,
       socket
       |> assign(id: id)
       |> assign(user: user)
       |> assign(entity: entity)
-      |> assign(study_labels: study_labels)
       |> init_file_uploader(:photo)
       |> update_ui()
     }

@@ -11,7 +11,7 @@ defmodule CoreWeb.User.Profile do
   alias Core
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.User.Forms.Profile, as: ProfileForm
-  alias CoreWeb.User.Forms.Study, as: StudyForm
+  alias CoreWeb.User.Forms.Scholar, as: ScholarForm
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
 
   alias CoreWeb.UI.Navigation.{ActionBar, Tabbar, TabbarContent, TabbarFooter, TabbarArea}
@@ -94,11 +94,11 @@ defmodule CoreWeb.User.Profile do
     })
     |> append(
       %{
-        id: :study,
-        title: dgettext("eyra-ui", "tabbar.item.study"),
-        forward_title: dgettext("eyra-ui", "tabbar.item.study.forward"),
+        id: :scholar,
+        title: dgettext("eyra-ui", "tabbar.item.scholar"),
+        forward_title: dgettext("eyra-ui", "tabbar.item.scholar.forward"),
         type: :form,
-        component: StudyForm,
+        component: ScholarForm,
         props: %{user: current_user}
       },
       current_user.student

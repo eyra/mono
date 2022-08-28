@@ -184,7 +184,7 @@ defmodule Systems.Pool.SubmissionView do
   # Saving
 
   @impl true
-  def handle_event("save", %{"submission" => attrs}, %{assigns: %{entity: entity}} = socket) do
+  def handle_event("save", %{"submission_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket

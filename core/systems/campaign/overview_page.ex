@@ -9,9 +9,9 @@ defmodule Systems.Campaign.OverviewPage do
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.UI.PlainDialog
   alias CoreWeb.UI.SelectorDialog
-  alias Frameworks.Pixel.Button.PrimaryLiveViewButton
 
-  alias Link.Marketplace.Card, as: CardVM
+  alias Frameworks.Utility.ViewModelBuilder
+  alias Frameworks.Pixel.Button.PrimaryLiveViewButton
   alias Frameworks.Pixel.Card.DynamicCampaign
   alias Frameworks.Pixel.Grid.DynamicGrid
   alias Frameworks.Pixel.Text.Title2
@@ -48,7 +48,9 @@ defmodule Systems.Campaign.OverviewPage do
     campaigns =
       user
       |> Campaign.Context.list_owned_campaigns(preload: preload)
-      |> Enum.map(&CardVM.campaign_researcher(&1, socket))
+      |> Enum.map(
+        &ViewModelBuilder.view_model(&1, {__MODULE__, :card}, user, url_resolver(socket))
+      )
 
     socket
     |> assign(

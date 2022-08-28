@@ -7,14 +7,14 @@ defmodule Systems.Pool.CriteriaModel do
 
   alias Systems.Pool.SubmissionModel
 
-  alias Core.Enums.{Genders, DominantHands, NativeLanguages, StudyProgramCodes}
-  require Core.Enums.{Genders, DominantHands, NativeLanguages, StudyProgramCodes}
+  alias Core.Enums.{Genders, DominantHands, NativeLanguages}
+  require Core.Enums.{Genders, DominantHands, NativeLanguages}
 
   schema "eligibility_criteria" do
     field(:genders, {:array, Ecto.Enum}, values: Genders.schema_values())
     field(:dominant_hands, {:array, Ecto.Enum}, values: DominantHands.schema_values())
     field(:native_languages, {:array, Ecto.Enum}, values: NativeLanguages.schema_values())
-    field(:study_program_codes, {:array, Ecto.Enum}, values: StudyProgramCodes.schema_values())
+    field(:study_program_codes, {:array, Ecto.Atom})
 
     belongs_to(:submission, SubmissionModel)
 

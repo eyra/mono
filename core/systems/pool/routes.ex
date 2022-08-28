@@ -3,9 +3,10 @@ defmodule Systems.Pool.Routes do
     quote do
       scope "/", Systems.Pool do
         pipe_through([:browser, :require_authenticated_user])
-        live("/studentpool", OverviewPage)
-        live("/studentpool/student/:id", StudentPage)
-        live("/studentpool/campaign/:id", SubmissionPage)
+        live("/pool", OverviewPage)
+        live("/pool/:id", DetailPage)
+        live("/pool/student/:id", StudentPage)
+        live("/pool/campaign/:id", SubmissionPage)
       end
     end
   end

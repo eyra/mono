@@ -1,9 +1,25 @@
-defmodule Core.Enums.StudyProgramCodes do
+defmodule Systems.Scholar.Codes do
   @moduledoc """
     Defines study program codes used as user feature for vu students.
   """
-  use Core.Enums.Base,
-      {:study_pogram_codes, [:bk_1, :bk_1_h, :bk_2, :bk_2_h, :iba_1, :iba_1_h, :iba_2, :iba_2_h]}
+
+  alias Systems.{
+    Org,
+    Scholar,
+    Content
+  }
+
+  def values(),
+    do: [
+      :vu_sbe_bk_1,
+      :vu_sbe_bk_1_h,
+      :vu_sbe_bk_2,
+      :vu_sbe_bk_2_h,
+      :vu_sbe_iba_1,
+      :vu_sbe_iba_1_h,
+      :vu_sbe_iba_2,
+      :vu_sbe_iba_2_h
+    ]
 
   def year_to_string(:first), do: "1"
   def year_to_string(:second), do: "2"
@@ -75,5 +91,32 @@ defmodule Core.Enums.StudyProgramCodes do
 
   def labels_by_year(year, active_value) do
     labels_by_year(year, [active_value])
+  end
+
+  defp convert_to_label(value, active_values) when is_atom(value) do
+    value_as_string =
+      value
+      |> Atom.to_string()
+      |> translate()
+
+    active =
+      active_values
+      |> Enum.member?(value)
+
+    %{id: value, value: value_as_string, active: active}
+  end
+
+  def translate(value) do
+    Gettext.dgettext(CoreWeb.Gettext, "eyra-enums", "study_pogram_codes.#{value}")
+  end
+
+  def text(code) do
+    locale = Gettext.get_locale(CoreWeb.Gettext)
+
+    code
+    |> Scholar.Class.identifier()
+    |> Org.Context.get_node!(short_name_bundle: Content.TextBundleModel.preload_graph(:full))
+    |> Map.get(:short_name_bundle)
+    |> Content.TextBundleModel.text(locale)
   end
 end

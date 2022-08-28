@@ -80,38 +80,6 @@ msgid "native_languages.nl"
 msgstr "Nederlands"
 
 #, elixir-format
-msgid "study_pogram_codes.bk_1"
-msgstr "BK 1e jaar"
-
-#, elixir-format
-msgid "study_pogram_codes.bk_1_h"
-msgstr "BK 1e jaar (herkansing)"
-
-#, elixir-format
-msgid "study_pogram_codes.bk_2"
-msgstr "BK 2e jaar"
-
-#, elixir-format
-msgid "study_pogram_codes.bk_2_h"
-msgstr "BK 2e jaar (herkansing)"
-
-#, elixir-format
-msgid "study_pogram_codes.iba_1"
-msgstr "IBA 1e jaar"
-
-#, elixir-format
-msgid "study_pogram_codes.iba_1_h"
-msgstr "IBA 1e jaar (herkansing)"
-
-#, elixir-format
-msgid "study_pogram_codes.iba_2"
-msgstr "IBA 2e jaar"
-
-#, elixir-format
-msgid "study_pogram_codes.iba_2_h"
-msgstr "IBA 2e jaar (herkansing)"
-
-#, elixir-format
 msgid "ticket_types.bug"
 msgstr "Ik ben tegen een probleem aangelopen"
 
@@ -122,14 +90,6 @@ msgstr "Ik heb een vraag"
 #, elixir-format
 msgid "ticket_types.tip"
 msgstr "Ik heb een idee om het platform te verbeteren"
-
-#, elixir-format
-msgid "study_years.first"
-msgstr "Eerste jaar"
-
-#, elixir-format
-msgid "study_years.second"
-msgstr "Tweede jaar"
 
 #, elixir-format
 msgid "themes.accounting"
@@ -212,14 +172,6 @@ msgid "criteria_filters.resit"
 msgstr "Herhaling"
 
 #, elixir-format
-msgid "criteria_filters.year1"
-msgstr "1e jaars"
-
-#, elixir-format
-msgid "criteria_filters.year2"
-msgstr "2e jaars"
-
-#, elixir-format
 msgid "ticket_status.closed"
 msgstr "Gesloten"
 
@@ -286,3 +238,39 @@ msgstr "Inactief"
 #, elixir-format, ex-autogen
 msgid "student_filters.passed"
 msgstr "Geslaagd"
+
+#, elixir-format, ex-autogen
+msgid "organisation_types.faculty"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "organisation_types.scholar_class"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "organisation_types.scholar_course"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "organisation_types.scholar_program"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "organisation_types.university"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "scholar_years.first"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "scholar_years.second"
+msgstr ""
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "organisation_types.company"
+msgstr ""
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "organisation_types.department"
+msgstr ""

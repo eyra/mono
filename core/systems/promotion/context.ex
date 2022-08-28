@@ -30,12 +30,10 @@ defmodule Systems.Promotion.Context do
   def get(id), do: Repo.get(Promotion, id)
 
   def create(attrs, auth_node) do
-    changeset =
-      %Promotion.Model{}
-      |> Promotion.Model.changeset(:insert, attrs)
-      |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
-
-    changeset |> Repo.insert()
+    %Promotion.Model{}
+    |> Promotion.Model.changeset(:insert, attrs)
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Repo.insert()
   end
 
   def update(%Promotion.Model{} = _promotion, %Changeset{} = changeset) do

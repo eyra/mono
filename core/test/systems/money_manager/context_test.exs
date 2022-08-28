@@ -28,7 +28,7 @@ defmodule Systems.MoneyManager.ContextTest do
 
   describe "process_bank_transaction/1" do
     test "create booking when money box receives budget" do
-      :ok =
+      {:ok, _} =
         MoneyManager.Context.process_bank_transaction(%{
           id: 1,
           date: DateTime.utc_now(),
@@ -45,7 +45,7 @@ defmodule Systems.MoneyManager.ContextTest do
     end
 
     test "book non-system related transactions to 'assorted'" do
-      :ok =
+      {:ok, _} =
         MoneyManager.Context.process_bank_transaction(%{
           id: 1,
           date: DateTime.utc_now(),
@@ -61,7 +61,7 @@ defmodule Systems.MoneyManager.ContextTest do
     end
 
     test "unrelated payment booking" do
-      :ok =
+      {:ok, _} =
         MoneyManager.Context.process_bank_transaction(%{
           id: 1,
           date: DateTime.utc_now(),
@@ -76,7 +76,7 @@ defmodule Systems.MoneyManager.ContextTest do
     end
 
     test "wallet payment booking" do
-      :ok =
+      {:ok, _} =
         MoneyManager.Context.process_bank_transaction(%{
           id: 1,
           date: DateTime.utc_now(),
@@ -98,7 +98,7 @@ defmodule Systems.MoneyManager.ContextTest do
         |> String.replace("123", "223")
 
       assert capture_log(fn ->
-               :ok =
+               {:ok, _} =
                  MoneyManager.Context.process_bank_transaction(%{
                    id: 1,
                    date: DateTime.utc_now(),

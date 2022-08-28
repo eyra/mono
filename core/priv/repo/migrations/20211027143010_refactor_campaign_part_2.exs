@@ -66,14 +66,14 @@ defmodule Core.Repo.Migrations.RefactorCampaignPart2 do
     if not exist?(:assignments, "assignable_#{tool_type}_id", tool_id) do
       execute(
         """
-        INSERT INTO authorization_nodes (parent_id, inserted_at, updated_at)
-        VALUES (#{campaign_id}, '#{now()}', '#{now()}');
+        INSERT INTO assignments (assignable_#{tool_type}_id, director, auth_node_id, inserted_at, updated_at)
+        VALUES (#{tool_id}, 'campaign', CURRVAL('authorization_nodes_id_seq'), '#{now()}', '#{now()}');
         """
       )
       execute(
         """
-        INSERT INTO assignments (assignable_#{tool_type}_id, director, auth_node_id, inserted_at, updated_at)
-        VALUES (#{tool_id}, 'campaign', CURRVAL('authorization_nodes_id_seq'), '#{now()}', '#{now()}');
+        INSERT INTO authorization_nodes (parent_id, inserted_at, updated_at)
+        VALUES (#{campaign_id}, '#{now()}', '#{now()}');
         """
       )
       flush()

@@ -271,14 +271,11 @@ defmodule Systems.Campaign.AssemblyTest do
 
       %{
         id: id,
-        promotion: %{
-          submission:
-            %{
-              pool: %{
-                name: pool_name
-              }
-            } = submission
-        },
+        submissions: [
+          %{
+            pool: %{name: pool_name}
+          } = submission
+        ],
         promotable_assignment: %{
           crew: crew1,
           assignable_experiment:
@@ -356,9 +353,8 @@ defmodule Systems.Campaign.AssemblyTest do
       assert %{
                authors: [%{}],
                auth_node: %{role_assignments: [%{role: :owner}]},
-               promotion: %{
-                 title: "New Campaign (copy)",
-                 submission: %{
+               submissions: [
+                 %{
                    reward_value: nil,
                    schedule_end: ^schedule_end,
                    schedule_start: ^schedule_start,
@@ -373,6 +369,9 @@ defmodule Systems.Campaign.AssemblyTest do
                    },
                    status: :idle
                  }
+               ],
+               promotion: %{
+                 title: "New Campaign (copy)"
                },
                promotable_assignment: %{
                  crew: crew2,

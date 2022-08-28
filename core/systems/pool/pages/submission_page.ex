@@ -14,7 +14,7 @@ defmodule Systems.Pool.SubmissionPage do
   alias CoreWeb.UI.Timestamp
 
   alias Systems.Pool.SubmissionView, as: SubmissionForm
-  alias Systems.Pool.SubmissionCriteriaView, as: SubmissionCriteriaForm
+  alias Systems.Pool.SubmissionPoolView, as: SubmissionPoolForm
 
   alias Frameworks.Pixel.Text.{Title1, SubHead}
 
@@ -42,10 +42,7 @@ defmodule Systems.Pool.SubmissionPage do
   defoverridable handle_uri: 1
 
   @impl true
-  def handle_uri(
-        %{assigns: %{uri_path: uri_path, vm: %{submission: %{promotion: %{id: promotion_id}}}}} =
-          socket
-      ) do
+  def handle_uri(%{assigns: %{uri_path: uri_path, vm: %{promotion_id: promotion_id}}} = socket) do
     preview_path =
       Routes.live_path(socket, Systems.Promotion.LandingPage, promotion_id,
         preview: true,
@@ -66,11 +63,11 @@ defmodule Systems.Pool.SubmissionPage do
   end
 
   def handle_info({:claim_focus, :submission_form}, socket) do
-    send_update(SubmissionCriteriaForm, id: :submission_criteria_form, focus: "")
+    send_update(SubmissionPoolForm, id: :submission_pool_form, focus: "")
     {:noreply, socket}
   end
 
-  def handle_info({:claim_focus, :submission_criteria_form}, socket) do
+  def handle_info({:claim_focus, :submission_pool_form}, socket) do
     send_update(SubmissionForm, id: :submission_form, focus: "")
     {:noreply, socket}
   end
@@ -78,7 +75,7 @@ defmodule Systems.Pool.SubmissionPage do
   @impl true
   def handle_event("reset_focus", _, socket) do
     send_update(SubmissionForm, id: :submission_form, focus: "")
-    send_update(SubmissionCriteriaForm, id: :submission_criteria_form, focus: "")
+    send_update(SubmissionPoolForm, id: :submission_pool_form, focus: "")
     {:noreply, socket}
   end
 
@@ -226,11 +223,11 @@ defmodule Systems.Pool.SubmissionPage do
           <Spacing value="L" />
         </ContentArea>
 
-        <SubmissionCriteriaForm
-          id={:submission_criteria_form}
-          props={%{entity: @vm.submission.criteria}}
+        <SubmissionPoolForm
+          id={:submission_pool_form}
+          props={%{entity: @vm.submission, user: @current_user}}
         />
-        <Spacing value="XL" />
+        <Spacing value="S" />
         <SubmissionForm
           id={:submission_form}
           props={%{entity: @vm.submission, validate?: @vm.validate?}}

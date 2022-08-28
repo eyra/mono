@@ -19,14 +19,24 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
   }
 
   def view_model(
+        %Campaign.Model{} = campaign,
+        assigns,
+        url_resolver
+      ) do
+    campaign
+    |> Campaign.Model.flatten()
+    |> view_model(assigns, url_resolver)
+  end
+
+  def view_model(
         %{
           id: id,
+          submission: submission,
           promotion: %{
             expectations: expectations,
-            title: title,
-            submission: submission
+            title: title
           },
-          promotable_assignment:
+          promotable:
             %{
               crew: crew
             } = assignment
@@ -96,12 +106,15 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
 
   # Highlights
 
-  defp highlights(assignment, submission) do
+  defp highlights(assignment, nil) do
     [
       Campaign.Builders.Highlight.view_model(assignment, :duration),
-      Campaign.Builders.Highlight.view_model(assignment, :language),
-      Campaign.Builders.Highlight.view_model(submission, :reward)
+      Campaign.Builders.Highlight.view_model(assignment, :language)
     ]
+  end
+
+  defp highlights(assignment, submission) do
+    highlights(assignment, nil) ++ [Campaign.Builders.Highlight.view_model(submission, :reward)]
   end
 
   # Experiment

@@ -151,13 +151,5 @@ msgid "login.surf.message.surfconext.href"
 msgstr ""
 
 #, elixir-format
-msgid "features.study.program"
-msgstr ""
-
-#, elixir-format
-msgid "features.study.year"
-msgstr ""
-
-#, elixir-format
 msgid "ehtical.code.label"
 msgstr ""

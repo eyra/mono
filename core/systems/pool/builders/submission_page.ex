@@ -8,8 +8,10 @@ defmodule Systems.Pool.Builders.SubmissionPage do
     Promotion
   }
 
-  def view_model(%{promotion: promotion} = submission, _assigns, url_resolver) do
-    campaign = Campaign.Context.get_by_promotion(submission.promotion_id)
+  def view_model(submission, _assigns, url_resolver) do
+    %{promotion: promotion} =
+      campaign = Campaign.Context.get_by_submission(submission, [:promotion])
+
     owners = Campaign.Context.list_owners(campaign, [:profile, :features])
     owner = List.first(owners)
     member = to_member(owner, promotion)
@@ -30,8 +32,9 @@ defmodule Systems.Pool.Builders.SubmissionPage do
     %{
       member: member,
       submission: submission,
+      promotion_id: promotion.id,
       campaign_id: campaign.id,
-      title: submission.promotion.title,
+      title: promotion.title,
       byline: byline,
       accepted?: accepted?,
       completed?: completed?,

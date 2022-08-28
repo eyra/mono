@@ -2,14 +2,15 @@ defmodule Systems.Campaign.Context do
   @moduledoc """
   The Studies context.
   """
-
   import Ecto.Query, warn: false
   require Logger
-  alias Frameworks.GreenLight.Principal
   alias Core.Repo
   alias Core.Accounts.User
   alias Core.Authorization
-  alias Core.Enums.StudyProgramCodes
+  alias Ecto.Multi
+
+  alias Frameworks.GreenLight.Principal
+  alias Frameworks.Signal
 
   alias Systems.{
     Campaign,
@@ -17,12 +18,12 @@ defmodule Systems.Campaign.Context do
     Assignment,
     Survey,
     Crew,
+    Budget,
     Bookkeeping,
-    Pool
+    Pool,
+    Org,
+    Scholar
   }
-
-  alias Core.Accounts.User
-  alias Frameworks.Signal
 
   def get!(id, preload \\ []) do
     from(c in Campaign.Model,
@@ -38,6 +39,22 @@ defmodule Systems.Campaign.Context do
       preload: ^preload
     )
     |> Repo.all()
+  end
+
+  def get_by_submission(submission, preload \\ [])
+
+  def get_by_submission(%{id: id}, preload) do
+    get_by_submission(id, preload)
+  end
+
+  def get_by_submission(submission_id, preload) do
+    from(c in Campaign.Model,
+      inner_join: cs in Campaign.SubmissionModel,
+      on: cs.campaign_id == c.id,
+      where: cs.submission_id == ^submission_id,
+      preload: ^preload
+    )
+    |> Repo.one()
   end
 
   def get_by_promotion(promotion, preload \\ [])
@@ -68,14 +85,6 @@ defmodule Systems.Campaign.Context do
     |> Repo.one()
   end
 
-  def get_by_promotables(promotable_ids, preload) when is_list(promotable_ids) do
-    from(c in Campaign.Model,
-      where: c.promotable_assignment_id in ^promotable_ids,
-      preload: ^preload
-    )
-    |> Repo.all()
-  end
-
   def list(opts \\ []) do
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
 
@@ -85,6 +94,14 @@ defmodule Systems.Campaign.Context do
     |> Repo.all()
 
     # AUTH: Can be piped through auth filter.
+  end
+
+  def list_by_promotables(promotable_ids, preload) when is_list(promotable_ids) do
+    from(c in Campaign.Model,
+      where: c.promotable_assignment_id in ^promotable_ids,
+      preload: ^preload
+    )
+    |> Repo.all()
   end
 
   def list_by_submission_status(submission_status, opts \\ []) when is_list(submission_status) do
@@ -107,7 +124,7 @@ defmodule Systems.Campaign.Context do
   @doc """
   Returns the list of studies submitted at least once.
   """
-  def list_submitted(opts \\ []) do
+  def list_submitted(pool, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
 
@@ -116,7 +133,9 @@ defmodule Systems.Campaign.Context do
       on: p.id == c.promotion_id,
       join: s in Pool.SubmissionModel,
       on: s.promotion_id == p.id,
-      where: c.id not in ^exclude and (s.status != :idle or not is_nil(s.submitted_at)),
+      where: c.id not in ^exclude,
+      where: s.pool_id == ^pool.id,
+      where: s.status != :idle or not is_nil(s.submitted_at),
       preload: ^preload,
       order_by: [desc: s.updated_at],
       select: c
@@ -186,7 +205,7 @@ defmodule Systems.Campaign.Context do
     |> Enum.reduce([], fn campaign, acc ->
       acc ++ list_excluded_assignment_ids(campaign)
     end)
-    |> get_by_promotables([])
+    |> list_by_promotables([])
   end
 
   defp list_excluded_assignment_ids(%Campaign.Model{promotable_assignment: %{excluded: excluded}})
@@ -258,12 +277,14 @@ defmodule Systems.Campaign.Context do
   @doc """
   Creates a campaign.
   """
-  def create(promotion, assignment, researcher, auth_node) do
+  def create(promotion, assignment, submissions, researcher, auth_node)
+      when is_list(submissions) do
     with {:ok, campaign} <-
            %Campaign.Model{}
            |> Campaign.Model.changeset(%{})
            |> Ecto.Changeset.put_assoc(:promotion, promotion)
            |> Ecto.Changeset.put_assoc(:promotable_assignment, assignment)
+           |> Ecto.Changeset.put_assoc(:submissions, submissions)
            |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
            |> Repo.insert() do
       :ok = Authorization.assign_role(researcher, campaign, :owner)
@@ -308,8 +329,10 @@ defmodule Systems.Campaign.Context do
         %Campaign.Model{} = campaign,
         %Promotion.Model{} = promotion,
         %Assignment.Model{} = assignment,
+        submissions,
         auth_node
-      ) do
+      )
+      when is_list(submissions) do
     %Campaign.Model{}
     |> Campaign.Model.changeset(
       campaign
@@ -318,6 +341,7 @@ defmodule Systems.Campaign.Context do
     )
     |> Ecto.Changeset.put_assoc(:promotion, promotion)
     |> Ecto.Changeset.put_assoc(:promotable_assignment, assignment)
+    |> Ecto.Changeset.put_assoc(:submissions, submissions)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Repo.insert!()
   end
@@ -348,10 +372,10 @@ defmodule Systems.Campaign.Context do
     |> List.first()
   end
 
-  def list_authors(%Campaign.Model{} = campaign) do
+  def list_authors(%{id: campaign_id}) do
     from(
       a in Campaign.AuthorModel,
-      where: a.campaign_id == ^campaign.id,
+      where: a.campaign_id == ^campaign_id,
       order_by: {:asc, :inserted_at},
       preload: [user: [:profile]]
     )
@@ -429,9 +453,9 @@ defmodule Systems.Campaign.Context do
     |> Assignment.Context.open?()
   end
 
-  def open?(%Pool.SubmissionModel{promotion_id: promotion_id}) do
-    Promotion.Context.get!(promotion_id)
-    |> get_by_promotion(Campaign.Model.preload_graph(:full))
+  def open?(%Pool.SubmissionModel{id: submission_id}) do
+    submission_id
+    |> get_by_submission(Campaign.Model.preload_graph(:full))
     |> open?()
   end
 
@@ -440,17 +464,19 @@ defmodule Systems.Campaign.Context do
     If force is true (for debug purposes only), all pending tasks will be marked as expired.
   """
   def mark_expired_debug(force \\ false) do
-    submitted_submissions =
+    submission_ids =
       from(s in Pool.SubmissionModel, where: s.status == :accepted)
       |> Repo.all()
-
-    promotion_ids =
-      submitted_submissions
-      |> Enum.map(& &1.promotion_id)
+      |> Enum.map(& &1.id)
 
     preload = Campaign.Model.preload_graph(:full)
 
-    from(c in Campaign.Model, preload: ^preload, where: c.promotion_id in ^promotion_ids)
+    from(c in Campaign.Model,
+      inner_join: cs in Campaign.SubmissionModel,
+      on: cs.campaign_id == c.id,
+      where: cs.submission_id in ^submission_ids,
+      preload: ^preload
+    )
     |> Repo.all()
     |> Enum.each(&mark_expired_debug(&1, force))
   end
@@ -462,122 +488,112 @@ defmodule Systems.Campaign.Context do
     Assignment.Context.mark_expired_debug(assignment, force)
   end
 
-  def reward_student(%{id: assignment_id} = _assignment, %{id: student_id} = _student) do
-    {credits, study_program_codes} =
-      from(c in Campaign.Model,
-        inner_join: s in Pool.SubmissionModel,
-        on: s.promotion_id == c.promotion_id,
-        inner_join: ec in Pool.CriteriaModel,
-        on: ec.submission_id == s.id,
-        where: c.promotable_assignment_id == ^assignment_id,
-        select: {s.reward_value, ec.study_program_codes}
-      )
-      |> Repo.one!()
-
-    reward_student({student_id, assignment_id, credits, study_program_codes})
+  def payout_participant(%Assignment.Model{} = assignment, %User{} = user) do
+    Assignment.Context.payout_participant(assignment, user)
   end
 
-  def rewarded_value(assignment_id, user_id) do
-    idempotence_key = assignment_idempotence_key(assignment_id, user_id)
-
-    case Bookkeeping.Context.get_entry(idempotence_key) do
-      %{lines: lines} -> rewarded_value(lines)
-      _ -> 0
-    end
+  def rewarded_amount(%Assignment.Model{} = assignment, %User{} = user) do
+    Assignment.Context.rewarded_amount(assignment, user)
   end
 
-  defp rewarded_value([first_line | _]), do: rewarded_value(first_line)
-  defp rewarded_value(%{debit: debit, credit: nil}), do: debit
-  defp rewarded_value(%{debit: nil, credit: credit}), do: credit
-  defp rewarded_value(_), do: 0
-
-  defp guard_number_nil(nil), do: 0
-  defp guard_number_nil(number), do: number
-
-  def pending_rewards(%{id: student_id} = _student, year) when is_atom(year) do
-    from([_, _, _, _, m] in pending_rewards_query(year),
-      where: m.user_id == ^student_id
-    )
-    |> Repo.one!()
-    |> guard_number_nil()
-  end
-
-  def pending_rewards(year) when is_atom(year) do
-    from(c in pending_rewards_query(year))
-    |> Repo.one!()
-    |> guard_number_nil()
-  end
-
-  def pending_rewards_query(year) when is_atom(year) do
-    study_program_codes =
-      StudyProgramCodes.values_by_year(year)
-      |> Enum.map(&Atom.to_string(&1))
-
+  def reward_amount(%Assignment.Model{id: assignment_id}) do
     from(c in Campaign.Model,
+      inner_join: cs in Campaign.SubmissionModel,
+      on: cs.campaign_id == c.id,
       inner_join: s in Pool.SubmissionModel,
-      on: s.promotion_id == c.promotion_id,
+      on: s.id == cs.submission_id,
       inner_join: ec in Pool.CriteriaModel,
       on: ec.submission_id == s.id,
-      inner_join: a in Assignment.Model,
-      on: a.id == c.promotable_assignment_id,
-      inner_join: m in Crew.MemberModel,
-      on: m.crew_id == a.crew_id,
-      inner_join: t in Crew.TaskModel,
-      on: t.member_id == m.id,
-      where: t.status == :completed,
-      where: fragment("? && ?", ec.study_program_codes, ^study_program_codes),
-      select: sum(s.reward_value)
+      where: c.promotable_assignment_id == ^assignment_id,
+      select: s.reward_value
     )
+    |> Repo.one!()
   end
 
   @doc """
-    Synchronizes accepted student tasks with with bookkeeping.
+    Synchronizes accepted student tasks with bookkeeping.
   """
   def sync_student_credits() do
-    from(u in User,
-      inner_join: m in Crew.MemberModel,
-      on: m.user_id == u.id,
+    from(a in Assignment.Model,
       inner_join: t in Crew.TaskModel,
-      on: t.member_id == m.id,
-      inner_join: a in Assignment.Model,
-      on: a.crew_id == t.crew_id,
-      inner_join: c in Campaign.Model,
-      on: c.promotable_assignment_id == a.id,
-      inner_join: s in Pool.SubmissionModel,
-      on: s.promotion_id == c.promotion_id,
-      inner_join: ec in Pool.CriteriaModel,
-      on: ec.submission_id == s.id,
+      on: t.crew_id == a.crew_id,
+      inner_join: m in Crew.MemberModel,
+      on: m.id == t.member_id,
+      inner_join: u in User,
+      on: u.id == m.user_id,
+      inner_join: b in Budget.Model,
+      on: b.id == a.budget_id,
       where: t.status == :accepted and u.student == true,
-      select: {u.id, a.id, s.reward_value, ec.study_program_codes}
+      preload: [budget: [:fund, :reserve]],
+      select: %{assignment: a, user: u}
     )
     |> Repo.all()
-    |> Enum.each(&reward_student(&1))
+    |> Enum.each(&payout_participant(&1.assignment, &1.user))
   end
 
-  defp reward_student({student_id, assignment_id, credits, study_program_codes}) do
-    year =
-      if is_year?("1", study_program_codes) do
-        "1"
-      else
-        "2"
-      end
-
-    idempotence_key = assignment_idempotence_key(assignment_id, student_id)
-
-    journal_message =
-      "Student #{student_id} earned #{credits} credits by completing assignment #{assignment_id}"
-
-    create_student_credit_transaction(student_id, credits, year, idempotence_key, journal_message)
+  def user_has_currency?(%User{} = user, currency) do
+    query_user_pools_by_currency(user, currency)
+    |> Repo.exists?()
   end
 
-  def import_student_reward(student_id, credits, session_key, year) when is_atom(year) do
+  def get_user_pools_by_currency(%User{} = user, currency) do
+    query_user_pools_by_currency(user, currency)
+    |> Repo.all()
+  end
+
+  def query_user_pools_by_currency(%User{id: user_id}, currency) do
+    from(p in Pool.Model,
+      inner_join: pp in Pool.ParticipantModel,
+      on: pp.pool_id == p.id,
+      inner_join: u in User,
+      on: pp.user_id == u.id,
+      inner_join: bc in Budget.CurrencyModel,
+      on: bc.id == p.currency_id,
+      where: bc.name == ^currency and u.id == ^user_id,
+      select: p
+    )
+  end
+
+  def import_student_reward(student_id, amount, session_key, currency) when is_binary(currency) do
     idempotence_key = import_idempotence_key(session_key, student_id)
-    year = year_to_string(year)
+    student = Core.Accounts.get_user!(student_id)
 
-    journal_message =
-      "Student #{student_id} earned #{credits} by import during session '#{session_key}'"
+    if user_has_currency?(student, currency) do
+      from = ["fund", currency]
+      to = ["wallet", currency, student_id]
 
-    create_student_credit_transaction(student_id, credits, year, idempotence_key, journal_message)
+      journal_message =
+        "Student #{student_id} earned #{amount} by import during session '#{session_key}'"
+
+      import_student_reward(from, to, amount, idempotence_key, journal_message)
+    else
+      Logger.warn(
+        "Import reward failed, user has no access to currency #{currency}: amount=#{amount} idempotence_key=#{idempotence_key}"
+      )
+    end
+  end
+
+  defp import_student_reward(from, to, amount, idempotence_key, journal_message) do
+    lines = [
+      %{account: from, debit: amount},
+      %{account: to, credit: amount}
+    ]
+
+    payment = %{
+      idempotence_key: idempotence_key,
+      journal_message: journal_message,
+      lines: lines
+    }
+
+    if Bookkeeping.Context.exists?(idempotence_key) do
+      Logger.warn("Import reward skipped: amount=#{amount} idempotence_key=#{idempotence_key}")
+    else
+      result = Bookkeeping.Context.enter(payment)
+
+      with {:error, error} <- result do
+        Logger.warn("Import reward failed: idempotence_key=#{idempotence_key}, error=#{error}")
+      end
+    end
   end
 
   def import_student_reward_exists?(student_id, session_key) do
@@ -585,58 +601,47 @@ defmodule Systems.Campaign.Context do
     Bookkeeping.Context.exists?(idempotence_key)
   end
 
-  defp create_student_credit_transaction(
-         student_id,
-         credits,
-         year,
-         idempotence_key,
-         journal_message
-       ) do
-    pool = "sbe_year#{year}_2021"
-    fund = {:fund, pool}
-    wallet = {:wallet, pool, student_id}
-
-    lines = [
-      %{account: fund, debit: credits},
-      %{account: wallet, credit: credits}
-    ]
-
-    if Bookkeeping.Context.exists?(idempotence_key) do
-      Logger.warn(
-        "Credit transaction skipped: credits=#{credits} idempotence_key=#{idempotence_key} from={fund, #{pool}} to={wallet, #{pool}, #{student_id}}"
-      )
-    else
-      result =
-        Bookkeeping.Context.enter(%{
-          idempotence_key: idempotence_key,
-          journal_message: journal_message,
-          lines: lines
-        })
-
-      with {:error, error} <- result do
-        Logger.warn(
-          "Credit transaction failed: idempotence_key=#{idempotence_key}, error=#{error}"
-        )
-      end
-    end
-  end
-
-  defp assignment_idempotence_key(assignment_id, user_id) do
-    "assignment=#{assignment_id},user=#{user_id}"
-  end
-
   defp import_idempotence_key(session_key, user_id) do
     "import=#{session_key},user=#{user_id}"
   end
 
-  defp is_year?(year, study_program_codes) when is_list(study_program_codes) do
-    study_program_codes |> Enum.find(&is_year?(year, &1)) != nil
+  # Consider moving logic to Pool.Context
+  def update_pool_participations(user, added_to_classes, deleted_from_classes) do
+    Multi.new()
+    |> Multi.run(:add, fn _, _ ->
+      added_to_classes
+      |> update_pools(user, :add)
+
+      {:ok, true}
+    end)
+    |> Multi.run(:delete, fn _, _ ->
+      deleted_from_classes
+      |> update_pools(user, :delete)
+
+      {:ok, true}
+    end)
+    |> Repo.transaction()
   end
 
-  defp is_year?(year, study_program_code) when is_atom(study_program_code) do
-    Atom.to_string(study_program_code) |> String.contains?(year)
+  defp update_pools([[_ | _] | _] = class_nodes, user, command) do
+    class_nodes
+    |> Enum.each(&update_pools(&1, user, command))
+
+    class_nodes
   end
 
-  defp year_to_string(:first), do: "1"
-  defp year_to_string(:second), do: "2"
+  defp update_pools([_ | _] = class_node_identifier, user, command) do
+    %{links: links} = Org.Context.get_node!(class_node_identifier, [:links])
+
+    links
+    |> Enum.filter(&(&1.type == :scholar_course))
+    |> Enum.map(&Scholar.Course.pool_name(&1))
+    |> Pool.Context.get_by_names()
+    |> Enum.map(&update_pool(&1, user, command))
+  end
+
+  defp update_pools(_, _, _), do: nil
+
+  defp update_pool(pool, user, :add), do: Pool.Context.link!(pool, user)
+  defp update_pool(pool, user, :delete), do: Pool.Context.unlink!(pool, user)
 end

@@ -2,7 +2,6 @@ defmodule Systems.Assignment.Context do
   @moduledoc """
   The assignment context.
   """
-
   import Ecto.Query, warn: false
   import CoreWeb.Gettext
 
@@ -13,6 +12,7 @@ defmodule Systems.Assignment.Context do
   alias CoreWeb.UI.Timestamp
   alias Core.Authorization
   alias Core.Accounts
+  alias Core.Accounts.User
 
   alias Frameworks.{
     Signal,
@@ -20,6 +20,7 @@ defmodule Systems.Assignment.Context do
   }
 
   alias Systems.{
+    Budget,
     Assignment,
     Crew,
     Survey,
@@ -33,10 +34,12 @@ defmodule Systems.Assignment.Context do
     |> Repo.get!(id)
   end
 
-  def get_by_crew!(%{id: crew_id}), do: get_by_crew!(crew_id)
+  def get_by_crew!(crew, preload \\ [])
 
-  def get_by_crew!(crew_id) when is_number(crew_id) do
-    from(a in Assignment.Model, where: a.crew_id == ^crew_id)
+  def get_by_crew!(%{id: crew_id}, preload), do: get_by_crew!(crew_id, preload)
+
+  def get_by_crew!(crew_id, preload) when is_number(crew_id) do
+    from(a in Assignment.Model, where: a.crew_id == ^crew_id, preload: ^preload)
     |> Repo.all()
   end
 
@@ -84,7 +87,7 @@ defmodule Systems.Assignment.Context do
   end
 
   def list_user_ids(assignment_ids) when is_list(assignment_ids) do
-    from(u in Accounts.User,
+    from(u in User,
       join: m in Crew.MemberModel,
       on: m.user_id == u.id,
       join: a in Assignment.Model,
@@ -238,16 +241,30 @@ defmodule Systems.Assignment.Context do
     Timestamp.naive_from_now(timeout)
   end
 
-  def apply_member(id, user) when is_number(id) do
-    apply_member(get!(id, [:crew]), user)
+  def apply_member(id, user, reward_amount) when is_number(id) do
+    apply_member(get!(id, [:crew]), user, reward_amount)
   end
 
-  def apply_member(%{crew: crew} = assignment, user) do
+  def apply_member(%{crew: crew} = assignment, user, reward_amount) do
     if Crew.Context.member?(crew, user) do
       Crew.Context.get_member!(crew, user)
     else
       expire_at = expiration_timestamp(assignment)
-      Crew.Context.apply_member!(crew, user, expire_at)
+
+      Multi.new()
+      |> Multi.run(:reward, fn _, _ ->
+        case create_reward(assignment, user, reward_amount) do
+          nil -> {:error, false}
+          reward -> {:ok, reward}
+        end
+      end)
+      |> Multi.run(:member, fn _, _ ->
+        case Crew.Context.apply_member!(crew, user, expire_at) do
+          nil -> {:error}
+          member -> {:ok, member}
+        end
+      end)
+      |> Repo.transaction()
     end
   end
 
@@ -264,7 +281,11 @@ defmodule Systems.Assignment.Context do
 
   def cancel(%Assignment.Model{} = assignment, user) do
     crew = get_crew(assignment)
-    Crew.Context.cancel(crew, user)
+
+    Multi.new()
+    |> Crew.Context.cancel(crew, user)
+    |> rollback_reward(assignment, user)
+    |> Repo.transaction()
   end
 
   def cancel(id, user) do
@@ -296,13 +317,13 @@ defmodule Systems.Assignment.Context do
 
   def activate_task(
         %Assignment.Model{crew: crew},
-        %Core.Accounts.User{} = user,
+        %User{} = user,
         force_apply_as_member?
       ) do
     activate_task(crew, user, force_apply_as_member?)
   end
 
-  def activate_task(%Crew.Model{} = crew, %Core.Accounts.User{} = user, force_apply_as_member?) do
+  def activate_task(%Crew.Model{} = crew, %User{} = user, force_apply_as_member?) do
     member =
       if Crew.Context.member?(crew, user) do
         Crew.Context.get_member!(crew, user)
@@ -510,7 +531,7 @@ defmodule Systems.Assignment.Context do
     }
   end
 
-  def search_subject(tool, %Core.Accounts.User{} = user) do
+  def search_subject(tool, %User{} = user) do
     if experiment = get_experiment_by_tool(tool) do
       %{crew: crew} = get_by_experiment!(experiment, [:crew])
       member = Crew.Context.get_member!(crew, user)
@@ -530,6 +551,57 @@ defmodule Systems.Assignment.Context do
     else
       nil
     end
+  end
+
+  def expired_rewards(preload \\ []) do
+    from(r in Budget.RewardModel,
+      inner_join: u in User,
+      on: u.id == r.user_id,
+      inner_join: m in Crew.MemberModel,
+      on: m.user_id == u.id,
+      inner_join: t in Crew.TaskModel,
+      on: t.member_id == m.id,
+      where: t.expired == true,
+      where: not is_nil(r.deposit_id) and is_nil(r.payment_id),
+      preload: ^preload
+    )
+    |> Repo.all()
+  end
+
+  def rollback_expired_rewards() do
+    expired_rewards([:payment, deposit: [lines: [:account]]])
+    |> Enum.reduce(Multi.new(), &Budget.Context.rollback_reward(&2, &1))
+    |> Repo.transaction()
+  end
+
+  def rollback_reward(%Multi{} = multi, %Assignment.Model{} = assignment, %User{} = user) do
+    idempotence_key = idempotence_key(assignment, user)
+
+    multi
+    |> Budget.Context.rollback_reward(idempotence_key)
+  end
+
+  def create_reward(%Assignment.Model{budget: budget} = assignment, %User{} = user, amount) do
+    idempotence_key = idempotence_key(assignment, user)
+    Budget.Context.create_reward!(budget, amount, user, idempotence_key)
+  end
+
+  def idempotence_key(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
+    idempotence_key(assignment_id, user_id)
+  end
+
+  def idempotence_key(assignment_id, user_id) do
+    "assignment=#{assignment_id},user=#{user_id}"
+  end
+
+  def payout_participant(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
+    idempotence_key = idempotence_key(assignment_id, user_id)
+    Budget.Context.payout_reward(idempotence_key)
+  end
+
+  def rewarded_amount(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
+    idempotence_key = idempotence_key(assignment_id, user_id)
+    Budget.Context.rewarded_amount(idempotence_key)
   end
 end
 

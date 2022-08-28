@@ -1,18 +1,23 @@
-defmodule CoreWeb.User.Forms.Study do
+defmodule CoreWeb.User.Forms.Scholar do
   use CoreWeb.LiveForm
 
-  alias Core.Enums.StudyProgramCodes
   alias Core.Accounts
   alias Core.Accounts.Features
 
   alias Frameworks.Pixel.Selector.Selector
   alias Frameworks.Pixel.Text.{Title2, BodyMedium}
 
+  alias Systems.{
+    Scholar,
+    Content
+  }
+
   prop(props, :any, required: true)
 
   data(user, :any)
   data(entity, :any)
-  data(study_labels, :any)
+  data(scholar_classes, :any)
+  data(scholar_class_labels, :any)
 
   data(changeset, :any)
   data(focus, :any, default: "")
@@ -28,7 +33,10 @@ defmodule CoreWeb.User.Forms.Study do
   def update(%{id: id, props: %{user: user}}, socket) do
     entity = Accounts.get_features(user)
 
-    study_labels = StudyProgramCodes.labels(entity.study_program_codes)
+    scholar_classes =
+      Scholar.Context.list_classes([":2021"],
+        short_name_bundle: Content.TextBundleModel.preload_graph(:full)
+      )
 
     {
       :ok,
@@ -36,21 +44,42 @@ defmodule CoreWeb.User.Forms.Study do
       |> assign(id: id)
       |> assign(user: user)
       |> assign(entity: entity)
-      |> assign(study_labels: study_labels)
+      |> assign(scholar_classes: scholar_classes)
       |> update_ui()
     }
   end
 
-  defp update_ui(%{assigns: %{entity: entity}} = socket) do
-    update_ui(socket, entity)
+  defp update_ui(socket) do
+    update_scholar_classes(socket)
   end
 
-  defp update_ui(socket, entity) do
-    study_labels = StudyProgramCodes.labels(entity.study_program_codes)
+  defp update_scholar_classes(
+         %{
+           assigns: %{
+             scholar_classes: scholar_classes,
+             user: user
+           }
+         } = socket
+       ) do
+    active_classes = Scholar.Context.list_classes(user)
+
+    active_codes =
+      scholar_classes
+      |> Enum.filter(&active?(&1, active_classes))
+      |> Enum.map(&Scholar.Class.code(&1.identifier))
+
+    locale = Gettext.get_locale(CoreWeb.Gettext)
+    scholar_class_labels = Scholar.Class.selector_labels(scholar_classes, locale, active_codes)
 
     socket
-    |> assign(study_labels: study_labels)
+    |> assign(scholar_class_labels: scholar_class_labels)
   end
+
+  defp active?(%{id: class_id}, [_ | _] = active_classes) do
+    Enum.find(active_classes, &(&1.id == class_id)) != nil
+  end
+
+  defp active?(_, _), do: false
 
   def save(socket, %Core.Accounts.Features{} = entity, type, attrs) do
     changeset = Features.changeset(entity, type, attrs)
@@ -65,13 +94,13 @@ defmodule CoreWeb.User.Forms.Study do
     <ContentArea>
       <MarginY id={:page_top} />
       <FormArea>
-        <Title2>{dgettext("eyra-ui", "tabbar.item.study")}</Title2>
+        <Title2>{dgettext("eyra-ui", "tabbar.item.scholar")}</Title2>
         <BodyMedium>{dgettext("eyra-account", "feature.study.description")}</BodyMedium>
         <Spacing value="S" />
         <Selector
           grid_options="grid grid-cols-2 gap-y-3"
           id={:study_program_codes}
-          items={@study_labels}
+          items={@scholar_class_labels}
           type={:checkbox}
           parent={%{type: __MODULE__, id: @id}}
         />

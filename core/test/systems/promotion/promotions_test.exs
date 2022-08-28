@@ -10,7 +10,7 @@ defmodule Systems.Promotion.Test do
   describe "update/1" do
     setup do
       promotion = Factories.insert!(:promotion)
-      submission = Factories.insert!(:submission, %{promotion: promotion})
+      submission = Factories.insert!(:submission)
       {:ok, promotion: promotion, submission: submission}
     end
 

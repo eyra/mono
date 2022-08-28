@@ -6,6 +6,7 @@ defmodule Systems.Pool.StudentFilters do
       {:student_filters, [:inactive, :active, :passed]}
 
   alias Systems.{
+    Budget,
     Bookkeeping,
     Pool
   }
@@ -24,12 +25,9 @@ defmodule Systems.Pool.StudentFilters do
 
   def include?(student, filter), do: state(student) == filter
 
-  defp wallets(%{id: user_id} = _student) do
-    Bookkeeping.Context.account_query(["wallet", "#{user_id}"])
-  end
-
   defp state(%Core.Accounts.User{} = student) do
-    state(wallets(student))
+    Budget.Context.list_wallets(student)
+    |> state()
   end
 
   defp state([] = _wallets), do: :inactive

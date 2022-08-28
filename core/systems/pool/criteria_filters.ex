@@ -3,7 +3,7 @@ defmodule Systems.Pool.CriteriaFilters do
   Defines filters used to filter students in the overview page of the pool.
   """
   use Core.Enums.Base,
-      {:criteria_filters, [:iba, :bk, :year1, :year2, :resit]}
+      {:criteria_filters, [:iba, :bk, :resit]}
 
   def include?(codes, nil) when is_list(codes), do: true
   def include?(codes, []) when is_list(codes), do: true
@@ -21,8 +21,6 @@ defmodule Systems.Pool.CriteriaFilters do
     Enum.count(Enum.filter(codes, &include?(&1, filter))) > 0
   end
 
-  def include?(code, :year1), do: String.contains?(Atom.to_string(code), "_1")
-  def include?(code, :year2), do: String.contains?(Atom.to_string(code), "_2")
   def include?(code, :iba), do: String.contains?(Atom.to_string(code), "iba")
   def include?(code, :bk), do: String.contains?(Atom.to_string(code), "bk")
   def include?(code, :resit), do: String.contains?(Atom.to_string(code), "_h")

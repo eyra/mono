@@ -19,6 +19,7 @@ defmodule Systems.Campaign.Assembly do
 
   def delete(%Campaign.Model{
         auth_node: auth_node,
+        submissions: _submissions,
         promotion: promotion,
         promotable_assignment: %{
           crew: crew,
@@ -38,7 +39,8 @@ defmodule Systems.Campaign.Assembly do
 
     promotion_attrs = create_promotion_attrs(title, user, profile)
 
-    pool = Pool.Context.get_by_name(:sbe_2021)
+    # FIXME POOL
+    pool = Pool.Context.get_by_name(:vu_sbe_rpr_year1_2021)
 
     campaign_auth_node = Authorization.create_node!()
     promotion_auth_node = Authorization.create_node!(campaign_auth_node)
@@ -47,24 +49,28 @@ defmodule Systems.Campaign.Assembly do
     experiment_auth_node = Authorization.create_node!(assignment_auth_node)
     tool_auth_node = Authorization.create_node!(experiment_auth_node)
 
-    with {:ok, tool} <- create_tool(tool_type, tool_auth_node),
-         {:ok, crew} <- Crew.Context.create(crew_auth_node),
-         {:ok, experiment} <-
-           Assignment.Context.create_experiment(
-             experiment_attrs(tool_type),
-             tool,
-             experiment_auth_node
-           ),
-         {:ok, assignment} <-
-           Assignment.Context.create(assignment_attrs(), crew, experiment, assignment_auth_node),
-         {:ok, promotion} <- Promotion.Context.create(promotion_attrs, promotion_auth_node),
-         {:ok, _submission} <-
-           Pool.Context.create_submission(submission_attrs(), promotion, pool),
-         {:ok, campaign} <-
-           Campaign.Context.create(promotion, assignment, user, campaign_auth_node),
-         {:ok, _author} <- Campaign.Context.add_author(campaign, user) do
-      campaign
-    end
+    {:ok, tool} = create_tool(tool_type, tool_auth_node)
+    {:ok, crew} = Crew.Context.create(crew_auth_node)
+
+    {:ok, experiment} =
+      Assignment.Context.create_experiment(
+        experiment_attrs(tool_type),
+        tool,
+        experiment_auth_node
+      )
+
+    {:ok, assignment} =
+      Assignment.Context.create(assignment_attrs(), crew, experiment, assignment_auth_node)
+
+    {:ok, promotion} = Promotion.Context.create(promotion_attrs, promotion_auth_node)
+    {:ok, submission} = Pool.Context.create_submission(submission_attrs(), pool)
+
+    {:ok, campaign} =
+      Campaign.Context.create(promotion, assignment, [submission], user, campaign_auth_node)
+
+    {:ok, _author} = Campaign.Context.add_author(campaign, user)
+
+    campaign
   end
 
   defp create_tool(tool_type, tool_auth_node) do
@@ -119,14 +125,10 @@ defmodule Systems.Campaign.Assembly do
         %Campaign.Model{
           auth_node: campaign_auth_node,
           authors: authors,
+          submissions: submissions,
           promotion:
             %{
-              auth_node: promotion_auth_node,
-              submission:
-                %{
-                  pool: pool,
-                  criteria: criteria
-                } = submission
+              auth_node: promotion_auth_node
             } = promotion,
           promotable_assignment:
             %{
@@ -144,12 +146,14 @@ defmodule Systems.Campaign.Assembly do
     experiment_auth_node = Authorization.copy(experiment_auth_node, assignment_auth_node)
 
     promotion = Promotion.Context.copy(promotion, promotion_auth_node)
-    submission = Pool.Context.copy(submission, promotion, pool)
-    criteria = Pool.Context.copy(criteria, submission)
+    submissions = Pool.Context.copy(submissions)
     tool = Assignment.Context.copy_tool(experiment, experiment_auth_node)
     experiment = Assignment.Context.copy_experiment(experiment, tool, experiment_auth_node)
     assignment = Assignment.Context.copy(assignment, experiment, assignment_auth_node)
-    campaign = Campaign.Context.copy(campaign, promotion, assignment, campaign_auth_node)
+
+    campaign =
+      Campaign.Context.copy(campaign, promotion, assignment, submissions, campaign_auth_node)
+
     authors = Campaign.Context.copy(authors, campaign)
 
     {
@@ -157,8 +161,7 @@ defmodule Systems.Campaign.Assembly do
       %{
         campaign: campaign,
         promotion: promotion,
-        submission: submission,
-        criteria: criteria,
+        submissions: submissions,
         tool: tool,
         experiment: experiment,
         assignment: assignment,

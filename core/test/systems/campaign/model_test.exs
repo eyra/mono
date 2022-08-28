@@ -41,13 +41,14 @@ defmodule Systems.Campaign.ModelTest do
     end
 
     test "create/1 with valid data creates a campaign" do
+      submission = Factories.insert!(:submission)
       promotion = Factories.insert!(:promotion)
       assignment = Factories.insert!(:assignment)
       researcher = Factories.insert!(:researcher)
       auth_node = Factories.insert!(:auth_node)
 
       assert {:ok, %Campaign.Model{}} =
-               Campaign.Context.create(promotion, assignment, researcher, auth_node)
+               Campaign.Context.create(promotion, assignment, [submission], researcher, auth_node)
 
       assert_signal_dispatched(:campaign_created)
     end

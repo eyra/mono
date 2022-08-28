@@ -2,14 +2,13 @@ defmodule Systems.Pool.SubmissionModel do
   @moduledoc """
   A task (donate data) to be completed by a participant.
   """
-  use Ecto.Schema
+  use Frameworks.Utility.Schema
   use Frameworks.Utility.Model
 
   import Ecto.Changeset
 
   alias Systems.{
-    Pool,
-    Promotion
+    Pool
   }
 
   alias CoreWeb.UI.Timestamp
@@ -17,7 +16,6 @@ defmodule Systems.Pool.SubmissionModel do
   schema "pool_submissions" do
     field(:status, Ecto.Enum, values: Pool.SubmissionStatus.values())
     field(:reward_value, :integer)
-    field(:reward_currency, :string)
     field(:schedule_start, :string)
     field(:schedule_end, :string)
 
@@ -26,13 +24,14 @@ defmodule Systems.Pool.SubmissionModel do
     field(:completed_at, :naive_datetime)
 
     has_one(:criteria, Pool.CriteriaModel, foreign_key: :submission_id)
-    belongs_to(:promotion, Promotion.Model)
-    belongs_to(:pool, Pool.Model)
+    belongs_to(:pool, Pool.Model, on_replace: :update)
 
     field(:director, Ecto.Enum, values: [:campaign])
 
     timestamps()
   end
+
+  def preload_graph(:pool), do: [pool: Pool.Model.preload_graph(:full)]
 
   @fields ~w(status reward_value schedule_start schedule_end submitted_at accepted_at completed_at)a
 
@@ -71,6 +70,11 @@ defmodule Systems.Pool.SubmissionModel do
     end
   end
 
+  def changeset(submission, pool_id) when is_integer(pool_id) do
+    submission
+    |> cast(%{pool_id: pool_id}, [:pool_id])
+  end
+
   def changeset(submission, attrs) do
     submission
     |> cast(attrs, [:director])
@@ -84,6 +88,12 @@ defmodule Systems.Pool.SubmissionModel do
   def scheduled?(%{schedule_start: schedule_start}) do
     future?(schedule_start)
   end
+
+  def status(%{status: status}), do: status
+  def status(_), do: :idle
+
+  def submitted?(%{status: status}), do: status != :idle
+  def submitted?(_), do: false
 
   defp past?(nil), do: false
 

@@ -243,15 +243,20 @@ defmodule Systems.Crew.Context do
 
   # Members
   def cancel(crew, user) do
+    Multi.new()
+    |> cancel(crew, user)
+    |> Repo.transaction()
+  end
+
+  def cancel(%Multi{} = multi, crew, user) do
     if member?(crew, user) do
       member = get_member!(crew, user)
       task = get_task(crew, member)
 
       # temporary cancel is implemented by expiring the task
-      Multi.new()
+      multi
       |> Multi.update(:member, Crew.MemberModel.changeset(member, %{expired: true}))
       |> multi_update(:task, Crew.TaskModel.changeset(task, %{expired: true}))
-      |> Repo.transaction()
     else
       Logger.warn("Unable to cancel, user #{user.id} is not a member on crew #{crew.id}")
     end

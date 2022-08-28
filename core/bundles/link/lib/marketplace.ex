@@ -15,8 +15,6 @@ defmodule Link.Marketplace do
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
-  alias Link.Marketplace.Card, as: CardVM
-
   alias Frameworks.Pixel.Card.SecondaryCampaign
   alias Frameworks.Pixel.Text.{Title2}
   alias Frameworks.Pixel.Grid.{DynamicGrid}
@@ -55,7 +53,9 @@ defmodule Link.Marketplace do
       )
       |> filter(socket)
       |> sort_by_open_spot_count()
-      |> Enum.map(&CardVM.primary_campaign(&1, socket))
+      |> Enum.map(
+        &ViewModelBuilder.view_model(&1, {__MODULE__, :card}, user, url_resolver(socket))
+      )
 
     subject_count = Enum.count(subject_campaigns)
     available_count = Enum.count(available_campaigns)
@@ -81,17 +81,20 @@ defmodule Link.Marketplace do
   end
 
   defp filter(
-         %{
-           promotion: %{submission: %{criteria: submission_criteria} = submission}
-         },
+         %{submissions: submissions},
          %{assigns: %{current_user: user}}
        ) do
-    user_features = Accounts.get_features(user)
+    case Pool.Context.select(submissions, user) do
+      nil ->
+        false
 
-    released? = Pool.Context.published_status(submission) == :released
-    eligitable? = Pool.CriteriaModel.eligitable?(submission_criteria, user_features)
+      %{criteria: criteria} = submission ->
+        user_features = Accounts.get_features(user)
+        released? = Pool.Context.published_status(submission) == :released
+        eligitable? = Pool.CriteriaModel.eligitable?(criteria, user_features)
 
-    released? and eligitable?
+        released? and eligitable?
+    end
   end
 
   def handle_info({:handle_auto_save_done, _}, socket) do
