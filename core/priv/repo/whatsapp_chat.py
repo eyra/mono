@@ -770,7 +770,7 @@ def process(file_data):
     try:
         zfile = zipfile.ZipFile(file_data)
     except:
-        if FILE_RE.match(file_data.name):
+        if FILE_RE.match(file_data):
             tfile = open(file_data, encoding="utf8")
             chat = parse_chat(log_error, tfile.read())
 
