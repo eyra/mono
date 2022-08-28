@@ -158,7 +158,7 @@ defmodule Core.Factories do
 
   def build(:book_account) do
     build(:book_account, %{
-      identifier: ["account", Faker.Lorem.word()],
+      identifier: random_identifier(:account),
       balance_debit: 0,
       balance_credit: 0
     })
@@ -166,7 +166,7 @@ defmodule Core.Factories do
 
   def build(:fund) do
     build(:book_account, %{
-      identifier: ["fund", Faker.Lorem.word()],
+      identifier: random_identifier(:fund),
       balance_debit: 0,
       balance_credit: 0
     })
@@ -174,7 +174,7 @@ defmodule Core.Factories do
 
   def build(:reserve) do
     build(:book_account, %{
-      identifier: ["reserve", Faker.Lorem.word()],
+      identifier: random_identifier(:reserve),
       balance_debit: 0,
       balance_credit: 0
     })
@@ -603,5 +603,11 @@ defmodule Core.Factories do
     else
       result
     end
+  end
+
+  defp random_identifier(type) when is_atom(type), do: random_identifier(type |> Atom.to_string())
+
+  defp random_identifier(type) when is_binary(type) do
+    [type] ++ Faker.Lorem.words(3..5)
   end
 end
