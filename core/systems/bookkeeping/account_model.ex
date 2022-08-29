@@ -7,4 +7,6 @@ defmodule Systems.Bookkeeping.AccountModel do
     field(:balance_credit, :integer)
     timestamps()
   end
+
+  def balance(%{balance_debit: debit, balance_credit: credit}), do: credit - debit
 end

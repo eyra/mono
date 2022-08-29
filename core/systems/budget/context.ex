@@ -57,6 +57,11 @@ defmodule Systems.Budget.Context do
     |> Repo.one!()
   end
 
+  def get_budget!(id, preload \\ []) when is_integer(id) do
+    from(budget in Budget.Model, preload: ^preload)
+    |> Repo.get!(id)
+  end
+
   def get_reward!(id, preload \\ [:budget, :deposit, :payment, :user]) do
     from(reward in Budget.RewardModel, preload: ^preload)
     |> Repo.get!(id)

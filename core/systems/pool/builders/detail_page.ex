@@ -10,7 +10,8 @@ defmodule Systems.Pool.Builders.DetailPage do
     Pool,
     Assignment,
     Campaign,
-    Budget
+    Budget,
+    Bookkeeping
   }
 
   def view_model(pool, assigns, url_resolver) do
@@ -74,12 +75,19 @@ defmodule Systems.Pool.Builders.DetailPage do
        }) do
     scale = scale(breakpoint)
 
-    credits =
-      Budget.Context.list_wallets(currency)
-      |> Enum.map(& &1.balance_credit)
+    wallets = Budget.Context.list_wallets(currency)
 
-    active_credits = credits |> Enum.filter(&(&1 > 0 and &1 < target))
-    passed_credits = credits |> Enum.filter(&(&1 >= target))
+    credits = Enum.map(wallets, &Bookkeeping.AccountModel.balance(&1))
+
+    active_credits = Enum.filter(credits, &(&1 > 0 and &1 < target))
+    active_count = Enum.count(active_credits)
+
+    passed_credits = Enum.filter(credits, &(&1 >= target))
+    passed_count = Enum.count(passed_credits)
+
+    total_count = participants |> Enum.count()
+
+    inactive_count = total_count - (active_count + active_count)
 
     truncated_credits =
       credits
@@ -91,14 +99,9 @@ defmodule Systems.Pool.Builders.DetailPage do
         end
       )
 
-    total_student_count = participants |> Enum.count()
-    active_student_count = active_credits |> Enum.count()
-    passed_student_count = passed_credits |> Enum.count()
-    inactive_student_count = total_student_count - (active_student_count + passed_student_count)
-
     total_credits = Statistics.sum(truncated_credits) |> do_round()
     pending_credits = Budget.Context.pending_rewards(currency)
-    target_credits = total_student_count * target
+    target_credits = total_count * target
 
     %{
       credits: %{
@@ -118,9 +121,9 @@ defmodule Systems.Pool.Builders.DetailPage do
       metrics: [
         %{
           label: dgettext("link-studentpool", "inactive.students"),
-          number: inactive_student_count,
+          number: inactive_count,
           color:
-            if inactive_student_count == 0 do
+            if inactive_count == 0 do
               :positive
             else
               :negative
@@ -128,9 +131,9 @@ defmodule Systems.Pool.Builders.DetailPage do
         },
         %{
           label: dgettext("link-studentpool", "active.students"),
-          number: active_student_count,
+          number: active_count,
           color:
-            if active_student_count == 0 do
+            if active_count == 0 do
               :negative
             else
               :primary
@@ -138,9 +141,9 @@ defmodule Systems.Pool.Builders.DetailPage do
         },
         %{
           label: dgettext("link-studentpool", "passed.students"),
-          number: passed_student_count,
+          number: passed_count,
           color:
-            if passed_student_count == 0 do
+            if passed_count == 0 do
               :negative
             else
               :positive

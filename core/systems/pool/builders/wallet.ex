@@ -28,7 +28,7 @@ defmodule Systems.Pool.Builders.Wallet do
           ""
       end
 
-    balance = balance(account)
+    balance = Bookkeeping.AccountModel.balance(account)
 
     pending_rewards = Budget.Context.pending_rewards(user, currency)
 
@@ -41,8 +41,6 @@ defmodule Systems.Pool.Builders.Wallet do
       pending_amount: pending_rewards
     }
   end
-
-  defp balance(%{balance_debit: debit, balance_credit: credit}), do: credit - debit
 
   defp title(currency) when is_binary(currency) do
     Budget.Context.get_currency_by_name!(currency)
