@@ -19,6 +19,24 @@ defmodule Systems.Pool.Context do
     Repo.all(Pool.Model) |> Repo.preload(preload)
   end
 
+  def list_by_orgs(orgs, preload \\ [])
+
+  def list_by_orgs([%Org.NodeModel{} | _] = orgs, preload) do
+    orgs
+    |> Enum.map(& &1.id)
+    |> list_by_orgs(preload)
+  end
+
+  def list_by_orgs([head | _] = orgs, preload) when is_integer(head) do
+    from(p in Pool.Model,
+      inner_join: o in Org.NodeModel,
+      on: o.id == p.org_id,
+      where: o.id in ^orgs,
+      preload: ^preload
+    )
+    |> Repo.all()
+  end
+
   def list_by_org(org_identifier, preload \\ []) when is_list(org_identifier) do
     from(p in Pool.Model,
       inner_join: o in Org.NodeModel,

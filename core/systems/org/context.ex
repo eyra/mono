@@ -8,11 +8,6 @@ defmodule Systems.Org.Context do
     Org.Internals
   }
 
-  def top_level_org_identifier(_user) do
-    # FIXME: determine to which top level organisation a user belongs
-    ["vu", "sbe"]
-  end
-
   def get_node!(id, preload \\ [])
 
   def get_node!([_ | _] = identifier, preload) do

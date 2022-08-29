@@ -26,10 +26,11 @@ defmodule Systems.Pool.OverviewPage do
   end
 
   @impl true
-  def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
+  def mount(_params, _session, socket) do
+    # FIXME POOLS: slect pools that current user has access to using auth permissions on org nodes
     pools =
-      Org.Context.top_level_org_identifier(user)
-      |> Pool.Context.list_by_org(Pool.Model.preload_graph([:org, :participants, :submissions]))
+      Org.Context.list_nodes(:scholar_course, ["vu", "sbe"], [])
+      |> Pool.Context.list_by_orgs(Pool.Model.preload_graph([:org, :participants, :submissions]))
       |> Enum.map(&vm(&1))
 
     {
@@ -45,7 +46,6 @@ defmodule Systems.Pool.OverviewPage do
 
   defp vm(%{id: id} = pool) do
     %{
-      id: id,
       title: Pool.Model.title(pool),
       description: description(pool),
       tags: Pool.Model.namespace(pool),
