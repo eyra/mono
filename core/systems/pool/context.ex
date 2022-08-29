@@ -309,7 +309,7 @@ defmodule Systems.Pool.Context do
     if Ecto.Changeset.get_change(changeset, :status) === :submitted do
       for user <- Accounts.list_pool_admins() do
         NextAction.Context.create_next_action(user, Pool.ReviewSubmission,
-          key: pool_id,
+          key: "#{pool_id}",
           params: %{id: pool_id}
         )
       end

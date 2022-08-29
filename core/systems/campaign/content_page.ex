@@ -127,7 +127,6 @@ defmodule Systems.Campaign.ContentPage do
       ) do
     socket =
       if Campaign.Context.ready?(campaign_id) do
-        # FIXME: POOL adapt to multple submissions
         {:ok, _submission} =
           Pool.Context.update(submission, %{
             status: :submitted,

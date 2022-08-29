@@ -45,6 +45,7 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
 
     %{
       id: campaign_id,
+      submission: submission,
       promotion: promotion,
       tabs: tabs,
       submitted?: submitted?,
