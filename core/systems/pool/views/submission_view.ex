@@ -198,7 +198,7 @@ defmodule Systems.Pool.SubmissionView do
     socket
     |> save(changeset)
     |> validate_for_publish()
-    |> update_ui
+    |> update_ui()
   end
 
   def render(assigns) do

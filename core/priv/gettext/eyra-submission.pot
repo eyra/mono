@@ -71,19 +71,19 @@ msgid "retract.admin.success.title"
 msgstr ""
 
 #, elixir-format
-msgid "accept.error.text"
+msgid "publish.error.text"
 msgstr ""
 
 #, elixir-format
-msgid "accept.error.title"
+msgid "publish.error.title"
 msgstr ""
 
 #, elixir-format
-msgid "accept.success.text"
+msgid "publish.success.text"
 msgstr ""
 
 #, elixir-format
-msgid "accept.success.title"
+msgid "publish.success.title"
 msgstr ""
 
 #, elixir-format

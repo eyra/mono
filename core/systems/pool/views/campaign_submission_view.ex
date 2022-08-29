@@ -13,6 +13,7 @@ defmodule Systems.Pool.CampaignSubmissionView do
 
   prop(props, :any, required: true)
 
+  data(user, :any)
   data(entity, :any)
   data(gender_labels, :any)
   data(dominanthand_labels, :any)
@@ -76,6 +77,19 @@ defmodule Systems.Pool.CampaignSubmissionView do
     }
   end
 
+  # Update campaigns only
+  def update(
+        _,
+        %{assigns: %{id: _}} = socket
+      ) do
+    {
+      :ok,
+      socket
+      |> update_campaigns()
+      |> update_ui()
+    }
+  end
+
   # Initial update
   def update(
         %{
@@ -87,6 +101,19 @@ defmodule Systems.Pool.CampaignSubmissionView do
         },
         socket
       ) do
+    {
+      :ok,
+      socket
+      |> assign(id: id)
+      |> assign(entity: criteria)
+      |> assign(submission: submission)
+      |> assign(user: user)
+      |> update_campaigns()
+      |> update_ui()
+    }
+  end
+
+  defp update_campaigns(%{assigns: %{user: user, submission: submission}} = socket) do
     %{id: campaign_id, promotable_assignment: %{excluded: excluded_assignments} = assignment} =
       Campaign.Context.get_by_submission(submission, promotable_assignment: [:excluded])
 
@@ -101,17 +128,10 @@ defmodule Systems.Pool.CampaignSubmissionView do
 
     excluded_user_ids = Assignment.Context.list_user_ids(excluded_assignment_ids)
 
-    {
-      :ok,
-      socket
-      |> assign(id: id)
-      |> assign(submission: submission)
-      |> assign(assignment: assignment)
-      |> assign(entity: criteria)
-      |> assign(campaign_labels: campaign_labels)
-      |> assign(excluded_user_ids: excluded_user_ids)
-      |> update_ui()
-    }
+    socket
+    |> assign(assignment: assignment)
+    |> assign(campaign_labels: campaign_labels)
+    |> assign(excluded_user_ids: excluded_user_ids)
   end
 
   defp to_label(
@@ -130,13 +150,24 @@ defmodule Systems.Pool.CampaignSubmissionView do
     update_ui(socket, criteria)
   end
 
-  defp update_ui(%{assigns: %{excluded_user_ids: excluded_user_ids}} = socket, criteria) do
+  defp update_ui(
+         %{
+           assigns: %{
+             submission: %{pool: %{participants: participants}},
+             excluded_user_ids: excluded_user_ids
+           }
+         } = socket,
+         criteria
+       ) do
     gender_labels = Genders.labels(criteria.genders)
     dominanthand_labels = DominantHands.labels(criteria.dominant_hands)
     nativelanguage_labels = NativeLanguages.labels(criteria.native_languages)
 
-    pool_size = Pool.Context.count_eligitable_users(criteria.study_program_codes)
-    sample_size = Pool.Context.count_eligitable_users(criteria, excluded_user_ids)
+    included_user_ids = Enum.map(participants, & &1.id)
+    pool_size = Enum.count(included_user_ids)
+
+    sample_size =
+      Pool.Context.count_eligitable_users(criteria, included_user_ids, excluded_user_ids)
 
     socket
     |> assign(
@@ -154,6 +185,7 @@ defmodule Systems.Pool.CampaignSubmissionView do
 
     socket
     |> save(changeset)
+    |> update_ui()
   end
 
   def render(assigns) do

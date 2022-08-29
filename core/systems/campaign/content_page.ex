@@ -157,7 +157,7 @@ defmodule Systems.Campaign.ContentPage do
         _params,
         %{assigns: %{vm: %{submission: submission}}} = socket
       ) do
-    {:ok, _submission} = Pool.Context.update(submission, %{status: :idle})
+    {:ok, _} = Pool.Context.update(submission, %{status: :idle})
     title = dgettext("eyra-submission", "retract.success.title")
     text = dgettext("eyra-submission", "retract.success.text")
 

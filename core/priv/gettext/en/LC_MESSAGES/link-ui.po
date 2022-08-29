@@ -48,7 +48,7 @@ msgid "retract.button"
 msgstr "Unpublish"
 
 #, elixir-format
-msgid "accept.button"
+msgid "publish.button"
 msgstr "Publish"
 
 #, elixir-format, ex-autogen, fuzzy

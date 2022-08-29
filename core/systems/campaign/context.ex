@@ -122,22 +122,22 @@ defmodule Systems.Campaign.Context do
   end
 
   @doc """
-  Returns the list of studies submitted at least once.
+  Returns the list of campaigns submitted at least once.
   """
   def list_submitted(pool, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
 
     from(c in Campaign.Model,
-      join: p in Promotion.Model,
-      on: p.id == c.promotion_id,
-      join: s in Pool.SubmissionModel,
-      on: s.promotion_id == p.id,
+      inner_join: cs in Campaign.SubmissionModel,
+      on: cs.campaign_id == c.id,
+      inner_join: ps in Pool.SubmissionModel,
+      on: ps.id == cs.submission_id,
       where: c.id not in ^exclude,
-      where: s.pool_id == ^pool.id,
-      where: s.status != :idle or not is_nil(s.submitted_at),
+      where: ps.pool_id == ^pool.id,
+      where: ps.status != :idle or not is_nil(ps.submitted_at),
       preload: ^preload,
-      order_by: [desc: s.updated_at],
+      order_by: [desc: ps.updated_at],
       select: c
     )
     |> Repo.all()

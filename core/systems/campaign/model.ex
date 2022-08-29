@@ -63,7 +63,7 @@ defmodule Systems.Campaign.Model do
       :promotion,
       auth_node: [:role_assignments],
       authors: [:user],
-      submissions: [:criteria, pool: Pool.Model.preload_graph(:currency)],
+      submissions: [:criteria, pool: Pool.Model.preload_graph(:full)],
       promotable_assignment: Assignment.Model.preload_graph(:full)
     ]
   end
@@ -555,16 +555,21 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     end
   end
 
-  defp reward_value_label(nil), do: "?"
-
-  defp reward_value_label(%{pool: %{currency: currency}} = submission) do
-    locale = Gettext.get_locale(CoreWeb.Gettext)
-    reward_value = reward_value(submission)
-    Budget.CurrencyModel.label(currency, locale, reward_value)
+  defp reward_value_label(%Pool.SubmissionModel{
+         pool: %{currency: currency},
+         reward_value: reward_value
+       }) do
+    reward_value_label(currency, reward_value)
   end
 
-  defp reward_value(%{reward_value: reward_value}), do: reward_value
-  defp reward_value(_), do: "?"
+  defp reward_value_label(_), do: "?"
+
+  defp reward_value_label(%{} = currency, nil), do: reward_value_label(currency, 0)
+
+  defp reward_value_label(%{} = currency, reward_value) when is_integer(reward_value) do
+    locale = Gettext.get_locale(CoreWeb.Gettext)
+    Budget.CurrencyModel.label(currency, locale, reward_value)
+  end
 
   def get_card_type(submission) do
     case completed?(submission) do

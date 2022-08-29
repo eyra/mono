@@ -55,6 +55,7 @@ defmodule Systems.Pool.SubmissionPage do
   defoverridable handle_view_model_updated: 1
 
   def handle_view_model_updated(socket) do
+    IO.puts("handle_view_model_updated")
     socket |> update_menus()
   end
 
@@ -80,20 +81,20 @@ defmodule Systems.Pool.SubmissionPage do
   end
 
   @impl true
-  def handle_event("accept", _params, %{assigns: %{vm: %{submission: submission}}} = socket) do
+  def handle_event("publish", _params, %{assigns: %{vm: %{submission: submission}}} = socket) do
     socket =
       if ready_for_publish?(submission) do
-        {:ok, _submission} =
+        {:ok, _} =
           Pool.Context.update(submission, %{status: :accepted, accepted_at: Timestamp.naive_now()})
 
-        title = dgettext("eyra-submission", "accept.success.title")
-        text = dgettext("eyra-submission", "accept.success.text")
+        title = dgettext("eyra-submission", "publish.success.title")
+        text = dgettext("eyra-submission", "publish.success.text")
 
         socket
         |> inform(title, text)
       else
-        title = dgettext("eyra-submission", "accept.error.title")
-        text = dgettext("eyra-submission", "accept.error.text")
+        title = dgettext("eyra-submission", "publish.error.title")
+        text = dgettext("eyra-submission", "publish.error.text")
 
         socket
         |> inform(title, text)
@@ -104,7 +105,7 @@ defmodule Systems.Pool.SubmissionPage do
 
   @impl true
   def handle_event("retract", _params, %{assigns: %{vm: %{submission: submission}}} = socket) do
-    {:ok, _submission} = Pool.Context.update(submission, %{status: :idle})
+    {:ok, _} = Pool.Context.update(submission, %{status: :idle})
 
     title = dgettext("eyra-submission", "retract.admin.success.title")
     text = dgettext("eyra-submission", "retract.admin.success.text")
@@ -118,7 +119,7 @@ defmodule Systems.Pool.SubmissionPage do
 
   @impl true
   def handle_event("complete", _params, %{assigns: %{vm: %{submission: submission}}} = socket) do
-    {:ok, _submission} =
+    {:ok, _} =
       Pool.Context.update(submission, %{status: :completed, completed_at: Timestamp.naive_now()})
 
     title = dgettext("eyra-submission", "complete.admin.success.title")
@@ -147,16 +148,16 @@ defmodule Systems.Pool.SubmissionPage do
 
   defp action_map(%{preview_path: preview_path}) do
     preview_action = %{type: :redirect, to: preview_path}
-    accept_action = %{type: :send, event: "accept"}
+    publish_action = %{type: :send, event: "publish"}
     retract_action = %{type: :send, event: "retract"}
     complete_action = %{type: :send, event: "complete"}
 
     %{
       accept: %{
-        action: accept_action,
+        action: publish_action,
         face: %{
           type: :primary,
-          label: dgettext("link-ui", "accept.button"),
+          label: dgettext("link-ui", "publish.button"),
           bg_color: "bg-success"
         }
       },

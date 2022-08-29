@@ -176,18 +176,18 @@ defmodule Systems.Pool.Context do
     |> Repo.insert!()
   end
 
-  def update(%Pool.SubmissionModel{} = _submission, %Changeset{} = changeset) do
-    result =
-      Multi.new()
-      |> Multi.update(:submission, changeset)
-      |> Repo.transaction()
-
-    with {:ok, %{submission: submission}} <- result do
+  def update(%Pool.SubmissionModel{}, %Changeset{} = changeset) do
+    Multi.new()
+    |> Multi.update(:submission, changeset)
+    |> Multi.run(:dispatch, fn _, %{submission: submission} ->
       Signal.Context.dispatch!(:submission_updated, submission)
-      {:ok, notify_when_submitted(submission, changeset)}
-    end
-
-    result
+      {:ok, true}
+    end)
+    |> Multi.run(:notify, fn _, %{submission: submission} ->
+      notify_when_submitted(submission, changeset)
+      {:ok, true}
+    end)
+    |> Repo.transaction()
   end
 
   def update(%Pool.SubmissionModel{} = submission, attrs) do
@@ -196,16 +196,12 @@ defmodule Systems.Pool.Context do
   end
 
   def update(%Pool.CriteriaModel{} = _criteria, %Changeset{} = changeset) do
-    result =
-      Multi.new()
-      |> Multi.update(:criteria, changeset)
-      |> Repo.transaction()
-
-    with {:ok, %{criteria: criteria}} <- result do
+    Multi.new()
+    |> Multi.update(:criteria, changeset)
+    |> Multi.run(:dispatch, fn _, %{criteria: criteria} ->
       Signal.Context.dispatch!(:criteria_updated, criteria)
-    end
-
-    result
+    end)
+    |> Repo.transaction()
   end
 
   def select(nil, _user), do: nil
@@ -223,54 +219,32 @@ defmodule Systems.Pool.Context do
     Pool.CriteriaModel.eligitable?(submission_criteria, user_features)
   end
 
-  def count_eligitable_users(study_program_codes, exclude \\ [])
-  def count_eligitable_users(nil, exclude), do: count_eligitable_users([], exclude)
-
-  def count_eligitable_users(study_program_codes, exclude) when is_list(study_program_codes) do
-    study_program_codes = study_program_codes |> to_string_list()
-
-    study_program_codes
-    |> query_count_eligitable_users(exclude)
-    |> Repo.one()
-  end
-
   def count_eligitable_users(
         %Pool.CriteriaModel{
           genders: genders,
           dominant_hands: dominant_hands,
-          native_languages: native_languages,
-          study_program_codes: study_program_codes
+          native_languages: native_languages
         },
+        include,
         exclude
       ) do
     genders = genders |> to_string_list()
     dominant_hands = dominant_hands |> to_string_list()
     native_languages = native_languages |> to_string_list()
-    study_program_codes = study_program_codes |> to_string_list()
 
-    study_program_codes
-    |> query_count_eligitable_users(exclude)
+    query_count_users(include, exclude)
     |> optional_where(:gender, genders)
     |> optional_where(:dominant_hand, dominant_hands)
     |> optional_where(:native_language, native_languages)
     |> Repo.one()
   end
 
-  def count_students(study_program_codes) do
-    study_program_codes = study_program_codes |> to_string_list()
-
-    study_program_codes
-    |> query_count_eligitable_users([])
-    |> where([user, features], user.student == true)
-    |> Repo.one()
-  end
-
-  defp query_count_eligitable_users(study_program_codes, exclude) do
+  defp query_count_users(include, exclude) do
     from(user in Accounts.User,
       join: features in assoc(user, :features),
       select: count(user.id),
-      where: user.id not in ^exclude,
-      where: fragment("? && ?", features.study_program_codes, ^study_program_codes)
+      where: user.id in ^include,
+      where: user.id not in ^exclude
     )
   end
 

@@ -110,3 +110,14 @@ defmodule Systems.Pool.SubmissionModel do
     Timestamp.future?(schedule_start)
   end
 end
+
+defimpl Core.Persister, for: Systems.Pool.SubmissionModel do
+  alias Systems.Pool
+
+  def save(submission, changeset) do
+    case Pool.Context.update(submission, changeset) do
+      {:ok, %{submission: submission}} -> {:ok, submission}
+      _ -> {:error, changeset}
+    end
+  end
+end
