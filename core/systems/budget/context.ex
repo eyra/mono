@@ -39,9 +39,19 @@ defmodule Systems.Budget.Context do
     |> Repo.all()
   end
 
-  def get!(id, preload \\ [:fund, :reserve]) do
+  def get!(id, preload \\ [:fund, :reserve]) when is_integer(id) do
     from(budget in Budget.Model, preload: ^preload)
     |> Repo.get!(id)
+  end
+
+  def get_by_currency!(%Budget.CurrencyModel{id: currency_id}, preload \\ []) do
+    Repo.get_by!(Budget.CurrencyModel, currency_id: currency_id)
+    |> Repo.preload(preload)
+  end
+
+  def get_by_name!(name, preload \\ []) when is_binary(name) do
+    Repo.get_by!(Budget.Model, name: name)
+    |> Repo.preload(preload)
   end
 
   def get_currency!(id, preload \\ []) when is_integer(id) do
@@ -54,16 +64,6 @@ defmodule Systems.Budget.Context do
     |> Repo.preload(preload)
   end
 
-  def get_budget!(id, preload \\ []) when is_integer(id) do
-    from(budget in Budget.Model, preload: ^preload)
-    |> Repo.get!(id)
-  end
-
-  def get_budget_by_name(name, preload \\ []) when is_binary(name) do
-    Repo.get_by(Budget.Model, name: name)
-    |> Repo.preload(preload)
-  end
-
   def get_reward!(id, preload \\ [:budget, :deposit, :payment, :user]) do
     from(reward in Budget.RewardModel, preload: ^preload)
     |> Repo.get!(id)
@@ -72,6 +72,16 @@ defmodule Systems.Budget.Context do
   def get_reward(idempotence_key, preload) when is_binary(idempotence_key) do
     from(reward in Budget.RewardModel,
       where: reward.idempotence_key == ^idempotence_key,
+      preload: ^preload
+    )
+    |> Repo.one()
+  end
+
+  def get_reward(%Budget.Model{id: budget_id}, %Accounts.User{id: user_id}, preload \\ []) do
+    from(reward in Budget.RewardModel,
+      where: reward.user_id == ^user_id,
+      where: reward.budget_id == ^budget_id,
+      where: not (is_nil(reward.deposit_id) and is_nil(reward.payment_id)),
       preload: ^preload
     )
     |> Repo.one()

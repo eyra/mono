@@ -142,17 +142,20 @@ defmodule Systems.Assignment.Context do
     |> Repo.transaction()
   end
 
+  def update(assignment, budget) do
+    assignment
+    |> Assignment.Model.changeset(budget)
+    |> Repo.update!()
+  end
+
   def update_experiment(changeset) do
-    result =
-      Multi.new()
-      |> Repo.multi_update(:experiment, changeset)
-      |> Repo.transaction()
-
-    with {:ok, %{experiment: experiment}} <- result do
+    Multi.new()
+    |> Repo.multi_update(:experiment, changeset)
+    |> Multi.run(:dispatch, fn _, %{experiment: experiment} ->
       Signal.Context.dispatch!(:experiment_updated, experiment)
-    end
-
-    result
+      {:ok, true}
+    end)
+    |> Repo.transaction()
   end
 
   def create_experiment(%{} = attrs, tool, auth_node) do

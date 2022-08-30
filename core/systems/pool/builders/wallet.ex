@@ -55,7 +55,7 @@ defmodule Systems.Pool.Builders.Wallet do
   end
 
   defp target(%{identifier: [_ | [pool_name | _]]}) do
-    %{target: target} = Pool.Context.get_by_name(pool_name)
+    %{target: target} = Pool.Context.get_by_name!(pool_name)
     target
   end
 

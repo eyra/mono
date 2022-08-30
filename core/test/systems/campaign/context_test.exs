@@ -384,11 +384,11 @@ defmodule Systems.Campaign.ContextTest do
 
       assert %{
                participants: [%{id: ^user_id}]
-             } = Pool.Context.get_by_name("vu_sbe_rpr_year1_2021", [:participants])
+             } = Pool.Context.get_by_name!("vu_sbe_rpr_year1_2021", [:participants])
 
       assert %{
                participants: []
-             } = Pool.Context.get_by_name("vu_sbe_rpr_year2_2021", [:participants])
+             } = Pool.Context.get_by_name!("vu_sbe_rpr_year2_2021", [:participants])
     end
 
     test "update_pool_participations/3 add 2 for 1 pool", %{user: %{id: user_id} = user} do
@@ -399,11 +399,11 @@ defmodule Systems.Campaign.ContextTest do
 
       assert %{
                participants: [%{id: ^user_id}]
-             } = Pool.Context.get_by_name("vu_sbe_rpr_year1_2021", [:participants])
+             } = Pool.Context.get_by_name!("vu_sbe_rpr_year1_2021", [:participants])
 
       assert %{
                participants: []
-             } = Pool.Context.get_by_name("vu_sbe_rpr_year2_2021", [:participants])
+             } = Pool.Context.get_by_name!("vu_sbe_rpr_year2_2021", [:participants])
     end
 
     test "update_pool_participations/3 add 2 for 2 pools", %{user: %{id: user_id} = user} do
@@ -414,11 +414,11 @@ defmodule Systems.Campaign.ContextTest do
 
       assert %{
                participants: [%{id: ^user_id}]
-             } = Pool.Context.get_by_name("vu_sbe_rpr_year1_2021", [:participants])
+             } = Pool.Context.get_by_name!("vu_sbe_rpr_year1_2021", [:participants])
 
       assert %{
                participants: [%{id: ^user_id}]
-             } = Pool.Context.get_by_name("vu_sbe_rpr_year2_2021", [:participants])
+             } = Pool.Context.get_by_name!("vu_sbe_rpr_year2_2021", [:participants])
     end
 
     test "update_pool_participations/3 remove 1 for 1 pools", %{user: user} do
@@ -429,11 +429,11 @@ defmodule Systems.Campaign.ContextTest do
 
       assert %{
                participants: []
-             } = Pool.Context.get_by_name("vu_sbe_rpr_year1_2021", [:participants])
+             } = Pool.Context.get_by_name!("vu_sbe_rpr_year1_2021", [:participants])
 
       assert %{
                participants: []
-             } = Pool.Context.get_by_name("vu_sbe_rpr_year2_2021", [:participants])
+             } = Pool.Context.get_by_name!("vu_sbe_rpr_year2_2021", [:participants])
     end
 
     test "update_pool_participations/3 remove 2 for 1 pools", %{user: user} do
@@ -445,11 +445,11 @@ defmodule Systems.Campaign.ContextTest do
 
       assert %{
                participants: []
-             } = Pool.Context.get_by_name("vu_sbe_rpr_year1_2021", [:participants])
+             } = Pool.Context.get_by_name!("vu_sbe_rpr_year1_2021", [:participants])
 
       assert %{
                participants: []
-             } = Pool.Context.get_by_name("vu_sbe_rpr_year2_2021", [:participants])
+             } = Pool.Context.get_by_name!("vu_sbe_rpr_year2_2021", [:participants])
     end
 
     test "update_pool_participations/3 remove 2 for 2 pools", %{user: user} do
@@ -461,11 +461,11 @@ defmodule Systems.Campaign.ContextTest do
 
       assert %{
                participants: []
-             } = Pool.Context.get_by_name("vu_sbe_rpr_year1_2021", [:participants])
+             } = Pool.Context.get_by_name!("vu_sbe_rpr_year1_2021", [:participants])
 
       assert %{
                participants: []
-             } = Pool.Context.get_by_name("vu_sbe_rpr_year2_2021", [:participants])
+             } = Pool.Context.get_by_name!("vu_sbe_rpr_year2_2021", [:participants])
     end
 
     defp create_campaign(status, budget, schedule_start \\ nil, schedule_end \\ nil) do

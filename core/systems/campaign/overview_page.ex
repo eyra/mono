@@ -211,8 +211,8 @@ defmodule Systems.Campaign.OverviewPage do
     title = dgettext("eyra-dashboard", "default.study.title")
 
     # FIXME POOL
-    pool = Pool.Context.get_by_name(:vu_sbe_rpr_year1_2021)
-    budget = Budget.Context.get_budget_by_name(pool.name)
+    pool = Pool.Context.get_by_name!(:vu_sbe_rpr_year1_2021)
+    budget = Budget.Context.get_by_name!(pool.name)
 
     Campaign.Assembly.create(user, title, tool_type, pool, budget)
   end

@@ -84,13 +84,13 @@ defmodule Systems.Pool.Context do
   def get!(id, preload \\ []), do: Repo.get!(Pool.Model, id) |> Repo.preload(preload)
   def get(id, preload \\ []), do: Repo.get(Pool.Model, id) |> Repo.preload(preload)
 
-  def get_by_name(name, preload \\ [])
+  def get_by_name!(name, preload \\ [])
 
-  def get_by_name(name, preload) when is_atom(name),
-    do: get_by_name(Atom.to_string(name), preload)
+  def get_by_name!(name, preload) when is_atom(name),
+    do: get_by_name!(Atom.to_string(name), preload)
 
-  def get_by_name(name, preload) do
-    Repo.get_by(Pool.Model, name: name)
+  def get_by_name!(name, preload) do
+    Repo.get_by!(Pool.Model, name: name)
     |> Repo.preload(preload)
   end
 

@@ -28,7 +28,7 @@ defmodule Systems.Campaign.AssemblyTest do
   setup do
     currency = Budget.Factories.create_currency("test_1234", "ƒ", 2)
     budget = Budget.Factories.create_budget("test_1234", currency)
-    pool = Factories.insert!(:pool, %{name: "test_1234"})
+    pool = Factories.insert!(:pool, %{name: "test_1234", currency: currency})
 
     {:ok, currency: currency, budget: budget, pool: pool}
   end

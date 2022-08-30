@@ -321,6 +321,22 @@ defmodule Systems.Campaign.Context do
     |> update
   end
 
+  def submission_updated(%Campaign.Model{
+        promotable_assignment: assignment,
+        submissions: [
+          %{
+            pool: %{
+              currency: %{
+                name: currency_name
+              }
+            }
+          }
+        ]
+      }) do
+    budget = Budget.Context.get_by_name!(currency_name)
+    Assignment.Context.update(assignment, budget)
+  end
+
   def delete(id) when is_number(id) do
     get!(id, Campaign.Model.preload_graph(:full))
     |> Campaign.Assembly.delete()

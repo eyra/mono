@@ -5,7 +5,8 @@ defmodule Systems.Assignment.LandingPageTest do
 
   alias Systems.{
     Assignment,
-    Crew
+    Crew,
+    Budget
   }
 
   describe "show landing page for: campaign -> assignment -> survey_tool" do
@@ -16,6 +17,10 @@ defmodule Systems.Assignment.LandingPageTest do
       promotion_auth_node = Factories.insert!(:auth_node, %{parent: campaign_auth_node})
       assignment_auth_node = Factories.insert!(:auth_node, %{parent: campaign_auth_node})
       experiment_auth_node = Factories.insert!(:auth_node, %{parent: assignment_auth_node})
+
+      currency = Budget.Factories.create_currency("test_1234", "ƒ", 2)
+      budget = Budget.Factories.create_budget("test_1234", currency)
+      pool = Factories.insert!(:pool, %{name: "test_1234", currency: currency})
 
       survey_tool =
         Factories.insert!(
@@ -45,6 +50,7 @@ defmodule Systems.Assignment.LandingPageTest do
           :assignment,
           %{
             auth_node: assignment_auth_node,
+            budget: budget,
             experiment: experiment,
             director: :campaign
           }
@@ -67,7 +73,7 @@ defmodule Systems.Assignment.LandingPageTest do
           }
         )
 
-      submission = Factories.insert!(:submission, %{reward_value: 5})
+      submission = Factories.insert!(:submission, %{reward_value: 500, pool: pool})
       researcher = Factories.build(:researcher)
       author = Factories.build(:author, %{researcher: researcher})
 
@@ -90,7 +96,7 @@ defmodule Systems.Assignment.LandingPageTest do
     } do
       Core.Authorization.assign_role(user, campaign, :owner)
 
-      _member = Crew.Context.apply_member!(assignment.crew, user)
+      _member = Assignment.Context.apply_member(assignment, user, 500)
 
       {:ok, _view, html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
@@ -111,7 +117,7 @@ defmodule Systems.Assignment.LandingPageTest do
     } do
       Core.Authorization.assign_role(user, campaign, :owner)
 
-      member = Crew.Context.apply_member!(assignment.crew, user)
+      {:ok, %{member: member}} = Assignment.Context.apply_member(assignment, user, 500)
       task = Crew.Context.get_task(assignment.crew, member)
 
       {:ok, view, _html} =
@@ -136,7 +142,7 @@ defmodule Systems.Assignment.LandingPageTest do
     } do
       Core.Authorization.assign_role(user, campaign, :owner)
 
-      member = Crew.Context.apply_member!(assignment.crew, user)
+      {:ok, %{member: member}} = Assignment.Context.apply_member(assignment, user, 500)
       task = Crew.Context.get_task(assignment.crew, member)
       Crew.Context.lock_task(task)
 
@@ -159,7 +165,7 @@ defmodule Systems.Assignment.LandingPageTest do
     } do
       Core.Authorization.assign_role(user, campaign, :owner)
 
-      member = Crew.Context.apply_member!(assignment.crew, user)
+      {:ok, %{member: member}} = Assignment.Context.apply_member(assignment, user, 500)
       task = Crew.Context.get_task(assignment.crew, member)
       Crew.Context.lock_task(task)
       Crew.Context.activate_task(task)
