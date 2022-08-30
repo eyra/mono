@@ -421,8 +421,15 @@ defmodule Systems.Campaign.Context do
     Assignment.Context.search_subject(tool, public_id)
   end
 
-  def activate_task(tool, user_id, force_apply_as_member? \\ false) do
-    Assignment.Context.activate_task(tool, user_id, force_apply_as_member?)
+  def apply_member_and_activate_task(tool, user) do
+    assignment = Assignment.Context.get_by_tool(tool, Assignment.Model.preload_graph(:full))
+
+    %{submission: %{reward_value: reward_value}} =
+      assignment
+      |> get_by_promotable([:submissions])
+      |> Campaign.Model.flatten()
+
+    Assignment.Context.apply_member_and_activate_task(assignment, user, reward_value)
   end
 
   def assign_tester_role(tool, user) do

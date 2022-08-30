@@ -11,7 +11,6 @@ defmodule Systems.Assignment.Context do
   alias Core.Repo
   alias CoreWeb.UI.Timestamp
   alias Core.Authorization
-  alias Core.Accounts
   alias Core.Accounts.User
 
   alias Frameworks.{
@@ -309,41 +308,32 @@ defmodule Systems.Assignment.Context do
     end
   end
 
-  def activate_task(crew_ref, user, force_apply_as_member? \\ false)
-
-  def activate_task(%{} = tool, user_id, force_apply_as_member?) when is_integer(user_id) do
-    if experiment = get_experiment_by_tool(tool) do
-      %{crew: crew} = get_by_experiment!(experiment, [:crew])
-
-      user = Accounts.get_user!(user_id)
-      activate_task(crew, user, force_apply_as_member?)
-    else
-      nil
-    end
-  end
-
-  def activate_task(
-        %Assignment.Model{crew: crew},
+  def apply_member_and_activate_task(
+        %Assignment.Model{crew: crew} = assignment,
         %User{} = user,
-        force_apply_as_member?
-      ) do
-    activate_task(crew, user, force_apply_as_member?)
-  end
-
-  def activate_task(%Crew.Model{} = crew, %User{} = user, force_apply_as_member?) do
+        reward_amount
+      )
+      when is_integer(reward_amount) do
     member =
       if Crew.Context.member?(crew, user) do
         Crew.Context.get_member!(crew, user)
       else
-        if force_apply_as_member? do
-          Crew.Context.apply_member!(crew, user)
-        else
-          Logger.warn("Can not complete task for non member")
-          nil
+        case apply_member(assignment, user, reward_amount) do
+          {:ok, %{member: member}} -> member
+          _ -> nil
         end
       end
 
     _activate_task(crew, member)
+  end
+
+  def activate_task(%Crew.Model{} = crew, %User{} = user) do
+    if Crew.Context.member?(crew, user) do
+      member = Crew.Context.get_member!(crew, user)
+      _activate_task(crew, member)
+    else
+      raise "Can not complete task for non member"
+    end
   end
 
   defp _activate_task(%Crew.Model{} = _crew, nil), do: nil
