@@ -106,7 +106,7 @@ defmodule Core.Repo.Migrations.RefactorPoolsPart1 do
 
     drop(index(:pool_submissions, [:pool_id, :promotion_id]))
 
-    drop(constraint(:pool_submissions, "pool_submissions_promotion_id_fkey"))
+    #drop(constraint(:pool_submissions, "pool_submissions_promotion_id_fkey"))
     alter table(:pool_submissions) do
       modify(:promotion_id, references(:promotions, on_delete: :delete_all), null: true)
     end

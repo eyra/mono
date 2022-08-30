@@ -34,13 +34,10 @@ defmodule Systems.Campaign.Assembly do
     |> Repo.transaction()
   end
 
-  def create(user, title, tool_type) do
+  def create(user, title, tool_type, pool, budget) do
     profile = user |> Accounts.get_profile()
 
     promotion_attrs = create_promotion_attrs(title, user, profile)
-
-    # FIXME POOL
-    pool = Pool.Context.get_by_name(:vu_sbe_rpr_year1_2021)
 
     campaign_auth_node = Authorization.create_node!()
     promotion_auth_node = Authorization.create_node!(campaign_auth_node)
@@ -60,7 +57,13 @@ defmodule Systems.Campaign.Assembly do
       )
 
     {:ok, assignment} =
-      Assignment.Context.create(assignment_attrs(), crew, experiment, assignment_auth_node)
+      Assignment.Context.create(
+        assignment_attrs(),
+        budget,
+        crew,
+        experiment,
+        assignment_auth_node
+      )
 
     {:ok, promotion} = Promotion.Context.create(promotion_attrs, promotion_auth_node)
     {:ok, submission} = Pool.Context.create_submission(submission_attrs(), pool)
@@ -132,6 +135,7 @@ defmodule Systems.Campaign.Assembly do
             } = promotion,
           promotable_assignment:
             %{
+              budget: budget,
               auth_node: assignment_auth_node,
               assignable_experiment:
                 %{
@@ -149,7 +153,7 @@ defmodule Systems.Campaign.Assembly do
     submissions = Pool.Context.copy(submissions)
     tool = Assignment.Context.copy_tool(experiment, experiment_auth_node)
     experiment = Assignment.Context.copy_experiment(experiment, tool, experiment_auth_node)
-    assignment = Assignment.Context.copy(assignment, experiment, assignment_auth_node)
+    assignment = Assignment.Context.copy(assignment, budget, experiment, assignment_auth_node)
 
     campaign =
       Campaign.Context.copy(campaign, promotion, assignment, submissions, campaign_auth_node)

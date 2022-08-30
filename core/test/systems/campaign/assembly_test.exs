@@ -10,7 +10,8 @@ defmodule Systems.Campaign.AssemblyTest do
     Assignment,
     Survey,
     Lab,
-    Pool
+    Pool,
+    Budget
   }
 
   setup_all do
@@ -19,7 +20,17 @@ defmodule Systems.Campaign.AssemblyTest do
     )
 
     Application.put_env(:core, :unsplash_client, Campaign.AssemblyTest.UnsplashMockClient)
-    {:ok, mock: Campaign.AssemblyTest.UnsplashMockClient}
+    mock = Campaign.AssemblyTest.UnsplashMockClient
+
+    {:ok, mock: mock}
+  end
+
+  setup do
+    currency = Budget.Factories.create_currency("test_1234", "ƒ", 2)
+    budget = Budget.Factories.create_budget("test_1234", currency)
+    pool = Factories.insert!(:pool, %{name: "test_1234"})
+
+    {:ok, currency: currency, budget: budget, pool: pool}
   end
 
   describe "campaign assembly" do
@@ -27,7 +38,7 @@ defmodule Systems.Campaign.AssemblyTest do
 
     setup [:login_as_researcher]
 
-    test "create online", %{user: researcher, mock: mock} do
+    test "create online", %{user: researcher, mock: mock, budget: budget, pool: pool} do
       mock
       |> expect(:get, fn _, "/photos/random", "query=abstract" ->
         {:ok,
@@ -38,7 +49,7 @@ defmodule Systems.Campaign.AssemblyTest do
          }}
       end)
 
-      campaign = Campaign.Assembly.create(researcher, "New Campaign", :online)
+      campaign = Campaign.Assembly.create(researcher, "New Campaign", :online, pool, budget)
 
       assert %Systems.Campaign.Model{
                auth_node: %Core.Authorization.Node{
@@ -156,7 +167,7 @@ defmodule Systems.Campaign.AssemblyTest do
       assert owner.id == researcher.id
     end
 
-    test "create lab", %{user: researcher, mock: mock} do
+    test "create lab", %{user: researcher, mock: mock, budget: budget, pool: pool} do
       mock
       |> expect(:get, fn _, "/photos/random", "query=abstract" ->
         {:ok,
@@ -167,7 +178,7 @@ defmodule Systems.Campaign.AssemblyTest do
          }}
       end)
 
-      campaign = Campaign.Assembly.create(researcher, "New Campaign", :lab)
+      campaign = Campaign.Assembly.create(researcher, "New Campaign", :lab, pool, budget)
 
       assert %Systems.Campaign.Model{
                auth_node: %Core.Authorization.Node{
@@ -217,7 +228,7 @@ defmodule Systems.Campaign.AssemblyTest do
       assert lab_tool_auth_node_parent_id == experiment_auth_node_id
     end
 
-    test "delete", %{user: researcher, mock: mock} do
+    test "delete", %{user: researcher, mock: mock, budget: budget, pool: pool} do
       mock
       |> expect(:get, fn _, "/photos/random", "query=abstract" ->
         {:ok,
@@ -228,7 +239,7 @@ defmodule Systems.Campaign.AssemblyTest do
          }}
       end)
 
-      %{id: id} = Campaign.Assembly.create(researcher, "New Campaign", :online)
+      %{id: id} = Campaign.Assembly.create(researcher, "New Campaign", :online, pool, budget)
 
       campaign = Campaign.Context.get!(id, Campaign.Model.preload_graph(:full))
 
@@ -256,7 +267,7 @@ defmodule Systems.Campaign.AssemblyTest do
              ) == nil
     end
 
-    test "copy", %{user: researcher, mock: mock} do
+    test "copy", %{user: researcher, mock: mock, budget: budget, pool: pool} do
       mock
       |> expect(:get, fn _, "/photos/random", "query=abstract" ->
         {:ok,
@@ -267,7 +278,7 @@ defmodule Systems.Campaign.AssemblyTest do
          }}
       end)
 
-      %{id: id} = Campaign.Assembly.create(researcher, "New Campaign", :online)
+      %{id: id} = Campaign.Assembly.create(researcher, "New Campaign", :online, pool, budget)
 
       %{
         id: id,
@@ -299,7 +310,6 @@ defmodule Systems.Campaign.AssemblyTest do
           schedule_end: schedule_end
         })
 
-      study_program_codes = [:bk_2]
       genders = [:woman]
       dominant_hands = [:left]
       native_languages = [:en, :nl]
@@ -307,7 +317,6 @@ defmodule Systems.Campaign.AssemblyTest do
       # Update Criteria
       criteria
       |> Pool.CriteriaModel.changeset(%{
-        study_program_codes: study_program_codes,
         genders: genders,
         dominant_hands: dominant_hands,
         native_languages: native_languages
@@ -359,7 +368,6 @@ defmodule Systems.Campaign.AssemblyTest do
                    schedule_end: ^schedule_end,
                    schedule_start: ^schedule_start,
                    criteria: %{
-                     study_program_codes: ^study_program_codes,
                      genders: ^genders,
                      dominant_hands: ^dominant_hands,
                      native_languages: ^native_languages

@@ -20,8 +20,7 @@ defmodule Systems.Pool.CriteriaModelTest do
       criteria = %CriteriaModel{
         genders: nil,
         dominant_hands: nil,
-        native_languages: nil,
-        study_program_codes: nil
+        native_languages: nil
       }
 
       assert CriteriaModel.eligitable?(criteria, features)
@@ -31,8 +30,7 @@ defmodule Systems.Pool.CriteriaModelTest do
       criteria = %CriteriaModel{
         genders: [:m],
         dominant_hands: nil,
-        native_languages: nil,
-        study_program_codes: nil
+        native_languages: nil
       }
 
       assert CriteriaModel.eligitable?(criteria, features)
@@ -42,8 +40,7 @@ defmodule Systems.Pool.CriteriaModelTest do
       criteria = %CriteriaModel{
         genders: [:v],
         dominant_hands: nil,
-        native_languages: nil,
-        study_program_codes: nil
+        native_languages: nil
       }
 
       assert not CriteriaModel.eligitable?(criteria, features)
@@ -53,8 +50,7 @@ defmodule Systems.Pool.CriteriaModelTest do
       criteria = %CriteriaModel{
         genders: [:m],
         dominant_hands: [:right],
-        native_languages: nil,
-        study_program_codes: nil
+        native_languages: nil
       }
 
       assert CriteriaModel.eligitable?(criteria, features)
@@ -64,8 +60,7 @@ defmodule Systems.Pool.CriteriaModelTest do
       criteria = %CriteriaModel{
         genders: [:m],
         dominant_hands: [:left],
-        native_languages: nil,
-        study_program_codes: nil
+        native_languages: nil
       }
 
       assert not CriteriaModel.eligitable?(criteria, features)
@@ -75,8 +70,7 @@ defmodule Systems.Pool.CriteriaModelTest do
       criteria = %CriteriaModel{
         genders: [:m],
         dominant_hands: [:right],
-        native_languages: [:nl, :en],
-        study_program_codes: nil
+        native_languages: [:nl, :en]
       }
 
       assert CriteriaModel.eligitable?(criteria, features)
@@ -86,30 +80,7 @@ defmodule Systems.Pool.CriteriaModelTest do
       criteria = %CriteriaModel{
         genders: [:m],
         dominant_hands: [:right],
-        native_languages: [:en],
-        study_program_codes: nil
-      }
-
-      assert not CriteriaModel.eligitable?(criteria, features)
-    end
-
-    test "eligitable with matching study_program_codes", %{features: features} do
-      criteria = %CriteriaModel{
-        genders: [:m],
-        dominant_hands: [:right],
-        native_languages: [:nl, :en],
-        study_program_codes: [:vu_sbe_bk_1, :vu_sbe_bk_2]
-      }
-
-      assert CriteriaModel.eligitable?(criteria, features)
-    end
-
-    test "not eligitable without matching study_program_codes", %{features: features} do
-      criteria = %CriteriaModel{
-        genders: [:m],
-        dominant_hands: [:right],
-        native_languages: [:en],
-        study_program_codes: [:vu_sbe_bk_2, :vu_sbe_bk_2_h]
+        native_languages: [:en]
       }
 
       assert not CriteriaModel.eligitable?(criteria, features)

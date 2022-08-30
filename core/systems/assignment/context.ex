@@ -98,11 +98,12 @@ defmodule Systems.Assignment.Context do
     |> Repo.all()
   end
 
-  def create(%{} = attrs, crew, experiment, auth_node) do
+  def create(%{} = attrs, budget, crew, experiment, auth_node) do
     assignable_field = assignable_field(experiment)
 
     %Assignment.Model{}
     |> Assignment.Model.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:budget, budget)
     |> Ecto.Changeset.put_assoc(:crew, crew)
     |> Ecto.Changeset.put_assoc(assignable_field, experiment)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
@@ -111,6 +112,7 @@ defmodule Systems.Assignment.Context do
 
   def copy(
         %Assignment.Model{} = assignment,
+        %Budget.Model{} = budget,
         %Assignment.ExperimentModel{} = experiment,
         auth_node
       ) do
@@ -119,6 +121,7 @@ defmodule Systems.Assignment.Context do
 
     %Assignment.Model{}
     |> Assignment.Model.changeset(Map.from_struct(assignment))
+    |> Ecto.Changeset.put_assoc(:budget, budget)
     |> Ecto.Changeset.put_assoc(:crew, crew)
     |> Ecto.Changeset.put_assoc(:assignable_experiment, experiment)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
@@ -242,7 +245,8 @@ defmodule Systems.Assignment.Context do
   end
 
   def apply_member(id, user, reward_amount) when is_number(id) do
-    apply_member(get!(id, [:crew]), user, reward_amount)
+    get!(id, [:crew])
+    |> apply_member(user, reward_amount)
   end
 
   def apply_member(%{crew: crew} = assignment, user, reward_amount) do

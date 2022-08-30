@@ -25,7 +25,9 @@ defmodule Systems.Campaign.OverviewPage do
 
   alias Systems.{
     Campaign,
-    Assignment
+    Assignment,
+    Pool,
+    Budget
   }
 
   def mount(_params, _session, socket) do
@@ -207,7 +209,12 @@ defmodule Systems.Campaign.OverviewPage do
 
   defp create_campaign(%{assigns: %{current_user: user}} = _socket, tool_type) do
     title = dgettext("eyra-dashboard", "default.study.title")
-    Campaign.Assembly.create(user, title, tool_type)
+
+    # FIXME POOL
+    pool = Pool.Context.get_by_name(:vu_sbe_rpr_year1_2021)
+    budget = Budget.Context.get_budget_by_name(pool.name)
+
+    Campaign.Assembly.create(user, title, tool_type, pool, budget)
   end
 
   def render(assigns) do

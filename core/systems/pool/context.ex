@@ -19,6 +19,16 @@ defmodule Systems.Pool.Context do
     Repo.all(Pool.Model) |> Repo.preload(preload)
   end
 
+  def list_by_user(%Accounts.User{id: user_id}, preload \\ []) do
+    from(pool in Pool.Model,
+      inner_join: participant in Pool.ParticipantModel,
+      on: participant.pool_id == pool.id,
+      where: participant.user_id == ^user_id,
+      preload: ^preload
+    )
+    |> Repo.all()
+  end
+
   def list_by_orgs(orgs, preload \\ [])
 
   def list_by_orgs([%Org.NodeModel{} | _] = orgs, preload) do

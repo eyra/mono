@@ -104,18 +104,23 @@ defmodule Systems.Campaign.Context do
     |> Repo.all()
   end
 
-  def list_by_submission_status(submission_status, opts \\ []) when is_list(submission_status) do
+  def list_by_pools_and_submission_status(pools, submission_status, opts \\ [])
+      when is_list(pools) and is_list(submission_status) do
+    pool_ids = Enum.map(pools, & &1.id)
+
     preload = Keyword.get(opts, :preload, [])
     exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
 
     from(c in Campaign.Model,
-      join: p in Promotion.Model,
-      on: p.id == c.promotion_id,
-      join: s in Pool.SubmissionModel,
-      on: s.promotion_id == p.id,
-      where: c.id not in ^exclude and s.status in ^submission_status,
+      inner_join: cs in Campaign.SubmissionModel,
+      on: cs.campaign_id == c.id,
+      inner_join: ps in Pool.SubmissionModel,
+      on: ps.id == cs.submission_id,
+      where: c.id not in ^exclude,
+      where: ps.pool_id in ^pool_ids,
+      where: ps.status in ^submission_status,
       preload: ^preload,
-      order_by: [desc: s.updated_at],
+      order_by: [desc: ps.updated_at],
       select: c
     )
     |> Repo.all()

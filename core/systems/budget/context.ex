@@ -49,17 +49,19 @@ defmodule Systems.Budget.Context do
     |> Repo.get!(id)
   end
 
-  def get_currency_by_name!(name, preload \\ []) when is_binary(name) do
-    from(currency in Budget.CurrencyModel,
-      where: currency.name == ^name,
-      preload: ^preload
-    )
-    |> Repo.one!()
+  def get_currency_by_name(name, preload \\ []) when is_binary(name) do
+    Repo.get_by(Budget.CurrencyModel, name: name)
+    |> Repo.preload(preload)
   end
 
   def get_budget!(id, preload \\ []) when is_integer(id) do
     from(budget in Budget.Model, preload: ^preload)
     |> Repo.get!(id)
+  end
+
+  def get_budget_by_name(name, preload \\ []) when is_binary(name) do
+    Repo.get_by(Budget.Model, name: name)
+    |> Repo.preload(preload)
   end
 
   def get_reward!(id, preload \\ [:budget, :deposit, :payment, :user]) do

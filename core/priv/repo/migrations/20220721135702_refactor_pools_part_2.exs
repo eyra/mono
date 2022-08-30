@@ -315,11 +315,6 @@ defmodule Core.Repo.Migrations.RefactorPoolsPart2 do
   defp get_pool_name(:first), do: "vu_sbe_rpr_year1_2021"
   defp get_pool_name(:second), do: "vu_sbe_rpr_year2_2021"
 
-  defp add_pools(currencies, org_id) do
-    currencies
-    |> Enum.each(&add_pool(&1, org_id))
-  end
-
   defp add_pool(%{name: currency_name, target: target} = _currency, org_id) do
     add_pool(currency_name, currency_name, org_id, target)
   end

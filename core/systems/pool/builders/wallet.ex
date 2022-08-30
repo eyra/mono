@@ -43,7 +43,7 @@ defmodule Systems.Pool.Builders.Wallet do
   end
 
   defp title(currency) when is_binary(currency) do
-    Budget.Context.get_currency_by_name!(currency)
+    Budget.Context.get_currency_by_name(currency)
     |> title()
   end
 
