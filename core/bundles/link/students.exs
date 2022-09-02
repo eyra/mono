@@ -29,7 +29,7 @@ password = "asdf;lkjASDF0987"
         student: true,
         password: password,
         features: %Core.Accounts.Features{
-          study_program_codes: [:vu_sbe_bk_1]
+          study_program_codes: [:vu_sbe_bk_1_year1_2021]
         }
       }
 
@@ -41,7 +41,7 @@ password = "asdf;lkjASDF0987"
         student: true,
         password: password,
         features: %Core.Accounts.Features{
-          study_program_codes: [:vu_sbe_bk_1_h]
+          study_program_codes: [:vu_sbe_bk_1_h_year1_2021]
         }
       }
 
@@ -53,7 +53,7 @@ password = "asdf;lkjASDF0987"
         student: true,
         password: password,
         features: %Core.Accounts.Features{
-          study_program_codes: [:bk_2]
+          study_program_codes: [:vu_sbe_bk_2_year1_2021]
         }
       }
 
@@ -65,7 +65,7 @@ password = "asdf;lkjASDF0987"
         student: true,
         password: password,
         features: %Core.Accounts.Features{
-          study_program_codes: [:bk_2_h]
+          study_program_codes: [:vu_sbe_bk_2_h_year1_2021]
         }
       }
 
@@ -77,7 +77,7 @@ password = "asdf;lkjASDF0987"
         student: true,
         password: password,
         features: %Core.Accounts.Features{
-          study_program_codes: [:iba_1]
+          study_program_codes: [:vu_sbe_iba_1_year1_2021]
         }
       }
 
@@ -89,7 +89,7 @@ password = "asdf;lkjASDF0987"
         student: true,
         password: password,
         features: %Core.Accounts.Features{
-          study_program_codes: [:iba_1_h]
+          study_program_codes: [:vu_sbe_iba_1_h_year1_2021]
         }
       }
 
@@ -101,7 +101,7 @@ password = "asdf;lkjASDF0987"
         student: true,
         password: password,
         features: %Core.Accounts.Features{
-          study_program_codes: [:iba_2]
+          study_program_codes: [:vu_sbe_iba_2_year1_2021]
         }
       }
 
@@ -113,7 +113,7 @@ password = "asdf;lkjASDF0987"
         student: true,
         password: password,
         features: %Core.Accounts.Features{
-          study_program_codes: [:iba_2_h]
+          study_program_codes: [:vu_sbe_iba_2_h_year1_2021]
         }
       }
 

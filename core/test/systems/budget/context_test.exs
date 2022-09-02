@@ -416,6 +416,24 @@ defmodule Systems.Budget.ContextTest do
            } = Bookkeeping.Context.get_account!(["wallet", "a_b_c_2022", "1"])
   end
 
+  test "move_wallet_balance/4 skipped: from account does not exist" do
+    a_b_c_2022 =
+      Core.Factories.insert!(:book_account, %{
+        identifier: ["wallet", "a_b_c_2022", "1"],
+        balance_credit: 0,
+        balance_debit: 0
+      })
+
+    assert_raise RuntimeError, fn ->
+      Budget.Context.move_wallet_balance(
+        ["wallet", "a_b_c_2021", "1"],
+        a_b_c_2022.identifier,
+        "idempotency_key",
+        5000
+      )
+    end
+  end
+
   test "multiply_rewards/2 succeeds", %{
     budget: %{fund: fund, reserve: reserve} = budget
   } do

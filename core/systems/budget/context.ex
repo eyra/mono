@@ -6,8 +6,9 @@ defmodule Systems.Budget.Context do
 
   alias Ecto.Multi
   alias Core.Repo
-
   alias Core.Accounts
+
+  alias Frameworks.Utility.Identifier
 
   alias Systems.{
     Budget,
@@ -187,25 +188,52 @@ defmodule Systems.Budget.Context do
   end
 
   def move_wallet_balance(
-        [_ | _] = from_identifier,
-        [_ | _] = to_identifier,
+        [_ | _] = from,
+        [_ | _] = to,
         idempotence_key,
         limit
       )
       when is_integer(limit) do
-    %{id: from_id} = from = Bookkeeping.Context.get_account!(from_identifier)
-    %{id: to_id} = to = Bookkeeping.Context.get_account!(to_identifier)
+    Bookkeeping.Context.get_account(from)
+    |> move_wallet_balance(to, idempotence_key, limit)
+  end
 
-    amount = Bookkeeping.AccountModel.balance(from)
+  def move_wallet_balance(
+        nil,
+        [_ | _] = _to,
+        idempotence_key,
+        _limit
+      ),
+      do: raise("Unable to move balance: #{idempotence_key}")
 
-    if amount > 0 and amount < limit do
-      journal_message = "Moved #{amount} from account #{from_id} to account #{to_id}"
-      create_payment_transaction(from, to, amount, idempotence_key, journal_message)
-    else
-      Logger.info(
-        "Move wallet ballance skipped: amount=#{amount} limit=#{limit} idempotence_key=#{idempotence_key}"
+  def move_wallet_balance(
+        %{} = from_account,
+        [_ | _] = to,
+        idempotence_key,
+        limit
+      ) do
+    amount = Bookkeeping.AccountModel.balance(from_account)
+    move_wallet_balance(from_account, to, idempotence_key, limit, amount)
+  end
+
+  def move_wallet_balance(
+        %{identifier: from},
+        [_ | _] = to,
+        idempotence_key,
+        limit,
+        amount
       )
-    end
+      when amount > 0 and amount < limit do
+    journal_message =
+      "Moved #{amount} from account #{Identifier.to_string(from)} to account #{Identifier.to_string(to)}"
+
+    create_payment_transaction(from, to, amount, idempotence_key, journal_message)
+  end
+
+  def move_wallet_balance(_, _, idempotence_key, limit, amount) do
+    Logger.info(
+      "Move wallet ballance skipped: amount=#{amount} limit=#{limit} idempotence_key=#{idempotence_key}"
+    )
   end
 
   def create_reward!(%Budget.Model{} = budget, amount, user, idempotence_key)

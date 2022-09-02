@@ -31,6 +31,14 @@ defmodule Systems.Bookkeeping.Context do
     |> Repo.one!()
   end
 
+  def get_account([_ | _] = identifier, preload \\ []) do
+    from(account in AccountModel,
+      where: account.identifier == ^identifier,
+      preload: ^preload
+    )
+    |> Repo.one()
+  end
+
   def get_entry(idempotence_key, preload \\ [:lines]) do
     from(entry in EntryModel,
       where: entry.idempotence_key == ^idempotence_key,
