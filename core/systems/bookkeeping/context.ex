@@ -16,6 +16,13 @@ defmodule Systems.Bookkeeping.Context do
     |> Repo.exists?()
   end
 
+  def account_exists?([_ | _] = identifier) do
+    from(account in AccountModel,
+      where: account.identifier == ^identifier
+    )
+    |> Repo.exists?()
+  end
+
   def get_account!([_ | _] = identifier, preload \\ []) do
     from(account in AccountModel,
       where: account.identifier == ^identifier,

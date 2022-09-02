@@ -8,6 +8,7 @@ defmodule Systems.Scholar.Context do
   alias Systems.{
     Org,
     Budget,
+    Bookkeeping,
     Pool,
     Scholar
   }
@@ -127,10 +128,12 @@ defmodule Systems.Scholar.Context do
   def migrate_wallet(%User{id: user_id} = user, %Pool.Model{target: target, name: name}) do
     wallet = ["wallet", name, "#{user_id}"]
     previous_wallet = get_previous_wallet(wallet)
-    migrate_wallets(user, previous_wallet, wallet, target)
+    migrate_wallet(user, previous_wallet, wallet, target)
   end
 
-  defp migrate_wallets(
+  defp migrate_wallet(_, nil, _, _), do: nil
+
+  defp migrate_wallet(
          %{id: user_id},
          [_, last_year_currency, _] = last_year_wallet,
          [_, current_year_currency, _] = current_year_wallet,
@@ -150,7 +153,13 @@ defmodule Systems.Scholar.Context do
   defp get_previous_wallet([type, currency_name, user_id]) do
     current_year = get_year(currency_name)
     last_year_currency_name = replace_year(currency_name, current_year - 1)
-    [type, last_year_currency_name, user_id]
+    wallet = [type, last_year_currency_name, user_id]
+
+    if Bookkeeping.Context.account_exists?(wallet) do
+      wallet
+    else
+      nil
+    end
   end
 
   defp get_year(currency_name) do

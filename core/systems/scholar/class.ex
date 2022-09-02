@@ -43,6 +43,4 @@ defmodule Systems.Scholar.Class do
       course -> course
     end
   end
-
-  def get_course(_class), do: raise("Could not find course for invalid class")
 end
