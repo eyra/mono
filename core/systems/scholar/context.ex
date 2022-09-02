@@ -1,4 +1,6 @@
 defmodule Systems.Scholar.Context do
+  require Logger
+
   alias Ecto.Multi
   alias Core.Repo
   alias Core.Accounts.User
@@ -208,6 +210,8 @@ defmodule Systems.Scholar.Context do
   end
 
   defp pool_name(class_code) do
+    Logger.warn("*** pool_name(#{class_code})")
+
     class_code
     |> Atom.to_string()
     |> Identifier.from_string(true)
