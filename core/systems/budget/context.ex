@@ -236,6 +236,18 @@ defmodule Systems.Budget.Context do
     )
   end
 
+  def wallet_is_passive?(%{
+        identifier: ["wallet", _, _],
+        balance_credit: balance_credit,
+        balance_debit: balance_debit
+      }) do
+    balance_credit > 0 and balance_credit == balance_debit
+  end
+
+  def wallet_is_active?(%{identifier: ["wallet", _, _]} = wallet) do
+    not wallet_is_passive?(wallet)
+  end
+
   def create_reward!(%Budget.Model{} = budget, amount, user, idempotence_key)
       when is_integer(amount) and is_binary(idempotence_key) do
     result = create_reward(budget, amount, user, idempotence_key)

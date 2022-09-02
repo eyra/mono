@@ -32,6 +32,7 @@ defmodule Link.Console do
 
     wallets =
       Budget.Context.list_wallets(user)
+      |> filter_wallets()
       |> Enum.map(&Pool.Builders.Wallet.view_model(&1, user, url_resolver(socket)))
 
     contributions =
@@ -59,6 +60,11 @@ defmodule Link.Console do
       )
 
     {:ok, socket}
+  end
+
+  defp filter_wallets(wallets) do
+    wallets
+    |> Enum.filter(&Budget.Context.wallet_is_active?(&1))
   end
 
   def handle_info({:handle_auto_save_done, _}, socket) do
