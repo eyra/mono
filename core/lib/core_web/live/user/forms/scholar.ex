@@ -42,17 +42,12 @@ defmodule CoreWeb.User.Forms.Scholar do
     current_year = Scholar.Context.academic_year()
     last_year = current_year - 1
 
-    wallets_last_year_finised =
-      user
-      |> Budget.Context.list_wallets()
-      |> Enum.filter(
-        &(is_year?(&1, last_year) and
-            finished?(&1))
-      )
+    courses_finised = courses_finised(user, last_year)
 
     classes =
-      classes(current_year)
-      |> Enum.filter(&(not member?(wallets_last_year_finised, &1, current_year)))
+      current_year
+      |> classes()
+      |> remove_finished(current_year, courses_finised)
 
     title = "VU SBE #{Scholar.Context.academic_year()}"
 
@@ -68,13 +63,29 @@ defmodule CoreWeb.User.Forms.Scholar do
     }
   end
 
-  defp member?([_ | _] = finished_wallets, class, current_year) do
+  defp courses_finised(user, year) do
+    user
+    |> Budget.Context.list_wallets()
+    |> Enum.filter(
+      &(is_year?(&1, year) and
+          finished?(&1))
+    )
+    |> Enum.map(&Scholar.Course.get_by_wallet(&1))
+  end
+
+  defp remove_finished(classes, current_year, courses_finised) do
+    classes
+    |> Enum.filter(&(not finished_last_year?(&1, current_year, courses_finised)))
+  end
+
+  defp finished_last_year?(class, current_year, [_ | _] = finished_courses) do
     course = Scholar.Class.get_course(class)
 
-    finished_wallets
-    |> Enum.map(&Scholar.Course.get_by_wallet(&1))
+    finished_courses
     |> Enum.find(&successor?(&1, course, current_year)) != nil
   end
+
+  defp finished_last_year?(_, _, _), do: false
 
   defp successor?(
          %{identifier: finished_currency} = _finished_course,
