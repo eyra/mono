@@ -14,7 +14,7 @@ defmodule Systems.Content.TextItemModel do
     timestamps()
   end
 
-  @fields ~w()a
+  @fields ~w(locale text text_plural)a
 
   def changeset(item, attrs) do
     item

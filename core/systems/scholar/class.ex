@@ -3,6 +3,8 @@ defmodule Systems.Scholar.Class do
     Defines study program using organisation nodes.
   """
 
+  alias Frameworks.Utility.Identifier
+
   alias Systems.{
     Content,
     Org
@@ -24,29 +26,23 @@ defmodule Systems.Scholar.Class do
   end
 
   def active?(code, active_codes)
-      when is_atom(code) and is_list(active_codes) do
+      when is_binary(code) and is_list(active_codes) do
     Enum.member?(active_codes, code)
   end
 
-  # Backwards compatible from old code format to new organisation node identifier (intentionally ugly code)
-  def identifier(:bk_1), do: ["vu", "sbe", "bk", ":year1", ":2021"]
-  def identifier(:bk_1_h), do: ["vu", "sbe", "bk", ":year1", ":resit", ":2021"]
-  def identifier(:bk_2), do: ["vu", "sbe", "bk", ":year2", ":2021"]
-  def identifier(:bk_2_h), do: ["vu", "sbe", "bk", ":year2", ":resit", ":2021"]
-  def identifier(:iba_1), do: ["vu", "sbe", "iba", ":year1", ":2021"]
-  def identifier(:iba_1_h), do: ["vu", "sbe", "iba", ":year1", ":resit", ":2021"]
-  def identifier(:iba_2), do: ["vu", "sbe", "iba", ":year2", ":2021"]
-  def identifier(:iba_2_h), do: ["vu", "sbe", "iba", ":year2", ":resit", ":2021"]
-  def identifier(code), do: raise("Unsupported study class code #{code}")
+  def active?(code, active_codes)
+      when is_atom(code) and is_list(active_codes) do
+    active?(Atom.to_string(code), active_codes)
+  end
 
-  def code(%Org.NodeModel{identifier: identifier}), do: code(identifier)
-  def code(["vu", "sbe", "bk", ":year1", ":2021"]), do: :bk_1
-  def code(["vu", "sbe", "bk", ":year1", ":resit", ":2021"]), do: :bk_1_h
-  def code(["vu", "sbe", "bk", ":year2", ":2021"]), do: :bk_2
-  def code(["vu", "sbe", "bk", ":year2", ":resit", ":2021"]), do: :bk_2_h
-  def code(["vu", "sbe", "iba", ":year1", ":2021"]), do: :iba_1
-  def code(["vu", "sbe", "iba", ":year1", ":resit", ":2021"]), do: :iba_1_h
-  def code(["vu", "sbe", "iba", ":year2", ":2021"]), do: :iba_2
-  def code(["vu", "sbe", "iba", ":year2", ":resit", ":2021"]), do: :iba_2_h
-  def code(identifier), do: raise("Unsupported org node identifier #{identifier}")
+  def code(identifier), do: Frameworks.Utility.Identifier.to_string(identifier)
+
+  def get_course(%{links: links, identifier: identifier}) do
+    case Enum.find(links, &(&1.type == :scholar_course)) do
+      nil -> raise "No course found for class #{Identifier.to_string(identifier)}"
+      course -> course
+    end
+  end
+
+  def get_course(_class), do: raise("Could not find course for invalid class")
 end

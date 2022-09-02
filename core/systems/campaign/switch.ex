@@ -9,15 +9,6 @@ defmodule Systems.Campaign.Switch do
   }
 
   @impl true
-  def dispatch(:scholar_class_updated, %{
-        user: user,
-        added_to: added_to_classes,
-        deleted_from: deleted_from_classes
-      }) do
-    Campaign.Context.update_pool_participations(user, added_to_classes, deleted_from_classes)
-  end
-
-  @impl true
   def dispatch(signal, %{director: :campaign} = object) do
     handle(signal, object)
   end

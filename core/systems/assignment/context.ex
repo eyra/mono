@@ -327,6 +327,8 @@ defmodule Systems.Assignment.Context do
     _activate_task(crew, member)
   end
 
+  def activate_task(%Assignment.Model{crew: crew}, %User{} = user), do: activate_task(crew, user)
+
   def activate_task(%Crew.Model{} = crew, %User{} = user) do
     if Crew.Context.member?(crew, user) do
       member = Crew.Context.get_member!(crew, user)

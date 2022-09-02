@@ -11,7 +11,8 @@ defmodule Systems.Budget.Context do
 
   alias Systems.{
     Budget,
-    Bookkeeping
+    Bookkeeping,
+    Content
   }
 
   defmodule BudgetError do
@@ -26,6 +27,8 @@ defmodule Systems.Budget.Context do
   def list_wallets(%Accounts.User{id: user_id}) do
     Bookkeeping.Context.list_accounts(["wallet", "#{user_id}"])
   end
+
+  def list_wallets(%Budget.Model{currency: currency}), do: list_wallets(currency)
 
   def list_wallets(%Budget.CurrencyModel{name: name}) do
     Bookkeeping.Context.list_accounts(["wallet", "#{name}"])
@@ -45,12 +48,12 @@ defmodule Systems.Budget.Context do
   end
 
   def get_by_currency!(%Budget.CurrencyModel{id: currency_id}, preload \\ []) do
-    Repo.get_by!(Budget.CurrencyModel, currency_id: currency_id)
+    Repo.get_by!(Budget.Model, currency_id: currency_id)
     |> Repo.preload(preload)
   end
 
-  def get_by_name!(name, preload \\ []) when is_binary(name) do
-    Repo.get_by!(Budget.Model, name: name)
+  def get_by_name(name, preload \\ []) when is_binary(name) do
+    Repo.get_by(Budget.Model, name: name)
     |> Repo.preload(preload)
   end
 
@@ -87,9 +90,13 @@ defmodule Systems.Budget.Context do
     |> Repo.one()
   end
 
-  def get_wallet_identifier(%Core.Accounts.User{id: user_id}, %Budget.CurrencyModel{
+  def get_wallet_identifier(%Core.Accounts.User{} = user, %Budget.CurrencyModel{
         name: currency_name
-      }) do
+      }),
+      do: get_wallet_identifier(user, currency_name)
+
+  def get_wallet_identifier(%Core.Accounts.User{id: user_id}, currency_name)
+      when is_binary(currency_name) do
     {:wallet, currency_name, user_id}
   end
 
@@ -106,9 +113,99 @@ defmodule Systems.Budget.Context do
     |> cast_assoc(:reserve)
   end
 
+  def create!(%Budget.CurrencyModel{} = currency) do
+    case create(currency) do
+      {:ok, %{budget: budget}} -> budget
+      _ -> nil
+    end
+  end
+
+  def create(%Budget.CurrencyModel{name: name} = currency) do
+    Multi.new()
+    |> Multi.run(:fund, fn _, _ ->
+      {:ok, create_fund!(currency)}
+    end)
+    |> Multi.run(:reserve, fn _, _ ->
+      {:ok, create_reserve!(currency)}
+    end)
+    |> Multi.run(:auth_node, fn _, _ ->
+      {:ok, Core.Authorization.make_node()}
+    end)
+    |> Multi.run(:org, fn _, %{fund: fund, reserve: reserve, auth_node: auth_node} ->
+      {
+        :ok,
+        %Budget.Model{}
+        |> Budget.Model.changeset(%{name: name})
+        |> put_assoc(:currency, currency)
+        |> put_assoc(:fund, fund)
+        |> put_assoc(:reserve, reserve)
+        |> put_assoc(:auth_node, auth_node)
+        |> Repo.insert!()
+      }
+    end)
+    |> Repo.transaction()
+  end
+
   def create(name) when is_binary(name) do
     prepare(name)
     |> Repo.insert!()
+  end
+
+  def create_fund!(%Budget.CurrencyModel{name: name}) do
+    Bookkeeping.Context.create_account!({"fund", name})
+  end
+
+  def create_reserve!(%Budget.CurrencyModel{name: name}) do
+    Bookkeeping.Context.create_account!({"reserve", name})
+  end
+
+  def create_currency!(name, decimal_scale, label) do
+    case create_currency(name, decimal_scale, label) do
+      {:ok, %{currency: currency}} -> currency
+      _ -> nil
+    end
+  end
+
+  def create_currency(name, decimal_scale, label) do
+    attrs = %{name: name, decimal_scale: decimal_scale}
+
+    Multi.new()
+    |> Multi.run(:label, fn _, _ ->
+      {:ok, %{bundle: bundle}} = Content.Context.create_text_bundle(label)
+      {:ok, bundle}
+    end)
+    |> Multi.run(:currency, fn _, %{label: label_bundle} ->
+      {
+        :ok,
+        %Budget.CurrencyModel{}
+        |> Budget.CurrencyModel.changeset(attrs)
+        |> put_assoc(:label_bundle, label_bundle)
+        |> Repo.insert!()
+      }
+    end)
+    |> Repo.transaction()
+  end
+
+  def move_wallet_balance(
+        [_ | _] = from_identifier,
+        [_ | _] = to_identifier,
+        idempotence_key,
+        limit
+      )
+      when is_integer(limit) do
+    %{id: from_id} = from = Bookkeeping.Context.get_account!(from_identifier)
+    %{id: to_id} = to = Bookkeeping.Context.get_account!(to_identifier)
+
+    amount = Bookkeeping.AccountModel.balance(from)
+
+    if amount > 0 and amount < limit do
+      journal_message = "Moved #{amount} from account #{from_id} to account #{to_id}"
+      create_payment_transaction(from, to, amount, idempotence_key, journal_message)
+    else
+      Logger.info(
+        "Move wallet ballance skipped: amount=#{amount} limit=#{limit} idempotence_key=#{idempotence_key}"
+      )
+    end
   end
 
   def create_reward!(%Budget.Model{} = budget, amount, user, idempotence_key)
@@ -146,6 +243,45 @@ defmodule Systems.Budget.Context do
       nil -> raise BudgetError, "No reward available to payout"
       reward -> make_payment(reward)
     end
+  end
+
+  def multiply_rewards(currency_name, multiplier) when is_binary(currency_name) do
+    currency_name
+    |> Budget.Context.get_currency_by_name()
+    |> multiply_rewards(multiplier)
+  end
+
+  def multiply_rewards(%Budget.CurrencyModel{} = currency, multiplier) do
+    currency
+    |> Budget.Context.get_by_currency!(Budget.Model.preload_graph(:full))
+    |> multiply_rewards(multiplier)
+  end
+
+  def multiply_rewards(%Budget.Model{} = budget, multiplier) when multiplier > 1 do
+    Budget.Context.list_wallets(budget)
+    |> Enum.map(&multiply_reward(&1, budget, multiplier))
+  end
+
+  def multiply_rewards(_, multiplier), do: raise("Attempt to multiply rewards by #{multiplier}")
+
+  defp multiply_reward(
+         %Bookkeeping.AccountModel{
+           balance_credit: balance_credit,
+           identifier: ["wallet", currency_name, user_id]
+         },
+         %Budget.Model{} = budget,
+         multiplier
+       )
+       when multiplier > 1 do
+    user =
+      String.to_integer(user_id)
+      |> Core.Accounts.get_user!()
+
+    reward_amount = balance_credit * (multiplier - 1)
+    idempotence_key = "multiplier=#{multiplier},currency=#{currency_name},user=#{user_id}"
+
+    Budget.Context.create_reward(budget, reward_amount, user, idempotence_key)
+    Budget.Context.payout_reward(idempotence_key)
   end
 
   defp upsert_reward(

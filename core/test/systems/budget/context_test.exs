@@ -168,8 +168,23 @@ defmodule Systems.Budget.ContextTest do
 
     student = Factories.insert!(:member, %{student: true})
 
-    deposit = create_entry(fund, reserve, amount, deposit_idempotence_key, "test_rollback_reward")
-    payment = create_entry(fund, reserve, amount, payment_idempotence_key, "test_rollback_reward")
+    deposit =
+      Bookkeeping.Factories.create_entry(
+        fund,
+        reserve,
+        amount,
+        deposit_idempotence_key,
+        "test_rollback_reward"
+      )
+
+    payment =
+      Bookkeeping.Factories.create_entry(
+        fund,
+        reserve,
+        amount,
+        payment_idempotence_key,
+        "test_rollback_reward"
+      )
 
     reward =
       Factories.insert!(:reward, %{
@@ -193,7 +208,14 @@ defmodule Systems.Budget.ContextTest do
     reward_idempotence_key = "1"
     deposit_idempotence_key = "idempotence_key_deposit"
 
-    deposit = create_entry(fund, reserve, amount, deposit_idempotence_key, "test_payout_reward")
+    deposit =
+      Bookkeeping.Factories.create_entry(
+        fund,
+        reserve,
+        amount,
+        deposit_idempotence_key,
+        "test_payout_reward"
+      )
 
     %{id: student_id} = student = Factories.insert!(:member, %{student: true})
 
@@ -294,10 +316,25 @@ defmodule Systems.Budget.ContextTest do
     payment_idempotence_key = "1,type=payment"
 
     student = Factories.insert!(:member, %{student: true})
-    wallet = create_wallet(student, currency)
+    wallet = Budget.Factories.create_wallet(student, currency)
 
-    deposit = create_entry(fund, reserve, amount, deposit_idempotence_key, "test_payout_reward")
-    payment = create_entry(reserve, wallet, amount, payment_idempotence_key, "test_payout_reward")
+    deposit =
+      Bookkeeping.Factories.create_entry(
+        fund,
+        reserve,
+        amount,
+        deposit_idempotence_key,
+        "test_payout_reward"
+      )
+
+    payment =
+      Bookkeeping.Factories.create_entry(
+        reserve,
+        wallet,
+        amount,
+        payment_idempotence_key,
+        "test_payout_reward"
+      )
 
     Factories.insert!(:reward, %{
       idempotence_key: reward_idempotence_key,
@@ -313,24 +350,136 @@ defmodule Systems.Budget.ContextTest do
              Budget.Context.payout_reward(reward_idempotence_key)
   end
 
-  defp create_wallet(%Core.Accounts.User{id: user_id}, %Budget.CurrencyModel{name: currency_name}) do
-    Factories.insert!(:book_account, %{
-      identifier: ["wallet", currency_name, "#{user_id}"],
-      balance_debit: 0,
-      balance_credit: 0
-    })
-  end
-
-  defp create_entry(from, to, amount, idempotence_key, journal_message) do
-    entry =
-      Factories.insert!(:book_entry, %{
-        idempotence_key: idempotence_key,
-        journal_message: journal_message
+  test "move_wallet_balance/4 succeeded" do
+    a_b_c_2021 =
+      Core.Factories.insert!(:book_account, %{
+        identifier: ["wallet", "a_b_c_2021", "1"],
+        balance_credit: 10_000,
+        balance_debit: 5000
       })
 
-    Factories.insert!(:book_line, %{account: from, entry: entry, debit: amount, credit: 0})
-    Factories.insert!(:book_line, %{account: to, entry: entry, debit: 0, credit: amount})
+    a_b_c_2022 =
+      Core.Factories.insert!(:book_account, %{
+        identifier: ["wallet", "a_b_c_2022", "1"],
+        balance_credit: 0,
+        balance_debit: 0
+      })
 
-    Bookkeeping.Context.get_entry(idempotence_key, lines: [:account])
+    Budget.Context.move_wallet_balance(
+      a_b_c_2021.identifier,
+      a_b_c_2022.identifier,
+      "idempotency_key",
+      5001
+    )
+
+    assert %{
+             balance_credit: 10_000,
+             balance_debit: 10_000
+           } = Bookkeeping.Context.get_account!(["wallet", "a_b_c_2021", "1"])
+
+    assert %{
+             balance_credit: 5000,
+             balance_debit: 0
+           } = Bookkeeping.Context.get_account!(["wallet", "a_b_c_2022", "1"])
+  end
+
+  test "move_wallet_balance/4 skipped: exceeding limit" do
+    a_b_c_2021 =
+      Core.Factories.insert!(:book_account, %{
+        identifier: ["wallet", "a_b_c_2021", "1"],
+        balance_credit: 10_000,
+        balance_debit: 5000
+      })
+
+    a_b_c_2022 =
+      Core.Factories.insert!(:book_account, %{
+        identifier: ["wallet", "a_b_c_2022", "1"],
+        balance_credit: 0,
+        balance_debit: 0
+      })
+
+    Budget.Context.move_wallet_balance(
+      a_b_c_2021.identifier,
+      a_b_c_2022.identifier,
+      "idempotency_key",
+      5000
+    )
+
+    assert %{
+             balance_credit: 10_000,
+             balance_debit: 5000
+           } = Bookkeeping.Context.get_account!(["wallet", "a_b_c_2021", "1"])
+
+    assert %{
+             balance_credit: 0,
+             balance_debit: 0
+           } = Bookkeeping.Context.get_account!(["wallet", "a_b_c_2022", "1"])
+  end
+
+  test "multiply_rewards/2 succeeds", %{
+    budget: %{fund: fund, reserve: reserve} = budget
+  } do
+    amount = 3500
+    multiplier = 10
+    expected_mount = amount * (multiplier - 1)
+
+    reserve_debit = 0
+    expected_reserve_debit = reserve_debit + 2 * expected_mount
+
+    fund_debit = 12_000
+    expected_fund_debit = fund_debit + 2 * expected_mount
+
+    expected_wallet_credit = amount * multiplier
+
+    student1 = Factories.insert!(:member, %{student: true})
+    student2 = Factories.insert!(:member, %{student: true})
+
+    Factories.insert!(:reward, %{
+      idempotence_key: "student=1",
+      amount: amount,
+      attempt: 0,
+      user: student1,
+      budget: budget
+    })
+
+    Factories.insert!(:reward, %{
+      idempotence_key: "student=2",
+      amount: amount,
+      attempt: 0,
+      user: student2,
+      budget: budget
+    })
+
+    Budget.Context.payout_reward("student=1")
+    Budget.Context.payout_reward("student=2")
+
+    assert %{debit: ^reserve_debit} = Bookkeeping.Context.balance(reserve)
+    assert %{debit: ^fund_debit} = Bookkeeping.Context.balance(fund)
+
+    assert [
+             %{balance_credit: ^amount},
+             %{balance_credit: ^amount}
+           ] = Budget.Context.list_wallets(budget)
+
+    assert [
+             ok: %{
+               reward: %{
+                 amount: ^expected_mount
+               }
+             },
+             ok: %{
+               reward: %{
+                 amount: ^expected_mount
+               }
+             }
+           ] = Budget.Context.multiply_rewards(budget, 10)
+
+    assert %{debit: ^expected_reserve_debit} = Bookkeeping.Context.balance(reserve)
+    assert %{debit: ^expected_fund_debit} = Bookkeeping.Context.balance(fund)
+
+    assert [
+             %{balance_credit: ^expected_wallet_credit},
+             %{balance_credit: ^expected_wallet_credit}
+           ] = Budget.Context.list_wallets(budget)
   end
 end

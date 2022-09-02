@@ -17,9 +17,13 @@ defmodule Link.Debug do
   alias Frameworks.Pixel.Text.Title2
 
   alias Systems.{
-    Campaign
+    Campaign,
+    Budget,
+    Scholar
   }
 
+  data(multiply_rewards_button, :map)
+  data(generate_vu_2022_button, :map)
   data(import_rewards_button, :map)
   data(sync_rewards_button, :map)
   data(expire_button, :map)
@@ -47,6 +51,28 @@ defmodule Link.Debug do
       face: %{
         type: :primary,
         label: "Mark expired tasks"
+      }
+    }
+
+    multiply_rewards_button = %{
+      action: %{
+        type: :send,
+        event: "multiply_rewards_year2_2021"
+      },
+      face: %{
+        type: :primary,
+        label: "Multiply rewards year2 2021 x 10"
+      }
+    }
+
+    generate_vu_2022_button = %{
+      action: %{
+        type: :send,
+        event: "generate_vu_2022"
+      },
+      face: %{
+        type: :primary,
+        label: "Generate VU Academic Year 2022"
       }
     }
 
@@ -87,6 +113,8 @@ defmodule Link.Debug do
       :ok,
       socket
       |> assign(
+        multiply_rewards_button: multiply_rewards_button,
+        generate_vu_2022_button: generate_vu_2022_button,
         import_rewards_button: import_rewards_button,
         sync_rewards_button: sync_rewards_button,
         start_button: start_button,
@@ -108,6 +136,27 @@ defmodule Link.Debug do
   def handle_event("expire", _, socket) do
     Campaign.Context.mark_expired_debug()
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("generate_vu_2022", _, socket) do
+    Scholar.Context.generate_vu(2022, 1, "1st", "1e", 60)
+    Scholar.Context.generate_vu(2022, 2, "2nd", "2e", 30)
+
+    {
+      :noreply,
+      socket
+    }
+  end
+
+  @impl true
+  def handle_event("multiply_rewards_year2_2021", _, socket) do
+    Budget.Context.multiply_rewards("vu_sbe_rpr_year2_2021", 10)
+
+    {
+      :noreply,
+      socket
+    }
   end
 
   @impl true
@@ -154,6 +203,18 @@ defmodule Link.Debug do
       <MarginY id={:page_top} />
       <ContentArea>
         <MarginY id={:page_top} />
+        <Title2 margin="">VU</Title2>
+        <Spacing value="S" />
+        <Wrap>
+          <DynamicButton vm={@multiply_rewards_button} />
+          <Spacing value="S" />
+        </Wrap>
+        <Wrap>
+          <DynamicButton vm={@generate_vu_2022_button} />
+          <Spacing value="S" />
+        </Wrap>
+        <Spacing value="XL" />
+
         <Title2 margin="">Book keeping</Title2>
         <Spacing value="S" />
         <Wrap>

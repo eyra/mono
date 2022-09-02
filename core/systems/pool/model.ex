@@ -29,6 +29,13 @@ defmodule Systems.Pool.Model do
     timestamps()
   end
 
+  @fields ~w(name target)a
+
+  def changeset(pool, attrs) do
+    pool
+    |> cast(attrs, @fields)
+  end
+
   def preload_graph(:full),
     do:
       preload_graph([

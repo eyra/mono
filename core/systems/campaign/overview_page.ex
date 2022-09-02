@@ -27,7 +27,8 @@ defmodule Systems.Campaign.OverviewPage do
     Campaign,
     Assignment,
     Pool,
-    Budget
+    Budget,
+    Scholar
   }
 
   def mount(_params, _session, socket) do
@@ -210,9 +211,12 @@ defmodule Systems.Campaign.OverviewPage do
   defp create_campaign(%{assigns: %{current_user: user}} = _socket, tool_type) do
     title = dgettext("eyra-dashboard", "default.study.title")
 
-    # FIXME POOL
-    pool = Pool.Context.get_by_name!(:vu_sbe_rpr_year1_2021)
-    budget = Budget.Context.get_by_name!(pool.name)
+    %{name: pool_name} =
+      pool =
+      Scholar.Context.default_pool()
+      |> Pool.Context.get_by_name()
+
+    budget = Budget.Context.get_by_name(pool_name)
 
     Campaign.Assembly.create(user, title, tool_type, pool, budget)
   end

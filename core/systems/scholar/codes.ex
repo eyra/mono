@@ -5,7 +5,6 @@ defmodule Systems.Scholar.Codes do
 
   alias Systems.{
     Org,
-    Scholar,
     Content
   }
 
@@ -110,11 +109,12 @@ defmodule Systems.Scholar.Codes do
     Gettext.dgettext(CoreWeb.Gettext, "eyra-enums", "study_pogram_codes.#{value}")
   end
 
-  def text(code) do
+  def text(code) when is_atom(code) do
     locale = Gettext.get_locale(CoreWeb.Gettext)
 
     code
-    |> Scholar.Class.identifier()
+    |> Atom.to_string()
+    |> Frameworks.Utility.Identifier.from_string(true)
     |> Org.Context.get_node!(short_name_bundle: Content.TextBundleModel.preload_graph(:full))
     |> Map.get(:short_name_bundle)
     |> Content.TextBundleModel.text(locale)

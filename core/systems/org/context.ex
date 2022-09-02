@@ -3,10 +3,23 @@ defmodule Systems.Org.Context do
 
   alias Core.Repo
   alias Core.Accounts.User
+  alias Ecto.Multi
 
   use Systems.{
     Org.Internals
   }
+
+  alias Systems.{
+    Content
+  }
+
+  def get_node([_ | _] = identifier, preload \\ []) do
+    from(node in Node,
+      where: node.identifier == ^identifier,
+      preload: ^preload
+    )
+    |> Repo.one()
+  end
 
   def get_node!(id, preload \\ [])
 
@@ -23,6 +36,38 @@ defmodule Systems.Org.Context do
     |> Repo.get!(id)
   end
 
+  def create_node!(type, identifier, short_name, full_name) do
+    case create_node(type, identifier, short_name, full_name) do
+      {:ok, %{org: org}} -> org
+      _ -> nil
+    end
+  end
+
+  def create_node(type, identifier, short_name, full_name) do
+    Multi.new()
+    |> Multi.run(:short_name, fn _, _ ->
+      {:ok, %{bundle: bundle}} = Content.Context.create_text_bundle(short_name)
+      {:ok, bundle}
+    end)
+    |> Multi.run(:full_name, fn _, _ ->
+      {:ok, %{bundle: bundle}} = Content.Context.create_text_bundle(full_name)
+      {:ok, bundle}
+    end)
+    |> Multi.run(:org, fn _, %{short_name: short_name, full_name: full_name} ->
+      {
+        :ok,
+        %{
+          type: type,
+          identifier: identifier,
+          short_name_bundle: short_name,
+          full_name_bundle: full_name
+        }
+        |> Org.Context.create_node!()
+      }
+    end)
+    |> Repo.transaction()
+  end
+
   def create_node!(%{} = attrs) do
     {short_name_bundle, attrs} = Map.pop(attrs, :short_name_bundle, nil)
     {full_name_bundle, attrs} = Map.pop(attrs, :full_name_bundle, nil)
@@ -32,6 +77,15 @@ defmodule Systems.Org.Context do
     |> Ecto.Changeset.put_assoc(:short_name_bundle, short_name_bundle)
     |> Ecto.Changeset.put_assoc(:full_name_bundle, full_name_bundle)
     |> Repo.insert!()
+  end
+
+  def get_link(%Node{id: from_id}, %Node{id: to_id}, preload \\ []) do
+    from(link in Link,
+      where: link.from_id == ^from_id,
+      where: link.to_id == ^to_id,
+      preload: ^preload
+    )
+    |> Repo.one()
   end
 
   def create_link!(%Node{} = from, %Node{} = to) do

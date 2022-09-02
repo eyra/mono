@@ -7,7 +7,6 @@ defmodule Systems.Campaign.Context do
   alias Core.Repo
   alias Core.Accounts.User
   alias Core.Authorization
-  alias Ecto.Multi
 
   alias Frameworks.GreenLight.Principal
   alias Frameworks.Signal
@@ -20,9 +19,7 @@ defmodule Systems.Campaign.Context do
     Crew,
     Budget,
     Bookkeeping,
-    Pool,
-    Org,
-    Scholar
+    Pool
   }
 
   def get!(id, preload \\ []) do
@@ -333,7 +330,7 @@ defmodule Systems.Campaign.Context do
           }
         ]
       }) do
-    budget = Budget.Context.get_by_name!(currency_name)
+    budget = Budget.Context.get_by_name(currency_name)
     Assignment.Context.update(assignment, budget)
   end
 
@@ -632,44 +629,4 @@ defmodule Systems.Campaign.Context do
   defp import_idempotence_key(session_key, user_id) do
     "import=#{session_key},user=#{user_id}"
   end
-
-  # Consider moving logic to Pool.Context
-  def update_pool_participations(user, added_to_classes, deleted_from_classes) do
-    Multi.new()
-    |> Multi.run(:add, fn _, _ ->
-      added_to_classes
-      |> update_pools(user, :add)
-
-      {:ok, true}
-    end)
-    |> Multi.run(:delete, fn _, _ ->
-      deleted_from_classes
-      |> update_pools(user, :delete)
-
-      {:ok, true}
-    end)
-    |> Repo.transaction()
-  end
-
-  defp update_pools([[_ | _] | _] = class_nodes, user, command) do
-    class_nodes
-    |> Enum.each(&update_pools(&1, user, command))
-
-    class_nodes
-  end
-
-  defp update_pools([_ | _] = class_node_identifier, user, command) do
-    %{links: links} = Org.Context.get_node!(class_node_identifier, [:links])
-
-    links
-    |> Enum.filter(&(&1.type == :scholar_course))
-    |> Enum.map(&Scholar.Course.pool_name(&1))
-    |> Pool.Context.get_by_names()
-    |> Enum.map(&update_pool(&1, user, command))
-  end
-
-  defp update_pools(_, _, _), do: nil
-
-  defp update_pool(pool, user, :add), do: Pool.Context.link!(pool, user)
-  defp update_pool(pool, user, :delete), do: Pool.Context.unlink!(pool, user)
 end

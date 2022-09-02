@@ -16,6 +16,14 @@ defmodule Systems.Bookkeeping.Context do
     |> Repo.exists?()
   end
 
+  def get_account!([_ | _] = identifier, preload \\ []) do
+    from(account in AccountModel,
+      where: account.identifier == ^identifier,
+      preload: ^preload
+    )
+    |> Repo.one!()
+  end
+
   def get_entry(idempotence_key, preload \\ [:lines]) do
     from(entry in EntryModel,
       where: entry.idempotence_key == ^idempotence_key,
@@ -79,6 +87,15 @@ defmodule Systems.Bookkeeping.Context do
       where: fragment("?::text[] @> ?", account.identifier, ^account_template)
     )
     |> Repo.all()
+  end
+
+  def create_account!(account) do
+    %AccountModel{
+      identifier: to_identifier(account),
+      balance_debit: 0,
+      balance_credit: 0
+    }
+    |> Repo.insert!()
   end
 
   defp update_records(multi, %{lines: lines} = entry) do
@@ -160,6 +177,8 @@ defmodule Systems.Bookkeeping.Context do
       on_conflict: [inc: [balance_debit: debit, balance_credit: credit]]
     )
   end
+
+  def to_identifier(%AccountModel{identifier: identifier}), do: identifier
 
   def to_identifier({type, subtype, id}) when is_binary(subtype) and is_integer(id) do
     to_identifier([type, subtype, id])

@@ -43,7 +43,7 @@ defmodule Systems.Pool.SubmissionPoolView do
       Scholar.Context.course_patterns(user)
       |> Scholar.Context.list_courses()
       |> Enum.map(&Scholar.Course.pool_name(&1))
-      |> Enum.map(&Pool.Context.get_by_name!(&1, Pool.Model.preload_graph([:org])))
+      |> Enum.map(&Pool.Context.get_by_name(&1, Pool.Model.preload_graph([:org])))
       |> Pool.Model.labels(active_pool)
 
     {

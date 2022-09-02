@@ -249,8 +249,8 @@ defmodule Core.Factories do
   end
 
   def build(:org_link, %{} = attributes) do
-    {from, attributes} = Map.pop(attributes, :from, build(:org))
-    {to, attributes} = Map.pop(attributes, :to, build(:org))
+    {from, attributes} = Map.pop(attributes, :from, build(:org_node))
+    {to, attributes} = Map.pop(attributes, :to, build(:org_node))
 
     %Org.LinkModel{
       from: from,

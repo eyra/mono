@@ -1,4 +1,8 @@
 defmodule Systems.Budget.Factories do
+  alias Systems.{
+    Budget
+  }
+
   def create_currency(name, sign, decimal_scale) do
     label_bundle = Core.Factories.insert!(:text_bundle, %{})
 
@@ -58,6 +62,14 @@ defmodule Systems.Budget.Factories do
       user: user,
       budget: budget,
       idempotence_key: idempotence_key
+    })
+  end
+
+  def create_wallet(%Core.Accounts.User{id: user_id}, %Budget.CurrencyModel{name: currency_name}) do
+    Core.Factories.insert!(:book_account, %{
+      identifier: ["wallet", currency_name, "#{user_id}"],
+      balance_debit: 0,
+      balance_credit: 0
     })
   end
 end

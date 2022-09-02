@@ -13,6 +13,15 @@ defmodule Systems.Budget.CurrencyModel do
     timestamps()
   end
 
+  @fields ~w(name decimal_scale)a
+  @required_fields @fields
+
+  def changeset(pool, attrs) do
+    pool
+    |> cast(attrs, @fields)
+    |> validate_required(@required_fields)
+  end
+
   def preload_graph(:full), do: preload_graph([:label_bundle])
 
   def preload_graph(:label_bundle),

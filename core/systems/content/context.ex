@@ -2,6 +2,7 @@ defmodule Systems.Content.Context do
   import Ecto.Query, warn: false
 
   alias Core.Repo
+  alias Ecto.Multi
 
   alias Systems.Content.TextItemModel, as: TextItem
   alias Systems.Content.TextBundleModel, as: TextBundle
@@ -23,9 +24,33 @@ defmodule Systems.Content.Context do
     |> Repo.insert!()
   end
 
-  def create_text_bundle!(attrs \\ %{}) do
+  def create_text_bundle!() do
     %TextBundle{}
-    |> TextBundle.changeset(attrs)
+    |> TextBundle.changeset(%{})
     |> Repo.insert!()
   end
+
+  def create_text_bundle([_ | _] = items) do
+    Multi.new()
+    |> Multi.run(:bundle, fn _, _ ->
+      {
+        :ok,
+        create_text_bundle!()
+      }
+    end)
+    |> Multi.run(:items, fn _, %{bundle: bundle} ->
+      {
+        :ok,
+        items
+        |> Enum.map(&translate_item(&1))
+        |> Enum.map(&create_text_item!(&1, bundle))
+      }
+    end)
+    |> Repo.transaction()
+  end
+
+  defp translate_item({locale, text}), do: %{locale: Atom.to_string(locale), text: text}
+
+  defp translate_item({locale, single, plural}),
+    do: %{locale: Atom.to_string(locale), text: single, text_plural: plural}
 end

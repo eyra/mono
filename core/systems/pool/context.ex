@@ -42,6 +42,7 @@ defmodule Systems.Pool.Context do
       inner_join: o in Org.NodeModel,
       on: o.id == p.org_id,
       where: o.id in ^orgs,
+      order_by: [desc: p.inserted_at],
       preload: ^preload
     )
     |> Repo.all()
@@ -84,13 +85,13 @@ defmodule Systems.Pool.Context do
   def get!(id, preload \\ []), do: Repo.get!(Pool.Model, id) |> Repo.preload(preload)
   def get(id, preload \\ []), do: Repo.get(Pool.Model, id) |> Repo.preload(preload)
 
-  def get_by_name!(name, preload \\ [])
+  def get_by_name(name, preload \\ [])
 
-  def get_by_name!(name, preload) when is_atom(name),
-    do: get_by_name!(Atom.to_string(name), preload)
+  def get_by_name(name, preload) when is_atom(name),
+    do: get_by_name(Atom.to_string(name), preload)
 
-  def get_by_name!(name, preload) do
-    Repo.get_by!(Pool.Model, name: name)
+  def get_by_name(name, preload) do
+    Repo.get_by(Pool.Model, name: name)
     |> Repo.preload(preload)
   end
 
@@ -141,8 +142,11 @@ defmodule Systems.Pool.Context do
     |> Repo.get!(id)
   end
 
-  def create(name) do
-    %Pool.Model{name: name}
+  def create!(name, target, currency, org) do
+    %Pool.Model{}
+    |> Pool.Model.changeset(%{name: name, target: target})
+    |> Ecto.Changeset.put_assoc(:currency, currency)
+    |> Ecto.Changeset.put_assoc(:org, org)
     |> Repo.insert!()
   end
 
@@ -352,4 +356,32 @@ defmodule Systems.Pool.Context do
       end
     end
   end
+
+  def update_pool_participations(user, added_to_pools, deleted_from_pools) do
+    Multi.new()
+    |> Multi.run(:add, fn _, _ ->
+      added_to_pools
+      |> update_pools(user, :add)
+
+      {:ok, true}
+    end)
+    |> Multi.run(:delete, fn _, _ ->
+      deleted_from_pools
+      |> update_pools(user, :delete)
+
+      {:ok, true}
+    end)
+    |> Repo.transaction()
+  end
+
+  defp update_pools([_ | _] = pool_names, user, command) do
+    pool_names
+    |> get_by_names()
+    |> Enum.map(&update_pool(&1, user, command))
+  end
+
+  defp update_pools(_, _, _), do: nil
+
+  defp update_pool(pool, user, :add), do: link!(pool, user)
+  defp update_pool(pool, user, :delete), do: unlink!(pool, user)
 end

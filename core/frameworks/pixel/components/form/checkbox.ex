@@ -64,7 +64,7 @@ defmodule Frameworks.Pixel.Form.Checkbox do
             %{"checkbox" => checkbox},
             %{assigns: %{entity: entity}} = socket
           ) do
-        field = String.to_existing_atom(checkbox)
+        field = String.to_atom(checkbox)
 
         new_value =
           case Map.get(entity, field) do

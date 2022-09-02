@@ -5,7 +5,6 @@ defmodule Systems.Campaign.ContextTest do
     alias Systems.{
       Campaign,
       Crew,
-      Pool,
       Bookkeeping,
       Budget
     }
@@ -376,96 +375,6 @@ defmodule Systems.Campaign.ContextTest do
 
       assert %{credit: 4, debit: 0} =
                Bookkeeping.Context.balance({:wallet, "fake_currency", student2.id})
-    end
-
-    test "update_pool_participations/3 add", %{user: %{id: user_id} = user} do
-      iba_1 = ["vu", "sbe", "iba", ":year1", ":2021"]
-      Campaign.Context.update_pool_participations(user, [iba_1], [])
-
-      assert %{
-               participants: [%{id: ^user_id}]
-             } = Pool.Context.get_by_name!("vu_sbe_rpr_year1_2021", [:participants])
-
-      assert %{
-               participants: []
-             } = Pool.Context.get_by_name!("vu_sbe_rpr_year2_2021", [:participants])
-    end
-
-    test "update_pool_participations/3 add 2 for 1 pool", %{user: %{id: user_id} = user} do
-      iba_1 = ["vu", "sbe", "iba", ":year1", ":2021"]
-      bk_1_h = ["vu", "sbe", "bk", ":year1", ":resit", ":2021"]
-
-      Campaign.Context.update_pool_participations(user, [iba_1, bk_1_h], [])
-
-      assert %{
-               participants: [%{id: ^user_id}]
-             } = Pool.Context.get_by_name!("vu_sbe_rpr_year1_2021", [:participants])
-
-      assert %{
-               participants: []
-             } = Pool.Context.get_by_name!("vu_sbe_rpr_year2_2021", [:participants])
-    end
-
-    test "update_pool_participations/3 add 2 for 2 pools", %{user: %{id: user_id} = user} do
-      iba_1 = ["vu", "sbe", "iba", ":year1", ":2021"]
-      bk_2_h = ["vu", "sbe", "bk", ":year2", ":resit", ":2021"]
-
-      Campaign.Context.update_pool_participations(user, [iba_1, bk_2_h], [])
-
-      assert %{
-               participants: [%{id: ^user_id}]
-             } = Pool.Context.get_by_name!("vu_sbe_rpr_year1_2021", [:participants])
-
-      assert %{
-               participants: [%{id: ^user_id}]
-             } = Pool.Context.get_by_name!("vu_sbe_rpr_year2_2021", [:participants])
-    end
-
-    test "update_pool_participations/3 remove 1 for 1 pools", %{user: user} do
-      iba_1 = ["vu", "sbe", "iba", ":year1", ":2021"]
-
-      Campaign.Context.update_pool_participations(user, [iba_1], [])
-      Campaign.Context.update_pool_participations(user, [], [iba_1])
-
-      assert %{
-               participants: []
-             } = Pool.Context.get_by_name!("vu_sbe_rpr_year1_2021", [:participants])
-
-      assert %{
-               participants: []
-             } = Pool.Context.get_by_name!("vu_sbe_rpr_year2_2021", [:participants])
-    end
-
-    test "update_pool_participations/3 remove 2 for 1 pools", %{user: user} do
-      iba_1 = ["vu", "sbe", "iba", ":year1", ":2021"]
-      bk_1_h = ["vu", "sbe", "bk", ":year1", ":resit", ":2021"]
-
-      Campaign.Context.update_pool_participations(user, [iba_1, bk_1_h], [])
-      Campaign.Context.update_pool_participations(user, [], [iba_1, bk_1_h])
-
-      assert %{
-               participants: []
-             } = Pool.Context.get_by_name!("vu_sbe_rpr_year1_2021", [:participants])
-
-      assert %{
-               participants: []
-             } = Pool.Context.get_by_name!("vu_sbe_rpr_year2_2021", [:participants])
-    end
-
-    test "update_pool_participations/3 remove 2 for 2 pools", %{user: user} do
-      iba_1 = ["vu", "sbe", "iba", ":year1", ":2021"]
-      bk_2_h = ["vu", "sbe", "bk", ":year2", ":resit", ":2021"]
-
-      Campaign.Context.update_pool_participations(user, [iba_1, bk_2_h], [])
-      Campaign.Context.update_pool_participations(user, [], [iba_1, bk_2_h])
-
-      assert %{
-               participants: []
-             } = Pool.Context.get_by_name!("vu_sbe_rpr_year1_2021", [:participants])
-
-      assert %{
-               participants: []
-             } = Pool.Context.get_by_name!("vu_sbe_rpr_year2_2021", [:participants])
     end
 
     defp create_campaign(status, budget, schedule_start \\ nil, schedule_end \\ nil) do
