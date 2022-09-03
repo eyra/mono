@@ -189,6 +189,10 @@ defmodule Core.Repo.Migrations.RefactorPoolsPart2 do
     study_program_codes =
       query_field(:user_features, :study_program_codes, "user_id = #{user_id}")
 
+    migrate_student(user_id, study_program_codes)
+  end
+
+  defp migrate_student(user_id, [_ | _] = study_program_codes) do
     study_program_codes
     |> get_years()
     |> get_pool_names()
@@ -199,6 +203,8 @@ defmodule Core.Repo.Migrations.RefactorPoolsPart2 do
 
     flush()
   end
+
+  defp migrate_student(_, _), do: nil
 
   defp migrate_submissions() do
     if exist?(:pools, "name = '#{@old_sbe_pool}'") do
