@@ -92,7 +92,7 @@ defmodule Systems.Pool.SubmissionModel do
   def status(%{status: status}), do: status
   def status(_), do: :idle
 
-  def submitted?(%{status: status}), do: status != :idle
+  def submitted?(%{submitted_at: submitted_at}), do: submitted_at != nil
   def submitted?(_), do: false
 
   defp past?(nil), do: false
