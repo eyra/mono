@@ -14,7 +14,9 @@ defmodule Systems.Pool.SubmissionView do
       before?: 2
     ]
 
-  alias Core.Pools.Submission
+  alias Systems.{
+    Pool
+  }
 
   prop(props, :any, required: true)
 
@@ -116,7 +118,7 @@ defmodule Systems.Pool.SubmissionView do
       schedule_end: schedule_end
     } = entity
 
-    changeset = Submission.changeset(entity, %{})
+    changeset = Pool.SubmissionModel.changeset(entity, %{})
 
     schedule_start_disabled = schedule_start == nil
 
@@ -170,7 +172,7 @@ defmodule Systems.Pool.SubmissionView do
 
   def validate_for_publish(%{assigns: %{entity: entity, validate?: true}} = socket) do
     changeset =
-      Submission.operational_changeset(entity, %{})
+      Pool.SubmissionModel.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
 
     socket
@@ -182,7 +184,7 @@ defmodule Systems.Pool.SubmissionView do
   # Saving
 
   @impl true
-  def handle_event("save", %{"submission" => attrs}, %{assigns: %{entity: entity}} = socket) do
+  def handle_event("save", %{"submission_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket
@@ -190,13 +192,13 @@ defmodule Systems.Pool.SubmissionView do
     }
   end
 
-  def save(socket, %Submission{} = entity, attrs) do
-    changeset = Submission.changeset(entity, attrs)
+  def save(socket, %Pool.SubmissionModel{} = entity, attrs) do
+    changeset = Pool.SubmissionModel.changeset(entity, attrs)
 
     socket
     |> save(changeset)
     |> validate_for_publish()
-    |> update_ui
+    |> update_ui()
   end
 
   def render(assigns) do

@@ -7,7 +7,8 @@ defmodule Systems.Assignment.ContextTest do
 
     alias Systems.{
       Assignment,
-      Crew
+      Crew,
+      Budget
     }
 
     alias Core.Factories
@@ -82,7 +83,41 @@ defmodule Systems.Assignment.ContextTest do
       assert %{expired: false} = Crew.Context.get_task!(task3.id)
     end
 
-    test "apply_member!/2 re-uses expired member" do
+    test "apply_member/2 creates reward with deposit" do
+      %{id: assignment_id, crew: crew, budget: %{id: budget_id}} =
+        assignment = create_assignment(31, 1)
+
+      task = create_task(crew, :pending, false, 31)
+
+      Assignment.Context.mark_expired_debug(assignment, false)
+
+      assert %{expired: true} = Crew.Context.get_member!(task.member_id)
+      assert %{expired: true} = Crew.Context.get_task!(task.id)
+
+      member = Crew.Context.get_member!(task.member_id)
+      %{id: user_id} = user = Accounts.get_user!(member.user_id)
+
+      Assignment.Context.apply_member(assignment, user, 1000)
+
+      idempotence_key = "assignment=#{assignment_id},user=#{user_id}"
+
+      deposit_idempotence_key =
+        "assignment=#{assignment_id},user=#{user_id},type=deposit,attempt=0"
+
+      assert [
+               %{
+                 idempotence_key: ^idempotence_key,
+                 amount: 1000,
+                 attempt: 0,
+                 user: %{id: ^user_id},
+                 budget: %{id: ^budget_id},
+                 deposit: %{idempotence_key: ^deposit_idempotence_key},
+                 payment_id: nil
+               }
+             ] = Budget.Context.list_rewards(user, [:budget, :user, :deposit, :payment])
+    end
+
+    test "apply_member/2 re-uses expired member" do
       %{crew: crew} = assignment = create_assignment(31, 1)
       task = create_task(crew, :pending, false, 31)
 
@@ -94,10 +129,123 @@ defmodule Systems.Assignment.ContextTest do
       member = Crew.Context.get_member!(task.member_id)
       user = Accounts.get_user!(member.user_id)
 
-      Assignment.Context.apply_member(assignment, user)
+      Assignment.Context.apply_member(assignment, user, 1000)
 
       assert %{expired: false} = Crew.Context.get_member!(task.member_id)
       assert %{expired: false} = Crew.Context.get_task!(task.id)
+    end
+
+    test "rollback_expired_rewards/0 resets reward" do
+      user = Factories.insert!(:member)
+      assignment = create_assignment(31, 1)
+      Assignment.Context.apply_member(assignment, user, 1000)
+      Assignment.Context.mark_expired_debug(assignment, true)
+      Assignment.Context.rollback_expired_rewards()
+
+      assert [
+               %{
+                 amount: 1000,
+                 attempt: 1,
+                 deposit: nil,
+                 payment: nil
+               }
+             ] = Budget.Context.list_rewards(user, [:deposit, :payment])
+
+      assert %{
+               fund: %{balance_credit: 1000, balance_debit: 1000},
+               reserve: %{balance_credit: 1000, balance_debit: 1000}
+             } = Budget.Context.get!(assignment.budget_id)
+    end
+
+    test "apply_member/3 re-apply member creates reward with next attempt deposit" do
+      user = Factories.insert!(:member)
+      assignment = create_assignment(31, 1)
+      Assignment.Context.apply_member(assignment, user, 1000)
+      Assignment.Context.mark_expired_debug(assignment, true)
+      Assignment.Context.rollback_expired_rewards()
+      Assignment.Context.apply_member(assignment, user, 2000)
+
+      deposit_idempotence_key =
+        "assignment=#{assignment.id},user=#{user.id},type=deposit,attempt=1"
+
+      assert [
+               %{
+                 amount: 2000,
+                 attempt: 1,
+                 deposit: %{idempotence_key: ^deposit_idempotence_key},
+                 payment: nil
+               }
+             ] = Budget.Context.list_rewards(user, [:deposit, :payment])
+
+      assert %{
+               fund: %{balance_credit: 1000, balance_debit: 3000},
+               reserve: %{balance_credit: 3000, balance_debit: 1000}
+             } = Budget.Context.get!(assignment.budget_id)
+    end
+
+    test "payout_participant/2 creates transaction from budget reserve to user wallet" do
+      user = Factories.insert!(:member)
+      assignment = create_assignment(31, 1)
+      Assignment.Context.apply_member(assignment, user, 1000)
+      Assignment.Context.mark_expired_debug(assignment, true)
+      Assignment.Context.rollback_expired_rewards()
+      Assignment.Context.apply_member(assignment, user, 2000)
+      Assignment.Context.payout_participant(assignment, user)
+
+      deposit_idempotence_key =
+        "assignment=#{assignment.id},user=#{user.id},type=deposit,attempt=1"
+
+      payment_idempotence_key = "assignment=#{assignment.id},user=#{user.id},type=payment"
+
+      assert [
+               %{
+                 amount: 2000,
+                 attempt: 1,
+                 deposit: %{idempotence_key: ^deposit_idempotence_key},
+                 payment: %{idempotence_key: ^payment_idempotence_key}
+               }
+             ] = Budget.Context.list_rewards(user, [:deposit, :payment])
+
+      assert %{
+               fund: %{balance_credit: 1000, balance_debit: 3000},
+               reserve: %{balance_credit: 3000, balance_debit: 3000}
+             } = Budget.Context.get!(assignment.budget_id)
+    end
+
+    test "payout_participant/2 twice fails" do
+      user = Factories.insert!(:member)
+      assignment = create_assignment(31, 1)
+      Assignment.Context.apply_member(assignment, user, 1000)
+      Assignment.Context.mark_expired_debug(assignment, true)
+      Assignment.Context.rollback_expired_rewards()
+      Assignment.Context.apply_member(assignment, user, 2000)
+      assert {:ok, _} = Assignment.Context.payout_participant(assignment, user)
+
+      assert {:error, _, :payment_already_available, %{}} =
+               Assignment.Context.payout_participant(assignment, user)
+    end
+
+    test "rewarded_amount/2 after payout" do
+      user = Factories.insert!(:member)
+      assignment = create_assignment(31, 1)
+      Assignment.Context.apply_member(assignment, user, 1000)
+      Assignment.Context.mark_expired_debug(assignment, true)
+      Assignment.Context.rollback_expired_rewards()
+      Assignment.Context.apply_member(assignment, user, 2000)
+      Assignment.Context.payout_participant(assignment, user)
+
+      assert Assignment.Context.rewarded_amount(assignment, user) == 2000
+    end
+
+    test "rewarded_amount/2 before payout" do
+      user = Factories.insert!(:member)
+      assignment = create_assignment(31, 1)
+      Assignment.Context.apply_member(assignment, user, 1000)
+      Assignment.Context.mark_expired_debug(assignment, true)
+      Assignment.Context.rollback_expired_rewards()
+      Assignment.Context.apply_member(assignment, user, 2000)
+
+      assert Assignment.Context.rewarded_amount(assignment, user) == 0
     end
 
     test "open_spot_count/3 with 1 expired spot" do

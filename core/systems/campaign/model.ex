@@ -21,6 +21,11 @@ defmodule Systems.Campaign.Model do
     has_many(:role_assignments, through: [:auth_node, :role_assignments])
     has_many(:authors, Campaign.AuthorModel, foreign_key: :campaign_id)
 
+    many_to_many(:submissions, Pool.SubmissionModel,
+      join_through: Campaign.SubmissionModel,
+      join_keys: [campaign_id: :id, submission_id: :id]
+    )
+
     timestamps()
   end
 
@@ -43,16 +48,22 @@ defmodule Systems.Campaign.Model do
     campaign
     |> Map.take([:id, :promotion, :authors, :updated_at])
     |> Map.put(:promotable, promotable(campaign))
+    |> Map.put(:submission, submission(campaign))
   end
 
   def promotable(%{promotable_assignment: promotable}) when not is_nil(promotable), do: promotable
   def promotable(%{id: id}), do: raise("no promotable object available for campaign #{id}")
 
+  def submission(%{submissions: [submission]}), do: submission
+  def submission(%{submissions: []}), do: nil
+  def submission(_), do: raise("No support for multiple submissions yet")
+
   def preload_graph(:full) do
     [
+      :promotion,
       auth_node: [:role_assignments],
       authors: [:user],
-      promotion: [submission: [:criteria, :pool]],
+      submissions: [:criteria, pool: Pool.Model.preload_graph(:full)],
       promotable_assignment: Assignment.Model.preload_graph(:full)
     ]
   end
@@ -78,7 +89,8 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     Promotion,
     Assignment,
     Crew,
-    Pool
+    Pool,
+    Budget
   }
 
   alias Core.ImageHelpers
@@ -87,6 +99,179 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     campaign
     |> Campaign.Model.flatten()
     |> vm(page, user, url_resolver)
+  end
+
+  defp vm(
+         %{
+           id: id,
+           submission: submission,
+           promotion: %{
+             id: open_id,
+             title: title,
+             image_id: image_id,
+             themes: themes,
+             marks: marks
+           },
+           promotable:
+             %{
+               assignable_experiment: %{
+                 duration: duration,
+                 language: language
+               }
+             } = assignment
+         },
+         {Link.Marketplace, :card},
+         _user,
+         _url_resolver
+       ) do
+    duration = if duration === nil, do: 0, else: duration
+
+    reward_value_label = reward_value_label(submission)
+    reward_label = dgettext("eyra-submission", "reward.title")
+    duration_label = dgettext("eyra-promotion", "duration.title")
+
+    info1_elements = [
+      "#{duration_label}: #{duration} min.",
+      "#{reward_label}: #{reward_value_label}"
+    ]
+
+    info1_elements =
+      if language != nil do
+        language_label = language |> String.upcase(:ascii)
+        info1_elements ++ ["#{language_label}"]
+      else
+        info1_elements
+      end
+
+    info1 = Enum.join(info1_elements, " | ")
+    info = [info1]
+
+    open? = Assignment.Context.open?(assignment)
+
+    label =
+      if open? do
+        nil
+      else
+        %{text: dgettext("eyra-marketplace", "assignment.status.complete.label"), type: :tertiary}
+      end
+
+    icon_url = get_card_icon_url(marks)
+    image_info = ImageHelpers.get_image_info(image_id)
+    tags = get_card_tags(themes)
+
+    %{
+      id: id,
+      edit_id: id,
+      open_id: open_id,
+      title: title,
+      image_info: image_info,
+      tags: tags,
+      duration: duration,
+      info: info,
+      icon_url: icon_url,
+      label: label
+    }
+  end
+
+  defp vm(
+         %{
+           id: id,
+           submission: submission,
+           promotion: %{
+             id: open_id,
+             title: title,
+             image_id: image_id,
+             themes: themes,
+             marks: marks
+           },
+           promotable:
+             %{
+               assignable_experiment: %{
+                 duration: duration,
+                 language: language
+               }
+             } = assignment
+         },
+         {Campaign.OverviewPage, :card},
+         _user,
+         _url_resolver
+       ) do
+    duration = if duration === nil, do: 0, else: duration
+
+    open_spot_count = Assignment.Context.open_spot_count(assignment)
+
+    duration_label = dgettext("eyra-promotion", "duration.title")
+    open_spots_label = dgettext("eyra-promotion", "open.spots.label", count: "#{open_spot_count}")
+
+    reward_label = dgettext("eyra-submission", "reward.title")
+    reward_value_label = reward_value_label(submission)
+
+    info1_elements = [
+      "#{duration_label}: #{duration} min.",
+      "#{reward_label}: #{reward_value_label}"
+    ]
+
+    info1_elements =
+      if language != nil do
+        language_label = language |> String.upcase(:ascii)
+        info1_elements ++ ["#{language_label}"]
+      else
+        info1_elements
+      end
+
+    info1 = Enum.join(info1_elements, " | ")
+    info2 = "#{open_spots_label}"
+
+    info = [info1, info2]
+
+    label = Pool.Context.get_tag(submission)
+    icon_url = get_card_icon_url(marks)
+    image_info = ImageHelpers.get_image_info(image_id)
+    tags = get_card_tags(themes)
+    type = get_card_type(submission)
+
+    %{
+      type: type,
+      id: id,
+      edit_id: id,
+      open_id: open_id,
+      title: title,
+      image_info: image_info,
+      tags: tags,
+      duration: duration,
+      info: info,
+      icon_url: icon_url,
+      label: label,
+      label_type: "secondary",
+      left_actions: [
+        %{
+          action: %{type: :send, event: "share", item: "#{id}"},
+          face: %{
+            type: :label,
+            label: dgettext("eyra-ui", "share.button"),
+            font: "text-subhead font-subhead",
+            text_color: "text-white",
+            wrap: true
+          }
+        },
+        %{
+          action: %{type: :send, event: "duplicate", item: id},
+          face: %{
+            type: :label,
+            label: dgettext("eyra-ui", "duplicate.button"),
+            font: "text-subhead font-subhead",
+            text_color: "text-white",
+            wrap: true
+          }
+        }
+      ],
+      right_actions: [
+        %{
+          action: %{type: :send, event: "delete", item: id},
+          face: %{type: :icon, icon: :delete, color: :white}
+        }
+      ]
+    }
   end
 
   defp vm(
@@ -139,11 +324,11 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
          %{
            id: id,
            updated_at: updated_at,
+           submission: submission,
            promotion:
              %{
                title: title,
-               image_id: image_id,
-               submission: submission
+               image_id: image_id
              } = promotion,
            promotable:
              %{
@@ -204,11 +389,12 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   end
 
   defp vm(
-         %{promotion: %{submission: submission}} = campaign,
+         %{submission: submission} = campaign,
          {Pool.StudentPage, :contribution},
          user,
          url_resolver
        ) do
+    # FIXME: POOL adapt to multiple submissions
     path = url_resolver.(Systems.Pool.SubmissionPage, id: submission.id)
     vm(campaign, :contribution, user, path)
   end
@@ -284,8 +470,8 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
   defp subtitle(
          %{status: status} = _task,
-         %{id: user_id} = _user,
-         %{id: assignment_id} = _assignment
+         user,
+         assignment
        ) do
     case status do
       :pending ->
@@ -295,13 +481,13 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
         dgettext("eyra-marketplace", "assignment.status.completed.subtitle")
 
       :accepted ->
-        rewarded_value = Campaign.Context.rewarded_value(assignment_id, user_id)
+        rewarded_amount = Campaign.Context.rewarded_amount(assignment, user)
 
         dngettext(
           "eyra-marketplace",
           "Awarded 1 credit",
           "Awarded %{count} credits",
-          rewarded_value
+          rewarded_amount
         )
 
       :rejected ->
@@ -316,6 +502,20 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     updated_at
     |> CoreWeb.UI.Timestamp.apply_timezone()
     |> CoreWeb.UI.Timestamp.humanize()
+  end
+
+  defp get_content_list_item_subtitle(
+         nil,
+         promotion_ready?,
+         open_spot_count,
+         target_subject_count
+       ) do
+    get_content_list_item_subtitle(
+      %{status: :idle},
+      promotion_ready?,
+      open_spot_count,
+      target_subject_count
+    )
   end
 
   defp get_content_list_item_subtitle(
@@ -352,6 +552,51 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
       :completed ->
         dgettext("eyra-submission", "submission.completed.message")
+    end
+  end
+
+  defp reward_value_label(%Pool.SubmissionModel{
+         pool: %{currency: currency},
+         reward_value: reward_value
+       }) do
+    reward_value_label(currency, reward_value)
+  end
+
+  defp reward_value_label(_), do: "?"
+
+  defp reward_value_label(%{} = currency, nil), do: reward_value_label(currency, 0)
+
+  defp reward_value_label(%{} = currency, reward_value) when is_integer(reward_value) do
+    locale = Gettext.get_locale(CoreWeb.Gettext)
+    Budget.CurrencyModel.label(currency, locale, reward_value)
+  end
+
+  def get_card_type(submission) do
+    case completed?(submission) do
+      true -> :secondary
+      false -> :primary
+    end
+  end
+
+  def get_card_tags(nil), do: []
+
+  def get_card_tags(themes) do
+    themes
+    |> Enum.map(&Core.Enums.Themes.translate(&1))
+  end
+
+  def get_card_icon_url(marks) do
+    case marks do
+      [mark] -> CoreWeb.Endpoint.static_path("/images/#{mark}.svg")
+      _ -> nil
+    end
+  end
+
+  defp completed?(%{status: status} = submission) do
+    case status do
+      :completed -> true
+      :accepted -> Pool.Context.published_status(submission) == :closed
+      _ -> false
     end
   end
 end

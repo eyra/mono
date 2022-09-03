@@ -6,12 +6,14 @@ defmodule Systems.Assignment.Model do
   import Ecto.Changeset
 
   alias Systems.{
-    Assignment
+    Assignment,
+    Budget
   }
 
   schema "assignments" do
     belongs_to(:assignable_experiment, Assignment.ExperimentModel)
     belongs_to(:crew, Systems.Crew.Model)
+    belongs_to(:budget, Budget.Model, on_replace: :update)
     belongs_to(:auth_node, Core.Authorization.Node)
 
     many_to_many(
@@ -33,7 +35,11 @@ defmodule Systems.Assignment.Model do
     def id(assignment), do: assignment.auth_node_id
   end
 
-  @doc false
+  def changeset(assignment, %Budget.Model{id: budget_id}) do
+    assignment
+    |> cast(%{budget_id: budget_id}, [:budget_id])
+  end
+
   def changeset(assignment, attrs) do
     assignment
     |> cast(attrs, [:director])
@@ -57,7 +63,8 @@ defmodule Systems.Assignment.Model do
     [
       :crew,
       :excluded,
-      assignable_experiment: [lab_tool: [:time_slots], survey_tool: [:auth_node]]
+      assignable_experiment: [lab_tool: [:time_slots], survey_tool: [:auth_node]],
+      budget: [:currency, :fund, :reserve]
     ]
   end
 

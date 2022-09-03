@@ -7,8 +7,19 @@ defmodule Systems.Campaign.Builders.AssignmentCallbackPage do
   alias Phoenix.LiveView
 
   alias Systems.{
+    Campaign,
     Assignment
   }
+
+  def view_model(
+        %Campaign.Model{} = campaign,
+        assigns,
+        url_resolver
+      ) do
+    campaign
+    |> Campaign.Model.flatten()
+    |> view_model(assigns, url_resolver)
+  end
 
   def view_model(
         %{
@@ -16,7 +27,7 @@ defmodule Systems.Campaign.Builders.AssignmentCallbackPage do
           promotion: %{
             title: title
           },
-          promotable_assignment: assignment
+          promotable: assignment
         },
         %{current_user: user} = _assigns,
         _url_resolver

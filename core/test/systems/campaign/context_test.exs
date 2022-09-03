@@ -5,14 +5,22 @@ defmodule Systems.Campaign.ContextTest do
     alias Systems.{
       Campaign,
       Crew,
-      Bookkeeping
+      Bookkeeping,
+      Budget
     }
 
     alias Core.Factories
     alias CoreWeb.UI.Timestamp
 
-    test "mark_expired_debug?/0 should mark 1 expired task in online campaign" do
-      %{promotable_assignment: %{crew: crew}} = create_campaign(:accepted)
+    setup do
+      currency = Budget.Factories.create_currency("fake_currency", "ƒ", 2)
+      budget = Budget.Factories.create_budget("test", currency)
+      user = Factories.insert!(:member)
+      {:ok, currency: currency, budget: budget, user: user}
+    end
+
+    test "mark_expired_debug?/0 should mark 1 expired task in online campaign", %{budget: budget} do
+      %{promotable_assignment: %{crew: crew}} = create_campaign(:accepted, budget)
       task = create_task(crew, :pending, false, -31)
 
       Campaign.Context.mark_expired_debug()
@@ -20,8 +28,10 @@ defmodule Systems.Campaign.ContextTest do
       assert %{expired: true} = Crew.Context.get_task!(task.id)
     end
 
-    test "mark_expired_debug?/0 should mark 0 expired tasks in submitted campaign" do
-      %{promotable_assignment: %{crew: crew}} = create_campaign(:submitted)
+    test "mark_expired_debug?/0 should mark 0 expired tasks in submitted campaign", %{
+      budget: budget
+    } do
+      %{promotable_assignment: %{crew: crew}} = create_campaign(:submitted, budget)
       task = create_task(crew, :pending, false, -31)
 
       Campaign.Context.mark_expired_debug()
@@ -29,9 +39,12 @@ defmodule Systems.Campaign.ContextTest do
       assert %{expired: false} = Crew.Context.get_task!(task.id)
     end
 
-    test "mark_expired_debug?/0 should mark 1 expired tasks in closed campaign" do
+    test "mark_expired_debug?/0 should mark 1 expired tasks in closed campaign", %{budget: budget} do
       schedule_end = yesterday() |> Timestamp.format_user_input_date()
-      %{promotable_assignment: %{crew: crew}} = create_campaign(:accepted, nil, schedule_end)
+
+      %{promotable_assignment: %{crew: crew}} =
+        create_campaign(:accepted, budget, nil, schedule_end)
+
       task = create_task(crew, :pending, false, -31)
 
       Campaign.Context.mark_expired_debug()
@@ -39,12 +52,14 @@ defmodule Systems.Campaign.ContextTest do
       assert %{expired: true} = Crew.Context.get_task!(task.id)
     end
 
-    test "mark_expired_debug?/1 should mark 1 expired tasks in scheduled campaign" do
+    test "mark_expired_debug?/1 should mark 1 expired tasks in scheduled campaign", %{
+      budget: budget
+    } do
       schedule_start = tomorrow() |> Timestamp.format_user_input_date()
       schedule_end = next_week() |> Timestamp.format_user_input_date()
 
       %{promotable_assignment: %{crew: crew}} =
-        create_campaign(:accepted, schedule_start, schedule_end)
+        create_campaign(:accepted, budget, schedule_start, schedule_end)
 
       task = create_task(crew, :pending, false, -31)
 
@@ -53,8 +68,10 @@ defmodule Systems.Campaign.ContextTest do
       assert %{expired: true} = Crew.Context.get_task!(task.id)
     end
 
-    test "mark_expired_debug?/1 should mark 1 expired tasks in submitted campaign" do
-      %{promotable_assignment: %{crew: crew}} = create_campaign(:submitted)
+    test "mark_expired_debug?/1 should mark 1 expired tasks in submitted campaign", %{
+      budget: budget
+    } do
+      %{promotable_assignment: %{crew: crew}} = create_campaign(:submitted, budget)
       task = create_task(crew, :pending, false, -31)
 
       Campaign.Context.mark_expired_debug(true)
@@ -62,9 +79,12 @@ defmodule Systems.Campaign.ContextTest do
       assert %{expired: false} = Crew.Context.get_task!(task.id)
     end
 
-    test "mark_expired_debug?/1 should mark 1 expired tasks in closed campaign" do
+    test "mark_expired_debug?/1 should mark 1 expired tasks in closed campaign", %{budget: budget} do
       schedule_end = yesterday() |> Timestamp.format_user_input_date()
-      %{promotable_assignment: %{crew: crew}} = create_campaign(:accepted, nil, schedule_end)
+
+      %{promotable_assignment: %{crew: crew}} =
+        create_campaign(:accepted, budget, nil, schedule_end)
+
       task = create_task(crew, :pending, false, -31)
 
       Campaign.Context.mark_expired_debug(true)
@@ -72,12 +92,14 @@ defmodule Systems.Campaign.ContextTest do
       assert %{expired: true} = Crew.Context.get_task!(task.id)
     end
 
-    test "mark_expired_debug?/0 should mark 1 expired tasks in scheduled campaign" do
+    test "mark_expired_debug?/0 should mark 1 expired tasks in scheduled campaign", %{
+      budget: budget
+    } do
       schedule_start = tomorrow() |> Timestamp.format_user_input_date()
       schedule_end = next_week() |> Timestamp.format_user_input_date()
 
       %{promotable_assignment: %{crew: crew}} =
-        create_campaign(:accepted, schedule_start, schedule_end)
+        create_campaign(:accepted, budget, schedule_start, schedule_end)
 
       task = create_task(crew, :pending, false, -31)
 
@@ -86,264 +108,283 @@ defmodule Systems.Campaign.ContextTest do
       assert %{expired: true} = Crew.Context.get_task!(task.id)
     end
 
-    test "reward_student/2 One transaction of one student" do
+    test "payout_participant/2 One transaction of one student", %{budget: budget} do
       student = Factories.insert!(:member, %{student: true})
 
-      %{promotable_assignment: %{crew: crew} = assignment} = create_campaign(:accepted)
+      %{promotable_assignment: %{crew: crew} = assignment} = create_campaign(:accepted, budget)
 
       create_task(student, crew, :accepted, false, -31)
+      Budget.Factories.create_reward(assignment, student, budget)
 
-      Campaign.Context.reward_student(assignment, student)
+      Campaign.Context.payout_participant(assignment, student)
 
-      assert Enum.count(Bookkeeping.Context.account_query(["wallet"])) == 1
-      assert Enum.count(Bookkeeping.Context.account_query(["fund"])) == 1
+      assert Enum.count(Bookkeeping.Context.list_accounts(["wallet"])) == 1
+      assert Enum.count(Bookkeeping.Context.list_accounts(["fund"])) == 1
 
-      assert Enum.count(Bookkeeping.Context.list_entries({:wallet, "sbe_year2_2021", student.id})) ==
+      assert Enum.count(Bookkeeping.Context.list_entries({:wallet, "fake_currency", student.id})) ==
                1
 
-      assert Enum.count(Bookkeeping.Context.list_entries({:fund, "sbe_year2_2021"})) == 1
+      assert Enum.count(Bookkeeping.Context.list_entries({:fund, "test"})) == 1
 
-      assert %{credit: 0, debit: 2} = Bookkeeping.Context.balance({:fund, "sbe_year2_2021"})
+      assert %{credit: 10_000, debit: 5002} = Bookkeeping.Context.balance({:fund, "test"})
 
       assert %{credit: 2, debit: 0} =
-               Bookkeeping.Context.balance({:wallet, "sbe_year2_2021", student.id})
+               Bookkeeping.Context.balance({:wallet, "fake_currency", student.id})
     end
 
-    test "reward_student/2 Two transactions of one student" do
+    test "payout_participant/2 Two transactions of one student", %{budget: budget} do
       student = Factories.insert!(:member, %{student: true})
 
-      %{promotable_assignment: %{crew: crew1} = assignment1} = create_campaign(:accepted)
-      %{promotable_assignment: %{crew: crew2} = assignment2} = create_campaign(:accepted)
+      %{promotable_assignment: %{crew: crew1} = assignment1} = create_campaign(:accepted, budget)
+      %{promotable_assignment: %{crew: crew2} = assignment2} = create_campaign(:accepted, budget)
 
       create_task(student, crew1, :accepted, false, -31)
       create_task(student, crew2, :accepted, false, -31)
 
-      Campaign.Context.reward_student(assignment1, student)
-      Campaign.Context.reward_student(assignment2, student)
+      Budget.Factories.create_reward(assignment1, student, budget)
+      Budget.Factories.create_reward(assignment2, student, budget)
 
-      assert Enum.count(Bookkeeping.Context.account_query(["wallet"])) == 1
-      assert Enum.count(Bookkeeping.Context.account_query(["fund"])) == 1
+      Campaign.Context.payout_participant(assignment1, student)
+      Campaign.Context.payout_participant(assignment2, student)
 
-      assert Enum.count(Bookkeeping.Context.list_entries({:wallet, "sbe_year2_2021", student.id})) ==
+      assert Enum.count(Bookkeeping.Context.list_accounts(["wallet"])) == 1
+      assert Enum.count(Bookkeeping.Context.list_accounts(["fund"])) == 1
+
+      assert Enum.count(Bookkeeping.Context.list_entries({:wallet, "fake_currency", student.id})) ==
                2
 
-      assert Enum.count(Bookkeeping.Context.list_entries({:fund, "sbe_year2_2021"})) == 2
+      assert Enum.count(Bookkeeping.Context.list_entries({:fund, "test"})) == 2
 
-      assert %{credit: 0, debit: 4} = Bookkeeping.Context.balance({:fund, "sbe_year2_2021"})
+      assert %{credit: 10_000, debit: 5004} = Bookkeeping.Context.balance({:fund, "test"})
 
       assert %{credit: 4, debit: 0} =
-               Bookkeeping.Context.balance({:wallet, "sbe_year2_2021", student.id})
+               Bookkeeping.Context.balance({:wallet, "fake_currency", student.id})
     end
 
-    test "reward_student/2 Two transactions of two students" do
+    test "payout_participant/2 Two transactions of two students", %{budget: budget} do
       student1 = Factories.insert!(:member, %{student: true})
       student2 = Factories.insert!(:member, %{student: true})
 
-      %{promotable_assignment: %{crew: crew1} = assignment1} = create_campaign(:accepted)
-      %{promotable_assignment: %{crew: crew2} = assignment2} = create_campaign(:accepted)
+      %{promotable_assignment: %{crew: crew1} = assignment1} = create_campaign(:accepted, budget)
+      %{promotable_assignment: %{crew: crew2} = assignment2} = create_campaign(:accepted, budget)
 
       create_task(student1, crew1, :accepted, false, -31)
       create_task(student1, crew2, :accepted, false, -31)
       create_task(student2, crew1, :accepted, false, -31)
       create_task(student2, crew2, :accepted, false, -31)
 
-      Campaign.Context.reward_student(assignment1, student1)
-      Campaign.Context.reward_student(assignment2, student1)
-      Campaign.Context.reward_student(assignment1, student2)
-      Campaign.Context.reward_student(assignment2, student2)
+      Budget.Factories.create_reward(assignment1, student1, budget)
+      Budget.Factories.create_reward(assignment2, student1, budget)
+      Budget.Factories.create_reward(assignment1, student2, budget)
+      Budget.Factories.create_reward(assignment2, student2, budget)
 
-      assert Enum.count(Bookkeeping.Context.account_query(["wallet"])) == 2
-      assert Enum.count(Bookkeeping.Context.account_query(["fund"])) == 1
+      Campaign.Context.payout_participant(assignment1, student1)
+      Campaign.Context.payout_participant(assignment2, student1)
+      Campaign.Context.payout_participant(assignment1, student2)
+      Campaign.Context.payout_participant(assignment2, student2)
 
-      assert Enum.count(
-               Bookkeeping.Context.list_entries({:wallet, "sbe_year2_2021", student1.id})
-             ) == 2
+      assert Enum.count(Bookkeeping.Context.list_accounts(["wallet"])) == 2
+      assert Enum.count(Bookkeeping.Context.list_accounts(["fund"])) == 1
 
-      assert Enum.count(
-               Bookkeeping.Context.list_entries({:wallet, "sbe_year2_2021", student2.id})
-             ) == 2
+      assert Enum.count(Bookkeeping.Context.list_entries({:wallet, "fake_currency", student1.id})) ==
+               2
 
-      assert Enum.count(Bookkeeping.Context.list_entries({:fund, "sbe_year2_2021"})) == 4
+      assert Enum.count(Bookkeeping.Context.list_entries({:wallet, "fake_currency", student2.id})) ==
+               2
 
-      assert %{credit: 0, debit: 8} = Bookkeeping.Context.balance({:fund, "sbe_year2_2021"})
+      assert Enum.count(Bookkeeping.Context.list_entries({:fund, "test"})) == 4
+
+      assert %{credit: 10_000, debit: 5008} = Bookkeeping.Context.balance({:fund, "test"})
 
       assert %{credit: 4, debit: 0} =
-               Bookkeeping.Context.balance({:wallet, "sbe_year2_2021", student1.id})
+               Bookkeeping.Context.balance({:wallet, "fake_currency", student1.id})
 
       assert %{credit: 4, debit: 0} =
-               Bookkeeping.Context.balance({:wallet, "sbe_year2_2021", student2.id})
+               Bookkeeping.Context.balance({:wallet, "fake_currency", student2.id})
     end
 
-    test "reward_student/2 One transaction of one student (via signals)" do
+    test "payout_participant/2 One transaction of one student (via signals)", %{budget: budget} do
       student = Factories.insert!(:member, %{student: true})
 
-      %{promotable_assignment: %{crew: crew}} = create_campaign(:accepted)
+      %{promotable_assignment: %{crew: crew} = assignment} = create_campaign(:accepted, budget)
       task = create_task(student, crew, :pending, false, -31)
+      Budget.Factories.create_reward(assignment, student, budget)
 
       # accept task should send signal to campaign to reward student
       Crew.Context.accept_task(task)
 
-      assert Enum.count(Bookkeeping.Context.account_query(["wallet"])) == 1
-      assert Enum.count(Bookkeeping.Context.account_query(["fund"])) == 1
+      assert Enum.count(Bookkeeping.Context.list_accounts(["wallet"])) == 1
+      assert Enum.count(Bookkeeping.Context.list_accounts(["fund"])) == 1
 
-      assert Enum.count(Bookkeeping.Context.list_entries({:wallet, "sbe_year2_2021", student.id})) ==
+      assert Enum.count(Bookkeeping.Context.list_entries({:wallet, "fake_currency", student.id})) ==
                1
 
-      assert Enum.count(Bookkeeping.Context.list_entries({:fund, "sbe_year2_2021"})) == 1
+      assert Enum.count(Bookkeeping.Context.list_entries({:fund, "test"})) == 1
 
-      assert %{credit: 0, debit: 2} = Bookkeeping.Context.balance({:fund, "sbe_year2_2021"})
+      assert %{credit: 10_000, debit: 5002} = Bookkeeping.Context.balance({:fund, "test"})
 
       assert %{credit: 2, debit: 0} =
-               Bookkeeping.Context.balance({:wallet, "sbe_year2_2021", student.id})
+               Bookkeeping.Context.balance({:wallet, "fake_currency", student.id})
     end
 
-    test "reward_student/2 One transaction of one student failed: task already accepted (via signals)" do
+    test "payout_participant/2 One transaction of one student failed: task already accepted (via signals)",
+         %{budget: budget} do
       student = Factories.insert!(:member, %{student: true})
 
-      %{promotable_assignment: %{crew: crew}} = create_campaign(:accepted)
+      %{promotable_assignment: %{crew: crew} = assignment} = create_campaign(:accepted, budget)
       task = create_task(student, crew, :accepted, false, -31)
+      Budget.Factories.create_reward(assignment, student, budget)
 
       # accept task should send signal to campaign to reward student
       Crew.Context.accept_task(task)
 
-      assert Enum.empty?(Bookkeeping.Context.account_query(["wallet"]))
-      assert Enum.empty?(Bookkeeping.Context.account_query(["fund"]))
+      assert Enum.empty?(Bookkeeping.Context.list_accounts(["wallet"]))
 
-      assert Enum.empty?(
-               Bookkeeping.Context.list_entries({:wallet, "sbe_year2_2021", student.id})
-             )
-
-      assert Enum.empty?(Bookkeeping.Context.list_entries({:fund, "sbe_year2_2021"}))
+      assert Enum.empty?(Bookkeeping.Context.list_entries({:wallet, "fake_currency", student.id}))
     end
 
-    test "reward_student/2 Multiple transactions of two students (via signals)" do
+    test "payout_participant/2 Multiple transactions of two students (via signals)", %{
+      budget: budget
+    } do
       student1 = Factories.insert!(:member, %{student: true})
       student2 = Factories.insert!(:member, %{student: true})
 
-      %{promotable_assignment: %{crew: crew1}} = create_campaign(:accepted)
-      %{promotable_assignment: %{crew: crew2}} = create_campaign(:accepted)
+      %{promotable_assignment: %{crew: crew1} = assignment1} = create_campaign(:accepted, budget)
+      %{promotable_assignment: %{crew: crew2} = assignment2} = create_campaign(:accepted, budget)
 
       task1 = create_task(student1, crew1, :pending, false, -31)
       task2 = create_task(student1, crew2, :pending, false, -31)
       task3 = create_task(student2, crew1, :pending, false, -31)
       _task4 = create_task(student2, crew2, :pending, false, -31)
 
+      Budget.Factories.create_reward(assignment1, student1, budget)
+      Budget.Factories.create_reward(assignment2, student1, budget)
+      Budget.Factories.create_reward(assignment1, student2, budget)
+      Budget.Factories.create_reward(assignment2, student2, budget)
+
       # accept task should send signal to campaign to reward student
       Crew.Context.accept_task(task1)
       Crew.Context.accept_task(task2)
       Crew.Context.accept_task(task3)
 
-      assert Enum.count(Bookkeeping.Context.account_query(["wallet"])) == 2
-      assert Enum.count(Bookkeeping.Context.account_query(["fund"])) == 1
+      assert Enum.count(Bookkeeping.Context.list_accounts(["wallet"])) == 2
+      assert Enum.count(Bookkeeping.Context.list_accounts(["fund"])) == 1
 
-      assert Enum.count(
-               Bookkeeping.Context.list_entries({:wallet, "sbe_year2_2021", student1.id})
-             ) == 2
+      assert Enum.count(Bookkeeping.Context.list_entries({:wallet, "fake_currency", student1.id})) ==
+               2
 
-      assert Enum.count(
-               Bookkeeping.Context.list_entries({:wallet, "sbe_year2_2021", student2.id})
-             ) == 1
+      assert Enum.count(Bookkeeping.Context.list_entries({:wallet, "fake_currency", student2.id})) ==
+               1
 
-      assert Enum.count(Bookkeeping.Context.list_entries({:fund, "sbe_year2_2021"})) == 3
+      assert Enum.count(Bookkeeping.Context.list_entries({:fund, "test"})) == 3
 
-      assert %{credit: 0, debit: 6} = Bookkeeping.Context.balance({:fund, "sbe_year2_2021"})
+      assert %{credit: 10_000, debit: 5006} = Bookkeeping.Context.balance({:fund, "test"})
 
       assert %{credit: 4, debit: 0} =
-               Bookkeeping.Context.balance({:wallet, "sbe_year2_2021", student1.id})
+               Bookkeeping.Context.balance({:wallet, "fake_currency", student1.id})
 
       assert %{credit: 2, debit: 0} =
-               Bookkeeping.Context.balance({:wallet, "sbe_year2_2021", student2.id})
+               Bookkeeping.Context.balance({:wallet, "fake_currency", student2.id})
     end
 
-    test "sync_student_credits/0 One transaction of one student" do
+    test "sync_student_credits/0 One transaction of one student", %{budget: budget} do
       student = Factories.insert!(:member, %{student: true})
 
-      %{promotable_assignment: %{crew: crew}} = create_campaign(:accepted)
+      %{promotable_assignment: %{crew: crew} = assignment} = create_campaign(:accepted, budget)
 
       create_task(student, crew, :accepted, false, -31)
+      Budget.Factories.create_reward(assignment, student, budget)
 
       Campaign.Context.sync_student_credits()
 
-      assert Enum.count(Bookkeeping.Context.account_query(["wallet"])) == 1
-      assert Enum.count(Bookkeeping.Context.account_query(["fund"])) == 1
+      assert Enum.count(Bookkeeping.Context.list_accounts(["wallet"])) == 1
+      assert Enum.count(Bookkeeping.Context.list_accounts(["fund"])) == 1
 
-      assert Enum.count(Bookkeeping.Context.list_entries({:wallet, "sbe_year2_2021", student.id})) ==
+      assert Enum.count(Bookkeeping.Context.list_entries({:wallet, "fake_currency", student.id})) ==
                1
 
-      assert Enum.count(Bookkeeping.Context.list_entries({:fund, "sbe_year2_2021"})) == 1
+      assert Enum.count(Bookkeeping.Context.list_entries({:fund, "test"})) == 1
 
-      assert %{credit: 0, debit: 2} = Bookkeeping.Context.balance({:fund, "sbe_year2_2021"})
+      assert %{credit: 10_000, debit: 5002} = Bookkeeping.Context.balance({:fund, "test"})
 
       assert %{credit: 2, debit: 0} =
-               Bookkeeping.Context.balance({:wallet, "sbe_year2_2021", student.id})
+               Bookkeeping.Context.balance({:wallet, "fake_currency", student.id})
     end
 
-    test "sync_student_credits/0 One transaction of one student (sync twice)" do
+    test "sync_student_credits/0 One transaction of one student (sync twice -> no error)", %{
+      budget: budget
+    } do
       student = Factories.insert!(:member, %{student: true})
 
-      %{promotable_assignment: %{crew: crew}} = create_campaign(:accepted)
+      %{promotable_assignment: %{crew: crew} = assignment} = create_campaign(:accepted, budget)
 
       create_task(student, crew, :accepted, false, -31)
+      Budget.Factories.create_reward(assignment, student, budget)
 
       Campaign.Context.sync_student_credits()
       Campaign.Context.sync_student_credits()
 
-      assert Enum.count(Bookkeeping.Context.account_query(["wallet"])) == 1
-      assert Enum.count(Bookkeeping.Context.account_query(["fund"])) == 1
+      assert Enum.count(Bookkeeping.Context.list_accounts(["wallet"])) == 1
+      assert Enum.count(Bookkeeping.Context.list_accounts(["fund"])) == 1
 
-      assert Enum.count(Bookkeeping.Context.list_entries({:wallet, "sbe_year2_2021", student.id})) ==
+      assert Enum.count(Bookkeeping.Context.list_entries({:wallet, "fake_currency", student.id})) ==
                1
 
-      assert Enum.count(Bookkeeping.Context.list_entries({:fund, "sbe_year2_2021"})) == 1
+      assert Enum.count(Bookkeeping.Context.list_entries({:fund, "test"})) == 1
 
-      assert %{credit: 0, debit: 2} = Bookkeeping.Context.balance({:fund, "sbe_year2_2021"})
+      assert %{credit: 10_000, debit: 5002} = Bookkeeping.Context.balance({:fund, "test"})
 
       assert %{credit: 2, debit: 0} =
-               Bookkeeping.Context.balance({:wallet, "sbe_year2_2021", student.id})
+               Bookkeeping.Context.balance({:wallet, "fake_currency", student.id})
     end
 
-    test "sync_student_credits/0 Two transactions of two students" do
+    test "sync_student_credits/0 Two transactions of two students", %{budget: budget} do
       student1 = Factories.insert!(:member, %{student: true})
       student2 = Factories.insert!(:member, %{student: true})
 
-      %{promotable_assignment: %{crew: crew1}} = create_campaign(:accepted)
-      %{promotable_assignment: %{crew: crew2}} = create_campaign(:accepted)
+      %{promotable_assignment: %{crew: crew1} = assignment1} = create_campaign(:accepted, budget)
+      %{promotable_assignment: %{crew: crew2} = assignment2} = create_campaign(:accepted, budget)
 
       create_task(student1, crew1, :accepted, false, -31)
       create_task(student1, crew2, :accepted, false, -31)
       create_task(student2, crew1, :accepted, false, -31)
       create_task(student2, crew2, :accepted, false, -31)
 
+      Budget.Factories.create_reward(assignment1, student1, budget)
+      Budget.Factories.create_reward(assignment2, student1, budget)
+      Budget.Factories.create_reward(assignment1, student2, budget)
+      Budget.Factories.create_reward(assignment2, student2, budget)
+
       Campaign.Context.sync_student_credits()
 
-      assert Enum.count(Bookkeeping.Context.account_query(["wallet"])) == 2
-      assert Enum.count(Bookkeeping.Context.account_query(["fund"])) == 1
+      assert Enum.count(Bookkeeping.Context.list_accounts(["wallet"])) == 2
+      assert Enum.count(Bookkeeping.Context.list_accounts(["fund"])) == 1
 
-      assert Enum.count(
-               Bookkeeping.Context.list_entries({:wallet, "sbe_year2_2021", student1.id})
-             ) == 2
+      assert Enum.count(Bookkeeping.Context.list_entries({:wallet, "fake_currency", student1.id})) ==
+               2
 
-      assert Enum.count(
-               Bookkeeping.Context.list_entries({:wallet, "sbe_year2_2021", student2.id})
-             ) == 2
+      assert Enum.count(Bookkeeping.Context.list_entries({:wallet, "fake_currency", student2.id})) ==
+               2
 
-      assert Enum.count(Bookkeeping.Context.list_entries({:fund, "sbe_year2_2021"})) == 4
+      assert Enum.count(Bookkeeping.Context.list_entries({:fund, "test"})) == 4
 
-      assert %{credit: 0, debit: 8} = Bookkeeping.Context.balance({:fund, "sbe_year2_2021"})
+      assert %{credit: 10_000, debit: 5008} = Bookkeeping.Context.balance({:fund, "test"})
 
       assert %{credit: 4, debit: 0} =
-               Bookkeeping.Context.balance({:wallet, "sbe_year2_2021", student1.id})
+               Bookkeeping.Context.balance({:wallet, "fake_currency", student1.id})
 
       assert %{credit: 4, debit: 0} =
-               Bookkeeping.Context.balance({:wallet, "sbe_year2_2021", student2.id})
+               Bookkeeping.Context.balance({:wallet, "fake_currency", student2.id})
     end
 
-    defp create_campaign(status, schedule_start \\ nil, schedule_end \\ nil) do
+    defp create_campaign(status, budget, schedule_start \\ nil, schedule_end \\ nil) do
       promotion = Factories.insert!(:promotion)
 
-      _submission =
+      pool = Factories.insert!(:pool, %{name: "test_pool"})
+
+      submission =
         Factories.insert!(:submission, %{
-          promotion: promotion,
+          pool: pool,
           reward_value: 2,
           status: status,
           schedule_start: schedule_start,
@@ -362,9 +403,18 @@ defmodule Systems.Campaign.ContextTest do
         })
 
       assignment =
-        Factories.insert!(:assignment, %{experiment: experiment, crew: crew, director: :campaign})
+        Factories.insert!(:assignment, %{
+          budget: budget,
+          experiment: experiment,
+          crew: crew,
+          director: :campaign
+        })
 
-      Factories.insert!(:campaign, %{assignment: assignment, promotion: promotion})
+      Factories.insert!(:campaign, %{
+        assignment: assignment,
+        promotion: promotion,
+        submissions: [submission]
+      })
     end
 
     defp create_task(crew, status, expired, minutes_ago) when is_boolean(expired) do

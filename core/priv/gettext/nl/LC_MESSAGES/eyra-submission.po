@@ -72,19 +72,19 @@ msgid "retract.admin.success.title"
 msgstr "Campagne offline"
 
 #, elixir-format
-msgid "accept.error.text"
+msgid "publish.error.text"
 msgstr "Sommige verplichte velden zijn niet correct ingevuld."
 
 #, elixir-format
-msgid "accept.error.title"
+msgid "publish.error.title"
 msgstr "Maak het formulier compleet"
 
 #, elixir-format
-msgid "accept.success.text"
+msgid "publish.success.text"
 msgstr "De campagne staat open of is ingepland voor deelname in de marktplaats."
 
 #, elixir-format
-msgid "accept.success.title"
+msgid "publish.success.title"
 msgstr "Campagne gepubliceerd"
 
 #, elixir-format

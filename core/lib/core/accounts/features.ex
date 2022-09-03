@@ -6,14 +6,18 @@ defmodule Core.Accounts.Features do
   import Ecto.Changeset
   alias Core.Accounts.User
 
-  alias Core.Enums.{Genders, DominantHands, NativeLanguages, StudyProgramCodes}
-  require Core.Enums.{Genders, DominantHands, NativeLanguages, StudyProgramCodes}
+  alias Core.Enums.{Genders, DominantHands, NativeLanguages}
+  require Core.Enums.{Genders, DominantHands, NativeLanguages}
+
+  alias Systems.{
+    Scholar
+  }
 
   schema "user_features" do
     field(:gender, Ecto.Enum, values: Genders.schema_values())
     field(:dominant_hand, Ecto.Enum, values: DominantHands.schema_values())
     field(:native_language, Ecto.Enum, values: NativeLanguages.schema_values())
-    field(:study_program_codes, {:array, Ecto.Enum}, values: StudyProgramCodes.schema_values())
+    field(:study_program_codes, {:array, Ecto.Atom})
 
     belongs_to(:user, User)
     timestamps()
@@ -34,13 +38,9 @@ defmodule Core.Accounts.Features do
     |> validate_required(@required_fields)
   end
 
-  def get_study_programs(%{study_program_codes: study_program_codes})
-      when is_list(study_program_codes) and study_program_codes != [] do
-    study_program_codes
-    |> Enum.map(&StudyProgramCodes.translate(&1))
+  def get_scholar_classes(%{study_program_codes: [_ | _] = codes}) do
+    Enum.map(codes, &Scholar.Codes.text(&1))
   end
 
-  def get_study_programs(_) do
-    []
-  end
+  def get_scholar_classes(_), do: []
 end

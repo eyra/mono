@@ -9,26 +9,35 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
   alias Systems.Pool.CampaignSubmissionView, as: SubmissionForm
 
   alias Systems.{
+    Campaign,
     Assignment,
-    Promotion
+    Promotion,
+    Pool
   }
+
+  def view_model(
+        %Campaign.Model{} = campaign,
+        assigns,
+        url_resolver
+      ) do
+    campaign
+    |> Campaign.Model.flatten()
+    |> view_model(assigns, url_resolver)
+  end
 
   def view_model(
         %{
           id: campaign_id,
+          submission: submission,
           promotion:
             %{
-              id: promotion_id,
-              submission: %{
-                status: status
-              }
+              id: promotion_id
             } = promotion
         } = campaign,
         %{uri_path: uri_path} = assigns,
         url_resolver
       ) do
-    submitted? = status != :idle
-
+    submitted? = Map.get(submission, :status, :idle) != :idle
     tabs = create_tabs(campaign, assigns, url_resolver)
 
     preview_path =
@@ -36,6 +45,7 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
 
     %{
       id: campaign_id,
+      submission: submission,
       promotion: promotion,
       tabs: tabs,
       submitted?: submitted?,
@@ -45,19 +55,14 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
 
   defp create_tabs(
          %{
-           promotion:
-             %{
-               submission:
-                 %{
-                   status: status
-                 } = submission
-             } = promotion,
-           promotable_assignment: assignment
+           submission: submission,
+           promotion: promotion,
+           promotable: assignment
          } = campaign,
          %{current_user: user, uri_origin: uri_origin, validate?: validate?},
          _url_resolver
        ) do
-    submitted? = status != :idle
+    submitted? = Pool.SubmissionModel.submitted?(submission)
     validate? = validate? or submitted?
 
     assignment_form_ready? = Assignment.Context.ready?(assignment)

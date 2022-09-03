@@ -4,21 +4,27 @@ defmodule Systems.Campaign.Builders.Highlight do
   alias Link.Enums.OnlineStudyLanguages
 
   alias Systems.{
-    Assignment
+    Assignment,
+    Pool,
+    Budget
   }
 
-  def view_model(%Core.Pools.Submission{reward_value: reward_value}, :reward) do
+  defp vm(%Budget.CurrencyModel{} = currency, amount, :reward) do
     reward_title = dgettext("link-survey", "reward.highlight.title")
-
-    reward_value =
-      case reward_value do
-        nil -> "?"
-        value -> value
-      end
-
-    reward_text = "#{reward_value} credits"
-
+    locale = Gettext.get_locale(CoreWeb.Gettext)
+    reward_text = Budget.CurrencyModel.label(currency, locale, amount)
     %{title: reward_title, text: reward_text}
+  end
+
+  def view_model(
+        %Pool.SubmissionModel{pool: %{currency: currency}, reward_value: amount},
+        :reward
+      ) do
+    vm(currency, amount, :reward)
+  end
+
+  def view_model(%Budget.RewardModel{amount: amount, budget: %{currency: currency}}, :reward) do
+    vm(currency, amount, :reward)
   end
 
   def view_model(%Assignment.Model{assignable_experiment: experiment}, :duration) do

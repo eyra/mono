@@ -24,16 +24,24 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
           expectations: "These are the expectations for the participants"
         })
 
-      _submission = Factories.insert!(:submission, %{reward_value: 5, promotion: promotion})
-      %{id: id} = Factories.insert!(:campaign, %{assignment: assignment, promotion: promotion})
+      submission = Factories.insert!(:submission, %{reward_value: 5})
 
-      campaign = Campaign.Context.get!(id, Campaign.Model.preload_graph(:full))
+      %{id: id} =
+        Factories.insert!(:campaign, %{
+          assignment: assignment,
+          promotion: promotion,
+          submissions: [submission]
+        })
+
+      campaign =
+        Campaign.Context.get!(id, Campaign.Model.preload_graph(:full))
+        |> Campaign.Context.flatten()
+
       {:ok, campaign: campaign, user: user}
     end
 
     test "With applied member", %{campaign: campaign, user: user} do
       member = Crew.Context.apply_member!(campaign.promotable_assignment.crew, user)
-
       view_model = Campaign.Builders.AssignmentLandingPage.view_model(campaign, user)
 
       assert %{
@@ -113,8 +121,9 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
 
     test "Without applied member" do
       user = Factories.insert!(:member)
-      %{id: id, promotion: promotion} = Factories.insert!(:campaign)
-      _submission = Factories.insert!(:submission, %{reward_value: 5, promotion: promotion})
+      submission = Factories.insert!(:submission, %{reward_value: 5})
+
+      %{id: id, promotion: promotion} = Factories.insert!(:campaign, %{submissions: [submission]})
 
       campaign = Campaign.Context.get!(id, Campaign.Model.preload_graph(:full))
       view_model = Campaign.Builders.AssignmentLandingPage.view_model(campaign, user)
@@ -171,14 +180,15 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
           }
         )
 
-      _submission = Factories.insert!(:submission, %{reward_value: 5, promotion: promotion})
+      submission = Factories.insert!(:submission, %{reward_value: 5})
       author = Factories.build(:author)
 
       %{id: id} =
         Factories.insert!(:campaign, %{
           assignment: assignment,
           promotion: promotion,
-          authors: [author]
+          authors: [author],
+          submission: [submission]
         })
 
       campaign = Campaign.Context.get!(id, Campaign.Model.preload_graph(:full))

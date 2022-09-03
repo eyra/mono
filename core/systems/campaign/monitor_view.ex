@@ -5,6 +5,7 @@ defmodule Systems.Campaign.MonitorView do
   alias Frameworks.Pixel.Container.Wrap
 
   alias Systems.{
+    Pool,
     Crew,
     Campaign,
     Lab
@@ -235,10 +236,8 @@ defmodule Systems.Campaign.MonitorView do
            }
          },
          %{
-           promotion: %{
-             submission: %{status: status}
-           },
-           promotable_assignment: %{
+           submission: submission,
+           promotable: %{
              crew: crew,
              assignable_experiment:
                %{
@@ -252,6 +251,7 @@ defmodule Systems.Campaign.MonitorView do
     pending_count = Crew.Context.count_pending_tasks(crew)
     vacant_count = experiment |> get_vacant_count(participated_count, pending_count)
 
+    status = Pool.SubmissionModel.status(submission)
     active? = status === :accepted or Crew.Context.active?(crew)
 
     {attention_columns, attention_tasks} =

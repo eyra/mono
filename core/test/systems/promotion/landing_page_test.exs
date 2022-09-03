@@ -5,13 +5,18 @@ defmodule Systems.Promotion.LandingPageTest do
 
   alias Systems.{
     Promotion,
-    Crew
+    Crew,
+    Budget
   }
 
   describe "show landing page for: campaign -> assignment -> survey_tool" do
     setup [:login_as_member]
 
     setup do
+      currency = Budget.Factories.create_currency("test_1234", "ƒ", 2)
+      budget = Budget.Factories.create_budget("test_1234", currency)
+      pool = Factories.insert!(:pool, %{name: "test_1234", currency: currency})
+
       survey_tool =
         Factories.insert!(
           :survey_tool,
@@ -36,6 +41,7 @@ defmodule Systems.Promotion.LandingPageTest do
         Factories.insert!(
           :assignment,
           %{
+            budget: budget,
             experiment: experiment
           }
         )
@@ -57,17 +63,18 @@ defmodule Systems.Promotion.LandingPageTest do
           }
         )
 
-      _submission = Factories.insert!(:submission, %{reward_value: 5, promotion: promotion})
+      submission = Factories.insert!(:submission, %{reward_value: 500, pool: pool})
       author = Factories.build(:author)
 
       _campaign =
         Factories.insert!(:campaign, %{
           assignment: assignment,
           promotion: promotion,
-          authors: [author]
+          authors: [author],
+          submissions: [submission]
         })
 
-      %{promotion: promotion, assignment: assignment}
+      %{promotion: promotion, assignment: assignment, submissions: [submission]}
     end
 
     test "Initial", %{conn: conn, promotion: promotion} do
@@ -84,7 +91,7 @@ defmodule Systems.Promotion.LandingPageTest do
       assert html =~ "Duration"
       assert html =~ "10 minutes"
       assert html =~ "Reward"
-      assert html =~ "5 credits"
+      assert html =~ "ƒ5.00"
       assert html =~ "Status"
       assert html =~ "Open for participation"
       assert html =~ "Available on:"

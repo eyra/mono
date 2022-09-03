@@ -15,18 +15,28 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
     Assignment,
     Crew,
     Survey,
-    Lab
+    Lab,
+    Budget
   }
+
+  def view_model(
+        %Campaign.Model{} = campaign,
+        assigns,
+        url_resolver
+      ) do
+    campaign
+    |> Campaign.Model.flatten()
+    |> view_model(assigns, url_resolver)
+  end
 
   def view_model(
         %{
           id: id,
           promotion: %{
             expectations: expectations,
-            title: title,
-            submission: submission
+            title: title
           },
-          promotable_assignment:
+          promotable:
             %{
               crew: crew
             } = assignment
@@ -34,10 +44,14 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
         %{current_user: user} = _assigns,
         _url_resolver
       ) do
+    reward =
+      Assignment.Context.idempotence_key(assignment, user)
+      |> Budget.Context.get_reward(budget: [currency: Budget.CurrencyModel.preload_graph(:full)])
+
     base = %{
       id: id,
       title: title,
-      highlights: highlights(assignment, submission),
+      highlights: highlights(assignment, reward),
       hero_title: dgettext("link-survey", "task.hero.title")
     }
 
@@ -96,12 +110,15 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
 
   # Highlights
 
-  defp highlights(assignment, submission) do
+  defp highlights(assignment, nil) do
     [
       Campaign.Builders.Highlight.view_model(assignment, :duration),
-      Campaign.Builders.Highlight.view_model(assignment, :language),
-      Campaign.Builders.Highlight.view_model(submission, :reward)
+      Campaign.Builders.Highlight.view_model(assignment, :language)
     ]
+  end
+
+  defp highlights(assignment, reward) do
+    highlights(assignment, nil) ++ [Campaign.Builders.Highlight.view_model(reward, :reward)]
   end
 
   # Experiment

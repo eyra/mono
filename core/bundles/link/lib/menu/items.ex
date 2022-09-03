@@ -10,7 +10,7 @@ defmodule Link.Menu.Items do
       debug: %{target: Link.Debug, domain: "eyra-ui"},
       console: %{target: Link.Console, domain: "eyra-ui"},
       marketplace: %{target: Link.Marketplace, domain: "eyra-ui"},
-      studentpool: %{target: Systems.Pool.OverviewPage, domain: "link-ui"},
+      pools: %{target: Systems.Pool.OverviewPage, domain: "link-ui"},
       recruitment: %{target: Systems.Campaign.OverviewPage, domain: "link-ui"},
       todo: %{target: Systems.NextAction.OverviewPage, domain: "eyra-ui"},
       helpdesk: %{target: Systems.Support.HelpdeskPage, domain: "eyra-ui"},

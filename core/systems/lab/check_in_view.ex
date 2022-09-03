@@ -53,10 +53,12 @@ defmodule Systems.Lab.CheckInView do
         %{"item" => user_id},
         %{assigns: %{tool: tool, parent: _parent}} = socket
       ) do
-    user_id = String.to_integer(user_id)
+    user =
+      user_id
+      |> String.to_integer()
+      |> Accounts.get_user!()
 
-    Director.context(tool).activate_task(tool, user_id, true)
-    # update_target(parent, %{checkin: :new_participant})
+    Director.context(tool).apply_member_and_activate_task(tool, user)
     {:noreply, socket |> assign(focus: "", query: nil, message: nil)}
   end
 

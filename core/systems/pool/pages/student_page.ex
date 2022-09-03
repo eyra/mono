@@ -10,7 +10,8 @@ defmodule Systems.Pool.StudentPage do
 
   alias Systems.{
     Campaign,
-    Bookkeeping
+    Budget,
+    Pool
   }
 
   data(member, :any, default: nil)
@@ -22,8 +23,8 @@ defmodule Systems.Pool.StudentPage do
     user = Accounts.get_user!(user_id, [:features, :profile])
 
     wallets =
-      Bookkeeping.Context.account_query(["wallet", "#{user.id}"])
-      |> Enum.map(&ViewModelBuilder.view_model(&1, __MODULE__, user, url_resolver(socket)))
+      Budget.Context.list_wallets(user)
+      |> Enum.map(&Pool.Builders.Wallet.view_model(&1, user, url_resolver(socket)))
 
     campaign_preload = Campaign.Model.preload_graph(:full)
 
@@ -63,7 +64,7 @@ defmodule Systems.Pool.StudentPage do
            } = features
        }) do
     subtitle =
-      [email | Accounts.Features.get_study_programs(features)]
+      [email | Accounts.Features.get_scholar_classes(features)]
       |> Enum.join(" ▪︎ ")
 
     action = %{type: :href, href: "mailto:#{email}"}

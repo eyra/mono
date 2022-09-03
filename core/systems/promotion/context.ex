@@ -9,10 +9,10 @@ defmodule Systems.Promotion.Context do
   alias Ecto.Changeset
   alias Core.Repo
   alias Frameworks.Signal
-  alias Core.Pools.Submission
 
   alias Systems.{
-    Promotion
+    Promotion,
+    Pool
   }
 
   def list do
@@ -30,12 +30,10 @@ defmodule Systems.Promotion.Context do
   def get(id), do: Repo.get(Promotion, id)
 
   def create(attrs, auth_node) do
-    changeset =
-      %Promotion.Model{}
-      |> Promotion.Model.changeset(:insert, attrs)
-      |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
-
-    changeset |> Repo.insert()
+    %Promotion.Model{}
+    |> Promotion.Model.changeset(:insert, attrs)
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Repo.insert()
   end
 
   def update(%Promotion.Model{} = _promotion, %Changeset{} = changeset) do
@@ -81,7 +79,9 @@ defmodule Systems.Promotion.Context do
   end
 
   def has_submission?(promotion_id, pool_id) do
-    from(s in Submission, where: s.promotion_id == ^promotion_id and s.pool_id == ^pool_id)
+    from(s in Pool.SubmissionModel,
+      where: s.promotion_id == ^promotion_id and s.pool_id == ^pool_id
+    )
     |> Repo.exists?()
   end
 end

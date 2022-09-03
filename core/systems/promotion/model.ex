@@ -24,7 +24,6 @@ defmodule Systems.Promotion.Model do
     # Technical
     field(:director, Ecto.Enum, values: [:campaign])
 
-    has_one(:submission, Core.Pools.Submission, foreign_key: :promotion_id)
     belongs_to(:auth_node, Core.Authorization.Node)
 
     timestamps()

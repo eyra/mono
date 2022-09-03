@@ -75,7 +75,7 @@ msgid "tabbar.item.profile"
 msgstr ""
 
 #, elixir-format
-msgid "tabbar.item.study"
+msgid "tabbar.item.scholar"
 msgstr ""
 
 #, elixir-format
@@ -87,7 +87,7 @@ msgid "tabbar.item.profile.forward"
 msgstr ""
 
 #, elixir-format
-msgid "tabbar.item.study.forward"
+msgid "tabbar.item.scholar.forward"
 msgstr ""
 
 #, elixir-format

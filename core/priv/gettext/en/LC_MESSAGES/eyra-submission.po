@@ -72,19 +72,19 @@ msgid "retract.admin.success.title"
 msgstr "Campaign offline"
 
 #, elixir-format
-msgid "accept.error.text"
+msgid "publish.error.text"
 msgstr "Some required fields are not filled in correctly."
 
 #, elixir-format
-msgid "accept.error.title"
+msgid "publish.error.title"
 msgstr "Complete the form"
 
 #, elixir-format
-msgid "accept.success.text"
+msgid "publish.success.text"
 msgstr "The campaign is open or scheduled for participation in the marketplace."
 
 #, elixir-format
-msgid "accept.success.title"
+msgid "publish.success.title"
 msgstr "Campaign published"
 
 #, elixir-format

@@ -12,10 +12,6 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-msgid "menu.item.studentpool"
-msgstr "Student pool"
-
-#, elixir-format
 msgid "menu.item.recruitment"
 msgstr "Recruitment"
 
@@ -52,9 +48,13 @@ msgid "retract.button"
 msgstr "Unpublish"
 
 #, elixir-format
-msgid "accept.button"
+msgid "publish.button"
 msgstr "Publish"
 
 #, elixir-format, ex-autogen, fuzzy
 msgid "complete.button"
 msgstr "Finish up"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "menu.item.pools"
+msgstr "Pools"

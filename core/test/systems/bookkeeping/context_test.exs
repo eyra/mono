@@ -6,7 +6,7 @@ defmodule Systems.Bookkeeping.ContextTest do
     test "enter single booking" do
       amount = :rand.uniform(10_000)
 
-      :ok =
+      {:ok, _} =
         Bookkeeping.Context.enter(%{
           idempotence_key: Faker.String.base64(),
           journal_message: "Bank transaction: 123, received: 123,45 for money box: 89",
@@ -32,7 +32,7 @@ defmodule Systems.Bookkeeping.ContextTest do
       first_amount = :rand.uniform(10_000)
       second_amount = :rand.uniform(10_000)
 
-      :ok =
+      {:ok, _} =
         Bookkeeping.Context.enter(%{
           idempotence_key: Faker.String.base64(),
           journal_message: "Bank transaction",
@@ -48,7 +48,7 @@ defmodule Systems.Bookkeeping.ContextTest do
           ]
         })
 
-      :ok =
+      {:ok, _} =
         Bookkeeping.Context.enter(%{
           idempotence_key: Faker.String.base64(),
           journal_message: "Bank transaction",
@@ -79,7 +79,7 @@ defmodule Systems.Bookkeeping.ContextTest do
         result =
           Bookkeeping.Context.enter(%{
             idempotence_key: Faker.String.base64(),
-            journal_message: "",
+            journal_message: "transaction",
             lines: [
               %{
                 account: :bank,
@@ -100,7 +100,7 @@ defmodule Systems.Bookkeeping.ContextTest do
       result =
         Bookkeeping.Context.enter(%{
           idempotence_key: Faker.String.base64(),
-          journal_message: "",
+          journal_message: "transaction",
           lines: [
             %{
               account: :bank,
@@ -118,7 +118,7 @@ defmodule Systems.Bookkeeping.ContextTest do
     end
 
     test "require lines to have a unique idempotence key" do
-      :ok =
+      {:ok, _} =
         Bookkeeping.Context.enter(%{
           idempotence_key: "test",
           journal_message: "Testing",
@@ -160,7 +160,7 @@ defmodule Systems.Bookkeeping.ContextTest do
     end
 
     test "entries have the lines" do
-      :ok =
+      {:ok, _} =
         Bookkeeping.Context.enter(%{
           idempotence_key: "a",
           journal_message: "Bank transaction: 123, received: 123,45 for money box: 89",
@@ -176,7 +176,7 @@ defmodule Systems.Bookkeeping.ContextTest do
           ]
         })
 
-      :ok =
+      {:ok, _} =
         Bookkeeping.Context.enter(%{
           idempotence_key: "b",
           journal_message: "Bank transaction: 123, received: 123,45 for money box: 89",

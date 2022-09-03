@@ -10,7 +10,7 @@ defmodule Link.Onboarding.Wizard do
 
   alias Core.Accounts
   alias Link.Onboarding.Welcome, as: Welcome
-  alias CoreWeb.User.Forms.Study, as: StudyForm
+  alias CoreWeb.User.Forms.Scholar, as: ScholarForm
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
 
   alias Frameworks.Pixel.Button.DynamicButton
@@ -85,10 +85,10 @@ defmodule Link.Onboarding.Wizard do
     })
     |> append(
       %{
-        id: :study,
-        title: dgettext("eyra-ui", "tabbar.item.study"),
-        forward_title: dgettext("eyra-ui", "tabbar.item.study.forward"),
-        component: StudyForm,
+        id: :scholar,
+        title: dgettext("eyra-ui", "tabbar.item.scholar"),
+        forward_title: dgettext("eyra-ui", "tabbar.item.scholar.forward"),
+        component: ScholarForm,
         props: %{user: current_user},
         type: :form
       },

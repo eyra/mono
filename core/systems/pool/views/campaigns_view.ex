@@ -51,7 +51,7 @@ defmodule Systems.Pool.CampaignsView do
 
   defp clear_review_submission_next_action do
     for user <- Accounts.list_pool_admins() do
-      NextAction.Context.clear_next_action(user, Core.Pools.ReviewSubmission)
+      NextAction.Context.clear_next_action(user, Pool.ReviewSubmission)
     end
   end
 
@@ -77,14 +77,14 @@ defmodule Systems.Pool.CampaignsView do
     ~F"""
     <ContentArea>
       <MarginY id={:page_top} />
-      <div class="flex flex-row gap-3 items-center">
-        <div class="font-label text-label">Filter:</div>
-        <Selector id={:campaign_filters} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
-      </div>
-      <Spacing value="L" />
-      <Title2>{dgettext("link-studentpool", "tabbar.item.campaigns")}: <span class="text-primary">{Enum.count(@filtered_campaigns)}</span></Title2>
       <Case value={Enum.count(@campaigns) > 0}>
         <True>
+          <div class="flex flex-row gap-3 items-center">
+            <div class="font-label text-label">Filter:</div>
+            <Selector id={:campaign_filters} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
+          </div>
+          <Spacing value="L" />
+          <Title2>{dgettext("link-studentpool", "tabbar.item.campaigns")}: <span class="text-primary">{Enum.count(@filtered_campaigns)}</span></Title2>
           <ContentList items={@filtered_campaigns} />
         </True>
         <False>

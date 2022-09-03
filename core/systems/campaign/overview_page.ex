@@ -9,9 +9,9 @@ defmodule Systems.Campaign.OverviewPage do
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.UI.PlainDialog
   alias CoreWeb.UI.SelectorDialog
-  alias Frameworks.Pixel.Button.PrimaryLiveViewButton
 
-  alias Link.Marketplace.Card, as: CardVM
+  alias Frameworks.Utility.ViewModelBuilder
+  alias Frameworks.Pixel.Button.PrimaryLiveViewButton
   alias Frameworks.Pixel.Card.DynamicCampaign
   alias Frameworks.Pixel.Grid.DynamicGrid
   alias Frameworks.Pixel.Text.Title2
@@ -25,7 +25,10 @@ defmodule Systems.Campaign.OverviewPage do
 
   alias Systems.{
     Campaign,
-    Assignment
+    Assignment,
+    Pool,
+    Budget,
+    Scholar
   }
 
   def mount(_params, _session, socket) do
@@ -48,7 +51,9 @@ defmodule Systems.Campaign.OverviewPage do
     campaigns =
       user
       |> Campaign.Context.list_owned_campaigns(preload: preload)
-      |> Enum.map(&CardVM.campaign_researcher(&1, socket))
+      |> Enum.map(
+        &ViewModelBuilder.view_model(&1, {__MODULE__, :card}, user, url_resolver(socket))
+      )
 
     socket
     |> assign(
@@ -205,7 +210,15 @@ defmodule Systems.Campaign.OverviewPage do
 
   defp create_campaign(%{assigns: %{current_user: user}} = _socket, tool_type) do
     title = dgettext("eyra-dashboard", "default.study.title")
-    Campaign.Assembly.create(user, title, tool_type)
+
+    %{name: pool_name} =
+      pool =
+      Scholar.Context.default_pool()
+      |> Pool.Context.get_by_name()
+
+    budget = Budget.Context.get_by_name(pool_name)
+
+    Campaign.Assembly.create(user, title, tool_type, pool, budget)
   end
 
   def render(assigns) do

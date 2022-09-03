@@ -5,10 +5,10 @@ defmodule Core.Factories do
   alias Core.Accounts.{User, Profile, Features}
 
   alias Core.{
-    Pools,
     Authorization,
     DataDonation,
-    WebPush
+    WebPush,
+    Repo
   }
 
   alias Frameworks.{
@@ -24,10 +24,13 @@ defmodule Core.Factories do
     Support,
     Survey,
     Lab,
-    DataDonation
+    DataDonation,
+    Pool,
+    Budget,
+    Bookkeeping,
+    Content,
+    Org
   }
-
-  alias Core.Repo
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
 
@@ -88,6 +91,14 @@ defmodule Core.Factories do
     %Authorization.Node{}
   end
 
+  def build(:org_node) do
+    build(:org_node, %{})
+  end
+
+  def build(:org_link) do
+    build(:org_link, %{})
+  end
+
   def build(:web_push_subscription) do
     %WebPush.PushSubscription{
       user: build(:member),
@@ -141,13 +152,57 @@ defmodule Core.Factories do
     build(:time_slot, %{})
   end
 
-  # def build(:client_script) do
-  #   %DataDonation.ToolModel{
-  #     title: Faker.Lorem.sentence(),
-  #     script: "print 'hello'"
-  #   }
+  def build(:budget) do
+    build(:budget, %{name: Faker.Lorem.sentence()})
+  end
 
-  # end
+  def build(:book_account) do
+    build(:book_account, %{
+      identifier: random_identifier(:account),
+      balance_debit: 0,
+      balance_credit: 0
+    })
+  end
+
+  def build(:fund) do
+    build(:book_account, %{
+      identifier: random_identifier(:fund),
+      balance_debit: 0,
+      balance_credit: 0
+    })
+  end
+
+  def build(:reserve) do
+    build(:book_account, %{
+      identifier: random_identifier(:reserve),
+      balance_debit: 0,
+      balance_credit: 0
+    })
+  end
+
+  def build(:book_entry) do
+    build(:book_entry, %{})
+  end
+
+  def build(:book_line) do
+    build(:book_line, %{})
+  end
+
+  def build(:wallet) do
+    build(:book_account, %{
+      identifier: ["wallet", Faker.Lorem.word(), Faker.Random.Elixir.random_between(1, 4)],
+      balance_debit: 0,
+      balance_credit: 0
+    })
+  end
+
+  def build(:currency) do
+    build(:currency, %{name: Faker.Lorem.word()})
+  end
+
+  def build(:text_bundle) do
+    build(:text_bundle, %{})
+  end
 
   def build(:role_assignment) do
     %Authorization.RoleAssignment{}
@@ -158,11 +213,11 @@ defmodule Core.Factories do
   end
 
   def build(:pool) do
-    %Pools.Pool{name: :sbe_2021}
+    build(:pool, %{name: "test_pool"})
   end
 
   def build(:criteria) do
-    %Pools.Criteria{}
+    %Pool.CriteriaModel{}
   end
 
   def build(:submission) do
@@ -179,6 +234,28 @@ defmodule Core.Factories do
 
   def build(:auth_node, %{} = attributes) do
     %Authorization.Node{}
+    |> struct!(attributes)
+  end
+
+  def build(:org_node, %{} = attributes) do
+    {short_name_bundle, attributes} = Map.pop(attributes, :short_name_bundle, build(:text_bundle))
+    {full_name_bundle, attributes} = Map.pop(attributes, :full_name_bundle, build(:text_bundle))
+
+    %Org.NodeModel{
+      short_name_bundle: short_name_bundle,
+      full_name_bundle: full_name_bundle
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:org_link, %{} = attributes) do
+    {from, attributes} = Map.pop(attributes, :from, build(:org_node))
+    {to, attributes} = Map.pop(attributes, :to, build(:org_node))
+
+    %Org.LinkModel{
+      from: from,
+      to: to
+    }
     |> struct!(attributes)
   end
 
@@ -216,6 +293,9 @@ defmodule Core.Factories do
 
     {authors, attributes} = Map.pop(attributes, :authors, many_relationship(:authors, attributes))
 
+    {submissions, attributes} =
+      Map.pop(attributes, :submissions, many_relationship(:submissions, attributes))
+
     {promotion, attributes} =
       case Map.pop(attributes, :promotion, nil) do
         {nil, attributes} ->
@@ -251,13 +331,15 @@ defmodule Core.Factories do
       auth_node: campaign_auth_node,
       authors: authors,
       promotion: promotion,
-      promotable_assignment: assignment
+      promotable_assignment: assignment,
+      submissions: submissions
     }
     |> struct!(attributes)
   end
 
   def build(:assignment, %{} = attributes) do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+    {budget, attributes} = Map.pop(attributes, :budget, build(:budget))
 
     crew_auth_node = build(:auth_node, %{parent: auth_node})
     {crew, attributes} = Map.pop(attributes, :crew, build(:crew, %{auth_node: crew_auth_node}))
@@ -272,6 +354,7 @@ defmodule Core.Factories do
 
     %Assignment.Model{
       auth_node: auth_node,
+      budget: budget,
       assignable_experiment: experiment,
       crew: crew,
       excluded: []
@@ -354,13 +437,10 @@ defmodule Core.Factories do
   end
 
   def build(:submission, %{} = attributes) do
-    {promotion, attributes} = Map.pop!(attributes, :promotion)
-
     {criteria, attributes} = Map.pop(attributes, :criteria, build(:criteria))
-    {pool, attributes} = Map.pop(attributes, :pool, Pools.get_by_name(:sbe_2021))
+    {pool, attributes} = Map.pop(attributes, :pool, build(:pool))
 
-    %Pools.Submission{
-      promotion_id: promotion.id,
+    %Pool.SubmissionModel{
       status: :idle,
       criteria: criteria,
       pool: pool
@@ -375,6 +455,11 @@ defmodule Core.Factories do
       auth_node: auth_node,
       title: Faker.Lorem.sentence()
     }
+    |> struct!(attributes)
+  end
+
+  def build(:pool, %{} = attributes) do
+    %Pool.Model{}
     |> struct!(attributes)
   end
 
@@ -416,6 +501,84 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
+  def build(:budget, %{} = attributes) do
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+    {currency, attributes} = Map.pop(attributes, :currency, build(:currency))
+    {fund, attributes} = Map.pop(attributes, :fund, build(:fund))
+    {reserve, attributes} = Map.pop(attributes, :reserve, build(:reserve))
+
+    %Budget.Model{
+      currency: currency,
+      fund: fund,
+      reserve: reserve,
+      auth_node: auth_node
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:book_account, %{} = attributes) do
+    %Bookkeeping.AccountModel{}
+    |> struct!(attributes)
+  end
+
+  def build(:book_entry, %{} = attributes) do
+    %Bookkeeping.EntryModel{}
+    |> struct!(attributes)
+  end
+
+  def build(:book_line, %{} = attributes) do
+    {account, attributes} = Map.pop(attributes, :account, build(:book_account))
+    {entry, attributes} = Map.pop(attributes, :entry, build(:book_entry))
+
+    %Bookkeeping.LineModel{
+      account: account,
+      entry: entry
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:currency, %{} = attributes) do
+    {label_bundle, attributes} = Map.pop(attributes, :label_bundle, build(:text_bundle))
+
+    %Budget.CurrencyModel{
+      label_bundle: label_bundle
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:reward, %{} = attributes) do
+    {budget, attributes} = Map.pop(attributes, :budget, build(:budget))
+    {user, attributes} = Map.pop(attributes, :user, build(:member))
+    {deposit, attributes} = Map.pop(attributes, :deposit, nil)
+    {payment, attributes} = Map.pop(attributes, :payment, nil)
+
+    %Budget.RewardModel{
+      budget: budget,
+      user: user,
+      deposit: deposit,
+      payment: payment
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:text_bundle, %{} = attributes) do
+    {items, attributes} = Map.pop(attributes, :items, [])
+
+    %Content.TextBundleModel{
+      items: items
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:text_item, %{} = attributes) do
+    {bundle, attributes} = Map.pop(attributes, :bundle, build(:text_bundle))
+
+    %Content.TextItemModel{
+      bundle: bundle
+    }
+    |> struct!(attributes)
+  end
+
   def build(factory_name, %{} = attributes) do
     factory_name |> build() |> struct!(attributes)
   end
@@ -440,5 +603,11 @@ defmodule Core.Factories do
     else
       result
     end
+  end
+
+  defp random_identifier(type) when is_atom(type), do: random_identifier(type |> Atom.to_string())
+
+  defp random_identifier(type) when is_binary(type) do
+    [type] ++ Faker.Lorem.words(3..5)
   end
 end

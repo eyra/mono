@@ -12,22 +12,18 @@ defmodule Link.Marketplace do
   }
 
   alias Core.Accounts
-  alias Core.Pools.Criteria
 
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-
-  alias Link.Marketplace.Card, as: CardVM
 
   alias Frameworks.Pixel.Card.SecondaryCampaign
   alias Frameworks.Pixel.Text.{Title2}
   alias Frameworks.Pixel.Grid.{DynamicGrid}
 
   data(next_best_action, :any)
-  data(highlighted_count, :any)
   data(owned_campaigns, :any)
   data(subject_count, :any)
-  data(available_campaigns, :any)
-  data(available_count, :any)
+  data(campaigns, :any)
+  data(campaign_count, :any)
   data(current_user, :any)
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
@@ -37,11 +33,7 @@ defmodule Link.Marketplace do
     preload = Campaign.Model.preload_graph(:full)
 
     subject_campaigns = Campaign.Context.list_subject_campaigns(user, preload: preload)
-
-    highlighted_count = Enum.count(subject_campaigns)
-
     excluded_campaigns = Campaign.Context.list_excluded_campaigns(subject_campaigns)
-
     exclude = subject_campaigns ++ excluded_campaigns
 
     exclusion_list =
@@ -49,26 +41,26 @@ defmodule Link.Marketplace do
       |> Stream.map(fn campaign -> campaign.id end)
       |> Enum.into(MapSet.new())
 
-    available_campaigns =
-      Campaign.Context.list_by_submission_status([:accepted],
+    campaigns =
+      Pool.Context.list_by_user(user)
+      |> Campaign.Context.list_by_pools_and_submission_status([:accepted],
         exclude: exclusion_list,
         preload: preload
       )
       |> filter(socket)
       |> sort_by_open_spot_count()
-      |> Enum.map(&CardVM.primary_campaign(&1, socket))
+      |> Enum.map(
+        &ViewModelBuilder.view_model(&1, {__MODULE__, :card}, user, url_resolver(socket))
+      )
 
-    subject_count = Enum.count(subject_campaigns)
-    available_count = Enum.count(available_campaigns)
+    campaign_count = Enum.count(campaigns)
 
     socket =
       socket
       |> update_menus()
       |> assign(next_best_action: next_best_action)
-      |> assign(highlighted_count: highlighted_count)
-      |> assign(subject_count: subject_count)
-      |> assign(available_campaigns: available_campaigns)
-      |> assign(available_count: available_count)
+      |> assign(campaigns: campaigns)
+      |> assign(campaign_count: campaign_count)
 
     {:ok, socket}
   end
@@ -82,17 +74,20 @@ defmodule Link.Marketplace do
   end
 
   defp filter(
-         %{
-           promotion: %{submission: %{criteria: submission_criteria} = submission}
-         },
+         %{submissions: submissions},
          %{assigns: %{current_user: user}}
        ) do
-    user_features = Accounts.get_features(user)
+    case Pool.Context.select(submissions, user) do
+      nil ->
+        false
 
-    released? = Pool.Context.published_status(submission) == :released
-    eligitable? = Criteria.eligitable?(submission_criteria, user_features)
+      %{criteria: criteria} = submission ->
+        user_features = Accounts.get_features(user)
+        released? = Pool.Context.published_status(submission) == :released
+        eligitable? = Pool.CriteriaModel.eligitable?(criteria, user_features)
 
-    released? and eligitable?
+        released? and eligitable?
+    end
   end
 
   def handle_info({:handle_auto_save_done, _}, socket) do
@@ -121,8 +116,8 @@ defmodule Link.Marketplace do
     {:noreply, push_redirect(socket, to: action)}
   end
 
-  def render_empty?(%{available_count: available_count}) do
-    not feature_enabled?(:marketplace) or available_count == 0
+  def render_empty?(%{campaign_count: campaign_count}) do
+    not feature_enabled?(:marketplace) or campaign_count == 0
   end
 
   def render(assigns) do
@@ -134,20 +129,15 @@ defmodule Link.Marketplace do
           <NextAction.HighlightView vm={@next_best_action} />
           <div class="mt-6 lg:mt-10" />
         </div>
-        <Case value={@subject_count > 0}>
-          <True>
-          </True>
-        </Case>
         <Case value={render_empty?(assigns)}>
           <False>
-            <Spacing :if={@subject_count > 0} value="XL" />
             <Title2>
               {dgettext("eyra-campaign", "campaign.all.title")}
               <span class="text-primary">
-                {@available_count}</span>
+                {@campaign_count}</span>
             </Title2>
             <DynamicGrid>
-              <div :for={card <- @available_campaigns} class="mb-1">
+              <div :for={card <- @campaigns} class="mb-1">
                 <SecondaryCampaign
                   id={card.id}
                   path_provider={CoreWeb.Endpoint}
@@ -158,7 +148,6 @@ defmodule Link.Marketplace do
             </DynamicGrid>
           </False>
           <True>
-            <Spacing :if={@subject_count > 0} value="XXL" />
             <Empty
               title={dgettext("eyra-marketplace", "empty.title")}
               body={dgettext("eyra-marketplace", "empty.description")}

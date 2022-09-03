@@ -21,7 +21,8 @@ defmodule Systems.Assignment.Switch do
         }
       ) do
     # crew does not have a director (yet), so check if assignment is available to handle signal
-    with [%{director: director} = assignment | _] <- Assignment.Context.get_by_crew!(crew_id) do
+    with [%{director: director} = assignment | _] <-
+           Assignment.Context.get_by_crew!(crew_id, budget: [:fund, :reserve, :currency]) do
       %{user_id: user_id} = Crew.Context.get_member!(member_id)
       user = Accounts.get_user!(user_id)
 

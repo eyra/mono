@@ -93,7 +93,7 @@ msgstr "Push notificaties zijn gedeactiveerd op deze browser"
 
 #, elixir-format
 msgid "feature.study.description"
-msgstr "Selecteer je opleiding(en), bedrijfskunde (BK) en/of international business administration (IBA). Heb je RPR vorig jaar niet afgerond, selecteer dan de herkansing variant. Ben je een 2e jaars student (RPR2), maar heb je RPR1 nog niet afgerond, selecteer dan zowel \"2e jaar\" als \"1e jaar (herkansing)\"."
+msgstr "Selecteer je opleiding, bedrijfskunde (BK) en/of international business administration (IBA), en je studie jaar, om credits te kunnen behalen voor onderzoeksparticipatie. Als je nog credits van vorig jaar moet behalen, zorg er dan voor dat je dat jaar ook selecteert."
 
 #, elixir-format
 msgid "features.description"
@@ -150,14 +150,6 @@ msgstr "privacy verklaring"
 #, elixir-format
 msgid "login.surf.message.surfconext.href"
 msgstr "https://wiki.surfnet.nl/display/conextsupport/Inloggen+via+SURFconext"
-
-#, elixir-format
-msgid "features.study.program"
-msgstr "Opleiding"
-
-#, elixir-format
-msgid "features.study.year"
-msgstr "Leerjaar"
 
 #, elixir-format
 msgid "ehtical.code.label"

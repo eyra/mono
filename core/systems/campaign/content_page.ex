@@ -10,8 +10,6 @@ defmodule Systems.Campaign.ContentPage do
   import CoreWeb.Gettext
   import Core.ImageCatalog, only: [image_catalog: 0]
 
-  alias Core.Pools.Submissions
-
   alias CoreWeb.ImageCatalogPicker
   alias Systems.Promotion.FormView, as: PromotionForm
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
@@ -21,7 +19,8 @@ defmodule Systems.Campaign.ContentPage do
 
   alias Systems.{
     Campaign,
-    Assignment
+    Assignment,
+    Pool
   }
 
   data(validate?, :boolean, default: false)
@@ -124,12 +123,12 @@ defmodule Systems.Campaign.ContentPage do
   def handle_event(
         "submit",
         _params,
-        %{assigns: %{vm: %{id: campaign_id, promotion: %{submission: submission}}}} = socket
+        %{assigns: %{vm: %{id: campaign_id, submission: submission}}} = socket
       ) do
     socket =
       if Campaign.Context.ready?(campaign_id) do
         {:ok, _submission} =
-          Submissions.update(submission, %{
+          Pool.Context.update(submission, %{
             status: :submitted,
             submitted_at: Timestamp.naive_now()
           })
@@ -156,10 +155,9 @@ defmodule Systems.Campaign.ContentPage do
   def handle_event(
         "retract",
         _params,
-        %{assigns: %{vm: %{promotion: %{submission: submission}}}} = socket
+        %{assigns: %{vm: %{submission: submission}}} = socket
       ) do
-    {:ok, _submission} = Submissions.update(submission, %{status: :idle})
-
+    {:ok, _} = Pool.Context.update(submission, %{status: :idle})
     title = dgettext("eyra-submission", "retract.success.title")
     text = dgettext("eyra-submission", "retract.success.text")
 

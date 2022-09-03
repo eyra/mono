@@ -76,7 +76,7 @@ msgid "tabbar.item.profile"
 msgstr "My profile"
 
 #, elixir-format
-msgid "tabbar.item.study"
+msgid "tabbar.item.scholar"
 msgstr "Study program"
 
 #, elixir-format
@@ -88,7 +88,7 @@ msgid "tabbar.item.profile.forward"
 msgstr "Update profile"
 
 #, elixir-format
-msgid "tabbar.item.study.forward"
+msgid "tabbar.item.scholar.forward"
 msgstr "Select study program"
 
 #, elixir-format
@@ -200,13 +200,13 @@ msgid "persister.error.flash"
 msgstr "Not saved, please reload and try again"
 
 #, elixir-format, ex-autogen
-msgid "pronoun.him"
-msgstr "him"
-
-#, elixir-format, ex-autogen
 msgid "mailto.button"
 msgstr "Get in touch"
 
 #, elixir-format, ex-autogen
 msgid "notify.all"
 msgstr "Send notification"
+
+#, elixir-format, ex-autogen
+msgid "pronoun.him"
+msgstr "him"

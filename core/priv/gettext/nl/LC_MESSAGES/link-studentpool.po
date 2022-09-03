@@ -20,10 +20,6 @@ msgid "tabbar.item.campaigns"
 msgstr "Campagnes"
 
 #, elixir-format
-msgid "title"
-msgstr "Studentenpool"
-
-#, elixir-format
 msgid "students.empty.description"
 msgstr "Op dit moment zijn er nog geen studenten geregistreerd. Je wordt op de hoogte gesteld zodra er studenten zijn die zich  hebben aangemeld."
 
@@ -64,10 +60,6 @@ msgid "tabbar.item.dashboard"
 msgstr "Dashboard"
 
 #, elixir-format, ex-autogen
-msgid "year.label"
-msgstr "SBE Jaar %{year}"
-
-#, elixir-format, ex-autogen
 msgid "active.students"
 msgstr "Actieve studenten"
 
@@ -94,3 +86,19 @@ msgstr "Student"
 #, elixir-format, ex-autogen, fuzzy
 msgid "search.placeholder"
 msgstr "Zoeken"
+
+#, elixir-format, ex-autogen, fuzzy
+msgid "submission.selector.title"
+msgstr "Pool"
+
+#, elixir-format, ex-autogen
+msgid "overview.title"
+msgstr "Pools"
+
+#, elixir-format, ex-autogen
+msgid "campaigns.label"
+msgstr "Campagnes"
+
+#, elixir-format, ex-autogen
+msgid "participants.label"
+msgstr "Deelnemers"

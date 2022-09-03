@@ -11,7 +11,8 @@ defmodule Systems.Campaign.MonitorViewTest do
 
   alias Systems.{
     Campaign,
-    Crew
+    Crew,
+    Budget
   }
 
   describe "show content page for campaign" do
@@ -189,11 +190,15 @@ defmodule Systems.Campaign.MonitorViewTest do
          schedule_start \\ nil,
          schedule_end \\ nil
        ) do
+    currency = Budget.Factories.create_currency("test_1234", "ƒ", 2)
+    budget = Budget.Factories.create_budget("test_1234", currency)
+    pool = Factories.insert!(:pool, %{name: "test_1234", currency: currency})
+
     promotion = Factories.insert!(:promotion)
 
-    _submission =
+    submission =
       Factories.insert!(:submission, %{
-        promotion: promotion,
+        pool: pool,
         status: status,
         schedule_start: schedule_start,
         schedule_end: schedule_end
@@ -209,8 +214,15 @@ defmodule Systems.Campaign.MonitorViewTest do
         subject_count: subject_count
       })
 
-    assignment = Factories.insert!(:assignment, %{experiment: experiment, crew: crew})
-    campaign = Factories.insert!(:campaign, %{assignment: assignment, promotion: promotion})
+    assignment =
+      Factories.insert!(:assignment, %{budget: budget, experiment: experiment, crew: crew})
+
+    campaign =
+      Factories.insert!(:campaign, %{
+        assignment: assignment,
+        promotion: promotion,
+        submissions: [submission]
+      })
 
     :ok = Authorization.assign_role(researcher, campaign, :owner)
 

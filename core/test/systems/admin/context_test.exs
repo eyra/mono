@@ -1,5 +1,6 @@
 defmodule Systems.Admin.ContextTest do
-  use ExUnit.Case, async: true
+  use Core.DataCase
+
   alias Systems.Admin.Context
 
   describe "admin?/2" do

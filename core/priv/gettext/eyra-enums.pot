@@ -79,38 +79,6 @@ msgid "native_languages.nl"
 msgstr ""
 
 #, elixir-format
-msgid "study_pogram_codes.bk_1"
-msgstr ""
-
-#, elixir-format
-msgid "study_pogram_codes.bk_1_h"
-msgstr ""
-
-#, elixir-format
-msgid "study_pogram_codes.bk_2"
-msgstr ""
-
-#, elixir-format
-msgid "study_pogram_codes.bk_2_h"
-msgstr ""
-
-#, elixir-format
-msgid "study_pogram_codes.iba_1"
-msgstr ""
-
-#, elixir-format
-msgid "study_pogram_codes.iba_1_h"
-msgstr ""
-
-#, elixir-format
-msgid "study_pogram_codes.iba_2"
-msgstr ""
-
-#, elixir-format
-msgid "study_pogram_codes.iba_2_h"
-msgstr ""
-
-#, elixir-format
 msgid "ticket_types.bug"
 msgstr ""
 
@@ -120,14 +88,6 @@ msgstr ""
 
 #, elixir-format
 msgid "ticket_types.tip"
-msgstr ""
-
-#, elixir-format
-msgid "study_years.first"
-msgstr ""
-
-#, elixir-format
-msgid "study_years.second"
 msgstr ""
 
 #, elixir-format
@@ -211,14 +171,6 @@ msgid "criteria_filters.resit"
 msgstr ""
 
 #, elixir-format
-msgid "criteria_filters.year1"
-msgstr ""
-
-#, elixir-format
-msgid "criteria_filters.year2"
-msgstr ""
-
-#, elixir-format
 msgid "ticket_status.closed"
 msgstr ""
 
@@ -284,4 +236,40 @@ msgstr ""
 
 #, elixir-format, ex-autogen
 msgid "student_filters.passed"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "organisation_types.faculty"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "organisation_types.scholar_class"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "organisation_types.scholar_course"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "organisation_types.scholar_program"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "organisation_types.university"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "scholar_years.first"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "scholar_years.second"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "organisation_types.company"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "organisation_types.department"
 msgstr ""

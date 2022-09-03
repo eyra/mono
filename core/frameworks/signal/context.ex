@@ -1,13 +1,13 @@
 defmodule Frameworks.Signal.Context do
   @signal_handlers [
     Core.Accounts.SignalHandlers,
-    Core.Pools.SignalHandlers,
     Core.Mailer.SignalHandlers,
     Core.WebPush.SignalHandlers,
     Core.APNS.SignalHandlers,
     Systems.Observatory.Switch,
     Systems.Assignment.Switch,
     Systems.Pool.Switch,
+    Systems.Scholar.Switch,
     Systems.Campaign.Switch,
     Systems.NextAction.Switch
   ]

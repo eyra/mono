@@ -65,7 +65,7 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
       user_state.researcher
     )
     |> append(
-      live_item(socket, menu_id, :studentpool, user_state, active_item),
+      live_item(socket, menu_id, :pools, user_state, active_item),
       user_state.coordinator
     )
     |> append(live_item(socket, menu_id, :marketplace, user_state, active_item))

@@ -93,7 +93,7 @@ msgstr "Determining state.."
 
 #, elixir-format
 msgid "feature.study.description"
-msgstr "Select your study program(s), bedrijfskunde (BK) and/or international business administration (IBA). Did you not finish RPR last year, select the re-sit option. If you are a 2nd year student (RPR2), but also retaking RPR1 \"1st year (re-sit)\", make sure to select both."
+msgstr "To earn credits for research participation, select your study program, bedrijfskunde (BK) and/or international business administration (IBA), and study year. If you still need to earn credits for last year, make sure to select that year as well."
 
 #, elixir-format
 msgid "features.description"
@@ -150,14 +150,6 @@ msgstr "privacy statement"
 #, elixir-format
 msgid "login.surf.message.surfconext.href"
 msgstr "https://wiki.surfnet.nl/display/conextsupport/Log+in+SURFconext"
-
-#, elixir-format
-msgid "features.study.program"
-msgstr "Study program"
-
-#, elixir-format
-msgid "features.study.year"
-msgstr "Study year"
 
 #, elixir-format
 msgid "ehtical.code.label"
