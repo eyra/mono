@@ -54,11 +54,18 @@ defmodule Systems.Pool.OverviewPage do
   end
 
   defp description(%{participants: participants, submissions: submissions}) do
+    submissions = remove_concept_submissions(submissions)
+
     [
       "#{dgettext("link-studentpool", "participants.label")}: #{Enum.count(participants)}",
       "#{dgettext("link-studentpool", "campaigns.label")}: #{Enum.count(submissions)}"
     ]
     |> Enum.join("  |  ")
+  end
+
+  defp remove_concept_submissions(submissions) do
+    submissions
+    |> Enum.filter(&Pool.SubmissionModel.submitted?(&1))
   end
 
   def render(assigns) do
