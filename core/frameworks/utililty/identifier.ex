@@ -20,5 +20,6 @@ defmodule Frameworks.Utility.Identifier do
 
   defp atomify("year" <> year, true), do: ":year#{year}"
   defp atomify("20" <> year, true), do: ":20#{year}"
+  defp atomify("resit", true), do: ":resit"
   defp atomify(term, _), do: term
 end
