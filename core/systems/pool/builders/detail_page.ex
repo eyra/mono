@@ -87,7 +87,7 @@ defmodule Systems.Pool.Builders.DetailPage do
 
     total_count = participants |> Enum.count()
 
-    inactive_count = total_count - (active_count + active_count)
+    inactive_count = total_count - (active_count + passed_count)
 
     truncated_credits =
       credits
