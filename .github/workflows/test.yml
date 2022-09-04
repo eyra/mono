@@ -49,7 +49,7 @@ jobs:
         continue-on-error: true
 
       - name: Commit formatted code
-        uses: EndBug/add-and-commit@v6
+        uses: EndBug/add-and-commit@v9
         with:
           add: '.'
           message: 'Formatted code'
