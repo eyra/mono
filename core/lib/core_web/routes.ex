@@ -11,7 +11,7 @@ defmodule CoreWeb.Routes do
         plug(:accepts, ["html"])
         plug(:fetch_session)
 
-        plug(Cldr.Plug.SetLocale,
+        plug(Cldr.Plug.PutLocale,
           apps: [cldr: CoreWeb.Cldr, gettext: :global],
           from: [:query, :cookie, :accept_language],
           param: "locale"

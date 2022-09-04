@@ -10,6 +10,12 @@ import Config
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :surface, :components, [
+  {Surface.Components.Form, propagate_context_to_slots: true},
+  {Frameworks.Pixel.Form.Form, propagate_context_to_slots: true},
+  {CoreWeb.UI.Navigation.TabbarArea, propagate_context_to_slots: true},
+]
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

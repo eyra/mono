@@ -7,8 +7,12 @@ defmodule CoreWeb.UI.PlainDialog do
   prop(text, :string, required: true)
   prop(buttons, :string, default: [])
 
-  defmacro __using__(_opts) do
+  defoverridable __using__: 1
+
+  defmacro __using__(opts) do
+    super_use = super(opts)
     quote do
+      unquote(super_use)
       alias CoreWeb.UI.PlainDialog
 
       data(dialog, :any)

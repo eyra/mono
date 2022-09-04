@@ -7,9 +7,9 @@ defmodule Systems.Content.TextItemModel do
   }
 
   schema "text_items" do
-    field(:locale, :string, null: false)
-    field(:text, :string, null: false)
-    field(:text_plural, :string, null: true)
+    field(:locale, :string)
+    field(:text, :string)
+    field(:text_plural, :string)
     belongs_to(:bundle, Content.TextBundleModel)
     timestamps()
   end
