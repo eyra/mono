@@ -93,7 +93,7 @@ msgstr "Determining state.."
 
 #, elixir-format
 msgid "feature.study.description"
-msgstr "To earn credits for research participation, select your study program, bedrijfskunde (BK) and/or international business administration (IBA), and study year. If you still need to earn credits for last year, make sure to select that year as well."
+msgstr "To earn credits for research participation (OP / RPR) for bedrijfskunde (BK) or international business administration (IBA), select one or more courses below. If you did not finish a course last year, make sure to select that course as well."
 
 #, elixir-format
 msgid "features.description"
