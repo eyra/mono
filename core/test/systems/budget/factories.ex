@@ -65,11 +65,16 @@ defmodule Systems.Budget.Factories do
     })
   end
 
-  def create_wallet(%Core.Accounts.User{id: user_id}, %Budget.CurrencyModel{name: currency_name}) do
+  def create_wallet(
+        %Core.Accounts.User{id: user_id},
+        %Budget.CurrencyModel{name: currency_name},
+        balance_credit \\ 0,
+        balance_debit \\ 0
+      ) do
     Core.Factories.insert!(:book_account, %{
       identifier: ["wallet", currency_name, "#{user_id}"],
-      balance_debit: 0,
-      balance_credit: 0
+      balance_credit: balance_credit,
+      balance_debit: balance_debit
     })
   end
 end
