@@ -12,5 +12,5 @@
 
 <pre><code id="python-script"><%= @script %></code></pre>
 
-<script src="https://cdn.jsdelivr.net/pyodide/v0.17.0a2/full/pyodide.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/vv0.21.2/full/pyodide.js"></script>
 <script src="<%= CoreWeb.Endpoint.static_path("/js/python_data_loader.js") %>"></script>
