@@ -8,7 +8,7 @@ defmodule Core.MixProject do
       source_url: "https://github.com/eyra/eylixir",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:gettext, :phoenix] ++ Mix.compilers() ++ [:surface],
+      compilers: [:phoenix] ++ Mix.compilers() ++ [:surface],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -31,7 +31,7 @@ defmodule Core.MixProject do
         flags: [
           # :unmatched_returns,
           :error_handling,
-          :race_conditions,
+          # :race_conditions,
           :no_opaque
         ]
       ]
@@ -80,8 +80,8 @@ defmodule Core.MixProject do
       {:phoenix_live_view, "~> 0.17.5"},
       {:phoenix_html, "~> 3.2"},
       {:phoenix_inline_svg, "~> 1.4"},
-      {:surface, "~> 0.7.0"},
-      {:surface_catalogue, "~> 0.4.1"},
+      {:surface, "~> 0.8.0"},
+      {:surface_catalogue, "~> 0.5.0"},
       {:floki, ">= 0.27.0"},
       {:ecto_sql, "~> 3.7"},
       {:ecto_commons, "~> 0.3.3"},
@@ -110,6 +110,7 @@ defmodule Core.MixProject do
       {:ex_cldr, "~> 2.25"},
       {:ex_cldr_numbers, "~> 2.23"},
       {:ex_cldr_dates_times, "~> 2.10"},
+      {:ex_cldr_plugs, "~> 1.2"},
       {:site_encrypt, "~> 0.4"},
       # Optional, but recommended for SSL validation with :httpc adapter
       {:certifi, "~> 2.8"},

@@ -19,7 +19,7 @@ defmodule Frameworks.Pixel.Panel.Panel do
     ~F"""
     <div class={@bg_color, @size, "rounded-md"}>
       <div class={"#{@padding} #{@align}"}>
-        <#slot name="title" />
+        <#slot {@title} />
         <#slot />
       </div>
     </div>

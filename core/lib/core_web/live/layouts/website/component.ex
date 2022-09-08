@@ -15,8 +15,14 @@ defmodule CoreWeb.Layouts.Website.Component do
   slot(hero, required: true)
   slot(default, required: true)
 
+  defoverridable __using__: 1
+
   defmacro __using__(active_item) do
+    super_use = super([])
+
     quote do
+      unquote(super_use)
+
       alias CoreWeb.Layouts.Website.Component, as: Website
 
       data(menus, :map)
@@ -73,7 +79,7 @@ defmodule CoreWeb.Layouts.Website.Component do
             <div class="flex-1">
               <div class="flex flex-col h-full border-t border-l border-b border-grey4">
                 <div class="bg-white">
-                  <#slot name="hero" />
+                  <#slot {@hero} />
                 </div>
                 <div class="flex-1 bg-white">
                   <div class="flex flex-row">

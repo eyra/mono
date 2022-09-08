@@ -1,6 +1,6 @@
 defmodule Systems.Assignment.ExperimentForm do
   use CoreWeb.LiveForm
-  use Frameworks.Pixel.Form.Checkbox
+  use Frameworks.Pixel.Form.CheckboxHelpers
 
   alias Core.Enums.Devices
   alias Link.Enums.OnlineStudyLanguages

@@ -84,6 +84,8 @@ defmodule Systems.Scholar.Context do
     target
   end
 
+  def handle_features_updated(_user, nil, _new_class_codes), do: nil
+
   def handle_features_updated(user, old_class_codes, new_class_codes) do
     old_pool_names =
       old_class_codes

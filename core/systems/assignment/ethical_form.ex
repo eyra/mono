@@ -1,6 +1,6 @@
 defmodule Systems.Assignment.EthicalForm do
   use CoreWeb.LiveForm
-  use Frameworks.Pixel.Form.Checkbox
+  use Frameworks.Pixel.Form.CheckboxHelpers
 
   alias Frameworks.Pixel.Panel.Panel
   alias Frameworks.Pixel.Text.{Title3, Title5, BodyMedium}

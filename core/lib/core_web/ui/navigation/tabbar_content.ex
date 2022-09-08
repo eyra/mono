@@ -4,16 +4,18 @@ defmodule CoreWeb.UI.Navigation.TabbarContent do
 
   alias CoreWeb.UI.Navigation.Tab
 
+  data(tabs, :any, from_context: :tabs)
+
   def render(assigns) do
     ~F"""
-    <div class="h-navbar-height" />
-    <Context get={tabs: tabs}>
-      {#for tab <- tabs}
+    <div>
+      <div class="h-navbar-height" />
+      {#for tab <- @tabs}
         <Tab id={tab.id}>
           <Dynamic.LiveComponent id={tab.id} module={tab.component} props={tab.props} />
         </Tab>
       {/for}
-    </Context>
+    </div>
     """
   end
 end

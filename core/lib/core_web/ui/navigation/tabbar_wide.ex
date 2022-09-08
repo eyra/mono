@@ -8,6 +8,8 @@ defmodule CoreWeb.UI.Navigation.TabbarWide do
 
   defviewmodel(type: :seperated)
 
+  data(tabs, :any, from_context: :tabs)
+
   defp tab_vm(:seperated, tab, index), do: Map.merge(tab, %{type: :seperated, index: index})
   defp tab_vm(:segmented, tab, _), do: Map.put(tab, :type, :segmented)
 
@@ -16,15 +18,13 @@ defmodule CoreWeb.UI.Navigation.TabbarWide do
 
   def render(assigns) do
     ~F"""
-    <Context get={tabs: tabs}>
-      <div class={"flex flex-row items-center h-full #{gap(type(@vm))}"}>
-        {#for {tab, index} <- Enum.with_index(tabs)}
-          <div class="flex-shrink-0 h-full">
-            <TabbarItem tabbar="wide" vm={tab_vm(type(@vm), tab, index)} />
-          </div>
-        {/for}
-      </div>
-    </Context>
+    <div class={"flex flex-row items-center h-full #{gap(type(@vm))}"}>
+      {#for {tab, index} <- Enum.with_index(@tabs)}
+        <div class="flex-shrink-0 h-full">
+          <TabbarItem tabbar="wide" vm={tab_vm(type(@vm), tab, index)} />
+        </div>
+      {/for}
+    </div>
     """
   end
 end

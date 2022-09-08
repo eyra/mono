@@ -44,9 +44,9 @@ defmodule Frameworks.Pixel.Card.ClickableCard do
       :on-click="card_click"
     >
       <div class="flex flex-col h-full">
-        <#slot name="image" />
+        <#slot {@image} />
         <div class="p-6 lg:pl-8 lg:pr-8 lg:pt-8">
-          <#slot name="title" />
+          <#slot {@title} />
         </div>
         <div class="flex-grow" />
         <div>

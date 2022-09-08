@@ -58,12 +58,10 @@ defmodule Frameworks.Pixel.Button.Primary.Playground do
     height: "110px",
     container: {:div, class: "buttons is-centered"}
 
-  data(props, :map,
-    default: %{
-      to: "/",
-      label: "My Button"
-    }
-  )
+  @props [
+    to: "/",
+    label: "My Button"
+  ]
 
   def render(assigns) do
     ~F"""
