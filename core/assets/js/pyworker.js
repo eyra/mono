@@ -1,8 +1,8 @@
-importScripts("https://cdn.jsdelivr.net/pyodide/v0.19.0/full/pyodide.js");
+importScripts("https://cdn.jsdelivr.net/pyodide/v0.21.2/full/pyodide.js");
 
 var data = undefined;
 
-loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.19.0/full/" }).then((pyodide) => {
+loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.21.2/full/" }).then((pyodide) => {
   self.pyodide = pyodide;
   return self.pyodide.loadPackage(["micropip", "numpy", "pandas"]);
 }).then(() => {
