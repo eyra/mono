@@ -6,7 +6,7 @@ defmodule Systems.Budget.CurrencyModel do
   }
 
   schema "currencies" do
-    field(:name, :string, null: false)
+    field(:name, :string)
     field(:decimal_scale, :integer)
     belongs_to(:label_bundle, Content.TextBundleModel)
 

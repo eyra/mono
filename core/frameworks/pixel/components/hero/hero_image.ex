@@ -27,7 +27,7 @@ defmodule Frameworks.Pixel.Hero.HeroImage do
             <Title4 color="text-white">{@subtitle}</Title4>
             <Spacing value="S" />
             <div>
-              <#slot name="call_to_action" />
+              <#slot {@call_to_action} />
             </div>
           </div>
         </div>

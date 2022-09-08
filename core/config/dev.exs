@@ -21,7 +21,7 @@ config :core, Core.Repo,
   pool_size: 10
 
 config :core, CoreWeb.Endpoint,
-  reloadable_compilers: [:gettext, :elixir, :surface],
+  reloadable_compilers: [:elixir, :surface],
   force_ssl: false,
   debug_errors: true,
   code_reloader: true,
@@ -70,7 +70,7 @@ config :web_push_encryption, :vapid_details,
     "BLddMfMPHE67WZkYxELLBedpRNvJMj7xTbn8ZsObC_0c1-p-AsHl7ndhoty2YURTgCR0XMPm6Mf-74FnwH32fhw",
   private_key: "yWo9lKKkdbN1IGQH8aUlk3u_Shemyh8CmtDnJoNdhBk"
 
-config :core, :apns_backend, backend: Core.APNS.LoggingBackend
+config :core, :apns_backend, Core.APNS.LoggingBackend
 
 config :core,
        :static_path,

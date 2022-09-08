@@ -19,3 +19,9 @@ RUN apt-get install -y postgresql-client-11
 RUN mix archive.install --force hex phx_new 1.5.5
 
 COPY . .
+
+RUN mix deps.get &&\
+    cd assets &&\
+    npm install &&\
+    npx browserslist@latest --update-db &&\
+    npm run deploy

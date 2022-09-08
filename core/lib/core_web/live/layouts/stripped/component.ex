@@ -13,8 +13,14 @@ defmodule CoreWeb.Layouts.Stripped.Component do
 
   slot(default, required: true)
 
+  defoverridable __using__: 1
+
   defmacro __using__(active_item) do
+    super_use = super([])
+
     quote do
+      unquote(super_use)
+
       alias CoreWeb.Layouts.Website.Component, as: Website
 
       data(menus, :map)
