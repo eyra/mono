@@ -11,6 +11,7 @@ defmodule Systems.Pool.Context do
 
   alias Systems.{
     Pool,
+    Bookkeeping,
     NextAction,
     Org
   }
@@ -275,20 +276,23 @@ defmodule Systems.Pool.Context do
     where(query, [user, features], field(features, ^field_name) in ^values)
   end
 
-  def target("vu_sbe_rpr_year1_2021"), do: target(:first)
-  def target("vu_sbe_rpr_year2_2021"), do: target(:second)
-  def target(:first), do: 60
-  def target(:second), do: 3
-  def target(_), do: -1
-
   def is_target_achieved?(
-        %{identifier: ["wallet" | [currency, _user_id]], balance_credit: balance_credit} =
-          _account
+        %Pool.Model{target: target},
+        %{balance_credit: balance_credit}
       ) do
-    balance_credit >= target(currency)
+    balance_credit >= target
   end
 
-  def is_target_achieved?(_), do: false
+  def is_target_achieved?(_, _), do: false
+
+  def is_wallet_related?(
+        %Pool.Model{currency: %{name: currency_name}},
+        %Bookkeeping.AccountModel{identifier: ["wallet", wallet_name, _]}
+      ) do
+    wallet_name == currency_name
+  end
+
+  def is_wallet_related?(_, _), do: false
 
   defp notify_when_submitted(
          %Pool.SubmissionModel{pool_id: pool_id} = submission,

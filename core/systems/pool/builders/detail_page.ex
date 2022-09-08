@@ -34,7 +34,7 @@ defmodule Systems.Pool.Builders.DetailPage do
         id: :students,
         title: dgettext("link-studentpool", "tabbar.item.students"),
         component: Pool.StudentsView,
-        props: %{students: participants},
+        props: %{students: participants, pool: pool},
         type: :fullpage,
         active: initial_tab === :students
       },

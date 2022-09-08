@@ -14,39 +14,40 @@ defmodule Systems.Pool.StudentFilters do
   def include?(_student, nil), do: true
   def include?(_student, []), do: true
 
-  def include?(student, filters) when is_list(filters) do
+  def include?(student, filters, %Pool.Model{} = pool) when is_list(filters) do
     filters = filters |> Enum.filter(&Enum.member?(values(), &1))
 
     filter_count = Enum.count(filters)
-    match_count = Enum.count(Enum.filter(filters, &include?(student, &1)))
-    # each filter should have at least one match (AND)
+    match_count = Enum.count(Enum.filter(filters, &include?(student, &1, pool)))
+    # each filter should match (AND)
     filter_count == match_count
   end
 
-  def include?(student, filter), do: state(student) == filter
+  def include?(student, filter, %Pool.Model{} = pool), do: state(student, pool) == filter
 
-  defp state(%Core.Accounts.User{} = student) do
+  defp state(%Core.Accounts.User{} = student, pool) do
     Budget.Context.list_wallets(student)
-    |> state()
+    |> Enum.filter(&Pool.Context.is_wallet_related?(pool, &1))
+    |> state(pool)
   end
 
-  defp state([] = _wallets), do: :inactive
+  defp state([] = _wallets, _pool), do: :inactive
 
-  defp state(%Bookkeeping.AccountModel{} = wallet) do
-    if Pool.Context.is_target_achieved?(wallet) do
+  defp state(%Bookkeeping.AccountModel{} = wallet, pool) do
+    if Pool.Context.is_target_achieved?(pool, wallet) do
       :passed
     else
       :active
     end
   end
 
-  defp state([wallet] = _wallets), do: state(wallet)
+  defp state([wallet] = _wallets, pool), do: state(wallet, pool)
 
-  defp state([wallet, tail] = _wallets) do
-    if state(wallet) == :passed do
+  defp state([wallet | tail] = _wallets, pool) do
+    if state(wallet, pool) == :passed do
       :passed
     else
-      state(tail)
+      state(tail, pool)
     end
   end
 end

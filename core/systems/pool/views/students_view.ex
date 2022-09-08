@@ -13,6 +13,7 @@ defmodule Systems.Pool.StudentsView do
 
   prop(props, :map, required: true)
 
+  data(pool, :map)
   data(students, :map)
   data(query, :any, default: nil)
   data(query_string, :string, default: "")
@@ -56,7 +57,7 @@ defmodule Systems.Pool.StudentsView do
 
   # Initial update
   def update(
-        %{id: id, props: %{students: students}} = _params,
+        %{id: id, props: %{students: students, pool: pool}} = _params,
         %{assigns: %{myself: target}} = socket
       ) do
     filter_labels = Pool.CriteriaFilters.labels([]) ++ Pool.StudentFilters.labels([])
@@ -72,6 +73,7 @@ defmodule Systems.Pool.StudentsView do
       |> assign(
         id: id,
         students: students,
+        pool: pool,
         active_filters: [],
         filter_labels: filter_labels,
         email_button: email_button
@@ -86,14 +88,14 @@ defmodule Systems.Pool.StudentsView do
     {:noreply, socket}
   end
 
-  defp filter(students, nil), do: students
-  defp filter(students, []), do: students
+  defp filter(students, nil, _), do: students
+  defp filter(students, [], _), do: students
 
-  defp filter(students, filters) do
+  defp filter(students, filters, pool) do
     students
     |> Enum.filter(
       &(Pool.CriteriaFilters.include?(&1.features.study_program_codes, filters) and
-          Pool.StudentFilters.include?(&1, filters))
+          Pool.StudentFilters.include?(&1, filters, pool))
     )
   end
 
@@ -126,11 +128,18 @@ defmodule Systems.Pool.StudentsView do
   end
 
   defp prepare_students(
-         %{assigns: %{students: students, active_filters: active_filters, query: query}} = socket
+         %{
+           assigns: %{
+             students: students,
+             pool: pool,
+             active_filters: active_filters,
+             query: query
+           }
+         } = socket
        ) do
     filtered_students =
       students
-      |> filter(active_filters)
+      |> filter(active_filters, pool)
       |> query(query)
 
     filtered_student_items =
