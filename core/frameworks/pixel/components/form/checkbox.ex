@@ -11,6 +11,8 @@ defmodule Frameworks.Pixel.Form.Checkbox do
   prop(accent, :atom, default: :primary)
   prop(background, :atom, default: :light)
 
+  data(form, :form, from_context: {Surface.Components.Form, :form})
+
   defp check_value(form, field) do
     case input_value(form, field) do
       nil -> false
@@ -27,36 +29,36 @@ defmodule Frameworks.Pixel.Form.Checkbox do
 
   def render(assigns) do
     ~F"""
-    <Context get={Surface.Components.Form, form: form}>
+    <div
+      class="flex flex-row mb-3 gap-5 sm:gap-3 cursor-pointer items-center"
+      x-data={"{ active: #{check_value(@form, @field)} }"}
+      x-on:click={"active = !active, $parent.focus = '#{@field}'"}
+      phx-click="toggle"
+      phx-value-checkbox={@field}
+      phx-target={target(@form)}
+    >
       <div
-        class="flex flex-row mb-3 gap-5 sm:gap-3 cursor-pointer items-center"
-        x-data={"{ active: #{check_value(form, @field)} }"}
-        x-on:click={"active = !active, $parent.focus = '#{@field}'"}
-        phx-click="toggle"
-        phx-value-checkbox={@field}
-        phx-target={target(form)}
+        class="flex-shrink-0 w-6 h-6 rounded"
+        x-bind:class={"{ '#{active_bg_color(@accent)}': active, '#{inactive_bg_color(@background)} border-2 #{border_color(assigns, @form, default_border_color(@accent))}': !active }"}
       >
-        <div
-          class="flex-shrink-0 w-6 h-6 rounded"
-          x-bind:class={"{ '#{active_bg_color(@accent)}': active, '#{inactive_bg_color(@background)} border-2 #{border_color(assigns, form, default_border_color(@accent))}': !active }"}
-        >
-          <img
-            x-show="active"
-            src={"/images/icons/#{check_icon(@background)}.svg"}
-            alt={"#{@field} is selected"}
-          />
-        </div>
-        <div
-          class="mt-0.5 text-title6 font-title6 leading-snug"
-          x-bind:class={"{'#{@label_color}': active || #{not field_has_error?(assigns, form)}, 'text-warning': !active && #{field_has_error?(assigns, form)} }"}
-        >
-          {@label_text}
-        </div>
+        <img
+          x-show="active"
+          src={"/images/icons/#{check_icon(@background)}.svg"}
+          alt={"#{@field} is selected"}
+        />
       </div>
-    </Context>
+      <div
+        class="mt-0.5 text-title6 font-title6 leading-snug"
+        x-bind:class={"{'#{@label_color}': active || #{not field_has_error?(assigns, @form)}, 'text-warning': !active && #{field_has_error?(assigns, @form)} }"}
+      >
+        {@label_text}
+      </div>
+    </div>
     """
   end
+end
 
+defmodule Frameworks.Pixel.Form.CheckboxHelpers do
   defmacro __using__(_opts) do
     quote do
       def handle_event(

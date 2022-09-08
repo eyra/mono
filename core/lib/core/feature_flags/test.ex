@@ -2,10 +2,10 @@ defmodule Core.FeatureFlags.Test do
   defmacro __using__(_opts \\ []) do
     quote do
       setup do
-        conf = Application.get_env(:core, :features, [])
+        features = Application.get_env(:core, :features, [])
 
         on_exit(fn ->
-          Application.put_env(:core, :features, conf)
+          Application.put_env(:core, :features, features)
         end)
       end
 

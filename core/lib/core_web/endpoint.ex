@@ -22,12 +22,12 @@ defmodule CoreWeb.Endpoint do
     websocket: [connect_info: [:user_agent, session: @session_options]]
   )
 
-  bundle = Application.get_env(:core, :bundle)
+  @bundle Application.compile_env(:core, :bundle)
 
-  if bundle do
+  if @bundle do
     plug(Plug.Static,
       at: "/",
-      from: {:core, "priv/bundles/#{to_string(bundle)}"},
+      from: {:core, "priv/bundles/#{to_string(@bundle)}"},
       gzip: false,
       only_matching:
         ~w(css assets fonts images js favicon icon apple-touch-icon robots manifest sw privacy-statement.pdf)

@@ -31,7 +31,7 @@ defmodule Core.MixProject do
         flags: [
           # :unmatched_returns,
           :error_handling,
-          :race_conditions,
+          # :race_conditions,
           :no_opaque
         ]
       ]

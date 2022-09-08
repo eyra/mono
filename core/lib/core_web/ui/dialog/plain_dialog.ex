@@ -11,6 +11,7 @@ defmodule CoreWeb.UI.PlainDialog do
 
   defmacro __using__(opts) do
     super_use = super(opts)
+
     quote do
       unquote(super_use)
       alias CoreWeb.UI.PlainDialog

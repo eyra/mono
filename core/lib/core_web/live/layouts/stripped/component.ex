@@ -17,6 +17,7 @@ defmodule CoreWeb.Layouts.Stripped.Component do
 
   defmacro __using__(active_item) do
     super_use = super([])
+
     quote do
       unquote(super_use)
 

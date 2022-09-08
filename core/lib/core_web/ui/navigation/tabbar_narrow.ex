@@ -4,9 +4,11 @@ defmodule CoreWeb.UI.Navigation.TabbarNarrow do
 
   alias CoreWeb.UI.Navigation.{TabbarDropdown, TabbarItem}
 
+  data(tabs, :any, from_context: :tabs)
+
   def render(assigns) do
     ~F"""
-    <Context get={tabs: tabs}>
+    <div>
       <div id="tabbar_dropdown" class="absolute z-50 left-0 top-navbar-height w-full h-full">
         <TabbarDropdown />
       </div>
@@ -17,7 +19,7 @@ defmodule CoreWeb.UI.Navigation.TabbarNarrow do
         class="flex flex-row cursor-pointer items-center h-full w-full"
       >
         <div class="flex-shrink-0">
-          {#for {tab, index} <- Enum.with_index(tabs)}
+          {#for {tab, index} <- Enum.with_index(@tabs)}
             <div class="flex-shrink-0">
               <TabbarItem tabbar="narrow" opts="hide-when-idle" vm={Map.merge(tab, %{index: index})} />
             </div>
@@ -29,7 +31,7 @@ defmodule CoreWeb.UI.Navigation.TabbarNarrow do
           <img src="/images/icons/dropdown.svg" alt="Show tabbar dropdown">
         </div>
       </div>
-    </Context>
+    </div>
     """
   end
 end
