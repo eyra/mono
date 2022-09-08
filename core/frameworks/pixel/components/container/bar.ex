@@ -12,8 +12,8 @@ defmodule Frameworks.Pixel.Container.Bar do
   def render(assigns) do
     ~F"""
     <div class="flex flex-row items-center">
-      {#for {_, index} <- Enum.with_index(@items)}
-        <#slot name="items" index={index} />
+      {#for item <- @items}
+        <#slot {item} />
         <Spacing value={"#{@gap}"} direction="l" />
       {/for}
     </div>

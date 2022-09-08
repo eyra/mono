@@ -9,9 +9,7 @@ defmodule CoreWeb.UI.Navigation.TabbarArea do
   def render(assigns) do
     ~F"""
     <div>
-      <Context put={tabs: @tabs}>
-        <#slot />
-      </Context>
+      <#slot context_put={tabs: @tabs} />
     </div>
     """
   end

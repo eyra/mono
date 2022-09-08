@@ -26,7 +26,7 @@ defmodule Frameworks.Pixel.Panel.ClickablePanel do
       class={@bg_color, @size, "rounded-md", "cursor-pointer"}
     >
       <div class={"#{@padding} #{@align}"}>
-        <#slot name="title" />
+        <#slot {@title} />
         <#slot />
       </div>
     </div>

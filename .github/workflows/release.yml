@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       bundle:
-        description: 'Bundle ID (link / next etc.)'
+        description: "Bundle ID (link / next etc.)"
         required: true
-        default: 'link'
+        default: "link"
 jobs:
   tagged-release:
     runs-on: ubuntu-20.04
@@ -23,8 +23,8 @@ jobs:
       - id: setup-elixir
         uses: erlef/setup-elixir@v1
         with:
-          otp-version: '24.2'
-          elixir-version: '1.13.1'
+          otp-version: "25.0.4"
+          elixir-version: "1.14.0"
 
       - name: Setup the Elixir project
         run: make deps
@@ -64,4 +64,3 @@ jobs:
           fail_on_unmatched_files: true
           files: |
             ${{steps.tag.outputs.tag}}.tar.bz2
-

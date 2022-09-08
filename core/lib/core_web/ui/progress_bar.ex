@@ -93,15 +93,13 @@ defmodule CoreWeb.UI.ProgressBar.Playground do
     height: "110px",
     container: {:div, class: "buttons is-centered"}
 
-  data(props, :map,
-    default: %{
-      size: 100,
-      bars: [
-        %{color: :primary, size: 100},
-        %{color: :secondary, size: 50}
-      ]
-    }
-  )
+  @props [
+    size: 100,
+    bars: [
+      %{color: :primary, size: 100},
+      %{color: :secondary, size: 50}
+    ]
+  ]
 
   def render(assigns) do
     ~F"""
