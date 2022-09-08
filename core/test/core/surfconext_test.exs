@@ -28,6 +28,22 @@ defmodule Core.SurfConext.Test do
   end
 
   describe "register_surfconext_user/1" do
+    test "fails to register: missing email" do
+      sso_info = %{
+        "sub" => Faker.UUID.v4(),
+        "given_name" => Faker.Person.name(),
+        "family_name" => Faker.Person.name(),
+        "schac_home_organization" => "eduid.nl",
+        "schac_personal_unique_code" => [
+          "urn:schac:personalUniqueCode:nl:local:vu.nl:studentid:2765287"
+        ]
+      }
+
+      assert_raise Core.SurfConext.SurfConextError, fn ->
+        Core.SurfConext.register_user(sso_info)
+      end
+    end
+
     test "creates a user with a profile" do
       sso_info = %{
         "sub" => Faker.UUID.v4(),

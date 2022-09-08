@@ -28,7 +28,11 @@ defmodule Core.SurfConext.UserTest do
 
     test "allow any schac_home_organization when no filter is set" do
       changeset =
-        User.register_changeset(%User{}, %{sub: "tst", schac_home_organization: "some-org"})
+        User.register_changeset(%User{}, %{
+          email: "test@student.vu.nl",
+          sub: "tst",
+          schac_home_organization: "some-org"
+        })
 
       assert changeset.valid?
     end
