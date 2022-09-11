@@ -8,7 +8,7 @@ export const Tabbar = {
         var savedTabId = this.loadActiveTab()
         var firstTabId = this.getFirstTab()
 
-        var nextTabId = initialTabId ?? savedTabId ?? firstTabId
+        var nextTabId = initialTabId || savedTabId || firstTabId
         this.show(nextTabId, true)
     },
 

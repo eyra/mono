@@ -116,9 +116,9 @@ config :core, BankingClient,
   certfile: "../banking_proxy/certs/client_certificate.pem",
   keyfile: "../banking_proxy/certs/client_key.pem"
 
-import_config "#{Mix.env()}.exs"
+import_config "#{config_env()}.exs"
 
-unless Mix.env() == :test do
+unless config_env() == :test do
   default_bundle =
     case File.read(".bundle") do
       {:ok, bundle} -> String.trim(bundle)
