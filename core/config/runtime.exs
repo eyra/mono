@@ -106,10 +106,10 @@ if config_env() == :prod do
     |> String.replace(" ", "")
     |> String.split(",")
 
-  config :core, :ssl,
-    domains: ssl_domains
+  config :core, :ssl, domains: ssl_domains
 
   lets_encrypt_db = System.get_env("LETS_ENCRYPT_DB")
+
   if lets_encrypt_db do
     config :core, :ssl,
       emails: [System.get_env("LETS_ENCRYPT_EMAIL", "admin@#{host}")],

@@ -72,9 +72,14 @@ defmodule CoreWeb.Endpoint do
   @impl Phoenix.Endpoint
   def init(_key, config) do
     cond do
-      Application.get_env(:core, __MODULE__) |> get_in([:https, :certfile]) -> {:ok, config}
-      Application.get_env(:core, :ssl_enabled) -> {:ok, SiteEncrypt.Phoenix.configure_https(config)}
-      true -> {:ok, config}
+      Application.get_env(:core, __MODULE__) |> get_in([:https, :certfile]) ->
+        {:ok, config}
+
+      Application.get_env(:core, :ssl_enabled) ->
+        {:ok, SiteEncrypt.Phoenix.configure_https(config)}
+
+      true ->
+        {:ok, config}
     end
   end
 
