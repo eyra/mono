@@ -11,146 +11,146 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "displayname.label"
 msgstr "Schermnaam"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "email.label"
 msgstr "E-mail"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "fullname.label"
 msgstr "Volledige naam"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "password.label"
 msgstr "Wachtwoord"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "profile.title"
 msgstr "Mijn profiel"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "signin.label"
 msgstr "Heb je al een account?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "signin.link"
 msgstr "Log hier in"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "signup.button"
 msgstr "Registreer"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "signup.title"
 msgstr "Nieuw account"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "await.confirmation.title"
 msgstr "Confirm you registration"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "confirm.token.resend_button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "choose.profile.photo.file"
 msgstr "Kies foto"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "choose.other.profile.photo.file"
 msgstr "Aanpassen"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "professionaltitle.label"
 msgstr "Functietitel"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "push.registration.button"
 msgstr "Activeren"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "push.registration.title"
 msgstr "Push notificaties"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "push.registration.activated"
 msgstr "Push notificaties staan ingeschakeld op deze browser."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "push.registration.denied"
 msgstr "Push notificaties zijn gedeactiveerd op deze browser"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "push.registration.label"
 msgstr "Activeer om meldingen van het Panl platform in je browser te ontvangen. Na het activeren kan het zijn dat je browser vraagt om toestemming voor het tonen van notificaties."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "push.registration.pending"
 msgstr "Push notificaties zijn gedeactiveerd op deze browser"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "feature.study.description"
 msgstr "Om credits te kunnen behalen voor onderzoeksparticipatie (OP / RPR) voor bedrijfskunde (BK) of international business administration (IBA), selecteer je één of meerdere cursussen hieronder. Als je een cursus vorig jaar niet hebt afgerond, zorg dan dat je die cursus ook selecteert."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "features.description"
 msgstr "Enkele studies gebruiken specifieke selectie criteria. Als je de onderstaande optionele kenmerken invult kun je meedoen aan studies waarvoor jouw kenmerken geselecteerd zijn."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "features.dominanthand.title"
 msgstr "Voorkeurshand"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "features.gender.title"
 msgstr "Geslacht"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "features.nativelanguage.title"
 msgstr "Eerste taal"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "features.title"
 msgstr "Inclusie"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "features.content.description"
 msgstr "Selecteer hieronder de inclusiecriteria voor je studie. Geen selectie betekend dat iedereen in de pool mee mag doen."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "push.unavailable.label"
 msgstr "Registereren voor push notificaties is op dit moment alleen beschikbaar op Chrome en Firefox browsers. Open deze website in een van deze browser om gebruik te maken van push notificaties."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "login.google.button"
 msgstr "Inloggen met Google"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "login.surf.button"
 msgstr "Inloggen met SURFconext"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "login.title"
 msgstr "Log in"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "login.surf.message.part1"
 msgstr "Om in te loggen op Panl kun je gebruik maken van je VU Amsterdam account. Dit werkt via "
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "login.surf.message.part2"
 msgstr "Jouw persoonsgegevens worden gebruikt voor het goed functioneren van het platform. Meer weten? Lees de "
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "login.surf.message.part3"
 msgstr "privacy verklaring"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "login.surf.message.surfconext.href"
 msgstr "https://wiki.surfnet.nl/display/conextsupport/Inloggen+via+SURFconext"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ehtical.code.label"
 msgstr "Code"

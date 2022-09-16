@@ -10,34 +10,34 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "403.body"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "404.body"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "500.body"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "503.body"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "helpdesk.button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "home.button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "mail.button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "page.title"
 msgstr ""

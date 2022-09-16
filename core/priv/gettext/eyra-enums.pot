@@ -10,266 +10,266 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "devices.desktop"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "devices.phone"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "devices.tablet"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "genders.man"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "genders.woman"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "genders.x"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.art"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.health"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.history"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.language"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.politics"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.society"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.technology"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "dominant_hands.left"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "dominant_hands.right"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "native_languages.en"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "native_languages.nl"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket_types.bug"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket_types.question"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket_types.tip"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.accounting"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.business"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.economics"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.management"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.marketing"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.organisation"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "online_study_languages.en"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "online_study_languages.nl"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "native_languages.other"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.data_science"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.digital_innovation"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.econometrics"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.finance"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.operations_analytics"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reject_catagories.attention_checks_failed"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reject_catagories.not_completed"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reject_catagories.other"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "criteria_filters.bk"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "criteria_filters.iba"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "criteria_filters.resit"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket_status.closed"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket_status.open"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tool_types.lab"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tool_types.online"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "submission_status.accepted"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "submission_status.completed"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "submission_status.idle"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "submission_status.submitted"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "pool_campaign_status.closed"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "pool_campaign_status.completed"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "pool_campaign_status.retracted"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "pool_campaign_status.released"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "pool_campaign_status.scheduled"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "pool_campaign_status.submitted"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "student_filters.active"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "student_filters.inactive"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "student_filters.passed"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "organisation_types.faculty"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "organisation_types.scholar_class"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "organisation_types.scholar_course"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "organisation_types.scholar_program"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "organisation_types.university"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "scholar_years.first"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "scholar_years.second"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "organisation_types.company"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "organisation_types.department"
 msgstr ""

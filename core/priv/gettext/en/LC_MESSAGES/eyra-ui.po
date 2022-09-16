@@ -11,202 +11,202 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "error.flash"
 msgstr "Something went wrong"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "persister.saved.flash"
 msgstr "Saved"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.console"
 msgstr "My console"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.marketplace"
 msgstr "Marketplace"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.profile"
 msgstr "My profile"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.settings"
 msgstr "Settings"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.signin"
 msgstr "Sign in"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.signout"
 msgstr "Sign out"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.menu"
 msgstr "Menu"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.eyra"
 msgstr "Eyra"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.todo"
 msgstr "To-do"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "dashboard.title"
 msgstr "My console"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "marketplace.title"
 msgstr "Marketplace"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "todo.title"
 msgstr "To-do"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.features"
 msgstr "Characteristics"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.profile"
 msgstr "My profile"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.scholar"
 msgstr "Study program"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.features.forward"
 msgstr "Update characteristics"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.profile.forward"
 msgstr "Update profile"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.scholar.forward"
 msgstr "Select study program"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "onboarding.forward"
 msgstr "Continue"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.debug"
 msgstr "Debug"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.welcome"
 msgstr "Welcome"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.welcome.forward"
 msgstr "Welcome"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.link"
 msgstr "Panl"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.helpdesk"
 msgstr "Helpdesk"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "cancel.button"
 msgstr "Cancel"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "delete.confirm.text"
 msgstr "This %{item} will be permanently deleted."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "delete.confirm.title"
 msgstr "Delete %{item}?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "delete.confirm.label"
 msgstr "Delete"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ok.button"
 msgstr "OK"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "feature.unavailable.text"
 msgstr "We are still working on this feature. Try again later, the platform is updated regularly. "
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "feature.unavailable.title"
 msgstr "Coming soon"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.permissions"
 msgstr "Permissions"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.support"
 msgstr "Support"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "timestamp.at"
 msgstr "at"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "timestamp.today"
 msgstr "today"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "timestamp.yesterday"
 msgstr "yesterday"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "authentication.required.error"
 msgstr "Please sign in to view this page."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "start.page.console"
 msgstr "Go to console"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "start.page.marketplace"
 msgstr "Go to marketplace"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "duplicate.button"
 msgstr "Duplicate"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "share.button"
 msgstr "Share"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "share.dialog.text"
 msgstr "Share your %{content} with one or more %{group} from the list below."
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "pronoun.her"
 msgstr "her"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "menu.item.payments"
 msgstr "Menu"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "persister.error.flash"
 msgstr "Not saved, please reload and try again"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "mailto.button"
 msgstr "Get in touch"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "notify.all"
 msgstr "Send notification"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "pronoun.him"
 msgstr "him"

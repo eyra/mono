@@ -10,30 +10,30 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.completed.message.part1"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.completed.message.part2"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.completed.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.expired.subtitle"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.expired.text"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "tester.completed.subtitle"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "tester.completed.text"
 msgstr ""

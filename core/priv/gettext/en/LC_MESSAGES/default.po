@@ -11,10 +11,10 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "Dutch"
 msgstr "Nederlands"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "English"
 msgstr ""

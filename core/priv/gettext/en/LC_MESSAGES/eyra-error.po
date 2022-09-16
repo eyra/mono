@@ -11,34 +11,34 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "403.body"
 msgstr "Unfortunately, you don't have access to this page. If you think this is an error, we would appreciate it if you report this at our helpdesk. If not, click \"Home\" to return to the Panl home page."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "404.body"
 msgstr "Unfortunately, this page is not available. If you think this is an error, we would appreciate it if you report this at our helpdesk. If not, click \"Home\" to return to the Panl home page."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "500.body"
 msgstr "Unfortunately, this page is currently unavailable. If we are aware of this problem, we are doing the best we can to get this page up and running as soon as possible. Please try again later. If this message keeps appearing, let us know. Thanks in advance."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "503.body"
 msgstr "Unfortunately, this page is currently unavailable. If we are aware of this problem, we are doing the best we can to get this page up and running as soon as possible. Please try again later. If this message keeps appearing, let us know. Thanks in advance."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "helpdesk.button"
 msgstr "Helpdesk"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "home.button"
 msgstr "Home"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "mail.button"
 msgstr "Contact"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "page.title"
 msgstr "Sorry"

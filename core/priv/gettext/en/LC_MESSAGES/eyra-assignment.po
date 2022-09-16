@@ -11,54 +11,46 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "cancel.button"
 msgstr "Cancel"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "cancel.confirm.label"
 msgstr "Confirm"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "cancel.confirm.text"
 msgstr "We will release your spot to enable others to participate."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "cancel.confirm.title"
 msgstr "Release spot?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "contact.button"
 msgstr "Contact researcher"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "form.title"
 msgstr "Study"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "ticket.title"
 msgstr "Your Panl ID"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "earned.label"
 msgstr "earned"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "pending.label"
 msgstr "pending"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "togo.label"
 msgstr "to go"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "student.account.target"
 msgstr "%{target} credits required"
-
-#, elixir-format, ex-autogen
-msgid "first.year"
-msgstr "1st year"
-
-#, elixir-format, ex-autogen
-msgid "second.year"
-msgstr "2nd year"

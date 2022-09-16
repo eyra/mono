@@ -11,70 +11,70 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "attention.title"
 msgstr "Attention"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "started.at.message"
 msgstr "Started %{date} but not returned to Panl"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "accept.all.button"
 msgstr "Approve all"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "attention.body"
 msgstr "Please pay attention to the contributions of the participants below."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "rejected.title"
 msgstr "Rejected"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "waitinglist.body"
 msgstr "The participants below are waiting for approval."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "waitinglist.title"
 msgstr "Participated"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "accepted.title"
 msgstr "Accepted"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "phase1.title"
 msgstr "Progress"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "phase2.title"
 msgstr "Contributions"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "column.accepted"
 msgstr "Accepted"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "column.checkedin"
 msgstr "Checked in"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "column.message"
 msgstr "Message"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "column.participant"
 msgstr "Participant"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "column.reason"
 msgstr "Reason"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "column.rejected"
 msgstr "Rejected"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "column.reservation"
 msgstr "Reservation"

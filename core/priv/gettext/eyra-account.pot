@@ -10,146 +10,146 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "displayname.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "email.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "fullname.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "password.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "profile.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "signin.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "signin.link"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "signup.button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "signup.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "await.confirmation.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "confirm.token.resend_button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "choose.profile.photo.file"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "choose.other.profile.photo.file"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "professionaltitle.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "push.registration.button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "push.registration.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "push.registration.activated"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "push.registration.denied"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "push.registration.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "push.registration.pending"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "feature.study.description"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "features.description"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "features.dominanthand.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "features.gender.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "features.nativelanguage.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "features.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "features.content.description"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "push.unavailable.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "login.google.button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "login.surf.button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "login.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "login.surf.message.part1"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "login.surf.message.part2"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "login.surf.message.part3"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "login.surf.message.surfconext.href"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ehtical.code.label"
 msgstr ""
