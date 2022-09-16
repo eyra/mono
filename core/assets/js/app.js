@@ -28,6 +28,7 @@ import { Toggle } from "./toggle"
 import { Tabbar, TabbarItem, TabbarFooterItem } from "./tabbar"
 import { PythonUploader} from "./python_uploader"
 import { Clipboard } from "./clipboard"
+import { VisualisationEngineHook} from "./visualisation_engine_hook"
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -90,6 +91,7 @@ Hooks.NativeWrapper = {
 }
 
 Hooks.PythonUploader = PythonUploader
+Hooks.VisualisationEngineHook = VisualisationEngineHook
 
 let liveSocket = new LiveSocket('/live', Socket, {
   dom: {

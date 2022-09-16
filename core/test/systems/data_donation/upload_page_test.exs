@@ -4,11 +4,11 @@ defmodule Systems.DataDonation.UploadPageTest do
   import Phoenix.LiveViewTest
   import Mox
 
-  alias Systems.DataDonation.{UploadPage}
+  alias Systems.DataDonation.{DonatePage}
 
   describe "public page" do
     test "embedding of Python code on the page", %{conn: conn} do
-      path = Routes.live_path(conn, UploadPage, 1, session: %{participant: 1})
+      path = Routes.live_path(conn, DonatePage, 1, session: %{participant: 1})
 
       {:ok, _view, html} = live(conn, path)
       assert html =~ "import pandas"
@@ -18,7 +18,7 @@ defmodule Systems.DataDonation.UploadPageTest do
       Systems.DataDonation.MockStorageBackend
       |> expect(:store, fn _state, _vm, "Some extracted data" -> nil end)
 
-      path = Routes.live_path(conn, UploadPage, 1, session: %{participant: 1})
+      path = Routes.live_path(conn, DonatePage, 1, session: %{participant: 1})
       {:ok, view, _html} = live(conn, path)
 
       assert {:error, {:live_redirect, %{kind: :push}}} =
@@ -31,7 +31,7 @@ defmodule Systems.DataDonation.UploadPageTest do
       Systems.DataDonation.MockStorageBackend
       |> expect(:store, fn _state, _vm, "Some extracted data" -> nil end)
 
-      path = Routes.live_path(conn, UploadPage, 1, session: %{participant: 1})
+      path = Routes.live_path(conn, DonatePage, 1, session: %{participant: 1})
       {:ok, view, _html} = live(conn, path)
 
       assert {:error, {:live_redirect, %{kind: :push}}} =

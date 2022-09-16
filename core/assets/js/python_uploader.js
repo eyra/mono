@@ -23,7 +23,6 @@ export const PythonUploader = {
                 uploader.el.querySelector(".donate-form").classList.remove("hidden")
                 uploader.el.querySelector(".extracted").innerHTML = result.html;
                 uploader.el.querySelector("input[id='data']").value = result.data;
-                console.log("done", result)
                 Tabbar.show("tab_" + this.el.dataset.afterCompletionTab, true)
                 this.el.querySelector(".extract-data").classList.remove("hidden")
                 this.el.querySelector(".data-extraction").classList.add("hidden")
@@ -31,22 +30,21 @@ export const PythonUploader = {
         });
 
         // Hook up the process button to the worker
-        const fileInput = this.el.querySelector("input[type=file]")
-        fileInput.addEventListener("change", () => {
-            console.log("File input changed")
+        const FileInputFactory = this.el.querySelector("input[type=file]")
+        FileInputFactory.addEventListener("change", () => {
             this.el.querySelector(".select-file").classList.add("hidden");
             this.el.querySelector(".extract-data").classList.remove("hidden");
             const filenameInfo = this.el.querySelector(".selected-filename");
-            filenameInfo.innerText = fileInput.files[0].name;
+            filenameInfo.innerText = FileInputFactory.files[0].name;
             filenameInfo.classList.remove("hidden")
         })
 
 
         this.el.querySelector(".reset-button").addEventListener("click", () => {
             // clear current selected file
-            const fileInput = this.el.querySelector("input[type=file]")
-            fileInput.type= "text"
-            fileInput.type= "file"
+            const FileInputFactory = this.el.querySelector("input[type=file]")
+            FileInputFactory.type= "text"
+            FileInputFactory.type= "file"
 
             // show select file panel
             this.el.querySelector(".select-file").classList.remove("hidden")
@@ -72,8 +70,8 @@ export const PythonUploader = {
         })
     },
     sendDataToWorker(worker) {
-        const fileInput = this.el.querySelector("input[type=file]")
-        const file = fileInput.files[0];
+        const FileInputFactory = this.el.querySelector("input[type=file]")
+        const file = FileInputFactory.files[0];
         const filename = file.name
         const reader = file.stream().getReader();
         const sendToWorker = ({ done, value }) => {

@@ -49,5 +49,19 @@ onmessage = (event) => {
       }
     _process_data()`);
     self.postMessage({ eventType: "result", result: result.toJs({ create_proxies: false, dict_converter: Object.fromEntries }) });
+  } else if (eventType === "run_cycle") {
+
+    var prompt = undefined
+
+    if (generator == undefined) {
+      generator = self.pyodide.runPython(`
+        return process()
+      `);
+      prompt = generator.__next__()
+    } else {
+      prompt = generator.send(event.data)
+    }
+
+    self.postMessage({ eventType: "prompt", result: prompt.toJs({ create_proxies: false, dict_converter: Object.fromEntries }) });
   }
 };
