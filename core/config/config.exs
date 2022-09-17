@@ -92,8 +92,7 @@ config :core, CoreWeb.Endpoint,
   render_errors: [view: CoreWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Core.PubSub,
   live_view: [signing_salt: "U46ENwad8CDswjwuXgNZVpJjUlBjbmL9"],
-  http: [port: 4000],
-  https: [port: 4001]
+  http: [port: 4000]
 
 config :core, :ssl,
   client: :native,
