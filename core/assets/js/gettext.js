@@ -1,39 +1,38 @@
-export const GetText = (function() {
-    'use strict';
+export const GetText = (function () {
+  "use strict";
 
-    const defaultLocale = "nl"
+  const defaultLocale = "nl";
 
-    /* PUBLIC */
+  /* PUBLIC */
 
-    function resolve(translatable, locale){
-      return _.escape(getTranslation(translatable, locale))
-    }
+  function resolve(translatable, locale) {
+    return _.escape(getTranslation(translatable, locale));
+  }
 
-    /* PRIVATE */
+  /* PRIVATE */
 
-    function getTranslation(translatable, locale){
-      if (typeof translatable === 'object' && translatable !== null) {
-
-        if (translatable[locale]) {
-          return translatable[locale]
-        }
-
-        if (defaultLocale in translatable) {
-          return translatable[defaultLocale]
-        }
-
-        if (Object.values(translatable).length > 0) {
-          return Object.values(translatable)[0]
-        }
+  function getTranslation(translatable, locale) {
+    if (typeof translatable === "object" && translatable !== null) {
+      if (translatable[locale]) {
+        return translatable[locale];
       }
 
-      console.log("[GetText] Invalid translatable", translatable)
-      return "?text?"
+      if (defaultLocale in translatable) {
+        return translatable[defaultLocale];
+      }
+
+      if (Object.values(translatable).length > 0) {
+        return Object.values(translatable)[0];
+      }
     }
 
-    /* MODULE INTERFACE */
+    console.log("[GetText] Invalid translatable", translatable);
+    return "?text?";
+  }
 
-    return {
-      resolve,
-    }
+  /* MODULE INTERFACE */
+
+  return {
+    resolve,
+  };
 })();

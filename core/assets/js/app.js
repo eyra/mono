@@ -13,7 +13,7 @@ import "../css/app.css";
 //     import socket from "./socket"
 //
 
-import '@ryangjchandler/spruce'
+import "@ryangjchandler/spruce";
 import "alpine-magic-helpers/dist/component";
 import Alpine from "alpinejs";
 import "phoenix_html";
@@ -23,12 +23,12 @@ import { decode } from "blurhash";
 import { urlBase64ToUint8Array } from "./tools";
 import { registerAPNSDeviceToken } from "./apns";
 import "./100vh-fix";
-import { ViewportResize } from "./viewport_resize"
-import { Toggle } from "./toggle"
-import { Tabbar, TabbarItem, TabbarFooterItem } from "./tabbar"
-import { PythonUploader} from "./python_uploader"
-import { Clipboard } from "./clipboard"
-import { VisualisationEngineHook} from "./visualisation_engine_hook"
+import { ViewportResize } from "./viewport_resize";
+import { Toggle } from "./toggle";
+import { Tabbar, TabbarItem, TabbarFooterItem } from "./tabbar";
+import { PythonUploader } from "./python_uploader";
+import { Clipboard } from "./clipboard";
+import { DataDonationHook } from "./data_donation_hook";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -40,7 +40,7 @@ window.blurHash = () => {
       return this.show !== false;
     },
     reset() {
-      console.log("Reset blurhash")
+      console.log("Reset blurhash");
     },
     hideBlurHash() {
       if (!liveSocket.socket.isConnected()) {
@@ -49,8 +49,8 @@ window.blurHash = () => {
       this.show = false;
     },
     render() {
-      console.log("Render blurhash")
-      const img = this.$el.getElementsByTagName("img")[0]
+      console.log("Render blurhash");
+      const img = this.$el.getElementsByTagName("img")[0];
       if (img.complete) {
         this.show = false;
         return;
@@ -76,40 +76,47 @@ let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
 
-let Hooks = { Clipboard, ViewportResize, Toggle, Tabbar, TabbarItem, TabbarFooterItem };
+let Hooks = {
+  Clipboard,
+  ViewportResize,
+  Toggle,
+  Tabbar,
+  TabbarItem,
+  TabbarFooterItem,
+};
 
 Hooks.NativeWrapper = {
   mounted() {
-    console.log("NativeWrapper mounted")
-    window.nativeWrapperHook = this
+    console.log("NativeWrapper mounted");
+    window.nativeWrapperHook = this;
   },
   toggleSidePanel() {
-    console.log("NativeWrapper::toggleSidePanel")
-    nativeWrapper.toggleSidePanel({origin: "right"})
-    window.dispatchEvent(new CustomEvent("toggle-native-menu", {}))
-  }
-}
+    console.log("NativeWrapper::toggleSidePanel");
+    nativeWrapper.toggleSidePanel({ origin: "right" });
+    window.dispatchEvent(new CustomEvent("toggle-native-menu", {}));
+  },
+};
 
-Hooks.PythonUploader = PythonUploader
-Hooks.VisualisationEngineHook = VisualisationEngineHook
+Hooks.PythonUploader = PythonUploader;
+Hooks.PortHook = PortHook;
 
-let liveSocket = new LiveSocket('/live', Socket, {
+let liveSocket = new LiveSocket("/live", Socket, {
   dom: {
     onBeforeElUpdated(from, to) {
       if (from.__x) {
-        window.Alpine.clone(from.__x, to)
+        window.Alpine.clone(from.__x, to);
       }
-    }
+    },
   },
   params: {
     _csrf_token: csrfToken,
     viewport: {
       width: window.innerWidth,
-      height: window.innerHeight
-    }
+      height: window.innerHeight,
+    },
   },
-  hooks: Hooks
-})
+  hooks: Hooks,
+});
 
 window.nativeIOSWrapper = {
   // The native code bridge assumes that handlers have been setup. Seethe docs for more info:
@@ -152,15 +159,15 @@ window.nativeIOSWrapper = {
   webReady: (id) => {
     window.webkit.messageHandlers.Native.postMessage({
       type: "webReady",
-      id
+      id,
     });
   },
-  toggleSidePanel: (info)=>{
+  toggleSidePanel: (info) => {
     window.webkit.messageHandlers.Native.postMessage({
       type: "toggleSidePanel",
-      ...info
-    })
-  }
+      ...info,
+    });
+  },
 };
 
 const loggingWrapper = {
@@ -183,7 +190,7 @@ const loggingWrapper = {
     console.log("web ready", id);
   },
   toggleSidePanel: (info) => {
-    console.log("toggle side panel", info)
+    console.log("toggle side panel", info);
   },
 };
 
@@ -236,10 +243,12 @@ window.addEventListener("phx:page-loading-stop", (info) => {
   nativeWrapper.updateScreenInfo({
     title,
     id: screenId(info.detail.to),
-    rightBarButtons: [{
-      title: "Menu",
-      action: {id: "toggle-native-menu"},
-    }]
+    rightBarButtons: [
+      {
+        title: "Menu",
+        action: { id: "toggle-native-menu" },
+      },
+    ],
   });
   nativeWrapper.webReady(screenId(info.detail.to));
 });
@@ -251,12 +260,12 @@ window.setScreenFromNative = (screenId, state) => {
     }, 0);
   });
 };
-window.handleActionFromNative = (action)=>{
+window.handleActionFromNative = (action) => {
   if (action.id === "toggle-native-menu") {
-    nativeWrapper.toggleSidePanel({origin: "right"})
-    window.dispatchEvent(new CustomEvent("toggle-native-menu", {}))
+    nativeWrapper.toggleSidePanel({ origin: "right" });
+    window.dispatchEvent(new CustomEvent("toggle-native-menu", {}));
   }
-}
+};
 
 window.setStateFromNative = (state) => {
   updateState(state);
@@ -273,72 +282,75 @@ window.liveSocket = liveSocket;
 
 // PWA
 //
-const pushStore = Spruce.store("push", {registration: "pending"})
+const pushStore = Spruce.store("push", { registration: "pending" });
 const getExistingSubscription = () => {
-  return navigator.serviceWorker.ready.then((registration)=> {
-    return registration.pushManager.getSubscription().then(subscription=>{
-      return {registration, subscription};
-    })
+  return navigator.serviceWorker.ready.then((registration) => {
+    return registration.pushManager.getSubscription().then((subscription) => {
+      return { registration, subscription };
+    });
   });
-}
+};
 const registerPushSubscription = (subscription) => {
-      console.log("Server", subscription);
-  return fetch('/web-push/register', {
-    method: 'post',
+  console.log("Server", subscription);
+  return fetch("/web-push/register", {
+    method: "post",
     headers: {
-      'Content-type': 'application/json'
+      "Content-type": "application/json",
     },
     body: JSON.stringify({
-      subscription: subscription
+      subscription: subscription,
     }),
-  }).then(()=>{
-    pushStore.registration = "registered"
+  }).then(() => {
+    pushStore.registration = "registered";
   });
-}
+};
 
-
-window.registerForPush = ()=>{
-  if (!('serviceWorker' in navigator)) {
-    alert("Sorry, your browser does not support push")
+window.registerForPush = () => {
+  if (!("serviceWorker" in navigator)) {
+    alert("Sorry, your browser does not support push");
     return;
   }
-  pushStore.registration = "registering"
-  getExistingSubscription().then(({registration,subscription})=> {
-    if (subscription) {
-      // already registered
-      return subscription;
-    }
+  pushStore.registration = "registering";
+  getExistingSubscription()
+    .then(({ registration, subscription }) => {
+      if (subscription) {
+        // already registered
+        return subscription;
+      }
 
-    return fetch('/web-push/vapid-public-key').then((response)=>{
-      console.log("Vapid", response);
-      return response.text()
-    }).then((vapidPublicKey)=>{
-      // Chrome doesn’t accept the base64-encoded (string) vapidPublicKey yet urlBase64ToUint8Array() is defined in /tools.js
-      const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
+      return fetch("/web-push/vapid-public-key")
+        .then((response) => {
+          console.log("Vapid", response);
+          return response.text();
+        })
+        .then((vapidPublicKey) => {
+          // Chrome doesn’t accept the base64-encoded (string) vapidPublicKey yet urlBase64ToUint8Array() is defined in /tools.js
+          const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
 
-      return registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: convertedVapidKey
-      });
+          return registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: convertedVapidKey,
+          });
+        });
     })
-  }).then(registerPushSubscription).catch(e=>{
-    pushStore.registration = "denied";
-  });
-}
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js', {scope: './'})
-  .catch((error) => {
+    .then(registerPushSubscription)
+    .catch((e) => {
+      pushStore.registration = "denied";
+    });
+};
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js", { scope: "./" }).catch((error) => {
     // registration failed
-    console.log('Registration failed with ' + error);
+    console.log("Registration failed with " + error);
   });
 
-  getExistingSubscription().then(({subscription}) => {
+  getExistingSubscription().then(({ subscription }) => {
     if (subscription) {
       return registerPushSubscription(subscription);
     } else {
       pushStore.registration = "not-registered";
     }
-  })
+  });
 } else {
-  Spruce.store("push", {registration: "unavailable"})
+  Spruce.store("push", { registration: "unavailable" });
 }

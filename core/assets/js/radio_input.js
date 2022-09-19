@@ -1,24 +1,21 @@
-import { GetText } from "./gettext"
+import { GetText } from "./gettext";
 
-export const RadioInputFactory = function(data, locale) {
-  return RadioInput(data, locale)
-}
+export class RadioInput {
+  constructor(data, locale) {
+    this.data = data;
+    this.locale = locale;
+  }
 
-const RadioInput = (function(data, locale) {
+  render(parent) {
+    let items_html = this.renderItems(data.items);
 
-  /* PUBLIC */
-
-  function render(parent){
-
-    let items_html = renderItems(data.items)
-
-    const { title, description } = data
+    const { title, description } = data;
 
     const text = {
-      "title": GetText.resolve(title, locale),
-      "description": GetText.resolve(description, locale),
-      "continueButton": GetText.resolve(continueButtonLabel(), locale)
-    }
+      title: GetText.resolve(title, locale),
+      description: GetText.resolve(description, locale),
+      continueButton: GetText.resolve(this.continueButtonLabel(), locale),
+    };
 
     parent.el.innerHTML = `
     <div class="text-title5 font-title5 sm:text-title4 sm:font-title4 lg:text-title3 lg:font-title3 text-grey1">
@@ -32,7 +29,7 @@ const RadioInput = (function(data, locale) {
       <div class="mt-4"></div>
       <div>
         <div id="radio-group" class="flex flex-col gap-3">
-          ${ items_html }
+          ${items_html}
         </div>
       </div>
     </div>
@@ -43,43 +40,40 @@ const RadioInput = (function(data, locale) {
           ${text.continueButton}
         </div>
       </div>
-    </div>`
+    </div>`;
   }
 
-
-  function activate(parent, resolve) {
-    const dataItems = data.items
-    const radioGroup = parent.child("radio-group")
-    const radioItems = radioGroup.childs("radio-item")
-    const confirmButton = parent.child("confirm-button")
-    let selected = undefined
+  activate(parent, resolve) {
+    const dataItems = data.items;
+    const radioGroup = parent.child("radio-group");
+    const radioItems = radioGroup.childs("radio-item");
+    const confirmButton = parent.child("confirm-button");
+    let selected = undefined;
 
     radioItems.forEach((radioItem, index) => {
-      const itemId = radioItem.el.id
+      const itemId = radioItem.el.id;
       radioItem.onClick(() => {
-        toggleGroup(radioItems, itemId)
-        confirmButton.show()
-        selected = index
-      })
-    })
+        this.toggleGroup(radioItems, itemId);
+        confirmButton.show();
+        selected = index;
+      });
+    });
 
     confirmButton.onClick(() => {
-      const selectedItem = dataItems[selected]
-      resolve(selectedItem)
-    })
+      const selectedItem = dataItems[selected];
+      resolve(selectedItem);
+    });
   }
 
   /* PRIVATE */
 
-  function renderItems(items) {
-    return items.map((item, index) =>
-      renderItem(item, index)
-    )
+  renderItems(items) {
+    return items.map((item, index) => this.renderItem(item, index));
   }
 
-  function renderItem(item, index) {
-    const itemId = `item-${index}`
-    const itemHTML = _.escape(item)
+  renderItem(item, index) {
+    const itemId = `item-${index}`;
+    const itemHTML = _.escape(item);
     return `
     <div id="${itemId}" class="radio-item flex flex-row gap-3 items-center cursor-pointer">
       <div>
@@ -99,40 +93,33 @@ const RadioInput = (function(data, locale) {
       <div class="text-grey1 text-label font-label select-none mt-1">
         ${itemHTML}
       </div>
-    </div>`
+    </div>`;
   }
 
-  function continueButtonLabel() {
+  continueButtonLabel() {
     return {
-      "en": "Continue",
-      "nl": "Doorgaan"
-    }
+      en: "Continue",
+      nl: "Doorgaan",
+    };
   }
 
-  function toggleGroup(items, activeItemId) {
+  toggleGroup(items, activeItemId) {
     for (let item of items) {
-      toggleItem(item, item.el.id === activeItemId)
+      this.toggleItem(item, item.el.id === activeItemId);
     }
   }
 
-  function toggleItem(item, on) {
-    const item_on = item.child(`${item.el.id}-on`)
-    const item_off = item.child(`${item.el.id}-off`)
+  toggleItem(item, on) {
+    const item_on = item.child(`${item.el.id}-on`);
+    const item_off = item.child(`${item.el.id}-off`);
 
-    item_on.hide()
-    item_off.hide()
+    item_on.hide();
+    item_off.hide();
 
     if (on) {
-      item_on.show()
+      item_on.show();
     } else {
-      item_off.show()
+      item_off.show();
     }
   }
-
-  /* MODULE INTERFACE */
-
-  return {
-      render,
-      activate
-  }
-})
+}

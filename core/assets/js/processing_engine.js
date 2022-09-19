@@ -1,56 +1,45 @@
-export const ProcessingEngine = (function() {
-  'use strict';
+export class ProcessingEngine {
+  constructor(workerFile) {
+    this.eventListener = (event) => {
+      event_string = Object.stringify(event);
+      console.log(
+        "[ProcessingEngine] No event listener registered for event: ",
+        event_string
+      );
+    };
 
-  /* PUBLIC */
-
-  function registerEventListener(event_listener) {
-    _event_listener = event_listener
+    this.worker = new Worker(workerFile);
+    this.worker.onerror = console.log;
+    this.worker.onmessage = (event) => {
+      console.log(
+        "[ProcessingEngine] Received event from worker: ",
+        event.data.eventType
+      );
+      this.eventListener(event);
+    };
   }
 
-  function initialise() {
-    _worker.postMessage({ eventType: "initialise" })
+  registerEventListener(event_listener) {
+    this.eventListener = event_listener;
   }
 
-  function loadScript(script) {
-    _worker.postMessage({ eventType: "loadScript", script })
+  initialise() {
+    this.worker.postMessage({ eventType: "initialise" });
   }
 
-  function firstRunCycle() {
-    _worker.postMessage({ eventType: "firstRunCycle" })
+  loadScript(script) {
+    this.worker.postMessage({ eventType: "loadScript", script });
   }
 
-  function nextRunCycle(response) {
-    _worker.postMessage({ eventType: "nextRunCycle", response })
+  firstRunCycle() {
+    this.worker.postMessage({ eventType: "firstRunCycle" });
   }
 
-  function terminate() {
-    _worker.terminate()
+  nextRunCycle(response) {
+    this.worker.postMessage({ eventType: "nextRunCycle", response });
   }
 
-
-
-  /* PRIVATE */
-
-  let _event_listener = (event) => {
-    event_string = Object.stringify(event)
-    console.log("[ProcessingEngine] No event listener registered for event: ${event_string}")
+  terminate() {
+    this.worker.terminate();
   }
-
-  const _worker = new Worker("/js/processing_worker.js");
-  _worker.onerror = console.log;
-  _worker.onmessage = (event) => {
-    console.log("[ProcessingEngine] Received event from worker: ", event.data.eventType)
-    _event_listener(event)
-  }
-
-  /* MODULE INTERFACE */
-
-  return {
-    registerEventListener,
-    initialise,
-    loadScript,
-    firstRunCycle,
-    nextRunCycle,
-    terminate
-  }
-})();
+}

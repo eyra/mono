@@ -136,7 +136,7 @@ defmodule Systems.DataDonation.FlowPage do
     <Stripped user={@current_user} menus={@menus}>
       <div
         id="data-donation"
-        phx-hook="VisualisationEngineHook"
+        phx-hook="DataDonationHook"
         data-after-completion-tab="submit_data"
         data-locale={@locale}
       >

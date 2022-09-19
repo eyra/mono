@@ -1,26 +1,23 @@
-import { GetText } from "./gettext"
+import { GetText } from "./gettext";
 
-export const FileInputFactory = function(data, locale) {
-  return FileInput(data, locale)
-}
+export class FileInput {
+  constructor(data, locale) {
+    this.data = data;
+    this.locale = locale;
+  }
 
-const FileInput = (function(data, locale) {
-    'use strict';
+  render(parent) {
+    const { title, description } = data;
 
-    /* PUBLIC */
+    const text = {
+      title: GetText.resolve(title, locale),
+      description: GetText.resolve(description, locale),
+      selectButton: GetText.resolve(this.selectButtonLabel(), locale),
+      continueButton: GetText.resolve(this.continueButtonLabel(), locale),
+      resetButton: GetText.resolve(this.resetButtonLabel(), locale),
+    };
 
-    function render(parent){
-      const { title, description } = data
-
-      const text = {
-        "title": GetText.resolve(title, locale),
-        "description": GetText.resolve(description, locale),
-        "selectButton": GetText.resolve(selectButtonLabel(), locale),
-        "continueButton": GetText.resolve(continueButtonLabel(), locale),
-        "resetButton": GetText.resolve(resetButtonLabel(), locale)
-      }
-
-      parent.el.innerHTML = `
+    parent.el.innerHTML = `
       <div class="text-title5 font-title5 sm:text-title4 sm:font-title4 lg:text-title3 lg:font-title3 text-grey1">
         ${text.title}
       </div>
@@ -67,68 +64,61 @@ const FileInput = (function(data, locale) {
             </div>
           </div>
         </div>
-      </div>`
-    }
+      </div>`;
+  }
 
-    function activate(parent, resolve) {
-      const input = parent.child("input")
-      const selectedFilename = parent.child("selected-filename")
-      const selectPanel = parent.child("select-panel")
-      const selectButton = parent.child("select-button")
-      const confirmPanel = parent.child("confirm-panel")
-      const confirmButton = parent.child("confirm-button")
-      const resetButton = parent.child("reset-button")
+  activate(parent, resolve) {
+    const input = parent.child("input");
+    const selectedFilename = parent.child("selected-filename");
+    const selectPanel = parent.child("select-panel");
+    const selectButton = parent.child("select-button");
+    const confirmPanel = parent.child("confirm-panel");
+    const confirmButton = parent.child("confirm-button");
+    const resetButton = parent.child("reset-button");
 
-      selectButton.onClick(() => {
-        // fake click on hidden input to trigger native file selector
-        input.click()
-      })
+    selectButton.onClick(() => {
+      // fake click on hidden input to trigger native file selector
+      input.click();
+    });
 
-      input.onChange(() => {
-        selectPanel.hide()
-        confirmPanel.show()
+    input.onChange(() => {
+      selectPanel.hide();
+      confirmPanel.show();
 
-        selectedFilename.el.innerText = input.selectedFile().name;
-        selectedFilename.show()
-      })
+      selectedFilename.el.innerText = input.selectedFile().name;
+      selectedFilename.show();
+    });
 
-      confirmButton.onClick(() => {
-        resolve(input.selectedFile())
-      })
+    confirmButton.onClick(() => {
+      resolve(input.selectedFile());
+    });
 
-      resetButton.onClick(() => {
-        // fake click on hidden input to trigger native file selector
-        input.click()
-      })
-    }
+    resetButton.onClick(() => {
+      // fake click on hidden input to trigger native file selector
+      input.click();
+    });
+  }
 
-    /* PRIVATE */
+  /* PRIVATE */
 
-    function continueButtonLabel() {
-      return {
-        "en": "Continue",
-        "nl": "Doorgaan"
-      }
-    }
-
-    function selectButtonLabel() {
-      return {
-        "en": "Select file",
-        "nl": "Selecteer bestand"
-      }
-    }
-
-    function resetButtonLabel() {
-      return {
-        "en": "Select again",
-        "nl": "Opnieuw"
-      }
-    }
-
-    /* MODULE INTERFACE */
-
+  continueButtonLabel() {
     return {
-        render,
-        activate
-    }
-});
+      en: "Continue",
+      nl: "Doorgaan",
+    };
+  }
+
+  selectButtonLabel() {
+    return {
+      en: "Select file",
+      nl: "Selecteer bestand",
+    };
+  }
+
+  resetButtonLabel() {
+    return {
+      en: "Select again",
+      nl: "Opnieuw",
+    };
+  }
+}
