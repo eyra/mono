@@ -7,14 +7,14 @@ export class FileInput {
   }
 
   render(parent) {
-    const { title, description } = data;
+    const { title, description, extensions } = this.data;
 
     const text = {
-      title: GetText.resolve(title, locale),
-      description: GetText.resolve(description, locale),
-      selectButton: GetText.resolve(this.selectButtonLabel(), locale),
-      continueButton: GetText.resolve(this.continueButtonLabel(), locale),
-      resetButton: GetText.resolve(this.resetButtonLabel(), locale),
+      title: GetText.resolve(title, this.locale),
+      description: GetText.resolve(description, this.locale),
+      selectButton: GetText.resolve(this.selectButtonLabel(), this.locale),
+      continueButton: GetText.resolve(this.continueButtonLabel(), this.locale),
+      resetButton: GetText.resolve(this.resetButtonLabel(), this.locale),
     };
 
     parent.el.innerHTML = `
@@ -35,7 +35,7 @@ export class FileInput {
             </div>
           </div>
         </div>
-        <input id="input" type="file" class="hidden" accept="${data.extensions}">
+        <input id="input" type="file" class="hidden" accept="${extensions}">
         <div class="mt-8"></div>
       </div>
 

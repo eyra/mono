@@ -19,11 +19,7 @@ export class ProcessingEngine {
     };
   }
 
-  registerEventListener(event_listener) {
-    this.eventListener = event_listener;
-  }
-
-  initialise() {
+  start() {
     this.worker.postMessage({ eventType: "initialise" });
   }
 

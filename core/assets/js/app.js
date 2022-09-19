@@ -98,7 +98,7 @@ Hooks.NativeWrapper = {
 };
 
 Hooks.PythonUploader = PythonUploader;
-Hooks.PortHook = PortHook;
+Hooks.DataDonationHook = DataDonationHook;
 
 let liveSocket = new LiveSocket("/live", Socket, {
   dom: {

@@ -1,11 +1,11 @@
 import { Tabbar } from "./tabbar";
 import { DataDonationAssembly } from "./data_donation_assembly";
 
-let assembly = undefined;
+const assembly = new DataDonationAssembly();
 
 export const DataDonationHook = {
   mounted() {
-    console.log("[PortHook] mounted");
+    console.log("[DataDonationHook] mounted");
     this.hideNextButton("execute");
 
     const locale = this.el.dataset.locale;
@@ -16,10 +16,8 @@ export const DataDonationHook = {
     const prompt_element = this.get_prompt_element();
     const spinner_element = this.get_spinner_element();
 
-    assembly = DataDonationAssembly();
-
     assembly.visualisationEngine
-      .run(script, prompt_element, spinner_element, locale)
+      .start(script, prompt_element, spinner_element, locale)
       .then((result) => {
         hook.el
           .querySelector(".no-extraction-data-yet")
@@ -29,12 +27,14 @@ export const DataDonationHook = {
         hook.el.querySelector("input[id='data']").value = result.data;
         Tabbar.show("tab_" + afterCompletionTab, true);
       });
+
+    assembly.processingEngine.start();
   },
   beforeUpdate() {
-    console.log("[PortHook] beforeUpdate");
+    console.log("[DataDonationHook] beforeUpdate");
   },
   updated() {
-    console.log("[PortHook] updated");
+    console.log("[DataDonationHook] updated");
   },
   destroyed() {
     assembly.visualisationEngine.terminate();

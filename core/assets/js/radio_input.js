@@ -7,14 +7,14 @@ export class RadioInput {
   }
 
   render(parent) {
-    let items_html = this.renderItems(data.items);
+    const { title, description } = this.data;
 
-    const { title, description } = data;
+    let items_html = this.renderItems(this.data.items);
 
     const text = {
-      title: GetText.resolve(title, locale),
-      description: GetText.resolve(description, locale),
-      continueButton: GetText.resolve(this.continueButtonLabel(), locale),
+      title: GetText.resolve(title, this.locale),
+      description: GetText.resolve(description, this.locale),
+      continueButton: GetText.resolve(this.continueButtonLabel(), this.locale),
     };
 
     parent.el.innerHTML = `
@@ -44,7 +44,7 @@ export class RadioInput {
   }
 
   activate(parent, resolve) {
-    const dataItems = data.items;
+    const dataItems = this.data.items;
     const radioGroup = parent.child("radio-group");
     const radioItems = radioGroup.childs("radio-item");
     const confirmButton = parent.child("confirm-button");
