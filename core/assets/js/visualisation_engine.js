@@ -81,12 +81,12 @@ export const VisualisationEngine = (function() {
         return {
             el: element,
             onClick(handle) {
-                this.el.addEventListener("click", (_event) => {
+                this.el.addEventListener("click", () => {
                     handle()
                 })
             },
             onChange(handle) {
-                this.el.addEventListener("change", (_event) => {
+                this.el.addEventListener("change", () => {
                     handle()
                 })
             },
@@ -120,10 +120,7 @@ export const VisualisationEngine = (function() {
                 let result = []
                 const elements = this.el.getElementsByClassName(className)
                 const childs = Array.from(elements)
-                for (let child of childs) {
-                    result.push(wrap(child))
-                }
-                return result
+                return childs.map(child => wrap(child));
             }
         }
     }

@@ -10,10 +10,9 @@ const RadioInput = (function(data, locale) {
 
   function render(parent){
 
-    let items_html = render_items(data.items)
+    let items_html = renderItems(data.items)
 
-    const { title } = data
-    const { description } = data
+    const { title, description } = data
 
     const text = {
       "title": GetText.resolve(title, locale),
@@ -58,7 +57,7 @@ const RadioInput = (function(data, locale) {
     radioItems.forEach((radioItem, index) => {
       const itemId = radioItem.el.id
       radioItem.onClick(() => {
-        toggle_group(radioItems, itemId)
+        toggleGroup(radioItems, itemId)
         confirmButton.show()
         selected = index
       })
@@ -72,19 +71,15 @@ const RadioInput = (function(data, locale) {
 
   /* PRIVATE */
 
-  function render_items(items) {
-    let result = ""
-    items.forEach((item, index) => {
-      if (index > 0) {
-        result += "\n"
-      }
-      result += render_item(item, index)
-    })
-    return result
+  function renderItems(items) {
+    return items.map((item, index) =>
+      renderItem(item, index)
+    )
   }
 
-  function render_item(item, index) {
+  function renderItem(item, index) {
     const itemId = `item-${index}`
+    const itemHTML = _.escape(item)
     return `
     <div id="${itemId}" class="radio-item flex flex-row gap-3 items-center cursor-pointer">
       <div>
@@ -92,17 +87,17 @@ const RadioInput = (function(data, locale) {
           id="${itemId}-on"
           class="hidden"
           src="/images/icons/radio_active.svg"
-          alt="${item} is selected"
+          alt="${itemHTML} is selected"
         />
         <img
           id="${itemId}-off"
           class=""
           src="/images/icons/radio.svg"
-          alt="Select ${item}"
+          alt="Select ${itemHTML}"
         />
       </div>
       <div class="text-grey1 text-label font-label select-none mt-1">
-        ${item}
+        ${itemHTML}
       </div>
     </div>`
   }
@@ -114,13 +109,13 @@ const RadioInput = (function(data, locale) {
     }
   }
 
-  function toggle_group(items, activeItemId) {
+  function toggleGroup(items, activeItemId) {
     for (let item of items) {
-      toggle_item(item, item.el.id === activeItemId)
+      toggleItem(item, item.el.id === activeItemId)
     }
   }
 
-  function toggle_item(item, on) {
+  function toggleItem(item, on) {
     const item_on = item.child(`${item.el.id}-on`)
     const item_off = item.child(`${item.el.id}-off`)
 

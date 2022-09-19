@@ -6,6 +6,12 @@ export const GetText = (function() {
     /* PUBLIC */
 
     function resolve(translatable, locale){
+      return _.escape(getTranslation(translatable, locale))
+    }
+
+    /* PRIVATE */
+
+    function getTranslation(translatable, locale){
       if (typeof translatable === 'object' && translatable !== null) {
 
         if (translatable[locale]) {
@@ -24,8 +30,6 @@ export const GetText = (function() {
       console.log("[GetText] Invalid translatable", translatable)
       return "?text?"
     }
-
-    /* PRIVATE */
 
     /* MODULE INTERFACE */
 

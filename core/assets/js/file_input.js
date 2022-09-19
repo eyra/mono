@@ -10,8 +10,7 @@ const FileInput = (function(data, locale) {
     /* PUBLIC */
 
     function render(parent){
-      const { title } = data
-      const { description } = data
+      const { title, description } = data
 
       const text = {
         "title": GetText.resolve(title, locale),
@@ -72,7 +71,7 @@ const FileInput = (function(data, locale) {
     }
 
     function activate(parent, resolve) {
-      const FileInputFactory = parent.child("input")
+      const input = parent.child("input")
       const selectedFilename = parent.child("selected-filename")
       const selectPanel = parent.child("select-panel")
       const selectButton = parent.child("select-button")
@@ -82,24 +81,24 @@ const FileInput = (function(data, locale) {
 
       selectButton.onClick(() => {
         // fake click on hidden input to trigger native file selector
-        FileInputFactory.click()
+        input.click()
       })
 
-      FileInputFactory.onChange(() => {
+      input.onChange(() => {
         selectPanel.hide()
         confirmPanel.show()
 
-        selectedFilename.el.innerText = FileInputFactory.selectedFile().name;
+        selectedFilename.el.innerText = input.selectedFile().name;
         selectedFilename.show()
       })
 
       confirmButton.onClick(() => {
-        resolve(FileInputFactory.selectedFile())
+        resolve(input.selectedFile())
       })
 
       resetButton.onClick(() => {
         // fake click on hidden input to trigger native file selector
-        FileInputFactory.click()
+        input.click()
       })
     }
 
