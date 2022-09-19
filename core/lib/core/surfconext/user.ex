@@ -36,7 +36,7 @@ defmodule Core.SurfConext.User do
         []
       end
     end)
-    |> validate_required(:sub)
+    |> validate_required([:email, :sub])
   end
 
   def update_changeset(%Core.SurfConext.User{} = user, attrs) do

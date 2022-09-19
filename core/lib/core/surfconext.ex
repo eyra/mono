@@ -4,6 +4,12 @@ defmodule Core.SurfConext do
   alias Frameworks.Signal
   import Ecto.Query, warn: false
 
+  require Logger
+
+  defmodule SurfConextError do
+    defexception [:message]
+  end
+
   def get_user_by_student_id(student_id) do
     student_id_code = "urn:schac:personalUniqueCode:nl:local:vu.nl:studentid:#{student_id}"
 
@@ -42,7 +48,7 @@ defmodule Core.SurfConext do
       |> Enum.join(" ")
 
     display_name = Map.get(attrs, "given_name", fullname)
-    email = Map.get(attrs, "email")
+    email = get_email(attrs)
 
     sso_info = %{
       email: email,
@@ -64,6 +70,13 @@ defmodule Core.SurfConext do
            |> Repo.insert() do
       Signal.Context.dispatch!(:user_created, %{user: surf_user.user})
       {:ok, surf_user}
+    end
+  end
+
+  defp get_email(attrs) do
+    case Map.get(attrs, "email") do
+      nil -> raise SurfConextError, "No email found in user info #{attrs |> inspect()}"
+      email -> email
     end
   end
 
