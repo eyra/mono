@@ -9,11 +9,16 @@ repos:
       - id: check-merge-conflict
       - id: no-commit-to-branch
         args: [-b, master]
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.7.1
+    hooks:
+      - id: prettier
+        types_or: [css, javascript]
   - repo: local
     hooks:
       - id: mix-format
-        name: "elixir: make format"
-        entry: make format
+        name: "elixir: mix format"
+        entry: mix format
         language: system
         files: \.exs?$
 

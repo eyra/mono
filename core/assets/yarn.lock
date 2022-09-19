@@ -5666,6 +5666,23 @@
   "resolved" "https://registry.npmjs.org/prepend-http/-/prepend-http-1.0.4.tgz"
   "version" "1.0.4"
 
+"prettier-html-templates@^0.1.0":
+  "integrity" "sha512-KdLveYzO2kJLiwUAebd5UFeKP8h3OqFhOiLbkgeIuS1WNoCRTyxW4KuyGfbh3F+Rp/2A6mipRxCq2zPi+//pmg=="
+  "resolved" "https://registry.npmjs.org/prettier-html-templates/-/prettier-html-templates-0.1.0.tgz"
+  "version" "0.1.0"
+
+"prettier-plugin-eex@0.6.0":
+  "integrity" "sha512-cI2mlKj4NsE43vsXTHB3QGsmg1FUHWiD2obegnWjGeRDN7scPhjX+uEmBkJl53pJ+a7byC9t/okDQUeVmvxPpw=="
+  "resolved" "https://registry.npmjs.org/prettier-plugin-eex/-/prettier-plugin-eex-0.6.0.tgz"
+  "version" "0.6.0"
+  dependencies:
+    "prettier-html-templates" "^0.1.0"
+
+"prettier@^2.0.0", "prettier@2.7.1":
+  "integrity" "sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g=="
+  "resolved" "https://registry.npmjs.org/prettier/-/prettier-2.7.1.tgz"
+  "version" "2.7.1"
+
 "pretty-bytes@^5.3.0", "pretty-bytes@^5.4.1":
   "integrity" "sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg=="
   "resolved" "https://registry.npmjs.org/pretty-bytes/-/pretty-bytes-5.6.0.tgz"

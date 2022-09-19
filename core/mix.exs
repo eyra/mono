@@ -153,7 +153,9 @@ defmodule Core.MixProject do
         "gettext.extract --merge priv/gettext"
       ],
       makedocs: ["deps.get", "docs -o doc/output"],
-      dev: "run --no-halt dev.exs"
+      dev: "run --no-halt dev.exs",
+      prettier: "cmd ./assets/node_modules/.bin/prettier --color --check ./assets/js",
+      "prettier.fix": "cmd ./assetsnode_modules/.bin/prettier --color -w ./assets/js"
     ]
   end
 end

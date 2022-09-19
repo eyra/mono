@@ -1,9 +1,2 @@
-_build/
-tmp/
-priv/static
-priv/cldr
-.bundle
-deps/
-
 # Ignore generated js hook files for components
-assets/js/_hooks/
+assets/js/_hooks
