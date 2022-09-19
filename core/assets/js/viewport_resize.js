@@ -1,27 +1,26 @@
-import _ from 'lodash'
+import _ from "lodash";
 
-let resizeHandler
+let resizeHandler;
 
 export const ViewportResize = {
-
-  mounted () {
+  mounted() {
     // Direct push of current window size to properly update view
-    this.pushResizeEvent()
+    this.pushResizeEvent();
 
-    window.addEventListener('resize', (event) => {
-      this.pushResizeEvent()
-    })
+    window.addEventListener("resize", (event) => {
+      this.pushResizeEvent();
+    });
   },
 
-  pushResizeEvent () {
-    console.log("pushResizeEvent")
-    this.pushEvent('viewport_resize', {
+  pushResizeEvent() {
+    console.log("pushResizeEvent");
+    this.pushEvent("viewport_resize", {
       width: window.innerWidth,
-      height: window.innerHeight
-    })
+      height: window.innerHeight,
+    });
   },
 
-  turbolinksDisconnected () {
-    window.removeEventListener('resize', resizeHandler)
-  }
-}
+  turbolinksDisconnected() {
+    window.removeEventListener("resize", resizeHandler);
+  },
+};
