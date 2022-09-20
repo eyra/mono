@@ -17,7 +17,7 @@ defmodule Core.Application do
         if Application.get_env(:core, :ssl_enabled) do
           [{SiteEncrypt.Phoenix, CoreWeb.Endpoint}]
         else
-          []
+          [CoreWeb.Endpoint]
         end
 
     opts = [strategy: :one_for_one, name: Core.Supervisor]
