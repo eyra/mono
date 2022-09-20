@@ -27,7 +27,7 @@ test/%: FORCE
 .PHONY: format
 format: ${MIX_PROJECTS:%=format/%}
 format/%: FORCE
-	cd $* && make format
+	cd $* && mix format
 
 .PHONY: credo
 credo: ${MIX_PROJECTS:%=credo/%}
