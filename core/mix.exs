@@ -81,7 +81,7 @@ defmodule Core.MixProject do
       {:phoenix_html, "~> 3.2"},
       {:phoenix_inline_svg, "~> 1.4"},
       {:surface, "~> 0.8.0"},
-      {:surface_catalogue, "~> 0.5.0"},
+      {:surface_catalogue, "~> 0.5.1"},
       {:floki, ">= 0.27.0"},
       {:ecto_sql, "~> 3.7"},
       {:ecto_commons, "~> 0.3.3"},
