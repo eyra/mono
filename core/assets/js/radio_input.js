@@ -68,7 +68,9 @@ export class RadioInput {
   /* PRIVATE */
 
   renderItems(items) {
-    return items.map((item, index) => this.renderItem(item, index));
+    return items
+      .map((item, index) => this.renderItem(item, index))
+      .join("\r\n");
   }
 
   renderItem(item, index) {
