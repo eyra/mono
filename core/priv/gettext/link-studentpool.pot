@@ -10,94 +10,94 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.students"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.campaigns"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "students.empty.description"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "students.empty.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "campaigns.empty.description"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "campaigns.empty.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "student.tag.complete"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "student.tag.incomplete"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "spots.available"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "submission.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "sample.size"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "tabbar.item.dashboard"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "active.students"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "inactive.students"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "credit.distribution.title"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "credit.progress.title"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "passed.students"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "student.title"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "search.placeholder"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "submission.selector.title"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "overview.title"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "campaigns.label"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "participants.label"
 msgstr ""

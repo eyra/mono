@@ -11,62 +11,62 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "complete.profile.cta"
 msgstr "Go to profile"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "complete.profile.description"
 msgstr "Some fields in your profile are not filled out."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "complete.profile.title"
 msgstr "Complete your profile"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "promote.push.student.cta"
 msgstr "Open settings"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "promote.push.student.description"
 msgstr "Choose to activate them. Email notifications are send by default."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "promote.push.student.title"
 msgstr "Do you want to receive push notifications?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "select.study.student.cta"
 msgstr "Go to profile"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "select.study.student.description"
 msgstr "To be able to participate in research studies."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "select.study.student.title"
 msgstr "Select your study program"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "review.submission.cta"
 msgstr "Go to waiting list"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "review.submission.description"
 msgstr "New campaigns available for publishing"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "review.submission.title"
 msgstr "New campaigns"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.check.rejection.cta"
 msgstr "Go to contribution"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.check.rejection.description"
 msgstr "Visit the contribution page for further details"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.check.rejection.title"
 msgstr "One of your contributions is rejected"

@@ -10,10 +10,10 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "Dutch"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "English"
 msgstr ""

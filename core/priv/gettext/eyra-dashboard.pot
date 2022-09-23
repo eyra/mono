@@ -10,18 +10,18 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "default.study.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "recent-items.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "empty.description"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "empty.title"
 msgstr ""

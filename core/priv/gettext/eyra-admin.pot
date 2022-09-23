@@ -10,58 +10,58 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "permissions.pooladmin.candidates.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "permissions.pooladmin.description"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "permissions.pooladmin.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "permissions.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "support.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket.tag.bug"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket.tag.question"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket.tag.tip"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "close.ticket.button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "role.coordinator"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "role.researcher"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "role.student"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reopen.ticket.button"
 msgstr ""

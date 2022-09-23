@@ -11,62 +11,62 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "complete.profile.cta"
 msgstr "Ga naar profiel"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "complete.profile.description"
 msgstr "Sommige velden in je profiel zijn niet ingevuld."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "complete.profile.title"
 msgstr "Maak je profiel compleet"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "promote.push.student.cta"
 msgstr "Ga naar instellingen"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "promote.push.student.description"
 msgstr "Deze kun je activeren. E-mail notificaties worden automatisch verstuurd."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "promote.push.student.title"
 msgstr "Wil je push notificaties ontvangen?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "select.study.student.cta"
 msgstr "Ga naar profiel"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "select.study.student.description"
 msgstr "Om mee te kunnen doen aan onderzoeksstudies."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "select.study.student.title"
 msgstr "Selecteer je opleiding"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "review.submission.cta"
 msgstr "Ga naar wachtrij"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "review.submission.description"
 msgstr "Er staan nieuwe canpagnes klaar om in te roosteren"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "review.submission.title"
 msgstr "Nieuwe campagnes"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.check.rejection.cta"
 msgstr "Ga naar bijdrage"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.check.rejection.description"
 msgstr "Bezoek de pagina van deze bijdrage voor meer details"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.check.rejection.title"
 msgstr "Een van je bijdragen is afgekeurd"

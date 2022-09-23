@@ -10,18 +10,18 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "quick_summary.%{open_spot_count}.%{target_subject_count}"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "recent-items.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "title"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "book.accounts.title"
 msgstr ""

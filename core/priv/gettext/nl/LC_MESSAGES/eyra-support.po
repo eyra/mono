@@ -11,30 +11,30 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "form.description"
 msgstr "Help ons om het Panl platform te verbeteren. Heb je een vraag over het Panl platform? Of wil je ons feedback geven? Vul dan het onderstaande formulier in. We nemen contact met je op via e-mail."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "form.title"
 msgstr "Helpdesk"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket.description.label"
 msgstr "Beschrijving"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket.title.label"
 msgstr "Onderwerp"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "create_ticket.button"
 msgstr "Verstuur"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket_created.info.flash"
 msgstr "Melding ontvangen"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket.type"
 msgstr "Formulier"

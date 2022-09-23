@@ -10,34 +10,34 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "confirm.token.email.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "password_reset.email.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "password_reset.password.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "password_reset.password_confirmation.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "password_reset.reset_button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "password_reset.reset_password_button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "user.password_reset.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "Invalid email or password"
 msgstr ""

@@ -11,142 +11,142 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "status.idle.label"
 msgstr "Concept"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "status.submitted.label"
 msgstr "Submitted"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "incomplete.forms.message"
 msgstr "Some required fields are not filled in yet"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ready.for.submission.message"
 msgstr "All required fields are filled, you can submit this campaign"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "waiting.for.coordinator.message"
 msgstr "Waiting for the pool administrator to publish your campaign in the marketplace"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "submit.error.text"
 msgstr "Some required fields in your campaign are not filled in."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "submit.error.title"
 msgstr "Complete your campaign"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "submit.success.text"
 msgstr "Thank you for your submission. The pool administrator will review your campaign and schedule it for publication in the marketplace."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "submit.success.title"
 msgstr "Campaign submitted"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "retract.success.text"
 msgstr "Your campaign is no longer visible for the pool administrator and in the marketplace of the participants."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "retract.success.title"
 msgstr "Campaign offline"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reward.title"
 msgstr "Reward"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "byline"
 msgstr "Updated %{timestamp}"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "retract.admin.success.text"
 msgstr "The campaign is no longer open or scheduled for participation in the marketplace."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "retract.admin.success.title"
 msgstr "Campaign offline"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "publish.error.text"
 msgstr "Some required fields are not filled in correctly."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "publish.error.title"
 msgstr "Complete the form"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "publish.success.text"
 msgstr "The campaign is open or scheduled for participation in the marketplace."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "publish.success.title"
 msgstr "Campaign published"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reward.value.label"
 msgstr "Credits"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reward.label"
 msgstr "Reward"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "schedule.end.label"
 msgstr "Offline after"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "schedule.start.label"
 msgstr "Online on"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "schedule.description"
 msgstr "Scheduling is optional. If you publish a campaign without scheduling, it is immediately visible in the marketplace. You can retract a published campaign at any moment in time."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "schedule.title"
 msgstr "Schedule"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "status.accepted.closed.label"
 msgstr "Closed"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "status.accepted.online.label"
 msgstr "Open"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "status.accepted.scheduled.label"
 msgstr "Scheduled"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "accepted.closed.message"
 msgstr "This campaign is closed"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "accepted.scheduled.message"
 msgstr "This campaign is scheduled for participation"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "complete.admin.success.text"
 msgstr "This campaign is marked as finished and no longer available in the marketplace."
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "complete.admin.success.title"
 msgstr "Campaign finished"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "status.completed.label"
 msgstr "Finished"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "status.retracted.label"
 msgstr "Withdrawn"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "submission.completed.message"
 msgstr "Campaign is finished"

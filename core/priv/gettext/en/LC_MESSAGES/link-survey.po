@@ -11,270 +11,270 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "config.nrofsubjects.label"
 msgstr "How many participants do you need?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "config.url.label"
 msgstr "Qualtrics link"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "duration.label"
 msgstr "How many minutes do you estimate participants will need?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "by.author.label"
 msgstr "By"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reward.highlight.title"
 msgstr "Reward"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "apply.cta.title"
 msgstr "Participate"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "devices.label"
 msgstr "Which devices can participants use?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "open.cta.title"
 msgstr "Proceed"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "redirect.description"
 msgstr "To redirect participants back to Panl at the end of the survey, copy the redirect URL below and paste it as \"Website URL\" in Qualtrics as %{link}."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "redirect.title"
 msgstr "Redirect URL (End of Survey)"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "devices.title"
 msgstr "Devices"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "pending.label"
 msgstr "Pending"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "status.title"
 msgstr "Participations"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "vacant.label"
 msgstr "Open"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "content.title"
 msgstr "Campaign"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "title"
 msgstr "Recruitment"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "add.first.button"
 msgstr "Start your first campaign"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "add.new.button"
 msgstr "Start new campaign"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "empty.description"
 msgstr "Here you can set-up and follow the status of your campaigns. A campaign is an organized course of action to achieve a goal, in this case to recruit participants. It consists of publishing a promotion in the marketplace, linking your study details, determining your sample and reviewing the results."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "empty.title"
 msgstr "Recruit participants for your study"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"
 msgstr "Dashboard"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.promotion"
 msgstr "Promotion"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.assignment"
 msgstr "Study"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "monitor.empty.description"
 msgstr "Submit your campaign and wait for the pool administrator to publish your campaign. Check out the preview to see what your campaign will look like for participants. Once your campaign is online, you can use this dashboard to manage your participants."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "monitor.empty.title"
 msgstr "Campaign submitted?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.promotion.forward"
 msgstr "Create promotion"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.assignment.forward"
 msgstr "Your study"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor.forward"
 msgstr "Go to dashboard"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.criteria"
 msgstr "Sample"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.criteria.forward"
 msgstr "Sample characteristics"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "form.title"
 msgstr "Survey"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "campaign.overview.title"
 msgstr "Campaigns"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "language.title"
 msgstr "Language"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "languages.label"
 msgstr "In what language is your study written?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ethical.label"
 msgstr "I hereby state that my study conforms to all ethical standards."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ethical.title"
 msgstr "Ethical review"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "panlid.description"
 msgstr "Panl automatically adds the participant ID to your Qualtrics survey URL. To use this ID in Qualtrics, add an embedded data element field with the name \"panl_id\", as %{link} in \"PART 2\"."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "panlid.title"
 msgstr "Panl ID"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "setup.title"
 msgstr "How to set up your survey on Qualtrics?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "redirect.copy.button"
 msgstr "Copy"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ethical.description"
 msgstr "Make sure that you completed the %{link} and that you have approval from the SBE Ethics Review Board (ERB), if required for your study. Provide your received ERB code."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "study.link.description"
 msgstr "To obtain the link to your Qualtrics survey, follow %{link}. Paste your link in the  \"Qualtrics link\" field in the form below."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "study.link.title"
 msgstr "Anonymous Survey Link"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "panlid.instructions.link"
 msgstr "explained here"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "redirect.instructions.link"
 msgstr "instructed here"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "study.instructions.link"
 msgstr "these instructions"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "form.description"
 msgstr "Follow the steps in the black frame to make sure that participants can start your online study on Panl and are redirected back to Panl after they finish."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "duration.highlight.text"
 msgstr "%{duration} minutes"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "duration.highlight.title"
 msgstr "Duration"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ethical.review.link"
 msgstr "ethical checklist"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.hero.title"
 msgstr "Study"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.completed.subtitle"
 msgstr "You have contributed to this study"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.completed.text"
 msgstr "Your contribution will be reviewed by the author of this study and either accepted or rejected."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.pending.subtitle"
 msgstr "Instructions"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "status.closed.highlight.text"
 msgstr "Closed for participation"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "status.highlight.title"
 msgstr "Status"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "status.open.highlight.text"
 msgstr "Open for participation"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "language.highlight.title"
 msgstr "Language"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "add.new.button.short"
 msgstr "New"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.accepted.subtitle"
 msgstr "Your contribution has been approved ✅"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.accepted.text"
 msgstr "The author of this study reviewed and approved your contribution. Your reward has been awarded. Thank you for participating, your contribution is highly appreciated."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.rejected.subtitle"
 msgstr "Unfortunately, your contribution is rejected"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.rejected.text"
 msgstr "The author of this study reviewed your contribution and wrote the following message: \"%{reason}\""
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "participated.label"
 msgstr "Participated"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "test.roundtrip.button"
 msgstr "Test set-up"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "test.roundtrip.text"
 msgstr "Test your survey set-up and check if you end up on the \"Round trip confirmed\" screen."
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "test.roundtrip.title"
 msgstr "Is your survey set up correctly?"

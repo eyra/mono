@@ -11,22 +11,22 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "message.label"
 msgstr "Message"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "recipients.label"
 msgstr "Recipients"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "title.label"
 msgstr "Title"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "send.button"
 msgstr "Send"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "dialog.title"
 msgstr "Notify by email"

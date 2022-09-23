@@ -11,58 +11,58 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "permissions.pooladmin.candidates.title"
 msgstr "Onderzoekers"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "permissions.pooladmin.description"
 msgstr "Selecteer een of meer onderzoekers die namens de VU de studentenpool beheren."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "permissions.pooladmin.title"
 msgstr "Pool beheerders"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "permissions.title"
 msgstr "Permissies"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "support.title"
 msgstr "Support"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket.tag.bug"
 msgstr "Bug"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket.tag.question"
 msgstr "Vraag"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket.tag.tip"
 msgstr "Tip"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "close.ticket.button"
 msgstr "Melding sluiten"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ticket.title"
 msgstr "Melding"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "role.coordinator"
 msgstr "Pool beheerder"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "role.researcher"
 msgstr "Onderzoeker"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "role.student"
 msgstr "Student"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reopen.ticket.button"
 msgstr "Melding heropenen"

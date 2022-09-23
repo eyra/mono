@@ -10,62 +10,62 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "complete.profile.cta"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "complete.profile.description"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "complete.profile.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "promote.push.student.cta"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "promote.push.student.description"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "promote.push.student.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "select.study.student.cta"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "select.study.student.description"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "select.study.student.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "review.submission.cta"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "review.submission.description"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "review.submission.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.check.rejection.cta"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.check.rejection.description"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.check.rejection.title"
 msgstr ""

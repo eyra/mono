@@ -10,51 +10,51 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "empty.description"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "empty.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reward.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.complete.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.completed.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.expired.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.pending.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.accepted.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.rejected.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.completed.subtitle"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.pending.subtitle"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.rejected.subtitle"
 msgstr ""
 

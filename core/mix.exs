@@ -75,13 +75,13 @@ defmodule Core.MixProject do
       {:assent, "~> 0.1.23"},
       {:bcrypt_elixir, "~> 2.0"},
       {:ex_aws_s3, "~> 2.0"},
-      {:phoenix, "~> 1.6.6"},
+      {:phoenix, "~> 1.6.12"},
       {:phoenix_ecto, "~> 4.4"},
-      {:phoenix_live_view, "~> 0.17.5"},
+      {:phoenix_live_view, "~> 0.17.6"},
       {:phoenix_html, "~> 3.2"},
       {:phoenix_inline_svg, "~> 1.4"},
       {:surface, "~> 0.8.0"},
-      {:surface_catalogue, "~> 0.5.0"},
+      {:surface_catalogue, "~> 0.5.1"},
       {:floki, ">= 0.27.0"},
       {:ecto_sql, "~> 3.7"},
       {:ecto_commons, "~> 0.3.3"},
@@ -153,7 +153,8 @@ defmodule Core.MixProject do
         "gettext.extract --merge priv/gettext"
       ],
       makedocs: ["deps.get", "docs -o doc/output"],
-      dev: "run --no-halt dev.exs"
+      prettier: "cmd ./assets/node_modules/.bin/prettier --color --check ./assets/js",
+      "prettier.fix": "cmd ./assetsnode_modules/.bin/prettier --color -w ./assets/js"
     ]
   end
 end

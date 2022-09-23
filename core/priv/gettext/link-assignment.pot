@@ -10,18 +10,18 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "closed.dialog.text"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "closed.dialog.title"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "excluded.dialog.text"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "excluded.dialog.title"
 msgstr ""

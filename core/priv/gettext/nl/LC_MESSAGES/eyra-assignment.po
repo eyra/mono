@@ -11,54 +11,46 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "cancel.button"
 msgstr "Annuleren"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "cancel.confirm.label"
 msgstr "Bevestigen"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "cancel.confirm.text"
 msgstr "Je geeft je plek vrij, zodat anderen deel kunnen nemen."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "cancel.confirm.title"
 msgstr "Plek vrijgeven?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "contact.button"
 msgstr "E-mail onderzoeker"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "form.title"
 msgstr "Studie"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "ticket.title"
 msgstr "Jouw Panl ID"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "earned.label"
 msgstr "verdiend"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "pending.label"
 msgstr "in afwachting"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "togo.label"
 msgstr "te gaan"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "student.account.target"
 msgstr "%{target} credits vereist"
-
-#, elixir-format, ex-autogen
-msgid "first.year"
-msgstr "1e jaar"
-
-#, elixir-format, ex-autogen
-msgid "second.year"
-msgstr "2e jaar"

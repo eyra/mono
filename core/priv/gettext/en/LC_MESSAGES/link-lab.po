@@ -11,35 +11,35 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "add.day.button"
 msgstr "Add day"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "form.description"
 msgstr "You currently planned %{time_slots} time slots with room for in total %{seats} participants."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "form.title"
 msgstr "Lab schedule"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "day.schedule.date.label"
 msgstr "Select a date"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "day.schedule.location.label"
 msgstr "Location"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "day.schedule.seats.label"
 msgstr "Seats"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "day.schedule.submit.button"
 msgstr "Confirm schedule"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "time.slot.item.available.label"
 msgstr "Not planned"
 
@@ -55,7 +55,7 @@ msgid_plural "%{count} seats"
 msgstr[0] ""
 msgstr[1] ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "day.schedule.byline"
 msgstr "Day schedule: %{time_slots} with %{seats} in total."
 
@@ -65,110 +65,110 @@ msgid_plural "%{count} time slots"
 msgstr[0] ""
 msgstr[1] ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "duplicate.day.button"
 msgstr "Duplicate"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "edit.day.button"
 msgstr "Edit"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "timeslot.selector.label"
 msgstr "Select a time slot"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "timeslot.submit.button"
 msgstr "Reserve a seat"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "apply.cta.title"
 msgstr "Participate"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "no.reservation.title"
 msgstr "Book lab session"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "open.cta.title"
 msgstr "Proceed"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "reservation.title"
 msgstr "Booked lab session"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "submit.warning.no.selection"
 msgstr "Please select a time slot first"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "update.warning.time.slot.no.longer.available"
 msgstr "Selected time slot is no longer available, please select a different one"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "participated.label"
 msgstr "Participated"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "pending.label"
 msgstr "Reserved"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.title"
 msgstr "Lab check in"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.query.label"
 msgstr "Search participant"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.body"
 msgstr "On arrival, enter the participant Panl ID or email below. Their reserved time slot will appear and you can check them in."
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.expired"
 msgstr "Reservation expired"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.not.found"
 msgstr "No results"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "experiment.checkin.label"
 msgstr "Check in with Panl ID:"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.email.not.found"
 msgstr "No results"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.email.found"
 msgstr "%{count} matches"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.email.found.more"
 msgstr "First %{max} out of %{count} matches visible"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.cancelled"
 msgstr "Reservation cancelled"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.noreservation"
 msgstr "No reservation available"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.checkedin.full"
 msgstr "Checked in %{date} as subject %{subject}"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.checkedin.short"
 msgstr "Checked in %{date}"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.reservation"
 msgstr "Reservation found"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "date.location.error"
 msgstr "Location already booked on the selected date"

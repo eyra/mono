@@ -11,18 +11,18 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "closed.dialog.text"
 msgstr "Unfortunately, this assignment is currently closed for participation."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "closed.dialog.title"
 msgstr "Closed"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "excluded.dialog.text"
 msgstr "The researcher excluded you based on your participation in a previous study."
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "excluded.dialog.title"
 msgstr "Unfortunately you cannot participate"

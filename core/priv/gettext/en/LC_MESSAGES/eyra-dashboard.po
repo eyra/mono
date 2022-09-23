@@ -11,18 +11,18 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "default.study.title"
 msgstr "New study"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "recent-items.title"
 msgstr "Recent items:"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "empty.description"
 msgstr "Start working with Panl and this console will provide an overview of your activities. It is the place to be, to quickly pick up where you left off during your last visit."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "empty.title"
 msgstr "Not active yet?"
