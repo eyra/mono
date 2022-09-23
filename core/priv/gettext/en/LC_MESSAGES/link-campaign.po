@@ -11,58 +11,58 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reject.button"
 msgstr "Reject contribution"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reject.message.label"
 msgstr "Message to participant"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reject.text"
 msgstr "Please specify why the contribution of this participant is rejected:"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reject.title"
 msgstr "Reject contribution"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reject.note"
 msgstr "Note: Rejected participants cannot participate in your campaign again."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "create.campaign.dialog.ok.button"
 msgstr "Proceed"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "create.campaign.dialog.text"
 msgstr "What type of study would you like to set up?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "create.campaign.dialog.title"
 msgstr "Study type"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "exclusion.description"
 msgstr "If you would like to exclude participants that you recruited in previous campaigns, select one or more campaigns below."
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "exclusion.select.label"
 msgstr "Campaigns"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "exclusion.title"
 msgstr "Exclusion"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "no.previous.campaigns.available"
 msgstr "No previous campaigns available yet"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "submission.criteria.status"
 msgstr "Based on the selected criteria, %{sample} out of %{total} people in the pool can participate in your study."
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "submission.criteria.title"
 msgstr "Criteria"

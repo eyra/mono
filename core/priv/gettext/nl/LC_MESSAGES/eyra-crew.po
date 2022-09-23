@@ -11,30 +11,30 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.completed.message.part1"
 msgstr "Jouw bijdrage wordt door de auteur van deze studie beoordeeld. Afhankelijk van de beoordeling wordt jouw bijdrage goedgekeurd of afgekeurd."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.completed.message.part2"
 msgstr "Bezoek jouw console om de status van jouw bijdragen te bekijken."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.completed.title"
 msgstr "Bedankt voor jouw deelname"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.expired.subtitle"
 msgstr "Helaas is jouw sessie verlopen"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.expired.text"
 msgstr "Is de studie nog open? Dan kun je alsnog meedoen. Is de studie gesloten? Ga dan naar de marktplaats om andere studies te bekijken."
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "tester.completed.subtitle"
 msgstr "✅ Round trip bevestigd"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "tester.completed.text"
 msgstr "Als de titel van deze pagina overeenkomt met de titel van jouw campagne, dan is de \"round trip\" van Panl naar Qualtrics en terug geslaagd."

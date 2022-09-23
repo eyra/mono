@@ -10,15 +10,15 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "no.results.found.message"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "search.image.button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "search.image.title"
 msgstr ""
 

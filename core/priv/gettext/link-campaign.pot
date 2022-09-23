@@ -10,58 +10,58 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reject.button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reject.message.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reject.text"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reject.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reject.note"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "create.campaign.dialog.ok.button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "create.campaign.dialog.text"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "create.campaign.dialog.title"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "exclusion.description"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "exclusion.select.label"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "exclusion.title"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "no.previous.campaigns.available"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "submission.criteria.status"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "submission.criteria.title"
 msgstr ""

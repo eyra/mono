@@ -11,118 +11,114 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "back.button.label"
 msgstr "Back"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "banner.subtitle.label"
 msgstr "Description"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "banner.title"
 msgstr "About you or your team"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "banner.title.label"
 msgstr "Name"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "banner.url.label"
 msgstr "Website"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "choose.banner.photo.file"
 msgstr "Select picture"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "choose.other.banner.photo.file"
 msgstr "Choose different photo"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "description.label"
 msgstr "Provide some background information about this study"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "description.public.label"
 msgstr "About this study"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "description.title"
 msgstr "Why are you performing this study?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "devices.available.label"
 msgstr "Available on:"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "duration.title"
 msgstr "Duration"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "expectations.label"
 msgstr "Describe what is expected of participants"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "expectations.public.label"
 msgstr "What to expect?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "expectations.title"
 msgstr "What do participants have to do?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "image.label"
 msgstr "This image is used as a cover image for your promotion page and your marketplace tile."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "image.title"
 msgstr "Cover image"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "open.spots.label"
 msgstr "%{count} open spots"
 
-#, elixir-format
-msgid "reward.title"
-msgstr "Credits"
-
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "search.different.image.button"
 msgstr "Change cover"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "subtitle.label"
 msgstr "Can you explain in one line what your study is about?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.label"
 msgstr "Which theme fits your study best? You could select multiple."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "themes.title"
 msgstr "Themes"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "title.label"
 msgstr "Title"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "form.title"
 msgstr "Promotion"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "form.description"
 msgstr "Promotions will be published in the marketplace to recruit participants. Preview the promotion page to view what participants will see when they click your marketplace tile."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "preview.inform.text"
 msgstr "This feature does not work in preview mode."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "preview.inform.title"
 msgstr "Preview"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "languages.available.label"
 msgstr "Language:"

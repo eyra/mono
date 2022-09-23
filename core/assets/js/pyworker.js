@@ -2,25 +2,27 @@ importScripts("https://cdn.jsdelivr.net/pyodide/v0.21.2/full/pyodide.js");
 
 var data = undefined;
 
-loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.21.2/full/" }).then((pyodide) => {
-  self.pyodide = pyodide;
-  return self.pyodide.loadPackage(["micropip", "numpy", "pandas"]);
-}).then(() => {
-  self.postMessage({ eventType: "initialized" });
-});
+loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.21.2/full/" })
+  .then((pyodide) => {
+    self.pyodide = pyodide;
+    return self.pyodide.loadPackage(["micropip", "numpy", "pandas"]);
+  })
+  .then(() => {
+    self.postMessage({ eventType: "initialized" });
+  });
 
-let file = undefined
-var filename = undefined
+let file = undefined;
+var filename = undefined;
 
 onmessage = (event) => {
   const { eventType } = event.data;
   if (eventType === "loadScript") {
-    self.pyodide.runPython(event.data.script)
+    self.pyodide.runPython(event.data.script);
   } else if (eventType === "initData") {
-    filename = event.data.filename
-    file = self.pyodide.FS.open(filename, "w")
+    filename = event.data.filename;
+    file = self.pyodide.FS.open(filename, "w");
   } else if (eventType === "data") {
-    self.pyodide.FS.write(file, event.data.chunk, 0, event.data.chunk.length)
+    self.pyodide.FS.write(file, event.data.chunk, 0, event.data.chunk.length);
   } else if (eventType === "processData") {
     const result = self.pyodide.runPython(`
     def _process_data():
@@ -48,6 +50,31 @@ onmessage = (event) => {
         "data": json.dumps(data_output),
       }
     _process_data()`);
-    self.postMessage({ eventType: "result", result: result.toJs({ create_proxies: false, dict_converter: Object.fromEntries }) });
+    self.postMessage({
+      eventType: "result",
+      result: result.toJs({
+        create_proxies: false,
+        dict_converter: Object.fromEntries,
+      }),
+    });
+  } else if (eventType === "run_cycle") {
+    var prompt = undefined;
+
+    if (generator == undefined) {
+      generator = self.pyodide.runPython(`
+        return process()
+      `);
+      prompt = generator.__next__();
+    } else {
+      prompt = generator.send(event.data);
+    }
+
+    self.postMessage({
+      eventType: "prompt",
+      result: prompt.toJs({
+        create_proxies: false,
+        dict_converter: Object.fromEntries,
+      }),
+    });
   }
 };

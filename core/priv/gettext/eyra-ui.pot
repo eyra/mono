@@ -10,202 +10,202 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "error.flash"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "persister.saved.flash"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.console"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.marketplace"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.profile"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.settings"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.signin"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.signout"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.menu"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.eyra"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.todo"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "dashboard.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "marketplace.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "todo.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.features"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.profile"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.scholar"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.features.forward"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.profile.forward"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.scholar.forward"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "onboarding.forward"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.debug"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.welcome"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.welcome.forward"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.link"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.helpdesk"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "cancel.button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "delete.confirm.text"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "delete.confirm.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "delete.confirm.label"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ok.button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "feature.unavailable.text"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "feature.unavailable.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.permissions"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.support"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "timestamp.at"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "timestamp.today"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "timestamp.yesterday"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "authentication.required.error"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "start.page.console"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "start.page.marketplace"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "duplicate.button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "share.button"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "share.dialog.text"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "pronoun.her"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "menu.item.payments"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "persister.error.flash"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "mailto.button"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "notify.all"
 msgstr ""
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "pronoun.him"
 msgstr ""

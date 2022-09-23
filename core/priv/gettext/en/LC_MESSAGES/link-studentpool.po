@@ -11,94 +11,94 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.students"
 msgstr "Students"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.campaigns"
 msgstr "Campaigns"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "students.empty.description"
 msgstr "There are currently no registered students. You will be notified as soon as students have signed up."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "students.empty.title"
 msgstr "Students participating in this pool will appear here"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "campaigns.empty.description"
 msgstr "As soon as researchers publish a campaign in your pool to recruit participants for their study it will be added here. You can schedule when campaigns will become available in the marketplace for eligible participants."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "campaigns.empty.title"
 msgstr "Campaigns in your pool"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "student.tag.complete"
 msgstr "Ready"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "student.tag.incomplete"
 msgstr "Incompleet"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "spots.available"
 msgstr "%{open} out of %{total} spots available"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "submission.title"
 msgstr "Campaign"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "sample.size"
 msgstr "%{size} spots available"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "tabbar.item.dashboard"
 msgstr "Dashboard"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "active.students"
 msgstr "Active students"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "inactive.students"
 msgstr "Inactive students"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "credit.distribution.title"
 msgstr "Credit distribution (Active students)"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "credit.progress.title"
 msgstr "Pool credit budget"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "passed.students"
 msgstr "Passed students"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "student.title"
 msgstr "Student"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.placeholder"
 msgstr "Search"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "submission.selector.title"
 msgstr "Pool"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "overview.title"
 msgstr "Pools"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "campaigns.label"
 msgstr "Campaigns"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "participants.label"
 msgstr "Participants"

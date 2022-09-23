@@ -21,6 +21,7 @@ module.exports = (env, options) => {
     entry: {
       'app': glob.sync('./vendor/**/*.js').concat(['./js/app.js']),
       'pyworker': ['./js/pyworker.js'],
+      'processing_worker': ['./js/processing_worker.js'],
       // 'sw': ['./js/sw.js']
     },
     output: {

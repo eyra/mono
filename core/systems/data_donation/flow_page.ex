@@ -1,4 +1,4 @@
-defmodule Systems.DataDonation.UploadPage do
+defmodule Systems.DataDonation.FlowPage do
   defmodule StoreResultsError do
     @moduledoc false
     defexception [:message]
@@ -19,7 +19,7 @@ defmodule Systems.DataDonation.UploadPage do
 
   alias Systems.DataDonation.{
     WelcomeSheet,
-    FileSelectionSheet,
+    ExecuteSheet,
     SubmitDataSheet
   }
 
@@ -37,14 +37,19 @@ defmodule Systems.DataDonation.UploadPage do
   data(summary, :any, default: "")
   data(extracted, :any, default: "")
   data(tabs, :any)
+  data(locale, :any)
 
   @impl true
-  def mount(%{"id" => id, "session" => session} = _params, _session, socket) do
+  def mount(
+        %{"id" => id, "session" => session} = _params,
+        %{"locale" => locale} = _session,
+        socket
+      ) do
     vm = DataDonation.Context.get(id)
     tabs = create_tabs(vm, session)
 
     {:ok,
-     assign(socket, id: id, vm: vm, session: session, tabs: tabs)
+     assign(socket, id: id, vm: vm, session: session, tabs: tabs, locale: locale)
      |> update_menus()}
   end
 
@@ -63,11 +68,11 @@ defmodule Systems.DataDonation.UploadPage do
         align: :left
       },
       %{
-        id: :file_selection,
+        id: :execute,
         action: nil,
         title: dgettext("eyra-data-donation", "tabbar.item.file_selection"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.file_selection.forward"),
-        component: FileSelectionSheet,
+        component: ExecuteSheet,
         props: %{script: script_content, platform: platform},
         type: :sheet
       },
@@ -129,7 +134,12 @@ defmodule Systems.DataDonation.UploadPage do
   def render(assigns) do
     ~F"""
     <Stripped user={@current_user} menus={@menus}>
-      <div id="data-donation" phx-hook="PythonUploader" data-after-completion-tab="submit_data">
+      <div
+        id="data-donation"
+        phx-hook="DataDonationHook"
+        data-after-completion-tab="submit_data"
+        data-locale={@locale}
+      >
         <TabbarArea tabs={@tabs}>
           <ActionBar>
             <Tabbar vm={%{initial_tab: :welcome}} />
@@ -175,7 +185,7 @@ defmodule Systems.DataDonation.UploadPage do
   end
 end
 
-defimpl Plug.Exception, for: Systems.DataDonation.UploadPage.StoreResultsError do
+defimpl Plug.Exception, for: Systems.DataDonation.FlowPage.StoreResultsError do
   def status(_exception), do: 500
   def actions(_), do: []
 end

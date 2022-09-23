@@ -11,202 +11,202 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "error.flash"
 msgstr "Er is een fout opgetreden"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "persister.saved.flash"
 msgstr "Opgeslagen"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.console"
 msgstr "Mijn console"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.marketplace"
 msgstr "Marktplaats"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.profile"
 msgstr "Mijn profiel"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.settings"
 msgstr "Instellingen"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.signin"
 msgstr "Inloggen"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.signout"
 msgstr "Uitloggen"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.menu"
 msgstr "Menu"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.eyra"
 msgstr "Menu"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.todo"
 msgstr "To-do"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "dashboard.title"
 msgstr "Mijn console"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "marketplace.title"
 msgstr "Marktplaats"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "todo.title"
 msgstr "To-do"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.features"
 msgstr "Kenmerken"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.profile"
 msgstr "Mijn profiel"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.scholar"
 msgstr "Opleiding"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.features.forward"
 msgstr "Pas kenmerken aan"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.profile.forward"
 msgstr "Pas profiel aan"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.scholar.forward"
 msgstr "Selecteer opleiding"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "onboarding.forward"
 msgstr "Verder"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.debug"
 msgstr "Debug"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.welcome"
 msgstr "Toelichting"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.welcome.forward"
 msgstr "Welkom"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.link"
 msgstr "Panl"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.helpdesk"
 msgstr "Helpdesk"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "cancel.button"
 msgstr "Annuleren"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "delete.confirm.text"
 msgstr "De %{item} wordt permanent verwijderd."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "delete.confirm.title"
 msgstr "%{item} verwijderen?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "delete.confirm.label"
 msgstr "Verwijderen"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ok.button"
 msgstr "OK"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "feature.unavailable.text"
 msgstr "Op dit moment werken we nog aan deze functie. We updaten het platform regelmatig. Probeer het later nog eens."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "feature.unavailable.title"
 msgstr "Binnenkort beschikbaar"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.permissions"
 msgstr "Permissies"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "menu.item.support"
 msgstr "Support"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "timestamp.at"
 msgstr "om"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "timestamp.today"
 msgstr "vandaag"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "timestamp.yesterday"
 msgstr "gisteren"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "authentication.required.error"
 msgstr "Deze pagina bekijken? Log hier eerst in."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "start.page.console"
 msgstr "Ga naar console"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "start.page.marketplace"
 msgstr "Ga naar marktplaats"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "duplicate.button"
 msgstr "Dupliceren"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "share.button"
 msgstr "Delen"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "share.dialog.text"
 msgstr "Deel je %{content} met een of meer %{group} uit de onderstaande lijst."
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "pronoun.her"
 msgstr "haar"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "menu.item.payments"
 msgstr "Menu"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "persister.error.flash"
 msgstr "Niet opgeslagen, herlaad en probeer het opnieuw"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "mailto.button"
 msgstr "Benaderen"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "notify.all"
 msgstr "Stuur notificatie"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "pronoun.him"
 msgstr "haar"

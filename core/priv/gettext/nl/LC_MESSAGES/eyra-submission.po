@@ -11,142 +11,142 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "status.idle.label"
 msgstr "Concept"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "status.submitted.label"
 msgstr "Ingediend"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "incomplete.forms.message"
 msgstr "Sommige verplichte velden zijn nog niet ingevuld"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "ready.for.submission.message"
 msgstr "Alle verplichte velden zijn gevuld, je kunt deze campagne indienen"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "waiting.for.coordinator.message"
 msgstr "Jouw campagne staat in de wachtrij om door de poolbeheerder in de marktplaats gezet te worden"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "submit.error.text"
 msgstr "Sommige verplichte velden in je campagne zijn niet ingevuld."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "submit.error.title"
 msgstr "Maak je campagne compleet"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "submit.success.text"
 msgstr "Bedankt voor het indienen. De poolbeheerder zal je campagne bekijken en deze inplannen voor publicatie in de marktplaats."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "submit.success.title"
 msgstr "Campagne ingediend"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "retract.success.text"
 msgstr "Jouw campagne is niet meer zichtbaar voor de poolbeheerder en in de marktplaats van de deelnemers."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "retract.success.title"
 msgstr "Campagne offline"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reward.title"
 msgstr "Beloning"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "byline"
 msgstr "Laatste aanpassing: %{timestamp}"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "retract.admin.success.text"
 msgstr "De campagne is niet meer open of ingepland voor deelname in de marktplaats."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "retract.admin.success.title"
 msgstr "Campagne offline"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "publish.error.text"
 msgstr "Sommige verplichte velden zijn niet correct ingevuld."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "publish.error.title"
 msgstr "Maak het formulier compleet"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "publish.success.text"
 msgstr "De campagne staat open of is ingepland voor deelname in de marktplaats."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "publish.success.title"
 msgstr "Campagne gepubliceerd"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reward.value.label"
 msgstr "Credits"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reward.label"
 msgstr "Beloning"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "schedule.end.label"
 msgstr "Offline na"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "schedule.start.label"
 msgstr "Online op"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "schedule.description"
 msgstr "Het plannen van een campagne is optioneel. Als je een campagne online zet, zonder planning, dan is deze meteen beschikbaar op de marktplaats. Je kunt een campagne die online staat op elk moment weer terugtrekken."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "schedule.title"
 msgstr "Planning"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "status.accepted.closed.label"
 msgstr "Afgerond"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "status.accepted.online.label"
 msgstr "Open"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "status.accepted.scheduled.label"
 msgstr "Ingepland"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "accepted.closed.message"
 msgstr "Deze campagne is afgerond"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "accepted.scheduled.message"
 msgstr "Deze campagne staat ingepland voor deelname "
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "complete.admin.success.text"
 msgstr "Deze campagne is gemarkeerd als afgerond en niet meer beschikbaar in de marktplaats."
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "complete.admin.success.title"
 msgstr "Campagne afgerond"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "status.completed.label"
 msgstr "Afgerond"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "status.retracted.label"
 msgstr "Ingetrokken"
 
-#, elixir-format, ex-autogen, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "submission.completed.message"
 msgstr "Campagne is afgerond"

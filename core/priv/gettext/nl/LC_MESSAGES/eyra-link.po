@@ -11,70 +11,70 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "welcome.title"
 msgstr "Panl"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "console-button"
 msgstr "Naar het console"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "link.message"
 msgstr "Panl is een marktplaats voor onderzoek. Onderzoekers kunnen hier campagnes opzetten voor het werven van deelnemers aan onderzoeksstudies. Deelnemers kunnen zich opgeven om mee te doen aan deze studies. Op dit moment wordt Panl alleen gebruikt voor student deelname aan onderzoeksstudies van de VU Amsterdam School of Business and Economics (SBE). In 2022 wordt Panl breder beschikbaar gesteld."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "link.title"
 msgstr "Marktplaats"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "signup.card.title"
 msgstr "Ben je VU student of medewerker?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "member.card.title"
 msgstr "Welkom terug."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "member.profile.card.title"
 msgstr "Welkom terug %{user}."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "signup.card.button"
 msgstr "Log hier in"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "usp1.description"
 msgstr "Ondersteunt een flexibele en efficiënte workflow, inclusief een mobile-first ontwerp voor makkelijk gebruik op mobiel."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "usp1.title"
 msgstr "Efficiënt voor onderzoekers"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "usp2.description"
 msgstr "De marktplaats biedt een aantrekkelijk overzicht van beschikbare studies waar deelnemers meer informatie kunnen vinden en deel kunnen nemen aan onderzoek."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "usp2.title"
 msgstr "Aantrekkelijk voor deelnemers"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "usp3.description"
 msgstr "Ontwikkeld door onderzoekers van de VU Amsterdam met ervaring in het werven van deelnemers voor onderzoek, in samenwerking met platform ontwikkelaar Eyra en SURF."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "usp3.title"
 msgstr "Voor en door onderzoekers"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "welcome.subtitle"
 msgstr "Voor onderzoek"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "marketplace.button"
 msgstr "Naar de marktplaats"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "link.message.interested"
 msgstr "Meer weten? Stuur een e-mail naar "

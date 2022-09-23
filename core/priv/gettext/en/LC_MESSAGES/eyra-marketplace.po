@@ -11,51 +11,51 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "empty.description"
 msgstr "There are currently no research studies available to participate in. As soon as one becomes available, it will be added here and you will be notified by email (make sure to check your spam or junk mail folder, just in case)."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "empty.title"
 msgstr "Looking for a study?"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "reward.label"
 msgstr "Reward: %{value} credits"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.complete.label"
 msgstr "Closed"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.completed.label"
 msgstr "Finished"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.expired.label"
 msgstr "Expired"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.pending.label"
 msgstr "Enrolled"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.accepted.label"
 msgstr "Accepted"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.rejected.label"
 msgstr "Rejected"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.completed.subtitle"
 msgstr "Awaiting approval by the researcher"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.pending.subtitle"
 msgstr "Awaiting your contribution"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "assignment.status.rejected.subtitle"
 msgstr "No credits awarded"
 

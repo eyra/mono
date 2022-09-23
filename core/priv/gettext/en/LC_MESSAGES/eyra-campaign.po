@@ -11,18 +11,18 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "campaign.all.title"
 msgstr "Available studies"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "campaign.subject.title"
 msgstr "Contributions"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "share.dialog.content"
 msgstr "campaign"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "share.dialog.group"
 msgstr "researchers"

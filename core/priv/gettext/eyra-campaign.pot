@@ -10,18 +10,18 @@
 msgid ""
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "campaign.all.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "campaign.subject.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "share.dialog.content"
 msgstr ""
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "share.dialog.group"
 msgstr ""

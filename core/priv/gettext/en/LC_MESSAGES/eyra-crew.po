@@ -11,30 +11,30 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.completed.message.part1"
 msgstr "Your contribution will be reviewed by the author of this study and either accepted or rejected."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.completed.message.part2"
 msgstr "Visit your console to view the status of your contribution."
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.completed.title"
 msgstr "Thank you for participating"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.expired.subtitle"
 msgstr "Unfortunately, your session has expired"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "task.expired.text"
 msgstr "If the study is still open, you can participate again. Is the study closed? Visit the marketplace to check for other studies."
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "tester.completed.subtitle"
 msgstr "✅ Round trip confirmed"
 
-#, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "tester.completed.text"
 msgstr "If the title of this page corresponds with the title of your campaign, the roundtrip from Panl to Qualtrics and back was successful."

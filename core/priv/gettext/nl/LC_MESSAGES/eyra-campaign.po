@@ -11,18 +11,18 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "campaign.all.title"
 msgstr "Beschikbare studies"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "campaign.subject.title"
 msgstr "Bijdragen"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "share.dialog.content"
 msgstr "campagne"
 
-#, elixir-format
+#, elixir-autogen, elixir-format
 msgid "share.dialog.group"
 msgstr "onderzoekers"
