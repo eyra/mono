@@ -1,0 +1,9 @@
+assets/node_modules
+deps
+_build
+Dockerfile
+tmp
+priv/static
+priv/cldr
+.bundle
+assets/js/_hooks/

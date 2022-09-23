@@ -25,6 +25,6 @@ config :core, :meta,
   bundle_title: "Panl",
   bundle: :link
 
-if Mix.env() === :dev do
-  import_config "#{Mix.env()}.exs"
+if config_env() === :dev do
+  import_config "#{config_env()}.exs"
 end

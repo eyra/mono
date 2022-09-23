@@ -27,35 +27,23 @@ jobs:
           elixir-version: "1.14.0"
 
       - name: Setup the Elixir project
-        run: make deps
-
-      - name: Install Node deps
-        run: npm install
-        working-directory: core/assets
-
-      - name: Update browserslist package
-        run: npx browserslist@latest --update-db
-        working-directory: core/assets
-
-      - name: Build static resources
-        run: npm run deploy
-        working-directory: core/assets
-
-      - name: Build digest
-        run: mix phx.digest
+        run: mix deps.get
         working-directory: core
-        env:
-          MIX_ENV: prod
+
+      - name: Build Frontend
+        run: ./scripts/build-frontend
+        working-directory: core
 
       - name: Build release
-        run: mix release --overwrite --path "../${{steps.tag.outputs.tag}}"
+        run: ./scripts/build-release
         working-directory: core
         env:
           BUNDLE: ${{github.event.inputs.bundle}}
           VERSION: ${{steps.tag.outputs.tag}}
 
       - name: Archive release
-        run: tar cfj "${{steps.tag.outputs.tag}}.tar.bz2" "${{steps.tag.outputs.tag}}"
+        run: tar cfj "../${{steps.tag.outputs.tag}}.tar.bz2" "${{steps.tag.outputs.tag}}"
+        working-directory: core
 
       - uses: softprops/action-gh-release@v1
         with:

@@ -2,9 +2,9 @@ const plugin = require('tailwindcss/plugin')
 
 module.exports = {
   purge: [
-      "../../**/*.html.eex",
-      "../../**/*.html.leex",
-      "../../**/*.ex",
+      "../**/*.html.eex",
+      "../**/*.html.leex",
+      "../**/*.ex",
       "./js/**/*.js",
   ],
 

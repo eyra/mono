@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+set -x
+
+if [ -z ${VERSION} ]; then 
+    echo "VERSION is unset"; 
+    exit 1;
+fi
+if [ -z ${BUNDLE} ]; then 
+    echo "BUNDLE is unset"; 
+    exit 1;
+fi
+
+
+cd $(dirname "$0")/..
+
+mix deps.get
+
+mix phx.digest
+MIX_ENV=prod mix release --overwrite --path "${VERSION}"

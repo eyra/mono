@@ -6,14 +6,19 @@ defmodule Core.Application do
   use Application
 
   def start(_type, _args) do
-    children = [
-      Core.Repo,
-      CoreWeb.Telemetry,
-      {SiteEncrypt.Phoenix, CoreWeb.Endpoint},
-      {Phoenix.PubSub, name: Core.PubSub},
-      {Oban, oban_config()},
-      {Systems.Banking.Context.backend(), "account-number"}
-    ]
+    children =
+      [
+        Core.Repo,
+        CoreWeb.Telemetry,
+        {Phoenix.PubSub, name: Core.PubSub},
+        {Oban, oban_config()},
+        {Systems.Banking.Context.backend(), "account-number"}
+      ] ++
+        if Application.get_env(:core, :ssl_enabled) do
+          [{SiteEncrypt.Phoenix, CoreWeb.Endpoint}]
+        else
+          [CoreWeb.Endpoint]
+        end
 
     opts = [strategy: :one_for_one, name: Core.Supervisor]
     Supervisor.start_link(children, opts)

@@ -118,7 +118,6 @@ defmodule Core.MixProject do
       {:ssl_verify_fun, "~> 1.1"},
       # Dev and test deps
       {:file_system, "~> 0.2", only: [:dev, :test]},
-      {:exsync, "~> 0.2", only: :dev},
       {:bypass, "~> 2.1", only: :test},
       {:mox, "~> 1.0", only: :test},
       {:progress_bar, "~> 2.0.1", only: [:dev, :test]},

@@ -3,11 +3,6 @@ import Config
 if config_env() == :prod do
   host = System.fetch_env!("BUNDLE_DOMAIN")
 
-  ssl_domains =
-    System.fetch_env!("SSL_DOMAINS")
-    |> String.replace(" ", "")
-    |> String.split(",")
-
   # Allow enabling of features from an environment variable
   config :core,
          :features,
@@ -29,8 +24,7 @@ if config_env() == :prod do
     url: [host: host, port: 443],
     http: [
       port: String.to_integer(System.get_env("HTTP_PORT", "80"))
-    ],
-    https: [port: String.to_integer(System.get_env("HTTPS_PORT", "443"))]
+    ]
 
   if https_keyfile = System.get_env("HTTPS_KEYFILE") do
     config :core, :ssl, mode: :manual
@@ -107,11 +101,30 @@ if config_env() == :prod do
     access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
     app_name: System.get_env("UNSPLASH_APP_NAME")
 
-  config :core, :ssl,
-    domains: ssl_domains,
-    emails: [System.get_env("LETS_ENCRYPT_EMAIL", "admin@#{host}")],
-    directory_url: System.get_env("LETS_ENCRYPT_DIRECTORY_URL"),
-    db_folder: System.get_env("LETS_ENCRYPT_DB")
+  ssl_domains =
+    System.get_env("SSL_DOMAINS", "")
+    |> String.replace(" ", "")
+    |> String.split(",")
+
+  config :core, :ssl, domains: ssl_domains
+
+  lets_encrypt_db = System.get_env("LETS_ENCRYPT_DB")
+
+  if lets_encrypt_db do
+    config :core, :ssl,
+      emails: [System.get_env("LETS_ENCRYPT_EMAIL", "admin@#{host}")],
+      directory_url: System.get_env("LETS_ENCRYPT_DIRECTORY_URL"),
+      db_folder: System.get_env("LETS_ENCRYPT_DB")
+  end
+
+  ssl_enabled? = https_keyfile || lets_encrypt_db
+  config :core, :ssl_enabled, ssl_enabled?
+
+  if ssl_enabled? do
+    config :core, CoreWeb.Endpoint,
+      url: [host: host, port: 443],
+      https: [port: String.to_integer(System.get_env("HTTPS_PORT", "443"))]
+  end
 
   config :web_push_encryption, :vapid_details,
     subject: "mailto:admin@#{host}",
