@@ -26,6 +26,7 @@ defmodule Systems.Assignment.CallbackPage do
       socket
       |> assign(model: model)
       |> observe_view_model()
+      |> activate_task()
       |> update_menus()
     }
   end
@@ -33,6 +34,16 @@ defmodule Systems.Assignment.CallbackPage do
   defoverridable handle_view_model_updated: 1
 
   def handle_view_model_updated(socket), do: socket
+
+  def activate_task(
+        %{assigns: %{vm: %{state: :participant, assignment: assignment}, current_user: user}} =
+          socket
+      ) do
+    Assignment.Context.activate_task(assignment, user)
+    socket
+  end
+
+  def activate_task(socket), do: socket
 
   @impl true
   def handle_event(

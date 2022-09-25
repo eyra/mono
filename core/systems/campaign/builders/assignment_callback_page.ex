@@ -35,6 +35,7 @@ defmodule Systems.Campaign.Builders.AssignmentCallbackPage do
     %{
       id: id,
       title: title,
+      assignment: assignment,
       state: state(assignment, user),
       hero_title: dgettext("link-survey", "task.hero.title"),
       call_to_action: forward_call_to_action(user)
@@ -42,7 +43,7 @@ defmodule Systems.Campaign.Builders.AssignmentCallbackPage do
   end
 
   defp state(%{crew: crew} = assignment, user) do
-    if Assignment.Context.activate_task(assignment, user) do
+    if Assignment.Context.member?(assignment, user) do
       :participant
     else
       if Authorization.user_has_role?(user, crew, :tester) do
