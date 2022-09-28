@@ -16,6 +16,9 @@ RUN mix archive.install --force hex phx_new 1.5.5
 ARG BUNDLE
 ARG VERSION
 
+ENV BUNDLE $BUNDLE
+ENV VERSION $VERSION
+
 COPY mix.exs .
 RUN mix deps.get
 
@@ -29,6 +32,7 @@ RUN scripts/build-release
 
 FROM debian:bullseye-slim
 ARG VERSION
+ENV VERSION $VERSION
 
 EXPOSE 443
 EXPOSE 80

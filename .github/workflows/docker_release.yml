@@ -1,0 +1,57 @@
+name: Docker Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bundle:
+        description: "Bundle ID (link / next etc.)"
+        required: true
+        default: "next"
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      MIX_ENV: prod
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Tag name
+        id: tag
+        run: echo ::set-output "name=TAG::$(date +%F)_${{github.run_number}}"
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@59bc9ddfd5a31eb6f5b55e89b65578fe3bbba85e
+        with:
+          images: |
+            ${{env.REGISTRY}}/eyra/${{github.event.inputs.bundle}}
+          tags: |
+            type=raw,value=${{steps.tag.outputs.tag}}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: core
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            BUNDLE=${{github.event.inputs.bundle}}
+            VERSION=${{steps.tag.outputs.tag}}
