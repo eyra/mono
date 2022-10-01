@@ -3,6 +3,7 @@ FROM elixir:1.14.0 as builder
 WORKDIR /workspace
 
 ENV NODE_MAJOR 16
+ENV MIX_ENV prod 
 
 RUN set -x &&\
     mix local.hex --force &&\
@@ -33,13 +34,13 @@ RUN scripts/build-release
 FROM debian:bullseye-slim
 ARG VERSION
 ENV VERSION $VERSION
+ENV MIX_ENV prod 
 
-EXPOSE 443
 EXPOSE 80
 
 COPY --from=builder /workspace/$VERSION /opt/app
 
-COPY scripts/migrate-and-start /opt/app/bin
+COPY ./scripts/migrate-and-start /opt/app/bin
 
 CMD ["/opt/app/bin/migrate-and-start"]
 

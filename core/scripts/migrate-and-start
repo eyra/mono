@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+/opt/app/bin/core eval Core.Release.migrate
+
+exec /opt/app/bin/core start
