@@ -39,6 +39,7 @@ EXPOSE 80
 
 COPY --from=builder /workspace/$VERSION /opt/app
 
-ENTRYPOINT ["./opt/app/bin/core"]
-CMD ["start"]
+COPY scripts/migrate-and-start /opt/app/bin
+
+CMD ["/opt/app/bin/migrate-and-start"]
 
