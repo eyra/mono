@@ -7,10 +7,11 @@ export const Tabbar = {
     var initialTabId = this.el.dataset.initialTab
       ? "tab_" + this.el.dataset.initialTab
       : undefined;
+
     var savedTabId = this.loadActiveTab();
     var firstTabId = this.getFirstTab();
 
-    var nextTabId = initialTabId ?? savedTabId ?? firstTabId;
+    var nextTabId = initialTabId | savedTabId | firstTabId;
     this.show(nextTabId, true);
   },
 

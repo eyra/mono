@@ -9,6 +9,10 @@ defmodule Systems.DataDonation.DefaultController do
     handle(conn, params, Systems.DataDonation.FlowPage)
   end
 
+  def port(conn, params) do
+    handle(conn, params, Systems.DataDonation.PortPage)
+  end
+
   def handle(
         conn,
         %{
