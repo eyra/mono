@@ -246,6 +246,10 @@ defmodule Systems.Assignment.Context do
     Timestamp.naive_from_now(timeout)
   end
 
+  def member?(%{crew: crew}, user) do
+    Crew.Context.member?(crew, user)
+  end
+
   def apply_member(id, user, reward_amount) when is_number(id) do
     get!(id, [:crew])
     |> apply_member(user, reward_amount)
