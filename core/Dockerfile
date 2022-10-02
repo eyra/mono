@@ -4,6 +4,7 @@ WORKDIR /workspace
 
 ENV NODE_MAJOR 16
 ENV MIX_ENV prod 
+ENV SSL_PROXIED true
 
 RUN set -x &&\
     mix local.hex --force &&\
