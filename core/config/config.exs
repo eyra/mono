@@ -101,6 +101,8 @@ config :core, :ssl,
   domains: ["localhost"],
   emails: ["admin@localhost"]
 
+config :core, :ssl_proxied, {:ok, "true"} == System.fetch_env("SSL_PROXIED")
+
 config :web_push_encryption, :vapid_details,
   subject: "mailto:administrator@example.com",
   public_key: "use `mix web_push.gen.keypair`",
