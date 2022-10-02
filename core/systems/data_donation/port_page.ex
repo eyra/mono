@@ -28,11 +28,7 @@ defmodule Systems.DataDonation.PortPage do
   def render(assigns) do
     ~F"""
     <Stripped user={@current_user} menus={@menus}>
-      <div
-        id="port"
-        phx-hook="Port"
-        data-locale={@locale}
-      />
+      <div id="port" phx-hook="Port" data-locale={@locale} />
     </Stripped>
     """
   end
