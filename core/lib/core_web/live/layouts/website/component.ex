@@ -72,8 +72,10 @@ defmodule CoreWeb.Layouts.Website.Component do
             <MobileMenu items={@menus.mobile_menu} path_provider={CoreWeb.Router.Helpers} />
           </div>
           <div class="flex flex-col w-full h-viewport">
-            <div class="flex-wrap">
+            <div class="flex-wrap md:hidden">
               <MobileNavbar items={@menus.mobile_navbar} path_provider={CoreWeb.Router.Helpers} />
+            </div>
+            <div class="flex-wrap hidden md:flex">
               <DesktopNavbar items={@menus.desktop_navbar} path_provider={CoreWeb.Router.Helpers} />
             </div>
             <div class="flex-1">

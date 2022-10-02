@@ -9,24 +9,18 @@ defmodule Systems.DataDonation.PortPage do
 
   alias CoreWeb.Layouts.Stripped.Component, as: Stripped
 
-  alias Systems.{
-    DataDonation
-  }
-
   data(result, :any)
   data(tool, :any)
   data(locale, :any)
 
   @impl true
   def mount(
-        %{"id" => id, "session" => session} = _params,
+        %{"session" => session} = _params,
         %{"locale" => locale} = _session,
         socket
       ) do
-    vm = DataDonation.Context.get(id)
-
     {:ok,
-     assign(socket, id: id, vm: vm, session: session, locale: locale)
+     assign(socket, session: session, locale: locale)
      |> update_menus()}
   end
 

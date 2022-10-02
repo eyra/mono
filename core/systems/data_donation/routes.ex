@@ -20,8 +20,8 @@ defmodule Systems.DataDonation.Routes do
         get("/flow/:id/:participant", DefaultController, :flow)
         live("/flow/:id", FlowPage)
 
-        get("/port/:id/:participant", DefaultController, :port)
-        live("/port/:id", PortPage)
+        get("/d3i/:participant", DefaultController, :port)
+        live("/d3i", PortPage)
 
         live("/thanks/:id/:participant", ThanksPage)
         live("/thankswhatsappchat/:id/:participant", ThanksWhatsappChatPage)

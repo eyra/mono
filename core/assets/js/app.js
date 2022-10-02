@@ -25,8 +25,10 @@ import { registerAPNSDeviceToken } from "./apns";
 import "./100vh-fix";
 import { ViewportResize } from "./viewport_resize";
 import { Toggle } from "./toggle";
+import { Tabbar, TabbarItem, TabbarFooterItem } from "./tabbar";
 import { PythonUploader } from "./python_uploader";
 import { Clipboard } from "./clipboard";
+import { DataDonationHook } from "./data_donation_hook";
 import { Port } from "./port";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
@@ -91,8 +93,12 @@ let Hooks = {
   Clipboard,
   ViewportResize,
   Toggle,
+  Tabbar,
+  TabbarItem,
+  TabbarFooterItem,
   NativeWrapper,
   PythonUploader,
+  DataDonationHook,
   Port,
 };
 
