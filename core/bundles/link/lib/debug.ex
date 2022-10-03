@@ -6,6 +6,7 @@ defmodule Link.Debug do
   use CoreWeb.Layouts.Workspace.Component, :debug
   alias CoreWeb.Router.Helpers, as: Routes
 
+  alias CoreWeb.UI.Timestamp
   alias CoreWeb.User.Forms.Debug, as: UserDebugForm
   alias Systems.Email.DebugForm, as: EmailDebugForm
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
@@ -19,9 +20,11 @@ defmodule Link.Debug do
   alias Systems.{
     Campaign,
     Budget,
-    Scholar
+    Scholar,
+    Assignment
   }
 
+  data(rollback_expired_deposits_button, :map)
   data(multiply_rewards_button, :map)
   data(generate_vu_2022_button, :map)
   data(import_rewards_button, :map)
@@ -51,6 +54,17 @@ defmodule Link.Debug do
       face: %{
         type: :primary,
         label: "Mark expired tasks"
+      }
+    }
+
+    rollback_expired_deposits_button = %{
+      action: %{
+        type: :send,
+        event: "rollback_expired_deposits"
+      },
+      face: %{
+        type: :primary,
+        label: "Rollback expired deposits"
       }
     }
 
@@ -113,6 +127,7 @@ defmodule Link.Debug do
       :ok,
       socket
       |> assign(
+        rollback_expired_deposits_button: rollback_expired_deposits_button,
         multiply_rewards_button: multiply_rewards_button,
         generate_vu_2022_button: generate_vu_2022_button,
         import_rewards_button: import_rewards_button,
@@ -142,6 +157,18 @@ defmodule Link.Debug do
   def handle_event("generate_vu_2022", _, socket) do
     Scholar.Context.generate_vu(2022, 1, "1st", "1e", 60)
     Scholar.Context.generate_vu(2022, 2, "2nd", "2e", 30)
+
+    {
+      :noreply,
+      socket
+    }
+  end
+
+  @impl true
+  def handle_event("rollback_expired_deposits", _, socket) do
+    sixty_days = 60 * 24 * 60
+    from_sixty_days_ago = Timestamp.naive_from_now(-sixty_days)
+    Assignment.Context.rollback_expired_deposits(from_sixty_days_ago)
 
     {
       :noreply,
@@ -217,6 +244,10 @@ defmodule Link.Debug do
 
         <Title2 margin="">Book keeping</Title2>
         <Spacing value="S" />
+        <Wrap>
+          <DynamicButton vm={@rollback_expired_deposits_button} />
+          <Spacing value="S" />
+        </Wrap>
         <Wrap>
           <DynamicButton vm={@import_rewards_button} />
           <Spacing value="S" />

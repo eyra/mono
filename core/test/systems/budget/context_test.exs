@@ -59,7 +59,7 @@ defmodule Systems.Budget.ContextTest do
            } = reward
   end
 
-  test "rollback_reward/4 fails without deposit", %{budget: budget} do
+  test "rollback_deposit/4 fails without deposit", %{budget: budget} do
     student = Factories.insert!(:member, %{student: true})
 
     reward =
@@ -71,11 +71,11 @@ defmodule Systems.Budget.ContextTest do
         budget: budget
       })
 
-    assert Budget.Context.rollback_reward(reward) ==
+    assert Budget.Context.rollback_deposit(reward) ==
              {:error, :revert_deposit, :deposit_not_available, %{}}
   end
 
-  test "rollback_reward/4 succeeds with deposit and without payment", %{
+  test "rollback_deposit/4 succeeds with deposit and without payment", %{
     budget: %{id: budget_id, fund: fund, reserve: reserve} = budget
   } do
     amount = 3500
@@ -87,7 +87,7 @@ defmodule Systems.Budget.ContextTest do
     deposit =
       Factories.insert!(:book_entry, %{
         idempotence_key: idempotence_key,
-        journal_message: "test_rollback_reward"
+        journal_message: "test_rollback_deposit"
       })
 
     Factories.insert!(:book_line, %{account: fund, entry: deposit, debit: amount, credit: 0})
@@ -111,10 +111,10 @@ defmodule Systems.Budget.ContextTest do
                 validate: true,
                 entry: %{
                   idempotence_key: "[REVERT] idempotence_key_1" = reverted_idempotence_key,
-                  journal_message: "[REVERT] test_rollback_reward"
+                  journal_message: "[REVERT] test_rollback_deposit"
                 }
               }
-            }} = Budget.Context.rollback_reward(reward)
+            }} = Budget.Context.rollback_deposit(reward)
 
     reverted_deposit = Bookkeeping.Context.get_entry(reverted_idempotence_key, lines: [:account])
 
@@ -159,7 +159,7 @@ defmodule Systems.Budget.ContextTest do
            } = Budget.Context.get!(budget_id)
   end
 
-  test "rollback_reward/4 fails with deposit and payment", %{
+  test "rollback_deposit/4 fails with deposit and payment", %{
     budget: %{fund: fund, reserve: reserve} = budget
   } do
     amount = 3500
@@ -174,7 +174,7 @@ defmodule Systems.Budget.ContextTest do
         reserve,
         amount,
         deposit_idempotence_key,
-        "test_rollback_reward"
+        "test_rollback_deposit"
       )
 
     payment =
@@ -183,7 +183,7 @@ defmodule Systems.Budget.ContextTest do
         reserve,
         amount,
         payment_idempotence_key,
-        "test_rollback_reward"
+        "test_rollback_deposit"
       )
 
     reward =
@@ -197,7 +197,7 @@ defmodule Systems.Budget.ContextTest do
         payment: payment
       })
 
-    assert Budget.Context.rollback_reward(reward) ==
+    assert Budget.Context.rollback_deposit(reward) ==
              {:error, :revert_deposit, :payment_already_available, %{}}
   end
 

@@ -294,7 +294,7 @@ defmodule Systems.Assignment.Context do
 
     Multi.new()
     |> Crew.Context.cancel(crew, user)
-    |> rollback_reward(assignment, user)
+    |> rollback_deposit(assignment, user)
     |> Repo.transaction()
   end
 
@@ -556,32 +556,43 @@ defmodule Systems.Assignment.Context do
     end
   end
 
-  def expired_rewards(preload \\ []) do
-    from(r in Budget.RewardModel,
-      inner_join: u in User,
-      on: u.id == r.user_id,
+  def expired_user_assignments(%NaiveDateTime{} = from) do
+    from(a in Assignment.Model,
       inner_join: m in Crew.MemberModel,
-      on: m.user_id == u.id,
-      inner_join: t in Crew.TaskModel,
-      on: t.member_id == m.id,
-      where: t.expired == true,
-      where: not is_nil(r.deposit_id) and is_nil(r.payment_id),
-      preload: ^preload
+      on: m.crew_id == a.crew_id,
+      where: m.expired == true,
+      where: m.expire_at >= ^from,
+      select: {m.user_id, a.id}
     )
     |> Repo.all()
   end
 
-  def rollback_expired_rewards() do
-    expired_rewards([:payment, deposit: [lines: [:account]]])
-    |> Enum.reduce(Multi.new(), &Budget.Context.rollback_reward(&2, &1))
+  def rollback_expired_deposits() do
+    one_day = 60 * 24
+    from_one_day_ago = Timestamp.naive_from_now(-one_day)
+    rollback_expired_deposits(from_one_day_ago)
+  end
+
+  def rollback_expired_deposits(%NaiveDateTime{} = from) do
+    Multi.new()
+    |> Multi.run(:rollback, fn _, _ ->
+      expired_user_assignments(from)
+      |> Enum.map(fn {user_id, assignment_id} ->
+        idempotence_key(assignment_id, user_id)
+      end)
+      |> Enum.filter(&Budget.Context.reward_has_outstanding_deposit?(&1))
+      |> Enum.each(&Budget.Context.rollback_deposit(&1))
+
+      {:ok, true}
+    end)
     |> Repo.transaction()
   end
 
-  def rollback_reward(%Multi{} = multi, %Assignment.Model{} = assignment, %User{} = user) do
+  def rollback_deposit(%Multi{} = multi, %Assignment.Model{} = assignment, %User{} = user) do
     idempotence_key = idempotence_key(assignment, user)
 
     multi
-    |> Budget.Context.rollback_reward(idempotence_key)
+    |> Budget.Context.rollback_deposit(idempotence_key)
   end
 
   def create_reward(%Assignment.Model{budget: budget} = assignment, %User{} = user, amount) do

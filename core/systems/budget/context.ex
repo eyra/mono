@@ -366,23 +366,39 @@ defmodule Systems.Budget.Context do
     |> Repo.update()
   end
 
-  def rollback_reward(%Multi{} = multi, idempotence_key) when is_binary(idempotence_key) do
+  def reward_has_outstanding_deposit?(idempotence_key) do
+    from(reward in Budget.RewardModel,
+      where: reward.idempotence_key == ^idempotence_key,
+      where: not is_nil(reward.deposit_id),
+      where: is_nil(reward.payment_id)
+    )
+    |> Repo.exists?()
+  end
+
+  def rollback_deposit(idempotence_key) when is_binary(idempotence_key) do
     case Budget.Context.get_reward(idempotence_key, Budget.RewardModel.preload_graph(:full)) do
       nil -> raise BudgetError, "No reward available to rollback"
-      reward -> rollback_reward(multi, reward)
+      reward -> rollback_deposit(reward)
     end
   end
 
-  def rollback_reward(%Multi{} = multi, reward) do
+  def rollback_deposit(%Budget.RewardModel{} = reward) do
+    Multi.new()
+    |> rollback_deposit(reward)
+    |> Repo.transaction()
+  end
+
+  def rollback_deposit(%Multi{} = multi, idempotence_key) when is_binary(idempotence_key) do
+    case Budget.Context.get_reward(idempotence_key, Budget.RewardModel.preload_graph(:full)) do
+      nil -> raise BudgetError, "No reward available to rollback"
+      reward -> rollback_deposit(multi, reward)
+    end
+  end
+
+  def rollback_deposit(%Multi{} = multi, reward) do
     multi
     |> revert_deposit(reward)
     |> reset_reward(reward)
-  end
-
-  def rollback_reward(reward) do
-    Multi.new()
-    |> rollback_reward(reward)
-    |> Repo.transaction()
   end
 
   defp reset_reward(multi, %Budget.RewardModel{attempt: attempt} = reward) do

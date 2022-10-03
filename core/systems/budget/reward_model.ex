@@ -38,7 +38,12 @@ defmodule Systems.Budget.RewardModel do
   end
 
   def preload_graph(:full) do
-    [:deposit, :payment, :user, budget: Budget.Model.preload_graph(:full)]
+    [
+      :user,
+      deposit: [lines: [:account]],
+      payment: [lines: [:account]],
+      budget: Budget.Model.preload_graph(:full)
+    ]
   end
 
   def deposit_idempotence_key(%Budget.RewardModel{
