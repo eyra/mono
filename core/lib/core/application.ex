@@ -12,13 +12,9 @@ defmodule Core.Application do
         CoreWeb.Telemetry,
         {Phoenix.PubSub, name: Core.PubSub},
         {Oban, oban_config()},
-        {Systems.Banking.Context.backend(), "account-number"}
-      ] ++
-        if Application.get_env(:core, :ssl_enabled) do
-          [{SiteEncrypt.Phoenix, CoreWeb.Endpoint}]
-        else
-          [CoreWeb.Endpoint]
-        end
+        {Systems.Banking.Context.backend(), "account-number"},
+        CoreWeb.Endpoint
+      ]
 
     opts = [strategy: :one_for_one, name: Core.Supervisor]
     Supervisor.start_link(children, opts)

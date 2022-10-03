@@ -23,19 +23,8 @@ if config_env() == :prod do
     secret_key_base: System.fetch_env!("SECRET_KEY_BASE"),
     url: [host: host, port: 443],
     http: [
-      port: String.to_integer(System.get_env("HTTP_PORT", "80"))
+      port: String.to_integer(System.get_env("HTTP_PORT", "8000"))
     ]
-
-  if https_keyfile = System.get_env("HTTPS_KEYFILE") do
-    config :core, :ssl, mode: :manual
-
-    config :core, CoreWeb.Endpoint,
-      https: [
-        cipher_suite: :strong,
-        keyfile: https_keyfile,
-        certfile: System.fetch_env!("HTTPS_CERTFILE")
-      ]
-  end
 
   config :core,
          :data_donation_storage_backend,
@@ -100,34 +89,6 @@ if config_env() == :prod do
   config :core, Core.ImageCatalog.Unsplash,
     access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
     app_name: System.get_env("UNSPLASH_APP_NAME")
-
-  ssl_domains =
-    System.get_env("SSL_DOMAINS", "")
-    |> String.replace(" ", "")
-    |> String.split(",")
-
-  config :core, :ssl, domains: ssl_domains
-
-  lets_encrypt_db = System.get_env("LETS_ENCRYPT_DB")
-
-  if lets_encrypt_db do
-    config :core, :ssl,
-      emails: [System.get_env("LETS_ENCRYPT_EMAIL", "admin@#{host}")],
-      directory_url: System.get_env("LETS_ENCRYPT_DIRECTORY_URL"),
-      db_folder: System.get_env("LETS_ENCRYPT_DB")
-  end
-
-  ssl_enabled? = https_keyfile || lets_encrypt_db
-  config :core, :ssl_enabled, ssl_enabled?
-
-  if ssl_enabled? do
-    config :core, CoreWeb.Endpoint,
-      url: [host: host, port: 443],
-      https: [port: String.to_integer(System.get_env("HTTPS_PORT", "443"))]
-  else
-    config :core, CoreWeb.Endpoint,
-      force_ssl: [rewrite_on: [:x_forwarded_proto]]
-  end
 
   config :web_push_encryption, :vapid_details,
     subject: "mailto:admin@#{host}",

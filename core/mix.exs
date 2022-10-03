@@ -111,7 +111,6 @@ defmodule Core.MixProject do
       {:ex_cldr_numbers, "~> 2.23"},
       {:ex_cldr_dates_times, "~> 2.10"},
       {:ex_cldr_plugs, "~> 1.2"},
-      {:site_encrypt, "~> 0.4"},
       # Optional, but recommended for SSL validation with :httpc adapter
       {:certifi, "~> 2.8"},
       # Optional, but recommended for SSL validation with :httpc adapter

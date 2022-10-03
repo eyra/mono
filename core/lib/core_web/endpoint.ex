@@ -1,6 +1,5 @@
 defmodule CoreWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :core
-  use SiteEncrypt.Phoenix
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
@@ -68,23 +67,4 @@ defmodule CoreWeb.Endpoint do
   plug(Plug.Head)
   plug(Plug.Session, @session_options)
   plug(CoreWeb.Router)
-
-  @impl Phoenix.Endpoint
-  def init(_key, config) do
-    cond do
-      Application.get_env(:core, __MODULE__) |> get_in([:https, :certfile]) ->
-        {:ok, config}
-
-      Application.get_env(:core, :ssl_enabled) ->
-        {:ok, SiteEncrypt.Phoenix.configure_https(config)}
-
-      true ->
-        {:ok, config}
-    end
-  end
-
-  @impl SiteEncrypt
-  def certification do
-    SiteEncrypt.configure(Application.fetch_env!(:core, :ssl))
-  end
 end

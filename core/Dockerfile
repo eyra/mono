@@ -37,7 +37,7 @@ ARG VERSION
 ENV VERSION $VERSION
 ENV MIX_ENV prod 
 
-EXPOSE 80
+EXPOSE 8000
 
 COPY --from=builder /workspace/$VERSION /opt/app
 
