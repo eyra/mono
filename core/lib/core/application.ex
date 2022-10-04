@@ -6,15 +6,14 @@ defmodule Core.Application do
   use Application
 
   def start(_type, _args) do
-    children =
-      [
-        Core.Repo,
-        CoreWeb.Telemetry,
-        {Phoenix.PubSub, name: Core.PubSub},
-        {Oban, oban_config()},
-        {Systems.Banking.Context.backend(), "account-number"},
-        CoreWeb.Endpoint
-      ]
+    children = [
+      Core.Repo,
+      CoreWeb.Telemetry,
+      {Phoenix.PubSub, name: Core.PubSub},
+      {Oban, oban_config()},
+      {Systems.Banking.Context.backend(), "account-number"},
+      CoreWeb.Endpoint
+    ]
 
     opts = [strategy: :one_for_one, name: Core.Supervisor]
     Supervisor.start_link(children, opts)
