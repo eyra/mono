@@ -44,7 +44,7 @@ config :core, Oban,
   plugins: [
     {Oban.Plugins.Cron,
      crontab: [
-       {"*/5 * * * *", Systems.Campaign.ExpirationWorker}
+       {"*/5 * * * *", Systems.Campaign.ExpirationWorker, max_attempts: 2}
      ]}
   ]
 

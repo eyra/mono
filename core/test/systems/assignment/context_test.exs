@@ -135,12 +135,12 @@ defmodule Systems.Assignment.ContextTest do
       assert %{expired: false} = Crew.Context.get_task!(task.id)
     end
 
-    test "rollback_expired_rewards/0 resets reward" do
+    test "rollback_expired_deposits/0 resets reward" do
       user = Factories.insert!(:member)
       assignment = create_assignment(31, 1)
       Assignment.Context.apply_member(assignment, user, 1000)
       Assignment.Context.mark_expired_debug(assignment, true)
-      Assignment.Context.rollback_expired_rewards()
+      Assignment.Context.rollback_expired_deposits()
 
       assert [
                %{
@@ -162,7 +162,7 @@ defmodule Systems.Assignment.ContextTest do
       assignment = create_assignment(31, 1)
       Assignment.Context.apply_member(assignment, user, 1000)
       Assignment.Context.mark_expired_debug(assignment, true)
-      Assignment.Context.rollback_expired_rewards()
+      Assignment.Context.rollback_expired_deposits()
       Assignment.Context.apply_member(assignment, user, 2000)
 
       deposit_idempotence_key =
@@ -188,7 +188,7 @@ defmodule Systems.Assignment.ContextTest do
       assignment = create_assignment(31, 1)
       Assignment.Context.apply_member(assignment, user, 1000)
       Assignment.Context.mark_expired_debug(assignment, true)
-      Assignment.Context.rollback_expired_rewards()
+      Assignment.Context.rollback_expired_deposits()
       Assignment.Context.apply_member(assignment, user, 2000)
       Assignment.Context.payout_participant(assignment, user)
 
@@ -217,7 +217,7 @@ defmodule Systems.Assignment.ContextTest do
       assignment = create_assignment(31, 1)
       Assignment.Context.apply_member(assignment, user, 1000)
       Assignment.Context.mark_expired_debug(assignment, true)
-      Assignment.Context.rollback_expired_rewards()
+      Assignment.Context.rollback_expired_deposits()
       Assignment.Context.apply_member(assignment, user, 2000)
       assert {:ok, _} = Assignment.Context.payout_participant(assignment, user)
 
@@ -230,7 +230,7 @@ defmodule Systems.Assignment.ContextTest do
       assignment = create_assignment(31, 1)
       Assignment.Context.apply_member(assignment, user, 1000)
       Assignment.Context.mark_expired_debug(assignment, true)
-      Assignment.Context.rollback_expired_rewards()
+      Assignment.Context.rollback_expired_deposits()
       Assignment.Context.apply_member(assignment, user, 2000)
       Assignment.Context.payout_participant(assignment, user)
 
@@ -242,7 +242,7 @@ defmodule Systems.Assignment.ContextTest do
       assignment = create_assignment(31, 1)
       Assignment.Context.apply_member(assignment, user, 1000)
       Assignment.Context.mark_expired_debug(assignment, true)
-      Assignment.Context.rollback_expired_rewards()
+      Assignment.Context.rollback_expired_deposits()
       Assignment.Context.apply_member(assignment, user, 2000)
 
       assert Assignment.Context.rewarded_amount(assignment, user) == 0
