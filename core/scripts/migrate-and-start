@@ -1,5 +1,11 @@
 #!/bin/bash -e
 
+echo "DBHOST $DB_HOST"
+
+host $DB_HOST
+
+dig $DB_HOST
+
 /opt/app/bin/core eval Core.Release.migrate
 
 exec /opt/app/bin/core start
