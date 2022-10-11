@@ -383,7 +383,9 @@ defmodule Systems.Assignment.Context do
       on: crew.id == assignment.crew_id,
       join: member in Crew.MemberModel,
       on: member.user_id == ^user_id,
-      where: exclude.from_id == assignment.id and crew.id == member.crew_id,
+      where: exclude.from_id == assignment.id,
+      where: crew.id == member.crew_id,
+      where: member.expired == false,
       preload: [crew: [:members]]
     )
     |> Repo.exists?()

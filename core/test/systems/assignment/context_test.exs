@@ -365,6 +365,16 @@ defmodule Systems.Assignment.ContextTest do
       assert Assignment.Context.excluded?(assignment2, user) == true
     end
 
+    test "excluded?/2 false: user has expired task on excluded assignment" do
+      %{crew: crew1} = assignment1 = create_assignment(31, 2)
+      assignment2 = create_assignment(31, 2)
+
+      %{member: %{user: user}} = create_task(crew1, :pending, true, 10)
+
+      Assignment.Context.exclude(assignment1, assignment2)
+      assert Assignment.Context.excluded?(assignment2, user) == false
+    end
+
     test "excluded?/2 user has task on multiple excluded assignment" do
       %{crew: crew1} = assignment1 = create_assignment(31, 2)
       assignment2 = create_assignment(31, 2)
@@ -420,7 +430,7 @@ defmodule Systems.Assignment.ContextTest do
       updated_at = Timestamp.naive_from_now(minutes_ago * -1)
 
       user = Factories.insert!(:member)
-      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+      member = Factories.insert!(:crew_member, %{crew: crew, user: user, expired: expired})
 
       _task =
         Factories.insert!(:crew_task, %{
