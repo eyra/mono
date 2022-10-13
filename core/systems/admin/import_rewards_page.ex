@@ -285,8 +285,8 @@ defmodule Systems.Admin.ImportRewardsPage do
     }
 
     currency_labels =
-      Org.Context.list_nodes(:scholar_course, ["vu", ":2021"])
-      |> Enum.map(&Scholar.Course.currency(&1.identifier))
+      Org.Context.list_nodes(:scholar_course, ["vu"], [])
+      |> Enum.map(&Scholar.Course.currency(&1))
       |> Enum.map(&%{id: &1, value: &1, active: false})
 
     {
