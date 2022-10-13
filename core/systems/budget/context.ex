@@ -652,9 +652,11 @@ defmodule Systems.Budget.Context do
   end
 
   def rewarded_amount(idempotence_key) when is_binary(idempotence_key) do
-    case Budget.Context.get_reward(idempotence_key, payment: [:lines]) do
+    payment_idempotence_key = Budget.RewardModel.payment_idempotence_key(idempotence_key)
+
+    case Bookkeeping.Context.get_entry(payment_idempotence_key, [:lines]) do
       nil -> 0
-      %{payment: payment} -> rewarded_amount(payment)
+      payment -> rewarded_amount(payment)
     end
   end
 
