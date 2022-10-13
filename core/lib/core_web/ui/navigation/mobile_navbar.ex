@@ -11,7 +11,7 @@ defmodule CoreWeb.UI.Navigation.MobileNavbar do
 
   def render(assigns) do
     ~F"""
-    <div class="md:hidden bg-grey5">
+    <div class="bg-grey5">
       <Navbar items={@items} path_provider={@path_provider} />
     </div>
     """

@@ -29,6 +29,7 @@ import { Tabbar, TabbarItem, TabbarFooterItem } from "./tabbar";
 import { PythonUploader } from "./python_uploader";
 import { Clipboard } from "./clipboard";
 import { DataDonationHook } from "./data_donation_hook";
+import { Port } from "./port";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -76,16 +77,7 @@ let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
 
-let Hooks = {
-  Clipboard,
-  ViewportResize,
-  Toggle,
-  Tabbar,
-  TabbarItem,
-  TabbarFooterItem,
-};
-
-Hooks.NativeWrapper = {
+const NativeWrapper = {
   mounted() {
     console.log("NativeWrapper mounted");
     window.nativeWrapperHook = this;
@@ -97,8 +89,18 @@ Hooks.NativeWrapper = {
   },
 };
 
-Hooks.PythonUploader = PythonUploader;
-Hooks.DataDonationHook = DataDonationHook;
+let Hooks = {
+  Clipboard,
+  ViewportResize,
+  Toggle,
+  Tabbar,
+  TabbarItem,
+  TabbarFooterItem,
+  NativeWrapper,
+  PythonUploader,
+  DataDonationHook,
+  Port,
+};
 
 let liveSocket = new LiveSocket("/live", Socket, {
   dom: {
