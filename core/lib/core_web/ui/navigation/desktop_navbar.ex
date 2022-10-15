@@ -11,7 +11,7 @@ defmodule CoreWeb.UI.Navigation.DesktopNavbar do
 
   def render(assigns) do
     ~F"""
-    <div class="hidden md:block pr-4">
+    <div class="pr-4">
       <Navbar items={@items} path_provider={@path_provider} />
     </div>
     """
