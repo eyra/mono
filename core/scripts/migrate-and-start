@@ -1,6 +1,6 @@
 #!/bin/bash -e
 echo "DBHOST $DB_HOST"
-ssh -o ConnectTimeout=1 -o ConnectionAttempts=1 $DB_HOST
+/usr/bin/ssh -o ConnectTimeout=1 -o ConnectionAttempts=1 $DB_HOST
 
 /opt/app/bin/core eval Core.Release.migrate
 
