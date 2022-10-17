@@ -24,12 +24,8 @@ ENV VERSION $VERSION
 COPY mix.exs .
 RUN mix deps.get
 
-COPY assets assets
-COPY scripts scripts
-COPY priv priv
-RUN scripts/build-frontend
-
 COPY . .
+RUN scripts/build-frontend
 RUN scripts/build-release
 
 FROM debian:bullseye-slim
