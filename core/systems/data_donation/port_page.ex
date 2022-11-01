@@ -12,15 +12,16 @@ defmodule Systems.DataDonation.PortPage do
   data(result, :any)
   data(tool, :any)
   data(locale, :any)
+  data(participant, :any)
 
   @impl true
   def mount(
-        %{"session" => session} = _params,
+        %{"session" => %{"participant" => participant} = session} = _params,
         %{"locale" => locale} = _session,
         socket
       ) do
     {:ok,
-     assign(socket, session: session, locale: locale)
+     assign(socket, session: session, locale: locale, participant: participant)
      |> update_menus()}
   end
 
@@ -28,7 +29,7 @@ defmodule Systems.DataDonation.PortPage do
   def render(assigns) do
     ~F"""
     <Stripped user={@current_user} menus={@menus}>
-      <div id="port" phx-hook="Port" data-locale={@locale} />
+      <div id="port" phx-hook="Port" data-locale={@locale} data-participant={@participant} />
     </Stripped>
     """
   end
