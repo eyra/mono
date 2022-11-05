@@ -181,7 +181,8 @@ defmodule Systems.Lab.CheckInView do
   end
 
   defp to_view_model(nil, _tool), do: nil
-  defp to_view_model({nil, nil}, _tool), do: nil
+  defp to_view_model({_, nil}, _tool), do: nil
+  defp to_view_model({nil, _}, _tool), do: nil
 
   defp to_view_model(%Core.Accounts.User{id: user_id, email: email} = user, tool) do
     reservation = reservation(user, tool)
