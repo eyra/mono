@@ -102,3 +102,7 @@ msgstr "Campagnes"
 #, elixir-format, ex-autogen
 msgid "participants.label"
 msgstr "Deelnemers"
+
+#, elixir-format, ex-autogen
+msgid "excluded.campaigns.title"
+msgstr "Exclusie"

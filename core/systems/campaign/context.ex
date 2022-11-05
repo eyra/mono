@@ -202,12 +202,12 @@ defmodule Systems.Campaign.Context do
     |> Repo.all()
   end
 
-  def list_excluded_campaigns(campaigns) when is_list(campaigns) do
+  def list_excluded_campaigns(campaigns, preload \\ []) when is_list(campaigns) do
     campaigns
     |> Enum.reduce([], fn campaign, acc ->
       acc ++ list_excluded_assignment_ids(campaign)
     end)
-    |> list_by_promotables([])
+    |> list_by_promotables(preload)
   end
 
   defp list_excluded_assignment_ids(%Campaign.Model{promotable_assignment: %{excluded: excluded}})

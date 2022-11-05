@@ -26,6 +26,16 @@ defmodule Systems.Pool.CriteriaModelTest do
       assert CriteriaModel.eligitable?(criteria, features)
     end
 
+    test "eligitable with empty criteria", %{features: features} do
+      criteria = %CriteriaModel{
+        genders: [],
+        dominant_hands: [],
+        native_languages: []
+      }
+
+      assert CriteriaModel.eligitable?(criteria, features)
+    end
+
     test "eligitable with matching gender", %{features: features} do
       criteria = %CriteriaModel{
         genders: [:m],

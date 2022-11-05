@@ -4,13 +4,15 @@ defmodule Systems.Pool.Builders.SubmissionPage do
   alias Core.Accounts.User
 
   alias Systems.{
+    Pool,
     Campaign,
     Promotion
   }
 
   def view_model(submission, _assigns, url_resolver) do
     %{promotion: promotion} =
-      campaign = Campaign.Context.get_by_submission(submission, [:promotion])
+      campaign =
+      Campaign.Context.get_by_submission(submission, Campaign.Model.preload_graph(:full))
 
     owners = Campaign.Context.list_owners(campaign, [:profile, :features])
     owner = List.first(owners)
@@ -29,11 +31,17 @@ defmodule Systems.Pool.Builders.SubmissionPage do
 
     preview_path = url_resolver.(Promotion.LandingPage, id: promotion.id, preview: true)
 
+    excluded_campaigns =
+      Campaign.Context.list_excluded_campaigns([campaign], Campaign.Model.preload_graph(:full))
+      |> Enum.map(&Campaign.Model.flatten(&1))
+      |> Enum.map(&Pool.Builders.CampaignItem.view_model(url_resolver, &1))
+
     %{
       member: member,
       submission: submission,
       promotion_id: promotion.id,
       campaign_id: campaign.id,
+      excluded_campaigns: excluded_campaigns,
       title: promotion.title,
       byline: byline,
       accepted?: accepted?,

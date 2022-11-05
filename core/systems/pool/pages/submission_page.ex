@@ -12,11 +12,9 @@ defmodule Systems.Pool.SubmissionPage do
   alias CoreWeb.UI.Navigation.ButtonBar
   alias CoreWeb.UI.Member
   alias CoreWeb.UI.Timestamp
+  alias CoreWeb.UI.ContentList
 
-  alias Systems.Pool.SubmissionView, as: SubmissionForm
-  alias Systems.Pool.SubmissionPoolView, as: SubmissionPoolForm
-
-  alias Frameworks.Pixel.Text.{Title1, SubHead}
+  alias Frameworks.Pixel.Text.{Title1, Title3, SubHead}
 
   alias Systems.{
     Pool
@@ -224,12 +222,19 @@ defmodule Systems.Pool.SubmissionPage do
           <Spacing value="L" />
         </ContentArea>
 
-        <SubmissionPoolForm
+        <Pool.SubmissionPoolView
           id={:submission_pool_form}
           props={%{entity: @vm.submission, user: @current_user}}
         />
+
+        <ContentArea :if={Enum.count(@vm.excluded_campaigns) > 0}>
+          <Title3 margin="mb-5 sm:mb-8">{dgettext("link-studentpool", "excluded.campaigns.title")}</Title3>
+          <ContentList items={@vm.excluded_campaigns} />
+          <Spacing value="M" />
+        </ContentArea>
+
         <Spacing value="S" />
-        <SubmissionForm
+        <Pool.SubmissionView
           id={:submission_form}
           props={%{entity: @vm.submission, validate?: @vm.validate?}}
         />

@@ -4,10 +4,6 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
   require Link.Enums.Themes
   alias Link.Enums.Themes
 
-  alias Systems.Promotion.FormView, as: PromotionForm
-  alias Systems.Campaign.MonitorView
-  alias Systems.Pool.CampaignSubmissionView, as: SubmissionForm
-
   alias Systems.{
     Campaign,
     Assignment,
@@ -78,7 +74,7 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
         title: dgettext("link-survey", "tabbar.item.promotion"),
         forward_title: dgettext("link-survey", "tabbar.item.promotion.forward"),
         type: :fullpage,
-        component: PromotionForm,
+        component: Promotion.FormView,
         props: %{
           entity: promotion,
           validate?: validate?,
@@ -105,7 +101,7 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
         title: dgettext("link-survey", "tabbar.item.criteria"),
         forward_title: dgettext("link-survey", "tabbar.item.criteria.forward"),
         type: :fullpage,
-        component: SubmissionForm,
+        component: Pool.CampaignSubmissionView,
         props: %{
           entity: submission,
           user: user
@@ -116,7 +112,7 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
         title: dgettext("link-survey", "tabbar.item.monitor"),
         forward_title: dgettext("link-survey", "tabbar.item.monitor.forward"),
         type: :fullpage,
-        component: MonitorView,
+        component: Campaign.MonitorView,
         props: %{
           entity: campaign,
           attention_list_enabled?: attention_list_enabled?,
