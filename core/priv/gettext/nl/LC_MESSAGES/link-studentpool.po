@@ -105,4 +105,4 @@ msgstr "Deelnemers"
 
 #, elixir-format, ex-autogen
 msgid "excluded.campaigns.title"
-msgstr "Exclusie"
+msgstr "Uitgesloten"
