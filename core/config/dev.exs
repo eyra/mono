@@ -85,10 +85,17 @@ config :core,
 
 config :core, Systems.DataDonation.S3StorageBackend, bucket: "eylixir"
 
+config :azurex, Azurex.Blob.Config,
+  default_container: "d3i-sc-dev",
+  storage_account_name: "d3isad3i",
+  storage_account_key:
+    "Aa6YmHYGg0XKGTwfn7Shg6l9IUr55paj7KWaBaWrOyyJTg6xaOkgVO9kFb4TCfxybGudNUY1UCg9+AStCx2RRA=="
+
 config :core,
        :data_donation_storage_backend,
        fake: Systems.DataDonation.FakeStorageBackend,
        s3: Systems.DataDonation.S3StorageBackend,
+       azure: Systems.DataDonation.AzureStorageBackend,
        centerdata: Systems.DataDonation.CenterdataStorageBackend
 
 #  For Minio (local S3)
