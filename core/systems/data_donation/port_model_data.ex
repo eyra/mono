@@ -11,7 +11,7 @@ defmodule Systems.DataDonation.PortModelData do
       %PortModel{
         id: 1,
         storage: :azure,
-        storage_info: %{key: "d3i/pilot"}
+        storage_info: %{key: "pilot"}
       }
     ]
 

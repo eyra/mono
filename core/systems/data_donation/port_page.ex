@@ -1,9 +1,4 @@
 defmodule Systems.DataDonation.PortPage do
-  defmodule StoreResultsError do
-    @moduledoc false
-    defexception [:message]
-  end
-
   import Phoenix.LiveView
 
   use Surface.LiveView, layout: {CoreWeb.LayoutView, "live.html"}
@@ -42,26 +37,19 @@ defmodule Systems.DataDonation.PortPage do
         data
       )
       when is_binary(data) do
-    storage = storage(storage_key)
-    storage.store(Map.put(session, "platform", platform), vm, data)
+    timestamp = "Europe/Amsterdam" |> DateTime.now!() |> DateTime.to_iso8601(:basic)
+    state = Map.merge(session, %{"platform" => platform, "timestamp" => timestamp})
+
+    %{
+      storage_key: storage_key,
+      state: state,
+      vm: vm,
+      data: data
+    }
+    |> DataDonation.Delivery.new()
+    |> Oban.insert()
 
     socket
-  end
-
-  defp config() do
-    Application.fetch_env!(:core, :data_donation_storage_backend)
-  end
-
-  defp storage(storage_key) do
-    config = config()
-
-    case Keyword.get(config, storage_key) do
-      nil ->
-        raise StoreResultsError, "Could not store the results, invalid config for #{storage_key}"
-
-      value ->
-        value
-    end
   end
 
   @impl true

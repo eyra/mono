@@ -148,8 +148,9 @@ defmodule Systems.DataDonation.DonatePage do
         data
       )
       when is_binary(data) do
-    storage = storage(storage_key)
-    storage.store(session, vm, data)
+    timestamp = "Europe/Amsterdam" |> DateTime.now!() |> DateTime.to_iso8601(:basic)
+    state = Map.merge(session, %{"timestamp" => timestamp})
+    storage(storage_key).store(state, vm, data)
   end
 
   defp storage(storage_key) do
