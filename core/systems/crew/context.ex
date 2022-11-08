@@ -52,8 +52,8 @@ defmodule Systems.Crew.Context do
     |> Repo.one()
   end
 
-  def get_task!(id) do
-    Repo.get!(Crew.TaskModel, id)
+  def get_task!(id, preload \\ []) do
+    Repo.get!(Crew.TaskModel, id) |> Repo.preload(preload)
   end
 
   def create_task(crew, member, expire_at) do
@@ -195,8 +195,8 @@ defmodule Systems.Crew.Context do
     end
   end
 
-  def reject_task(%Crew.TaskModel{} = task, %{category: category, message: message}) do
-    update_task(task, %{
+  def reject_task(multi, %Crew.TaskModel{} = task, %{category: category, message: message}) do
+    multi_update(multi, :task, task, %{
       status: :rejected,
       rejected_at: Timestamp.naive_now(),
       rejected_category: category,
@@ -204,9 +204,21 @@ defmodule Systems.Crew.Context do
     })
   end
 
+  def reject_task(multi, id, rejection) do
+    task = get_task!(id)
+    reject_task(multi, task, rejection)
+  end
+
+  def reject_task(%Crew.TaskModel{} = task, rejection) do
+    Multi.new()
+    |> reject_task(task, rejection)
+    |> Repo.transaction()
+  end
+
   def reject_task(id, rejection) do
-    get_task!(id)
-    |> reject_task(rejection)
+    Multi.new()
+    |> reject_task(id, rejection)
+    |> Repo.transaction()
   end
 
   def accept_task(%Crew.TaskModel{} = task) do
@@ -222,11 +234,14 @@ defmodule Systems.Crew.Context do
   end
 
   def update_task(%Crew.TaskModel{} = task, attrs) do
-    changeset = Crew.TaskModel.changeset(task, attrs)
-
     Multi.new()
-    |> multi_update(:task, changeset)
+    |> multi_update(:task, task, attrs)
     |> Repo.transaction()
+  end
+
+  def multi_update(multi, :task, task, attrs) do
+    changeset = Crew.TaskModel.changeset(task, attrs)
+    multi_update(multi, :task, changeset)
   end
 
   def multi_update(multi, :task, changeset) do
@@ -256,7 +271,7 @@ defmodule Systems.Crew.Context do
       # temporary cancel is implemented by expiring the task
       multi
       |> Multi.update(:member, Crew.MemberModel.changeset(member, %{expired: true}))
-      |> multi_update(:task, Crew.TaskModel.changeset(task, %{expired: true}))
+      |> multi_update(:task, task, %{expired: true})
     else
       Logger.warn("Unable to cancel, user #{user.id} is not a member on crew #{crew.id}")
     end

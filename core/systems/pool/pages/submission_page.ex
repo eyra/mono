@@ -62,19 +62,19 @@ defmodule Systems.Pool.SubmissionPage do
   end
 
   def handle_info({:claim_focus, :submission_form}, socket) do
-    send_update(SubmissionPoolForm, id: :submission_pool_form, focus: "")
+    send_update(Pool.SubmissionPoolView, id: :submission_pool_form, focus: "")
     {:noreply, socket}
   end
 
   def handle_info({:claim_focus, :submission_pool_form}, socket) do
-    send_update(SubmissionForm, id: :submission_form, focus: "")
+    send_update(Pool.SubmissionView, id: :submission_form, focus: "")
     {:noreply, socket}
   end
 
   @impl true
   def handle_event("reset_focus", _, socket) do
-    send_update(SubmissionForm, id: :submission_form, focus: "")
-    send_update(SubmissionPoolForm, id: :submission_pool_form, focus: "")
+    send_update(Pool.SubmissionView, id: :submission_form, focus: "")
+    send_update(Pool.SubmissionPoolView, id: :submission_pool_form, focus: "")
     {:noreply, socket}
   end
 

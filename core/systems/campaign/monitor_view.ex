@@ -7,6 +7,7 @@ defmodule Systems.Campaign.MonitorView do
   alias Systems.{
     Pool,
     Crew,
+    Assignment,
     Campaign,
     Lab
   }
@@ -19,18 +20,12 @@ defmodule Systems.Campaign.MonitorView do
   data(reject_task, :number)
   data(labels, :list)
 
-  # def update(%{checkin: :new_participant}, socket) do
-  #   {
-  #     :ok,
-  #     socket |> update_vm()
-  #   }
-  # end
-
   def update(
         %{reject: :submit, rejection: rejection},
-        %{assigns: %{reject_task: task_id}} = socket
+        %{assigns: %{reject_task: task_id, vm: %{promotable: promotable}}} = socket
       ) do
-    Crew.Context.reject_task(task_id, rejection)
+    task = Crew.Context.get_task!(task_id, [:crew, member: [:user]])
+    reject_task(promotable, task, rejection)
 
     {
       :ok,
@@ -70,6 +65,12 @@ defmodule Systems.Campaign.MonitorView do
       )
     }
   end
+
+  defp reject_task(%Assignment.Model{} = assignment, task, rejection) do
+    Assignment.Context.reject_task(assignment, task, rejection)
+  end
+
+  defp reject_task(_, _, _), do: raise("Could not reject task for unsupported promotable")
 
   @impl true
   def handle_event(
@@ -237,13 +238,14 @@ defmodule Systems.Campaign.MonitorView do
          },
          %{
            submission: submission,
-           promotable: %{
-             crew: crew,
-             assignable_experiment:
-               %{
-                 subject_count: subject_count
-               } = experiment
-           }
+           promotable:
+             %{
+               crew: crew,
+               assignable_experiment:
+                 %{
+                   subject_count: subject_count
+                 } = experiment
+             } = promotable
          },
          attention_list_enabled?
        ) do
@@ -275,6 +277,7 @@ defmodule Systems.Campaign.MonitorView do
       |> to_view_model(:accepted_tasks, target, experiment)
 
     %{
+      promotable: promotable,
       experiment: experiment,
       active?: active?,
       subject_count: subject_count,

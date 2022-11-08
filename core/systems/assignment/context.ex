@@ -289,6 +289,17 @@ defmodule Systems.Assignment.Context do
     end
   end
 
+  def reject_task(
+        %Assignment.Model{} = assignment,
+        %Crew.TaskModel{member: %{user: user}} = task,
+        rejection
+      ) do
+    Multi.new()
+    |> Crew.Context.reject_task(task, rejection)
+    |> rollback_deposit(assignment, user)
+    |> Repo.transaction()
+  end
+
   def cancel(%Assignment.Model{} = assignment, user) do
     crew = get_crew(assignment)
 
