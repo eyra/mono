@@ -9,20 +9,8 @@ defmodule Systems.DataDonation.DefaultController do
     handle(conn, params, Systems.DataDonation.FlowPage)
   end
 
-  def port(
-        conn,
-        %{
-          "participant" => participant
-        }
-      ) do
-    unless String.match?(participant, ~r/[a-zA-Z0-9_\-]+/) do
-      throw(:invalid_participant_id)
-    end
-
-    path =
-      Routes.live_path(conn, Systems.DataDonation.PortPage, session: %{participant: participant})
-
-    redirect(conn, to: path)
+  def port(conn, params) do
+    handle(conn, params, Systems.DataDonation.PortPage)
   end
 
   def handle(

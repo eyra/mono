@@ -26,10 +26,15 @@ if config_env() == :prod do
       port: String.to_integer(System.get_env("HTTP_PORT", "8000"))
     ]
 
+  # Port
+
   config :core,
          :data_donation_storage_backend,
          s3: Systems.DataDonation.S3StorageBackend,
+         azure: Systems.DataDonation.AzureStorageBackend,
          centerdata: Systems.DataDonation.CenterdataStorageBackend
+
+  # AWS
 
   if bucket = System.get_env("AWS_S3_BUCKET") do
     config :core, Systems.DataDonation.S3StorageBackend, bucket: bucket
@@ -51,6 +56,22 @@ if config_env() == :prod do
   if aws_region = System.get_env("AWS_REGION") do
     config :ex_aws, region: aws_region
   end
+
+  # AZURE BLOB
+
+  if default_container = System.get_env("AZURE_BLOB_CONTAINER") do
+    config :azurex, Azurex.Blob.Config, default_container: default_container
+  end
+
+  if storage_account_name = System.get_env("AZURE_BLOB_STORAGE_USER") do
+    config :azurex, Azurex.Blob.Config, storage_account_name: storage_account_name
+  end
+
+  if storage_account_key = System.get_env("AZURE_BLOB_STORAGE_PASSWORD") do
+    config :azurex, Azurex.Blob.Config, storage_account_key: storage_account_key
+  end
+
+  # MAILGUN
 
   if mailgun_api_key = System.get_env("MAILGUN_API_KEY") do
     config :core, Systems.Email.Mailer,
