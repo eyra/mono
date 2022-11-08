@@ -105,4 +105,4 @@ msgstr "Participants"
 
 #, elixir-format, ex-autogen
 msgid "excluded.campaigns.title"
-msgstr "Exclusion"
+msgstr "Excluded"
