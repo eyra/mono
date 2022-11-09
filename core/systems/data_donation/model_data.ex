@@ -106,6 +106,31 @@ defmodule Systems.DataDonation.ModelData do
         id: 5,
         recipient: "Universiteit Utrecht",
         researcher: %ResearcherModel{
+          name: "dr. Rense Corten",
+          pronoun: dgettext("eyra-ui", "pronoun.him"),
+          job_title: "Associate Professor",
+          institution: %InstitutionModel{
+            name: "Universiteit Utrecht",
+            image: "/images/uu_card.svg"
+          }
+        },
+        research_topic: nil,
+        research_description: %{
+          "nl" =>
+            "De gegevens die we u vragen te doneren kunnen worden gebruikt om te onderzoeken hoe mensen Whatsapp groepen gebruiken. Gegevens, zoals aantal berichten per persoon, zullen uit uw WhatsApp groep bestand gehaald worden. Dit zijn echter geen gegevens die te herleiden zijn naar personen.",
+          "en" =>
+            "The data that we ask you to donate could be used to investigate how people use Whatsapp groups. Information, such as number of messages per person, will be extracted from your WhatsApp group data. However, no personal identifiable information will be extracted."
+        },
+        platform: "Whatsapp",
+        redirect_to: :thanks_whatsapp_chat,
+        storage: :s3,
+        storage_info: %{key: "whatsapp_chat_liss"},
+        script: "whatsapp_chat.py"
+      },
+      %Model{
+        id: 6,
+        recipient: "Universiteit Utrecht",
+        researcher: %ResearcherModel{
           name: "Universiteit Utrecht",
           pronoun: dgettext("eyra-ui", "pronoun.him"),
           job_title: "Associate Professor",
@@ -124,8 +149,8 @@ defmodule Systems.DataDonation.ModelData do
         platform: "Whatsapp",
         redirect_to: :thanks_whatsapp_account,
         storage: :s3,
-        storage_info: %{key: "whatsapp_account_test"},
-        script: "generator_test.py"
+        storage_info: %{key: "whatsapp_account_liss"},
+        script: "whatsapp_account.py"
       }
     ]
 
