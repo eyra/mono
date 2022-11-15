@@ -8,11 +8,17 @@ defmodule CoreWeb.UI.Navigation.DesktopNavbar do
 
   prop(items, :any, required: true)
   prop(path_provider, :any, required: true)
+  prop(logo, :any)
 
   def render(assigns) do
     ~F"""
-    <div class="pr-4">
-      <Navbar items={@items} path_provider={@path_provider} />
+    <div class="pr-4 flex flex-row gap-4 items-center">
+      <div :if={@logo}>
+        <img src={"/images/icons/#{@logo}.svg"} alt={"#{@logo}"}>
+      </div>
+      <div class="flex-grow">
+        <Navbar items={@items} path_provider={@path_provider} />
+      </div>
     </div>
     """
   end
