@@ -33,7 +33,7 @@ export const Port = {
 
   handleDonation(command) {
     console.log(
-      `[System] received donation: ${command.key}=${command.json_string}`
+      `[System] received donation: key=${command.key}, payload=${command.json_string}`
     );
     this.pushEvent("donate", command);
   },
