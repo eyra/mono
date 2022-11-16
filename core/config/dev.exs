@@ -64,12 +64,6 @@ config :core, Systems.Email.Mailer,
   open_email_in_browser_url: "http://localhost:4000/sent_emails",
   default_from_email: "no-reply@example.com"
 
-config :web_push_encryption, :vapid_details,
-  subject: "mailto:administrator@example.com",
-  public_key:
-    "BLddMfMPHE67WZkYxELLBedpRNvJMj7xTbn8ZsObC_0c1-p-AsHl7ndhoty2YURTgCR0XMPm6Mf-74FnwH32fhw",
-  private_key: "yWo9lKKkdbN1IGQH8aUlk3u_Shemyh8CmtDnJoNdhBk"
-
 config :core, :apns_backend, Core.APNS.LoggingBackend
 
 config :core,
@@ -84,12 +78,6 @@ config :core,
        ["e.vanderveen@eyra.co"]
 
 config :core, Systems.DataDonation.S3StorageBackend, bucket: "eylixir"
-
-config :azurex, Azurex.Blob.Config,
-  default_container: "d3i-sc-dev",
-  storage_account_name: "d3isad3i",
-  storage_account_key:
-    "Aa6YmHYGg0XKGTwfn7Shg6l9IUr55paj7KWaBaWrOyyJTg6xaOkgVO9kFb4TCfxybGudNUY1UCg9+AStCx2RRA=="
 
 config :core,
        :data_donation_storage_backend,

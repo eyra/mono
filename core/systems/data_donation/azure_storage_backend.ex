@@ -6,18 +6,18 @@ defmodule Systems.DataDonation.AzureStorageBackend do
   alias Azurex.Blob
 
   def store(
-        %{"participant" => participant, "platform" => platform} = _state,
-        %{storage_info: %{key: key}} = _vm,
+        %{"participant" => participant, "platform" => platform, "timestamp" => timestamp} =
+          _state,
+        %{"storage_info" => %{"key" => key}} = _vm,
         data
       ) do
     Timex.Translator.with_locale "en" do
-      path = path(key, participant, platform)
+      path = path(key, participant, platform, timestamp)
       Blob.put_blob(path, data, "text/plain")
     end
   end
 
-  def path(key, participant, platform) do
-    timestamp = "Europe/Amsterdam" |> DateTime.now!() |> DateTime.to_iso8601(:basic)
-    "#{key}/#{participant}/#{platform}/#{timestamp}.json"
+  def path(key, participant, platform, timestamp) do
+    "#{key}/#{participant}/#{platform}-#{timestamp}.json"
   end
 end
