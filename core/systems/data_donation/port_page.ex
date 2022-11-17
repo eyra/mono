@@ -49,18 +49,17 @@ defmodule Systems.DataDonation.PortPage do
 
   def store_results(
         %{assigns: %{session: session, vm: %{storage: storage_key} = vm}} = socket,
-        platform,
-        data
+        key,
+        json_string
       )
-      when is_binary(data) do
-    timestamp = "Europe/Amsterdam" |> DateTime.now!() |> DateTime.to_iso8601(:basic)
-    state = Map.merge(session, %{"platform" => platform, "timestamp" => timestamp})
+      when is_binary(json_string) do
+    state = Map.merge(session, %{"key" => key})
 
     %{
       storage_key: storage_key,
       state: state,
       vm: vm,
-      data: data
+      data: json_string
     }
     |> DataDonation.Delivery.new()
     |> Oban.insert()
