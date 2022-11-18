@@ -54,7 +54,15 @@ module.exports = (env, options) => {
           test: /\.css$/,
           use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
         },
-
+        {
+          test: /\.whl$/,
+          use: [
+            {
+              loader: "file-loader",
+              options: { name: "[name].[ext]", outputPath: "../" },
+            },
+          ],
+        },
         {
           test: /\.(woff(2)?|ttf|otf|woff|woff2|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
           use: [
