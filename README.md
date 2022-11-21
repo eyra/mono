@@ -4,11 +4,14 @@ Primary collection of Eyra projects
 
 ## Projects
 
-### Core
+* Core
+* Banking Proxy
+
+## Core
 
 Project implementing a SaaS platform based on interlinked modules called Systems. These Systems are composed into Bundles to form specific deployments. Deployments use config to expose a set of features (web pages) to the public.
 
-#### Systems
+### Systems
 
 A shortlist of Systems available:
 
@@ -23,7 +26,7 @@ A shortlist of Systems available:
 * Data Donation
 * ..
 
-#### Bundles
+### Bundles
 
 * Next
 
@@ -35,6 +38,6 @@ Next is hosted on: https://eyra.co
 Secundary bundle with only Panl specific features. 
 Link is hosted on: https://researchpanl.eu
 
-### Banking Proxy
+## Banking Proxy
 
 Project implementing a proxy server used in Banking (core/systems/banking). It allows for a limited and secure interaction with a banking account.
