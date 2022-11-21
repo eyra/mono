@@ -11,9 +11,7 @@ Primary collection of Eyra projects
 
 Project implementing a SaaS platform based on interlinked modules called Systems. These Systems are composed into Bundles to form specific deployments. Deployments use config to expose a set of features (web pages) to the public.
 
-### Systems
-
-A shortlist of Systems available:
+### Systems (shortlist)
 
 * Banking
 * Bookkeeping
