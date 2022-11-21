@@ -12,7 +12,8 @@ defmodule Core.Application do
       {Phoenix.PubSub, name: Core.PubSub},
       {Oban, oban_config()},
       {Systems.Banking.Context.backend(), "account-number"},
-      CoreWeb.Endpoint
+      CoreWeb.Endpoint,
+      Systems.Rate.Service
     ]
 
     opts = [strategy: :one_for_one, name: Core.Supervisor]
