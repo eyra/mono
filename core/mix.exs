@@ -5,7 +5,7 @@ defmodule Core.MixProject do
     [
       app: :core,
       version: "0.1.0",
-      source_url: "https://github.com/eyra/eylixir",
+      source_url: "https://github.com/eyra/mono",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix] ++ Mix.compilers() ++ [:surface],

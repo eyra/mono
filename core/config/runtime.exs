@@ -125,8 +125,7 @@ if config_env() == :prod do
       url: [host: host, port: 443],
       https: [port: String.to_integer(System.get_env("HTTPS_PORT", "443"))]
   else
-    config :core, CoreWeb.Endpoint,
-      force_ssl: [rewrite_on: [:x_forwarded_proto]]
+    config :core, CoreWeb.Endpoint, force_ssl: [rewrite_on: [:x_forwarded_proto]]
   end
 
   config :web_push_encryption, :vapid_details,
