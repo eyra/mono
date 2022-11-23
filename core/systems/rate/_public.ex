@@ -1,17 +1,13 @@
 defmodule Systems.Rate.Public do
-  alias CoreWeb.UI.Timestamp
+  defmodule RateLimitError do
+    defexception [:message]
+  end
 
-  alias Systems.{
-    Rate
-  }
-
-  def validate(ip, service, bandwidth)
-      when is_binary(ip) and is_atom(service) and is_integer(bandwidth) do
-    today = Timestamp.now() |> Timestamp.to_date() |> Timestamp.humanize_date()
-    raw_key = "#{today}-#{ip}"
-    key = :crypto.hash(:md5, raw_key) |> Base.encode16()
-
-    Rate.LimitModel.get!(service)
-    |> Rate.Private.validate(key, service, bandwidth)
+  def request_permission(service, client_id, packet_size)
+      when is_atom(service) and is_binary(client_id) and is_integer(packet_size) do
+    case Systems.Rate.Server.request_permission(service, client_id, packet_size) do
+      :granted -> :granted
+      {:denied, reason} -> raise RateLimitError, reason
+    end
   end
 end

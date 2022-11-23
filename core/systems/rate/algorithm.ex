@@ -1,8 +1,14 @@
 defmodule Systems.Rate.Algorithm do
+  # ARGS
+  @type state :: map
+  @type service :: :atom
+  @type client_id :: String.t()
+  @type packet_size :: integer
+
+  # RESULT
+  @type permission_result :: permission_granted | permission_denied
   @type permission_granted :: {:granted, map}
   @type permission_denied :: {{:denied, :atom}, map}
-  @type permission_result :: permission_granted | permission_denied
-  @type request :: {:atom, String.t(), integer}
 
-  @callback request_permission(map, :atom, String.t(), integer) :: permission_result
+  @callback request_permission(state, service, client_id, packet_size) :: permission_result
 end

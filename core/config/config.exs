@@ -54,6 +54,14 @@ config :core, Oban,
      ]}
   ]
 
+config :core, :rate,
+  prune_interval: 60 * 60 * 1000,
+  quotas: [
+    [service: :azure_blob, limit: 1000, unit: :call, window: :minute, scope: :local],
+    [service: :azure_blob, limit: 10_000_000, unit: :byte, window: :day, scope: :local],
+    [service: :azure_blob, limit: 1_000_000_000, unit: :byte, window: :day, scope: :global]
+  ]
+
 config :core, ecto_repos: [Core.Repo]
 
 config :core, Systems.Email.Mailer,

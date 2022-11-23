@@ -10,7 +10,7 @@ defmodule Frameworks.Pixel.Text.Bullet do
 
   def render(assigns) do
     ~F"""
-    <div class="flex items-center">
+    <div class="flex flex-row items-center">
       <div class={"flex-wrap h-3 w-3 mr-3 flex-shrink-0 #{@color}"}>
         <img src={@image} alt="">
       </div>

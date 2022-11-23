@@ -13,7 +13,7 @@ defmodule Core.Application do
       {Oban, oban_config()},
       {Systems.Banking.Context.backend(), "account-number"},
       CoreWeb.Endpoint,
-      Systems.Rate.Service
+      {Systems.Rate.Server, rate_config()}
     ]
 
     opts = [strategy: :one_for_one, name: Core.Supervisor]
@@ -26,5 +26,9 @@ defmodule Core.Application do
 
   defp oban_config do
     Application.fetch_env!(:core, Oban)
+  end
+
+  defp rate_config do
+    Application.fetch_env!(:core, :rate)
   end
 end

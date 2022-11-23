@@ -1,5 +1,3 @@
 defmodule Systems.Rate.Private do
-  defmodule RateLimitError do
-    defexception [:message]
-  end
+  def datetime_now(), do: DateTime.now!("Etc/UTC")
 end

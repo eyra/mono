@@ -4,13 +4,15 @@ defmodule Systems.DataDonation.PortPage do
   use Surface.LiveView, layout: {CoreWeb.LayoutView, "live.html"}
   use CoreWeb.LiveUri
   use CoreWeb.LiveLocale
+  use CoreWeb.LiveRemoteIp
   use CoreWeb.LiveAssignHelper
 
   alias CoreWeb.Layouts.App.Component, as: App
   alias CoreWeb.Menu
 
   alias Systems.{
-    DataDonation
+    DataDonation,
+    Rate
   }
 
   data(result, :any)
@@ -48,21 +50,25 @@ defmodule Systems.DataDonation.PortPage do
   end
 
   def store_results(
-        %{assigns: %{session: session, vm: %{storage: storage_key} = vm}} = socket,
+        %{assigns: %{session: session, remote_ip: remote_ip, vm: %{storage: storage_key} = vm}} =
+          socket,
         key,
         json_string
       )
       when is_binary(json_string) do
     state = Map.merge(session, %{"key" => key})
+    packet_size = String.length(json_string)
 
-    %{
-      storage_key: storage_key,
-      state: state,
-      vm: vm,
-      data: json_string
-    }
-    |> DataDonation.Delivery.new()
-    |> Oban.insert()
+    with :granted <- Rate.Public.request_permission(:azure_blob, remote_ip, packet_size) do
+      %{
+        storage_key: storage_key,
+        state: state,
+        vm: vm,
+        data: json_string
+      }
+      |> DataDonation.Delivery.new()
+      |> Oban.insert()
+    end
 
     socket
   end
