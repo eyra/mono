@@ -61,7 +61,7 @@ defmodule Systems.DataDonation.PortPage do
     state = Map.merge(session, %{"key" => key})
     packet_size = String.length(json_string)
 
-    #Temp logging of IP for testing purposes on Azure env
+    # Temp logging of IP for testing purposes on Azure env
     Logger.info("Storing results from #{remote_ip}")
 
     with :granted <- Rate.Public.request_permission(:azure_blob, remote_ip, packet_size) do

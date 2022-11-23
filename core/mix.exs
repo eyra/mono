@@ -98,6 +98,7 @@ defmodule Core.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:currency_formatter, "~> 0.8"},
       {:web_push_encryption, "~> 0.3.1"},
+      {:remote_ip, "~> 1.1"},
       {:pigeon, "~> 1.6.1"},
       {:kadabra, "~> 0.6.0"},
       {:oban, "~> 2.10"},
