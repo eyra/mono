@@ -1,6 +1,8 @@
 defmodule Systems.DataDonation.PortPage do
   import Phoenix.LiveView
 
+  require Logger
+
   use Surface.LiveView, layout: {CoreWeb.LayoutView, "live.html"}
   use CoreWeb.LiveUri
   use CoreWeb.LiveLocale
@@ -58,6 +60,9 @@ defmodule Systems.DataDonation.PortPage do
       when is_binary(json_string) do
     state = Map.merge(session, %{"key" => key})
     packet_size = String.length(json_string)
+
+    #Temp logging of IP for testing purposes on Azure env
+    Logger.info("Storing results from #{remote_ip}")
 
     with :granted <- Rate.Public.request_permission(:azure_blob, remote_ip, packet_size) do
       %{
