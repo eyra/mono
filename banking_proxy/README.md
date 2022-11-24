@@ -30,7 +30,7 @@ development mode.
 
 Build a release via:
 
-https://github.com/eyra/eylixir/actions
+https://github.com/eyra/mono/actions
 
 Go to "Release Banking Proxy" and "Run workflow".
 

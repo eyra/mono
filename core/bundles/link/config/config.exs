@@ -25,6 +25,8 @@ config :core, :meta,
   bundle_title: "Panl",
   bundle: :link
 
+config :core, :rate, quotas: []
+
 if config_env() === :dev do
   import_config "#{config_env()}.exs"
 end
