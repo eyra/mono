@@ -113,7 +113,12 @@
 							</h3>
 							<p class="p-projects-style">
 								In collaboration with the VU, UvA and SURF, we are developing a sustainable online participant recruitment platform for social sciences and humanities research.<br><br>Funded by the PDI-SSH.<br>
-							</p><img src="./landing_page/img/vu.svg" class="img-fluid rounded-circle float-lg-none partner-icon partner-icon-uva" alt="vu" /><img src="./landing_page/img/uva.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uva" /><img src="./landing_page/img/surf.svg" class="img-fluid rounded-circle float-lg-none partner-icon partner-icon-uva" alt="surf" />
+							</p>
+							<div style="display:flex">
+								<img src="./landing_page/img/vu.svg" class="img-fluid rounded-circle float-lg-none partner-icon partner-icon-uva" alt="vu" />
+								<img src="./landing_page/img/uva.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uva" />
+								<img src="./landing_page/img/surf.svg" class="img-fluid rounded-circle float-lg-none partner-icon partner-icon-uva" alt="surf" />
+							</div>
 						</div>
 					</div>
 				</div>
@@ -133,8 +138,12 @@
 								Eyra Port
 							</h3>
 							<p class="p-projects-style">
-								In collaboration with the UU we are working on a proof of concept that enables citizens to easily and safely donate their data from social media platform like Instagram or Google for research. <br><br>Funded by the UU.
-							</p><img src="./landing_page/img/uu.png" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uu" />
+								In collaboration with the UU and UvA we are working on a tool that enables citizens to easily and safely donate their data from social media platforms like Instagram or Google for research. <br><br>Funded by the UU and PDI-SSH.
+							</p>
+							<div style="display:flex">
+								<img src="./landing_page/img/uu.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uu" />
+								<img src="./landing_page/img/uva.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uva" />
+							</div>
 						</div>
 					</div>
 				</div>
@@ -176,48 +185,84 @@
 		</div>
 		<div class="row voffset-lg voffset-clear-sm voffset-clear-md">
 			<div class="offset-md-0 column-style-bio offset-lg-0 col-lg-4">
-				<img src="./landing_page/img/adrienne-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-adrien-style" alt="adrienne" />
+				<img src="./landing_page/img/adrienne-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-adrien-style" alt="Adrienne" />
 				<h5 class="mg-md text-lg-center mx-auto d-block h5-style h5-color tc-dark-jungle-green">
 					Adriënne Mendrik
 				</h5>
 				<p class="mg-clear-md mg-clear-sm mx-auto d-block p-style bio-style mg-sm text-lg-center text-md-center text-sm-center">
-					Adriënne founded Eyra to provide long term solutions that enhance research and bridge the gap between companies and academia.<br>
+					Adriënne is a visionary who reads between the lines and encourages people to improve upon the status quo, while keeping a close eye on how new ideas connect to existing frameworks.<br>
 				</p>
 			</div>
 			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
-				<img src="./landing_page/img/emiel-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-team-style" alt="emiel" />
+				<img src="./landing_page/img/emiel-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-team-style" alt="Emiel" />
 				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
 					Emiel van der Veen
 				</h5>
 				<p class="p-style bio-style mx-auto d-block mg-clear-xs mg-lg text-lg-center text-md-center text-sm-center">
-					With more than two decades experience in the Software Engineering field Emiel has gained a broad insight of every aspect of digital product development.<br>
+					Emiel is a visionary who excels in systematic thinking, challenges people to step up, and guides them into developing robust and high quality products that withstand the test of time.<br>
 				</p>
 			</div>
 			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
-				<img src="./landing_page/img/jeroen-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-jero-style" alt="emiel" />
-				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
-					Jeroen Vloothuis
-				</h5>
-				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center">
-					Jeroen solves complex problems with exceptional precision and elegance. In this way he is able to get an awful lot done in a short time.<br>
-				</p>
-			</div>
-			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
-				<img src="./landing_page/img/neo-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-6-style" alt="emiel" />
-				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
-					Neo Cheung
-				</h5>
-				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center">
-					When designing digital solutions, Neo is focussing on finding the balance between business need and user experience.<br>
-				</p>
-			</div>
-			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
-				<img src="./landing_page/img/peter-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-7-style" alt="emiel" />
+				<img src="./landing_page/img/peter-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-7-style" alt="Peter" />
 				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
 					Peter Waterman
 				</h5>
 				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center">
-					Peter is an experienced professional &amp; entrepreneur with a background in finance and general management.<br>
+					Peter is a people-oriented quick thinker with great listening skills who advices on long term company health, based on a broad experience in finance and general management.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
+				<img src="./landing_page/img/neo-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-6-style" alt="Neo" />
+				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
+					Neo Cheung
+				</h5>
+				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center">
+					With his sharp eye and organised way of working, Neo quickly translates thoughts into design, while finding the right balance between client needs and user experience.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
+				<img src="./landing_page/img/jeroen-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-jero-style" alt="Jeroen" />
+				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
+					Jeroen Vloothuis
+				</h5>
+				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center">
+					With extensive technical knowledge and great analytical skills, Jeroen quickly solves complex problems with exceptional precision and elegance, while keeping things as simple as possible.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
+				<img src="./landing_page/img/tjerk.png" class="img-fluid rounded-circle mx-auto d-block avatar img-jero-style" alt="Tjerk" />
+				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
+					Tjerk Nan
+				</h5>
+				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center">
+					Products run smoothly and secure due to Tjerks eye for detail and passion for automation combined with extensive experience in security and DevOps.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
+				<img src="./landing_page/img/rowdy.png" class="img-fluid rounded-circle mx-auto d-block avatar img-jero-style" alt="Rowdy" />
+				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
+					Rowdy van Looy
+				</h5>
+				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center">
+					Rowdy excels in striking the right balance between stakeholder interests and technical feasibility, to find product and marketing strategies that fit the Eyra mission and vision.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
+				<img src="./landing_page/img/pien.png" class="img-fluid rounded-circle mx-auto d-block avatar img-7-style" alt="Pien" />
+				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
+					Pien Chrispijn
+				</h5>
+				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center">
+					Pien is driven by curiosity and a genuin interest in people, in order to learn from them and find ways to break new ground, while regenerating symbiosis.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
+				<img src="./landing_page/img/naiyara.png" class="img-fluid rounded-circle mx-auto d-block avatar img-7-style" alt="Naiyara" />
+				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
+					Naiyara van der Veen
+				</h5>
+				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center">
+					Naiyara has a deep understanding of what people need and the ability to translate this into concrete actions that make both an organisation as well as the people within thrive.<br>
 				</p>
 			</div>
 		</div>
@@ -254,7 +299,7 @@
 		</div>
 		<div class="row voffset-lg voffset-clear-sm voffset-clear-md no-gutters">
 			<div class="offset-lg-0 col-lg-4 col offset-md-0 column-style-bio">
-				<img src="./landing_page/img/martha-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-mart-style" alt="adrienne" />
+				<img src="./landing_page/img/martha-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-mart-style" alt="martha" />
 				<h3 class="mg-md text-lg-center mx-auto d-block h5-style">
 					Martha&nbsp;Larson
 				</h3>
@@ -262,22 +307,22 @@
 					Professor of Multimedia Information Technology at Radboud University and a member of the Multimedia Computing Group at Delft University of Technology. She is the coordinator of the MediaEval Benchmarking Initiative for Multimedia Evaluation, which she co-founded in 2008.<br>
 				</p>
 			</div>
-			<div class="offset-lg-0 offset-sm-0 col-sm-12 col-lg-4 col column-style-bio">
-				<img src="./landing_page/img/stan-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-bloc-5-style" alt="emiel" />
-				<h5 class="mg-md text-lg-center mx-auto d-block h5-style">
-					Stan Bentvelsen
-				</h5>
-				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center text-center">
-					Professor at the University of Amsterdam and Director of the National Institute for Subatomic Physics (Nikhef). He received the ‘Physica&rsquo; prize 2013 for his contribution to the discovery of the Higgs particle with the ATLAS experiment at the European Organization for Nuclear Research (CERN).<br>
-				</p>
-			</div>
 			<div class="offset-lg-0 col-lg-4 col column-style-bio">
-				<img src="./landing_page/img/daniel-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-dani-style" alt="martijn" />
+				<img src="./landing_page/img/daniel-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-dani-style" alt="daniel" />
 				<h5 class="mg-md text-lg-center text-sm-center mx-auto d-block h5-style">
 					Daniel Oberski
 				</h5>
 				<p class="p-style bio-style mx-auto d-block text-lg-center text-md-center text-sm-center text-center">
-					Associate professor of data science methodology with a joint appointment at Utrecht University&rsquo;s Department of Methodology &amp; Statistics, and the department of Biostatistics at the Julius Center, University Medical Center Utrecht (UMCU). Daniel is a member of "de Jonge Akademie" KNAW.<br>
+					Professor of data science methodology with a joint appointment at Utrecht University’s Department of Methodology & Statistics, and the department of Biostatistics at the Julius Center, University Medical Center Utrecht (UMCU). Daniel is a member of "de Jonge Akademie" KNAW.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 col-lg-4 col column-style-bio">
+				<img src="./landing_page/img/stephen.png" class="img-fluid rounded-circle mx-auto d-block avatar img-dani-style" alt="stephan" />
+				<h5 class="mg-md text-lg-center text-sm-center mx-auto d-block h5-style">
+					Stephen Aylward
+				</h5>
+				<p class="p-style bio-style mx-auto d-block text-lg-center text-md-center text-sm-center text-center">
+					Senior Director of Strategic Initiatives at Kitware and a successful researcher in the field of medical image analysis. After being an associate professor at UNC, Stephen founded Kitware NC in 2005 and is and has been the driving force behind the open source community for medical image analysis.<br>
 				</p>
 			</div>
 		</div>
@@ -329,7 +374,7 @@
 						<img src="./landing_page/img/logo_surf.svg" class="img-fluid mx-auto d-block mg-md" alt="logo_surf" />
 					</div>
 					<div class="col-lg-2 col-md-5">
-						<img style="height: 100px" src="./landing_page/img/uu.png" class="img-fluid mx-auto d-block mg-md" alt="logo_uu" />
+						<img style="height: 100px" src="./landing_page/img/uu.svg" class="img-fluid mx-auto d-block mg-md" alt="logo_uu" />
 					</div>
 				</div>
 			</div>
