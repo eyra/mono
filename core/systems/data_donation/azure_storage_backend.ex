@@ -69,6 +69,6 @@ defmodule Systems.DataDonation.AzureStorageBackend do
   end
 
   defp config() do
-    Application.fetch_env!(:core, :azure_storage_backend)
+    Application.get_env(:core, :azure_storage_backend)
   end
 end
