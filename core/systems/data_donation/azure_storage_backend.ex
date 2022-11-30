@@ -39,7 +39,7 @@ defmodule Systems.DataDonation.AzureStorageBackend do
          ],
          path
        ) do
-    "https://#{storage_account_name}.blob.core.windows.net/#{container}/#{path}/#{sas_token}"
+    "https://#{storage_account_name}.blob.core.windows.net/#{container}/#{path}#{sas_token}"
   end
 
   defp config() do
