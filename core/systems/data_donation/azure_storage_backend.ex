@@ -21,7 +21,7 @@ defmodule Systems.DataDonation.AzureStorageBackend do
 
     config = config() |> IO.inspect(label: "XXX")
 
-    #Logger.info("[AzureStorageBackend] store: config=#{config}")
+    # Logger.info("[AzureStorageBackend] store: config=#{config}")
 
     url = url(config, path) |> IO.inspect(label: "ZZZ")
 
