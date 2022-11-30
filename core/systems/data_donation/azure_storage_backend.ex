@@ -1,4 +1,9 @@
 defmodule Systems.DataDonation.AzureStorageBackend do
+  defmodule DeliveryError do
+    @moduledoc false
+    defexception [:message]
+  end
+
   @behaviour Systems.DataDonation.StorageBackend
 
   require Logger
@@ -45,7 +50,15 @@ defmodule Systems.DataDonation.AzureStorageBackend do
          ],
          path
        ) do
-    "https://#{storage_account_name}.blob.core.windows.net/#{container}/#{path}#{sas_token}"
+    url = "https://#{storage_account_name}.blob.core.windows.net/#{container}/#{path}#{sas_token}"
+    Logger.info("[AzureStorageBackend] url=#{url}")
+
+    url
+  end
+
+  defp url(config, _) do
+    Logger.error("[AzureStorageBackend] invalid config=#{config}")
+    raise DeliveryError, "Could not deliver donated data, invalid config"
   end
 
   defp config() do
