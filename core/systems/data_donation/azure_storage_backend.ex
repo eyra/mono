@@ -1,5 +1,4 @@
 defmodule Systems.DataDonation.AzureStorageBackend do
-
   @behaviour Systems.DataDonation.StorageBackend
 
   def store(
@@ -43,7 +42,6 @@ defmodule Systems.DataDonation.AzureStorageBackend do
          config,
          path
        ) do
-
     storage_account_name = Keyword.get(config, :storage_account_name) |> IO.inspect(label: "SAN")
     container = Keyword.get(config, :container) |> IO.inspect(label: "CON")
     sas_token = Keyword.get(config, :sas_token) |> IO.inspect(label: "SAS")
