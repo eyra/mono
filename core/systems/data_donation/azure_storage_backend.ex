@@ -1,31 +1,19 @@
 defmodule Systems.DataDonation.AzureStorageBackend do
-  defmodule DeliveryError do
-    @moduledoc false
-    defexception [:message]
-  end
 
   @behaviour Systems.DataDonation.StorageBackend
-
-  require Logger
 
   def store(
         %{"participant" => participant, "key" => donation_key},
         %{"storage_info" => %{"key" => root_key}},
         data
       ) do
-    Logger.info("[AzureStorageBackend] store begin")
+    participant |> IO.inspect(label: "STORE")
 
-    path = path(root_key, participant, donation_key)
+    path = path(root_key, participant, donation_key) |> IO.inspect(label: "PATH")
 
-    Logger.info("[AzureStorageBackend] store: path=#{path}")
+    config = config() |> IO.inspect(label: "CONFIG")
 
-    config = config() |> IO.inspect(label: "XXX")
-
-    Logger.info("[AzureStorageBackend] store: config=#{inspect(config)}")
-
-    url = url(config, path) |> IO.inspect(label: "ZZZ")
-
-    Logger.info("[AzureStorageBackend] store: url=#{url}")
+    url = url(config, path) |> IO.inspect(label: "URL2")
 
     headers = [
       {"Content-Type", "text/plain"},
@@ -33,7 +21,7 @@ defmodule Systems.DataDonation.AzureStorageBackend do
     ]
 
     HTTPoison.put(url, data, headers)
-    |> IO.inspect(label: "YYY")
+    |> IO.inspect(label: "PUT")
     |> case do
       {:ok, %{status_code: 201}} ->
         :ok
@@ -44,6 +32,7 @@ defmodule Systems.DataDonation.AzureStorageBackend do
       {_, response} ->
         {:error, response}
     end
+    |> IO.inspect(label: "RESULT")
   end
 
   def path(root_key, participant, donation_key) do
@@ -51,25 +40,18 @@ defmodule Systems.DataDonation.AzureStorageBackend do
   end
 
   defp url(
-         [
-           storage_account_name: storage_account_name,
-           container: container,
-           sas_token: sas_token
-         ],
+         config,
          path
        ) do
-    url = "https://#{storage_account_name}.blob.core.windows.net/#{container}/#{path}#{sas_token}"
-    Logger.info("[AzureStorageBackend] url=#{url}")
 
-    url
-  end
+    storage_account_name = Keyword.get(config, :storage_account_name) |> IO.inspect(label: "SAN")
+    container = Keyword.get(config, :container) |> IO.inspect(label: "CON")
+    sas_token = Keyword.get(config, :sas_token) |> IO.inspect(label: "SAS")
 
-  defp url(config, _) do
-    Logger.error("[AzureStorageBackend] invalid config=#{inspect(config)}")
-    raise DeliveryError, "Could not deliver donated data, invalid config"
+    "https://#{storage_account_name}.blob.core.windows.net/#{container}/#{path}#{sas_token}"
   end
 
   defp config() do
-    Application.get_env(:core, :azure_storage_backend) |> IO.inspect(label: "XXX")
+    Application.get_env(:core, :azure_storage_backend)
   end
 end
