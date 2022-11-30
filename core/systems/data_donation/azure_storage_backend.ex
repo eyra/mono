@@ -17,11 +17,11 @@ defmodule Systems.DataDonation.AzureStorageBackend do
 
     path = path(root_key, participant, donation_key)
 
-    Logger.info("[AzureStorageBackend] store; path")
+    Logger.info("[AzureStorageBackend] store: path=#{path}")
 
     config = config()
 
-    Logger.info("[AzureStorageBackend] store: path")
+    Logger.info("[AzureStorageBackend] store: config=#{config}")
 
     url = url(config, path)
 
