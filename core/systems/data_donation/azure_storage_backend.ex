@@ -1,13 +1,19 @@
 defmodule Systems.DataDonation.AzureStorageBackend do
   @behaviour Systems.DataDonation.StorageBackend
 
+  require Logger
+
   def store(
         %{"participant" => participant, "key" => donation_key},
         %{"storage_info" => %{"key" => root_key}},
         data
       ) do
+    Logger.info("[AzureStorageBackend] store begin")
+
     path = path(root_key, participant, donation_key)
     url = url(config(), path)
+
+    Logger.info("[AzureStorageBackend] store: url=#{url}")
 
     headers = [
       {"Content-Type", "text/plain"},
