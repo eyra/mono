@@ -21,7 +21,7 @@ defmodule Systems.DataDonation.AzureStorageBackend do
 
     config = config() |> IO.inspect(label: "XXX")
 
-    #Logger.info("[AzureStorageBackend] store: config=#{config}")
+    Logger.info("[AzureStorageBackend] store: config=#{inspect(config)}")
 
     url = url(config, path) |> IO.inspect(label: "ZZZ")
 
@@ -65,7 +65,7 @@ defmodule Systems.DataDonation.AzureStorageBackend do
   end
 
   defp url(config, _) do
-    Logger.error("[AzureStorageBackend] invalid config=#{config}")
+    Logger.error("[AzureStorageBackend] invalid config=#{inspect(config)}")
     raise DeliveryError, "Could not deliver donated data, invalid config"
   end
 
