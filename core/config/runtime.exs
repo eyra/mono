@@ -59,16 +59,16 @@ if config_env() == :prod do
 
   # AZURE BLOB
 
-  if default_container = System.get_env("AZURE_BLOB_CONTAINER") do
-    config :azurex, Azurex.Blob.Config, default_container: default_container
+  if container = System.get_env("AZURE_BLOB_CONTAINER") do
+    config :core, :azure_storage_backend, container: container
   end
 
   if storage_account_name = System.get_env("AZURE_BLOB_STORAGE_USER") do
-    config :azurex, Azurex.Blob.Config, storage_account_name: storage_account_name
+    config :core, :azure_storage_backend, storage_account_name: storage_account_name
   end
 
-  if storage_account_key = System.get_env("AZURE_BLOB_STORAGE_PASSWORD") do
-    config :azurex, Azurex.Blob.Config, storage_account_key: storage_account_key
+  if sas_token = System.get_env("AZURE_SAS_TOKEN") do
+    config :core, :azure_storage_backend, sas_token: sas_token
   end
 
   # MAILGUN
