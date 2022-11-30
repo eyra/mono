@@ -165,7 +165,7 @@ msgstr "Do you want to donate the data above to %{recipient}?"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "thanks.whatsappchat.description"
-msgstr "Thank you for your participation. Next we would like to ask you to donate information on Whatsapp use from your Whatsapp account file. Please return to the invitation email for more information. Thank you in advance."
+msgstr "Thank you for your participation. Next we would like to ask you to donate information on WhatsApp use from your WhatsApp account file. Please return to the invitation email for more information. Thank you in advance."
 
 #, elixir-autogen, elixir-format
 msgid "execute.spinner"
