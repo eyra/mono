@@ -42,13 +42,7 @@ defmodule Systems.Rate.Server do
 
   @impl true
   def handle_call({:request_permission, {service, client_id, packet_size}}, _from, state) do
-    Logger.info(
-      "[Rate.Server] request_permission: client_id=#{client_id}, packet_size=#{packet_size}"
-    )
-
     {result, state} = Algorithm.request_permission(state, service, client_id, packet_size)
-    Logger.info("[Rate.Server] request_permission: result=#{result}")
-
     {:reply, result, state}
   end
 
