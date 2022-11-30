@@ -19,11 +19,11 @@ defmodule Systems.DataDonation.AzureStorageBackend do
 
     Logger.info("[AzureStorageBackend] store: path=#{path}")
 
-    config = config()
+    config = config() |> IO.inspect(label: "XXX")
 
-    Logger.info("[AzureStorageBackend] store: config=#{config}")
+    #Logger.info("[AzureStorageBackend] store: config=#{config}")
 
-    url = url(config, path)
+    url = url(config, path) |> IO.inspect(label: "ZZZ")
 
     Logger.info("[AzureStorageBackend] store: url=#{url}")
 
@@ -33,6 +33,7 @@ defmodule Systems.DataDonation.AzureStorageBackend do
     ]
 
     HTTPoison.put(url, data, headers)
+    |> IO.inspect(label: "YYY")
     |> case do
       {:ok, %{status_code: 201}} ->
         :ok
@@ -69,6 +70,6 @@ defmodule Systems.DataDonation.AzureStorageBackend do
   end
 
   defp config() do
-    Application.get_env(:core, :azure_storage_backend)
+    Application.get_env(:core, :azure_storage_backend) |> IO.inspect(label: "XXX")
   end
 end
