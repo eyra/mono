@@ -61,7 +61,7 @@ def format_results(dataframe, error):
     results = []
     results.append(
         {
-            "id": "Whatsapp account info",
+            "id": "WhatsApp account info",
             "title": DUTCH_CONST.OUTPUT_TITLE,
             "data_frame": dataframe
         }
@@ -191,15 +191,15 @@ def prompt_file():
             "type": "file",
             "file": {
                 "title": {
-                    "en": "Step 1: Select the account info file",
-                    "nl": "Stap 1: Selecteer het account info file"
+                    "en": "Step 1: Select the account information file",
+                    "nl": "Stap 1: Selecteer het account informatie bestand"
                 },
                 "description": {
-                    "en": "We previously asked you to export an acount info file from Whatsapp. "
+                    "en": "We previously asked you to export an acount info file from WhatsApp. "
                           "Please select this file so we can extract relevant information "
                           "for our research.",
                     "nl": "We hebben u gevraagd een account info bestand te exporteren uit "
-                          "Whatsapp. U kunt dit bestand nu selecteren zodat wij er relevante "
+                          "WhatsApp. U kunt dit bestand nu selecteren zodat wij er relevante "
                           " informatie uit kunnen halen voor ons onderzoek."
                 },
                 "extensions": "application/zip",
@@ -249,10 +249,16 @@ def process():
     log_error = errors.append
 
     file_data = yield prompt_file()
-    zfile = zipfile.ZipFile(file_data)  # pylint: disable=R1732
     try:
+        zfile = zipfile.ZipFile(file_data)  # pylint: disable=R1732
+    except:
+        yield format_results([], format_errors(errors))
 
-        data_groups, data_contacts = parse_zipfile(log_error, zfile)
+    try:
+        try:
+            data_groups, data_contacts = parse_zipfile(log_error, zfile)
+        except:
+            yield format_results([], format_errors(errors))
 
         if data_groups is not None:
             groups_no = extract_groups(log_error, data_groups)
