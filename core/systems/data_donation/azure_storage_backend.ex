@@ -16,7 +16,14 @@ defmodule Systems.DataDonation.AzureStorageBackend do
     Logger.info("[AzureStorageBackend] store begin")
 
     path = path(root_key, participant, donation_key)
-    url = url(config(), path)
+
+    Logger.info("[AzureStorageBackend] store; path")
+
+    config = config()
+
+    Logger.info("[AzureStorageBackend] store: path")
+
+    url = url(config, path)
 
     Logger.info("[AzureStorageBackend] store: url=#{url}")
 
