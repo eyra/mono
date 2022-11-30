@@ -1,4 +1,4 @@
-"""Parser utils.
+m"""Parser utils.
 The main part is extracted from https://github.com/lucasrodes/whatstk.git
 """
 __version__ = '0.2.0'
@@ -864,11 +864,11 @@ def parse_chat_file(log_error, chat_file_name):
     except BadZipFile:
 
         if FILE_RE.match(chat_file_name):
-            try: 
+            try:
                 with open(chat_file_name, encoding="utf8") as tfile:
                     chat = parse_chat(log_error, tfile.read())
             except:
-                log_error("parse_chat could not be executed")
+                log_error("Could not read .txt file")
                 return None
         else:
             log_error("There is not a valid input file format.")
@@ -894,9 +894,14 @@ def process():
        """
     errors = []
     log_error = errors.append
+    chat_df = None
 
     chat_file_name = yield prompt_file()
-    chat_df = parse_chat_file(log_error, chat_file_name)
+    try:
+        chat_df = parse_chat_file(log_error, chat_file_name)
+    except:
+        log_error("Could not extract data from this chat file")
+
     if chat_df is not None:
         chat_df = remove_system_messages(chat_df)
         participants_df = get_participants_features(chat_df)
@@ -908,7 +913,6 @@ def process():
         results = extract_results(participants_df, username)
         yield format_results(results, format_errors(errors))
     else:
-        # I think this should be da df??
         yield format_results([], format_errors(errors))
 
 
@@ -958,6 +962,7 @@ def prompt_radio(usernames):
                Dictionary
                    a prompt event - radio type
     """
+    usernames.append("Mijn naam of telefoonnummer staat er niet tussen")
     return {
         "cmd": "prompt",
         "prompt": {
@@ -975,7 +980,7 @@ def prompt_radio(usernames):
                           "informatie uit uw data te kunnen halen."
 
                 },
-                "items": usernames.append(pd.Series("Mijn naam of telefoonnummer staat er niet tussen")),
+                "items": usernames,
             }
         }
     }
@@ -991,7 +996,7 @@ def extract_usernames(participants_df):
                Participants in the chat and their features
            Returns
            -------
-           pandas.Series
+           list
                Extracted usernames
     """
     return participants_df[COLNAMES_DF.USERNAME].tolist()  # pylint: disable=C0302

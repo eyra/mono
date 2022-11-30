@@ -6,6 +6,7 @@ import zipfile
 import re
 import json
 import pandas as pd
+from zipfile import BadZipFile 
 
 
 HIDDEN_FILE_RE = re.compile(r".*__MACOSX*")
@@ -59,6 +60,9 @@ def format_results(dataframe, error):
     """
 
     results = []
+    if not isinstance(dataframe, pd.DataFrame):
+        dataframe = pd.DataFrame(["We konden geen account informatie van u vinden"], columns=[DUTCH_CONST.DESCRIPTION])
+
     results.append(
         {
             "id": "WhatsApp account info",
@@ -84,7 +88,7 @@ def format_errors(errors):
         return []
     data_frame = pd.DataFrame()
     data_frame[DUTCH_CONST.DESCRIPTION] = pd.Series(errors, name=DUTCH_CONST.DESCRIPTION)
-    return [{"id": "extraction_log", "title": DUTCH_CONST.LOG_TITLE, "data_frame": data_frame}]
+    return [{"id": "extraction_log", "title": "", "data_frame": data_frame}]
 
 
 def extract_groups(log_error, data):
@@ -147,6 +151,9 @@ def parse_records(log_error, file):  # pylint: disable=R1710
 
 def parse_zipfile(log_error, zfile):
     """Function for extracting input zipfile"""
+    data_groups = None
+    data_contacts = None
+
     for name in zfile.namelist():
         if name == 'whatsapp_connections/groups.json':
             if HIDDEN_FILE_RE.match(name):
@@ -251,13 +258,15 @@ def process():
     file_data = yield prompt_file()
     try:
         zfile = zipfile.ZipFile(file_data)  # pylint: disable=R1732
-    except:
+    except BadZipFile:
+        log_error("We could not read the zipfile")
         yield format_results([], format_errors(errors))
 
     try:
-        try:
-            data_groups, data_contacts = parse_zipfile(log_error, zfile)
-        except:
+        data_groups, data_contacts = parse_zipfile(log_error, zfile)
+
+        if data_groups is None and data_contacts is None:
+            log_error("We could not extract your account information")
             yield format_results([], format_errors(errors))
 
         if data_groups is not None:
