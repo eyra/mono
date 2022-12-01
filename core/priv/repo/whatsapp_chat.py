@@ -1,4 +1,4 @@
-m"""Parser utils.
+"""Parser utils.
 The main part is extracted from https://github.com/lucasrodes/whatstk.git
 """
 __version__ = '0.2.0'
