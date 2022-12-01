@@ -3,5 +3,5 @@ defmodule Systems.DataDonation.StorageBackend do
               session :: map(),
               vm :: map(),
               data :: binary()
-            ) :: nil
+            ) :: any()
 end

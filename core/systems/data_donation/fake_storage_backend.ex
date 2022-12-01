@@ -3,6 +3,6 @@ defmodule Systems.DataDonation.FakeStorageBackend do
 
   def store(_state, _vm, data) do
     IO.puts("fake store: #{data}")
-    nil
+    :ok
   end
 end

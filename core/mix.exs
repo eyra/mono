@@ -116,8 +116,6 @@ defmodule Core.MixProject do
       {:certifi, "~> 2.8"},
       # Optional, but recommended for SSL validation with :httpc adapter
       {:ssl_verify_fun, "~> 1.1"},
-      # Azure integration
-      {:azurex, "~> 0.1.5"},
       # Dev and test deps
       {:file_system, "~> 0.2", only: [:dev, :test]},
       {:bypass, "~> 2.1", only: :test},

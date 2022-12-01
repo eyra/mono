@@ -17,7 +17,7 @@ defmodule Systems.DataDonation.Delivery do
     case deliver(args) do
       {:error, error} ->
         Logger.error("Data-donation delivery error: #{error}")
-        :error
+        {:error, error}
 
       _ ->
         Logger.debug("Data-donation delivery succeeded")
