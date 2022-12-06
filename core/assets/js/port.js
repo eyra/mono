@@ -5,7 +5,9 @@ import { isCommandSystemDonate } from "port/dist/framework/types/commands";
 
 // Webpack will make sure the assets below can be served from root
 import "port/dist/port-0.0.0-py3-none-any.whl";
-import "port/dist/styles.css";
+
+// TODO: refactor import multiple css files. Temporary disable port css in the master branch
+// import "port/dist/styles.css";
 
 export const Port = {
   mounted() {
