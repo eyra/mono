@@ -13,3 +13,6 @@ config :logger_json, :backend, metadata: :all
 
 config :logger,
   backends: [LoggerJSON]
+
+config :core, CoreWeb.Endpoint,
+  force_ssl: [rewrite_on: [:x_forwarded_host, :x_forwarded_port, :x_forwarded_proto]]

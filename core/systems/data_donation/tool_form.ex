@@ -86,7 +86,7 @@ defmodule Systems.DataDonation.ToolForm do
               </div>
               <div class="flex-wrap">
                 <a
-                  href={Routes.download_path(@socket, :download_single, @entity_id, donation.id)}
+                  href="/"
                   class="text-primary text-bodymedium font-body hover:text-grey1 underline focus:outline-none"
                 >
                   {dgettext("eyra-data-donation", "download.button.label")}
@@ -96,10 +96,7 @@ defmodule Systems.DataDonation.ToolForm do
           </div>
         </Panel>
         <Spacing value="S" />
-        <PrimaryButton
-          to={Routes.download_path(@socket, :download_all, @entity_id)}
-          label={dgettext("eyra-data-donation", "download.all.button.label")}
-        />
+        <PrimaryButton to="/" label={dgettext("eyra-data-donation", "download.all.button.label")} />
         <Spacing value="XL" />
       </div>
       <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>

@@ -98,6 +98,7 @@ defmodule Core.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:currency_formatter, "~> 0.8"},
       {:web_push_encryption, "~> 0.3.1"},
+      {:remote_ip, "~> 1.1"},
       {:pigeon, "~> 1.6.1"},
       {:kadabra, "~> 0.6.0"},
       {:oban, "~> 2.10"},
@@ -111,7 +112,6 @@ defmodule Core.MixProject do
       {:ex_cldr_numbers, "~> 2.23"},
       {:ex_cldr_dates_times, "~> 2.10"},
       {:ex_cldr_plugs, "~> 1.2"},
-      {:site_encrypt, "~> 0.4"},
       # Optional, but recommended for SSL validation with :httpc adapter
       {:certifi, "~> 2.8"},
       # Optional, but recommended for SSL validation with :httpc adapter

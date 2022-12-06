@@ -23,24 +23,18 @@ if config_env() == :prod do
     secret_key_base: System.fetch_env!("SECRET_KEY_BASE"),
     url: [host: host, port: 443],
     http: [
-      port: String.to_integer(System.get_env("HTTP_PORT", "80"))
+      port: String.to_integer(System.get_env("HTTP_PORT", "8000"))
     ]
 
-  if https_keyfile = System.get_env("HTTPS_KEYFILE") do
-    config :core, :ssl, mode: :manual
-
-    config :core, CoreWeb.Endpoint,
-      https: [
-        cipher_suite: :strong,
-        keyfile: https_keyfile,
-        certfile: System.fetch_env!("HTTPS_CERTFILE")
-      ]
-  end
+  # Port
 
   config :core,
          :data_donation_storage_backend,
          s3: Systems.DataDonation.S3StorageBackend,
+         azure: Systems.DataDonation.AzureStorageBackend,
          centerdata: Systems.DataDonation.CenterdataStorageBackend
+
+  # AWS
 
   if bucket = System.get_env("AWS_S3_BUCKET") do
     config :core, Systems.DataDonation.S3StorageBackend, bucket: bucket
@@ -62,6 +56,22 @@ if config_env() == :prod do
   if aws_region = System.get_env("AWS_REGION") do
     config :ex_aws, region: aws_region
   end
+
+  # AZURE BLOB
+
+  if container = System.get_env("AZURE_BLOB_CONTAINER") do
+    config :core, :azure_storage_backend, container: container
+  end
+
+  if storage_account_name = System.get_env("AZURE_BLOB_STORAGE_USER") do
+    config :core, :azure_storage_backend, storage_account_name: storage_account_name
+  end
+
+  if sas_token = System.get_env("AZURE_SAS_TOKEN") do
+    config :core, :azure_storage_backend, sas_token: sas_token
+  end
+
+  # MAILGUN
 
   if mailgun_api_key = System.get_env("MAILGUN_API_KEY") do
     config :core, Systems.Email.Mailer,
@@ -100,33 +110,6 @@ if config_env() == :prod do
   config :core, Core.ImageCatalog.Unsplash,
     access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
     app_name: System.get_env("UNSPLASH_APP_NAME")
-
-  ssl_domains =
-    System.get_env("SSL_DOMAINS", "")
-    |> String.replace(" ", "")
-    |> String.split(",")
-
-  config :core, :ssl, domains: ssl_domains
-
-  lets_encrypt_db = System.get_env("LETS_ENCRYPT_DB")
-
-  if lets_encrypt_db do
-    config :core, :ssl,
-      emails: [System.get_env("LETS_ENCRYPT_EMAIL", "admin@#{host}")],
-      directory_url: System.get_env("LETS_ENCRYPT_DIRECTORY_URL"),
-      db_folder: System.get_env("LETS_ENCRYPT_DB")
-  end
-
-  ssl_enabled? = https_keyfile || lets_encrypt_db
-  config :core, :ssl_enabled, ssl_enabled?
-
-  if ssl_enabled? do
-    config :core, CoreWeb.Endpoint,
-      url: [host: host, port: 443],
-      https: [port: String.to_integer(System.get_env("HTTPS_PORT", "443"))]
-  else
-    config :core, CoreWeb.Endpoint, force_ssl: [rewrite_on: [:x_forwarded_proto]]
-  end
 
   config :web_push_encryption, :vapid_details,
     subject: "mailto:admin@#{host}",

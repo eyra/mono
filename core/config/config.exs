@@ -46,12 +46,20 @@ config :esbuild,
 
 config :core, Oban,
   repo: Core.Repo,
-  queues: [default: 5, email_dispatchers: 1, email_delivery: 1],
+  queues: [default: 5, email_dispatchers: 1, email_delivery: 1, data_donation_delivery: 1],
   plugins: [
     {Oban.Plugins.Cron,
      crontab: [
        {"*/5 * * * *", Systems.Campaign.ExpirationWorker}
      ]}
+  ]
+
+config :core, :rate,
+  prune_interval: 60 * 60 * 1000,
+  quotas: [
+    [service: :azure_blob, limit: 1000, unit: :call, window: :minute, scope: :local],
+    [service: :azure_blob, limit: 10_000_000, unit: :byte, window: :day, scope: :local],
+    [service: :azure_blob, limit: 1_000_000_000, unit: :byte, window: :day, scope: :global]
   ]
 
 config :core, ecto_repos: [Core.Repo]

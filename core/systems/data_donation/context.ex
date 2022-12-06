@@ -26,6 +26,8 @@ defmodule Systems.DataDonation.Context do
 
   def get(id), do: DataDonation.ModelData.get(id)
 
+  def get_port(id), do: DataDonation.PortModelData.get(id)
+
   def get_tool!(id), do: Repo.get!(DataDonation.ToolModel, id)
   def get_tool(id), do: Repo.get(DataDonation.ToolModel, id)
 

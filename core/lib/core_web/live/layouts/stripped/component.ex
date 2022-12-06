@@ -6,7 +6,7 @@ defmodule CoreWeb.Layouts.Stripped.Component do
 
   import CoreWeb.UI.OldSkool
 
-  alias CoreWeb.UI.Navigation.{DesktopNavbar, MobileNavbar}
+  alias CoreWeb.UI.Navigation.{DesktopNavbar}
 
   prop(user, :string, required: true)
   prop(menus, :map, required: true)
@@ -59,7 +59,6 @@ defmodule CoreWeb.Layouts.Stripped.Component do
       <div class="flex-1">
         <div class="flex flex-col w-full h-viewport">
           <div class="flex-wrap">
-            <MobileNavbar items={@menus.mobile_navbar} path_provider={CoreWeb.Router.Helpers} />
             <DesktopNavbar items={@menus.desktop_navbar} path_provider={CoreWeb.Router.Helpers} />
           </div>
           <div class="flex-1">

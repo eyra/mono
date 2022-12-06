@@ -53,6 +53,13 @@ config :core,
     "*@eyra.co"
   ]
 
+config :core, :rate,
+  prune_interval: 5 * 1000,
+  quotas: [
+    [service: :azure_blob, limit: 1, unit: :call, window: :second, scope: :local],
+    [service: :azure_blob, limit: 100, unit: :byte, window: :second, scope: :local]
+  ]
+
 config :core, Core.ImageCatalog.Unsplash,
   access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
   app_name: System.get_env("UNSPLASH_APP_NAME")
@@ -63,12 +70,6 @@ config :core, Systems.Email.Mailer,
   adapter: Bamboo.LocalAdapter,
   open_email_in_browser_url: "http://localhost:4000/sent_emails",
   default_from_email: "no-reply@example.com"
-
-config :web_push_encryption, :vapid_details,
-  subject: "mailto:administrator@example.com",
-  public_key:
-    "BLddMfMPHE67WZkYxELLBedpRNvJMj7xTbn8ZsObC_0c1-p-AsHl7ndhoty2YURTgCR0XMPm6Mf-74FnwH32fhw",
-  private_key: "yWo9lKKkdbN1IGQH8aUlk3u_Shemyh8CmtDnJoNdhBk"
 
 config :core, :apns_backend, Core.APNS.LoggingBackend
 
@@ -89,6 +90,7 @@ config :core,
        :data_donation_storage_backend,
        fake: Systems.DataDonation.FakeStorageBackend,
        s3: Systems.DataDonation.S3StorageBackend,
+       azure: Systems.DataDonation.AzureStorageBackend,
        centerdata: Systems.DataDonation.CenterdataStorageBackend
 
 #  For Minio (local S3)

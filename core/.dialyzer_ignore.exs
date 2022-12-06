@@ -117,5 +117,6 @@
   {"systems/support/overview_page.ex", :pattern_match},
   {"systems/support/overview_tab.ex", :pattern_match},
   {"systems/support/ticket_page.ex", :pattern_match},
-  {"systems/survey/tool_form.ex", :pattern_match}
+  {"systems/survey/tool_form.ex", :pattern_match},
+  {"systems/data_donation/port_page.ex", :pattern_match}
 ]

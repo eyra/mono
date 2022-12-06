@@ -1,4 +1,5 @@
 #!/bin/bash -e
+echo "DBHOST $DB_HOST"
 
 /opt/app/bin/core eval Core.Release.migrate
 

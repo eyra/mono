@@ -159,7 +159,9 @@ defmodule Systems.DataDonation.FlowPage do
       )
       when is_binary(data) do
     storage = storage(storage_key)
-    storage.store(session, vm, data)
+    timestamp = "Europe/Amsterdam" |> DateTime.now!() |> DateTime.to_iso8601(:basic)
+    state = Map.merge(session, %{"timestamp" => timestamp})
+    storage.store(state, vm, data)
   end
 
   defp storage(storage_key) do
