@@ -11,7 +11,12 @@ export const Tabbar = {
     var savedTabId = this.loadActiveTab();
     var firstTabId = this.getFirstTab();
 
-    var nextTabId = initialTabId | savedTabId | firstTabId;
+    // TODO: Fix optional chaining using Webpack >= 5.0.0
+    var nextTabId = initialTabId
+      ? initialTabId
+      : savedTabId
+      ? savedTabId
+      : firstTabId;
     this.show(nextTabId, true);
   },
 
@@ -26,7 +31,11 @@ export const Tabbar = {
   },
 
   loadActiveTab() {
-    return window.localStorage.getItem(this.getActiveTabKey());
+    const activeTab = window.localStorage.getItem(this.getActiveTabKey());
+    if (typeof activeTab === "string") {
+      return activeTab;
+    }
+    return undefined;
   },
 
   saveActiveTab(tabId) {

@@ -12,7 +12,7 @@ defmodule CoreWeb.UI.Navigation.DesktopNavbar do
 
   def render(assigns) do
     ~F"""
-    <div class="pr-4 flex flex-row gap-4 items-center">
+    <div class="pr-4 flex flex-row gap-4 items-center w-full">
       <div :if={@logo}>
         <img src={"/images/icons/#{@logo}.svg"} alt={"#{@logo}"}>
       </div>

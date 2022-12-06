@@ -120,7 +120,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
   hooks: Hooks,
 });
 
-window.nativeIOSWrapper = {
+const nativeIOSWrapper = {
   // The native code bridge assumes that handlers have been setup. Seethe docs for more info:
   // https://developer.apple.com/documentation/webkit/wkusercontentcontroller/1537172-add
   //
@@ -197,7 +197,7 @@ const loggingWrapper = {
 };
 
 const nativeWrapper =
-  window.webkit?.messageHandlers !== undefined
+  window.webkit && window.webkit.messageHandlers !== undefined
     ? nativeIOSWrapper
     : loggingWrapper;
 
@@ -233,7 +233,7 @@ window.addEventListener("phx:page-loading-start", (info) => {
 });
 
 const updateState = (state) => {
-  window.scroll(0, state?.scrollPosition || 0);
+  window.scroll(0, state ? state.scrollPosition : 0);
 };
 
 window.addEventListener("phx:page-loading-stop", (info) => {
@@ -241,7 +241,7 @@ window.addEventListener("phx:page-loading-stop", (info) => {
     return;
   }
   const titleNode = document.querySelector("[data-native-title]");
-  const title = titleNode?.dataset.nativeTitle || "- no title set -";
+  const title = titleNode ? titleNode.dataset.nativeTitle : "- no title set -";
   nativeWrapper.updateScreenInfo({
     title,
     id: screenId(info.detail.to),
