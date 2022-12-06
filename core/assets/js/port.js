@@ -1,4 +1,3 @@
-import { jsx as _jsx } from "react/jsx-runtime";
 import Assembly from "port/dist/framework/assembly";
 import Worker from "port/dist/framework/processing/py_worker.js";
 import { isCommandSystemDonate } from "port/dist/framework/types/commands";

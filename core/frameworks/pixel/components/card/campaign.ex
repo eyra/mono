@@ -30,77 +30,79 @@ defmodule Frameworks.Pixel.Card.Campaign do
 
   def render(assigns) do
     ~F"""
-    <ClickableCard
-      bg_color={@bg_color}
-      id={@card.id}
-      click_event_name={@click_event_name}
-      click_event_data={@click_event_data}
-      left_actions={left_actions(@card)}
-      right_actions={right_actions(@card)}
-    >
-      <:image>
-        <div class="relative">
-          {#if @card.label}
-            <div class="absolute top-6 z-10">
-              <Frameworks.Pixel.Card.Label
-                path_provider={@path_provider}
-                text={@card.label.text}
-                type={@card.label.type}
+    <div>
+      <ClickableCard
+        bg_color={@bg_color}
+        id={@card.id}
+        click_event_name={@click_event_name}
+        click_event_data={@click_event_data}
+        left_actions={left_actions(@card)}
+        right_actions={right_actions(@card)}
+      >
+        <:image>
+          <div class="relative">
+            {#if @card.label}
+              <div class="absolute top-6 z-10">
+                <Frameworks.Pixel.Card.Label
+                  path_provider={@path_provider}
+                  text={@card.label.text}
+                  type={@card.label.type}
+                />
+              </div>
+            {/if}
+            {#if @card.icon_url}
+              <div class="absolute top-6 right-6 z-10">
+                <Icon size="S" src={@card.icon_url} />
+              </div>
+            {/if}
+            <div class="h-image-card">
+              <Image
+                id={Integer.to_string(@card.id)}
+                image={@card.image_info}
+                transition="duration-500"
+                corners="rounded-t-lg"
               />
             </div>
-          {/if}
-          {#if @card.icon_url}
-            <div class="absolute top-6 right-6 z-10">
-              <Icon size="S" src={@card.icon_url} />
-            </div>
-          {/if}
-          <div class="h-image-card">
-            <Image
-              id={Integer.to_string(@card.id)}
-              image={@card.image_info}
-              transition="duration-500"
-              corners="rounded-t-lg"
-            />
           </div>
+        </:image>
+        <:title>
+          <div class={"text-title5 font-title5 lg:text-title3 lg:font-title3 #{@text_color}"}>
+            {@card.title}
+          </div>
+        </:title>
+        <div class="flex items-center">
+          <div class="flex-wrap">
+            {#if @card.tags}
+              <div class="flex flex-wrap items-center gap-y-3">
+                {#for tag <- @card.tags}
+                  <Tag text={tag} bg_color={"bg-#{@tag_type}"} text_color={"text-#{@tag_type}"} />
+                  <Spacing value="XS" direction="l" />
+                {/for}
+              </div>
+              <Spacing value="S" />
+            {/if}
+            {#if Enum.count(@card.info) > 0}
+              <SubHead color={@info1_color}>
+                {@card.info |> List.first()}
+              </SubHead>
+              <Spacing value="M" />
+            {/if}
+            {#if Enum.count(@card.info) > 1}
+              <SubHead color={@info2_color}>
+                {@card.info |> Enum.at(1)}
+              </SubHead>
+            {/if}
+            {#if Enum.count(@card.info) > 2}
+              <Spacing value="XXS" />
+              <SubHead color={@info2_color}>
+                {@card.info |> Enum.at(2)}
+              </SubHead>
+            {/if}
+          </div>
+          <div class="flex-grow" />
         </div>
-      </:image>
-      <:title>
-        <div class={"text-title5 font-title5 lg:text-title3 lg:font-title3 #{@text_color}"}>
-          {@card.title}
-        </div>
-      </:title>
-      <div class="flex items-center">
-        <div class="flex-wrap">
-          {#if @card.tags}
-            <div class="flex flex-wrap items-center gap-y-3">
-              {#for tag <- @card.tags}
-                <Tag text={tag} bg_color={"bg-#{@tag_type}"} text_color={"text-#{@tag_type}"} />
-                <Spacing value="XS" direction="l" />
-              {/for}
-            </div>
-            <Spacing value="S" />
-          {/if}
-          {#if Enum.count(@card.info) > 0}
-            <SubHead color={@info1_color}>
-              {@card.info |> List.first()}
-            </SubHead>
-            <Spacing value="M" />
-          {/if}
-          {#if Enum.count(@card.info) > 1}
-            <SubHead color={@info2_color}>
-              {@card.info |> Enum.at(1)}
-            </SubHead>
-          {/if}
-          {#if Enum.count(@card.info) > 2}
-            <Spacing value="XXS" />
-            <SubHead color={@info2_color}>
-              {@card.info |> Enum.at(2)}
-            </SubHead>
-          {/if}
-        </div>
-        <div class="flex-grow" />
-      </div>
-    </ClickableCard>
+      </ClickableCard>
+    </div>
     """
   end
 end
