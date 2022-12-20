@@ -33,25 +33,8 @@ defmodule Systems.DataDonation.ThanksWhatsappAccountPage do
     }
   end
 
-  defp survey_link(participant) do
-    link_as_string(
-      dgettext("eyra-data-donation", "survey.link"),
-      "https://survey.uu.nl/jfe/form/SV_3EOL9MSKqVX3FLE?participant_id=#{participant}"
-    )
-  end
-
-  defp link_as_string(label, url) do
-    label
-    |> Phoenix.HTML.Link.link(
-      class: "text-primary underline",
-      target: "_blank",
-      to: url
-    )
-    |> Phoenix.HTML.safe_to_string()
-  end
-
-  defp descriptions(participant) do
-    dgettext("eyra-data-donation", "thanks.description", survey_link: survey_link(participant))
+  defp descriptions(_participant) do
+    dgettext("eyra-data-donation", "thanks.whatsapp.description")
     |> String.split("<br>")
   end
 
@@ -67,19 +50,6 @@ defmodule Systems.DataDonation.ThanksWhatsappAccountPage do
               <div class="flex flex-col gap-4">
                 <div :for={description <- descriptions(@participant)} class="text-bodylarge font-body">
                   {raw(description)}
-                </div>
-              </div>
-            </div>
-            <div class="flex-shrink-0">
-              <div class="rounded-lg bg-grey5">
-                <img src={@vm.researcher.institution.image} alt={@vm.researcher.institution.name}>
-                <div class="flex flex-col gap-3 p-4">
-                  <div class="text-title7 font-title7 text-grey1">
-                    {@vm.researcher.name}
-                  </div>
-                  <div class="text-caption font-caption text-grey1">
-                    {@vm.researcher.job_title}
-                  </div>
                 </div>
               </div>
             </div>

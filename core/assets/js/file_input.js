@@ -10,8 +10,9 @@ export class FileInput {
     const { title, description, extensions } = this.data;
 
     const text = {
-      title: GetText.resolve(title, this.locale),
+      title: GetText.resolve(title, this.locale),      
       description: GetText.resolve(description, this.locale),
+      continue: GetText.resolve(this.continueText(), this.locale),
       selectButton: GetText.resolve(this.selectButtonLabel(), this.locale),
       continueButton: GetText.resolve(this.continueButtonLabel(), this.locale),
       resetButton: GetText.resolve(this.resetButtonLabel(), this.locale),
@@ -49,7 +50,7 @@ export class FileInput {
         </div>
         <div class="mt-8"></div>
         <div class="text-bodylarge font-body text-grey1 text-left">
-          Continue with the selected file, or select again?
+          ${text.continue}
         </div>
         <div class="mt-4"></div>
         <div class="flex flex-row gap-4">
@@ -68,7 +69,7 @@ export class FileInput {
   }
 
   activate(parent, resolve) {
-    const input = parent.child("input");
+    const input = parent.child("input");    
     const selectedFilename = parent.child("selected-filename");
     const selectPanel = parent.child("select-panel");
     const selectButton = parent.child("select-button");
@@ -101,6 +102,13 @@ export class FileInput {
 
   /* PRIVATE */
 
+  continueText() {
+    return {
+      en: "Do you want to continue with the selected file or select a different file?",
+      nl: "Wilt u doorgaan met het gekozen bestand of een ander bestand kiezen?",
+    };
+  }
+
   continueButtonLabel() {
     return {
       en: "Continue",
@@ -111,14 +119,14 @@ export class FileInput {
   selectButtonLabel() {
     return {
       en: "Select file",
-      nl: "Selecteer bestand",
+      nl: "Kies bestand",
     };
   }
 
   resetButtonLabel() {
     return {
       en: "Select again",
-      nl: "Opnieuw",
+      nl: "Kies opnieuw",
     };
   }
 }

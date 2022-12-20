@@ -69,7 +69,7 @@ msgstr "Click “Select file” to choose the file that you received from %{plat
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "submit_data.description"
-msgstr "Below you’ll find the data that was extracted from your file and that is valuable for research. Inspect the data carefully and decide whether you would like to donate it. Thanks a lot in advance!"
+msgstr "Below you’ll find the data that was extracted from your file and that is valuable for research. Inspect the data carefully and decide whether you would like to donate it. This can be done at the bottom of the page. Thanks a lot in advance!"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "submit_data.title"
@@ -145,7 +145,7 @@ msgstr "the following survey"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "welcome.description.top"
-msgstr "You will be able to donate your data to %{recipient} in a minute. We will walk you through the process step by step."
+msgstr "You will be able to donate your data to the researchers of the %{recipient} in a minute. We will walk you through the process step by step."
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "thanks.description"
@@ -153,7 +153,7 @@ msgstr "Thank you for your participation. We would love to hear how you experien
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "welcome.description.bottom"
-msgstr "At step 2 you can select the data package that you received from %{platform}. During this step, no data is saved or sent. At step 3 you can inspect your data and decide whether or not you would like to donate the presented data to %{recipient}."
+msgstr "At step 2 you can select the data package that you received from %{platform}. During this step, no data is saved or sent. At step 3 you can inspect your data and decide whether or not you would like to donate the presented data to the researchers of the %{recipient}."
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "decline.data.button"
@@ -161,11 +161,11 @@ msgstr "No"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "submit_data.action.label"
-msgstr "Do you want to donate the data above to %{recipient}?"
+msgstr "Do you want to donate the data above to the researchers of the %{recipient}?"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "thanks.whatsappchat.description"
-msgstr "Thank you for your participation. Next we would like to ask you to donate information on WhatsApp use from your WhatsApp account file. Please return to the invitation email for more information. Thank you in advance."
+msgid "thanks.whatsapp.description"
+msgstr "Thank you for your participation. Please proceed to the LISS survey on your computer or laptop."
 
 #, elixir-autogen, elixir-format
 msgid "execute.spinner"

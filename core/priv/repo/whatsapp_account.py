@@ -198,16 +198,17 @@ def prompt_file():
             "type": "file",
             "file": {
                 "title": {
-                    "en": "Step 1: Select the account information file",
-                    "nl": "Stap 1: Selecteer het account informatie bestand"
+                    "en": "Select the account information file",
+                    "nl": "Kies het account informatiebestand"
                 },
                 "description": {
-                    "en": "We previously asked you to export an acount info file from WhatsApp. "
-                          "Please select this file so we can extract relevant information "
-                          "for our research.",
-                    "nl": "We hebben u gevraagd een account info bestand te exporteren uit "
-                          "WhatsApp. U kunt dit bestand nu selecteren zodat wij er relevante "
-                          " informatie uit kunnen halen voor ons onderzoek."
+                    "en": "We previously asked you to export an account information file "
+                          "from WhatsApp and save it on your phone. Please select this "
+                          "file so we can extract relevant information for our research.",
+                    "nl": "We hebben u gevraagd een account informatiebestand te exporteren "
+                          "uit WhatsApp en op uw telefoon op te slaan. U kunt dit bestand nu "
+                          "kiezen zodat wij er relevante informatie uit kunnen halen voor "
+                          "ons onderzoek."
                 },
                 "extensions": "application/zip",
             }
@@ -237,8 +238,9 @@ def prompt_radio(usernames):
                     "nl": "Stap 2: Selecteer je gebruikersnaam"
                 },
                 "description": {
-                    "en": "The following users are extracted from the chat file. "
-                          "Which one are you?",
+                    "en": "Please indicate which username is yours. Note that "
+                          "names and phone numbers are not stored, but only used "
+                          "to extract relevant information from the chat file.",
                     "nl": "Geef hieronder aan welke gebruikersnaam van u is. "
                           "Deze data wordt niet opgeslagen, maar alleen gebruikt om de juiste "
                           "informatie uit uw data te kunnen halen."
