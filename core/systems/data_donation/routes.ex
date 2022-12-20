@@ -21,8 +21,7 @@ defmodule Systems.DataDonation.Routes do
         live("/flow/:id", FlowPage)
 
         live("/thanks/:id/:participant", ThanksPage)
-        live("/thankswhatsappchat/:id/:participant", ThanksWhatsappChatPage)
-        live("/thankswhatsappaccount/:id/:participant", ThanksWhatsappAccountPage)
+        live("/thankswhatsapp/:id/:participant", ThanksWhatsappPage)
 
         post("/centerdata/:id", CenterdataController, :create)
         get("/centerdata/:id", CenterdataController, :create)

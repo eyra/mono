@@ -72,7 +72,7 @@ defmodule Systems.DataDonation.ModelData do
             "The data that we ask you to donate could be used to investigate how people use WhatsApp groups. Information, such as number of messages per person, will be extracted from your WhatsApp group data. However, no personal identifiable information will be extracted."
         },
         platform: "WhatsApp",
-        redirect_to: :thanks_whatsapp_chat,
+        redirect_to: :thanks_whatsapp,
         storage: :s3,
         storage_info: %{key: "whatsapp_chat"},
         script: "whatsapp_chat.py"
@@ -97,7 +97,7 @@ defmodule Systems.DataDonation.ModelData do
             "The data that we ask you to donate could be used to investigate how people use WhatsApp. Information, such as the number of WhatsApp groups you participate in and the number of contacts you interact with, will be extracted from your WhatsApp account information. However, no personal identifiable information will be extracted."
         },
         platform: "WhatsApp",
-        redirect_to: :thanks_whatsapp_account,
+        redirect_to: :thanks_whatsapp,
         storage: :s3,
         storage_info: %{key: "whatsapp_account"},
         script: "whatsapp_account.py"
@@ -114,7 +114,7 @@ defmodule Systems.DataDonation.ModelData do
             "The data that we ask you to donate could be used to investigate how people use WhatsApp groups. Information, such as number of messages per person, will be extracted from your WhatsApp group data. However, no personal identifiable information will be extracted."
         },
         platform: "WhatsApp",
-        redirect_to: :thanks_whatsapp_chat,
+        redirect_to: :thanks_whatsapp,
         storage: :s3,
         storage_info: %{key: "whatsapp_chat_liss"},
         script: "whatsapp_chat.py"
@@ -131,7 +131,7 @@ defmodule Systems.DataDonation.ModelData do
             "The data that we ask you to donate could be used to investigate how people use WhatsApp. Information, such as the number of WhatsApp groups you participate in and the number of contacts you interact with, will be extracted from your WhatsApp account information. However, no personal identifiable information will be extracted."
         },
         platform: "WhatsApp",
-        redirect_to: :thanks_whatsapp_account,
+        redirect_to: :thanks_whatsapp,
         storage: :s3,
         storage_info: %{key: "whatsapp_account_liss"},
         script: "whatsapp_account.py"
@@ -150,7 +150,7 @@ defmodule Systems.DataDonation.ModelData do
         platform: "WhatsApp",
         redirect_to: nil,
         storage: :centerdata,
-        storage_info: %{quest: "C_Datadonation_pilot"},
+        storage_info: %{quest: "L_Datadonation_CHAT"},
         script: "whatsapp_chat.py"
       },
       %Model{
@@ -167,7 +167,7 @@ defmodule Systems.DataDonation.ModelData do
         platform: "WhatsApp",
         redirect_to: nil,
         storage: :centerdata,
-        storage_info: %{quest: "C_Datadonation_pilot"},
+        storage_info: %{quest: "L_Datadonation_ACCOUNT"},
         script: "whatsapp_account.py"
       }
     ]

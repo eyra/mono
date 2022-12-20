@@ -127,8 +127,7 @@ defmodule Systems.DataDonation.FlowPage do
   end
 
   defp thanks_page(:thanks), do: DataDonation.ThanksPage
-  defp thanks_page(:thanks_whatsapp_chat), do: DataDonation.ThanksWhatsappChatPage
-  defp thanks_page(:thanks_whatsapp_account), do: DataDonation.ThanksWhatsappAccountPage
+  defp thanks_page(:thanks_whatsapp), do: DataDonation.ThanksWhatsappPage
 
   @impl true
   def render(assigns) do

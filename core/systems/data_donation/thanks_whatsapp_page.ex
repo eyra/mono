@@ -1,4 +1,4 @@
-defmodule Systems.DataDonation.ThanksWhatsappChatPage do
+defmodule Systems.DataDonation.ThanksWhatsappPage do
   import Phoenix.LiveView
 
   use Surface.LiveView, layout: {CoreWeb.LayoutView, "live.html"}
