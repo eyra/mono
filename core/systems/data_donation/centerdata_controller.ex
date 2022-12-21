@@ -59,7 +59,7 @@ defmodule Systems.DataDonation.CenterdataController do
   end
 
   defp start_data_donation(opts, conn, id) do
-    path = Routes.live_path(conn, Systems.DataDonation.DonatePage, id, opts)
+    path = Routes.live_path(conn, Systems.DataDonation.FlowPage, id, opts)
     redirect(conn, to: path)
   end
 end
