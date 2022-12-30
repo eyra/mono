@@ -96,7 +96,7 @@ The first phase of the project (ended in december 2022) resulted in a MVP soluti
 | [port_page.ex](core/systems/data_donation/port_page.ex) | Elixir/Phoenix web page running on endpoint `/data-donation/port/:appid/:participantid` |
 | [port_model.ex](core/systems/data_donation/port_model.ex)  | Port app configuration (id and storage configuration) |
 | [port_model_data.ex](core/systems/data_donation/port_model_data.ex)  | Contains configuration for Port app with id `1` |
-| [delivery.ex](core/systems/data_donation/delivery.ex)  | Asynchronious delivery of donated data backend by [Oban](https://hexdocs.pm/oban/Oban.html) |
+| [delivery.ex](core/systems/data_donation/delivery.ex)  | Asynchronious delivery of donated data backed by [Oban](https://hexdocs.pm/oban/Oban.html) |
 | [azure_storage_backend.ex](core/systems/data_donation/azure_storage_backend.ex)  | Integration with [Azure Blob Storage](https://azure.microsoft.com/en-us/products/storage/blobs/#overview). |
 
 
