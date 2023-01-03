@@ -17,15 +17,17 @@ The consortium is composed by researchers from:
 
 ## D3i Pilot
 
-The first phase of the project (ended in december 2022) resulted in a MVP solution to run one Port app on top of a Next bundle. This Next + Port combi can be released as a Docker image and deployed on [Azure Web App Service](https://azure.microsoft.com/en-us/products/app-service/web).
+The first phase of the project (ended in december 2022) resulted in a MVP solution to run one Port app on top of a Next bundle (see: [README.md](README.md)). This Next + Port combi can be released as a Docker image and deployed on [Azure Web App Service](https://azure.microsoft.com/en-us/products/app-service/web).
 
-## Development setup instructions
+## Development instructions
+
+### Setup
 
 0. Pre-requisite
 
     * Install [asdf](https://asdf-vm.com) 
     * Install [PostgreSQL Server](https://www.postgresql.org) 
-    * Fork and clone branch `d3i/latest` of this repo.
+    * Fork and clone branch `d3i/latest` of this Mono repo.
 
 1. Create a PostgreSQL database and replace the configurated values in `core/config/dev.exs` with your own:
 
@@ -41,7 +43,7 @@ The first phase of the project (ended in december 2022) resulted in a MVP soluti
 
     See https://github.com/eyra/port-poc/blob/master/README.md on how to create your own Port app.
 
-    Go to [package.json](core/assets/package.json) qne 4eplace `github:eyra/port` with a reference to your Port app. 
+    Go to [package.json](core/assets/package.json) and replace `github:eyra/port` with a reference to your Port app. 
 
 3. Install tools:
 
@@ -88,7 +90,7 @@ The first phase of the project (ended in december 2022) resulted in a MVP soluti
 
     Example: http://localhost:4000/data-donation/port/1/tester1
 
-## Port integration code
+### Relevant Code
 
 | Source file  | Description |
 | ------------- | ------------- |
@@ -100,7 +102,45 @@ The first phase of the project (ended in december 2022) resulted in a MVP soluti
 | [azure_storage_backend.ex](core/systems/data_donation/azure_storage_backend.ex)  | Integration with [Azure Blob Storage](https://azure.microsoft.com/en-us/products/storage/blobs/#overview). |
 
 
-## Port rate limiters
+Note: if you created an alternative processing worker file, don't forget to import this file [port.js](core/assets/js/port.js):
+
+```Javascript
+import Worker from "port/dist/framework/processing/my_new_worker.js";
+```
+
+## Testing 
+
+### Add local dependency
+
+When testing your work it is useful to link your cloned Port app instance to your cloned Mono instance.
+
+1. Register Port app locally
+
+    In the Port app:
+
+    ```sh
+    $ npm link
+    ```
+
+2. Link Port app locally in
+
+    In Mono:
+
+    ```sh
+    $ cd core/assets
+    $ npm link port
+    ```
+
+3. Unlink
+
+    In Mono:
+
+    ```sh
+    $ cd core/assets
+    $ npm unlink --no-save port
+    ```
+
+### Port rate limiters
 
 To prevent users from exhausting system resources Next makes use of rate limiters. The local configuration for rate limiters for Azure Blob Service can be found in `core/config/dev.exs`:
 
