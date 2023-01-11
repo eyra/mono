@@ -85,10 +85,8 @@ defmodule Systems.Scholar.Context do
   end
 
   def credits(%User{id: id}, %Pool.Model{name: name}) do
-    case Bookkeeping.Context.balance(["wallet", name, id]) do
-      %{credit: credit, debit: debit} -> credit - debit
-      _ -> 0
-    end
+    %{credit: credit, debit: debit} = Bookkeeping.Context.balance(["wallet", name, id])
+    credit - debit
   end
 
   def handle_features_updated(user, nil, new_class_codes),
