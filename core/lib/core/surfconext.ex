@@ -10,6 +10,20 @@ defmodule Core.SurfConext do
     defexception [:message]
   end
 
+  def list_by_users(users, preload \\ []) when is_list(users) do
+    users
+    |> Enum.map(& &1.id)
+    |> list_by_user_ids(preload)
+  end
+
+  def list_by_user_ids(user_ids, preload \\ []) when is_list(user_ids) do
+    from(sc in Core.SurfConext.User,
+      where: sc.user_id in ^user_ids,
+      preload: ^preload
+    )
+    |> Repo.all()
+  end
+
   def get_user_by_student_id(student_id) do
     student_id_code = "urn:schac:personalUniqueCode:nl:local:vu.nl:studentid:#{student_id}"
 
@@ -33,9 +47,18 @@ defmodule Core.SurfConext do
     |> Repo.one()
   end
 
-  def get_surfconext_user_by_user(%User{id: id}) do
-    from(surfconext_user in Core.SurfConext.User, where: surfconext_user.user_id == ^id)
+  def get_surfconext_user_by_user(%User{} = user) do
+    get_surfconext_user_by_user_query(user)
+    |> Repo.one()
+  end
+
+  def get_surfconext_user_by_user!(%User{} = user) do
+    get_surfconext_user_by_user_query(user)
     |> Repo.one!()
+  end
+
+  defp get_surfconext_user_by_user_query(%User{id: id}) do
+    from(surfconext_user in Core.SurfConext.User, where: surfconext_user.user_id == ^id)
   end
 
   def register_user(attrs) do
@@ -81,7 +104,7 @@ defmodule Core.SurfConext do
   end
 
   def update_user(%User{} = user, attrs) do
-    get_surfconext_user_by_user(user)
+    get_surfconext_user_by_user!(user)
     |> Core.SurfConext.User.update_changeset(attrs)
     |> Repo.update!()
   end

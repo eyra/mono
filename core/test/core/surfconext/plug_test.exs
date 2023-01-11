@@ -217,7 +217,7 @@ defmodule Core.SurfConext.CallbackController.Test do
       conn = conn |> get("/surfconext/auth")
 
       user = Core.SurfConext.get_user_by_sub("student")
-      surfconext_user = Core.SurfConext.get_surfconext_user_by_user(user)
+      surfconext_user = Core.SurfConext.get_surfconext_user_by_user!(user)
 
       assert redirected_to(conn) == "/console"
 

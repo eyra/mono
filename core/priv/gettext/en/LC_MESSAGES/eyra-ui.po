@@ -204,9 +204,5 @@ msgid "mailto.button"
 msgstr "Get in touch"
 
 #, elixir-format, ex-autogen
-msgid "notify.all"
-msgstr "Send notification"
-
-#, elixir-format, ex-autogen
 msgid "pronoun.him"
 msgstr "him"

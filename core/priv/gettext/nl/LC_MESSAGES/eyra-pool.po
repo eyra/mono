@@ -22,3 +22,11 @@ msgstr "gereserveerd"
 #, elixir-format, ex-autogen
 msgid "progress.pending.label"
 msgstr "beschikbaar"
+
+#, elixir-format, ex-autogen
+msgid "export"
+msgstr "Exporteer credits"
+
+#, elixir-format, ex-autogen
+msgid "notify"
+msgstr "Stuur bericht"

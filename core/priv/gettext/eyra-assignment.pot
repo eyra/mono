@@ -53,11 +53,3 @@ msgstr ""
 #, elixir-format, ex-autogen
 msgid "student.account.target"
 msgstr ""
-
-#, elixir-format, ex-autogen
-msgid "first.year"
-msgstr ""
-
-#, elixir-format, ex-autogen
-msgid "second.year"
-msgstr ""

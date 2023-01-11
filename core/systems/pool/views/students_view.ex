@@ -1,5 +1,6 @@
 defmodule Systems.Pool.StudentsView do
   use CoreWeb.UI.LiveComponent
+  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text.Title2
@@ -20,6 +21,7 @@ defmodule Systems.Pool.StudentsView do
   data(filtered_students, :list)
   data(filtered_student_items, :list)
   data(filter_labels, :list)
+  data(export_button, :map)
   data(email_button, :map)
 
   # Handle Selector Update
@@ -29,6 +31,7 @@ defmodule Systems.Pool.StudentsView do
       socket
       |> assign(active_filters: active_filters)
       |> prepare_students()
+      |> update_buttons()
     }
   end
 
@@ -42,6 +45,7 @@ defmodule Systems.Pool.StudentsView do
         query_string: query_string
       )
       |> prepare_students()
+      |> update_buttons()
     }
   end
 
@@ -52,20 +56,16 @@ defmodule Systems.Pool.StudentsView do
       socket
       |> assign(students: students)
       |> prepare_students()
+      |> update_buttons()
     }
   end
 
   # Initial update
   def update(
         %{id: id, props: %{students: students, pool: pool}} = _params,
-        %{assigns: %{myself: target}} = socket
+        socket
       ) do
     filter_labels = Pool.CriteriaFilters.labels([]) ++ Pool.StudentFilters.labels([])
-
-    email_button = %{
-      action: %{type: :send, event: "email", target: target},
-      face: %{type: :label, label: dgettext("eyra-ui", "notify.all"), icon: :chat}
-    }
 
     {
       :ok,
@@ -75,56 +75,50 @@ defmodule Systems.Pool.StudentsView do
         students: students,
         pool: pool,
         active_filters: [],
-        filter_labels: filter_labels,
-        email_button: email_button
+        filter_labels: filter_labels
       )
       |> prepare_students()
+      |> update_buttons()
     }
+  end
+
+  defp update_buttons(
+         %{assigns: %{myself: target, active_filters: active_filters, query: query, pool: pool}} =
+           socket
+       ) do
+    export_path = Routes.export_path(socket, :credits)
+    export_filter = active_filters |> Enum.join(",")
+
+    export_query =
+      if query do
+        query |> Enum.join(",")
+      else
+        ""
+      end
+
+    export_href = "#{export_path}?pool=#{pool.id}&filters=#{export_filter}&query=#{export_query}"
+
+    export_button = %{
+      action: %{type: :href, href: export_href},
+      face: %{type: :label, label: dgettext("eyra-pool", "export"), icon: :export}
+    }
+
+    email_button = %{
+      action: %{type: :send, event: "email", target: target},
+      face: %{type: :label, label: dgettext("eyra-pool", "notify"), icon: :chat}
+    }
+
+    socket
+    |> assign(
+      export_button: export_button,
+      email_button: email_button
+    )
   end
 
   @impl true
   def handle_event("email", _, %{assigns: %{filtered_students: filtered_students}} = socket) do
     send(self(), {:email_dialog, %{recipients: filtered_students}})
     {:noreply, socket}
-  end
-
-  defp filter(students, nil, _), do: students
-  defp filter(students, [], _), do: students
-
-  defp filter(students, filters, pool) do
-    students
-    |> Enum.filter(
-      &(Pool.CriteriaFilters.include?(&1.features.study_program_codes, filters) and
-          Pool.StudentFilters.include?(&1, filters, pool))
-    )
-  end
-
-  defp query(students, nil), do: students
-  defp query(students, []), do: students
-
-  defp query(students, query) when is_list(query) do
-    students
-    |> Enum.filter(&include?(&1, query))
-  end
-
-  defp include?(_student, []), do: true
-
-  defp include?(student, [word]) do
-    include?(student, word)
-  end
-
-  defp include?(student, [word | rest]) do
-    include?(student, word) and include?(student, rest)
-  end
-
-  defp include?(_student, ""), do: true
-
-  defp include?(student, word) when is_binary(word) do
-    word = String.downcase(word)
-
-    String.contains?(student.profile.fullname |> String.downcase(), word) or
-      String.contains?(student.email |> String.downcase(), word) or
-      Scholar.Codes.contains_study_program?(student.features.study_program_codes, word)
   end
 
   defp prepare_students(
@@ -139,8 +133,8 @@ defmodule Systems.Pool.StudentsView do
        ) do
     filtered_students =
       students
-      |> filter(active_filters, pool)
-      |> query(query)
+      |> Scholar.Context.filter(active_filters, pool)
+      |> Scholar.Context.query(query)
 
     filtered_student_items =
       filtered_students
@@ -229,6 +223,8 @@ defmodule Systems.Pool.StudentsView do
         <div class="flex flex-row">
           <Title2>{dgettext("link-studentpool", "tabbar.item.students")}: <span class="text-primary">{Enum.count(@filtered_students)}</span></Title2>
           <div class="flex-grow" />
+          <DynamicButton vm={@export_button} />
+          <div class="w-10" />
           <DynamicButton vm={@email_button} />
         </div>
         <ContentList items={@filtered_student_items} />

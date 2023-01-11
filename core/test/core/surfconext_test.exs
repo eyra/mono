@@ -21,7 +21,7 @@ defmodule Core.SurfConext.Test do
       core_user = Factories.insert!(:member)
       surfconext_user = Repo.insert!(%Core.SurfConext.User{sub: "test", user: core_user})
 
-      loaded_surfconext_user = Core.SurfConext.get_surfconext_user_by_user(core_user)
+      loaded_surfconext_user = Core.SurfConext.get_surfconext_user_by_user!(core_user)
 
       assert loaded_surfconext_user.id == surfconext_user.id
     end
