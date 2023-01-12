@@ -21,3 +21,11 @@ msgstr ""
 #, elixir-format, ex-autogen
 msgid "progress.pending.label"
 msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "export"
+msgstr ""
+
+#, elixir-format, ex-autogen
+msgid "notify"
+msgstr ""

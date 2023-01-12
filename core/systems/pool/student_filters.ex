@@ -11,11 +11,11 @@ defmodule Systems.Pool.StudentFilters do
     Pool
   }
 
-  def include?(_student, nil), do: true
-  def include?(_student, []), do: true
+  def include?(_student, nil, _), do: true
+  def include?(_student, [], _), do: true
 
   def include?(student, filters, %Pool.Model{} = pool) when is_list(filters) do
-    filters = filters |> Enum.filter(&Enum.member?(values(), &1))
+    filters = filters |> Enum.filter(&member?(&1))
 
     filter_count = Enum.count(filters)
     match_count = Enum.count(Enum.filter(filters, &include?(student, &1, pool)))
@@ -23,7 +23,13 @@ defmodule Systems.Pool.StudentFilters do
     filter_count == match_count
   end
 
-  def include?(student, filter, %Pool.Model{} = pool), do: state(student, pool) == filter
+  def include?(student, filter, %Pool.Model{} = pool) do
+    if member?(filter) do
+      state(student, pool) == convert_to_atom(filter)
+    else
+      false
+    end
+  end
 
   defp state(%Core.Accounts.User{} = student, pool) do
     Budget.Context.list_wallets(student)

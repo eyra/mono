@@ -8,7 +8,8 @@ defmodule Core.Factories do
     Authorization,
     DataDonation,
     WebPush,
-    Repo
+    Repo,
+    SurfConext
   }
 
   alias Frameworks.{
@@ -85,6 +86,10 @@ defmodule Core.Factories do
         photo_url: Faker.Avatar.image_url()
       }
     })
+  end
+
+  def build(:surfconext_student) do
+    build(:surfconext_student, %{})
   end
 
   def build(:auth_node) do
@@ -257,6 +262,47 @@ defmodule Core.Factories do
       to: to
     }
     |> struct!(attributes)
+  end
+
+  def build(:surfconext_student, attributes) do
+    {email, attributes} = Map.pop(attributes, :email, Faker.Internet.email())
+    {first_name, attributes} = Map.pop(attributes, :first_name, Faker.Person.first_name())
+    {last_name, attributes} = Map.pop(attributes, :last_name, Faker.Person.last_name())
+    {gender, attributes} = Map.pop(attributes, :gender, :man)
+    fullname = Enum.join([first_name, last_name], " ")
+
+    {schac_home_organization, attributes} = Map.pop(attributes, :schac_home_organization, "vu.nl")
+
+    {schac_personal_unique_code, _attributes} =
+      Map.pop(
+        attributes,
+        :schac_personal_unique_code,
+        "urn:schac:personalUniqueCode:nl:local:#{schac_home_organization}:studentid:12345678"
+      )
+
+    %SurfConext.User{
+      email: email,
+      sub: Faker.UUID.v4(),
+      family_name: last_name,
+      given_name: first_name,
+      preferred_username: String.downcase(first_name),
+      schac_home_organization: schac_home_organization,
+      schac_personal_unique_code: [schac_personal_unique_code],
+      eduperson_affiliation: ["student"],
+      user: %User{
+        email: email,
+        hashed_password: Bcrypt.hash_pwd_salt(valid_user_password()),
+        displayname: first_name,
+        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        profile: %Profile{
+          fullname: fullname,
+          photo_url: Faker.Avatar.image_url()
+        },
+        features: %Features{
+          gender: gender
+        }
+      }
+    }
   end
 
   def build(:notification_box, %{user: user} = attributes) do

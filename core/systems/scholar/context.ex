@@ -84,6 +84,11 @@ defmodule Systems.Scholar.Context do
     target
   end
 
+  def credits(%User{id: id}, %Pool.Model{name: name}) do
+    %{credit: credit, debit: debit} = Bookkeeping.Context.balance(["wallet", name, id])
+    credit - debit
+  end
+
   def handle_features_updated(user, nil, new_class_codes),
     do: handle_features_updated(user, [], new_class_codes)
 
@@ -213,6 +218,45 @@ defmodule Systems.Scholar.Context do
 
       {:ok, true}
     end)
+  end
+
+  def filter(students, nil, _), do: students
+  def filter(students, [], _), do: students
+
+  def filter(students, filters, pool) do
+    students
+    |> Enum.filter(
+      &(Pool.CriteriaFilters.include?(&1.features.study_program_codes, filters) and
+          Pool.StudentFilters.include?(&1, filters, pool))
+    )
+  end
+
+  def query(students, nil), do: students
+  def query(students, []), do: students
+
+  def query(students, query) when is_list(query) do
+    students
+    |> Enum.filter(&query_include?(&1, query))
+  end
+
+  defp query_include?(_student, []), do: true
+
+  defp query_include?(student, [word]) do
+    query_include?(student, word)
+  end
+
+  defp query_include?(student, [word | rest]) do
+    query_include?(student, word) and query_include?(student, rest)
+  end
+
+  defp query_include?(_student, ""), do: true
+
+  defp query_include?(student, word) when is_binary(word) do
+    word = String.downcase(word)
+
+    String.contains?(student.profile.fullname |> String.downcase(), word) or
+      String.contains?(student.email |> String.downcase(), word) or
+      Scholar.Codes.contains_study_program?(student.features.study_program_codes, word)
   end
 
   defp pool_name(class_code) do

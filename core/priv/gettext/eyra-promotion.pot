@@ -83,10 +83,6 @@ msgid "open.spots.label"
 msgstr ""
 
 #, elixir-format
-msgid "reward.title"
-msgstr ""
-
-#, elixir-format
 msgid "search.different.image.button"
 msgstr ""
 

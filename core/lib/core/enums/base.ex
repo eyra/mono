@@ -28,12 +28,17 @@ defmodule Core.Enums.Base do
         labels([active_value])
       end
 
-      defp convert_to_atoms(values) when is_list(values) do
+      def member?(filter) when is_atom(filter), do: Enum.member?(values(), filter)
+
+      def member?(filter) when is_binary(filter),
+        do: Enum.member?(values() |> Enum.map(&Atom.to_string(&1)), filter)
+
+      def convert_to_atoms(values) when is_list(values) do
         Enum.map(values, &convert_to_atom(&1))
       end
 
-      defp convert_to_atom(value) when is_binary(value), do: String.to_atom(value)
-      defp convert_to_atom(value) when is_atom(value), do: value
+      def convert_to_atom(value) when is_binary(value), do: String.to_existing_atom(value)
+      def convert_to_atom(value) when is_atom(value), do: value
 
       defp convert_to_label(value, active_values) when is_atom(value) do
         value_as_string =

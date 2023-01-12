@@ -72,6 +72,10 @@ defmodule Core.Authorization do
     index: [:visitor, :member]
   })
 
+  grant_actions(Systems.Scholar.ExportController, %{
+    credits: [:coordinator]
+  })
+
   def get_node!(id), do: Repo.get!(Core.Authorization.Node, id)
 
   def make_node(), do: %Core.Authorization.Node{}
