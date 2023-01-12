@@ -1,15 +1,15 @@
 # Port
 
-Port is a research tool that will enable individuals to donate their digital trace data to academic research in a secure, transparent, and privacy-protecting manner. 
+Port is a research tool that enables individuals to donate their digital trace data for academic research in a secure, transparent, and privacy-preserving way.  
 
 ## Digital Data Donation Infrastructure (D3I)
 
-The D3i project is funded by PDI-SSH and is a collaboration between six Dutch universities and Eyra.
+The D3i project is funded by the PDI-SSH and is a collaboration between six Dutch universities and Eyra.
 
-The consortium is composed by researchers from:
+The consortium is composed of researchers from:
 
 * University of Amsterdam
-* Radboud University 
+* Radboud University Nijmegen
 * VU Amsterdam
 * Utrecht University
 * Tilburg University
@@ -17,7 +17,7 @@ The consortium is composed by researchers from:
 
 ## D3i Pilot
 
-The first phase of the project (ended in december 2022) resulted in a MVP solution to run one Port app on top of a Next bundle (see: [README.md](README.md)). This Next + Port combi can be released as a Docker image and deployed on [Azure Web App Service](https://azure.microsoft.com/en-us/products/app-service/web).
+The first phase of the project ended in December 2022 and resulted in an MVP solution to run one Port app on top of a Next bundle (see: [README.md](README.md)). This Next + Port combi can be released as a Docker image and deployed on [Azure Web App Service](https://azure.microsoft.com/en-us/products/app-service/web).
 
 ## Development instructions
 
@@ -94,11 +94,11 @@ The first phase of the project (ended in december 2022) resulted in a MVP soluti
 
 | Source file  | Description |
 | ------------- | ------------- |
-| [port.js](core/assets/js/port.js)  | Javascript hook  responsble for starting the Port app and implementing the Port app `System` callback interface |
+| [port.js](core/assets/js/port.js)  | Javascript hook responsible for starting the Port app and implementing the Port app `System` callback interface |
 | [port_page.ex](core/systems/data_donation/port_page.ex) | Elixir/Phoenix web page running on endpoint `/data-donation/port/:appid/:participantid` |
 | [port_model.ex](core/systems/data_donation/port_model.ex)  | Port app configuration (id and storage configuration) |
 | [port_model_data.ex](core/systems/data_donation/port_model_data.ex)  | Contains configuration for Port app with id `1` |
-| [delivery.ex](core/systems/data_donation/delivery.ex)  | Asynchronious delivery of donated data backed by [Oban](https://hexdocs.pm/oban/Oban.html) |
+| [delivery.ex](core/systems/data_donation/delivery.ex)  | Asynchronous delivery of donated data backed by [Oban](https://hexdocs.pm/oban/Oban.html) |
 | [azure_storage_backend.ex](core/systems/data_donation/azure_storage_backend.ex)  | Integration with [Azure Blob Storage](https://azure.microsoft.com/en-us/products/storage/blobs/#overview). |
 
 
@@ -122,7 +122,7 @@ When testing your work it is useful to link your cloned Port app instance to you
     $ npm link
     ```
 
-2. Link Port app locally in
+2. Link Port app locally
 
     In Mono:
 
@@ -142,7 +142,7 @@ When testing your work it is useful to link your cloned Port app instance to you
 
 ### Port rate limiters
 
-To prevent users from exhausting system resources Next makes use of rate limiters. The local configuration for rate limiters for Azure Blob Service can be found in `core/config/dev.exs`:
+To prevent users from exhausting system resources, Next uses rate limiters. The local configuration of rate limiters for Azure Blob Service can be found in `core/config/dev.exs`:
 
 ```Elixir
 config :core, :rate,
@@ -175,7 +175,7 @@ $ docker build  --build-arg VERSION=1.0.0 --build-arg BUNDLE=next . -t next:late
 $ docker image save next -o next.zip
 ```
 
-2. Running the Docker image
+2. Run the Docker image
 
 Several environment variables are required for running:
 
