@@ -27,9 +27,4 @@ defmodule Systems.Pool.CriteriaFilters do
     do: String.contains?(Atom.to_string(code), filter)
 
   def include?(_, _), do: false
-
-  defp member?(filter) when is_atom(filter), do: Enum.member?(values(), filter)
-
-  defp member?(filter) when is_binary(filter),
-    do: Enum.member?(values() |> Enum.map(&Atom.to_string(&1)), filter)
 end

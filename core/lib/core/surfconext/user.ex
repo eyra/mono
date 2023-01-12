@@ -2,7 +2,10 @@ defmodule Core.SurfConext.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @student_id_regex Regex.compile!("^urn:schac:personalUniqueCode.*studentid:(.*)")
+  # urn:schac:personalUniqueCode:nl:<scope>:<organisation_id>:<id_type>:<id_token>
+  @personal_unique_code_regex Regex.compile!(
+                                "^urn:schac:personalUniqueCode:nl:([^:]*):([^:]*):([^:]*):(.*)"
+                              )
 
   schema "surfconext_users" do
     belongs_to(:user, Core.Accounts.User)
@@ -54,8 +57,8 @@ defmodule Core.SurfConext.User do
   def student_id(%Core.SurfConext.User{schac_personal_unique_code: codes}) when is_list(codes) do
     codes
     |> Enum.flat_map(fn code ->
-      case Regex.run(@student_id_regex, code) do
-        [_, student_id] -> [student_id]
+      case Regex.run(@personal_unique_code_regex, code) do
+        [_, _scope, _organisation_id, "studentid", student_id] -> [student_id]
         _ -> []
       end
     end)

@@ -8,7 +8,7 @@ defmodule Systems.Scholar.ExportController do
 
   def credits(conn, %{"pool" => pool_id, "filters" => filters, "query" => query}) do
     %{name: pool_name, participants: students} =
-      pool = Pool.Context.get!(pool_id, participants: [:features, :profile])
+      pool = Pool.Context.get!(pool_id, [:currency, participants: [:features, :profile]])
 
     filters = prepare_list(filters)
     query = prepare_list(query)

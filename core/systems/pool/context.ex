@@ -292,7 +292,11 @@ defmodule Systems.Pool.Context do
     wallet_name == currency_name
   end
 
-  def is_wallet_related?(_, _), do: false
+  def is_wallet_related?(
+        %Pool.Model{currency: %{name: _}},
+        %Bookkeeping.AccountModel{identifier: _}
+      ),
+      do: false
 
   defp notify_when_submitted(
          %Pool.SubmissionModel{pool_id: pool_id} = submission,
