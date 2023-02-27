@@ -37,7 +37,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@59bc9ddfd5a31eb6f5b55e89b65578fe3bbba85e
+        uses: docker/metadata-action@3343011071fa59c64a174cc6aa415dc13b31b7b2
         with:
           images: |
             ${{env.REGISTRY}}/eyra/${{github.event.inputs.bundle}}
