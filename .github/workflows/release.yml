@@ -16,6 +16,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.17'
+
       - name: Tag name
         id: tag
         run: echo ::set-output "name=TAG::${{github.event.inputs.bundle}}_$(date +%F)_${{github.run_number}}"
