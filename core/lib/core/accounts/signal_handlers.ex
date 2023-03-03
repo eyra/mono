@@ -26,9 +26,9 @@ defmodule Core.Accounts.SignalHandlers do
     profile_valid? = validate_required(profile_changeset, required_fields).valid?
 
     if user_valid? && profile_valid? do
-      NextAction.Context.clear_next_action(user, CompleteProfile)
+      NextAction.Public.clear_next_action(user, CompleteProfile)
     else
-      NextAction.Context.create_next_action(user, CompleteProfile)
+      NextAction.Public.create_next_action(user, CompleteProfile)
     end
   end
 
@@ -43,9 +43,9 @@ defmodule Core.Accounts.SignalHandlers do
         |> validate_length(:study_program_codes, min: 1)
 
       if validated.valid? do
-        NextAction.Context.clear_next_action(user, SelectStudyStudent)
+        NextAction.Public.clear_next_action(user, SelectStudyStudent)
       else
-        NextAction.Context.create_next_action(user, SelectStudyStudent)
+        NextAction.Public.create_next_action(user, SelectStudyStudent)
       end
     end
   end
@@ -55,18 +55,18 @@ defmodule Core.Accounts.SignalHandlers do
     visited_settings? = Enum.member?(visited_pages, "settings")
 
     if visited_settings? do
-      NextAction.Context.clear_next_action(user, PromotePushStudent)
+      NextAction.Public.clear_next_action(user, PromotePushStudent)
     end
   end
 
   @impl true
   def dispatch(:user_created, %{user: user}) do
     if user.student do
-      NextAction.Context.create_next_action(user, SelectStudyStudent)
-      NextAction.Context.create_next_action(user, PromotePushStudent)
+      NextAction.Public.create_next_action(user, SelectStudyStudent)
+      NextAction.Public.create_next_action(user, PromotePushStudent)
     end
 
     Accounts.Email.account_created(user)
-    |> Email.Context.deliver_later()
+    |> Email.Public.deliver_later()
   end
 end

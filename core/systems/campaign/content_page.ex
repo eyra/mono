@@ -19,10 +19,10 @@ defmodule Systems.Campaign.ContentPage do
 
   alias Systems.{
     Campaign,
-    Assignment,
     Pool
   }
 
+  data(tabbar_id, :string)
   data(validate?, :boolean, default: false)
   data(initial_tab, :any)
   data(actions, :map)
@@ -33,19 +33,23 @@ defmodule Systems.Campaign.ContentPage do
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
-    Campaign.Context.get!(id)
+    Campaign.Public.get!(id)
   end
 
   @impl true
-  def mount(%{"id" => id, "tab" => initial_tab}, _session, socket) do
+  def mount(%{"id" => id, "tab" => initial_tab}, %{"locale" => locale}, socket) do
     model = %{id: String.to_integer(id), director: :campaign}
+    tabbar_id = "campaign_content/#{id}"
 
     {
       :ok,
       socket
       |> assign(
+        id: id,
         model: model,
+        tabbar_id: tabbar_id,
         initial_tab: initial_tab,
+        locale: locale,
         changesets: %{},
         dialog: nil,
         popup: nil
@@ -92,13 +96,6 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   @impl true
-  def handle_event("reset_focus", _, socket) do
-    send_update(Assignment.AssignmentForm, id: :assignment_form, claim_focus: nil)
-    send_update(PromotionForm, id: :promotion_form, focus: "")
-    {:noreply, socket}
-  end
-
-  @impl true
   def handle_event("delete", _params, socket) do
     item = dgettext("link-ui", "delete.confirm.campaign")
     title = String.capitalize(dgettext("eyra-ui", "delete.confirm.title", item: item))
@@ -110,7 +107,7 @@ defmodule Systems.Campaign.ContentPage do
 
   @impl true
   def handle_event("delete_confirm", _params, %{assigns: %{vm: %{id: campaign_id}}} = socket) do
-    Campaign.Context.delete(campaign_id)
+    Campaign.Public.delete(campaign_id)
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Console))}
   end
 
@@ -126,9 +123,9 @@ defmodule Systems.Campaign.ContentPage do
         %{assigns: %{vm: %{id: campaign_id, submission: submission}}} = socket
       ) do
     socket =
-      if Campaign.Context.ready?(campaign_id) do
+      if Campaign.Public.ready?(campaign_id) do
         {:ok, _submission} =
-          Pool.Context.update(submission, %{
+          Pool.Public.update(submission, %{
             status: :submitted,
             submitted_at: Timestamp.naive_now()
           })
@@ -157,7 +154,7 @@ defmodule Systems.Campaign.ContentPage do
         _params,
         %{assigns: %{vm: %{submission: submission}}} = socket
       ) do
-    {:ok, _} = Pool.Context.update(submission, %{status: :idle})
+    {:ok, _} = Pool.Public.update(submission, %{status: :idle})
     title = dgettext("eyra-submission", "retract.success.title")
     text = dgettext("eyra-submission", "retract.success.text")
 
@@ -208,19 +205,6 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   @impl true
-  def handle_info({:claim_focus, :promotion_form}, socket) do
-    send_update(Assignment.AssignmentForm, id: :assignment_form, claim_focus: :promotion_form)
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_info({:claim_focus, form}, socket) do
-    send_update(PromotionForm, id: :promotion_form, focus: "")
-    send_update(Assignment.AssignmentForm, id: :assignment_form, claim_focus: form)
-    {:noreply, socket}
-  end
-
-  @impl true
   def handle_info({:image_picker, image_id}, socket) do
     send_update(PromotionForm, id: :promotion_form, image_id: image_id)
     {:noreply, socket}
@@ -246,8 +230,6 @@ defmodule Systems.Campaign.ContentPage do
       if socket.assigns[ready_key] != ready? do
         socket
         |> assign(ready_key, ready?)
-
-        # |> create_tabs()
       else
         socket
       end
@@ -425,7 +407,7 @@ defmodule Systems.Campaign.ContentPage do
   def render(assigns) do
     ~F"""
     <Workspace title={dgettext("link-survey", "content.title")} menus={@menus}>
-      <div id={:survey_content} phx-hook="ViewportResize" phx-click="reset_focus">
+      <div id={:survey_content} phx-hook="ViewportResize">
         <div x-data="{ image_picker: false, active_tab: 0, dropdown: false }">
           <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="image_picker">
             <div class="flex flex-row items-center justify-center w-full h-full">
@@ -455,7 +437,7 @@ defmodule Systems.Campaign.ContentPage do
               right_bar_buttons={create_actions(assigns)}
               more_buttons={create_more_actions(assigns)}
             >
-              <Tabbar vm={%{initial_tab: @initial_tab, size: tabbar_size(@breakpoint)}} />
+              <Tabbar id={@tabbar_id} initial_tab={@initial_tab} size={tabbar_size(@breakpoint)} />
             </ActionBar>
             <TabbarContent />
             <TabbarFooter />

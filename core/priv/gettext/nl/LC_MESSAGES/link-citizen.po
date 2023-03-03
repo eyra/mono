@@ -1,0 +1,96 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-autogen, elixir-format
+msgid "overview.plugin.title"
+msgstr "Burgerpools"
+
+#, elixir-autogen, elixir-format
+msgid "campaigns.label"
+msgstr "Campagnes"
+
+#, elixir-autogen, elixir-format
+msgid "participants.label"
+msgstr "Burgers"
+
+#, elixir-autogen, elixir-format
+msgid "pool.create.title"
+msgstr "Nieuwe pool"
+
+#, elixir-autogen, elixir-format
+msgid "pool.currency.label"
+msgstr "Munteenheid"
+
+#, elixir-autogen, elixir-format
+msgid "pool.edit.title"
+msgstr "Aanpassen pool"
+
+#, elixir-autogen, elixir-format
+msgid "pool.name.label"
+msgstr "Name"
+
+#, elixir-autogen, elixir-format
+msgid "pool.submit.button"
+msgstr "Opslaan"
+
+#, elixir-autogen, elixir-format
+msgid "citizen.tag.complete"
+msgstr "Gereed"
+
+#, elixir-autogen, elixir-format
+msgid "citizen.tag.incomplete"
+msgstr "Onvolledig"
+
+#, elixir-autogen, elixir-format
+msgid "citizens.empty.description"
+msgstr "Op dit moment zijn er nog geen burgers geregistreerd. Je wordt op de hoogte gesteld zodra er burgers zijn die zich hebben aangemeld."
+
+#, elixir-autogen, elixir-format
+msgid "citizens.empty.title"
+msgstr "Hier vind je straks alle geregistreerde burgers."
+
+#, elixir-autogen, elixir-format
+msgid "sample.size"
+msgstr "%{size} plaatsen beschikbaar"
+
+#, elixir-autogen, elixir-format
+msgid "search.placeholder"
+msgstr "Zoeken"
+
+#, elixir-autogen, elixir-format
+msgid "spots.available"
+msgstr "%{open} van de %{total} plaatsen beschikbaar"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.campaigns"
+msgstr "Campagnes"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.citizens"
+msgstr "Burgers"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pool.icon.label"
+msgstr "Emoji icon"
+
+#, elixir-autogen, elixir-format
+msgid "overview.archive.button"
+msgstr "Archiveer"
+
+#, elixir-autogen, elixir-format
+msgid "overview.restore.button"
+msgstr "Herstel"
+
+#, elixir-autogen, elixir-format
+msgid "overview.share.button"
+msgstr "Deel"

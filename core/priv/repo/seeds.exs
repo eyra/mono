@@ -52,24 +52,25 @@ data_donation_promotions =
     }
   end)
 
-  Enum.each(data_donation_promotions, fn promotion ->
-    data = %{
-      script: File.read!(Path.join([:code.priv_dir(:core), "repo", "script.py"])),
-      subject_count: 400,
-      # promotion: promotion
-    }
-    Core.Factories.insert!(:data_donation_tool, data)
-  end)
+Enum.each(data_donation_promotions, fn promotion ->
+  data = %{
+    script: File.read!(Path.join([:code.priv_dir(:core), "repo", "script.py"])),
+    subject_count: 400
+    # promotion: promotion
+  }
 
-  # campaigns =
-  # Enum.map(data_donation_tools, fn data_donation_tool ->
-  #   %{
-  #     title: Faker.Lorem.sentence(),
-  #     description: Faker.Lorem.paragraph(),
-  #     type: :data_donation_tool,
-  #     data_donation_tool: data_donation_tool
-  #   }
-  # end)
+  Core.Factories.insert!(:data_donation_tool, data)
+end)
+
+# campaigns =
+# Enum.map(data_donation_tools, fn data_donation_tool ->
+#   %{
+#     title: Faker.Lorem.sentence(),
+#     description: Faker.Lorem.paragraph(),
+#     type: :data_donation_tool,
+#     data_donation_tool: data_donation_tool
+#   }
+# end)
 
 password = "asdf;lkjASDF0987"
 
@@ -85,7 +86,7 @@ _admin =
     password: password
   })
 
-Systems.NextAction.Context.create_next_action(member, Core.Accounts.NextActions.CompleteProfile)
+Systems.NextAction.Public.create_next_action(member, Core.Accounts.NextActions.CompleteProfile)
 
 researcher =
   Core.Factories.insert!(:member, %{
@@ -94,7 +95,10 @@ researcher =
     password: password
   })
 
-Systems.NextAction.Context.create_next_action(researcher, Core.Accounts.NextActions.CompleteProfile)
+Systems.NextAction.Public.create_next_action(
+  researcher,
+  Core.Accounts.NextActions.CompleteProfile
+)
 
 # for campaign_data <- campaigns do
 #   {tool_type, campaign_data} = Map.pop!(campaign_data, :type)

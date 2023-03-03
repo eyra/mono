@@ -30,18 +30,6 @@ msgstr ""
 msgid "reject.note"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "create.campaign.dialog.ok.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "create.campaign.dialog.text"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "create.campaign.dialog.title"
-msgstr ""
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "exclusion.description"
 msgstr ""

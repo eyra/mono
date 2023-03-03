@@ -95,58 +95,56 @@ defmodule Frameworks.Pixel.ShareView do
   end
 
   defp update_parent(socket, message) do
-    send(self(), {:share_view, message})
+    send(self(), %{module: __MODULE__, action: message})
     socket
   end
 
   @impl true
   def render(assigns) do
     ~F"""
-    <div class="p-8 bg-white shadow-2xl rounded" phx-click="reset_focus" phx-target={@myself}>
-      <div class="">
-        <div class="flex flex-row">
-          <div class="flex-grow">
-            <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
-              Shared with
-            </div>
-          </div>
-          <DynamicButton vm={@close_button} />
-        </div>
-        <Spacing value="S" />
-        <div class="rounded border-2 border-grey3 h-40 overflow-scroll">
-          <div class="p-4 flex flex-col gap-3">
-            <div :for={user <- @shared_users} class="flex flex-row items-center gap-3">
-              <UserListItemSmall
-                user={user}
-                action_button={%{
-                  action: %{type: :send, event: "remove", item: user.id, target: @myself},
-                  face: %{type: :icon, icon: :remove}
-                }}
-              />
-            </div>
+    <div class="">
+      <div class="flex flex-row">
+        <div class="flex-grow">
+          <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
+            {dgettext("eyra-ui", "share.dialog.title")}
           </div>
         </div>
-        <Spacing value="L" />
+        <DynamicButton vm={@close_button} />
+      </div>
+      <Spacing value="S" />
+      <div class="rounded border-2 border-grey3 h-40 overflow-scroll">
+        <div class="p-4 flex flex-col gap-3">
+          <div :for={user <- @shared_users} class="flex flex-row items-center gap-3">
+            <UserListItemSmall
+              user={user}
+              action_button={%{
+                action: %{type: :send, event: "remove", item: user.id, target: @myself},
+                face: %{type: :icon, icon: :remove}
+              }}
+            />
+          </div>
+        </div>
+      </div>
+      <Spacing value="L" />
 
-        <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
-          {String.capitalize(@group_name)}
-        </div>
-        <Spacing value="S" />
-        <div class="text-bodymedium font-body sm:text-bodylarge">
-          {dgettext("eyra-ui", "share.dialog.text", content: @content_name, group: @group_name)}
-        </div>
-        <Spacing value="M" />
-        <div class="rounded border-2 border-grey3 h-40 overflow-scroll">
-          <div class="p-4 flex flex-col gap-3">
-            <div :for={user <- @filtered_users} class="flex flex-row items-center gap-3">
-              <UserListItemSmall
-                user={user}
-                action_button={%{
-                  action: %{type: :send, event: "add", item: user.id, target: @myself},
-                  face: %{type: :icon, icon: :add}
-                }}
-              />
-            </div>
+      <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
+        {String.capitalize(@group_name)}
+      </div>
+      <Spacing value="S" />
+      <div class="text-bodymedium font-body sm:text-bodylarge">
+        {dgettext("eyra-ui", "share.dialog.text", content: @content_name, group: @group_name)}
+      </div>
+      <Spacing value="M" />
+      <div class="rounded border-2 border-grey3 h-40 overflow-scroll">
+        <div class="p-4 flex flex-col gap-3">
+          <div :for={user <- @filtered_users} class="flex flex-row items-center gap-3">
+            <UserListItemSmall
+              user={user}
+              action_button={%{
+                action: %{type: :send, event: "add", item: user.id, target: @myself},
+                face: %{type: :icon, icon: :add}
+              }}
+            />
           </div>
         </div>
       </div>
@@ -219,17 +217,17 @@ defmodule Frameworks.Pixel.ShareView.Example do
     """
   end
 
-  def handle_info({:share_view, :close}, socket) do
+  def handle_info(%{module: Frameworks.Pixel.ShareView, action: :close}, socket) do
     IO.puts("Close")
     {:noreply, socket}
   end
 
-  def handle_info({:share_view, %{add: user}}, socket) do
+  def handle_info(%{module: Frameworks.Pixel.ShareView, action: %{add: user}}, socket) do
     IO.puts("Add: #{user.fullname}")
     {:noreply, socket}
   end
 
-  def handle_info({:share_view, %{remove: user}}, socket) do
+  def handle_info(%{module: Frameworks.Pixel.ShareView, action: %{remove: user}}, socket) do
     IO.puts("Remove: #{user.fullname}")
     {:noreply, socket}
   end

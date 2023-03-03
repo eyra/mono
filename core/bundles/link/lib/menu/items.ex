@@ -4,7 +4,8 @@ defmodule Link.Menu.Items do
   @impl true
   def values() do
     %{
-      permissions: %{target: Systems.Admin.PermissionsPage, domain: "eyra-ui"},
+      admin: %{target: Systems.Admin.ConfigPage, domain: "eyra-ui"},
+      funding: %{target: Systems.Budget.FundingPage, domain: "eyra-ui"},
       support: %{target: Systems.Support.OverviewPage, domain: "eyra-ui"},
       link: %{target: Link.Index, size: :large, title: "Panl", domain: "eyra-ui"},
       debug: %{target: Link.Debug, domain: "eyra-ui"},

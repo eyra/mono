@@ -75,7 +75,7 @@ msgid "tabbar.item.profile"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.scholar"
+msgid "tabbar.item.student"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -87,7 +87,7 @@ msgid "tabbar.item.profile.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.scholar.forward"
+msgid "tabbar.item.student.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -140,10 +140,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "feature.unavailable.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "menu.item.permissions"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -208,4 +204,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "pronoun.him"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "menu.item.admin"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "menu.item.funding"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "share.dialog.title"
 msgstr ""

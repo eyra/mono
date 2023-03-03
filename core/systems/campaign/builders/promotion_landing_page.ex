@@ -98,13 +98,13 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
           }
         } = socket
       ) do
-    case Assignment.Context.can_apply_as_member?(assignment, user) do
+    case Assignment.Public.can_apply_as_member?(assignment, user) do
       {:error, error} ->
         inform(error, socket)
 
       {:ok} ->
-        reward_amount = Campaign.Context.reward_amount(assignment)
-        Assignment.Context.apply_member(assignment, user, reward_amount)
+        reward_amount = Campaign.Public.reward_amount(assignment)
+        Assignment.Public.apply_member(assignment, user, reward_amount)
 
         LiveView.push_redirect(socket,
           to: Routes.live_path(socket, Systems.Assignment.LandingPage, id)

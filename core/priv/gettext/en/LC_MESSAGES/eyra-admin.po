@@ -12,22 +12,6 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-autogen, elixir-format
-msgid "permissions.pooladmin.candidates.title"
-msgstr "Researchers"
-
-#, elixir-autogen, elixir-format
-msgid "permissions.pooladmin.description"
-msgstr "Select one or more researchers who will administer the student pool on behalf of the VU."
-
-#, elixir-autogen, elixir-format
-msgid "permissions.pooladmin.title"
-msgstr "Pool administrators"
-
-#, elixir-autogen, elixir-format
-msgid "permissions.title"
-msgstr "Permissions"
-
-#, elixir-autogen, elixir-format
 msgid "support.title"
 msgstr "Support"
 
@@ -66,3 +50,43 @@ msgstr "Student"
 #, elixir-autogen, elixir-format
 msgid "reopen.ticket.button"
 msgstr "Reopen ticket"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "system.title"
+msgstr "System"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "actions.title"
+msgstr "Actions"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "create.org.button"
+msgstr "Create organisation"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "create.org.button.short"
+msgstr "Create"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "org.content.title"
+msgstr "Organisations"
+
+#, elixir-autogen, elixir-format
+msgid "config.title"
+msgstr "Admin"
+
+#, elixir-autogen, elixir-format
+msgid "system.bank.accounts.title"
+msgstr "Bank accounts"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "system.bank.accounts.new.title"
+msgstr "New account"
+
+#, elixir-autogen, elixir-format
+msgid "system.citizen.pools.new.title"
+msgstr "New pool"
+
+#, elixir-autogen, elixir-format
+msgid "system.citizen.pools.title"
+msgstr "Citizen pools"

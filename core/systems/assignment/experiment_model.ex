@@ -105,8 +105,8 @@ defmodule Systems.Assignment.ExperimentModel do
 
   def open_label(_), do: "<open>"
 
-  def ready?(%{survey_tool: tool}) when not is_nil(tool), do: Systems.Survey.Context.ready?(tool)
-  def ready?(%{lab_tool: tool}) when not is_nil(tool), do: Systems.Lab.Context.ready?(tool)
+  def ready?(%{survey_tool: tool}) when not is_nil(tool), do: Systems.Survey.Public.ready?(tool)
+  def ready?(%{lab_tool: tool}) when not is_nil(tool), do: Systems.Lab.Public.ready?(tool)
 
   def external_path(%{survey_tool: survey_tool}, panl_id) do
     Survey.ToolModel.external_path(survey_tool, panl_id)

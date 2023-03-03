@@ -7,13 +7,12 @@ defmodule Link.Console do
 
   alias Systems.{
     Campaign,
-    Budget,
-    Pool
+    Budget
   }
 
   alias Frameworks.Utility.ViewModelBuilder
 
-  alias CoreWeb.UI.{WalletList, ContentList}
+  alias CoreWeb.UI.ContentList
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias Frameworks.Pixel.Text.{Title2}
@@ -28,23 +27,23 @@ defmodule Link.Console do
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
     preload = Campaign.Model.preload_graph(:full)
 
-    next_best_action = NextAction.Context.next_best_action(url_resolver(socket), user)
+    next_best_action = NextAction.Public.next_best_action(url_resolver(socket), user)
 
     wallets =
-      Budget.Context.list_wallets(user)
+      Budget.Public.list_wallets(user)
       |> filter_wallets()
-      |> Enum.map(&Pool.Builders.Wallet.view_model(&1, user, url_resolver(socket)))
+      |> Enum.map(&Budget.WalletViewBuilder.view_model(&1, user, url_resolver(socket)))
 
     contributions =
       user
-      |> Campaign.Context.list_subject_campaigns(preload: preload)
+      |> Campaign.Public.list_subject_campaigns(preload: preload)
       |> Enum.map(
         &ViewModelBuilder.view_model(&1, {__MODULE__, :contribution}, user, url_resolver(socket))
       )
 
     content_items =
       user
-      |> Campaign.Context.list_owned_campaigns(preload: preload)
+      |> Campaign.Public.list_owned_campaigns(preload: preload)
       |> Enum.map(
         &ViewModelBuilder.view_model(&1, {__MODULE__, :content}, user, url_resolver(socket))
       )
@@ -64,7 +63,7 @@ defmodule Link.Console do
 
   defp filter_wallets(wallets) do
     wallets
-    |> Enum.filter(&Budget.Context.wallet_is_active?(&1))
+    |> Enum.filter(&Budget.Public.wallet_is_active?(&1))
   end
 
   def handle_info({:handle_auto_save_done, _}, socket) do
@@ -84,7 +83,7 @@ defmodule Link.Console do
           <Title2>
             {dgettext("link-dashboard", "book.accounts.title")}
           </Title2>
-          <WalletList items={@wallets} />
+          <Budget.WalletList items={@wallets} />
           <Spacing value="XL" />
         </div>
         <div :if={Enum.count(@contributions) > 0}>

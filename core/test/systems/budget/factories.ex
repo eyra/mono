@@ -3,7 +3,7 @@ defmodule Systems.Budget.Factories do
     Budget
   }
 
-  def create_currency(name, sign, decimal_scale) do
+  def create_currency(name, type, sign, decimal_scale) do
     label_bundle = Core.Factories.insert!(:text_bundle, %{})
 
     label_items = [
@@ -23,6 +23,7 @@ defmodule Systems.Budget.Factories do
 
     Core.Factories.insert!(:currency, %{
       name: name,
+      type: type,
       label_bundle: label_bundle,
       decimal_scale: decimal_scale
     })
@@ -54,6 +55,22 @@ defmodule Systems.Budget.Factories do
     })
   end
 
+  def create_bank_account(name, icon, currency) do
+    account =
+      Core.Factories.insert!(:book_account, %{
+        identifier: ["bank", name],
+        balance_debit: 0,
+        balance_credit: 0
+      })
+
+    Core.Factories.insert!(:bank_account, %{
+      name: name,
+      icon: icon,
+      currency: currency,
+      account: account
+    })
+  end
+
   def create_reward(assignment, user, budget, amount \\ 2) do
     idempotence_key = "assignment=#{assignment.id},user=#{user.id}"
 
@@ -65,11 +82,22 @@ defmodule Systems.Budget.Factories do
     })
   end
 
+  def create_wallet(user, currency, balance_credit \\ 0, balance_debit \\ 0)
+
   def create_wallet(
         %Core.Accounts.User{id: user_id},
+        %Budget.CurrencyModel{} = currency,
+        balance_credit,
+        balance_debit
+      ) do
+    create_wallet(user_id, currency, balance_credit, balance_debit)
+  end
+
+  def create_wallet(
+        user_id,
         %Budget.CurrencyModel{name: currency_name},
-        balance_credit \\ 0,
-        balance_debit \\ 0
+        balance_credit,
+        balance_debit
       ) do
     Core.Factories.insert!(:book_account, %{
       identifier: ["wallet", currency_name, "#{user_id}"],

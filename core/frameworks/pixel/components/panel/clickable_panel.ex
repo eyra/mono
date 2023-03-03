@@ -17,12 +17,14 @@ defmodule Frameworks.Pixel.Panel.ClickablePanel do
 
   prop(event, :string, default: "handle_panel_click")
   prop(item, :string, required: true)
+  prop(target, :any, default: false)
 
   def render(assigns) do
     ~F"""
     <div
       phx-click={@event}
       phx-value-item={@item}
+      phx-target={@target}
       class={@bg_color, @size, "rounded-md", "cursor-pointer"}
     >
       <div class={"#{@padding} #{@align}"}>

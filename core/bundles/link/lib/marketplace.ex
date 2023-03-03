@@ -27,13 +27,13 @@ defmodule Link.Marketplace do
   data(current_user, :any)
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    next_best_action = NextAction.Context.next_best_action(url_resolver(socket), user)
+    next_best_action = NextAction.Public.next_best_action(url_resolver(socket), user)
     user = socket.assigns[:current_user]
 
     preload = Campaign.Model.preload_graph(:full)
 
-    subject_campaigns = Campaign.Context.list_subject_campaigns(user, preload: preload)
-    excluded_campaigns = Campaign.Context.list_excluded_campaigns(subject_campaigns)
+    subject_campaigns = Campaign.Public.list_subject_campaigns(user, preload: preload)
+    excluded_campaigns = Campaign.Public.list_excluded_campaigns(subject_campaigns)
     exclude = subject_campaigns ++ excluded_campaigns
 
     exclusion_list =
@@ -42,8 +42,8 @@ defmodule Link.Marketplace do
       |> Enum.into(MapSet.new())
 
     campaigns =
-      Pool.Context.list_by_user(user)
-      |> Campaign.Context.list_by_pools_and_submission_status([:accepted],
+      Pool.Public.list_by_user(user)
+      |> Campaign.Public.list_by_pools_and_submission_status([:accepted],
         exclude: exclusion_list,
         preload: preload
       )
@@ -66,7 +66,7 @@ defmodule Link.Marketplace do
   end
 
   defp sort_by_open_spot_count(campaigns) when is_list(campaigns) do
-    Enum.sort_by(campaigns, &Campaign.Context.open_spot_count/1, :desc)
+    Enum.sort_by(campaigns, &Campaign.Public.open_spot_count/1, :desc)
   end
 
   defp filter(campaigns, socket) when is_list(campaigns) do
@@ -77,13 +77,13 @@ defmodule Link.Marketplace do
          %{submissions: submissions},
          %{assigns: %{current_user: user}}
        ) do
-    case Pool.Context.select(submissions, user) do
+    case Pool.Public.select(submissions, user) do
       nil ->
         false
 
       %{criteria: criteria} = submission ->
         user_features = Accounts.get_features(user)
-        released? = Pool.Context.published_status(submission) == :released
+        released? = Pool.Public.published_status(submission) == :released
         eligitable? = Pool.CriteriaModel.eligitable?(criteria, user_features)
 
         released? and eligitable?

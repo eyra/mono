@@ -16,8 +16,23 @@ defmodule Systems.Content.TextItemModel do
 
   @fields ~w(locale text text_plural)a
 
-  def changeset(item, attrs) do
-    item
+  def translate({locale, text}) when is_atom(locale) do
+    %__MODULE__{
+      locale: to_string(locale),
+      text: text
+    }
+  end
+
+  def translate({locale, text, text_plural}) when is_atom(locale) do
+    %__MODULE__{
+      locale: to_string(locale),
+      text: text,
+      text_plural: text_plural
+    }
+  end
+
+  def change(bundle, attrs) do
+    bundle
     |> cast(attrs, @fields)
   end
 

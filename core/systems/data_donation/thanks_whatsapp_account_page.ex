@@ -27,7 +27,7 @@ defmodule Systems.DataDonation.ThanksWhatsappAccountPage do
       socket
       |> assign(
         participant: participant,
-        vm: DataDonation.Context.get(id)
+        vm: DataDonation.Public.get(id)
       )
       |> update_menus()
     }

@@ -52,5 +52,5 @@ msgid "togo.label"
 msgstr "to go"
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "student.account.target"
+msgid "pool.target"
 msgstr "%{target} credits required"

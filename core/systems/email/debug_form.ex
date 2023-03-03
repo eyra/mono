@@ -29,7 +29,6 @@ defmodule Systems.Email.DebugForm do
   data(to, :string)
   data(subject, :string)
   data(message, :string)
-  data(focus, :any, default: "")
   data(changeset, :any)
 
   # Handle update from parent after auto-save, prevents overwrite of current state
@@ -79,14 +78,7 @@ defmodule Systems.Email.DebugForm do
     ~F"""
     <ContentArea>
       <Title2>Email</Title2>
-      <Form
-        id="mail_form"
-        changeset={@changeset}
-        change_event="update"
-        submit="send"
-        target={@myself}
-        focus={@focus}
-      >
+      <Form id="mail_form" changeset={@changeset} change_event="update" submit="send" target={@myself}>
         <TextInput field={:to} label_text="To" />
         <TextInput field={:subject} label_text="Subject" />
         <TextArea field={:message} label_text="Message" />
@@ -103,6 +95,6 @@ defmodule Systems.Email.DebugForm do
 
   defp send_mail(subject, message, from_user, to_user) do
     Accounts.Email.debug(subject, message, from_user, to_user)
-    |> Email.Context.deliver_now!()
+    |> Email.Public.deliver_now!()
   end
 end

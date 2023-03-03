@@ -1,7 +1,7 @@
 defmodule Systems.Banking.Backend do
   alias Systems.Banking
 
-  @type account :: Banking.Context.account()
+  @type account :: Banking.Public.account()
 
   @type payment :: %{
           idempotence_key: binary(),

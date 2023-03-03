@@ -16,6 +16,7 @@ defmodule Systems.Support.OverviewPage do
     Support
   }
 
+  data(tabbar_id, :string)
   data(tabs, :list)
   data(bar_size, :number)
 
@@ -24,6 +25,7 @@ defmodule Systems.Support.OverviewPage do
     {
       :ok,
       socket
+      |> assign(tabbar_id: "support_overview")
       |> assign_breakpoint()
       |> create_tabs()
       |> update_tabbar()
@@ -48,7 +50,7 @@ defmodule Systems.Support.OverviewPage do
   defp create_tabs(socket) do
     tabs =
       Support.TicketStatus.values()
-      |> Enum.map(&{&1, Support.Context.list_tickets(&1)})
+      |> Enum.map(&{&1, Support.Public.list_tickets(&1)})
       |> Enum.map(fn {status, tickets} ->
         %{
           id: status,
@@ -76,7 +78,7 @@ defmodule Systems.Support.OverviewPage do
       <div id={:support} phx-hook="ViewportResize">
         <TabbarArea tabs={@tabs}>
           <ActionBar>
-            <Tabbar vm={%{size: @tabbar_size}} />
+            <Tabbar id={@tabbar_id} size={@tabbar_size} />
           </ActionBar>
           <TabbarContent />
         </TabbarArea>

@@ -20,6 +20,13 @@ defmodule Core.Authorization.RoleAssignment do
 
   @fields ~w(role principal_id)a
 
+  def create(principal_id, role \\ :owner) do
+    %__MODULE__{
+      principal_id: principal_id,
+      role: role
+    }
+  end
+
   def changeset(role_assignment, attrs) do
     role_assignment
     |> cast(attrs, @fields)

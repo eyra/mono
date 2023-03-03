@@ -16,7 +16,6 @@ defmodule CoreWeb.User.Forms.Features do
   data(dominanthand_labels, :any, default: [])
   data(nativelanguage_labels, :any, default: [])
   data(changeset, :any, default: nil)
-  data(focus, :any, default: "")
 
   # Handle Selector Update
   def update(

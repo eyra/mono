@@ -92,13 +92,17 @@ msgid "submission.selector.title"
 msgstr "Pool"
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "overview.title"
-msgstr "Pools"
-
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "campaigns.label"
 msgstr "Campaigns"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "participants.label"
-msgstr "Participants"
+msgstr "Students"
+
+#, elixir-autogen, elixir-format
+msgid "excluded.campaigns.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "overview.plugin.title"
+msgstr "Student pools"

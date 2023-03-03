@@ -17,7 +17,7 @@ defmodule Systems.Promotion.Test do
     test "do not send accepted signal when the publication date is not set", %{
       submission: submission
     } do
-      Pool.Context.update(submission, %{status: :retracted})
+      Pool.Public.update(submission, %{status: :retracted})
       refute_signal_dispatched(:submission_accepted)
     end
   end

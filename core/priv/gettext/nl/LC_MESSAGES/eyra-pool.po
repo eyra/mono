@@ -22,3 +22,15 @@ msgstr "gereserveerd"
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "progress.pending.label"
 msgstr "beschikbaar"
+
+#, elixir-autogen, elixir-format
+msgid "overview.title"
+msgstr "Pools"
+
+#, elixir-autogen, elixir-format
+msgid "share.dialog.content"
+msgstr "pool"
+
+#, elixir-autogen, elixir-format
+msgid "share.dialog.group"
+msgstr "onderzoekers"

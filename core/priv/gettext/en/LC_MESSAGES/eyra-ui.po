@@ -76,7 +76,7 @@ msgid "tabbar.item.profile"
 msgstr "My profile"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.scholar"
+msgid "tabbar.item.student"
 msgstr "Study program"
 
 #, elixir-autogen, elixir-format
@@ -88,7 +88,7 @@ msgid "tabbar.item.profile.forward"
 msgstr "Update profile"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.scholar.forward"
+msgid "tabbar.item.student.forward"
 msgstr "Select study program"
 
 #, elixir-autogen, elixir-format
@@ -142,10 +142,6 @@ msgstr "We are still working on this feature. Try again later, the platform is u
 #, elixir-autogen, elixir-format
 msgid "feature.unavailable.title"
 msgstr "Coming soon"
-
-#, elixir-autogen, elixir-format
-msgid "menu.item.permissions"
-msgstr "Permissions"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.support"
@@ -210,3 +206,15 @@ msgstr "Send notification"
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "pronoun.him"
 msgstr "him"
+
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
+msgid "menu.item.admin"
+msgstr "Admin"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "menu.item.funding"
+msgstr "Funding"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "share.dialog.title"
+msgstr "Shared with"

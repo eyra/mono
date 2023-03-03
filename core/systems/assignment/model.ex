@@ -35,6 +35,8 @@ defmodule Systems.Assignment.Model do
     def id(assignment), do: assignment.auth_node_id
   end
 
+  def changeset(assignment, nil), do: changeset(assignment, %{})
+
   def changeset(assignment, %Budget.Model{id: budget_id}) do
     assignment
     |> cast(%{budget_id: budget_id}, [:budget_id])

@@ -14,7 +14,6 @@ defmodule CoreWeb.User.Signup do
   alias Core.Accounts.User
 
   data(changeset, :any)
-  data(focus, :string, default: "")
 
   def mount(_params, _session, socket) do
     require_feature(:password_sign_in)
@@ -52,15 +51,6 @@ defmodule CoreWeb.User.Signup do
   end
 
   @impl true
-  def handle_event("focus", %{"field" => field}, socket) do
-    {
-      :noreply,
-      socket
-      |> assign(focus: field)
-    }
-  end
-
-  @impl true
   def handle_uri(socket), do: socket
 
   def render(assigns) do
@@ -69,7 +59,7 @@ defmodule CoreWeb.User.Signup do
       <MarginY id={:page_top} />
       <FormArea>
         <Title2>{dgettext("eyra-account", "signup.title")}</Title2>
-        <div x-data={"{ focus: '#{@focus}' }"}>
+        <div>
           <Form for={@changeset} submit="signup" change="form_change">
             <EmailInput field={:email} label_text={dgettext("eyra-account", "email.label")} />
             <PasswordInput field={:password} label_text={dgettext("eyra-account", "password.label")} />

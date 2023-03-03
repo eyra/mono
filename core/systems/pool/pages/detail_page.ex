@@ -1,6 +1,6 @@
 defmodule Systems.Pool.DetailPage do
   @moduledoc """
-   The student overview screen.
+   The pool details screen.
   """
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :pool_detail
@@ -10,9 +10,11 @@ defmodule Systems.Pool.DetailPage do
   alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent}
 
   alias Systems.{
+    Pool,
     Email
   }
 
+  data(tabbar_id, :string)
   data(tabs, :any)
   data(initial_tab, :any)
   data(email_dialog, :map)
@@ -21,12 +23,15 @@ defmodule Systems.Pool.DetailPage do
   @impl true
   def mount(%{"id" => pool_id, "tab" => initial_tab}, _session, socket) do
     pool_id = String.to_integer(pool_id)
-    model = %{id: pool_id, director: :pool}
+    model = Pool.Public.get!(pool_id)
+    tabbar_id = "pool_detail/#{pool_id}"
 
     {
       :ok,
       socket
       |> assign(
+        id: pool_id,
+        tabbar_id: tabbar_id,
         model: model,
         initial_tab: initial_tab,
         email_dialog: nil
@@ -59,7 +64,7 @@ defmodule Systems.Pool.DetailPage do
   end
 
   def handle_info({:email_dialog, %Systems.Email.Model{} = email}, socket) do
-    Email.Context.deliver_later!(email)
+    Email.Public.deliver_later!(email)
 
     {
       :noreply,
@@ -124,7 +129,7 @@ defmodule Systems.Pool.DetailPage do
       <div id={:pool_detail} phx-hook="ViewportResize">
         <TabbarArea tabs={@vm.tabs}>
           <ActionBar>
-            <Tabbar vm={%{initial_tab: @initial_tab, size: :wide, type: :segmented}} />
+            <Tabbar id={@tabbar_id} initial_tab={@initial_tab} size={:wide} type={:segmented} />
           </ActionBar>
           <TabbarContent />
         </TabbarArea>

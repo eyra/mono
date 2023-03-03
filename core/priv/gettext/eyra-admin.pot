@@ -11,22 +11,6 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "permissions.pooladmin.candidates.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "permissions.pooladmin.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "permissions.pooladmin.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "permissions.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "support.title"
 msgstr ""
 
@@ -64,4 +48,44 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "reopen.ticket.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "system.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "actions.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "create.org.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "create.org.button.short"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "org.content.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "config.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "system.bank.accounts.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "system.bank.accounts.new.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "system.citizen.pools.new.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "system.citizen.pools.title"
 msgstr ""

@@ -17,17 +17,6 @@ defmodule Systems.Assignment.AssignmentForm do
   data(tool_form, :number)
   data(user, :map)
 
-  def update(%{claim_focus: form}, %{assigns: assigns} = socket) do
-    assigns
-    |> forms()
-    |> filter(form)
-    |> Enum.each(fn %{component: component, props: %{id: id}} ->
-      send_update(component, id: id, focus: "")
-    end)
-
-    {:ok, socket}
-  end
-
   # Handle update from parent after attempt to publish
   def update(%{props: %{validate?: new}}, %{assigns: %{validate?: current}} = socket)
       when new != current do
@@ -75,11 +64,6 @@ defmodule Systems.Assignment.AssignmentForm do
     }
   end
 
-  @impl true
-  def handle_event("reset_focus", _, socket) do
-    {:noreply, socket |> assign(focus: "")}
-  end
-
   defp forms(%{
          tool_form: tool_form,
          tool_id: tool_id,
@@ -119,10 +103,6 @@ defmodule Systems.Assignment.AssignmentForm do
   end
 
   defp forms(_), do: []
-
-  defp filter(forms, exclude_form_id) do
-    Enum.filter(forms, &(&1.props.id != exclude_form_id))
-  end
 
   def render(assigns) do
     ~F"""

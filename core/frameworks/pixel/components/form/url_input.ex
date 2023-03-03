@@ -7,7 +7,6 @@ defmodule Frameworks.Pixel.Form.UrlInput do
   prop(label_text, :string)
   prop(label_color, :css_class, default: "text-grey1")
   prop(background, :atom, default: :light)
-  slot(default)
 
   def render(assigns) do
     ~F"""
@@ -17,9 +16,7 @@ defmodule Frameworks.Pixel.Form.UrlInput do
       label_color={@label_color}
       background={@background}
       type="url"
-    >
-      <#slot />
-    </Input>
+    />
     """
   end
 end

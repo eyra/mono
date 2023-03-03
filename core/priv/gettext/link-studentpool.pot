@@ -91,13 +91,17 @@ msgid "submission.selector.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "overview.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "campaigns.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "participants.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "excluded.campaigns.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.plugin.title"
 msgstr ""

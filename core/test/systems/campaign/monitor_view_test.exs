@@ -23,9 +23,9 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Participated: 0"
-      assert html =~ "Pending: 0"
-      assert html =~ "Open: 1"
+      assert html =~ "Deelgenomen: 0"
+      assert html =~ "Bezig: 0"
+      assert html =~ "Vrij: 1"
     end
 
     test "Member applied but expired and not completed", %{
@@ -33,21 +33,21 @@ defmodule Systems.Campaign.MonitorViewTest do
     } do
       %{id: id, promotable_assignment: %{crew: crew}} = create_campaign(user, :accepted, 1)
 
-      {:ok, %{task: task}} = Crew.Context.apply_member(crew, user)
+      {:ok, %{task: task}} = Crew.Public.apply_member(crew, user)
 
-      Crew.Context.update_task(task, %{
+      Crew.Public.update_task(task, %{
         started_at: Timestamp.naive_from_now(-60),
         expire_at: Timestamp.naive_from_now(-31)
       })
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Participated: 0"
-      assert html =~ "Pending: 1"
-      assert html =~ "Open: 0"
-      assert html =~ "Attention<span class=\"text-primary\">\n            1"
+      assert html =~ "Deelgenomen: 0"
+      assert html =~ "Bezig: 1"
+      assert html =~ "Vrij: 0"
+      assert html =~ "Let op<span class=\"text-primary\">\n            1"
       assert html =~ "Subject 1"
-      assert html =~ "Started today at"
+      assert html =~ "Gestart vandaag om"
       assert html =~ "accept"
       assert html =~ "reject"
     end
@@ -57,9 +57,9 @@ defmodule Systems.Campaign.MonitorViewTest do
     } do
       %{id: id, promotable_assignment: %{crew: crew}} = create_campaign(user, :accepted, 1)
 
-      {:ok, %{task: task}} = Crew.Context.apply_member(crew, user)
+      {:ok, %{task: task}} = Crew.Public.apply_member(crew, user)
 
-      Crew.Context.update_task(task, %{
+      Crew.Public.update_task(task, %{
         started_at: Timestamp.naive_from_now(-60),
         expire_at: Timestamp.naive_from_now(-31)
       })
@@ -71,8 +71,8 @@ defmodule Systems.Campaign.MonitorViewTest do
         |> element("[phx-click=\"reject\"]")
         |> render_click()
 
-      assert html =~ "Reject contribution"
-      assert html =~ "Message to participant"
+      assert html =~ "Bijdrage afkeuren"
+      assert html =~ "Bericht aan de deelnemer (in het Engels)"
     end
 
     test "Member applied but expired and not completed: accept ", %{
@@ -80,9 +80,9 @@ defmodule Systems.Campaign.MonitorViewTest do
     } do
       %{id: id, promotable_assignment: %{crew: crew}} = create_campaign(user, :accepted, 1)
 
-      {:ok, %{task: task}} = Crew.Context.apply_member(crew, user)
+      {:ok, %{task: task}} = Crew.Public.apply_member(crew, user)
 
-      Crew.Context.update_task(task, %{
+      Crew.Public.update_task(task, %{
         started_at: Timestamp.naive_from_now(-60),
         expire_at: Timestamp.naive_from_now(-31)
       })
@@ -102,17 +102,17 @@ defmodule Systems.Campaign.MonitorViewTest do
     } do
       %{id: id, promotable_assignment: %{crew: crew}} = create_campaign(user, :accepted, 2)
 
-      {:ok, %{task: task}} = Crew.Context.apply_member(crew, user)
+      {:ok, %{task: task}} = Crew.Public.apply_member(crew, user)
 
-      Crew.Context.update_task(task, %{
+      Crew.Public.update_task(task, %{
         started_at: Timestamp.naive_from_now(-60),
         expire_at: Timestamp.naive_from_now(-31)
       })
 
       user2 = Factories.insert!(:member)
-      {:ok, %{task: task2}} = Crew.Context.apply_member(crew, user2)
+      {:ok, %{task: task2}} = Crew.Public.apply_member(crew, user2)
 
-      Crew.Context.update_task(task2, %{
+      Crew.Public.update_task(task2, %{
         started_at: Timestamp.naive_from_now(-60),
         expire_at: Timestamp.naive_from_now(-31)
       })
@@ -132,17 +132,17 @@ defmodule Systems.Campaign.MonitorViewTest do
     } do
       %{id: id, promotable_assignment: %{crew: crew}} = create_campaign(user, :accepted, 2)
 
-      {:ok, %{task: task}} = Crew.Context.apply_member(crew, user)
+      {:ok, %{task: task}} = Crew.Public.apply_member(crew, user)
 
-      Crew.Context.update_task(task, %{
+      Crew.Public.update_task(task, %{
         status: :completed,
         completed_at: Timestamp.naive_now()
       })
 
       user2 = Factories.insert!(:member)
-      {:ok, %{task: task2}} = Crew.Context.apply_member(crew, user2)
+      {:ok, %{task: task2}} = Crew.Public.apply_member(crew, user2)
 
-      Crew.Context.update_task(task2, %{
+      Crew.Public.update_task(task2, %{
         status: :completed,
         completed_at: Timestamp.naive_now()
       })
@@ -160,26 +160,26 @@ defmodule Systems.Campaign.MonitorViewTest do
     test "Member applied and completed", %{conn: %{assigns: %{current_user: user}} = conn} do
       %{id: id, promotable_assignment: %{crew: crew}} = create_campaign(user, :accepted, 1)
 
-      {:ok, %{task: task}} = Crew.Context.apply_member(crew, user)
-      Crew.Context.activate_task(task)
+      {:ok, %{task: task}} = Crew.Public.apply_member(crew, user)
+      Crew.Public.activate_task(task)
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Participated: 1"
-      assert html =~ "Pending: 0"
-      assert html =~ "Open: 0"
+      assert html =~ "Deelgenomen: 1"
+      assert html =~ "Bezig: 0"
+      assert html =~ "Vrij: 0"
     end
 
     test "Member applied", %{conn: %{assigns: %{current_user: user}} = conn} do
       %{id: id, promotable_assignment: %{crew: crew}} = create_campaign(user, :accepted, 1)
 
-      {:ok, _} = Crew.Context.apply_member(crew, user)
+      {:ok, _} = Crew.Public.apply_member(crew, user)
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Participated: 0"
-      assert html =~ "Pending: 1"
-      assert html =~ "Open: 0"
+      assert html =~ "Deelgenomen: 0"
+      assert html =~ "Bezig: 1"
+      assert html =~ "Vrij: 0"
     end
   end
 
@@ -190,9 +190,9 @@ defmodule Systems.Campaign.MonitorViewTest do
          schedule_start \\ nil,
          schedule_end \\ nil
        ) do
-    currency = Budget.Factories.create_currency("test_1234", "ƒ", 2)
+    currency = Budget.Factories.create_currency("test_1234", :legal, "ƒ", 2)
     budget = Budget.Factories.create_budget("test_1234", currency)
-    pool = Factories.insert!(:pool, %{name: "test_1234", currency: currency})
+    pool = Factories.insert!(:pool, %{name: "test_1234", director: :citizen, currency: currency})
 
     promotion = Factories.insert!(:promotion)
 

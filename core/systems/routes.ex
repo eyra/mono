@@ -2,6 +2,7 @@ defmodule Systems.Routes do
   defmacro routes() do
     quote do
       use Systems.Subroutes, [
+        :org,
         :home,
         :admin,
         :support,
@@ -12,7 +13,10 @@ defmodule Systems.Routes do
         :promotion,
         :pool,
         :lab,
-        :data_donation
+        :data_donation,
+        :budget,
+        :student,
+        :citizen
       ]
     end
   end

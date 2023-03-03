@@ -13,7 +13,6 @@ defmodule CoreWeb.User.Forms.Debug do
   data(entity, :any)
   data(changeset, :any)
   data(role_labels, :list)
-  data(focus, :any, default: "")
 
   # Handle Selector Update
   def update(
@@ -75,6 +74,7 @@ defmodule CoreWeb.User.Forms.Debug do
 
   # Saving
 
+  @impl true
   def handle_event(
         "save",
         %{"user_profile_edit" => attrs},
@@ -88,6 +88,7 @@ defmodule CoreWeb.User.Forms.Debug do
     }
   end
 
+  @impl true
   def handle_event(
         "save",
         _params,
@@ -111,7 +112,7 @@ defmodule CoreWeb.User.Forms.Debug do
     ~F"""
     <ContentArea>
       <Title2>User roles</Title2>
-      <Form id="main_form" changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
+      <Form id="main_form" changeset={@changeset} change_event="save" target={@myself}>
         <Selector
           id={:role_selector}
           items={@role_labels}

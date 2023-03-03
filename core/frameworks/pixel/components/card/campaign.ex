@@ -52,7 +52,14 @@ defmodule Frameworks.Pixel.Card.Campaign do
             {/if}
             {#if @card.icon_url}
               <div class="absolute top-6 right-6 z-10">
-                <Icon size="S" src={@card.icon_url} />
+                <Icon
+                  size="S"
+                  type={:url}
+                  src={@card.icon_url}
+                  bg_color="bg-white"
+                  border_size="border-2"
+                  border_radius="rounded-full"
+                />
               </div>
             {/if}
             <div class="h-image-card">
@@ -142,17 +149,7 @@ defmodule Frameworks.Pixel.Card.Campaign.Example do
         icon_url: nil,
         label: %{text: "Label", type: :disabled},
         label_type: "secondary",
-        left_actions: [
-          %{
-            action: %{type: :send, event: "share", item: "777"},
-            face: %{
-              type: :label,
-              label: "Share",
-              font: "text-subhead font-subhead",
-              text_color: "text-white",
-              wrap: true
-            }
-          },
+        right_actions: [
           %{
             action: %{type: :send, event: "duplicate", item: "777"},
             face: %{
@@ -162,12 +159,22 @@ defmodule Frameworks.Pixel.Card.Campaign.Example do
               text_color: "text-white",
               wrap: true
             }
+          },
+          %{
+            action: %{type: :send, event: "share", item: "777"},
+            face: %{
+              type: :label,
+              label: "Share",
+              font: "text-subhead font-subhead",
+              text_color: "text-white",
+              wrap: true
+            }
           }
         ],
-        right_actions: [
+        left_actions: [
           %{
             action: %{type: :send, event: "delete", item: ""},
-            face: %{type: :icon, icon: :delete, color: :white}
+            face: %{type: :icon, icon: :delete, color: :light}
           }
         ]
       }}

@@ -20,7 +20,6 @@ defmodule Systems.Promotion.FormView do
   data(validate?, :boolean)
   data(changeset, :any)
   data(uploads, :any)
-  data(focus, :any, default: "")
 
   data(published?, :boolean)
   data(image_info, :string)
@@ -146,7 +145,7 @@ defmodule Systems.Promotion.FormView do
       <Title2>{dgettext("eyra-promotion", "form.title")}</Title2>
       <BodyLarge>{dgettext("eyra-promotion", "form.description")}</BodyLarge>
       <Spacing value="M" />
-      <Form id={@id} changeset={@changeset} change_event="save" focus={@focus} target={@myself}>
+      <Form id={@id} changeset={@changeset} change_event="save" target={@myself}>
         <TextInput field={:title} label_text={dgettext("eyra-promotion", "title.label")} />
         <TextInput field={:subtitle} label_text={dgettext("eyra-promotion", "subtitle.label")} />
 

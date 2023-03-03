@@ -19,11 +19,10 @@ defmodule Systems.DataDonation.ToolForm do
   data(entity, :any)
   data(donations, :any)
   data(changeset, :any)
-  data(focus, :any, default: "")
 
   def update(%{id: id, entity_id: entity_id}, socket) do
-    entity = DataDonation.Context.get_tool!(entity_id)
-    donations = DataDonation.Context.list_donations(entity)
+    entity = DataDonation.Public.get_tool!(entity_id)
+    donations = DataDonation.Public.list_donations(entity)
     changeset = DataDonation.ToolModel.changeset(entity, :mount, %{})
 
     {
@@ -54,8 +53,8 @@ defmodule Systems.DataDonation.ToolForm do
         _params,
         %{assigns: %{entity_id: entity_id, current_user: user}} = socket
       ) do
-    DataDonation.Context.get_tool!(entity_id)
-    |> DataDonation.Context.delete()
+    DataDonation.Public.get_tool!(entity_id)
+    |> DataDonation.Public.delete()
 
     {:noreply,
      push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))}
@@ -99,7 +98,7 @@ defmodule Systems.DataDonation.ToolForm do
         <PrimaryButton to="/" label={dgettext("eyra-data-donation", "download.all.button.label")} />
         <Spacing value="XL" />
       </div>
-      <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
+      <Form id={@id} changeset={@changeset} change_event="save" target={@myself}>
         <Title3>{dgettext("eyra-data-donation", "script.title")}</Title3>
         <TextArea field={:script} label_text={dgettext("eyra-data-donation", "script.label")} />
         <Spacing value="L" />

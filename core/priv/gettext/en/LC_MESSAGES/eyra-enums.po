@@ -241,36 +241,56 @@ msgstr "Passed"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "organisation_types.faculty"
-msgstr ""
+msgstr "Faculty"
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.scholar_class"
-msgstr ""
+msgid "organisation_types.student_class"
+msgstr "Student class"
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.scholar_course"
-msgstr ""
+msgid "organisation_types.student_course"
+msgstr "Student course"
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.scholar_program"
-msgstr ""
+msgid "organisation_types.student_program"
+msgstr "Student program"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "organisation_types.university"
+msgstr "University"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "student_years.first"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "scholar_years.first"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "scholar_years.second"
+msgid "student_years.second"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "organisation_types.company"
-msgstr ""
+msgstr "Company"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "organisation_types.department"
-msgstr ""
+msgstr "Department"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "currency_types.legal"
+msgstr "Legal"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "currency_types.virtual"
+msgstr "Virtual"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "criteria_filters.man"
+msgstr "Man"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "criteria_filters.woman"
+msgstr "Woman"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "criteria_filters.x"
+msgstr "X"

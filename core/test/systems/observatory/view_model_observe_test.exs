@@ -21,8 +21,8 @@ defmodule Systems.Observatory.ViewModelObserveTest do
     test "View model update", %{conn: conn} do
       {:ok, view, _html} = live(conn, Routes.live_path(conn, Test.Page, 1))
 
-      model = Test.Context.get(1)
-      Test.Context.update(model, %{age: 57})
+      model = Test.Public.get(1)
+      Test.Public.update(model, %{age: 57})
 
       assert render(view) =~ "Age: 57 - Works at: The Basement"
     end

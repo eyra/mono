@@ -34,7 +34,7 @@ defmodule Systems.Promotion.LandingPage do
         _session,
         %{assigns: %{current_user: user}} = socket
       ) do
-    model = Promotion.Context.get!(id)
+    model = Promotion.Public.get!(id)
 
     {
       :ok,

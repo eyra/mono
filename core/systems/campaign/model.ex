@@ -10,7 +10,8 @@ defmodule Systems.Campaign.Model do
     Campaign,
     Promotion,
     Assignment,
-    Pool
+    Pool,
+    Student
   }
 
   schema "campaigns" do
@@ -90,7 +91,8 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     Assignment,
     Crew,
     Pool,
-    Budget
+    Budget,
+    Student
   }
 
   alias Core.ImageHelpers
@@ -146,7 +148,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     info1 = Enum.join(info1_elements, " | ")
     info = [info1]
 
-    open? = Assignment.Context.open?(assignment)
+    open? = Assignment.Public.open?(assignment)
 
     label =
       if open? do
@@ -198,7 +200,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
        ) do
     duration = if duration === nil, do: 0, else: duration
 
-    open_spot_count = Assignment.Context.open_spot_count(assignment)
+    open_spot_count = Assignment.Public.open_spot_count(assignment)
 
     duration_label = dgettext("eyra-promotion", "duration.title")
     open_spots_label = dgettext("eyra-promotion", "open.spots.label", count: "#{open_spot_count}")
@@ -224,11 +226,13 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
     info = [info1, info2]
 
-    label = Pool.Context.get_tag(submission)
+    label = Pool.Public.get_tag(submission)
     icon_url = get_card_icon_url(marks)
     image_info = ImageHelpers.get_image_info(image_id)
     tags = get_card_tags(themes)
     type = get_card_type(submission)
+    action_icon_color = get_action_icon_color(type)
+    action_label_color = get_action_label_color(type)
 
     %{
       type: type,
@@ -243,32 +247,32 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
       icon_url: icon_url,
       label: label,
       label_type: "secondary",
-      left_actions: [
-        %{
-          action: %{type: :send, event: "share", item: "#{id}"},
-          face: %{
-            type: :label,
-            label: dgettext("eyra-ui", "share.button"),
-            font: "text-subhead font-subhead",
-            text_color: "text-white",
-            wrap: true
-          }
-        },
+      right_actions: [
         %{
           action: %{type: :send, event: "duplicate", item: id},
           face: %{
             type: :label,
             label: dgettext("eyra-ui", "duplicate.button"),
             font: "text-subhead font-subhead",
-            text_color: "text-white",
+            text_color: action_label_color,
+            wrap: true
+          }
+        },
+        %{
+          action: %{type: :send, event: "share", item: "#{id}"},
+          face: %{
+            type: :label,
+            label: dgettext("eyra-ui", "share.button"),
+            font: "text-subhead font-subhead",
+            text_color: action_label_color,
             wrap: true
           }
         }
       ],
-      right_actions: [
+      left_actions: [
         %{
           action: %{type: :send, event: "delete", item: id},
-          face: %{type: :icon, icon: :delete, color: :white}
+          face: %{type: :icon, icon: :delete, color: action_icon_color}
         }
       ]
     }
@@ -342,9 +346,9 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
          url_resolver
        ) do
     path = url_resolver.(Systems.Campaign.ContentPage, id: id)
-    tag = Pool.Context.get_tag(submission)
+    tag = Pool.Public.get_tag(submission)
 
-    promotion_ready? = Promotion.Context.ready?(promotion)
+    promotion_ready? = Promotion.Public.ready?(promotion)
 
     target_subject_count =
       if target_subject_count == nil do
@@ -353,7 +357,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
         target_subject_count
       end
 
-    open_spot_count = Assignment.Context.open_spot_count(assignment)
+    open_spot_count = Assignment.Public.open_spot_count(assignment)
 
     subtitle =
       get_content_list_item_subtitle(
@@ -390,7 +394,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
   defp vm(
          %{submission: submission} = campaign,
-         {Pool.StudentPage, :contribution},
+         {Student.DetailPage, :contribution},
          user,
          url_resolver
        ) do
@@ -433,9 +437,9 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   end
 
   defp task(crew, user) do
-    case Crew.Context.get_member!(crew, user) do
+    case Crew.Public.get_member!(crew, user) do
       nil -> nil
-      member -> Crew.Context.get_task(crew, member)
+      member -> Crew.Public.get_task(crew, member)
     end
   end
 
@@ -481,7 +485,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
         dgettext("eyra-marketplace", "assignment.status.completed.subtitle")
 
       :accepted ->
-        rewarded_amount = Campaign.Context.rewarded_amount(assignment, user)
+        rewarded_amount = Campaign.Public.rewarded_amount(assignment, user)
 
         dngettext(
           "eyra-marketplace",
@@ -536,7 +540,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
         dgettext("eyra-submission", "waiting.for.coordinator.message")
 
       :accepted ->
-        case Pool.Context.published_status(submission) do
+        case Pool.Public.published_status(submission) do
           :scheduled ->
             dgettext("eyra-submission", "accepted.scheduled.message")
 
@@ -578,6 +582,20 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     end
   end
 
+  def get_action_label_color(type) do
+    case type do
+      :primary -> "text-white"
+      :secondary -> "text-grey1"
+    end
+  end
+
+  def get_action_icon_color(type) do
+    case type do
+      :primary -> :light
+      :secondary -> :dark
+    end
+  end
+
   def get_card_tags(nil), do: []
 
   def get_card_tags(themes) do
@@ -595,7 +613,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   defp completed?(%{status: status} = submission) do
     case status do
       :completed -> true
-      :accepted -> Pool.Context.published_status(submission) == :closed
+      :accepted -> Pool.Public.published_status(submission) == :closed
       _ -> false
     end
   end

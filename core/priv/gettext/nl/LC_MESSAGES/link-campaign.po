@@ -31,18 +31,6 @@ msgstr "Bijdrage afkeuren"
 msgid "reject.note"
 msgstr "Let op: Afgewezen deelnemers kunnen niet opnieuw meedoen aan deze campagne."
 
-#, elixir-autogen, elixir-format
-msgid "create.campaign.dialog.ok.button"
-msgstr "Doorgaan"
-
-#, elixir-autogen, elixir-format
-msgid "create.campaign.dialog.text"
-msgstr "Wat voor soort studie wil je opzetten?"
-
-#, elixir-autogen, elixir-format
-msgid "create.campaign.dialog.title"
-msgstr "Soort studie"
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "exclusion.description"
 msgstr "Wil je deelnemers die je in voorgaande campagnes geworven hebt excluderen? Selecteer dan één of meerdere campagnes hieronder."

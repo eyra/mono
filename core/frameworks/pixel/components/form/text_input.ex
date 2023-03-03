@@ -10,6 +10,7 @@ defmodule Frameworks.Pixel.Form.TextInput do
   prop(placeholder, :string, default: "")
   prop(reserve_error_space, :boolean, default: true)
   prop(debounce, :string, default: "1000")
+  prop(maxlength, :string)
 
   def render(assigns) do
     ~F"""
@@ -21,6 +22,7 @@ defmodule Frameworks.Pixel.Form.TextInput do
       placeholder={@placeholder}
       reserve_error_space={@reserve_error_space}
       debounce={@debounce}
+      maxlength={@maxlength}
       type="text"
     />
     """

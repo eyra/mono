@@ -14,12 +14,12 @@ defmodule Systems.Assignment.CallbackPage do
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
-    Assignment.Context.get!(id, [:crew]).crew
+    Assignment.Public.get!(id, [:crew]).crew
   end
 
   @impl true
   def mount(%{"id" => id}, _session, socket) do
-    model = Assignment.Context.get!(id, [:crew])
+    model = Assignment.Public.get!(id, [:crew])
 
     {
       :ok,

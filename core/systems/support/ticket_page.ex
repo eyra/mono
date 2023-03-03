@@ -15,7 +15,7 @@ defmodule Systems.Support.TicketPage do
   data(member, :any, default: nil)
 
   def mount(%{"id" => id}, _session, socket) do
-    ticket = Support.Context.get_ticket!(id)
+    ticket = Support.Public.get_ticket!(id)
 
     timestamp =
       ticket.updated_at
@@ -88,13 +88,13 @@ defmodule Systems.Support.TicketPage do
 
   @impl true
   def handle_event("close_ticket", _params, %{assigns: %{id: id}} = socket) do
-    Support.Context.close_ticket_by_id(id)
+    Support.Public.close_ticket_by_id(id)
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, Systems.Support.OverviewPage))}
   end
 
   @impl true
   def handle_event("reopen_ticket", _params, %{assigns: %{id: id}} = socket) do
-    Support.Context.reopen_ticket_by_id(id)
+    Support.Public.reopen_ticket_by_id(id)
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, Systems.Support.OverviewPage))}
   end
 

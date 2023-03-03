@@ -243,15 +243,15 @@ msgid "organisation_types.faculty"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.scholar_class"
+msgid "organisation_types.student_class"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.scholar_course"
+msgid "organisation_types.student_course"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.scholar_program"
+msgid "organisation_types.student_program"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
@@ -259,11 +259,11 @@ msgid "organisation_types.university"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "scholar_years.first"
+msgid "student_years.first"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "scholar_years.second"
+msgid "student_years.second"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
@@ -272,4 +272,24 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "organisation_types.department"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "currency_types.legal"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "currency_types.virtual"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "criteria_filters.man"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "criteria_filters.woman"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "criteria_filters.x"
 msgstr ""

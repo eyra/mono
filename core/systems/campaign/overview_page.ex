@@ -20,15 +20,11 @@ defmodule Systems.Campaign.OverviewPage do
   alias Frameworks.Pixel.ShareView
 
   data(campaigns, :list, default: [])
-  data(share_dialog, :map)
+  data(popup, :any)
   data(selector_dialog, :map)
 
   alias Systems.{
-    Campaign,
-    Assignment,
-    Pool,
-    Budget,
-    Scholar
+    Campaign
   }
 
   def mount(_params, _session, socket) do
@@ -37,7 +33,7 @@ defmodule Systems.Campaign.OverviewPage do
       socket
       |> assign(
         dialog: nil,
-        share_dialog: nil,
+        popup: nil,
         selector_dialog: nil
       )
       |> update_campaigns()
@@ -50,7 +46,7 @@ defmodule Systems.Campaign.OverviewPage do
 
     campaigns =
       user
-      |> Campaign.Context.list_owned_campaigns(preload: preload)
+      |> Campaign.Public.list_owned_campaigns(preload: preload)
       |> Enum.map(
         &ViewModelBuilder.view_model(&1, {__MODULE__, :card}, user, url_resolver(socket))
       )
@@ -59,7 +55,7 @@ defmodule Systems.Campaign.OverviewPage do
     |> assign(
       campaigns: campaigns,
       dialog: nil,
-      share_dialog: nil,
+      popup: nil,
       selector_dialog: nil
     )
   end
@@ -85,7 +81,7 @@ defmodule Systems.Campaign.OverviewPage do
 
   @impl true
   def handle_event("delete_confirm", _params, %{assigns: %{campaign_id: campaign_id}} = socket) do
-    Campaign.Context.delete(campaign_id)
+    Campaign.Public.delete(campaign_id)
 
     {
       :noreply,
@@ -107,7 +103,7 @@ defmodule Systems.Campaign.OverviewPage do
   @impl true
   def handle_event("close_share_dialog", _, socket) do
     IO.puts("close_share_dialog")
-    {:noreply, socket |> assign(share_dialog: nil)}
+    {:noreply, socket |> assign(popup: nil)}
   end
 
   @impl true
@@ -120,12 +116,13 @@ defmodule Systems.Campaign.OverviewPage do
     owners =
       campaign_id
       |> String.to_integer()
-      |> Campaign.Context.get!()
-      |> Campaign.Context.list_owners([:profile])
+      |> Campaign.Public.get!()
+      |> Campaign.Public.list_owners([:profile])
       # filter current user
       |> Enum.filter(&(&1.id != user.id))
 
-    share_dialog = %{
+    popup = %{
+      module: ShareView,
       content_id: campaign_id,
       content_name: dgettext("eyra-campaign", "share.dialog.content"),
       group_name: dgettext("eyra-campaign", "share.dialog.group"),
@@ -135,14 +132,14 @@ defmodule Systems.Campaign.OverviewPage do
 
     {
       :noreply,
-      socket |> assign(share_dialog: share_dialog)
+      socket |> assign(popup: popup)
     }
   end
 
   @impl true
   def handle_event("duplicate", %{"item" => campaign_id}, socket) do
     preload = Campaign.Model.preload_graph(:full)
-    campaign = Campaign.Context.get!(String.to_integer(campaign_id), preload)
+    campaign = Campaign.Public.get!(String.to_integer(campaign_id), preload)
 
     Campaign.Assembly.copy(campaign)
 
@@ -155,23 +152,23 @@ defmodule Systems.Campaign.OverviewPage do
   end
 
   @impl true
-  def handle_event("create_campaign", _params, socket) do
-    selector_dialog = %{
-      title: dgettext("link-campaign", "create.campaign.dialog.title"),
-      text: dgettext("link-campaign", "create.campaign.dialog.text"),
-      items: Assignment.ToolTypes.labels(nil),
-      ok_button_text: dgettext("link-campaign", "create.campaign.dialog.ok.button"),
-      cancel_button_text: dgettext("eyra-ui", "cancel.button"),
-      target: self()
+  def handle_event("create_campaign", _params, %{assigns: %{current_user: user}} = socket) do
+    popup = %{
+      module: Campaign.CreateForm,
+      target: self(),
+      user: user
     }
 
-    {:noreply, socket |> assign(selector_dialog: selector_dialog)}
+    {:noreply, socket |> assign(popup: popup)}
   end
 
   @impl true
-  def handle_info(%{selector: :ok, selected: tool_type}, socket) do
-    tool = create_campaign(socket, tool_type)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, Campaign.ContentPage, tool.id))}
+  def handle_info(
+        %{module: Systems.Campaign.CreateForm, action: %{redirect_to: campaign_id}},
+        socket
+      ) do
+    {:noreply,
+     push_redirect(socket, to: Routes.live_path(socket, Campaign.ContentPage, campaign_id))}
   end
 
   @impl true
@@ -186,53 +183,42 @@ defmodule Systems.Campaign.OverviewPage do
   end
 
   @impl true
-  def handle_info({:share_view, :close}, socket) do
-    {:noreply, socket |> assign(share_dialog: nil)}
+  def handle_info(%{module: _, action: :close}, socket) do
+    {:noreply, socket |> assign(popup: nil)}
   end
 
   @impl true
-  def handle_info({:share_view, %{add: user, content_id: campaign_id}}, socket) do
+  def handle_info(
+        %{module: Frameworks.Pixel.ShareView, action: %{add: user, content_id: campaign_id}},
+        socket
+      ) do
     campaign_id
-    |> Campaign.Context.get!()
-    |> Campaign.Context.add_owner!(user)
+    |> Campaign.Public.get!()
+    |> Campaign.Public.add_owner!(user)
 
     {:noreply, socket}
   end
 
   @impl true
-  def handle_info({:share_view, %{remove: user, content_id: campaign_id}}, socket) do
+  def handle_info(
+        %{module: Frameworks.Pixel.ShareView, action: %{remove: user, content_id: campaign_id}},
+        socket
+      ) do
     campaign_id
-    |> Campaign.Context.get!()
-    |> Campaign.Context.remove_owner!(user)
+    |> Campaign.Public.get!()
+    |> Campaign.Public.remove_owner!(user)
 
     {:noreply, socket}
-  end
-
-  defp create_campaign(%{assigns: %{current_user: user}} = _socket, tool_type) do
-    title = dgettext("eyra-dashboard", "default.study.title")
-
-    %{name: pool_name} =
-      pool =
-      Scholar.Context.default_pool()
-      |> Pool.Context.get_by_name()
-
-    budget = Budget.Context.get_by_name(pool_name)
-
-    Campaign.Assembly.create(user, title, tool_type, pool, budget)
   end
 
   def render(assigns) do
     ~F"""
     <Workspace title={dgettext("link-survey", "title")} menus={@menus}>
-      <div
-        :if={@share_dialog}
-        class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20"
-        phx-click="close_share_dialog"
-      >
-        <div class="flex flex-row items-center justify-center w-full h-full">
-          <ShareView id={:share_dialog} {...@share_dialog} />
+      <Popup :if={@popup}>
+        <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
+          <Dynamic.LiveComponent id={:campaign_overview_popup} module={@popup.module} {...@popup} />
         </div>
-      </div>
+      </Popup>
 
       <div :if={@dialog != nil} class="fixed z-40 left-0 top-0 w-full h-full bg-black bg-opacity-20">
         <div class="flex flex-row items-center justify-center w-full h-full">
@@ -253,7 +239,7 @@ defmodule Systems.Campaign.OverviewPage do
         <MarginY id={:page_top} />
         <Case value={Enum.count(@campaigns) > 0}>
           <True>
-            <div class="flex flex-row items-center">
+            <div class="flex flex-row items-center justify-center">
               <div class="h-full">
                 <Title2 margin="">{dgettext("link-survey", "campaign.overview.title")}</Title2>
               </div>

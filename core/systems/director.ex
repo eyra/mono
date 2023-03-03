@@ -1,5 +1,6 @@
 defmodule Systems.Director do
-  def context(director), do: module(director, "Context")
+  def get(director), do: module(director, "Director")
+  def public(director), do: module(director, "Public")
   def presenter(director), do: module(director, "Presenter")
 
   defp module(%{director: director}, name) when is_atom(director),

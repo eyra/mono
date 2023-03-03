@@ -1,7 +1,7 @@
 defmodule CoreWeb.Layouts.Workspace.MenuBuilder do
   @behaviour CoreWeb.Menu.Builder
 
-  import Systems.Admin.Context
+  import Systems.Admin.Public
   import CoreWeb.Menu.Helpers
 
   @impl true
@@ -43,7 +43,7 @@ defmodule CoreWeb.Layouts.Workspace.MenuBuilder do
   defp build_menu_first_part(socket, menu_id, %{email: email} = user, active_item) do
     []
     # |> append(live_item(socket, menu_id, :console, user, active_item))
-    |> append(live_item(socket, menu_id, :permissions, user, active_item), admin?(email))
+    |> append(live_item(socket, menu_id, :admin, user, active_item), admin?(email))
     |> append(live_item(socket, menu_id, :support, user, active_item), admin?(email))
     |> append(live_item(socket, menu_id, :todo, user, active_item))
 

@@ -151,7 +151,7 @@ defmodule GoogleSignIn.CallbackPlug.Test do
       Application.put_env(
         :core,
         :admins,
-        Systems.Admin.Context.compile([GoogleSignIn.FakeGoogle.email()])
+        Systems.Admin.Public.compile([GoogleSignIn.FakeGoogle.email()])
       )
 
       set_feature_flag(:member_google_sign_in, false)

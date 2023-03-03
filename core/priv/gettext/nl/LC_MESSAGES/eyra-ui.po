@@ -76,7 +76,7 @@ msgid "tabbar.item.profile"
 msgstr "Mijn profiel"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.scholar"
+msgid "tabbar.item.student"
 msgstr "Opleiding"
 
 #, elixir-autogen, elixir-format
@@ -88,7 +88,7 @@ msgid "tabbar.item.profile.forward"
 msgstr "Pas profiel aan"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.scholar.forward"
+msgid "tabbar.item.student.forward"
 msgstr "Selecteer opleiding"
 
 #, elixir-autogen, elixir-format
@@ -142,10 +142,6 @@ msgstr "Op dit moment werken we nog aan deze functie. We updaten het platform re
 #, elixir-autogen, elixir-format
 msgid "feature.unavailable.title"
 msgstr "Binnenkort beschikbaar"
-
-#, elixir-autogen, elixir-format
-msgid "menu.item.permissions"
-msgstr "Permissies"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.support"
@@ -210,3 +206,15 @@ msgstr "Stuur notificatie"
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "pronoun.him"
 msgstr "haar"
+
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
+msgid "menu.item.admin"
+msgstr "Admin"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "menu.item.funding"
+msgstr "Financiën"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "share.dialog.title"
+msgstr "Gedeeld met"

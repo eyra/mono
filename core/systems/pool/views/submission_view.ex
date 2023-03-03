@@ -27,7 +27,6 @@ defmodule Systems.Pool.SubmissionView do
   data(schedule_end_disabled, :boolean)
 
   data(changeset, :any)
-  data(focus, :any, default: "")
 
   defp determine_new_end(_, nil), do: nil
   defp determine_new_end(nil, schedule_end), do: schedule_end
@@ -204,7 +203,7 @@ defmodule Systems.Pool.SubmissionView do
   def render(assigns) do
     ~F"""
     <ContentArea>
-      <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
+      <Form id={@id} changeset={@changeset} change_event="save" target={@myself}>
         <Title3 margin="mb-5 sm:mb-8">{dgettext("eyra-submission", "reward.label")}</Title3>
         <NumberInput
           field={:reward_value}

@@ -13,9 +13,11 @@ defmodule Systems.Promotion.LandingPageTest do
     setup [:login_as_member]
 
     setup do
-      currency = Budget.Factories.create_currency("test_1234", "ƒ", 2)
+      currency = Budget.Factories.create_currency("test_1234", :legal, "ƒ", 2)
       budget = Budget.Factories.create_budget("test_1234", currency)
-      pool = Factories.insert!(:pool, %{name: "test_1234", currency: currency})
+
+      pool =
+        Factories.insert!(:pool, %{name: "test_1234", director: :citizen, currency: currency})
 
       survey_tool =
         Factories.insert!(
@@ -81,29 +83,29 @@ defmodule Systems.Promotion.LandingPageTest do
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Promotion.LandingPage, promotion.id))
       assert html =~ "This is a test title"
       assert html =~ "These are the expectations for the participants"
-      assert html =~ "Marketing, Econometrics"
-      assert html =~ "What to expect?"
+      assert html =~ "Marketing, Econometrie"
+      assert html =~ "Wat kun je verwachten?"
       assert html =~ "These are the expectations for the participants"
-      assert html =~ "About this study"
+      assert html =~ "Over deze studie"
       assert html =~ "Something about this study"
       assert html =~ "This is a test title"
-      assert html =~ "Participate"
-      assert html =~ "Duration"
-      assert html =~ "10 minutes"
-      assert html =~ "Reward"
-      assert html =~ "ƒ5.00"
+      assert html =~ "Ik doe mee"
+      assert html =~ "Duur"
+      assert html =~ "10 minuten"
+      assert html =~ "Beloning"
+      assert html =~ "ƒ5,00"
       assert html =~ "Status"
-      assert html =~ "Open for participation"
-      assert html =~ "Available on:"
+      assert html =~ "Open voor deelname"
+      assert html =~ "Beschikbaar op:"
       assert html =~ "desktop.svg"
     end
 
     test "One member applied", %{conn: conn, promotion: promotion, assignment: assignment} do
       user = Factories.insert!(:member)
-      _member = Crew.Context.apply_member!(assignment.crew, user)
+      _member = Crew.Public.apply_member!(assignment.crew, user)
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Promotion.LandingPage, promotion.id))
-      assert html =~ "Open for participation"
+      assert html =~ "Open voor deelname"
     end
 
     test "Apply current user", %{conn: conn, promotion: promotion} do

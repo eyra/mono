@@ -17,7 +17,6 @@ defmodule Systems.Lab.ToolForm do
   data(day_list_items, :list)
   data(add_day_button, :map)
   data(changeset, :any)
-  data(focus, :any, default: "")
 
   # Handle initial update
   def update(
@@ -48,7 +47,7 @@ defmodule Systems.Lab.ToolForm do
         %{day_view: :submit, og_day_model: og_day_model, day_model: day_model},
         %{assigns: %{entity: entity}} = socket
       ) do
-    Lab.Context.submit_day_model(entity, og_day_model, day_model)
+    Lab.Public.submit_day_model(entity, og_day_model, day_model)
     send(self(), {:hide_popup})
 
     {
@@ -66,7 +65,7 @@ defmodule Systems.Lab.ToolForm do
   end
 
   defp update_entity(%{assigns: %{entity_id: entity_id}} = socket) do
-    entity = Lab.Context.get(entity_id, [:time_slots])
+    entity = Lab.Public.get(entity_id, [:time_slots])
     changeset = Lab.ToolModel.changeset(entity, :create, %{})
 
     socket
@@ -107,7 +106,7 @@ defmodule Systems.Lab.ToolForm do
 
   @impl true
   def handle_event("add_day", _params, %{assigns: %{entity: entity}} = socket) do
-    day_model = Lab.Context.new_day_model(entity)
+    day_model = Lab.Public.new_day_model(entity)
     props = popup_props(day_model, socket)
 
     send(self(), {:show_popup, %{view: Systems.Lab.DayView, props: props}})
@@ -122,7 +121,7 @@ defmodule Systems.Lab.ToolForm do
   @impl true
   def handle_event("edit_day", %{"item" => index}, %{assigns: %{entity: entity}} = socket) do
     day = get_day(socket, index)
-    day_model = Lab.Context.edit_day_model(entity, day)
+    day_model = Lab.Public.edit_day_model(entity, day)
 
     props = popup_props(day_model, socket)
 
@@ -133,7 +132,7 @@ defmodule Systems.Lab.ToolForm do
   @impl true
   def handle_event("duplicate_day", %{"item" => index}, %{assigns: %{entity: entity}} = socket) do
     day = get_day(socket, index)
-    day_model = Lab.Context.duplicate_day_model(entity, day)
+    day_model = Lab.Public.duplicate_day_model(entity, day)
 
     props = popup_props(day_model, socket)
 
@@ -144,7 +143,7 @@ defmodule Systems.Lab.ToolForm do
   @impl true
   def handle_event("remove_day", %{"item" => index}, %{assigns: %{entity: entity}} = socket) do
     day = get_day(socket, index)
-    Lab.Context.remove_day(entity, day)
+    Lab.Public.remove_day(entity, day)
 
     {
       :noreply,
@@ -209,19 +208,4 @@ defmodule Systems.Lab.ToolForm.Example do
     <ToolForm id={:reject_view_example} entity_id={1} validate?={false} />
     """
   end
-
-  # def handle_info({:share_view, :close}, socket) do
-  #   IO.puts("Close")
-  #   {:noreply, socket}
-  # end
-
-  # def handle_info({:share_view, %{add: user}}, socket) do
-  #   IO.puts("Add: #{user.fullname}")
-  #   {:noreply, socket}
-  # end
-
-  # def handle_info({:share_view, %{remove: user}}, socket) do
-  #   IO.puts("Remove: #{user.fullname}")
-  #   {:noreply, socket}
-  # end
 end

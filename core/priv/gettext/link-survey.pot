@@ -123,11 +123,11 @@ msgid "tabbar.item.monitor.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.criteria"
+msgid "tabbar.item.submission"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.criteria.forward"
+msgid "tabbar.item.submission.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -276,4 +276,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "test.roundtrip.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.funding"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.funding.forward"
 msgstr ""

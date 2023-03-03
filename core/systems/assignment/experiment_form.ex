@@ -20,7 +20,6 @@ defmodule Systems.Assignment.ExperimentForm do
   data(language_labels, :list)
   data(ethical_label, :any)
   data(changeset, :any)
-  data(focus, :any, default: "")
 
   # Handle selector update
 
@@ -98,12 +97,6 @@ defmodule Systems.Assignment.ExperimentForm do
     }
   end
 
-  @impl true
-  def handle_event("reset_focus", _, socket) do
-    send_update(ProfileForm, id: :profile, focus: "")
-    {:noreply, socket}
-  end
-
   # Saving
 
   def save(socket, entity, type, attrs) do
@@ -131,7 +124,7 @@ defmodule Systems.Assignment.ExperimentForm do
 
   def render(assigns) do
     ~F"""
-    <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
+    <Form id={@id} changeset={@changeset} change_event="save" target={@myself}>
       <NumberInput field={:duration} label_text={dgettext("link-survey", "duration.label")} />
       <Spacing value="M" />
 

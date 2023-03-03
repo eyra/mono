@@ -16,7 +16,7 @@ defmodule Systems.Test.Page do
     {
       :ok,
       socket
-      |> assign(model: Test.Context.get(id))
+      |> assign(model: Test.Public.get(id))
       |> observe_view_model()
     }
   end

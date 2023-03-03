@@ -24,17 +24,17 @@ defmodule Systems.Assignment.LandingPage do
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
-    Assignment.Context.get!(id, [:crew]).crew
+    Assignment.Public.get!(id, [:crew]).crew
   end
 
   @impl true
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
-    NextAction.Context.clear_next_action(user, Assignment.CheckRejection,
+    NextAction.Public.clear_next_action(user, Assignment.CheckRejection,
       key: "#{id}",
       params: %{id: id}
     )
 
-    model = Assignment.Context.get!(id, [:crew])
+    model = Assignment.Public.get!(id, [:crew])
 
     {
       :ok,
@@ -99,7 +99,7 @@ defmodule Systems.Assignment.LandingPage do
         _params,
         %{assigns: %{current_user: user, model: %{id: id}}} = socket
       ) do
-    Assignment.Context.cancel(id, user)
+    Assignment.Public.cancel(id, user)
 
     {:noreply,
      push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))}

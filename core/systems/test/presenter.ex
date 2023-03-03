@@ -10,11 +10,11 @@ defmodule Systems.Test.Presenter do
   end
 
   def view_model(id, page, %{current_user: user}, url_resolver) when is_binary(id) do
-    Systems.Test.Context.get(id)
+    Systems.Test.Public.get(id)
     |> Builder.view_model(page, user, url_resolver)
   end
 
   def update(Systems.Test.Page = page, model) do
-    Observatory.Context.local_dispatch(page, [model.id], %{model: model})
+    Observatory.Public.local_dispatch(page, [model.id], %{model: model})
   end
 end

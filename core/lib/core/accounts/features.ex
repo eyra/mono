@@ -10,7 +10,7 @@ defmodule Core.Accounts.Features do
   require Core.Enums.{Genders, DominantHands, NativeLanguages}
 
   alias Systems.{
-    Scholar
+    Student
   }
 
   schema "user_features" do
@@ -38,9 +38,9 @@ defmodule Core.Accounts.Features do
     |> validate_required(@required_fields)
   end
 
-  def get_scholar_classes(%{study_program_codes: [_ | _] = codes}) do
-    Enum.map(codes, &Scholar.Codes.text(&1))
+  def get_student_classes(%{study_program_codes: [_ | _] = codes}) do
+    Enum.map(codes, &Student.Codes.text(&1))
   end
 
-  def get_scholar_classes(_), do: []
+  def get_student_classes(_), do: []
 end

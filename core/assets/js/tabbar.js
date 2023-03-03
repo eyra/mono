@@ -26,12 +26,12 @@ export const Tabbar = {
   },
 
   getActiveTabKey() {
-    var path = window.location.pathname;
-    return path + "/" + tabbarId + "/active_tab";
+    return "tabbar://" + tabbarId + "/active_tab";
   },
 
   loadActiveTab() {
-    const activeTab = window.localStorage.getItem(this.getActiveTabKey());
+    const tabKey = this.getActiveTabKey();
+    const activeTab = window.localStorage.getItem(tabKey);
     if (typeof activeTab === "string") {
       return activeTab;
     }

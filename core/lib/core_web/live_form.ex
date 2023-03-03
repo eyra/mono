@@ -3,26 +3,6 @@ defmodule CoreWeb.LiveForm do
     quote do
       use CoreWeb.UI.LiveComponent
 
-      def update(%{focus: focus}, socket) do
-        {
-          :ok,
-          socket
-          |> assign(focus: focus)
-        }
-      end
-
-      def handle_event("focus", %{"field" => field}, socket) do
-        IO.puts("Event focus")
-
-        claim_focus(socket)
-
-        {
-          :noreply,
-          socket
-          |> assign(focus: field)
-        }
-      end
-
       def hide_flash(socket) do
         Frameworks.Pixel.Flash.push_hide()
         socket
@@ -95,10 +75,6 @@ defmodule CoreWeb.LiveForm do
       defp handle_auto_save_done(%{assigns: %{id: id}} = socket) do
         send(self(), {:handle_auto_save_done, id})
         socket
-      end
-
-      defp claim_focus(%{assigns: %{id: id}}) do
-        send(self(), {:claim_focus, id})
       end
 
       def auto_save_begin(socket) do

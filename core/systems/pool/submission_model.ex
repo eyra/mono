@@ -15,7 +15,7 @@ defmodule Systems.Pool.SubmissionModel do
 
   schema "pool_submissions" do
     field(:status, Ecto.Enum, values: Pool.SubmissionStatus.values())
-    field(:reward_value, :integer)
+    field(:reward_value, :integer, default: 0)
     field(:schedule_start, :string)
     field(:schedule_end, :string)
 
@@ -115,7 +115,7 @@ defimpl Core.Persister, for: Systems.Pool.SubmissionModel do
   alias Systems.Pool
 
   def save(submission, changeset) do
-    case Pool.Context.update(submission, changeset) do
+    case Pool.Public.update(submission, changeset) do
       {:ok, %{submission: submission}} -> {:ok, submission}
       _ -> {:error, changeset}
     end

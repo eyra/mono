@@ -6,7 +6,7 @@ defmodule Systems.Campaign.ExpirationWorker do
   @impl Oban.Worker
   def perform(%Oban.Job{args: _args}) do
     Logger.warn("Running Towel Feature")
-    Systems.Crew.Context.mark_expired()
-    Systems.Assignment.Context.rollback_expired_rewards()
+    Systems.Crew.Public.mark_expired()
+    Systems.Assignment.Public.rollback_expired_deposits()
   end
 end

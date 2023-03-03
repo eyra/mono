@@ -19,7 +19,7 @@ defmodule Systems.Admin.ImportRewardsPage do
   alias Systems.{
     Campaign,
     Admin,
-    Scholar,
+    Student,
     Org
   }
 
@@ -36,7 +36,6 @@ defmodule Systems.Admin.ImportRewardsPage do
   data(lines_error, :any)
   data(lines_unknown, :any)
   data(lines_valid, :any)
-  data(focus, :any, default: "")
 
   @impl true
   def process_file(
@@ -94,7 +93,7 @@ defmodule Systems.Admin.ImportRewardsPage do
         %{assigns: %{session_key: session_key, currency: currency}} = _socket
       ) do
     {status, message} =
-      if Campaign.Context.user_has_currency?(user, currency) do
+      if Campaign.Public.user_has_currency?(user, currency) do
         if transaction_exists?(user, session_key) do
           {:transaction_exists, "Import done"}
         else
@@ -117,7 +116,7 @@ defmodule Systems.Admin.ImportRewardsPage do
   end
 
   defp transaction_exists?(user, session_key) do
-    Campaign.Context.import_student_reward_exists?(user.id, session_key)
+    Campaign.Public.import_student_reward_exists?(user.id, session_key)
   end
 
   defp process(%{assigns: %{local_file: local_file}} = socket) do
@@ -176,7 +175,7 @@ defmodule Systems.Admin.ImportRewardsPage do
          %{:user_id => user_id, "credits" => credits} = _line
        ) do
     credits = String.to_integer(credits)
-    Campaign.Context.import_student_reward(user_id, credits, session_key, currency)
+    Campaign.Public.import_student_reward(user_id, credits, session_key, currency)
 
     socket
   end
@@ -213,7 +212,7 @@ defmodule Systems.Admin.ImportRewardsPage do
           |> process()
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          socket |> assign(changeset: changeset, focus: "")
+          socket |> assign(changeset: changeset)
       end
 
     {:noreply, socket}
@@ -233,7 +232,7 @@ defmodule Systems.Admin.ImportRewardsPage do
           socket |> assign(changeset: changeset, entity: entity)
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          socket |> assign(changeset: changeset, focus: "")
+          socket |> assign(changeset: changeset)
       end
 
     {:noreply, socket}
@@ -242,15 +241,6 @@ defmodule Systems.Admin.ImportRewardsPage do
   @impl true
   def handle_event("change", _params, socket) do
     {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("focus", %{"field" => field}, socket) do
-    {
-      :noreply,
-      socket
-      |> assign(focus: field)
-    }
   end
 
   def mount(%{"back" => back}, _session, socket) do
@@ -285,8 +275,8 @@ defmodule Systems.Admin.ImportRewardsPage do
     }
 
     currency_labels =
-      Org.Context.list_nodes(:scholar_course, ["vu", ":2021"])
-      |> Enum.map(&Scholar.Course.currency(&1.identifier))
+      Org.Public.list_nodes(:student_course, ["vu", ":2021"])
+      |> Enum.map(&Student.Course.currency(&1.identifier))
       |> Enum.map(&%{id: &1, value: &1, active: false})
 
     {
@@ -322,7 +312,7 @@ defmodule Systems.Admin.ImportRewardsPage do
       <MarginY id={:page_top} />
       <ContentArea>
         <Panel bg_color="bg-grey1">
-          <Form id="import_form" changeset={@changeset} change_event="change" focus={@focus} target="">
+          <Form id="import_form" changeset={@changeset} change_event="change" target="">
             <Title3 color="text-white">Setup the import session</Title3>
             <Spacing value="XXS" />
             <BodyLarge color="text-white">Selected file: <span class="text-tertiary">{@uploaded_file}</span></BodyLarge>

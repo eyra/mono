@@ -22,7 +22,6 @@ defmodule Systems.Lab.CheckInView do
   data(items, :list, default: [])
   data(message, :string, default: "")
   data(query, :string)
-  data(focus, :string, default: "")
 
   def update(%{id: id, tool: tool, parent: parent}, socket) do
     changeset =
@@ -58,8 +57,8 @@ defmodule Systems.Lab.CheckInView do
       |> String.to_integer()
       |> Accounts.get_user!()
 
-    Director.context(tool).apply_member_and_activate_task(tool, user)
-    {:noreply, socket |> assign(focus: "", query: nil, message: nil)}
+    Director.public(tool).apply_member_and_activate_task(tool, user)
+    {:noreply, socket |> assign(query: nil, message: nil)}
   end
 
   @impl true
@@ -87,23 +86,13 @@ defmodule Systems.Lab.CheckInView do
   end
 
   @impl true
-  def handle_event("focus", %{"field" => field}, socket) do
-    {:noreply, socket |> assign(focus: field)}
-  end
-
-  @impl true
-  def handle_event("reset_focus", _, socket) do
-    {:noreply, socket |> assign(focus: "")}
-  end
-
-  @impl true
   def handle_event("submit", _, socket) do
     {:noreply, socket}
   end
 
   defp search(public_id, tool) when is_integer(public_id) do
     item =
-      Director.context(tool).search_subject(tool, public_id)
+      Director.public(tool).search_subject(tool, public_id)
       |> to_view_model(tool)
 
     case item do
@@ -138,45 +127,42 @@ defmodule Systems.Lab.CheckInView do
   @impl true
   def render(assigns) do
     ~F"""
-    <div phx-click="reset_focus" phx-target={@myself}>
-      <Panel bg_color="bg-grey1">
-        <Title3 color="text-white">{dgettext("link-lab", "search.subject.title")}</Title3>
-        <Spacing value="M" />
-        <BodyMedium color="text-white">{dgettext("link-lab", "search.subject.body")}</BodyMedium>
-        <Spacing value="S" />
+    <Panel bg_color="bg-grey1">
+      <Title3 color="text-white">{dgettext("link-lab", "search.subject.title")}</Title3>
+      <Spacing value="M" />
+      <BodyMedium color="text-white">{dgettext("link-lab", "search.subject.body")}</BodyMedium>
+      <Spacing value="S" />
 
-        <Form
-          id="search_subject"
-          changeset={@changeset}
-          change_event="update"
-          submit="submit"
-          target={@myself}
-          focus={@focus}
-        >
-          <div class="w-form">
-            <TextInput
-              field={:query}
-              label_text={dgettext("link-lab", "search.subject.query.label")}
-              reserve_error_space={false}
-              debounce="300"
-              background={:dark}
-              label_color="text-white"
-            />
+      <Form
+        id="search_subject"
+        changeset={@changeset}
+        change_event="update"
+        submit="submit"
+        target={@myself}
+      >
+        <div class="w-form">
+          <TextInput
+            field={:query}
+            label_text={dgettext("link-lab", "search.subject.query.label")}
+            reserve_error_space={false}
+            debounce="300"
+            background={:dark}
+            label_color="text-white"
+          />
+        </div>
+        <div :if={@message}>
+          <div class="text-caption font-caption text-tertiary">
+            {@message}
           </div>
-          <div :if={@message}>
-            <div class="text-caption font-caption text-tertiary">
-              {@message}
-            </div>
-          </div>
-          <div :if={@query}>
-            <Spacing value="S" />
-            <table>
-              <Lab.CheckInItem :for={item <- @items} {...item} target={@myself} />
-            </table>
-          </div>
-        </Form>
-      </Panel>
-    </div>
+        </div>
+        <div :if={@query}>
+          <Spacing value="S" />
+          <table>
+            <Lab.CheckInItem :for={item <- @items} {...item} target={@myself} />
+          </table>
+        </div>
+      </Form>
+    </Panel>
     """
   end
 
@@ -187,7 +173,7 @@ defmodule Systems.Lab.CheckInView do
     reservation = reservation(user, tool)
     time_slot = time_slot(reservation)
 
-    search_result = Director.context(tool).search_subject(tool, user)
+    search_result = Director.public(tool).search_subject(tool, user)
 
     status =
       case search_result do
@@ -255,12 +241,12 @@ defmodule Systems.Lab.CheckInView do
   end
 
   defp reservation(%Accounts.User{} = user, tool) do
-    Lab.Context.reservation_for_user(tool, user)
+    Lab.Public.reservation_for_user(tool, user)
   end
 
   defp time_slot(nil), do: nil
 
   defp time_slot(%{time_slot_id: time_slot_id} = _reservation) do
-    Lab.Context.get_time_slot(time_slot_id)
+    Lab.Public.get_time_slot(time_slot_id)
   end
 end

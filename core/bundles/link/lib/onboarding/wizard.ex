@@ -10,18 +10,20 @@ defmodule Link.Onboarding.Wizard do
 
   alias Core.Accounts
   alias Link.Onboarding.Welcome, as: Welcome
-  alias CoreWeb.User.Forms.Scholar, as: ScholarForm
+  alias CoreWeb.User.Forms.Student, as: StudentForm
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
 
   alias Frameworks.Pixel.Button.DynamicButton
   alias CoreWeb.UI.Navigation.{ActionBar, Tabbar, TabbarContent, TabbarFooter, TabbarArea}
 
+  data(tabbar_id, :string)
   data(user_agent, :string, default: "")
   data(current_user, :any)
   data(tabs, :any)
 
   def mount(_params, _session, socket) do
     tabs = create_tabs(socket)
+    tabbar_id = "onboarding"
 
     finish_button = %{
       action: %{
@@ -38,18 +40,13 @@ defmodule Link.Onboarding.Wizard do
       :ok,
       socket
       |> assign(
+        tabbar_id: tabbar_id,
         tabs: tabs,
         finish_button: finish_button,
         changesets: %{}
       )
       |> update_menus()
     }
-  end
-
-  @impl true
-  def handle_event("reset_focus", _, socket) do
-    send_update(ProfileForm, id: :profile, focus: "")
-    {:noreply, socket}
   end
 
   @impl true
@@ -60,11 +57,6 @@ defmodule Link.Onboarding.Wizard do
 
   def handle_info({:handle_auto_save_done, _}, socket) do
     socket |> update_menus()
-    {:noreply, socket}
-  end
-
-  def handle_info({:claim_focus, :profile}, socket) do
-    # Profile is currently only form that can claim focus
     {:noreply, socket}
   end
 
@@ -85,10 +77,10 @@ defmodule Link.Onboarding.Wizard do
     })
     |> append(
       %{
-        id: :scholar,
-        title: dgettext("eyra-ui", "tabbar.item.scholar"),
-        forward_title: dgettext("eyra-ui", "tabbar.item.scholar.forward"),
-        component: ScholarForm,
+        id: :student,
+        title: dgettext("eyra-ui", "tabbar.item.student"),
+        forward_title: dgettext("eyra-ui", "tabbar.item.student.forward"),
+        component: StudentForm,
         props: %{user: current_user},
         type: :form
       },
@@ -119,7 +111,7 @@ defmodule Link.Onboarding.Wizard do
     <Stripped user={@current_user} menus={@menus}>
       <TabbarArea tabs={@tabs}>
         <ActionBar>
-          <Tabbar vm={%{initial_tab: :welcome}} />
+          <Tabbar id={@tabbar_id} initial_tab={:welcome} />
         </ActionBar>
         <TabbarContent />
         <TabbarFooter>
