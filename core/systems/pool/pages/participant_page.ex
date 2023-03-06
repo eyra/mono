@@ -1,6 +1,6 @@
-defmodule Systems.Student.DetailPage do
+defmodule Systems.Pool.ParticipantPage do
   use CoreWeb, :live_view
-  use CoreWeb.Layouts.Workspace.Component, :pool_student
+  use CoreWeb.Layouts.Workspace.Component, :pool_participant
 
   alias Core.Accounts
   alias CoreWeb.UI.{ContentList, Member}
@@ -92,7 +92,7 @@ defmodule Systems.Student.DetailPage do
   @impl true
   def render(assigns) do
     ~F"""
-    <Workspace title={dgettext("link-studentpool", "student.title")} menus={@menus}>
+    <Workspace title={dgettext("link-studentpool", "participant.title")} menus={@menus}>
       <ContentArea>
         <MarginY id={:page_top} />
         <Member :if={@member} vm={@member} />

@@ -11,8 +11,6 @@ defmodule Link.Marketplace do
     Campaign
   }
 
-  alias Core.Accounts
-
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
   alias Frameworks.Pixel.Card.SecondaryCampaign
@@ -47,7 +45,7 @@ defmodule Link.Marketplace do
         exclude: exclusion_list,
         preload: preload
       )
-      |> filter(socket)
+      |> filter_campaigns(socket)
       |> sort_by_open_spot_count()
       |> Enum.map(
         &ViewModelBuilder.view_model(&1, {__MODULE__, :card}, user, url_resolver(socket))
@@ -69,24 +67,17 @@ defmodule Link.Marketplace do
     Enum.sort_by(campaigns, &Campaign.Public.open_spot_count/1, :desc)
   end
 
-  defp filter(campaigns, socket) when is_list(campaigns) do
-    Enum.filter(campaigns, &filter(&1, socket))
+  defp filter_campaigns(campaigns, socket) when is_list(campaigns) do
+    Enum.filter(campaigns, &filter_campaign(&1, socket))
   end
 
-  defp filter(
-         %{submissions: submissions},
+  defp filter_campaign(
+         campaign,
          %{assigns: %{current_user: user}}
        ) do
-    case Pool.Public.select(submissions, user) do
-      nil ->
-        false
-
-      %{criteria: criteria} = submission ->
-        user_features = Accounts.get_features(user)
-        released? = Pool.Public.published_status(submission) == :released
-        eligitable? = Pool.CriteriaModel.eligitable?(criteria, user_features)
-
-        released? and eligitable?
+    case Campaign.Public.validate_open(campaign, user) do
+      :ok -> true
+      _ -> false
     end
   end
 

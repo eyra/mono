@@ -6,6 +6,8 @@ defmodule Systems.Citizen.Director do
 
   @behaviour Systems.Pool.External
 
+  alias CoreWeb.UI.Timestamp
+
   import CoreWeb.Gettext
 
   alias Systems.{
@@ -46,5 +48,15 @@ defmodule Systems.Citizen.Director do
   defp create_first_budget(currency, user) do
     default_name = dgettext("eyra-budget", "budget.default.name")
     Budget.Public.create_budget(currency, default_name, {:emoji, "💰"}, user)
+  end
+
+  @impl true
+  def submit(submission_id) do
+    submission = Pool.Public.get_submission!(submission_id)
+
+    Pool.Public.update(submission, %{
+      status: :submitted,
+      submitted_at: Timestamp.naive_now()
+    })
   end
 end

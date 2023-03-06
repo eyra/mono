@@ -6,6 +6,8 @@ defmodule Systems.Student.Director do
 
   @behaviour Systems.Pool.External
 
+  alias CoreWeb.UI.Timestamp
+
   alias Systems.{
     Student,
     Pool,
@@ -37,5 +39,15 @@ defmodule Systems.Student.Director do
       nil -> raise Error, message: "Student pool budget not available"
       budget -> budget
     end
+  end
+
+  @impl true
+  def submit(submission_id) do
+    submission = Pool.Public.get_submission!(submission_id)
+
+    Pool.Public.update(submission, %{
+      status: :submitted,
+      submitted_at: Timestamp.naive_now()
+    })
   end
 end

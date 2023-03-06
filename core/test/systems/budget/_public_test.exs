@@ -20,8 +20,8 @@ defmodule Systems.Budget.PublicTest do
     reward_idempotence_key = "user:#{student.id},budget:#{budget.id},assignment:1"
     deposit_idempotence_key = "#{reward_idempotence_key},type=deposit,attempt=0"
 
-    %{id: reward_id} =
-      Budget.Public.create_reward!(budget, amount, student, reward_idempotence_key)
+    {:ok, %{reward: %{id: reward_id}}} =
+      Budget.Public.create_reward(budget, amount, student, reward_idempotence_key)
 
     reward =
       Budget.Public.get_reward!(reward_id, [
@@ -437,14 +437,14 @@ defmodule Systems.Budget.PublicTest do
   test "multiply_rewards/2 succeeds", %{
     budget: %{fund: fund, reserve: reserve} = budget
   } do
-    amount = 3500
+    amount = 250
     multiplier = 10
     expected_mount = amount * (multiplier - 1)
 
     reserve_debit = 0
     expected_reserve_debit = reserve_debit + 2 * expected_mount
 
-    fund_debit = 12_000
+    fund_debit = 5500
     expected_fund_debit = fund_debit + 2 * expected_mount
 
     expected_wallet_credit = amount * multiplier

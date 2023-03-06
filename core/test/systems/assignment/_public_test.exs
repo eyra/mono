@@ -14,39 +14,39 @@ defmodule Systems.Assignment.PublicTest do
     alias Core.Factories
     alias CoreWeb.UI.Timestamp
 
-    test "open?/1 true, with 1 expired pending task" do
+    test "has_open_spots?/1 true, with 1 expired pending task" do
       %{crew: crew} = assignment = create_assignment(31, 1)
       _task = create_task(crew, :pending, true)
 
-      assert Assignment.Public.open?(assignment)
+      assert Assignment.Public.has_open_spots?(assignment)
     end
 
-    test "open?/1 true, with 1 expired pending task and 1 completed task" do
+    test "has_open_spots?/1 true, with 1 expired pending task and 1 completed task" do
       %{crew: crew} = assignment = create_assignment(31, 2)
       _task = create_task(crew, :completed, false)
       _task = create_task(crew, :pending, true)
 
-      assert Assignment.Public.open?(assignment)
+      assert Assignment.Public.has_open_spots?(assignment)
     end
 
-    test "open?/1 true, with 0 tasks" do
+    test "has_open_spots?/1 true, with 0 tasks" do
       assignment = create_assignment(31, 1)
 
-      assert Assignment.Public.open?(assignment)
+      assert Assignment.Public.has_open_spots?(assignment)
     end
 
-    test "open?/1 false, with 1 pending task left" do
+    test "has_open_spots?/1 false, with 1 pending task left" do
       %{crew: crew} = assignment = create_assignment(31, 1)
       _task = create_task(crew, :pending, false)
 
-      assert not Assignment.Public.open?(assignment)
+      assert not Assignment.Public.has_open_spots?(assignment)
     end
 
-    test "open?/1 false, with completed tasks" do
+    test "has_open_spots?/1 false, with completed tasks" do
       %{crew: crew} = assignment = create_assignment(31, 1)
       _task = create_task(crew, :completed, false)
 
-      assert not Assignment.Public.open?(assignment)
+      assert not Assignment.Public.has_open_spots?(assignment)
     end
 
     test "mark_expired?/1 force=false, marked 1 expired task" do

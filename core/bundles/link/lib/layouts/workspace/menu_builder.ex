@@ -7,7 +7,7 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
 
   import Systems.Admin.Public
 
-  alias Systems.{Budget, Support, NextAction}
+  alias Systems.{Pool, Budget, Support, NextAction}
 
   @impl true
   def build_menu(:desktop_menu = menu_id, socket, user_state, active_item) do
@@ -65,7 +65,7 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
     )
     |> append(
       live_item(socket, menu_id, :pools, user_state, active_item),
-      user_state.coordinator
+      has_pools?(user_state)
     )
     |> append(live_item(socket, menu_id, :marketplace, user_state, active_item))
     |> append(live_item(socket, menu_id, :todo, user_state, active_item, true, next_action_count))
@@ -88,5 +88,9 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
 
   defp append(list, extra, condition \\ true) do
     if condition, do: list ++ [extra], else: list
+  end
+
+  defp has_pools?(user) do
+    not Enum.empty?(Pool.Public.list_owned(user))
   end
 end

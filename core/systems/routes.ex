@@ -14,9 +14,7 @@ defmodule Systems.Routes do
         :pool,
         :lab,
         :data_donation,
-        :budget,
-        :student,
-        :citizen
+        :budget
       ]
     end
   end

@@ -14,7 +14,6 @@ defmodule Systems.Campaign.ContentPage do
   alias Systems.Promotion.FormView, as: PromotionForm
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
-  alias CoreWeb.UI.Timestamp
   alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent, TabbarFooter}
 
   alias Systems.{
@@ -124,12 +123,7 @@ defmodule Systems.Campaign.ContentPage do
       ) do
     socket =
       if Campaign.Public.ready?(campaign_id) do
-        {:ok, _submission} =
-          Pool.Public.update(submission, %{
-            status: :submitted,
-            submitted_at: Timestamp.naive_now()
-          })
-
+        {:ok, _submission} = Pool.Public.submit(submission)
         title = dgettext("eyra-submission", "submit.success.title")
         text = dgettext("eyra-submission", "submit.success.text")
 

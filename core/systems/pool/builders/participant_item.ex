@@ -27,7 +27,7 @@ defmodule Systems.Pool.Builders.ParticipantItem do
       |> CoreWeb.UI.Timestamp.humanize()
 
     %{
-      path: Routes.live_path(socket, Systems.Student.DetailPage, user_id),
+      path: Routes.live_path(socket, Systems.Pool.ParticipantPage, user_id),
       title: fullname,
       subtitle: subtitle,
       quick_summary: quick_summery,
@@ -36,12 +36,8 @@ defmodule Systems.Pool.Builders.ParticipantItem do
     }
   end
 
-  def get_tag(%{study_program_codes: [_ | _]}) do
-    %{type: :success, text: dgettext("link-citizen", "citizen.tag.complete")}
-  end
-
   def get_tag(_) do
-    %{type: :delete, text: dgettext("link-citizen", "citizen.tag.incomplete")}
+    %{type: :success, text: dgettext("link-citizen", "citizen.tag.complete")}
   end
 
   def get_photo_url(nil, %{gender: :man}), do: "/images/profile_photo_default_male.svg"

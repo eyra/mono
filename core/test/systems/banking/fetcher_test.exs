@@ -17,9 +17,9 @@ defmodule Systems.Banking.FetcherTest do
     end
   end
 
-  describe "update_marker/2" do
+  describe "update_cursor/2" do
     test "set a new transaction marker" do
-      Fetcher.update_marker("testing", 12)
+      Fetcher.update_cursor("testing", 12)
       assert Fetcher.last_cursor() == "testing"
     end
   end
@@ -36,8 +36,8 @@ defmodule Systems.Banking.FetcherTest do
 
     test "don't update transaction marker without new payments", %{state: state} do
       Systems.Banking.MockBackend
-      |> expect(:list_payments, fn nil -> %{marker: "tst", transactions: []} end)
-      |> expect(:list_payments, fn nil -> %{marker: "tst", transactions: []} end)
+      |> expect(:list_payments, fn nil -> %{cursor: "tst", payments: []} end)
+      |> expect(:list_payments, fn nil -> %{cursor: "tst", payments: []} end)
 
       Fetcher.fetch(state)
       Fetcher.fetch(state)
@@ -47,8 +47,8 @@ defmodule Systems.Banking.FetcherTest do
       Systems.Banking.MockBackend
       |> expect(:list_payments, fn nil ->
         %{
-          marker: "first",
-          transactions: [
+          cursor: "first",
+          payments: [
             %{
               id: "",
               amount: 1,
@@ -66,7 +66,7 @@ defmodule Systems.Banking.FetcherTest do
 
       # The transaction marker should now have been updated
       Systems.Banking.MockBackend
-      |> expect(:list_payments, fn "first" -> %{marker: "second", transactions: []} end)
+      |> expect(:list_payments, fn "first" -> %{cursor: "second", payments: []} end)
 
       Fetcher.fetch(state)
     end
@@ -75,8 +75,8 @@ defmodule Systems.Banking.FetcherTest do
       Systems.Banking.MockBackend
       |> expect(:list_payments, fn nil ->
         %{
-          marker: "marker",
-          transactions: [
+          cursor: "marker",
+          payments: [
             %{
               id: 123,
               amount: 1,

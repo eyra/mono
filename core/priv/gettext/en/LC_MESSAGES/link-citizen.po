@@ -48,10 +48,6 @@ msgid "citizen.tag.complete"
 msgstr "Ready"
 
 #, elixir-autogen, elixir-format
-msgid "citizen.tag.incomplete"
-msgstr "Incomplete"
-
-#, elixir-autogen, elixir-format
 msgid "citizens.empty.description"
 msgstr "There are currently no registered citizens. You will be notified as soon as citizens have signed up."
 
@@ -60,16 +56,8 @@ msgid "citizens.empty.title"
 msgstr "Citizens participating in this pool will appear here"
 
 #, elixir-autogen, elixir-format
-msgid "sample.size"
-msgstr "%{size} spots available"
-
-#, elixir-autogen, elixir-format
 msgid "search.placeholder"
 msgstr "Search"
-
-#, elixir-autogen, elixir-format
-msgid "spots.available"
-msgstr "%{open} out of %{total} spots available"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.campaigns"

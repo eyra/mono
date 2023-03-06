@@ -5,6 +5,7 @@ defmodule Systems.Campaign.Public do
   import Ecto.Query, warn: false
   require Logger
   alias Core.Repo
+  alias Core.Accounts
   alias Core.Accounts.User
   alias Core.Authorization
 
@@ -12,6 +13,7 @@ defmodule Systems.Campaign.Public do
   alias Frameworks.Signal
 
   alias Systems.{
+    Director,
     Campaign,
     Promotion,
     Assignment,
@@ -19,8 +21,7 @@ defmodule Systems.Campaign.Public do
     Crew,
     Budget,
     Bookkeeping,
-    Pool,
-    Director
+    Pool
   }
 
   def get!(id, preload \\ []) do
@@ -471,16 +472,72 @@ defmodule Systems.Campaign.Public do
     Assignment.Public.include(assignment, other)
   end
 
-  def open?(%Campaign.Model{promotable_assignment_id: assignment_id}) do
-    Assignment.Public.get!(assignment_id, Assignment.Model.preload_graph(:full))
-    |> Assignment.Public.open?()
+  def validate_open(%Assignment.Model{} = assignment, user) do
+    assignment
+    |> get_by_promotable(Campaign.Model.preload_graph(:full))
+    |> validate_open(user)
   end
 
-  def open?(%Pool.SubmissionModel{id: submission_id}) do
-    submission_id
-    |> get_by_submission(Campaign.Model.preload_graph(:full))
-    |> open?()
+  def validate_open(%Campaign.Model{} = campaign, user) do
+    campaign = Campaign.Model.flatten(campaign)
+
+    with :ok <- validate_exclusion(campaign, user),
+         :ok <- validate_eligitable(campaign, user),
+         :ok <- validate_open_spots(campaign),
+         :ok <- validate_released(campaign),
+         :ok <- validate_funded(campaign) do
+      :ok
+    else
+      error -> error
+    end
   end
+
+  defp validate_exclusion(%{promotable: assignment}, user) do
+    if Assignment.Public.excluded?(assignment, user) do
+      {:error, :excluded}
+    else
+      :ok
+    end
+  end
+
+  defp validate_eligitable(%{submission: %{criteria: criteria}}, user) do
+    user_features = Accounts.get_features(user)
+
+    if Pool.CriteriaModel.eligitable?(criteria, user_features) do
+      :ok
+    else
+      {:error, :not_eligitable}
+    end
+  end
+
+  defp validate_open_spots(%{promotable: assignment}) do
+    if Assignment.Public.has_open_spots?(assignment) do
+      :ok
+    else
+      {:error, :no_open_spots}
+    end
+  end
+
+  defp validate_released(%{submission: submission}) do
+    if Pool.Public.published_status(submission) == :released do
+      :ok
+    else
+      {:error, :not_released}
+    end
+  end
+
+  defp validate_funded(%{
+         promotable: %{budget: %{currency: %{type: :legal}} = budget},
+         submission: %{reward_value: reward_value}
+       }) do
+    if Budget.Model.amount_available(budget) > reward_value do
+      :ok
+    else
+      {:error, :not_funded}
+    end
+  end
+
+  defp validate_funded(%{promotable: %{budget: %{currency: %{type: _}}}}), do: :ok
 
   @doc """
     Marks expired tasks in online campaigns based on updated_at and estimated duration.

@@ -39,8 +39,8 @@ defmodule Systems.Banking.Public do
         }
 
   @spec list_payments(since :: binary() | nil) :: %{
-          marker: binary(),
-          transactions: list(transaction()),
+          cursor: binary(),
+          payments: list(transaction()),
           has_more: boolean()
         }
   def list_payments(since) when is_nil(since) or is_binary(since) do

@@ -44,7 +44,8 @@ defmodule Systems.Promotion.LandingPageTest do
           :assignment,
           %{
             budget: budget,
-            experiment: experiment
+            experiment: experiment,
+            director: :campaign
           }
         )
 
@@ -102,7 +103,7 @@ defmodule Systems.Promotion.LandingPageTest do
 
     test "One member applied", %{conn: conn, promotion: promotion, assignment: assignment} do
       user = Factories.insert!(:member)
-      _member = Crew.Public.apply_member!(assignment.crew, user)
+      {:ok, %{member: _member}} = Crew.Public.apply_member(assignment.crew, user)
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Promotion.LandingPage, promotion.id))
       assert html =~ "Open voor deelname"

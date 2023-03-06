@@ -229,16 +229,6 @@ defmodule Systems.Budget.Public do
     not wallet_is_passive?(wallet)
   end
 
-  def create_reward!(%Budget.Model{} = budget, amount, user, idempotence_key)
-      when is_integer(amount) and is_binary(idempotence_key) do
-    result = create_reward(budget, amount, user, idempotence_key)
-
-    case result do
-      {:ok, %{reward: reward}} -> reward
-      _ -> nil
-    end
-  end
-
   def create_reward(%Budget.Model{} = budget, amount, user, idempotence_key)
       when is_integer(amount) and is_binary(idempotence_key) do
     Multi.new()
@@ -255,9 +245,29 @@ defmodule Systems.Budget.Public do
       )
       when is_integer(amount) and is_binary(idempotence_key) do
     multi
+    |> guard_budget_balance(budget, amount)
     |> upsert_reward(budget, amount, user, idempotence_key)
     |> make_deposit()
   end
+
+  defp guard_budget_balance(
+         multi,
+         %Budget.Model{currency: %{type: :legal}} = budget,
+         amount
+       )
+       when is_integer(amount) do
+    multi
+    |> Multi.run(:budget_balance, fn _, _ ->
+      if Budget.Model.amount_available(budget) >= amount do
+        {:ok, true}
+      else
+        Logger.warn("Budget has not enough funds to make reward reservation")
+        {:error, :no_funding}
+      end
+    end)
+  end
+
+  defp guard_budget_balance(multi, _, _), do: multi
 
   def payout_reward(idempotence_key) when is_binary(idempotence_key) do
     case get_reward(idempotence_key, Budget.RewardModel.preload_graph(:full)) do

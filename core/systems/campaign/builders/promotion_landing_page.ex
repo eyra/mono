@@ -7,6 +7,7 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
   alias Phoenix.LiveView
 
   alias Systems.{
+    Director,
     Campaign,
     Promotion,
     Assignment
@@ -98,19 +99,28 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
           }
         } = socket
       ) do
-    case Assignment.Public.can_apply_as_member?(assignment, user) do
+    case Director.public(assignment).validate_open(assignment, user) do
       {:error, error} ->
         inform(error, socket)
 
-      {:ok} ->
+      :ok ->
         reward_amount = Campaign.Public.reward_amount(assignment)
-        Assignment.Public.apply_member(assignment, user, reward_amount)
 
-        LiveView.push_redirect(socket,
-          to: Routes.live_path(socket, Systems.Assignment.LandingPage, id)
-        )
+        case Assignment.Public.apply_member(assignment, user, reward_amount) do
+          {:ok, _} ->
+            LiveView.push_redirect(socket,
+              to: Routes.live_path(socket, Systems.Assignment.LandingPage, id)
+            )
+
+          {:error, error} ->
+            inform(error, socket)
+        end
     end
   end
+
+  defp inform(:not_released, socket), do: inform(:closed, socket)
+  defp inform(:not_funded, socket), do: inform(:closed, socket)
+  defp inform(:no_open_spots, socket), do: inform(:closed, socket)
 
   defp inform(:closed, socket) do
     title = dgettext("link-assignment", "closed.dialog.title")

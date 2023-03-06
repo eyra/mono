@@ -316,13 +316,6 @@ defmodule Systems.Crew.Public do
     |> Repo.all()
   end
 
-  def apply_member!(%Crew.Model{} = crew, %User{} = user, expire_at \\ nil) do
-    case Crew.Public.apply_member(crew, user, expire_at) do
-      {:ok, %{member: member}} -> member
-      _ -> nil
-    end
-  end
-
   def apply_member(%Crew.Model{} = crew, %User{} = user, expire_at \\ nil) do
     if member = get_expired_member(crew, user) do
       member = reset_member(member, expire_at)

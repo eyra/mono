@@ -36,14 +36,6 @@ msgid "campaigns.empty.title"
 msgstr "Campaigns in your pool"
 
 #, elixir-autogen, elixir-format
-msgid "student.tag.complete"
-msgstr "Ready"
-
-#, elixir-autogen, elixir-format
-msgid "student.tag.incomplete"
-msgstr "Incompleet"
-
-#, elixir-autogen, elixir-format
 msgid "spots.available"
 msgstr "%{open} out of %{total} spots available"
 
@@ -80,8 +72,8 @@ msgid "passed.students"
 msgstr "Passed students"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "student.title"
-msgstr "Student"
+msgid "participant.title"
+msgstr "Participant"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.placeholder"

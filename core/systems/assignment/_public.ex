@@ -264,14 +264,14 @@ defmodule Systems.Assignment.Public do
       Multi.new()
       |> Multi.run(:reward, fn _, _ ->
         case create_reward(assignment, user, reward_amount) do
-          nil -> {:error, false}
-          reward -> {:ok, reward}
+          {:ok, %{reward: reward}} -> {:ok, reward}
+          {:error, error} -> {:error, error}
         end
       end)
       |> Multi.run(:member, fn _, _ ->
-        case Crew.Public.apply_member!(crew, user, expire_at) do
-          nil -> {:error}
-          member -> {:ok, member}
+        case Crew.Public.apply_member(crew, user, expire_at) do
+          {:ok, %{member: member}} -> {:ok, member}
+          {:error, error} -> {:error, error}
         end
       end)
       |> Repo.transaction()
@@ -361,29 +361,6 @@ defmodule Systems.Assignment.Public do
   end
 
   @doc """
-  How many new members can be added to the assignment?
-  """
-  def open_spot_count(%{crew: _crew} = assignment) do
-    type = assignment_type(assignment)
-    open_spot_count?(assignment, type)
-  end
-
-  @doc """
-    Can this user apply for this assignment: is assignment open and is user not excluded?
-  """
-  def can_apply_as_member?(assignment, user) do
-    if open?(assignment) do
-      if excluded?(assignment, user) do
-        {:error, :excluded}
-      else
-        {:ok}
-      end
-    else
-      {:error, :closed}
-    end
-  end
-
-  @doc """
     Is user excluded? from joining given assignment
   """
   def excluded?(%{id: to_id} = _assignment, %{id: user_id}) do
@@ -405,13 +382,21 @@ defmodule Systems.Assignment.Public do
   @doc """
   Is assignment open for new members?
   """
-  def open?(%{crew: _crew} = assignment) do
+  def has_open_spots?(%{crew: _crew} = assignment) do
     open_spot_count(assignment) > 0
   end
 
-  def open?(_), do: true
+  def has_open_spots?(_), do: false
 
-  defp open_spot_count?(%{crew: crew, assignable_experiment: experiment}, :one_task) do
+  @doc """
+  How many new members can be added to the assignment?
+  """
+  def open_spot_count(%{crew: _crew} = assignment) do
+    type = assignment_type(assignment)
+    open_spot_count(assignment, type)
+  end
+
+  defp open_spot_count(%{crew: crew, assignable_experiment: experiment}, :one_task) do
     target = Assignment.ExperimentModel.spot_count(experiment)
     all_non_expired_tasks = Crew.Public.count_tasks(crew, Crew.TaskStatus.values())
 
@@ -608,9 +593,9 @@ defmodule Systems.Assignment.Public do
     |> Budget.Public.rollback_deposit(idempotence_key)
   end
 
-  def create_reward(%Assignment.Model{budget: budget} = assignment, %User{} = user, amount) do
+  defp create_reward(%Assignment.Model{budget: budget} = assignment, %User{} = user, amount) do
     idempotence_key = idempotence_key(assignment, user)
-    Budget.Public.create_reward!(budget, amount, user, idempotence_key)
+    Budget.Public.create_reward(budget, amount, user, idempotence_key)
   end
 
   def idempotence_key(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do

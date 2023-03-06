@@ -20,6 +20,7 @@ defmodule Systems.Pool.SubmissionView do
 
   prop(props, :any, required: true)
 
+  data(render_reward?, :boolean)
   data(schedule_start_toggle_labels, :list)
   data(schedule_start_disabled, :boolean)
 
@@ -111,14 +112,23 @@ defmodule Systems.Pool.SubmissionView do
     }
   end
 
-  def update(%{id: id, props: %{entity: entity, validate?: validate?}}, socket) do
-    %{
-      schedule_start: schedule_start,
-      schedule_end: schedule_end
-    } = entity
-
+  def update(
+        %{
+          id: id,
+          props: %{
+            entity:
+              %{
+                schedule_start: schedule_start,
+                schedule_end: schedule_end,
+                pool: %{currency: %{type: currency_type}}
+              } = entity,
+            validate?: validate?
+          }
+        },
+        socket
+      ) do
+    render_reward? = currency_type == :virtual
     changeset = Pool.SubmissionModel.changeset(entity, %{})
-
     schedule_start_disabled = schedule_start == nil
 
     schedule_start_toggle_labels = [
@@ -145,6 +155,7 @@ defmodule Systems.Pool.SubmissionView do
       |> assign(
         id: id,
         entity: entity,
+        render_reward?: render_reward?,
         schedule_start_toggle_labels: schedule_start_toggle_labels,
         schedule_start_disabled: schedule_start_disabled,
         schedule_end_toggle_labels: schedule_end_toggle_labels,
@@ -204,12 +215,14 @@ defmodule Systems.Pool.SubmissionView do
     ~F"""
     <ContentArea>
       <Form id={@id} changeset={@changeset} change_event="save" target={@myself}>
-        <Title3 margin="mb-5 sm:mb-8">{dgettext("eyra-submission", "reward.label")}</Title3>
-        <NumberInput
-          field={:reward_value}
-          label_text={dgettext("eyra-submission", "reward.value.label")}
-        />
-        <Spacing value="M" />
+        <div :if={@render_reward?}>
+          <Title3 margin="mb-5 sm:mb-8">{dgettext("eyra-submission", "reward.label")}</Title3>
+          <NumberInput
+            field={:reward_value}
+            label_text={dgettext("eyra-submission", "reward.value.label")}
+          />
+          <Spacing value="M" />
+        </div>
 
         <Title3 margin="mb-5 sm:mb-8">{dgettext("eyra-submission", "schedule.title")}</Title3>
         <Body>{dgettext("eyra-submission", "schedule.description")}</Body>

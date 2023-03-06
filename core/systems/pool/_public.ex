@@ -33,6 +33,21 @@ defmodule Systems.Pool.Public do
     |> Repo.all()
   end
 
+  def list_owned(user, preload \\ []) do
+    node_ids =
+      Authorization.query_node_ids(
+        role: :owner,
+        principal: user
+      )
+
+    from(p in Pool.Model,
+      where: p.auth_node_id in subquery(node_ids),
+      order_by: [desc: p.updated_at],
+      preload: ^preload
+    )
+    |> Repo.all()
+  end
+
   def list_by_user(%Accounts.User{id: user_id}, preload \\ []) do
     from(pool in Pool.Model,
       inner_join: participant in Pool.ParticipantModel,
@@ -104,6 +119,10 @@ defmodule Systems.Pool.Public do
     |> Repo.all()
   end
 
+  def submit(%Pool.SubmissionModel{id: id, pool: pool}) do
+    Director.get(pool).submit(id)
+  end
+
   def list_directors() do
     from(p in Pool.Model,
       distinct: true,
@@ -163,6 +182,14 @@ defmodule Systems.Pool.Public do
       preload: ^preload
     )
     |> Repo.one!()
+  end
+
+  def is_participant?(%Pool.Model{} = pool, %Accounts.User{} = user) do
+    from(participant in Pool.ParticipantModel,
+      where: participant.pool_id == ^pool.id,
+      where: participant.user_id == ^user.id
+    )
+    |> Repo.exists?()
   end
 
   def add_owner!(pool, user) do
@@ -417,14 +444,14 @@ defmodule Systems.Pool.Public do
     if Pool.SubmissionModel.schedule_ended?(submission) do
       :closed
     else
-      if Systems.Director.public(submission).open?(submission) do
+      if Pool.SubmissionModel.completed?(submission) do
+        :closed
+      else
         if Pool.SubmissionModel.scheduled?(submission) do
           :scheduled
         else
           :released
         end
-      else
-        :closed
       end
     end
   end

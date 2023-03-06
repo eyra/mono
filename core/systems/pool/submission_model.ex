@@ -95,6 +95,9 @@ defmodule Systems.Pool.SubmissionModel do
   def submitted?(%{submitted_at: submitted_at}), do: submitted_at != nil
   def submitted?(_), do: false
 
+  def completed?(%{completed_at: completed_at}), do: completed_at != nil
+  def completed?(_), do: false
+
   defp past?(nil), do: false
 
   defp past?(schedule_end) do

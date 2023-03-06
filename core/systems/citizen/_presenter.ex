@@ -8,7 +8,7 @@ defmodule Systems.Citizen.Presenter do
 
   @impl true
   def view_model(id, Pool.SubmissionPage = page, assigns, url_resolver) when is_integer(id) do
-    Pool.Public.get_submission!(id, pool: Pool.Model.preload_graph([:org]))
+    Pool.Public.get_submission!(id, pool: Pool.Model.preload_graph([:org, :currency]))
     |> view_model(page, assigns, url_resolver)
   end
 

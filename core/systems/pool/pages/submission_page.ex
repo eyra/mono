@@ -208,6 +208,7 @@ defmodule Systems.Pool.SubmissionPage do
         </ContentArea>
 
         <Dynamic.LiveComponent
+          :if={Map.has_key?(@vm, :form)}
           id={:submission_pool_form}
           module={@vm.form.component}
           {...@vm.form.props}

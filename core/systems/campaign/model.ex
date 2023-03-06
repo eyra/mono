@@ -10,8 +10,7 @@ defmodule Systems.Campaign.Model do
     Campaign,
     Promotion,
     Assignment,
-    Pool,
-    Student
+    Pool
   }
 
   schema "campaigns" do
@@ -91,8 +90,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     Assignment,
     Crew,
     Pool,
-    Budget,
-    Student
+    Budget
   }
 
   alias Core.ImageHelpers
@@ -148,10 +146,10 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     info1 = Enum.join(info1_elements, " | ")
     info = [info1]
 
-    open? = Assignment.Public.open?(assignment)
+    has_open_spots? = Assignment.Public.has_open_spots?(assignment)
 
     label =
-      if open? do
+      if has_open_spots? do
         nil
       else
         %{text: dgettext("eyra-marketplace", "assignment.status.complete.label"), type: :tertiary}
@@ -394,7 +392,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
   defp vm(
          %{submission: submission} = campaign,
-         {Student.DetailPage, :contribution},
+         {Pool.ParticipantPage, :contribution},
          user,
          url_resolver
        ) do
@@ -576,7 +574,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   end
 
   def get_card_type(submission) do
-    case completed?(submission) do
+    case inactive?(submission) do
       true -> :secondary
       false -> :primary
     end
@@ -610,7 +608,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     end
   end
 
-  defp completed?(%{status: status} = submission) do
+  defp inactive?(%{status: status} = submission) do
     case status do
       :completed -> true
       :accepted -> Pool.Public.published_status(submission) == :closed

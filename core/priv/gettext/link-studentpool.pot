@@ -35,14 +35,6 @@ msgid "campaigns.empty.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "student.tag.complete"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "student.tag.incomplete"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "spots.available"
 msgstr ""
 
@@ -79,7 +71,7 @@ msgid "passed.students"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "student.title"
+msgid "participant.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen

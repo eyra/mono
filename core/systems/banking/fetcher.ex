@@ -27,29 +27,31 @@ defmodule Systems.Banking.Fetcher do
       processor: processor
     }
 
+    schedule_fetch(state)
+
     {
       :ok,
-      state |> schedule_fetch()
+      state
     }
   end
 
   @impl true
   def handle_info(:fetch, state) do
+    fetch(state)
+    schedule_fetch(state)
+
     {
       :noreply,
       state
-      |> fetch()
-      |> schedule_fetch()
     }
   end
 
-  defp schedule_fetch(%{interval: interval} = state) do
+  defp schedule_fetch(%{interval: interval}) do
     Process.send_after(self(), :fetch, interval)
-    state
   end
 
-  def fetch(%{processor: processor} = state) do
-    %{marker: new_marker, transactions: payments} =
+  def fetch(%{processor: processor}) do
+    %{cursor: new_cursor, payments: payments} =
       last_cursor()
       |> Banking.Public.list_payments()
 
@@ -58,13 +60,11 @@ defmodule Systems.Banking.Fetcher do
 
     unless Enum.empty?(payments) do
       Enum.each(payments, &Banking.Processor.next(processor, &1))
-      update_marker(new_marker, payment_count)
+      update_cursor(new_cursor, payment_count)
     end
-
-    state
   end
 
-  def update_marker(new_cursor, payment_count) do
+  def update_cursor(new_cursor, payment_count) do
     Repo.insert!(%Banking.MarkerModel{
       marker: new_cursor,
       payment_count: payment_count

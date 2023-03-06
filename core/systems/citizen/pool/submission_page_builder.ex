@@ -7,7 +7,7 @@ defmodule Systems.Citizen.Pool.SubmissionPageBuilder do
     Promotion
   }
 
-  def view_model(%Pool.SubmissionModel{} = submission, %{current_user: user}, url_resolver) do
+  def view_model(%Pool.SubmissionModel{} = submission, _, url_resolver) do
     %{promotion: promotion} =
       campaign = Campaign.Public.get_by_submission(submission, [:promotion])
 
@@ -33,13 +33,7 @@ defmodule Systems.Citizen.Pool.SubmissionPageBuilder do
       |> Enum.map(&Campaign.Model.flatten(&1))
       |> Enum.map(&Pool.Builders.CampaignItem.view_model(url_resolver, &1))
 
-    form = %{
-      component: Pool.SubmissionView,
-      props: %{entity: submission, user: user}
-    }
-
     %{
-      form: form,
       member: member,
       submission: submission,
       promotion_id: promotion.id,

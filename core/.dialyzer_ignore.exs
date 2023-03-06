@@ -101,6 +101,8 @@
   {"systems/lab/tool_form.ex", :pattern_match},
   {"systems/next_action/overview_page.ex", :pattern_match},
   {"systems/next_action/view.ex", :pattern_match},
+  {"systems/pool/pages/landing_page.ex", :pattern_match},
+  {"systems/pool/pages/participant_page.ex", :pattern_match},
   {"systems/pool/pages/detail_page.ex", :pattern_match},
   {"systems/pool/pages/overview_page.ex", :pattern_match},
   {"systems/pool/pages/student_page.ex", :pattern_match},
@@ -147,5 +149,6 @@
   {"systems/student/pool/dashboard_view.ex", :pattern_match},
   {"systems/student/pool/overview_plugin.ex", :pattern_match},
   {"systems/student/pool/submission_pool_view.ex", :pattern_match},
+  {"systems/student/pool/submission_form.ex", :pattern_match},
   {"systems/student/overview.ex", :pattern_match}
 ]

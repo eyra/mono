@@ -1,4 +1,4 @@
-defmodule Systems.Student.Pool.SubmissionView do
+defmodule Systems.Student.Pool.SubmissionForm do
   use CoreWeb.LiveForm
 
   alias Frameworks.Pixel.Selector.Selector

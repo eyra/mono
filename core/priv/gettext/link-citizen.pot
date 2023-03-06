@@ -47,10 +47,6 @@ msgid "citizen.tag.complete"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "citizen.tag.incomplete"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "citizens.empty.description"
 msgstr ""
 
@@ -59,15 +55,7 @@ msgid "citizens.empty.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "sample.size"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "search.placeholder"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "spots.available"
 msgstr ""
 
 #, elixir-autogen, elixir-format
