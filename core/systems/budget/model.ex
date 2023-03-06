@@ -44,12 +44,14 @@ defmodule Systems.Budget.Model do
   end
 
   def create(%Budget.CurrencyModel{} = currency, name, icon, %User{id: user_id}) do
+    uuid = Ecto.UUID.generate()
+
     %__MODULE__{
       name: name,
       icon: icon,
       currency: currency,
-      fund: Bookkeeping.AccountModel.create({:fund, name}),
-      reserve: Bookkeeping.AccountModel.create({:reserve, name}),
+      fund: Bookkeeping.AccountModel.create({:fund, uuid}),
+      reserve: Bookkeeping.AccountModel.create({:reserve, uuid}),
       auth_node: Core.Authorization.Node.create(user_id, :owner)
     }
   end

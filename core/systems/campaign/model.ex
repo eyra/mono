@@ -84,6 +84,8 @@ end
 defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   import CoreWeb.Gettext
 
+  import Frameworks.Utility.Guards
+
   alias Systems.{
     Campaign,
     Promotion,
@@ -469,6 +471,9 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
          submission: %{reward_value: reward_value, pool: %{currency: currency}},
          promotable: %{assignable_experiment: %{subject_count: subject_count}}
        }) do
+    reward_value = guard_nil(reward_value, :integer)
+    subject_count = guard_nil(subject_count, :integer)
+
     locale = Gettext.get_locale(CoreWeb.Gettext)
     required_funding_amount = subject_count * reward_value
     required_funding_label = Budget.CurrencyModel.label(currency, locale, required_funding_amount)
@@ -479,6 +484,9 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
          submission: %{reward_value: reward_value},
          promotable: %{budget: budget, assignable_experiment: %{subject_count: subject_count}}
        }) do
+    reward_value = guard_nil(reward_value, :integer)
+    subject_count = guard_nil(subject_count, :integer)
+
     available = Budget.Model.amount_available(budget)
 
     if available < reward_value do

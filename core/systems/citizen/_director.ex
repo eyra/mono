@@ -39,8 +39,7 @@ defmodule Systems.Citizen.Director do
     %{currency: currency} = Pool.Public.get!(pool_id, [:currency])
 
     case Budget.Public.list_owned_by_currency(user, currency, Budget.Model.preload_graph(:full)) do
-      [budget] -> budget
-      [budget, _] -> budget
+      [budget | _] -> budget
       _ -> create_first_budget(currency, user)
     end
   end
