@@ -132,7 +132,7 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
          locale
        ) do
     %{
-      id: :funding_view,
+      id: :funding,
       title: dgettext("link-survey", "tabbar.item.funding"),
       forward_title: dgettext("link-survey", "tabbar.item.funding.forward"),
       type: :fullpage,

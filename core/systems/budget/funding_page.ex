@@ -2,13 +2,15 @@ defmodule Systems.Budget.FundingPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :funding
 
+  alias CoreWeb.UI.ContentList
   alias Frameworks.Pixel.Line
   alias Frameworks.Pixel.Text.{Title1, Title2, Title3}
   alias Frameworks.Pixel.{Square, SquareContainer}
 
   alias Systems.{
     Budget,
-    Bookkeeping
+    Bookkeeping,
+    Campaign
   }
 
   data(create_budget, :map)
@@ -16,7 +18,7 @@ defmodule Systems.Budget.FundingPage do
   data(deposit_button, :map)
   data(budgets, :list)
   data(selected_budget, :any, default: nil)
-  data(linked_assignments, :list, default: [])
+  data(campaign_items, :list, default: [])
   data(balance, :any, default: nil)
   data(squares, :list)
   data(popup, :any)
@@ -58,118 +60,27 @@ defmodule Systems.Budget.FundingPage do
       |> update_selected_budget()
       |> update_balance()
       |> update_squares()
+      |> update_campaigns()
     }
   end
 
-  @impl true
-  def handle_event("create_budget", _, %{assigns: %{current_user: user, locale: locale}} = socket) do
-    popup = %{
-      module: Systems.Budget.Form,
-      id: :create_budget,
-      budget: nil,
-      user: user,
-      locale: locale,
-      target: self()
-    }
-
-    {
-      :noreply,
-      socket |> show_popup(popup)
-    }
+  defp update_campaigns(%{assigns: %{selected_budget: nil}} = socket) do
+    socket |> assign(campaign_items: [])
   end
 
-  @impl true
-  def handle_event(
-        "edit_budget",
-        _,
-        %{assigns: %{selected_budget: budget, current_user: user, locale: locale}} = socket
-      ) do
-    popup = %{
-      module: Systems.Budget.Form,
-      id: :create_budget,
-      budget: budget,
-      user: user,
-      locale: locale,
-      target: self()
-    }
+  defp update_campaigns(
+         %{assigns: %{current_user: user, selected_budget: selected_budget}} = socket
+       ) do
+    campaign_items =
+      selected_budget
+      |> Campaign.Public.list_by_budget(Campaign.Model.preload_graph(:full))
+      |> Enum.map(&to_content_list_item(&1, user, url_resolver(socket)))
 
-    {
-      :noreply,
-      socket |> show_popup(popup)
-    }
+    socket |> assign(campaign_items: campaign_items)
   end
 
-  @impl true
-  def handle_event("deposit_money", _, %{assigns: %{selected_budget: budget}} = socket) do
-    popup = %{
-      module: Systems.Budget.DepositForm,
-      budget: budget,
-      target: self()
-    }
-
-    {
-      :noreply,
-      socket |> show_popup(popup)
-    }
-  end
-
-  @impl true
-  def handle_event(
-        "select_budget",
-        %{"item" => budget_id},
-        %{assigns: %{budgets: budgets}} = socket
-      ) do
-    selected_budget = budgets |> Enum.find(&(&1.id == String.to_integer(budget_id)))
-
-    {
-      :noreply,
-      socket
-      |> assign(selected_budget: selected_budget)
-      |> update_balance()
-      |> update_squares()
-    }
-  end
-
-  @impl true
-  def handle_info(%{module: Systems.Budget.DepositForm, action: "saved"}, socket) do
-    {
-      :noreply,
-      socket
-      |> update_budgets()
-      |> update_selected_budget()
-      |> update_balance()
-      |> update_squares()
-      |> hide_popup()
-    }
-  end
-
-  @impl true
-  def handle_info(%{module: Systems.Budget.Form, action: "saved"}, socket) do
-    {
-      :noreply,
-      socket
-      |> update_budgets()
-      |> update_selected_budget()
-      |> update_balance()
-      |> update_squares()
-      |> hide_popup()
-    }
-  end
-
-  @impl true
-  def handle_info(%{module: _, action: "cancel"}, socket) do
-    {
-      :noreply,
-      socket |> hide_popup()
-    }
-  end
-
-  defp show_popup(socket, popup) do
-    socket |> assign(popup: popup)
-  end
-
-  defp hide_popup(socket) do
-    socket |> assign(popup: nil)
+  defp to_content_list_item(campaign, user, url_resolver) do
+    ViewModelBuilder.view_model(campaign, {__MODULE__, :budget_campaigns}, user, url_resolver)
   end
 
   defp update_budgets(socket) do
@@ -256,6 +167,118 @@ defmodule Systems.Budget.FundingPage do
     }
   end
 
+  @impl true
+  def handle_event("create_budget", _, %{assigns: %{current_user: user, locale: locale}} = socket) do
+    popup = %{
+      module: Systems.Budget.Form,
+      id: :create_budget,
+      budget: nil,
+      user: user,
+      locale: locale,
+      target: self()
+    }
+
+    {
+      :noreply,
+      socket |> show_popup(popup)
+    }
+  end
+
+  @impl true
+  def handle_event(
+        "edit_budget",
+        _,
+        %{assigns: %{selected_budget: budget, current_user: user, locale: locale}} = socket
+      ) do
+    popup = %{
+      module: Systems.Budget.Form,
+      id: :create_budget,
+      budget: budget,
+      user: user,
+      locale: locale,
+      target: self()
+    }
+
+    {
+      :noreply,
+      socket |> show_popup(popup)
+    }
+  end
+
+  @impl true
+  def handle_event("deposit_money", _, %{assigns: %{selected_budget: budget}} = socket) do
+    popup = %{
+      module: Systems.Budget.DepositForm,
+      budget: budget,
+      target: self()
+    }
+
+    {
+      :noreply,
+      socket |> show_popup(popup)
+    }
+  end
+
+  @impl true
+  def handle_event(
+        "select_budget",
+        %{"item" => budget_id},
+        %{assigns: %{budgets: budgets}} = socket
+      ) do
+    selected_budget = budgets |> Enum.find(&(&1.id == String.to_integer(budget_id)))
+
+    {
+      :noreply,
+      socket
+      |> assign(selected_budget: selected_budget)
+      |> update_balance()
+      |> update_squares()
+      |> update_campaigns()
+    }
+  end
+
+  @impl true
+  def handle_info(%{module: Systems.Budget.DepositForm, action: "saved"}, socket) do
+    {
+      :noreply,
+      socket
+      |> update_budgets()
+      |> update_selected_budget()
+      |> update_balance()
+      |> update_squares()
+      |> hide_popup()
+    }
+  end
+
+  @impl true
+  def handle_info(%{module: Systems.Budget.Form, action: "saved"}, socket) do
+    {
+      :noreply,
+      socket
+      |> update_budgets()
+      |> update_selected_budget()
+      |> update_balance()
+      |> update_squares()
+      |> hide_popup()
+    }
+  end
+
+  @impl true
+  def handle_info(%{module: _, action: "cancel"}, socket) do
+    {
+      :noreply,
+      socket |> hide_popup()
+    }
+  end
+
+  defp show_popup(socket, popup) do
+    socket |> assign(popup: popup)
+  end
+
+  defp hide_popup(socket) do
+    socket |> assign(popup: nil)
+  end
+
   def render(assigns) do
     ~F"""
     <Workspace title={dgettext("eyra-budget", "funding.title")} menus={@menus}>
@@ -282,7 +305,8 @@ defmodule Systems.Budget.FundingPage do
             <DynamicButton vm={@deposit_button} />
           </div>
           <Budget.BalanceView :if={@balance} {...@balance} />
-          <Title3>{dgettext("eyra-budget", "linked.assignments.title")} <span class="text-primary">{Enum.count(@linked_assignments)}</span></Title3>
+          <Title3 margin="">{dgettext("eyra-budget", "linked.assignments.title")} <span class="text-primary">{Enum.count(@campaign_items)}</span></Title3>
+          <ContentList items={@campaign_items} />
         </div>
       </ContentArea>
     </Workspace>

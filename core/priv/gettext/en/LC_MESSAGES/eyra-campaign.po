@@ -78,3 +78,19 @@ msgstr "With the selected fund you can't afford any participants."
 #, elixir-autogen, elixir-format, fuzzy
 msgid "funding.fund.description.success"
 msgstr "With the selected fund you can afford all participants."
+
+#, elixir-autogen, elixir-format
+msgid "required.funding.label"
+msgstr "Required funding: %{funding}"
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.broke.label"
+msgstr "Broke"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.status.poor.label"
+msgstr "Poor"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.status.rich.label"
+msgstr "Rich"

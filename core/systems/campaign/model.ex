@@ -381,6 +381,37 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   end
 
   defp vm(
+         %{
+           id: id,
+           updated_at: updated_at,
+           promotion: %{
+             title: title,
+             image_id: image_id
+           }
+         } = campaign,
+         {Budget.FundingPage, :budget_campaigns},
+         _user,
+         url_resolver
+       ) do
+    path = url_resolver.(Systems.Campaign.ContentPage, id: id, tab: :funding)
+    tag = funding_tag(campaign)
+    subtitle = required_funding(campaign)
+    quick_summary = get_quick_summary(updated_at)
+    image_info = ImageHelpers.get_image_info(image_id, 120, 115)
+    image = %{type: :catalog, info: image_info}
+
+    %{
+      path: path,
+      title: title,
+      subtitle: subtitle,
+      tag: tag,
+      level: :critical,
+      image: image,
+      quick_summary: quick_summary
+    }
+  end
+
+  defp vm(
          %{promotable: assignment} = campaign,
          {Link.Console, :contribution},
          user,
@@ -432,6 +463,33 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
       image: image,
       quick_summary: quick_summary
     }
+  end
+
+  defp required_funding(%{
+         submission: %{reward_value: reward_value, pool: %{currency: currency}},
+         promotable: %{assignable_experiment: %{subject_count: subject_count}}
+       }) do
+    locale = Gettext.get_locale(CoreWeb.Gettext)
+    required_funding_amount = subject_count * reward_value
+    required_funding_label = Budget.CurrencyModel.label(currency, locale, required_funding_amount)
+    dgettext("eyra-campaign", "required.funding.label", funding: required_funding_label)
+  end
+
+  defp funding_tag(%{
+         submission: %{reward_value: reward_value},
+         promotable: %{budget: budget, assignable_experiment: %{subject_count: subject_count}}
+       }) do
+    available = Budget.Model.amount_available(budget)
+
+    if available < reward_value do
+      %{text: dgettext("eyra-campaign", "funding.status.broke.label"), type: :error}
+    else
+      if available >= subject_count * reward_value do
+        %{text: dgettext("eyra-campaign", "funding.status.rich.label"), type: :success}
+      else
+        %{text: dgettext("eyra-campaign", "funding.status.poor.label"), type: :warning}
+      end
+    end
   end
 
   defp task(crew, user) do

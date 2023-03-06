@@ -78,3 +78,19 @@ msgstr "Met het geselecteerde fonds kan je geen deelnemers betalen."
 #, elixir-autogen, elixir-format, fuzzy
 msgid "funding.fund.description.success"
 msgstr "Met het geselecteerde fonds kan je alle deelnemers betalen."
+
+#, elixir-autogen, elixir-format
+msgid "required.funding.label"
+msgstr "Vereist budget: %{funding}"
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.broke.label"
+msgstr "Blut"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.status.poor.label"
+msgstr "Arm"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.status.rich.label"
+msgstr "Rijk"

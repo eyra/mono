@@ -77,3 +77,19 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "funding.fund.description.success"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "required.funding.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.broke.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.poor.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.rich.label"
+msgstr ""

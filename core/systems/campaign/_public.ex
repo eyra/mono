@@ -125,6 +125,18 @@ defmodule Systems.Campaign.Public do
     |> Repo.all()
   end
 
+  def list_by_budget(%Budget.Model{id: budget_id}, preload \\ []) do
+    from(c in Campaign.Model,
+      inner_join: a in Assignment.Model,
+      on: c.promotable_assignment_id == a.id,
+      where: a.budget_id == ^budget_id,
+      preload: ^preload,
+      order_by: [desc: c.updated_at],
+      select: c
+    )
+    |> Repo.all()
+  end
+
   @doc """
   Returns the list of campaigns submitted at least once.
   """

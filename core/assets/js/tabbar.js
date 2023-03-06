@@ -39,6 +39,7 @@ export const Tabbar = {
   },
 
   saveActiveTab(tabId) {
+    console.info("saveActiveTab ", tabId);
     window.localStorage.setItem(this.getActiveTabKey(), tabId);
   },
 
