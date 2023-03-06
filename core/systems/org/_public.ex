@@ -165,7 +165,6 @@ defmodule Systems.Org.Public do
     from(node in subquery,
       where: node.type == ^type
     )
-    |> query_preload(preload)
   end
 
   defp list_nodes_query(type, identifier_template, preload) when is_list(identifier_template) do
@@ -174,7 +173,6 @@ defmodule Systems.Org.Public do
     from(node in subquery,
       where: fragment("?::text[] @> ?", node.identifier, ^identifier_template)
     )
-    |> query_preload(preload)
   end
 
   defp list_nodes_query(%User{} = user, preload) do
