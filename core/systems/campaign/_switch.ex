@@ -41,10 +41,7 @@ defmodule Systems.Campaign.Switch do
 
   def handle(:assignment_accepted, %{assignment: assignment, user: user}) do
     handle(:assignment_updated, assignment)
-
-    if user.student == true do
-      Campaign.Public.payout_participant(assignment, user)
-    end
+    Campaign.Public.payout_participant(assignment, user)
   end
 
   def handle(:assignment_rejected, %{assignment: assignment, user: _user}) do

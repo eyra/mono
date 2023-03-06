@@ -71,13 +71,6 @@ defmodule Systems.Student.Pool.OverviewPlugin do
     {:noreply, socket |> update_pools()}
   end
 
-  @impl true
-  def handle_event("handle_pool_click", %{"item" => pool_id}, socket) do
-    pool_id = String.to_integer(pool_id)
-    detail_path = Routes.live_path(socket, Systems.Pool.DetailPage, pool_id)
-    {:noreply, push_redirect(socket, to: detail_path)}
-  end
-
   defp to_view_model(%{id: id} = pool, target) do
     archived_action = archived_action(pool, target)
     share_action = share_action(pool)

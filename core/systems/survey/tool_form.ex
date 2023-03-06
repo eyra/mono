@@ -170,7 +170,7 @@ defmodule Systems.Survey.ToolForm do
                 <StepIndicator vm={text: "1", bg_color: "bg-tertiary", text_color: "text-grey1"} />
               </div>
               <div class="flex-wrap">
-                <Title5 color="text-white">{dgettext("link-survey", "panlid.title")}</Title5>
+                <Title5 align="text-left" color="text-white">{dgettext("link-survey", "panlid.title")}</Title5>
                 <Spacing value="XS" />
                 <BodyMedium color="text-white">{raw(dgettext("link-survey", "panlid.description", link: panlid_instructions_link()))}</BodyMedium>
               </div>
@@ -181,7 +181,7 @@ defmodule Systems.Survey.ToolForm do
                 <StepIndicator vm={text: "2", bg_color: "bg-tertiary", text_color: "text-grey1"} />
               </div>
               <div class="flex-wrap">
-                <Title5 color="text-white">{dgettext("link-survey", "redirect.title")}</Title5>
+                <Title5 align="text-left" color="text-white">{dgettext("link-survey", "redirect.title")}</Title5>
                 <Spacing value="XS" />
                 <BodyMedium color="text-white">{raw(dgettext("link-survey", "redirect.description", link: redirect_instructions_link()))}</BodyMedium>
                 <Spacing value="XS" />
@@ -207,7 +207,7 @@ defmodule Systems.Survey.ToolForm do
                 <StepIndicator vm={text: "3", bg_color: "bg-tertiary", text_color: "text-grey1"} />
               </div>
               <div class="flex-wrap">
-                <Title5 color="text-white">{dgettext("link-survey", "study.link.title")}</Title5>
+                <Title5 align="text-left" color="text-white">{dgettext("link-survey", "study.link.title")}</Title5>
                 <Spacing value="XS" />
                 <BodyMedium color="text-white">{raw(dgettext("link-survey", "study.link.description", link: study_instructions_link()))}</BodyMedium>
               </div>

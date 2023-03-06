@@ -41,15 +41,15 @@ msgstr "Your Panl ID"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "earned.label"
-msgstr "earned"
+msgstr "%{amount} earned"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "pending.label"
-msgstr "pending"
+msgstr "%{amount} pending"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "togo.label"
-msgstr "to go"
+msgstr "%{amount} to go"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "pool.target"

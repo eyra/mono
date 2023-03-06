@@ -83,9 +83,13 @@ defmodule Systems.Budget.FundingPage do
     ViewModelBuilder.view_model(campaign, {__MODULE__, :budget_campaigns}, user, url_resolver)
   end
 
-  defp update_budgets(socket) do
+  defp update_budgets(%{assigns: %{current_user: user}} = socket) do
     budgets =
-      Budget.Public.list([:fund, :reserve, currency: Budget.CurrencyModel.preload_graph(:full)])
+      Budget.Public.list_owned(user, [
+        :fund,
+        :reserve,
+        currency: Budget.CurrencyModel.preload_graph(:full)
+      ])
       |> Enum.filter(&(&1.currency.type == :legal))
 
     socket |> assign(budgets: budgets)

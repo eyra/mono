@@ -73,9 +73,29 @@ defmodule Systems.Budget.CurrencyModel do
   def preload_graph(:bank_account),
     do: [bank_account: [:account]]
 
-  def title(%{name: name, label_bundle: label_bundle}, locale) do
+  def title(%{name: name, type: :legal, label_bundle: label_bundle}, locale) do
     Content.TextBundleModel.text(label_bundle, locale, name, name)
   end
+
+  def title(%{name: name, type: :virtual}, _locale) do
+    title(String.split(name, "_"))
+  end
+
+  def title(elements) when is_list(elements) do
+    elements
+    |> Enum.take(-3)
+    |> Enum.map_join(" ", &translate(&1))
+  end
+
+  def namespace(%{name: name}) do
+    name
+    |> String.split("_")
+    |> Enum.take(2)
+    |> Enum.map(&translate(&1))
+  end
+
+  defp translate("year" <> year), do: year
+  defp translate(element), do: String.upcase(element)
 
   def label(%{decimal_scale: nil} = currency, locale, amount) when is_integer(amount) do
     label(currency, locale, Integer.to_string(amount))

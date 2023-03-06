@@ -15,49 +15,63 @@ defmodule Systems.Budget.WalletViewBuilder do
         user,
         _url_resolver
       ) do
-    title = title(currency)
+    locale = Gettext.get_locale(CoreWeb.Gettext)
+    currency = Budget.Public.get_currency_by_name(currency, label_bundle: [:items])
+    title = Budget.CurrencyModel.title(currency, locale)
 
-    target = target(account)
+    target_amount = target(account)
 
     subtitle =
-      case target do
-        target when target > 0 ->
-          dgettext("eyra-assignment", "pool.target", target: target)
+      case target_amount do
+        target when not is_nil(target) and target > 0 ->
+          dgettext("eyra-assignment", "pool.target", target: target_amount)
 
         _ ->
           ""
       end
 
-    balance = Bookkeeping.AccountModel.balance(account)
+    earned_amount = Bookkeeping.AccountModel.balance(account)
+    pending_amount = Budget.Public.pending_rewards(user, currency)
 
-    pending_rewards = Budget.Public.pending_rewards(user, currency)
+    togo_amount =
+      if target_amount do
+        target_amount - (earned_amount + pending_amount)
+      else
+        0
+      end
+
+    earned_label =
+      dgettext("eyra-assignment", "earned.label",
+        amount: Budget.CurrencyModel.label(currency, locale, earned_amount)
+      )
+
+    pending_label =
+      dgettext("eyra-assignment", "pending.label",
+        amount: Budget.CurrencyModel.label(currency, locale, pending_amount)
+      )
+
+    togo_label =
+      dgettext("eyra-assignment", "togo.label",
+        amount: Budget.CurrencyModel.label(currency, locale, togo_amount)
+      )
 
     %{
       id: id,
       title: title,
       subtitle: subtitle,
-      target_amount: target,
-      earned_amount: balance,
-      pending_amount: pending_rewards
+      target_amount: target_amount,
+      earned_amount: earned_amount,
+      earned_label: earned_label,
+      pending_amount: pending_amount,
+      pending_label: pending_label,
+      togo_amount: togo_amount,
+      togo_label: togo_label
     }
   end
 
-  defp title(currency) when is_binary(currency) do
-    Budget.Public.get_currency_by_name(currency)
-    |> title()
-  end
+  defp target(%{identifier: [_ | [pool_name | _]]}),
+    do: target(Pool.Public.get_by_name(pool_name))
 
-  defp title(%Budget.CurrencyModel{name: name} = currency) do
-    case Pool.Public.list_by_currency(currency) do
-      [pool] -> Pool.Model.title(pool)
-      _ -> name
-    end
-  end
-
-  defp target(%{identifier: [_ | [pool_name | _]]}) do
-    %{target: target} = Pool.Public.get_by_name(pool_name)
-    target
-  end
-
+  defp target(%{target: target} = _pool), do: target
   defp target(_), do: nil
 end

@@ -30,6 +30,8 @@ defmodule Systems.Assignment.Switch do
 
       case new_status do
         :accepted ->
+          IO.puts("BBBB")
+
           Signal.Public.dispatch!(:assignment_accepted, %{
             director: director,
             assignment: assignment,

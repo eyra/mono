@@ -4,7 +4,6 @@ defmodule Systems.Pool.OverviewPage do
   """
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :pools
-  use CoreWeb.UI.Responsive.Viewport
 
   import CoreWeb.Gettext
 
@@ -31,8 +30,10 @@ defmodule Systems.Pool.OverviewPage do
   end
 
   @impl true
-  def handle_resize(socket) do
-    socket |> update_menus()
+  def handle_event("handle_pool_click", %{"item" => pool_id}, socket) do
+    pool_id = String.to_integer(pool_id)
+    detail_path = Routes.live_path(socket, Systems.Pool.DetailPage, pool_id)
+    {:noreply, push_redirect(socket, to: detail_path)}
   end
 
   @impl true
@@ -97,14 +98,12 @@ defmodule Systems.Pool.OverviewPage do
         </div>
       </Popup>
 
-      <div id={:pool_overview} phx-hook="ViewportResize">
-        <ContentArea>
-          <MarginY id={:page_top} />
-          <div class="flex flex-col gap-20">
-            <Dynamic.LiveComponent :for={plugin <- @plugins} module={plugin.module} {...plugin.props} />
-          </div>
-        </ContentArea>
-      </div>
+      <ContentArea>
+        <MarginY id={:page_top} />
+        <div class="flex flex-col gap-20">
+          <Dynamic.LiveComponent :for={plugin <- @plugins} module={plugin.module} {...plugin.props} />
+        </div>
+      </ContentArea>
     </Workspace>
     """
   end

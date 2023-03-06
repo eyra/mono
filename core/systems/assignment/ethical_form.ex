@@ -116,7 +116,7 @@ defmodule Systems.Assignment.EthicalForm do
       <Spacing value="M" />
 
       <Panel bg_color="bg-grey1">
-        <Title5 color="text-white">ERB code</Title5>
+        <Title5 align="text-left" color="text-white">ERB code</Title5>
         <Spacing value="S" />
         <TextInput
           field={:ethical_code}

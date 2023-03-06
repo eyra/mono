@@ -30,7 +30,7 @@ defmodule Frameworks.Pixel.Card.Campaign do
 
   def render(assigns) do
     ~F"""
-    <div>
+    <div class="h-full">
       <ClickableCard
         bg_color={@bg_color}
         id={@card.id}

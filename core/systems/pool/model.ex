@@ -105,11 +105,12 @@ defmodule Systems.Pool.Model do
 
   def title(%__MODULE__{name: name}), do: title(name)
   def title(name) when is_binary(name), do: title(String.split(name, "_"))
-  def title(["vu", "sbe" | rest]), do: title(rest)
   def title([element]), do: element
 
   def title(elements) when is_list(elements) do
-    Enum.map_join(elements, " ", &translate(&1))
+    elements
+    |> Enum.take(-3)
+    |> Enum.map_join(" ", &translate(&1))
   end
 
   def namespace(%{name: name}) do

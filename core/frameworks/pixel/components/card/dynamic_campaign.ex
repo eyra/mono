@@ -14,14 +14,16 @@ defmodule Frameworks.Pixel.Card.DynamicCampaign do
 
   def render(assigns) do
     ~F"""
-    <Dynamic.LiveComponent
-      id={@card.id}
-      module={campaign(@card)}
-      card={@card}
-      path_provider={@path_provider}
-      click_event_name={@click_event_name}
-      click_event_data={@click_event_data}
-    />
+    <div class="h-full">
+      <Dynamic.LiveComponent
+        id={@card.id}
+        module={campaign(@card)}
+        card={@card}
+        path_provider={@path_provider}
+        click_event_name={@click_event_name}
+        click_event_data={@click_event_data}
+      />
+    </div>
     """
   end
 end

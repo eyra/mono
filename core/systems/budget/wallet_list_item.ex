@@ -1,8 +1,6 @@
 defmodule Systems.Budget.WalletListItem do
   use CoreWeb.UI.Component
 
-  import CoreWeb.Gettext
-
   alias Frameworks.Pixel.Text.Label
   alias CoreWeb.UI.ProgressBar
 
@@ -11,14 +9,14 @@ defmodule Systems.Budget.WalletListItem do
     subtitle: nil,
     target_amount: 0,
     earned_amount: 0,
+    earned_label: "",
     pending_amount: 0,
+    pending_label: "",
+    togo_amount: 0,
+    togo_label: "",
     title_css: "font-title7 text-title7 md:font-title5z md:text-title5 text-grey1",
     subtitle_css: "text-bodysmall md:text-bodymedium font-body text-grey2 whitespace-pre-wrap"
   )
-
-  defp togo_amount(vm) do
-    target_amount(vm) - (earned_amount(vm) + pending_amount(vm))
-  end
 
   prop(vm, :map, required: true)
 
@@ -51,19 +49,19 @@ defmodule Systems.Budget.WalletListItem do
                   <div :if={earned_amount(@vm) > 0}>
                     <div class="flex flex-row items-center gap-3">
                       <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-success" />
-                      <Label>{earned_amount(@vm)} {dgettext("eyra-assignment", "earned.label")}</Label>
+                      <Label>{earned_label(@vm)}</Label>
                     </div>
                   </div>
                   <div :if={pending_amount(@vm) > 0}>
                     <div class="flex flex-row items-center gap-3">
                       <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-warning" />
-                      <Label>{pending_amount(@vm)} {dgettext("eyra-assignment", "pending.label")}</Label>
+                      <Label>{pending_label(@vm)}</Label>
                     </div>
                   </div>
                   <div :if={togo_amount(@vm) > 0}>
                     <div class="flex flex-row items-center gap-3">
                       <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-grey3" />
-                      <Label>{togo_amount(@vm)} {dgettext("eyra-assignment", "togo.label")}</Label>
+                      <Label>{togo_label(@vm)}</Label>
                     </div>
                   </div>
                 </div>

@@ -29,7 +29,7 @@ defmodule Systems.Campaign.CreateForm do
         %{active_item_id: active_item_id, selector_id: :tool_type_selector},
         %{assigns: %{tool_type_labels: tool_type_labels}} = socket
       ) do
-    selected_tool_type = Enum.find(tool_type_labels, &(&1.id == active_item_id))
+    %{id: selected_tool_type} = Enum.find(tool_type_labels, &(&1.id == active_item_id))
 
     {
       :ok,
