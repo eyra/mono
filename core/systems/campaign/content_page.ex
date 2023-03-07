@@ -24,7 +24,9 @@ defmodule Systems.Campaign.ContentPage do
   data(tabbar_id, :string)
   data(validate?, :boolean, default: false)
   data(initial_tab, :any)
-  data(actions, :map)
+  data(actions, :map, default: [])
+  data(more_actions, :map, default: [])
+  data(tabbar_size, :any)
   data(changesets, :any)
   data(initial_image_query, :any)
   data(uri_origin, :any)
@@ -55,6 +57,7 @@ defmodule Systems.Campaign.ContentPage do
       )
       |> assign_viewport()
       |> assign_breakpoint()
+      |> update_tabbar_size()
       |> update_menus()
     }
   end
@@ -71,6 +74,8 @@ defmodule Systems.Campaign.ContentPage do
     socket =
       socket
       |> observe_view_model()
+      |> update_actions()
+      |> update_more_actions()
       |> update_menus()
 
     super(socket)
@@ -84,7 +89,11 @@ defmodule Systems.Campaign.ContentPage do
 
   @impl true
   def handle_resize(socket) do
-    socket |> update_menus()
+    socket
+    |> update_tabbar_size()
+    |> update_actions()
+    |> update_more_actions()
+    |> update_menus()
   end
 
   defp initial_image_query(%{vm: %{promotion: promotion}}) do
@@ -239,7 +248,7 @@ defmodule Systems.Campaign.ContentPage do
   defp margin_x(:mobile), do: "mx-6"
   defp margin_x(_), do: "mx-10"
 
-  defp action_map(%{vm: %{preview_path: preview_path}}) do
+  defp action_map(%{assigns: %{vm: %{preview_path: preview_path}}}) do
     preview_action = %{type: :redirect, to: preview_path}
     submit_action = %{type: :send, event: "submit"}
     delete_action = %{type: :send, event: "delete"}
@@ -308,8 +317,15 @@ defmodule Systems.Campaign.ContentPage do
     }
   end
 
-  defp create_actions(%{breakpoint: breakpoint, vm: %{submitted?: submitted?}} = assigns) do
-    create_actions(action_map(assigns), breakpoint, submitted?)
+  defp update_actions(
+         %{assigns: %{breakpoint: breakpoint, vm: %{submitted?: submitted?}}} = socket
+       ) do
+    actions =
+      socket
+      |> action_map()
+      |> create_actions(breakpoint, submitted?)
+
+    socket |> assign(actions: actions)
   end
 
   defp create_actions(_, {:unknown, _}, _), do: []
@@ -375,8 +391,13 @@ defmodule Systems.Campaign.ContentPage do
     |> Enum.filter(&(not is_nil(&1)))
   end
 
-  defp create_more_actions(%{vm: %{submitted?: submitted?}} = assigns) do
-    create_more_actions(action_map(assigns), submitted?)
+  defp update_more_actions(%{assigns: %{vm: %{submitted?: submitted?}}} = socket) do
+    more_actions =
+      socket
+      |> action_map()
+      |> create_more_actions(submitted?)
+
+    socket |> assign(more_actions: more_actions)
   end
 
   defp create_more_actions(%{preview: preview, delete: delete}, false) do
@@ -393,6 +414,11 @@ defmodule Systems.Campaign.ContentPage do
       retract.label_icon
     ]
     |> Enum.filter(&(not is_nil(&1)))
+  end
+
+  defp update_tabbar_size(%{assigns: %{breakpoint: breakpoint}} = socket) do
+    tabbar_size = tabbar_size(breakpoint)
+    socket |> assign(tabbar_size: tabbar_size)
   end
 
   defp tabbar_size({:unknown, _}), do: :unknown
@@ -427,11 +453,8 @@ defmodule Systems.Campaign.ContentPage do
             <PlainDialog {...@dialog} />
           </Popup>
           <TabbarArea tabs={@vm.tabs}>
-            <ActionBar
-              right_bar_buttons={create_actions(assigns)}
-              more_buttons={create_more_actions(assigns)}
-            >
-              <Tabbar id={@tabbar_id} initial_tab={@initial_tab} size={tabbar_size(@breakpoint)} />
+            <ActionBar right_bar_buttons={@actions} more_buttons={@more_actions}>
+              <Tabbar id={@tabbar_id} initial_tab={@initial_tab} size={@tabbar_size} />
             </ActionBar>
             <TabbarContent />
             <TabbarFooter />

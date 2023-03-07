@@ -59,12 +59,6 @@ defmodule Frameworks.Pixel.Form.Checkbox do
           {@label_text}
         </div>
       </div>
-      <div
-        class="mt-0.5 text-title6 font-title6 leading-snug"
-        x-bind:class={"{'#{@label_color}': active || #{not field_has_error?(assigns, @form)}, 'text-warning': !active && #{field_has_error?(assigns, @form)} }"}
-      >
-        {@label_text}
-      </div>
     </div>
     """
   end

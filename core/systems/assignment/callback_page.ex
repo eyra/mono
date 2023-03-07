@@ -26,9 +26,19 @@ defmodule Systems.Assignment.CallbackPage do
       socket
       |> assign(model: model)
       |> observe_view_model()
+      |> activate_participant_task()
       |> update_menus()
     }
   end
+
+  defp activate_participant_task(
+         %{assigns: %{vm: %{state: :participant}, model: model, current_user: user}} = socket
+       ) do
+    Assignment.Public.activate_task(model, user)
+    socket
+  end
+
+  defp activate_participant_task(socket), do: socket
 
   defoverridable handle_view_model_updated: 1
 

@@ -70,21 +70,27 @@ defmodule Systems.Assignment.ExperimentForm do
       ) do
     changeset = Assignment.ExperimentModel.changeset(entity, :create, %{})
 
-    device_labels = Devices.labels(entity.devices)
-
-    language_labels = OnlineStudyLanguages.labels(entity.language)
-
     {
       :ok,
       socket
       |> assign(id: id)
       |> assign(entity: entity)
       |> assign(changeset: changeset)
-      |> assign(device_labels: device_labels)
-      |> assign(language_labels: language_labels)
       |> assign(validate?: validate?)
+      |> update_device_labels()
+      |> update_language_labels()
       |> validate_for_publish()
     }
+  end
+
+  defp update_device_labels(%{assigns: %{entity: %{devices: devices}}} = socket) do
+    device_labels = Devices.labels(devices)
+    socket |> assign(device_labels: device_labels)
+  end
+
+  defp update_language_labels(%{assigns: %{entity: %{language: language}}} = socket) do
+    language_labels = OnlineStudyLanguages.labels(language)
+    socket |> assign(language_labels: language_labels)
   end
 
   # Handle Events
@@ -104,6 +110,8 @@ defmodule Systems.Assignment.ExperimentForm do
 
     socket
     |> save(changeset)
+    |> update_device_labels()
+    |> update_language_labels()
     |> validate_for_publish()
   end
 

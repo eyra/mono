@@ -86,20 +86,29 @@ defmodule Systems.Promotion.FormView do
       ) do
     changeset = Promotion.Model.changeset(entity, :create, %{})
     image_info = ImageHelpers.get_image_info(image_id, 400, 300)
-    theme_labels = themes_module.labels(entity.themes)
 
     {
       :ok,
       socket
       |> init_file_uploader(:photo)
-      |> assign(id: id)
-      |> assign(entity: entity)
-      |> assign(changeset: changeset)
-      |> assign(image_info: image_info)
-      |> assign(theme_labels: theme_labels)
-      |> assign(validate?: validate?)
+      |> assign(
+        id: id,
+        entity: entity,
+        changeset: changeset,
+        image_info: image_info,
+        validate?: validate?,
+        themes_module: themes_module
+      )
+      |> update_theme_labels()
       |> validate_for_publish()
     }
+  end
+
+  defp update_theme_labels(
+         %{assigns: %{entity: %{themes: themes}, themes_module: themes_module}} = socket
+       ) do
+    theme_labels = themes_module.labels(themes)
+    socket |> assign(theme_labels: theme_labels)
   end
 
   # Save
@@ -108,6 +117,7 @@ defmodule Systems.Promotion.FormView do
 
     socket
     |> save(changeset)
+    |> update_theme_labels()
     |> validate_for_publish()
   end
 
