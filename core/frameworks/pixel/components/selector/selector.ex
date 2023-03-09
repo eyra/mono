@@ -21,8 +21,6 @@ defmodule Frameworks.Pixel.Selector.Selector do
   defp multiselect?(_), do: true
 
   def update(%{reset: new_items}, socket) do
-    IO.puts("RESET")
-
     {
       :ok,
       socket
@@ -121,27 +119,16 @@ defmodule Frameworks.Pixel.Selector.Selector do
     active_count = active_count(items)
 
     if is_same_id?(item.id, item_id) do
-      IO.puts("A")
-
       if not item.active or optional? or (multiselect? and active_count > 1) do
-        IO.puts("B")
-
         %{item | active: !item.active}
       else
-        IO.puts("C")
-
         # prevent deselection
         item
       end
     else
-      IO.puts("D")
-
       if multiselect? do
-        IO.puts("E")
-
         item
       else
-        IO.puts("F")
         %{item | active: false}
       end
     end

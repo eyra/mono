@@ -25,11 +25,16 @@ defmodule Systems.Crew.RejectView do
   data(model, :map)
   data(changeset, :map)
 
-  def update(%{active_item_id: category, selector_id: :category}, socket) do
+  def update(
+        %{active_item_id: category, selector_id: :category},
+        socket
+      ) do
+    categories = Crew.RejectCategories.labels(category)
+
     {
       :ok,
       socket
-      |> assign(category: category)
+      |> assign(category: category, categories: categories)
     }
   end
 
@@ -63,10 +68,11 @@ defmodule Systems.Crew.RejectView do
   @impl true
   def handle_event(
         "update",
-        %{"reject_model" => reject_model},
-        %{assigns: %{model: model}} = socket
+        %{"reject_model" => %{"message" => message}},
+        %{assigns: %{model: model, category: category}} = socket
       ) do
-    changeset = Crew.RejectModel.changeset(model, :submit, reject_model)
+    attrs = %{category: category, message: message}
+    changeset = Crew.RejectModel.changeset(model, :submit, attrs)
     {:noreply, socket |> assign(changeset: changeset)}
   end
 

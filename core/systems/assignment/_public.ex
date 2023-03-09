@@ -211,8 +211,10 @@ defmodule Systems.Assignment.Public do
     multi |> Utility.EctoHelper.delete(:survey_tool, tool)
   end
 
-  def delete_tool(multi, %{lab_tool: tool}) when not is_nil(tool) do
-    multi |> Utility.EctoHelper.delete(:lab_tool, tool)
+  def delete_tool(multi, %{lab_tool: %{time_slots: time_slots} = tool}) when not is_nil(tool) do
+    multi
+    |> Utility.EctoHelper.delete(:lab_time_slots, Lab.TimeSlotModel, time_slots)
+    |> Utility.EctoHelper.delete(:lab_tool, tool)
   end
 
   def owner!(%Assignment.Model{} = assignment), do: parent_owner!(assignment)

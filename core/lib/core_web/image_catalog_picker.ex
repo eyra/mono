@@ -16,6 +16,7 @@ defmodule CoreWeb.ImageCatalogPicker do
   data(query, :string, default: nil)
   data(search_results, :list, default: nil)
   data(meta, :any, default: nil)
+  data(close_button, :map)
 
   defp gap(%{"width" => width}, :mobile) when width < 400, do: "gap-4"
   defp gap(%{"width" => width}, :mobile) when width < 500, do: "gap-8"
@@ -77,7 +78,17 @@ defmodule CoreWeb.ImageCatalogPicker do
       |> assign(image_catalog: image_catalog)
       |> assign(initial_query: initial_query)
       |> assign(target: target)
+      |> update_close_button()
     }
+  end
+
+  defp update_close_button(%{assigns: %{myself: myself}} = socket) do
+    close_button = %{
+      action: %{type: :send, event: "close", target: myself},
+      face: %{type: :icon, icon: :close}
+    }
+
+    socket |> assign(close_button: close_button)
   end
 
   @impl true
@@ -101,6 +112,12 @@ defmodule CoreWeb.ImageCatalogPicker do
   @impl true
   def handle_event("select_image", %{"image" => image_id}, %{assigns: %{id: id}} = socket) do
     send(self(), {id, image_id})
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("close", _, %{assigns: %{id: id}} = socket) do
+    send(self(), {id, :close})
     {:noreply, socket}
   end
 
@@ -129,16 +146,11 @@ defmodule CoreWeb.ImageCatalogPicker do
     <div class="bg-white rounded">
       <div class="pl-6 pr-6 pt-6 pb-8 lg:pt-8 lg:pb-10 lg:pr-8 lg:pl-8">
         <div class="flex flex-row">
-          <div class="flex-grow">
+          <div>
             <Title3>{dgettext("eyra-imagecatalog", "search.image.title")}</Title3>
           </div>
-          <button
-            type="button"
-            class="w-button-sm h-button-sm flex-wrap cursor-pointer active:opacity-50"
-            x-on:click="image_picker = false, $parent.$parent.overlay = false"
-          >
-            <img src={@static_path.("/images/close.svg")} alt="Close image picker">
-          </button>
+          <div class="flex-grow" />
+          <DynamicButton vm={@close_button} />
         </div>
         <div x-data="{ selected: -1 }">
           <Form for={:x} submit="search" opts={id: "image_catalog_picker_form", phx_target: @myself}>

@@ -172,9 +172,14 @@ defmodule Systems.Campaign.Public do
       )
 
     from(c in Campaign.Model,
+      inner_join: cs in Campaign.SubmissionModel,
+      on: cs.campaign_id == c.id,
+      inner_join: ps in Pool.SubmissionModel,
+      on: ps.id == cs.submission_id,
       where: c.auth_node_id in subquery(node_ids),
-      order_by: [desc: c.updated_at],
-      preload: ^preload
+      order_by: [desc: ps.completed_at, desc: ps.updated_at],
+      preload: ^preload,
+      select: c
     )
     |> Repo.all()
   end
@@ -442,6 +447,16 @@ defmodule Systems.Campaign.Public do
 
   def assign_tester_role(tool, user) do
     Assignment.Public.assign_tester_role(tool, user)
+  end
+
+  def completed?(%Campaign.Model{} = campaign) do
+    campaign
+    |> Campaign.Model.flatten()
+    |> completed?()
+  end
+
+  def completed?(%{submission: submission}) do
+    Pool.SubmissionModel.completed?(submission)
   end
 
   def ready?(id) do

@@ -30,7 +30,8 @@ defmodule Systems.Campaign.ModelTest do
     test "list_owned_campaigns/1 returns only studies that are owned by the user" do
       _not_owned = Factories.insert!(:campaign)
       researcher = Factories.insert!(:researcher)
-      owned = Factories.insert!(:campaign)
+      submission = Factories.insert!(:submission)
+      owned = Factories.insert!(:campaign, %{submissions: [submission]})
       :ok = Authorization.assign_role(researcher, owned, :owner)
       assert Campaign.Public.list_owned_campaigns(researcher) |> Enum.map(& &1.id) == [owned.id]
     end
@@ -67,7 +68,8 @@ defmodule Systems.Campaign.ModelTest do
     test "add_owner!/2 grants a user ownership over a campaign" do
       researcher_1 = Factories.insert!(:researcher)
       researcher_2 = Factories.insert!(:researcher)
-      campaign = Factories.insert!(:campaign)
+      submission = Factories.insert!(:submission)
+      campaign = Factories.insert!(:campaign, %{submissions: [submission]})
       :ok = Authorization.assign_role(researcher_1, campaign, :owner)
       # The second researcher is not the owner of the campaign
       assert Campaign.Public.list_owned_campaigns(researcher_2) == []
@@ -81,7 +83,8 @@ defmodule Systems.Campaign.ModelTest do
     test "assign_owners/2 adds or removes a users ownership of a campaign" do
       researcher_1 = Factories.insert!(:researcher)
       researcher_2 = Factories.insert!(:researcher)
-      campaign = Factories.insert!(:campaign)
+      submission = Factories.insert!(:submission)
+      campaign = Factories.insert!(:campaign, %{submissions: [submission]})
       :ok = Authorization.assign_role(researcher_1, campaign, :owner)
       # The second researcher is not the owner of the campaign
       assert Campaign.Public.list_owned_campaigns(researcher_2) == []

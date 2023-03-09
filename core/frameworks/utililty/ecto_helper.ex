@@ -15,8 +15,17 @@ defmodule Frameworks.Utility.EctoHelper do
     delete(multi, name, table, id)
   end
 
-  def delete(multi, name, table, id) do
-    query = from(t in table, where: t.id == ^id)
+  def delete(multi, name, table, objects) when is_list(objects) do
+    ids = Enum.map(objects, & &1.id)
+    delete_all(multi, name, table, ids)
+  end
+
+  def delete(multi, name, table, id) when is_integer(id) do
+    delete_all(multi, name, table, [id])
+  end
+
+  def delete_all(multi, name, table, ids) when is_list(ids) do
+    query = from(t in table, where: t.id in ^ids)
     Multi.delete_all(multi, name, query)
   end
 

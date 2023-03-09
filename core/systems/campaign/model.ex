@@ -63,7 +63,10 @@ defmodule Systems.Campaign.Model do
       :promotion,
       auth_node: [:role_assignments],
       authors: [:user],
-      submissions: [:criteria, pool: Pool.Model.preload_graph(:full)],
+      submissions: [
+        :criteria,
+        pool: Pool.Model.preload_graph([:currency, :org, :auth_node, :participants])
+      ],
       promotable_assignment: Assignment.Model.preload_graph(:full)
     ]
   end
@@ -234,6 +237,18 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     action_icon_color = get_action_icon_color(type)
     action_label_color = get_action_label_color(type)
 
+    left_actions =
+      if Pool.SubmissionModel.concept?(submission) do
+        [
+          %{
+            action: %{type: :send, event: "delete", item: id},
+            face: %{type: :icon, icon: :delete, color: action_icon_color}
+          }
+        ]
+      else
+        []
+      end
+
     %{
       type: type,
       id: id,
@@ -269,12 +284,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
           }
         }
       ],
-      left_actions: [
-        %{
-          action: %{type: :send, event: "delete", item: id},
-          face: %{type: :icon, icon: :delete, color: action_icon_color}
-        }
-      ]
+      left_actions: left_actions
     }
   end
 

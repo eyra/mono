@@ -28,7 +28,6 @@ defmodule Systems.Campaign.ContentPage do
   data(more_actions, :map, default: [])
   data(tabbar_size, :any)
   data(changesets, :any)
-  data(initial_image_query, :any)
   data(uri_origin, :any)
   data(popup, :map)
 
@@ -85,6 +84,9 @@ defmodule Systems.Campaign.ContentPage do
 
   def handle_view_model_updated(socket) do
     socket
+    |> update_actions()
+    |> update_more_actions()
+    |> update_menus()
   end
 
   @impl true
@@ -94,13 +96,6 @@ defmodule Systems.Campaign.ContentPage do
     |> update_actions()
     |> update_more_actions()
     |> update_menus()
-  end
-
-  defp initial_image_query(%{vm: %{promotion: promotion}}) do
-    case promotion.themes do
-      nil -> ""
-      themes -> themes |> Enum.join(" ")
-    end
   end
 
   @impl true
@@ -137,6 +132,7 @@ defmodule Systems.Campaign.ContentPage do
         text = dgettext("eyra-submission", "submit.success.text")
 
         socket
+        |> update_view_model()
         |> inform(title, text)
       else
         title = dgettext("eyra-submission", "submit.error.title")
@@ -208,6 +204,31 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   @impl true
+  def handle_info(
+        {:show_image_picker, initial_image_query},
+        %{assigns: %{viewport: viewport, breakpoint: breakpoint}} = socket
+      ) do
+    popup = %{
+      view: ImageCatalogPicker,
+      props: %{
+        id: :image_picker,
+        viewport: viewport,
+        breakpoint: breakpoint,
+        static_path: &CoreWeb.Endpoint.static_path/1,
+        initial_query: initial_image_query,
+        image_catalog: image_catalog()
+      }
+    }
+
+    {:noreply, socket |> assign(popup: popup)}
+  end
+
+  @impl true
+  def handle_info({:image_picker, :close}, socket) do
+    {:noreply, socket |> assign(popup: nil)}
+  end
+
+  @impl true
   def handle_info({:image_picker, image_id}, socket) do
     send_update(PromotionForm, id: :promotion_form, image_id: image_id)
     {:noreply, socket}
@@ -244,9 +265,6 @@ defmodule Systems.Campaign.ContentPage do
   def handle_info({:signal_test, _}, socket) do
     {:noreply, socket}
   end
-
-  defp margin_x(:mobile), do: "mx-6"
-  defp margin_x(_), do: "mx-10"
 
   defp action_map(%{assigns: %{vm: %{preview_path: preview_path}}}) do
     preview_action = %{type: :redirect, to: preview_path}
@@ -424,42 +442,28 @@ defmodule Systems.Campaign.ContentPage do
   defp tabbar_size({:unknown, _}), do: :unknown
   defp tabbar_size(bp), do: value(bp, :narrow, sm: %{30 => :wide})
 
+  defp margin_x(:mobile), do: "mx-6"
+  defp margin_x(_), do: "mx-10"
+
   def render(assigns) do
     ~F"""
     <Workspace title={dgettext("link-survey", "content.title")} menus={@menus}>
       <div id={:survey_content} phx-hook="ViewportResize">
-        <div x-data="{ image_picker: false, active_tab: 0, dropdown: false }">
-          <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="image_picker">
-            <div class="flex flex-row items-center justify-center w-full h-full">
-              <div
-                class={"#{margin_x(@breakpoint)} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg"}
-                x-on:click.away="image_picker = false, $parent.$parent.overlay = false"
-              >
-                <ImageCatalogPicker
-                  id={:image_picker}
-                  viewport={@viewport}
-                  breakpoint={@breakpoint}
-                  static_path={&CoreWeb.Endpoint.static_path/1}
-                  initial_query={initial_image_query(assigns)}
-                  image_catalog={image_catalog()}
-                />
-              </div>
-            </div>
-          </div>
-          <Popup :if={@popup}>
+        <Popup :if={@popup}>
+          <div class={"#{margin_x(@breakpoint)} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg"}>
             <Dynamic.LiveComponent module={@popup.view} {...@popup.props} />
-          </Popup>
-          <Popup :if={@dialog}>
-            <PlainDialog {...@dialog} />
-          </Popup>
-          <TabbarArea tabs={@vm.tabs}>
-            <ActionBar right_bar_buttons={@actions} more_buttons={@more_actions}>
-              <Tabbar id={@tabbar_id} initial_tab={@initial_tab} size={@tabbar_size} />
-            </ActionBar>
-            <TabbarContent />
-            <TabbarFooter />
-          </TabbarArea>
-        </div>
+          </div>
+        </Popup>
+        <Popup :if={@dialog}>
+          <PlainDialog {...@dialog} />
+        </Popup>
+        <TabbarArea tabs={@vm.tabs}>
+          <ActionBar right_bar_buttons={@actions} more_buttons={@more_actions}>
+            <Tabbar id={@tabbar_id} initial_tab={@initial_tab} size={@tabbar_size} />
+          </ActionBar>
+          <TabbarContent />
+          <TabbarFooter />
+        </TabbarArea>
       </div>
     </Workspace>
     """

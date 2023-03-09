@@ -9,7 +9,7 @@ config :ex_aws, :s3,
 # Only in tests, remove the complexity from the password hashing algorithm
 config :bcrypt_elixir, :log_rounds, 1
 
-config :logger, level: :debug
+config :logger, level: :info
 
 # Configure your database
 config :core, Core.Repo,
