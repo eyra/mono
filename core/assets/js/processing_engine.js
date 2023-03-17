@@ -1,5 +1,5 @@
 export class ProcessingEngine {
-  constructor(workerFile) {
+  constructor(worker) {
     this.eventListener = (event) => {
       event_string = Object.stringify(event);
       console.log(
@@ -8,7 +8,7 @@ export class ProcessingEngine {
       );
     };
 
-    this.worker = new Worker(workerFile);
+    this.worker = worker;
     this.worker.onerror = console.log;
     this.worker.onmessage = (event) => {
       console.log(

@@ -116,7 +116,8 @@ defmodule Systems.DataDonation.FlowPage do
              vm: %{redirect_to: redirect_to}
            }
          } = socket
-       ) do
+       )
+       when not is_nil(redirect_to) do
     thanks_page = thanks_page(redirect_to)
     push_redirect(socket, to: Routes.live_path(socket, thanks_page, id, participant))
   end
