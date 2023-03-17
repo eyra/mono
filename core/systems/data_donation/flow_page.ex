@@ -27,7 +27,6 @@ defmodule Systems.DataDonation.FlowPage do
     DataDonation
   }
 
-  data(tabbar_id, :string)
   data(result, :any)
   data(tool, :any)
   data(user, :any)
@@ -48,17 +47,9 @@ defmodule Systems.DataDonation.FlowPage do
       ) do
     vm = DataDonation.Public.get(id)
     tabs = create_tabs(vm, session)
-    tabbar_id = "data_donation_flow/#{id}"
 
     {:ok,
-     assign(socket,
-       id: id,
-       vm: vm,
-       session: session,
-       tabbar_id: tabbar_id,
-       tabs: tabs,
-       locale: locale
-     )
+     assign(socket, id: id, vm: vm, session: session, tabs: tabs, locale: locale)
      |> update_menus()}
   end
 
@@ -135,9 +126,7 @@ defmodule Systems.DataDonation.FlowPage do
     socket
   end
 
-  defp thanks_page(:thanks), do: DataDonation.ThanksPage
-  defp thanks_page(:thanks_whatsapp_chat), do: DataDonation.ThanksWhatsappChatPage
-  defp thanks_page(:thanks_whatsapp_account), do: DataDonation.ThanksWhatsappAccountPage
+  defp thanks_page(:thanks_whatsapp), do: DataDonation.ThanksWhatsappPage
 
   @impl true
   def render(assigns) do
@@ -151,7 +140,7 @@ defmodule Systems.DataDonation.FlowPage do
       >
         <TabbarArea tabs={@tabs}>
           <ActionBar>
-            <Tabbar id={@tabbar_id} initial_tab={:welcome} />
+            <Tabbar id={:tabbar} initial_tab={:welcome} />
           </ActionBar>
           <TabbarContent />
           <TabbarFooter>
@@ -168,9 +157,7 @@ defmodule Systems.DataDonation.FlowPage do
       )
       when is_binary(data) do
     storage = storage(storage_key)
-    timestamp = "Europe/Amsterdam" |> DateTime.now!() |> DateTime.to_iso8601(:basic)
-    state = Map.merge(session, %{"timestamp" => timestamp})
-    storage.store(state, vm, data)
+    storage.store(session, vm, data)
   end
 
   defp storage(storage_key) do

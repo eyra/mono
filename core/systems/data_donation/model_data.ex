@@ -4,91 +4,31 @@ defmodule Systems.DataDonation.ModelData do
     defexception [:message]
   end
 
-  import CoreWeb.Gettext
-
-  alias Systems.DataDonation.{Model, ResearcherModel, InstitutionModel}
+  alias Systems.DataDonation.Model
 
   defp data(),
     do: [
       %Model{
-        id: 1,
-        recipient: "University Utrecht",
-        researcher: %ResearcherModel{
-          name: "dr. Bella Struminskaya",
-          pronoun: dgettext("eyra-ui", "pronoun.her"),
-          job_title: "Assistant Professor",
-          institution: %InstitutionModel{
-            name: "University Utrecht",
-            image: "/images/uu_card.svg"
-          }
-        },
-        research_topic: "Local processing of digital trace data",
-        research_description: %{
-          "nl" =>
-            "De gegevens die we u vragen te doneren kunnen worden gebruikt om te onderzoeken hoeveel tijd mensen besteden aan activiteiten (zoals lopen en fietsen) en het verschil hierin voor en tijdens de corona periode.",
-          "en" =>
-            "The data that we ask you to donate could be used to investigate how much time people spent in activities (such as walking and biking), before and during the COVID-19 pandemic."
-        },
-        platform: "Google",
-        redirect_to: :thanks,
-        storage: :s3,
-        storage_info: %{key: "google"},
-        script: "script.py"
-      },
-      %Model{
-        id: 2,
-        recipient: "Centerdata",
+        id: 5,
+        recipient: "LISS panel",
         researcher: nil,
-        research_topic: "Local processing of digital trace data",
-        research_description: %{
-          "nl" =>
-            "De gegevens die we u vragen te doneren kunnen worden gebruikt om te onderzoeken hoeveel tijd mensen besteden aan activiteiten (zoals lopen en fietsen) en het verschil hierin voor en tijdens de corona periode.",
-          "en" =>
-            "The data that we ask you to donate could be used to investigate how much time people spent in activities (such as walking and biking), before and during the COVID-19 pandemic."
-        },
-        platform: "Google",
-        redirect_to: nil,
-        storage: :centerdata,
-        storage_info: %{quest: "C_Datadonation_pilot"},
-        script: "script.py"
-      },
-      %Model{
-        id: 3,
-        recipient: "Universiteit Utrecht",
-        researcher: %ResearcherModel{
-          name: "dr. Rense Corten",
-          pronoun: dgettext("eyra-ui", "pronoun.him"),
-          job_title: "Associate Professor",
-          institution: %InstitutionModel{
-            name: "Universiteit Utrecht",
-            image: "/images/uu_card.svg"
-          }
-        },
         research_topic: nil,
         research_description: %{
           "nl" =>
-            "De gegevens die we u vragen te doneren kunnen worden gebruikt om te onderzoeken hoe mensen Whatsapp groepen gebruiken. Gegevens, zoals aantal berichten per persoon, zullen uit uw WhatsApp groep bestand gehaald worden. Dit zijn echter geen gegevens die te herleiden zijn naar personen.",
+            "De gegevens die we u vragen te doneren kunnen worden gebruikt om te onderzoeken hoe mensen WhatsApp groepen gebruiken. Gegevens, zoals aantal berichten per persoon, zullen uit uw WhatsApp groep bestand gehaald worden. Dit zijn echter geen gegevens die te herleiden zijn naar personen.",
           "en" =>
-            "The data that we ask you to donate could be used to investigate how people use Whatsapp groups. Information, such as number of messages per person, will be extracted from your WhatsApp group data. However, no personal identifiable information will be extracted."
+            "The data that we ask you to donate could be used to investigate how people use WhatsApp groups. Information, such as number of messages per person, will be extracted from your WhatsApp group data. However, no personal identifiable information will be extracted."
         },
-        platform: "Whatsapp",
-        redirect_to: :thanks_whatsapp_chat,
+        platform: "WhatsApp",
+        redirect_to: :thanks_whatsapp,
         storage: :s3,
-        storage_info: %{key: "whatsapp_chat"},
+        storage_info: %{key: "whatsapp_chat_liss"},
         script: "whatsapp_chat.py"
       },
       %Model{
-        id: 4,
-        recipient: "Universiteit Utrecht",
-        researcher: %ResearcherModel{
-          name: "dr. Rense Corten",
-          pronoun: dgettext("eyra-ui", "pronoun.him"),
-          job_title: "Associate Professor",
-          institution: %InstitutionModel{
-            name: "Universiteit Utrecht",
-            image: "/images/uu_card.svg"
-          }
-        },
+        id: 6,
+        recipient: "LISS panel",
+        researcher: nil,
         research_topic: nil,
         research_description: %{
           "nl" =>
@@ -96,24 +36,33 @@ defmodule Systems.DataDonation.ModelData do
           "en" =>
             "The data that we ask you to donate could be used to investigate how people use WhatsApp. Information, such as the number of WhatsApp groups you participate in and the number of contacts you interact with, will be extracted from your WhatsApp account information. However, no personal identifiable information will be extracted."
         },
-        platform: "Whatsapp",
-        redirect_to: :thanks_whatsapp_account,
+        platform: "WhatsApp",
+        redirect_to: :thanks_whatsapp,
         storage: :s3,
-        storage_info: %{key: "whatsapp_account"},
+        storage_info: %{key: "whatsapp_account_liss"},
         script: "whatsapp_account.py"
       },
       %Model{
-        id: 5,
-        recipient: "Universiteit Utrecht",
-        researcher: %ResearcherModel{
-          name: "Universiteit Utrecht",
-          pronoun: dgettext("eyra-ui", "pronoun.him"),
-          job_title: "Associate Professor",
-          institution: %InstitutionModel{
-            name: "Universiteit Utrecht",
-            image: "/images/uu_card.svg"
-          }
+        id: 7,
+        recipient: "LISS panel",
+        researcher: nil,
+        research_topic: nil,
+        research_description: %{
+          "nl" =>
+            "De gegevens die we u vragen te doneren kunnen worden gebruikt om te onderzoeken hoe mensen WhatsApp groepen gebruiken. Gegevens, zoals aantal berichten per persoon, zullen uit uw WhatsApp groep bestand gehaald worden. Dit zijn echter geen gegevens die te herleiden zijn naar personen.",
+          "en" =>
+            "The data that we ask you to donate could be used to investigate how people use WhatsApp groups. Information, such as number of messages per person, will be extracted from your WhatsApp group data. However, no personal identifiable information will be extracted."
         },
+        platform: "WhatsApp",
+        redirect_to: nil,
+        storage: :centerdata,
+        storage_info: %{quest: "L_Datadonation_CHAT"},
+        script: "whatsapp_chat.py"
+      },
+      %Model{
+        id: 8,
+        recipient: "LISS panel",
+        researcher: nil,
         research_topic: nil,
         research_description: %{
           "nl" =>
@@ -121,11 +70,11 @@ defmodule Systems.DataDonation.ModelData do
           "en" =>
             "The data that we ask you to donate could be used to investigate how people use WhatsApp. Information, such as the number of WhatsApp groups you participate in and the number of contacts you interact with, will be extracted from your WhatsApp account information. However, no personal identifiable information will be extracted."
         },
-        platform: "Whatsapp",
-        redirect_to: :thanks_whatsapp_account,
-        storage: :s3,
-        storage_info: %{key: "whatsapp_account_test"},
-        script: "generator_test.py"
+        platform: "WhatsApp",
+        redirect_to: nil,
+        storage: :centerdata,
+        storage_info: %{quest: "L_Datadonation_ACCOUNT"},
+        script: "whatsapp_account.py"
       }
     ]
 

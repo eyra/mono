@@ -1,10 +1,6 @@
 defmodule Systems.DataDonation.DefaultController do
   use CoreWeb, :controller
 
-  def donate(conn, params) do
-    handle(conn, params, Systems.DataDonation.DonatePage)
-  end
-
   def flow(conn, params) do
     handle(conn, params, Systems.DataDonation.FlowPage)
   end
