@@ -163,7 +163,7 @@ msgid "submit_data.action.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "thanks.whatsappchat.description"
+msgid "thanks.whatsapp.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format

@@ -19,8 +19,8 @@ def prompt_file():
                     "nl": "Stap 1: Selecteer het chat file"
                 },
                 "description": {
-                    "en": "We previously asked you to export a chat file from Whatsapp. Please select this file so we can extract relevant information for our research.",
-                    "nl": "We hebben je gevraagd een chat bestand te exporteren uit Whatsapp. Je kan deze file nu selecteren zodat wij er relevante informatie uit kunnen halen voor ons onderzoek."
+                    "en": "We previously asked you to export a chat file from WhatsApp. Please select this file so we can extract relevant information for our research.",
+                    "nl": "We hebben je gevraagd een chat bestand te exporteren uit WhatsApp. Je kan deze file nu selecteren zodat wij er relevante informatie uit kunnen halen voor ons onderzoek."
                 },
                 "extensions": "application/zip, text/plain",
             }

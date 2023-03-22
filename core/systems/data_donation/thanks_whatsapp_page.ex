@@ -1,4 +1,4 @@
-defmodule Systems.DataDonation.ThanksWhatsappChatPage do
+defmodule Systems.DataDonation.ThanksWhatsappPage do
   import Phoenix.LiveView
 
   use Surface.LiveView, layout: {CoreWeb.LayoutView, "live.html"}
@@ -34,7 +34,7 @@ defmodule Systems.DataDonation.ThanksWhatsappChatPage do
   end
 
   defp descriptions(_participant) do
-    dgettext("eyra-data-donation", "thanks.whatsappchat.description")
+    dgettext("eyra-data-donation", "thanks.whatsapp.description")
     |> String.split("<br>")
   end
 
@@ -50,19 +50,6 @@ defmodule Systems.DataDonation.ThanksWhatsappChatPage do
               <div class="flex flex-col gap-4">
                 <div :for={description <- descriptions(@participant)} class="text-bodylarge font-body">
                   {raw(description)}
-                </div>
-              </div>
-            </div>
-            <div class="flex-shrink-0">
-              <div class="rounded-lg bg-grey5">
-                <img src={@vm.researcher.institution.image} alt={@vm.researcher.institution.name}>
-                <div class="flex flex-col gap-3 p-4">
-                  <div class="text-title7 font-title7 text-grey1">
-                    {@vm.researcher.name}
-                  </div>
-                  <div class="text-caption font-caption text-grey1">
-                    {@vm.researcher.job_title}
-                  </div>
                 </div>
               </div>
             </div>

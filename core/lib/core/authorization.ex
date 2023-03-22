@@ -52,12 +52,9 @@ defmodule Core.Authorization do
   grant_access(Systems.Pool.ParticipantPage, [:researcher])
   grant_access(Systems.Test.Page, [:visitor, :member])
   grant_access(Systems.DataDonation.Content, [:owner, :coordinator])
-  grant_access(Systems.DataDonation.DonatePage, [:visitor, :member])
   grant_access(Systems.DataDonation.FlowPage, [:visitor, :member])
   grant_access(Systems.DataDonation.PortPage, [:visitor, :member])
-  grant_access(Systems.DataDonation.ThanksPage, [:visitor, :member])
-  grant_access(Systems.DataDonation.ThanksWhatsappChatPage, [:visitor, :member])
-  grant_access(Systems.DataDonation.ThanksWhatsappAccountPage, [:visitor, :member])
+  grant_access(Systems.DataDonation.ThanksWhatsappPage, [:visitor, :member])
 
   grant_access(CoreWeb.Console, [:researcher])
   grant_access(CoreWeb.User.Signin, [:visitor])
