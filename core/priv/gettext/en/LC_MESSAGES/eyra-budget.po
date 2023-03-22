@@ -1,0 +1,128 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "currency.label.title"
+msgstr "Label"
+
+#, elixir-autogen, elixir-format
+msgid "currency.name.label"
+msgstr "Name"
+
+#, elixir-autogen, elixir-format
+msgid "currency.title"
+msgstr "Currency"
+
+#, elixir-autogen, elixir-format
+msgid "bank.account.content.title"
+msgstr "Bank account"
+
+#, elixir-autogen, elixir-format
+msgid "bank.account.name.label"
+msgstr "Name"
+
+#, elixir-autogen, elixir-format
+msgid "funding.title"
+msgstr "Funding"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.budgets.title"
+msgstr "My funds"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.budgets.new.title"
+msgstr "New fund"
+
+#, elixir-autogen, elixir-format
+msgid "budget.create.title"
+msgstr "New fund"
+
+#, elixir-autogen, elixir-format
+msgid "budget.currency.label"
+msgstr "Currency"
+
+#, elixir-autogen, elixir-format
+msgid "budget.edit.title"
+msgstr "Edit fund"
+
+#, elixir-autogen, elixir-format
+msgid "budget.name.label"
+msgstr "Name"
+
+#, elixir-autogen, elixir-format
+msgid "budget.submit.button"
+msgstr "Save"
+
+#, elixir-autogen, elixir-format
+msgid "edit.button.label"
+msgstr "Edit"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "deposit.button.label"
+msgstr "Deposit money"
+
+#, elixir-autogen, elixir-format
+msgid "deposit.form.title"
+msgstr "Deposit money (test)"
+
+#, elixir-autogen, elixir-format
+msgid "linked.assignments.title"
+msgstr "Campaigns"
+
+#, elixir-autogen, elixir-format
+msgid "budget.available.label"
+msgstr "Available"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget.reserved.label"
+msgstr "Reserved"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget.spend.label"
+msgstr "Spend"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "deposit.amount.label"
+msgstr "Amount in cents"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "deposit.submit.button"
+msgstr "Submit"
+
+#, elixir-autogen, elixir-format
+msgid "deposit.reference.label"
+msgstr "Payment reference"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "bank.account.icon.label"
+msgstr "Emoji icon"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget.icon.label"
+msgstr "Emoji icon"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "bank.account.create.title"
+msgstr "Bank account"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "bank.account.edit.title"
+msgstr "Bank account"
+
+#, elixir-autogen, elixir-format
+msgid "bank.account.submit.button"
+msgstr "Save"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget.default.name"
+msgstr "My first fund"

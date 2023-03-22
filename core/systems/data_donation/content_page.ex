@@ -25,11 +25,11 @@ defmodule Systems.DataDonation.ContentPage do
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
-    DataDonation.Context.get_tool!(id)
+    DataDonation.Public.get_tool!(id)
   end
 
   def mount(%{"id" => id}, _session, socket) do
-    tool = DataDonation.Context.get_tool!(id)
+    tool = DataDonation.Public.get_tool!(id)
 
     {
       :ok,
@@ -46,7 +46,7 @@ defmodule Systems.DataDonation.ContentPage do
   def handle_uri(socket), do: socket
 
   defp initial_image_query(%{promotion_id: promotion_id}) do
-    promotion = Promotion.Context.get!(promotion_id)
+    promotion = Promotion.Public.get!(promotion_id)
 
     case promotion.themes do
       nil -> ""
@@ -54,24 +54,7 @@ defmodule Systems.DataDonation.ContentPage do
     end
   end
 
-  @impl true
-  def handle_event("reset_focus", _, socket) do
-    send_update(DataDonation.ToolForm, id: :tool_form, focus: "")
-    send_update(Promotion.FormView, id: :promotion_form, focus: "")
-    {:noreply, socket}
-  end
-
   def handle_info({:handle_auto_save_done, _}, socket) do
-    {:noreply, socket}
-  end
-
-  def handle_info({:claim_focus, :tool_form}, socket) do
-    send_update(Promotion.FormView, id: :promotion_form, focus: "")
-    {:noreply, socket}
-  end
-
-  def handle_info({:claim_focus, :promotion_form}, socket) do
-    send_update(DataDonation.ToolForm, id: :tool_form, focus: "")
     {:noreply, socket}
   end
 
@@ -82,7 +65,7 @@ defmodule Systems.DataDonation.ContentPage do
 
   def render(assigns) do
     ~F"""
-    <div phx-click="reset_focus">
+    <div>
       <div x-data="{ open: false }">
         <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="open">
           <div class="flex flex-row items-center justify-center w-full h-full">

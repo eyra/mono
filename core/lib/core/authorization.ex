@@ -5,7 +5,7 @@ defmodule Core.Authorization do
   It makes use of the GreenLight framework to manage permissions and
   authorization.
   """
-  use Frameworks.GreenLight.Context,
+  use Frameworks.GreenLight.Public,
     repo: Core.Repo,
     roles: [:visitor, :member, :student, :researcher, :owner, :participant, :coordinator, :admin],
     role_assignment_schema: Core.Authorization.RoleAssignment
@@ -22,14 +22,18 @@ defmodule Core.Authorization do
 
   Core.BundleOverrides.grants()
 
+  # Models
   grant_access(Systems.Campaign.Model, [:visitor, :member])
   grant_access(Systems.Survey.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.Lab.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.DataDonation.ToolModel, [:owner, :coordinator, :participant])
 
+  # Pages
+  grant_access(Systems.Org.ContentPage, [:admin])
   grant_access(Systems.Admin.LoginPage, [:visitor, :member])
-  grant_access(Systems.Admin.PermissionsPage, [:admin])
+  grant_access(Systems.Admin.ConfigPage, [:admin])
   grant_access(Systems.Admin.ImportRewardsPage, [:admin])
+  grant_access(Systems.Budget.FundingPage, [:admin, :researcher])
   grant_access(Systems.Support.OverviewPage, [:admin])
   grant_access(Systems.Support.TicketPage, [:admin])
   grant_access(Systems.Support.HelpdeskPage, [:member])
@@ -43,8 +47,9 @@ defmodule Core.Authorization do
   grant_access(Systems.Promotion.LandingPage, [:visitor, :member, :owner])
   grant_access(Systems.Pool.OverviewPage, [:researcher])
   grant_access(Systems.Pool.DetailPage, [:researcher])
+  grant_access(Systems.Pool.LandingPage, [:visitor, :member, :owner])
   grant_access(Systems.Pool.SubmissionPage, [:researcher])
-  grant_access(Systems.Pool.StudentPage, [:researcher])
+  grant_access(Systems.Pool.ParticipantPage, [:researcher])
   grant_access(Systems.Test.Page, [:visitor, :member])
   grant_access(Systems.DataDonation.Content, [:owner, :coordinator])
   grant_access(Systems.DataDonation.DonatePage, [:visitor, :member])

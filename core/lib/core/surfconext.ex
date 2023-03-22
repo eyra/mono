@@ -68,7 +68,7 @@ defmodule Core.SurfConext do
            |> Core.SurfConext.User.register_changeset(attrs)
            |> Ecto.Changeset.put_assoc(:user, user)
            |> Repo.insert() do
-      Signal.Context.dispatch!(:user_created, %{user: surf_user.user})
+      Signal.Public.dispatch!(:user_created, %{user: surf_user.user})
       {:ok, surf_user}
     end
   end

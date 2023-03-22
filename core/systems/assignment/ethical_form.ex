@@ -15,7 +15,6 @@ defmodule Systems.Assignment.EthicalForm do
 
   data(ethical_label, :any)
   data(changeset, :any)
-  data(focus, :any, default: "")
 
   # Handle selector update
 
@@ -111,13 +110,13 @@ defmodule Systems.Assignment.EthicalForm do
 
   def render(assigns) do
     ~F"""
-    <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
+    <Form id={@id} changeset={@changeset} change_event="save" target={@myself}>
       <Title3>{dgettext("link-survey", "ethical.title")}</Title3>
       <BodyMedium>{raw(dgettext("link-survey", "ethical.description", link: ethical_review_link()))}</BodyMedium>
       <Spacing value="M" />
 
       <Panel bg_color="bg-grey1">
-        <Title5 color="text-white">ERB code</Title5>
+        <Title5 align="text-left" color="text-white">ERB code</Title5>
         <Spacing value="S" />
         <TextInput
           field={:ethical_code}

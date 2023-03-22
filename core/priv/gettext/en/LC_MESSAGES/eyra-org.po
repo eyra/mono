@@ -1,0 +1,56 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "node.title"
+msgstr "Characteristics"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "org.content.title"
+msgstr "Organisation"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "user.title"
+msgstr "Members"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "full.name.title"
+msgstr "Name"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "identifier.label"
+msgstr "Identifier"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "short.name.title"
+msgstr "Abbreviation"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "type.selector.label"
+msgstr "Type"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "domains.label"
+msgstr "Email domains"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "org.members.label"
+msgstr "Members"
+
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
+msgid "org.admins.label"
+msgstr "Admins"
+
+#, elixir-autogen, elixir-format
+msgid "search.placeholder"
+msgstr "Search"

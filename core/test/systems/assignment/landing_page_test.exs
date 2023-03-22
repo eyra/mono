@@ -18,9 +18,11 @@ defmodule Systems.Assignment.LandingPageTest do
       assignment_auth_node = Factories.insert!(:auth_node, %{parent: campaign_auth_node})
       experiment_auth_node = Factories.insert!(:auth_node, %{parent: assignment_auth_node})
 
-      currency = Budget.Factories.create_currency("test_1234", "ƒ", 2)
+      currency = Budget.Factories.create_currency("test_1234", :legal, "ƒ", 2)
       budget = Budget.Factories.create_budget("test_1234", currency)
-      pool = Factories.insert!(:pool, %{name: "test_1234", currency: currency})
+
+      pool =
+        Factories.insert!(:pool, %{name: "test_1234", director: :citizen, currency: currency})
 
       survey_tool =
         Factories.insert!(
@@ -96,18 +98,18 @@ defmodule Systems.Assignment.LandingPageTest do
     } do
       Core.Authorization.assign_role(user, campaign, :owner)
 
-      _member = Assignment.Context.apply_member(assignment, user, 500)
+      _member = Assignment.Public.apply_member(assignment, user, 500)
 
       {:ok, _view, html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
 
       assert html =~ "This is a test title"
-      assert html =~ "Instructions"
+      assert html =~ "Instructies"
       assert html =~ "These are the expectations for the participants"
-      assert html =~ "Reward"
-      assert html =~ "Duration"
-      assert html =~ "Language"
-      assert html =~ "Proceed"
+      assert html =~ "Beloning"
+      assert html =~ "Duur"
+      assert html =~ "Taal"
+      assert html =~ "Doorgaan"
     end
 
     test "Member starting assignment", %{
@@ -117,8 +119,8 @@ defmodule Systems.Assignment.LandingPageTest do
     } do
       Core.Authorization.assign_role(user, campaign, :owner)
 
-      {:ok, %{member: member}} = Assignment.Context.apply_member(assignment, user, 500)
-      task = Crew.Context.get_task(assignment.crew, member)
+      {:ok, %{member: member}} = Assignment.Public.apply_member(assignment, user, 500)
+      task = Crew.Public.get_task(assignment.crew, member)
 
       {:ok, view, _html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
@@ -130,7 +132,7 @@ defmodule Systems.Assignment.LandingPageTest do
 
       assert {:error, {:redirect, %{to: "https://eyra.co/fake_survey?panl_id=1"}}} = html
 
-      task = Crew.Context.get_task!(task.id)
+      task = Crew.Public.get_task!(task.id)
       assert %Systems.Crew.TaskModel{started_at: started_at, updated_at: updated_at} = task
       assert started_at == updated_at
     end
@@ -142,20 +144,20 @@ defmodule Systems.Assignment.LandingPageTest do
     } do
       Core.Authorization.assign_role(user, campaign, :owner)
 
-      {:ok, %{member: member}} = Assignment.Context.apply_member(assignment, user, 500)
-      task = Crew.Context.get_task(assignment.crew, member)
-      Crew.Context.lock_task(task)
+      {:ok, %{member: member}} = Assignment.Public.apply_member(assignment, user, 500)
+      task = Crew.Public.get_task(assignment.crew, member)
+      Crew.Public.lock_task(task)
 
       {:ok, _view, html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
 
       assert html =~ "This is a test title"
-      assert html =~ "Instructions"
+      assert html =~ "Instructies"
       assert html =~ "These are the expectations for the participants"
-      assert html =~ "Reward"
-      assert html =~ "Duration"
-      assert html =~ "Language"
-      assert html =~ "Proceed"
+      assert html =~ "Beloning"
+      assert html =~ "Duur"
+      assert html =~ "Taal"
+      assert html =~ "Doorgaan"
     end
 
     test "Member completed assignment", %{
@@ -165,21 +167,21 @@ defmodule Systems.Assignment.LandingPageTest do
     } do
       Core.Authorization.assign_role(user, campaign, :owner)
 
-      {:ok, %{member: member}} = Assignment.Context.apply_member(assignment, user, 500)
-      task = Crew.Context.get_task(assignment.crew, member)
-      Crew.Context.lock_task(task)
-      Crew.Context.activate_task(task)
+      {:ok, %{member: member}} = Assignment.Public.apply_member(assignment, user, 500)
+      task = Crew.Public.get_task(assignment.crew, member)
+      Crew.Public.lock_task(task)
+      Crew.Public.activate_task(task)
 
       {:ok, _view, html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
 
       assert html =~ "This is a test title"
-      assert html =~ "You have contributed to this study"
-      assert html =~ "Your contribution will be reviewed by the author "
-      assert html =~ "Reward"
-      assert html =~ "Duration"
-      assert html =~ "Language"
-      assert html =~ "Go to console"
+      assert html =~ "Je hebt bijgedragen aan deze studie"
+      assert html =~ "Jouw bijdrage wordt door de auteur van deze studie beoordeeld"
+      assert html =~ "Beloning"
+      assert html =~ "Duur"
+      assert html =~ "Taal"
+      assert html =~ "Ga naar console"
     end
   end
 end

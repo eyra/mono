@@ -30,12 +30,14 @@ defmodule Systems.Campaign.MonitorView do
         %{reject: :submit, rejection: rejection},
         %{assigns: %{reject_task: task_id}} = socket
       ) do
-    Crew.Context.reject_task(task_id, rejection)
+    Crew.Public.reject_task(task_id, rejection)
 
     {
       :ok,
       socket
       |> assign(reject_task: nil)
+      |> update_entity()
+      |> update_vm()
     }
   end
 
@@ -55,20 +57,36 @@ defmodule Systems.Campaign.MonitorView do
         },
         socket
       ) do
-    vm = to_view_model(socket, entity, attention_list_enabled?)
-
     {
       :ok,
       socket
       |> assign(
         id: id,
         entity: entity,
-        vm: vm,
         attention_list_enabled?: attention_list_enabled?,
         labels: labels,
         reject_task: nil
       )
+      |> update_vm()
     }
+  end
+
+  defp update_vm(
+         %{assigns: %{entity: entity, attention_list_enabled?: attention_list_enabled?}} = socket
+       ) do
+    vm =
+      socket
+      |> to_view_model(entity, attention_list_enabled?)
+
+    socket |> assign(vm: vm)
+  end
+
+  defp update_entity(%{assigns: %{entity: %{id: id}}} = socket) do
+    entity =
+      Campaign.Public.get!(id, Campaign.Model.preload_graph(:full))
+      |> Campaign.Model.flatten()
+
+    socket |> assign(entity: entity)
   end
 
   @impl true
@@ -77,7 +95,7 @@ defmodule Systems.Campaign.MonitorView do
         _params,
         %{assigns: %{vm: %{attention_tasks: tasks}}} = socket
       ) do
-    Enum.each(tasks, &Crew.Context.accept_task(&1.id))
+    Enum.each(tasks, &Crew.Public.accept_task(&1.id))
     {:noreply, socket}
   end
 
@@ -87,21 +105,34 @@ defmodule Systems.Campaign.MonitorView do
         _params,
         %{assigns: %{vm: %{completed_tasks: tasks}}} = socket
       ) do
-    Enum.each(tasks, &Crew.Context.accept_task(&1.id))
-    {:noreply, socket}
+    Enum.each(tasks, &Crew.Public.accept_task(&1.id))
+
+    {
+      :noreply,
+      socket
+      |> update_entity()
+      |> update_vm()
+    }
   end
 
   @impl true
   def handle_event("accept", %{"item" => task_id}, socket) do
-    Crew.Context.accept_task(task_id)
-    {:noreply, socket}
+    Crew.Public.accept_task(task_id)
+
+    {
+      :noreply,
+      socket
+      |> update_entity()
+      |> update_vm()
+    }
   end
 
   @impl true
   def handle_event("reject", %{"item" => task_id}, socket) do
     {
       :noreply,
-      socket |> assign(reject_task: task_id)
+      socket
+      |> assign(reject_task: task_id)
     }
   end
 
@@ -247,31 +278,31 @@ defmodule Systems.Campaign.MonitorView do
          },
          attention_list_enabled?
        ) do
-    participated_count = Crew.Context.count_participated_tasks(crew)
-    pending_count = Crew.Context.count_pending_tasks(crew)
+    participated_count = Crew.Public.count_participated_tasks(crew)
+    pending_count = Crew.Public.count_pending_tasks(crew)
     vacant_count = experiment |> get_vacant_count(participated_count, pending_count)
 
     status = Pool.SubmissionModel.status(submission)
-    active? = status === :accepted or Crew.Context.active?(crew)
+    active? = status === :accepted or Crew.Public.active?(crew)
 
     {attention_columns, attention_tasks} =
       if attention_list_enabled? do
-        Crew.Context.expired_pending_started_tasks(crew)
+        Crew.Public.expired_pending_started_tasks(crew)
         |> to_view_model(:attention_tasks, target, experiment)
       else
         {[], []}
       end
 
     {completed_columns, completed_tasks} =
-      Crew.Context.completed_tasks(crew)
+      Crew.Public.completed_tasks(crew)
       |> to_view_model(:completed_tasks, target, experiment)
 
     {rejected_columns, rejected_tasks} =
-      Crew.Context.rejected_tasks(crew)
+      Crew.Public.rejected_tasks(crew)
       |> to_view_model(:rejected_tasks, target, experiment)
 
     {accepted_columns, accepted_tasks} =
-      Crew.Context.accepted_tasks(crew)
+      Crew.Public.accepted_tasks(crew)
       |> to_view_model(:accepted_tasks, target, experiment)
 
     %{
@@ -316,9 +347,9 @@ defmodule Systems.Campaign.MonitorView do
   defp is_lab_experiment(%{lab_tool_id: lab_tool_id} = _experiment), do: lab_tool_id != nil
 
   defp reservation(%{lab_tool_id: lab_tool_id} = _experiment, user_id) when lab_tool_id != nil do
-    tool = Lab.Context.get(lab_tool_id)
+    tool = Lab.Public.get(lab_tool_id)
     user = Core.Accounts.get_user!(user_id)
-    Lab.Context.reservation_for_user(tool, user)
+    Lab.Public.reservation_for_user(tool, user)
   end
 
   defp reservation(_experiment, _user_id), do: nil
@@ -326,7 +357,7 @@ defmodule Systems.Campaign.MonitorView do
   defp time_slot(nil), do: nil
 
   defp time_slot(%{time_slot_id: time_slot_id} = _reservation) do
-    Lab.Context.get_time_slot(time_slot_id)
+    Lab.Public.get_time_slot(time_slot_id)
   end
 
   defp time_slot_message(nil), do: "Participated without reservation"
@@ -387,7 +418,7 @@ defmodule Systems.Campaign.MonitorView do
          started_at: started_at,
          member_id: member_id
        }) do
-    %{public_id: public_id} = Crew.Context.get_member!(member_id)
+    %{public_id: public_id} = Crew.Public.get_member!(member_id)
 
     date_string =
       started_at
@@ -409,7 +440,7 @@ defmodule Systems.Campaign.MonitorView do
          completed_at: completed_at,
          member_id: member_id
        }) do
-    %{user_id: user_id, public_id: public_id} = Crew.Context.get_member!(member_id)
+    %{user_id: user_id, public_id: public_id} = Crew.Public.get_member!(member_id)
 
     description =
       if is_lab_experiment(experiment) do
@@ -445,7 +476,7 @@ defmodule Systems.Campaign.MonitorView do
          rejected_at: rejected_at,
          member_id: member_id
        }) do
-    %{public_id: public_id} = Crew.Context.get_member!(member_id)
+    %{public_id: public_id} = Crew.Public.get_member!(member_id)
 
     date_string =
       rejected_at
@@ -470,7 +501,7 @@ defmodule Systems.Campaign.MonitorView do
          accepted_at: accepted_at,
          member_id: member_id
        }) do
-    %{public_id: public_id} = Crew.Context.get_member!(member_id)
+    %{public_id: public_id} = Crew.Public.get_member!(member_id)
 
     date_string =
       accepted_at

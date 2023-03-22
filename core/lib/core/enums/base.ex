@@ -13,6 +13,10 @@ defmodule Core.Enums.Base do
         Gettext.dgettext(CoreWeb.Gettext, "eyra-enums", "#{unquote(name)}.#{value}")
       end
 
+      def labels() do
+        labels([])
+      end
+
       def labels(nil) do
         labels([])
       end

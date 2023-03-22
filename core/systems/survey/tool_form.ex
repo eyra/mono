@@ -21,7 +21,6 @@ defmodule Systems.Survey.ToolForm do
 
   data(entity, :any)
   data(changeset, :any)
-  data(focus, :any, default: "")
   data(panlid_link, :any)
 
   # Handle update from parent after attempt to publish
@@ -46,7 +45,7 @@ defmodule Systems.Survey.ToolForm do
         },
         socket
       ) do
-    entity = Survey.Context.get_survey_tool!(entity_id)
+    entity = Survey.Public.get_survey_tool!(entity_id)
 
     changeset = Survey.ToolModel.changeset(entity, :create, %{})
 
@@ -77,7 +76,7 @@ defmodule Systems.Survey.ToolForm do
     changeset = Survey.ToolModel.validate(changeset, :roundtrip)
 
     if changeset.valid? do
-      Director.context(entity).assign_tester_role(entity, user)
+      Director.public(entity).assign_tester_role(entity, user)
 
       fake_panl_id = "TEST-" <> Faker.UUID.v4()
       external_path = Survey.ToolModel.external_path(entity, fake_panl_id)
@@ -156,7 +155,7 @@ defmodule Systems.Survey.ToolForm do
   def render(assigns) do
     ~F"""
     <div class="-mb-8">
-      <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
+      <Form id={@id} changeset={@changeset} change_event="save" target={@myself}>
         <Title3>{dgettext("link-survey", "form.title")}</Title3>
         <BodyLarge>{dgettext("link-survey", "form.description")}</BodyLarge>
         <Spacing value="M" />
@@ -171,7 +170,7 @@ defmodule Systems.Survey.ToolForm do
                 <StepIndicator vm={text: "1", bg_color: "bg-tertiary", text_color: "text-grey1"} />
               </div>
               <div class="flex-wrap">
-                <Title5 color="text-white">{dgettext("link-survey", "panlid.title")}</Title5>
+                <Title5 align="text-left" color="text-white">{dgettext("link-survey", "panlid.title")}</Title5>
                 <Spacing value="XS" />
                 <BodyMedium color="text-white">{raw(dgettext("link-survey", "panlid.description", link: panlid_instructions_link()))}</BodyMedium>
               </div>
@@ -182,7 +181,7 @@ defmodule Systems.Survey.ToolForm do
                 <StepIndicator vm={text: "2", bg_color: "bg-tertiary", text_color: "text-grey1"} />
               </div>
               <div class="flex-wrap">
-                <Title5 color="text-white">{dgettext("link-survey", "redirect.title")}</Title5>
+                <Title5 align="text-left" color="text-white">{dgettext("link-survey", "redirect.title")}</Title5>
                 <Spacing value="XS" />
                 <BodyMedium color="text-white">{raw(dgettext("link-survey", "redirect.description", link: redirect_instructions_link()))}</BodyMedium>
                 <Spacing value="XS" />
@@ -208,7 +207,7 @@ defmodule Systems.Survey.ToolForm do
                 <StepIndicator vm={text: "3", bg_color: "bg-tertiary", text_color: "text-grey1"} />
               </div>
               <div class="flex-wrap">
-                <Title5 color="text-white">{dgettext("link-survey", "study.link.title")}</Title5>
+                <Title5 align="text-left" color="text-white">{dgettext("link-survey", "study.link.title")}</Title5>
                 <Spacing value="XS" />
                 <BodyMedium color="text-white">{raw(dgettext("link-survey", "study.link.description", link: study_instructions_link()))}</BodyMedium>
               </div>

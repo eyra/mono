@@ -124,12 +124,12 @@ msgid "tabbar.item.monitor.forward"
 msgstr "Naar dashboard"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.criteria"
+msgid "tabbar.item.submission"
 msgstr "Sample"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.criteria.forward"
-msgstr "Sample kenmerken"
+msgid "tabbar.item.submission.forward"
+msgstr "Sample"
 
 #, elixir-autogen, elixir-format
 msgid "form.title"
@@ -278,3 +278,11 @@ msgstr "Test of jouw vragenlijst goed opgezet is en controleer of je terugkomt o
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "test.roundtrip.title"
 msgstr "Is je vragenlijst goed opgezet?"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.funding"
+msgstr "Financiering"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.funding.forward"
+msgstr "Financier je studie"

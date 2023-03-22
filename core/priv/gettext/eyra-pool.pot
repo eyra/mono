@@ -21,3 +21,35 @@ msgstr ""
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "progress.pending.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "share.dialog.content"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "share.dialog.group"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "landing.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "landing.description.participant"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "landing.register.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "landing.unregister.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "landing.description.visitor"
+msgstr ""

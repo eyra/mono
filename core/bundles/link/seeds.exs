@@ -254,7 +254,7 @@ Core.Repo.transaction(
         participant_count = :random.uniform(tool.subject_count)
 
         for student <- Enum.take_random(students, participant_count) do
-          Systems.Survey.Context.apply_participant(tool, student)
+          Systems.Survey.Public.apply_participant(tool, student)
         end
       end
 

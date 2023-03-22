@@ -13,7 +13,7 @@ if config_env() == :prod do
 
   config :core,
          :admins,
-         System.get_env("APP_ADMINS", "") |> String.split() |> Systems.Admin.Context.compile()
+         System.get_env("APP_ADMINS", "") |> String.split() |> Systems.Admin.Public.compile()
 
   config :core, :static_path, System.fetch_env!("STATIC_PATH")
 

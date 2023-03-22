@@ -27,6 +27,7 @@ defmodule Systems.DataDonation.FlowPage do
     DataDonation
   }
 
+  data(tabbar_id, :string)
   data(result, :any)
   data(tool, :any)
   data(user, :any)
@@ -45,11 +46,19 @@ defmodule Systems.DataDonation.FlowPage do
         %{"locale" => locale} = _session,
         socket
       ) do
-    vm = DataDonation.Context.get(id)
+    vm = DataDonation.Public.get(id)
     tabs = create_tabs(vm, session)
+    tabbar_id = "data_donation_flow/#{id}"
 
     {:ok,
-     assign(socket, id: id, vm: vm, session: session, tabs: tabs, locale: locale)
+     assign(socket,
+       id: id,
+       vm: vm,
+       session: session,
+       tabbar_id: tabbar_id,
+       tabs: tabs,
+       locale: locale
+     )
      |> update_menus()}
   end
 
@@ -142,7 +151,7 @@ defmodule Systems.DataDonation.FlowPage do
       >
         <TabbarArea tabs={@tabs}>
           <ActionBar>
-            <Tabbar vm={%{initial_tab: :welcome}} />
+            <Tabbar id={@tabbar_id} initial_tab={:welcome} />
           </ActionBar>
           <TabbarContent />
           <TabbarFooter>

@@ -25,3 +25,71 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "share.dialog.group"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "campaign.create.pool.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "campaign.create.proceed.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "campaign.create.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "campaign.create.tooltype.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.reward.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.reward.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.fund.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.fund.description.warning"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.reward.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.fund.description.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.fund.description.success"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "required.funding.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.broke.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.poor.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.rich.label"
+msgstr ""

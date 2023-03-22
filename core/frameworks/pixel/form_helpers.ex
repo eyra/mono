@@ -3,11 +3,7 @@ defmodule Frameworks.Pixel.FormHelpers do
   Conveniences for accassing the form using Surface.
   """
   alias Frameworks.Pixel.ErrorHelpers
-
-  def form(assigns) do
-    context(assigns)
-    |> Map.get({Surface.Components.Form, :form})
-  end
+  alias Phoenix.LiveView.JS
 
   def field_has_error?(assigns, form) do
     ErrorHelpers.has_error?(form, assigns.field)
@@ -17,44 +13,50 @@ defmodule Frameworks.Pixel.FormHelpers do
     !(assigns |> field_has_error?(form))
   end
 
-  def field_error_tag(assigns, form) do
-    ErrorHelpers.error_tag(form, assigns.field)
+  def field_error_message(assigns, form) do
+    ErrorHelpers.error_message(form, assigns.field)
   end
 
-  def label_color(assigns, form, default \\ "text-grey1") do
-    if assigns |> field_has_error?(form) do
-      "text-warning"
-    else
-      default
-    end
+  def reset_field_color(js \\ %JS{}, field) do
+    border_classes =
+      [
+        "border-grey3",
+        "border-primary",
+        "border-tertiary",
+        "border-warning"
+      ]
+      |> Enum.join(" ")
+
+    text_classes =
+      [
+        "text-grey1",
+        "text-primary",
+        "text-tertiary",
+        "text-warning"
+      ]
+      |> Enum.join(" ")
+
+    js
+    |> JS.remove_class(border_classes, to: "##{field}", time: 0)
+    |> JS.remove_class(text_classes, to: "##{field}_label", time: 0)
   end
 
-  def focus_label_color(background) do
-    case background do
-      :light -> "text-primary"
-      _ -> "text-tertiary"
-    end
+  def set_field_color(js \\ %JS{}, field, options) do
+    js
+    |> reset_field_color(field)
+    |> JS.add_class(get_border_color(options), to: "##{field}", time: 0)
+    |> JS.add_class(get_text_color(options), to: "##{field}_label", time: 0)
   end
 
-  def border_color(assigns, form, default \\ "border-grey3") do
-    if assigns |> field_has_error?(form) do
-      "border-warning"
-    else
-      default
-    end
-  end
+  def get_border_color(options), do: "border-#{get_field_color(options, "grey3")}"
+  def get_text_color(options), do: "text-#{get_field_color(options, "grey1")}"
 
-  def focus_border_color(background) do
-    case background do
-      :light -> "border-primary"
-      _ -> "border-tertiary"
-    end
-  end
+  def get_field_color({true, _, :light}, _), do: "primary"
+  def get_field_color({true, _, _}, _), do: "tertiary"
+  def get_field_color({false, error, _}, _) when is_binary(error) and error != "", do: "warning"
+  def get_field_color({false, true, _}, _), do: "warning"
+  def get_field_color({_, _, _}, default), do: default
 
   def target(%{options: options} = _form), do: options[:phx_target]
   def target(_form), do: nil
-
-  defp context(assigns) do
-    assigns[:__context__]
-  end
 end

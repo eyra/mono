@@ -12,7 +12,7 @@ defmodule Core.Mailer.SignalHandlers do
         mail
         |> subject(title)
         |> render(:new_notification, title: title)
-        |> Email.Context.deliver_later()
+        |> Email.Public.deliver_later()
       end
     end
   end
@@ -24,6 +24,6 @@ defmodule Core.Mailer.SignalHandlers do
   end
 
   defp user_email(user) do
-    Email.Context.base_email() |> to(user.email) |> assign(:user, user)
+    Email.Public.base_email() |> to(user.email) |> assign(:user, user)
   end
 end

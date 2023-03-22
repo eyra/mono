@@ -42,12 +42,6 @@ defmodule Systems.Email.Dialog do
     {:noreply, update_parent(socket, :close)}
   end
 
-  @impl true
-  def handle_event("reset_focus", _unsigned_params, socket) do
-    send_update(Email.Form, id: :email_form, focus: "")
-    {:noreply, socket}
-  end
-
   defp update_parent(socket, message) do
     send(self(), {:email_dialog, message})
     socket
@@ -56,11 +50,7 @@ defmodule Systems.Email.Dialog do
   @impl true
   def render(assigns) do
     ~F"""
-    <div
-      class="min-w-1/2 max-w-9/10 sm:max-w-3/4 p-8 bg-white shadow-2xl rounded"
-      phx-click="reset_focus"
-      phx-target={@myself}
-    >
+    <div class="min-w-1/2 max-w-9/10 sm:max-w-3/4 p-8 bg-white shadow-2xl rounded">
       <div class="">
         <div class="flex flex-row">
           <div class="flex-grow" />

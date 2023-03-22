@@ -4,9 +4,7 @@ defmodule CoreWeb.UI.Navigation.TabbarWide do
 
   alias CoreWeb.UI.Navigation.TabbarItem
 
-  prop(vm, :map, required: true)
-
-  defviewmodel(type: :seperated)
+  prop(type, :atom, default: :seperated)
 
   data(tabs, :any, from_context: :tabs)
 
@@ -18,10 +16,10 @@ defmodule CoreWeb.UI.Navigation.TabbarWide do
 
   def render(assigns) do
     ~F"""
-    <div class={"flex flex-row items-center h-full #{gap(type(@vm))}"}>
+    <div class={"flex flex-row items-center h-full #{gap(@type)}"}>
       {#for {tab, index} <- Enum.with_index(@tabs)}
         <div class="flex-shrink-0 h-full">
-          <TabbarItem tabbar="wide" vm={tab_vm(type(@vm), tab, index)} />
+          <TabbarItem tabbar="wide" vm={tab_vm(@type, tab, index)} />
         </div>
       {/for}
     </div>

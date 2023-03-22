@@ -12,19 +12,19 @@ defmodule Systems.Pool.SubmissionPage do
   alias CoreWeb.UI.Navigation.ButtonBar
   alias CoreWeb.UI.Member
   alias CoreWeb.UI.Timestamp
+  alias CoreWeb.UI.ContentList
 
-  alias Systems.Pool.SubmissionView, as: SubmissionForm
-  alias Systems.Pool.SubmissionPoolView, as: SubmissionPoolForm
-
-  alias Frameworks.Pixel.Text.{Title1, SubHead}
+  alias Frameworks.Pixel.Text.{Title1, Title3, SubHead}
 
   alias Systems.{
     Pool
   }
 
   @impl true
-  def mount(%{"id" => submission_id}, _session, socket) do
-    model = %{id: String.to_integer(submission_id), director: :pool}
+  def mount(%{"id" => id}, _session, socket) do
+    submission_id = String.to_integer(id)
+    %{pool: %{director: director}} = Pool.Public.get_submission!(submission_id, [:pool])
+    model = %{id: submission_id, director: director}
 
     {
       :ok,
@@ -63,29 +63,12 @@ defmodule Systems.Pool.SubmissionPage do
     {:noreply, socket |> update_menus()}
   end
 
-  def handle_info({:claim_focus, :submission_form}, socket) do
-    send_update(SubmissionPoolForm, id: :submission_pool_form, focus: "")
-    {:noreply, socket}
-  end
-
-  def handle_info({:claim_focus, :submission_pool_form}, socket) do
-    send_update(SubmissionForm, id: :submission_form, focus: "")
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("reset_focus", _, socket) do
-    send_update(SubmissionForm, id: :submission_form, focus: "")
-    send_update(SubmissionPoolForm, id: :submission_pool_form, focus: "")
-    {:noreply, socket}
-  end
-
   @impl true
   def handle_event("publish", _params, %{assigns: %{vm: %{submission: submission}}} = socket) do
     socket =
       if ready_for_publish?(submission) do
         {:ok, _} =
-          Pool.Context.update(submission, %{status: :accepted, accepted_at: Timestamp.naive_now()})
+          Pool.Public.update(submission, %{status: :accepted, accepted_at: Timestamp.naive_now()})
 
         title = dgettext("eyra-submission", "publish.success.title")
         text = dgettext("eyra-submission", "publish.success.text")
@@ -105,7 +88,7 @@ defmodule Systems.Pool.SubmissionPage do
 
   @impl true
   def handle_event("retract", _params, %{assigns: %{vm: %{submission: submission}}} = socket) do
-    {:ok, _} = Pool.Context.update(submission, %{status: :idle})
+    {:ok, _} = Pool.Public.update(submission, %{status: :idle})
 
     title = dgettext("eyra-submission", "retract.admin.success.title")
     text = dgettext("eyra-submission", "retract.admin.success.text")
@@ -120,7 +103,7 @@ defmodule Systems.Pool.SubmissionPage do
   @impl true
   def handle_event("complete", _params, %{assigns: %{vm: %{submission: submission}}} = socket) do
     {:ok, _} =
-      Pool.Context.update(submission, %{status: :completed, completed_at: Timestamp.naive_now()})
+      Pool.Public.update(submission, %{status: :completed, completed_at: Timestamp.naive_now()})
 
     title = dgettext("eyra-submission", "complete.admin.success.title")
     text = dgettext("eyra-submission", "complete.admin.success.text")
@@ -213,7 +196,7 @@ defmodule Systems.Pool.SubmissionPage do
           <PlainDialog {...@dialog} />
         </div>
       </div>
-      <div phx-click="reset_focus">
+      <div>
         <ContentArea>
           <MarginY id={:page_top} />
           <Member :if={@vm.member} vm={@vm.member} />
@@ -224,12 +207,21 @@ defmodule Systems.Pool.SubmissionPage do
           <Spacing value="L" />
         </ContentArea>
 
-        <SubmissionPoolForm
+        <Dynamic.LiveComponent
+          :if={Map.has_key?(@vm, :form)}
           id={:submission_pool_form}
-          props={%{entity: @vm.submission, user: @current_user}}
+          module={@vm.form.component}
+          {...@vm.form.props}
         />
+
+        <ContentArea :if={Enum.count(@vm.excluded_campaigns) > 0}>
+          <Title3 margin="mb-5 sm:mb-8">{dgettext("link-studentpool", "excluded.campaigns.title")}</Title3>
+          <ContentList items={@vm.excluded_campaigns} />
+          <Spacing value="M" />
+        </ContentArea>
+
         <Spacing value="S" />
-        <SubmissionForm
+        <Pool.SubmissionView
           id={:submission_form}
           props={%{entity: @vm.submission, validate?: @vm.validate?}}
         />

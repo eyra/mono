@@ -1,12 +1,11 @@
 defmodule Frameworks.Pixel.Dropdown.Selector do
   use CoreWeb.UI.LiveComponent
 
-  import Frameworks.Pixel.FormHelpers, only: [focus_border_color: 1]
+  import Frameworks.Pixel.FormHelpers, only: [get_border_color: 1]
 
   alias Frameworks.Pixel.Dropdown
   alias Frameworks.Pixel.Text.BodyMedium
 
-  prop(field, :atom, required: true)
   prop(options, :list, required: true)
   prop(parent, :any, required: true)
   prop(selected_option_index, :integer)
@@ -59,6 +58,7 @@ defmodule Frameworks.Pixel.Dropdown.Selector do
         options: options,
         parent: parent,
         selected_option_index: selected_option_index,
+        selected_option: nil,
         background: background,
         debounce: debounce,
         show_options?: false,
@@ -69,8 +69,33 @@ defmodule Frameworks.Pixel.Dropdown.Selector do
     }
   end
 
-  defp validate_selection(%{assigns: %{selected_option_index: nil}} = socket) do
-    socket |> assign(selected_option: nil)
+  defp validate_selection(
+         %{assigns: %{selected_option: nil, selected_option_index: nil}} = socket
+       ) do
+    socket
+  end
+
+  defp validate_selection(
+         %{
+           assigns: %{
+             options: options,
+             selected_option_index: selected_option_index,
+             selected_option: nil
+           }
+         } = socket
+       ) do
+    case Enum.at(options, selected_option_index) do
+      nil ->
+        socket
+        |> assign(
+          selected_option_index: nil,
+          selected_option: nil
+        )
+
+      selected_option ->
+        socket
+        |> assign(selected_option: selected_option)
+    end
   end
 
   defp validate_selection(
@@ -78,6 +103,7 @@ defmodule Frameworks.Pixel.Dropdown.Selector do
            assigns: %{
              options: options,
              selected_option: %{id: selected_option_id},
+             selected_option_index: nil,
              parent: parent
            }
          } = socket
@@ -154,17 +180,13 @@ defmodule Frameworks.Pixel.Dropdown.Selector do
     }
   end
 
-  defp border_color(%{warning: warning}) when not is_nil(warning), do: "border-warning"
-  defp border_color(%{show_options?: false}), do: "border-grey3"
-  defp border_color(%{background: background}), do: focus_border_color(background)
-
   defp icon(%{show_options?: false}), do: :dropdown
   defp icon(_), do: :dropup
 
   def render(assigns) do
     ~F"""
     <div phx-click="toggle_options" phx-target={@myself} class="relative">
-      <div class={"text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid rounded h-44px #{border_color(assigns)}"}>
+      <div class={"text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid rounded h-44px #{get_border_color({@show_options?, @warning != nil, @background})}"}>
         <div class="flex flex-row items-center h-full w-full cursor-pointer">
           <BodyMedium><span class="whitespace-pre-wrap">{@selector_text}</span></BodyMedium>
           <div class="flex-grow" />
@@ -211,7 +233,6 @@ defmodule Frameworks.Pixel.Dropdown.Selector.Example do
     ~F"""
     <Selector
       id={:dropdown_selector}
-      field={:dropdown_selector}
       selected_option_index={nil}
       parent={self()}
       options={[

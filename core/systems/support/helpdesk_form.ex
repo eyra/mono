@@ -12,7 +12,6 @@ defmodule Systems.Support.HelpdeskForm do
 
   prop(user, :any, required: true)
 
-  data(focus, :any, default: nil)
   data(data, :any, default: {})
   data(type_labels, :map)
   data(type, :atom)
@@ -33,7 +32,7 @@ defmodule Systems.Support.HelpdeskForm do
 
   # Initial update
   def update(%{id: id, user: user}, socket) do
-    changeset = Support.Context.new_ticket_changeset()
+    changeset = Support.Public.new_ticket_changeset()
     type = changeset.changes.type
     type_labels = Enums.TicketTypes.labels(type)
 
@@ -42,7 +41,7 @@ defmodule Systems.Support.HelpdeskForm do
       socket
       |> assign(:id, id)
       |> assign(:user, user)
-      |> assign(:changeset, Support.Context.new_ticket_changeset())
+      |> assign(:changeset, Support.Public.new_ticket_changeset())
       |> assign(:type_labels, type_labels)
       |> assign(:type, type)
     }
@@ -56,7 +55,7 @@ defmodule Systems.Support.HelpdeskForm do
       ) do
     data = data |> Map.put("type", type)
 
-    case Support.Context.create_ticket(user, data) do
+    case Support.Public.create_ticket(user, data) do
       {:ok, _} ->
         {:noreply,
          socket
@@ -70,7 +69,7 @@ defmodule Systems.Support.HelpdeskForm do
 
   @impl true
   def handle_event("store_state", %{"ticket_model" => ticket}, socket) do
-    {:noreply, assign(socket, :changeset, Support.Context.new_ticket_changeset(ticket))}
+    {:noreply, assign(socket, :changeset, Support.Public.new_ticket_changeset(ticket))}
   end
 
   def render(assigns) do
@@ -83,7 +82,6 @@ defmodule Systems.Support.HelpdeskForm do
           submit="create_ticket"
           change_event="store_state"
           target={@myself}
-          focus={@focus}
         >
           <Title3>{dgettext("eyra-support", "ticket.type")}</Title3>
           <Selector id={:type} items={@type_labels} type={:radio} parent={%{type: __MODULE__, id: @id}} />

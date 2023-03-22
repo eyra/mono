@@ -11,7 +11,7 @@ defimpl Frameworks.GreenLight.Principal, for: Core.Accounts.User do
     MapSet.new([:member])
     |> add_role_when(:researcher, user.researcher)
     |> add_role_when(:student, user.student)
-    |> add_role_when(:admin, Systems.Admin.Context.admin?(user))
+    |> add_role_when(:admin, Systems.Admin.Public.admin?(user))
   end
 
   defp add_role_when(roles, role, flag) do

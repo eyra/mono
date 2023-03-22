@@ -26,3 +26,71 @@ msgstr "campaign"
 #, elixir-autogen, elixir-format
 msgid "share.dialog.group"
 msgstr "researchers"
+
+#, elixir-autogen, elixir-format
+msgid "campaign.create.pool.label"
+msgstr "Pool"
+
+#, elixir-autogen, elixir-format
+msgid "campaign.create.proceed.button"
+msgstr "Proceed"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "campaign.create.title"
+msgstr "New campaign"
+
+#, elixir-autogen, elixir-format
+msgid "campaign.create.tooltype.label"
+msgstr "Study type"
+
+#, elixir-autogen, elixir-format
+msgid "funding.title"
+msgstr "Funding"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.reward.title"
+msgstr "Determine reward"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.reward.label"
+msgstr "Reward %{amount}"
+
+#, elixir-autogen, elixir-format
+msgid "funding.description"
+msgstr "You need %{amount} for %{count} participants."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.fund.title"
+msgstr "Select a fund"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.fund.description.warning"
+msgstr "With the selected fund you can afford %{count} participants."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.reward.description"
+msgstr "Consider a minimum of %{amount} for an assignment that takes %{duration} minutes."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.fund.description.error"
+msgstr "With the selected fund you can't afford any participants."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.fund.description.success"
+msgstr "With the selected fund you can afford all participants."
+
+#, elixir-autogen, elixir-format
+msgid "required.funding.label"
+msgstr "Required funding: %{funding}"
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.broke.label"
+msgstr "Broke"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.status.poor.label"
+msgstr "Poor"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.status.rich.label"
+msgstr "Rich"

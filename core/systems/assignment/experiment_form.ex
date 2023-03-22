@@ -20,7 +20,6 @@ defmodule Systems.Assignment.ExperimentForm do
   data(language_labels, :list)
   data(ethical_label, :any)
   data(changeset, :any)
-  data(focus, :any, default: "")
 
   # Handle selector update
 
@@ -71,21 +70,27 @@ defmodule Systems.Assignment.ExperimentForm do
       ) do
     changeset = Assignment.ExperimentModel.changeset(entity, :create, %{})
 
-    device_labels = Devices.labels(entity.devices)
-
-    language_labels = OnlineStudyLanguages.labels(entity.language)
-
     {
       :ok,
       socket
       |> assign(id: id)
       |> assign(entity: entity)
       |> assign(changeset: changeset)
-      |> assign(device_labels: device_labels)
-      |> assign(language_labels: language_labels)
       |> assign(validate?: validate?)
+      |> update_device_labels()
+      |> update_language_labels()
       |> validate_for_publish()
     }
+  end
+
+  defp update_device_labels(%{assigns: %{entity: %{devices: devices}}} = socket) do
+    device_labels = Devices.labels(devices)
+    socket |> assign(device_labels: device_labels)
+  end
+
+  defp update_language_labels(%{assigns: %{entity: %{language: language}}} = socket) do
+    language_labels = OnlineStudyLanguages.labels(language)
+    socket |> assign(language_labels: language_labels)
   end
 
   # Handle Events
@@ -98,12 +103,6 @@ defmodule Systems.Assignment.ExperimentForm do
     }
   end
 
-  @impl true
-  def handle_event("reset_focus", _, socket) do
-    send_update(ProfileForm, id: :profile, focus: "")
-    {:noreply, socket}
-  end
-
   # Saving
 
   def save(socket, entity, type, attrs) do
@@ -111,6 +110,8 @@ defmodule Systems.Assignment.ExperimentForm do
 
     socket
     |> save(changeset)
+    |> update_device_labels()
+    |> update_language_labels()
     |> validate_for_publish()
   end
 
@@ -131,7 +132,7 @@ defmodule Systems.Assignment.ExperimentForm do
 
   def render(assigns) do
     ~F"""
-    <Form id={@id} changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
+    <Form id={@id} changeset={@changeset} change_event="save" target={@myself}>
       <NumberInput field={:duration} label_text={dgettext("link-survey", "duration.label")} />
       <Spacing value="M" />
 

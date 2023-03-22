@@ -12,8 +12,9 @@ config :phoenix, :json_library, Jason
 
 config :surface, :components, [
   {Surface.Components.Form, propagate_context_to_slots: true},
+  {CoreWeb.UI.Navigation.TabbarArea, propagate_context_to_slots: true},
   {Frameworks.Pixel.Form.Form, propagate_context_to_slots: true},
-  {CoreWeb.UI.Navigation.TabbarArea, propagate_context_to_slots: true}
+  {Frameworks.Pixel.Form.Inputs, propagate_context_to_slots: true}
 ]
 
 # Configures Elixir's Logger
@@ -30,7 +31,9 @@ config :core,
   stripped_menu_builder: CoreWeb.Layouts.Stripped.MenuBuilder,
   banking_backend: Systems.Banking.Dummy
 
-config :core, CoreWeb.Gettext, default_locale: "nl", locales: ~w(en nl)
+config :gettext, default_locale: "nl"
+
+config :core, CoreWeb.Gettext, locales: ~w(en nl)
 
 config :phoenix_inline_svg,
   dir: "./assets/static/images",

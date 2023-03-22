@@ -28,7 +28,7 @@ defmodule Systems.NextAction.OverviewPage do
     assign(
       socket,
       :next_actions,
-      NextAction.Context.list_next_actions(url_resolver(socket), user)
+      NextAction.Public.list_next_actions(url_resolver(socket), user)
     )
   end
 

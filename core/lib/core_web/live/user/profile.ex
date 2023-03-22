@@ -11,7 +11,7 @@ defmodule CoreWeb.User.Profile do
   alias Core
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
   alias CoreWeb.User.Forms.Profile, as: ProfileForm
-  alias CoreWeb.User.Forms.Scholar, as: ScholarForm
+  alias CoreWeb.User.Forms.Student, as: StudentForm
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
 
   alias CoreWeb.UI.Navigation.{ActionBar, Tabbar, TabbarContent, TabbarFooter, TabbarArea}
@@ -25,11 +25,13 @@ defmodule CoreWeb.User.Profile do
   @impl true
   def mount(%{"tab" => initial_tab}, _session, socket) do
     tabs = create_tabs(socket)
+    tabbar_id = "user_profile"
 
     {
       :ok,
       socket
       |> assign(
+        tabbar_id: tabbar_id,
         tabs: tabs,
         initial_tab: initial_tab,
         changesets: %{}
@@ -47,12 +49,6 @@ defmodule CoreWeb.User.Profile do
   end
 
   @impl true
-  def handle_event("reset_focus", _, socket) do
-    send_update(ProfileForm, id: :profile, focus: "")
-    {:noreply, socket}
-  end
-
-  @impl true
   def handle_resize(socket) do
     socket |> update_tabbar()
   end
@@ -66,11 +62,6 @@ defmodule CoreWeb.User.Profile do
 
   def handle_info({:handle_auto_save_done, _}, socket) do
     socket |> update_menus()
-    {:noreply, socket}
-  end
-
-  def handle_info({:claim_focus, :profile}, socket) do
-    # Profile is currently only form that can claim focus
     {:noreply, socket}
   end
 
@@ -94,11 +85,11 @@ defmodule CoreWeb.User.Profile do
     })
     |> append(
       %{
-        id: :scholar,
-        title: dgettext("eyra-ui", "tabbar.item.scholar"),
-        forward_title: dgettext("eyra-ui", "tabbar.item.scholar.forward"),
+        id: :student,
+        title: dgettext("eyra-ui", "tabbar.item.student"),
+        forward_title: dgettext("eyra-ui", "tabbar.item.student.forward"),
         type: :form,
-        component: ScholarForm,
+        component: StudentForm,
         props: %{user: current_user}
       },
       current_user.student
@@ -124,7 +115,7 @@ defmodule CoreWeb.User.Profile do
       <div id={:profile} phx-hook="ViewportResize">
         <TabbarArea tabs={@tabs}>
           <ActionBar size={@bar_size}>
-            <Tabbar vm={%{initial_tab: @initial_tab, size: @bar_size, type: :segmented}} />
+            <Tabbar id={@tabbar_id} initial_tab={@initial_tab} size={@bar_size} type={:segmented} />
           </ActionBar>
           <TabbarContent />
           <TabbarFooter />

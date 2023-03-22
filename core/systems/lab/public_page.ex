@@ -11,12 +11,12 @@ defmodule Systems.Lab.PublicPage do
   data(reservation, :any, default: nil)
 
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
-    tool = Lab.Context.get(id, [:time_slots])
+    tool = Lab.Public.get(id, [:time_slots])
 
     {:ok,
      socket
      |> assign(:tool, tool)
-     |> assign(:reservation, Lab.Context.reservation_for_user(tool, user))}
+     |> assign(:reservation, Lab.Public.reservation_for_user(tool, user))}
   end
 
   @impl true
@@ -32,7 +32,7 @@ defmodule Systems.Lab.PublicPage do
     {:ok, reservation} =
       time_slot_id
       |> String.to_integer()
-      |> Lab.Context.reserve_time_slot(user)
+      |> Lab.Public.reserve_time_slot(user)
 
     {:noreply, socket |> assign(:reservation, reservation)}
   end
@@ -43,7 +43,7 @@ defmodule Systems.Lab.PublicPage do
         _params,
         %{assigns: %{current_user: user, tool: tool}} = socket
       ) do
-    Lab.Context.cancel_reservation(tool, user)
+    Lab.Public.cancel_reservation(tool, user)
     {:noreply, socket |> assign(:reservation, nil)}
   end
 

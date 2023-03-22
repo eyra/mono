@@ -1,0 +1,84 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-autogen, elixir-format
+msgid "overview.plugin.title"
+msgstr "Citizen pools"
+
+#, elixir-autogen, elixir-format
+msgid "campaigns.label"
+msgstr "Campaigns"
+
+#, elixir-autogen, elixir-format
+msgid "participants.label"
+msgstr "Citizens"
+
+#, elixir-autogen, elixir-format
+msgid "pool.create.title"
+msgstr "New pool"
+
+#, elixir-autogen, elixir-format
+msgid "pool.currency.label"
+msgstr "Currency"
+
+#, elixir-autogen, elixir-format
+msgid "pool.edit.title"
+msgstr "Edit pool"
+
+#, elixir-autogen, elixir-format
+msgid "pool.name.label"
+msgstr "Name"
+
+#, elixir-autogen, elixir-format
+msgid "pool.submit.button"
+msgstr "Save"
+
+#, elixir-autogen, elixir-format
+msgid "citizen.tag.complete"
+msgstr "Ready"
+
+#, elixir-autogen, elixir-format
+msgid "citizens.empty.description"
+msgstr "There are currently no registered citizens. You will be notified as soon as citizens have signed up."
+
+#, elixir-autogen, elixir-format
+msgid "citizens.empty.title"
+msgstr "Citizens participating in this pool will appear here"
+
+#, elixir-autogen, elixir-format
+msgid "search.placeholder"
+msgstr "Search"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.campaigns"
+msgstr "Campaigns"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.citizens"
+msgstr "Citizens"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pool.icon.label"
+msgstr "Emoji icon"
+
+#, elixir-autogen, elixir-format
+msgid "overview.archive.button"
+msgstr "Archive"
+
+#, elixir-autogen, elixir-format
+msgid "overview.restore.button"
+msgstr "Restore"
+
+#, elixir-autogen, elixir-format
+msgid "overview.share.button"
+msgstr "Share"

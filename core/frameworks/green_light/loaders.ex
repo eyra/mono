@@ -111,7 +111,7 @@ defmodule Frameworks.GreenLight.Loaders do
 
   # def can?(conn, action, entity \\ nil) do
   #   permission = conn.private.phoenix_controller |> controller_to_permission(action)
-  #   GreenLight.Context.allowed?(conn, permission, entity)
+  #   GreenLight.Public.allowed?(conn, permission, entity)
   # end
 
   # @doc false

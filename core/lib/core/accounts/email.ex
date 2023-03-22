@@ -6,11 +6,11 @@ defmodule Core.Accounts.Email do
   }
 
   def mail_user(emails) when is_list(emails) do
-    Email.Context.base_email() |> to(emails)
+    Email.Public.base_email() |> to(emails)
   end
 
   def mail_user(email) when is_binary(email) do
-    Email.Context.base_email() |> to(email)
+    Email.Public.base_email() |> to(email)
   end
 
   def mail_user(%{email: email} = user) do

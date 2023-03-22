@@ -75,5 +75,5 @@ defmodule(GoogleSignIn.CallbackPlug) do
     google_sign_in_user.user
   end
 
-  defp admin?(%{"email" => email}), do: Systems.Admin.Context.admin?(email)
+  defp admin?(%{"email" => email}), do: Systems.Admin.Public.admin?(email)
 end

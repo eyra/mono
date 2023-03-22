@@ -20,7 +20,14 @@ defmodule Frameworks.Pixel.Hero.HeroBanner do
         <div class={"flex-wrap ml-6 sm:ml-14 #{@bg_color} bg-opacity-50 z-20 rounded-lg"}>
           <div class="flex items-center">
             <div class="">
-              <Icon size="L" src={@icon_url} border_size="border-2" />
+              <Icon
+                size="L"
+                type={:url}
+                src={@icon_url}
+                border_size="border-2"
+                bg_color="bg-white"
+                border_radius="rounded-full"
+              />
             </div>
             <div class="ml-6 mr-4 sm:ml-8">
               <Title4 color="text-white">

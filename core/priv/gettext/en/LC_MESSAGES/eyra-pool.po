@@ -22,3 +22,35 @@ msgstr "available"
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "progress.pending.label"
 msgstr "reserved"
+
+#, elixir-autogen, elixir-format
+msgid "overview.title"
+msgstr "Pools"
+
+#, elixir-autogen, elixir-format
+msgid "share.dialog.content"
+msgstr "pool"
+
+#, elixir-autogen, elixir-format
+msgid "share.dialog.group"
+msgstr "researchers"
+
+#, elixir-autogen, elixir-format
+msgid "landing.title"
+msgstr "Pool"
+
+#, elixir-autogen, elixir-format
+msgid "landing.description.participant"
+msgstr "✅ You are a member of this pool."
+
+#, elixir-autogen, elixir-format
+msgid "landing.register.button"
+msgstr "Register"
+
+#, elixir-autogen, elixir-format
+msgid "landing.unregister.button"
+msgstr "Sign off"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "landing.description.visitor"
+msgstr "🚫 You are not a member of this pool."

@@ -45,8 +45,8 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
         _url_resolver
       ) do
     reward =
-      Assignment.Context.idempotence_key(assignment, user)
-      |> Budget.Context.get_reward(budget: [currency: Budget.CurrencyModel.preload_graph(:full)])
+      Assignment.Public.idempotence_key(assignment, user)
+      |> Budget.Public.get_reward(budget: [currency: Budget.CurrencyModel.preload_graph(:full)])
 
     base = %{
       id: id,
@@ -56,10 +56,10 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
     }
 
     extra =
-      if Crew.Context.member?(crew, user) do
-        member = Crew.Context.get_member!(crew, user)
-        task = Crew.Context.get_task(crew, member)
-        %{user: contact} = Campaign.Context.original_author(campaign)
+      if Crew.Public.member?(crew, user) do
+        member = Crew.Public.get_member!(crew, user)
+        task = Crew.Public.get_task(crew, member)
+        %{user: contact} = Campaign.Public.original_author(campaign)
 
         %{
           public_id: member.public_id,
@@ -152,7 +152,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
          title
        )
        when not is_nil(lab_tool) do
-    reservation = Lab.Context.reservation_for_user(lab_tool, user)
+    reservation = Lab.Public.reservation_for_user(lab_tool, user)
     actions = lab_actions(lab_tool, reservation, user, member, task, contact, title)
 
     %{
@@ -184,7 +184,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
          member,
          user
        ) do
-    case Crew.Context.get_task(crew, member) do
+    case Crew.Public.get_task(crew, member) do
       nil ->
         forward_action(user)
 
@@ -230,9 +230,9 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
   end
 
   def handle_open(%{user: user, crew: crew, path: path}, socket) do
-    member = Crew.Context.get_member!(crew, user)
-    task = Crew.Context.get_task(crew, member)
-    Crew.Context.lock_task(task)
+    member = Crew.Public.get_member!(crew, user)
+    task = Crew.Public.get_task(crew, member)
+    Crew.Public.lock_task(task)
     LiveView.redirect(socket, external: path)
   end
 
@@ -272,7 +272,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
   end
 
   def handle_submit(%{user: user}, %{assigns: %{selected_time_slot: time_slot}} = socket) do
-    Lab.Context.reserve_time_slot(time_slot, user)
+    Lab.Public.reserve_time_slot(time_slot, user)
     socket
   end
 
@@ -292,7 +292,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
   end
 
   def handle_cancel(%{lab_tool: lab_tool, user: user}, socket) do
-    Lab.Context.cancel_reservation(lab_tool, user)
+    Lab.Public.cancel_reservation(lab_tool, user)
     socket |> LiveView.assign(selected_time_slot: nil)
   end
 

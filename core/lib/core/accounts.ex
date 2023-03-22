@@ -443,7 +443,7 @@ defmodule Core.Accounts do
     Multi.new()
     |> Multi.update(:profile, profile_changeset)
     |> Multi.update(:user, user_changeset)
-    |> Signal.Context.multi_dispatch(:user_profile_updated, %{
+    |> Signal.Public.multi_dispatch(:user_profile_updated, %{
       user_changeset: user_changeset,
       profile_changeset: profile_changeset
     })
@@ -479,7 +479,7 @@ defmodule Core.Accounts do
   def update_features(%Features{} = features, changeset) do
     Multi.new()
     |> Repo.multi_update(:features, changeset)
-    |> Signal.Context.multi_dispatch(:features_updated, %{
+    |> Signal.Public.multi_dispatch(:features_updated, %{
       features: features,
       features_changeset: changeset
     })
@@ -496,7 +496,7 @@ defmodule Core.Accounts do
 
   def mark_as_visited(%User{visited_pages: visited_pages} = user, page) do
     if visited?(user, page) do
-      Signal.Context.dispatch(:visited_pages_updated, %{user: user, visited_pages: visited_pages})
+      Signal.Public.dispatch(:visited_pages_updated, %{user: user, visited_pages: visited_pages})
     else
       update_visited(user, visited_pages ++ [page])
     end
@@ -507,7 +507,7 @@ defmodule Core.Accounts do
 
     Multi.new()
     |> Multi.update(:user, changeset)
-    |> Signal.Context.multi_dispatch(:visited_pages_updated, %{
+    |> Signal.Public.multi_dispatch(:visited_pages_updated, %{
       visited_pages: changeset.changes.visited_pages
     })
     |> Repo.transaction()

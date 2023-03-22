@@ -31,18 +31,6 @@ msgstr "Reject contribution"
 msgid "reject.note"
 msgstr "Note: Rejected participants cannot participate in your campaign again."
 
-#, elixir-autogen, elixir-format
-msgid "create.campaign.dialog.ok.button"
-msgstr "Proceed"
-
-#, elixir-autogen, elixir-format
-msgid "create.campaign.dialog.text"
-msgstr "What type of study would you like to set up?"
-
-#, elixir-autogen, elixir-format
-msgid "create.campaign.dialog.title"
-msgstr "Study type"
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "exclusion.description"
 msgstr "If you would like to exclude participants that you recruited in previous campaigns, select one or more campaigns below."
@@ -61,7 +49,7 @@ msgstr "No previous campaigns available yet"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "submission.criteria.status"
-msgstr "Based on the selected criteria, %{sample} out of %{total} people in the pool can participate in your study."
+msgstr "Based on the selected criteria, %{sample} out of %{total} people in the %{pool} pool can participate in your study."
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "submission.criteria.title"

@@ -4,8 +4,8 @@ defmodule CoreWeb.Menu.Items do
   @impl true
   def values(),
     do: %{
+      admin: %{target: Systems.Admin.ConfigPage, domain: "eyra-ui"},
       support: %{target: Systems.Support.OverviewPage, domain: "eyra-ui"},
-      permissions: %{target: Systems.Admin.PermissionsPage, domain: "eyra-ui"},
       eyra: %{target: Systems.Home.LandingPage, size: :large, title: "Eyra", domain: "eyra-ui"},
       console: %{target: CoreWeb.Console, domain: "eyra-ui"},
       todo: %{target: Systems.NextAction.OverviewPage, domain: "eyra-ui"},

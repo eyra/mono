@@ -28,6 +28,16 @@ defmodule Frameworks.Pixel.ErrorHelpers do
   end
 
   @doc """
+  Generates message for inlined form input errors.
+  """
+  def error_message(%{errors: errors}, field) do
+    case Keyword.get_values(errors, field) do
+      [error | _] -> translate_error(error)
+      _ -> nil
+    end
+  end
+
+  @doc """
   Returnes border color in error, focus, and normal state.
   """
   def border_color(form, field) do

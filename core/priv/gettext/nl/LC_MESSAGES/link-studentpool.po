@@ -21,7 +21,7 @@ msgstr "Campagnes"
 
 #, elixir-autogen, elixir-format
 msgid "students.empty.description"
-msgstr "Op dit moment zijn er nog geen studenten geregistreerd. Je wordt op de hoogte gesteld zodra er studenten zijn die zich  hebben aangemeld."
+msgstr "Op dit moment zijn er nog geen studenten geregistreerd. Je wordt op de hoogte gesteld zodra er studenten zijn die zich hebben aangemeld."
 
 #, elixir-autogen, elixir-format
 msgid "students.empty.title"
@@ -34,14 +34,6 @@ msgstr "Hier vind je straks de campagnes die onderzoekers in jouw pool beschikba
 #, elixir-autogen, elixir-format
 msgid "campaigns.empty.title"
 msgstr "Campagnes in jouw pool"
-
-#, elixir-autogen, elixir-format
-msgid "student.tag.complete"
-msgstr "Gereed"
-
-#, elixir-autogen, elixir-format
-msgid "student.tag.incomplete"
-msgstr "Onvolledig"
 
 #, elixir-autogen, elixir-format
 msgid "spots.available"
@@ -80,8 +72,8 @@ msgid "passed.students"
 msgstr "Geslaagde studenten"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "student.title"
-msgstr "Student"
+msgid "participant.title"
+msgstr "Deelnemer"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.placeholder"
@@ -92,13 +84,17 @@ msgid "submission.selector.title"
 msgstr "Pool"
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "overview.title"
-msgstr "Pools"
-
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "campaigns.label"
 msgstr "Campagnes"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "participants.label"
-msgstr "Deelnemers"
+msgstr "Studenten"
+
+#, elixir-autogen, elixir-format
+msgid "excluded.campaigns.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "overview.plugin.title"
+msgstr "Studentenpools"

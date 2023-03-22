@@ -11,7 +11,7 @@ defmodule Core.Application do
       CoreWeb.Telemetry,
       {Phoenix.PubSub, name: Core.PubSub},
       {Oban, oban_config()},
-      {Systems.Banking.Context.backend(), "account-number"},
+      {Systems.Banking.Supervisor, [{:euro, "account-number"}]},
       CoreWeb.Endpoint,
       {Systems.Rate.Server, rate_config()}
     ]

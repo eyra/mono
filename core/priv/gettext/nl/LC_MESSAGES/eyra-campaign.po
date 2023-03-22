@@ -26,3 +26,71 @@ msgstr "campagne"
 #, elixir-autogen, elixir-format
 msgid "share.dialog.group"
 msgstr "onderzoekers"
+
+#, elixir-autogen, elixir-format
+msgid "campaign.create.pool.label"
+msgstr "Pool"
+
+#, elixir-autogen, elixir-format
+msgid "campaign.create.proceed.button"
+msgstr "Doorgaan"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "campaign.create.title"
+msgstr "Nieuwe campagne"
+
+#, elixir-autogen, elixir-format
+msgid "campaign.create.tooltype.label"
+msgstr "Type studie"
+
+#, elixir-autogen, elixir-format
+msgid "funding.title"
+msgstr "Financiering"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.reward.title"
+msgstr "Bepaal beloning"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.reward.label"
+msgstr "Beloning %{amount}"
+
+#, elixir-autogen, elixir-format
+msgid "funding.description"
+msgstr "Je hebt %{amount} nodig voor %{count} deelnemers."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.fund.title"
+msgstr "Selecteer een fonds"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.fund.description.warning"
+msgstr "Met het geselecteerde fonds kan je %{count} deelnemers betalen."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.reward.description"
+msgstr "Overweeg minimaal %{amount} voor een opdracht van %{duration} minuten."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.fund.description.error"
+msgstr "Met het geselecteerde fonds kan je geen deelnemers betalen."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.fund.description.success"
+msgstr "Met het geselecteerde fonds kan je alle deelnemers betalen."
+
+#, elixir-autogen, elixir-format
+msgid "required.funding.label"
+msgstr "Vereist budget: %{funding}"
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.broke.label"
+msgstr "Blut"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.status.poor.label"
+msgstr "Arm"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.status.rich.label"
+msgstr "Rijk"

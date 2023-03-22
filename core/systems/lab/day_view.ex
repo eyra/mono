@@ -26,7 +26,6 @@ defmodule Systems.Lab.DayView do
   data(entity, :map)
   data(changeset, :map)
   data(error, :any, default: nil)
-  data(focus, :string, default: "")
 
   def update(%{id: id, day_model: day_model, target: target}, socket) do
     changeset =
@@ -195,7 +194,7 @@ defmodule Systems.Lab.DayView do
        ) do
     time_slots =
       tool_id
-      |> Lab.Context.get_time_slots()
+      |> Lab.Public.get_time_slots()
       |> Enum.filter(
         &(&1.location == location and CoreWeb.UI.Timestamp.to_date(&1.start_time) == date)
       )
@@ -227,7 +226,7 @@ defmodule Systems.Lab.DayView do
           |> validate_unused_date()
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          socket |> assign(changeset: changeset, focus: "")
+          socket |> assign(changeset: changeset)
       end
 
     {:noreply, socket |> update_ui()}
@@ -265,17 +264,6 @@ defmodule Systems.Lab.DayView do
     {:noreply, socket}
   end
 
-  @impl true
-  def handle_event("focus", %{"field" => _field}, socket) do
-    # ignore focus event for now to prevent date input looses its value (real fix later when redesign date picker)
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("reset_focus", _, socket) do
-    {:noreply, socket |> assign(focus: "")}
-  end
-
   defp buttons(%{myself: myself}) do
     [
       %{
@@ -292,11 +280,7 @@ defmodule Systems.Lab.DayView do
   @impl true
   def render(assigns) do
     ~F"""
-    <div
-      class="p-8 w-popup-md bg-white shadow-2xl rounded"
-      phx-click="reset_focus"
-      phx-target={@myself}
-    >
+    <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
       <div>
         <div class="text-button font-button text-warning leading-6">
           {@error}
@@ -306,14 +290,7 @@ defmodule Systems.Lab.DayView do
           {@title}
         </div>
         <Spacing value="XS" />
-        <Form
-          id="day_view"
-          changeset={@changeset}
-          change_event="update"
-          submit="submit"
-          target={@myself}
-          focus={@focus}
-        >
+        <Form id="day_view" changeset={@changeset} change_event="update" submit="submit" target={@myself}>
           <Wrap>
             <DateInput
               :if={@day_model.date_editable?}

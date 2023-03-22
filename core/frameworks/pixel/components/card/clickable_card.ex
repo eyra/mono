@@ -125,7 +125,7 @@ defmodule Frameworks.Pixel.Card.ClickableCard.Example do
       right_actions={[
         %{
           action: %{type: :send, event: "delete", item: "1"},
-          face: %{type: :icon, icon: :delete, alt: "delete", color: :white}
+          face: %{type: :icon, icon: :delete, alt: "delete", color: :light}
         }
       ]}
     >

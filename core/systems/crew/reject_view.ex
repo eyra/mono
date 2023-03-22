@@ -24,13 +24,17 @@ defmodule Systems.Crew.RejectView do
   data(category, :atom)
   data(model, :map)
   data(changeset, :map)
-  data(focus, :string, default: "")
 
-  def update(%{active_item_id: category, selector_id: :category}, socket) do
+  def update(
+        %{active_item_id: category, selector_id: :category},
+        socket
+      ) do
+    categories = Crew.RejectCategories.labels(category)
+
     {
       :ok,
       socket
-      |> assign(category: category, focus: :category)
+      |> assign(category: category, categories: categories)
     }
   end
 
@@ -61,15 +65,18 @@ defmodule Systems.Crew.RejectView do
     }
   end
 
+  @impl true
   def handle_event(
         "update",
-        %{"reject_model" => reject_model},
-        %{assigns: %{model: model}} = socket
+        %{"reject_model" => %{"message" => message}},
+        %{assigns: %{model: model, category: category}} = socket
       ) do
-    changeset = Crew.RejectModel.changeset(model, :submit, reject_model)
+    attrs = %{category: category, message: message}
+    changeset = Crew.RejectModel.changeset(model, :submit, attrs)
     {:noreply, socket |> assign(changeset: changeset)}
   end
 
+  @impl true
   def handle_event(
         "reject",
         %{"reject_model" => %{"message" => message}},
@@ -88,23 +95,14 @@ defmodule Systems.Crew.RejectView do
           Logger.warn("Reject failed: #{key} -> #{error}")
         end)
 
-        {:noreply, socket |> assign(focus: "", changeset: changeset)}
+        {:noreply, socket |> assign(changeset: changeset)}
     end
   end
 
+  @impl true
   def handle_event("cancel", _params, %{assigns: %{target: target}} = socket) do
     update_target(target, %{reject: :cancel})
     {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("focus", %{"field" => field}, socket) do
-    {:noreply, socket |> assign(focus: field)}
-  end
-
-  @impl true
-  def handle_event("reset_focus", _, socket) do
-    {:noreply, socket |> assign(focus: "")}
   end
 
   defp buttons(target) do
@@ -127,7 +125,7 @@ defmodule Systems.Crew.RejectView do
   @impl true
   def render(assigns) do
     ~F"""
-    <div class="p-8 bg-white shadow-2xl rounded" phx-click="reset_focus" phx-target={@myself}>
+    <div class="p-8 bg-white shadow-2xl rounded">
       <div class="flex flex-col gap-4 gap-8">
         <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
           {@title}
@@ -149,7 +147,6 @@ defmodule Systems.Crew.RejectView do
           change_event="update"
           submit="reject"
           target={@myself}
-          focus={@focus}
         >
           <Selector
             id={:category}

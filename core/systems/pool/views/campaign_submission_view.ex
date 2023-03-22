@@ -11,21 +11,25 @@ defmodule Systems.Pool.CampaignSubmissionView do
     Pool
   }
 
+  @enums_mapping %{
+    genders: Genders,
+    dominant_hands: DominantHands,
+    native_languages: NativeLanguages
+  }
+
   prop(props, :any, required: true)
 
   data(user, :any)
   data(entity, :any)
-  data(gender_labels, :any)
-  data(dominanthand_labels, :any)
-  data(nativelanguage_labels, :any)
+  data(inclusion_labels, :any, default: nil)
   data(campaign_labels, :map)
   data(excluded_user_ids, :list)
 
   data(sample_size, :integer)
   data(pool_size, :integer)
+  data(pool_title, :string)
 
   data(changeset, :any)
-  data(focus, :any, default: "")
 
   # Handle Selector Update
   def update(
@@ -39,9 +43,9 @@ defmodule Systems.Pool.CampaignSubmissionView do
     socket =
       socket
       |> save_closure(fn socket ->
-        Campaign.Context.handle_exclusion(assignment, current_items)
+        Campaign.Public.handle_exclusion(assignment, current_items)
 
-        excluded_user_ids = Campaign.Context.list_excluded_user_ids(excluded_campaign_ids)
+        excluded_user_ids = Campaign.Public.list_excluded_user_ids(excluded_campaign_ids)
 
         socket
         |> assign(excluded_user_ids: excluded_user_ids)
@@ -115,18 +119,18 @@ defmodule Systems.Pool.CampaignSubmissionView do
 
   defp update_campaigns(%{assigns: %{user: user, submission: submission}} = socket) do
     %{id: campaign_id, promotable_assignment: %{excluded: excluded_assignments} = assignment} =
-      Campaign.Context.get_by_submission(submission, promotable_assignment: [:excluded])
+      Campaign.Public.get_by_submission(submission, promotable_assignment: [:excluded])
 
     excluded_assignment_ids =
       excluded_assignments
       |> Enum.map(& &1.id)
 
     campaign_labels =
-      Campaign.Context.list_owned_campaigns(user, preload: [:promotion, :promotable_assignment])
+      Campaign.Public.list_owned_campaigns(user, preload: [:promotion, :promotable_assignment])
       |> Enum.filter(&(&1.id != campaign_id))
       |> Enum.map(&to_label(&1, excluded_assignment_ids))
 
-    excluded_user_ids = Assignment.Context.list_user_ids(excluded_assignment_ids)
+    excluded_user_ids = Assignment.Public.list_user_ids(excluded_assignment_ids)
 
     socket
     |> assign(assignment: assignment)
@@ -153,30 +157,42 @@ defmodule Systems.Pool.CampaignSubmissionView do
   defp update_ui(
          %{
            assigns: %{
-             submission: %{pool: %{participants: participants}},
+             submission: %{pool: %{name: pool_name, participants: participants} = pool},
              excluded_user_ids: excluded_user_ids
            }
          } = socket,
          criteria
        ) do
-    gender_labels = Genders.labels(criteria.genders)
-    dominanthand_labels = DominantHands.labels(criteria.dominant_hands)
-    nativelanguage_labels = NativeLanguages.labels(criteria.native_languages)
+    inclusion_labels =
+      Systems.Director.get(pool).inclusion_criteria()
+      |> Enum.map(&get_inclusion_labels(&1, criteria))
+      |> Map.new()
 
     included_user_ids = Enum.map(participants, & &1.id)
     pool_size = Enum.count(included_user_ids)
+    pool_title = Pool.Model.title(pool_name)
 
     sample_size =
-      Pool.Context.count_eligitable_users(criteria, included_user_ids, excluded_user_ids)
+      Pool.Public.count_eligitable_users(criteria, included_user_ids, excluded_user_ids)
 
     socket
     |> assign(
-      gender_labels: gender_labels,
-      dominanthand_labels: dominanthand_labels,
-      nativelanguage_labels: nativelanguage_labels,
+      inclusion_labels: inclusion_labels,
       sample_size: sample_size,
-      pool_size: pool_size
+      pool_size: pool_size,
+      pool_title: pool_title
     )
+  end
+
+  defp get_inclusion_labels(field, %Pool.CriteriaModel{} = criteria) when is_atom(field) do
+    case Map.get(@enums_mapping, field) do
+      nil ->
+        nil
+
+      enum_module ->
+        values = Map.get(criteria, field)
+        {field, enum_module.labels(values)}
+    end
   end
 
   # Saving
@@ -188,6 +204,14 @@ defmodule Systems.Pool.CampaignSubmissionView do
     |> update_ui()
   end
 
+  defp inclusion_title(:genders), do: dgettext("eyra-account", "features.gender.title")
+
+  defp inclusion_title(:native_languages),
+    do: dgettext("eyra-account", "features.nativelanguage.title")
+
+  defp inclusion_title(:dominant_hands),
+    do: dgettext("eyra-account", "features.dominanthand.title")
+
   def render(assigns) do
     ~F"""
     <ContentArea>
@@ -198,7 +222,8 @@ defmodule Systems.Pool.CampaignSubmissionView do
         {raw(
           dgettext("link-campaign", "submission.criteria.status",
             sample: "<span class=\"text-primary\">#{@sample_size}</span>",
-            total: @pool_size
+            total: @pool_size,
+            pool: @pool_title
           )
         )}
       </SubHead>
@@ -209,34 +234,19 @@ defmodule Systems.Pool.CampaignSubmissionView do
           <BodyMedium>{dgettext("eyra-account", "features.content.description")}</BodyMedium>
           <Spacing value="M" />
 
-          <Title4>{dgettext("eyra-account", "features.gender.title")}</Title4>
-          <Spacing value="S" />
-          <Selector
-            id={:genders}
-            items={@gender_labels}
-            type={:checkbox}
-            parent={%{type: __MODULE__, id: @id}}
-          />
+          <div class="flex flex-col gap-14">
+            <div :for={field <- Map.keys(@inclusion_labels)}>
+              <Title4>{inclusion_title(field)}</Title4>
+              <Spacing value="S" />
+              <Selector
+                id={field}
+                items={Map.get(@inclusion_labels, field)}
+                type={:checkbox}
+                parent={%{type: __MODULE__, id: @id}}
+              />
+            </div>
+          </div>
           <Spacing value="XL" />
-
-          <Title4>{dgettext("eyra-account", "features.nativelanguage.title")}</Title4>
-          <Spacing value="S" />
-          <Selector
-            id={:native_languages}
-            items={@nativelanguage_labels}
-            type={:checkbox}
-            parent={%{type: __MODULE__, id: @id}}
-          />
-          <Spacing value="XL" />
-
-          <Title4>{dgettext("eyra-account", "features.dominanthand.title")}</Title4>
-          <Spacing value="S" />
-          <Selector
-            id={:dominant_hands}
-            items={@dominanthand_labels}
-            type={:checkbox}
-            parent={%{type: __MODULE__, id: @id}}
-          />
         </div>
         <div class="xl:max-w-form">
           <Title3>{dgettext("link-campaign", "exclusion.title")}</Title3>

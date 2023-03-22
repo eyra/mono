@@ -34,14 +34,16 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
         })
 
       campaign =
-        Campaign.Context.get!(id, Campaign.Model.preload_graph(:full))
-        |> Campaign.Context.flatten()
+        Campaign.Public.get!(id, Campaign.Model.preload_graph(:full))
+        |> Campaign.Public.flatten()
 
       {:ok, campaign: campaign, user: user}
     end
 
     test "With applied member", %{campaign: campaign, user: user} do
-      member = Crew.Context.apply_member!(campaign.promotable_assignment.crew, user)
+      {:ok, %{member: member}} =
+        Crew.Public.apply_member(campaign.promotable_assignment.crew, user)
+
       view_model = Campaign.Builders.AssignmentLandingPage.view_model(campaign, user)
 
       assert %{
@@ -63,9 +65,9 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
     end
 
     test "With started member", %{campaign: campaign, user: user} do
-      member = Crew.Context.apply_member!(campaign.promotable_assignment.crew, user)
-      task = Crew.Context.get_task(campaign.promotable_assignment.crew, member)
-      Crew.Context.lock_task(task)
+      member = Crew.Public.apply_member(campaign.promotable_assignment.crew, user)
+      task = Crew.Public.get_task(campaign.promotable_assignment.crew, member)
+      Crew.Public.lock_task(task)
 
       view_model = Campaign.Builders.AssignmentLandingPage.view_model(campaign, user)
 
@@ -90,10 +92,12 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
     end
 
     test "With finished member", %{campaign: campaign, user: user} do
-      member = Crew.Context.apply_member!(campaign.promotable_assignment.crew, user)
-      task = Crew.Context.get_task(campaign.promotable_assignment.crew, member)
-      Crew.Context.lock_task(task)
-      Crew.Context.activate_task(task)
+      {:ok, %{member: member}} =
+        Crew.Public.apply_member(campaign.promotable_assignment.crew, user)
+
+      task = Crew.Public.get_task(campaign.promotable_assignment.crew, member)
+      Crew.Public.lock_task(task)
+      Crew.Public.activate_task(task)
 
       view_model = Campaign.Builders.AssignmentLandingPage.view_model(campaign, user)
 
@@ -125,7 +129,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
 
       %{id: id, promotion: promotion} = Factories.insert!(:campaign, %{submissions: [submission]})
 
-      campaign = Campaign.Context.get!(id, Campaign.Model.preload_graph(:full))
+      campaign = Campaign.Public.get!(id, Campaign.Model.preload_graph(:full))
       view_model = Campaign.Builders.AssignmentLandingPage.view_model(campaign, user)
 
       assert %{
@@ -191,7 +195,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
           submission: [submission]
         })
 
-      campaign = Campaign.Context.get!(id, Campaign.Model.preload_graph(:full))
+      campaign = Campaign.Public.get!(id, Campaign.Model.preload_graph(:full))
       {:ok, campaign: campaign, user: user, author: author}
     end
 
@@ -232,7 +236,10 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
 
     test "With 1 application", %{campaign: campaign, user: user} do
       user2 = Factories.insert!(:member)
-      member = Crew.Context.apply_member!(campaign.promotable_assignment.crew, user2)
+
+      {:ok, %{member: member}} =
+        Crew.Public.apply_member(campaign.promotable_assignment.crew, user2)
+
       view_model = Campaign.Builders.PromotionLandingPage.view_model(campaign, user)
 
       assert %{

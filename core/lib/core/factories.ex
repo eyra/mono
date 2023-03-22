@@ -197,7 +197,7 @@ defmodule Core.Factories do
   end
 
   def build(:currency) do
-    build(:currency, %{name: Faker.Lorem.word()})
+    build(:currency, %{name: Faker.UUID.v4()})
   end
 
   def build(:text_bundle) do
@@ -213,7 +213,7 @@ defmodule Core.Factories do
   end
 
   def build(:pool) do
-    build(:pool, %{name: "test_pool"})
+    build(:pool, %{name: "test_pool", director: :citizen})
   end
 
   def build(:criteria) do
@@ -512,6 +512,17 @@ defmodule Core.Factories do
       fund: fund,
       reserve: reserve,
       auth_node: auth_node
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:bank_account, %{} = attributes) do
+    {currency, attributes} = Map.pop(attributes, :currency, build(:currency))
+    {account, attributes} = Map.pop(attributes, :account, build(:book_account))
+
+    %Budget.BankAccountModel{
+      currency: currency,
+      account: account
     }
     |> struct!(attributes)
   end

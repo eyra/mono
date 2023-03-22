@@ -11,7 +11,8 @@ defmodule Systems.Lab.ToolModel do
 
     has_many(:time_slots, Systems.Lab.TimeSlotModel,
       foreign_key: :tool_id,
-      preload_order: [asc: :start_time]
+      preload_order: [asc: :start_time],
+      on_delete: :delete_all
     )
 
     field(:director, Ecto.Enum, values: [:campaign])

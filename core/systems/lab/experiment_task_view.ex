@@ -138,7 +138,7 @@ defmodule Systems.Lab.ExperimentTaskView do
   defp handle_delayed_update(socket), do: socket
 
   defp update_time_slots(%{assigns: %{lab_tool: %{id: id}}} = socket) do
-    time_slots = Lab.Context.get_available_time_slots(id)
+    time_slots = Lab.Public.get_available_time_slots(id)
     socket |> assign(time_slots: time_slots)
   end
 
@@ -147,7 +147,6 @@ defmodule Systems.Lab.ExperimentTaskView do
 
     selector = %{
       id: :dropdown_selector,
-      field: :dropdown_selector,
       selected_option_index: nil,
       options: options,
       parent: %{type: __MODULE__, id: id}
@@ -187,7 +186,7 @@ defmodule Systems.Lab.ExperimentTaskView do
   defp location(%Lab.TimeSlotModel{location: location}), do: location
 
   defp time_slot(%{time_slot_id: time_slot_id}) do
-    Lab.Context.get_time_slot(time_slot_id)
+    Lab.Public.get_time_slot(time_slot_id)
   end
 
   defp id_text(public_id) do

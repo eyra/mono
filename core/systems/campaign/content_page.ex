@@ -14,44 +14,49 @@ defmodule Systems.Campaign.ContentPage do
   alias Systems.Promotion.FormView, as: PromotionForm
   alias CoreWeb.Layouts.Workspace.Component, as: Workspace
 
-  alias CoreWeb.UI.Timestamp
   alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent, TabbarFooter}
 
   alias Systems.{
     Campaign,
-    Assignment,
     Pool
   }
 
+  data(tabbar_id, :string)
   data(validate?, :boolean, default: false)
   data(initial_tab, :any)
-  data(actions, :map)
+  data(actions, :map, default: [])
+  data(more_actions, :map, default: [])
+  data(tabbar_size, :any)
   data(changesets, :any)
-  data(initial_image_query, :any)
   data(uri_origin, :any)
   data(popup, :map)
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
-    Campaign.Context.get!(id)
+    Campaign.Public.get!(id)
   end
 
   @impl true
-  def mount(%{"id" => id, "tab" => initial_tab}, _session, socket) do
+  def mount(%{"id" => id, "tab" => initial_tab}, %{"locale" => locale}, socket) do
     model = %{id: String.to_integer(id), director: :campaign}
+    tabbar_id = "campaign_content/#{id}"
 
     {
       :ok,
       socket
       |> assign(
+        id: id,
         model: model,
+        tabbar_id: tabbar_id,
         initial_tab: initial_tab,
+        locale: locale,
         changesets: %{},
         dialog: nil,
         popup: nil
       )
       |> assign_viewport()
       |> assign_breakpoint()
+      |> update_tabbar_size()
       |> update_menus()
     }
   end
@@ -68,6 +73,8 @@ defmodule Systems.Campaign.ContentPage do
     socket =
       socket
       |> observe_view_model()
+      |> update_actions()
+      |> update_more_actions()
       |> update_menus()
 
     super(socket)
@@ -77,25 +84,18 @@ defmodule Systems.Campaign.ContentPage do
 
   def handle_view_model_updated(socket) do
     socket
+    |> update_actions()
+    |> update_more_actions()
+    |> update_menus()
   end
 
   @impl true
   def handle_resize(socket) do
-    socket |> update_menus()
-  end
-
-  defp initial_image_query(%{vm: %{promotion: promotion}}) do
-    case promotion.themes do
-      nil -> ""
-      themes -> themes |> Enum.join(" ")
-    end
-  end
-
-  @impl true
-  def handle_event("reset_focus", _, socket) do
-    send_update(Assignment.AssignmentForm, id: :assignment_form, claim_focus: nil)
-    send_update(PromotionForm, id: :promotion_form, focus: "")
-    {:noreply, socket}
+    socket
+    |> update_tabbar_size()
+    |> update_actions()
+    |> update_more_actions()
+    |> update_menus()
   end
 
   @impl true
@@ -110,7 +110,7 @@ defmodule Systems.Campaign.ContentPage do
 
   @impl true
   def handle_event("delete_confirm", _params, %{assigns: %{vm: %{id: campaign_id}}} = socket) do
-    Campaign.Context.delete(campaign_id)
+    Campaign.Public.delete(campaign_id)
     {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Console))}
   end
 
@@ -126,17 +126,13 @@ defmodule Systems.Campaign.ContentPage do
         %{assigns: %{vm: %{id: campaign_id, submission: submission}}} = socket
       ) do
     socket =
-      if Campaign.Context.ready?(campaign_id) do
-        {:ok, _submission} =
-          Pool.Context.update(submission, %{
-            status: :submitted,
-            submitted_at: Timestamp.naive_now()
-          })
-
+      if Campaign.Public.ready?(campaign_id) do
+        {:ok, _submission} = Pool.Public.submit(submission)
         title = dgettext("eyra-submission", "submit.success.title")
         text = dgettext("eyra-submission", "submit.success.text")
 
         socket
+        |> update_view_model()
         |> inform(title, text)
       else
         title = dgettext("eyra-submission", "submit.error.title")
@@ -157,7 +153,7 @@ defmodule Systems.Campaign.ContentPage do
         _params,
         %{assigns: %{vm: %{submission: submission}}} = socket
       ) do
-    {:ok, _} = Pool.Context.update(submission, %{status: :idle})
+    {:ok, _} = Pool.Public.update(submission, %{status: :idle})
     title = dgettext("eyra-submission", "retract.success.title")
     text = dgettext("eyra-submission", "retract.success.text")
 
@@ -208,16 +204,28 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   @impl true
-  def handle_info({:claim_focus, :promotion_form}, socket) do
-    send_update(Assignment.AssignmentForm, id: :assignment_form, claim_focus: :promotion_form)
-    {:noreply, socket}
+  def handle_info(
+        {:show_image_picker, initial_image_query},
+        %{assigns: %{viewport: viewport, breakpoint: breakpoint}} = socket
+      ) do
+    popup = %{
+      view: ImageCatalogPicker,
+      props: %{
+        id: :image_picker,
+        viewport: viewport,
+        breakpoint: breakpoint,
+        static_path: &CoreWeb.Endpoint.static_path/1,
+        initial_query: initial_image_query,
+        image_catalog: image_catalog()
+      }
+    }
+
+    {:noreply, socket |> assign(popup: popup)}
   end
 
   @impl true
-  def handle_info({:claim_focus, form}, socket) do
-    send_update(PromotionForm, id: :promotion_form, focus: "")
-    send_update(Assignment.AssignmentForm, id: :assignment_form, claim_focus: form)
-    {:noreply, socket}
+  def handle_info({:image_picker, :close}, socket) do
+    {:noreply, socket |> assign(popup: nil)}
   end
 
   @impl true
@@ -246,8 +254,6 @@ defmodule Systems.Campaign.ContentPage do
       if socket.assigns[ready_key] != ready? do
         socket
         |> assign(ready_key, ready?)
-
-        # |> create_tabs()
       else
         socket
       end
@@ -260,10 +266,7 @@ defmodule Systems.Campaign.ContentPage do
     {:noreply, socket}
   end
 
-  defp margin_x(:mobile), do: "mx-6"
-  defp margin_x(_), do: "mx-10"
-
-  defp action_map(%{vm: %{preview_path: preview_path}}) do
+  defp action_map(%{assigns: %{vm: %{preview_path: preview_path}}}) do
     preview_action = %{type: :redirect, to: preview_path}
     submit_action = %{type: :send, event: "submit"}
     delete_action = %{type: :send, event: "delete"}
@@ -332,8 +335,15 @@ defmodule Systems.Campaign.ContentPage do
     }
   end
 
-  defp create_actions(%{breakpoint: breakpoint, vm: %{submitted?: submitted?}} = assigns) do
-    create_actions(action_map(assigns), breakpoint, submitted?)
+  defp update_actions(
+         %{assigns: %{breakpoint: breakpoint, vm: %{submitted?: submitted?}}} = socket
+       ) do
+    actions =
+      socket
+      |> action_map()
+      |> create_actions(breakpoint, submitted?)
+
+    socket |> assign(actions: actions)
   end
 
   defp create_actions(_, {:unknown, _}, _), do: []
@@ -399,8 +409,13 @@ defmodule Systems.Campaign.ContentPage do
     |> Enum.filter(&(not is_nil(&1)))
   end
 
-  defp create_more_actions(%{vm: %{submitted?: submitted?}} = assigns) do
-    create_more_actions(action_map(assigns), submitted?)
+  defp update_more_actions(%{assigns: %{vm: %{submitted?: submitted?}}} = socket) do
+    more_actions =
+      socket
+      |> action_map()
+      |> create_more_actions(submitted?)
+
+    socket |> assign(more_actions: more_actions)
   end
 
   defp create_more_actions(%{preview: preview, delete: delete}, false) do
@@ -419,48 +434,36 @@ defmodule Systems.Campaign.ContentPage do
     |> Enum.filter(&(not is_nil(&1)))
   end
 
+  defp update_tabbar_size(%{assigns: %{breakpoint: breakpoint}} = socket) do
+    tabbar_size = tabbar_size(breakpoint)
+    socket |> assign(tabbar_size: tabbar_size)
+  end
+
   defp tabbar_size({:unknown, _}), do: :unknown
   defp tabbar_size(bp), do: value(bp, :narrow, sm: %{30 => :wide})
+
+  defp margin_x(:mobile), do: "mx-6"
+  defp margin_x(_), do: "mx-10"
 
   def render(assigns) do
     ~F"""
     <Workspace title={dgettext("link-survey", "content.title")} menus={@menus}>
-      <div id={:survey_content} phx-hook="ViewportResize" phx-click="reset_focus">
-        <div x-data="{ image_picker: false, active_tab: 0, dropdown: false }">
-          <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="image_picker">
-            <div class="flex flex-row items-center justify-center w-full h-full">
-              <div
-                class={"#{margin_x(@breakpoint)} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg"}
-                x-on:click.away="image_picker = false, $parent.$parent.overlay = false"
-              >
-                <ImageCatalogPicker
-                  id={:image_picker}
-                  viewport={@viewport}
-                  breakpoint={@breakpoint}
-                  static_path={&CoreWeb.Endpoint.static_path/1}
-                  initial_query={initial_image_query(assigns)}
-                  image_catalog={image_catalog()}
-                />
-              </div>
-            </div>
-          </div>
-          <Popup :if={@popup}>
+      <div id={:survey_content} phx-hook="ViewportResize">
+        <Popup :if={@popup}>
+          <div class={"#{margin_x(@breakpoint)} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg"}>
             <Dynamic.LiveComponent module={@popup.view} {...@popup.props} />
-          </Popup>
-          <Popup :if={@dialog}>
-            <PlainDialog {...@dialog} />
-          </Popup>
-          <TabbarArea tabs={@vm.tabs}>
-            <ActionBar
-              right_bar_buttons={create_actions(assigns)}
-              more_buttons={create_more_actions(assigns)}
-            >
-              <Tabbar vm={%{initial_tab: @initial_tab, size: tabbar_size(@breakpoint)}} />
-            </ActionBar>
-            <TabbarContent />
-            <TabbarFooter />
-          </TabbarArea>
-        </div>
+          </div>
+        </Popup>
+        <Popup :if={@dialog}>
+          <PlainDialog {...@dialog} />
+        </Popup>
+        <TabbarArea tabs={@vm.tabs}>
+          <ActionBar right_bar_buttons={@actions} more_buttons={@more_actions}>
+            <Tabbar id={@tabbar_id} initial_tab={@initial_tab} size={@tabbar_size} />
+          </ActionBar>
+          <TabbarContent />
+          <TabbarFooter />
+        </TabbarArea>
       </div>
     </Workspace>
     """

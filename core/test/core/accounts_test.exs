@@ -624,7 +624,7 @@ defmodule Core.AccountsTest do
       user_changeset = Accounts.User.user_profile_changeset(user, %{student: true})
       {:ok, %{user: user}} = Accounts.update_user(user_changeset)
 
-      NextAction.Context.create_next_action(user, PromotePushStudent)
+      NextAction.Public.create_next_action(user, PromotePushStudent)
       assert_next_action(user, url_resolver, "/settings")
 
       {:ok, %{user: user}} = Accounts.mark_as_visited(user, :settings)

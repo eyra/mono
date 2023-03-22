@@ -36,6 +36,6 @@ defmodule Systems.Email.Delivery do
   end
 
   defp deliver(%Email.Model{} = email) do
-    Email.Context.deliver_now(email)
+    Email.Public.deliver_now(email)
   end
 end

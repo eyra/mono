@@ -15,7 +15,7 @@ defmodule Systems.Pool.SubmissionModel do
 
   schema "pool_submissions" do
     field(:status, Ecto.Enum, values: Pool.SubmissionStatus.values())
-    field(:reward_value, :integer)
+    field(:reward_value, :integer, default: 0)
     field(:schedule_start, :string)
     field(:schedule_end, :string)
 
@@ -31,7 +31,7 @@ defmodule Systems.Pool.SubmissionModel do
     timestamps()
   end
 
-  def preload_graph(:pool), do: [pool: Pool.Model.preload_graph(:full)]
+  def preload_graph(:pool), do: [pool: Pool.Model.preload_graph([:currency, :org, :auth_node])]
 
   @fields ~w(status reward_value schedule_start schedule_end submitted_at accepted_at completed_at)a
 
@@ -89,11 +89,18 @@ defmodule Systems.Pool.SubmissionModel do
     future?(schedule_start)
   end
 
+  def concept?(%{submitted_at: submitted_at}), do: submitted_at == nil
+
   def status(%{status: status}), do: status
   def status(_), do: :idle
 
-  def submitted?(%{submitted_at: submitted_at}), do: submitted_at != nil
+  def submitted?(%{submitted_at: submitted_at, status: status}),
+    do: submitted_at != nil and status != :idle
+
   def submitted?(_), do: false
+
+  def completed?(%{completed_at: completed_at}), do: completed_at != nil
+  def completed?(_), do: false
 
   defp past?(nil), do: false
 
@@ -115,7 +122,7 @@ defimpl Core.Persister, for: Systems.Pool.SubmissionModel do
   alias Systems.Pool
 
   def save(submission, changeset) do
-    case Pool.Context.update(submission, changeset) do
+    case Pool.Public.update(submission, changeset) do
       {:ok, %{submission: submission}} -> {:ok, submission}
       _ -> {:error, changeset}
     end

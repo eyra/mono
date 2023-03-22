@@ -63,7 +63,10 @@ defmodule Systems.Campaign.Model do
       :promotion,
       auth_node: [:role_assignments],
       authors: [:user],
-      submissions: [:criteria, pool: Pool.Model.preload_graph(:full)],
+      submissions: [
+        :criteria,
+        pool: Pool.Model.preload_graph([:currency, :org, :auth_node, :participants])
+      ],
       promotable_assignment: Assignment.Model.preload_graph(:full)
     ]
   end
@@ -83,6 +86,8 @@ end
 
 defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   import CoreWeb.Gettext
+
+  import Frameworks.Utility.Guards
 
   alias Systems.{
     Campaign,
@@ -146,10 +151,10 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     info1 = Enum.join(info1_elements, " | ")
     info = [info1]
 
-    open? = Assignment.Context.open?(assignment)
+    has_open_spots? = Assignment.Public.has_open_spots?(assignment)
 
     label =
-      if open? do
+      if has_open_spots? do
         nil
       else
         %{text: dgettext("eyra-marketplace", "assignment.status.complete.label"), type: :tertiary}
@@ -198,7 +203,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
        ) do
     duration = if duration === nil, do: 0, else: duration
 
-    open_spot_count = Assignment.Context.open_spot_count(assignment)
+    open_spot_count = Assignment.Public.open_spot_count(assignment)
 
     duration_label = dgettext("eyra-promotion", "duration.title")
     open_spots_label = dgettext("eyra-promotion", "open.spots.label", count: "#{open_spot_count}")
@@ -224,11 +229,25 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
     info = [info1, info2]
 
-    label = Pool.Context.get_tag(submission)
+    label = Pool.Public.get_tag(submission)
     icon_url = get_card_icon_url(marks)
     image_info = ImageHelpers.get_image_info(image_id)
     tags = get_card_tags(themes)
     type = get_card_type(submission)
+    action_icon_color = get_action_icon_color(type)
+    action_label_color = get_action_label_color(type)
+
+    left_actions =
+      if Pool.SubmissionModel.concept?(submission) do
+        [
+          %{
+            action: %{type: :send, event: "delete", item: id},
+            face: %{type: :icon, icon: :delete, color: action_icon_color}
+          }
+        ]
+      else
+        []
+      end
 
     %{
       type: type,
@@ -243,34 +262,29 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
       icon_url: icon_url,
       label: label,
       label_type: "secondary",
-      left_actions: [
-        %{
-          action: %{type: :send, event: "share", item: "#{id}"},
-          face: %{
-            type: :label,
-            label: dgettext("eyra-ui", "share.button"),
-            font: "text-subhead font-subhead",
-            text_color: "text-white",
-            wrap: true
-          }
-        },
+      right_actions: [
         %{
           action: %{type: :send, event: "duplicate", item: id},
           face: %{
             type: :label,
             label: dgettext("eyra-ui", "duplicate.button"),
             font: "text-subhead font-subhead",
-            text_color: "text-white",
+            text_color: action_label_color,
+            wrap: true
+          }
+        },
+        %{
+          action: %{type: :send, event: "share", item: "#{id}"},
+          face: %{
+            type: :label,
+            label: dgettext("eyra-ui", "share.button"),
+            font: "text-subhead font-subhead",
+            text_color: action_label_color,
             wrap: true
           }
         }
       ],
-      right_actions: [
-        %{
-          action: %{type: :send, event: "delete", item: id},
-          face: %{type: :icon, icon: :delete, color: :white}
-        }
-      ]
+      left_actions: left_actions
     }
   end
 
@@ -342,9 +356,9 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
          url_resolver
        ) do
     path = url_resolver.(Systems.Campaign.ContentPage, id: id)
-    tag = Pool.Context.get_tag(submission)
+    tag = Pool.Public.get_tag(submission)
 
-    promotion_ready? = Promotion.Context.ready?(promotion)
+    promotion_ready? = Promotion.Public.ready?(promotion)
 
     target_subject_count =
       if target_subject_count == nil do
@@ -353,7 +367,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
         target_subject_count
       end
 
-    open_spot_count = Assignment.Context.open_spot_count(assignment)
+    open_spot_count = Assignment.Public.open_spot_count(assignment)
 
     subtitle =
       get_content_list_item_subtitle(
@@ -363,6 +377,37 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
         target_subject_count
       )
 
+    quick_summary = get_quick_summary(updated_at)
+    image_info = ImageHelpers.get_image_info(image_id, 120, 115)
+    image = %{type: :catalog, info: image_info}
+
+    %{
+      path: path,
+      title: title,
+      subtitle: subtitle,
+      tag: tag,
+      level: :critical,
+      image: image,
+      quick_summary: quick_summary
+    }
+  end
+
+  defp vm(
+         %{
+           id: id,
+           updated_at: updated_at,
+           promotion: %{
+             title: title,
+             image_id: image_id
+           }
+         } = campaign,
+         {Budget.FundingPage, :budget_campaigns},
+         _user,
+         url_resolver
+       ) do
+    path = url_resolver.(Systems.Campaign.ContentPage, id: id, tab: :funding)
+    tag = funding_tag(campaign)
+    subtitle = required_funding(campaign)
     quick_summary = get_quick_summary(updated_at)
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
     image = %{type: :catalog, info: image_info}
@@ -390,7 +435,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
   defp vm(
          %{submission: submission} = campaign,
-         {Pool.StudentPage, :contribution},
+         {Pool.ParticipantPage, :contribution},
          user,
          url_resolver
        ) do
@@ -432,10 +477,43 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     }
   end
 
+  defp required_funding(%{
+         submission: %{reward_value: reward_value, pool: %{currency: currency}},
+         promotable: %{assignable_experiment: %{subject_count: subject_count}}
+       }) do
+    reward_value = guard_nil(reward_value, :integer)
+    subject_count = guard_nil(subject_count, :integer)
+
+    locale = Gettext.get_locale(CoreWeb.Gettext)
+    required_funding_amount = subject_count * reward_value
+    required_funding_label = Budget.CurrencyModel.label(currency, locale, required_funding_amount)
+    dgettext("eyra-campaign", "required.funding.label", funding: required_funding_label)
+  end
+
+  defp funding_tag(%{
+         submission: %{reward_value: reward_value},
+         promotable: %{budget: budget, assignable_experiment: %{subject_count: subject_count}}
+       }) do
+    reward_value = guard_nil(reward_value, :integer)
+    subject_count = guard_nil(subject_count, :integer)
+
+    available = Budget.Model.amount_available(budget)
+
+    if available < reward_value do
+      %{text: dgettext("eyra-campaign", "funding.status.broke.label"), type: :error}
+    else
+      if available >= subject_count * reward_value do
+        %{text: dgettext("eyra-campaign", "funding.status.rich.label"), type: :success}
+      else
+        %{text: dgettext("eyra-campaign", "funding.status.poor.label"), type: :warning}
+      end
+    end
+  end
+
   defp task(crew, user) do
-    case Crew.Context.get_member!(crew, user) do
+    case Crew.Public.get_member!(crew, user) do
       nil -> nil
-      member -> Crew.Context.get_task(crew, member)
+      member -> Crew.Public.get_task(crew, member)
     end
   end
 
@@ -481,7 +559,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
         dgettext("eyra-marketplace", "assignment.status.completed.subtitle")
 
       :accepted ->
-        rewarded_amount = Campaign.Context.rewarded_amount(assignment, user)
+        rewarded_amount = Campaign.Public.rewarded_amount(assignment, user)
 
         dngettext(
           "eyra-marketplace",
@@ -536,7 +614,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
         dgettext("eyra-submission", "waiting.for.coordinator.message")
 
       :accepted ->
-        case Pool.Context.published_status(submission) do
+        case Pool.Public.published_status(submission) do
           :scheduled ->
             dgettext("eyra-submission", "accepted.scheduled.message")
 
@@ -572,9 +650,23 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
   end
 
   def get_card_type(submission) do
-    case completed?(submission) do
+    case inactive?(submission) do
       true -> :secondary
       false -> :primary
+    end
+  end
+
+  def get_action_label_color(type) do
+    case type do
+      :primary -> "text-white"
+      :secondary -> "text-grey1"
+    end
+  end
+
+  def get_action_icon_color(type) do
+    case type do
+      :primary -> :light
+      :secondary -> :dark
     end
   end
 
@@ -592,10 +684,10 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     end
   end
 
-  defp completed?(%{status: status} = submission) do
+  defp inactive?(%{status: status} = submission) do
     case status do
       :completed -> true
-      :accepted -> Pool.Context.published_status(submission) == :closed
+      :accepted -> Pool.Public.published_status(submission) == :closed
       _ -> false
     end
   end

@@ -15,28 +15,29 @@ defmodule Frameworks.Pixel.Form.TextArea do
 
   data(form, :form, from_context: {Surface.Components.Form, :form})
 
-  def render(assigns) do
+  def render(%{form: form, field: field} = assigns) do
+    field_id = String.to_atom(input_id(form, field))
+    field_name = input_name(form, field)
+    field_value = input_value(form, field) || ""
+    error = field_error_message(assigns, form)
+    error? = error != nil
+
     ~F"""
     <Field
-      form={@form}
-      field={@field}
+      field={field_id}
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
+      error={error}
       extra_space={false}
     >
       <textarea
-        id={input_id(@form, @field)}
-        name={input_name(@form, @field)}
-        class="text-grey1 text-bodymedium font-body pl-3 pt-2 w-full h-64 border-2 focus:outline-none rounded"
-        x-bind:class={"{ '#{focus_border_color(@background)}': focus === '#{@field}', '#{border_color(assigns, @form)}': focus !== '#{@field}' }"}
-        x-on:focus={"focus = '#{@field}'"}
-        x-on:click.stop
-        phx-focus="focus"
-        phx-value-field={@field}
-        phx-target={target(@form)}
+        id={field_id}
+        name={field_name}
+        class={"text-grey1 text-bodymedium font-body pl-3 pt-2 w-full h-64 border-2 focus:outline-none rounded #{get_border_color({false, error?, @background})}"}
+        phx-target={target(form)}
         phx-debounce={@debounce}
-      >{html_escape(input_value(@form, @field) || "")}</textarea>
+      >{html_escape(field_value)}</textarea>
     </Field>
     """
   end

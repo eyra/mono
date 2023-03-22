@@ -7,8 +7,6 @@ defmodule Systems.Email.Dispatcher do
   def perform(%Oban.Job{
         args: %{"to" => to} = args
       }) do
-    IO.puts("#{__MODULE__} perform")
-
     Multi.new()
     |> dispatch_multi(0, to, args)
     |> Repo.transaction()

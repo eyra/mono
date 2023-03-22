@@ -27,7 +27,7 @@ defmodule CoreWeb.Console do
     # FIXME: Refactor to use content node
     content_items =
       user
-      |> Campaign.Context.list_owned_campaigns(preload: preload)
+      |> Campaign.Public.list_owned_campaigns(preload: preload)
       |> Enum.map(&Campaign.Model.flatten(&1))
       |> Enum.map(&convert_to_vm(socket, &1))
 
@@ -35,7 +35,7 @@ defmodule CoreWeb.Console do
       socket
       |> update_menus()
       |> assign(content_items: content_items)
-      |> assign(next_best_action: NextAction.Context.next_best_action(url_resolver(socket), user))
+      |> assign(next_best_action: NextAction.Public.next_best_action(url_resolver(socket), user))
 
     {:ok, socket}
   end

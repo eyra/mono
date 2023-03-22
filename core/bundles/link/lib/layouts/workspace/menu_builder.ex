@@ -5,10 +5,9 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
   import Core.Authorization, only: [can_access?: 2]
   import CoreWeb.Menu.Helpers
 
-  import Systems.Admin.Context
+  import Systems.Admin.Public
 
-  alias Systems.NextAction
-  alias Systems.Support
+  alias Systems.{Pool, Budget, Support, NextAction}
 
   @impl true
   def build_menu(:desktop_menu = menu_id, socket, user_state, active_item) do
@@ -47,15 +46,15 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
   end
 
   defp build_menu_first_part(socket, menu_id, %{email: email} = user_state, active_item) do
-    next_action_count = NextAction.Context.count_next_actions(user_state)
-    support_count = Support.Context.count_open_tickets()
+    next_action_count = NextAction.Public.count_next_actions(user_state)
+    support_count = Support.Public.count_open_tickets()
 
     []
     |> append(
       live_item(socket, menu_id, :console, user_state, active_item),
       can_access?(user_state, Link.Console)
     )
-    |> append(live_item(socket, menu_id, :permissions, user_state, active_item), admin?(email))
+    |> append(live_item(socket, menu_id, :admin, user_state, active_item), admin?(email))
     |> append(
       live_item(socket, menu_id, :support, user_state, active_item, true, support_count),
       admin?(email)
@@ -66,10 +65,14 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
     )
     |> append(
       live_item(socket, menu_id, :pools, user_state, active_item),
-      user_state.coordinator
+      has_pools?(user_state)
     )
     |> append(live_item(socket, menu_id, :marketplace, user_state, active_item))
     |> append(live_item(socket, menu_id, :todo, user_state, active_item, true, next_action_count))
+    |> append(
+      live_item(socket, menu_id, :funding, user_state, active_item),
+      can_access?(user_state, Budget.FundingPage)
+    )
   end
 
   defp build_menu_second_part(socket, menu_id, %{email: email} = user_state, active_item) do
@@ -85,5 +88,9 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
 
   defp append(list, extra, condition \\ true) do
     if condition, do: list ++ [extra], else: list
+  end
+
+  defp has_pools?(user) do
+    not Enum.empty?(Pool.Public.list_owned(user))
   end
 end

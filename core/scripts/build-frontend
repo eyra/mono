@@ -10,4 +10,4 @@ npm install
 
 npx -y -i browserslist@latest
 npx browserslist --update-db
-npm run deploy
+npm --openssl-legacy-provider run deploy

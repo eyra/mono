@@ -6,7 +6,7 @@ defmodule Core.Accounts.UserNotifier do
   }
 
   defp deliver_later(email) do
-    Email.Context.deliver_later(email)
+    Email.Public.deliver_later(email)
   end
 
   @doc """

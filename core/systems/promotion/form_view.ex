@@ -12,7 +12,6 @@ defmodule Systems.Promotion.FormView do
   alias Frameworks.Pixel.Form.{Form, TextInput, TextArea, PhotoInput, UrlInput}
   alias Frameworks.Pixel.Selector.Selector
   alias Frameworks.Pixel.ImagePreview
-  alias Frameworks.Pixel.Button.SecondaryAlpineButton
 
   prop(props, :any, required: true)
 
@@ -20,11 +19,11 @@ defmodule Systems.Promotion.FormView do
   data(validate?, :boolean)
   data(changeset, :any)
   data(uploads, :any)
-  data(focus, :any, default: "")
 
   data(published?, :boolean)
   data(image_info, :string)
   data(theme_labels, :list)
+  data(image_picker_button, :any)
 
   @impl true
   def process_file(
@@ -74,33 +73,64 @@ defmodule Systems.Promotion.FormView do
     }
   end
 
+  # Initial update
   def update(
         %{
           id: id,
           props: %{
-            entity: %{image_id: image_id} = entity,
+            entity: entity,
             validate?: validate?,
             themes_module: themes_module
           }
         },
         socket
       ) do
-    changeset = Promotion.Model.changeset(entity, :create, %{})
-    image_info = ImageHelpers.get_image_info(image_id, 400, 300)
-    theme_labels = themes_module.labels(entity.themes)
-
     {
       :ok,
       socket
       |> init_file_uploader(:photo)
-      |> assign(id: id)
-      |> assign(entity: entity)
-      |> assign(changeset: changeset)
-      |> assign(image_info: image_info)
-      |> assign(theme_labels: theme_labels)
-      |> assign(validate?: validate?)
+      |> assign(
+        id: id,
+        entity: entity,
+        validate?: validate?,
+        themes_module: themes_module
+      )
+      |> update_changeset()
+      |> update_image_info()
+      |> update_image_picker_button()
+      |> update_theme_labels()
       |> validate_for_publish()
     }
+  end
+
+  defp update_changeset(%{assigns: %{entity: entity}} = socket) do
+    changeset = Promotion.Model.changeset(entity, :create, %{})
+    socket |> assign(changeset: changeset)
+  end
+
+  defp update_image_info(%{assigns: %{entity: %{image_id: image_id}}} = socket) do
+    image_info = ImageHelpers.get_image_info(image_id, 400, 300)
+    socket |> assign(image_info: image_info)
+  end
+
+  defp update_image_picker_button(%{assigns: %{myself: myself}} = socket) do
+    image_picker_button = %{
+      action: %{type: :send, event: "open_image_picker", target: myself},
+      face: %{
+        type: :secondary,
+        text_color: "text-primary",
+        label: dgettext("eyra-promotion", "search.different.image.button")
+      }
+    }
+
+    socket |> assign(image_picker_button: image_picker_button)
+  end
+
+  defp update_theme_labels(
+         %{assigns: %{entity: %{themes: themes}, themes_module: themes_module}} = socket
+       ) do
+    theme_labels = themes_module.labels(themes)
+    socket |> assign(theme_labels: theme_labels)
   end
 
   # Save
@@ -109,6 +139,7 @@ defmodule Systems.Promotion.FormView do
 
     socket
     |> save(changeset)
+    |> update_theme_labels()
     |> validate_for_publish()
   end
 
@@ -138,6 +169,18 @@ defmodule Systems.Promotion.FormView do
     }
   end
 
+  def handle_event("open_image_picker", _, socket) do
+    send(self(), {:show_image_picker, initial_image_query(socket)})
+    {:noreply, socket}
+  end
+
+  defp initial_image_query(%{assigns: %{entity: entity}}) do
+    case entity.themes do
+      nil -> ""
+      themes -> themes |> Enum.join(" ")
+    end
+  end
+
   @impl true
   def render(assigns) do
     ~F"""
@@ -146,7 +189,7 @@ defmodule Systems.Promotion.FormView do
       <Title2>{dgettext("eyra-promotion", "form.title")}</Title2>
       <BodyLarge>{dgettext("eyra-promotion", "form.description")}</BodyLarge>
       <Spacing value="M" />
-      <Form id={@id} changeset={@changeset} change_event="save" focus={@focus} target={@myself}>
+      <Form id={@id} changeset={@changeset} change_event="save" target={@myself}>
         <TextInput field={:title} label_text={dgettext("eyra-promotion", "title.label")} />
         <TextInput field={:subtitle} label_text={dgettext("eyra-promotion", "subtitle.label")} />
 
@@ -160,15 +203,9 @@ defmodule Systems.Promotion.FormView do
         <Title3>{dgettext("eyra-promotion", "image.title")}</Title3>
         <Body>{dgettext("eyra-promotion", "image.label")}</Body>
         <Spacing value="XS" />
-        <div class="flex flex-row">
+        <div class="flex flex-row gap-4">
           <ImagePreview image_url={@image_info.url} placeholder="" />
-          <Spacing value="S" direction="l" />
-          <div class="flex-wrap">
-            <SecondaryAlpineButton
-              click="$parent.image_picker = true, $parent.$parent.$parent.overlay = true"
-              label={dgettext("eyra-promotion", "search.different.image.button")}
-            />
-          </div>
+          <DynamicButton vm={@image_picker_button} />
         </div>
         <Spacing value="XL" />
 

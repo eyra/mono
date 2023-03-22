@@ -27,6 +27,7 @@ defmodule Systems.DataDonation.DonatePage do
     DataDonation
   }
 
+  data(tabbar_id, :string)
   data(result, :any)
   data(tool, :any)
   data(user, :any)
@@ -40,11 +41,13 @@ defmodule Systems.DataDonation.DonatePage do
 
   @impl true
   def mount(%{"id" => id, "session" => session} = _params, _session, socket) do
-    vm = DataDonation.Context.get(id)
+    vm = DataDonation.Public.get(id)
     tabs = create_tabs(vm, session)
 
+    tabbar_id = "data_donation_donate/#{id}"
+
     {:ok,
-     assign(socket, id: id, vm: vm, session: session, tabs: tabs)
+     assign(socket, tabbar_id: tabbar_id, vm: vm, session: session, tabs: tabs)
      |> update_menus()}
   end
 
@@ -132,7 +135,7 @@ defmodule Systems.DataDonation.DonatePage do
       <div id="data-donation" phx-hook="PythonUploader" data-after-completion-tab="submit_data">
         <TabbarArea tabs={@tabs}>
           <ActionBar>
-            <Tabbar vm={%{initial_tab: :welcome}} />
+            <Tabbar id={@tabbar_id} initial_tab={:welcome} />
           </ActionBar>
           <TabbarContent />
           <TabbarFooter>

@@ -1,0 +1,55 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "node.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "org.content.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "user.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "full.name.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "identifier.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "short.name.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "type.selector.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "domains.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "org.members.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "org.admins.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "search.placeholder"
+msgstr ""

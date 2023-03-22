@@ -18,15 +18,9 @@ defmodule Systems.Email.Form do
 
   data(subject, :string)
   data(message, :string)
-  data(focus, :any)
   data(model, :map)
   data(changeset, :any)
   data(validate?, :boolean)
-
-  # Prevents overwrite of current state
-  def update(%{focus: field}, socket) do
-    {:ok, socket |> assign(focus: field)}
-  end
 
   # Prevents overwrite of current state
   def update(_params, %{assigns: %{changeset: _}} = socket) do
@@ -55,17 +49,8 @@ defmodule Systems.Email.Form do
         from_user: from_user,
         model: model,
         changeset: changeset,
-        validate?: false,
-        focus: ""
+        validate?: false
       )
-    }
-  end
-
-  @impl true
-  def handle_event("focus", %{"field" => field}, socket) do
-    {
-      :noreply,
-      socket |> assign(focus: field)
     }
   end
 
@@ -112,7 +97,7 @@ defmodule Systems.Email.Form do
           socket |> assign(model: model)
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          socket |> assign(focus: "", changeset: changeset, validate?: true)
+          socket |> assign(changeset: changeset, validate?: true)
       end
 
     {:noreply, socket}
@@ -130,14 +115,7 @@ defmodule Systems.Email.Form do
   @impl true
   def render(assigns) do
     ~F"""
-    <Form
-      id="mail_form"
-      changeset={@changeset}
-      change_event="update"
-      submit="send"
-      target={@myself}
-      focus={@focus}
-    >
+    <Form id="mail_form" changeset={@changeset} change_event="update" submit="send" target={@myself}>
       <div class="text-title6 font-title6 leading-snug">{dgettext("eyra-email", "recipients.label")} <span class="text-primary">{Enum.count(@users)}</span></div>
       <Spacing value="XXS" />
       <div class="max-h-mailto overflow-scroll border-2 border-grey3 rounded p-4">

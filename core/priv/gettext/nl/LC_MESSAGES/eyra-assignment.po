@@ -41,16 +41,16 @@ msgstr "Jouw Panl ID"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "earned.label"
-msgstr "verdiend"
+msgstr "%{amount} verdiend"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "pending.label"
-msgstr "in afwachting"
+msgstr "%{amount} in afwachting"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "togo.label"
-msgstr "te gaan"
+msgstr "%{amount} te gaan"
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "student.account.target"
+msgid "pool.target"
 msgstr "%{target} credits vereist"

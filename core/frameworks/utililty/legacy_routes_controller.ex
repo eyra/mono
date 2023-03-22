@@ -11,7 +11,7 @@ defmodule Frameworks.Utility.LegacyRoutesController do
   # task/:type/:id/callback -> assignment/:id/callback
   def task_callback(%{assigns: %{current_user: user}} = conn, %{"type" => "campaign", "id" => id}) do
     %{promotable_assignment: %{crew: crew}} =
-      Campaign.Context.get!(id, promotable_assignment: [:crew])
+      Campaign.Public.get!(id, promotable_assignment: [:crew])
 
     case crew do
       nil ->
@@ -19,7 +19,7 @@ defmodule Frameworks.Utility.LegacyRoutesController do
 
       crew ->
         # expect one assignment here
-        assignments = Assignment.Context.get_by_crew!(crew)
+        assignments = Assignment.Public.get_by_crew!(crew)
         redirect_to_live(conn, Systems.Assignment.CallbackPage, assignments)
     end
   end

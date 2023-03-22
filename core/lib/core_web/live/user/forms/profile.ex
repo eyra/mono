@@ -14,7 +14,6 @@ defmodule CoreWeb.User.Forms.Profile do
   data(entity, :any)
   data(uploads, :any)
   data(changeset, :any, default: nil)
-  data(focus, :any, default: "")
 
   @impl true
   def process_file(
@@ -88,7 +87,7 @@ defmodule CoreWeb.User.Forms.Profile do
       <MarginY id={:page_top} />
       <FormArea>
         <Title2>{dgettext("eyra-account", "profile.title")}</Title2>
-        <Form id="main_form" changeset={@changeset} change_event="save" target={@myself} focus={@focus}>
+        <Form id="main_form" changeset={@changeset} change_event="save" target={@myself}>
           <PhotoInput
             static_path={&CoreWeb.Endpoint.static_path/1}
             photo_url={@entity.photo_url}

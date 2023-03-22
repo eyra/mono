@@ -28,7 +28,7 @@ defmodule Systems.DataDonation.PortPage do
         %{"locale" => locale} = _session,
         socket
       ) do
-    vm = DataDonation.Context.get_port(id)
+    vm = DataDonation.Public.get_port(id)
 
     {:ok,
      assign(socket, id: id, vm: vm, session: session, locale: locale, participant: participant)

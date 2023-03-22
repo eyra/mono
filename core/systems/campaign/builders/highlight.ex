@@ -37,11 +37,11 @@ defmodule Systems.Campaign.Builders.Highlight do
   end
 
   def view_model(%Assignment.Model{} = assignment, :status) do
-    open? = Assignment.Context.open?(assignment)
+    has_open_spots? = Assignment.Public.has_open_spots?(assignment)
     status_title = dgettext("link-survey", "status.highlight.title")
 
     status_text =
-      if open? do
+      if has_open_spots? do
         dgettext("link-survey", "status.open.highlight.text")
       else
         dgettext("link-survey", "status.closed.highlight.text")
