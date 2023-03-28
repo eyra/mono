@@ -9,7 +9,6 @@
 msgid ""
 msgstr ""
 "Language: nl\n"
-"Plural-Forms: nplurals=2\n"
 
 #, elixir-autogen, elixir-format
 msgid "error.flash"
@@ -183,10 +182,6 @@ msgstr "Delen"
 msgid "share.dialog.text"
 msgstr "Deel je %{content} met een of meer %{group} uit de onderstaande lijst."
 
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pronoun.her"
-msgstr "haar"
-
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "menu.item.payments"
 msgstr "Menu"
@@ -202,10 +197,6 @@ msgstr "Benaderen"
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "notify.all"
 msgstr "Stuur notificatie"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "pronoun.him"
-msgstr "haar"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "menu.item.admin"

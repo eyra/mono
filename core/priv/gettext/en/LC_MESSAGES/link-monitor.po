@@ -9,7 +9,6 @@
 msgid ""
 msgstr ""
 "Language: en\n"
-"Plural-Forms: nplurals=2\n"
 
 #, elixir-autogen, elixir-format
 msgid "attention.title"
