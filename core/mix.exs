@@ -72,7 +72,7 @@ defmodule Core.MixProject do
       # Workaround for conflicting versions in ex_aws & ex_phone_number
       {:sweet_xml, "~> 0.7", override: true},
       # Deps
-      {:assent, "~> 0.1.23"},
+      {:assent, "~> 0.2.3"},
       {:bcrypt_elixir, "~> 2.0"},
       {:ex_aws_s3, "~> 2.0"},
       {:phoenix, "~> 1.6.12"},
