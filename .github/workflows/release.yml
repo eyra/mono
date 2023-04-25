@@ -14,7 +14,11 @@ jobs:
       MIX_ENV: prod
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.17'
 
       - name: Tag name
         id: tag
