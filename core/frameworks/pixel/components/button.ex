@@ -50,7 +50,6 @@ defmodule Frameworks.Pixel.Button do
   slot(:inner_block, required: true)
 
   def action(%{type: type} = assigns) do
-
     assigns =
       assign(assigns, %{
         function: action_function(type)

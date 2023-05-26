@@ -32,7 +32,6 @@ defmodule CoreWeb.User.ResetPasswordToken do
         %{"user" => password_params},
         %{assigns: %{user: user}} = socket
       ) do
-
     case Accounts.reset_user_password(user, password_params) do
       {:ok, _} ->
         {:noreply,

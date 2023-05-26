@@ -35,7 +35,7 @@ defmodule Frameworks.Pixel.Square do
       {:active, :error} -> "text-error"
       _ -> "text-grey2"
     end
-end
+  end
 
   attr(:icon, :any, default: nil)
   attr(:title, :string, required: true)

@@ -276,6 +276,7 @@ defmodule Systems.Assignment.Public do
 
   defp run_create_reward(%Assignment.Model{budget: budget} = assignment, %User{} = user, amount) do
     idempotence_key = idempotence_key(assignment, user)
+
     case Budget.Public.create_reward(budget, amount, user, idempotence_key) do
       {:ok, %{reward: reward}} -> {:ok, reward}
       {:error, error} -> {:error, error}
