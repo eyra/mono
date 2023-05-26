@@ -25,6 +25,7 @@ import { registerAPNSDeviceToken } from "./apns";
 import "./100vh-fix";
 import { ViewportResize } from "./viewport_resize";
 import { Toggle } from "./toggle";
+import { LiveView, Field } from "./live_view";
 import { Tabbar, TabbarItem, TabbarFooterItem } from "./tabbar";
 import { PythonUploader } from "./python_uploader";
 import { Clipboard } from "./clipboard";
@@ -93,6 +94,8 @@ let Hooks = {
   Clipboard,
   ViewportResize,
   Toggle,
+  LiveView,
+  Field,
   Tabbar,
   TabbarItem,
   TabbarFooterItem,

@@ -1,16 +1,16 @@
 defmodule Frameworks.Pixel.ImagePreview do
   @moduledoc false
-  use Surface.Component
+  use CoreWeb, :html
 
-  prop(image_url, :string)
-  prop(placeholder, :string, required: true)
+  attr(:image_url, :string)
+  attr(:placeholder, :string, required: true)
 
-  prop(shape, :string,
+  attr(:shape, :string,
     default: "w-image-preview sm:w-image-preview-sm h-image-preview sm:h-image-preview-sm rounded"
   )
 
-  def render(assigns) do
-    ~F"""
+  def image_preview(assigns) do
+    ~H"""
     <div class={"overflow-hidden bg-grey4 border-2 border-grey4 #{@shape}"}>
       <img
         class="object-cover w-full h-full"

@@ -4,7 +4,6 @@ defprotocol CoreWeb.User.Service do
 end
 
 defimpl CoreWeb.User.Service, for: Phoenix.LiveView.Socket do
-  # socket inside Surface component
   def is_logged_in?(%{assigns: %{__assigns__: %{user: user}}}), do: user != nil
   def is_logged_in?(%{assigns: %{current_user: _user}}), do: true
   def is_logged_in?(_), do: false

@@ -1,17 +1,9 @@
 defmodule Frameworks.Pixel.ShareView do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
-  alias CoreWeb.UI.UserListItemSmall
+  alias CoreWeb.UI.UserListItem
 
-  prop(content_id, :number, required: true)
-  prop(content_name, :string, required: true)
-  prop(group_name, :string, required: true)
-  prop(users, :list, required: true)
-  prop(shared_users, :list)
-
-  data(filtered_users, :list)
-  data(close_button, :map)
-
+  @impl true
   def update(
         %{
           id: id,
@@ -99,136 +91,69 @@ defmodule Frameworks.Pixel.ShareView do
     socket
   end
 
+  # data(filtered_users, :list)
+  # data(close_button, :map)
+
+  attr(:content_id, :integer, required: true)
+  attr(:content_name, :string, required: true)
+  attr(:group_name, :string, required: true)
+  attr(:users, :list, required: true)
+  attr(:shared_users, :list)
+
   @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div class="">
       <div class="flex flex-row">
         <div class="flex-grow">
           <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
-            {dgettext("eyra-ui", "share.dialog.title")}
+            <%= dgettext("eyra-ui", "share.dialog.title") %>
           </div>
         </div>
-        <DynamicButton vm={@close_button} />
+        <Button.dynamic {@close_button} />
       </div>
-      <Spacing value="S" />
+      <.spacing value="S" />
       <div class="rounded border-2 border-grey3 h-40 overflow-scroll">
         <div class="p-4 flex flex-col gap-3">
-          <div :for={user <- @shared_users} class="flex flex-row items-center gap-3">
-            <UserListItemSmall
-              user={user}
-              action_button={%{
-                action: %{type: :send, event: "remove", item: user.id, target: @myself},
-                face: %{type: :icon, icon: :remove}
-              }}
-            />
-          </div>
+          <%= for user <- @shared_users do %>
+            <div class="flex flex-row items-center gap-3">
+              <UserListItem.small
+                user={user}
+                action_button={%{
+                  action: %{type: :send, event: "remove", item: user.id, target: @myself},
+                  face: %{type: :icon, icon: :remove}
+                }}
+              />
+            </div>
+          <% end %>
         </div>
       </div>
-      <Spacing value="L" />
+      <.spacing value="L" />
 
       <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
-        {String.capitalize(@group_name)}
+        <%= String.capitalize(@group_name) %>
       </div>
-      <Spacing value="S" />
+      <.spacing value="S" />
       <div class="text-bodymedium font-body sm:text-bodylarge">
-        {dgettext("eyra-ui", "share.dialog.text", content: @content_name, group: @group_name)}
+        <%= dgettext("eyra-ui", "share.dialog.text", content: @content_name, group: @group_name) %>
       </div>
-      <Spacing value="M" />
+      <.spacing value="M" />
       <div class="rounded border-2 border-grey3 h-40 overflow-scroll">
         <div class="p-4 flex flex-col gap-3">
-          <div :for={user <- @filtered_users} class="flex flex-row items-center gap-3">
-            <UserListItemSmall
-              user={user}
-              action_button={%{
-                action: %{type: :send, event: "add", item: user.id, target: @myself},
-                face: %{type: :icon, icon: :add}
-              }}
-            />
-          </div>
+          <%= for user <- @filtered_users do %>
+            <div class="flex flex-row items-center gap-3">
+              <UserListItem.small
+                user={user}
+                action_button={%{
+                  action: %{type: :send, event: "add", item: user.id, target: @myself},
+                  face: %{type: :icon, icon: :add}
+                }}
+              />
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
     """
-  end
-end
-
-defmodule Frameworks.Pixel.ShareView.Example do
-  use Surface.Catalogue.Example,
-    subject: Frameworks.Pixel.ShareView,
-    catalogue: Frameworks.Pixel.Catalogue,
-    title: "Share view",
-    height: "812px",
-    direction: "vertical",
-    container: {:div, class: ""}
-
-  data(users, :list,
-    default: [
-      %{
-        id: 2,
-        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
-      },
-      %{
-        id: 3,
-        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
-      },
-      %{id: 4, profile: %{fullname: Faker.Person.name(), photo_url: nil}},
-      %{
-        id: 5,
-        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
-      },
-      %{
-        id: 6,
-        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
-      },
-      %{
-        id: 7,
-        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
-      },
-      %{id: 8, profile: %{fullname: Faker.Person.name(), photo_url: nil}},
-      %{id: 9, profile: %{fullname: Faker.Person.name(), photo_url: nil}},
-      %{
-        id: 10,
-        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
-      },
-      %{
-        id: 11,
-        profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url(32, 32)}
-      }
-    ]
-  )
-
-  data(shared_users, :list,
-    default: [
-      %{id: 1, profile: %{fullname: Faker.Person.name(), photo_url: Faker.Avatar.image_url()}}
-    ]
-  )
-
-  def render(assigns) do
-    ~F"""
-    <ShareView
-      id={:share_view_example}
-      content_id={1}
-      content_name="campaign"
-      group_name="researchers"
-      users={@users}
-      shared_users={@shared_users}
-    />
-    """
-  end
-
-  def handle_info(%{module: Frameworks.Pixel.ShareView, action: :close}, socket) do
-    IO.puts("Close")
-    {:noreply, socket}
-  end
-
-  def handle_info(%{module: Frameworks.Pixel.ShareView, action: %{add: user}}, socket) do
-    IO.puts("Add: #{user.fullname}")
-    {:noreply, socket}
-  end
-
-  def handle_info(%{module: Frameworks.Pixel.ShareView, action: %{remove: user}}, socket) do
-    IO.puts("Remove: #{user.fullname}")
-    {:noreply, socket}
   end
 end

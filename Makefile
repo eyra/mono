@@ -32,7 +32,7 @@ format/%: FORCE
 .PHONY: credo
 credo: ${MIX_PROJECTS:%=credo/%}
 credo/%: FORCE
-	cd $* && mix credo
+	cd $* && mix credo --all
 
 .PHONY: compile
 compile: ${MIX_PROJECTS:%=%/_build}

@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title><%= Meta.bundle_title() %></title>
+    <%= csrf_meta_tag() %>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, height=device-height, viewport-fit=cover, user-scalable=no, initial-scale=1.0" />
+    <meta name="theme-color" content="#4272ef">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/index.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="/css/app.css"
+    />
+    <script src="/js/app.js" defer></script>
+  </head>
+  <body class="font-body bg-grey5 scrollbar-hide" x-data="{ overlay: false}" >
+    <div class="fixed z-10 w-full h-full bg-black bg-opacity-20" x-show="overlay"></div>
+    <div class="flex flex-row">
+      <div class="flex flex-col w-full">
+        <div class="flex-grow">
+
+            <!-- inner content -->
+            <div class="flex flex-row">
+                <div class="w-0 md:w-sidepadding flex-shrink-0">
+                </div>
+                <div class="flex-1">
+                    <div x-data="{native_menu: false, mobile_menu: false}" @toggle-native-menu.window="native_menu = !native_menu">
+                        <div class="flex flex-col w-full h-viewport">
+                            <div class="flex-wrap">
+                                <Navigation.stripped_navbar icon={"/images/icons/#{Meta.bundle()}.svg"} />
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex flex-col h-full border-t border-l border-b border-grey4">
+                                    <div class="bg-white">
+                                        <Frameworks.Pixel.Hero.small title={@status} />
+                                    </div>
+                                    <div class="flex-1 bg-white">
+                                        <div class="flex flex-row">
+                                            <div class="flex-1">
+
+                                                <!-- Content Area -->
+                                                <div class="flex w-full {{ @class }}">
+                                                    <div class="flex-grow mx-6 lg:mx-14">
+                                                        <div class="w-full pt-6 md:pt-8 lg:pt-14">
+                                                            <%= @inner_content %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Content Area -->
+
+                                            </div>
+                                            <div class="w-0 md:w-sidepadding">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <.footer />
+                                </div>
+                            </div>
+                            <div class="pb-0 md:pb-10 bg-grey5">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- inner content -->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

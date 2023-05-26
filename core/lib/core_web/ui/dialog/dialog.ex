@@ -1,27 +1,28 @@
 defmodule CoreWeb.UI.Dialog do
-  use CoreWeb.UI.Component
+  use CoreWeb, :html
 
-  alias Frameworks.Pixel.Button.DynamicButton
+  alias Frameworks.Pixel.Button
 
-  prop(title, :string, required: true)
-  prop(text, :string, required: true)
-  prop(buttons, :string, default: [])
+  attr(:title, :string, required: true)
+  attr(:text, :string, required: true)
+  attr(:buttons, :list, default: [])
+  slot(:inner_block)
 
-  slot(default)
-
-  def render(assigns) do
-    ~F"""
+  def dialog(assigns) do
+    ~H"""
     <div class="p-8 bg-white shadow-2xl min-w-dialog-width sm:min-w-dialog-width-sm rounded">
       <div class="flex flex-col gap-4 sm:gap-8">
         <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
-          {@title}
+          <%= @title %>
         </div>
         <div class="text-bodymedium font-body sm:text-bodylarge">
-          {@text}
+          <%= @text %>
         </div>
-        <#slot />
+        <%= render_slot(@inner_block) %>
         <div class="flex flex-row gap-4">
-          <DynamicButton :for={button <- @buttons} vm={button} />
+          <%= for button <- @buttons do %>
+            <Button.dynamic {button} />
+          <% end %>
         </div>
       </div>
     </div>

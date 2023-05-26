@@ -265,18 +265,27 @@ defmodule Systems.Assignment.Public do
 
       Multi.new()
       |> Multi.run(:reward, fn _, _ ->
-        case create_reward(assignment, user, reward_amount) do
-          {:ok, %{reward: reward}} -> {:ok, reward}
-          {:error, error} -> {:error, error}
-        end
+        run_create_reward(assignment, user, reward_amount)
       end)
       |> Multi.run(:member, fn _, _ ->
-        case Crew.Public.apply_member(crew, user, expire_at) do
-          {:ok, %{member: member}} -> {:ok, member}
-          {:error, error} -> {:error, error}
-        end
+        run_apply_member(crew, user, expire_at)
       end)
       |> Repo.transaction()
+    end
+  end
+
+  defp run_create_reward(%Assignment.Model{budget: budget} = assignment, %User{} = user, amount) do
+    idempotence_key = idempotence_key(assignment, user)
+    case Budget.Public.create_reward(budget, amount, user, idempotence_key) do
+      {:ok, %{reward: reward}} -> {:ok, reward}
+      {:error, error} -> {:error, error}
+    end
+  end
+
+  def run_apply_member(%Crew.Model{} = crew, user, expire_at) do
+    case Crew.Public.apply_member(crew, user, expire_at) do
+      {:ok, %{member: member}} -> {:ok, member}
+      {:error, error} -> {:error, error}
     end
   end
 
@@ -593,11 +602,6 @@ defmodule Systems.Assignment.Public do
 
     multi
     |> Budget.Public.rollback_deposit(idempotence_key)
-  end
-
-  defp create_reward(%Assignment.Model{budget: budget} = assignment, %User{} = user, amount) do
-    idempotence_key = idempotence_key(assignment, user)
-    Budget.Public.create_reward(budget, amount, user, idempotence_key)
   end
 
   def idempotence_key(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do

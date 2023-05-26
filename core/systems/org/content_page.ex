@@ -3,21 +3,12 @@ defmodule Systems.Org.ContentPage do
   use CoreWeb.Layouts.Workspace.Component, :admin
   use CoreWeb.UI.Responsive.Viewport
 
-  alias CoreWeb.UI.Navigation.{
-    ActionBar,
-    TabbarArea,
-    Tabbar,
-    TabbarContent
-  }
+  alias CoreWeb.UI.Tabbar
+  alias CoreWeb.UI.Navigation
 
   alias Systems.{
     Org
   }
-
-  data(tabbar_id, :string)
-  data(node, :map)
-  data(tabs, :list)
-  data(bar_size, :number)
 
   @impl true
   def mount(%{"id" => id}, %{"locale" => locale}, socket) do
@@ -63,10 +54,10 @@ defmodule Systems.Org.ContentPage do
     tabs = [
       %{
         id: :node,
-        ready?: true,
+        ready: true,
         title: dgettext("eyra-org", "node.title"),
         type: :fullpage,
-        component: Systems.Org.NodeContentView,
+        live_component: Systems.Org.NodeContentView,
         props: %{
           locale: locale,
           node: node
@@ -74,10 +65,10 @@ defmodule Systems.Org.ContentPage do
       },
       %{
         id: :users,
-        ready?: true,
+        ready: true,
         title: dgettext("eyra-org", "user.title"),
         type: :fullpage,
-        component: Systems.Org.UserView,
+        live_component: Systems.Org.UserView,
         props: %{
           locale: locale
         }
@@ -91,16 +82,19 @@ defmodule Systems.Org.ContentPage do
   defp tabbar_size({:unknown, _}), do: :unknown
   defp tabbar_size(bp), do: value(bp, :narrow, sm: %{30 => :wide})
 
+  # data(tabbar_id, :string)
+  # data(node, :map)
+  # data(tabs, :list)
+  # data(bar_size, :number)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace title={dgettext("eyra-org", "org.content.title")} menus={@menus}>
-      <TabbarArea tabs={@tabs}>
-        <ActionBar>
-          <Tabbar id={@tabbar_id} size={@tabbar_size} />
-        </ActionBar>
-        <TabbarContent />
-      </TabbarArea>
-    </Workspace>
+    ~H"""
+    <.workspace title={dgettext("eyra-org", "org.content.title")} menus={@menus}>
+      <Navigation.action_bar>
+        <Tabbar.container id={@tabbar_id} tabs={@tabs} size={@tabbar_size} />
+      </Navigation.action_bar>
+      <Tabbar.content tabs={@tabs} />
+    </.workspace>
     """
   end
 end

@@ -1,15 +1,9 @@
 defmodule Systems.DataDonation.WelcomeSheet do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
-  alias Frameworks.Pixel.Text.Title1
+  alias Frameworks.Pixel.Text
 
-  prop(props, :map, required: true)
-
-  data(recipient, :string)
-  data(researcher, :map)
-  data(research_description, :map)
-  data(platform, :string)
-
+  @impl true
   def update(
         %{
           id: id,
@@ -62,36 +56,43 @@ defmodule Systems.DataDonation.WelcomeSheet do
     )
   end
 
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <SheetArea>
+    ~H"""
+    <div>
+      <Area.content>
+      <Margin.y id={:page_top} />
+      <Area.sheet>
         <div class="flex flex-col sm:flex-row gap-10">
           <div>
-            <Title1>{dgettext("eyra-data-donation", "welcome.title")}</Title1>
+            <Text.title1><%= dgettext("eyra-data-donation", "welcome.title") %></Text.title1>
             <div class="flex flex-col gap-4">
-              <div :for={description <- descriptions(assigns)} class="text-bodylarge font-body">
-                {raw(description)}
-              </div>
+              <%= for description <- descriptions(assigns) do %>
+                <div class="text-bodylarge font-body">
+                  <%= raw(description) %>
+                </div>
+              <% end %>
             </div>
           </div>
-          <div class="flex-shrink-0" :if={@researcher}>
-            <div class="rounded-lg bg-grey5">
-              <img src={@researcher.institution.image} alt={@researcher.institution.name}>
-              <div class="flex flex-col gap-3 p-4">
-                <div class="text-title7 font-title7 text-grey1">
-                  {@researcher.name}
-                </div>
-                <div class="text-caption font-caption text-grey1">
-                  {@researcher.job_title}
+          <%= if @researcher do %>
+            <div class="flex-shrink-0">
+              <div class="rounded-lg bg-grey5">
+                <img src={@researcher.institution.image} alt={@researcher.institution.name}>
+                <div class="flex flex-col gap-3 p-4">
+                  <div class="text-title7 font-title7 text-grey1">
+                    <%= @researcher.name %>
+                  </div>
+                  <div class="text-caption font-caption text-grey1">
+                    <%= @researcher.job_title %>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          <% end %>
         </div>
-      </SheetArea>
-    </ContentArea>
+      </Area.sheet>
+      </Area.content>
+    </div>
     """
   end
 end

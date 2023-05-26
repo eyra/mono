@@ -1,5 +1,5 @@
 defmodule Systems.Lab.CheckInItem do
-  use CoreWeb.UI.Component
+  use CoreWeb, :html
 
   import CoreWeb.Gettext
   alias CoreWeb.UI.Timestamp
@@ -7,14 +7,6 @@ defmodule Systems.Lab.CheckInItem do
   alias Systems.{
     Lab
   }
-
-  prop(id, :string, required: true)
-  prop(status, :atom, required: true)
-  prop(email, :string)
-  prop(subject, :integer)
-  prop(time_slot, :any)
-  prop(check_in_date, :any)
-  prop(target, :any)
 
   defp title(%{email: nil, subject: subject}), do: "Subject #{subject}"
   defp title(%{email: email}), do: email
@@ -79,128 +71,31 @@ defmodule Systems.Lab.CheckInItem do
       }
     ]
 
-  @impl true
-  def render(assigns) do
-    ~F"""
+  attr(:id, :string, required: true)
+  attr(:status, :atom, required: true)
+  attr(:email, :string)
+  attr(:subject, :integer)
+  attr(:time_slot, :any)
+  attr(:check_in_date, :any)
+  attr(:target, :any)
+
+  def check_in_item(assigns) do
+    ~H"""
     <tr class="h-12">
       <td class="pr-8 font-body text-bodymedium sm:text-bodylarge flex-wrap text-white">
-        {title(assigns)}
+        <%= title(assigns) %>
       </td>
       <td class="pr-8 font-body text-bodysmall sm:text-bodymedium text-white">
-        <span class="whitespace-pre-wrap">{message(assigns)}</span>
+        <span class="whitespace-pre-wrap"><%= message(assigns) %></span>
       </td>
       <td>
         <div class="flex flex-row gap-4">
-          <DynamicButton :for={button <- buttons(assigns)} vm={button} />
+          <%= for button <- buttons(assigns) do %>
+            <Button.dynamic {button} />
+          <% end %>
         </div>
       </td>
     </tr>
-    """
-  end
-end
-
-defmodule Systems.Lab.CheckInItem.Example do
-  use Surface.Catalogue.Example,
-    subject: Systems.Lab.CheckInItem,
-    catalogue: Frameworks.Pixel.Catalogue,
-    title: "Check in list item",
-    height: "812px",
-    direction: "vertical",
-    container: {:div, class: ""}
-
-  data(item1, :map,
-    default: %{
-      id: 1,
-      subject: 1,
-      status: :reservation_available,
-      time_slot: %{location: "SBE lab", start_time: CoreWeb.UI.Timestamp.now()}
-    }
-  )
-
-  data(item2, :map,
-    default: %{
-      id: 2,
-      subject: 12,
-      status: :reservation_expired,
-      time_slot: %{location: "SBE lab", start_time: CoreWeb.UI.Timestamp.now()}
-    }
-  )
-
-  data(item3, :map,
-    default: %{
-      id: 3,
-      subject: 123,
-      status: :reservation_cancelled,
-      time_slot: %{location: "SBE lab", start_time: CoreWeb.UI.Timestamp.now()}
-    }
-  )
-
-  data(item4, :map,
-    default: %{
-      id: 4,
-      subject: 1234,
-      status: :signed_up_already,
-      time_slot: %{location: "SBE lab", start_time: CoreWeb.UI.Timestamp.now()}
-    }
-  )
-
-  data(item5, :map,
-    default: %{
-      id: 5,
-      email: "e.vanderveen@eyra.co",
-      status: :reservation_available,
-      time_slot: %{location: "SBE lab", start_time: CoreWeb.UI.Timestamp.now()}
-    }
-  )
-
-  data(item6, :map,
-    default: %{
-      id: 6,
-      email: "e.vanderveen@eyra.co",
-      status: :signed_up_already,
-      subject: 6
-    }
-  )
-
-  data(item7, :map,
-    default: %{
-      id: 7,
-      email: "e.vanderveen@eyra.co",
-      status: :reservation_not_found
-    }
-  )
-
-  data(item8, :map,
-    default: %{
-      id: 8,
-      email: "e.vanderveen@eyra.co",
-      status: :reservation_cancelled,
-      time_slot: %{location: "SBE lab", start_time: CoreWeb.UI.Timestamp.now()}
-    }
-  )
-
-  @impl true
-  def handle_event(event, %{"item" => item}, socket) do
-    IO.puts("#{event}: #{item}")
-
-    {:noreply, socket}
-  end
-
-  @impl true
-  def render(assigns) do
-    ~F"""
-    <div class="p-8 rounded-lg bg-grey1">
-      <table>
-        <CheckInItem {...@item1} />
-        <CheckInItem {...@item2} />
-        <CheckInItem {...@item3} />
-        <CheckInItem {...@item4} />
-        <CheckInItem {...@item5} />
-        <CheckInItem {...@item7} />
-        <CheckInItem {...@item8} />
-        <CheckInItem {...@item6} />
-      </table>
-    </div>
     """
   end
 end

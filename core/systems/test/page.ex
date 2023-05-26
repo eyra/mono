@@ -9,8 +9,6 @@ defmodule Systems.Test.Page do
     Test
   }
 
-  data(model, :map)
-
   @impl true
   def mount(%{"id" => id}, _session, socket) do
     {
@@ -24,10 +22,12 @@ defmodule Systems.Test.Page do
   defoverridable handle_view_model_updated: 1
   def handle_view_model_updated(socket), do: socket
 
+  # data(model, :map)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <div>{@vm.title}</div>
-    <div>{@vm.subtitle}</div>
+    ~H"""
+    <div><%= @vm.title %></div>
+    <div><%= @vm.subtitle %></div>
     """
   end
 end

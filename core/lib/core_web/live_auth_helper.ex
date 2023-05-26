@@ -21,7 +21,7 @@ defmodule CoreWeb.LiveAssignHelper do
       def mount(params, session, socket) do
         socket =
           socket
-          |> Phoenix.LiveView.assign(current_user: user(session))
+          |> Phoenix.Component.assign(current_user: user(session))
 
         super(params, session, socket)
       end

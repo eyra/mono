@@ -6,16 +6,13 @@ defmodule Systems.DataDonation.FlowPage do
 
   import Phoenix.LiveView
 
-  use Surface.LiveView, layout: {CoreWeb.LayoutView, "live.html"}
-  use CoreWeb.LiveUri
-  use CoreWeb.LiveLocale
-  use CoreWeb.LiveAssignHelper
+  use CoreWeb, :live_view
   use CoreWeb.Layouts.Stripped.Component, :data_donation
 
   import CoreWeb.Gettext
   alias CoreWeb.Router.Helpers, as: Routes
-  alias CoreWeb.Layouts.Stripped.Component, as: Stripped
-  alias CoreWeb.UI.Navigation.{ActionBar, Tabbar, TabbarContent, TabbarFooter, TabbarArea}
+  alias CoreWeb.UI.Tabbar
+  alias CoreWeb.UI.Navigation
 
   alias Systems.DataDonation.{
     WelcomeSheet,
@@ -27,17 +24,17 @@ defmodule Systems.DataDonation.FlowPage do
     DataDonation
   }
 
-  data(result, :any)
-  data(tool, :any)
-  data(user, :any)
-  data(loading, :boolean, default: true)
-  data(step2, :css_class, default: "hidden")
-  data(step3, :css_class, default: "hidden")
-  data(step4, :css_class, default: "hidden")
-  data(summary, :any, default: "")
-  data(extracted, :any, default: "")
-  data(tabs, :any)
-  data(locale, :any)
+  # data(result, :any)
+  # data(tool, :any)
+  # data(user, :any)
+  # data(loading, :boolean, default: true)
+  # data(step2, :string, default: "hidden")
+  # data(step3, :string, default: "hidden")
+  # data(step4, :string, default: "hidden")
+  # data(summary, :any, default: "")
+  # data(extracted, :any, default: "")
+  # data(tabs, :any)
+  # data(locale, :any)
 
   @impl true
   def mount(
@@ -62,7 +59,7 @@ defmodule Systems.DataDonation.FlowPage do
         action: nil,
         title: dgettext("eyra-data-donation", "tabbar.item.welcome"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.welcome.forward"),
-        component: WelcomeSheet,
+        live_component: WelcomeSheet,
         props: vm,
         type: :sheet,
         align: :left
@@ -72,7 +69,7 @@ defmodule Systems.DataDonation.FlowPage do
         action: nil,
         title: dgettext("eyra-data-donation", "tabbar.item.file_selection"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.file_selection.forward"),
-        component: ExecuteSheet,
+        live_component: ExecuteSheet,
         props: %{script: script_content, platform: platform},
         type: :sheet
       },
@@ -81,7 +78,7 @@ defmodule Systems.DataDonation.FlowPage do
         action: nil,
         title: dgettext("eyra-data-donation", "tabbar.item.submit_data"),
         forward_title: dgettext("eyra-data-donation", "tabbar.item.submit_data.forward"),
-        component: SubmitDataSheet,
+        live_component: SubmitDataSheet,
         props: Map.put(vm, :session, session),
         type: :sheet
       }
@@ -131,24 +128,21 @@ defmodule Systems.DataDonation.FlowPage do
 
   @impl true
   def render(assigns) do
-    ~F"""
-    <Stripped user={@current_user} menus={@menus}>
+    ~H"""
+    <.stripped user={@current_user} menus={@menus}>
       <div
         id="data-donation"
         phx-hook="DataDonationHook"
         data-after-completion-tab="submit_data"
         data-locale={@locale}
       >
-        <TabbarArea tabs={@tabs}>
-          <ActionBar>
-            <Tabbar id={:tabbar} initial_tab={:welcome} />
-          </ActionBar>
-          <TabbarContent />
-          <TabbarFooter>
-          </TabbarFooter>
-        </TabbarArea>
+        <Navigation.action_bar>
+          <Tabbar.container id={:tabbar} tabs={@tabs} initial_tab={:welcome} />
+        </Navigation.action_bar>
+        <Tabbar.content tabs={@tabs}/>
+        <Tabbar.footer tabs={@tabs} />
       </div>
-    </Stripped>
+    </.stripped>
     """
   end
 

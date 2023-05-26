@@ -1,22 +1,19 @@
 defmodule CoreWeb.UI.Empty do
-  @moduledoc """
-  A line.
-  """
-  use CoreWeb.UI.Component
+  use CoreWeb, :html
 
-  alias Frameworks.Pixel.Text.Title1
+  alias Frameworks.Pixel.Text
 
-  prop(title, :string, required: true)
-  prop(body, :string, required: true)
-  prop(illustration, :string, default: "cards")
+  attr(:title, :string, required: true)
+  attr(:body, :string, required: true)
+  attr(:illustration, :string, default: "cards")
 
-  def render(assigns) do
-    ~F"""
+  def empty(assigns) do
+    ~H"""
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
       <div>
-        <Title1>{@title}</Title1>
+        <Text.title1><%= @title %></Text.title1>
         <div class="text-bodymedium sm:text-bodylarge font-body">
-          {@body}
+          <%= @body %>
         </div>
       </div>
       <div class="w-full mt-6 md:mt-0">

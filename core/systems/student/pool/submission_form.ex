@@ -1,23 +1,16 @@
 defmodule Systems.Student.Pool.SubmissionForm do
   use CoreWeb.LiveForm
 
-  alias Frameworks.Pixel.Selector.Selector
-  alias Frameworks.Pixel.Text.Title3
+  alias Frameworks.Pixel.Selector
+  alias Frameworks.Pixel.Text
 
   alias Systems.{
     Pool,
     Student
   }
 
-  prop(entity, :map, required: true)
-  prop(user, :map, required: true)
-
-  data(criteria, :any)
-  data(pool, :any)
-  data(pool_labels, :any)
-  data(changeset, :any)
-
   # Handle Selector Update
+  @impl true
   def update(
         %{active_item_id: active_item_id, selector_id: :pools},
         %{assigns: %{pool_labels: pool_labels, submission: submission}} = socket
@@ -35,6 +28,7 @@ defmodule Systems.Student.Pool.SubmissionForm do
     }
   end
 
+  @impl true
   def update(
         %{id: id, entity: %{pool: active_pool} = submission, user: user},
         socket
@@ -65,19 +59,30 @@ defmodule Systems.Student.Pool.SubmissionForm do
     |> save(changeset)
   end
 
+  # data(criteria, :any)
+  # data(pool, :any)
+  # data(pool_labels, :any)
+  # data(changeset, :any)
+
+  attr(:entity, :map, required: true)
+  attr(:user, :map, required: true)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <Title3 margin="mb-5 sm:mb-8">{dgettext("link-studentpool", "submission.selector.title")}</Title3>
-      <Selector
+    ~H"""
+    <div>
+      <Area.content>
+      <Text.title3 margin="mb-5 sm:mb-8"><%= dgettext("link-studentpool", "submission.selector.title") %></Text.title3>
+      <.live_component
+        module={Selector}
         id={:pools}
         items={@pool_labels}
         type={:radio}
         parent={%{type: __MODULE__, id: @id}}
         optional?={false}
       />
-      <Spacing value="L" />
-    </ContentArea>
+      <.spacing value="L" />
+      </Area.content>
+    </div>
     """
   end
 end

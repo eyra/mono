@@ -1,8 +1,8 @@
 defmodule Systems.Admin.SystemView do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
-  alias Frameworks.Pixel.Text.Title2
-  alias Frameworks.Pixel.{Square, SquareContainer}
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Square
 
   alias Systems.{
     Budget,
@@ -10,15 +10,8 @@ defmodule Systems.Admin.SystemView do
     Pool
   }
 
-  prop(props, :any)
-
-  data(bank_accounts, :list)
-  data(bank_account_items, :list)
-
-  data(citizen_pools, :list)
-  data(citizen_pool_items, :list)
-
   # Popup cancel
+  @impl true
   def update(%{module: _, action: "cancel"}, socket) do
     {
       :ok,
@@ -28,6 +21,7 @@ defmodule Systems.Admin.SystemView do
   end
 
   # Popup saved
+  @impl true
   def update(%{module: _, action: "saved"}, socket) do
     {
       :ok,
@@ -39,7 +33,8 @@ defmodule Systems.Admin.SystemView do
   end
 
   # Initial update
-  def update(%{id: id, props: %{user: user, locale: locale}}, socket) do
+  @impl true
+  def update(%{id: id, user: user, locale: locale}, socket) do
     {
       :ok,
       socket
@@ -107,6 +102,7 @@ defmodule Systems.Admin.SystemView do
     }
   end
 
+  @impl true
   def handle_event(
         "edit_bank_account",
         %{"item" => item},
@@ -125,6 +121,7 @@ defmodule Systems.Admin.SystemView do
     {:noreply, socket |> show_popup(popup)}
   end
 
+  @impl true
   def handle_event(
         "create_bank_account",
         _,
@@ -141,6 +138,7 @@ defmodule Systems.Admin.SystemView do
     {:noreply, socket |> show_popup(popup)}
   end
 
+  @impl true
   def handle_event(
         "edit_citizen_pool",
         %{"item" => item},
@@ -159,6 +157,7 @@ defmodule Systems.Admin.SystemView do
     {:noreply, socket |> show_popup(popup)}
   end
 
+  @impl true
   def handle_event(
         "create_citizen_pool",
         _,
@@ -185,34 +184,42 @@ defmodule Systems.Admin.SystemView do
     socket
   end
 
+  attr(:user, :list, required: true)
+  attr(:locale, :list, required: true)
+
+  @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div>
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <Title2>{dgettext("eyra-admin", "system.bank.accounts.title")} <span class="text-primary">{Enum.count(@bank_account_items)}</span></Title2>
-        <SquareContainer>
-          <Square
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <Text.title2><%= dgettext("eyra-admin", "system.bank.accounts.title") %> <span class="text-primary"><%= Enum.count(@bank_account_items) %></span></Text.title2>
+        <Square.container>
+          <Square.item
             state={:transparent}
             title={dgettext("eyra-admin", "system.bank.accounts.new.title")}
             icon={{:static, "add_tertiary"}}
             action={%{type: :send, event: "create_bank_account", item: "first", target: @myself}}
           />
-          <Square :for={bank_account_item <- @bank_account_items} {...bank_account_item} />
-        </SquareContainer>
-        <Spacing value="XL" />
+          <%= for bank_account_item <- @bank_account_items do %>
+            <Square.item {bank_account_item} />
+          <% end %>
+        </Square.container>
+        <.spacing value="XL" />
 
-        <Title2>{dgettext("eyra-admin", "system.citizen.pools.title")} <span class="text-primary">{Enum.count(@citizen_pool_items)}</span></Title2>
-        <SquareContainer>
-          <Square
+        <Text.title2><%= dgettext("eyra-admin", "system.citizen.pools.title") %> <span class="text-primary"><%= Enum.count(@citizen_pool_items) %></span></Text.title2>
+        <Square.container>
+          <Square.item
             state={:transparent}
             title={dgettext("eyra-admin", "system.citizen.pools.new.title")}
             icon={{:static, "add_tertiary"}}
             action={%{type: :send, event: "create_citizen_pool", item: "first", target: @myself}}
           />
-          <Square :for={citizen_pool_item <- @citizen_pool_items} {...citizen_pool_item} />
-        </SquareContainer>
-      </ContentArea>
+          <%= for citizen_pool_item <- @citizen_pool_items do %>
+            <Square.item {citizen_pool_item} />
+          <% end %>
+        </Square.container>
+      </Area.content>
     </div>
     """
   end

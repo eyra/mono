@@ -9,19 +9,14 @@ defmodule Systems.DataDonation.ContentPage do
 
   import CoreWeb.Gettext
 
-  alias Frameworks.Pixel.Hero.HeroSmall
+  alias Frameworks.Pixel.Hero
 
-  alias CoreWeb.ImageCatalogPicker
+  alias CoreWeb.UI.ImageCatalogPicker
 
   alias Systems.{
     DataDonation,
     Promotion
   }
-
-  data(tool_id, :any)
-  data(promotion_id, :any)
-  data(changesets, :any)
-  data(initial_image_query, :any)
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
@@ -63,8 +58,13 @@ defmodule Systems.DataDonation.ContentPage do
     {:noreply, socket}
   end
 
+  # data(tool_id, :any)
+  # data(promotion_id, :any)
+  # data(changesets, :any)
+  # data(initial_image_query, :any)
+  @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div>
       <div x-data="{ open: false }">
         <div class="fixed z-20 left-0 top-0 w-full h-full" x-show="open">
@@ -73,7 +73,8 @@ defmodule Systems.DataDonation.ContentPage do
               class="w-5/6 md:w-popup-md lg:w-popup-lg"
               @click.away="open = false, $parent.overlay = false"
             >
-              <ImageCatalogPicker
+              <.live_component
+                module={ImageCatalogPicker}
                 static_path={&CoreWeb.Endpoint.static_path/1}
                 initial_query={initial_image_query(assigns)}
                 id={:image_picker}
@@ -82,11 +83,16 @@ defmodule Systems.DataDonation.ContentPage do
             </div>
           </div>
         </div>
-        <HeroSmall title={dgettext("eyra-data-donation", "content.title")} />
-        <DataDonation.ToolForm id={:tool_form} entity_id={@tool_id} />
-        <Promotion.FormView
+        <Hero.small title={dgettext("eyra-data-donation", "content.title")} />
+        <.live_component
+          module={DataDonation.ToolForm}
+          id={:tool_form}
+          entity_id={@tool_id}
+        />
+        <.live_component
+          module={Promotion.FormView}
           id={:promotion_form}
-          props={%{entity_id: @promotion_id, themes_module: Themes}}
+          props={%{entity_id: @promotion_id, themes_module: Themes, validate?: false, active_field: nil}}
         />
       </div>
     </div>

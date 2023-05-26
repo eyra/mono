@@ -23,7 +23,7 @@ defmodule CoreWeb.Routes do
 
         plug(:fetch_live_flash)
         plug(:fetch_meta_info)
-        plug(:put_root_layout, {CoreWeb.LayoutView, :root})
+        plug(:put_root_layout, {CoreWeb.Layouts, :root})
       end
 
       pipeline :browser_secure do

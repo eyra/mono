@@ -1,8 +1,9 @@
 defmodule Systems.Campaign.FundingView do
   use CoreWeb.LiveForm
 
-  alias Frameworks.Pixel
-  alias Pixel.{Text, Square, SquareContainer, Form}
+  import Frameworks.Pixel.Form
+
+  alias Frameworks.Pixel.Square
 
   alias Systems.{
     Budget,
@@ -13,21 +14,10 @@ defmodule Systems.Campaign.FundingView do
 
   @minimal_reward_per_minute 10
 
-  prop(props, :map, required: true)
-
-  data(budgets, :map)
-  data(selected_budget, :map)
-  data(budget_items, :list)
-  data(open_spot_count, :integer)
-  data(shortage_label, :string)
-  data(reward_label, :string)
-  data(reward_description, :string)
-  data(fund_description, :string)
-  data(changeset, :any, default: nil)
-
   # Handle update from parent
+  @impl true
   def update(
-        %{props: %{assignment: assignment, submission: submission}},
+        %{assignment: assignment, submission: submission, active_field: active_field},
         %{assigns: %{id: _id}} = socket
       ) do
     {
@@ -37,6 +27,7 @@ defmodule Systems.Campaign.FundingView do
         assignment: assignment,
         submission: submission
       )
+      |> update_active_field(active_field)
       |> update_state()
       |> update_shortage()
       |> update_reward_description()
@@ -47,15 +38,15 @@ defmodule Systems.Campaign.FundingView do
   end
 
   # Initial update
+  @impl true
   def update(
         %{
           id: id,
-          props: %{
-            assignment: %{budget: budget} = assignment,
-            submission: submission,
-            user: user,
-            locale: locale
-          }
+          assignment: %{budget: budget} = assignment,
+          submission: submission,
+          user: user,
+          locale: locale,
+          active_field: active_field
         },
         socket
       ) do
@@ -71,7 +62,8 @@ defmodule Systems.Campaign.FundingView do
         changeset: changeset,
         selected_budget: budget,
         user: user,
-        locale: locale
+        locale: locale,
+        active_field: active_field
       )
       |> update_state()
       |> update_reward()
@@ -82,6 +74,14 @@ defmodule Systems.Campaign.FundingView do
       |> update_budget_items()
     }
   end
+
+  defp update_active_field(%{assigns: %{active_field: current}} = socket, new)
+       when new != current do
+    socket
+    |> assign(active_field: new)
+  end
+
+  defp update_active_field(socket, _new), do: socket
 
   defp update_state(
          %{
@@ -292,34 +292,53 @@ defmodule Systems.Campaign.FundingView do
   defp guard_number_nil(number) when is_number(number), do: number
   defp guard_number_nil(number) when is_binary(number), do: String.to_integer(number)
 
+  # data(budgets, :map)
+  # data(selected_budget, :map)
+  # data(budget_items, :list)
+  # data(open_spot_count, :integer)
+  # data(shortage_label, :string)
+  # data(reward_label, :string)
+  # data(reward_description, :string)
+  # data(fund_description, :string)
+  # data(changeset, :any, default: nil)
+
+  attr(:assignment, :map, required: true)
+  attr(:submission, :map, required: true)
+  attr(:user, :map, required: true)
+  attr(:locale, :string, required: true)
+
   @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <Text.Title2>{dgettext("eyra-campaign", "funding.title")}</Text.Title2>
-      <Text.Body>{dgettext("eyra-campaign", "funding.description", amount: @shortage_label, count: @open_spot_count)}</Text.Body>
-      <Spacing value="M" />
+    ~H"""
+    <div>
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <Text.title2><%= dgettext("eyra-campaign", "funding.title") %></Text.title2>
+        <Text.body><%= dgettext("eyra-campaign", "funding.description", amount: @shortage_label, count: @open_spot_count) %></Text.body>
+        <.spacing value="M" />
 
-      <Text.Title4>{dgettext("eyra-campaign", "funding.fund.title")}</Text.Title4>
-      <Spacing value="XS" />
-      <Text.Body>{@fund_description}</Text.Body>
-      <Spacing value="XS" />
-      <SquareContainer>
-        <Square :for={budget_item <- @budget_items} {...budget_item} />
-      </SquareContainer>
-      <Spacing value="L" />
+        <Text.title4><%= dgettext("eyra-campaign", "funding.fund.title") %></Text.title4>
+        <.spacing value="XS" />
+        <Text.body><%= @fund_description %></Text.body>
+        <.spacing value="XS" />
+        <Square.container>
+          <%= for budget_item <- @budget_items do %>
+            <Square.item {budget_item} />
+          <% end %>
+        </Square.container>
+        <.spacing value="L" />
 
-      <Form.Form id="main_form" changeset={@changeset} change_event="change_reward" target={@myself}>
-        <Text.Title4>{dgettext("eyra-campaign", "funding.reward.title")}</Text.Title4>
-        <Spacing value="XS" />
-        <Text.Body>{@reward_description}</Text.Body>
-        <Spacing value="XS" />
-        <div class="w-form">
-          <Form.NumberInput field={:reward_value} label_text={@reward_label} />
-        </div>
-      </Form.Form>
-    </ContentArea>
+        <.form id="main_form" :let={form} for={@changeset} phx-change="change_reward" phx-target={@myself} >
+          <Text.title4><%= dgettext("eyra-campaign", "funding.reward.title") %></Text.title4>
+          <.spacing value="XS" />
+          <Text.body><%= @reward_description %></Text.body>
+          <.spacing value="XS" />
+          <div class="w-form">
+            <.number_input form={form} field={:reward_value} label_text={@reward_label} active_field={@active_field} />
+          </div>
+        </.form>
+      </Area.content>
+    </div>
     """
   end
 end

@@ -8,13 +8,13 @@ defmodule Systems.Pool.SubmissionPage do
 
   import CoreWeb.Gettext
 
-  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias CoreWeb.UI.Navigation.ButtonBar
-  alias CoreWeb.UI.Member
+  import CoreWeb.Layouts.Workspace.Component
+  import CoreWeb.UI.Navigation, only: [button_bar: 1]
+  import CoreWeb.UI.Member
   alias CoreWeb.UI.Timestamp
-  alias CoreWeb.UI.ContentList
+  import CoreWeb.UI.Content
 
-  alias Frameworks.Pixel.Text.{Title1, Title3, SubHead}
+  alias Frameworks.Pixel.Text
 
   alias Systems.{
     Pool
@@ -186,51 +186,61 @@ defmodule Systems.Pool.SubmissionPage do
 
   @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace title={dgettext("link-studentpool", "submission.title")} menus={@menus}>
-      <div
-        :if={show_dialog?(@dialog)}
-        class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20"
-      >
-        <div class="flex flex-row items-center justify-center w-full h-full">
-          <PlainDialog {...@dialog} />
+    ~H"""
+    <.workspace title={dgettext("link-studentpool", "submission.title")} menus={@menus}>
+      <%= if show_dialog?(@dialog) do %>
+        <div
+          class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20"
+        >
+          <div class="flex flex-row items-center justify-center w-full h-full">
+            <.plain_dialog {@dialog} />
+          </div>
         </div>
-      </div>
+      <% end %>
+
       <div>
-        <ContentArea>
-          <MarginY id={:page_top} />
-          <Member :if={@vm.member} vm={@vm.member} />
-          <Spacing value="XL" />
-          <Title1>{@vm.title}</Title1>
-          <Spacing value="L" />
-          <SubHead>{@vm.byline}</SubHead>
-          <Spacing value="L" />
-        </ContentArea>
+        <Area.content>
+          <Margin.y id={:page_top} />
+          <%= if @vm.member do %>
+            <.member {@vm.member} />
+          <% end %>
+          <.spacing value="XL" />
+          <Text.title1><%= @vm.title %></Text.title1>
+          <.spacing value="L" />
+          <Text.sub_head><%= @vm.byline %></Text.sub_head>
+          <.spacing value="L" />
+        </Area.content>
 
-        <Dynamic.LiveComponent
-          :if={Map.has_key?(@vm, :form)}
-          id={:submission_pool_form}
-          module={@vm.form.component}
-          {...@vm.form.props}
-        />
+        <%= if Map.has_key?(@vm, :form) do %>
+          <.live_component
+            id={:submission_pool_form}
+            module={@vm.form.component}
+            {@vm.form.props}
+          />
+        <% end %>
 
-        <ContentArea :if={Enum.count(@vm.excluded_campaigns) > 0}>
-          <Title3 margin="mb-5 sm:mb-8">{dgettext("link-studentpool", "excluded.campaigns.title")}</Title3>
-          <ContentList items={@vm.excluded_campaigns} />
-          <Spacing value="M" />
-        </ContentArea>
+        <%= if Enum.count(@vm.excluded_campaigns) > 0 do %>
+          <Area.content>
+            <Text.title3 margin="mb-5 sm:mb-8"><%= dgettext("link-studentpool", "excluded.campaigns.title") %></Text.title3>
+            <.list items={@vm.excluded_campaigns} />
+            <.spacing value="M" />
+          </Area.content>
+        <% end %>
 
-        <Spacing value="S" />
-        <Pool.SubmissionView
+        <.spacing value="S" />
+
+        <.live_component
           id={:submission_form}
-          props={%{entity: @vm.submission, validate?: @vm.validate?}}
+          module={Pool.SubmissionView}
+          submission={@vm.submission}
+          validate?={@vm.validate?}
         />
       </div>
-      <ContentArea>
-        <MarginY id={:button_bar_top} />
-        <ButtonBar buttons={create_actions(assigns)} />
-      </ContentArea>
-    </Workspace>
+      <Area.content>
+        <Margin.y id={:button_bar_top} />
+        <.button_bar buttons={create_actions(assigns)} />
+      </Area.content>
+    </.workspace>
     """
   end
 end

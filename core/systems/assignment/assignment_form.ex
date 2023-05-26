@@ -1,42 +1,34 @@
 defmodule Systems.Assignment.AssignmentForm do
   use CoreWeb.LiveForm
 
-  alias Frameworks.Pixel.Text.Title2
-
   alias Systems.{
     Assignment
   }
 
-  prop(props, :map)
-
-  data(entity, :map)
-  data(callback_url, :string)
-  data(validate?, :boolean)
-  data(experiment, :map)
-  data(tool_id, :number)
-  data(tool_form, :number)
-  data(user, :map)
-
-  # Handle update from parent after attempt to publish
-  def update(%{props: %{validate?: new}}, %{assigns: %{validate?: current}} = socket)
-      when new != current do
+  # Handle update from parent
+  @impl true
+  def update(
+        %{validate?: validate?, active_field: active_field},
+        %{assigns: %{entity: _}} = socket
+      ) do
     {
       :ok,
       socket
-      |> assign(validate?: new)
+      |> update_validate?(validate?)
+      |> update_active_field(active_field)
     }
   end
 
   # Handle initial update
+  @impl true
   def update(
         %{
           id: id,
-          props: %{
-            entity: %{id: entity_id, assignable_experiment: experiment} = entity,
-            validate?: validate?,
-            user: user,
-            uri_origin: uri_origin
-          }
+          entity: %{id: entity_id, assignable_experiment: experiment} = entity,
+          validate?: validate?,
+          active_field: active_field,
+          user: user,
+          uri_origin: uri_origin
         },
         socket
       ) do
@@ -58,45 +50,65 @@ defmodule Systems.Assignment.AssignmentForm do
         tool_id: tool_id,
         tool_form: tool_form,
         validate?: validate?,
+        active_field: active_field,
         user: user,
         callback_url: callback_url
       )
     }
   end
 
+  defp update_active_field(%{assigns: %{active_field: current}} = socket, new)
+       when new != current do
+    socket
+    |> assign(active_field: new)
+  end
+
+  defp update_active_field(socket, _new), do: socket
+
+  defp update_validate?(%{assigns: %{validate?: current}} = socket, new) when new != current do
+    socket
+    |> assign(validate?: new)
+  end
+
+  defp update_validate?(socket, _new), do: socket
+
   defp forms(%{
          tool_form: tool_form,
          tool_id: tool_id,
          experiment: experiment,
          validate?: validate?,
+         active_field: active_field,
          callback_url: callback_url,
          user: user
        }) do
     [
       %{
-        component: Assignment.ExperimentForm,
+        live_component: Assignment.ExperimentForm,
         props: %{
           id: :experiment_form,
           entity: experiment,
-          validate?: validate?
+          validate?: validate?,
+          active_field: active_field
         }
       },
       %{
-        component: tool_form,
+        live_component: tool_form,
         props: %{
           id: :tool_form,
           entity_id: tool_id,
           validate?: validate?,
+          active_field: active_field,
           callback_url: callback_url,
           user: user
         }
       },
       %{
-        component: Assignment.EthicalForm,
+        live_component: Assignment.EthicalForm,
         props: %{
           id: :ethical_form,
           entity: experiment,
-          validate?: validate?
+          validate?: validate?,
+          active_field: active_field
         }
       }
     ]
@@ -104,19 +116,22 @@ defmodule Systems.Assignment.AssignmentForm do
 
   defp forms(_), do: []
 
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea class="mb-4">
-      <MarginY id={:page_top} />
-      <Title2>{dgettext("eyra-assignment", "form.title")}</Title2>
-      <Spacing value="M" />
+    ~H"""
+    <div>
+      <Area.content class="mb-4">
+        <Margin.y id={:page_top} />
+        <Text.title2><%= dgettext("eyra-assignment", "form.title") %></Text.title2>
+        <.spacing value="M" />
 
-      <div class="flex flex-col gap-12 lg:gap-16">
-        {#for form <- forms(assigns)}
-          <Dynamic.LiveComponent module={form.component} {...form.props} />
-        {/for}
-      </div>
-    </ContentArea>
+        <div class="flex flex-col gap-12 lg:gap-16">
+          <%= for form <- forms(assigns) do %>
+            <.live_component module={form.live_component} {form.props} />
+          <% end %>
+        </div>
+      </Area.content>
+    </div>
     """
   end
 end

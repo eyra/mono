@@ -5,8 +5,8 @@ defmodule Systems.Assignment.CallbackPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :survey
 
-  alias Frameworks.Pixel.Text.{Title1, Title3, BodyLarge}
-  alias Frameworks.Pixel.Button.PrimaryLiveViewButton
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Button
 
   alias Systems.{
     Assignment
@@ -57,34 +57,44 @@ defmodule Systems.Assignment.CallbackPage do
     {:noreply, handle.(socket)}
   end
 
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace title={@vm.hero_title} menus={@menus}>
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <Title1>{@vm.title}</Title1>
-        <Spacing value="M" />
-        <div :if={@vm.state == :expired}>
-          <Title3>{dgettext("eyra-crew", "task.expired.subtitle")}</Title3>
-          <Spacing value="M" />
-          <BodyLarge>{dgettext("eyra-crew", "task.expired.text")}</BodyLarge>
-        </div>
-        <div :if={@vm.state == :tester}>
-          <Title3>{dgettext("eyra-crew", "tester.completed.subtitle")}</Title3>
-          <Spacing value="M" />
-          <BodyLarge>{dgettext("eyra-crew", "tester.completed.text")}</BodyLarge>
-        </div>
-        <div :if={@vm.state == :participant}>
-          <Title3>{dgettext("eyra-crew", "task.completed.title")}</Title3>
-          <Spacing value="M" />
-          <BodyLarge>{dgettext("eyra-crew", "task.completed.message.part1")}</BodyLarge>
-          <Spacing value="XS" />
-          <BodyLarge>{dgettext("eyra-crew", "task.completed.message.part2")}</BodyLarge>
-        </div>
-        <Spacing value="L" />
-        <PrimaryLiveViewButton label={@vm.call_to_action.label} event="call-to-action" />
-      </ContentArea>
-    </Workspace>
+    ~H"""
+    <.workspace title={@vm.hero_title} menus={@menus}>
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <Text.title1><%= @vm.title %></Text.title1>
+        <.spacing value="M" />
+        <%= if @vm.state == :expired do %>
+          <div>
+            <Text.title3><%= dgettext("eyra-crew", "task.expired.subtitle") %></Text.title3>
+            <.spacing value="M" />
+            <Text.body_large><%= dgettext("eyra-crew", "task.expired.text") %></Text.body_large>
+          </div>
+        <% end %>
+
+        <%= if @vm.state == :tester do %>
+          <div>
+            <Text.title3><%= dgettext("eyra-crew", "tester.completed.subtitle") %></Text.title3>
+            <.spacing value="M" />
+            <Text.body_large><%= dgettext("eyra-crew", "tester.completed.text") %></Text.body_large>
+          </div>
+        <% end %>
+
+        <%= if @vm.state == :participant do %>
+          <div>
+            <Text.title3><%= dgettext("eyra-crew", "task.completed.title") %></Text.title3>
+            <.spacing value="M" />
+            <Text.body_large><%= dgettext("eyra-crew", "task.completed.message.part1") %></Text.body_large>
+            <.spacing value="XS" />
+            <Text.body_large><%= dgettext("eyra-crew", "task.completed.message.part2") %></Text.body_large>
+          </div>
+        <% end %>
+
+        <.spacing value="L" />
+        <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action" />
+      </Area.content>
+    </.workspace>
     """
   end
 end

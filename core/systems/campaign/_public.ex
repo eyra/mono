@@ -324,6 +324,7 @@ defmodule Systems.Campaign.Public do
       {:error, %Ecto.Changeset{}}
 
   """
+
   def update(%Ecto.Changeset{} = changeset) do
     changeset
     |> Repo.update()

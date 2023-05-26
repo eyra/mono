@@ -2,10 +2,7 @@ defmodule Frameworks.Pixel.Spacing do
   @moduledoc """
   A line.
   """
-  use Surface.Component
-
-  prop(value, :string, required: true)
-  prop(direction, :string, default: "t")
+  use Phoenix.Component
 
   defp spacing("XXL", "t"), do: "mt-16 lg:mt-24"
   defp spacing("XL", "t"), do: "mt-12 lg:mt-16"
@@ -23,8 +20,11 @@ defmodule Frameworks.Pixel.Spacing do
   defp spacing("XS", "l"), do: "ml-4"
   defp spacing("XXS", "l"), do: "ml-2"
 
-  def render(assigns) do
-    ~F"""
+  attr(:value, :string, required: true)
+  attr(:direction, :string, default: "t")
+
+  def spacing(assigns) do
+    ~H"""
     <div class={"#{spacing(@value, @direction)}"} />
     """
   end

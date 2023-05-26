@@ -1,4 +1,4 @@
-defmodule CoreWeb.LayoutViewTest do
+defmodule CoreWeb.LayoutsTest do
   use CoreWeb.ConnCase, async: true
 
   # When testing helpers, you may want to import Phoenix.HTML and

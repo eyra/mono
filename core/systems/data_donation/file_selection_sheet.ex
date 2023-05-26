@@ -1,13 +1,9 @@
 defmodule Systems.DataDonation.FileSelectionSheet do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
-  alias Frameworks.Pixel.Text.{Title1, BodyMedium, BodyLarge}
+  alias Frameworks.Pixel.Text
 
-  prop(props, :map, required: true)
-
-  data(script, :string)
-  data(platform, :string)
-
+  @impl true
   def update(%{id: id, props: %{script: script, platform: platform}}, socket) do
     {:ok, assign(socket, id: id, script: script, platform: platform)}
   end
@@ -37,54 +33,56 @@ defmodule Systems.DataDonation.FileSelectionSheet do
     }
   end
 
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <SheetArea>
-        <Title1>{dgettext("eyra-data-donation", "extract.data.title")}</Title1>
+    ~H"""
+    <div>
+      <Area.content>
+      <Margin.y id={:page_top} />
+      <Area.sheet>
+        <Text.title1><%= dgettext("eyra-data-donation", "extract.data.title") %></Text.title1>
 
         <div class="select-file">
-          <BodyLarge>
-            {dgettext("eyra-data-donation", "file_selection.welcome.description", platform: @platform)}
-          </BodyLarge>
-          <Spacing value="M" />
+          <Text.body_large>
+            <%= dgettext("eyra-data-donation", "file_selection.welcome.description", platform: @platform) %>
+          </Text.body_large>
+          <.spacing value="M" />
           <div class="mb-3 w-96">
-            <Wrap>
-              <DynamicButton vm={select_button()} />
-            </Wrap>
+            <.wrap>
+              <Button.dynamic {select_button()} />
+            </.wrap>
             <input class="hidden" type="file" id="input-data-file" accept="application/zip, text/plain">
           </div>
-          <Spacing value="M" />
+          <.spacing value="M" />
         </div>
 
         <div class="hidden extract-data">
-          <BodyLarge>
-            {dgettext("eyra-data-donation", "selected.file.description")}
-          </BodyLarge>
-          <Spacing value="M" />
+          <Text.body_large>
+            <%= dgettext("eyra-data-donation", "selected.file.description") %>
+          </Text.body_large>
+          <.spacing value="M" />
           <div class="flex flex-row h-14 px-5 items-center bg-grey5 rounded">
             <div class="flex-grow selected-filename text-label font-label text-grey1">filename</div>
             <div>
               <div class="reset-button">
-                <DynamicButton vm={reset_button()} />
+                <Button.dynamic {reset_button()} />
               </div>
             </div>
           </div>
-          <Spacing value="M" />
+          <.spacing value="M" />
           <div class="extract-data-button">
-            <Wrap>
-              <DynamicButton vm={extract_button()} />
-            </Wrap>
+            <.wrap>
+              <Button.dynamic {extract_button()} />
+            </.wrap>
           </div>
-          <Spacing value="M" />
+          <.spacing value="M" />
         </div>
 
         <div class="hidden data-extraction">
-          <BodyLarge>
-            {dgettext("eyra-data-donation", "file.extracton.description")}
-          </BodyLarge>
-          <Spacing value="M" />
+          <Text.body_large>
+            <%= dgettext("eyra-data-donation", "file.extracton.description") %>
+          </Text.body_large>
+          <.spacing value="M" />
           <div class="bg-grey6 p-4">
             <div class="loading-indicator flex flex-row items-center gap-4">
               <div
@@ -92,20 +90,21 @@ defmodule Systems.DataDonation.FileSelectionSheet do
                 class="inline-block w-4 h-4 border-2 border-primary border-solid rounded-full animate-spin"
               >
               </div>
-              <BodyMedium>
-                {dgettext("eyra-data-donation", "data_extraction.processing.loading")}
-              </BodyMedium>
+              <Text.body_medium>
+                <%= dgettext("eyra-data-donation", "data_extraction.processing.loading") %>
+              </Text.body_medium>
             </div>
-            <code class="hidden">{@script}</code>
+            <code class="hidden"><%= @script %></code>
           </div>
-          <Spacing value="M" />
+          <.spacing value="M" />
         </div>
 
-        <BodyMedium color="text-grey2">
-          {dgettext("eyra-data-donation", "file_selection.note")}
-        </BodyMedium>
-      </SheetArea>
-    </ContentArea>
+        <Text.body_medium color="text-grey2">
+          <%= dgettext("eyra-data-donation", "file_selection.note") %>
+        </Text.body_medium>
+      </Area.sheet>
+      </Area.content>
+    </div>
     """
   end
 end

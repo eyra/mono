@@ -2,22 +2,18 @@ defmodule Systems.Assignment.EthicalForm do
   use CoreWeb.LiveForm
   use Frameworks.Pixel.Form.CheckboxHelpers
 
-  alias Frameworks.Pixel.Panel.Panel
-  alias Frameworks.Pixel.Text.{Title3, Title5, BodyMedium}
-  alias Frameworks.Pixel.Form.{Form, TextInput, Checkbox}
+  import Frameworks.Pixel.Form
+
+  alias Frameworks.Pixel.Panel
+  alias Frameworks.Pixel.Text
 
   alias Systems.{
     Assignment
   }
 
-  prop(entity, :map, required: true)
-  prop(validate?, :boolean, required: true)
-
-  data(ethical_label, :any)
-  data(changeset, :any)
-
   # Handle selector update
 
+  @impl true
   def update(
         %{active_item_ids: active_item_ids, selector_id: :ethical_approval},
         %{assigns: %{entity: entity}} = socket
@@ -29,9 +25,24 @@ defmodule Systems.Assignment.EthicalForm do
     }
   end
 
-  # Handle initial update
+  # Handle update from parent
+  @impl true
   def update(
-        %{id: id, entity: entity, validate?: validate?},
+        %{validate?: validate?, active_field: active_field},
+        %{assigns: %{entity: _}} = socket
+      ) do
+    {
+      :ok,
+      socket
+      |> update_validate?(validate?)
+      |> update_active_field(active_field)
+    }
+  end
+
+  # Handle initial update
+  @impl true
+  def update(
+        %{id: id, entity: entity, validate?: validate?, active_field: active_field},
         socket
       ) do
     changeset = Assignment.ExperimentModel.changeset(entity, :create, %{})
@@ -46,14 +57,33 @@ defmodule Systems.Assignment.EthicalForm do
     {
       :ok,
       socket
-      |> assign(id: id)
-      |> assign(entity: entity)
-      |> assign(changeset: changeset)
-      |> assign(ethical_label: ethical_label)
-      |> assign(validate?: validate?)
+      |> assign(
+        id: id,
+        entity: entity,
+        changeset: changeset,
+        ethical_label: ethical_label,
+        validate?: validate?,
+        active_field: active_field
+      )
       |> validate_for_publish()
     }
   end
+
+  defp update_active_field(%{assigns: %{active_field: current}} = socket, new)
+       when new != current do
+    socket
+    |> assign(active_field: new)
+  end
+
+  defp update_active_field(socket, _new), do: socket
+
+  defp update_validate?(%{assigns: %{validate?: current}} = socket, new) when new != current do
+    socket
+    |> assign(validate?: new)
+    |> validate_for_publish()
+  end
+
+  defp update_validate?(socket, _new), do: socket
 
   # Handle Events
 
@@ -108,30 +138,36 @@ defmodule Systems.Assignment.EthicalForm do
     |> Phoenix.HTML.safe_to_string()
   end
 
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Form id={@id} changeset={@changeset} change_event="save" target={@myself}>
-      <Title3>{dgettext("link-survey", "ethical.title")}</Title3>
-      <BodyMedium>{raw(dgettext("link-survey", "ethical.description", link: ethical_review_link()))}</BodyMedium>
-      <Spacing value="M" />
+    ~H"""
+    <div>
+      <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
+        <Text.title3><%= dgettext("link-survey", "ethical.title") %></Text.title3>
+        <Text.body_medium><%= raw(dgettext("link-survey", "ethical.description", link: ethical_review_link())) %></Text.body_medium>
+        <.spacing value="M" />
 
-      <Panel bg_color="bg-grey1">
-        <Title5 align="text-left" color="text-white">ERB code</Title5>
-        <Spacing value="S" />
-        <TextInput
-          field={:ethical_code}
-          placeholder={dgettext("eyra-account", "ehtical.code.label")}
-          background={:dark}
-        />
-        <Checkbox
-          field={:ethical_approval}
-          label_text={dgettext("link-survey", "ethical.label")}
-          label_color="text-white"
-          accent={:tertiary}
-          background={:dark}
-        />
-      </Panel>
-    </Form>
+        <Panel.flat bg_color="bg-grey1">
+          <Text.title5 align="text-left" color="text-white">ERB code</Text.title5>
+          <.spacing value="S" />
+          <.text_input
+            form={form}
+            field={:ethical_code}
+            placeholder={dgettext("eyra-account", "ehtical.code.label")}
+            background={:dark}
+            active_field={@active_field}
+          />
+          <.checkbox
+            form={form}
+            field={:ethical_approval}
+            label_text={dgettext("link-survey", "ethical.label")}
+            label_color="text-white"
+            accent={:tertiary}
+            background={:dark}
+          />
+        </Panel.flat>
+      </.form>
+    </div>
     """
   end
 end

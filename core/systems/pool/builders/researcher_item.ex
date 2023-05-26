@@ -16,7 +16,7 @@ defmodule Systems.Pool.Builders.ResearcherItem do
         }
       ) do
     role = dgettext("eyra-admin", "role.researcher")
-    action = %{type: :href, href: "mailto:#{email}?subject=Re: #{title}"}
+    action = %{type: :http_get, to: "mailto:#{email}?subject=Re: #{title}"}
 
     %{
       title: fullname,

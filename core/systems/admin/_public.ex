@@ -34,9 +34,11 @@ defmodule Systems.Admin.Public do
     admin?(email)
   end
 
-  def admin?(email) do
+  def admin?(email) when is_binary(email) do
     admin?(email_patterns(), email)
   end
+
+  def admin?(_), do: false
 
   defp email_patterns do
     Application.get_env(:core, :admins, [])

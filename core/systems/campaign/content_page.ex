@@ -10,26 +10,17 @@ defmodule Systems.Campaign.ContentPage do
   import CoreWeb.Gettext
   import Core.ImageCatalog, only: [image_catalog: 0]
 
-  alias CoreWeb.ImageCatalogPicker
+  alias CoreWeb.UI.ImageCatalogPicker
   alias Systems.Promotion.FormView, as: PromotionForm
-  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
+  import CoreWeb.Layouts.Workspace.Component
 
-  alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent, TabbarFooter}
+  alias CoreWeb.UI.Tabbar
+  alias CoreWeb.UI.Navigation
 
   alias Systems.{
     Campaign,
     Pool
   }
-
-  data(tabbar_id, :string)
-  data(validate?, :boolean, default: false)
-  data(initial_tab, :any)
-  data(actions, :map, default: [])
-  data(more_actions, :map, default: [])
-  data(tabbar_size, :any)
-  data(changesets, :any)
-  data(uri_origin, :any)
-  data(popup, :map)
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
@@ -52,7 +43,9 @@ defmodule Systems.Campaign.ContentPage do
         locale: locale,
         changesets: %{},
         dialog: nil,
-        popup: nil
+        popup: nil,
+        validate?: false,
+        active_field: nil
       )
       |> assign_viewport()
       |> assign_breakpoint()
@@ -99,6 +92,16 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   @impl true
+  def handle_event("active-field", field, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(active_field: field)
+      |> update_view_model()
+    }
+  end
+
+  @impl true
   def handle_event("delete", _params, socket) do
     item = dgettext("link-ui", "delete.confirm.campaign")
     title = String.capitalize(dgettext("eyra-ui", "delete.confirm.title", item: item))
@@ -111,7 +114,7 @@ defmodule Systems.Campaign.ContentPage do
   @impl true
   def handle_event("delete_confirm", _params, %{assigns: %{vm: %{id: campaign_id}}} = socket) do
     Campaign.Public.delete(campaign_id)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, CoreWeb.Console))}
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, Next.Console.Page))}
   end
 
   @impl true
@@ -209,7 +212,7 @@ defmodule Systems.Campaign.ContentPage do
         %{assigns: %{viewport: viewport, breakpoint: breakpoint}} = socket
       ) do
     popup = %{
-      view: ImageCatalogPicker,
+      module: ImageCatalogPicker,
       props: %{
         id: :image_picker,
         viewport: viewport,
@@ -445,27 +448,35 @@ defmodule Systems.Campaign.ContentPage do
   defp margin_x(:mobile), do: "mx-6"
   defp margin_x(_), do: "mx-10"
 
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace title={dgettext("link-survey", "content.title")} menus={@menus}>
-      <div id={:survey_content} phx-hook="ViewportResize">
-        <Popup :if={@popup}>
-          <div class={"#{margin_x(@breakpoint)} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg"}>
-            <Dynamic.LiveComponent module={@popup.view} {...@popup.props} />
-          </div>
-        </Popup>
-        <Popup :if={@dialog}>
-          <PlainDialog {...@dialog} />
-        </Popup>
-        <TabbarArea tabs={@vm.tabs}>
-          <ActionBar right_bar_buttons={@actions} more_buttons={@more_actions}>
-            <Tabbar id={@tabbar_id} initial_tab={@initial_tab} size={@tabbar_size} />
-          </ActionBar>
-          <TabbarContent />
-          <TabbarFooter />
-        </TabbarArea>
+    ~H"""
+    <.workspace title={dgettext("link-survey", "content.title")} menus={@menus}>
+      <div id="campaign" phx-hook="LiveView">
+        <div id={:survey_content} phx-hook="ViewportResize">
+
+          <%= if @popup do %>
+            <.popup>
+              <div class={"#{margin_x(@breakpoint)} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg"}>
+                <.live_component module={@popup.module} {@popup.props} />
+              </div>
+            </.popup>
+          <% end %>
+
+          <%= if @dialog do %>
+            <.popup>
+              <.plain_dialog {@dialog} />
+            </.popup>
+          <% end %>
+
+          <Navigation.action_bar right_bar_buttons={@actions} more_buttons={@more_actions}>
+            <Tabbar.container id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} size={@tabbar_size} />
+          </Navigation.action_bar>
+          <Tabbar.content tabs={@vm.tabs} />
+          <Tabbar.footer tabs={@vm.tabs} />
+        </div>
       </div>
-    </Workspace>
+    </.workspace>
     """
   end
 end

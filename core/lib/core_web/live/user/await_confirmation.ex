@@ -4,12 +4,10 @@ defmodule CoreWeb.User.AwaitConfirmation do
   """
   use CoreWeb, :live_view
 
-  alias Frameworks.Pixel.Text.Title2
+  alias Frameworks.Pixel.Text
 
   alias Core.Accounts
   alias Core.Accounts.User
-
-  data(changeset, :any)
 
   def mount(_params, _session, socket) do
     require_feature(:password_sign_in)
@@ -43,13 +41,17 @@ defmodule CoreWeb.User.AwaitConfirmation do
     end
   end
 
+  # data(changeset, :any)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <Title2>{dgettext("eyra-account", "await.confirmation.title")}</Title2>
+    ~H"""
+    <div>
+      <Area.content>
+      <Margin.y id={:page_top} />
+      <Text.title2><%= dgettext("eyra-account", "await.confirmation.title") %></Text.title2>
       <p>Please check your e-mail for a confirmation link.</p>
-    </ContentArea>
+      </Area.content>
+    </div>
     """
   end
 end

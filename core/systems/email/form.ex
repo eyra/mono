@@ -1,33 +1,26 @@
 defmodule Systems.Email.Form do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
   import Phoenix.LiveView
 
   alias Core.Accounts
   alias CoreWeb.UI.Timestamp
-  alias Frameworks.Pixel.Tag
-  alias Frameworks.Pixel.Form.{Form, TextInput, TextArea}
-  alias Frameworks.Pixel.Button.SubmitButton
-  use Bamboo.Phoenix, view: Systems.Email.EmailView
+  import Frameworks.Pixel.Tag
+  import Frameworks.Pixel.Form
+  alias Frameworks.Pixel.Button
+  use Bamboo.Phoenix, component: Systems.Email.EmailHTML
 
   alias Systems.{
     Email
   }
 
-  prop(users, :list)
-  prop(from_user, :map)
-
-  data(subject, :string)
-  data(message, :string)
-  data(model, :map)
-  data(changeset, :any)
-  data(validate?, :boolean)
-
   # Prevents overwrite of current state
+  @impl true
   def update(_params, %{assigns: %{changeset: _}} = socket) do
     {:ok, socket}
   end
 
   # Handle initial update
+  @impl true
   def update(%{id: id, users: users, from_user: %{email: from_email} = from_user}, socket) do
     # send a copy to sender, append email to end of list
     user_emails = users |> Enum.map(& &1.email)
@@ -112,49 +105,34 @@ defmodule Systems.Email.Form do
     |> Enum.map(&username(&1))
   end
 
+  # data(subject, :string)
+  # data(message, :string)
+  # data(model, :map)
+  # data(changeset, :any)
+  # data(validate?, :boolean)
+
+  attr(:users, :list)
+  attr(:from_user, :map)
+
   @impl true
   def render(assigns) do
-    ~F"""
-    <Form id="mail_form" changeset={@changeset} change_event="update" submit="send" target={@myself}>
-      <div class="text-title6 font-title6 leading-snug">{dgettext("eyra-email", "recipients.label")} <span class="text-primary">{Enum.count(@users)}</span></div>
-      <Spacing value="XXS" />
+    ~H"""
+    <.form id="mail_form" :let={form} for={@changeset} phx-change="update" phx-submit="send" phx-target={@myself} >
+      <div class="text-title6 font-title6 leading-snug"><%= dgettext("eyra-email", "recipients.label") %> <span class="text-primary"><%= Enum.count(@users) %></span></div>
+      <.spacing value="XXS" />
       <div class="max-h-mailto overflow-scroll border-2 border-grey3 rounded p-4">
         <div class="flex flex-row flex-wrap gap-x-4 gap-y-3 items-center">
-          <Tag :for={tag <- tags(assigns)} text={tag} />
+          <%= for tag <- tags(assigns) do %>
+            <.tag text={tag} />
+          <% end %>
         </div>
       </div>
-      <Spacing value="S" />
+      <.spacing value="S" />
 
-      <TextInput field={:title} label_text={dgettext("eyra-email", "title.label")} debounce="0" />
-      <TextArea field={:message} label_text={dgettext("eyra-email", "message.label")} debounce="0" />
-      <SubmitButton label={dgettext("eyra-email", "send.button")} />
-    </Form>
-    """
-  end
-end
-
-defmodule Systems.Email.Form.Example do
-  use Surface.Catalogue.Example,
-    subject: Systems.Email.Form,
-    catalogue: Frameworks.Pixel.Catalogue,
-    title: "Email Popup",
-    height: "1024px",
-    direction: "vertical",
-    container: {:div, class: ""}
-
-  def render(assigns) do
-    ~F"""
-    <Form
-      id={:email_form_example}
-      users={[
-        "e.vanderveen@eyra.co",
-        "a.m.mendrik@eyra.co",
-        "emielvdveen@gmail.com",
-        "pietje.puk@gmail.com",
-        "jantje.paardehaar@gmail.com",
-        "jantje.smid@gmail.com"
-      ]}
-    />
+      <.text_input form={form} field={:title} label_text={dgettext("eyra-email", "title.label")} debounce="0" />
+      <.text_area form={form} field={:message} label_text={dgettext("eyra-email", "message.label")} debounce="0" />
+      <Button.submit label={dgettext("eyra-email", "send.button")} />
+    </.form>
     """
   end
 end

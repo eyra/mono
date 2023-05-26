@@ -441,18 +441,11 @@ defmodule Systems.Pool.Public do
   end
 
   def published_status(submission) do
-    if Pool.SubmissionModel.schedule_ended?(submission) do
-      :closed
-    else
-      if Pool.SubmissionModel.completed?(submission) do
-        :closed
-      else
-        if Pool.SubmissionModel.scheduled?(submission) do
-          :scheduled
-        else
-          :released
-        end
-      end
+    cond do
+      Pool.SubmissionModel.schedule_ended?(submission) -> :closed
+      Pool.SubmissionModel.completed?(submission) -> :closed
+      Pool.SubmissionModel.scheduled?(submission) -> :scheduled
+      true -> :released
     end
   end
 

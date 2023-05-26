@@ -1,15 +1,15 @@
 defmodule Systems.Campaign.Builders.CampaignContentPage do
   import CoreWeb.Gettext
 
-  require Link.Enums.Themes
-  alias Link.Enums.Themes
-
   alias Systems.{
     Campaign,
     Assignment,
     Promotion,
     Pool
   }
+
+  require Campaign.Themes
+  alias Campaign.Themes
 
   def view_model(
         %Campaign.Model{} = campaign,
@@ -35,6 +35,7 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
           uri_path: uri_path,
           uri_origin: uri_origin,
           validate?: validate?,
+          active_field: active_field,
           locale: locale
         },
         url_resolver
@@ -42,7 +43,7 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
     submitted? = Pool.SubmissionModel.submitted?(submission)
     validate? = validate? or submitted?
 
-    tabs = create_tabs(campaign, validate?, user, uri_origin, locale)
+    tabs = create_tabs(campaign, validate?, active_field, user, uri_origin, locale)
 
     preview_path =
       url_resolver.(Promotion.LandingPage, id: promotion_id, preview: true, back: uri_path)
@@ -57,10 +58,10 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
     }
   end
 
-  defp create_tabs(campaign, validate?, user, uri_origin, locale) do
+  defp create_tabs(campaign, validate?, active_field, user, uri_origin, locale) do
     campaign
     |> get_tab_keys()
-    |> Enum.map(&create_tab(&1, campaign, validate?, user, uri_origin, locale))
+    |> Enum.map(&create_tab(&1, campaign, validate?, active_field, user, uri_origin, locale))
   end
 
   defp get_tab_keys(%{submission: %{pool: %{currency: %{type: :legal}}}}) do
@@ -71,51 +72,77 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
     [:promotion, :assignment, :submission, :monitor]
   end
 
-  defp create_tab(:promotion, %{promotion: promotion}, validate?, _user, _uri_origin, _locale) do
+  defp create_tab(
+         :promotion,
+         %{promotion: promotion},
+         validate?,
+         active_field,
+         _user,
+         _uri_origin,
+         _locale
+       ) do
     promotion_form_ready? = Promotion.Public.ready?(promotion)
 
     %{
       id: :promotion_form,
-      ready?: !validate? || promotion_form_ready?,
+      ready: !validate? || promotion_form_ready?,
       title: dgettext("link-survey", "tabbar.item.promotion"),
       forward_title: dgettext("link-survey", "tabbar.item.promotion.forward"),
       type: :fullpage,
-      component: Promotion.FormView,
+      live_component: Promotion.FormView,
       props: %{
         entity: promotion,
         validate?: validate?,
+        active_field: active_field,
         themes_module: Themes
       }
     }
   end
 
-  defp create_tab(:assignment, %{promotable: assignment}, validate?, user, uri_origin, _locale) do
+  defp create_tab(
+         :assignment,
+         %{promotable: assignment},
+         validate?,
+         active_field,
+         user,
+         uri_origin,
+         _locale
+       ) do
     assignment_form_ready? = Assignment.Public.ready?(assignment)
 
     %{
       id: :assignment_form,
-      ready?: !validate? || assignment_form_ready?,
+      ready: !validate? || assignment_form_ready?,
       title: dgettext("link-survey", "tabbar.item.assignment"),
       forward_title: dgettext("link-survey", "tabbar.item.assignment.forward"),
       type: :fullpage,
-      component: Assignment.AssignmentForm,
+      live_component: Assignment.AssignmentForm,
       props: %{
         entity: assignment,
         uri_origin: uri_origin,
         validate?: validate?,
+        active_field: active_field,
         user: user,
         target: self()
       }
     }
   end
 
-  defp create_tab(:submission, %{submission: submission}, _validate?, user, _uri_origin, _locale) do
+  defp create_tab(
+         :submission,
+         %{submission: submission},
+         _validate?,
+         _active_field,
+         user,
+         _uri_origin,
+         _locale
+       ) do
     %{
       id: :submission_form,
       title: dgettext("link-survey", "tabbar.item.submission"),
       forward_title: dgettext("link-survey", "tabbar.item.submission.forward"),
       type: :fullpage,
-      component: Pool.CampaignSubmissionView,
+      live_component: Pool.CampaignSubmissionView,
       props: %{
         entity: submission,
         user: user
@@ -127,6 +154,7 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
          :funding,
          %{promotable: assignment, submission: submission},
          _validate?,
+         active_field,
          user,
          _uri_origin,
          locale
@@ -136,12 +164,13 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
       title: dgettext("link-survey", "tabbar.item.funding"),
       forward_title: dgettext("link-survey", "tabbar.item.funding.forward"),
       type: :fullpage,
-      component: Campaign.FundingView,
+      live_component: Campaign.FundingView,
       props: %{
         assignment: assignment,
         submission: submission,
         user: user,
-        locale: locale
+        locale: locale,
+        active_field: active_field
       }
     }
   end
@@ -150,6 +179,7 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
          :monitor,
          %{promotable: assignment} = campaign,
          _validate?,
+         _active_field,
          _user,
          _uri_origin,
          _locale
@@ -162,7 +192,7 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
       title: dgettext("link-survey", "tabbar.item.monitor"),
       forward_title: dgettext("link-survey", "tabbar.item.monitor.forward"),
       type: :fullpage,
-      component: Campaign.MonitorView,
+      live_component: Campaign.MonitorView,
       props: %{
         entity: campaign,
         attention_list_enabled?: attention_list_enabled?,

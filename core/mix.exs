@@ -8,7 +8,7 @@ defmodule Core.MixProject do
       source_url: "https://github.com/eyra/mono",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix] ++ Mix.compilers() ++ [:surface],
+      compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -44,24 +44,31 @@ defmodule Core.MixProject do
   def application do
     [
       mod: {Core.Application, []},
-      extra_applications: [:logger, :runtime_tools, :csv]
+      extra_applications: [:logger, :runtime_tools, :csv, :wx, :observer]
     ]
   end
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test),
-    do: ["bundles", "apps", "systems", "frameworks", "lib", "test", "test/support"]
+    do: ["bundles/#{bundle()}", "apps", "systems", "frameworks", "lib", "test", "test/support"]
 
   defp elixirc_paths(:dev),
-    do: ["bundles", "apps", "systems", "frameworks", "lib"] ++ catalogues()
+    do: ["bundles/#{bundle()}", "apps", "systems", "frameworks", "lib"]
 
-  defp elixirc_paths(_), do: ["bundles", "apps", "systems", "frameworks", "lib"]
+  defp elixirc_paths(_), do: ["bundles/#{bundle()}", "apps", "systems", "frameworks", "lib"]
 
-  def catalogues do
-    [
-      "priv/catalogue",
-      "deps/surface/priv/catalogue"
-    ]
+  defp bundle() do
+    module =
+      case Code.ensure_compiled(Bundle) do
+        {:module, module} ->
+          module
+
+        _ ->
+          [{module, _binary}] = Code.compile_file(".bundle.ex")
+          module
+      end
+
+    apply(module, :name, [])
   end
 
   # Specifies your project dependencies.
@@ -75,13 +82,12 @@ defmodule Core.MixProject do
       {:assent, "~> 0.2.3"},
       {:bcrypt_elixir, "~> 2.0"},
       {:ex_aws_s3, "~> 2.0"},
-      {:phoenix, "~> 1.6.12"},
+      {:phoenix, "1.7.2"},
+      {:phoenix_view, "~> 2.0"},
       {:phoenix_ecto, "~> 4.4"},
-      {:phoenix_live_view, "~> 0.17.6"},
-      {:phoenix_html, "~> 3.2"},
+      {:phoenix_live_view, "~> 0.18.18"},
+      {:phoenix_html, "~> 3.3.1"},
       {:phoenix_inline_svg, "~> 1.4"},
-      {:surface, "~> 0.8.0"},
-      {:surface_catalogue, "~> 0.5.1"},
       {:floki, ">= 0.27.0"},
       {:ecto_sql, "~> 3.9.2"},
       {:ecto_commons, "~> 0.3.3"},
@@ -92,7 +98,7 @@ defmodule Core.MixProject do
       {:faker, "~> 0.17"},
       {:timex, "~> 3.7"},
       {:bamboo, "~> 2.2"},
-      {:bamboo_phoenix, "~> 1.0.0"},
+      {:bamboo_phoenix, git: "https://github.com/populimited/bamboo_phoenix.git", ref: "bf3e320"},
       {:bamboo_ses, "~> 0.3.0"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},

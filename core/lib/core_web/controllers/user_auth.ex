@@ -1,4 +1,6 @@
 defmodule CoreWeb.UserAuth do
+  use CoreWeb, :verified_routes
+
   import Plug.Conn
   import Phoenix.Controller
   import CoreWeb.Gettext
@@ -83,7 +85,7 @@ defmodule CoreWeb.UserAuth do
     conn
     |> renew_session()
     |> delete_resp_cookie(@remember_me_cookie)
-    |> redirect(to: Routes.user_session_path(conn, :new))
+    |> redirect(to: ~p"/user/signin")
   end
 
   @doc """
@@ -137,7 +139,7 @@ defmodule CoreWeb.UserAuth do
       conn
       |> put_flash(:error, dgettext("eyra-ui", "authentication.required.error"))
       |> maybe_store_return_to()
-      |> redirect(to: Routes.user_session_path(conn, :new))
+      |> redirect(to: ~p"/user/signin")
       |> halt()
     end
   end
@@ -172,7 +174,7 @@ defmodule CoreWeb.UserAuth do
     do: page(:participant_signed_in_page, Accounts.start_page_target(user))
 
   defp signed_in_page(%{researcher: true}),
-    do: page(:researcher_signed_in_page, CoreWeb.Console)
+    do: page(:researcher_signed_in_page, Next.Console.Page)
 
   defp signed_in_page(user),
     do: page(:participant_signed_in_page, Accounts.start_page_target(user))

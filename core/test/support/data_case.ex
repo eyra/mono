@@ -26,6 +26,8 @@ defmodule Core.DataCase do
       import Core.DataCase
 
       alias Core.Factories
+
+      use CoreWeb, :verified_routes
     end
   end
 

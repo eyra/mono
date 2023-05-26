@@ -1,15 +1,12 @@
 defmodule Systems.Lab.DayView do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
   require Logger
 
   alias CoreWeb.UI.Timestamp
 
-  alias Frameworks.Pixel.Button.DynamicButton
-  alias Frameworks.Pixel.Form.{Form, TextInput, NumberInput, DateInput}
-  alias Frameworks.Pixel.Text.SubHead
-  alias Frameworks.Pixel.Spacing
-  alias Frameworks.Pixel.Line
+  import Frameworks.Pixel.Line
+  import Frameworks.Pixel.Form
 
   alias Systems.{
     Lab
@@ -17,16 +14,7 @@ defmodule Systems.Lab.DayView do
 
   import CoreWeb.Gettext
 
-  prop(day_model, :map, default: nil)
-  prop(target, :any, required: true)
-
-  data(date, :date)
-  data(title, :string)
-  data(byline, :string)
-  data(entity, :map)
-  data(changeset, :map)
-  data(error, :any, default: nil)
-
+  @impl true
   def update(%{id: id, day_model: day_model, target: target}, socket) do
     changeset =
       day_model
@@ -46,6 +34,7 @@ defmodule Systems.Lab.DayView do
     }
   end
 
+  @impl true
   def update(
         %{active_item_ids: active_item_ids, selector_id: selector_id},
         %{assigns: %{day_model: %{entries: entries} = day_model}} = socket
@@ -65,6 +54,7 @@ defmodule Systems.Lab.DayView do
     }
   end
 
+  @impl true
   def update(_params, socket) do
     {
       :ok,
@@ -277,130 +267,83 @@ defmodule Systems.Lab.DayView do
     ]
   end
 
+  # data(date, :date)
+  # data(title, :string)
+  # data(byline, :string)
+  # data(entity, :map)
+  # data(changeset, :map)
+  # data(error, :any, default: nil)
+
+  attr(:day_model, :map, default: nil)
+  attr(:target, :any, required: true)
+
   @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
       <div>
-        <div class="text-button font-button text-warning leading-6">
-          {@error}
-        </div>
-        <Spacing :if={@error} value="XS" />
+        <%= if @error do %>
+          <div class="text-button font-button text-warning leading-6">
+            <%= @error %>
+          </div>
+          <.spacing value="XS" />
+        <% end %>
+
         <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
-          {@title}
+          <%= @title %>
         </div>
-        <Spacing value="XS" />
-        <Form id="day_view" changeset={@changeset} change_event="update" submit="submit" target={@myself}>
-          <Wrap>
-            <DateInput
-              :if={@day_model.date_editable?}
+        <.spacing value="XS" />
+        <.form id="day_view" :let={form} for={@changeset} phx-change="update" phx-submit="submit" phx-target={@myself} >
+          <.wrap>
+            <%= if @day_model.date_editable? do %>
+            <.date_input form={form}
               field={:date}
               label_text={dgettext("link-lab", "day.schedule.date.label")}
               value={@day_model.date}
             />
-          </Wrap>
+            <% end %>
+          </.wrap>
           <div class="flex flex-row gap-8">
             <div class="flex-grow">
-              <TextInput
+              <.text_input form={form}
                 field={:location}
                 label_text={dgettext("link-lab", "day.schedule.location.label")}
                 debounce="0"
               />
             </div>
             <div class="w-24">
-              <NumberInput
+              <.number_input form={form}
                 field={:number_of_seats}
                 label_text={dgettext("link-lab", "day.schedule.seats.label")}
                 debounce="0"
               />
             </div>
           </div>
-          <SubHead color="text-grey2">
-            {@byline}
-          </SubHead>
-          <Spacing value="M" />
-          <Line />
+          <Text.sub_head color="text-grey2">
+            <%= @byline %>
+          </Text.sub_head>
+          <.spacing value="M" />
+          <.line />
           <div class="h-lab-day-popup-list overflow-y-scroll overscroll-contain">
             <div class="h-2" />
             <div class="w-full">
-              <div :for={entry <- @day_model.entries}>
-                <Lab.DayEntryListItem entry={entry} />
-              </div>
+              <%= for entry <- @day_model.entries do %>
+                <div>
+                  <Lab.DayEntry.time_slot_item {entry} />
+                </div>
+              <% end %>
             </div>
           </div>
-          <Line />
-          <Spacing value="M" />
+          <.line />
+          <.spacing value="M" />
           <div class="flex flex-row gap-4">
-            <DynamicButton :for={button <- buttons(assigns)} vm={button} />
+            <%= for button <- buttons(assigns) do %>
+              <Button.dynamic {button} />
+            <% end %>
           </div>
-        </Form>
+        </.form>
       </div>
     </div>
     """
-  end
-end
-
-defmodule Systems.Lab.DayView.Example do
-  use Surface.Catalogue.Example,
-    subject: Systems.Lab.DayView,
-    catalogue: Frameworks.Pixel.Catalogue,
-    title: "Lab day view",
-    height: "1740px",
-    direction: "vertical",
-    container: {:div, class: ""}
-
-  data(day_model, :map,
-    default: %Systems.Lab.DayModel{
-      action: :new,
-      tool_id: 1,
-      date: ~D[2022-12-13],
-      date_editable?: true,
-      location: "Lab 007, Unit 4.02",
-      number_of_seats: 10,
-      entries: [
-        %{type: :time_slot, enabled?: true, start_time: 900, number_of_reservations: 6},
-        %{type: :time_slot, enabled?: true, start_time: 930, number_of_reservations: 2},
-        %{type: :time_slot, enabled?: true, start_time: 1000, number_of_reservations: 0},
-        %{type: :time_slot, enabled?: false, start_time: 1030, number_of_reservations: 0},
-        %{type: :break},
-        %{type: :time_slot, enabled?: true, start_time: 1100, number_of_reservations: 0},
-        %{type: :time_slot, enabled?: true, start_time: 1130, number_of_reservations: 0},
-        %{type: :time_slot, enabled?: true, start_time: 1200, number_of_reservations: 0},
-        %{type: :time_slot, enabled?: true, start_time: 1230, number_of_reservations: 0},
-        %{type: :break},
-        %{type: :time_slot, enabled?: false, start_time: 1300, number_of_reservations: 0},
-        %{type: :time_slot, enabled?: true, start_time: 1330, number_of_reservations: 0},
-        %{type: :time_slot, enabled?: true, start_time: 1400, number_of_reservations: 0},
-        %{type: :time_slot, enabled?: true, start_time: 1430, number_of_reservations: 0},
-        %{type: :break},
-        %{type: :time_slot, enabled?: false, start_time: 1500, number_of_reservations: 0},
-        %{type: :time_slot, enabled?: true, start_time: 1530, number_of_reservations: 0},
-        %{type: :time_slot, enabled?: true, start_time: 1600, number_of_reservations: 0},
-        %{type: :time_slot, enabled?: true, start_time: 1630, number_of_reservations: 0},
-        %{type: :time_slot, enabled?: true, start_time: 1700, number_of_reservations: 0},
-        %{type: :break},
-        %{type: :time_slot, enabled?: false, start_time: 1730, number_of_reservations: 0},
-        %{type: :time_slot, enabled?: false, start_time: 1800, number_of_reservations: 0},
-        %{type: :time_slot, enabled?: false, start_time: 1830, number_of_reservations: 0},
-        %{type: :time_slot, enabled?: false, start_time: 1900, number_of_reservations: 0},
-        %{type: :time_slot, enabled?: false, start_time: 1930, number_of_reservations: 0}
-      ]
-    }
-  )
-
-  def render(assigns) do
-    ~F"""
-    <DayView id={:day_view_example} day_model={@day_model} target={self()} />
-    """
-  end
-
-  def handle_info(%{day_view: :submit, day_model: day_model}, socket) do
-    IO.puts("submit: day_model=#{day_model.date}")
-    {:noreply, socket}
-  end
-
-  def handle_info(%{day_view: :hide}, socket) do
-    IO.puts("cancel")
-    {:noreply, socket}
   end
 end

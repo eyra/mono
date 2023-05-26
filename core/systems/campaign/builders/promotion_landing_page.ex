@@ -55,7 +55,7 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
       Enum.map_join(authors, ", ", & &1.fullname)
   end
 
-  defp themes(%{themes: themes}, themes_module \\ Link.Enums.Themes) do
+  defp themes(%{themes: themes}, themes_module \\ Campaign.Themes) do
     themes
     |> themes_module.labels()
     |> Enum.filter(& &1.active)
@@ -148,6 +148,6 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
       buttons: buttons
     }
 
-    LiveView.assign(socket, dialog: dialog)
+    Phoenix.Component.assign(socket, dialog: dialog)
   end
 end

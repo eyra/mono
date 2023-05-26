@@ -8,8 +8,6 @@ defmodule Systems.Lab.PublicPage do
     Lab
   }
 
-  data(reservation, :any, default: nil)
-
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
     tool = Lab.Public.get(id, [:time_slots])
 
@@ -51,36 +49,45 @@ defmodule Systems.Lab.PublicPage do
     {:noreply, socket}
   end
 
+  # data(reservation, :any, default: nil)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <div :if={@reservation}>
-        You have made a reservation
-        <button
-          :on-click="cancel-reservation"
-          data-confirm="Are you sure you want to cancel the reservation?"
-        >Cancel</button>
-      </div>
+    ~H"""
+    <div>
+      <Area.content>
+      <Margin.y id={:page_top} />
+      <%= if @reservation do %>
+        <div>
+          You have made a reservation
+          <button
+            phx-click="cancel-reservation"
+            data-confirm="Are you sure you want to cancel the reservation?"
+          >Cancel</button>
+        </div>
+      <% end %>
 
       <table>
-        <tr :for={slot <- @tool.time_slots}>
-          <td>{slot.start_time}</td>
-          <td>{slot.location}</td>
-          <td>{slot.number_of_seats}</td>
-          <td>
-            <button
-              :if={is_nil(@reservation) || @reservation.time_slot_id != slot.id}
-              :on-click="reserve-time-slot"
-              phx-value-time-slot-id={slot.id}
-              data-confirm={not is_nil(@reservation) and "Are you sure you want to switch your reservation?"}
-            >
-              Apply
-            </button>
-          </td>
-        </tr>
+        <%= for slot <- @tool.time_slots do %>
+          <tr>
+            <td><%= slot.start_time %></td>
+            <td><%= slot.location %></td>
+            <td><%= slot.number_of_seats %></td>
+            <td>
+              <%= if is_nil(@reservation) || @reservation.time_slot_id != slot.id do %>
+                <button
+                  phx-click="reserve-time-slot"
+                  phx-value-time-slot-id={slot.id}
+                  data-confirm={not is_nil(@reservation) and "Are you sure you want to switch your reservation?"}
+                >
+                  Apply
+                </button>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
       </table>
-    </ContentArea>
+      </Area.content>
+    </div>
     """
   end
 end

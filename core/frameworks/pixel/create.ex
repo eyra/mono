@@ -2,7 +2,8 @@ defmodule Frameworks.Pixel.Create do
   @moduledoc """
   Provides support for creating "new" views the Eyra way.
   """
-  import Phoenix.LiveView, only: [assign: 2, put_flash: 3, push_redirect: 2]
+  import Phoenix.Component
+  import Phoenix.LiveView, only: [put_flash: 3, push_redirect: 2]
   alias Phoenix.LiveView.Socket
 
   @callback create(socket :: Socket.t(), changeset :: any()) :: any()

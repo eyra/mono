@@ -1,5 +1,5 @@
 defmodule CoreWeb.UI.Responsive.Viewport do
-  import Phoenix.LiveView
+  import Phoenix.Component
   import CoreWeb.UI.Responsive.Breakpoint
 
   @callback handle_resize(socket :: Socket.t()) :: Socket.t()
@@ -10,9 +10,6 @@ defmodule CoreWeb.UI.Responsive.Viewport do
 
       import CoreWeb.UI.Responsive.Viewport
       import CoreWeb.UI.Responsive.Breakpoint
-
-      data(viewport, :map)
-      data(breakpoint, :map)
 
       def handle_event("viewport_resize", new_viewport, socket) do
         new_breakpoint = breakpoint(new_viewport)

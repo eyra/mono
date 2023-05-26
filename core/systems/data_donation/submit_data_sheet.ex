@@ -1,19 +1,15 @@
 defmodule Systems.DataDonation.SubmitDataSheet do
-  use CoreWeb.UI.LiveComponent
-  alias Surface
+  use CoreWeb, :live_component
 
-  alias Frameworks.Pixel.Text.{Title1, Body}
-  alias Frameworks.Pixel.Line
+  alias Frameworks.Pixel.Text
+  import Frameworks.Pixel.Line
 
-  alias Surface.Components.Dynamic
+  import Systems.DataDonation.FakeForm
+  import Systems.DataDonation.S3Form
+  import Systems.DataDonation.CenterdataForm
 
-  prop(props, :map, required: true)
-
-  data(recipient, :any)
-  data(form, :any)
-  data(buttons, :any)
-
-  def update(%{id: id, props: %{recipient: recipient} = props}, socket) do
+  @impl true
+  def update(%{id: id, recipient: recipient} = params, socket) do
     {
       :ok,
       socket
@@ -21,32 +17,32 @@ defmodule Systems.DataDonation.SubmitDataSheet do
         id: id,
         recipient: recipient
       )
-      |> update_form(props)
+      |> update_form(params)
       |> update_buttons()
     }
   end
 
-  defp update_form(socket, props) do
-    socket |> assign(form: get_form(props))
+  defp update_form(socket, params) do
+    socket |> assign(form: get_form(params))
   end
 
   defp get_form(%{storage: :fake}) do
     %{
-      module: Systems.DataDonation.FakeForm,
+      function: &fake_form/1,
       props: %{}
     }
   end
 
   defp get_form(%{storage: :s3}) do
     %{
-      module: Systems.DataDonation.S3Form,
+      function: &s3_form/1,
       props: %{}
     }
   end
 
   defp get_form(%{storage: :centerdata, storage_info: storage_info, session: session}) do
     %{
-      module: Systems.DataDonation.CenterdataForm,
+      function: &centerdata_form/1,
       props: %{session: session, storage_info: storage_info}
     }
   end
@@ -73,42 +69,52 @@ defmodule Systems.DataDonation.SubmitDataSheet do
     }
   end
 
-  def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <SheetArea>
-        <div class="flex flex-col">
-          <Title1>{dgettext("eyra-data-donation", "submit_data.title")}</Title1>
-          <div class="no-extraction-data-yet">
-            <Body>
-              {dgettext("eyra-data-donation", "no.extraction.data.yet.description")}
-            </Body>
-          </div>
-          <Dynamic.Component module={@form.module} {...@form.props}>
-            <div>
-              <Body>
-                {dgettext("eyra-data-donation", "submit_data.description")}
-              </Body>
-              <Spacing value="L" />
+  # data(recipient, :any)
+  # data(form, :any)
+  # data(buttons, :any)
 
-              <Line />
+  attr(:props, :map, required: true)
+  @impl true
+  def render(assigns) do
+    ~H"""
+    <div>
+      <Area.content>
+      <Margin.y id={:page_top} />
+      <Area.sheet>
+        <div class="flex flex-col">
+          <Text.title1><%= dgettext("eyra-data-donation", "submit_data.title") %></Text.title1>
+          <div class="no-extraction-data-yet">
+            <Text.body>
+              <%= dgettext("eyra-data-donation", "no.extraction.data.yet.description") %>
+            </Text.body>
+          </div>
+          <.function_component {@form}>
+            <div>
+              <Text.body>
+                <%= dgettext("eyra-data-donation", "submit_data.description") %>
+              </Text.body>
+              <.spacing value="L" />
+
+              <.line />
               <p class="extracted overflow-scroll">...</p>
-              <Spacing value="M" />
-              <Line />
-              <Spacing value="L" />
+              <.spacing value="M" />
+              <.line />
+              <.spacing value="L" />
             </div>
-            <Body>
-              {dgettext("eyra-data-donation", "submit_data.action.label", recipient: @recipient)}
-            </Body>
-            <Spacing value="M" />
+            <Text.body>
+              <%= dgettext("eyra-data-donation", "submit_data.action.label", recipient: @recipient) %>
+            </Text.body>
+            <.spacing value="M" />
             <div class="flex flex-row gap-4">
-              <DynamicButton :for={button <- @buttons} vm={button} />
+              <%= for button <- @buttons do %>
+                <Button.dynamic {button} />
+              <% end %>
             </div>
-          </Dynamic.Component>
+          </.function_component>
         </div>
-      </SheetArea>
-    </ContentArea>
+      </Area.sheet>
+      </Area.content>
+    </div>
     """
   end
 end

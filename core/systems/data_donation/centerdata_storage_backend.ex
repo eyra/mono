@@ -33,6 +33,10 @@ defmodule Systems.DataDonation.CenterdataStorageBackend do
   end
 
   defp http_client() do
-    Application.get_env(:core, :data_donation_http_client, Systems.DataDonation.CenterdataHTTP)
+    Application.get_env(
+      :core,
+      :data_donation_http_client,
+      Systems.DataDonation.CenterdataHTTPClient
+    )
   end
 end

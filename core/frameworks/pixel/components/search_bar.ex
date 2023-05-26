@@ -1,14 +1,7 @@
 defmodule Frameworks.Pixel.SearchBar do
   @moduledoc false
-  use CoreWeb.UI.LiveComponent
-
-  alias Surface.Components.Form
-
-  prop(query_string, :any, default: nil)
-  prop(placeholder, :string, default: "")
-  prop(parent, :any, required: true)
-  prop(debounce, :string, default: "1000")
-
+  use CoreWeb, :live_component
+  @impl true
   def update(
         %{
           id: id,
@@ -32,6 +25,7 @@ defmodule Frameworks.Pixel.SearchBar do
     }
   end
 
+  @impl true
   def handle_event(
         "change",
         %{"query" => query},
@@ -44,6 +38,7 @@ defmodule Frameworks.Pixel.SearchBar do
     }
   end
 
+  @impl true
   def handle_event(
         "submit",
         %{"query" => query},
@@ -71,48 +66,27 @@ defmodule Frameworks.Pixel.SearchBar do
     socket
   end
 
+  attr(:query_string, :any, default: nil)
+  attr(:placeholder, :string, default: "")
+  attr(:parent, :any, required: true)
+  attr(:debounce, :string, default: "1000")
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Form for={:x} submit="submit" change="change" opts={id: "#{@id}_form"}>
-      <div class="flex flex-row">
-        <input
-          class="text-grey1 text-bodymedium font-body pl-3 pr-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-48px"
-          placeholder={@placeholder}
-          value={@query_string}
-          name="query"
-          type="search"
-          phx-debounce={@debounce}
-        />
-      </div>
-    </Form>
+    ~H"""
+    <div>
+      <.form id={"#{@id}_form"} for={%{}} phx-submit="submit" phx-change="change">
+        <div class="flex flex-row">
+          <input
+            class="text-grey1 text-bodymedium font-body pl-3 pr-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-48px"
+            placeholder={@placeholder}
+            value={@query_string}
+            name="query"
+            type="search"
+            phx-debounce={@debounce}
+          />
+        </div>
+      </.form>
+    </div>
     """
-  end
-end
-
-defmodule Frameworks.Pixel.SearchBar.Example do
-  use Surface.Catalogue.Example,
-    subject: Frameworks.Pixel.SearchBar,
-    catalogue: Frameworks.Pixel.Catalogue,
-    title: "Search Bar",
-    height: "640px",
-    direction: "vertical",
-    container: {:div, class: ""}
-
-  def render(assigns) do
-    ~F"""
-    <Frameworks.Pixel.SearchBar
-      id={:my_search_bar}
-      query_string=""
-      placeholder="Search here.."
-      parent={self()}
-    />
-    """
-  end
-
-  def handle_info(%{search_bar: :my_search_bar, query: _query}, socket) do
-    {
-      :noreply,
-      socket
-    }
   end
 end

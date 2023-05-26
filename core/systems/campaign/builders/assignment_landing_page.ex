@@ -3,7 +3,6 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
 
   alias Core.Accounts
   alias CoreWeb.Router.Helpers, as: Routes
-  alias Phoenix.LiveView
 
   import Frameworks.Utility.LiveCommand, only: [live_command: 2]
   import Frameworks.Utility.List
@@ -210,7 +209,9 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
   end
 
   def handle_forward(%{user: user}, socket) do
-    LiveView.push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))
+    Phoenix.LiveView.push_redirect(socket,
+      to: Routes.live_path(socket, Accounts.start_page_target(user))
+    )
   end
 
   # Survey open button
@@ -233,7 +234,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
     member = Crew.Public.get_member!(crew, user)
     task = Crew.Public.get_task(crew, member)
     Crew.Public.lock_task(task)
-    LiveView.redirect(socket, external: path)
+    Phoenix.LiveView.redirect(socket, external: path)
   end
 
   # Lab buttons
@@ -267,7 +268,12 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
 
   def handle_submit(_, %{assigns: %{selected_time_slot: nil}} = socket) do
     warning = dgettext("link-lab", "submit.warning.no.selection")
-    LiveView.send_update(Dropdown.Selector, id: :dropdown_selector, model: %{warning: warning})
+
+    Phoenix.LiveView.send_update(Dropdown.Selector,
+      id: :dropdown_selector,
+      model: %{warning: warning}
+    )
+
     socket
   end
 
@@ -293,7 +299,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
 
   def handle_cancel(%{lab_tool: lab_tool, user: user}, socket) do
     Lab.Public.cancel_reservation(lab_tool, user)
-    socket |> LiveView.assign(selected_time_slot: nil)
+    socket |> Phoenix.Component.assign(selected_time_slot: nil)
   end
 
   # Contact button
@@ -302,7 +308,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
     %{
       id: :contact,
       button: %{
-        action: %{type: :href, href: contact_href(email, title, public_id)},
+        action: %{type: :http_get, to: contact_href(email, title, public_id)},
         face: %{type: :label, label: dgettext("eyra-assignment", "contact.button")}
       }
     }
