@@ -40,6 +40,7 @@ defmodule CoreWeb.Menu.Builder do
 
       defp build(assigns, items, builder) do
         user = Map.get(assigns, :current_user)
+
         items
         |> Enum.filter(&filter(user, &1))
         |> Enum.map(&builder.(&1))

@@ -17,8 +17,6 @@ defmodule Systems.Student.Filters do
   def include?(student, filters, %Pool.Model{} = pool) when is_list(filters) do
     filters = filters |> Enum.filter(&Enum.member?(values(), &1))
 
-
-
     filter_count = Enum.count(filters)
     match_count = Enum.count(filters, &include?(student, &1, pool))
     # each filter should match (AND)
