@@ -2,7 +2,7 @@ let liveviewId = "";
 
 export const LiveView = {
   mounted() {
-    console.log("LiveView mounted")
+    console.log("LiveView mounted");
     liveviewId = this.el.id;
 
     var initialFieldId = this.el.dataset.initialField
@@ -12,7 +12,7 @@ export const LiveView = {
     var savedFieldId = this.loadActiveField();
 
     // TODO: Fix optional chaining using Webpack >= 5.0.0
-    var nextFieldId = initialFieldId ? initialFieldId : savedFieldId
+    var nextFieldId = initialFieldId ? initialFieldId : savedFieldId;
     this.makeActive(nextFieldId);
 
     this.el.addEventListener("click", (event) => {
@@ -61,7 +61,7 @@ export const LiveView = {
     var label = field.getElementsByClassName("field-label")[0];
     var input = field.getElementsByClassName("field-input")[0];
     var error = field.getElementsByClassName("field-error")[0];
-    
+
     if (label) {
       updateElement(label, activate);
     }
@@ -71,36 +71,35 @@ export const LiveView = {
     if (error) {
       updateElement(error, activate);
     }
-  }  
+  },
 };
 
 export const Field = {
   mounted() {
-    console.log("Field mounted")
+    console.log("Field mounted");
 
-    var fieldId = "field-" + this.el.dataset.fieldId
+    var fieldId = "field-" + this.el.dataset.fieldId;
 
     var input = this.el.getElementsByClassName("field-input")[0];
     input.addEventListener("click", (event) => {
-      event.stopPropagation()
+      event.stopPropagation();
       LiveView.makeActive(fieldId);
-      this.pushEvent("active-field", this.el.dataset.fieldId)
+      this.pushEvent("active-field", this.el.dataset.fieldId);
     });
 
     input.addEventListener("focus", (event) => {
-      event.stopPropagation()
+      event.stopPropagation();
       LiveView.makeActive(fieldId);
-      this.pushEvent("active-field", this.el.dataset.fieldId)
+      this.pushEvent("active-field", this.el.dataset.fieldId);
     });
 
     input.addEventListener("blur", (event) => {
-      event.stopPropagation()
+      event.stopPropagation();
       LiveView.makeActive(undefined);
-      this.pushEvent("active-field", undefined)
+      this.pushEvent("active-field", undefined);
     });
   },
 };
-
 
 function updateElement(element, activate, error) {
   if (!element) {

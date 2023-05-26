@@ -159,7 +159,7 @@ defmodule Core.MixProject do
       ],
       makedocs: ["deps.get", "docs -o doc/output"],
       prettier: "cmd ./assets/node_modules/.bin/prettier --color --check ./assets/js",
-      "prettier.fix": "cmd ./assetsnode_modules/.bin/prettier --color -w ./assets/js"
+      "prettier.fix": "cmd ./assets/node_modules/.bin/prettier --color -w ./assets/js"
     ]
   end
 end
