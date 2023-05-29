@@ -173,8 +173,8 @@ defmodule CoreWeb.UserAuth do
   defp signed_in_page(%{student: true} = user),
     do: page(:participant_signed_in_page, Accounts.start_page_target(user))
 
-  defp signed_in_page(%{researcher: true}),
-    do: page(:researcher_signed_in_page, Next.Console.Page)
+  defp signed_in_page(%{researcher: true} = user),
+    do: page(:researcher_signed_in_page, Accounts.start_page_target(user))
 
   defp signed_in_page(user),
     do: page(:participant_signed_in_page, Accounts.start_page_target(user))

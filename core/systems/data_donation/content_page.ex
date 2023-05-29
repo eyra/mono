@@ -92,7 +92,7 @@ defmodule Systems.DataDonation.ContentPage do
         <.live_component
           module={Promotion.FormView}
           id={:promotion_form}
-          props={%{entity_id: @promotion_id, themes_module: Themes, validate?: false, active_field: nil}}
+          props={%{entity_id: @promotion_id, themes_module: Themes}}
         />
       </div>
     </div>

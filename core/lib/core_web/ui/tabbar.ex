@@ -174,24 +174,24 @@ defmodule CoreWeb.UI.Tabbar do
   def center_correction_for_number(4), do: "mr-1px"
   def center_correction_for_number(_), do: ""
 
-  def icon_text(_, false, _), do: "!"
-  def icon_text(_, _, count) when not is_nil(count), do: "#{count}"
-  def icon_text(index, _, _), do: index + 1
+  def icon_text(_, false, true, _), do: "!"
+  def icon_text(_, _, _, count) when not is_nil(count), do: "#{count}"
+  def icon_text(index, _, _, _), do: index + 1
 
   def active_icon(_), do: "bg-primary text-white"
 
-  def idle_icon(false), do: "bg-warning text-white"
-  def idle_icon(_), do: "bg-grey5 text-grey2"
+  def idle_icon(false, true), do: "bg-warning text-white"
+  def idle_icon(_, _), do: "bg-grey5 text-grey2"
 
   def active_title(:segmented), do: "text-white"
   def active_title(_), do: "text-primary"
 
-  def idle_title(false), do: "text-warning"
-  def idle_title(_), do: "text-grey2"
+  def idle_title(false, true), do: "text-warning"
+  def idle_title(_, _), do: "text-grey2"
 
-  def idle_shape("wide", :segmented, false), do: "h-full px-4 bg-warning"
-  def idle_shape("wide", :segmented, _), do: "h-full px-4 bg-grey5"
-  def idle_shape(_, _, _), do: "rounded-full"
+  def idle_shape("wide", :segmented, false, true), do: "h-full px-4 bg-warning"
+  def idle_shape("wide", :segmented, _, _), do: "h-full px-4 bg-grey5"
+  def idle_shape(_, _, _, _), do: "rounded-full"
 
   def active_shape(_, :segmented), do: "h-full px-4 bg-primary"
   def active_shape(_, _), do: "rounded-full"
@@ -204,6 +204,7 @@ defmodule CoreWeb.UI.Tabbar do
   attr(:id, :string)
   attr(:title, :string)
   attr(:ready, :boolean, default: true)
+  attr(:show_errors, :boolean, default: false)
   attr(:count, :integer, default: nil)
   attr(:index, :integer, default: nil)
   attr(:opts, :string, default: "")
@@ -214,17 +215,17 @@ defmodule CoreWeb.UI.Tabbar do
       id={"tabbar-#{@tabbar}-#{@id}"}
       data-tab-id={@id}
       phx-hook="TabbarItem"
-      class={"tabbar-item flex flex-row items-center justify-start focus:outline-none cursor-pointer #{@opts} #{idle_shape(@tabbar, @type, @ready)}"}
-      idle-class={idle_shape(@tabbar, @type, @ready)}
+      class={"tabbar-item flex flex-row items-center justify-start focus:outline-none cursor-pointer #{@opts} #{idle_shape(@tabbar, @type, @ready, @show_errors)}"}
+      idle-class={idle_shape(@tabbar, @type, @ready, @show_errors)}
       active-class={active_shape(@tabbar, @type)}
     >
       <%= if @index do %>
         <div
-          class={"icon w-6 h-6 font-caption text-caption rounded-full flex items-center #{idle_icon(@ready)}"}
-          idle-class={idle_icon(@ready)}
+          class={"icon w-6 h-6 font-caption text-caption rounded-full flex items-center #{idle_icon(@ready, @show_errors)}"}
+          idle-class={idle_icon(@ready, @show_errors)}
           active-class={active_icon(@type)}
         >
-          <span class={"text-center w-full mt-1px #{center_correction_for_number(icon_text(@index, @ready, @count))}"}><%= icon_text(@index, @ready, @count) %></span>
+          <span class={"text-center w-full mt-1px #{center_correction_for_number(icon_text(@index, @ready, @show_errors, @count))}"}><%= icon_text(@index, @ready, @show_errors, @count) %></span>
         </div>
       <% end %>
 
@@ -235,8 +236,8 @@ defmodule CoreWeb.UI.Tabbar do
       <%= if @title do %>
         <div class="flex flex-col items-center justify-center">
           <div
-            class={"title text-button font-button #{title_inset(@type)} #{idle_title(@ready)}"}
-            idle-class={idle_title(@ready)}
+            class={"title text-button font-button #{title_inset(@type)} #{idle_title(@ready, @show_errors)}"}
+            idle-class={idle_title(@ready, @show_errors)}
             active-class={active_title(@type)}
           >
             <%= @title %>

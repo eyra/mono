@@ -12,6 +12,21 @@ defmodule Frameworks.Pixel.Form do
 
   alias Phoenix.LiveView.JS
 
+  @label "label"
+  @input "input"
+  @error "error"
+  @error_space "error_space"
+  @error_message "error_message"
+
+  defp active_input_color(%{background: :light}), do: "border-primary"
+  defp active_input_color(_), do: "border-tertiary"
+
+  defp active_label_color(%{background: :light}), do: "text-primary"
+  defp active_label_color(_), do: "text-tertiary"
+
+  defp field_tag(name), do: "field-#{name}"
+  defp field_item_id(field, item), do: "#{field}_#{item}"
+
   attr(:field, :atom, required: true)
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
@@ -21,59 +36,46 @@ defmodule Frameworks.Pixel.Form do
   attr(:error_message, :string, default: nil)
   attr(:reserve_error_space, :boolean, default: true)
   attr(:extra_space, :boolean, default: true)
-  attr(:active?, :boolean, default: false)
 
   slot(:inner_block, required: true)
 
-  def field(%{field: field, active?: active?, background: background, errors: errors} = assigns) do
-    label_id = "#{field}_label"
-    error_space_id = "#{field}_error_space"
-    error_message_id = "#{field}_error_message"
+  def field(%{field: field, errors: errors} = assigns) do
+    has_errors = Enum.count(errors) > 0
 
-    idle_text_color =
-      if Enum.empty?(errors) do
-        "text-grey1"
-      else
-        "text-warning"
-      end
+    error_space_id = field_item_id(field, @error_space)
+    error_message_id = field_item_id(field, @error_message)
+    error_static_class = "#{field_tag(@error)} text-caption font-caption text-warning hidden"
 
-    active_text_color =
-      if background == :light do
-        "text-primary"
-      else
-        "text-tertiary"
-      end
+    label_id = field_item_id(field, @label)
+    label_static_class = "#{field_tag(@label)} mt-0.5 text-title6 font-title6 leading-snug"
+    label_dynamic_class = "text-grey1"
 
-    current_text_color =
-      if active? do
-        active_text_color
-      else
-        idle_text_color
-      end
-
-    label_color = get_text_color({false, Enum.count(errors) > 0, background})
+    active_color = active_label_color(assigns)
 
     assigns =
       assign(assigns, %{
         label_id: label_id,
-        label_color: label_color,
         error_space_id: error_space_id,
         error_message_id: error_message_id,
-        current_text_color: current_text_color,
-        idle_text_color: idle_text_color,
-        active_text_color: active_text_color
+        error_static_class: error_static_class,
+        label_static_class: label_static_class,
+        label_dynamic_class: label_dynamic_class,
+        active_color: active_color,
+        has_errors: has_errors
       })
 
     ~H"""
-    <div id={"field-#{@field}"} data-field-id={@field} phx-hook="Field">
+    <div id={"#{field_tag(@field)}"} data-field-id={@field} phx-hook="LiveField">
       <div>
         <%= if @label_text do %>
           <div>
             <div
               id={@label_id}
-              class={"field-label mt-0.5 text-title6 font-title6 leading-snug #{@current_text_color}"}
-              idle-class={@idle_text_color}
-              active-class={@active_text_color}
+              class={"#{@label_static_class} #{@label_dynamic_class}"}
+              __eyra_field_id={@field}
+              __eyra_field_has_errors={@has_errors}
+              __eyra_field_static_class={@label_static_class}
+              __eyra_field_active_color={@active_color}
             >
               <%= @label_text %>
             </div>
@@ -89,9 +91,8 @@ defmodule Frameworks.Pixel.Form do
         <%= for {msg, _opts} <- @errors do %>
             <div
               id={@error_message_id}
-              class={"text-caption font-caption text-warning"}
-              idle-class="text-warning"
-              active-class="text-warning"
+              class={@error_static_class}
+              __eyra_field_id={@field}
             >
               <%= msg %>
             </div>
@@ -108,7 +109,6 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
-  attr(:active_field, :string, default: nil)
   attr(:type, :string, required: true)
   attr(:placeholder, :string, default: "")
   attr(:label_text, :string)
@@ -120,33 +120,17 @@ defmodule Frameworks.Pixel.Form do
   attr(:value, :any, default: nil)
   attr(:maxlength, :string, default: "1000")
 
-  def input(
-        %{form: form, field: field, active_field: active_field, background: background} = assigns
-      ) do
+  def input(%{form: form, field: field} = assigns) do
     errors = form[field].errors
     field_id = String.to_atom(input_id(form, field))
-    active? = Atom.to_string(field_id) == active_field
+    input_id = field_item_id(field_id, @input)
 
-    idle_border_color =
-      if Enum.empty?(errors) do
-        "border-grey3"
-      else
-        "border-warning"
-      end
+    input_static_class =
+      "#{field_tag(@input)} text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid focus:outline-none rounded h-44px"
 
-    active_border_color =
-      if background == :light do
-        "border-primary"
-      else
-        "border-tertiary"
-      end
-
-    current_border_color =
-      if active? do
-        active_border_color
-      else
-        idle_border_color
-      end
+    input_dynamic_class = "border-grey3"
+    active_color = active_input_color(assigns)
+    has_errors = Enum.count(errors) > 0
 
     assigns =
       assign(assigns, %{
@@ -154,11 +138,12 @@ defmodule Frameworks.Pixel.Form do
         field_name: input_name(form, field),
         field_value: value(form, assigns),
         target: target(form),
-        current_border_color: current_border_color,
-        idle_border_color: idle_border_color,
-        active_border_color: active_border_color,
+        input_id: input_id,
+        input_static_class: input_static_class,
+        input_dynamic_class: input_dynamic_class,
+        active_color: active_color,
         errors: errors,
-        active?: active?
+        has_errors: has_errors
       })
 
     ~H"""
@@ -169,32 +154,33 @@ defmodule Frameworks.Pixel.Form do
       background={@background}
       reserve_error_space={@reserve_error_space}
       errors={@errors}
-      active?={@active?}
     >
       <%= if @disabled do %>
         <input
           type={@type}
-          id={@field_id}
+          id={@input_id}
           name={@field_name}
           value={@field_value}
           placeholder={@placeholder}
-          class="text-grey3 bg-white placeholder-grey3 text-bodymedium font-body pl-3 w-full disabled:border-grey3 border-2 border-solid focus:outline-none rounded h-44px"
+          class={"#{@input_static_class} text-grey3"}
           disabled
         />
       <% else %>
         <input
           type={@type}
-          id={@field_id}
+          id={@input_id}
           name={@field_name}
           value={@field_value}
           min="0"
           placeholder={@placeholder}
           maxlength={@maxlength}
-          class={"field-input text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid focus:outline-none rounded h-44px #{@current_border_color}"}
-          idle-class={@idle_border_color}
-          active-class={@active_border_color}
           phx-target={@target}
           phx-debounce={@debounce}
+          class={[@input_static_class, @input_dynamic_class]}
+          __eyra_field_id={@field_id}
+          __eyra_field_has_errors={@has_errors}
+          __eyra_field_static_class={@input_static_class}
+          __eyra_field_active_color={@active_color}
         />
       <% end %>
     </.field>
@@ -203,7 +189,6 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
-  attr(:active_field, :string, default: nil)
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
@@ -215,7 +200,6 @@ defmodule Frameworks.Pixel.Form do
     <.input
       form={@form}
       field={@field}
-      active_field={@active_field}
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
@@ -228,7 +212,6 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
-  attr(:active_field, :string, default: nil)
   attr(:label_text, :string, default: nil)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
@@ -242,7 +225,6 @@ defmodule Frameworks.Pixel.Form do
     <.input
       form={@form}
       field={@field}
-      active_field={@active_field}
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
@@ -257,7 +239,6 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
-  attr(:active_field, :string, default: nil)
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
@@ -267,7 +248,6 @@ defmodule Frameworks.Pixel.Form do
     <.input
       form={@form}
       field={@field}
-      active_field={@active_field}
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
@@ -278,7 +258,6 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
-  attr(:active_field, :string, default: nil)
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
@@ -288,7 +267,6 @@ defmodule Frameworks.Pixel.Form do
     <.input
       form={@form}
       field={@field}
-      active_field={@active_field}
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
@@ -299,7 +277,6 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
-  attr(:active_field, :string, default: nil)
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
@@ -311,7 +288,6 @@ defmodule Frameworks.Pixel.Form do
     <.input
       form={@form}
       field={@field}
-      active_field={@active_field}
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
@@ -325,7 +301,6 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
-  attr(:active_field, :string, default: nil)
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
@@ -335,7 +310,6 @@ defmodule Frameworks.Pixel.Form do
     <.input
       form={@form}
       field={@field}
-      active_field={@active_field}
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
@@ -346,39 +320,21 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
-  attr(:active_field, :string, default: nil)
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
   attr(:debounce, :string, default: "1000")
 
-  def text_area(
-        %{form: form, field: field, active_field: active_field, background: background} = assigns
-      ) do
+  def text_area(%{form: form, field: field} = assigns) do
     errors = form[field].errors
+    has_errors = Enum.count(errors) > 0
     field_id = String.to_atom(input_id(form, field))
-    active? = Atom.to_string(field_id) == active_field
 
-    idle_border_color =
-      if Enum.empty?(errors) do
-        "border-grey3"
-      else
-        "border-warning"
-      end
+    input_static_class =
+      "#{field_tag(@input)} field-input text-grey1 text-bodymedium font-body pl-3 pt-2 w-full h-64 border-2 focus:outline-none rounded"
 
-    active_border_color =
-      if background == :light do
-        "border-primary"
-      else
-        "border-tertiary"
-      end
-
-    current_border_color =
-      if active? do
-        active_border_color
-      else
-        idle_border_color
-      end
+    input_dynamic_class = "border-grey3"
+    active_color = active_input_color(assigns)
 
     assigns =
       assign(assigns, %{
@@ -386,11 +342,11 @@ defmodule Frameworks.Pixel.Form do
         field_name: input_name(form, field),
         field_value: html_escape(input_value(form, field) || ""),
         target: target(form),
-        current_border_color: current_border_color,
-        idle_border_color: idle_border_color,
-        active_border_color: active_border_color,
+        input_static_class: input_static_class,
+        input_dynamic_class: input_dynamic_class,
+        active_color: active_color,
         errors: errors,
-        active?: active?
+        has_errors: has_errors
       })
 
     ~H"""
@@ -400,15 +356,16 @@ defmodule Frameworks.Pixel.Form do
       label_color={@label_color}
       background={@background}
       errors={@errors}
-      active?={@active?}
       extra_space={false}
     >
       <textarea
         id={@field_id}
         name={@field_name}
-        class={"field-input text-grey1 text-bodymedium font-body pl-3 pt-2 w-full h-64 border-2 focus:outline-none rounded #{@current_border_color}"}
-        idle-class={@idle_border_color}
-        active-class={@active_border_color}
+        class={[@input_static_class, @input_dynamic_class]}
+        __eyra_field_id={@field_id}
+        __eyra_field_has_errors={@has_errors}
+        __eyra_field_static_class={@input_static_class}
+        __eyra_field_active_color={@active_color}
         phx-target={@target}
         phx-debounce={@debounce}
       ><%= @field_value %></textarea>
@@ -530,7 +487,6 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
-  attr(:active_field, :string, default: nil)
   attr(:options, :list, required: true)
   attr(:selected_option, :atom)
   attr(:target, :any, required: true)
@@ -543,46 +499,29 @@ defmodule Frameworks.Pixel.Form do
   attr(:debounce, :string, default: "1000")
   attr(:value, :any, default: nil)
 
-  def dropdown(
-        %{form: form, field: field, active_field: active_field, background: background} = assigns
-      ) do
+  def dropdown(%{form: form, field: field} = assigns) do
     errors = form[field].errors
     field_id = String.to_atom(input_id(form, field))
-    active? = Atom.to_string(field_id) == active_field
     options_id = "#{field_id}-options"
 
-    idle_border_color =
-      if Enum.empty?(errors) do
-        "border-grey3"
-      else
-        "border-warning"
-      end
+    input_static_class =
+      "#{field_tag(@input)} text-grey1 text-bodymedium font-body pl-3 focus:outline-none whitespace-pre-wrap w-full border-2 border-solid rounded h-44px cursor-pointer"
 
-    active_border_color =
-      if background == :light do
-        "border-primary"
-      else
-        "border-tertiary"
-      end
-
-    current_border_color =
-      if active? do
-        active_border_color
-      else
-        idle_border_color
-      end
+    input_dynamic_class = "border-grey3"
+    active_color = active_input_color(assigns)
+    has_errors = Enum.count(errors) > 0
 
     assigns =
       assign(assigns, %{
         field_id: field_id,
         field_name: input_name(form, field),
         field_value: value(form, assigns),
-        current_border_color: current_border_color,
-        idle_border_color: idle_border_color,
-        active_border_color: active_border_color,
         options_id: options_id,
-        active?: active?,
-        errors: errors
+        input_static_class: input_static_class,
+        input_dynamic_class: input_dynamic_class,
+        active_color: active_color,
+        errors: errors,
+        has_errors: has_errors
       })
 
     ~H"""
@@ -593,7 +532,6 @@ defmodule Frameworks.Pixel.Form do
       background={@background}
       error_message={@error_message}
       reserve_error_space={@reserve_error_space}
-      active?={@active?}
       errors={@errors}
     >
       <div class="relative">
@@ -604,9 +542,11 @@ defmodule Frameworks.Pixel.Form do
           name={@field_name}
           value={@field_value}
           placeholder={@placeholder}
-          class={"field-input text-grey1 text-bodymedium font-body pl-3 focus:outline-none whitespace-pre-wrap w-full border-2 border-solid rounded h-44px cursor-pointer #{@current_border_color}"}
-          idle-class={@idle_border_color}
-          active-class={@active_border_color}
+          class={"#{@input_static_class} #{@input_dynamic_class}"}
+          __eyra_field_id={@field_id}
+          __eyra_field_has_error={@has_errors}
+          __eyra_field_static_class={@input_static_class}
+          __eyra_field_active_color={@active_color}
           phx-target={@target}
         />
         <div class="absolute z-20 right-0 top-0 h-44px flex flex-col justify-center">

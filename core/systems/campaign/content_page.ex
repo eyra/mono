@@ -10,6 +10,7 @@ defmodule Systems.Campaign.ContentPage do
   import CoreWeb.Gettext
   import Core.ImageCatalog, only: [image_catalog: 0]
 
+  alias Core.Accounts
   alias CoreWeb.UI.ImageCatalogPicker
   alias Systems.Promotion.FormView, as: PromotionForm
   import CoreWeb.Layouts.Workspace.Component
@@ -42,10 +43,9 @@ defmodule Systems.Campaign.ContentPage do
         initial_tab: initial_tab,
         locale: locale,
         changesets: %{},
+        submit_clicked: false,
         dialog: nil,
-        popup: nil,
-        validate?: false,
-        active_field: nil
+        popup: nil
       )
       |> assign_viewport()
       |> assign_breakpoint()
@@ -92,16 +92,6 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   @impl true
-  def handle_event("active-field", field, socket) do
-    {
-      :noreply,
-      socket
-      |> assign(active_field: field)
-      |> update_view_model()
-    }
-  end
-
-  @impl true
   def handle_event("delete", _params, socket) do
     item = dgettext("link-ui", "delete.confirm.campaign")
     title = String.capitalize(dgettext("eyra-ui", "delete.confirm.title", item: item))
@@ -112,9 +102,14 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   @impl true
-  def handle_event("delete_confirm", _params, %{assigns: %{vm: %{id: campaign_id}}} = socket) do
+  def handle_event(
+        "delete_confirm",
+        _params,
+        %{assigns: %{vm: %{id: campaign_id}, current_user: user}} = socket
+      ) do
     Campaign.Public.delete(campaign_id)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, Next.Console.Page))}
+    start_page = Accounts.start_page_target(user)
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, start_page))}
   end
 
   @impl true
@@ -142,7 +137,7 @@ defmodule Systems.Campaign.ContentPage do
         text = dgettext("eyra-submission", "submit.error.text")
 
         socket
-        |> assign(validate?: true)
+        |> assign(submit_clicked: true)
         |> update_view_model()
         |> inform(title, text)
       end
@@ -452,7 +447,7 @@ defmodule Systems.Campaign.ContentPage do
   def render(assigns) do
     ~H"""
     <.workspace title={dgettext("link-survey", "content.title")} menus={@menus}>
-      <div id="campaign" phx-hook="LiveView">
+      <div id="campaign" phx-hook="LiveContent" data-show-errors={@vm.show_errors}>
         <div id={:survey_content} phx-hook="ViewportResize">
 
           <%= if @popup do %>

@@ -31,7 +31,7 @@ defmodule Systems.DataDonation.OverviewPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <div id="port-studies" phx-hook="LiveView">
+    <div id="port-studies" phx-hook="LiveContent">
       <.workspace title="Studies" menus={@menus}>
         <Area.content>
           <Margin.y id={:page_top} />

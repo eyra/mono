@@ -173,7 +173,7 @@ defmodule Systems.Pool.SubmissionView do
 
   # Validate
 
-  def validate_for_publish(%{assigns: %{entity: entity, validate?: true}} = socket) do
+  def validate_for_publish(%{assigns: %{entity: entity}} = socket) do
     changeset =
       Pool.SubmissionModel.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
@@ -181,8 +181,6 @@ defmodule Systems.Pool.SubmissionView do
     socket
     |> assign(changeset: changeset)
   end
-
-  def validate_for_publish(socket), do: socket
 
   # Saving
 

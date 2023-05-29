@@ -14,28 +14,12 @@ defmodule Systems.Survey.ToolForm do
     Survey
   }
 
-  # Handle update from parent
-  @impl true
-  def update(
-        %{validate?: validate?, active_field: active_field},
-        %{assigns: %{entity: _}} = socket
-      ) do
-    {
-      :ok,
-      socket
-      |> update_validate?(validate?)
-      |> update_active_field(active_field)
-    }
-  end
-
   # Handle initial update
   @impl true
   def update(
         %{
           id: id,
           entity_id: entity_id,
-          validate?: validate?,
-          active_field: active_field,
           callback_url: callback_url,
           user: user
         },
@@ -54,29 +38,11 @@ defmodule Systems.Survey.ToolForm do
         entity: entity,
         callback_url: callback_url,
         changeset: changeset,
-        validate?: validate?,
-        active_field: active_field,
         user: user
       )
       |> validate_for_publish()
     }
   end
-
-  defp update_active_field(%{assigns: %{active_field: current}} = socket, new)
-       when new != current do
-    socket
-    |> assign(active_field: new)
-  end
-
-  defp update_active_field(socket, _new), do: socket
-
-  defp update_validate?(%{assigns: %{validate?: current}} = socket, new) when new != current do
-    socket
-    |> assign(validate?: new)
-    |> validate_for_publish()
-  end
-
-  defp update_validate?(socket, _new), do: socket
 
   # Handle Events
 
@@ -121,7 +87,7 @@ defmodule Systems.Survey.ToolForm do
 
   # Validate
 
-  def validate_for_publish(%{assigns: %{id: id, entity: entity, validate?: true}} = socket) do
+  def validate_for_publish(%{assigns: %{id: id, entity: entity}} = socket) do
     changeset =
       Survey.ToolModel.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
@@ -131,8 +97,6 @@ defmodule Systems.Survey.ToolForm do
     socket
     |> assign(changeset: changeset)
   end
-
-  def validate_for_publish(socket), do: socket
 
   defp redirect_instructions_link() do
     link_as_string(
@@ -231,7 +195,7 @@ defmodule Systems.Survey.ToolForm do
         </Panel.flat>
         <.spacing value="L" />
 
-        <.url_input form={form} field={:survey_url} label_text={dgettext("link-survey", "config.url.label")} active_field={@active_field} />
+        <.url_input form={form} field={:survey_url} label_text={dgettext("link-survey", "config.url.label")} />
         <.spacing value="S" />
         <Panel.flat bg_color="bg-grey5">
           <Text.title3><%= dgettext("link-survey", "test.roundtrip.title") %></Text.title3>

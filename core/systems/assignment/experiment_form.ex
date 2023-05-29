@@ -46,24 +46,10 @@ defmodule Systems.Assignment.ExperimentForm do
     }
   end
 
-  # Handle update from parent
-  @impl true
-  def update(
-        %{validate?: validate?, active_field: active_field},
-        %{assigns: %{entity: _}} = socket
-      ) do
-    {
-      :ok,
-      socket
-      |> update_validate?(validate?)
-      |> update_active_field(active_field)
-    }
-  end
-
   # Handle initial update
   @impl true
   def update(
-        %{id: id, entity: entity, validate?: validate?, active_field: active_field},
+        %{id: id, entity: entity},
         socket
       ) do
     changeset = Assignment.ExperimentModel.changeset(entity, :create, %{})
@@ -74,31 +60,13 @@ defmodule Systems.Assignment.ExperimentForm do
       |> assign(
         id: id,
         entity: entity,
-        changeset: changeset,
-        validate?: validate?,
-        active_field: active_field
+        changeset: changeset
       )
       |> update_device_labels()
       |> update_language_labels()
       |> validate_for_publish()
     }
   end
-
-  defp update_active_field(%{assigns: %{active_field: current}} = socket, new)
-       when new != current do
-    socket
-    |> assign(active_field: new)
-  end
-
-  defp update_active_field(socket, _new), do: socket
-
-  defp update_validate?(%{assigns: %{validate?: current}} = socket, new) when new != current do
-    socket
-    |> assign(validate?: new)
-    |> validate_for_publish()
-  end
-
-  defp update_validate?(socket, _new), do: socket
 
   defp update_device_labels(%{assigns: %{entity: %{devices: devices}}} = socket) do
     device_labels = Devices.labels(devices)
@@ -134,7 +102,7 @@ defmodule Systems.Assignment.ExperimentForm do
 
   # Validate
 
-  def validate_for_publish(%{assigns: %{id: id, entity: entity, validate?: true}} = socket) do
+  def validate_for_publish(%{assigns: %{id: id, entity: entity}} = socket) do
     changeset =
       Assignment.ExperimentModel.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
@@ -145,8 +113,6 @@ defmodule Systems.Assignment.ExperimentForm do
     |> assign(changeset: changeset)
   end
 
-  def validate_for_publish(socket), do: socket
-
   @impl true
   def render(assigns) do
     ~H"""
@@ -156,7 +122,6 @@ defmodule Systems.Assignment.ExperimentForm do
           form={form}
           field={:duration}
           label_text={dgettext("link-survey", "duration.label")}
-          active_field={@active_field}
         />
         <.spacing value="M" />
 
@@ -164,7 +129,6 @@ defmodule Systems.Assignment.ExperimentForm do
           form={form}
           field={:subject_count}
           label_text={dgettext("link-survey", "config.nrofsubjects.label")}
-          active_field={@active_field}
         />
         <.spacing value="M" />
 

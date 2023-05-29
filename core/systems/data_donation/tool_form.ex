@@ -15,23 +15,9 @@ defmodule Systems.DataDonation.ToolForm do
     DataDonation
   }
 
-  # Handle update from parent
   @impl true
   def update(
-        %{validate?: validate?, active_field: active_field},
-        %{assigns: %{entity: _}} = socket
-      ) do
-    {
-      :ok,
-      socket
-      |> update_validate?(validate?)
-      |> update_active_field(active_field)
-    }
-  end
-
-  @impl true
-  def update(
-        %{id: id, entity_id: entity_id, validate?: validate?, active_field: active_field},
+        %{id: id, entity_id: entity_id},
         socket
       ) do
     entity = DataDonation.Public.get_tool!(entity_id)
@@ -46,27 +32,10 @@ defmodule Systems.DataDonation.ToolForm do
         entity_id: entity_id,
         entity: entity,
         changeset: changeset,
-        donations: donations,
-        validate?: validate?,
-        active_field: active_field
+        donations: donations
       )
     }
   end
-
-  defp update_active_field(%{assigns: %{active_field: current}} = socket, new)
-       when new != current do
-    socket
-    |> assign(active_field: new)
-  end
-
-  defp update_active_field(socket, _new), do: socket
-
-  defp update_validate?(%{assigns: %{validate?: current}} = socket, new) when new != current do
-    socket
-    |> assign(validate?: new)
-  end
-
-  defp update_validate?(socket, _new), do: socket
 
   # Handle Events
 
@@ -137,11 +106,11 @@ defmodule Systems.DataDonation.ToolForm do
       <% end %>
       <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
         <Text.title3><%= dgettext("eyra-data-donation", "script.title") %></Text.title3>
-        <.text_area form={form} field={:script} label_text={dgettext("eyra-data-donation", "script.label")} active_field={@active_field} />
+        <.text_area form={form} field={:script} label_text={dgettext("eyra-data-donation", "script.label")} />
         <.spacing value="L" />
 
         <Text.title3><%= dgettext("eyra-data-donation", "reward.title") %></Text.title3>
-        <.number_input form={form} field={:reward_value} label_text={dgettext("eyra-data-donation", "reward.label")} active_field={@active_field} />
+        <.number_input form={form} field={:reward_value} label_text={dgettext("eyra-data-donation", "reward.label")} />
         <.spacing value="L" />
 
         <Text.title3><%= dgettext("eyra-data-donation", "nrofsubjects.title") %></Text.title3>
@@ -149,7 +118,6 @@ defmodule Systems.DataDonation.ToolForm do
           form={form}
           field={:subject_count}
           label_text={dgettext("eyra-data-donation", "config.nrofsubjects.label")}
-          active_field={@active_field}
         />
       </.form>
       <.spacing value="M" />

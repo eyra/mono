@@ -54,28 +54,12 @@ defmodule Systems.Promotion.FormView do
     }
   end
 
-  # Handle update from parent
-  @impl true
-  def update(
-        %{validate?: validate?, active_field: active_field},
-        %{assigns: %{entity: _}} = socket
-      ) do
-    {
-      :ok,
-      socket
-      |> update_validate?(validate?)
-      |> update_active_field(active_field)
-    }
-  end
-
   # Initial update
   @impl true
   def update(
         %{
           id: id,
           entity: entity,
-          validate?: validate?,
-          active_field: active_field,
           themes_module: themes_module
         },
         socket
@@ -87,8 +71,6 @@ defmodule Systems.Promotion.FormView do
       |> assign(
         id: id,
         entity: entity,
-        validate?: validate?,
-        active_field: active_field,
         themes_module: themes_module
       )
       |> update_changeset()
@@ -98,22 +80,6 @@ defmodule Systems.Promotion.FormView do
       |> validate_for_publish()
     }
   end
-
-  defp update_active_field(%{assigns: %{active_field: current}} = socket, new)
-       when new != current do
-    socket
-    |> assign(active_field: new)
-  end
-
-  defp update_active_field(socket, _new), do: socket
-
-  defp update_validate?(%{assigns: %{validate?: current}} = socket, new) when new != current do
-    socket
-    |> assign(validate?: new)
-    |> validate_for_publish()
-  end
-
-  defp update_validate?(socket, _new), do: socket
 
   defp update_changeset(%{assigns: %{entity: entity}} = socket) do
     changeset = Promotion.Model.changeset(entity, :create, %{})
@@ -157,7 +123,7 @@ defmodule Systems.Promotion.FormView do
 
   # Validate
 
-  def validate_for_publish(%{assigns: %{id: id, entity: entity, validate?: true}} = socket) do
+  def validate_for_publish(%{assigns: %{id: id, entity: entity}} = socket) do
     changeset =
       Promotion.Model.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
@@ -167,8 +133,6 @@ defmodule Systems.Promotion.FormView do
     socket
     |> assign(changeset: changeset, form: to_form(changeset))
   end
-
-  def validate_for_publish(socket), do: socket
 
   # Handle Events
 
@@ -203,8 +167,8 @@ defmodule Systems.Promotion.FormView do
         <Text.body_large><%= dgettext("eyra-promotion", "form.description") %></Text.body_large>
         <.spacing value="M" />
         <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
-          <.text_input form={form} field={:title} label_text={dgettext("eyra-promotion", "title.label")} active_field={@active_field} />
-          <.text_input form={form} field={:subtitle} label_text={dgettext("eyra-promotion", "subtitle.label")} active_field={@active_field} />
+          <.text_input form={form} field={:title} label_text={dgettext("eyra-promotion", "title.label")} />
+          <.text_input form={form} field={:subtitle} label_text={dgettext("eyra-promotion", "subtitle.label")} />
 
           <.spacing value="XL" />
           <Text.title3><%= dgettext("eyra-promotion", "themes.title") %></Text.title3>
@@ -224,11 +188,11 @@ defmodule Systems.Promotion.FormView do
           <.spacing value="XL" />
 
           <Text.title3><%= dgettext("eyra-promotion", "expectations.title") %></Text.title3>
-          <.text_area form={form} field={:expectations} label_text={dgettext("eyra-promotion", "expectations.label")} active_field={@active_field} />
+          <.text_area form={form} field={:expectations} label_text={dgettext("eyra-promotion", "expectations.label")} />
           <.spacing value="L" />
 
           <Text.title3><%= dgettext("eyra-promotion", "description.title") %></Text.title3>
-          <.text_area form={form} field={:description} label_text={dgettext("eyra-promotion", "description.label")} active_field={@active_field} />
+          <.text_area form={form} field={:description} label_text={dgettext("eyra-promotion", "description.label")} />
           <.spacing value="L" />
 
           <Text.title3><%= dgettext("eyra-promotion", "banner.title") %></Text.title3>
@@ -242,13 +206,12 @@ defmodule Systems.Promotion.FormView do
 
           <.spacing value="S" />
 
-          <.text_input form={form} field={:banner_title} label_text={dgettext("eyra-promotion", "banner.title.label")} active_field={@active_field} />
+          <.text_input form={form} field={:banner_title} label_text={dgettext("eyra-promotion", "banner.title.label")} />
           <.text_input form={form}
             field={:banner_subtitle}
             label_text={dgettext("eyra-promotion", "banner.subtitle.label")}
-            active_field={@active_field}
           />
-          <.url_input form={form} field={:banner_url} label_text={dgettext("eyra-promotion", "banner.url.label")} active_field={@active_field} />
+          <.url_input form={form} field={:banner_url} label_text={dgettext("eyra-promotion", "banner.url.label")} />
         </.form>
       </Area.content>
     </div>

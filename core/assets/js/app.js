@@ -25,7 +25,7 @@ import { registerAPNSDeviceToken } from "./apns";
 import "./100vh-fix";
 import { ViewportResize } from "./viewport_resize";
 import { Toggle } from "./toggle";
-import { LiveView, Field } from "./live_view";
+import { LiveContent, LiveField } from "./live_content";
 import { Tabbar, TabbarItem, TabbarFooterItem } from "./tabbar";
 import { PythonUploader } from "./python_uploader";
 import { Clipboard } from "./clipboard";
@@ -94,8 +94,8 @@ let Hooks = {
   Clipboard,
   ViewportResize,
   Toggle,
-  LiveView,
-  Field,
+  LiveContent,
+  LiveField,
   Tabbar,
   TabbarItem,
   TabbarFooterItem,
@@ -110,6 +110,8 @@ let liveSocket = new LiveSocket("/live", Socket, {
     onBeforeElUpdated(from, to) {
       if (from.__x) {
         window.Alpine.clone(from.__x, to);
+      } else {
+        LiveContent.onBeforeElUpdated(from, to);
       }
     },
   },

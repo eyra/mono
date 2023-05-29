@@ -17,7 +17,7 @@ defmodule Systems.Campaign.FundingView do
   # Handle update from parent
   @impl true
   def update(
-        %{assignment: assignment, submission: submission, active_field: active_field},
+        %{assignment: assignment, submission: submission},
         %{assigns: %{id: _id}} = socket
       ) do
     {
@@ -27,7 +27,6 @@ defmodule Systems.Campaign.FundingView do
         assignment: assignment,
         submission: submission
       )
-      |> update_active_field(active_field)
       |> update_state()
       |> update_shortage()
       |> update_reward_description()
@@ -45,8 +44,7 @@ defmodule Systems.Campaign.FundingView do
           assignment: %{budget: budget} = assignment,
           submission: submission,
           user: user,
-          locale: locale,
-          active_field: active_field
+          locale: locale
         },
         socket
       ) do
@@ -62,8 +60,7 @@ defmodule Systems.Campaign.FundingView do
         changeset: changeset,
         selected_budget: budget,
         user: user,
-        locale: locale,
-        active_field: active_field
+        locale: locale
       )
       |> update_state()
       |> update_reward()
@@ -74,14 +71,6 @@ defmodule Systems.Campaign.FundingView do
       |> update_budget_items()
     }
   end
-
-  defp update_active_field(%{assigns: %{active_field: current}} = socket, new)
-       when new != current do
-    socket
-    |> assign(active_field: new)
-  end
-
-  defp update_active_field(socket, _new), do: socket
 
   defp update_state(
          %{
@@ -334,7 +323,7 @@ defmodule Systems.Campaign.FundingView do
           <Text.body><%= @reward_description %></Text.body>
           <.spacing value="XS" />
           <div class="w-form">
-            <.number_input form={form} field={:reward_value} label_text={@reward_label} active_field={@active_field} />
+            <.number_input form={form} field={:reward_value} label_text={@reward_label} />
           </div>
         </.form>
       </Area.content>

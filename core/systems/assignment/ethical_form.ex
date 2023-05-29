@@ -25,24 +25,10 @@ defmodule Systems.Assignment.EthicalForm do
     }
   end
 
-  # Handle update from parent
-  @impl true
-  def update(
-        %{validate?: validate?, active_field: active_field},
-        %{assigns: %{entity: _}} = socket
-      ) do
-    {
-      :ok,
-      socket
-      |> update_validate?(validate?)
-      |> update_active_field(active_field)
-    }
-  end
-
   # Handle initial update
   @impl true
   def update(
-        %{id: id, entity: entity, validate?: validate?, active_field: active_field},
+        %{id: id, entity: entity},
         socket
       ) do
     changeset = Assignment.ExperimentModel.changeset(entity, :create, %{})
@@ -61,29 +47,11 @@ defmodule Systems.Assignment.EthicalForm do
         id: id,
         entity: entity,
         changeset: changeset,
-        ethical_label: ethical_label,
-        validate?: validate?,
-        active_field: active_field
+        ethical_label: ethical_label
       )
       |> validate_for_publish()
     }
   end
-
-  defp update_active_field(%{assigns: %{active_field: current}} = socket, new)
-       when new != current do
-    socket
-    |> assign(active_field: new)
-  end
-
-  defp update_active_field(socket, _new), do: socket
-
-  defp update_validate?(%{assigns: %{validate?: current}} = socket, new) when new != current do
-    socket
-    |> assign(validate?: new)
-    |> validate_for_publish()
-  end
-
-  defp update_validate?(socket, _new), do: socket
 
   # Handle Events
 
@@ -108,7 +76,7 @@ defmodule Systems.Assignment.EthicalForm do
 
   # Validate
 
-  def validate_for_publish(%{assigns: %{id: id, entity: entity, validate?: true}} = socket) do
+  def validate_for_publish(%{assigns: %{id: id, entity: entity}} = socket) do
     changeset =
       Assignment.ExperimentModel.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
@@ -118,8 +86,6 @@ defmodule Systems.Assignment.EthicalForm do
     socket
     |> assign(changeset: changeset)
   end
-
-  def validate_for_publish(socket), do: socket
 
   defp ethical_review_link() do
     link_as_string(
@@ -155,7 +121,6 @@ defmodule Systems.Assignment.EthicalForm do
             field={:ethical_code}
             placeholder={dgettext("eyra-account", "ehtical.code.label")}
             background={:dark}
-            active_field={@active_field}
           />
           <.checkbox
             form={form}

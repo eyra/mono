@@ -34,16 +34,15 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
           current_user: user,
           uri_path: uri_path,
           uri_origin: uri_origin,
-          validate?: validate?,
-          active_field: active_field,
+          submit_clicked: submit_clicked,
           locale: locale
         },
         url_resolver
       ) do
     submitted? = Pool.SubmissionModel.submitted?(submission)
-    validate? = validate? or submitted?
+    show_errors = submit_clicked or submitted?
 
-    tabs = create_tabs(campaign, validate?, active_field, user, uri_origin, locale)
+    tabs = create_tabs(campaign, show_errors, user, uri_origin, locale)
 
     preview_path =
       url_resolver.(Promotion.LandingPage, id: promotion_id, preview: true, back: uri_path)
@@ -54,14 +53,15 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
       promotion: promotion,
       tabs: tabs,
       submitted?: submitted?,
+      show_errors: show_errors,
       preview_path: preview_path
     }
   end
 
-  defp create_tabs(campaign, validate?, active_field, user, uri_origin, locale) do
+  defp create_tabs(campaign, show_errors, user, uri_origin, locale) do
     campaign
     |> get_tab_keys()
-    |> Enum.map(&create_tab(&1, campaign, validate?, active_field, user, uri_origin, locale))
+    |> Enum.map(&create_tab(&1, campaign, show_errors, user, uri_origin, locale))
   end
 
   defp get_tab_keys(%{submission: %{pool: %{currency: %{type: :legal}}}}) do
@@ -75,25 +75,23 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
   defp create_tab(
          :promotion,
          %{promotion: promotion},
-         validate?,
-         active_field,
+         show_errors,
          _user,
          _uri_origin,
          _locale
        ) do
-    promotion_form_ready? = Promotion.Public.ready?(promotion)
+    ready? = Promotion.Public.ready?(promotion)
 
     %{
       id: :promotion_form,
-      ready: !validate? || promotion_form_ready?,
+      ready: ready?,
+      show_errors: show_errors,
       title: dgettext("link-survey", "tabbar.item.promotion"),
       forward_title: dgettext("link-survey", "tabbar.item.promotion.forward"),
       type: :fullpage,
       live_component: Promotion.FormView,
       props: %{
         entity: promotion,
-        validate?: validate?,
-        active_field: active_field,
         themes_module: Themes
       }
     }
@@ -102,17 +100,17 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
   defp create_tab(
          :assignment,
          %{promotable: assignment},
-         validate?,
-         active_field,
+         show_errors,
          user,
          uri_origin,
          _locale
        ) do
-    assignment_form_ready? = Assignment.Public.ready?(assignment)
+    ready? = Assignment.Public.ready?(assignment)
 
     %{
       id: :assignment_form,
-      ready: !validate? || assignment_form_ready?,
+      ready: ready?,
+      show_errors: show_errors,
       title: dgettext("link-survey", "tabbar.item.assignment"),
       forward_title: dgettext("link-survey", "tabbar.item.assignment.forward"),
       type: :fullpage,
@@ -120,8 +118,6 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
       props: %{
         entity: assignment,
         uri_origin: uri_origin,
-        validate?: validate?,
-        active_field: active_field,
         user: user,
         target: self()
       }
@@ -131,8 +127,7 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
   defp create_tab(
          :submission,
          %{submission: submission},
-         _validate?,
-         _active_field,
+         _show_errors,
          user,
          _uri_origin,
          _locale
@@ -153,8 +148,7 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
   defp create_tab(
          :funding,
          %{promotable: assignment, submission: submission},
-         _validate?,
-         active_field,
+         _show_errors,
          user,
          _uri_origin,
          locale
@@ -169,8 +163,7 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
         assignment: assignment,
         submission: submission,
         user: user,
-        locale: locale,
-        active_field: active_field
+        locale: locale
       }
     }
   end
@@ -178,8 +171,7 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
   defp create_tab(
          :monitor,
          %{promotable: assignment} = campaign,
-         _validate?,
-         _active_field,
+         _show_errors,
          _user,
          _uri_origin,
          _locale
