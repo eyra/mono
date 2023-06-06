@@ -4,17 +4,11 @@ defmodule CoreWeb.User.Forms.Debug do
   alias Core.Accounts
   alias Core.Accounts.UserProfileEdit
 
-  alias Frameworks.Pixel.Text.{Title2}
-  alias Frameworks.Pixel.Form.{Form}
-  alias Frameworks.Pixel.Selector.Selector
-
-  prop(user, :any, required: true)
-
-  data(entity, :any)
-  data(changeset, :any)
-  data(role_labels, :list)
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Selector
 
   # Handle Selector Update
+  @impl true
   def update(
         %{active_item_id: active_item_id, selector_id: :role_selector},
         %{assigns: %{entity: entity}} = socket
@@ -33,6 +27,7 @@ defmodule CoreWeb.User.Forms.Debug do
     }
   end
 
+  @impl true
   def update(%{id: id, user: user}, socket) do
     profile = Accounts.get_profile(user)
     entity = UserProfileEdit.create(user, profile)
@@ -107,20 +102,29 @@ defmodule CoreWeb.User.Forms.Debug do
     |> save(changeset)
   end
 
+  # data(entity, :any)
+  # data(changeset, :any)
+  # data(role_labels, :list)
+
+  attr(:user, :any, required: true)
+
   @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <Title2>User roles</Title2>
-      <Form id="main_form" changeset={@changeset} change_event="save" target={@myself}>
-        <Selector
+    ~H"""
+    <div>
+      <Area.content>
+      <Text.title2>User roles</Text.title2>
+      <.form id="main_form" for={@changeset} phx-change="save" phx-target={@myself} >
+        <.live_component
+          module={Selector}
           id={:role_selector}
           items={@role_labels}
           type={:radio}
           parent={%{type: __MODULE__, id: @id}}
         />
-      </Form>
-    </ContentArea>
+      </.form>
+      </Area.content>
+    </div>
     """
   end
 end

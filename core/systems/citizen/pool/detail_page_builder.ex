@@ -25,7 +25,7 @@ defmodule Systems.Citizen.Pool.DetailPageBuilder do
       %{
         id: :citizens,
         title: dgettext("link-citizen", "tabbar.item.citizens"),
-        component: Citizen.Overview,
+        live_component: Citizen.Overview,
         props: %{citizens: participants, pool: pool},
         type: :fullpage,
         active: initial_tab === :citizens
@@ -33,7 +33,7 @@ defmodule Systems.Citizen.Pool.DetailPageBuilder do
       %{
         id: :campaigns,
         title: dgettext("link-citizen", "tabbar.item.campaigns"),
-        component: Pool.CampaignsView,
+        live_component: Pool.CampaignsView,
         props: %{campaigns: campaigns},
         type: :fullpage,
         active: initial_tab === :campaigns

@@ -1,28 +1,23 @@
 defmodule Systems.Lab.CheckInView do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
   import CoreWeb.Gettext
   require Logger
 
   alias Core.Accounts
   alias Systems.Director
-  alias Frameworks.Pixel.Form.{Form, TextInput}
-  alias Frameworks.Pixel.Panel.Panel
-  alias Frameworks.Pixel.Text.{BodyMedium, Title3}
+  import Frameworks.Pixel.Form
+  alias Frameworks.Pixel.Panel
+  alias Frameworks.Pixel.Text
 
   alias Systems.{
     Lab
   }
 
+  import Lab.CheckInItem
+
   @max_search_results 5
 
-  prop(tool, :map, required: true)
-  prop(parent, :any, required: true)
-
-  data(changeset, :map)
-  data(items, :list, default: [])
-  data(message, :string, default: "")
-  data(query, :string)
-
+  @impl true
   def update(%{id: id, tool: tool, parent: parent}, socket) do
     changeset =
       %Lab.CheckInModel{}
@@ -124,24 +119,26 @@ defmodule Systems.Lab.CheckInView do
     {items |> Enum.take(@max_search_results), message}
   end
 
+  # data(changeset, :map)
+  # data(items, :list, default: [])
+  # data(message, :string, default: "")
+  # data(query, :string)
+
+  attr(:tool, :map, required: true)
+  attr(:parent, :any, required: true)
+
   @impl true
   def render(assigns) do
-    ~F"""
-    <Panel bg_color="bg-grey1">
-      <Title3 color="text-white">{dgettext("link-lab", "search.subject.title")}</Title3>
-      <Spacing value="M" />
-      <BodyMedium color="text-white">{dgettext("link-lab", "search.subject.body")}</BodyMedium>
-      <Spacing value="S" />
+    ~H"""
+    <Panel.flat bg_color="bg-grey1">
+      <Text.title3 color="text-white"><%= dgettext("link-lab", "search.subject.title") %></Text.title3>
+      <.spacing value="M" />
+      <Text.body_medium color="text-white"><%= dgettext("link-lab", "search.subject.body") %></Text.body_medium>
+      <.spacing value="S" />
 
-      <Form
-        id="search_subject"
-        changeset={@changeset}
-        change_event="update"
-        submit="submit"
-        target={@myself}
-      >
+      <.form id="search_subject" :let={form} for={@changeset} phx-change="update" phx-submit="submit" phx-target={@myself}>
         <div class="w-form">
-          <TextInput
+          <.text_input form={form}
             field={:query}
             label_text={dgettext("link-lab", "search.subject.query.label")}
             reserve_error_space={false}
@@ -150,19 +147,22 @@ defmodule Systems.Lab.CheckInView do
             label_color="text-white"
           />
         </div>
-        <div :if={@message}>
+        <%= if @message do %>
           <div class="text-caption font-caption text-tertiary">
-            {@message}
+            <%= @message %>
           </div>
-        </div>
-        <div :if={@query}>
-          <Spacing value="S" />
+        <% end %>
+
+        <%= if @query do %>
+          <.spacing value="S" />
           <table>
-            <Lab.CheckInItem :for={item <- @items} {...item} target={@myself} />
+            <%= for item <- @items do %>
+              <.check_in_item {item} target={@myself} />
+            <% end %>
           </table>
-        </div>
-      </Form>
-    </Panel>
+        <% end %>
+      </.form>
+    </Panel.flat>
     """
   end
 

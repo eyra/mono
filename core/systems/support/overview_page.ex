@@ -5,20 +5,12 @@ defmodule Systems.Support.OverviewPage do
 
   require Systems.Support.TicketStatus
 
-  alias CoreWeb.UI.Navigation.{
-    ActionBar,
-    TabbarArea,
-    Tabbar,
-    TabbarContent
-  }
+  alias CoreWeb.UI.Tabbar
+  alias CoreWeb.UI.Navigation
 
   alias Systems.{
     Support
   }
-
-  data(tabbar_id, :string)
-  data(tabs, :list)
-  data(bar_size, :number)
 
   @impl true
   def mount(_params, _session, socket) do
@@ -54,11 +46,11 @@ defmodule Systems.Support.OverviewPage do
       |> Enum.map(fn {status, tickets} ->
         %{
           id: status,
-          ready?: true,
+          ready: true,
           title: Support.TicketStatus.translate(status),
           count: Enum.count(tickets),
           type: :fullpage,
-          component: Systems.Support.OverviewTab,
+          live_component: Systems.Support.OverviewTab,
           props: %{
             tickets: tickets
           }
@@ -72,18 +64,20 @@ defmodule Systems.Support.OverviewPage do
   defp tabbar_size({:unknown, _}), do: :unknown
   defp tabbar_size(bp), do: value(bp, :narrow, sm: %{30 => :wide})
 
+  # data(tabbar_id, :string)
+  # data(tabs, :list)
+  # data(tabbar_size, :number)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace title={dgettext("eyra-admin", "support.title")} menus={@menus}>
+    ~H"""
+    <.workspace title={dgettext("eyra-admin", "support.title")} menus={@menus}>
       <div id={:support} phx-hook="ViewportResize">
-        <TabbarArea tabs={@tabs}>
-          <ActionBar>
-            <Tabbar id={@tabbar_id} size={@tabbar_size} />
-          </ActionBar>
-          <TabbarContent />
-        </TabbarArea>
+        <Navigation.action_bar>
+          <Tabbar.container id={@tabbar_id} tabs={@tabs} size={@tabbar_size} />
+        </Navigation.action_bar>
+        <Tabbar.content tabs={@tabs} />
       </div>
-    </Workspace>
+    </.workspace>
     """
   end
 end

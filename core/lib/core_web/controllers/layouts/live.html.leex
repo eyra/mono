@@ -1,0 +1,70 @@
+<main class="w-full">
+  <div>
+    <div x-data="{ }"
+        class="fixed z-20 bottom-6 right-6 pointer-events-none"
+        x-bind:class="{'hidden': <%= live_flash(@flash, :info) === nil %>}">
+      <div class="flex flex-row" >
+        <div class="max-w-form flex-shrink-0 pointer-events-auto" >
+          <div class="text-caption font-caption bg-white rounded shadow-2xl">
+            <div class="flex flex-row">
+              <div
+                class="alert alert-danger text-primary flex-wrap pr-4 pl-4 pt-2 pb-2 leading-6"
+                role="alert"
+              >
+                <%= live_flash(@flash, :info) %>
+              </div>
+              <button
+                x-on:click="visible = false"
+                phx-click="lv:clear-flash"
+                phx-value-key="info"
+                type="button"
+                class="w-button-sm h-button-sm flex-shrink-0 cursor-pointer active:opacity-50 mt-3 mr-4 mb-2"
+              >
+                <svg width="17" height="12" viewBox="0 0 17 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1.70492 4.04492L6.29492 8.62492L14.8849 0.0449218L16.2949 1.45492L6.29492 11.4549L0.294922 5.45492L1.70492 4.04492Z" fill="#4272EF"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+        class="fixed z-20 top-6 w-full pointer-events-none"
+        x-data="{ }"
+        x-bind:class="{'hidden': <%= live_flash(@flash, :error) === nil %>}"
+    >
+      <div class="flex flex-row items-center justify-center" >
+        <div class="max-w-form flex-shrink-0 pointer-events-auto" >
+          <div class="text-label font-label bg-white rounded shadow-2xl">
+            <div class="flex flex-row">
+              <div
+                class="alert alert-danger text-warning flex-wrap p-4 leading-6"
+                role="alert"
+              >
+                <p><%= live_flash(@flash, :error) %></p>
+              </div>
+
+              <button
+                x-on:click="visible = false"
+                phx-click="lv:clear-flash"
+                phx-value-key="error"
+                type="button"
+                class="w-button-sm h-button-sm flex-shrink-0 cursor-pointer active:opacity-50 mt-5 mr-4 mb-4"
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14 1.41L12.59 0L7 5.59L1.41 0L0 1.41L5.59 7L0 12.59L1.41 14L7 8.41L12.59 14L14 12.59L8.41 7L14 1.41Z" fill="#F28D15"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="h-full">
+    <%= @inner_content %>
+  </div>
+</main>

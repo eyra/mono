@@ -30,7 +30,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
       %{
         id: :students,
         title: dgettext("link-studentpool", "tabbar.item.students"),
-        component: Student.Overview,
+        live_component: Student.Overview,
         props: %{students: participants, pool: pool},
         type: :fullpage,
         active: initial_tab === :students
@@ -38,7 +38,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
       %{
         id: :campaigns,
         title: dgettext("link-studentpool", "tabbar.item.campaigns"),
-        component: Pool.CampaignsView,
+        live_component: Pool.CampaignsView,
         props: %{campaigns: campaigns},
         type: :fullpage,
         active: initial_tab === :campaigns
@@ -46,7 +46,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
       %{
         id: :dashboard,
         title: dgettext("link-studentpool", "tabbar.item.dashboard"),
-        component: Student.Pool.DashboardView,
+        live_component: Student.Pool.DashboardView,
         props: dashboard,
         type: :fullpage,
         active: initial_tab === :dashboard

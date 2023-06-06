@@ -139,15 +139,7 @@ msgid "thanks.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "survey.link"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "welcome.description.top"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "thanks.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen

@@ -1,9 +1,9 @@
 defmodule Systems.Pool.SubmissionView do
   use CoreWeb.LiveForm
 
-  alias Frameworks.Pixel.Selector.Selector
-  alias Frameworks.Pixel.Text.{Title3, Body}
-  alias Frameworks.Pixel.Form.{Form, NumberInput, DateInput}
+  alias Frameworks.Pixel.Selector
+  alias Frameworks.Pixel.Text
+  import Frameworks.Pixel.Form
 
   import CoreWeb.UI.Timestamp,
     only: [
@@ -18,17 +18,6 @@ defmodule Systems.Pool.SubmissionView do
     Pool
   }
 
-  prop(props, :any, required: true)
-
-  data(render_reward?, :boolean)
-  data(schedule_start_toggle_labels, :list)
-  data(schedule_start_disabled, :boolean)
-
-  data(schedule_end_toggle_labels, :list)
-  data(schedule_end_disabled, :boolean)
-
-  data(changeset, :any)
-
   defp determine_new_end(_, nil), do: nil
   defp determine_new_end(nil, schedule_end), do: schedule_end
 
@@ -40,6 +29,7 @@ defmodule Systems.Pool.SubmissionView do
     end
   end
 
+  @impl true
   def update(
         %{active_item_ids: [], selector_id: :schedule_start_toggle},
         %{assigns: %{entity: entity}} = socket
@@ -51,6 +41,7 @@ defmodule Systems.Pool.SubmissionView do
     }
   end
 
+  @impl true
   def update(
         %{active_item_ids: [_], selector_id: :schedule_start_toggle},
         %{assigns: %{entity: entity}} = socket
@@ -70,6 +61,7 @@ defmodule Systems.Pool.SubmissionView do
     }
   end
 
+  @impl true
   def update(
         %{active_item_ids: [], selector_id: :schedule_end_toggle},
         %{assigns: %{entity: entity}} = socket
@@ -81,6 +73,7 @@ defmodule Systems.Pool.SubmissionView do
     }
   end
 
+  @impl true
   def update(
         %{active_item_ids: [_], selector_id: :schedule_end_toggle},
         %{assigns: %{entity: entity}} = socket
@@ -102,7 +95,8 @@ defmodule Systems.Pool.SubmissionView do
   end
 
   # Handle update from parent after attempt to publish
-  def update(%{props: %{validate?: new}}, %{assigns: %{validate?: current}} = socket)
+  @impl true
+  def update(%{validate?: new}, %{assigns: %{validate?: current}} = socket)
       when new != current do
     {
       :ok,
@@ -112,18 +106,17 @@ defmodule Systems.Pool.SubmissionView do
     }
   end
 
+  @impl true
   def update(
         %{
           id: id,
-          props: %{
-            entity:
-              %{
-                schedule_start: schedule_start,
-                schedule_end: schedule_end,
-                pool: %{currency: %{type: currency_type}}
-              } = entity,
-            validate?: validate?
-          }
+          entity:
+            %{
+              schedule_start: schedule_start,
+              schedule_end: schedule_end,
+              pool: %{currency: %{type: currency_type}}
+            } = entity,
+          validate?: validate?
         },
         socket
       ) do
@@ -180,7 +173,7 @@ defmodule Systems.Pool.SubmissionView do
 
   # Validate
 
-  def validate_for_publish(%{assigns: %{entity: entity, validate?: true}} = socket) do
+  def validate_for_publish(%{assigns: %{entity: entity}} = socket) do
     changeset =
       Pool.SubmissionModel.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
@@ -188,8 +181,6 @@ defmodule Systems.Pool.SubmissionView do
     socket
     |> assign(changeset: changeset)
   end
-
-  def validate_for_publish(socket), do: socket
 
   # Saving
 
@@ -211,26 +202,41 @@ defmodule Systems.Pool.SubmissionView do
     |> update_ui()
   end
 
+  # data(render_reward?, :boolean)
+  # data(schedule_start_toggle_labels, :list)
+  # data(schedule_start_disabled, :boolean)
+
+  # data(schedule_end_toggle_labels, :list)
+  # data(schedule_end_disabled, :boolean)
+
+  # data(changeset, :any)
+
+  attr(:submission, :map, required: true)
+  attr(:validate?, :boolean, required: true)
+
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <Form id={@id} changeset={@changeset} change_event="save" target={@myself}>
-        <div :if={@render_reward?}>
-          <Title3 margin="mb-5 sm:mb-8">{dgettext("eyra-submission", "reward.label")}</Title3>
-          <NumberInput
+    ~H"""
+    <div>
+      <Area.content>
+      <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
+        <%= if @render_reward? do %>
+          <Text.title3 margin="mb-5 sm:mb-8"><%= dgettext("eyra-submission", "reward.label") %></Text.title3>
+          <.number_input form={form}
             field={:reward_value}
             label_text={dgettext("eyra-submission", "reward.value.label")}
           />
-          <Spacing value="M" />
-        </div>
+          <.spacing value="M" />
+        <% end %>
 
-        <Title3 margin="mb-5 sm:mb-8">{dgettext("eyra-submission", "schedule.title")}</Title3>
-        <Body>{dgettext("eyra-submission", "schedule.description")}</Body>
-        <Spacing value="S" />
+        <Text.title3 margin="mb-5 sm:mb-8"><%= dgettext("eyra-submission", "schedule.title") %></Text.title3>
+        <Text.body><%= dgettext("eyra-submission", "schedule.description") %></Text.body>
+        <.spacing value="S" />
 
         <div class="flex flex-col gap-y-2 sm:flex-row items-left w-full sm:w-form">
           <div class="flex-wrap mt-2">
-            <Selector
+            <.live_component
+          module={Selector}
               id={:schedule_start_toggle}
               items={@schedule_start_toggle_labels}
               type={:checkbox}
@@ -240,13 +246,14 @@ defmodule Systems.Pool.SubmissionView do
           <div class="flex-grow">
           </div>
           <div class="flex-wrap h-full">
-            <DateInput field={:schedule_start} disabled={@schedule_start_disabled} />
+            <.date_input form={form} field={:schedule_start} disabled={@schedule_start_disabled} />
           </div>
         </div>
 
         <div class="flex flex-col gap-y-2 sm:flex-row items-left w-full sm:w-form">
           <div class="flex-wrap mt-2">
-            <Selector
+            <.live_component
+          module={Selector}
               id={:schedule_end_toggle}
               items={@schedule_end_toggle_labels}
               type={:checkbox}
@@ -256,11 +263,12 @@ defmodule Systems.Pool.SubmissionView do
           <div class="flex-grow">
           </div>
           <div class="flex-wrap h-full">
-            <DateInput field={:schedule_end} disabled={@schedule_end_disabled} />
+            <.date_input form={form} field={:schedule_end} disabled={@schedule_end_disabled} />
           </div>
         </div>
-      </Form>
-    </ContentArea>
+      </.form>
+      </Area.content>
+    </div>
     """
   end
 end

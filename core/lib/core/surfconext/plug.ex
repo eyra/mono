@@ -38,7 +38,7 @@ end
 defmodule Core.SurfConext.CallbackController do
   require Logger
   use Phoenix.Controller, namespace: CoreWeb
-  alias CoreWeb.Router.Helpers, as: Routes
+  use CoreWeb, :verified_routes
 
   import Core.SurfConext.PlugUtils
 
@@ -84,7 +84,7 @@ defmodule Core.SurfConext.CallbackController do
           Enum.reduce(changeset.errors, conn, fn {_, {message, _}}, conn ->
             put_flash(conn, :error, message)
           end)
-          |> redirect(to: Routes.user_session_path(conn, :new))
+          |> redirect(to: ~p"/user/signin")
       end
     end
   end

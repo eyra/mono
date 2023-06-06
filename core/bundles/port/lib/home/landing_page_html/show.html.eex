@@ -1,0 +1,437 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="shortcut icon" type="image/png" href="./landing_page/favicon.png">
+
+	<link rel="stylesheet" type="text/css" href="./landing_page/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="./landing_page/styles.css">
+	<link rel="stylesheet" type="text/css" href="./landing_page/css/font-awesome.min.css">
+
+    <title>Home</title>
+
+
+
+<!-- Analytics -->
+
+<!-- Analytics END -->
+
+</head>
+<body>
+
+<!-- Preloader -->
+<div id="page-loading-blocs-notifaction" class="page-preloader"></div>
+<!-- Preloader END -->
+
+
+<!-- Main container -->
+<div class="page-container">
+
+<!-- bloc-0 -->
+<div class="bloc none bloc-padding full-width-bloc l-bloc" id="bloc-0">
+	<div class="container ">
+		<div class="row max-height no-gutters">
+			<div class="col-lg-4 offset-md-0 offset-lg-0 col">
+				<div class="row max-height max-width row-style no-gutters">
+					<div class="col align-self-center">
+						<img src="./landing_page/img/top-logo.svg" class="img-fluid float-lg-none ruler-left img-style logo-size" alt="logo slack-2" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- bloc-0 END -->
+
+<!-- bloc-0 -->
+<div class="bloc d-flex b-parallax none bgc-ultramarine-blue full-width-bloc d-bloc" id="bloc-0">
+	<div class="container ">
+		<div class="row voffset-clear-sm voffset-clear-xs no-gutters">
+			<div class="offset-md-0 offset-0 col-6 col-md-6 offset-lg-0 col-lg-6 offset-sm-0 col-sm-6">
+				<div class="row max-height no-gutters">
+					<div class="align-self-center offset-sm-0 col-lg-8 col-md-12">
+						<h1 class="mg-md h1-style ruler-left ">
+							Empowering<br>Science
+						</h1>
+					</div>
+				</div>
+			</div>
+			<div class="offset-lg-0 col-6 col-md-6">
+				<img src="./landing_page/img/illustration.svg" class="img-fluid float-lg-right float-sm-right float-right" alt="illustration" />
+			</div>
+		</div>
+	</div>
+</div>
+<!-- bloc-0 END -->
+
+<!-- bloc-2 -->
+<div class="bloc d-flex b-parallax none bloc-2-padding bgc-dark-jungle-green d-bloc" id="bloc-2">
+	<div class="container ">
+		<div class="row voffset-clear-sm voffset-lg voffset-clear-xs top-margin-0">
+			<div class="offset-sm-0 col-sm-12 offset-lg-0 col-lg-12 offset-0 col-12">
+				<div class="row max-height">
+					<div class="align-self-center bottom-padding-0 offset-md-1 col-md-10">
+						<h2 class="mg-md h2-style h2-bloc-2-style text-md-center mx-auto btn-resize-mode d-lg-none d-xl-none d-block">
+							Co-creating sustainable research infrastructure
+						</h2>
+						<h2 class="mg-md h2-style h2-bloc-2-style text-md-center mx-auto btn-resize-mode d-lg-block   d-none">
+							Co-creating sustainable research infrastructure
+						</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- bloc-2 END -->
+
+<!-- ScrollToTop Button -->
+<a class="bloc-button btn btn-d scrollToTop" onclick="scrollToTarget('1',this)"><span class="fa fa-chevron-up"></span></a>
+<!-- ScrollToTop Button END-->
+
+
+<!-- projects -->
+<div class="bloc content-bloc-style tc-4033" id="projects">
+	<div class="container ">
+		<div class="row">
+			<div class="col-lg-4 card border-0">
+				<div class="card-background">
+					<div>
+						<div class="image-container image-link ">
+							<div class="card-label">
+								<h3 class="mg-md h3-1-style ">
+									Project
+								</h3><img src="./landing_page/img/Rectangle%2023.svg" class="img-fluid mx-auto d-block card-label-arrow" alt="Rectangle%2023" />
+							</div>
+						</div>
+						<div class=" card-content">
+							<h3 class="mg-md h3-heading-3-style text-lg-left ">
+								Eyra Link
+							</h3>
+							<p class="p-projects-style">
+								In collaboration with the VU, UvA and SURF, we are developing a sustainable online participant recruitment platform for social sciences and humanities research.<br><br>Funded by the PDI-SSH.<br>
+							</p>
+							<div style="display:flex">
+								<img src="./landing_page/img/vu.svg" class="img-fluid rounded-circle float-lg-none partner-icon partner-icon-uva" alt="vu" />
+								<img src="./landing_page/img/uva.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uva" />
+								<img src="./landing_page/img/surf.svg" class="img-fluid rounded-circle float-lg-none partner-icon partner-icon-uva" alt="surf" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="bgc-splashed-white col-lg-4 card border-0">
+				<div class="card-background">
+					<div>
+						<div class="image-container image-port">
+							<div class="card-label">
+								<h3 class="mg-md h3-1-style ">
+									Project
+								</h3><img src="./landing_page/img/Rectangle%2023.svg" class="img-fluid mx-auto d-block card-label-arrow" alt="Rectangle%2023" />
+							</div>
+						</div>
+						<div class=" card-content">
+							<h3 class="mg-md h3-heading-3-style text-lg-left ">
+								Eyra Port
+							</h3>
+							<p class="p-projects-style">
+								In collaboration with the UU and UvA we are working on a tool that enables citizens to easily and safely donate their data from social media platforms like Instagram or Google for research. <br><br>Funded by the UU and PDI-SSH.
+							</p>
+							<div style="display:flex">
+								<img src="./landing_page/img/uu.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uu" />
+								<img src="./landing_page/img/uva.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uva" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="bgc-splashed-white col-lg-4 card border-0">
+				<div class="card-background">
+					<div>
+						<div class="image-container image-next">
+							<div class="card-label">
+								<h3 class="mg-md h3-1-style ">
+									Project
+								</h3><img src="./landing_page/img/Rectangle%2023.svg" class="img-fluid mx-auto d-block card-label-arrow" alt="Rectangle%2023" />
+							</div>
+						</div>
+						<div class=" card-content">
+							<h3 class="mg-md h3-heading-3-style text-lg-left ">
+								Eyra&nbsp;Next
+							</h3>
+							<p class="p-projects-style">
+								A sustainable science dissemination platform that empowers transparent scientific practice and enables everyone to monitor the state-of-the-art in science. <br><br>Funded by Eyra.
+							</p><img src="./landing_page/img/eyra-logo.svg" class="img-fluid rounded-circle float-lg-none img-eyra-lo-style" alt="eyra logo" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- projects END -->
+
+<!-- team -->
+<div class="bloc content-bloc-style l-bloc" id="team">
+	<div class="container ">
+		<div class="row voffset-clear-md">
+			<div class="col">
+				<h3 class="mg-md text-lg-center float-lg-none h3-style tc-dark-jungle-green">
+				</h3>
+			</div>
+		</div>
+		<div class="row voffset-lg voffset-clear-sm voffset-clear-md">
+			<div class="offset-md-0 column-style-bio offset-lg-0 col-lg-4">
+				<img src="./landing_page/img/adrienne-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-adrien-style" alt="Adrienne" />
+				<h5 class="mg-md text-lg-center mx-auto d-block h5-style h5-color tc-dark-jungle-green">
+					Adriënne Mendrik
+				</h5>
+				<p class="mg-clear-md mg-clear-sm mx-auto d-block p-style bio-style mg-sm text-lg-center text-md-center text-sm-center">
+					Adriënne is a visionary who reads between the lines and encourages people to improve upon the status quo, while keeping a close eye on how new ideas connect to existing frameworks.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
+				<img src="./landing_page/img/emiel-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-team-style" alt="Emiel" />
+				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
+					Emiel van der Veen
+				</h5>
+				<p class="p-style bio-style mx-auto d-block mg-clear-xs mg-lg text-lg-center text-md-center text-sm-center">
+					Emiel is a visionary who excels in systematic thinking, challenges people to step up, and guides them into developing robust and high quality products that withstand the test of time.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
+				<img src="./landing_page/img/peter-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-7-style" alt="Peter" />
+				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
+					Peter Waterman
+				</h5>
+				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center">
+					Peter is a people-oriented quick thinker with great listening skills who advices on long term company health, based on a broad experience in finance and general management.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
+				<img src="./landing_page/img/neo-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-6-style" alt="Neo" />
+				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
+					Neo Cheung
+				</h5>
+				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center">
+					With his sharp eye and organised way of working, Neo quickly translates thoughts into design, while finding the right balance between client needs and user experience.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
+				<img src="./landing_page/img/jeroen-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-jero-style" alt="Jeroen" />
+				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
+					Jeroen Vloothuis
+				</h5>
+				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center">
+					With extensive technical knowledge and great analytical skills, Jeroen quickly solves complex problems with exceptional precision and elegance, while keeping things as simple as possible.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
+				<img src="./landing_page/img/tjerk.png" class="img-fluid rounded-circle mx-auto d-block avatar img-jero-style" alt="Tjerk" />
+				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
+					Tjerk Nan
+				</h5>
+				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center">
+					Products run smoothly and secure due to Tjerks eye for detail and passion for automation combined with extensive experience in security and DevOps.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
+				<img src="./landing_page/img/rowdy.png" class="img-fluid rounded-circle mx-auto d-block avatar img-jero-style" alt="Rowdy" />
+				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
+					Rowdy van Looy
+				</h5>
+				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center">
+					Rowdy excels in striking the right balance between stakeholder interests and technical feasibility, to find product and marketing strategies that fit the Eyra mission and vision.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
+				<img src="./landing_page/img/pien.png" class="img-fluid rounded-circle mx-auto d-block avatar img-7-style" alt="Pien" />
+				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
+					Pien Chrispijn
+				</h5>
+				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center">
+					Pien is driven by curiosity and a genuin interest in people, in order to learn from them and find ways to break new ground, while regenerating symbiosis.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 offset-sm-0 col-sm-12 column-style-bio col-lg-4">
+				<img src="./landing_page/img/naiyara.png" class="img-fluid rounded-circle mx-auto d-block avatar img-7-style" alt="Naiyara" />
+				<h5 class="mg-md text-lg-center mx-auto d-block h5-style tc-dark-jungle-green">
+					Naiyara van der Veen
+				</h5>
+				<p class="p-style bio-style mx-auto d-block mg-clear-xs text-lg-center text-md-center text-sm-center">
+					Naiyara has a deep understanding of what people need and the ability to translate this into concrete actions that make both an organisation as well as the people within thrive.<br>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- team END -->
+
+<!-- banner -->
+<div class="bloc tc-5883 none content-bloc-style full-width-bloc bgc-jonquil banner-padding" id="banner">
+	<div class="container ">
+		<div class="row voffset-clear-sm">
+			<div class="col-lg-12 col-md-12">
+				<h6 class="h6-style tc-dark-jungle-green mg-lg float-md-none text-md-center text-sm-center">
+					Open Science
+				</h6>
+				<h2 class="text-lg-center text-md-center mx-auto d-block mg-md text-sm-center text-center mg-md-xs h2-style h2-services-style text-grey1 ">
+					”We work towards a world in which the current state of&nbsp;<span class="text-span-services-color span-bold">human knowledge</span>&nbsp;is available to all of humankind, so anyone can&nbsp;<span class="text-span-0-color span-bold">learn</span>&nbsp;from and&nbsp;<span class="text-span-0-services-color span-bold">build</span>&nbsp;upon previous knowledge.”<br>
+				</h2>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- banner END -->
+
+<!-- bloc-5 -->
+<div class="bloc content-bloc-style l-bloc" id="bloc-5">
+	<div class="container ">
+		<div class="row voffset-clear-md voffset-md">
+			<div class="col">
+				<h3 class="text-md-center mg-lg-sm mg-md mg-lg-xs h3-style">
+					Scientific advisory board
+				</h3>
+			</div>
+		</div>
+		<div class="row voffset-lg voffset-clear-sm voffset-clear-md no-gutters">
+			<div class="offset-lg-0 col-lg-4 col offset-md-0 column-style-bio">
+				<img src="./landing_page/img/martha-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-mart-style" alt="martha" />
+				<h3 class="mg-md text-lg-center mx-auto d-block h5-style">
+					Martha&nbsp;Larson
+				</h3>
+				<p class="mg-clear-md mg-clear-sm mx-auto d-block p-style bio-style text-lg-center text-md-center text-sm-center text-center">
+					Professor of Multimedia Information Technology at Radboud University and a member of the Multimedia Computing Group at Delft University of Technology. She is the coordinator of the MediaEval Benchmarking Initiative for Multimedia Evaluation, which she co-founded in 2008.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 col-lg-4 col column-style-bio">
+				<img src="./landing_page/img/daniel-bw.png" class="img-fluid rounded-circle mx-auto d-block avatar img-dani-style" alt="daniel" />
+				<h5 class="mg-md text-lg-center text-sm-center mx-auto d-block h5-style">
+					Daniel Oberski
+				</h5>
+				<p class="p-style bio-style mx-auto d-block text-lg-center text-md-center text-sm-center text-center">
+					Professor of data science methodology with a joint appointment at Utrecht University’s Department of Methodology & Statistics, and the department of Biostatistics at the Julius Center, University Medical Center Utrecht (UMCU). Daniel is a member of "de Jonge Akademie" KNAW.<br>
+				</p>
+			</div>
+			<div class="offset-lg-0 col-lg-4 col column-style-bio">
+				<img src="./landing_page/img/stephen.png" class="img-fluid rounded-circle mx-auto d-block avatar img-dani-style" alt="stephan" />
+				<h5 class="mg-md text-lg-center text-sm-center mx-auto d-block h5-style">
+					Stephen Aylward
+				</h5>
+				<p class="p-style bio-style mx-auto d-block text-lg-center text-md-center text-sm-center text-center">
+					Senior Director of Strategic Initiatives at Kitware and a successful researcher in the field of medical image analysis. After being an associate professor at UNC, Stephen founded Kitware NC in 2005 and is and has been the driving force behind the open source community for medical image analysis.<br>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- bloc-5 END -->
+
+<!-- bloc-9 -->
+<div class="bloc bg-Apollo14-voorzijde bloc-bg-texture texture-darken l-bloc" id="bloc-9">
+	<div class="container bloc-lg">
+		<div class="row">
+			<div class="col">
+				<div class="row voffset-clear-xs">
+					<div class="col-lg-6 col-md-10 col-sm-12 align-self-center">
+						<h3 class="mg-md tc-white text-lg-left text-md-left text-sm-left h3-style-apollo text-left h3-bloc-9-style">
+							We are part of&nbsp;Apollo 14&nbsp;<br>
+						</h3>
+						<h4 class="mg-md h4-apollo-style text-md-left text-sm-left text-left mg-lg-xs mg-lg-sm mg-lg-md">
+							Home for startups that innovate for a better world
+						</h4><a href="http://apollo14.nl" class="btn btn-d cta-btn-apollo float-lg-none btn-lg">Find out more</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- bloc-9 END -->
+
+<!-- connect -->
+<div class="bloc full-width-bloc padding-collaborators l-bloc" id="connect">
+	<div class="container ">
+		<div class="row row-14-style">
+			<div class="offset-lg-0 col-lg-12 col-12">
+				<h3 class="text-lg-center text-sm-center text-center mg-lg h3-style ">
+					Collaborators
+				</h3>
+				<div class="row no-gutters row-connect-style">
+					<div class="col-lg-4 offset-lg-1 offset-md-1 col-md-5">
+						<div class="row">
+							<div class="col offset-lg-0">
+								<img src="./landing_page/img/logo_vu.svg" class="img-fluid mx-auto d-block mg-md" alt="logo_vu" />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-5 col-lg-2">
+						<img src="./landing_page/img/logo_uva.svg" class="img-fluid mx-auto d-block mg-md" alt="logo_uva" />
+					</div>
+					<div class="col-lg-2 offset-md-1 col-md-5 offset-lg-0">
+						<img src="./landing_page/img/logo_surf.svg" class="img-fluid mx-auto d-block mg-md" alt="logo_surf" />
+					</div>
+					<div class="col-lg-2 col-md-5">
+						<img style="height: 100px" src="./landing_page/img/uu.svg" class="img-fluid mx-auto d-block mg-md" alt="logo_uu" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- connect END -->
+
+<!-- footer -->
+<div class="bloc bgc-dark-jungle-green none footer-padding d-bloc" id="footer">
+	<div class="container ">
+		<div class="row">
+			<div class="col-lg-5 bottom-spacing-24">
+				<h6 class="mg-md h6-style text-white h6-footer-style tc-white-2">
+					Interested in shaping the future together?
+				</h6>
+				<div>
+					<a href="https://www.linkedin.com/company/37456690" class="btn btn-sm btn-footer btn-d">Follow us</a><a href="mailto:hello@eyra.co" class="btn btn-sm btn-footer btn-d">Let's connect</a>
+				</div>
+			</div>
+			<div class="offset-lg-0 col-lg-4 bottom-spacing-32">
+				<img src="./landing_page/img/logo-eyra-text-white.svg" class="img-fluid float-lg-none img-footer-style" alt="logo 200" />
+				<p class="p-footer-style mx-auto d-block p-6-style text-lg-left text-md-left text-sm-left text-left mg-clear">
+					Eyra Leap B.V. - KvK 77867513<br>Eyra Co B.V. - KvK 77860179<br>Eyra Nova - KvK 77928997<br>
+				</p>
+			</div>
+			<div class="col-lg-3">
+				<h6 class="mg-md h6-heading-6-style tc-white-2 btn-resize-mode mg-clear-md">
+					HQ
+				</h6>
+				<p class="p-footer-style mx-auto d-block p-6-style text-lg-left text-md-left text-sm-left text-left mg-clear">
+					Saturnusstraat 14 - Unit 4.13<br>2516 AH The Hague<br>The Netherlands<br>
+				</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div class="row">
+					<div class="col-12">
+						<img src="./landing_page/img/footer.svg" class="img-fluid mx-auto footer-img img-foot-style d-lg-block   d-none" alt="footer" /><img src="./landing_page/img/footer-mobile.svg" class="img-fluid mx-auto footer-img img-foot-style d-lg-none d-xl-none d-block" alt="footer" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- footer END -->
+
+</div>
+<!-- Main container END -->
+
+
+<script src="./landing_page/js/jquery-3.5.1.min.js"></script>
+<script src="./landing_page/js/bootstrap.bundle.min.js"></script>
+<script src="./landing_page/js/blocs.min.js"></script>
+<!-- Additional JS END -->
+
+
+</body>
+</html>

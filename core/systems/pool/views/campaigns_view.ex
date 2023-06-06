@@ -1,23 +1,20 @@
 defmodule Systems.Pool.CampaignsView do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
   alias Systems.{
     Pool,
     NextAction
   }
 
+  import CoreWeb.UI.Empty
+  import CoreWeb.UI.Content
+
   alias Core.Accounts
-  alias CoreWeb.UI.ContentList
-  alias Frameworks.Pixel.Selector.Selector
-  alias Frameworks.Pixel.Text.{Title2}
-
-  prop(props, :map, required: true)
-
-  data(campaigns, :list)
-  data(filtered_campaigns, :map)
-  data(filter_labels, :list)
+  alias Frameworks.Pixel.Selector
+  alias Frameworks.Pixel.Text
 
   # Handle Selector Update
+  @impl true
   def update(%{active_item_ids: active_filters, selector_id: :campaign_filters}, socket) do
     {
       :ok,
@@ -28,8 +25,9 @@ defmodule Systems.Pool.CampaignsView do
   end
 
   # Primary Update
+  @impl true
   def update(
-        %{id: id, props: %{campaigns: campaigns}} = _params,
+        %{id: id, campaigns: campaigns} = _params,
         socket
       ) do
     clear_review_submission_next_action()
@@ -73,29 +71,31 @@ defmodule Systems.Pool.CampaignsView do
     |> assign(filtered_campaigns: filtered_campaigns)
   end
 
+  attr(:campaigns, :list, required: true)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <Case value={Enum.count(@campaigns) > 0}>
-        <True>
-          <div class="flex flex-row gap-3 items-center">
-            <div class="font-label text-label">Filter:</div>
-            <Selector id={:campaign_filters} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
-          </div>
-          <Spacing value="L" />
-          <Title2>{dgettext("link-studentpool", "tabbar.item.campaigns")} <span class="text-primary">{Enum.count(@filtered_campaigns)}</span></Title2>
-          <ContentList items={@filtered_campaigns} />
-        </True>
-        <False>
-          <Empty
-            title={dgettext("link-studentpool", "campaigns.empty.title")}
-            body={dgettext("link-studentpool", "campaigns.empty.description")}
-            illustration="items"
-          />
-        </False>
-      </Case>
-    </ContentArea>
+    ~H"""
+    <div>
+      <Area.content>
+      <Margin.y id={:page_top} />
+      <%= if Enum.count(@campaigns) > 0 do %>
+        <div class="flex flex-row gap-3 items-center">
+          <div class="font-label text-label">Filter:</div>
+          <.live_component
+          module={Selector} id={:campaign_filters} type={:label} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
+        </div>
+        <.spacing value="L" />
+        <Text.title2><%=dgettext("link-studentpool", "tabbar.item.campaigns") %> <span class="text-primary"><%= Enum.count(@filtered_campaigns) %></span></Text.title2>
+        <.list items={@filtered_campaigns} />
+      <% else %>
+        <.empty
+          title={dgettext("link-studentpool", "campaigns.empty.title")}
+          body={dgettext("link-studentpool", "campaigns.empty.description")}
+          illustration="items"
+        />
+      <% end %>
+      </Area.content>
+    </div>
     """
   end
 end

@@ -3,18 +3,11 @@ defmodule Systems.Admin.ImportRewardsPage do
   use CoreWeb.Layouts.Workspace.Component, :import_rewards
   use CoreWeb.FileUploader, ~w(.csv)
 
-  alias Surface.Components.Form
+  import CoreWeb.Layouts.Workspace.Component
 
-  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-
-  alias Frameworks.Pixel.Spacing
-  alias Frameworks.Pixel.Button.{BackButton, PrimaryLabelButton}
-
-  alias Frameworks.Pixel.Container.{Wrap}
-  alias Frameworks.Pixel.Text.{Title2, Title3, Title6, BodyLarge}
-  alias Frameworks.Pixel.Form.{Form, TextInput}
-  alias Frameworks.Pixel.Panel.Panel
-  alias Frameworks.Pixel.Selector.Selector
+  import Frameworks.Pixel.Form
+  alias Frameworks.Pixel.Panel
+  alias Frameworks.Pixel.Selector
 
   alias Systems.{
     Campaign,
@@ -22,20 +15,6 @@ defmodule Systems.Admin.ImportRewardsPage do
     Student,
     Org
   }
-
-  data(back_path, :any)
-  data(process_button, :any)
-  data(import_button, :any)
-  data(entity, :any)
-  data(changeset, :any)
-
-  data(currency, :atom, default: :first)
-  data(local_file, :any, default: nil)
-  data(session_key, :string, default: "")
-  data(uploaded_file, :string, default: "-")
-  data(lines_error, :any)
-  data(lines_unknown, :any)
-  data(lines_valid, :any)
 
   @impl true
   def process_file(
@@ -94,17 +73,7 @@ defmodule Systems.Admin.ImportRewardsPage do
       ) do
     {status, message} =
       if Campaign.Public.user_has_currency?(user, currency) do
-        if transaction_exists?(user, session_key) do
-          {:transaction_exists, "Import done"}
-        else
-          credits = String.to_integer(credits)
-
-          if credits <= 0 do
-            {:zero_credits, "Zero credits"}
-          else
-            {:ready_to_import, ""}
-          end
-        end
+        handle_user_has_currency(user, session_key, credits)
       else
         {:incorrect_currency, "Student is not part of #{currency}"}
       end
@@ -113,6 +82,18 @@ defmodule Systems.Admin.ImportRewardsPage do
     |> Map.put(:status, status)
     |> Map.put(:message, message)
     |> Map.put(:user_id, user.id)
+  end
+
+  defp handle_user_has_currency(user, session_key, credits) do
+    if transaction_exists?(user, session_key) do
+      {:transaction_exists, "Import done"}
+    else
+      if credits <= 0 do
+        {:zero_credits, "Zero credits"}
+      else
+        {:ready_to_import, ""}
+      end
+    end
   end
 
   defp transaction_exists?(user, session_key) do
@@ -306,118 +287,147 @@ defmodule Systems.Admin.ImportRewardsPage do
   defp opacity(%{status: :transaction_exists}), do: "opacity-30"
   defp opacity(_), do: "opacity-100"
 
+  # data(back_path, :any)
+  # data(process_button, :any)
+  # data(import_button, :any)
+  # data(entity, :any)
+  # data(changeset, :any)
+
+  # data(currency, :atom, default: :first)
+  # data(local_file, :any, default: nil)
+  # data(session_key, :string, default: "")
+  # data(uploaded_file, :string, default: "-")
+  # data(lines_error, :any)
+  # data(lines_unknown, :any)
+  # data(lines_valid, :any)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace title="Import rewards" menus={@menus}>
-      <MarginY id={:page_top} />
-      <ContentArea>
-        <Panel bg_color="bg-grey1">
-          <Form id="import_form" changeset={@changeset} change_event="change" target="">
-            <Title3 color="text-white">Setup the import session</Title3>
-            <Spacing value="XXS" />
-            <BodyLarge color="text-white">Selected file: <span class="text-tertiary">{@uploaded_file}</span></BodyLarge>
-            <Spacing value="S" />
+    ~H"""
+    <.workspace title="Import rewards" menus={@menus}>
+      <Margin.y id={:page_top} />
+      <Area.content>
+        <Panel.flat bg_color="bg-grey1">
+          <.form id="import_form" :let={form} for={@changeset} phx-change="change" phx-target="" >
+            <Text.title3 color="text-white">Setup the import session</Text.title3>
+            <.spacing value="XXS" />
+            <Text.body_large color="text-white">Selected file: <span class="text-tertiary"><%= @uploaded_file %></span></Text.body_large>
+            <.spacing value="S" />
             <div class="flex flex-row gap-4">
               <div class="flex-wrap">
-                <PrimaryLabelButton
+                <Button.primary_label
                   label="Select csv file"
                   field={@uploads.csv.ref}
                   bg_color="bg-tertiary"
                   text_color="text-grey1"
                 />
-                {live_file_input(@uploads.csv, class: "hidden")}
+                <%= live_file_input(@uploads.csv, class: "hidden") %>
               </div>
             </div>
-            <div :if={@local_file} class="flex-wrap">
-              <Spacing value="M" />
-              <TextInput
-                field={:session_key}
-                label_text="Session key"
-                background={:dark}
-                label_color="text-white"
-              />
-              <Spacing value="XS" />
-              <Title6 color="text-white">Currency</Title6>
-              <Spacing value="XS" />
-              <Selector
-                id={:currency}
-                items={@currency_labels}
-                type={:radio}
-                parent={self()}
-                background={:dark}
-              />
-              <Spacing value="L" />
-              <Wrap>
-                <DynamicButton vm={@process_button} />
-              </Wrap>
-            </div>
-          </Form>
-        </Panel>
-        <Spacing value="L" />
-        <div :if={@lines_valid |> Enum.count() > 0}>
-          <Spacing value="XL" />
-          <Title2 margin="mb-0">Credit transactions</Title2>
-          <Spacing value="S" />
-          <Panel>
-            <table>
-              <tr>
-                <td class="pr-4"><BodyLarge>Session key</BodyLarge></td>
-                <td><BodyLarge><span class="text-primary font-button">{@session_key}</span></BodyLarge></td>
-              </tr>
-              <tr>
-                <td class="pr-4"><BodyLarge>Study year</BodyLarge></td>
-                <td><BodyLarge><span class="text-primary font-button">{@currency}</span></BodyLarge></td>
-              </tr>
+            <%= if @local_file do %>
+              <div class="flex-wrap">
+                <.spacing value="M" />
+                <.text_input form={form}
+                  field={:session_key}
+                  label_text="Session key"
+                  background={:dark}
+                  label_color="text-white"
+                />
+                <.spacing value="XS" />
+                <Text.title6 color="text-white">Currency</Text.title6>
+                <.spacing value="XS" />
+                <.live_component
+                  module={Selector}
+                  id={:currency}
+                  items={@currency_labels}
+                  type={:radio}
+                  parent={self()}
+                  background={:dark}
+                />
+                <.spacing value="L" />
+                <.wrap>
+                  <Button.dynamic {@process_button} />
+                </.wrap>
+              </div>
+            <% end %>
+          </.form>
+        </Panel.flat>
+        <.spacing value="L" />
+        <%= if Enum.count(@lines_valid) > 0 do %>
+          <div>
+            <.spacing value="XL" />
+            <Text.title2 margin="mb-0">Credit transactions</Text.title2>
+            <.spacing value="S" />
+            <Panel.flat>
+              <table>
+                <tr>
+                  <td class="pr-4"><Text.body_large>Session key</Text.body_large></td>
+                  <td><Text.body_large><span class="text-primary font-button"><%= @session_key %></span></Text.body_large></td>
+                </tr>
+                <tr>
+                  <td class="pr-4"><Text.body_large>Study year</Text.body_large></td>
+                  <td><Text.body_large><span class="text-primary font-button"><%= @currency %></span></Text.body_large></td>
+                </tr>
+              </table>
+            </Panel.flat>
+            <.spacing value="L" />
+            <table class="table-fixed">
+              <thead>
+                <tr class="text-left">
+                  <th class="pl-0 pr-8"><Text.title6>Email</Text.title6></th>
+                  <th class="pl-0 pr-8"><Text.title6>Student ID</Text.title6></th>
+                  <th class="pl-0 pr-8"><Text.title6>Credits</Text.title6></th>
+                  <th class="pl-0" />
+                </tr>
+              </thead>
+              <tbody>
+                <%= for {line, index} <- Enum.with_index(@lines_valid) do %>
+                  <tr class={"#{opacity(line)} h-10"}>
+                    <td class="pr-8"><Text.body_large><%= line["email"] %></Text.body_large></td>
+                    <td class="pr-8"><Text.body_large><%= line["student_id"] %></Text.body_large></td>
+                    <td class="pr-8"><Text.body_large><%= line["credits"] %></Text.body_large></td>
+                    <td class="pr-8">
+                      <%= if line.status == :ready_to_import do %>
+                        <Button.dynamic {%{
+                            action: %{type: :send, event: "import_single", item: index},
+                            face: %{type: :icon, icon: :add}
+                          }}
+                        />
+                      <% end %>
+                      <Text.body_large color={message_color(line)}><%= line.message %></Text.body_large>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
             </table>
-          </Panel>
-          <Spacing value="L" />
-          <table class="table-fixed">
-            <thead>
-              <tr class="text-left">
-                <th class="pl-0 pr-8"><Title6>Email</Title6></th>
-                <th class="pl-0 pr-8"><Title6>Student ID</Title6></th>
-                <th class="pl-0 pr-8"><Title6>Credits</Title6></th>
-                <th class="pl-0" />
-              </tr>
-            </thead>
-            <tbody>
-              <tr :for={{line, index} <- Enum.with_index(@lines_valid)} class={"#{opacity(line)} h-10"}>
-                <td class="pr-8"><BodyLarge>{line["email"]}</BodyLarge></td>
-                <td class="pr-8"><BodyLarge>{line["student_id"]}</BodyLarge></td>
-                <td class="pr-8"><BodyLarge>{line["credits"]}</BodyLarge></td>
-                <td class="pr-8">
-                  <DynamicButton
-                    :if={line.status == :ready_to_import}
-                    vm={%{
-                      action: %{type: :send, event: "import_single", item: index},
-                      face: %{type: :icon, icon: :add}
-                    }}
-                  />
-                  <BodyLarge color={message_color(line)}>{line.message}</BodyLarge>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <Spacing value="L" />
-          <Wrap>
-            <DynamicButton vm={@import_button} />
-          </Wrap>
-          <Spacing value="L" />
-        </div>
-        <div :if={@lines_error |> Enum.count() > 0}>
-          <Title3>Parsing errors</Title3>
-          <BodyLarge :for={message <- @lines_error}>{message}</BodyLarge>
-          <Spacing value="M" />
-        </div>
-        <Spacing value="M" />
-        <div :if={@lines_unknown |> Enum.count() > 0}>
-          <Title3>Unknown students</Title3>
-          <BodyLarge :for={line <- @lines_unknown}>{line["email"]}</BodyLarge>
-          <Spacing value="M" />
-        </div>
-        <BackButton label="Back" path={@back_path} />
-      </ContentArea>
-    </Workspace>
+            <.spacing value="L" />
+            <.wrap>
+              <Button.dynamic {@import_button} />
+            </.wrap>
+            <.spacing value="L" />
+          </div>
+        <% end %>
+        <%= if Enum.count(@lines_error) > 0 do %>
+          <div>
+            <Text.title3>Parsing errors</Text.title3>
+            <%= for message <- @lines_error do %>
+              <Text.body_large><%= message %></Text.body_large>
+            <% end %>
+            <.spacing value="M" />
+          </div>
+        <% end %>
+        <.spacing value="M" />
+        <%= if Enum.count(@lines_unknown) > 0 do %>
+          <div>
+            <Text.title3>Unknown students</Text.title3>
+            <%= for line <- @lines_unknown do %>
+              <Text.body_large><%= line["email"] %></Text.body_large>
+            <% end %>
+            <.spacing value="M" />
+          </div>
+        <% end %>
+        <Button.back label="Back" path={@back_path} />
+      </Area.content>
+    </.workspace>
     """
   end
 end

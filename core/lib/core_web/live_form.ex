@@ -1,7 +1,7 @@
 defmodule CoreWeb.LiveForm do
   defmacro __using__(_opts) do
     quote do
-      use CoreWeb.UI.LiveComponent
+      use CoreWeb, :live_component
 
       def hide_flash(socket) do
         Frameworks.Pixel.Flash.push_hide()

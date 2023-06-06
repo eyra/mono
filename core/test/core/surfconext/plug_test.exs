@@ -127,7 +127,7 @@ defmodule Core.SurfConext.CallbackController.Test do
       conn = conn |> get("/surfconext/auth")
       assert redirected_to(conn) == "/user/signin"
 
-      assert get_flash(conn, :error) =~ "not allowed to authenticate"
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "not allowed to authenticate"
     end
 
     test "authenticates an existing user", %{conn: conn} do

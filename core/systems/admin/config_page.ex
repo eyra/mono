@@ -3,17 +3,8 @@ defmodule Systems.Admin.ConfigPage do
   use CoreWeb.Layouts.Workspace.Component, :admin
   use CoreWeb.UI.Responsive.Viewport
 
-  alias CoreWeb.UI.Navigation.{
-    ActionBar,
-    TabbarArea,
-    Tabbar,
-    TabbarContent
-  }
-
-  data(tabbar_id, :string)
-  data(tabs, :list)
-  data(bar_size, :number)
-  data(popup, :any)
+  alias CoreWeb.UI.Tabbar
+  alias CoreWeb.UI.Navigation
 
   @impl true
   def mount(_params, %{"locale" => locale} = _session, socket) do
@@ -50,10 +41,10 @@ defmodule Systems.Admin.ConfigPage do
     tabs = [
       %{
         id: :system,
-        ready?: true,
+        ready: true,
         title: dgettext("eyra-admin", "system.title"),
         type: :fullpage,
-        component: Systems.Admin.SystemView,
+        live_component: Systems.Admin.SystemView,
         props: %{
           locale: locale,
           user: user
@@ -61,20 +52,20 @@ defmodule Systems.Admin.ConfigPage do
       },
       %{
         id: :org,
-        ready?: true,
+        ready: true,
         title: dgettext("eyra-admin", "org.content.title"),
         type: :fullpage,
-        component: Systems.Admin.OrgView,
+        live_component: Systems.Admin.OrgView,
         props: %{
           locale: locale
         }
       },
       %{
         id: :actions,
-        ready?: true,
+        ready: true,
         title: dgettext("eyra-admin", "actions.title"),
         type: :fullpage,
-        component: Systems.Admin.ActionsView,
+        live_component: Systems.Admin.ActionsView,
         props: %{
           tickets: []
         }
@@ -98,22 +89,27 @@ defmodule Systems.Admin.ConfigPage do
     {:noreply, socket |> assign(popup: nil)}
   end
 
+  # data(tabbar_id, :string)
+  # data(tabs, :list)
+  # data(bar_size, :number)
+  # data(popup, :any)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace title={dgettext("eyra-admin", "config.title")} menus={@menus}>
-      <Popup :if={@popup}>
-        <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
-          <Dynamic.LiveComponent id={:config_page_popup} module={@popup.module} {...@popup} />
-        </div>
-      </Popup>
+    ~H"""
+    <.workspace title={dgettext("eyra-admin", "config.title")} menus={@menus}>
+      <%= if @popup do %>
+        <.popup>
+          <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
+            <.live_component id={:config_page_popup} module={@popup.module} {@popup} />
+          </div>
+        </.popup>
+      <% end %>
 
-      <TabbarArea tabs={@tabs}>
-        <ActionBar>
-          <Tabbar id={@tabbar_id} size={@tabbar_size} />
-        </ActionBar>
-        <TabbarContent />
-      </TabbarArea>
-    </Workspace>
+      <Navigation.action_bar>
+        <Tabbar.container id={@tabbar_id} tabs={@tabs} size={@tabbar_size} type={:segmented} />
+      </Navigation.action_bar>
+      <Tabbar.content tabs={@tabs} />
+    </.workspace>
     """
   end
 end

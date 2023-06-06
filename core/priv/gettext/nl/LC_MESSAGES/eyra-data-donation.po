@@ -9,7 +9,6 @@
 msgid ""
 msgstr ""
 "Language: nl\n"
-"Plural-Forms: nplurals=2\n"
 
 #, elixir-autogen, elixir-format
 msgid "content.title"
@@ -139,17 +138,9 @@ msgstr "Uitvoeren"
 msgid "thanks.title"
 msgstr "Bedankt"
 
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "survey.link"
-msgstr "deze vragenlijst"
-
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "welcome.description.top"
 msgstr "U kunt zo uw gegevens gaan doneren aan de onderzoekers van het %{recipient}. We leggen u stap voor stap uit hoe u dit doet."
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "thanks.description"
-msgstr "Hartelijk dank voor uw deelnane. We zijn benieuwd hoe u het doneren van de data heeft ervaren.<br>Zou u %{survey_link} in willen vullen?<br>Alvast hartelijk dank."
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "welcome.description.bottom"

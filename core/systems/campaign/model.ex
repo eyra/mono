@@ -351,7 +351,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
                }
              } = assignment
          },
-         {Link.Console, :content},
+         {Link.Console.Page, :content},
          _user,
          url_resolver
        ) do
@@ -425,7 +425,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
   defp vm(
          %{promotable: assignment} = campaign,
-         {Link.Console, :contribution},
+         {Link.Console.Page, :contribution},
          user,
          url_resolver
        ) do

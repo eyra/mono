@@ -4,13 +4,10 @@ defmodule CoreWeb.User.ResetPasswordToken do
   """
   use CoreWeb, :live_view
 
-  alias Surface.Components.Form
-  alias Core.Accounts
-  alias Frameworks.Pixel.Form.PasswordInput
-  alias Frameworks.Pixel.Text.Title2
-  alias Frameworks.Pixel.Button.SubmitButton
+  import Frameworks.Pixel.Form
 
-  data(changeset, :any)
+  alias Core.Accounts
+  alias Frameworks.Pixel.Button
 
   def mount(%{"token" => token}, _session, socket) do
     if user = Accounts.get_user_by_reset_password_token(token) do
@@ -40,32 +37,38 @@ defmodule CoreWeb.User.ResetPasswordToken do
         {:noreply,
          socket
          |> put_flash(:info, "Password reset successfully.")
-         |> redirect(to: Routes.user_session_path(socket, :new))}
+         |> redirect(to: ~p"/user/signin")}
 
       {:error, changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
   end
 
+  # data(changeset, :any)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <FormArea>
-        <Title2>{dgettext("eyra-user", "user.password_reset.title")}</Title2>
-        <Form for={@changeset} submit="reset-password">
-          <PasswordInput
-            field={:password}
-            label_text={dgettext("eyra-user", "password_reset.password.label")}
-          />
-          <PasswordInput
-            field={:password_confirmation}
-            label_text={dgettext("eyra-user", "password_reset.password_confirmation.label")}
-          />
-          <SubmitButton label={dgettext("eyra-user", "password_reset.reset_password_button")} />
-        </Form>
-      </FormArea>
-    </ContentArea>
+    ~H"""
+    <div>
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <Area.form>
+          <Text.title2><%= dgettext("eyra-user", "user.password_reset.title") %></Text.title2>
+          <.form id="reset_password_token" :let={form} for={@changeset} phx-submit="reset-password" >
+            <.password_input
+              form={form}
+              field={:password}
+              label_text={dgettext("eyra-user", "password_reset.password.label")}
+            />
+            <.password_input
+              form={form}
+              field={:password_confirmation}
+              label_text={dgettext("eyra-user", "password_reset.password_confirmation.label")}
+            />
+            <Button.submit label={dgettext("eyra-user", "password_reset.reset_password_button")} />
+          </.form>
+        </Area.form>
+      </Area.content>
+    </div>
     """
   end
 end

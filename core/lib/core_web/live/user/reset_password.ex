@@ -5,14 +5,12 @@ defmodule CoreWeb.User.ResetPassword do
   use CoreWeb, :live_view
   alias CoreWeb.Router.Helpers, as: Routes
 
-  alias Surface.Components.Form
+  import Frameworks.Pixel.Form
+
   alias Core.Accounts
   alias Core.Accounts.User
-  alias Frameworks.Pixel.Text.Title2
-  alias Frameworks.Pixel.Form.EmailInput
-  alias Frameworks.Pixel.Button.SubmitButton
-
-  data(changeset, :any)
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Button
 
   def mount(_params, _session, socket) do
     {:ok,
@@ -49,18 +47,22 @@ defmodule CoreWeb.User.ResetPassword do
   @impl true
   def handle_uri(socket), do: socket
 
+  # data(changeset, :any)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <FormArea>
-        <Title2>{dgettext("eyra-user", "user.password_reset.title")}</Title2>
-        <Form for={@changeset} submit="reset-password">
-          <EmailInput field={:email} label_text={dgettext("eyra-user", "password_reset.email.label")} />
-          <SubmitButton label={dgettext("eyra-user", "password_reset.reset_button")} />
-        </Form>
-      </FormArea>
-    </ContentArea>
+    ~H"""
+    <div>
+      <Area.content>
+      <Margin.y id={:page_top} />
+      <Area.form>
+        <Text.title2><%= dgettext("eyra-user", "user.password_reset.title") %></Text.title2>
+        <.form id="reset_password" :let={form} for={@changeset} phx-submit="reset-password" >
+          <.email_input form={form} field={:email} label_text={dgettext("eyra-user", "password_reset.email.label")} />
+          <Button.submit label={dgettext("eyra-user", "password_reset.reset_button")} />
+        </.form>
+      </Area.form>
+      </Area.content>
+    </div>
     """
   end
 end

@@ -10,34 +10,27 @@ end
 
 defmodule Systems.Email.DebugForm do
   use CoreWeb.LiveForm
+
   import Ecto.Changeset
 
   alias Core.Accounts
 
-  alias Phoenix.LiveView
-  alias Frameworks.Pixel.Text.{Title2}
-  alias Frameworks.Pixel.Form.{Form, TextInput, TextArea}
-  alias Frameworks.Pixel.Button.SubmitButton
-  use Bamboo.Phoenix, view: Systems.Email.EmailView
+  import Frameworks.Pixel.Form
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Button
 
   alias Systems.{
     Email
   }
 
-  prop(user, :map)
-
-  data(to, :string)
-  data(subject, :string)
-  data(message, :string)
-  data(changeset, :any)
-
   # Handle update from parent after auto-save, prevents overwrite of current state
+  @impl true
   def update(%{id: id, user: user} = params, socket) do
     {:ok,
      socket
-     |> LiveView.assign(:id, id)
-     |> LiveView.assign(user: user)
-     |> LiveView.assign(:changeset, changeset(params))}
+     |> assign(:id, id)
+     |> assign(user: user)
+     |> assign(:changeset, changeset(params))}
   end
 
   @impl true
@@ -46,7 +39,7 @@ defmodule Systems.Email.DebugForm do
         %{"debug_model" => mail_data},
         socket
       ) do
-    {:noreply, LiveView.assign(socket, :changeset, changeset(mail_data))}
+    {:noreply, assign(socket, :changeset, changeset(mail_data))}
   end
 
   @impl true
@@ -69,22 +62,24 @@ defmodule Systems.Email.DebugForm do
 
     {
       :noreply,
-      Phoenix.LiveView.assign(socket, :changeset, changeset)
+      assign(socket, :changeset, changeset)
     }
   end
 
   @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <Title2>Email</Title2>
-      <Form id="mail_form" changeset={@changeset} change_event="update" submit="send" target={@myself}>
-        <TextInput field={:to} label_text="To" />
-        <TextInput field={:subject} label_text="Subject" />
-        <TextArea field={:message} label_text="Message" />
-        <SubmitButton label="Send" />
-      </Form>
-    </ContentArea>
+    ~H"""
+    <div>
+      <Area.content>
+      <Text.title2>Email</Text.title2>
+      <.form id="mail_form" :let={form} for={@changeset} phx-change="update" phx-submit="send" phx-target={@myself}>
+        <.text_input form={form} field={:to} label_text="To" />
+        <.text_input form={form} field={:subject} label_text="Subject" />
+        <.text_area form={form} field={:message} label_text="Message" />
+        <Button.submit label="Send" />
+      </.form>
+      </Area.content>
+    </div>
     """
   end
 
@@ -94,7 +89,7 @@ defmodule Systems.Email.DebugForm do
   end
 
   defp send_mail(subject, message, from_user, to_user) do
-    Accounts.Email.debug(subject, message, from_user, to_user)
+    Email.Factory.debug(subject, message, from_user, to_user)
     |> Email.Public.deliver_now!()
   end
 end

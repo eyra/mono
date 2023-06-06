@@ -2,9 +2,7 @@ defmodule Systems.Support.HelpdeskPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :helpdesk
 
-  alias Frameworks.Pixel.Spacing
-  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias Frameworks.Pixel.Text.{Title2, BodyLarge}
+  import CoreWeb.Layouts.Workspace.Component
 
   alias Systems.Support.HelpdeskForm
 
@@ -19,22 +17,23 @@ defmodule Systems.Support.HelpdeskPage do
     {:noreply, socket}
   end
 
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace menus={@menus}>
-      <ContentArea>
-        <FormArea>
-          <MarginY id={:page_top} />
-          <Title2>{dgettext("eyra-support", "form.title")}</Title2>
-          <BodyLarge>{dgettext("eyra-support", "form.description")}
-          </BodyLarge>
-        </FormArea>
-      </ContentArea>
+    ~H"""
+    <.workspace menus={@menus}>
+      <Area.content>
+        <Area.form>
+          <Margin.y id={:page_top} />
+          <Text.title2><%= dgettext("eyra-support", "form.title") %></Text.title2>
+          <Text.body_large><%= dgettext("eyra-support", "form.description") %>
+          </Text.body_large>
+        </Area.form>
+      </Area.content>
 
-      <Spacing value="XL" />
+      <.spacing value="XL" />
 
-      <HelpdeskForm id={:helpdesk_form} user={@current_user} />
-    </Workspace>
+      <.live_component module={HelpdeskForm} id={:helpdesk_form} user={@current_user} />
+    </.workspace>
     """
   end
 end

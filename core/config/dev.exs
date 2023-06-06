@@ -21,7 +21,7 @@ config :core, Core.Repo,
   pool_size: 10
 
 config :core, CoreWeb.Endpoint,
-  reloadable_compilers: [:elixir, :surface],
+  reloadable_compilers: [:elixir],
   force_ssl: false,
   debug_errors: true,
   code_reloader: true,
@@ -33,12 +33,10 @@ config :core, CoreWeb.Endpoint,
       ~r"lib/core_web/(live|views|components)/.*(ex|sface|js)$",
       ~r"lib/core_web/templates/*/.*(eex)$",
       ~r"bundles/*/.*(ex)$",
-      ~r"bundles/*/templates/.*(eex)$",
-      ~r"priv/catalogue/.*(ex)$"
+      ~r"bundles/*/templates/.*(eex)$"
     ]
   ],
   watchers: [
-    esbuild: {Esbuild, :install_and_run, [:catalogue, ~w(--sourcemap=inline --watch)]},
     node: [
       "node_modules/webpack/bin/webpack.js",
       "--mode",

@@ -7,15 +7,12 @@ defmodule Systems.Pool.OverviewPage do
 
   import CoreWeb.Gettext
 
-  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
+  import CoreWeb.Layouts.Workspace.Component
   alias Frameworks.Pixel.ShareView
 
   alias Systems.{
     Pool
   }
-
-  data(plugins, :list)
-  data(popup, :any, default: nil)
 
   @impl true
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
@@ -25,7 +22,11 @@ defmodule Systems.Pool.OverviewPage do
 
     {
       :ok,
-      socket |> assign(plugins: plugins)
+      socket
+      |> assign(
+        plugins: plugins,
+        popup: nil
+      )
     }
   end
 
@@ -89,22 +90,30 @@ defmodule Systems.Pool.OverviewPage do
     socket |> assign(popup: nil)
   end
 
-  def render(assigns) do
-    ~F"""
-    <Workspace title={dgettext("eyra-pool", "overview.title")} menus={@menus}>
-      <Popup :if={@popup}>
-        <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
-          <Dynamic.LiveComponent id={:pool_overview_popup} module={@popup.module} {...@popup} />
-        </div>
-      </Popup>
+  # data(plugins, :list)
+  # data(popup, :any, default: nil)
 
-      <ContentArea>
-        <MarginY id={:page_top} />
+  @impl true
+  def render(assigns) do
+    ~H"""
+    <.workspace title={dgettext("eyra-pool", "overview.title")} menus={@menus}>
+      <%= if @popup do %>
+        <.popup>
+          <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
+            <.live_component id={:pool_overview_popup} module={@popup.module} {@popup} />
+          </div>
+        </.popup>
+      <% end %>
+
+      <Area.content>
+        <Margin.y id={:page_top} />
         <div class="flex flex-col gap-20">
-          <Dynamic.LiveComponent :for={plugin <- @plugins} module={plugin.module} {...plugin.props} />
+          <%= for plugin <- @plugins do %>
+            <.live_component module={plugin.module} {plugin.props} />
+          <% end %>
         </div>
-      </ContentArea>
-    </Workspace>
+      </Area.content>
+    </.workspace>
     """
   end
 end

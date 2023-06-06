@@ -1,27 +1,19 @@
 defmodule Link.Layouts.Stripped.MenuBuilder do
-  @behaviour CoreWeb.Menu.Builder
+  @home_flags [
+    desktop_navbar: [:wide],
+    mobile_menu: [:wide]
+  ]
 
-  import CoreWeb.Menu.Helpers
+  @item_flags [
+    desktop_navbar: [:icon],
+    mobile_navbar: [:icon]
+  ]
+
+  @primary []
+  @secondary [:language]
+
+  use CoreWeb.Menu.Builder, home: :link
 
   @impl true
-  def build_menu(:desktop_navbar = menu_id, socket, user_state, active_item) do
-    %{
-      home: live_item(socket, menu_id, :link, user_state, active_item),
-      right: build_menu_second_part(socket, menu_id)
-    }
-  end
-
-  @impl true
-  def build_menu(:mobile_navbar = menu_id, socket, user_state, active_item) do
-    %{
-      home: live_item(socket, menu_id, :link, user_state, active_item),
-      right: build_menu_second_part(socket, menu_id)
-    }
-  end
-
-  defp build_menu_second_part(socket, menu_id, icon_only? \\ true) do
-    [
-      language_switch_item(socket, menu_id, icon_only?)
-    ]
-  end
+  def can_access?(_user, _id), do: true
 end

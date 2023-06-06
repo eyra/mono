@@ -35,7 +35,7 @@ defmodule Systems.Student.Pool.SubmissionPageBuilder do
       |> Enum.map(&Pool.Builders.CampaignItem.view_model(url_resolver, &1))
 
     form = %{
-      component: Student.Pool.SubmissionForm,
+      live_component: Student.Pool.SubmissionForm,
       props: %{entity: submission, user: user}
     }
 

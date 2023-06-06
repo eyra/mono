@@ -1,45 +1,25 @@
 defmodule Systems.Survey.ToolForm do
   use CoreWeb.LiveForm
 
-  alias CoreWeb.UI.StepIndicator
+  import CoreWeb.UI.StepIndicator
 
   alias Phoenix.LiveView
-  alias Frameworks.Pixel.Panel.Panel
-  alias Frameworks.Pixel.Text.{Title3, Title5, BodyLarge, BodyMedium}
-  alias Frameworks.Pixel.Form.{Form, UrlInput}
-  alias Frameworks.Pixel.Button.Face.LabelIcon
+  alias Frameworks.Pixel.Panel
+  alias Frameworks.Pixel.Text
+  import Frameworks.Pixel.Form
+  alias Frameworks.Pixel.Button
 
   alias Systems.{
     Director,
     Survey
   }
 
-  prop(entity_id, :number, required: true)
-  prop(callback_url, :string, required: true)
-  prop(validate?, :boolean, required: true)
-  prop(user, :map, required: true)
-
-  data(entity, :any)
-  data(changeset, :any)
-  data(panlid_link, :any)
-
-  # Handle update from parent after attempt to publish
-  def update(%{validate?: new}, %{assigns: %{validate?: current}} = socket)
-      when new != current do
-    {
-      :ok,
-      socket
-      |> assign(validate?: new)
-      |> validate_for_publish()
-    }
-  end
-
   # Handle initial update
+  @impl true
   def update(
         %{
           id: id,
           entity_id: entity_id,
-          validate?: validate?,
           callback_url: callback_url,
           user: user
         },
@@ -58,7 +38,6 @@ defmodule Systems.Survey.ToolForm do
         entity: entity,
         callback_url: callback_url,
         changeset: changeset,
-        validate?: validate?,
         user: user
       )
       |> validate_for_publish()
@@ -108,7 +87,7 @@ defmodule Systems.Survey.ToolForm do
 
   # Validate
 
-  def validate_for_publish(%{assigns: %{id: id, entity: entity, validate?: true}} = socket) do
+  def validate_for_publish(%{assigns: %{id: id, entity: entity}} = socket) do
     changeset =
       Survey.ToolModel.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
@@ -118,8 +97,6 @@ defmodule Systems.Survey.ToolForm do
     socket
     |> assign(changeset: changeset)
   end
-
-  def validate_for_publish(socket), do: socket
 
   defp redirect_instructions_link() do
     link_as_string(
@@ -152,50 +129,51 @@ defmodule Systems.Survey.ToolForm do
     |> Phoenix.HTML.safe_to_string()
   end
 
+  @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div class="-mb-8">
-      <Form id={@id} changeset={@changeset} change_event="save" target={@myself}>
-        <Title3>{dgettext("link-survey", "form.title")}</Title3>
-        <BodyLarge>{dgettext("link-survey", "form.description")}</BodyLarge>
-        <Spacing value="M" />
+      <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
+        <Text.title3><%= dgettext("link-survey", "form.title") %></Text.title3>
+        <Text.body_large><%= dgettext("link-survey", "form.description") %></Text.body_large>
+        <.spacing value="M" />
 
-        <Panel bg_color="bg-grey1">
-          <Title3 color="text-white">{dgettext("link-survey", "setup.title")}</Title3>
-          <Spacing value="M" />
+        <Panel.flat bg_color="bg-grey1">
+          <Text.title3 color="text-white"><%= dgettext("link-survey", "setup.title") %></Text.title3>
+          <.spacing value="M" />
           <div class="flex flex-col gap-8">
             <!-- STEP 1 -->
             <div class="flex flex-row gap-4">
               <div class="flex-wrap">
-                <StepIndicator vm={text: "1", bg_color: "bg-tertiary", text_color: "text-grey1"} />
+                <.step_indicator text="1" bg_color="bg-tertiary" text_color="text-grey1" />
               </div>
               <div class="flex-wrap">
-                <Title5 align="text-left" color="text-white">{dgettext("link-survey", "panlid.title")}</Title5>
-                <Spacing value="XS" />
-                <BodyMedium color="text-white">{raw(dgettext("link-survey", "panlid.description", link: panlid_instructions_link()))}</BodyMedium>
+                <Text.title5 align="text-left" color="text-white"><%= dgettext("link-survey", "panlid.title") %></Text.title5>
+                <.spacing value="XS" />
+                <Text.body_medium color="text-white"><%= raw(dgettext("link-survey", "panlid.description", link: panlid_instructions_link())) %></Text.body_medium>
               </div>
             </div>
             <!-- STEP 2 -->
             <div class="flex flex-row gap-4">
               <div class="flex-wrap">
-                <StepIndicator vm={text: "2", bg_color: "bg-tertiary", text_color: "text-grey1"} />
+                <.step_indicator text="2" bg_color="bg-tertiary" text_color="text-grey1" />
               </div>
               <div class="flex-wrap">
-                <Title5 align="text-left" color="text-white">{dgettext("link-survey", "redirect.title")}</Title5>
-                <Spacing value="XS" />
-                <BodyMedium color="text-white">{raw(dgettext("link-survey", "redirect.description", link: redirect_instructions_link()))}</BodyMedium>
-                <Spacing value="XS" />
+                <Text.title5 align="text-left" color="text-white"><%= dgettext("link-survey", "redirect.title") %></Text.title5>
+                <.spacing value="XS" />
+                <Text.body_medium color="text-white"><%= raw(dgettext("link-survey", "redirect.description", link: redirect_instructions_link())) %></Text.body_medium>
+                <.spacing value="XS" />
                 <div class="flex flex-row gap-6 items-center">
                   <div class="flex-wrap">
-                    <BodyMedium color="text-tertiary"><span class="break-all">{@callback_url}</span></BodyMedium>
+                    <Text.body_medium color="text-tertiary"><span class="break-all"><%= @callback_url %></span></Text.body_medium>
                   </div>
                   <div class="flex-wrap flex-shrink-0 mt-1">
                     <div id="copy-redirect-url" class="cursor-pointer" phx-hook="Clipboard" data-text={@callback_url}>
-                      <LabelIcon vm={%{
-                        label: dgettext("link-survey", "redirect.copy.button"),
-                        icon: :clipboard_tertiary,
-                        text_color: "text-tertiary"
-                      }} />
+                      <Button.Face.label_icon
+                        label={dgettext("link-survey", "redirect.copy.button")}
+                        icon={:clipboard_tertiary}
+                        text_color="text-tertiary"
+                      />
                     </div>
                   </div>
                 </div>
@@ -204,28 +182,28 @@ defmodule Systems.Survey.ToolForm do
             <!-- STEP 3 -->
             <div class="flex flex-row gap-4">
               <div class="flex-wrap">
-                <StepIndicator vm={text: "3", bg_color: "bg-tertiary", text_color: "text-grey1"} />
+                <.step_indicator text="3" bg_color="bg-tertiary" text_color="text-grey1" />
               </div>
               <div class="flex-wrap">
-                <Title5 align="text-left" color="text-white">{dgettext("link-survey", "study.link.title")}</Title5>
-                <Spacing value="XS" />
-                <BodyMedium color="text-white">{raw(dgettext("link-survey", "study.link.description", link: study_instructions_link()))}</BodyMedium>
+                <Text.title5 align="text-left" color="text-white"><%= dgettext("link-survey", "study.link.title") %></Text.title5>
+                <.spacing value="XS" />
+                <Text.body_medium color="text-white"><%= raw(dgettext("link-survey", "study.link.description", link: study_instructions_link())) %></Text.body_medium>
               </div>
             </div>
           </div>
-          <Spacing value="M" />
-        </Panel>
-        <Spacing value="L" />
+          <.spacing value="M" />
+        </Panel.flat>
+        <.spacing value="L" />
 
-        <UrlInput field={:survey_url} label_text={dgettext("link-survey", "config.url.label")} />
-        <Spacing value="S" />
-        <Panel bg_color="bg-grey5">
-          <Title3>{dgettext("link-survey", "test.roundtrip.title")}</Title3>
-          <Spacing value="M" />
-          <BodyMedium>{dgettext("link-survey", "test.roundtrip.text")}</BodyMedium>
-          <Spacing value="M" />
-          <Wrap>
-            <DynamicButton vm={%{
+        <.url_input form={form} field={:survey_url} label_text={dgettext("link-survey", "config.url.label")} />
+        <.spacing value="S" />
+        <Panel.flat bg_color="bg-grey5">
+          <Text.title3><%= dgettext("link-survey", "test.roundtrip.title") %></Text.title3>
+          <.spacing value="M" />
+          <Text.body_medium><%= dgettext("link-survey", "test.roundtrip.text") %></Text.body_medium>
+          <.spacing value="M" />
+          <.wrap>
+            <Button.dynamic {%{
               action: %{type: :send, event: "test-roundtrip", target: @myself},
               face: %{
                 type: :primary,
@@ -234,10 +212,10 @@ defmodule Systems.Survey.ToolForm do
                 text_color: "text-grey1"
               }
             }} />
-          </Wrap>
-        </Panel>
-        <Spacing value="XL" />
-      </Form>
+          </.wrap>
+        </Panel.flat>
+        <.spacing value="XL" />
+      </.form>
     </div>
     """
   end

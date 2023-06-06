@@ -10,13 +10,13 @@ defmodule Systems.Citizen.CriteriaFilters do
 
   def include?(items, filters) when is_list(items) and is_list(filters) do
     filters = filters |> Enum.filter(&Enum.member?(values(), &1))
-    match_count = Enum.count(Enum.filter(filters, &include?(items, &1)))
+    match_count = Enum.count(filters, &include?(items, &1))
     # have at least one match (OR)
     match_count > 0
   end
 
   def include?(items, filter) when is_list(items) do
-    Enum.count(Enum.filter(items, &include?(&1, filter))) > 0
+    Enum.count(items, &include?(&1, filter)) > 0
   end
 
   def include?(item, filter) when is_atom(item), do: item == filter

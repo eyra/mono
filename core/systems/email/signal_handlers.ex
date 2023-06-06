@@ -1,6 +1,6 @@
 defmodule Core.Mailer.SignalHandlers do
   use Frameworks.Signal.Handler
-  use Bamboo.Phoenix, view: Systems.Email.EmailView
+  use Bamboo.Phoenix, component: Systems.Email.EmailHTML
   import Core.FeatureFlags
   alias Systems.Email
   alias Systems.Notification.Box

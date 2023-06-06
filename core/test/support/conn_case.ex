@@ -32,6 +32,8 @@ defmodule CoreWeb.ConnCase do
 
       alias CoreWeb.Router.Helpers, as: Routes
       import Core.AuthTestHelpers
+
+      use CoreWeb, :verified_routes
     end
   end
 

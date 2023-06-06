@@ -1,10 +1,8 @@
 defmodule Systems.Survey.ExperimentTaskView do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
   alias Frameworks.Utility.LiveCommand
-  alias CoreWeb.UI.Navigation.ButtonBar
-
-  prop(actions, :list, required: true)
+  import CoreWeb.UI.Navigation, only: [button_bar: 1]
 
   @impl true
   def handle_event(event, _params, socket) do
@@ -15,12 +13,14 @@ defmodule Systems.Survey.ExperimentTaskView do
     LiveCommand.action_buttons(actions, target)
   end
 
+  attr(:actions, :list, required: true)
+  @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div>
-      <MarginY id={:button_bar_top} />
-      <ButtonBar buttons={action_buttons(assigns)} />
-      <Spacing value="XL" />
+      <Margin.y id={:button_bar_top} />
+      <.button_bar buttons={action_buttons(assigns)} />
+      <.spacing value="XL" />
     </div>
     """
   end

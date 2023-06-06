@@ -2,8 +2,6 @@ defmodule Systems.Email.Public do
   import Bamboo.Email
   import Bamboo.Phoenix
 
-  alias Core.Accounts
-
   alias Systems.{
     Email
   }
@@ -14,7 +12,7 @@ defmodule Systems.Email.Public do
       Application.fetch_env!(:core, Systems.Email.Mailer)
       |> Keyword.fetch!(:default_from_email)
     )
-    |> put_layout({Systems.Email.EmailLayoutView, :email})
+    |> put_layout({Systems.Email.EmailLayoutHTML, :email})
     |> assign(:email_header_image, "notification")
   end
 
@@ -28,14 +26,14 @@ defmodule Systems.Email.Public do
         message: message,
         to: to
       }) do
-    Accounts.Email.notification(title, byline, message, to)
+    Email.Factory.notification(title, byline, message, to)
     |> deliver_now!()
   end
 
   def deliver_now!(email), do: Email.Mailer.deliver_now!(email)
 
   def deliver_now(%Email.Model{title: title, byline: byline, message: message, to: to}) do
-    Accounts.Email.notification(title, byline, message, to)
+    Email.Factory.notification(title, byline, message, to)
     |> deliver_now()
   end
 

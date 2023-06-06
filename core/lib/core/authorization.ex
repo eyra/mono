@@ -55,8 +55,8 @@ defmodule Core.Authorization do
   grant_access(Systems.DataDonation.FlowPage, [:visitor, :member])
   grant_access(Systems.DataDonation.PortPage, [:visitor, :member])
   grant_access(Systems.DataDonation.ThanksWhatsappPage, [:visitor, :member])
+  grant_access(Systems.DataDonation.OverviewPage, [:member])
 
-  grant_access(CoreWeb.Console, [:researcher])
   grant_access(CoreWeb.User.Signin, [:visitor])
   grant_access(CoreWeb.User.Signup, [:visitor])
   grant_access(CoreWeb.User.ResetPassword, [:visitor])

@@ -25,27 +25,7 @@ defmodule Frameworks.GreenLight.Plug do
 
     conn = Plug.Conn.put_private(conn, :auth_principal_roles, principal.roles)
 
-    result =
-      Enum.zip(entities, entity_roles)
-      |> Enum.reduce_while({:ok, conn}, fn {entity, entity_roles}, {_, conn} ->
-        roles = entity_roles |> MapSet.union(conn.private.auth_principal_roles)
-
-        if is_nil(entity) do
-          {:halt, {:ok, Plug.Conn.put_private(conn, :auth_principal_roles, roles)}}
-        else
-          permission =
-            entity.__struct__
-            |> GreenLight.Permissions.access_permission()
-
-          if auth_module.allowed?(roles, permission) do
-            {:cont, {:ok, Plug.Conn.put_private(conn, :auth_principal_roles, roles)}}
-          else
-            {:halt, {:error, {roles, permission}}}
-          end
-        end
-      end)
-
-    case result do
+    case validate_permissions(conn, entities, entity_roles, auth_module) do
       {:error, {principal_roles, required_permission}} ->
         Logger.debug(
           "Principal with roles: #{principal_roles |> Enum.join(", ")} is not allowed to: `#{required_permission}`."
@@ -61,6 +41,30 @@ defmodule Frameworks.GreenLight.Plug do
           GreenLight.Permissions.action_permission(phoenix_controller, phoenix_action),
           auth_module
         )
+    end
+  end
+
+  defp validate_permissions(conn, entities, entity_roles, auth_module) do
+    Enum.zip(entities, entity_roles)
+    |> Enum.reduce_while({:ok, conn}, fn {entity, entity_roles}, {_, conn} ->
+      roles = entity_roles |> MapSet.union(conn.private.auth_principal_roles)
+      validate_permission(conn, entity, roles, auth_module)
+    end)
+  end
+
+  defp validate_permission(conn, entity, roles, auth_module) do
+    if is_nil(entity) do
+      {:halt, {:ok, Plug.Conn.put_private(conn, :auth_principal_roles, roles)}}
+    else
+      permission =
+        entity.__struct__
+        |> GreenLight.Permissions.access_permission()
+
+      if auth_module.allowed?(roles, permission) do
+        {:cont, {:ok, Plug.Conn.put_private(conn, :auth_principal_roles, roles)}}
+      else
+        {:halt, {:error, {roles, permission}}}
+      end
     end
   end
 

@@ -1,17 +1,15 @@
 defmodule Systems.Support.OverviewTab do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
   alias Core.ImageHelpers
-  alias CoreWeb.UI.ContentList
-  alias CoreWeb.UI.Container.ContentArea
+  import CoreWeb.UI.Content
+  alias CoreWeb.UI.Area
+  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Systems.Support
 
-  prop(props, :map)
-
-  data(items, :list)
-
-  def update(%{id: id, props: %{tickets: tickets}}, socket) do
+  @impl true
+  def update(%{id: id, tickets: tickets}, socket) do
     items =
       tickets
       |> Enum.map(&to_view_model(&1, socket))
@@ -61,25 +59,31 @@ defmodule Systems.Support.OverviewTab do
     }
   end
 
+  # data(items, :list)
+
+  attr(:tickets, :list, required: true)
+  @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div>
-      <MarginY id={:page_top} />
+      <Margin.y id={:page_top} />
 
-      <div :if={Enum.empty?(@items)} class="h-full">
-        <MarginY id={:page_top} />
-        <div class="flex flex-col items-center w-full h-full">
-          <div class="flex-grow" />
-          <div class="flex-none">
-            <img src="/images/illustrations/zero-todo.svg" id="zero-todos" alt="All done">
+      <%= if Enum.empty?(@items) do %>
+        <div class="h-full">
+          <Margin.y id={:page_top} />
+          <div class="flex flex-col items-center w-full h-full">
+            <div class="flex-grow" />
+            <div class="flex-none">
+              <img src="/images/illustrations/zero-todo.svg" id="zero-todos" alt="All done">
+            </div>
+            <div class="flex-grow" />
           </div>
-          <div class="flex-grow" />
         </div>
-      </div>
-
-      <ContentArea>
-        <ContentList items={@items} />
-      </ContentArea>
+      <% else %>
+        <Area.content>
+          <.list items={@items} />
+        </Area.content>
+      <% end %>
     </div>
     """
   end

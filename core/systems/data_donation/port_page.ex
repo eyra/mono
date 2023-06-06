@@ -1,15 +1,10 @@
 defmodule Systems.DataDonation.PortPage do
-  import Phoenix.LiveView
+  use CoreWeb, :live_view
+  use CoreWeb.LiveRemoteIp
+  import CoreWeb.Layouts.App.Component
 
   require Logger
 
-  use Surface.LiveView, layout: {CoreWeb.LayoutView, "live.html"}
-  use CoreWeb.LiveUri
-  use CoreWeb.LiveLocale
-  use CoreWeb.LiveRemoteIp
-  use CoreWeb.LiveAssignHelper
-
-  alias CoreWeb.Layouts.App.Component, as: App
   alias CoreWeb.Menu
 
   alias Systems.{
@@ -17,10 +12,10 @@ defmodule Systems.DataDonation.PortPage do
     Rate
   }
 
-  data(result, :any)
-  data(tool, :any)
-  data(locale, :any)
-  data(participant, :any)
+  # data(result, :any)
+  # data(tool, :any)
+  # data(locale, :any)
+  # data(participant, :any)
 
   @impl true
   def mount(
@@ -40,12 +35,14 @@ defmodule Systems.DataDonation.PortPage do
     update_menus(socket)
   end
 
-  def update_menus(socket) do
+  def update_menus(%{assigns: assigns} = socket) do
     socket
     |> assign(
       menus: %{
         desktop_navbar: %{
-          right: [Menu.Helpers.language_switch_item(socket, :desktop_navbar, true)]
+          secondary: [
+            Menu.Helpers.menu_item(assigns, :desktop_navbar, :language, nil, [:icon])
+          ]
         }
       }
     )
@@ -89,8 +86,8 @@ defmodule Systems.DataDonation.PortPage do
 
   @impl true
   def render(assigns) do
-    ~F"""
-    <App user={@current_user} logo={:port_wide} menus={@menus}>
+    ~H"""
+    <.app user={@current_user} logo={:port_wide} menus={@menus}>
       <div
         class="h-full"
         id="port"
@@ -98,7 +95,7 @@ defmodule Systems.DataDonation.PortPage do
         data-locale={@locale}
         data-participant={@participant}
       />
-    </App>
+    </.app>
     """
   end
 end

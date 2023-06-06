@@ -4,7 +4,8 @@ defimpl Browser.Ua, for: Phoenix.LiveView.Socket do
 end
 
 defmodule CoreWeb.UI.OldSkool do
-  import Phoenix.LiveView.Helpers
+  import Phoenix.Component
+  import CoreWeb.UI.Footer
 
   @moduledoc """
   Conveniences for reusable UI components
@@ -27,53 +28,30 @@ defmodule CoreWeb.UI.OldSkool do
     Browser.chrome?(conn) || Browser.firefox?(conn)
   end
 
-  def language_switch_item(%{request_path: request_path, assigns: assigns} = conn) do
-    [locale | _] = CoreWeb.Menu.Helpers.supported_languages()
-
-    path =
-      CoreWeb.Router.Helpers.language_switch_path(conn, :index, locale.id, redir: request_path)
-
-    ~H"""
-    <a href={path}>
-      <img src={"/images/icons/#{locale.id}.svg"} alt={"Switch language to #{locale.name}"}/>
-    </a>
-    """
-  end
-
   def warning(assigns, message) do
+    assigns = assign(assigns, :message, message)
+
     ~H"""
     <div class="mb-5 text-warning font-caption bg-warning bg-opacity-20 text-center leading-none rounded">
-      <p class="inline-block mt-4 mb-4"><%= message %></p>
+      <p class="inline-block mt-4 mb-4"><%= @message %></p>
     </div>
     """
   end
 
-  def footer(assigns, left, right) do
-    ~H"""
-    <div class="h-footer sm:h-footer-sm lg:h-footer-lg">
-      <div class="flex">
-        <div class="flex-wrap">
-            <img class="h-footer sm:h-footer-sm lg:h-footer-lg" src={left} alt=""/>
-        </div>
-        <div class="flex-grow">
-        </div>
-        <div class="flex-wrap">
-            <img class="h-footer sm:h-footer-sm lg:h-footer-lg" src={right} alt="" />
-        </div>
-      </div>
-    </div>
-    """
-  end
-
-  def primary_button(%{assigns: assigns}, label, to), do: primary_button(assigns, label, to)
+  # def primary_button(%{assigns: assigns}, label, to), do: primary_button(assigns, label, to)
 
   def primary_button(assigns, label, to) do
+    assigns =
+      assigns
+      |> assign(:label, label)
+      |> assign(:to, to)
+
     ~H"""
     <div class="flex flex-row">
       <div class="flex-wrap">
-          <a href={to} >
+          <a href={@to} >
             <div class="pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px leading-none font-button text-button rounded pr-4 pl-4 bg-primary text-white">
-              <%= label %>
+              <%= @label %>
             </div>
           </a>
       </div>
@@ -84,12 +62,17 @@ defmodule CoreWeb.UI.OldSkool do
   def secondary_button(%{assigns: assigns}, label, to), do: secondary_button(assigns, label, to)
 
   def secondary_button(assigns, label, to) do
+    assigns =
+      assigns
+      |> assign(:label, label)
+      |> assign(:to, to)
+
     ~H"""
     <div class="flex flex-row">
       <div class="flex-wrap">
-          <a href={to} >
+          <a href={@to} >
             <div class="pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 font-button text-button rounded bg-opacity-0 pr-4 pl-4 text-primary border-primary">
-              <%= label %>
+              <%= @label %>
             </div>
           </a>
       </div>
@@ -100,40 +83,17 @@ defmodule CoreWeb.UI.OldSkool do
   def hero_small(%{assigns: assigns}, title), do: hero_small(assigns, title)
 
   def hero_small(assigns, title) do
+    assigns = assign(assigns, :title, title)
+
     ~H"""
-    <div class="flex h-header2 items-center sm:h-header2-sm lg:h-header2-lg text-white bg-primary overflow-hidden" data-native-title={title}>
+    <div class="flex h-header2 items-center sm:h-header2-sm lg:h-header2-lg text-white bg-primary overflow-hidden" data-native-title={@title}>
       <div class="flex-grow flex-shrink-0">
           <p class="text-title5 sm:text-title2 lg:text-title1 font-title1 ml-6 mr-6 lg:ml-14">
-            <%= title %>
+            <%= @title %>
           </p>
       </div>
       <div class="flex-none h-header2 sm:h-header2-sm lg:h-header2-lg w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
           <img src="/images/illustration.svg" alt=""/>
-      </div>
-    </div>
-    """
-  end
-
-  def stripped_navbar(%{assigns: assigns}, icon), do: stripped_navbar(assigns, icon)
-
-  def stripped_navbar(assigns, icon) do
-    ~H"""
-    <div class="h-topbar sm:h-topbar-sm lg:h-topbar-lg pl-6 md:pl-0 flex-shrink-0" >
-      <div class="flex flex-row h-full">
-          <div class="flex-wrap">
-              <div class="flex flex-col items-center justify-center h-full">
-                  <div class="flex-wrap cursor-pointer">
-                      <a
-                      class="cursor-pointer"
-                      data-phx-link="redirect"
-                      data-phx-link-state="replace"
-                      href="/"
-                      >
-                          <img class="h-8 sm:h-12" src={icon} alt="Home" />
-                      </a>
-                  </div>
-              </div>
-          </div>
       </div>
     </div>
     """
@@ -144,7 +104,15 @@ defmodule CoreWeb.UI.OldSkool do
   def page_footer(assigns) do
     ~H"""
     <div class="bg-white">
-      <%= footer assigns, "/images/footer-left.svg", "/images/footer-right.svg" %>
+      <.footer />
+    </div>
+    """
+  end
+
+  def tabbar(assigns, _tabs) do
+    ~H"""
+    <div class="bg-white">
+      <.footer />
     </div>
     """
   end

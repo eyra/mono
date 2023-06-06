@@ -1,7 +1,6 @@
 defmodule Systems.Observatory.Public do
   alias Systems.Director
   alias CoreWeb.Endpoint
-  alias Phoenix.LiveView
 
   import CoreWeb.UrlResolver, only: [url_resolver: 1]
 
@@ -55,7 +54,7 @@ defmodule Systems.Observatory.Public do
       |> get_view_model(socket, model_or_id, page, url_resolver(socket))
 
     socket
-    |> LiveView.assign(vm: vm)
+    |> Phoenix.Component.assign(vm: vm)
   end
 
   defp get_view_model(
@@ -76,7 +75,7 @@ defmodule Systems.Observatory.Public do
       import CoreWeb.Gettext
       alias Systems.Observatory.Public
 
-      data(vm, :map)
+      # data(vm, :map)
 
       def handle_info(%{auto_save: status}, socket) do
         {

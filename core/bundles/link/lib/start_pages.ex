@@ -3,8 +3,8 @@ defmodule Link.StartPages do
 
   def pages(),
     do: %{
-      console: %{id: :console, target: Link.Console, domain: "eyra-ui"},
-      marketplace: %{id: :marketplace, target: Link.Marketplace, domain: "eyra-ui"}
+      console: %{id: :console, target: Link.Console.Page, domain: "eyra-ui"},
+      marketplace: %{id: :marketplace, target: Link.Marketplace.Page, domain: "eyra-ui"}
     }
 
   @impl true

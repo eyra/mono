@@ -1,25 +1,24 @@
 defmodule Systems.DataDonation.ThanksWhatsappPage do
-  import Phoenix.LiveView
+  import Phoenix.Component
 
-  use Surface.LiveView, layout: {CoreWeb.LayoutView, "live.html"}
+  use CoreWeb, :live_view
   use CoreWeb.LiveLocale
   use CoreWeb.LiveAssignHelper
   use CoreWeb.Layouts.Stripped.Component, :data_donation
 
   import CoreWeb.Gettext
 
-  alias CoreWeb.UI.MarginY
-  alias CoreWeb.UI.Container.{ContentArea, SheetArea}
-  alias CoreWeb.Layouts.Stripped.Component, as: Stripped
+  alias CoreWeb.UI.Area
+  alias CoreWeb.UI.Margin
 
-  alias Frameworks.Pixel.Text.{Title1}
+  alias Frameworks.Pixel.Text
 
   alias Systems.{
     DataDonation
   }
 
-  data(tool, :any)
-  data(participant, :any)
+  # data(tool, :any)
+  # data(participant, :any)
 
   def mount(%{"id" => id, "participant" => participant} = _params, _session, socket) do
     {
@@ -38,25 +37,28 @@ defmodule Systems.DataDonation.ThanksWhatsappPage do
     |> String.split("<br>")
   end
 
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Stripped user={@current_user} menus={@menus}>
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <SheetArea>
+    ~H"""
+    <.stripped user={@current_user} menus={@menus}>
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <Area.sheet>
           <div class="flex flex-col sm:flex-row gap-10">
             <div>
-              <Title1>{dgettext("eyra-data-donation", "thanks.title")}</Title1>
+              <Text.title1><%= dgettext("eyra-data-donation", "thanks.title") %></Text.title1>
               <div class="flex flex-col gap-4">
-                <div :for={description <- descriptions(@participant)} class="text-bodylarge font-body">
-                  {raw(description)}
-                </div>
+                <%= for description <- descriptions(@participant) do %>
+                  <div class="text-bodylarge font-body">
+                    <%= raw(description) %>
+                  </div>
+                <% end %>
               </div>
             </div>
           </div>
-        </SheetArea>
-      </ContentArea>
-    </Stripped>
+        </Area.sheet>
+      </Area.content>
+    </.stripped>
     """
   end
 end

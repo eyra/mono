@@ -1,8 +1,11 @@
 defmodule Systems.Campaign.MonitorView do
   use CoreWeb.LiveForm
 
-  alias CoreWeb.UI.{Timestamp, ProgressBar, Popup}
-  alias Frameworks.Pixel.Container.Wrap
+  import CoreWeb.UI.Empty
+  import CoreWeb.UI.Popup
+  import CoreWeb.UI.ProgressBar
+  alias CoreWeb.UI.Timestamp
+  import Systems.Campaign.MonitorTableView
 
   alias Systems.{
     Pool,
@@ -11,13 +14,7 @@ defmodule Systems.Campaign.MonitorView do
     Lab
   }
 
-  alias Frameworks.Pixel.Text.{Title2, Title3, BodyLarge, Label}
-
-  prop(props, :map, required: true)
-
-  data(vm, :any)
-  data(reject_task, :number)
-  data(labels, :list)
+  alias Frameworks.Pixel.Text
 
   # def update(%{checkin: :new_participant}, socket) do
   #   {
@@ -26,6 +23,7 @@ defmodule Systems.Campaign.MonitorView do
   #   }
   # end
 
+  @impl true
   def update(
         %{reject: :submit, rejection: rejection},
         %{assigns: %{reject_task: task_id}} = socket
@@ -41,19 +39,19 @@ defmodule Systems.Campaign.MonitorView do
     }
   end
 
+  @impl true
   def update(%{reject: :cancel}, socket) do
     {:ok, socket |> assign(reject_task: nil)}
   end
 
   # Handle initial update
+  @impl true
   def update(
         %{
           id: id,
-          props: %{
-            entity: entity,
-            attention_list_enabled?: attention_list_enabled?,
-            labels: labels
-          }
+          entity: entity,
+          attention_list_enabled?: attention_list_enabled?,
+          labels: labels
         },
         socket
       ) do
@@ -139,124 +137,133 @@ defmodule Systems.Campaign.MonitorView do
   defp lab_tool(%{lab_tool: lab_tool}), do: lab_tool
   defp lab_tool(_), do: nil
 
+  # data(vm, :any)
+  # data(reject_task, :number)
+  # data(labels, :list)
+
+  attr(:entity, :map, required: true)
+  attr(:attention_list_enabled?, :boolean, required: true)
+  attr(:labels, :list, required: true)
+
   @impl true
   def render(assigns) do
-    ~F"""
-    <Popup :if={@reject_task != nil}>
-      <Crew.RejectView id={:reject_view_example} target={%{type: __MODULE__, id: @id}} />
-    </Popup>
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <Case value={@vm.active?}>
-        <True>
-          <div :if={lab_tool(@vm.experiment) != nil}>
-            <Lab.CheckInView
+    ~H"""
+    <div>
+      <%= if @reject_task do %>
+        <.popup>
+          <.live_component module={Crew.RejectView} id={:reject_view_example} target={%{type: __MODULE__, id: @id}} />
+        </.popup>
+      <% end %>
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <%= if not @vm.active? do %>
+          <.empty
+              title={dgettext("link-survey", "monitor.empty.title")}
+              body={dgettext("link-survey", "monitor.empty.description")}
+              illustration="members"
+            />
+        <% else %>
+          <%= if lab_tool(@vm.experiment) do %>
+            <.live_component module={Lab.CheckInView}
               id={:search_subject_view}
               tool={lab_tool(@vm.experiment)}
               parent={%{type: __MODULE__, id: @id}}
             />
-            <Spacing value="XL" />
-          </div>
+            <.spacing value="XL" />
+          <% end %>
 
-          <Title2>{dgettext("link-monitor", "phase1.title")}</Title2>
-          <Title3 margin="mb-8">{dgettext("link-survey", "status.title")}<span class="text-primary">
-              {@vm.participated_count}/{@vm.progress.size}</span></Title3>
-          <Spacing value="M" />
+          <Text.title2><%= dgettext("link-monitor", "phase1.title") %></Text.title2>
+          <Text.title3 margin="mb-8"><%= dgettext("link-survey", "status.title") %><span class="text-primary">
+            <%= @vm.participated_count %>/<%= @vm.progress.size %></span></Text.title3>
+          <.spacing value="M" />
           <div class="bg-grey6 rounded p-12">
-            <ProgressBar {...@vm.progress} />
+            <.progress_bar {@vm.progress} />
             <div class="flex flex-row flex-wrap gap-y-4 gap-x-12 mt-12">
               <div>
                 <div class="flex flex-row items-center gap-3">
                   <div class="flex-shrink-0 w-6 h-6 rounded-full bg-success" />
-                  <Label>{@labels.participated}: {@vm.participated_count}</Label>
+                  <Text.label><%= @labels.participated %>: <%= @vm.participated_count %></Text.label>
                 </div>
               </div>
               <div>
                 <div class="flex flex-row items-center gap-3">
                   <div class="flex-shrink-0 w-6 h-6 rounded-full bg-warning" />
-                  <Label>{@labels.pending}: {@vm.pending_count}</Label>
+                  <Text.label><%= @labels.pending %>: <%= @vm.pending_count %></Text.label>
                 </div>
               </div>
               <div>
                 <div class="flex flex-row items-center gap-3">
                   <div class="flex-shrink-0 w-6 h-6 rounded-full bg-grey4" />
-                  <Label>{dgettext("link-survey", "vacant.label")}: {@vm.vacant_count}</Label>
+                  <Text.label><%= dgettext("link-survey", "vacant.label") %>: <%= @vm.vacant_count %></Text.label>
                 </div>
               </div>
             </div>
           </div>
-          <Spacing value="XL" />
+          <.spacing value="XL" />
 
-          <Title2>{dgettext("link-monitor", "phase2.title")}</Title2>
+          <Text.title2><%= dgettext("link-monitor", "phase2.title") %></Text.title2>
 
-          <div :if={Enum.count(@vm.attention_tasks) > 0}>
-            <Title3 margin="mb-8">
-              {dgettext("link-monitor", "attention.title")}<span class="text-primary">
-                {Enum.count(@vm.attention_tasks)}</span>
-            </Title3>
-            <BodyLarge>{dgettext("link-monitor", "attention.body")}</BodyLarge>
-            <Spacing value="M" />
-            <Campaign.MonitorTableView columns={@vm.attention_columns} tasks={@vm.attention_tasks} />
-            <Spacing value="M" />
-            <Wrap>
-              <DynamicButton vm={%{
+          <%= if Enum.count(@vm.attention_tasks) > 0 do %>
+            <Text.title3 margin="mb-8">
+              <%= dgettext("link-monitor", "attention.title") %><span class="text-primary">
+                <%= Enum.count(@vm.attention_tasks) %></span>
+            </Text.title3>
+            <Text.body_large><%= dgettext("link-monitor", "attention.body") %></Text.body_large>
+            <.spacing value="M" />
+            <.monitor_table_view columns={@vm.attention_columns} tasks={@vm.attention_tasks} />
+            <.spacing value="M" />
+            <.wrap>
+              <Button.dynamic {%{
                 action: %{type: :send, target: @myself, event: "accept_all_pending_started"},
                 face: %{type: :primary, label: dgettext("link-monitor", "accept.all.button")}
               }} />
-            </Wrap>
-            <Spacing value="XL" />
-          </div>
+            </.wrap>
+            <.spacing value="XL" />
+          <% end %>
 
-          <Title3 margin="mb-8">
-            {dgettext("link-monitor", "waitinglist.title")}<span class="text-primary">
-              {Enum.count(@vm.completed_tasks)}</span>
-          </Title3>
-          <div :if={Enum.count(@vm.completed_tasks) > 0}>
-            <BodyLarge>{dgettext("link-monitor", "waitinglist.body")}</BodyLarge>
-            <Spacing value="M" />
-            <Campaign.MonitorTableView columns={@vm.completed_columns} tasks={@vm.completed_tasks} />
-            <Spacing value="M" />
-            <Wrap>
-              <DynamicButton vm={%{
+          <Text.title3 margin="mb-8">
+            <%= dgettext("link-monitor", "waitinglist.title") %><span class="text-primary">
+              <%= Enum.count(@vm.completed_tasks) %></span>
+          </Text.title3>
+
+          <%= if Enum.count(@vm.completed_tasks) > 0 do %>
+            <Text.body_large><%= dgettext("link-monitor", "waitinglist.body") %></Text.body_large>
+            <.spacing value="M" />
+            <.monitor_table_view columns={@vm.completed_columns} tasks={@vm.completed_tasks} />
+            <.spacing value="M" />
+            <.wrap>
+              <Button.dynamic {%{
                 action: %{type: :send, target: @myself, event: "accept_all_completed"},
                 face: %{type: :primary, label: dgettext("link-monitor", "accept.all.button")}
               }} />
-            </Wrap>
-            <Spacing value="XL" />
-          </div>
-          <div :if={Enum.count(@vm.completed_tasks) == 0}>
-            <Spacing value="L" />
-          </div>
+            </.wrap>
+            <.spacing value="XL" />
+          <% else %>
+            <.spacing value="L" />
+          <% end %>
 
-          <Title3>
-            {dgettext("link-monitor", "rejected.title")}<span class="text-primary">
-              {Enum.count(@vm.rejected_tasks)}</span>
-          </Title3>
-          <div :if={Enum.count(@vm.rejected_tasks) > 0}>
-            <Campaign.MonitorTableView columns={@vm.rejected_columns} tasks={@vm.rejected_tasks} />
-            <Spacing value="XL" />
-          </div>
-          <div :if={Enum.count(@vm.rejected_tasks) == 0}>
-            <Spacing value="L" />
-          </div>
+          <Text.title3>
+            <%= dgettext("link-monitor", "rejected.title") %><span class="text-primary"> <%= Enum.count(@vm.rejected_tasks) %></span>
+          </Text.title3>
 
-          <Title3 margin="mb-8">
-            {dgettext("link-monitor", "accepted.title")}<span class="text-primary">
-              {Enum.count(@vm.accepted_tasks)}</span>
-          </Title3>
-          <div :if={Enum.count(@vm.accepted_tasks) > 0}>
-            <Campaign.MonitorTableView columns={@vm.accepted_columns} tasks={@vm.accepted_tasks} />
-          </div>
-        </True>
-        <False>
-          <Empty
-            title={dgettext("link-survey", "monitor.empty.title")}
-            body={dgettext("link-survey", "monitor.empty.description")}
-            illustration="members"
-          />
-        </False>
-      </Case>
-    </ContentArea>
+          <%= if Enum.count(@vm.rejected_tasks) > 0 do %>
+            <.monitor_table_view columns={@vm.rejected_columns} tasks={@vm.rejected_tasks} />
+            <.spacing value="XL" />
+          <% else %>
+            <.spacing value="L" />
+          <% end %>
+
+          <Text.title3 margin="mb-8">
+            <%= dgettext("link-monitor", "accepted.title") %><span class="text-primary">
+              <%= Enum.count(@vm.accepted_tasks) %></span>
+          </Text.title3>
+
+          <%= if Enum.count(@vm.accepted_tasks) > 0 do %>
+            <.monitor_table_view columns={@vm.accepted_columns} tasks={@vm.accepted_tasks} />
+          <% end %>>
+        <% end %>
+      </Area.content>
+    </div>
     """
   end
 

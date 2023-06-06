@@ -1,26 +1,17 @@
 defmodule Systems.Lab.ExperimentTaskView do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
-  alias CoreWeb.UI.Navigation.ButtonBar
+  import CoreWeb.UI.Navigation, only: [button_bar: 1]
   alias Frameworks.Utility.LiveCommand
-  alias Frameworks.Pixel.Text.{Title3, Title6, Body}
+  alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Dropdown
 
   alias Systems.{
     Lab
   }
 
-  prop(lab_tool, :map, required: true)
-  prop(public_id, :any, required: true)
-  prop(status, :any, required: true)
-  prop(reservation, :any, required: true)
-  prop(actions, :list, required: true)
-  prop(user, :map, required: true)
-
-  data(selector, :map)
-  data(selected_time_slot, :map)
-
   # Selector updates
+  @impl true
   def update(%{selector: :toggle, show_options?: show_options?}, socket) do
     {
       :ok,
@@ -30,6 +21,7 @@ defmodule Systems.Lab.ExperimentTaskView do
     }
   end
 
+  @impl true
   def update(%{selector: :reset}, socket) do
     {
       :ok,
@@ -42,6 +34,7 @@ defmodule Systems.Lab.ExperimentTaskView do
     }
   end
 
+  @impl true
   def update(
         %{selector: :selected, option: %{id: id}},
         %{assigns: %{time_slots: time_slots}} = socket
@@ -60,10 +53,12 @@ defmodule Systems.Lab.ExperimentTaskView do
   end
 
   # Realtime updates
+  @impl true
   def update(%{model: new_model}, %{assigns: %{lock_ui: true}} = socket) do
     {:ok, socket |> assign(new_model: new_model)}
   end
 
+  @impl true
   def update(
         %{
           model: %{
@@ -90,6 +85,7 @@ defmodule Systems.Lab.ExperimentTaskView do
   end
 
   # Initial update
+  @impl true
   def update(
         %{
           id: id,
@@ -205,30 +201,42 @@ defmodule Systems.Lab.ExperimentTaskView do
     LiveCommand.action_buttons(actions, target)
   end
 
+  # data(selector, :map)
+  # data(selected_time_slot, :map)
+
+  attr(:lab_tool, :map, required: true)
+  attr(:public_id, :any, required: true)
+  attr(:status, :any, required: true)
+  attr(:reservation, :any, required: true)
+  attr(:actions, :list, required: true)
+  attr(:user, :map, required: true)
+
+  @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div>
-      <div :if={@reservation == nil and @status == :pending}>
-        <Title3>{dgettext("link-lab", "no.reservation.title")}</Title3>
-        <Spacing value="M" />
-        <Title6>{dgettext("link-lab", "timeslot.selector.label")}</Title6>
-        <Spacing value="XXS" />
-        <Dropdown.Selector {...@selector} />
-      </div>
-      <div :if={@reservation != nil}>
-        <Title3>{dgettext("link-lab", "reservation.title")}</Title3>
-        <Spacing value="M" />
+      <%= if @reservation do %>
+        <Text.title3><%= dgettext("link-lab", "reservation.title") %></Text.title3>
+        <.spacing value="M" />
         <div class="flex flex-col sm:flex-row gap-x-4 gap-y-3">
-          <Body><span class="whitespace-pre-wrap">🗓 {date(time_slot(@reservation))}</span></Body>
-          <Body><span class="whitespace-pre-wrap">🕙 {time(time_slot(@reservation))}</span></Body>
-          <Body><span class="whitespace-pre-wrap">📍 {location(time_slot(@reservation))}</span></Body>
+          <Text.body><span class="whitespace-pre-wrap">🗓 <%= date(time_slot(@reservation)) %></span></Text.body>
+          <Text.body><span class="whitespace-pre-wrap">🕙 <%= time(time_slot(@reservation)) %></span></Text.body>
+          <Text.body><span class="whitespace-pre-wrap">📍 <%= location(time_slot(@reservation)) %></span></Text.body>
         </div>
-        <Spacing value="XXS" />
-        <Body><span class="whitespace-pre-wrap">{id_text(@public_id)}</span></Body>
-        <Spacing value="S" />
-      </div>
-      <MarginY id={:button_bar_top} />
-      <ButtonBar buttons={action_buttons(assigns)} />
+        <.spacing value="XXS" />
+        <Text.body><span class="whitespace-pre-wrap"><%= id_text(@public_id) %></span></Text.body>
+        <.spacing value="S" />
+      <% else %>
+        <%= if @status == :pending do %>
+          <Text.title3><%= dgettext("link-lab", "no.reservation.title") %></Text.title3>
+          <.spacing value="M" />
+          <Text.title6><%= dgettext("link-lab", "timeslot.selector.label") %></Text.title6>
+          <.spacing value="XXS" />
+          <.live_component module={Dropdown.Selector} {@selector} />
+        <% end %>
+      <% end %>
+      <Margin.y id={:button_bar_top} />
+      <.button_bar buttons={action_buttons(assigns)} />
     </div>
     """
   end

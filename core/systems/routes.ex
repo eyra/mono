@@ -3,7 +3,6 @@ defmodule Systems.Routes do
     quote do
       use Systems.Subroutes, [
         :org,
-        :home,
         :admin,
         :support,
         :assignment,

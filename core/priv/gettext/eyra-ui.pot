@@ -183,10 +183,6 @@ msgid "share.dialog.text"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "pronoun.her"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "menu.item.payments"
 msgstr ""
 
@@ -200,10 +196,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "notify.all"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pronoun.him"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen

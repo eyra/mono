@@ -1,12 +1,12 @@
 defmodule Systems.Citizen.Pool.Form do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
   require Logger
 
+  import Frameworks.Pixel.Form
   alias Frameworks.Utility.EctoHelper
   alias Frameworks.Pixel.Dropdown
-  alias Frameworks.Pixel.Form.{Form, TextInput}
-  alias Frameworks.Pixel.Text.{Title3, FormFieldLabel}
+  alias Frameworks.Pixel.Text
 
   alias Systems.{
     Budget,
@@ -15,22 +15,8 @@ defmodule Systems.Citizen.Pool.Form do
 
   @default_values %{"director" => "citizen", "target" => 0}
 
-  prop(pool, :any)
-  prop(user, :any)
-  prop(locale, :any)
-  prop(target, :any)
-
-  data(title, :string)
-  data(buttons, :list)
-
-  data(changeset, :map)
-  data(validate_changeset?, :boolean)
-
-  data(currencies, :list)
-  data(currency_selector, :map)
-  data(selected_currency, :map)
-
   # Selector toggle
+  @impl true
   def update(%{selector: :toggle}, socket) do
     {
       :ok,
@@ -39,6 +25,7 @@ defmodule Systems.Citizen.Pool.Form do
   end
 
   # Selector selected
+  @impl true
   def update(
         %{selector: :selected, option: %{id: id}},
         %{assigns: %{currencies: currencies}} = socket
@@ -53,6 +40,7 @@ defmodule Systems.Citizen.Pool.Form do
   end
 
   # Initial update create
+  @impl true
   def update(%{id: id, pool: nil, user: user, locale: locale, target: target}, socket) do
     title = dgettext("link-citizen", "pool.create.title")
 
@@ -80,6 +68,7 @@ defmodule Systems.Citizen.Pool.Form do
   end
 
   # Initial update edit
+  @impl true
   def update(%{id: id, pool: pool, user: user, locale: locale, target: target}, socket) do
     title = dgettext("link-citizen", "pool.edit.title")
     changeset = Pool.Model.prepare(pool)
@@ -158,7 +147,7 @@ defmodule Systems.Citizen.Pool.Form do
 
     {
       :noreply,
-      socket |> submit(attrs)
+      socket |> handle_submit(attrs)
     }
   end
 
@@ -184,7 +173,7 @@ defmodule Systems.Citizen.Pool.Form do
     end
   end
 
-  defp submit(%{assigns: %{pool: %{currency: %{id: _id}} = pool}} = socket, attrs) do
+  defp handle_submit(%{assigns: %{pool: %{currency: %{id: _id}} = pool}} = socket, attrs) do
     # Edit modus
     socket
     |> apply_submit(
@@ -195,7 +184,7 @@ defmodule Systems.Citizen.Pool.Form do
     )
   end
 
-  defp submit(
+  defp handle_submit(
          %{assigns: %{pool: pool, user: user, selected_currency: selected_currency}} = socket,
          attrs
        ) do
@@ -220,34 +209,51 @@ defmodule Systems.Citizen.Pool.Form do
     end
   end
 
+  # data(title, :string)
+  # data(buttons, :list)
+
+  # data(changeset, :map)
+  # data(validate_changeset?, :boolean)
+
+  # data(currencies, :list)
+  # data(currency_selector, :map)
+  # data(selected_currency, :map)
+
+  attr(:pool, :any)
+  attr(:user, :any)
+  attr(:locale, :any)
+  attr(:target, :any)
+
   @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div>
-      <Title3>{@title}</Title3>
-      <Spacing value="XS" />
-      <Form id="citizen_form" changeset={@changeset} submit="submit" target={@myself}>
-        <TextInput field={:name} debounce="0" label_text={dgettext("link-citizen", "pool.name.label")} />
-        <TextInput
+      <Text.title3><%= @title %></Text.title3>
+      <.spacing value="XS" />
+      <.form id="citizen_form" :let={form} for={@changeset} phx-submit="submit" phx-target={@myself} >
+        <.text_input form={form} field={:name} debounce="0" label_text={dgettext("link-citizen", "pool.name.label")} />
+        <.text_input form={form}
           field={:virtual_icon}
           debounce="0"
           maxlength="2"
           label_text={dgettext("link-citizen", "pool.icon.label")}
         />
 
-        <div :if={@currency_selector}>
-          <FormFieldLabel id={:currency_label}>
-            {dgettext("link-citizen", "pool.currency.label")}
-          </FormFieldLabel>
-          <Spacing value="XXS" />
-          <Dropdown.Selector {...@currency_selector} />
-        </div>
+        <%= if @currency_selector do %>
+          <Text.form_field_label id={:currency_label}>
+            <%= dgettext("link-citizen", "pool.currency.label") %>
+          </Text.form_field_label>
+          <.spacing value="XXS" />
+          <.live_component module={Dropdown.Selector} {@currency_selector} />
+        <% end %>
 
-        <Spacing value="M" />
+        <.spacing value="M" />
         <div class="flex flex-row gap-4">
-          <DynamicButton :for={button <- @buttons} vm={button} />
+          <%= for button <- @buttons do %>
+            <Button.dynamic {button} />
+          <% end %>
         </div>
-      </Form>
+      </.form>
     </div>
     """
   end

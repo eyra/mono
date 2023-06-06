@@ -1,16 +1,15 @@
 defmodule Systems.DataDonation.FakeForm do
-  use Frameworks.Pixel.Component
+  use CoreWeb, :html
 
-  slot(default, required: true)
+  slot(:inner_block, required: true)
 
-  @impl true
-  def render(assigns) do
-    ~F"""
-    <form id="donate-form" class="donate-form hidden" :on-submit={"donate", target: :live_view}>
+  def fake_form(assigns) do
+    ~H"""
+    <form id="donate-form" class="donate-form hidden" phx-submit="donate">
       <input type="hidden" name="data" value="..." id="data">
-      <#slot />
+      <%= render_slot(@inner_block) %>
     </form>
-    <form id="decline-form" class="decline-form hidden" :on-submit={"decline", target: :live_view}>
+    <form id="decline-form" class="decline-form hidden" phx-submit="decline">
       <input type="hidden" name="data" value="{ 'message': 'declined'}" id="data">
     </form>
     """

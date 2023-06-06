@@ -1,24 +1,14 @@
 defmodule Systems.Lab.ToolForm do
   use CoreWeb.LiveForm
 
-  alias Frameworks.Pixel.Text.{Title3, BodyLarge}
+  alias Frameworks.Pixel.Text
 
   alias Systems.{
     Lab
   }
 
-  prop(entity_id, :number, required: true)
-  prop(validate?, :boolean, required: true)
-  prop(callback_url, :string)
-  prop(user, :map)
-
-  data(entity, :map)
-  data(byline, :string)
-  data(day_list_items, :list)
-  data(add_day_button, :map)
-  data(changeset, :any)
-
   # Handle initial update
+  @impl true
   def update(
         %{id: id, entity_id: entity_id, validate?: validate?},
         %{assigns: %{myself: myself}} = socket
@@ -43,6 +33,7 @@ defmodule Systems.Lab.ToolForm do
     }
   end
 
+  @impl true
   def update(
         %{day_view: :submit, og_day_model: og_day_model, day_model: day_model},
         %{assigns: %{entity: entity}} = socket
@@ -59,6 +50,7 @@ defmodule Systems.Lab.ToolForm do
     }
   end
 
+  @impl true
   def update(%{day_view: :hide}, socket) do
     send(self(), {:hide_popup})
     {:ok, socket}
@@ -109,7 +101,7 @@ defmodule Systems.Lab.ToolForm do
     day_model = Lab.Public.new_day_model(entity)
     props = popup_props(day_model, socket)
 
-    send(self(), {:show_popup, %{view: Systems.Lab.DayView, props: props}})
+    send(self(), {:show_popup, %{module: Systems.Lab.DayView, props: props}})
     {:noreply, socket}
   end
 
@@ -125,7 +117,7 @@ defmodule Systems.Lab.ToolForm do
 
     props = popup_props(day_model, socket)
 
-    send(self(), {:show_popup, %{view: Systems.Lab.DayView, props: props}})
+    send(self(), {:show_popup, %{module: Systems.Lab.DayView, props: props}})
     {:noreply, socket}
   end
 
@@ -136,7 +128,7 @@ defmodule Systems.Lab.ToolForm do
 
     props = popup_props(day_model, socket)
 
-    send(self(), {:show_popup, %{view: Systems.Lab.DayView, props: props}})
+    send(self(), {:show_popup, %{module: Systems.Lab.DayView, props: props}})
     {:noreply, socket}
   end
 
@@ -170,42 +162,24 @@ defmodule Systems.Lab.ToolForm do
     day_list_items |> Enum.at(index)
   end
 
+  @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div>
-      <Title3>{dgettext("link-lab", "form.title")}</Title3>
-      <Spacing value="M" />
-      <BodyLarge>{@byline}</BodyLarge>
-      <Spacing value="S" />
+      <Text.title3><%= dgettext("link-lab", "form.title") %></Text.title3>
+      <.spacing value="M" />
+      <Text.body_large><%= @byline %></Text.body_large>
+      <.spacing value="S" />
       <table class="table-auto">
-        <Lab.DayListItem
-          :for={{day_list_item, index} <- Enum.with_index(@day_list_items)}
-          id={index}
-          target={@myself}
-          {...day_list_item}
-        />
+        <%= for {day_list_item, index} <- Enum.with_index(@day_list_items) do %>
+          <Lab.DayList.item id={index} target={@myself} {day_list_item} />
+        <% end %>
       </table>
-      <Spacing value="S" />
-      <Wrap>
-        <DynamicButton vm={@add_day_button} />
-      </Wrap>
+      <.spacing value="S" />
+      <.wrap>
+        <Button.dynamic {@add_day_button} />
+      </.wrap>
     </div>
-    """
-  end
-end
-
-defmodule Systems.Lab.ToolForm.Example do
-  use Surface.Catalogue.Example,
-    subject: Systems.Lab.ToolForm,
-    catalogue: Frameworks.Pixel.Catalogue,
-    title: "Lab tool form",
-    height: "812px",
-    direction: "vertical",
-    container: {:div, class: ""}
-
-  def render(assigns) do
-    ~F"""
-    <ToolForm id={:reject_view_example} entity_id={1} validate?={false} />
     """
   end
 end

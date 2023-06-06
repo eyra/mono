@@ -18,7 +18,7 @@ defmodule Systems.Student.Filters do
     filters = filters |> Enum.filter(&Enum.member?(values(), &1))
 
     filter_count = Enum.count(filters)
-    match_count = Enum.count(Enum.filter(filters, &include?(student, &1, pool)))
+    match_count = Enum.count(filters, &include?(student, &1, pool))
     # each filter should match (AND)
     filter_count == match_count
   end
