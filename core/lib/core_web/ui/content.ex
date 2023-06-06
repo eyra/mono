@@ -22,7 +22,7 @@ defmodule CoreWeb.UI.Content do
   attr(:subtitle, :string, required: true)
   attr(:quick_summary, :string, required: true)
   attr(:tag, :map, default: %{type: nil, text: nil})
-  attr(:image, :map, default: %{type: nil, info: nil})
+  attr(:image, :map, default: nil)
 
   attr(:title_css, :string,
     default: "font-title7 text-title7 md:font-title5 md:text-title5 text-grey1"
@@ -74,15 +74,17 @@ defmodule CoreWeb.UI.Content do
               </div>
             </div>
           </div>
-          <%= if @image.type == :catalog do %>
-            <div class="flex-wrap flex-shrink-0 w-30">
-              <.blurhash id={@id} image={@image.info} corners="rounded-br-md rounded-tr-xl md:rounded-tr-md" />
-            </div>
-          <% end %>
-          <%= if @image.type == :avatar do %>
-            <div class="flex-wrap flex-shrink-0 my-6 mr-6">
-              <img src={@image.info} class="w-20 h-20 rounded-full" alt="">
-            </div>
+          <%= if @image do %>
+            <%= if @image.type == :catalog do %>
+              <div class="flex-wrap flex-shrink-0 w-30">
+                <.blurhash id={@id} image={@image.info} corners="rounded-br-md rounded-tr-xl md:rounded-tr-md" />
+              </div>
+            <% end %>
+            <%= if @image.type == :avatar do %>
+              <div class="flex-wrap flex-shrink-0 my-6 mr-6">
+                <img src={@image.info} class="w-20 h-20 rounded-full" alt="">
+              </div>
+            <% end %>
           <% end %>
         </div>
       </div>

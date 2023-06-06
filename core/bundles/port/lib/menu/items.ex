@@ -48,7 +48,10 @@ defmodule Port.Menu.Items do
         action: %{type: :click, code: "mobile_menu = !mobile_menu"},
         title: dgettext("eyra-ui", "menu.item.menu")
       },
-      studies: %{action: %{type: :redirect, to: ~p"/studies"}, title: "Studies"}
+      projects: %{
+        action: %{type: :redirect, to: ~p"/projects"},
+        title: dgettext("eyra-ui", "menu.item.projects")
+      }
     }
   end
 end

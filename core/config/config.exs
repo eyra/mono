@@ -113,7 +113,18 @@ config :core, BankingClient,
 
 import_config "#{config_env()}.exs"
 
-bundle = Bundle.name()
+module =
+  case Code.ensure_compiled(Bundle) do
+    {:module, module} ->
+      module
+
+    _ ->
+      [{module, _binary}] = Code.compile_file(".bundle.ex")
+      module
+  end
+
+bundle = apply(module, :name, [])
+
 config :core, :bundle, bundle
 
 unless is_nil(bundle) do

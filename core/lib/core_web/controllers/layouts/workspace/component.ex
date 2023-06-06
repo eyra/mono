@@ -48,6 +48,8 @@ defmodule CoreWeb.Layouts.Workspace.Component do
 
   attr(:title, :string, default: nil)
   attr(:menus, :map)
+  attr(:footer, :boolean, default: true)
+  slot(:top_bar, default: nil)
   slot(:inner_block, required: true)
 
   def workspace(assigns) do
@@ -71,10 +73,15 @@ defmodule CoreWeb.Layouts.Workspace.Component do
             <div class="flex-1 bg-white md:border-t md:border-l md:border-b border-grey4">
               <div class="flex flex-col h-full">
                 <div class="flex-1">
-                  <div class="flex flex-col h-full">
+                  <div class="flex flex-col h-full w-full">
                     <%= if @title do %>
                       <div class="flex-none">
                         <Hero.small title={@title} />
+                      </div>
+                    <% end %>
+                    <%= if @top_bar do %>
+                      <div class="flex-none">
+                        <%= render_slot(@top_bar) %>
                       </div>
                     <% end %>
                     <div class="flex-1">
@@ -83,9 +90,11 @@ defmodule CoreWeb.Layouts.Workspace.Component do
                     </div>
                   </div>
                 </div>
-                <div class="flex-none">
-                  <.footer />
-                </div>
+                <%= if @footer do %>
+                  <div class="flex-none">
+                    <.footer />
+                  </div>
+                <% end %>
               </div>
             </div>
             <div class="pb-0 md:pb-10 bg-grey5">

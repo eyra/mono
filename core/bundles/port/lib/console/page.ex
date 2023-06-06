@@ -4,27 +4,23 @@ defmodule Port.Console.Page do
   """
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :console
+  import CoreWeb.Layouts.Workspace.Component
 
   import CoreWeb.UI.Content
 
+  alias Frameworks.Pixel.Text
+
   alias Systems.{
-    Campaign,
+    Project,
     NextAction
   }
 
-  alias Frameworks.Pixel.Text
-  alias Core.ImageHelpers
-
-  import CoreWeb.Layouts.Workspace.Component
-
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    preload = Campaign.Model.preload_graph(:full)
+    preload = Project.Model.preload_graph(:full)
 
-    # FIXME: Refactor to use content node
     content_items =
       user
-      |> Campaign.Public.list_owned_campaigns(preload: preload)
-      |> Enum.map(&Campaign.Model.flatten(&1))
+      |> Project.Public.list_owned_projects(preload: preload)
       |> Enum.map(&convert_to_vm(socket, &1))
 
     socket =
@@ -41,9 +37,6 @@ defmodule Port.Console.Page do
     {:noreply, socket}
   end
 
-  # data(content_items, :any)
-  # data(current_user, :any)
-  # data(next_best_action, :any)
   @impl true
   def render(assigns) do
     ~H"""
@@ -66,32 +59,20 @@ defmodule Port.Console.Page do
   end
 
   def convert_to_vm(
-        socket,
+        _socket,
         %{
-          promotion: %{
-            title: title,
-            subtitle: subtitle,
-            image_id: image_id
-          },
-          promotable: %{
-            assignable_experiment: %{
-              data_donation_tool: %{
-                id: edit_id
-              }
-            }
-          }
+          id: id,
+          name: name
         }
       ) do
-    image_info = ImageHelpers.get_image_info(image_id, 120, 115)
-    image = %{type: :catalog, info: image_info}
-
     %{
-      path: Routes.live_path(socket, Systems.DataDonation.ContentPage, edit_id),
-      title: title,
-      subtitle: subtitle,
+      path: ~p"/projects/#{id}/content",
+      title: name,
+      subtitle: "<subtitle>",
       tag: %{text: "Concept", type: :success},
       level: :critical,
-      image: image
+      image: nil,
+      quick_summary: ""
     }
   end
 end

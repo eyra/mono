@@ -3,17 +3,24 @@ defmodule Systems.DataDonation.ToolForm do
 
   alias Core.Accounts
 
-  alias CoreWeb.UI.Timestamp
   alias CoreWeb.Router.Helpers, as: Routes
 
-  alias Frameworks.Pixel.Text
   import Frameworks.Pixel.Form
-  alias Frameworks.Pixel.Button
-  alias Frameworks.Pixel.Panel
+  alias Frameworks.Pixel.Selector
 
   alias Systems.{
     DataDonation
   }
+
+  require Systems.DataDonation.Platforms
+
+  @impl true
+  def update(
+        %{active_item_ids: active_item_ids, selector_id: selector_id},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    {:ok, socket |> save(entity, %{selector_id => active_item_ids})}
+  end
 
   @impl true
   def update(
@@ -22,7 +29,7 @@ defmodule Systems.DataDonation.ToolForm do
       ) do
     entity = DataDonation.Public.get_tool!(entity_id)
     donations = DataDonation.Public.list_donations(entity)
-    changeset = DataDonation.ToolModel.changeset(entity, :mount, %{})
+    changeset = DataDonation.ToolModel.changeset(entity, %{})
 
     {
       :ok,
@@ -34,17 +41,23 @@ defmodule Systems.DataDonation.ToolForm do
         changeset: changeset,
         donations: donations
       )
+      |> update_platform_labels()
     }
+  end
+
+  defp update_platform_labels(%{assigns: %{entity: %{platforms: platforms}}} = socket) do
+    platform_labels = DataDonation.Platforms.labels(platforms)
+    socket |> assign(platform_labels: platform_labels)
   end
 
   # Handle Events
 
   @impl true
-  def handle_event("save", %{"tool" => attrs}, %{assigns: %{entity: entity}} = socket) do
+  def handle_event("save", %{"tool_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket
-      |> save(entity, :auto_save, attrs)
+      |> save(entity, attrs)
     }
   end
 
@@ -62,8 +75,8 @@ defmodule Systems.DataDonation.ToolForm do
   end
 
   # Saving
-  def save(socket, %DataDonation.ToolModel{} = entity, type, attrs) do
-    changeset = DataDonation.ToolModel.changeset(entity, type, attrs)
+  def save(socket, %DataDonation.ToolModel{} = entity, attrs) do
+    changeset = DataDonation.ToolModel.changeset(entity, attrs)
 
     socket
     |> save(changeset)
@@ -74,55 +87,19 @@ defmodule Systems.DataDonation.ToolForm do
   def render(assigns) do
     ~H"""
     <div>
-      <Area.content>
-      <Margin.y id={:page_top} />
-      <%= if Enum.count(@donations) > 0 do %>
-        <Text.title2><%= dgettext("eyra-data-donation", "donations.title") %></Text.title2>
-        <Panel.flat bg_color="bg-grey6">
-          <%= for donation <- @donations do %>
-            <div class="mb-2 w-full">
-              <div class="flex flex-row w-full">
-                <div class="flex-wrap text-grey1 text-bodymedium font-body mr-6">
-                  Participant {donation.user_id}
-                </div>
-                <div class="flex-grow text-grey2 text-bodymedium font-body">
-                  <%= dgettext("eyra-data-donation", "received.label") %> <%= Timestamp.humanize(donation.inserted_at) %>
-                </div>
-                <div class="flex-wrap">
-                  <a
-                    href="/"
-                    class="text-primary text-bodymedium font-body hover:text-grey1 underline focus:outline-none"
-                  >
-                    <%= dgettext("eyra-data-donation", "download.button.label") %>
-                  </a>
-                </div>
-              </div>
-            </div>
-          <% end %>
-        </Panel.flat>
-        <.spacing value="S" />
-        <Button.primary to="/" label={dgettext("eyra-data-donation", "download.all.button.label")} />
-        <.spacing value="XL" />
-      <% end %>
       <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
-        <Text.title3><%= dgettext("eyra-data-donation", "script.title") %></Text.title3>
-        <.text_area form={form} field={:script} label_text={dgettext("eyra-data-donation", "script.label")} />
-        <.spacing value="L" />
-
-        <Text.title3><%= dgettext("eyra-data-donation", "reward.title") %></Text.title3>
-        <.number_input form={form} field={:reward_value} label_text={dgettext("eyra-data-donation", "reward.label")} />
-        <.spacing value="L" />
-
-        <Text.title3><%= dgettext("eyra-data-donation", "nrofsubjects.title") %></Text.title3>
-        <.number_input
-          form={form}
-          field={:subject_count}
-          label_text={dgettext("eyra-data-donation", "config.nrofsubjects.label")}
-        />
+        <.number_input form={form} field={:subject_count} label_text={dgettext("eyra-data-donation", "config.nrofsubjects.label")} />
       </.form>
       <.spacing value="M" />
-      <Button.secondary_live_view label={dgettext("eyra-data-donation", "delete.button")} event="delete" />
-      </Area.content>
+
+      <Text.title3><%= dgettext("eyra-data-donation", "platforms.title") %></Text.title3>
+      <.live_component
+        module={Selector}
+        id={:platforms}
+        items={@platform_labels}
+        type={:label}
+        parent={%{type: __MODULE__, id: @id}}
+      />
     </div>
     """
   end

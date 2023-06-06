@@ -27,17 +27,5 @@ msgid "503.body"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "helpdesk.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "home.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "mail.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "page.title"
 msgstr ""

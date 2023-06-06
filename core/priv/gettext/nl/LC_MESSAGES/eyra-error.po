@@ -27,17 +27,5 @@ msgid "503.body"
 msgstr "Deze pagina is op dit moment helaas niet bereikbaar. Als we hiervan op de hoogte zijn dan doen we ons uiterste best om de pagina zo snel mogelijk weer bereikbaar te maken. Probeer het later nog eens. Blijft deze melding verschijnen? Dan horen we het graag. Neem even contact met ons op. Alvast bedankt."
 
 #, elixir-autogen, elixir-format
-msgid "helpdesk.button"
-msgstr "Helpdesk"
-
-#, elixir-autogen, elixir-format
-msgid "home.button"
-msgstr "Home"
-
-#, elixir-autogen, elixir-format
-msgid "mail.button"
-msgstr "Contact"
-
-#, elixir-autogen, elixir-format
 msgid "page.title"
 msgstr "Sorry"

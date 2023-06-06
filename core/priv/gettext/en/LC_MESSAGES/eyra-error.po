@@ -27,17 +27,5 @@ msgid "503.body"
 msgstr "Unfortunately, this page is currently unavailable. If we are aware of this problem, we are doing the best we can to get this page up and running as soon as possible. Please try again later. If this message keeps appearing, let us know. Thanks in advance."
 
 #, elixir-autogen, elixir-format
-msgid "helpdesk.button"
-msgstr "Helpdesk"
-
-#, elixir-autogen, elixir-format
-msgid "home.button"
-msgstr "Home"
-
-#, elixir-autogen, elixir-format
-msgid "mail.button"
-msgstr "Contact"
-
-#, elixir-autogen, elixir-format
 msgid "page.title"
 msgstr "Sorry"

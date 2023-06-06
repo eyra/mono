@@ -19,7 +19,7 @@ defmodule Frameworks.Pixel.Icon do
     assigns = assign(assigns, :style, style)
 
     ~H"""
-    <div class={"border-grey4 border-opacity-100 #{@size} #{@bg_color} #{@border_size} #{@border_radius}"}>
+    <div class={"border-grey4/100 #{@size} #{@bg_color} #{@border_size} #{@border_radius}"}>
       <.generic_body {assigns}/>
     </div>
     """

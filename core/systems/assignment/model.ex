@@ -65,8 +65,13 @@ defmodule Systems.Assignment.Model do
     [
       :crew,
       :excluded,
-      assignable_experiment: [lab_tool: [:time_slots], survey_tool: [:auth_node]],
-      budget: [:currency, :fund, :reserve]
+      assignable_experiment: [
+        auth_node: [:role_assignments],
+        lab_tool: [:time_slots],
+        survey_tool: [auth_node: [:role_assignments]]
+      ],
+      budget: [:currency, :fund, :reserve],
+      auth_node: [:role_assignments]
     ]
   end
 

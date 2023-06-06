@@ -11,52 +11,8 @@ msgstr ""
 "Language: en\n"
 
 #, elixir-autogen, elixir-format
-msgid "content.title"
-msgstr "Data Donation"
-
-#, elixir-autogen, elixir-format
-msgid "reward.label"
-msgstr "Amount in euro cents"
-
-#, elixir-autogen, elixir-format
-msgid "script.label"
-msgstr "Paste your python script here"
-
-#, elixir-autogen, elixir-format
 msgid "config.nrofsubjects.label"
 msgstr "How many participants do you need?"
-
-#, elixir-autogen, elixir-format
-msgid "nrofsubjects.title"
-msgstr "Subjects"
-
-#, elixir-autogen, elixir-format
-msgid "reward.title"
-msgstr "Credits"
-
-#, elixir-autogen, elixir-format
-msgid "script.title"
-msgstr "Script"
-
-#, elixir-autogen, elixir-format
-msgid "delete.button"
-msgstr "Delete"
-
-#, elixir-autogen, elixir-format
-msgid "donations.title"
-msgstr "Received donations"
-
-#, elixir-autogen, elixir-format
-msgid "download.all.button.label"
-msgstr "Download all"
-
-#, elixir-autogen, elixir-format
-msgid "download.button.label"
-msgstr "Download"
-
-#, elixir-autogen, elixir-format
-msgid "received.label"
-msgstr "Received"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "file_selection.file_upload.description"
@@ -161,3 +117,7 @@ msgstr "Thank you for your participation. Please proceed to the LISS survey on y
 #, elixir-autogen, elixir-format
 msgid "execute.spinner"
 msgstr "One moment please"
+
+#, elixir-autogen, elixir-format
+msgid "platforms.title"
+msgstr "Platforms"

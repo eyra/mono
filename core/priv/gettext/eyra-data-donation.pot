@@ -11,51 +11,7 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "content.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "reward.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "script.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "config.nrofsubjects.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "nrofsubjects.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "reward.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "script.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "delete.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "donations.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "download.all.button.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "download.button.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "received.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
@@ -160,4 +116,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "execute.spinner"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.title"
 msgstr ""

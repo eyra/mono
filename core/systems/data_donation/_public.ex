@@ -31,18 +31,18 @@ defmodule Systems.DataDonation.Public do
   def get_tool!(id), do: Repo.get!(DataDonation.ToolModel, id)
   def get_tool(id), do: Repo.get(DataDonation.ToolModel, id)
 
-  def create(attrs, campaign, promotion) do
+  def create(
+        %{subject_count: _, director: _} = attrs,
+        %Authorization.Node{} = auth_node
+      ) do
     %DataDonation.ToolModel{}
-    |> DataDonation.ToolModel.changeset(:mount, attrs)
-    |> Ecto.Changeset.put_assoc(:campaign, campaign)
-    |> Ecto.Changeset.put_assoc(:promotion, promotion)
-    |> Ecto.Changeset.put_assoc(:auth_node, Authorization.make_node(campaign))
-    |> Repo.insert()
+    |> DataDonation.ToolModel.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
 
   def update(changeset) do
     Multi.new()
-    |> Repo.multi_update(:tool, changeset)
+    |> Repo.multi_update(:data_donation_tool, changeset)
     |> Repo.transaction()
   end
 
@@ -59,12 +59,19 @@ defmodule Systems.DataDonation.Public do
     )
     |> Repo.all()
   end
+
+  def copy(%DataDonation.ToolModel{} = tool, auth_node) do
+    %DataDonation.ToolModel{}
+    |> DataDonation.ToolModel.changeset(Map.from_struct(tool))
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Repo.insert!()
+  end
 end
 
 defimpl Core.Persister, for: Systems.DataDonation.ToolModel do
   def save(_tool, changeset) do
     case Systems.DataDonation.Public.update(changeset) do
-      {:ok, %{tool: tool}} -> {:ok, tool}
+      {:ok, %{data_donation_tool: tool}} -> {:ok, tool}
       _ -> {:error, changeset}
     end
   end

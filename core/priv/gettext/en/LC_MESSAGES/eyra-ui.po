@@ -47,10 +47,6 @@ msgid "menu.item.menu"
 msgstr "Menu"
 
 #, elixir-autogen, elixir-format
-msgid "menu.item.eyra"
-msgstr "Eyra"
-
-#, elixir-autogen, elixir-format
 msgid "menu.item.todo"
 msgstr "To-do"
 
@@ -105,10 +101,6 @@ msgstr "Welcome"
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.welcome.forward"
 msgstr "Welcome"
-
-#, elixir-autogen, elixir-format
-msgid "menu.item.link"
-msgstr "Panl"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.helpdesk"
@@ -209,3 +201,11 @@ msgstr "Funding"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "share.dialog.title"
 msgstr "Shared with"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "menu.item.projects"
+msgstr "Data Donation"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "start.page.projects"
+msgstr "Go to console"

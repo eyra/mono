@@ -12,7 +12,6 @@ defmodule Systems.Campaign.CardView do
   alias Frameworks.Pixel.ClickableCard
 
   attr(:card, :map, required: true)
-  attr(:path_provider, :any, required: true)
   attr(:click_event_name, :string, default: "handle_click")
   attr(:click_event_data, :map)
 
@@ -32,7 +31,6 @@ defmodule Systems.Campaign.CardView do
         function={@function}
         props={%{
           card: @card,
-          path_provider: @path_provider,
           click_event_name: @click_event_name,
           click_event_data: @click_event_data
         }}
@@ -42,7 +40,6 @@ defmodule Systems.Campaign.CardView do
   end
 
   attr(:card, :any, required: true)
-  attr(:path_provider, :any, required: true)
   attr(:click_event_name, :string, default: "handle_click")
   attr(:click_event_data, :map)
 
@@ -50,7 +47,6 @@ defmodule Systems.Campaign.CardView do
     ~H"""
     <.basic
       {@card}
-      path_provider={@path_provider}
       click_event_data={@click_event_data}
       click_event_name={@click_event_name}
     />
@@ -58,7 +54,6 @@ defmodule Systems.Campaign.CardView do
   end
 
   attr(:card, :any, required: true)
-  attr(:path_provider, :any, required: true)
   attr(:click_event_name, :string, default: "handle_click")
   attr(:click_event_data, :map)
 
@@ -66,7 +61,6 @@ defmodule Systems.Campaign.CardView do
     ~H"""
     <.basic
       {@card}
-      path_provider={@path_provider}
       bg_color="grey5"
       text_color="text-grey1"
       label_type="primary"
@@ -87,7 +81,6 @@ defmodule Systems.Campaign.CardView do
   attr(:label, :map, default: nil)
   attr(:info, :list, default: [])
 
-  attr(:path_provider, :any, required: true)
   attr(:bg_color, :string, default: "grey1")
   attr(:text_color, :string, default: "text-white")
   attr(:label_type, :string, default: "tertiary")
@@ -111,12 +104,12 @@ defmodule Systems.Campaign.CardView do
         left_actions={@left_actions}
         right_actions={@right_actions}
       >
-        <:image>
+        <:top>
           <div class="relative">
 
             <%= if @label do %>
               <div class="absolute top-6 z-10">
-                <Card.label {@label} path_provider={@path_provider} />
+                <Card.label {@label} />
               </div>
             <% end %>
 
@@ -135,7 +128,7 @@ defmodule Systems.Campaign.CardView do
               />
             </div>
           </div>
-        </:image>
+        </:top>
         <:title>
           <div class={"text-title5 font-title5 lg:text-title3 lg:font-title3 #{@text_color}"}>
             <%= @title %>

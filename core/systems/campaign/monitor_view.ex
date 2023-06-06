@@ -137,14 +137,6 @@ defmodule Systems.Campaign.MonitorView do
   defp lab_tool(%{lab_tool: lab_tool}), do: lab_tool
   defp lab_tool(_), do: nil
 
-  # data(vm, :any)
-  # data(reject_task, :number)
-  # data(labels, :list)
-
-  attr(:entity, :map, required: true)
-  attr(:attention_list_enabled?, :boolean, required: true)
-  attr(:labels, :list, required: true)
-
   @impl true
   def render(assigns) do
     ~H"""

@@ -29,19 +29,19 @@ defmodule Frameworks.Pixel.ClickableCard do
   attr(:right_actions, :list, default: [])
 
   slot(:inner_block, required: true)
-  slot(:image, required: true)
+  slot(:top, default: nil)
   slot(:title, required: true)
   @impl true
   def render(assigns) do
     ~H"""
     <div
       x-data="{actions: false}"
-      class={"rounded-lg cursor-pointer bg-#{@bg_color} #{@size}"}
+      class={"h-full rounded-lg cursor-pointer bg-#{@bg_color} #{@size}"}
       phx-click="card_click"
       phx-target={@myself}
     >
       <div class="flex flex-col h-full">
-        <%= render_slot(@image) %>
+        <%= if @top do render_slot(@top) end %>
         <div class="p-6 lg:pl-8 lg:pr-8 lg:pt-8">
           <%= render_slot(@title) %>
         </div>

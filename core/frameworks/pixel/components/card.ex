@@ -93,11 +93,12 @@ defmodule Frameworks.Pixel.Card do
     """
   end
 
-  attr(:path_provider, :any, required: true)
   attr(:text, :string, required: true)
   attr(:type, :atom, default: :primary)
 
   def label(%{type: type} = assigns) do
+    image = "label-arrow-#{type}.svg"
+
     bg_color =
       case type do
         :delete -> "bg-delete"
@@ -120,7 +121,8 @@ defmodule Frameworks.Pixel.Card do
     assigns =
       assign(assigns, %{
         bg_color: bg_color,
-        text_color: text_color
+        text_color: text_color,
+        image: image
       })
 
     ~H"""
@@ -130,7 +132,7 @@ defmodule Frameworks.Pixel.Card do
           <Text.title5 color={@text_color}><%= @text %></Text.title5>
         </div>
       </div>
-      <img src={@path_provider.static_path("/images/label-arrow-#{@type}.svg")} alt={@text}>
+      <img src={~p"/images/#{@image}"} alt={@text}>
     </div>
     """
   end

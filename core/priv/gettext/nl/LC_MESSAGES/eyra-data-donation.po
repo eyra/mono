@@ -11,52 +11,8 @@ msgstr ""
 "Language: nl\n"
 
 #, elixir-autogen, elixir-format
-msgid "content.title"
-msgstr "Controleren"
-
-#, elixir-autogen, elixir-format
-msgid "reward.label"
-msgstr "Beloning in euro centen"
-
-#, elixir-autogen, elixir-format
-msgid "script.label"
-msgstr "Plak hier je python script"
-
-#, elixir-autogen, elixir-format
 msgid "config.nrofsubjects.label"
 msgstr "Aantal gewenste deelnemers"
-
-#, elixir-autogen, elixir-format
-msgid "nrofsubjects.title"
-msgstr "Deelnemers"
-
-#, elixir-autogen, elixir-format
-msgid "reward.title"
-msgstr "Beloning"
-
-#, elixir-autogen, elixir-format
-msgid "script.title"
-msgstr "Script"
-
-#, elixir-autogen, elixir-format
-msgid "delete.button"
-msgstr "Verwijderen"
-
-#, elixir-autogen, elixir-format
-msgid "donations.title"
-msgstr "Ontvangen donaties"
-
-#, elixir-autogen, elixir-format
-msgid "download.all.button.label"
-msgstr "Download alles"
-
-#, elixir-autogen, elixir-format
-msgid "download.button.label"
-msgstr "Download"
-
-#, elixir-autogen, elixir-format
-msgid "received.label"
-msgstr "Ontvangen"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "file_selection.file_upload.description"
@@ -161,3 +117,7 @@ msgstr "Hartelijk bedankt voor uw deelname. Gaat u a.u.b. nu weer verder met de 
 #, elixir-autogen, elixir-format
 msgid "execute.spinner"
 msgstr "Een moment geduld"
+
+#, elixir-autogen, elixir-format
+msgid "platforms.title"
+msgstr "Platformen"
