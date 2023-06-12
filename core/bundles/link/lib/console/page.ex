@@ -18,29 +18,25 @@ defmodule Link.Console.Page do
   alias Frameworks.Pixel.Text
   alias Systems.NextAction
 
-  def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
+  def mount(_params, _session, %{assigns: %{current_user: user} = assigns} = socket) do
     preload = Campaign.Model.preload_graph(:full)
 
-    next_best_action = NextAction.Public.next_best_action(url_resolver(socket), user)
+    next_best_action = NextAction.Public.next_best_action(user)
 
     wallets =
       Budget.Public.list_wallets(user)
       |> filter_wallets()
-      |> Enum.map(&Budget.WalletViewBuilder.view_model(&1, user, url_resolver(socket)))
+      |> Enum.map(&Budget.WalletViewBuilder.view_model(&1, user))
 
     contributions =
       user
       |> Campaign.Public.list_subject_campaigns(preload: preload)
-      |> Enum.map(
-        &ViewModelBuilder.view_model(&1, {__MODULE__, :contribution}, user, url_resolver(socket))
-      )
+      |> Enum.map(&ViewModelBuilder.view_model(&1, {__MODULE__, :contribution}, assigns))
 
     content_items =
       user
       |> Campaign.Public.list_owned_campaigns(preload: preload)
-      |> Enum.map(
-        &ViewModelBuilder.view_model(&1, {__MODULE__, :content}, user, url_resolver(socket))
-      )
+      |> Enum.map(&ViewModelBuilder.view_model(&1, {__MODULE__, :content}, assigns))
 
     socket =
       socket

@@ -1,4 +1,4 @@
-defmodule Systems.Project.MonitorView do
+defmodule Systems.Project.ItemMonitorView do
   use CoreWeb, :live_component
 
   @impl true

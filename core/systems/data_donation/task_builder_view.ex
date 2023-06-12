@@ -1,7 +1,7 @@
-defmodule Systems.Sequence.BuilderView do
+defmodule Systems.DataDonation.TaskBuilderView do
   use CoreWeb, :live_component
 
-  import Systems.Sequence.Views
+  import Systems.DataDonation.TaskViews
   import Frameworks.Pixel.SidePanel
 
   @impl true

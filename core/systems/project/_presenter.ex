@@ -6,15 +6,27 @@ defmodule Systems.Project.Presenter do
   }
 
   @impl true
-  def view_model(id, Project.ContentPage = page, assigns, url_resolver) when is_number(id) do
-    Project.Public.get!(id, Project.Model.preload_graph(:full))
-    |> view_model(page, assigns, url_resolver)
+  def view_model(id, Project.NodePage = page, assigns) when is_number(id) do
+    Project.Public.get_node!(id, Project.NodeModel.preload_graph(:down))
+    |> view_model(page, assigns)
   end
 
   @impl true
-  def view_model(%Project.Model{} = study, page, assigns, _url_resolver) do
-    builder(page).view_model(study, assigns)
+  def view_model(id, Project.ItemContentPage = page, assigns) when is_number(id) do
+    Project.Public.get_item!(id, Project.ItemModel.preload_graph(:down))
+    |> view_model(page, assigns)
   end
 
-  defp builder(Project.ContentPage), do: Project.ContentPageBuilder
+  @impl true
+  def view_model(%Project.NodeModel{} = node, page, assigns) do
+    builder(page).view_model(node, assigns)
+  end
+
+  @impl true
+  def view_model(%Project.ItemModel{} = item, page, assigns) do
+    builder(page).view_model(item, assigns)
+  end
+
+  defp builder(Project.NodePage), do: Project.NodePageBuilder
+  defp builder(Project.ItemContentPage), do: Project.ContentPageBuilder.Item
 end

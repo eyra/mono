@@ -1,4 +1,4 @@
-defmodule Systems.Sequence.Views do
+defmodule Systems.DataDonation.TaskViews do
   use CoreWeb, :html
 
   alias Frameworks.Pixel.Panel

@@ -9,11 +9,9 @@ defmodule Systems.Campaign.CardView do
 
   import Frameworks.Pixel.Tag
   alias Frameworks.Pixel.Card
-  alias Frameworks.Pixel.ClickableCard
+  import Frameworks.Pixel.ClickableCard
 
   attr(:card, :map, required: true)
-  attr(:click_event_name, :string, default: "handle_click")
-  attr(:click_event_data, :map)
 
   def dynamic(%{card: card} = assigns) do
     assigns =
@@ -29,33 +27,21 @@ defmodule Systems.Campaign.CardView do
     <div class="h-full">
       <.function_component
         function={@function}
-        props={%{
-          card: @card,
-          click_event_name: @click_event_name,
-          click_event_data: @click_event_data
-        }}
+        props={%{card: @card}}
       />
     </div>
     """
   end
 
   attr(:card, :any, required: true)
-  attr(:click_event_name, :string, default: "handle_click")
-  attr(:click_event_data, :map)
 
   def primary(assigns) do
     ~H"""
-    <.basic
-      {@card}
-      click_event_data={@click_event_data}
-      click_event_name={@click_event_name}
-    />
+    <.basic {@card} />
     """
   end
 
   attr(:card, :any, required: true)
-  attr(:click_event_name, :string, default: "handle_click")
-  attr(:click_event_data, :map)
 
   def secondary(assigns) do
     ~H"""
@@ -67,8 +53,6 @@ defmodule Systems.Campaign.CardView do
       tag_type="primary"
       info1_color="text-grey1"
       info2_color="text-grey2"
-      click_event_data={@click_event_data}
-      click_event_name={@click_event_name}
     />
     """
   end
@@ -87,20 +71,15 @@ defmodule Systems.Campaign.CardView do
   attr(:tag_type, :string, default: "grey2")
   attr(:info1_color, :string, default: "text-tertiary")
   attr(:info2_color, :string, default: "text-white")
-  attr(:click_event_name, :string, default: "handle_click")
-  attr(:click_event_data, :map)
   attr(:left_actions, :list, default: nil)
   attr(:right_actions, :list, default: nil)
 
   def basic(assigns) do
     ~H"""
     <div class="h-full">
-      <.live_component
-        module={ClickableCard}
+      <.clickable_card
         bg_color={@bg_color}
         id={@id}
-        click_event_name={@click_event_name}
-        click_event_data={@click_event_data}
         left_actions={@left_actions}
         right_actions={@right_actions}
       >
@@ -168,7 +147,7 @@ defmodule Systems.Campaign.CardView do
           </div>
           <div class="flex-grow" />
         </div>
-      </.live_component>
+      </.clickable_card>
     </div>
     """
   end

@@ -121,3 +121,7 @@ msgstr "One moment please"
 #, elixir-autogen, elixir-format
 msgid "platforms.title"
 msgstr "Platforms"
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr "Data Donation"

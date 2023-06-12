@@ -281,7 +281,6 @@ defmodule Frameworks.Pixel.Form do
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
   attr(:disabled, :boolean, default: false)
-  attr(:value, :string)
 
   def date_input(assigns) do
     ~H"""
@@ -294,7 +293,6 @@ defmodule Frameworks.Pixel.Form do
       type="date"
       disabled={@disabled}
       debounce={""}
-      value={@value}
     />
     """
   end

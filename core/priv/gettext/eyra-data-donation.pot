@@ -121,3 +121,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "platforms.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr ""

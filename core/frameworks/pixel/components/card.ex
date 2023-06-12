@@ -52,12 +52,14 @@ defmodule Frameworks.Pixel.Card do
 
   def highlight(assigns) do
     ~H"""
-    <div class="flex items-center justify-center">
-      <div class="text-center ml-6 mr-6">
-        <div class="mt-6 mb-7 sm:mt-8 sm:mb-9">
-          <Text.title5 color="text-primary"><%= @title %></Text.title5>
-          <div class="mb-1 sm:mb-2" />
-          <Text.title5><%= @text %></Text.title5>
+    <div class="bg-grey5 rounded">
+      <div class="flex items-center justify-center">
+        <div class="text-center ml-6 mr-6">
+          <div class="mt-6 mb-7 sm:mt-8 sm:mb-9">
+            <Text.title5 color="text-primary"><%= @title %></Text.title5>
+            <div class="mb-1 sm:mb-2" />
+            <Text.title5><%= @text %></Text.title5>
+          </div>
         </div>
       </div>
     </div>
@@ -108,6 +110,7 @@ defmodule Frameworks.Pixel.Card do
         :secondary -> "bg-secondary"
         :tertiary -> "bg-tertiary"
         :disabled -> "bg-grey5"
+        :idle -> "bg-grey3"
         type -> "bg-#{type}"
       end
 

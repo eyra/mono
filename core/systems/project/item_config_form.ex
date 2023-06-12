@@ -1,55 +1,33 @@
-defmodule Systems.Project.ConfigForm do
+defmodule Systems.Project.ItemConfigForm do
   use CoreWeb.LiveForm
 
   alias Systems.{
-    Project,
-    DataDonation
+    Project
   }
 
   # Handle initial update
   @impl true
   def update(
-        %{id: id, entity: project},
+        %{id: id, entity: item, sub_form: sub_form},
         socket
       ) do
-    changeset = Project.Model.changeset(project, %{})
+    changeset = Project.ItemModel.changeset(item, %{})
 
     {
       :ok,
       socket
       |> assign(
         id: id,
-        entity: project,
-        changeset: changeset,
-        data_donation_tool_id: nil
+        entity: item,
+        sub_form: sub_form,
+        changeset: changeset
       )
-      |> update_data_donation_tool_id()
     }
-  end
-
-  defp update_data_donation_tool_id(
-         %{
-           assigns: %{
-             entity: %{
-               root: %{
-                 items: [
-                   %{
-                     tool_ref: %{
-                       data_donation_tool_id: data_donation_tool_id
-                     }
-                   }
-                 ]
-               }
-             }
-           }
-         } = socket
-       ) do
-    assign(socket, data_donation_tool_id: data_donation_tool_id)
   end
 
   # Handle Events
   @impl true
-  def handle_event("save", %{"model" => attrs}, %{assigns: %{entity: entity}} = socket) do
+  def handle_event("save", %{"item_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket
@@ -86,11 +64,8 @@ defmodule Systems.Project.ConfigForm do
           <.text_input form={form} field={:name} label_text={dgettext("eyra-project", "form.name.label")} />
         </.form>
 
-        <.live_component
-          id={:tool_form}
-          module={DataDonation.ToolForm}
-          entity_id={@data_donation_tool_id}
-        />
+        <.live_component {@sub_form} />
+
       </Area.content>
     </div>
     """

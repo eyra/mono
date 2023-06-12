@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddProjectPart1 do
+defmodule Core.Repo.Migrations.AddProject do
   use Ecto.Migration
 
   def up do
@@ -12,20 +12,6 @@ defmodule Core.Repo.Migrations.AddProjectPart1 do
       remove(:campaign_id)
       remove(:content_node_id)
     end
-
-    create table(:sequences) do
-      timestamps()
-    end
-
-    create table(:sequence_elements) do
-      add(:sequence_id, references(:sequences, on_delete: :delete_all), null: false)
-      add(:position, :integer, null: false)
-      add(:director, :string, null: false)
-      add(:identifier, {:array, :string}, null: false)
-      timestamps()
-    end
-
-    create(index(:sequence_elements, :identifier, unique: true))
 
     create table(:project_nodes) do
       add(:name, :string, null: false)
@@ -54,6 +40,7 @@ defmodule Core.Repo.Migrations.AddProjectPart1 do
     end
 
     create table(:project_items) do
+      add(:name, :string, null: false)
       add(:project_path, {:array, :integer}, null: false)
       add(:node_id, references(:project_nodes, on_delete: :delete_all), null: false)
       add(:tool_ref_id, references(:tool_refs, on_delete: :delete_all), null: false)
@@ -105,10 +92,6 @@ defmodule Core.Repo.Migrations.AddProjectPart1 do
     drop(table(:tool_refs))
     drop(table(:projects))
     drop(table(:project_nodes))
-
-    drop(index(:sequence_elements, :identifier))
-    drop(table(:sequence_elements))
-    drop(table(:sequences))
 
     alter table(:data_donation_tools) do
       remove(:platforms)

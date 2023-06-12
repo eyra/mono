@@ -1,0 +1,134 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr "Benchmark"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.leaderboards"
+msgstr "Ranglijsten"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.leaderboards.forward"
+msgstr "Ranglijsten"
+
+#, elixir-autogen, elixir-format
+msgid "form.data_set.label"
+msgstr "Data set (url)"
+
+#, elixir-autogen, elixir-format
+msgid "form.deadline.label"
+msgstr "Streefdatum"
+
+#, elixir-autogen, elixir-format
+msgid "form.expectations.label"
+msgstr "Verwachtingen"
+
+#, elixir-autogen, elixir-format
+msgid "form.title.label"
+msgstr "Titel"
+
+#, elixir-autogen, elixir-format
+msgid "tool.page.title"
+msgstr "Benchmark"
+
+#, elixir-autogen, elixir-format
+msgid "submission.form.title"
+msgstr "Dien methode in"
+
+#, elixir-autogen, elixir-format
+msgid "dataset.intro"
+msgstr "Download de Liss panel training data afkomstig van Centerdata om je methode trainen."
+
+#, elixir-autogen, elixir-format
+msgid "dataset.title"
+msgstr "Voorbeeld dataset"
+
+#, elixir-autogen, elixir-format
+msgid "expectations.title"
+msgstr "Wat kan je verwachten?"
+
+#, elixir-autogen, elixir-format
+msgid "submissions.intro"
+msgstr "Om je methode in te dienen moet je hieronder een url van je github repository opgeven."
+
+#, elixir-autogen, elixir-format
+msgid "submissions.subhead.active"
+msgstr "Je kan maximaal 3 methodes in dienen."
+
+#, elixir-autogen, elixir-format
+msgid "submissions.title"
+msgstr "Inzendingen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "expectations.subhead"
+msgstr "De volledige ranglijst zal niet publiekelijk beschikbaar worden, alleen de top inzendingen zullen zichtbaar zijn voor iedereen."
+
+#, elixir-autogen, elixir-format
+msgid "highlight.deadline.title"
+msgstr "Aantal dagen te gaan"
+
+#, elixir-autogen, elixir-format
+msgid "highlight.spots.title"
+msgstr "Aantal teams"
+
+#, elixir-autogen, elixir-format
+msgid "highlight.submissions.title"
+msgstr "Aantal inzendingen"
+
+#, elixir-autogen, elixir-format
+msgid "1 day"
+msgid_plural "%{count} days"
+msgstr[0] "%{count} dag"
+msgstr[1] "%{count} dagen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.form.url.label"
+msgstr "Github commit url"
+
+#, elixir-autogen, elixir-format
+msgid "spot.form.name.label"
+msgstr "Naam"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.form.description.label"
+msgstr "Omschrijving"
+
+#, elixir-autogen, elixir-format
+msgid "add.submission.button"
+msgstr "Voeg methode toe"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.form.submit.button"
+msgstr "Dien methode in"
+
+#, elixir-autogen, elixir-format
+msgid "invalid.github.commit.url.message"
+msgstr "moet een geldige Github commit url zijn"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submissions.subhead.inactive"
+msgstr "Challenge is gesloten. Je kan niet langer methodes indienen."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "1 submission"
+msgid_plural "%{count} submissions"
+msgstr[0] "1 methode"
+msgstr[1] "%{count} methodes"
+
+#, elixir-autogen, elixir-format
+msgid "1 team"
+msgid_plural "%{count} teams"
+msgstr[0] "1 team"
+msgstr[1] "%{count} teams"

@@ -1,0 +1,134 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new messages manually only if they're dynamic
+## messages that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+#
+msgid ""
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.leaderboards"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.leaderboards.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.data_set.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.deadline.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.expectations.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.title.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tool.page.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.form.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "dataset.intro"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "dataset.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "expectations.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submissions.intro"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submissions.subhead.active"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submissions.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "expectations.subhead"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.deadline.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.spots.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.submissions.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "1 day"
+msgid_plural "%{count} days"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.form.url.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "spot.form.name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.form.description.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.submission.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.form.submit.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invalid.github.commit.url.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submissions.subhead.inactive"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "1 submission"
+msgid_plural "%{count} submissions"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "1 team"
+msgid_plural "%{count} teams"
+msgstr[0] ""
+msgstr[1] ""

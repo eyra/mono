@@ -19,27 +19,24 @@ defmodule Systems.NextAction.Public do
 
   @doc """
   """
-  def list_next_actions(url_resolver, %User{} = user)
-      when is_function(url_resolver) do
+  def list_next_actions(%User{} = user) do
     from(na in NextAction.Model, where: na.user_id == ^user.id, limit: 10)
     |> Repo.all()
-    |> Enum.map(&to_view_model(&1, url_resolver))
+    |> Enum.map(&to_view_model(&1))
   end
 
   @doc """
   """
-  def next_best_action(url_resolver, %User{} = user)
-      when is_function(url_resolver) do
+  def next_best_action(%User{} = user) do
     from(na in NextAction.Model, where: na.user_id == ^user.id, limit: 1)
     |> Repo.one()
-    |> to_view_model(url_resolver)
+    |> to_view_model()
   end
 
   @doc """
   """
-  def next_best_action!(url_resolver, %User{} = user)
-      when is_function(url_resolver) do
-    list_next_actions(url_resolver, user)
+  def next_best_action!(%User{} = user) do
+    list_next_actions(user)
     |> List.first()
   end
 
@@ -92,13 +89,13 @@ defmodule Systems.NextAction.Public do
   defp where_key_is(query, nil), do: from(na in query, where: is_nil(na.key))
   defp where_key_is(query, key), do: from(na in query, where: na.key == ^key)
 
-  def to_view_model(nil, _url_resolver), do: nil
+  def to_view_model(nil), do: nil
 
-  def to_view_model(%NextAction.Model{action: action, count: count, params: params}, url_resolver) do
+  def to_view_model(%NextAction.Model{action: action, count: count, params: params}) do
     action_type = String.to_existing_atom(action)
 
     action_type
-    |> apply(:to_view_model, [url_resolver, count, params])
+    |> apply(:to_view_model, [count, params])
     |> Map.put(:action_type, action_type)
   end
 end

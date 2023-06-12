@@ -21,7 +21,7 @@ defmodule Link.Menu.Items do
         title: dgettext("eyra-ui", "menu.item.admin")
       },
       support: %{
-        action: %{type: :redirect, to: ~p"/support/tickets"},
+        action: %{type: :redirect, to: ~p"/support/ticket"},
         title: dgettext("eyra-ui", "menu.item.support")
       },
       console: %{

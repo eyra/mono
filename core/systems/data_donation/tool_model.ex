@@ -4,6 +4,7 @@ defmodule Systems.DataDonation.ToolModel do
   """
   use Ecto.Schema
   use Frameworks.Utility.Model
+  use Frameworks.Utility.Schema
 
   require Core.Enums.Themes
 
@@ -32,6 +33,14 @@ defmodule Systems.DataDonation.ToolModel do
 
   @impl true
   def operational_validation(changeset), do: changeset
+
+  def preload_graph(:full),
+    do:
+      preload_graph([
+        :auth_node
+      ])
+
+  def preload_graph(:auth_node), do: [auth_node: []]
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(tool), do: tool.auth_node_id

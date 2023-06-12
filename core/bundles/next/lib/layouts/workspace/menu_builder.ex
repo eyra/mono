@@ -15,6 +15,7 @@ defmodule Next.Layouts.Workspace.MenuBuilder do
   @primary [
     default: [
       :console,
+      :projects,
       :admin,
       :support,
       :todo

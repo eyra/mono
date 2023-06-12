@@ -147,9 +147,7 @@ defmodule Systems.Assignment.LandingPage do
 
         <div class={"grid gap-6 sm:gap-8 #{grid_cols(Enum.count(@vm.highlights))}"}>
           <%= for highlight <- @vm.highlights do %>
-            <div class="bg-grey5 rounded">
-              <Card.highlight title={highlight.title} text={highlight.text} />
-            </div>
+            <Card.highlight {highlight} />
           <% end %>
         </div>
         <.spacing value="L" />

@@ -17,7 +17,7 @@ defmodule Port.Menu.Items do
         title: dgettext("eyra-ui", "menu.item.helpdesk")
       },
       support: %{
-        action: %{type: :redirect, to: ~p"/support/tickets"},
+        action: %{type: :redirect, to: ~p"/support/ticket"},
         title: dgettext("eyra-ui", "menu.item.support")
       },
       console: %{
@@ -49,7 +49,7 @@ defmodule Port.Menu.Items do
         title: dgettext("eyra-ui", "menu.item.menu")
       },
       projects: %{
-        action: %{type: :redirect, to: ~p"/projects"},
+        action: %{type: :redirect, to: ~p"/project"},
         title: dgettext("eyra-ui", "menu.item.projects")
       }
     }

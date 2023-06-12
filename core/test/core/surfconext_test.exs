@@ -157,14 +157,7 @@ defmodule Core.SurfConext.Test do
 
       {:ok, %{user: user}} = Core.SurfConext.register_user(sso_info)
 
-      url_resolver = fn target, _ ->
-        case target do
-          CoreWeb.User.Settings -> "/settings"
-          _ -> "/"
-        end
-      end
-
-      assert_next_action(user, url_resolver, "/settings")
+      assert_next_action(user, "/user/settings")
     end
   end
 

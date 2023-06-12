@@ -618,17 +618,16 @@ defmodule Core.AccountsTest do
     end
 
     test "mark_as_visited/2 clears next best action for student", %{
-      user: user,
-      url_resolver: url_resolver
+      user: user
     } do
       user_changeset = Accounts.User.user_profile_changeset(user, %{student: true})
       {:ok, %{user: user}} = Accounts.update_user(user_changeset)
 
       NextAction.Public.create_next_action(user, PromotePushStudent)
-      assert_next_action(user, url_resolver, "/settings")
+      assert_next_action(user, "/user/settings")
 
       {:ok, %{user: user}} = Accounts.mark_as_visited(user, :settings)
-      refute_next_action(user, url_resolver, "/settings")
+      refute_next_action(user, "/user/settings")
     end
 
     test "visited?/2 updates the user", %{

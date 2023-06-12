@@ -27,6 +27,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Survey.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.Lab.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.DataDonation.ToolModel, [:owner, :coordinator, :participant])
+  grant_access(Systems.Benchmark.SpotModel, [:owner])
 
   # Pages
   grant_access(Systems.Org.ContentPage, [:admin])
@@ -57,7 +58,9 @@ defmodule Core.Authorization do
   grant_access(Systems.DataDonation.ThanksWhatsappPage, [:visitor, :member])
   grant_access(Systems.DataDonation.OverviewPage, [:member])
   grant_access(Systems.Project.OverviewPage, [:researcher])
-  grant_access(Systems.Project.ContentPage, [:member, :owner])
+  grant_access(Systems.Project.NodePage, [:researcher, :owner])
+  grant_access(Systems.Project.ItemContentPage, [:researcher, :owner])
+  grant_access(Systems.Benchmark.ToolPage, [:member, :owner])
 
   grant_access(CoreWeb.User.Signin, [:visitor])
   grant_access(CoreWeb.User.Signup, [:visitor])

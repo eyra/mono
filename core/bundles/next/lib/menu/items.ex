@@ -17,7 +17,7 @@ defmodule Next.Menu.Items do
         title: dgettext("eyra-ui", "menu.item.helpdesk")
       },
       support: %{
-        action: %{type: :redirect, to: ~p"/support/tickets"},
+        action: %{type: :redirect, to: ~p"/support/ticket"},
         title: dgettext("eyra-ui", "menu.item.support")
       },
       console: %{
@@ -49,8 +49,12 @@ defmodule Next.Menu.Items do
         title: dgettext("eyra-ui", "menu.item.menu")
       },
       payments: %{
-        action: %{type: :redirect, path: "/payments"},
+        action: %{type: :redirect, to: "/payment"},
         title: dgettext("eyra-ui", "menu.item.payments")
+      },
+      projects: %{
+        action: %{type: :redirect, to: "/project"},
+        title: dgettext("eyra-ui", "menu.item.projects")
       }
     }
   end

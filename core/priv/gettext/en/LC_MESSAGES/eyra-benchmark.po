@@ -1,0 +1,134 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr "Benchmark"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.leaderboards"
+msgstr "Leaderboards"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.leaderboards.forward"
+msgstr "Leaderboards"
+
+#, elixir-autogen, elixir-format
+msgid "form.data_set.label"
+msgstr "Data set (url)"
+
+#, elixir-autogen, elixir-format
+msgid "form.deadline.label"
+msgstr "Deadline"
+
+#, elixir-autogen, elixir-format
+msgid "form.expectations.label"
+msgstr "Expectations"
+
+#, elixir-autogen, elixir-format
+msgid "form.title.label"
+msgstr "Title"
+
+#, elixir-autogen, elixir-format
+msgid "tool.page.title"
+msgstr "Benchmark"
+
+#, elixir-autogen, elixir-format
+msgid "submission.form.title"
+msgstr "Add submission"
+
+#, elixir-autogen, elixir-format
+msgid "dataset.intro"
+msgstr "Download the training Liss panel data from Centerdata to tune your method."
+
+#, elixir-autogen, elixir-format
+msgid "dataset.title"
+msgstr "Example data set"
+
+#, elixir-autogen, elixir-format
+msgid "expectations.title"
+msgstr "What to expect?"
+
+#, elixir-autogen, elixir-format
+msgid "submissions.intro"
+msgstr "To submit your method, please provide the url of your github repository below."
+
+#, elixir-autogen, elixir-format
+msgid "submissions.subhead.active"
+msgstr "Please note that you can submit a maximum of three submissions."
+
+#, elixir-autogen, elixir-format
+msgid "submissions.title"
+msgstr "Submissions"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "expectations.subhead"
+msgstr "Please note that the full leaderboard will not be made publicly available, but only top submissions will be shown. "
+
+#, elixir-autogen, elixir-format
+msgid "highlight.deadline.title"
+msgstr "Days to deadline"
+
+#, elixir-autogen, elixir-format
+msgid "highlight.spots.title"
+msgstr "Number of teams"
+
+#, elixir-autogen, elixir-format
+msgid "highlight.submissions.title"
+msgstr "Number of submissions"
+
+#, elixir-autogen, elixir-format
+msgid "1 day"
+msgid_plural "%{count} days"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.form.url.label"
+msgstr "Github commit url"
+
+#, elixir-autogen, elixir-format
+msgid "spot.form.name.label"
+msgstr "Name"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.form.description.label"
+msgstr "Description"
+
+#, elixir-autogen, elixir-format
+msgid "add.submission.button"
+msgstr "Add submission"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.form.submit.button"
+msgstr "Submit"
+
+#, elixir-autogen, elixir-format
+msgid "invalid.github.commit.url.message"
+msgstr "must be a valid Github commit url"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submissions.subhead.inactive"
+msgstr "Challenge is closed. You can no longer add or change submissions."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "1 submission"
+msgid_plural "%{count} submissions"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "1 team"
+msgid_plural "%{count} teams"
+msgstr[0] ""
+msgstr[1] ""

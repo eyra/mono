@@ -3,6 +3,8 @@ defmodule Systems.Org.NodeModel do
   import Ecto.Changeset
   import Frameworks.Utility.EctoHelper, only: [apply_virtual_change: 4]
 
+  alias Core.Accounts.User
+
   use Systems.{
     Org.Internals
   }
@@ -22,7 +24,7 @@ defmodule Systems.Org.NodeModel do
     belongs_to(:short_name_bundle, Content.TextBundleModel, on_replace: :update)
     belongs_to(:full_name_bundle, Content.TextBundleModel, on_replace: :update)
 
-    many_to_many(:users, Node,
+    many_to_many(:users, User,
       join_through: Org.UserAssociation,
       join_keys: [org_id: :id, user_id: :id]
     )

@@ -204,8 +204,16 @@ msgstr "Gedeeld met"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.projects"
-msgstr "Data Donatie"
+msgstr "Projecten"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.projects"
 msgstr "Ga naar console"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "copy.button"
+msgstr "Kopieer"
+
+#, elixir-autogen, elixir-format
+msgid "title.placeholder"
+msgstr "Hier komt de titel.."

@@ -1,4 +1,6 @@
 defmodule Systems.Pool.Builders.CampaignItem do
+  use CoreWeb, :verified_routes
+
   import CoreWeb.Gettext
   import Frameworks.Utility.Guards
 
@@ -11,7 +13,6 @@ defmodule Systems.Pool.Builders.CampaignItem do
   }
 
   def view_model(
-        url_resolver,
         %{
           submission: %{id: submission_id, updated_at: updated_at} = submission,
           promotion: %{
@@ -55,7 +56,7 @@ defmodule Systems.Pool.Builders.CampaignItem do
     image = %{type: :catalog, info: image_info}
 
     %{
-      path: url_resolver.(Systems.Pool.SubmissionPage, id: submission_id),
+      path: ~p"/pool/campaign/#{submission_id}",
       title: title,
       subtitle: subtitle,
       tag: tag,

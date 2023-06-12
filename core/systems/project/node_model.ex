@@ -29,7 +29,7 @@ defmodule Systems.Project.NodeModel do
     |> validate_required(@required_fields)
   end
 
-  def preload_graph(:full),
+  def preload_graph(:down),
     do:
       preload_graph([
         :children,
@@ -37,9 +37,8 @@ defmodule Systems.Project.NodeModel do
         :auth_node
       ])
 
-  def preload_graph(:parent), do: [parent: [:parent, :children, :items, :auth_node]]
   def preload_graph(:children), do: [children: [:children, :items, :auth_node]]
-  def preload_graph(:items), do: [items: [:tool_ref]]
+  def preload_graph(:items), do: [items: Project.ItemModel.preload_graph(:down)]
   def preload_graph(:auth_node), do: [auth_node: []]
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
@@ -47,8 +46,10 @@ defmodule Systems.Project.NodeModel do
   end
 
   defimpl Frameworks.Utility.ViewModelBuilder do
-    def view_model(%Project.Model{} = project, page, user, _url_resolver) do
-      vm(project, page, user)
+    use CoreWeb, :verified_routes
+
+    def view_model(%Project.NodeModel{} = node, page, %{current_user: user}) do
+      vm(node, page, user)
     end
 
     defp vm(
@@ -56,12 +57,36 @@ defmodule Systems.Project.NodeModel do
              id: id,
              name: name
            },
-           {Project.OverviewPage, :card},
+           {Project.NodePage, :item_card},
            _user
          ) do
+      path = ~p"/project/item/#{id}/content"
+
+      %{
+        type: :secondary,
+        id: id,
+        path: path,
+        title: name,
+        tags: [],
+        right_actions: [],
+        left_actions: []
+      }
+    end
+
+    defp vm(
+           %{
+             id: id,
+             name: name
+           },
+           {Project.NodePage, :node_card},
+           _user
+         ) do
+      path = ~p"/project/node/#{id}"
+
       %{
         type: :primary,
         id: id,
+        path: path,
         title: name,
         tags: [],
         right_actions: [],

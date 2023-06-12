@@ -35,6 +35,9 @@ defmodule CoreWeb do
 
       import Phoenix.LiveView.Controller
       alias CoreWeb.Router.Helpers, as: Routes
+
+      # Routes generation with the ~p sigil
+      unquote(verified_routes())
     end
   end
 

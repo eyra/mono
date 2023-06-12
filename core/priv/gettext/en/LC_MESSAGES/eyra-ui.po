@@ -204,8 +204,16 @@ msgstr "Shared with"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.projects"
-msgstr "Data Donation"
+msgstr "Projects"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.projects"
 msgstr "Go to console"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "copy.button"
+msgstr "Copy"
+
+#, elixir-autogen, elixir-format
+msgid "title.placeholder"
+msgstr "Here comes the title.."

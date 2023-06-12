@@ -13,12 +13,11 @@ defmodule Systems.Campaign.Builders.AssignmentCallbackPage do
 
   def view_model(
         %Campaign.Model{} = campaign,
-        assigns,
-        url_resolver
+        assigns
       ) do
     campaign
     |> Campaign.Model.flatten()
-    |> view_model(assigns, url_resolver)
+    |> view_model(assigns)
   end
 
   def view_model(
@@ -29,8 +28,7 @@ defmodule Systems.Campaign.Builders.AssignmentCallbackPage do
           },
           promotable: assignment
         },
-        %{current_user: user} = _assigns,
-        _url_resolver
+        %{current_user: user} = _assigns
       ) do
     %{
       id: id,

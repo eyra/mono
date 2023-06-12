@@ -11,17 +11,16 @@ defmodule Systems.NextAction.Presenter do
   def view_model(
         %{presenter: Systems.NextAction.Presenter},
         page,
-        %{current_user: user} = assigns,
-        url_resolver
+        %{current_user: user} = assigns
       ) do
-    view_model(user.id, page, assigns, url_resolver)
+    view_model(user.id, page, assigns)
   end
 
   @impl true
-  def view_model(user_id, NextAction.OverviewPage, %{current_user: user}, url_resolver)
+  def view_model(user_id, NextAction.OverviewPage, %{current_user: user})
       when is_number(user_id) do
     %{
-      next_actions: NextAction.Public.list_next_actions(url_resolver, user)
+      next_actions: NextAction.Public.list_next_actions(user)
     }
   end
 

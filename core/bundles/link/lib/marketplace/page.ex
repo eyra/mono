@@ -15,8 +15,8 @@ defmodule Link.Marketplace.Page do
   alias Frameworks.Pixel.Grid
   alias Frameworks.Pixel.Text
 
-  def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    next_best_action = NextAction.Public.next_best_action(url_resolver(socket), user)
+  def mount(_params, _session, %{assigns: %{current_user: user} = assigns} = socket) do
+    next_best_action = NextAction.Public.next_best_action(user)
     user = socket.assigns[:current_user]
 
     preload = Campaign.Model.preload_graph(:full)
@@ -38,9 +38,7 @@ defmodule Link.Marketplace.Page do
       )
       |> filter_campaigns(socket)
       |> sort_by_open_spot_count()
-      |> Enum.map(
-        &ViewModelBuilder.view_model(&1, {__MODULE__, :card}, user, url_resolver(socket))
-      )
+      |> Enum.map(&ViewModelBuilder.view_model(&1, {__MODULE__, :card}, assigns))
 
     campaign_count = Enum.count(campaigns)
 
@@ -77,19 +75,19 @@ defmodule Link.Marketplace.Page do
     {:noreply, socket}
   end
 
-  def handle_info({:card_click, %{action: :edit, id: id}}, socket) do
-    {:noreply,
-     push_redirect(socket,
-       to: CoreWeb.Router.Helpers.live_path(socket, Systems.Campaign.ContentPage, id)
-     )}
-  end
-
-  def handle_info(
-        {:card_click, %{action: :public, id: id}},
-        %{assigns: %{uri_path: uri_path}} = socket
+  @impl true
+  def handle_event(
+        "card_clicked",
+        %{"item" => card_id},
+        %{assigns: %{campaigns: campaigns}} = socket
       ) do
-    promotion_path = Routes.live_path(socket, Systems.Promotion.LandingPage, id, back: uri_path)
-    {:noreply, push_redirect(socket, to: promotion_path)}
+    card_id = String.to_integer(card_id)
+    %{path: path} = Enum.find(campaigns, &(&1.id == card_id))
+
+    {
+      :noreply,
+      push_redirect(socket, to: path)
+    }
   end
 
   @impl true
@@ -130,7 +128,6 @@ defmodule Link.Marketplace.Page do
               <div class="mb-1">
                 <Campaign.CardView.secondary
                   card={card}
-                  click_event_data={%{action: :public, id: card.open_id}}
                 />
               </div>
             <% end %>
