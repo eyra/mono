@@ -60,7 +60,7 @@ defmodule Systems.Campaign.Model do
 
   def preload_graph(:full) do
     [
-      :promotion,
+      promotion: [auth_node: [:role_assignments]],
       auth_node: [:role_assignments],
       authors: [:user],
       submissions: [

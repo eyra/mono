@@ -293,3 +293,27 @@ msgstr "Vrouw"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "criteria_filters.x"
 msgstr "X"
+
+#, elixir-autogen, elixir-format
+msgid "platforms.facebook"
+msgstr "Facebook"
+
+#, elixir-autogen, elixir-format
+msgid "platforms.google"
+msgstr "Google"
+
+#, elixir-autogen, elixir-format
+msgid "platforms.instagram"
+msgstr "Instagram"
+
+#, elixir-autogen, elixir-format
+msgid "platforms.twitter"
+msgstr "Twitter"
+
+#, elixir-autogen, elixir-format
+msgid "platforms.whatsapp"
+msgstr "WhatsApp"
+
+#, elixir-autogen, elixir-format
+msgid "platforms.youtube"
+msgstr "YouTube"

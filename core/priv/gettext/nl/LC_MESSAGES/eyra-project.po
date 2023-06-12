@@ -1,0 +1,132 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "delete.button"
+msgstr "Verwijder"
+
+#, elixir-autogen, elixir-format
+msgid "preview.button"
+msgstr "Voorbeeld"
+
+#, elixir-autogen, elixir-format
+msgid "retract.button"
+msgstr "Haal offline"
+
+#, elixir-autogen, elixir-format
+msgid "submit.button"
+msgstr "Publiceren"
+
+#, elixir-autogen, elixir-format
+msgid "delete.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.config"
+msgstr "Instellingen"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.config.forward"
+msgstr "Instellingen"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.invite"
+msgstr "Uitnodigen"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.invite.forward"
+msgstr "Uitnodigen"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor"
+msgstr "Monitor"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor.forward"
+msgstr "Monitor"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.privacy"
+msgstr "Privacy"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.privacy.forward"
+msgstr "Privacy"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.tasks"
+msgstr "Taken"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.tasks.forward"
+msgstr "Taken"
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr "Studie"
+
+#, elixir-autogen, elixir-format
+msgid "add.first.button"
+msgstr "Start je eerste project"
+
+#, elixir-autogen, elixir-format
+msgid "add.new.button"
+msgstr "Start project"
+
+#, elixir-autogen, elixir-format
+msgid "add.new.button.short"
+msgstr "Start"
+
+#, elixir-autogen, elixir-format
+msgid "default.project.name"
+msgstr "Nieuw project"
+
+#, elixir-autogen, elixir-format
+msgid "overview.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.empty.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.title"
+msgstr "Data Donatie"
+
+#, elixir-autogen, elixir-format
+msgid "share.dialog.content"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "share.dialog.group"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "config.title"
+msgstr "Instellingen"
+
+#, elixir-autogen, elixir-format
+msgid "form.name.label"
+msgstr "Naam"
+
+#, elixir-autogen, elixir-format
+msgid "invite.title"
+msgstr "Invite"
+
+#, elixir-autogen, elixir-format
+msgid "monitor.title"
+msgstr "Monitor"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "overview.header.title"
+msgstr "Projecten"

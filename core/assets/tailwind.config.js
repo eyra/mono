@@ -1,14 +1,13 @@
 const plugin = require("tailwindcss/plugin");
 
 module.exports = {
-  purge: [
+  content: [
     "../**/*.html.eex",
     "../**/*.html.leex",
     "../**/*.ex",
     "./js/**/*.js",
   ],
 
-  darkMode: false, // or 'media' or 'class'
   theme: {
     boxShadow: {
       top4px: "inset 0 4px 0 0 rgba(0, 0, 0, 0.15)",
@@ -105,6 +104,7 @@ module.exports = {
         form: "400px",
         sheet: "760px",
         popup: "480px",
+        "side-panel": "535px",
         "popup-sm": "520px",
         "popup-md": "730px",
         "popup-lg": "1228px",
@@ -198,20 +198,6 @@ module.exports = {
         form: "400px",
         mailto: "128px",
       },
-    },
-  },
-  variants: {
-    extend: {
-      borderColor: ["active", "hover", "disabled"],
-      borderWidth: ["active", "hover", "disabled"],
-      ringColor: ["hover"],
-      ringWidth: ["hover"],
-      ringOpacity: ["hover"],
-      ringOffsetColor: ["hover"],
-      ringOffsetWidth: ["hover"],
-      opacity: ["active", "disabled"],
-      padding: ["active"],
-      boxShadow: ["active"],
     },
   },
   plugins: [

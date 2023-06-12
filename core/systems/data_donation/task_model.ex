@@ -3,11 +3,12 @@ defmodule Systems.DataDonation.TaskModel do
   import Ecto.Changeset
 
   embedded_schema do
+    field(:position, :integer)
     field(:title, :string)
     field(:subtitle, :string)
   end
 
-  @fields ~w(title subtitle)a
+  @fields ~w(position title subtitle)a
 
   def changeset(model, params) do
     model

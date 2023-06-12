@@ -102,13 +102,6 @@ defmodule Link.Marketplace.Page do
     not feature_enabled?(:marketplace) or campaign_count == 0
   end
 
-  # data(next_best_action, :any)
-  # data(owned_campaigns, :any)
-  # data(subject_count, :any)
-  # data(campaigns, :any)
-  # data(campaign_count, :any)
-  # data(current_user, :any)
-
   @impl true
   def render(assigns) do
     ~H"""
@@ -136,7 +129,6 @@ defmodule Link.Marketplace.Page do
             <%= for card <- @campaigns do %>
               <div class="mb-1">
                 <Campaign.CardView.secondary
-                  path_provider={CoreWeb.Endpoint}
                   card={card}
                   click_event_data={%{action: :public, id: card.open_id}}
                 />

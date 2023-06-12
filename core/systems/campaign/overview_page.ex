@@ -260,7 +260,6 @@ defmodule Systems.Campaign.OverviewPage do
           <Grid.dynamic>
             <%= for campaign <- @campaigns do %>
               <Campaign.CardView.dynamic
-                path_provider={CoreWeb.Endpoint}
                 card={campaign }
                 click_event_data={%{action: :edit, id: campaign.edit_id}}
               />

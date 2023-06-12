@@ -18,13 +18,11 @@ defmodule CoreWeb.UI.FunctionComponent do
     assigns = assign(assigns, :props, props)
 
     ~H"""
-    <div>
-      <%= component(
-        @function,
-        @props,
-        {__ENV__.module, __ENV__.function, __ENV__.file, __ENV__.line}
-      ) %>
-    </div>
+    <%= component(
+      @function,
+      @props,
+      {__ENV__.module, __ENV__.function, __ENV__.file, __ENV__.line}
+    ) %>
     """
   end
 end

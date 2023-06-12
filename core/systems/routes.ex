@@ -2,11 +2,12 @@ defmodule Systems.Routes do
   defmacro routes() do
     quote do
       use Systems.Subroutes, [
+        :project,
+        :campaign,
         :org,
         :admin,
         :support,
         :assignment,
-        :campaign,
         :next_action,
         :notification,
         :promotion,

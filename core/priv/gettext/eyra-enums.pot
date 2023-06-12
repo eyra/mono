@@ -293,3 +293,27 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "criteria_filters.x"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.facebook"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.google"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.instagram"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.twitter"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.whatsapp"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.youtube"
+msgstr ""

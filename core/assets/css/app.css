@@ -5,19 +5,17 @@
 @tailwind utilities;
 
 @layer utilities {
-  @variants responsive {
-    .text-shadow {
-      text-shadow: 0px 2px 4px rgba(0,0,0, 0.3);
-    }
-    .text-shadow-md {
-      text-shadow: 0px 4px 8px rgba(0,0,0, 0.3);
-    }
-    .text-shadow-lg {
-      text-shadow: 0px 8px 16px rgba(0,0,0, 0.3);
-    }
-    .text-shadow-none {
-      text-shadow: none;
-    }
+  .text-shadow {
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  .text-shadow-md {
+    text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  .text-shadow-lg {
+    text-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+  }
+  .text-shadow-none {
+    text-shadow: none;
   }
 }
 
@@ -43,104 +41,119 @@
 }
 
 @font-face {
-  font-family: 'Finador-Thin';
-  src: url('../static/fonts/Finador-Thin.woff2') format('woff2'), url('../static/fonts/Finador-Thin.woff') format('woff');
+  font-family: "Finador-Thin";
+  src: url("../static/fonts/Finador-Thin.woff2") format("woff2"),
+    url("../static/fonts/Finador-Thin.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Finador-ThinOblique';
-  src: url('../static/fonts/Finador-ThinOblique.woff2') format('woff2'), url('../static/fonts/Finador-ThinOblique.woff') format('woff');
+  font-family: "Finador-ThinOblique";
+  src: url("../static/fonts/Finador-ThinOblique.woff2") format("woff2"),
+    url("../static/fonts/Finador-ThinOblique.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Finador-ExtraLight';
-  src: url('../static/fonts/Finador-ExtraLight.woff2') format('woff2'), url('../static/fonts/Finador-ExtraLight.woff') format('woff');
+  font-family: "Finador-ExtraLight";
+  src: url("../static/fonts/Finador-ExtraLight.woff2") format("woff2"),
+    url("../static/fonts/Finador-ExtraLight.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Finador-ExtraLightOblique';
-  src: url('../static/fonts/Finador-ExtraLightOblique.woff2') format('woff2'), url('../static/fonts/Finador-ExtraLightOblique.woff') format('woff');
+  font-family: "Finador-ExtraLightOblique";
+  src: url("../static/fonts/Finador-ExtraLightOblique.woff2") format("woff2"),
+    url("../static/fonts/Finador-ExtraLightOblique.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Finador-Light';
-  src: url('../static/fonts/Finador-Light.woff2') format('woff2'), url('../static/fonts/Finador-Light.woff') format('woff');
+  font-family: "Finador-Light";
+  src: url("../static/fonts/Finador-Light.woff2") format("woff2"),
+    url("../static/fonts/Finador-Light.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Finador-LightOblique';
-  src: url('../static/fonts/Finador-LightOblique.woff2') format('woff2'), url('../static/fonts/Finador-LightOblique.woff') format('woff');
+  font-family: "Finador-LightOblique";
+  src: url("../static/fonts/Finador-LightOblique.woff2") format("woff2"),
+    url("../static/fonts/Finador-LightOblique.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Finador-Regular';
-  src: url('../static/fonts/Finador-Regular.woff2') format('woff2'), url('../static/fonts/Finador-Regular.woff') format('woff');
+  font-family: "Finador-Regular";
+  src: url("../static/fonts/Finador-Regular.woff2") format("woff2"),
+    url("../static/fonts/Finador-Regular.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Finador-RegularOblique';
-  src: url('../static/fonts/Finador-RegularOblique.woff2') format('woff2'), url('../static/fonts/Finador-RegularOblique.woff') format('woff');
+  font-family: "Finador-RegularOblique";
+  src: url("../static/fonts/Finador-RegularOblique.woff2") format("woff2"),
+    url("../static/fonts/Finador-RegularOblique.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Finador-Medium';
-  src: url('../static/fonts/Finador-Medium.woff2') format('woff2'), url('../static/fonts/Finador-Medium.woff') format('woff');
+  font-family: "Finador-Medium";
+  src: url("../static/fonts/Finador-Medium.woff2") format("woff2"),
+    url("../static/fonts/Finador-Medium.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Finador-MediumOblique';
-  src: url('../static/fonts/Finador-MediumOblique.woff2') format('woff2'),z url('../static/fonts/Finador-MediumOblique.woff') format('woff');
+  font-family: "Finador-MediumOblique";
+  src: url("../static/fonts/Finador-MediumOblique.woff2") format("woff2"),
+    z url("../static/fonts/Finador-MediumOblique.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Finador-Bold';
-  src: url('../static/fonts/Finador-Bold.woff2') format('woff2'), url('../static/fonts/Finador-Bold.woff') format('woff');
+  font-family: "Finador-Bold";
+  src: url("../static/fonts/Finador-Bold.woff2") format("woff2"),
+    url("../static/fonts/Finador-Bold.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Finador-BoldOblique';
-  src: url('../static/fonts/Finador-BoldOblique.woff2') format('woff2'), url('../static/fonts/Finador-BoldOblique.woff') format('woff');
+  font-family: "Finador-BoldOblique";
+  src: url("../static/fonts/Finador-BoldOblique.woff2") format("woff2"),
+    url("../static/fonts/Finador-BoldOblique.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Finador-Black';
-  src: url('../static/fonts/Finador-Black.woff2') format('woff2'), url('../static/fonts/Finador-Black.woff') format('woff');
+  font-family: "Finador-Black";
+  src: url("../static/fonts/Finador-Black.woff2") format("woff2"),
+    url("../static/fonts/Finador-Black.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Finador-BlackOblique';
-  src: url('../static/fonts/Finador-BlackOblique.woff2') format('woff2'), url('../static/fonts/Finador-BlackOblique.woff') format('woff');
+  font-family: "Finador-BlackOblique";
+  src: url("../static/fonts/Finador-BlackOblique.woff2") format("woff2"),
+    url("../static/fonts/Finador-BlackOblique.woff") format("woff");
 }
 
 .data-donation-extraction-results tbody tr:nth-child(even) {
-  background-color: #FAFAFA;
+  background-color: #fafafa;
 }
 
 .data-donation-extraction-results thead {
-  background-color: #FAFAFA;
+  background-color: #fafafa;
 }
 
 .data-donation-extraction-results thead tr {
-  font-family: 'Finador-Bold';
+  font-family: "Finador-Bold";
   font-size: 18px;
 }
 
 .data-donation-extraction-results tbody tr {
-  font-family: 'Finador-Regular';
+  font-family: "Finador-Regular";
   font-size: 14px;
 }
 
-.data-donation-extraction-results thead tr td, th {
+.data-donation-extraction-results thead tr td,
+th {
   padding-top: 9px;
   padding-bottom: 9px;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.data-donation-extraction-results tbody tr td, th {
+.data-donation-extraction-results tbody tr td,
+th {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 10px;
   padding-right: 10px;
 }
-

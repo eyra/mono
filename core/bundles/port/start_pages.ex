@@ -3,16 +3,16 @@ defmodule Port.StartPages do
 
   def pages(),
     do: %{
-      console: %{id: :console, target: Port.Console.Page, domain: "eyra-ui"}
+      projects: %{id: :projects, target: Systems.Project.OverviewPage, domain: "eyra-ui"}
     }
 
   @impl true
   def values(),
     do: %{
-      researcher: pages().console,
-      student: pages().console,
-      coordinator: pages().console,
-      member: pages().console
+      researcher: pages().projects,
+      student: pages().projects,
+      coordinator: pages().projects,
+      member: pages().projects
     }
 
   defmacro __using__(_opts) do

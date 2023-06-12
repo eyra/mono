@@ -1,4 +1,4 @@
-defmodule Next.User.SessionHTML do
+defmodule Port.User.SessionHTML do
   use CoreWeb, :html
 
   import CoreWeb.UI.Footer

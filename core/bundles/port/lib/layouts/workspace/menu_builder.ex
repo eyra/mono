@@ -14,8 +14,7 @@ defmodule Port.Layouts.Workspace.MenuBuilder do
 
   @primary [
     default: [
-      :console,
-      :studies,
+      :projects,
       :admin,
       :support,
       :todo
@@ -36,10 +35,6 @@ defmodule Port.Layouts.Workspace.MenuBuilder do
   ]
 
   use CoreWeb.Menu.Builder, home: :eyra
-  alias Core.Authorization
-
-  @impl true
-  def can_access?(user, :console), do: Authorization.can_access?(user, Port.Console.Page)
 
   @impl true
   def can_access?(_user, _id), do: true

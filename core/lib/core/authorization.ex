@@ -56,6 +56,8 @@ defmodule Core.Authorization do
   grant_access(Systems.DataDonation.PortPage, [:visitor, :member])
   grant_access(Systems.DataDonation.ThanksWhatsappPage, [:visitor, :member])
   grant_access(Systems.DataDonation.OverviewPage, [:member])
+  grant_access(Systems.Project.OverviewPage, [:researcher])
+  grant_access(Systems.Project.ContentPage, [:member, :owner])
 
   grant_access(CoreWeb.User.Signin, [:visitor])
   grant_access(CoreWeb.User.Signup, [:visitor])
@@ -118,8 +120,29 @@ defmodule Core.Authorization do
     auth_node
   end
 
-  def copy(_auth_node, %Core.Authorization.Node{} = parent) do
-    create_node!(parent)
+  def copy(
+        %Core.Authorization.Node{role_assignments: role_assignments},
+        %Core.Authorization.Node{} = new_parent
+      )
+      when is_list(role_assignments) do
+    auth_node = create_node!(new_parent)
+
+    role_assignments
+    |> Enum.each(&copy_role(&1, auth_node))
+
+    auth_node
+  end
+
+  def copy_auth_node(%{auth_node: auth_node}, %Core.Authorization.Node{} = new_parent) do
+    copy(auth_node, new_parent)
+  end
+
+  def copy_auth_node(%{auth_node: child_auth_node}, %{auth_node: parent_auth_node}) do
+    copy(child_auth_node, parent_auth_node)
+  end
+
+  def copy_auth_node(%{auth_node: auth_node}) do
+    copy(auth_node)
   end
 
   def copy_role(%Core.Authorization.RoleAssignment{} = role, node) do

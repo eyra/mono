@@ -141,7 +141,7 @@ defmodule CoreWeb.UI.Tabbar do
   end
 
   attr(:tabs, :any, required: true)
-  slot(:inner_block)
+  slot(:inner_block, default: nil)
 
   def footer(assigns) do
     ~H"""
@@ -159,14 +159,13 @@ defmodule CoreWeb.UI.Tabbar do
             >
               <%= if index < Enum.count(@tabs) - 1 do %>
                 <Button.Face.plain_icon label={tab2.forward_title} icon={:forward} />
-              <% else %>
-                <%= render_slot(@inner_block) %>
               <% end %>
             </div>
           </div>
         </Area.dynamic>
       <% end %>
     </Area.content>
+    <%= if @inner_block do render_slot(@inner_block) end %>
     """
   end
 

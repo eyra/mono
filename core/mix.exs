@@ -50,26 +50,12 @@ defmodule Core.MixProject do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test),
-    do: ["bundles/#{bundle()}", "apps", "systems", "frameworks", "lib", "test", "test/support"]
+    do: ["bundles", "apps", "systems", "frameworks", "lib", "test", "test/support"]
 
   defp elixirc_paths(:dev),
-    do: ["bundles/#{bundle()}", "apps", "systems", "frameworks", "lib"]
+    do: ["bundles", "apps", "systems", "frameworks", "lib"]
 
-  defp elixirc_paths(_), do: ["bundles/#{bundle()}", "apps", "systems", "frameworks", "lib"]
-
-  defp bundle() do
-    module =
-      case Code.ensure_compiled(Bundle) do
-        {:module, module} ->
-          module
-
-        _ ->
-          [{module, _binary}] = Code.compile_file(".bundle.ex")
-          module
-      end
-
-    apply(module, :name, [])
-  end
+  defp elixirc_paths(_), do: ["bundles", "apps", "systems", "frameworks", "lib"]
 
   # Specifies your project dependencies.
   #

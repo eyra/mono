@@ -7,6 +7,14 @@ defmodule Link.Menu.Items do
   @impl true
   def values() do
     %{
+      debug: %{
+        action: %{type: :redirect, to: "/debug"},
+        title: dgettext("eyra-ui", "menu.item.debug")
+      },
+      marketplace: %{
+        action: %{type: :redirect, to: "/marketplace"},
+        title: dgettext("eyra-ui", "menu.item.marketplace")
+      },
       link: %{action: %{type: :redirect, to: ~p"/"}, title: "Panl"},
       admin: %{
         action: %{type: :redirect, to: ~p"/admin/config"},
@@ -44,17 +52,9 @@ defmodule Link.Menu.Items do
         action: %{type: :http_get, to: ~p"/user/signin"},
         title: dgettext("eyra-ui", "menu.item.signin")
       },
-      debug: %{
-        action: %{type: :redirect, to: ~p"/debug"},
-        title: dgettext("eyra-ui", "menu.item.debug")
-      },
       funding: %{
         action: %{type: :redirect, to: ~p"/funding"},
         title: dgettext("eyra-ui", "menu.item.funding")
-      },
-      marketplace: %{
-        action: %{type: :redirect, to: ~p"/marketplace"},
-        title: dgettext("eyra-ui", "menu.item.marketplace")
       },
       pools: %{
         action: %{type: :redirect, to: ~p"/pool"},
