@@ -217,3 +217,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "title.placeholder"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "start.page.home"
+msgstr ""

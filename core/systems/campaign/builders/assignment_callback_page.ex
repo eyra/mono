@@ -3,7 +3,6 @@ defmodule Systems.Campaign.Builders.AssignmentCallbackPage do
 
   alias Core.Accounts
   alias Core.Authorization
-  alias CoreWeb.Router.Helpers, as: Routes
   alias Phoenix.LiveView
 
   alias Systems.{
@@ -60,6 +59,6 @@ defmodule Systems.Campaign.Builders.AssignmentCallbackPage do
   end
 
   def handle_forward(%{assigns: %{current_user: user}} = socket) do
-    LiveView.push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))
+    LiveView.push_redirect(socket, to: Accounts.start_page_path(user))
   end
 end

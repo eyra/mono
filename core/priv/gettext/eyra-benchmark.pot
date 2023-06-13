@@ -132,3 +132,11 @@ msgid "1 team"
 msgid_plural "%{count} teams"
 msgstr[0] ""
 msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "spot.form.intro"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "spot.form.title"
+msgstr ""

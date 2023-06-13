@@ -16,7 +16,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.email.label"
-msgstr ""
+msgstr "Email"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.password.label"
@@ -28,7 +28,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.reset_button"
-msgstr ""
+msgstr "Send request"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.reset_password_button"
@@ -36,8 +36,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "user.password_reset.title"
-msgstr ""
+msgstr "Reset password"
 
 #, elixir-autogen, elixir-format
 msgid "Invalid email or password"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "register.link"
+msgstr "Register"
+
+#, elixir-autogen, elixir-format
+msgid "reset.link"
+msgstr "Reset password"

@@ -8,9 +8,10 @@ defmodule Systems.Benchmark.SpotForm do
   # Handle initial update
   @impl true
   def update(
-        %{id: id, entity: spot},
+        %{id: id, spot_id: spot_id},
         socket
       ) do
+    spot = Benchmark.Public.get_spot!(spot_id)
     changeset = Benchmark.SpotModel.changeset(spot, %{})
 
     {
@@ -53,9 +54,10 @@ defmodule Systems.Benchmark.SpotForm do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <div class="sm:max-w-form">
+      <Text.title2><%= dgettext("eyra-benchmark", "spot.form.title") %></Text.title2>
       <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
-        <.text_input form={form} field={:name} label_text={dgettext("eyra-benchmark", "spot.form.name.label")} />
+        <.text_input form={form} field={:name} label_text={dgettext("eyra-benchmark", "spot.form.intro")} />
       </.form>
     </div>
     """

@@ -106,7 +106,7 @@ defmodule Systems.Benchmark.SubmissionForm do
       <.spacing value="XS" />
       <.form id={@id} :let={form} for={@changeset} phx-submit="submit" phx-target={@myself} >
         <.text_input form={form} field={:description} label_text={dgettext("eyra-benchmark", "submission.form.description.label")} />
-        <.text_input form={form} field={:github_commit_url} placeholder="http://github/<team>/<repo>/commit/<sha>" label_text={dgettext("eyra-benchmark", "submission.form.url.label")} />
+        <.text_input form={form} field={:github_commit_url} placeholder="http://github/<owner>/<repo>/commit/<sha>" label_text={dgettext("eyra-benchmark", "submission.form.url.label")} />
         <.spacing value="XS" />
         <Button.dynamic {@submit_button} />
       </.form>

@@ -74,7 +74,7 @@ defmodule Systems.Benchmark.Public do
     )
   end
 
-  def list_owned_spots(tool_id, user, preload \\ []) do
+  def list_spots_for_tool(user, tool_id, preload \\ []) do
     node_ids =
       Authorization.query_node_ids(
         role: :owner,
@@ -83,6 +83,20 @@ defmodule Systems.Benchmark.Public do
 
     from(spot in Benchmark.SpotModel,
       where: spot.tool_id == ^tool_id,
+      where: spot.auth_node_id in subquery(node_ids),
+      preload: ^preload
+    )
+    |> Repo.all()
+  end
+
+  def list_spots(user, preload \\ []) do
+    node_ids =
+      Authorization.query_node_ids(
+        role: :owner,
+        principal: user
+      )
+
+    from(spot in Benchmark.SpotModel,
       where: spot.auth_node_id in subquery(node_ids),
       preload: ^preload
     )

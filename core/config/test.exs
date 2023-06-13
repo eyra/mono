@@ -39,6 +39,13 @@ config :core, CoreWeb.Endpoint,
   force_ssl: false,
   server: false
 
+config :core, :features,
+  sign_in_with_apple: true,
+  member_google_sign_in: true,
+  password_sign_in: true,
+  notification_mails: true,
+  debug_expire_force: true
+
 config :core, Oban, queues: false, plugins: false
 
 config :core, Core.SurfConext, oidc_module: Core.SurfConext.FakeOIDC

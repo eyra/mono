@@ -25,6 +25,7 @@ defmodule Frameworks.Pixel.Icon do
     """
   end
 
+  attr(:type, :atom, required: true)
   attr(:src, :any, required: true)
   attr(:size, :string, required: true)
   attr(:border_radius, :string, default: "rounded-none")
@@ -37,8 +38,8 @@ defmodule Frameworks.Pixel.Icon do
 
   def generic_body(%{type: :static} = assigns) do
     ~H"""
-    <div class="flex flex-col items-center justify-center">
-      <img src={"/images/icons/#{@src}.svg"} alt={@src}>
+    <div class="flex flex-col items-center justify-center h-full">
+      <img class="object-scale-down h-full" src={"/images/icons/#{@src}.svg"} alt={@src}>
     </div>
     """
   end
@@ -87,7 +88,7 @@ defmodule Frameworks.Pixel.Icon do
 
   def hero(assigns) do
     ~H"""
-    <Icon.generic
+    <.generic
       src={@url}
       size="w-12 h-12 sm:h-16 sm:w-16 lg:h-84px lg:w-84px"
       type={:url}
@@ -104,7 +105,6 @@ defmodule Frameworks.Pixel.Icon do
   def menu_home(%{name: name, size: size} = assigns) do
     icon_name =
       case size do
-        :narrow -> "#{name}_narrow"
         :wide -> "#{name}_wide"
         _ -> "#{name}"
       end
@@ -112,11 +112,13 @@ defmodule Frameworks.Pixel.Icon do
     assigns = assign(assigns, :icon_name, icon_name)
 
     ~H"""
-    <Icon.generic
-      type={:static}
-      src={@icon_name}
-      size="h-8 sm:h-12"
-    />
+    <div class="h-8 sm:h-12">
+      <.generic_body
+        type={:static}
+        src={@icon_name}
+        size=""
+      />
+    </div>
     """
   end
 
@@ -134,7 +136,7 @@ defmodule Frameworks.Pixel.Icon do
     assigns = assign(assigns, :icon_name, icon_name)
 
     ~H"""
-    <Icon.generic
+    <.generic
       type={:static}
       src={@icon_name}
       size="XS"

@@ -99,7 +99,7 @@ msgstr "Github commit url"
 
 #, elixir-autogen, elixir-format
 msgid "spot.form.name.label"
-msgstr "Naam"
+msgstr "Alias"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.form.description.label"
@@ -119,7 +119,7 @@ msgstr "moet een geldige Github commit url zijn"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submissions.subhead.inactive"
-msgstr "Challenge is gesloten. Je kan niet langer methodes indienen."
+msgstr "Challenge is gesloten. Je kan geen nieuwe methodes indienen of aanpassingen maken aan bestaande."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "1 submission"
@@ -132,3 +132,11 @@ msgid "1 team"
 msgid_plural "%{count} teams"
 msgstr[0] "1 team"
 msgstr[1] "%{count} teams"
+
+#, elixir-autogen, elixir-format
+msgid "spot.form.intro"
+msgstr "Alias voor op de ranglijsten"
+
+#, elixir-autogen, elixir-format
+msgid "spot.form.title"
+msgstr "Team"

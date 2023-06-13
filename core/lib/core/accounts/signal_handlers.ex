@@ -18,8 +18,9 @@ defmodule Core.Accounts.SignalHandlers do
       }) do
     required_fields =
       case {user.researcher, user.student} do
+        {true, _} -> [:fullname, :title]
         {_, true} -> [:fullname]
-        _ -> [:fullname, :title]
+        _ -> [:fullname]
       end
 
     user_valid? = validate_required(user_changeset, [:displayname]).valid?

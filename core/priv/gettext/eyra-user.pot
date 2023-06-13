@@ -41,3 +41,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Invalid email or password"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "register.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "reset.link"
+msgstr ""

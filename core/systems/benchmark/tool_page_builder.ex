@@ -15,12 +15,18 @@ defmodule Systems.Benchmark.ToolPageBuilder do
         } = tool,
         %{spot_id: spot_id}
       ) do
+    active? = status == :online
     highlights = highlights(tool)
 
-    download_dataset_button = %{
-      action: %{type: :http_get, to: data_set, target: "_blank"},
-      face: %{type: :primary, label: "Download"}
-    }
+    download_dataset_button =
+      if active? do
+        %{
+          action: %{type: :http_get, to: data_set, target: "_blank"},
+          face: %{type: :primary, label: "Download"}
+        }
+      else
+        nil
+      end
 
     title =
       if title == nil do
@@ -29,11 +35,17 @@ defmodule Systems.Benchmark.ToolPageBuilder do
         title
       end
 
+    spot_form = %{
+      id: :spot_form,
+      module: Benchmark.SpotForm,
+      spot_id: spot_id
+    }
+
     submission_list_form = %{
       id: :submission_list_form,
       module: Benchmark.SubmissionListForm,
       spot_id: spot_id,
-      active?: status == :online
+      active?: active?
     }
 
     %{
@@ -42,6 +54,7 @@ defmodule Systems.Benchmark.ToolPageBuilder do
       highlights: highlights,
       expectations: expectations,
       download_dataset_button: download_dataset_button,
+      spot_form: spot_form,
       submission_list_form: submission_list_form
     }
   end

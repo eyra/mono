@@ -1,6 +1,6 @@
 defmodule Systems.Benchmark.ToolPage do
   use CoreWeb, :live_view
-  use CoreWeb.Layouts.Workspace.Component, :projects
+  use CoreWeb.Layouts.Stripped.Component, :projects
 
   alias Frameworks.Pixel.{
     Align,
@@ -62,7 +62,7 @@ defmodule Systems.Benchmark.ToolPage do
   @impl true
   def render(assigns) do
     ~H"""
-      <.workspace title={@vm.hero_title} menus={@menus}>
+      <.stripped title={@vm.hero_title} user={@current_user} menus={@menus}>
         <%= if @popup do %>
           <.popup>
             <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
@@ -93,17 +93,22 @@ defmodule Systems.Benchmark.ToolPage do
           <Text.sub_head><%= dgettext("eyra-benchmark", "expectations.subhead") %></Text.sub_head>
           <.spacing value="XL" />
 
-          <Text.title2><%= dgettext("eyra-benchmark", "dataset.title") %></Text.title2>
-          <Text.intro margin="mb-4 lg:mb-6" ><%= dgettext("eyra-benchmark", "dataset.intro") %></Text.intro>
-          <.wrap>
-            <Button.dynamic {@vm.download_dataset_button} />
-          </.wrap>
-          <.spacing value="XL" />
+          <%= if @vm.download_dataset_button do %>
+            <Text.title2><%= dgettext("eyra-benchmark", "dataset.title") %></Text.title2>
+            <Text.intro margin="mb-4 lg:mb-6" ><%= dgettext("eyra-benchmark", "dataset.intro") %></Text.intro>
+            <.wrap>
+              <Button.dynamic {@vm.download_dataset_button} />
+            </.wrap>
+            <.spacing value="XL" />
+          <% end %>
+
+          <.live_component {@vm.spot_form} />
+          <.spacing value="L" />
 
           <.live_component {@vm.submission_list_form} />
 
         </Area.content>
-      </.workspace>
+      </.stripped>
     """
   end
 end

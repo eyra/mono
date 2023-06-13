@@ -9,7 +9,7 @@ defmodule Systems.Benchmark.ToolController do
     id = String.to_integer(id)
 
     spot =
-      if spot = List.first(Benchmark.Public.list_owned_spots(id, user)) do
+      if spot = List.first(Benchmark.Public.list_spots_for_tool(user, id)) do
         spot
       else
         Benchmark.Public.create_spot!(id, user)

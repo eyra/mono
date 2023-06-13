@@ -62,7 +62,7 @@ defmodule Systems.Promotion.Page do
               <Card.primary_cta
                 title={cta_title(@current_user)}
                 button_label={Accounts.start_page_title(@current_user)}
-                to={Routes.live_path(@socket, Accounts.start_page_target(@current_user))}
+                to={Accounts.start_page_path(@current_user)}
               />
             <% else %>
               <Card.primary_cta

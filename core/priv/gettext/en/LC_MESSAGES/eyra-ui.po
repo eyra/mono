@@ -217,3 +217,7 @@ msgstr "Copy"
 #, elixir-autogen, elixir-format
 msgid "title.placeholder"
 msgstr "Here comes the title.."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "start.page.home"
+msgstr "Go to console"

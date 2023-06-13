@@ -126,9 +126,9 @@
 
                   <div class="flex flex-row" >
                       <div class="mb-8"></div>
-                    <%= link "Registreren", to: Routes.live_path(@conn, CoreWeb.User.Signup), class: "text-primary text-link font-link hover:text-black underline focus:outline-none" %>
-                    <div class="ml-2"></div>|<div class="ml-2"></div>
-                    <%= link "Reset wachtwoord", to: Routes.live_path(@conn, CoreWeb.User.ResetPassword), class: "text-primary text-link font-link hover:text-black underline focus:outline-none" %>
+                      <%= link dgettext("eyra-user", "register.link"), to: Routes.live_path(@conn, CoreWeb.User.Signup), class: "text-primary text-link font-link hover:text-black underline focus:outline-none" %>
+                      <div class="ml-2"></div>|<div class="ml-2"></div>
+                      <%= link dgettext("eyra-user", "reset.link"), to: Routes.live_path(@conn, CoreWeb.User.ResetPassword), class: "text-primary text-link font-link hover:text-black underline focus:outline-none" %>
                   </div>
                   <% end %>
                 </div>

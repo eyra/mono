@@ -52,7 +52,7 @@ defmodule Systems.Promotion.LandingPage do
 
     back =
       params
-      |> Map.get("back", Routes.live_path(socket, Accounts.start_page_target(user)))
+      |> Map.get("back", Accounts.start_page_path(user))
 
     mount(
       params

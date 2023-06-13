@@ -2,7 +2,6 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
   import CoreWeb.Gettext
 
   alias Core.Accounts
-  alias CoreWeb.Router.Helpers, as: Routes
 
   import Frameworks.Utility.LiveCommand, only: [live_command: 2]
   import Frameworks.Utility.List
@@ -207,9 +206,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
   end
 
   def handle_forward(%{user: user}, socket) do
-    Phoenix.LiveView.push_redirect(socket,
-      to: Routes.live_path(socket, Accounts.start_page_target(user))
-    )
+    Phoenix.LiveView.push_redirect(socket, to: Accounts.start_page_path(user))
   end
 
   # Survey open button

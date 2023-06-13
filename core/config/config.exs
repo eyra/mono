@@ -111,8 +111,6 @@ config :core, BankingClient,
   certfile: "../banking_proxy/certs/client_certificate.pem",
   keyfile: "../banking_proxy/certs/client_key.pem"
 
-import_config "#{config_env()}.exs"
-
 module =
   case Code.ensure_compiled(Bundle) do
     {:module, module} ->
@@ -130,3 +128,5 @@ config :core, :bundle, bundle
 unless is_nil(bundle) do
   import_config "../bundles/#{bundle}/config/config.exs"
 end
+
+import_config "#{config_env()}.exs"

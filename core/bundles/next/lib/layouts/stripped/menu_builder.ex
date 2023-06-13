@@ -5,15 +5,15 @@ defmodule Next.Layouts.Stripped.MenuBuilder do
   ]
 
   @item_flags [
-    desktop_navbar: [:icon],
-    mobile_navbar: [:icon]
+    desktop_navbar: [default: [:title], language: [:icon]],
+    mobile_navbar: [default: [:title], language: [:icon]]
   ]
 
   @primary []
-  @secondary [:language]
+  @secondary [:signin, :profile, :language]
 
-  use CoreWeb.Menu.Builder, home: :eyra
+  use CoreWeb.Menu.Builder, home: :next
 
   @impl true
-  def can_access?(_user, _id), do: true
+  def include_map(_user), do: %{}
 end

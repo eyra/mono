@@ -33,6 +33,7 @@ defmodule Systems.Benchmark.SpotModel do
         :submissions
       ])
 
+  def preload_graph(:tool), do: [tool: []]
   def preload_graph(:auth_node), do: [auth_node: []]
 
   def preload_graph(:submissions),
