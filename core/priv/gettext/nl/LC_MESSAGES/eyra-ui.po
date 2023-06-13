@@ -40,7 +40,7 @@ msgstr "Inloggen"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.signout"
-msgstr "Uitloggen"
+msgstr "Log uit"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.menu"

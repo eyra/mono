@@ -285,3 +285,7 @@ msgstr "Financiering"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.funding.forward"
 msgstr "Financier je studie"
+
+#, elixir-autogen, elixir-format
+msgid "rememberme.label"
+msgstr "Blijf ingelogd voor 60 dagen"

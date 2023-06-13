@@ -20,11 +20,11 @@ msgstr "E-mail"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.password.label"
-msgstr ""
+msgstr "Nieuw wachtwoord"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.password_confirmation.label"
-msgstr ""
+msgstr "Bevestig wachtwoord"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.reset_button"
@@ -32,7 +32,7 @@ msgstr "Verstuur verzoek"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.reset_password_button"
-msgstr ""
+msgstr "Wijzig"
 
 #, elixir-autogen, elixir-format
 msgid "user.password_reset.title"
@@ -40,7 +40,7 @@ msgstr "Wachtwoord wijzigen"
 
 #, elixir-autogen, elixir-format
 msgid "Invalid email or password"
-msgstr ""
+msgstr "E-mail of wachtwoord ongeldig"
 
 #, elixir-autogen, elixir-format
 msgid "register.link"
@@ -49,3 +49,19 @@ msgstr "Registreren"
 #, elixir-autogen, elixir-format
 msgid "reset.link"
 msgstr "Wijzigen password"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "user.password_reset.flash"
+msgstr "Als je email bekend is bij ons krijg je spoedig een e-mail met instructies om je wachtwoord te resetten."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Invalid email"
+msgstr "E-mail ongeldig"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "confirm.token.flash"
+msgstr "Als je email bij ons bekend is en deze is nog niet bevestigd, dan krijg je spoedig een e-mail met instructies."
+
+#, elixir-autogen, elixir-format
+msgid "Signed out successfully"
+msgstr ""

@@ -98,10 +98,6 @@ msgid "submission.form.url.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "spot.form.name.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "submission.form.description.label"
 msgstr ""
 

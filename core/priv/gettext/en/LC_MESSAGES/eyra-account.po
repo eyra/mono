@@ -48,7 +48,7 @@ msgstr "Sign up"
 
 #, elixir-autogen, elixir-format
 msgid "await.confirmation.title"
-msgstr "Bevestig je registratie"
+msgstr "Confirm you registration"
 
 #, elixir-autogen, elixir-format
 msgid "confirm.token.resend_button"
@@ -153,3 +153,15 @@ msgstr "https://wiki.surfnet.nl/display/conextsupport/Log+in+SURFconext"
 #, elixir-autogen, elixir-format
 msgid "ehtical.code.label"
 msgstr "Code"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "signin.button"
+msgstr "Sign in"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "signin.title"
+msgstr "Sign in"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "await.confirmation.description"
+msgstr "Please check your e-mail for a confirmation link."

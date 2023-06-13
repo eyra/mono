@@ -97,10 +97,6 @@ msgstr[1] "%{count} dagen"
 msgid "submission.form.url.label"
 msgstr "Github commit url"
 
-#, elixir-autogen, elixir-format
-msgid "spot.form.name.label"
-msgstr "Alias"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.form.description.label"
 msgstr "Omschrijving"

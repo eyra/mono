@@ -34,6 +34,17 @@ if config_env() == :prod do
          azure: Systems.DataDonation.AzureStorageBackend,
          centerdata: Systems.DataDonation.CenterdataStorageBackend
 
+  # MAILGUN
+  if mailgun_api_key = System.get_env("MAILGUN_API_KEY") do
+    config :core, Systems.Email.Mailer,
+      adapter: Bamboo.MailgunAdapter,
+      base_uri: "https://api.eu.mailgun.net/v2",
+      api_key: mailgun_api_key,
+      domain: host,
+      default_from_email: "no-reply@#{host}",
+      hackney_opts: [recv_timeout: :timer.minutes(1)]
+  end
+
   # AWS
 
   if bucket = System.get_env("AWS_S3_BUCKET") do
@@ -69,18 +80,6 @@ if config_env() == :prod do
 
   if sas_token = System.get_env("AZURE_SAS_TOKEN") do
     config :core, :azure_storage_backend, sas_token: sas_token
-  end
-
-  # MAILGUN
-
-  if mailgun_api_key = System.get_env("MAILGUN_API_KEY") do
-    config :core, Systems.Email.Mailer,
-      adapter: Bamboo.MailgunAdapter,
-      base_uri: "https://api.eu.mailgun.net/v2",
-      api_key: mailgun_api_key,
-      domain: host,
-      default_from_email: "no-reply@#{host}",
-      hackney_opts: [recv_timeout: :timer.minutes(1)]
   end
 
   config :core, Core.Repo,

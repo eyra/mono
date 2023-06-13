@@ -40,7 +40,7 @@ defmodule Link.User.SessionController do
   end
 
   defp render_new(%{request_path: request_path} = conn) do
-    logo = CoreWeb.Endpoint.static_path("/images/icons/#{Meta.bundle(conn)}.svg")
+    logo = CoreWeb.Endpoint.static_path("/images/icons/#{Meta.bundle(conn)}_wide.svg")
     title = Meta.bundle_title()
 
     conn
@@ -50,7 +50,7 @@ defmodule Link.User.SessionController do
 
   def delete(conn, _params) do
     conn
-    |> put_flash(:info, "Logged out successfully.")
+    |> put_flash(:info, dgettext("eyra-user", "Signed out successfully"))
     |> CoreWeb.UserAuth.log_out_user()
   end
 

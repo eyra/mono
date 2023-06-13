@@ -125,6 +125,9 @@ defmodule CoreWeb do
 
         Map.put(socket, :assigns, assigns)
       end
+
+      # Routes generation with the ~p sigil
+      unquote(verified_routes())
     end
   end
 

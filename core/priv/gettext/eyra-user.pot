@@ -49,3 +49,19 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "reset.link"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "user.password_reset.flash"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Invalid email"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "confirm.token.flash"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Signed out successfully"
+msgstr ""

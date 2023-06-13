@@ -95,20 +95,8 @@
                   <div class="mb-7 bg-grey4 h-px"></div>
 
                   <%= form_for @conn, ~p"/user/signin", [as: :user], fn f -> %>
-                    <div class="flex flex-col mb-8">
-                      <%= label f, :email, class: "flex-wrap mt-0.5 text-title6 font-title6 mb-2" %>
-                      <div>
-                        <%= email_input f, :email, required: true, class: "text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-44px" %>
-                      </div>
-                    </div>
-
-                    <div class="flex flex-col mb-6">
-                      <%= label f, :password, class: "flex-wrap mt-0.5 text-title6 font-title6 mb-2" %>
-                      <div>
-                        <%= password_input f, :password, required: true, class: "text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-44px" %>
-
-                      </div>
-                    </div>
+                    <.email_input form={f} field={:email} label_text="aap" reserve_error_space={false} />
+                    <.password_input form={f} field={:password} label_text={dgettext("eyra-account", "password.label")} reserve_error_space={false} />
 
                     <div>
                       <%= submit "Log in", class: "w-full pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded pr-4 pl-4 bg-grey1" %>

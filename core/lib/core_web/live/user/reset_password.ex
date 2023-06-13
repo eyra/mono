@@ -3,6 +3,8 @@ defmodule CoreWeb.User.ResetPassword do
   The home screen.
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Stripped.Component, :signup
+
   alias CoreWeb.Router.Helpers, as: Routes
 
   import Frameworks.Pixel.Form
@@ -31,12 +33,11 @@ defmodule CoreWeb.User.ResetPassword do
           )
         end
 
-        {:noreply,
-         put_flash(
-           socket,
-           :info,
-           "If your email is in our system, you will receive instructions to reset your password shortly."
-         )}
+        {
+          :noreply,
+          socket
+          |> put_flash(:info, dgettext("eyra-user", "user.password_reset.flash"))
+        }
 
       changeset ->
         {:noreply,
@@ -44,25 +45,22 @@ defmodule CoreWeb.User.ResetPassword do
     end
   end
 
-  @impl true
-  def handle_uri(socket), do: socket
-
   # data(changeset, :any)
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <.stripped user={@current_user} menus={@menus}>
       <Area.content>
       <Margin.y id={:page_top} />
       <Area.form>
         <Text.title2><%= dgettext("eyra-user", "user.password_reset.title") %></Text.title2>
-        <.form id="reset_password" :let={form} for={@changeset} phx-submit="reset-password" >
+        <.form id="reset_password" :let={form} for={@changeset} phx-submit="reset-password" data-show-errors={true} >
           <.email_input form={form} field={:email} label_text={dgettext("eyra-user", "password_reset.email.label")} />
-          <Button.submit label={dgettext("eyra-user", "password_reset.reset_button")} />
+          <Button.submit_wide label={dgettext("eyra-user", "password_reset.reset_button")} bg_color="bg-grey1" />
         </.form>
       </Area.form>
       </Area.content>
-    </div>
+    </.stripped>
     """
   end
 end

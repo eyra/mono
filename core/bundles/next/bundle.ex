@@ -13,7 +13,7 @@ defmodule Next.Bundle do
 
         scope "/", Next do
           pipe_through([:browser, :redirect_if_user_is_authenticated])
-          get("/user/signin", User.SessionController, :new)
+          live("/user/signin", User.Signin)
           post("/user/signin", User.SessionController, :create)
         end
 
@@ -34,6 +34,7 @@ defmodule Next.Bundle do
     if include?() do
       quote do
         grant_access(Next.Console.Page, [:member])
+        grant_access(Next.User.Signin, [:visitor, :member])
       end
     end
   end

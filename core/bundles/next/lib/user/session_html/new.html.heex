@@ -36,76 +36,20 @@
                   </div>
 
                   <%= if feature_enabled?(:member_google_sign_in) do %>
-                  <a href="/google-sign-in">
-                    <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-google rounded pl-4 pr-4">
-                      <div class="flex w-full justify-center items-center">
-                        <div>
-                          <img class="mr-3 -mt-1" src="/images/google.svg" alt="">
-                        </div>
-                        <div class="h-11 focus:outline-none">
-                          <div class="flex flex-col justify-center h-full items-center rounded">
-                            <div class="text-white text-button font-button">
-                              <%= dgettext("eyra-account", "login.google.button") %>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-
-                  <div class="mb-6"></div>
+                    <Form.google_signin />
+                    <div class="mb-6"></div>
                   <% end %>
 
                   <%= if feature_enabled?(:sign_in_with_apple) do %>
-                  <div class="flex w-full h-12 bg-apple rounded justify-center items-center hover:opacity-80">
-                      <div class="w-full h-full pl-4 pr-4 focus:outline-none" id="appleid-signin" data-color="black" data-border="false" data-type="sign in" data-logo-size="small" data-label-position="10" ></div>
-                      <%= sign_in_with_apple_button(@conn) %>
-                  </div>
-
-                  <div class="mb-6"></div>
+                    <Form.apple_signin conn={@conn} />
+                    <div class="mb-6"></div>
                   <% end %>
 
                   <%= if feature_enabled?(:password_sign_in) do %>
                     <%= if feature_enabled?(:sign_in_with_apple) or feature_enabled?(:member_google_sign_in) do %>
                       <div class="mb-7 bg-grey4 h-px"></div>
                     <% end %>
-
-                    <%= form_for @conn, ~p"/user/signin", [as: :user], fn f -> %>
-                      <div class="flex flex-col mb-8">
-                        <%= label f, :email, class: "flex-wrap mt-0.5 text-title6 font-title6 mb-2" %>
-                        <div>
-                          <%= email_input f, :email, required: true, class: "text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-44px" %>
-                        </div>
-                      </div>
-
-                      <div class="flex flex-col mb-6">
-                        <%= label f, :password, class: "flex-wrap mt-0.5 text-title6 font-title6 mb-2" %>
-                        <div>
-                          <%= password_input f, :password, required: true, class: "text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-44px" %>
-
-                        </div>
-                      </div>
-
-                      <div>
-                        <%= submit "Log in", class: "w-full pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded pr-4 pl-4 bg-grey1" %>
-                      </div>
-
-                      <div class="mb-6"></div>
-                      <div class="flex flex-row text-label font-label items-center">
-                        <%= checkbox f, :remember_me %>
-                        <div class="ml-2"></div>
-                        <%= label f, :remember_me, "Blijf ingelogd voor 60 dagen" %>
-                      </div>
-                      <div class="mb-4"></div>
-                      <div class="flex flex-row" >
-                        <div class="mb-8"></div>
-                        <%= link dgettext("eyra-user", "register.link"), to: Routes.live_path(@conn, CoreWeb.User.Signup), class: "text-primary text-link font-link hover:text-black underline focus:outline-none" %>
-                        <div class="ml-2"></div>|<div class="ml-2"></div>
-                        <%= link dgettext("eyra-user", "reset.link"), to: Routes.live_path(@conn, CoreWeb.User.ResetPassword), class: "text-primary text-link font-link hover:text-black underline focus:outline-none" %>
-                      </div>
-
-                    <% end %>
-
+                    <Form.password_signin />
                   <% end %>
                 </div>
               </div>
