@@ -22,6 +22,16 @@ defmodule CoreWeb.User.Profile do
     tabs = create_tabs(socket)
     tabbar_id = "user_profile"
 
+    signout_button = %{
+      action: %{type: :http_delete, to: ~p"/user/signout"},
+      face: %{
+        type: :secondary,
+        label: dgettext("eyra-ui", "menu.item.signout"),
+        border_color: "border-delete",
+        text_color: "text-delete"
+      }
+    }
+
     {
       :ok,
       socket
@@ -29,7 +39,8 @@ defmodule CoreWeb.User.Profile do
         tabbar_id: tabbar_id,
         tabs: tabs,
         initial_tab: initial_tab,
-        changesets: %{}
+        changesets: %{},
+        signout_button: signout_button
       )
       |> assign_viewport()
       |> assign_breakpoint()
@@ -118,6 +129,13 @@ defmodule CoreWeb.User.Profile do
         </Navigation.action_bar>
         <Tabbar.content tabs={@tabs} />
         <Tabbar.footer tabs={@tabs} />
+
+        <Area.form>
+          <.wrap>
+            <Button.dynamic {@signout_button} />
+          </.wrap>
+        </Area.form>
+
       </div>
     </.workspace>
     """
