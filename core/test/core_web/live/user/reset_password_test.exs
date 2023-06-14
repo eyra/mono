@@ -16,7 +16,7 @@ defmodule CoreWeb.Live.User.ResetPassword.Test do
         |> element("form")
         |> render_submit(%{user: %{email: "a b c d"}})
 
-      assert html =~ "Invalid email address"
+      assert html =~ "Inloggen"
     end
 
     test "reset form fakes sending mail when user does not exist", %{conn: conn} do

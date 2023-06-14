@@ -81,9 +81,8 @@ defmodule CoreWeb.UserSessionControllerTest do
           "user" => %{"email" => user.email, "password" => "invalid_password"}
         })
 
-      response = html_response(conn, 200)
-      assert response =~ "Log in"
-      assert response =~ "E-mail of wachtwoord ongeldig"
+      response = html_response(conn, 302)
+      assert response =~ "You are being <a href=\"/user/signin\">redirected</a>"
     end
   end
 

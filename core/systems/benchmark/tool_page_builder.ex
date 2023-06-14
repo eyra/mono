@@ -1,6 +1,7 @@
 defmodule Systems.Benchmark.ToolPageBuilder do
   import CoreWeb.Gettext
   alias CoreWeb.UI.Timestamp
+  alias ExAws.S3
 
   alias Systems.{
     Benchmark
@@ -19,10 +20,14 @@ defmodule Systems.Benchmark.ToolPageBuilder do
     active? = status == :online
     highlights = highlights(tool)
 
+    {:ok, presigned_data_set} =
+      ExAws.Config.new(:s3)
+      |> S3.presigned_url(:get, "eyra-rank", data_set, [])
+
     dataset_button =
       if active? do
         %{
-          action: %{type: :http_get, to: data_set, target: "_blank"},
+          action: %{type: :http_get, to: presigned_data_set, target: "_blank"},
           face: %{type: :primary, label: dgettext("eyra-benchmark", "dataset.button")}
         }
       else

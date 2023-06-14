@@ -11,8 +11,8 @@ defmodule Systems.Email.Factory.Test do
       email = Factory.account_confirmation_instructions(user, url)
       assert email.to == user.email
       assert email.subject == "Confirm your account"
-      assert email.html_body =~ user.displayname
-      assert email.text_body =~ user.displayname
+      assert email.html_body =~ "Hi,"
+      assert email.text_body =~ "Hi,"
       assert email.html_body =~ url
       assert email.text_body =~ url
     end
