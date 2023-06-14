@@ -4,10 +4,11 @@ defmodule Frameworks.Pixel.Button.Face do
   alias Frameworks.Pixel.Icon
 
   attr(:text, :string, required: true)
+  attr(:font, :string, default: "text-link font-link")
 
   def link(assigns) do
     ~H"""
-    <div class="text-primary text-link font-link underline focus:outline-none">
+    <div class="text-primary underline cursor-pointer zfocus:outline-none">
       <%= @text %>
     </div>
     """

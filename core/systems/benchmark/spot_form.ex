@@ -54,10 +54,12 @@ defmodule Systems.Benchmark.SpotForm do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="sm:max-w-form">
+    <div>
       <Text.title2><%= dgettext("eyra-benchmark", "spot.form.title") %></Text.title2>
+      <Text.body><%= dgettext("eyra-benchmark", "spot.form.description") %></Text.body>
+      <.spacing value="XS" />
       <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
-        <.text_input form={form} field={:name} label_text={dgettext("eyra-benchmark", "spot.form.intro")} />
+        <.text_input form={form} field={:name} label_text={dgettext("eyra-benchmark", "spot.form.name")} />
       </.form>
     </div>
     """

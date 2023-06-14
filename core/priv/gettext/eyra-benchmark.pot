@@ -48,14 +48,6 @@ msgid "submission.form.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "dataset.intro"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "dataset.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "expectations.title"
 msgstr ""
 
@@ -130,9 +122,41 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-autogen, elixir-format
-msgid "spot.form.intro"
+msgid "spot.form.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "spot.form.title"
+msgid "form.template_repo.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "preparation.dataset.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "preparation.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "preparation.template.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "preparation.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "dataset.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "template.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "spot.form.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "spot.form.name"
 msgstr ""

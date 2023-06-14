@@ -31,14 +31,6 @@ msgid "profile.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "signin.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "signin.link"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "signup.button"
 msgstr ""
 

@@ -93,14 +93,25 @@ defmodule Systems.Benchmark.ToolPage do
           <Text.sub_head><%= dgettext("eyra-benchmark", "expectations.subhead") %></Text.sub_head>
           <.spacing value="XL" />
 
-          <%= if @vm.download_dataset_button do %>
-            <Text.title2><%= dgettext("eyra-benchmark", "dataset.title") %></Text.title2>
-            <Text.intro margin="mb-4 lg:mb-6" ><%= dgettext("eyra-benchmark", "dataset.intro") %></Text.intro>
-            <.wrap>
-              <Button.dynamic {@vm.download_dataset_button} />
-            </.wrap>
-            <.spacing value="XL" />
+          <Text.title2><%= dgettext("eyra-benchmark", "preparation.title") %></Text.title2>
+          <Text.body><%= dgettext("eyra-benchmark", "preparation.description") %></Text.body>
+          <.spacing value="XS" />
+          <Text.title5 align="text-left">1. <%= dgettext("eyra-benchmark", "preparation.dataset.title") %></Text.title5>
+          <.spacing value="M" />
+          <%= if @vm.dataset_button do %>
+            <div class="ml-6">
+              <.wrap>
+                <Button.dynamic {@vm.dataset_button} />
+              </.wrap>
+            </div>
           <% end %>
+          <.spacing value="M" />
+
+          <Text.title5 align="text-left">2. <%= dgettext("eyra-benchmark", "preparation.template.title") %></Text.title5>
+          <.spacing value="XS" />
+          <Text.title5 align="ml-6 text-left"><Button.dynamic {@vm.template_button} /></Text.title5>
+
+          <.spacing value="XL" />
 
           <.live_component {@vm.spot_form} />
           <.spacing value="L" />

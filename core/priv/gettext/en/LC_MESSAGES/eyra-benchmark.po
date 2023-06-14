@@ -48,14 +48,6 @@ msgid "submission.form.title"
 msgstr "Add submission"
 
 #, elixir-autogen, elixir-format
-msgid "dataset.intro"
-msgstr "Download the training Liss panel data from Centerdata to tune your method."
-
-#, elixir-autogen, elixir-format
-msgid "dataset.title"
-msgstr "Example data set"
-
-#, elixir-autogen, elixir-format
 msgid "expectations.title"
 msgstr "What to expect?"
 
@@ -130,9 +122,41 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-autogen, elixir-format
-msgid "spot.form.intro"
-msgstr "Leaderboard alias"
-
-#, elixir-autogen, elixir-format
 msgid "spot.form.title"
 msgstr "Team"
+
+#, elixir-autogen, elixir-format
+msgid "form.template_repo.label"
+msgstr "Github repository"
+
+#, elixir-autogen, elixir-format
+msgid "preparation.dataset.title"
+msgstr "Download the example data to tune your method"
+
+#, elixir-autogen, elixir-format
+msgid "preparation.description"
+msgstr "To prepare your submission, follow the steps below."
+
+#, elixir-autogen, elixir-format
+msgid "preparation.template.title"
+msgstr "Fork and clone the example repository and prepare your submission as described"
+
+#, elixir-autogen, elixir-format
+msgid "preparation.title"
+msgstr "Preparation"
+
+#, elixir-autogen, elixir-format
+msgid "dataset.button"
+msgstr "Download data"
+
+#, elixir-autogen, elixir-format
+msgid "template.button"
+msgstr "Github example repository"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "spot.form.description"
+msgstr "Your team name will appear alongside your submissions on the leaderboard."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "spot.form.name"
+msgstr "Name"

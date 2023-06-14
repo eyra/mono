@@ -48,14 +48,6 @@ msgid "submission.form.title"
 msgstr "Dien methode in"
 
 #, elixir-autogen, elixir-format
-msgid "dataset.intro"
-msgstr "Download de Liss panel training data afkomstig van Centerdata om je methode trainen."
-
-#, elixir-autogen, elixir-format
-msgid "dataset.title"
-msgstr "Voorbeeld dataset"
-
-#, elixir-autogen, elixir-format
 msgid "expectations.title"
 msgstr "Wat kan je verwachten?"
 
@@ -130,9 +122,41 @@ msgstr[0] "1 team"
 msgstr[1] "%{count} teams"
 
 #, elixir-autogen, elixir-format
-msgid "spot.form.intro"
-msgstr "Alias voor op de ranglijsten"
-
-#, elixir-autogen, elixir-format
 msgid "spot.form.title"
 msgstr "Team"
+
+#, elixir-autogen, elixir-format
+msgid "form.template_repo.label"
+msgstr "Github repository"
+
+#, elixir-autogen, elixir-format
+msgid "preparation.dataset.title"
+msgstr "Download de voorbeeld data om je methode to tunen"
+
+#, elixir-autogen, elixir-format
+msgid "preparation.description"
+msgstr "Volg de volgende stappen ter voorbereiding van je deelname."
+
+#, elixir-autogen, elixir-format
+msgid "preparation.template.title"
+msgstr "Fork en clone de voorbeeld repository en volg de aanwijzigingen zoals beschreven in de README"
+
+#, elixir-autogen, elixir-format
+msgid "preparation.title"
+msgstr "Voorbereiding"
+
+#, elixir-autogen, elixir-format
+msgid "dataset.button"
+msgstr "Download data"
+
+#, elixir-autogen, elixir-format
+msgid "template.button"
+msgstr "Github voorbeeld repository"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "spot.form.description"
+msgstr "De naam van je team zal bij naast je scores op de leaderboard zichtbaar zijn."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "spot.form.name"
+msgstr "Naam"

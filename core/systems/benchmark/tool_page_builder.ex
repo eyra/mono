@@ -11,22 +11,28 @@ defmodule Systems.Benchmark.ToolPageBuilder do
           status: status,
           title: title,
           expectations: expectations,
-          data_set: data_set
+          data_set: data_set,
+          template_repo: template_repo
         } = tool,
         %{spot_id: spot_id}
       ) do
     active? = status == :online
     highlights = highlights(tool)
 
-    download_dataset_button =
+    dataset_button =
       if active? do
         %{
           action: %{type: :http_get, to: data_set, target: "_blank"},
-          face: %{type: :primary, label: "Download"}
+          face: %{type: :primary, label: dgettext("eyra-benchmark", "dataset.button")}
         }
       else
         nil
       end
+
+    template_button = %{
+      action: %{type: :http_get, to: template_repo, target: "_blank"},
+      face: %{type: :link, text: dgettext("eyra-benchmark", "template.button"), font: ""}
+    }
 
     title =
       if title == nil do
@@ -53,7 +59,8 @@ defmodule Systems.Benchmark.ToolPageBuilder do
       title: title,
       highlights: highlights,
       expectations: expectations,
-      download_dataset_button: download_dataset_button,
+      dataset_button: dataset_button,
+      template_button: template_button,
       spot_form: spot_form,
       submission_list_form: submission_list_form
     }

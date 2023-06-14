@@ -285,7 +285,3 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.funding.forward"
 msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "rememberme.label"
-msgstr ""

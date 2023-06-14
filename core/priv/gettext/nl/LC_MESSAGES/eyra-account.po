@@ -31,14 +31,6 @@ msgid "profile.title"
 msgstr "Mijn profiel"
 
 #, elixir-autogen, elixir-format
-msgid "signin.label"
-msgstr "Heb je al een account?"
-
-#, elixir-autogen, elixir-format
-msgid "signin.link"
-msgstr "Log hier in"
-
-#, elixir-autogen, elixir-format
 msgid "signup.button"
 msgstr "Registreer"
 
