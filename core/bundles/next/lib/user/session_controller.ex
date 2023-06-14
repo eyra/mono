@@ -2,8 +2,6 @@ defmodule Next.User.SessionController do
   use CoreWeb, :controller
   import CoreWeb.Gettext
 
-  alias CoreWeb.Meta
-
   plug(:setup_sign_in_with_apple, :core when action != :delete)
 
   defp setup_sign_in_with_apple(conn, otp_app) do
@@ -50,9 +48,5 @@ defmodule Next.User.SessionController do
     conn
     |> put_flash(:info, dgettext("eyra-user", "Signed out successfully"))
     |> CoreWeb.UserAuth.log_out_user()
-  end
-
-  defp init_tabs(conn) do
-    assign(conn, :tabs, [])
   end
 end
