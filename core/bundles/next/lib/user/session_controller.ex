@@ -42,13 +42,8 @@ defmodule Next.User.SessionController do
     end
   end
 
-  defp render_new(%{request_path: request_path} = conn) do
-    logo = CoreWeb.Endpoint.static_path("/images/icons/#{Meta.bundle(conn)}_wide.svg")
-    title = Meta.bundle_title()
-
-    conn
-    |> init_tabs()
-    |> render(:new, bundle_logo: logo, bundle_title: title, request_path: request_path)
+  defp render_new(conn) do
+    redirect(conn, to: ~p"/user/signin")
   end
 
   def delete(conn, _params) do
