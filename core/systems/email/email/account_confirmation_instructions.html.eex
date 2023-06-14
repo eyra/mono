@@ -1,4 +1,4 @@
-<h1>Hi <%= @user.displayname %>,</h1>
+<h1>Hi,</h1>
 
 Almost there, you can now <a href="<%= @url %>">confirm your account</a>.
 

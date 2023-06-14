@@ -1,4 +1,4 @@
-Hi <%= @user.displayname %>,
+Hi,
 
 You can confirm your account by visiting the URL below:
 
