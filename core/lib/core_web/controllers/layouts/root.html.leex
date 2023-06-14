@@ -22,7 +22,12 @@
     <script src="<%= CoreWeb.Endpoint.static_path("/js/app.js") %>" defer></script>
   </head>
   <body class="font-body bg-grey5 scrollbar-hide" x-data="{ overlay: false}" >
-    <div class="fixed z-10 w-full h-full bg-black bg-opacity-20 hidden" x-cloak x-show="overlay"></div>
+    <div
+      x-cloak
+      x-show="overlay"
+      class="fixed z-10 w-full h-full bg-black bg-opacity-20"
+    >
+    </div>
     <div class="flex flex-row">
       <div
           x-cloak
