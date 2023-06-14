@@ -94,7 +94,7 @@
                   <%= if feature_enabled?(:password_sign_in) do %>
                   <div class="mb-7 bg-grey4 h-px"></div>
 
-                  <%= form_for @conn, ~p"/user/signin", [as: :user], fn f -> %>
+                  <%= form_for @conn, ~p"/user/session", [as: :user], fn f -> %>
                     <.email_input form={f} field={:email} label_text="aap" reserve_error_space={false} />
                     <.password_input form={f} field={:password} label_text={dgettext("eyra-account", "password.label")} reserve_error_space={false} />
 

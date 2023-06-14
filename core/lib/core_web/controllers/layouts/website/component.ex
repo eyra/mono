@@ -63,6 +63,7 @@ defmodule CoreWeb.Layouts.Website.Component do
         >
           <div
             class="fixed z-30 right-0 top-0 w-mobile-menu-width h-viewport"
+            x-cloak
             x-show="mobile_menu"
             @click.away="mobile_menu = !mobile_menu, $parent.overlay = false"
           >

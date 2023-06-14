@@ -31,7 +31,7 @@ defmodule CoreWeb.User.Forms.Profile do
     entity = UserProfileEdit.create(user, profile)
 
     signout_button = %{
-      action: %{type: :http_delete, to: ~p"/user/signout"},
+      action: %{type: :http_delete, to: ~p"/user/session"},
       face: %{
         type: :secondary,
         label: dgettext("eyra-ui", "menu.item.signout"),

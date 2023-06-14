@@ -1,8 +1,11 @@
 <main class="w-full">
   <div>
-    <div x-data="{ }"
+    <div
+        x-cloak
+        x-data="{ }"
+        x-bind:class="{'hidden': <%= live_flash(@flash, :info) === nil %>"
         class="fixed z-20 bottom-6 right-6 pointer-events-none"
-        x-bind:class="{'hidden': <%= live_flash(@flash, :info) === nil %>}">
+    >
       <div class="flex flex-row" >
         <div class="max-w-form flex-shrink-0 pointer-events-auto" >
           <div class="text-caption font-caption bg-white rounded shadow-2xl">
@@ -31,9 +34,10 @@
     </div>
 
     <div
-        class="fixed z-20 top-6 w-full pointer-events-none"
+        class="fixed z-20 top-6 w-full pointer-events-none hidden"
+        x-cloak
         x-data="{ }"
-        x-bind:class="{'hidden': <%= live_flash(@flash, :error) === nil %>}"
+        x-bind:class="{'hidden': <%= live_flash(@flash, :error) === nil %>"
     >
       <div class="flex flex-row items-center justify-center" >
         <div class="max-w-form flex-shrink-0 pointer-events-auto" >

@@ -37,7 +37,7 @@ defmodule Port.Menu.Items do
         title: dgettext("eyra-ui", "menu.item.profile")
       },
       signout: %{
-        action: %{type: :http_delete, to: ~p"/user/signout"},
+        action: %{type: :http_delete, to: ~p"/user/session"},
         title: dgettext("eyra-ui", "menu.item.signout")
       },
       signin: %{

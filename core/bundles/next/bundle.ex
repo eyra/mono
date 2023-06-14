@@ -14,12 +14,13 @@ defmodule Next.Bundle do
         scope "/", Next do
           pipe_through([:browser, :redirect_if_user_is_authenticated])
           live("/user/signin", User.Signin)
-          post("/user/signin", User.SessionController, :create)
+          get("/user/session", User.SessionController, :new)
+          post("/user/session", User.SessionController, :create)
         end
 
         scope "/", Next do
           pipe_through([:browser])
-          delete("/user/signout", User.SessionController, :delete)
+          delete("/user/session", User.SessionController, :delete)
         end
 
         scope "/", Next do
