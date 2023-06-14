@@ -59,6 +59,7 @@ defmodule Systems.Benchmark.ToolForm do
         <.text_input form={form} field={:title} label_text={dgettext("eyra-benchmark", "form.title.label")} />
         <.text_area form={form} field={:expectations} label_text={dgettext("eyra-benchmark", "form.expectations.label")} />
         <.url_input form={form} field={:data_set} label_text={dgettext("eyra-benchmark", "form.data_set.label")} />
+        <.url_input form={form} field={:template_repo} label_text={dgettext("eyra-benchmark", "form.template_repo.label")} />
         <.date_input form={form} field={:deadline} label_text={dgettext("eyra-benchmark", "form.deadline.label")} />
       </.form>
     </div>

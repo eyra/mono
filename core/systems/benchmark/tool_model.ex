@@ -16,6 +16,7 @@ defmodule Systems.Benchmark.ToolModel do
     field(:title, :string)
     field(:expectations, :string)
     field(:data_set, :string)
+    field(:template_repo, :string)
     field(:deadline, :string)
     field(:director, Ecto.Enum, values: [:project])
     belongs_to(:auth_node, Core.Authorization.Node)
@@ -25,7 +26,7 @@ defmodule Systems.Benchmark.ToolModel do
     timestamps()
   end
 
-  @fields ~w(status title expectations data_set deadline director)a
+  @fields ~w(status title expectations data_set template_repo deadline director)a
   @required_fields @fields
 
   def changeset(tool, params) do
