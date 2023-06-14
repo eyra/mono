@@ -21,7 +21,7 @@ if config_env() == :prod do
     cache_static_manifest: "priv/static/cache_manifest.json",
     server: true,
     secret_key_base: System.fetch_env!("SECRET_KEY_BASE"),
-    url: [host: host, port: 443],
+    url: [host: host, scheme: "https", port: 443],
     http: [
       port: String.to_integer(System.get_env("HTTP_PORT", "8000"))
     ]
