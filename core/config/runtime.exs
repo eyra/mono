@@ -35,13 +35,14 @@ if config_env() == :prod do
          centerdata: Systems.DataDonation.CenterdataStorageBackend
 
   # MAILGUN
+
   if mailgun_api_key = System.get_env("MAILGUN_API_KEY") do
     config :core, Systems.Email.Mailer,
       adapter: Bamboo.MailgunAdapter,
       base_uri: "https://api.eu.mailgun.net/v2",
       api_key: mailgun_api_key,
       domain: host,
-      default_from_email: "no-reply@#{host}",
+      default_from_email: "no-reply@eyra.co",
       hackney_opts: [recv_timeout: :timer.minutes(1)]
   end
 
@@ -57,7 +58,7 @@ if config_env() == :prod do
     config :core, Systems.Email.Mailer,
       adapter: Bamboo.SesAdapter,
       domain: host,
-      default_from_email: "no-reply@#{host}"
+      default_from_email: "no-reply@eyra.co"
   end
 
   if secret_access_key = System.get_env("AWS_SECRET_ACCESS_KEY") do
