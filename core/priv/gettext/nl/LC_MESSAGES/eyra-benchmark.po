@@ -139,7 +139,7 @@ msgstr "Volg de volgende stappen ter voorbereiding van je deelname."
 
 #, elixir-autogen, elixir-format
 msgid "preparation.template.title"
-msgstr "Fork en clone de voorbeeld repository en volg de aanwijzigingen zoals beschreven in de README"
+msgstr "Fork en clone de voorbeeld repository en volg de aanwijzigingen zoals beschreven."
 
 #, elixir-autogen, elixir-format
 msgid "preparation.title"
