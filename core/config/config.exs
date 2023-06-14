@@ -73,7 +73,7 @@ config :core, Core.ImageCatalog.Unsplash,
   access_key: "",
   app_name: "Core"
 
-config :core, Systems.DataDonation.S3StorageBackend, bucket: "port"
+config :core, :s3, bucket: "port"
 
 config :core, CoreWeb.Endpoint,
   url: [host: "localhost"],

@@ -49,7 +49,7 @@ if config_env() == :prod do
   # AWS
 
   if bucket = System.get_env("AWS_S3_BUCKET") do
-    config :core, Systems.DataDonation.S3StorageBackend, bucket: bucket
+    config :core, :s3, bucket: bucket
   end
 
   if aws_access_key_id = System.get_env("AWS_ACCESS_KEY_ID") do

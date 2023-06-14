@@ -22,7 +22,7 @@ defmodule Systems.Benchmark.ToolPageBuilder do
 
     {:ok, presigned_data_set} =
       ExAws.Config.new(:s3)
-      |> S3.presigned_url(:get, "eyra-rank", data_set, [])
+      |> S3.presigned_url(:get, bucket(), data_set, [])
 
     dataset_button =
       if active? do
@@ -69,6 +69,12 @@ defmodule Systems.Benchmark.ToolPageBuilder do
       spot_form: spot_form,
       submission_list_form: submission_list_form
     }
+  end
+
+  defp bucket do
+    :core
+    |> Application.fetch_env!(:s3)
+    |> Keyword.fetch!(:bucket)
   end
 
   defp highlights(tool) do

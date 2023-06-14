@@ -15,7 +15,7 @@ defmodule Systems.DataDonation.S3StorageBackend do
 
   defp bucket do
     :core
-    |> Application.fetch_env!(__MODULE__)
+    |> Application.fetch_env!(:s3)
     |> Keyword.fetch!(:bucket)
   end
 
