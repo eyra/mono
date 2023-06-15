@@ -58,7 +58,7 @@ if config_env() == :prod do
     config :core, Systems.Email.Mailer,
       adapter: Bamboo.SesAdapter,
       domain: host,
-      default_from_email: {"Eyra", "no-reply@eyra.co>"}
+      default_from_email: {"Eyra", "no-reply@eyra.co"}
   end
 
   if secret_access_key = System.get_env("AWS_SECRET_ACCESS_KEY") do
