@@ -154,13 +154,15 @@ defmodule Systems.Project.OverviewPage do
 
   @impl true
   def handle_event("create_project", _params, %{assigns: %{current_user: user}} = socket) do
-    name = dgettext("eyra-project", "default.project.name")
-    {:ok, %{project: %{root: root}}} = Project.Assembly.create(name, user, :benchmark)
+    popup = %{
+      module: Project.CreatePopup,
+      target: self(),
+      user: user
+    }
 
     {
       :noreply,
-      socket
-      |> push_redirect(to: ~p"/project/node/#{root.id}")
+      socket |> assign(popup: popup)
     }
   end
 

@@ -72,10 +72,6 @@ msgid "add.new.button.short"
 msgstr "Start"
 
 #, elixir-autogen, elixir-format
-msgid "default.project.name"
-msgstr "Nieuw project"
-
-#, elixir-autogen, elixir-format
 msgid "overview.empty.description"
 msgstr ""
 
@@ -186,3 +182,19 @@ msgstr "Offline"
 #, elixir-autogen, elixir-format
 msgid "label.online"
 msgstr "Online"
+
+#, elixir-autogen, elixir-format
+msgid "create.proceed.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "template.selector.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "default.name"
+msgstr "Nieuw project"
