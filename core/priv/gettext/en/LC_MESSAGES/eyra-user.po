@@ -12,7 +12,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "confirm.token.email.label"
-msgstr ""
+msgstr "Email"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.email.label"
