@@ -65,13 +65,14 @@ defmodule CoreWeb.User.ConfirmToken do
          put_flash(
            socket,
            :info,
-           "If your email is in our system and it has not been confirmed yet, " <>
-             "you will receive an email with instructions shortly."
+           dgettext("eyra-user", "confirm.token.flash")
          )}
 
       changeset ->
         {:noreply,
-         socket |> assign(changeset: changeset) |> put_flash(:error, "Invalid email address")}
+         socket
+         |> assign(changeset: changeset)
+         |> put_flash(:error, dgettext("eyra-user", "Invalid email"))}
     end
   end
 

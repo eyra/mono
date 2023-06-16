@@ -95,8 +95,7 @@ defmodule Systems.Assignment.LandingPage do
       ) do
     Assignment.Public.cancel(id, user)
 
-    {:noreply,
-     push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))}
+    {:noreply, push_redirect(socket, to: Accounts.start_page_path(user))}
   end
 
   @impl true
@@ -124,10 +123,6 @@ defmodule Systems.Assignment.LandingPage do
   defp grid_cols(2), do: "grid-cols-1 sm:grid-cols-2"
   defp grid_cols(_), do: "grid-cols-1 sm:grid-cols-3"
 
-  # data(model, :map)
-  # data(task, :map)
-  # data(tool_view_model, :map)
-  # data(experiment, :map)
   @impl true
   def render(assigns) do
     ~H"""
@@ -147,9 +142,7 @@ defmodule Systems.Assignment.LandingPage do
 
         <div class={"grid gap-6 sm:gap-8 #{grid_cols(Enum.count(@vm.highlights))}"}>
           <%= for highlight <- @vm.highlights do %>
-            <div class="bg-grey5 rounded">
-              <Card.highlight title={highlight.title} text={highlight.text} />
-            </div>
+            <Card.highlight {highlight} />
           <% end %>
         </div>
         <.spacing value="L" />

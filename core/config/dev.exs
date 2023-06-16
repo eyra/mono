@@ -82,7 +82,7 @@ config :core,
        :admins,
        ["e.vanderveen@eyra.co"]
 
-config :core, Systems.DataDonation.S3StorageBackend, bucket: "eylixir"
+config :core, :s3, bucket: "eylixir"
 
 config :core,
        :data_donation_storage_backend,

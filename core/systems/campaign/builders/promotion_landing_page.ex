@@ -15,12 +15,11 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
 
   def view_model(
         %Campaign.Model{} = campaign,
-        assigns,
-        url_resolver
+        assigns
       ) do
     campaign
     |> Campaign.Model.flatten()
-    |> view_model(assigns, url_resolver)
+    |> view_model(assigns)
   end
 
   def view_model(
@@ -34,8 +33,7 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
               assignable_experiment: experiment
             } = assignment
         },
-        _assigns,
-        _url_resolver
+        _assigns
       ) do
     %{
       id: id,

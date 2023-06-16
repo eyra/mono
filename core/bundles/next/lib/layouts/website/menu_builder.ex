@@ -1,7 +1,7 @@
 defmodule Next.Layouts.Website.MenuBuilder do
   @home_flags [
     desktop_navbar: [:wide],
-    mobile_menu: [:wide]
+    mobile_menu: [:narrow]
   ]
 
   @item_flags [
@@ -18,12 +18,12 @@ defmodule Next.Layouts.Website.MenuBuilder do
     mobile_navbar: [:menu]
   ]
 
-  use CoreWeb.Menu.Builder, home: :eyra
+  use CoreWeb.Menu.Builder, home: :next
   alias Core.Authorization
 
   @impl true
-  def can_access?(user, :console), do: Authorization.can_access?(user, Link.Console.Page)
-
-  @impl true
-  def can_access?(_user, _id), do: true
+  def include_map(user),
+    do: %{
+      console: Authorization.can_access?(user, Link.Console.Page)
+    }
 end

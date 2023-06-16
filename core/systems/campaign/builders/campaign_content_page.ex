@@ -1,4 +1,5 @@
 defmodule Systems.Campaign.Builders.CampaignContentPage do
+  use CoreWeb, :verified_routes
   import CoreWeb.Gettext
 
   alias Systems.{
@@ -13,12 +14,11 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
 
   def view_model(
         %Campaign.Model{} = campaign,
-        assigns,
-        url_resolver
+        assigns
       ) do
     campaign
     |> Campaign.Model.flatten()
-    |> view_model(assigns, url_resolver)
+    |> view_model(assigns)
   end
 
   def view_model(
@@ -36,16 +36,13 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
           uri_origin: uri_origin,
           submit_clicked: submit_clicked,
           locale: locale
-        },
-        url_resolver
+        }
       ) do
     submitted? = Pool.SubmissionModel.submitted?(submission)
     show_errors = submit_clicked or submitted?
 
     tabs = create_tabs(campaign, show_errors, user, uri_origin, locale)
-
-    preview_path =
-      url_resolver.(Promotion.LandingPage, id: promotion_id, preview: true, back: uri_path)
+    preview_path = ~p"/promotion/#{promotion_id}?preview=true&back=#{uri_path}"
 
     %{
       id: campaign_id,

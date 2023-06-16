@@ -79,11 +79,12 @@ defmodule Frameworks.Pixel.Text do
   end
 
   attr(:color, :string, default: "text-grey1")
+  attr(:margin, :string, default: "lg:mb-9")
   slot(:inner_block, required: true)
 
   def intro(assigns) do
     ~H"""
-    <div class={"text-intro lg:text-introdesktop font-intro lg:mb-9 #{@color}"}>
+    <div class={"text-intro lg:text-introdesktop font-intro #{@margin} #{@color}"}>
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -135,7 +136,7 @@ defmodule Frameworks.Pixel.Text do
   end
 
   attr(:color, :string, default: "text-grey1")
-  attr(:margin, :string, default: "mb-6 md:mb-8 lg:mb-10")
+  attr(:margin, :string, default: "mb-5 md:mb-7 lg:mb-9")
   slot(:inner_block, required: true)
 
   def title2(assigns) do

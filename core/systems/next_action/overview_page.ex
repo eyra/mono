@@ -6,7 +6,10 @@ defmodule Systems.NextAction.OverviewPage do
   use CoreWeb.Layouts.Workspace.Component, :todo
 
   import CoreWeb.Layouts.Workspace.Component
-  alias Systems.NextAction
+
+  alias Systems.{
+    NextAction
+  }
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
     model = %{
@@ -28,7 +31,7 @@ defmodule Systems.NextAction.OverviewPage do
     assign(
       socket,
       :next_actions,
-      NextAction.Public.list_next_actions(url_resolver(socket), user)
+      NextAction.Public.list_next_actions(user)
     )
   end
 

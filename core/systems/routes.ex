@@ -14,6 +14,7 @@ defmodule Systems.Routes do
         :pool,
         :lab,
         :data_donation,
+        :benchmark,
         :budget
       ]
     end

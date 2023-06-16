@@ -8,9 +8,9 @@ config :core,
   stripped_menu_builder: Link.Layouts.Stripped.MenuBuilder
 
 config :core, CoreWeb.UserAuth,
-  researcher_signed_in_page: Link.Console.Page,
-  participant_signed_in_page: Link.Console.Page,
-  participant_onboarding_page: Link.Onboarding.WizardPage
+  researcher_signed_in_page: "/console",
+  participant_signed_in_page: "/console",
+  participant_onboarding_page: "/onboarding"
 
 config :core, :features,
   sign_in_with_apple: false,

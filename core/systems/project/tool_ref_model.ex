@@ -4,10 +4,20 @@ defmodule Systems.Project.ToolRefModel do
 
   import Ecto.Changeset
 
+  alias Systems.{
+    Project,
+    Survey,
+    Lab,
+    DataDonation,
+    Benchmark
+  }
+
   schema "tool_refs" do
-    belongs_to(:survey_tool, Systems.Survey.ToolModel)
-    belongs_to(:lab_tool, Systems.Lab.ToolModel)
-    belongs_to(:data_donation_tool, Systems.DataDonation.ToolModel)
+    has_one(:item, Project.ItemModel, foreign_key: :tool_ref_id)
+    belongs_to(:survey_tool, Survey.ToolModel)
+    belongs_to(:lab_tool, Lab.ToolModel)
+    belongs_to(:data_donation_tool, DataDonation.ToolModel)
+    belongs_to(:benchmark_tool, Benchmark.ToolModel)
     timestamps()
   end
 
@@ -21,15 +31,21 @@ defmodule Systems.Project.ToolRefModel do
     |> validate_required(@required_fields)
   end
 
-  def preload_graph(:full),
+  def preload_graph(:down),
     do:
       preload_graph([
         :survey_tool,
         :lab_tool,
-        :data_donation_tool
+        :data_donation_tool,
+        :benchmark_tool
       ])
 
-  def preload_graph(:survey_tool), do: [sursurvey_toolvey: []]
-  def preload_graph(:lab_tool), do: [lab_tool: [:time_slots]]
-  def preload_graph(:data_donation_tool), do: [data_donation_tool: []]
+  def preload_graph(:survey_tool), do: [survey_tool: Survey.ToolModel.preload_graph(:full)]
+  def preload_graph(:lab_tool), do: [lab_tool: Lab.ToolModel.preload_graph(:full)]
+
+  def preload_graph(:data_donation_tool),
+    do: [data_donation_tool: DataDonation.ToolModel.preload_graph(:full)]
+
+  def preload_graph(:benchmark_tool),
+    do: [benchmark_tool: Benchmark.ToolModel.preload_graph(:down)]
 end

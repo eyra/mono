@@ -1,0 +1,162 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr "Challenge"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.leaderboards"
+msgstr "Ranglijsten"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.leaderboards.forward"
+msgstr "Ranglijsten"
+
+#, elixir-autogen, elixir-format
+msgid "form.data_set.label"
+msgstr "Data set (url)"
+
+#, elixir-autogen, elixir-format
+msgid "form.deadline.label"
+msgstr "Streefdatum"
+
+#, elixir-autogen, elixir-format
+msgid "form.expectations.label"
+msgstr "Verwachtingen"
+
+#, elixir-autogen, elixir-format
+msgid "form.title.label"
+msgstr "Titel"
+
+#, elixir-autogen, elixir-format
+msgid "tool.page.title"
+msgstr "Challenge"
+
+#, elixir-autogen, elixir-format
+msgid "submission.form.title"
+msgstr "Dien methode in"
+
+#, elixir-autogen, elixir-format
+msgid "expectations.title"
+msgstr "Beschrijving"
+
+#, elixir-autogen, elixir-format
+msgid "submissions.intro"
+msgstr "Als de challenge open is, kun je hieronder methodes indienen. Deze worden toegepast op de holdout data en toegevoegd aan het scoreboard."
+
+#, elixir-autogen, elixir-format
+msgid "submissions.subhead.active"
+msgstr "Let op, je kan maximaal drie methodes indienen."
+
+#, elixir-autogen, elixir-format
+msgid "submissions.title"
+msgstr "Indienen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "expectations.subhead"
+msgstr " Let op, alleen de hoogst scorende methodes worden getoond op het publieke scoreboard op het platform."
+
+#, elixir-autogen, elixir-format
+msgid "highlight.deadline.title"
+msgstr "Dagen tot deadline"
+
+#, elixir-autogen, elixir-format
+msgid "highlight.spots.title"
+msgstr "Aantal teams"
+
+#, elixir-autogen, elixir-format
+msgid "highlight.submissions.title"
+msgstr "Aantal ingediend"
+
+#, elixir-autogen, elixir-format
+msgid "1 day"
+msgid_plural "%{count} days"
+msgstr[0] "%{count} dag"
+msgstr[1] "%{count} dagen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.form.url.label"
+msgstr "Github commit url"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.form.description.label"
+msgstr "Omschrijving"
+
+#, elixir-autogen, elixir-format
+msgid "add.submission.button"
+msgstr "Voeg methode toe"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.form.submit.button"
+msgstr "Dien methode in"
+
+#, elixir-autogen, elixir-format
+msgid "invalid.github.commit.url.message"
+msgstr "Voer een geldige Github commit url in"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submissions.subhead.inactive"
+msgstr "Gesloten: Het is niet meer mogelijk om methodes in te dienen of aan te passen."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "1 submission"
+msgid_plural "%{count} submissions"
+msgstr[0] "1 methode"
+msgstr[1] "%{count} methodes"
+
+#, elixir-autogen, elixir-format
+msgid "1 team"
+msgid_plural "%{count} teams"
+msgstr[0] "1 team"
+msgstr[1] "%{count} teams"
+
+#, elixir-autogen, elixir-format
+msgid "spot.form.title"
+msgstr "Team"
+
+#, elixir-autogen, elixir-format
+msgid "form.template_repo.label"
+msgstr "Github repository"
+
+#, elixir-autogen, elixir-format
+msgid "preparation.dataset.title"
+msgstr "Download de voorbeeld data om jouw methode te trainen"
+
+#, elixir-autogen, elixir-format
+msgid "preparation.description"
+msgstr "Voordat je jouw methode indient volg je de stappen hieronder."
+
+#, elixir-autogen, elixir-format
+msgid "preparation.template.title"
+msgstr "Fork and clone de voorbeeld repository en volg de instructies voor het indienen."
+
+#, elixir-autogen, elixir-format
+msgid "preparation.title"
+msgstr "Voorbereiding"
+
+#, elixir-autogen, elixir-format
+msgid "dataset.button"
+msgstr "Download data"
+
+#, elixir-autogen, elixir-format
+msgid "template.button"
+msgstr "Github voorbeeld repository"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "spot.form.description"
+msgstr "Geef een team naam op die op het scoreboard bij jouw ingediende methodes komt te staan."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "spot.form.name"
+msgstr "Naam"

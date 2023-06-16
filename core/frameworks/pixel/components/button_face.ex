@@ -3,6 +3,17 @@ defmodule Frameworks.Pixel.Button.Face do
 
   alias Frameworks.Pixel.Icon
 
+  attr(:text, :string, required: true)
+  attr(:font, :string, default: "text-link font-link")
+
+  def link(assigns) do
+    ~H"""
+    <div class="text-primary underline cursor-pointer zfocus:outline-none">
+      <%= @text %>
+    </div>
+    """
+  end
+
   def icon_name(%{icon: icon, color: nil}), do: "#{icon}"
   def icon_name(%{icon: icon, color: color}), do: "#{icon}_#{color}"
   def icon_name(%{icon: icon}), do: "#{icon}"

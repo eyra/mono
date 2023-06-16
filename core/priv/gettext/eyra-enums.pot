@@ -317,3 +317,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "platforms.youtube"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "organisation_types.team"
+msgstr ""

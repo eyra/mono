@@ -68,26 +68,25 @@ defmodule Frameworks.Pixel.Button do
     """
   end
 
+  defp face_function(:primary, nil), do: &Face.primary/1
+  defp face_function(:primary, _icon), do: &Face.primary_icon/1
+  defp face_function(:secondary, _), do: &Face.secondary/1
+  defp face_function(:label, nil), do: &Face.label/1
+  defp face_function(:label, _icon), do: &Face.label_icon/1
+  defp face_function(:forward, _), do: &Face.plain/1
+  defp face_function(:plain, nil), do: &Face.plain/1
+  defp face_function(:plain, _icon), do: &Face.plain_icon/1
+  defp face_function(:menu_home, _), do: &Face.menu_home/1
+  defp face_function(:menu_item, _), do: &Face.menu_item/1
+  defp face_function(:link, _), do: &Face.link/1
+  defp face_function(_, icon) when not is_nil(icon), do: &Face.icon/1
+  defp face_function(_, _), do: &Face.primary/1
+
   attr(:type, :atom, required: true)
   attr(:icon, :any, default: nil)
 
   def face(%{type: type, icon: icon} = assigns) do
-    function =
-      case {type, icon} do
-        {:primary, icon} when not is_nil(icon) -> &Face.primary_icon/1
-        {:primary, _} -> &Face.primary/1
-        {:secondary, _} -> &Face.secondary/1
-        {:label, icon} when not is_nil(icon) -> &Face.label_icon/1
-        {:label, _} -> &Face.label/1
-        {:forward, _} -> &Face.plain/1
-        {:plain, icon} when not is_nil(icon) -> &Face.plain_icon/1
-        {:plain, _} -> &Face.plain/1
-        {:menu_home, _} -> &Face.menu_home/1
-        {:menu_item, _} -> &Face.menu_item/1
-        {_, icon} when not is_nil(icon) -> &Face.icon/1
-        _ -> &Face.primary/1
-      end
-
+    function = face_function(type, icon)
     assigns = assign(assigns, %{function: function})
 
     ~H"""
@@ -160,20 +159,6 @@ defmodule Frameworks.Pixel.Button do
           </div>
         </div>
       </div>
-    </a>
-    """
-  end
-
-  attr(:path, :string, required: true)
-  attr(:label, :string, required: true)
-
-  def link(assigns) do
-    ~H"""
-    <a
-      href={@path}
-      class="text-primary text-link font-link hover:text-black underline focus:outline-none"
-    >
-      <%= @label %>
     </a>
     """
   end

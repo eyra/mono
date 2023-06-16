@@ -2,8 +2,6 @@ defmodule Link.User.SessionController do
   use CoreWeb, :controller
   import CoreWeb.Gettext
 
-  alias CoreWeb.Meta
-
   plug(:setup_sign_in_with_apple, :core when action != :delete)
 
   defp setup_sign_in_with_apple(conn, otp_app) do
@@ -39,22 +37,13 @@ defmodule Link.User.SessionController do
     end
   end
 
-  defp render_new(%{request_path: request_path} = conn) do
-    logo = CoreWeb.Endpoint.static_path("/images/icons/#{Meta.bundle(conn)}.svg")
-    title = Meta.bundle_title()
-
-    conn
-    |> init_tabs()
-    |> render(:new, bundle_logo: logo, bundle_title: title, request_path: request_path)
+  defp render_new(conn) do
+    redirect(conn, to: ~p"/user/signin")
   end
 
   def delete(conn, _params) do
     conn
-    |> put_flash(:info, "Logged out successfully.")
+    |> put_flash(:info, dgettext("eyra-user", "Signed out successfully"))
     |> CoreWeb.UserAuth.log_out_user()
-  end
-
-  defp init_tabs(conn) do
-    assign(conn, :tabs, [])
   end
 end

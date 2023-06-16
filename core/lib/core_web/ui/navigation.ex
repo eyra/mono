@@ -18,7 +18,7 @@ defmodule CoreWeb.UI.Navigation do
       <Align.horizontal_center>
         <%= if @home do %>
           <div class="flex-wrap">
-            <div class="ml-6 md:ml-0 mr-8">
+            <div class="mr-8">
               <Menu.item {@home} />
             </div>
           </div>
@@ -170,9 +170,21 @@ defmodule CoreWeb.UI.Navigation do
   attr(:primary, :map, default: nil)
   attr(:secondary, :map, default: nil)
 
+  def desktop_navbar(assigns) do
+    ~H"""
+    <div class="bg-grey5 w-full pr-6">
+      <.navbar {assigns} />
+    </div>
+    """
+  end
+
+  attr(:home, :map, default: nil)
+  attr(:primary, :map, default: nil)
+  attr(:secondary, :map, default: nil)
+
   def mobile_navbar(assigns) do
     ~H"""
-    <div class="bg-grey5 md:hidden">
+    <div class="md:hidden bg-grey5 w-full pl-6 pr-6">
       <.navbar {assigns} />
     </div>
     """

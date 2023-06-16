@@ -3,7 +3,7 @@ defmodule Port.StartPages do
 
   def pages(),
     do: %{
-      projects: %{id: :projects, target: Systems.Project.OverviewPage, domain: "eyra-ui"}
+      projects: %{id: :projects, path: "/project", domain: "eyra-ui"}
     }
 
   @impl true

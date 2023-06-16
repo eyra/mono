@@ -5,8 +5,7 @@ defmodule Systems.Project.Model do
   import Ecto.Changeset
 
   alias Systems.{
-    Project,
-    DataDonation
+    Project
   }
 
   schema "projects" do
@@ -33,15 +32,7 @@ defmodule Systems.Project.Model do
         :auth_node
       ])
 
-  def preload_graph(:root),
-    do: [
-      root: [
-        :children,
-        :auth_node,
-        items: [tool_ref: Project.ToolRefModel.preload_graph(:data_donation_tool)]
-      ]
-    ]
-
+  def preload_graph(:root), do: [root: Project.NodeModel.preload_graph(:down)]
   def preload_graph(:auth_node), do: [auth_node: []]
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
@@ -49,7 +40,9 @@ defmodule Systems.Project.Model do
   end
 
   defimpl Frameworks.Utility.ViewModelBuilder do
-    def view_model(%Project.Model{} = project, page, user, _url_resolver) do
+    use CoreWeb, :verified_routes
+
+    def view_model(%Project.Model{} = project, page, %{current_user: user}) do
       vm(project, page, user)
     end
 
@@ -58,39 +51,55 @@ defmodule Systems.Project.Model do
              id: id,
              name: name,
              root: %{
-               items: [
-                 %{
-                   tool_ref: %{
-                     data_donation_tool: %{
-                       subject_count: subject_count,
-                       platforms: platforms
-                     }
-                   }
-                 }
-               ]
+               id: root_node_id,
+               items: items
              }
            },
            {Project.OverviewPage, :card},
            _user
          ) do
-      tags = get_card_tags(platforms)
+      path = ~p"/project/node/#{root_node_id}"
+
+      share = %{
+        action: %{type: :send, event: "share", item: id},
+        face: %{type: :label, label: "Share", wrap: true}
+      }
+
+      edit = %{
+        action: %{type: :send, event: "edit", item: id},
+        face: %{type: :label, label: "Edit", wrap: true}
+      }
+
+      delete = %{
+        action: %{type: :send, event: "delete", item: id},
+        face: %{type: :icon, icon: :delete}
+      }
+
+      info = [info(items)]
+
+      tags =
+        items
+        |> Enum.map(&tag/1)
+        |> Enum.uniq()
 
       %{
         type: :secondary,
         id: id,
-        label: %{type: :warning, text: "Concept"},
+        path: path,
+        label: nil,
         title: name,
         tags: tags,
-        info: ["#{subject_count} participants | 0 donations"],
-        right_actions: [],
-        left_actions: []
+        info: info,
+        left_actions: [edit, share],
+        right_actions: [delete]
       }
     end
 
-    defp get_card_tags(nil), do: []
+    defp tag(%{tool_ref: %{data_donation_tool: %{id: _id}}}), do: "Data Donation"
+    defp tag(%{tool_ref: %{benchmark_tool: %{id: _id}}}), do: "Benchmark"
+    defp tag(_), do: nil
 
-    defp get_card_tags(platforms) do
-      Enum.map(platforms, &DataDonation.Platforms.translate(&1))
-    end
+    defp info([_item]), do: "1 item"
+    defp info(items) when is_list(items), do: "#{Enum.count(items)} items"
   end
 end

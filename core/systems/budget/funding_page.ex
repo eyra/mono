@@ -61,19 +61,17 @@ defmodule Systems.Budget.FundingPage do
     socket |> assign(campaign_items: [])
   end
 
-  defp update_campaigns(
-         %{assigns: %{current_user: user, selected_budget: selected_budget}} = socket
-       ) do
+  defp update_campaigns(%{assigns: %{selected_budget: selected_budget} = assigns} = socket) do
     campaign_items =
       selected_budget
       |> Campaign.Public.list_by_budget(Campaign.Model.preload_graph(:full))
-      |> Enum.map(&to_content_list_item(&1, user, url_resolver(socket)))
+      |> Enum.map(&to_content_list_item(&1, assigns))
 
     socket |> assign(campaign_items: campaign_items)
   end
 
-  defp to_content_list_item(campaign, user, url_resolver) do
-    ViewModelBuilder.view_model(campaign, {__MODULE__, :budget_campaigns}, user, url_resolver)
+  defp to_content_list_item(campaign, assigns) do
+    ViewModelBuilder.view_model(campaign, {__MODULE__, :budget_campaigns}, assigns)
   end
 
   defp update_budgets(%{assigns: %{current_user: user}} = socket) do

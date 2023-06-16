@@ -2,12 +2,10 @@ defmodule Systems.Project.CardView do
   use CoreWeb, :html
 
   import Frameworks.Pixel.Tag
-  alias Frameworks.Pixel.ClickableCard
+  import Frameworks.Pixel.ClickableCard
   alias Frameworks.Pixel.Card
 
   attr(:card, :map, required: true)
-  attr(:click_event_name, :string, default: "handle_click")
-  attr(:click_event_data, :map)
 
   def dynamic(%{card: card} = assigns) do
     assigns =
@@ -24,9 +22,7 @@ defmodule Systems.Project.CardView do
       <.function_component
         function={@function}
         props={%{
-          card: @card,
-          click_event_name: @click_event_name,
-          click_event_data: @click_event_data
+          card: @card
         }}
       />
     </div>
@@ -34,22 +30,14 @@ defmodule Systems.Project.CardView do
   end
 
   attr(:card, :any, required: true)
-  attr(:click_event_name, :string, default: "handle_click")
-  attr(:click_event_data, :map)
 
   def primary(assigns) do
     ~H"""
-    <.basic
-      {@card}
-      click_event_data={@click_event_data}
-      click_event_name={@click_event_name}
-    />
+    <.basic {@card} />
     """
   end
 
   attr(:card, :any, required: true)
-  attr(:click_event_name, :string, default: "handle_click")
-  attr(:click_event_data, :map)
 
   def secondary(assigns) do
     ~H"""
@@ -61,8 +49,6 @@ defmodule Systems.Project.CardView do
       tag_type="primary"
       info1_color="text-grey1"
       info2_color="text-grey2"
-      click_event_data={@click_event_data}
-      click_event_name={@click_event_name}
     />
     """
   end
@@ -78,28 +64,25 @@ defmodule Systems.Project.CardView do
   attr(:tag_type, :string, default: "grey2")
   attr(:info1_color, :string, default: "text-tertiary")
   attr(:info2_color, :string, default: "text-white")
-  attr(:click_event_name, :string, default: "handle_click")
-  attr(:click_event_data, :map)
   attr(:left_actions, :list, default: nil)
   attr(:right_actions, :list, default: nil)
 
   def basic(assigns) do
     ~H"""
     <div class="h-full">
-      <.live_component
-        module={ClickableCard}
+      <.clickable_card
         bg_color={@bg_color}
         id={@id}
-        click_event_name={@click_event_name}
-        click_event_data={@click_event_data}
         left_actions={@left_actions}
         right_actions={@right_actions}
       >
         <:top>
+          <%= if @label do %>
           <div>
             <.spacing value="S" />
             <Card.label {@label} />
           </div>
+          <% end %>
         </:top>
 
         <:title>
@@ -122,14 +105,14 @@ defmodule Systems.Project.CardView do
 
             <%= if Enum.count(@info) > 0 do %>
               <Text.sub_head color={@info1_color}>
-                <%= @info |> List.first() %>
+                <span class="whitespace-pre-wrap"><%= @info |> List.first() %></span>
               </Text.sub_head>
             <% end %>
 
           </div>
           <div class="flex-grow" />
         </div>
-      </.live_component>
+      </.clickable_card>
     </div>
     """
   end

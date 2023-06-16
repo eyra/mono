@@ -1,5 +1,5 @@
 defmodule Systems.NextAction.ViewModel do
-  @callback to_view_model(fun(), integer(), map()) :: %{
+  @callback to_view_model(integer(), map()) :: %{
               title: binary(),
               description: binary(),
               cta_label: binary(),

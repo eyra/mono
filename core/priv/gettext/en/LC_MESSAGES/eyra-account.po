@@ -31,14 +31,6 @@ msgid "profile.title"
 msgstr "My profile"
 
 #, elixir-autogen, elixir-format
-msgid "signin.label"
-msgstr "Already an account?"
-
-#, elixir-autogen, elixir-format
-msgid "signin.link"
-msgstr "Sign in here"
-
-#, elixir-autogen, elixir-format
 msgid "signup.button"
 msgstr "Sign up"
 
@@ -48,7 +40,7 @@ msgstr "Sign up"
 
 #, elixir-autogen, elixir-format
 msgid "await.confirmation.title"
-msgstr "Bevestig je registratie"
+msgstr "Activate your account"
 
 #, elixir-autogen, elixir-format
 msgid "confirm.token.resend_button"
@@ -84,7 +76,7 @@ msgstr "Push notifications are deactivated on this browser"
 
 #, elixir-autogen, elixir-format
 msgid "push.registration.label"
-msgstr "Activate to receive notifications from the Panl platform in your browser. After activation, your browser might ask for permission to show notifications."
+msgstr "Activate to receive notifications from the platform in your browser. After activation, your browser might ask for permission to show notifications."
 
 #, elixir-autogen, elixir-format
 msgid "push.registration.pending"
@@ -96,7 +88,7 @@ msgstr "To earn credits for research participation (OP / RPR) for bedrijfskunde 
 
 #, elixir-autogen, elixir-format
 msgid "features.description"
-msgstr "A few studies use specific eligibility requirements. Selecting the optional characteristics below, allows you to participate in studies that specify your characteristics as requirements."
+msgstr "These characteristics are optional, they are currently not used by any application on the platform."
 
 #, elixir-autogen, elixir-format
 msgid "features.dominanthand.title"
@@ -153,3 +145,19 @@ msgstr "https://wiki.surfnet.nl/display/conextsupport/Log+in+SURFconext"
 #, elixir-autogen, elixir-format
 msgid "ehtical.code.label"
 msgstr "Code"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "signin.button"
+msgstr "Sign in"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "signin.title"
+msgstr "Sign in"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "await.confirmation.description"
+msgstr "Your account has been created. You should have received a activation email. Please click the link in the email to activate your account."
+
+#, elixir-autogen, elixir-format
+msgid "account.created.info.flash"
+msgstr "Account created successfully"

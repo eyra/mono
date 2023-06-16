@@ -11,8 +11,24 @@ defmodule Systems.Project.Public do
   }
 
   def get!(id, preload \\ []) do
-    from(c in Project.Model,
-      where: c.id == ^id,
+    from(project in Project.Model,
+      where: project.id == ^id,
+      preload: ^preload
+    )
+    |> Repo.one!()
+  end
+
+  def get_node!(id, preload \\ []) do
+    from(node in Project.NodeModel,
+      where: node.id == ^id,
+      preload: ^preload
+    )
+    |> Repo.one!()
+  end
+
+  def get_item!(id, preload \\ []) do
+    from(item in Project.ItemModel,
+      where: item.id == ^id,
       preload: ^preload
     )
     |> Repo.one!()
@@ -53,7 +69,7 @@ defmodule Systems.Project.Public do
       Authorization.make_node(project_auth_node)
     end)
     |> Multi.insert(:root, fn %{root_auth_node: root_auth_node} ->
-      create_node(%{name: "root", project_path: [0]}, root_auth_node)
+      create_node(%{name: "Project", project_path: [0]}, root_auth_node)
     end)
     |> Multi.insert(:project, fn %{root: root, project_auth_node: project_auth_node} ->
       create(attrs, root, project_auth_node)
@@ -97,7 +113,7 @@ defmodule Systems.Project.Public do
   end
 
   def create_item(
-        %{project_path: _} = attrs,
+        %{name: _name, project_path: _} = attrs,
         %Project.NodeModel{} = node,
         %Project.ToolRefModel{} = tool_ref
       ) do
@@ -137,17 +153,17 @@ defmodule Systems.Project.Public do
     |> Repo.update()
   end
 
-  def add_owner!(%Project.Model{} = study, user) do
-    :ok = Authorization.assign_role(user, study, :owner)
+  def add_owner!(%Project.Model{} = project, user) do
+    :ok = Authorization.assign_role(user, project, :owner)
   end
 
-  def remove_owner!(%Project.Model{} = study, user) do
-    Authorization.remove_role!(user, study, :owner)
+  def remove_owner!(%Project.Model{} = project, user) do
+    Authorization.remove_role!(user, project, :owner)
   end
 
-  def list_owners(%Project.Model{} = study, preload \\ []) do
+  def list_owners(%Project.Model{} = project, preload \\ []) do
     owner_ids =
-      study
+      project
       |> Authorization.list_principals()
       |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
       |> Enum.map(fn %{id: id} -> id end)

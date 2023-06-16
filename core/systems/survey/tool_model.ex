@@ -4,6 +4,8 @@ defmodule Systems.Survey.ToolModel do
   """
   use Ecto.Schema
   use Frameworks.Utility.Model
+  use Frameworks.Utility.Schema
+
   import NimbleParsec
 
   require Core.Enums.Devices
@@ -32,6 +34,14 @@ defmodule Systems.Survey.ToolModel do
 
   @impl true
   def operational_validation(changeset), do: changeset
+
+  def preload_graph(:full),
+    do:
+      preload_graph([
+        :auth_node
+      ])
+
+  def preload_graph(:auth_node), do: [auth_node: []]
 
   def changeset(tool, :auto_save, params) do
     tool

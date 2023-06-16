@@ -1,13 +1,14 @@
 defmodule Systems.Citizen.Pool.SubmissionPageBuilder do
+  use CoreWeb, :verified_routes
+
   import CoreWeb.Gettext
 
   alias Systems.{
     Pool,
-    Campaign,
-    Promotion
+    Campaign
   }
 
-  def view_model(%Pool.SubmissionModel{} = submission, _, url_resolver) do
+  def view_model(%Pool.SubmissionModel{} = submission, _assigns) do
     %{promotion: promotion} =
       campaign = Campaign.Public.get_by_submission(submission, [:promotion])
 
@@ -26,12 +27,12 @@ defmodule Systems.Citizen.Pool.SubmissionPageBuilder do
 
     byline = dgettext("eyra-submission", "byline", timestamp: update_at)
 
-    preview_path = url_resolver.(Promotion.LandingPage, id: promotion.id, preview: true)
+    preview_path = ~p"/promotion/#{promotion.id}?preview=true"
 
     excluded_campaigns =
       Campaign.Public.list_excluded_campaigns([campaign], Campaign.Model.preload_graph(:full))
       |> Enum.map(&Campaign.Model.flatten(&1))
-      |> Enum.map(&Pool.Builders.CampaignItem.view_model(url_resolver, &1))
+      |> Enum.map(&Pool.Builders.CampaignItem.view_model(&1))
 
     %{
       member: member,

@@ -12,20 +12,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, elixir-autogen, elixir-format
-msgid "delete.button"
-msgstr "Verwijder"
-
-#, elixir-autogen, elixir-format
 msgid "preview.button"
 msgstr "Voorbeeld"
-
-#, elixir-autogen, elixir-format
-msgid "retract.button"
-msgstr "Haal offline"
-
-#, elixir-autogen, elixir-format
-msgid "submit.button"
-msgstr "Publiceren"
 
 #, elixir-autogen, elixir-format
 msgid "delete.confirm"
@@ -72,10 +60,6 @@ msgid "tabbar.item.tasks.forward"
 msgstr "Taken"
 
 #, elixir-autogen, elixir-format
-msgid "content.title"
-msgstr "Studie"
-
-#, elixir-autogen, elixir-format
 msgid "add.first.button"
 msgstr "Start je eerste project"
 
@@ -101,7 +85,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "overview.title"
-msgstr "Data Donatie"
+msgstr "Projecten"
 
 #, elixir-autogen, elixir-format
 msgid "share.dialog.content"
@@ -129,4 +113,76 @@ msgstr "Monitor"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "overview.header.title"
-msgstr "Projecten"
+msgstr "Overzicht"
+
+#, elixir-autogen, elixir-format
+msgid "node.items.title"
+msgstr "Items"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "publish.button"
+msgstr "Publiceren"
+
+#, elixir-autogen, elixir-format
+msgid "form.title"
+msgstr "Project instellingen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "node.nodes.title"
+msgstr "Groepen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "add.new.item.button"
+msgstr "Voeg nieuw item toe"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "add.new.item.button.short"
+msgstr "Nieuw item"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "add.new.node.button"
+msgstr "Voeg nieuwe groep toe"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "add.new.node.button.short"
+msgstr "Nieuwe group"
+
+#, elixir-autogen, elixir-format
+msgid "retract.button"
+msgstr "Terugtrekken"
+
+#, elixir-autogen, elixir-format
+msgid "campaign.invite.title"
+msgstr "Nodig mensen uit met een campagne"
+
+#, elixir-autogen, elixir-format
+msgid "direct.invite.description"
+msgstr "Je kan mensen direct uitnodigigen op de onderstaande url."
+
+#, elixir-autogen, elixir-format
+msgid "direct.invite.title"
+msgstr "Nodig mensen uit met een url"
+
+#, elixir-autogen, elixir-format
+msgid "close.button"
+msgstr "Finish"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "open.button"
+msgstr "Resume"
+
+#, elixir-autogen, elixir-format
+msgid "label.concept"
+msgstr "Concept"
+
+#, elixir-autogen, elixir-format
+msgid "label.idle"
+msgstr "Gesloten"
+
+#, elixir-autogen, elixir-format
+msgid "label.offline"
+msgstr "Offline"
+
+#, elixir-autogen, elixir-format
+msgid "label.online"
+msgstr "Online"

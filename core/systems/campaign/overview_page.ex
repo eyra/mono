@@ -34,15 +34,13 @@ defmodule Systems.Campaign.OverviewPage do
     }
   end
 
-  defp update_campaigns(%{assigns: %{current_user: user}} = socket) do
+  defp update_campaigns(%{assigns: %{current_user: user} = assigns} = socket) do
     preload = Campaign.Model.preload_graph(:full)
 
     campaigns =
       user
       |> Campaign.Public.list_owned_campaigns(preload: preload)
-      |> Enum.map(
-        &ViewModelBuilder.view_model(&1, {__MODULE__, :card}, user, url_resolver(socket))
-      )
+      |> Enum.map(&ViewModelBuilder.view_model(&1, {__MODULE__, :card}, assigns))
 
     socket
     |> assign(
@@ -156,6 +154,17 @@ defmodule Systems.Campaign.OverviewPage do
   end
 
   @impl true
+  def handle_event(
+        "card_clicked",
+        %{"item" => card_id},
+        %{assigns: %{campaigns: campaigns}} = socket
+      ) do
+    card_id = String.to_integer(card_id)
+    %{path: path} = Enum.find(campaigns, &(&1.id == card_id))
+    {:noreply, push_redirect(socket, to: path)}
+  end
+
+  @impl true
   def handle_info(
         %{module: Systems.Campaign.CreateForm, action: %{redirect_to: campaign_id}},
         socket
@@ -167,12 +176,6 @@ defmodule Systems.Campaign.OverviewPage do
   @impl true
   def handle_info(%{selector: :cancel}, socket) do
     {:noreply, socket |> assign(selector_dialog: nil)}
-  end
-
-  @impl true
-  def handle_info({:card_click, %{action: :edit, id: id}}, socket) do
-    {:noreply,
-     push_redirect(socket, to: CoreWeb.Router.Helpers.live_path(socket, Campaign.ContentPage, id))}
   end
 
   @impl true
@@ -259,10 +262,7 @@ defmodule Systems.Campaign.OverviewPage do
           <Margin.y id={:title2_bottom} />
           <Grid.dynamic>
             <%= for campaign <- @campaigns do %>
-              <Campaign.CardView.dynamic
-                card={campaign }
-                click_event_data={%{action: :edit, id: campaign.edit_id}}
-              />
+              <Campaign.CardView.dynamic card={campaign} />
             <% end %>
           </Grid.dynamic>
           <.spacing value="L" />

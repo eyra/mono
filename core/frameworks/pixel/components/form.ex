@@ -242,6 +242,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
+  attr(:reserve_error_space, :boolean, default: true)
 
   def url_input(assigns) do
     ~H"""
@@ -251,6 +252,7 @@ defmodule Frameworks.Pixel.Form do
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
+      reserve_error_space={@reserve_error_space}
       type="url"
     />
     """
@@ -261,6 +263,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
+  attr(:reserve_error_space, :boolean, default: true)
 
   def password_input(assigns) do
     ~H"""
@@ -270,6 +273,7 @@ defmodule Frameworks.Pixel.Form do
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
+      reserve_error_space={@reserve_error_space}
       type="password"
     />
     """
@@ -281,7 +285,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
   attr(:disabled, :boolean, default: false)
-  attr(:value, :string)
+  attr(:reserve_error_space, :boolean, default: true)
 
   def date_input(assigns) do
     ~H"""
@@ -291,10 +295,10 @@ defmodule Frameworks.Pixel.Form do
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
+      reserve_error_space={@reserve_error_space}
       type="date"
       disabled={@disabled}
       debounce={""}
-      value={@value}
     />
     """
   end
@@ -304,6 +308,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
+  attr(:reserve_error_space, :boolean, default: true)
 
   def email_input(assigns) do
     ~H"""
@@ -313,6 +318,7 @@ defmodule Frameworks.Pixel.Form do
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
+      reserve_error_space={@reserve_error_space}
       type="email"
     />
     """

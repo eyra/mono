@@ -21,7 +21,7 @@ if config_env() == :prod do
     cache_static_manifest: "priv/static/cache_manifest.json",
     server: true,
     secret_key_base: System.fetch_env!("SECRET_KEY_BASE"),
-    url: [host: host, port: 443],
+    url: [host: host, scheme: "https", port: 443],
     http: [
       port: String.to_integer(System.get_env("HTTP_PORT", "8000"))
     ]
@@ -34,10 +34,22 @@ if config_env() == :prod do
          azure: Systems.DataDonation.AzureStorageBackend,
          centerdata: Systems.DataDonation.CenterdataStorageBackend
 
+  # MAILGUN
+
+  if mailgun_api_key = System.get_env("MAILGUN_API_KEY") do
+    config :core, Systems.Email.Mailer,
+      adapter: Bamboo.MailgunAdapter,
+      base_uri: "https://api.eu.mailgun.net/v2",
+      api_key: mailgun_api_key,
+      domain: host,
+      default_from_email: "Next <no-reply@eyra.co>",
+      hackney_opts: [recv_timeout: :timer.minutes(1)]
+  end
+
   # AWS
 
   if bucket = System.get_env("AWS_S3_BUCKET") do
-    config :core, Systems.DataDonation.S3StorageBackend, bucket: bucket
+    config :core, :s3, bucket: bucket
   end
 
   if aws_access_key_id = System.get_env("AWS_ACCESS_KEY_ID") do
@@ -46,7 +58,7 @@ if config_env() == :prod do
     config :core, Systems.Email.Mailer,
       adapter: Bamboo.SesAdapter,
       domain: host,
-      default_from_email: "no-reply@#{host}"
+      default_from_email: {"Next", "no-reply@eyra.co"}
   end
 
   if secret_access_key = System.get_env("AWS_SECRET_ACCESS_KEY") do
@@ -69,18 +81,6 @@ if config_env() == :prod do
 
   if sas_token = System.get_env("AZURE_SAS_TOKEN") do
     config :core, :azure_storage_backend, sas_token: sas_token
-  end
-
-  # MAILGUN
-
-  if mailgun_api_key = System.get_env("MAILGUN_API_KEY") do
-    config :core, Systems.Email.Mailer,
-      adapter: Bamboo.MailgunAdapter,
-      base_uri: "https://api.eu.mailgun.net/v2",
-      api_key: mailgun_api_key,
-      domain: host,
-      default_from_email: "no-reply@#{host}",
-      hackney_opts: [recv_timeout: :timer.minutes(1)]
   end
 
   config :core, Core.Repo,

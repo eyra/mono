@@ -3,7 +3,7 @@
     <li><%= @current_user.email %></li>
     <li><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></li>
     <li>
-      <%= link "Log out", to: ~p"/user/signout" %>
+      <%= link "Log out", to: ~p"/user/session" %>
     </li>
   <% else %>
     <li>

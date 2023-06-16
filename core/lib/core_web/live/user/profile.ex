@@ -117,7 +117,6 @@ defmodule CoreWeb.User.Profile do
           <Tabbar.container id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} size={@bar_size} type={:segmented} />
         </Navigation.action_bar>
         <Tabbar.content tabs={@tabs} />
-        <Tabbar.footer tabs={@tabs} />
       </div>
     </.workspace>
     """

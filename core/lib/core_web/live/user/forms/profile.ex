@@ -30,12 +30,25 @@ defmodule CoreWeb.User.Forms.Profile do
     profile = Accounts.get_profile(user)
     entity = UserProfileEdit.create(user, profile)
 
+    signout_button = %{
+      action: %{type: :http_delete, to: ~p"/user/session"},
+      face: %{
+        type: :secondary,
+        label: dgettext("eyra-ui", "menu.item.signout"),
+        border_color: "border-delete",
+        text_color: "text-delete"
+      }
+    }
+
     {
       :ok,
       socket
-      |> assign(id: id)
-      |> assign(user: user)
-      |> assign(entity: entity)
+      |> assign(
+        id: id,
+        user: user,
+        entity: entity,
+        signout_button: signout_button
+      )
       |> init_file_uploader(:photo)
       |> update_ui()
     }
@@ -107,6 +120,12 @@ defmodule CoreWeb.User.Forms.Profile do
             <.text_input form={form} field={:title} label_text={dgettext("eyra-account", "professionaltitle.label")} />
           <% end %>
         </.form>
+
+        <.spacing value="S" />
+        <.wrap>
+          <Button.dynamic {@signout_button} />
+        </.wrap>
+
       </Area.form>
       </Area.content>
     </div>

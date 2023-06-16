@@ -32,7 +32,6 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
       :helpdesk,
       :settings,
       :profile,
-      :signout,
       :debug
     ],
     mobile_navbar: [:menu]
@@ -47,19 +46,13 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
   }
 
   @impl true
-  def can_access?(user, :console), do: Authorization.can_access?(user, Link.Console.Page)
-
-  @impl true
-  def can_access?(user, :funding), do: Authorization.can_access?(user, Budget.FundingPage)
-
-  @impl true
-  def can_access?(user, :recruitment), do: is_researcher?(user)
-
-  @impl true
-  def can_access?(user, :pools), do: has_pools?(user)
-
-  @impl true
-  def can_access?(_user, _id), do: true
+  def include_map(user),
+    do: %{
+      console: Authorization.can_access?(user, Link.Console.Page),
+      funding: Authorization.can_access?(user, Budget.FundingPage),
+      recruitment: is_researcher?(user),
+      pools: has_pools?(user)
+    }
 
   defp is_researcher?(user), do: Map.get(user, :researcher, false)
   defp has_pools?(user), do: not Enum.empty?(Pool.Public.list_owned(user))

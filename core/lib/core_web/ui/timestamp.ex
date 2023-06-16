@@ -51,6 +51,10 @@ defmodule CoreWeb.UI.Timestamp do
     |> NaiveDateTime.truncate(:second)
   end
 
+  def days_until(%DateTime{} = date) do
+    Timex.diff(date, now(), :days)
+  end
+
   def one_week_after(date) when is_binary(date) do
     one_week_after(parse_user_input_date(date))
   end

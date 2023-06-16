@@ -12,8 +12,7 @@ defmodule Systems.Budget.WalletViewBuilder do
           id: id,
           identifier: ["wallet", currency, _user_id]
         } = account,
-        user,
-        _url_resolver
+        user
       ) do
     locale = Gettext.get_locale(CoreWeb.Gettext)
     currency = Budget.Public.get_currency_by_name(currency, label_bundle: [:items])

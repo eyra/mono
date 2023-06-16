@@ -16,8 +16,8 @@ defmodule Link.Layouts.Website.MenuBuilder do
   ]
 
   @secondary [
-    desktop_navbar: [:signin, :signout, :language],
-    mobile_menu: [:language, :signin, :signout],
+    desktop_navbar: [:signin, :profile, :language],
+    mobile_menu: [:language, :signin, :profile],
     mobile_navbar: [:menu]
   ]
 
@@ -25,8 +25,8 @@ defmodule Link.Layouts.Website.MenuBuilder do
   alias Core.Authorization
 
   @impl true
-  def can_access?(user, :console), do: Authorization.can_access?(user, Link.Console.Page)
-
-  @impl true
-  def can_access?(_user, _id), do: true
+  def include_map(user),
+    do: %{
+      console: Authorization.can_access?(user, Link.Console.Page)
+    }
 end

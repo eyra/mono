@@ -58,7 +58,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
         |> element("form")
         |> render_submit(%{user: %{email: "a b c d"}})
 
-      assert html =~ "Invalid email address"
+      assert html =~ "Account confirmation link is invalid or it has expired."
     end
 
     test "resend form fakes sending mail when user does not exist", %{conn: conn} do
@@ -69,7 +69,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
         |> element("form")
         |> render_submit(%{user: %{email: Faker.Internet.email()}})
 
-      assert html =~ "you will receive an email"
+      assert html =~ "krijg je spoedig een e-mail met instructies"
       assert Repo.all(Accounts.UserToken) == []
     end
 
@@ -82,7 +82,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
         |> element("form")
         |> render_submit(%{user: %{email: user.email}})
 
-      assert html =~ "you will receive an email"
+      assert html =~ "krijg je spoedig een e-mail met instructies"
       assert Repo.get_by!(Accounts.UserToken, user_id: user.id).context == "confirm"
     end
 
@@ -95,7 +95,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
         |> element("form")
         |> render_submit(%{user: %{email: user.email}})
 
-      assert html =~ "you will receive an email"
+      assert html =~ "krijg je spoedig een e-mail met instructies"
     end
   end
 

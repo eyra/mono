@@ -7,17 +7,20 @@ defmodule CoreWeb.Menu.Builder do
   @type item :: atom()
 
   @callback build_menu(socket, type, active_item) :: menu
-  @callback can_access?(user, item) :: boolean()
+  @callback include_map(user) :: map()
 
   alias Systems.Admin
 
-  def can_access?(user, :admin), do: Admin.Public.admin?(user)
-  def can_access?(user, :support), do: Admin.Public.admin?(user)
-  def can_access?(user, :debug), do: Admin.Public.admin?(user)
-  def can_access?(user, :profile), do: not is_nil(user)
-  def can_access?(user, :signout), do: not is_nil(user)
-  def can_access?(user, :signin), do: is_nil(user)
-  def can_access?(_user, _id), do: false
+  def include_map(user) do
+    %{
+      admin: Admin.Public.admin?(user),
+      support: Admin.Public.admin?(user),
+      debug: Admin.Public.admin?(user),
+      profile: not is_nil(user),
+      signout: not is_nil(user),
+      signin: is_nil(user)
+    }
+  end
 
   defmacro __using__(home: home) do
     quote do
@@ -41,17 +44,15 @@ defmodule CoreWeb.Menu.Builder do
       defp build(assigns, items, builder) do
         user = Map.get(assigns, :current_user)
 
-        items
-        |> Enum.filter(&filter(user, &1))
-        |> Enum.map(&builder.(&1))
-      end
+        include_map =
+          Map.merge(
+            unquote(__MODULE__).include_map(user),
+            include_map(user)
+          )
 
-      defp filter(user, item) do
-        cond do
-          __MODULE__.can_access?(user, item) -> true
-          can_access?(user, item) -> true
-          true -> false
-        end
+        items
+        |> Enum.filter(&Map.get(include_map, &1, true))
+        |> Enum.map(&builder.(&1))
       end
     end
   end
