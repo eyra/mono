@@ -150,10 +150,10 @@ defmodule Systems.Project.ItemModel do
 
     defp get_label(:idle), do: %{type: :idle, text: dgettext("eyra-project", "label.idle")}
 
-    defp get_card_tags(%DataDonation.ToolModel{platforms: platforms}),
+    defp get_card_tags(%DataDonation.ToolModel{platforms: platforms}) when is_list(platforms),
       do: Enum.map(platforms, &DataDonation.Platforms.translate(&1))
 
-    defp get_card_tags(%Benchmark.ToolModel{}), do: ["Benchmark"]
+    defp get_card_tags(%Benchmark.ToolModel{}), do: ["Challenge"]
     defp get_card_tags(_), do: []
   end
 end

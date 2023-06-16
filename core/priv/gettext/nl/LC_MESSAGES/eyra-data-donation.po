@@ -14,110 +14,6 @@ msgstr ""
 msgid "config.nrofsubjects.label"
 msgstr "Aantal gewenste deelnemers"
 
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "file_selection.file_upload.description"
-msgstr "Selecteer bestand"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "file_selection.welcome.description"
-msgstr "Klik op ‘Selecteer bestand’ om het bestand dat u ontvangen hebt van %{platform} te kiezen."
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "submit_data.description"
-msgstr "Hieronder staan de gegevens die uit uw bestand zijn gehaald en waardevol zijn voor het onderzoek. Bekijk de gegevens goed en beslis of u deze wilt doneren. Dit doet u onderaan deze pagina. Alvast hartelijk bedankt!"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "submit_data.title"
-msgstr "Controleren"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "tabbar.item.file_selection"
-msgstr "Uitvoeren"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "tabbar.item.file_selection.forward"
-msgstr "Stap 2"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "tabbar.item.submit_data"
-msgstr "Controleren"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "tabbar.item.submit_data.forward"
-msgstr "Controleren"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "data_extraction.processing.loading"
-msgstr "Verwerken bestand..."
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "file_selection.note"
-msgstr "NB: Het proces om de juiste gegevens uit het bestand te halen gebeurt op uw eigen computer. Er worden nog geen gegevens opgeslagen of verstuurd."
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "tabbar.item.welcome"
-msgstr "Inleiding"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "tabbar.item.welcome.forward"
-msgstr "Inleiding"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "welcome.title"
-msgstr "Inleiding"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "extract.data.button"
-msgstr "Start"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "selected.file.description"
-msgstr "Uw gegevens die nodig zijn uit het volgende bestand te halen:"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "file.extracton.description"
-msgstr "De gegevens die gebruikt kunnen worden voor het onderzoek worden uit uw bestand gehaald. Dit kan even duren, sluit uw browser niet af tijdens dit proces en wacht rustig af. U wordt automatisch naar de volgende stap gestuurd."
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "submit.data.button"
-msgstr "Ja, doneer"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "no.extraction.data.yet.description"
-msgstr "Ga eerst naar stap 2 om data te verzamelen."
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "extract.data.title"
-msgstr "Uitvoeren"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "thanks.title"
-msgstr "Bedankt"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "welcome.description.top"
-msgstr "U kunt zo uw gegevens gaan doneren aan de onderzoekers van het %{recipient}. We leggen u stap voor stap uit hoe u dit doet."
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "welcome.description.bottom"
-msgstr "Bij stap 2 kiest u het gegevenspakket dat u van %{platform} hebt ontvangen. Er worden dan nog geen gegevens opgeslagen of verstuurd. Bij stap 3 kunt u eerst uw gegevens controleren en daarna beslissen of u deze wel of niet wilt doneren aan de onderzoekers van het %{recipient}."
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "decline.data.button"
-msgstr "Nee"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "submit_data.action.label"
-msgstr "Wilt u de gegevens hierboven doneren aan de onderzoekers van het %{recipient}?"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "thanks.whatsapp.description"
-msgstr "Hartelijk bedankt voor uw deelname. Gaat u a.u.b. nu weer verder met de LISS vragenlijst op uw computer of laptop."
-
-#, elixir-autogen, elixir-format
-msgid "execute.spinner"
-msgstr "Een moment geduld"
-
 #, elixir-autogen, elixir-format
 msgid "platforms.title"
 msgstr "Platformen"
@@ -125,3 +21,63 @@ msgstr "Platformen"
 #, elixir-autogen, elixir-format
 msgid "content.title"
 msgstr "Data Donatie"
+
+#, elixir-autogen, elixir-format
+msgid "task.donate.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.donate.title"
+msgstr "Donatie"
+
+#, elixir-autogen, elixir-format
+msgid "task.download.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.download.title"
+msgstr "Downloaden DDP"
+
+#, elixir-autogen, elixir-format
+msgid "task.library.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.library.title"
+msgstr "Bibliotheek"
+
+#, elixir-autogen, elixir-format
+msgid "task.list.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.list.title"
+msgstr "Taken"
+
+#, elixir-autogen, elixir-format
+msgid "task.request.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.request.title"
+msgstr "Aanvragen DDP"
+
+#, elixir-autogen, elixir-format
+msgid "task.survey.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.survey.title"
+msgstr "Vragenlijst"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "task.description.label"
+msgstr "Beschrijving"
+
+#, elixir-autogen, elixir-format
+msgid "task.title.label"
+msgstr "Titel"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "task.list.hint"
+msgstr "Verander volgorde met de pijltjes"

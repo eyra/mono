@@ -112,6 +112,17 @@ defmodule Frameworks.Pixel.Text do
     """
   end
 
+  attr(:color, :string, default: "text-grey2")
+  slot(:inner_block, required: true)
+
+  def hint(assigns) do
+    ~H"""
+    <div class={"text-hint font-hint #{@color}"}>
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
   attr(:color, :string, default: "text-grey1")
   slot(:inner_block, required: true)
 
@@ -136,7 +147,7 @@ defmodule Frameworks.Pixel.Text do
   end
 
   attr(:color, :string, default: "text-grey1")
-  attr(:margin, :string, default: "mb-5 md:mb-7 lg:mb-9")
+  attr(:margin, :string, default: "mb-5 md:mb-6 lg:mb-8")
   slot(:inner_block, required: true)
 
   def title2(assigns) do

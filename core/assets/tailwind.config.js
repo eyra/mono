@@ -153,6 +153,7 @@ module.exports = {
         intro: ["Finador-Medium", "sans-serif"],
         label: ["Finador-Bold", "sans-serif"],
         body: ["Finador-Light", "sans-serif"],
+        hint: ["Finador-LightOblique", "sans-serif"],
       },
       fontSize: {
         title0: ["64px", "68px"],
@@ -178,6 +179,7 @@ module.exports = {
         bodylinklarge: ["24px", "36px"],
         bodylinkmedium: ["30px", "30px"],
         link: ["16px", "24px"],
+        hint: ["20px", "24px"],
       },
       minWidth: {
         "1/2": "50%",

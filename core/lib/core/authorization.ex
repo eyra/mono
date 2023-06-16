@@ -55,7 +55,6 @@ defmodule Core.Authorization do
   grant_access(Systems.DataDonation.Content, [:owner, :coordinator])
   grant_access(Systems.DataDonation.FlowPage, [:visitor, :member])
   grant_access(Systems.DataDonation.PortPage, [:visitor, :member])
-  grant_access(Systems.DataDonation.ThanksWhatsappPage, [:visitor, :member])
   grant_access(Systems.DataDonation.OverviewPage, [:member])
   grant_access(Systems.Project.OverviewPage, [:researcher])
   grant_access(Systems.Project.NodePage, [:researcher, :owner])

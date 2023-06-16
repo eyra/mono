@@ -40,7 +40,7 @@ defmodule Frameworks.Pixel.Button.Face do
     <div class="pt-0 pb-1px active:pt-1px active:pb-0 font-button text-button rounded bg-opacity-0">
       <div class="flex justify-left items-center w-full">
         <div>
-          <img class="mr-3 -mt-2px" src={"/images/icons/#{@icon}.svg"} alt={@label}>
+          <img class="mr-2 -mt-2px" src={"/images/icons/#{@icon}.svg"} alt={@label}>
         </div>
         <div class="h-10">
           <div class="flex flex-col justify-center h-full items-center">
