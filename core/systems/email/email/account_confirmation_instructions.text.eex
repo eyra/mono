@@ -1,4 +1,4 @@
-Activate account
+Activate your account
 
 Thank you for creating an account on Next. You are only one step removed from being able to use the platform.
 Activate your account by clicking on this link <%= @url %>.
