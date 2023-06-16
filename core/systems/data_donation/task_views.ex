@@ -1,7 +1,9 @@
 defmodule Systems.DataDonation.TaskViews do
   use CoreWeb, :html
 
+  alias Systems.DataDonation
   alias Frameworks.Pixel.Panel
+  alias Frameworks.Pixel.Align
 
   attr(:title, :string, required: true)
   attr(:description, :string, required: true)
@@ -41,6 +43,32 @@ defmodule Systems.DataDonation.TaskViews do
           />
         </.wrap>
       </Panel.flat>
+    </div>
+    """
+  end
+
+  defp relative_position(0, _count), do: :top
+  defp relative_position(position, count) when position == count - 1, do: :bottom
+  defp relative_position(_position, _count), do: :middle
+
+  attr(:tasks, :list, required: true)
+  attr(:parent, :map, required: true)
+
+  def list(assigns) do
+    ~H"""
+    <div class="bg-grey5 rounded-2xl p-6 flex flex-col gap-4">
+      <Align.horizontal_center>
+        <Text.hint><%= dgettext("eyra-data-donation", "task.list.hint") %></Text.hint>
+      </Align.horizontal_center>
+      <%= for task <- @tasks do %>
+        <.live_component
+          id={"task-cell-#{task.id}"}
+          module={DataDonation.TaskCell}
+          entity_id={task.id}
+          parent={@parent}
+          relative_position={relative_position(task.position, Enum.count(@tasks))}
+        />
+      <% end %>
     </div>
     """
   end

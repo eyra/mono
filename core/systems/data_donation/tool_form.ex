@@ -26,7 +26,6 @@ defmodule Systems.DataDonation.ToolForm do
         socket
       ) do
     entity = DataDonation.Public.get_tool!(entity_id)
-    donations = DataDonation.Public.list_donations(entity)
     changeset = DataDonation.ToolModel.changeset(entity, %{})
 
     {
@@ -36,8 +35,7 @@ defmodule Systems.DataDonation.ToolForm do
         id: id,
         entity_id: entity_id,
         entity: entity,
-        changeset: changeset,
-        donations: donations
+        changeset: changeset
       )
       |> update_platform_labels()
     }

@@ -30,9 +30,10 @@ defmodule Systems.Project.ContentPageBuilder.ItemDataDonation do
     }
   end
 
-  defp show_errors(%{status: status}, %{publish_clicked: publish_clicked}) do
-    concept? = status == :concept
-    publish_clicked or not concept?
+  defp show_errors(%{status: _status}, %{publish_clicked: _publish_clicked}) do
+    # concept? = status == :concept
+    # publish_clicked or not concept?
+    false
   end
 
   defp action_map(%{id: tool_id}) do
@@ -59,10 +60,15 @@ defmodule Systems.Project.ContentPageBuilder.ItemDataDonation do
     }
   end
 
-  defp actions(%{status: :concept}, %{publish: publish, preview: preview}), do: [publish, preview]
-  defp actions(%{status: :online}, %{retract: retract}), do: [retract]
-  defp actions(%{status: :offline}, %{publish: publish, close: close}), do: [publish, close]
-  defp actions(%{status: :idle}, %{open: open}), do: [open]
+  defp actions(%{status: :online}, %{retract: retract}), do: [retract: retract]
+
+  defp actions(%{status: :offline}, %{publish: publish, close: close}),
+    do: [publish: publish, close: close]
+
+  defp actions(%{status: :idle}, %{open: open}), do: [open: open]
+
+  defp actions(%{status: _concept}, %{publish: publish, preview: preview}),
+    do: [publish: publish, preview: preview]
 
   defp handle_publish(socket) do
     socket
@@ -118,7 +124,7 @@ defmodule Systems.Project.ContentPageBuilder.ItemDataDonation do
 
   defp create_tab(
          :tasks,
-         _item,
+         %{tool_ref: %{data_donation_tool_id: tool_id}},
          show_errors,
          _assigns
        ) do
@@ -133,36 +139,34 @@ defmodule Systems.Project.ContentPageBuilder.ItemDataDonation do
       type: :fullpage,
       live_component: DataDonation.TaskBuilderView,
       props: %{
-        entity: nil,
+        tool_id: tool_id,
         flow: %{
-          title: "Task list",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+          title: dgettext("eyra-data-donation", "task.list.title"),
+          description: dgettext("eyra-data-donation", "task.list.description")
         },
         library: %{
-          title: "Task library",
-          description:
-            "Overview of tasks available to add to your flow lorem ipsum dolor sit amet.",
+          title: dgettext("eyra-data-donation", "task.library.title"),
+          description: dgettext("eyra-data-donation", "task.library.description"),
           items: [
             %{
+              id: :survey,
+              title: dgettext("eyra-data-donation", "task.survey.title"),
+              description: dgettext("eyra-data-donation", "task.survey.description")
+            },
+            %{
               id: :request,
-              title: "Request DDP",
-              description: "Description of the task lorem ipsum dolor sit amet. "
+              title: dgettext("eyra-data-donation", "task.request.title"),
+              description: dgettext("eyra-data-donation", "task.request.description")
             },
             %{
               id: :download,
-              title: "Download DDP",
-              description: "Description of the task lorem ipsum dolor sit amet. "
+              title: dgettext("eyra-data-donation", "task.download.title"),
+              description: dgettext("eyra-data-donation", "task.download.description")
             },
             %{
               id: :donate,
-              title: "Donate",
-              description: "Description of the task lorem ipsum dolor sit amet. "
-            },
-            %{
-              id: :survey,
-              title: "Survey",
-              description: "Description of the task lorem ipsum dolor sit amet. "
+              title: dgettext("eyra-data-donation", "task.donate.title"),
+              description: dgettext("eyra-data-donation", "task.donate.description")
             }
           ]
         }

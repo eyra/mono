@@ -8,7 +8,8 @@ defmodule Core.Repo.Migrations.AddGithubTemplateRepoUrl do
   end
 
   def down do
-    remove(:template_repo)
+    alter table(:benchmark_tools) do
+      remove(:template_repo)
+    end
   end
-
 end

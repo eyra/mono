@@ -5,9 +5,7 @@ export const SidePanel = {
     this.startRect = this.el.getBoundingClientRect();
     this.panel = this.el.getElementsByClassName("panel")[0];
     this.panel.style = `height: 0px;`;
-    this.el.classList.remove("relative");
-    this.el.classList.add("absolute");
-
+    this.make_absolute();
     this.updateFrame();
 
     window.addEventListener("scroll", (event) => {
@@ -18,7 +16,12 @@ export const SidePanel = {
       this.updateFrame();
     });
   },
+  make_absolute() {
+    this.el.classList.remove("relative");
+    this.el.classList.add("absolute");
+  },
   updated() {
+    this.make_absolute();
     this.updateFrame();
   },
 

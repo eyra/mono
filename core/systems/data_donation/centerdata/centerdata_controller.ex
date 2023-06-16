@@ -58,8 +58,9 @@ defmodule Systems.DataDonation.CenterdataController do
     locale in @supported_locales
   end
 
-  defp start_data_donation(opts, conn, id) do
-    path = Routes.live_path(conn, Systems.DataDonation.FlowPage, id, opts)
+  defp start_data_donation(_opts, conn, _id) do
+    # Routes.live_path(conn, Systems.DataDonation.FlowPage, id, opts)
+    path = "/"
     redirect(conn, to: path)
   end
 end
