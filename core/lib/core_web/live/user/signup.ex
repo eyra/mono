@@ -35,7 +35,7 @@ defmodule CoreWeb.User.Signup do
 
         {:noreply,
          socket
-         |> put_flash(:info, "User created successfully.")
+         |> put_flash(:info, dgettext("eyra-user", "account.created.successfully"))
          |> push_redirect(to: Routes.live_path(socket, CoreWeb.User.AwaitConfirmation))}
     end
   end

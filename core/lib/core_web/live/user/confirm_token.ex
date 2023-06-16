@@ -17,7 +17,7 @@ defmodule CoreWeb.User.ConfirmToken do
       {:ok, _} ->
         {:ok,
          socket
-         |> put_flash(:info, "Account confirmed successfully.")
+         |> put_flash(:info, dgettext("eyra-user", "account.activated.successfully"))
          |> redirect(to: ~p"/user/signin")}
 
       _ ->

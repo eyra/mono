@@ -1,10 +1,10 @@
 <h1>Activate account</h1>
 
 Thank you for creating an account on Next. You are only one step removed from being able to use the platform.
-Activate your account by clicking on this link <a href="<%= @url %>">.
-
+Activate your account by clicking on this <<a href="<%= @url %>">link</a>.
+<br /><br />
 If you did not register an account on Next, you can discard this email.
-
+<br /><br />
 Kind regards,
-
+<br /><br />
 The Eyra team

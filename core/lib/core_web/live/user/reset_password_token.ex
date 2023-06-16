@@ -34,7 +34,7 @@ defmodule CoreWeb.User.ResetPasswordToken do
       {:ok, _} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Password reset successfully.")
+         |> put_flash(:info, dgettext("eyra-user", "password.reset.successfully"))
          |> redirect(to: ~p"/user/signin")}
 
       {:error, changeset} ->
