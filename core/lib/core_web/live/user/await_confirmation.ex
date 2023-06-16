@@ -46,7 +46,7 @@ defmodule CoreWeb.User.AwaitConfirmation do
         <Margin.y id={:page_top} />
           <div class="flex flex-col items-center">
             <Text.title2><%= dgettext("eyra-account", "await.confirmation.title") %></Text.title2>
-            <Text.body><%= dgettext("eyra-account", "await.confirmation.description") %></Text.body>
+            <Text.body align="text-center"><%= dgettext("eyra-account", "await.confirmation.description") %></Text.body>
           </div>
         </Area.sheet>
       </div>
