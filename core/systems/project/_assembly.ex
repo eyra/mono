@@ -17,11 +17,17 @@ defmodule Systems.Project.Assembly do
     |> Repo.transaction()
   end
 
+  def create(name, user, :empty) do
+    Multi.new()
+    |> prepare_project(name, user)
+    |> Repo.transaction()
+  end
+
   def create(name, user, :data_donation) do
     Multi.new()
     |> prepare_project(name, user)
     |> prepare_tool_ref(0, :data_donation)
-    |> prepare_item(0, "Data Donation Study")
+    |> prepare_item(0, "Data Donation")
     |> Repo.transaction()
   end
 

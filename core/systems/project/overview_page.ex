@@ -188,6 +188,14 @@ defmodule Systems.Project.OverviewPage do
 
   @impl true
   def handle_info(
+        %{module: Systems.Project.CreatePopup, action: %{redirect_to: node_id}},
+        socket
+      ) do
+    {:noreply, push_redirect(socket, to: ~p"/project/node/#{node_id}")}
+  end
+
+  @impl true
+  def handle_info(
         %{module: Frameworks.Pixel.ShareView, action: %{add: user, content_id: project_id}},
         socket
       ) do

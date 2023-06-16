@@ -17,10 +17,13 @@ defmodule Systems.DataDonation.ToolModel do
   require DataDonation.Platforms
 
   schema "data_donation_tools" do
+    field(:status, Ecto.Enum, values: DataDonation.ToolStatus.values(), default: :concept)
     field(:platforms, {:array, Ecto.Enum}, values: DataDonation.Platforms.schema_values())
     field(:subject_count, :integer, default: 0)
     field(:director, Ecto.Enum, values: [:project])
+
     belongs_to(:auth_node, Core.Authorization.Node)
+    has_many(:tasks, DataDonation.TaskModel, foreign_key: :tool_id)
 
     timestamps()
   end

@@ -188,13 +188,5 @@ msgid "create.proceed.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "template.selector.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "create.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "default.name"
 msgstr ""

@@ -21,3 +21,63 @@ msgstr "Platformen"
 #, elixir-autogen, elixir-format
 msgid "content.title"
 msgstr "Data Donatie"
+
+#, elixir-autogen, elixir-format
+msgid "task.donate.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.donate.title"
+msgstr "Donatie"
+
+#, elixir-autogen, elixir-format
+msgid "task.download.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.download.title"
+msgstr "Downloaden DDP"
+
+#, elixir-autogen, elixir-format
+msgid "task.library.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.library.title"
+msgstr "Bibliotheek"
+
+#, elixir-autogen, elixir-format
+msgid "task.list.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.list.title"
+msgstr "Taken"
+
+#, elixir-autogen, elixir-format
+msgid "task.request.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.request.title"
+msgstr "Aanvragen DDP"
+
+#, elixir-autogen, elixir-format
+msgid "task.survey.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.survey.title"
+msgstr "Vragenlijst"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "task.description.label"
+msgstr "Beschrijving"
+
+#, elixir-autogen, elixir-format
+msgid "task.title.label"
+msgstr "Titel"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "task.list.hint"
+msgstr "Verander volgorde met de pijltjes"

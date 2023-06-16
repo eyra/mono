@@ -4,8 +4,7 @@ defmodule Systems.Project.CreatePopup do
   alias Frameworks.Pixel.Selector
 
   alias Systems.{
-    Project,
-    Director
+    Project
   }
 
   # Handle Tool Type Selector Update
@@ -38,7 +37,7 @@ defmodule Systems.Project.CreatePopup do
   end
 
   defp init_templates(socket) do
-    selected_template = :benchmark
+    selected_template = :empty
     template_labels = Project.Templates.labels(selected_template)
     socket |> assign(template_labels: template_labels, selected_template: selected_template)
   end
@@ -68,8 +67,8 @@ defmodule Systems.Project.CreatePopup do
         _,
         %{assigns: %{selected_template: selected_template}} = socket
       ) do
-    project = create_project(socket, selected_template)
-    {:noreply, socket |> redirect_to(project.id)}
+    {:ok, %{project: %{root: %{id: root_node_id}}}} = create_project(socket, selected_template)
+    {:noreply, socket |> redirect_to(root_node_id)}
   end
 
   @impl true
@@ -88,7 +87,7 @@ defmodule Systems.Project.CreatePopup do
   end
 
   defp create_project(%{assigns: %{user: user}}, template) do
-    name = dgettext("eyra-project", "default.name")
+    name = Project.Templates.translate(template)
     Project.Assembly.create(name, user, template)
   end
 
@@ -98,11 +97,6 @@ defmodule Systems.Project.CreatePopup do
     <div>
       <Text.title3><%= @title %></Text.title3>
       <.spacing value="XS" />
-
-      <Text.form_field_label id={:template_label}>
-        <%= dgettext("eyra-project", "template.selector.label") %>
-      </Text.form_field_label>
-      <.spacing value="XXS" />
       <.live_component
         module={Selector}
         id={:template_selector}

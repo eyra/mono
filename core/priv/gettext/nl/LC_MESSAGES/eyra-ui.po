@@ -221,3 +221,11 @@ msgstr "Hier komt de titel.."
 #, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.home"
 msgstr "Ga naar console"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "collapse.button"
+msgstr "Inklappen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "expand.button"
+msgstr "Uitklappen"

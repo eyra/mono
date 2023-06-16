@@ -324,8 +324,12 @@ msgstr "Afdeling"
 
 #, elixir-autogen, elixir-format
 msgid "project_templates.benchmark"
-msgstr "Benchmark Project"
+msgstr "Benchmark"
 
 #, elixir-autogen, elixir-format
 msgid "project_templates.data_donation"
 msgstr "Data Donatie Studie"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "project_templates.empty"
+msgstr "Leeg"

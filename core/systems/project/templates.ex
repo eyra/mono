@@ -1,3 +1,3 @@
 defmodule Systems.Project.Templates do
-  use Core.Enums.Base, {:project_templates, [:data_donation, :benchmark]}
+  use Core.Enums.Base, {:project_templates, [:empty, :benchmark, :data_donation]}
 end

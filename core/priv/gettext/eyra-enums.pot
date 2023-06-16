@@ -329,3 +329,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "project_templates.data_donation"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "project_templates.empty"
+msgstr ""

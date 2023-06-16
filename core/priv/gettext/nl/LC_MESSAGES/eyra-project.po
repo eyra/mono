@@ -185,16 +185,8 @@ msgstr "Online"
 
 #, elixir-autogen, elixir-format
 msgid "create.proceed.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "template.selector.label"
-msgstr ""
+msgstr "Doorgaan"
 
 #, elixir-autogen, elixir-format
 msgid "create.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "default.name"
-msgstr "Nieuw project"
+msgstr "Selecteer template"
