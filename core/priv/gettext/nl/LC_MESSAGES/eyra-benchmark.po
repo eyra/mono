@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "content.title"
-msgstr "Benchmark"
+msgstr "Challenge"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.leaderboards"
@@ -41,7 +41,7 @@ msgstr "Titel"
 
 #, elixir-autogen, elixir-format
 msgid "tool.page.title"
-msgstr "Benchmark"
+msgstr "Challenge"
 
 #, elixir-autogen, elixir-format
 msgid "submission.form.title"
@@ -49,27 +49,27 @@ msgstr "Dien methode in"
 
 #, elixir-autogen, elixir-format
 msgid "expectations.title"
-msgstr "Wat kan je verwachten?"
+msgstr "Beschrijving"
 
 #, elixir-autogen, elixir-format
 msgid "submissions.intro"
-msgstr "Om je methode in te dienen moet je hieronder een url van je github repository opgeven."
+msgstr "Als de challenge open is, kun je hieronder methodes indienen. Deze worden toegepast op de holdout data en toegevoegd aan het scoreboard."
 
 #, elixir-autogen, elixir-format
 msgid "submissions.subhead.active"
-msgstr "Je kan maximaal 3 methodes in dienen."
+msgstr "Let op, je kan maximaal drie methodes indienen."
 
 #, elixir-autogen, elixir-format
 msgid "submissions.title"
-msgstr "Inzendingen"
+msgstr "Indienen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "expectations.subhead"
-msgstr "De volledige ranglijst zal niet publiekelijk beschikbaar worden, alleen de top inzendingen zullen zichtbaar zijn voor iedereen."
+msgstr " Let op, alleen de hoogst scorende methodes worden getoond op het publieke scoreboard op het platform."
 
 #, elixir-autogen, elixir-format
 msgid "highlight.deadline.title"
-msgstr "Aantal dagen te gaan"
+msgstr "Dagen tot deadline"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.spots.title"
@@ -77,7 +77,7 @@ msgstr "Aantal teams"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.submissions.title"
-msgstr "Aantal inzendingen"
+msgstr "Aantal ingediend"
 
 #, elixir-autogen, elixir-format
 msgid "1 day"
@@ -103,11 +103,11 @@ msgstr "Dien methode in"
 
 #, elixir-autogen, elixir-format
 msgid "invalid.github.commit.url.message"
-msgstr "moet een geldige Github commit url zijn"
+msgstr "Voer een geldige Github commit url in"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submissions.subhead.inactive"
-msgstr "Challenge is gesloten. Je kan geen nieuwe methodes indienen of aanpassingen maken aan bestaande."
+msgstr "Gesloten: Het is niet meer mogelijk om methodes in te dienen of aan te passen."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "1 submission"
@@ -131,15 +131,15 @@ msgstr "Github repository"
 
 #, elixir-autogen, elixir-format
 msgid "preparation.dataset.title"
-msgstr "Download de voorbeeld data om je methode to tunen"
+msgstr "Download de voorbeeld data om jouw methode te trainen"
 
 #, elixir-autogen, elixir-format
 msgid "preparation.description"
-msgstr "Volg de volgende stappen ter voorbereiding van je deelname."
+msgstr "Voordat je jouw methode indient volg je de stappen hieronder."
 
 #, elixir-autogen, elixir-format
 msgid "preparation.template.title"
-msgstr "Fork en clone de voorbeeld repository en volg de aanwijzigingen zoals beschreven."
+msgstr "Fork and clone de voorbeeld repository en volg de instructies voor het indienen."
 
 #, elixir-autogen, elixir-format
 msgid "preparation.title"
@@ -155,7 +155,7 @@ msgstr "Github voorbeeld repository"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "spot.form.description"
-msgstr "De naam van je team zal bij naast je scores op de leaderboard zichtbaar zijn."
+msgstr "Geef een team naam op die op het scoreboard bij jouw ingediende methodes komt te staan."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "spot.form.name"

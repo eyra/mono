@@ -157,3 +157,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "await.confirmation.description"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "account.created.info.flash"
+msgstr ""

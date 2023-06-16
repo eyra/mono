@@ -40,7 +40,7 @@ msgstr "Sign up"
 
 #, elixir-autogen, elixir-format
 msgid "await.confirmation.title"
-msgstr "Confirm you registration"
+msgstr "Activate your account"
 
 #, elixir-autogen, elixir-format
 msgid "confirm.token.resend_button"
@@ -76,7 +76,7 @@ msgstr "Push notifications are deactivated on this browser"
 
 #, elixir-autogen, elixir-format
 msgid "push.registration.label"
-msgstr "Activate to receive notifications from the Panl platform in your browser. After activation, your browser might ask for permission to show notifications."
+msgstr "Activate to receive notifications from the platform in your browser. After activation, your browser might ask for permission to show notifications."
 
 #, elixir-autogen, elixir-format
 msgid "push.registration.pending"
@@ -88,7 +88,7 @@ msgstr "To earn credits for research participation (OP / RPR) for bedrijfskunde 
 
 #, elixir-autogen, elixir-format
 msgid "features.description"
-msgstr "A few studies use specific eligibility requirements. Selecting the optional characteristics below, allows you to participate in studies that specify your characteristics as requirements."
+msgstr "These characteristics are optional, they are currently not used by any application on the platform."
 
 #, elixir-autogen, elixir-format
 msgid "features.dominanthand.title"
@@ -156,4 +156,8 @@ msgstr "Sign in"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "await.confirmation.description"
-msgstr "Please check your e-mail for a confirmation link."
+msgstr "Your account has been created. You should have received a activation email. Please click the link in the email to activate your account."
+
+#, elixir-autogen, elixir-format
+msgid "account.created.info.flash"
+msgstr "Account created successfully"

@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "content.title"
-msgstr "Benchmark"
+msgstr "Challenge"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.leaderboards"
@@ -41,7 +41,7 @@ msgstr "Title"
 
 #, elixir-autogen, elixir-format
 msgid "tool.page.title"
-msgstr "Benchmark"
+msgstr "Challenge"
 
 #, elixir-autogen, elixir-format
 msgid "submission.form.title"
@@ -49,15 +49,15 @@ msgstr "Add submission"
 
 #, elixir-autogen, elixir-format
 msgid "expectations.title"
-msgstr "What to expect?"
+msgstr "Description"
 
 #, elixir-autogen, elixir-format
 msgid "submissions.intro"
-msgstr "To submit your method, please provide the url of your github repository below."
+msgstr "When the challenge is open, you can add submissions below. They will be run on the holdout data and added to the leaderboard. "
 
 #, elixir-autogen, elixir-format
 msgid "submissions.subhead.active"
-msgstr "Please note that you can submit a maximum of three submissions."
+msgstr "Please note that you are allowed to submit up to three methods."
 
 #, elixir-autogen, elixir-format
 msgid "submissions.title"
@@ -65,11 +65,11 @@ msgstr "Submissions"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "expectations.subhead"
-msgstr "Please note that the full leaderboard will not be made publicly available, but only top submissions will be shown. "
+msgstr "Please note that only top submissions will be made publicly available on the platform."
 
 #, elixir-autogen, elixir-format
 msgid "highlight.deadline.title"
-msgstr "Days to deadline"
+msgstr "Days untill deadline"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.spots.title"
@@ -103,11 +103,11 @@ msgstr "Submit"
 
 #, elixir-autogen, elixir-format
 msgid "invalid.github.commit.url.message"
-msgstr "must be a valid Github commit url"
+msgstr "Please enter a valid Github commit url"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submissions.subhead.inactive"
-msgstr "Challenge is closed. You can not add or change submissions."
+msgstr "Closed: You can no longer add or edit submissions."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "1 submission"
@@ -139,7 +139,7 @@ msgstr "To prepare your submission, follow the steps below."
 
 #, elixir-autogen, elixir-format
 msgid "preparation.template.title"
-msgstr "Fork and clone the example repository and prepare your submission as described"
+msgstr "Fork and clone the example repository and follow the instructions to prepare your submission"
 
 #, elixir-autogen, elixir-format
 msgid "preparation.title"
@@ -155,7 +155,7 @@ msgstr "Github example repository"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "spot.form.description"
-msgstr "Your team name will appear alongside your submissions on the leaderboard."
+msgstr "Provide a team name that will be posted with your submissions on the leaderboard. "
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "spot.form.name"

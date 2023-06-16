@@ -12,7 +12,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "403.body"
-msgstr "Je hebt helaas geen toegang tot deze pagina. Is dit volgens jou een fout? Dan horen we dat graag. Laat  een melding achter bij onze helpdesk. Zo niet, klik dan op \"Home\" om terug te gaan naar de home pagina van Panl."
+msgstr "Je hebt helaas geen toegang tot deze pagina. Is dit volgens jou een fout? Dan horen we dat graag. Stuur een e-mail naar support@eyra.co."
 
 #, elixir-autogen, elixir-format
 msgid "404.body"

@@ -152,7 +152,7 @@ msgstr "yesterday"
 
 #, elixir-autogen, elixir-format
 msgid "authentication.required.error"
-msgstr "Please sign in to view this page."
+msgstr "Sign in to view this page"
 
 #, elixir-autogen, elixir-format
 msgid "start.page.console"

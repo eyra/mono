@@ -152,7 +152,7 @@ msgstr "gisteren"
 
 #, elixir-autogen, elixir-format
 msgid "authentication.required.error"
-msgstr "Deze pagina bekijken? Log hier eerst in."
+msgstr "Log in om deze pagina te bekijken"
 
 #, elixir-autogen, elixir-format
 msgid "start.page.console"

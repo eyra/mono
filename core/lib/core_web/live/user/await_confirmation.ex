@@ -31,7 +31,7 @@ defmodule CoreWeb.User.AwaitConfirmation do
 
         {:noreply,
          socket
-         |> put_flash(:info, "User created successfully.")
+         |> put_flash(:info, dgettext("eyra-account", "account.created.info.flash"))
          |> push_redirect(to: Routes.live_path(socket, CoreWeb.User.ConfirmToken))}
     end
   end
