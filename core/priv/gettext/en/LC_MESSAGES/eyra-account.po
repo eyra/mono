@@ -44,7 +44,7 @@ msgstr "Activate your account"
 
 #, elixir-autogen, elixir-format
 msgid "confirm.token.resend_button"
-msgstr ""
+msgstr "Resend activation link"
 
 #, elixir-autogen, elixir-format
 msgid "choose.profile.photo.file"
