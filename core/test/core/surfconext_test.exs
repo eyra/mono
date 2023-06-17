@@ -157,7 +157,7 @@ defmodule Core.SurfConext.Test do
 
       {:ok, %{user: user}} = Core.SurfConext.register_user(sso_info)
 
-      assert_next_action(user, "/user/settings")
+      assert_next_action(user, "/user/profile?tab=settings")
     end
   end
 

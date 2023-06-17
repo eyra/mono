@@ -229,3 +229,19 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "expand.button"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "terms.link"
+msgstr ""

@@ -13,6 +13,7 @@ defmodule CoreWeb.User.Profile do
   alias CoreWeb.User.Forms.Profile, as: ProfileForm
   alias CoreWeb.User.Forms.Student, as: StudentForm
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
+  alias CoreWeb.User.Forms.Settings, as: SettingsForm
 
   alias CoreWeb.UI.Tabbar
   alias CoreWeb.UI.Navigation
@@ -96,6 +97,15 @@ defmodule CoreWeb.User.Profile do
       forward_title: dgettext("eyra-ui", "tabbar.item.features.forward"),
       type: :form,
       live_component: FeaturesForm,
+      props: %{user: current_user}
+    })
+    |> append(%{
+      id: :settings,
+      action: nil,
+      title: dgettext("eyra-ui", "tabbar.item.settings"),
+      forward_title: dgettext("eyra-ui", "tabbar.item.settings.forward"),
+      type: :form,
+      live_component: SettingsForm,
       props: %{user: current_user}
     })
   end

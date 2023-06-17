@@ -27,7 +27,6 @@ defmodule Next.Layouts.Workspace.MenuBuilder do
     default: [
       :language,
       :helpdesk,
-      :settings,
       :profile,
       :signin
     ],

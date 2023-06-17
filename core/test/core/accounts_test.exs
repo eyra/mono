@@ -624,7 +624,7 @@ defmodule Core.AccountsTest do
       {:ok, %{user: user}} = Accounts.update_user(user_changeset)
 
       NextAction.Public.create_next_action(user, PromotePushStudent)
-      assert_next_action(user, "/user/settings")
+      assert_next_action(user, "/user/profile?tab=settings")
 
       {:ok, %{user: user}} = Accounts.mark_as_visited(user, :settings)
       refute_next_action(user, "/user/settings")

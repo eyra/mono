@@ -93,12 +93,13 @@ defmodule CoreWeb.Layouts.Workspace.Component do
                 </div>
                 <%= if @footer do %>
                   <div class="flex-none">
-                    <.footer />
+                    <.content_footer />
                   </div>
                 <% end %>
               </div>
             </div>
-            <div class="pb-0 md:pb-10 bg-grey5">
+            <div class="bg-grey5">
+              <.platform_footer />
             </div>
           </div>
         </div>

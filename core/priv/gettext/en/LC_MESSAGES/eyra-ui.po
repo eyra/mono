@@ -229,3 +229,19 @@ msgstr "Collapse"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "expand.button"
 msgstr "Expand"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings"
+msgstr "Settings"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings.forward"
+msgstr "Settings"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link"
+msgstr "Privacy"
+
+#, elixir-autogen, elixir-format
+msgid "terms.link"
+msgstr "Terms"

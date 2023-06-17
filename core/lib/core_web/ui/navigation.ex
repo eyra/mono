@@ -136,7 +136,7 @@ defmodule CoreWeb.UI.Navigation do
 
   def desktop_menu(assigns) do
     ~H"""
-    <div class="fixed z-1 hidden lg:block w-desktop-menu-width h-full pl-10 pr-8 pt-10 pb-10 h-full">
+    <div class="fixed z-1 hidden lg:block w-desktop-menu-width h-full pl-10 pr-8 pt-10 pb-desktop-menu-bottom-padding h-full">
       <Menu.generic {assigns} />
     </div>
     """

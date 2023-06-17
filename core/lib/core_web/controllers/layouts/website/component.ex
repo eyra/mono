@@ -92,7 +92,7 @@ defmodule CoreWeb.Layouts.Website.Component do
                   </div>
                 </div>
                 <div class="bg-white">
-                  <.footer />
+                  <.content_footer />
                 </div>
               </div>
             </div>
