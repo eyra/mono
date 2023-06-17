@@ -73,11 +73,11 @@ msgstr "Start"
 
 #, elixir-autogen, elixir-format
 msgid "overview.empty.description"
-msgstr ""
+msgstr "Hier kan vind je een overzicht van al je projecten. Op dit moment zijn er nog geen projecten voor je. Je kan een eigen project starten of iemand kan een project met je delen."
 
 #, elixir-autogen, elixir-format
 msgid "overview.empty.title"
-msgstr ""
+msgstr "Welkom"
 
 #, elixir-autogen, elixir-format
 msgid "overview.title"
