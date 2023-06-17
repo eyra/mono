@@ -65,7 +65,7 @@ defmodule Systems.Email.Factory.Test do
       assert email.to == user.email
       assert email.subject =~ "Welcome"
       assert email.html_body =~ "You are all set and ready to use the platform"
-      assert email.html_body =~ "email-header-welcome.png"
+      assert email.html_body =~ "email-header-notification.png"
       assert email.text_body =~ "You are all set and ready to use the platform"
     end
   end

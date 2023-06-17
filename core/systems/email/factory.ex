@@ -43,7 +43,7 @@ defmodule Systems.Email.Factory do
 
   def account_created(user) do
     mail_user(user)
-    |> assign(:email_header_image, "welcome")
+    |> assign(:email_header_image, "notification")
     |> subject("Welcome")
     |> render(:account_created)
   end
