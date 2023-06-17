@@ -58,7 +58,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
         |> element("form")
         |> render_submit(%{user: %{email: "a b c d"}})
 
-      assert html =~ "Account confirmation link is invalid or it has expired."
+      assert html =~ "our account activation link is invalid or it has expired."
     end
 
     test "resend form fakes sending mail when user does not exist", %{conn: conn} do
