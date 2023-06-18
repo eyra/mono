@@ -84,8 +84,8 @@ defmodule CoreWeb.User.ConfirmToken do
     <div>
       <Area.content>
       <Margin.y id={:page_top} />
-      <p>Account confirmation link is invalid or it has expired.</p>
-      <p>Enter your e-mail to resend the token</p>
+      <p>Your account activation link is invalid or it has expired.</p>
+      <p>Enter your email address and click resend to receive a new account activation link.</p>
       <.form id="confirm_token" :let={form} for={%{}} phx-submit="resend-token" >
         <.email_input form={form} field={:email} label_text={dgettext("eyra-user", "confirm.token.email.label")} />
         <Button.submit label={dgettext("eyra-account", "confirm.token.resend_button")} />
