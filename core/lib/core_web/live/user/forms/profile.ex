@@ -88,11 +88,6 @@ defmodule CoreWeb.User.Forms.Profile do
     |> auto_save(changeset)
   end
 
-  # data(user, :any)
-  # data(entity, :any)
-  # data(uploads, :any)
-  # data(changeset, :any, default: nil)
-
   attr(:user, :map, required: true)
 
   @impl true

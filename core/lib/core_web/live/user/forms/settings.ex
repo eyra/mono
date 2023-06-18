@@ -1,28 +1,20 @@
-defmodule CoreWeb.User.Settings do
-  @moduledoc """
-  The home screen.
-  """
-  use CoreWeb, :live_view
-  use CoreWeb.Layouts.Workspace.Component, :settings
+defmodule CoreWeb.User.Forms.Settings do
+  use CoreWeb, :live_component
 
   import CoreWeb.UI.OldSkool, only: [is_push_supported?: 1]
-  import CoreWeb.Layouts.Workspace.Component
 
   alias Core.Accounts
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
 
-  def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
+  @impl true
+  def update(%{user: user}, socket) do
     Accounts.mark_as_visited(user, :settings)
-    {:ok, socket |> update_menus()}
-  end
-
-  def handle_auto_save_done(socket) do
-    socket |> update_menus()
+    {:ok, assign(socket, user: user)}
   end
 
   @impl true
-  def handle_event("send-test-notification", _params, %{assigns: %{current_user: user}} = socket) do
+  def handle_event("send-test-notification", _params, %{assigns: %{user: user}} = socket) do
     Core.WebPush.send(user, "Test notification")
     {:noreply, socket}
   end
@@ -30,7 +22,7 @@ defmodule CoreWeb.User.Settings do
   @impl true
   def render(assigns) do
     ~H"""
-    <.workspace menus={@menus}>
+      <div>
       <Area.content>
         <Margin.y id={:page_top} />
         <Area.form>
@@ -63,7 +55,7 @@ defmodule CoreWeb.User.Settings do
           </div>
         </Area.form>
       </Area.content>
-    </.workspace>
+      </div>
     """
   end
 end

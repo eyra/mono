@@ -36,10 +36,6 @@ defmodule Link.Menu.Items do
         action: %{type: :redirect, to: ~p"/support/helpdesk"},
         title: dgettext("eyra-ui", "menu.item.helpdesk")
       },
-      settings: %{
-        action: %{type: :redirect, to: ~p"/user/settings"},
-        title: dgettext("eyra-ui", "menu.item.settings")
-      },
       profile: %{
         action: %{type: :redirect, to: ~p"/user/profile"},
         title: dgettext("eyra-ui", "menu.item.profile")

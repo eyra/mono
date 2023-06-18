@@ -104,7 +104,7 @@ defmodule CoreWeb.UI.OldSkool do
   def page_footer(assigns) do
     ~H"""
     <div class="bg-white">
-      <.footer />
+      <.content_footer />
     </div>
     """
   end
@@ -112,7 +112,7 @@ defmodule CoreWeb.UI.OldSkool do
   def tabbar(assigns, _tabs) do
     ~H"""
     <div class="bg-white">
-      <.footer />
+      <.content_footer />
     </div>
     """
   end

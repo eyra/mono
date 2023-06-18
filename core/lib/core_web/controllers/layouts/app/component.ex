@@ -31,7 +31,7 @@ defmodule CoreWeb.Layouts.App.Component do
                 <%= render_slot(@inner_block) %>
               </div>
               <div class="bg-white border-b border-l border-grey4">
-                <.footer />
+                <.content_footer />
               </div>
               <div class="bg-grey5 h-16 w-full">
                 <div class="flex flex-col justify-center items-center h-full">

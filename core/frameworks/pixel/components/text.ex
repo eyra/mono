@@ -5,6 +5,18 @@ defmodule Frameworks.Pixel.Text do
   attr(:align, :string, default: "text-left")
   slot(:inner_block, required: true)
 
+  def body_small(assigns) do
+    ~H"""
+    <div class={"flex-wrap text-bodysmall font-body #{@color} #{@align}"}>
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
+  attr(:color, :string, default: "text-grey1")
+  attr(:align, :string, default: "text-left")
+  slot(:inner_block, required: true)
+
   def body_medium(assigns) do
     ~H"""
     <div class={"flex-wrap text-bodymedium font-body #{@color} #{@align}"}>
@@ -73,6 +85,17 @@ defmodule Frameworks.Pixel.Text do
   def form_field_label(assigns) do
     ~H"""
     <div id={@id} class={"mt-0.5 text-title6 font-title6 leading-snug  #{@color}"}>
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
+  attr(:color, :string, default: "text-grey2")
+  slot(:inner_block, required: true)
+
+  def footnote(assigns) do
+    ~H"""
+    <div class={"text-footnote font-footnote #{@color}"}>
       <%= render_slot(@inner_block) %>
     </div>
     """

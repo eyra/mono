@@ -28,10 +28,6 @@ defmodule Next.Menu.Items do
         action: %{type: :redirect, to: ~p"/todo"},
         title: dgettext("eyra-ui", "menu.item.todo")
       },
-      settings: %{
-        action: %{type: :redirect, to: ~p"/user/settings"},
-        title: dgettext("eyra-ui", "menu.item.settings")
-      },
       profile: %{
         action: %{type: :redirect, to: ~p"/user/profile"},
         title: dgettext("eyra-ui", "menu.item.profile")

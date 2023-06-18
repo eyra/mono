@@ -30,7 +30,6 @@ defmodule Link.Layouts.Workspace.MenuBuilder do
     default: [
       :language,
       :helpdesk,
-      :settings,
       :profile,
       :debug
     ],

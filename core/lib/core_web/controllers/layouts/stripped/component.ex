@@ -79,11 +79,12 @@ defmodule CoreWeb.Layouts.Stripped.Component do
                 </div>
               </div>
               <div class="bg-white">
-                <.footer />
+                <.content_footer />
               </div>
             </div>
           </div>
-          <div class="pb-0 md:pb-10 bg-grey5">
+          <div class="bg-grey5">
+            <.platform_footer />
           </div>
         </div>
       </div>
