@@ -25,6 +25,7 @@ defmodule Core.Factories do
     Survey,
     Lab,
     DataDonation,
+    Benchmark,
     Pool,
     Budget,
     Bookkeeping,
@@ -222,6 +223,18 @@ defmodule Core.Factories do
 
   def build(:submission) do
     build(:submission, %{})
+  end
+
+  def build(:benchmark_submission) do
+    build(:benchmark_submission, %{description: "description"})
+  end
+
+  def build(:benchmark_spot) do
+    build(:benchmark_spot, %{})
+  end
+
+  def build(:benchmark_tool) do
+    build(:benchmark_tool, %{})
   end
 
   def build(:experiment) do
@@ -460,6 +473,35 @@ defmodule Core.Factories do
 
   def build(:pool, %{} = attributes) do
     %Pool.Model{}
+    |> struct!(attributes)
+  end
+
+  def build(:benchmark_tool, %{} = attributes) do
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+
+    %Benchmark.ToolModel{
+      auth_node: auth_node
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:benchmark_spot, %{} = attributes) do
+    {tool, attributes} = Map.pop(attributes, :tool, build(:benchmark_tool))
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+
+    %Benchmark.SpotModel{
+      tool: tool,
+      auth_node: auth_node
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:benchmark_submission, %{} = attributes) do
+    {spot, attributes} = Map.pop(attributes, :spot, build(:benchmark_spot))
+
+    %Benchmark.SubmissionModel{
+      spot: spot
+    }
     |> struct!(attributes)
   end
 

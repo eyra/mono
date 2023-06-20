@@ -6,6 +6,7 @@ defmodule Systems.Benchmark.Routes do
 
         get("/:id", ToolController, :ensure_spot)
         live("/:id/:spot", ToolPage)
+        get("/:id/export/submissions", ExportController, :submissions)
       end
     end
   end
