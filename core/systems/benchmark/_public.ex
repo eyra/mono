@@ -103,6 +103,16 @@ defmodule Systems.Benchmark.Public do
     |> Repo.all()
   end
 
+  def list_submissions(tool_id, preload \\ []) do
+    from(submission in Benchmark.SubmissionModel,
+      join: spot in Benchmark.SpotModel,
+      on: spot.id == submission.spot_id,
+      where: spot.tool_id == ^tool_id,
+      preload: ^preload
+    )
+    |> Repo.all()
+  end
+
   def delete(%Benchmark.SubmissionModel{} = submission) do
     Repo.delete(submission)
   end

@@ -58,7 +58,7 @@ defmodule Systems.Project.ItemConfigForm do
     ~H"""
     <div>
       <Area.content>
-      <Margin.y id={:page_top} />
+        <Margin.y id={:page_top} />
         <Text.title2><%= dgettext("eyra-project", "config.title")  %></Text.title2>
         <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
           <.text_input form={form} field={:name} label_text={dgettext("eyra-project", "form.name.label")} />

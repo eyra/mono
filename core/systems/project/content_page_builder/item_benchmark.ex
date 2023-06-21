@@ -22,6 +22,7 @@ defmodule Systems.Project.ContentPageBuilder.ItemBenchmark do
 
     %{
       id: id,
+      tool_id: tool.id,
       title: dgettext("eyra-benchmark", "content.title"),
       tabs: tabs,
       actions: actions,
@@ -85,8 +86,8 @@ defmodule Systems.Project.ContentPageBuilder.ItemBenchmark do
     socket |> set_tool_status(:concept)
   end
 
-  defp set_tool_status(%{assigns: %{vm: %{id: id}}} = socket, status) do
-    Benchmark.Public.set_tool_status(id, status)
+  defp set_tool_status(%{assigns: %{vm: %{tool_id: tool_id}}} = socket, status) do
+    Benchmark.Public.set_tool_status(tool_id, status)
     socket
   end
 
