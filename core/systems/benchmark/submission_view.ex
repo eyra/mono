@@ -18,6 +18,7 @@ defmodule Systems.Benchmark.SubmissionView do
   end
 
   attr(:description, :string, required: true)
+  attr(:team, :string, default: nil)
   attr(:summary, :string, required: true)
   attr(:url, :string, required: true)
   attr(:buttons, :list, required: true)
@@ -25,7 +26,12 @@ defmodule Systems.Benchmark.SubmissionView do
   def item(assigns) do
     ~H"""
     <tr class="h-12">
+      <%= if @team do %>
       <td class="pl-0">
+        <Text.body_medium><%= @team %></Text.body_medium>
+      </td>
+      <% end %>
+      <td class={if @team do "pl-8" else "pl-0" end}>
        <Text.body_medium><%= @description %></Text.body_medium>
       </td>
       <td class="pl-8">
