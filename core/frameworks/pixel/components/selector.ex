@@ -12,9 +12,14 @@ defmodule Frameworks.Pixel.Selector do
   defp grid_options(_, grid_options) when grid_options != "", do: grid_options
   defp grid_options(:radio, _), do: "flex flex-col gap-3"
   defp grid_options(:checkbox, _), do: "flex flex-row flex-wrap gap-x-8 gap-y-3 items-center"
+
+  defp grid_options(:segmented, _),
+    do: "flex flex-row flex-wrap gap-0 items-center rounded-full overflow-hidden"
+
   defp grid_options(_, _), do: "flex flex-row flex-wrap gap-3 items-center"
 
   defp multiselect?(:radio), do: false
+  defp multiselect?(:segmented), do: false
   defp multiselect?(_), do: true
 
   @impl true
@@ -142,6 +147,7 @@ defmodule Frameworks.Pixel.Selector do
 
   defp item_component(:radio), do: &Frameworks.Pixel.Selector.Item.radio/1
   defp item_component(:checkbox), do: &Frameworks.Pixel.Selector.Item.checkbox/1
+  defp item_component(:segmented), do: &Frameworks.Pixel.Selector.Item.segment/1
   defp item_component(_), do: &Frameworks.Pixel.Selector.Item.label/1
 
   @impl true
@@ -236,6 +242,21 @@ defmodule Frameworks.Pixel.Selector.Item do
     <div
       x-bind:class="{ 'bg-primary text-white': active, 'bg-grey5 text-grey2': !active}"
       class="rounded-full px-6 py-3 text-label font-label select-none"
+    >
+      <%= @item.value %>
+    </div>
+    """
+  end
+
+  attr(:item, :map, required: true)
+  attr(:multiselect?, :boolean, default: true)
+  attr(:background, :atom, default: :light)
+
+  def segment(assigns) do
+    ~H"""
+    <div
+      x-bind:class="{ 'bg-primary text-white': active, 'bg-grey5 text-grey2': !active}"
+      class="px-6 py-3 text-label font-label select-none"
     >
       <%= @item.value %>
     </div>

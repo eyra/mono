@@ -108,7 +108,7 @@ defmodule Link.Onboarding.WizardPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.stripped user={@current_user} menus={@menus}>
+    <.stripped menus={@menus}>
       <Navigation.action_bar>
         <Tabbar.container id={@tabbar_id} tabs={@tabs} initial_tab={:welcome} />
       </Navigation.action_bar>

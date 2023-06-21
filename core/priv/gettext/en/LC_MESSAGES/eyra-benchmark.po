@@ -63,10 +63,6 @@ msgstr "Please note that you are allowed to submit up to three methods."
 msgid "submissions.title"
 msgstr "Submissions"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "expectations.subhead"
-msgstr "Please note that only top submissions will be made publicly available on the platform."
-
 #, elixir-autogen, elixir-format
 msgid "highlight.deadline.title"
 msgstr "Days untill deadline"
@@ -174,10 +170,6 @@ msgid "import.leaderboard.title"
 msgstr "Import"
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard.latest.title"
-msgstr "Latest version"
-
-#, elixir-autogen, elixir-format
 msgid "csv-import-button"
 msgstr "Import selected file"
 
@@ -192,3 +184,31 @@ msgstr "Select file"
 #, elixir-autogen, elixir-format
 msgid "csv-select-placeholder"
 msgstr "Select a leaderboard csv file"
+
+#, elixir-autogen, elixir-format
+msgid "challenge.forward.button"
+msgstr "Go to challenge"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.forward.button"
+msgstr "Public"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.github.label"
+msgstr "Github"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.method.label"
+msgstr "Method"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.position.label"
+msgstr "Position"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.score.label"
+msgstr "Score"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.team.label"
+msgstr "Team"

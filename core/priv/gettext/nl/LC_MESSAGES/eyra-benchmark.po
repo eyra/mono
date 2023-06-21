@@ -63,10 +63,6 @@ msgstr "Let op, je kan maximaal drie methodes indienen."
 msgid "submissions.title"
 msgstr "Indienen"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "expectations.subhead"
-msgstr " Let op, alleen de hoogst scorende methodes worden getoond op het publieke scoreboard op het platform."
-
 #, elixir-autogen, elixir-format
 msgid "highlight.deadline.title"
 msgstr "Dagen tot deadline"
@@ -174,10 +170,6 @@ msgid "import.leaderboard.title"
 msgstr "Importeren"
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard.latest.title"
-msgstr "Laatste versie"
-
-#, elixir-autogen, elixir-format
 msgid "csv-import-button"
 msgstr "Importeer gekozen bestand"
 
@@ -192,3 +184,31 @@ msgstr "Kies bestand"
 #, elixir-autogen, elixir-format
 msgid "csv-select-placeholder"
 msgstr "Kies een ranglijst csv bestand"
+
+#, elixir-autogen, elixir-format
+msgid "challenge.forward.button"
+msgstr "Naar de challenge"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.forward.button"
+msgstr "Publiek"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.github.label"
+msgstr "Github"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.method.label"
+msgstr "Methode"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.position.label"
+msgstr "Poisitie"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.score.label"
+msgstr "Score"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.team.label"
+msgstr "Team"

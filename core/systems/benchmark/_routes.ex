@@ -8,6 +8,11 @@ defmodule Systems.Benchmark.Routes do
         live("/:id/:spot", ToolPage)
         get("/:id/export/submissions", ExportController, :submissions)
       end
+
+      scope "/benchmark", Systems.Benchmark do
+        pipe_through([:browser])
+        live("/:id/public/leaderboard", LeaderboardPage)
+      end
     end
   end
 end

@@ -5,10 +5,6 @@ defmodule Systems.Benchmark.LeaderboardOverview do
     Benchmark
   }
 
-  import Benchmark.LeaderboardView
-
-  @main_category "f1_score"
-
   @impl true
   def update(%{csv_lines: csv_lines}, %{assigns: %{entity: %{id: tool_id}}} = socket) do
     csv_lines
@@ -44,21 +40,39 @@ defmodule Systems.Benchmark.LeaderboardOverview do
         import_form: import_form
       )
       |> update_leaderboard()
+      |> update_forward_button()
     }
   end
 
   defp update_leaderboard(%{assigns: %{entity: %{id: tool_id}}} = socket) do
     categories =
       Benchmark.Public.list_leaderboard_categories(tool_id, scores: [submission: [:spot]])
-      |> Enum.sort(&sort_categories/2)
 
-    leaderboard = %{categories: categories}
+    leaderboard = %{
+      id: :leaderboard,
+      module: Benchmark.LeaderboardView,
+      categories: categories
+    }
 
     assign(socket, leaderboard: leaderboard)
   end
 
-  defp sort_categories(%{name: @main_category}, _), do: true
-  defp sort_categories(_, _), do: false
+  defp update_forward_button(%{assigns: %{entity: %{id: tool_id}}} = socket) do
+    forward_button = %{
+      action: %{
+        type: :http_get,
+        to: ~p"/benchmark/#{tool_id}/public/leaderboard",
+        target: "_blank"
+      },
+      face: %{
+        type: :plain,
+        label: dgettext("eyra-benchmark", "leaderboard.forward.button"),
+        icon: :forward
+      }
+    }
+
+    assign(socket, forward_button: forward_button)
+  end
 
   defp parse_entry(line) do
     {id, line} = Map.pop(line, "id")
@@ -94,12 +108,17 @@ defmodule Systems.Benchmark.LeaderboardOverview do
     <div>
       <Area.content>
         <Margin.y id={:page_top} />
-        <Text.title2><%= dgettext("eyra-benchmark", "tabbar.item.leaderboard")%></Text.title2>
-        <Text.title4><%= dgettext("eyra-benchmark", "import.leaderboard.title")%></Text.title4>
-        <.spacing value="XS" />
-        <.live_component {@import_form} />
+        <div class="flex flex-row items-center justify-center">
+          <Text.title2 margin=""><%= dgettext("eyra-benchmark", "tabbar.item.leaderboard")%></Text.title2>
+          <div class="flex-grow" />
+          <Button.dynamic {@forward_button} />
+        </div>
+        <.spacing value="M" />
+        <.live_component {@leaderboard} />
         <.spacing value="XL" />
-        <.leaderboard {@leaderboard} />
+        <Text.title4><%= dgettext("eyra-benchmark", "import.leaderboard.title")%></Text.title4>
+        <.spacing value="S" />
+        <.live_component {@import_form} />
       </Area.content>
     </div>
     """

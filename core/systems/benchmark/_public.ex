@@ -11,6 +11,9 @@ defmodule Systems.Benchmark.Public do
     Benchmark
   }
 
+  # FIXME: should come from CMS
+  @main_category "f1_score"
+
   def get_tool!(id, preload \\ []) do
     from(tool in Benchmark.ToolModel, preload: ^preload)
     |> Repo.get!(id)
@@ -198,10 +201,14 @@ defmodule Systems.Benchmark.Public do
         preload: ^preload
       )
       |> Repo.all()
+      |> Enum.sort(&sort_categories/2)
     else
       []
     end
   end
+
+  defp sort_categories(%{name: @main_category}, _), do: true
+  defp sort_categories(_, _), do: false
 
   def count_leaderboard_versions() do
     list =

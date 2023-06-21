@@ -50,7 +50,7 @@ defmodule CoreWeb.User.Signup do
   @impl true
   def render(assigns) do
     ~H"""
-    <.stripped user={@current_user} menus={@menus}>
+    <.stripped menus={@menus}>
       <div id="signup_content" phx-hook="LiveContent" data-show-errors={true}>
         <Area.content>
         <Margin.y id={:page_top} />

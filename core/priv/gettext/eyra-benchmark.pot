@@ -64,10 +64,6 @@ msgid "submissions.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "expectations.subhead"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "highlight.deadline.title"
 msgstr ""
 
@@ -174,10 +170,6 @@ msgid "import.leaderboard.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard.latest.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "csv-import-button"
 msgstr ""
 
@@ -191,4 +183,32 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "csv-select-placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "challenge.forward.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.forward.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.github.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.method.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.position.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.score.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.team.label"
 msgstr ""
