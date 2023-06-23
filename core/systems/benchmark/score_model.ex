@@ -16,7 +16,7 @@ defmodule Systems.Benchmark.ScoreModel do
     timestamps()
   end
 
-  @fields ~w(name)a
+  @fields ~w(score)a
   @required_fields ~w()a
 
   def changeset(tool, params) do

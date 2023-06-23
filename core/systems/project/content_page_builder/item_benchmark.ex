@@ -6,6 +6,8 @@ defmodule Systems.Project.ContentPageBuilder.ItemBenchmark do
     Benchmark
   }
 
+  @tabs [:config, :invite, :submissions, :leaderboard]
+
   def view_model(
         %{
           id: id,
@@ -92,12 +94,7 @@ defmodule Systems.Project.ContentPageBuilder.ItemBenchmark do
   end
 
   defp create_tabs(item, show_errors, assigns) do
-    get_tab_keys()
-    |> Enum.map(&create_tab(&1, item, show_errors, assigns))
-  end
-
-  defp get_tab_keys() do
-    [:config, :leaderboards, :invite]
+    Enum.map(@tabs, &create_tab(&1, item, show_errors, assigns))
   end
 
   defp create_tab(
@@ -128,7 +125,7 @@ defmodule Systems.Project.ContentPageBuilder.ItemBenchmark do
   end
 
   defp create_tab(
-         :leaderboards,
+         :submissions,
          %{tool_ref: %{benchmark_tool: benchmark_tool}},
          show_errors,
          _assigns
@@ -136,11 +133,33 @@ defmodule Systems.Project.ContentPageBuilder.ItemBenchmark do
     ready? = false
 
     %{
-      id: :leaderboards,
+      id: :submissions,
       ready: ready?,
       show_errors: show_errors,
-      title: dgettext("eyra-benchmark", "tabbar.item.leaderboards"),
-      forward_title: dgettext("eyra-benchmark", "tabbar.item.leaderboards.forward"),
+      title: dgettext("eyra-benchmark", "tabbar.item.submissions"),
+      forward_title: dgettext("eyra-benchmark", "tabbar.item.submissions.forward"),
+      type: :fullpage,
+      live_component: Benchmark.SubmissionOverview,
+      props: %{
+        entity: benchmark_tool
+      }
+    }
+  end
+
+  defp create_tab(
+         :leaderboard,
+         %{tool_ref: %{benchmark_tool: benchmark_tool}},
+         show_errors,
+         _assigns
+       ) do
+    ready? = false
+
+    %{
+      id: :leaderboard,
+      ready: ready?,
+      show_errors: show_errors,
+      title: dgettext("eyra-benchmark", "tabbar.item.leaderboard"),
+      forward_title: dgettext("eyra-benchmark", "tabbar.item.leaderboard.forward"),
       type: :fullpage,
       live_component: Benchmark.LeaderboardOverview,
       props: %{

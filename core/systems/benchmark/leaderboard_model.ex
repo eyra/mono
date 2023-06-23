@@ -17,7 +17,7 @@ defmodule Systems.Benchmark.LeaderboardModel do
     timestamps()
   end
 
-  @fields ~w(name)a
+  @fields ~w(name version)a
   @required_fields ~w()a
 
   def changeset(tool, params) do

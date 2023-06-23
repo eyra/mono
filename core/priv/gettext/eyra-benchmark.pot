@@ -16,11 +16,11 @@ msgid "content.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.leaderboards"
+msgid "tabbar.item.leaderboard"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.leaderboards.forward"
+msgid "tabbar.item.leaderboard.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -61,10 +61,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "submissions.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "expectations.subhead"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -159,4 +155,60 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "spot.form.name"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.submissions"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.submissions.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "import.leaderboard.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "csv-import-button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "csv-replace-file-button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "csv-select-file-button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "csv-select-placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "challenge.forward.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.forward.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.github.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.method.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.position.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.score.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.team.label"
 msgstr ""

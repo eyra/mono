@@ -40,7 +40,7 @@ defmodule CoreWeb.User.AwaitConfirmation do
   @impl true
   def render(assigns) do
     ~H"""
-    <.stripped user={@current_user} menus={@menus}>
+    <.stripped menus={@menus}>
       <div>
         <Area.sheet>
         <Margin.y id={:page_top} />

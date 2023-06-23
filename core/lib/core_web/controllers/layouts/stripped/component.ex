@@ -44,7 +44,6 @@ defmodule CoreWeb.Layouts.Stripped.Component do
   end
 
   attr(:title, :string, default: nil)
-  attr(:user, :string, required: true)
   attr(:menus, :map, required: true)
   slot(:inner_block, required: true)
 

@@ -25,7 +25,7 @@ defmodule Systems.Admin.LoginPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.stripped user={@current_user} menus={@menus}>
+    <.stripped menus={@menus}>
       <Area.content>
         <Margin.y id={:page_top} />
         <Area.form>

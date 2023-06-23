@@ -24,13 +24,13 @@ defmodule Next.User.Signin do
     field = String.to_atom(checkbox)
 
     new_value =
-      case Ecto.Changeset.fetch_field(changeset, field) |> IO.inspect(label: "FETCH") do
+      case Ecto.Changeset.fetch_field(changeset, field) do
         :error -> true
-        value -> not value
+        {:changes, value} -> not value
+        {:data, value} -> not value
       end
 
-    changeset =
-      Ecto.Changeset.cast(changeset, %{field => new_value}, [field]) |> IO.inspect(label: "OEPS")
+    changeset = Ecto.Changeset.cast(changeset, %{field => new_value}, [field])
 
     {:noreply, socket |> assign(changeset: changeset)}
   end
@@ -44,7 +44,7 @@ defmodule Next.User.Signin do
   @impl true
   def render(assigns) do
     ~H"""
-    <.stripped user={@current_user} menus={@menus}>
+    <.stripped menus={@menus}>
       <div id="signup_content" phx-hook="LiveContent" data-show-errors={true}>
         <Area.content>
         <Margin.y id={:page_top} />

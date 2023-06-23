@@ -1,4 +1,5 @@
 defmodule Systems.Benchmark.ToolPageBuilder do
+  use CoreWeb, :verified_routes
   import CoreWeb.Gettext
   alias CoreWeb.UI.Timestamp
   alias ExAws.S3
@@ -59,6 +60,37 @@ defmodule Systems.Benchmark.ToolPageBuilder do
       active?: active?
     }
 
+    categories =
+      Benchmark.Public.list_leaderboard_categories(tool.id, scores: [submission: [:spot]])
+
+    leaderboard =
+      if Enum.count(categories) > 0 do
+        forward_button = %{
+          action: %{
+            type: :http_get,
+            to: ~p"/benchmark/#{tool.id}/public/leaderboard",
+            target: "_blank"
+          },
+          face: %{
+            type: :plain,
+            label: dgettext("eyra-benchmark", "leaderboard.forward.button"),
+            icon: :forward
+          }
+        }
+
+        %{
+          title: dgettext("eyra-benchmark", "tabbar.item.leaderboard"),
+          forward_button: forward_button,
+          component: %{
+            id: :leaderboard,
+            module: Benchmark.LeaderboardView,
+            categories: categories
+          }
+        }
+      else
+        nil
+      end
+
     %{
       hero_title: dgettext("eyra-benchmark", "tool.page.title"),
       title: title,
@@ -67,7 +99,8 @@ defmodule Systems.Benchmark.ToolPageBuilder do
       dataset_button: dataset_button,
       template_button: template_button,
       spot_form: spot_form,
-      submission_list_form: submission_list_form
+      submission_list_form: submission_list_form,
+      leaderboard: leaderboard
     }
   end
 

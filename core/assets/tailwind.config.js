@@ -79,6 +79,7 @@ module.exports = {
         30: "120px",
         34: "136px",
         35: "140px",
+        border: "2px",
         "action_menu-width": "180px",
         "tablet-menu-width": "72px",
         "desktop-menu-width": "296px",
@@ -141,6 +142,7 @@ module.exports = {
         "image-preview-circle-sm": "150px",
         "campaign-banner": "224px",
         "button-sm": "14px",
+        "file-selector": "96px",
       },
       fontFamily: {
         title0: ["Finador-Black", "sans-serif"],
@@ -160,6 +162,8 @@ module.exports = {
         label: ["Finador-Bold", "sans-serif"],
         body: ["Finador-Light", "sans-serif"],
         hint: ["Finador-LightOblique", "sans-serif"],
+        tablehead: ["Finador-Bold", "sans-serif"],
+        tablerow: ["Finador-Regular", "sans-serif"],
       },
       fontSize: {
         title0: ["64px", "68px"],
@@ -187,6 +191,8 @@ module.exports = {
         bodylinkmedium: ["30px", "30px"],
         link: ["16px", "24px"],
         hint: ["20px", "24px"],
+        tablehead: ["14px", "16px"],
+        tablerow: ["14px", "16px"],
       },
       minWidth: {
         "1/2": "50%",

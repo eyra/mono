@@ -1,15 +1,34 @@
 defmodule Systems.Benchmark.LeaderboardOverview do
   use CoreWeb, :live_component
 
+  alias Systems.{
+    Benchmark
+  }
+
   @impl true
-  def update(%{id: id, entity: %{id: tool_id}}, socket) do
-    export_button = %{
-      action: %{
-        type: :http_get,
-        to: ~p"/benchmark/#{tool_id}/export/submissions",
-        target: "_blank"
-      },
-      face: %{type: :primary, label: "Export submissions"}
+  def update(%{csv_lines: csv_lines}, %{assigns: %{entity: %{id: tool_id}}} = socket) do
+    csv_lines
+    |> Enum.filter(&(Map.get(&1, "status") == "success"))
+    |> Enum.map(&parse_entry/1)
+    |> Benchmark.Public.import(tool_id)
+
+    {
+      :ok,
+      socket
+      |> update_leaderboard()
+    }
+  end
+
+  @impl true
+  def update(%{id: id, entity: entity}, socket) do
+    import_form = %{
+      id: :import_form,
+      module: Benchmark.ImportForm,
+      parent: %{type: __MODULE__, id: id},
+      placeholder: dgettext("eyra-benchmark", "csv-select-placeholder"),
+      select_button: dgettext("eyra-benchmark", "csv-select-file-button"),
+      replace_button: dgettext("eyra-benchmark", "csv-replace-file-button"),
+      process_button: dgettext("eyra-benchmark", "csv-import-button")
     }
 
     {
@@ -17,9 +36,70 @@ defmodule Systems.Benchmark.LeaderboardOverview do
       socket
       |> assign(
         id: id,
-        export_button: export_button
+        entity: entity,
+        import_form: import_form
       )
+      |> update_leaderboard()
+      |> update_forward_button()
     }
+  end
+
+  defp update_leaderboard(%{assigns: %{entity: %{id: tool_id}}} = socket) do
+    categories =
+      Benchmark.Public.list_leaderboard_categories(tool_id, scores: [submission: [:spot]])
+
+    leaderboard = %{
+      id: :leaderboard,
+      module: Benchmark.LeaderboardView,
+      categories: categories
+    }
+
+    assign(socket, leaderboard: leaderboard)
+  end
+
+  defp update_forward_button(%{assigns: %{entity: %{id: tool_id}}} = socket) do
+    forward_button = %{
+      action: %{
+        type: :http_get,
+        to: ~p"/benchmark/#{tool_id}/public/leaderboard",
+        target: "_blank"
+      },
+      face: %{
+        type: :plain,
+        label: dgettext("eyra-benchmark", "leaderboard.forward.button"),
+        icon: :forward
+      }
+    }
+
+    assign(socket, forward_button: forward_button)
+  end
+
+  defp parse_entry(line) do
+    {id, line} = Map.pop(line, "id")
+    {status, line} = Map.pop(line, "status")
+    {message, line} = Map.pop(line, "error_message")
+
+    submission_id =
+      id
+      |> String.split(":")
+      |> List.first()
+      |> String.to_integer()
+
+    %{
+      submission_id: submission_id,
+      status: status,
+      message: message,
+      scores: parse_scores(line)
+    }
+  end
+
+  defp parse_scores(%{} = scores) do
+    Enum.map(scores, fn {metric, value} ->
+      %{
+        name: metric,
+        score: String.to_float(value)
+      }
+    end)
   end
 
   @impl true
@@ -28,9 +108,17 @@ defmodule Systems.Benchmark.LeaderboardOverview do
     <div>
       <Area.content>
         <Margin.y id={:page_top} />
-        <.wrap>
-          <Button.dynamic {@export_button} />
-        </.wrap>
+        <div class="flex flex-row items-center justify-center">
+          <Text.title2 margin=""><%= dgettext("eyra-benchmark", "tabbar.item.leaderboard")%></Text.title2>
+          <div class="flex-grow" />
+          <Button.dynamic {@forward_button} />
+        </div>
+        <.spacing value="M" />
+        <.live_component {@leaderboard} />
+        <.spacing value="XL" />
+        <Text.title4><%= dgettext("eyra-benchmark", "import.leaderboard.title")%></Text.title4>
+        <.spacing value="S" />
+        <.live_component {@import_form} />
       </Area.content>
     </div>
     """

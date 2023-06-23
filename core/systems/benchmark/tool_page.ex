@@ -62,7 +62,7 @@ defmodule Systems.Benchmark.ToolPage do
   @impl true
   def render(assigns) do
     ~H"""
-      <.stripped title={@vm.hero_title} user={@current_user} menus={@menus}>
+      <.stripped title={@vm.hero_title} menus={@menus}>
         <%= if @popup do %>
           <.popup>
             <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
@@ -89,8 +89,8 @@ defmodule Systems.Benchmark.ToolPage do
 
           <Text.title2><%= dgettext("eyra-benchmark", "expectations.title") %></Text.title2>
           <Text.body><%= raw(@vm.expectations) %></Text.body>
-          <.spacing value="XS" />
-          <Text.sub_head><%= dgettext("eyra-benchmark", "expectations.subhead") %></Text.sub_head>
+          <%!-- <.spacing value="XS" />
+          <Text.sub_head><%= dgettext("eyra-benchmark", "expectations.subhead") %></Text.sub_head> --%>
           <.spacing value="XL" />
 
           <Text.title2><%= dgettext("eyra-benchmark", "preparation.title") %></Text.title2>
@@ -110,13 +110,23 @@ defmodule Systems.Benchmark.ToolPage do
           <Text.title5 align="text-left">2. <%= dgettext("eyra-benchmark", "preparation.template.title") %></Text.title5>
           <.spacing value="XS" />
           <Text.title5 align="ml-6 text-left"><Button.dynamic {@vm.template_button} /></Text.title5>
-
           <.spacing value="XL" />
 
           <.live_component {@vm.spot_form} />
           <.spacing value="L" />
 
           <.live_component {@vm.submission_list_form} />
+          <.spacing value="XL" />
+
+          <%= if @vm.leaderboard do %>
+            <div class="flex flex-row items-center">
+              <Text.title2 margin=""><%= @vm.leaderboard.title %></Text.title2>
+              <div class="flex-grow" />
+              <Button.dynamic {@vm.leaderboard.forward_button} />
+            </div>
+            <.spacing value="M" />
+            <.live_component {@vm.leaderboard.component} />
+          <% end %>
 
         </Area.content>
       </.stripped>

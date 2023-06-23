@@ -1,6 +1,6 @@
 defmodule Systems.Project.ItemContentPage do
   use CoreWeb, :live_view
-  use CoreWeb.Layouts.Workspace.Component, :project
+  use CoreWeb.Layouts.Workspace.Component, :projects
   use CoreWeb.UI.Responsive.Viewport
   use CoreWeb.UI.PlainDialog
 
@@ -193,10 +193,10 @@ defmodule Systems.Project.ItemContentPage do
       label: %{
         action: action,
         face: %{
-          type: :primary,
+          type: :secondary,
           label: dgettext("eyra-project", "retract.button"),
-          text_color: "text-grey1",
-          bg_color: "bg-tertiary"
+          text_color: "text-error",
+          border_color: "border-error"
         }
       },
       icon: %{
