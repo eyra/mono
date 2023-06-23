@@ -164,6 +164,7 @@ module.exports = {
         hint: ["Finador-LightOblique", "sans-serif"],
         tablehead: ["Finador-Bold", "sans-serif"],
         tablerow: ["Finador-Regular", "sans-serif"],
+        pre: ["Finador-Light", "sans-serif"],
       },
       fontSize: {
         title0: ["64px", "68px"],
@@ -193,6 +194,7 @@ module.exports = {
         hint: ["20px", "24px"],
         tablehead: ["14px", "16px"],
         tablerow: ["14px", "16px"],
+        pre: ["24px", "30px"],
       },
       minWidth: {
         "1/2": "50%",

@@ -337,7 +337,7 @@ defmodule Frameworks.Pixel.Form do
     field_id = String.to_atom(input_id(form, field))
 
     input_static_class =
-      "#{field_tag(@input)} field-input text-grey1 text-bodymedium font-body pl-3 pt-2 w-full h-64 border-2 focus:outline-none rounded"
+      "#{field_tag(@input)} field-input text-grey1 text-bodymedium font-body pl-3 pt-2 w-full border-2 focus:outline-none rounded"
 
     input_dynamic_class = "border-grey3"
     active_color = active_input_color(assigns)
@@ -365,6 +365,13 @@ defmodule Frameworks.Pixel.Form do
       extra_space={false}
     >
       <textarea
+        id={"#{@field_id}_textarea"}
+        name={"#{@field_name}_textarea"}
+        class="hidden"
+        phx-target={@target}
+        phx-debounce={@debounce}
+      ><%= @field_value %></textarea>
+      <div
         id={@field_id}
         name={@field_name}
         class={[@input_static_class, @input_dynamic_class]}
@@ -372,9 +379,12 @@ defmodule Frameworks.Pixel.Form do
         __eyra_field_has_errors={@has_errors}
         __eyra_field_static_class={@input_static_class}
         __eyra_field_active_color={@active_color}
-        phx-target={@target}
-        phx-debounce={@debounce}
-      ><%= @field_value %></textarea>
+        phx-update="ignore">
+        <trix-editor
+          phx-debounce={@debounce}
+          input={"#{@field_id}_textarea"}>
+        </trix-editor>
+      </div>
     </.field>
     """
   end

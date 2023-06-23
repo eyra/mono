@@ -33,6 +33,8 @@ import { Clipboard } from "./clipboard";
 import { DataDonationHook } from "./data_donation_hook";
 import { Port } from "./port";
 
+import Trix from "trix"
+
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
 window.blurHash = () => {

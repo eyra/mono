@@ -19,6 +19,7 @@
     "port": "github:eyra/port#v1.0.0",
     "stringify": "^5.2.0",
     "topbar": "^0.1.4",
+    "trix": "^2.0.5",
     "workbox-precaching": "^6.1.5",
     "workbox-routing": "^6.1.5",
     "workbox-strategies": "^6.1.5"
