@@ -81,3 +81,7 @@ msgstr "Title"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "task.list.hint"
 msgstr "Change order with the arrows"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "task.platform.label"
+msgstr "Platform"

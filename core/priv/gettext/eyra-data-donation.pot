@@ -81,3 +81,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "task.list.hint"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task.platform.label"
+msgstr ""

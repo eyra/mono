@@ -40,8 +40,7 @@ defmodule Systems.Org.NodeContentView do
   end
 
   defp update_dropdown(%{assigns: %{entity: %{type: type}}} = socket) do
-    all_types = Org.Types.labels()
-    options = all_types |> Enum.map(&to_option(&1))
+    options = Org.Types.labels()
 
     socket
     |> assign(
@@ -49,8 +48,6 @@ defmodule Systems.Org.NodeContentView do
       selected_option: type
     )
   end
-
-  defp to_option(%{id: id, value: value}), do: %{id: id, label: value}
 
   @impl true
   def handle_event(
@@ -102,7 +99,6 @@ defmodule Systems.Org.NodeContentView do
           form={form}
           field={:type_string}
           options={@options}
-          selected_option={@selected_option}
           label_text={dgettext("eyra-org", "type.selector.label")}
           target={@myself}
         />

@@ -23,7 +23,7 @@ defmodule Systems.DataDonation.TaskModel do
     timestamps()
   end
 
-  @fields ~w(position title description)a
+  @fields ~w(platform position title description)a
 
   def changeset(model, params) do
     model
