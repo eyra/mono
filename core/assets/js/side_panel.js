@@ -1,15 +1,16 @@
-const maxBottomMargin = 41;
+const maxBottomMargin = 62;
 
 export const SidePanel = {
   mounted() {
     this.parent = document.getElementById(this.el.dataset.parent);
     this.panel = this.el.getElementsByClassName("panel")[0];
+    this.panel.style = `height: 0px;`;
     this.make_absolute();
     this.updateFrame();
 
     window.addEventListener("tab-activated", (event) => {
       this.updateFrame();
-    });  
+    });
 
     window.addEventListener("scroll", (event) => {
       this.updateFrame();
@@ -32,19 +33,22 @@ export const SidePanel = {
     this.updatePosition();
   },
   updateHeight() {
-    const scrollDelta =
+    const bottomMarginDelta = Math.min(
+      maxBottomMargin,
       document.documentElement.scrollHeight -
-      window.innerHeight -
-      window.scrollY;
-    const bottomMargin =
-      maxBottomMargin - Math.min(maxBottomMargin, scrollDelta);
+        window.scrollY -
+        window.innerHeight
+    );
+    const bottomMargin = maxBottomMargin - bottomMarginDelta;
 
-    const topDelta = Math.max(0, this.parent.getBoundingClientRect().top - window.scrollY);
-    const height = Math.max(0, window.innerHeight - topDelta - bottomMargin);
+    const height =
+      window.innerHeight -
+      (this.parent.getBoundingClientRect().top + bottomMargin);
     this.panel.style = `height: ${height}px;`;
   },
   updatePosition() {
-    const top = Math.max(0,this.parent.getBoundingClientRect().top) + window.scrollY
+    const top =
+      Math.max(0, this.parent.getBoundingClientRect().top) + window.scrollY;
     this.el.style = `top: ${top}px; right: 0px`;
   },
 };
