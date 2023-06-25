@@ -7,10 +7,7 @@ defmodule Systems.Benchmark.LeaderboardOverview do
 
   @impl true
   def update(%{csv_lines: csv_lines}, %{assigns: %{entity: %{id: tool_id}}} = socket) do
-    csv_lines
-    |> Enum.filter(&(Map.get(&1, "status") == "success"))
-    |> Enum.map(&parse_entry/1)
-    |> Benchmark.Public.import(tool_id)
+    Benchmark.Public.import_csv_lines(csv_lines, tool_id)
 
     {
       :ok,
@@ -72,34 +69,6 @@ defmodule Systems.Benchmark.LeaderboardOverview do
     }
 
     assign(socket, forward_button: forward_button)
-  end
-
-  defp parse_entry(line) do
-    {id, line} = Map.pop(line, "id")
-    {status, line} = Map.pop(line, "status")
-    {message, line} = Map.pop(line, "error_message")
-
-    submission_id =
-      id
-      |> String.split(":")
-      |> List.first()
-      |> String.to_integer()
-
-    %{
-      submission_id: submission_id,
-      status: status,
-      message: message,
-      scores: parse_scores(line)
-    }
-  end
-
-  defp parse_scores(%{} = scores) do
-    Enum.map(scores, fn {metric, value} ->
-      %{
-        name: metric,
-        score: String.to_float(value)
-      }
-    end)
   end
 
   @impl true

@@ -83,9 +83,50 @@ defmodule Systems.Benchmark.Public do
     )
   end
 
-  def import(entries, tool_id) when is_list(entries) do
+  defp parse_entry(line) do
+    {id, line} = Map.pop(line, "id")
+    {status, line} = Map.pop(line, "status")
+    {message, line} = Map.pop(line, "error_message")
+
+    submission_id =
+      id
+      |> String.split(":")
+      |> List.first()
+      |> String.to_integer()
+
+    %{
+      submission_id: submission_id,
+      status: status,
+      message: message,
+      scores: parse_scores(line)
+    }
+  end
+
+  defp parse_scores(%{} = scores) do
+    Enum.map(scores, fn {metric, value} ->
+      score =
+        case Float.parse(value) do
+          {score, ""} -> score
+          _ -> 0
+        end
+
+      %{
+        name: metric,
+        score: score
+      }
+    end)
+  end
+
+  def import_csv_lines(csv_lines, tool_id) when is_integer(tool_id) do
     tool = get_tool!(tool_id)
 
+    csv_lines
+    |> Enum.filter(&(Map.get(&1, "status") == "success"))
+    |> Enum.map(&parse_entry/1)
+    |> Benchmark.Public.import_entries(tool)
+  end
+
+  def import_entries(entries, %Benchmark.ToolModel{} = tool) when is_list(entries) do
     names =
       entries
       |> List.first(%{scores: []})
