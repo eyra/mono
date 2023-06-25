@@ -511,9 +511,8 @@ defmodule Frameworks.Pixel.Form do
 
     field_value =
       if raw_value = value(form, assigns) do
-        with %{value: value} <- Enum.find(options, "", &(Atom.to_string(&1.id) == raw_value)) do
-          value
-        else
+        case Enum.find(options, "", &(Atom.to_string(&1.id) == raw_value)) do
+          %{value: value} -> value
           _ -> raw_value
         end
       else
