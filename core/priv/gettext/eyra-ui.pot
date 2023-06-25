@@ -245,3 +245,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "terms.link"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "share.search.placeholder"
+msgstr ""

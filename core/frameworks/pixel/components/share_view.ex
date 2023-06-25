@@ -2,6 +2,7 @@ defmodule Frameworks.Pixel.ShareView do
   use CoreWeb, :live_component
 
   alias CoreWeb.UI.UserListItem
+  alias Frameworks.Pixel.SearchBar
 
   @impl true
   def update(
@@ -32,7 +33,8 @@ defmodule Frameworks.Pixel.ShareView do
         filtered_users: users,
         shared_users: shared_users,
         users: users,
-        close_button: close_button
+        close_button: close_button,
+        query_string: ""
       )
       |> filter_users()
     }
@@ -91,15 +93,6 @@ defmodule Frameworks.Pixel.ShareView do
     socket
   end
 
-  # data(filtered_users, :list)
-  # data(close_button, :map)
-
-  attr(:content_id, :integer, required: true)
-  attr(:content_name, :string, required: true)
-  attr(:group_name, :string, required: true)
-  attr(:users, :list, required: true)
-  attr(:shared_users, :list)
-
   @impl true
   def render(assigns) do
     ~H"""
@@ -112,6 +105,16 @@ defmodule Frameworks.Pixel.ShareView do
         </div>
         <Button.dynamic {@close_button} />
       </div>
+
+      <.live_component
+        module={SearchBar}
+        id={:share_search_bar}
+        query_string={@query_string}
+        placeholder={dgettext("eyra-ui", "share.search.placeholder")}
+        debounce="200"
+        parent={%{type: __MODULE__, id: @id}}
+      />
+
       <.spacing value="S" />
       <div class="rounded border-2 border-grey3 h-40 overflow-scroll">
         <div class="p-4 flex flex-col gap-3">

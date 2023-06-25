@@ -85,11 +85,11 @@ msgstr "Projects"
 
 #, elixir-autogen, elixir-format
 msgid "share.dialog.content"
-msgstr ""
+msgstr "project"
 
 #, elixir-autogen, elixir-format
 msgid "share.dialog.group"
-msgstr ""
+msgstr "researchers"
 
 #, elixir-autogen, elixir-format
 msgid "config.title"
