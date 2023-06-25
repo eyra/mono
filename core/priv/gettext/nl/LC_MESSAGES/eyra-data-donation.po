@@ -85,3 +85,15 @@ msgstr "Verander volgorde met de pijltjes"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "task.platform.label"
 msgstr "Platform"
+
+#, elixir-autogen, elixir-format
+msgid "pdf-replace-file-button"
+msgstr "Vervang PDF"
+
+#, elixir-autogen, elixir-format
+msgid "pdf-select-file-button"
+msgstr "Kies PDF"
+
+#, elixir-autogen, elixir-format
+msgid "pdf-select-placeholder"
+msgstr "Kies een pdf bestand"

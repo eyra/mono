@@ -60,7 +60,7 @@ defmodule Systems.DataDonation.TaskForm do
   # Saving
 
   def save(socket, %DataDonation.TaskModel{} = entity, attrs) do
-    changeset = DataDonation.TaskModel.changeset(entity, attrs) |> dbg()
+    changeset = DataDonation.TaskModel.changeset(entity, attrs)
 
     socket
     |> save(changeset)

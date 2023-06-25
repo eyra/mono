@@ -61,11 +61,6 @@ defmodule Link.Console.Page do
     {:noreply, socket}
   end
 
-  # data(wallets, :any)
-  # data(contributions, :any)
-  # data(content_items, :any)
-  # data(current_user, :any)
-  # data(next_best_action, :any)
   @impl true
   def render(assigns) do
     ~H"""

@@ -57,7 +57,7 @@ defmodule Systems.DataDonation.TaskBuilderView do
   end
 
   defp update_tasks(%{assigns: %{tool_id: tool_id}} = socket) do
-    tasks = DataDonation.Public.list_tasks(tool_id)
+    tasks = DataDonation.Public.list_tasks(tool_id, DataDonation.TaskModel.preload_graph(:down))
     socket |> assign(tasks: tasks)
   end
 
