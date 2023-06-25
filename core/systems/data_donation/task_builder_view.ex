@@ -76,7 +76,7 @@ defmodule Systems.DataDonation.TaskBuilderView do
   def render(assigns) do
     ~H"""
     <div>
-      <div  class="flex flex-row">
+      <div id={:task_builder} class="flex flex-row">
         <div class="flex-grow">
           <Area.content>
             <Margin.y id={:page_top} />
@@ -87,7 +87,7 @@ defmodule Systems.DataDonation.TaskBuilderView do
           </Area.content>
         </div>
         <div class="flex-shrink-0 w-side-panel">
-          <.side_panel id={:library} >
+          <.side_panel id={:library} parent={:task_builder}>
             <Margin.y id={:page_top} />
             <.library {@library} />
           </.side_panel>
