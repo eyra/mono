@@ -97,6 +97,7 @@ defmodule Systems.Project.OverviewPage do
         project_id: nil,
         dialog: nil
       )
+      |> update_projects()
       |> update_cards()
       |> update_menus()
     }

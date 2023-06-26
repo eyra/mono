@@ -1,7 +1,7 @@
 defmodule Systems.Project.Assembly do
   alias Core.Repo
   alias Ecto.Multi
-  alias Frameworks.Utility.EctoHelper
+  import Ecto.Query, warn: false
   alias Core.Authorization
 
   alias Systems.{
@@ -10,11 +10,11 @@ defmodule Systems.Project.Assembly do
     Benchmark
   }
 
-  def delete(%Project.Model{root: root, auth_node: auth_node}) do
-    Multi.new()
-    |> EctoHelper.delete(:root, root)
-    |> Multi.delete(:auth_node, auth_node)
-    |> Repo.transaction()
+  def delete(%Project.Model{auth_node: %{id: node_id}}) do
+    from(ra in Core.Authorization.RoleAssignment,
+      where: ra.node_id == ^node_id
+    )
+    |> Repo.delete_all()
   end
 
   def create(name, user, :empty) do
