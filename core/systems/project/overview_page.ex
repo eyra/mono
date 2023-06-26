@@ -139,21 +139,6 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_event("duplicate", %{"item" => project_id}, socket) do
-    preload = Project.Model.preload_graph(:full)
-    _project = Project.Public.get!(String.to_integer(project_id), preload)
-
-    # Project.Assembly.copy(project)
-
-    {
-      :noreply,
-      socket
-      |> update_cards()
-      |> update_menus()
-    }
-  end
-
-  @impl true
   def handle_event("create_project", _params, %{assigns: %{current_user: user}} = socket) do
     popup = %{
       module: Project.CreatePopup,

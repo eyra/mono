@@ -59,6 +59,11 @@ defmodule Systems.Project.Public do
     |> Project.Assembly.delete()
   end
 
+  def delete_item(id) when is_number(id) do
+    get_item!(id, Project.ItemModel.preload_graph(:down))
+    |> Project.Assembly.delete()
+  end
+
   def create(
         %Multi{} = multi,
         %{name: _name} = attrs
