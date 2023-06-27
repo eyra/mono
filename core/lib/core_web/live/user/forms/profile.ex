@@ -5,15 +5,8 @@ defmodule CoreWeb.User.Forms.Profile do
   alias Core.Accounts
   alias Core.Accounts.UserProfileEdit
 
-  alias Frameworks.Pixel.Text.{Title2}
-  alias Frameworks.Pixel.Form.{Form, TextInput, PhotoInput}
-
-  prop(props, :any, required: true)
-
-  data(user, :any)
-  data(entity, :any)
-  data(uploads, :any)
-  data(changeset, :any, default: nil)
+  import Frameworks.Pixel.Form
+  alias Frameworks.Pixel.Text
 
   @impl true
   def process_file(
@@ -24,6 +17,7 @@ defmodule CoreWeb.User.Forms.Profile do
   end
 
   # Handle Selector Update
+  @impl true
   def update(
         %{active_item_ids: active_item_ids, selector_id: selector_id},
         %{assigns: %{entity: entity}} = socket
@@ -31,16 +25,30 @@ defmodule CoreWeb.User.Forms.Profile do
     {:ok, socket |> save(entity, :auto_save, %{selector_id => active_item_ids})}
   end
 
-  def update(%{id: id, props: %{user: user}}, socket) do
+  @impl true
+  def update(%{id: id, user: user}, socket) do
     profile = Accounts.get_profile(user)
     entity = UserProfileEdit.create(user, profile)
+
+    signout_button = %{
+      action: %{type: :http_delete, to: ~p"/user/session"},
+      face: %{
+        type: :secondary,
+        label: dgettext("eyra-ui", "menu.item.signout"),
+        border_color: "border-delete",
+        text_color: "text-delete"
+      }
+    }
 
     {
       :ok,
       socket
-      |> assign(id: id)
-      |> assign(user: user)
-      |> assign(entity: entity)
+      |> assign(
+        id: id,
+        user: user,
+        entity: entity,
+        signout_button: signout_button
+      )
       |> init_file_uploader(:photo)
       |> update_ui()
     }
@@ -80,32 +88,42 @@ defmodule CoreWeb.User.Forms.Profile do
     |> auto_save(changeset)
   end
 
+  attr(:user, :map, required: true)
+
   @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <FormArea>
-        <Title2>{dgettext("eyra-account", "profile.title")}</Title2>
-        <Form id="main_form" changeset={@changeset} change_event="save" target={@myself}>
-          <PhotoInput
+    ~H"""
+    <div>
+      <Area.content>
+      <Margin.y id={:page_top} />
+      <Area.form>
+        <Text.title2><%= dgettext("eyra-account", "profile.title")  %></Text.title2>
+        <.form id="main_form" :let={form} for={@changeset} phx-submit="signup" phx-change="save" phx-target={@myself} >
+          <.photo_input
             static_path={&CoreWeb.Endpoint.static_path/1}
             photo_url={@entity.photo_url}
             uploads={@uploads}
             primary_button_text={dgettext("eyra-account", "choose.profile.photo.file")}
             secondary_button_text={dgettext("eyra-account", "choose.other.profile.photo.file")}
           />
-          <Spacing value="M" />
+          <.spacing value="M" />
 
-          <TextInput field={:fullname} label_text={dgettext("eyra-account", "fullname.label")} />
-          <TextInput field={:displayname} label_text={dgettext("eyra-account", "displayname.label")} />
+          <.text_input form={form} field={:fullname} label_text={dgettext("eyra-account", "fullname.label")} />
+          <.text_input form={form} field={:displayname} label_text={dgettext("eyra-account", "displayname.label")} />
 
-          <div :if={@user.researcher}>
-            <TextInput field={:title} label_text={dgettext("eyra-account", "professionaltitle.label")} />
-          </div>
-        </Form>
-      </FormArea>
-    </ContentArea>
+          <%= if @user.researcher do %>
+            <.text_input form={form} field={:title} label_text={dgettext("eyra-account", "professionaltitle.label")} />
+          <% end %>
+        </.form>
+
+        <.spacing value="S" />
+        <.wrap>
+          <Button.dynamic {@signout_button} />
+        </.wrap>
+
+      </Area.form>
+      </Area.content>
+    </div>
     """
   end
 end

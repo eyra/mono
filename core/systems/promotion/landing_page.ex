@@ -5,29 +5,22 @@ defmodule Systems.Promotion.LandingPage do
   use CoreWeb, :live_view
   use CoreWeb.UI.PlainDialog
   use CoreWeb.Layouts.Website.Component, :promotion
-  alias CoreWeb.Layouts.Website.Component, as: Website
 
   import CoreWeb.UI.Responsive.Viewport
 
-  alias Frameworks.Pixel.CampaignBanner
-  alias Frameworks.Pixel.Text.{Title1, Title2, BodyLarge}
-  alias Frameworks.Pixel.Button.{PrimaryLiveViewButton, BackButton}
-  alias Frameworks.Pixel.Hero.{HeroImage, HeroBanner}
-  alias Frameworks.Pixel.Card.Highlight
+  import Frameworks.Pixel.CampaignBanner
+  alias Frameworks.Pixel.Hero
+  alias Frameworks.Pixel.Card
 
   alias Core.ImageHelpers
   alias Core.Accounts
 
-  alias CoreWeb.{Devices, Languages}
+  import CoreWeb.Devices
+  import CoreWeb.Languages
 
   alias Systems.{
     Promotion
   }
-
-  data(preview, :boolean)
-  data(model, :map)
-  data(image_info, :map)
-  data(back_path, :any)
 
   def mount(
         %{"id" => id, "preview" => preview, "back" => back},
@@ -59,7 +52,7 @@ defmodule Systems.Promotion.LandingPage do
 
     back =
       params
-      |> Map.get("back", Routes.live_path(socket, Accounts.start_page_target(user)))
+      |> Map.get("back", Accounts.start_page_path(user))
 
     mount(
       params
@@ -139,80 +132,84 @@ defmodule Systems.Promotion.LandingPage do
   defp grid_cols(2), do: "grid-cols-1 sm:grid-cols-2"
   defp grid_cols(_), do: "grid-cols-1 sm:grid-cols-3"
 
+  # data(preview, :boolean)
+  # data(model, :map)
+  # data(image_info, :map)
+  # data(back_path, :any)
+
   @impl true
   def render(assigns) do
-    ~F"""
-    <Website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus}>
+    ~H"""
+    <.website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus}>
       <:hero>
-        <HeroImage title={@vm.title} subtitle={@vm.themes} image_info={@image_info}>
+        <Hero.image title={@vm.title} subtitle={@vm.themes} image_info={@image_info}>
           <:call_to_action>
-            <PrimaryLiveViewButton label={@vm.call_to_action.label} event="call-to-action-1" />
+            <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action-1" />
           </:call_to_action>
-        </HeroImage>
-        <HeroBanner
+        </Hero.image>
+        <Hero.banner
           title={@vm.organisation.label}
           subtitle={@vm.byline}
           icon_url={CoreWeb.Endpoint.static_path("/images/#{@vm.organisation.id}.svg")}
         />
       </:hero>
 
-      <div
-        :if={show_dialog?(@dialog)}
-        class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20"
-      >
-        <div class="flex flex-row items-center justify-center w-full h-full">
-          <PlainDialog {...@dialog} />
+      <%= if show_dialog?(@dialog) do %>
+        <div class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
+          <div class="flex flex-row items-center justify-center w-full h-full">
+            <.plain_dialog {@dialog} />
+          </div>
         </div>
-      </div>
+      <% end %>
 
-      <ContentArea>
-        <MarginY id={:page_top} />
+      <Area.content>
+        <Margin.y id={:page_top} />
         <div class="ml-8 mr-8 text-center">
-          <Title1>{@vm.subtitle}</Title1>
+          <Text.title1><%= @vm.subtitle %></Text.title1>
         </div>
 
         <div class="mb-12 sm:mb-16" />
         <div class={"grid gap-6 sm:gap-8 #{grid_cols(Enum.count(@vm.highlights))}"}>
-          <div :for={highlight <- @vm.highlights} class="bg-grey5 rounded">
-            <Highlight title={highlight.title} text={highlight.text} />
-          </div>
+          <%= for highlight <- @vm.highlights do %>
+            <Card.highlight {highlight} />
+          <% end %>
         </div>
         <div class="mb-12 sm:mb-16" />
 
-        <Title2 margin="">{dgettext("eyra-promotion", "expectations.public.label")}</Title2>
-        <Spacing value="M" />
-        <BodyLarge>{@vm.expectations}</BodyLarge>
-        <Spacing value="M" />
-        <Title2 margin="">{dgettext("eyra-promotion", "description.public.label")}</Title2>
-        <Spacing value="M" />
-        <BodyLarge>{@vm.description}</BodyLarge>
-        <Spacing value="L" />
+        <Text.title2 margin=""><%= dgettext("eyra-promotion", "expectations.public.label") %></Text.title2>
+        <.spacing value="M" />
+        <Text.body_large><%= @vm.expectations %></Text.body_large>
+        <.spacing value="M" />
+        <Text.title2 margin=""><%= dgettext("eyra-promotion", "description.public.label") %></Text.title2>
+        <.spacing value="M" />
+        <Text.body_large><%= @vm.description %></Text.body_large>
+        <.spacing value="L" />
 
-        <CampaignBanner
+        <.campaign_banner
           photo_url={@vm.banner_photo_url}
           placeholder_photo_url={CoreWeb.Endpoint.static_path("/images/profile_photo_default.svg")}
           title={@vm.banner_title}
           subtitle={@vm.banner_subtitle}
           url={@vm.banner_url}
         />
-        <Spacing value="L" />
+        <.spacing value="L" />
         <div class="flex flex-col justify-center sm:flex-row gap-4 sm:gap-8 items-center">
-          <Devices label={dgettext("eyra-promotion", "devices.available.label")} devices={@vm.devices} />
-          <Languages
+          <.devices label={dgettext("eyra-promotion", "devices.available.label")} devices={@vm.devices} />
+          <.languages
             label={dgettext("eyra-promotion", "languages.available.label")}
             languages={@vm.languages}
           />
         </div>
-        <Spacing value="XL" />
+        <.spacing value="XL" />
 
-        <PrimaryLiveViewButton label={@vm.call_to_action.label} event="call-to-action-2" />
-        <Spacing value="M" />
+        <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action-2" />
+        <.spacing value="M" />
 
         <div class="flex">
-          <BackButton label={dgettext("eyra-promotion", "back.button.label")} path={@back_path} />
+          <Button.back label={dgettext("eyra-promotion", "back.button.label")} path={@back_path} />
         </div>
-      </ContentArea>
-    </Website>
+      </Area.content>
+    </.website>
     """
   end
 end

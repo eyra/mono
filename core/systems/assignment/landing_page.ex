@@ -6,9 +6,8 @@ defmodule Systems.Assignment.LandingPage do
   use CoreWeb.UI.PlainDialog
   use CoreWeb.Layouts.Workspace.Component, :assignment
 
-  alias Frameworks.Pixel.Text.{Title1, Title3, BodyLarge}
-  alias Frameworks.Pixel.Card.Highlight
-  alias Frameworks.Pixel.Wrap
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Card
 
   alias Core.Accounts
 
@@ -16,11 +15,6 @@ defmodule Systems.Assignment.LandingPage do
     Assignment,
     NextAction
   }
-
-  data(model, :map)
-  data(task, :map)
-  data(tool_view_model, :map)
-  data(experiment, :map)
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
@@ -101,8 +95,7 @@ defmodule Systems.Assignment.LandingPage do
       ) do
     Assignment.Public.cancel(id, user)
 
-    {:noreply,
-     push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))}
+    {:noreply, push_redirect(socket, to: Accounts.start_page_path(user))}
   end
 
   @impl true
@@ -130,49 +123,52 @@ defmodule Systems.Assignment.LandingPage do
   defp grid_cols(2), do: "grid-cols-1 sm:grid-cols-2"
   defp grid_cols(_), do: "grid-cols-1 sm:grid-cols-3"
 
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace title={@vm.hero_title} menus={@menus}>
-      <div
-        :if={show_dialog?(@dialog)}
-        class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20"
-      >
-        <div class="flex flex-row items-center justify-center w-full h-full">
-          <PlainDialog {...@dialog} />
-        </div>
-      </div>
-
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <Title1>{@vm.title}</Title1>
-        <Spacing value="L" />
-
-        <div class={"grid gap-6 sm:gap-8 #{grid_cols(Enum.count(@vm.highlights))}"}>
-          <div :for={highlight <- @vm.highlights} class="bg-grey5 rounded">
-            <Highlight title={highlight.title} text={highlight.text} />
+    ~H"""
+    <.workspace title={@vm.hero_title} menus={@menus}>
+      <%= if show_dialog?(@dialog) do %>
+        <div class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
+          <div class="flex flex-row items-center justify-center w-full h-full">
+            <.plain_dialog {@dialog} />
           </div>
         </div>
-        <Spacing value="L" />
+      <% end %>
 
-        <Title3>{@vm.subtitle}</Title3>
-        <Spacing value="M" />
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <Text.title1><%= @vm.title %></Text.title1>
+        <.spacing value="L" />
 
-        <Wrap :if={@vm.public_id}>
-          <Assignment.TicketView public_id={@vm.public_id} />
-        </Wrap>
-        <Spacing value="M" />
+        <div class={"grid gap-6 sm:gap-8 #{grid_cols(Enum.count(@vm.highlights))}"}>
+          <%= for highlight <- @vm.highlights do %>
+            <Card.highlight {highlight} />
+          <% end %>
+        </div>
+        <.spacing value="L" />
 
-        <BodyLarge>{@vm.text}</BodyLarge>
-        <Spacing value="L" />
+        <Text.title3><%= @vm.subtitle %></Text.title3>
+        <.spacing value="M" />
 
-        <Dynamic.LiveComponent
-          :if={@experiment != nil}
-          id={@experiment.id}
-          module={@experiment.view}
-          {...@experiment.model}
-        />
-      </ContentArea>
-    </Workspace>
+        <%= if @vm.public_id do %>
+          <.wrap>
+            <Assignment.TicketView.normal public_id={@vm.public_id} />
+          </.wrap>
+        <% end %>
+        <.spacing value="M" />
+
+        <Text.body_large><%= @vm.text %></Text.body_large>
+        <.spacing value="L" />
+
+        <%= if @experiment do %>
+          <.live_component
+            id={@experiment.id}
+            module={@experiment.view}
+            {@experiment.model}
+          />
+        <% end %>
+      </Area.content>
+    </.workspace>
     """
   end
 end

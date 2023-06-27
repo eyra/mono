@@ -1,16 +1,13 @@
 defmodule Frameworks.Pixel.Wrap do
-  @moduledoc """
-    Wraps an element x.
-  """
-  use Surface.Component
+  use Phoenix.Component
 
-  slot(default)
+  slot(:inner_block, required: true)
 
-  def render(assigns) do
-    ~F"""
+  def wrap(assigns) do
+    ~H"""
     <div class="flex flex-row">
       <div class="flex-wrap">
-        <#slot />
+        <%= render_slot(@inner_block) %>
       </div>
     </div>
     """

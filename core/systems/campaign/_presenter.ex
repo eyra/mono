@@ -17,34 +17,34 @@ defmodule Systems.Campaign.Presenter do
   # View Model By ID
 
   @impl true
-  def view_model(id, Campaign.ContentPage = page, assigns, url_resolver) when is_number(id) do
+  def view_model(id, Campaign.ContentPage = page, assigns) when is_number(id) do
     Campaign.Public.get!(id, Campaign.Model.preload_graph(:full))
-    |> view_model(page, assigns, url_resolver)
+    |> view_model(page, assigns)
   end
 
   @impl true
-  def view_model(id, Promotion.LandingPage = page, assigns, url_resolver) when is_number(id) do
+  def view_model(id, Promotion.LandingPage = page, assigns) when is_number(id) do
     Campaign.Public.get_by_promotion(id, Campaign.Model.preload_graph(:full))
-    |> view_model(page, assigns, url_resolver)
+    |> view_model(page, assigns)
   end
 
   @impl true
-  def view_model(id, Assignment.CallbackPage = page, assigns, url_resolver) when is_number(id) do
+  def view_model(id, Assignment.CallbackPage = page, assigns) when is_number(id) do
     Campaign.Public.get_by_promotable(id, Campaign.Model.preload_graph(:full))
-    |> view_model(page, assigns, url_resolver)
+    |> view_model(page, assigns)
   end
 
   @impl true
-  def view_model(id, Assignment.LandingPage = page, assigns, url_resolver) when is_number(id) do
+  def view_model(id, Assignment.LandingPage = page, assigns) when is_number(id) do
     Campaign.Public.get_by_promotable(id, Campaign.Model.preload_graph(:full))
-    |> view_model(page, assigns, url_resolver)
+    |> view_model(page, assigns)
   end
 
   # View Model By Campaign
 
   @impl true
-  def view_model(%Campaign.Model{} = campaign, page, assigns, url_resolver) do
-    builder(page).view_model(campaign, assigns, url_resolver)
+  def view_model(%Campaign.Model{} = campaign, page, assigns) do
+    builder(page).view_model(campaign, assigns)
   end
 
   defp builder(Campaign.ContentPage), do: Campaign.Builders.CampaignContentPage

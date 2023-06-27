@@ -1,9 +1,10 @@
 defmodule Systems.Admin.ActionsView do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
   use Core.FeatureFlags
 
+  alias CoreWeb.Router.Helpers, as: Routes
   alias CoreWeb.UI.Timestamp
-  alias Frameworks.Pixel.Text.{Title2, Title3}
+  alias Frameworks.Pixel.Text
 
   alias Systems.{
     Campaign,
@@ -12,16 +13,7 @@ defmodule Systems.Admin.ActionsView do
     Assignment
   }
 
-  prop(props, :any)
-
-  data(rollback_expired_deposits_button, :map)
-  data(multiply_rewards_button, :map)
-  data(generate_vu_2022_button, :map)
-  data(import_rewards_button, :map)
-  data(sync_rewards_button, :map)
-  data(expire_button, :map)
-  data(expire_force_button, :map)
-
+  @impl true
   def update(%{id: id}, socket) do
     {
       :ok,
@@ -181,50 +173,53 @@ defmodule Systems.Admin.ActionsView do
     {:noreply, socket}
   end
 
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <Title2>{dgettext("eyra-admin", "actions.title")}</Title2>
+    ~H"""
+    <div>
+      <Area.content>
+      <Margin.y id={:page_top} />
+      <Text.title2><%= dgettext("eyra-admin", "actions.title") %></Text.title2>
 
-      <Title3 margin="">VU</Title3>
-      <Spacing value="S" />
-      <Wrap>
-        <DynamicButton vm={@multiply_rewards_button} />
-        <Spacing value="S" />
-      </Wrap>
-      <Wrap>
-        <DynamicButton vm={@generate_vu_2022_button} />
-        <Spacing value="S" />
-      </Wrap>
-      <Spacing value="XL" />
+      <Text.title3 margin="">VU</Text.title3>
+      <.spacing value="S" />
+      <.wrap>
+        <Button.dynamic {@multiply_rewards_button} />
+        <.spacing value="S" />
+      </.wrap>
+      <.wrap>
+        <Button.dynamic {@generate_vu_2022_button} />
+        <.spacing value="S" />
+      </.wrap>
+      <.spacing value="XL" />
 
-      <Title3 margin="">Book keeping</Title3>
-      <Spacing value="S" />
-      <Wrap>
-        <DynamicButton vm={@rollback_expired_deposits_button} />
-        <Spacing value="S" />
-      </Wrap>
-      <Wrap>
-        <DynamicButton vm={@import_rewards_button} />
-        <Spacing value="S" />
-      </Wrap>
-      <Wrap>
-        <DynamicButton vm={@sync_rewards_button} />
-      </Wrap>
-      <Spacing value="XL" />
-      <Title3 margin="">Campaigns</Title3>
-      <Spacing value="S" />
-      <Wrap>
-        <DynamicButton vm={@expire_button} />
-        <Spacing value="S" />
-      </Wrap>
-      <div :if={feature_enabled?(:debug_expire_force)}>
-        <Wrap>
-          <DynamicButton vm={@expire_force_button} />
-        </Wrap>
-      </div>
-    </ContentArea>
+      <Text.title3 margin="">Book keeping</Text.title3>
+      <.spacing value="S" />
+      <.wrap>
+        <Button.dynamic {@rollback_expired_deposits_button} />
+        <.spacing value="S" />
+      </.wrap>
+      <.wrap>
+        <Button.dynamic {@import_rewards_button} />
+        <.spacing value="S" />
+      </.wrap>
+      <.wrap>
+        <Button.dynamic {@sync_rewards_button} />
+      </.wrap>
+      <.spacing value="XL" />
+      <Text.title3 margin="">Campaigns</Text.title3>
+      <.spacing value="S" />
+      <.wrap>
+        <Button.dynamic {@expire_button} />
+        <.spacing value="S" />
+      </.wrap>
+      <%= if feature_enabled?(:debug_expire_force) do %>
+        <.wrap>
+          <Button.dynamic {@expire_force_button} />
+        </.wrap>
+      <% end %>
+      </Area.content>
+    </div>
     """
   end
 end

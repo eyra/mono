@@ -18,8 +18,9 @@ defmodule Core.Accounts.SignalHandlers do
       }) do
     required_fields =
       case {user.researcher, user.student} do
+        {true, _} -> [:fullname, :title]
         {_, true} -> [:fullname]
-        _ -> [:fullname, :title]
+        _ -> [:fullname]
       end
 
     user_valid? = validate_required(user_changeset, [:displayname]).valid?
@@ -66,7 +67,7 @@ defmodule Core.Accounts.SignalHandlers do
       NextAction.Public.create_next_action(user, PromotePushStudent)
     end
 
-    Accounts.Email.account_created(user)
+    Email.Factory.account_created(user)
     |> Email.Public.deliver_later()
   end
 end

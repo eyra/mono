@@ -9,11 +9,10 @@
 msgid ""
 msgstr ""
 "Language: en\n"
-"Plural-Forms: nplurals=2\n"
 
 #, elixir-autogen, elixir-format
 msgid "form.description"
-msgstr "Help us to improve the Panl platform. Do you have a question about the Panl platform? Or do you want to give us feedback? Fill out the form below. We will reply by sending an email."
+msgstr "Do you have a question about the platform? Or do you want to give us feedback? Fill out the form below. We will reply by sending an email."
 
 #, elixir-autogen, elixir-format
 msgid "form.title"

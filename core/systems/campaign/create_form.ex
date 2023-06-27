@@ -1,8 +1,8 @@
 defmodule Systems.Campaign.CreateForm do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
-  alias Frameworks.Pixel.Selector.Selector
-  alias Frameworks.Pixel.Text.{Title3, FormFieldLabel}
+  alias Frameworks.Pixel.Selector
+  alias Frameworks.Pixel.Text
 
   alias Systems.{
     Campaign,
@@ -11,20 +11,8 @@ defmodule Systems.Campaign.CreateForm do
     Director
   }
 
-  prop(user, :any)
-  prop(target, :any)
-
-  data(title, :string)
-  data(buttons, :list)
-
-  data(pools, :list)
-  data(pool_labels, :list)
-  data(tool_type_labels, :list)
-
-  data(selected_tool_type, :map)
-  data(selected_pool, :map)
-
   # Handle Tool Type Selector Update
+  @impl true
   def update(
         %{active_item_id: active_item_id, selector_id: :tool_type_selector},
         %{assigns: %{tool_type_labels: tool_type_labels}} = socket
@@ -39,6 +27,7 @@ defmodule Systems.Campaign.CreateForm do
   end
 
   # Handle Pool Selector Update
+  @impl true
   def update(
         %{active_item_id: active_item_id, selector_id: :pool_selector},
         %{assigns: %{pools: pools}} = socket
@@ -53,7 +42,7 @@ defmodule Systems.Campaign.CreateForm do
   end
 
   # Initial Update
-
+  @impl true
   def update(%{id: id, user: user, target: target}, socket) do
     title = dgettext("eyra-campaign", "campaign.create.title")
 
@@ -149,18 +138,30 @@ defmodule Systems.Campaign.CreateForm do
     Campaign.Assembly.create(user, title, tool_type, pool, budget)
   end
 
+  # data(title, :string)
+  # data(buttons, :list)
+  # data(pools, :list)
+  # data(pool_labels, :list)
+  # data(tool_type_labels, :list)
+  # data(selected_tool_type, :map)
+  # data(selected_pool, :map)
+
+  attr(:user, :any)
+  attr(:target, :any)
+
   @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div>
-      <Title3>{@title}</Title3>
-      <Spacing value="XS" />
+      <Text.title3><%= @title %></Text.title3>
+      <.spacing value="XS" />
 
-      <FormFieldLabel id={:tool_type_label}>
-        {dgettext("eyra-campaign", "campaign.create.tooltype.label")}
-      </FormFieldLabel>
-      <Spacing value="XXS" />
-      <Selector
+      <Text.form_field_label id={:tool_type_label}>
+        <%= dgettext("eyra-campaign", "campaign.create.tooltype.label") %>
+      </Text.form_field_label>
+      <.spacing value="XXS" />
+      <.live_component
+        module={Selector}
         id={:tool_type_selector}
         items={@tool_type_labels}
         type={:radio}
@@ -168,13 +169,14 @@ defmodule Systems.Campaign.CreateForm do
         parent={%{type: __MODULE__, id: @id}}
       />
 
-      <Spacing value="M" />
+      <.spacing value="M" />
 
-      <FormFieldLabel id={:pool_label}>
-        {dgettext("eyra-campaign", "campaign.create.pool.label")}
-      </FormFieldLabel>
-      <Spacing value="XXS" />
-      <Selector
+      <Text.form_field_label id={:pool_label}>
+        <%= dgettext("eyra-campaign", "campaign.create.pool.label") %>
+      </Text.form_field_label>
+      <.spacing value="XXS" />
+      <.live_component
+        module={Selector}
         id={:pool_selector}
         items={@pool_labels}
         type={:radio}
@@ -182,9 +184,11 @@ defmodule Systems.Campaign.CreateForm do
         parent={%{type: __MODULE__, id: @id}}
       />
 
-      <Spacing value="M" />
+      <.spacing value="M" />
       <div class="flex flex-row gap-4">
-        <DynamicButton :for={button <- @buttons} vm={button} />
+        <%= for button <- @buttons do %>
+          <Button.dynamic {button} />
+        <% end %>
       </div>
     </div>
     """

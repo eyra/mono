@@ -3,11 +3,7 @@ defmodule CoreWeb.UI.ProgressBar do
     Progress bar capable of stacking multiple bars.
     The bars will be sorted on size and will be stacked from large to small.
   """
-  use Surface.Component
-
-  prop(size, :integer, default: 0)
-  prop(bars, :list, default: [])
-  prop(bg_color, :string, default: "bg-grey4")
+  use CoreWeb, :html
 
   defp hide(0, _), do: true
   defp hide(nil, _), do: true
@@ -35,75 +31,28 @@ defmodule CoreWeb.UI.ProgressBar do
     bars |> Enum.sort_by(& &1.size, :desc)
   end
 
-  def render(assigns) do
-    ~F"""
+  attr(:size, :integer, default: 0)
+  attr(:bars, :list, default: [])
+  attr(:bg_color, :string, default: "bg-grey4")
+
+  def progress_bar(assigns) do
+    ~H"""
     <div class="relative h-6">
       <div class={"absolute w-full h-6 rounded-full #{@bg_color}"}>
       </div>
-      <div :for={{bar, index} <- Enum.with_index(sort_by_size(@bars))} class="absolute h-6 w-full">
-        <div
-          style={"min-width: #{min_width(@size, @bars, bar, index)}; width: #{width(@size, bar)}%"}
-          class={"absolute h-6 rounded-full bg-white ml-2px #{hide(@size, bar)}"}
-        />
-        <div
-          style={"min-width: #{min_width(@size, @bars, bar, index)}; width: #{width(@size, bar)}%"}
-          class={"absolute h-6 rounded-full #{color(bar)}"}
-        />
-      </div>
+      <%= for {bar, index} <- Enum.with_index(sort_by_size(@bars)) do %>
+        <div class="absolute h-6 w-full">
+          <div
+            style={"min-width: #{min_width(@size, @bars, bar, index)}; width: #{width(@size, bar)}%"}
+            class={"absolute h-6 rounded-full bg-white ml-2px #{hide(@size, bar)}"}
+          />
+          <div
+            style={"min-width: #{min_width(@size, @bars, bar, index)}; width: #{width(@size, bar)}%"}
+            class={"absolute h-6 rounded-full #{color(bar)}"}
+          />
+        </div>
+      <% end %>
     </div>
-    """
-  end
-end
-
-defmodule CoreWeb.UI.ProgressBar.Example do
-  use Surface.Catalogue.Example,
-    subject: CoreWeb.UI.ProgressBar,
-    catalogue: Frameworks.Pixel.Catalogue,
-    height: "420px",
-    container: {:div, class: ""}
-
-  def render(assigns) do
-    ~F"""
-    <ProgressBar size={nil} bars={[%{color: :primary, size: 100}]} />
-    <ProgressBar size={0} bars={[%{color: :primary, size: nil}]} />
-    <ProgressBar size={0} bars={[%{color: :primary, size: 100}]} />
-    <ProgressBar size={100} bars={[%{color: :primary, size: 100}]} />
-    <ProgressBar size={100} bars={[%{color: :primary, size: 100}, %{color: :secondary, size: 50}]} />
-    <ProgressBar
-      size={100}
-      bars={[%{color: :primary, size: 100}, %{color: :secondary, size: 50}, %{color: :tertiary, size: 1}]}
-    />
-    <ProgressBar
-      size={100}
-      bars={[
-        %{color: :primary, size: 100},
-        %{color: :secondary, size: 50},
-        %{color: :tertiary, size: 1},
-        %{color: :grey1, size: 1}
-      ]}
-    />
-    """
-  end
-end
-
-defmodule CoreWeb.UI.ProgressBar.Playground do
-  use Surface.Catalogue.Playground,
-    subject: CoreWeb.UI.ProgressBar,
-    catalogue: Frameworks.Pixel.Catalogue,
-    height: "110px",
-    container: {:div, class: "buttons is-centered"}
-
-  @props [
-    size: 100,
-    bars: [
-      %{color: :primary, size: 100},
-      %{color: :secondary, size: 50}
-    ]
-  ]
-
-  def render(assigns) do
-    ~F"""
-    <ProgressBar {...@props} />
     """
   end
 end

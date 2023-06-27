@@ -1,13 +1,10 @@
 defmodule Systems.Admin.LoginPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Stripped.Component, :admin_login
-  alias CoreWeb.Layouts.Stripped.Component, as: Stripped
 
   import Ecto.Query
   alias Core.Repo
   alias Core.Accounts.User
-
-  data(users, :any)
 
   def mount(_params, _session, socket) do
     {
@@ -24,12 +21,14 @@ defmodule Systems.Admin.LoginPage do
     |> Repo.all()
   end
 
+  # data(users, :any)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Stripped user={@current_user} menus={@menus}>
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <FormArea>
+    ~H"""
+    <.stripped menus={@menus}>
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <Area.form>
           <div class="text-title5 font-title5 sm:text-title3 sm:font-title3 lg:text-title2 lg:font-title2 mb-7 lg:mb-9">
             Log in
           </div>
@@ -50,9 +49,9 @@ defmodule Systems.Admin.LoginPage do
               </div>
             </div>
           </a>
-        </FormArea>
-      </ContentArea>
-    </Stripped>
+        </Area.form>
+      </Area.content>
+    </.stripped>
     """
   end
 end

@@ -47,10 +47,6 @@ msgid "menu.item.menu"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "menu.item.eyra"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "menu.item.todo"
 msgstr ""
 
@@ -104,10 +100,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.welcome.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "menu.item.link"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -183,10 +175,6 @@ msgid "share.dialog.text"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "pronoun.her"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "menu.item.payments"
 msgstr ""
 
@@ -203,10 +191,6 @@ msgid "notify.all"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "pronoun.him"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "menu.item.admin"
 msgstr ""
 
@@ -216,4 +200,48 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "share.dialog.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "menu.item.projects"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "start.page.projects"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "copy.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "title.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "start.page.home"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "collapse.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "expand.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "terms.link"
 msgstr ""

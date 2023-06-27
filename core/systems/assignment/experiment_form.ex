@@ -3,26 +3,19 @@ defmodule Systems.Assignment.ExperimentForm do
   use Frameworks.Pixel.Form.CheckboxHelpers
 
   alias Core.Enums.Devices
-  alias Link.Enums.OnlineStudyLanguages
 
-  alias Frameworks.Pixel.Selector.Selector
-  alias Frameworks.Pixel.Text.{Title3, Body}
-  alias Frameworks.Pixel.Form.{Form, NumberInput}
+  import Frameworks.Pixel.Form
+
+  alias Frameworks.Pixel.Selector
+  alias Frameworks.Pixel.Text
 
   alias Systems.{
     Assignment
   }
 
-  prop(entity, :map)
-  prop(validate?, :boolean)
-
-  data(device_labels, :list)
-  data(language_labels, :list)
-  data(ethical_label, :any)
-  data(changeset, :any)
-
   # Handle selector update
 
+  @impl true
   def update(
         %{active_item_id: active_item_id, selector_id: :language},
         %{assigns: %{entity: entity}} = socket
@@ -41,6 +34,7 @@ defmodule Systems.Assignment.ExperimentForm do
     }
   end
 
+  @impl true
   def update(
         %{active_item_ids: active_item_ids, selector_id: selector_id},
         %{assigns: %{entity: entity}} = socket
@@ -52,20 +46,10 @@ defmodule Systems.Assignment.ExperimentForm do
     }
   end
 
-  # Handle update from parent after attempt to publish
-  def update(%{props: %{validate?: new}}, %{assigns: %{validate?: current}} = socket)
-      when new != current do
-    {
-      :ok,
-      socket
-      |> assign(validate?: new)
-      |> validate_for_publish()
-    }
-  end
-
   # Handle initial update
+  @impl true
   def update(
-        %{id: id, entity: entity, validate?: validate?},
+        %{id: id, entity: entity},
         socket
       ) do
     changeset = Assignment.ExperimentModel.changeset(entity, :create, %{})
@@ -73,10 +57,11 @@ defmodule Systems.Assignment.ExperimentForm do
     {
       :ok,
       socket
-      |> assign(id: id)
-      |> assign(entity: entity)
-      |> assign(changeset: changeset)
-      |> assign(validate?: validate?)
+      |> assign(
+        id: id,
+        entity: entity,
+        changeset: changeset
+      )
       |> update_device_labels()
       |> update_language_labels()
       |> validate_for_publish()
@@ -89,7 +74,7 @@ defmodule Systems.Assignment.ExperimentForm do
   end
 
   defp update_language_labels(%{assigns: %{entity: %{language: language}}} = socket) do
-    language_labels = OnlineStudyLanguages.labels(language)
+    language_labels = Assignment.OnlineStudyLanguages.labels(language)
     socket |> assign(language_labels: language_labels)
   end
 
@@ -117,7 +102,7 @@ defmodule Systems.Assignment.ExperimentForm do
 
   # Validate
 
-  def validate_for_publish(%{assigns: %{id: id, entity: entity, validate?: true}} = socket) do
+  def validate_for_publish(%{assigns: %{id: id, entity: entity}} = socket) do
     changeset =
       Assignment.ExperimentModel.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
@@ -128,36 +113,48 @@ defmodule Systems.Assignment.ExperimentForm do
     |> assign(changeset: changeset)
   end
 
-  def validate_for_publish(socket), do: socket
-
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Form id={@id} changeset={@changeset} change_event="save" target={@myself}>
-      <NumberInput field={:duration} label_text={dgettext("link-survey", "duration.label")} />
-      <Spacing value="M" />
+    ~H"""
+    <div>
+      <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
+        <.number_input
+          form={form}
+          field={:duration}
+          label_text={dgettext("link-survey", "duration.label")}
+        />
+        <.spacing value="M" />
 
-      <NumberInput
-        field={:subject_count}
-        label_text={dgettext("link-survey", "config.nrofsubjects.label")}
-      />
-      <Spacing value="M" />
+        <.number_input
+          form={form}
+          field={:subject_count}
+          label_text={dgettext("link-survey", "config.nrofsubjects.label")}
+        />
+        <.spacing value="M" />
 
-      <Title3>{dgettext("link-survey", "language.title")}</Title3>
-      <Body>{dgettext("link-survey", "languages.label")}</Body>
-      <Spacing value="S" />
-      <Selector
-        id={:language}
-        items={@language_labels}
-        type={:radio}
-        parent={%{type: __MODULE__, id: @id}}
-      />
-      <Spacing value="XL" />
+        <Text.title3><%= dgettext("link-survey", "language.title") %></Text.title3>
+        <Text.body><%= dgettext("link-survey", "languages.label") %></Text.body>
+        <.spacing value="S" />
+        <.live_component
+          module={Selector}
+          id={:language}
+          items={@language_labels}
+          type={:radio}
+          parent={%{type: __MODULE__, id: @id}}
+        />
+        <.spacing value="XL" />
 
-      <Title3>{dgettext("link-survey", "devices.title")}</Title3>
-      <Body>{dgettext("link-survey", "devices.label")}</Body>
-      <Spacing value="S" />
-      <Selector id={:devices} items={@device_labels} parent={%{type: __MODULE__, id: @id}} />
-    </Form>
+        <Text.title3><%= dgettext("link-survey", "devices.title") %></Text.title3>
+        <Text.body><%= dgettext("link-survey", "devices.label") %></Text.body>
+        <.spacing value="S" />
+        <.live_component
+            module={Selector}
+            id={:devices}
+            type={:label}
+            items={@device_labels}
+            parent={%{type: __MODULE__, id: @id}} />
+      </.form>
+    </div>
     """
   end
 end

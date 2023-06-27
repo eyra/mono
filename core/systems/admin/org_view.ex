@@ -1,31 +1,24 @@
 defmodule Systems.Admin.OrgView do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
+  alias CoreWeb.Router.Helpers, as: Routes
   alias CoreWeb.UI.Timestamp
-  alias Frameworks.Pixel.Text.Title2
-  alias Frameworks.Pixel.Grid.DynamicGrid
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Grid
 
   alias Frameworks.Pixel.SearchBar
-  alias Frameworks.Pixel.Button.Face.PlainIcon
-  alias Frameworks.Pixel.Button.Action.Send
-  alias Frameworks.Pixel.Selector.Selector
+  alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Selector
 
   alias Systems.{
     Org,
     Content
   }
 
-  prop(props, :any)
-
-  data(locale, :string)
-  data(organisations, :list)
-  data(query, :any, default: nil)
-  data(query_string, :string, default: "")
-  data(filtered_organisations, :list)
-  data(filter_labels, :list)
-  data(active_filters, :list, default: [])
+  import Org.ItemView
 
   # Handle Selector Update
+  @impl true
   def update(%{active_item_ids: active_filters, selector_id: :org_filters}, socket) do
     {
       :ok,
@@ -36,6 +29,7 @@ defmodule Systems.Admin.OrgView do
   end
 
   # Handle Search Bar Update
+  @impl true
   def update(%{search_bar: :org_search_bar, query_string: query_string, query: query}, socket) do
     {
       :ok,
@@ -49,8 +43,8 @@ defmodule Systems.Admin.OrgView do
   end
 
   # Initial update
-
-  def update(%{id: id, props: %{locale: locale}}, socket) do
+  @impl true
+  def update(%{id: id, locale: locale}, socket) do
     filter_labels = Org.Types.labels([])
 
     organisations = Org.Public.list_nodes(Org.NodeModel.preload_graph(:full))
@@ -62,7 +56,10 @@ defmodule Systems.Admin.OrgView do
         id: id,
         filter_labels: filter_labels,
         organisations: organisations,
-        locale: locale
+        locale: locale,
+        active_filters: [],
+        query: nil,
+        query_string: ""
       )
       |> prepare_organisations()
     }
@@ -148,11 +145,13 @@ defmodule Systems.Admin.OrgView do
     "#{dgettext("eyra-org", "org.admins.label")}: 0"
   end
 
+  @impl true
   def handle_event("handle_item_click", %{"item" => org_id}, socket) do
     path = Routes.live_path(socket, Systems.Org.ContentPage, org_id)
     {:noreply, push_redirect(socket, to: path)}
   end
 
+  @impl true
   def handle_event("create_org", _, socket) do
     timestamp = Timestamp.now() |> DateTime.to_unix()
 
@@ -171,16 +170,20 @@ defmodule Systems.Admin.OrgView do
     }
   end
 
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
+    ~H"""
+    <div>
+      <Area.content>
+      <Margin.y id={:page_top} />
       <div class="flex flex-row gap-3 items-center">
         <div class="font-label text-label">Filter:</div>
-        <Selector id={:org_filters} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
+        <.live_component
+          module={Selector} id={:org_filters} type={:label} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
         <div class="flex-grow" />
         <div class="flex-shrink-0">
-          <SearchBar
+          <.live_component
+            module={SearchBar}
             id={:org_search_bar}
             query_string={@query_string}
             placeholder={dgettext("eyra-org", "search.placeholder")}
@@ -189,33 +192,36 @@ defmodule Systems.Admin.OrgView do
           />
         </div>
       </div>
-      <Spacing value="L" />
+      <.spacing value="L" />
 
       <div class="flex flex-row items-center justify-center mb-6 md:mb-8 lg:mb-10">
         <div class="h-full">
-          <Title2 margin="">{dgettext("eyra-admin", "org.content.title")}</Title2>
+          <Text.title2 margin=""><%= dgettext("eyra-admin", "org.content.title") %></Text.title2>
         </div>
         <div class="flex-grow">
         </div>
         <div class="h-full pt-2px lg:pt-1">
-          <Send vm={%{event: "create_org", target: @myself}}>
+          <Button.Action.send event="create_org" target={@myself}>
             <div class="sm:hidden">
-              <PlainIcon vm={label: dgettext("eyra-admin", "create.org.button.short"), icon: :forward} />
+              <Button.Face.plain_icon label={dgettext("eyra-admin", "create.org.button.short")} icon={:forward} />
             </div>
             <div class="hidden sm:block">
-              <PlainIcon vm={label: dgettext("eyra-admin", "create.org.button"), icon: :forward} />
+              <Button.Face.plain_icon label={dgettext("eyra-admin", "create.org.button")} icon={:forward} />
             </div>
-          </Send>
+          </Button.Action.send>
         </div>
       </div>
 
-      <DynamicGrid>
-        <div :for={organisation <- @filtered_organisations}>
-          <Org.ItemView {...organisation} target={@myself} />
-        </div>
-      </DynamicGrid>
-      <Spacing value="XL" />
-    </ContentArea>
+      <Grid.dynamic>
+        <%= for organisation <- @filtered_organisations do %>
+          <div>
+            <.item_view {organisation} target={@myself} />
+          </div>
+        <% end %>
+      </Grid.dynamic>
+      <.spacing value="XL" />
+      </Area.content>
+    </div>
     """
   end
 end

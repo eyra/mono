@@ -6,19 +6,14 @@ defmodule Systems.Pool.DetailPage do
   use CoreWeb.Layouts.Workspace.Component, :pool_detail
   use CoreWeb.UI.Responsive.Viewport
 
-  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias CoreWeb.UI.Navigation.{ActionBar, TabbarArea, Tabbar, TabbarContent}
+  import CoreWeb.Layouts.Workspace.Component
+  alias CoreWeb.UI.Tabbar
+  alias CoreWeb.UI.Navigation
 
   alias Systems.{
     Pool,
     Email
   }
-
-  data(tabbar_id, :string)
-  data(tabs, :any)
-  data(initial_tab, :any)
-  data(email_dialog, :map)
-  data(title, :string, default: "")
 
   @impl true
   def mount(%{"id" => pool_id, "tab" => initial_tab}, _session, socket) do
@@ -90,6 +85,7 @@ defmodule Systems.Pool.DetailPage do
       socket
       |> assign(
         email_dialog: %{
+          module: Email.Dialog,
           id: :email_dialog,
           users: recipients,
           current_user: current_user
@@ -113,28 +109,33 @@ defmodule Systems.Pool.DetailPage do
     |> assign(email_dialog: nil)
   end
 
+  # data(tabbar_id, :string)
+  # data(vm, :any)
+  # data(initial_tab, :any)
+  # data(email_dialog, :map)
+  # data(title, :string, default: "")
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace title={@vm.title} menus={@menus}>
-      <div
-        :if={@email_dialog}
-        class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20"
-        phx-click="close_email_dialog"
-      >
-        <div class="flex flex-row items-center justify-center w-full h-full">
-          <Email.Dialog {...@email_dialog} />
+    ~H"""
+    <.workspace title={@vm.title} menus={@menus}>
+      <%= if @email_dialog do %>
+        <div
+          class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20"
+          phx-click="close_email_dialog"
+        >
+          <div class="flex flex-row items-center justify-center w-full h-full">
+            <.live_component {@email_dialog} />
+          </div>
         </div>
-      </div>
+      <% end %>
 
       <div id={:pool_detail} phx-hook="ViewportResize">
-        <TabbarArea tabs={@vm.tabs}>
-          <ActionBar>
-            <Tabbar id={@tabbar_id} initial_tab={@initial_tab} size={:wide} type={:segmented} />
-          </ActionBar>
-          <TabbarContent />
-        </TabbarArea>
+        <Navigation.action_bar>
+          <Tabbar.container id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} size={:wide} type={:segmented} />
+        </Navigation.action_bar>
+        <Tabbar.content tabs={@vm.tabs} />
       </div>
-    </Workspace>
+    </.workspace>
     """
   end
 end

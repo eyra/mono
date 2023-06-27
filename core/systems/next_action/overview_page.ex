@@ -5,8 +5,11 @@ defmodule Systems.NextAction.OverviewPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :todo
 
-  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias Systems.NextAction
+  import CoreWeb.Layouts.Workspace.Component
+
+  alias Systems.{
+    NextAction
+  }
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
     model = %{
@@ -28,7 +31,7 @@ defmodule Systems.NextAction.OverviewPage do
     assign(
       socket,
       :next_actions,
-      NextAction.Public.list_next_actions(url_resolver(socket), user)
+      NextAction.Public.list_next_actions(user)
     )
   end
 
@@ -42,26 +45,31 @@ defmodule Systems.NextAction.OverviewPage do
     socket |> update_menus()
   end
 
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace title={dgettext("eyra-ui", "todo.title")} menus={@menus}>
-      <div :if={Enum.empty?(@vm.next_actions)} class="h-full">
-        <div class="flex flex-col items-center w-full h-full">
-          <div class="flex-grow" />
-          <div class="flex-none">
-            <img src="/images/illustrations/zero-todo.svg" id="zero-todos" alt="All done">
+    ~H"""
+    <.workspace title={dgettext("eyra-ui", "todo.title")} menus={@menus}>
+      <%= if Enum.empty?(@vm.next_actions) do %>
+        <div class="h-full">
+          <div class="flex flex-col items-center w-full h-full">
+            <div class="flex-grow" />
+            <div class="flex-none">
+              <img src="/images/illustrations/zero-todo.svg" id="zero-todos" alt="All done">
+            </div>
+            <div class="flex-grow" />
           </div>
-          <div class="flex-grow" />
         </div>
-      </div>
-
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <div :if={!Enum.empty?(@vm.next_actions)} class="flex flex-col gap-6 sm:gap-10" id="next-actions">
-          <NextAction.View :for={action <- @vm.next_actions} vm={action} />
-        </div>
-      </ContentArea>
-    </Workspace>
+      <% else %>
+        <Area.content>
+          <Margin.y id={:page_top} />
+          <div class="flex flex-col gap-6 sm:gap-10" id="next-actions">
+            <%= for action <- @vm.next_actions do %>
+              <NextAction.View.normal {action} />
+            <% end %>
+          </div>
+        </Area.content>
+      <% end %>
+    </.workspace>
     """
   end
 end

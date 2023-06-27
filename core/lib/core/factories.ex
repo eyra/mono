@@ -25,11 +25,13 @@ defmodule Core.Factories do
     Survey,
     Lab,
     DataDonation,
+    Benchmark,
     Pool,
     Budget,
     Bookkeeping,
     Content,
-    Org
+    Org,
+    Project
   }
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
@@ -224,12 +226,32 @@ defmodule Core.Factories do
     build(:submission, %{})
   end
 
+  def build(:benchmark_submission) do
+    build(:benchmark_submission, %{description: "description"})
+  end
+
+  def build(:benchmark_spot) do
+    build(:benchmark_spot, %{})
+  end
+
+  def build(:benchmark_tool) do
+    build(:benchmark_tool, %{})
+  end
+
   def build(:experiment) do
     build(:experiment, %{})
   end
 
   def build(:assignment) do
     build(:assignment, %{})
+  end
+
+  def build(:project) do
+    build(:project, %{name: Faker.Lorem.word()})
+  end
+
+  def build(:project_node) do
+    build(:project_node, %{name: Faker.Lorem.word(), project_path: [1, 2]})
   end
 
   def build(:auth_node, %{} = attributes) do
@@ -333,6 +355,26 @@ defmodule Core.Factories do
       promotion: promotion,
       promotable_assignment: assignment,
       submissions: submissions
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:project, %{} = attributes) do
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+    {node, attributes} = Map.pop(attributes, :budget, build(:project_node))
+
+    %Project.Model{
+      auth_node: auth_node,
+      root: node
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:project_node, %{} = attributes) do
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+
+    %Project.NodeModel{
+      auth_node: auth_node
     }
     |> struct!(attributes)
   end
@@ -460,6 +502,35 @@ defmodule Core.Factories do
 
   def build(:pool, %{} = attributes) do
     %Pool.Model{}
+    |> struct!(attributes)
+  end
+
+  def build(:benchmark_tool, %{} = attributes) do
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+
+    %Benchmark.ToolModel{
+      auth_node: auth_node
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:benchmark_spot, %{} = attributes) do
+    {tool, attributes} = Map.pop(attributes, :tool, build(:benchmark_tool))
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+
+    %Benchmark.SpotModel{
+      tool: tool,
+      auth_node: auth_node
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:benchmark_submission, %{} = attributes) do
+    {spot, attributes} = Map.pop(attributes, :spot, build(:benchmark_spot))
+
+    %Benchmark.SubmissionModel{
+      spot: spot
+    }
     |> struct!(attributes)
   end
 

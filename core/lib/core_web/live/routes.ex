@@ -11,12 +11,6 @@ defmodule CoreWeb.Live.Routes do
         live("/fake_survey/:id", FakeSurvey)
       end
 
-      scope "/", CoreWeb do
-        pipe_through([:browser, :require_authenticated_user])
-        live("/onboarding", Onboarding)
-        live("/console", Console)
-      end
-
       if Mix.env() in [:test] do
         scope "/test", Systems.Test do
           pipe_through(:browser)

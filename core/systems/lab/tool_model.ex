@@ -1,6 +1,7 @@
 defmodule Systems.Lab.ToolModel do
   use Ecto.Schema
   use Frameworks.Utility.Model
+  use Frameworks.Utility.Schema
 
   require Core.Enums.Themes
 
@@ -28,6 +29,16 @@ defmodule Systems.Lab.ToolModel do
 
   @impl true
   def operational_validation(changeset), do: changeset
+
+  def preload_graph(:full),
+    do:
+      preload_graph([
+        :auth_node,
+        :time_slots
+      ])
+
+  def preload_graph(:auth_node), do: [auth_node: []]
+  def preload_graph(:time_slots), do: [time_slots: []]
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(lab_tool), do: lab_tool.auth_node_id

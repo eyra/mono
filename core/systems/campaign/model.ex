@@ -60,7 +60,7 @@ defmodule Systems.Campaign.Model do
 
   def preload_graph(:full) do
     [
-      :promotion,
+      promotion: [auth_node: [:role_assignments]],
       auth_node: [:role_assignments],
       authors: [:user],
       submissions: [
@@ -85,6 +85,7 @@ defmodule Systems.Campaign.Model do
 end
 
 defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
+  use CoreWeb, :verified_routes
   import CoreWeb.Gettext
 
   import Frameworks.Utility.Guards
@@ -100,10 +101,10 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
   alias Core.ImageHelpers
 
-  def view_model(%Campaign.Model{} = campaign, page, user, url_resolver) do
+  def view_model(%Campaign.Model{} = campaign, page, %{current_user: user}) do
     campaign
     |> Campaign.Model.flatten()
-    |> vm(page, user, url_resolver)
+    |> vm(page, user)
   end
 
   defp vm(
@@ -111,7 +112,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
            id: id,
            submission: submission,
            promotion: %{
-             id: open_id,
+             id: promotion_id,
              title: title,
              image_id: image_id,
              themes: themes,
@@ -126,8 +127,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
              } = assignment
          },
          {Link.Marketplace, :card},
-         _user,
-         _url_resolver
+         %{uri_path: uri_path}
        ) do
     duration = if duration === nil, do: 0, else: duration
 
@@ -166,8 +166,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
     %{
       id: id,
-      edit_id: id,
-      open_id: open_id,
+      path: ~p"/promotion/#{promotion_id}?back=#{uri_path}",
       title: title,
       image_info: image_info,
       tags: tags,
@@ -183,7 +182,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
            id: id,
            submission: submission,
            promotion: %{
-             id: open_id,
              title: title,
              image_id: image_id,
              themes: themes,
@@ -198,8 +196,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
              } = assignment
          },
          {Campaign.OverviewPage, :card},
-         _user,
-         _url_resolver
+         _assigns
        ) do
     duration = if duration === nil, do: 0, else: duration
 
@@ -252,8 +249,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     %{
       type: type,
       id: id,
-      edit_id: id,
-      open_id: open_id,
+      path: ~p"/campaign/#{id}/content",
       title: title,
       image_info: image_info,
       tags: tags,
@@ -301,8 +297,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
              } = assignment
          },
          {Link.Marketplace, _},
-         user,
-         url_resolver
+         %{current_user: user}
        ) do
     task = task(crew, user)
     tag = tag(task)
@@ -324,7 +319,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
     %{
       id: id,
-      path: url_resolver.(Assignment.LandingPage, id: assignment.id),
+      path: ~p"/assignment/#{assignment.id}",
       title: title,
       subtitle: subtitle,
       tag: tag,
@@ -351,11 +346,9 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
                }
              } = assignment
          },
-         {Link.Console, :content},
-         _user,
-         url_resolver
+         {Link.Console.Page, :content},
+         _assigns
        ) do
-    path = url_resolver.(Systems.Campaign.ContentPage, id: id)
     tag = Pool.Public.get_tag(submission)
 
     promotion_ready? = Promotion.Public.ready?(promotion)
@@ -382,7 +375,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     image = %{type: :catalog, info: image_info}
 
     %{
-      path: path,
+      path: ~p"/campaign/#{id}/content",
       title: title,
       subtitle: subtitle,
       tag: tag,
@@ -402,10 +395,9 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
            }
          } = campaign,
          {Budget.FundingPage, :budget_campaigns},
-         _user,
-         url_resolver
+         _assigns
        ) do
-    path = url_resolver.(Systems.Campaign.ContentPage, id: id, tab: :funding)
+    path = ~p"/campaign/#{id}/content?tab=#{:funding}"
     tag = funding_tag(campaign)
     subtitle = required_funding(campaign)
     quick_summary = get_quick_summary(updated_at)
@@ -425,22 +417,20 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
   defp vm(
          %{promotable: assignment} = campaign,
-         {Link.Console, :contribution},
-         user,
-         url_resolver
+         {Link.Console.Page, :contribution},
+         user
        ) do
-    path = url_resolver.(Systems.Assignment.LandingPage, id: assignment.id)
+    path = ~p"/assignment/#{assignment.id}"
     vm(campaign, :contribution, user, path)
   end
 
   defp vm(
          %{submission: submission} = campaign,
          {Pool.ParticipantPage, :contribution},
-         user,
-         url_resolver
+         user
        ) do
     # FIXME: POOL adapt to multiple submissions
-    path = url_resolver.(Systems.Pool.SubmissionPage, id: submission.id)
+    path = ~p"/pool/campaign/#{submission.id}"
     vm(campaign, :contribution, user, path)
   end
 

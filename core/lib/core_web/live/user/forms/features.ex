@@ -5,19 +5,11 @@ defmodule CoreWeb.User.Forms.Features do
   alias Core.Accounts
   alias Core.Accounts.Features
 
-  alias Frameworks.Pixel.Selector.Selector
-  alias Frameworks.Pixel.Text.{Title2, Title3, BodyMedium}
-
-  prop(props, :any, required: true)
-
-  data(user, :any)
-  data(entity, :any, default: nil)
-  data(gender_labels, :any, default: [])
-  data(dominanthand_labels, :any, default: [])
-  data(nativelanguage_labels, :any, default: [])
-  data(changeset, :any, default: nil)
+  alias Frameworks.Pixel.Selector
+  alias Frameworks.Pixel.Text
 
   # Handle Selector Update
+  @impl true
   def update(
         %{active_item_id: active_item_id, selector_id: selector_id},
         %{assigns: %{entity: entity}} = socket
@@ -29,7 +21,8 @@ defmodule CoreWeb.User.Forms.Features do
     }
   end
 
-  def update(%{id: id, props: %{user: user}}, socket) do
+  @impl true
+  def update(%{id: id, user: user}, socket) do
     entity = Accounts.get_features(user)
 
     gender_labels = Genders.labels(entity.gender)
@@ -73,42 +66,56 @@ defmodule CoreWeb.User.Forms.Features do
     |> update_ui()
   end
 
-  def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <FormArea>
-        <Title2>{dgettext("eyra-ui", "tabbar.item.features")}</Title2>
-        <BodyMedium>{dgettext("eyra-account", "features.description")}</BodyMedium>
-        <Spacing value="XL" />
+  # data(user, :any)
+  # data(entity, :any, default: nil)
+  # data(gender_labels, :any, default: [])
+  # data(dominanthand_labels, :any, default: [])
+  # data(nativelanguage_labels, :any, default: [])
+  # data(changeset, :any, default: nil)
 
-        <Title3>{dgettext("eyra-account", "features.gender.title")}</Title3>
-        <Selector
+  attr(:user, :map, required: true)
+  @impl true
+  def render(assigns) do
+    ~H"""
+    <div>
+      <Area.content>
+      <Margin.y id={:page_top} />
+      <Area.form>
+        <Text.title2><%= dgettext("eyra-ui", "tabbar.item.features") %></Text.title2>
+        <Text.body_medium><%= dgettext("eyra-account", "features.description") %></Text.body_medium>
+        <.spacing value="XL" />
+
+        <Text.title3><%= dgettext("eyra-account", "features.gender.title") %></Text.title3>
+        <.live_component
+          module={Selector}
           id={:gender}
           items={@gender_labels}
           type={:radio}
           parent={%{type: __MODULE__, id: @id}}
         />
-        <Spacing value="XL" />
+        <.spacing value="XL" />
 
-        <Title3>{dgettext("eyra-account", "features.nativelanguage.title")}</Title3>
-        <Selector
+        <Text.title3><%= dgettext("eyra-account", "features.nativelanguage.title") %></Text.title3>
+        <.live_component
+          module={Selector}
           id={:native_language}
           items={@nativelanguage_labels}
           type={:radio}
           parent={%{type: __MODULE__, id: @id}}
         />
-        <Spacing value="XL" />
+        <.spacing value="XL" />
 
-        <Title3>{dgettext("eyra-account", "features.dominanthand.title")}</Title3>
-        <Selector
+        <Text.title3><%= dgettext("eyra-account", "features.dominanthand.title") %></Text.title3>
+        <.live_component
+          module={Selector}
           id={:dominant_hand}
           items={@dominanthand_labels}
           type={:radio}
           parent={%{type: __MODULE__, id: @id}}
         />
-      </FormArea>
-    </ContentArea>
+      </Area.form>
+      </Area.content>
+    </div>
     """
   end
 end

@@ -1,6 +1,6 @@
 defmodule Frameworks.Pixel.FormHelpers do
   @moduledoc """
-  Conveniences for accassing the form using Surface.
+  Conveniences for accessing the form.
   """
   alias Frameworks.Pixel.ErrorHelpers
   alias Phoenix.LiveView.JS
@@ -57,6 +57,6 @@ defmodule Frameworks.Pixel.FormHelpers do
   def get_field_color({false, true, _}, _), do: "warning"
   def get_field_color({_, _, _}, default), do: default
 
-  def target(%{options: options} = _form), do: options[:phx_target]
+  def target(%{options: options} = _form), do: options[:"phx-target"]
   def target(_form), do: nil
 end

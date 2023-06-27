@@ -1,33 +1,19 @@
 defmodule Systems.Budget.Form do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
   require Logger
 
+  import Frameworks.Pixel.Form
   alias Frameworks.Utility.EctoHelper
   alias Frameworks.Pixel.Dropdown
-  alias Frameworks.Pixel.Form.{Form, TextInput}
-  alias Frameworks.Pixel.Text.{Title3, FormFieldLabel}
+  alias Frameworks.Pixel.Text
 
   alias Systems.{
     Budget
   }
 
-  prop(budget, :any)
-  prop(user, :any)
-  prop(locale, :any)
-  prop(target, :any)
-
-  data(title, :string)
-  data(buttons, :list)
-
-  data(changeset, :map)
-  data(validate_changeset?, :boolean)
-
-  data(currencies, :list)
-  data(currency_selector, :map)
-  data(selected_currency, :map)
-
   # Selector toggle
+  @impl true
   def update(%{selector: :toggle}, socket) do
     {
       :ok,
@@ -36,6 +22,7 @@ defmodule Systems.Budget.Form do
   end
 
   # Selector selected
+  @impl true
   def update(
         %{selector: :selected, option: %{id: id}},
         %{assigns: %{currencies: currencies}} = socket
@@ -50,6 +37,7 @@ defmodule Systems.Budget.Form do
   end
 
   # Initial update create
+  @impl true
   def update(%{id: id, budget: nil, user: user, locale: locale, target: target}, socket) do
     title = dgettext("eyra-budget", "budget.create.title")
     budget = %Budget.Model{}
@@ -75,6 +63,7 @@ defmodule Systems.Budget.Form do
   end
 
   # Initial update edit
+  @impl true
   def update(%{id: id, budget: budget, user: user, locale: locale, target: target}, socket) do
     title = dgettext("eyra-budget", "budget.edit.title")
     changeset = Budget.Model.prepare(budget)
@@ -149,7 +138,7 @@ defmodule Systems.Budget.Form do
 
   @impl true
   def handle_event("submit", %{"model" => attrs}, socket) do
-    {:noreply, socket |> submit(attrs)}
+    {:noreply, socket |> handle_submit(attrs)}
   end
 
   @impl true
@@ -177,7 +166,7 @@ defmodule Systems.Budget.Form do
     end
   end
 
-  defp submit(%{assigns: %{budget: %{currency: %{id: _id}} = budget}} = socket, attrs) do
+  defp handle_submit(%{assigns: %{budget: %{currency: %{id: _id}} = budget}} = socket, attrs) do
     # Edit modus
     socket
     |> apply_submit(
@@ -188,7 +177,7 @@ defmodule Systems.Budget.Form do
     )
   end
 
-  defp submit(
+  defp handle_submit(
          %{assigns: %{budget: budget, user: user, selected_currency: selected_currency}} = socket,
          attrs
        ) do
@@ -213,42 +202,53 @@ defmodule Systems.Budget.Form do
     end
   end
 
+  # data(title, :string)
+  # data(buttons, :list)
+
+  # data(changeset, :map)
+  # data(validate_changeset?, :boolean)
+
+  # data(currencies, :list)
+  # data(currency_selector, :map)
+  # data(selected_currency, :map)
+
+  attr(:budget, :any)
+  attr(:user, :any)
+  attr(:locale, :any)
+  attr(:target, :any)
+
   @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div>
-      <Title3>
-        {@title}
-      </Title3>
-      <Spacing value="XS" />
-      <Form
-        id="budget_form"
-        changeset={@changeset}
-        submit="submit"
-        change_event="change"
-        target={@myself}
-      >
-        <TextInput field={:name} debounce="0" label_text={dgettext("eyra-budget", "budget.name.label")} />
-        <TextInput
+      <Text.title3>
+        <%= @title %>
+      </Text.title3>
+      <.spacing value="XS" />
+      <.form id="budget_form" :let={form} for={@changeset} phx-change="change" phx-submit="submit" phx-target={@myself} >
+        <.text_input form={form} field={:name} debounce="0" label_text={dgettext("eyra-budget", "budget.name.label")} />
+        <.text_input form={form}
           field={:virtual_icon}
           maxlength="2"
           debounce="0"
           label_text={dgettext("eyra-budget", "budget.icon.label")}
         />
 
-        <div :if={@currency_selector}>
-          <FormFieldLabel id={:currency_label}>
-            {dgettext("eyra-budget", "budget.currency.label")}
-          </FormFieldLabel>
-          <Spacing value="XXS" />
-          <Dropdown.Selector {...@currency_selector} />
-        </div>
+        <%= if @currency_selector do %>
+          <Text.form_field_label id={:currency_label}>
+            <%= dgettext("eyra-budget", "budget.currency.label") %>
+          </Text.form_field_label>
+          <.spacing value="XXS" />
+          <.live_component module={Dropdown.Selector} {@currency_selector} />
+        <% end %>
 
-        <Spacing value="M" />
+        <.spacing value="M" />
         <div class="flex flex-row gap-4">
-          <DynamicButton :for={button <- @buttons} vm={button} />
+          <%= for button <- @buttons do %>
+            <Button.dynamic {button} />
+          <% end %>
         </div>
-      </Form>
+      </.form>
     </div>
     """
   end

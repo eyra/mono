@@ -1,23 +1,27 @@
 defmodule CoreWeb.Languages do
   @moduledoc """
   """
-  use CoreWeb.UI.Component
+  use CoreWeb, :html
 
-  prop(languages, :any, required: true)
-  prop(label, :string, required: true)
+  attr(:languages, :any, required: true)
+  attr(:label, :string, required: true)
 
-  def render(assigns) do
-    ~F"""
-    <div class="text-grey1" :if={@languages}>
-      <div class="flex flex-row items-center gap-3 h-full">
-        <div class="text-title6 font-title6 mr-1">
-          {@label}
-        </div>
-        <div class="" :for={language <- @languages}>
-          <img src={"/images/icons/#{language}.svg"} alt={"#{language}"}>
+  def languages(assigns) do
+    ~H"""
+    <%= if @languages do %>
+      <div class="text-grey1">
+        <div class="flex flex-row items-center gap-3 h-full">
+          <div class="text-title6 font-title6 mr-1">
+            <%= @label %>
+          </div>
+          <%= for language <- @languages do %>
+            <div>
+              <img src={"/images/icons/#{language}.svg"} alt={"#{language}"}>
+            </div>
+          <% end %>
         </div>
       </div>
-    </div>
+    <% end %>
     """
   end
 end

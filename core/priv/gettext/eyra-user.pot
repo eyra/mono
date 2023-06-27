@@ -41,3 +41,47 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Invalid email or password"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "register.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "reset.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "user.password_reset.flash"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Invalid email"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "confirm.token.flash"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Signed out successfully"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "account.activated.successfully"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "account.created.successfully"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email.changed.successfully"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "password.reset.successfully"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "password.updated.successfully"
+msgstr ""

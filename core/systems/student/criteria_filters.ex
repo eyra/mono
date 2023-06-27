@@ -12,13 +12,13 @@ defmodule Systems.Student.CriteriaFilters do
     filters = filters |> Enum.filter(&Enum.member?(values(), &1))
 
     filter_count = Enum.count(filters)
-    match_count = Enum.count(Enum.filter(filters, &include?(codes, &1)))
+    match_count = Enum.count(filters, &include?(codes, &1))
     # each filter should have at least one match (AND)
     filter_count == match_count
   end
 
   def include?(codes, filter) when is_list(codes) do
-    Enum.count(Enum.filter(codes, &include?(&1, filter))) > 0
+    Enum.count(codes, &include?(&1, filter)) > 0
   end
 
   def include?(code, :iba), do: String.contains?(Atom.to_string(code), "iba")

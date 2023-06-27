@@ -9,7 +9,6 @@
 msgid ""
 msgstr ""
 "Language: nl\n"
-"Plural-Forms: nplurals=2\n"
 
 #, elixir-autogen, elixir-format
 msgid "displayname.label"
@@ -32,14 +31,6 @@ msgid "profile.title"
 msgstr "Mijn profiel"
 
 #, elixir-autogen, elixir-format
-msgid "signin.label"
-msgstr "Heb je al een account?"
-
-#, elixir-autogen, elixir-format
-msgid "signin.link"
-msgstr "Log hier in"
-
-#, elixir-autogen, elixir-format
 msgid "signup.button"
 msgstr "Registreer"
 
@@ -49,11 +40,11 @@ msgstr "Nieuw account"
 
 #, elixir-autogen, elixir-format
 msgid "await.confirmation.title"
-msgstr "Confirm you registration"
+msgstr "Activeer je account"
 
 #, elixir-autogen, elixir-format
 msgid "confirm.token.resend_button"
-msgstr ""
+msgstr "Stuur nieuwe link"
 
 #, elixir-autogen, elixir-format
 msgid "choose.profile.photo.file"
@@ -85,7 +76,7 @@ msgstr "Push notificaties zijn gedeactiveerd op deze browser"
 
 #, elixir-autogen, elixir-format
 msgid "push.registration.label"
-msgstr "Activeer om meldingen van het Panl platform in je browser te ontvangen. Na het activeren kan het zijn dat je browser vraagt om toestemming voor het tonen van notificaties."
+msgstr "Activeer om meldingen van het platform in je browser te ontvangen. Na het activeren kan het zijn dat je browser vraagt om toestemming voor het tonen van notificaties."
 
 #, elixir-autogen, elixir-format
 msgid "push.registration.pending"
@@ -97,7 +88,7 @@ msgstr "Om credits te kunnen behalen voor onderzoeksparticipatie (OP / RPR) voor
 
 #, elixir-autogen, elixir-format
 msgid "features.description"
-msgstr "Enkele studies gebruiken specifieke selectie criteria. Als je de onderstaande optionele kenmerken invult kun je meedoen aan studies waarvoor jouw kenmerken geselecteerd zijn."
+msgstr "Deze kenmerken zijn optioneel. Voor de huidige toepassingen op het platform worden ze niet gebruikt."
 
 #, elixir-autogen, elixir-format
 msgid "features.dominanthand.title"
@@ -154,3 +145,19 @@ msgstr "https://wiki.surfnet.nl/display/conextsupport/Inloggen+via+SURFconext"
 #, elixir-autogen, elixir-format
 msgid "ehtical.code.label"
 msgstr "Code"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "signin.button"
+msgstr "Log in"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "signin.title"
+msgstr "Inloggen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "await.confirmation.description"
+msgstr "Je account is aangemaakt. We hebben je een e-mail gestuurd ter bevestiging. Klik op de link in de e-mail om je account te activeren."
+
+#, elixir-autogen, elixir-format
+msgid "account.created.info.flash"
+msgstr "Account succesvol aangemaakt"

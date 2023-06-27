@@ -3,14 +3,12 @@ defmodule CoreWeb.User.ResetPasswordToken do
   The password reset token.
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Stripped.Component, :signup
 
-  alias Surface.Components.Form
+  import Frameworks.Pixel.Form
+
   alias Core.Accounts
-  alias Frameworks.Pixel.Form.PasswordInput
-  alias Frameworks.Pixel.Text.Title2
-  alias Frameworks.Pixel.Button.SubmitButton
-
-  data(changeset, :any)
+  alias Frameworks.Pixel.Button
 
   def mount(%{"token" => token}, _session, socket) do
     if user = Accounts.get_user_by_reset_password_token(token) do
@@ -27,9 +25,6 @@ defmodule CoreWeb.User.ResetPasswordToken do
   end
 
   @impl true
-  def handle_uri(socket), do: socket
-
-  @impl true
   def handle_event(
         "reset-password",
         %{"user" => password_params},
@@ -39,33 +34,39 @@ defmodule CoreWeb.User.ResetPasswordToken do
       {:ok, _} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Password reset successfully.")
-         |> redirect(to: Routes.user_session_path(socket, :new))}
+         |> put_flash(:info, dgettext("eyra-user", "password.reset.successfully"))
+         |> redirect(to: ~p"/user/signin")}
 
       {:error, changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
   end
 
+  # data(changeset, :any)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <FormArea>
-        <Title2>{dgettext("eyra-user", "user.password_reset.title")}</Title2>
-        <Form for={@changeset} submit="reset-password">
-          <PasswordInput
-            field={:password}
-            label_text={dgettext("eyra-user", "password_reset.password.label")}
-          />
-          <PasswordInput
-            field={:password_confirmation}
-            label_text={dgettext("eyra-user", "password_reset.password_confirmation.label")}
-          />
-          <SubmitButton label={dgettext("eyra-user", "password_reset.reset_password_button")} />
-        </Form>
-      </FormArea>
-    </ContentArea>
+    ~H"""
+    <.stripped menus={@menus}>
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <Area.form>
+          <Text.title2><%= dgettext("eyra-user", "user.password_reset.title") %></Text.title2>
+          <.form id="reset_password_token" :let={form} for={@changeset} phx-submit="reset-password" data-show-errors={true} >
+            <.password_input
+              form={form}
+              field={:password}
+              label_text={dgettext("eyra-user", "password_reset.password.label")}
+            />
+            <.password_input
+              form={form}
+              field={:password_confirmation}
+              label_text={dgettext("eyra-user", "password_reset.password_confirmation.label")}
+            />
+            <Button.submit_wide label={dgettext("eyra-user", "password_reset.reset_password_button")} bg_color="bg-grey1" />
+          </.form>
+        </Area.form>
+      </Area.content>
+    </.stripped>
     """
   end
 end

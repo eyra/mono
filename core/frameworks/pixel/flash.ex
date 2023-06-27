@@ -2,13 +2,15 @@ defmodule Frameworks.Pixel.Flash do
   @moduledoc """
   Provides support for flash messages.
   """
-  alias Phoenix.LiveView
+  import Phoenix.Component
   import CoreWeb.Gettext
+
+  alias Phoenix.LiveView
 
   @hide_message_delay 3
 
   def mount(socket) do
-    socket |> LiveView.assign(hide_timer: nil)
+    socket |> assign(hide_timer: nil)
   end
 
   def schedule_hide(socket), do: schedule_hide(socket, true)
@@ -18,9 +20,7 @@ defmodule Frameworks.Pixel.Flash do
     cancel_hide_timer(socket)
 
     socket
-    |> LiveView.assign(
-      hide_timer: Process.send_after(self(), :hide_flash, @hide_message_delay * 1_000)
-    )
+    |> assign(hide_timer: Process.send_after(self(), :hide_flash, @hide_message_delay * 1_000))
   end
 
   def hide(socket) do

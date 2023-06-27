@@ -4,8 +4,8 @@ defmodule CoreWeb.User.Forms.Student do
   alias Core.Accounts
   alias Core.Accounts.Features
 
-  alias Frameworks.Pixel.Selector.Selector
-  alias Frameworks.Pixel.Text.{Title2, Title4, BodyMedium}
+  alias Frameworks.Pixel.Selector
+  alias Frameworks.Pixel.Text
 
   alias Systems.{
     Student,
@@ -13,17 +13,8 @@ defmodule CoreWeb.User.Forms.Student do
     Content
   }
 
-  prop(props, :any, required: true)
-
-  data(user, :any)
-  data(entity, :any)
-  data(title, :any)
-  data(student_classes, :any)
-  data(student_class_labels, :any)
-
-  data(changeset, :any)
-
   # Handle Selector Update
+  @impl true
   def update(
         %{active_item_ids: active_item_ids, selector_id: selector_id},
         %{assigns: %{entity: entity}} = socket
@@ -35,7 +26,8 @@ defmodule CoreWeb.User.Forms.Student do
     {:ok, socket |> save(entity, :auto_save, %{selector_id => active_item_ids})}
   end
 
-  def update(%{id: id, props: %{user: user}}, socket) do
+  @impl true
+  def update(%{id: id, user: user}, socket) do
     entity = Accounts.get_features(user)
 
     current_year = Student.Public.academic_year()
@@ -150,25 +142,38 @@ defmodule CoreWeb.User.Forms.Student do
     |> update_ui()
   end
 
+  # data(user, :any)
+  # data(entity, :any)
+  # data(title, :any)
+  # data(student_classes, :any)
+  # data(student_class_labels, :any)
+
+  # data(changeset, :any)
+
+  attr(:user, :map, required: true)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <FormArea>
-        <Title2>{dgettext("eyra-ui", "tabbar.item.student")}</Title2>
-        <BodyMedium>{dgettext("eyra-account", "feature.study.description")}</BodyMedium>
-        <Spacing value="M" />
-        <Title4>{@title}</Title4>
-        <Spacing value="S" />
-        <Selector
+    ~H"""
+    <div>
+      <Area.content>
+      <Margin.y id={:page_top} />
+      <Area.form>
+        <Text.title2><%= dgettext("eyra-ui", "tabbar.item.student") %></Text.title2>
+        <Text.body_medium><%= dgettext("eyra-account", "feature.study.description") %></Text.body_medium>
+        <.spacing value="M" />
+        <Text.title4><%= @title %></Text.title4>
+        <.spacing value="S" />
+        <.live_component
+          module={Selector}
           grid_options="grid grid-cols-2 gap-y-3"
           id={:study_program_codes}
           items={@student_class_labels}
           type={:checkbox}
           parent={%{type: __MODULE__, id: @id}}
         />
-      </FormArea>
-    </ContentArea>
+      </Area.form>
+      </Area.content>
+    </div>
     """
   end
 end

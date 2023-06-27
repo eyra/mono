@@ -1,22 +1,13 @@
 defmodule CoreWeb.UI.PlainDialog do
-  use CoreWeb.UI.Component
+  use CoreWeb, :html
 
-  alias CoreWeb.UI.Dialog
+  import CoreWeb.UI.Dialog
 
-  prop(title, :string, required: true)
-  prop(text, :string, required: true)
-  prop(buttons, :string, default: [])
-
-  defoverridable __using__: 1
-
-  defmacro __using__(opts) do
-    super_use = super(opts)
-
+  defmacro __using__(_opts) do
     quote do
-      unquote(super_use)
-      alias CoreWeb.UI.PlainDialog
+      import CoreWeb.UI.PlainDialog
 
-      data(dialog, :any)
+      # data(dialog, :any)
 
       defp confirm(socket, action, title, text, confirm_label) do
         buttons = [
@@ -58,9 +49,13 @@ defmodule CoreWeb.UI.PlainDialog do
     end
   end
 
-  def render(assigns) do
-    ~F"""
-    <Dialog title={@title} text={@text} buttons={@buttons} />
+  attr(:title, :string, required: true)
+  attr(:text, :string, required: true)
+  attr(:buttons, :list, default: [])
+
+  def plain_dialog(assigns) do
+    ~H"""
+    <.dialog title={@title} text={@text} buttons={@buttons} />
     """
   end
 end

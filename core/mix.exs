@@ -8,7 +8,7 @@ defmodule Core.MixProject do
       source_url: "https://github.com/eyra/mono",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix] ++ Mix.compilers() ++ [:surface],
+      compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -53,16 +53,9 @@ defmodule Core.MixProject do
     do: ["bundles", "apps", "systems", "frameworks", "lib", "test", "test/support"]
 
   defp elixirc_paths(:dev),
-    do: ["bundles", "apps", "systems", "frameworks", "lib"] ++ catalogues()
+    do: ["bundles", "apps", "systems", "frameworks", "lib"]
 
   defp elixirc_paths(_), do: ["bundles", "apps", "systems", "frameworks", "lib"]
-
-  def catalogues do
-    [
-      "priv/catalogue",
-      "deps/surface/priv/catalogue"
-    ]
-  end
 
   # Specifies your project dependencies.
   #
@@ -72,18 +65,17 @@ defmodule Core.MixProject do
       # Workaround for conflicting versions in ex_aws & ex_phone_number
       {:sweet_xml, "~> 0.7", override: true},
       # Deps
-      {:assent, "~> 0.1.23"},
+      {:assent, "~> 0.2.3"},
       {:bcrypt_elixir, "~> 2.0"},
       {:ex_aws_s3, "~> 2.0"},
-      {:phoenix, "~> 1.6.12"},
+      {:phoenix, "1.7.2"},
+      {:phoenix_view, "~> 2.0"},
       {:phoenix_ecto, "~> 4.4"},
-      {:phoenix_live_view, "~> 0.17.6"},
-      {:phoenix_html, "~> 3.2"},
+      {:phoenix_live_view, "~> 0.18.18"},
+      {:phoenix_html, "~> 3.3.1"},
       {:phoenix_inline_svg, "~> 1.4"},
-      {:surface, "~> 0.8.0"},
-      {:surface_catalogue, "~> 0.5.1"},
       {:floki, ">= 0.27.0"},
-      {:ecto_sql, "~> 3.7"},
+      {:ecto_sql, "~> 3.9.2"},
       {:ecto_commons, "~> 0.3.3"},
       {:postgrex, ">= 0.15.13"},
       {:gettext, "~> 0.19"},
@@ -92,7 +84,7 @@ defmodule Core.MixProject do
       {:faker, "~> 0.17"},
       {:timex, "~> 3.7"},
       {:bamboo, "~> 2.2"},
-      {:bamboo_phoenix, "~> 1.0.0"},
+      {:bamboo_phoenix, git: "https://github.com/populimited/bamboo_phoenix.git", ref: "bf3e320"},
       {:bamboo_ses, "~> 0.3.0"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
@@ -101,7 +93,7 @@ defmodule Core.MixProject do
       {:remote_ip, "~> 1.1"},
       {:pigeon, "~> 1.6.1"},
       {:kadabra, "~> 0.6.0"},
-      {:oban, "~> 2.10"},
+      {:oban, "~> 2.13.3"},
       {:nimble_parsec, "~> 1.2"},
       {:typed_struct, "~> 0.2.1"},
       {:logger_json, "~> 4.3"},
@@ -153,7 +145,7 @@ defmodule Core.MixProject do
       ],
       makedocs: ["deps.get", "docs -o doc/output"],
       prettier: "cmd ./assets/node_modules/.bin/prettier --color --check ./assets/js",
-      "prettier.fix": "cmd ./assetsnode_modules/.bin/prettier --color -w ./assets/js"
+      "prettier.fix": "cmd ./assets/node_modules/.bin/prettier --color -w ./assets/js"
     ]
   end
 end

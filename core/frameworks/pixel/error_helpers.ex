@@ -3,7 +3,8 @@ defmodule Frameworks.Pixel.ErrorHelpers do
   Conveniences for translating and building error messages.
   """
 
-  use Phoenix.HTML
+  alias Phoenix.HTML.Form
+  alias Phoenix.HTML.Tag
 
   @doc """
   Checkss if there are errors.
@@ -20,9 +21,9 @@ defmodule Frameworks.Pixel.ErrorHelpers do
   """
   def error_tag(form, field) do
     Enum.map(Keyword.get_values(form.errors, field), fn error ->
-      content_tag(:span, translate_error(error),
+      Tag.content_tag(:span, translate_error(error),
         class: "invalid-feedback",
-        phx_feedback_for: input_id(form, field)
+        phx_feedback_for: Form.input_id(form, field)
       )
     end)
   end

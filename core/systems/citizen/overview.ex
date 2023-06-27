@@ -1,28 +1,19 @@
 defmodule Systems.Citizen.Overview do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
   alias Frameworks.Pixel.SearchBar
-  alias Frameworks.Pixel.Text.Title2
-  alias Frameworks.Pixel.Selector.Selector
-  alias CoreWeb.UI.ContentList
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Selector
+  import CoreWeb.UI.Content
+  import CoreWeb.UI.Empty
 
   alias Systems.{
     Citizen,
     Pool
   }
 
-  prop(props, :map, required: true)
-
-  data(pool, :map)
-  data(citizens, :map)
-  data(query, :any, default: nil)
-  data(query_string, :string, default: "")
-  data(filtered_citizens, :list)
-  data(filtered_citizen_items, :list)
-  data(filter_labels, :list)
-  data(email_button, :map)
-
   # Handle Selector Update
+  @impl true
   def update(%{active_item_ids: active_filters, selector_id: :citizen_filters}, socket) do
     {
       :ok,
@@ -33,6 +24,7 @@ defmodule Systems.Citizen.Overview do
   end
 
   # Handle Search Bar Update
+  @impl true
   def update(%{search_bar: :citizen_search_bar, query_string: query_string, query: query}, socket) do
     {
       :ok,
@@ -46,6 +38,7 @@ defmodule Systems.Citizen.Overview do
   end
 
   # View model update
+  @impl true
   def update(%{props: %{citizens: citizens}} = _params, %{assigns: %{id: _id}} = socket) do
     {
       :ok,
@@ -56,6 +49,7 @@ defmodule Systems.Citizen.Overview do
   end
 
   # Initial update
+  @impl true
   def update(
         %{id: id, props: %{citizens: citizens, pool: pool}} = _params,
         %{assigns: %{myself: target}} = socket
@@ -148,40 +142,47 @@ defmodule Systems.Citizen.Overview do
     )
   end
 
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <Empty
-        :if={@citizens == []}
-        title={dgettext("link-citizen", "citizens.empty.title")}
-        body={dgettext("link-citizen", "citizens.empty.description")}
-        illustration="members"
-      />
-      <div :if={not Enum.empty?(@citizens)}>
-        <div class="flex flex-row gap-3 items-center">
-          <div class="font-label text-label">Filter:</div>
-          <Selector id={:citizen_filters} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
-          <div class="flex-grow" />
-          <div class="flex-shrink-0">
-            <SearchBar
-              id={:citizen_search_bar}
-              query_string={@query_string}
-              placeholder={dgettext("link-citizen", "search.placeholder")}
-              debounce="200"
-              parent={%{type: __MODULE__, id: @id}}
-            />
+    ~H"""
+    <div>
+      <Area.content>
+      <Margin.y id={:page_top} />
+      <%= if Enum.empty?(@citizens) do %>
+        <.empty
+          title={dgettext("link-citizen", "citizens.empty.title")}
+          body={dgettext("link-citizen", "citizens.empty.description")}
+          illustration="members"
+        />
+      <% else %>
+        <div>
+          <div class="flex flex-row gap-3 items-center">
+            <div class="font-label text-label">Filter:</div>
+            <.live_component
+            module={Selector} id={:citizen_filters} type={:label} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
+            <div class="flex-grow" />
+            <div class="flex-shrink-0">
+              <.live_component
+                module={SearchBar}
+                id={:citizen_search_bar}
+                query_string={@query_string}
+                placeholder={dgettext("link-citizen", "search.placeholder")}
+                debounce="200"
+                parent={%{type: __MODULE__, id: @id}}
+              />
+            </div>
           </div>
+          <.spacing value="L" />
+          <div class="flex flex-row">
+            <Text.title2><%= dgettext("link-citizen", "tabbar.item.citizens") %> <span class="text-primary"><%= Enum.count(@filtered_citizens) %></span></Text.title2>
+            <div class="flex-grow" />
+            <Button.dynamic {@email_button} />
+          </div>
+          <.list items={@filtered_citizen_items} />
         </div>
-        <Spacing value="L" />
-        <div class="flex flex-row">
-          <Title2>{dgettext("link-citizen", "tabbar.item.citizens")} <span class="text-primary">{Enum.count(@filtered_citizens)}</span></Title2>
-          <div class="flex-grow" />
-          <DynamicButton vm={@email_button} />
-        </div>
-        <ContentList items={@filtered_citizen_items} />
-      </div>
-    </ContentArea>
+      <% end %>
+      </Area.content>
+    </div>
     """
   end
 end

@@ -3,47 +3,57 @@ defmodule Systems.DataDonation.ToolForm do
 
   alias Core.Accounts
 
-  alias CoreWeb.UI.Timestamp
-
-  alias Frameworks.Pixel.Text.{Title2, Title3}
-  alias Frameworks.Pixel.Form.{Form, TextArea, NumberInput}
-  alias Frameworks.Pixel.Button.{SecondaryLiveViewButton, PrimaryButton}
-  alias Frameworks.Pixel.Panel.Panel
+  import Frameworks.Pixel.Form
+  alias Frameworks.Pixel.Selector
 
   alias Systems.{
     DataDonation
   }
 
-  prop(entity_id, :any, required: true)
+  require Systems.DataDonation.Platforms
 
-  data(entity, :any)
-  data(donations, :any)
-  data(changeset, :any)
+  @impl true
+  def update(
+        %{active_item_ids: active_item_ids, selector_id: selector_id},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    {:ok, socket |> save(entity, %{selector_id => active_item_ids})}
+  end
 
-  def update(%{id: id, entity_id: entity_id}, socket) do
+  @impl true
+  def update(
+        %{id: id, entity_id: entity_id},
+        socket
+      ) do
     entity = DataDonation.Public.get_tool!(entity_id)
-    donations = DataDonation.Public.list_donations(entity)
-    changeset = DataDonation.ToolModel.changeset(entity, :mount, %{})
+    changeset = DataDonation.ToolModel.changeset(entity, %{})
 
     {
       :ok,
       socket
-      |> assign(entity_id: entity_id)
-      |> assign(entity: entity)
-      |> assign(changeset: changeset)
-      |> assign(donations: donations)
-      |> assign(id: id)
+      |> assign(
+        id: id,
+        entity_id: entity_id,
+        entity: entity,
+        changeset: changeset
+      )
+      |> update_platform_labels()
     }
+  end
+
+  defp update_platform_labels(%{assigns: %{entity: %{platforms: platforms}}} = socket) do
+    platform_labels = DataDonation.Platforms.labels(platforms)
+    socket |> assign(platform_labels: platform_labels)
   end
 
   # Handle Events
 
   @impl true
-  def handle_event("save", %{"tool" => attrs}, %{assigns: %{entity: entity}} = socket) do
+  def handle_event("save", %{"tool_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket
-      |> save(entity, :auto_save, attrs)
+      |> save(entity, attrs)
     }
   end
 
@@ -56,66 +66,36 @@ defmodule Systems.DataDonation.ToolForm do
     DataDonation.Public.get_tool!(entity_id)
     |> DataDonation.Public.delete()
 
-    {:noreply,
-     push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))}
+    {:noreply, push_redirect(socket, to: Accounts.start_page_path(user))}
   end
 
   # Saving
-  def save(socket, %DataDonation.ToolModel{} = entity, type, attrs) do
-    changeset = DataDonation.ToolModel.changeset(entity, type, attrs)
+  def save(socket, %DataDonation.ToolModel{} = entity, attrs) do
+    changeset = DataDonation.ToolModel.changeset(entity, attrs)
 
     socket
     |> save(changeset)
   end
 
+  attr(:entity_id, :any, required: true)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <div :if={Enum.count(@donations) > 0}>
-        <Title2>{dgettext("eyra-data-donation", "donations.title")}</Title2>
-        <Panel bg_color="bg-grey6">
-          <div :for={donation <- @donations} class="mb-2 w-full">
-            <div class="flex flex-row w-full">
-              <div class="flex-wrap text-grey1 text-bodymedium font-body mr-6">
-                Participant {donation.user_id}
-              </div>
-              <div class="flex-grow text-grey2 text-bodymedium font-body">
-                {dgettext("eyra-data-donation", "received.label")} {Timestamp.humanize(donation.inserted_at)}
-              </div>
-              <div class="flex-wrap">
-                <a
-                  href="/"
-                  class="text-primary text-bodymedium font-body hover:text-grey1 underline focus:outline-none"
-                >
-                  {dgettext("eyra-data-donation", "download.button.label")}
-                </a>
-              </div>
-            </div>
-          </div>
-        </Panel>
-        <Spacing value="S" />
-        <PrimaryButton to="/" label={dgettext("eyra-data-donation", "download.all.button.label")} />
-        <Spacing value="XL" />
-      </div>
-      <Form id={@id} changeset={@changeset} change_event="save" target={@myself}>
-        <Title3>{dgettext("eyra-data-donation", "script.title")}</Title3>
-        <TextArea field={:script} label_text={dgettext("eyra-data-donation", "script.label")} />
-        <Spacing value="L" />
+    ~H"""
+    <div>
+      <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
+        <.number_input form={form} field={:subject_count} label_text={dgettext("eyra-data-donation", "config.nrofsubjects.label")} />
+      </.form>
+      <.spacing value="M" />
 
-        <Title3>{dgettext("eyra-data-donation", "reward.title")}</Title3>
-        <NumberInput field={:reward_value} label_text={dgettext("eyra-data-donation", "reward.label")} />
-        <Spacing value="L" />
-
-        <Title3>{dgettext("eyra-data-donation", "nrofsubjects.title")}</Title3>
-        <NumberInput
-          field={:subject_count}
-          label_text={dgettext("eyra-data-donation", "config.nrofsubjects.label")}
-        />
-      </Form>
-      <Spacing value="M" />
-      <SecondaryLiveViewButton label={dgettext("eyra-data-donation", "delete.button")} event="delete" />
-    </ContentArea>
+      <Text.title3><%= dgettext("eyra-data-donation", "platforms.title") %></Text.title3>
+      <.live_component
+        module={Selector}
+        id={:platforms}
+        items={@platform_labels}
+        type={:label}
+        parent={%{type: __MODULE__, id: @id}}
+      />
+    </div>
     """
   end
 end

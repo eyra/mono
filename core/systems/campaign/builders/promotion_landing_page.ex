@@ -15,12 +15,11 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
 
   def view_model(
         %Campaign.Model{} = campaign,
-        assigns,
-        url_resolver
+        assigns
       ) do
     campaign
     |> Campaign.Model.flatten()
-    |> view_model(assigns, url_resolver)
+    |> view_model(assigns)
   end
 
   def view_model(
@@ -34,8 +33,7 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
               assignable_experiment: experiment
             } = assignment
         },
-        _assigns,
-        _url_resolver
+        _assigns
       ) do
     %{
       id: id,
@@ -55,7 +53,7 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
       Enum.map_join(authors, ", ", & &1.fullname)
   end
 
-  defp themes(%{themes: themes}, themes_module \\ Link.Enums.Themes) do
+  defp themes(%{themes: themes}, themes_module \\ Campaign.Themes) do
     themes
     |> themes_module.labels()
     |> Enum.filter(& &1.active)
@@ -148,6 +146,6 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
       buttons: buttons
     }
 
-    LiveView.assign(socket, dialog: dialog)
+    Phoenix.Component.assign(socket, dialog: dialog)
   end
 end

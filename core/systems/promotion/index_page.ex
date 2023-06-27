@@ -4,16 +4,13 @@ defmodule Systems.Promotion.Page do
   """
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Website.Component, :index
-  alias CoreWeb.Layouts.Website.Component, as: Website
   alias Core.Accounts
 
-  alias Frameworks.Pixel.Card.PrimaryCTA
-  alias Frameworks.Pixel.Panel.USP
-  alias Frameworks.Pixel.Text.{Title1, Intro}
-  alias Frameworks.Pixel.Grid.{AbsoluteGrid}
-  alias Frameworks.Pixel.Hero.HeroLarge
-
-  data(current_user, :any)
+  alias Frameworks.Pixel.Grid
+  alias Frameworks.Pixel.Card
+  alias Frameworks.Pixel.Panel
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Hero
 
   def mount(_params, _session, socket) do
     {
@@ -37,58 +34,59 @@ defmodule Systems.Promotion.Page do
     {:noreply, push_redirect(socket, to: action)}
   end
 
+  #  data(current_user, :any)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus}>
+    ~H"""
+    <.website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus}>
       <:hero>
-        <HeroLarge
+        <Hero.large
           title={dgettext("eyra-link", "welcome.title")}
           subtitle={dgettext("eyra-link", "welcome.subtitle")}
         />
       </:hero>
 
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <AbsoluteGrid>
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <Grid.absolute>
           <div class="md:col-span-2">
-            <Title1>
-              {dgettext("eyra-link", "link.title")}
-            </Title1>
-            <Intro>
-              {dgettext("eyra-link", "link.message")}
-            </Intro>
+            <Text.title1>
+              <%= dgettext("eyra-link", "link.title") %>
+            </Text.title1>
+            <Text.intro>
+              <%= dgettext("eyra-link", "link.message") %>
+            </Text.intro>
           </div>
           <div>
-            <div :if={@current_user != nil}>
-              <PrimaryCTA
+            <%= if @current_user do %>
+              <Card.primary_cta
                 title={cta_title(@current_user)}
                 button_label={Accounts.start_page_title(@current_user)}
-                to={Routes.live_path(@socket, Accounts.start_page_target(@current_user))}
+                to={Accounts.start_page_path(@current_user)}
               />
-            </div>
-            <div :if={@current_user == nil}>
-              <PrimaryCTA
+            <% else %>
+              <Card.primary_cta
                 title={dgettext("eyra-link", "signup.card.title")}
                 button_label={dgettext("eyra-link", "signup.card.button")}
                 to={Routes.live_path(@socket, CoreWeb.User.Signup)}
               />
-            </div>
+            <% end %>
           </div>
-          <USP
+          <Panel.usp
             title={dgettext("eyra-link", "usp1.title")}
             description={dgettext("eyra-link", "usp1.description")}
           />
-          <USP
+          <Panel.usp
             title={dgettext("eyra-link", "usp2.title")}
             description={dgettext("eyra-link", "usp2.description")}
           />
-          <USP
+          <Panel.usp
             title={dgettext("eyra-link", "usp3.title")}
             description={dgettext("eyra-link", "usp3.description")}
           />
-        </AbsoluteGrid>
-      </ContentArea>
-    </Website>
+        </Grid.absolute>
+      </Area.content>
+    </.website>
     """
   end
 end

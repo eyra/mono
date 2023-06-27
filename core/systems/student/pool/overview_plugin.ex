@@ -1,21 +1,17 @@
 defmodule Systems.Student.Pool.OverviewPlugin do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
   import CoreWeb.Gettext
 
-  alias Frameworks.Pixel.Text.{Title2}
-  alias Frameworks.Pixel.Grid.DynamicGrid
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Grid
 
   alias Systems.{
     Pool
   }
 
-  prop(user, :map, required: true)
-
-  data(pools, :list)
-  data(pool_items, :list)
-
   # Initial update
+  @impl true
   def update(%{id: id, user: user}, socket) do
     {
       :ok,
@@ -139,16 +135,18 @@ defmodule Systems.Student.Pool.OverviewPlugin do
     |> Enum.filter(&Pool.SubmissionModel.submitted?(&1))
   end
 
+  attr(:user, :map, required: true)
+
   @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div>
-      <Title2>{dgettext("link-studentpool", "overview.plugin.title")} <span class="text-primary">{Enum.count(@pool_items)}</span></Title2>
-      <DynamicGrid>
-        <div :for={pool_item <- @pool_items}>
-          <Pool.ItemView {...pool_item} />
-        </div>
-      </DynamicGrid>
+      <Text.title2><%= dgettext("link-studentpool", "overview.plugin.title") %> <span class="text-primary"><%= Enum.count(@pool_items) %></span></Text.title2>
+      <Grid.dynamic>
+        <%= for pool_item <- @pool_items do %>
+          <Pool.ItemView.normal {pool_item} />
+        <% end %>
+      </Grid.dynamic>
     </div>
     """
   end

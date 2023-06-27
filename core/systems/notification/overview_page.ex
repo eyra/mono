@@ -2,8 +2,6 @@ defmodule Systems.Notification.OverviewPage do
   use CoreWeb, :live_view
   alias Systems.Notification
 
-  data(notifications, :any)
-
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
     {:ok, socket |> assign(:notifications, Notification.Public.list(user))}
   end
@@ -11,14 +9,18 @@ defmodule Systems.Notification.OverviewPage do
   @impl true
   def handle_uri(socket), do: socket
 
+  # data(notifications, :any)
+  @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div>
       Notifications
       <ul>
-        <li :for={notification <- @notifications}>
-          {notification.title}
-        </li>
+        <%= for notification <- @notifications do %>
+          <li>
+            <%= notification.title %>
+          </li>
+        <% end %>
       </ul>
     </div>
     """

@@ -9,7 +9,6 @@
 msgid ""
 msgstr ""
 "Language: nl\n"
-"Plural-Forms: nplurals=2\n"
 
 #, elixir-autogen, elixir-format
 msgid "error.flash"
@@ -41,14 +40,10 @@ msgstr "Inloggen"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.signout"
-msgstr "Uitloggen"
+msgstr "Log uit"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.menu"
-msgstr "Menu"
-
-#, elixir-autogen, elixir-format
-msgid "menu.item.eyra"
 msgstr "Menu"
 
 #, elixir-autogen, elixir-format
@@ -108,10 +103,6 @@ msgid "tabbar.item.welcome.forward"
 msgstr "Welkom"
 
 #, elixir-autogen, elixir-format
-msgid "menu.item.link"
-msgstr "Panl"
-
-#, elixir-autogen, elixir-format
 msgid "menu.item.helpdesk"
 msgstr "Helpdesk"
 
@@ -161,7 +152,7 @@ msgstr "gisteren"
 
 #, elixir-autogen, elixir-format
 msgid "authentication.required.error"
-msgstr "Deze pagina bekijken? Log hier eerst in."
+msgstr "Log in om deze pagina te bekijken"
 
 #, elixir-autogen, elixir-format
 msgid "start.page.console"
@@ -183,10 +174,6 @@ msgstr "Delen"
 msgid "share.dialog.text"
 msgstr "Deel je %{content} met een of meer %{group} uit de onderstaande lijst."
 
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pronoun.her"
-msgstr "haar"
-
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "menu.item.payments"
 msgstr "Menu"
@@ -204,10 +191,6 @@ msgid "notify.all"
 msgstr "Stuur notificatie"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "pronoun.him"
-msgstr "haar"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "menu.item.admin"
 msgstr "Admin"
 
@@ -218,3 +201,47 @@ msgstr "Financiën"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "share.dialog.title"
 msgstr "Gedeeld met"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "menu.item.projects"
+msgstr "Projecten"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "start.page.projects"
+msgstr "Ga naar console"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "copy.button"
+msgstr "Kopieer"
+
+#, elixir-autogen, elixir-format
+msgid "title.placeholder"
+msgstr "Hier komt de titel.."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "start.page.home"
+msgstr "Ga naar console"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "collapse.button"
+msgstr "Inklappen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "expand.button"
+msgstr "Uitklappen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings"
+msgstr "Instellingen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings.forward"
+msgstr "Instellingen"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link"
+msgstr "Privacy"
+
+#, elixir-autogen, elixir-format
+msgid "terms.link"
+msgstr "Voorwaarden"

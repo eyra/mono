@@ -2,22 +2,18 @@ defmodule Systems.Assignment.EthicalForm do
   use CoreWeb.LiveForm
   use Frameworks.Pixel.Form.CheckboxHelpers
 
-  alias Frameworks.Pixel.Panel.Panel
-  alias Frameworks.Pixel.Text.{Title3, Title5, BodyMedium}
-  alias Frameworks.Pixel.Form.{Form, TextInput, Checkbox}
+  import Frameworks.Pixel.Form
+
+  alias Frameworks.Pixel.Panel
+  alias Frameworks.Pixel.Text
 
   alias Systems.{
     Assignment
   }
 
-  prop(entity, :map, required: true)
-  prop(validate?, :boolean, required: true)
-
-  data(ethical_label, :any)
-  data(changeset, :any)
-
   # Handle selector update
 
+  @impl true
   def update(
         %{active_item_ids: active_item_ids, selector_id: :ethical_approval},
         %{assigns: %{entity: entity}} = socket
@@ -30,8 +26,9 @@ defmodule Systems.Assignment.EthicalForm do
   end
 
   # Handle initial update
+  @impl true
   def update(
-        %{id: id, entity: entity, validate?: validate?},
+        %{id: id, entity: entity},
         socket
       ) do
     changeset = Assignment.ExperimentModel.changeset(entity, :create, %{})
@@ -46,11 +43,12 @@ defmodule Systems.Assignment.EthicalForm do
     {
       :ok,
       socket
-      |> assign(id: id)
-      |> assign(entity: entity)
-      |> assign(changeset: changeset)
-      |> assign(ethical_label: ethical_label)
-      |> assign(validate?: validate?)
+      |> assign(
+        id: id,
+        entity: entity,
+        changeset: changeset,
+        ethical_label: ethical_label
+      )
       |> validate_for_publish()
     }
   end
@@ -78,7 +76,7 @@ defmodule Systems.Assignment.EthicalForm do
 
   # Validate
 
-  def validate_for_publish(%{assigns: %{id: id, entity: entity, validate?: true}} = socket) do
+  def validate_for_publish(%{assigns: %{id: id, entity: entity}} = socket) do
     changeset =
       Assignment.ExperimentModel.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
@@ -88,8 +86,6 @@ defmodule Systems.Assignment.EthicalForm do
     socket
     |> assign(changeset: changeset)
   end
-
-  def validate_for_publish(socket), do: socket
 
   defp ethical_review_link() do
     link_as_string(
@@ -108,30 +104,35 @@ defmodule Systems.Assignment.EthicalForm do
     |> Phoenix.HTML.safe_to_string()
   end
 
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Form id={@id} changeset={@changeset} change_event="save" target={@myself}>
-      <Title3>{dgettext("link-survey", "ethical.title")}</Title3>
-      <BodyMedium>{raw(dgettext("link-survey", "ethical.description", link: ethical_review_link()))}</BodyMedium>
-      <Spacing value="M" />
+    ~H"""
+    <div>
+      <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
+        <Text.title3><%= dgettext("link-survey", "ethical.title") %></Text.title3>
+        <Text.body_medium><%= raw(dgettext("link-survey", "ethical.description", link: ethical_review_link())) %></Text.body_medium>
+        <.spacing value="M" />
 
-      <Panel bg_color="bg-grey1">
-        <Title5 align="text-left" color="text-white">ERB code</Title5>
-        <Spacing value="S" />
-        <TextInput
-          field={:ethical_code}
-          placeholder={dgettext("eyra-account", "ehtical.code.label")}
-          background={:dark}
-        />
-        <Checkbox
-          field={:ethical_approval}
-          label_text={dgettext("link-survey", "ethical.label")}
-          label_color="text-white"
-          accent={:tertiary}
-          background={:dark}
-        />
-      </Panel>
-    </Form>
+        <Panel.flat bg_color="bg-grey1">
+          <Text.title5 align="text-left" color="text-white">ERB code</Text.title5>
+          <.spacing value="S" />
+          <.text_input
+            form={form}
+            field={:ethical_code}
+            placeholder={dgettext("eyra-account", "ehtical.code.label")}
+            background={:dark}
+          />
+          <.checkbox
+            form={form}
+            field={:ethical_approval}
+            label_text={dgettext("link-survey", "ethical.label")}
+            label_color="text-white"
+            accent={:tertiary}
+            background={:dark}
+          />
+        </Panel.flat>
+      </.form>
+    </div>
     """
   end
 end

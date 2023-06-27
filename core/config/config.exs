@@ -10,25 +10,18 @@ import Config
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :surface, :components, [
-  {Surface.Components.Form, propagate_context_to_slots: true},
-  {CoreWeb.UI.Navigation.TabbarArea, propagate_context_to_slots: true},
-  {Frameworks.Pixel.Form.Form, propagate_context_to_slots: true},
-  {Frameworks.Pixel.Form.Inputs, propagate_context_to_slots: true}
-]
-
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :plug, :statuses, %{
+  403 => "Access Denied",
+  404 => "Page not found"
+}
+
 config :core,
-  start_pages: CoreWeb.StartPages,
   image_catalog: Core.ImageCatalog.Unsplash,
-  menu_items: CoreWeb.Menu.Items,
-  workspace_menu_builder: CoreWeb.Layouts.Workspace.MenuBuilder,
-  website_menu_builder: CoreWeb.Layouts.Website.MenuBuilder,
-  stripped_menu_builder: CoreWeb.Layouts.Stripped.MenuBuilder,
   banking_backend: Systems.Banking.Dummy
 
 config :gettext, default_locale: "nl"
@@ -38,14 +31,6 @@ config :core, CoreWeb.Gettext, locales: ~w(en nl)
 config :phoenix_inline_svg,
   dir: "./assets/static/images",
   default_collection: "icons"
-
-config :esbuild,
-  catalogue: [
-    args:
-      ~w(../deps/surface_catalogue/assets/js/app.js --bundle --target=es2016 --minify --outdir=../priv/static/assets/catalogue),
-    cd: Path.expand("../assets", __DIR__),
-    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
-  ]
 
 config :core, Oban,
   repo: Core.Repo,
@@ -93,14 +78,17 @@ config :core, Core.ImageCatalog.Unsplash,
   access_key: "",
   app_name: "Core"
 
-config :core, Systems.DataDonation.S3StorageBackend, bucket: "port"
+config :core, :s3, bucket: "port"
 
 config :core, CoreWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "QbAmUdYcDMMQ2e7wVp6PSXI8QdUjfDEGR0FTwjwkUIYS4lW1ledjE9Dkhr3pE4Qn",
   server: true,
   force_ssl: [],
-  render_errors: [view: CoreWeb.ErrorView, accepts: ~w(html json), layout: false],
+  render_errors: [
+    formats: [html: CoreWeb.ErrorHTML, json: CoreWeb.ErrorHTML],
+    layout: {CoreWeb.Layouts, :error}
+  ],
   pubsub_server: Core.PubSub,
   live_view: [signing_salt: "U46ENwad8CDswjwuXgNZVpJjUlBjbmL9"],
   http: [port: 4000]
@@ -128,20 +116,22 @@ config :core, BankingClient,
   certfile: "../banking_proxy/certs/client_certificate.pem",
   keyfile: "../banking_proxy/certs/client_key.pem"
 
-import_config "#{config_env()}.exs"
+module =
+  case Code.ensure_compiled(Bundle) do
+    {:module, module} ->
+      module
 
-unless config_env() == :test do
-  default_bundle =
-    case File.read(".bundle") do
-      {:ok, bundle} -> String.trim(bundle)
-      {:error, _} -> "next"
-    end
-
-  bundle = System.get_env("BUNDLE", default_bundle) |> String.to_atom()
-
-  config :core, :bundle, bundle
-
-  unless is_nil(bundle) do
-    import_config "../bundles/#{bundle}/config/config.exs"
+    _ ->
+      [{module, _binary}] = Code.compile_file(".bundle.ex")
+      module
   end
+
+bundle = apply(module, :name, [])
+
+config :core, :bundle, bundle
+
+unless is_nil(bundle) do
+  import_config "../bundles/#{bundle}/config/config.exs"
 end
+
+import_config "#{config_env()}.exs"

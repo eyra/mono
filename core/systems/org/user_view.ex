@@ -1,11 +1,10 @@
 defmodule Systems.Org.UserView do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
-  alias Frameworks.Pixel.Text.Title2
+  alias Frameworks.Pixel.Text
 
-  prop(props, :map)
-
-  def update(%{id: id, props: %{locale: _locale}}, socket) do
+  @impl true
+  def update(%{id: id, locale: _locale}, socket) do
     {
       :ok,
       socket
@@ -13,12 +12,16 @@ defmodule Systems.Org.UserView do
     }
   end
 
+  attr(:locale, :string)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <Title2>{dgettext("eyra-org", "user.title")}</Title2>
-    </ContentArea>
+    ~H"""
+    <div>
+      <Area.content>
+      <Margin.y id={:page_top} />
+      <Text.title2><%= dgettext("eyra-org", "user.title") %></Text.title2>
+      </Area.content>
+    </div>
     """
   end
 end

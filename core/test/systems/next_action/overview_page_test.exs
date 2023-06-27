@@ -9,7 +9,7 @@ defmodule Systems.NextAction.OverviewPageTest do
     @behaviour Systems.NextAction.ViewModel
 
     @impl Systems.NextAction.ViewModel
-    def to_view_model(_url_resolver, count, _params) do
+    def to_view_model(count, _params) do
       %{
         title: "Test: #{count}",
         description: "Testing",

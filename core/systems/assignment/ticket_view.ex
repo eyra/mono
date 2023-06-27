@@ -1,17 +1,16 @@
 defmodule Systems.Assignment.TicketView do
-  use Frameworks.Pixel.Component
+  use CoreWeb, :html
 
   import CoreWeb.Gettext
+  alias Frameworks.Pixel.Text
 
-  alias Frameworks.Pixel.Text.Title4
+  attr(:public_id, :string, required: true)
 
-  prop(public_id, :string, required: true)
-
-  def render(assigns) do
-    ~F"""
+  def normal(assigns) do
+    ~H"""
     <div class="flex flex-row gap-12 rounded-lg shadow-2xl p-8 h-full bg-tertiary">
-      <Title4>{dgettext("eyra-assignment", "ticket.title")}</Title4>
-      <Title4>{@public_id}</Title4>
+      <Text.title4><%= dgettext("eyra-assignment", "ticket.title") %></Text.title4>
+      <Text.title4><%= @public_id %></Text.title4>
     </div>
     """
   end

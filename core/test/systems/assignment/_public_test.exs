@@ -272,34 +272,22 @@ defmodule Systems.Assignment.PublicTest do
     end
 
     test "next_action (Assignment.CheckRejection) after rejection of task" do
-      %{crew: crew} = create_assignment(31, 3)
+      %{id: id, crew: crew} = create_assignment(31, 3)
       %{id: task_id, member: %{user: user}} = create_task(crew, :pending, false, 10)
 
       Crew.Public.reject_task(task_id, %{category: :other, message: "rejected"})
 
-      url_resolver = fn target, _ ->
-        case target do
-          Systems.Assignment.LandingPage -> "/assignment"
-        end
-      end
-
-      assert_next_action(user, url_resolver, "/assignment")
+      assert_next_action(user, "/assignment/#{id}")
     end
 
     test "next_action cleared after acceptence of task" do
-      %{crew: crew} = create_assignment(31, 3)
+      %{id: id, crew: crew} = create_assignment(31, 3)
       %{id: task_id, member: %{user: user}} = create_task(crew, :pending, false, 10)
 
       Crew.Public.reject_task(task_id, %{category: :other, message: "rejected"})
       Crew.Public.accept_task(task_id)
 
-      url_resolver = fn target, _ ->
-        case target do
-          Systems.Assignment.LandingPage -> "/assignment"
-        end
-      end
-
-      refute_next_action(user, url_resolver, "/assignment")
+      refute_next_action(user, "/assignment/#{id}")
     end
 
     test "exclude/2" do

@@ -1,31 +1,34 @@
 defmodule Systems.Campaign.MonitorTableView do
-  use CoreWeb.UI.Component
+  use CoreWeb, :html
 
   alias Systems.{
     Crew
   }
 
-  alias Frameworks.Pixel.Text.{Title6}
-
-  prop(columns, :list, required: true)
-  prop(tasks, :list, required: true)
+  import Crew.TaskItemView
 
   defp padding(0), do: "pl-0"
   defp padding(_), do: "pl-8"
 
-  @impl true
-  def render(assigns) do
-    ~F"""
+  attr(:columns, :list, required: true)
+  attr(:tasks, :list, required: true)
+
+  def monitor_table_view(assigns) do
+    ~H"""
     <table>
       <thead>
         <tr class="text-left">
-          <th :for={{column, index} <- Enum.with_index(@columns)} class={"#{padding(index)}"}>
-            <Title6>{column}</Title6>
-          </th>
+          <%= for {column, index} <- Enum.with_index(@columns) do %>
+            <th class={"#{padding(index)}"}>
+              <Text.title6><%= column %></Text.title6>
+            </th>
+          <% end %>
         </tr>
       </thead>
       <tbody>
-        <Crew.TaskItemView :for={task <- @tasks} {...task} />
+        <%= for task <- @tasks do %>
+          <.task_item_view {task} />
+        <% end %>
       </tbody>
     </table>
     """

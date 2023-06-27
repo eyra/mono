@@ -8,22 +8,12 @@ defmodule Systems.Promotion.FormView do
 
   alias Core.ImageHelpers
 
-  alias Frameworks.Pixel.Text.{Title2, Title3, Body, BodyLarge}
-  alias Frameworks.Pixel.Form.{Form, TextInput, TextArea, PhotoInput, UrlInput}
-  alias Frameworks.Pixel.Selector.Selector
-  alias Frameworks.Pixel.ImagePreview
+  import Frameworks.Pixel.Form
 
-  prop(props, :any, required: true)
-
-  data(entity, :any)
-  data(validate?, :boolean)
-  data(changeset, :any)
-  data(uploads, :any)
-
-  data(published?, :boolean)
-  data(image_info, :string)
-  data(theme_labels, :list)
-  data(image_picker_button, :any)
+  alias Frameworks.Pixel.Text
+  import Frameworks.Pixel.Form
+  alias Frameworks.Pixel.Selector
+  alias Frameworks.Pixel.Image
 
   @impl true
   def process_file(
@@ -34,6 +24,7 @@ defmodule Systems.Promotion.FormView do
     |> save(entity, %{banner_photo_url: local_relative_path})
   end
 
+  @impl true
   def update(%{image_id: image_id}, %{assigns: %{entity: entity}} = socket) do
     attrs = %{image_id: image_id}
     image_info = ImageHelpers.get_image_info(image_id, 400, 300)
@@ -47,6 +38,7 @@ defmodule Systems.Promotion.FormView do
   end
 
   # Handle Selector Update
+  @impl true
   def update(
         %{active_item_ids: active_theme_ids, selector_id: :themes},
         %{assigns: %{entity: entity}} = socket
@@ -62,26 +54,13 @@ defmodule Systems.Promotion.FormView do
     }
   end
 
-  # Handle update from parent after attempt to publish
-  def update(%{props: %{validate?: new}}, %{assigns: %{validate?: current}} = socket)
-      when new != current do
-    {
-      :ok,
-      socket
-      |> assign(validate?: new)
-      |> validate_for_publish()
-    }
-  end
-
   # Initial update
+  @impl true
   def update(
         %{
           id: id,
-          props: %{
-            entity: entity,
-            validate?: validate?,
-            themes_module: themes_module
-          }
+          entity: entity,
+          themes_module: themes_module
         },
         socket
       ) do
@@ -92,7 +71,6 @@ defmodule Systems.Promotion.FormView do
       |> assign(
         id: id,
         entity: entity,
-        validate?: validate?,
         themes_module: themes_module
       )
       |> update_changeset()
@@ -105,7 +83,7 @@ defmodule Systems.Promotion.FormView do
 
   defp update_changeset(%{assigns: %{entity: entity}} = socket) do
     changeset = Promotion.Model.changeset(entity, :create, %{})
-    socket |> assign(changeset: changeset)
+    socket |> assign(changeset: changeset, form: to_form(changeset))
   end
 
   defp update_image_info(%{assigns: %{entity: %{image_id: image_id}}} = socket) do
@@ -145,7 +123,7 @@ defmodule Systems.Promotion.FormView do
 
   # Validate
 
-  def validate_for_publish(%{assigns: %{id: id, entity: entity, validate?: true}} = socket) do
+  def validate_for_publish(%{assigns: %{id: id, entity: entity}} = socket) do
     changeset =
       Promotion.Model.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
@@ -153,10 +131,8 @@ defmodule Systems.Promotion.FormView do
     send(self(), %{id: id, ready?: changeset.valid?})
 
     socket
-    |> assign(changeset: changeset)
+    |> assign(changeset: changeset, form: to_form(changeset))
   end
-
-  def validate_for_publish(socket), do: socket
 
   # Handle Events
 
@@ -183,59 +159,62 @@ defmodule Systems.Promotion.FormView do
 
   @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <Title2>{dgettext("eyra-promotion", "form.title")}</Title2>
-      <BodyLarge>{dgettext("eyra-promotion", "form.description")}</BodyLarge>
-      <Spacing value="M" />
-      <Form id={@id} changeset={@changeset} change_event="save" target={@myself}>
-        <TextInput field={:title} label_text={dgettext("eyra-promotion", "title.label")} />
-        <TextInput field={:subtitle} label_text={dgettext("eyra-promotion", "subtitle.label")} />
+    ~H"""
+    <div>
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <Text.title2><%= dgettext("eyra-promotion", "form.title") %></Text.title2>
+        <Text.body_large><%= dgettext("eyra-promotion", "form.description") %></Text.body_large>
+        <.spacing value="M" />
+        <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
+          <.text_input form={form} field={:title} label_text={dgettext("eyra-promotion", "title.label")} />
+          <.text_input form={form} field={:subtitle} label_text={dgettext("eyra-promotion", "subtitle.label")} />
 
-        <Spacing value="XL" />
-        <Title3>{dgettext("eyra-promotion", "themes.title")}</Title3>
-        <Body>{dgettext("eyra-promotion", "themes.label")}</Body>
-        <Spacing value="XS" />
-        <Selector id={:themes} items={@theme_labels} parent={%{type: __MODULE__, id: @id}} />
-        <Spacing value="XL" />
+          <.spacing value="XL" />
+          <Text.title3><%= dgettext("eyra-promotion", "themes.title") %></Text.title3>
+          <Text.body><%= dgettext("eyra-promotion", "themes.label") %></Text.body>
+          <.spacing value="XS" />
+          <.live_component
+            module={Selector} id={:themes} type={:label} items={@theme_labels} parent={%{type: __MODULE__, id: @id}} />
+          <.spacing value="XL" />
 
-        <Title3>{dgettext("eyra-promotion", "image.title")}</Title3>
-        <Body>{dgettext("eyra-promotion", "image.label")}</Body>
-        <Spacing value="XS" />
-        <div class="flex flex-row gap-4">
-          <ImagePreview image_url={@image_info.url} placeholder="" />
-          <DynamicButton vm={@image_picker_button} />
-        </div>
-        <Spacing value="XL" />
+          <Text.title3><%= dgettext("eyra-promotion", "image.title") %></Text.title3>
+          <Text.body><%= dgettext("eyra-promotion", "image.label") %></Text.body>
+          <.spacing value="XS" />
+          <div class="flex flex-row gap-4">
+            <Image.preview image_url={@image_info.url} placeholder="" />
+            <Button.dynamic {@image_picker_button} />
+          </div>
+          <.spacing value="XL" />
 
-        <Title3>{dgettext("eyra-promotion", "expectations.title")}</Title3>
-        <TextArea field={:expectations} label_text={dgettext("eyra-promotion", "expectations.label")} />
-        <Spacing value="L" />
+          <Text.title3><%= dgettext("eyra-promotion", "expectations.title") %></Text.title3>
+          <.text_area form={form} field={:expectations} label_text={dgettext("eyra-promotion", "expectations.label")} />
+          <.spacing value="L" />
 
-        <Title3>{dgettext("eyra-promotion", "description.title")}</Title3>
-        <TextArea field={:description} label_text={dgettext("eyra-promotion", "description.label")} />
-        <Spacing value="L" />
+          <Text.title3><%= dgettext("eyra-promotion", "description.title") %></Text.title3>
+          <.text_area form={form} field={:description} label_text={dgettext("eyra-promotion", "description.label")} />
+          <.spacing value="L" />
 
-        <Title3>{dgettext("eyra-promotion", "banner.title")}</Title3>
-        <PhotoInput
-          static_path={&CoreWeb.Endpoint.static_path/1}
-          photo_url={@entity.banner_photo_url}
-          uploads={@uploads}
-          primary_button_text={dgettext("eyra-promotion", "choose.banner.photo.file")}
-          secondary_button_text={dgettext("eyra-promotion", "choose.other.banner.photo.file")}
-        />
+          <Text.title3><%= dgettext("eyra-promotion", "banner.title") %></Text.title3>
+          <.photo_input
+            static_path={&CoreWeb.Endpoint.static_path/1}
+            photo_url={@entity.banner_photo_url}
+            uploads={@uploads}
+            primary_button_text={dgettext("eyra-promotion", "choose.banner.photo.file")}
+            secondary_button_text={dgettext("eyra-promotion", "choose.other.banner.photo.file")}
+          />
 
-        <Spacing value="S" />
+          <.spacing value="S" />
 
-        <TextInput field={:banner_title} label_text={dgettext("eyra-promotion", "banner.title.label")} />
-        <TextInput
-          field={:banner_subtitle}
-          label_text={dgettext("eyra-promotion", "banner.subtitle.label")}
-        />
-        <UrlInput field={:banner_url} label_text={dgettext("eyra-promotion", "banner.url.label")} />
-      </Form>
-    </ContentArea>
+          <.text_input form={form} field={:banner_title} label_text={dgettext("eyra-promotion", "banner.title.label")} />
+          <.text_input form={form}
+            field={:banner_subtitle}
+            label_text={dgettext("eyra-promotion", "banner.subtitle.label")}
+          />
+          <.url_input form={form} field={:banner_url} label_text={dgettext("eyra-promotion", "banner.url.label")} />
+        </.form>
+      </Area.content>
+    </div>
     """
   end
 end

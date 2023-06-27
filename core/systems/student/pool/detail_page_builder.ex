@@ -11,26 +11,25 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
     Student
   }
 
-  def view_model(pool, assigns, url_resolver) do
+  def view_model(pool, assigns) do
     %{
       title: Pool.Model.title(pool),
-      tabs: create_tabs(assigns, url_resolver, pool)
+      tabs: create_tabs(assigns, pool)
     }
   end
 
   defp create_tabs(
          %{initial_tab: initial_tab} = assigns,
-         url_resolver,
          %{participants: participants} = pool
        ) do
-    campaigns = load_campaigns(url_resolver, pool)
+    campaigns = load_campaigns(pool)
     dashboard = load_dashboard(assigns, pool)
 
     [
       %{
         id: :students,
         title: dgettext("link-studentpool", "tabbar.item.students"),
-        component: Student.Overview,
+        live_component: Student.Overview,
         props: %{students: participants, pool: pool},
         type: :fullpage,
         active: initial_tab === :students
@@ -38,7 +37,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
       %{
         id: :campaigns,
         title: dgettext("link-studentpool", "tabbar.item.campaigns"),
-        component: Pool.CampaignsView,
+        live_component: Pool.CampaignsView,
         props: %{campaigns: campaigns},
         type: :fullpage,
         active: initial_tab === :campaigns
@@ -46,7 +45,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
       %{
         id: :dashboard,
         title: dgettext("link-studentpool", "tabbar.item.dashboard"),
-        component: Student.Pool.DashboardView,
+        live_component: Student.Pool.DashboardView,
         props: dashboard,
         type: :fullpage,
         active: initial_tab === :dashboard
@@ -54,12 +53,12 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
     ]
   end
 
-  defp load_campaigns(url_resolver, pool) do
+  defp load_campaigns(pool) do
     preload = Campaign.Model.preload_graph(:full)
 
     Campaign.Public.list_submitted(pool, preload: preload)
     |> Enum.map(&Campaign.Model.flatten(&1))
-    |> Enum.map(&Pool.Builders.CampaignItem.view_model(url_resolver, &1))
+    |> Enum.map(&Pool.Builders.CampaignItem.view_model(&1))
   end
 
   defp scale({:unknown, _}), do: 5

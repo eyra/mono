@@ -6,22 +6,15 @@ defmodule Systems.Campaign.OverviewPage do
   use CoreWeb.Layouts.Workspace.Component, :recruitment
   use CoreWeb.UI.PlainDialog
 
-  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
-  alias CoreWeb.UI.PlainDialog
+  import CoreWeb.Layouts.Workspace.Component
   alias CoreWeb.UI.SelectorDialog
 
   alias Frameworks.Utility.ViewModelBuilder
-  alias Frameworks.Pixel.Button.PrimaryLiveViewButton
-  alias Frameworks.Pixel.Card.DynamicCampaign
-  alias Frameworks.Pixel.Grid.DynamicGrid
-  alias Frameworks.Pixel.Text.Title2
-  alias Frameworks.Pixel.Button.Action.Send
-  alias Frameworks.Pixel.Button.Face.PlainIcon
+  alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Grid
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.ShareView
-
-  data(campaigns, :list, default: [])
-  data(popup, :any)
-  data(selector_dialog, :map)
 
   alias Systems.{
     Campaign
@@ -41,15 +34,13 @@ defmodule Systems.Campaign.OverviewPage do
     }
   end
 
-  defp update_campaigns(%{assigns: %{current_user: user}} = socket) do
+  defp update_campaigns(%{assigns: %{current_user: user} = assigns} = socket) do
     preload = Campaign.Model.preload_graph(:full)
 
     campaigns =
       user
       |> Campaign.Public.list_owned_campaigns(preload: preload)
-      |> Enum.map(
-        &ViewModelBuilder.view_model(&1, {__MODULE__, :card}, user, url_resolver(socket))
-      )
+      |> Enum.map(&ViewModelBuilder.view_model(&1, {__MODULE__, :card}, assigns))
 
     socket
     |> assign(
@@ -163,6 +154,17 @@ defmodule Systems.Campaign.OverviewPage do
   end
 
   @impl true
+  def handle_event(
+        "card_clicked",
+        %{"item" => card_id},
+        %{assigns: %{campaigns: campaigns}} = socket
+      ) do
+    card_id = String.to_integer(card_id)
+    %{path: path} = Enum.find(campaigns, &(&1.id == card_id))
+    {:noreply, push_redirect(socket, to: path)}
+  end
+
+  @impl true
   def handle_info(
         %{module: Systems.Campaign.CreateForm, action: %{redirect_to: campaign_id}},
         socket
@@ -174,12 +176,6 @@ defmodule Systems.Campaign.OverviewPage do
   @impl true
   def handle_info(%{selector: :cancel}, socket) do
     {:noreply, socket |> assign(selector_dialog: nil)}
-  end
-
-  @impl true
-  def handle_info({:card_click, %{action: :edit, id: id}}, socket) do
-    {:noreply,
-     push_redirect(socket, to: CoreWeb.Router.Helpers.live_path(socket, Campaign.ContentPage, id))}
   end
 
   @impl true
@@ -211,78 +207,79 @@ defmodule Systems.Campaign.OverviewPage do
     {:noreply, socket}
   end
 
+  # data(campaigns, :list, default: [])
+  # data(popup, :any)
+  # data(selector_dialog, :map)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace title={dgettext("link-survey", "title")} menus={@menus}>
-      <Popup :if={@popup}>
-        <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
-          <Dynamic.LiveComponent id={:campaign_overview_popup} module={@popup.module} {...@popup} />
-        </div>
-      </Popup>
+    ~H"""
+    <.workspace title={dgettext("link-survey", "title")} menus={@menus}>
 
-      <div :if={@dialog != nil} class="fixed z-40 left-0 top-0 w-full h-full bg-black bg-opacity-20">
-        <div class="flex flex-row items-center justify-center w-full h-full">
-          <PlainDialog {...@dialog} />
-        </div>
-      </div>
+      <%= if @popup do %>
+        <.popup>
+          <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
+            <.live_component id={:campaign_overview_popup} module={@popup.module} {@popup} />
+          </div>
+        </.popup>
+      <% end %>
 
-      <div
-        :if={@selector_dialog != nil}
-        class="fixed z-40 left-0 top-0 w-full h-full bg-black bg-opacity-20"
-      >
-        <div class="flex flex-row items-center justify-center w-full h-full">
-          <SelectorDialog id={:selector_dialog} {...@selector_dialog} />
+      <%= if @dialog do %>
+        <div class="fixed z-40 left-0 top-0 w-full h-full bg-black bg-opacity-20">
+          <div class="flex flex-row items-center justify-center w-full h-full">
+            <.plain_dialog {@dialog} />
+          </div>
         </div>
-      </div>
+      <% end %>
 
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <Case value={Enum.count(@campaigns) > 0}>
-          <True>
-            <div class="flex flex-row items-center justify-center">
-              <div class="h-full">
-                <Title2 margin="">{dgettext("link-survey", "campaign.overview.title")}</Title2>
-              </div>
-              <div class="flex-grow">
-              </div>
-              <div class="h-full pt-2px lg:pt-1">
-                <Send vm={%{event: "create_campaign"}}>
-                  <div class="sm:hidden">
-                    <PlainIcon vm={label: dgettext("link-survey", "add.new.button.short"), icon: :forward} />
-                  </div>
-                  <div class="hidden sm:block">
-                    <PlainIcon vm={label: dgettext("link-survey", "add.new.button"), icon: :forward} />
-                  </div>
-                </Send>
-              </div>
+      <%= if @selector_dialog do %>
+        <div class="fixed z-40 left-0 top-0 w-full h-full bg-black bg-opacity-20">
+          <div class="flex flex-row items-center justify-center w-full h-full">
+            <.live_component module={SelectorDialog} id={:selector_dialog} {@selector_dialog} />
+          </div>
+        </div>
+      <% end %>
+
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <%= if Enum.count(@campaigns) > 0 do %>
+          <div class="flex flex-row items-center justify-center">
+            <div class="h-full">
+              <Text.title2 margin=""><%= dgettext("link-survey", "campaign.overview.title") %></Text.title2>
             </div>
-            <MarginY id={:title2_bottom} />
-            <DynamicGrid>
-              <div :for={campaign <- @campaigns}>
-                <DynamicCampaign
-                  path_provider={CoreWeb.Endpoint}
-                  card={campaign}
-                  click_event_data={%{action: :edit, id: campaign.edit_id}}
-                />
-              </div>
-            </DynamicGrid>
-            <Spacing value="L" />
-          </True>
-          <False>
-            <Empty
-              title={dgettext("link-survey", "empty.title")}
-              body={dgettext("link-survey", "empty.description")}
-              illustration="cards"
-            />
-            <Spacing value="L" />
-            <PrimaryLiveViewButton
-              label={dgettext("link-survey", "add.first.button")}
-              event="create_campaign"
-            />
-          </False>
-        </Case>
-      </ContentArea>
-    </Workspace>
+            <div class="flex-grow">
+            </div>
+            <div class="h-full pt-2px lg:pt-1">
+              <Button.Action.send event="create_campaign">
+                <div class="sm:hidden">
+                  <Button.Face.plain_icon label={dgettext("link-survey", "add.new.button.short")} icon={:forward} />
+                </div>
+                <div class="hidden sm:block">
+                  <Button.Face.plain_icon label={dgettext("link-survey", "add.new.button")} icon={:forward} />
+                </div>
+              </Button.Action.send>
+            </div>
+          </div>
+          <Margin.y id={:title2_bottom} />
+          <Grid.dynamic>
+            <%= for campaign <- @campaigns do %>
+              <Campaign.CardView.dynamic card={campaign} />
+            <% end %>
+          </Grid.dynamic>
+          <.spacing value="L" />
+        <% else %>
+          <.empty
+            title={dgettext("link-survey", "empty.title")}
+            body={dgettext("link-survey", "empty.description")}
+            illustration="cards"
+          />
+          <.spacing value="L" />
+          <Button.primary_live_view
+            label={dgettext("link-survey", "add.first.button")}
+            event="create_campaign"
+          />
+        <% end %>
+      </Area.content>
+    </.workspace>
     """
   end
 end

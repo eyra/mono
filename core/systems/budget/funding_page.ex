@@ -2,10 +2,10 @@ defmodule Systems.Budget.FundingPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :funding
 
-  alias CoreWeb.UI.ContentList
-  alias Frameworks.Pixel.Line
-  alias Frameworks.Pixel.Text.{Title1, Title2, Title3}
-  alias Frameworks.Pixel.{Square, SquareContainer}
+  import CoreWeb.UI.Content
+  import Frameworks.Pixel.Line
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Square
 
   alias Systems.{
     Budget,
@@ -13,15 +13,7 @@ defmodule Systems.Budget.FundingPage do
     Campaign
   }
 
-  data(create_budget, :map)
-  data(edit_button, :map)
-  data(deposit_button, :map)
-  data(budgets, :list)
-  data(selected_budget, :any, default: nil)
-  data(campaign_items, :list, default: [])
-  data(balance, :any, default: nil)
-  data(squares, :list)
-  data(popup, :any)
+  import Budget.BalanceView
 
   @impl true
   def mount(_params, %{"locale" => locale} = _session, socket) do
@@ -54,7 +46,8 @@ defmodule Systems.Budget.FundingPage do
         locale: locale,
         create_budget: create_budget,
         edit_button: edit_button,
-        deposit_button: deposit_button
+        deposit_button: deposit_button,
+        selected_budget: nil
       )
       |> update_budgets()
       |> update_selected_budget()
@@ -68,19 +61,17 @@ defmodule Systems.Budget.FundingPage do
     socket |> assign(campaign_items: [])
   end
 
-  defp update_campaigns(
-         %{assigns: %{current_user: user, selected_budget: selected_budget}} = socket
-       ) do
+  defp update_campaigns(%{assigns: %{selected_budget: selected_budget} = assigns} = socket) do
     campaign_items =
       selected_budget
       |> Campaign.Public.list_by_budget(Campaign.Model.preload_graph(:full))
-      |> Enum.map(&to_content_list_item(&1, user, url_resolver(socket)))
+      |> Enum.map(&to_content_list_item(&1, assigns))
 
     socket |> assign(campaign_items: campaign_items)
   end
 
-  defp to_content_list_item(campaign, user, url_resolver) do
-    ViewModelBuilder.view_model(campaign, {__MODULE__, :budget_campaigns}, user, url_resolver)
+  defp to_content_list_item(campaign, assigns) do
+    ViewModelBuilder.view_model(campaign, {__MODULE__, :budget_campaigns}, assigns)
   end
 
   defp update_budgets(%{assigns: %{current_user: user}} = socket) do
@@ -283,37 +274,60 @@ defmodule Systems.Budget.FundingPage do
     socket |> assign(popup: nil)
   end
 
+  # data(create_budget, :map)
+  # data(edit_button, :map)
+  # data(deposit_button, :map)
+  # data(budgets, :list)
+  # data(selected_budget, :any, default: nil)
+  # data(campaign_items, :list, default: [])
+  # data(balance, :any, default: nil)
+  # data(squares, :list)
+  # data(popup, :any)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace title={dgettext("eyra-budget", "funding.title")} menus={@menus}>
-      <Popup :if={@popup}>
-        <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
-          <Dynamic.LiveComponent id={:funding_popup} module={@popup.module} {...@popup} />
-        </div>
-      </Popup>
-      <MarginY id={:page_top} />
-      <ContentArea>
-        <Title1>{dgettext("eyra-budget", "funding.budgets.title")} <span class="text-primary">{Enum.count(@squares)}</span></Title1>
-        <SquareContainer>
-          <Square {...@create_budget} />
-          <Square :for={square <- @squares} {...square} />
-        </SquareContainer>
-
-        <div :if={@selected_budget} class="flex flex-col gap-10">
-          <div />
-          <Line />
-          <div class="flex flex-row gap-8">
-            <Title2 margin="">{@selected_budget.name}</Title2>
-            <div class="flex-grow" />
-            <DynamicButton vm={@edit_button} />
-            <DynamicButton vm={@deposit_button} />
+    ~H"""
+    <.workspace title={dgettext("eyra-budget", "funding.title")} menus={@menus}>
+      <%= if @popup do %>
+        <.popup>
+          <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
+            <.live_component id={:funding_popup} module={@popup.module} {@popup} />
           </div>
-          <Budget.BalanceView :if={@balance} {...@balance} />
-          <Title3 margin="">{dgettext("eyra-budget", "linked.assignments.title")} <span class="text-primary">{Enum.count(@campaign_items)}</span></Title3>
-          <ContentList items={@campaign_items} />
-        </div>
-      </ContentArea>
-    </Workspace>
+        </.popup>
+      <% end %>
+      <Margin.y id={:page_top} />
+      <Area.content>
+        <Text.title1>
+          <%= dgettext("eyra-budget", "funding.budgets.title") %>
+          <span class="text-primary"><%= Enum.count(@squares) %></span>
+        </Text.title1>
+        <Square.container>
+          <Square.item {@create_budget} />
+          <%= for square <- @squares do %>
+            <Square.item {square} />
+          <% end %>
+        </Square.container>
+        <%= if @selected_budget do %>
+          <div class="flex flex-col gap-10">
+            <div />
+            <.line />
+            <div class="flex flex-row gap-8">
+              <Text.title2 margin=""><%= @selected_budget.name %></Text.title2>
+              <div class="flex-grow" />
+              <Button.dynamic {@edit_button} />
+              <Button.dynamic {@deposit_button} />
+            </div>
+            <%= if @balance do %>
+              <.balance_view {@balance} />
+            <% end %>
+            <Text.title3 margin="">
+              <%= dgettext("eyra-budget", "linked.assignments.title") %>
+              <span class="text-primary"> <%= Enum.count(@campaign_items) %></span>
+            </Text.title3>
+            <.list items={@campaign_items} />
+          </div>
+        <% end %>
+      </Area.content>
+    </.workspace>
     """
   end
 end

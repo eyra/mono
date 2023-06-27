@@ -14,11 +14,11 @@ defmodule CoreWeb.StartPageProvider do
     quote do
       import CoreWeb.Gettext
 
-      def start_page_target(user) do
+      def start_page_path(user) do
         case CoreWeb.StartPageProvider.page(user) do
           nil -> exit("Start page for #{user} not found in configuration")
-          %{target: target} -> target
-          _ -> exit("Start page for #{user} has no configuration for target")
+          %{path: path} -> path
+          _ -> exit("Start page for #{user} has no configuration for path")
         end
       end
 

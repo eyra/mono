@@ -1,28 +1,146 @@
 defmodule Frameworks.Pixel.Icon do
-  use Surface.Component
+  use CoreWeb, :html
 
-  prop(type, :atom, required: true)
-  prop(src, :any, required: true)
-  prop(size, :string)
-  prop(border_size, :css_class, default: "border-0")
-  prop(border_radius, :css_class, default: "rounded-none")
-  prop(bg_color, :css_class, default: false)
+  attr(:type, :atom, required: true)
+  attr(:src, :any, required: true)
+  attr(:size, :string, required: true)
+  attr(:border_size, :string, default: "border-0")
+  attr(:border_radius, :string, default: "rounded-none")
+  attr(:bg_color, :string, default: "")
 
-  defp size("L"), do: "w-12 h-12 sm:h-16 sm:w-16 lg:h-84px lg:w-84px"
-  defp size("S"), do: "h-14 w-14"
-  defp size(_), do: ""
+  def generic(%{size: size} = assigns) do
+    style =
+      case size do
+        "L" -> "w-12 h-12 sm:h-16 sm:w-16 lg:h-84px lg:w-84px"
+        "S" -> "h-14 w-14"
+        _ -> "h-6 w-6"
+      end
 
-  defp emoji_style("L"), do: "text-title1 font-title1 text-grey1"
-  defp emoji_style("M"), do: "text-title2 font-title2 text-grey1"
-  defp emoji_style("S"), do: "text-title3 font-title3 text-grey1"
+    assigns = assign(assigns, :style, style)
 
-  def render(assigns) do
-    ~F"""
-    <div class={"border-grey4 border-opacity-100 #{size(@size)} #{@bg_color} #{@border_size} #{@border_radius}"}>
-      <img :if={@type == :url} class={"w-full h-full #{@border_radius}"} src={@src} alt="">
-      <img :if={@type == :static} src={"/images/icons/#{@src}.svg"} alt="">
-      <div :if={@type == :emoji} class={"w-full h-full #{@border_radius} #{emoji_style("M")}"}>{@src}</div>
+    ~H"""
+    <div class={"border-grey4/100 #{@size} #{@bg_color} #{@border_size} #{@border_radius}"}>
+      <.generic_body {assigns}/>
     </div>
+    """
+  end
+
+  attr(:type, :atom, required: true)
+  attr(:src, :any, required: true)
+  attr(:size, :string, required: true)
+  attr(:border_radius, :string, default: "rounded-none")
+
+  def generic_body(%{type: :url} = assigns) do
+    ~H"""
+    <img class={"w-full h-full #{@border_radius}"} src={@src} alt="">
+    """
+  end
+
+  def generic_body(%{type: :static} = assigns) do
+    ~H"""
+    <div class="flex flex-col items-center justify-center h-full">
+      <img class="object-scale-down h-full" src={"/images/icons/#{@src}.svg"} alt={@src}>
+    </div>
+    """
+  end
+
+  def generic_body(%{type: :emoji, size: size} = assigns) do
+    style =
+      case size do
+        "L" -> "text-title1 font-title1 text-grey1"
+        "M" -> "text-title2 font-title2 text-grey1"
+        "S" -> "text-title3 font-title3 text-grey1"
+      end
+
+    assigns = assign(assigns, :style, style)
+
+    ~H"""
+    <div class={"w-full h-full #{@border_radius} #{@style}"}><%= @src %></div>
+    """
+  end
+
+  attr(:url, :string, required: true)
+
+  def card(assigns) do
+    ~H"""
+    <.generic
+      src={@url}
+      size="h-14 w-14"
+      type={:url}
+      bg_color="bg-white"
+      border_size="border-2"
+      border_radius="rounded-full"
+    />
+    """
+  end
+
+  attr(:type, :atom, required: true)
+  attr(:src, :any, required: true)
+  attr(:size, :string, default: "L")
+
+  def square(assigns) do
+    ~H"""
+    <.generic {assigns} />
+    """
+  end
+
+  attr(:url, :string, required: true)
+
+  def hero(assigns) do
+    ~H"""
+    <.generic
+      src={@url}
+      size="w-12 h-12 sm:h-16 sm:w-16 lg:h-84px lg:w-84px"
+      type={:url}
+      border_size="border-2"
+      bg_color="bg-white"
+      border_radius="rounded-full"
+    />
+    """
+  end
+
+  attr(:name, :any, required: true)
+  attr(:size, :atom, required: true)
+
+  def menu_home(%{name: name, size: size} = assigns) do
+    icon_name =
+      case size do
+        :wide -> "#{name}_wide"
+        _ -> "#{name}"
+      end
+
+    assigns = assign(assigns, :icon_name, icon_name)
+
+    ~H"""
+    <div class="h-8 sm:h-12">
+      <.generic_body
+        type={:static}
+        src={@icon_name}
+        size=""
+      />
+    </div>
+    """
+  end
+
+  attr(:name, :any, required: true)
+  attr(:active?, :any, required: true)
+
+  def menu_item(%{name: name, active?: active?} = assigns) do
+    icon_name =
+      if active? do
+        "#{name}_active"
+      else
+        name
+      end
+
+    assigns = assign(assigns, :icon_name, icon_name)
+
+    ~H"""
+    <.generic
+      type={:static}
+      src={@icon_name}
+      size="XS"
+    />
     """
   end
 end

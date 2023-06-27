@@ -20,7 +20,7 @@ defmodule CoreWeb.UserAuthTest do
 
     test_conf = [
       # fake onboarding path
-      participant_onboarding_page: CoreWeb.User.Profile
+      participant_onboarding_page: "/user/profile"
     ]
 
     Application.put_env(:core, CoreWeb.UserAuth, test_conf)
@@ -167,10 +167,16 @@ defmodule CoreWeb.UserAuthTest do
 
   describe "require_authenticated_user/2" do
     test "redirects if user is not authenticated", %{conn: conn} do
-      conn = conn |> fetch_flash() |> UserAuth.require_authenticated_user([])
+      conn =
+        conn
+        |> fetch_flash()
+        |> UserAuth.require_authenticated_user([])
+
       assert conn.halted
-      assert redirected_to(conn) == Routes.user_session_path(conn, :new)
-      assert get_flash(conn, :error) == "Deze pagina bekijken? Log hier eerst in."
+      assert redirected_to(conn) == ~p"/user/signin"
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
+               "Log in om deze pagina te bekijken"
     end
 
     test "stores the path to redirect to on GET", %{conn: conn} do

@@ -40,12 +40,16 @@ defmodule Systems.Pool.Switch do
       from(s in Campaign.Model)
       |> Repo.all()
       |> Enum.each(fn campaign ->
-        if user_changeset.changes.coordinator do
-          Authorization.assign_role(user, campaign, :coordinator)
-        else
-          Authorization.remove_role!(user, campaign, :coordinator)
-        end
+        update_coordinator_role(campaign, user, user_changeset.changes.coordinator)
       end)
+    end
+  end
+
+  defp update_coordinator_role(campaign, user, assign?) do
+    if assign? do
+      Authorization.assign_role(user, campaign, :coordinator)
+    else
+      Authorization.remove_role!(user, campaign, :coordinator)
     end
   end
 

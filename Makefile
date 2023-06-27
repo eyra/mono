@@ -32,7 +32,7 @@ format/%: FORCE
 .PHONY: credo
 credo: ${MIX_PROJECTS:%=credo/%}
 credo/%: FORCE
-	cd $* && mix credo
+	cd $* && mix credo --all
 
 .PHONY: compile
 compile: ${MIX_PROJECTS:%=%/_build}
@@ -45,8 +45,8 @@ deps: ${MIX_PROJECTS:%=%/deps}
 	cd $* && mix deps.get
 
 .PHONY: docs
-docs: ${MIX_PROJECTS:%=%/doc}
-%/doc:
+docs: ${MIX_PROJECTS:%=%/docs}
+%/docs:
 	mkdir -p doc
 	cd $* && mix docs
 	cp -R $*/doc/ doc/`basename $*`

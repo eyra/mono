@@ -1,14 +1,18 @@
-defmodule CoreWeb.ImageCatalogPicker.Test.View do
-  use Surface.LiveView
-  alias CoreWeb.ImageCatalogPicker
+defmodule CoreWeb.UI.ImageCatalogPicker.Test.View do
+  use Phoenix.LiveView
+  alias CoreWeb.UI.ImageCatalogPicker
 
-  data(image_id, :string, default: nil)
+  @impl true
+  def mount(_params, _session, socket) do
+    {:ok, socket}
+  end
 
   @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div>
-      <ImageCatalogPicker
+      <.live_component
+        module={ImageCatalogPicker}
         id="picker"
         image_catalog={Core.ImageCatalog.Local}
         static_path={&CoreWeb.Endpoint.static_path/1}
@@ -23,16 +27,17 @@ defmodule CoreWeb.ImageCatalogPicker.Test.View do
   end
 end
 
-defmodule CoreWeb.ImageCatalogPicker.Test do
+defmodule CoreWeb.UI.ImageCatalogPicker.Test do
   use CoreWeb.ConnCase
   import Phoenix.LiveViewTest
-  alias CoreWeb.ImageCatalogPicker
 
   setup do
     conn = Phoenix.ConnTest.build_conn(:get, "/", nil)
 
     {:ok, view, html} =
-      live_isolated(conn, ImageCatalogPicker.Test.View, connect_params: %{testing: 1124})
+      live_isolated(conn, CoreWeb.UI.ImageCatalogPicker.Test.View,
+        connect_params: %{testing: 1124}
+      )
 
     {:ok, [view: view, html: html]}
   end

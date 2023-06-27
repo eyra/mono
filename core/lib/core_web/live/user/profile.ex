@@ -9,18 +9,14 @@ defmodule CoreWeb.User.Profile do
   import CoreWeb.Gettext
 
   alias Core
-  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
+  import CoreWeb.Layouts.Workspace.Component
   alias CoreWeb.User.Forms.Profile, as: ProfileForm
   alias CoreWeb.User.Forms.Student, as: StudentForm
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
+  alias CoreWeb.User.Forms.Settings, as: SettingsForm
 
-  alias CoreWeb.UI.Navigation.{ActionBar, Tabbar, TabbarContent, TabbarFooter, TabbarArea}
-
-  data(user_agent, :string, default: "")
-  data(current_user, :any)
-  data(tabs, :any)
-  data(initial_tab, :any)
-  data(bar_size, :any)
+  alias CoreWeb.UI.Tabbar
+  alias CoreWeb.UI.Navigation
 
   @impl true
   def mount(%{"tab" => initial_tab}, _session, socket) do
@@ -80,7 +76,7 @@ defmodule CoreWeb.User.Profile do
       title: dgettext("eyra-ui", "tabbar.item.profile"),
       forward_title: dgettext("eyra-ui", "tabbar.item.profile.forward"),
       type: :form,
-      component: ProfileForm,
+      live_component: ProfileForm,
       props: %{user: current_user}
     })
     |> append(
@@ -89,7 +85,7 @@ defmodule CoreWeb.User.Profile do
         title: dgettext("eyra-ui", "tabbar.item.student"),
         forward_title: dgettext("eyra-ui", "tabbar.item.student.forward"),
         type: :form,
-        component: StudentForm,
+        live_component: StudentForm,
         props: %{user: current_user}
       },
       current_user.student
@@ -100,7 +96,16 @@ defmodule CoreWeb.User.Profile do
       title: dgettext("eyra-ui", "tabbar.item.features"),
       forward_title: dgettext("eyra-ui", "tabbar.item.features.forward"),
       type: :form,
-      component: FeaturesForm,
+      live_component: FeaturesForm,
+      props: %{user: current_user}
+    })
+    |> append(%{
+      id: :settings,
+      action: nil,
+      title: dgettext("eyra-ui", "tabbar.item.settings"),
+      forward_title: dgettext("eyra-ui", "tabbar.item.settings.forward"),
+      type: :form,
+      live_component: SettingsForm,
       props: %{user: current_user}
     })
   end
@@ -108,20 +113,22 @@ defmodule CoreWeb.User.Profile do
   defp bar_size({:unknown, _}), do: :unknown
   defp bar_size(bp), do: value(bp, :narrow, xs: %{45 => :wide})
 
+  # data(user_agent, :string, default: "")
+  # data(current_user, :any)
+  # data(tabs, :any)
+  # data(initial_tab, :any)
+  # data(bar_size, :any)
   @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace menus={@menus}>
+    ~H"""
+    <.workspace menus={@menus}>
       <div id={:profile} phx-hook="ViewportResize">
-        <TabbarArea tabs={@tabs}>
-          <ActionBar size={@bar_size}>
-            <Tabbar id={@tabbar_id} initial_tab={@initial_tab} size={@bar_size} type={:segmented} />
-          </ActionBar>
-          <TabbarContent />
-          <TabbarFooter />
-        </TabbarArea>
+        <Navigation.action_bar size={@bar_size}>
+          <Tabbar.container id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} size={@bar_size} type={:segmented} />
+        </Navigation.action_bar>
+        <Tabbar.content tabs={@tabs} />
       </div>
-    </Workspace>
+    </.workspace>
     """
   end
 end

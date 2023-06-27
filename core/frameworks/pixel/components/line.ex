@@ -2,10 +2,10 @@ defmodule Frameworks.Pixel.Line do
   @moduledoc """
   A line.
   """
-  use Surface.Component
+  use CoreWeb, :html
 
-  def render(assigns) do
-    ~F"""
+  def line(assigns) do
+    ~H"""
     <div class="bg-grey4 h-px" />
     """
   end

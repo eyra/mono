@@ -21,9 +21,9 @@ config :core, Core.Repo,
   pool_size: 10
 
 config :core, CoreWeb.Endpoint,
-  reloadable_compilers: [:elixir, :surface],
+  reloadable_compilers: [:elixir],
   force_ssl: false,
-  debug_errors: true,
+  debug_errors: false,
   code_reloader: true,
   check_origin: false,
   live_reload: [
@@ -33,12 +33,10 @@ config :core, CoreWeb.Endpoint,
       ~r"lib/core_web/(live|views|components)/.*(ex|sface|js)$",
       ~r"lib/core_web/templates/*/.*(eex)$",
       ~r"bundles/*/.*(ex)$",
-      ~r"bundles/*/templates/.*(eex)$",
-      ~r"priv/catalogue/.*(ex)$"
+      ~r"bundles/*/templates/.*(eex)$"
     ]
   ],
   watchers: [
-    esbuild: {Esbuild, :install_and_run, [:catalogue, ~w(--sourcemap=inline --watch)]},
     node: [
       "node_modules/webpack/bin/webpack.js",
       "--mode",
@@ -54,7 +52,7 @@ config :core,
   ]
 
 config :core, :rate,
-  prune_interval: 5 * 1000,
+  prune_interval: 5 * 60 * 1000,
   quotas: [
     [service: :azure_blob, limit: 1, unit: :call, window: :second, scope: :local],
     [service: :azure_blob, limit: 100, unit: :byte, window: :second, scope: :local]
@@ -84,7 +82,7 @@ config :core,
        :admins,
        ["e.vanderveen@eyra.co"]
 
-config :core, Systems.DataDonation.S3StorageBackend, bucket: "eylixir"
+config :core, :s3, bucket: "eylixir"
 
 config :core,
        :data_donation_storage_backend,

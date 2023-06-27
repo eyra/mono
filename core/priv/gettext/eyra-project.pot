@@ -1,0 +1,192 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new messages manually only if they're dynamic
+## messages that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+#
+msgid ""
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "preview.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "delete.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.config"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.config.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.invite"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.invite.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.privacy"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.privacy.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.tasks"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.tasks.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.first.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.new.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.new.button.short"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.empty.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "share.dialog.content"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "share.dialog.group"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "config.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invite.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "monitor.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.header.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.items.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "publish.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.nodes.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.new.item.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.new.item.button.short"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "retract.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "campaign.invite.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "direct.invite.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "direct.invite.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "close.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.concept"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.idle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.offline"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.online"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.proceed.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.item.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.item.button.short"
+msgstr ""

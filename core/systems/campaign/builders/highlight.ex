@@ -1,8 +1,6 @@
 defmodule Systems.Campaign.Builders.Highlight do
   import CoreWeb.Gettext
 
-  alias Link.Enums.OnlineStudyLanguages
-
   alias Systems.{
     Assignment,
     Pool,
@@ -69,6 +67,6 @@ defmodule Systems.Campaign.Builders.Highlight do
   defp translate(nil), do: "?"
 
   defp translate(language) do
-    OnlineStudyLanguages.translate(language)
+    Assignment.OnlineStudyLanguages.translate(language)
   end
 end

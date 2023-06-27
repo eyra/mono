@@ -27,6 +27,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Survey.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.Lab.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.DataDonation.ToolModel, [:owner, :coordinator, :participant])
+  grant_access(Systems.Benchmark.SpotModel, [:owner])
 
   # Pages
   grant_access(Systems.Org.ContentPage, [:admin])
@@ -54,9 +55,13 @@ defmodule Core.Authorization do
   grant_access(Systems.DataDonation.Content, [:owner, :coordinator])
   grant_access(Systems.DataDonation.FlowPage, [:visitor, :member])
   grant_access(Systems.DataDonation.PortPage, [:visitor, :member])
-  grant_access(Systems.DataDonation.ThanksWhatsappPage, [:visitor, :member])
+  grant_access(Systems.DataDonation.OverviewPage, [:member])
+  grant_access(Systems.Project.OverviewPage, [:researcher])
+  grant_access(Systems.Project.NodePage, [:researcher, :owner])
+  grant_access(Systems.Project.ItemContentPage, [:researcher, :owner])
+  grant_access(Systems.Benchmark.ToolPage, [:owner])
+  grant_access(Systems.Benchmark.LeaderboardPage, [:visitor, :member])
 
-  grant_access(CoreWeb.Console, [:researcher])
   grant_access(CoreWeb.User.Signin, [:visitor])
   grant_access(CoreWeb.User.Signup, [:visitor])
   grant_access(CoreWeb.User.ResetPassword, [:visitor])
@@ -118,8 +123,29 @@ defmodule Core.Authorization do
     auth_node
   end
 
-  def copy(_auth_node, %Core.Authorization.Node{} = parent) do
-    create_node!(parent)
+  def copy(
+        %Core.Authorization.Node{role_assignments: role_assignments},
+        %Core.Authorization.Node{} = new_parent
+      )
+      when is_list(role_assignments) do
+    auth_node = create_node!(new_parent)
+
+    role_assignments
+    |> Enum.each(&copy_role(&1, auth_node))
+
+    auth_node
+  end
+
+  def copy_auth_node(%{auth_node: auth_node}, %Core.Authorization.Node{} = new_parent) do
+    copy(auth_node, new_parent)
+  end
+
+  def copy_auth_node(%{auth_node: child_auth_node}, %{auth_node: parent_auth_node}) do
+    copy(child_auth_node, parent_auth_node)
+  end
+
+  def copy_auth_node(%{auth_node: auth_node}) do
+    copy(auth_node)
   end
 
   def copy_role(%Core.Authorization.RoleAssignment{} = role, node) do
@@ -172,13 +198,15 @@ defmodule Core.Authorization do
     can?(principal, permission)
   end
 
-  def can?(principal, entity, permission) when is_binary(permission) do
-    can?(principal, permission) or
-      has_required_roles_in_context?(principal, entity, permission)
-  end
+  def can_access?(_principal, nil, _module), do: false
 
   def can_access?(principal, entity, module) when is_atom(module) do
     can?(principal, entity, GreenLight.Permissions.access_permission(module))
+  end
+
+  def can?(principal, entity, permission) when is_binary(permission) do
+    can?(principal, permission) or
+      has_required_roles_in_context?(principal, entity, permission)
   end
 
   def users_with_role(_, _, preload \\ [])

@@ -1,15 +1,11 @@
 defmodule CoreWeb.User.AwaitConfirmation do
-  @moduledoc """
-  The home screen.
-  """
   use CoreWeb, :live_view
-
-  alias Frameworks.Pixel.Text.Title2
+  use CoreWeb.Layouts.Stripped.Component, :signup
 
   alias Core.Accounts
   alias Core.Accounts.User
 
-  data(changeset, :any)
+  alias Frameworks.Pixel.Text
 
   def mount(_params, _session, socket) do
     require_feature(:password_sign_in)
@@ -19,9 +15,6 @@ defmodule CoreWeb.User.AwaitConfirmation do
      socket
      |> assign(changeset: changeset)}
   end
-
-  @impl true
-  def handle_uri(socket), do: socket
 
   @impl true
   def handle_event("signup", params, socket) do
@@ -38,18 +31,26 @@ defmodule CoreWeb.User.AwaitConfirmation do
 
         {:noreply,
          socket
-         |> put_flash(:info, "User created successfully.")
+         |> put_flash(:info, dgettext("eyra-account", "account.created.info.flash"))
          |> push_redirect(to: Routes.live_path(socket, CoreWeb.User.ConfirmToken))}
     end
   end
 
+  # data(changeset, :any)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <Title2>{dgettext("eyra-account", "await.confirmation.title")}</Title2>
-      <p>Please check your e-mail for a confirmation link.</p>
-    </ContentArea>
+    ~H"""
+    <.stripped menus={@menus}>
+      <div>
+        <Area.sheet>
+        <Margin.y id={:page_top} />
+          <div class="flex flex-col items-center">
+            <Text.title2><%= dgettext("eyra-account", "await.confirmation.title") %></Text.title2>
+            <Text.body align="text-center"><%= dgettext("eyra-account", "await.confirmation.description") %></Text.body>
+          </div>
+        </Area.sheet>
+      </div>
+    </.stripped>
     """
   end
 end

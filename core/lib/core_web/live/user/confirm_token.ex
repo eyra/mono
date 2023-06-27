@@ -4,15 +4,11 @@ defmodule CoreWeb.User.ConfirmToken do
   """
   use CoreWeb, :live_view
 
-  alias Surface.Components.Form
-  alias Frameworks.Pixel.Button.SubmitButton
-  alias Frameworks.Pixel.Form.EmailInput
+  import Frameworks.Pixel.Form
+  alias Frameworks.Pixel.Button
 
   alias Core.Accounts
   alias Core.Accounts.User
-
-  data(status, :any)
-  data(changeset, :any)
 
   def mount(%{"token" => token}, _session, socket) do
     require_feature(:password_sign_in)
@@ -21,8 +17,8 @@ defmodule CoreWeb.User.ConfirmToken do
       {:ok, _} ->
         {:ok,
          socket
-         |> put_flash(:info, "Account confirmed successfully.")
-         |> redirect(to: Routes.user_session_path(socket, :new))}
+         |> put_flash(:info, dgettext("eyra-user", "account.activated.successfully"))
+         |> redirect(to: ~p"/user/signin")}
 
       _ ->
         {:ok,
@@ -61,7 +57,7 @@ defmodule CoreWeb.User.ConfirmToken do
             # FIXME: Log suspicous behavior?
             Accounts.deliver_already_activated_notification(
               user,
-              Routes.user_session_url(socket, :new)
+              ~p"/user/signin"
             )
         end
 
@@ -69,27 +65,33 @@ defmodule CoreWeb.User.ConfirmToken do
          put_flash(
            socket,
            :info,
-           "If your email is in our system and it has not been confirmed yet, " <>
-             "you will receive an email with instructions shortly."
+           dgettext("eyra-user", "confirm.token.flash")
          )}
 
       changeset ->
         {:noreply,
-         socket |> assign(changeset: changeset) |> put_flash(:error, "Invalid email address")}
+         socket
+         |> assign(changeset: changeset)
+         |> put_flash(:error, dgettext("eyra-user", "Invalid email"))}
     end
   end
 
+  # data(status, :any)
+  # data(changeset, :any)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <p>Account confirmation link is invalid or it has expired.</p>
-      <p>Enter your e-mail to resend the token</p>
-      <Form for={@changeset} submit="resend-token">
-        <EmailInput field={:email} label_text={dgettext("eyra-user", "confirm.token.email.label")} />
-        <SubmitButton label={dgettext("eyra-account", "confirm.token.resend_button")} />
-      </Form>
-    </ContentArea>
+    ~H"""
+    <div>
+      <Area.content>
+      <Margin.y id={:page_top} />
+      <p>Your account activation link is invalid or it has expired.</p>
+      <p>Enter your email address and click resend to receive a new account activation link.</p>
+      <.form id="confirm_token" :let={form} for={%{}} phx-submit="resend-token" >
+        <.email_input form={form} field={:email} label_text={dgettext("eyra-user", "confirm.token.email.label")} />
+        <Button.submit label={dgettext("eyra-account", "confirm.token.resend_button")} />
+      </.form>
+      </Area.content>
+    </div>
     """
   end
 end

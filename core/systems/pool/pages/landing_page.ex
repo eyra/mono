@@ -5,17 +5,12 @@ defmodule Systems.Pool.LandingPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :pool_landing
 
-  alias CoreWeb.Layouts.Workspace.Component, as: Workspace
+  import CoreWeb.Layouts.Workspace.Component
   alias Frameworks.Pixel.Text
 
   alias Systems.{
     Pool
   }
-
-  data(title, :string, default: "title")
-  data(description, :string, default: "description")
-  data(participant?, :boolean)
-  data(buttons, :list)
 
   @impl true
   def mount(%{"id" => pool_id}, _session, socket) do
@@ -109,20 +104,27 @@ defmodule Systems.Pool.LandingPage do
     socket
   end
 
+  # data(title, :string, default: "title")
+  # data(description, :string, default: "description")
+  # data(participant?, :boolean)
+  # data(buttons, :list)
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace title={dgettext("eyra-pool", "landing.title")} menus={@menus}>
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <Text.Title2>{@title}</Text.Title2>
-        <Text.Body>{@description}</Text.Body>
+    ~H"""
+    <.workspace title={dgettext("eyra-pool", "landing.title")} menus={@menus}>
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <Text.title2><%= @title %></Text.title2>
+        <Text.body><%= @description %></Text.body>
 
-        <Spacing value="M" />
+        <.spacing value="M" />
         <div class="flex flex-row gap-4">
-          <DynamicButton :for={button <- @buttons} vm={button} />
+          <%= for button <- @buttons do %>
+            <Button.dynamic {button} />
+          <% end %>
         </div>
-      </ContentArea>
-    </Workspace>
+      </Area.content>
+    </.workspace>
     """
   end
 end

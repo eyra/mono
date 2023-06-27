@@ -1,19 +1,15 @@
 defmodule Systems.Org.NodeContentView do
   use CoreWeb.LiveForm
 
-  alias Frameworks.Pixel.Text.{Title2, Title3}
-  alias Frameworks.Pixel.Form.{Form, TextInput, Dropdown}
+  alias Frameworks.Pixel.Text
+  import Frameworks.Pixel.Form
 
   alias Systems.{
     Org,
     Content
   }
 
-  prop(props, :map)
-
-  data(changeset, :any)
-  data(options, :list)
-  data(selected_option, :atom)
+  import Content.TextBundleInput
 
   # Successive update
 
@@ -28,7 +24,7 @@ defmodule Systems.Org.NodeContentView do
   # Initial update
 
   @impl true
-  def update(%{id: id, props: %{node: entity, locale: _locale}}, socket) do
+  def update(%{id: id, node: entity, locale: _locale}, socket) do
     changeset = Org.NodeModel.changeset(entity, %{})
 
     {
@@ -44,8 +40,7 @@ defmodule Systems.Org.NodeContentView do
   end
 
   defp update_dropdown(%{assigns: %{entity: %{type: type}}} = socket) do
-    all_types = Org.Types.labels()
-    options = all_types |> Enum.map(&to_option(&1))
+    options = Org.Types.labels()
 
     socket
     |> assign(
@@ -54,8 +49,7 @@ defmodule Systems.Org.NodeContentView do
     )
   end
 
-  defp to_option(%{id: id, value: value}), do: %{id: id, label: value}
-
+  @impl true
   def handle_event(
         "select-option",
         %{"id" => type, "label" => type_string},
@@ -87,35 +81,38 @@ defmodule Systems.Org.NodeContentView do
     |> save(changeset)
   end
 
+  @impl true
   def render(assigns) do
-    ~F"""
-    <ContentArea>
-      <MarginY id={:page_top} />
-      <Title2>{dgettext("eyra-org", "node.title")}</Title2>
-      <Form id="node_form" changeset={@changeset} change_event="save" target={@myself}>
-        <TextInput field={:identifier_string} label_text={dgettext("eyra-org", "identifier.label")} />
-        <Spacing value="XS" />
+    ~H"""
+    <div>
+      <Area.content>
+      <Margin.y id={:page_top} />
+      <Text.title2><%= dgettext("eyra-org", "node.title") %></Text.title2>
+      <.form id="node_form" :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
+        <.text_input form={form} field={:identifier_string} label_text={dgettext("eyra-org", "identifier.label")} />
+        <.spacing value="XS" />
 
-        <TextInput field={:domains_string} label_text={dgettext("eyra-org", "domains.label")} />
-        <Spacing value="XS" />
+        <.text_input form={form} field={:domains_string} label_text={dgettext("eyra-org", "domains.label")} />
+        <.spacing value="XS" />
 
-        <Dropdown
+        <.dropdown
+          form={form}
           field={:type_string}
           options={@options}
-          selected_option={@selected_option}
           label_text={dgettext("eyra-org", "type.selector.label")}
           target={@myself}
         />
-        <Spacing value="L" />
+        <.spacing value="L" />
 
-        <Title3>{dgettext("eyra-org", "full.name.title")}</Title3>
-        <Content.TextBundleInputs field={:full_name_bundle} target={@myself} />
-        <Spacing value="M" />
+        <Text.title3><%= dgettext("eyra-org", "full.name.title") %></Text.title3>
+        <.text_bundle_input form={form} field={:full_name_bundle} target={@myself} />
+        <.spacing value="M" />
 
-        <Title3>{dgettext("eyra-org", "short.name.title")}</Title3>
-        <Content.TextBundleInputs field={:short_name_bundle} target={@myself} />
-      </Form>
-    </ContentArea>
+        <Text.title3><%= dgettext("eyra-org", "short.name.title") %></Text.title3>
+        <.text_bundle_input form={form} field={:short_name_bundle} target={@myself} />
+      </.form>
+      </Area.content>
+    </div>
     """
   end
 end

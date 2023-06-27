@@ -1,31 +1,19 @@
 defmodule Systems.Budget.BankAccountForm do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
   alias Ecto.Changeset
+
+  import Frameworks.Pixel.Form
   alias Frameworks.Utility.EctoHelper
-  alias Frameworks.Pixel.Text.{Title3, Title6}
-  alias Frameworks.Pixel.Form.{Form, Inputs, TextInput}
+  alias Frameworks.Pixel.Text
 
   alias Systems.{
     Budget,
     Content
   }
 
+  import Content.TextBundleInput
   alias Budget.BankAccountModel, as: Model
-
-  prop(bank_account, :any)
-  prop(user, :any)
-  prop(locale, :any)
-  prop(target, :any)
-
-  data(title, :string)
-  data(buttons, :list)
-
-  data(changeset, :any)
-  data(validate_changeset?, :boolean)
-
-  data(type_options, :list)
-  data(type_selected, :atom)
 
   # Successive update
 
@@ -113,7 +101,7 @@ defmodule Systems.Budget.BankAccountForm do
 
   @impl true
   def handle_event("submit", %{"bank_account_model" => attrs}, socket) do
-    {:noreply, socket |> submit(attrs)}
+    {:noreply, socket |> handle_submit(attrs)}
   end
 
   @impl true
@@ -142,7 +130,7 @@ defmodule Systems.Budget.BankAccountForm do
     end
   end
 
-  defp submit(%{assigns: %{bank_account: bank_account}} = socket, attrs) do
+  defp handle_submit(%{assigns: %{bank_account: bank_account}} = socket, attrs) do
     socket
     |> apply_submit(
       bank_account
@@ -163,46 +151,57 @@ defmodule Systems.Budget.BankAccountForm do
     end
   end
 
+  # data(title, :string)
+  # data(buttons, :list)
+
+  # data(changeset, :any)
+  # data(validate_changeset?, :boolean)
+
+  # data(type_options, :list)
+  # data(type_selected, :atom)
+
+  attr(:bank_account, :any)
+  attr(:user, :any)
+  attr(:locale, :any)
+  attr(:target, :any)
+
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Form
-      id="bank_account_form"
-      changeset={@changeset}
-      submit="submit"
-      change_event="change"
-      target={@myself}
-    >
-      <Title3>{dgettext("eyra-budget", "bank.account.content.title")}</Title3>
-      <TextInput
+    ~H"""
+    <.form id="bank_account_form" :let={form} for={@changeset} phx-change="change" phx-submit="submit" phx-target={@myself} >
+      <Text.title3><%= dgettext("eyra-budget", "bank.account.content.title") %></Text.title3>
+      <.text_input form={form}
         field={:name}
         debounce="0"
         label_text={dgettext("eyra-budget", "bank.account.name.label")}
       />
-      <TextInput
+      <.text_input form={form}
         field={:virtual_icon}
         debounce="0"
         maxlength="2"
         label_text={dgettext("eyra-budget", "bank.account.icon.label")}
       />
-      <Spacing value="XS" />
+      <.spacing value="XS" />
 
-      <Title3>{dgettext("eyra-budget", "currency.title")}</Title3>
-      <Inputs field={:currency}>
-        <TextInput
+      <Text.title3><%= dgettext("eyra-budget", "currency.title") %></Text.title3>
+      <.inputs form={form} :let={subform} field={:currency}>
+        <.text_input form={subform}
           field={:name}
           debounce="0"
           label_text={dgettext("eyra-budget", "currency.name.label")}
         />
-        <Title6>{dgettext("eyra-budget", "currency.label.title")}</Title6>
-        <Spacing value="XS" />
-        <Content.TextBundleInputs field={:label_bundle} target={@myself} />
-      </Inputs>
+        <Text.title6><%= dgettext("eyra-budget", "currency.label.title") %></Text.title6>
+        <.spacing value="XS" />
+        <.text_bundle_input form={form} field={:label_bundle} target={@myself} />
+      </.inputs>
 
-      <Spacing value="M" />
+      <.spacing value="M" />
       <div class="flex flex-row gap-4">
-        <DynamicButton :for={button <- @buttons} vm={button} />
+        <%= for button <- @buttons do %>
+          <Button.dynamic {button} />
+        <% end %>
       </div>
-    </Form>
+    </.form>
     """
   end
 end

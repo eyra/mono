@@ -6,13 +6,9 @@ defmodule Systems.Support.TicketPage do
     Support
   }
 
-  alias Frameworks.Pixel.Wrap
-  alias Frameworks.Pixel.Text.Title2
-  alias CoreWeb.UI.{Member, ContentTag}
-
-  data(ticket, :any)
-  data(timestamp, :any)
-  data(member, :any, default: nil)
+  import CoreWeb.UI.Member
+  alias Frameworks.Pixel.Text
+  import CoreWeb.UI.Content
 
   def mount(%{"id" => id}, _session, socket) do
     ticket = Support.Public.get_ticket!(id)
@@ -25,9 +21,12 @@ defmodule Systems.Support.TicketPage do
     {
       :ok,
       socket
-      |> assign(id: id)
-      |> assign(ticket: ticket)
-      |> assign(timestamp: timestamp)
+      |> assign(
+        id: id,
+        ticket: ticket,
+        timestamp: timestamp,
+        member: nil
+      )
       |> update_member()
       |> update_menus()
     }
@@ -63,7 +62,7 @@ defmodule Systems.Support.TicketPage do
         true -> nil
       end
 
-    action = %{type: :href, href: "mailto:#{email}?subject=Re: [##{id}] #{title}"}
+    action = %{type: :http_get, to: "mailto:#{email}?subject=Re: [##{id}] #{title}"}
 
     %{
       title: fullname,
@@ -120,32 +119,35 @@ defmodule Systems.Support.TicketPage do
     }
   end
 
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace title={dgettext("eyra-admin", "ticket.title")} menus={@menus}>
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <Member :if={@member} vm={@member} />
-        <MarginY id={:page_top} />
+    ~H"""
+    <.workspace title={dgettext("eyra-admin", "ticket.title")} menus={@menus}>
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <%= if @member do %>
+          <.member {@member} />
+        <% end %>
+        <Margin.y id={:page_top} />
         <div class="flex flex-row gap-4 items-center">
-          <Wrap>
-            <ContentTag vm={Support.TicketModel.tag(@ticket)} />
-          </Wrap>
+          <.wrap>
+            <.tag {Support.TicketModel.tag(@ticket)} />
+          </.wrap>
           <div class="text-label font-label text-grey1">
-            #{@ticket.id}
+            #<%= @ticket.id %>
           </div>
           <div class="text-label font-label text-grey2">
-            {@timestamp}
+            <%= @timestamp %>
           </div>
         </div>
-        <Spacing value="S" />
-        <Title2>{@ticket.title}</Title2>
-        <div class="text-bodymedium sm:text-bodylarge font-body mb-6 md:mb-8 lg:mb-10">{@ticket.description}</div>
-        <Wrap>
-          <DynamicButton vm={button(assigns)} />
-        </Wrap>
-      </ContentArea>
-    </Workspace>
+        <.spacing value="S" />
+        <Text.title2><%= @ticket.title %></Text.title2>
+        <div class="text-bodymedium sm:text-bodylarge font-body mb-6 md:mb-8 lg:mb-10"><%=@ticket.description %></div>
+        <.wrap>
+          <Button.dynamic {button(assigns)} />
+        </.wrap>
+      </Area.content>
+    </.workspace>
     """
   end
 end

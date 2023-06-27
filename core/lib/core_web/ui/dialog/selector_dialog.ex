@@ -1,16 +1,10 @@
 defmodule CoreWeb.UI.SelectorDialog do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
-  alias CoreWeb.UI.Dialog
-  alias Frameworks.Pixel.Selector.Selector
+  import CoreWeb.UI.Dialog
+  alias Frameworks.Pixel.Selector
 
-  prop(title, :string, required: true)
-  prop(text, :string, required: true)
-  prop(items, :list, required: true)
-  prop(ok_button_text, :string, required: true)
-  prop(cancel_button_text, :string, required: true)
-  prop(target, :any, required: true)
-
+  @impl true
   def update(%{active_item_id: active_item_id, selector_id: :type}, socket) do
     active_item_id =
       case active_item_id do
@@ -26,6 +20,7 @@ defmodule CoreWeb.UI.SelectorDialog do
     }
   end
 
+  @impl true
   def update(
         %{
           id: id,
@@ -108,46 +103,24 @@ defmodule CoreWeb.UI.SelectorDialog do
     ]
   end
 
+  attr(:title, :string, required: true)
+  attr(:text, :string, required: true)
+  attr(:items, :list, required: true)
+  attr(:ok_button_text, :string, required: true)
+  attr(:cancel_button_text, :string, required: true)
+  attr(:target, :any, required: true)
   @impl true
   def render(assigns) do
-    ~F"""
-    <Dialog {...%{title: @title, text: @text, buttons: buttons(assigns, @myself)}}>
-      <Selector id={:type} items={@items} type={:radio} parent={%{type: __MODULE__, id: @id}} />
-    </Dialog>
+    ~H"""
+    <.dialog {%{title: @title, text: @text, buttons: buttons(assigns, @myself)}}>
+      <.live_component
+        module={Selector}
+        id={:type}
+        items={@items}
+        type={:radio}
+        parent={%{type: __MODULE__, id: @id}}
+      />
+    </.dialog>
     """
-  end
-end
-
-defmodule CoreWeb.UI.SelectorDialog.Example do
-  use Surface.Catalogue.Example,
-    subject: CoreWeb.UI.SelectorDialog,
-    catalogue: Frameworks.Pixel.Catalogue,
-    title: "Selector Dialog",
-    height: "640px",
-    direction: "vertical",
-    container: {:div, class: ""}
-
-  def render(assigns) do
-    ~F"""
-    <SelectorDialog
-      id={:selector_dialog_example}
-      title="Selector dialog title"
-      text="Selector dialog text"
-      items={Core.Enums.Themes.labels(nil)}
-      ok_button_text="Proceed"
-      cancel_button_text="Cancel"
-      target={self()}
-    />
-    """
-  end
-
-  def handle_info(%{selector: :ok, selected: selected_item}, socket) do
-    IO.puts("ok -> #{selected_item}")
-    {:noreply, socket}
-  end
-
-  def handle_info(%{selector: :cancel}, socket) do
-    IO.puts("cancel")
-    {:noreply, socket}
   end
 end

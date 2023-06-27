@@ -1,8 +1,9 @@
 defmodule CoreWeb.UserAuth do
+  use CoreWeb, :verified_routes
+
   import Plug.Conn
   import Phoenix.Controller
   import CoreWeb.Gettext
-  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Core.Accounts
 
@@ -83,7 +84,7 @@ defmodule CoreWeb.UserAuth do
     conn
     |> renew_session()
     |> delete_resp_cookie(@remember_me_cookie)
-    |> redirect(to: Routes.user_session_path(conn, :new))
+    |> redirect(to: ~p"/user/signin")
   end
 
   @doc """
@@ -116,8 +117,10 @@ defmodule CoreWeb.UserAuth do
   """
   def redirect_if_user_is_authenticated(conn, _opts) do
     if user = conn.assigns[:current_user] do
+      path = signed_in_path(user) || Accounts.start_page_path(user)
+
       conn
-      |> redirect(to: signed_in_path(conn, user))
+      |> redirect(to: path)
       |> halt()
     else
       conn
@@ -137,7 +140,7 @@ defmodule CoreWeb.UserAuth do
       conn
       |> put_flash(:error, dgettext("eyra-ui", "authentication.required.error"))
       |> maybe_store_return_to()
-      |> redirect(to: Routes.user_session_path(conn, :new))
+      |> redirect(to: ~p"/user/signin")
       |> halt()
     end
   end
@@ -149,38 +152,35 @@ defmodule CoreWeb.UserAuth do
   defp maybe_store_return_to(conn), do: conn
 
   defp redirect_path_after_signin(conn, user) do
-    onboarding_path(conn, user) ||
+    onboarding_path(user) ||
       get_session(conn, :user_return_to) ||
-      signed_in_path(conn, user)
+      signed_in_path(user) ||
+      Accounts.start_page_path(user)
   end
 
-  defp onboarding_path(conn, %{student: true} = user) do
+  defp onboarding_path(%{student: true} = user) do
     if Accounts.visited?(user, :onboarding) do
       nil
     else
-      onboarding_page = page(:participant_onboarding_page, Accounts.start_page_target(user))
-      Routes.live_path(conn, onboarding_page)
+      path(:participant_onboarding_page) || Accounts.start_page_path(user)
     end
   end
 
-  defp onboarding_path(_, _), do: nil
+  defp onboarding_path(_), do: nil
 
-  defp signed_in_path(conn, user),
-    do: Routes.live_path(conn, signed_in_page(user))
+  defp signed_in_path(%{student: true}),
+    do: path(:participant_signed_in_page)
 
-  defp signed_in_page(%{student: true} = user),
-    do: page(:participant_signed_in_page, Accounts.start_page_target(user))
+  defp signed_in_path(%{researcher: true}),
+    do: path(:researcher_signed_in_page)
 
-  defp signed_in_page(%{researcher: true}),
-    do: page(:researcher_signed_in_page, CoreWeb.Console)
+  defp signed_in_path(_user),
+    do: path(:participant_signed_in_page)
 
-  defp signed_in_page(user),
-    do: page(:participant_signed_in_page, Accounts.start_page_target(user))
+  defp path(key), do: auth_config(key)
 
-  defp page(key, default), do: auth_config(key, default)
-
-  defp auth_config(key, default) when is_atom(key) do
+  defp auth_config(key) when is_atom(key) do
     Application.get_env(:core, CoreWeb.UserAuth, [])
-    |> Keyword.get(key, default)
+    |> Keyword.get(key)
   end
 end

@@ -1,23 +1,17 @@
 defmodule Systems.Budget.DepositForm do
-  use CoreWeb.UI.LiveComponent
+  use CoreWeb, :live_component
 
   import Ecto.Changeset
 
-  alias Frameworks.Pixel.Text.Title2
-  alias Frameworks.Pixel.Form.{Form, NumberInput, TextInput}
+  import Frameworks.Pixel.Form
+  alias Frameworks.Pixel.Text
 
   alias Systems.{
     Budget
   }
 
-  prop(budget, :map, required: true)
-  prop(target, :any)
-
-  data(changeset, :map)
-  data(buttons, :list)
-  data(error, :any, default: nil)
-
   # Initial update
+  @impl true
   def update(%{id: id, budget: budget, target: target}, socket) do
     {
       :ok,
@@ -90,25 +84,36 @@ defmodule Systems.Budget.DepositForm do
     end
   end
 
-  def render(assigns) do
-    ~F"""
-    <div>
-      <div :if={@error}>
-        <div class="text-button font-button text-warning leading-6">
-          {@error}
-        </div>
-        <Spacing value="XS" />
-      </div>
+  # data(changeset, :map)
+  # data(buttons, :list)
+  # data(error, :any, default: nil)
 
-      <Title2>{dgettext("eyra-budget", "deposit.form.title")}</Title2>
-      <Form id="deposit_form" changeset={@changeset} submit="submit" target={@myself}>
-        <NumberInput field={:amount} label_text={dgettext("eyra-budget", "deposit.amount.label")} />
-        <TextInput field={:reference} label_text={dgettext("eyra-budget", "deposit.reference.label")} />
-        <Spacing value="M" />
-        <div class="flex flex-row gap-4">
-          <DynamicButton :for={button <- @buttons} vm={button} />
+  attr(:budget, :map, required: true)
+  attr(:target, :any)
+
+  @impl true
+  def render(assigns) do
+    ~H"""
+    <div>
+      <%= if @error do %>
+        <div class="text-button font-button text-warning leading-6">
+          <%= @error %>
         </div>
-      </Form>
+        <.spacing value="XS" />
+      <% end %>
+
+      <Text.title2><%= dgettext("eyra-budget", "deposit.form.title") %></Text.title2>
+
+      <.form id="deposit_form" :let={form} for={@changeset} phx-submit="submit" phx-target={@myself} >
+        <.number_input form={form} field={:amount} label_text={dgettext("eyra-budget", "deposit.amount.label")} />
+        <.text_input form={form} field={:reference} label_text={dgettext("eyra-budget", "deposit.reference.label")} />
+        <.spacing value="M" />
+        <div class="flex flex-row gap-4">
+          <%= for button <- @buttons do %>
+            <Button.dynamic {button} />
+          <% end %>
+        </div>
+      </.form>
     </div>
     """
   end

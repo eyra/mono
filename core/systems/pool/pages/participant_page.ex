@@ -2,10 +2,11 @@ defmodule Systems.Pool.ParticipantPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :pool_participant
 
+  import CoreWeb.UI.Member
   alias Core.Accounts
-  alias CoreWeb.UI.{ContentList, Member}
+  import CoreWeb.UI.Content
 
-  alias Frameworks.Pixel.Text.{Title2}
+  alias Frameworks.Pixel.Text
   alias Frameworks.Utility.ViewModelBuilder
 
   alias Systems.{
@@ -13,32 +14,27 @@ defmodule Systems.Pool.ParticipantPage do
     Budget
   }
 
-  data(member, :any, default: nil)
-  data(wallets, :any)
-  data(contributions, :any)
-
   @impl true
-  def mount(%{"id" => user_id}, _session, socket) do
+  def mount(%{"id" => user_id}, _session, %{assigns: assigns} = socket) do
     user = Accounts.get_user!(user_id, [:features, :profile])
+    # assigning user as the wallet owner, not to be confused with current_user
+    socket = assign(socket, :user, user)
 
     wallets =
       Budget.Public.list_wallets(user)
-      |> Enum.map(&Budget.WalletViewBuilder.view_model(&1, user, url_resolver(socket)))
+      |> Enum.map(&Budget.WalletViewBuilder.view_model(&1, assigns))
 
     campaign_preload = Campaign.Model.preload_graph(:full)
 
     contributions =
       user
       |> Campaign.Public.list_subject_campaigns(preload: campaign_preload)
-      |> Enum.map(
-        &ViewModelBuilder.view_model(&1, {__MODULE__, :contribution}, user, url_resolver(socket))
-      )
+      |> Enum.map(&ViewModelBuilder.view_model(&1, {__MODULE__, :contribution}, assigns))
 
     {
       :ok,
       socket
       |> assign(
-        user: user,
         wallets: wallets,
         contributions: contributions
       )
@@ -66,7 +62,7 @@ defmodule Systems.Pool.ParticipantPage do
       [email | Accounts.Features.get_student_classes(features)]
       |> Enum.join(" ▪︎ ")
 
-    action = %{type: :href, href: "mailto:#{email}"}
+    action = %{type: :http_get, to: "mailto:#{email}"}
 
     %{
       title: fullname,
@@ -89,32 +85,44 @@ defmodule Systems.Pool.ParticipantPage do
     }
   end
 
+  # data(member, :any, default: nil)
+  # data(wallets, :any)
+  # data(contributions, :any)
+
   @impl true
   def render(assigns) do
-    ~F"""
-    <Workspace title={dgettext("link-studentpool", "participant.title")} menus={@menus}>
-      <ContentArea>
-        <MarginY id={:page_top} />
-        <Member :if={@member} vm={@member} />
-        <MarginY id={:page_top} />
-        <div :if={Enum.count(@wallets) > 0}>
-          <Title2>
-            {dgettext("link-dashboard", "book.accounts.title")}
-          </Title2>
-          <Budget.WalletList items={@wallets} />
-          <Spacing value="XL" />
-        </div>
-        <div :if={Enum.count(@contributions) > 0}>
-          <Title2>
-            {dgettext("eyra-campaign", "campaign.subject.title")}
-            <span class="text-primary">
-              {Enum.count(@contributions)}</span>
-          </Title2>
-          <ContentList items={@contributions} />
-          <Spacing value="XL" />
-        </div>
-      </ContentArea>
-    </Workspace>
+    ~H"""
+    <.workspace title={dgettext("link-studentpool", "participant.title")} menus={@menus}>
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <%= if @member do %>
+          <.member {@member} />
+        <% end %>
+        <Margin.y id={:page_top} />
+
+        <%= if Enum.count(@wallets) > 0 do %>
+          <div>
+            <Text.title2>
+              <%= dgettext("link-dashboard", "book.accounts.title") %>
+            </Text.title2>
+            <Budget.WalletView.list items={@wallets} />
+            <.spacing value="XL" />
+          </div>
+        <% end %>
+
+        <%= if Enum.count(@contributions) > 0 do %>
+          <div>
+            <Text.title2>
+              <%= dgettext("eyra-campaign", "campaign.subject.title") %>
+              <span class="text-primary"> <%= Enum.count(@contributions) %></span>
+            </Text.title2>
+            <.list items={@contributions} />
+            <.spacing value="XL" />
+          </div>
+        <% end %>
+
+      </Area.content>
+    </.workspace>
     """
   end
 end

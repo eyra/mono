@@ -3,8 +3,8 @@ defmodule Systems.Support.Routes do
     quote do
       scope "/support", Systems.Support do
         pipe_through([:browser])
-        live("/tickets", OverviewPage)
-        live("/tickets/:id", TicketPage)
+        live("/ticket", OverviewPage)
+        live("/ticket/:id", TicketPage)
         live("/helpdesk", HelpdeskPage)
       end
     end
