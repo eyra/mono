@@ -8,7 +8,14 @@ defmodule BankingProxy.MixProject do
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      escript: escript()
+      escript: escript(),
+      docs: [
+        main: "readme",
+        logo: "../core/assets/static/images/icons/next.svg",
+        extras: [
+          "README.md"
+        ]
+      ]
     ]
   end
 
@@ -34,7 +41,8 @@ defmodule BankingProxy.MixProject do
       {:mox, "~> 1.0", only: :test},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       # {:exsync, "~> 0.2", only: :dev},
-      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.26", only: [:dev, :test], runtime: false}
     ]
   end
 end
