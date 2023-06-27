@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.29.3">
+    <meta name="project" content="core v0.1.0">
+
+    <title>CoreWeb.Cldr.DateTime.Relative — core v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
+
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
+    <script src="dist/sidebar_items-56E16D23.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/html-EHGDP2LQ.js"></script>
+
+
+  </head>
+  <body data-type="modules" class="page-module">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<section class="sidebar">
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button" aria-label="Submit Search">
+      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
+      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
+    </button>
+    <label class="search-label">
+      <p class="sr-only">Search</p>
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+
+      <a href="readme.html">
+        <img src="assets/logo.svg" alt="core" class="sidebar-projectImage">
+      </a>
+
+    <div class="sidebar-projectDetails">
+      <a href="readme.html" class="sidebar-projectName" translate="no">
+core
+      </a>
+      <strong class="sidebar-projectVersion" translate="no">
+        v0.1.0
+      </strong>
+    </div>
+    <ul class="sidebar-listNav">
+      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+
+        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+
+
+    </ul>
+  </div>
+
+  <div class="gradient"></div>
+  <ul id="full-list"></ul>
+</section>
+
+<section class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h1>
+<button class="icon-action display-settings">
+  <i class="ri-settings-3-line"></i>
+  <span class="sr-only">Settings</span>
+</button>
+
+
+    <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" title="View Source" class="icon-action" rel="help">
+      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+      <span class="sr-only">View Source</span>
+    </a>
+
+  <span translate="no">CoreWeb.Cldr.DateTime.Relative</span> 
+  <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+</h1>
+
+
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+      Summary
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_string/2" translate="no">to_string(time, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a <code class="inline">{:ok, string}</code> representing a relative time (ago, in) for a given
+number, Date or Datetime.  Returns <code class="inline">{:error, reason}</code> when errors are detected.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_string!/2" translate="no">to_string!(time, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a <code class="inline">{:ok, string}</code> representing a relative time (ago, in) for a given
+number, Date or Datetime or raises an exception on error.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Functions
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="to_string/2">
+
+    <span id="to_string/1"></span>
+
+  <div class="detail-header">
+    <a href="#to_string/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">to_string(time, options \\ [])</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_string(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
+  {:ok, <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()} | {:error, {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}}</pre>
+
+      </div>
+
+<p>Returns a <code class="inline">{:ok, string}</code> representing a relative time (ago, in) for a given
+number, Date or Datetime.  Returns <code class="inline">{:error, reason}</code> when errors are detected.</p><ul><li><p><code class="inline">relative</code> is a number or Date/Datetime representing the time distance from <code class="inline">now</code> or from
+options[:relative_to]</p></li><li><p><code class="inline">options</code> is a <a href="https://hexdocs.pm/elixir/Keyword.html"><code class="inline">Keyword</code></a> list of options which are:</p></li></ul><h2 id="to_string/2-options" class="section-heading">
+  <a href="#to_string/2-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">options</p>
+  </a>
+  Options
+</h2>
+<ul><li><p><code class="inline">:locale</code> is the locale in which the binary is formatted.
+The default is <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#get_locale/0"><code class="inline">Cldr.get_locale/0</code></a></p></li><li><p><code class="inline">:style</code> is the style of the binary.  Style may be <code class="inline">:default</code>, <code class="inline">:narrow</code> or <code class="inline">:short</code></p></li><li><p><code class="inline">:unit</code> is the time unit for the formatting.  The allowable units are <code class="inline">:second</code>, <code class="inline">:minute</code>,
+<code class="inline">:hour</code>, <code class="inline">:day</code>, <code class="inline">:week</code>, <code class="inline">:month</code>, <code class="inline">:year</code>, <code class="inline">:mon</code>, <code class="inline">:tue</code>, <code class="inline">:wed</code>, <code class="inline">:thu</code>, <code class="inline">:fri</code>, <code class="inline">:sat</code>,
+<code class="inline">:sun</code>, <code class="inline">:quarter</code></p></li><li><p><code class="inline">:relative_to</code> is the baseline Date or Datetime from which the difference from <code class="inline">relative</code> is
+calculated when <code class="inline">relative</code> is a Date or a DateTime. The default for a Date is <code class="inline">Date.utc_today</code>,
+for a DateTime it is <code class="inline">DateTime.utc_now</code></p></li></ul><h3 id="to_string/2-notes" class="section-heading">
+  <a href="#to_string/2-notes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">notes</p>
+  </a>
+  Notes
+</h3>
+<p>When <code class="inline">options[:unit]</code> is not specified, <code class="inline">MyApp.Cldr.DateTime.Relative.to_string/2</code>
+attempts to identify the appropriate unit based upon the magnitude of <code class="inline">relative</code>.
+For example, given a parameter of less than <code class="inline">60</code>, then <a href="#to_string/2"><code class="inline">to_string/2</code></a> will
+assume <code class="inline">:seconds</code> as the unit.  See <code class="inline">unit_from_relative_time/1</code>.</p><h2 id="to_string/2-examples" class="section-heading">
+  <a href="#to_string/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="6810378607-1">(</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="6810378607-1">)</span><span class="w">
+</span><span class="p" data-group-id="6810378607-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;1 second ago&quot;</span><span class="p" data-group-id="6810378607-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="6810378607-3">(</span><span class="mi">1</span><span class="p" data-group-id="6810378607-3">)</span><span class="w">
+</span><span class="p" data-group-id="6810378607-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;in 1 second&quot;</span><span class="p" data-group-id="6810378607-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="6810378607-5">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">unit</span><span class="p">:</span><span class="w"> </span><span class="ss">:day</span><span class="p" data-group-id="6810378607-5">)</span><span class="w">
+</span><span class="p" data-group-id="6810378607-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;tomorrow&quot;</span><span class="p" data-group-id="6810378607-6">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="6810378607-7">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">unit</span><span class="p">:</span><span class="w"> </span><span class="ss">:day</span><span class="p">,</span><span class="w"> </span><span class="ss">locale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fr&quot;</span><span class="p" data-group-id="6810378607-7">)</span><span class="w">
+</span><span class="p" data-group-id="6810378607-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;demain&quot;</span><span class="p" data-group-id="6810378607-8">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="6810378607-9">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">unit</span><span class="p">:</span><span class="w"> </span><span class="ss">:day</span><span class="p">,</span><span class="w"> </span><span class="ss">style</span><span class="p">:</span><span class="w"> </span><span class="ss">:narrow</span><span class="p" data-group-id="6810378607-9">)</span><span class="w">
+</span><span class="p" data-group-id="6810378607-10">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;tomorrow&quot;</span><span class="p" data-group-id="6810378607-10">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="6810378607-11">(</span><span class="mi">1234</span><span class="p">,</span><span class="w"> </span><span class="ss">unit</span><span class="p">:</span><span class="w"> </span><span class="ss">:year</span><span class="p" data-group-id="6810378607-11">)</span><span class="w">
+</span><span class="p" data-group-id="6810378607-12">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;in 1,234 years&quot;</span><span class="p" data-group-id="6810378607-12">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="6810378607-13">(</span><span class="mi">1234</span><span class="p">,</span><span class="w"> </span><span class="ss">unit</span><span class="p">:</span><span class="w"> </span><span class="ss">:year</span><span class="p">,</span><span class="w"> </span><span class="ss">locale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fr&quot;</span><span class="p" data-group-id="6810378607-13">)</span><span class="w">
+</span><span class="p" data-group-id="6810378607-14">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;dans 1 234 ans&quot;</span><span class="p" data-group-id="6810378607-14">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="6810378607-15">(</span><span class="mi">31</span><span class="p" data-group-id="6810378607-15">)</span><span class="w">
+</span><span class="p" data-group-id="6810378607-16">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;in 31 seconds&quot;</span><span class="p" data-group-id="6810378607-16">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="6810378607-17">(</span><span class="ld">~D[2017-04-29]</span><span class="p">,</span><span class="w"> </span><span class="ss">relative_to</span><span class="p">:</span><span class="w"> </span><span class="ld">~D[2017-04-26]</span><span class="p" data-group-id="6810378607-17">)</span><span class="w">
+</span><span class="p" data-group-id="6810378607-18">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;in 3 days&quot;</span><span class="p" data-group-id="6810378607-18">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="6810378607-19">(</span><span class="mi">310</span><span class="p">,</span><span class="w"> </span><span class="ss">style</span><span class="p">:</span><span class="w"> </span><span class="ss">:short</span><span class="p">,</span><span class="w"> </span><span class="ss">locale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fr&quot;</span><span class="p" data-group-id="6810378607-19">)</span><span class="w">
+</span><span class="p" data-group-id="6810378607-20">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;dans 5 min&quot;</span><span class="p" data-group-id="6810378607-20">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="6810378607-21">(</span><span class="mi">310</span><span class="p">,</span><span class="w"> </span><span class="ss">style</span><span class="p">:</span><span class="w"> </span><span class="ss">:narrow</span><span class="p">,</span><span class="w"> </span><span class="ss">locale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fr&quot;</span><span class="p" data-group-id="6810378607-21">)</span><span class="w">
+</span><span class="p" data-group-id="6810378607-22">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;+5 min&quot;</span><span class="p" data-group-id="6810378607-22">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">unit</span><span class="p">:</span><span class="w"> </span><span class="ss">:wed</span><span class="p">,</span><span class="w"> </span><span class="ss">style</span><span class="p">:</span><span class="w"> </span><span class="ss">:short</span><span class="p">,</span><span class="w"> </span><span class="ss">locale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
+</span><span class="p" data-group-id="6810378607-23">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;in 2 Wed.&quot;</span><span class="p" data-group-id="6810378607-23">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">unit</span><span class="p">:</span><span class="w"> </span><span class="ss">:wed</span><span class="p">,</span><span class="w"> </span><span class="ss">style</span><span class="p">:</span><span class="w"> </span><span class="ss">:short</span><span class="w">
+</span><span class="p" data-group-id="6810378607-24">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;next Wed.&quot;</span><span class="p" data-group-id="6810378607-24">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">unit</span><span class="p">:</span><span class="w"> </span><span class="ss">:wed</span><span class="p">,</span><span class="w"> </span><span class="ss">style</span><span class="p">:</span><span class="w"> </span><span class="ss">:short</span><span class="w">
+</span><span class="p" data-group-id="6810378607-25">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;last Wed.&quot;</span><span class="p" data-group-id="6810378607-25">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">unit</span><span class="p">:</span><span class="w"> </span><span class="ss">:wed</span><span class="w">
+</span><span class="p" data-group-id="6810378607-26">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;last Wednesday&quot;</span><span class="p" data-group-id="6810378607-26">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">unit</span><span class="p">:</span><span class="w"> </span><span class="ss">:quarter</span><span class="w">
+</span><span class="p" data-group-id="6810378607-27">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;last quarter&quot;</span><span class="p" data-group-id="6810378607-27">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">unit</span><span class="p">:</span><span class="w"> </span><span class="ss">:mon</span><span class="p">,</span><span class="w"> </span><span class="ss">locale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fr&quot;</span><span class="w">
+</span><span class="p" data-group-id="6810378607-28">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;lundi dernier&quot;</span><span class="p" data-group-id="6810378607-28">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Relative</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="6810378607-29">(</span><span class="ld">~D[2017-04-29]</span><span class="p">,</span><span class="w"> </span><span class="ss">unit</span><span class="p">:</span><span class="w"> </span><span class="ss">:ziggeraut</span><span class="p" data-group-id="6810378607-29">)</span><span class="w">
+</span><span class="p" data-group-id="6810378607-30">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6810378607-31">{</span><span class="nc">Cldr.UnknownTimeUnit</span><span class="p">,</span><span class="w">
+ </span><span class="s">&quot;Unknown time unit :ziggeraut.  Valid time units are [:day, :hour, :minute, :month, :second, :week, :year, :mon, :tue, :wed, :thu, :fri, :sat, :sun, :quarter]&quot;</span><span class="p" data-group-id="6810378607-31">}</span><span class="p" data-group-id="6810378607-30">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="to_string!/2">
+
+    <span id="to_string!/1"></span>
+
+  <div class="detail-header">
+    <a href="#to_string!/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">to_string!(time, options \\ [])</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_string!(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Returns a <code class="inline">{:ok, string}</code> representing a relative time (ago, in) for a given
+number, Date or Datetime or raises an exception on error.</p><h2 id="to_string!/2-arguments" class="section-heading">
+  <a href="#to_string!/2-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">arguments</p>
+  </a>
+  Arguments
+</h2>
+<ul><li><p><code class="inline">relative</code> is a number or Date/Datetime representing the time distance from <code class="inline">now</code> or from
+options[:relative_to].</p></li><li><p><code class="inline">options</code> is a <a href="https://hexdocs.pm/elixir/Keyword.html"><code class="inline">Keyword</code></a> list of options.</p></li></ul><h2 id="to_string!/2-options" class="section-heading">
+  <a href="#to_string!/2-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">options</p>
+  </a>
+  Options
+</h2>
+<ul><li><p><code class="inline">:locale</code> is the locale in which the binary is formatted.
+The default is <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#get_locale/0"><code class="inline">Cldr.get_locale/0</code></a></p></li><li><p><code class="inline">:style</code> is the format of the binary.  Style may be <code class="inline">:default</code>, <code class="inline">:narrow</code> or <code class="inline">:short</code>.
+The default is <code class="inline">:default</code></p></li><li><p><code class="inline">:unit</code> is the time unit for the formatting.  The allowable units are <code class="inline">:second</code>, <code class="inline">:minute</code>,
+<code class="inline">:hour</code>, <code class="inline">:day</code>, <code class="inline">:week</code>, <code class="inline">:month</code>, <code class="inline">:year</code>, <code class="inline">:mon</code>, <code class="inline">:tue</code>, <code class="inline">:wed</code>, <code class="inline">:thu</code>, <code class="inline">:fri</code>, <code class="inline">:sat</code>,
+<code class="inline">:sun</code>, <code class="inline">:quarter</code></p></li><li><p><code class="inline">:relative_to</code> is the baseline Date or Datetime from which the difference from <code class="inline">relative</code> is
+calculated when <code class="inline">relative</code> is a Date or a DateTime. The default for a Date is <code class="inline">Date.utc_today</code>,
+for a DateTime it is <code class="inline">DateTime.utc_now</code></p></li></ul><p>See <a href="#to_string/2"><code class="inline">to_string/2</code></a></p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+      <footer class="footer">
+        <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="core.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.3) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+
+
+  </body>
+</html>

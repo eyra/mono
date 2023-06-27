@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.29.3">
+    <meta name="project" content="core v0.1.0">
+
+    <title>Frameworks.Pixel.Button — core v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
+
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
+    <script src="dist/sidebar_items-56E16D23.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/html-EHGDP2LQ.js"></script>
+
+
+  </head>
+  <body data-type="modules" class="page-module">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<section class="sidebar">
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button" aria-label="Submit Search">
+      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
+      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
+    </button>
+    <label class="search-label">
+      <p class="sr-only">Search</p>
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+
+      <a href="readme.html">
+        <img src="assets/logo.svg" alt="core" class="sidebar-projectImage">
+      </a>
+
+    <div class="sidebar-projectDetails">
+      <a href="readme.html" class="sidebar-projectName" translate="no">
+core
+      </a>
+      <strong class="sidebar-projectVersion" translate="no">
+        v0.1.0
+      </strong>
+    </div>
+    <ul class="sidebar-listNav">
+      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+
+        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+
+
+    </ul>
+  </div>
+
+  <div class="gradient"></div>
+  <ul id="full-list"></ul>
+</section>
+
+<section class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h1>
+<button class="icon-action display-settings">
+  <i class="ri-settings-3-line"></i>
+  <span class="sr-only">Settings</span>
+</button>
+
+
+    <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" title="View Source" class="icon-action" rel="help">
+      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+      <span class="sr-only">View Source</span>
+    </a>
+
+  <span translate="no">Frameworks.Pixel.Button</span> 
+  <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+</h1>
+
+
+  <section id="moduledoc">
+<p>A colored button with white text.</p>
+  </section>
+
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+      Summary
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#action/1" translate="no">action(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">type</code> (<code class="inline">:atom</code>) (required)</li></ul><h2>Slots</h2><ul><li><code class="inline">inner_block</code> (required)</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#back/1" translate="no">back(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">path</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">icon</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;/images/back.svg&quot;</code>.</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#current_user/1" translate="no">current_user(arg1)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete/1" translate="no">delete(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">path</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#dynamic/1" translate="no">dynamic(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">action</code> (<code class="inline">:map</code>) (required)</li><li><code class="inline">face</code> (<code class="inline">:map</code>) (required)</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#dynamic_bar/1" translate="no">dynamic_bar(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">buttons</code> (<code class="inline">:list</code>) (required)</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#face/1" translate="no">face(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">type</code> (<code class="inline">:atom</code>) (required)</li><li><code class="inline">icon</code> (<code class="inline">:any</code>) - Defaults to <code class="inline">nil</code>.</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#menu/1" translate="no">menu(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">id</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">overlay?</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">action</code> (<code class="inline">:map</code>) (required)</li><li><code class="inline">face</code> (<code class="inline">:map</code>) (required)</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#primary/1" translate="no">primary(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">to</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#primary_alpine/1" translate="no">primary_alpine(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">click</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#primary_icon/1" translate="no">primary_icon(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">to</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">icon</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) (required)</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#primary_label/1" translate="no">primary_label(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">field</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#primary_live_view/1" translate="no">primary_live_view(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">event</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">width</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;pl-4 pr-4&quot;</code>.</li><li><code class="inline">target</code> (<code class="inline">:any</code>) - Defaults to <code class="inline">nil</code>.</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#primary_wide/1" translate="no">primary_wide(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">to</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) (required)</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#secondary_alpine/1" translate="no">secondary_alpine(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">click</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">border_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;border-primary&quot;</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-primary&quot;</code>.</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#secondary_label/1" translate="no">secondary_label(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">field</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">border_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;border-primary&quot;</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-primary&quot;</code>.</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#secondary_live_view/1" translate="no">secondary_live_view(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">event</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-delete&quot;</code>.</li><li><code class="inline">width</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;pl-4 pr-4&quot;</code>.</li><li><code class="inline">target</code> (<code class="inline">:any</code>)</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#submit/1" translate="no">submit(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li><li><code class="inline">alpine_onclick</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;&quot;</code>.</li><li><code class="inline">target</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;&quot;</code>.</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#submit_wide/1" translate="no">submit_wide(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#version/0" translate="no">version()</a>
+
+      </div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Functions
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="action/1">
+
+  <div class="detail-header">
+    <a href="#action/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">action(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="action/1-attributes" class="section-heading">
+  <a href="#action/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">type</code> (<code class="inline">:atom</code>) (required)</li></ul><h2 id="action/1-slots" class="section-heading">
+  <a href="#action/1-slots" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">slots</p>
+  </a>
+  Slots
+</h2>
+<ul><li><code class="inline">inner_block</code> (required)</li></ul>
+  </section>
+</section>
+<section class="detail" id="back/1">
+
+  <div class="detail-header">
+    <a href="#back/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">back(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="back/1-attributes" class="section-heading">
+  <a href="#back/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">path</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">icon</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;/images/back.svg&quot;</code>.</li></ul>
+  </section>
+</section>
+<section class="detail" id="current_user/1">
+
+  <div class="detail-header">
+    <a href="#current_user/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">current_user(arg1)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L5" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="delete/1">
+
+  <div class="detail-header">
+    <a href="#delete/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">delete(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="delete/1-attributes" class="section-heading">
+  <a href="#delete/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">path</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li></ul>
+  </section>
+</section>
+<section class="detail" id="dynamic/1">
+
+  <div class="detail-header">
+    <a href="#dynamic/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">dynamic(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="dynamic/1-attributes" class="section-heading">
+  <a href="#dynamic/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">action</code> (<code class="inline">:map</code>) (required)</li><li><code class="inline">face</code> (<code class="inline">:map</code>) (required)</li></ul>
+  </section>
+</section>
+<section class="detail" id="dynamic_bar/1">
+
+  <div class="detail-header">
+    <a href="#dynamic_bar/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">dynamic_bar(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="dynamic_bar/1-attributes" class="section-heading">
+  <a href="#dynamic_bar/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">buttons</code> (<code class="inline">:list</code>) (required)</li></ul>
+  </section>
+</section>
+<section class="detail" id="face/1">
+
+  <div class="detail-header">
+    <a href="#face/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">face(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="face/1-attributes" class="section-heading">
+  <a href="#face/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">type</code> (<code class="inline">:atom</code>) (required)</li><li><code class="inline">icon</code> (<code class="inline">:any</code>) - Defaults to <code class="inline">nil</code>.</li></ul>
+  </section>
+</section>
+<section class="detail" id="menu/1">
+
+  <div class="detail-header">
+    <a href="#menu/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">menu(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="menu/1-attributes" class="section-heading">
+  <a href="#menu/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">id</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">overlay?</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">action</code> (<code class="inline">:map</code>) (required)</li><li><code class="inline">face</code> (<code class="inline">:map</code>) (required)</li></ul>
+  </section>
+</section>
+<section class="detail" id="primary/1">
+
+  <div class="detail-header">
+    <a href="#primary/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">primary(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="primary/1-attributes" class="section-heading">
+  <a href="#primary/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">to</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li></ul>
+  </section>
+</section>
+<section class="detail" id="primary_alpine/1">
+
+  <div class="detail-header">
+    <a href="#primary_alpine/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">primary_alpine(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="primary_alpine/1-attributes" class="section-heading">
+  <a href="#primary_alpine/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">click</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li></ul>
+  </section>
+</section>
+<section class="detail" id="primary_icon/1">
+
+  <div class="detail-header">
+    <a href="#primary_icon/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">primary_icon(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="primary_icon/1-attributes" class="section-heading">
+  <a href="#primary_icon/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">to</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">icon</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) (required)</li></ul>
+  </section>
+</section>
+<section class="detail" id="primary_label/1">
+
+  <div class="detail-header">
+    <a href="#primary_label/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">primary_label(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="primary_label/1-attributes" class="section-heading">
+  <a href="#primary_label/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">field</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li></ul>
+  </section>
+</section>
+<section class="detail" id="primary_live_view/1">
+
+  <div class="detail-header">
+    <a href="#primary_live_view/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">primary_live_view(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="primary_live_view/1-attributes" class="section-heading">
+  <a href="#primary_live_view/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">event</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">width</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;pl-4 pr-4&quot;</code>.</li><li><code class="inline">target</code> (<code class="inline">:any</code>) - Defaults to <code class="inline">nil</code>.</li></ul>
+  </section>
+</section>
+<section class="detail" id="primary_wide/1">
+
+  <div class="detail-header">
+    <a href="#primary_wide/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">primary_wide(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="primary_wide/1-attributes" class="section-heading">
+  <a href="#primary_wide/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">to</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) (required)</li></ul>
+  </section>
+</section>
+<section class="detail" id="secondary_alpine/1">
+
+  <div class="detail-header">
+    <a href="#secondary_alpine/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">secondary_alpine(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="secondary_alpine/1-attributes" class="section-heading">
+  <a href="#secondary_alpine/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">click</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">border_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;border-primary&quot;</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-primary&quot;</code>.</li></ul>
+  </section>
+</section>
+<section class="detail" id="secondary_label/1">
+
+  <div class="detail-header">
+    <a href="#secondary_label/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">secondary_label(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="secondary_label/1-attributes" class="section-heading">
+  <a href="#secondary_label/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">field</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">border_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;border-primary&quot;</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-primary&quot;</code>.</li></ul>
+  </section>
+</section>
+<section class="detail" id="secondary_live_view/1">
+
+  <div class="detail-header">
+    <a href="#secondary_live_view/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">secondary_live_view(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="secondary_live_view/1-attributes" class="section-heading">
+  <a href="#secondary_live_view/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">event</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-delete&quot;</code>.</li><li><code class="inline">width</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;pl-4 pr-4&quot;</code>.</li><li><code class="inline">target</code> (<code class="inline">:any</code>)</li></ul>
+  </section>
+</section>
+<section class="detail" id="submit/1">
+
+  <div class="detail-header">
+    <a href="#submit/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">submit(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="submit/1-attributes" class="section-heading">
+  <a href="#submit/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li><li><code class="inline">alpine_onclick</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;&quot;</code>.</li><li><code class="inline">target</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;&quot;</code>.</li></ul>
+  </section>
+</section>
+<section class="detail" id="submit_wide/1">
+
+  <div class="detail-header">
+    <a href="#submit_wide/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">submit_wide(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="submit_wide/1-attributes" class="section-heading">
+  <a href="#submit_wide/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li></ul>
+  </section>
+</section>
+<section class="detail" id="version/0">
+
+  <div class="detail-header">
+    <a href="#version/0" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">version()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button.ex#L5" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+      <footer class="footer">
+        <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="core.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.3) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+
+
+  </body>
+</html>

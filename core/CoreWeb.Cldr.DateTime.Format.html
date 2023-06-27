@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.29.3">
+    <meta name="project" content="core v0.1.0">
+
+    <title>CoreWeb.Cldr.DateTime.Format — core v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
+
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
+    <script src="dist/sidebar_items-56E16D23.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/html-EHGDP2LQ.js"></script>
+
+
+  </head>
+  <body data-type="modules" class="page-module">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<section class="sidebar">
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button" aria-label="Submit Search">
+      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
+      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
+    </button>
+    <label class="search-label">
+      <p class="sr-only">Search</p>
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+
+      <a href="readme.html">
+        <img src="assets/logo.svg" alt="core" class="sidebar-projectImage">
+      </a>
+
+    <div class="sidebar-projectDetails">
+      <a href="readme.html" class="sidebar-projectName" translate="no">
+core
+      </a>
+      <strong class="sidebar-projectVersion" translate="no">
+        v0.1.0
+      </strong>
+    </div>
+    <ul class="sidebar-listNav">
+      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+
+        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+
+
+    </ul>
+  </div>
+
+  <div class="gradient"></div>
+  <ul id="full-list"></ul>
+</section>
+
+<section class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h1>
+<button class="icon-action display-settings">
+  <i class="ri-settings-3-line"></i>
+  <span class="sr-only">Settings</span>
+</button>
+
+
+    <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" title="View Source" class="icon-action" rel="help">
+      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+      <span class="sr-only">View Source</span>
+    </a>
+
+  <span translate="no">CoreWeb.Cldr.DateTime.Format</span> 
+  <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+</h1>
+
+
+  <section id="moduledoc">
+<p>Manages the Date, TIme and DateTime formats
+defined by CLDR.</p><p>The functions in <a href="https://hexdocs.pm/ex_cldr_dates_times/2.13.3/Cldr.DateTime.Format.html"><code class="inline">Cldr.DateTime.Format</code></a> are
+primarily concerned with encapsulating the
+data from CLDR in functions that are used
+during the formatting process.</p>
+  </section>
+
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+      Summary
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:calendar/0" translate="no">calendar()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:formats/0" translate="no">formats()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#calendars_for/1" translate="no">calendars_for(locale \\ CoreWeb.Cldr.get_locale())</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a list of calendars defined for a given locale.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#date_formats/2" translate="no">date_formats(locale \\ CoreWeb.Cldr.get_locale(), calendar \\ Cldr.Calendar.default_cldr_calendar())</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a map of the standard date formats for a given locale and calendar.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#date_time_available_formats/2" translate="no">date_time_available_formats(locale \\ CoreWeb.Cldr.get_locale(), calendar \\ Cldr.Calendar.default_cldr_calendar())</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a map of the available non-standard datetime formats for a
+given locale and calendar.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#date_time_formats/2" translate="no">date_time_formats(locale \\ CoreWeb.Cldr.get_locale(), calendar \\ Cldr.Calendar.default_cldr_calendar())</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a map of the standard datetime formats for a given locale and calendar.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#date_time_interval_fallback/2" translate="no">date_time_interval_fallback(locale \\ CoreWeb.Cldr.get_locale(), calendar \\ Cldr.Calendar.default_cldr_calendar())</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the fallback format for a given
+locale and calendar type</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#date_time_interval_formats/2" translate="no">date_time_interval_formats(locale \\ CoreWeb.Cldr.get_locale(), calendar \\ Cldr.Calendar.default_cldr_calendar())</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a map of the interval formats for a
+given locale and calendar.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#day_period_for/2" translate="no">day_period_for(time, language)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the time period for a given time of day.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#gmt_format/1" translate="no">gmt_format(locale \\ CoreWeb.Cldr.get_locale())</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the GMT offset format list for a
+for a timezone offset for a given locale.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#gmt_zero_format/1" translate="no">gmt_zero_format(locale \\ CoreWeb.Cldr.get_locale())</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the GMT format string for a
+for a timezone with an offset of zero for
+a given locale.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#hour_format/1" translate="no">hour_format(locale \\ CoreWeb.Cldr.get_locale())</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the positive and negative hour format
+for a timezone offset for a given locale.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#language_has_noon_and_midnight?/1" translate="no">language_has_noon_and_midnight?(locale)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a boolean indicating is a given language defines the
+notion of &quot;noon&quot; and &quot;midnight&quot;</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#time_formats/2" translate="no">time_formats(locale \\ CoreWeb.Cldr.get_locale(), calendar \\ Cldr.Calendar.default_cldr_calendar())</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a map of the standard time formats for a given locale and calendar.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Types
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:calendar/0">
+
+  <div class="detail-header">
+    <a href="#t:calendar/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">calendar()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> calendar() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:formats/0">
+
+  <div class="detail-header">
+    <a href="#t:formats/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">formats()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> formats() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Functions
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="calendars_for/1">
+
+    <span id="calendars_for/0"></span>
+
+  <div class="detail-header">
+    <a href="#calendars_for/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">calendars_for(locale \\ CoreWeb.Cldr.get_locale())</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> calendars_for(<a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_name/0">Cldr.Locale.locale_name</a>() | <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html#t:t/0">Cldr.LanguageTag.t</a>()) ::
+  {:ok, [<a href="#t:calendar/0">calendar</a>(), ...]} | {:error, {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}}</pre>
+
+      </div>
+
+<p>Returns a list of calendars defined for a given locale.</p><h2 id="calendars_for/1-arguments" class="section-heading">
+  <a href="#calendars_for/1-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">arguments</p>
+  </a>
+  Arguments
+</h2>
+<ul><li><code class="inline">locale</code> is any valid locale name returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a>
+or a <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html"><code class="inline">Cldr.LanguageTag</code></a> struct. The default is <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#get_locale/0"><code class="inline">Cldr.get_locale/0</code></a></li></ul><h2 id="calendars_for/1-example" class="section-heading">
+  <a href="#calendars_for/1-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">example</p>
+  </a>
+  Example
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">calendars_for</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
+</span><span class="p" data-group-id="1003647001-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1003647001-2">[</span><span class="ss">:buddhist</span><span class="p">,</span><span class="w"> </span><span class="ss">:chinese</span><span class="p">,</span><span class="w"> </span><span class="ss">:coptic</span><span class="p">,</span><span class="w"> </span><span class="ss">:dangi</span><span class="p">,</span><span class="w"> </span><span class="ss">:ethiopic</span><span class="p">,</span><span class="w"> </span><span class="ss">:ethiopic_amete_alem</span><span class="p">,</span><span class="w">
+ </span><span class="ss">:generic</span><span class="p">,</span><span class="w"> </span><span class="ss">:gregorian</span><span class="p">,</span><span class="w"> </span><span class="ss">:hebrew</span><span class="p">,</span><span class="w"> </span><span class="ss">:indian</span><span class="p">,</span><span class="w"> </span><span class="ss">:islamic</span><span class="p">,</span><span class="w"> </span><span class="ss">:islamic_civil</span><span class="p">,</span><span class="w">
+ </span><span class="ss">:islamic_rgsa</span><span class="p">,</span><span class="w"> </span><span class="ss">:islamic_tbla</span><span class="p">,</span><span class="w"> </span><span class="ss">:islamic_umalqura</span><span class="p">,</span><span class="w"> </span><span class="ss">:japanese</span><span class="p">,</span><span class="w"> </span><span class="ss">:persian</span><span class="p">,</span><span class="w"> </span><span class="ss">:roc</span><span class="p" data-group-id="1003647001-2">]</span><span class="p" data-group-id="1003647001-1">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="date_formats/2">
+
+    <span id="date_formats/0"></span>
+
+    <span id="date_formats/1"></span>
+
+  <div class="detail-header">
+    <a href="#date_formats/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">date_formats(locale \\ CoreWeb.Cldr.get_locale(), calendar \\ Cldr.Calendar.default_cldr_calendar())</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> date_formats(<a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_name/0">Cldr.Locale.locale_name</a>() | <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html#t:t/0">Cldr.LanguageTag.t</a>(), <a href="#t:calendar/0">calendar</a>()) ::
+  {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()} | {:error, {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}}</pre>
+
+      </div>
+
+<p>Returns a map of the standard date formats for a given locale and calendar.</p><h2 id="date_formats/2-arguments" class="section-heading">
+  <a href="#date_formats/2-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">arguments</p>
+  </a>
+  Arguments
+</h2>
+<ul><li><p><code class="inline">locale</code> is any locale returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a></p></li><li><p><code class="inline">calendar</code> is any calendar returned by <a href="https://hexdocs.pm/ex_cldr_dates_times/2.13.3/Cldr.DateTime.Format.html#calendars_for/1"><code class="inline">Cldr.DateTime.Format.calendars_for/1</code></a>
+The default is <code class="inline">:gregorian</code></p></li></ul><h2 id="date_formats/2-examples" class="section-heading">
+  <a href="#date_formats/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples:
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">date_formats</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
+</span><span class="p" data-group-id="0361822047-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0361822047-2">%</span><span class="nc" data-group-id="0361822047-2">Cldr.Date.Styles</span><span class="p" data-group-id="0361822047-2">{</span><span class="w">
+  </span><span class="ss">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;EEEE, MMMM d, y&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">long</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMMM d, y&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">medium</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMM d, y&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">short</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;M/d/yy&quot;</span><span class="w">
+</span><span class="p" data-group-id="0361822047-2">}</span><span class="p" data-group-id="0361822047-1">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">date_formats</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:buddhist</span><span class="w">
+</span><span class="p" data-group-id="0361822047-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0361822047-4">%</span><span class="nc" data-group-id="0361822047-4">Cldr.Date.Styles</span><span class="p" data-group-id="0361822047-4">{</span><span class="w">
+  </span><span class="ss">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;EEEE, MMMM d, y G&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">long</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMMM d, y G&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">medium</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMM d, y G&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">short</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;M/d/y GGGGG&quot;</span><span class="w">
+</span><span class="p" data-group-id="0361822047-4">}</span><span class="p" data-group-id="0361822047-3">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="date_time_available_formats/2">
+
+    <span id="date_time_available_formats/0"></span>
+
+    <span id="date_time_available_formats/1"></span>
+
+  <div class="detail-header">
+    <a href="#date_time_available_formats/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">date_time_available_formats(locale \\ CoreWeb.Cldr.get_locale(), calendar \\ Cldr.Calendar.default_cldr_calendar())</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> date_time_available_formats(
+  <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_name/0">Cldr.Locale.locale_name</a>() | <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html#t:t/0">Cldr.LanguageTag.t</a>(),
+  <a href="#t:calendar/0">calendar</a>()
+) ::
+  {:ok, <a href="#t:formats/0">formats</a>()}</pre>
+
+      </div>
+
+<p>Returns a map of the available non-standard datetime formats for a
+given locale and calendar.</p><h2 id="date_time_available_formats/2-arguments" class="section-heading">
+  <a href="#date_time_available_formats/2-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">arguments</p>
+  </a>
+  Arguments
+</h2>
+<ul><li><p><code class="inline">locale</code> is any locale returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a>
+or a <code class="inline">Cldr.LanguageTag.t()</code></p></li><li><p><code class="inline">calendar</code> is any calendar returned by <a href="https://hexdocs.pm/ex_cldr_dates_times/2.13.3/Cldr.DateTime.Format.html#calendars_for/1"><code class="inline">Cldr.DateTime.Format.calendars_for/1</code></a>
+The default is <code class="inline">:gregorian</code></p></li></ul><h2 id="date_time_available_formats/2-examples" class="section-heading">
+  <a href="#date_time_available_formats/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples:
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">date_time_available_formats</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
+</span><span class="p" data-group-id="8276578873-1">{</span><span class="w">
+  </span><span class="ss">:ok</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="8276578873-2">%{</span><span class="w">
+    </span><span class="ss">d</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;d&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">h</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h a&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">hm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm a&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">hms</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm:ss a&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">hmsv</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm:ss a v&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">hmv</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm a v&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">ms</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;mm:ss&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">y</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;y&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">yw</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8276578873-3">%{</span><span class="ss">one</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;week&#39; w &#39;of&#39; Y&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">other</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;week&#39; w &#39;of&#39; Y&quot;</span><span class="p" data-group-id="8276578873-3">}</span><span class="p">,</span><span class="w">
+    </span><span class="ss">Bh</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h B&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">Bhm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm B&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">Bhms</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm:ss B&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">E</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ccc&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">EBhm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;E h:mm B&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">EBhms</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;E h:mm:ss B&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">EHm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;E HH:mm&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">EHms</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;E HH:mm:ss&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">Ed</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;d E&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">Ehm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;E h:mm a&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">Ehms</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;E h:mm:ss a&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">Gy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;y G&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">GyMMM</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMM y G&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">GyMMMEd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;E, MMM d, y G&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">GyMMMd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMM d, y G&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">GyMd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;M/d/y G&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">H</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HH&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">Hm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HH:mm&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">Hms</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HH:mm:ss&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">Hmsv</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HH:mm:ss v&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">Hmv</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HH:mm v&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">M</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;L&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">MEd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;E, M/d&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">MMM</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LLL&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">MMMEd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;E, MMM d&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">MMMMW</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8276578873-4">%{</span><span class="ss">one</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;week&#39; W &#39;of&#39; MMMM&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">other</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;week&#39; W &#39;of&#39; MMMM&quot;</span><span class="p" data-group-id="8276578873-4">}</span><span class="p">,</span><span class="w">
+    </span><span class="ss">MMMMd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMMM d&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">MMMd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMM d&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">Md</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;M/d&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">yM</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;M/y&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">yMEd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;E, M/d/y&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">yMMM</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMM y&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">yMMMEd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;E, MMM d, y&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">yMMMM</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMMM y&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">yMMMd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMM d, y&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">yMd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;M/d/y&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">yQQQ</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;QQQ y&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">yQQQQ</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;QQQQ y&quot;</span><span class="w">
+  </span><span class="p" data-group-id="8276578873-2">}</span><span class="w">
+</span><span class="p" data-group-id="8276578873-1">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="date_time_formats/2">
+
+    <span id="date_time_formats/0"></span>
+
+    <span id="date_time_formats/1"></span>
+
+  <div class="detail-header">
+    <a href="#date_time_formats/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">date_time_formats(locale \\ CoreWeb.Cldr.get_locale(), calendar \\ Cldr.Calendar.default_cldr_calendar())</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> date_time_formats(<a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_name/0">Cldr.Locale.locale_name</a>() | <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html#t:t/0">Cldr.LanguageTag.t</a>(), <a href="#t:calendar/0">calendar</a>()) ::
+  {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()} | {:error, {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}}</pre>
+
+      </div>
+
+<p>Returns a map of the standard datetime formats for a given locale and calendar.</p><h2 id="date_time_formats/2-arguments" class="section-heading">
+  <a href="#date_time_formats/2-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">arguments</p>
+  </a>
+  Arguments
+</h2>
+<ul><li><p><code class="inline">locale</code> is any locale returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a></p></li><li><p><code class="inline">calendar</code> is any calendar returned by <a href="https://hexdocs.pm/ex_cldr_dates_times/2.13.3/Cldr.DateTime.Format.html#calendars_for/1"><code class="inline">Cldr.DateTime.Format.calendars_for/1</code></a>
+The default is <code class="inline">:gregorian</code></p></li></ul><h2 id="date_time_formats/2-examples" class="section-heading">
+  <a href="#date_time_formats/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples:
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">date_time_formats</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
+</span><span class="p" data-group-id="3437194884-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3437194884-2">%</span><span class="nc" data-group-id="3437194884-2">Cldr.DateTime.Styles</span><span class="p" data-group-id="3437194884-2">{</span><span class="w">
+  </span><span class="ss">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{1}, {0}&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">long</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{1}, {0}&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">medium</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{1}, {0}&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">short</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{1}, {0}&quot;</span><span class="w">
+</span><span class="p" data-group-id="3437194884-2">}</span><span class="p" data-group-id="3437194884-1">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">date_time_formats</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:buddhist</span><span class="w">
+</span><span class="p" data-group-id="3437194884-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3437194884-4">%</span><span class="nc" data-group-id="3437194884-4">Cldr.DateTime.Styles</span><span class="p" data-group-id="3437194884-4">{</span><span class="w">
+  </span><span class="ss">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{1}, {0}&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">long</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{1}, {0}&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">medium</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{1}, {0}&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">short</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{1}, {0}&quot;</span><span class="w">
+</span><span class="p" data-group-id="3437194884-4">}</span><span class="p" data-group-id="3437194884-3">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="date_time_interval_fallback/2">
+
+    <span id="date_time_interval_fallback/0"></span>
+
+    <span id="date_time_interval_fallback/1"></span>
+
+  <div class="detail-header">
+    <a href="#date_time_interval_fallback/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">date_time_interval_fallback(locale \\ CoreWeb.Cldr.get_locale(), calendar \\ Cldr.Calendar.default_cldr_calendar())</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> date_time_interval_fallback(
+  <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_name/0">Cldr.Locale.locale_name</a>() | <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html#t:t/0">Cldr.LanguageTag.t</a>(),
+  <a href="#t:calendar/0">calendar</a>()
+) ::
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>() | {:error, {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}}</pre>
+
+      </div>
+
+<p>Returns the fallback format for a given
+locale and calendar type</p><h2 id="date_time_interval_fallback/2-arguments" class="section-heading">
+  <a href="#date_time_interval_fallback/2-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">arguments</p>
+  </a>
+  Arguments
+</h2>
+<ul><li><p><code class="inline">locale</code> is any locale returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a>
+or a <code class="inline">Cldr.LanguageTag.t()</code></p></li><li><p><code class="inline">calendar</code> is any calendar returned by <a href="https://hexdocs.pm/ex_cldr_dates_times/2.13.3/Cldr.DateTime.Format.html#calendars_for/1"><code class="inline">Cldr.DateTime.Format.calendars_for/1</code></a>
+The default is <code class="inline">:gregorian</code></p></li></ul><h2 id="date_time_interval_fallback/2-examples" class="section-heading">
+  <a href="#date_time_interval_fallback/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples:
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">date_time_interval_fallback</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:gregorian</span><span class="w">
+</span><span class="p" data-group-id="3385128974-1">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot; – &quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3385128974-1">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="date_time_interval_formats/2">
+
+    <span id="date_time_interval_formats/0"></span>
+
+    <span id="date_time_interval_formats/1"></span>
+
+  <div class="detail-header">
+    <a href="#date_time_interval_formats/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">date_time_interval_formats(locale \\ CoreWeb.Cldr.get_locale(), calendar \\ Cldr.Calendar.default_cldr_calendar())</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> date_time_interval_formats(
+  <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_name/0">Cldr.Locale.locale_name</a>() | <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html#t:t/0">Cldr.LanguageTag.t</a>(),
+  <a href="#t:calendar/0">calendar</a>()
+) ::
+  {:ok, <a href="#t:formats/0">formats</a>()}</pre>
+
+      </div>
+
+<p>Returns a map of the interval formats for a
+given locale and calendar.</p><h2 id="date_time_interval_formats/2-arguments" class="section-heading">
+  <a href="#date_time_interval_formats/2-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">arguments</p>
+  </a>
+  Arguments
+</h2>
+<ul><li><p><code class="inline">locale</code> is any locale returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a>
+or a <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html#t:t/0"><code class="inline">Cldr.LanguageTag.t/0</code></a></p></li><li><p><code class="inline">calendar</code> is any calendar returned by <a href="https://hexdocs.pm/ex_cldr_dates_times/2.13.3/Cldr.DateTime.Format.html#calendars_for/1"><code class="inline">Cldr.DateTime.Format.calendars_for/1</code></a>
+The default is <code class="inline">:gregorian</code></p></li></ul><h2 id="date_time_interval_formats/2-examples" class="section-heading">
+  <a href="#date_time_interval_formats/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples:
+</h2>
+
+  </section>
+</section>
+<section class="detail" id="day_period_for/2">
+
+  <div class="detail-header">
+    <a href="#day_period_for/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">day_period_for(time, language)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> day_period_for(
+  <a href="https://hexdocs.pm/elixir/Calendar.html#t:time/0">Calendar.time</a>(),
+  <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html#t:t/0">Cldr.LanguageTag.t</a>() | <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_name/0">Cldr.Locale.locale_name</a>()
+) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()</pre>
+
+      </div>
+
+<p>Returns the time period for a given time of day.</p><h2 id="day_period_for/2-arguments" class="section-heading">
+  <a href="#day_period_for/2-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">arguments</p>
+  </a>
+  Arguments
+</h2>
+<ul><li><p><code class="inline">time</code> is any <code class="inline">Time.t</code> or a map with at least <code class="inline">:hour</code>,
+<code class="inline">:minute</code> and <code class="inline">:second</code> keys</p></li><li><p><code class="inline">language</code> is a binary representation of a valid and
+configured language in <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html"><code class="inline">Cldr</code></a></p></li></ul><p>The time period is a locale-specific key that is used
+to localise a time into a textual representation of &quot;am&quot;,
+&quot;pm&quot;, &quot;noon&quot;, &quot;midnight&quot;, &quot;evening&quot;, &quot;morning&quot; and so on
+as defined in the CLDR day period rules.</p><h2 id="day_period_for/2-examples" class="section-heading">
+  <a href="#day_period_for/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">day_period_for</span><span class="w"> </span><span class="ld">~T[06:05:54.515228]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
+</span><span class="ss">:morning1</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">day_period_for</span><span class="w"> </span><span class="ld">~T[13:05:54.515228]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
+</span><span class="ss">:afternoon1</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">day_period_for</span><span class="w"> </span><span class="ld">~T[21:05:54.515228]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
+</span><span class="ss">:night1</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">day_period_for</span><span class="w"> </span><span class="ld">~T[21:05:54.515228]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;fr&quot;</span><span class="w">
+</span><span class="ss">:evening1</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="gmt_format/1">
+
+    <span id="gmt_format/0"></span>
+
+  <div class="detail-header">
+    <a href="#gmt_format/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">gmt_format(locale \\ CoreWeb.Cldr.get_locale())</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> gmt_format(<a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_name/0">Cldr.Locale.locale_name</a>() | <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html#t:t/0">Cldr.LanguageTag.t</a>()) ::
+  {:ok, [<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>() | <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), ...]}</pre>
+
+      </div>
+
+<p>Returns the GMT offset format list for a
+for a timezone offset for a given locale.</p><h2 id="gmt_format/1-arguments" class="section-heading">
+  <a href="#gmt_format/1-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">arguments</p>
+  </a>
+  Arguments
+</h2>
+<ul><li><code class="inline">locale</code> is any locale returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a></li></ul><h2 id="gmt_format/1-example" class="section-heading">
+  <a href="#gmt_format/1-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">example</p>
+  </a>
+  Example
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">gmt_format</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
+</span><span class="p" data-group-id="1174997048-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1174997048-2">[</span><span class="s">&quot;GMT&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="1174997048-2">]</span><span class="p" data-group-id="1174997048-1">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="gmt_zero_format/1">
+
+    <span id="gmt_zero_format/0"></span>
+
+  <div class="detail-header">
+    <a href="#gmt_zero_format/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">gmt_zero_format(locale \\ CoreWeb.Cldr.get_locale())</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> gmt_zero_format(<a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_name/0">Cldr.Locale.locale_name</a>() | <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html#t:t/0">Cldr.LanguageTag.t</a>()) ::
+  {:ok, <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()} | {:error, {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}}</pre>
+
+      </div>
+
+<p>Returns the GMT format string for a
+for a timezone with an offset of zero for
+a given locale.</p><h2 id="gmt_zero_format/1-arguments" class="section-heading">
+  <a href="#gmt_zero_format/1-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">arguments</p>
+  </a>
+  Arguments
+</h2>
+<ul><li><code class="inline">locale</code> is any locale returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a></li></ul><h2 id="gmt_zero_format/1-example" class="section-heading">
+  <a href="#gmt_zero_format/1-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">example</p>
+  </a>
+  Example
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">gmt_zero_format</span><span class="w"> </span><span class="ss">:en</span><span class="w">
+</span><span class="p" data-group-id="2186318269-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GMT&quot;</span><span class="p" data-group-id="2186318269-1">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">gmt_zero_format</span><span class="w"> </span><span class="s">&quot;fr&quot;</span><span class="w">
+</span><span class="p" data-group-id="2186318269-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;UTC&quot;</span><span class="p" data-group-id="2186318269-2">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="hour_format/1">
+
+    <span id="hour_format/0"></span>
+
+  <div class="detail-header">
+    <a href="#hour_format/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">hour_format(locale \\ CoreWeb.Cldr.get_locale())</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> hour_format(<a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_name/0">Cldr.Locale.locale_name</a>() | <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html#t:t/0">Cldr.LanguageTag.t</a>()) ::
+  {:ok, {<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}}</pre>
+
+      </div>
+
+<p>Returns the positive and negative hour format
+for a timezone offset for a given locale.</p><h2 id="hour_format/1-arguments" class="section-heading">
+  <a href="#hour_format/1-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">arguments</p>
+  </a>
+  Arguments
+</h2>
+<ul><li><code class="inline">locale</code> is any locale returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a></li></ul><h2 id="hour_format/1-example" class="section-heading">
+  <a href="#hour_format/1-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">example</p>
+  </a>
+  Example
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">hour_format</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
+</span><span class="p" data-group-id="8052222087-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8052222087-2">{</span><span class="s">&quot;+HH:mm&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-HH:mm&quot;</span><span class="p" data-group-id="8052222087-2">}</span><span class="p" data-group-id="8052222087-1">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="language_has_noon_and_midnight?/1">
+
+  <div class="detail-header">
+    <a href="#language_has_noon_and_midnight?/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">language_has_noon_and_midnight?(locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> language_has_noon_and_midnight?(
+  <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html#t:t/0">Cldr.LanguageTag.t</a>()
+  | <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_name/0">Cldr.Locale.locale_name</a>()
+) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Returns a boolean indicating is a given language defines the
+notion of &quot;noon&quot; and &quot;midnight&quot;</p><h2 id="language_has_noon_and_midnight?/1-arguments" class="section-heading">
+  <a href="#language_has_noon_and_midnight?/1-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">arguments</p>
+  </a>
+  Arguments
+</h2>
+<ul><li><code class="inline">language</code> is a binary representation of a valid and
+configured language in <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html"><code class="inline">Cldr</code></a></li></ul><h2 id="language_has_noon_and_midnight?/1-examples" class="section-heading">
+  <a href="#language_has_noon_and_midnight?/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">language_has_noon_and_midnight?</span><span class="w"> </span><span class="s">&quot;fr&quot;</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">language_has_noon_and_midnight?</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">language_has_noon_and_midnight?</span><span class="w"> </span><span class="s">&quot;af&quot;</span><span class="w">
+</span><span class="no">false</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="time_formats/2">
+
+    <span id="time_formats/0"></span>
+
+    <span id="time_formats/1"></span>
+
+  <div class="detail-header">
+    <a href="#time_formats/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">time_formats(locale \\ CoreWeb.Cldr.get_locale(), calendar \\ Cldr.Calendar.default_cldr_calendar())</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> time_formats(<a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_name/0">Cldr.Locale.locale_name</a>() | <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html#t:t/0">Cldr.LanguageTag.t</a>(), <a href="#t:calendar/0">calendar</a>()) ::
+  {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()} | {:error, {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}}</pre>
+
+      </div>
+
+<p>Returns a map of the standard time formats for a given locale and calendar.</p><h2 id="time_formats/2-arguments" class="section-heading">
+  <a href="#time_formats/2-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">arguments</p>
+  </a>
+  Arguments
+</h2>
+<ul><li><p><code class="inline">locale</code> is any locale returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a></p></li><li><p><code class="inline">calendar</code> is any calendar returned by <a href="https://hexdocs.pm/ex_cldr_dates_times/2.13.3/Cldr.DateTime.Format.html#calendars_for/1"><code class="inline">Cldr.DateTime.Format.calendars_for/1</code></a>
+The default is <code class="inline">:gregorian</code></p></li></ul><h2 id="time_formats/2-examples" class="section-heading">
+  <a href="#time_formats/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples:
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">time_formats</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
+</span><span class="p" data-group-id="4573923712-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4573923712-2">%</span><span class="nc" data-group-id="4573923712-2">Cldr.Time.Styles</span><span class="p" data-group-id="4573923712-2">{</span><span class="w">
+  </span><span class="ss">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm:ss a zzzz&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">long</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm:ss a z&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">medium</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm:ss a&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">short</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm a&quot;</span><span class="w">
+</span><span class="p" data-group-id="4573923712-2">}</span><span class="p" data-group-id="4573923712-1">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">time_formats</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:buddhist</span><span class="w">
+</span><span class="p" data-group-id="4573923712-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4573923712-4">%</span><span class="nc" data-group-id="4573923712-4">Cldr.Time.Styles</span><span class="p" data-group-id="4573923712-4">{</span><span class="w">
+  </span><span class="ss">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm:ss a zzzz&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">long</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm:ss a z&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">medium</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm:ss a&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">short</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm a&quot;</span><span class="w">
+</span><span class="p" data-group-id="4573923712-4">}</span><span class="p" data-group-id="4573923712-3">}</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+      <footer class="footer">
+        <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="core.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.3) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+
+
+  </body>
+</html>

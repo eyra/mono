@@ -1,0 +1,4669 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.29.3">
+    <meta name="project" content="core v0.1.0">
+
+    <title>API Reference — core v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
+
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
+    <script src="dist/sidebar_items-56E16D23.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/html-EHGDP2LQ.js"></script>
+
+
+  </head>
+  <body data-type="extras" class="page-extra">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<section class="sidebar">
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button" aria-label="Submit Search">
+      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
+      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
+    </button>
+    <label class="search-label">
+      <p class="sr-only">Search</p>
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+
+      <a href="readme.html">
+        <img src="assets/logo.svg" alt="core" class="sidebar-projectImage">
+      </a>
+
+    <div class="sidebar-projectDetails">
+      <a href="readme.html" class="sidebar-projectName" translate="no">
+core
+      </a>
+      <strong class="sidebar-projectVersion" translate="no">
+        v0.1.0
+      </strong>
+    </div>
+    <ul class="sidebar-listNav">
+      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+
+        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+
+
+    </ul>
+  </div>
+
+  <div class="gradient"></div>
+  <ul id="full-list"></ul>
+</section>
+
+<section class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h1>
+<button class="icon-action display-settings">
+  <i class="ri-settings-3-line"></i>
+  <span class="sr-only">Settings</span>
+</button>
+
+
+
+  <span>API Reference <small class="app-vsn">core v0.1.0</small></span>
+</h1>
+
+
+  <section class="details-list">
+    <h2 id="modules" class="section-heading">
+  <a href="#modules" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">modules</p>
+  </a>
+  Modules
+</h2>
+
+    <div class="summary">
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="BankingClient.html" translate="no">BankingClient</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="BankingClient.API.html" translate="no">BankingClient.API</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="BankingClient.ListPaymentsResponse.html" translate="no">BankingClient.ListPaymentsResponse</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="BankingClient.Payment.html" translate="no">BankingClient.Payment</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="BankingClient.PaymentAlias.html" translate="no">BankingClient.PaymentAlias</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="BankingClient.ProxyClient.html" translate="no">BankingClient.ProxyClient</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.html" translate="no">Core</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Core keeps the contexts that define your domain
+and business logic.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.APNS.html" translate="no">Core.APNS</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The APNS context.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.APNS.Backend.html" translate="no">Core.APNS.Backend</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.APNS.DeviceToken.html" translate="no">Core.APNS.DeviceToken</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.APNS.LoggingBackend.html" translate="no">Core.APNS.LoggingBackend</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.APNS.SignalHandlers.html" translate="no">Core.APNS.SignalHandlers</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Accounts.html" translate="no">Core.Accounts</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Accounts context.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Accounts.Features.html" translate="no">Core.Accounts.Features</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>This schema contains features of members.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Accounts.NextActions.CompleteProfile.html" translate="no">Core.Accounts.NextActions.CompleteProfile</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Accounts.NextActions.PromotePushStudent.html" translate="no">Core.Accounts.NextActions.PromotePushStudent</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Accounts.NextActions.SelectStudyStudent.html" translate="no">Core.Accounts.NextActions.SelectStudyStudent</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Accounts.Profile.html" translate="no">Core.Accounts.Profile</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>This schema contains profile related data for members.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Accounts.SignalHandlers.html" translate="no">Core.Accounts.SignalHandlers</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Accounts.User.html" translate="no">Core.Accounts.User</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The User module encapsulates the changesets for creating and updating users.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Accounts.UserNotifier.html" translate="no">Core.Accounts.UserNotifier</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Accounts.UserProfileEdit.html" translate="no">Core.Accounts.UserProfileEdit</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The study type.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Accounts.UserToken.html" translate="no">Core.Accounts.UserToken</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Authorization.html" translate="no">Core.Authorization</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The authorization system for Core.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Authorization.Node.html" translate="no">Core.Authorization.Node</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An authorization node represents a context where principals can gain
+additional roles. They can be nested to create a tree structure.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Authorization.RoleAssignment.html" translate="no">Core.Authorization.RoleAssignment</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A role assignment entity is used to assign a role to a principal on a
+specific entity.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.BundleOverrides.html" translate="no">Core.BundleOverrides</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Content.Node.html" translate="no">Core.Content.Node</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The content node schema.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Content.Nodes.html" translate="no">Core.Content.Nodes</a>
+
+  </div>
+
+    <div class="summary-synopsis"></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Enums.Base.html" translate="no">Core.Enums.Base</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Enums.Devices.html" translate="no">Core.Enums.Devices</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Defines device categories for participants.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Enums.DominantHands.html" translate="no">Core.Enums.DominantHands</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Defines hands used as user feature.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Enums.Genders.html" translate="no">Core.Enums.Genders</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Defines genders used as user feature.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Enums.NativeLanguages.html" translate="no">Core.Enums.NativeLanguages</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Defines languages used as user feature.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Enums.Themes.html" translate="no">Core.Enums.Themes</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Defines themes used to categorize studies or tools wihin studies.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Enums.TicketTypes.html" translate="no">Core.Enums.TicketTypes</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Defines the different types of support tickets.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Factories.html" translate="no">Core.Factories</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>This module provides factory function to be used for tests.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.FeatureFlags.html" translate="no">Core.FeatureFlags</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.FeatureFlags.Test.html" translate="no">Core.FeatureFlags.Test</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.ImageCatalog.html" translate="no">Core.ImageCatalog</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.ImageCatalog.Local.html" translate="no">Core.ImageCatalog.Local</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.ImageCatalog.Unsplash.html" translate="no">Core.ImageCatalog.Unsplash</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.ImageCatalog.Unsplash.Client.html" translate="no">Core.ImageCatalog.Unsplash.Client</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.ImageCatalog.Unsplash.HTTP.html" translate="no">Core.ImageCatalog.Unsplash.HTTP</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.ImageHelpers.html" translate="no">Core.ImageHelpers</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Mailer.SignalHandlers.html" translate="no">Core.Mailer.SignalHandlers</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Marks.html" translate="no">Core.Marks</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Manages instances of marks. These marks are ultimately managed by administrators belonging to certain organizations.
+For the time being a set of hardcoded marks are provided.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Marks.Mark.html" translate="no">Core.Marks.Mark</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A sticker that represents some kind of authority.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Persister.html" translate="no">Core.Persister</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Release.html" translate="no">Core.Release</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.Repo.html" translate="no">Core.Repo</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.SurfConext.html" translate="no">Core.SurfConext</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.SurfConext.AuthorizePlug.html" translate="no">Core.SurfConext.AuthorizePlug</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>This controller manages the OpenID Connect flow with SurfConext.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.SurfConext.CallbackController.html" translate="no">Core.SurfConext.CallbackController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.SurfConext.PlugUtils.html" translate="no">Core.SurfConext.PlugUtils</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.SurfConext.SurfConextError.html" translate="no">Core.SurfConext.SurfConextError</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.SurfConext.User.html" translate="no">Core.SurfConext.User</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.WebPush.html" translate="no">Core.WebPush</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The WebPush context.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.WebPush.Backend.html" translate="no">Core.WebPush.Backend</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.WebPush.Keys.html" translate="no">Core.WebPush.Keys</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.WebPush.PushSubscription.html" translate="no">Core.WebPush.PushSubscription</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.WebPush.SignalHandlers.html" translate="no">Core.WebPush.SignalHandlers</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.WebPush.Subscription.html" translate="no">Core.WebPush.Subscription</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Core.WebPush.Worker.html" translate="no">Core.WebPush.Worker</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.html" translate="no">CoreWeb</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The entrypoint for defining your web interface, such
+as controllers, views, channels and so on.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.APNSDeviceTokenController.html" translate="no">CoreWeb.APNSDeviceTokenController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.html" translate="no">CoreWeb.Cldr</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Provides the core functions to retrieve and manage
+the CLDR data that supports formatting and localisation.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.AcceptLanguage.html" translate="no">CoreWeb.Cldr.AcceptLanguage</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Parses HTTP <code class="inline">Accept-Language</code> header values as defined in
+<a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4">rfc2616</a>.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Currency.html" translate="no">CoreWeb.Cldr.Currency</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Date.html" translate="no">CoreWeb.Cldr.Date</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Date.Interval.html" translate="no">CoreWeb.Cldr.Date.Interval</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Interval formats allow for software to format intervals like &quot;Jan 10-12, 2008&quot; as a
+shorter and more natural format than &quot;Jan 10, 2008 - Jan 12, 2008&quot;. They are designed
+to take a start and end date, time or datetime plus a formatting pattern
+and use that information to produce a localized format.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.DateTime.html" translate="no">CoreWeb.Cldr.DateTime</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.DateTime.Format.html" translate="no">CoreWeb.Cldr.DateTime.Format</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Manages the Date, TIme and DateTime formats
+defined by CLDR.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.DateTime.Formatter.html" translate="no">CoreWeb.Cldr.DateTime.Formatter</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Implements the compilation and execution of
+date, time and datetime formats.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.DateTime.Interval.html" translate="no">CoreWeb.Cldr.DateTime.Interval</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Interval formats allow for software to format intervals like &quot;Jan 10-12, 2008&quot; as a
+shorter and more natural format than &quot;Jan 10, 2008 - Jan 12, 2008&quot;. They are designed
+to take a start and end date, time or datetime plus a formatting pattern
+and use that information to produce a localized format.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.DateTime.Relative.html" translate="no">CoreWeb.Cldr.DateTime.Relative</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Interval.html" translate="no">CoreWeb.Cldr.Interval</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Interval formats allow for software to format intervals like &quot;Jan 10-12, 2008&quot; as a
+shorter and more natural format than &quot;Jan 10, 2008 - Jan 12, 2008&quot;. They are designed
+to take a start and end date, time or datetime plus a formatting pattern
+and use that information to produce a localized format.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Locale.html" translate="no">CoreWeb.Cldr.Locale</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Backend module that provides functions
+to define new locales and display human-readable
+locale names for presentation purposes.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Number.html" translate="no">CoreWeb.Cldr.Number</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Formats numbers and currencies based upon CLDR's decimal formats specification.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Number.Cardinal.html" translate="no">CoreWeb.Cldr.Number.Cardinal</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Implements cardinal plural rules for numbers.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Number.Format.html" translate="no">CoreWeb.Cldr.Number.Format</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions to manage the collection of number patterns defined in Cldr.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Number.Formatter.Decimal.html" translate="no">CoreWeb.Cldr.Number.Formatter.Decimal</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Number.Ordinal.html" translate="no">CoreWeb.Cldr.Number.Ordinal</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Implements ordinal plural rules for numbers.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Number.PluralRule.Range.html" translate="no">CoreWeb.Cldr.Number.PluralRule.Range</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Implements plural rules for ranges</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Number.Symbol.html" translate="no">CoreWeb.Cldr.Number.Symbol</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Number.System.html" translate="no">CoreWeb.Cldr.Number.System</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Number.Transliterate.html" translate="no">CoreWeb.Cldr.Number.Transliterate</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Transliteration for digits and separators.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Rbnf.NumberSystem.html" translate="no">CoreWeb.Cldr.Rbnf.NumberSystem</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions to implement the number system rule-based-number-format rules of CLDR.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Rbnf.Ordinal.html" translate="no">CoreWeb.Cldr.Rbnf.Ordinal</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions to implement the ordinal rule-based-number-format rules of CLDR.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Rbnf.Spellout.html" translate="no">CoreWeb.Cldr.Rbnf.Spellout</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions to implement the spellout rule-based-number-format rules of CLDR.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Time.html" translate="no">CoreWeb.Cldr.Time</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Cldr.Time.Interval.html" translate="no">CoreWeb.Cldr.Time.Interval</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Interval formats allow for software to format intervals like &quot;Jan 10-12, 2008&quot; as a
+shorter and more natural format than &quot;Jan 10, 2008 - Jan 12, 2008&quot;. They are designed
+to take a start and end date, time or datetime plus a formatting pattern
+and use that information to produce a localized format.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Devices.html" translate="no">CoreWeb.Devices</a>
+
+  </div>
+
+    <div class="summary-synopsis"></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Endpoint.html" translate="no">CoreWeb.Endpoint</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.ErrorHTML.html" translate="no">CoreWeb.ErrorHTML</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.FakeSurvey.html" translate="no">CoreWeb.FakeSurvey</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The home screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.FakeSurveyController.html" translate="no">CoreWeb.FakeSurveyController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.FakeSurveyHTML.html" translate="no">CoreWeb.FakeSurveyHTML</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.FallbackController.html" translate="no">CoreWeb.FallbackController</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Translates controller action results into valid <a href="https://hexdocs.pm/plug/1.14.2/Plug.Conn.html"><code class="inline">Plug.Conn</code></a> responses.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.FallbackHTML.html" translate="no">CoreWeb.FallbackHTML</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.FileUploader.html" translate="no">CoreWeb.FileUploader</a>
+
+  </div>
+
+    <div class="summary-synopsis"></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Gettext.html" translate="no">CoreWeb.Gettext</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A module providing Internationalization with a gettext-based API.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.HealthController.html" translate="no">CoreWeb.HealthController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.LanguageSwitchController.html" translate="no">CoreWeb.LanguageSwitchController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Languages.html" translate="no">CoreWeb.Languages</a>
+
+  </div>
+
+    <div class="summary-synopsis"></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Layouts.html" translate="no">CoreWeb.Layouts</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Layouts.App.Component.html" translate="no">CoreWeb.Layouts.App.Component</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Wrapper component used at the root of a page to create a menu + detail layout</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Layouts.Stripped.Component.html" translate="no">CoreWeb.Layouts.Stripped.Component</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Wrapper component used at the root of a page to create a menu + detail layout</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Layouts.Website.Component.html" translate="no">CoreWeb.Layouts.Website.Component</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Wrapper component used at the root of a page to create a menu + detail layout</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Layouts.Workspace.Component.html" translate="no">CoreWeb.Layouts.Workspace.Component</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Wrapper component used at the root of a page to create a menu + detail layout</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Live.Routes.html" translate="no">CoreWeb.Live.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Live.Subroutes.html" translate="no">CoreWeb.Live.Subroutes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Live.User.Routes.html" translate="no">CoreWeb.Live.User.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.LiveAssignHelper.html" translate="no">CoreWeb.LiveAssignHelper</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Automatically setup the current user in LiveViews.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.LiveForm.html" translate="no">CoreWeb.LiveForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.LiveLocale.html" translate="no">CoreWeb.LiveLocale</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A LiveView helper that automatically sets the current locale from a session variable.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.LiveRemoteIp.html" translate="no">CoreWeb.LiveRemoteIp</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A LiveView helper that automatically sets the current remote_ip from a session variable.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.LiveUri.html" translate="no">CoreWeb.LiveUri</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A LiveView helper that automatically sets the current locale from a session variable.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Loaders.html" translate="no">CoreWeb.Loaders</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The loaders for the Link application. They integrate with the GreenLight
+framework.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.LocalImageCatalogPlug.html" translate="no">CoreWeb.LocalImageCatalogPlug</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Menu.Builder.html" translate="no">CoreWeb.Menu.Builder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Menu.Helpers.html" translate="no">CoreWeb.Menu.Helpers</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Menu.ItemsProvider.html" translate="no">CoreWeb.Menu.ItemsProvider</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Meta.html" translate="no">CoreWeb.Meta</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Plug.LiveLocale.html" translate="no">CoreWeb.Plug.LiveLocale</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A Plug that sets a session variable to the current locale.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Plug.LiveRemoteIp.html" translate="no">CoreWeb.Plug.LiveRemoteIp</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A Plug that sets a session variable to the current remote ip.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.PushSubscriptionController.html" translate="no">CoreWeb.PushSubscriptionController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.PushSubscriptionHTML.html" translate="no">CoreWeb.PushSubscriptionHTML</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Router.html" translate="no">CoreWeb.Router</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Routes.html" translate="no">CoreWeb.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.StartPageProvider.html" translate="no">CoreWeb.StartPageProvider</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.Telemetry.html" translate="no">CoreWeb.Telemetry</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Telemtry configuration for the Link application.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.Area.html" translate="no">CoreWeb.UI.Area</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.Content.html" translate="no">CoreWeb.UI.Content</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.Dialog.html" translate="no">CoreWeb.UI.Dialog</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.Empty.html" translate="no">CoreWeb.UI.Empty</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.Footer.html" translate="no">CoreWeb.UI.Footer</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.FunctionComponent.html" translate="no">CoreWeb.UI.FunctionComponent</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.ImageCatalogPicker.html" translate="no">CoreWeb.UI.ImageCatalogPicker</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.Language.html" translate="no">CoreWeb.UI.Language</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.Margin.html" translate="no">CoreWeb.UI.Margin</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.Member.html" translate="no">CoreWeb.UI.Member</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Label with a pill formed background.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.OldSkool.html" translate="no">CoreWeb.UI.OldSkool</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Conveniences for reusable UI components</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.PlainDialog.html" translate="no">CoreWeb.UI.PlainDialog</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.Popup.html" translate="no">CoreWeb.UI.Popup</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.ProgressBar.html" translate="no">CoreWeb.UI.ProgressBar</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Progress bar capable of stacking multiple bars.
+  The bars will be sorted on size and will be stacked from large to small.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.Responsive.Breakpoint.html" translate="no">CoreWeb.UI.Responsive.Breakpoint</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.Responsive.Viewport.html" translate="no">CoreWeb.UI.Responsive.Viewport</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.SelectorDialog.html" translate="no">CoreWeb.UI.SelectorDialog</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.StepIndicator.html" translate="no">CoreWeb.UI.StepIndicator</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Circle with a number</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.Timestamp.html" translate="no">CoreWeb.UI.Timestamp</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Helper functions for displaying timestamps</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UI.UserListItem.html" translate="no">CoreWeb.UI.UserListItem</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  User list item</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UploadedFileController.html" translate="no">CoreWeb.UploadedFileController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UrlResolver.html" translate="no">CoreWeb.UrlResolver</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.User.AwaitConfirmation.html" translate="no">CoreWeb.User.AwaitConfirmation</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.User.ConfirmToken.html" translate="no">CoreWeb.User.ConfirmToken</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The home screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.User.Form.html" translate="no">CoreWeb.User.Form</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.User.Forms.Debug.html" translate="no">CoreWeb.User.Forms.Debug</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.User.Forms.Features.html" translate="no">CoreWeb.User.Forms.Features</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.User.Forms.Profile.html" translate="no">CoreWeb.User.Forms.Profile</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.User.Forms.Settings.html" translate="no">CoreWeb.User.Forms.Settings</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.User.Forms.Student.html" translate="no">CoreWeb.User.Forms.Student</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.User.Profile.html" translate="no">CoreWeb.User.Profile</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The home screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.User.ResetPassword.html" translate="no">CoreWeb.User.ResetPassword</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The home screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.User.ResetPasswordToken.html" translate="no">CoreWeb.User.ResetPasswordToken</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The password reset token.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.User.Service.html" translate="no">CoreWeb.User.Service</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.User.Signup.html" translate="no">CoreWeb.User.Signup</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The home screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UserAuth.html" translate="no">CoreWeb.UserAuth</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UserSettingsController.html" translate="no">CoreWeb.UserSettingsController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UserSettingsHTML.html" translate="no">CoreWeb.UserSettingsHTML</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.UserSocket.html" translate="no">CoreWeb.UserSocket</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.VapidPublicKeyController.html" translate="no">CoreWeb.VapidPublicKeyController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CoreWeb.WWWRedirect.html" translate="no">CoreWeb.WWWRedirect</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Ecto.Atom.html" translate="no">Ecto.Atom</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Custom Type to support <code class="inline">:atom</code>
+defmodule Post do
+  use Ecto.Schema
+  schema &quot;posts&quot; do</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Eyra.Core.html" translate="no">Eyra.Core</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.GreenLight.Access.html" translate="no">Frameworks.GreenLight.Access</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Helper functions to check if a given user can access / invoke something.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.GreenLight.AccessDeniedError.html" translate="no">Frameworks.GreenLight.AccessDeniedError</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.GreenLight.AuthorizationNode.html" translate="no">Frameworks.GreenLight.AuthorizationNode</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.GreenLight.Config.html" translate="no">Frameworks.GreenLight.Config</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.GreenLight.Ecto.Query.html" translate="no">Frameworks.GreenLight.Ecto.Query</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Query functions around role assignments.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.GreenLight.Ecto.RoleAssignment.html" translate="no">Frameworks.GreenLight.Ecto.RoleAssignment</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A role assignment entity is used to assign a role to a principal on a
+specific entity.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.GreenLight.Live.html" translate="no">Frameworks.GreenLight.Live</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Live module enables automatic authorization checks for LiveViews.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.GreenLight.Loaders.html" translate="no">Frameworks.GreenLight.Loaders</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>This is module that automates the loading of entities based on path parameters.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.GreenLight.PermissionMap.html" translate="no">Frameworks.GreenLight.PermissionMap</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The permission map holds a mapping of permissions to roles. The permission map
+is intended to be an implementation detail of the authorization framework.
+Convenience functions to build it are provided in other modules.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.GreenLight.Permissions.html" translate="no">Frameworks.GreenLight.Permissions</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The permissions module provides several functions that create permission
+strings and <code class="inline">GreenLight.PermissionMap</code>s.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.GreenLight.Plug.html" translate="no">Frameworks.GreenLight.Plug</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>This Plug validates the permissions before the request is allowed to proceed.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.GreenLight.Principal.html" translate="no">Frameworks.GreenLight.Principal</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The principal is used as a representation for any person / thing that can
+interact with the system.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.GreenLight.Public.html" translate="no">Frameworks.GreenLight.Public</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Defines an authorization module.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Align.html" translate="no">Frameworks.Pixel.Align</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Centers content along the x-axis.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Block.html" translate="no">Frameworks.Pixel.Block</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Unique Selling Point Card highlights a reason for taking an action.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Button.html" translate="no">Frameworks.Pixel.Button</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A colored button with white text.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Button.Action.html" translate="no">Frameworks.Pixel.Button.Action</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Button.Face.html" translate="no">Frameworks.Pixel.Button.Face</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.CampaignBanner.html" translate="no">Frameworks.Pixel.CampaignBanner</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Unique Selling Point Card highlights a reason for taking an action.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Card.html" translate="no">Frameworks.Pixel.Card</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Unique Selling Point Card highlights a reason for taking an action.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.ClickableCard.html" translate="no">Frameworks.Pixel.ClickableCard</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Unique Selling Point Card highlights a reason for taking an action.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Create.html" translate="no">Frameworks.Pixel.Create</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Provides support for creating &quot;new&quot; views the Eyra way.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Dropdown.html" translate="no">Frameworks.Pixel.Dropdown</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Dropdown.Selector.html" translate="no">Frameworks.Pixel.Dropdown.Selector</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.ErrorHelpers.html" translate="no">Frameworks.Pixel.ErrorHelpers</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Conveniences for translating and building error messages.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Flash.html" translate="no">Frameworks.Pixel.Flash</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Provides support for flash messages.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Form.CheckboxHelpers.html" translate="no">Frameworks.Pixel.Form.CheckboxHelpers</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.FormHelpers.html" translate="no">Frameworks.Pixel.FormHelpers</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Conveniences for accessing the form.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Hero.html" translate="no">Frameworks.Pixel.Hero</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The hero is to be used as a large decorative header with page title.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Icon.html" translate="no">Frameworks.Pixel.Icon</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Image.html" translate="no">Frameworks.Pixel.Image</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Line.html" translate="no">Frameworks.Pixel.Line</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A line.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Menu.html" translate="no">Frameworks.Pixel.Menu</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Panel.html" translate="no">Frameworks.Pixel.Panel</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Grouping information in a card-like fashion.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.ShareView.html" translate="no">Frameworks.Pixel.ShareView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Spacing.html" translate="no">Frameworks.Pixel.Spacing</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A line.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Square.html" translate="no">Frameworks.Pixel.Square</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Status.html" translate="no">Frameworks.Pixel.Status</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A colored button with white text</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Tag.html" translate="no">Frameworks.Pixel.Tag</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A colored button with white text</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Text.html" translate="no">Frameworks.Pixel.Text</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.ViewModel.html" translate="no">Frameworks.Pixel.ViewModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Widget.html" translate="no">Frameworks.Pixel.Widget</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Pixel.Wrap.html" translate="no">Frameworks.Pixel.Wrap</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Signal.Handler.html" translate="no">Frameworks.Signal.Handler</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Signal.Public.html" translate="no">Frameworks.Signal.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Utility.EctoHelper.html" translate="no">Frameworks.Utility.EctoHelper</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Utility.EctoTuple.html" translate="no">Frameworks.Utility.EctoTuple</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Utility.Guards.html" translate="no">Frameworks.Utility.Guards</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Utility.Identifier.html" translate="no">Frameworks.Utility.Identifier</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Utility.LegacyRoutesController.html" translate="no">Frameworks.Utility.LegacyRoutesController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Utility.List.html" translate="no">Frameworks.Utility.List</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Utility.LiveCommand.html" translate="no">Frameworks.Utility.LiveCommand</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Utility.Model.html" translate="no">Frameworks.Utility.Model</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The content node schema.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Utility.Schema.html" translate="no">Frameworks.Utility.Schema</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Utility.ViewModel.html" translate="no">Frameworks.Utility.ViewModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Frameworks.Utility.ViewModelBuilder.html" translate="no">Frameworks.Utility.ViewModelBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="GoogleSignIn.html" translate="no">GoogleSignIn</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="GoogleSignIn.AuthorizePlug.html" translate="no">GoogleSignIn.AuthorizePlug</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>This controller manages the OpenID Connect flow with SurfConext.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="GoogleSignIn.CallbackPlug.html" translate="no">GoogleSignIn.CallbackPlug</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="GoogleSignIn.PlugUtils.html" translate="no">GoogleSignIn.PlugUtils</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="GoogleSignIn.User.html" translate="no">GoogleSignIn.User</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Link.Bundle.html" translate="no">Link.Bundle</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Link.Console.Page.html" translate="no">Link.Console.Page</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The console screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Link.Debug.Page.html" translate="no">Link.Debug.Page</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The debug screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Link.Index.Page.html" translate="no">Link.Index.Page</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The home screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Link.Layouts.Stripped.MenuBuilder.html" translate="no">Link.Layouts.Stripped.MenuBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Link.Layouts.Website.MenuBuilder.html" translate="no">Link.Layouts.Website.MenuBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Link.Layouts.Workspace.MenuBuilder.html" translate="no">Link.Layouts.Workspace.MenuBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Link.Marketplace.Page.html" translate="no">Link.Marketplace.Page</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The home screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Link.Menu.Items.html" translate="no">Link.Menu.Items</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Link.Onboarding.WelcomeView.html" translate="no">Link.Onboarding.WelcomeView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Link.Onboarding.WizardPage.html" translate="no">Link.Onboarding.WizardPage</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The home screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Link.StartPageTranslations.html" translate="no">Link.StartPageTranslations</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Link.StartPages.html" translate="no">Link.StartPages</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Link.User.SessionController.html" translate="no">Link.User.SessionController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Link.User.SessionHTML.html" translate="no">Link.User.SessionHTML</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Next.Bundle.html" translate="no">Next.Bundle</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Next.Console.Page.html" translate="no">Next.Console.Page</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Next.Home.LandingPageController.html" translate="no">Next.Home.LandingPageController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Next.Home.LandingPageHTML.html" translate="no">Next.Home.LandingPageHTML</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Next.Layouts.Stripped.MenuBuilder.html" translate="no">Next.Layouts.Stripped.MenuBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Next.Layouts.Website.MenuBuilder.html" translate="no">Next.Layouts.Website.MenuBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Next.Layouts.Workspace.MenuBuilder.html" translate="no">Next.Layouts.Workspace.MenuBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Next.Menu.Items.html" translate="no">Next.Menu.Items</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Next.StartPageTranslations.html" translate="no">Next.StartPageTranslations</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Next.StartPages.html" translate="no">Next.StartPages</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Next.User.SessionController.html" translate="no">Next.User.SessionController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Next.User.SessionHTML.html" translate="no">Next.User.SessionHTML</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Next.User.Signin.html" translate="no">Next.User.Signin</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Port.Bundle.html" translate="no">Port.Bundle</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Port.Console.Page.html" translate="no">Port.Console.Page</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The console screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Port.Home.LandingPageController.html" translate="no">Port.Home.LandingPageController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Port.Home.LandingPageHTML.html" translate="no">Port.Home.LandingPageHTML</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Port.Layouts.Stripped.MenuBuilder.html" translate="no">Port.Layouts.Stripped.MenuBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Port.Layouts.Website.MenuBuilder.html" translate="no">Port.Layouts.Website.MenuBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Port.Layouts.Workspace.MenuBuilder.html" translate="no">Port.Layouts.Workspace.MenuBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Port.Menu.Items.html" translate="no">Port.Menu.Items</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Port.StartPageTranslations.html" translate="no">Port.StartPageTranslations</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Port.StartPages.html" translate="no">Port.StartPages</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Port.User.SessionController.html" translate="no">Port.User.SessionController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Port.User.SessionHTML.html" translate="no">Port.User.SessionHTML</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="SignInWithApple.html" translate="no">SignInWithApple</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="SignInWithApple.Backend.html" translate="no">SignInWithApple.Backend</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="SignInWithApple.CallbackPlug.html" translate="no">SignInWithApple.CallbackPlug</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="SignInWithApple.Helpers.html" translate="no">SignInWithApple.Helpers</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="SignInWithApple.User.html" translate="no">SignInWithApple.User</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Admin.ActionsView.html" translate="no">Systems.Admin.ActionsView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Admin.ConfigPage.html" translate="no">Systems.Admin.ConfigPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Admin.ImportRewardsModel.html" translate="no">Systems.Admin.ImportRewardsModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Admin.ImportRewardsPage.html" translate="no">Systems.Admin.ImportRewardsPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Admin.LoginPage.html" translate="no">Systems.Admin.LoginPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Admin.OrgView.html" translate="no">Systems.Admin.OrgView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Admin.Public.html" translate="no">Systems.Admin.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Admin.Routes.html" translate="no">Systems.Admin.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Admin.SystemView.html" translate="no">Systems.Admin.SystemView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.AssignmentForm.html" translate="no">Systems.Assignment.AssignmentForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.CallbackPage.html" translate="no">Systems.Assignment.CallbackPage</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The redirect page to complete a task</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.CheckRejection.html" translate="no">Systems.Assignment.CheckRejection</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.EthicalForm.html" translate="no">Systems.Assignment.EthicalForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.ExcludeModel.html" translate="no">Systems.Assignment.ExcludeModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.ExperimentForm.html" translate="no">Systems.Assignment.ExperimentForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.ExperimentModel.html" translate="no">Systems.Assignment.ExperimentModel</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The survey tool schema.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.LandingPage.html" translate="no">Systems.Assignment.LandingPage</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The  page for an assigned task</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.Model.html" translate="no">Systems.Assignment.Model</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The assignment type.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.OnlineStudyLanguages.html" translate="no">Systems.Assignment.OnlineStudyLanguages</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Defines themes used to categorize campaigns.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.Public.html" translate="no">Systems.Assignment.Public</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The assignment context.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.Routes.html" translate="no">Systems.Assignment.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.Switch.html" translate="no">Systems.Assignment.Switch</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.TicketView.html" translate="no">Systems.Assignment.TicketView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.ToolTypes.html" translate="no">Systems.Assignment.ToolTypes</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Defines types of assignment.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Banking.AccountSupervisor.html" translate="no">Systems.Banking.AccountSupervisor</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A bank account under supervision of Systems.Banking.AccountSupervisor</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Banking.Backend.html" translate="no">Systems.Banking.Backend</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Banking.Dummy.html" translate="no">Systems.Banking.Dummy</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Banking.Fetcher.html" translate="no">Systems.Banking.Fetcher</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Banking.MarkerModel.html" translate="no">Systems.Banking.MarkerModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Banking.Processor.html" translate="no">Systems.Banking.Processor</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Banking.Public.html" translate="no">Systems.Banking.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Banking.Supervisor.html" translate="no">Systems.Banking.Supervisor</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Supervisor for Systems.Banking.BankAccountSupervisor instances.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.ExportController.html" translate="no">Systems.Benchmark.ExportController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.ImportForm.html" translate="no">Systems.Benchmark.ImportForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.LeaderboardCategoryView.html" translate="no">Systems.Benchmark.LeaderboardCategoryView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.LeaderboardModel.html" translate="no">Systems.Benchmark.LeaderboardModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.LeaderboardOverview.html" translate="no">Systems.Benchmark.LeaderboardOverview</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.LeaderboardPage.html" translate="no">Systems.Benchmark.LeaderboardPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.LeaderboardView.html" translate="no">Systems.Benchmark.LeaderboardView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.Presenter.html" translate="no">Systems.Benchmark.Presenter</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.Public.html" translate="no">Systems.Benchmark.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.Routes.html" translate="no">Systems.Benchmark.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.ScoreModel.html" translate="no">Systems.Benchmark.ScoreModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.SpotForm.html" translate="no">Systems.Benchmark.SpotForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.SpotModel.html" translate="no">Systems.Benchmark.SpotModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.SubmissionForm.html" translate="no">Systems.Benchmark.SubmissionForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.SubmissionListForm.html" translate="no">Systems.Benchmark.SubmissionListForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.SubmissionModel.html" translate="no">Systems.Benchmark.SubmissionModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.SubmissionOverview.html" translate="no">Systems.Benchmark.SubmissionOverview</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.SubmissionView.html" translate="no">Systems.Benchmark.SubmissionView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.ToolController.html" translate="no">Systems.Benchmark.ToolController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.ToolForm.html" translate="no">Systems.Benchmark.ToolForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.ToolModel.html" translate="no">Systems.Benchmark.ToolModel</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The benchmark tool schema.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.ToolPage.html" translate="no">Systems.Benchmark.ToolPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.ToolPageBuilder.html" translate="no">Systems.Benchmark.ToolPageBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Benchmark.ToolStatus.html" translate="no">Systems.Benchmark.ToolStatus</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Bookkeeping.AccountModel.html" translate="no">Systems.Bookkeeping.AccountModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Bookkeeping.AccountStrategy.html" translate="no">Systems.Bookkeeping.AccountStrategy</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Bookkeeping.EntryModel.html" translate="no">Systems.Bookkeeping.EntryModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Bookkeeping.LineModel.html" translate="no">Systems.Bookkeeping.LineModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Bookkeeping.Public.html" translate="no">Systems.Bookkeeping.Public</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The bookkeeping system.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.AccountStrategy.html" translate="no">Systems.Budget.AccountStrategy</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.BalanceView.html" translate="no">Systems.Budget.BalanceView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.BankAccountForm.html" translate="no">Systems.Budget.BankAccountForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.BankAccountModel.html" translate="no">Systems.Budget.BankAccountModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.CurrencyModel.html" translate="no">Systems.Budget.CurrencyModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.CurrencyTypes.html" translate="no">Systems.Budget.CurrencyTypes</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Defines valid types of currencies.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.DepositForm.html" translate="no">Systems.Budget.DepositForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.DepositModel.html" translate="no">Systems.Budget.DepositModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.Form.html" translate="no">Systems.Budget.Form</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.FundingPage.html" translate="no">Systems.Budget.FundingPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.Model.html" translate="no">Systems.Budget.Model</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The budget type.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.Presenter.html" translate="no">Systems.Budget.Presenter</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.Public.html" translate="no">Systems.Budget.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.RewardModel.html" translate="no">Systems.Budget.RewardModel</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The budget type.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.Routes.html" translate="no">Systems.Budget.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.WalletView.html" translate="no">Systems.Budget.WalletView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Budget.WalletViewBuilder.html" translate="no">Systems.Budget.WalletViewBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.Assembly.html" translate="no">Systems.Campaign.Assembly</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.AuthorModel.html" translate="no">Systems.Campaign.AuthorModel</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The schema for a campaign author.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.Builders.AssignmentCallbackPage.html" translate="no">Systems.Campaign.Builders.AssignmentCallbackPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.Builders.AssignmentLandingPage.html" translate="no">Systems.Campaign.Builders.AssignmentLandingPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.Builders.CampaignContentPage.html" translate="no">Systems.Campaign.Builders.CampaignContentPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.Builders.Highlight.html" translate="no">Systems.Campaign.Builders.Highlight</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.Builders.PromotionLandingPage.html" translate="no">Systems.Campaign.Builders.PromotionLandingPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.CardView.html" translate="no">Systems.Campaign.CardView</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A large eye-catcher meant to call a user into taking an action.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.ContentPage.html" translate="no">Systems.Campaign.ContentPage</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The cms page for survey tool</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.CreateForm.html" translate="no">Systems.Campaign.CreateForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.ExpirationWorker.html" translate="no">Systems.Campaign.ExpirationWorker</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.FundingView.html" translate="no">Systems.Campaign.FundingView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.Model.html" translate="no">Systems.Campaign.Model</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The campaign type.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.MonitorTableView.html" translate="no">Systems.Campaign.MonitorTableView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.MonitorView.html" translate="no">Systems.Campaign.MonitorView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.OverviewPage.html" translate="no">Systems.Campaign.OverviewPage</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p> The recruitment page for researchers.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.Presenter.html" translate="no">Systems.Campaign.Presenter</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.Public.html" translate="no">Systems.Campaign.Public</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Studies context.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.Routes.html" translate="no">Systems.Campaign.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.SubmissionModel.html" translate="no">Systems.Campaign.SubmissionModel</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A join table to associate campaign with one or more submissions.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.Switch.html" translate="no">Systems.Campaign.Switch</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Campaign.Themes.html" translate="no">Systems.Campaign.Themes</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Defines themes used to categorize campaigns.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Citizen.CriteriaFilters.html" translate="no">Systems.Citizen.CriteriaFilters</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Defines filters used to filter citizens in the overview page of the pool.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Citizen.Director.html" translate="no">Systems.Citizen.Director</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Citizen.Overview.html" translate="no">Systems.Citizen.Overview</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Citizen.Pool.DetailPageBuilder.html" translate="no">Systems.Citizen.Pool.DetailPageBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Citizen.Pool.Form.html" translate="no">Systems.Citizen.Pool.Form</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Citizen.Pool.OverviewPlugin.html" translate="no">Systems.Citizen.Pool.OverviewPlugin</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Citizen.Pool.SubmissionPageBuilder.html" translate="no">Systems.Citizen.Pool.SubmissionPageBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Citizen.Presenter.html" translate="no">Systems.Citizen.Presenter</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Citizen.Public.html" translate="no">Systems.Citizen.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Content.Public.html" translate="no">Systems.Content.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Content.TextBundleModel.html" translate="no">Systems.Content.TextBundleModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Content.TextItemModel.html" translate="no">Systems.Content.TextItemModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Crew.MemberModel.html" translate="no">Systems.Crew.MemberModel</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The schema for a participant.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Crew.Model.html" translate="no">Systems.Crew.Model</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The schema for a group of participants with (assigned) tasks</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Crew.Public.html" translate="no">Systems.Crew.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Crew.RejectCategories.html" translate="no">Systems.Crew.RejectCategories</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Defines languages used as user feature.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Crew.RejectModel.html" translate="no">Systems.Crew.RejectModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Crew.RejectView.html" translate="no">Systems.Crew.RejectView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Crew.TaskItemView.html" translate="no">Systems.Crew.TaskItemView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Crew.TaskModel.html" translate="no">Systems.Crew.TaskModel</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A task to be completed by a crew member.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Crew.TaskStatus.html" translate="no">Systems.Crew.TaskStatus</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.AzureStorageBackend.html" translate="no">Systems.DataDonation.AzureStorageBackend</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.CenterdataController.html" translate="no">Systems.DataDonation.CenterdataController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.CenterdataFakeApiController.html" translate="no">Systems.DataDonation.CenterdataFakeApiController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.CenterdataFakeApiPage.html" translate="no">Systems.DataDonation.CenterdataFakeApiPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.CenterdataForm.html" translate="no">Systems.DataDonation.CenterdataForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.CenterdataHTTPClient.html" translate="no">Systems.DataDonation.CenterdataHTTPClient</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.CenterdataStorageBackend.html" translate="no">Systems.DataDonation.CenterdataStorageBackend</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.Delivery.html" translate="no">Systems.DataDonation.Delivery</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.DocumentTaskForm.html" translate="no">Systems.DataDonation.DocumentTaskForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.DocumentTaskModel.html" translate="no">Systems.DataDonation.DocumentTaskModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.DonateTaskModel.html" translate="no">Systems.DataDonation.DonateTaskModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.FakeForm.html" translate="no">Systems.DataDonation.FakeForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.FakeStorageBackend.html" translate="no">Systems.DataDonation.FakeStorageBackend</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.Platforms.html" translate="no">Systems.DataDonation.Platforms</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Defines DDP platforms that are supported out of the box.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.Public.html" translate="no">Systems.DataDonation.Public</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A data donation allows a researcher to ask participants to submit data. This
+data is submitted in the form of a file that is stored on the participants
+device.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.Routes.html" translate="no">Systems.DataDonation.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.S3Form.html" translate="no">Systems.DataDonation.S3Form</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.S3StorageBackend.html" translate="no">Systems.DataDonation.S3StorageBackend</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.SpotModel.html" translate="no">Systems.DataDonation.SpotModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.StorageBackend.html" translate="no">Systems.DataDonation.StorageBackend</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.SurveyTaskModel.html" translate="no">Systems.DataDonation.SurveyTaskModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.TaskBuilderView.html" translate="no">Systems.DataDonation.TaskBuilderView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.TaskCell.html" translate="no">Systems.DataDonation.TaskCell</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.TaskForm.html" translate="no">Systems.DataDonation.TaskForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.TaskModel.html" translate="no">Systems.DataDonation.TaskModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.TaskSpotStatusModel.html" translate="no">Systems.DataDonation.TaskSpotStatusModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.TaskViews.html" translate="no">Systems.DataDonation.TaskViews</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.ToolForm.html" translate="no">Systems.DataDonation.ToolForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.ToolModel.html" translate="no">Systems.DataDonation.ToolModel</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The data donation tool schema.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.DataDonation.ToolStatus.html" translate="no">Systems.DataDonation.ToolStatus</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Director.html" translate="no">Systems.Director</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Email.DebugForm.html" translate="no">Systems.Email.DebugForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Email.DebugModel.html" translate="no">Systems.Email.DebugModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Email.Delivery.html" translate="no">Systems.Email.Delivery</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Email.Dialog.html" translate="no">Systems.Email.Dialog</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Email.Dispatcher.html" translate="no">Systems.Email.Dispatcher</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Email.EmailHTML.html" translate="no">Systems.Email.EmailHTML</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Email.EmailLayoutHTML.html" translate="no">Systems.Email.EmailLayoutHTML</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Email.Factory.html" translate="no">Systems.Email.Factory</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Email.Form.html" translate="no">Systems.Email.Form</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Email.Mailer.html" translate="no">Systems.Email.Mailer</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Email.Model.html" translate="no">Systems.Email.Model</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Email.Public.html" translate="no">Systems.Email.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.CheckInItem.html" translate="no">Systems.Lab.CheckInItem</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.CheckInModel.html" translate="no">Systems.Lab.CheckInModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.CheckInView.html" translate="no">Systems.Lab.CheckInView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.DayEntry.html" translate="no">Systems.Lab.DayEntry</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.DayList.html" translate="no">Systems.Lab.DayList</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.DayListItemModel.html" translate="no">Systems.Lab.DayListItemModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.DayModel.html" translate="no">Systems.Lab.DayModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.DayView.html" translate="no">Systems.Lab.DayView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.ExperimentTaskView.html" translate="no">Systems.Lab.ExperimentTaskView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.Public.html" translate="no">Systems.Lab.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.PublicPage.html" translate="no">Systems.Lab.PublicPage</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The public promotion screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.ReservationModel.html" translate="no">Systems.Lab.ReservationModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.Routes.html" translate="no">Systems.Lab.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.TimeSlotModel.html" translate="no">Systems.Lab.TimeSlotModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.ToolForm.html" translate="no">Systems.Lab.ToolForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.ToolModel.html" translate="no">Systems.Lab.ToolModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Lab.VUDaySchedule.html" translate="no">Systems.Lab.VUDaySchedule</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.NextAction.Model.html" translate="no">Systems.NextAction.Model</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.NextAction.OverviewPage.html" translate="no">Systems.NextAction.OverviewPage</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p> The todo screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.NextAction.Presenter.html" translate="no">Systems.NextAction.Presenter</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.NextAction.Public.html" translate="no">Systems.NextAction.Public</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The NextActions context.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.NextAction.Routes.html" translate="no">Systems.NextAction.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.NextAction.Switch.html" translate="no">Systems.NextAction.Switch</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.NextAction.View.html" translate="no">Systems.NextAction.View</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.NextAction.ViewModel.html" translate="no">Systems.NextAction.ViewModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Notification.Box.html" translate="no">Systems.Notification.Box</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The box type.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Notification.Log.html" translate="no">Systems.Notification.Log</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Notification.Model.html" translate="no">Systems.Notification.Model</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The notification type.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Notification.OverviewPage.html" translate="no">Systems.Notification.OverviewPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Notification.Public.html" translate="no">Systems.Notification.Public</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Documentation for <code class="inline">Notification System</code>.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Notification.Routes.html" translate="no">Systems.Notification.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Observatory.Public.html" translate="no">Systems.Observatory.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Observatory.Switch.html" translate="no">Systems.Observatory.Switch</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Org.ContentPage.html" translate="no">Systems.Org.ContentPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Org.Internals.html" translate="no">Systems.Org.Internals</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Org.ItemView.html" translate="no">Systems.Org.ItemView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Org.LinkModel.html" translate="no">Systems.Org.LinkModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Org.NodeContentView.html" translate="no">Systems.Org.NodeContentView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Org.NodeModel.html" translate="no">Systems.Org.NodeModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Org.Public.html" translate="no">Systems.Org.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Org.Routes.html" translate="no">Systems.Org.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Org.Types.html" translate="no">Systems.Org.Types</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Defines types of organisations.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Org.UserAssociation.html" translate="no">Systems.Org.UserAssociation</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Org.UserView.html" translate="no">Systems.Org.UserView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Payment.Private.html" translate="no">Systems.Payment.Private</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Payment.Public.html" translate="no">Systems.Payment.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.Builders.CampaignItem.html" translate="no">Systems.Pool.Builders.CampaignItem</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.Builders.ParticipantItem.html" translate="no">Systems.Pool.Builders.ParticipantItem</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.Builders.ResearcherItem.html" translate="no">Systems.Pool.Builders.ResearcherItem</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.CampaignStatus.html" translate="no">Systems.Pool.CampaignStatus</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.CampaignSubmissionView.html" translate="no">Systems.Pool.CampaignSubmissionView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.CampaignsView.html" translate="no">Systems.Pool.CampaignsView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.CriteriaModel.html" translate="no">Systems.Pool.CriteriaModel</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>This schema contains features of members.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.DetailPage.html" translate="no">Systems.Pool.DetailPage</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p> The pool details screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.External.html" translate="no">Systems.Pool.External</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.ItemView.html" translate="no">Systems.Pool.ItemView</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Pool Card displays information about a participant pool.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.LandingPage.html" translate="no">Systems.Pool.LandingPage</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p> The pool details screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.Model.html" translate="no">Systems.Pool.Model</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The pool schema.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.OverviewPage.html" translate="no">Systems.Pool.OverviewPage</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p> The student overview screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.ParticipantModel.html" translate="no">Systems.Pool.ParticipantModel</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A task (donate data) to be completed by a participant.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.ParticipantPage.html" translate="no">Systems.Pool.ParticipantPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.Public.html" translate="no">Systems.Pool.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.ReviewSubmission.html" translate="no">Systems.Pool.ReviewSubmission</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.Routes.html" translate="no">Systems.Pool.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.SubmissionModel.html" translate="no">Systems.Pool.SubmissionModel</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A task (donate data) to be completed by a participant.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.SubmissionPage.html" translate="no">Systems.Pool.SubmissionPage</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p> The submission page for a campaign.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.SubmissionStatus.html" translate="no">Systems.Pool.SubmissionStatus</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.SubmissionView.html" translate="no">Systems.Pool.SubmissionView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Pool.Switch.html" translate="no">Systems.Pool.Switch</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Presenter.html" translate="no">Systems.Presenter</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Privacy.Form.html" translate="no">Systems.Privacy.Form</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.Assembly.html" translate="no">Systems.Project.Assembly</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.CardView.html" translate="no">Systems.Project.CardView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.ContentPageBuilder.Item.html" translate="no">Systems.Project.ContentPageBuilder.Item</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.ContentPageBuilder.ItemBenchmark.html" translate="no">Systems.Project.ContentPageBuilder.ItemBenchmark</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.ContentPageBuilder.ItemDataDonation.html" translate="no">Systems.Project.ContentPageBuilder.ItemDataDonation</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.CreatePopup.html" translate="no">Systems.Project.CreatePopup</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.Form.html" translate="no">Systems.Project.Form</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.InviteForm.html" translate="no">Systems.Project.InviteForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.ItemConfigForm.html" translate="no">Systems.Project.ItemConfigForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.ItemContentPage.html" translate="no">Systems.Project.ItemContentPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.ItemModel.html" translate="no">Systems.Project.ItemModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.ItemMonitorView.html" translate="no">Systems.Project.ItemMonitorView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.Model.html" translate="no">Systems.Project.Model</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.NodeModel.html" translate="no">Systems.Project.NodeModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.NodePage.html" translate="no">Systems.Project.NodePage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.NodePageBuilder.html" translate="no">Systems.Project.NodePageBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.OverviewPage.html" translate="no">Systems.Project.OverviewPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.Presenter.html" translate="no">Systems.Project.Presenter</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.Public.html" translate="no">Systems.Project.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.Routes.html" translate="no">Systems.Project.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.Switch.html" translate="no">Systems.Project.Switch</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.Templates.html" translate="no">Systems.Project.Templates</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.ToolRefModel.html" translate="no">Systems.Project.ToolRefModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Project.Tools.html" translate="no">Systems.Project.Tools</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Promotion.FormView.html" translate="no">Systems.Promotion.FormView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Promotion.LandingPage.html" translate="no">Systems.Promotion.LandingPage</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The public promotion screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Promotion.Model.html" translate="no">Systems.Promotion.Model</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The promotion schema.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Promotion.Page.html" translate="no">Systems.Promotion.Page</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The home screen.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Promotion.Public.html" translate="no">Systems.Promotion.Public</a>
+
+  </div>
+
+    <div class="summary-synopsis"></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Promotion.Routes.html" translate="no">Systems.Promotion.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Rate.Algorithm.html" translate="no">Systems.Rate.Algorithm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Rate.LeakyBucket.html" translate="no">Systems.Rate.LeakyBucket</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Rate.LeakyBucketAlgorithm.html" translate="no">Systems.Rate.LeakyBucketAlgorithm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Rate.LeakyBucketState.html" translate="no">Systems.Rate.LeakyBucketState</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Rate.Private.html" translate="no">Systems.Rate.Private</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Rate.Public.html" translate="no">Systems.Rate.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Rate.Public.RateLimitError.html" translate="no">Systems.Rate.Public.RateLimitError</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Rate.Quota.html" translate="no">Systems.Rate.Quota</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Rate.Server.html" translate="no">Systems.Rate.Server</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Routes.html" translate="no">Systems.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Student.Class.html" translate="no">Systems.Student.Class</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Defines study program using organisation nodes.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Student.Codes.html" translate="no">Systems.Student.Codes</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Defines study program codes used as user feature for vu students.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Student.Course.html" translate="no">Systems.Student.Course</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Defines student course using organisation nodes.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Student.CriteriaFilters.html" translate="no">Systems.Student.CriteriaFilters</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Defines filters used to filter students in the overview page of the pool.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Student.Director.html" translate="no">Systems.Student.Director</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Student.Filters.html" translate="no">Systems.Student.Filters</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Defines filters used to filter students in the overview page of the pool.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Student.Overview.html" translate="no">Systems.Student.Overview</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Student.Pool.DashboardView.html" translate="no">Systems.Student.Pool.DashboardView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Student.Pool.DetailPageBuilder.html" translate="no">Systems.Student.Pool.DetailPageBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Student.Pool.OverviewPlugin.html" translate="no">Systems.Student.Pool.OverviewPlugin</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Student.Pool.SubmissionForm.html" translate="no">Systems.Student.Pool.SubmissionForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Student.Pool.SubmissionPageBuilder.html" translate="no">Systems.Student.Pool.SubmissionPageBuilder</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Student.Presenter.html" translate="no">Systems.Student.Presenter</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Student.Public.html" translate="no">Systems.Student.Public</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Student.Switch.html" translate="no">Systems.Student.Switch</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Student.Years.html" translate="no">Systems.Student.Years</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Defines student years supported by the studentpool app.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Subroutes.html" translate="no">Systems.Subroutes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Support.HelpdeskForm.html" translate="no">Systems.Support.HelpdeskForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Support.HelpdeskPage.html" translate="no">Systems.Support.HelpdeskPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Support.OverviewPage.html" translate="no">Systems.Support.OverviewPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Support.OverviewTab.html" translate="no">Systems.Support.OverviewTab</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Support.Public.html" translate="no">Systems.Support.Public</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Support context.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Support.Routes.html" translate="no">Systems.Support.Routes</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Support.TicketModel.html" translate="no">Systems.Support.TicketModel</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Support.TicketPage.html" translate="no">Systems.Support.TicketPage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Support.TicketStatus.html" translate="no">Systems.Support.TicketStatus</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Ticket status values.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Survey.ExperimentTaskView.html" translate="no">Systems.Survey.ExperimentTaskView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Survey.Public.html" translate="no">Systems.Survey.Public</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Survey tools allow a researcher to setup a link to an external survey
+tool. The participant goes through the flow described below</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Survey.ToolForm.html" translate="no">Systems.Survey.ToolForm</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Survey.ToolModel.html" translate="no">Systems.Survey.ToolModel</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The survey tool schema.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Test.Model.html" translate="no">Systems.Test.Model</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Test.Page.html" translate="no">Systems.Test.Page</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The page for testing the view model observations</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Test.Presenter.html" translate="no">Systems.Test.Presenter</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Test.Public.html" translate="no">Systems.Test.Public</a>
+
+  </div>
+
+</div>
+
+    </div>
+  </section>
+
+
+<div class="bottom-actions">
+  <div class="bottom-actions-item">
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="readme.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Eyra Mono
+        </span>
+      </a>
+
+  </div>
+</div>
+      <footer class="footer">
+        <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="core.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.3) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+
+
+  </body>
+</html>
