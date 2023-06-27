@@ -333,3 +333,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "project_templates.empty"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "project_tools.benchmark"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "project_tools.data_donation"
+msgstr ""

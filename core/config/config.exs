@@ -15,6 +15,11 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :plug, :statuses, %{
+  403 => "Access Denied",
+  404 => "Page not found"
+}
+
 config :core,
   image_catalog: Core.ImageCatalog.Unsplash,
   banking_backend: Systems.Banking.Dummy

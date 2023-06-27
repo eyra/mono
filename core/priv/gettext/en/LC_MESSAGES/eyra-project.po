@@ -135,14 +135,6 @@ msgstr "Add new item"
 msgid "add.new.item.button.short"
 msgstr "New item"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "add.new.node.button"
-msgstr "Add new group"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "add.new.node.button.short"
-msgstr "New group"
-
 #, elixir-autogen, elixir-format
 msgid "retract.button"
 msgstr "Retract"
@@ -190,3 +182,11 @@ msgstr "Proceed"
 #, elixir-autogen, elixir-format
 msgid "create.title"
 msgstr "Select template"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "create.item.button"
+msgstr "Retract"
+
+#, elixir-autogen, elixir-format
+msgid "create.item.button.short"
+msgstr ""

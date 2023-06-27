@@ -23,7 +23,7 @@ config :core, Core.Repo,
 config :core, CoreWeb.Endpoint,
   reloadable_compilers: [:elixir],
   force_ssl: false,
-  debug_errors: true,
+  debug_errors: false,
   code_reloader: true,
   check_origin: false,
   live_reload: [
