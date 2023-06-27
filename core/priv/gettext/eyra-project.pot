@@ -136,14 +136,6 @@ msgid "add.new.item.button.short"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "add.new.node.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "add.new.node.button.short"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "retract.button"
 msgstr ""
 
@@ -189,4 +181,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "create.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.item.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.item.button.short"
 msgstr ""

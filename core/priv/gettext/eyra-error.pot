@@ -15,11 +15,11 @@ msgid "403.body"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "404.body"
+msgid "page.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "500.body"
+msgid "404.body"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -27,5 +27,9 @@ msgid "503.body"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "page.title"
+msgid "500.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "generic.body"
 msgstr ""

@@ -19,17 +19,19 @@ defmodule CoreWeb.Layouts.Stripped.Component do
 
       def builder, do: Application.fetch_env!(:core, :stripped_menu_builder)
 
-      def build_menu(socket, type) do
-        builder().build_menu(socket, type, unquote(active_item))
+      def build_menu(assigns, type) do
+        builder().build_menu(assigns, type, unquote(active_item))
       end
 
-      def build_menus(socket) do
-        menus =
-          Enum.reduce(@menus, %{}, fn menu_id, acc ->
-            Map.put(acc, menu_id, build_menu(socket, menu_id))
-          end)
-
+      def build_menus(%{assigns: assigns} = socket) do
+        menus = build_menus(assigns)
         socket |> assign(menus: menus)
+      end
+
+      def build_menus(assigns) do
+        Enum.reduce(@menus, %{}, fn menu_id, acc ->
+          Map.put(acc, menu_id, build_menu(assigns, menu_id))
+        end)
       end
 
       def update_menus(socket) do

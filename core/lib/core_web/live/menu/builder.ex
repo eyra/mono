@@ -28,7 +28,7 @@ defmodule CoreWeb.Menu.Builder do
       import CoreWeb.Menu.Helpers
 
       @impl true
-      def build_menu(%{assigns: assigns}, menu_id, active_item) do
+      def build_menu(assigns, menu_id, active_item) do
         builder = &build_item(assigns, menu_id, &1, active_item, @item_flags)
 
         primary = select_items(menu_id, @primary)

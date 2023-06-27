@@ -12,20 +12,24 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "403.body"
-msgstr "Je hebt helaas geen toegang tot deze pagina. Is dit volgens jou een fout? Dan horen we dat graag. Stuur een e-mail naar support@eyra.co."
-
-#, elixir-autogen, elixir-format
-msgid "404.body"
-msgstr "Deze pagina is helaas niet beschikbaar. Is dit volgens jou een fout? Dan horen we dat graag. Laat een melding achter bij onze helpdesk. Zo niet, klik dan op \"Home\" om terug te gaan naar de home pagina van Panl."
-
-#, elixir-autogen, elixir-format
-msgid "500.body"
-msgstr "Deze pagina is op dit moment helaas niet bereikbaar. Als we hiervan op de hoogte zijn dan doen we ons uiterste best om de pagina zo snel mogelijk weer bereikbaar te maken. Probeer het later nog eens. Blijft deze melding verschijnen? Dan horen we het graag. Neem even contact met ons op. Alvast bedankt."
-
-#, elixir-autogen, elixir-format
-msgid "503.body"
-msgstr "Deze pagina is op dit moment helaas niet bereikbaar. Als we hiervan op de hoogte zijn dan doen we ons uiterste best om de pagina zo snel mogelijk weer bereikbaar te maken. Probeer het later nog eens. Blijft deze melding verschijnen? Dan horen we het graag. Neem even contact met ons op. Alvast bedankt."
+msgstr "Je hebt helaas geen toegang tot deze pagina. Is dit volgens jou een fout? Dan horen we dat graag. Stuur een e-mail naar <span class=\"text-primary underline\"><a href=\"mailto:support@eyra.co?subject=[403] %{status}\">support@eyra.co</a></span>."
 
 #, elixir-autogen, elixir-format
 msgid "page.title"
 msgstr "Sorry"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "404.body"
+msgstr "Deze pagina is helaas niet beschikbaar. Is dit volgens jou een fout? Dan horen we dat graag. Stuur een e-mail naar <span class=\"text-primary underline\"><a href=\"mailto:support@eyra.co?subject=[404] %{status}\">support@eyra.co</a></span>."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "503.body"
+msgstr "Deze pagina is op dit moment helaas niet bereikbaar. Blijft dit probleem bestaan dan horen we dat graag. Stuur een e-mail naar <span class=\"text-primary underline\"><a href=\"mailto:support@eyra.co?subject=[503] %{status}\">support@eyra.co</a></span>."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "500.body"
+msgstr "Deze pagina is op dit moment helaas niet bereikbaar. Blijft dit probleem bestaan dan horen we dat graag. Stuur een e-mail naar <span class=\"text-primary underline\"><a href=\"mailto:support@eyra.co?subject=[500] %{status}\">support@eyra.co</a></span>."
+
+#, elixir-autogen, elixir-format
+msgid "generic.body"
+msgstr "Er is helaas iets misgegaan. Blijft dit probleem bestaan dan horen we dat graag. Stuur een e-mail naar <span class=\"text-primary underline\"><a href=\"mailto:support@eyra.co?subject=%{status}\">support@eyra.co</a></span>."

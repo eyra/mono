@@ -24,6 +24,15 @@ defmodule Systems.Benchmark.Public do
     |> Repo.get!(id)
   end
 
+  def get_spot_for_tool(tool_id, spot_id, preload \\ []) do
+    from(spot in Benchmark.SpotModel,
+      where: spot.id == ^spot_id,
+      where: spot.tool_id == ^tool_id,
+      preload: ^preload
+    )
+    |> Repo.one()
+  end
+
   def get_spot!(id, preload \\ []) do
     from(spot in Benchmark.SpotModel, preload: ^preload)
     |> Repo.get!(id)
