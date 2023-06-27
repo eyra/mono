@@ -17,7 +17,7 @@ defmodule CoreWeb.User.ConfirmToken do
       {:ok, _} ->
         {:ok,
          socket
-         |> put_flash(:info, "Account confirmed successfully.")
+         |> put_flash(:info, dgettext("eyra-user", "account.activated.successfully"))
          |> redirect(to: ~p"/user/signin")}
 
       _ ->
@@ -65,13 +65,14 @@ defmodule CoreWeb.User.ConfirmToken do
          put_flash(
            socket,
            :info,
-           "If your email is in our system and it has not been confirmed yet, " <>
-             "you will receive an email with instructions shortly."
+           dgettext("eyra-user", "confirm.token.flash")
          )}
 
       changeset ->
         {:noreply,
-         socket |> assign(changeset: changeset) |> put_flash(:error, "Invalid email address")}
+         socket
+         |> assign(changeset: changeset)
+         |> put_flash(:error, dgettext("eyra-user", "Invalid email"))}
     end
   end
 
@@ -83,8 +84,8 @@ defmodule CoreWeb.User.ConfirmToken do
     <div>
       <Area.content>
       <Margin.y id={:page_top} />
-      <p>Account confirmation link is invalid or it has expired.</p>
-      <p>Enter your e-mail to resend the token</p>
+      <p>Your account activation link is invalid or it has expired.</p>
+      <p>Enter your email address and click resend to receive a new account activation link.</p>
       <.form id="confirm_token" :let={form} for={%{}} phx-submit="resend-token" >
         <.email_input form={form} field={:email} label_text={dgettext("eyra-user", "confirm.token.email.label")} />
         <Button.submit label={dgettext("eyra-account", "confirm.token.resend_button")} />

@@ -3,8 +3,6 @@ defmodule Systems.DataDonation.ToolForm do
 
   alias Core.Accounts
 
-  alias CoreWeb.Router.Helpers, as: Routes
-
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Selector
 
@@ -28,7 +26,6 @@ defmodule Systems.DataDonation.ToolForm do
         socket
       ) do
     entity = DataDonation.Public.get_tool!(entity_id)
-    donations = DataDonation.Public.list_donations(entity)
     changeset = DataDonation.ToolModel.changeset(entity, %{})
 
     {
@@ -38,8 +35,7 @@ defmodule Systems.DataDonation.ToolForm do
         id: id,
         entity_id: entity_id,
         entity: entity,
-        changeset: changeset,
-        donations: donations
+        changeset: changeset
       )
       |> update_platform_labels()
     }
@@ -70,8 +66,7 @@ defmodule Systems.DataDonation.ToolForm do
     DataDonation.Public.get_tool!(entity_id)
     |> DataDonation.Public.delete()
 
-    {:noreply,
-     push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))}
+    {:noreply, push_redirect(socket, to: Accounts.start_page_path(user))}
   end
 
   # Saving

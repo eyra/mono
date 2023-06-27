@@ -11,7 +11,8 @@ defmodule Systems.Org.Types do
          :faculty,
          :student_program,
          :student_class,
-         :student_course
+         :student_course,
+         :team
        ]}
 
   def filter(organisations, nil), do: organisations

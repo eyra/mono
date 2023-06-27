@@ -108,8 +108,8 @@ defmodule Systems.Campaign.ContentPage do
         %{assigns: %{vm: %{id: campaign_id}, current_user: user}} = socket
       ) do
     Campaign.Public.delete(campaign_id)
-    start_page = Accounts.start_page_target(user)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, start_page))}
+    start_path = Accounts.start_page_path(user)
+    {:noreply, push_redirect(socket, to: start_path)}
   end
 
   @impl true

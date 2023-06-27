@@ -19,7 +19,7 @@ defmodule Systems.Email.Factory do
 
   def account_confirmation_instructions(user, url) do
     mail_user(user)
-    |> subject("Confirm your account")
+    |> subject("Activate your account")
     |> render(:account_confirmation_instructions, url: url)
   end
 
@@ -43,8 +43,8 @@ defmodule Systems.Email.Factory do
 
   def account_created(user) do
     mail_user(user)
-    |> assign(:email_header_image, "welcome")
-    |> subject("Welcome to Panl")
+    |> assign(:email_header_image, "notification")
+    |> subject("Welcome")
     |> render(:account_created)
   end
 

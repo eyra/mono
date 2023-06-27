@@ -19,6 +19,10 @@
   }
 }
 
+[x-cloak] {
+  display: none !important;
+}
+
 .max-lines-1 {
   overflow: hidden;
   display: -webkit-box;

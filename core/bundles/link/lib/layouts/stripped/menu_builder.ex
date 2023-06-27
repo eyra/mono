@@ -1,7 +1,7 @@
 defmodule Link.Layouts.Stripped.MenuBuilder do
   @home_flags [
     desktop_navbar: [:wide],
-    mobile_menu: [:wide]
+    mobile_menu: [:narrow]
   ]
 
   @item_flags [
@@ -15,5 +15,5 @@ defmodule Link.Layouts.Stripped.MenuBuilder do
   use CoreWeb.Menu.Builder, home: :link
 
   @impl true
-  def can_access?(_user, _id), do: true
+  def include_map(_user), do: %{}
 end

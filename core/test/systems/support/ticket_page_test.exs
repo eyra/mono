@@ -35,7 +35,7 @@ defmodule Systems.Support.TicketPageTest do
         |> element("[phx-click=\"close_ticket\"]")
         |> render_click()
 
-      assert {:error, {:live_redirect, %{kind: :push, to: "/support/tickets"}}} = html
+      assert {:error, {:live_redirect, %{kind: :push, to: "/support/ticket"}}} = html
     end
   end
 end

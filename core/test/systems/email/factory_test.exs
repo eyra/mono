@@ -10,9 +10,9 @@ defmodule Systems.Email.Factory.Test do
       url = Faker.Internet.url()
       email = Factory.account_confirmation_instructions(user, url)
       assert email.to == user.email
-      assert email.subject == "Confirm your account"
-      assert email.html_body =~ user.displayname
-      assert email.text_body =~ user.displayname
+      assert email.subject == "Activate your account"
+      assert email.html_body =~ "Activate your account"
+      assert email.text_body =~ "Activate your account"
       assert email.html_body =~ url
       assert email.text_body =~ url
     end
@@ -25,8 +25,6 @@ defmodule Systems.Email.Factory.Test do
       email = Factory.reset_password_instructions(user, url)
       assert email.to == user.email
       assert email.subject == "Password reset"
-      assert email.html_body =~ user.displayname
-      assert email.text_body =~ user.displayname
       assert email.html_body =~ url
       assert email.text_body =~ url
     end
@@ -66,9 +64,9 @@ defmodule Systems.Email.Factory.Test do
       email = Factory.account_created(user)
       assert email.to == user.email
       assert email.subject =~ "Welcome"
-      assert email.html_body =~ "You have made an account"
-      assert email.html_body =~ "email-header-welcome.png"
-      assert email.text_body =~ "You have made an account"
+      assert email.html_body =~ "You are all set and ready to use the platform"
+      assert email.html_body =~ "email-header-notification.png"
+      assert email.text_body =~ "You are all set and ready to use the platform"
     end
   end
 end

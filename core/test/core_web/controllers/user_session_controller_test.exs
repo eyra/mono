@@ -81,9 +81,8 @@ defmodule CoreWeb.UserSessionControllerTest do
           "user" => %{"email" => user.email, "password" => "invalid_password"}
         })
 
-      response = html_response(conn, 200)
-      assert response =~ "Log in"
-      assert response =~ "Invalid email or password"
+      response = html_response(conn, 302)
+      assert response =~ "You are being <a href=\"/user/signin\">redirected</a>"
     end
   end
 
@@ -94,7 +93,7 @@ defmodule CoreWeb.UserSessionControllerTest do
       conn = delete(conn, Routes.session_path(conn, :delete))
       assert redirected_to(conn) == "/user/signin"
       refute get_session(conn, :user_token)
-      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Logged out successfully"
+      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Succesvol uitgelogd"
     end
   end
 
@@ -103,7 +102,7 @@ defmodule CoreWeb.UserSessionControllerTest do
       conn = delete(conn, Routes.session_path(conn, :delete))
       assert redirected_to(conn) == "/user/signin"
       refute get_session(conn, :user_token)
-      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Logged out successfully"
+      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Succesvol uitgelogd"
     end
   end
 end

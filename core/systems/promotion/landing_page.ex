@@ -52,7 +52,7 @@ defmodule Systems.Promotion.LandingPage do
 
     back =
       params
-      |> Map.get("back", Routes.live_path(socket, Accounts.start_page_target(user)))
+      |> Map.get("back", Accounts.start_page_path(user))
 
     mount(
       params
@@ -171,9 +171,7 @@ defmodule Systems.Promotion.LandingPage do
         <div class="mb-12 sm:mb-16" />
         <div class={"grid gap-6 sm:gap-8 #{grid_cols(Enum.count(@vm.highlights))}"}>
           <%= for highlight <- @vm.highlights do %>
-            <div class="bg-grey5 rounded">
-              <Card.highlight title={highlight.title} text={highlight.text} />
-            </div>
+            <Card.highlight {highlight} />
           <% end %>
         </div>
         <div class="mb-12 sm:mb-16" />

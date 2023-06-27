@@ -3,7 +3,8 @@ defmodule Next.StartPages do
 
   def pages(),
     do: %{
-      console: %{id: :console, target: Next.Console.Page, domain: "eyra-ui"}
+      home: %{id: :home, path: "/", domain: "eyra-ui"},
+      console: %{id: :home, path: "/console", domain: "eyra-ui"}
     }
 
   @impl true

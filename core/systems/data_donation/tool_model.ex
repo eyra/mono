@@ -4,6 +4,7 @@ defmodule Systems.DataDonation.ToolModel do
   """
   use Ecto.Schema
   use Frameworks.Utility.Model
+  use Frameworks.Utility.Schema
 
   require Core.Enums.Themes
 
@@ -16,10 +17,13 @@ defmodule Systems.DataDonation.ToolModel do
   require DataDonation.Platforms
 
   schema "data_donation_tools" do
+    field(:status, Ecto.Enum, values: DataDonation.ToolStatus.values(), default: :concept)
     field(:platforms, {:array, Ecto.Enum}, values: DataDonation.Platforms.schema_values())
     field(:subject_count, :integer, default: 0)
     field(:director, Ecto.Enum, values: [:project])
+
     belongs_to(:auth_node, Core.Authorization.Node)
+    has_many(:tasks, DataDonation.TaskModel, foreign_key: :tool_id)
 
     timestamps()
   end
@@ -32,6 +36,14 @@ defmodule Systems.DataDonation.ToolModel do
 
   @impl true
   def operational_validation(changeset), do: changeset
+
+  def preload_graph(:full),
+    do:
+      preload_graph([
+        :auth_node
+      ])
+
+  def preload_graph(:auth_node), do: [auth_node: []]
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(tool), do: tool.auth_node_id

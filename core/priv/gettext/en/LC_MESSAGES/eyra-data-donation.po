@@ -14,110 +14,86 @@ msgstr ""
 msgid "config.nrofsubjects.label"
 msgstr "How many participants do you need?"
 
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "file_selection.file_upload.description"
-msgstr "Select file"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "file_selection.welcome.description"
-msgstr "Click “Select file” to choose the file that you received from %{platform}."
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "submit_data.description"
-msgstr "Below you’ll find the data that was extracted from your file and that is valuable for research. Inspect the data carefully and decide whether you would like to donate it. This can be done at the bottom of the page. Thanks a lot in advance!"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "submit_data.title"
-msgstr "Inspect"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "tabbar.item.file_selection"
-msgstr "Execute"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "tabbar.item.file_selection.forward"
-msgstr "Step 2"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "tabbar.item.submit_data"
-msgstr "Inspect"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "tabbar.item.submit_data.forward"
-msgstr "Step 3"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "data_extraction.processing.loading"
-msgstr "Processing file..."
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "file_selection.note"
-msgstr "NB: The process to extract the required data from the file is performed on your own device, no data is saved or sent during this process."
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "tabbar.item.welcome"
-msgstr "Introduction"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "tabbar.item.welcome.forward"
-msgstr "Introduction"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "welcome.title"
-msgstr "Introduction"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "extract.data.button"
-msgstr "Start"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "selected.file.description"
-msgstr "The required data will be extracted from the following file:"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "file.extracton.description"
-msgstr "The data that can be used for research are being extracted from your file. This may take a while, please do not close your browser during this process. Once finished, you are automatically forwarded to the next step."
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "submit.data.button"
-msgstr "Yes, donate"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "no.extraction.data.yet.description"
-msgstr "Please go to step 2 to extract data first."
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "extract.data.title"
-msgstr "Execute"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "thanks.title"
-msgstr "Thank you"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "welcome.description.top"
-msgstr "You will be able to donate your data to the researchers of the %{recipient} in a minute. We will walk you through the process step by step."
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "welcome.description.bottom"
-msgstr "At step 2 you can select the data package that you received from %{platform}. During this step, no data is saved or sent. At step 3 you can inspect your data and decide whether or not you would like to donate the presented data to the researchers of the %{recipient}."
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "decline.data.button"
-msgstr "No"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "submit_data.action.label"
-msgstr "Do you want to donate the data above to the researchers of the %{recipient}?"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "thanks.whatsapp.description"
-msgstr "Thank you for your participation. Please proceed to the LISS survey on your computer or laptop."
-
-#, elixir-autogen, elixir-format
-msgid "execute.spinner"
-msgstr "One moment please"
-
 #, elixir-autogen, elixir-format
 msgid "platforms.title"
 msgstr "Platforms"
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr "Data Donation"
+
+#, elixir-autogen, elixir-format
+msgid "task.donate.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.donate.title"
+msgstr "Donate"
+
+#, elixir-autogen, elixir-format
+msgid "task.download.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.download.title"
+msgstr "Download DDP"
+
+#, elixir-autogen, elixir-format
+msgid "task.library.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.library.title"
+msgstr "Task Library"
+
+#, elixir-autogen, elixir-format
+msgid "task.list.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.list.title"
+msgstr "Tasks"
+
+#, elixir-autogen, elixir-format
+msgid "task.request.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.request.title"
+msgstr "Request DDP"
+
+#, elixir-autogen, elixir-format
+msgid "task.survey.description"
+msgstr "Lorem ipsum dolor sit amet."
+
+#, elixir-autogen, elixir-format
+msgid "task.survey.title"
+msgstr "Survey"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "task.description.label"
+msgstr "Description"
+
+#, elixir-autogen, elixir-format
+msgid "task.title.label"
+msgstr "Title"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "task.list.hint"
+msgstr "Change order with the arrows"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "task.platform.label"
+msgstr "Platform"
+
+#, elixir-autogen, elixir-format
+msgid "pdf-replace-file-button"
+msgstr "Replace PDF"
+
+#, elixir-autogen, elixir-format
+msgid "pdf-select-file-button"
+msgstr "Select PDF"
+
+#, elixir-autogen, elixir-format
+msgid "pdf-select-placeholder"
+msgstr "Select a pdf file"

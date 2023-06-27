@@ -2,8 +2,6 @@ defmodule Systems.Observatory.Public do
   alias Systems.Director
   alias CoreWeb.Endpoint
 
-  import CoreWeb.UrlResolver, only: [url_resolver: 1]
-
   def subscribe(signal, key \\ []) do
     Endpoint.subscribe(topic_key(signal, key))
   end
@@ -51,7 +49,7 @@ defmodule Systems.Observatory.Public do
   defp update_view_model(socket, presenter, model_or_id, page) do
     vm =
       presenter
-      |> get_view_model(socket, model_or_id, page, url_resolver(socket))
+      |> get_view_model(socket, model_or_id, page)
 
     socket
     |> Phoenix.Component.assign(vm: vm)
@@ -61,11 +59,10 @@ defmodule Systems.Observatory.Public do
          presenter,
          %{assigns: assigns} = _socket,
          model_or_id,
-         page,
-         url_resolver
+         page
        ) do
     presenter
-    |> apply(:view_model, [model_or_id, page, assigns, url_resolver])
+    |> apply(:view_model, [model_or_id, page, assigns])
   end
 
   defmacro __using__(_opts \\ []) do

@@ -6,6 +6,7 @@ defmodule CoreWeb.Layouts.Stripped.Component do
 
   import CoreWeb.UI.Footer
   alias CoreWeb.UI.Navigation
+  alias Frameworks.Pixel.Hero
 
   defmacro __using__(active_item) do
     quote do
@@ -42,7 +43,7 @@ defmodule CoreWeb.Layouts.Stripped.Component do
     end
   end
 
-  attr(:user, :string, required: true)
+  attr(:title, :string, default: nil)
   attr(:menus, :map, required: true)
   slot(:inner_block, required: true)
 
@@ -53,11 +54,19 @@ defmodule CoreWeb.Layouts.Stripped.Component do
       </div>
       <div class="flex-1">
         <div class="flex flex-col w-full h-viewport">
-          <div class="flex-wrap">
-            <Navigation.navbar {@menus.desktop_navbar} />
-          </div>
+            <div class="flex-wrap md:hidden">
+              <Navigation.mobile_navbar {@menus.mobile_navbar} />
+            </div>
+            <div class="flex-wrap hidden md:flex">
+              <Navigation.desktop_navbar {@menus.desktop_navbar} />
+            </div>
           <div class="flex-1">
             <div class="flex flex-col h-full border-t border-l border-b border-grey4">
+              <%= if @title do %>
+                <div class="flex-none">
+                  <Hero.small title={@title} />
+                </div>
+              <% end %>
               <div class="flex-1 bg-white">
                 <div class="flex flex-row">
                   <div class="flex-1">
@@ -69,11 +78,12 @@ defmodule CoreWeb.Layouts.Stripped.Component do
                 </div>
               </div>
               <div class="bg-white">
-                <.footer />
+                <.content_footer />
               </div>
             </div>
           </div>
-          <div class="pb-0 md:pb-10 bg-grey5">
+          <div class="bg-grey5">
+            <.platform_footer />
           </div>
         </div>
       </div>

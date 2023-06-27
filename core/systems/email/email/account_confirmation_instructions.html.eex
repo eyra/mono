@@ -1,5 +1,10 @@
-<h1>Hi <%= @user.displayname %>,</h1>
+<h1>Activate your account</h1>
 
-Almost there, you can now <a href="<%= @url %>">confirm your account</a>.
-
-If you didn't create an account with us, please ignore this.
+Thank you for creating an account on Next. You are only one step removed from being able to use the platform.
+Click <a href="<%= @url %>">here</a> to activate your account.
+<br /><br />
+If you did not register an account on Next, you can discard this email.
+<br /><br />
+Kind regards,
+<br /><br />
+The Eyra team

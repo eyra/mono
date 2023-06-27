@@ -27,31 +27,48 @@ defmodule Systems.Project.OverviewPage do
         selector_dialog: nil
       )
       |> update_projects()
+      |> update_cards()
       |> update_menus()
     }
   end
 
   defp update_projects(%{assigns: %{current_user: user}} = socket) do
     preload = Project.Model.preload_graph(:full)
-
-    projects =
-      user
-      |> Project.Public.list_owned_projects(preload: preload)
-      |> Enum.map(
-        &ViewModelBuilder.view_model(&1, {__MODULE__, :card}, user, url_resolver(socket))
-      )
+    projects = Project.Public.list_owned_projects(user, preload: preload)
 
     socket
-    |> assign(
-      projects: projects,
-      dialog: nil,
-      popup: nil,
-      selector_dialog: nil
-    )
+    |> assign(projects: projects)
+  end
+
+  defp update_cards(%{assigns: %{projects: projects} = assigns} = socket) do
+    cards = Enum.map(projects, &ViewModelBuilder.view_model(&1, {__MODULE__, :card}, assigns))
+
+    socket
+    |> assign(cards: cards)
   end
 
   def handle_auto_save_done(socket) do
     socket |> update_menus()
+  end
+
+  @impl true
+  def handle_event("card_clicked", %{"item" => card_id}, %{assigns: %{cards: cards}} = socket) do
+    card_id = String.to_integer(card_id)
+    %{path: path} = Enum.find(cards, &(&1.id == card_id))
+    {:noreply, push_redirect(socket, to: path)}
+  end
+
+  @impl true
+  def handle_event("edit", %{"item" => project_id}, %{assigns: %{projects: projects}} = socket) do
+    project = Enum.find(projects, &(&1.id == String.to_integer(project_id)))
+
+    popup = %{
+      module: Project.Form,
+      entity: project,
+      target: self()
+    }
+
+    {:noreply, assign(socket, popup: popup)}
   end
 
   @impl true
@@ -81,6 +98,7 @@ defmodule Systems.Project.OverviewPage do
         dialog: nil
       )
       |> update_projects()
+      |> update_cards()
       |> update_menus()
     }
   end
@@ -88,12 +106,6 @@ defmodule Systems.Project.OverviewPage do
   @impl true
   def handle_event("delete_cancel", _params, socket) do
     {:noreply, socket |> assign(project_id: nil, dialog: nil)}
-  end
-
-  @impl true
-  def handle_event("close_share_dialog", _, socket) do
-    IO.puts("close_share_dialog")
-    {:noreply, socket |> assign(popup: nil)}
   end
 
   @impl true
@@ -127,29 +139,26 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_event("duplicate", %{"item" => project_id}, socket) do
-    preload = Project.Model.preload_graph(:full)
-    _project = Project.Public.get!(String.to_integer(project_id), preload)
-
-    # Project.Assembly.copy(project)
+  def handle_event("create_project", _params, %{assigns: %{current_user: user}} = socket) do
+    popup = %{
+      module: Project.CreatePopup,
+      target: self(),
+      user: user
+    }
 
     {
       :noreply,
-      socket
-      |> update_projects()
-      |> update_menus()
+      socket |> assign(popup: popup)
     }
   end
 
   @impl true
-  def handle_event("create_project", _params, %{assigns: %{current_user: user}} = socket) do
-    name = dgettext("eyra-project", "default.project.name")
-    {:ok, %{project: project}} = Project.Assembly.create(name, user)
-
+  def handle_info({:handle_auto_save_done, :project_overview_popup}, socket) do
     {
       :noreply,
       socket
-      |> push_redirect(to: ~p"/projects/#{project.id}/content")
+      |> update_projects()
+      |> update_cards()
     }
   end
 
@@ -159,14 +168,16 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_info({:card_click, %{action: :edit, id: id}}, socket) do
-    {:noreply,
-     push_redirect(socket, to: CoreWeb.Router.Helpers.live_path(socket, Project.ContentPage, id))}
+  def handle_info(%{module: _, action: :close}, socket) do
+    {:noreply, socket |> assign(popup: nil)}
   end
 
   @impl true
-  def handle_info(%{module: _, action: :close}, socket) do
-    {:noreply, socket |> assign(popup: nil)}
+  def handle_info(
+        %{module: Systems.Project.CreatePopup, action: %{redirect_to: node_id}},
+        socket
+      ) do
+    {:noreply, push_redirect(socket, to: ~p"/project/node/#{node_id}")}
   end
 
   @impl true
@@ -224,12 +235,12 @@ defmodule Systems.Project.OverviewPage do
 
       <Area.content>
         <Margin.y id={:page_top} />
-        <%= if Enum.count(@projects) > 0 do %>
+        <%= if Enum.count(@cards) > 0 do %>
           <div class="flex flex-row items-center justify-center">
             <div class="h-full">
               <Text.title2 margin="">
                 <%= dgettext("eyra-project", "overview.header.title") %>
-                <span class="text-primary"> <%= Enum.count(@projects) %></span>
+                <span class="text-primary"> <%= Enum.count(@cards) %></span>
               </Text.title2>
             </div>
             <div class="flex-grow">
@@ -247,11 +258,8 @@ defmodule Systems.Project.OverviewPage do
           </div>
           <Margin.y id={:title2_bottom} />
           <Grid.dynamic>
-            <%= for projects <- @projects do %>
-              <Project.CardView.dynamic
-                card={projects}
-                click_event_data={%{action: :edit, id: projects.id}}
-              />
+            <%= for card <- @cards do %>
+              <Project.CardView.dynamic card={card} />
             <% end %>
           </Grid.dynamic>
           <.spacing value="L" />

@@ -209,3 +209,39 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "start.page.projects"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "copy.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "title.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "start.page.home"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "collapse.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "expand.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "terms.link"
+msgstr ""

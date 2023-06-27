@@ -63,6 +63,7 @@ defmodule CoreWeb.Layouts.Website.Component do
         >
           <div
             class="fixed z-30 right-0 top-0 w-mobile-menu-width h-viewport"
+            x-cloak
             x-show="mobile_menu"
             @click.away="mobile_menu = !mobile_menu, $parent.overlay = false"
           >
@@ -70,10 +71,10 @@ defmodule CoreWeb.Layouts.Website.Component do
           </div>
           <div class="flex flex-col w-full h-viewport">
             <div class="flex-wrap md:hidden">
-              <Navigation.navbar {@menus.mobile_navbar} />
+              <Navigation.mobile_navbar {@menus.mobile_navbar} />
             </div>
             <div class="flex-wrap hidden md:flex">
-              <Navigation.navbar {@menus.desktop_navbar} />
+              <Navigation.desktop_navbar {@menus.desktop_navbar} />
             </div>
             <div class="flex-1">
               <div class="flex flex-col h-full border-t border-l border-b border-grey4">
@@ -91,7 +92,7 @@ defmodule CoreWeb.Layouts.Website.Component do
                   </div>
                 </div>
                 <div class="bg-white">
-                  <.footer />
+                  <.content_footer />
                 </div>
               </div>
             </div>

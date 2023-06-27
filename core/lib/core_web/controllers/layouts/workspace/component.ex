@@ -57,6 +57,7 @@ defmodule CoreWeb.Layouts.Workspace.Component do
     <div class="w-full h-viewport" x-data="{mobile_menu: false}">
       <div
         class="fixed z-40 right-0 top-0 w-mobile-menu-width h-viewport"
+        x-cloak
         x-show="mobile_menu"
         @click.away="mobile_menu = !mobile_menu, $parent.overlay = false"
       >
@@ -92,12 +93,13 @@ defmodule CoreWeb.Layouts.Workspace.Component do
                 </div>
                 <%= if @footer do %>
                   <div class="flex-none">
-                    <.footer />
+                    <.content_footer />
                   </div>
                 <% end %>
               </div>
             </div>
-            <div class="pb-0 md:pb-10 bg-grey5">
+            <div class="bg-grey5">
+              <.platform_footer />
             </div>
           </div>
         </div>

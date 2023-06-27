@@ -15,6 +15,7 @@ defmodule Next.Layouts.Workspace.MenuBuilder do
   @primary [
     default: [
       :console,
+      :projects,
       :admin,
       :support,
       :todo
@@ -26,20 +27,19 @@ defmodule Next.Layouts.Workspace.MenuBuilder do
     default: [
       :language,
       :helpdesk,
-      :settings,
       :profile,
-      :signin,
-      :signout
+      :signin
     ],
     mobile_navbar: [:menu]
   ]
 
-  use CoreWeb.Menu.Builder, home: :eyra
+  use CoreWeb.Menu.Builder, home: :next
   alias Core.Authorization
 
   @impl true
-  def can_access?(user, :console), do: Authorization.can_access?(user, Next.Console.Page)
-
-  @impl true
-  def can_access?(_user, _id), do: true
+  def include_map(user),
+    do: %{
+      console: Authorization.can_access?(user, Next.Console.Page),
+      projects: Systems.Admin.Public.admin?(user)
+    }
 end

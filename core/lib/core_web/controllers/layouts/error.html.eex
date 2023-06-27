@@ -55,7 +55,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <.footer />
+                                    <.content_footer />
                                 </div>
                             </div>
                             <div class="pb-0 md:pb-10 bg-grey5">

@@ -40,7 +40,7 @@ msgstr "Inloggen"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.signout"
-msgstr "Uitloggen"
+msgstr "Log uit"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.menu"
@@ -152,7 +152,7 @@ msgstr "gisteren"
 
 #, elixir-autogen, elixir-format
 msgid "authentication.required.error"
-msgstr "Deze pagina bekijken? Log hier eerst in."
+msgstr "Log in om deze pagina te bekijken"
 
 #, elixir-autogen, elixir-format
 msgid "start.page.console"
@@ -204,8 +204,44 @@ msgstr "Gedeeld met"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.projects"
-msgstr "Data Donatie"
+msgstr "Projecten"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.projects"
 msgstr "Ga naar console"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "copy.button"
+msgstr "Kopieer"
+
+#, elixir-autogen, elixir-format
+msgid "title.placeholder"
+msgstr "Hier komt de titel.."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "start.page.home"
+msgstr "Ga naar console"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "collapse.button"
+msgstr "Inklappen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "expand.button"
+msgstr "Uitklappen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings"
+msgstr "Instellingen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings.forward"
+msgstr "Instellingen"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link"
+msgstr "Privacy"
+
+#, elixir-autogen, elixir-format
+msgid "terms.link"
+msgstr "Voorwaarden"

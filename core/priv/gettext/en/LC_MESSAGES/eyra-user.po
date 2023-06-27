@@ -12,32 +12,76 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "confirm.token.email.label"
-msgstr ""
+msgstr "Email"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.email.label"
-msgstr ""
+msgstr "Email"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.password.label"
-msgstr ""
+msgstr "New password"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.password_confirmation.label"
-msgstr ""
+msgstr "Confirm password"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.reset_button"
-msgstr ""
+msgstr "Send request"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.reset_password_button"
-msgstr ""
+msgstr "Reset"
 
 #, elixir-autogen, elixir-format
 msgid "user.password_reset.title"
-msgstr ""
+msgstr "Reset password"
 
 #, elixir-autogen, elixir-format
 msgid "Invalid email or password"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "register.link"
+msgstr "Register"
+
+#, elixir-autogen, elixir-format
+msgid "reset.link"
+msgstr "Reset password"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "user.password_reset.flash"
+msgstr "If your email is in our system, you will receive instructions to reset your password shortly."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Invalid email"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "confirm.token.flash"
+msgstr "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+
+#, elixir-autogen, elixir-format
+msgid "Signed out successfully"
+msgstr "Succesvol uitgelogd"
+
+#, elixir-autogen, elixir-format
+msgid "account.activated.successfully"
+msgstr "Account activated Successfully"
+
+#, elixir-autogen, elixir-format
+msgid "account.created.successfully"
+msgstr "Account created successfully"
+
+#, elixir-autogen, elixir-format
+msgid "email.changed.successfully"
+msgstr "Email changed successfully"
+
+#, elixir-autogen, elixir-format
+msgid "password.reset.successfully"
+msgstr "Password reset successfully"
+
+#, elixir-autogen, elixir-format
+msgid "password.updated.successfully"
+msgstr "Password updated succesfull"

@@ -10,7 +10,7 @@ defmodule Core.Accounts.UserNotifier.Test do
       user = Factories.build(:member)
       url = Faker.Internet.url()
       {:ok, _} = UserNotifier.deliver_confirmation_instructions(user, url)
-      assert_email_delivered_with(subject: "Confirm your account")
+      assert_email_delivered_with(subject: "Activate your account")
     end
   end
 

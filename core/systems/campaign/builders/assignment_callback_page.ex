@@ -3,7 +3,6 @@ defmodule Systems.Campaign.Builders.AssignmentCallbackPage do
 
   alias Core.Accounts
   alias Core.Authorization
-  alias CoreWeb.Router.Helpers, as: Routes
   alias Phoenix.LiveView
 
   alias Systems.{
@@ -13,12 +12,11 @@ defmodule Systems.Campaign.Builders.AssignmentCallbackPage do
 
   def view_model(
         %Campaign.Model{} = campaign,
-        assigns,
-        url_resolver
+        assigns
       ) do
     campaign
     |> Campaign.Model.flatten()
-    |> view_model(assigns, url_resolver)
+    |> view_model(assigns)
   end
 
   def view_model(
@@ -29,8 +27,7 @@ defmodule Systems.Campaign.Builders.AssignmentCallbackPage do
           },
           promotable: assignment
         },
-        %{current_user: user} = _assigns,
-        _url_resolver
+        %{current_user: user} = _assigns
       ) do
     %{
       id: id,
@@ -62,6 +59,6 @@ defmodule Systems.Campaign.Builders.AssignmentCallbackPage do
   end
 
   def handle_forward(%{assigns: %{current_user: user}} = socket) do
-    LiveView.push_redirect(socket, to: Routes.live_path(socket, Accounts.start_page_target(user)))
+    LiveView.push_redirect(socket, to: Accounts.start_page_path(user))
   end
 end

@@ -27,7 +27,7 @@ defmodule Port.Console.Page do
       socket
       |> update_menus()
       |> assign(content_items: content_items)
-      |> assign(next_best_action: NextAction.Public.next_best_action(url_resolver(socket), user))
+      |> assign(next_best_action: NextAction.Public.next_best_action(user))
 
     {:ok, socket}
   end
@@ -61,15 +61,37 @@ defmodule Port.Console.Page do
   def convert_to_vm(
         _socket,
         %{
-          id: id,
-          name: name
+          name: name,
+          root: %{
+            items: [item]
+          }
         }
       ) do
     %{
-      path: ~p"/projects/#{id}/content",
+      path: ~p"/project/item/#{item.id}/content",
       title: name,
       subtitle: "<subtitle>",
       tag: %{text: "Concept", type: :success},
+      level: :critical,
+      image: nil,
+      quick_summary: ""
+    }
+  end
+
+  def convert_to_vm(
+        _socket,
+        %{
+          name: name,
+          root: %{
+            id: root_node_id
+          }
+        }
+      ) do
+    %{
+      path: ~p"/project/node/#{root_node_id}",
+      title: name,
+      subtitle: "<subtitle>",
+      tag: nil,
       level: :critical,
       image: nil,
       quick_summary: ""

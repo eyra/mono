@@ -25,8 +25,11 @@ defmodule Port.User.SessionController do
   end
 
   def create(conn, %{"user" => user_params}) do
+    create(conn, user_params)
+  end
+
+  def create(conn, %{"email" => email, "password" => password} = user_params) do
     require_feature(:password_sign_in)
-    %{"email" => email, "password" => password} = user_params
 
     if user = Core.Accounts.get_user_by_email_and_password(email, password) do
       CoreWeb.UserAuth.log_in_user(conn, user, false, user_params)
@@ -40,7 +43,7 @@ defmodule Port.User.SessionController do
   end
 
   defp render_new(%{request_path: request_path} = conn) do
-    logo = CoreWeb.Endpoint.static_path("/images/icons/#{Meta.bundle(conn)}.svg")
+    logo = CoreWeb.Endpoint.static_path("/images/icons/#{Meta.bundle(conn)}_wide.svg")
     title = Meta.bundle_title()
 
     conn
@@ -50,7 +53,7 @@ defmodule Port.User.SessionController do
 
   def delete(conn, _params) do
     conn
-    |> put_flash(:info, "Logged out successfully.")
+    |> put_flash(:info, dgettext("eyra-user", "Signed out successfully"))
     |> CoreWeb.UserAuth.log_out_user()
   end
 

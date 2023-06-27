@@ -242,6 +242,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
+  attr(:reserve_error_space, :boolean, default: true)
 
   def url_input(assigns) do
     ~H"""
@@ -251,6 +252,7 @@ defmodule Frameworks.Pixel.Form do
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
+      reserve_error_space={@reserve_error_space}
       type="url"
     />
     """
@@ -261,6 +263,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
+  attr(:reserve_error_space, :boolean, default: true)
 
   def password_input(assigns) do
     ~H"""
@@ -270,6 +273,7 @@ defmodule Frameworks.Pixel.Form do
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
+      reserve_error_space={@reserve_error_space}
       type="password"
     />
     """
@@ -281,7 +285,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
   attr(:disabled, :boolean, default: false)
-  attr(:value, :string)
+  attr(:reserve_error_space, :boolean, default: true)
 
   def date_input(assigns) do
     ~H"""
@@ -291,10 +295,10 @@ defmodule Frameworks.Pixel.Form do
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
+      reserve_error_space={@reserve_error_space}
       type="date"
       disabled={@disabled}
       debounce={""}
-      value={@value}
     />
     """
   end
@@ -304,6 +308,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
+  attr(:reserve_error_space, :boolean, default: true)
 
   def email_input(assigns) do
     ~H"""
@@ -313,6 +318,7 @@ defmodule Frameworks.Pixel.Form do
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
+      reserve_error_space={@reserve_error_space}
       type="email"
     />
     """
@@ -488,7 +494,6 @@ defmodule Frameworks.Pixel.Form do
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
   attr(:options, :list, required: true)
-  attr(:selected_option, :atom)
   attr(:target, :any, required: true)
   attr(:placeholder, :string, default: "")
   attr(:label_text, :string)
@@ -499,10 +504,20 @@ defmodule Frameworks.Pixel.Form do
   attr(:debounce, :string, default: "1000")
   attr(:value, :any, default: nil)
 
-  def dropdown(%{form: form, field: field} = assigns) do
+  def dropdown(%{form: form, field: field, options: options} = assigns) do
     errors = form[field].errors
     field_id = String.to_atom(input_id(form, field))
     options_id = "#{field_id}-options"
+
+    field_value =
+      if raw_value = value(form, assigns) do
+        case Enum.find(options, "", &(Atom.to_string(&1.id) == raw_value)) do
+          %{value: value} -> value
+          _ -> raw_value
+        end
+      else
+        ""
+      end
 
     input_static_class =
       "#{field_tag(@input)} text-grey1 text-bodymedium font-body pl-3 focus:outline-none whitespace-pre-wrap w-full border-2 border-solid rounded h-44px cursor-pointer"
@@ -511,17 +526,24 @@ defmodule Frameworks.Pixel.Form do
     active_color = active_input_color(assigns)
     has_errors = Enum.count(errors) > 0
 
+    js_click =
+      JS.focus(to: "##{field_id}")
+      |> JS.toggle(to: "##{options_id}")
+      |> JS.toggle(to: "##{options_id}-dropdown-img")
+      |> JS.toggle(to: "##{options_id}-dropup-img")
+
     assigns =
       assign(assigns, %{
         field_id: field_id,
         field_name: input_name(form, field),
-        field_value: value(form, assigns),
+        field_value: field_value,
         options_id: options_id,
         input_static_class: input_static_class,
         input_dynamic_class: input_dynamic_class,
         active_color: active_color,
         errors: errors,
-        has_errors: has_errors
+        has_errors: has_errors,
+        js_click: js_click
       })
 
     ~H"""
@@ -530,13 +552,11 @@ defmodule Frameworks.Pixel.Form do
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
-      error_message={@error_message}
       reserve_error_space={@reserve_error_space}
       errors={@errors}
     >
-      <div class="relative">
+      <div class="relative" >
         <input
-          readonly
           type="text"
           id={@field_id}
           name={@field_name}
@@ -550,11 +570,11 @@ defmodule Frameworks.Pixel.Form do
           phx-target={@target}
         />
         <div class="absolute z-20 right-0 top-0 h-44px flex flex-col justify-center">
-          <div id="dropdown-img">
-            <img class="mr-3" src="/images/icons/dropdown.svg" alt="Dropdown">
+          <div id={"#{@options_id}-dropdown-img"}>
+            <img class="mr-3" src="/images/icons/dropdown.svg" alt="Dropdown" phx-click={@js_click}>
           </div>
-          <div id="dropup-img" class="hidden">
-            <img class="mr-3" src="/images/icons/dropup.svg" alt="Dropup">
+          <div id={"#{@options_id}-dropup-img"} class="hidden">
+            <img class="mr-3" src="/images/icons/dropup.svg" alt="Dropup" phx-click={@js_click}>
           </div>
         </div>
         <div id={@options_id} class="absolute z-20 left-0 top-48px bg-black bg-opacity-20 w-full hidden">
@@ -574,19 +594,20 @@ defmodule Frameworks.Pixel.Form do
   end
 
   attr(:option, :map, required: true)
+  attr(:field_value, :string, required: true)
   attr(:options_id, :string, required: true)
-  attr(:text_color, :string, required: true)
+  attr(:target, :any, required: true)
 
   def dropdown_option(
         %{
           option: option,
-          selected_option: selected_option,
+          field_value: field_value,
           options_id: options_id,
           target: target
         } = assigns
       ) do
     text_color =
-      if option == selected_option do
+      if option.value == field_value do
         "text-primary"
       else
         "text-grey1"
@@ -594,6 +615,8 @@ defmodule Frameworks.Pixel.Form do
 
     js_click =
       JS.hide(to: "##{options_id}")
+      |> JS.toggle(to: "##{options_id}-dropdown-img")
+      |> JS.toggle(to: "##{options_id}-dropup-img")
       |> JS.push("select-option", value: option, target: target)
 
     assigns =
@@ -609,7 +632,7 @@ defmodule Frameworks.Pixel.Form do
         phx-click={@js_click}
       >
         <div class={"text-button font-button whitespace-nowrap #{@text_color}"}>
-          <%= @option.label %>
+          <%= @option.value %>
         </div>
       </div>
     </div>

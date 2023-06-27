@@ -2,8 +2,6 @@ defmodule Next.User.SessionController do
   use CoreWeb, :controller
   import CoreWeb.Gettext
 
-  alias CoreWeb.Meta
-
   plug(:setup_sign_in_with_apple, :core when action != :delete)
 
   defp setup_sign_in_with_apple(conn, otp_app) do
@@ -25,8 +23,11 @@ defmodule Next.User.SessionController do
   end
 
   def create(conn, %{"user" => user_params}) do
+    create(conn, user_params)
+  end
+
+  def create(conn, %{"email" => email, "password" => password} = user_params) do
     require_feature(:password_sign_in)
-    %{"email" => email, "password" => password} = user_params
 
     if user = Core.Accounts.get_user_by_email_and_password(email, password) do
       CoreWeb.UserAuth.log_in_user(conn, user, false, user_params)
@@ -39,22 +40,13 @@ defmodule Next.User.SessionController do
     end
   end
 
-  defp render_new(%{request_path: request_path} = conn) do
-    logo = CoreWeb.Endpoint.static_path("/images/icons/#{Meta.bundle(conn)}.svg")
-    title = Meta.bundle_title()
-
-    conn
-    |> init_tabs()
-    |> render(:new, bundle_logo: logo, bundle_title: title, request_path: request_path)
+  defp render_new(conn) do
+    redirect(conn, to: ~p"/user/signin")
   end
 
   def delete(conn, _params) do
     conn
-    |> put_flash(:info, "Logged out successfully.")
+    |> put_flash(:info, dgettext("eyra-user", "Signed out successfully"))
     |> CoreWeb.UserAuth.log_out_user()
-  end
-
-  defp init_tabs(conn) do
-    assign(conn, :tabs, [])
   end
 end

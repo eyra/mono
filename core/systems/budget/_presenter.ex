@@ -26,7 +26,7 @@ defmodule Systems.Budget.Presenter do
   defp to_option(%Budget.CurrencyModel{id: id} = currency, locale) do
     %{
       id: id,
-      label: Budget.CurrencyModel.title(currency, locale)
+      value: Budget.CurrencyModel.title(currency, locale)
     }
   end
 end

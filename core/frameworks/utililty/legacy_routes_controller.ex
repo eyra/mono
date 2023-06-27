@@ -15,7 +15,7 @@ defmodule Frameworks.Utility.LegacyRoutesController do
 
     case crew do
       nil ->
-        redirect_to_live(conn, Accounts.start_page_target(user))
+        redirect_to(conn, Accounts.start_page_path(user))
 
       crew ->
         # expect one assignment here
@@ -24,7 +24,6 @@ defmodule Frameworks.Utility.LegacyRoutesController do
     end
   end
 
-  defp redirect_to_live(conn, action), do: redirect_to(conn, Routes.live_path(conn, action))
   defp redirect_to_live(conn, action, [model | _]), do: redirect_to_live(conn, action, model)
   defp redirect_to_live(conn, action, %{id: id}), do: redirect_to_live(conn, action, id)
 

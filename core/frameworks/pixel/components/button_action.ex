@@ -102,6 +102,7 @@ defmodule Frameworks.Pixel.Button.Action do
 
   attr(:to, :string, required: true)
   attr(:method, :string, required: true)
+  attr(:target, :string, default: "_self")
   slot(:inner_block, required: true)
 
   def http(assigns) do
@@ -112,6 +113,7 @@ defmodule Frameworks.Pixel.Button.Action do
       data-to={@to}
       data-method={@method}
       data-csrf={Plug.CSRFProtection.get_csrf_token_for(@to)}
+      target={@target}
     >
       <%= render_slot(@inner_block) %>
     </a>
@@ -119,27 +121,31 @@ defmodule Frameworks.Pixel.Button.Action do
   end
 
   attr(:to, :string, required: true)
+  attr(:target, :string, default: "_self")
   slot(:inner_block, required: true)
 
   def http_get(assigns) do
     ~H"""
-    <a href={@to}>
+    <a href={@to} target={@target}>
       <%= render_slot(@inner_block) %>
     </a>
     """
   end
 
   attr(:to, :string, required: true)
+  attr(:target, :string)
   slot(:inner_block, required: true)
 
   def http_delete(assigns), do: http(assign(assigns, :method, "delete"))
 
   attr(:to, :string, required: true)
+  attr(:target, :string)
   slot(:inner_block, required: true)
 
   def http_post(assigns), do: http(assign(assigns, :method, "post"))
 
   attr(:to, :string, required: true)
+  attr(:target, :string)
   slot(:inner_block, required: true)
 
   def http_new(assigns), do: http(assign(assigns, :method, "new"))

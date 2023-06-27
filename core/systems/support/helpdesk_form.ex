@@ -5,7 +5,6 @@ defmodule Systems.Support.HelpdeskForm do
   alias Systems.Support
   alias Core.Enums
   alias Core.Accounts
-  alias CoreWeb.Router.Helpers, as: Routes
   alias Frameworks.Pixel.Selector
 
   # Handle Selector Update
@@ -53,7 +52,7 @@ defmodule Systems.Support.HelpdeskForm do
         {:noreply,
          socket
          |> put_flash(:info, dgettext("eyra-support", "ticket_created.info.flash"))
-         |> push_redirect(to: Routes.live_path(socket, Accounts.start_page_target(user)))}
+         |> push_redirect(to: Accounts.start_page_path(user))}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}

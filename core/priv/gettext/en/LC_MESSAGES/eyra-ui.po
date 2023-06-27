@@ -152,7 +152,7 @@ msgstr "yesterday"
 
 #, elixir-autogen, elixir-format
 msgid "authentication.required.error"
-msgstr "Please sign in to view this page."
+msgstr "Sign in to view this page"
 
 #, elixir-autogen, elixir-format
 msgid "start.page.console"
@@ -204,8 +204,44 @@ msgstr "Shared with"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.projects"
-msgstr "Data Donation"
+msgstr "Projects"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.projects"
 msgstr "Go to console"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "copy.button"
+msgstr "Copy"
+
+#, elixir-autogen, elixir-format
+msgid "title.placeholder"
+msgstr "Here comes the title.."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "start.page.home"
+msgstr "Go to console"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "collapse.button"
+msgstr "Collapse"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "expand.button"
+msgstr "Expand"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings"
+msgstr "Settings"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings.forward"
+msgstr "Settings"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link"
+msgstr "Privacy"
+
+#, elixir-autogen, elixir-format
+msgid "terms.link"
+msgstr "Terms"

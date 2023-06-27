@@ -2,7 +2,6 @@ defmodule Core.Repo.Migrations.UpdatePoolCriteria do
   use Ecto.Migration
 
   def change do
-
     alter table(:promotions) do
       remove(:published_at)
     end
@@ -36,6 +35,5 @@ defmodule Core.Repo.Migrations.UpdatePoolCriteria do
     end
 
     create(unique_index(:eligibility_criteria, [:submission_id]))
-
   end
 end

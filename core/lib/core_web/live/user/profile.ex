@@ -13,6 +13,7 @@ defmodule CoreWeb.User.Profile do
   alias CoreWeb.User.Forms.Profile, as: ProfileForm
   alias CoreWeb.User.Forms.Student, as: StudentForm
   alias CoreWeb.User.Forms.Features, as: FeaturesForm
+  alias CoreWeb.User.Forms.Settings, as: SettingsForm
 
   alias CoreWeb.UI.Tabbar
   alias CoreWeb.UI.Navigation
@@ -98,6 +99,15 @@ defmodule CoreWeb.User.Profile do
       live_component: FeaturesForm,
       props: %{user: current_user}
     })
+    |> append(%{
+      id: :settings,
+      action: nil,
+      title: dgettext("eyra-ui", "tabbar.item.settings"),
+      forward_title: dgettext("eyra-ui", "tabbar.item.settings.forward"),
+      type: :form,
+      live_component: SettingsForm,
+      props: %{user: current_user}
+    })
   end
 
   defp bar_size({:unknown, _}), do: :unknown
@@ -117,7 +127,6 @@ defmodule CoreWeb.User.Profile do
           <Tabbar.container id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} size={@bar_size} type={:segmented} />
         </Navigation.action_bar>
         <Tabbar.content tabs={@tabs} />
-        <Tabbar.footer tabs={@tabs} />
       </div>
     </.workspace>
     """

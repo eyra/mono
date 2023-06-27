@@ -3,6 +3,7 @@ defmodule CoreWeb.User.ResetPasswordToken do
   The password reset token.
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Stripped.Component, :signup
 
   import Frameworks.Pixel.Form
 
@@ -24,9 +25,6 @@ defmodule CoreWeb.User.ResetPasswordToken do
   end
 
   @impl true
-  def handle_uri(socket), do: socket
-
-  @impl true
   def handle_event(
         "reset-password",
         %{"user" => password_params},
@@ -36,7 +34,7 @@ defmodule CoreWeb.User.ResetPasswordToken do
       {:ok, _} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Password reset successfully.")
+         |> put_flash(:info, dgettext("eyra-user", "password.reset.successfully"))
          |> redirect(to: ~p"/user/signin")}
 
       {:error, changeset} ->
@@ -48,12 +46,12 @@ defmodule CoreWeb.User.ResetPasswordToken do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <.stripped menus={@menus}>
       <Area.content>
         <Margin.y id={:page_top} />
         <Area.form>
           <Text.title2><%= dgettext("eyra-user", "user.password_reset.title") %></Text.title2>
-          <.form id="reset_password_token" :let={form} for={@changeset} phx-submit="reset-password" >
+          <.form id="reset_password_token" :let={form} for={@changeset} phx-submit="reset-password" data-show-errors={true} >
             <.password_input
               form={form}
               field={:password}
@@ -64,11 +62,11 @@ defmodule CoreWeb.User.ResetPasswordToken do
               field={:password_confirmation}
               label_text={dgettext("eyra-user", "password_reset.password_confirmation.label")}
             />
-            <Button.submit label={dgettext("eyra-user", "password_reset.reset_password_button")} />
+            <Button.submit_wide label={dgettext("eyra-user", "password_reset.reset_password_button")} bg_color="bg-grey1" />
           </.form>
         </Area.form>
       </Area.content>
-    </div>
+    </.stripped>
     """
   end
 end

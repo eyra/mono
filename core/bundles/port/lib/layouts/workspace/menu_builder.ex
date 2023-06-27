@@ -26,10 +26,8 @@ defmodule Port.Layouts.Workspace.MenuBuilder do
     default: [
       :language,
       :helpdesk,
-      :settings,
       :profile,
-      :signin,
-      :signout
+      :signin
     ],
     mobile_navbar: [:menu]
   ]
@@ -37,5 +35,5 @@ defmodule Port.Layouts.Workspace.MenuBuilder do
   use CoreWeb.Menu.Builder, home: :eyra
 
   @impl true
-  def can_access?(_user, _id), do: true
+  def include_map(_user), do: %{}
 end

@@ -15,5 +15,5 @@ defmodule Port.Layouts.Stripped.MenuBuilder do
   use CoreWeb.Menu.Builder, home: :eyra
 
   @impl true
-  def can_access?(_user, _id), do: true
+  def include_map(_user), do: %{}
 end

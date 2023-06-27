@@ -52,7 +52,7 @@ config :core,
   ]
 
 config :core, :rate,
-  prune_interval: 5 * 1000,
+  prune_interval: 5 * 60 * 1000,
   quotas: [
     [service: :azure_blob, limit: 1, unit: :call, window: :second, scope: :local],
     [service: :azure_blob, limit: 100, unit: :byte, window: :second, scope: :local]
@@ -82,7 +82,7 @@ config :core,
        :admins,
        ["e.vanderveen@eyra.co"]
 
-config :core, Systems.DataDonation.S3StorageBackend, bucket: "eylixir"
+config :core, :s3, bucket: "eylixir"
 
 config :core,
        :data_donation_storage_backend,

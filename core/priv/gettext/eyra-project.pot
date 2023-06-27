@@ -12,19 +12,7 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "delete.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "preview.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "retract.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "submit.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -72,10 +60,6 @@ msgid "tabbar.item.tasks.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "content.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "add.first.button"
 msgstr ""
 
@@ -85,10 +69,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "add.new.button.short"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "default.project.name"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -129,4 +109,84 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "overview.header.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.items.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "publish.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.nodes.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.new.item.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.new.item.button.short"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.new.node.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.new.node.button.short"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "retract.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "campaign.invite.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "direct.invite.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "direct.invite.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "close.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.concept"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.idle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.offline"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.online"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.proceed.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.title"
 msgstr ""

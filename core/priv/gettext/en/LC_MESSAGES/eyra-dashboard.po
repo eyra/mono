@@ -16,7 +16,7 @@ msgstr "New study"
 
 #, elixir-autogen, elixir-format
 msgid "recent-items.title"
-msgstr "Recent items:"
+msgstr "Recent items"
 
 #, elixir-autogen, elixir-format
 msgid "empty.description"

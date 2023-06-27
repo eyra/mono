@@ -3,6 +3,7 @@ defmodule Link.User.SessionHTML do
 
   import CoreWeb.UI.Footer
   import CoreWeb.UI.Language
+  import Frameworks.Pixel.Form
 
   embed_templates("session_html/*")
 

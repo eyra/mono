@@ -20,7 +20,7 @@ defmodule CoreWeb.UserAuthTest do
 
     test_conf = [
       # fake onboarding path
-      participant_onboarding_page: CoreWeb.User.Profile
+      participant_onboarding_page: "/user/profile"
     ]
 
     Application.put_env(:core, CoreWeb.UserAuth, test_conf)
@@ -176,7 +176,7 @@ defmodule CoreWeb.UserAuthTest do
       assert redirected_to(conn) == ~p"/user/signin"
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
-               "Deze pagina bekijken? Log hier eerst in."
+               "Log in om deze pagina te bekijken"
     end
 
     test "stores the path to redirect to on GET", %{conn: conn} do

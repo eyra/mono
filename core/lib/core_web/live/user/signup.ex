@@ -3,12 +3,10 @@ defmodule CoreWeb.User.Signup do
   The home screen.
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Stripped.Component, :onboarding
+
+  alias CoreWeb.User.Form
   alias CoreWeb.Router.Helpers, as: Routes
-
-  import Frameworks.Pixel.Form
-
-  alias Frameworks.Pixel.Button
-  alias Frameworks.Pixel.Text
 
   alias Core.Accounts
   alias Core.Accounts.User
@@ -37,7 +35,7 @@ defmodule CoreWeb.User.Signup do
 
         {:noreply,
          socket
-         |> put_flash(:info, "User created successfully.")
+         |> put_flash(:info, dgettext("eyra-user", "account.created.successfully"))
          |> push_redirect(to: Routes.live_path(socket, CoreWeb.User.AwaitConfirmation))}
     end
   end
@@ -48,34 +46,21 @@ defmodule CoreWeb.User.Signup do
     {:noreply, socket |> assign(changeset: changeset)}
   end
 
-  @impl true
-  def handle_uri(socket), do: socket
-
   # data(changeset, :any)
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
-      <Area.content>
-      <Margin.y id={:page_top} />
-      <Area.form>
-        <Text.title2><%= dgettext("eyra-account", "signup.title") %></Text.title2>
-        <div>
-          <.form id="signup" :let={form} for={@changeset} phx-submit="signup" phx-change="form_change" >
-            <.email_input form={form} field={:email} label_text={dgettext("eyra-account", "email.label")} />
-            <.password_input form={form} field={:password} label_text={dgettext("eyra-account", "password.label")} />
-            <Button.submit_wide label={dgettext("eyra-account", "signup.button")} bg_color="bg-grey1" />
-          </.form>
-        </div>
-        <div class="mb-8" />
-        <%= dgettext("eyra-account", "signin.label") %>
-        <Button.link
-          label={dgettext("eyra-account", "signin.link")}
-          path={~p"/user/signin"}
-        />
-      </Area.form>
-      </Area.content>
-    </div>
+    <.stripped menus={@menus}>
+      <div id="signup_content" phx-hook="LiveContent" data-show-errors={true}>
+        <Area.content>
+        <Margin.y id={:page_top} />
+        <Area.form>
+          <Text.title2><%= dgettext("eyra-account", "signup.title") %></Text.title2>
+          <Form.password_signup changeset={@changeset} />
+        </Area.form>
+        </Area.content>
+      </div>
+    </.stripped>
     """
   end
 end

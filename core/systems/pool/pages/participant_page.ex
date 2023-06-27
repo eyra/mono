@@ -15,27 +15,26 @@ defmodule Systems.Pool.ParticipantPage do
   }
 
   @impl true
-  def mount(%{"id" => user_id}, _session, socket) do
+  def mount(%{"id" => user_id}, _session, %{assigns: assigns} = socket) do
     user = Accounts.get_user!(user_id, [:features, :profile])
+    # assigning user as the wallet owner, not to be confused with current_user
+    socket = assign(socket, :user, user)
 
     wallets =
       Budget.Public.list_wallets(user)
-      |> Enum.map(&Budget.WalletViewBuilder.view_model(&1, user, url_resolver(socket)))
+      |> Enum.map(&Budget.WalletViewBuilder.view_model(&1, assigns))
 
     campaign_preload = Campaign.Model.preload_graph(:full)
 
     contributions =
       user
       |> Campaign.Public.list_subject_campaigns(preload: campaign_preload)
-      |> Enum.map(
-        &ViewModelBuilder.view_model(&1, {__MODULE__, :contribution}, user, url_resolver(socket))
-      )
+      |> Enum.map(&ViewModelBuilder.view_model(&1, {__MODULE__, :contribution}, assigns))
 
     {
       :ok,
       socket
       |> assign(
-        user: user,
         wallets: wallets,
         contributions: contributions
       )

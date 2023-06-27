@@ -299,7 +299,6 @@ defmodule Systems.Lab.DayView do
             <.date_input form={form}
               field={:date}
               label_text={dgettext("link-lab", "day.schedule.date.label")}
-              value={@day_model.date}
             />
             <% end %>
           </.wrap>

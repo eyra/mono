@@ -7,7 +7,7 @@ defmodule Next.Menu.Items do
   @impl true
   def values() do
     %{
-      eyra: %{action: %{type: :http_get, to: ~p"/"}, title: "Eyra"},
+      next: %{action: %{type: :http_get, to: ~p"/console"}, title: "Next"},
       admin: %{
         action: %{type: :redirect, to: ~p"/admin/config"},
         title: dgettext("eyra-ui", "menu.item.admin")
@@ -17,7 +17,7 @@ defmodule Next.Menu.Items do
         title: dgettext("eyra-ui", "menu.item.helpdesk")
       },
       support: %{
-        action: %{type: :redirect, to: ~p"/support/tickets"},
+        action: %{type: :redirect, to: ~p"/support/ticket"},
         title: dgettext("eyra-ui", "menu.item.support")
       },
       console: %{
@@ -28,20 +28,16 @@ defmodule Next.Menu.Items do
         action: %{type: :redirect, to: ~p"/todo"},
         title: dgettext("eyra-ui", "menu.item.todo")
       },
-      settings: %{
-        action: %{type: :redirect, to: ~p"/user/settings"},
-        title: dgettext("eyra-ui", "menu.item.settings")
-      },
       profile: %{
         action: %{type: :redirect, to: ~p"/user/profile"},
         title: dgettext("eyra-ui", "menu.item.profile")
       },
       signout: %{
-        action: %{type: :http_delete, to: ~p"/user/signout"},
+        action: %{type: :http_delete, to: ~p"/user/session"},
         title: dgettext("eyra-ui", "menu.item.signout")
       },
       signin: %{
-        action: %{type: :http_get, to: ~p"/user/signin"},
+        action: %{type: :redirect, to: ~p"/user/signin"},
         title: dgettext("eyra-ui", "menu.item.signin")
       },
       menu: %{
@@ -49,8 +45,12 @@ defmodule Next.Menu.Items do
         title: dgettext("eyra-ui", "menu.item.menu")
       },
       payments: %{
-        action: %{type: :redirect, path: "/payments"},
+        action: %{type: :redirect, to: "/payment"},
         title: dgettext("eyra-ui", "menu.item.payments")
+      },
+      projects: %{
+        action: %{type: :redirect, to: "/project"},
+        title: dgettext("eyra-ui", "menu.item.projects")
       }
     }
   end

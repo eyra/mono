@@ -31,14 +31,6 @@ msgid "profile.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "signin.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "signin.link"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "signup.button"
 msgstr ""
 
@@ -152,4 +144,20 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "ehtical.code.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "signin.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "signin.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "await.confirmation.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "account.created.info.flash"
 msgstr ""
