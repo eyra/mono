@@ -12,8 +12,10 @@ defmodule Systems.Benchmark.ToolPage do
   }
 
   @impl true
-  def get_authorization_context(%{"spot" => spot_id}, _session, _socket) do
-    Benchmark.Public.get_spot!(String.to_integer(spot_id))
+  def get_authorization_context(%{"id" => id, "spot" => spot_id}, _session, %{
+        assigns: %{current_user: _user}
+      }) do
+    Benchmark.Public.get_spot_for_tool(String.to_integer(id), String.to_integer(spot_id))
   end
 
   @impl true

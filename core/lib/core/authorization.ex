@@ -59,7 +59,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Project.OverviewPage, [:researcher])
   grant_access(Systems.Project.NodePage, [:researcher, :owner])
   grant_access(Systems.Project.ItemContentPage, [:researcher, :owner])
-  grant_access(Systems.Benchmark.ToolPage, [:member, :owner])
+  grant_access(Systems.Benchmark.ToolPage, [:owner])
   grant_access(Systems.Benchmark.LeaderboardPage, [:visitor, :member])
 
   grant_access(CoreWeb.User.Signin, [:visitor])
@@ -198,13 +198,15 @@ defmodule Core.Authorization do
     can?(principal, permission)
   end
 
-  def can?(principal, entity, permission) when is_binary(permission) do
-    can?(principal, permission) or
-      has_required_roles_in_context?(principal, entity, permission)
-  end
+  def can_access?(_principal, nil, _module), do: false
 
   def can_access?(principal, entity, module) when is_atom(module) do
     can?(principal, entity, GreenLight.Permissions.access_permission(module))
+  end
+
+  def can?(principal, entity, permission) when is_binary(permission) do
+    can?(principal, permission) or
+      has_required_roles_in_context?(principal, entity, permission)
   end
 
   def users_with_role(_, _, preload \\ [])
