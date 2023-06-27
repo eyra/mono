@@ -45,7 +45,7 @@ deps: ${MIX_PROJECTS:%=%/deps}
 	cd $* && mix deps.get
 
 .PHONY: docs
-docs: ${MIX_PROJECTS:%=%/doc}
+docs: ${MIX_PROJECTS:%=%/docs}
 %/doc:
 	mkdir -p doc
 	cd $* && mix docs
