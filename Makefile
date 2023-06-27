@@ -46,7 +46,7 @@ deps: ${MIX_PROJECTS:%=%/deps}
 
 .PHONY: docs
 docs: ${MIX_PROJECTS:%=%/docs}
-%/doc:
+%/docs:
 	mkdir -p doc
 	cd $* && mix docs
 	cp -R $*/doc/ doc/`basename $*`
