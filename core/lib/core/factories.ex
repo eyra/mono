@@ -30,7 +30,8 @@ defmodule Core.Factories do
     Budget,
     Bookkeeping,
     Content,
-    Org
+    Org,
+    Project
   }
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
@@ -245,6 +246,14 @@ defmodule Core.Factories do
     build(:assignment, %{})
   end
 
+  def build(:project) do
+    build(:project, %{name: Faker.Lorem.word()})
+  end
+
+  def build(:project_node) do
+    build(:project_node, %{name: Faker.Lorem.word(), project_path: [1, 2]})
+  end
+
   def build(:auth_node, %{} = attributes) do
     %Authorization.Node{}
     |> struct!(attributes)
@@ -346,6 +355,26 @@ defmodule Core.Factories do
       promotion: promotion,
       promotable_assignment: assignment,
       submissions: submissions
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:project, %{} = attributes) do
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+    {node, attributes} = Map.pop(attributes, :budget, build(:project_node))
+
+    %Project.Model{
+      auth_node: auth_node,
+      root: node
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:project_node, %{} = attributes) do
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+
+    %Project.NodeModel{
+      auth_node: auth_node
     }
     |> struct!(attributes)
   end

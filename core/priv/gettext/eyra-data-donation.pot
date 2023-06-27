@@ -81,3 +81,19 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "task.list.hint"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task.platform.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pdf-replace-file-button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pdf-select-file-button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pdf-select-placeholder"
+msgstr ""

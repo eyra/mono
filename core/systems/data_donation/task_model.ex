@@ -1,5 +1,7 @@
 defmodule Systems.DataDonation.TaskModel do
   use Ecto.Schema
+  use Frameworks.Utility.Schema
+
   import Ecto.Changeset
 
   alias Systems.{
@@ -23,10 +25,24 @@ defmodule Systems.DataDonation.TaskModel do
     timestamps()
   end
 
-  @fields ~w(position title description)a
+  @fields ~w(platform position title description)a
 
   def changeset(model, params) do
     model
     |> cast(params, @fields)
   end
+
+  def preload_graph(:down),
+    do:
+      preload_graph([
+        :survey_task,
+        :request_task,
+        :download_task,
+        :donate_task
+      ])
+
+  def preload_graph(:survey_task), do: [survey_task: []]
+  def preload_graph(:request_task), do: [request_task: []]
+  def preload_graph(:download_task), do: [download_task: []]
+  def preload_graph(:donate_task), do: [donate_task: []]
 end

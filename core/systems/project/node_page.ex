@@ -28,6 +28,18 @@ defmodule Systems.Project.NodePage do
   end
 
   @impl true
+  def handle_event("delete", %{"item" => item_id}, socket) do
+    Project.Public.delete_item(String.to_integer(item_id))
+
+    {
+      :noreply,
+      socket
+      |> update_view_model()
+      |> update_menus()
+    }
+  end
+
+  @impl true
   def handle_event(
         "card_clicked",
         %{"item" => card_id},
@@ -62,10 +74,10 @@ defmodule Systems.Project.NodePage do
             <div class="h-full pt-2px lg:pt-1">
               <Button.Action.send event="create_item">
                 <div class="sm:hidden">
-                  <Button.Face.plain_icon label={dgettext("eyra-project", "add.new.node.button.short")} icon={:forward} />
+                  <Button.Face.plain_icon label={dgettext("eyra-project", "create.item.button.short")} icon={:forward} />
                 </div>
                 <div class="hidden sm:block">
-                  <Button.Face.plain_icon label={dgettext("eyra-project", "add.new.node.button")} icon={:forward} />
+                  <Button.Face.plain_icon label={dgettext("eyra-project", "create.item.button")} icon={:forward} />
                 </div>
               </Button.Action.send>
             </div>

@@ -20,7 +20,8 @@ defmodule Systems.Project.NodePageBuilder do
       id: id,
       title: node.name,
       node_cards: node_cards,
-      item_cards: item_cards
+      item_cards: item_cards,
+      node: node
     }
   end
 

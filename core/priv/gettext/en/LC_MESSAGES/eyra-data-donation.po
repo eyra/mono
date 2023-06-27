@@ -81,3 +81,19 @@ msgstr "Title"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "task.list.hint"
 msgstr "Change order with the arrows"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "task.platform.label"
+msgstr "Platform"
+
+#, elixir-autogen, elixir-format
+msgid "pdf-replace-file-button"
+msgstr "Replace PDF"
+
+#, elixir-autogen, elixir-format
+msgid "pdf-select-file-button"
+msgstr "Select PDF"
+
+#, elixir-autogen, elixir-format
+msgid "pdf-select-placeholder"
+msgstr "Select a pdf file"

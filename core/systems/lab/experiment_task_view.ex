@@ -164,7 +164,7 @@ defmodule Systems.Lab.ExperimentTaskView do
 
     %{
       id: id,
-      label: "#{date}  |  #{time}  |  #{location}" |> Macro.camelize()
+      value: "#{date}  |  #{time}  |  #{location}" |> Macro.camelize()
     }
   end
 

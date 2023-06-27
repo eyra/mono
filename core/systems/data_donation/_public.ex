@@ -52,6 +52,11 @@ defmodule Systems.DataDonation.Public do
     |> Repo.one()
   end
 
+  def get_document_task!(id, preload \\ []) do
+    from(task in DataDonation.DocumentTaskModel, preload: ^preload)
+    |> Repo.get!(id)
+  end
+
   def create(
         %{subject_count: _, director: _} = attrs,
         %Authorization.Node{} = auth_node

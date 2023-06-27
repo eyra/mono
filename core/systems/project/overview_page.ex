@@ -97,6 +97,7 @@ defmodule Systems.Project.OverviewPage do
         project_id: nil,
         dialog: nil
       )
+      |> update_projects()
       |> update_cards()
       |> update_menus()
     }
@@ -134,21 +135,6 @@ defmodule Systems.Project.OverviewPage do
     {
       :noreply,
       socket |> assign(popup: popup)
-    }
-  end
-
-  @impl true
-  def handle_event("duplicate", %{"item" => project_id}, socket) do
-    preload = Project.Model.preload_graph(:full)
-    _project = Project.Public.get!(String.to_integer(project_id), preload)
-
-    # Project.Assembly.copy(project)
-
-    {
-      :noreply,
-      socket
-      |> update_cards()
-      |> update_menus()
     }
   end
 

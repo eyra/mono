@@ -17,7 +17,7 @@ msgstr "Preview"
 
 #, elixir-autogen, elixir-format
 msgid "delete.confirm"
-msgstr ""
+msgstr "project"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.config"

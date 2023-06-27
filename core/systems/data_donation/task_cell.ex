@@ -22,6 +22,7 @@ defmodule Systems.DataDonation.TaskCell do
       )
       |> update_task()
       |> update_task_form()
+      |> update_special_form()
       |> update_title()
       |> update_buttons()
     }
@@ -44,7 +45,7 @@ defmodule Systems.DataDonation.TaskCell do
   end
 
   defp update_task(%{assigns: %{entity_id: entity_id}} = socket) do
-    task = DataDonation.Public.get_task!(entity_id)
+    task = DataDonation.Public.get_task!(entity_id, DataDonation.TaskModel.preload_graph(:down))
     socket |> assign(task: task)
   end
 
@@ -57,6 +58,29 @@ defmodule Systems.DataDonation.TaskCell do
 
     socket |> assign(task_form: task_form)
   end
+
+  defp update_special_form(%{assigns: %{task: task}} = socket) do
+    special_form = special_form(task)
+    socket |> assign(special_form: special_form)
+  end
+
+  defp special_form(%{request_task: %{id: id}}),
+    do: %{
+      id: "#{id}_request_form",
+      module: DataDonation.DocumentTaskForm,
+      entity_id: id,
+      parent: %{type: __MODULE__, id: id}
+    }
+
+  defp special_form(%{download_task: %{id: id}}),
+    do: %{
+      id: "#{id}_request_form",
+      module: DataDonation.DocumentTaskForm,
+      entity_id: id,
+      parent: %{type: __MODULE__, id: id}
+    }
+
+  defp special_form(_), do: nil
 
   defp update_title(%{assigns: %{task: task}} = socket) do
     title = get_title(task)
@@ -137,6 +161,10 @@ defmodule Systems.DataDonation.TaskCell do
       </div>
       <%= if @expanded? do %>
         <.live_component {@task_form} />
+        <%= if @special_form do %>
+          <.live_component {@special_form} />
+          <.spacing value="XS" />
+        <% end %>
         <Button.dynamic {@collapse_button}/>
       <% else %>
         <Button.dynamic {@expand_button}/>
