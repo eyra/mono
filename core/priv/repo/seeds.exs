@@ -24,7 +24,7 @@ images = [
   "raw_url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1515378791036-0648a3ef77b2%3Fixid%3DMnwyMTY0MzZ8MHwxfHNlYXJjaHw4fHx3b3JrfGVufDB8fHx8MTYyMTc3NjgwOQ%26ixlib%3Drb-1.2.1&username=christinhumephoto&name=Christin+Hume&blur_hash=LMF%3B%3Dw0LAJR%25~A9uT0nNRjxaW%3DIo"
 ]
 
-data_donation_promotions =
+_data_donation_promotions =
   Enum.map(images, fn image ->
     %{
       title: Faker.Lorem.sentence(),
@@ -52,15 +52,15 @@ data_donation_promotions =
     }
   end)
 
-Enum.each(data_donation_promotions, fn promotion ->
-  data = %{
-    script: File.read!(Path.join([:code.priv_dir(:core), "repo", "script.py"])),
-    subject_count: 400
-    # promotion: promotion
-  }
+# Enum.each(data_donation_promotions, fn promotion ->
+#   data = %{
+#     script: File.read!(Path.join([:code.priv_dir(:core), "repo", "script.py"])),
+#     subject_count: 400
+#     # promotion: promotion
+#   }
 
-  Core.Factories.insert!(:data_donation_tool, data)
-end)
+#   Core.Factories.insert!(:data_donation_tool, data)
+# end)
 
 # campaigns =
 # Enum.map(data_donation_tools, fn data_donation_tool ->

@@ -48,7 +48,8 @@ defmodule Systems.Project.Assembly do
     |> Repo.transaction()
   end
 
-  def create_item(%Project.NodeModel{id: node_id} = node, tool_special) do
+  def create_item(name, %Project.NodeModel{id: node_id} = node, tool_special)
+      when is_binary(name) do
     project =
       from(p in Project.Model, where: p.root_id == ^node_id, preload: [:auth_node])
       |> Repo.one!()
@@ -59,11 +60,12 @@ defmodule Systems.Project.Assembly do
     end)
     |> prepare_tool(tool_special)
     |> Multi.insert(:tool_ref, fn %{tool: tool} ->
-      Project.Public.create_tool_ref(tool_special, tool)
+      key = String.to_existing_atom("#{tool_special}_tool")
+      Project.Public.create_tool_ref(key, tool)
     end)
     |> Multi.insert(:item, fn %{tool_ref: tool_ref} ->
       Project.Public.create_item(
-        %{name: "Item", project_path: [project.id, node_id]},
+        %{name: name, project_path: [project.id, node_id]},
         node,
         tool_ref
       )
@@ -120,14 +122,14 @@ defmodule Systems.Project.Assembly do
     end)
   end
 
-  defp prepare_tool(multi, :data_donation_tool) do
+  defp prepare_tool(multi, :data_donation) do
     multi
     |> Multi.insert(:tool, fn %{auth_node: auth_node} ->
       DataDonation.Public.create(%{subject_count: 0, director: :project}, auth_node)
     end)
   end
 
-  defp prepare_tool(multi, :benchmark_tool) do
+  defp prepare_tool(multi, :benchmark) do
     multi
     |> Multi.insert(:tool, fn %{auth_node: auth_node} ->
       Benchmark.Public.create(%{title: "", director: :project}, auth_node)

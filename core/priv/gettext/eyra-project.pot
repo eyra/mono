@@ -190,3 +190,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "create.item.button.short"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.item.title"
+msgstr ""

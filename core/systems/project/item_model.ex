@@ -63,6 +63,11 @@ defmodule Systems.Project.ItemModel do
       tags = get_card_tags(tool)
       path = ~p"/project/item/#{id}/content"
 
+      edit = %{
+        action: %{type: :send, event: "edit", item: id},
+        face: %{type: :label, label: "Edit", wrap: true}
+      }
+
       delete = %{
         action: %{type: :send, event: "delete", item: id},
         face: %{type: :icon, icon: :delete}
@@ -76,7 +81,7 @@ defmodule Systems.Project.ItemModel do
         title: name,
         tags: tags,
         info: ["#{subject_count} participants  |  0 donations"],
-        left_actions: [],
+        left_actions: [edit],
         right_actions: [delete]
       }
     end
@@ -101,6 +106,11 @@ defmodule Systems.Project.ItemModel do
       tags = get_card_tags(tool)
       path = ~p"/project/item/#{id}/content"
       label = get_label(status)
+
+      edit = %{
+        action: %{type: :send, event: "edit", item: id},
+        face: %{type: :label, label: "Edit", wrap: true}
+      }
 
       delete = %{
         action: %{type: :send, event: "delete", item: id},
@@ -127,7 +137,7 @@ defmodule Systems.Project.ItemModel do
         title: name,
         tags: tags,
         info: [info_line_1],
-        left_actions: [],
+        left_actions: [edit],
         right_actions: [delete]
       }
     end

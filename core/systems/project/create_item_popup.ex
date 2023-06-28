@@ -1,4 +1,4 @@
-defmodule Systems.Project.CreatePopup do
+defmodule Systems.Project.CreateItemPopup do
   use CoreWeb, :live_component
 
   alias Frameworks.Pixel.Selector
@@ -10,36 +10,36 @@ defmodule Systems.Project.CreatePopup do
   # Handle Tool Type Selector Update
   @impl true
   def update(
-        %{active_item_id: active_item_id, selector_id: :template_selector},
-        %{assigns: %{template_labels: template_labels}} = socket
+        %{active_item_id: active_item_id, selector_id: :tool_selector},
+        %{assigns: %{tool_labels: tool_labels}} = socket
       ) do
-    %{id: selected_template} = Enum.find(template_labels, &(&1.id == active_item_id))
+    %{id: selected_tool} = Enum.find(tool_labels, &(&1.id == active_item_id))
 
     {
       :ok,
       socket
-      |> assign(selected_template: selected_template)
+      |> assign(selected_tool: selected_tool)
     }
   end
 
   # Initial Update
   @impl true
-  def update(%{id: id, user: user, target: target}, socket) do
-    title = dgettext("eyra-project", "create.title")
+  def update(%{id: id, node: node, target: target}, socket) do
+    title = dgettext("eyra-project", "create.item.title")
 
     {
       :ok,
       socket
-      |> assign(id: id, user: user, target: target, title: title)
-      |> init_templates()
+      |> assign(id: id, node: node, target: target, title: title)
+      |> init_tools()
       |> init_buttons()
     }
   end
 
-  defp init_templates(socket) do
-    selected_template = :empty
-    template_labels = Project.Templates.labels(selected_template)
-    socket |> assign(template_labels: template_labels, selected_template: selected_template)
+  defp init_tools(socket) do
+    selected_tool = :empty
+    tool_labels = Project.Tools.labels(selected_tool)
+    socket |> assign(tool_labels: tool_labels, selected_tool: selected_tool)
   end
 
   defp init_buttons(%{assigns: %{myself: myself}} = socket) do
@@ -65,10 +65,11 @@ defmodule Systems.Project.CreatePopup do
   def handle_event(
         "proceed",
         _,
-        %{assigns: %{selected_template: selected_template}} = socket
+        %{assigns: %{selected_tool: selected_tool}} = socket
       ) do
-    {:ok, %{project: %{root: %{id: root_node_id}}}} = create_project(socket, selected_template)
-    {:noreply, socket |> redirect_to(root_node_id)}
+    create_item(socket, selected_tool)
+
+    {:noreply, socket |> close()}
   end
 
   @impl true
@@ -81,14 +82,9 @@ defmodule Systems.Project.CreatePopup do
     socket
   end
 
-  defp redirect_to(%{assigns: %{target: target}} = socket, project_id) do
-    update_target(target, %{module: __MODULE__, action: %{redirect_to: project_id}})
-    socket
-  end
-
-  defp create_project(%{assigns: %{user: user}}, template) do
-    name = Project.Templates.translate(template)
-    Project.Assembly.create(name, user, template)
+  defp create_item(%{assigns: %{node: node}}, tool) do
+    name = Project.Tools.translate(tool)
+    Project.Assembly.create_item(name, node, tool)
   end
 
   @impl true
@@ -99,8 +95,8 @@ defmodule Systems.Project.CreatePopup do
       <.spacing value="S" />
       <.live_component
         module={Selector}
-        id={:template_selector}
-        items={@template_labels}
+        id={:tool_selector}
+        items={@tool_labels}
         type={:radio}
         optional?={false}
         parent={%{type: __MODULE__, id: @id}}

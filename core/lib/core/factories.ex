@@ -251,7 +251,15 @@ defmodule Core.Factories do
   end
 
   def build(:project_node) do
-    build(:project_node, %{name: Faker.Lorem.word(), project_path: [1, 2]})
+    build(:project_node, %{name: Faker.Lorem.word(), project_path: []})
+  end
+
+  def build(:project_item) do
+    build(:project_item, %{name: Faker.Lorem.word(), project_path: []})
+  end
+
+  def build(:tool_ref) do
+    build(:tool_ref, %{})
   end
 
   def build(:auth_node, %{} = attributes) do
@@ -375,6 +383,34 @@ defmodule Core.Factories do
 
     %Project.NodeModel{
       auth_node: auth_node
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:project_item, %{} = attributes) do
+    {node, attributes} = Map.pop(attributes, :node, build(:project_node))
+    {tool_ref, attributes} = Map.pop(attributes, :tool_ref, build(:tool_ref))
+
+    %Project.ItemModel{
+      node: node,
+      tool_ref: tool_ref
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:tool_ref, %{} = attributes) do
+    {item, attributes} = Map.pop(attributes, :item, build(:project_item))
+    {survey_tool, attributes} = Map.pop(attributes, :survey_tool, nil)
+    {lab_tool, attributes} = Map.pop(attributes, :lab_tool, nil)
+    {data_donation_tool, attributes} = Map.pop(attributes, :data_donation_tool, nil)
+    {benchmark_tool, attributes} = Map.pop(attributes, :benchmark_tool, nil)
+
+    %Project.ToolRefModel{
+      item: item,
+      survey_tool: survey_tool,
+      lab_tool: lab_tool,
+      data_donation_tool: data_donation_tool,
+      benchmark_tool: benchmark_tool
     }
     |> struct!(attributes)
   end

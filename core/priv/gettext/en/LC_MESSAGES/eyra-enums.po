@@ -340,4 +340,4 @@ msgstr "Benchmark"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "project_tools.data_donation"
-msgstr "Data Donation Study"
+msgstr "Data Donation"
