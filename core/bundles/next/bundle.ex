@@ -26,6 +26,7 @@ defmodule Next.Bundle do
         scope "/", Next do
           pipe_through([:browser, :require_authenticated_user])
           live("/console", Console.Page)
+          live("/next", Console.Page)
         end
       end
     end
