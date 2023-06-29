@@ -63,7 +63,7 @@ export const Tabbar = {
       var isVisible = tab.id === nextTabId;
       setVisible(tab, isVisible);
       if (isVisible) {
-        tab.dispatchEvent(new Event("tab-activated", { bubbles: true}));
+        tab.dispatchEvent(new Event("tab-activated", { bubbles: true }));
       }
     });
 
