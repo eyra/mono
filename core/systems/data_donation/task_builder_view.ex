@@ -16,23 +16,15 @@ defmodule Systems.DataDonation.TaskBuilderView do
   end
 
   @impl true
-  def update(%{action: "up", task: %{tool_id: tool_id, position: position} = task}, socket) do
-    if task_above = DataDonation.Public.get_task(tool_id, position - 1) do
-      DataDonation.Public.switch_position(task, task_above)
-      {:ok, socket |> update_tasks()}
-    else
-      {:ok, socket}
-    end
+  def update(%{action: "up", task: %{position: position} = task}, socket) do
+    {:ok, _} = DataDonation.Public.update_position(task, position - 1)
+    {:ok, socket |> update_tasks()}
   end
 
   @impl true
-  def update(%{action: "down", task: %{tool_id: tool_id, position: position} = task}, socket) do
-    if task_below = DataDonation.Public.get_task(tool_id, position + 1) do
-      DataDonation.Public.switch_position(task, task_below)
-      {:ok, socket |> update_tasks()}
-    else
-      {:ok, socket}
-    end
+  def update(%{action: "down", task: %{position: position} = task}, socket) do
+    {:ok, _} = DataDonation.Public.update_position(task, position + 1)
+    {:ok, socket |> update_tasks()}
   end
 
   @impl true

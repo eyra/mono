@@ -150,6 +150,18 @@ defmodule Core.Factories do
     build(:lab_tool, %{})
   end
 
+  def build(:data_donation_tool) do
+    build(:data_donation_tool, %{})
+  end
+
+  def build(:data_donation_task) do
+    build(:data_donation_task, %{})
+  end
+
+  def build(:data_donation_document_task) do
+    build(:data_donation_document_task, %{})
+  end
+
   def build(:time_slot) do
     build(:time_slot, %{})
   end
@@ -576,6 +588,24 @@ defmodule Core.Factories do
     %DataDonation.ToolModel{
       auth_node: auth_node
     }
+    |> struct!(attributes)
+  end
+
+  def build(:data_donation_task, %{} = attributes) do
+    {tool, attributes} = Map.pop(attributes, :tool, build(:data_donation_tool))
+
+    {document_task, attributes} =
+      Map.pop(attributes, :document_task, build(:data_donation_document_task))
+
+    %DataDonation.TaskModel{
+      tool: tool,
+      download_task: document_task
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:data_donation_document_task, %{} = attributes) do
+    %DataDonation.DocumentTaskModel{}
     |> struct!(attributes)
   end
 

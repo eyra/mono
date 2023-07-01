@@ -131,18 +131,84 @@ defmodule Systems.DataDonation.Public do
     |> Repo.transaction()
   end
 
-  def delete(%DataDonation.TaskModel{} = task) do
-    Repo.delete(task)
+  def delete(%DataDonation.TaskModel{tool_id: tool_id} = task) do
+    Multi.new()
+    |> Multi.delete(:task, task)
+    |> Multi.run(:tasks, fn _, _ ->
+      {:ok, list_tasks(tool_id)}
+    end)
+    |> Multi.run(:order_and_update, fn _, %{tasks: tasks} ->
+      {:ok, rearrange(tasks)}
+    end)
+    |> Repo.transaction()
   end
 
-  def switch_position(
-        %DataDonation.TaskModel{position: position1} = task1,
-        %DataDonation.TaskModel{position: position2} = task2
-      ) do
+  def update_position(%DataDonation.TaskModel{tool_id: tool_id, position: old}, new)
+      when old == new,
+      do: {:ok, %{tasks: list_tasks(tool_id)}}
+
+  def update_position(%DataDonation.TaskModel{id: id, tool_id: tool_id, position: old}, new) do
     Multi.new()
-    |> Multi.update(:task1, DataDonation.TaskModel.changeset(task1, %{position: position2}))
-    |> Multi.update(:task2, DataDonation.TaskModel.changeset(task2, %{position: position1}))
+    |> Multi.run(:tasks, fn _, _ ->
+      {:ok, list_tasks(tool_id)}
+    end)
+    |> Multi.run(:validate_old_position, fn _, %{tasks: tasks} ->
+      validate_old_position(tasks, id, old)
+    end)
+    |> Multi.run(:validate_new_position, fn _, %{tasks: tasks} ->
+      validate_new_position(tasks, new)
+    end)
+    |> Multi.run(:order_and_update, fn _, %{tasks: tasks} ->
+      {:ok, rearrange(tasks, old, new)}
+    end)
     |> Repo.transaction()
+  end
+
+  def validate_old_position(tasks, id, pos) do
+    validate_old_position(tasks, id, pos, Enum.count(tasks))
+  end
+
+  def validate_old_position([%{id: id_, position: pos_} | _], id, pos, count)
+      when id == id_ and pos == pos_ do
+    if pos >= 0 and pos < count do
+      {:ok, true}
+    else
+      {:error, :out_of_bounds}
+    end
+  end
+
+  def validate_old_position([%{id: id_} | _], id, _, _) when id == id_, do: {:error, :out_of_sync}
+
+  def validate_old_position([_ | tl], id, pos, count),
+    do: validate_old_position(tl, id, pos, count)
+
+  def validate_old_position([], _, _, _), do: {:error, :task_not_found}
+
+  def validate_new_position(tasks, pos) do
+    if pos >= 0 and pos < Enum.count(tasks) do
+      {:ok, true}
+    else
+      {:error, :out_of_bounds}
+    end
+  end
+
+  def rearrange(tasks, old, new) do
+    {task, tasks} = List.pop_at(tasks, old)
+
+    tasks
+    |> List.insert_at(new, task)
+    |> rearrange()
+  end
+
+  def rearrange(tasks) do
+    tasks
+    |> Enum.with_index()
+    |> Enum.map(&prepare_update_position/1)
+    |> Enum.map(&Repo.update/1)
+  end
+
+  def prepare_update_position({%DataDonation.TaskModel{} = task, index}) do
+    DataDonation.TaskModel.changeset(task, %{position: index})
   end
 
   def copy(%DataDonation.ToolModel{} = tool, auth_node) do
