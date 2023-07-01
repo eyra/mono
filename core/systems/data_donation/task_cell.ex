@@ -17,7 +17,6 @@ defmodule Systems.DataDonation.TaskCell do
         id: id,
         entity_id: entity_id,
         parent: parent,
-        expanded?: false,
         relative_position: relative_position
       )
       |> update_task()
@@ -26,16 +25,6 @@ defmodule Systems.DataDonation.TaskCell do
       |> update_title()
       |> update_buttons()
     }
-  end
-
-  @impl true
-  def handle_event("collapse", _params, socket) do
-    {:noreply, socket |> assign(expanded?: false)}
-  end
-
-  @impl true
-  def handle_event("expand", _params, socket) do
-    {:noreply, socket |> assign(expanded?: true)}
   end
 
   @impl true
@@ -104,7 +93,7 @@ defmodule Systems.DataDonation.TaskCell do
     }
 
     collapse_button = %{
-      action: %{type: :send, event: "collapse"},
+      action: %{type: :fake},
       face: %{
         type: :label,
         label: dgettext("eyra-ui", "collapse.button"),
@@ -114,7 +103,7 @@ defmodule Systems.DataDonation.TaskCell do
     }
 
     expand_button = %{
-      action: %{type: :send, event: "expand"},
+      action: %{type: :fake},
       face: %{
         type: :label,
         label: dgettext("eyra-ui", "expand.button"),
@@ -147,7 +136,7 @@ defmodule Systems.DataDonation.TaskCell do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="bg-white rounded-md p-6">
+    <div id={@id} class="bg-white rounded-md p-6" phx-hook="Cell" >
       <div class="flex flex-row gap-4">
         <Text.title3><%= @title %></Text.title3>
         <div class="flex-grow" />
@@ -159,16 +148,21 @@ defmodule Systems.DataDonation.TaskCell do
         <% end %>
         <Button.dynamic {@delete_button}/>
       </div>
-      <%= if @expanded? do %>
+      <div class="cell-expanded-view">
         <.live_component {@task_form} />
         <%= if @special_form do %>
           <.live_component {@special_form} />
           <.spacing value="XS" />
         <% end %>
-        <Button.dynamic {@collapse_button}/>
-      <% else %>
-        <Button.dynamic {@expand_button}/>
-      <% end %>
+        <div class="cell-collapse-button">
+          <Button.dynamic {@collapse_button}/>
+        </div>
+      </div>
+      <div class="cell-collapsed-view">
+        <div class="cell-expand-button">
+          <Button.dynamic {@expand_button}/>
+        </div>
+      </div>
     </div>
     """
   end
