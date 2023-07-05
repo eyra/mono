@@ -26,11 +26,54 @@ defmodule Systems.DataDonation.TaskModel do
   end
 
   @fields ~w(platform position title description)a
+  @required_fields @fields
 
   def changeset(model, params) do
     model
     |> cast(params, @fields)
   end
+
+  def validate(changeset) do
+    changeset
+    |> validate_required(@required_fields)
+  end
+
+  def ready?(%DataDonation.TaskModel{} = task) do
+    changeset =
+      changeset(task, %{})
+      |> validate()
+
+    changeset.valid?()
+  end
+
+  def ready?(list) when is_list(list) do
+    if Enum.member?(list, false) do
+      :incomplete
+    else
+      :ready
+    end
+  end
+
+  def ready?(%DataDonation.SurveyTaskModel{} = special),
+    do: DataDonation.SurveyTaskModel.ready?(special)
+
+  def ready?(%DataDonation.DocumentTaskModel{} = special),
+    do: DataDonation.DocumentTaskModel.ready?(special)
+
+  def ready?(%DataDonation.DonateTaskModel{} = special),
+    do: DataDonation.DonateTaskModel.ready?(special)
+
+  def status(%DataDonation.TaskModel{} = task) do
+    ready?([
+      ready?(task),
+      ready?(special(task))
+    ])
+  end
+
+  defp special(%{survey_task: %{id: _id} = special}), do: special
+  defp special(%{request_task: %{id: _id} = special}), do: special
+  defp special(%{download_task: %{id: _id} = special}), do: special
+  defp special(%{donate_task: %{id: _id} = special}), do: special
 
   def preload_graph(:down),
     do:

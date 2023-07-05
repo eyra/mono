@@ -15,6 +15,7 @@ defmodule Systems.DataDonation.Public do
 
   alias Ecto.Multi
   alias Core.Authorization
+  alias Frameworks.Signal
 
   alias Systems.{
     DataDonation
@@ -43,13 +44,23 @@ defmodule Systems.DataDonation.Public do
     |> Repo.get!(id)
   end
 
-  def get_task(tool_id, position, preload \\ []) do
-    from(task in DataDonation.TaskModel,
-      where: task.tool_id == ^tool_id,
-      where: task.position == ^position,
-      preload: ^preload
-    )
-    |> Repo.one()
+  def get_task_by_special!(field, special_id, preload \\ [])
+
+  def get_task_by_special!(field, special_id, preload) when is_atom(field) do
+    get_task_by_special!([field], special_id, preload)
+  end
+
+  def get_task_by_special!([hd | tl], special_id, preload) when is_integer(special_id) do
+    query =
+      from(task in DataDonation.TaskModel,
+        where: field(task, ^hd) == ^special_id,
+        preload: ^preload
+      )
+
+    Enum.reduce(tl, query, fn key, query ->
+      query |> or_where([task], field(task, ^key) == ^special_id)
+    end)
+    |> Repo.one!()
   end
 
   def get_document_task!(id, preload \\ []) do
@@ -68,11 +79,16 @@ defmodule Systems.DataDonation.Public do
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
 
-  def add_task(tool, task_type) when is_binary(task_type) do
+  def add_task(tool_id, task_type) when is_integer(tool_id) do
+    get_tool!(tool_id)
+    |> add_task(task_type)
+  end
+
+  def add_task(%DataDonation.ToolModel{} = tool, task_type) when is_binary(task_type) do
     add_task(tool, String.to_existing_atom(task_type))
   end
 
-  def add_task(%DataDonation.ToolModel{} = tool, task_type) do
+  def add_task(%DataDonation.ToolModel{id: tool_id} = tool, task_type) do
     Multi.new()
     |> Multi.run(:position, fn _, _ ->
       {:ok, task_count(tool)}
@@ -81,6 +97,7 @@ defmodule Systems.DataDonation.Public do
     |> Multi.insert(:task, fn %{position: position, task_special: task_special} ->
       create_task(tool, position, task_type, task_special)
     end)
+    |> Signal.Public.multi_dispatch(:data_donation_tasks, %{tool_id: tool_id})
     |> Repo.transaction()
   end
 
@@ -119,9 +136,10 @@ defmodule Systems.DataDonation.Public do
     |> DataDonation.DonateTaskModel.changeset(%{})
   end
 
-  def update(changeset) do
+  def update(changeset, key) do
     Multi.new()
-    |> Repo.multi_update(:data_donation_tool, changeset)
+    |> Repo.multi_update(key, changeset)
+    |> Signal.Public.multi_dispatch(key, %{changeset: changeset})
     |> Repo.transaction()
   end
 
@@ -140,6 +158,7 @@ defmodule Systems.DataDonation.Public do
     |> Multi.run(:order_and_update, fn _, %{tasks: tasks} ->
       {:ok, rearrange(tasks)}
     end)
+    |> Signal.Public.multi_dispatch(:data_donation_tasks, %{tool_id: tool_id})
     |> Repo.transaction()
   end
 
@@ -161,6 +180,7 @@ defmodule Systems.DataDonation.Public do
     |> Multi.run(:order_and_update, fn _, %{tasks: tasks} ->
       {:ok, rearrange(tasks, old, new)}
     end)
+    |> Signal.Public.multi_dispatch(:data_donation_tasks, %{tool_id: tool_id})
     |> Repo.transaction()
   end
 
@@ -221,8 +241,26 @@ end
 
 defimpl Core.Persister, for: Systems.DataDonation.ToolModel do
   def save(_tool, changeset) do
-    case Systems.DataDonation.Public.update(changeset) do
+    case Systems.DataDonation.Public.update(changeset, :data_donation_tool) do
       {:ok, %{data_donation_tool: tool}} -> {:ok, tool}
+      _ -> {:error, changeset}
+    end
+  end
+end
+
+defimpl Core.Persister, for: Systems.DataDonation.TaskModel do
+  def save(_task, changeset) do
+    case Systems.DataDonation.Public.update(changeset, :data_donation_task) do
+      {:ok, %{data_donation_task: task}} -> {:ok, task}
+      _ -> {:error, changeset}
+    end
+  end
+end
+
+defimpl Core.Persister, for: Systems.DataDonation.DocumentTaskModel do
+  def save(_task, changeset) do
+    case Systems.DataDonation.Public.update(changeset, :data_donation_document_task) do
+      {:ok, %{data_donation_document_task: task}} -> {:ok, task}
       _ -> {:error, changeset}
     end
   end

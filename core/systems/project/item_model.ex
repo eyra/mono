@@ -42,8 +42,8 @@ defmodule Systems.Project.ItemModel do
   defimpl Frameworks.Utility.ViewModelBuilder do
     use CoreWeb, :verified_routes
 
-    def view_model(%Project.ItemModel{} = project, page, %{current_user: user}) do
-      vm(project, page, user)
+    def view_model(%Project.ItemModel{} = item, page, %{current_user: user}) do
+      vm(item, page, user)
     end
 
     defp vm(
@@ -160,8 +160,13 @@ defmodule Systems.Project.ItemModel do
 
     defp get_label(:idle), do: %{type: :idle, text: dgettext("eyra-project", "label.idle")}
 
-    defp get_card_tags(%DataDonation.ToolModel{platforms: platforms}) when is_list(platforms),
-      do: Enum.map(platforms, &DataDonation.Platforms.translate(&1))
+    defp get_card_tags(%DataDonation.ToolModel{tasks: tasks}) when is_list(tasks) do
+      tasks
+      |> Enum.map(& &1.platform)
+      |> Enum.filter(&is_binary/1)
+      |> Enum.uniq()
+      |> Enum.map(&DataDonation.Platforms.translate/1)
+    end
 
     defp get_card_tags(%Benchmark.ToolModel{}), do: ["Challenge"]
     defp get_card_tags(_), do: []

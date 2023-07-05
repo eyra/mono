@@ -9,10 +9,9 @@ defmodule Systems.DataDonation.TaskForm do
 
   @impl true
   def update(
-        %{id: id, entity_id: entity_id},
+        %{id: id, entity: entity},
         socket
       ) do
-    entity = DataDonation.Public.get_task!(entity_id)
     changeset = DataDonation.TaskModel.changeset(entity, %{})
 
     {

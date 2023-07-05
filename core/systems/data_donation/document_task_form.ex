@@ -19,8 +19,7 @@ defmodule Systems.DataDonation.DocumentTaskForm do
   def update(
         %{
           id: id,
-          parent: parent,
-          entity_id: entity_id
+          entity: entity
         },
         socket
       ) do
@@ -33,20 +32,13 @@ defmodule Systems.DataDonation.DocumentTaskForm do
       socket
       |> assign(
         id: id,
-        parent: parent,
         placeholder: placeholder,
         select_button: select_button,
         replace_button: replace_button,
-        entity_id: entity_id
+        entity: entity
       )
       |> init_file_uploader(:pdf)
-      |> update_entity()
     }
-  end
-
-  defp update_entity(%{assigns: %{entity_id: entity_id}} = socket) do
-    entity = DataDonation.Public.get_document_task!(entity_id)
-    assign(socket, entity: entity)
   end
 
   @impl true

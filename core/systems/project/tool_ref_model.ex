@@ -44,7 +44,7 @@ defmodule Systems.Project.ToolRefModel do
   def preload_graph(:lab_tool), do: [lab_tool: Lab.ToolModel.preload_graph(:full)]
 
   def preload_graph(:data_donation_tool),
-    do: [data_donation_tool: DataDonation.ToolModel.preload_graph(:full)]
+    do: [data_donation_tool: DataDonation.ToolModel.preload_graph(:down)]
 
   def preload_graph(:benchmark_tool),
     do: [benchmark_tool: Benchmark.ToolModel.preload_graph(:down)]

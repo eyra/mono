@@ -12,19 +12,19 @@ defmodule Systems.DataDonation.TaskBuilderView do
   @impl true
   def update(%{action: "delete", task: task}, socket) do
     DataDonation.Public.delete(task)
-    {:ok, socket |> update_tasks()}
+    {:ok, socket}
   end
 
   @impl true
   def update(%{action: "up", task: %{position: position} = task}, socket) do
     {:ok, _} = DataDonation.Public.update_position(task, position - 1)
-    {:ok, socket |> update_tasks()}
+    {:ok, socket}
   end
 
   @impl true
   def update(%{action: "down", task: %{position: position} = task}, socket) do
     {:ok, _} = DataDonation.Public.update_position(task, position + 1)
-    {:ok, socket |> update_tasks()}
+    {:ok, socket}
   end
 
   @impl true
@@ -38,29 +38,16 @@ defmodule Systems.DataDonation.TaskBuilderView do
         flow: flow,
         library: library
       )
-      |> update_tool()
-      |> update_tasks()
     }
   end
 
-  defp update_tool(%{assigns: %{tool_id: tool_id}} = socket) do
-    tool = DataDonation.Public.get_tool!(tool_id)
-    socket |> assign(tool: tool)
-  end
-
-  defp update_tasks(%{assigns: %{tool_id: tool_id}} = socket) do
-    tasks = DataDonation.Public.list_tasks(tool_id, DataDonation.TaskModel.preload_graph(:down))
-    socket |> assign(tasks: tasks)
-  end
-
   @impl true
-  def handle_event("add", %{"item" => item}, %{assigns: %{tool: tool}} = socket) do
-    {:ok, _} = DataDonation.Public.add_task(tool, "#{item}_task")
+  def handle_event("add", %{"item" => item}, %{assigns: %{tool_id: tool_id}} = socket) do
+    {:ok, _} = DataDonation.Public.add_task(tool_id, "#{item}_task")
 
     {
       :noreply,
       socket
-      |> update_tasks()
     }
   end
 
@@ -75,7 +62,7 @@ defmodule Systems.DataDonation.TaskBuilderView do
             <Text.title2><%= @flow.title %></Text.title2>
             <Text.body><%= @flow.description %></Text.body>
             <.spacing value="M" />
-            <.list tasks={@tasks} parent={%{type: __MODULE__, id: @id}} />
+            <.list tasks={@flow.tasks} parent={%{type: __MODULE__, id: @id}} />
           </Area.content>
         </div>
         <div class="flex-shrink-0 w-side-panel">

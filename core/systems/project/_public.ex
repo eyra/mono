@@ -34,6 +34,15 @@ defmodule Systems.Project.Public do
     |> Repo.one!()
   end
 
+  def get_tool_refs_by_tool!(field, tool_id, preload \\ [])
+      when is_atom(field) and is_integer(tool_id) do
+    from(tr in Project.ToolRefModel,
+      where: field(tr, ^field) == ^tool_id,
+      preload: ^preload
+    )
+    |> Repo.all()
+  end
+
   @doc """
   Returns the list of projects that are owned by the user.
   """

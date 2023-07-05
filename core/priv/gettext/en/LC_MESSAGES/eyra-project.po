@@ -194,3 +194,19 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "create.item.title"
 msgstr "Select item type"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "item.form.name.label"
+msgstr "Name"
+
+#, elixir-autogen, elixir-format
+msgid "item.form.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.support"
+msgstr "Support"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.support.forward"
+msgstr "Support"

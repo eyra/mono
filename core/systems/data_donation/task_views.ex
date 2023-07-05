@@ -57,14 +57,16 @@ defmodule Systems.DataDonation.TaskViews do
   def list(assigns) do
     ~H"""
     <div class="bg-grey5 rounded-2xl p-6 flex flex-col gap-4">
-      <Align.horizontal_center>
-        <Text.hint><%= dgettext("eyra-data-donation", "task.list.hint") %></Text.hint>
-      </Align.horizontal_center>
+      <%= if Enum.count(@tasks) > 0 do %>
+        <Align.horizontal_center>
+          <Text.hint><%= dgettext("eyra-data-donation", "task.list.hint") %></Text.hint>
+        </Align.horizontal_center>
+      <% end %>
       <%= for task <- @tasks do %>
         <.live_component
           id={"task-cell-#{task.id}"}
           module={DataDonation.TaskCell}
-          entity_id={task.id}
+          task={task}
           parent={@parent}
           relative_position={relative_position(task.position, Enum.count(@tasks))}
         />
