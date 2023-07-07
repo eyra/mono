@@ -291,7 +291,7 @@ defmodule Systems.Project.ItemContentPage do
       </:top_bar>
 
       <div id="project" phx-hook="LiveContent" data-show-errors={@vm.show_errors}>
-        <div id={:survey_content} phx-hook="ViewportResize">
+        <div id={:questionnaire_content} phx-hook="ViewportResize">
 
           <%= if @popup do %>
             <.popup>

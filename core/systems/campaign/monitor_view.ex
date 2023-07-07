@@ -150,8 +150,8 @@ defmodule Systems.Campaign.MonitorView do
         <Margin.y id={:page_top} />
         <%= if not @vm.active? do %>
           <.empty
-              title={dgettext("link-survey", "monitor.empty.title")}
-              body={dgettext("link-survey", "monitor.empty.description")}
+              title={dgettext("link-questionnaire", "monitor.empty.title")}
+              body={dgettext("link-questionnaire", "monitor.empty.description")}
               illustration="members"
             />
         <% else %>
@@ -165,7 +165,7 @@ defmodule Systems.Campaign.MonitorView do
           <% end %>
 
           <Text.title2><%= dgettext("link-monitor", "phase1.title") %></Text.title2>
-          <Text.title3 margin="mb-8"><%= dgettext("link-survey", "status.title") %><span class="text-primary">
+          <Text.title3 margin="mb-8"><%= dgettext("link-questionnaire", "status.title") %><span class="text-primary">
             <%= @vm.participated_count %>/<%= @vm.progress.size %></span></Text.title3>
           <.spacing value="M" />
           <div class="bg-grey6 rounded p-12">
@@ -186,7 +186,7 @@ defmodule Systems.Campaign.MonitorView do
               <div>
                 <div class="flex flex-row items-center gap-3">
                   <div class="flex-shrink-0 w-6 h-6 rounded-full bg-grey4" />
-                  <Text.label><%= dgettext("link-survey", "vacant.label") %>: <%= @vm.vacant_count %></Text.label>
+                  <Text.label><%= dgettext("link-questionnaire", "vacant.label") %>: <%= @vm.vacant_count %></Text.label>
                 </div>
               </div>
             </div>

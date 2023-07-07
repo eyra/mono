@@ -119,8 +119,8 @@ defmodule Systems.DataDonation.TaskCell do
     )
   end
 
-  defp get_title(%{survey_task_id: id}) when not is_nil(id),
-    do: dgettext("eyra-data-donation", "task.survey.title")
+  defp get_title(%{questionnaire_task_id: id}) when not is_nil(id),
+    do: dgettext("eyra-data-donation", "task.questionnaire.title")
 
   defp get_title(%{request_task_id: id}) when not is_nil(id),
     do: dgettext("eyra-data-donation", "task.request.title")

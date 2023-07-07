@@ -15,8 +15,13 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
 
     setup do
       user = Factories.insert!(:member)
-      survey_tool = Factories.insert!(:survey_tool, %{survey_url: "https://eyra.co/fake_survey"})
-      assignment = Factories.insert!(:assignment, %{survey_tool: survey_tool})
+
+      questionnaire_tool =
+        Factories.insert!(:questionnaire_tool, %{
+          questionnaire_url: "https://eyra.co/fake_questionnaire"
+        })
+
+      assignment = Factories.insert!(:assignment, %{questionnaire_tool: questionnaire_tool})
 
       promotion =
         Factories.insert!(:promotion, %{
@@ -49,7 +54,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
       assert %{
                call_to_action: %{
                  label: "Naar vragenlijst",
-                 path: "https://eyra.co/fake_survey?panl_id=1",
+                 path: "https://eyra.co/fake_questionnaire?panl_id=1",
                  target: %{type: :event, value: "open"}
                },
                hero_title: "Online Studie",
@@ -74,7 +79,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
       assert %{
                call_to_action: %{
                  label: "Naar vragenlijst",
-                 path: "https://eyra.co/fake_survey?panl_id=1",
+                 path: "https://eyra.co/fake_questionnaire?panl_id=1",
                  target: %{type: :event, value: "open"}
                },
                hero_title: "Online Studie",
@@ -104,7 +109,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
       assert %{
                call_to_action: %{
                  label: "Naar vragenlijst",
-                 path: "https://eyra.co/fake_survey?panl_id=1",
+                 path: "https://eyra.co/fake_questionnaire?panl_id=1",
                  target: %{type: :event, value: "open"}
                },
                hero_title: "Online Studie",
@@ -155,11 +160,11 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
     setup do
       user = Factories.insert!(:member)
 
-      survey_tool =
+      questionnaire_tool =
         Factories.insert!(
-          :survey_tool,
+          :questionnaire_tool,
           %{
-            survey_url: "https://eyra.co/fake_survey",
+            questionnaire_url: "https://eyra.co/fake_questionnaire",
             subject_count: 10,
             duration: "10",
             language: "en",
@@ -167,7 +172,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
           }
         )
 
-      assignment = Factories.insert!(:assignment, %{survey_tool: survey_tool})
+      assignment = Factories.insert!(:assignment, %{questionnaire_tool: questionnaire_tool})
 
       promotion =
         Factories.insert!(

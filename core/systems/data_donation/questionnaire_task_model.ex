@@ -1,8 +1,8 @@
-defmodule Systems.DataDonation.SurveyTaskModel do
+defmodule Systems.DataDonation.QuestionnaireTaskModel do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "data_donation_survey_tasks" do
+  schema "data_donation_questionnaire_tasks" do
     timestamps()
   end
 

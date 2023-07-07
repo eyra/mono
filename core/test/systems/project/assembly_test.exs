@@ -18,7 +18,7 @@ defmodule Systems.Project.AssemblyTest do
                 project_path: [^project_id, ^root_id],
                 node_id: ^root_id,
                 tool_ref: %Systems.Project.ToolRefModel{
-                  survey_tool_id: nil,
+                  questionnaire_tool_id: nil,
                   lab_tool_id: nil,
                   data_donation_tool_id: nil,
                   benchmark_tool: %Systems.Benchmark.ToolModel{
@@ -43,7 +43,7 @@ defmodule Systems.Project.AssemblyTest do
                 project_path: [^project_id, ^root_id],
                 node_id: ^root_id,
                 tool_ref: %Systems.Project.ToolRefModel{
-                  survey_tool_id: nil,
+                  questionnaire_tool_id: nil,
                   lab_tool_id: nil,
                   data_donation_tool: %Systems.DataDonation.ToolModel{
                     status: :concept,

@@ -1,4 +1,4 @@
-defmodule CoreWeb.FakeSurvey do
+defmodule CoreWeb.FakeQuestionnaire do
   @moduledoc """
   The home screen.
   """
@@ -25,14 +25,14 @@ defmodule CoreWeb.FakeSurvey do
   def render(assigns) do
     ~H"""
     <div>
-    <Hero.small title="Fake survey" bg_color="bg-grey1" />
+    <Hero.small title="Fake questionnaire" bg_color="bg-grey1" />
 
     <Area.content>
       <Margin.y id={:page_top} />
-      <Text.title2>Fake survey</Text.title2>
-      <Text.body_large>This fake survey is used to validate the survey tool flow with an external tool.</Text.body_large>
+      <Text.title2>Fake questionnaire</Text.title2>
+      <Text.body_large>This fake questionnaire is used to validate the survey tool flow with an external tool.</Text.body_large>
       <.spacing value="M" />
-      <Button.primary label="Complete survey (go back)" to={@redirect_url} bg_color="bg-grey1" />
+      <Button.primary label="Complete questionnaire (go back)" to={@redirect_url} bg_color="bg-grey1" />
       </Area.content>
     </div>
     """

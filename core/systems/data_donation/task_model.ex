@@ -17,7 +17,7 @@ defmodule Systems.DataDonation.TaskModel do
     belongs_to(:tool, DataDonation.ToolModel)
     has_many(:statuses, DataDonation.TaskSpotStatusModel, foreign_key: :task_id)
 
-    belongs_to(:survey_task, DataDonation.SurveyTaskModel)
+    belongs_to(:questionnaire_task, DataDonation.QuestionnaireTaskModel)
     belongs_to(:request_task, DataDonation.DocumentTaskModel)
     belongs_to(:download_task, DataDonation.DocumentTaskModel)
     belongs_to(:donate_task, DataDonation.DonateTaskModel)
@@ -54,8 +54,8 @@ defmodule Systems.DataDonation.TaskModel do
     end
   end
 
-  def ready?(%DataDonation.SurveyTaskModel{} = special),
-    do: DataDonation.SurveyTaskModel.ready?(special)
+  def ready?(%DataDonation.QuestionnaireTaskModel{} = special),
+    do: DataDonation.QuestionnaireTaskModel.ready?(special)
 
   def ready?(%DataDonation.DocumentTaskModel{} = special),
     do: DataDonation.DocumentTaskModel.ready?(special)
@@ -70,7 +70,7 @@ defmodule Systems.DataDonation.TaskModel do
     ])
   end
 
-  defp special(%{survey_task: %{id: _id} = special}), do: special
+  defp special(%{questionnaire_task: %{id: _id} = special}), do: special
   defp special(%{request_task: %{id: _id} = special}), do: special
   defp special(%{download_task: %{id: _id} = special}), do: special
   defp special(%{donate_task: %{id: _id} = special}), do: special
@@ -78,13 +78,13 @@ defmodule Systems.DataDonation.TaskModel do
   def preload_graph(:down),
     do:
       preload_graph([
-        :survey_task,
+        :questionnaire_task,
         :request_task,
         :download_task,
         :donate_task
       ])
 
-  def preload_graph(:survey_task), do: [survey_task: []]
+  def preload_graph(:questionnaire_task), do: [questionnaire_task: []]
   def preload_graph(:request_task), do: [request_task: []]
   def preload_graph(:download_task), do: [download_task: []]
   def preload_graph(:donate_task), do: [donate_task: []]

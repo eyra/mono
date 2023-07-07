@@ -6,7 +6,7 @@ defmodule Systems.Project.ToolRefModel do
 
   alias Systems.{
     Project,
-    Survey,
+    Questionnaire,
     Lab,
     DataDonation,
     Benchmark
@@ -14,7 +14,7 @@ defmodule Systems.Project.ToolRefModel do
 
   schema "tool_refs" do
     has_one(:item, Project.ItemModel, foreign_key: :tool_ref_id)
-    belongs_to(:survey_tool, Survey.ToolModel)
+    belongs_to(:questionnaire_tool, Questionnaire.ToolModel)
     belongs_to(:lab_tool, Lab.ToolModel)
     belongs_to(:data_donation_tool, DataDonation.ToolModel)
     belongs_to(:benchmark_tool, Benchmark.ToolModel)
@@ -34,13 +34,15 @@ defmodule Systems.Project.ToolRefModel do
   def preload_graph(:down),
     do:
       preload_graph([
-        :survey_tool,
+        :questionnaire_tool,
         :lab_tool,
         :data_donation_tool,
         :benchmark_tool
       ])
 
-  def preload_graph(:survey_tool), do: [survey_tool: Survey.ToolModel.preload_graph(:full)]
+  def preload_graph(:questionnaire_tool),
+    do: [questionnaire_tool: Questionnaire.ToolModel.preload_graph(:full)]
+
   def preload_graph(:lab_tool), do: [lab_tool: Lab.ToolModel.preload_graph(:full)]
 
   def preload_graph(:data_donation_tool),

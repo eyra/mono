@@ -1,4 +1,4 @@
-defmodule CoreWeb.FakeSurveyController do
+defmodule CoreWeb.FakeQuestionnaireController do
   use CoreWeb, :controller
 
   def index(conn, _params) do

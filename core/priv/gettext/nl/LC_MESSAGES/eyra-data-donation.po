@@ -15,16 +15,12 @@ msgid "config.nrofsubjects.label"
 msgstr "Aantal gewenste deelnemers"
 
 #, elixir-autogen, elixir-format
-msgid "platforms.title"
-msgstr "Platformen"
-
-#, elixir-autogen, elixir-format
 msgid "content.title"
 msgstr "Data Donatie"
 
 #, elixir-autogen, elixir-format
 msgid "task.donate.description"
-msgstr "Lorem ipsum dolor sit amet."
+msgstr "Biedt deelnemers de mogelijkheid om te doneren."
 
 #, elixir-autogen, elixir-format
 msgid "task.donate.title"
@@ -32,15 +28,15 @@ msgstr "Donatie"
 
 #, elixir-autogen, elixir-format
 msgid "task.download.description"
-msgstr "Lorem ipsum dolor sit amet."
+msgstr "Legt deelnemers uit hoe ze digital trace data kunnen downloaden."
 
 #, elixir-autogen, elixir-format
 msgid "task.download.title"
-msgstr "Downloaden DDP"
+msgstr "Download handleiding"
 
 #, elixir-autogen, elixir-format
 msgid "task.library.description"
-msgstr "Lorem ipsum dolor sit amet."
+msgstr "Kies items die je aan de flow wilt toevoegen."
 
 #, elixir-autogen, elixir-format
 msgid "task.library.title"
@@ -48,26 +44,26 @@ msgstr "Bibliotheek"
 
 #, elixir-autogen, elixir-format
 msgid "task.list.description"
-msgstr "Lorem ipsum dolor sit amet."
+msgstr "Voeg items uit de bibliotheek toe om een flow te bouwen voor jouw deelnemers."
 
 #, elixir-autogen, elixir-format
 msgid "task.list.title"
-msgstr "Taken"
+msgstr "Flow voor deelnemers"
 
 #, elixir-autogen, elixir-format
 msgid "task.request.description"
-msgstr "Lorem ipsum dolor sit amet."
+msgstr "Legt deelnemers uit hoe ze digital trace data kunnen aanvragen."
 
 #, elixir-autogen, elixir-format
 msgid "task.request.title"
-msgstr "Aanvragen DDP"
+msgstr "Aanvraag handleiding"
 
 #, elixir-autogen, elixir-format
-msgid "task.survey.description"
-msgstr "Lorem ipsum dolor sit amet."
+msgid "task.questionnaire.description"
+msgstr "Stuurt deelnemers naar een online vragenlijst."
 
 #, elixir-autogen, elixir-format
-msgid "task.survey.title"
+msgid "task.questionnaire.title"
 msgstr "Vragenlijst"
 
 #, elixir-autogen, elixir-format, fuzzy
@@ -84,7 +80,7 @@ msgstr "Verander volgorde met de pijltjes"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "task.platform.label"
-msgstr "Platform"
+msgstr "Organisatie"
 
 #, elixir-autogen, elixir-format
 msgid "pdf-replace-file-button"
@@ -97,3 +93,11 @@ msgstr "Kies PDF"
 #, elixir-autogen, elixir-format
 msgid "pdf-select-placeholder"
 msgstr "Kies een pdf bestand"
+
+#, elixir-autogen, elixir-format
+msgid "add.to.button"
+msgstr "Voeg toe"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pdf-select-label"
+msgstr "Handleiding"

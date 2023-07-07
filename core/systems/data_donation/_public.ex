@@ -116,9 +116,9 @@ defmodule Systems.DataDonation.Public do
     |> Ecto.Changeset.put_assoc(task_type, special)
   end
 
-  def create_task_special(:survey_task) do
-    %DataDonation.SurveyTaskModel{}
-    |> DataDonation.SurveyTaskModel.changeset(%{})
+  def create_task_special(:questionnaire_task) do
+    %DataDonation.QuestionnaireTaskModel{}
+    |> DataDonation.QuestionnaireTaskModel.changeset(%{})
   end
 
   def create_task_special(:request_task) do

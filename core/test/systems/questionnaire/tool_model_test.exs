@@ -1,8 +1,8 @@
-defmodule Systems.Survey.ToolModelTest do
+defmodule Systems.Questionnaire.ToolModelTest do
   use Core.DataCase, async: true
 
   alias Systems.{
-    Survey
+    Questionnaire
   }
 
   describe "validate_url" do
@@ -15,35 +15,39 @@ defmodule Systems.Survey.ToolModelTest do
           ] do
       test "allow #{url}" do
         changeset =
-          Survey.ToolModel.changeset(%Survey.ToolModel{}, :auto_save, %{survey_url: unquote(url)})
+          Questionnaire.ToolModel.changeset(%Questionnaire.ToolModel{}, :auto_save, %{
+            questionnaire_url: unquote(url)
+          })
 
         assert changeset.valid?, changeset.errors
       end
     end
 
     for url <- [
-          "http://example.org/survey?a=<param",
-          "http://example.org/survey?b=<var with space>",
-          "http://example.org/survey?c=<var-with-dash>",
-          "http://example.org/survey?d=<unclosed&other=<var>"
+          "http://example.org/questionnaire?a=<param",
+          "http://example.org/questionnaire?b=<var with space>",
+          "http://example.org/questionnaire?c=<var-with-dash>",
+          "http://example.org/questionnaire?d=<unclosed&other=<var>"
         ] do
       test "disallow URL: #{url}" do
         changeset =
-          Survey.ToolModel.changeset(%Survey.ToolModel{}, :auto_save, %{survey_url: unquote(url)})
+          Questionnaire.ToolModel.changeset(%Questionnaire.ToolModel{}, :auto_save, %{
+            questionnaire_url: unquote(url)
+          })
 
         refute changeset.valid?
       end
     end
   end
 
-  describe "prepare_survey_url" do
+  describe "prepare_questionnaire_url" do
     test "URL without params stays the same" do
-      assert Survey.ToolModel.prepare_url("http://example.org/test?a=b", %{}) ==
+      assert Questionnaire.ToolModel.prepare_url("http://example.org/test?a=b", %{}) ==
                "http://example.org/test?a=b"
     end
 
     test "URL with param has replacement" do
-      assert Survey.ToolModel.prepare_url(
+      assert Questionnaire.ToolModel.prepare_url(
                "http://example.org/test?participant=<participantId>",
                %{
                  "participantId" => 123

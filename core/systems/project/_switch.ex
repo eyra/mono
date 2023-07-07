@@ -32,9 +32,9 @@ defmodule Systems.Project.Switch do
   end
 
   @impl true
-  def dispatch(:data_donation_survey_task, %{changeset: changeset}) do
+  def dispatch(:data_donation_questionnaire_task, %{changeset: changeset}) do
     special_id = Ecto.Changeset.get_field(changeset, :id)
-    task = DataDonation.Public.get_task_by_special!(:survey_task_id, special_id)
+    task = DataDonation.Public.get_task_by_special!(:questionnaire_task_id, special_id)
     update_pages(task)
   end
 

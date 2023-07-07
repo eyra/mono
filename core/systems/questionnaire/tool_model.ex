@@ -1,6 +1,6 @@
-defmodule Systems.Survey.ToolModel do
+defmodule Systems.Questionnaire.ToolModel do
   @moduledoc """
-  The survey tool schema.
+  The questionnaire tool schema.
   """
   use Ecto.Schema
   use Frameworks.Utility.Model
@@ -12,20 +12,20 @@ defmodule Systems.Survey.ToolModel do
 
   import Ecto.Changeset
 
-  schema "survey_tools" do
+  schema "questionnaire_tools" do
     belongs_to(:auth_node, Core.Authorization.Node)
 
-    field(:survey_url, :string)
+    field(:questionnaire_url, :string)
     field(:director, Ecto.Enum, values: [:campaign])
 
     timestamps()
   end
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
-    def id(survey_tool), do: survey_tool.auth_node_id
+    def id(questionnaire_tool), do: questionnaire_tool.auth_node_id
   end
 
-  @operational_fields ~w(survey_url)a
+  @operational_fields ~w(questionnaire_url)a
   @fields @operational_fields
   @required_fields ~w()a
 
@@ -47,7 +47,7 @@ defmodule Systems.Survey.ToolModel do
     tool
     |> cast(params, @fields)
     |> validate_required(@required_fields)
-    |> validate_url(:survey_url)
+    |> validate_url(:questionnaire_url)
   end
 
   def changeset(tool, _, params) do
@@ -59,7 +59,7 @@ defmodule Systems.Survey.ToolModel do
   def validate(changeset, :roundtrip) do
     changeset =
       changeset
-      |> Ecto.Changeset.validate_required([:survey_url])
+      |> Ecto.Changeset.validate_required([:questionnaire_url])
 
     %{changeset | action: :validate_roundtrip}
   end
@@ -126,8 +126,9 @@ defmodule Systems.Survey.ToolModel do
     |> to_string()
   end
 
-  def external_path(%{survey_url: survey_url}, panl_id) when not is_nil(survey_url) do
-    url_components = URI.parse(survey_url)
+  def external_path(%{questionnaire_url: questionnaire_url}, panl_id)
+      when not is_nil(questionnaire_url) do
+    url_components = URI.parse(questionnaire_url)
 
     query =
       url_components.query

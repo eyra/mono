@@ -15,11 +15,11 @@ student_count = 1500
 researcher_count = 100
 researchers_per_campaign = 5
 lab_count = 200
-survey_count = 600
+questionnaire_count = 600
 time_slots_per_lab = 20
 seats_per_time_slot = 20
 
-survey_url = "https://vuamsterdam.eu.qualtrics.com/jfe/form/SV_4Po8iTxbvcxtuaW"
+questionnaire_url = "https://vuamsterdam.eu.qualtrics.com/jfe/form/SV_4Po8iTxbvcxtuaW"
 
 images = [
   "raw_url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1600614908054-57142d1eec2b%3Fixid%3DMnwyMTY0MzZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2Mjc4MDc5MzY%26ixlib%3Drb-1.2.1&username=seonghojang95&name=Seongho+Jang&blur_hash=LKLy%5B%2AMd0L%3FG%3B0XSE2xDyC%25f%24zI%3B",
@@ -184,9 +184,9 @@ researcher =
 
 {:ok, surveys} =
   Core.Repo.transaction(fn ->
-    for _ <- 1..survey_count do
+    for _ <- 1..questionnaire_count do
       %{
-        type: :survey_tool,
+        type: :questionnaire_tool,
         promotion: %{
           title: Faker.Lorem.sentence() <> " (survey)",
           subtitle: Faker.Lorem.sentence(),
@@ -195,8 +195,8 @@ researcher =
           marks: ["vu"],
           plugin: "survey"
         },
-        survey_tool: %{
-          survey_url: Faker.Internet.url(),
+        questionnaire_tool: %{
+          questionnaire_url: Faker.Internet.url(),
           # desktop_enabled: true,
           # phone_enabled: true,
           # tablet_enabled: true,
@@ -250,7 +250,7 @@ Core.Repo.transaction(
           )
         )
 
-      if tool_type == :survey_tool do
+      if tool_type == :questionnaire_tool do
         participant_count = :random.uniform(tool.subject_count)
 
         for student <- Enum.take_random(students, participant_count) do

@@ -23,6 +23,7 @@ defmodule Systems.DataDonation.DocumentTaskForm do
         },
         socket
       ) do
+    label = dgettext("eyra-data-donation", "pdf-select-label")
     placeholder = dgettext("eyra-data-donation", "pdf-select-placeholder")
     select_button = dgettext("eyra-data-donation", "pdf-select-file-button")
     replace_button = dgettext("eyra-data-donation", "pdf-replace-file-button")
@@ -32,6 +33,7 @@ defmodule Systems.DataDonation.DocumentTaskForm do
       socket
       |> assign(
         id: id,
+        label: label,
         placeholder: placeholder,
         select_button: select_button,
         replace_button: replace_button,
@@ -59,7 +61,7 @@ defmodule Systems.DataDonation.DocumentTaskForm do
     ~H"""
     <div>
       <.form id="select_file_form" for={%{}} phx-change="change" phx-target="" >
-        <Text.form_field_label id="document_ref_label"><%= @placeholder %></Text.form_field_label>
+        <Text.form_field_label id="document_ref_label"><%= @label %></Text.form_field_label>
         <.spacing value="XXS" />
         <div class="h-file-selector border-grey4 border-2 rounded pl-6 pr-6">
           <div class="flex flex-row items-center h-full">

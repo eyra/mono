@@ -1,6 +1,6 @@
 # Eyra Mono
 
-Primary collection of Eyra projects  
+Primary collection of Eyra projects
 
 ## Projects
 
@@ -19,7 +19,7 @@ Project implementing a SaaS platform based on interlinked modules called Systems
 * Campaign
 * Assignment
 * Lab
-* Survey
+* Questionnaire
 * Pool
 * Data Donation
 * ..
@@ -28,12 +28,12 @@ Project implementing a SaaS platform based on interlinked modules called Systems
 
 * Next
 
-Primary bundle with all features available except Link specific features. 
+Primary bundle with all features available except Link specific features.
 Next is hosted on: https://eyra.co
 
 * Link
 
-Secundary bundle with only Panl specific features. 
+Secundary bundle with only Panl specific features.
 Link is hosted on: https://researchpanl.eu
 
 ## Banking Proxy

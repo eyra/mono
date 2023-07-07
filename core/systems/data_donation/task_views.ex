@@ -38,7 +38,7 @@ defmodule Systems.DataDonation.TaskViews do
         <.spacing value="M" />
         <.wrap>
           <Button.dynamic
-            face={%{type: :primary, bg_color: "bg-success", label: "Add to list" }}
+            face={%{type: :primary, bg_color: "bg-success", label: dgettext("eyra-data-donation", "add.to.button") }}
             action={%{type: :send, event: "add", item: @id}}
           />
         </.wrap>

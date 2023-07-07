@@ -17,7 +17,7 @@ defmodule Systems.Campaign.Public do
     Campaign,
     Promotion,
     Assignment,
-    Survey,
+    Questionnaire,
     Crew,
     Budget,
     Bookkeeping,
@@ -417,8 +417,8 @@ defmodule Systems.Campaign.Public do
     |> Repo.all()
   end
 
-  def list_survey_tools(%Campaign.Model{} = campaign) do
-    from(s in Survey.ToolModel, where: s.campaign_id == ^campaign.id)
+  def list_questionnaire_tools(%Campaign.Model{} = campaign) do
+    from(s in Questionnaire.ToolModel, where: s.campaign_id == ^campaign.id)
     |> Repo.all()
   end
 

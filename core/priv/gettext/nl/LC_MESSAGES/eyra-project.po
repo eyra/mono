@@ -53,11 +53,11 @@ msgstr "Privacy"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.tasks"
-msgstr "Taken"
+msgstr "Flow"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.tasks.forward"
-msgstr "Taken"
+msgstr "Flow"
 
 #, elixir-autogen, elixir-format
 msgid "add.first.button"

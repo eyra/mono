@@ -153,9 +153,9 @@ defmodule Systems.Project.ContentPageBuilder.ItemDataDonation do
           description: dgettext("eyra-data-donation", "task.library.description"),
           items: [
             %{
-              id: :survey,
-              title: dgettext("eyra-data-donation", "task.survey.title"),
-              description: dgettext("eyra-data-donation", "task.survey.description")
+              id: :questionnaire,
+              title: dgettext("eyra-data-donation", "task.questionnaire.title"),
+              description: dgettext("eyra-data-donation", "task.questionnaire.description")
             },
             %{
               id: :request,

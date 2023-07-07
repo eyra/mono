@@ -9,7 +9,7 @@ defmodule Systems.Assignment.LandingPageTest do
     Budget
   }
 
-  describe "show landing page for: campaign -> assignment -> survey_tool" do
+  describe "show landing page for: campaign -> assignment -> questionnaire_tool" do
     setup [:login_as_member]
 
     setup do
@@ -24,11 +24,11 @@ defmodule Systems.Assignment.LandingPageTest do
       pool =
         Factories.insert!(:pool, %{name: "test_1234", director: :citizen, currency: currency})
 
-      survey_tool =
+      questionnaire_tool =
         Factories.insert!(
-          :survey_tool,
+          :questionnaire_tool,
           %{
-            survey_url: "https://eyra.co/fake_survey",
+            questionnaire_url: "https://eyra.co/fake_questionnaire",
             director: :campaign
           }
         )
@@ -38,7 +38,7 @@ defmodule Systems.Assignment.LandingPageTest do
           :experiment,
           %{
             auth_node: experiment_auth_node,
-            survey_tool: survey_tool,
+            questionnaire_tool: questionnaire_tool,
             subject_count: 10,
             duration: "10",
             language: "en",
@@ -130,7 +130,7 @@ defmodule Systems.Assignment.LandingPageTest do
         |> element("[phx-click=\"open\"]")
         |> render_click()
 
-      assert {:error, {:redirect, %{to: "https://eyra.co/fake_survey?panl_id=1"}}} = html
+      assert {:error, {:redirect, %{to: "https://eyra.co/fake_questionnaire?panl_id=1"}}} = html
 
       task = Crew.Public.get_task!(task.id)
       assert %Systems.Crew.TaskModel{started_at: started_at, updated_at: updated_at} = task
