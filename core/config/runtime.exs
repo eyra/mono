@@ -83,11 +83,17 @@ if config_env() == :prod do
     config :core, :azure_storage_backend, sas_token: sas_token
   end
 
-  config :core, Core.Repo,
-    username: System.get_env("DB_USER"),
-    password: System.get_env("DB_PASS"),
-    database: System.get_env("DB_NAME"),
-    hostname: System.get_env("DB_HOST")
+  database_url = System.get_env("DB_URL")
+
+  if database_url do
+    config :core, Core.Repo, url: database_url
+  else
+    config :core, Core.Repo,
+      username: System.get_env("DB_USER"),
+      password: System.get_env("DB_PASS"),
+      database: System.get_env("DB_NAME"),
+      hostname: System.get_env("DB_HOST")
+  end
 
   config :core, GoogleSignIn,
     redirect_uri: "https://#{host}/google-sign-in/auth",
