@@ -123,4 +123,8 @@ if config_env() == :prod do
     private_key: System.get_env("WEB_PUSH_PRIVATE_KEY")
 
   config :logger, level: System.get_env("LOG_LEVEL", "info") |> String.to_existing_atom()
+
+  config :sentry,
+    dsn: System.get_env("SENTRY_DSN"),
+    environment_name: System.get_env("RELEASE_ENV") || "prod"
 end
