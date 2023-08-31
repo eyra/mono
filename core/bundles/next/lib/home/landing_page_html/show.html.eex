@@ -109,11 +109,14 @@
 						</div>
 						<div class=" card-content">
 							<h3 class="mg-md h3-heading-3-style text-lg-left ">
-								Eyra Link
+								Link
 							</h3>
 							<p class="p-projects-style">
-								In collaboration with the VU, UvA and SURF, we are developing a sustainable online participant recruitment platform for social sciences and humanities research.<br><br>Funded by the PDI-SSH.<br>
+								In collaboration with the VU, UvA and SURF, we are developing a software-asa service solution sustainable online participant recruitment platform for social sciences and humanities research.<br><br>Funded by the PDI-SSH.<br>
 							</p>
+							<div>
+								<a href="https://eyra.notion.site/Link-490a4e1127714ed0b356e8668ca1af94?pvs=4" class="btn btn-sm btn-footer btn-d">Read more</a>
+							</div>
 							<div style="display:flex">
 								<img src="./landing_page/img/vu.svg" class="img-fluid rounded-circle float-lg-none partner-icon partner-icon-uva" alt="vu" />
 								<img src="./landing_page/img/uva.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uva" />
@@ -135,11 +138,14 @@
 						</div>
 						<div class=" card-content">
 							<h3 class="mg-md h3-heading-3-style text-lg-left ">
-								Eyra Port
+								Port
 							</h3>
 							<p class="p-projects-style">
 								In collaboration with the UU and UvA we are working on a tool that enables citizens to easily and safely donate their data from social media platforms like Instagram or Google for research. <br><br>Funded by the UU and PDI-SSH.
 							</p>
+							<div>
+								<a href="https://eyra.notion.site/Port-4bbf0bbc466547af95f05c609405c4b2?pvs=4" class="btn btn-sm btn-footer btn-d">Read more</a>
+							</div>
 							<div style="display:flex">
 								<img src="./landing_page/img/uu.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uu" />
 								<img src="./landing_page/img/uva.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uva" />
@@ -160,11 +166,18 @@
 						</div>
 						<div class=" card-content">
 							<h3 class="mg-md h3-heading-3-style text-lg-left ">
-								Eyra&nbsp;Next
+								Rank
 							</h3>
 							<p class="p-projects-style">
 								A sustainable science dissemination platform that empowers transparent scientific practice and enables everyone to monitor the state-of-the-art in science. <br><br>Funded by Eyra.
-							</p><img src="./landing_page/img/eyra-logo.svg" class="img-fluid rounded-circle float-lg-none img-eyra-lo-style" alt="eyra logo" />
+							</p>
+							<div>
+								<a href="https://eyra.notion.site/Rank-51f5dc6529704fbcb6b86ead5565e3b4?pvs=4" class="btn btn-sm btn-footer btn-d">Read more</a>
+							</div>
+							<div style="display:flex">
+								<img src="./landing_page/img/uu.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uu" />
+								<img src="./landing_page/img/uva.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uva" />
+							</div>
 						</div>
 					</div>
 				</div>
