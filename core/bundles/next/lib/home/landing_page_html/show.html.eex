@@ -141,7 +141,7 @@
 								Port
 							</h3>
 							<p class="p-projects-style">
-								A data donation software service that enables people to donate their digital trace data (e.g. from Google or Instagram) for research, developed in collaboration with the UU and UvA.<br><br>Funded by the UU and PDI-SSH.
+								A data donation software service that enables people to donate their digital trace data (e.g. from Google or Instagram) for research, developed in collaboration with the UU and UvA (D3I Consortium).<br><br>Funded by the UU and PDI-SSH.
 							</p>
 							<div>
 								<a href="https://eyra.notion.site/Port-4bbf0bbc466547af95f05c609405c4b2?pvs=4" class="btn btn-sm btn-footer btn-d">Read more</a>
@@ -186,6 +186,27 @@
 	</div>
 </div>
 <!-- projects END -->
+
+<!-- Next platform banner -->
+<div class="bloc tc-5883 none content-bloc-style full-width-bloc bgc-jonquil banner-padding" id="banner">
+	<div class="container ">
+		<div class="row voffset-clear-sm">
+			<div class="col-lg-12 col-md-12">
+				<h6 class="h6-style tc-dark-jungle-green mg-lg float-md-none text-md-center text-sm-center">
+					Next Platform
+				</h6>
+				<h2 class="text-lg-center text-md-center mx-auto d-block mg-md text-sm-center text-center mg-md-xs h2-style h2-services-style text-grey1 ">
+					A <span class="text-span-services-color span-bold">sustainable</span> open source platform developed by Eyra and governed by the Nova Software Foundation that functions as a software-as-a-service <span class="text-span-services-color span-bold">integration hub</span>. Based on a circular economy business model, each project adds to and benefits from high quality <span class="text-span-services-color span-bold">reusable modules</span> in the Next codebase.<br>
+				</h2>
+				<div>
+					<a href="https://eyra.notion.site/Next-Platform-ec86811b5a98460fa05c6faa7e3adff4?pvs=4" class="btn btn-sm btn-footer btn-d">Read more</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Next platform banner END -->
+
 
 <!-- team -->
 <div class="bloc content-bloc-style l-bloc" id="team">
@@ -292,7 +313,7 @@
 					Open Science
 				</h6>
 				<h2 class="text-lg-center text-md-center mx-auto d-block mg-md text-sm-center text-center mg-md-xs h2-style h2-services-style text-grey1 ">
-					”We work towards a world in which the current state of&nbsp;<span class="text-span-services-color span-bold">human knowledge</span>&nbsp;is available to all of humankind, so anyone can&nbsp;<span class="text-span-0-color span-bold">learn</span>&nbsp;from and&nbsp;<span class="text-span-0-services-color span-bold">build</span>&nbsp;upon previous knowledge.”<br>
+					”We work towards a world in which <span class="text-span-services-color span-bold">anyone</span> can quickly gain insights from the current state of <span class="text-span-services-color span-bold">human knowledge</span>, to contribute to the world in their own <span class="text-span-services-color span-bold">unique</span> way.”<br>
 				</h2>
 			</div>
 		</div>
