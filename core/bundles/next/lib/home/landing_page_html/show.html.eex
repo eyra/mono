@@ -75,10 +75,10 @@
 				<div class="row max-height">
 					<div class="align-self-center bottom-padding-0 offset-md-1 col-md-10">
 						<h2 class="mg-md h2-style h2-bloc-2-style text-md-center mx-auto btn-resize-mode d-lg-none d-xl-none d-block">
-							Co-creating Sustainable Web and App Solutions
+							Co-creating Sustainable Software-as-a-Service Solutions
 						</h2>
 						<h2 class="mg-md h2-style h2-bloc-2-style text-md-center mx-auto btn-resize-mode d-lg-block   d-none">
-							Co-creating Sustainable Web and App Solutions
+							Co-creating Sustainable Software-as-a-Service Solutions
 						</h2>
 					</div>
 				</div>
@@ -109,11 +109,14 @@
 						</div>
 						<div class=" card-content">
 							<h3 class="mg-md h3-heading-3-style text-lg-left ">
-								Eyra Link
+								Link
 							</h3>
 							<p class="p-projects-style">
-								In collaboration with the VU, UvA and SURF, we are developing a sustainable online participant recruitment platform for social sciences and humanities research.<br><br>Funded by the PDI-SSH.<br>
+								A participant recruitment software service for Panl, enabling Dutch people to participate in social sciences and humanities research, developed in collaboration with the VU, UvA and SURF.<br><br>Funded by the VU and PDI-SSH.<br>
 							</p>
+							<div>
+								<a href="https://eyra.notion.site/Link-490a4e1127714ed0b356e8668ca1af94?pvs=4" class="btn btn-sm btn-footer btn-d">Read more</a>
+							</div>
 							<div style="display:flex">
 								<img src="./landing_page/img/vu.svg" class="img-fluid rounded-circle float-lg-none partner-icon partner-icon-uva" alt="vu" />
 								<img src="./landing_page/img/uva.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uva" />
@@ -135,11 +138,14 @@
 						</div>
 						<div class=" card-content">
 							<h3 class="mg-md h3-heading-3-style text-lg-left ">
-								Eyra Port
+								Port
 							</h3>
 							<p class="p-projects-style">
-								In collaboration with the UU and UvA we are working on a tool that enables citizens to easily and safely donate their data from social media platforms like Instagram or Google for research. <br><br>Funded by the UU and PDI-SSH.
+								A data donation software service that enables people to donate their digital trace data (e.g. from Google or Instagram) for research, developed in collaboration with the UU and UvA.<br><br>Funded by the UU and PDI-SSH.
 							</p>
+							<div>
+								<a href="https://eyra.notion.site/Port-4bbf0bbc466547af95f05c609405c4b2?pvs=4" class="btn btn-sm btn-footer btn-d">Read more</a>
+							</div>
 							<div style="display:flex">
 								<img src="./landing_page/img/uu.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uu" />
 								<img src="./landing_page/img/uva.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uva" />
@@ -160,11 +166,18 @@
 						</div>
 						<div class=" card-content">
 							<h3 class="mg-md h3-heading-3-style text-lg-left ">
-								Eyra&nbsp;Next
+								Rank
 							</h3>
 							<p class="p-projects-style">
-								A sustainable science dissemination platform that empowers transparent scientific practice and enables everyone to monitor the state-of-the-art in science. <br><br>Funded by Eyra.
-							</p><img src="./landing_page/img/eyra-logo.svg" class="img-fluid rounded-circle float-lg-none img-eyra-lo-style" alt="eyra logo" />
+								A software service for benchmarking that supports the organisation of challenges for the direct comparison of various social sciences models, developed in collaboration with the RUG and ODISSEI.<br><br>Funded by the RUG and ODISSEI.
+							</p>
+							<div>
+								<a href="https://eyra.notion.site/Rank-51f5dc6529704fbcb6b86ead5565e3b4?pvs=4" class="btn btn-sm btn-footer btn-d">Read more</a>
+							</div>
+							<div style="display:flex">
+								<img src="./landing_page/img/rug.png" class="img-fluid rounded-circle float-lg-none partner-icon" alt="rug" />
+								<img src="./landing_page/img/odissei.png" class="img-fluid rounded-circle float-lg-none partner-icon" alt="odissei" />
+							</div>
 						</div>
 					</div>
 				</div>
