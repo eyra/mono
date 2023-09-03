@@ -196,10 +196,25 @@
 					Next Platform
 				</h6>
 				<h2 class="text-lg-center text-md-center mx-auto d-block mg-md text-sm-center text-center mg-md-xs h2-style h2-services-style text-grey1 ">
-					A <span class="text-span-services-color span-bold">sustainable</span> open source platform developed by Eyra and governed by the Nova Software Foundation that functions as a software-as-a-service <span class="text-span-services-color span-bold">integration hub</span>. Based on a circular economy business model, each project adds to and benefits from high quality <span class="text-span-services-color span-bold">reusable modules</span> in the Next codebase.<br>
+					An open source software-as-a-service <span class="text-span-services-color span-bold">integration hub</span>. Each project adds to and benefits from high quality <span class="text-span-services-color span-bold">reusable modules</span> in the Next codebase.<br>
 				</h2>
-				<div>
-					<a href="https://eyra.notion.site/Next-Platform-ec86811b5a98460fa05c6faa7e3adff4?pvs=4" class="btn btn-sm btn-footer btn-d">Read more</a>
+				<div class="row no-gutters row-connect-style">
+					<div class="col-lg-4 offset-lg-1 offset-md-1 col-md-5">
+						<div class="row">
+							<div class="col offset-lg-0">
+								<br>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-5 col-lg-2">
+						<a href="https://eyra.notion.site/Next-Platform-ec86811b5a98460fa05c6faa7e3adff4?pvs=4" class="btn btn-sm btn-footer btn-d">Read more</a>
+					</div>
+					<div class="col-lg-2 offset-md-1 col-md-5 offset-lg-0">
+						<br>
+					</div>
+					<div class="col-lg-2 col-md-5">
+						<br>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -214,6 +229,7 @@
 		<div class="row voffset-clear-md">
 			<div class="col">
 				<h3 class="mg-md text-lg-center float-lg-none h3-style tc-dark-jungle-green">
+					Team
 				</h3>
 			</div>
 		</div>
@@ -375,7 +391,7 @@
 							We are part of&nbsp;Apollo 14&nbsp;<br>
 						</h3>
 						<h4 class="mg-md h4-apollo-style text-md-left text-sm-left text-left mg-lg-xs mg-lg-sm mg-lg-md">
-							Home for startups that innovate for a better world
+							Home for entrepreneurs who innovate for a better world
 						</h4><a href="http://apollo14.nl" class="btn btn-d cta-btn-apollo float-lg-none btn-lg">Find out more</a>
 					</div>
 				</div>
@@ -432,7 +448,7 @@
 			<div class="offset-lg-0 col-lg-4 bottom-spacing-32">
 				<img src="./landing_page/img/logo-eyra-text-white.svg" class="img-fluid float-lg-none img-footer-style" alt="logo 200" />
 				<p class="p-footer-style mx-auto d-block p-6-style text-lg-left text-md-left text-sm-left text-left mg-clear">
-					Eyra Leap B.V. - KvK 77867513<br>Eyra Co B.V. - KvK 77860179<br>Eyra Nova - KvK 77928997<br>
+					Eyra Leap B.V.<br>KvK 77867513<br>
 				</p>
 			</div>
 			<div class="col-lg-3">
