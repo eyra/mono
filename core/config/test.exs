@@ -54,3 +54,7 @@ config :core, Core.SurfConext, oidc_module: Core.SurfConext.FakeOIDC
 config :core, :bundle, :next
 
 config :core, :banking_backend, Systems.Banking.Dummy
+
+config :core, :feldspar,
+  backend: Systems.Feldspar.LocalFS,
+  local_fs_root_path: "/tmp"

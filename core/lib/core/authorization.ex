@@ -61,6 +61,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Project.ItemContentPage, [:researcher, :owner])
   grant_access(Systems.Benchmark.ToolPage, [:owner])
   grant_access(Systems.Benchmark.LeaderboardPage, [:visitor, :member])
+  grant_access(Systems.Feldspar.AppPage, [:visitor, :member])
 
   grant_access(CoreWeb.User.Signin, [:visitor])
   grant_access(CoreWeb.User.Signup, [:visitor])

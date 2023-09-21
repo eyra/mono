@@ -15,7 +15,8 @@ defmodule Systems.Routes do
         :lab,
         :data_donation,
         :benchmark,
-        :budget
+        :budget,
+        :feldspar
       ]
     end
   end
