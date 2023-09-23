@@ -13,7 +13,9 @@ defmodule Systems.Feldspar.AppPageTest do
   describe "handle app_event" do
     test "can receive random app_event data", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/apps/test")
-      assert render_hook(view, :app_event, %{unexpected_key: "some data"}) =~ "Unsupported message:"
+
+      assert render_hook(view, :app_event, %{unexpected_key: "some data"}) =~
+               "Unsupported message:"
     end
   end
 end
