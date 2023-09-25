@@ -19,7 +19,7 @@ defmodule Link.Marketplace.Page do
     next_best_action = NextAction.Public.next_best_action(user)
     user = socket.assigns[:current_user]
 
-    preload = Campaign.Model.preload_graph(:full)
+    preload = Campaign.Model.preload_graph(:down)
 
     subject_campaigns = Campaign.Public.list_subject_campaigns(user, preload: preload)
     excluded_campaigns = Campaign.Public.list_excluded_campaigns(subject_campaigns)

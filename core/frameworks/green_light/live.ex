@@ -6,7 +6,7 @@ defmodule Frameworks.GreenLight.Live do
               Phoenix.LiveView.unsigned_params() | :not_mounted_at_router,
               session :: map,
               socket :: Phoenix.Socket.t()
-            ) :: integer
+            ) :: integer | struct
   @optional_callbacks get_authorization_context: 3
 
   defmacro __using__(auth_module) do

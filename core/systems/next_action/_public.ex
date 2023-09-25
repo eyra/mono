@@ -41,9 +41,15 @@ defmodule Systems.NextAction.Public do
   end
 
   @doc """
-  Creates a next action.
+  Creates a next action for the audience.
   """
-  def create_next_action(%User{} = user, action, opts \\ []) when is_atom(action) do
+  def create_next_action(audience, action, opts \\ [])
+
+  def create_next_action([_ | _] = users, action, opts) when is_atom(action) do
+    Enum.map(users, &create_next_action(&1, action, opts))
+  end
+
+  def create_next_action(%User{} = user, action, opts) when is_atom(action) do
     key = Keyword.get(opts, :key)
 
     conflict_target_fragment =
@@ -74,7 +80,13 @@ defmodule Systems.NextAction.Public do
     )
   end
 
-  def clear_next_action(user, action, opts \\ []) do
+  def clear_next_action(audience, action, opts \\ [])
+
+  def clear_next_action([_ | _] = users, action, opts) do
+    Enum.map(users, &clear_next_action(&1, action, opts))
+  end
+
+  def clear_next_action(user, action, opts) do
     key = Keyword.get(opts, :key)
     action_string = to_string(action)
 

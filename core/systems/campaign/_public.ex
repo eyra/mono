@@ -11,13 +11,13 @@ defmodule Systems.Campaign.Public do
 
   alias Frameworks.GreenLight.Principal
   alias Frameworks.Signal
+  alias Frameworks.Concept.Directable
 
   alias Systems.{
-    Director,
     Campaign,
     Promotion,
     Assignment,
-    Questionnaire,
+    Alliance,
     Crew,
     Budget,
     Bookkeeping,
@@ -307,7 +307,7 @@ defmodule Systems.Campaign.Public do
            |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
            |> Repo.insert() do
       :ok = Authorization.assign_role(researcher, campaign, :owner)
-      Signal.Public.dispatch!(:campaign_created, %{campaign: campaign})
+      Signal.Public.dispatch!({:campaign, :created}, %{campaign: campaign})
       {:ok, campaign}
     end
   end
@@ -345,14 +345,14 @@ defmodule Systems.Campaign.Public do
         ]
       }) do
     # FIXME: budget change after pool update should be handled in student submission form
-    budget = Director.get(pool).resolve_budget(pool_id, nil)
+    budget = Directable.director(pool).resolve_budget(pool_id, nil)
     Assignment.Public.update(assignment, budget)
   end
 
   def submission_updated(_), do: nil
 
   def delete(id) when is_number(id) do
-    get!(id, Campaign.Model.preload_graph(:full))
+    get!(id, Campaign.Model.preload_graph(:down))
     |> Campaign.Assembly.delete()
   end
 
@@ -417,37 +417,14 @@ defmodule Systems.Campaign.Public do
     |> Repo.all()
   end
 
-  def list_questionnaire_tools(%Campaign.Model{} = campaign) do
-    from(s in Questionnaire.ToolModel, where: s.campaign_id == ^campaign.id)
+  def list_tools(%Campaign.Model{} = campaign) do
+    from(s in Alliance.ToolModel, where: s.campaign_id == ^campaign.id)
     |> Repo.all()
   end
 
   def list_tools(%Campaign.Model{} = campaign, schema) do
     from(s in schema, where: s.campaign_id == ^campaign.id)
     |> Repo.all()
-  end
-
-  def search_subject(tool, %Core.Accounts.User{} = user) do
-    Assignment.Public.search_subject(tool, user)
-  end
-
-  def search_subject(tool, public_id) do
-    Assignment.Public.search_subject(tool, public_id)
-  end
-
-  def apply_member_and_activate_task(tool, user) do
-    assignment = Assignment.Public.get_by_tool(tool, Assignment.Model.preload_graph(:full))
-
-    %{submission: %{reward_value: reward_value}} =
-      assignment
-      |> get_by_promotable([:submissions])
-      |> Campaign.Model.flatten()
-
-    Assignment.Public.apply_member_and_activate_task(assignment, user, reward_value)
-  end
-
-  def assign_tester_role(tool, user) do
-    Assignment.Public.assign_tester_role(tool, user)
   end
 
   def completed?(%Campaign.Model{} = campaign) do
@@ -464,7 +441,7 @@ defmodule Systems.Campaign.Public do
     # temp solution for checking if campaign is ready to submit,
     # TBD: replace with signal driven db field
 
-    preload = Campaign.Model.preload_graph(:full)
+    preload = Campaign.Model.preload_graph(:down)
 
     %{
       promotion: promotion,
@@ -475,9 +452,33 @@ defmodule Systems.Campaign.Public do
       Assignment.Public.ready?(assignment)
   end
 
+  def assign_coordinators(campaign) do
+    from(u in User, where: u.coordinator == true)
+    |> Repo.all()
+    |> Enum.each(fn user ->
+      Authorization.assign_role(user, campaign, :coordinator)
+    end)
+  end
+
+  def update_coordinator_role(user, value) do
+    from(c in Campaign.Model)
+    |> Repo.all()
+    |> Enum.each(fn campaign ->
+      update_coordinator_role(campaign, user, value)
+    end)
+  end
+
+  defp update_coordinator_role(campaign, user, value) do
+    if value do
+      Authorization.assign_role(user, campaign, :coordinator)
+    else
+      Authorization.remove_role!(user, campaign, :coordinator)
+    end
+  end
+
   def handle_exclusion(%Assignment.Model{} = assignment, items) when is_list(items) do
     items |> Enum.each(&handle_exclusion(assignment, &1))
-    Signal.Public.dispatch!(:assignment_updated, assignment)
+    Signal.Public.dispatch!({:assignment, :updated}, %{assignment: assignment})
   end
 
   def handle_exclusion(%Assignment.Model{} = assignment, %{id: id, active: active} = _item) do
@@ -500,9 +501,18 @@ defmodule Systems.Campaign.Public do
     Assignment.Public.include(assignment, other)
   end
 
+  def reward_value(%Assignment.Model{} = assignment) do
+    %{submission: %{reward_value: reward_value}} =
+      assignment
+      |> Campaign.Public.get_by_promotable([:submissions])
+      |> Campaign.Model.flatten()
+
+    reward_value
+  end
+
   def validate_open(%Assignment.Model{} = assignment, user) do
     assignment
-    |> get_by_promotable(Campaign.Model.preload_graph(:full))
+    |> get_by_promotable(Campaign.Model.preload_graph(:down))
     |> validate_open(user)
   end
 
@@ -577,7 +587,7 @@ defmodule Systems.Campaign.Public do
       |> Repo.all()
       |> Enum.map(& &1.id)
 
-    preload = Campaign.Model.preload_graph(:full)
+    preload = Campaign.Model.preload_graph(:down)
 
     from(c in Campaign.Model,
       inner_join: cs in Campaign.SubmissionModel,
@@ -622,18 +632,22 @@ defmodule Systems.Campaign.Public do
     Synchronizes accepted student tasks with bookkeeping.
   """
   def sync_student_credits() do
-    from(a in Assignment.Model,
-      inner_join: t in Crew.TaskModel,
-      on: t.crew_id == a.crew_id,
-      inner_join: m in Crew.MemberModel,
-      on: m.id == t.member_id,
-      inner_join: u in User,
-      on: u.id == m.user_id,
-      inner_join: b in Budget.Model,
-      on: b.id == a.budget_id,
-      where: t.status == :accepted and u.student == true,
+    from(assignment in Assignment.Model,
+      inner_join: task in Crew.TaskModel,
+      on: task.crew_id == assignment.crew_id,
+      inner_join: node in Authorization.Node,
+      on: node.id == task.auth_node_id,
+      inner_join: role in Authorization.RoleAssignment,
+      on: role.node_id == node.id,
+      inner_join: user in User,
+      on: user.id == role.principal_id,
+      inner_join: budget in Budget.Model,
+      on: budget.id == assignment.budget_id,
+      where: role.role == :owner,
+      where: task.status == :accepted,
+      where: user.student == true,
       preload: [budget: [:fund, :reserve]],
-      select: %{assignment: a, user: u}
+      select: %{assignment: assignment, user: user}
     )
     |> Repo.all()
     |> Enum.each(&payout_participant(&1.assignment, &1.user))

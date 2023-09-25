@@ -49,10 +49,7 @@ defmodule Systems.Benchmark.Public do
     |> set_tool_status(status)
   end
 
-  def create(
-        %{title: _, director: _} = attrs,
-        %Authorization.Node{} = auth_node
-      ) do
+  def prepare_tool(%{} = attrs, auth_node \\ Core.Authorization.make_node()) do
     attrs = Map.put(attrs, :status, :concept)
 
     %Benchmark.ToolModel{}

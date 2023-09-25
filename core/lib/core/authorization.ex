@@ -15,6 +15,7 @@ defmodule Core.Authorization do
   require Logger
 
   import Ecto.Query
+  alias Ecto.Multi
   alias Core.Repo
   alias Frameworks.GreenLight
 
@@ -42,8 +43,9 @@ defmodule Core.Authorization do
   grant_access(Systems.NextAction.OverviewPage, [:member])
   grant_access(Systems.Campaign.OverviewPage, [:researcher])
   grant_access(Systems.Campaign.ContentPage, [:owner])
+  grant_access(Systems.Assignment.ContentPage, [:researcher, :owner])
   grant_access(Systems.Assignment.LandingPage, [:participant])
-  grant_access(Systems.Assignment.CallbackPage, [:participant, :tester])
+  grant_access(Systems.Alliance.CallbackPage, [:participant, :tester])
   grant_access(Systems.Lab.PublicPage, [:member])
   grant_access(Systems.Promotion.LandingPage, [:visitor, :member, :owner])
   grant_access(Systems.Pool.OverviewPage, [:researcher])
@@ -58,7 +60,7 @@ defmodule Core.Authorization do
   grant_access(Systems.DataDonation.OverviewPage, [:member])
   grant_access(Systems.Project.OverviewPage, [:researcher])
   grant_access(Systems.Project.NodePage, [:researcher, :owner])
-  grant_access(Systems.Project.ItemContentPage, [:researcher, :owner])
+  grant_access(Systems.Benchmark.ContentPage, [:researcher, :owner])
   grant_access(Systems.Benchmark.ToolPage, [:owner])
   grant_access(Systems.Benchmark.LeaderboardPage, [:visitor, :member])
 
@@ -71,9 +73,9 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.User.Profile, [:member])
   grant_access(CoreWeb.User.Settings, [:member])
   grant_access(CoreWeb.User.SecuritySettings, [:member])
-  grant_access(CoreWeb.FakeQuestionnaire, [:member])
+  grant_access(CoreWeb.FaceAlliance, [:member])
 
-  grant_actions(CoreWeb.FakeQuestionnaireController, %{
+  grant_actions(CoreWeb.FaceAllianceController, %{
     index: [:visitor, :member]
   })
 
@@ -175,8 +177,8 @@ defmodule Core.Authorization do
     node_id |> parent_node_query |> Core.Repo.all()
   end
 
-  def roles_intersect?(principal, node_id, roles) do
-    nodes_query = node_id |> parent_node_query
+  def roles_intersect?(principal, entity, roles) do
+    nodes_query = entity |> parent_node_query
 
     from(ra in Core.Authorization.RoleAssignment,
       where:
@@ -256,5 +258,48 @@ defmodule Core.Authorization do
     entity
     |> get_parent_nodes()
     |> List.last()
+  end
+
+  def link(auth_tree) do
+    Multi.new()
+    |> link(auth_tree)
+    |> Repo.transaction()
+  end
+
+  def link(multi, {parent, [h | t]}) do
+    multi
+    |> link({parent, h})
+    |> link({parent, t})
+  end
+
+  def link(
+        multi,
+        {%Core.Authorization.Node{} = parent, {%Core.Authorization.Node{} = child, subtree}}
+      ) do
+    multi
+    |> link({parent, child})
+    |> link({child, subtree})
+  end
+
+  def link(multi, {%Core.Authorization.Node{} = parent, %Core.Authorization.Node{} = child}) do
+    link(multi, parent, child)
+  end
+
+  def link(multi, {_, _}), do: multi
+
+  def link(
+        multi,
+        %Core.Authorization.Node{} = parent,
+        %Core.Authorization.Node{parent: %Ecto.Association.NotLoaded{}} = child
+      ) do
+    link(multi, parent, Repo.preload(child, :parent))
+  end
+
+  def link(multi, %Core.Authorization.Node{} = parent, %Core.Authorization.Node{} = child) do
+    changeset =
+      Core.Authorization.Node.change(child)
+      |> Ecto.Changeset.put_assoc(:parent, parent)
+
+    Multi.update(multi, Ecto.UUID.generate(), changeset)
   end
 end

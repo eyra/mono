@@ -5,6 +5,7 @@ defmodule Systems.Pool.Public do
   alias Ecto.Multi
   alias Ecto.Changeset
   alias Frameworks.Signal
+  alias Frameworks.Concept.Directable
 
   alias Core.{
     Repo,
@@ -13,7 +14,6 @@ defmodule Systems.Pool.Public do
   }
 
   alias Systems.{
-    Director,
     Pool,
     Bookkeeping,
     NextAction,
@@ -120,7 +120,7 @@ defmodule Systems.Pool.Public do
   end
 
   def submit(%Pool.SubmissionModel{id: id, pool: pool}) do
-    Director.get(pool).submit(id)
+    Directable.director(pool).submit(id)
   end
 
   def list_directors() do
@@ -129,7 +129,7 @@ defmodule Systems.Pool.Public do
       select: p.director
     )
     |> Repo.all()
-    |> Enum.map(&Systems.Director.get/1)
+    |> Enum.map(&Directable.director/1)
   end
 
   def get!(id, preload \\ []), do: Repo.get!(Pool.Model, id) |> Repo.preload(preload)
@@ -229,7 +229,7 @@ defmodule Systems.Pool.Public do
   end
 
   def get_or_create_budget(%Pool.Model{} = pool) do
-    Director.get(pool).create_budget(pool)
+    Directable.director(pool).create_budget(pool)
   end
 
   def create!(name, target, currency, org, director) do
@@ -290,7 +290,7 @@ defmodule Systems.Pool.Public do
     Multi.new()
     |> Multi.update(:submission, changeset)
     |> Multi.run(:dispatch, fn _, %{submission: submission} ->
-      Signal.Public.dispatch!(:submission_updated, submission)
+      Signal.Public.dispatch!({:submission, :updated}, submission)
       {:ok, true}
     end)
     |> Multi.run(:notify, fn _, %{submission: submission} ->
@@ -309,7 +309,7 @@ defmodule Systems.Pool.Public do
     Multi.new()
     |> Multi.update(:criteria, changeset)
     |> Multi.run(:dispatch, fn _, %{criteria: criteria} ->
-      Signal.Public.dispatch!(:criteria_updated, criteria)
+      Signal.Public.dispatch!({:criteria, :updated}, criteria)
     end)
     |> Repo.transaction()
   end

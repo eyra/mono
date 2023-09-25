@@ -271,7 +271,7 @@ defmodule Systems.Budget.Public do
 
   def payout_reward(idempotence_key) when is_binary(idempotence_key) do
     case get_reward(idempotence_key, Budget.RewardModel.preload_graph(:full)) do
-      nil -> raise BudgetError, "No reward available to payout"
+      nil -> Logger.warn("No reward available to payout for #{idempotence_key}")
       reward -> make_payment(reward)
     end
   end

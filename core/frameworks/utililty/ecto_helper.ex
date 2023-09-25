@@ -2,6 +2,7 @@ defmodule Frameworks.Utility.EctoHelper do
   import Ecto.Query, only: [from: 2]
   alias Ecto.{Multi, Changeset}
   alias Core.Repo
+  alias Frameworks.Signal
 
   def upsert(%{data: %{id: id}} = changeset) when not is_nil(id) do
     Repo.update(changeset)
@@ -9,6 +10,13 @@ defmodule Frameworks.Utility.EctoHelper do
 
   def upsert(changeset) do
     Repo.insert(changeset)
+  end
+
+  def update_and_dispatch(changeset, key) do
+    Multi.new()
+    |> Repo.multi_update(key, changeset)
+    |> Signal.Public.multi_dispatch({key, :update_and_dispatch}, %{changeset: changeset})
+    |> Repo.transaction()
   end
 
   def delete(multi, name, %table{id: id}) do
@@ -52,6 +60,27 @@ defmodule Frameworks.Utility.EctoHelper do
       changeset |> Changeset.put_change(:icon, {icon_type, icon_value})
     else
       changeset
+    end
+  end
+
+  # Multi
+
+  def run(multi, name, function) do
+    case :erlang.fun_info(function)[:arity] do
+      1 ->
+        Multi.run(multi, name, fn _, args ->
+          function.(args)
+        end)
+
+      2 ->
+        Multi.run(multi, name, fn _, args ->
+          Multi.new()
+          |> function.(args)
+          |> Repo.transaction()
+        end)
+
+      _ ->
+        multi
     end
   end
 end

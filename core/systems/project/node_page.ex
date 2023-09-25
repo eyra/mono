@@ -2,6 +2,7 @@ defmodule Systems.Project.NodePage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :projects
   use CoreWeb.UI.PlainDialog
+  use Systems.Observatory.Public
 
   import CoreWeb.Layouts.Workspace.Component
 
@@ -12,7 +13,8 @@ defmodule Systems.Project.NodePage do
   }
 
   def mount(%{"id" => id}, _session, socket) do
-    model = %{id: String.to_integer(id), director: :project}
+    model =
+      Project.Public.get_node!(String.to_integer(id), Project.NodeModel.preload_graph(:down))
 
     {
       :ok,

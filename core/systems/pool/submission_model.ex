@@ -26,8 +26,6 @@ defmodule Systems.Pool.SubmissionModel do
     has_one(:criteria, Pool.CriteriaModel, foreign_key: :submission_id)
     belongs_to(:pool, Pool.Model, on_replace: :update)
 
-    field(:director, Ecto.Enum, values: [:campaign])
-
     timestamps()
   end
 
@@ -77,7 +75,6 @@ defmodule Systems.Pool.SubmissionModel do
 
   def changeset(submission, attrs) do
     submission
-    |> cast(attrs, [:director])
     |> cast(attrs, @fields)
   end
 

@@ -9,7 +9,7 @@ defmodule Systems.Lab.PublicPage do
   }
 
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
-    tool = Lab.Public.get(id, [:time_slots])
+    tool = Lab.Public.get_tool!(id, [:time_slots])
 
     {:ok,
      socket

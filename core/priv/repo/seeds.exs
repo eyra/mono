@@ -12,7 +12,7 @@
 #
 #
 
-_questionnaire_url = "https://vuamsterdam.eu.qualtrics.com/jfe/form/SV_4Po8iTxbvcxtuaW"
+_alliance_url = "https://vuamsterdam.eu.qualtrics.com/jfe/form/SV_4Po8iTxbvcxtuaW"
 
 images = [
   "raw_url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1498462440456-0dba182e775b%3Fixid%3DMnwyMTY0MzZ8MHwxfHNlYXJjaHw5fHx3YXRlcnxlbnwwfHx8fDE2MjE3NzY0MjA%26ixlib%3Drb-1.2.1&username=samaradoole&name=Samara+Doole&blur_hash=LtI~0%3Ft7aeof~qofazayt6f6j%5Bf6",

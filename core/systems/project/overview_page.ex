@@ -33,7 +33,7 @@ defmodule Systems.Project.OverviewPage do
   end
 
   defp update_projects(%{assigns: %{current_user: user}} = socket) do
-    preload = Project.Model.preload_graph(:full)
+    preload = Project.Model.preload_graph(:down)
     projects = Project.Public.list_owned_projects(user, preload: preload)
 
     socket

@@ -1,12 +1,14 @@
 defmodule Systems.Project.Assembly do
   alias Core.Repo
   alias Ecto.Multi
+  alias Ecto.Changeset
   import Ecto.Query, warn: false
+  alias Frameworks.Utility.EctoHelper
   alias Core.Authorization
 
   alias Systems.{
     Project,
-    DataDonation,
+    Assignment,
     Benchmark
   }
 
@@ -25,114 +27,166 @@ defmodule Systems.Project.Assembly do
   end
 
   def create(name, user, :empty) do
+    project = prepare_project(name, [])
+
     Multi.new()
-    |> prepare_project(name, user)
+    |> Multi.put(:user, user)
+    |> Multi.insert(:project, project)
+    |> EctoHelper.run(:assign_role, &assign_role/1)
     |> Repo.transaction()
   end
 
-  def create(name, user, :data_donation) do
+  def create(name, user, template) do
+    items = prepare_items(template)
+    project = prepare_project(name, items)
+
     Multi.new()
-    |> prepare_project(name, user)
-    |> prepare_tool_ref(0, :data_donation)
-    |> prepare_item(0, "Data Donation")
+    |> Multi.put(:user, user)
+    |> Multi.insert(:project, project)
+    |> EctoHelper.run(:auth, &update_auth/2)
+    |> EctoHelper.run(:path, &update_path/2)
+    |> EctoHelper.run(:assign_role, &assign_role/1)
     |> Repo.transaction()
   end
 
-  def create(name, user, :benchmark) do
-    Multi.new()
-    |> prepare_project(name, user)
-    |> prepare_tool_ref(0, :benchmark)
-    |> prepare_item(0, "Challenge Round 1")
-    |> prepare_tool_ref(1, :benchmark)
-    |> prepare_item(1, "Challenge Round 2")
-    |> Repo.transaction()
-  end
-
-  def create_item(name, %Project.NodeModel{id: node_id} = node, tool_special)
+  def create_item(template, name, %Project.NodeModel{} = node)
       when is_binary(name) do
-    project =
-      from(p in Project.Model, where: p.root_id == ^node_id, preload: [:auth_node])
-      |> Repo.one!()
-
     Multi.new()
-    |> Multi.insert(:auth_node, fn _ ->
-      Authorization.make_node(project.auth_node)
-    end)
-    |> prepare_tool(tool_special)
-    |> Multi.insert(:tool_ref, fn %{tool: tool} ->
-      key = String.to_existing_atom("#{tool_special}_tool")
-      Project.Public.create_tool_ref(key, tool)
-    end)
-    |> Multi.insert(:item, fn %{tool_ref: tool_ref} ->
-      Project.Public.create_item(
-        %{name: name, project_path: [project.id, node_id]},
-        node,
-        tool_ref
-      )
-    end)
+    |> Multi.insert(
+      :item,
+      prepare_item(template, name)
+      |> Changeset.put_assoc(:node, node)
+    )
+    |> EctoHelper.run(:node, &load_node!/1)
+    |> EctoHelper.run(:auth, &update_auth/2)
+    |> EctoHelper.run(:path, &update_path/2)
     |> Repo.transaction()
   end
 
-  defp prepare_project(multi, name, user) do
+  # LOAD
+
+  defp load_node!(%{item: %{node_id: node_id}}) do
+    {:ok, Project.Public.get_node!(node_id, Project.NodeModel.preload_graph(:down))}
+  end
+
+  # PREPARE
+
+  defp prepare_project(name, items) when is_list(items) do
+    Project.Public.prepare(%{name: name}, items)
+  end
+
+  defp prepare_items(:data_donation) do
+    [prepare_item(:data_donation, "Data Donation Assignment")]
+  end
+
+  defp prepare_items(:benchmark) do
+    [
+      prepare_item(:benchmark, "Challenge Round 1"),
+      prepare_item(:benchmark, "Challenge Round 2")
+    ]
+  end
+
+  defp prepare_item(:benchmark, name) do
+    {:ok, tool} =
+      Benchmark.Public.prepare_tool(%{title: "", director: :project})
+      |> Changeset.apply_action(:prepare)
+
+    {:ok, tool_ref} =
+      Project.Public.prepare_tool_ref(:benchmark, :benchmark_tool, tool)
+      |> Changeset.apply_action(:prepare)
+
+    Project.Public.prepare_item(%{name: name, project_path: []}, tool_ref)
+  end
+
+  defp prepare_item(:data_donation, name) do
+    {:ok, assignment} =
+      Assignment.Assembly.prepare(:data_donation, :project, nil)
+      |> Changeset.apply_action(:prepare)
+
+    Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
+  end
+
+  # PROJECT PATH
+  def update_path(multi, %{project: project}), do: update_path(multi, project)
+
+  def update_path(multi, %{node: %{project_path: project_path} = node}),
+    do: update_path(multi, node, project_path)
+
+  def update_path(multi, %Project.Model{id: id, root: root}) do
+    update_path(multi, root, [id])
+  end
+
+  def update_path(
+        multi,
+        %Project.NodeModel{children: %Ecto.Association.NotLoaded{}} = node,
+        project_path
+      ) do
+    update_path(multi, Repo.preload(node, :children), project_path)
+  end
+
+  def update_path(
+        multi,
+        %Project.NodeModel{items: %Ecto.Association.NotLoaded{}} = node,
+        project_path
+      ) do
+    update_path(multi, Repo.preload(node, :items), project_path)
+  end
+
+  def update_path(
+        multi,
+        %Project.NodeModel{id: id, items: items, children: children} = node,
+        project_path
+      ) do
+    changeset = Project.NodeModel.changeset(node, %{project_path: project_path})
+    new_project_path = append_path(project_path, node)
+
     multi
-    |> Project.Public.create(%{name: name})
-    |> Multi.run(:assign_role, fn _, %{project: project} ->
-      {:ok, Authorization.assign_role(user, project, :owner)}
+    |> Multi.update("node_#{id}", changeset)
+    |> update_paths(items, new_project_path)
+    |> update_paths(children, new_project_path)
+  end
+
+  def update_path(multi, %Project.ItemModel{id: id} = item, project_path) do
+    changeset = Project.ItemModel.changeset(item, %{project_path: project_path})
+
+    Multi.update(multi, "item_#{id}", changeset)
+  end
+
+  def update_paths(multi, [_ | _] = elements, project_path) do
+    Enum.reduce(elements, multi, fn element, multi ->
+      update_path(multi, element, project_path)
     end)
   end
 
-  defp prepare_item(multi, index, name) do
-    multi
-    |> Multi.insert({:item, index}, fn %{
-                                         {:tool_ref, ^index} => tool_ref,
-                                         project: project,
-                                         root: root
-                                       } ->
-      Project.Public.create_item(
-        %{name: name, project_path: [project.id, root.id]},
-        root,
-        tool_ref
-      )
-    end)
+  def update_paths(multi, _, _parent_path), do: multi
+
+  def append_path(path, %{id: id}) when is_list(path), do: append_path(path, id)
+
+  def append_path(path, sub_path) when is_list(path) and is_integer(sub_path),
+    do: path ++ [sub_path]
+
+  # AUTHORIZATION
+
+  def assign_role(%{user: user, project: project}) do
+    {:ok, Authorization.assign_role(user, project, :owner)}
   end
 
-  defp prepare_tool_ref(multi, index, :data_donation) when is_integer(index) do
-    multi
-    |> Multi.insert({:tool_auth_node, index}, fn %{root: %{auth_node: auth_node}} ->
-      Authorization.make_node(auth_node)
-    end)
-    |> Multi.insert({:tool, index}, fn %{{:tool_auth_node, ^index} => tool_auth_node} ->
-      DataDonation.Public.create(%{subject_count: 0, director: :project}, tool_auth_node)
-    end)
-    |> Multi.insert({:tool_ref, index}, fn %{{:tool, ^index} => tool} ->
-      Project.Public.create_tool_ref(:data_donation_tool, tool)
-    end)
+  def update_auth(multi, %{project: project}), do: update_auth(multi, project)
+  def update_auth(multi, %{node: node}), do: update_auth(multi, node)
+  def update_auth(multi, %{item: item}), do: update_auth(multi, item)
+
+  def update_auth(multi, %Project.Model{} = project) do
+    auth_tree = Project.Model.auth_tree(project)
+    Core.Authorization.link(multi, auth_tree)
   end
 
-  defp prepare_tool_ref(multi, index, :benchmark) when is_integer(index) do
-    multi
-    |> Multi.insert({:tool_auth_node, index}, fn %{root: %{auth_node: auth_node}} ->
-      Authorization.make_node(auth_node)
-    end)
-    |> Multi.insert({:tool, index}, fn %{{:tool_auth_node, ^index} => tool_auth_node} ->
-      Benchmark.Public.create(%{title: "", director: :project}, tool_auth_node)
-    end)
-    |> Multi.insert({:tool_ref, index}, fn %{{:tool, ^index} => tool} ->
-      Project.Public.create_tool_ref(:benchmark_tool, tool)
-    end)
+  def update_auth(multi, %Project.NodeModel{} = project) do
+    auth_tree = Project.NodeModel.auth_tree(project)
+    Core.Authorization.link(multi, auth_tree)
   end
 
-  defp prepare_tool(multi, :data_donation) do
-    multi
-    |> Multi.insert(:tool, fn %{auth_node: auth_node} ->
-      DataDonation.Public.create(%{subject_count: 0, director: :project}, auth_node)
-    end)
-  end
-
-  defp prepare_tool(multi, :benchmark) do
-    multi
-    |> Multi.insert(:tool, fn %{auth_node: auth_node} ->
-      Benchmark.Public.create(%{title: "", director: :project}, auth_node)
-    end)
+  def update_auth(multi, %Project.ItemModel{} = project) do
+    auth_tree = Project.ItemModel.auth_tree(project)
+    Core.Authorization.link(multi, auth_tree)
   end
 end

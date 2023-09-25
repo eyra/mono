@@ -1,0 +1,215 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "config.url.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "by.author.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "reward.highlight.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "apply.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "redirect.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "redirect.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "status.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "vacant.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.first.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.new.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "empty.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "monitor.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "monitor.empty.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "campaign.overview.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ethical.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ethical.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panlid.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panlid.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "setup.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "redirect.copy.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ethical.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "study.link.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "study.link.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panlid.instructions.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "redirect.instructions.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "study.instructions.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "duration.highlight.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "duration.highlight.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ethical.review.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task.hero.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task.completed.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task.completed.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task.pending.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "status.closed.highlight.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "status.highlight.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "status.open.highlight.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "language.highlight.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.new.button.short"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task.accepted.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task.accepted.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task.rejected.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task.rejected.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "participated.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "test.roundtrip.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "test.roundtrip.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "test.roundtrip.title"
+msgstr ""

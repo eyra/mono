@@ -14,58 +14,6 @@ msgstr ""
 msgid "config.nrofsubjects.label"
 msgstr "Aantal gewenste deelnemers"
 
-#, elixir-autogen, elixir-format
-msgid "content.title"
-msgstr "Data Donatie"
-
-#, elixir-autogen, elixir-format
-msgid "task.donate.description"
-msgstr "Biedt deelnemers de mogelijkheid om te doneren."
-
-#, elixir-autogen, elixir-format
-msgid "task.donate.title"
-msgstr "Donatie"
-
-#, elixir-autogen, elixir-format
-msgid "task.download.description"
-msgstr "Legt deelnemers uit hoe ze digital trace data kunnen downloaden."
-
-#, elixir-autogen, elixir-format
-msgid "task.download.title"
-msgstr "Download handleiding"
-
-#, elixir-autogen, elixir-format
-msgid "task.library.description"
-msgstr "Kies items die je aan de flow wilt toevoegen."
-
-#, elixir-autogen, elixir-format
-msgid "task.library.title"
-msgstr "Bibliotheek"
-
-#, elixir-autogen, elixir-format
-msgid "task.list.description"
-msgstr "Voeg items uit de bibliotheek toe om een flow te bouwen voor jouw deelnemers."
-
-#, elixir-autogen, elixir-format
-msgid "task.list.title"
-msgstr "Flow voor deelnemers"
-
-#, elixir-autogen, elixir-format
-msgid "task.request.description"
-msgstr "Legt deelnemers uit hoe ze digital trace data kunnen aanvragen."
-
-#, elixir-autogen, elixir-format
-msgid "task.request.title"
-msgstr "Aanvraag handleiding"
-
-#, elixir-autogen, elixir-format
-msgid "task.questionnaire.description"
-msgstr "Stuurt deelnemers naar een online vragenlijst."
-
-#, elixir-autogen, elixir-format
-msgid "task.questionnaire.title"
-msgstr "Vragenlijst"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "task.description.label"
 msgstr "Beschrijving"

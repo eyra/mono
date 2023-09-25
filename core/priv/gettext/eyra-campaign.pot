@@ -39,7 +39,7 @@ msgid "campaign.create.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "campaign.create.tooltype.label"
+msgid "campaign.create.template.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format

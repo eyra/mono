@@ -16,7 +16,7 @@ defmodule Port.Console.Page do
   }
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    preload = Project.Model.preload_graph(:full)
+    preload = Project.Model.preload_graph(:down)
 
     content_items =
       user

@@ -24,7 +24,7 @@ defmodule Systems.Pool.ParticipantPage do
       Budget.Public.list_wallets(user)
       |> Enum.map(&Budget.WalletViewBuilder.view_model(&1, assigns))
 
-    campaign_preload = Campaign.Model.preload_graph(:full)
+    campaign_preload = Campaign.Model.preload_graph(:down)
 
     contributions =
       user

@@ -7,10 +7,10 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
   alias Phoenix.LiveView
 
   alias Systems.{
-    Director,
     Campaign,
     Promotion,
-    Assignment
+    Assignment,
+    Workflow
   }
 
   def view_model(
@@ -30,10 +30,10 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
           promotion: promotion,
           promotable:
             %{
-              assignable_experiment: experiment
+              info: info
             } = assignment
         },
-        _assigns
+        %{current_user: user}
       ) do
     %{
       id: id,
@@ -41,15 +41,15 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
       themes: themes(promotion),
       organisation: organisation(promotion),
       highlights: highlights(assignment, submission),
-      call_to_action: apply_call_to_action(assignment),
-      languages: Assignment.ExperimentModel.languages(experiment),
-      devices: Assignment.ExperimentModel.devices(experiment)
+      call_to_action: apply_call_to_action(assignment, user),
+      languages: Assignment.InfoModel.languages(info),
+      devices: Assignment.InfoModel.devices(info)
     }
     |> merge(promotion |> Map.take([:image_id | Promotion.Model.plain_fields()]))
   end
 
   defp byline(authors) when is_list(authors) do
-    "#{dgettext("link-questionnaire", "by.author.label")}: " <>
+    "#{dgettext("eyra-alliance", "by.author.label")}: " <>
       Enum.map_join(authors, ", ", & &1.fullname)
   end
 
@@ -80,11 +80,15 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
     ]
   end
 
-  defp apply_call_to_action(%{assignable_experiment: experiment} = assignment) do
+  defp apply_call_to_action(%{workflow: workflow} = assignment, user) do
+    [tool | _] = Workflow.Model.flatten(workflow)
+    task_identifier = Assignment.Public.task_identifier(tool, user)
+
     %{
-      label: Assignment.ExperimentModel.apply_label(experiment),
+      label: Frameworks.Concept.ToolModel.apply_label(tool),
       target: %{type: :event, value: "apply"},
       assignment: assignment,
+      task_identifier: task_identifier,
       handle: &handle_apply/1
     }
   end
@@ -93,18 +97,23 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
         %{
           assigns: %{
             current_user: user,
-            vm: %{call_to_action: %{assignment: %{id: id} = assignment}}
+            vm: %{
+              call_to_action: %{
+                assignment: %{id: id} = assignment,
+                task_identifier: task_identifier
+              }
+            }
           }
         } = socket
       ) do
-    case Director.public(assignment).validate_open(assignment, user) do
+    case Campaign.Public.validate_open(assignment, user) do
       {:error, error} ->
         inform(error, socket)
 
       :ok ->
         reward_amount = Campaign.Public.reward_amount(assignment)
 
-        case Assignment.Public.apply_member(assignment, user, reward_amount) do
+        case Assignment.Public.apply_member(assignment, user, task_identifier, reward_amount) do
           {:ok, _} ->
             LiveView.push_redirect(socket,
               to: Routes.live_path(socket, Systems.Assignment.LandingPage, id)

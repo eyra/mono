@@ -19,7 +19,7 @@ defmodule Link.Console.Page do
   alias Systems.NextAction
 
   def mount(_params, _session, %{assigns: %{current_user: user} = assigns} = socket) do
-    preload = Campaign.Model.preload_graph(:full)
+    preload = Campaign.Model.preload_graph(:down)
 
     next_best_action = NextAction.Public.next_best_action(user)
 

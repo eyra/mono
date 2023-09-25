@@ -14,58 +14,6 @@ msgstr ""
 msgid "config.nrofsubjects.label"
 msgstr "How many participants do you need?"
 
-#, elixir-autogen, elixir-format
-msgid "content.title"
-msgstr "Data Donation"
-
-#, elixir-autogen, elixir-format
-msgid "task.donate.description"
-msgstr "Enables participants to donate data."
-
-#, elixir-autogen, elixir-format
-msgid "task.donate.title"
-msgstr "Donate"
-
-#, elixir-autogen, elixir-format
-msgid "task.download.description"
-msgstr "Instructs participants on how to download digital trace data."
-
-#, elixir-autogen, elixir-format
-msgid "task.download.title"
-msgstr "Download manual"
-
-#, elixir-autogen, elixir-format
-msgid "task.library.description"
-msgstr "Choose which items to add to your flow."
-
-#, elixir-autogen, elixir-format
-msgid "task.library.title"
-msgstr "Library"
-
-#, elixir-autogen, elixir-format
-msgid "task.list.description"
-msgstr "Add items from the library to build a custom flow for your participants."
-
-#, elixir-autogen, elixir-format
-msgid "task.list.title"
-msgstr "Participant flow"
-
-#, elixir-autogen, elixir-format
-msgid "task.request.description"
-msgstr "Instructs participants on how to request digital trace data."
-
-#, elixir-autogen, elixir-format
-msgid "task.request.title"
-msgstr "Request manual"
-
-#, elixir-autogen, elixir-format
-msgid "task.questionnaire.description"
-msgstr "Redirects participants to an online questionnaire."
-
-#, elixir-autogen, elixir-format
-msgid "task.questionnaire.title"
-msgstr "Questionnaire"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "task.description.label"
 msgstr "Description"

@@ -21,7 +21,7 @@ defmodule Next.Console.Page do
 
     project_items =
       user
-      |> Project.Public.list_owned_projects(preload: Project.Model.preload_graph(:full))
+      |> Project.Public.list_owned_projects(preload: Project.Model.preload_graph(:down))
       |> Enum.map(&convert_to_vm(socket, &1))
 
     content_items = spot_items ++ project_items

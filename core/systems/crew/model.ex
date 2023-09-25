@@ -5,6 +5,8 @@ defmodule Systems.Crew.Model do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Systems.Crew
+
   schema "crews" do
     has_many(:tasks, Systems.Crew.TaskModel, foreign_key: :crew_id)
     has_many(:members, Systems.Crew.MemberModel, foreign_key: :crew_id)
@@ -14,6 +16,8 @@ defmodule Systems.Crew.Model do
   end
 
   @fields ~w()a
+
+  def auth_tree(%Crew.Model{auth_node: auth_node}), do: auth_node
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(crew), do: crew.auth_node_id

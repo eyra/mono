@@ -35,7 +35,7 @@ defmodule SignInWithApple do
            |> SignInWithApple.User.changeset(attrs)
            |> Ecto.Changeset.put_assoc(:user, user)
            |> Repo.insert() do
-      Signal.Public.dispatch!(:user_created, %{user: apple_user.user})
+      Signal.Public.dispatch!({:user, :created}, %{user: apple_user.user})
       {:ok, apple_user}
     end
   end
