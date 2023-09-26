@@ -20,7 +20,10 @@ defmodule Core.APNS.SignalHandlers.Test do
       Core.APNS.MockBackend
       |> expect(:send_notification, fn _notif -> :ok end)
 
-      SignalHandlers.dispatch(:new_notification, %{box: box, data: %{title: "Hello Test Message"}})
+      SignalHandlers.intercept(:new_notification, %{
+        box: box,
+        data: %{title: "Hello Test Message"}
+      })
     end
   end
 end

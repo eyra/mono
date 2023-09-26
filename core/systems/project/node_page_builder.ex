@@ -33,9 +33,8 @@ defmodule Systems.Project.NodePageBuilder do
   end
 
   defp to_item_cards(%{items: items}, assigns) do
-    Enum.map(
-      items,
-      &ViewModelBuilder.view_model(&1, {Project.NodePage, :item_card}, assigns)
-    )
+    items
+    |> Enum.sort_by(& &1.inserted_at, {:asc, NaiveDateTime})
+    |> Enum.map(&ViewModelBuilder.view_model(&1, {Project.NodePage, :item_card}, assigns))
   end
 end

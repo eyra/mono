@@ -5,13 +5,15 @@ defmodule Systems.Campaign.MonitorView do
   import CoreWeb.UI.Popup
   import CoreWeb.UI.ProgressBar
   alias CoreWeb.UI.Timestamp
+  alias Core.Authorization
   import Systems.Campaign.MonitorTableView
 
   alias Systems.{
     Pool,
     Crew,
     Campaign,
-    Lab
+    Lab,
+    Workflow
   }
 
   alias Frameworks.Pixel.Text
@@ -50,7 +52,7 @@ defmodule Systems.Campaign.MonitorView do
         %{
           id: id,
           entity: entity,
-          attention_list_enabled?: attention_list_enabled?,
+          attention_list_enabled?: true,
           labels: labels
         },
         socket
@@ -61,7 +63,7 @@ defmodule Systems.Campaign.MonitorView do
       |> assign(
         id: id,
         entity: entity,
-        attention_list_enabled?: attention_list_enabled?,
+        attention_list_enabled?: true,
         labels: labels,
         reject_task: nil
       )
@@ -81,7 +83,7 @@ defmodule Systems.Campaign.MonitorView do
 
   defp update_entity(%{assigns: %{entity: %{id: id}}} = socket) do
     entity =
-      Campaign.Public.get!(id, Campaign.Model.preload_graph(:full))
+      Campaign.Public.get!(id, Campaign.Model.preload_graph(:down))
       |> Campaign.Model.flatten()
 
     socket |> assign(entity: entity)
@@ -150,22 +152,22 @@ defmodule Systems.Campaign.MonitorView do
         <Margin.y id={:page_top} />
         <%= if not @vm.active? do %>
           <.empty
-              title={dgettext("link-survey", "monitor.empty.title")}
-              body={dgettext("link-survey", "monitor.empty.description")}
+              title={dgettext("eyra-alliance", "monitor.empty.title")}
+              body={dgettext("eyra-alliance", "monitor.empty.description")}
               illustration="members"
             />
         <% else %>
-          <%= if lab_tool(@vm.experiment) do %>
+          <%= if lab_tool(@vm.tool) do %>
             <.live_component module={Lab.CheckInView}
               id={:search_subject_view}
-              tool={lab_tool(@vm.experiment)}
+              tool={lab_tool(@vm.tool)}
               parent={%{type: __MODULE__, id: @id}}
             />
             <.spacing value="XL" />
           <% end %>
 
           <Text.title2><%= dgettext("link-monitor", "phase1.title") %></Text.title2>
-          <Text.title3 margin="mb-8"><%= dgettext("link-survey", "status.title") %><span class="text-primary">
+          <Text.title3 margin="mb-8"><%= dgettext("eyra-alliance", "status.title") %><span class="text-primary">
             <%= @vm.participated_count %>/<%= @vm.progress.size %></span></Text.title3>
           <.spacing value="M" />
           <div class="bg-grey6 rounded p-12">
@@ -186,7 +188,7 @@ defmodule Systems.Campaign.MonitorView do
               <div>
                 <div class="flex flex-row items-center gap-3">
                   <div class="flex-shrink-0 w-6 h-6 rounded-full bg-grey4" />
-                  <Text.label><%= dgettext("link-survey", "vacant.label") %>: <%= @vm.vacant_count %></Text.label>
+                  <Text.label><%= dgettext("eyra-alliance", "vacant.label") %>: <%= @vm.vacant_count %></Text.label>
                 </div>
               </div>
             </div>
@@ -268,18 +270,19 @@ defmodule Systems.Campaign.MonitorView do
          %{
            submission: submission,
            promotable: %{
+             workflow: workflow,
              crew: crew,
-             assignable_experiment:
-               %{
-                 subject_count: subject_count
-               } = experiment
+             info: %{
+               subject_count: subject_count
+             }
            }
          },
          attention_list_enabled?
        ) do
+    [tool] = Workflow.Model.flatten(workflow)
     participated_count = Crew.Public.count_participated_tasks(crew)
     pending_count = Crew.Public.count_pending_tasks(crew)
-    vacant_count = experiment |> get_vacant_count(participated_count, pending_count)
+    vacant_count = get_vacant_count(subject_count, participated_count, pending_count)
 
     status = Pool.SubmissionModel.status(submission)
     active? = status === :accepted or Crew.Public.active?(crew)
@@ -287,25 +290,25 @@ defmodule Systems.Campaign.MonitorView do
     {attention_columns, attention_tasks} =
       if attention_list_enabled? do
         Crew.Public.expired_pending_started_tasks(crew)
-        |> to_view_model(:attention_tasks, target, experiment)
+        |> to_view_model(:attention_tasks, target, crew, tool)
       else
         {[], []}
       end
 
     {completed_columns, completed_tasks} =
       Crew.Public.completed_tasks(crew)
-      |> to_view_model(:completed_tasks, target, experiment)
+      |> to_view_model(:completed_tasks, target, crew, tool)
 
     {rejected_columns, rejected_tasks} =
       Crew.Public.rejected_tasks(crew)
-      |> to_view_model(:rejected_tasks, target, experiment)
+      |> to_view_model(:rejected_tasks, target, crew, tool)
 
     {accepted_columns, accepted_tasks} =
       Crew.Public.accepted_tasks(crew)
-      |> to_view_model(:accepted_tasks, target, experiment)
+      |> to_view_model(:accepted_tasks, target, crew, tool)
 
     %{
-      experiment: experiment,
+      tool: tool,
       active?: active?,
       subject_count: subject_count,
       pending_count: pending_count,
@@ -335,7 +338,7 @@ defmodule Systems.Campaign.MonitorView do
     }
   end
 
-  defp get_vacant_count(%{subject_count: subject_count} = _experiment, finished, pending) do
+  defp get_vacant_count(subject_count, finished, pending) do
     case subject_count do
       count when is_nil(count) -> 0
       count when count > 0 -> max(0, count - (finished + pending))
@@ -343,15 +346,16 @@ defmodule Systems.Campaign.MonitorView do
     end
   end
 
-  defp is_lab_experiment(%{lab_tool_id: lab_tool_id} = _experiment), do: lab_tool_id != nil
+  defp is_lab_tool(%Lab.ToolModel{}), do: true
+  defp is_lab_tool(_), do: false
 
-  defp reservation(%{lab_tool_id: lab_tool_id} = _experiment, user_id) when lab_tool_id != nil do
-    tool = Lab.Public.get(lab_tool_id)
+  defp reservation(%{lab_tool_id: lab_tool_id} = _tool, user_id) when lab_tool_id != nil do
+    tool = Lab.Public.get_tool!(lab_tool_id)
     user = Core.Accounts.get_user!(user_id)
     Lab.Public.reservation_for_user(tool, user)
   end
 
-  defp reservation(_experiment, _user_id), do: nil
+  defp reservation(_tool, _user_id), do: nil
 
   defp time_slot(nil), do: nil
 
@@ -362,21 +366,21 @@ defmodule Systems.Campaign.MonitorView do
   defp time_slot_message(nil), do: "Participated without reservation"
   defp time_slot_message(time_slot), do: "🗓  " <> Lab.TimeSlotModel.message(time_slot)
 
-  defp to_view_model([], _, _, _), do: {[], []}
+  defp to_view_model([], _, _, _, _), do: {[], []}
 
-  defp to_view_model(tasks, :attention_tasks, target, experiment) do
+  defp to_view_model(tasks, :attention_tasks, target, crew, tool) do
     columns = [
       dgettext("link-monitor", "column.participant"),
       dgettext("link-monitor", "column.message")
     ]
 
-    tasks = Enum.map(tasks, &to_view_model(:attention, target, experiment, &1))
+    tasks = Enum.map(tasks, &to_view_model(:attention, target, crew, tool, &1))
     {columns, tasks}
   end
 
-  defp to_view_model(tasks, :completed_tasks, target, experiment) do
+  defp to_view_model(tasks, :completed_tasks, target, crew, tool) do
     columns =
-      if is_lab_experiment(experiment) do
+      if is_lab_tool(tool) do
         [
           dgettext("link-monitor", "column.participant"),
           dgettext("link-monitor", "column.reservation"),
@@ -386,39 +390,49 @@ defmodule Systems.Campaign.MonitorView do
         ["Subject", "Finished"]
       end
 
-    tasks = Enum.map(tasks, &to_view_model(:waitinglist, target, experiment, &1))
+    tasks = Enum.map(tasks, &to_view_model(:waitinglist, target, crew, tool, &1))
 
     {columns, tasks}
   end
 
-  defp to_view_model(tasks, :rejected_tasks, target, experiment) do
+  defp to_view_model(tasks, :rejected_tasks, target, crew, tool) do
     columns = [
       dgettext("link-monitor", "column.participant"),
       dgettext("link-monitor", "column.reason"),
       dgettext("link-monitor", "column.rejected")
     ]
 
-    tasks = Enum.map(tasks, &to_view_model(:rejected, target, experiment, &1))
+    tasks = Enum.map(tasks, &to_view_model(:rejected, target, crew, tool, &1))
     {columns, tasks}
   end
 
-  defp to_view_model(tasks, :accepted_tasks, target, experiment) do
+  defp to_view_model(tasks, :accepted_tasks, target, crew, tool) do
     columns = [
       dgettext("link-monitor", "column.participant"),
       dgettext("link-monitor", "column.accepted")
     ]
 
-    tasks = Enum.map(tasks, &to_view_model(:accepted, target, experiment, &1))
+    tasks = Enum.map(tasks, &to_view_model(:accepted, target, crew, tool, &1))
     {columns, tasks}
   end
 
-  defp to_view_model(:attention, target, _experiment, %Crew.TaskModel{
-         id: id,
-         started_at: started_at,
-         member_id: member_id
-       }) do
-    %{public_id: public_id} = Crew.Public.get_member!(member_id)
+  defp to_view_model(type, target, crew, tool, %Crew.TaskModel{} = task) do
+    [user] = Authorization.users_with_role(task, :owner)
+    member = Crew.Public.get_member(crew, user)
 
+    to_view_model(type, target, tool, task, member)
+  end
+
+  defp to_view_model(
+         :attention,
+         target,
+         _tool,
+         %Crew.TaskModel{
+           id: id,
+           started_at: started_at
+         },
+         %{public_id: public_id}
+       ) do
     date_string =
       started_at
       |> Timestamp.apply_timezone()
@@ -434,16 +448,19 @@ defmodule Systems.Campaign.MonitorView do
     }
   end
 
-  defp to_view_model(:waitinglist, target, experiment, %Crew.TaskModel{
-         id: id,
-         completed_at: completed_at,
-         member_id: member_id
-       }) do
-    %{user_id: user_id, public_id: public_id} = Crew.Public.get_member!(member_id)
-
+  defp to_view_model(
+         :waitinglist,
+         target,
+         tool,
+         %Crew.TaskModel{
+           id: id,
+           completed_at: completed_at
+         },
+         %{user_id: user_id, public_id: public_id}
+       ) do
     description =
-      if is_lab_experiment(experiment) do
-        if reservation = reservation(experiment, user_id) do
+      if is_lab_tool(tool) do
+        if reservation = reservation(tool, user_id) do
           time_slot(reservation)
           |> time_slot_message()
         else
@@ -468,15 +485,18 @@ defmodule Systems.Campaign.MonitorView do
     }
   end
 
-  defp to_view_model(:rejected, target, _experiment, %Crew.TaskModel{
-         id: id,
-         rejected_category: rejected_category,
-         rejected_message: rejected_message,
-         rejected_at: rejected_at,
-         member_id: member_id
-       }) do
-    %{public_id: public_id} = Crew.Public.get_member!(member_id)
-
+  defp to_view_model(
+         :rejected,
+         target,
+         _tool,
+         %Crew.TaskModel{
+           id: id,
+           rejected_category: rejected_category,
+           rejected_message: rejected_message,
+           rejected_at: rejected_at
+         },
+         %{public_id: public_id}
+       ) do
     date_string =
       rejected_at
       |> Timestamp.apply_timezone()
@@ -495,13 +515,16 @@ defmodule Systems.Campaign.MonitorView do
     }
   end
 
-  defp to_view_model(:accepted, _target, _experiment, %Crew.TaskModel{
-         id: id,
-         accepted_at: accepted_at,
-         member_id: member_id
-       }) do
-    %{public_id: public_id} = Crew.Public.get_member!(member_id)
-
+  defp to_view_model(
+         :accepted,
+         _target,
+         _tool,
+         %Crew.TaskModel{
+           id: id,
+           accepted_at: accepted_at
+         },
+         %{public_id: public_id}
+       ) do
     date_string =
       accepted_at
       |> Timestamp.apply_timezone()

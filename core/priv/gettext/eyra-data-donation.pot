@@ -15,62 +15,6 @@ msgid "config.nrofsubjects.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "platforms.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "content.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.donate.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.donate.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.download.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.download.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.library.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.library.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.list.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.list.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.request.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.request.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.survey.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.survey.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "task.description.label"
 msgstr ""
 
@@ -96,4 +40,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "pdf-select-placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.to.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pdf-select-label"
 msgstr ""

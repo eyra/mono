@@ -53,3 +53,51 @@ msgstr ""
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "pool.target"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "close.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "config.nrofsubjects.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "devices.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "devices.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "duration.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "language.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "languages.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "preview.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "publish.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "retract.button"
+msgstr ""

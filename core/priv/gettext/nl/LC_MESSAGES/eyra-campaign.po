@@ -39,7 +39,7 @@ msgid "campaign.create.title"
 msgstr "Nieuwe campagne"
 
 #, elixir-autogen, elixir-format
-msgid "campaign.create.tooltype.label"
+msgid "campaign.create.template.label"
 msgstr "Type studie"
 
 #, elixir-autogen, elixir-format

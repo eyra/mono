@@ -27,11 +27,10 @@ defmodule Systems.Crew.Public do
     |> Repo.one()
   end
 
-  def create(auth_node, attrs \\ %{}) do
+  def prepare(auth_node, attrs \\ %{}) do
     %Crew.Model{}
     |> Crew.Model.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
-    |> Repo.insert()
   end
 
   def active?(crew) do
@@ -42,12 +41,11 @@ defmodule Systems.Crew.Public do
   # Tasks
   def get_task(_crew, nil), do: nil
 
-  def get_task(crew, member) do
+  def get_task(crew, [_ | _] = identifier) do
     from(task in Crew.TaskModel,
-      where:
-        task.crew_id == ^crew.id and
-          task.member_id == ^member.id and
-          task.expired == false
+      where: task.crew_id == ^crew.id,
+      where: task.identifier == ^identifier,
+      where: task.expired == false
     )
     |> Repo.one()
   end
@@ -56,44 +54,81 @@ defmodule Systems.Crew.Public do
     Repo.get!(Crew.TaskModel, id) |> Repo.preload(preload)
   end
 
-  def create_task(crew, member, expire_at) do
-    attrs = %{status: :pending, expire_at: expire_at}
+  def create_task(crew, members, identifier, expire_at \\ nil)
+
+  def create_task(crew, [_ | _] = members, [_ | _] = identifier, expire_at) do
+    attrs = %{identifier: identifier, status: :pending, expire_at: expire_at}
+    user_ids = Enum.map(members, & &1.user_id)
 
     %Crew.TaskModel{}
     |> Crew.TaskModel.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:crew, crew)
-    |> Ecto.Changeset.put_assoc(:member, member)
+    |> Ecto.Changeset.put_assoc(:auth_node, Authorization.Node.create(user_ids, :owner))
     |> Repo.insert()
   end
 
-  def create_task!(crew, member, expire_at) do
-    case create_task(crew, member, expire_at) do
+  def create_task(crew, member, [_ | _] = identifier, expire_at),
+    do: create_task(crew, [member], identifier, expire_at)
+
+  def create_task!(crew, members, identifier, expire_at \\ nil)
+
+  def create_task!(crew, [_ | _] = members, [_ | _] = identifier, expire_at) do
+    case create_task(crew, members, identifier, expire_at) do
       {:ok, task} -> task
       _ -> nil
     end
   end
 
-  def list_tasks(crew) do
+  def create_task!(crew, member, [_ | _] = identifier, expire_at) do
+    case create_task(crew, member, identifier, expire_at) do
+      {:ok, task} -> task
+      _ -> nil
+    end
+  end
+
+  def list_tasks(crew, order_by \\ {:desc, :id}) do
     from(task in Crew.TaskModel,
-      where: task.crew_id == ^crew.id and task.expired == false
+      where: task.crew_id == ^crew.id,
+      where: task.expired == false,
+      order_by: ^order_by
     )
     |> Repo.all()
   end
 
-  def task_query(crew, status_list) do
-    from(t in Crew.TaskModel,
-      where:
-        t.crew_id == ^crew.id and
-          t.status in ^status_list
-    )
+  def list_tasks_for_user(crew, user_ref, order_by \\ {:desc, :id}) do
+    from(t in task_query(crew, user_ref, false), order_by: ^order_by)
+    |> Repo.all()
   end
 
-  def task_query(crew, status_list, expired) do
+  def task_query(crew, status_list, expired) when is_list(status_list) do
     from(t in Crew.TaskModel,
       where:
         t.crew_id == ^crew.id and
           t.status in ^status_list and
           t.expired == ^expired
+    )
+  end
+
+  def task_query(crew, user_ref, expired) do
+    user_id = user_id(user_ref)
+
+    from(task in Crew.TaskModel,
+      inner_join: node in Authorization.Node,
+      on: node.id == task.auth_node_id,
+      inner_join: role in Authorization.RoleAssignment,
+      on: role.node_id == node.id,
+      where: role.principal_id == ^user_id,
+      where: role.role == :owner,
+      where: task.crew_id == ^crew.id,
+      where: task.expired == ^expired
+    )
+  end
+
+  def task_query(crew, status_list) when is_list(status_list) do
+    from(t in Crew.TaskModel,
+      where:
+        t.crew_id == ^crew.id and
+          t.status in ^status_list
     )
   end
 
@@ -146,16 +181,6 @@ defmodule Systems.Crew.Public do
 
   def count_participated_tasks(crew) do
     count_tasks(crew, [:completed, :rejected, :accepted])
-  end
-
-  def setup_tasks_for_members!(members, crew) do
-    members
-    |> Enum.map(
-      &(Crew.TaskModel.changeset(%Crew.TaskModel{}, %{status: :pending})
-        |> Ecto.Changeset.put_change(:member_id, &1.id)
-        |> Ecto.Changeset.put_assoc(:crew, crew))
-    )
-    |> Enum.map(&Repo.insert!(&1))
   end
 
   def cancel_task(%Crew.TaskModel{} = task) do
@@ -247,7 +272,7 @@ defmodule Systems.Crew.Public do
   def multi_update(multi, :task, changeset) do
     multi
     |> Multi.update(:task, changeset)
-    |> Signal.Public.multi_dispatch(:crew_task_updated, changeset)
+    |> Signal.Public.multi_dispatch({:crew_task, :updated}, changeset)
   end
 
   def delete_task(%Crew.TaskModel{} = task) do
@@ -257,24 +282,19 @@ defmodule Systems.Crew.Public do
   def delete_task(_), do: nil
 
   # Members
-  def cancel(crew, user) do
+  def cancel(crew, user_ref) do
     Multi.new()
-    |> cancel(crew, user)
+    |> cancel(crew, user_ref)
     |> Repo.transaction()
   end
 
-  def cancel(%Multi{} = multi, crew, user) do
-    if member?(crew, user) do
-      member = get_member!(crew, user)
-      task = get_task(crew, member)
+  def cancel(%Multi{} = multi, crew, user_ref) do
+    member = get_member(crew, user_ref)
+    task_query = task_query(crew, user_ref, false)
 
-      # temporary cancel is implemented by expiring the task
-      multi
-      |> Multi.update(:member, Crew.MemberModel.changeset(member, %{expired: true}))
-      |> multi_update(:task, task, %{expired: true})
-    else
-      Logger.warn("Unable to cancel, user #{user.id} is not a member on crew #{crew.id}")
-    end
+    multi
+    |> Multi.update(:member, Crew.MemberModel.changeset(member, %{expired: true}))
+    |> Multi.update_all(:tasks, task_query, set: [expired: true])
   end
 
   def count_members(crew) do
@@ -285,16 +305,18 @@ defmodule Systems.Crew.Public do
     |> Repo.one()
   end
 
-  def public_id(crew, user) do
+  def public_id(crew, user_ref) do
     crew
-    |> member_query(user)
+    |> member_query(user_ref)
     |> select([m], m.public_id)
     |> Repo.one()
   end
 
-  def get_member!(crew, user) do
+  def get_member(crew, user_ref) do
+    user_id = user_id(user_ref)
+
     from(m in Crew.MemberModel,
-      where: m.crew_id == ^crew.id and m.user_id == ^user.id and m.expired == false
+      where: m.crew_id == ^crew.id and m.user_id == ^user_id and m.expired == false
     )
     |> Repo.one()
   end
@@ -303,33 +325,24 @@ defmodule Systems.Crew.Public do
     Repo.get!(Crew.MemberModel, id)
   end
 
-  def list_members_without_task(crew) do
-    member_ids_with_task =
-      from(t in Crew.TaskModel,
-        where: t.crew_id == ^crew.id and t.expired == false,
-        select: t.member_id
-      )
-
-    from(m in Crew.MemberModel,
-      where: m.crew_id == ^crew.id and m.id not in subquery(member_ids_with_task)
-    )
-    |> Repo.all()
-  end
-
-  def apply_member(%Crew.Model{} = crew, %User{} = user, expire_at \\ nil) do
-    if member = get_expired_member(crew, user) do
+  def apply_member(%Crew.Model{} = crew, %User{} = user, [_ | _] = identifier, expire_at \\ nil) do
+    if member = get_expired_member(crew, user, [:crew]) do
       member = reset_member(member, expire_at)
       {:ok, %{member: member}}
     else
       Multi.new()
       |> insert(:member, crew, user, %{expire_at: expire_at})
-      |> insert(:task, crew, %{status: :pending, expire_at: expire_at})
+      |> insert(:task, crew, user, %{
+        identifier: identifier,
+        status: :pending,
+        expire_at: expire_at
+      })
       |> insert(:role_assignment, crew, user, :participant)
       |> Repo.transaction()
     end
   end
 
-  defp insert(multi, :member = name, crew, user, attrs) do
+  defp insert(multi, :member = name, crew, %User{} = user, attrs) do
     Multi.insert(
       multi,
       name,
@@ -340,24 +353,29 @@ defmodule Systems.Crew.Public do
     )
   end
 
-  defp insert(multi, :role_assignment = name, crew, user, role) do
+  defp insert(multi, :role_assignment = name, crew, %User{} = user, role) do
     Multi.insert(multi, name, Authorization.build_role_assignment(user, crew, role))
   end
 
-  defp insert(multi, :task = name, crew, attrs) do
-    Multi.insert(multi, name, fn %{member: member} ->
+  defp insert(multi, :task = name, crew, %User{} = user, attrs) do
+    Multi.insert(
+      multi,
+      name,
       %Crew.TaskModel{}
       |> Crew.TaskModel.changeset(attrs)
       |> Ecto.Changeset.put_assoc(:crew, crew)
-      |> Ecto.Changeset.put_assoc(:member, member)
-    end)
+      |> Ecto.Changeset.put_assoc(:auth_node, Authorization.Node.create(user.id, :owner))
+    )
   end
 
-  def get_expired_member(%Crew.Model{} = crew, %User{} = user) do
+  def get_expired_member(%Crew.Model{} = crew, user_ref, preload \\ []) do
+    user_id = user_id(user_ref)
+
     from(m in Crew.MemberModel,
+      preload: ^preload,
       where:
         m.crew_id == ^crew.id and
-          m.user_id == ^user.id and
+          m.user_id == ^user_id and
           m.expired == true
     )
     |> Repo.one()
@@ -371,9 +389,9 @@ defmodule Systems.Crew.Public do
     |> Repo.all()
   end
 
-  def reset_member(%Crew.MemberModel{} = member, expire_at) do
+  def reset_member(%Crew.MemberModel{crew: crew} = member, expire_at) do
     member_query = from(m in Crew.MemberModel, where: m.id == ^member.id)
-    task_query = from(t in Crew.TaskModel, where: t.member_id == ^member.id)
+    task_query = task_query(crew, member, true)
 
     member_attrs = Crew.MemberModel.reset_attrs(expire_at)
     task_attrs = Crew.TaskModel.reset_attrs(expire_at)
@@ -387,15 +405,15 @@ defmodule Systems.Crew.Public do
     |> Repo.one()
   end
 
-  def member?(crew, user) do
+  def member?(crew, user_ref) do
     crew
-    |> member_query(user)
+    |> member_query(user_ref)
     |> Repo.exists?()
   end
 
-  def expired_member?(crew, user) do
+  def expired_member?(crew, user_ref) do
     crew
-    |> member_query(user, true)
+    |> member_query(user_ref, true)
     |> Repo.exists?()
   end
 
@@ -408,12 +426,28 @@ defmodule Systems.Crew.Public do
     |> Repo.one()
   end
 
-  defp member_query(crew, user, expired \\ false) do
+  def member_query(crew, user_ref, expired \\ false) do
+    user_id = user_id(user_ref)
+
     from(m in Crew.MemberModel,
       where:
         m.crew_id == ^crew.id and
-          m.user_id == ^user.id and
+          m.user_id == ^user_id and
           m.expired == ^expired
+    )
+  end
+
+  def member_query(task_ids) do
+    from(member in Crew.MemberModel,
+      inner_join: user in User,
+      on: member.user_id == user.id,
+      inner_join: role in Authorization.RoleAssignment,
+      on: role.principal_id == user.id,
+      inner_join: node in Authorization.Node,
+      on: node.id == role.node_id,
+      inner_join: task in Crew.TaskModel,
+      on: task.auth_node_id == role.node_id,
+      where: task.id in subquery(task_ids)
     )
   end
 
@@ -433,10 +467,8 @@ defmodule Systems.Crew.Public do
     #   3. end of survey pointing to wrong url (redirecting, but to the wrong campaign)
 
     task_query = from(t in Crew.TaskModel, where: t.expire_at <= ^now and is_nil(t.started_at))
-    member_ids = from(t in task_query, select: t.member_id)
-
-    member_query =
-      from(m in Crew.MemberModel, where: m.expire_at <= ^now and m.id in subquery(member_ids))
+    task_ids = from(t in task_query, select: t.id)
+    member_query = member_query(task_ids)
 
     Multi.new()
     |> Multi.update_all(:members, member_query, set: [expired: true])
@@ -461,14 +493,18 @@ defmodule Systems.Crew.Public do
             is_nil(t.completed_at)
       )
 
-    member_ids = from(t in task_query, select: t.member_id)
+    user_ids = from(t in task_query, select: t.user_id)
 
     member_query =
-      from(m in Crew.MemberModel, where: m.expire_at <= ^now and m.id in subquery(member_ids))
+      from(m in Crew.MemberModel, where: m.expire_at <= ^now and m.user_id in subquery(user_ids))
 
     Multi.new()
     |> Multi.update_all(:members, member_query, set: [expired: true])
     |> Multi.update_all(:tasks, task_query, set: [expired: true])
     |> Repo.transaction()
   end
+
+  def user_id(%User{id: id}), do: id
+  def user_id(%Crew.MemberModel{user_id: id}), do: id
+  def user_id(id) when is_integer(id), do: id
 end

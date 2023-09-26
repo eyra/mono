@@ -6,7 +6,7 @@ defmodule Systems.Privacy.Form do
     ~H"""
     <div>
       <Area.content>
-      <Margin.y id={:page_top} />
+        <Margin.y id={:page_top} />
         <Text.title2><%= dgettext("eyra-privacy", "form.title")  %></Text.title2>
       </Area.content>
     </div>

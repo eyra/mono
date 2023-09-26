@@ -1,6 +1,16 @@
 defmodule Frameworks.Pixel.Button.Action do
   use CoreWeb, :html
 
+  slot(:inner_block, required: true)
+
+  def fake(assigns) do
+    ~H"""
+    <div class="cursor-pointer focus:outline-none">
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
   attr(:code, :string, required: true)
   slot(:inner_block, required: true)
 

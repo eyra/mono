@@ -140,7 +140,7 @@ defmodule Systems.Campaign.FundingView do
          %{
            assigns: %{
              submission: %{pool: %{currency: currency}},
-             assignment: %{assignable_experiment: %{duration: duration}},
+             assignment: %{assignable_inquiry: %{duration: duration}},
              locale: locale
            }
          } = socket

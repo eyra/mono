@@ -133,7 +133,7 @@ msgid "search.subject.not.found"
 msgstr "Geen resultaten"
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "experiment.checkin.label"
+msgid "inquiry.checkin.label"
 msgstr "Inchecken met Panl ID:"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
@@ -171,3 +171,7 @@ msgstr "Reserving gevonden"
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "date.location.error"
 msgstr "Deze locatie is al geboekt op de geselecteerde datum"
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr ""

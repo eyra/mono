@@ -6,6 +6,7 @@ defmodule Systems.Campaign.ContentPage do
   use CoreWeb.Layouts.Workspace.Component, :campaign
   use CoreWeb.UI.Responsive.Viewport
   use CoreWeb.UI.PlainDialog
+  use Systems.Observatory.Public
 
   import CoreWeb.Gettext
   import Core.ImageCatalog, only: [image_catalog: 0]
@@ -13,15 +14,14 @@ defmodule Systems.Campaign.ContentPage do
   alias Core.Accounts
   alias CoreWeb.UI.ImageCatalogPicker
   alias Systems.Promotion.FormView, as: PromotionForm
-  import CoreWeb.Layouts.Workspace.Component
-
-  alias CoreWeb.UI.Tabbar
-  alias CoreWeb.UI.Navigation
 
   alias Systems.{
     Campaign,
-    Pool
+    Pool,
+    Content
   }
+
+  import Content.Page
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
@@ -30,7 +30,7 @@ defmodule Systems.Campaign.ContentPage do
 
   @impl true
   def mount(%{"id" => id, "tab" => initial_tab}, %{"locale" => locale}, socket) do
-    model = %{id: String.to_integer(id), director: :campaign}
+    model = Campaign.Public.get!(String.to_integer(id), Campaign.Model.preload_graph(:down))
     tabbar_id = "campaign_content/#{id}"
 
     {
@@ -233,7 +233,7 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   @impl true
-  def handle_info(%{id: :experiment_form, ready?: ready?}, socket),
+  def handle_info(%{id: :inquiry_form, ready?: ready?}, socket),
     do: handle_info(%{id: :assignment_form, ready?: ready?}, socket)
 
   @impl true
@@ -437,41 +437,23 @@ defmodule Systems.Campaign.ContentPage do
     socket |> assign(tabbar_size: tabbar_size)
   end
 
-  defp tabbar_size({:unknown, _}), do: :unknown
-  defp tabbar_size(bp), do: value(bp, :narrow, sm: %{30 => :wide})
-
-  defp margin_x(:mobile), do: "mx-6"
-  defp margin_x(_), do: "mx-10"
-
   @impl true
   def render(assigns) do
     ~H"""
-    <.workspace title={dgettext("link-survey", "content.title")} menus={@menus}>
-      <div id="campaign" phx-hook="LiveContent" data-show-errors={@vm.show_errors}>
-        <div id={:survey_content} phx-hook="ViewportResize">
-
-          <%= if @popup do %>
-            <.popup>
-              <div class={"#{margin_x(@breakpoint)} w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg"}>
-                <.live_component module={@popup.module} {@popup.props} />
-              </div>
-            </.popup>
-          <% end %>
-
-          <%= if @dialog do %>
-            <.popup>
-              <.plain_dialog {@dialog} />
-            </.popup>
-          <% end %>
-
-          <Navigation.action_bar right_bar_buttons={@actions} more_buttons={@more_actions}>
-            <Tabbar.container id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} size={@tabbar_size} />
-          </Navigation.action_bar>
-          <Tabbar.content tabs={@vm.tabs} />
-          <Tabbar.footer tabs={@vm.tabs} />
-        </div>
-      </div>
-    </.workspace>
+    <.content_page
+      title={@vm.title}
+      menus={@menus}
+      tabs={@vm.tabs}
+      actions={@actions}
+      more_actions={@more_actions}
+      initial_tab={@initial_tab}
+      tabbar_id={@tabbar_id}
+      tabbar_size={@tabbar_size}
+      breakpoint={@breakpoint}
+      popup={@popup}
+      dialog={@dialog}
+      show_errors={@vm.show_errors}
+     />
     """
   end
 end

@@ -19,8 +19,8 @@ defmodule Frameworks.Utility.LegacyRoutesController do
 
       crew ->
         # expect one assignment here
-        assignments = Assignment.Public.get_by_crew!(crew)
-        redirect_to_live(conn, Systems.Assignment.CallbackPage, assignments)
+        [assignment] = Assignment.Public.list_by_crew(crew)
+        redirect_to_live(conn, Systems.Alliance.CallbackPage, assignment)
     end
   end
 

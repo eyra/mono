@@ -28,7 +28,7 @@ config :core, Core.Repo,
   queue_target: 5000
 
 # Print only warnings and errors during test
-config :logger, level: :warn
+config :logger, level: :error
 
 # Reduce password hashing impact on test duration
 config :bcrypt_elixir,

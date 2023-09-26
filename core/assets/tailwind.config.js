@@ -239,7 +239,7 @@ module.exports = {
           paddingBottom: "constant(safe-area-inset-bottom)",
           paddingBottom: "env(safe-area-inset-bottom)",
         },
-        ".scrollbar-hide": {
+        ".scrollbar-hidden": {
           /* Firefox */
           "scrollbar-width": "thin",
 

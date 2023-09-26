@@ -4,6 +4,7 @@ defmodule Systems.Test.Page do
   """
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :test_page
+  use Systems.Observatory.Public
 
   alias Systems.{
     Test

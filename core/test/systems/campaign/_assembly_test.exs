@@ -8,7 +8,8 @@ defmodule Systems.Campaign.AssemblyTest do
   alias Systems.{
     Campaign,
     Assignment,
-    Survey,
+    Workflow,
+    Alliance,
     Lab,
     Pool,
     Budget
@@ -49,7 +50,7 @@ defmodule Systems.Campaign.AssemblyTest do
          }}
       end)
 
-      campaign = Campaign.Assembly.create(researcher, "New Campaign", :online, pool, budget)
+      campaign = Campaign.Assembly.create(:online, researcher, "New Campaign", pool, budget)
 
       assert %Systems.Campaign.Model{
                auth_node: %Core.Authorization.Node{
@@ -58,27 +59,16 @@ defmodule Systems.Campaign.AssemblyTest do
                },
                promotable_assignment:
                  %Systems.Assignment.Model{
-                   director: :campaign,
-                   assignable_experiment: %{
-                     devices: [:phone, :tablet, :desktop],
-                     duration: nil,
-                     ethical_approval: nil,
-                     ethical_code: nil,
-                     language: nil,
+                   info: %Systems.Assignment.InfoModel{
                      subject_count: nil,
-                     director: :campaign,
-                     lab_tool_id: nil,
-                     survey_tool: %Survey.ToolModel{
-                       survey_url: nil,
-                       director: :campaign,
-                       auth_node: %Core.Authorization.Node{
-                         parent_id: survey_tool_auth_node_parent_id
-                       }
-                     },
-                     auth_node: %Core.Authorization.Node{
-                       id: experiment_auth_node_id,
-                       parent_id: experiment_auth_node_parent_id
-                     }
+                     duration: nil,
+                     language: nil,
+                     devices: [:phone, :tablet, :desktop],
+                     ethical_approval: nil,
+                     ethical_code: nil
+                   },
+                   workflow: %Systems.Workflow.Model{
+                     id: workflow_id
                    },
                    auth_node: %Core.Authorization.Node{
                      id: assignment_auth_node_id,
@@ -112,12 +102,36 @@ defmodule Systems.Campaign.AssemblyTest do
 
       assert promotion_auth_node_parent_id == campaign_auth_node_id
       assert assignment_auth_node_parent_id == campaign_auth_node_id
-      assert experiment_auth_node_parent_id == assignment_auth_node_id
       assert crew_auth_node_parent_id == assignment_auth_node_id
-      assert survey_tool_auth_node_parent_id == experiment_auth_node_id
 
       assert banner_photo_url == researcher.profile.photo_url
       assert banner_title == researcher.displayname
+
+      # WORKFLOW
+
+      assert %Systems.Workflow.Model{
+               type: :single_task,
+               items: [
+                 %Systems.Workflow.ItemModel{
+                   group: nil,
+                   position: nil,
+                   title: nil,
+                   description: nil,
+                   tool_ref: %{
+                     alliance_tool: %Systems.Alliance.ToolModel{
+                       auth_node: %Core.Authorization.Node{
+                         parent_id: ^assignment_auth_node_id
+                       },
+                       url: nil,
+                       director: :assignment
+                     },
+                     feldspar_tool_id: nil,
+                     document_tool_id: nil,
+                     lab_tool_id: nil
+                   }
+                 }
+               ]
+             } = Assignment.Public.get_workflow!(workflow_id, Workflow.Model.preload_graph(:down))
 
       # CAMPAIGN AUTHORS
 
@@ -178,7 +192,7 @@ defmodule Systems.Campaign.AssemblyTest do
          }}
       end)
 
-      campaign = Campaign.Assembly.create(researcher, "New Campaign", :lab, pool, budget)
+      campaign = Campaign.Assembly.create(:lab, researcher, "New Campaign", pool, budget)
 
       assert %Systems.Campaign.Model{
                auth_node: %Core.Authorization.Node{
@@ -186,27 +200,16 @@ defmodule Systems.Campaign.AssemblyTest do
                  parent_id: nil
                },
                promotable_assignment: %Systems.Assignment.Model{
-                 director: :campaign,
-                 assignable_experiment: %{
-                   devices: [],
-                   duration: nil,
-                   ethical_approval: nil,
-                   ethical_code: nil,
-                   language: nil,
+                 info: %Systems.Assignment.InfoModel{
                    subject_count: nil,
-                   director: :campaign,
-                   survey_tool_id: nil,
-                   lab_tool: %Lab.ToolModel{
-                     id: lab_tool_id,
-                     director: :campaign,
-                     auth_node: %Core.Authorization.Node{
-                       parent_id: lab_tool_auth_node_parent_id
-                     }
-                   },
-                   auth_node: %Core.Authorization.Node{
-                     id: experiment_auth_node_id,
-                     parent_id: experiment_auth_node_parent_id
-                   }
+                   duration: nil,
+                   language: nil,
+                   devices: [],
+                   ethical_approval: nil,
+                   ethical_code: nil
+                 },
+                 workflow: %Systems.Workflow.Model{
+                   id: workflow_id
                  },
                  auth_node: %Core.Authorization.Node{
                    id: assignment_auth_node_id,
@@ -220,12 +223,36 @@ defmodule Systems.Campaign.AssemblyTest do
                }
              } = campaign
 
-      assert Lab.Public.get_time_slots(lab_tool_id) == []
-
       assert assignment_auth_node_parent_id == campaign_auth_node_id
-      assert experiment_auth_node_parent_id == assignment_auth_node_id
       assert crew_auth_node_parent_id == assignment_auth_node_id
-      assert lab_tool_auth_node_parent_id == experiment_auth_node_id
+
+      # WORKFLOW
+
+      assert %Systems.Workflow.Model{
+               type: :single_task,
+               items: [
+                 %Systems.Workflow.ItemModel{
+                   group: nil,
+                   position: nil,
+                   title: nil,
+                   description: nil,
+                   tool_ref: %{
+                     lab_tool: %Systems.Lab.ToolModel{
+                       id: lab_tool_id,
+                       auth_node: %Core.Authorization.Node{
+                         parent_id: ^assignment_auth_node_id
+                       },
+                       director: :assignment
+                     },
+                     feldspar_tool_id: nil,
+                     document_tool_id: nil,
+                     alliance_tool_id: nil
+                   }
+                 }
+               ]
+             } = Assignment.Public.get_workflow!(workflow_id, Workflow.Model.preload_graph(:down))
+
+      assert Lab.Public.get_time_slots(lab_tool_id) == []
     end
 
     test "delete", %{user: researcher, mock: mock, budget: budget, pool: pool} do
@@ -239,32 +266,17 @@ defmodule Systems.Campaign.AssemblyTest do
          }}
       end)
 
-      %{id: id} = Campaign.Assembly.create(researcher, "New Campaign", :online, pool, budget)
+      %{id: id} = Campaign.Assembly.create(:online, researcher, "New Campaign", pool, budget)
 
-      campaign = Campaign.Public.get!(id, Campaign.Model.preload_graph(:full))
+      campaign = Campaign.Public.get!(id, Campaign.Model.preload_graph(:down))
 
       Campaign.Assembly.delete(campaign)
 
       assert Repo.get(Campaign.Model, campaign.id) == nil
+      assert Repo.get(Core.Authorization.Node, campaign.auth_node_id) == nil
       assert Repo.get(Systems.Promotion.Model, campaign.promotion_id) == nil
       assert Repo.get(Core.Authorization.Node, campaign.promotion.auth_node_id) == nil
-      assert Repo.get(Systems.Assignment.Model, campaign.promotable_assignment_id) == nil
-      assert Repo.get(Core.Authorization.Node, campaign.promotable_assignment.auth_node_id) == nil
-      assert Repo.get(Systems.Crew.Model, campaign.promotable_assignment.crew_id) == nil
-
-      assert Repo.get(Core.Authorization.Node, campaign.promotable_assignment.crew.auth_node_id) ==
-               nil
-
-      assert Repo.get(
-               Survey.ToolModel,
-               campaign.promotable_assignment.assignable_experiment.survey_tool_id
-             ) ==
-               nil
-
-      assert Repo.get(
-               Core.Authorization.Node,
-               campaign.promotable_assignment.assignable_experiment.survey_tool.auth_node_id
-             ) == nil
+      assert Repo.get(Systems.Assignment.Model, campaign.promotable_assignment_id) != nil
     end
 
     test "copy", %{user: researcher, mock: mock, budget: budget, pool: pool} do
@@ -278,7 +290,7 @@ defmodule Systems.Campaign.AssemblyTest do
          }}
       end)
 
-      %{id: id} = Campaign.Assembly.create(researcher, "New Campaign", :online, pool, budget)
+      %{id: id} = Campaign.Assembly.create(:online, researcher, "New Campaign", pool, budget)
 
       %{
         id: id,
@@ -288,13 +300,19 @@ defmodule Systems.Campaign.AssemblyTest do
           } = submission
         ],
         promotable_assignment: %{
+          info: info,
           crew: crew1,
-          assignable_experiment:
-            %{
-              survey_tool: tool
-            } = experiment
+          workflow: %{
+            items: [
+              %{
+                tool_ref: %Systems.Project.ToolRefModel{
+                  alliance_tool: tool
+                }
+              }
+            ]
+          }
         }
-      } = Campaign.Public.get!(id, Campaign.Model.preload_graph(:full))
+      } = Campaign.Public.get!(id, Campaign.Model.preload_graph(:down))
 
       # Update Submission
       reward_value = 1
@@ -324,17 +342,16 @@ defmodule Systems.Campaign.AssemblyTest do
       |> Repo.update!()
 
       # Update Tool
-      survey_url = "https://eyra.co/surveys/1"
-      director = :campaign
+      alliance_url = "https://eyra.co/alliances/1"
 
       tool
-      |> Survey.ToolModel.changeset(:update, %{
-        survey_url: survey_url,
-        director: director
+      |> Alliance.ToolModel.changeset(:update, %{
+        url: alliance_url,
+        director: :assignment
       })
       |> Repo.update!()
 
-      # Update Experiment
+      # Update Inquiry
       subject_count = 2
       duration = "10"
       language = "en"
@@ -342,22 +359,21 @@ defmodule Systems.Campaign.AssemblyTest do
       ethical_code = "RERB"
       devices = [:desktop, :tablet]
 
-      experiment
-      |> Assignment.ExperimentModel.changeset(:update, %{
+      info
+      |> Assignment.InfoModel.changeset(:update, %{
         subject_count: subject_count,
         duration: duration,
         language: language,
         ethical_approval: ethical_approval,
         ethical_code: ethical_code,
-        devices: devices,
-        director: director
+        devices: devices
       })
       |> Repo.update!()
 
-      campaign = Campaign.Public.get!(id, Campaign.Model.preload_graph(:full))
+      campaign = Campaign.Public.get!(id, Campaign.Model.preload_graph(:down))
 
       {:ok, %{campaign: %{id: id2}}} = Campaign.Assembly.copy(campaign)
-      campaign2 = Campaign.Public.get!(id2, Campaign.Model.preload_graph(:full))
+      campaign2 = Campaign.Public.get!(id2, Campaign.Model.preload_graph(:down))
 
       assert %{
                authors: [%{}],
@@ -382,19 +398,16 @@ defmodule Systems.Campaign.AssemblyTest do
                  title: "New Campaign (copy)"
                },
                promotable_assignment: %{
-                 crew: crew2,
-                 assignable_experiment: %{
+                 info: %{
                    subject_count: ^subject_count,
                    duration: ^duration,
                    language: ^language,
                    ethical_approval: ^ethical_approval,
                    ethical_code: ^ethical_code,
-                   devices: ^devices,
-                   director: ^director,
-                   survey_tool: %{
-                     survey_url: ^survey_url
-                   }
-                 }
+                   devices: ^devices
+                 },
+                 crew: crew2,
+                 workflow: %{items: []}
                }
              } = campaign2
 

@@ -86,7 +86,7 @@ defmodule Core.SurfConext.Test do
 
       {:ok, surf_user} = Core.SurfConext.register_user(sso_info)
 
-      message = assert_signal_dispatched(:user_created)
+      message = assert_signal_dispatched({:user, :created})
       assert message == %{user: surf_user.user}
     end
 

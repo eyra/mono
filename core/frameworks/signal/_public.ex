@@ -1,11 +1,17 @@
 defmodule Frameworks.Signal.Public do
+  require Logger
+
+  import Frameworks.Utililty.PrettyPrint
+
   @signal_handlers [
     Core.Accounts.SignalHandlers,
     Core.Mailer.SignalHandlers,
     Core.WebPush.SignalHandlers,
     Core.APNS.SignalHandlers,
     Systems.Observatory.Switch,
+    Systems.Project.Switch,
     Systems.Assignment.Switch,
+    Systems.Workflow.Switch,
     Systems.Pool.Switch,
     Systems.Student.Switch,
     Systems.Campaign.Switch,
@@ -13,8 +19,10 @@ defmodule Frameworks.Signal.Public do
   ]
 
   def dispatch(signal, message) do
+    Logger.warn("SIGNAL: " <> pretty_print(signal) <> " => " <> pretty_print(Map.keys(message)))
+
     for handler <- signal_handlers() do
-      handler.dispatch(signal, message)
+      handler.intercept(signal, message)
     end
 
     :ok
@@ -30,7 +38,7 @@ defmodule Frameworks.Signal.Public do
   It automatically merges the message with the multi
   changes.
   """
-  def multi_dispatch(multi, signal, message) when is_map(message) do
+  def multi_dispatch(multi, signal, message \\ %{}) when is_map(message) do
     Ecto.Multi.run(multi, :dispatch_signal, fn _, updates ->
       :ok = dispatch(signal, Map.merge(updates, message))
       {:ok, nil}

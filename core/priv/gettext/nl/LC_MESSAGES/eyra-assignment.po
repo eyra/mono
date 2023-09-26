@@ -32,7 +32,7 @@ msgstr "E-mail onderzoeker"
 
 #, elixir-autogen, elixir-format
 msgid "form.title"
-msgstr "Studie"
+msgstr "Opdracht"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "ticket.title"
@@ -53,3 +53,51 @@ msgstr "%{amount} te gaan"
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "pool.target"
 msgstr "%{target} credits vereist"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "close.button"
+msgstr "Afronden"
+
+#, elixir-autogen, elixir-format
+msgid "config.nrofsubjects.label"
+msgstr "Hoeveel deelnemers heb je nodig?"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "content.title"
+msgstr "Jouw Panl ID"
+
+#, elixir-autogen, elixir-format
+msgid "devices.label"
+msgstr "Welke apparaten mogen deelnemers gebruiken?"
+
+#, elixir-autogen, elixir-format
+msgid "devices.title"
+msgstr "Apparaten"
+
+#, elixir-autogen, elixir-format
+msgid "duration.label"
+msgstr "Hoeveel minuten schat je in dat deelnemers nodig hebben?"
+
+#, elixir-autogen, elixir-format
+msgid "language.title"
+msgstr "Taal"
+
+#, elixir-autogen, elixir-format
+msgid "languages.label"
+msgstr "In welke taal is de opdracht geschreven?"
+
+#, elixir-autogen, elixir-format
+msgid "open.button"
+msgstr "Open"
+
+#, elixir-autogen, elixir-format
+msgid "preview.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "publish.button"
+msgstr "Publiceren"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "retract.button"
+msgstr "Intrekken"

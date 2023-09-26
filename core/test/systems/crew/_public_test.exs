@@ -2,13 +2,14 @@ defmodule Systems.Crew.PublicTest do
   use Core.DataCase
   alias Core.Authorization
   alias CoreWeb.UI.Timestamp
+  alias Frameworks.GreenLight
 
   describe "crews" do
     alias Systems.Crew
 
     test "list/0 returns all created crews with preloaded references" do
-      {:ok, crew1} = Crew.Public.create(Core.Authorization.make_node())
-      {:ok, crew2} = Crew.Public.create(Core.Authorization.make_node())
+      {:ok, crew1} = Crew.Public.prepare(Core.Authorization.make_node()) |> Core.Repo.insert()
+      {:ok, crew2} = Crew.Public.prepare(Core.Authorization.make_node()) |> Core.Repo.insert()
       list = Crew.Public.list()
       assert list |> Enum.find(&(&1.id == crew1.id))
       assert list |> Enum.find(&(&1.id == crew2.id))
@@ -18,7 +19,7 @@ defmodule Systems.Crew.PublicTest do
     end
 
     test "get/1 returns crew with preloaded references" do
-      {:ok, crew} = Crew.Public.create(Core.Authorization.make_node())
+      {:ok, crew} = Crew.Public.prepare(Core.Authorization.make_node()) |> Core.Repo.insert()
       crew = Crew.Public.get!(crew.id)
 
       assert crew.tasks == []
@@ -62,17 +63,25 @@ defmodule Systems.Crew.PublicTest do
     end
 
     test "apply_member/2 creates member + pending task" do
-      user = Factories.insert!(:member)
+      %{id: user_id} = user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
-      {:ok, %{member: %{id: member_id}, task: task}} = Crew.Public.apply_member(crew, user)
+      {:ok, %{member: %{user_id: ^user_id}, task: task}} =
+        Crew.Public.apply_member(crew, user, ["task1"])
 
       assert %{
                status: :pending,
                expired: nil,
                started_at: nil,
                completed_at: nil,
-               member_id: ^member_id
+               auth_node: %Core.Authorization.Node{
+                 role_assignments: [
+                   %Core.Authorization.RoleAssignment{
+                     principal_id: ^user_id,
+                     role: :owner
+                   }
+                 ]
+               }
              } = task
     end
 
@@ -80,7 +89,7 @@ defmodule Systems.Crew.PublicTest do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
-      {:ok, %{member: member}} = Crew.Public.apply_member(crew, user)
+      {:ok, %{member: member}} = Crew.Public.apply_member(crew, user, ["task1"])
 
       assert member.crew_id == crew.id
       assert member.user_id == user.id
@@ -95,11 +104,11 @@ defmodule Systems.Crew.PublicTest do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
-      {:ok, %{member: member1}} = Crew.Public.apply_member(crew, user, expire_at(-1))
+      {:ok, %{member: member1}} = Crew.Public.apply_member(crew, user, ["task1"], expire_at(-1))
 
       Crew.Public.mark_expired()
 
-      {:ok, %{member: member2}} = Crew.Public.apply_member(crew, user, expire_at(1))
+      {:ok, %{member: member2}} = Crew.Public.apply_member(crew, user, ["task1"], expire_at(1))
 
       assert member1.id == member2.id
       assert %{expired: false} = member2
@@ -107,10 +116,12 @@ defmodule Systems.Crew.PublicTest do
 
     test "list_members/1 lists only members from that crew" do
       user = Factories.insert!(:member)
+
       crew1 = Factories.insert!(:crew)
       crew2 = Factories.insert!(:crew)
-      {:ok, %{member: member1}} = Crew.Public.apply_member(crew1, user)
-      {:ok, %{member: member2}} = Crew.Public.apply_member(crew2, user)
+
+      {:ok, %{member: member1}} = Crew.Public.apply_member(crew1, user, ["task1"])
+      {:ok, %{member: member2}} = Crew.Public.apply_member(crew2, user, ["task2"])
 
       list1 = Crew.Public.list_members(crew1)
       list2 = Crew.Public.list_members(crew2)
@@ -128,7 +139,7 @@ defmodule Systems.Crew.PublicTest do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
-      {:ok, %{member: member, task: task}} = Crew.Public.apply_member(crew, user, nil)
+      {:ok, %{member: member, task: task}} = Crew.Public.apply_member(crew, user, ["task1"], nil)
 
       assert Crew.Public.mark_expired()
 
@@ -140,7 +151,8 @@ defmodule Systems.Crew.PublicTest do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
-      {:ok, %{member: member, task: task}} = Crew.Public.apply_member(crew, user, expire_at(1))
+      {:ok, %{member: member, task: task}} =
+        Crew.Public.apply_member(crew, user, ["task1"], expire_at(1))
 
       assert Crew.Public.mark_expired()
 
@@ -152,7 +164,9 @@ defmodule Systems.Crew.PublicTest do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
-      {:ok, %{member: member, task: task}} = Crew.Public.apply_member(crew, user, expire_at(-1))
+      {:ok, %{member: member, task: task}} =
+        Crew.Public.apply_member(crew, user, ["task1"], expire_at(-1))
+
       Crew.Public.lock_task(task)
 
       assert Crew.Public.mark_expired()
@@ -167,7 +181,8 @@ defmodule Systems.Crew.PublicTest do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
-      {:ok, %{member: member, task: task}} = Crew.Public.apply_member(crew, user, expire_at(-1))
+      {:ok, %{member: member, task: task}} =
+        Crew.Public.apply_member(crew, user, ["task1"], expire_at(-1))
 
       assert Crew.Public.mark_expired()
 
@@ -183,9 +198,10 @@ defmodule Systems.Crew.PublicTest do
       crew = Factories.insert!(:crew)
 
       {:ok, %{member: member1, task: task1}} =
-        Crew.Public.apply_member(crew, user1, expire_at(-1))
+        Crew.Public.apply_member(crew, user1, ["task1"], expire_at(-1))
 
-      {:ok, %{member: member2, task: task2}} = Crew.Public.apply_member(crew, user2, expire_at(1))
+      {:ok, %{member: member2, task: task2}} =
+        Crew.Public.apply_member(crew, user2, ["task2"], expire_at(1))
 
       assert Crew.Public.mark_expired()
 
@@ -203,7 +219,7 @@ defmodule Systems.Crew.PublicTest do
       crew = Factories.insert!(:crew)
 
       {:ok, %{member: %{id: member_id} = member, task: task}} =
-        Crew.Public.apply_member(crew, user, expire_at(-1))
+        Crew.Public.apply_member(crew, user, ["task1"], expire_at(-1))
 
       assert Crew.Public.member?(crew, user)
       assert [%{id: ^member_id}] = Crew.Public.list_members(crew)
@@ -223,82 +239,313 @@ defmodule Systems.Crew.PublicTest do
     alias Core.Factories
 
     test "create_task/2 returns valid task" do
-      user = Factories.insert!(:member)
-      crew = Factories.insert!(:crew)
+      %{id: user_id} = user = Factories.insert!(:member)
+      %{id: crew_id} = crew = Factories.insert!(:crew)
       member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
-      {:ok, task} = Crew.Public.create_task(crew, member, nil)
+      {:ok, task} = Crew.Public.create_task(crew, member, ["task1"], nil)
 
-      assert task.crew_id == crew.id
-      assert task.member_id == member.id
-
-      list = Crew.Public.list_members_without_task(crew)
-      assert is_nil(list |> Enum.find(&(&1.id == member.id)))
+      assert %{
+               crew_id: ^crew_id,
+               auth_node: %Core.Authorization.Node{
+                 role_assignments: [
+                   %Core.Authorization.RoleAssignment{
+                     principal_id: ^user_id,
+                     role: :owner
+                   }
+                 ]
+               }
+             } = task
     end
 
-    test "list_tasks/2 returns all available tasks for the crew" do
-      user = Factories.insert!(:member)
-      crew = Factories.insert!(:crew)
-      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+    test "list_tasks/1 returns one task for the crew" do
+      %{id: crew_id} = crew = Factories.insert!(:crew)
 
-      {:ok, _task} = Crew.Public.create_task(crew, member, nil)
+      user1 = Factories.insert!(:member)
+      user2 = Factories.insert!(:member)
+
+      member1 = Factories.insert!(:crew_member, %{crew: crew, user: user1})
+      member2 = Factories.insert!(:crew_member, %{crew: crew, user: user2})
+
+      {:ok, %{auth_node_id: auth_node_id}} =
+        Crew.Public.create_task(crew, [member1, member2], ["task1"], nil)
 
       list = Crew.Public.list_tasks(crew)
-      assert list |> Enum.find(&(&1.member_id == member.id))
+
+      assert [
+               %Systems.Crew.TaskModel{
+                 identifier: ["task1"],
+                 status: :pending,
+                 started_at: nil,
+                 completed_at: nil,
+                 accepted_at: nil,
+                 rejected_at: nil,
+                 expire_at: nil,
+                 expired: false,
+                 rejected_category: nil,
+                 rejected_message: nil,
+                 crew_id: ^crew_id,
+                 auth_node_id: ^auth_node_id
+               }
+             ] = list
+    end
+
+    test "list_tasks/1 returns 3 tasks for the crew, latest first" do
+      crew = Factories.insert!(:crew)
+
+      user1 = Factories.insert!(:member)
+      user2 = Factories.insert!(:member)
+
+      member1 = Factories.insert!(:crew_member, %{crew: crew, user: user1})
+      member2 = Factories.insert!(:crew_member, %{crew: crew, user: user2})
+
+      {:ok, _} = Crew.Public.create_task(crew, [member1], ["task1"], nil)
+      {:ok, _} = Crew.Public.create_task(crew, [member1, member2], ["task2"], nil)
+      {:ok, _} = Crew.Public.create_task(crew, [member2], ["task3"], nil)
+
+      list = Crew.Public.list_tasks(crew)
+
+      assert [
+               %Systems.Crew.TaskModel{identifier: ["task3"]},
+               %Systems.Crew.TaskModel{identifier: ["task2"]},
+               %Systems.Crew.TaskModel{identifier: ["task1"]}
+             ] = list
+    end
+
+    test "list_tasks_for_user/2 returns tasks for one member, latest first" do
+      crew = Factories.insert!(:crew)
+
+      user1 = Factories.insert!(:member)
+      user2 = Factories.insert!(:member)
+
+      member1 = Factories.insert!(:crew_member, %{crew: crew, user: user1})
+      member2 = Factories.insert!(:crew_member, %{crew: crew, user: user2})
+
+      {:ok, _} = Crew.Public.create_task(crew, [member1], ["task1"], nil)
+      {:ok, _} = Crew.Public.create_task(crew, [member1, member2], ["task2"], nil)
+      {:ok, _} = Crew.Public.create_task(crew, [member2], ["task3"], nil)
+
+      assert [
+               %Systems.Crew.TaskModel{identifier: ["task2"]},
+               %Systems.Crew.TaskModel{identifier: ["task1"]}
+             ] = Crew.Public.list_tasks_for_user(crew, member1)
+
+      assert [
+               %Systems.Crew.TaskModel{identifier: ["task3"]},
+               %Systems.Crew.TaskModel{identifier: ["task2"]}
+             ] = Crew.Public.list_tasks_for_user(crew, member2)
     end
 
     test "count_tasks/2 returns correct nr of tasks in the crew" do
       user = Factories.insert!(:member)
+      auth_node = auth_node_with_owner(user)
+
       crew = Factories.insert!(:crew)
-      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+      _member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
       assert Crew.Public.count_tasks(crew, [:pending, :completed]) == 0
 
-      _task = Factories.insert!(:crew_task, %{crew: crew, member: member, status: :pending})
+      _task =
+        Factories.insert!(:crew_task, %{
+          identifier: ["task1"],
+          crew: crew,
+          auth_node: auth_node,
+          status: :pending
+        })
 
       assert Crew.Public.count_tasks(crew, [:pending]) == 1
       assert Crew.Public.count_tasks(crew, [:completed]) == 0
 
-      _task = Factories.insert!(:crew_task, %{crew: crew, member: member, status: :completed})
+      _task =
+        Factories.insert!(:crew_task, %{
+          identifier: ["task2"],
+          crew: crew,
+          auth_node: auth_node,
+          status: :completed
+        })
+
       assert Crew.Public.count_tasks(crew, [:pending]) == 1
       assert Crew.Public.count_tasks(crew, [:completed]) == 1
     end
 
     test "create_task/2 succeeds for member" do
+      %{id: user_id} = user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+
+      assert %{
+               status: :pending,
+               auth_node: %{
+                 role_assignments: [%{principal_id: ^user_id}]
+               }
+             } = Crew.Public.create_task!(crew, member, ["task1"], nil)
+    end
+
+    test "create_task/2 multiple tasks succeeds for member" do
+      %{id: user_id} = user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+
+      assert %{
+               status: :pending,
+               auth_node: %{
+                 role_assignments: [%{principal_id: ^user_id}]
+               }
+             } = Crew.Public.create_task!(crew, member, ["task1"], nil)
+
+      assert %{
+               status: :pending,
+               auth_node: %{
+                 role_assignments: [%{principal_id: ^user_id}]
+               }
+             } = Crew.Public.create_task!(crew, member, ["task2"], nil)
+
+      assert %{
+               status: :pending,
+               auth_node: %{
+                 role_assignments: [%{principal_id: ^user_id}]
+               }
+             } = Crew.Public.create_task!(crew, member, ["task3"], nil)
+    end
+
+    test "create_task/2 multiple tasks succeeds for multiple members" do
+      crew = Factories.insert!(:crew)
+
+      user1 = Factories.insert!(:member)
+      user2 = Factories.insert!(:member)
+
+      member1 = Factories.insert!(:crew_member, %{crew: crew, user: user1})
+      member2 = Factories.insert!(:crew_member, %{crew: crew, user: user2})
+
+      assert {:ok, _} = Crew.Public.create_task(crew, member1, ["task1", "member1"], nil)
+      assert {:ok, _} = Crew.Public.create_task(crew, member1, ["task2", "member1"], nil)
+      assert {:ok, _} = Crew.Public.create_task(crew, member2, ["task1", "member2"], nil)
+      assert {:ok, _} = Crew.Public.create_task(crew, member2, ["task2", "member2"], nil)
+    end
+
+    test "create_task/2 single task succeeds for team" do
+      %{id: crew_id} = crew = Factories.insert!(:crew)
+
+      %{id: user_id1} = user1 = Factories.insert!(:member)
+      %{id: user_id2} = user2 = Factories.insert!(:member)
+
+      member1 = Factories.insert!(:crew_member, %{crew: crew, user: user1})
+      member2 = Factories.insert!(:crew_member, %{crew: crew, user: user2})
+
+      assert %{
+               identifier: ["task1"],
+               status: :pending,
+               crew_id: ^crew_id,
+               auth_node: %Core.Authorization.Node{
+                 parent_id: nil,
+                 role_assignments: [
+                   %Core.Authorization.RoleAssignment{
+                     principal_id: ^user_id1,
+                     role: :owner
+                   },
+                   %Core.Authorization.RoleAssignment{
+                     principal_id: ^user_id2,
+                     role: :owner
+                   }
+                 ]
+               }
+             } = Crew.Public.create_task!(crew, [member1, member2], ["task1"], nil)
+    end
+
+    test "create_task/2 multiple tasks succeeds for multiple teams" do
+      %{id: crew_id} = crew = Factories.insert!(:crew)
+
+      %{id: user_id1} = user1 = Factories.insert!(:member)
+      %{id: user_id2} = user2 = Factories.insert!(:member)
+      %{id: user_id3} = user3 = Factories.insert!(:member)
+
+      member1 = Factories.insert!(:crew_member, %{crew: crew, user: user1})
+      member2 = Factories.insert!(:crew_member, %{crew: crew, user: user2})
+      member3 = Factories.insert!(:crew_member, %{crew: crew, user: user3})
+
+      assert %{
+               identifier: ["task1"],
+               status: :pending,
+               crew_id: ^crew_id,
+               auth_node: %Core.Authorization.Node{
+                 parent_id: nil,
+                 role_assignments: [
+                   %Core.Authorization.RoleAssignment{
+                     principal_id: ^user_id1,
+                     role: :owner
+                   },
+                   %Core.Authorization.RoleAssignment{
+                     principal_id: ^user_id2,
+                     role: :owner
+                   }
+                 ]
+               }
+             } = Crew.Public.create_task!(crew, [member1, member2], ["task1"], nil)
+
+      assert %{
+               identifier: ["task2"],
+               status: :pending,
+               crew_id: ^crew_id,
+               auth_node: %Core.Authorization.Node{
+                 parent_id: nil,
+                 role_assignments: [
+                   %Core.Authorization.RoleAssignment{
+                     principal_id: ^user_id2,
+                     role: :owner
+                   },
+                   %Core.Authorization.RoleAssignment{
+                     principal_id: ^user_id3,
+                     role: :owner
+                   }
+                 ]
+               }
+             } = Crew.Public.create_task!(crew, [member2, member3], ["task2"], nil)
+    end
+
+    test "create_task/2 multiple tasks fails for one member: identifier must be unique" do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
       member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
-      assert %{status: :pending, member_id: member_id} =
-               Crew.Public.create_task!(crew, member, nil)
+      assert {:ok, _} = Crew.Public.create_task(crew, member, ["task1"], nil)
 
-      assert member_id == member.id
+      assert {:error,
+              %{
+                errors: [identifier: {"has already been taken", _}]
+              }} = Crew.Public.create_task(crew, member, ["task1"], nil)
     end
 
-    test "setup_tasks_for_members/2 " do
+    test "create_task/2 multiple tasks fails for multiple members: identifier must be unique" do
       crew = Factories.insert!(:crew)
+
       user1 = Factories.insert!(:member)
       user2 = Factories.insert!(:member)
+
       member1 = Factories.insert!(:crew_member, %{crew: crew, user: user1})
       member2 = Factories.insert!(:crew_member, %{crew: crew, user: user2})
 
-      list = Crew.Public.setup_tasks_for_members!([member1, member2], crew)
-      assert list |> Enum.find(&(&1.member_id == member1.id))
-      assert list |> Enum.find(&(&1.member_id == member2.id))
-      assert Crew.Public.count_tasks(crew, [:pending]) == 2
+      assert {:ok, _} = Crew.Public.create_task(crew, member1, ["task1"], nil)
+
+      assert {:error,
+              %{
+                errors: [identifier: {"has already been taken", _}]
+              }} = Crew.Public.create_task(crew, member2, ["task1"], nil)
     end
 
     test "activate_task/1 marks pending task completed" do
       user = Factories.insert!(:member)
+      auth_node = auth_node_with_owner(user)
+
       crew = Factories.insert!(:crew)
-      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+      _member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
       assert Crew.Public.count_tasks(crew, [:completed]) == 0
 
       task =
         Factories.insert!(:crew_task, %{
+          identifier: ["task1"],
           crew: crew,
-          member: member,
+          auth_node: auth_node,
           status: :pending
         })
 
@@ -309,15 +556,18 @@ defmodule Systems.Crew.PublicTest do
 
     test "activate_task/1 does not mark accepted task completed" do
       user = Factories.insert!(:member)
+      auth_node = auth_node_with_owner(user)
+
       crew = Factories.insert!(:crew)
-      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+      _member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
       assert Crew.Public.count_tasks(crew, [:completed]) == 0
 
       task =
         Factories.insert!(:crew_task, %{
+          identifier: ["task1"],
           crew: crew,
-          member: member,
+          auth_node: auth_node,
           status: :pending
         })
 
@@ -329,15 +579,18 @@ defmodule Systems.Crew.PublicTest do
 
     test "activate_task/1 does not mark rejected task completed" do
       user = Factories.insert!(:member)
+      auth_node = auth_node_with_owner(user)
+
       crew = Factories.insert!(:crew)
-      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+      _member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
       assert Crew.Public.count_tasks(crew, [:completed]) == 0
 
       task =
         Factories.insert!(:crew_task, %{
+          identifier: ["task1"],
           crew: crew,
-          member: member,
+          auth_node: auth_node,
           status: :pending
         })
 
@@ -355,15 +608,18 @@ defmodule Systems.Crew.PublicTest do
 
     test "accept_task/1 marks task accepted" do
       user = Factories.insert!(:member)
+      auth_node = auth_node_with_owner(user)
+
       crew = Factories.insert!(:crew)
-      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+      _member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
       assert Crew.Public.count_tasks(crew, [:accepted]) == 0
 
       task =
         Factories.insert!(:crew_task, %{
+          identifier: ["task1"],
           crew: crew,
-          member: member,
+          auth_node: auth_node,
           status: :pending
         })
 
@@ -383,15 +639,18 @@ defmodule Systems.Crew.PublicTest do
 
     test "reject_task/1 marks task rejected" do
       user = Factories.insert!(:member)
+      auth_node = auth_node_with_owner(user)
+
       crew = Factories.insert!(:crew)
-      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+      _member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
       assert Crew.Public.count_tasks(crew, [:rejected]) == 0
 
       task =
         Factories.insert!(:crew_task, %{
+          identifier: ["task1"],
           crew: crew,
-          member: member,
+          auth_node: auth_node,
           status: :pending
         })
 
@@ -415,32 +674,40 @@ defmodule Systems.Crew.PublicTest do
 
     test "delete_task/1 " do
       user = Factories.insert!(:member)
+      auth_node = auth_node_with_owner(user)
+
       crew = Factories.insert!(:crew)
-      member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+      _member = Factories.insert!(:crew_member, %{crew: crew, user: user})
 
       assert Crew.Public.count_tasks(crew, [:pending]) == 0
 
       task =
         Factories.insert!(:crew_task, %{
+          identifier: ["task1"],
           crew: crew,
-          member: member,
+          auth_node: auth_node,
           status: :pending
         })
 
       assert Crew.Public.count_tasks(crew, [:pending]) == 1
 
-      list = Crew.Public.list_members_without_task(crew)
-      assert is_nil(list |> Enum.find(&(&1.id == member.id)))
-
       Crew.Public.delete_task(task)
       assert Crew.Public.count_tasks(crew, [:pending]) == 0
-
-      list = Crew.Public.list_members_without_task(crew)
-      assert list |> Enum.find(&(&1.id == member.id))
     end
   end
 
   defp expire_at(minutes) do
     Timestamp.naive_from_now(minutes)
+  end
+
+  defp auth_node_with_owner(user) do
+    Factories.insert!(:auth_node, %{
+      role_assignments: [
+        %{
+          role: :owner,
+          principal_id: GreenLight.Principal.id(user)
+        }
+      ]
+    })
   end
 end

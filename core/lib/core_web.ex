@@ -87,7 +87,6 @@ defmodule CoreWeb do
       import Core.FeatureFlags
 
       use Frameworks.Pixel.Flash
-      use Systems.Observatory.Public
 
       import CoreWeb.UrlResolver, only: [url_resolver: 1]
 

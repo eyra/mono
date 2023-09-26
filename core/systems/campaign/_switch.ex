@@ -4,83 +4,69 @@ defmodule Systems.Campaign.Switch do
   alias Systems.{
     Campaign,
     Promotion,
-    Assignment,
-    Pool
+    Assignment
   }
 
   @impl true
-  def dispatch(signal, %{director: :campaign} = object) do
-    handle(signal, object)
+  def intercept({:assignment, _} = signal, %{assignment: assignment} = message) do
+    handle(signal, message)
+
+    if campaign =
+         Campaign.Public.get_by_promotable(assignment, Campaign.Model.preload_graph(:down)) do
+      dispatch!({:campaign, signal}, Map.merge(message, %{campaign: campaign}))
+    end
   end
 
-  def handle(:survey_tool_updated, survey_tool) do
-    experiment = Assignment.Public.get_experiment_by_tool(survey_tool)
-    handle(:experiment_updated, experiment)
+  @impl true
+  def intercept({:promotion, _} = signal, %{promotion: promotion} = message) do
+    if campaign = Campaign.Public.get_by_promotion(promotion, Campaign.Model.preload_graph(:down)) do
+      dispatch!({:campaign, signal}, Map.merge(message, %{campaign: campaign}))
+    end
   end
 
-  def handle(:lab_tool_updated, lab_tool) do
-    experiment = Assignment.Public.get_experiment_by_tool(lab_tool)
-    handle(:experiment_updated, experiment)
+  @impl true
+  def intercept({:campaign, _} = signal, message) do
+    handle(signal, message)
   end
 
-  def handle(:experiment_updated, experiment) do
-    assignment = Assignment.Public.get_by_assignable(experiment)
-    handle(:assignment_updated, assignment)
+  @impl true
+  def intercept({:user_profile, _} = signal, message) do
+    handle(signal, message)
   end
 
-  def handle(:assignment_updated, assignment) do
-    %{promotion: promotion} =
-      campaign =
-      Campaign.Public.get_by_promotable(assignment.id, Campaign.Model.preload_graph(:full))
+  # HANDLE
 
-    campaign
-    |> Campaign.Presenter.update(promotion.id, Promotion.LandingPage)
-    |> Campaign.Presenter.update(assignment.id, Assignment.LandingPage)
-    |> Campaign.Presenter.update(campaign.id, Campaign.ContentPage)
+  defp handle({:user_profile, :updated}, %{user: user, user_changeset: user_changeset}) do
+    if Map.has_key?(user_changeset.changes, :coordinator) do
+      new_value = user_changeset.changes.coordinator
+      Campaign.Public.update_coordinator_role(user, new_value)
+    end
   end
 
-  def handle(:assignment_accepted, %{assignment: assignment, user: user}) do
-    handle(:assignment_updated, assignment)
-    Campaign.Public.payout_participant(assignment, user)
+  defp handle(
+         {:campaign, event},
+         %{
+           campaign:
+             %Campaign.Model{
+               id: id,
+               promotion_id: promotion_id,
+               promotable_assignment_id: assignment_id
+             } = campaign
+         }
+       ) do
+    if event == :created do
+      Campaign.Public.assign_coordinators(campaign)
+    else
+      campaign
+      |> Campaign.Presenter.update(promotion_id, Promotion.LandingPage)
+      |> Campaign.Presenter.update(assignment_id, Assignment.LandingPage)
+      |> Campaign.Presenter.update(id, Campaign.ContentPage)
+    end
   end
 
-  def handle(:assignment_rejected, %{assignment: assignment, user: _user}) do
-    handle(:assignment_updated, assignment)
+  defp handle({:assignment, :accepted}, %{assignment: assignment, users: users}) do
+    Enum.each(users, &Campaign.Public.payout_participant(assignment, &1))
   end
 
-  def handle(:assignment_completed, %{assignment: assignment, user: _user}) do
-    handle(:assignment_updated, assignment)
-  end
-
-  def handle(:promotion_updated, promotion) do
-    campaign = Campaign.Public.get_by_promotion(promotion, Campaign.Model.preload_graph(:full))
-    promotable = Campaign.Model.promotable(campaign)
-
-    campaign
-    |> Campaign.Presenter.update(promotion.id, Promotion.LandingPage)
-    |> Campaign.Presenter.update(promotable.id, Assignment.LandingPage)
-    |> Campaign.Presenter.update(campaign.id, Campaign.ContentPage)
-  end
-
-  def handle(:submission_updated, %Pool.SubmissionModel{} = submission) do
-    campaign = Campaign.Public.get_by_submission(submission, Campaign.Model.preload_graph(:full))
-    handle(:submission_updated, campaign)
-  end
-
-  def handle(
-        :submission_updated,
-        %Campaign.Model{
-          promotion_id: promotion_id,
-          promotable_assignment: %{
-            id: promotable_assignment_id
-          }
-        } = campaign
-      ) do
-    Campaign.Public.submission_updated(campaign)
-
-    campaign
-    |> Campaign.Presenter.update(promotion_id, Promotion.LandingPage)
-    |> Campaign.Presenter.update(promotable_assignment_id, Assignment.LandingPage)
-    |> Campaign.Presenter.update(campaign.id, Campaign.ContentPage)
-  end
+  defp handle({_, _}, _), do: nil
 end

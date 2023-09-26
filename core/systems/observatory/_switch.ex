@@ -5,7 +5,7 @@ defmodule Systems.Observatory.Switch do
     Observatory
   }
 
-  def dispatch(%{page: page}, %{id: id} = message) do
+  def intercept({:page, page}, %{id: id} = message) do
     Observatory.Public.local_dispatch(page, [id], message)
   end
 end

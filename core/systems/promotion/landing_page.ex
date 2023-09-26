@@ -5,6 +5,7 @@ defmodule Systems.Promotion.LandingPage do
   use CoreWeb, :live_view
   use CoreWeb.UI.PlainDialog
   use CoreWeb.Layouts.Website.Component, :promotion
+  use Systems.Observatory.Public
 
   import CoreWeb.UI.Responsive.Viewport
 

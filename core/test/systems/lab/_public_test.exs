@@ -238,7 +238,7 @@ defmodule Systems.Lab.PublicTest do
 
       first_member = List.first(members)
       Lab.Public.cancel_reservation(lab_tool, first_member)
-      Lab.Public.get(id, time_slots: [:reservations])
+      Lab.Public.get_tool!(id, time_slots: [:reservations])
       assert [%{id: ^slot1_id}, %{id: ^slot2_id}] = Lab.Public.get_available_time_slots(id)
     end
   end

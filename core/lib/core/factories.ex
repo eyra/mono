@@ -6,7 +6,6 @@ defmodule Core.Factories do
 
   alias Core.{
     Authorization,
-    DataDonation,
     WebPush,
     Repo
   }
@@ -20,11 +19,13 @@ defmodule Core.Factories do
     Campaign,
     Promotion,
     Assignment,
+    Workflow,
     Crew,
     Support,
-    Survey,
+    Alliance,
+    Feldspar,
+    Document,
     Lab,
-    DataDonation,
     Benchmark,
     Pool,
     Budget,
@@ -142,8 +143,16 @@ defmodule Core.Factories do
     }
   end
 
-  def build(:survey_tool) do
-    build(:survey_tool, %{})
+  def build(:alliance_tool) do
+    build(:alliance_tool, %{})
+  end
+
+  def build(:feldspar_tool) do
+    build(:feldspar_tool, %{})
+  end
+
+  def build(:document_tool) do
+    build(:document_tool, %{})
   end
 
   def build(:lab_tool) do
@@ -238,12 +247,20 @@ defmodule Core.Factories do
     build(:benchmark_tool, %{})
   end
 
-  def build(:experiment) do
-    build(:experiment, %{})
+  def build(:workflow) do
+    build(:workflow, %{})
+  end
+
+  def build(:workflow_item) do
+    build(:workflow_item, %{})
   end
 
   def build(:assignment) do
     build(:assignment, %{})
+  end
+
+  def build(:assignment_info) do
+    build(:assignment_info, %{})
   end
 
   def build(:project) do
@@ -251,7 +268,15 @@ defmodule Core.Factories do
   end
 
   def build(:project_node) do
-    build(:project_node, %{name: Faker.Lorem.word(), project_path: [1, 2]})
+    build(:project_node, %{name: Faker.Lorem.word(), project_path: []})
+  end
+
+  def build(:project_item) do
+    build(:project_item, %{name: Faker.Lorem.word(), project_path: []})
+  end
+
+  def build(:tool_ref) do
+    build(:tool_ref, %{})
   end
 
   def build(:auth_node, %{} = attributes) do
@@ -345,8 +370,8 @@ defmodule Core.Factories do
             attributes
           }
 
-        {experiment, attributes} ->
-          {experiment, attributes}
+        {assignment, attributes} ->
+          {assignment, attributes}
       end
 
     %Campaign.Model{
@@ -361,7 +386,7 @@ defmodule Core.Factories do
 
   def build(:project, %{} = attributes) do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
-    {node, attributes} = Map.pop(attributes, :budget, build(:project_node))
+    {node, attributes} = Map.pop(attributes, :node, build(:project_node))
 
     %Project.Model{
       auth_node: auth_node,
@@ -372,9 +397,41 @@ defmodule Core.Factories do
 
   def build(:project_node, %{} = attributes) do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+    {items, attributes} = Map.pop(attributes, :items, [])
+    {children, attributes} = Map.pop(attributes, :children, [])
 
     %Project.NodeModel{
-      auth_node: auth_node
+      auth_node: auth_node,
+      items: items,
+      children: children
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:project_item, %{} = attributes) do
+    {tool_ref, attributes} = get_optional(:tool_ref, attributes)
+    {assignment, attributes} = get_optional(:assignment, attributes)
+
+    %Project.ItemModel{
+      tool_ref: tool_ref,
+      assignment: assignment
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:tool_ref, %{} = attributes) do
+    {alliance_tool, attributes} = get_optional(:alliance_tool, attributes)
+    {feldspar_tool, attributes} = get_optional(:feldspar_tool, attributes)
+    {document_tool, attributes} = get_optional(:document_tool, attributes)
+    {lab_tool, attributes} = get_optional(:lab_tool, attributes)
+    {benchmark_tool, attributes} = get_optional(:benchmark_tool, attributes)
+
+    %Project.ToolRefModel{
+      alliance_tool: alliance_tool,
+      document_tool: document_tool,
+      lab_tool: lab_tool,
+      feldspar_tool: feldspar_tool,
+      benchmark_tool: benchmark_tool
     }
     |> struct!(attributes)
   end
@@ -385,51 +442,37 @@ defmodule Core.Factories do
 
     crew_auth_node = build(:auth_node, %{parent: auth_node})
     {crew, attributes} = Map.pop(attributes, :crew, build(:crew, %{auth_node: crew_auth_node}))
-
-    experiment_auth_node = build(:auth_node, %{parent: auth_node})
-
-    {experiment, attributes} =
-      case Map.pop(attributes, :experiment, nil) do
-        {nil, attributes} -> {build(:experiment, %{auth_node: experiment_auth_node}), attributes}
-        {experiment, attributes} -> {experiment, attributes}
-      end
+    {info, attributes} = Map.pop(attributes, :assignment_info, build(:assignment_info))
+    {workflow, attributes} = Map.pop(attributes, :workflow, build(:workflow))
 
     %Assignment.Model{
       auth_node: auth_node,
       budget: budget,
-      assignable_experiment: experiment,
+      info: info,
+      workflow: workflow,
       crew: crew,
       excluded: []
     }
     |> struct!(attributes)
   end
 
-  def build(:experiment, %{} = attributes) do
-    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+  def build(:assignment_info, %{} = attributes) do
+    %Assignment.InfoModel{}
+    |> struct!(attributes)
+  end
 
-    {lab_tool, attributes} =
-      if Map.has_key?(attributes, :lab_tool) do
-        Map.pop(attributes, :lab_tool)
-      else
-        {nil, attributes}
-      end
+  def build(:workflow, %{} = attributes) do
+    %Workflow.Model{}
+    |> struct!(attributes)
+  end
 
-    {survey_tool, attributes} =
-      if lab_tool == nil do
-        tool_auth_node = build(:auth_node, %{parent: auth_node})
+  def build(:workflow_item, %{} = attributes) do
+    {workflow, attributes} = Map.pop(attributes, :workflow, build(:workflow))
+    {tool_ref, attributes} = Map.pop(attributes, :tool_ref, build(:tool_ref))
 
-        case Map.pop(attributes, :survey_tool, nil) do
-          {nil, attributes} -> {build(:survey_tool, %{auth_node: tool_auth_node}), attributes}
-          {survey_tool, attributes} -> {survey_tool, attributes}
-        end
-      else
-        {nil, attributes}
-      end
-
-    %Assignment.ExperimentModel{
-      auth_node: auth_node,
-      survey_tool: survey_tool,
-      lab_tool: lab_tool
+    %Workflow.ItemModel{
+      workflow: workflow,
+      tool_ref: tool_ref
     }
     |> struct!(attributes)
   end
@@ -455,11 +498,9 @@ defmodule Core.Factories do
   end
 
   def build(:crew_task, %{} = attributes) do
-    {member, attributes} = Map.pop(attributes, :member)
     {crew, _attributes} = Map.pop(attributes, :crew)
 
     %Crew.TaskModel{
-      member: member,
       crew: crew
     }
     |> struct!(attributes)
@@ -534,19 +575,28 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
-  def build(:data_donation_tool, %{} = attributes) do
+  def build(:feldspar_tool, %{} = attributes) do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
 
-    %DataDonation.ToolModel{
+    %Feldspar.ToolModel{
       auth_node: auth_node
     }
     |> struct!(attributes)
   end
 
-  def build(:survey_tool, %{} = attributes) do
+  def build(:document_tool, %{} = attributes) do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
 
-    %Survey.ToolModel{
+    %Document.ToolModel{
+      auth_node: auth_node
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:alliance_tool, %{} = attributes) do
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+
+    %Alliance.ToolModel{
       auth_node: auth_node
     }
     |> struct!(attributes)
@@ -691,5 +741,13 @@ defmodule Core.Factories do
 
   defp random_identifier(type) when is_binary(type) do
     [type] ++ Faker.Lorem.words(3..5)
+  end
+
+  defp get_optional(key, attributes) do
+    if Map.has_key?(attributes, key) do
+      Map.pop(attributes, key)
+    else
+      {nil, attributes}
+    end
   end
 end

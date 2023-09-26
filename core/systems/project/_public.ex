@@ -1,13 +1,13 @@
 defmodule Systems.Project.Public do
   import Ecto.Query, warn: false
-  alias Ecto.Multi
   alias Core.Repo
 
   alias Core.Accounts.User
   alias Core.Authorization
 
   alias Systems.{
-    Project
+    Project,
+    Assignment
   }
 
   def get!(id, preload \\ []) do
@@ -34,6 +34,49 @@ defmodule Systems.Project.Public do
     |> Repo.one!()
   end
 
+  def get_item_by_tool_ref(tool_ref, preload \\ [])
+
+  def get_item_by_tool_ref(%Project.ToolRefModel{id: tool_ref_id}, preload) do
+    get_item_by_tool_ref(tool_ref_id, preload)
+  end
+
+  def get_item_by_tool_ref(tool_ref_id, preload) when is_integer(tool_ref_id) do
+    from(item in Project.ItemModel,
+      where: item.tool_ref_id == ^tool_ref_id,
+      preload: ^preload
+    )
+    |> Repo.one()
+  end
+
+  def get_item_by_assignment(assignment, preload \\ [])
+
+  def get_item_by_assignment(%Assignment.Model{id: assignment_id}, preload) do
+    get_item_by_assignment(assignment_id, preload)
+  end
+
+  def get_item_by_assignment(assignment_id, preload) do
+    from(item in Project.ItemModel,
+      where: item.assignment_id in ^assignment_id,
+      preload: ^preload
+    )
+    |> Repo.one()
+  end
+
+  def get_tool_refs_by_tool(%{id: id} = tool, preload \\ []) do
+    field = Project.ToolRefModel.tool_id_field(tool)
+
+    query_tool_refs_by_tool(id, field, preload)
+    |> Repo.all()
+  end
+
+  def query_tool_refs_by_tool(tool_id, field, preload \\ [])
+      when is_integer(tool_id) and is_atom(field) do
+    from(tool_ref in Project.ToolRefModel,
+      where: field(tool_ref, ^field) == ^tool_id,
+      preload: ^preload
+    )
+  end
+
   @doc """
   Returns the list of projects that are owned by the user.
   """
@@ -55,7 +98,7 @@ defmodule Systems.Project.Public do
   end
 
   def delete(id) when is_number(id) do
-    get!(id, Project.Model.preload_graph(:full))
+    get!(id, Project.Model.preload_graph(:down))
     |> Project.Assembly.delete()
   end
 
@@ -64,30 +107,22 @@ defmodule Systems.Project.Public do
     |> Project.Assembly.delete()
   end
 
-  def create(
-        %Multi{} = multi,
-        %{name: _name} = attrs
-      ) do
-    multi
-    |> Multi.insert(:project_auth_node, Authorization.make_node())
-    |> Multi.insert(:root_auth_node, fn %{project_auth_node: project_auth_node} ->
-      Authorization.make_node(project_auth_node)
-    end)
-    |> Multi.insert(:root, fn %{root_auth_node: root_auth_node} ->
-      create_node(%{name: "Project", project_path: [0]}, root_auth_node)
-    end)
-    |> Multi.insert(:project, fn %{root: root, project_auth_node: project_auth_node} ->
-      create(attrs, root, project_auth_node)
-    end)
-    |> Multi.update(:project_path, fn %{project: project, root: root} ->
-      update_project_path(root, [project.id])
-    end)
+  def prepare(
+        %{name: _name} = attrs,
+        items
+      )
+      when is_list(items) do
+    {:ok, root} =
+      prepare_node(%{name: "Project", project_path: []}, items)
+      |> Ecto.Changeset.apply_action(:prepare)
+
+    prepare(attrs, root)
   end
 
-  def create(
+  def prepare(
         %{name: _name} = attrs,
         %Project.NodeModel{} = root,
-        %Authorization.Node{} = auth_node
+        %Authorization.Node{} = auth_node \\ Authorization.make_node()
       ) do
     %Project.Model{}
     |> Project.Model.changeset(attrs)
@@ -95,53 +130,40 @@ defmodule Systems.Project.Public do
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
 
-  def create_node(
+  def prepare_node(
         %{name: _, project_path: _} = attrs,
-        %Authorization.Node{} = auth_node
-      ) do
-    %Project.NodeModel{}
-    |> Project.NodeModel.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
-  end
-
-  def create_node(
-        %{name: _, project_path: _} = attrs,
-        children,
         items,
-        %Authorization.Node{} = auth_node
-      ) do
+        auth_node \\ Authorization.make_node()
+      )
+      when is_list(items) do
     %Project.NodeModel{}
     |> Project.NodeModel.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:children, children)
     |> Ecto.Changeset.put_assoc(:items, items)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
 
-  def create_item(
+  def prepare_item(attrs, %Project.ToolRefModel{} = tool_ref) do
+    prepare_item(attrs, :tool_ref, tool_ref)
+  end
+
+  def prepare_item(attrs, %Assignment.Model{} = assignment) do
+    prepare_item(attrs, :assignment, assignment)
+  end
+
+  def prepare_item(
         %{name: _name, project_path: _} = attrs,
-        %Project.NodeModel{} = node,
-        %Project.ToolRefModel{} = tool_ref
+        field_name,
+        concrete
       ) do
     %Project.ItemModel{}
     |> Project.ItemModel.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:node, node)
-    |> Ecto.Changeset.put_assoc(:tool_ref, tool_ref)
+    |> Ecto.Changeset.put_assoc(field_name, concrete)
   end
 
-  def create_tool_ref(tool_key, tool) do
+  def prepare_tool_ref(special, tool_key, tool) do
     %Project.ToolRefModel{}
-    |> Project.ToolRefModel.changeset(%{})
+    |> Project.ToolRefModel.changeset(%{special: special})
     |> Ecto.Changeset.put_assoc(tool_key, tool)
-  end
-
-  def update_project_path(%Project.NodeModel{} = node, project_path) when is_list(project_path) do
-    node
-    |> Project.NodeModel.changeset(%{project_path: project_path})
-  end
-
-  def update_project_path(%Project.ItemModel{} = item, project_path) when is_list(project_path) do
-    item
-    |> Project.ItemModel.changeset(%{project_path: project_path})
   end
 
   def add_item(%Project.ItemModel{} = item, %Project.NodeModel{} = node) do
@@ -174,7 +196,5 @@ defmodule Systems.Project.Public do
       |> Enum.map(fn %{id: id} -> id end)
 
     from(u in User, where: u.id in ^owner_ids, preload: ^preload, order_by: u.id) |> Repo.all()
-    # AUTH: needs to be marked save. Current user is normally not allowed to
-    # access other users.
   end
 end
