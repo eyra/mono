@@ -4,10 +4,10 @@ defmodule Systems.Lab.CheckInView do
   require Logger
 
   alias Core.Accounts
-  alias Systems.Director
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Text
+  alias Frameworks.Concept.Directable
 
   alias Systems.{
     Lab
@@ -52,7 +52,7 @@ defmodule Systems.Lab.CheckInView do
       |> String.to_integer()
       |> Accounts.get_user!()
 
-    Director.public(tool).apply_member_and_activate_task(tool, user)
+    Directable.director(tool).apply_member_and_activate_task(tool, user)
     {:noreply, socket |> assign(query: nil, message: nil)}
   end
 
@@ -87,7 +87,7 @@ defmodule Systems.Lab.CheckInView do
 
   defp search(public_id, tool) when is_integer(public_id) do
     item =
-      Director.public(tool).search_subject(tool, public_id)
+      Directable.director(tool).search_subject(tool, public_id)
       |> to_view_model(tool)
 
     case item do
@@ -173,11 +173,11 @@ defmodule Systems.Lab.CheckInView do
     reservation = reservation(user, tool)
     time_slot = time_slot(reservation)
 
-    search_result = Director.public(tool).search_subject(tool, user)
+    search_result = Directable.director(tool).search_subject(tool, user)
 
     status =
       case search_result do
-        {_, task} -> item_status(task, reservation)
+        {_, [task]} -> item_status(task, reservation)
         _ -> :reservation_not_found
       end
 
@@ -209,7 +209,7 @@ defmodule Systems.Lab.CheckInView do
              user_id: user_id,
              public_id: public_id
            } = _member,
-           %{completed_at: completed_at} = task
+           [%{completed_at: completed_at} = task]
          },
          tool
        ) do

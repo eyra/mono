@@ -9,14 +9,14 @@ defmodule Systems.Assignment.LandingPageTest do
     Budget
   }
 
-  describe "show landing page for: campaign -> assignment -> survey_tool" do
+  describe "show landing page for: campaign -> assignment -> alliance_tool" do
     setup [:login_as_member]
 
     setup do
       campaign_auth_node = Factories.insert!(:auth_node)
       promotion_auth_node = Factories.insert!(:auth_node, %{parent: campaign_auth_node})
       assignment_auth_node = Factories.insert!(:auth_node, %{parent: campaign_auth_node})
-      experiment_auth_node = Factories.insert!(:auth_node, %{parent: assignment_auth_node})
+      tool_auth_node = Factories.insert!(:auth_node, %{parent: assignment_auth_node})
 
       currency = Budget.Factories.create_currency("test_1234", :legal, "ƒ", 2)
       budget = Budget.Factories.create_budget("test_1234", currency)
@@ -24,38 +24,19 @@ defmodule Systems.Assignment.LandingPageTest do
       pool =
         Factories.insert!(:pool, %{name: "test_1234", director: :citizen, currency: currency})
 
-      survey_tool =
-        Factories.insert!(
-          :survey_tool,
-          %{
-            survey_url: "https://eyra.co/fake_survey",
-            director: :campaign
-          }
-        )
-
-      experiment =
-        Factories.insert!(
-          :experiment,
-          %{
-            auth_node: experiment_auth_node,
-            survey_tool: survey_tool,
-            subject_count: 10,
-            duration: "10",
-            language: "en",
-            devices: [:desktop],
-            director: :campaign
-          }
-        )
+      tool = Assignment.Factories.create_tool(tool_auth_node)
+      tool_ref = Assignment.Factories.create_tool_ref(tool)
+      workflow = Assignment.Factories.create_workflow()
+      _workflow_item = Assignment.Factories.create_workflow_item(workflow, tool_ref)
+      info = Assignment.Factories.create_info("10", 10)
 
       assignment =
-        Factories.insert!(
-          :assignment,
-          %{
-            auth_node: assignment_auth_node,
-            budget: budget,
-            experiment: experiment,
-            director: :campaign
-          }
+        Assignment.Factories.create_assignment(
+          info,
+          workflow,
+          assignment_auth_node,
+          budget,
+          :campaign
         )
 
       promotion =
@@ -98,7 +79,7 @@ defmodule Systems.Assignment.LandingPageTest do
     } do
       Core.Authorization.assign_role(user, campaign, :owner)
 
-      _member = Assignment.Public.apply_member(assignment, user, 500)
+      _member = Assignment.Public.apply_member(assignment, user, ["task1"], 500)
 
       {:ok, _view, html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
@@ -119,8 +100,8 @@ defmodule Systems.Assignment.LandingPageTest do
     } do
       Core.Authorization.assign_role(user, campaign, :owner)
 
-      {:ok, %{member: member}} = Assignment.Public.apply_member(assignment, user, 500)
-      task = Crew.Public.get_task(assignment.crew, member)
+      {:ok, %{member: _member}} = Assignment.Public.apply_member(assignment, user, ["task1"], 500)
+      task = Crew.Public.get_task(assignment.crew, ["task1"])
 
       {:ok, view, _html} =
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
@@ -130,7 +111,7 @@ defmodule Systems.Assignment.LandingPageTest do
         |> element("[phx-click=\"open\"]")
         |> render_click()
 
-      assert {:error, {:redirect, %{to: "https://eyra.co/fake_survey?panl_id=1"}}} = html
+      assert {:error, {:redirect, %{to: "https://eyra.co/alliance/123?panl_id=1"}}} = html
 
       task = Crew.Public.get_task!(task.id)
       assert %Systems.Crew.TaskModel{started_at: started_at, updated_at: updated_at} = task
@@ -144,8 +125,8 @@ defmodule Systems.Assignment.LandingPageTest do
     } do
       Core.Authorization.assign_role(user, campaign, :owner)
 
-      {:ok, %{member: member}} = Assignment.Public.apply_member(assignment, user, 500)
-      task = Crew.Public.get_task(assignment.crew, member)
+      {:ok, %{member: _member}} = Assignment.Public.apply_member(assignment, user, ["task1"], 500)
+      task = Crew.Public.get_task(assignment.crew, ["task1"])
       Crew.Public.lock_task(task)
 
       {:ok, _view, html} =
@@ -167,8 +148,8 @@ defmodule Systems.Assignment.LandingPageTest do
     } do
       Core.Authorization.assign_role(user, campaign, :owner)
 
-      {:ok, %{member: member}} = Assignment.Public.apply_member(assignment, user, 500)
-      task = Crew.Public.get_task(assignment.crew, member)
+      {:ok, %{member: _member}} = Assignment.Public.apply_member(assignment, user, ["task1"], 500)
+      task = Crew.Public.get_task(assignment.crew, ["task1"])
       Crew.Public.lock_task(task)
       Crew.Public.activate_task(task)
 

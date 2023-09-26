@@ -3,26 +3,26 @@ defmodule Systems.Campaign.CreateForm do
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
+  alias Frameworks.Concept.Directable
 
   alias Systems.{
     Campaign,
     Assignment,
-    Pool,
-    Director
+    Pool
   }
 
   # Handle Tool Type Selector Update
   @impl true
   def update(
-        %{active_item_id: active_item_id, selector_id: :tool_type_selector},
-        %{assigns: %{tool_type_labels: tool_type_labels}} = socket
+        %{active_item_id: active_item_id, selector_id: :template_selector},
+        %{assigns: %{template_labels: template_labels}} = socket
       ) do
-    %{id: selected_tool_type} = Enum.find(tool_type_labels, &(&1.id == active_item_id))
+    %{id: selected_template} = Enum.find(template_labels, &(&1.id == active_item_id))
 
     {
       :ok,
       socket
-      |> assign(selected_tool_type: selected_tool_type)
+      |> assign(selected_template: selected_template)
     }
   end
 
@@ -50,16 +50,16 @@ defmodule Systems.Campaign.CreateForm do
       :ok,
       socket
       |> assign(id: id, user: user, target: target, title: title)
-      |> init_tool_types()
+      |> init_templates()
       |> init_pools()
       |> init_buttons()
     }
   end
 
-  defp init_tool_types(socket) do
-    selected_tool_type = :online
-    tool_type_labels = Assignment.ToolTypes.labels(selected_tool_type)
-    socket |> assign(tool_type_labels: tool_type_labels, selected_tool_type: selected_tool_type)
+  defp init_templates(socket) do
+    selected_template = :online
+    template_labels = Assignment.Templates.labels(selected_template)
+    socket |> assign(template_labels: template_labels, selected_template: selected_template)
   end
 
   defp init_pools(socket) do
@@ -102,10 +102,9 @@ defmodule Systems.Campaign.CreateForm do
   def handle_event(
         "proceed",
         _,
-        %{assigns: %{selected_tool_type: selected_tool_type, selected_pool: selected_pool}} =
-          socket
+        %{assigns: %{selected_template: selected_template, selected_pool: selected_pool}} = socket
       ) do
-    campaign = create_campaign(socket, selected_tool_type, selected_pool)
+    campaign = create_campaign(socket, selected_template, selected_pool)
     {:noreply, socket |> redirect_to(campaign.id)}
   end
 
@@ -126,25 +125,17 @@ defmodule Systems.Campaign.CreateForm do
 
   defp create_campaign(
          %{assigns: %{user: %{id: user_id}}} = socket,
-         tool_type,
+         template,
          %{id: currency_id} = pool
        ) do
-    budget = Director.get(pool).resolve_budget(currency_id, user_id)
-    socket |> create_campaign(tool_type, pool, budget)
+    budget = Directable.director(pool).resolve_budget(currency_id, user_id)
+    socket |> create_campaign(template, pool, budget)
   end
 
-  defp create_campaign(%{assigns: %{user: user}} = _socket, tool_type, pool, budget) do
+  defp create_campaign(%{assigns: %{user: user}} = _socket, template, pool, budget) do
     title = dgettext("eyra-dashboard", "default.study.title")
-    Campaign.Assembly.create(user, title, tool_type, pool, budget)
+    Campaign.Assembly.create(template, user, title, pool, budget)
   end
-
-  # data(title, :string)
-  # data(buttons, :list)
-  # data(pools, :list)
-  # data(pool_labels, :list)
-  # data(tool_type_labels, :list)
-  # data(selected_tool_type, :map)
-  # data(selected_pool, :map)
 
   attr(:user, :any)
   attr(:target, :any)
@@ -156,14 +147,14 @@ defmodule Systems.Campaign.CreateForm do
       <Text.title3><%= @title %></Text.title3>
       <.spacing value="XS" />
 
-      <Text.form_field_label id={:tool_type_label}>
-        <%= dgettext("eyra-campaign", "campaign.create.tooltype.label") %>
+      <Text.form_field_label id={:template_label}>
+        <%= dgettext("eyra-campaign", "campaign.create.template.label") %>
       </Text.form_field_label>
       <.spacing value="XXS" />
       <.live_component
         module={Selector}
-        id={:tool_type_selector}
-        items={@tool_type_labels}
+        id={:template_selector}
+        items={@template_labels}
         type={:radio}
         optional?={false}
         parent={%{type: __MODULE__, id: @id}}

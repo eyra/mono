@@ -31,7 +31,7 @@ defmodule Systems.Student.Pool.SubmissionPageBuilder do
     preview_path = ~p"/promotion/#{promotion.id}?preview=true"
 
     excluded_campaigns =
-      Campaign.Public.list_excluded_campaigns([campaign], Campaign.Model.preload_graph(:full))
+      Campaign.Public.list_excluded_campaigns([campaign], Campaign.Model.preload_graph(:down))
       |> Enum.map(&Campaign.Model.flatten(&1))
       |> Enum.map(&Pool.Builders.CampaignItem.view_model(&1))
 

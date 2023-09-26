@@ -2,6 +2,7 @@ defmodule Systems.Project.NodePage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :projects
   use CoreWeb.UI.PlainDialog
+  use Systems.Observatory.Public
 
   import CoreWeb.Layouts.Workspace.Component
 
@@ -12,12 +13,13 @@ defmodule Systems.Project.NodePage do
   }
 
   def mount(%{"id" => id}, _session, socket) do
-    model = %{id: String.to_integer(id), director: :project}
+    model =
+      Project.Public.get_node!(String.to_integer(id), Project.NodeModel.preload_graph(:down))
 
     {
       :ok,
       socket
-      |> assign(model: model)
+      |> assign(model: model, popup: nil)
       |> observe_view_model()
       |> update_menus()
     }
@@ -25,6 +27,19 @@ defmodule Systems.Project.NodePage do
 
   def handle_auto_save_done(socket) do
     socket |> update_menus()
+  end
+
+  @impl true
+  def handle_event("edit", %{"item" => item_id}, socket) do
+    item = Project.Public.get_item!(String.to_integer(item_id))
+
+    popup = %{
+      module: Project.ItemForm,
+      entity: item,
+      target: self()
+    }
+
+    {:noreply, assign(socket, popup: popup)}
   end
 
   @impl true
@@ -40,6 +55,20 @@ defmodule Systems.Project.NodePage do
   end
 
   @impl true
+  def handle_event("create_item", _params, %{assigns: %{vm: %{node: node}}} = socket) do
+    popup = %{
+      module: Project.CreateItemPopup,
+      target: self(),
+      node: node
+    }
+
+    {
+      :noreply,
+      socket |> assign(popup: popup)
+    }
+  end
+
+  @impl true
   def handle_event(
         "card_clicked",
         %{"item" => card_id},
@@ -48,6 +77,25 @@ defmodule Systems.Project.NodePage do
     card_id = String.to_integer(card_id)
     %{path: path} = Enum.find(item_cards ++ node_cards, &(&1.id == card_id))
     {:noreply, push_redirect(socket, to: path)}
+  end
+
+  @impl true
+  def handle_info(%{module: _, action: :close}, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(popup: nil)
+      |> update_view_model()
+    }
+  end
+
+  @impl true
+  def handle_info({:handle_auto_save_done, :node_page_popup}, socket) do
+    {
+      :noreply,
+      socket
+      |> update_view_model()
+    }
   end
 
   @doc """
@@ -59,6 +107,15 @@ defmodule Systems.Project.NodePage do
   def render(assigns) do
     ~H"""
     <.workspace title={@vm.title} menus={@menus}>
+
+      <%= if @popup do %>
+        <.popup>
+          <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
+            <.live_component id={:node_page_popup} module={@popup.module} {@popup} />
+          </div>
+        </.popup>
+      <% end %>
+
       <Area.content>
         <Margin.y id={:page_top} />
         <%= if Enum.count(@vm.node_cards) > 0 do %>

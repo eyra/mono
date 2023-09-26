@@ -57,7 +57,7 @@ defmodule Systems.Lab.ToolForm do
   end
 
   defp update_entity(%{assigns: %{entity_id: entity_id}} = socket) do
-    entity = Lab.Public.get(entity_id, [:time_slots])
+    entity = Lab.Public.get_tool!(entity_id, [:time_slots])
     changeset = Lab.ToolModel.changeset(entity, :create, %{})
 
     socket

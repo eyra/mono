@@ -44,6 +44,10 @@ defmodule Systems.Pool.Model do
     def id(pool), do: pool.auth_node_id
   end
 
+  defimpl Frameworks.Concept.Directable do
+    def director(%{director: director}), do: Frameworks.Concept.System.director(director)
+  end
+
   @fields ~w(name virtual_icon target director archived)a
   @required_fields @fields
 

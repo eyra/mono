@@ -4,7 +4,7 @@ defmodule Core.WebPush.SignalHandlers do
   alias Core.WebPush
 
   @impl true
-  def dispatch(:new_notification, %{box: box, data: %{title: title}}) do
+  def intercept(:new_notification, %{box: box, data: %{title: title}}) do
     for user <- users(box) do
       :ok = WebPush.send(user, title)
     end

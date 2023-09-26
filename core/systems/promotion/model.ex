@@ -49,6 +49,10 @@ defmodule Systems.Promotion.Model do
     def id(promotion), do: promotion.auth_node_id
   end
 
+  defimpl Frameworks.Concept.Directable do
+    def director(%{director: director}), do: Frameworks.Utility.Module.get(director, "Director")
+  end
+
   def preload_graph(:full) do
     [:submission]
   end

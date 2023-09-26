@@ -5,6 +5,7 @@ defmodule Systems.Assignment.LandingPage do
   use CoreWeb, :live_view
   use CoreWeb.UI.PlainDialog
   use CoreWeb.Layouts.Workspace.Component, :assignment
+  use Systems.Observatory.Public
 
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Card
@@ -38,7 +39,7 @@ defmodule Systems.Assignment.LandingPage do
         dialog: nil
       )
       |> observe_view_model()
-      |> update_experiment_view()
+      |> update_task_view()
       |> update_menus()
     }
   end
@@ -47,32 +48,32 @@ defmodule Systems.Assignment.LandingPage do
 
   def handle_view_model_updated(socket) do
     socket
-    |> update_experiment_view()
+    |> update_task_view()
     |> update_menus()
   end
 
-  defp update_experiment_view(
+  defp update_task_view(
          %{
            assigns: %{
-             vm: %{experiment: %{view: view, id: id, model: model}},
-             experiment: experiment
+             vm: %{task: %{view: view, id: id, model: model}},
+             task: task
            }
          } = socket
        )
-       when not is_nil(experiment) do
-    # send update message to existing experiment view
+       when not is_nil(task) do
+    # send update message to existing task view
     send_update(view, id: id, model: model)
     socket
   end
 
-  defp update_experiment_view(%{assigns: %{vm: %{experiment: experiment}}} = socket) do
-    # initialize experiment view
-    socket |> assign(experiment: experiment)
+  defp update_task_view(%{assigns: %{vm: %{task: task}}} = socket) do
+    # initialize task view
+    socket |> assign(task: task)
   end
 
-  defp update_experiment_view(socket) do
-    # disable experiment view
-    socket |> assign(experiment: nil)
+  defp update_task_view(socket) do
+    # disable task view
+    socket |> assign(task: nil)
   end
 
   defp cancel(socket) do
@@ -160,11 +161,11 @@ defmodule Systems.Assignment.LandingPage do
         <Text.body_large><%= @vm.text %></Text.body_large>
         <.spacing value="L" />
 
-        <%= if @experiment do %>
+        <%= if @task do %>
           <.live_component
-            id={@experiment.id}
-            module={@experiment.view}
-            {@experiment.model}
+            id={@task.id}
+            module={@task.view}
+            {@task.model}
           />
         <% end %>
       </Area.content>

@@ -443,7 +443,7 @@ defmodule Core.Accounts do
     Multi.new()
     |> Multi.update(:profile, profile_changeset)
     |> Multi.update(:user, user_changeset)
-    |> Signal.Public.multi_dispatch(:user_profile_updated, %{
+    |> Signal.Public.multi_dispatch({:user_profile, :updated}, %{
       user_changeset: user_changeset,
       profile_changeset: profile_changeset
     })

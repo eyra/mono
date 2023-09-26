@@ -6,10 +6,7 @@ defmodule Systems.Assignment.EthicalForm do
 
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Text
-
-  alias Systems.{
-    Assignment
-  }
+  alias Systems.Assignment
 
   # Handle selector update
 
@@ -31,11 +28,11 @@ defmodule Systems.Assignment.EthicalForm do
         %{id: id, entity: entity},
         socket
       ) do
-    changeset = Assignment.ExperimentModel.changeset(entity, :create, %{})
+    changeset = Assignment.InfoModel.changeset(entity, :create, %{})
 
     ethical_label = %{
       id: :statement,
-      value: dgettext("link-survey", "ethical.label"),
+      value: dgettext("eyra-alliance", "ethical.label"),
       accent: :tertiary,
       active: entity.ethical_approval
     }
@@ -56,7 +53,7 @@ defmodule Systems.Assignment.EthicalForm do
   # Handle Events
 
   @impl true
-  def handle_event("save", %{"experiment_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
+  def handle_event("save", %{"info_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket
@@ -67,7 +64,7 @@ defmodule Systems.Assignment.EthicalForm do
   # Saving
 
   def save(socket, entity, type, attrs) do
-    changeset = Assignment.ExperimentModel.changeset(entity, type, attrs)
+    changeset = Assignment.InfoModel.changeset(entity, type, attrs)
 
     socket
     |> save(changeset)
@@ -78,7 +75,7 @@ defmodule Systems.Assignment.EthicalForm do
 
   def validate_for_publish(%{assigns: %{id: id, entity: entity}} = socket) do
     changeset =
-      Assignment.ExperimentModel.operational_changeset(entity, %{})
+      Assignment.InfoModel.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
 
     send(self(), %{id: id, ready?: changeset.valid?})
@@ -89,7 +86,7 @@ defmodule Systems.Assignment.EthicalForm do
 
   defp ethical_review_link() do
     link_as_string(
-      dgettext("link-survey", "ethical.review.link"),
+      dgettext("eyra-alliance", "ethical.review.link"),
       "https://vueconomics.eu.qualtrics.com/jfe/form/SV_1SKjMzceWRZIk9D"
     )
   end
@@ -109,8 +106,8 @@ defmodule Systems.Assignment.EthicalForm do
     ~H"""
     <div>
       <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
-        <Text.title3><%= dgettext("link-survey", "ethical.title") %></Text.title3>
-        <Text.body_medium><%= raw(dgettext("link-survey", "ethical.description", link: ethical_review_link())) %></Text.body_medium>
+        <Text.title3><%= dgettext("eyra-alliance", "ethical.title") %></Text.title3>
+        <Text.body_medium><%= raw(dgettext("eyra-alliance", "ethical.description", link: ethical_review_link())) %></Text.body_medium>
         <.spacing value="M" />
 
         <Panel.flat bg_color="bg-grey1">
@@ -125,7 +122,7 @@ defmodule Systems.Assignment.EthicalForm do
           <.checkbox
             form={form}
             field={:ethical_approval}
-            label_text={dgettext("link-survey", "ethical.label")}
+            label_text={dgettext("eyra-alliance", "ethical.label")}
             label_color="text-white"
             accent={:tertiary}
             background={:dark}

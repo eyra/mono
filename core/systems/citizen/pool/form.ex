@@ -112,7 +112,7 @@ defmodule Systems.Citizen.Pool.Form do
          %{assigns: %{id: id, locale: locale, currencies: currencies}} = socket
        ) do
     {currency_selector, selected_currency} =
-      Budget.Presenter.init_currency_selector(currencies, locale, %{type: __MODULE__, id: id})
+      Budget.CurrencySelector.init(currencies, locale, %{type: __MODULE__, id: id})
 
     socket |> assign(currency_selector: currency_selector, selected_currency: selected_currency)
   end

@@ -1,0 +1,46 @@
+defmodule Systems.Workflow.Switch do
+  use Frameworks.Signal.Handler
+
+  alias Frameworks.Signal
+
+  alias Systems.{
+    Workflow,
+    Project
+  }
+
+  @impl true
+  def intercept(
+        {:tool_ref, _} = signal,
+        %{tool_ref: %Project.ToolRefModel{} = tool_ref} = message
+      ) do
+    workflow_item = Workflow.Public.get_item_by_tool_ref(tool_ref, [:workflow, :tool_ref])
+
+    dispatch!(
+      {:workflow_item, signal},
+      Map.merge(message, %{workflow_item: workflow_item})
+    )
+  end
+
+  @impl true
+  def intercept(
+        {:workflow_item, _} = signal,
+        %{workflow_item: %{workflow_id: workflow_id}} = message
+      ) do
+    workflow = Workflow.Public.get!(workflow_id)
+
+    dispatch!(
+      {:workflow, signal},
+      Map.merge(message, %{workflow: workflow})
+    )
+  end
+
+  @impl true
+  def intercept({:workflow, :rearranged} = signal, %{workflow_id: workflow_id} = message) do
+    workflow = Workflow.Public.get!(workflow_id)
+
+    dispatch!(
+      {:workflow, signal},
+      Map.merge(message, %{workflow: workflow})
+    )
+  end
+end

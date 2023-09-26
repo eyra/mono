@@ -1,54 +1,42 @@
-const maxBottomMargin = 62;
+const maxBottomMargin = 63;
 
 export const SidePanel = {
   mounted() {
+    this.mainContent = document.getElementById("main-content");
     this.parent = document.getElementById(this.el.dataset.parent);
     this.panel = this.el.getElementsByClassName("panel")[0];
-    this.panel.style = `height: 0px;`;
-    this.make_absolute();
+    this.panel.style = `position: fixed; height: 0px; top: 0px`;
     this.updateFrame();
 
-    window.addEventListener("tab-activated", (event) => {
+    new ResizeObserver(() => {
       this.updateFrame();
-    });
+    }).observe(this.parent);
 
-    window.addEventListener("scroll", (event) => {
+    this.mainContent.addEventListener("scroll", (event) => {
       this.updateFrame();
     });
 
     window.addEventListener("resize", (event) => {
       this.updateFrame();
     });
-  },
-  make_absolute() {
-    this.el.classList.remove("relative");
-    this.el.classList.add("absolute");
+
+    window.addEventListener("tab-activated", (event) => {
+      this.updateFrame();
+    });
   },
   updated() {
-    this.make_absolute();
     this.updateFrame();
   },
   updateFrame() {
-    this.updateHeight();
-    this.updatePosition();
-  },
-  updateHeight() {
-    const bottomMarginDelta = Math.min(
-      maxBottomMargin,
-      document.documentElement.scrollHeight -
-        window.scrollY -
-        window.innerHeight
-    );
-    const bottomMargin = maxBottomMargin - bottomMarginDelta;
+    const bottomDistance =
+      this.mainContent.scrollHeight -
+      this.mainContent.scrollTop -
+      window.innerHeight;
+    const bottomMargin =
+      maxBottomMargin - Math.min(maxBottomMargin, bottomDistance);
+    const topMargin = Math.max(0, this.parent.getBoundingClientRect().top);
+    const height = window.innerHeight - (topMargin + bottomMargin);
 
-    const height =
-      window.innerHeight -
-      (this.parent.getBoundingClientRect().top + bottomMargin);
-    this.panel.style = `height: ${height}px;`;
-  },
-  updatePosition() {
-    const top =
-      Math.max(0, this.parent.getBoundingClientRect().top) + window.scrollY;
-    this.el.style = `top: ${top}px; right: 0px`;
+    this.panel.style = `position: fixed; height: ${height}px; top: ${topMargin}px`;
   },
 };

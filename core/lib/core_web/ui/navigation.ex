@@ -68,7 +68,7 @@ defmodule CoreWeb.UI.Navigation do
       </div>
       <div class="absolute top-0 left-0 w-full bg-red">
         <Area.content>
-          <div class="overflow-scroll scrollbar-hide w-full">
+          <div class="overflow-scroll scrollbar-hidden w-full">
             <div class="flex flex-row items-center w-full h-navbar-height">
               <%= if @centralize do %>
                 <div class="flex-grow" />
@@ -136,7 +136,7 @@ defmodule CoreWeb.UI.Navigation do
 
   def desktop_menu(assigns) do
     ~H"""
-    <div class="fixed z-1 hidden lg:block w-desktop-menu-width h-full pl-10 pr-8 pt-10 pb-desktop-menu-bottom-padding h-full">
+    <div class="hidden lg:block w-desktop-menu-width h-full pl-10 pr-8 pt-10 pb-desktop-menu-bottom-padding h-full">
       <Menu.generic {assigns} />
     </div>
     """
@@ -148,7 +148,7 @@ defmodule CoreWeb.UI.Navigation do
 
   def tablet_menu(assigns) do
     ~H"""
-      <div class="fixed z-1 hidden md:block lg:hidden w-tablet-menu-width h-full pt-10 pb-10 h-full">
+      <div class="hidden md:block lg:hidden w-tablet-menu-width h-full pt-10 pb-10 h-full">
         <Menu.generic {assigns} align="items-center" />
       </div>
     """

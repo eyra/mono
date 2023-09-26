@@ -4,6 +4,7 @@ defmodule Systems.NextAction.OverviewPage do
   """
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :todo
+  use Systems.Observatory.Public
 
   import CoreWeb.Layouts.Workspace.Component
 
@@ -12,15 +13,10 @@ defmodule Systems.NextAction.OverviewPage do
   }
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    model = %{
-      id: user.id,
-      presenter: Systems.NextAction.Presenter
-    }
-
     {
       :ok,
       socket
-      |> assign(model: model)
+      |> assign(model: user)
       |> observe_view_model()
       |> update_menus()
       |> refresh_next_actions()

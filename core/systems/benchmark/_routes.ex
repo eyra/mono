@@ -4,8 +4,10 @@ defmodule Systems.Benchmark.Routes do
       scope "/benchmark", Systems.Benchmark do
         pipe_through([:browser, :require_authenticated_user])
 
-        get("/:id", ToolController, :ensure_spot)
+        live("/:id/content", ContentPage)
         live("/:id/:spot", ToolPage)
+
+        get("/:id", ToolController, :ensure_spot)
         get("/:id/export/submissions", ExportController, :submissions)
       end
 

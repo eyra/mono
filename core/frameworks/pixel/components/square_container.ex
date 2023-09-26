@@ -8,7 +8,7 @@ defmodule Frameworks.Pixel.Square do
   def container(assigns) do
     ~H"""
     <div class="relative rounded-lg bg-grey6 h-248px">
-      <div class="absolute top-0 left-0 w-full flex flex-row gap-6 p-6 overflow-scroll scrollbar-hide">
+      <div class="absolute top-0 left-0 w-full flex flex-row gap-6 p-6 overflow-scroll scrollbar-hidden">
         <%= render_slot(@inner_block) %>
       </div>
       <div class="absolute top-0 right-0 h-full w-64px rounded-tr-lg rounded-br-lg bg-gradient-to-r from-white to-black opacity-5" />

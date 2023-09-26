@@ -15,8 +15,13 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
 
     setup do
       user = Factories.insert!(:member)
-      survey_tool = Factories.insert!(:survey_tool, %{survey_url: "https://eyra.co/fake_survey"})
-      assignment = Factories.insert!(:assignment, %{survey_tool: survey_tool})
+
+      alliance_tool =
+        Factories.insert!(:alliance_tool, %{
+          url: "https://eyra.co/fake_alliance"
+        })
+
+      assignment = Factories.insert!(:assignment, %{alliance_tool: alliance_tool})
 
       promotion =
         Factories.insert!(:promotion, %{
@@ -34,7 +39,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
         })
 
       campaign =
-        Campaign.Public.get!(id, Campaign.Model.preload_graph(:full))
+        Campaign.Public.get!(id, Campaign.Model.preload_graph(:down))
         |> Campaign.Public.flatten()
 
       {:ok, campaign: campaign, user: user}
@@ -42,14 +47,14 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
 
     test "With applied member", %{campaign: campaign, user: user} do
       {:ok, %{member: member}} =
-        Crew.Public.apply_member(campaign.promotable_assignment.crew, user)
+        Crew.Public.apply_member(campaign.promotable_assignment.crew, user, ["task1"])
 
       view_model = Campaign.Builders.AssignmentLandingPage.view_model(campaign, user)
 
       assert %{
                call_to_action: %{
                  label: "Naar vragenlijst",
-                 path: "https://eyra.co/fake_survey?panl_id=1",
+                 path: "https://eyra.co/fake_alliance?panl_id=1",
                  target: %{type: :event, value: "open"}
                },
                hero_title: "Online Studie",
@@ -65,8 +70,8 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
     end
 
     test "With started member", %{campaign: campaign, user: user} do
-      member = Crew.Public.apply_member(campaign.promotable_assignment.crew, user)
-      task = Crew.Public.get_task(campaign.promotable_assignment.crew, member)
+      member = Crew.Public.apply_member(campaign.promotable_assignment.crew, user, ["task1"])
+      [task] = Crew.Public.list_tasks_for_user(campaign.promotable_assignment.crew, user)
       Crew.Public.lock_task(task)
 
       view_model = Campaign.Builders.AssignmentLandingPage.view_model(campaign, user)
@@ -74,7 +79,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
       assert %{
                call_to_action: %{
                  label: "Naar vragenlijst",
-                 path: "https://eyra.co/fake_survey?panl_id=1",
+                 path: "https://eyra.co/fake_alliance?panl_id=1",
                  target: %{type: :event, value: "open"}
                },
                hero_title: "Online Studie",
@@ -93,9 +98,9 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
 
     test "With finished member", %{campaign: campaign, user: user} do
       {:ok, %{member: member}} =
-        Crew.Public.apply_member(campaign.promotable_assignment.crew, user)
+        Crew.Public.apply_member(campaign.promotable_assignment.crew, user, ["task1"])
 
-      task = Crew.Public.get_task(campaign.promotable_assignment.crew, member)
+      [task] = Crew.Public.list_tasks_for_user(campaign.promotable_assignment.crew, user)
       Crew.Public.lock_task(task)
       Crew.Public.activate_task(task)
 
@@ -104,7 +109,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
       assert %{
                call_to_action: %{
                  label: "Naar vragenlijst",
-                 path: "https://eyra.co/fake_survey?panl_id=1",
+                 path: "https://eyra.co/fake_alliance?panl_id=1",
                  target: %{type: :event, value: "open"}
                },
                hero_title: "Online Studie",
@@ -129,7 +134,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
 
       %{id: id, promotion: promotion} = Factories.insert!(:campaign, %{submissions: [submission]})
 
-      campaign = Campaign.Public.get!(id, Campaign.Model.preload_graph(:full))
+      campaign = Campaign.Public.get!(id, Campaign.Model.preload_graph(:down))
       view_model = Campaign.Builders.AssignmentLandingPage.view_model(campaign, user)
 
       assert %{
@@ -155,11 +160,11 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
     setup do
       user = Factories.insert!(:member)
 
-      survey_tool =
+      alliance_tool =
         Factories.insert!(
-          :survey_tool,
+          :alliance_tool,
           %{
-            survey_url: "https://eyra.co/fake_survey",
+            url: "https://eyra.co/fake_alliance",
             subject_count: 10,
             duration: "10",
             language: "en",
@@ -167,7 +172,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
           }
         )
 
-      assignment = Factories.insert!(:assignment, %{survey_tool: survey_tool})
+      assignment = Factories.insert!(:assignment, %{alliance_tool: alliance_tool})
 
       promotion =
         Factories.insert!(
@@ -195,7 +200,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
           submission: [submission]
         })
 
-      campaign = Campaign.Public.get!(id, Campaign.Model.preload_graph(:full))
+      campaign = Campaign.Public.get!(id, Campaign.Model.preload_graph(:down))
       {:ok, campaign: campaign, user: user, author: author}
     end
 
@@ -238,7 +243,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
       user2 = Factories.insert!(:member)
 
       {:ok, %{member: member}} =
-        Crew.Public.apply_member(campaign.promotable_assignment.crew, user2)
+        Crew.Public.apply_member(campaign.promotable_assignment.crew, user2, ["task2"])
 
       view_model = Campaign.Builders.PromotionLandingPage.view_model(campaign, user)
 

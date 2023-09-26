@@ -11,7 +11,7 @@ defmodule Core.Accounts.SignalHandlers do
   alias Core.Accounts.NextActions.{CompleteProfile, PromotePushStudent, SelectStudyStudent}
 
   @impl true
-  def dispatch(:user_profile_updated, %{
+  def intercept({:user_profile, :updated}, %{
         user: user,
         user_changeset: user_changeset,
         profile_changeset: profile_changeset
@@ -34,7 +34,7 @@ defmodule Core.Accounts.SignalHandlers do
   end
 
   @impl true
-  def dispatch(:features_updated, %{features: features, features_changeset: features_changeset}) do
+  def intercept(:features_updated, %{features: features, features_changeset: features_changeset}) do
     user = Accounts.get_user!(features.user_id)
 
     if user.student do
@@ -52,7 +52,7 @@ defmodule Core.Accounts.SignalHandlers do
   end
 
   @impl true
-  def dispatch(:visited_pages_updated, %{user: user, visited_pages: visited_pages}) do
+  def intercept(:visited_pages_updated, %{user: user, visited_pages: visited_pages}) do
     visited_settings? = Enum.member?(visited_pages, "settings")
 
     if visited_settings? do
@@ -61,7 +61,7 @@ defmodule Core.Accounts.SignalHandlers do
   end
 
   @impl true
-  def dispatch(:user_created, %{user: user}) do
+  def intercept({:user, :created}, %{user: user}) do
     if user.student do
       NextAction.Public.create_next_action(user, SelectStudyStudent)
       NextAction.Public.create_next_action(user, PromotePushStudent)
