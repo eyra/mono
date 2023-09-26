@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-56E16D23.js"></script>
+    <script src="dist/sidebar_items-BCA19BEF.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -149,7 +149,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:dispatch/2" translate="no">dispatch(signal, message)</a>
+        <a href="#c:intercept/2" translate="no">intercept(signal, message)</a>
 
       </div>
 
@@ -218,7 +218,7 @@ Types
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@type</span> signal() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()</pre>
+          <pre translate="no"><span class="attribute">@type</span> signal() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>() | {:atom, <a href="#t:signal/0">signal</a>()}</pre>
 
       </div>
 
@@ -238,14 +238,14 @@ Types
 Callbacks
     </h1>
     <div class="callbacks-list">
-<section class="detail" id="c:dispatch/2">
+<section class="detail" id="c:intercept/2">
 
   <div class="detail-header">
-    <a href="#c:dispatch/2" class="detail-link" title="Link to this callback">
+    <a href="#c:intercept/2" class="detail-link" title="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this callback</span>
     </a>
-    <h1 class="signature" translate="no">dispatch(signal, message)</h1>
+    <h1 class="signature" translate="no">intercept(signal, message)</h1>
 
       <a href="https://github.com/eyra/mono/blob/main/frameworks/signal/handler.ex#L4" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
@@ -259,7 +259,7 @@ Callbacks
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> dispatch(<a href="#t:signal/0">signal</a>(), <a href="#t:message/0">message</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
+          <pre translate="no"><span class="attribute">@callback</span> intercept(<a href="#t:signal/0">signal</a>(), <a href="#t:message/0">message</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
 
       </div>
 

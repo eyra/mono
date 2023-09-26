@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-56E16D23.js"></script>
+    <script src="dist/sidebar_items-BCA19BEF.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -155,7 +155,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#apply_member_and_activate_task/2" translate="no">apply_member_and_activate_task(tool, user)</a>
+        <a href="#assign_coordinators/1" translate="no">assign_coordinators(campaign)</a>
 
       </div>
 
@@ -164,14 +164,6 @@ core
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#assign_owners/2" translate="no">assign_owners(campaign, users)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#assign_tester_role/2" translate="no">assign_tester_role(tool, user)</a>
 
       </div>
 
@@ -395,7 +387,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_survey_tools/1" translate="no">list_survey_tools(campaign)</a>
+        <a href="#list_tools/1" translate="no">list_tools(campaign)</a>
 
       </div>
 
@@ -488,7 +480,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#rewarded_amount/2" translate="no">rewarded_amount(assignment, user)</a>
+        <a href="#reward_value/1" translate="no">reward_value(assignment)</a>
 
       </div>
 
@@ -496,7 +488,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#search_subject/2" translate="no">search_subject(tool, user)</a>
+        <a href="#rewarded_amount/2" translate="no">rewarded_amount(assignment, user)</a>
 
       </div>
 
@@ -533,6 +525,14 @@ core
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#update/2" translate="no">update(campaign, attrs)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_coordinator_role/2" translate="no">update_coordinator_role(user, value)</a>
 
       </div>
 
@@ -636,16 +636,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="apply_member_and_activate_task/2">
+<section class="detail" id="assign_coordinators/1">
 
   <div class="detail-header">
-    <a href="#apply_member_and_activate_task/2" class="detail-link" title="Link to this function">
+    <a href="#assign_coordinators/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">apply_member_and_activate_task(tool, user)</h1>
+    <h1 class="signature" translate="no">assign_coordinators(campaign)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L438" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L455" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -668,28 +668,6 @@ Functions
     <h1 class="signature" translate="no">assign_owners(campaign, users)</h1>
 
       <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L250" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="assign_tester_role/2">
-
-  <div class="detail-header">
-    <a href="#assign_tester_role/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">assign_tester_role(tool, user)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L449" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -735,7 +713,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">completed?(campaign)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L453" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L430" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -965,7 +943,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_user_pools_by_currency(user, currency)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L647" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L661" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -987,7 +965,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">handle_exclusion(assignment, items)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L478" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L479" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1009,7 +987,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">import_student_reward(student_id, amount, session_key, currency)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L665" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L679" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1031,7 +1009,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">import_student_reward_exists?(student_id, session_key)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L707" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L721" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1302,14 +1280,14 @@ Functions
 <p>Returns the list of campaigns submitted at least once.</p>
   </section>
 </section>
-<section class="detail" id="list_survey_tools/1">
+<section class="detail" id="list_tools/1">
 
   <div class="detail-header">
-    <a href="#list_survey_tools/1" class="detail-link" title="Link to this function">
+    <a href="#list_tools/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">list_survey_tools(campaign)</h1>
+    <h1 class="signature" translate="no">list_tools(campaign)</h1>
 
       <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L420" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
@@ -1357,7 +1335,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">mark_expired_debug(force \\ false)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L574" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L584" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1380,7 +1358,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">mark_expired_debug(map, force)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L595" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L605" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1446,7 +1424,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">payout_participant(assignment, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L599" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L609" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1468,7 +1446,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">query_user_pools_by_currency(user, currency)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L652" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L666" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1490,7 +1468,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">ready?(id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L463" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L440" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1534,7 +1512,29 @@ Functions
     </a>
     <h1 class="signature" translate="no">reward_amount(model)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L607" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L617" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="reward_value/1">
+
+  <div class="detail-header">
+    <a href="#reward_value/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">reward_value(assignment)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L504" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1556,29 +1556,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">rewarded_amount(assignment, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L603" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="search_subject/2">
-
-  <div class="detail-header">
-    <a href="#search_subject/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">search_subject(tool, user)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L430" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L613" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1622,7 +1600,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">sync_student_credits()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L624" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L634" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1660,11 +1638,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update</span><span class="p" data-group-id="3327583459-1">(</span><span class="n">get_campaign</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3327583459-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="3327583459-2">}</span><span class="p" data-group-id="3327583459-1">)</span><span class="w">
-</span><span class="p" data-group-id="3327583459-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3327583459-4">%</span><span class="nc" data-group-id="3327583459-4">Campaign.Model</span><span class="p" data-group-id="3327583459-4">{</span><span class="p" data-group-id="3327583459-4">}</span><span class="p" data-group-id="3327583459-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update</span><span class="p" data-group-id="8243999739-1">(</span><span class="n">get_campaign</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8243999739-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="8243999739-2">}</span><span class="p" data-group-id="8243999739-1">)</span><span class="w">
+</span><span class="p" data-group-id="8243999739-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8243999739-4">%</span><span class="nc" data-group-id="8243999739-4">Campaign.Model</span><span class="p" data-group-id="8243999739-4">{</span><span class="p" data-group-id="8243999739-4">}</span><span class="p" data-group-id="8243999739-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">update</span><span class="p" data-group-id="3327583459-5">(</span><span class="n">get_campaign</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3327583459-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="3327583459-6">}</span><span class="p" data-group-id="3327583459-5">)</span><span class="w">
-</span><span class="p" data-group-id="3327583459-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3327583459-8">%</span><span class="nc" data-group-id="3327583459-8">Ecto.Changeset</span><span class="p" data-group-id="3327583459-8">{</span><span class="p" data-group-id="3327583459-8">}</span><span class="p" data-group-id="3327583459-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">update</span><span class="p" data-group-id="8243999739-5">(</span><span class="n">get_campaign</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8243999739-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="8243999739-6">}</span><span class="p" data-group-id="8243999739-5">)</span><span class="w">
+</span><span class="p" data-group-id="8243999739-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8243999739-8">%</span><span class="nc" data-group-id="8243999739-8">Ecto.Changeset</span><span class="p" data-group-id="8243999739-8">{</span><span class="p" data-group-id="8243999739-8">}</span><span class="p" data-group-id="8243999739-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="update/2">
@@ -1689,6 +1667,28 @@ Functions
 
   </section>
 </section>
+<section class="detail" id="update_coordinator_role/2">
+
+  <div class="detail-header">
+    <a href="#update_coordinator_role/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_coordinator_role(user, value)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L463" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="user_has_currency?/2">
 
   <div class="detail-header">
@@ -1698,7 +1698,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">user_has_currency?(user, currency)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L642" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L656" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1720,7 +1720,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">validate_open(assignment, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L503" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/campaign/_public.ex#L513" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

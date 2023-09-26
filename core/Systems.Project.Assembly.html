@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-56E16D23.js"></script>
+    <script src="dist/sidebar_items-BCA19BEF.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -127,7 +127,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create/3" translate="no">create(name, user, atom)</a>
+        <a href="#append_path/2" translate="no">append_path(path, sub_path)</a>
 
       </div>
 
@@ -135,7 +135,23 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_item/2" translate="no">create_item(node, tool_special)</a>
+        <a href="#assign_role/1" translate="no">assign_role(map)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create/3" translate="no">create(name, user, template)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_item/3" translate="no">create_item(template, name, node)</a>
 
       </div>
 
@@ -144,6 +160,38 @@ core
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#delete/1" translate="no">delete(arg1)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_auth/2" translate="no">update_auth(multi, project)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_path/2" translate="no">update_path(multi, arg2)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_path/3" translate="no">update_path(multi, node, project_path)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_paths/3" translate="no">update_paths(multi, elements, project_path)</a>
 
       </div>
 
@@ -163,16 +211,16 @@ core
 Functions
     </h1>
     <div class="functions-list">
-<section class="detail" id="create/3">
+<section class="detail" id="append_path/2">
 
   <div class="detail-header">
-    <a href="#create/3" class="detail-link" title="Link to this function">
+    <a href="#append_path/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">create(name, user, atom)</h1>
+    <h1 class="signature" translate="no">append_path(path, sub_path)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/_assembly.ex#L27" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_assembly.ex#L163" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -185,16 +233,60 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="create_item/2">
+<section class="detail" id="assign_role/1">
 
   <div class="detail-header">
-    <a href="#create_item/2" class="detail-link" title="Link to this function">
+    <a href="#assign_role/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">create_item(node, tool_special)</h1>
+    <h1 class="signature" translate="no">assign_role(map)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/_assembly.ex#L51" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_assembly.ex#L170" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="create/3">
+
+  <div class="detail-header">
+    <a href="#create/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">create(name, user, template)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_assembly.ex#L29" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="create_item/3">
+
+  <div class="detail-header">
+    <a href="#create_item/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">create_item(template, name, node)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_assembly.ex#L52" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -216,7 +308,95 @@ Functions
     </a>
     <h1 class="signature" translate="no">delete(arg1)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/_assembly.ex#L13" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_assembly.ex#L15" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="update_auth/2">
+
+  <div class="detail-header">
+    <a href="#update_auth/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_auth(multi, project)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_assembly.ex#L174" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="update_path/2">
+
+  <div class="detail-header">
+    <a href="#update_path/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_path(multi, arg2)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_assembly.ex#L110" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="update_path/3">
+
+  <div class="detail-header">
+    <a href="#update_path/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_path(multi, node, project_path)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_assembly.ex#L119" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="update_paths/3">
+
+  <div class="detail-header">
+    <a href="#update_paths/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_paths(multi, elements, project_path)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_assembly.ex#L155" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

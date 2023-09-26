@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-56E16D23.js"></script>
+    <script src="dist/sidebar_items-BCA19BEF.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -135,14 +135,6 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create/2" translate="no">create(attrs, auth_node)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
         <a href="#create_spot/2" translate="no">create_spot(tool_id, user)</a>
 
       </div>
@@ -255,6 +247,14 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#prepare_tool/2" translate="no">prepare_tool(attrs, auth_node \\ Core.Authorization.make_node())</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#set_tool_status/2" translate="no">set_tool_status(tool, status)</a>
 
       </div>
@@ -284,29 +284,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">count_leaderboard_versions()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L263" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="create/2">
-
-  <div class="detail-header">
-    <a href="#create/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">create(attrs, auth_node)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L52" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L260" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -328,7 +306,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">create_spot(tool_id, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L63" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L60" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -350,7 +328,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">create_spot!(tool_id, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L80" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L77" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -372,7 +350,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">create_submission(changeset)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L87" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L84" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -394,7 +372,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">delete(submission)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L275" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L272" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -512,7 +490,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">import_csv_lines(csv_lines, tool_id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L129" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L126" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -534,7 +512,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">import_entries(entries, tool)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L138" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L135" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -558,7 +536,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">list_leaderboard_categories(tool_id, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L239" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L236" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -582,7 +560,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">list_spots(user, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L215" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L212" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -606,7 +584,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">list_spots_for_tool(user, tool_id, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L200" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L197" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -630,7 +608,31 @@ Functions
     </a>
     <h1 class="signature" translate="no">list_submissions(tool_id, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L229" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L226" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="prepare_tool/2">
+
+    <span id="prepare_tool/1"></span>
+
+  <div class="detail-header">
+    <a href="#prepare_tool/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">prepare_tool(attrs, auth_node \\ Core.Authorization.make_node())</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/benchmark/_public.ex#L52" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
