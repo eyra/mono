@@ -14,7 +14,7 @@ defmodule Systems.Feldspar.LocalFS do
   end
 
   def get_public_url(id) do
-    "#{Endpoint.url()}/#{static_path()}/#{id}"
+    "#{Endpoint.url()}/#{public_path()}/#{id}"
   end
 
   def remove(id) do
@@ -33,5 +33,5 @@ defmodule Systems.Feldspar.LocalFS do
     |> Access.fetch!(:local_fs_root_path)
   end
 
-  def static_path, do: "/feldspar_apps"
+  def public_path, do: "/feldspar/apps"
 end

@@ -3,7 +3,7 @@ defmodule Systems.Feldspar.Plug do
 
   defmacro setup() do
     quote do
-      plug(Systems.Feldspar.Plug, at: Systems.Feldspar.LocalFS.static_path())
+      plug(Systems.Feldspar.Plug, at: Systems.Feldspar.LocalFS.public_path())
     end
   end
 
