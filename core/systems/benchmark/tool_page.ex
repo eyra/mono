@@ -1,6 +1,7 @@
 defmodule Systems.Benchmark.ToolPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Stripped.Component, :projects
+  use Systems.Observatory.Public
 
   alias Frameworks.Pixel.{
     Align,
@@ -20,7 +21,8 @@ defmodule Systems.Benchmark.ToolPage do
 
   @impl true
   def mount(%{"id" => id, "spot" => spot_id}, _session, socket) do
-    model = %{id: String.to_integer(id), director: :benchmark}
+    model =
+      Benchmark.Public.get_tool!(String.to_integer(id), Benchmark.ToolModel.preload_graph(:down))
 
     {
       :ok,

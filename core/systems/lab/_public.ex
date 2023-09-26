@@ -4,7 +4,6 @@ defmodule Systems.Lab.Public do
   alias Systems.Lab.VUDaySchedule, as: DaySchedule
 
   alias Core.Repo
-  alias Ecto.Multi
 
   alias Frameworks.{
     Signal
@@ -16,7 +15,7 @@ defmodule Systems.Lab.Public do
 
   alias Core.Accounts.User
 
-  def get(id, preload \\ []) do
+  def get_tool!(id, preload \\ []) do
     from(lab_tool in Lab.ToolModel,
       preload: ^preload
     )
@@ -24,11 +23,10 @@ defmodule Systems.Lab.Public do
     |> filter_double_time_slots()
   end
 
-  def create_tool(attrs, auth_node) do
+  def prepare_tool(attrs, auth_node \\ Core.Authorization.make_node()) do
     %Lab.ToolModel{}
     |> Lab.ToolModel.changeset(:mount, attrs)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
-    |> Repo.insert()
   end
 
   def copy(%Lab.ToolModel{} = tool, auth_node) do
@@ -36,19 +34,6 @@ defmodule Systems.Lab.Public do
     |> Lab.ToolModel.changeset(:copy, Map.from_struct(tool))
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Repo.insert!()
-  end
-
-  def update_tool(changeset) do
-    result =
-      Multi.new()
-      |> Repo.multi_update(:tool, changeset)
-      |> Repo.transaction()
-
-    with {:ok, %{tool: tool}} <- result do
-      Signal.Public.dispatch!(:lab_tool_updated, tool)
-    end
-
-    result
   end
 
   def get_time_slot(id, preload \\ []) do
@@ -192,7 +177,7 @@ defmodule Systems.Lab.Public do
     entries
     |> Enum.each(&submit_day_entry(&1, tool, og_date, og_location, date, location))
 
-    Signal.Public.dispatch!(:lab_tool_updated, tool)
+    Signal.Public.dispatch!(:lab_tool, tool)
   end
 
   defp submit_day_entry(
@@ -244,7 +229,7 @@ defmodule Systems.Lab.Public do
            |> time_slot_query(from, to, location)
            |> Repo.update_all(set: [enabled?: false]) do
       if count > 0 do
-        Signal.Public.dispatch!(:lab_tool_updated, tool)
+        Signal.Public.dispatch!(:lab_tool, tool)
       end
 
       {count, nil}
@@ -336,9 +321,9 @@ defmodule Systems.Lab.Public do
              conflict_target: [:user_id, :time_slot_id],
              on_conflict: {:replace, [:status]}
            ) do
-      tool = get(tool_id)
+      tool = get_tool!(tool_id)
 
-      Signal.Public.dispatch!(:lab_reservation_created, %{
+      Signal.Public.dispatch!({:lab_tool, :reservation_created}, %{
         tool: tool,
         user: user,
         time_slot: time_slot
@@ -362,7 +347,10 @@ defmodule Systems.Lab.Public do
 
     with {update_count, _} <- Repo.update_all(query, set: [status: :cancelled]) do
       if update_count > 0 do
-        Signal.Public.dispatch!(:lab_reservations_cancelled, %{tool: get(tool_id), user: user})
+        Signal.Public.dispatch!({:lab_tool, :reservations_cancelled}, %{
+          tool: get_tool!(tool_id),
+          user: user
+        })
       end
 
       unless update_count < 2 do
@@ -394,8 +382,8 @@ end
 
 defimpl Core.Persister, for: Systems.Lab.ToolModel do
   def save(_tool, changeset) do
-    case Systems.Lab.Public.update_tool(changeset) do
-      {:ok, %{tool: tool}} -> {:ok, tool}
+    case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :lab_tool) do
+      {:ok, %{lab_tool: lab_tool}} -> {:ok, lab_tool}
       _ -> {:error, changeset}
     end
   end

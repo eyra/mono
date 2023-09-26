@@ -54,7 +54,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
   end
 
   defp load_campaigns(pool) do
-    preload = Campaign.Model.preload_graph(:full)
+    preload = Campaign.Model.preload_graph(:down)
 
     Campaign.Public.list_submitted(pool, preload: preload)
     |> Enum.map(&Campaign.Model.flatten(&1))

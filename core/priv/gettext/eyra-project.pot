@@ -12,10 +12,6 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "preview.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "delete.confirm"
 msgstr ""
 
@@ -49,14 +45,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.privacy.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.tasks"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.tasks.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -116,10 +104,6 @@ msgid "node.items.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "publish.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "form.title"
 msgstr ""
 
@@ -136,10 +120,6 @@ msgid "add.new.item.button.short"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "retract.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "campaign.invite.title"
 msgstr ""
 
@@ -149,14 +129,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "direct.invite.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "close.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "open.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format

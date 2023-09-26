@@ -12,10 +12,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, elixir-autogen, elixir-format
-msgid "preview.button"
-msgstr "Voorbeeld"
-
-#, elixir-autogen, elixir-format
 msgid "delete.confirm"
 msgstr "project"
 
@@ -25,7 +21,7 @@ msgstr "Instellingen"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.config.forward"
-msgstr "Instellingen"
+msgstr "Ga naar Instellingen"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.invite"
@@ -33,7 +29,7 @@ msgstr "Uitnodigen"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.invite.forward"
-msgstr "Uitnodigen"
+msgstr "Ga naar Uitnodigen"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"
@@ -41,7 +37,7 @@ msgstr "Monitor"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor.forward"
-msgstr "Monitor"
+msgstr "Ga naar Monitor"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.privacy"
@@ -49,15 +45,7 @@ msgstr "Privacy"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.privacy.forward"
-msgstr "Privacy"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.tasks"
-msgstr "Flow"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.tasks.forward"
-msgstr "Flow"
+msgstr "Ga naar Privacy"
 
 #, elixir-autogen, elixir-format
 msgid "add.first.button"
@@ -115,10 +103,6 @@ msgstr "Overzicht"
 msgid "node.items.title"
 msgstr "Items"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "publish.button"
-msgstr "Publiceren"
-
 #, elixir-autogen, elixir-format
 msgid "form.title"
 msgstr "Project instellingen"
@@ -136,10 +120,6 @@ msgid "add.new.item.button.short"
 msgstr "Nieuw item"
 
 #, elixir-autogen, elixir-format
-msgid "retract.button"
-msgstr "Terugtrekken"
-
-#, elixir-autogen, elixir-format
 msgid "campaign.invite.title"
 msgstr "Nodig mensen uit met een campagne"
 
@@ -150,14 +130,6 @@ msgstr "Je kan mensen direct uitnodigigen op de onderstaande url."
 #, elixir-autogen, elixir-format
 msgid "direct.invite.title"
 msgstr "Nodig mensen uit met een url"
-
-#, elixir-autogen, elixir-format
-msgid "close.button"
-msgstr "Finish"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "open.button"
-msgstr "Resume"
 
 #, elixir-autogen, elixir-format
 msgid "label.concept"
@@ -209,4 +181,4 @@ msgstr "Support"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.support.forward"
-msgstr "Support"
+msgstr "Ga naar Support"

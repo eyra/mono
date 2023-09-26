@@ -15,7 +15,7 @@ defmodule Core.WebPush.SignalHandler.Test do
     end
 
     test "send web-push for new notifications", %{box: box, subscription: subscription} do
-      SignalHandlers.dispatch(:new_notification, %{box: box, data: %{title: "Hello Test"}})
+      SignalHandlers.intercept(:new_notification, %{box: box, data: %{title: "Hello Test"}})
 
       assert_enqueued(
         worker: Worker,

@@ -70,7 +70,7 @@ defmodule Frameworks.Pixel.Flash do
       end
 
       def handle_info(
-            {:show_flash, %{type: type, message: message, auto_hide: auto_hide}},
+            {:show_flash, %{type: type, message: message, auto_hide: auto_hide}} = params,
             socket
           ) do
         {:noreply, socket |> Flash.put(type, message, auto_hide)}

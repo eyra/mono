@@ -212,3 +212,43 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "leaderboard.team.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "apply.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "close.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "preview.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "publish.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "retract.button"
+msgstr ""

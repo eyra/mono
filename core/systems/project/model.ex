@@ -25,7 +25,7 @@ defmodule Systems.Project.Model do
     |> validate_required(@required_fields)
   end
 
-  def preload_graph(:full),
+  def preload_graph(:down),
     do:
       preload_graph([
         :root,
@@ -34,6 +34,10 @@ defmodule Systems.Project.Model do
 
   def preload_graph(:root), do: [root: Project.NodeModel.preload_graph(:down)]
   def preload_graph(:auth_node), do: [auth_node: []]
+
+  def auth_tree(%Project.Model{auth_node: auth_node, root: root}) do
+    {auth_node, Project.NodeModel.auth_tree(root)}
+  end
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(project), do: project.auth_node_id

@@ -51,7 +51,7 @@ defmodule Systems.Campaign.ModelTest do
       assert {:ok, %Campaign.Model{}} =
                Campaign.Public.create(promotion, assignment, [submission], researcher, auth_node)
 
-      assert_signal_dispatched(:campaign_created)
+      assert_signal_dispatched({:campaign, :created})
     end
 
     test "delete/1 deletes the campaign" do

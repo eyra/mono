@@ -7,7 +7,7 @@ defmodule Systems.Project.ItemModel do
 
   alias Systems.{
     Project,
-    DataDonation,
+    Assignment,
     Benchmark
   }
 
@@ -16,6 +16,7 @@ defmodule Systems.Project.ItemModel do
     field(:project_path, {:array, :integer})
     belongs_to(:node, Project.NodeModel)
     belongs_to(:tool_ref, Project.ToolRefModel)
+    belongs_to(:assignment, Assignment.Model)
     timestamps()
   end
 
@@ -29,15 +30,45 @@ defmodule Systems.Project.ItemModel do
     |> validate_required(@required_fields)
   end
 
+  def preload_graph(:up),
+    do:
+      preload_graph([
+        :node
+      ])
+
   def preload_graph(:down),
     do:
       preload_graph([
-        :node,
-        :tool_ref
+        :tool_ref,
+        :assignment
       ])
 
   def preload_graph(:node), do: [node: [:parent, :children, :items, :auth_node]]
   def preload_graph(:tool_ref), do: [tool_ref: Project.ToolRefModel.preload_graph(:down)]
+  def preload_graph(:assignment), do: [assignment: Assignment.Model.preload_graph(:down)]
+
+  def special(%{tool_ref: %{id: _id} = special}), do: special
+  def special(%{assignment: %{id: _id} = special}), do: special
+
+  def auth_tree(%Project.ItemModel{tool_ref: %Ecto.Association.NotLoaded{}} = item) do
+    auth_tree(Repo.preload(item, :tool_ref))
+  end
+
+  def auth_tree(%Project.ItemModel{tool_ref: tool_ref}) when not is_nil(tool_ref) do
+    Project.ToolRefModel.auth_tree(tool_ref)
+  end
+
+  def auth_tree(%Project.ItemModel{assignment: %Ecto.Association.NotLoaded{}} = item) do
+    auth_tree(Repo.preload(item, :assignment))
+  end
+
+  def auth_tree(%Project.ItemModel{assignment: assignment}) when not is_nil(assignment) do
+    Assignment.Model.auth_tree(assignment)
+  end
+
+  def auth_tree(items) when is_list(items) do
+    Enum.map(items, &auth_tree/1)
+  end
 
   defimpl Frameworks.Utility.ViewModelBuilder do
     use CoreWeb, :verified_routes
@@ -50,18 +81,19 @@ defmodule Systems.Project.ItemModel do
            %{
              id: id,
              name: name,
-             tool_ref: %{
-               data_donation_tool:
-                 %{
+             assignment:
+               %{
+                 id: assignment_id,
+                 info: %{
                    subject_count: subject_count
-                 } = tool
-             }
+                 }
+               } = assignment
            },
            {Project.NodePage, :item_card},
            _user
          ) do
-      tags = get_card_tags(tool)
-      path = ~p"/project/item/#{id}/content"
+      tags = get_card_tags(assignment)
+      path = ~p"/assignment/#{assignment_id}/content"
 
       edit = %{
         action: %{type: :send, event: "edit", item: id},
@@ -93,6 +125,7 @@ defmodule Systems.Project.ItemModel do
              tool_ref: %{
                benchmark_tool:
                  %{
+                   id: benchmark_id,
                    status: status,
                    director: _director,
                    spots: spots,
@@ -104,7 +137,7 @@ defmodule Systems.Project.ItemModel do
            _user
          ) do
       tags = get_card_tags(tool)
-      path = ~p"/project/item/#{id}/content"
+      path = ~p"/benchmark/#{benchmark_id}/content"
       label = get_label(status)
 
       edit = %{
@@ -160,12 +193,8 @@ defmodule Systems.Project.ItemModel do
 
     defp get_label(:idle), do: %{type: :idle, text: dgettext("eyra-project", "label.idle")}
 
-    defp get_card_tags(%DataDonation.ToolModel{tasks: tasks}) when is_list(tasks) do
-      tasks
-      |> Enum.map(& &1.platform)
-      |> Enum.filter(&is_binary/1)
-      |> Enum.uniq()
-      |> Enum.map(&DataDonation.Platforms.translate/1)
+    defp get_card_tags(%Assignment.Model{}) do
+      ["Assignment"]
     end
 
     defp get_card_tags(%Benchmark.ToolModel{}), do: ["Challenge"]

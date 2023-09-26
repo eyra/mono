@@ -8,7 +8,7 @@ defmodule Systems.Student.Switch do
   alias Core.Accounts
 
   @impl true
-  def dispatch(:features_updated, %{features: features, features_changeset: features_changeset}) do
+  def intercept(:features_updated, %{features: features, features_changeset: features_changeset}) do
     with %{user_id: user_id, study_program_codes: old_codes} <- features,
          %{changes: %{study_program_codes: new_codes}} <- features_changeset do
       user = Accounts.get_user!(user_id)

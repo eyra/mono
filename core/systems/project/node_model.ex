@@ -41,6 +41,22 @@ defmodule Systems.Project.NodeModel do
   def preload_graph(:items), do: [items: Project.ItemModel.preload_graph(:down)]
   def preload_graph(:auth_node), do: [auth_node: []]
 
+  def auth_tree(%Project.NodeModel{children: %Ecto.Association.NotLoaded{}} = node) do
+    auth_tree(Repo.preload(node, :children))
+  end
+
+  def auth_tree(%Project.NodeModel{items: %Ecto.Association.NotLoaded{}} = node) do
+    auth_tree(Repo.preload(node, :items))
+  end
+
+  def auth_tree(%Project.NodeModel{auth_node: auth_node, children: children, items: items}) do
+    {auth_node, auth_tree(children) ++ Project.ItemModel.auth_tree(items)}
+  end
+
+  def auth_tree(nodes) when is_list(nodes) do
+    Enum.map(nodes, &auth_tree/1)
+  end
+
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(project_node), do: project_node.auth_node_id
   end

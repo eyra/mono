@@ -1,0 +1,88 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "add.to.button"
+msgstr "Voeg toe"
+
+#, elixir-autogen, elixir-format
+msgid "item.description.label"
+msgstr "Beschrijving"
+
+#, elixir-autogen, elixir-format
+msgid "item.donate.description"
+msgstr "Biedt deelnemers de mogelijkheid om te doneren."
+
+#, elixir-autogen, elixir-format
+msgid "item.donate.title"
+msgstr "Donatie"
+
+#, elixir-autogen, elixir-format
+msgid "item.download.description"
+msgstr "Instructs participants on how to download digital trace data."
+
+#, elixir-autogen, elixir-format
+msgid "item.download.title"
+msgstr "Download handleiding"
+
+#, elixir-autogen, elixir-format
+msgid "item.group.label"
+msgstr "Group"
+
+#, elixir-autogen, elixir-format
+msgid "item.library.description"
+msgstr "Kies items die je aan de werklijst wilt toevoegen."
+
+#, elixir-autogen, elixir-format
+msgid "item.library.title"
+msgstr "Bibliotheek"
+
+#, elixir-autogen, elixir-format
+msgid "item.list.description"
+msgstr "Voeg items uit de bibliotheek toe om een werklijst te bouwen voor jouw deelnemers."
+
+#, elixir-autogen, elixir-format
+msgid "item.list.hint"
+msgstr "Verander volgorde met de pijltjes"
+
+#, elixir-autogen, elixir-format
+msgid "item.list.title"
+msgstr "Werklijst"
+
+#, elixir-autogen, elixir-format
+msgid "item.request.description"
+msgstr "Legt deelnemers uit hoe ze digital trace data kunnen aanvragen."
+
+#, elixir-autogen, elixir-format
+msgid "item.request.title"
+msgstr "Aanvraag handleiding"
+
+#, elixir-autogen, elixir-format
+msgid "item.title.label"
+msgstr "Titel"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.workflow"
+msgstr "Werklijst"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.workflow.forward"
+msgstr "Ga naar Werklijst"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "item.questionaire.description"
+msgstr "Stuurt deelnemers naar een online vragenlijst."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "item.questionaire.title"
+msgstr "Vragenlijst"

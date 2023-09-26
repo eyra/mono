@@ -20,7 +20,7 @@ defmodule Frameworks.Signal.TestHelper do
     end
   end
 
-  def dispatch(signal, message) do
+  def intercept(signal, message) do
     send(self(), {:signal_test, {signal, message}})
   end
 end

@@ -179,11 +179,11 @@ msgid "ticket_status.open"
 msgstr "Open"
 
 #, elixir-autogen, elixir-format
-msgid "tool_types.lab"
+msgid "templates.lab"
 msgstr "Lab study"
 
 #, elixir-autogen, elixir-format
-msgid "tool_types.online"
+msgid "templates.online"
 msgstr "Online study"
 
 #, elixir-autogen, elixir-format, ex-autogen
@@ -335,9 +335,5 @@ msgid "project_templates.empty"
 msgstr "Empty"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "project_tools.benchmark"
-msgstr "Benchmark"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "project_tools.data_donation"
-msgstr "Data Donation"
+msgid "templates.data_donation"
+msgstr "Online study"

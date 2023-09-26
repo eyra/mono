@@ -21,7 +21,7 @@ defmodule Systems.Pool.Builders.CampaignItem do
           },
           promotable:
             %{
-              assignable_experiment: %{
+              assignable_inquiry: %{
                 subject_count: target_subject_count
               }
             } = assignment

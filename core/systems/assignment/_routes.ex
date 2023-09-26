@@ -4,7 +4,7 @@ defmodule Systems.Assignment.Routes do
       scope "/", Systems.Assignment do
         pipe_through([:browser, :require_authenticated_user])
         live("/assignment/:id", LandingPage)
-        live("/assignment/:id/callback", CallbackPage)
+        live("/assignment/:id/content", ContentPage)
       end
 
       scope "/", Frameworks.Utility do

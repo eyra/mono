@@ -53,3 +53,47 @@ msgstr ""
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "submission.criteria.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.assignment"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.assignment.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.funding"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.funding.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.promotion"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.promotion.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.submission"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.submission.forward"
+msgstr ""

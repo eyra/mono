@@ -4,49 +4,40 @@ defmodule Systems.Promotion.LandingPageTest do
   import Phoenix.LiveViewTest
 
   alias Systems.{
+    Assignment,
     Promotion,
     Crew,
     Budget
   }
 
-  describe "show landing page for: campaign -> assignment -> questionnaire_tool" do
+  describe "show landing page for: campaign -> assignment -> alliance_tool" do
     setup [:login_as_member]
 
     setup do
+      campaign_auth_node = Factories.insert!(:auth_node)
+      promotion_auth_node = Factories.insert!(:auth_node, %{parent: campaign_auth_node})
+      assignment_auth_node = Factories.insert!(:auth_node, %{parent: campaign_auth_node})
+      tool_auth_node = Factories.insert!(:auth_node, %{parent: assignment_auth_node})
+
       currency = Budget.Factories.create_currency("test_1234", :legal, "ƒ", 2)
       budget = Budget.Factories.create_budget("test_1234", currency)
 
       pool =
         Factories.insert!(:pool, %{name: "test_1234", director: :citizen, currency: currency})
 
-      questionnaire_tool =
-        Factories.insert!(
-          :questionnaire_tool,
-          %{
-            questionnaire_url: "https://eyra.co/fake_questionnaire"
-          }
-        )
-
-      experiment =
-        Factories.insert!(
-          :experiment,
-          %{
-            questionnaire_tool: questionnaire_tool,
-            subject_count: 10,
-            duration: "10",
-            language: "en",
-            devices: [:desktop]
-          }
-        )
+      tool = Assignment.Factories.create_tool(tool_auth_node)
+      tool_ref = Assignment.Factories.create_tool_ref(tool)
+      workflow = Assignment.Factories.create_workflow()
+      _workflow_item = Assignment.Factories.create_workflow_item(workflow, tool_ref)
+      info = Assignment.Factories.create_info("10", 10)
 
       assignment =
-        Factories.insert!(
-          :assignment,
-          %{
-            budget: budget,
-            experiment: experiment,
-            director: :campaign
-          }
+        Assignment.Factories.create_assignment(
+          info,
+          workflow,
+          assignment_auth_node,
+          budget,
+          :campaign
         )
 
       promotion =
@@ -62,7 +53,8 @@ defmodule Systems.Promotion.LandingPageTest do
             banner_subtitle: "Banner Subtitle",
             banner_photo_url: "https://eyra.co/image/1",
             banner_url: "https://eyra.co/member/1",
-            marks: ["vu"]
+            marks: ["vu"],
+            auth_node: promotion_auth_node
           }
         )
 
@@ -74,7 +66,8 @@ defmodule Systems.Promotion.LandingPageTest do
           assignment: assignment,
           promotion: promotion,
           authors: [author],
-          submissions: [submission]
+          submissions: [submission],
+          auth_node: campaign_auth_node
         })
 
       %{promotion: promotion, assignment: assignment, submissions: [submission]}
@@ -103,7 +96,7 @@ defmodule Systems.Promotion.LandingPageTest do
 
     test "One member applied", %{conn: conn, promotion: promotion, assignment: assignment} do
       user = Factories.insert!(:member)
-      {:ok, %{member: _member}} = Crew.Public.apply_member(assignment.crew, user)
+      {:ok, %{member: _member}} = Crew.Public.apply_member(assignment.crew, user, ["task1"])
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Promotion.LandingPage, promotion.id))
       assert html =~ "Open voor deelname"

@@ -587,7 +587,7 @@ defmodule Core.AccountsTest do
       {:ok, _} = Accounts.update_user_profile(user_changeset, profile_changeset)
 
       assert user |> Accounts.get_profile() |> Map.get(:fullname) == "Update Test"
-      assert_signal_dispatched(:user_profile_updated)
+      assert_signal_dispatched({:user_profile, :updated})
     end
   end
 

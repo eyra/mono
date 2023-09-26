@@ -43,7 +43,7 @@ defmodule Systems.Promotion.Public do
       |> Repo.transaction()
 
     with {:ok, %{promotion: promotion}} <- result do
-      Signal.Public.dispatch!(:promotion_updated, promotion)
+      Signal.Public.dispatch!({:promotion, :updated}, promotion)
     end
 
     result
