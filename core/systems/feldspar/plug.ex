@@ -20,7 +20,7 @@ defmodule Systems.Feldspar.Plug do
         conn,
         options
       ) do
-    call(Systems.Feldspar.Internal.get_backend(), conn, options)
+    call(Systems.Feldspar.Private.get_backend(), conn, options)
   end
 
   def call(Systems.Feldspar.LocalFS, conn, options) do

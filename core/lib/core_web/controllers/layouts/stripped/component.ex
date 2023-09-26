@@ -70,7 +70,7 @@ defmodule CoreWeb.Layouts.Stripped.Component do
                 </div>
               <% end %>
               <div class="flex-1 bg-white">
-                <div class="flex flex-row">
+                <div class="flex flex-row w-full h-full">
                   <div class="flex-1">
                     <%= render_slot(@inner_block) %>
                     <Margin.y id={:page_footer_top} />

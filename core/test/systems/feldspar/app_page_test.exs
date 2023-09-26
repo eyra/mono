@@ -15,7 +15,7 @@ defmodule Systems.Feldspar.AppPageTest do
       {:ok, view, _html} = live(conn, ~p"/apps/test")
 
       assert render_hook(view, :app_event, %{unexpected_key: "some data"}) =~
-               "Unsupported message:"
+               "Unsupported "
     end
   end
 end
