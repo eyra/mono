@@ -86,7 +86,7 @@ defmodule Systems.Assignment.Switch do
     handle(signal, object)
   end
 
-  def handle(:survey_tool_updated, tool), do: handle(:tool_updated, tool)
+  def handle(:questionnaire_tool_updated, tool), do: handle(:tool_updated, tool)
   def handle(:lab_tool_updated, tool), do: handle(:tool_updated, tool)
   def handle(:data_donation_tool_updated, tool), do: handle(:tool_updated, tool)
 

@@ -83,8 +83,8 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
       id: :promotion_form,
       ready: ready?,
       show_errors: show_errors,
-      title: dgettext("link-survey", "tabbar.item.promotion"),
-      forward_title: dgettext("link-survey", "tabbar.item.promotion.forward"),
+      title: dgettext("link-questionnaire", "tabbar.item.promotion"),
+      forward_title: dgettext("link-questionnaire", "tabbar.item.promotion.forward"),
       type: :fullpage,
       live_component: Promotion.FormView,
       props: %{
@@ -108,8 +108,8 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
       id: :assignment_form,
       ready: ready?,
       show_errors: show_errors,
-      title: dgettext("link-survey", "tabbar.item.assignment"),
-      forward_title: dgettext("link-survey", "tabbar.item.assignment.forward"),
+      title: dgettext("link-questionnaire", "tabbar.item.assignment"),
+      forward_title: dgettext("link-questionnaire", "tabbar.item.assignment.forward"),
       type: :fullpage,
       live_component: Assignment.AssignmentForm,
       props: %{
@@ -131,8 +131,8 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
        ) do
     %{
       id: :submission_form,
-      title: dgettext("link-survey", "tabbar.item.submission"),
-      forward_title: dgettext("link-survey", "tabbar.item.submission.forward"),
+      title: dgettext("link-questionnaire", "tabbar.item.submission"),
+      forward_title: dgettext("link-questionnaire", "tabbar.item.submission.forward"),
       type: :fullpage,
       live_component: Pool.CampaignSubmissionView,
       props: %{
@@ -152,8 +152,8 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
        ) do
     %{
       id: :funding,
-      title: dgettext("link-survey", "tabbar.item.funding"),
-      forward_title: dgettext("link-survey", "tabbar.item.funding.forward"),
+      title: dgettext("link-questionnaire", "tabbar.item.funding"),
+      forward_title: dgettext("link-questionnaire", "tabbar.item.funding.forward"),
       type: :fullpage,
       live_component: Campaign.FundingView,
       props: %{
@@ -178,8 +178,8 @@ defmodule Systems.Campaign.Builders.CampaignContentPage do
 
     %{
       id: :monitor,
-      title: dgettext("link-survey", "tabbar.item.monitor"),
-      forward_title: dgettext("link-survey", "tabbar.item.monitor.forward"),
+      title: dgettext("link-questionnaire", "tabbar.item.monitor"),
+      forward_title: dgettext("link-questionnaire", "tabbar.item.monitor.forward"),
       type: :fullpage,
       live_component: Campaign.MonitorView,
       props: %{

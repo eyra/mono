@@ -194,3 +194,19 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "create.item.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "item.form.name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "item.form.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.support"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.support.forward"
+msgstr ""

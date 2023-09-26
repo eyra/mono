@@ -5,6 +5,7 @@ defmodule Frameworks.Signal.Public do
     Core.WebPush.SignalHandlers,
     Core.APNS.SignalHandlers,
     Systems.Observatory.Switch,
+    Systems.Project.Switch,
     Systems.Assignment.Switch,
     Systems.Pool.Switch,
     Systems.Student.Switch,

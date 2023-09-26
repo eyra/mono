@@ -11,7 +11,7 @@ defmodule Systems.Campaign.Assembly do
   alias Systems.{
     Campaign,
     Assignment,
-    Survey,
+    Questionnaire,
     Lab,
     Crew,
     Pool,
@@ -82,7 +82,7 @@ defmodule Systems.Campaign.Assembly do
     context(tool_type).create_tool(tool_attrs, tool_auth_node)
   end
 
-  defp context(:online), do: Survey.Public
+  defp context(:online), do: Questionnaire.Public
   defp context(:lab), do: Lab.Public
 
   defp assignment_attrs(), do: %{director: :campaign}

@@ -24,7 +24,7 @@ defmodule Core.Authorization do
 
   # Models
   grant_access(Systems.Campaign.Model, [:visitor, :member])
-  grant_access(Systems.Survey.ToolModel, [:owner, :coordinator, :participant])
+  grant_access(Systems.Questionnaire.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.Lab.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.DataDonation.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.Benchmark.SpotModel, [:owner])
@@ -71,9 +71,9 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.User.Profile, [:member])
   grant_access(CoreWeb.User.Settings, [:member])
   grant_access(CoreWeb.User.SecuritySettings, [:member])
-  grant_access(CoreWeb.FakeSurvey, [:member])
+  grant_access(CoreWeb.FakeQuestionnaire, [:member])
 
-  grant_actions(CoreWeb.FakeSurveyController, %{
+  grant_actions(CoreWeb.FakeQuestionnaireController, %{
     index: [:visitor, :member]
   })
 

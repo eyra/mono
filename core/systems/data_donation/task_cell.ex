@@ -7,7 +7,7 @@ defmodule Systems.DataDonation.TaskCell do
 
   @impl true
   def update(
-        %{id: id, entity_id: entity_id, parent: parent, relative_position: relative_position},
+        %{id: id, task: task, parent: parent, relative_position: relative_position},
         socket
       ) do
     {
@@ -15,27 +15,16 @@ defmodule Systems.DataDonation.TaskCell do
       socket
       |> assign(
         id: id,
-        entity_id: entity_id,
+        task: task,
         parent: parent,
-        expanded?: false,
         relative_position: relative_position
       )
-      |> update_task()
       |> update_task_form()
       |> update_special_form()
       |> update_title()
+      |> update_status()
       |> update_buttons()
     }
-  end
-
-  @impl true
-  def handle_event("collapse", _params, socket) do
-    {:noreply, socket |> assign(expanded?: false)}
-  end
-
-  @impl true
-  def handle_event("expand", _params, socket) do
-    {:noreply, socket |> assign(expanded?: true)}
   end
 
   @impl true
@@ -44,16 +33,11 @@ defmodule Systems.DataDonation.TaskCell do
     {:noreply, socket}
   end
 
-  defp update_task(%{assigns: %{entity_id: entity_id}} = socket) do
-    task = DataDonation.Public.get_task!(entity_id, DataDonation.TaskModel.preload_graph(:down))
-    socket |> assign(task: task)
-  end
-
   defp update_task_form(%{assigns: %{id: id, task: task}} = socket) do
     task_form = %{
       id: "#{id}_task_form",
       module: DataDonation.TaskForm,
-      entity_id: task.id
+      entity: task
     }
 
     socket |> assign(task_form: task_form)
@@ -64,23 +48,26 @@ defmodule Systems.DataDonation.TaskCell do
     socket |> assign(special_form: special_form)
   end
 
-  defp special_form(%{request_task: %{id: id}}),
+  defp special_form(%{request_task: %{id: id} = entity}),
     do: %{
       id: "#{id}_request_form",
       module: DataDonation.DocumentTaskForm,
-      entity_id: id,
-      parent: %{type: __MODULE__, id: id}
+      entity: entity
     }
 
-  defp special_form(%{download_task: %{id: id}}),
+  defp special_form(%{download_task: %{id: id} = entity}),
     do: %{
       id: "#{id}_request_form",
       module: DataDonation.DocumentTaskForm,
-      entity_id: id,
-      parent: %{type: __MODULE__, id: id}
+      entity: entity
     }
 
   defp special_form(_), do: nil
+
+  defp update_status(%{assigns: %{task: task}} = socket) do
+    status = DataDonation.TaskModel.status(task)
+    assign(socket, status: status)
+  end
 
   defp update_title(%{assigns: %{task: task}} = socket) do
     title = get_title(task)
@@ -104,7 +91,7 @@ defmodule Systems.DataDonation.TaskCell do
     }
 
     collapse_button = %{
-      action: %{type: :send, event: "collapse"},
+      action: %{type: :fake},
       face: %{
         type: :label,
         label: dgettext("eyra-ui", "collapse.button"),
@@ -114,7 +101,7 @@ defmodule Systems.DataDonation.TaskCell do
     }
 
     expand_button = %{
-      action: %{type: :send, event: "expand"},
+      action: %{type: :fake},
       face: %{
         type: :label,
         label: dgettext("eyra-ui", "expand.button"),
@@ -132,8 +119,8 @@ defmodule Systems.DataDonation.TaskCell do
     )
   end
 
-  defp get_title(%{survey_task_id: id}) when not is_nil(id),
-    do: dgettext("eyra-data-donation", "task.survey.title")
+  defp get_title(%{questionnaire_task_id: id}) when not is_nil(id),
+    do: dgettext("eyra-data-donation", "task.questionnaire.title")
 
   defp get_title(%{request_task_id: id}) when not is_nil(id),
     do: dgettext("eyra-data-donation", "task.request.title")
@@ -147,9 +134,14 @@ defmodule Systems.DataDonation.TaskCell do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="bg-white rounded-md p-6">
-      <div class="flex flex-row gap-4">
-        <Text.title3><%= @title %></Text.title3>
+    <div id={@id} class="bg-white rounded-md p-6" phx-hook="Cell" >
+      <div class="flex flex-row gap-4 items-center mb-8">
+        <Text.title3 margin=""><%= @title %></Text.title3>
+        <%= if @status == :ready do %>
+          <div>
+            <img class="h-6 w-6" src="/images/icons/ready.svg" alt="ready">
+          </div>
+        <% end %>
         <div class="flex-grow" />
         <%= if @relative_position != :bottom do %>
           <Button.dynamic {@down_button}/>
@@ -159,16 +151,21 @@ defmodule Systems.DataDonation.TaskCell do
         <% end %>
         <Button.dynamic {@delete_button}/>
       </div>
-      <%= if @expanded? do %>
+      <div class="cell-expanded-view">
         <.live_component {@task_form} />
         <%= if @special_form do %>
           <.live_component {@special_form} />
           <.spacing value="XS" />
         <% end %>
-        <Button.dynamic {@collapse_button}/>
-      <% else %>
-        <Button.dynamic {@expand_button}/>
-      <% end %>
+        <div class="cell-collapse-button">
+          <Button.dynamic {@collapse_button}/>
+        </div>
+      </div>
+      <div class="cell-collapsed-view">
+        <div class="cell-expand-button">
+          <Button.dynamic {@expand_button}/>
+        </div>
+      </div>
     </div>
     """
   end

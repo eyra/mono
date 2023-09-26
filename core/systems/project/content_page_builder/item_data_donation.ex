@@ -4,7 +4,8 @@ defmodule Systems.Project.ContentPageBuilder.ItemDataDonation do
   alias Systems.{
     Project,
     DataDonation,
-    Privacy
+    Privacy,
+    Support
   }
 
   def view_model(
@@ -92,7 +93,7 @@ defmodule Systems.Project.ContentPageBuilder.ItemDataDonation do
   end
 
   defp get_tab_keys() do
-    [:config, :tasks, :privacy, :invite, :monitor]
+    [:config, :privacy, :tasks, :support, :invite, :monitor]
   end
 
   defp create_tab(
@@ -130,6 +131,8 @@ defmodule Systems.Project.ContentPageBuilder.ItemDataDonation do
        ) do
     ready? = false
 
+    tasks = DataDonation.Public.list_tasks(tool_id, DataDonation.TaskModel.preload_graph(:down))
+
     %{
       id: :tasks_form,
       ready: ready?,
@@ -142,16 +145,17 @@ defmodule Systems.Project.ContentPageBuilder.ItemDataDonation do
         tool_id: tool_id,
         flow: %{
           title: dgettext("eyra-data-donation", "task.list.title"),
-          description: dgettext("eyra-data-donation", "task.list.description")
+          description: dgettext("eyra-data-donation", "task.list.description"),
+          tasks: tasks
         },
         library: %{
           title: dgettext("eyra-data-donation", "task.library.title"),
           description: dgettext("eyra-data-donation", "task.library.description"),
           items: [
             %{
-              id: :survey,
-              title: dgettext("eyra-data-donation", "task.survey.title"),
-              description: dgettext("eyra-data-donation", "task.survey.description")
+              id: :questionnaire,
+              title: dgettext("eyra-data-donation", "task.questionnaire.title"),
+              description: dgettext("eyra-data-donation", "task.questionnaire.description")
             },
             %{
               id: :request,
@@ -192,6 +196,24 @@ defmodule Systems.Project.ContentPageBuilder.ItemDataDonation do
       live_component: Privacy.Form,
       props: %{
         entity: %{}
+      }
+    }
+  end
+
+  defp create_tab(
+         :support,
+         item,
+         _show_errors,
+         _assigns
+       ) do
+    %{
+      id: :support,
+      title: dgettext("eyra-project", "tabbar.item.support"),
+      forward_title: dgettext("eyra-project", "tabbar.item.support.forward"),
+      type: :fullpage,
+      live_component: Support.Form,
+      props: %{
+        entity: item
       }
     }
   end

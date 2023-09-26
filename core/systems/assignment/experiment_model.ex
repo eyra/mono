@@ -11,14 +11,14 @@ defmodule Systems.Assignment.ExperimentModel do
   import Ecto.Changeset
 
   alias Systems.{
-    Survey,
+    Questionnaire,
     Lab
   }
 
   schema "experiments" do
     belongs_to(:auth_node, Core.Authorization.Node)
 
-    belongs_to(:survey_tool, Systems.Survey.ToolModel)
+    belongs_to(:questionnaire_tool, Systems.Questionnaire.ToolModel)
     belongs_to(:lab_tool, Systems.Lab.ToolModel)
 
     field(:subject_count, :integer)
@@ -89,40 +89,44 @@ defmodule Systems.Assignment.ExperimentModel do
 
   def duration(_), do: 0
 
-  def apply_label(%{survey_tool: tool}) when not is_nil(tool),
-    do: dgettext("link-survey", "apply.cta.title")
+  def apply_label(%{questionnaire_tool: tool}) when not is_nil(tool),
+    do: dgettext("link-questionnaire", "apply.cta.title")
 
   def apply_label(%{lab_tool: tool}) when not is_nil(tool),
     do: dgettext("link-lab", "apply.cta.title")
 
   def apply_label(_), do: "<apply>"
 
-  def open_label(%{survey_tool: tool}) when not is_nil(tool),
-    do: dgettext("link-survey", "open.cta.title")
+  def open_label(%{questionnaire_tool: tool}) when not is_nil(tool),
+    do: dgettext("link-questionnaire", "open.cta.title")
 
   def open_label(%{lab_tool: tool}) when not is_nil(tool),
     do: dgettext("link-lab", "open.cta.title")
 
   def open_label(_), do: "<open>"
 
-  def ready?(%{survey_tool: tool}) when not is_nil(tool), do: Systems.Survey.Public.ready?(tool)
+  def ready?(%{questionnaire_tool: tool}) when not is_nil(tool),
+    do: Systems.Questionnaire.Public.ready?(tool)
+
   def ready?(%{lab_tool: tool}) when not is_nil(tool), do: Systems.Lab.Public.ready?(tool)
 
-  def external_path(%{survey_tool: survey_tool}, panl_id) do
-    Survey.ToolModel.external_path(survey_tool, panl_id)
+  def external_path(%{questionnaire_tool: questionnaire_tool}, panl_id) do
+    Questionnaire.ToolModel.external_path(questionnaire_tool, panl_id)
   end
 
   def external_path(_, _), do: nil
 
-  def tool_id(%{survey_tool_id: tool_id}) when not is_nil(tool_id), do: tool_id
+  def tool_id(%{questionnaire_tool_id: tool_id}) when not is_nil(tool_id), do: tool_id
   def tool_id(%{lab_tool_id: tool_id}) when not is_nil(tool_id), do: tool_id
 
-  def tool_form(%{survey_tool_id: tool_id}) when not is_nil(tool_id), do: Survey.ToolForm
+  def tool_form(%{questionnaire_tool_id: tool_id}) when not is_nil(tool_id),
+    do: Questionnaire.ToolForm
+
   def tool_form(%{lab_tool_id: tool_id}) when not is_nil(tool_id), do: Lab.ToolForm
 
-  def tool_field(%Survey.ToolModel{}), do: :survey_tool
+  def tool_field(%Questionnaire.ToolModel{}), do: :questionnaire_tool
   def tool_field(%Lab.ToolModel{}), do: :lab_tool
 
-  def tool_id_field(%Survey.ToolModel{}), do: :survey_tool_id
+  def tool_id_field(%Questionnaire.ToolModel{}), do: :questionnaire_tool_id
   def tool_id_field(%Lab.ToolModel{}), do: :lab_tool_id
 end

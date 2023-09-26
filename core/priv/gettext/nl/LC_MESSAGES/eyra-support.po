@@ -37,3 +37,7 @@ msgstr "Melding ontvangen"
 #, elixir-autogen, elixir-format
 msgid "ticket.type"
 msgstr "Formulier"
+
+#, elixir-autogen, elixir-format
+msgid "content.form.title"
+msgstr "Support"

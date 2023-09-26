@@ -33,7 +33,7 @@ defmodule Systems.Campaign.Builders.AssignmentCallbackPage do
       id: id,
       title: title,
       state: state(assignment, user),
-      hero_title: dgettext("link-survey", "task.hero.title"),
+      hero_title: dgettext("link-questionnaire", "task.hero.title"),
       call_to_action: forward_call_to_action(user)
     }
   end

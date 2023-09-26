@@ -9,8 +9,22 @@ defmodule Core.Enums.Base do
         unquote(values)
       end
 
+      def contains(atom) when is_atom(atom) do
+        contains(Atom.to_string(atom))
+      end
+
+      def contains(binary) when is_binary(binary) do
+        values()
+        |> Enum.map(&Atom.to_string/1)
+        |> Enum.member?(binary)
+      end
+
       def translate(value) do
-        Gettext.dgettext(CoreWeb.Gettext, "eyra-enums", "#{unquote(name)}.#{value}")
+        if contains(value) do
+          Gettext.dgettext(CoreWeb.Gettext, "eyra-enums", "#{unquote(name)}.#{value}")
+        else
+          value
+        end
       end
 
       def labels() do

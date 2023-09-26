@@ -3,7 +3,7 @@ defmodule Systems.Assignment.CallbackPage do
   The redirect page to complete a task
   """
   use CoreWeb, :live_view
-  use CoreWeb.Layouts.Workspace.Component, :survey
+  use CoreWeb.Layouts.Workspace.Component, :questionnaire
 
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button

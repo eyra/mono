@@ -393,11 +393,11 @@ defmodule Systems.Campaign.PublicTest do
         })
 
       crew = Factories.insert!(:crew)
-      survey_tool = Factories.insert!(:survey_tool)
+      questionnaire_tool = Factories.insert!(:questionnaire_tool)
 
       experiment =
         Factories.insert!(:experiment, %{
-          survey_tool: survey_tool,
+          questionnaire_tool: questionnaire_tool,
           duration: "10",
           subject_count: 1
         })

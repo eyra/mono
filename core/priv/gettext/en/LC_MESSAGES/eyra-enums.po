@@ -152,7 +152,7 @@ msgstr "Attention checks failed"
 
 #, elixir-autogen, elixir-format
 msgid "reject_catagories.not_completed"
-msgstr "Survey not completed"
+msgstr "Questionnaire not completed"
 
 #, elixir-autogen, elixir-format
 msgid "reject_catagories.other"

@@ -22,7 +22,7 @@ defmodule Core.Factories do
     Assignment,
     Crew,
     Support,
-    Survey,
+    Questionnaire,
     Lab,
     DataDonation,
     Benchmark,
@@ -142,12 +142,24 @@ defmodule Core.Factories do
     }
   end
 
-  def build(:survey_tool) do
-    build(:survey_tool, %{})
+  def build(:questionnaire_tool) do
+    build(:questionnaire_tool, %{})
   end
 
   def build(:lab_tool) do
     build(:lab_tool, %{})
+  end
+
+  def build(:data_donation_tool) do
+    build(:data_donation_tool, %{})
+  end
+
+  def build(:data_donation_task) do
+    build(:data_donation_task, %{})
+  end
+
+  def build(:data_donation_document_task) do
+    build(:data_donation_document_task, %{})
   end
 
   def build(:time_slot) do
@@ -400,14 +412,14 @@ defmodule Core.Factories do
 
   def build(:tool_ref, %{} = attributes) do
     {item, attributes} = Map.pop(attributes, :item, build(:project_item))
-    {survey_tool, attributes} = Map.pop(attributes, :survey_tool, nil)
+    {questionnaire_tool, attributes} = Map.pop(attributes, :questionnaire_tool, nil)
     {lab_tool, attributes} = Map.pop(attributes, :lab_tool, nil)
     {data_donation_tool, attributes} = Map.pop(attributes, :data_donation_tool, nil)
     {benchmark_tool, attributes} = Map.pop(attributes, :benchmark_tool, nil)
 
     %Project.ToolRefModel{
       item: item,
-      survey_tool: survey_tool,
+      questionnaire_tool: questionnaire_tool,
       lab_tool: lab_tool,
       data_donation_tool: data_donation_tool,
       benchmark_tool: benchmark_tool
@@ -450,13 +462,16 @@ defmodule Core.Factories do
         {nil, attributes}
       end
 
-    {survey_tool, attributes} =
+    {questionnaire_tool, attributes} =
       if lab_tool == nil do
         tool_auth_node = build(:auth_node, %{parent: auth_node})
 
-        case Map.pop(attributes, :survey_tool, nil) do
-          {nil, attributes} -> {build(:survey_tool, %{auth_node: tool_auth_node}), attributes}
-          {survey_tool, attributes} -> {survey_tool, attributes}
+        case Map.pop(attributes, :questionnaire_tool, nil) do
+          {nil, attributes} ->
+            {build(:questionnaire_tool, %{auth_node: tool_auth_node}), attributes}
+
+          {questionnaire_tool, attributes} ->
+            {questionnaire_tool, attributes}
         end
       else
         {nil, attributes}
@@ -464,7 +479,7 @@ defmodule Core.Factories do
 
     %Assignment.ExperimentModel{
       auth_node: auth_node,
-      survey_tool: survey_tool,
+      questionnaire_tool: questionnaire_tool,
       lab_tool: lab_tool
     }
     |> struct!(attributes)
@@ -579,10 +594,28 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
-  def build(:survey_tool, %{} = attributes) do
+  def build(:data_donation_task, %{} = attributes) do
+    {tool, attributes} = Map.pop(attributes, :tool, build(:data_donation_tool))
+
+    {document_task, attributes} =
+      Map.pop(attributes, :document_task, build(:data_donation_document_task))
+
+    %DataDonation.TaskModel{
+      tool: tool,
+      download_task: document_task
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:data_donation_document_task, %{} = attributes) do
+    %DataDonation.DocumentTaskModel{}
+    |> struct!(attributes)
+  end
+
+  def build(:questionnaire_tool, %{} = attributes) do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
 
-    %Survey.ToolModel{
+    %Questionnaire.ToolModel{
       auth_node: auth_node
     }
     |> struct!(attributes)

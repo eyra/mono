@@ -121,19 +121,19 @@ defmodule Systems.Assignment.ExperimentForm do
         <.number_input
           form={form}
           field={:duration}
-          label_text={dgettext("link-survey", "duration.label")}
+          label_text={dgettext("link-questionnaire", "duration.label")}
         />
         <.spacing value="M" />
 
         <.number_input
           form={form}
           field={:subject_count}
-          label_text={dgettext("link-survey", "config.nrofsubjects.label")}
+          label_text={dgettext("link-questionnaire", "config.nrofsubjects.label")}
         />
         <.spacing value="M" />
 
-        <Text.title3><%= dgettext("link-survey", "language.title") %></Text.title3>
-        <Text.body><%= dgettext("link-survey", "languages.label") %></Text.body>
+        <Text.title3><%= dgettext("link-questionnaire", "language.title") %></Text.title3>
+        <Text.body><%= dgettext("link-questionnaire", "languages.label") %></Text.body>
         <.spacing value="S" />
         <.live_component
           module={Selector}
@@ -144,8 +144,8 @@ defmodule Systems.Assignment.ExperimentForm do
         />
         <.spacing value="XL" />
 
-        <Text.title3><%= dgettext("link-survey", "devices.title") %></Text.title3>
-        <Text.body><%= dgettext("link-survey", "devices.label") %></Text.body>
+        <Text.title3><%= dgettext("link-questionnaire", "devices.title") %></Text.title3>
+        <Text.body><%= dgettext("link-questionnaire", "devices.label") %></Text.body>
         <.spacing value="S" />
         <.live_component
             module={Selector}

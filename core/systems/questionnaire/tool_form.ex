@@ -1,4 +1,4 @@
-defmodule Systems.Survey.ToolForm do
+defmodule Systems.Questionnaire.ToolForm do
   use CoreWeb.LiveForm
 
   import CoreWeb.UI.StepIndicator
@@ -11,7 +11,7 @@ defmodule Systems.Survey.ToolForm do
 
   alias Systems.{
     Director,
-    Survey
+    Questionnaire
   }
 
   # Handle initial update
@@ -25,9 +25,9 @@ defmodule Systems.Survey.ToolForm do
         },
         socket
       ) do
-    entity = Survey.Public.get_survey_tool!(entity_id)
+    entity = Questionnaire.Public.get_questionnaire_tool!(entity_id)
 
-    changeset = Survey.ToolModel.changeset(entity, :create, %{})
+    changeset = Questionnaire.ToolModel.changeset(entity, :create, %{})
 
     {
       :ok,
@@ -52,13 +52,13 @@ defmodule Systems.Survey.ToolForm do
         _params,
         %{assigns: %{user: user, changeset: changeset, entity: entity}} = socket
       ) do
-    changeset = Survey.ToolModel.validate(changeset, :roundtrip)
+    changeset = Questionnaire.ToolModel.validate(changeset, :roundtrip)
 
     if changeset.valid? do
       Director.public(entity).assign_tester_role(entity, user)
 
       fake_panl_id = "TEST-" <> Faker.UUID.v4()
-      external_path = Survey.ToolModel.external_path(entity, fake_panl_id)
+      external_path = Questionnaire.ToolModel.external_path(entity, fake_panl_id)
 
       {:noreply, LiveView.redirect(socket, external: external_path)}
     else
@@ -78,7 +78,7 @@ defmodule Systems.Survey.ToolForm do
   # Saving
 
   def save(socket, entity, type, attrs) do
-    changeset = Survey.ToolModel.changeset(entity, type, attrs)
+    changeset = Questionnaire.ToolModel.changeset(entity, type, attrs)
 
     socket
     |> save(changeset)
@@ -89,7 +89,7 @@ defmodule Systems.Survey.ToolForm do
 
   def validate_for_publish(%{assigns: %{id: id, entity: entity}} = socket) do
     changeset =
-      Survey.ToolModel.operational_changeset(entity, %{})
+      Questionnaire.ToolModel.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
 
     send(self(), %{id: id, ready?: changeset.valid?})
@@ -100,21 +100,21 @@ defmodule Systems.Survey.ToolForm do
 
   defp redirect_instructions_link() do
     link_as_string(
-      dgettext("link-survey", "redirect.instructions.link"),
+      dgettext("link-questionnaire", "redirect.instructions.link"),
       "https://www.qualtrics.com/support/survey-platform/survey-module/survey-options/survey-termination/#RedirectingRespondentsToAUrl"
     )
   end
 
   defp panlid_instructions_link() do
     link_as_string(
-      dgettext("link-survey", "panlid.instructions.link"),
-      "https://www.qualtrics.com/support/survey-platform/survey-module/survey-flow/standard-elements/passing-information-through-query-strings/?parent=p001135#PassingInformationIntoASurvey"
+      dgettext("link-questionnaire", "panlid.instructions.link"),
+      "https://www.qualtrics.com/support/survey-platform/survey-module/survey-flow/standard-elements/passing-information-through-query-strings/?parent=p001135#PassingInformationIntoAQuestionnaire"
     )
   end
 
   defp study_instructions_link() do
     link_as_string(
-      dgettext("link-survey", "study.instructions.link"),
+      dgettext("link-questionnaire", "study.instructions.link"),
       "https://www.qualtrics.com/support/survey-platform/distributions-module/web-distribution/anonymous-link/#ObtainingTheAnonymousLink"
     )
   end
@@ -134,12 +134,12 @@ defmodule Systems.Survey.ToolForm do
     ~H"""
     <div class="-mb-8">
       <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
-        <Text.title3><%= dgettext("link-survey", "form.title") %></Text.title3>
-        <Text.body_large><%= dgettext("link-survey", "form.description") %></Text.body_large>
+        <Text.title3><%= dgettext("link-questionnaire", "form.title") %></Text.title3>
+        <Text.body_large><%= dgettext("link-questionnaire", "form.description") %></Text.body_large>
         <.spacing value="M" />
 
         <Panel.flat bg_color="bg-grey1">
-          <Text.title3 color="text-white"><%= dgettext("link-survey", "setup.title") %></Text.title3>
+          <Text.title3 color="text-white"><%= dgettext("link-questionnaire", "setup.title") %></Text.title3>
           <.spacing value="M" />
           <div class="flex flex-col gap-8">
             <!-- STEP 1 -->
@@ -148,9 +148,9 @@ defmodule Systems.Survey.ToolForm do
                 <.step_indicator text="1" bg_color="bg-tertiary" text_color="text-grey1" />
               </div>
               <div class="flex-wrap">
-                <Text.title5 align="text-left" color="text-white"><%= dgettext("link-survey", "panlid.title") %></Text.title5>
+                <Text.title5 align="text-left" color="text-white"><%= dgettext("link-questionnaire", "panlid.title") %></Text.title5>
                 <.spacing value="XS" />
-                <Text.body_medium color="text-white"><%= raw(dgettext("link-survey", "panlid.description", link: panlid_instructions_link())) %></Text.body_medium>
+                <Text.body_medium color="text-white"><%= raw(dgettext("link-questionnaire", "panlid.description", link: panlid_instructions_link())) %></Text.body_medium>
               </div>
             </div>
             <!-- STEP 2 -->
@@ -159,9 +159,9 @@ defmodule Systems.Survey.ToolForm do
                 <.step_indicator text="2" bg_color="bg-tertiary" text_color="text-grey1" />
               </div>
               <div class="flex-wrap">
-                <Text.title5 align="text-left" color="text-white"><%= dgettext("link-survey", "redirect.title") %></Text.title5>
+                <Text.title5 align="text-left" color="text-white"><%= dgettext("link-questionnaire", "redirect.title") %></Text.title5>
                 <.spacing value="XS" />
-                <Text.body_medium color="text-white"><%= raw(dgettext("link-survey", "redirect.description", link: redirect_instructions_link())) %></Text.body_medium>
+                <Text.body_medium color="text-white"><%= raw(dgettext("link-questionnaire", "redirect.description", link: redirect_instructions_link())) %></Text.body_medium>
                 <.spacing value="XS" />
                 <div class="flex flex-row gap-6 items-center">
                   <div class="flex-wrap">
@@ -170,7 +170,7 @@ defmodule Systems.Survey.ToolForm do
                   <div class="flex-wrap flex-shrink-0 mt-1">
                     <div id="copy-redirect-url" class="cursor-pointer" phx-hook="Clipboard" data-text={@callback_url}>
                       <Button.Face.label_icon
-                        label={dgettext("link-survey", "redirect.copy.button")}
+                        label={dgettext("link-questionnaire", "redirect.copy.button")}
                         icon={:clipboard_tertiary}
                         text_color="text-tertiary"
                       />
@@ -185,9 +185,9 @@ defmodule Systems.Survey.ToolForm do
                 <.step_indicator text="3" bg_color="bg-tertiary" text_color="text-grey1" />
               </div>
               <div class="flex-wrap">
-                <Text.title5 align="text-left" color="text-white"><%= dgettext("link-survey", "study.link.title") %></Text.title5>
+                <Text.title5 align="text-left" color="text-white"><%= dgettext("link-questionnaire", "study.link.title") %></Text.title5>
                 <.spacing value="XS" />
-                <Text.body_medium color="text-white"><%= raw(dgettext("link-survey", "study.link.description", link: study_instructions_link())) %></Text.body_medium>
+                <Text.body_medium color="text-white"><%= raw(dgettext("link-questionnaire", "study.link.description", link: study_instructions_link())) %></Text.body_medium>
               </div>
             </div>
           </div>
@@ -195,19 +195,19 @@ defmodule Systems.Survey.ToolForm do
         </Panel.flat>
         <.spacing value="L" />
 
-        <.url_input form={form} field={:survey_url} label_text={dgettext("link-survey", "config.url.label")} />
+        <.url_input form={form} field={:questionnaire_url} label_text={dgettext("link-questionnaire", "config.url.label")} />
         <.spacing value="S" />
         <Panel.flat bg_color="bg-grey5">
-          <Text.title3><%= dgettext("link-survey", "test.roundtrip.title") %></Text.title3>
+          <Text.title3><%= dgettext("link-questionnaire", "test.roundtrip.title") %></Text.title3>
           <.spacing value="M" />
-          <Text.body_medium><%= dgettext("link-survey", "test.roundtrip.text") %></Text.body_medium>
+          <Text.body_medium><%= dgettext("link-questionnaire", "test.roundtrip.text") %></Text.body_medium>
           <.spacing value="M" />
           <.wrap>
             <Button.dynamic {%{
               action: %{type: :send, event: "test-roundtrip", target: @myself},
               face: %{
                 type: :primary,
-                label: dgettext("link-survey", "test.roundtrip.button"),
+                label: dgettext("link-questionnaire", "test.roundtrip.button"),
                 bg_color: "bg-tertiary",
                 text_color: "text-grey1"
               }

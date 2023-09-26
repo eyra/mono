@@ -15,16 +15,12 @@ msgid "config.nrofsubjects.label"
 msgstr "How many participants do you need?"
 
 #, elixir-autogen, elixir-format
-msgid "platforms.title"
-msgstr "Platforms"
-
-#, elixir-autogen, elixir-format
 msgid "content.title"
 msgstr "Data Donation"
 
 #, elixir-autogen, elixir-format
 msgid "task.donate.description"
-msgstr "Lorem ipsum dolor sit amet."
+msgstr "Enables participants to donate data."
 
 #, elixir-autogen, elixir-format
 msgid "task.donate.title"
@@ -32,43 +28,43 @@ msgstr "Donate"
 
 #, elixir-autogen, elixir-format
 msgid "task.download.description"
-msgstr "Lorem ipsum dolor sit amet."
+msgstr "Instructs participants on how to download digital trace data."
 
 #, elixir-autogen, elixir-format
 msgid "task.download.title"
-msgstr "Download DDP"
+msgstr "Download manual"
 
 #, elixir-autogen, elixir-format
 msgid "task.library.description"
-msgstr "Lorem ipsum dolor sit amet."
+msgstr "Choose which items to add to your flow."
 
 #, elixir-autogen, elixir-format
 msgid "task.library.title"
-msgstr "Task Library"
+msgstr "Library"
 
 #, elixir-autogen, elixir-format
 msgid "task.list.description"
-msgstr "Lorem ipsum dolor sit amet."
+msgstr "Add items from the library to build a custom flow for your participants."
 
 #, elixir-autogen, elixir-format
 msgid "task.list.title"
-msgstr "Tasks"
+msgstr "Participant flow"
 
 #, elixir-autogen, elixir-format
 msgid "task.request.description"
-msgstr "Lorem ipsum dolor sit amet."
+msgstr "Instructs participants on how to request digital trace data."
 
 #, elixir-autogen, elixir-format
 msgid "task.request.title"
-msgstr "Request DDP"
+msgstr "Request manual"
 
 #, elixir-autogen, elixir-format
-msgid "task.survey.description"
-msgstr "Lorem ipsum dolor sit amet."
+msgid "task.questionnaire.description"
+msgstr "Redirects participants to an online questionnaire."
 
 #, elixir-autogen, elixir-format
-msgid "task.survey.title"
-msgstr "Survey"
+msgid "task.questionnaire.title"
+msgstr "Questionnaire"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "task.description.label"
@@ -80,11 +76,11 @@ msgstr "Title"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "task.list.hint"
-msgstr "Change order with the arrows"
+msgstr "Use the arrows to order the flow"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "task.platform.label"
-msgstr "Platform"
+msgstr "Organisation"
 
 #, elixir-autogen, elixir-format
 msgid "pdf-replace-file-button"
@@ -97,3 +93,11 @@ msgstr "Select PDF"
 #, elixir-autogen, elixir-format
 msgid "pdf-select-placeholder"
 msgstr "Select a pdf file"
+
+#, elixir-autogen, elixir-format
+msgid "add.to.button"
+msgstr "Add"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pdf-select-label"
+msgstr "Manual"

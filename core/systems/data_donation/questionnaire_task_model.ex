@@ -1,14 +1,12 @@
-defmodule Systems.DataDonation.DocumentTaskModel do
+defmodule Systems.DataDonation.QuestionnaireTaskModel do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "data_donation_document_tasks" do
-    field(:document_name, :string)
-    field(:document_ref, :string)
+  schema "data_donation_questionnaire_tasks" do
     timestamps()
   end
 
-  @fields ~w(document_name document_ref)a
+  @fields ~w()a
   @required_fields @fields
 
   def changeset(model, params) do

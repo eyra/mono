@@ -12,7 +12,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
     Campaign,
     Assignment,
     Crew,
-    Survey,
+    Questionnaire,
     Lab,
     Budget
   }
@@ -48,7 +48,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
       id: id,
       title: title,
       highlights: highlights(assignment, reward),
-      hero_title: dgettext("link-survey", "task.hero.title")
+      hero_title: dgettext("link-questionnaire", "task.hero.title")
     }
 
     extra =
@@ -78,28 +78,29 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
 
   # Subtitle
   defp assignment_subtitle(%{status: :pending}),
-    do: dgettext("link-survey", "task.pending.subtitle")
+    do: dgettext("link-questionnaire", "task.pending.subtitle")
 
   defp assignment_subtitle(%{status: :completed}),
-    do: dgettext("link-survey", "task.completed.subtitle")
+    do: dgettext("link-questionnaire", "task.completed.subtitle")
 
   defp assignment_subtitle(%{status: :accepted}),
-    do: dgettext("link-survey", "task.accepted.subtitle")
+    do: dgettext("link-questionnaire", "task.accepted.subtitle")
 
   defp assignment_subtitle(%{status: :rejected}),
-    do: dgettext("link-survey", "task.rejected.subtitle")
+    do: dgettext("link-questionnaire", "task.rejected.subtitle")
 
   defp assignment_subtitle(_),
     do: dgettext("eyra-promotion", "expectations.public.label")
 
   # Text
   defp assignment_text(%{status: :completed}, _),
-    do: dgettext("link-survey", "task.completed.text")
+    do: dgettext("link-questionnaire", "task.completed.text")
 
-  defp assignment_text(%{status: :accepted}, _), do: dgettext("link-survey", "task.accepted.text")
+  defp assignment_text(%{status: :accepted}, _),
+    do: dgettext("link-questionnaire", "task.accepted.text")
 
   defp assignment_text(%{status: :rejected, rejected_message: rejected_message}, _) do
-    dgettext("link-survey", "task.rejected.text", reason: rejected_message)
+    dgettext("link-questionnaire", "task.rejected.text", reason: rejected_message)
   end
 
   defp assignment_text(_, expectations), do: expectations
@@ -120,19 +121,19 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
   # Experiment
 
   defp experiment(
-         %{assignable_experiment: %{survey_tool: survey_tool}} = assignment,
+         %{assignable_experiment: %{questionnaire_tool: questionnaire_tool}} = assignment,
          member,
          user,
          task,
          contact,
          title
        )
-       when not is_nil(survey_tool) do
-    actions = survey_actions(assignment, member, user, task, contact, title)
+       when not is_nil(questionnaire_tool) do
+    actions = questionnaire_actions(assignment, member, user, task, contact, title)
 
     %{
       id: :experiment_task_view,
-      view: Survey.ExperimentTaskView,
+      view: Questionnaire.ExperimentTaskView,
       model: %{
         actions: actions
       }
@@ -167,15 +168,15 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
 
   defp experiment(_assignment, _member, _user, _task, _contact, _title), do: nil
 
-  # Survey buttons
+  # Questionnaire buttons
 
-  defp survey_actions(assignment, member, user, task, contact, title) do
+  defp questionnaire_actions(assignment, member, user, task, contact, title) do
     []
-    |> append(survey_cta(assignment, member, user))
+    |> append(questionnaire_cta(assignment, member, user))
     |> append_if(contact_enabled?(task), contact_action(contact, member, title))
   end
 
-  defp survey_cta(
+  defp questionnaire_cta(
          %{crew: crew, assignable_experiment: experiment} = _assignment,
          member,
          user
@@ -192,7 +193,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
     end
   end
 
-  # Survey forward button
+  # Questionnaire forward button
 
   defp forward_action(user) do
     %{
@@ -209,7 +210,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
     Phoenix.LiveView.push_redirect(socket, to: Accounts.start_page_path(user))
   end
 
-  # Survey open button
+  # Questionnaire open button
 
   defp open_action(user, experiment, crew, panl_id) do
     label = Assignment.ExperimentModel.open_label(experiment)

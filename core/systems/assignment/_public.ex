@@ -22,7 +22,7 @@ defmodule Systems.Assignment.Public do
     Budget,
     Assignment,
     Crew,
-    Survey,
+    Questionnaire,
     Lab
   }
 
@@ -65,9 +65,9 @@ defmodule Systems.Assignment.Public do
     |> Repo.one()
   end
 
-  def get_by_tool(%Survey.ToolModel{id: id}, preload) do
+  def get_by_tool(%Questionnaire.ToolModel{id: id}, preload) do
     query_by_tool(preload)
-    |> where([assignment, experiment], experiment.survey_tool_id == ^id)
+    |> where([assignment, experiment], experiment.questionnaire_tool_id == ^id)
     |> Repo.one()
   end
 
@@ -169,12 +169,12 @@ defmodule Systems.Assignment.Public do
 
   def copy_experiment(
         %Assignment.ExperimentModel{} = experiment,
-        %Survey.ToolModel{} = tool,
+        %Questionnaire.ToolModel{} = tool,
         auth_node
       ) do
     %Assignment.ExperimentModel{}
     |> Assignment.ExperimentModel.changeset(:copy, Map.from_struct(experiment))
-    |> Ecto.Changeset.put_assoc(:survey_tool, tool)
+    |> Ecto.Changeset.put_assoc(:questionnaire_tool, tool)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Repo.insert!()
   end
@@ -192,11 +192,11 @@ defmodule Systems.Assignment.Public do
   end
 
   def copy_tool(
-        %Assignment.ExperimentModel{survey_tool: %{auth_node: tool_auth_node} = tool},
+        %Assignment.ExperimentModel{questionnaire_tool: %{auth_node: tool_auth_node} = tool},
         experiment_auth_node
       ) do
     tool_auth_node = Authorization.copy(tool_auth_node, experiment_auth_node)
-    Survey.Public.copy(tool, tool_auth_node)
+    Questionnaire.Public.copy(tool, tool_auth_node)
   end
 
   def copy_tool(
@@ -207,8 +207,8 @@ defmodule Systems.Assignment.Public do
     Lab.Public.copy(tool, tool_auth_node)
   end
 
-  def delete_tool(multi, %{survey_tool: tool}) when not is_nil(tool) do
-    multi |> Utility.EctoHelper.delete(:survey_tool, tool)
+  def delete_tool(multi, %{questionnaire_tool: tool}) when not is_nil(tool) do
+    multi |> Utility.EctoHelper.delete(:questionnaire_tool, tool)
   end
 
   def delete_tool(multi, %{lab_tool: %{time_slots: time_slots} = tool}) when not is_nil(tool) do
@@ -500,7 +500,9 @@ defmodule Systems.Assignment.Public do
     changeset.valid? && tool_ready?(experiment)
   end
 
-  def tool_ready?(%{survey_tool: tool}) when not is_nil(tool), do: Survey.Public.ready?(tool)
+  def tool_ready?(%{questionnaire_tool: tool}) when not is_nil(tool),
+    do: Questionnaire.Public.ready?(tool)
+
   def tool_ready?(%{lab_tool: tool}) when not is_nil(tool), do: Lab.Public.ready?(tool)
 
   defp assignable_field(%Assignment.ExperimentModel{}), do: :assignable_experiment
@@ -523,7 +525,7 @@ defmodule Systems.Assignment.Public do
     |> Repo.one()
   end
 
-  def attention_list_enabled?(%{assignable_experiment: %{survey_tool: tool}})
+  def attention_list_enabled?(%{assignable_experiment: %{questionnaire_tool: tool}})
       when not is_nil(tool),
       do: true
 
@@ -537,10 +539,10 @@ defmodule Systems.Assignment.Public do
     }
   end
 
-  def task_labels(%{assignable_experiment: %{survey_tool: tool}}) when not is_nil(tool) do
+  def task_labels(%{assignable_experiment: %{questionnaire_tool: tool}}) when not is_nil(tool) do
     %{
-      pending: dgettext("link-survey", "pending.label"),
-      participated: dgettext("link-survey", "participated.label")
+      pending: dgettext("link-questionnaire", "pending.label"),
+      participated: dgettext("link-questionnaire", "participated.label")
     }
   end
 

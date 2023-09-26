@@ -37,13 +37,15 @@ defmodule Systems.DataDonation.ToolModel do
   @impl true
   def operational_validation(changeset), do: changeset
 
-  def preload_graph(:full),
+  def preload_graph(:down),
     do:
       preload_graph([
-        :auth_node
+        :auth_node,
+        :tasks
       ])
 
   def preload_graph(:auth_node), do: [auth_node: []]
+  def preload_graph(:tasks), do: [tasks: []]
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(tool), do: tool.auth_node_id

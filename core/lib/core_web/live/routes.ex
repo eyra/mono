@@ -8,7 +8,7 @@ defmodule CoreWeb.Live.Routes do
       scope "/", CoreWeb do
         pipe_through(:browser)
         get("/switch-language/:locale", LanguageSwitchController, :index)
-        live("/fake_survey/:id", FakeSurvey)
+        live("/fake_survey/:id", FakeQuestionnaire)
       end
 
       if Mix.env() in [:test] do

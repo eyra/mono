@@ -13,8 +13,8 @@ defmodule Systems.Campaign.Switch do
     handle(signal, object)
   end
 
-  def handle(:survey_tool_updated, survey_tool) do
-    experiment = Assignment.Public.get_experiment_by_tool(survey_tool)
+  def handle(:questionnaire_tool_updated, questionnaire_tool) do
+    experiment = Assignment.Public.get_experiment_by_tool(questionnaire_tool)
     handle(:experiment_updated, experiment)
   end
 

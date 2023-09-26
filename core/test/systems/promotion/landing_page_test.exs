@@ -9,7 +9,7 @@ defmodule Systems.Promotion.LandingPageTest do
     Budget
   }
 
-  describe "show landing page for: campaign -> assignment -> survey_tool" do
+  describe "show landing page for: campaign -> assignment -> questionnaire_tool" do
     setup [:login_as_member]
 
     setup do
@@ -19,11 +19,11 @@ defmodule Systems.Promotion.LandingPageTest do
       pool =
         Factories.insert!(:pool, %{name: "test_1234", director: :citizen, currency: currency})
 
-      survey_tool =
+      questionnaire_tool =
         Factories.insert!(
-          :survey_tool,
+          :questionnaire_tool,
           %{
-            survey_url: "https://eyra.co/fake_survey"
+            questionnaire_url: "https://eyra.co/fake_questionnaire"
           }
         )
 
@@ -31,7 +31,7 @@ defmodule Systems.Promotion.LandingPageTest do
         Factories.insert!(
           :experiment,
           %{
-            survey_tool: survey_tool,
+            questionnaire_tool: questionnaire_tool,
             subject_count: 10,
             duration: "10",
             language: "en",

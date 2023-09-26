@@ -8,7 +8,7 @@ defmodule Systems.Campaign.AssemblyTest do
   alias Systems.{
     Campaign,
     Assignment,
-    Survey,
+    Questionnaire,
     Lab,
     Pool,
     Budget
@@ -68,11 +68,11 @@ defmodule Systems.Campaign.AssemblyTest do
                      subject_count: nil,
                      director: :campaign,
                      lab_tool_id: nil,
-                     survey_tool: %Survey.ToolModel{
-                       survey_url: nil,
+                     questionnaire_tool: %Questionnaire.ToolModel{
+                       questionnaire_url: nil,
                        director: :campaign,
                        auth_node: %Core.Authorization.Node{
-                         parent_id: survey_tool_auth_node_parent_id
+                         parent_id: questionnaire_tool_auth_node_parent_id
                        }
                      },
                      auth_node: %Core.Authorization.Node{
@@ -114,7 +114,7 @@ defmodule Systems.Campaign.AssemblyTest do
       assert assignment_auth_node_parent_id == campaign_auth_node_id
       assert experiment_auth_node_parent_id == assignment_auth_node_id
       assert crew_auth_node_parent_id == assignment_auth_node_id
-      assert survey_tool_auth_node_parent_id == experiment_auth_node_id
+      assert questionnaire_tool_auth_node_parent_id == experiment_auth_node_id
 
       assert banner_photo_url == researcher.profile.photo_url
       assert banner_title == researcher.displayname
@@ -195,7 +195,7 @@ defmodule Systems.Campaign.AssemblyTest do
                    language: nil,
                    subject_count: nil,
                    director: :campaign,
-                   survey_tool_id: nil,
+                   questionnaire_tool_id: nil,
                    lab_tool: %Lab.ToolModel{
                      id: lab_tool_id,
                      director: :campaign,
@@ -256,14 +256,14 @@ defmodule Systems.Campaign.AssemblyTest do
                nil
 
       assert Repo.get(
-               Survey.ToolModel,
-               campaign.promotable_assignment.assignable_experiment.survey_tool_id
+               Questionnaire.ToolModel,
+               campaign.promotable_assignment.assignable_experiment.questionnaire_tool_id
              ) ==
                nil
 
       assert Repo.get(
                Core.Authorization.Node,
-               campaign.promotable_assignment.assignable_experiment.survey_tool.auth_node_id
+               campaign.promotable_assignment.assignable_experiment.questionnaire_tool.auth_node_id
              ) == nil
     end
 
@@ -291,7 +291,7 @@ defmodule Systems.Campaign.AssemblyTest do
           crew: crew1,
           assignable_experiment:
             %{
-              survey_tool: tool
+              questionnaire_tool: tool
             } = experiment
         }
       } = Campaign.Public.get!(id, Campaign.Model.preload_graph(:full))
@@ -324,12 +324,12 @@ defmodule Systems.Campaign.AssemblyTest do
       |> Repo.update!()
 
       # Update Tool
-      survey_url = "https://eyra.co/surveys/1"
+      questionnaire_url = "https://eyra.co/questionnaires/1"
       director = :campaign
 
       tool
-      |> Survey.ToolModel.changeset(:update, %{
-        survey_url: survey_url,
+      |> Questionnaire.ToolModel.changeset(:update, %{
+        questionnaire_url: questionnaire_url,
         director: director
       })
       |> Repo.update!()
@@ -391,8 +391,8 @@ defmodule Systems.Campaign.AssemblyTest do
                    ethical_code: ^ethical_code,
                    devices: ^devices,
                    director: ^director,
-                   survey_tool: %{
-                     survey_url: ^survey_url
+                   questionnaire_tool: %{
+                     questionnaire_url: ^questionnaire_url
                    }
                  }
                }

@@ -9,8 +9,8 @@ defmodule Frameworks.Pixel.SidePanel do
 
   def side_panel(assigns) do
     ~H"""
-    <div id={@id} data-parent={@parent} class={"relative top-0 right-0 w-side-panel #{@bg_color}"} phx-hook="SidePanel">
-      <div class="panel w-side-panel overflow-y-scroll">
+    <div id={@id} data-parent={@parent} class={"w-side-panel #{@bg_color}"} phx-hook="SidePanel">
+      <div class="panel w-side-panel scrollbar-hidden overflow-y-scroll bg-grey5">
         <div class="mx-6 mb-6">
           <%= render_slot(@inner_block) %>
         </div>

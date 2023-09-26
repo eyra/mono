@@ -49,7 +49,7 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
   end
 
   defp byline(authors) when is_list(authors) do
-    "#{dgettext("link-survey", "by.author.label")}: " <>
+    "#{dgettext("link-questionnaire", "by.author.label")}: " <>
       Enum.map_join(authors, ", ", & &1.fullname)
   end
 

@@ -446,9 +446,9 @@ defmodule Systems.Campaign.ContentPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.workspace title={dgettext("link-survey", "content.title")} menus={@menus}>
+    <.workspace title={dgettext("link-questionnaire", "content.title")} menus={@menus}>
       <div id="campaign" phx-hook="LiveContent" data-show-errors={@vm.show_errors}>
-        <div id={:survey_content} phx-hook="ViewportResize">
+        <div id={:questionnaire_content} phx-hook="ViewportResize">
 
           <%= if @popup do %>
             <.popup>

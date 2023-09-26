@@ -1,4 +1,4 @@
-defmodule Systems.Survey.ExperimentTaskView do
+defmodule Systems.Questionnaire.ExperimentTaskView do
   use CoreWeb, :live_component
 
   alias Frameworks.Utility.LiveCommand
