@@ -8,15 +8,15 @@ defmodule Systems.Routes do
         :admin,
         :support,
         :assignment,
-        :alliance,
-        :lab,
-        :benchmark,
-        :feldspar,
-        :document,
         :next_action,
         :notification,
         :promotion,
         :pool,
+        :lab,
+        :benchmark,
+        :feldspar,
+        :document,
+        :alliance,
         :budget
       ]
     end

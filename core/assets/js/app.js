@@ -33,6 +33,7 @@ import { PythonUploader } from "./python_uploader";
 import { Clipboard } from "./clipboard";
 import { DataDonationHook } from "./data_donation_hook";
 import { Port } from "./port";
+import { FeldsparApp } from "./feldspar_app";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -107,6 +108,7 @@ let Hooks = {
   PythonUploader,
   DataDonationHook,
   Port,
+  FeldsparApp,
 };
 
 let liveSocket = new LiveSocket("/live", Socket, {

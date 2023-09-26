@@ -96,6 +96,14 @@ config :ex_aws,
   access_key_id: "my_access_key",
   secret_access_key: "a_super_secret"
 
+config :core, :feldspar,
+  backend: Systems.Feldspar.LocalFS,
+  local_fs_root_path:
+    File.cwd!()
+    |> Path.join("tmp")
+    |> Path.join("feldspar")
+    |> tap(&File.mkdir_p!/1)
+
 try do
   import_config "dev.secret.exs"
 rescue
