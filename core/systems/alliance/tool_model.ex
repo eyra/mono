@@ -25,6 +25,10 @@ defmodule Systems.Alliance.ToolModel do
     def id(tool), do: tool.auth_node_id
   end
 
+  defimpl Frameworks.Concept.Directable do
+    def director(%{director: director}), do: Frameworks.Concept.System.director(director)
+  end
+
   @operational_fields ~w(url)a
   @fields @operational_fields
   @required_fields ~w()a
@@ -172,6 +176,7 @@ defmodule Systems.Alliance.ToolModel do
     def open_label(_), do: dgettext("eyra-alliance", "open.cta.title")
     def ready?(tool), do: Alliance.ToolModel.ready?(tool)
     def form(_), do: Alliance.ToolForm
+    def launcher(%{url: url}), do: %{url: url}
 
     def task_labels(_) do
       %{

@@ -43,8 +43,8 @@ defmodule Systems.Project.Switch do
   end
 
   defp handle({:tool, signal}, %{tool: tool} = message) do
-    Project.Public.get_tool_refs_by_tool(tool)
-    |> Enum.each(&dispatch!({:tool_ref, signal}, Map.merge(message, %{tool_ref: &1})))
+    Project.Public.get_tool_ref_by_tool(tool)
+    |> then(&dispatch!({:tool_ref, signal}, Map.merge(message, %{tool_ref: &1})))
   end
 
   defp update_pages(%Project.ItemModel{} = item) do

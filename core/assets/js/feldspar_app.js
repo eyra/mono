@@ -1,12 +1,12 @@
 export const FeldsparApp = {
   mounted() {
+    console.log("FeldsparApp MOUNTED");
+
     const iframe = this.getIframe();
-    if (iframe.contentDocument.readyState === "complete") {
+    iframe.addEventListener("load", () => {
       this.onFrameLoaded();
-    }
-    else {
-      iframe.contentDocument.addEventListener("load", ()=>{ this.onFrameLoaded() });
-    }
+    });
+    iframe.setAttribute("src", this.el.dataset.src);
   },
 
   getIframe() {
@@ -14,15 +14,17 @@ export const FeldsparApp = {
   },
 
   onFrameLoaded() {
-    console.log("Initializing iframe app")
+    console.log("Initializing iframe app");
     this.channel = new MessageChannel();
     this.channel.port1.onmessage = (e) => {
       this.handleMessage(e);
     };
-    this.getIframe().contentWindow.postMessage("init", "*", [this.channel.port2]);
+    this.getIframe().contentWindow.postMessage("init", "*", [
+      this.channel.port2,
+    ]);
   },
 
   handleMessage(e) {
     this.pushEvent("app_event", e.data);
-  }
+  },
 };

@@ -46,3 +46,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "pdf-select-placeholder"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "component.title"
+msgstr ""

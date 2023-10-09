@@ -71,7 +71,7 @@ defmodule Systems.NextAction.Public do
       conflict_target: {:unsafe_fragment, conflict_target_fragment}
     )
     |> tap(
-      &Signal.Public.dispatch!(:next_action_created, %{
+      &Signal.Public.dispatch!({:next_action, :created}, %{
         action_type: action,
         user: user,
         action: &1,
@@ -94,7 +94,11 @@ defmodule Systems.NextAction.Public do
     |> where_key_is(key)
     |> Repo.delete_all()
     |> tap(fn _ ->
-      Signal.Public.dispatch!(:next_action_cleared, %{user: user, action_type: action, key: key})
+      Signal.Public.dispatch!({:next_action, :cleared}, %{
+        user: user,
+        action_type: action,
+        key: key
+      })
     end)
   end
 

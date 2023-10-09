@@ -80,9 +80,9 @@ msgid "tabbar.item.workflow.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "item.questionaire.description"
+msgid "item.questionnaire.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "item.questionaire.title"
+msgid "item.questionnaire.title"
 msgstr ""

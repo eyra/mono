@@ -15,7 +15,7 @@ defmodule Systems.Assignment.AllianceCallbackPageBuilder do
         %Alliance.ToolModel{id: id} = tool,
         %{current_user: user} = _assigns
       ) do
-    %{title: title} = Workflow.Public.get_item_by_tool!(:alliance_tool, tool.id)
+    %{title: title} = Workflow.Public.get_item_by_tool!(:alliance_tool_id, tool.id)
     assignment = Assignment.Public.get_by_tool(tool)
 
     %{

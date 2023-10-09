@@ -7,9 +7,12 @@ defmodule Systems.Workflow.Platforms do
        [
          :facebook,
          :instagram,
+         :tiktok,
          :twitter,
          :google,
          :youtube,
-         :whatsapp
+         :whatsapp,
+         :apple,
+         :samsung
        ]}
 end

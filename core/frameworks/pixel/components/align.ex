@@ -18,7 +18,7 @@ defmodule Frameworks.Pixel.Align do
 
   def vertical_center(assigns) do
     ~H"""
-    <div class="flex flex-col items-center justify-center w-full">
+    <div class="flex flex-col justify-center w-full h-full">
       <%= render_slot(@inner_block) %>
     </div>
     """

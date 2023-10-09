@@ -2,7 +2,8 @@ defmodule Systems.Assignment.ContentPage do
   use Systems.Content.Page
 
   alias Systems.{
-    Assignment
+    Assignment,
+    Crew
   }
 
   @impl true
@@ -17,13 +18,23 @@ defmodule Systems.Assignment.ContentPage do
 
     {
       :ok,
-      socket |> initialize(id, model, tabbar_id, initial_tab, locale)
+      socket
+      |> initialize(id, model, tabbar_id, initial_tab, locale)
+      |> ensure_tester_role()
     }
   end
 
   @impl true
   def mount(params, session, socket) do
     mount(Map.put(params, "tab", nil), session, socket)
+  end
+
+  defp ensure_tester_role(%{assigns: %{current_user: user, model: %{crew: crew}}} = socket) do
+    if Crew.Public.get_member(crew, user) == nil do
+      Crew.Public.apply_member_with_role(crew, user, :tester)
+    end
+
+    socket
   end
 
   @impl true

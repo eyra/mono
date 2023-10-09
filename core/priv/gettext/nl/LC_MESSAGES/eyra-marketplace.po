@@ -19,20 +19,12 @@ msgid "empty.title"
 msgstr "Op zoek naar een studie?"
 
 #, elixir-autogen, elixir-format
-msgid "reward.label"
-msgstr "Beloning: %{value} credits"
-
-#, elixir-autogen, elixir-format
 msgid "assignment.status.complete.label"
 msgstr "Gesloten"
 
 #, elixir-autogen, elixir-format
 msgid "assignment.status.completed.label"
 msgstr "Afgerond"
-
-#, elixir-autogen, elixir-format
-msgid "assignment.status.expired.label"
-msgstr "Verlopen"
 
 #, elixir-autogen, elixir-format
 msgid "assignment.status.pending.label"

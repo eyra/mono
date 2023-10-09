@@ -71,9 +71,8 @@ defmodule Systems.Workflow.BuilderView do
     }
   end
 
-  defp order_items(%{assigns: %{workflow: %{items: items}}} = socket) do
-    ordered_items = Enum.sort_by(items, & &1.position)
-    assign(socket, ordered_items: ordered_items)
+  defp order_items(%{assigns: %{workflow: workflow}} = socket) do
+    assign(socket, ordered_items: Workflow.Model.ordered_items(workflow))
   end
 
   defp update_item_types(%{assigns: %{ordered_items: ordered_items}} = socket) do

@@ -4,8 +4,8 @@ defmodule CoreWeb.UI.StepIndicator do
   """
   use CoreWeb, :html
 
-  defp center_correction_for_number(1), do: "mr-1px"
-  defp center_correction_for_number(4), do: "mr-1px"
+  defp center_correction_for_number(1), do: "mr-px"
+  defp center_correction_for_number(4), do: "mr-px"
   defp center_correction_for_number(_), do: ""
 
   attr(:text, :string, required: true)
@@ -15,7 +15,7 @@ defmodule CoreWeb.UI.StepIndicator do
   def step_indicator(assigns) do
     ~H"""
     <div class={"w-6 h-6 font-caption text-caption rounded-full flex items-center #{@bg_color} #{@text_color}"}>
-      <span class={"text-center w-full mt-1px #{center_correction_for_number(@text)}"}><%= @text %></span>
+      <span class={"text-center w-full mt-px #{center_correction_for_number(@text)}"}><%= @text %></span>
     </div>
     """
   end

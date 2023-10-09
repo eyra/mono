@@ -80,9 +80,9 @@ msgid "tabbar.item.workflow.forward"
 msgstr "Go to Workflow"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "item.questionaire.description"
+msgid "item.questionnaire.description"
 msgstr "Redirects participants to an online questionnaire."
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "item.questionaire.title"
+msgid "item.questionnaire.title"
 msgstr "Questionnaire"

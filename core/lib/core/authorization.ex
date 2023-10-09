@@ -43,9 +43,10 @@ defmodule Core.Authorization do
   grant_access(Systems.NextAction.OverviewPage, [:member])
   grant_access(Systems.Campaign.OverviewPage, [:researcher])
   grant_access(Systems.Campaign.ContentPage, [:owner])
-  grant_access(Systems.Assignment.ContentPage, [:researcher, :owner])
+  grant_access(Systems.Assignment.CrewPage, [:participant, :tester])
+  grant_access(Systems.Assignment.ContentPage, [:owner])
   grant_access(Systems.Assignment.LandingPage, [:participant])
-  grant_access(Systems.Alliance.CallbackPage, [:participant, :tester])
+  grant_access(Systems.Alliance.CallbackPage, [:owner])
   grant_access(Systems.Lab.PublicPage, [:member])
   grant_access(Systems.Promotion.LandingPage, [:visitor, :member, :owner])
   grant_access(Systems.Pool.OverviewPage, [:researcher])
@@ -74,9 +75,9 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.User.Profile, [:member])
   grant_access(CoreWeb.User.Settings, [:member])
   grant_access(CoreWeb.User.SecuritySettings, [:member])
-  grant_access(CoreWeb.FaceAlliance, [:member])
+  grant_access(CoreWeb.FakeQualtrics, [:member])
 
-  grant_actions(CoreWeb.FaceAllianceController, %{
+  grant_actions(CoreWeb.FakeAllianceController, %{
     index: [:visitor, :member]
   })
 
@@ -86,31 +87,49 @@ defmodule Core.Authorization do
 
   def get_node!(id), do: Repo.get!(Core.Authorization.Node, id)
 
-  def make_node(), do: %Core.Authorization.Node{}
-
-  def make_node(%Core.Authorization.Node{} = parent) do
-    %Core.Authorization.Node{parent_id: parent.id}
+  def prepare_node() do
+    %Core.Authorization.Node{}
   end
 
-  def make_node(nil), do: make_node()
+  def prepare_node(nil) do
+    %Core.Authorization.Node{}
+  end
 
-  def make_node(parent_id) when is_integer(parent_id) do
+  def prepare_node(roles) when is_list(roles) do
+    %Core.Authorization.Node{role_assignments: roles}
+  end
+
+  def prepare_node(parent_id) when is_integer(parent_id) do
     %Core.Authorization.Node{parent_id: parent_id}
   end
 
-  def make_node(parent) do
-    GreenLight.AuthorizationNode.id(parent) |> make_node
+  def prepare_node(%Core.Authorization.Node{id: parent_id}) do
+    %Core.Authorization.Node{parent_id: parent_id}
+  end
+
+  def prepare_node(principal, role) do
+    role = prepare_role(principal, role)
+    prepare_node([role])
+  end
+
+  def prepare_role(principal, role) when is_atom(role) do
+    principal_id = GreenLight.Principal.id(principal)
+
+    %Core.Authorization.RoleAssignment{
+      principal_id: principal_id,
+      role: :owner
+    }
   end
 
   def create_node(parent \\ nil) do
-    case make_node(parent) |> Core.Repo.insert() do
+    case prepare_node(parent) |> Core.Repo.insert() do
       {:ok, node} -> {:ok, node.id}
       error -> error
     end
   end
 
   def create_node!(parent \\ nil) do
-    case make_node(parent) |> Core.Repo.insert() do
+    case prepare_node(parent) |> Core.Repo.insert() do
       {:ok, node} -> node
       error -> error
     end

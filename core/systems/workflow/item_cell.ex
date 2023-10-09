@@ -49,11 +49,11 @@ defmodule Systems.Workflow.ItemCell do
     {:noreply, socket}
   end
 
-  defp update_item_view(%{assigns: %{item: %{title: title}}} = socket) do
+  defp update_item_view(%{assigns: %{item: %{title: _title}}} = socket) do
     item_view = %{
       function: &Workflow.ItemViews.collapsed/1,
       props: %{
-        title: title,
+        # title: title,
         inner_block: nil
       }
     }
@@ -77,17 +77,26 @@ defmodule Systems.Workflow.ItemCell do
   end
 
   defp update_tool_form(
-         %{assigns: %{id: id, item: %{tool_ref: tool_ref}, user: user, uri_origin: uri_origin}} =
-           socket
+         %{
+           assigns: %{
+             id: id,
+             item: %{id: item_id, tool_ref: tool_ref},
+             user: user,
+             uri_origin: uri_origin
+           }
+         } = socket
        ) do
     tool = Project.ToolRefModel.flatten(tool_ref)
     tool_form_module = Concept.ToolModel.form(tool)
+
+    callback_path = ~p"/assignment/callback/#{item_id}"
+    callback_url = uri_origin <> callback_path
 
     tool_form = %{
       id: "#{id}_tool_form",
       module: tool_form_module,
       entity: tool,
-      uri_origin: uri_origin,
+      callback_url: callback_url,
       user: user
     }
 

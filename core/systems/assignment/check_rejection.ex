@@ -10,7 +10,7 @@ defmodule Systems.Assignment.CheckRejection do
       title: dgettext("eyra-nextaction", "assignment.check.rejection.title"),
       description: dgettext("eyra-nextaction", "assignment.check.rejection.description"),
       cta_label: dgettext("eyra-nextaction", "assignment.check.rejection.cta"),
-      cta_action: %{type: :redirect, to: ~p"/assignment/#{id}"}
+      cta_action: %{type: :redirect, to: ~p"/assignment/#{id}/landing"}
     }
   end
 end

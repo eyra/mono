@@ -47,6 +47,8 @@ defmodule CoreWeb.Layouts.Stripped.Component do
 
   attr(:title, :string, default: nil)
   attr(:menus, :map, required: true)
+  attr(:footer?, :boolean, default: true)
+
   slot(:inner_block, required: true)
 
   def stripped(assigns) do
@@ -79,9 +81,11 @@ defmodule CoreWeb.Layouts.Stripped.Component do
                   </div>
                 </div>
               </div>
-              <div class="bg-white">
-                <.content_footer />
-              </div>
+              <%= if @footer? do %>
+                <div class="bg-white">
+                  <.content_footer />
+                </div>
+              <% end %>
             </div>
           </div>
           <div class="bg-grey5">

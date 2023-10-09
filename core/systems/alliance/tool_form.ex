@@ -3,12 +3,10 @@ defmodule Systems.Alliance.ToolForm do
 
   import CoreWeb.UI.StepIndicator
 
-  alias Phoenix.LiveView
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Text
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Button
-  alias Frameworks.Concept.Directable
 
   alias Systems.{
     Alliance
@@ -20,16 +18,11 @@ defmodule Systems.Alliance.ToolForm do
         %{
           id: id,
           entity: entity,
-          uri_origin: uri_origin,
+          callback_url: callback_url,
           user: user
         },
         socket
       ) do
-    callback_path =
-      CoreWeb.Router.Helpers.live_path(socket, Systems.Alliance.CallbackPage, entity.id)
-
-    callback_url = uri_origin <> callback_path
-
     changeset = Alliance.ToolModel.changeset(entity, :create, %{})
 
     {
@@ -48,25 +41,25 @@ defmodule Systems.Alliance.ToolForm do
 
   # Handle Events
 
-  @impl true
-  def handle_event(
-        "test-roundtrip",
-        _params,
-        %{assigns: %{user: user, changeset: changeset, entity: entity}} = socket
-      ) do
-    changeset = Alliance.ToolModel.validate(changeset, :roundtrip)
+  # @impl true
+  # def handle_event(
+  #       "test-roundtrip",
+  #       _params,
+  #       %{assigns: %{user: user, changeset: changeset, entity: entity}} = socket
+  #     ) do
+  #   changeset = Alliance.ToolModel.validate(changeset, :roundtrip)
 
-    if changeset.valid? do
-      Directable.director(entity).assign_tester_role(entity, user)
+  #   if changeset.valid? do
+  #     Directable.director(entity).assign_tester_role(entity, user)
 
-      fake_panl_id = "TEST-" <> Faker.UUID.v4()
-      external_path = Alliance.ToolModel.external_path(entity, fake_panl_id)
+  #     fake_panl_id = "TEST-" <> Faker.UUID.v4()
+  #     external_path = Alliance.ToolModel.external_path(entity, fake_panl_id)
 
-      {:noreply, LiveView.redirect(socket, external: external_path)}
-    else
-      {:noreply, socket |> assign(changeset: changeset)}
-    end
-  end
+  #     {:noreply, LiveView.redirect(socket, external: external_path)}
+  #   else
+  #     {:noreply, socket |> assign(changeset: changeset)}
+  #   end
+  # end
 
   @impl true
   def handle_event("save", %{"tool_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
@@ -74,6 +67,14 @@ defmodule Systems.Alliance.ToolForm do
       :noreply,
       socket
       |> save(entity, :auto_save, attrs)
+    }
+  end
+
+  @impl true
+  def handle_event("change", _, socket) do
+    {
+      :noreply,
+      socket
     }
   end
 
@@ -194,24 +195,6 @@ defmodule Systems.Alliance.ToolForm do
         <.spacing value="L" />
 
         <.url_input form={form} field={:url} label_text={dgettext("eyra-alliance", "config.url.label")} />
-        <.spacing value="S" />
-        <Panel.flat bg_color="bg-grey5">
-          <Text.title3><%= dgettext("eyra-alliance", "test.roundtrip.title") %></Text.title3>
-          <.spacing value="M" />
-          <Text.body_medium><%= dgettext("eyra-alliance", "test.roundtrip.text") %></Text.body_medium>
-          <.spacing value="M" />
-          <.wrap>
-            <Button.dynamic {%{
-              action: %{type: :send, event: "test-roundtrip", target: @myself},
-              face: %{
-                type: :primary,
-                label: dgettext("eyra-alliance", "test.roundtrip.button"),
-                bg_color: "bg-tertiary",
-                text_color: "text-grey1"
-              }
-            }} />
-          </.wrap>
-        </Panel.flat>
         <.spacing value="XL" />
       </.form>
     </div>

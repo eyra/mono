@@ -57,6 +57,14 @@ defmodule Systems.Workflow.ItemForm do
     }
   end
 
+  @impl true
+  def handle_event("change", _params, socket) do
+    {
+      :noreply,
+      socket
+    }
+  end
+
   # Saving
 
   def save(socket, %Workflow.ItemModel{} = entity, attrs) do

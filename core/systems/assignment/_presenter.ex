@@ -27,6 +27,7 @@ defmodule Systems.Assignment.Presenter do
     builder(page).view_model(assignment, assigns)
   end
 
-  def builder(Alliance.CallbackPage), do: Assignment.AllianceCallbackPageBuilder
+  def builder(Assignment.CrewPage), do: Assignment.CrewPageBuilder
   def builder(Assignment.ContentPage), do: Assignment.ContentPageBuilder
+  def builder(Alliance.CallbackPage), do: Assignment.AllianceCallbackPageBuilder
 end

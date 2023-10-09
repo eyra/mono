@@ -41,7 +41,7 @@ config :core, CoreWeb.Endpoint,
       "node_modules/webpack/bin/webpack.js",
       "--mode",
       "development",
-      "--watch-stdin",
+      "--watch",
       cd: Path.expand("../assets", __DIR__)
     ]
   ]
@@ -74,7 +74,8 @@ config :core, :apns_backend, Core.APNS.LoggingBackend
 config :core,
        :static_path,
        File.cwd!()
-       |> Path.join("tmp")
+       |> Path.join("priv")
+       |> Path.join("static")
        |> Path.join("uploads")
        |> tap(&File.mkdir_p!/1)
 
@@ -100,8 +101,9 @@ config :core, :feldspar,
   backend: Systems.Feldspar.LocalFS,
   local_fs_root_path:
     File.cwd!()
-    |> Path.join("tmp")
-    |> Path.join("feldspar")
+    |> Path.join("priv")
+    |> Path.join("static")
+    |> Path.join("feldspar_apps")
     |> tap(&File.mkdir_p!/1)
 
 try do

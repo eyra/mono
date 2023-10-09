@@ -102,7 +102,7 @@ defmodule Systems.Notification.Public do
     {:ok, box} =
       %Box{}
       |> Box.changeset(%{})
-      |> Ecto.Changeset.put_assoc(:auth_node, Authorization.make_node())
+      |> Ecto.Changeset.put_assoc(:auth_node, Authorization.prepare_node())
       |> Repo.insert()
       |> Authorization.assign_role(user, :owner)
 

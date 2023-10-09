@@ -337,3 +337,15 @@ msgstr "Leeg"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "templates.data_donation"
 msgstr "Online studie"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "platforms.apple"
+msgstr "Apple"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "platforms.samsung"
+msgstr "Samsung"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "platforms.tiktok"
+msgstr "TikTok"

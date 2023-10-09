@@ -4,9 +4,12 @@ defmodule Frameworks.Pixel.Line do
   """
   use CoreWeb, :html
 
+  attr(:color, :string, default: "bg-grey4")
+  attr(:height, :string, default: "h-px")
+
   def line(assigns) do
     ~H"""
-    <div class="bg-grey4 h-px" />
+    <div class={"#{@color} #{@height}"} />
     """
   end
 end

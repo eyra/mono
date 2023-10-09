@@ -1,5 +1,8 @@
 import Config
 
+# Print only errors during test
+config :logger, level: :warn
+
 # Setup for MinIO
 config :ex_aws, :s3,
   scheme: "http://",
@@ -26,9 +29,6 @@ config :core, Core.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10,
   queue_target: 5000
-
-# Print only warnings and errors during test
-config :logger, level: :error
 
 # Reduce password hashing impact on test duration
 config :bcrypt_elixir,

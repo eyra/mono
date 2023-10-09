@@ -1,4 +1,6 @@
 defmodule Systems.Assignment.ContentPageBuilder do
+  use CoreWeb, :verified_routes
+
   import CoreWeb.Gettext
 
   alias Systems.{
@@ -33,8 +35,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
     false
   end
 
-  defp action_map(%{workflow_id: workflow_id}) do
-    preview_action = %{type: :http_get, to: "/workflow/#{workflow_id}", target: "_blank"}
+  defp action_map(%{id: id}) do
+    preview_action = %{type: :http_get, to: ~p"/assignment/#{id}", target: "_blank"}
     publish_action = %{type: :send, event: "action_click", item: :publish}
     retract_action = %{type: :send, event: "action_click", item: :retract}
     close_action = %{type: :send, event: "action_click", item: :close}
@@ -214,8 +216,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
               %{
                 id: :questionnaire,
                 type: :alliance_tool,
-                title: dgettext("eyra-workflow", "item.questionaire.title"),
-                description: dgettext("eyra-workflow", "item.questionaire.description")
+                title: dgettext("eyra-workflow", "item.questionnaire.title"),
+                description: dgettext("eyra-workflow", "item.questionnaire.description")
               },
               %{
                 id: :request,

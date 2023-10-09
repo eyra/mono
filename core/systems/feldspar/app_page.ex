@@ -20,7 +20,7 @@ defmodule Systems.Feldspar.AppPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.stripped menus={@menus}>
+    <.stripped menus={@menus} footer?={false}>
       <.app_view url={@app_url} />
     </.stripped>
     """

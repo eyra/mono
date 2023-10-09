@@ -47,6 +47,15 @@ defmodule Systems.Feldspar.ToolModel do
     def ready?(tool), do: Feldspar.ToolModel.ready?(tool)
     def form(_), do: Feldspar.ToolForm
 
+    def launcher(%{archive_ref: archive_ref}) when is_binary(archive_ref) do
+      %{
+        function: &Feldspar.AppView.app_view/1,
+        props: %{url: archive_ref <> "/index.html"}
+      }
+    end
+
+    def launcher(_), do: nil
+
     def task_labels(_) do
       %{
         pending: dgettext("eyra-feldspar", "pending.label"),
