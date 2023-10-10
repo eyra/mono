@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-21943617.js"></script>
+    <script src="dist/sidebar_items-D33A7423.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -207,7 +207,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_tool_refs_by_tool/2" translate="no">get_tool_refs_by_tool(tool, preload \\ [])</a>
+        <a href="#get_tool_ref_by_tool/2" translate="no">get_tool_ref_by_tool(tool, preload \\ [])</a>
 
       </div>
 
@@ -233,15 +233,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare/2" translate="no">prepare(attrs, items)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#prepare/3" translate="no">prepare(attrs, root, auth_node \\ Authorization.make_node())</a>
+        <a href="#prepare/3" translate="no">prepare(attrs, items, user)</a>
 
       </div>
 
@@ -265,7 +257,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_node/3" translate="no">prepare_node(attrs, items, auth_node \\ Authorization.make_node())</a>
+        <a href="#prepare_node/3" translate="no">prepare_node(attrs, items, auth_node \\ Authorization.prepare_node())</a>
 
       </div>
 
@@ -318,7 +310,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">add_item(item, node)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L169" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L170" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -340,7 +332,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">add_node(child, parent)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L176" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L177" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -362,7 +354,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">add_owner!(project, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L183" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L184" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -539,16 +531,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="get_tool_refs_by_tool/2">
+<section class="detail" id="get_tool_ref_by_tool/2">
 
-    <span id="get_tool_refs_by_tool/1"></span>
+    <span id="get_tool_ref_by_tool/1"></span>
 
   <div class="detail-header">
-    <a href="#get_tool_refs_by_tool/2" class="detail-link" title="Link to this function">
+    <a href="#get_tool_ref_by_tool/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">get_tool_refs_by_tool(tool, preload \\ [])</h1>
+    <h1 class="signature" translate="no">get_tool_ref_by_tool(tool, preload \\ [])</h1>
 
       <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L65" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
@@ -598,29 +590,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">list_owners(project, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L191" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="prepare/2">
-
-  <div class="detail-header">
-    <a href="#prepare/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">prepare(attrs, items)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L110" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L192" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -640,9 +610,9 @@ Functions
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">prepare(attrs, root, auth_node \\ Authorization.make_node())</h1>
+    <h1 class="signature" translate="no">prepare(attrs, items, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L122" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L110" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -664,7 +634,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">prepare_item(attrs, tool_ref)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L145" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L146" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -686,7 +656,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">prepare_item(attrs, field_name, concrete)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L153" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L154" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -708,9 +678,9 @@ Functions
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">prepare_node(attrs, items, auth_node \\ Authorization.make_node())</h1>
+    <h1 class="signature" translate="no">prepare_node(attrs, items, auth_node \\ Authorization.prepare_node())</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L133" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L134" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -732,7 +702,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">prepare_tool_ref(special, tool_key, tool)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L163" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L164" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -778,7 +748,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">remove_owner!(project, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L187" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_public.ex#L188" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
