@@ -42,4 +42,8 @@ defmodule Systems.Workflow.Model do
   def flatten(%{items: items}) do
     Enum.map(items, &Workflow.ItemModel.flatten/1)
   end
+
+  def ordered_items(%Workflow.Model{items: items}) do
+    Enum.sort_by(items, & &1.position)
+  end
 end

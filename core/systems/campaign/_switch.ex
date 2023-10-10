@@ -9,10 +9,9 @@ defmodule Systems.Campaign.Switch do
 
   @impl true
   def intercept({:assignment, _} = signal, %{assignment: assignment} = message) do
-    handle(signal, message)
-
     if campaign =
          Campaign.Public.get_by_promotable(assignment, Campaign.Model.preload_graph(:down)) do
+      handle(signal, message)
       dispatch!({:campaign, signal}, Map.merge(message, %{campaign: campaign}))
     end
   end
@@ -62,10 +61,6 @@ defmodule Systems.Campaign.Switch do
       |> Campaign.Presenter.update(assignment_id, Assignment.LandingPage)
       |> Campaign.Presenter.update(id, Campaign.ContentPage)
     end
-  end
-
-  defp handle({:assignment, :accepted}, %{assignment: assignment, users: users}) do
-    Enum.each(users, &Campaign.Public.payout_participant(assignment, &1))
   end
 
   defp handle({_, _}, _), do: nil

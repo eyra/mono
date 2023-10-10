@@ -209,6 +209,14 @@ defmodule Systems.Assignment.Public do
     |> Repo.update!()
   end
 
+  def is_owner?(assignment, user) do
+    Core.Authorization.user_has_role?(user, assignment, :owner)
+  end
+
+  def add_owner!(assignment, user) do
+    :ok = Core.Authorization.assign_role(user, assignment, :owner)
+  end
+
   def owner!(%Assignment.Model{} = assignment), do: parent_owner!(assignment)
   def owner!(%Workflow.Model{} = workflow), do: parent_owner!(workflow)
   def owner!(%Workflow.ItemModel{} = item), do: parent_owner!(item)
@@ -570,13 +578,5 @@ defmodule Systems.Assignment.Public do
   def rewarded_amount(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
     idempotence_key = idempotence_key(assignment_id, user_id)
     Budget.Public.rewarded_amount(idempotence_key)
-  end
-
-  def task_identifier(tool, user) do
-    [
-      Atom.to_string(Frameworks.Concept.ToolModel.key(tool)),
-      Integer.to_string(tool.id),
-      Integer.to_string(user.id)
-    ]
   end
 end

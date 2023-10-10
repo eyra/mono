@@ -4,9 +4,8 @@ defmodule Systems.Assignment.InfoForm do
 
   alias Core.Enums.Devices
 
-  import Frameworks.Pixel.Form
-
-  alias Frameworks.Pixel.Selector
+  # import Frameworks.Pixel.Form
+  # alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
 
   alias Systems.{
@@ -121,7 +120,7 @@ defmodule Systems.Assignment.InfoForm do
         <Margin.y id={:page_top} />
         <Text.title2><%= dgettext("eyra-assignment", "form.title")  %></Text.title2>
 
-        <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
+        <%!-- <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
           <.number_input
             form={form}
             field={:duration}
@@ -157,7 +156,7 @@ defmodule Systems.Assignment.InfoForm do
               type={:label}
               items={@device_labels}
               parent={%{type: __MODULE__, id: @id}} />
-        </.form>
+        </.form> --%>
       </Area.content>
     </div>
     """

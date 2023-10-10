@@ -10,7 +10,7 @@ defmodule Frameworks.Signal.TestHelper do
 
   defmacro refute_signal_dispatched(signal) do
     quote bind_quoted: [signal: signal] do
-      refute_received({:signal_test, {^signal, _}})
+      refute_received({:signal_test, {^signal, _}}, 1000)
     end
   end
 

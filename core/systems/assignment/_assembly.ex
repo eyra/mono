@@ -10,13 +10,13 @@ defmodule Systems.Assignment.Assembly do
     Lab
   }
 
-  def create(template, director, budget \\ nil, auth_node \\ Authorization.create_node!()) do
+  def create(template, director, budget \\ nil, auth_node \\ Authorization.prepare_node()) do
     prepare(template, director, budget, auth_node)
     |> Repo.insert()
   end
 
-  def prepare(template, director, budget \\ nil, auth_node \\ Authorization.create_node!()) do
-    crew_auth_node = Authorization.create_node!(auth_node)
+  def prepare(template, director, budget \\ nil, auth_node \\ Authorization.prepare_node()) do
+    crew_auth_node = Authorization.prepare_node(auth_node)
     crew = Crew.Public.prepare(crew_auth_node)
 
     info = Assignment.Public.prepare_info(info_attrs(template, director))
@@ -24,7 +24,7 @@ defmodule Systems.Assignment.Assembly do
     workflow = prepare_workflow(template, auth_node)
 
     Assignment.Public.prepare(
-      %{director: :campaign, special: template},
+      %{special: template},
       crew,
       info,
       workflow,

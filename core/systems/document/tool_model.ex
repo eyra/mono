@@ -46,6 +46,12 @@ defmodule Systems.Document.ToolModel do
     def ready?(tool), do: Document.ToolModel.ready?(tool)
     def form(_), do: Document.ToolForm
 
+    def launcher(%{ref: ref}),
+      do: %{
+        function: &Document.PDFView.pdf_view/1,
+        props: %{url: ref, title: dgettext("eyra-document", "component.title")}
+      }
+
     def task_labels(_) do
       %{
         pending: dgettext("eyra-document", "pending.label"),

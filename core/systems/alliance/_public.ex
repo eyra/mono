@@ -32,6 +32,7 @@ defmodule Systems.Alliance.Public do
   import Ecto.Query, warn: false
   alias Ecto.Multi
   alias Core.Repo
+  alias Core.Authorization
 
   alias Frameworks.{
     Signal
@@ -59,7 +60,7 @@ defmodule Systems.Alliance.Public do
   @doc """
   Creates a alliance_tool.
   """
-  def prepare_tool(attrs, auth_node \\ Core.Authorization.make_node()) do
+  def prepare_tool(attrs, auth_node \\ Authorization.prepare_node()) do
     %Alliance.ToolModel{}
     |> Alliance.ToolModel.changeset(:mount, attrs)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)

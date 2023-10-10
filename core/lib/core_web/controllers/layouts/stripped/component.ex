@@ -47,6 +47,8 @@ defmodule CoreWeb.Layouts.Stripped.Component do
 
   attr(:title, :string, default: nil)
   attr(:menus, :map, required: true)
+  attr(:footer?, :boolean, default: true)
+
   slot(:inner_block, required: true)
 
   def stripped(assigns) do
@@ -70,7 +72,7 @@ defmodule CoreWeb.Layouts.Stripped.Component do
                 </div>
               <% end %>
               <div class="flex-1 bg-white">
-                <div class="flex flex-row">
+                <div class="flex flex-row w-full h-full">
                   <div class="flex-1">
                     <%= render_slot(@inner_block) %>
                     <Margin.y id={:page_footer_top} />
@@ -79,9 +81,11 @@ defmodule CoreWeb.Layouts.Stripped.Component do
                   </div>
                 </div>
               </div>
-              <div class="bg-white">
-                <.content_footer />
-              </div>
+              <%= if @footer? do %>
+                <div class="bg-white">
+                  <.content_footer />
+                </div>
+              <% end %>
             </div>
           </div>
           <div class="bg-grey5">

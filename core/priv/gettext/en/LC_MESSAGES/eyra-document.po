@@ -46,3 +46,7 @@ msgstr "Manual"
 #, elixir-autogen, elixir-format
 msgid "pdf-select-placeholder"
 msgstr "Select a pdf file"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "component.title"
+msgstr "Manual"

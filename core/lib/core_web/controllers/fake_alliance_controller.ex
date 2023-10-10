@@ -1,4 +1,4 @@
-defmodule CoreWeb.FaceAllianceController do
+defmodule CoreWeb.FakeAllianceController do
   use CoreWeb, :controller
 
   def index(conn, _params) do

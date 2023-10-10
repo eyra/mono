@@ -82,7 +82,7 @@ defmodule Systems.Campaign.Builders.PromotionLandingPage do
 
   defp apply_call_to_action(%{workflow: workflow} = assignment, user) do
     [tool | _] = Workflow.Model.flatten(workflow)
-    task_identifier = Assignment.Public.task_identifier(tool, user)
+    task_identifier = Assignment.Private.task_identifier(tool, user)
 
     %{
       label: Frameworks.Concept.ToolModel.apply_label(tool),

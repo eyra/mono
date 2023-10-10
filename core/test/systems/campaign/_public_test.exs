@@ -285,6 +285,8 @@ defmodule Systems.Campaign.PublicTest do
       # accept task should send signal to campaign to reward student
       Crew.Public.accept_task(task)
 
+      Bookkeeping.Public.list_accounts(["wallet"])
+
       assert Enum.empty?(Bookkeeping.Public.list_accounts(["wallet"]))
 
       assert Enum.empty?(Bookkeeping.Public.list_entries({:wallet, "fake_currency", student.id}))

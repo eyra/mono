@@ -49,7 +49,7 @@ defmodule Systems.Benchmark.Public do
     |> set_tool_status(status)
   end
 
-  def prepare_tool(%{} = attrs, auth_node \\ Core.Authorization.make_node()) do
+  def prepare_tool(%{} = attrs, auth_node \\ Core.Authorization.prepare_node()) do
     attrs = Map.put(attrs, :status, :concept)
 
     %Benchmark.ToolModel{}
@@ -61,7 +61,7 @@ defmodule Systems.Benchmark.Public do
     tool = Benchmark.Public.get_tool!(tool_id)
 
     Multi.new()
-    |> Multi.insert(:auth_node, Authorization.make_node())
+    |> Multi.insert(:auth_node, Authorization.prepare_node())
     |> Multi.insert(:spot, fn %{auth_node: auth_node} ->
       %Benchmark.SpotModel{}
       |> Benchmark.SpotModel.changeset(%{name: displayname})

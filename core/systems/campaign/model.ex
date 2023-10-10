@@ -307,7 +307,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
     %{
       id: id,
-      path: ~p"/assignment/#{assignment.id}",
+      path: ~p"/assignment/#{assignment.id}/landing",
       title: title,
       subtitle: subtitle,
       tag: tag,
@@ -408,7 +408,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
          {Link.Console.Page, :contribution},
          user
        ) do
-    path = ~p"/assignment/#{assignment.id}"
+    path = ~p"/assignment/#{assignment.id}/landing"
     vm(campaign, :contribution, user, path)
   end
 

@@ -23,7 +23,7 @@ defmodule Systems.Lab.Public do
     |> filter_double_time_slots()
   end
 
-  def prepare_tool(attrs, auth_node \\ Core.Authorization.make_node()) do
+  def prepare_tool(attrs, auth_node \\ Core.Authorization.prepare_node()) do
     %Lab.ToolModel{}
     |> Lab.ToolModel.changeset(:mount, attrs)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)

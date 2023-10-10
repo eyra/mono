@@ -67,7 +67,7 @@ defmodule Systems.Project.AssemblyTest do
                  role_assignments: []
                },
                excluded: [],
-               director: :campaign
+               director: nil
              }
            } = item
   end

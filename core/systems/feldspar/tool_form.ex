@@ -11,8 +11,12 @@ defmodule Systems.Feldspar.ToolForm do
         %{assigns: %{entity: entity}} = socket,
         {_local_relative_path, local_full_path, remote_file}
       ) do
+    archive_ref =
+      Feldspar.Public.store(local_full_path)
+      |> Feldspar.Public.get_public_url()
+
     socket
-    |> save(entity, %{archive_ref: local_full_path, archive_name: remote_file})
+    |> save(entity, %{archive_ref: archive_ref, archive_name: remote_file})
   end
 
   @impl true

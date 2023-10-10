@@ -62,11 +62,11 @@ defmodule Systems.Project.Public do
     |> Repo.one()
   end
 
-  def get_tool_refs_by_tool(%{id: id} = tool, preload \\ []) do
+  def get_tool_ref_by_tool(%{id: id} = tool, preload \\ []) do
     field = Project.ToolRefModel.tool_id_field(tool)
 
     query_tool_refs_by_tool(id, field, preload)
-    |> Repo.all()
+    |> Repo.one()
   end
 
   def query_tool_refs_by_tool(tool_id, field, preload \\ [])
@@ -109,20 +109,21 @@ defmodule Systems.Project.Public do
 
   def prepare(
         %{name: _name} = attrs,
-        items
+        items,
+        user
       )
       when is_list(items) do
     {:ok, root} =
       prepare_node(%{name: "Project", project_path: []}, items)
       |> Ecto.Changeset.apply_action(:prepare)
 
-    prepare(attrs, root)
+    prepare(attrs, root, Authorization.prepare_node(user, :owner))
   end
 
   def prepare(
         %{name: _name} = attrs,
         %Project.NodeModel{} = root,
-        %Authorization.Node{} = auth_node \\ Authorization.make_node()
+        %Authorization.Node{} = auth_node
       ) do
     %Project.Model{}
     |> Project.Model.changeset(attrs)
@@ -133,7 +134,7 @@ defmodule Systems.Project.Public do
   def prepare_node(
         %{name: _, project_path: _} = attrs,
         items,
-        auth_node \\ Authorization.make_node()
+        auth_node \\ Authorization.prepare_node()
       )
       when is_list(items) do
     %Project.NodeModel{}

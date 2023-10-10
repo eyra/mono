@@ -23,6 +23,9 @@ gettext:
 
 build: build-digest build-app
 
+build-assets:
+	@cd .assets && npm run build
+
 build-digest:
 	@mix phx.digest
 

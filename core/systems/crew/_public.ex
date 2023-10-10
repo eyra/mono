@@ -95,6 +95,13 @@ defmodule Systems.Crew.Public do
     |> Repo.all()
   end
 
+  def list_tasks_by_template(crew, task_template, order_by \\ {:desc, :id}) do
+    from(t in task_query_by_template(crew, task_template),
+      order_by: ^order_by
+    )
+    |> Repo.all()
+  end
+
   def list_tasks_for_user(crew, user_ref, order_by \\ {:desc, :id}) do
     from(t in task_query(crew, user_ref, false), order_by: ^order_by)
     |> Repo.all()
@@ -129,6 +136,13 @@ defmodule Systems.Crew.Public do
       where:
         t.crew_id == ^crew.id and
           t.status in ^status_list
+    )
+  end
+
+  def task_query_by_template(crew, task_template) when is_list(task_template) do
+    from(task in Crew.TaskModel,
+      where: task.crew_id == ^crew.id,
+      where: fragment("?::text[] @> ?", task.identifier, ^task_template)
     )
   end
 
@@ -184,11 +198,11 @@ defmodule Systems.Crew.Public do
   end
 
   def cancel_task(%Crew.TaskModel{} = task) do
-    update_task(task, %{started_at: nil})
+    update_task(task, %{started_at: nil}, :canceled)
   end
 
   def lock_task(%Crew.TaskModel{} = task) do
-    update_task(task, %{started_at: Timestamp.naive_now()})
+    update_task(task, %{started_at: Timestamp.naive_now()}, :locked)
   end
 
   def activate_task(%Crew.TaskModel{status: status, started_at: started_at} = task) do
@@ -198,35 +212,45 @@ defmodule Systems.Crew.Public do
       :pending ->
         case started_at do
           nil ->
-            update_task(task, %{
-              status: :completed,
-              started_at: timestamp,
-              completed_at: timestamp
-            })
+            update_task(
+              task,
+              %{
+                status: :completed,
+                started_at: timestamp,
+                completed_at: timestamp
+              },
+              :completed
+            )
 
           _ ->
-            update_task(task, %{status: :completed, completed_at: timestamp})
+            update_task(task, %{status: :completed, completed_at: timestamp}, :completed)
         end
 
       _ ->
-        {:ok, %{task: task}}
+        {:ok, %{crew_task: task}}
     end
   end
 
   def activate_task!(%Crew.TaskModel{} = task) do
     case Crew.Public.activate_task(task) do
-      {:ok, %{task: task}} -> task
+      {:ok, %{crew_task: task}} -> task
       _ -> nil
     end
   end
 
   def reject_task(multi, %Crew.TaskModel{} = task, %{category: category, message: message}) do
-    multi_update(multi, :task, task, %{
-      status: :rejected,
-      rejected_at: Timestamp.naive_now(),
-      rejected_category: category,
-      rejected_message: message
-    })
+    multi_update(
+      multi,
+      :task,
+      task,
+      %{
+        status: :rejected,
+        rejected_at: Timestamp.naive_now(),
+        rejected_category: category,
+        rejected_message: message
+      },
+      :rejected
+    )
   end
 
   def reject_task(multi, id, rejection) do
@@ -247,10 +271,14 @@ defmodule Systems.Crew.Public do
   end
 
   def accept_task(%Crew.TaskModel{} = task) do
-    update_task(task, %{
-      status: :accepted,
-      accepted_at: Timestamp.naive_now()
-    })
+    update_task(
+      task,
+      %{
+        status: :accepted,
+        accepted_at: Timestamp.naive_now()
+      },
+      :accepted
+    )
   end
 
   def accept_task(id) do
@@ -258,25 +286,25 @@ defmodule Systems.Crew.Public do
     |> accept_task()
   end
 
-  def update_task(%Crew.TaskModel{} = task, attrs) do
+  def update_task(%Crew.TaskModel{} = task, attrs, event) do
     Multi.new()
-    |> multi_update(:task, task, attrs)
+    |> multi_update(:task, task, attrs, event)
     |> Repo.transaction()
   end
 
-  def multi_update(multi, :task, task, attrs) do
+  def multi_update(multi, :task, task, attrs, event) do
     changeset = Crew.TaskModel.changeset(task, attrs)
-    multi_update(multi, :task, changeset)
+    multi_update(multi, :task, changeset, event)
   end
 
-  def multi_update(multi, :task, changeset) do
+  def multi_update(multi, :task, changeset, event \\ :updated) do
     multi
-    |> Multi.update(:task, changeset)
-    |> Signal.Public.multi_dispatch({:crew_task, :updated}, changeset)
+    |> Multi.update(:crew_task, changeset)
+    |> Signal.Public.multi_dispatch({:crew_task, event}, %{changeset: changeset})
   end
 
   def delete_task(%Crew.TaskModel{} = task) do
-    update_task(task, %{expired: true})
+    update_task(task, %{expired: true}, :deleted)
   end
 
   def delete_task(_), do: nil
@@ -332,12 +360,29 @@ defmodule Systems.Crew.Public do
     else
       Multi.new()
       |> insert(:member, crew, user, %{expire_at: expire_at})
-      |> insert(:task, crew, user, %{
+      |> insert(:crew_task, crew, user, %{
         identifier: identifier,
         status: :pending,
         expire_at: expire_at
       })
       |> insert(:role_assignment, crew, user, :participant)
+      |> Repo.transaction()
+    end
+  end
+
+  def apply_member_with_role(
+        %Crew.Model{} = crew,
+        %User{} = user,
+        role \\ :participant,
+        expire_at \\ nil
+      ) do
+    if member = get_expired_member(crew, user, [:crew]) do
+      member = reset_member(member, expire_at)
+      {:ok, %{member: member}}
+    else
+      Multi.new()
+      |> insert(:member, crew, user, %{expire_at: expire_at})
+      |> insert(:role_assignment, crew, user, role)
       |> Repo.transaction()
     end
   end
@@ -357,7 +402,7 @@ defmodule Systems.Crew.Public do
     Multi.insert(multi, name, Authorization.build_role_assignment(user, crew, role))
   end
 
-  defp insert(multi, :task = name, crew, %User{} = user, attrs) do
+  defp insert(multi, :crew_task = name, crew, %User{} = user, attrs) do
     Multi.insert(
       multi,
       name,

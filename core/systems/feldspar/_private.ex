@@ -1,4 +1,4 @@
-defmodule Systems.Feldspar.Internal do
+defmodule Systems.Feldspar.Private do
   def get_backend do
     :core
     |> Application.fetch_env!(:feldspar)

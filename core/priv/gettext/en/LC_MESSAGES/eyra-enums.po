@@ -328,7 +328,7 @@ msgstr "Benchmark"
 
 #, elixir-autogen, elixir-format
 msgid "project_templates.data_donation"
-msgstr "Data Donation Study"
+msgstr "Data Donation"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "project_templates.empty"
@@ -337,3 +337,15 @@ msgstr "Empty"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "templates.data_donation"
 msgstr "Online study"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "platforms.apple"
+msgstr "Apple"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "platforms.samsung"
+msgstr "Samsung"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "platforms.tiktok"
+msgstr "TikTok"

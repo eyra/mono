@@ -14,7 +14,7 @@ defmodule Systems.Assignment.Model do
   }
 
   schema "assignments" do
-    field(:special, :string)
+    field(:special, Ecto.Atom)
     field(:status, Ecto.Enum, values: Assignment.Status.values(), default: :concept)
 
     belongs_to(:info, Assignment.InfoModel)
@@ -36,7 +36,7 @@ defmodule Systems.Assignment.Model do
     timestamps()
   end
 
-  @fields ~w()a
+  @fields ~w(special status)a
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(assignment), do: assignment.auth_node_id

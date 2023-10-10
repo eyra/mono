@@ -337,3 +337,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "templates.data_donation"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.apple"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.samsung"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.tiktok"
+msgstr ""

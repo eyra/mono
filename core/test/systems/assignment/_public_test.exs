@@ -313,7 +313,7 @@ defmodule Systems.Assignment.PublicTest do
 
       Crew.Public.reject_task(task_id, %{category: :other, message: "rejected"})
 
-      assert_next_action(user, "/assignment/#{id}")
+      assert_next_action(user, "/assignment/#{id}/landing")
     end
 
     test "next_action cleared after acceptence of task" do
@@ -325,7 +325,7 @@ defmodule Systems.Assignment.PublicTest do
       Crew.Public.reject_task(task_id, %{category: :other, message: "rejected"})
       Crew.Public.accept_task(task_id)
 
-      refute_next_action(user, "/assignment/#{id}")
+      refute_next_action(user, "/assignment/#{id}/landing")
     end
 
     test "exclude/2" do

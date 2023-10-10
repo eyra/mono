@@ -8,8 +8,8 @@ defmodule Systems.Crew.PublicTest do
     alias Systems.Crew
 
     test "list/0 returns all created crews with preloaded references" do
-      {:ok, crew1} = Crew.Public.prepare(Core.Authorization.make_node()) |> Core.Repo.insert()
-      {:ok, crew2} = Crew.Public.prepare(Core.Authorization.make_node()) |> Core.Repo.insert()
+      {:ok, crew1} = Crew.Public.prepare(Core.Authorization.prepare_node()) |> Core.Repo.insert()
+      {:ok, crew2} = Crew.Public.prepare(Core.Authorization.prepare_node()) |> Core.Repo.insert()
       list = Crew.Public.list()
       assert list |> Enum.find(&(&1.id == crew1.id))
       assert list |> Enum.find(&(&1.id == crew2.id))
@@ -19,7 +19,7 @@ defmodule Systems.Crew.PublicTest do
     end
 
     test "get/1 returns crew with preloaded references" do
-      {:ok, crew} = Crew.Public.prepare(Core.Authorization.make_node()) |> Core.Repo.insert()
+      {:ok, crew} = Crew.Public.prepare(Core.Authorization.prepare_node()) |> Core.Repo.insert()
       crew = Crew.Public.get!(crew.id)
 
       assert crew.tasks == []
@@ -66,7 +66,7 @@ defmodule Systems.Crew.PublicTest do
       %{id: user_id} = user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
-      {:ok, %{member: %{user_id: ^user_id}, task: task}} =
+      {:ok, %{member: %{user_id: ^user_id}, crew_task: task}} =
         Crew.Public.apply_member(crew, user, ["task1"])
 
       assert %{
@@ -139,7 +139,8 @@ defmodule Systems.Crew.PublicTest do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
-      {:ok, %{member: member, task: task}} = Crew.Public.apply_member(crew, user, ["task1"], nil)
+      {:ok, %{member: member, crew_task: task}} =
+        Crew.Public.apply_member(crew, user, ["task1"], nil)
 
       assert Crew.Public.mark_expired()
 
@@ -151,7 +152,7 @@ defmodule Systems.Crew.PublicTest do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
-      {:ok, %{member: member, task: task}} =
+      {:ok, %{member: member, crew_task: task}} =
         Crew.Public.apply_member(crew, user, ["task1"], expire_at(1))
 
       assert Crew.Public.mark_expired()
@@ -164,7 +165,7 @@ defmodule Systems.Crew.PublicTest do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
-      {:ok, %{member: member, task: task}} =
+      {:ok, %{member: member, crew_task: task}} =
         Crew.Public.apply_member(crew, user, ["task1"], expire_at(-1))
 
       Crew.Public.lock_task(task)
@@ -181,7 +182,7 @@ defmodule Systems.Crew.PublicTest do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
-      {:ok, %{member: member, task: task}} =
+      {:ok, %{member: member, crew_task: task}} =
         Crew.Public.apply_member(crew, user, ["task1"], expire_at(-1))
 
       assert Crew.Public.mark_expired()
@@ -197,10 +198,10 @@ defmodule Systems.Crew.PublicTest do
       user2 = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
-      {:ok, %{member: member1, task: task1}} =
+      {:ok, %{member: member1, crew_task: task1}} =
         Crew.Public.apply_member(crew, user1, ["task1"], expire_at(-1))
 
-      {:ok, %{member: member2, task: task2}} =
+      {:ok, %{member: member2, crew_task: task2}} =
         Crew.Public.apply_member(crew, user2, ["task2"], expire_at(1))
 
       assert Crew.Public.mark_expired()
@@ -218,7 +219,7 @@ defmodule Systems.Crew.PublicTest do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
-      {:ok, %{member: %{id: member_id} = member, task: task}} =
+      {:ok, %{member: %{id: member_id} = member, crew_task: task}} =
         Crew.Public.apply_member(crew, user, ["task1"], expire_at(-1))
 
       assert Crew.Public.member?(crew, user)
@@ -572,7 +573,7 @@ defmodule Systems.Crew.PublicTest do
         })
 
       assert Crew.Public.count_tasks(crew, [:completed]) == 0
-      {:ok, %{task: task}} = Crew.Public.accept_task(task)
+      {:ok, %{crew_task: task}} = Crew.Public.accept_task(task)
       assert %{status: :accepted} = Crew.Public.activate_task!(task)
       assert Crew.Public.count_tasks(crew, [:completed]) == 0
     end
@@ -596,7 +597,7 @@ defmodule Systems.Crew.PublicTest do
 
       assert Crew.Public.count_tasks(crew, [:completed]) == 0
 
-      {:ok, %{task: task}} =
+      {:ok, %{crew_task: task}} =
         Crew.Public.reject_task(task, %{
           category: :attention_checks_failed,
           message: "rejection message"
@@ -627,7 +628,7 @@ defmodule Systems.Crew.PublicTest do
 
       assert {:ok,
               %{
-                task: %{
+                crew_task: %{
                   status: :accepted,
                   accepted_at: accepted_at
                 }
@@ -660,7 +661,7 @@ defmodule Systems.Crew.PublicTest do
 
       assert {:ok,
               %{
-                task: %{
+                crew_task: %{
                   status: :rejected,
                   rejected_at: rejected_at,
                   rejected_category: :attention_checks_failed,

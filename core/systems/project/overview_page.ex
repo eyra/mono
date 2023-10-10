@@ -153,6 +153,14 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
+  def handle_info(%{auto_save: _status}, socket) do
+    {
+      :noreply,
+      socket
+    }
+  end
+
+  @impl true
   def handle_info({:handle_auto_save_done, :project_overview_popup}, socket) do
     {
       :noreply,
