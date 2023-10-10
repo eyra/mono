@@ -479,6 +479,7 @@ Systems.Feldspar.Presenter.html
 Systems.Feldspar.Private.html
 Systems.Feldspar.Public.html
 Systems.Feldspar.Routes.html
+Systems.Feldspar.S3.html
 Systems.Feldspar.ToolForm.html
 Systems.Feldspar.ToolModel.html
 Systems.Lab.CheckInItem.html
@@ -665,8 +666,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-18671CF5.js
-dist/sidebar_items-D33A7423.js
+dist/search_items-4C3E3B20.js
+dist/sidebar_items-987C767E.js
 index.html
 readme.html
 search.html
