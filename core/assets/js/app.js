@@ -29,10 +29,7 @@ import { Toggle } from "./toggle";
 import { Cell } from "./cell";
 import { LiveContent, LiveField } from "./live_content";
 import { Tabbar, TabbarItem, TabbarFooterItem } from "./tabbar";
-import { PythonUploader } from "./python_uploader";
 import { Clipboard } from "./clipboard";
-import { DataDonationHook } from "./data_donation_hook";
-import { Port } from "./port";
 import { FeldsparApp } from "./feldspar_app";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
@@ -105,9 +102,6 @@ let Hooks = {
   TabbarItem,
   TabbarFooterItem,
   NativeWrapper,
-  PythonUploader,
-  DataDonationHook,
-  Port,
   FeldsparApp,
 };
 
