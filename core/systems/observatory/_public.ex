@@ -1,5 +1,4 @@
 defmodule Systems.Observatory.Public do
-  alias Systems.Director
   alias CoreWeb.Endpoint
 
   def subscribe(signal, key \\ []) do
@@ -38,18 +37,10 @@ defmodule Systems.Observatory.Public do
     socket
   end
 
-  def update_view_model(%{assigns: %{model: %{presenter: presenter}}} = socket, model_or_id, page) do
-    update_view_model(socket, presenter, model_or_id, page)
-  end
-
-  def update_view_model(%{assigns: %{model: model}} = socket, model_or_id, page) do
-    update_view_model(socket, Director.presenter(model), model_or_id, page)
-  end
-
-  defp update_view_model(socket, presenter, model_or_id, page) do
+  def update_view_model(socket, model, page, presenter) do
     vm =
       presenter
-      |> get_view_model(socket, model_or_id, page)
+      |> get_view_model(socket, model, page)
 
     socket
     |> Phoenix.Component.assign(vm: vm)
@@ -58,21 +49,19 @@ defmodule Systems.Observatory.Public do
   defp get_view_model(
          presenter,
          %{assigns: assigns} = _socket,
-         model_or_id,
+         model,
          page
        ) do
     presenter
-    |> apply(:view_model, [model_or_id, page, assigns])
+    |> apply(:view_model, [model, page, assigns])
   end
 
   defmacro __using__(_opts \\ []) do
     quote do
-      import unquote(__MODULE__), only: [observe: 2]
-
       import CoreWeb.Gettext
       alias Systems.Observatory.Public
 
-      # data(vm, :map)
+      @presenter Frameworks.Concept.System.presenter(__MODULE__)
 
       def handle_info(%{auto_save: status}, socket) do
         {
@@ -85,21 +74,21 @@ defmodule Systems.Observatory.Public do
         {
           :noreply,
           socket
-          |> Public.update_view_model(model, __MODULE__)
+          |> Public.update_view_model(model, __MODULE__, @presenter)
           |> handle_view_model_updated()
           |> put_updated_info_flash()
         }
       end
 
-      def observe_view_model(%{assigns: %{model: %{id: id}}} = socket) do
+      def observe_view_model(%{assigns: %{model: %{id: id} = model}} = socket) do
         socket
         |> Public.observe([{__MODULE__, [id]}])
-        |> Public.update_view_model(id, __MODULE__)
+        |> Public.update_view_model(model, __MODULE__, @presenter)
       end
 
-      def update_view_model(%{assigns: %{model: %{id: id}}} = socket) do
+      def update_view_model(%{assigns: %{model: %{id: id} = model}} = socket) do
         socket
-        |> Public.update_view_model(id, __MODULE__)
+        |> Public.update_view_model(model, __MODULE__, @presenter)
       end
 
       def handle_view_model_updated(socket) do

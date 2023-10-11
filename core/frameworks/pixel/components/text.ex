@@ -185,7 +185,7 @@ defmodule Frameworks.Pixel.Text do
 
   def title1(assigns) do
     ~H"""
-    <div class={"text-title3 font-title3 sm:text-title2 lg:text-title1 lg:font-title1 #{@margin}"}>
+    <div class={"text-title3 font-title3 sm:text-title2 lg:text-title1 lg:font-title1 #{@margin} #{@color}"}>
       <%= render_slot(@inner_block) %>
     </div>
     """

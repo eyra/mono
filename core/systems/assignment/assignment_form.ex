@@ -2,7 +2,8 @@ defmodule Systems.Assignment.AssignmentForm do
   use CoreWeb.LiveForm
 
   alias Systems.{
-    Assignment
+    Assignment,
+    Workflow
   }
 
   # Handle initial update
@@ -10,19 +11,14 @@ defmodule Systems.Assignment.AssignmentForm do
   def update(
         %{
           id: id,
-          entity: %{id: entity_id, assignable_experiment: experiment} = entity,
+          entity: %{info: info, workflow: workflow} = entity,
           user: user,
           uri_origin: uri_origin
         },
         socket
       ) do
-    callback_path =
-      CoreWeb.Router.Helpers.live_path(socket, Systems.Assignment.CallbackPage, entity_id)
-
-    callback_url = uri_origin <> callback_path
-
-    tool_id = Assignment.ExperimentModel.tool_id(experiment)
-    tool_form = Assignment.ExperimentModel.tool_form(experiment)
+    [tool | _] = Workflow.Model.flatten(workflow)
+    tool_form = Frameworks.Concept.ToolModel.form(tool)
 
     {
       :ok,
@@ -30,35 +26,38 @@ defmodule Systems.Assignment.AssignmentForm do
       |> assign(
         id: id,
         entity: entity,
-        experiment: experiment,
-        tool_id: tool_id,
+        info: info,
+        tool: tool,
         tool_form: tool_form,
         user: user,
-        callback_url: callback_url
+        uri_origin: uri_origin
       )
     }
   end
 
   defp forms(%{
          tool_form: tool_form,
-         tool_id: tool_id,
-         experiment: experiment,
-         callback_url: callback_url,
+         tool: tool,
+         info: info,
+         uri_origin: uri_origin,
          user: user
        }) do
+    callback_path = ~p"/assignment/callback/#{tool.id}"
+    callback_url = uri_origin <> callback_path
+
     [
       %{
-        live_component: Assignment.ExperimentForm,
+        live_component: Assignment.InfoForm,
         props: %{
-          id: :experiment_form,
-          entity: experiment
+          id: :info_form,
+          entity: info
         }
       },
       %{
         live_component: tool_form,
         props: %{
           id: :tool_form,
-          entity_id: tool_id,
+          entity: tool,
           callback_url: callback_url,
           user: user
         }
@@ -67,7 +66,7 @@ defmodule Systems.Assignment.AssignmentForm do
         live_component: Assignment.EthicalForm,
         props: %{
           id: :ethical_form,
-          entity: experiment
+          entity: info
         }
       }
     ]

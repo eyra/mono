@@ -5,6 +5,7 @@ defmodule Systems.Pool.SubmissionPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :pool_submission
   use CoreWeb.UI.PlainDialog
+  use Systems.Observatory.Public
 
   import CoreWeb.Gettext
 
@@ -23,8 +24,9 @@ defmodule Systems.Pool.SubmissionPage do
   @impl true
   def mount(%{"id" => id}, _session, socket) do
     submission_id = String.to_integer(id)
-    %{pool: %{director: director}} = Pool.Public.get_submission!(submission_id, [:pool])
-    model = %{id: submission_id, director: director}
+
+    model =
+      Pool.Public.get_submission!(submission_id, pool: Pool.Model.preload_graph([:org, :currency]))
 
     {
       :ok,

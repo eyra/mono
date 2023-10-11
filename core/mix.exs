@@ -44,7 +44,7 @@ defmodule Core.MixProject do
   def application do
     [
       mod: {Core.Application, []},
-      extra_applications: [:logger, :runtime_tools, :csv]
+      extra_applications: [:logger, :runtime_tools, :csv, :ssl]
     ]
   end
 
@@ -67,7 +67,7 @@ defmodule Core.MixProject do
       # Deps
       {:assent, "~> 0.2.3"},
       {:bcrypt_elixir, "~> 2.0"},
-      {:ex_aws_s3, "~> 2.0"},
+      {:ex_aws_s3, "~> 2.5"},
       {:phoenix, "1.7.2"},
       {:phoenix_view, "~> 2.0"},
       {:phoenix_ecto, "~> 4.4"},
@@ -99,6 +99,7 @@ defmodule Core.MixProject do
       {:logger_json, "~> 4.3"},
       {:statistics, "~> 0.6.2"},
       {:csv, "~> 2.4"},
+      {:sentry, "~> 8.0"},
       # i18n
       {:ex_cldr, "~> 2.25"},
       {:ex_cldr_numbers, "~> 2.23"},

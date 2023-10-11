@@ -4,7 +4,7 @@ defmodule Systems.Citizen.Director do
     defexception [:message]
   end
 
-  @behaviour Systems.Pool.External
+  @behaviour Frameworks.Concept.PoolDirector
 
   alias CoreWeb.UI.Timestamp
 

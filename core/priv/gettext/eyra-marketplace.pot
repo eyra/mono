@@ -19,19 +19,11 @@ msgid "empty.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "reward.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "assignment.status.complete.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "assignment.status.completed.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "assignment.status.expired.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format

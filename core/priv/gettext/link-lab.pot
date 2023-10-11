@@ -133,7 +133,7 @@ msgid "search.subject.not.found"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "experiment.checkin.label"
+msgid "inquiry.checkin.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
@@ -170,4 +170,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "date.location.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
 msgstr ""

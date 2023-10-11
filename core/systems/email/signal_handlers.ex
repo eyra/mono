@@ -6,7 +6,7 @@ defmodule Core.Mailer.SignalHandlers do
   alias Systems.Notification.Box
 
   @impl true
-  def dispatch(:new_notification, %{box: box, data: %{title: title}}) do
+  def intercept(:new_notification, %{box: box, data: %{title: title}}) do
     if feature_enabled?(:notification_mails) do
       for mail <- base_emails(box) do
         mail

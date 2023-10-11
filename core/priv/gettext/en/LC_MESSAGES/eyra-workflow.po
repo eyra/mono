@@ -1,0 +1,88 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "add.to.button"
+msgstr "Add"
+
+#, elixir-autogen, elixir-format
+msgid "item.description.label"
+msgstr "Description"
+
+#, elixir-autogen, elixir-format
+msgid "item.donate.description"
+msgstr "Enables participants to donate data."
+
+#, elixir-autogen, elixir-format
+msgid "item.donate.title"
+msgstr "Donate"
+
+#, elixir-autogen, elixir-format
+msgid "item.download.description"
+msgstr "Instructs participants on how to download digital trace data."
+
+#, elixir-autogen, elixir-format
+msgid "item.download.title"
+msgstr "Download manual"
+
+#, elixir-autogen, elixir-format
+msgid "item.group.label"
+msgstr "Group"
+
+#, elixir-autogen, elixir-format
+msgid "item.library.description"
+msgstr "Choose which items to add to your workflow."
+
+#, elixir-autogen, elixir-format
+msgid "item.library.title"
+msgstr "Library"
+
+#, elixir-autogen, elixir-format
+msgid "item.list.description"
+msgstr "Add items from the library to build a custom workflow for your participants."
+
+#, elixir-autogen, elixir-format
+msgid "item.list.hint"
+msgstr "Use the arrows to order the items"
+
+#, elixir-autogen, elixir-format
+msgid "item.list.title"
+msgstr "Workflow"
+
+#, elixir-autogen, elixir-format
+msgid "item.request.description"
+msgstr "Instructs participants on how to request digital trace data."
+
+#, elixir-autogen, elixir-format
+msgid "item.request.title"
+msgstr "Request manual"
+
+#, elixir-autogen, elixir-format
+msgid "item.title.label"
+msgstr "Title"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.workflow"
+msgstr "Workflow"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.workflow.forward"
+msgstr "Go to Workflow"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "item.questionnaire.description"
+msgstr "Redirects participants to an online questionnaire."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "item.questionnaire.title"
+msgstr "Questionnaire"

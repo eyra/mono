@@ -3,15 +3,22 @@ defmodule Systems.Assignment.Model do
   The assignment type.
   """
   use Ecto.Schema
+  use Frameworks.Utility.Schema
+
   import Ecto.Changeset
 
   alias Systems.{
     Assignment,
+    Workflow,
     Budget
   }
 
   schema "assignments" do
-    belongs_to(:assignable_experiment, Assignment.ExperimentModel)
+    field(:special, Ecto.Atom)
+    field(:status, Ecto.Enum, values: Assignment.Status.values(), default: :concept)
+
+    belongs_to(:info, Assignment.InfoModel)
+    belongs_to(:workflow, Workflow.Model)
     belongs_to(:crew, Systems.Crew.Model)
     belongs_to(:budget, Budget.Model, on_replace: :update)
     belongs_to(:auth_node, Core.Authorization.Node)
@@ -29,11 +36,17 @@ defmodule Systems.Assignment.Model do
     timestamps()
   end
 
-  @fields ~w()a
+  @fields ~w(special status)a
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(assignment), do: assignment.auth_node_id
   end
+
+  defimpl Frameworks.Concept.Directable do
+    def director(%{director: director}), do: Frameworks.Concept.System.director(director)
+  end
+
+  def auth_tree(%Assignment.Model{auth_node: auth_node}), do: auth_node
 
   def changeset(assignment, nil), do: changeset(assignment, %{})
 
@@ -50,26 +63,23 @@ defmodule Systems.Assignment.Model do
 
   def flatten(assignment) do
     assignment
-    |> Map.take([:id, :crew, :excluded, :director])
-    |> Map.put(:assignable, assignable(assignment))
+    |> Map.take([:id, :info, :workflow, :crew, :budget, :excluded, :director])
+    |> Map.put(:tool, tool(assignment))
   end
 
-  def assignable(%{assignable: assignable}) when not is_nil(assignable), do: assignable
-  def assignable(%{assignable_experiment: assignable}) when not is_nil(assignable), do: assignable
-
-  def assignable(%{id: id}) do
-    raise "no assignable object available for assignment #{id}"
+  def tool(%{workflow: workflow}) when not is_nil(workflow) do
+    [tool | _] = Workflow.Model.flatten(workflow)
+    tool
   end
 
-  def preload_graph(:full) do
+  def tool(_), do: nil
+
+  def preload_graph(:down) do
     [
-      :crew,
       :excluded,
-      assignable_experiment: [
-        auth_node: [:role_assignments],
-        lab_tool: [:time_slots],
-        survey_tool: [auth_node: [:role_assignments]]
-      ],
+      info: [],
+      crew: [:tasks, :members, :auth_node],
+      workflow: Workflow.Model.preload_graph(:down),
       budget: [:currency, :fund, :reserve],
       auth_node: [:role_assignments]
     ]

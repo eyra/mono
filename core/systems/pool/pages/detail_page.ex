@@ -5,6 +5,7 @@ defmodule Systems.Pool.DetailPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :pool_detail
   use CoreWeb.UI.Responsive.Viewport
+  use Systems.Observatory.Public
 
   import CoreWeb.Layouts.Workspace.Component
   alias CoreWeb.UI.Tabbar
@@ -18,7 +19,7 @@ defmodule Systems.Pool.DetailPage do
   @impl true
   def mount(%{"id" => pool_id, "tab" => initial_tab}, _session, socket) do
     pool_id = String.to_integer(pool_id)
-    model = Pool.Public.get!(pool_id)
+    model = Pool.Public.get!(pool_id, Pool.Model.preload_graph([:org, :currency, :participants]))
     tabbar_id = "pool_detail/#{pool_id}"
 
     {

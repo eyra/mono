@@ -3,7 +3,6 @@ defmodule Systems.Assignment.Public do
   The assignment context.
   """
   import Ecto.Query, warn: false
-  import CoreWeb.Gettext
 
   require Logger
 
@@ -12,18 +11,14 @@ defmodule Systems.Assignment.Public do
   alias CoreWeb.UI.Timestamp
   alias Core.Authorization
   alias Core.Accounts.User
-
-  alias Frameworks.{
-    Signal,
-    Utility
-  }
+  alias Frameworks.Concept
 
   alias Systems.{
-    Budget,
+    Project,
     Assignment,
-    Crew,
-    Survey,
-    Lab
+    Budget,
+    Workflow,
+    Crew
   }
 
   @min_expiration_timeout 30
@@ -33,54 +28,92 @@ defmodule Systems.Assignment.Public do
     |> Repo.get!(id)
   end
 
-  def get_by_crew!(crew, preload \\ [])
+  def get_workflow!(id, preload \\ []) do
+    from(a in Workflow.Model, preload: ^preload)
+    |> Repo.get!(id)
+  end
 
-  def get_by_crew!(%{id: crew_id}, preload), do: get_by_crew!(crew_id, preload)
+  def list_by_crew(crew, preload \\ [])
 
-  def get_by_crew!(crew_id, preload) when is_number(crew_id) do
+  def list_by_crew(%{id: crew_id}, preload), do: list_by_crew(crew_id, preload)
+
+  def list_by_crew(crew_id, preload) when is_number(crew_id) do
     from(a in Assignment.Model, where: a.crew_id == ^crew_id, preload: ^preload)
     |> Repo.all()
   end
 
-  def get_by_assignable(assignable, preload \\ [])
+  def list_by_workflow(workflow, preload \\ [])
 
-  def get_by_assignable(%Assignment.ExperimentModel{id: id}, preload) do
-    from(a in Assignment.Model,
-      where: a.assignable_experiment_id == ^id,
-      preload: ^preload
-    )
-    |> Repo.one()
+  def list_by_workflow(%{id: workflow_id}, preload), do: list_by_workflow(workflow_id, preload)
+
+  def list_by_workflow(workflow_id, preload) when is_number(workflow_id) do
+    from(a in Assignment.Model, where: a.workflow_id == ^workflow_id, preload: ^preload)
+    |> Repo.all()
   end
 
-  def get_by_experiment!(experiment, preload \\ [])
+  def get_by_info!(info, preload \\ [])
 
-  def get_by_experiment!(%{id: experiment_id}, preload),
-    do: get_by_experiment!(experiment_id, preload)
+  def get_by_info!(%Assignment.InfoModel{id: id}, preload), do: get_by_info!(id, preload)
 
-  def get_by_experiment!(experiment_id, preload) when is_number(experiment_id) do
-    from(a in Assignment.Model,
-      where: a.assignable_experiment_id == ^experiment_id,
-      preload: ^preload
-    )
-    |> Repo.one()
-  end
-
-  def get_by_tool(%Survey.ToolModel{id: id}, preload) do
-    query_by_tool(preload)
-    |> where([assignment, experiment], experiment.survey_tool_id == ^id)
-    |> Repo.one()
-  end
-
-  def get_by_tool(%Lab.ToolModel{id: id}, preload) do
-    query_by_tool(preload)
-    |> where([assignment, experiment], experiment.lab_tool_id == ^id)
-    |> Repo.one()
-  end
-
-  defp query_by_tool(preload) do
+  def get_by_info!(info_id, preload) do
     from(assignment in Assignment.Model,
-      join: experiment in Assignment.ExperimentModel,
-      on: assignment.assignable_experiment_id == experiment.id,
+      where: assignment.info_id == ^info_id,
+      preload: ^preload
+    )
+    |> Repo.one!()
+  end
+
+  def get_by_workflow(workflow, preload \\ [])
+
+  def get_by_workflow(%Workflow.Model{id: id}, preload), do: get_by_workflow(id, preload)
+
+  def get_by_workflow(workflow_id, preload) do
+    from(assignment in Assignment.Model,
+      where: assignment.workflow_id == ^workflow_id,
+      preload: ^preload
+    )
+    |> Repo.one()
+  end
+
+  def get_by_tool_ref(workflow, preload \\ [])
+
+  def get_by_tool_ref(%Project.ToolRefModel{id: id}, preload), do: get_by_tool_ref(id, preload)
+
+  def get_by_tool_ref(tool_ref_id, preload) do
+    query_by_tool_ref(tool_ref_id, preload)
+    |> Repo.one()
+  end
+
+  def get_by_tool(tool, preload \\ [])
+
+  def get_by_tool(%{id: id} = tool, preload) do
+    field_name = Project.ToolRefModel.tool_id_field(tool)
+
+    query_by_tool(field_name, id, preload)
+    |> Repo.one()
+  end
+
+  def query_by_tool(field_name, id, preload) do
+    from(assignment in Assignment.Model,
+      join: workflow in Workflow.Model,
+      on: workflow.id == assignment.workflow_id,
+      join: workflow_item in Workflow.ItemModel,
+      on: workflow_item.workflow_id == workflow.id,
+      join: tool_ref in Project.ToolRefModel,
+      on: tool_ref.id == workflow_item.tool_ref_id,
+      where: field(tool_ref, ^field_name) == ^id,
+      preload: ^preload
+    )
+  end
+
+  def query_by_tool_ref(tool_ref_id, preload) do
+    from(assignment in Assignment.Model,
+      join: workflow in Workflow.Model,
+      on: workflow.id == assignment.workflow_id,
+      join: workflow_item in Workflow.ItemModel,
+      on: workflow_item.workflow_id == workflow.id,
+      join: tool_ref in Project.ToolRefModel,
+      on: tool_ref.id == ^tool_ref_id,
       preload: ^preload
     )
   end
@@ -97,33 +130,62 @@ defmodule Systems.Assignment.Public do
     |> Repo.all()
   end
 
-  def create(%{} = attrs, crew, experiment, budget, auth_node) do
-    assignable_field = assignable_field(experiment)
-
+  def prepare(%{} = attrs, crew, info, workflow, budget, auth_node) do
     %Assignment.Model{}
     |> Assignment.Model.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:info, info)
+    |> Ecto.Changeset.put_assoc(:workflow, workflow)
     |> Ecto.Changeset.put_assoc(:crew, crew)
-    |> Ecto.Changeset.put_assoc(assignable_field, experiment)
     |> Ecto.Changeset.put_assoc(:budget, budget)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
-    |> Repo.insert()
+  end
+
+  def prepare_info(%{} = attrs) do
+    %Assignment.InfoModel{}
+    |> Assignment.InfoModel.changeset(:create, attrs)
+  end
+
+  def prepare_workflow(special, items, type \\ :single_task) do
+    %Workflow.Model{}
+    |> Workflow.Model.changeset(%{type: type, special: special})
+    |> Ecto.Changeset.put_assoc(:items, items)
+  end
+
+  def prepare_workflow_item(tool_ref) do
+    %Workflow.ItemModel{}
+    |> Workflow.ItemModel.changeset(%{})
+    |> Ecto.Changeset.put_assoc(:tool_ref, tool_ref)
   end
 
   def copy(
         %Assignment.Model{} = assignment,
+        %Assignment.InfoModel{} = info,
+        %Workflow.Model{} = workflow,
         %Budget.Model{} = budget,
-        %Assignment.ExperimentModel{} = experiment,
         auth_node
       ) do
     # don't copy crew, just create a new one
-    {:ok, crew} = Crew.Public.create(auth_node)
+    crew = Crew.Public.prepare(auth_node)
 
     %Assignment.Model{}
     |> Assignment.Model.changeset(Map.from_struct(assignment))
+    |> Ecto.Changeset.put_assoc(:info, info)
+    |> Ecto.Changeset.put_assoc(:workflow, workflow)
     |> Ecto.Changeset.put_assoc(:budget, budget)
     |> Ecto.Changeset.put_assoc(:crew, crew)
-    |> Ecto.Changeset.put_assoc(:assignable_experiment, experiment)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Repo.insert!()
+  end
+
+  def copy_info(%Assignment.InfoModel{} = info) do
+    %Assignment.InfoModel{}
+    |> Assignment.InfoModel.changeset(:copy, Map.from_struct(info))
+    |> Repo.insert!()
+  end
+
+  def copy_workflow(%Workflow.Model{} = workflow) do
+    %Workflow.Model{}
+    |> Workflow.Model.changeset(Map.from_struct(workflow))
     |> Repo.insert!()
   end
 
@@ -147,78 +209,17 @@ defmodule Systems.Assignment.Public do
     |> Repo.update!()
   end
 
-  def update_experiment(changeset) do
-    Multi.new()
-    |> Repo.multi_update(:experiment, changeset)
-    |> Multi.run(:dispatch, fn _, %{experiment: experiment} ->
-      Signal.Public.dispatch!(:experiment_updated, experiment)
-      {:ok, true}
-    end)
-    |> Repo.transaction()
+  def is_owner?(assignment, user) do
+    Core.Authorization.user_has_role?(user, assignment, :owner)
   end
 
-  def create_experiment(%{} = attrs, tool, auth_node) do
-    tool_field = Assignment.ExperimentModel.tool_field(tool)
-
-    %Assignment.ExperimentModel{}
-    |> Assignment.ExperimentModel.changeset(:create, attrs)
-    |> Ecto.Changeset.put_assoc(tool_field, tool)
-    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
-    |> Repo.insert()
-  end
-
-  def copy_experiment(
-        %Assignment.ExperimentModel{} = experiment,
-        %Survey.ToolModel{} = tool,
-        auth_node
-      ) do
-    %Assignment.ExperimentModel{}
-    |> Assignment.ExperimentModel.changeset(:copy, Map.from_struct(experiment))
-    |> Ecto.Changeset.put_assoc(:survey_tool, tool)
-    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
-    |> Repo.insert!()
-  end
-
-  def copy_experiment(
-        %Assignment.ExperimentModel{} = experiment,
-        %Lab.ToolModel{} = tool,
-        auth_node
-      ) do
-    %Assignment.ExperimentModel{}
-    |> Assignment.ExperimentModel.changeset(:copy, Map.from_struct(experiment))
-    |> Ecto.Changeset.put_assoc(:lab_tool, tool)
-    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
-    |> Repo.insert!()
-  end
-
-  def copy_tool(
-        %Assignment.ExperimentModel{survey_tool: %{auth_node: tool_auth_node} = tool},
-        experiment_auth_node
-      ) do
-    tool_auth_node = Authorization.copy(tool_auth_node, experiment_auth_node)
-    Survey.Public.copy(tool, tool_auth_node)
-  end
-
-  def copy_tool(
-        %Assignment.ExperimentModel{lab_tool: %{auth_node: tool_auth_node} = tool},
-        experiment_auth_node
-      ) do
-    tool_auth_node = Authorization.copy(tool_auth_node, experiment_auth_node)
-    Lab.Public.copy(tool, tool_auth_node)
-  end
-
-  def delete_tool(multi, %{survey_tool: tool}) when not is_nil(tool) do
-    multi |> Utility.EctoHelper.delete(:survey_tool, tool)
-  end
-
-  def delete_tool(multi, %{lab_tool: %{time_slots: time_slots} = tool}) when not is_nil(tool) do
-    multi
-    |> Utility.EctoHelper.delete(:lab_time_slots, Lab.TimeSlotModel, time_slots)
-    |> Utility.EctoHelper.delete(:lab_tool, tool)
+  def add_owner!(assignment, user) do
+    :ok = Core.Authorization.assign_role(user, assignment, :owner)
   end
 
   def owner!(%Assignment.Model{} = assignment), do: parent_owner!(assignment)
-  def owner!(%Assignment.ExperimentModel{} = experiment), do: parent_owner!(experiment)
+  def owner!(%Workflow.Model{} = workflow), do: parent_owner!(workflow)
+  def owner!(%Workflow.ItemModel{} = item), do: parent_owner!(item)
 
   def assign_tester_role(tool, user) do
     %{crew: crew} = get_by_tool(tool, [:crew])
@@ -241,25 +242,48 @@ defmodule Systems.Assignment.Public do
     |> Authorization.first_user_with_role(:owner, [])
   end
 
-  def expiration_timestamp(%{assignable_experiment: experiment}) do
-    duration = Assignment.ExperimentModel.duration(experiment)
+  def expiration_timestamp(%{info: info}) do
+    duration = Assignment.InfoModel.duration(info)
     timeout = max(@min_expiration_timeout, duration)
 
     Timestamp.naive_from_now(timeout)
   end
 
+  def status(%{crew: crew}, user) do
+    statuses =
+      Crew.Public.list_tasks_for_user(crew, user)
+      |> Enum.map(& &1.status)
+
+    cond do
+      Enum.member?(statuses, :rejected) -> :rejected
+      Enum.member?(statuses, :pending) -> :pending
+      Enum.member?(statuses, :completed) -> :completed
+      true -> :accepted
+    end
+  end
+
+  def timestamp(%{crew: crew}, user) do
+    crew
+    |> Crew.Public.list_tasks_for_user(user)
+    |> List.first()
+    |> timestamp()
+  end
+
+  def timestamp(%{updated_at: updated_at}), do: updated_at
+  def timestamp(_), do: nil
+
   def member?(%{crew: crew}, user) do
     Crew.Public.member?(crew, user)
   end
 
-  def apply_member(id, user, reward_amount) when is_number(id) do
+  def apply_member(id, user, identifier, reward_amount) when is_number(id) do
     get!(id, [:crew])
-    |> apply_member(user, reward_amount)
+    |> apply_member(user, identifier, reward_amount)
   end
 
-  def apply_member(%{crew: crew} = assignment, user, reward_amount) do
+  def apply_member(%{crew: crew} = assignment, user, identifier, reward_amount) do
     if Crew.Public.member?(crew, user) do
-      Crew.Public.get_member!(crew, user)
+      Crew.Public.get_member(crew, user)
     else
       expire_at = expiration_timestamp(assignment)
 
@@ -268,7 +292,7 @@ defmodule Systems.Assignment.Public do
         run_create_reward(assignment, user, reward_amount)
       end)
       |> Multi.run(:member, fn _, _ ->
-        run_apply_member(crew, user, expire_at)
+        run_apply_member(crew, user, identifier, expire_at)
       end)
       |> Repo.transaction()
     end
@@ -283,8 +307,8 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  def run_apply_member(%Crew.Model{} = crew, user, expire_at) do
-    case Crew.Public.apply_member(crew, user, expire_at) do
+  def run_apply_member(%Crew.Model{} = crew, user, identifier, expire_at) do
+    case Crew.Public.apply_member(crew, user, identifier, expire_at) do
       {:ok, %{member: member}} -> {:ok, member}
       {:error, error} -> {:error, error}
     end
@@ -294,7 +318,7 @@ defmodule Systems.Assignment.Public do
     if Crew.Public.member?(crew, user) do
       expire_at = expiration_timestamp(assignment)
 
-      Crew.Public.get_member!(crew, user)
+      Crew.Public.get_member(crew, user)
       |> Crew.Public.reset_member(expire_at)
     else
       Logger.warn("Unable to reset, user #{user.id} is not a member on crew #{crew.id}")
@@ -303,18 +327,18 @@ defmodule Systems.Assignment.Public do
 
   def reject_task(
         %Assignment.Model{} = assignment,
-        %Crew.TaskModel{member: %{user: user}} = task,
+        %Crew.TaskModel{} = task,
         rejection
       ) do
+    [user] = Authorization.users_with_role(assignment, :owner)
+
     Multi.new()
     |> Crew.Public.reject_task(task, rejection)
     |> rollback_deposit(assignment, user)
     |> Repo.transaction()
   end
 
-  def cancel(%Assignment.Model{} = assignment, user) do
-    crew = get_crew(assignment)
-
+  def cancel(%Assignment.Model{crew: crew} = assignment, user) do
     Multi.new()
     |> Crew.Public.cancel(crew, user)
     |> rollback_deposit(assignment, user)
@@ -325,50 +349,38 @@ defmodule Systems.Assignment.Public do
     get!(id) |> cancel(user)
   end
 
-  def lock_task(%{crew: crew} = _assignment, user) do
-    if Crew.Public.member?(crew, user) do
-      member = Crew.Public.get_member!(crew, user)
-      task = Crew.Public.get_task(crew, member)
+  def get_task(tool, identifier) do
+    %{crew: crew} = Assignment.Public.get_by_tool(tool, [:crew])
+    Crew.Public.get_task(crew, identifier)
+  end
+
+  def lock_task(tool, identifier) do
+    if task = get_task(tool, identifier) do
       Crew.Public.lock_task(task)
     else
-      Logger.warn("Can not lock task for non member")
+      Logger.warn("Can not lock task")
     end
   end
 
   def apply_member_and_activate_task(
         %Assignment.Model{crew: crew} = assignment,
         %User{} = user,
+        [_ | _] = identifier,
         reward_amount
       )
       when is_integer(reward_amount) do
-    member =
-      if Crew.Public.member?(crew, user) do
-        Crew.Public.get_member!(crew, user)
-      else
-        case apply_member(assignment, user, reward_amount) do
-          {:ok, %{member: member}} -> member
-          _ -> nil
-        end
-      end
-
-    _activate_task(crew, member)
-  end
-
-  def activate_task(%Assignment.Model{crew: crew}, %User{} = user), do: activate_task(crew, user)
-
-  def activate_task(%Crew.Model{} = crew, %User{} = user) do
-    if Crew.Public.member?(crew, user) do
-      member = Crew.Public.get_member!(crew, user)
-      _activate_task(crew, member)
-    else
-      raise "Can not complete task for non member"
+    if not Crew.Public.member?(crew, user) do
+      apply_member(assignment, user, identifier, reward_amount)
     end
+
+    activate_task(crew, identifier)
   end
 
-  defp _activate_task(%Crew.Model{} = _crew, nil), do: nil
+  def activate_task(%Assignment.Model{crew: crew}, [_ | _] = identifier),
+    do: activate_task(crew, identifier)
 
-  defp _activate_task(%Crew.Model{} = crew, %Crew.MemberModel{} = member) do
-    Crew.Public.get_task(crew, member)
+  def activate_task(%Crew.Model{} = crew, [_ | _] = identifier) do
+    Crew.Public.get_task(crew, identifier)
     |> Crew.Public.activate_task!()
   end
 
@@ -391,6 +403,16 @@ defmodule Systems.Assignment.Public do
     |> Repo.exists?()
   end
 
+  def attention_list_enabled?(%{workflow: workflow}) do
+    [tool] = Workflow.Model.flatten(workflow)
+    Concept.ToolModel.attention_list_enabled?(tool)
+  end
+
+  def task_labels(%{workflow: workflow}) do
+    [tool] = Workflow.Model.flatten(workflow)
+    Concept.ToolModel.task_labels(tool)
+  end
+
   @doc """
   Is assignment open for new members?
   """
@@ -408,24 +430,14 @@ defmodule Systems.Assignment.Public do
     open_spot_count(assignment, type)
   end
 
-  defp open_spot_count(%{crew: crew, assignable_experiment: experiment}, :one_task) do
-    target = Assignment.ExperimentModel.spot_count(experiment)
+  defp open_spot_count(%{crew: crew, info: %{subject_count: subject_count}}, :single_task) do
     all_non_expired_tasks = Crew.Public.count_tasks(crew, Crew.TaskStatus.values())
-
-    max(0, target - all_non_expired_tasks)
+    max(0, subject_count - all_non_expired_tasks)
   end
 
-  defp assignment_type(_assignment) do
-    # Some logic (eg: open?) is depending on the type of assignment.
-    # Currently we only support the 1-task assignment: a member has one task todo.
-    # Other types will be:
-    #   N-tasks: a member can voluntaraly pick one or more tasks
-    #   all-tasks: a member has a batch of tasks todo
+  defp assignment_type(%{workflow: %{type: type}}), do: type
 
-    :one_task
-  end
-
-  def mark_expired_debug(%{assignable_experiment: %{duration: duration}} = assignment, force) do
+  def mark_expired_debug(%{info: %{duration: duration}} = assignment, force) do
     mark_expired_debug(assignment, duration, force)
   end
 
@@ -439,8 +451,8 @@ defmodule Systems.Assignment.Public do
         expired_pending_tasks_query(crew_id, expiration_timeout)
       end
 
-    member_ids = from(t in task_query, select: t.member_id)
-    member_query = from(m in Crew.MemberModel, where: m.id in subquery(member_ids))
+    task_ids = from(t in task_query, select: t.id)
+    member_query = Crew.Public.member_query(task_ids)
 
     Multi.new()
     |> Multi.update_all(:members, member_query, set: [expired: true])
@@ -488,83 +500,27 @@ defmodule Systems.Assignment.Public do
 
   # Assignable
 
-  def ready?(%{assignable_experiment: experiment}) do
-    ready?(experiment)
+  def ready?(%{workflow: workflow}) do
+    Workflow.Model.ready?(workflow)
   end
 
-  def ready?(%Assignment.ExperimentModel{} = experiment) do
-    changeset =
-      %Assignment.ExperimentModel{}
-      |> Assignment.ExperimentModel.operational_changeset(Map.from_struct(experiment))
-
-    changeset.valid? && tool_ready?(experiment)
+  def search_subject(%Assignment.Model{crew: crew}, %User{} = user) do
+    member = Crew.Public.get_member(crew, user)
+    tasks = Crew.Public.list_tasks_for_user(crew, member.user_id)
+    {member, tasks}
   end
 
-  def tool_ready?(%{survey_tool: tool}) when not is_nil(tool), do: Survey.Public.ready?(tool)
-  def tool_ready?(%{lab_tool: tool}) when not is_nil(tool), do: Lab.Public.ready?(tool)
-
-  defp assignable_field(%Assignment.ExperimentModel{}), do: :assignable_experiment
-
-  # Experiment
-
-  def get_experiment!(id, preload \\ []) do
-    from(a in Assignment.ExperimentModel, preload: ^preload)
-    |> Repo.get!(id)
+  def search_subject(%Assignment.Model{crew: crew}, public_id) do
+    member = Crew.Public.subject(crew, public_id)
+    tasks = Crew.Public.list_tasks_for_user(crew, member.user_id)
+    {member, tasks}
   end
 
-  def get_experiment_by_tool(%{id: tool_id} = tool, preload \\ []) do
-    tool_id_field = Assignment.ExperimentModel.tool_id_field(tool)
-    where = [{tool_id_field, tool_id}]
-
-    from(a in Assignment.ExperimentModel,
-      where: ^where,
-      preload: ^preload
-    )
-    |> Repo.one()
+  def search_subject(%{} = tool, user) do
+    search_subject(get_by_tool(tool, [:crew]), user)
   end
 
-  def attention_list_enabled?(%{assignable_experiment: %{survey_tool: tool}})
-      when not is_nil(tool),
-      do: true
-
-  def attention_list_enabled?(%{assignable_experiment: %{lab_tool: tool}}) when not is_nil(tool),
-    do: false
-
-  def task_labels(%{assignable_experiment: %{lab_tool: tool}}) when not is_nil(tool) do
-    %{
-      pending: dgettext("link-lab", "pending.label"),
-      participated: dgettext("link-lab", "participated.label")
-    }
-  end
-
-  def task_labels(%{assignable_experiment: %{survey_tool: tool}}) when not is_nil(tool) do
-    %{
-      pending: dgettext("link-survey", "pending.label"),
-      participated: dgettext("link-survey", "participated.label")
-    }
-  end
-
-  def search_subject(tool, %User{} = user) do
-    if experiment = get_experiment_by_tool(tool) do
-      %{crew: crew} = get_by_experiment!(experiment, [:crew])
-      member = Crew.Public.get_member!(crew, user)
-      task = Crew.Public.get_task(crew, member)
-      {member, task}
-    else
-      nil
-    end
-  end
-
-  def search_subject(tool, public_id) do
-    if experiment = get_experiment_by_tool(tool) do
-      %{crew: crew} = get_by_experiment!(experiment, [:crew])
-      member = Crew.Public.subject(crew, public_id)
-      task = Crew.Public.get_task(crew, member)
-      {member, task}
-    else
-      nil
-    end
-  end
+  def search_subject(nil, _), do: nil
 
   def expired_user_assignments(%NaiveDateTime{} = from) do
     from(a in Assignment.Model,
@@ -609,7 +565,8 @@ defmodule Systems.Assignment.Public do
     idempotence_key(assignment_id, user_id)
   end
 
-  def idempotence_key(assignment_id, user_id) do
+  def idempotence_key(assignment_id, user_id)
+      when is_integer(assignment_id) and is_integer(user_id) do
     "assignment=#{assignment_id},user=#{user_id}"
   end
 
@@ -621,14 +578,5 @@ defmodule Systems.Assignment.Public do
   def rewarded_amount(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
     idempotence_key = idempotence_key(assignment_id, user_id)
     Budget.Public.rewarded_amount(idempotence_key)
-  end
-end
-
-defimpl Core.Persister, for: Systems.Assignment.ExperimentModel do
-  def save(_model, changeset) do
-    case Systems.Assignment.Public.update_experiment(changeset) do
-      {:ok, %{experiment: experiment}} -> {:ok, experiment}
-      _ -> {:error, changeset}
-    end
   end
 end

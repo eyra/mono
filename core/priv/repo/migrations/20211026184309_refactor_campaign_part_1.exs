@@ -4,7 +4,7 @@ defmodule Core.Repo.Migrations.RefactorCampaignPromotionAssignment do
   import Ecto.Query, warn: false
 
   def up do
-    #Rename Studies -> Campaigns
+    # Rename Studies -> Campaigns
     rename_pkey(from: :studies, to: :campaigns)
     rename_fkey(from: :studies, to: :campaigns, field: :auth_node_id)
     rename_fkey(from: :study_id, to: :campaign_id, table: :authors)
@@ -14,7 +14,7 @@ defmodule Core.Repo.Migrations.RefactorCampaignPromotionAssignment do
     rename_fkey(from: :study_id, to: :campaign_id, table: :survey_tools)
     rename_table(from: :studies, to: :campaigns)
 
-    #Create Assignment
+    # Create Assignment
     create_assignment_table()
 
     # Add director field
@@ -25,10 +25,10 @@ defmodule Core.Repo.Migrations.RefactorCampaignPromotionAssignment do
     # Drop director field
     drop_directors()
 
-    #Drop Assignment
+    # Drop Assignment
     drop_assignment_table()
 
-    #Rename Campaigns -> Studies
+    # Rename Campaigns -> Studies
     rename_pkey(from: :campaigns, to: :studies)
     rename_fkey(from: :campaigns, to: :studies, field: :auth_node_id)
     rename_fkey(from: :campaign_id, to: :study_id, table: :authors)
@@ -76,29 +76,47 @@ defmodule Core.Repo.Migrations.RefactorCampaignPromotionAssignment do
   defp create_assignment_table do
     create table(:assignments) do
       add(:director, :string)
-      add(:assignable_survey_tool_id, references(:survey_tools, on_delete: :delete_all), null: true)
+
+      add(:assignable_survey_tool_id, references(:survey_tools, on_delete: :delete_all),
+        null: true
+      )
+
       add(:assignable_lab_tool_id, references(:lab_tools, on_delete: :delete_all), null: true)
-      add(:assignable_data_donation_tool_id, references(:data_donation_tools, on_delete: :delete_all), null: true)
+
+      add(
+        :assignable_data_donation_tool_id,
+        references(:data_donation_tools, on_delete: :delete_all),
+        null: true
+      )
+
       add(:crew_id, references(:crews, on_delete: :delete_all), null: true)
       add(:auth_node_id, references(:authorization_nodes), null: false)
       timestamps()
     end
-    create constraint(:assignments, :must_have_at_least_one_assignable, check:
-      """
-      assignable_survey_tool_id != null or
-      assignable_lab_tool_id != null or
-      assignable_data_donation_tool_id != null
-      """
+
+    create(
+      constraint(:assignments, :must_have_at_least_one_assignable,
+        check: """
+        assignable_survey_tool_id != null or
+        assignable_lab_tool_id != null or
+        assignable_data_donation_tool_id != null
+        """
+      )
     )
+
     flush()
+
     alter table(:campaigns) do
       add(:promotion_id, references(:promotions, on_delete: :delete_all), null: true)
       add(:promotable_assignment_id, references(:assignments, on_delete: :delete_all), null: true)
     end
-    create constraint(:campaigns, :must_have_at_least_one_promotable, check:
-      """
-      promotable_assignment_id != null
-      """
+
+    create(
+      constraint(:campaigns, :must_have_at_least_one_promotable,
+        check: """
+        promotable_assignment_id != null
+        """
+      )
     )
 
     alter table(:promotions) do
@@ -113,13 +131,15 @@ defmodule Core.Repo.Migrations.RefactorCampaignPromotionAssignment do
       modify(:plugin, :string, null: false)
     end
 
-    drop constraint(:campaigns, :must_have_at_least_one_promotable)
+    drop(constraint(:campaigns, :must_have_at_least_one_promotable))
+
     alter table(:campaigns) do
       remove(:promotion_id)
       remove(:promotable_assignment_id)
     end
-    drop constraint(:assignments, :must_have_at_least_one_assignable)
-    drop table(:assignments)
+
+    drop(constraint(:assignments, :must_have_at_least_one_assignable))
+    drop(table(:assignments))
   end
 
   defp rename_fkey(from: from_field, to: to_field, table: table_name) do
@@ -145,28 +165,22 @@ defmodule Core.Repo.Migrations.RefactorCampaignPromotionAssignment do
   end
 
   defp rename_table(from: from_table_name, to: to_table_name) do
-    execute(
-      """
-      ALTER TABLE #{from_table_name} RENAME TO #{to_table_name};
-      """
-    )
+    execute("""
+    ALTER TABLE #{from_table_name} RENAME TO #{to_table_name};
+    """)
   end
 
   defp rename_constraint(table, from, to) do
-    execute(
-      """
-      ALTER TABLE #{table} RENAME CONSTRAINT "#{from}" TO "#{to}";
-      """
-    )
+    execute("""
+    ALTER TABLE #{table} RENAME CONSTRAINT "#{from}" TO "#{to}";
+    """)
   end
 
   defp rename_field(table, from, to) do
-    execute(
-      """
-      ALTER TABLE #{table}
-      RENAME COLUMN #{from} TO #{to};
-      """
-    )
+    execute("""
+    ALTER TABLE #{table}
+    RENAME COLUMN #{from} TO #{to};
+    """)
   end
 
   @max_identifier_length 63
@@ -175,5 +189,4 @@ defmodule Core.Repo.Migrations.RefactorCampaignPromotionAssignment do
     |> Enum.join("_")
     |> String.slice(0, @max_identifier_length)
   end
-
 end

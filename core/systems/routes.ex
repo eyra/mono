@@ -13,8 +13,10 @@ defmodule Systems.Routes do
         :promotion,
         :pool,
         :lab,
-        :data_donation,
         :benchmark,
+        :feldspar,
+        :document,
+        :alliance,
         :budget
       ]
     end

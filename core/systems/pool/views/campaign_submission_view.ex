@@ -4,6 +4,7 @@ defmodule Systems.Pool.CampaignSubmissionView do
   alias Core.Enums.{Genders, DominantHands, NativeLanguages}
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
+  alias Frameworks.Concept.Directable
 
   alias Systems.{
     Campaign,
@@ -153,7 +154,7 @@ defmodule Systems.Pool.CampaignSubmissionView do
          criteria
        ) do
     inclusion_labels =
-      Systems.Director.get(pool).inclusion_criteria()
+      Directable.director(pool).inclusion_criteria()
       |> Enum.map(&get_inclusion_labels(&1, criteria))
       |> Map.new()
 

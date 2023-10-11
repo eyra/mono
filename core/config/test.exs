@@ -1,5 +1,8 @@
 import Config
 
+# Print only errors during test
+config :logger, level: :warn
+
 # Setup for MinIO
 config :ex_aws, :s3,
   scheme: "http://",
@@ -27,9 +30,6 @@ config :core, Core.Repo,
   pool_size: 10,
   queue_target: 5000
 
-# Print only warnings and errors during test
-config :logger, level: :warn
-
 # Reduce password hashing impact on test duration
 config :bcrypt_elixir,
   log_rounds: 4
@@ -54,3 +54,7 @@ config :core, Core.SurfConext, oidc_module: Core.SurfConext.FakeOIDC
 config :core, :bundle, :next
 
 config :core, :banking_backend, Systems.Banking.Dummy
+
+config :core, :feldspar,
+  backend: Systems.Feldspar.LocalFS,
+  local_fs_root_path: "/tmp"

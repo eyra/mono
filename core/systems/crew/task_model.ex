@@ -10,6 +10,7 @@ defmodule Systems.Crew.TaskModel do
   require Crew.RejectCategories
 
   schema "crew_tasks" do
+    field(:identifier, {:array, :string})
     field(:status, Ecto.Enum, values: Crew.TaskStatus.values())
     field(:started_at, :naive_datetime)
     field(:completed_at, :naive_datetime)
@@ -23,18 +24,23 @@ defmodule Systems.Crew.TaskModel do
     field(:rejected_message, :string)
 
     belongs_to(:crew, Crew.Model)
-    belongs_to(:member, Crew.MemberModel)
+    belongs_to(:auth_node, Core.Authorization.Node)
 
     timestamps()
   end
 
-  @fields ~w(status started_at completed_at expire_at expired accepted_at rejected_at rejected_category rejected_message)a
+  @fields ~w(identifier status started_at completed_at expire_at expired accepted_at rejected_at rejected_category rejected_message)a
+
+  defimpl Frameworks.GreenLight.AuthorizationNode do
+    def id(task), do: task.auth_node_id
+  end
 
   @doc false
   def changeset(task, attrs) do
     task
     |> cast(attrs, @fields)
-    |> validate_required([:status])
+    |> validate_required([:identifier, :status])
+    |> unique_constraint(:identifier)
   end
 
   def reset_attrs(expire_at) do

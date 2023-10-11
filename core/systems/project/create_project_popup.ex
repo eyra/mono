@@ -96,7 +96,7 @@ defmodule Systems.Project.CreatePopup do
     ~H"""
     <div>
       <Text.title3><%= @title %></Text.title3>
-      <.spacing value="XS" />
+      <.spacing value="S" />
       <.live_component
         module={Selector}
         id={:template_selector}

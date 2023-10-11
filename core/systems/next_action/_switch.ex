@@ -5,13 +5,11 @@ defmodule Systems.NextAction.Switch do
     NextAction
   }
 
-  def dispatch(:next_action_created, %{user: user, action: action}) do
-    %{created: action}
-    |> NextAction.Presenter.update(user.id, NextAction.OverviewPage)
+  def intercept({:next_action, :created}, %{user: user, action: _action}) do
+    NextAction.Presenter.update(user, user, NextAction.OverviewPage)
   end
 
-  def dispatch(:next_action_cleared, %{user: user, action_type: action_type}) do
-    %{cleared: action_type}
-    |> NextAction.Presenter.update(user.id, NextAction.OverviewPage)
+  def intercept({:next_action, :cleared}, %{user: user, action_type: _action_type}) do
+    NextAction.Presenter.update(user, user, NextAction.OverviewPage)
   end
 end

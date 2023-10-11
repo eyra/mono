@@ -64,7 +64,7 @@ defmodule Systems.Budget.FundingPage do
   defp update_campaigns(%{assigns: %{selected_budget: selected_budget} = assigns} = socket) do
     campaign_items =
       selected_budget
-      |> Campaign.Public.list_by_budget(Campaign.Model.preload_graph(:full))
+      |> Campaign.Public.list_by_budget(Campaign.Model.preload_graph(:down))
       |> Enum.map(&to_content_list_item(&1, assigns))
 
     socket |> assign(campaign_items: campaign_items)

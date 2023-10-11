@@ -1,7 +1,8 @@
 defmodule Systems.Assignment.Switch do
   use Frameworks.Signal.Handler
   require Logger
-  alias Core.Accounts
+
+  alias Core.Authorization
 
   alias Frameworks.{
     Signal
@@ -9,116 +10,140 @@ defmodule Systems.Assignment.Switch do
 
   alias Systems.{
     Assignment,
+    Workflow,
     Crew,
     NextAction
   }
 
-  def dispatch(
-        :crew_task_updated,
-        %{
-          data: %{status: old_status, member_id: member_id, crew_id: crew_id},
-          changes: %{status: new_status}
-        }
-      ) do
-    # crew does not have a director (yet), so check if assignment is available to handle signal
-    with [%{director: director} = assignment | _] <-
-           Assignment.Public.get_by_crew!(crew_id, budget: [:fund, :reserve, :currency]) do
-      %{user_id: user_id} = Crew.Public.get_member!(member_id)
-      user = Accounts.get_user!(user_id)
-
-      handle_next_action_check_rejection(old_status, new_status, assignment, user)
-
-      case new_status do
-        :accepted ->
-          Signal.Public.dispatch!(:assignment_accepted, %{
-            director: director,
-            assignment: assignment,
-            user: user
-          })
-
-        :rejected ->
-          Signal.Public.dispatch!(:assignment_rejected, %{
-            director: director,
-            assignment: assignment,
-            user: user
-          })
-
-        :pending ->
-          nil
-
-        :completed ->
-          Signal.Public.dispatch!(:assignment_completed, %{
-            director: director,
-            assignment: assignment,
-            user: user
-          })
-
-        _ ->
-          Logger.warning("Unknown crew task status: #{new_status}")
-      end
+  @impl true
+  def intercept({:workflow, _} = signal, %{workflow: workflow} = message) do
+    if assignment =
+         Assignment.Public.get_by_workflow(workflow, Assignment.Model.preload_graph(:down)) do
+      dispatch!(
+        {:assignment, signal},
+        Map.merge(message, %{assignment: assignment})
+      )
     end
   end
 
-  def dispatch(:crew_task_updated, _task_changeset), do: :noop
+  @impl true
+  def intercept({:assignment_info, _} = signal, %{info: info} = message) do
+    if assignment = Assignment.Public.get_by_info!(info, Assignment.Model.preload_graph(:down)) do
+      handle(
+        {:assignment, signal},
+        Map.merge(message, %{assignment: assignment})
+      )
+    end
+  end
 
-  def dispatch(:lab_reservations_cancelled, %{tool: tool, user: user}) do
+  @impl true
+  def intercept({:assignment, _} = signal, message) do
+    handle(signal, message)
+  end
+
+  def intercept({:crew_task, _} = signal, %{crew_task: %{crew_id: crew_id}} = message) do
+    Assignment.Public.list_by_crew(crew_id, Assignment.Model.preload_graph(:down))
+    |> Enum.each(
+      &dispatch!(
+        {:assignment, signal},
+        Map.merge(message, %{assignment: &1})
+      )
+    )
+  end
+
+  def intercept({:lab_tool, :reservations_cancelled}, %{tool: tool, user: user}) do
     # reset the membership (with new expiration time), so user has time to reserve a spot on a different time slot
-    if experiment = Assignment.Public.get_experiment_by_tool(tool) do
-      experiment
-      |> Assignment.Public.get_by_assignable([:crew])
-      |> Assignment.Public.reset_member(user)
-
-      handle(:lab_tool_updated, tool)
+    if assignment = Assignment.Public.get_by_tool(tool, [:crew]) do
+      Assignment.Public.reset_member(assignment, user)
     end
   end
 
-  def dispatch(:lab_reservation_created, %{tool: tool, user: user}) do
-    if experiment = Assignment.Public.get_experiment_by_tool(tool) do
-      experiment
-      |> Assignment.Public.get_by_assignable([:crew])
-      |> Assignment.Public.lock_task(user)
-
-      handle(:lab_tool_updated, tool)
+  def intercept({:lab_tool, :reservation_created}, %{tool: tool, user: user}) do
+    if Assignment.Public.get_by_tool(tool) do
+      Assignment.Public.lock_task(tool, user)
     end
   end
 
-  def dispatch(signal, %{director: :assignment} = object) do
+  def intercept(signal, %{director: :assignment} = object) do
     handle(signal, object)
   end
 
-  def handle(:survey_tool_updated, tool), do: handle(:tool_updated, tool)
-  def handle(:lab_tool_updated, tool), do: handle(:tool_updated, tool)
-  def handle(:data_donation_tool_updated, tool), do: handle(:tool_updated, tool)
+  defp handle({:assignment, event}, %{assignment: assignment} = message) do
+    with {:workflow_item, :deleted} <- event do
+      delete_crew_tasks(message)
+    end
 
-  def handle(:tool_updated, tool) do
-    experiment = Assignment.Public.get_experiment_by_tool(tool)
-    handle(:experiment_updated, experiment)
+    with {:crew_task, :accepted} <- event do
+      payout_participants(message)
+    end
+
+    with {:crew_task, _} <- event do
+      update_crew_task_next_action(message)
+    end
+
+    update_pages(assignment)
   end
 
-  def handle(:experiment_updated, experiment), do: handle(:assignable_updated, experiment)
-
-  def handle(:assignable_updated, assignable) do
-    assignment = Assignment.Public.get_by_assignable(assignable)
-    Signal.Public.dispatch!(:assignment_updated, assignment)
+  defp delete_crew_tasks(%{
+         assignment: %Assignment.Model{crew: crew} = assignment,
+         workflow_item: %Workflow.ItemModel{} = workflow_item
+       }) do
+    Assignment.Private.task_template(assignment, workflow_item)
+    |> then(&Crew.Public.list_tasks_by_template(crew, &1))
+    |> delete_crew_tasks()
   end
 
-  defp handle_next_action_check_rejection(
-         old_status,
-         new_status,
-         %{id: assignment_id} = _assignment,
-         user
-       ) do
+  defp delete_crew_tasks([_ | _] = tasks) do
+    Enum.each(tasks, &Crew.Public.delete_task/1)
+  end
+
+  defp delete_crew_tasks(_), do: nil
+
+  defp update_pages(%Assignment.Model{} = assignment) do
+    [
+      Assignment.CrewPage,
+      Assignment.ContentPage
+    ]
+    |> Enum.each(&update_page(&1, assignment))
+  end
+
+  defp update_page(page, model) do
+    dispatch!({:page, page}, %{id: model.id, model: model})
+  end
+
+  defp update_crew_task_next_action(%{
+         assignment: %{id: assignment_id},
+         changeset: %{
+           data: %{status: old_status, auth_node_id: auth_node_id},
+           changes: %{status: new_status}
+         }
+       }) do
+    users = Authorization.users_with_role(auth_node_id, :owner)
+
     opts = [key: "#{assignment_id}", params: %{id: assignment_id}]
 
     case {old_status, new_status} do
       {_, :rejected} ->
-        NextAction.Public.create_next_action(user, Assignment.CheckRejection, opts)
+        NextAction.Public.create_next_action(users, Assignment.CheckRejection, opts)
 
       {:rejected, _} ->
-        NextAction.Public.clear_next_action(user, Assignment.CheckRejection, opts)
+        NextAction.Public.clear_next_action(users, Assignment.CheckRejection, opts)
 
       _ ->
         nil
+    end
+  end
+
+  defp update_crew_task_next_action(_), do: nil
+
+  defp payout_participants(%{
+         assignment: assignment,
+         crew_task: crew_task,
+         changeset: %{data: %{status: old_status}}
+       }) do
+    if old_status != :accepted do
+      participants = Core.Authorization.users_with_role(crew_task, :owner)
+      Enum.each(participants, &Assignment.Public.payout_participant(assignment, &1))
     end
   end
 end

@@ -41,9 +41,15 @@ defmodule Systems.NextAction.Public do
   end
 
   @doc """
-  Creates a next action.
+  Creates a next action for the audience.
   """
-  def create_next_action(%User{} = user, action, opts \\ []) when is_atom(action) do
+  def create_next_action(audience, action, opts \\ [])
+
+  def create_next_action([_ | _] = users, action, opts) when is_atom(action) do
+    Enum.map(users, &create_next_action(&1, action, opts))
+  end
+
+  def create_next_action(%User{} = user, action, opts) when is_atom(action) do
     key = Keyword.get(opts, :key)
 
     conflict_target_fragment =
@@ -65,7 +71,7 @@ defmodule Systems.NextAction.Public do
       conflict_target: {:unsafe_fragment, conflict_target_fragment}
     )
     |> tap(
-      &Signal.Public.dispatch!(:next_action_created, %{
+      &Signal.Public.dispatch!({:next_action, :created}, %{
         action_type: action,
         user: user,
         action: &1,
@@ -74,7 +80,13 @@ defmodule Systems.NextAction.Public do
     )
   end
 
-  def clear_next_action(user, action, opts \\ []) do
+  def clear_next_action(audience, action, opts \\ [])
+
+  def clear_next_action([_ | _] = users, action, opts) do
+    Enum.map(users, &clear_next_action(&1, action, opts))
+  end
+
+  def clear_next_action(user, action, opts) do
     key = Keyword.get(opts, :key)
     action_string = to_string(action)
 
@@ -82,7 +94,11 @@ defmodule Systems.NextAction.Public do
     |> where_key_is(key)
     |> Repo.delete_all()
     |> tap(fn _ ->
-      Signal.Public.dispatch!(:next_action_cleared, %{user: user, action_type: action, key: key})
+      Signal.Public.dispatch!({:next_action, :cleared}, %{
+        user: user,
+        action_type: action,
+        key: key
+      })
     end)
   end
 

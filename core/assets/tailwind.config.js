@@ -50,7 +50,7 @@ module.exports = {
         "square-border-striped": "url('/images/square_border_striped.png')",
       },
       spacing: {
-        "1px": "1px",
+        aap: "1px",
         "2px": "2px",
         "3px": "3px",
         "5px": "5px",
@@ -75,7 +75,7 @@ module.exports = {
         "200px": "200px",
         "224px": "224px",
         "248px": "248px",
-        15: "60x",
+        15: "60px",
         30: "120px",
         34: "136px",
         35: "140px",
@@ -112,6 +112,7 @@ module.exports = {
         sheet: "760px",
         popup: "480px",
         "side-panel": "535px",
+        "left-column": "368px",
         "popup-sm": "520px",
         "popup-md": "730px",
         "popup-lg": "1228px",
@@ -239,7 +240,7 @@ module.exports = {
           paddingBottom: "constant(safe-area-inset-bottom)",
           paddingBottom: "env(safe-area-inset-bottom)",
         },
-        ".scrollbar-hide": {
+        ".scrollbar-hidden": {
           /* Firefox */
           "scrollbar-width": "thin",
 

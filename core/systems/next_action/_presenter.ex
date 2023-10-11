@@ -1,5 +1,5 @@
 defmodule Systems.NextAction.Presenter do
-  use Systems.Presenter
+  use Frameworks.Concept.Presenter
 
   alias Frameworks.Signal
 
@@ -8,28 +8,12 @@ defmodule Systems.NextAction.Presenter do
   }
 
   @impl true
-  def view_model(
-        %{presenter: Systems.NextAction.Presenter},
-        page,
-        %{current_user: user} = assigns
-      ) do
-    view_model(user.id, page, assigns)
+  def view_model(%Core.Accounts.User{} = user, NextAction.OverviewPage, _) do
+    %{next_actions: NextAction.Public.list_next_actions(user)}
   end
 
-  @impl true
-  def view_model(user_id, NextAction.OverviewPage, %{current_user: user})
-      when is_number(user_id) do
-    %{
-      next_actions: NextAction.Public.list_next_actions(user)
-    }
-  end
-
-  def update(model, id, page) do
-    Signal.Public.dispatch!(%{page: page}, %{
-      id: id,
-      model: model |> Map.put(:presenter, __MODULE__)
-    })
-
+  def update(model, %Core.Accounts.User{id: id}, page) do
+    Signal.Public.dispatch!({:page, page}, %{id: id, model: model})
     model
   end
 end

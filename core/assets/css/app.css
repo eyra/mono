@@ -127,37 +127,3 @@
   src: url("../static/fonts/Finador-BlackOblique.woff2") format("woff2"),
     url("../static/fonts/Finador-BlackOblique.woff") format("woff");
 }
-
-.data-donation-extraction-results tbody tr:nth-child(even) {
-  background-color: #fafafa;
-}
-
-.data-donation-extraction-results thead {
-  background-color: #fafafa;
-}
-
-.data-donation-extraction-results thead tr {
-  font-family: "Finador-Bold";
-  font-size: 18px;
-}
-
-.data-donation-extraction-results tbody tr {
-  font-family: "Finador-Regular";
-  font-size: 14px;
-}
-
-.data-donation-extraction-results thead tr td,
-th {
-  padding-top: 9px;
-  padding-bottom: 9px;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-.data-donation-extraction-results tbody tr td,
-th {
-  padding-top: 7px;
-  padding-bottom: 7px;
-  padding-left: 10px;
-  padding-right: 10px;
-}

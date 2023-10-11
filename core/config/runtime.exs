@@ -83,11 +83,17 @@ if config_env() == :prod do
     config :core, :azure_storage_backend, sas_token: sas_token
   end
 
-  config :core, Core.Repo,
-    username: System.get_env("DB_USER"),
-    password: System.get_env("DB_PASS"),
-    database: System.get_env("DB_NAME"),
-    hostname: System.get_env("DB_HOST")
+  database_url = System.get_env("DB_URL")
+
+  if database_url do
+    config :core, Core.Repo, url: database_url
+  else
+    config :core, Core.Repo,
+      username: System.get_env("DB_USER"),
+      password: System.get_env("DB_PASS"),
+      database: System.get_env("DB_NAME"),
+      hostname: System.get_env("DB_HOST")
+  end
 
   config :core, GoogleSignIn,
     redirect_uri: "https://#{host}/google-sign-in/auth",
@@ -117,4 +123,16 @@ if config_env() == :prod do
     private_key: System.get_env("WEB_PUSH_PRIVATE_KEY")
 
   config :logger, level: System.get_env("LOG_LEVEL", "info") |> String.to_existing_atom()
+
+  config :sentry,
+    dsn: System.get_env("SENTRY_DSN"),
+    environment_name: System.get_env("RELEASE_ENV") || "prod"
+
+  config :core, :feldspar,
+    backend: Systems.Feldspar.S3,
+    bucket: System.get_env("FELDSPAR_S3_BUCKET"),
+    prefix: System.get_env("FELDSPAR_S3_PREFIX", ""),
+    # The public URL must point to the root's (bucket) publicly accessible URL.
+    # It should have a policy that allows anonymous users to read all files.
+    public_url: System.get_env("FELDSPAR_S3_PUBLIC_URL")
 end

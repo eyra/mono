@@ -75,10 +75,10 @@
 				<div class="row max-height">
 					<div class="align-self-center bottom-padding-0 offset-md-1 col-md-10">
 						<h2 class="mg-md h2-style h2-bloc-2-style text-md-center mx-auto btn-resize-mode d-lg-none d-xl-none d-block">
-							Co-creating sustainable research infrastructure
+							Co-creating Sustainable Software-as-a-Service Solutions
 						</h2>
 						<h2 class="mg-md h2-style h2-bloc-2-style text-md-center mx-auto btn-resize-mode d-lg-block   d-none">
-							Co-creating sustainable research infrastructure
+							Co-creating Sustainable Software-as-a-Service Solutions
 						</h2>
 					</div>
 				</div>
@@ -109,11 +109,14 @@
 						</div>
 						<div class=" card-content">
 							<h3 class="mg-md h3-heading-3-style text-lg-left ">
-								Eyra Link
+								Link
 							</h3>
 							<p class="p-projects-style">
-								In collaboration with the VU, UvA and SURF, we are developing a sustainable online participant recruitment platform for social sciences and humanities research.<br><br>Funded by the PDI-SSH.<br>
+								A participant recruitment software service for Panl, enabling Dutch people to participate in social sciences and humanities research, developed in collaboration with the VU, UvA and SURF.<br><br>Funded by the VU and PDI-SSH.<br>
 							</p>
+							<div>
+								<a href="https://eyra.notion.site/Link-490a4e1127714ed0b356e8668ca1af94?pvs=4" class="btn btn-sm btn-footer btn-d">Read more</a>
+							</div>
 							<div style="display:flex">
 								<img src="./landing_page/img/vu.svg" class="img-fluid rounded-circle float-lg-none partner-icon partner-icon-uva" alt="vu" />
 								<img src="./landing_page/img/uva.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uva" />
@@ -135,11 +138,14 @@
 						</div>
 						<div class=" card-content">
 							<h3 class="mg-md h3-heading-3-style text-lg-left ">
-								Eyra Port
+								Port
 							</h3>
 							<p class="p-projects-style">
-								In collaboration with the UU and UvA we are working on a tool that enables citizens to easily and safely donate their data from social media platforms like Instagram or Google for research. <br><br>Funded by the UU and PDI-SSH.
+								A data donation software service that enables people to donate their digital trace data (e.g. from Google or Instagram) for research, developed in collaboration with the UU and UvA (D3I Consortium).<br><br>Funded by the UU and PDI-SSH.
 							</p>
+							<div>
+								<a href="https://eyra.notion.site/Port-4bbf0bbc466547af95f05c609405c4b2?pvs=4" class="btn btn-sm btn-footer btn-d">Read more</a>
+							</div>
 							<div style="display:flex">
 								<img src="./landing_page/img/uu.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uu" />
 								<img src="./landing_page/img/uva.svg" class="img-fluid rounded-circle float-lg-none partner-icon" alt="uva" />
@@ -160,11 +166,18 @@
 						</div>
 						<div class=" card-content">
 							<h3 class="mg-md h3-heading-3-style text-lg-left ">
-								Eyra&nbsp;Next
+								Rank
 							</h3>
 							<p class="p-projects-style">
-								A sustainable science dissemination platform that empowers transparent scientific practice and enables everyone to monitor the state-of-the-art in science. <br><br>Funded by Eyra.
-							</p><img src="./landing_page/img/eyra-logo.svg" class="img-fluid rounded-circle float-lg-none img-eyra-lo-style" alt="eyra logo" />
+								A software service for benchmarking that supports the organisation of challenges for the direct comparison of various social sciences models, developed in collaboration with the RUG and ODISSEI.<br><br>Funded by the RUG and ODISSEI.
+							</p>
+							<div>
+								<a href="https://eyra.notion.site/Rank-51f5dc6529704fbcb6b86ead5565e3b4?pvs=4" class="btn btn-sm btn-footer btn-d">Read more</a>
+							</div>
+							<div style="display:flex">
+								<img src="./landing_page/img/rug.png" class="img-fluid rounded-circle float-lg-none partner-icon" alt="rug" />
+								<img src="./landing_page/img/odissei.png" class="img-fluid rounded-circle float-lg-none partner-icon" alt="odissei" />
+							</div>
 						</div>
 					</div>
 				</div>
@@ -174,12 +187,49 @@
 </div>
 <!-- projects END -->
 
+<!-- Next platform banner -->
+<div class="bloc tc-5883 none content-bloc-style full-width-bloc bgc-jonquil banner-padding" id="banner">
+	<div class="container ">
+		<div class="row voffset-clear-sm">
+			<div class="col-lg-12 col-md-12">
+				<h6 class="h6-style tc-dark-jungle-green mg-lg float-md-none text-md-center text-sm-center">
+					Next Platform
+				</h6>
+				<h2 class="text-lg-center text-md-center mx-auto d-block mg-md text-sm-center text-center mg-md-xs h2-style h2-services-style text-grey1 ">
+					An open source software-as-a-service <span class="text-span-services-color span-bold">integration hub</span>. Each project adds to and benefits from high quality <span class="text-span-services-color span-bold">reusable modules</span> in the Next codebase.<br>
+				</h2>
+				<div class="row no-gutters row-connect-style">
+					<div class="col-lg-4 offset-lg-1 offset-md-1 col-md-5">
+						<div class="row">
+							<div class="col offset-lg-0">
+								<br>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-5 col-lg-2">
+						<a href="https://eyra.notion.site/Next-Platform-ec86811b5a98460fa05c6faa7e3adff4?pvs=4" class="btn btn-sm btn-footer btn-d">Read more</a>
+					</div>
+					<div class="col-lg-2 offset-md-1 col-md-5 offset-lg-0">
+						<br>
+					</div>
+					<div class="col-lg-2 col-md-5">
+						<br>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Next platform banner END -->
+
+
 <!-- team -->
 <div class="bloc content-bloc-style l-bloc" id="team">
 	<div class="container ">
 		<div class="row voffset-clear-md">
 			<div class="col">
 				<h3 class="mg-md text-lg-center float-lg-none h3-style tc-dark-jungle-green">
+					Team
 				</h3>
 			</div>
 		</div>
@@ -279,7 +329,7 @@
 					Open Science
 				</h6>
 				<h2 class="text-lg-center text-md-center mx-auto d-block mg-md text-sm-center text-center mg-md-xs h2-style h2-services-style text-grey1 ">
-					”We work towards a world in which the current state of&nbsp;<span class="text-span-services-color span-bold">human knowledge</span>&nbsp;is available to all of humankind, so anyone can&nbsp;<span class="text-span-0-color span-bold">learn</span>&nbsp;from and&nbsp;<span class="text-span-0-services-color span-bold">build</span>&nbsp;upon previous knowledge.”<br>
+					”We work towards a world in which <span class="text-span-services-color span-bold">anyone</span> can quickly gain insights from the current state of <span class="text-span-services-color span-bold">human knowledge</span>, to contribute to the world in their own <span class="text-span-services-color span-bold">unique</span> way.”<br>
 				</h2>
 			</div>
 		</div>
@@ -341,7 +391,7 @@
 							We are part of&nbsp;Apollo 14&nbsp;<br>
 						</h3>
 						<h4 class="mg-md h4-apollo-style text-md-left text-sm-left text-left mg-lg-xs mg-lg-sm mg-lg-md">
-							Home for startups that innovate for a better world
+							Home for entrepreneurs who innovate for a better world
 						</h4><a href="http://apollo14.nl" class="btn btn-d cta-btn-apollo float-lg-none btn-lg">Find out more</a>
 					</div>
 				</div>
@@ -398,7 +448,7 @@
 			<div class="offset-lg-0 col-lg-4 bottom-spacing-32">
 				<img src="./landing_page/img/logo-eyra-text-white.svg" class="img-fluid float-lg-none img-footer-style" alt="logo 200" />
 				<p class="p-footer-style mx-auto d-block p-6-style text-lg-left text-md-left text-sm-left text-left mg-clear">
-					Eyra Leap B.V. - KvK 77867513<br>Eyra Co B.V. - KvK 77860179<br>Eyra Nova - KvK 77928997<br>
+					Eyra Leap B.V.<br>KvK 77867513<br>
 				</p>
 			</div>
 			<div class="col-lg-3">

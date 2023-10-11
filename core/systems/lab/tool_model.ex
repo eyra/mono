@@ -6,6 +6,7 @@ defmodule Systems.Lab.ToolModel do
   require Core.Enums.Themes
 
   import Ecto.Changeset
+  import CoreWeb.Gettext
 
   schema "lab_tools" do
     belongs_to(:auth_node, Core.Authorization.Node)
@@ -16,7 +17,7 @@ defmodule Systems.Lab.ToolModel do
       on_delete: :delete_all
     )
 
-    field(:director, Ecto.Enum, values: [:campaign])
+    field(:director, Ecto.Enum, values: [:assignment])
 
     timestamps()
   end
@@ -30,7 +31,7 @@ defmodule Systems.Lab.ToolModel do
   @impl true
   def operational_validation(changeset), do: changeset
 
-  def preload_graph(:full),
+  def preload_graph(:down),
     do:
       preload_graph([
         :auth_node,
@@ -46,13 +47,56 @@ defmodule Systems.Lab.ToolModel do
 
   def changeset(tool, :auto_save, params) do
     tool
-    |> cast(params, @fields)
-    |> validate_required(@required_fields)
+    |> changeset(params)
+    |> validate()
   end
 
   def changeset(tool, _, params) do
     tool
+    |> changeset(params)
     |> cast(params, [:director])
+  end
+
+  def changeset(tool, params) do
+    tool
     |> cast(params, @fields)
+  end
+
+  def validate(changeset) do
+    changeset
+    |> validate_required(@required_fields)
+  end
+
+  def ready?(tool) do
+    changeset =
+      changeset(tool, %{})
+      |> validate()
+
+    changeset.valid?()
+  end
+
+  defimpl Frameworks.Concept.ToolModel do
+    alias Systems.Lab
+    def key(_), do: :lab
+    def auth_tree(%{auth_node: auth_node}), do: auth_node
+    def apply_label(_), do: dgettext("link-lab", "apply.cta.title")
+    def open_label(_), do: dgettext("link-lab", "open.cta.title")
+    def ready?(tool), do: Lab.ToolModel.ready?(tool)
+    def form(_), do: Lab.Form
+    def launcher(_), do: %{function: fn _ -> nil end, props: %{}}
+
+    def task_labels(_) do
+      %{
+        pending: dgettext("link-lab", "pending.label"),
+        participated: dgettext("link-lab", "participated.label")
+      }
+    end
+
+    def attention_list_enabled?(_t), do: false
+    def group_enabled?(_t), do: true
+  end
+
+  defimpl Frameworks.Concept.Directable do
+    def director(%{director: director}), do: Frameworks.Utility.Module.get(director, "Director")
   end
 end

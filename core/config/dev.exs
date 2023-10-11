@@ -23,7 +23,7 @@ config :core, Core.Repo,
 config :core, CoreWeb.Endpoint,
   reloadable_compilers: [:elixir],
   force_ssl: false,
-  debug_errors: false,
+  debug_errors: true,
   code_reloader: true,
   check_origin: false,
   live_reload: [
@@ -41,7 +41,7 @@ config :core, CoreWeb.Endpoint,
       "node_modules/webpack/bin/webpack.js",
       "--mode",
       "development",
-      "--watch-stdin",
+      "--watch",
       cd: Path.expand("../assets", __DIR__)
     ]
   ]
@@ -74,7 +74,8 @@ config :core, :apns_backend, Core.APNS.LoggingBackend
 config :core,
        :static_path,
        File.cwd!()
-       |> Path.join("tmp")
+       |> Path.join("priv")
+       |> Path.join("static")
        |> Path.join("uploads")
        |> tap(&File.mkdir_p!/1)
 
@@ -95,6 +96,15 @@ config :core,
 config :ex_aws,
   access_key_id: "my_access_key",
   secret_access_key: "a_super_secret"
+
+config :core, :feldspar,
+  backend: Systems.Feldspar.LocalFS,
+  local_fs_root_path:
+    File.cwd!()
+    |> Path.join("priv")
+    |> Path.join("static")
+    |> Path.join("feldspar_apps")
+    |> tap(&File.mkdir_p!/1)
 
 try do
   import_config "dev.secret.exs"

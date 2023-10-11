@@ -26,12 +26,11 @@ import "./100vh-fix";
 import { ViewportResize } from "./viewport_resize";
 import { SidePanel } from "./side_panel";
 import { Toggle } from "./toggle";
+import { Cell } from "./cell";
 import { LiveContent, LiveField } from "./live_content";
 import { Tabbar, TabbarItem, TabbarFooterItem } from "./tabbar";
-import { PythonUploader } from "./python_uploader";
 import { Clipboard } from "./clipboard";
-import { DataDonationHook } from "./data_donation_hook";
-import { Port } from "./port";
+import { FeldsparApp } from "./feldspar_app";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -96,15 +95,14 @@ let Hooks = {
   ViewportResize,
   SidePanel,
   Toggle,
+  Cell,
   LiveContent,
   LiveField,
   Tabbar,
   TabbarItem,
   TabbarFooterItem,
   NativeWrapper,
-  PythonUploader,
-  DataDonationHook,
-  Port,
+  FeldsparApp,
 };
 
 let liveSocket = new LiveSocket("/live", Socket, {

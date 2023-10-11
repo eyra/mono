@@ -15,6 +15,7 @@ defmodule Core.Authorization do
   require Logger
 
   import Ecto.Query
+  alias Ecto.Multi
   alias Core.Repo
   alias Frameworks.GreenLight
 
@@ -24,7 +25,7 @@ defmodule Core.Authorization do
 
   # Models
   grant_access(Systems.Campaign.Model, [:visitor, :member])
-  grant_access(Systems.Survey.ToolModel, [:owner, :coordinator, :participant])
+  grant_access(Systems.Questionnaire.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.Lab.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.DataDonation.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.Benchmark.SpotModel, [:owner])
@@ -42,8 +43,10 @@ defmodule Core.Authorization do
   grant_access(Systems.NextAction.OverviewPage, [:member])
   grant_access(Systems.Campaign.OverviewPage, [:researcher])
   grant_access(Systems.Campaign.ContentPage, [:owner])
+  grant_access(Systems.Assignment.CrewPage, [:participant, :tester])
+  grant_access(Systems.Assignment.ContentPage, [:owner])
   grant_access(Systems.Assignment.LandingPage, [:participant])
-  grant_access(Systems.Assignment.CallbackPage, [:participant, :tester])
+  grant_access(Systems.Alliance.CallbackPage, [:owner])
   grant_access(Systems.Lab.PublicPage, [:member])
   grant_access(Systems.Promotion.LandingPage, [:visitor, :member, :owner])
   grant_access(Systems.Pool.OverviewPage, [:researcher])
@@ -58,9 +61,10 @@ defmodule Core.Authorization do
   grant_access(Systems.DataDonation.OverviewPage, [:member])
   grant_access(Systems.Project.OverviewPage, [:researcher])
   grant_access(Systems.Project.NodePage, [:researcher, :owner])
-  grant_access(Systems.Project.ItemContentPage, [:researcher, :owner])
+  grant_access(Systems.Benchmark.ContentPage, [:researcher, :owner])
   grant_access(Systems.Benchmark.ToolPage, [:owner])
   grant_access(Systems.Benchmark.LeaderboardPage, [:visitor, :member])
+  grant_access(Systems.Feldspar.AppPage, [:visitor, :member])
 
   grant_access(CoreWeb.User.Signin, [:visitor])
   grant_access(CoreWeb.User.Signup, [:visitor])
@@ -71,9 +75,9 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.User.Profile, [:member])
   grant_access(CoreWeb.User.Settings, [:member])
   grant_access(CoreWeb.User.SecuritySettings, [:member])
-  grant_access(CoreWeb.FakeSurvey, [:member])
+  grant_access(CoreWeb.FakeQualtrics, [:member])
 
-  grant_actions(CoreWeb.FakeSurveyController, %{
+  grant_actions(CoreWeb.FakeAllianceController, %{
     index: [:visitor, :member]
   })
 
@@ -83,31 +87,49 @@ defmodule Core.Authorization do
 
   def get_node!(id), do: Repo.get!(Core.Authorization.Node, id)
 
-  def make_node(), do: %Core.Authorization.Node{}
-
-  def make_node(%Core.Authorization.Node{} = parent) do
-    %Core.Authorization.Node{parent_id: parent.id}
+  def prepare_node() do
+    %Core.Authorization.Node{}
   end
 
-  def make_node(nil), do: make_node()
+  def prepare_node(nil) do
+    %Core.Authorization.Node{}
+  end
 
-  def make_node(parent_id) when is_integer(parent_id) do
+  def prepare_node(roles) when is_list(roles) do
+    %Core.Authorization.Node{role_assignments: roles}
+  end
+
+  def prepare_node(parent_id) when is_integer(parent_id) do
     %Core.Authorization.Node{parent_id: parent_id}
   end
 
-  def make_node(parent) do
-    GreenLight.AuthorizationNode.id(parent) |> make_node
+  def prepare_node(%Core.Authorization.Node{id: parent_id}) do
+    %Core.Authorization.Node{parent_id: parent_id}
+  end
+
+  def prepare_node(principal, role) do
+    role = prepare_role(principal, role)
+    prepare_node([role])
+  end
+
+  def prepare_role(principal, role) when is_atom(role) do
+    principal_id = GreenLight.Principal.id(principal)
+
+    %Core.Authorization.RoleAssignment{
+      principal_id: principal_id,
+      role: :owner
+    }
   end
 
   def create_node(parent \\ nil) do
-    case make_node(parent) |> Core.Repo.insert() do
+    case prepare_node(parent) |> Core.Repo.insert() do
       {:ok, node} -> {:ok, node.id}
       error -> error
     end
   end
 
   def create_node!(parent \\ nil) do
-    case make_node(parent) |> Core.Repo.insert() do
+    case prepare_node(parent) |> Core.Repo.insert() do
       {:ok, node} -> node
       error -> error
     end
@@ -175,8 +197,8 @@ defmodule Core.Authorization do
     node_id |> parent_node_query |> Core.Repo.all()
   end
 
-  def roles_intersect?(principal, node_id, roles) do
-    nodes_query = node_id |> parent_node_query
+  def roles_intersect?(principal, entity, roles) do
+    nodes_query = entity |> parent_node_query
 
     from(ra in Core.Authorization.RoleAssignment,
       where:
@@ -256,5 +278,48 @@ defmodule Core.Authorization do
     entity
     |> get_parent_nodes()
     |> List.last()
+  end
+
+  def link(auth_tree) do
+    Multi.new()
+    |> link(auth_tree)
+    |> Repo.transaction()
+  end
+
+  def link(multi, {parent, [h | t]}) do
+    multi
+    |> link({parent, h})
+    |> link({parent, t})
+  end
+
+  def link(
+        multi,
+        {%Core.Authorization.Node{} = parent, {%Core.Authorization.Node{} = child, subtree}}
+      ) do
+    multi
+    |> link({parent, child})
+    |> link({child, subtree})
+  end
+
+  def link(multi, {%Core.Authorization.Node{} = parent, %Core.Authorization.Node{} = child}) do
+    link(multi, parent, child)
+  end
+
+  def link(multi, {_, _}), do: multi
+
+  def link(
+        multi,
+        %Core.Authorization.Node{} = parent,
+        %Core.Authorization.Node{parent: %Ecto.Association.NotLoaded{}} = child
+      ) do
+    link(multi, parent, Repo.preload(child, :parent))
+  end
+
+  def link(multi, %Core.Authorization.Node{} = parent, %Core.Authorization.Node{} = child) do
+    changeset =
+      Core.Authorization.Node.change(child)
+      |> Ecto.Changeset.put_assoc(:parent, parent)
+
+    Multi.update(multi, Ecto.UUID.generate(), changeset)
   end
 end

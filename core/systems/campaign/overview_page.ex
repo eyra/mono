@@ -35,7 +35,7 @@ defmodule Systems.Campaign.OverviewPage do
   end
 
   defp update_campaigns(%{assigns: %{current_user: user} = assigns} = socket) do
-    preload = Campaign.Model.preload_graph(:full)
+    preload = Campaign.Model.preload_graph(:down)
 
     campaigns =
       user
@@ -129,7 +129,7 @@ defmodule Systems.Campaign.OverviewPage do
 
   @impl true
   def handle_event("duplicate", %{"item" => campaign_id}, socket) do
-    preload = Campaign.Model.preload_graph(:full)
+    preload = Campaign.Model.preload_graph(:down)
     campaign = Campaign.Public.get!(String.to_integer(campaign_id), preload)
 
     Campaign.Assembly.copy(campaign)
@@ -213,7 +213,7 @@ defmodule Systems.Campaign.OverviewPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.workspace title={dgettext("link-survey", "title")} menus={@menus}>
+    <.workspace title={dgettext("eyra-alliance", "title")} menus={@menus}>
 
       <%= if @popup do %>
         <.popup>
@@ -244,17 +244,17 @@ defmodule Systems.Campaign.OverviewPage do
         <%= if Enum.count(@campaigns) > 0 do %>
           <div class="flex flex-row items-center justify-center">
             <div class="h-full">
-              <Text.title2 margin=""><%= dgettext("link-survey", "campaign.overview.title") %></Text.title2>
+              <Text.title2 margin=""><%= dgettext("eyra-alliance", "campaign.overview.title") %></Text.title2>
             </div>
             <div class="flex-grow">
             </div>
             <div class="h-full pt-2px lg:pt-1">
               <Button.Action.send event="create_campaign">
                 <div class="sm:hidden">
-                  <Button.Face.plain_icon label={dgettext("link-survey", "add.new.button.short")} icon={:forward} />
+                  <Button.Face.plain_icon label={dgettext("eyra-alliance", "add.new.button.short")} icon={:forward} />
                 </div>
                 <div class="hidden sm:block">
-                  <Button.Face.plain_icon label={dgettext("link-survey", "add.new.button")} icon={:forward} />
+                  <Button.Face.plain_icon label={dgettext("eyra-alliance", "add.new.button")} icon={:forward} />
                 </div>
               </Button.Action.send>
             </div>
@@ -268,13 +268,13 @@ defmodule Systems.Campaign.OverviewPage do
           <.spacing value="L" />
         <% else %>
           <.empty
-            title={dgettext("link-survey", "empty.title")}
-            body={dgettext("link-survey", "empty.description")}
+            title={dgettext("eyra-alliance", "empty.title")}
+            body={dgettext("eyra-alliance", "empty.description")}
             illustration="cards"
           />
           <.spacing value="L" />
           <Button.primary_live_view
-            label={dgettext("link-survey", "add.first.button")}
+            label={dgettext("eyra-alliance", "add.first.button")}
             event="create_campaign"
           />
         <% end %>

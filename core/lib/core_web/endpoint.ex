@@ -1,5 +1,6 @@
 defmodule CoreWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :core
+  require Systems.Feldspar.Plug
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
@@ -32,6 +33,8 @@ defmodule CoreWeb.Endpoint do
         ~w(css assets fonts images js favicon icon apple-touch-icon robots manifest sw privacy-statement.pdf)
     )
   end
+
+  Systems.Feldspar.Plug.setup()
 
   # Serve at "/" the static files from "priv/static" directory.
   #

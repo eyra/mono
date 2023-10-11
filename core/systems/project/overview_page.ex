@@ -33,7 +33,7 @@ defmodule Systems.Project.OverviewPage do
   end
 
   defp update_projects(%{assigns: %{current_user: user}} = socket) do
-    preload = Project.Model.preload_graph(:full)
+    preload = Project.Model.preload_graph(:down)
     projects = Project.Public.list_owned_projects(user, preload: preload)
 
     socket
@@ -149,6 +149,14 @@ defmodule Systems.Project.OverviewPage do
     {
       :noreply,
       socket |> assign(popup: popup)
+    }
+  end
+
+  @impl true
+  def handle_info(%{auto_save: _status}, socket) do
+    {
+      :noreply,
+      socket
     }
   end
 

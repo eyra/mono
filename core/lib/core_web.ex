@@ -19,7 +19,7 @@ defmodule CoreWeb do
 
   def static_paths,
     do:
-      ~w(css assets fonts images js favicon logo icon apple-touch-icon robots manifest sw privacy-statement.pdf landing_page port)
+      ~w(css assets fonts images js favicon logo icon apple-touch-icon robots manifest sw privacy-statement.pdf landing_page)
 
   def controller(
         opts \\ [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]
@@ -87,7 +87,6 @@ defmodule CoreWeb do
       import Core.FeatureFlags
 
       use Frameworks.Pixel.Flash
-      use Systems.Observatory.Public
 
       import CoreWeb.UrlResolver, only: [url_resolver: 1]
 

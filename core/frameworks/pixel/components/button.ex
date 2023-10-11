@@ -32,6 +32,7 @@ defmodule Frameworks.Pixel.Button do
 
   defp action_function(type) do
     case type do
+      :fake -> &Action.fake/1
       :toggle -> &Action.toggle/1
       :click -> &Action.click/1
       :redirect -> &Action.redirect/1

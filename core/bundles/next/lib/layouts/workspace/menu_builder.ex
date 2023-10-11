@@ -40,6 +40,6 @@ defmodule Next.Layouts.Workspace.MenuBuilder do
   def include_map(user),
     do: %{
       console: Authorization.can_access?(user, Next.Console.Page),
-      projects: Systems.Admin.Public.admin?(user)
+      projects: Systems.Admin.Public.admin?(user) or user.researcher
     }
 end

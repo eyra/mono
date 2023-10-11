@@ -58,7 +58,7 @@ defmodule Systems.Campaign.Model do
   def submission(%{submissions: []}), do: nil
   def submission(_), do: raise("No support for multiple submissions yet")
 
-  def preload_graph(:full) do
+  def preload_graph(:down) do
     [
       promotion: [auth_node: [:role_assignments]],
       auth_node: [:role_assignments],
@@ -67,7 +67,7 @@ defmodule Systems.Campaign.Model do
         :criteria,
         pool: Pool.Model.preload_graph([:currency, :org, :auth_node, :participants])
       ],
-      promotable_assignment: Assignment.Model.preload_graph(:full)
+      promotable_assignment: Assignment.Model.preload_graph(:down)
     ]
   end
 
@@ -94,7 +94,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     Campaign,
     Promotion,
     Assignment,
-    Crew,
     Pool,
     Budget
   }
@@ -120,7 +119,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
            },
            promotable:
              %{
-               assignable_experiment: %{
+               info: %{
                  duration: duration,
                  language: language
                }
@@ -189,7 +188,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
            },
            promotable:
              %{
-               assignable_experiment: %{
+               info: %{
                  duration: duration,
                  language: language
                }
@@ -291,35 +290,24 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
              title: title,
              image_id: image_id
            },
-           promotable:
-             %{
-               crew: crew
-             } = assignment
+           promotable: assignment
          },
          {Link.Marketplace, _},
          %{current_user: user}
        ) do
-    task = task(crew, user)
-    tag = tag(task)
-    subtitle = subtitle(task, user, assignment)
+    status = Assignment.Public.status(assignment, user)
+    tag = tag(status)
+    subtitle = subtitle(status, user, assignment)
 
-    quick_summary =
-      case task do
-        %{updated_at: updated_at} ->
-          updated_at
-          |> CoreWeb.UI.Timestamp.apply_timezone()
-          |> CoreWeb.UI.Timestamp.humanize()
-
-        _ ->
-          "?"
-      end
+    timestamp = Assignment.Public.timestamp(assignment, user)
+    quick_summary = get_quick_summary(timestamp)
 
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
     image = %{type: :catalog, info: image_info}
 
     %{
       id: id,
-      path: ~p"/assignment/#{assignment.id}",
+      path: ~p"/assignment/#{assignment.id}/landing",
       title: title,
       subtitle: subtitle,
       tag: tag,
@@ -341,7 +329,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
              } = promotion,
            promotable:
              %{
-               assignable_experiment: %{
+               info: %{
                  subject_count: target_subject_count
                }
              } = assignment
@@ -420,7 +408,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
          {Link.Console.Page, :contribution},
          user
        ) do
-    path = ~p"/assignment/#{assignment.id}"
+    path = ~p"/assignment/#{assignment.id}/landing"
     vm(campaign, :contribution, user, path)
   end
 
@@ -440,19 +428,17 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
              title: title,
              image_id: image_id
            },
-           promotable:
-             %{
-               crew: crew
-             } = assignment
+           promotable: assignment
          },
          :contribution,
          user,
          path
        ) do
-    %{updated_at: updated_at} = task = task(crew, user)
-    tag = tag(task)
-    subtitle = subtitle(task, user, assignment)
-    quick_summary = get_quick_summary(updated_at)
+    status = Assignment.Public.status(assignment, user)
+    tag = tag(status)
+    subtitle = subtitle(status, user, assignment)
+    timestamp = Assignment.Public.timestamp(assignment, user)
+    quick_summary = get_quick_summary(timestamp)
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
     image = %{type: :catalog, info: image_info}
 
@@ -469,7 +455,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
   defp required_funding(%{
          submission: %{reward_value: reward_value, pool: %{currency: currency}},
-         promotable: %{assignable_experiment: %{subject_count: subject_count}}
+         promotable: %{assignable_inquiry: %{subject_count: subject_count}}
        }) do
     reward_value = guard_nil(reward_value, :integer)
     subject_count = guard_nil(subject_count, :integer)
@@ -482,7 +468,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
   defp funding_tag(%{
          submission: %{reward_value: reward_value},
-         promotable: %{budget: budget, assignable_experiment: %{subject_count: subject_count}}
+         promotable: %{budget: budget, assignable_inquiry: %{subject_count: subject_count}}
        }) do
     reward_value = guard_nil(reward_value, :integer)
     subject_count = guard_nil(subject_count, :integer)
@@ -500,19 +486,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
     end
   end
 
-  defp task(crew, user) do
-    case Crew.Public.get_member!(crew, user) do
-      nil -> nil
-      member -> Crew.Public.get_task(crew, member)
-    end
-  end
-
-  defp tag(nil),
-    do: %{text: dgettext("eyra-marketplace", "assignment.status.expired.label"), type: :disabled}
-
-  # defp tag(%{expired: true} = _task), do: %{text: dgettext("eyra-marketplace", "assignment.status.expired.label"), type: :disabled}
-
-  defp tag(%{status: status} = _task) do
+  defp tag(status) do
     case status do
       :pending ->
         %{text: dgettext("eyra-marketplace", "assignment.status.pending.label"), type: :warning}
@@ -528,16 +502,11 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
       :rejected ->
         %{text: dgettext("eyra-marketplace", "assignment.status.rejected.label"), type: :delete}
-
-      _ ->
-        %{text: "?", type: :disabled}
     end
   end
 
-  defp subtitle(nil, _, _), do: "?"
-
   defp subtitle(
-         %{status: status} = _task,
+         status,
          user,
          assignment
        ) do
@@ -560,11 +529,10 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Campaign.Model do
 
       :rejected ->
         dgettext("eyra-marketplace", "assignment.status.rejected.subtitle")
-
-      _ ->
-        dgettext("eyra-marketplace", "reward.label", value: 0)
     end
   end
+
+  defp get_quick_summary(nil), do: "?"
 
   defp get_quick_summary(updated_at) do
     updated_at
