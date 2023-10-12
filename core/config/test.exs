@@ -1,7 +1,7 @@
 import Config
 
 # Print only errors during test
-config :logger, level: :warn
+config :logger, level: :error
 
 # Setup for MinIO
 config :ex_aws, :s3,

@@ -55,7 +55,7 @@ defmodule Systems.Benchmark.ToolForm do
   def render(assigns) do
     ~H"""
     <div>
-      <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
+      <.form id={"#{@id}_benchmark_tool_form"} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
         <.text_input form={form} field={:title} label_text={dgettext("eyra-benchmark", "form.title.label")} />
         <.text_area form={form} field={:expectations} label_text={dgettext("eyra-benchmark", "form.expectations.label")} />
         <.url_input form={form} field={:data_set} label_text={dgettext("eyra-benchmark", "form.data_set.label")} />
