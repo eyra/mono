@@ -97,7 +97,7 @@ defmodule Systems.Workflow.ItemViews do
             <div class="flex-grow"></div>
             <%= if @icon do %>
               <div class="w-8 h-8">
-                <img src={"/images/icons/#{@icon}.svg"} alt={@icon}>
+                <img src={"/images/icons/#{@icon}.svg"} onerror="this.src='/images/icons/placeholder.svg';" alt={@icon}>
               </div>
             <% end %>
           </div>

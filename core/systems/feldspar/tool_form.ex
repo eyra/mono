@@ -83,8 +83,8 @@ defmodule Systems.Feldspar.ToolForm do
   def render(assigns) do
     ~H"""
     <div>
-      <.form id="select_file_form" for={%{}} phx-change="change" phx-target="" >
-        <Text.form_field_label id="archive_ref_label"><%= @label %></Text.form_field_label>
+      <.form id={"#{@id}_feldspar_tool_form"} for={%{}} phx-change="change" phx-target="" >
+        <Text.form_field_label id={"#{@id}_archive_ref_label"} ><%= @label %></Text.form_field_label>
         <.spacing value="XXS" />
         <div class="h-file-selector border-grey4 border-2 rounded pl-6 pr-6">
           <div class="flex flex-row items-center h-full">

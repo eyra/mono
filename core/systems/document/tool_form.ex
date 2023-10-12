@@ -64,7 +64,7 @@ defmodule Systems.Document.ToolForm do
   def render(assigns) do
     ~H"""
     <div>
-      <.form id="select_file_form" for={%{}} phx-change="change" phx-target="" >
+      <.form id={"#{@id}_document_tool_form"} for={%{}} phx-change="change" phx-target="" >
         <Text.form_field_label id="document_ref_label"><%= @label %></Text.form_field_label>
         <.spacing value="XXS" />
         <div class="h-file-selector border-grey4 border-2 rounded pl-6 pr-6">

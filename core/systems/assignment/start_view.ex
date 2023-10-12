@@ -17,12 +17,11 @@ defmodule Systems.Assignment.StartView do
         <Align.horizontal_center>
         <Area.sheet>
           <div class="flex flex-col gap-8 items-center">
-            <%= if @icon do %>
               <div>
-                <img class="w-24 h-24" src={"/images/icons/#{@icon}.svg"} alt={@icon}>
-              </div>
-            <% end %>
-
+              <%= if @icon do %>
+                <img class="w-24 h-24" src={"/images/icons/#{@icon}_square.svg"} onerror="this.src='/images/icons/placeholder_square.svg';" alt={@icon}>
+              <% end %>
+            </div>
             <Text.title2 margin=""><%= @title %></Text.title2>
             <Text.body align="text-center"><%= @description %></Text.body>
             <.wrap>

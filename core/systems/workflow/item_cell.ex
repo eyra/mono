@@ -98,7 +98,7 @@ defmodule Systems.Workflow.ItemCell do
       entity: tool,
       callback_url: callback_url,
       user: user
-    }
+    } |> dbg()
 
     socket |> assign(tool_form: tool_form)
   end

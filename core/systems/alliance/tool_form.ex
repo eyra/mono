@@ -136,7 +136,7 @@ defmodule Systems.Alliance.ToolForm do
   def render(assigns) do
     ~H"""
     <div class="-mb-8">
-      <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
+      <.form id={"#{@id}_alliance_tool_form"} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
         <Panel.flat bg_color="bg-grey1">
           <Text.title3 color="text-white"><%= dgettext("eyra-alliance", "setup.title") %></Text.title3>
           <.spacing value="M" />

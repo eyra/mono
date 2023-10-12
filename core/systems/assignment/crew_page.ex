@@ -35,6 +35,7 @@ defmodule Systems.Assignment.CrewPage do
         tool_ref_view: nil
       )
       |> observe_view_model()
+      |> update_selected_item_id()
       |> update_selected_item()
       |> update_start_view()
       |> update_work_list()
@@ -46,27 +47,35 @@ defmodule Systems.Assignment.CrewPage do
 
   def handle_view_model_updated(socket) do
     socket
+    |> update_selected_item_id()
     |> update_selected_item()
     |> update_start_view()
     |> update_work_list()
     |> update_menus()
   end
 
-  defp update_selected_item(%{assigns: %{selected_item: {_, _}}} = socket) do
+  defp update_selected_item_id(%{assigns: %{selected_item_id: selected_item_id}} = socket) when not is_nil(selected_item_id) do
     socket
   end
 
-  defp update_selected_item(%{assigns: %{vm: %{items: []}}} = socket) do
-    socket |> assign(selected_item: nil)
+  defp update_selected_item_id(%{assigns: %{vm: %{items: []}}} = socket) do
+    socket |> assign(selected_item_id: nil)
   end
 
-  defp update_selected_item(%{assigns: %{vm: %{items: [item]}}} = socket) do
-    socket |> assign(selected_item: item)
+  defp update_selected_item_id(%{assigns: %{vm: %{items: [item]}}} = socket) do
+    socket |> assign(selected_item_id: item.id)
   end
 
-  defp update_selected_item(%{assigns: %{vm: %{items: items}}} = socket) do
-    selected_item =
+  defp update_selected_item_id(%{assigns: %{vm: %{items: items}}} = socket) do
+    {%{id: selected_item_id}, _} =
       Enum.find(items, List.first(items), fn {_, %{status: status}} -> status == :pending end)
+
+    socket |> assign(selected_item_id: selected_item_id)
+  end
+
+  defp update_selected_item(%{assigns: %{selected_item_id: selected_item_id, vm: %{items: items}}} = socket) do
+    selected_item =
+      Enum.find(items, fn {%{id: id}, _} -> id == selected_item_id end)
 
     socket |> assign(selected_item: selected_item)
   end
@@ -94,7 +103,9 @@ defmodule Systems.Assignment.CrewPage do
     socket |> assign(start_view: start_view)
   end
 
-  defp update_start_view(socket), do: socket |> assign(start_view: nil)
+  defp update_start_view(socket) do
+    socket |> assign(start_view: nil)
+  end
 
   defp start_action({%{tool_ref: tool_ref}, _task} = item) do
     Project.ToolRefModel.tool(tool_ref)
@@ -122,7 +133,11 @@ defmodule Systems.Assignment.CrewPage do
       selected_item_id: selected_item_id
     }
 
-    socket |> assign(work_list: work_list)
+    socket |> assign(work_list: work_list, show_left_column: Enum.count(items) > 1)
+  end
+
+  defp update_work_list(socket) do
+    socket |> assign(work_list: nil, show_left_column: false)
   end
 
   defp map_item({%{id: id, title: title, group: group}, task}) do
@@ -148,18 +163,18 @@ defmodule Systems.Assignment.CrewPage do
   def handle_event(
         "work_item_selected",
         %{"item" => item_id},
-        %{assigns: %{vm: %{items: items}}} = socket
+        socket
       ) do
     item_id = String.to_integer(item_id)
-    item = Enum.find(items, fn {%{id: id}, _} -> id == item_id end)
 
     {
       :noreply,
       socket
       |> assign(
-        selected_item: item,
+        selected_item_id: item_id,
         tool_ref_view: nil
       )
+      |> update_selected_item()
       |> update_start_view()
       |> update_work_list()
     }
@@ -224,19 +239,19 @@ defmodule Systems.Assignment.CrewPage do
     ~H"""
     <.stripped menus={@menus} footer?={false}>
       <div class="w-full h-full flex flex-row">
-        <div class="w-left-column">
-          <.work_list {@work_list} />
-        </div>
-        <div class="border-l border-grey4">
-        </div>
+        <%= if @work_list && @show_left_column  do %>
+          <div class="w-left-column">
+            <.work_list {@work_list} />
+          </div>
+          <div class="border-l border-grey4">
+          </div>
+        <% end %>
         <div class="flex-1">
           <%= if @tool_ref_view do %>
             <.tool_ref_view {@tool_ref_view}/>
           <% else %>
             <%= if @start_view do %>
               <.start_view {@start_view} />
-            <% else %>
-              Empty
             <% end %>
           <% end %>
         </div>
