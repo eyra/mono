@@ -54,7 +54,8 @@ defmodule Systems.Assignment.CrewPage do
     |> update_menus()
   end
 
-  defp update_selected_item_id(%{assigns: %{selected_item_id: selected_item_id}} = socket) when not is_nil(selected_item_id) do
+  defp update_selected_item_id(%{assigns: %{selected_item_id: selected_item_id}} = socket)
+       when not is_nil(selected_item_id) do
     socket
   end
 
@@ -73,9 +74,10 @@ defmodule Systems.Assignment.CrewPage do
     socket |> assign(selected_item_id: selected_item_id)
   end
 
-  defp update_selected_item(%{assigns: %{selected_item_id: selected_item_id, vm: %{items: items}}} = socket) do
-    selected_item =
-      Enum.find(items, fn {%{id: id}, _} -> id == selected_item_id end)
+  defp update_selected_item(
+         %{assigns: %{selected_item_id: selected_item_id, vm: %{items: items}}} = socket
+       ) do
+    selected_item = Enum.find(items, fn {%{id: id}, _} -> id == selected_item_id end)
 
     socket |> assign(selected_item: selected_item)
   end
