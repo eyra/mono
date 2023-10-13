@@ -9,7 +9,7 @@ Application.put_env(:core, :web_push_backend, Core.WebPush.MockBackend)
 Mox.defmock(Core.APNS.MockBackend, for: Core.APNS.Backend)
 Application.put_env(:core, :apns_backend, Core.APNS.MockBackend)
 
-Application.put_env(:core, :signal_handlers, [Frameworks.Signal.TestHelper])
+Application.put_env(:core, :signal_handlers, ["Frameworks.Signal.TestHelper"])
 
 Application.put_env(
   :core,
