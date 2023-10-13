@@ -4,18 +4,18 @@ defmodule Frameworks.Signal.Public do
   import Frameworks.Utililty.PrettyPrint
 
   @signal_handlers [
-    Core.Accounts.SignalHandlers,
-    Core.Mailer.SignalHandlers,
-    Core.WebPush.SignalHandlers,
-    Core.APNS.SignalHandlers,
-    Systems.Observatory.Switch,
-    Systems.Project.Switch,
-    Systems.Assignment.Switch,
-    Systems.Workflow.Switch,
-    Systems.Pool.Switch,
-    Systems.Student.Switch,
-    Systems.Campaign.Switch,
-    Systems.NextAction.Switch
+    "Core.Accounts.SignalHandlers",
+    "Core.Mailer.SignalHandlers",
+    "Core.WebPush.SignalHandlers",
+    "Core.APNS.SignalHandlers",
+    "Systems.Observatory.Switch",
+    "Systems.Project.Switch",
+    "Systems.Assignment.Switch",
+    "Systems.Workflow.Switch",
+    "Systems.Pool.Switch",
+    "Systems.Student.Switch",
+    "Systems.Campaign.Switch",
+    "Systems.NextAction.Switch"
   ]
 
   def dispatch(signal, message) do
@@ -46,7 +46,8 @@ defmodule Frameworks.Signal.Public do
   end
 
   defp signal_handlers do
-    Application.get_env(:core, :signal_handlers, []) ++
-      @signal_handlers
+    (Application.get_env(:core, :signal_handlers, []) ++
+       @signal_handlers)
+    |> Enum.map(fn module_name -> String.to_atom("Elixir.#{module_name}") end)
   end
 end
