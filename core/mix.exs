@@ -71,7 +71,7 @@ defmodule Core.MixProject do
       {:phoenix, "1.7.2"},
       {:phoenix_view, "~> 2.0"},
       {:phoenix_ecto, "~> 4.4"},
-      {:phoenix_live_view, "~> 0.18.18"},
+      {:phoenix_live_view, "~> 0.20.1"},
       {:phoenix_html, "~> 3.3.1"},
       {:phoenix_inline_svg, "~> 1.4"},
       {:floki, ">= 0.27.0"},

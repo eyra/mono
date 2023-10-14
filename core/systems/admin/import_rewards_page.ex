@@ -320,7 +320,9 @@ defmodule Systems.Admin.ImportRewardsPage do
                   bg_color="bg-tertiary"
                   text_color="text-grey1"
                 />
-                <%= live_file_input(@uploads.csv, class: "hidden") %>
+                <div class="hidden">
+                  <.live_file_input upload={@uploads.csv} />
+                </div>
               </div>
             </div>
             <%= if @local_file do %>
