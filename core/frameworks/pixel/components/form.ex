@@ -405,7 +405,9 @@ defmodule Frameworks.Pixel.Form do
         <% else %>
           <Button.primary_label label={@primary_button_text} field={@uploads.photo.ref} />
         <% end %>
-        <%= live_file_input(@uploads.photo, class: "hidden") %>
+        <div class="hidden">
+          <.live_file_input upload={@uploads.photo} />
+        </div>
       </div>
     </div>
     """
@@ -483,11 +485,11 @@ defmodule Frameworks.Pixel.Form do
 
   def inputs(assigns) do
     ~H"""
-    <%= for subform <- Phoenix.HTML.Form.inputs_for(@form, @field, phx_target: @target) do %>
-      <div>
-        <%= render_slot(@inner_block, %{form: subform}) %>
-      </div>
-    <% end %>
+      <.inputs_for :let={nested_form} field={@form[@field]}>
+        <div>
+          <%= render_slot(@inner_block, %{form: nested_form}) %>
+        </div>
+      </.inputs_for>
     """
   end
 

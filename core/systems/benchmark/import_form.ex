@@ -96,7 +96,9 @@ defmodule Systems.Benchmark.ImportForm do
               <Button.primary_label label={@select_button} bg_color="bg-tertiary" text_color="text-grey1" field={@uploads.csv.ref} />
             <% end %>
           </div>
-          <%= live_file_input(@uploads.csv, class: "hidden") %>
+          <div class="hidden">
+            <.live_file_input upload={@uploads.csv} />
+          </div>
         </div>
       </.form>
       <.spacing value="M" />

@@ -82,7 +82,9 @@ defmodule Systems.Document.ToolForm do
               <Button.primary_label label={@select_button} bg_color="bg-tertiary" text_color="text-grey1" field={@uploads.pdf.ref} />
             <% end %>
           </div>
-          <%= live_file_input(@uploads.pdf, class: "hidden") %>
+          <div class="hidden">
+            <.live_file_input upload={@uploads.pdf} />
+          </div>
         </div>
       </.form>
     </div>
