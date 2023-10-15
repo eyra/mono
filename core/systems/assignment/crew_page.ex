@@ -63,8 +63,8 @@ defmodule Systems.Assignment.CrewPage do
     socket |> assign(selected_item_id: nil)
   end
 
-  defp update_selected_item_id(%{assigns: %{vm: %{items: [item]}}} = socket) do
-    socket |> assign(selected_item_id: item.id)
+  defp update_selected_item_id(%{assigns: %{vm: %{items: [{%{id: id}, _}]}}} = socket) do
+    socket |> assign(selected_item_id: id)
   end
 
   defp update_selected_item_id(%{assigns: %{vm: %{items: items}}} = socket) do
