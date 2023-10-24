@@ -21,7 +21,11 @@ defmodule Systems.Consent.RevisionForm do
   end
 
   @impl true
-  def handle_event("save", %{"source_input" => source}, %{assigns: %{entity: %{source: old_source} = entity}} = socket) do
+  def handle_event(
+        "save",
+        %{"source_input" => source},
+        %{assigns: %{entity: %{source: old_source} = entity}} = socket
+      ) do
     {
       :noreply,
       if old_source == source do
@@ -36,6 +40,7 @@ defmodule Systems.Consent.RevisionForm do
 
   def save(socket, entity, attrs) do
     changeset = Consent.RevisionModel.changeset(entity, attrs)
+
     case Core.Persister.save(entity, changeset) do
       {:ok, entity} ->
         socket

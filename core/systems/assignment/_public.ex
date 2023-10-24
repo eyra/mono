@@ -66,7 +66,8 @@ defmodule Systems.Assignment.Public do
 
   def get_by_consent_agreement(consent_agreement, preload \\ [])
 
-  def get_by_consent_agreement(%Consent.AgreementModel{id: id}, preload), do: get_by_consent_agreement(id, preload)
+  def get_by_consent_agreement(%Consent.AgreementModel{id: id}, preload),
+    do: get_by_consent_agreement(id, preload)
 
   def get_by_consent_agreement(consent_agreement_id, preload) do
     from(assignment in Assignment.Model,

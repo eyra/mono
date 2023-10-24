@@ -10,7 +10,6 @@ defmodule Systems.Consent.Public do
     Consent
   }
 
-
   def create_agreement(auth_node) do
     prepare_agreement(auth_node)
     |> Repo.insert()
@@ -102,11 +101,12 @@ defmodule Systems.Consent.Public do
 
   def query_unlocked_revisions(agreement, preload \\ []) do
     from(revision in query_revisions(agreement, preload),
-      where: revision.id not in subquery(
-        from(signature in Consent.SignatureModel,
-          select: signature.revision_id
+      where:
+        revision.id not in subquery(
+          from(signature in Consent.SignatureModel,
+            select: signature.revision_id
+          )
         )
-      )
     )
   end
 
@@ -117,9 +117,11 @@ defmodule Systems.Consent.Public do
   end
 
   def query_revisions(agreement, preload \\ [])
+
   def query_revisions(%Consent.AgreementModel{id: agreement_id}, preload) do
     query_revisions(agreement_id, preload)
   end
+
   def query_revisions(agreement_id, preload) when is_integer(agreement_id) do
     from(revision in Consent.RevisionModel,
       where: revision.agreement_id == ^agreement_id,
@@ -128,10 +130,13 @@ defmodule Systems.Consent.Public do
     )
   end
 
-  def update_revision(%Ecto.Changeset{data: %Consent.RevisionModel{id: id, updated_at: updated_at}} = changeset) do
+  def update_revision(
+        %Ecto.Changeset{data: %Consent.RevisionModel{id: id, updated_at: updated_at}} = changeset
+      ) do
     Multi.new()
     |> Multi.run(:validate_timestamp, fn _, _ ->
       %{updated_at: stored_updated_at} = Consent.Public.get_revision!(id)
+
       if stored_updated_at == updated_at do
         {:ok, :valid}
       else

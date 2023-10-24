@@ -19,7 +19,8 @@ defmodule Systems.Assignment.OnboardingConsentView do
   def update(%{id: id, revision: revision, user: user}, socket) do
     {
       :ok,
-      socket |> assign(
+      socket
+      |> assign(
         id: id,
         revision: revision,
         user: user
@@ -28,7 +29,9 @@ defmodule Systems.Assignment.OnboardingConsentView do
     }
   end
 
-  defp update_clickwrap_view(%{assigns: %{revision: revision, user: user, myself: myself}} = socket) do
+  defp update_clickwrap_view(
+         %{assigns: %{revision: revision, user: user, myself: myself}} = socket
+       ) do
     clickwrap_view = %{
       id: :consent_clickwrap_view,
       module: Consent.ClickWrapView,
@@ -39,7 +42,6 @@ defmodule Systems.Assignment.OnboardingConsentView do
 
     assign(socket, clickwrap_view: clickwrap_view)
   end
-
 
   @impl true
   def render(assigns) do

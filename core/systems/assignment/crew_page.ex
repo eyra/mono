@@ -169,8 +169,7 @@ defmodule Systems.Assignment.CrewPage do
 
   @impl true
   def handle_info({:onboarding_continue, _}, %{assigns: %{onboarding: onboarding}} = socket) do
-
-    {_, onboarding} = List.pop_at(onboarding, 0) |> dbg()
+    {_, onboarding} = List.pop_at(onboarding, 0)
 
     {
       :noreply,

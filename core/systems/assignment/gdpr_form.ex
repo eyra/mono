@@ -7,7 +7,6 @@ defmodule Systems.Assignment.GdprForm do
 
   @impl true
   def update(%{id: id, entity: entity}, socket) do
-
     {
       :ok,
       socket
@@ -20,7 +19,6 @@ defmodule Systems.Assignment.GdprForm do
   end
 
   defp update_consent_agreement(%{assigns: %{entity: entity}} = socket) do
-
     revision = Consent.Public.latest_unlocked_revision_safe(entity)
 
     consent_revision_form = %{

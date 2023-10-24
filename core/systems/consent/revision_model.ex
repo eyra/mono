@@ -33,5 +33,4 @@ defmodule Systems.Consent.RevisionModel do
     changeset
     |> validate_required(@required_fields)
   end
-
 end

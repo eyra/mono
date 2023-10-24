@@ -26,8 +26,8 @@ defmodule Systems.Assignment.CrewPageBuilder do
   defp onboarding(assignment, assigns, current_onboarding) do
     full_onboarding(assignment, assigns)
     |> Enum.filter(fn %{id: id} ->
-        Enum.find(current_onboarding, & &1.id == id) != nil
-      end)
+      Enum.find(current_onboarding, &(&1.id == id)) != nil
+    end)
   end
 
   defp full_onboarding(assignment, assigns) do

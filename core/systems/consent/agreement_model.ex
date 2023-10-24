@@ -1,5 +1,4 @@
 defmodule Systems.Consent.AgreementModel do
-
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
@@ -19,7 +18,8 @@ defmodule Systems.Consent.AgreementModel do
   @required_fields ~w()a
 
   def preload_graph(:down), do: preload_graph([:auth_node])
-  ##def preload_graph(:revisions), do: [revisions: Consent.RevisionModel.preload_graph(:down)]
+  def preload_graph(:up), do: preload_graph([])
+  def preload_graph(:revisions), do: [revisions: Consent.RevisionModel.preload_graph(:down)]
   def preload_graph(:auth_node), do: [auth_node: []]
 
   def changeset(agreement, attrs \\ %{}) do
@@ -31,5 +31,4 @@ defmodule Systems.Consent.AgreementModel do
     changeset
     |> validate_required(@required_fields)
   end
-
 end

@@ -15,7 +15,8 @@ defmodule Systems.Consent.ClickWrapView do
 
     {
       :ok,
-      socket |> assign(
+      socket
+      |> assign(
         id: id,
         revision: revision,
         user: user,
@@ -36,14 +37,22 @@ defmodule Systems.Consent.ClickWrapView do
   defp update_continue_button(%{assigns: %{selected?: selected?, myself: myself}} = socket) do
     continue_button = %{
       action: %{type: :send, event: "continue", target: myself},
-      face: %{type: :primary, label: dgettext("eyra-assignment", "onboarding.consent.continue.button") },
+      face: %{
+        type: :primary,
+        label: dgettext("eyra-assignment", "onboarding.consent.continue.button")
+      },
       enabled?: selected?
     }
+
     assign(socket, continue_button: continue_button)
   end
 
   @impl true
-  def handle_event("toggle", %{"checkbox" => _checkbox}, %{assigns: %{selected?: selected?}} = socket) do
+  def handle_event(
+        "toggle",
+        %{"checkbox" => _checkbox},
+        %{assigns: %{selected?: selected?}} = socket
+      ) do
     {
       :noreply,
       socket

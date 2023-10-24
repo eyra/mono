@@ -23,7 +23,7 @@ defmodule Systems.Consent.SignatureModel do
   def preload_graph(:revision), do: [revision: Consent.RevisionModel.preload_graph(:up)]
   def preload_graph(:user), do: [user: []]
 
-  def changeset(signature , attrs \\ %{}) do
+  def changeset(signature, attrs \\ %{}) do
     signature
     |> cast(attrs, @fields)
   end
@@ -32,5 +32,4 @@ defmodule Systems.Consent.SignatureModel do
     changeset
     |> validate_required(@required_fields)
   end
-
 end

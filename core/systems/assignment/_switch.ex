@@ -41,8 +41,15 @@ defmodule Systems.Assignment.Switch do
     handle(signal, message)
   end
 
-  def intercept({:consent_agreement, _} = signal, %{consent_agreement: consent_agreement} = message) do
-    if assignment = Assignment.Public.get_by_consent_agreement(consent_agreement, Assignment.Model.preload_graph(:down)) do
+  def intercept(
+        {:consent_agreement, _} = signal,
+        %{consent_agreement: consent_agreement} = message
+      ) do
+    if assignment =
+         Assignment.Public.get_by_consent_agreement(
+           consent_agreement,
+           Assignment.Model.preload_graph(:down)
+         ) do
       handle(
         {:assignment, signal},
         Map.merge(message, %{assignment: assignment})
