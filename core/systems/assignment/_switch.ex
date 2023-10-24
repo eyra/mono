@@ -41,6 +41,15 @@ defmodule Systems.Assignment.Switch do
     handle(signal, message)
   end
 
+  def intercept({:consent_agreement, _} = signal, %{consent_agreement: consent_agreement} = message) do
+    if assignment = Assignment.Public.get_by_consent_agreement(consent_agreement, Assignment.Model.preload_graph(:down)) do
+      handle(
+        {:assignment, signal},
+        Map.merge(message, %{assignment: assignment})
+      )
+    end
+  end
+
   def intercept({:crew_task, _} = signal, %{crew_task: %{crew_id: crew_id}} = message) do
     Assignment.Public.list_by_crew(crew_id, Assignment.Model.preload_graph(:down))
     |> Enum.each(

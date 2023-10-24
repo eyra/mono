@@ -35,6 +35,7 @@ defmodule Systems.Assignment.CrewPage do
         tool_ref_view: nil
       )
       |> observe_view_model()
+      |> update_onboarding()
       |> update_selected_item_id()
       |> update_selected_item()
       |> update_start_view()
@@ -47,11 +48,16 @@ defmodule Systems.Assignment.CrewPage do
 
   def handle_view_model_updated(socket) do
     socket
+    |> update_onboarding()
     |> update_selected_item_id()
     |> update_selected_item()
     |> update_start_view()
     |> update_work_list()
     |> update_menus()
+  end
+
+  defp update_onboarding(%{assigns: %{vm: %{onboarding: onboarding}}} = socket) do
+    socket |> assign(onboarding: onboarding)
   end
 
   defp update_selected_item_id(%{assigns: %{selected_item_id: selected_item_id}} = socket)
@@ -162,6 +168,17 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
+  def handle_info({:onboarding_continue, _}, %{assigns: %{onboarding: onboarding}} = socket) do
+
+    {_, onboarding} = List.pop_at(onboarding, 0) |> dbg()
+
+    {
+      :noreply,
+      socket |> assign(onboarding: onboarding)
+    }
+  end
+
+  @impl true
   def handle_event(
         "work_item_selected",
         %{"item" => item_id},
@@ -240,24 +257,28 @@ defmodule Systems.Assignment.CrewPage do
   def render(assigns) do
     ~H"""
     <.stripped menus={@menus} footer?={false}>
-      <div class="w-full h-full flex flex-row">
-        <%= if @work_list && @show_left_column  do %>
-          <div class="w-left-column">
-            <.work_list {@work_list} />
-          </div>
-          <div class="border-l border-grey4">
-          </div>
-        <% end %>
-        <div class="flex-1">
-          <%= if @tool_ref_view do %>
-            <.tool_ref_view {@tool_ref_view}/>
-          <% else %>
-            <%= if @start_view do %>
-              <.start_view {@start_view} />
-            <% end %>
+      <%= if view = List.first(@onboarding) do %>
+        <.live_component {view} />
+      <% else %>
+        <div class="w-full h-full flex flex-row">
+          <%= if @work_list && @show_left_column  do %>
+            <div class="w-left-column">
+              <.work_list {@work_list} />
+            </div>
+            <div class="border-l border-grey4">
+            </div>
           <% end %>
+          <div class="flex-1">
+            <%= if @tool_ref_view do %>
+              <.tool_ref_view {@tool_ref_view}/>
+            <% else %>
+              <%= if @start_view do %>
+                <.start_view {@start_view} />
+              <% end %>
+            <% end %>
+          </div>
         </div>
-      </div>
+      <% end %>
     </.stripped>
     """
   end

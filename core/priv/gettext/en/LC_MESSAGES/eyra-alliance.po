@@ -201,15 +201,3 @@ msgstr "The author of this study reviewed your contribution and wrote the follow
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "participated.label"
 msgstr "Participated"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "test.roundtrip.button"
-msgstr "Test set-up"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "test.roundtrip.text"
-msgstr "Test your questionnaire set-up and check if you end up on the \"Round trip confirmed\" screen."
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "test.roundtrip.title"
-msgstr "Is your questionnaire set up correctly?"

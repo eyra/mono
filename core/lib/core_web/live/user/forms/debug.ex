@@ -102,12 +102,6 @@ defmodule CoreWeb.User.Forms.Debug do
     |> save(changeset)
   end
 
-  # data(entity, :any)
-  # data(changeset, :any)
-  # data(role_labels, :list)
-
-  attr(:user, :any, required: true)
-
   @impl true
   def render(assigns) do
     ~H"""

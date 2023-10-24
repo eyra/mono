@@ -11,11 +11,12 @@ defmodule Frameworks.Signal.Public do
     "Systems.Observatory.Switch",
     "Systems.Project.Switch",
     "Systems.Assignment.Switch",
+    "Systems.Consent.Switch",
     "Systems.Workflow.Switch",
     "Systems.Pool.Switch",
     "Systems.Student.Switch",
     "Systems.Campaign.Switch",
-    "Systems.NextAction.Switch"
+    "Systems.NextAction.Switch",
   ]
 
   def dispatch(signal, message) do

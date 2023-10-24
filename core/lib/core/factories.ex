@@ -32,7 +32,8 @@ defmodule Core.Factories do
     Bookkeeping,
     Content,
     Org,
-    Project
+    Project,
+    Consent
   }
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
@@ -279,6 +280,18 @@ defmodule Core.Factories do
     build(:tool_ref, %{})
   end
 
+  def build(:consent_agreement) do
+    build(:consent_agreement, %{})
+  end
+
+  def build(:consent_revision) do
+    build(:consent_revision, %{})
+  end
+
+  def build(:consent_signature) do
+    build(:consent_signature, %{})
+  end
+
   def build(:auth_node, %{} = attributes) do
     %Authorization.Node{}
     |> struct!(attributes)
@@ -432,6 +445,35 @@ defmodule Core.Factories do
       lab_tool: lab_tool,
       feldspar_tool: feldspar_tool,
       benchmark_tool: benchmark_tool
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:consent_agreement, %{} = attributes) do
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+
+    %Consent.AgreementModel{
+      auth_node: auth_node
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:consent_revision, %{} = attributes) do
+    {agreement, attributes} = Map.pop(attributes, :agreement, build(:consent_agreement))
+
+    %Consent.RevisionModel{
+      agreement: agreement
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:consent_signature, %{} = attributes) do
+    {user, attributes} = Map.pop(attributes, :user, build(:member))
+    {revision, attributes} = Map.pop(attributes, :revision, build(:consent_revision))
+
+    %Consent.SignatureModel{
+      user: user,
+      revision: revision
     }
     |> struct!(attributes)
   end

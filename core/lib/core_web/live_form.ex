@@ -15,7 +15,11 @@ defmodule CoreWeb.LiveForm do
       end
 
       def flash_persister_error(socket) do
-        message = dgettext("eyra-ui", "persister.error.flash")
+        socket
+        |> flash_persister_error(dgettext("eyra-ui", "persister.error.flash"))
+      end
+
+      def flash_persister_error(socket, message) do
         Frameworks.Pixel.Flash.push_error(message)
         socket
       end
@@ -62,7 +66,7 @@ defmodule CoreWeb.LiveForm do
         case Core.Persister.save(changeset.data, changeset) do
           {:ok, entity} ->
             socket
-            |> assign(entity: entity, changeset: changeset)
+            |> assign(entity: entity)
             |> flash_persister_saved()
             |> handle_auto_save_done()
 

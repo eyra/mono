@@ -9,12 +9,19 @@ defmodule Frameworks.Pixel.Button do
 
   attr(:action, :map, required: true)
   attr(:face, :map, required: true)
+  attr(:enabled?, :boolean, default: true)
 
   def dynamic(assigns) do
     ~H"""
-    <.action {@action}>
-      <.face {@face} />
-    </.action>
+    <%= if @enabled? do %>
+      <.action {@action}>
+        <.face {@face} />
+      </.action>
+    <% else %>
+      <div class="opacity-30 cursor-not-allowed">
+        <.face {@face} />
+      </div>
+    <% end %>
     """
   end
 
