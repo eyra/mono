@@ -135,4 +135,14 @@ if config_env() == :prod do
     # The public URL must point to the root's (bucket) publicly accessible URL.
     # It should have a policy that allows anonymous users to read all files.
     public_url: System.get_env("FELDSPAR_S3_PUBLIC_URL")
+
+  config :core,
+         :dist_hosts,
+         "DIST_HOSTS"
+         |> System.get_env("")
+         |> String.split(",")
+         |> Enum.map(&String.trim/1)
+         |> Enum.reject(&(&1 == ""))
+         |> Enum.map(&"core@#{&1}")
+         |> Enum.map(&String.to_atom/1)
 end

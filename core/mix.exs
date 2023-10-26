@@ -100,6 +100,7 @@ defmodule Core.MixProject do
       {:statistics, "~> 0.6.2"},
       {:csv, "~> 2.4"},
       {:sentry, "~> 8.0"},
+      {:libcluster, "~> 3.3"},
       # i18n
       {:ex_cldr, "~> 2.25"},
       {:ex_cldr_numbers, "~> 2.23"},
