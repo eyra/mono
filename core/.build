@@ -320,10 +320,12 @@ Systems.Assignment.CrewPageBuilder.html
 Systems.Assignment.Director.html
 Systems.Assignment.EthicalForm.html
 Systems.Assignment.ExcludeModel.html
+Systems.Assignment.GdprForm.html
 Systems.Assignment.InfoForm.html
 Systems.Assignment.InfoModel.html
 Systems.Assignment.LandingPage.html
 Systems.Assignment.Model.html
+Systems.Assignment.OnboardingConsentView.html
 Systems.Assignment.OnlineStudyLanguages.html
 Systems.Assignment.Presenter.html
 Systems.Assignment.Private.html
@@ -421,6 +423,13 @@ Systems.Citizen.Pool.OverviewPlugin.html
 Systems.Citizen.Pool.SubmissionPageBuilder.html
 Systems.Citizen.Presenter.html
 Systems.Citizen.Public.html
+Systems.Consent.AgreementModel.html
+Systems.Consent.ClickWrapView.html
+Systems.Consent.Public.html
+Systems.Consent.RevisionForm.html
+Systems.Consent.RevisionModel.html
+Systems.Consent.SignatureModel.html
+Systems.Consent.Switch.html
 Systems.Content.Page.html
 Systems.Content.Public.html
 Systems.Content.TextBundleModel.html
@@ -666,8 +675,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-4C3E3B20.js
-dist/sidebar_items-987C767E.js
+dist/search_items-1B106C71.js
+dist/sidebar_items-BAFEFA34.js
 index.html
 readme.html
 search.html
