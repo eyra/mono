@@ -40,14 +40,6 @@ msgid "tabbar.item.monitor.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.privacy"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.privacy.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "add.first.button"
 msgstr ""
 
@@ -181,4 +173,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.support.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.gdpr"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.gdpr.forward"
 msgstr ""

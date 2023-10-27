@@ -7,7 +7,6 @@ defmodule Systems.Assignment.ContentPageBuilder do
     Assignment,
     Project,
     Workflow,
-    Privacy,
     Support
   }
 
@@ -155,7 +154,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp get_tab_keys() do
-    [:config, :privacy, :items, :support, :invite, :monitor]
+    [:config, :gdpr, :items, :invite]
   end
 
   defp create_tab(
@@ -245,23 +244,23 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp create_tab(
-         :privacy,
-         _assignment,
+         :gdpr,
+         %{consent_agreement: consent_agreement},
          show_errors,
          _assigns
        ) do
     ready? = false
 
     %{
-      id: :privacy_form,
+      id: :gdpr_form,
       ready: ready?,
       show_errors: show_errors,
-      title: dgettext("eyra-project", "tabbar.item.privacy"),
-      forward_title: dgettext("eyra-project", "tabbar.item.privacy.forward"),
+      title: dgettext("eyra-project", "tabbar.item.gdpr"),
+      forward_title: dgettext("eyra-project", "tabbar.item.gdpr.forward"),
       type: :fullpage,
-      live_component: Privacy.Form,
+      live_component: Assignment.GdprForm,
       props: %{
-        entity: %{}
+        entity: consent_agreement
       }
     }
   end

@@ -31,6 +31,7 @@ import { LiveContent, LiveField } from "./live_content";
 import { Tabbar, TabbarItem, TabbarFooterItem } from "./tabbar";
 import { Clipboard } from "./clipboard";
 import { FeldsparApp } from "./feldspar_app";
+import { Wysiwyg } from "./wysiwyg";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -103,6 +104,7 @@ let Hooks = {
   TabbarFooterItem,
   NativeWrapper,
   FeldsparApp,
+  Wysiwyg
 };
 
 let liveSocket = new LiveSocket("/live", Socket, {

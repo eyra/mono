@@ -16,6 +16,7 @@ defmodule Systems.Assignment.Public do
   alias Systems.{
     Project,
     Assignment,
+    Consent,
     Budget,
     Workflow,
     Crew
@@ -61,6 +62,19 @@ defmodule Systems.Assignment.Public do
       preload: ^preload
     )
     |> Repo.one!()
+  end
+
+  def get_by_consent_agreement(consent_agreement, preload \\ [])
+
+  def get_by_consent_agreement(%Consent.AgreementModel{id: id}, preload),
+    do: get_by_consent_agreement(id, preload)
+
+  def get_by_consent_agreement(consent_agreement_id, preload) do
+    from(assignment in Assignment.Model,
+      where: assignment.consent_agreement_id == ^consent_agreement_id,
+      preload: ^preload
+    )
+    |> Repo.one()
   end
 
   def get_by_workflow(workflow, preload \\ [])
@@ -130,13 +144,14 @@ defmodule Systems.Assignment.Public do
     |> Repo.all()
   end
 
-  def prepare(%{} = attrs, crew, info, workflow, budget, auth_node) do
+  def prepare(%{} = attrs, crew, info, workflow, budget, consent_agreement, auth_node) do
     %Assignment.Model{}
     |> Assignment.Model.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:info, info)
     |> Ecto.Changeset.put_assoc(:workflow, workflow)
     |> Ecto.Changeset.put_assoc(:crew, crew)
     |> Ecto.Changeset.put_assoc(:budget, budget)
+    |> Ecto.Changeset.put_assoc(:consent_agreement, consent_agreement)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
 

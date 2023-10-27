@@ -201,15 +201,3 @@ msgstr ""
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "participated.label"
 msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "test.roundtrip.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "test.roundtrip.text"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "test.roundtrip.title"
-msgstr ""

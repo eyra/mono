@@ -58,33 +58,9 @@ msgstr "%{target} credits required"
 msgid "close.button"
 msgstr "Finish up"
 
-#, elixir-autogen, elixir-format
-msgid "config.nrofsubjects.label"
-msgstr "How many participants do you need?"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "content.title"
 msgstr "Assignment"
-
-#, elixir-autogen, elixir-format
-msgid "devices.label"
-msgstr "Which devices can participants use?"
-
-#, elixir-autogen, elixir-format
-msgid "devices.title"
-msgstr "Devices"
-
-#, elixir-autogen, elixir-format
-msgid "duration.label"
-msgstr "How man minutes do you estimate participants will need?"
-
-#, elixir-autogen, elixir-format
-msgid "language.title"
-msgstr "Language"
-
-#, elixir-autogen, elixir-format
-msgid "languages.label"
-msgstr "In what language is the assignment written?"
 
 #, elixir-autogen, elixir-format
 msgid "open.button"
@@ -101,3 +77,11 @@ msgstr "Publish"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retract.button"
 msgstr "Contact researcher"
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.consent.continue.button"
+msgstr "Continue"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "onboarding.consent.title"
+msgstr "Consent"

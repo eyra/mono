@@ -10,13 +10,15 @@ defmodule Systems.Assignment.Model do
   alias Systems.{
     Assignment,
     Workflow,
-    Budget
+    Budget,
+    Consent
   }
 
   schema "assignments" do
     field(:special, Ecto.Atom)
     field(:status, Ecto.Enum, values: Assignment.Status.values(), default: :concept)
 
+    belongs_to(:consent_agreement, Consent.AgreementModel)
     belongs_to(:info, Assignment.InfoModel)
     belongs_to(:workflow, Workflow.Model)
     belongs_to(:crew, Systems.Crew.Model)
@@ -63,7 +65,7 @@ defmodule Systems.Assignment.Model do
 
   def flatten(assignment) do
     assignment
-    |> Map.take([:id, :info, :workflow, :crew, :budget, :excluded, :director])
+    |> Map.take([:id, :consent_agreement, :info, :workflow, :crew, :budget, :excluded, :director])
     |> Map.put(:tool, tool(assignment))
   end
 
@@ -77,6 +79,7 @@ defmodule Systems.Assignment.Model do
   def preload_graph(:down) do
     [
       :excluded,
+      consent_agreement: [:revisions],
       info: [],
       crew: [:tasks, :members, :auth_node],
       workflow: Workflow.Model.preload_graph(:down),
