@@ -239,6 +239,7 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
+  attr(:placeholder, :string, default: "")
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
@@ -249,6 +250,7 @@ defmodule Frameworks.Pixel.Form do
     <.input
       form={@form}
       field={@field}
+      placeholder={@placeholder}
       label_text={@label_text}
       label_color={@label_color}
       background={@background}

@@ -85,3 +85,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "onboarding.consent.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.data_storage.title"
+msgstr ""

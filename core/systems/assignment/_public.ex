@@ -19,7 +19,8 @@ defmodule Systems.Assignment.Public do
     Consent,
     Budget,
     Workflow,
-    Crew
+    Crew,
+    Storage
   }
 
   @min_expiration_timeout 30
@@ -171,6 +172,35 @@ defmodule Systems.Assignment.Public do
     |> Workflow.ItemModel.changeset(%{})
     |> Ecto.Changeset.put_assoc(:tool_ref, tool_ref)
   end
+
+  def delete_storage_endpoint!(%{storage_endpoint_id: nil} = assignment) do
+    assignment
+  end
+
+  def delete_storage_endpoint!(assignment) do
+    {:ok, assignment} =
+      Assignment.Model.changeset(assignment, %{})
+      |> Ecto.Changeset.put_assoc(:storage_endpoint, nil)
+      |> Repo.update()
+
+    assignment
+  end
+
+  def create_storage_endpoint!(%{storage_endpoint_id: nil} = assignment) do
+    storage_endpoint =
+      %Storage.EndpointModel{}
+      |> Storage.EndpointModel.changeset(%{})
+
+    {:ok, assignment} =
+      Assignment.Model.changeset(assignment, %{})
+      |> Ecto.Changeset.put_assoc(:storage_endpoint, storage_endpoint)
+      |> Repo.update()
+
+    assignment
+    |> Repo.preload(Assignment.Model.preload_graph(:down))
+  end
+
+  def create_storage_endpoint!(assignment), do: assignment
 
   def copy(
         %Assignment.Model{} = assignment,

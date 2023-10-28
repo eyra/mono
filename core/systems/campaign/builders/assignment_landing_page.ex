@@ -6,7 +6,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
   import Frameworks.Utility.LiveCommand, only: [live_command: 2]
   import Frameworks.Utility.List
 
-  alias Frameworks.Pixel.Dropdown
+  alias Frameworks.Pixel.DropdownSelector
 
   alias Systems.{
     Campaign,
@@ -290,7 +290,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
   def handle_submit(_, %{assigns: %{selected_time_slot: nil}} = socket) do
     warning = dgettext("link-lab", "submit.warning.no.selection")
 
-    Phoenix.LiveView.send_update(Dropdown.Selector,
+    Phoenix.LiveView.send_update(DropdownSelector,
       id: :dropdown_selector,
       model: %{warning: warning}
     )

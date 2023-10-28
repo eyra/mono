@@ -1,4 +1,4 @@
-defmodule Systems.DataDonation.StorageBackend do
+defmodule Systems.Storage.Backend do
   @callback store(
               session :: map(),
               vm :: map(),

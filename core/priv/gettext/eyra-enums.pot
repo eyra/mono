@@ -349,3 +349,19 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "platforms.tiktok"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage_backend_types.azure"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage_backend_types.centerdata"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage_backend_types.yoda"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage_backend_types.aws"
+msgstr ""

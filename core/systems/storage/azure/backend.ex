@@ -1,5 +1,5 @@
-defmodule Systems.DataDonation.AzureStorageBackend do
-  @behaviour Systems.DataDonation.StorageBackend
+defmodule Systems.Storage.Azure.Backend do
+  @behaviour Systems.Storage.Backend
 
   require Logger
 
@@ -32,7 +32,7 @@ defmodule Systems.DataDonation.AzureStorageBackend do
         end
 
       {:error, error} ->
-        Logger.error("[AzureStorageBackend] #{error}")
+        Logger.error("[Azure.Backend] #{error}")
         {:error, error}
     end
   end

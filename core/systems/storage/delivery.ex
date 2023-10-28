@@ -1,4 +1,4 @@
-defmodule Systems.DataDonation.Delivery do
+defmodule Systems.Storage.Delivery do
   defmodule DeliveryError do
     @moduledoc false
     defexception [:message]
@@ -16,11 +16,11 @@ defmodule Systems.DataDonation.Delivery do
   def perform(%Oban.Job{args: args}) do
     case deliver(args) do
       {:error, error} ->
-        Logger.error("Data-donation delivery error: #{error}")
+        Logger.error("Data delivery error: #{error}")
         {:error, error}
 
       _ ->
-        Logger.debug("Data-donation delivery succeeded")
+        Logger.debug("Data delivery succeeded")
         :ok
     end
   end
@@ -42,7 +42,7 @@ defmodule Systems.DataDonation.Delivery do
   defp storage(storage_key) do
     config = config()
 
-    case Keyword.get(config, String.to_atom(storage_key)) do
+    case Keyword.get(config, String.to_existing_atom(storage_key)) do
       nil ->
         raise DeliveryError, "Could not deliver donated data, invalid config for #{storage_key}"
 

@@ -182,3 +182,11 @@ msgstr "Consent"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.gdpr.forward"
 msgstr "Ga naar Consent"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings"
+msgstr "Instellingen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings.forward"
+msgstr "Ga naar Instellingen"

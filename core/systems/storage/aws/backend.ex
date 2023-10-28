@@ -1,5 +1,5 @@
-defmodule Systems.DataDonation.S3StorageBackend do
-  @behaviour Systems.DataDonation.StorageBackend
+defmodule Systems.Storage.AWS.Backend do
+  @behaviour Systems.Storage.Backend
 
   alias ExAws.S3
 
@@ -15,7 +15,7 @@ defmodule Systems.DataDonation.S3StorageBackend do
 
   defp bucket do
     :core
-    |> Application.fetch_env!(:s3)
+    |> Application.fetch_env!(:aws)
     |> Keyword.fetch!(:bucket)
   end
 

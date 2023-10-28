@@ -85,3 +85,11 @@ msgstr "Continue"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.consent.title"
 msgstr "Consent"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.title"
+msgstr "Settings"
+
+#, elixir-autogen, elixir-format
+msgid "settings.data_storage.title"
+msgstr "Participant data storage"

@@ -1,4 +1,4 @@
-defmodule Systems.DataDonation.CenterdataFakeApiPage do
+defmodule Systems.Union.Centerdata.FakeApiPage do
   use CoreWeb, :live_view
   use CoreWeb.LiveLocale
   use CoreWeb.LiveAssignHelper

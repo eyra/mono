@@ -182,3 +182,11 @@ msgstr "Consent"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.gdpr.forward"
 msgstr "Go to Consent"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings"
+msgstr "Settings"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings.forward"
+msgstr "Go to Settings"

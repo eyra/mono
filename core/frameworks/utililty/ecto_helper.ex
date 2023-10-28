@@ -4,6 +4,14 @@ defmodule Frameworks.Utility.EctoHelper do
   alias Core.Repo
   alias Frameworks.Signal
 
+  def put_assoc(changeset, key, value, execute?) do
+    if execute? do
+      Changeset.put_assoc(changeset, key, value)
+    else
+      changeset
+    end
+  end
+
   def upsert(%{data: %{id: id}} = changeset) when not is_nil(id) do
     Repo.update(changeset)
   end

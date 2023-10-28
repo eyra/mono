@@ -1,4 +1,4 @@
-defmodule Systems.DataDonation.CenterdataController do
+defmodule Systems.Union.Centerdata.Controller do
   use CoreWeb, :controller
 
   @supported_locales ~w(nl en)

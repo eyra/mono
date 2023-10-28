@@ -1,0 +1,64 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new messages manually only if they're dynamic
+## messages that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+#
+msgid ""
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "endpoint_form.type.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "aws.access_key_id.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "aws.region_code.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "aws.s3_bucket_name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "aws.secret_access_key.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "azure.account_name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "azure.container.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "azure.sas_token.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "centerdata.url.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "centerdata.url.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "yoda.password.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "yoda.url.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "yoda.user.label"
+msgstr ""

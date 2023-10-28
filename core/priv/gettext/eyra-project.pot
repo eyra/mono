@@ -182,3 +182,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.gdpr.forward"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings.forward"
+msgstr ""

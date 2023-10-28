@@ -5,7 +5,7 @@ defmodule Systems.Citizen.Pool.Form do
 
   import Frameworks.Pixel.Form
   alias Frameworks.Utility.EctoHelper
-  alias Frameworks.Pixel.Dropdown
+  alias Frameworks.Pixel.DropdownSelector
   alias Frameworks.Pixel.Text
 
   alias Systems.{
@@ -244,7 +244,7 @@ defmodule Systems.Citizen.Pool.Form do
             <%= dgettext("link-citizen", "pool.currency.label") %>
           </Text.form_field_label>
           <.spacing value="XXS" />
-          <.live_component module={Dropdown.Selector} {@currency_selector} />
+          <.live_component module={DropdownSelector} {@currency_selector} />
         <% end %>
 
         <.spacing value="M" />

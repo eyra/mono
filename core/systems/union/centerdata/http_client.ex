@@ -1,4 +1,4 @@
-defmodule Systems.DataDonation.CenterdataHTTPClient do
+defmodule Systems.Union.Centerdata.HTTPClient do
   use HTTPoison.Base
 
   @impl HTTPoison.Base

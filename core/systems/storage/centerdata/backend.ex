@@ -1,5 +1,5 @@
-defmodule Systems.DataDonation.CenterdataStorageBackend do
-  @behaviour Systems.DataDonation.StorageBackend
+defmodule Systems.Storage.Centerdata.Backend do
+  @behaviour Systems.Storage.Backend
 
   require Logger
 
@@ -36,7 +36,7 @@ defmodule Systems.DataDonation.CenterdataStorageBackend do
     Application.get_env(
       :core,
       :data_donation_http_client,
-      Systems.DataDonation.CenterdataHTTPClient
+      Systems.Union.Centerdata.HTTPClient
     )
   end
 end

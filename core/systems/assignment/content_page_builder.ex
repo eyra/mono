@@ -159,22 +159,22 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp create_tab(
          :config,
-         %{info: info},
+         assignment,
          show_errors,
          _assigns
        ) do
     ready? = false
 
     %{
-      id: :config_form,
+      id: :settings_form,
       ready: ready?,
       show_errors: show_errors,
-      title: dgettext("eyra-project", "tabbar.item.config"),
-      forward_title: dgettext("eyra-project", "tabbar.item.config.forward"),
+      title: dgettext("eyra-project", "tabbar.item.settings"),
+      forward_title: dgettext("eyra-project", "tabbar.item.settings.forward"),
       type: :fullpage,
-      live_component: Assignment.InfoForm,
+      live_component: Assignment.SettingsView,
       props: %{
-        entity: info
+        entity: assignment
       }
     }
   end

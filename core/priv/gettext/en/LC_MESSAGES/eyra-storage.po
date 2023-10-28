@@ -1,0 +1,64 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "endpoint_form.type.label"
+msgstr "Choose a storage service"
+
+#, elixir-autogen, elixir-format
+msgid "aws.access_key_id.label"
+msgstr "Access key id"
+
+#, elixir-autogen, elixir-format
+msgid "aws.region_code.label"
+msgstr "Region code"
+
+#, elixir-autogen, elixir-format
+msgid "aws.s3_bucket_name.label"
+msgstr "Bucket name"
+
+#, elixir-autogen, elixir-format
+msgid "aws.secret_access_key.label"
+msgstr "Secret access key"
+
+#, elixir-autogen, elixir-format
+msgid "azure.account_name.label"
+msgstr "Account name"
+
+#, elixir-autogen, elixir-format
+msgid "azure.container.label"
+msgstr "Container"
+
+#, elixir-autogen, elixir-format
+msgid "azure.sas_token.label"
+msgstr "SAS token"
+
+#, elixir-autogen, elixir-format
+msgid "centerdata.url.label"
+msgstr "URL"
+
+#, elixir-autogen, elixir-format
+msgid "centerdata.url.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "yoda.password.label"
+msgstr "Password"
+
+#, elixir-autogen, elixir-format
+msgid "yoda.url.label"
+msgstr "Portal"
+
+#, elixir-autogen, elixir-format
+msgid "yoda.user.label"
+msgstr "Email"
