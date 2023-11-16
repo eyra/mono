@@ -48,10 +48,6 @@ msgid "centerdata.url.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "centerdata.url.placeholder"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "yoda.password.label"
 msgstr ""
 

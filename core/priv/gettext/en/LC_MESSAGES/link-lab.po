@@ -122,7 +122,7 @@ msgstr "Search participant"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.body"
-msgstr "On arrival, enter the participant Panl ID or email below. Their reserved time slot will appear and you can check them in."
+msgstr "On arrival, enter the participant Next ID or email below. Their reserved time slot will appear and you can check them in."
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.subject.expired"
@@ -134,7 +134,7 @@ msgstr "No results"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "inquiry.checkin.label"
-msgstr "Check in with Panl ID:"
+msgstr "Check in with Next ID:"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "search.email.not.found"

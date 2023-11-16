@@ -95,12 +95,12 @@ msgid "ethical.title"
 msgstr "Ethische toetsing"
 
 #, elixir-autogen, elixir-format
-msgid "panlid.description"
-msgstr "Panl voegt automatisch een ID van de deelnemer toe aan de URL van je Qualtrics vragenlijst. Om deze ID in Qualtrics te kunnen gebruiken, voeg je een \"embedded data element field\" toe met de naam \"panl_id\". Instructies hiervoor %{link} in \"PART 2\"."
+msgid "nextid.description"
+msgstr "Next voegt automatisch een ID van de deelnemer toe aan de URL van je Qualtrics vragenlijst. Om deze ID in Qualtrics te kunnen gebruiken, voeg je een \"embedded data element field\" toe met de naam \"next_id\". Instructies hiervoor %{link} in \"PART 2\"."
 
 #, elixir-autogen, elixir-format
-msgid "panlid.title"
-msgstr "Panl ID"
+msgid "nextid.title"
+msgstr "Next ID"
 
 #, elixir-autogen, elixir-format
 msgid "setup.title"
@@ -115,15 +115,15 @@ msgid "ethical.description"
 msgstr "Zorg ervoor dat je de %{link} doorlopen hebt en dat je goedkeuring hebt van de SBE Ethics Review Board (ERB), wanneer dat vereist is voor jouw studie. Vul de ERB code in die je ontvangen hebt."
 
 #, elixir-autogen, elixir-format
-msgid "study.link.description"
+msgid "link.description"
 msgstr "Volg %{link} om jouw Qualtrics vragenlijst link aan te maken op te halen. Plak deze link in het \"Vragenlijst link\" veld van het formulier hieronder."
 
 #, elixir-autogen, elixir-format
-msgid "study.link.title"
-msgstr "Anonymous Questionnaire Link"
+msgid "link.title"
+msgstr "Vragenlijst Link"
 
 #, elixir-autogen, elixir-format
-msgid "panlid.instructions.link"
+msgid "nextid.instructions.link"
 msgstr "vind je hier"
 
 #, elixir-autogen, elixir-format

@@ -36,7 +36,7 @@ msgstr "Opdracht"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "ticket.title"
-msgstr "Jouw Panl ID"
+msgstr "Jouw Next ID"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "earned.label"
@@ -60,7 +60,7 @@ msgstr "Afronden"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "content.title"
-msgstr "Jouw Panl ID"
+msgstr "Jouw Next ID"
 
 #, elixir-autogen, elixir-format
 msgid "open.button"
@@ -93,3 +93,83 @@ msgstr "Instellingen"
 #, elixir-autogen, elixir-format
 msgid "settings.data_storage.title"
 msgstr "Opslag van deelnemers data"
+
+#, elixir-autogen, elixir-format
+msgid "panel.title"
+msgstr "Panel"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panel.label"
+msgstr "Selecteer jou panel"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "connect.button"
+msgstr "Koppeling maken"
+
+#, elixir-autogen, elixir-format
+msgid "connector.cancel.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "connector.connect.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "connector.panel.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "connector.panel.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "connector.storage.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "connector.storage.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.data_storage.body"
+msgstr "Opslag van deelnemers data"
+
+#, elixir-autogen, elixir-format
+msgid "settings.panel.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.panel.title"
+msgstr "Instellingen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "disconnect.button"
+msgstr "Ontkoppel"
+
+#, elixir-autogen, elixir-format
+msgid "panel_form.type.label"
+msgstr "Kies jouw panel"
+
+#, elixir-autogen, elixir-format
+msgid "panel.liss.connector.annotation"
+msgstr "<h3>LISS</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div><div>Ga naar <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a> voor meer informatie.</div>"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panel.generic.connector.annotation"
+msgstr "<h3>Other</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div>"
+
+#, elixir-autogen, elixir-format
+msgid "panel.ioresearch.connector.annotation"
+msgstr "<h3>I&O Research</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div><div>Ga naar <a href=\"https://www.ioresearch.nl/\">www.ioresearch.nl</a> voor meer informatie.</div>"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panel.generic.connection.annotation"
+msgstr "<h3>Other</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div>"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panel.ioresearch.connection.annotation"
+msgstr "<h3>I&O Research</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div><div>Ga naar <a href=\"https://www.ioresearch.nl/\">www.ioresearch.nl</a> voor meer informatie.</div>"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panel.liss.connection.annotation"
+msgstr "<h3>LISS</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div><div>Ga naar <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a> voor meer informatie.</div>"

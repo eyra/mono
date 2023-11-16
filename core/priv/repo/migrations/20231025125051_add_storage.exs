@@ -58,12 +58,15 @@ defmodule Core.Repo.Migrations.AddStorage do
 
     alter table(:assignments) do
       add(:storage_endpoint_id, references(:storage_endpoints, on_delete: :nilify_all), null: true)
+
+      add(:external_panel, :string, null: true)
     end
   end
 
   def down do
     alter table(:assignments) do
       remove(:storage_endpoint_id)
+      remove(:external_panel)
     end
 
     drop(constraint(:storage_endpoints, :must_have_at_most_one_special))

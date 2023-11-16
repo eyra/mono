@@ -24,12 +24,12 @@ msgid "tabbar.item.config.forward"
 msgstr "Go to Settings"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.invite"
-msgstr "Invite"
+msgid "tabbar.item.panel"
+msgstr "Panel"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.invite.forward"
-msgstr "Go to Invite"
+msgid "tabbar.item.panel.forward"
+msgstr "Go to Panel"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"
@@ -80,10 +80,6 @@ msgid "form.name.label"
 msgstr "Name"
 
 #, elixir-autogen, elixir-format
-msgid "invite.title"
-msgstr "Invite"
-
-#, elixir-autogen, elixir-format
 msgid "monitor.title"
 msgstr "Monitor"
 
@@ -110,18 +106,6 @@ msgstr "Add new item"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "add.new.item.button.short"
 msgstr "New item"
-
-#, elixir-autogen, elixir-format
-msgid "campaign.invite.title"
-msgstr "Invite by campaign"
-
-#, elixir-autogen, elixir-format
-msgid "direct.invite.description"
-msgstr "You can invite people directly using the url below."
-
-#, elixir-autogen, elixir-format
-msgid "direct.invite.title"
-msgstr "Invite by url"
 
 #, elixir-autogen, elixir-format
 msgid "label.concept"
@@ -189,4 +173,12 @@ msgstr "Settings"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.settings.forward"
+msgstr "Go to Settings"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.invite"
+msgstr "Panel"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.invite.forward"
 msgstr "Go to Settings"

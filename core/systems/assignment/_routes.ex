@@ -8,6 +8,21 @@ defmodule Systems.Assignment.Routes do
         live("/assignment/:id/content", ContentPage)
         get("/assignment/callback/:item", Controller, :callback)
       end
+
+      scope "/assignment", Systems.Assignment.Centerdata do
+        pipe_through([:browser])
+        live("/centerdata/fakeapi/page", Centerdata.FakeApiPage)
+      end
+
+      scope "/assignment", Systems.Assignment do
+        pipe_through([:browser])
+        get("/:id/:panel", ExternalPanelController, :create)
+      end
+
+      scope "/assignment/centerdata", Systems.Assignment do
+        pipe_through([:browser_unprotected])
+        post("/:id/:panel", ExternalPanelController, :create)
+      end
     end
   end
 end

@@ -36,7 +36,7 @@ msgstr "Settings"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "ticket.title"
-msgstr "Your Panl ID"
+msgstr "Your Next ID"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "earned.label"
@@ -92,4 +92,84 @@ msgstr "Settings"
 
 #, elixir-autogen, elixir-format
 msgid "settings.data_storage.title"
-msgstr "Participant data storage"
+msgstr "Storage"
+
+#, elixir-autogen, elixir-format
+msgid "panel.title"
+msgstr "Panel"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panel.label"
+msgstr "Select your panel"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "connect.button"
+msgstr "Set up connection"
+
+#, elixir-autogen, elixir-format
+msgid "connector.cancel.button"
+msgstr "Cancel"
+
+#, elixir-autogen, elixir-format
+msgid "connector.connect.button"
+msgstr "Connect"
+
+#, elixir-autogen, elixir-format
+msgid "connector.panel.text"
+msgstr "Connect your panel"
+
+#, elixir-autogen, elixir-format
+msgid "connector.panel.title"
+msgstr "Set up connection"
+
+#, elixir-autogen, elixir-format
+msgid "connector.storage.text"
+msgstr "Connect your participant database"
+
+#, elixir-autogen, elixir-format
+msgid "connector.storage.title"
+msgstr "Set up connection"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.data_storage.body"
+msgstr "Connection to the database that will be used to store the participant data."
+
+#, elixir-autogen, elixir-format
+msgid "settings.panel.body"
+msgstr "Connection to the panel that will provide for the participants."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.panel.title"
+msgstr "Panel"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "disconnect.button"
+msgstr "Disconnect"
+
+#, elixir-autogen, elixir-format
+msgid "panel_form.type.label"
+msgstr "Select your panel"
+
+#, elixir-autogen, elixir-format
+msgid "panel.liss.connector.annotation"
+msgstr "<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.<br><br>For more information see <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a></div>"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panel.generic.connector.annotation"
+msgstr "<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div>"
+
+#, elixir-autogen, elixir-format
+msgid "panel.ioresearch.connector.annotation"
+msgstr "<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.<br><br>For more information see <a href=\"https://www.ioresearch.nl/\">www.ioresearch.nl</a></div>"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panel.generic.connection.annotation"
+msgstr "<div>Copy the url below and hand it over to your contact person at the panel agency. They use this url to send participants to this assignment.<br><br>The url contains the following parameters:<ul><li>participant: identifier from the panel agency</li><li>language: 'nl' or 'en'</li></ul></div>"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panel.ioresearch.connection.annotation"
+msgstr "<div>Copy the url below and hand it over to your contact person at I&O Research. They use this url to send participants to this assignment.<br><br>The url contains the following parameters:<ul><li>participant: identifier from I&O Research</li><li>language: 'nl' or 'en'</li></ul></div>"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panel.liss.connection.annotation"
+msgstr "<div>Copy the url below and hand it over to your contact person at LISS. They use this url to send participants to this assignment.</div>"

@@ -245,3 +245,11 @@ msgstr "Privacy"
 #, elixir-autogen, elixir-format
 msgid "terms.link"
 msgstr "Terms"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "edit.button"
+msgstr "Edit"
+
+#, elixir-autogen, elixir-format
+msgid "copy.clipboard.button"
+msgstr "Copy"

@@ -111,7 +111,7 @@ defmodule Systems.Assignment.LandingPageTest do
         |> element("[phx-click=\"open\"]")
         |> render_click()
 
-      assert {:error, {:redirect, %{to: "https://eyra.co/alliance/123?panl_id=1"}}} = html
+      assert {:error, {:redirect, %{to: "https://eyra.co/alliance/123?next_id=1"}}} = html
 
       task = Crew.Public.get_task!(task.id)
       assert %Systems.Crew.TaskModel{started_at: started_at, updated_at: updated_at} = task

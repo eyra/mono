@@ -9,6 +9,15 @@ defmodule Frameworks.Pixel.ErrorHelpers do
   @doc """
   Checkss if there are errors.
   """
+  def show_errors?(form) do
+    form
+    |> Map.get(:options, [])
+    |> Keyword.get(:"data-show-errors", true)
+  end
+
+  @doc """
+  Checkss if there are errors.
+  """
   def has_error?(form, field) do
     form
     |> Map.get(:errors, [])

@@ -17,8 +17,7 @@ defmodule Systems.Assignment.Switch do
 
   @impl true
   def intercept({:workflow, _} = signal, %{workflow: workflow} = message) do
-    if assignment =
-         Assignment.Public.get_by_workflow(workflow, Assignment.Model.preload_graph(:down)) do
+    if assignment = Assignment.Public.get_by(workflow, Assignment.Model.preload_graph(:down)) do
       dispatch!(
         {:assignment, signal},
         Map.merge(message, %{assignment: assignment})
@@ -28,7 +27,18 @@ defmodule Systems.Assignment.Switch do
 
   @impl true
   def intercept({:assignment_info, _} = signal, %{info: info} = message) do
-    if assignment = Assignment.Public.get_by_info!(info, Assignment.Model.preload_graph(:down)) do
+    if assignment = Assignment.Public.get_by(info, Assignment.Model.preload_graph(:down)) do
+      handle(
+        {:assignment, signal},
+        Map.merge(message, %{assignment: assignment})
+      )
+    end
+  end
+
+  @impl true
+  def intercept({:storage_endpoint, _} = signal, %{storage_endpoint: storage_endpoint} = message) do
+    if assignment =
+         Assignment.Public.get_by(storage_endpoint, Assignment.Model.preload_graph(:down)) do
       handle(
         {:assignment, signal},
         Map.merge(message, %{assignment: assignment})
@@ -46,7 +56,7 @@ defmodule Systems.Assignment.Switch do
         %{consent_agreement: consent_agreement} = message
       ) do
     if assignment =
-         Assignment.Public.get_by_consent_agreement(
+         Assignment.Public.get_by(
            consent_agreement,
            Assignment.Model.preload_graph(:down)
          ) do

@@ -346,7 +346,7 @@ defmodule Systems.Campaign.Public do
       }) do
     # FIXME: budget change after pool update should be handled in student submission form
     budget = Directable.director(pool).resolve_budget(pool_id, nil)
-    Assignment.Public.update(assignment, budget)
+    Assignment.Public.update_budget(assignment, budget)
   end
 
   def submission_updated(_), do: nil

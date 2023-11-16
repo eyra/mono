@@ -1,15 +1,18 @@
 defmodule Systems.Assignment.CrewPage do
   use CoreWeb, :live_view
   use Systems.Observatory.Public
+  use CoreWeb.LiveRemoteIp
   use CoreWeb.Layouts.Stripped.Component, :projects
 
+  require Logger
   alias Frameworks.Concept
 
   alias Systems.{
     Assignment,
     Project,
     Workflow,
-    Crew
+    Crew,
+    Storage
   }
 
   import Assignment.StartView
@@ -23,7 +26,7 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def mount(%{"id" => id}, _session, socket) do
+  def mount(%{"id" => id} = _params, _session, socket) do
     model = Assignment.Public.get!(id, Assignment.Model.preload_graph(:down))
 
     {
@@ -154,6 +157,24 @@ defmodule Systems.Assignment.CrewPage do
 
   defp task_status(%{status: status}), do: status
   defp task_status(_), do: :pending
+
+  @impl true
+  def handle_info(
+        {:store_participant_data, _data},
+        %{assigns: %{model: %{storage_endpoint: nil}}} = socket
+      ) do
+    raise "Unable to store participant data: no storage endpoint configurated"
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(
+        {:store_participant_data, data},
+        %{assigns: %{model: %{storage_endpoint: endpoint}, remote_ip: remote_ip}} = socket
+      ) do
+    Storage.Public.store(endpoint, data, remote_ip)
+    {:noreply, socket}
+  end
 
   @impl true
   def handle_info(

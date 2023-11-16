@@ -1,17 +1,10 @@
-defmodule Systems.Union.Centerdata.FakeApiPage do
+defmodule Systems.Assignment.Centerdata.FakeApiPage do
   use CoreWeb, :live_view
   use CoreWeb.LiveLocale
   use CoreWeb.LiveAssignHelper
   use CoreWeb.Layouts.Stripped.Component, :data_donation
 
   import Phoenix.Component
-
-  # data(page, :any)
-  # data(qu_1, :any)
-  # data(respondent, :any)
-  # data(token, :any)
-  # data(quest, :any)
-  # data(button_next, :any)
 
   @impl true
   def mount(

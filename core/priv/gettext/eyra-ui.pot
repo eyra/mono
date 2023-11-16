@@ -245,3 +245,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "terms.link"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "edit.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "copy.clipboard.button"
+msgstr ""

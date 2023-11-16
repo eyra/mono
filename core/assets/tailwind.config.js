@@ -8,14 +8,14 @@ module.exports = {
     "./js/**/*.js",
   ],
   safelist: [
-    'drop-shadow-2xl',
-    'text-bold',
-    'text-pre',
-    'font-pre',
-    {pattern: /bg-wysiwyg-./ },
-    {pattern: /h-wysiwyg-./ },
-    {pattern: /border-./ },
-  ],  
+    "drop-shadow-2xl",
+    "text-bold",
+    "text-pre",
+    "font-pre",
+    { pattern: /bg-wysiwyg-./ },
+    { pattern: /h-wysiwyg-./ },
+    { pattern: /border-./ },
+  ],
   theme: {
     boxShadow: {
       top4px: "inset 0 4px 0 0 rgba(0, 0, 0, 0.15)",
@@ -65,12 +65,15 @@ module.exports = {
         "wysiwyg-code": "url('/images/wysiwyg/code.svg')",
         "wysiwyg-list-bullet": "url('/images/wysiwyg/list_bullet.svg')",
         "wysiwyg-list-number": "url('/images/wysiwyg/list_number.svg')",
-        "wysiwyg-nesting-level-decrease": "url('/images/wysiwyg/nesting_level_decrease.svg')",
-        "wysiwyg-nesting-level-increase": "url('/images/wysiwyg/nesting_level_increase.svg')",
+        "wysiwyg-nesting-level-decrease":
+          "url('/images/wysiwyg/nesting_level_decrease.svg')",
+        "wysiwyg-nesting-level-increase":
+          "url('/images/wysiwyg/nesting_level_increase.svg')",
         "wysiwyg-attach": "url('/images/wysiwyg/attach.svg')",
         "wysiwyg-history-undo": "url('/images/wysiwyg/history_undo.svg')",
         "wysiwyg-history-redo": "url('/images/wysiwyg/history_redo.svg')",
         "wysiwyg-bullet": "url('/images/wysiwyg/bullet.svg')",
+        "wysiwyg-bullet-dark": "url('/images/wysiwyg/bullet-secondary.svg')",
       },
       spacing: {
         "1px": "1px",
@@ -194,7 +197,7 @@ module.exports = {
         bold: ["Finador-Bold", "sans-serif"],
         quote: ["Finador-Bold", "sans-serif"],
       },
-      fontSize: {        
+      fontSize: {
         title0: ["64px", "68px"],
         title1: ["50px", "55px"],
         title2: ["40px", "44px"],
@@ -233,7 +236,7 @@ module.exports = {
         card: "376px",
         form: "400px",
         sheet: "760px",
-        popup: "480px", 
+        popup: "480px",
         "popup-sm": "520px",
         "popup-md": "730px",
         "popup-lg": "1228px",

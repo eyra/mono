@@ -69,8 +69,8 @@ defmodule Systems.Project.ToolRefModel do
 
   def flatten(item), do: tool(item)
 
-  def external_path(%{alliance_tool: alliance_tool}, panl_id) do
-    Alliance.ToolModel.external_path(alliance_tool, panl_id)
+  def external_path(%{alliance_tool: alliance_tool}, next_id) do
+    Alliance.ToolModel.external_path(alliance_tool, next_id)
   end
 
   def external_path(_, _), do: nil

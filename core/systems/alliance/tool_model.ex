@@ -148,14 +148,14 @@ defmodule Systems.Alliance.ToolModel do
     |> to_string()
   end
 
-  def external_path(%{url: url}, panl_id)
+  def external_path(%{url: url}, next_id)
       when not is_nil(url) do
     url_components = URI.parse(url)
 
     query =
       url_components.query
       |> decode_query()
-      |> Map.put(:panl_id, panl_id)
+      |> Map.put(:next_id, next_id)
       |> URI.encode_query(:rfc3986)
 
     url_components

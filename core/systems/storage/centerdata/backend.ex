@@ -36,7 +36,7 @@ defmodule Systems.Storage.Centerdata.Backend do
     Application.get_env(
       :core,
       :data_donation_http_client,
-      Systems.Union.Centerdata.HTTPClient
+      Frameworks.Utility.HTTPClient
     )
   end
 end

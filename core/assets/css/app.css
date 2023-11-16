@@ -3,7 +3,7 @@
 @tailwind components;
 
 trix-toolbar {
-  @apply mb-4 drop-shadow-lg h-8; 
+  @apply mb-4 drop-shadow-lg h-8;
 }
 
 trix-toolbar .trix-button-row {
@@ -11,23 +11,29 @@ trix-toolbar .trix-button-row {
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
-  overflow-x: auto; 
+  overflow-x: auto;
 }
 
 trix-toolbar .trix-button-group {
-  @apply flex rounded-lg overflow-hidden h-full; 
-  }
+  @apply flex rounded-lg overflow-hidden h-full;
+}
+trix-toolbar .trix-button-group:not(:first-child) {
+  margin-left: 1.5vw;
+}
+@media (max-width: 768px) {
   trix-toolbar .trix-button-group:not(:first-child) {
-    margin-left: 1.5vw; }
-    @media (max-width: 768px) {
-      trix-toolbar .trix-button-group:not(:first-child) {
-        margin-left: 0; } }
+    margin-left: 0;
+  }
+}
 
 trix-toolbar .trix-button-group-spacer {
-  flex-grow: 1; }
-  @media (max-width: 768px) {
-    trix-toolbar .trix-button-group-spacer {
-      display: none; } }
+  flex-grow: 1;
+}
+@media (max-width: 768px) {
+  trix-toolbar .trix-button-group-spacer {
+    display: none;
+  }
+}
 
 trix-toolbar .trix-button {
   height: 100%;
@@ -41,112 +47,125 @@ trix-toolbar .trix-button {
   border: none;
   padding: 4px;
   border-radius: 0;
-  background: #fff; }
-  trix-toolbar .trix-button:not(:first-child) {
-    border-left: 1px solid #eee; }
-  trix-toolbar .trix-button.trix-active {
-    @apply bg-primarylight;
+  background: #fff;
+}
+trix-toolbar .trix-button:not(:first-child) {
+  border-left: 1px solid #eee;
+}
+trix-toolbar .trix-button.trix-active {
+  @apply bg-primarylight;
+}
+trix-toolbar .trix-button:not(:disabled) {
+  cursor: pointer;
+}
+trix-toolbar .trix-button:disabled {
+  color: rgba(0, 0, 0, 0.3);
+}
+@media (max-width: 768px) {
+  trix-toolbar .trix-button {
+    letter-spacing: -0.01em;
+    padding: 0 0.3em;
   }
-  trix-toolbar .trix-button:not(:disabled) {
-    cursor: pointer; }
-  trix-toolbar .trix-button:disabled {
-    color: rgba(0, 0, 0, 0.3); }
-  @media (max-width: 768px) {
-    trix-toolbar .trix-button {
-      letter-spacing: -0.01em;
-      padding: 0 0.3em; } }
+}
 
-trix-toolbar .trix-button--icon {  
+trix-toolbar .trix-button--icon {
   font-size: inherit;
   width: 2.6em;
   max-width: calc(0.8em + 4vw);
-  text-indent: -9999px; }
-  @media (max-width: 768px) {
-    trix-toolbar .trix-button--icon {
-      height: 100%;
-      max-width: calc(0.8em + 3.5vw); } }
+  text-indent: -9999px;
+}
+@media (max-width: 768px) {
+  trix-toolbar .trix-button--icon {
+    height: 100%;
+    max-width: calc(0.8em + 3.5vw);
+  }
+}
+trix-toolbar .trix-button--icon::before {
+  display: inline-block;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  bottom: 4px;
+  left: 4px;
+  content: "";
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+@media (max-width: 768px) {
   trix-toolbar .trix-button--icon::before {
-    display: inline-block;
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    bottom: 4px;
-    left: 4px;
-    content: "";
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain; }
-    @media (max-width: 768px) {
-      trix-toolbar .trix-button--icon::before {
-        right: 6%;
-        left: 6%; } }
-  trix-toolbar .trix-button--icon:disabled::before {
-    opacity: 0.3; }
-    
+    right: 6%;
+    left: 6%;
+  }
+}
+trix-toolbar .trix-button--icon:disabled::before {
+  opacity: 0.3;
+}
+
 .trix-button-group--file-tools {
   border: 0 !important;
-}  
-  
+}
+
 .trix-button--icon-attach,
 .trix-button--icon-decrease-nesting-level,
 .trix-button--icon-increase-nesting-level {
-  display :none;
+  display: none;
 }
 
 trix-toolbar .trix-button--icon-attach::before {
-  @apply bg-wysiwyg-attach
+  @apply bg-wysiwyg-attach;
 }
 
 trix-toolbar .trix-button--icon-bold::before {
-  @apply bg-wysiwyg-bold  
+  @apply bg-wysiwyg-bold;
 }
 
 trix-toolbar .trix-button--icon-italic::before {
-  @apply bg-wysiwyg-italic  
+  @apply bg-wysiwyg-italic;
 }
 
 trix-toolbar .trix-button--icon-link::before {
-  @apply bg-wysiwyg-link  
+  @apply bg-wysiwyg-link;
 }
 
 trix-toolbar .trix-button--icon-strike::before {
-  @apply bg-wysiwyg-strike  
+  @apply bg-wysiwyg-strike;
 }
 
 trix-toolbar .trix-button--icon-quote::before {
-  @apply bg-wysiwyg-quote  
+  @apply bg-wysiwyg-quote;
 }
 
 trix-toolbar .trix-button--icon-heading-1::before {
-  @apply bg-wysiwyg-heading  
+  @apply bg-wysiwyg-heading;
 }
 
 trix-toolbar .trix-button--icon-code::before {
-  @apply bg-wysiwyg-code  
+  @apply bg-wysiwyg-code;
 }
 
 trix-toolbar .trix-button--icon-bullet-list::before {
-  @apply bg-wysiwyg-list-bullet  
+  @apply bg-wysiwyg-list-bullet;
 }
 
 trix-toolbar .trix-button--icon-number-list::before {
-  @apply bg-wysiwyg-list-number  
+  @apply bg-wysiwyg-list-number;
 }
 
 trix-toolbar .trix-button--icon-undo::before {
-  @apply bg-wysiwyg-history-undo  
+  @apply bg-wysiwyg-history-undo;
 }
 
 trix-toolbar .trix-button--icon-redo::before {
-  @apply bg-wysiwyg-history-redo  
+  @apply bg-wysiwyg-history-redo;
 }
 
 trix-toolbar .trix-button--icon-decrease-nesting-level::before {
-  @apply bg-wysiwyg-nesting-level-decrease  
+  @apply bg-wysiwyg-nesting-level-decrease;
 }
 
 trix-toolbar .trix-button--icon-increase-nesting-level::before {
-  @apply bg-wysiwyg-nesting-level-increase  
+  @apply bg-wysiwyg-nesting-level-increase;
 }
 
 trix-toolbar .trix-dialogs {
@@ -161,11 +180,11 @@ trix-toolbar .trix-input--dialog {
   @apply h-12 rounded bg-white outline-none pl-4 font-body text-bodymedium placeholder-grey2 text-grey1 border-2 border-grey3 focus:border-primary;
 }
 trix-toolbar .trix-input--dialog.validate:invalid {
-  @apply border-warning bg-white
+  @apply border-warning bg-white;
 }
 
 trix-toolbar [data-trix-dialog] [data-trix-validate]:invalid {
-  @apply border-warning bg-white
+  @apply border-warning bg-white;
 }
 
 trix-toolbar .trix-button--dialog {
@@ -177,98 +196,160 @@ trix-toolbar .trix-dialog__link-fields .trix-button-group {
 }
 
 trix-toolbar .trix-dialog__link-fields .trix-button {
-  border-left: 0px; 
+  border-left: 0px;
 }
 
 trix-toolbar .trix-dialog--link {
-  max-width: 600px; }
+  max-width: 600px;
+}
 
 trix-toolbar .trix-dialog__link-fields {
   display: flex;
-  align-items: baseline; }
-  trix-toolbar .trix-dialog__link-fields .trix-input {
-    flex: 1; }
-  trix-toolbar .trix-dialog__link-fields .trix-button-group {
-    flex: 0 0 content;
-    margin: 0; }
-
-
-trix-editor, .wysiwig {
-  @apply text-bodylarge font-body text-grey1 w-full outline-none;
+  align-items: baseline;
+}
+trix-toolbar .trix-dialog__link-fields .trix-input {
+  flex: 1;
+}
+trix-toolbar .trix-dialog__link-fields .trix-button-group {
+  flex: 0 0 content;
+  margin: 0;
 }
 
-trix-editor h1, .wysiwig h1 {
+trix-editor,
+.wysiwig {
+  @apply text-grey1 text-bodylarge font-body w-full outline-none;
+}
+
+trix-editor h1,
+.wysiwig h1 {
   @apply text-title2 font-title2 mb-8;
 }
 
-trix-editor strong, .wysiwig strong {
+trix-editor h2,
+.wysiwig h2 {
+  @apply text-title3 font-title3 mb-8;
+}
+
+trix-editor h3,
+.wysiwig h3 {
+  @apply text-title4 font-title4 mb-8;
+}
+
+trix-editor strong,
+.wysiwig strong {
   @apply font-bold;
 }
 
-trix-editor h1 strong, .wysiwig h1 strong {
+trix-editor h1 strong,
+.wysiwig h1 strong {
   @apply font-title1;
 }
 
-trix-editor strong, .wysiwig strong {
+trix-editor h2 strong,
+.wysiwig h2 strong {
+  @apply font-title1;
+}
+
+trix-editor h3 strong,
+.wysiwig h3 strong {
+  @apply font-title1;
+}
+
+trix-editor strong,
+.wysiwig strong {
   @apply font-bold;
 }
 
-trix-editor a:not(.no-underline), .wysiwig a:not(.no-underline) {
-  @apply text-primary underline cursor-pointer;
+trix-editor a,
+.wysiwig a {
+  @apply text-primary;
 }
 
-trix-editor a:visited, .wysiwig a:visited {
-  @apply text-primary;
-} 
+.wysiwig-dark a {
+  @apply text-tertiary;
+}
 
-trix-editor ul, .wysiwig ul {
+trix-editor a:not(.no-underline),
+.wysiwig a:not(.no-underline) {
+  @apply underline cursor-pointer;
+}
+
+trix-editor ul,
+.wysiwig ul {
   @apply mb-8 list-none;
 }
 
-trix-editor ul li::before, .wysiwig ul li::before {
+trix-editor ul li::before,
+.wysiwig ul li::before {
   @apply bg-wysiwyg-bullet text-primary;
   vertical-align: center;
-  content: "\2022";  /* Add content: \2022 is the CSS Code/unicode for a bullet */
+  content: "\2022"; /* Add content: \2022 is the CSS Code/unicode for a bullet */
   display: inline-block; /* Needed to add space between the bullet and the text */
   width: 30px; /* Also needed for space (tweak if needed) */
   margin-left: 6px; /* Also needed for space (tweak if needed) */
-  background-size:     10px 10px;
-  background-repeat:   no-repeat;
-  background-position: left center;    
-}  
-  
-trix-editor ol, .wysiwig ol {
+  background-size: 10px 10px;
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+
+trix-editor ol,
+.wysiwig ol {
   @apply mb-8 list-none;
   counter-reset: li;
 }
 
-trix-editor ol li::before, .wysiwig ol li::before {
-  @apply text-primary font-label text-title5;
-  content: counter(li) "."; color: theme('colors.primary');
+trix-editor ol li::before,
+.wysiwig ol li::before {
+  @apply font-label text-title5;
+  content: counter(li) ".";
+  color: theme("colors.primary");
   display: inline-block;
   width: 30px; /* Also needed for space (tweak if needed) */
   margin-left: 6px; /* Also needed for space (tweak if needed) */
 }
 
-trix-editor ol li, .wysiwig ol li {
-  counter-increment: li
-}  
+trix-editor ol li,
+.wysiwig ol li {
+  counter-increment: li;
+}
 
-trix-editor pre, .wysiwig pre {    
+trix-editor pre,
+.wysiwig pre {
   @apply text-mono font-mono text-grey2 mb-8 p-8 bg-grey5 rounded-lg relative w-full whitespace-pre-wrap;
   vertical-align: top;
 }
 
-trix-editor blockquote, .wysiwig blockquote {
+trix-editor blockquote,
+.wysiwig blockquote {
   @apply pl-11 pr-11 mb-8 relative font-quote text-quote;
 }
 
-trix-editor blockquote::before, .wysiwig blockquote::before {
-  @apply text-title0 font-title0 text-primary absolute -left-2px top-6px;
+trix-editor blockquote::before,
+.wysiwig blockquote::before {
+  @apply text-primary text-title0 font-title0 absolute -left-2px top-6px;
   vertical-align: center;
   content: "”";
   width: 0px;
-}  
+}
+
+/* DARK MODE */
+
+.wysiwig-dark {
+  @apply text-white;
+}
+
+.wysiwig-dark ul li::before {
+  @apply bg-wysiwyg-bullet-dark text-tertiary;
+}
+
+.wysiwig-dark ol li::before {
+  content: counter(li) ".";
+  color: theme("colors.secondary");
+}
+
+.wysiwig-dark blockquote::before {
+  @apply text-tertiary;
+}
 
 @tailwind utilities;
 

@@ -5,8 +5,17 @@ defmodule Core.Enums.Base do
     quote do
       import CoreWeb.Gettext
 
-      def values do
+      def values(filter \\ nil)
+
+      def values(nil) do
         unquote(values)
+      end
+
+      def values(filter) when is_list(filter) do
+        filter = convert_to_atoms(filter)
+
+        unquote(values)
+        |> Enum.filter(&Enum.member?(filter, &1))
       end
 
       def contains(atom) when is_atom(atom) do
@@ -27,30 +36,26 @@ defmodule Core.Enums.Base do
         end
       end
 
-      def labels() do
-        labels([])
-      end
+      def labels(active_values \\ [], filter \\ nil)
 
-      def labels(nil) do
-        labels([])
-      end
+      def labels(nil, filter), do: labels([], filter)
 
-      def labels(active_values) when is_list(active_values) do
+      def labels(active_values, filter) when is_list(active_values) do
         active_values = convert_to_atoms(active_values)
 
-        values()
+        values(filter)
         |> Enum.map(&convert_to_label(&1, active_values))
       end
 
-      def labels(active_value) do
-        labels([active_value])
+      def labels(active_value, filter) do
+        labels([active_value], filter)
       end
 
       defp convert_to_atoms(values) when is_list(values) do
         Enum.map(values, &convert_to_atom(&1))
       end
 
-      defp convert_to_atom(value) when is_binary(value), do: String.to_atom(value)
+      defp convert_to_atom(value) when is_binary(value), do: String.to_existing_atom(value)
       defp convert_to_atom(value) when is_atom(value), do: value
 
       defp convert_to_label(value, active_values) when is_atom(value) do

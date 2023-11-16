@@ -238,9 +238,9 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
 
   # Alliance open button
 
-  defp open_action(user, tool, crew, panl_id) do
+  defp open_action(user, tool, crew, next_id) do
     label = Frameworks.Concept.ToolModel.open_label(tool)
-    path = Alliance.ToolModel.external_path(tool, panl_id)
+    path = Alliance.ToolModel.external_path(tool, next_id)
 
     %{
       id: :open,
@@ -340,7 +340,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
   end
 
   defp contact_href(email, title, public_id) do
-    "mailto:#{email}?subject=[panl_id=#{public_id}] #{title}"
+    "mailto:#{email}?subject=[next_id=#{public_id}] #{title}"
   end
 
   # Optional behaviour

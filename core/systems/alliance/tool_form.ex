@@ -52,8 +52,8 @@ defmodule Systems.Alliance.ToolForm do
   #   if changeset.valid? do
   #     Directable.director(entity).assign_tester_role(entity, user)
 
-  #     fake_panl_id = "TEST-" <> Faker.UUID.v4()
-  #     external_path = Alliance.ToolModel.external_path(entity, fake_panl_id)
+  #     fake_next_id = "TEST-" <> Faker.UUID.v4()
+  #     external_path = Alliance.ToolModel.external_path(entity, fake_next_id)
 
   #     {:noreply, LiveView.redirect(socket, external: external_path)}
   #   else
@@ -108,9 +108,9 @@ defmodule Systems.Alliance.ToolForm do
     )
   end
 
-  defp panlid_instructions_link() do
+  defp nextid_instructions_link() do
     link_as_string(
-      dgettext("eyra-alliance", "panlid.instructions.link"),
+      dgettext("eyra-alliance", "nextid.instructions.link"),
       "https://www.qualtrics.com/support/survey-platform/survey-module/survey-flow/standard-elements/passing-information-through-query-strings/?parent=p001135#PassingInformationIntoAQuestionnaire"
     )
   end
@@ -147,9 +147,9 @@ defmodule Systems.Alliance.ToolForm do
                 <.step_indicator text="1" bg_color="bg-tertiary" text_color="text-grey1" />
               </div>
               <div class="flex-wrap">
-                <Text.title5 align="text-left" color="text-white"><%= dgettext("eyra-alliance", "panlid.title") %></Text.title5>
+                <Text.title5 align="text-left" color="text-white"><%= dgettext("eyra-alliance", "nextid.title") %></Text.title5>
                 <.spacing value="XS" />
-                <Text.body_medium color="text-white"><%= raw(dgettext("eyra-alliance", "panlid.description", link: panlid_instructions_link())) %></Text.body_medium>
+                <Text.body_medium color="text-white"><%= raw(dgettext("eyra-alliance", "nextid.description", link: nextid_instructions_link())) %></Text.body_medium>
               </div>
             </div>
             <!-- STEP 2 -->
@@ -184,9 +184,9 @@ defmodule Systems.Alliance.ToolForm do
                 <.step_indicator text="3" bg_color="bg-tertiary" text_color="text-grey1" />
               </div>
               <div class="flex-wrap">
-                <Text.title5 align="text-left" color="text-white"><%= dgettext("eyra-alliance", "study.link.title") %></Text.title5>
+                <Text.title5 align="text-left" color="text-white"><%= dgettext("eyra-alliance", "link.title") %></Text.title5>
                 <.spacing value="XS" />
-                <Text.body_medium color="text-white"><%= raw(dgettext("eyra-alliance", "study.link.description", link: study_instructions_link())) %></Text.body_medium>
+                <Text.body_medium color="text-white"><%= raw(dgettext("eyra-alliance", "link.description", link: study_instructions_link())) %></Text.body_medium>
               </div>
             </div>
           </div>

@@ -10,7 +10,7 @@ defmodule Systems.Storage.EndpointModel do
     Storage
   }
 
-  require Storage.BackendTypes
+  require Storage.ServiceIds
 
   schema "storage_endpoints" do
     belongs_to(:aws, Storage.AWS.EndpointModel, on_replace: :delete)
@@ -58,18 +58,24 @@ defmodule Systems.Storage.EndpointModel do
   end
 
   def special(endpoint) do
-    Enum.reduce(@special_fields, nil, fn field, acc ->
-      if special = Map.get(endpoint, field) do
-        special
-      else
-        acc
-      end
-    end)
+    if field = special_field(endpoint) do
+      Map.get(endpoint, field)
+    else
+      nil
+    end
+  end
+
+  def special_field_id(endpoint) do
+    if field = special_field(endpoint) do
+      map_to_field_id(field)
+    else
+      nil
+    end
   end
 
   def special_field(endpoint) do
     Enum.reduce(@special_fields, nil, fn field, acc ->
-      field_id = String.to_existing_atom("#{field}_id")
+      field_id = map_to_field_id(field)
 
       if Map.get(endpoint, field_id) != nil do
         field
@@ -86,6 +92,8 @@ defmodule Systems.Storage.EndpointModel do
       false
     end
   end
+
+  defp map_to_field_id(field), do: String.to_existing_atom("#{field}_id")
 
   defimpl Frameworks.Concept.ContentModel do
     alias Systems.Storage

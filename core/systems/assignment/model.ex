@@ -18,6 +18,7 @@ defmodule Systems.Assignment.Model do
   schema "assignments" do
     field(:special, Ecto.Atom)
     field(:status, Ecto.Enum, values: Assignment.Status.values(), default: :concept)
+    field(:external_panel, Ecto.Enum, values: Assignment.ExternalPanelIds.values())
 
     belongs_to(:consent_agreement, Consent.AgreementModel)
     belongs_to(:info, Assignment.InfoModel)
@@ -40,7 +41,7 @@ defmodule Systems.Assignment.Model do
     timestamps()
   end
 
-  @fields ~w(special status)a
+  @fields ~w(special status external_panel)a
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(assignment), do: assignment.auth_node_id
