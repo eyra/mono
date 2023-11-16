@@ -1,10 +1,10 @@
-defmodule Fabric.TestLiveComponent do
+defmodule Fabric.LiveComponentMock do
   use Phoenix.LiveComponent
   use Fabric.LiveComponent
 
   @impl true
-  def update(%{"id" => id}, socket) do
-    {:ok, socket |> assign(id: id)}
+  def update(%{text: text}, socket) do
+    {:ok, socket |> assign(text: text)}
   end
 
   @impl true
@@ -15,7 +15,7 @@ defmodule Fabric.TestLiveComponent do
   @impl true
   def render(assigns) do
     ~H"""
-      <div />
+      <div><%= @text %></div>
     """
   end
 end

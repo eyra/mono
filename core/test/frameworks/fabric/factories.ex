@@ -11,7 +11,7 @@ defmodule Fabric.Factories do
     %Fabric.Model{parent: nil, self: self, children: []}
   end
 
-  def create_child(id, module \\ Fabric.TestLiveComponent, params \\ %{}) do
+  def create_child(id, module \\ Fabric.LiveComponentMock, params \\ %{}) do
     ref = %Fabric.LiveComponent.RefModel{id: id, module: module}
     fabric = create_fabric(ref)
     params = Map.put(params, :fabric, fabric)
