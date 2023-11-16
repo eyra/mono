@@ -6,7 +6,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
   import Frameworks.Utility.LiveCommand, only: [live_command: 2]
   import Frameworks.Utility.List
 
-  alias Frameworks.Pixel.Dropdown
+  alias Frameworks.Pixel.DropdownSelector
 
   alias Systems.{
     Campaign,
@@ -238,9 +238,9 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
 
   # Alliance open button
 
-  defp open_action(user, tool, crew, panl_id) do
+  defp open_action(user, tool, crew, next_id) do
     label = Frameworks.Concept.ToolModel.open_label(tool)
-    path = Alliance.ToolModel.external_path(tool, panl_id)
+    path = Alliance.ToolModel.external_path(tool, next_id)
 
     %{
       id: :open,
@@ -290,7 +290,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
   def handle_submit(_, %{assigns: %{selected_time_slot: nil}} = socket) do
     warning = dgettext("link-lab", "submit.warning.no.selection")
 
-    Phoenix.LiveView.send_update(Dropdown.Selector,
+    Phoenix.LiveView.send_update(DropdownSelector,
       id: :dropdown_selector,
       model: %{warning: warning}
     )
@@ -340,7 +340,7 @@ defmodule Systems.Campaign.Builders.AssignmentLandingPage do
   end
 
   defp contact_href(email, title, public_id) do
-    "mailto:#{email}?subject=[panl_id=#{public_id}] #{title}"
+    "mailto:#{email}?subject=[next_id=#{public_id}] #{title}"
   end
 
   # Optional behaviour

@@ -27,7 +27,6 @@ defmodule Core.Authorization do
   grant_access(Systems.Campaign.Model, [:visitor, :member])
   grant_access(Systems.Questionnaire.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.Lab.ToolModel, [:owner, :coordinator, :participant])
-  grant_access(Systems.DataDonation.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.Benchmark.SpotModel, [:owner])
 
   # Pages
@@ -55,10 +54,6 @@ defmodule Core.Authorization do
   grant_access(Systems.Pool.SubmissionPage, [:researcher])
   grant_access(Systems.Pool.ParticipantPage, [:researcher])
   grant_access(Systems.Test.Page, [:visitor, :member])
-  grant_access(Systems.DataDonation.Content, [:owner, :coordinator])
-  grant_access(Systems.DataDonation.FlowPage, [:visitor, :member])
-  grant_access(Systems.DataDonation.PortPage, [:visitor, :member])
-  grant_access(Systems.DataDonation.OverviewPage, [:member])
   grant_access(Systems.Project.OverviewPage, [:researcher])
   grant_access(Systems.Project.NodePage, [:researcher, :owner])
   grant_access(Systems.Benchmark.ContentPage, [:researcher, :owner])

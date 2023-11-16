@@ -85,3 +85,91 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "onboarding.consent.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.data_storage.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panel.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panel.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "connect.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "connector.cancel.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "connector.connect.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "connector.panel.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "connector.panel.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "connector.storage.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "connector.storage.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.data_storage.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.panel.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.panel.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "disconnect.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panel_form.type.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panel.liss.connector.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panel.generic.connector.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panel.ioresearch.connector.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panel.generic.connection.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panel.ioresearch.connection.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panel.liss.connection.annotation"
+msgstr ""

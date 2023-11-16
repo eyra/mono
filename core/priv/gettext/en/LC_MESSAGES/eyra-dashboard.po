@@ -20,7 +20,7 @@ msgstr "Recent items"
 
 #, elixir-autogen, elixir-format
 msgid "empty.description"
-msgstr "Start working with Panl and this console will provide an overview of your activities. It is the place to be, to quickly pick up where you left off during your last visit."
+msgstr "Start working with Next and this console will provide an overview of your activities. It is the place to be, to quickly pick up where you left off during your last visit."
 
 #, elixir-autogen, elixir-format
 msgid "empty.title"

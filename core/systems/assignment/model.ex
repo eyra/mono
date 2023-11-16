@@ -11,15 +11,18 @@ defmodule Systems.Assignment.Model do
     Assignment,
     Workflow,
     Budget,
-    Consent
+    Consent,
+    Storage
   }
 
   schema "assignments" do
     field(:special, Ecto.Atom)
     field(:status, Ecto.Enum, values: Assignment.Status.values(), default: :concept)
+    field(:external_panel, Ecto.Enum, values: Assignment.ExternalPanelIds.values())
 
     belongs_to(:consent_agreement, Consent.AgreementModel)
     belongs_to(:info, Assignment.InfoModel)
+    belongs_to(:storage_endpoint, Storage.EndpointModel, on_replace: :delete)
     belongs_to(:workflow, Workflow.Model)
     belongs_to(:crew, Systems.Crew.Model)
     belongs_to(:budget, Budget.Model, on_replace: :update)
@@ -38,7 +41,7 @@ defmodule Systems.Assignment.Model do
     timestamps()
   end
 
-  @fields ~w(special status)a
+  @fields ~w(special status external_panel)a
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(assignment), do: assignment.auth_node_id
@@ -65,7 +68,17 @@ defmodule Systems.Assignment.Model do
 
   def flatten(assignment) do
     assignment
-    |> Map.take([:id, :consent_agreement, :info, :workflow, :crew, :budget, :excluded, :director])
+    |> Map.take([
+      :id,
+      :consent_agreement,
+      :info,
+      :storage_endpoint,
+      :workflow,
+      :crew,
+      :budget,
+      :excluded,
+      :director
+    ])
     |> Map.put(:tool, tool(assignment))
   end
 
@@ -81,6 +94,7 @@ defmodule Systems.Assignment.Model do
       :excluded,
       consent_agreement: [:revisions],
       info: [],
+      storage_endpoint: Storage.EndpointModel.preload_graph(:down),
       crew: [:tasks, :members, :auth_node],
       workflow: Workflow.Model.preload_graph(:down),
       budget: [:currency, :fund, :reserve],

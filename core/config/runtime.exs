@@ -30,9 +30,10 @@ if config_env() == :prod do
 
   config :core,
          :data_donation_storage_backend,
-         s3: Systems.DataDonation.S3StorageBackend,
-         azure: Systems.DataDonation.AzureStorageBackend,
-         centerdata: Systems.DataDonation.CenterdataStorageBackend
+         s3: Systems.Storage.AWS.Backend,
+         azure: Systems.Storage.Azure.Backend,
+         centerdata: Systems.Storage.Centerdata.Backend,
+         yoda: Systems.Storage.YodaBackend
 
   # MAILGUN
 

@@ -1,0 +1,25 @@
+defmodule Frameworks.Pixel.Annotation do
+  use CoreWeb, :html
+
+  alias Frameworks.Pixel.Panel
+
+  attr(:annotation, :string, required: true)
+
+  def panel(assigns) do
+    ~H"""
+      <Panel.flat bg_color="bg-grey1">
+        <.view annotation={@annotation} />
+      </Panel.flat>
+    """
+  end
+
+  attr(:annotation, :string, required: true)
+
+  def view(assigns) do
+    ~H"""
+      <div class="wysiwig wysiwig-dark">
+        <%= raw @annotation %>
+      </div>
+    """
+  end
+end

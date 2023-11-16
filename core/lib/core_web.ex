@@ -107,7 +107,7 @@ defmodule CoreWeb do
 
       use Phoenix.LiveComponent
 
-      def update_target(%{type: type, id: id}, message) when is_map(message) do
+      def update_target(%{id: id, type: type}, message) when is_map(message) do
         send_update(type, message |> Map.put(:id, id))
       end
 

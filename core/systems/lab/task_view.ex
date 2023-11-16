@@ -4,7 +4,7 @@ defmodule Systems.Lab.TaskView do
   import CoreWeb.UI.Navigation, only: [button_bar: 1]
   alias Frameworks.Utility.LiveCommand
   alias Frameworks.Pixel.Text
-  alias Frameworks.Pixel.Dropdown
+  alias Frameworks.Pixel.DropdownSelector
 
   alias Systems.{
     Lab
@@ -153,7 +153,7 @@ defmodule Systems.Lab.TaskView do
 
   defp update_selector(%{assigns: %{time_slots: time_slots}} = socket) do
     options = time_slots |> Enum.map(&to_option(&1))
-    send_update(Dropdown.Selector, id: :dropdown_selector, model: %{options: options})
+    send_update(DropdownSelector, id: :dropdown_selector, model: %{options: options})
     socket
   end
 
@@ -232,7 +232,7 @@ defmodule Systems.Lab.TaskView do
           <.spacing value="M" />
           <Text.title6><%= dgettext("link-lab", "timeslot.selector.label") %></Text.title6>
           <.spacing value="XXS" />
-          <.live_component module={Dropdown.Selector} {@selector} />
+          <.live_component module={DropdownSelector} {@selector} />
         <% end %>
       <% end %>
       <Margin.y id={:button_bar_top} />

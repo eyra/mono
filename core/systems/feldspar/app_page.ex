@@ -43,7 +43,8 @@ defmodule Systems.Feldspar.AppPage do
   end
 
   defp handle(socket, "CommandSystemDonate", event) do
-    Frameworks.Pixel.Flash.put_error(socket, "Unsupported donation " <> event)
+    send(self(), {:store_participant_data, event})
+    socket
   end
 
   defp handle(socket, _, event) do

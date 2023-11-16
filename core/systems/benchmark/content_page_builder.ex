@@ -218,12 +218,11 @@ defmodule Systems.Benchmark.ContentPageBuilder do
 
   defp create_tab(
          :invite,
-         %{id: id},
+         assignment,
          show_errors,
          %{uri_origin: uri_origin}
        ) do
     ready? = false
-    url = uri_origin <> "/benchmark/#{id}"
 
     %{
       id: :invite_form,
@@ -232,9 +231,10 @@ defmodule Systems.Benchmark.ContentPageBuilder do
       title: dgettext("eyra-project", "tabbar.item.invite"),
       forward_title: dgettext("eyra-project", "tabbar.item.invite.forward"),
       type: :fullpage,
-      live_component: Project.InviteForm,
+      live_component: Assignment.PanelForm,
       props: %{
-        url: url
+        uri_origin: uri_origin,
+        entity: assignment
       }
     }
   end

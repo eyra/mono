@@ -349,3 +349,27 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "platforms.tiktok"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage_service_ids.azure"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage_service_ids.yoda"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage_service_ids.aws"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "external_panel_ids.generic"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "external_panel_ids.ioresearch"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "external_panel_ids.liss"
+msgstr ""

@@ -87,10 +87,11 @@ config :core, :s3, bucket: "eylixir"
 
 config :core,
        :data_donation_storage_backend,
-       fake: Systems.DataDonation.FakeStorageBackend,
-       s3: Systems.DataDonation.S3StorageBackend,
-       azure: Systems.DataDonation.AzureStorageBackend,
-       centerdata: Systems.DataDonation.CenterdataStorageBackend
+       fake: Systems.Storage.FakeBackend,
+       s3: Systems.Storage.AWS.Backend,
+       azure: Systems.Storage.Azure.Backend,
+       centerdata: Systems.Storage.Centerdata.Backend,
+       yoda: Systems.Storage.YodaBackend
 
 #  For Minio (local S3)
 config :ex_aws,

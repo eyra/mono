@@ -95,12 +95,12 @@ msgid "ethical.title"
 msgstr "Ethical review"
 
 #, elixir-autogen, elixir-format
-msgid "panlid.description"
-msgstr "Panl automatically adds the participant ID to your Qualtrics URL. To use this ID in Qualtrics, add an embedded data element field with the name \"panl_id\", as %{link} in \"PART 2\"."
+msgid "nextid.description"
+msgstr "Next automatically adds the participant ID to your Qualtrics URL. To use this ID in Qualtrics, add an embedded data element field with the name \"next_id\", as %{link} in \"PART 2\"."
 
 #, elixir-autogen, elixir-format
-msgid "panlid.title"
-msgstr "Panl ID"
+msgid "nextid.title"
+msgstr "Next ID"
 
 #, elixir-autogen, elixir-format
 msgid "setup.title"
@@ -115,15 +115,15 @@ msgid "ethical.description"
 msgstr "Make sure that you completed the %{link} and that you have approval from the SBE Ethics Review Board (ERB), if required for your study. Provide your received ERB code."
 
 #, elixir-autogen, elixir-format
-msgid "study.link.description"
+msgid "link.description"
 msgstr "To obtain the link to your Qualtrics questionnaire, follow %{link}. Paste your link in the  \"Questionnaire link\" field in the form below."
 
 #, elixir-autogen, elixir-format
-msgid "study.link.title"
-msgstr "Anonymous Questionnaire Link"
+msgid "link.title"
+msgstr "Questionnaire Link"
 
 #, elixir-autogen, elixir-format
-msgid "panlid.instructions.link"
+msgid "nextid.instructions.link"
 msgstr "explained here"
 
 #, elixir-autogen, elixir-format

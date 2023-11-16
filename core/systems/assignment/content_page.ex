@@ -1,5 +1,6 @@
 defmodule Systems.Assignment.ContentPage do
   use Systems.Content.Page
+  use Fabric.LiveView
 
   alias Systems.{
     Assignment,

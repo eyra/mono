@@ -349,3 +349,27 @@ msgstr "Samsung"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "platforms.tiktok"
 msgstr "TikTok"
+
+#, elixir-autogen, elixir-format
+msgid "storage_service_ids.azure"
+msgstr "Azure Blob"
+
+#, elixir-autogen, elixir-format
+msgid "storage_service_ids.yoda"
+msgstr "Yoda"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "storage_service_ids.aws"
+msgstr "Amazon S3"
+
+#, elixir-autogen, elixir-format
+msgid "external_panel_ids.generic"
+msgstr "Andere"
+
+#, elixir-autogen, elixir-format
+msgid "external_panel_ids.ioresearch"
+msgstr "I&O Research"
+
+#, elixir-autogen, elixir-format
+msgid "external_panel_ids.liss"
+msgstr "LISS"

@@ -95,11 +95,11 @@ msgid "ethical.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "panlid.description"
+msgid "nextid.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "panlid.title"
+msgid "nextid.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -115,15 +115,15 @@ msgid "ethical.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "study.link.description"
+msgid "link.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "study.link.title"
+msgid "link.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "panlid.instructions.link"
+msgid "nextid.instructions.link"
 msgstr ""
 
 #, elixir-autogen, elixir-format

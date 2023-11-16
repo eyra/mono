@@ -16,7 +16,7 @@ msgstr "Attention"
 
 #, elixir-autogen, elixir-format
 msgid "started.at.message"
-msgstr "Started %{date} but not returned to Panl"
+msgstr "Started %{date} but not returned to Next"
 
 #, elixir-autogen, elixir-format
 msgid "accept.all.button"

@@ -54,7 +54,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
       assert %{
                call_to_action: %{
                  label: "Naar vragenlijst",
-                 path: "https://eyra.co/fake_alliance?panl_id=1",
+                 path: "https://eyra.co/fake_alliance?next_id=1",
                  target: %{type: :event, value: "open"}
                },
                hero_title: "Online Studie",
@@ -79,7 +79,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
       assert %{
                call_to_action: %{
                  label: "Naar vragenlijst",
-                 path: "https://eyra.co/fake_alliance?panl_id=1",
+                 path: "https://eyra.co/fake_alliance?next_id=1",
                  target: %{type: :event, value: "open"}
                },
                hero_title: "Online Studie",
@@ -109,7 +109,7 @@ defmodule Systems.Campaign.ViewModelBuilderTest do
       assert %{
                call_to_action: %{
                  label: "Naar vragenlijst",
-                 path: "https://eyra.co/fake_alliance?panl_id=1",
+                 path: "https://eyra.co/fake_alliance?next_id=1",
                  target: %{type: :event, value: "open"}
                },
                hero_title: "Online Studie",

@@ -44,7 +44,7 @@ defmodule Frameworks.Pixel.Form do
 
     error_space_id = field_item_id(field, @error_space)
     error_message_id = field_item_id(field, @error_message)
-    error_static_class = "#{field_tag(@error)} text-caption font-caption text-warning hidden"
+    error_static_class = "#{field_tag(@error)} text-caption font-caption text-warning"
 
     label_id = field_item_id(field, @label)
     label_static_class = "#{field_tag(@label)} mt-0.5 text-title6 font-title6 leading-snug"
@@ -121,7 +121,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:maxlength, :string, default: "1000")
 
   def input(%{form: form, field: field} = assigns) do
-    errors = form[field].errors
+    errors = guarded_errors(form, field)
     field_id = String.to_atom(input_id(form, field))
     input_id = field_item_id(field_id, @input)
 
@@ -239,6 +239,7 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
+  attr(:placeholder, :string, default: "")
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
@@ -249,6 +250,7 @@ defmodule Frameworks.Pixel.Form do
     <.input
       form={@form}
       field={@field}
+      placeholder={@placeholder}
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
@@ -332,7 +334,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:debounce, :string, default: "1000")
 
   def text_area(%{form: form, field: field} = assigns) do
-    errors = form[field].errors
+    errors = guarded_errors(form, field)
     has_errors = Enum.count(errors) > 0
     field_id = String.to_atom(input_id(form, field))
 
@@ -389,7 +391,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:max_height, :string, default: "max-h-wysiwyg-editor")
 
   def wysiwyg_area(%{form: form, field: field} = assigns) do
-    errors = form[field].errors
+    errors = guarded_errors(form, field)
     has_errors = Enum.count(errors) > 0
     field_id = String.to_atom(input_id(form, field))
 
@@ -580,7 +582,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:value, :any, default: nil)
 
   def dropdown(%{form: form, field: field, options: options} = assigns) do
-    errors = form[field].errors
+    errors = guarded_errors(form, field)
     field_id = String.to_atom(input_id(form, field))
     options_id = "#{field_id}-options"
 

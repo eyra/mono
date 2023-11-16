@@ -1,7 +1,3 @@
-let liveContentId = "";
-let liveContentShowErrors = false;
-let liveContentActiveField = "";
-
 const STATIC_CLASS_ATTR = "__eyra_field_static_class";
 const HAS_ERRORS_ATTR = "__eyra_field_has_errors";
 const ACTIVE_COLOR_ATTR = "__eyra_field_active_color";
@@ -22,122 +18,149 @@ const HIDDEN = "hidden";
 
 export const LiveContent = {
   mounted() {
-    liveContentId = this.el.id;
-    liveContentShowErrors = this.el.getAttribute(DATA_SHOW_ERRORS) != null;
+    console.log("LiveContent mounted", this.el);
+    this.showErrors = this.el.getAttribute(DATA_SHOW_ERRORS) != null;
+    this.activeField = undefined;
 
     this.el.addEventListener("click", (event) => {
-      makeActive(undefined);
+      this.activeField = undefined;
+      this.applyActiveField();
     });
 
-    applyErrors();
-    makeActive(undefined);
-  },
+    this.el.addEventListener("field-activated", (event) => {
+      event.stopPropagation();
+      this.activeField = event.target.dataset.fieldId;
+      this.applyActiveField();
+    });
 
+    this.el.addEventListener("field-deactivated", (event) => {
+      event.stopPropagation();
+      if (this.activeField == event.target.id) {
+        this.activeField = undefined;
+        this.applyActiveField();
+      }
+    });
+
+    this.applyErrors();
+    this.applyActiveField();
+  },
   updated() {
-    liveContentShowErrors = this.el.getAttribute(DATA_SHOW_ERRORS) != null;
-    applyErrors();
+    this.showErrors = this.el.getAttribute(DATA_SHOW_ERRORS) != null;
+    this.applyErrors();
+    this.applyActiveField();
   },
-
   onBeforeElUpdated(from, to) {
     const field_id = from.getAttribute("__eyra_field_id");
 
     if (field_id != null) {
-      updateFieldItem(to, field_id);
+      to.classList = from.classList;
     }
+  },
+  applyErrors() {
+    const fieldErrors = Array.from(
+      this.el.querySelectorAll(`.${FIELD_ERROR_TYPE}`)
+    );
+
+    console.log("fieldErrors", fieldErrors);
+
+    if (this.showErrors) {
+      fieldErrors.forEach((fieldError) => fieldError.classList.remove(HIDDEN));
+    } else {
+      fieldErrors.forEach((fieldError) => fieldError.classList.add(HIDDEN));
+    }
+  },
+  updateFieldItem(fieldItem, activate) {
+    const hasErrors = fieldItem.getAttribute(HAS_ERRORS_ATTR) != null;
+
+    if (fieldItem.classList.contains(FIELD_LABEL_TYPE)) {
+      this.updateFieldLabel(fieldItem, activate, hasErrors);
+    } else if (fieldItem.classList.contains(FIELD_INPUT_TYPE)) {
+      this.updateFieldInput(fieldItem, activate, hasErrors);
+    }
+  },
+  applyActiveField() {
+    var fields = Array.from(this.el.querySelectorAll('[id^="field-"]'));
+    fields.forEach((field) => {
+      var activate = field.dataset.fieldId === this.activeField;
+      this.updateField(field, activate);
+    });
+  },
+  updateField(field, activate) {
+    const label = field.getElementsByClassName(FIELD_LABEL_TYPE)[0];
+    const input = field.getElementsByClassName(FIELD_INPUT_TYPE)[0];
+
+    const hasErrors = field.getElementsByClassName(FIELD_ERROR_TYPE)[0] != null;
+
+    if (label) {
+      this.updateFieldLabel(label, activate, hasErrors);
+    }
+
+    if (input) {
+      this.updateFieldInput(input, activate, hasErrors);
+    }
+  },
+  updateFieldLabel(label, activate, hasErrors) {
+    this.updateFieldItemClass(
+      label,
+      activate,
+      hasErrors,
+      LABEL_IDLE,
+      LABEL_ERROR
+    );
+  },
+  updateFieldInput(input, activate, hasErrors) {
+    this.updateFieldItemClass(
+      input,
+      activate,
+      hasErrors,
+      INPUT_IDLE,
+      INPUT_ERROR
+    );
+  },
+  updateFieldItemClass(
+    fieldItem,
+    activate,
+    hasErrors,
+    idle_class,
+    error_class
+  ) {
+    var dynamic_class = idle_class;
+    if (activate) {
+      dynamic_class = fieldItem.getAttribute(ACTIVE_COLOR_ATTR);
+    } else if (this.showErrors && hasErrors) {
+      dynamic_class = error_class;
+    }
+    const static_class = fieldItem.getAttribute(STATIC_CLASS_ATTR);
+    fieldItem.setAttribute("class", static_class + " " + dynamic_class);
   },
 };
 
 export const LiveField = {
   mounted() {
-    const fieldId = this.el.dataset.fieldId;
+    console.log("LiveField mounted");
     const input = this.el.getElementsByClassName(FIELD_INPUT_TYPE)[0];
 
     if (input) {
       input.addEventListener("click", (event) => {
         event.stopPropagation();
-        makeActive(fieldId);
+        this.activate();
       });
 
       input.addEventListener("focus", (event) => {
         event.stopPropagation();
-        makeActive(fieldId);
+        this.activate();
       });
 
       input.addEventListener("blur", (event) => {
         event.stopPropagation();
-        makeActive(undefined);
+        this.deactivate();
       });
     }
   },
+  activate() {
+    this.el.dispatchEvent(new Event("field-activated", { bubbles: true }));
+  },
+  deactivate() {
+    this.el.dispatchEvent(new Event("field-deactivated", { bubbles: true }));
+  },
 };
-
-function applyErrors() {
-  const fieldErrors = Array.from(
-    document.querySelectorAll(`.${FIELD_ERROR_TYPE}`)
-  );
-  if (liveContentShowErrors) {
-    fieldErrors.forEach((fieldError) => fieldError.classList.remove(HIDDEN));
-  } else {
-    fieldErrors.forEach((fieldError) => fieldError.classList.add(HIDDEN));
-  }
-}
-
-function makeActive(fieldId) {
-  liveContentActiveField = fieldId;
-  var fields = Array.from(document.querySelectorAll('[id^="field-"]'));
-  fields.forEach((field) => {
-    var activate = field.dataset.fieldId === fieldId;
-    updateField(field, activate);
-  });
-}
-
-function updateField(field, activate) {
-  const label = field.getElementsByClassName(FIELD_LABEL_TYPE)[0];
-  const input = field.getElementsByClassName(FIELD_INPUT_TYPE)[0];
-
-  const hasErrors = field.getElementsByClassName(FIELD_ERROR_TYPE)[0] != null;
-
-  if (label) {
-    updateFieldLabel(label, activate, hasErrors);
-  }
-
-  if (input) {
-    updateFieldInput(input, activate, hasErrors);
-  }
-}
-
-function updateFieldItem(fieldItem, field) {
-  const activate = field == liveContentActiveField;
-  const hasErrors = fieldItem.getAttribute(HAS_ERRORS_ATTR) != null;
-
-  if (fieldItem.classList.contains(FIELD_LABEL_TYPE)) {
-    updateFieldLabel(fieldItem, activate, hasErrors);
-  } else if (fieldItem.classList.contains(FIELD_INPUT_TYPE)) {
-    updateFieldInput(fieldItem, activate, hasErrors);
-  }
-}
-
-function updateFieldLabel(label, activate, hasErrors) {
-  updateFieldItemClass(label, activate, hasErrors, LABEL_IDLE, LABEL_ERROR);
-}
-
-function updateFieldInput(input, activate, hasErrors) {
-  updateFieldItemClass(input, activate, hasErrors, INPUT_IDLE, INPUT_ERROR);
-}
-
-function updateFieldItemClass(
-  fieldItem,
-  activate,
-  hasErrors,
-  idle_class,
-  error_class
-) {
-  var dynamic_class = idle_class;
-  if (activate) {
-    dynamic_class = fieldItem.getAttribute(ACTIVE_COLOR_ATTR);
-  } else if (liveContentShowErrors && hasErrors) {
-    dynamic_class = error_class;
-  }
-  const static_class = fieldItem.getAttribute(STATIC_CLASS_ATTR);
-  fieldItem.setAttribute("class", static_class + " " + dynamic_class);
-}

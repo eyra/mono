@@ -24,11 +24,11 @@ msgid "tabbar.item.config.forward"
 msgstr "Ga naar Instellingen"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.invite"
+msgid "tabbar.item.panel"
 msgstr "Uitnodigen"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.invite.forward"
+msgid "tabbar.item.panel.forward"
 msgstr "Ga naar Uitnodigen"
 
 #, elixir-autogen, elixir-format
@@ -80,10 +80,6 @@ msgid "form.name.label"
 msgstr "Naam"
 
 #, elixir-autogen, elixir-format
-msgid "invite.title"
-msgstr "Invite"
-
-#, elixir-autogen, elixir-format
 msgid "monitor.title"
 msgstr "Monitor"
 
@@ -110,18 +106,6 @@ msgstr "Voeg nieuw item toe"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "add.new.item.button.short"
 msgstr "Nieuw item"
-
-#, elixir-autogen, elixir-format
-msgid "campaign.invite.title"
-msgstr "Nodig mensen uit met een campagne"
-
-#, elixir-autogen, elixir-format
-msgid "direct.invite.description"
-msgstr "Je kan mensen direct uitnodigigen op de onderstaande url."
-
-#, elixir-autogen, elixir-format
-msgid "direct.invite.title"
-msgstr "Nodig mensen uit met een url"
 
 #, elixir-autogen, elixir-format
 msgid "label.concept"
@@ -182,3 +166,19 @@ msgstr "Consent"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.gdpr.forward"
 msgstr "Ga naar Consent"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings"
+msgstr "Instellingen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings.forward"
+msgstr "Ga naar Instellingen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.invite"
+msgstr "Uitnodigen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.invite.forward"
+msgstr "Ga naar Instellingen"

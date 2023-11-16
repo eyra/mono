@@ -34,7 +34,7 @@ defmodule Systems.Content.Page do
         </Navigation.action_bar>
       </:top_bar>
 
-      <div id="assignment" phx-hook="LiveContent" data-show-errors={@show_errors}>
+      <div>
         <div id={:content} phx-hook="ViewportResize">
 
           <%= if @popup do %>
@@ -51,7 +51,9 @@ defmodule Systems.Content.Page do
             </.popup>
           <% end %>
 
-          <Tabbar.content tabs={@tabs} />
+          <div id="assignment" phx-hook="LiveContent" data-show-errors={@show_errors}>
+            <Tabbar.content tabs={@tabs} />
+          </div>
           <Tabbar.footer tabs={@tabs} />
         </div>
       </div>
@@ -163,6 +165,22 @@ defmodule Systems.Content.Page do
       @impl true
       def handle_event("inform_ok", _params, socket) do
         {:noreply, socket |> assign(dialog: nil)}
+      end
+
+      @impl true
+      def handle_event("show_popup", %{ref: %{id: id, module: module}, params: params}, socket) do
+        popup = %{module: module, props: Map.put(params, :id, id)}
+        handle_event("show_popup", popup, socket)
+      end
+
+      @impl true
+      def handle_event("show_popup", %{module: _, props: _} = popup, socket) do
+        {:noreply, socket |> assign(popup: popup)}
+      end
+
+      @impl true
+      def handle_event("hide_popup", _, socket) do
+        {:noreply, socket |> assign(popup: nil)}
       end
 
       @impl true

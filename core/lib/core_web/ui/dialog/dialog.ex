@@ -18,7 +18,9 @@ defmodule CoreWeb.UI.Dialog do
         <div class="text-bodymedium font-body sm:text-bodylarge">
           <%= @text %>
         </div>
-        <%= render_slot(@inner_block) %>
+        <div>
+          <%= render_slot(@inner_block) %>
+        </div>
         <div class="flex flex-row gap-4">
           <%= for button <- @buttons do %>
             <Button.dynamic {button} />

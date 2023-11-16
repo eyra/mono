@@ -19,7 +19,8 @@ defmodule Systems.Assignment.Public do
     Consent,
     Budget,
     Workflow,
-    Crew
+    Crew,
+    Storage
   }
 
   @min_expiration_timeout 30
@@ -43,50 +44,20 @@ defmodule Systems.Assignment.Public do
     |> Repo.all()
   end
 
-  def list_by_workflow(workflow, preload \\ [])
+  def get_by(association, preload \\ [])
+  def get_by(%Assignment.InfoModel{id: id}, preload), do: get_by(:info_id, id, preload)
 
-  def list_by_workflow(%{id: workflow_id}, preload), do: list_by_workflow(workflow_id, preload)
+  def get_by(%Storage.EndpointModel{id: id}, preload),
+    do: get_by(:storage_endpoint_id, id, preload)
 
-  def list_by_workflow(workflow_id, preload) when is_number(workflow_id) do
-    from(a in Assignment.Model, where: a.workflow_id == ^workflow_id, preload: ^preload)
-    |> Repo.all()
-  end
+  def get_by(%Consent.AgreementModel{id: id}, preload),
+    do: get_by(:consent_agreement_id, id, preload)
 
-  def get_by_info!(info, preload \\ [])
+  def get_by(%Workflow.Model{id: id}, preload), do: get_by(:workflow_id, id, preload)
 
-  def get_by_info!(%Assignment.InfoModel{id: id}, preload), do: get_by_info!(id, preload)
-
-  def get_by_info!(info_id, preload) do
-    from(assignment in Assignment.Model,
-      where: assignment.info_id == ^info_id,
-      preload: ^preload
-    )
-    |> Repo.one!()
-  end
-
-  def get_by_consent_agreement(consent_agreement, preload \\ [])
-
-  def get_by_consent_agreement(%Consent.AgreementModel{id: id}, preload),
-    do: get_by_consent_agreement(id, preload)
-
-  def get_by_consent_agreement(consent_agreement_id, preload) do
-    from(assignment in Assignment.Model,
-      where: assignment.consent_agreement_id == ^consent_agreement_id,
-      preload: ^preload
-    )
-    |> Repo.one()
-  end
-
-  def get_by_workflow(workflow, preload \\ [])
-
-  def get_by_workflow(%Workflow.Model{id: id}, preload), do: get_by_workflow(id, preload)
-
-  def get_by_workflow(workflow_id, preload) do
-    from(assignment in Assignment.Model,
-      where: assignment.workflow_id == ^workflow_id,
-      preload: ^preload
-    )
-    |> Repo.one()
+  def get_by(field_name, id, preload) when is_atom(field_name) do
+    Repo.get_by(Assignment.Model, [{field_name, id}])
+    |> Repo.preload(preload)
   end
 
   def get_by_tool_ref(workflow, preload \\ [])
@@ -172,6 +143,36 @@ defmodule Systems.Assignment.Public do
     |> Ecto.Changeset.put_assoc(:tool_ref, tool_ref)
   end
 
+  def delete_storage_endpoint!(%{storage_endpoint_id: nil} = assignment) do
+    assignment
+  end
+
+  def delete_storage_endpoint!(assignment) do
+    changeset =
+      Assignment.Model.changeset(assignment, %{})
+      |> Ecto.Changeset.put_assoc(:storage_endpoint, nil)
+
+    {:ok, assignment} = Core.Persister.save(changeset.data, changeset)
+
+    assignment
+  end
+
+  def create_storage_endpoint!(%{storage_endpoint_id: nil} = assignment) do
+    storage_endpoint =
+      %Storage.EndpointModel{}
+      |> Storage.EndpointModel.changeset(%{})
+
+    {:ok, assignment} =
+      Assignment.Model.changeset(assignment, %{})
+      |> Ecto.Changeset.put_assoc(:storage_endpoint, storage_endpoint)
+      |> Repo.update()
+
+    assignment
+    |> Repo.preload(Assignment.Model.preload_graph(:down))
+  end
+
+  def create_storage_endpoint!(assignment), do: assignment
+
   def copy(
         %Assignment.Model{} = assignment,
         %Assignment.InfoModel{} = info,
@@ -218,10 +219,17 @@ defmodule Systems.Assignment.Public do
     |> Repo.transaction()
   end
 
-  def update(assignment, budget) do
-    assignment
-    |> Assignment.Model.changeset(budget)
-    |> Repo.update!()
+  def update(assignment, %{} = attrs) do
+    changeset = Assignment.Model.changeset(assignment, attrs)
+    Core.Persister.save(assignment, changeset)
+  end
+
+  def update_budget(assignment, budget) do
+    changeset =
+      Assignment.Model.changeset(assignment, %{})
+      |> Ecto.Changeset.put_assoc(:budget, budget)
+
+    Core.Persister.save(assignment, changeset)
   end
 
   def is_owner?(assignment, user) do
@@ -593,5 +601,14 @@ defmodule Systems.Assignment.Public do
   def rewarded_amount(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
     idempotence_key = idempotence_key(assignment_id, user_id)
     Budget.Public.rewarded_amount(idempotence_key)
+  end
+end
+
+defimpl Core.Persister, for: Systems.Assignment.Model do
+  def save(_assignment, changeset) do
+    case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :assignment) do
+      {:ok, %{assignment: assignment}} -> {:ok, assignment}
+      _ -> {:error, changeset}
+    end
   end
 end

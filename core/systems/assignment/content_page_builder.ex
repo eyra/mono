@@ -159,23 +159,26 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp create_tab(
          :config,
-         %{info: info},
+         assignment,
          show_errors,
-         _assigns
+         %{fabric: fabric, uri_origin: uri_origin} = _assigns
        ) do
     ready? = false
 
+    child =
+      Fabric.prepare_child(fabric, :settings_form, Assignment.SettingsView, %{
+        entity: assignment,
+        uri_origin: uri_origin
+      })
+
     %{
-      id: :config_form,
+      id: :settings_form,
       ready: ready?,
       show_errors: show_errors,
-      title: dgettext("eyra-project", "tabbar.item.config"),
-      forward_title: dgettext("eyra-project", "tabbar.item.config.forward"),
+      title: dgettext("eyra-project", "tabbar.item.settings"),
+      forward_title: dgettext("eyra-project", "tabbar.item.settings.forward"),
       type: :fullpage,
-      live_component: Assignment.InfoForm,
-      props: %{
-        entity: info
-      }
+      child: child
     }
   end
 
@@ -285,23 +288,23 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp create_tab(
          :invite,
-         %{id: id},
+         assignment,
          show_errors,
          %{uri_origin: uri_origin}
        ) do
     ready? = false
-    url = uri_origin <> "/assignment/#{id}"
 
     %{
-      id: :invite_form,
+      id: :panel_form,
       ready: ready?,
       show_errors: show_errors,
-      title: dgettext("eyra-project", "tabbar.item.invite"),
-      forward_title: dgettext("eyra-project", "tabbar.item.invite.forward"),
+      title: dgettext("eyra-project", "tabbar.item.panel"),
+      forward_title: dgettext("eyra-project", "tabbar.item.panel.forward"),
       type: :fullpage,
-      live_component: Project.InviteForm,
+      live_component: Assignment.PanelForm,
       props: %{
-        url: url
+        uri_origin: uri_origin,
+        entity: assignment
       }
     }
   end

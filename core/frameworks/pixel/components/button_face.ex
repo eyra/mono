@@ -34,6 +34,7 @@ defmodule Frameworks.Pixel.Button.Face do
   attr(:label, :string, required: true)
   attr(:icon, :atom, required: true)
   attr(:text_color, :string, default: "text-grey1")
+  attr(:height, :string, default: "h-10")
 
   def label_icon(assigns) do
     ~H"""
@@ -42,7 +43,7 @@ defmodule Frameworks.Pixel.Button.Face do
         <div>
           <img class="mr-2 -mt-2px" src={"/images/icons/#{@icon}.svg"} alt={@label}>
         </div>
-        <div class="h-10">
+        <div class={"#{@height}"}>
           <div class="flex flex-col justify-center h-full items-center">
             <div class={"text-label font-label #{@text_color}"}>
               <%= @label %>

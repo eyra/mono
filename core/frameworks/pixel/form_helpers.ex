@@ -5,6 +5,14 @@ defmodule Frameworks.Pixel.FormHelpers do
   alias Frameworks.Pixel.ErrorHelpers
   alias Phoenix.LiveView.JS
 
+  def guarded_errors(form, field) do
+    if ErrorHelpers.show_errors?(form) do
+      form[field].errors
+    else
+      []
+    end
+  end
+
   def field_has_error?(assigns, form) do
     ErrorHelpers.has_error?(form, assigns.field)
   end

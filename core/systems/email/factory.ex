@@ -60,7 +60,7 @@ defmodule Systems.Email.Factory do
     html_message = message |> to_html()
 
     mail_user(to)
-    |> subject("Panl notification")
+    |> subject("Next notification")
     |> render(:notification,
       title: title,
       byline: byline,
