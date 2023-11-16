@@ -11,6 +11,7 @@ defmodule Core.Accounts.User do
   import Ecto.Changeset
 
   @derive {Inspect, except: [:password]}
+  @derive {Jason.Encoder, except: [:password]}
   schema "users" do
     field(:email, :string)
     field(:password, :string, virtual: true)
