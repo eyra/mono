@@ -6,6 +6,6 @@ defmodule Systems.Observatory.Switch do
   }
 
   def intercept({:page, page}, %{id: id} = message) do
-    Observatory.Public.local_dispatch(page, [id], message)
+    Observatory.Public.dispatch(page, [id], message)
   end
 end
