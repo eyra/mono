@@ -25,7 +25,9 @@ defmodule Core.AccountsTest do
     test "test Jason.Encoder" do
       user = Factories.insert!(:member)
       user_db = Accounts.get_user_by_email(user.email)
-      assert Jason.encode!(user_db) == "{\"id\":#{user.id},\"email\":\"#{user.email}\",\"displayname\":\"#{user.displayname}\",\"visited_pages\":null,\"researcher\":null,\"student\":null,\"coordinator\":null}"
+
+      assert Jason.encode!(user_db) ==
+               "{\"id\":#{user.id},\"email\":\"#{user.email}\",\"displayname\":\"#{user.displayname}\",\"visited_pages\":null,\"researcher\":null,\"student\":null,\"coordinator\":null}"
     end
   end
 
