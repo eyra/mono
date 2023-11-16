@@ -7,13 +7,13 @@
     <meta name="generator" content="ExDoc v0.29.3">
     <meta name="project" content="core v0.1.0">
 
-    <title>Systems.DataDonation.FakeForm — core v0.1.0</title>
+    <title>Systems.Storage.ServiceIds — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-BAFEFA34.js"></script>
+    <script src="dist/sidebar_items-3783DDDE.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -100,16 +100,20 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/systems/data_donation/storage/fake_form.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/systems/storage/service_ids.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">Systems.DataDonation.FakeForm</span> 
+  <span translate="no">Systems.Storage.ServiceIds</span> 
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
 
+
+  <section id="moduledoc">
+<p>Defines list of supported storage services</p>
+  </section>
 
 
   <section id="summary" class="details-list">
@@ -127,7 +131,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#current_user/1" translate="no">current_user(arg1)</a>
+        <a href="#contains/1" translate="no">contains(atom)</a>
 
       </div>
 
@@ -135,17 +139,31 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#fake_form/1" translate="no">fake_form(assigns)</a>
+        <a href="#labels/2" translate="no">labels(active_values \\ [], filter \\ nil)</a>
 
       </div>
-
-        <div class="summary-synopsis"><h2>Slots</h2><ul><li><code class="inline">inner_block</code> (required)</li></ul></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#version/0" translate="no">version()</a>
+        <a href="#schema_values/1" translate="no">schema_values(opts \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#translate/1" translate="no">translate(value)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#values/1" translate="no">values(filter \\ nil)</a>
 
       </div>
 
@@ -165,16 +183,16 @@ core
 Functions
     </h1>
     <div class="functions-list">
-<section class="detail" id="current_user/1">
+<section class="detail" id="contains/1">
 
   <div class="detail-header">
-    <a href="#current_user/1" class="detail-link" title="Link to this function">
+    <a href="#contains/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">current_user(arg1)</h1>
+    <h1 class="signature" translate="no">contains(atom)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/data_donation/storage/fake_form.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/service_ids.ex#L5" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -187,16 +205,20 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="fake_form/1">
+<section class="detail" id="labels/2">
+
+    <span id="labels/0"></span>
+
+    <span id="labels/1"></span>
 
   <div class="detail-header">
-    <a href="#fake_form/1" class="detail-link" title="Link to this function">
+    <a href="#labels/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">fake_form(assigns)</h1>
+    <h1 class="signature" translate="no">labels(active_values \\ [], filter \\ nil)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/data_donation/storage/fake_form.ex#L6" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/service_ids.ex#L5" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -206,25 +228,69 @@ Functions
 
   <section class="docstring">
 
-<h2 id="fake_form/1-slots" class="section-heading">
-  <a href="#fake_form/1-slots" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">slots</p>
-  </a>
-  Slots
-</h2>
-<ul><li><code class="inline">inner_block</code> (required)</li></ul>
+
   </section>
 </section>
-<section class="detail" id="version/0">
+<section class="detail" id="schema_values/1">
+
+    <span id="schema_values/0"></span>
 
   <div class="detail-header">
-    <a href="#version/0" class="detail-link" title="Link to this function">
+    <a href="#schema_values/1" class="detail-link" title="Link to this macro">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this macro</span>
+    </a>
+    <h1 class="signature" translate="no">schema_values(opts \\ [])</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/service_ids.ex#L5" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+      <span class="note">(macro)</span>
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="translate/1">
+
+  <div class="detail-header">
+    <a href="#translate/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">version()</h1>
+    <h1 class="signature" translate="no">translate(value)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/data_donation/storage/fake_form.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/service_ids.ex#L5" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="values/1">
+
+    <span id="values/0"></span>
+
+  <div class="detail-header">
+    <a href="#values/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">values(filter \\ nil)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/service_ids.ex#L5" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

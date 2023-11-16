@@ -7,13 +7,13 @@
     <meta name="generator" content="ExDoc v0.29.3">
     <meta name="project" content="core v0.1.0">
 
-    <title>Frameworks.Pixel.Dropdown.Selector — core v0.1.0</title>
+    <title>Systems.Storage.EndpointModel — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-BAFEFA34.js"></script>
+    <script src="dist/sidebar_items-3783DDDE.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -100,12 +100,12 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/dropdown.selector.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/systems/storage/endpoint_model.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">Frameworks.Pixel.Dropdown.Selector</span> 
+  <span translate="no">Systems.Storage.EndpointModel</span> 
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
@@ -127,7 +127,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#current_user/1" translate="no">current_user(arg1)</a>
+        <a href="#changeset/2" translate="no">changeset(endpoint, params)</a>
 
       </div>
 
@@ -135,25 +135,17 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#render/1" translate="no">render(assigns)</a>
+        <a href="#preload_graph/1" translate="no">preload_graph(fields)</a>
 
       </div>
 
-        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">options</code> (<code class="inline">:list</code>) (required)</li><li><code class="inline">parent</code> (<code class="inline">:any</code>) (required)</li><li><code class="inline">selected_option_index</code> (<code class="inline">:integer</code>)</li><li><code class="inline">background</code> (<code class="inline">:atom</code>) - Defaults to <code class="inline">:light</code>.</li><li><code class="inline">debounce</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;0&quot;</code>.</li></ul></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Frameworks.Utility.Schema.html#c:preload_graph/1"><code class="inline">Frameworks.Utility.Schema.preload_graph/1</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#update_defaults/3" translate="no">update_defaults(socket, props, defaults)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#update_target/2" translate="no">update_target(pid, message)</a>
+        <a href="#ready?/1" translate="no">ready?(endpoint)</a>
 
       </div>
 
@@ -161,7 +153,39 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#version/0" translate="no">version()</a>
+        <a href="#reset_special/3" translate="no">reset_special(endpoint, special_field, special)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#special/1" translate="no">special(endpoint)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#special_field/1" translate="no">special_field(endpoint)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#special_field_id/1" translate="no">special_field_id(endpoint)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#validate/1" translate="no">validate(changeset)</a>
 
       </div>
 
@@ -181,16 +205,16 @@ core
 Functions
     </h1>
     <div class="functions-list">
-<section class="detail" id="current_user/1">
+<section class="detail" id="changeset/2">
 
   <div class="detail-header">
-    <a href="#current_user/1" class="detail-link" title="Link to this function">
+    <a href="#changeset/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">current_user(arg1)</h1>
+    <h1 class="signature" translate="no">changeset(endpoint, params)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/dropdown.selector.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/endpoint_model.ex#L28" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -203,16 +227,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="render/1">
+<section class="detail" id="preload_graph/1">
 
   <div class="detail-header">
-    <a href="#render/1" class="detail-link" title="Link to this function">
+    <a href="#preload_graph/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">render(assigns)</h1>
+    <h1 class="signature" translate="no">preload_graph(fields)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/dropdown.selector.ex#L190" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/endpoint_model.ex#L3" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -222,47 +246,19 @@ Functions
 
   <section class="docstring">
 
-<h2 id="render/1-attributes" class="section-heading">
-  <a href="#render/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">attributes</p>
-  </a>
-  Attributes
-</h2>
-<ul><li><code class="inline">options</code> (<code class="inline">:list</code>) (required)</li><li><code class="inline">parent</code> (<code class="inline">:any</code>) (required)</li><li><code class="inline">selected_option_index</code> (<code class="inline">:integer</code>)</li><li><code class="inline">background</code> (<code class="inline">:atom</code>) - Defaults to <code class="inline">:light</code>.</li><li><code class="inline">debounce</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;0&quot;</code>.</li></ul>
+<p>Callback implementation for <a href="Frameworks.Utility.Schema.html#c:preload_graph/1"><code class="inline">Frameworks.Utility.Schema.preload_graph/1</code></a>.</p>
   </section>
 </section>
-<section class="detail" id="update_defaults/3">
+<section class="detail" id="ready?/1">
 
   <div class="detail-header">
-    <a href="#update_defaults/3" class="detail-link" title="Link to this function">
+    <a href="#ready?/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">update_defaults(socket, props, defaults)</h1>
+    <h1 class="signature" translate="no">ready?(endpoint)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/dropdown.selector.ex#L2" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="update_target/2">
-
-  <div class="detail-header">
-    <a href="#update_target/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">update_target(pid, message)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/dropdown.selector.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/endpoint_model.ex#L88" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -275,16 +271,104 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="version/0">
+<section class="detail" id="reset_special/3">
 
   <div class="detail-header">
-    <a href="#version/0" class="detail-link" title="Link to this function">
+    <a href="#reset_special/3" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">version()</h1>
+    <h1 class="signature" translate="no">reset_special(endpoint, special_field, special)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/dropdown.selector.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/endpoint_model.ex#L40" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="special/1">
+
+  <div class="detail-header">
+    <a href="#special/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">special(endpoint)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/endpoint_model.ex#L60" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="special_field/1">
+
+  <div class="detail-header">
+    <a href="#special_field/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">special_field(endpoint)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/endpoint_model.ex#L76" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="special_field_id/1">
+
+  <div class="detail-header">
+    <a href="#special_field_id/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">special_field_id(endpoint)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/endpoint_model.ex#L68" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="validate/1">
+
+  <div class="detail-header">
+    <a href="#validate/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">validate(changeset)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/endpoint_model.ex#L33" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

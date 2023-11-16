@@ -7,13 +7,13 @@
     <meta name="generator" content="ExDoc v0.29.3">
     <meta name="project" content="core v0.1.0">
 
-    <title>Systems.DataDonation.AzureStorageBackend — core v0.1.0</title>
+    <title>Frameworks.Pixel.DropdownSelector — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-BAFEFA34.js"></script>
+    <script src="dist/sidebar_items-3783DDDE.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -100,12 +100,12 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/systems/data_donation/storage/azure_storage_backend.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/dropdown_selector.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">Systems.DataDonation.AzureStorageBackend</span> 
+  <span translate="no">Frameworks.Pixel.DropdownSelector</span> 
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
@@ -127,7 +127,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#path/3" translate="no">path(root_key, participant, donation_key)</a>
+        <a href="#current_user/1" translate="no">current_user(arg1)</a>
 
       </div>
 
@@ -135,11 +135,35 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#store/3" translate="no">store(map1, map2, data)</a>
+        <a href="#render/1" translate="no">render(assigns)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="Systems.DataDonation.StorageBackend.html#c:store/3"><code class="inline">Systems.DataDonation.StorageBackend.store/3</code></a>.</p></div>
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">options</code> (<code class="inline">:list</code>) (required)</li><li><code class="inline">parent</code> (<code class="inline">:any</code>) (required)</li><li><code class="inline">selected_option_index</code> (<code class="inline">:integer</code>)</li><li><code class="inline">background</code> (<code class="inline">:atom</code>) - Defaults to <code class="inline">:light</code>.</li><li><code class="inline">debounce</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;0&quot;</code>.</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_defaults/3" translate="no">update_defaults(socket, props, defaults)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_target/2" translate="no">update_target(pid, message)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#version/0" translate="no">version()</a>
+
+      </div>
 
     </div>
 
@@ -157,16 +181,16 @@ core
 Functions
     </h1>
     <div class="functions-list">
-<section class="detail" id="path/3">
+<section class="detail" id="current_user/1">
 
   <div class="detail-header">
-    <a href="#path/3" class="detail-link" title="Link to this function">
+    <a href="#current_user/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">path(root_key, participant, donation_key)</h1>
+    <h1 class="signature" translate="no">current_user(arg1)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/data_donation/storage/azure_storage_backend.ex#L40" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/dropdown_selector.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -179,16 +203,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="store/3">
+<section class="detail" id="render/1">
 
   <div class="detail-header">
-    <a href="#store/3" class="detail-link" title="Link to this function">
+    <a href="#render/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">store(map1, map2, data)</h1>
+    <h1 class="signature" translate="no">render(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/data_donation/storage/azure_storage_backend.ex#L6" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/dropdown_selector.ex#L190" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -198,7 +222,79 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Systems.DataDonation.StorageBackend.html#c:store/3"><code class="inline">Systems.DataDonation.StorageBackend.store/3</code></a>.</p>
+<h2 id="render/1-attributes" class="section-heading">
+  <a href="#render/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">options</code> (<code class="inline">:list</code>) (required)</li><li><code class="inline">parent</code> (<code class="inline">:any</code>) (required)</li><li><code class="inline">selected_option_index</code> (<code class="inline">:integer</code>)</li><li><code class="inline">background</code> (<code class="inline">:atom</code>) - Defaults to <code class="inline">:light</code>.</li><li><code class="inline">debounce</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;0&quot;</code>.</li></ul>
+  </section>
+</section>
+<section class="detail" id="update_defaults/3">
+
+  <div class="detail-header">
+    <a href="#update_defaults/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_defaults(socket, props, defaults)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/dropdown_selector.ex#L2" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="update_target/2">
+
+  <div class="detail-header">
+    <a href="#update_target/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_target(pid, message)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/dropdown_selector.ex#L2" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="version/0">
+
+  <div class="detail-header">
+    <a href="#version/0" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">version()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/dropdown_selector.ex#L2" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
   </section>
 </section>
 
