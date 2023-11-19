@@ -4,20 +4,19 @@ defmodule Systems.Storage.Azure.Backend do
   require Logger
 
   def store(
-        %{"participant" => participant, "key" => donation_key},
-        %{"storage_info" => %{"key" => root_key}},
-        data
+        endpoint,
+        panel_info,
+        data,
+        meta_data
       ) do
-    path = path(root_key, participant, donation_key)
+    path = path(panel_info, meta_data)
 
     headers = [
       {"Content-Type", "text/plain"},
       {"x-ms-blob-type", "BlockBlob"}
     ]
 
-    config = config()
-
-    case url(config, path) do
+    case url(endpoint, path) do
       {:ok, url} ->
         HTTPoison.put(url, data, headers)
         |> case do
@@ -37,27 +36,27 @@ defmodule Systems.Storage.Azure.Backend do
     end
   end
 
-  def path(root_key, participant, donation_key) do
-    "#{root_key}/#{participant}/#{donation_key}.json"
+  defp path(%{"participant" => participant}, %{"key" => key, "timestamp" => timestamp}) do
+    "#{participant}/#{key}/#{timestamp}.json"
+  end
+
+  defp path(%{"participant" => participant}, %{"key" => key}) do
+    "#{key}/#{participant}.json"
   end
 
   defp url(
-         config,
+         %{
+           "storage_account_name" => storage_account_name,
+           "container" => container,
+           "sas_token" => sas_token
+         },
          path
        ) do
-    storage_account_name = Keyword.get(config, :storage_account_name)
-    container = Keyword.get(config, :container)
-    sas_token = Keyword.get(config, :sas_token)
-
-    if storage_account_name && container && sas_token do
-      {:ok,
-       "https://#{storage_account_name}.blob.core.windows.net/#{container}/#{path}#{sas_token}"}
-    else
-      {:error, "Unable to deliver donation: invalid Azure config"}
-    end
+    {:ok,
+     "https://#{storage_account_name}.blob.core.windows.net/#{container}/#{path}#{sas_token}"}
   end
 
-  defp config() do
-    Application.get_env(:core, :azure_storage_backend)
+  defp url(_, _) do
+    {:error, "Unable to deliver donation: invalid Azure config"}
   end
 end

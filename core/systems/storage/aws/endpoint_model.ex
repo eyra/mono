@@ -4,6 +4,10 @@ defmodule Systems.Storage.AWS.EndpointModel do
 
   import Ecto.Changeset
 
+  @fields ~w(access_key_id secret_access_key s3_bucket_name region_code)a
+  @required_fields @fields
+
+  @derive {Jason.Encoder, only: @fields}
   schema "storage_endpoints_aws" do
     field(:access_key_id, :string)
     field(:secret_access_key, :string)
@@ -12,9 +16,6 @@ defmodule Systems.Storage.AWS.EndpointModel do
 
     timestamps()
   end
-
-  @fields ~w(access_key_id secret_access_key s3_bucket_name region_code)a
-  @required_fields @fields
 
   def changeset(model, params) do
     model

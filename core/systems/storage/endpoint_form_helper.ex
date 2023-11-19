@@ -1,7 +1,7 @@
 defmodule Systems.Storage.EndpointForm.Helper do
   defmacro __using__(model) do
     quote do
-      use CoreWeb.LiveForm
+      use CoreWeb.LiveForm, :fabric
       use Fabric.LiveComponent
 
       alias unquote(model), as: Model

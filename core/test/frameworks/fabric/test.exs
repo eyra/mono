@@ -12,7 +12,7 @@ defmodule Fabric.Test do
       assert %Phoenix.LiveView.Socket{
                assigns: %{
                  __changed__: %{fabric: true},
-                 fabric: %Fabric.Model{parent: nil, self: nil, children: []}
+                 fabric: %Fabric.Model{parent: nil, self: nil, children: nil}
                }
              } = socket
     end
@@ -21,13 +21,13 @@ defmodule Fabric.Test do
   describe "new_fabric/0" do
     test "default" do
       fabric = Fabric.new_fabric()
-      assert %Fabric.Model{parent: nil, self: nil, children: []} = fabric
+      assert %Fabric.Model{parent: nil, self: nil, children: nil} = fabric
     end
   end
 
   describe "prepare_child/4" do
     test "socket" do
-      fabric = %Fabric.Model{parent: nil, children: []}
+      fabric = %Fabric.Model{parent: nil, children: nil}
 
       child =
         %Phoenix.LiveView.Socket{}
@@ -43,14 +43,14 @@ defmodule Fabric.Test do
                      id: :child,
                      module: Fabric.LiveComponentMock
                    },
-                   children: []
+                   children: nil
                  }
                }
              } = child
     end
 
     test "fabric" do
-      fabric = %Fabric.Model{parent: nil, children: []}
+      fabric = %Fabric.Model{parent: nil, children: nil}
 
       child = Fabric.prepare_child(fabric, :child, Fabric.LiveComponentMock, %{})
 
@@ -63,7 +63,7 @@ defmodule Fabric.Test do
                      id: :child,
                      module: Fabric.LiveComponentMock
                    },
-                   children: []
+                   children: nil
                  }
                }
              } = child
@@ -89,7 +89,7 @@ defmodule Fabric.Test do
                      id: :child,
                      module: Fabric.LiveComponentMock
                    },
-                   children: []
+                   children: nil
                  }
                }
              } = child
@@ -109,7 +109,7 @@ defmodule Fabric.Test do
                      id: :child,
                      module: Fabric.LiveComponentMock
                    },
-                   children: []
+                   children: nil
                  }
                }
              } = child
@@ -119,7 +119,7 @@ defmodule Fabric.Test do
   describe "show_child/2" do
     test "socket" do
       child = create_child(:child)
-      fabric = %Fabric.Model{parent: nil, children: []}
+      fabric = %Fabric.Model{parent: nil, children: nil}
 
       socket =
         %Phoenix.LiveView.Socket{}
@@ -144,7 +144,7 @@ defmodule Fabric.Test do
                              id: :child,
                              module: Fabric.LiveComponentMock
                            },
-                           children: []
+                           children: nil
                          }
                        }
                      }
@@ -158,37 +158,31 @@ defmodule Fabric.Test do
   describe "add_child/2" do
     test "socket" do
       child = create_child(:child)
-      fabric = %Fabric.Model{parent: nil, children: []}
 
-      socket =
-        %Phoenix.LiveView.Socket{}
-        |> Phoenix.Component.assign(:fabric, fabric)
+      fabric =
+        %Fabric.Model{parent: nil, children: nil}
         |> Fabric.add_child(child)
 
-      assert %Phoenix.LiveView.Socket{
-               assigns: %{
-                 fabric: %Fabric.Model{
-                   children: [
-                     %Fabric.LiveComponent.Model{
-                       ref: %Fabric.LiveComponent.RefModel{
+      assert %Fabric.Model{
+               children: [
+                 %Fabric.LiveComponent.Model{
+                   ref: %Fabric.LiveComponent.RefModel{
+                     id: :child,
+                     module: Fabric.LiveComponentMock
+                   },
+                   params: %{
+                     fabric: %Fabric.Model{
+                       parent: nil,
+                       self: %Fabric.LiveComponent.RefModel{
                          id: :child,
                          module: Fabric.LiveComponentMock
                        },
-                       params: %{
-                         fabric: %Fabric.Model{
-                           parent: nil,
-                           self: %Fabric.LiveComponent.RefModel{
-                             id: :child,
-                             module: Fabric.LiveComponentMock
-                           },
-                           children: []
-                         }
-                       }
+                       children: nil
                      }
-                   ]
+                   }
                  }
-               }
-             } = socket
+               ]
+             } = fabric
     end
   end
 
@@ -223,7 +217,7 @@ defmodule Fabric.Test do
                              id: :child,
                              module: Fabric.LiveComponentMock
                            },
-                           children: []
+                           children: nil
                          }
                        }
                      }
@@ -261,22 +255,15 @@ defmodule Fabric.Test do
     test "socket" do
       child = create_child(:child, Fabric.LiveComponentMock)
 
-      fabric = %Fabric.Model{parent: nil, children: [child]}
-
-      socket =
-        %Phoenix.LiveView.Socket{}
-        |> Phoenix.Component.assign(:fabric, fabric)
+      fabric =
+        %Fabric.Model{parent: nil, children: [child]}
         |> Fabric.remove_child(:child)
 
-      assert %Phoenix.LiveView.Socket{
-               assigns: %{
-                 fabric: %Fabric.Model{
-                   parent: nil,
-                   self: nil,
-                   children: []
-                 }
-               }
-             } = socket
+      assert %Fabric.Model{
+               parent: nil,
+               self: nil,
+               children: []
+             } = fabric
     end
   end
 
@@ -295,7 +282,7 @@ defmodule Fabric.Test do
               fabric: %Fabric.Model{
                 parent: nil,
                 self: %Fabric.LiveComponent.RefModel{id: :child, module: Fabric.LiveComponentMock},
-                children: []
+                children: nil
               }
             },
             ref: %Fabric.LiveComponent.RefModel{id: :child, module: Fabric.LiveComponentMock}
@@ -323,7 +310,7 @@ defmodule Fabric.Test do
                              id: :child,
                              module: Fabric.LiveComponentMock
                            },
-                           children: []
+                           children: nil
                          }
                        }
                      }

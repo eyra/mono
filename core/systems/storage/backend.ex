@@ -1,7 +1,8 @@
 defmodule Systems.Storage.Backend do
   @callback store(
-              session :: map(),
-              vm :: map(),
-              data :: binary()
+              endpoint :: map(),
+              panel_info :: map(),
+              data :: binary(),
+              meta_data :: map()
             ) :: any()
 end

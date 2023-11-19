@@ -4,6 +4,10 @@ defmodule Systems.Storage.Yoda.EndpointModel do
 
   import Ecto.Changeset
 
+  @fields ~w(url user password)a
+  @required_fields @fields
+
+  @derive {Jason.Encoder, only: @fields}
   schema "storage_endpoints_yoda" do
     field(:url, :string)
     field(:user, :string)
@@ -11,9 +15,6 @@ defmodule Systems.Storage.Yoda.EndpointModel do
 
     timestamps()
   end
-
-  @fields ~w(url user password)a
-  @required_fields @fields
 
   def changeset(endpoint, params) do
     endpoint

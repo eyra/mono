@@ -1,4 +1,5 @@
 defmodule Systems.Benchmark.ContentPage do
+  use CoreWeb, :live_view
   use Systems.Content.Page
 
   alias Systems.{

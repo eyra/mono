@@ -7,11 +7,8 @@ defmodule Systems.Workflow.ItemViews do
   import CoreWeb.UI.StepIndicator
 
   alias Systems.{
-    Workflow,
-    Project
+    Workflow
   }
-
-  import Project.ToolRefView
 
   attr(:title, :string, required: true)
   attr(:description, :string, required: true)
@@ -55,19 +52,6 @@ defmodule Systems.Workflow.ItemViews do
     """
   end
 
-  attr(:items, :list, required: true)
-  attr(:selected_item_id, :integer, required: true)
-
-  def work_list(assigns) do
-    ~H"""
-    <div class="flex flex-col gap-2 w-full h-full p-6">
-      <%= for {item, index} <- Enum.with_index(@items) do %>
-        <.work_item {item} index={index} selected?={item.id == @selected_item_id} />
-      <% end %>
-    </div>
-    """
-  end
-
   attr(:id, :any, required: true)
   attr(:title, :map, required: true)
   attr(:icon, :string, required: true)
@@ -103,17 +87,6 @@ defmodule Systems.Workflow.ItemViews do
           </div>
         </Align.vertical_center>
       </div>
-    </div>
-    """
-  end
-
-  attr(:item, :map, required: true)
-  attr(:task, :map, required: true)
-
-  def launcher(%{item: %{tool_ref: tool_ref}} = assigns) when not is_nil(tool_ref) do
-    ~H"""
-    <div class="w-full h-full">
-      <.tool_ref_view tool_ref={@item.tool_ref} task={@task} />
     </div>
     """
   end

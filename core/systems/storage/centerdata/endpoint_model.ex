@@ -4,14 +4,15 @@ defmodule Systems.Storage.Centerdata.EndpointModel do
 
   import Ecto.Changeset
 
+  @fields ~w(url)a
+  @required_fields @fields
+
+  @derive {Jason.Encoder, only: @fields}
   schema "storage_endpoints_centerdata" do
     field(:url, :string)
 
     timestamps()
   end
-
-  @fields ~w(url)a
-  @required_fields @fields
 
   def changeset(model, params) do
     model

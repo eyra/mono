@@ -4,18 +4,21 @@ defmodule Systems.Storage.Public do
     Storage
   }
 
-  def store(%Storage.EndpointModel{} = endpoint, data, remote_ip) do
-    storage = %{
-      key: Storage.EndpointModel.special_field_id(endpoint),
-      endpoint: Storage.EndpointModel.special(endpoint)
-    }
-
+  def store(
+        %{key: key, backend: backend, endpoint: endpoint},
+        panel_info,
+        data,
+        %{remote_ip: remote_ip} = meta_data
+      ) do
     packet_size = String.length(data)
 
-    with :granted <- Rate.Public.request_permission(storage.key, remote_ip, packet_size) do
+    with :granted <- Rate.Public.request_permission(key, remote_ip, packet_size) do
       %{
-        storage: storage,
-        data: data
+        backend: backend,
+        endpoint: endpoint,
+        panel_info: panel_info,
+        data: data,
+        meta_data: meta_data
       }
       |> Storage.Delivery.new()
       |> Oban.insert()

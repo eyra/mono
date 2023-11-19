@@ -4,16 +4,36 @@ defmodule Fabric.LiveView do
     defstruct [:pid]
   end
 
-  defmacro __using__(_opts) do
+  defmacro __using__(layout) do
     quote do
-      import Fabric
-      import Fabric.Html
+      use Phoenix.LiveView, layout: {unquote(layout), :live}
+      unquote(helpers())
+    end
+  end
+
+  defmacro __using__() do
+    quote do
+      use Phoenix.LiveView
+      unquote(helpers())
+    end
+  end
+
+  def helpers() do
+    quote do
+      use Fabric
 
       @before_compile Fabric.LiveView
 
       def handle_info(%{fabric_event: %{name: name, payload: payload}}, socket) do
-        __MODULE__.handle_event(name, payload, socket)
+        handle_event(name, payload, socket)
       end
+
+      @impl true
+      def handle_event(_name, _payload, _socket) do
+        raise "handle_event/3 not implemented"
+      end
+
+      defoverridable handle_event: 3
     end
   end
 
@@ -26,7 +46,7 @@ defmodule Fabric.LiveView do
       """
       def mount(params, session, socket) do
         self = %Fabric.LiveView.RefModel{pid: self()}
-        fabric = %Fabric.Model{parent: nil, self: self, children: []}
+        fabric = %Fabric.Model{parent: nil, self: self, children: nil}
         socket = Phoenix.Component.assign(socket, :fabric, fabric)
         super(params, session, socket)
       end

@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.ConnectorPopupStorage do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
   use Fabric.LiveComponent
 
   import CoreWeb.UI.Dialog

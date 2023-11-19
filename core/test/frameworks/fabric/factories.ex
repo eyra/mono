@@ -4,11 +4,11 @@ defmodule Fabric.Factories do
   end
 
   def create_fabric(%Fabric.LiveView.RefModel{} = self) do
-    %Fabric.Model{parent: nil, self: self, children: []}
+    %Fabric.Model{parent: nil, self: self, children: nil}
   end
 
   def create_fabric(%Fabric.LiveComponent.RefModel{} = self) do
-    %Fabric.Model{parent: nil, self: self, children: []}
+    %Fabric.Model{parent: nil, self: self, children: nil}
   end
 
   def create_child(id, module \\ Fabric.LiveComponentMock, params \\ %{}) do

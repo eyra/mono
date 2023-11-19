@@ -1,5 +1,6 @@
 defmodule Systems.Project.ToolRefView do
-  use CoreWeb, :html
+  use CoreWeb, :live_component_fabric
+  use Fabric.LiveComponent
 
   alias Frameworks.Concept
 
@@ -7,22 +8,30 @@ defmodule Systems.Project.ToolRefView do
     Project
   }
 
-  defp get_tool(tool_ref), do: Project.ToolRefModel.tool(tool_ref)
-  defp get_work(tool), do: Concept.ToolModel.launcher(tool)
+  def update(%{id: id, tool_ref: tool_ref, task: task}, socket) do
+    {
+      :ok,
+      socket
+      |> assign(
+        id: id,
+        tool_ref: tool_ref,
+        task: task
+      )
+      |> compose_element(:launcher)
+    }
+  end
 
-  attr(:tool_ref, :map, required: true)
-  attr(:task, :map, required: true)
+  @impl true
+  def compose(:launcher, %{tool_ref: tool_ref}) do
+    Project.ToolRefModel.tool(tool_ref)
+    |> Concept.ToolModel.launcher()
+  end
 
-  def tool_ref_view(%{tool_ref: tool_ref} = assigns) do
-    assigns =
-      tool_ref
-      |> get_tool()
-      |> get_work()
-      |> then(&assign(assigns, :work, &1))
-
+  @impl true
+  def render(assigns) do
     ~H"""
     <div class="w-full h-full">
-      <.function_component function={@work.function} props={@work.props}  />
+      <.function_component {@launcher} />
     </div>
     """
   end

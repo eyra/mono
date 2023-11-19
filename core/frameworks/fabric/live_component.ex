@@ -13,19 +13,29 @@ defmodule Fabric.LiveComponent do
 
   defmacro __using__(_opts) do
     quote do
-      import Fabric
-      import Fabric.Html
+      use Fabric
+      use Phoenix.LiveComponent
 
+      @impl true
       def update(%{fabric_event: %{name: name, payload: payload}}, socket) do
-        {:noreply, socket} = __MODULE__.handle_event(name, payload, socket)
+        {:noreply, socket} = handle_event(name, payload, socket)
         {:ok, socket}
       end
 
+      @impl true
       def update(%{id: _id, fabric: fabric} = params, socket) do
         params = Map.drop(params, [:fabric])
         socket = assign(socket, fabric: fabric)
         update(params, socket)
       end
+
+      @impl true
+      def handle_event(_name, _payload, socket) do
+        Logger.error("handle_event/3 not implemented")
+        {:noreply, socket}
+      end
+
+      defoverridable handle_event: 3
     end
   end
 end

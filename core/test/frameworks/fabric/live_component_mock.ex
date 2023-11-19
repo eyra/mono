@@ -1,5 +1,4 @@
 defmodule Fabric.LiveComponentMock do
-  use Phoenix.LiveComponent
   use Fabric.LiveComponent
 
   @impl true

@@ -27,11 +27,3 @@ Mox.defmock(BankingClient.MockClient, for: BankingClient.API)
 Application.put_env(:core, BankingClient, client: BankingClient.MockClient)
 
 Mox.defmock(Systems.Storage.MockBackend, for: Systems.Storage.Backend)
-
-Application.put_env(
-  :core,
-  :data_donation_storage_backend,
-  s3: Systems.Storage.MockBackend,
-  centerdata: Systems.Storage.MockBackend,
-  yoda: Systems.Storage.MockBackend
-)

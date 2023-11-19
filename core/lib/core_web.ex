@@ -101,14 +101,60 @@ defmodule CoreWeb do
     end
   end
 
+  def live_view_fabric do
+    quote do
+      unquote(component_helpers())
+
+      import Phoenix.Controller,
+        only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
+
+      use CoreWeb.LiveLocale
+      use CoreWeb.LiveUri
+      import Core.Authorization, only: [can_access?: 2]
+      use Frameworks.GreenLight.Live, Core.Authorization
+      alias CoreWeb.Router.Helpers, as: Routes
+
+      use CoreWeb.LiveAssignHelper
+      import Core.FeatureFlags
+
+      use Frameworks.Pixel.Flash
+
+      import CoreWeb.UrlResolver, only: [url_resolver: 1]
+
+      import CoreWeb.UI.Popup
+      import CoreWeb.UI.Empty
+      alias CoreWeb.UI.Margin
+
+      alias CoreWeb.UI.Area
+
+      # Routes generation with the ~p sigil
+      unquote(verified_routes())
+    end
+  end
+
   def live_component do
     quote do
       unquote(component_helpers())
 
       use Phoenix.LiveComponent
 
+      unquote(live_component_helpers())
+      unquote(verified_routes())
+    end
+  end
+
+  def live_component_fabric do
+    quote do
+      unquote(component_helpers())
+      unquote(live_component_helpers())
+      unquote(verified_routes())
+    end
+  end
+
+  def live_component_helpers do
+    quote do
       def update_target(%{id: id, type: type}, message) when is_map(message) do
-        send_update(type, message |> Map.put(:id, id))
+        Phoenix.LiveView.send_update(type, message |> Map.put(:id, id))
       end
 
       def update_target(pid, message) when is_pid(pid) do
@@ -124,9 +170,6 @@ defmodule CoreWeb do
 
         Map.put(socket, :assigns, assigns)
       end
-
-      # Routes generation with the ~p sigil
-      unquote(verified_routes())
     end
   end
 
