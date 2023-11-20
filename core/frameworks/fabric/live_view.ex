@@ -24,6 +24,7 @@ defmodule Fabric.LiveView do
 
       @before_compile Fabric.LiveView
 
+      @impl true
       def handle_info(%{fabric_event: %{name: name, payload: payload}}, socket) do
         handle_event(name, payload, socket)
       end
