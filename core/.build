@@ -336,6 +336,7 @@ Systems.Assignment.ContentPageBuilder.html
 Systems.Assignment.Controller.html
 Systems.Assignment.CrewPage.html
 Systems.Assignment.CrewPageBuilder.html
+Systems.Assignment.CrewWorkView.html
 Systems.Assignment.Director.html
 Systems.Assignment.EthicalForm.html
 Systems.Assignment.ExcludeModel.html
@@ -674,6 +675,7 @@ Systems.Workflow.Model.html
 Systems.Workflow.Platforms.html
 Systems.Workflow.Public.html
 Systems.Workflow.Switch.html
+Systems.Workflow.WorkListView.html
 api-reference.html
 assets/logo.svg
 authorization.html
@@ -705,8 +707,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-2178E3B5.js
-dist/sidebar_items-3783DDDE.js
+dist/search_items-17A6A16A.js
+dist/sidebar_items-C8338227.js
 index.html
 readme.html
 search.html

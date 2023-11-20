@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-3783DDDE.js"></script>
+    <script src="dist/sidebar_items-C8338227.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -127,7 +127,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:store/3" translate="no">store(session, vm, data)</a>
+        <a href="#c:store/4" translate="no">store(endpoint, panel_info, data, meta_data)</a>
 
       </div>
 
@@ -147,16 +147,16 @@ core
 Callbacks
     </h1>
     <div class="callbacks-list">
-<section class="detail" id="c:store/3">
+<section class="detail" id="c:store/4">
 
   <div class="detail-header">
-    <a href="#c:store/3" class="detail-link" title="Link to this callback">
+    <a href="#c:store/4" class="detail-link" title="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this callback</span>
     </a>
-    <h1 class="signature" translate="no">store(session, vm, data)</h1>
+    <h1 class="signature" translate="no">store(endpoint, panel_info, data, meta_data)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/storage/backend.ex#L6" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/backend.ex#L7" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -169,9 +169,10 @@ Callbacks
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@callback</span> store(
-  session :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
-  vm :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
-  data :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()
+  endpoint :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
+  panel_info :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
+  data :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(),
+  meta_data :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()
 ) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
 
       </div>

@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-3783DDDE.js"></script>
+    <script src="dist/sidebar_items-C8338227.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -21,7 +21,7 @@
 
 
   </head>
-  <body data-type="modules" class="page-module">
+  <body data-type="modules" class="page-behaviour">
     <script>
 
       try {
@@ -105,7 +105,7 @@ core
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">Fabric</span> 
+  <span translate="no">Fabric</span> <small>behaviour</small>
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
@@ -120,6 +120,66 @@ core
       </a>
       Summary
     </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:assigns/0" translate="no">assigns()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:child/0" translate="no">child()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:composition/0" translate="no">composition()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:composition_id/0" translate="no">composition_id()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:element/0" translate="no">element()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-callbacks summary">
+  <h2>
+    <a href="#callbacks">Callbacks</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:compose/2" translate="no">compose(id, a)</a>
+
+      </div>
+
+    </div>
+
+</div>
 <div class="summary-functions summary">
   <h2>
     <a href="#functions">Functions</a>
@@ -127,7 +187,15 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#add_child/2" translate="no">add_child(socket, child)</a>
+        <a href="#add_child/2" translate="no">add_child(fabric, child)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#exists?/2" translate="no">exists?(context, child_id)</a>
 
       </div>
 
@@ -136,6 +204,14 @@ core
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#get_child/2" translate="no">get_child(arg1, child_id)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_current_child/1" translate="no">get_current_child(model)</a>
 
       </div>
 
@@ -159,6 +235,14 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#install_children/2" translate="no">install_children(socket, children)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#new_fabric/0" translate="no">new_fabric()</a>
 
       </div>
@@ -175,6 +259,14 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#prepare_child/3" translate="no">prepare_child(context, child_id, arg3)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#prepare_child/4" translate="no">prepare_child(arg1, child_id, module, params)</a>
 
       </div>
@@ -183,7 +275,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#remove_child/2" translate="no">remove_child(socket, child_id)</a>
+        <a href="#remove_child/2" translate="no">remove_child(fabric, child_id)</a>
 
       </div>
 
@@ -223,6 +315,14 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#show_next/1" translate="no">show_next(socket)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#show_popup/2" translate="no">show_popup(socket, child)</a>
 
       </div>
@@ -233,6 +333,200 @@ core
 
   </section>
 
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Types
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:assigns/0">
+
+  <div class="detail-header">
+    <a href="#t:assigns/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">assigns()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L2" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> assigns() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:child/0">
+
+  <div class="detail-header">
+    <a href="#t:child/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">child()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L5" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> child() :: %{module: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), params: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:composition/0">
+
+  <div class="detail-header">
+    <a href="#t:composition/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">composition()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L4" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> composition() :: <a href="#t:child/0">child</a>() | <a href="#t:element/0">element</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:composition_id/0">
+
+  <div class="detail-header">
+    <a href="#t:composition_id/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">composition_id()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L3" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> composition_id() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:element/0">
+
+  <div class="detail-header">
+    <a href="#t:element/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">element()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L6" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> element() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="callbacks" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#callbacks">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Callbacks
+    </h1>
+    <div class="callbacks-list">
+<section class="detail" id="c:compose/2">
+
+  <div class="detail-header">
+    <a href="#c:compose/2" class="detail-link" title="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this callback</span>
+    </a>
+    <h1 class="signature" translate="no">compose(id, a)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L8" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> compose(id :: <a href="#t:composition_id/0">composition_id</a>(), a :: <a href="#t:assigns/0">assigns</a>()) :: <a href="#t:composition/0">composition</a>() | nil</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
 
   <section id="functions" class="details-list">
     <h1 class="section-heading">
@@ -250,9 +544,31 @@ Functions
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">add_child(socket, child)</h1>
+    <h1 class="signature" translate="no">add_child(fabric, child)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L67" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L197" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="exists?/2">
+
+  <div class="detail-header">
+    <a href="#exists?/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">exists?(context, child_id)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L125" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -274,7 +590,29 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_child(arg1, child_id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L21" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L113" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_current_child/1">
+
+  <div class="detail-header">
+    <a href="#get_current_child/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_current_child(model)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L216" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -296,7 +634,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">hide_child(socket, child_id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L51" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L168" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -318,7 +656,29 @@ Functions
     </a>
     <h1 class="signature" translate="no">hide_popup(socket, child_id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L61" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L188" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="install_children/2">
+
+  <div class="detail-header">
+    <a href="#install_children/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">install_children(socket, children)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L100" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -340,7 +700,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">new_fabric()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L34" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L134" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -362,7 +722,29 @@ Functions
     </a>
     <h1 class="signature" translate="no">new_fabric(socket)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L29" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L129" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="prepare_child/3">
+
+  <div class="detail-header">
+    <a href="#prepare_child/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">prepare_child(context, child_id, arg3)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L74" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -384,7 +766,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">prepare_child(arg1, child_id, module, params)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L5" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L80" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -404,9 +786,9 @@ Functions
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">remove_child(socket, child_id)</h1>
+    <h1 class="signature" translate="no">remove_child(fabric, child_id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L76" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L201" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -428,7 +810,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">replace_child(socket, child)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L42" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L149" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -450,7 +832,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">send_event(pid, event)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L120" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L265" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -474,7 +856,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">send_event(socket, target, name, payload \\ %{})</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L85" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L222" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -496,7 +878,29 @@ Functions
     </a>
     <h1 class="signature" translate="no">show_child(socket, child)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L38" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L138" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="show_next/1">
+
+  <div class="detail-header">
+    <a href="#show_next/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">show_next(socket)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L208" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -518,7 +922,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">show_popup(socket, child)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L55" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L176" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

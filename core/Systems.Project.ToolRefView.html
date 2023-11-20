@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-3783DDDE.js"></script>
+    <script src="dist/sidebar_items-C8338227.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -127,6 +127,22 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#compose_child/3" translate="no">compose_child(context, child_id, opts \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#compose_element/2" translate="no">compose_element(socket, element_id)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#current_user/1" translate="no">current_user(arg1)</a>
 
       </div>
@@ -135,11 +151,25 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#tool_ref_view/1" translate="no">tool_ref_view(assigns)</a>
+        <a href="#element/2" translate="no">element(id, assigns)</a>
 
       </div>
 
-        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">tool_ref</code> (<code class="inline">:map</code>) (required)</li><li><code class="inline">task</code> (<code class="inline">:map</code>) (required)</li></ul></div>
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_defaults/3" translate="no">update_defaults(socket, props, defaults)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_target/2" translate="no">update_target(pid, message)</a>
+
+      </div>
 
     </div>
 
@@ -165,6 +195,52 @@ core
 Functions
     </h1>
     <div class="functions-list">
+<section class="detail" id="compose_child/3">
+
+    <span id="compose_child/2"></span>
+
+  <div class="detail-header">
+    <a href="#compose_child/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">compose_child(context, child_id, opts \\ [])</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/tool_ref_view.ex#L3" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="compose_element/2">
+
+  <div class="detail-header">
+    <a href="#compose_element/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">compose_element(socket, element_id)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/tool_ref_view.ex#L3" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="current_user/1">
 
   <div class="detail-header">
@@ -187,16 +263,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="tool_ref_view/1">
+<section class="detail" id="element/2">
 
   <div class="detail-header">
-    <a href="#tool_ref_view/1" class="detail-link" title="Link to this function">
+    <a href="#element/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">tool_ref_view(assigns)</h1>
+    <h1 class="signature" translate="no">element(id, assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/tool_ref_view.ex#L16" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/tool_ref_view.ex#L3" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -206,13 +282,51 @@ Functions
 
   <section class="docstring">
 
-<h2 id="tool_ref_view/1-attributes" class="section-heading">
-  <a href="#tool_ref_view/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">attributes</p>
-  </a>
-  Attributes
-</h2>
-<ul><li><code class="inline">tool_ref</code> (<code class="inline">:map</code>) (required)</li><li><code class="inline">task</code> (<code class="inline">:map</code>) (required)</li></ul>
+
+  </section>
+</section>
+<section class="detail" id="update_defaults/3">
+
+  <div class="detail-header">
+    <a href="#update_defaults/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_defaults(socket, props, defaults)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/tool_ref_view.ex#L2" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="update_target/2">
+
+  <div class="detail-header">
+    <a href="#update_target/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_target(pid, message)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/tool_ref_view.ex#L2" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
   </section>
 </section>
 <section class="detail" id="version/0">
