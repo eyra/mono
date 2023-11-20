@@ -215,27 +215,4 @@ defmodule Systems.Benchmark.ContentPageBuilder do
       }
     }
   end
-
-  defp create_tab(
-         :invite,
-         assignment,
-         show_errors,
-         %{uri_origin: uri_origin}
-       ) do
-    ready? = false
-
-    %{
-      id: :invite_form,
-      ready: ready?,
-      show_errors: show_errors,
-      title: dgettext("eyra-project", "tabbar.item.invite"),
-      forward_title: dgettext("eyra-project", "tabbar.item.invite.forward"),
-      type: :fullpage,
-      live_component: Assignment.PanelForm,
-      props: %{
-        uri_origin: uri_origin,
-        entity: assignment
-      }
-    }
-  end
 end

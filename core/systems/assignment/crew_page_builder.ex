@@ -34,9 +34,12 @@ defmodule Systems.Assignment.CrewPageBuilder do
       consent_view(assignment, assigns),
       work_view(assignment, assigns)
     ]
+    |> Enum.filter(&(&1 != nil))
   end
 
   defp current_flow(%{fabric: %{children: children}}), do: children
+
+  defp consent_view(%{consent_agreement: nil}, _), do: nil
 
   defp consent_view(%{consent_agreement: consent_agreement}, %{current_user: user, fabric: fabric}) do
     revision = Consent.Public.latest_revision(consent_agreement)

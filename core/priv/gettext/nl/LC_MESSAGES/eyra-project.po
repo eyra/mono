@@ -24,14 +24,6 @@ msgid "tabbar.item.config.forward"
 msgstr "Ga naar Instellingen"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.panel"
-msgstr "Uitnodigen"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.panel.forward"
-msgstr "Ga naar Uitnodigen"
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"
 msgstr "Monitor"
 
@@ -160,25 +152,9 @@ msgid "tabbar.item.support.forward"
 msgstr "Ga naar Support"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.gdpr"
-msgstr "Consent"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.gdpr.forward"
-msgstr "Ga naar Consent"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.settings"
 msgstr "Instellingen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.settings.forward"
-msgstr "Ga naar Instellingen"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.invite"
-msgstr "Uitnodigen"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.invite.forward"
 msgstr "Ga naar Instellingen"

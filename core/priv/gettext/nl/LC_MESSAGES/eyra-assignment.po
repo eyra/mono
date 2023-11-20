@@ -94,14 +94,6 @@ msgstr "Instellingen"
 msgid "settings.data_storage.title"
 msgstr "Opslag van deelnemers data"
 
-#, elixir-autogen, elixir-format
-msgid "panel.title"
-msgstr "Panel"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panel.label"
-msgstr "Selecteer jou panel"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "connect.button"
 msgstr "Koppeling maken"
@@ -173,3 +165,19 @@ msgstr "<h3>I&O Research</h3><div>Lorem ipsum dolor sit amet, consectetur adipis
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.liss.connection.annotation"
 msgstr "<h3>LISS</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div><div>Ga naar <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a> voor meer informatie.</div>"
+
+#, elixir-autogen, elixir-format
+msgid "gdpr_form.off.label"
+msgstr "Consent overslaan"
+
+#, elixir-autogen, elixir-format
+msgid "gdpr_form.on.label"
+msgstr "Consent tonen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.consent.body"
+msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.consent.title"
+msgstr "Toestemming"

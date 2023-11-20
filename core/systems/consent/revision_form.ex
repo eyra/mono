@@ -1,5 +1,6 @@
 defmodule Systems.Consent.RevisionForm do
-  use CoreWeb.LiveForm
+  use CoreWeb.LiveForm, :fabric
+  use Fabric.LiveComponent
 
   alias Systems.{
     Consent

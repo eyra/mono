@@ -20,7 +20,7 @@ defmodule Systems.Assignment.Model do
     field(:status, Ecto.Enum, values: Assignment.Status.values(), default: :concept)
     field(:external_panel, Ecto.Enum, values: Assignment.ExternalPanelIds.values())
 
-    belongs_to(:consent_agreement, Consent.AgreementModel)
+    belongs_to(:consent_agreement, Consent.AgreementModel, on_replace: :update)
     belongs_to(:info, Assignment.InfoModel)
     belongs_to(:storage_endpoint, Storage.EndpointModel, on_replace: :delete)
     belongs_to(:workflow, Workflow.Model)

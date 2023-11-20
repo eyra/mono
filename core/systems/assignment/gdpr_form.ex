@@ -1,9 +1,10 @@
 defmodule Systems.Assignment.GdprForm do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
+  use Fabric.LiveComponent
 
-  alias Systems.{
-    Consent
-  }
+  alias Frameworks.Pixel
+  alias Systems.Assignment
+  alias Systems.Consent
 
   @impl true
   def update(%{id: id, entity: entity}, socket) do
@@ -14,31 +15,78 @@ defmodule Systems.Assignment.GdprForm do
         id: id,
         entity: entity
       )
-      |> update_consent_agreement()
+      |> compose_child(:switch)
+      |> compose_child(:consent_revision_form)
     }
   end
 
-  defp update_consent_agreement(%{assigns: %{entity: entity}} = socket) do
-    revision = Consent.Public.latest_unlocked_revision_safe(entity)
-
-    consent_revision_form = %{
-      id: :consent_revision,
-      module: Consent.RevisionForm,
-      entity: revision
+  @impl true
+  def compose(:switch, %{entity: %{consent_agreement: consent_agreement}}) do
+    %{
+      module: Pixel.Switch,
+      params: %{
+        opt_in?: false,
+        on_text: dgettext("eyra-assignment", "gdpr_form.on.label"),
+        off_text: dgettext("eyra-assignment", "gdpr_form.off.label"),
+        status:
+          if consent_agreement do
+            :on
+          else
+            :off
+          end
+      }
     }
+  end
 
-    assign(socket, consent_revision_form: consent_revision_form)
+  @impl true
+  def compose(:consent_revision_form, %{entity: %{consent_agreement: nil}}) do
+    nil
+  end
+
+  @impl true
+  def compose(:consent_revision_form, %{entity: %{consent_agreement: consent_agreement}}) do
+    %{
+      module: Consent.RevisionForm,
+      params: %{
+        entity: Consent.Public.latest_unlocked_revision_safe(consent_agreement)
+      }
+    }
+  end
+
+  @impl true
+  def handle_event(
+        "switch",
+        %{status: :on},
+        %{assigns: %{entity: %{auth_node: auth_node} = assignment}} = socket
+      ) do
+    consent_agreement = %Consent.AgreementModel{auth_node: auth_node}
+    Assignment.Public.update_consent_agreement(assignment, consent_agreement)
+
+    {
+      :noreply,
+      socket
+      |> compose_child(:consent_revision_form)
+    }
+  end
+
+  @impl true
+  def handle_event("switch", %{status: :off}, %{assigns: %{entity: assignment}} = socket) do
+    Assignment.Public.update_consent_agreement(assignment, nil)
+
+    {
+      :noreply,
+      socket
+      |> hide_child(:consent_revision_form)
+    }
   end
 
   @impl true
   def render(assigns) do
     ~H"""
       <div>
-        <Area.content>
-          <Margin.y id={:page_top} />
-          <Text.title2>Consent</Text.title2>
-          <.live_component {@consent_revision_form} />
-        </Area.content>
+        <.child id={:switch} fabric={@fabric} />
+        <.spacing value="S" />
+        <.child id={:consent_revision_form} fabric={@fabric} />
       </div>
     """
   end

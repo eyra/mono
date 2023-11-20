@@ -232,6 +232,14 @@ defmodule Systems.Assignment.Public do
     Core.Persister.save(assignment, changeset)
   end
 
+  def update_consent_agreement(assignment, consent_agreement) do
+    changeset =
+      Assignment.Model.changeset(assignment, %{})
+      |> Ecto.Changeset.put_assoc(:consent_agreement, consent_agreement)
+
+    Core.Persister.save(assignment, changeset)
+  end
+
   def is_owner?(assignment, user) do
     Core.Authorization.user_has_role?(user, assignment, :owner)
   end
