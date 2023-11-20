@@ -4,6 +4,10 @@ defmodule Systems.Storage.Azure.EndpointModel do
 
   import Ecto.Changeset
 
+  @fields ~w(account_name container sas_token)a
+  @required_fields @fields
+
+  @derive {Jason.Encoder, only: @fields}
   schema "storage_endpoints_azure" do
     field(:account_name, :string)
     field(:container, :string)
@@ -11,9 +15,6 @@ defmodule Systems.Storage.Azure.EndpointModel do
 
     timestamps()
   end
-
-  @fields ~w(account_name container sas_token)a
-  @required_fields @fields
 
   def changeset(model, params) do
     model

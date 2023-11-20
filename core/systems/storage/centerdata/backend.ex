@@ -4,18 +4,29 @@ defmodule Systems.Storage.Centerdata.Backend do
   require Logger
 
   def store(
+        %{"url" => url} = _endpoint,
         %{
-          "url" => url,
-          "varname1" => varname1,
-          "page" => page,
-          "respondent" => respondent,
-          "token" => token
-        } = _session,
-        %{storage_info: %{quest: quest}} = _vm,
-        data
+          "query_string" => %{
+            "quest" => quest,
+            "varname1" => varname1,
+            "respondent" => respondent,
+            "token" => token,
+            "page" => page
+          }
+        } = _panel_info,
+        data,
+        _meta_data
       ) do
     body =
-      "{\"#{varname1}\": \"#{data}\", \"button_next\": \"Next\", \"page\": \"#{page}\", \"_respondent\": \"#{respondent}\", \"token\": \"#{token}\", \"quest\": \"#{quest}}\""
+      %{
+        "#{varname1}" => Jason.decode!(data),
+        button_next: "Next",
+        page: page,
+        _respondent: respondent,
+        token: token,
+        quest: quest
+      }
+      |> Jason.encode!()
 
     post(url, body)
   end

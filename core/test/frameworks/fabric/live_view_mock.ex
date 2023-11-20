@@ -1,6 +1,5 @@
 defmodule Fabric.LiveViewMock do
-  use Phoenix.LiveView
-  use Fabric.LiveView
+  use Fabric.LiveView, Fabric.TestLayouts
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do

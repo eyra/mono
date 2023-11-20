@@ -222,17 +222,17 @@ trix-editor,
 
 trix-editor h1,
 .wysiwig h1 {
-  @apply text-title2 font-title2 mb-8;
+  @apply text-title3 font-title3 mb-8;
 }
 
 trix-editor h2,
 .wysiwig h2 {
-  @apply text-title3 font-title3 mb-8;
+  @apply text-title4 font-title4 mb-8;
 }
 
 trix-editor h3,
 .wysiwig h3 {
-  @apply text-title4 font-title4 mb-8;
+  @apply text-title5 font-title5 mb-8;
 }
 
 trix-editor strong,

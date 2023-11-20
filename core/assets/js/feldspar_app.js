@@ -25,6 +25,6 @@ export const FeldsparApp = {
   },
 
   handleMessage(e) {
-    this.pushEvent("app_event", e.data);
+    this.pushEvent("feldspar_event", e.data);
   },
 };

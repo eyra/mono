@@ -27,7 +27,7 @@ defmodule Systems.Feldspar.AppPage do
   end
 
   @impl true
-  def handle_event("app_event", %{"__type__" => type, "json_string" => event}, socket) do
+  def handle_event("feldspar_event", %{"__type__" => type, "json_string" => event}, socket) do
     {
       :noreply,
       socket |> handle(type, event)
@@ -35,7 +35,7 @@ defmodule Systems.Feldspar.AppPage do
   end
 
   @impl true
-  def handle_event("app_event", event, socket) do
+  def handle_event("feldspar_event", event, socket) do
     {
       :noreply,
       socket |> handle(nil, inspect(event))
@@ -43,7 +43,12 @@ defmodule Systems.Feldspar.AppPage do
   end
 
   defp handle(socket, "CommandSystemDonate", event) do
-    send(self(), {:store_participant_data, event})
+    Frameworks.Pixel.Flash.put_error(socket, "Unsupported CommandSystemDonate " <> event)
+    socket
+  end
+
+  defp handle(socket, "CommandSystemExit", event) do
+    Frameworks.Pixel.Flash.put_error(socket, "Unsupported CommandSystemExit " <> event)
     socket
   end
 

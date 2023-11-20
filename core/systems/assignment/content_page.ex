@@ -1,6 +1,7 @@
 defmodule Systems.Assignment.ContentPage do
+  use CoreWeb, :live_view_fabric
+  use Fabric.LiveView, CoreWeb.Layouts
   use Systems.Content.Page
-  use Fabric.LiveView
 
   alias Systems.{
     Assignment,

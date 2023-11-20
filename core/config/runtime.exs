@@ -26,15 +26,6 @@ if config_env() == :prod do
       port: String.to_integer(System.get_env("HTTP_PORT", "8000"))
     ]
 
-  # Port
-
-  config :core,
-         :data_donation_storage_backend,
-         s3: Systems.Storage.AWS.Backend,
-         azure: Systems.Storage.Azure.Backend,
-         centerdata: Systems.Storage.Centerdata.Backend,
-         yoda: Systems.Storage.YodaBackend
-
   # MAILGUN
 
   if mailgun_api_key = System.get_env("MAILGUN_API_KEY") do

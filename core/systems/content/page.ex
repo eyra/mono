@@ -81,9 +81,8 @@ defmodule Systems.Content.Page do
   def tabbar_size({:unknown, _}), do: :unknown
   def tabbar_size(bp), do: Breakpoint.value(bp, :narrow, sm: %{30 => :wide})
 
-  defmacro __using__(_opts) do
+  defmacro __using__(_) do
     quote do
-      use CoreWeb, :live_view
       use CoreWeb.Layouts.Workspace.Component, :projects
       use CoreWeb.UI.Responsive.Viewport
       use Systems.Observatory.Public
@@ -91,7 +90,7 @@ defmodule Systems.Content.Page do
       alias Frameworks.Pixel.Flash
 
       import CoreWeb.Gettext
-      import Systems.Content.Page
+      import Systems.Content.Page, except: [helpers: 0]
 
       defp initialize(socket, id, model, tabbar_id, initial_tab, locale) do
         socket

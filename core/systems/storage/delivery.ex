@@ -26,28 +26,12 @@ defmodule Systems.Storage.Delivery do
   end
 
   defp deliver(%{
-         "storage_key" => storage_key,
-         "state" => state,
-         "vm" => vm,
-         "data" => data
+         "backend" => backend,
+         "endpoint" => endpoint,
+         "panel_info" => panel_info,
+         "data" => data,
+         "meta_data" => meta_data
        }) do
-    storage = storage(storage_key)
-    storage.store(state, vm, data)
-  end
-
-  defp config() do
-    Application.fetch_env!(:core, :data_donation_storage_backend)
-  end
-
-  defp storage(storage_key) do
-    config = config()
-
-    case Keyword.get(config, String.to_existing_atom(storage_key)) do
-      nil ->
-        raise DeliveryError, "Could not deliver donated data, invalid config for #{storage_key}"
-
-      value ->
-        value
-    end
+    String.to_existing_atom(backend).store(endpoint, panel_info, data, meta_data)
   end
 end

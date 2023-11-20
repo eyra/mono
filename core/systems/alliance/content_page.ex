@@ -1,4 +1,5 @@
 defmodule Systems.Alliance.ContentPage do
+  use CoreWeb, :live_view
   use Systems.Content.Page
 
   alias Systems.{

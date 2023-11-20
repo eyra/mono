@@ -2,14 +2,15 @@ defmodule Systems.Consent.ClickWrapView do
   # Clickwrap agreements are a type of electronic signature that involves a user
   # clicking a simple button to accept the agreement.
 
-  use CoreWeb.LiveForm
+  use CoreWeb.LiveForm, :fabric
+  use Fabric.LiveComponent
 
   alias Systems.{
     Consent
   }
 
   @impl true
-  def update(%{id: id, revision: revision, user: user, target: target}, socket) do
+  def update(%{id: id, revision: revision, user: user}, socket) do
     signature = Consent.Public.get_signature(revision, user)
     selected? = signature != nil
 
@@ -20,12 +21,12 @@ defmodule Systems.Consent.ClickWrapView do
         id: id,
         revision: revision,
         user: user,
-        target: target,
         signature: signature,
         selected?: selected?
       )
       |> update_form()
       |> update_continue_button()
+      |> update_checkbox()
     }
   end
 
@@ -45,6 +46,15 @@ defmodule Systems.Consent.ClickWrapView do
     }
 
     assign(socket, continue_button: continue_button)
+  end
+
+  defp update_checkbox(socket) do
+    checkbox = %{
+      field: :signature_check,
+      label_text: dgettext("eyra-consent", "onboarding.consent.checkbox")
+    }
+
+    assign(socket, checkbox: checkbox)
   end
 
   @impl true
@@ -78,9 +88,8 @@ defmodule Systems.Consent.ClickWrapView do
     |> handle_continue()
   end
 
-  def handle_continue(%{assigns: %{id: id, signature: %{id: _}, target: target}} = socket) do
-    send_update(target, %{id => :continue})
-    socket
+  def handle_continue(%{assigns: %{signature: %{id: _}}} = socket) do
+    socket |> send_event(:parent, "continue")
   end
 
   @impl true
@@ -92,11 +101,7 @@ defmodule Systems.Consent.ClickWrapView do
           </div>
           <.spacing value="M" />
           <.form id={@id} :let={form} for={@form} phx-target={@myself} >
-            <.checkbox
-              form={form}
-              field={:signature_check}
-              label_text="I have read and agree with the above terms."
-            />
+            <.checkbox {@checkbox} form={form} />
           </.form>
           <.wrap>
             <Button.dynamic {@continue_button} />

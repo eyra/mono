@@ -1,17 +1,71 @@
 defmodule Systems.Assignment.StartView do
-  use CoreWeb, :html
+  use CoreWeb, :live_component_fabric
+  use Fabric.LiveComponent
 
   alias Frameworks.Pixel.Align
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
+  alias Frameworks.Concept
 
-  attr(:id, :any, required: true)
-  attr(:title, :string, required: true)
-  attr(:icon, :string, required: true)
-  attr(:description, :string, required: true)
-  attr(:button, :map, required: true)
+  alias Systems.Project
 
-  def start_view(assigns) do
+  def update(%{id: id, work_item: work_item}, socket) do
+    {
+      :ok,
+      socket
+      |> assign(
+        id: id,
+        work_item: work_item
+      )
+      |> compose_element(:title)
+      |> compose_element(:description)
+      |> compose_element(:icon)
+      |> compose_element(:button)
+    }
+  end
+
+  @impl true
+  def compose(:button, %{work_item: work_item}) do
+    %{
+      action: start_action(work_item),
+      face: %{type: :primary, label: "Start"}
+    }
+  end
+
+  @impl true
+  def compose(:title, %{work_item: {%{title: title}, _}}), do: title
+
+  @impl true
+  def compose(:description, %{work_item: {%{description: description}, _}}), do: description
+
+  @impl true
+  def compose(:icon, %{work_item: {%{group: group}, _}}), do: group
+
+  defp start_action({%{tool_ref: tool_ref}, _task} = item) do
+    Project.ToolRefModel.tool(tool_ref)
+    |> Concept.ToolModel.launcher()
+    |> start_action(item)
+  end
+
+  defp start_action(%{function: _, props: _}, _) do
+    %{type: :send, event: "start"}
+  end
+
+  defp start_action(%{url: url}, _) do
+    %{type: :http_get, to: url, target: "_blank"}
+  end
+
+  defp start_action(_, _) do
+    %{type: :send, event: "start"}
+  end
+
+  @impl true
+  def handle_event("start", _, socket) do
+    {:noreply, socket |> send_event(:parent, "start")}
+  end
+
+  @impl true
+  def render(assigns) do
     ~H"""
       <div class="w-full h-full pl-16 pb-16 pr-16">
         <Align.horizontal_center>

@@ -1,9 +1,22 @@
 defmodule CoreWeb.LiveForm do
+  defmacro __using__(:fabric) do
+    quote do
+      use CoreWeb, :live_component_fabric
+      unquote(flash_helpers())
+      unquote(form_helpers())
+    end
+  end
+
   defmacro __using__(_opts) do
     quote do
       use CoreWeb, :live_component
-      import Frameworks.Pixel.Form
+      unquote(flash_helpers())
+      unquote(form_helpers())
+    end
+  end
 
+  def flash_helpers() do
+    quote do
       def hide_flash(socket) do
         Frameworks.Pixel.Flash.push_hide()
         socket
@@ -29,6 +42,12 @@ defmodule CoreWeb.LiveForm do
         Frameworks.Pixel.Flash.push_info(message)
         socket
       end
+    end
+  end
+
+  def form_helpers() do
+    quote do
+      import Frameworks.Pixel.Form
 
       def save(socket, changeset) do
         socket

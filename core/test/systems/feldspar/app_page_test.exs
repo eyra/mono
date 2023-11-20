@@ -14,7 +14,7 @@ defmodule Systems.Feldspar.AppPageTest do
     test "can receive random app_event data", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/feldspar/apps/test")
 
-      assert render_hook(view, :app_event, %{unexpected_key: "some data"}) =~
+      assert render_hook(view, :feldspar_event, %{unexpected_key: "some data"}) =~
                "Unsupported "
     end
   end

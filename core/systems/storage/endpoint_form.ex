@@ -1,5 +1,5 @@
 defmodule Systems.Storage.EndpointForm do
-  use CoreWeb.LiveForm
+  use CoreWeb.LiveForm, :fabric
   use Fabric.LiveComponent
 
   alias Frameworks.Concept

@@ -1,6 +1,5 @@
 defmodule Systems.Email.Form do
   use CoreWeb, :live_component
-  import Phoenix.LiveView
 
   alias Core.Accounts
   alias CoreWeb.UI.Timestamp
@@ -104,15 +103,6 @@ defmodule Systems.Email.Form do
     users
     |> Enum.map(&username(&1))
   end
-
-  # data(subject, :string)
-  # data(message, :string)
-  # data(model, :map)
-  # data(changeset, :any)
-  # data(validate?, :boolean)
-
-  attr(:users, :list)
-  attr(:from_user, :map)
 
   @impl true
   def render(assigns) do

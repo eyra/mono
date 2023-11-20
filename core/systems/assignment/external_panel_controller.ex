@@ -1,57 +1,47 @@
 defmodule Systems.Assignment.ExternalPanelController do
   use CoreWeb, :controller
 
-  @supported_locales ~w(nl en)
-  @centerdata_callback_url "https://quest.centerdata.nl/eyra/dd.php"
-
-  def create(conn, %{"id" => id, "panel" => panel} = params) do
-    []
-    |> add_locale(params)
-    |> add_panel_info(String.to_existing_atom(panel), params)
-    |> start_assignment(conn, id)
+  def create(conn, %{"id" => _id, "panel" => _panel} = params) do
+    conn
+    |> add_panel_info(params)
+    |> redirect(to: path(params))
   end
 
-  defp add_panel_info(opts, panel, params) do
+  defp add_panel_info(conn, params) do
     panel_info = %{
-      callback_url: get_callback_url(panel),
-      participant: get_participant(panel, params),
-      language: get_language(panel, params),
+      participant: get_participant(params),
       query_string: params
     }
 
-    Keyword.put(opts, :panel_info, panel_info)
+    conn |> put_session(:panel_info, panel_info)
   end
 
-  defp add_locale(opts, %{"locale" => locale}), do: add_locale(opts, locale)
-  defp add_locale(opts, %{"lang" => locale}), do: add_locale(opts, locale)
+  defp path(%{"id" => id} = params) do
+    query_string = query_string(params)
+    "/assignment/#{id}#{query_string}"
+  end
 
-  defp add_locale(opts, locale) when is_binary(locale) do
-    if is_supported?(locale) do
-      Keyword.put(opts, :locale, locale)
+  defp query_string(params) do
+    if locale = get_locale(params) do
+      "?locale=#{locale}"
     else
-      opts
+      ""
     end
   end
 
-  defp add_locale(opts, _), do: opts
-
-  defp is_supported?(locale) when is_binary(locale) do
-    locale in @supported_locales
-  end
-
-  defp start_assignment(_opts, conn, id) do
-    path = ~p"/assignment/#{id}"
-    redirect(conn, to: path)
-  end
+  # @supported_locales ~w(nl en)
+  # defp is_supported?(locale) when is_binary(locale) do
+  #   locale in @supported_locales
+  # end
 
   # Param Mappings
 
-  defp get_participant(:liss, %{"respondent" => respondent}), do: respondent
-  defp get_participant(_, %{"participant" => participant}), do: participant
+  defp get_participant(%{"respondent" => respondent}), do: respondent
+  defp get_participant(%{"participant" => participant}), do: participant
+  defp get_participant(_), do: nil
 
-  defp get_language(:liss, %{"lang" => lang}), do: lang
-  defp get_language(_, %{"language" => language}), do: language
-
-  defp get_callback_url(:liss), do: @centerdata_callback_url
-  defp get_callback_url(_), do: nil
+  defp get_locale(%{"lang" => lang}), do: lang
+  defp get_locale(%{"language" => language}), do: language
+  defp get_locale(%{"locale" => locale}), do: locale
+  defp get_locale(_), do: nil
 end
