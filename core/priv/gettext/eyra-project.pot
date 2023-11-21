@@ -24,14 +24,6 @@ msgid "tabbar.item.config.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.panel"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.panel.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"
 msgstr ""
 
@@ -160,25 +152,9 @@ msgid "tabbar.item.support.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.gdpr"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.gdpr.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.settings"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.settings.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.invite"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.invite.forward"
 msgstr ""

@@ -154,7 +154,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp get_tab_keys() do
-    [:config, :gdpr, :items, :invite]
+    [:config, :items]
   end
 
   defp create_tab(
@@ -247,28 +247,6 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp create_tab(
-         :gdpr,
-         %{consent_agreement: consent_agreement},
-         show_errors,
-         _assigns
-       ) do
-    ready? = false
-
-    %{
-      id: :gdpr_form,
-      ready: ready?,
-      show_errors: show_errors,
-      title: dgettext("eyra-project", "tabbar.item.gdpr"),
-      forward_title: dgettext("eyra-project", "tabbar.item.gdpr.forward"),
-      type: :fullpage,
-      live_component: Assignment.GdprForm,
-      props: %{
-        entity: consent_agreement
-      }
-    }
-  end
-
-  defp create_tab(
          :support,
          assignment,
          _show_errors,
@@ -281,29 +259,6 @@ defmodule Systems.Assignment.ContentPageBuilder do
       type: :fullpage,
       live_component: Support.Form,
       props: %{
-        entity: assignment
-      }
-    }
-  end
-
-  defp create_tab(
-         :invite,
-         assignment,
-         show_errors,
-         %{uri_origin: uri_origin}
-       ) do
-    ready? = false
-
-    %{
-      id: :panel_form,
-      ready: ready?,
-      show_errors: show_errors,
-      title: dgettext("eyra-project", "tabbar.item.panel"),
-      forward_title: dgettext("eyra-project", "tabbar.item.panel.forward"),
-      type: :fullpage,
-      live_component: Assignment.PanelForm,
-      props: %{
-        uri_origin: uri_origin,
         entity: assignment
       }
     }

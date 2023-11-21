@@ -95,14 +95,6 @@ msgid "settings.data_storage.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "panel.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panel.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "connect.button"
 msgstr ""
 
@@ -172,4 +164,20 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "panel.liss.connection.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "gdpr_form.off.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "gdpr_form.on.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.title"
 msgstr ""

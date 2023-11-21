@@ -94,14 +94,6 @@ msgstr "Settings"
 msgid "settings.data_storage.title"
 msgstr "Storage"
 
-#, elixir-autogen, elixir-format
-msgid "panel.title"
-msgstr "Panel"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panel.label"
-msgstr "Select your panel"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "connect.button"
 msgstr "Set up connection"
@@ -173,3 +165,19 @@ msgstr "<div>Copy the url below and hand it over to your contact person at I&O R
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.liss.connection.annotation"
 msgstr "<div>Copy the url below and hand it over to your contact person at LISS. They use this url to send participants to this assignment.</div>"
+
+#, elixir-autogen, elixir-format
+msgid "gdpr_form.off.label"
+msgstr "Skip consent"
+
+#, elixir-autogen, elixir-format
+msgid "gdpr_form.on.label"
+msgstr "Show consent"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.consent.body"
+msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.consent.title"
+msgstr "Consent"
