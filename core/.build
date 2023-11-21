@@ -228,6 +228,7 @@ Frameworks.Pixel.ShareView.html
 Frameworks.Pixel.Spacing.html
 Frameworks.Pixel.Square.html
 Frameworks.Pixel.Status.html
+Frameworks.Pixel.Switch.html
 Frameworks.Pixel.Tag.html
 Frameworks.Pixel.Text.html
 Frameworks.Pixel.ViewModel.html
@@ -349,7 +350,6 @@ Systems.Assignment.LandingPage.html
 Systems.Assignment.Model.html
 Systems.Assignment.OnboardingConsentView.html
 Systems.Assignment.OnlineStudyLanguages.html
-Systems.Assignment.PanelForm.html
 Systems.Assignment.PanelViews.html
 Systems.Assignment.Presenter.html
 Systems.Assignment.Private.html
@@ -707,8 +707,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-17A6A16A.js
-dist/sidebar_items-C8338227.js
+dist/search_items-1D8335E6.js
+dist/sidebar_items-F5BB5005.js
 index.html
 readme.html
 search.html

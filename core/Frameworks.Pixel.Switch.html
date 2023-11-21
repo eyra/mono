@@ -7,13 +7,13 @@
     <meta name="generator" content="ExDoc v0.29.3">
     <meta name="project" content="core v0.1.0">
 
-    <title>Systems.Assignment.PanelForm — core v0.1.0</title>
+    <title>Frameworks.Pixel.Switch — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-C8338227.js"></script>
+    <script src="dist/sidebar_items-F5BB5005.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -100,12 +100,12 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/systems/assignment/panel_form.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/switch.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">Systems.Assignment.PanelForm</span> 
+  <span translate="no">Frameworks.Pixel.Switch</span> 
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
@@ -127,7 +127,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#auto_save_begin/1" translate="no">auto_save_begin(socket)</a>
+        <a href="#compose_child/3" translate="no">compose_child(context, child_id, opts \\ [])</a>
 
       </div>
 
@@ -135,7 +135,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#auto_save_end/1" translate="no">auto_save_end(socket)</a>
+        <a href="#compose_element/2" translate="no">compose_element(socket, element_id)</a>
 
       </div>
 
@@ -151,55 +151,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#flash_error/1" translate="no">flash_error(socket)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#flash_persister_error/1" translate="no">flash_persister_error(socket)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#flash_persister_error/2" translate="no">flash_persister_error(socket, message)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#flash_persister_saved/1" translate="no">flash_persister_saved(socket)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#hide_flash/1" translate="no">hide_flash(socket)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#save/2" translate="no">save(socket, changeset)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#save_closure/2" translate="no">save_closure(socket, closure)</a>
+        <a href="#element/2" translate="no">element(id, assigns)</a>
 
       </div>
 
@@ -243,16 +195,18 @@ core
 Functions
     </h1>
     <div class="functions-list">
-<section class="detail" id="auto_save_begin/1">
+<section class="detail" id="compose_child/3">
+
+    <span id="compose_child/2"></span>
 
   <div class="detail-header">
-    <a href="#auto_save_begin/1" class="detail-link" title="Link to this function">
+    <a href="#compose_child/3" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">auto_save_begin(socket)</h1>
+    <h1 class="signature" translate="no">compose_child(context, child_id, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/panel_form.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/switch.ex#L3" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -265,16 +219,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="auto_save_end/1">
+<section class="detail" id="compose_element/2">
 
   <div class="detail-header">
-    <a href="#auto_save_end/1" class="detail-link" title="Link to this function">
+    <a href="#compose_element/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">auto_save_end(socket)</h1>
+    <h1 class="signature" translate="no">compose_element(socket, element_id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/panel_form.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/switch.ex#L3" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -296,7 +250,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">current_user(arg1)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/panel_form.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/switch.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -309,148 +263,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="flash_error/1">
+<section class="detail" id="element/2">
 
   <div class="detail-header">
-    <a href="#flash_error/1" class="detail-link" title="Link to this function">
+    <a href="#element/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">flash_error(socket)</h1>
+    <h1 class="signature" translate="no">element(id, assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/panel_form.ex#L2" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="flash_persister_error/1">
-
-  <div class="detail-header">
-    <a href="#flash_persister_error/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">flash_persister_error(socket)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/panel_form.ex#L2" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="flash_persister_error/2">
-
-  <div class="detail-header">
-    <a href="#flash_persister_error/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">flash_persister_error(socket, message)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/panel_form.ex#L2" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="flash_persister_saved/1">
-
-  <div class="detail-header">
-    <a href="#flash_persister_saved/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">flash_persister_saved(socket)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/panel_form.ex#L2" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="hide_flash/1">
-
-  <div class="detail-header">
-    <a href="#hide_flash/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">hide_flash(socket)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/panel_form.ex#L2" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="save/2">
-
-  <div class="detail-header">
-    <a href="#save/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">save(socket, changeset)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/panel_form.ex#L2" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="save_closure/2">
-
-  <div class="detail-header">
-    <a href="#save_closure/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">save_closure(socket, closure)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/panel_form.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/switch.ex#L3" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -472,7 +294,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update_defaults(socket, props, defaults)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/panel_form.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/switch.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -494,7 +316,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update_target(pid, message)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/panel_form.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/switch.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -516,7 +338,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">version()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/panel_form.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/switch.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
