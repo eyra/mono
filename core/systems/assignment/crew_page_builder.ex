@@ -42,7 +42,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
   defp consent_view(%{consent_agreement: nil}, _), do: nil
 
   defp consent_view(%{consent_agreement: consent_agreement}, %{current_user: user, fabric: fabric}) do
-    revision = Consent.Public.latest_revision(consent_agreement)
+    revision = Consent.Public.latest_revision(consent_agreement, [:signatures])
 
     Fabric.prepare_child(fabric, :onboarding_view, Assignment.OnboardingConsentView, %{
       revision: revision,

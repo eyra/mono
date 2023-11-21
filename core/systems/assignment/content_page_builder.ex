@@ -133,19 +133,24 @@ defmodule Systems.Assignment.ContentPageBuilder do
     do: [publish: publish, preview: preview]
 
   defp handle_publish(socket) do
-    socket
+    socket |> set_status(:online)
   end
 
   defp handle_retract(socket) do
-    socket
+    socket |> set_status(:offline)
   end
 
   defp handle_close(socket) do
-    socket
+    socket |> set_status(:idle)
   end
 
   defp handle_open(socket) do
-    socket
+    socket |> set_status(:concept)
+  end
+
+  defp set_status(%{assigns: %{model: assignment}} = socket, status) do
+    assignment = Assignment.Public.update!(assignment, %{status: status})
+    socket |> Phoenix.Component.assign(model: assignment)
   end
 
   defp create_tabs(assignment, show_errors, assigns) do

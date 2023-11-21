@@ -224,6 +224,13 @@ defmodule Systems.Assignment.Public do
     Core.Persister.save(assignment, changeset)
   end
 
+  def update!(assignment, %{} = attrs) do
+    case __MODULE__.update(assignment, attrs) do
+      {:ok, assignment} -> assignment
+      _ -> nil
+    end
+  end
+
   def update_budget(assignment, budget) do
     changeset =
       Assignment.Model.changeset(assignment, %{})

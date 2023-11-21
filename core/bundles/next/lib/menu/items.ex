@@ -7,7 +7,7 @@ defmodule Next.Menu.Items do
   @impl true
   def values() do
     %{
-      next: %{action: %{type: :http_get, to: ~p"/next"}, title: "Next"},
+      next: %{action: %{type: :http_get, to: ~p"/"}, title: "Next"},
       admin: %{
         action: %{type: :redirect, to: ~p"/admin/config"},
         title: dgettext("eyra-ui", "menu.item.admin")
