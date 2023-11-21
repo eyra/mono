@@ -34,7 +34,7 @@ defmodule ExternalSignIn do
 
     user =
       Accounts.User.sso_changeset(%Accounts.User{}, %{
-        email: "external_#{name}@eyra.co",
+        email: "external+#{name}@eyra.co",
         researcher: false,
         student: false,
         displayname: name,
