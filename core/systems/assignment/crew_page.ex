@@ -64,6 +64,11 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
+  def handle_event("work_item_selected", payload, socket) do
+    {:noreply, socket |> send_event(:flow, "work_item_selected", payload)}
+  end
+
+  @impl true
   def handle_event("feldspar_event", event, socket) do
     {
       :noreply,

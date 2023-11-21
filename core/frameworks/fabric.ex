@@ -194,8 +194,19 @@ defmodule Fabric do
     Phoenix.Component.assign(assigns, fabric: remove_child(fabric, child_id))
   end
 
+  def add_child(%Fabric.Model{children: nil} = fabric, %Fabric.LiveComponent.Model{} = child) do
+    %Fabric.Model{fabric | children: [child]}
+  end
+
   def add_child(%Fabric.Model{children: children} = fabric, %Fabric.LiveComponent.Model{} = child) do
-    %Fabric.Model{fabric | children: List.wrap(children) ++ List.wrap(child)}
+    children =
+      if index = Enum.find_index(children, &(&1.ref.id == child.ref.id)) do
+        List.replace_at(children, index, child)
+      else
+        List.wrap(child) ++ List.wrap(children)
+      end
+
+    %Fabric.Model{fabric | children: children}
   end
 
   def remove_child(%Fabric.Model{} = fabric, nil), do: fabric

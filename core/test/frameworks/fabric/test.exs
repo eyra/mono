@@ -184,6 +184,36 @@ defmodule Fabric.Test do
                ]
              } = fabric
     end
+
+    test "existing child" do
+      child = create_child(:child)
+
+      fabric =
+        %Fabric.Model{parent: nil, children: nil}
+        |> Fabric.add_child(child)
+        |> Fabric.add_child(child)
+
+      assert %Fabric.Model{
+               children: [
+                 %Fabric.LiveComponent.Model{
+                   ref: %Fabric.LiveComponent.RefModel{
+                     id: :child,
+                     module: Fabric.LiveComponentMock
+                   },
+                   params: %{
+                     fabric: %Fabric.Model{
+                       parent: nil,
+                       self: %Fabric.LiveComponent.RefModel{
+                         id: :child,
+                         module: Fabric.LiveComponentMock
+                       },
+                       children: nil
+                     }
+                   }
+                 }
+               ]
+             } = fabric
+    end
   end
 
   describe "replace_child/2" do

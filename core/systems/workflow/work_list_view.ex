@@ -5,7 +5,7 @@ defmodule Systems.Workflow.WorkListView do
   import Systems.Workflow.ItemViews, only: [work_item: 1]
 
   @impl true
-  def update(%{id: id, items: items, selected_item_id: selected_item_id}, socket) do
+  def update(%{id: id, work_list: %{items: items, selected_item_id: selected_item_id}}, socket) do
     {
       :ok,
       socket
