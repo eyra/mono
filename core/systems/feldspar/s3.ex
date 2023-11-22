@@ -29,29 +29,37 @@ defmodule Systems.Feldspar.S3 do
   end
 
   defp upload_zip_content(zip_file, target) do
-    settings = s3_settings()
-
     {:ok, zip_handle} = :zip.zip_open(to_charlist(zip_file), [:memory])
-
-    upload_file = fn file ->
-      {:ok, {_, data}} = :zip.zip_get(file, zip_handle)
-
-      S3.put_object(
-        Access.fetch!(settings, :bucket),
-        "#{object_key(target)}/#{file}",
-        data
-      )
-      |> backend().request!()
-    end
 
     # Read the zip file names and skip the comment (first item)
     {:ok, [_ | contents]} = :zip.zip_list_dir(zip_handle)
 
     contents
-    |> Enum.map(fn {:zip_file, file, _, _, _, _} -> file end)
-    |> Task.async_stream(upload_file, max_concurrency: 10)
+    |> Enum.map(fn {:zip_file, file, info, _, _, _} -> {file, info} end)
+    |> Task.async_stream(&upload_file(&1, zip_handle, target, s3_settings()), max_concurrency: 10)
     |> Stream.run()
   end
+
+  defp upload_file({name, info}, zip_handle, target, settings) do
+    if is_regular_file(info) do
+      {:ok, {_, data}} = :zip.zip_get(name, zip_handle)
+
+      S3.put_object(
+        Access.fetch!(settings, :bucket),
+        "#{object_key(target)}/#{name}",
+        data
+      )
+      |> backend().request!()
+    end
+  end
+
+  @doc """
+    See: https://www.erlang.org/doc/man/file#type-file_info
+    Files types: device | directory | other | regular | symlink | undefined
+    Only real files (aka :regular) can/should be uploaded.
+  """
+  def is_regular_file({:file_info, _, :regular, _, _, _, _, _, _, _, _, _, _, _}), do: true
+  def is_regular_file(_), do: false
 
   defp object_key(id) do
     prefix = Access.get(s3_settings(), :prefix, "")
