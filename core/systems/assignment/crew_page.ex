@@ -58,6 +58,10 @@ defmodule Systems.Assignment.CrewPage do
     socket |> install_children(flow)
   end
 
+  def handle_info({:complete_task, _}, socket) do
+    {:noreply, socket |> send_event(:flow, "complete_task")}
+  end
+
   @impl true
   def handle_event("continue", _payload, socket) do
     {:noreply, socket |> show_next()}

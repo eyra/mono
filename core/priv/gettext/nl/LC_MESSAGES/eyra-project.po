@@ -141,7 +141,7 @@ msgstr "Naam"
 
 #, elixir-autogen, elixir-format
 msgid "item.form.title"
-msgstr ""
+msgstr "Project item"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.support"

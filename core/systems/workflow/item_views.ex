@@ -59,6 +59,7 @@ defmodule Systems.Workflow.ItemViews do
   attr(:index, :integer, required: true)
   attr(:selected?, :boolean, default: true)
   attr(:event, :string, default: "work_item_selected")
+  attr(:target, :any, default: "")
 
   def work_item(assigns) do
     ~H"""
@@ -66,6 +67,7 @@ defmodule Systems.Workflow.ItemViews do
       class={"w-full h-16 rounded-lg cursor-pointer p-6 border-2 #{if @selected? do "border-primary" else "hover:border-grey4 border-white" end} "}
       phx-click={@event}
       phx-value-item={@id}
+      phx-target={@target}
     >
       <div class="w-full h-full bg-white">
         <Align.vertical_center>

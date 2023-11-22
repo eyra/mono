@@ -76,7 +76,7 @@ msgstr "Publish"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retract.button"
-msgstr "Contact researcher"
+msgstr "Take offline"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.consent.continue.button"

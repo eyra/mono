@@ -40,6 +40,25 @@ defmodule Core.Accounts do
     |> Repo.all()
   end
 
+  ## External
+
+  def external?(%User{id: user_id}) do
+    external?(user_id)
+  end
+
+  def external?(user_id) do
+    from(ex in ExternalSignIn.User,
+      where: ex.user_id == ^user_id
+    )
+    |> Repo.exists?()
+  end
+
+  def internal?(nil), do: false
+
+  def internal?(user) do
+    not external?(user)
+  end
+
   ## Search
 
   def search(query, preload \\ []) do

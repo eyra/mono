@@ -23,9 +23,16 @@ defmodule Fabric.LiveComponent do
       end
 
       @impl true
-      def update(%{id: _id, fabric: fabric} = params, socket) do
+      def update(%{id: _id, fabric: fabric} = params, %{assigns: %{fabric: _}} = socket) do
+        # only assign fabric once
         params = Map.drop(params, [:fabric])
-        socket = assign(socket, fabric: fabric)
+        update(params, socket)
+      end
+
+      @impl true
+      def update(%{id: id, fabric: fabric} = params, socket) do
+        params = Map.drop(params, [:fabric])
+        socket = assign(socket, id: id, fabric: fabric)
         update(params, socket)
       end
 

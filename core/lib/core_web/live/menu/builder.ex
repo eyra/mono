@@ -16,7 +16,7 @@ defmodule CoreWeb.Menu.Builder do
       admin: Admin.Public.admin?(user),
       support: Admin.Public.admin?(user),
       debug: Admin.Public.admin?(user),
-      profile: not is_nil(user),
+      profile: Core.Accounts.internal?(user),
       signout: not is_nil(user),
       signin: is_nil(user)
     }

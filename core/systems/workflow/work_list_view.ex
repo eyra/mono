@@ -5,7 +5,7 @@ defmodule Systems.Workflow.WorkListView do
   import Systems.Workflow.ItemViews, only: [work_item: 1]
 
   @impl true
-  def update(%{id: id, items: items, selected_item_id: selected_item_id}, socket) do
+  def update(%{id: id, work_list: %{items: items, selected_item_id: selected_item_id}}, socket) do
     {
       :ok,
       socket
@@ -18,11 +18,16 @@ defmodule Systems.Workflow.WorkListView do
   end
 
   @impl true
+  def handle_event("work_item_selected", payload, socket) do
+    {:noreply, socket |> send_event(:parent, "work_item_selected", payload)}
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
       <div class="flex flex-col gap-2 w-full h-full p-6">
         <%= for {item, index} <- Enum.with_index(@items) do %>
-          <.work_item {item} index={index} selected?={item.id == @selected_item_id} />
+          <.work_item {item} index={index} selected?={item.id == @selected_item_id} target={@myself} />
         <% end %>
       </div>
     """

@@ -26,23 +26,20 @@ defmodule Fabric do
         Phoenix.Component.assign(assigns, element_id, element)
       end
 
-      def compose_child(context, child_id, opts \\ [])
+      def update_child(context, child_id) when is_atom(child_id) do
+        if exists?(context, child_id) do
+          compose_child(context, child_id)
+        else
+          context
+        end
+      end
 
-      def compose_child(%Phoenix.LiveView.Socket{assigns: assigns} = socket, child_id, opts)
+      def compose_child(%Phoenix.LiveView.Socket{assigns: assigns} = socket, child_id)
           when is_atom(child_id) do
         %Phoenix.LiveView.Socket{socket | assigns: compose_child(assigns, child_id)}
       end
 
-      def compose_child(%{fabric: fabric} = assigns, child_id, only: update)
-          when is_atom(child_id) do
-        if exists?(fabric, child_id) do
-          compose_child(assigns, child_id)
-        else
-          assigns
-        end
-      end
-
-      def compose_child(%{fabric: fabric} = assigns, child_id, _opts) when is_atom(child_id) do
+      def compose_child(%{fabric: fabric} = assigns, child_id) when is_atom(child_id) do
         fabric =
           if child = prepare_child(fabric, child_id, compose(child_id, assigns)) do
             add_child(fabric, child)
@@ -59,13 +56,6 @@ defmodule Fabric do
       end
 
       defoverridable compose: 2
-
-      def element(_id, _assigns) do
-        Logger.error("element/2 not implemented")
-        nil
-      end
-
-      defoverridable element: 2
     end
   end
 
@@ -194,8 +184,19 @@ defmodule Fabric do
     Phoenix.Component.assign(assigns, fabric: remove_child(fabric, child_id))
   end
 
+  def add_child(%Fabric.Model{children: nil} = fabric, %Fabric.LiveComponent.Model{} = child) do
+    %Fabric.Model{fabric | children: [child]}
+  end
+
   def add_child(%Fabric.Model{children: children} = fabric, %Fabric.LiveComponent.Model{} = child) do
-    %Fabric.Model{fabric | children: List.wrap(children) ++ List.wrap(child)}
+    children =
+      if index = Enum.find_index(children, &(&1.ref.id == child.ref.id)) do
+        List.replace_at(children, index, child)
+      else
+        List.wrap(child) ++ List.wrap(children)
+      end
+
+    %Fabric.Model{fabric | children: children}
   end
 
   def remove_child(%Fabric.Model{} = fabric, nil), do: fabric

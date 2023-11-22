@@ -76,7 +76,7 @@ msgstr "Publiceren"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retract.button"
-msgstr "Intrekken"
+msgstr "Offline halen"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.consent.continue.button"

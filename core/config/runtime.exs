@@ -1,7 +1,10 @@
 import Config
 
 if config_env() == :prod do
-  host = System.fetch_env!("BUNDLE_DOMAIN")
+  app_name = System.fetch_env!("APP_NAME")
+  app_domain = System.fetch_env!("APP_DOMAIN")
+  app_mail_domain = System.fetch_env!("APP_MAIL_DOMAIN")
+  app_mail_noreply = "no-reply@#{app_mail_domain}"
 
   # Allow enabling of features from an environment variable
   config :core,
@@ -21,7 +24,7 @@ if config_env() == :prod do
     cache_static_manifest: "priv/static/cache_manifest.json",
     server: true,
     secret_key_base: System.fetch_env!("SECRET_KEY_BASE"),
-    url: [host: host, scheme: "https", port: 443],
+    url: [host: app_domain, scheme: "https", port: 443],
     http: [
       port: String.to_integer(System.get_env("HTTP_PORT", "8000"))
     ]
@@ -33,8 +36,8 @@ if config_env() == :prod do
       adapter: Bamboo.MailgunAdapter,
       base_uri: "https://api.eu.mailgun.net/v2",
       api_key: mailgun_api_key,
-      domain: host,
-      default_from_email: "Next <no-reply@eyra.co>",
+      domain: app_domain,
+      default_from_email: "#{app_name} <#{app_mail_noreply}>",
       hackney_opts: [recv_timeout: :timer.minutes(1)]
   end
 
@@ -49,8 +52,8 @@ if config_env() == :prod do
 
     config :core, Systems.Email.Mailer,
       adapter: Bamboo.SesAdapter,
-      domain: host,
-      default_from_email: {"Next", "no-reply@eyra.co"}
+      domain: app_domain,
+      default_from_email: {app_name, app_mail_noreply}
   end
 
   if secret_access_key = System.get_env("AWS_SECRET_ACCESS_KEY") do
@@ -88,18 +91,18 @@ if config_env() == :prod do
   end
 
   config :core, GoogleSignIn,
-    redirect_uri: "https://#{host}/google-sign-in/auth",
+    redirect_uri: "https://#{app_domain}/google-sign-in/auth",
     client_id: System.get_env("GOOGLE_SIGN_IN_CLIENT_ID"),
     client_secret: System.get_env("GOOGLE_SIGN_IN_CLIENT_SECRET")
 
   config :core, Core.SurfConext,
-    redirect_uri: "https://#{host}/surfconext/auth",
+    redirect_uri: "https://#{app_domain}/surfconext/auth",
     site: System.get_env("SURFCONEXT_SITE"),
     client_id: System.get_env("SURFCONEXT_CLIENT_ID"),
     client_secret: System.get_env("SURFCONEXT_CLIENT_SECRET")
 
   config :core, SignInWithApple,
-    redirect_uri: "https://#{host}/apple/auth",
+    redirect_uri: "https://#{app_domain}/apple/auth",
     client_id: System.get_env("SIGN_IN_WITH_APPLE_CLIENT_ID"),
     team_id: System.get_env("SIGN_IN_WITH_APPLE_TEAM_ID"),
     private_key_id: System.get_env("SIGN_IN_WITH_APPLE_PRIVATE_KEY_ID"),
@@ -110,7 +113,7 @@ if config_env() == :prod do
     app_name: System.get_env("UNSPLASH_APP_NAME")
 
   config :web_push_encryption, :vapid_details,
-    subject: "mailto:admin@#{host}",
+    subject: "mailto:admin@#{app_mail_domain}",
     public_key: System.get_env("WEB_PUSH_PUBLIC_KEY"),
     private_key: System.get_env("WEB_PUSH_PRIVATE_KEY")
 

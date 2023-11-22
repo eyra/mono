@@ -9,35 +9,30 @@ defmodule Systems.Assignment.CrewWorkView do
     Project
   }
 
-  def update(%{work_items: work_items}, %{assigns: %{id: _id}} = socket) do
+  def update(%{work_items: work_items}, socket) do
     {
       :ok,
       socket
       |> assign(work_items: work_items)
-      |> compose_child(:start_view)
-      |> compose_child(:work_list_view)
-      |> compose_child(:tool_ref_view, only: :update)
-    }
-  end
-
-  def update(%{id: id, work_items: work_items}, socket) do
-    {
-      :ok,
-      socket
-      |> assign(
-        id: id,
-        work_items: work_items
-      )
       |> update_selected_item_id()
       |> update_selected_item()
-      |> compose_child(:start_view)
       |> compose_child(:work_list_view)
+      |> compose_child(:start_view)
+      |> update_child(:tool_ref_view)
     }
   end
 
-  defp update_selected_item_id(%{assigns: %{selected_item_id: selected_item_id}} = socket)
+  defp update_selected_item_id(
+         %{assigns: %{work_items: work_items, selected_item_id: selected_item_id}} = socket
+       )
        when not is_nil(selected_item_id) do
-    socket
+    if Enum.find(work_items, fn {%{id: id}, _} -> id == selected_item_id end) do
+      socket
+    else
+      socket
+      |> assign(selected_item_id: nil)
+      |> update_selected_item_id()
+    end
   end
 
   defp update_selected_item_id(%{assigns: %{work_items: []}} = socket) do
@@ -135,13 +130,10 @@ defmodule Systems.Assignment.CrewWorkView do
     {
       :noreply,
       socket
-      |> assign(
-        selected_item_id: item_id,
-        tool_ref_view: nil
-      )
+      |> assign(selected_item_id: item_id)
       |> update_selected_item()
-      |> compose_child(:start_view)
-      |> compose_child(:work_list_view)
+      |> update_child(:start_view)
+      |> update_child(:work_list_view)
     }
   end
 

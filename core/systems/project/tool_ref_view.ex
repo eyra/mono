@@ -31,7 +31,9 @@ defmodule Systems.Project.ToolRefView do
   def render(assigns) do
     ~H"""
     <div class="w-full h-full">
-      <.function_component {@launcher} />
+      <%= if @launcher do %>
+        <.function_component {@launcher} />
+      <% end %>
     </div>
     """
   end
