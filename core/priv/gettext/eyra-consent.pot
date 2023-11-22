@@ -22,3 +22,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "onboarding.consent.checkbox"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "locked.error.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "out_of_sync.error.message"
+msgstr ""

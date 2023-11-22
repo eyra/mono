@@ -48,7 +48,7 @@ defmodule Systems.Assignment.GdprForm do
     %{
       module: Consent.RevisionForm,
       params: %{
-        entity: Consent.Public.latest_unlocked_revision_safe(consent_agreement)
+        entity: Consent.Public.latest_revision(consent_agreement)
       }
     }
   end

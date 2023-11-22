@@ -48,10 +48,21 @@ defmodule Systems.Consent.RevisionForm do
         |> assign(entity: entity)
         |> flash_persister_saved()
 
-      {:error, _} ->
-        socket
-        |> flash_persister_error(dgettext("eyra-consent", "consent-out-of-sync-error"))
+      {:error, changeset} ->
+        socket |> handle_save_errors(changeset)
     end
+  end
+
+  defp handle_save_errors(socket, %{errors: errors}) do
+    handle_save_errors(socket, errors)
+  end
+
+  defp handle_save_errors(socket, [{_, {message, _}} | _]) do
+    socket |> flash_persister_error(message)
+  end
+
+  defp handle_save_errors(socket, _) do
+    socket |> flash_persister_error()
   end
 
   @impl true

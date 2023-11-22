@@ -18,10 +18,10 @@ defmodule Systems.Consent.PublicTest do
       Multi.new()
       |> Multi.insert(:agreement, Consent.Public.prepare_agreement(Authorization.prepare_node()))
       |> Multi.insert(:revision1, fn %{agreement: agreement} ->
-        Consent.Public.prepare_revision("revision1", agreement)
+        Consent.Public.prepare_revision(agreement, "revision1")
       end)
       |> Multi.insert(:revision2, fn %{agreement: agreement} ->
-        Consent.Public.prepare_revision("revision2", agreement)
+        Consent.Public.prepare_revision(agreement, "revision2")
       end)
       |> Repo.transaction()
 
@@ -48,7 +48,7 @@ defmodule Systems.Consent.PublicTest do
       Multi.new()
       |> Multi.insert(:agreement, Consent.Public.prepare_agreement(Authorization.prepare_node()))
       |> Multi.insert(:revision1, fn %{agreement: agreement} ->
-        Consent.Public.prepare_revision("revision1", agreement)
+        Consent.Public.prepare_revision(agreement, "revision1")
       end)
       |> Multi.insert(:signatureA1, fn %{revision1: revision1} ->
         Consent.Public.prepare_signature(revision1, user_a)
@@ -57,7 +57,7 @@ defmodule Systems.Consent.PublicTest do
         Consent.Public.prepare_signature(revision1, user_b)
       end)
       |> Multi.insert(:revision2, fn %{agreement: agreement} ->
-        Consent.Public.prepare_revision("revision2", agreement)
+        Consent.Public.prepare_revision(agreement, "revision2")
       end)
       |> Multi.insert(:signatureA2, fn %{revision2: revision2} ->
         Consent.Public.prepare_signature(revision2, user_a)
@@ -120,26 +120,25 @@ defmodule Systems.Consent.PublicTest do
     assert Consent.Public.latest_unlocked_revision(agreement, [:agreement]) == nil
   end
 
-  test "latest_unlocked_revision_safe/2 returns new revision in empty agreement" do
+  test "bump_revision_if_needed!/1 returns first revision" do
     agreement = Factories.insert!(:consent_agreement)
 
     assert %Systems.Consent.RevisionModel{
-             source: "<div>Beschrijf hier de consent voorwaarden</div>",
-             signatures: []
-           } = Consent.Public.latest_unlocked_revision_safe(agreement, [:signatures])
+             source: "<div>Beschrijf hier de consent voorwaarden</div>"
+           } = Consent.Public.bump_revision_if_needed!(agreement)
   end
 
-  test "latest_unlocked_revision_safe/2 returns latest revision" do
+  test "bump_revision_if_needed!/1 returns latest revision" do
     agreement = Factories.insert!(:consent_agreement)
-    _revision = Factories.insert!(:consent_revision, %{agreement: agreement, source: "source"})
+    %{id: id} = Factories.insert!(:consent_revision, %{agreement: agreement, source: "source"})
 
     assert %Systems.Consent.RevisionModel{
-             source: "source",
-             signatures: []
-           } = Consent.Public.latest_unlocked_revision_safe(agreement, [:signatures])
+             id: ^id,
+             source: "source"
+           } = Consent.Public.bump_revision_if_needed!(agreement)
   end
 
-  test "latest_unlocked_revision_safe/2 returns new revision on top of locked revision" do
+  test "bump_revision_if_needed!/1 returns new revision on top of locked revision" do
     user = Factories.insert!(:member)
 
     agreement = Factories.insert!(:consent_agreement)
@@ -148,9 +147,8 @@ defmodule Systems.Consent.PublicTest do
 
     assert %Systems.Consent.RevisionModel{
              id: revision_2_id,
-             source: "source",
-             signatures: []
-           } = Consent.Public.latest_unlocked_revision_safe(agreement, [:signatures])
+             source: "source"
+           } = Consent.Public.bump_revision_if_needed!(agreement)
 
     assert revision_1.id != revision_2_id
   end
