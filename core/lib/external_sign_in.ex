@@ -11,7 +11,9 @@ defmodule ExternalSignIn do
         register_user(organisation, external_id)
       end
 
-    CoreWeb.UserAuth.log_in_user_without_redirect(conn, user)
+    conn
+    |> CoreWeb.UserAuth.log_in_user_without_redirect(user)
+    |> Plug.Conn.assign(:current_user, user)
   end
 
   def get_user_by_external_id(external_id) do

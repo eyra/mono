@@ -13,44 +13,54 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp flow(%{status: status} = assignment, assigns) do
-    if is_tester?(assignment, assigns) or status == :online do
-      flow(assignment, assigns, current_flow(assigns))
+    is_tester? = is_tester?(assignment, assigns)
+
+    if is_tester? or status == :online do
+      flow(assignment, assigns, current_flow(assigns), is_tester?)
     else
       []
     end
   end
 
-  defp flow(assignment, assigns, nil), do: full_flow(assignment, assigns)
+  defp flow(assignment, assigns, nil, is_tester?), do: full_flow(assignment, assigns, is_tester?)
 
-  defp flow(assignment, assigns, current_flow) do
-    full_flow(assignment, assigns)
+  defp flow(assignment, assigns, current_flow, is_tester?) do
+    full_flow(assignment, assigns, is_tester?)
     |> Enum.filter(fn %{ref: %{id: id}} ->
       Enum.find(current_flow, &(&1.ref.id == id)) != nil
     end)
   end
 
-  defp full_flow(assignment, assigns) do
+  defp full_flow(assignment, assigns, is_tester?) do
     [
-      consent_view(assignment, assigns),
-      work_view(assignment, assigns)
+      consent_view(assignment, assigns, is_tester?),
+      work_view(assignment, assigns, is_tester?)
     ]
     |> Enum.filter(&(&1 != nil))
   end
 
   defp current_flow(%{fabric: %{children: children}}), do: children
 
-  defp consent_view(%{consent_agreement: nil}, _), do: nil
+  defp consent_view(%{consent_agreement: nil}, _, _), do: nil
 
-  defp consent_view(%{consent_agreement: consent_agreement}, %{current_user: user, fabric: fabric}) do
-    revision = Consent.Public.latest_revision(consent_agreement, [:signatures])
+  defp consent_view(
+         %{consent_agreement: consent_agreement},
+         %{current_user: user, fabric: fabric},
+         is_tester?
+       ) do
+    if Consent.Public.has_signature(consent_agreement, user) and not is_tester? do
+      nil
+    else
+      revision = Consent.Public.latest_revision(consent_agreement, [:signatures])
 
-    Fabric.prepare_child(fabric, :onboarding_view, Assignment.OnboardingConsentView, %{
-      revision: revision,
-      user: user
-    })
+      Fabric.prepare_child(fabric, :onboarding_view, Assignment.OnboardingConsentView, %{
+        revision: revision,
+        user: user
+      })
+    end
   end
 
-  defp work_view(assignment, %{fabric: fabric} = assigns) do
+  defp work_view(assignment, %{fabric: fabric} = assigns, _) do
     work_items = work_items(assignment, assigns)
 
     Fabric.prepare_child(fabric, :work_view, Assignment.CrewWorkView, %{
@@ -84,7 +94,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
     if task = Crew.Public.get_task(crew, identifier) do
       task
     else
-      Crew.Public.create_task(crew, [member], identifier)
+      Crew.Public.create_task!(crew, [member], identifier)
     end
   end
 end
