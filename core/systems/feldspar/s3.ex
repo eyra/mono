@@ -50,7 +50,7 @@ defmodule Systems.Feldspar.S3 do
         Access.fetch!(settings, :bucket),
         "#{object_key(target)}/#{name}",
         data,
-        content_type: "text/html"
+        content_type: content_type(name)
       )
       |> backend().request!()
     else
@@ -81,5 +81,23 @@ defmodule Systems.Feldspar.S3 do
   defp backend do
     # Allow mocking
     Access.get(s3_settings(), :s3_backend, ExAws)
+  end
+
+  defp content_type("html"), do: "text/html"
+  defp content_type("js"), do: "text/javascript"
+  defp content_type("css"), do: "text/css"
+  defp content_type("svg"), do: "image/svg+xml"
+  defp content_type("ico"), do: "image/x-icon"
+  defp content_type("whl"), do: " application/zip"
+  defp content_type("json"), do: "application/json"
+  defp content_type("ts"), do: "application/typescript"
+  defp content_type("tsx"), do: "application/typescript"
+  defp content_type(nil), do: "text/html"
+
+  defp content_type(name) do
+    name
+    |> String.split(name, ".")
+    |> List.last()
+    |> content_type()
   end
 end
