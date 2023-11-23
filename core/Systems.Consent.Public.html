@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-3351D255.js"></script>
+    <script src="dist/sidebar_items-6657C33D.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -127,6 +127,22 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#bump_revision_if_needed/1" translate="no">bump_revision_if_needed(agreement_id)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#bump_revision_if_needed!/1" translate="no">bump_revision_if_needed!(agreement)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#create_agreement/1" translate="no">create_agreement(auth_node)</a>
 
       </div>
@@ -135,7 +151,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_revision/2" translate="no">create_revision(source, agreement)</a>
+        <a href="#create_revision/2" translate="no">create_revision(agreement, source)</a>
 
       </div>
 
@@ -167,7 +183,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_signature/2" translate="no">get_signature(revision_model, user)</a>
+        <a href="#get_signature/2" translate="no">get_signature(arg1, user)</a>
 
       </div>
 
@@ -175,7 +191,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#has_signature/2" translate="no">has_signature(revision, user)</a>
+        <a href="#has_signature/2" translate="no">has_signature(context, user)</a>
 
       </div>
 
@@ -199,14 +215,6 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#latest_unlocked_revision_safe/2" translate="no">latest_unlocked_revision_safe(agreement, preload \\ [])</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
         <a href="#list_agreements/1" translate="no">list_agreements(preload \\ [])</a>
 
       </div>
@@ -223,7 +231,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_revision/2" translate="no">prepare_revision(source, agreement)</a>
+        <a href="#prepare_revision/2" translate="no">prepare_revision(agreement, source)</a>
 
       </div>
 
@@ -275,6 +283,50 @@ core
 Functions
     </h1>
     <div class="functions-list">
+<section class="detail" id="bump_revision_if_needed/1">
+
+  <div class="detail-header">
+    <a href="#bump_revision_if_needed/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">bump_revision_if_needed(agreement_id)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L24" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="bump_revision_if_needed!/1">
+
+  <div class="detail-header">
+    <a href="#bump_revision_if_needed!/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">bump_revision_if_needed!(agreement)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L42" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="create_agreement/1">
 
   <div class="detail-header">
@@ -304,9 +356,9 @@ Functions
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">create_revision(source, agreement)</h1>
+    <h1 class="signature" translate="no">create_revision(agreement, source)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L24" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L49" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -328,7 +380,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">create_signature(revision, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L35" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L60" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -352,7 +404,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_agreement!(id, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L47" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L72" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -376,7 +428,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_revision!(id, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L51" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L76" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -396,9 +448,9 @@ Functions
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">get_signature(revision_model, user)</h1>
+    <h1 class="signature" translate="no">get_signature(arg1, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L59" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L84" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -418,9 +470,9 @@ Functions
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">has_signature(revision, user)</h1>
+    <h1 class="signature" translate="no">has_signature(context, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L55" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L80" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -444,7 +496,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">latest_revision(agreement, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L113" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L130" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -468,31 +520,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">latest_unlocked_revision(agreement, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L96" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="latest_unlocked_revision_safe/2">
-
-    <span id="latest_unlocked_revision_safe/1"></span>
-
-  <div class="detail-header">
-    <a href="#latest_unlocked_revision_safe/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">latest_unlocked_revision_safe(agreement, preload \\ [])</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L77" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L113" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -516,7 +544,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">list_agreements(preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L68" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L104" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -558,9 +586,9 @@ Functions
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">prepare_revision(source, agreement)</h1>
+    <h1 class="signature" translate="no">prepare_revision(agreement, source)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L29" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L54" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -582,7 +610,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">prepare_signature(revision, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L40" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L65" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -606,7 +634,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">query_revisions(agreement, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L119" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L136" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -630,7 +658,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">query_unlocked_revisions(agreement, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L102" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L119" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -652,7 +680,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update_revision(changeset)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L133" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/consent/_public.ex#L150" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
