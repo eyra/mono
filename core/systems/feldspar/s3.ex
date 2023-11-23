@@ -38,7 +38,7 @@ defmodule Systems.Feldspar.S3 do
 
     contents
     |> Enum.map(fn {:zip_file, file, info, _, _, _} -> {file, info} end)
-    |> Task.async_stream(&upload_file(&1, zip_handle, target, s3_settings()), max_concurrency: 10)
+    |> Task.async_stream(&upload_file(&1, zip_handle, target, s3_settings()), max_concurrency: 10, timeout: 60000)
     |> Stream.run()
   end
 
