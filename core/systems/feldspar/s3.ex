@@ -95,7 +95,7 @@ defmodule Systems.Feldspar.S3 do
   defp content_type(nil), do: "text/html"
 
   defp content_type(name) do
-    name
+    "#{name}"
     |> String.split(".")
     |> List.last()
     |> content_type()
