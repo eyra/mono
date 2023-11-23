@@ -53,6 +53,7 @@ defmodule Systems.Feldspar.S3 do
         content_type: content_type(name)
       )
       |> backend().request!()
+      |> dbg()
     else
       Logger.info("[Feldspar.S3] Skip uploading: #{name}")
     end
