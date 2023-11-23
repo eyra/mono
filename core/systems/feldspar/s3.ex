@@ -1,8 +1,6 @@
 defmodule Systems.Feldspar.S3 do
   alias ExAws.S3
 
-  require Logger
-
   def store(zip_file) do
     id = Ecto.UUID.generate()
     :ok = upload_zip_content(zip_file, id)
@@ -10,9 +8,9 @@ defmodule Systems.Feldspar.S3 do
   end
 
   def get_public_url(id) do
-    settings = s3_settings() |> dbg()
-    public_url = Access.get(settings, :public_url) |> dbg()
-    "#{public_url}/#{object_key(id)}" |> dbg()
+    settings = s3_settings()
+    public_url = Access.get(settings, :public_url)
+    "#{public_url}/#{object_key(id)}"
   end
 
   def remove(id) do
@@ -39,8 +37,7 @@ defmodule Systems.Feldspar.S3 do
     contents
     |> Enum.map(fn {:zip_file, file, info, _, _, _} -> {file, info} end)
     |> Task.async_stream(&upload_file(&1, zip_handle, target, s3_settings()),
-      max_concurrency: 10,
-      timeout: 60000
+      max_concurrency: 10
     )
     |> Stream.run()
   end
@@ -56,9 +53,6 @@ defmodule Systems.Feldspar.S3 do
         content_type: content_type(name)
       )
       |> backend().request!()
-      |> dbg()
-    else
-      Logger.info("[Feldspar.S3] Skip uploading: #{name}")
     end
   end
 
@@ -87,21 +81,21 @@ defmodule Systems.Feldspar.S3 do
     Access.get(s3_settings(), :s3_backend, ExAws)
   end
 
-  defp content_type("html"), do: "text/html"
-  # defp content_type("js"), do: "text/javascript"
-  defp content_type("css"), do: "text/css"
-  # defp content_type("svg"), do: "image/svg+xml"
-  # defp content_type("ico"), do: "image/x-icon"
-  # defp content_type("whl"), do: " application/zip"
-  # defp content_type("json"), do: "application/json"
-  # defp content_type("ts"), do: "application/typescript"
-  # defp content_type("tsx"), do: "application/typescript"
-  defp content_type(nil), do: "text/html"
+  defp mime_type("html"), do: "text/html"
+  defp mime_type("js"), do: "text/javascript"
+  defp mime_type("css"), do: "text/css"
+  defp mime_type("svg"), do: "image/svg+xml"
+  defp mime_type("ico"), do: "image/x-icon"
+  defp mime_type("whl"), do: " application/zip"
+  defp mime_type("json"), do: "application/json"
+  defp mime_type("ts"), do: "application/typescript"
+  defp mime_type("tsx"), do: "application/typescript"
+  defp mime_type(_), do: "text/html"
 
   defp content_type(name) do
     "#{name}"
     |> String.split(".")
     |> List.last()
-    |> content_type()
+    |> mime_type()
   end
 end
