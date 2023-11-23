@@ -126,7 +126,7 @@ if config_env() == :prod do
   config :core, :feldspar,
     backend: Systems.Feldspar.S3,
     bucket: System.get_env("FELDSPAR_S3_BUCKET"),
-    prefix: System.get_env("FELDSPAR_S3_PREFIX", ""),
+    prefix: System.get_env("FELDSPAR_S3_PREFIX", nil),
     # The public URL must point to the root's (bucket) publicly accessible URL.
     # It should have a policy that allows anonymous users to read all files.
     public_url: System.get_env("FELDSPAR_S3_PUBLIC_URL")

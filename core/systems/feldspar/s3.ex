@@ -10,9 +10,9 @@ defmodule Systems.Feldspar.S3 do
   end
 
   def get_public_url(id) do
-    settings = s3_settings()
-    public_url = Access.get(settings, :public_url)
-    "#{public_url}/#{object_key(id)}"
+    settings = s3_settings() |> dbg()
+    public_url = Access.get(settings, :public_url) |> dbg()
+    "#{public_url}/#{object_key(id)}" |> dbg()
   end
 
   def remove(id) do
