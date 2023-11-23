@@ -49,7 +49,8 @@ defmodule Systems.Feldspar.S3 do
       S3.put_object(
         Access.fetch!(settings, :bucket),
         "#{object_key(target)}/#{name}",
-        data
+        data,
+        content_type: "text/html"
       )
       |> backend().request!()
     else
