@@ -96,7 +96,7 @@ defmodule Systems.Feldspar.S3 do
 
   defp content_type(name) do
     name
-    |> String.split(name, ".")
+    |> String.split(".")
     |> List.last()
     |> content_type()
   end
