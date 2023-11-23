@@ -1,6 +1,8 @@
 defmodule Systems.Feldspar.S3 do
   alias ExAws.S3
 
+  require Logger
+
   def store(zip_file) do
     id = Ecto.UUID.generate()
     :ok = upload_zip_content(zip_file, id)
@@ -10,7 +12,7 @@ defmodule Systems.Feldspar.S3 do
   def get_public_url(id) do
     settings = s3_settings()
     public_url = Access.get(settings, :public_url)
-    "#{public_url}/#{object_key(id)}/index.html"
+    "#{public_url}/#{object_key(id)}"
   end
 
   def remove(id) do
@@ -50,6 +52,8 @@ defmodule Systems.Feldspar.S3 do
         data
       )
       |> backend().request!()
+    else
+      Logger.info("[Feldspar.S3] Skip uploading: #{name}")
     end
   end
 
@@ -62,8 +66,11 @@ defmodule Systems.Feldspar.S3 do
   def is_regular_file(_), do: false
 
   defp object_key(id) do
-    prefix = Access.get(s3_settings(), :prefix, "")
-    "#{prefix}#{id}"
+    prefix = Access.get(s3_settings(), :prefix, nil)
+
+    [prefix, id]
+    |> Enum.filter(&(&1 != nil))
+    |> Enum.join("/")
   end
 
   defp s3_settings do
