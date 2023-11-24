@@ -101,6 +101,7 @@ defmodule Core.MixProject do
       {:csv, "~> 2.4"},
       {:sentry, "~> 8.0"},
       {:libcluster, "~> 3.3"},
+      {:mime, "~> 2.0"},
       # i18n
       {:ex_cldr, "~> 2.25"},
       {:ex_cldr_numbers, "~> 2.23"},

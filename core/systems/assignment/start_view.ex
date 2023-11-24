@@ -39,7 +39,10 @@ defmodule Systems.Assignment.StartView do
   def compose(:description, %{work_item: {%{description: description}, _}}), do: description
 
   @impl true
-  def compose(:icon, %{work_item: {%{group: group}, _}}), do: group
+  def compose(:icon, %{work_item: {%{group: nil}, _}}), do: nil
+
+  @impl true
+  def compose(:icon, %{work_item: {%{group: group}, _}}), do: String.downcase(group)
 
   defp start_action({%{tool_ref: tool_ref}, _task} = item) do
     Project.ToolRefModel.tool(tool_ref)

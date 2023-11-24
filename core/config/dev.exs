@@ -1,11 +1,5 @@
 import Config
 
-# Setup for MinIO
-config :ex_aws, :s3,
-  scheme: "http://",
-  host: "localhost",
-  port: 9000
-
 # Only in tests, remove the complexity from the password hashing algorithm
 config :bcrypt_elixir, :log_rounds, 1
 
@@ -83,12 +77,13 @@ config :core,
        :admins,
        ["e.vanderveen@eyra.co"]
 
-config :core, :s3, bucket: "eylixir"
-
-#  For Minio (local S3)
-config :ex_aws,
-  access_key_id: "my_access_key",
-  secret_access_key: "a_super_secret"
+# #  For Minio (local S3)
+# config :ex_aws,
+#   scheme: "http://",
+#   host: "localhost",
+#   port: 9000
+#   access_key_id: "my_access_key",
+#   secret_access_key: "a_super_secret"
 
 config :core, :feldspar,
   backend: Systems.Feldspar.LocalFS,

@@ -3,11 +3,14 @@ defmodule Systems.Feldspar.AppPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Stripped.Component, :projects
 
+  require Logger
+
   import Feldspar.AppView
 
   @impl true
   def mount(%{"id" => app_id}, _session, socket) do
     app_url = Feldspar.Public.get_public_url(app_id) <> "/index.html"
+    Logger.info("[Feldspar.AppPage] Starting feldspar app from: #{app_url}")
 
     {
       :ok,

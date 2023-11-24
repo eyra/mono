@@ -38,11 +38,11 @@ defmodule Systems.Feldspar.S3Test do
     end
   end
 
-  describe "get_public_url/1" do
+  describe "get_public_url/1 (without prefix)" do
     test "returns URL" do
       id = Ecto.UUID.generate()
       url = S3.get_public_url(id)
-      assert "http://example.com/#{id}/index.html" == url
+      assert "http://example.com/#{id}" == url
     end
   end
 

@@ -10,7 +10,7 @@ defmodule Systems.Feldspar.S3 do
   def get_public_url(id) do
     settings = s3_settings()
     public_url = Access.get(settings, :public_url)
-    "#{public_url}/#{object_key(id)}/index.html"
+    "#{public_url}/#{object_key(id)}"
   end
 
   def remove(id) do
@@ -36,7 +36,9 @@ defmodule Systems.Feldspar.S3 do
 
     contents
     |> Enum.map(fn {:zip_file, file, info, _, _, _} -> {file, info} end)
-    |> Task.async_stream(&upload_file(&1, zip_handle, target, s3_settings()), max_concurrency: 10)
+    |> Task.async_stream(&upload_file(&1, zip_handle, target, s3_settings()),
+      max_concurrency: 10
+    )
     |> Stream.run()
   end
 
@@ -47,11 +49,14 @@ defmodule Systems.Feldspar.S3 do
       S3.put_object(
         Access.fetch!(settings, :bucket),
         "#{object_key(target)}/#{name}",
-        data
+        data,
+        content_type: content_type(name)
       )
       |> backend().request!()
     end
   end
+
+  defp content_type(name), do: MIME.from_path(name)
 
   @doc """
     See: https://www.erlang.org/doc/man/file#type-file_info
@@ -62,8 +67,11 @@ defmodule Systems.Feldspar.S3 do
   def is_regular_file(_), do: false
 
   defp object_key(id) do
-    prefix = Access.get(s3_settings(), :prefix, "")
-    "#{prefix}#{id}"
+    prefix = Access.get(s3_settings(), :prefix, nil)
+
+    [prefix, id]
+    |> Enum.filter(&(&1 != nil))
+    |> Enum.join("/")
   end
 
   defp s3_settings do
