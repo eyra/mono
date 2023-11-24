@@ -2,6 +2,7 @@ defmodule Systems.Feldspar.AppView do
   use CoreWeb, :html
 
   attr(:url, :string, required: true)
+  attr(:locale, :string, required: true)
 
   def app_view(assigns) do
     ~H"""
@@ -10,7 +11,7 @@ defmodule Systems.Feldspar.AppView do
         Changing the preceding siblings of the iframe would result in a reload of the iframe
         due to Morphdom (https://github.com/patrick-steele-idem/morphdom/issues/200).
           --%>
-        <div class="w-full h-full" phx-update="ignore"  id="web-app-frame" phx-hook="FeldsparApp" data-src={@url}>
+        <div class="w-full h-full" phx-update="ignore"  id="web-app-frame" phx-hook="FeldsparApp" data-locale={@locale} data-src={@url}>
           <iframe class="w-full h-full"></iframe>
         </div>
       </div>
