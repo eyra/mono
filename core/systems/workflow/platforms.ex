@@ -8,7 +8,7 @@ defmodule Systems.Workflow.Platforms do
          :facebook,
          :instagram,
          :tiktok,
-         :twitter,
+         :x,
          :google,
          :youtube,
          :whatsapp,

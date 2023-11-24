@@ -6,7 +6,15 @@ defmodule Core.Application do
   use Application
 
   def start(_type, _args) do
+    topologies = [
+      example: [
+        strategy: Cluster.Strategy.Epmd,
+        config: [hosts: dist_hosts()]
+      ]
+    ]
+
     children = [
+      {Cluster.Supervisor, [topologies, [name: MyApp.ClusterSupervisor]]},
       Core.Repo,
       CoreWeb.Telemetry,
       {Phoenix.PubSub, name: Core.PubSub},
@@ -30,5 +38,9 @@ defmodule Core.Application do
 
   defp rate_config do
     Application.fetch_env!(:core, :rate)
+  end
+
+  defp dist_hosts do
+    Application.get_env(:core, :dist_hosts, [])
   end
 end
