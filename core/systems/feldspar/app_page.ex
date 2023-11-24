@@ -24,7 +24,7 @@ defmodule Systems.Feldspar.AppPage do
   def render(assigns) do
     ~H"""
     <.stripped menus={@menus} footer?={false}>
-      <.app_view url={@app_url} />
+      <.app_view url={@app_url} locale={Gettext.get_locale()} />
     </.stripped>
     """
   end

@@ -2,6 +2,8 @@ export const FeldsparApp = {
   mounted() {
     console.log("FeldsparApp MOUNTED");
 
+    console.log(this.el.dataset);
+
     const iframe = this.getIframe();
     iframe.addEventListener("load", () => {
       this.onFrameLoaded();
@@ -19,7 +21,11 @@ export const FeldsparApp = {
     this.channel.port1.onmessage = (e) => {
       this.handleMessage(e);
     };
-    this.getIframe().contentWindow.postMessage("init", "*", [
+
+    let action = "live-init";
+    let locale = this.el.dataset.locale;
+
+    this.getIframe().contentWindow.postMessage({ action, locale }, "*", [
       this.channel.port2,
     ]);
   },
