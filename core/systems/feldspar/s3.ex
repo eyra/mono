@@ -56,6 +56,8 @@ defmodule Systems.Feldspar.S3 do
     end
   end
 
+  defp content_type(name), do: MIME.from_path(name)
+
   @doc """
     See: https://www.erlang.org/doc/man/file#type-file_info
     Files types: device | directory | other | regular | symlink | undefined
@@ -79,23 +81,5 @@ defmodule Systems.Feldspar.S3 do
   defp backend do
     # Allow mocking
     Access.get(s3_settings(), :s3_backend, ExAws)
-  end
-
-  defp mime_type("html"), do: "text/html"
-  defp mime_type("js"), do: "text/javascript"
-  defp mime_type("css"), do: "text/css"
-  defp mime_type("svg"), do: "image/svg+xml"
-  defp mime_type("ico"), do: "image/x-icon"
-  defp mime_type("whl"), do: " application/zip"
-  defp mime_type("json"), do: "application/json"
-  defp mime_type("ts"), do: "application/typescript"
-  defp mime_type("tsx"), do: "application/typescript"
-  defp mime_type(_), do: "text/html"
-
-  defp content_type(name) do
-    "#{name}"
-    |> String.split(".")
-    |> List.last()
-    |> mime_type()
   end
 end
