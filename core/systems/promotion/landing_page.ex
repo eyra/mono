@@ -77,8 +77,6 @@ defmodule Systems.Promotion.LandingPage do
     |> assign(image_info: image_info)
   end
 
-  defoverridable handle_view_model_updated: 1
-
   def handle_view_model_updated(socket) do
     socket
     |> update_image_info()
@@ -132,11 +130,6 @@ defmodule Systems.Promotion.LandingPage do
   defp grid_cols(1), do: "grid-cols-1 sm:grid-cols-1"
   defp grid_cols(2), do: "grid-cols-1 sm:grid-cols-2"
   defp grid_cols(_), do: "grid-cols-1 sm:grid-cols-3"
-
-  # data(preview, :boolean)
-  # data(model, :map)
-  # data(image_info, :map)
-  # data(back_path, :any)
 
   @impl true
   def render(assigns) do

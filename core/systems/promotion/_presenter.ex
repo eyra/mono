@@ -4,7 +4,8 @@ defmodule Systems.Promotion.Presenter do
   alias Systems.Promotion
 
   @impl true
-  def view_model(%Promotion.Model{director: director} = promotion, page, assigns) do
-    Frameworks.Concept.System.presenter(director).view_model(promotion, page, assigns)
+  def view_model(page, %Promotion.Model{director: director} = promotion, assigns) do
+    presenter = Frameworks.Concept.System.presenter(director)
+    apply(presenter, :view_model, [page, promotion, assigns])
   end
 end

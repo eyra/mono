@@ -83,7 +83,8 @@ defmodule Systems.Project.Model do
 
       tags =
         items
-        |> Enum.map(&tag/1)
+        |> Enum.map(&Project.ItemModel.tag/1)
+        |> Enum.filter(&(&1 != nil))
         |> Enum.uniq()
 
       %{
@@ -98,10 +99,6 @@ defmodule Systems.Project.Model do
         right_actions: [delete]
       }
     end
-
-    defp tag(%{tool_ref: %{data_donation_tool: %{id: _id}}}), do: "Data Donation"
-    defp tag(%{tool_ref: %{benchmark_tool: %{id: _id}}}), do: "Benchmark"
-    defp tag(_), do: nil
 
     defp info([_item]), do: "1 item"
     defp info(items) when is_list(items), do: "#{Enum.count(items)} items"

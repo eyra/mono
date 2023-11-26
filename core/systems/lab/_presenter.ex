@@ -6,7 +6,7 @@ defmodule Systems.Lab.Presenter do
   }
 
   @impl true
-  def view_model(%Lab.ToolModel{} = _tool, _page, _assigns) do
+  def view_model(_page, %Lab.ToolModel{} = _tool, _assigns) do
     %{}
   end
 end

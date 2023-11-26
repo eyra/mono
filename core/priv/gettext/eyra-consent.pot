@@ -12,10 +12,6 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "consent-out-of-sync-error"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "default.consent.text"
 msgstr ""
 

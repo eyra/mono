@@ -9,21 +9,21 @@ defmodule Systems.Assignment.Presenter do
   }
 
   @impl true
-  def view_model(%Alliance.ToolModel{} = tool, Alliance.CallbackPage = page, assigns) do
+  def view_model(Alliance.CallbackPage = page, %Alliance.ToolModel{} = tool, assigns) do
     builder(page).view_model(tool, assigns)
   end
 
   @impl true
   def view_model(
-        %Assignment.Model{director: director} = assignment,
         Assignment.LandingPage = page,
+        %Assignment.Model{director: director} = assignment,
         assigns
       ) do
-    Module.get(director, "Presenter").view_model(assignment, page, assigns)
+    Module.get(director, "Presenter").view_model(page, assignment, assigns)
   end
 
   @impl true
-  def view_model(%Assignment.Model{} = assignment, page, assigns) do
+  def view_model(page, %Assignment.Model{} = assignment, assigns) do
     builder(page).view_model(assignment, assigns)
   end
 

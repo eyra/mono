@@ -44,8 +44,6 @@ defmodule Systems.Assignment.LandingPage do
     }
   end
 
-  defoverridable handle_view_model_updated: 1
-
   def handle_view_model_updated(socket) do
     socket
     |> update_task_view()

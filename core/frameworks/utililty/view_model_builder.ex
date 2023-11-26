@@ -1,6 +1,6 @@
 defprotocol Frameworks.Utility.ViewModelBuilder do
   @type accumulator :: map
-  @type model :: map | list
+  @type model :: map | list | nil
   @type page :: atom() | tuple()
   @type assigns :: map
 

@@ -336,7 +336,7 @@ msgstr "Empty"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "templates.data_donation"
-msgstr "Online study"
+msgstr "Data donation"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "platforms.apple"

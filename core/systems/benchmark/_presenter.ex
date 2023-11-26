@@ -6,7 +6,7 @@ defmodule Systems.Benchmark.Presenter do
   }
 
   @impl true
-  def view_model(%Benchmark.ToolModel{} = tool, page, assigns) do
+  def view_model(page, %Benchmark.ToolModel{} = tool, assigns) do
     builder(page).view_model(tool, assigns)
   end
 

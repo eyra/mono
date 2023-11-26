@@ -4,7 +4,7 @@ defmodule Systems.Alliance.Presenter do
   alias Systems.Alliance
 
   @impl true
-  def view_model(%Alliance.ToolModel{director: director} = tool, page, assigns) do
-    Frameworks.Utility.Module.get(director, "Presenter").view_model(tool, page, assigns)
+  def view_model(page, %Alliance.ToolModel{director: director} = tool, assigns) do
+    Frameworks.Utility.Module.get(director, "Presenter").view_model(page, tool, assigns)
   end
 end

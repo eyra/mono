@@ -70,6 +70,9 @@ defmodule Systems.Project.ItemModel do
     Enum.map(items, &auth_tree/1)
   end
 
+  def tag(%{tool_ref: %{id: _} = tool_ref}), do: Project.ToolRefModel.tag(tool_ref)
+  def tag(%{assignment: %{id: _} = assignment}), do: Assignment.Model.tag(assignment)
+
   defimpl Frameworks.Utility.ViewModelBuilder do
     use CoreWeb, :verified_routes
 

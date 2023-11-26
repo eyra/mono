@@ -54,10 +54,7 @@ defmodule Systems.Pool.SubmissionPage do
     super(assign(socket, preview_path: preview_path))
   end
 
-  defoverridable handle_view_model_updated: 1
-
   def handle_view_model_updated(socket) do
-    IO.puts("handle_view_model_updated")
     socket |> update_menus()
   end
 

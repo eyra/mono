@@ -4,7 +4,7 @@ defmodule CoreWeb.UI.Dialog do
   alias Frameworks.Pixel.Button
 
   attr(:title, :string, required: true)
-  attr(:text, :string, required: true)
+  attr(:text, :string, default: nil)
   attr(:buttons, :list, default: [])
   slot(:inner_block)
 
@@ -15,9 +15,11 @@ defmodule CoreWeb.UI.Dialog do
         <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
           <%= @title %>
         </div>
-        <div class="text-bodymedium font-body sm:text-bodylarge">
-          <%= @text %>
-        </div>
+        <%= if @text do %>
+          <div class="text-bodymedium font-body sm:text-bodylarge">
+            <%= @text %>
+          </div>
+        <% end %>
         <div>
           <%= render_slot(@inner_block) %>
         </div>

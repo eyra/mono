@@ -5,7 +5,8 @@ defmodule CoreWeb.UI.Empty do
 
   attr(:title, :string, required: true)
   attr(:body, :string, required: true)
-  attr(:illustration, :string, default: "cards")
+  attr(:illustration, :string)
+  attr(:button, :map, default: nil)
 
   def empty(assigns) do
     ~H"""
@@ -15,16 +16,19 @@ defmodule CoreWeb.UI.Empty do
         <div class="text-bodymedium sm:text-bodylarge font-body">
           <%= @body %>
         </div>
+        <%= if @button do %>
+        <div>
+          <.spacing value="L" />
+          <.wrap>
+            <Button.dynamic {@button} />
+          </.wrap>
+        </div>
+        <% end %>
       </div>
-      <div class="w-full mt-6 md:mt-0">
+      <div class="w-full mt-6 hidden md:block">
         <img
-          class="hidden md:block object-fill w-full"
+          class="object-fill w-full"
           src={"/images/illustrations/#{@illustration}.svg"}
-          alt=""
-        />
-        <img
-          class="md:hidden object-fill w-full"
-          src={"/images/illustrations/#{@illustration}_mobile.svg"}
           alt=""
         />
       </div>

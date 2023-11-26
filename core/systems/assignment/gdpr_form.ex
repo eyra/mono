@@ -59,7 +59,7 @@ defmodule Systems.Assignment.GdprForm do
         %{status: :on},
         %{assigns: %{entity: %{auth_node: auth_node} = assignment}} = socket
       ) do
-    consent_agreement = %Consent.AgreementModel{auth_node: auth_node}
+    consent_agreement = Consent.Public.prepare_agreement(auth_node: auth_node)
     Assignment.Public.update_consent_agreement(assignment, consent_agreement)
 
     {

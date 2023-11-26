@@ -3,6 +3,7 @@ defmodule Systems.Project.ToolRefModel do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
+  import CoreWeb.Gettext
 
   alias Frameworks.Concept
 
@@ -83,4 +84,14 @@ defmodule Systems.Project.ToolRefModel do
   def tool(%{document_tool: %{id: _id} = tool}), do: tool
   def tool(%{lab_tool: %{id: _id} = tool}), do: tool
   def tool(%{benchmark_tool: %{id: _id} = tool}), do: tool
+
+  def tag(%Project.ToolRefModel{special: :questionnaire}),
+    do: dgettext("eyra-project", "tool_ref.tag.questionnaire")
+
+  def tag(%Project.ToolRefModel{special: :benchmark}),
+    do: dgettext("eyra-project", "tool_ref.tag.benchmark")
+
+  def tag(%Project.ToolRefModel{special: _special}) do
+    dgettext("eyra-project", "tool_ref.tag.default")
+  end
 end

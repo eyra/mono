@@ -12,10 +12,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, elixir-autogen, elixir-format
-msgid "consent-out-of-sync-error"
-msgstr "Iemand heeft de consent tekst is aangepast. Ververs de pagina om verder te gaan."
-
-#, elixir-autogen, elixir-format
 msgid "default.consent.text"
 msgstr "<div>Beschrijf hier de consent voorwaarden</div>"
 

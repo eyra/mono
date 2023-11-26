@@ -2,11 +2,11 @@ defmodule Systems.Project.OverviewPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :projects
   use CoreWeb.UI.PlainDialog
+  use Systems.Observatory.Public
 
   import CoreWeb.Layouts.Workspace.Component
   alias CoreWeb.UI.SelectorDialog
 
-  alias Frameworks.Utility.ViewModelBuilder
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Grid
   alias Frameworks.Pixel.Text
@@ -17,34 +17,23 @@ defmodule Systems.Project.OverviewPage do
     Project
   }
 
-  def mount(_params, _session, socket) do
+  def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
     {
       :ok,
       socket
       |> assign(
+        model: user,
         dialog: nil,
         popup: nil,
         selector_dialog: nil
       )
-      |> update_projects()
-      |> update_cards()
+      |> observe_view_model()
       |> update_menus()
     }
   end
 
-  defp update_projects(%{assigns: %{current_user: user}} = socket) do
-    preload = Project.Model.preload_graph(:down)
-    projects = Project.Public.list_owned_projects(user, preload: preload)
-
-    socket
-    |> assign(projects: projects)
-  end
-
-  defp update_cards(%{assigns: %{projects: projects} = assigns} = socket) do
-    cards = Enum.map(projects, &ViewModelBuilder.view_model(&1, {__MODULE__, :card}, assigns))
-
-    socket
-    |> assign(cards: cards)
+  def handle_view_model_updated(socket) do
+    socket |> update_menus()
   end
 
   def handle_auto_save_done(socket) do
@@ -52,19 +41,27 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_event("card_clicked", %{"item" => card_id}, %{assigns: %{cards: cards}} = socket) do
+  def handle_event(
+        "card_clicked",
+        %{"item" => card_id},
+        %{assigns: %{vm: %{cards: cards}}} = socket
+      ) do
     card_id = String.to_integer(card_id)
     %{path: path} = Enum.find(cards, &(&1.id == card_id))
     {:noreply, push_redirect(socket, to: path)}
   end
 
   @impl true
-  def handle_event("edit", %{"item" => project_id}, %{assigns: %{projects: projects}} = socket) do
+  def handle_event(
+        "edit",
+        %{"item" => project_id},
+        %{assigns: %{vm: %{projects: projects}}} = socket
+      ) do
     project = Enum.find(projects, &(&1.id == String.to_integer(project_id)))
 
     popup = %{
       module: Project.Form,
-      entity: project,
+      project: project,
       target: self()
     }
 
@@ -97,8 +94,7 @@ defmodule Systems.Project.OverviewPage do
         project_id: nil,
         dialog: nil
       )
-      |> update_projects()
-      |> update_cards()
+      |> update_view_model()
       |> update_menus()
     }
   end
@@ -140,15 +136,14 @@ defmodule Systems.Project.OverviewPage do
 
   @impl true
   def handle_event("create_project", _params, %{assigns: %{current_user: user}} = socket) do
-    popup = %{
-      module: Project.CreatePopup,
-      target: self(),
-      user: user
-    }
+    user
+    |> Project.Public.new_project_name()
+    |> Project.Assembly.create(user, :empty)
 
     {
       :noreply,
-      socket |> assign(popup: popup)
+      socket
+      |> update_view_model()
     }
   end
 
@@ -165,19 +160,25 @@ defmodule Systems.Project.OverviewPage do
     {
       :noreply,
       socket
-      |> update_projects()
-      |> update_cards()
     }
   end
 
   @impl true
   def handle_info(%{selector: :cancel}, socket) do
-    {:noreply, socket |> assign(selector_dialog: nil)}
+    {
+      :noreply,
+      socket
+      |> assign(selector_dialog: nil)
+    }
   end
 
   @impl true
   def handle_info(%{module: _, action: :close}, socket) do
-    {:noreply, socket |> assign(popup: nil)}
+    {
+      :noreply,
+      socket
+      |> assign(popup: nil)
+    }
   end
 
   @impl true
@@ -219,7 +220,7 @@ defmodule Systems.Project.OverviewPage do
 
       <%= if @popup do %>
         <.popup>
-          <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
+          <div class="mx-10 w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg">
             <.live_component id={:project_overview_popup} module={@popup.module} {@popup} />
           </div>
         </.popup>
@@ -243,12 +244,12 @@ defmodule Systems.Project.OverviewPage do
 
       <Area.content>
         <Margin.y id={:page_top} />
-        <%= if Enum.count(@cards) > 0 do %>
+        <%= if Enum.count(@vm.cards) > 0 do %>
           <div class="flex flex-row items-center justify-center">
             <div class="h-full">
               <Text.title2 margin="">
                 <%= dgettext("eyra-project", "overview.header.title") %>
-                <span class="text-primary"> <%= Enum.count(@cards) %></span>
+                <span class="text-primary"> <%= Enum.count(@vm.cards) %></span>
               </Text.title2>
             </div>
             <div class="flex-grow">
@@ -266,7 +267,7 @@ defmodule Systems.Project.OverviewPage do
           </div>
           <Margin.y id={:title2_bottom} />
           <Grid.dynamic>
-            <%= for card <- @cards do %>
+            <%= for card <- @vm.cards do %>
               <Project.CardView.dynamic card={card} />
             <% end %>
           </Grid.dynamic>
@@ -276,11 +277,10 @@ defmodule Systems.Project.OverviewPage do
             title={dgettext("eyra-project", "overview.empty.title")}
             body={dgettext("eyra-project", "overview.empty.description")}
             illustration="cards"
-          />
-          <.spacing value="L" />
-          <Button.primary_live_view
-            label={dgettext("eyra-project", "add.first.button")}
-            event="create_project"
+            button={%{
+              action: %{type: :send, event: "create_project"},
+              face: %{type: :primary, label: dgettext("eyra-project", "add.first.button")}
+            }}
           />
         <% end %>
       </Area.content>

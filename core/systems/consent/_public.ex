@@ -19,6 +19,7 @@ defmodule Systems.Consent.Public do
     %Consent.AgreementModel{}
     |> Consent.AgreementModel.changeset()
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+    |> Ecto.Changeset.put_assoc(:revisions, [prepare_revision(nil)])
   end
 
   def bump_revision_if_needed(agreement_id) when is_integer(agreement_id) do
@@ -31,7 +32,7 @@ defmodule Systems.Consent.Public do
     Multi.new()
     |> Multi.run(:revision, fn _, _ ->
       case latest_revision(agreement, [:signatures]) do
-        nil -> create_revision(agreement, dgettext("eyra-consent", "default.consent.text"))
+        nil -> create_revision(agreement, nil)
         %{source: source, signatures: [_ | _]} -> create_revision(agreement, source)
         revision -> {:ok, revision}
       end
@@ -51,9 +52,18 @@ defmodule Systems.Consent.Public do
     |> Repo.insert()
   end
 
-  def prepare_revision(agreement, source) when is_binary(source) do
+  def prepare_revision(nil) do
+    dgettext("eyra-consent", "default.consent.text")
+    |> prepare_revision()
+  end
+
+  def prepare_revision(source) when is_binary(source) do
     %Consent.RevisionModel{}
     |> Consent.RevisionModel.changeset(%{source: source})
+  end
+
+  def prepare_revision(agreement, source) do
+    prepare_revision(source)
     |> Ecto.Changeset.put_assoc(:agreement, agreement)
   end
 

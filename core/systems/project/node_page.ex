@@ -176,6 +176,18 @@ defmodule Systems.Project.NodePage do
             <% end %>
           </Grid.dynamic>
           <.spacing value="L" />
+        <% else %>
+          <div>
+            <.empty
+              title={dgettext("eyra-project", "node.empty.title")}
+              body={dgettext("eyra-project", "node.empty.description")}
+              illustration="cards"
+              button={%{
+                action: %{type: :send, event: "create_item"},
+                face: %{type: :primary, label: dgettext("eyra-project", "add.first.item.button")}
+              }}
+            />
+          </div>
         <% end %>
       </Area.content>
     </.workspace>

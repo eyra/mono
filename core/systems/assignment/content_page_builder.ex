@@ -221,6 +221,12 @@ defmodule Systems.Assignment.ContentPageBuilder do
             description: dgettext("eyra-workflow", "item.library.description"),
             items: [
               %{
+                id: :donate,
+                type: :feldspar_tool,
+                title: dgettext("eyra-workflow", "item.donate.title"),
+                description: dgettext("eyra-workflow", "item.donate.description")
+              },
+              %{
                 id: :questionnaire,
                 type: :alliance_tool,
                 title: dgettext("eyra-workflow", "item.questionnaire.title"),
@@ -237,12 +243,6 @@ defmodule Systems.Assignment.ContentPageBuilder do
                 type: :document_tool,
                 title: dgettext("eyra-workflow", "item.download.title"),
                 description: dgettext("eyra-workflow", "item.download.description")
-              },
-              %{
-                id: :donate,
-                type: :feldspar_tool,
-                title: dgettext("eyra-workflow", "item.donate.title"),
-                description: dgettext("eyra-workflow", "item.donate.description")
               }
             ]
           }
