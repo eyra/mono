@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-6657C33D.js"></script>
+    <script src="dist/sidebar_items-2B765873.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -157,7 +157,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:view_model/3" translate="no">view_model(model, page, assigns)</a>
+        <a href="#c:view_model/3" translate="no">view_model(page, model, assigns)</a>
 
       </div>
 
@@ -214,7 +214,7 @@ Types
     </a>
     <h1 class="signature" translate="no">model()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/presenter.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/presenter.ex#L3" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -226,7 +226,7 @@ Types
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@type</span> model() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">pos_integer</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()</pre>
+          <pre translate="no"><span class="attribute">@type</span> model() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">pos_integer</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>() | nil</pre>
 
       </div>
 
@@ -242,7 +242,7 @@ Types
     </a>
     <h1 class="signature" translate="no">page()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/presenter.ex#L3" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/presenter.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -281,7 +281,7 @@ Callbacks
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this callback</span>
     </a>
-    <h1 class="signature" translate="no">view_model(model, page, assigns)</h1>
+    <h1 class="signature" translate="no">view_model(page, model, assigns)</h1>
 
       <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/presenter.ex#L6" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
@@ -295,7 +295,7 @@ Callbacks
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> view_model(<a href="#t:model/0">model</a>(), <a href="#t:page/0">page</a>(), <a href="#t:assigns/0">assigns</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()</pre>
+          <pre translate="no"><span class="attribute">@callback</span> view_model(<a href="#t:page/0">page</a>(), <a href="#t:model/0">model</a>(), <a href="#t:assigns/0">assigns</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()</pre>
 
       </div>
 
