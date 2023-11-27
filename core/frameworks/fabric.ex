@@ -87,6 +87,8 @@ defmodule Fabric do
     %Fabric.LiveComponent.Model{ref: child_ref, params: params}
   end
 
+  # Install
+
   def install_children(%Phoenix.LiveView.Socket{assigns: %{fabric: fabric}} = socket, children)
       when is_list(children) do
     Phoenix.Component.assign(socket, fabric: install_children(fabric, children))
@@ -99,6 +101,8 @@ defmodule Fabric do
   def install_children(%Fabric.Model{} = fabric, children) when is_list(children) do
     %Fabric.Model{fabric | children: children}
   end
+
+  # CRUD
 
   def get_child(%Phoenix.LiveView.Socket{assigns: %{fabric: fabric}}, child_id) do
     get_child(fabric, child_id)
@@ -161,6 +165,11 @@ defmodule Fabric do
 
   def hide_child(%{fabric: fabric} = assigns, child_id) do
     Phoenix.Component.assign(assigns, fabric: remove_child(fabric, child_id))
+  end
+
+  def show_popup(context, child_id) when is_atom(child_id) do
+    child = get_child(context, child_id)
+    show_popup(context, child)
   end
 
   def show_popup(
