@@ -42,6 +42,11 @@ defmodule Systems.Project.Switch do
     update_pages(project_item)
   end
 
+  @impl true
+  def intercept({:project, _}, %{project: project}) do
+    update_pages(project)
+  end
+
   defp handle({:tool, signal}, %{tool: tool} = message) do
     Project.Public.get_tool_ref_by_tool(tool)
     |> then(&dispatch!({:tool_ref, signal}, Map.merge(message, %{tool_ref: &1})))
@@ -50,6 +55,13 @@ defmodule Systems.Project.Switch do
   defp update_pages(%Project.ItemModel{} = item) do
     [Project.NodePage]
     |> Enum.each(&update_page(&1, item))
+  end
+
+  defp update_pages(%Project.Model{} = project) do
+    Project.Public.list_owners(project)
+    |> Enum.each(fn user ->
+      update_page(Project.OverviewPage, user)
+    end)
   end
 
   defp update_page(page, %{id: id} = model) when is_atom(page) do

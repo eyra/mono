@@ -17,11 +17,11 @@ defmodule Systems.Consent.PublicTest do
     {:ok, _} =
       Multi.new()
       |> Multi.insert(:agreement, Consent.Public.prepare_agreement(Authorization.prepare_node()))
-      |> Multi.insert(:revision1, fn %{agreement: agreement} ->
-        Consent.Public.prepare_revision(agreement, "revision1")
-      end)
       |> Multi.insert(:revision2, fn %{agreement: agreement} ->
         Consent.Public.prepare_revision(agreement, "revision2")
+      end)
+      |> Multi.insert(:revision3, fn %{agreement: agreement} ->
+        Consent.Public.prepare_revision(agreement, "revision3")
       end)
       |> Repo.transaction()
 
@@ -29,10 +29,13 @@ defmodule Systems.Consent.PublicTest do
              %Systems.Consent.AgreementModel{
                revisions: [
                  %Systems.Consent.RevisionModel{
-                   source: "revision1"
+                   source: _
                  },
                  %Systems.Consent.RevisionModel{
                    source: "revision2"
+                 },
+                 %Systems.Consent.RevisionModel{
+                   source: "revision3"
                  }
                ]
              }
@@ -47,26 +50,26 @@ defmodule Systems.Consent.PublicTest do
     {:ok, _} =
       Multi.new()
       |> Multi.insert(:agreement, Consent.Public.prepare_agreement(Authorization.prepare_node()))
-      |> Multi.insert(:revision1, fn %{agreement: agreement} ->
-        Consent.Public.prepare_revision(agreement, "revision1")
-      end)
-      |> Multi.insert(:signatureA1, fn %{revision1: revision1} ->
-        Consent.Public.prepare_signature(revision1, user_a)
-      end)
-      |> Multi.insert(:signatureB1, fn %{revision1: revision1} ->
-        Consent.Public.prepare_signature(revision1, user_b)
-      end)
       |> Multi.insert(:revision2, fn %{agreement: agreement} ->
         Consent.Public.prepare_revision(agreement, "revision2")
       end)
-      |> Multi.insert(:signatureA2, fn %{revision2: revision2} ->
+      |> Multi.insert(:signatureA1, fn %{revision2: revision2} ->
         Consent.Public.prepare_signature(revision2, user_a)
       end)
-      |> Multi.insert(:signatureB2, fn %{revision2: revision2} ->
+      |> Multi.insert(:signatureB1, fn %{revision2: revision2} ->
         Consent.Public.prepare_signature(revision2, user_b)
       end)
-      |> Multi.insert(:signatureC2, fn %{revision2: revision2} ->
-        Consent.Public.prepare_signature(revision2, user_c)
+      |> Multi.insert(:revision3, fn %{agreement: agreement} ->
+        Consent.Public.prepare_revision(agreement, "revision3")
+      end)
+      |> Multi.insert(:signatureA2, fn %{revision3: revision3} ->
+        Consent.Public.prepare_signature(revision3, user_a)
+      end)
+      |> Multi.insert(:signatureB2, fn %{revision3: revision3} ->
+        Consent.Public.prepare_signature(revision3, user_b)
+      end)
+      |> Multi.insert(:signatureC2, fn %{revision3: revision3} ->
+        Consent.Public.prepare_signature(revision3, user_c)
       end)
       |> Repo.transaction()
 
@@ -74,14 +77,18 @@ defmodule Systems.Consent.PublicTest do
              %Systems.Consent.AgreementModel{
                revisions: [
                  %Systems.Consent.RevisionModel{
-                   source: "revision1",
+                   source: _source,
+                   signatures: []
+                 },
+                 %Systems.Consent.RevisionModel{
+                   source: "revision2",
                    signatures: [
                      %Systems.Consent.SignatureModel{user_id: ^user_a_id},
                      %Systems.Consent.SignatureModel{user_id: ^user_b_id}
                    ]
                  },
                  %Systems.Consent.RevisionModel{
-                   source: "revision2",
+                   source: "revision3",
                    signatures: [
                      %Systems.Consent.SignatureModel{user_id: ^user_a_id},
                      %Systems.Consent.SignatureModel{user_id: ^user_b_id},

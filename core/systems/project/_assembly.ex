@@ -31,6 +31,7 @@ defmodule Systems.Project.Assembly do
 
     Multi.new()
     |> Multi.insert(:project, project)
+    |> EctoHelper.run(:auth, &update_auth/2)
     |> Repo.transaction()
   end
 

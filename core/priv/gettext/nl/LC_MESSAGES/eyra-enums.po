@@ -336,7 +336,7 @@ msgstr "Leeg"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "templates.data_donation"
-msgstr "Online studie"
+msgstr "Data donatie"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "platforms.apple"

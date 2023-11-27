@@ -6,7 +6,7 @@ defmodule Systems.Feldspar.Presenter do
   }
 
   @impl true
-  def view_model(%Feldspar.ToolModel{} = _tool, _page, _assigns) do
+  def view_model(_page, %Feldspar.ToolModel{} = _tool, _assigns) do
     %{}
   end
 end

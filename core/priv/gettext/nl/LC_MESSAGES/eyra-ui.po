@@ -253,3 +253,7 @@ msgstr "Bewerken"
 #, elixir-autogen, elixir-format
 msgid "copy.clipboard.button"
 msgstr "Kopieer"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submit.button"
+msgstr "Opslaan"

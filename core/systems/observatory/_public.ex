@@ -37,29 +37,28 @@ defmodule Systems.Observatory.Public do
     socket
   end
 
-  def update_view_model(socket, model, page, presenter) do
-    vm =
-      presenter
-      |> get_view_model(socket, model, page)
+  def update_view_model(socket, page, model, presenter) do
+    vm = get_view_model(socket, page, model, presenter)
 
     socket
     |> Phoenix.Component.assign(vm: vm)
   end
 
   defp get_view_model(
-         presenter,
          %{assigns: assigns} = _socket,
+         page,
          model,
-         page
+         presenter
        ) do
-    presenter
-    |> apply(:view_model, [model, page, assigns])
+    apply(presenter, :view_model, [page, model, assigns])
   end
 
   defmacro __using__(_opts \\ []) do
     quote do
       import CoreWeb.Gettext
       alias Systems.Observatory.Public
+
+      require Logger
 
       @presenter Frameworks.Concept.System.presenter(__MODULE__)
 
@@ -74,7 +73,7 @@ defmodule Systems.Observatory.Public do
         {
           :noreply,
           socket
-          |> Public.update_view_model(model, __MODULE__, @presenter)
+          |> Public.update_view_model(__MODULE__, model, @presenter)
           |> handle_view_model_updated()
           |> put_updated_info_flash()
         }
@@ -83,18 +82,20 @@ defmodule Systems.Observatory.Public do
       def observe_view_model(%{assigns: %{model: %{id: id} = model}} = socket) do
         socket
         |> Public.observe([{__MODULE__, [id]}])
-        |> Public.update_view_model(model, __MODULE__, @presenter)
+        |> Public.update_view_model(__MODULE__, model, @presenter)
       end
 
-      def update_view_model(%{assigns: %{model: %{id: id} = model}} = socket) do
+      def update_view_model(%{assigns: %{model: model}} = socket) do
         socket
-        |> Public.update_view_model(model, __MODULE__, @presenter)
+        |> Public.update_view_model(__MODULE__, model, @presenter)
       end
 
       def handle_view_model_updated(socket) do
-        IO.puts("No handle_observation/1 implemented")
+        Logger.warn("handle_view_model_updated/1 not implemented")
         socket
       end
+
+      defoverridable handle_view_model_updated: 1
 
       def put_updated_info_flash(%{assigns: %{auto_save_status: :active}} = socket) do
         socket

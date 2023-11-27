@@ -127,8 +127,6 @@ defmodule Systems.Content.Page do
         super(socket)
       end
 
-      defoverridable handle_view_model_updated: 1
-
       def handle_view_model_updated(socket) do
         socket
         |> update_actions()

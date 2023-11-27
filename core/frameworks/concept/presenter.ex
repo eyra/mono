@@ -1,9 +1,9 @@
 defmodule Frameworks.Concept.Presenter do
-  @type model :: pos_integer() | map
   @type page :: atom()
+  @type model :: pos_integer() | map | nil
   @type assigns :: map
 
-  @callback view_model(model, page, assigns) :: map()
+  @callback view_model(page, model, assigns) :: map()
 
   defmacro __using__(_opts) do
     quote do

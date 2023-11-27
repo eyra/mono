@@ -44,8 +44,6 @@ defmodule Systems.Pool.DetailPage do
     mount(%{"id" => pool_id, "tab" => nil}, session, socket)
   end
 
-  defoverridable handle_view_model_updated: 1
-
   def handle_view_model_updated(socket) do
     socket |> update_menus()
   end

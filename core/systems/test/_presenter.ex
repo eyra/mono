@@ -4,14 +4,12 @@ defmodule Systems.Test.Presenter do
   alias Systems.Observatory
 
   @impl true
-  def view_model(%Systems.Test.Model{} = model, page, assigns) do
-    model
-    |> Builder.view_model(page, assigns)
+  def view_model(page, %Systems.Test.Model{} = model, assigns) do
+    Builder.view_model(model, page, assigns)
   end
 
-  def view_model(id, page, assigns) when is_binary(id) do
-    Systems.Test.Public.get(id)
-    |> Builder.view_model(page, assigns)
+  def view_model(page, id, assigns) when is_binary(id) do
+    Builder.view_model(Systems.Test.Public.get(id), page, assigns)
   end
 
   def update(Systems.Test.Page = page, model) do

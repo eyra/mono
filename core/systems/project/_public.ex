@@ -1,5 +1,7 @@
 defmodule Systems.Project.Public do
   import Ecto.Query, warn: false
+  import CoreWeb.Gettext
+
   alias Core.Repo
 
   alias Core.Accounts.User
@@ -95,6 +97,31 @@ defmodule Systems.Project.Public do
       preload: ^preload
     )
     |> Repo.all()
+  end
+
+  def exists?(user, name) do
+    list_owned_projects(user)
+    |> Enum.find(&(&1.name == name)) != nil
+  end
+
+  def new_project_name(user) do
+    name = dgettext("eyra-project", "default.name")
+
+    if exists?(user, name) do
+      new_project_name(user, name, 2)
+    else
+      name
+    end
+  end
+
+  def new_project_name(user, name, attempt) do
+    new_name = "#{name} (#{attempt})"
+
+    if exists?(user, new_name) do
+      new_project_name(user, name, attempt + 1)
+    else
+      new_name
+    end
   end
 
   def delete(id) when is_number(id) do
@@ -197,5 +224,14 @@ defmodule Systems.Project.Public do
       |> Enum.map(fn %{id: id} -> id end)
 
     from(u in User, where: u.id in ^owner_ids, preload: ^preload, order_by: u.id) |> Repo.all()
+  end
+end
+
+defimpl Core.Persister, for: Systems.Project.Model do
+  def save(_project, changeset) do
+    case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :project) do
+      {:ok, %{project: project}} -> {:ok, project}
+      _ -> {:error, changeset}
+    end
   end
 end

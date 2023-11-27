@@ -253,3 +253,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "copy.clipboard.button"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submit.button"
+msgstr ""

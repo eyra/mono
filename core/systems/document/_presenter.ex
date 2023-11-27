@@ -6,7 +6,7 @@ defmodule Systems.Document.Presenter do
   }
 
   @impl true
-  def view_model(%Document.ToolModel{} = _tool, _page, _assigns) do
+  def view_model(_page, %Document.ToolModel{} = _tool, _assigns) do
     %{}
   end
 end

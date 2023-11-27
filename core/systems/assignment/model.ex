@@ -89,6 +89,10 @@ defmodule Systems.Assignment.Model do
 
   def tool(_), do: nil
 
+  def tag(%{special: special}) do
+    Assignment.Templates.translate(special)
+  end
+
   def preload_graph(:down) do
     [
       :excluded,

@@ -56,12 +56,15 @@ defmodule Systems.Campaign.Switch do
     if event == :created do
       Campaign.Public.assign_coordinators(campaign)
     else
-      campaign
-      |> Campaign.Presenter.update(promotion_id, Promotion.LandingPage)
-      |> Campaign.Presenter.update(assignment_id, Assignment.LandingPage)
-      |> Campaign.Presenter.update(id, Campaign.ContentPage)
+      update(Promotion.LandingPage, promotion_id, campaign)
+      update(Assignment.LandingPage, assignment_id, campaign)
+      update(Campaign.ContentPage, id, campaign)
     end
   end
 
   defp handle({_, _}, _), do: nil
+
+  def update(page, id, %Campaign.Model{} = campaign) do
+    Signal.Public.dispatch!({:page, page}, %{id: id, model: campaign})
+  end
 end
