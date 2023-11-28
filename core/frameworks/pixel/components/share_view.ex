@@ -1,5 +1,6 @@
 defmodule Frameworks.Pixel.ShareView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
+  use Fabric.LiveComponent
 
   alias CoreWeb.UI.UserListItem
 
@@ -55,7 +56,7 @@ defmodule Frameworks.Pixel.ShareView do
         socket
         |> assign(shared_users: [user] ++ shared_users)
         |> filter_users()
-        |> update_parent(%{add: user, content_id: content_id})
+        |> send_event(:parent, "add_user", %{user: user, content_id: content_id})
       else
         socket
       end
@@ -74,7 +75,7 @@ defmodule Frameworks.Pixel.ShareView do
         socket
         |> assign(shared_users: shared_users |> List.delete(user))
         |> filter_users()
-        |> update_parent(%{remove: user, content_id: content_id})
+        |> send_event(:parent, "remove_user", %{user: user, content_id: content_id})
       else
         socket
       end
@@ -83,27 +84,14 @@ defmodule Frameworks.Pixel.ShareView do
 
   @impl true
   def handle_event("close", _unsigned_params, socket) do
-    {:noreply, update_parent(socket, :close)}
+    {:noreply, socket |> send_event(:parent, "finish")}
   end
-
-  defp update_parent(socket, message) do
-    send(self(), %{module: __MODULE__, action: message})
-    socket
-  end
-
-  # data(filtered_users, :list)
-  # data(close_button, :map)
-
-  attr(:content_id, :integer, required: true)
-  attr(:content_name, :string, required: true)
-  attr(:group_name, :string, required: true)
-  attr(:users, :list, required: true)
-  attr(:shared_users, :list)
 
   @impl true
   def render(assigns) do
     ~H"""
     <div class="">
+      <Frameworks.Pixel.Panel.flat>
       <div class="flex flex-row">
         <div class="flex-grow">
           <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
@@ -153,6 +141,7 @@ defmodule Frameworks.Pixel.ShareView do
           <% end %>
         </div>
       </div>
+      </Frameworks.Pixel.Panel.flat>
     </div>
     """
   end

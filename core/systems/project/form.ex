@@ -1,5 +1,6 @@
 defmodule Systems.Project.Form do
-  use CoreWeb.LiveForm
+  use CoreWeb.LiveForm, :fabric
+  use Fabric.LiveComponent
 
   import CoreWeb.UI.Dialog
 
@@ -10,7 +11,7 @@ defmodule Systems.Project.Form do
   # Handle initial update
   @impl true
   def update(
-        %{id: id, project: project, target: target},
+        %{id: id, project: project},
         socket
       ) do
     changeset = Project.Model.changeset(project, %{})
@@ -21,7 +22,6 @@ defmodule Systems.Project.Form do
       |> assign(
         id: id,
         project: project,
-        target: target,
         changeset: changeset,
         show_errors: false
       )
@@ -96,8 +96,7 @@ defmodule Systems.Project.Form do
   end
 
   defp finish(socket) do
-    send(self(), %{module: __MODULE__, action: :close})
-    socket
+    socket |> send_event(:parent, "finish")
   end
 
   @impl true

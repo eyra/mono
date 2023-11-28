@@ -1,5 +1,6 @@
 defmodule Systems.Project.OverviewPage do
-  use CoreWeb, :live_view
+  use CoreWeb, :live_view_fabric
+  use Fabric.LiveView, CoreWeb.Layouts
   use CoreWeb.Layouts.Workspace.Component, :projects
   use CoreWeb.UI.PlainDialog
   use Systems.Observatory.Public
@@ -17,6 +18,7 @@ defmodule Systems.Project.OverviewPage do
     Project
   }
 
+  @impl true
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
     {
       :ok,
@@ -41,6 +43,51 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
+  def compose(:project_form, %{active_project: project_id, vm: %{projects: projects}}) do
+    project = Enum.find(projects, &(&1.id == String.to_integer(project_id)))
+
+    %{
+      module: Project.Form,
+      params: %{
+        project: project
+      }
+    }
+  end
+
+  @impl true
+  def compose(:share_view, %{active_project: project_id, current_user: user}) do
+    researchers =
+      Core.Accounts.list_researchers([:profile])
+      # filter current user
+      |> Enum.filter(&(&1.id != user.id))
+
+    owners =
+      project_id
+      |> String.to_integer()
+      |> Project.Public.get!()
+      |> Project.Public.list_owners([:profile])
+      # filter current user
+      |> Enum.filter(&(&1.id != user.id))
+
+    %{
+      module: ShareView,
+      params: %{
+        content_id: project_id,
+        content_name: dgettext("eyra-project", "share.dialog.content"),
+        group_name: dgettext("eyra-project", "share.dialog.group"),
+        users: researchers,
+        shared_users: owners
+      }
+    }
+  end
+
+  @impl true
+  def handle_event("show_popup", %{ref: %{id: id, module: module}, params: params}, socket) do
+    popup = %{module: module, props: Map.put(params, :id, id)}
+    {:noreply, socket |> assign(popup: popup)}
+  end
+
+  @impl true
   def handle_event(
         "card_clicked",
         %{"item" => card_id},
@@ -55,17 +102,15 @@ defmodule Systems.Project.OverviewPage do
   def handle_event(
         "edit",
         %{"item" => project_id},
-        %{assigns: %{vm: %{projects: projects}}} = socket
+        socket
       ) do
-    project = Enum.find(projects, &(&1.id == String.to_integer(project_id)))
-
-    popup = %{
-      module: Project.Form,
-      project: project,
-      target: self()
+    {
+      :noreply,
+      socket
+      |> assign(active_project: project_id)
+      |> compose_child(:project_form)
+      |> show_popup(:project_form)
     }
-
-    {:noreply, assign(socket, popup: popup)}
   end
 
   @impl true
@@ -105,32 +150,13 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_event("share", %{"item" => project_id}, %{assigns: %{current_user: user}} = socket) do
-    researchers =
-      Core.Accounts.list_researchers([:profile])
-      # filter current user
-      |> Enum.filter(&(&1.id != user.id))
-
-    owners =
-      project_id
-      |> String.to_integer()
-      |> Project.Public.get!()
-      |> Project.Public.list_owners([:profile])
-      # filter current user
-      |> Enum.filter(&(&1.id != user.id))
-
-    popup = %{
-      module: ShareView,
-      content_id: project_id,
-      content_name: dgettext("eyra-project", "share.dialog.content"),
-      group_name: dgettext("eyra-project", "share.dialog.group"),
-      users: researchers,
-      shared_users: owners
-    }
-
+  def handle_event("share", %{"item" => project_id}, socket) do
     {
       :noreply,
-      socket |> assign(popup: popup)
+      socket
+      |> assign(active_project: project_id)
+      |> compose_child(:share_view)
+      |> show_popup(:share_view)
     }
   end
 
@@ -145,6 +171,29 @@ defmodule Systems.Project.OverviewPage do
       socket
       |> update_view_model()
     }
+  end
+
+  @impl true
+  def handle_event("add_user", %{user: user, content_id: project_id}, socket) do
+    project_id
+    |> Project.Public.get!()
+    |> Project.Public.add_owner!(user)
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("remove_user", %{user: user, content_id: project_id}, socket) do
+    project_id
+    |> Project.Public.get!()
+    |> Project.Public.remove_owner!(user)
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("finish", _, socket) do
+    {:noreply, socket |> assign(popup: nil)}
   end
 
   @impl true
@@ -173,47 +222,6 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_info(%{module: _, action: :close}, socket) do
-    {
-      :noreply,
-      socket
-      |> assign(popup: nil)
-    }
-  end
-
-  @impl true
-  def handle_info(
-        %{module: Systems.Project.CreatePopup, action: %{redirect_to: node_id}},
-        socket
-      ) do
-    {:noreply, push_redirect(socket, to: ~p"/project/node/#{node_id}")}
-  end
-
-  @impl true
-  def handle_info(
-        %{module: Frameworks.Pixel.ShareView, action: %{add: user, content_id: project_id}},
-        socket
-      ) do
-    project_id
-    |> Project.Public.get!()
-    |> Project.Public.add_owner!(user)
-
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_info(
-        %{module: Frameworks.Pixel.ShareView, action: %{remove: user, content_id: project_id}},
-        socket
-      ) do
-    project_id
-    |> Project.Public.get!()
-    |> Project.Public.remove_owner!(user)
-
-    {:noreply, socket}
-  end
-
-  @impl true
   def render(assigns) do
     ~H"""
     <.workspace title={dgettext("eyra-project", "overview.title")} menus={@menus}>
@@ -221,7 +229,7 @@ defmodule Systems.Project.OverviewPage do
       <%= if @popup do %>
         <.popup>
           <div class="mx-10 w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg">
-            <.live_component id={:project_overview_popup} module={@popup.module} {@popup} />
+            <.live_component id={:project_overview_popup} module={@popup.module} {@popup.props} />
           </div>
         </.popup>
       <% end %>
