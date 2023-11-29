@@ -71,7 +71,7 @@ defmodule Frameworks.Pixel.Image do
     ~H"""
     <div
       id={"clickable-area-#{@index}"}
-      class={"relative bg-grey5 h-full ring-4 hover:ring-primary hover:border-0 cursor-pointer rounded overflow-hidden #{if @selected do "ring-primary" else "ring-white border-grey5 border-2" end}"}
+      class={"relative bg-grey5 h-full outline outline-4 hover:outline-primary cursor-pointer rounded overflow-hidden #{if @selected do "outline-primary" else "outline-grey5" end}"}
       phx-click="select_image"
       phx-value-image={@id}
       phx-target={@target}
