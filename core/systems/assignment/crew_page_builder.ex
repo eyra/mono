@@ -8,7 +8,8 @@ defmodule Systems.Assignment.CrewPageBuilder do
 
   def view_model(assignment, assigns) do
     %{
-      flow: flow(assignment, assigns)
+      flow: flow(assignment, assigns),
+      info: assignment.info
     }
   end
 

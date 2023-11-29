@@ -26,9 +26,9 @@ defmodule Systems.Assignment.Switch do
   end
 
   @impl true
-  def intercept({:assignment_info, _} = signal, %{info: info} = message) do
+  def intercept({:assignment_info, _} = signal, %{assignment_info: info} = message) do
     if assignment = Assignment.Public.get_by(info, Assignment.Model.preload_graph(:down)) do
-      handle(
+      dispatch!(
         {:assignment, signal},
         Map.merge(message, %{assignment: assignment})
       )

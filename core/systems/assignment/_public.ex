@@ -627,3 +627,12 @@ defimpl Core.Persister, for: Systems.Assignment.Model do
     end
   end
 end
+
+defimpl Core.Persister, for: Systems.Assignment.InfoModel do
+  def save(_info, changeset) do
+    case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :assignment_info) do
+      {:ok, %{assignment_info: assignment_info}} -> {:ok, assignment_info}
+      _ -> {:error, changeset}
+    end
+  end
+end

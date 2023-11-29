@@ -49,6 +49,7 @@ defmodule CoreWeb.Layouts.Stripped.Component do
   attr(:menus, :map, required: true)
   attr(:footer?, :boolean, default: true)
 
+  slot(:header)
   slot(:inner_block, required: true)
 
   def stripped(assigns) do
@@ -66,6 +67,7 @@ defmodule CoreWeb.Layouts.Stripped.Component do
             </div>
           <div class="flex-1">
             <div class="flex flex-col h-full border-t border-l border-b border-grey4">
+              <%= render_slot(@header) %>
               <%= if @title do %>
                 <div class="flex-none">
                   <Hero.small title={@title} />

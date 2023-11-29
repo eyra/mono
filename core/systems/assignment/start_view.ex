@@ -70,7 +70,7 @@ defmodule Systems.Assignment.StartView do
   @impl true
   def render(assigns) do
     ~H"""
-      <div class="w-full h-full pl-16 pb-16 pr-16">
+      <div class="w-full h-full">
         <Align.horizontal_center>
         <Area.sheet>
           <div class="flex flex-col gap-8 items-center">

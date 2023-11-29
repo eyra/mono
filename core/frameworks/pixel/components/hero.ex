@@ -7,6 +7,8 @@ defmodule Frameworks.Pixel.Hero do
   alias Frameworks.Pixel.Icon
   alias Frameworks.Pixel.Image
 
+  import Frameworks.Pixel.ImagePreview
+
   attr(:title, :string, required: true)
   attr(:illustration, :string, default: "/images/illustration.svg")
   attr(:text_color, :string, default: "text-white")
@@ -65,24 +67,42 @@ defmodule Frameworks.Pixel.Hero do
   attr(:title, :string, required: true)
   attr(:subtitle, :string, required: true)
   attr(:image_info, :any, required: true)
+  attr(:logo_url, :string, default: nil)
   attr(:text_color, :string, default: "text-white")
   slot(:call_to_action)
 
   def image(assigns) do
     ~H"""
-    <div class="w-full" data-native-title={@title}>
-      <div class="relative overflow-hidden w-full h-image-header sm:h-image-header-sm bg-grey4">
+    <div class="w-full h-full" data-native-title={@title}>
+      <div class="relative overflow-hidden w-full h-full bg-grey4">
         <%= if @image_info do %>
-          <Image.blurhash id="hero" {@image_info} transition="duration-1000" />
+          <Image.blurhash id="hero" image={@image_info} transition="duration-1000" />
         <% end %>
-        <div class="absolute z-20 top-0 left-0 w-full h-full flex items-center  bg-opacity-20 bg-black">
-          <div class="ml-6 mr-6 sm:ml-20 sm:mr-20 text-shadow-md flex-wrap">
-            <Text.title0 color="text-white"><%= @title %></Text.title0>
-            <.spacing value="S" />
-            <Text.title4 color="text-white"><%= @subtitle %></Text.title4>
-            <.spacing value="S" />
-            <div>
-              <%= render_slot(@call_to_action) %>
+        <div class="absolute z-20 top-0 left-0 w-full h-full bg-opacity-20 bg-black">
+          <div class="ml-6 mr-6 sm:ml-20 sm:mr-20 text-shadow-md h-full">
+            <div class="flex flex-col gap-2 h-full">
+              <div class="flex-grow" />
+              <div class="flex flex-row gap-12">
+                <%= if @logo_url do %>
+                <div>
+                  <.image_preview
+                    image_url={@logo_url}
+                    placeholder={"/images/logo_placeholder.svg"}
+                    shape="w-[96px] h-[96px] rounded-full"
+                  />
+                </div>
+                <% end %>
+                <div class="flex flex-col gap-2">
+                  <div class="flex-grow" />
+                  <Text.title2 margin="" color="text-white"><%= @title %></Text.title2>
+                  <Text.title6 margin="" color="text-white"><%= @subtitle %></Text.title6>
+                  <div class="flex-grow" />
+                </div>
+              </div>
+              <div>
+                <%= render_slot(@call_to_action) %>
+              </div>
+              <div class="flex-grow" />
             </div>
           </div>
         </div>
