@@ -46,13 +46,13 @@ defmodule Systems.Assignment.AssignmentForm do
     callback_url = uri_origin <> callback_path
 
     [
-      %{
-        live_component: Assignment.InfoForm,
-        props: %{
-          id: :info_form,
-          entity: info
-        }
-      },
+      # %{
+      #   live_component: Assignment.InfoForm,
+      #   props: %{
+      #     id: :info_form,
+      #     entity: info
+      #   }
+      # },
       %{
         live_component: tool_form,
         props: %{

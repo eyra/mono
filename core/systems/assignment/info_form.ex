@@ -1,54 +1,28 @@
 defmodule Systems.Assignment.InfoForm do
-  use CoreWeb.LiveForm
-  use Frameworks.Pixel.Form.CheckboxHelpers
+  use CoreWeb.LiveForm, :fabric
+  use Fabric.LiveComponent
+  use CoreWeb.FileUploader, ~w(.png .jpg .jpeg .svg)
 
-  alias Core.Enums.Devices
-
-  # import Frameworks.Pixel.Form
-  # alias Frameworks.Pixel.Selector
+  import Core.ImageCatalog, only: [image_catalog: 0]
+  import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Text
+  alias Core.ImageHelpers
+  alias Frameworks.Pixel.Image
+  alias CoreWeb.UI.ImageCatalogPicker
 
-  alias Systems.{
-    Assignment
-  }
-
-  # Handle selector update
+  alias Systems.Assignment
 
   @impl true
-  def update(
-        %{active_item_id: active_item_id, selector_id: :language},
-        %{assigns: %{entity: entity}} = socket
+  def process_file(
+        %{assigns: %{entity: entity}} = socket,
+        {local_relative_path, _local_full_path, _remote_file}
       ) do
-    language =
-      case active_item_id do
-        nil -> nil
-        item when is_atom(item) -> Atom.to_string(item)
-        _ -> active_item_id
-      end
-
-    {
-      :ok,
-      socket
-      |> save(entity, :auto_save, %{language: language})
-    }
+    save(socket, entity, :auto_save, %{logo_url: local_relative_path})
   end
 
   @impl true
   def update(
-        %{active_item_ids: active_item_ids, selector_id: selector_id},
-        %{assigns: %{entity: entity}} = socket
-      ) do
-    {
-      :ok,
-      socket
-      |> save(entity, :auto_save, %{selector_id => active_item_ids})
-    }
-  end
-
-  # Handle initial update
-  @impl true
-  def update(
-        %{id: id, entity: entity},
+        %{id: id, entity: entity, viewport: viewport, breakpoint: breakpoint},
         socket
       ) do
     changeset = Assignment.InfoModel.changeset(entity, :create, %{})
@@ -59,25 +33,84 @@ defmodule Systems.Assignment.InfoForm do
       |> assign(
         id: id,
         entity: entity,
-        changeset: changeset
+        changeset: changeset,
+        viewport: viewport,
+        breakpoint: breakpoint
       )
-      |> update_device_labels()
-      |> update_language_labels()
-      |> validate_for_publish()
+      |> update_image_info()
+      |> update_image_picker_button()
+      |> init_file_uploader(:photo)
     }
   end
 
-  defp update_device_labels(%{assigns: %{entity: %{devices: devices}}} = socket) do
-    device_labels = Devices.labels(devices)
-    socket |> assign(device_labels: device_labels)
+  @impl true
+  def compose(:image_picker, %{
+        entity: %{title: title},
+        viewport: viewport,
+        breakpoint: breakpoint
+      }) do
+    %{
+      module: ImageCatalogPicker,
+      params: %{
+        viewport: viewport,
+        breakpoint: breakpoint,
+        static_path: &CoreWeb.Endpoint.static_path/1,
+        initial_query: title,
+        image_catalog: image_catalog()
+      }
+    }
   end
 
-  defp update_language_labels(%{assigns: %{entity: %{language: language}}} = socket) do
-    language_labels = Assignment.OnlineStudyLanguages.labels(language)
-    socket |> assign(language_labels: language_labels)
+  defp update_image_info(%{assigns: %{entity: %{image_id: image_id}}} = socket) do
+    image_info = ImageHelpers.get_image_info(image_id, 400, 300)
+    socket |> assign(image_info: image_info)
+  end
+
+  defp update_image_picker_button(%{assigns: %{myself: myself}} = socket) do
+    image_picker_button = %{
+      action: %{type: :send, event: "open_image_picker", target: myself},
+      face: %{
+        type: :secondary,
+        text_color: "text-primary",
+        label: dgettext("eyra-assignment", "search.different.image.button")
+      }
+    }
+
+    socket |> assign(image_picker_button: image_picker_button)
   end
 
   # Handle Events
+
+  @impl true
+  def handle_event("open_image_picker", _, socket) do
+    {
+      :noreply,
+      socket
+      |> compose_child(:image_picker)
+      |> show_popup(:image_picker)
+    }
+  end
+
+  @impl true
+  def handle_event(
+        "finish",
+        %{image_id: _image_id} = attrs,
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    {
+      :noreply,
+      socket
+      |> save(entity, :auto_save, attrs)
+      |> update_image_info()
+      |> hide_popup(:image_picker)
+    }
+  end
+
+  @impl true
+  def handle_event("finish", _, socket) do
+    {:noreply, socket |> hide_popup(:image_picker)}
+  end
+
   @impl true
   def handle_event("save", %{"info_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
@@ -94,70 +127,37 @@ defmodule Systems.Assignment.InfoForm do
 
     socket
     |> save(changeset)
-    |> update_device_labels()
-    |> update_language_labels()
-    |> validate_for_publish()
-  end
-
-  # Validate
-
-  def validate_for_publish(%{assigns: %{id: id, entity: entity}} = socket) do
-    changeset =
-      Assignment.InfoModel.operational_changeset(entity, %{})
-      |> Map.put(:action, :validate_for_publish)
-
-    send(self(), %{id: id, ready?: changeset.valid?})
-
-    socket
-    |> assign(changeset: changeset)
   end
 
   @impl true
   def render(assigns) do
     ~H"""
     <div>
-      <Area.content>
-        <Margin.y id={:page_top} />
-        <Text.title2><%= dgettext("eyra-assignment", "form.title")  %></Text.title2>
-
-        <%!-- <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
-          <.number_input
-            form={form}
-            field={:duration}
-            label_text={dgettext("eyra-assignment", "duration.label")}
-          />
+        <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
+          <Text.title3><%= dgettext("eyra-assignment", "settings.branding.title") %></Text.title3>
+          <Text.body><%= dgettext("eyra-assignment", "settings.branding.text") %></Text.body>
           <.spacing value="M" />
-
-          <.number_input
-            form={form}
-            field={:subject_count}
-            label_text={dgettext("eyra-assignment", "config.nrofsubjects.label")}
-          />
-          <.spacing value="M" />
-
-          <Text.title3><%= dgettext("eyra-assignment", "language.title") %></Text.title3>
-          <Text.body><%= dgettext("eyra-assignment", "languages.label") %></Text.body>
+          <.text_input form={form} field={:title} label_text={dgettext("eyra-assignment", "settings.title.label")} />
+          <.text_input form={form} field={:subtitle} label_text={dgettext("eyra-assignment", "settings.subtitle.label")} />
           <.spacing value="S" />
-          <.live_component
-            module={Selector}
-            id={:language}
-            items={@language_labels}
-            type={:radio}
-            parent={%{type: __MODULE__, id: @id}}
+          <Text.title5 align="text-left"><%= dgettext("eyra-assignment", "settings.logo.title") %></Text.title5>
+          <.spacing value="XS" />
+          <.photo_input
+            static_path={&CoreWeb.Endpoint.static_path/1}
+            photo_url={@entity.logo_url}
+            uploads={@uploads}
+            primary_button_text={dgettext("eyra-assignment", "choose.logo.file")}
+            secondary_button_text={dgettext("eyra-assignment", "choose.other.logo.file")}
+            placeholder="logo_placeholder"
           />
-          <.spacing value="XL" />
-
-          <Text.title3><%= dgettext("eyra-assignment", "devices.title") %></Text.title3>
-          <Text.body><%= dgettext("eyra-assignment", "devices.label") %></Text.body>
-          <.spacing value="S" />
-          <.live_component
-              module={Selector}
-              id={:devices}
-              type={:label}
-              items={@device_labels}
-              parent={%{type: __MODULE__, id: @id}} />
-        </.form> --%>
-      </Area.content>
+          <.spacing value="L" />
+          <Text.title5 align="text-left"><%= dgettext("eyra-assignment", "settings.image.title") %></Text.title5>
+          <.spacing value="XS" />
+          <div class="flex flex-row gap-4">
+            <Image.preview image_url={@image_info.url} placeholder="" />
+            <Button.dynamic {@image_picker_button} />
+          </div>
+        </.form>
     </div>
     """
   end

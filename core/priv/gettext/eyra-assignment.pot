@@ -181,3 +181,39 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "settings.consent.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.subtitle.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.title.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.image.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "search.different.image.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "choose.logo.file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "choose.other.logo.file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.logo.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.branding.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.branding.title"
+msgstr ""

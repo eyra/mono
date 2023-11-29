@@ -1,22 +1,34 @@
 defmodule CoreWeb.UI.ImageCatalogPicker.Test.View do
-  use Phoenix.LiveView
+  use Fabric.LiveView, CoreWeb.Layouts
   alias CoreWeb.UI.ImageCatalogPicker
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    {
+      :ok,
+      socket |> compose_child(:image_picker)
+    }
+  end
+
+  @impl true
+  def compose(:image_picker, _) do
+    %{
+      module: ImageCatalogPicker,
+      params: %{
+        viewport: nil,
+        breakpoint: nil,
+        static_path: &CoreWeb.Endpoint.static_path/1,
+        image_catalog: Core.ImageCatalog.Local,
+        initial_query: ""
+      }
+    }
   end
 
   @impl true
   def render(assigns) do
     ~H"""
     <div>
-      <.live_component
-        module={ImageCatalogPicker}
-        id="picker"
-        image_catalog={Core.ImageCatalog.Local}
-        static_path={&CoreWeb.Endpoint.static_path/1}
-      />
+      <.child id={:image_picker} fabric={@fabric} />
     </div>
     """
   end

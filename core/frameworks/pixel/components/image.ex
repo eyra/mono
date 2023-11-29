@@ -62,6 +62,7 @@ defmodule Frameworks.Pixel.Image do
   attr(:srcset, :string, required: true)
   attr(:index, :string, required: true)
   attr(:target, :string, default: "")
+  attr(:selected, :boolean, default: false)
 
   @doc """
   An image that can be used in an image grid.
@@ -70,25 +71,21 @@ defmodule Frameworks.Pixel.Image do
     ~H"""
     <div
       id={"clickable-area-#{@index}"}
-      class="relative bg-grey4 ring-4 hover:ring-primary cursor-pointer rounded overflow-hidden"
-      x-bind:class={"{ 'ring-primary': selected === #{@index}, 'ring-white': selected != #{@index} }"}
-      x-on:click={"selected = #{@index}"}
+      class={"relative bg-grey5 h-full ring-4 hover:ring-primary hover:border-0 cursor-pointer rounded overflow-hidden #{if @selected do "ring-primary" else "ring-white border-grey5 border-2" end}"}
       phx-click="select_image"
       phx-value-image={@id}
       phx-target={@target}
     >
       <div
-        class="absolute z-10 w-full h-full bg-primary bg-opacity-50"
-        x-bind:class={"{ 'visible': selected === #{@index}, 'invisible': selected != #{@index} }"}
+        class={"absolute z-10 w-full h-full bg-primary bg-opacity-50 #{if @selected do "visible" else "invisible" end}"}
       />
       <div
-        class="absolute z-20 w-full h-full"
-        x-bind:class={"{ 'visible': selected === #{@index}, 'invisible': selected != #{@index} }"}
+        class={"absolute z-20 w-full h-full #{if @selected do "visible" else "invisible" end}"}
       >
         <img class="w-full h-full object-none" src="/images/checkmark.svg" alt="">
       </div>
       <div class="w-full h-full">
-        <img class="object-cover w-full h-full image" src={@url} srcset={@srcset}>
+        <img id={@id} class="object-cover w-full h-full image" src={@url} srcset={@srcset}>
       </div>
     </div>
     """

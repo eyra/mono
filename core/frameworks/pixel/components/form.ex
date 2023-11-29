@@ -461,6 +461,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:uploads, :any, required: true)
   attr(:primary_button_text, :string, required: true)
   attr(:secondary_button_text, :string, required: true)
+  attr(:placeholder, :string, default: "profile_photo_default")
 
   def photo_input(assigns) do
     ~H"""
@@ -470,7 +471,7 @@ defmodule Frameworks.Pixel.Form do
     <div class="flex flex-row items-center">
       <.image_preview
         image_url={@photo_url}
-        placeholder={@static_path.("/images/profile_photo_default.svg")}
+        placeholder={"/images/#{@placeholder}.svg"}
         shape="w-image-preview-circle sm:w-image-preview-circle-sm h-image-preview-circle sm:h-image-preview-circle-sm rounded-full"
       />
       <.spacing value="S" direction="l" />

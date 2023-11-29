@@ -32,4 +32,17 @@ defmodule CoreWeb.UI.Dialog do
     </div>
     """
   end
+
+  def form_dialog_buttons(target) do
+    [
+      %{
+        action: %{type: :send, target: target, event: "submit"},
+        face: %{type: :primary, label: dgettext("eyra-ui", "submit.button")}
+      },
+      %{
+        action: %{type: :send, target: target, event: "cancel"},
+        face: %{type: :label, label: dgettext("eyra-ui", "cancel.button")}
+      }
+    ]
+  end
 end

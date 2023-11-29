@@ -11,6 +11,11 @@ defmodule Systems.Assignment.InfoModel do
   }
 
   schema "assignment_info" do
+    field(:title, :string)
+    field(:subtitle, :string)
+    field(:image_id, :string)
+    field(:logo_url, :string)
+
     field(:subject_count, :integer)
     field(:duration, :string)
     field(:language, :string)
@@ -23,8 +28,8 @@ defmodule Systems.Assignment.InfoModel do
     timestamps()
   end
 
-  @operational_fields ~w(subject_count duration ethical_code ethical_approval devices)a
-  @fields @operational_fields ++ ~w(language)a
+  @operational_fields ~w(title subtitle subject_count duration ethical_code ethical_approval devices)a
+  @fields @operational_fields ++ ~w(image_id logo_url language)a
 
   @required_fields ~w()a
 
@@ -43,14 +48,14 @@ defmodule Systems.Assignment.InfoModel do
     end
   end
 
-  def changeset(tool, :auto_save, params) do
-    tool
+  def changeset(info, :auto_save, params) do
+    info
     |> cast(params, @fields)
     |> validate_required(@required_fields)
   end
 
-  def changeset(tool, _, params) do
-    tool
+  def changeset(info, _, params) do
+    info
     |> cast(params, @fields)
   end
 

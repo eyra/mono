@@ -181,3 +181,39 @@ msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.title"
 msgstr "Toestemming"
+
+#, elixir-autogen, elixir-format
+msgid "settings.subtitle.label"
+msgstr "Ondertitel"
+
+#, elixir-autogen, elixir-format
+msgid "settings.title.label"
+msgstr "Titel"
+
+#, elixir-autogen, elixir-format
+msgid "settings.image.title"
+msgstr "Omslagafbeelding"
+
+#, elixir-autogen, elixir-format
+msgid "search.different.image.button"
+msgstr "Verander afbeelding"
+
+#, elixir-autogen, elixir-format
+msgid "choose.logo.file"
+msgstr "Kies afbeelding"
+
+#, elixir-autogen, elixir-format
+msgid "choose.other.logo.file"
+msgstr "Kies andere afbeelding"
+
+#, elixir-autogen, elixir-format
+msgid "settings.logo.title"
+msgstr "Logo"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.branding.text"
+msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.branding.title"
+msgstr "Branding"

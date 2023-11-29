@@ -257,3 +257,7 @@ msgstr "Copy"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submit.button"
 msgstr "Save"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "save.button"
+msgstr "Save"
