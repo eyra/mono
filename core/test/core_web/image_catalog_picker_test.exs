@@ -19,7 +19,8 @@ defmodule CoreWeb.UI.ImageCatalogPicker.Test.View do
         breakpoint: nil,
         static_path: &CoreWeb.Endpoint.static_path/1,
         image_catalog: Core.ImageCatalog.Local,
-        initial_query: ""
+        initial_query: "",
+        state: nil
       }
     }
   end

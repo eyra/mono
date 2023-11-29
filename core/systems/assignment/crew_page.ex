@@ -56,11 +56,6 @@ defmodule Systems.Assignment.CrewPage do
     |> update_menus()
   end
 
-  defp update_image_info(%{assigns: %{vm: %{info: %{image_id: nil}}}} = socket) do
-    socket
-    |> assign(image_info: nil)
-  end
-
   defp update_image_info(
          %{assigns: %{viewport: %{"width" => viewport_width}, vm: %{info: %{image_id: image_id}}}} =
            socket

@@ -32,7 +32,6 @@ import { Tabbar, TabbarItem, TabbarFooterItem } from "./tabbar";
 import { Clipboard } from "./clipboard";
 import { FeldsparApp } from "./feldspar_app";
 import { Wysiwyg } from "./wysiwyg";
-import { ImageCatalogPicker } from "./image_catalog_picker";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -106,7 +105,6 @@ let Hooks = {
   NativeWrapper,
   FeldsparApp,
   Wysiwyg,
-  ImageCatalogPicker,
 };
 
 let liveSocket = new LiveSocket("/live", Socket, {

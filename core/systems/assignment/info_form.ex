@@ -37,6 +37,7 @@ defmodule Systems.Assignment.InfoForm do
         viewport: viewport,
         breakpoint: breakpoint
       )
+      |> update_image_picker_state()
       |> update_image_info()
       |> update_image_picker_button()
       |> init_file_uploader(:photo)
@@ -47,7 +48,8 @@ defmodule Systems.Assignment.InfoForm do
   def compose(:image_picker, %{
         entity: %{title: title},
         viewport: viewport,
-        breakpoint: breakpoint
+        breakpoint: breakpoint,
+        image_picker_state: state
       }) do
     %{
       module: ImageCatalogPicker,
@@ -56,9 +58,18 @@ defmodule Systems.Assignment.InfoForm do
         breakpoint: breakpoint,
         static_path: &CoreWeb.Endpoint.static_path/1,
         initial_query: title,
-        image_catalog: image_catalog()
+        image_catalog: image_catalog(),
+        state: state
       }
     }
+  end
+
+  defp update_image_picker_state(%{assigns: %{image_picker_state: %{}}} = socket) do
+    socket
+  end
+
+  defp update_image_picker_state(socket) do
+    socket |> assign(image_picker_state: nil)
   end
 
   defp update_image_info(%{assigns: %{entity: %{image_id: image_id}}} = socket) do
@@ -94,13 +105,14 @@ defmodule Systems.Assignment.InfoForm do
   @impl true
   def handle_event(
         "finish",
-        %{image_id: _image_id} = attrs,
+        %{image_id: image_id, state: state},
         %{assigns: %{entity: entity}} = socket
       ) do
     {
       :noreply,
       socket
-      |> save(entity, :auto_save, attrs)
+      |> assign(image_picker_state: state)
+      |> save(entity, :auto_save, %{image_id: image_id})
       |> update_image_info()
       |> hide_popup(:image_picker)
     }

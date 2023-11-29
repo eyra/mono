@@ -61,26 +61,47 @@ defmodule CoreWeb.UI.ImageCatalogPicker do
           id: id,
           static_path: static_path,
           image_catalog: image_catalog,
-          initial_query: initial_query
+          state: state
         } = props,
         socket
       ) do
     {
       :ok,
       socket
+      |> update_defaults(props, @defaults)
+      |> update_state(state)
       |> assign(
         id: id,
         static_path: static_path,
-        image_catalog: image_catalog,
-        initial_query: initial_query,
-        selected_page: 1,
-        selected_image: nil
+        image_catalog: image_catalog
       )
-      |> update_defaults(props, @defaults)
       |> update_title()
       |> update_buttons()
       |> initial_search()
     }
+  end
+
+  def update_state(%{} = socket, nil) do
+    socket
+    |> assign(
+      query: nil,
+      selected_page: 1,
+      selected_image: nil
+    )
+  end
+
+  def update_state(%{} = socket, %{
+        query: query,
+        selected_page: selected_page,
+        selected_image: selected_image
+      }) do
+    socket
+    |> assign(
+      initial_query: query,
+      query: query,
+      selected_page: selected_page,
+      selected_image: selected_image
+    )
   end
 
   defp initial_search(%{assigns: %{initial_query: nil}} = socket) do
@@ -92,12 +113,18 @@ defmodule CoreWeb.UI.ImageCatalogPicker do
   end
 
   defp initial_search(
-         %{assigns: %{initial_query: initial_query, image_catalog: image_catalog}} = socket
+         %{
+           assigns: %{
+             initial_query: initial_query,
+             image_catalog: image_catalog,
+             selected_page: selected_page
+           }
+         } = socket
        ) do
     {:noreply, socket} =
       socket
-      |> assign(selected_page: 1)
-      |> search(initial_query, image_catalog, 1)
+      |> assign(selected_page: selected_page)
+      |> search(initial_query, image_catalog, selected_page)
 
     socket
   end
@@ -138,8 +165,18 @@ defmodule CoreWeb.UI.ImageCatalogPicker do
   end
 
   @impl true
-  def handle_event("submit", _payload, %{assigns: %{selected_image: selected_image}} = socket) do
-    {:noreply, socket |> send_event(:parent, "finish", %{image_id: selected_image})}
+  def handle_event(
+        "submit",
+        _payload,
+        %{assigns: %{query: query, selected_page: selected_page, selected_image: selected_image}} =
+          socket
+      ) do
+    {:noreply,
+     socket
+     |> send_event(:parent, "finish", %{
+       image_id: selected_image,
+       state: %{query: query, selected_page: selected_page, selected_image: selected_image}
+     })}
   end
 
   @impl true
