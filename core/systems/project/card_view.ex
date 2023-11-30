@@ -4,6 +4,7 @@ defmodule Systems.Project.CardView do
   import Frameworks.Pixel.Tag
   import Frameworks.Pixel.ClickableCard
   alias Frameworks.Pixel.Card
+  alias Frameworks.Pixel.Image
 
   attr(:card, :map, required: true)
 
@@ -57,6 +58,8 @@ defmodule Systems.Project.CardView do
   attr(:title, :string, required: true)
   attr(:label, :map, required: true)
   attr(:tags, :list, default: [])
+  attr(:image_info, :map, default: nil)
+  attr(:icon_url, :string, default: nil)
 
   attr(:bg_color, :string, default: "grey1")
   attr(:text_color, :string, default: "text-white")
@@ -77,12 +80,30 @@ defmodule Systems.Project.CardView do
         right_actions={@right_actions}
       >
         <:top>
-          <%= if @label do %>
-          <div>
-            <.spacing value="S" />
-            <Card.label {@label} />
+          <div class="relative">
+            <%= if @label do %>
+              <div class={"#{if @image_info do "absolute top-6 z-10" else "mt-6" end}"}>
+                <Card.label {@label} />
+              </div>
+            <% end %>
+
+            <%= if @icon_url do %>
+              <div class="absolute top-6 right-6 z-10">
+                <Icon.card url={@icon_url} />
+              </div>
+            <% end %>
+
+            <%= if @image_info do %>
+              <div class="h-image-card">
+                <Image.blurhash
+                  id={Integer.to_string(@id)}
+                  image={@image_info}
+                  transition="duration-500"
+                  corners="rounded-t-lg"
+                />
+              </div>
+            <% end %>
           </div>
-          <% end %>
         </:top>
 
         <:title>
