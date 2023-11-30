@@ -228,7 +228,7 @@ defmodule Systems.Project.OverviewPage do
 
       <%= if @popup do %>
         <.popup>
-          <div class="mx-10 w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg">
+          <div class="w-popup-md">
             <.live_component id={:project_overview_popup} module={@popup.module} {@popup.props} />
           </div>
         </.popup>

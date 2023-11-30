@@ -1,5 +1,8 @@
 defmodule Systems.Project.CreateItemPopup do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
+  use Fabric.LiveComponent
+
+  import CoreWeb.UI.Dialog
 
   alias Frameworks.Pixel.Selector
 
@@ -24,13 +27,13 @@ defmodule Systems.Project.CreateItemPopup do
 
   # Initial Update
   @impl true
-  def update(%{id: id, node: node, target: target}, socket) do
+  def update(%{id: id, node: node}, socket) do
     title = dgettext("eyra-project", "create.item.title")
 
     {
       :ok,
       socket
-      |> assign(id: id, node: node, target: target, title: title)
+      |> assign(id: id, node: node, title: title)
       |> init_templates()
       |> init_buttons()
     }
@@ -38,7 +41,7 @@ defmodule Systems.Project.CreateItemPopup do
 
   defp init_templates(socket) do
     selected_template = :empty
-    template_labels = Project.Templates.labels(selected_template)
+    template_labels = Project.ItemTemplates.labels(selected_template)
     socket |> assign(template_labels: template_labels, selected_template: selected_template)
   end
 
@@ -69,21 +72,20 @@ defmodule Systems.Project.CreateItemPopup do
       ) do
     create_item(socket, selected_template)
 
-    {:noreply, socket |> close()}
+    {:noreply, socket |> finish()}
   end
 
   @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> close()}
+    {:noreply, socket |> finish()}
   end
 
-  defp close(%{assigns: %{target: target}} = socket) do
-    update_target(target, %{module: __MODULE__, action: :close})
-    socket
+  defp finish(socket) do
+    socket |> send_event(:parent, "finish")
   end
 
   defp create_item(%{assigns: %{node: node}}, template) do
-    name = Project.Templates.translate(template)
+    name = Project.ItemTemplates.translate(template)
     Project.Assembly.create_item(template, name, node)
   end
 
@@ -91,23 +93,16 @@ defmodule Systems.Project.CreateItemPopup do
   def render(assigns) do
     ~H"""
     <div>
-      <Text.title3><%= @title %></Text.title3>
-      <.spacing value="S" />
-      <.live_component
-        module={Selector}
-        id={:template_selector}
-        items={@template_labels}
-        type={:radio}
-        optional?={false}
-        parent={%{type: __MODULE__, id: @id}}
-      />
-
-      <.spacing value="M" />
-      <div class="flex flex-row gap-4">
-        <%= for button <- @buttons do %>
-          <Button.dynamic {button} />
-        <% end %>
-      </div>
+      <.dialog {%{title: @title, buttons: @buttons}}>
+        <.live_component
+          module={Selector}
+          id={:template_selector}
+          items={@template_labels}
+          type={:radio}
+          optional?={false}
+          parent={%{type: __MODULE__, id: @id}}
+        />
+      </.dialog>
     </div>
     """
   end

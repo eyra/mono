@@ -10,7 +10,7 @@ defmodule Systems.Project.AssemblyTest do
 
     item_name = "Item"
 
-    {:ok, %{item: %{id: id}}} = Project.Assembly.create_item(:benchmark, item_name, root)
+    {:ok, %{project_item: %{id: id}}} = Project.Assembly.create_item(:benchmark, item_name, root)
     item = Project.Public.get_item!(id, Project.ItemModel.preload_graph(:down))
 
     assert %Systems.Project.ItemModel{
@@ -44,7 +44,9 @@ defmodule Systems.Project.AssemblyTest do
 
     item_name = "Item"
 
-    {:ok, %{item: %{id: id}}} = Project.Assembly.create_item(:data_donation, item_name, root)
+    {:ok, %{project_item: %{id: id}}} =
+      Project.Assembly.create_item(:data_donation, item_name, root)
+
     item = Project.Public.get_item!(id, Project.ItemModel.preload_graph(:down))
 
     assert %{

@@ -323,15 +323,15 @@ msgid "organisation_types.team"
 msgstr "Department"
 
 #, elixir-autogen, elixir-format
-msgid "project_templates.benchmark"
+msgid "project_item_templates.benchmark"
 msgstr "Benchmark"
 
 #, elixir-autogen, elixir-format
-msgid "project_templates.data_donation"
+msgid "project_item_templates.data_donation"
 msgstr "Data Donation"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "project_templates.empty"
+msgid "project_item_templates.empty"
 msgstr "Empty"
 
 #, elixir-autogen, elixir-format, fuzzy

@@ -44,11 +44,6 @@ defmodule Systems.Project.Form do
   end
 
   # Handle Events
-  @impl true
-  def handle_event("close", _params, socket) do
-    send(self(), %{module: __MODULE__, action: :close})
-    {:noreply, socket}
-  end
 
   @impl true
   def handle_event("change", %{"model" => attrs}, %{assigns: %{project: project}} = socket) do
@@ -93,7 +88,7 @@ defmodule Systems.Project.Form do
     ~H"""
     <div>
       <.dialog {%{title: @title, buttons: @buttons}}>
-        <div id={"#{@id}_project_content"} phx-hook="LiveContent" data-show-errors={@show_errors}>
+      <div id={"#{@id}_project_content"} phx-hook="LiveContent" data-show-errors={@show_errors}>
           <.form id={@id} :let={form} for={@changeset} phx-change="change" phx-target={@myself} >
             <.text_input form={form} field={:name} label_text={dgettext("eyra-project", "form.name.label")} />
           </.form>

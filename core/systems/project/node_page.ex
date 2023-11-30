@@ -1,5 +1,7 @@
 defmodule Systems.Project.NodePage do
-  use CoreWeb, :live_view
+  use CoreWeb, :live_view_fabric
+  use Fabric.LiveView, CoreWeb.Layouts
+
   use CoreWeb.Layouts.Workspace.Component, :projects
   use CoreWeb.UI.PlainDialog
   use Systems.Observatory.Public
@@ -12,6 +14,7 @@ defmodule Systems.Project.NodePage do
     Project
   }
 
+  @impl true
   def mount(%{"id" => id}, _session, socket) do
     model =
       Project.Public.get_node!(String.to_integer(id), Project.NodeModel.preload_graph(:down))
@@ -19,27 +22,55 @@ defmodule Systems.Project.NodePage do
     {
       :ok,
       socket
-      |> assign(model: model, popup: nil)
+      |> assign(
+        model: model,
+        popup: nil,
+        focussed_item: nil
+      )
       |> observe_view_model()
       |> update_menus()
     }
+  end
+
+  def handle_view_model_updated(socket) do
+    socket |> update_menus()
   end
 
   def handle_auto_save_done(socket) do
     socket |> update_menus()
   end
 
+  # Childs
+
+  @impl true
+  def compose(:project_item_form, %{focussed_item: item}) do
+    %{
+      module: Project.ItemForm,
+      params: %{item: item}
+    }
+  end
+
+  @impl true
+  def compose(:create_item_popup, %{vm: %{node: node}}) do
+    %{
+      module: Project.CreateItemPopup,
+      params: %{node: node}
+    }
+  end
+
+  # Events
+
   @impl true
   def handle_event("edit", %{"item" => item_id}, socket) do
     item = Project.Public.get_item!(String.to_integer(item_id))
 
-    popup = %{
-      module: Project.ItemForm,
-      entity: item,
-      target: self()
+    {
+      :noreply,
+      socket
+      |> assign(focussed_item: item)
+      |> compose_child(:project_item_form)
+      |> show_popup(:project_item_form)
     }
-
-    {:noreply, assign(socket, popup: popup)}
   end
 
   @impl true
@@ -55,16 +86,12 @@ defmodule Systems.Project.NodePage do
   end
 
   @impl true
-  def handle_event("create_item", _params, %{assigns: %{vm: %{node: node}}} = socket) do
-    popup = %{
-      module: Project.CreateItemPopup,
-      target: self(),
-      node: node
-    }
-
+  def handle_event("create_item", _params, socket) do
     {
       :noreply,
-      socket |> assign(popup: popup)
+      socket
+      |> compose_child(:create_item_popup)
+      |> show_popup(:create_item_popup)
     }
   end
 
@@ -80,12 +107,17 @@ defmodule Systems.Project.NodePage do
   end
 
   @impl true
-  def handle_info(%{module: _, action: :close}, socket) do
+  def handle_event("show_popup", %{ref: %{id: id, module: module}, params: params}, socket) do
+    popup = %{module: module, params: Map.put(params, :id, id)}
+    {:noreply, socket |> assign(popup: popup)}
+  end
+
+  @impl true
+  def handle_event("finish", _, socket) do
     {
       :noreply,
       socket
       |> assign(popup: nil)
-      |> update_view_model()
     }
   end
 
@@ -110,8 +142,8 @@ defmodule Systems.Project.NodePage do
 
       <%= if @popup do %>
         <.popup>
-          <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
-            <.live_component id={:node_page_popup} module={@popup.module} {@popup} />
+          <div class="w-popup-md">
+            <.live_component id={:node_page_popup} module={@popup.module} {@popup.params} />
           </div>
         </.popup>
       <% end %>
