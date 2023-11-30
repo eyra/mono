@@ -5,6 +5,8 @@ defmodule Systems.Project.ItemModel do
   import Ecto.Changeset
   import CoreWeb.Gettext
 
+  alias Core.ImageHelpers
+
   alias Systems.{
     Project,
     Assignment,
@@ -87,14 +89,18 @@ defmodule Systems.Project.ItemModel do
              assignment:
                %{
                  id: assignment_id,
+                 status: status,
                  info: %{
-                   subject_count: subject_count
+                   subject_count: subject_count,
+                   image_id: image_id,
+                   logo_url: logo_url
                  }
                } = assignment
            },
            {Project.NodePage, :item_card},
            _user
          ) do
+      image_info = ImageHelpers.get_image_info(image_id, 120, 115)
       tags = get_card_tags(assignment)
       path = ~p"/assignment/#{assignment_id}/content"
 
@@ -112,7 +118,9 @@ defmodule Systems.Project.ItemModel do
         type: :secondary,
         id: id,
         path: path,
-        label: get_label(:concept),
+        image_info: image_info,
+        icon_url: logo_url,
+        label: get_label(status),
         title: name,
         tags: tags,
         info: ["#{subject_count} participants  |  0 donations"],

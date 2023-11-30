@@ -104,7 +104,7 @@ let Hooks = {
   TabbarFooterItem,
   NativeWrapper,
   FeldsparApp,
-  Wysiwyg
+  Wysiwyg,
 };
 
 let liveSocket = new LiveSocket("/live", Socket, {

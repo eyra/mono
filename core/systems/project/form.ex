@@ -40,18 +40,7 @@ defmodule Systems.Project.Form do
   end
 
   defp update_buttons(%{assigns: %{myself: myself}} = socket) do
-    buttons = [
-      %{
-        action: %{type: :send, target: myself, event: "submit"},
-        face: %{type: :primary, label: dgettext("eyra-ui", "submit.button")}
-      },
-      %{
-        action: %{type: :send, target: myself, event: "cancel"},
-        face: %{type: :label, label: dgettext("eyra-ui", "cancel.button")}
-      }
-    ]
-
-    assign(socket, buttons: buttons)
+    assign(socket, buttons: form_dialog_buttons(myself))
   end
 
   # Handle Events

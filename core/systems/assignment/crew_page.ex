@@ -4,11 +4,14 @@ defmodule Systems.Assignment.CrewPage do
 
   use Systems.Observatory.Public
   use CoreWeb.LiveRemoteIp
+  use CoreWeb.UI.Responsive.Viewport
   use CoreWeb.Layouts.Stripped.Component, :projects
 
   require Logger
 
   alias CoreWeb.UI.Timestamp
+  alias Core.ImageHelpers
+  alias Frameworks.Pixel.Hero
 
   alias Systems.{
     Assignment,
@@ -30,7 +33,8 @@ defmodule Systems.Assignment.CrewPage do
       socket
       |> assign(
         id: id,
-        model: model
+        model: model,
+        image_info: nil
       )
       |> update_panel_info(session)
       |> observe_view_model()
@@ -41,7 +45,27 @@ defmodule Systems.Assignment.CrewPage do
   def handle_view_model_updated(socket) do
     socket
     |> update_flow()
+    |> update_image_info()
     |> update_menus()
+  end
+
+  @impl true
+  def handle_resize(socket) do
+    socket
+    |> update_image_info()
+    |> update_menus()
+  end
+
+  defp update_image_info(
+         %{assigns: %{viewport: %{"width" => viewport_width}, vm: %{info: %{image_id: image_id}}}} =
+           socket
+       ) do
+    image_width = viewport_width
+    image_height = 360
+    image_info = ImageHelpers.get_image_info(image_id, image_width, image_height)
+
+    socket
+    |> assign(image_info: image_info)
   end
 
   defp update_panel_info(socket, %{"panel_info" => panel_info}) do
@@ -100,7 +124,18 @@ defmodule Systems.Assignment.CrewPage do
   def render(assigns) do
     ~H"""
       <.stripped menus={@menus} footer?={false}>
-        <.flow fabric={@fabric} />
+        <:header>
+          <div class="h-[180px] bg-grey5">
+          <%= if @image_info do %>
+            <Hero.image title={@vm.info.title} subtitle={@vm.info.subtitle} logo_url={@vm.info.logo_url} image_info={@image_info} />
+          <% end %>
+          </div>
+        </:header>
+        <div id={:crew_page} class="w-full h-full flex flex-col" phx-hook="ViewportResize">
+          <div class="flex-1">
+            <.flow fabric={@fabric} />
+          </div>
+        </div>
       </.stripped>
     """
   end

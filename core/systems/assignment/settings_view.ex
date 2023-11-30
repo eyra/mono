@@ -7,18 +7,42 @@ defmodule Systems.Assignment.SettingsView do
   }
 
   @impl true
-  def update(%{id: id, entity: assignment, uri_origin: uri_origin}, socket) do
+  def update(
+        %{
+          id: id,
+          entity: assignment,
+          uri_origin: uri_origin,
+          viewport: viewport,
+          breakpoint: breakpoint
+        },
+        socket
+      ) do
     {
       :ok,
       socket
       |> assign(
         id: id,
         entity: assignment,
-        uri_origin: uri_origin
+        uri_origin: uri_origin,
+        viewport: viewport,
+        breakpoint: breakpoint
       )
+      |> compose_child(:info)
       |> compose_child(:consent)
       |> compose_child(:panel_connector)
       |> compose_child(:storage_connector)
+    }
+  end
+
+  @impl true
+  def compose(:info, %{entity: %{info: info}, viewport: viewport, breakpoint: breakpoint}) do
+    %{
+      module: Assignment.InfoForm,
+      params: %{
+        entity: info,
+        viewport: viewport,
+        breakpoint: breakpoint
+      }
     }
   end
 
@@ -71,6 +95,12 @@ defmodule Systems.Assignment.SettingsView do
         <Margin.y id={:page_top} />
         <Text.title2><%= dgettext("eyra-assignment", "settings.title") %></Text.title2>
         <.spacing value="L" />
+
+        <.child id={:info} fabric={@fabric} >
+          <:footer>
+            <.spacing value="L" />
+          </:footer>
+        </.child>
 
         <.child id={:consent} fabric={@fabric} >
           <:header>

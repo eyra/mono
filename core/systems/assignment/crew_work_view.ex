@@ -200,7 +200,7 @@ defmodule Systems.Assignment.CrewWorkView do
             <div class="border-l border-grey4">
             </div>
           <% end %>
-          <div class="flex-1">
+          <div class="h-full w-full">
             <.child id={:start_view} fabric={@fabric} />
           </div>
         <% end %>

@@ -166,14 +166,17 @@ defmodule Systems.Assignment.ContentPageBuilder do
          :config,
          assignment,
          show_errors,
-         %{fabric: fabric, uri_origin: uri_origin} = _assigns
+         %{fabric: fabric, uri_origin: uri_origin, viewport: viewport, breakpoint: breakpoint} =
+           _assigns
        ) do
     ready? = false
 
     child =
       Fabric.prepare_child(fabric, :settings_form, Assignment.SettingsView, %{
         entity: assignment,
-        uri_origin: uri_origin
+        uri_origin: uri_origin,
+        viewport: viewport,
+        breakpoint: breakpoint
       })
 
     %{

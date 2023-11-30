@@ -27,7 +27,7 @@ defmodule Frameworks.Pixel.Grid do
 
   def image(assigns) do
     ~H"""
-    <div class={"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 #{@gap}"}>
+    <div class={"image-container grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 #{@gap}"}>
       <%= render_slot(@inner_block) %>
     </div>
     """
