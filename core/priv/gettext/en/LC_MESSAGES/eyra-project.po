@@ -37,7 +37,7 @@ msgstr "My first project"
 
 #, elixir-autogen, elixir-format
 msgid "add.new.button"
-msgstr "Start new project"
+msgstr "New project"
 
 #, elixir-autogen, elixir-format
 msgid "add.new.button.short"
