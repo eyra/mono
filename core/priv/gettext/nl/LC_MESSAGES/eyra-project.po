@@ -33,7 +33,7 @@ msgstr "Ga naar Monitor"
 
 #, elixir-autogen, elixir-format
 msgid "add.first.button"
-msgstr "Start je eerste project"
+msgstr "Mijn eerste project"
 
 #, elixir-autogen, elixir-format
 msgid "add.new.button"
@@ -45,11 +45,11 @@ msgstr "Start"
 
 #, elixir-autogen, elixir-format
 msgid "overview.empty.description"
-msgstr "Hier kan vind je een overzicht van al je projecten. Op dit moment zijn er nog geen projecten voor je. Je kan een eigen project starten of iemand kan een project met je delen."
+msgstr "Hier vind je straks een overzicht van al je projecten. Start je eerste project en voeg zoveel projecten toe als je wilt."
 
 #, elixir-autogen, elixir-format
 msgid "overview.empty.title"
-msgstr "Here start je reis"
+msgstr "Start je eerste project"
 
 #, elixir-autogen, elixir-format
 msgid "overview.title"
@@ -93,7 +93,7 @@ msgstr "Groepen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "add.new.item.button"
-msgstr "Voeg nieuw item toe"
+msgstr "Voeg item toe"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "add.new.item.button.short"
@@ -165,15 +165,15 @@ msgstr "Nieuw project"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "add.first.item.button"
-msgstr "Maak eerste item aan"
+msgstr "Mijn eerste item"
 
 #, elixir-autogen, elixir-format
 msgid "node.empty.description"
-msgstr "Hier vind je een overzicht van je items. Op dit moment zijn er nog geen items beschikbaar. Je kan nu je eerste item aanmaken."
+msgstr "Start door een item toe te voegen aan je project. Je kan zoveel items toevoegen als je wilt."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "node.empty.title"
-msgstr "Leeg canvas"
+msgstr "Een frisse start"
 
 #, elixir-autogen, elixir-format
 msgid "tool_ref.tag.benchmark"
