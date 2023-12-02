@@ -169,11 +169,11 @@ msgstr "Add first item"
 
 #, elixir-autogen, elixir-format
 msgid "node.empty.description"
-msgstr "Here you will find an overview your items. There are no items yet available. You can now add your first item."
+msgstr "Start by adding items to your project. You can add as many items as you want."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "node.empty.title"
-msgstr "Blank canvas"
+msgstr "A fresh start"
 
 #, elixir-autogen, elixir-format
 msgid "tool_ref.tag.benchmark"
