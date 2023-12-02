@@ -93,7 +93,7 @@ msgstr "Groups"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "add.new.item.button"
-msgstr "Add item"
+msgstr "New item"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "add.new.item.button.short"
