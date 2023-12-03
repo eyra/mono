@@ -11,13 +11,19 @@ defmodule Systems.Assignment.InfoForm do
   alias CoreWeb.UI.ImageCatalogPicker
 
   alias Systems.Assignment
+  alias Systems.Content
 
   @impl true
   def process_file(
         %{assigns: %{entity: entity}} = socket,
-        {local_relative_path, _local_full_path, _remote_file}
+        {_local_relative_path, local_full_path, _remote_file}
       ) do
-    save(socket, entity, :auto_save, %{logo_url: local_relative_path})
+    logo_url =
+      Content.Public.store(local_full_path)
+      |> Content.Public.get_public_url()
+
+    socket
+    |> save(entity, :auto_save, %{logo_url: logo_url})
   end
 
   @impl true
