@@ -192,7 +192,7 @@ msgstr "Study title"
 
 #, elixir-autogen, elixir-format
 msgid "settings.image.title"
-msgstr "Header background image"
+msgstr "Header image"
 
 #, elixir-autogen, elixir-format
 msgid "search.different.image.button"
