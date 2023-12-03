@@ -586,6 +586,7 @@ Systems.Project.ItemConfigForm.html
 Systems.Project.ItemForm.html
 Systems.Project.ItemModel.html
 Systems.Project.ItemMonitorView.html
+Systems.Project.ItemTemplates.html
 Systems.Project.Model.html
 Systems.Project.NodeModel.html
 Systems.Project.NodePage.html
@@ -596,7 +597,6 @@ Systems.Project.Presenter.html
 Systems.Project.Public.html
 Systems.Project.Routes.html
 Systems.Project.Switch.html
-Systems.Project.Templates.html
 Systems.Project.ToolRefModel.html
 Systems.Project.ToolRefView.html
 Systems.Promotion.FormView.html
@@ -710,8 +710,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-27D0925B.js
-dist/sidebar_items-129F4DEB.js
+dist/search_items-5321DEB0.js
+dist/sidebar_items-D6BE95F9.js
 index.html
 readme.html
 search.html
