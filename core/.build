@@ -459,8 +459,12 @@ Systems.Consent.RevisionModel.html
 Systems.Consent.SignatureModel.html
 Systems.Consent.Switch.html
 Systems.Consent.WysiwygTestForm.html
+Systems.Content.LocalFS.html
 Systems.Content.Page.html
+Systems.Content.Plug.html
+Systems.Content.Private.html
 Systems.Content.Public.html
+Systems.Content.S3.html
 Systems.Content.TextBundleModel.html
 Systems.Content.TextItemModel.html
 Systems.Crew.MemberModel.html
@@ -712,8 +716,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-9651E1EF.js
-dist/sidebar_items-465649FD.js
+dist/search_items-445522A5.js
+dist/sidebar_items-75DEB173.js
 index.html
 readme.html
 search.html
