@@ -3,7 +3,7 @@
 @tailwind components;
 
 trix-toolbar {
-  @apply mb-4 drop-shadow-lg h-8;
+  @apply mb-4 h-8;
 }
 
 trix-toolbar .trix-button-row {
@@ -15,7 +15,7 @@ trix-toolbar .trix-button-row {
 }
 
 trix-toolbar .trix-button-group {
-  @apply flex rounded-lg overflow-hidden h-full;
+  @apply flex border-2 border-grey4 rounded-lg overflow-hidden h-full;
 }
 trix-toolbar .trix-button-group:not(:first-child) {
   margin-left: 1.5vw;
