@@ -40,7 +40,10 @@ defmodule Systems.Assignment.GdprForm do
 
   @impl true
   def compose(:consent_revision_form, %{entity: %{consent_agreement: nil}}) do
-    nil
+    %{
+      module: Consent.RevisionForm,
+      params: %{entity: nil}
+    }
   end
 
   @impl true
@@ -55,28 +58,26 @@ defmodule Systems.Assignment.GdprForm do
 
   @impl true
   def handle_event(
-        "switch",
+        "update",
         %{status: :on},
         %{assigns: %{entity: %{auth_node: auth_node} = assignment}} = socket
       ) do
-    consent_agreement = Consent.Public.prepare_agreement(auth_node: auth_node)
-    Assignment.Public.update_consent_agreement(assignment, consent_agreement)
+    consent_agreement = Consent.Public.prepare_agreement(auth_node)
+    {:ok, _} = Assignment.Public.update_consent_agreement(assignment, consent_agreement)
 
     {
       :noreply,
       socket
-      |> compose_child(:consent_revision_form)
     }
   end
 
   @impl true
-  def handle_event("switch", %{status: :off}, %{assigns: %{entity: assignment}} = socket) do
-    Assignment.Public.update_consent_agreement(assignment, nil)
+  def handle_event("update", %{status: :off}, %{assigns: %{entity: assignment}} = socket) do
+    {:ok, _} = Assignment.Public.update_consent_agreement(assignment, nil)
 
     {
       :noreply,
       socket
-      |> hide_child(:consent_revision_form)
     }
   end
 

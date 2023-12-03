@@ -16,6 +16,23 @@ defmodule Systems.Consent.RevisionForm do
       |> assign(
         id: id,
         entity: entity,
+        visible: true,
+        form: form
+      )
+    }
+  end
+
+  @impl true
+  def update(%{id: id, entity: nil}, socket) do
+    form = to_form(%{"source" => "?"})
+
+    {
+      :ok,
+      socket
+      |> assign(
+        id: id,
+        entity: nil,
+        visible: false,
         form: form
       )
     }
@@ -37,19 +54,36 @@ defmodule Systems.Consent.RevisionForm do
     }
   end
 
+  @impl true
+  def handle_event(
+        "save",
+        _,
+        %{assigns: %{entity: nil}} = socket
+      ) do
+    {
+      :noreply,
+      socket
+    }
+  end
+
   # Saving
 
   def save(socket, entity, attrs) do
     changeset = Consent.RevisionModel.changeset(entity, attrs)
+
+    auto_save_begin(socket)
 
     case Core.Persister.save(entity, changeset) do
       {:ok, entity} ->
         socket
         |> assign(entity: entity)
         |> flash_persister_saved()
+        |> auto_save_end()
 
       {:error, changeset} ->
-        socket |> handle_save_errors(changeset)
+        socket
+        |> handle_save_errors(changeset)
+        |> auto_save_end()
     end
   end
 
@@ -70,7 +104,8 @@ defmodule Systems.Consent.RevisionForm do
     ~H"""
       <div>
         <.form id="agreement_form" :let={form} for={@form} phx-change="save" phx-target={@myself} >
-          <.wysiwyg_area form={form} field={:source} />
+          <!-- always render wyiwyg te prevent scrollbar reset in LiveView -->
+          <.wysiwyg_area form={form} field={:source} visible={@visible}/>
         </.form>
       </div>
     """
