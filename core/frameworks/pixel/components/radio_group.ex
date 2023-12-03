@@ -15,9 +15,22 @@ defmodule Frameworks.Pixel.RadioGroup do
   end
 
   @impl true
-  def handle_event("change", %{"radio-group" => status}, socket) do
-    {:noreply,
-     socket |> send_event(:parent, "update", %{status: String.to_existing_atom(status)})}
+  def handle_event(
+        "change",
+        %{"radio-group" => status},
+        %{assigns: %{form: %{source: %{"radio-group" => current_status}}}} = socket
+      )
+      when current_status != status do
+    {
+      :noreply,
+      socket |> send_event(:parent, "update", %{status: String.to_existing_atom(status)})
+    }
+  end
+
+  @impl true
+  def handle_event("change", _, socket) do
+    # ignore change, this happens always the first time rendering
+    {:noreply, socket}
   end
 
   @impl true
