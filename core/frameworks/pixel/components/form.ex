@@ -389,6 +389,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:debounce, :string, default: "1000")
   attr(:min_height, :string, default: "min-h-wysiwyg-editor")
   attr(:max_height, :string, default: "max-h-wysiwyg-editor")
+  attr(:visible, :boolean, default: true)
 
   def wysiwyg_area(%{form: form, field: field} = assigns) do
     errors = guarded_errors(form, field)
@@ -415,6 +416,7 @@ defmodule Frameworks.Pixel.Form do
       })
 
     ~H"""
+    <div class={if @visible do "visible" else "hidden" end}>
     <.field
       field={@field_id}
       label_text={@label_text}
@@ -423,17 +425,7 @@ defmodule Frameworks.Pixel.Form do
       errors={@errors}
       extra_space={false}
     >
-      <textarea
-        id={"#{@field_id}_input"}
-        name={"#{@field_name}_input"}
-        class="hidden"
-        phx-target={@target}
-        phx-debounce={@debounce}
-      >
-        <%= @field_value %>
-      </textarea>
       <div
-        phx-hook="Wysiwyg"
         id={@field_id}
         name={@field_name}
         class={[@input_static_class, @input_dynamic_class]}
@@ -441,16 +433,20 @@ defmodule Frameworks.Pixel.Form do
         __eyra_field_has_errors={@has_errors}
         __eyra_field_static_class={@input_static_class}
         __eyra_field_active_color={@active_color}
-        phx-update="ignore"
       >
-        <trix-editor
-          phx-debounce={@debounce}
-          input={"#{@field_id}_input"}
-          class={"#{@min_height} #{@max_height} overflow-y-scroll"}>
-          <%= @field_value %>
-        </trix-editor>
+        <div id={:wysiwyg}
+          phx-update="ignore"
+          phx-hook="Wysiwyg"
+          data-id={"#{@field_id}_input"}
+          data-name={"#{@field_name}_input"}
+          data-html={@field_value}
+          data-visible={true}
+          data-locked={false}
+          data-target={@target}
+        />
       </div>
     </.field>
+    </div>
     """
   end
 

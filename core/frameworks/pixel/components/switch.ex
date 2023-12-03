@@ -4,12 +4,6 @@ defmodule Frameworks.Pixel.Switch do
 
   alias Frameworks.Pixel
 
-  # Handle Selector Update
-  @impl true
-  def update(%{active_item_id: status, selector_id: :selector}, socket) do
-    {:ok, socket |> update_status(status)}
-  end
-
   @impl true
   def update(
         %{id: id, on_text: on_text, off_text: off_text, opt_in?: opt_in?, status: status},
@@ -25,24 +19,12 @@ defmodule Frameworks.Pixel.Switch do
         opt_in?: opt_in?,
         status: status
       )
-      |> compose_child(:selector)
+      |> compose_child(:radio_group)
     }
   end
 
-  defp update_status(%{assigns: %{status: status}} = socket, new_status)
-       when status != new_status do
-    socket
-    |> assign(status: new_status)
-    |> send_event(:parent, "switch", %{status: new_status})
-  end
-
-  defp update_status(socket, _status) do
-    socket
-  end
-
   @impl true
-  def compose(:selector, %{
-        id: id,
+  def compose(:radio_group, %{
         on_text: on_text,
         off_text: off_text,
         opt_in?: opt_in?,
@@ -59,14 +41,19 @@ defmodule Frameworks.Pixel.Switch do
       end
 
     %{
-      module: Pixel.Selector,
+      module: Pixel.RadioGroup,
       params: %{
-        grid_options: "flex flex-row gap-8",
-        items: items,
-        type: :radio,
-        optional?: false,
-        parent: %{id: id, type: __MODULE__}
+        items: items
       }
+    }
+  end
+
+  @impl true
+  def handle_event("update", %{status: status}, socket) do
+    {
+      :noreply,
+      socket
+      |> send_event(:parent, "update", %{status: status})
     }
   end
 

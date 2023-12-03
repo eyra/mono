@@ -32,6 +32,15 @@ defmodule Frameworks.Pixel.Selector do
   end
 
   @impl true
+  def update(%{items: new_items}, %{assigns: %{items: _items}} = socket) do
+    {
+      :ok,
+      socket
+      |> assign(current_items: new_items)
+    }
+  end
+
+  @impl true
   def update(
         %{
           id: id,
@@ -213,7 +222,7 @@ defmodule Frameworks.Pixel.Selector.Item do
       })
 
     ~H"""
-    <div class="flex flex-row gap-3 items-center">
+    <button class="flex flex-row gap-3 items-center">
       <div>
         <img
           x-show="active"
@@ -229,7 +238,7 @@ defmodule Frameworks.Pixel.Selector.Item do
       <div class={"#{@label_color} text-label font-label select-none mt-1"}>
         <%= @value %>
       </div>
-    </div>
+    </button>
     """
   end
 
