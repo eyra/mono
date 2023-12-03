@@ -60,7 +60,7 @@ msgstr "Afronden"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "content.title"
-msgstr "Jouw Next ID"
+msgstr "Data donatie"
 
 #, elixir-autogen, elixir-format
 msgid "open.button"
@@ -68,7 +68,7 @@ msgstr "Open"
 
 #, elixir-autogen, elixir-format
 msgid "preview.button"
-msgstr ""
+msgstr "Voorbeeld"
 
 #, elixir-autogen, elixir-format
 msgid "publish.button"
