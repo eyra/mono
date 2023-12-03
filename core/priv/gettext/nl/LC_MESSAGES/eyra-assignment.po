@@ -184,11 +184,11 @@ msgstr "Toestemming"
 
 #, elixir-autogen, elixir-format
 msgid "settings.subtitle.label"
-msgstr "Ondertitel"
+msgstr "Jouw organisatie naam"
 
 #, elixir-autogen, elixir-format
 msgid "settings.title.label"
-msgstr "Titel"
+msgstr "Studie titel"
 
 #, elixir-autogen, elixir-format
 msgid "settings.image.title"
@@ -200,19 +200,19 @@ msgstr "Verander afbeelding"
 
 #, elixir-autogen, elixir-format
 msgid "choose.logo.file"
-msgstr "Kies afbeelding"
+msgstr "Upload logo"
 
 #, elixir-autogen, elixir-format
 msgid "choose.other.logo.file"
-msgstr "Kies andere afbeelding"
+msgstr "Verander logo"
 
 #, elixir-autogen, elixir-format
 msgid "settings.logo.title"
-msgstr "Logo"
+msgstr "Jouw organisatie logo"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.text"
-msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+msgstr "Gebruik de velden hieronder om de omslag van jouw data donatie workflow voor respondenten aan te passen. Benieuwd hoe dit eruit komt te zien voor respondenten? Klik op "Voorbeeld" rechtsboven."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.title"
