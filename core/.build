@@ -226,6 +226,7 @@ Frameworks.Pixel.Image.html
 Frameworks.Pixel.Line.html
 Frameworks.Pixel.Menu.html
 Frameworks.Pixel.Panel.html
+Frameworks.Pixel.RadioGroup.html
 Frameworks.Pixel.ShareView.html
 Frameworks.Pixel.Spacing.html
 Frameworks.Pixel.Square.html
@@ -457,6 +458,7 @@ Systems.Consent.RevisionForm.html
 Systems.Consent.RevisionModel.html
 Systems.Consent.SignatureModel.html
 Systems.Consent.Switch.html
+Systems.Consent.WysiwygTestForm.html
 Systems.Content.Page.html
 Systems.Content.Public.html
 Systems.Content.TextBundleModel.html
@@ -710,8 +712,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-5321DEB0.js
-dist/sidebar_items-D6BE95F9.js
+dist/search_items-9651E1EF.js
+dist/sidebar_items-465649FD.js
 index.html
 readme.html
 search.html
