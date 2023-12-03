@@ -20,7 +20,7 @@ defmodule Frameworks.Signal.Public do
   ]
 
   def dispatch(signal, message) do
-    Logger.warn("SIGNAL: " <> pretty_print(signal) <> " => " <> pretty_print(Map.keys(message)))
+    Logger.debug("SIGNAL: " <> pretty_print(signal) <> " => " <> pretty_print(Map.keys(message)))
 
     for handler <- signal_handlers() do
       handler.intercept(signal, message)

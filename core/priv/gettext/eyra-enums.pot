@@ -331,10 +331,6 @@ msgid "project_item_templates.data_donation"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "project_item_templates.empty"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "templates.data_donation"
 msgstr ""
 
@@ -372,4 +368,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "external_panel_ids.liss"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "templates.benchmark"
 msgstr ""

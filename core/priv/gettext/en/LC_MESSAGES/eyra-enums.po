@@ -331,10 +331,6 @@ msgid "project_item_templates.data_donation"
 msgstr "Data Donation"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "project_item_templates.empty"
-msgstr "Empty"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "templates.data_donation"
 msgstr "Data donation"
 
@@ -373,3 +369,7 @@ msgstr "I&O Research"
 #, elixir-autogen, elixir-format
 msgid "external_panel_ids.liss"
 msgstr "LISS"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "templates.benchmark"
+msgstr "Benchmark"

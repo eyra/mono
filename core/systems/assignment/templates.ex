@@ -3,5 +3,5 @@ defmodule Systems.Assignment.Templates do
     Defines different templates used by Systems.Assignment.Assembly to initialize specials.
   """
   use Core.Enums.Base,
-      {:templates, [:online, :lab, :data_donation]}
+      {:templates, [:online, :lab, :data_donation, :benchmark]}
 end
