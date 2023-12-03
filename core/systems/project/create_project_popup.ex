@@ -38,7 +38,7 @@ defmodule Systems.Project.CreatePopup do
 
   defp init_templates(socket) do
     selected_template = :empty
-    template_labels = Project.Templates.labels(selected_template)
+    template_labels = Project.ItemTemplates.labels(selected_template)
     socket |> assign(template_labels: template_labels, selected_template: selected_template)
   end
 
@@ -87,7 +87,7 @@ defmodule Systems.Project.CreatePopup do
   end
 
   defp create_project(%{assigns: %{user: user}}, template) do
-    name = Project.Templates.translate(template)
+    name = Project.ItemTemplates.translate(template)
     Project.Assembly.create(name, user, template)
   end
 

@@ -4,6 +4,7 @@ defmodule Systems.Project.Assembly do
   alias Ecto.Changeset
   import Ecto.Query, warn: false
   alias Frameworks.Utility.EctoHelper
+  alias Frameworks.Signal
   alias Core.Authorization
 
   alias Systems.{
@@ -19,11 +20,18 @@ defmodule Systems.Project.Assembly do
     |> Repo.delete_all()
   end
 
-  def delete(%Project.ItemModel{id: id}) do
-    from(item in Project.ItemModel,
-      where: item.id == ^id
-    )
-    |> Repo.delete_all()
+  def delete(%Project.ItemModel{id: id} = item) do
+    items =
+      from(item in Project.ItemModel,
+        where: item.id == ^id
+      )
+
+    Multi.new()
+    |> Multi.delete_all(:items, items)
+    |> Multi.put(:project_item, item)
+    |> EctoHelper.run(:project_node, &load_node!/1)
+    |> Signal.Public.multi_dispatch({:project_node, :delete_item})
+    |> Repo.transaction()
   end
 
   def create(name, user, :empty) do
@@ -50,19 +58,20 @@ defmodule Systems.Project.Assembly do
       when is_binary(name) do
     Multi.new()
     |> Multi.insert(
-      :item,
+      :project_item,
       prepare_item(template, name)
       |> Changeset.put_assoc(:node, node)
     )
-    |> EctoHelper.run(:node, &load_node!/1)
+    |> EctoHelper.run(:project_node, &load_node!/1)
     |> EctoHelper.run(:auth, &update_auth/2)
     |> EctoHelper.run(:path, &update_path/2)
+    |> Signal.Public.multi_dispatch({:project_node, :create_and_dispatch})
     |> Repo.transaction()
   end
 
   # LOAD
 
-  defp load_node!(%{item: %{node_id: node_id}}) do
+  defp load_node!(%{project_item: %{node_id: node_id}}) do
     {:ok, Project.Public.get_node!(node_id, Project.NodeModel.preload_graph(:down))}
   end
 
@@ -106,7 +115,7 @@ defmodule Systems.Project.Assembly do
   # PROJECT PATH
   def update_path(multi, %{project: project}), do: update_path(multi, project)
 
-  def update_path(multi, %{node: %{project_path: project_path} = node}),
+  def update_path(multi, %{project_node: %{project_path: project_path} = node}),
     do: update_path(multi, node, project_path)
 
   def update_path(multi, %Project.Model{id: id, root: root}) do
@@ -165,8 +174,8 @@ defmodule Systems.Project.Assembly do
   # AUTHORIZATION
 
   def update_auth(multi, %{project: project}), do: update_auth(multi, project)
-  def update_auth(multi, %{node: node}), do: update_auth(multi, node)
-  def update_auth(multi, %{item: item}), do: update_auth(multi, item)
+  def update_auth(multi, %{project_node: node}), do: update_auth(multi, node)
+  def update_auth(multi, %{project_item: item}), do: update_auth(multi, item)
 
   def update_auth(multi, %Project.Model{} = project) do
     auth_tree = Project.Model.auth_tree(project)

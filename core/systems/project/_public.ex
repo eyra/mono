@@ -3,7 +3,6 @@ defmodule Systems.Project.Public do
   import CoreWeb.Gettext
 
   alias Core.Repo
-
   alias Core.Accounts.User
   alias Core.Authorization
 
@@ -18,6 +17,14 @@ defmodule Systems.Project.Public do
       preload: ^preload
     )
     |> Repo.one!()
+  end
+
+  def get_by_root(%Project.NodeModel{id: id}, preload \\ []) do
+    from(project in Project.Model,
+      where: project.root_id == ^id,
+      preload: ^preload
+    )
+    |> Repo.one()
   end
 
   def get_node!(id, preload \\ []) do
@@ -233,5 +240,29 @@ defimpl Core.Persister, for: Systems.Project.Model do
       {:ok, %{project: project}} -> {:ok, project}
       _ -> {:error, changeset}
     end
+  end
+end
+
+defimpl Core.Persister, for: Systems.Project.ItemModel do
+  alias Frameworks.Utility.EctoHelper
+  alias Frameworks.Signal
+  alias Systems.Project
+
+  def save(_project_item, changeset) do
+    result =
+      Ecto.Multi.new()
+      |> Core.Repo.multi_update(:project_item, changeset)
+      |> EctoHelper.run(:project_node, &load_node!/1)
+      |> Signal.Public.multi_dispatch({:project_node, :update})
+      |> Core.Repo.transaction()
+
+    case result do
+      {:ok, %{project_item: project_item}} -> {:ok, project_item}
+      _ -> {:error, changeset}
+    end
+  end
+
+  defp load_node!(%{project_item: %{node_id: node_id}}) do
+    {:ok, Project.Public.get_node!(node_id, Project.NodeModel.preload_graph(:down))}
   end
 end

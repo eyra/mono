@@ -117,7 +117,7 @@ msgstr "Online"
 
 #, elixir-autogen, elixir-format
 msgid "create.proceed.button"
-msgstr "Doorgaan"
+msgstr "Maak aan"
 
 #, elixir-autogen, elixir-format
 msgid "create.title"
@@ -125,7 +125,7 @@ msgstr "Selecteer template"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "create.item.button"
-msgstr "Terugtrekken"
+msgstr "Trek terug"
 
 #, elixir-autogen, elixir-format
 msgid "create.item.button.short"
@@ -133,7 +133,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "create.item.title"
-msgstr "Kies type item"
+msgstr "Kies item sjabloon"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "item.form.name.label"
@@ -141,7 +141,7 @@ msgstr "Naam"
 
 #, elixir-autogen, elixir-format
 msgid "item.form.title"
-msgstr "Project item"
+msgstr "Item instellingen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.support"
