@@ -60,7 +60,7 @@ msgstr "Finish up"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "content.title"
-msgstr "Assignment"
+msgstr "Data donation"
 
 #, elixir-autogen, elixir-format
 msgid "open.button"
