@@ -184,7 +184,7 @@ msgstr "Consent"
 
 #, elixir-autogen, elixir-format
 msgid "settings.subtitle.label"
-msgstr "Name of your organization"
+msgstr "Your organization name"
 
 #, elixir-autogen, elixir-format
 msgid "settings.title.label"
@@ -208,7 +208,7 @@ msgstr "Change logo"
 
 #, elixir-autogen, elixir-format
 msgid "settings.logo.title"
-msgstr "Your Organization Logo"
+msgstr "Your organization logo"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.text"
