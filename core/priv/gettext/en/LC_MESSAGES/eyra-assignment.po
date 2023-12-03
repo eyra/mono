@@ -184,15 +184,15 @@ msgstr "Consent"
 
 #, elixir-autogen, elixir-format
 msgid "settings.subtitle.label"
-msgstr "Subtitle"
+msgstr "Name of your organization"
 
 #, elixir-autogen, elixir-format
 msgid "settings.title.label"
-msgstr "Title"
+msgstr "Study title"
 
 #, elixir-autogen, elixir-format
 msgid "settings.image.title"
-msgstr "Cover"
+msgstr "Header background image"
 
 #, elixir-autogen, elixir-format
 msgid "search.different.image.button"
@@ -200,19 +200,19 @@ msgstr "Change image"
 
 #, elixir-autogen, elixir-format
 msgid "choose.logo.file"
-msgstr "Select image"
+msgstr "Upload logo"
 
 #, elixir-autogen, elixir-format
 msgid "choose.other.logo.file"
-msgstr "Change image"
+msgstr "Change logo"
 
 #, elixir-autogen, elixir-format
 msgid "settings.logo.title"
-msgstr "Logo"
+msgstr "Your Organization Logo"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.text"
-msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+msgstr "Use the fields below to customize the header of your data donation participant workflow. Curious to see what this will look like for participants? Click "Preview" at the top right to check it out."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.title"
