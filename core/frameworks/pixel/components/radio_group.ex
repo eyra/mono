@@ -34,7 +34,7 @@ defmodule Frameworks.Pixel.RadioGroup do
                 type="radio"
                 name="radio-group"
                 checked={item.active}
-                class="cursor-pointer appearance-none w-3 h-3 rounded-full ring-2 ring-offset-4 ring-grey3 checked:bg-primary checked:ring-primary"
+                class="cursor-pointer appearance-none w-3 h-3 rounded-full outline outline-2 outline-offset-4 outline-grey3 checked:bg-primary checked:outline-primary"
               />
               <div class="text-label font-label text-grey1 select-none mt-1"><%= item.value %></div>
             </label>
