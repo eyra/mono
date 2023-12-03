@@ -1,5 +1,6 @@
 defmodule CoreWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :core
+  require Systems.Content.Plug
   require Systems.Feldspar.Plug
 
   # The session will be stored in the cookie and signed,
@@ -34,6 +35,7 @@ defmodule CoreWeb.Endpoint do
     )
   end
 
+  Systems.Content.Plug.setup()
   Systems.Feldspar.Plug.setup()
 
   # Serve at "/" the static files from "priv/static" directory.

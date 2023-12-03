@@ -1,11 +1,23 @@
 defmodule Systems.Content.Public do
   import Ecto.Query, warn: false
 
+  alias Systems.{
+    Content
+  }
+
   alias Core.Repo
   alias Ecto.Multi
 
   alias Systems.Content.TextItemModel, as: TextItem
   alias Systems.Content.TextBundleModel, as: TextBundle
+
+  def store(file) do
+    Content.Private.get_backend().store(file)
+  end
+
+  def get_public_url(id) do
+    Content.Private.get_backend().get_public_url(id)
+  end
 
   def get_text_item!(id, preload \\ []) do
     from(t in TextItem, preload: ^preload)
