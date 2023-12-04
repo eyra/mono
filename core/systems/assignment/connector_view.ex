@@ -28,7 +28,7 @@ defmodule Systems.Assignment.ConnectorView do
         uri_origin: uri_origin
       )
       |> update_connect_button()
-      |> update_connection_view()
+      |> compose_child(:connection_view)
     }
   end
 
@@ -41,30 +41,27 @@ defmodule Systems.Assignment.ConnectorView do
     assign(socket, connect_button: connect_button)
   end
 
-  defp update_connection_view(%{assigns: %{connection: nil}} = socket) do
-    assign(socket, connection_view: nil)
+  @impl true
+  def compose(:connection_view, %{connection: nil}) do
+    nil
   end
 
-  defp update_connection_view(
-         %{
-           assigns: %{
-             id: id,
-             type: type,
-             connection: connection,
-             assignment: assignment,
-             uri_origin: uri_origin
-           }
-         } = socket
-       ) do
-    child =
-      prepare_child(socket, "#{id}_connection_view", Assignment.ConnectionView, %{
+  @impl true
+  def compose(:connection_view, %{
+        type: type,
+        connection: connection,
+        assignment: assignment,
+        uri_origin: uri_origin
+      }) do
+    %{
+      module: Assignment.ConnectionView,
+      params: %{
         assignment: assignment,
         connection: connection,
         type: type,
         uri_origin: uri_origin
-      })
-
-    show_child(socket, child)
+      }
+    }
   end
 
   @impl true
@@ -98,13 +95,17 @@ defmodule Systems.Assignment.ConnectorView do
   end
 
   @impl true
-  def handle_event("finish", %{source: %{id: :connector_popup}, connection: _connection}, socket) do
+  def handle_event(
+        "finish",
+        %{source: %{name: :connector_popup}, connection: _connection},
+        socket
+      ) do
     hide_popup(socket, :connector_popup)
     {:noreply, socket}
   end
 
   @impl true
-  def handle_event("cancel", %{source: %{id: :connector_popup}}, socket) do
+  def handle_event("cancel", %{source: %{name: :connector_popup}}, socket) do
     hide_popup(socket, :connector_popup)
     {:noreply, socket}
   end
@@ -113,8 +114,8 @@ defmodule Systems.Assignment.ConnectorView do
   def render(assigns) do
     ~H"""
     <div>
-    <%= if get_child(@fabric, "#{@id}_connection_view") do %>
-      <.child id={"#{@id}_connection_view"} fabric={@fabric}/>
+    <%= if get_child(@fabric, :connection_view) do %>
+      <.stack fabric={@fabric}/>
     <% else %>
       <.wrap>
         <Button.dynamic {@connect_button} />

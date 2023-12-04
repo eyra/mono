@@ -68,6 +68,10 @@ defmodule Systems.Assignment.CrewPage do
     |> assign(image_info: image_info)
   end
 
+  defp update_image_info(socket) do
+    socket
+  end
+
   defp update_panel_info(socket, %{"panel_info" => panel_info}) do
     assign(socket, panel_info: panel_info)
   end

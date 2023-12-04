@@ -85,9 +85,9 @@ defmodule Systems.Assignment.GdprForm do
   def render(assigns) do
     ~H"""
       <div>
-        <.child id={:switch} fabric={@fabric} />
+        <.child name={:switch} fabric={@fabric} />
         <.spacing value="S" />
-        <.child id={:consent_revision_form} fabric={@fabric} />
+        <.child name={:consent_revision_form} fabric={@fabric} />
       </div>
     """
   end

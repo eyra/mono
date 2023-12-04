@@ -20,7 +20,7 @@ defmodule Frameworks.Signal.Public do
   ]
 
   def dispatch(signal, message) do
-    Logger.debug("SIGNAL: " <> pretty_print(signal) <> " => " <> pretty_print(Map.keys(message)))
+    Logger.warn("SIGNAL: " <> pretty_print(signal) <> " => " <> pretty_print(Map.keys(message)))
 
     for handler <- signal_handlers() do
       handler.intercept(signal, message)
@@ -42,7 +42,7 @@ defmodule Frameworks.Signal.Public do
   def multi_dispatch(multi, signal, message \\ %{}) when is_map(message) do
     Ecto.Multi.run(multi, :dispatch_signal, fn _, updates ->
       :ok = dispatch(signal, Map.merge(updates, message))
-      {:ok, nil}
+      {:ok, message}
     end)
   end
 

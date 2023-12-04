@@ -244,6 +244,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
   attr(:reserve_error_space, :boolean, default: true)
+  attr(:debounce, :string, default: "1000")
 
   def url_input(assigns) do
     ~H"""
@@ -255,6 +256,7 @@ defmodule Frameworks.Pixel.Form do
       label_color={@label_color}
       background={@background}
       reserve_error_space={@reserve_error_space}
+      debounce={@debounce}
       type="url"
     />
     """
@@ -266,6 +268,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
   attr(:reserve_error_space, :boolean, default: true)
+  attr(:debounce, :string, default: "1000")
 
   def password_input(assigns) do
     ~H"""
@@ -276,6 +279,7 @@ defmodule Frameworks.Pixel.Form do
       label_color={@label_color}
       background={@background}
       reserve_error_space={@reserve_error_space}
+      debounce={@debounce}
       type="password"
     />
     """

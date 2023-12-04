@@ -1,14 +1,14 @@
 defmodule Fabric.Html do
   use Phoenix.Component
 
-  attr(:id, :any, required: true)
+  attr(:name, :any, required: true)
   attr(:fabric, :map, required: true)
   slot(:header)
   slot(:footer)
 
   def child(assigns) do
     ~H"""
-      <%= if child = Fabric.get_child(@fabric, @id) do %>
+      <%= if child = Fabric.get_child(@fabric, @name) do %>
         <%= render_slot(@header) %>
         <.live_child {Map.from_struct(child)} />
         <%= render_slot(@footer) %>

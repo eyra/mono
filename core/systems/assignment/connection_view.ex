@@ -112,7 +112,6 @@ defmodule Systems.Assignment.ConnectionView do
             <% end %>
           </div>
         </:title>
-        <.spacing value="S" />
         <.live_component {@special_view} />
       </Panel.flat>
     </div>

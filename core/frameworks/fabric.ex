@@ -26,25 +26,25 @@ defmodule Fabric do
         Phoenix.Component.assign(assigns, element_id, element)
       end
 
-      def update_child(context, child_id) when is_atom(child_id) do
-        if exists?(context, child_id) do
-          compose_child(context, child_id)
+      def update_child(context, child_name) when is_atom(child_name) do
+        if exists?(context, child_name) do
+          compose_child(context, child_name)
         else
           context
         end
       end
 
-      def compose_child(%Phoenix.LiveView.Socket{assigns: assigns} = socket, child_id)
-          when is_atom(child_id) do
-        %Phoenix.LiveView.Socket{socket | assigns: compose_child(assigns, child_id)}
+      def compose_child(%Phoenix.LiveView.Socket{assigns: assigns} = socket, child_name)
+          when is_atom(child_name) do
+        %Phoenix.LiveView.Socket{socket | assigns: compose_child(assigns, child_name)}
       end
 
-      def compose_child(%{fabric: fabric} = assigns, child_id) when is_atom(child_id) do
+      def compose_child(%{fabric: fabric} = assigns, child_name) when is_atom(child_name) do
         fabric =
-          if child = prepare_child(fabric, child_id, compose(child_id, assigns)) do
+          if child = prepare_child(fabric, child_name, compose(child_name, assigns)) do
             add_child(fabric, child)
           else
-            remove_child(fabric, child_id)
+            remove_child(fabric, child_name)
           end
 
         Phoenix.Component.assign(assigns, fabric: fabric)
@@ -59,29 +59,46 @@ defmodule Fabric do
     end
   end
 
+  # Child id
+
+  def child_id(%Fabric.Model{self: self}, child_name), do: child_id(self, child_name)
+
+  def child_id(%{pid: pid}, child_name) do
+    pid_string =
+      pid
+      |> :erlang.pid_to_list()
+      |> to_string()
+      |> then(&("PID" <> &1))
+
+    child_id(pid_string, child_name)
+  end
+
+  def child_id(%{id: id}, child_name), do: child_id(id, child_name)
+  def child_id(context, child_name), do: "#{child_name}->#{context}"
   # Prepare
 
-  def prepare_child(context, child_id, %{module: module, params: params}) do
-    prepare_child(context, child_id, module, params)
+  def prepare_child(context, child_name, %{module: module, params: params}) do
+    prepare_child(context, child_name, module, params)
   end
 
   def prepare_child(_context, _child_id, _), do: nil
 
   def prepare_child(
         %Phoenix.LiveView.Socket{assigns: assigns},
-        child_id,
+        child_name,
         module,
         params
       ) do
-    prepare_child(assigns, child_id, module, params)
+    prepare_child(assigns, child_name, module, params)
   end
 
-  def prepare_child(%{fabric: fabric}, child_id, module, params) do
-    prepare_child(fabric, child_id, module, params)
+  def prepare_child(%{fabric: fabric}, child_name, module, params) do
+    prepare_child(fabric, child_name, module, params)
   end
 
-  def prepare_child(%Fabric.Model{self: self}, child_id, module, params) do
-    child_ref = %Fabric.LiveComponent.RefModel{id: child_id, module: module}
+  def prepare_child(%Fabric.Model{self: self}, child_name, module, params) do
+    child_id = child_id(self, child_name)
+    child_ref = %Fabric.LiveComponent.RefModel{id: child_id, name: child_name, module: module}
     child_fabric = %Fabric.Model{parent: self, self: child_ref, children: nil}
     params = Map.put(params, :fabric, child_fabric)
     %Fabric.LiveComponent.Model{ref: child_ref, params: params}
@@ -104,20 +121,20 @@ defmodule Fabric do
 
   # CRUD
 
-  def get_child(%Phoenix.LiveView.Socket{assigns: %{fabric: fabric}}, child_id) do
-    get_child(fabric, child_id)
+  def get_child(%Phoenix.LiveView.Socket{assigns: %{fabric: fabric}}, child_name) do
+    get_child(fabric, child_name)
   end
 
-  def get_child(%{fabric: fabric}, child_id) do
-    get_child(fabric, child_id)
+  def get_child(%{fabric: fabric}, child_name) do
+    get_child(fabric, child_name)
   end
 
-  def get_child(%Fabric.Model{children: children}, child_id) do
-    Enum.find(List.wrap(children), &(&1.ref.id == child_id))
+  def get_child(%Fabric.Model{children: children}, child_name) do
+    Enum.find(List.wrap(children), &(&1.ref.name == child_name))
   end
 
-  def exists?(context, child_id) do
-    get_child(context, child_id) != nil
+  def exists?(context, child_name) do
+    get_child(context, child_name) != nil
   end
 
   def new_fabric(%Phoenix.LiveView.Socket{} = socket) do
@@ -159,16 +176,16 @@ defmodule Fabric do
     )
   end
 
-  def hide_child(%Phoenix.LiveView.Socket{assigns: assigns} = socket, child_id) do
-    %Phoenix.LiveView.Socket{socket | assigns: hide_child(assigns, child_id)}
+  def hide_child(%Phoenix.LiveView.Socket{assigns: assigns} = socket, child_name) do
+    %Phoenix.LiveView.Socket{socket | assigns: hide_child(assigns, child_name)}
   end
 
-  def hide_child(%{fabric: fabric} = assigns, child_id) do
-    Phoenix.Component.assign(assigns, fabric: remove_child(fabric, child_id))
+  def hide_child(%{fabric: fabric} = assigns, child_name) do
+    Phoenix.Component.assign(assigns, fabric: remove_child(fabric, child_name))
   end
 
-  def show_popup(context, child_id) when is_atom(child_id) do
-    child = get_child(context, child_id)
+  def show_popup(context, child_name) when is_atom(child_name) do
+    child = get_child(context, child_name)
     show_popup(context, child)
   end
 
@@ -184,13 +201,13 @@ defmodule Fabric do
     Phoenix.Component.assign(assigns, fabric: add_child(fabric, child))
   end
 
-  def hide_popup(%Phoenix.LiveView.Socket{assigns: assigns} = socket, child_id) do
-    %Phoenix.LiveView.Socket{socket | assigns: hide_popup(assigns, child_id)}
+  def hide_popup(%Phoenix.LiveView.Socket{assigns: assigns} = socket, child_name) do
+    %Phoenix.LiveView.Socket{socket | assigns: hide_popup(assigns, child_name)}
   end
 
-  def hide_popup(%{fabric: fabric} = assigns, child_id) do
+  def hide_popup(%{fabric: fabric} = assigns, child_name) do
     send_event(fabric, :root, "hide_popup")
-    Phoenix.Component.assign(assigns, fabric: remove_child(fabric, child_id))
+    Phoenix.Component.assign(assigns, fabric: remove_child(fabric, child_name))
   end
 
   def add_child(%Fabric.Model{children: nil} = fabric, %Fabric.LiveComponent.Model{} = child) do
@@ -210,8 +227,11 @@ defmodule Fabric do
 
   def remove_child(%Fabric.Model{} = fabric, nil), do: fabric
 
-  def remove_child(%Fabric.Model{children: children} = fabric, child_id) do
-    %Fabric.Model{fabric | children: Enum.filter(List.wrap(children), &(&1.ref.id != child_id))}
+  def remove_child(%Fabric.Model{children: children} = fabric, child_name) do
+    %Fabric.Model{
+      fabric
+      | children: Enum.filter(List.wrap(children), &(&1.ref.name != child_name))
+    }
   end
 
   # Flow
@@ -266,8 +286,8 @@ defmodule Fabric do
     raise "Sending event '#{name}' to empty flow"
   end
 
-  def send_event(%Fabric.Model{} = fabric, child_id, name, payload) do
-    if child = get_child(fabric, child_id) do
+  def send_event(%Fabric.Model{} = fabric, child_name, name, payload) do
+    if child = get_child(fabric, child_name) do
       send_event(child.ref, %{name: name, payload: payload})
     end
   end

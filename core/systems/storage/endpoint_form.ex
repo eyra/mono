@@ -3,35 +3,12 @@ defmodule Systems.Storage.EndpointForm do
   use Fabric.LiveComponent
 
   alias Frameworks.Concept
-  alias Frameworks.Pixel.Selector
+  alias Frameworks.Pixel
 
   alias Systems.{
     Storage
   }
 
-  @special_form_key :storage_endpoint_special_form
-
-  # Handle Selector Update
-  @impl true
-  def update(
-        %{active_item_id: special_type, selector_id: :special_type_selector},
-        socket
-      ) do
-    special = Storage.Private.build_special(special_type)
-
-    {
-      :ok,
-      socket
-      |> assign(
-        special_type: special_type,
-        special_changeset: nil,
-        special: special
-      )
-      |> update_special_form()
-    }
-  end
-
-  # Handle initial update
   @impl true
   def update(
         %{id: id, endpoint: endpoint},
@@ -45,30 +22,16 @@ defmodule Systems.Storage.EndpointForm do
         endpoint: endpoint
       )
       |> update_special_type()
-      |> update_type_selector()
       |> update_special()
-      |> update_special_form()
+      |> update_special_title()
+      |> compose_child(:type_selector)
+      |> compose_child(:special_form)
     }
   end
 
   defp update_special_type(%{assigns: %{endpoint: endpoint}} = socket) do
-    special_type = Storage.EndpointModel.special_field_id(endpoint)
+    special_type = Storage.EndpointModel.special_field(endpoint)
     assign(socket, special_type: special_type)
-  end
-
-  defp update_type_selector(%{assigns: %{id: id, special_type: special_type}} = socket) do
-    items = Storage.ServiceIds.labels(special_type, Storage.Private.allowed_service_ids())
-
-    type_selector = %{
-      module: Selector,
-      id: :special_type_selector,
-      grid_options: "flex flex-row gap-4",
-      items: items,
-      type: :radio,
-      parent: %{type: __MODULE__, id: id}
-    }
-
-    assign(socket, type_selector: type_selector)
   end
 
   defp update_special(%{assigns: %{endpoint: endpoint}} = socket) do
@@ -76,23 +39,43 @@ defmodule Systems.Storage.EndpointForm do
     assign(socket, special: special)
   end
 
-  defp update_special_form(%{assigns: %{special_type: nil}} = socket) do
+  defp update_special_title(%{assigns: %{special_type: nil}} = socket) do
     socket
-    |> assign(@special_form_key, nil)
-    |> assign(special_form_title: nil)
+    |> assign(special_title: nil)
   end
 
-  defp update_special_form(%{assigns: %{special_type: special_type, special: special}} = socket) do
-    special_form_title = Storage.ServiceIds.translate(special_type)
-
-    child =
-      prepare_child(socket, @special_form_key, Concept.ContentModel.form(special), %{
-        model: special
-      })
+  defp update_special_title(%{assigns: %{special_type: special_type}} = socket) do
+    special_title = Storage.ServiceIds.translate(special_type)
 
     socket
-    |> replace_child(child)
-    |> assign(special_form_title: special_form_title)
+    |> assign(special_title: special_title)
+  end
+
+  @impl true
+  def compose(:type_selector, %{special_type: special_type}) do
+    items = Storage.ServiceIds.labels(special_type, Storage.Private.allowed_service_ids())
+
+    %{
+      module: Pixel.RadioGroup,
+      params: %{
+        items: items
+      }
+    }
+  end
+
+  @impl true
+  def compose(:special_form, %{special: nil}) do
+    nil
+  end
+
+  @impl true
+  def compose(:special_form, %{special: special}) do
+    %{
+      module: Concept.ContentModel.form(special),
+      params: %{
+        model: special
+      }
+    }
   end
 
   defp update_changeset(%{assigns: %{special_changeset: nil}} = socket) do
@@ -115,7 +98,24 @@ defmodule Systems.Storage.EndpointForm do
   end
 
   @impl true
-  def handle_event("update", %{source: %{id: @special_form_key}, changeset: changeset}, socket) do
+  def handle_event("update", %{source: %{name: :type_selector}, status: special_type}, socket) do
+    special = Storage.Private.build_special(special_type)
+
+    {
+      :noreply,
+      socket
+      |> assign(
+        special_type: special_type,
+        special_changeset: nil,
+        special: special
+      )
+      |> update_special_title()
+      |> compose_child(:special_form)
+    }
+  end
+
+  @impl true
+  def handle_event("update", %{source: %{name: :special_form}, changeset: changeset}, socket) do
     {
       :noreply,
       socket
@@ -126,7 +126,7 @@ defmodule Systems.Storage.EndpointForm do
 
   @impl true
   def handle_event("show_errors", _payload, socket) do
-    {:noreply, socket |> send_event(@special_form_key, "show_errors")}
+    {:noreply, socket |> send_event(:special_form, "show_errors")}
   end
 
   @impl true
@@ -136,13 +136,13 @@ defmodule Systems.Storage.EndpointForm do
       <Text.form_field_label id={:type}><%= dgettext("eyra-storage", "endpoint_form.type.label") %></Text.form_field_label>
       <.spacing value="XS" />
       <div class="w-full">
-        <.live_component {@type_selector} />
+        <.child name={:type_selector} fabric={@fabric} />
       </div>
-      <%= if get_child(@fabric, :storage_endpoint_special_form) do %>
+      <%= if get_child(@fabric, :special_form) do %>
         <.spacing value="L" />
-        <Text.title4><%= @special_form_title %> </Text.title4>
+        <Text.title4><%= @special_title %> </Text.title4>
         <.spacing value="XS" />
-        <.child id={:storage_endpoint_special_form} fabric={@fabric} />
+        <.child name={:special_form} fabric={@fabric} />
       <% end %>
     </div>
     """

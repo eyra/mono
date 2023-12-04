@@ -53,7 +53,7 @@ msgstr "Password"
 
 #, elixir-autogen, elixir-format
 msgid "yoda.url.label"
-msgstr "Portal"
+msgstr "Folder url"
 
 #, elixir-autogen, elixir-format
 msgid "yoda.user.label"

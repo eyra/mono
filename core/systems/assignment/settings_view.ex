@@ -96,13 +96,13 @@ defmodule Systems.Assignment.SettingsView do
         <Text.title2><%= dgettext("eyra-assignment", "settings.title") %></Text.title2>
         <.spacing value="L" />
 
-        <.child id={:info} fabric={@fabric} >
+        <.child name={:info} fabric={@fabric} >
           <:footer>
             <.spacing value="L" />
           </:footer>
         </.child>
 
-        <.child id={:consent} fabric={@fabric} >
+        <.child name={:consent} fabric={@fabric} >
           <:header>
             <Text.title3><%= dgettext("eyra-assignment", "settings.consent.title") %></Text.title3>
             <Text.body><%= dgettext("eyra-assignment", "settings.consent.body") %></Text.body>
@@ -113,7 +113,7 @@ defmodule Systems.Assignment.SettingsView do
           </:footer>
         </.child>
 
-        <.child id={:panel_connector} fabric={@fabric}>
+        <.child name={:panel_connector} fabric={@fabric}>
           <:header>
             <Text.title3><%= dgettext("eyra-assignment", "settings.panel.title") %></Text.title3>
             <Text.body><%= dgettext("eyra-assignment", "settings.panel.body") %></Text.body>
@@ -124,7 +124,7 @@ defmodule Systems.Assignment.SettingsView do
           </:footer>
         </.child>
 
-        <.child id={:storage_connector} fabric={@fabric}>
+        <.child name={:storage_connector} fabric={@fabric}>
           <:header>
             <Text.title3><%= dgettext("eyra-assignment", "settings.data_storage.title") %></Text.title3>
             <Text.body><%= dgettext("eyra-assignment", "settings.data_storage.body") %></Text.body>

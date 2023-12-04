@@ -42,7 +42,7 @@ defmodule Systems.Assignment.OnboardingConsentView do
         <Margin.y id={:page_top} />
         <Area.content>
           <Text.title2><%= dgettext("eyra-assignment", "onboarding.consent.title") %></Text.title2>
-          <.child id={:clickwrap_view} fabric={@fabric} />
+          <.child name={:clickwrap_view} fabric={@fabric} />
         </Area.content>
       </div>
     """
