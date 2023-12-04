@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "default.consent.text"
-msgstr "<div>Beschrijf hier de consent voorwaarden</div>"
+msgstr "<div>Voeg hier de tekst voor het toestemmingsformulier toe. Bekijk het voorbeeld om te zien hoe de pagina er voor de deelnemers uit komt te zien.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.consent.checkbox"
@@ -21,8 +21,8 @@ msgstr "Ik heb de bovenstaande voorwaarden gelezen en ga ermee akkoord"
 
 #, elixir-autogen, elixir-format
 msgid "locked.error.message"
-msgstr "Deze versie van de consent tekst is al ondertekend door participanten. Ververs de pagina om verdere aanpassingen te maken aan de tekst."
+msgstr "Deze versie van de tekst voor toestemming is al ondertekend door participanten. Ververs de pagina als je door wilt gaan met het aanpassen van de tekst."
 
 #, elixir-autogen, elixir-format
 msgid "out_of_sync.error.message"
-msgstr "Iemand heeft de consent tekst is aangepast. Ververs de pagina om verder te gaan."
+msgstr "De toestemmingstekst is aangepast. Ververs de pagina om verder te gaan."
