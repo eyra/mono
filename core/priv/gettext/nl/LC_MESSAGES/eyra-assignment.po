@@ -80,11 +80,11 @@ msgstr "Offline halen"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.consent.continue.button"
-msgstr "Continue"
+msgstr "Verder"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.consent.title"
-msgstr "Consent"
+msgstr "Toestemming"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.title"
@@ -92,7 +92,7 @@ msgstr "Instellingen"
 
 #, elixir-autogen, elixir-format
 msgid "settings.data_storage.title"
-msgstr "Opslag van deelnemers data"
+msgstr "Data opslag"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "connect.button"
@@ -144,27 +144,27 @@ msgstr "Kies jouw panel"
 
 #, elixir-autogen, elixir-format
 msgid "panel.liss.connector.annotation"
-msgstr "<h3>LISS</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div><div>Ga naar <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a> voor meer informatie.</div>"
+msgstr "<div>Het LISS panel is een panel van hoge kwaliteit dat in het bijzonder geschikt is voor onderzoek waarbij een correcte representatie van de Nederlandse bevolking van belang is. Het is gebaseerd op een waarschijnlijkheidssteekproef van huishoudens die getrokken is vanuit het CBS bevolkingsregister.</div><div>Ga naar <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a> voor meer informatie.</div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.generic.connector.annotation"
-msgstr "<h3>Other</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div>"
+msgstr "<div>Kies deze optie als je geen panel gebruikt of als het panel dat je gebruikt niet voorkomt in de opties. Er wordt dan een link getoont die je kunt gebruiken om aan de participanten of het panel te geven voor deelname aan je studie.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "panel.ioresearch.connector.annotation"
-msgstr "<h3>I&O Research</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div><div>Ga naar <a href=\"https://www.ioresearch.nl/\">www.ioresearch.nl</a> voor meer informatie.</div>"
+msgstr "<div>Voor meer informatie over I&O Research, ga naar <a href=\"https://www.ioresearch.nl/\">www.ioresearch.nl</a>.</div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.generic.connection.annotation"
-msgstr "<h3>Other</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div>"
+msgstr "<div>Copy the url below and hand it over to your contact person at the panel agency. They use this url to send participants to this assignment.<br><br>The url contains the following parameters:<ul><li>participant: identifier from the panel agency</li><li>language: 'nl' or 'en'</li></ul></div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.ioresearch.connection.annotation"
-msgstr "<h3>I&O Research</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div><div>Ga naar <a href=\"https://www.ioresearch.nl/\">www.ioresearch.nl</a> voor meer informatie.</div>"
+msgstr "<div>Copy the url below and hand it over to your contact person at I&O Research. They use this url to send participants to this assignment.<br><br>The url contains the following parameters:<ul><li>participant: identifier from I&O Research</li><li>language: 'nl' or 'en'</li></ul></div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.liss.connection.annotation"
-msgstr "<h3>LISS</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div><div>Ga naar <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a> voor meer informatie.</div>"
+msgstr "<div>Copy the url below and hand it over to your contact person at LISS. They use this url to send participants to this assignment.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.off.label"
