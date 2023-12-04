@@ -168,19 +168,19 @@ msgstr "<div>Copy the url below and hand it over to your contact person at LISS.
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.off.label"
-msgstr "Skip consent"
+msgstr "Don't show"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.on.label"
-msgstr "Show consent"
+msgstr "Show"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.body"
-msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+msgstr "Use the text field below to write a consent form for the participants in your study. If consent is already provided before participants enter the workflow, you can choose to skip the consent page."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.title"
-msgstr "Consent"
+msgstr "Consent form"
 
 #, elixir-autogen, elixir-format
 msgid "settings.subtitle.label"
