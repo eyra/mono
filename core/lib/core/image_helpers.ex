@@ -1,5 +1,5 @@
 defmodule Core.ImageHelpers do
-  @default_image_id "raw_url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1447433819943-74a20887a81e%3Fixid%3DMnwyMTY0MzZ8MHwxfHNlYXJjaHw1OXx8c3BhY2V8ZW58MHx8fHwxNjIxNzU2Njc3%26ixlib%3Drb-1.2.1&username=nasa&name=NASA&blur_hash=LMG%40%7DcK%2CBX9Ec%5BxwoOrpEmtSi%7Ct6"
+  @default_image_id "raw_url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1620121478247-ec786b9be2fa%3Fixid%3DM3w1MzYyOTF8MHwxfGFsbHx8fHx8fHx8fDE3MDE2NDIxNDl8%26ixlib%3Drb-4.0.3&username=ricvath&name=Richard%20Horvath&blur_hash=La3n%7Dpo_kObWi%3DZ~a2bKVXWFa%2Aoe"
 
   def catalog, do: Application.get_env(:core, :image_catalog)
 
