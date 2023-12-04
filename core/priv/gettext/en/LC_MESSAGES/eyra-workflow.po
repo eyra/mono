@@ -17,7 +17,7 @@ msgstr "Add"
 
 #, elixir-autogen, elixir-format
 msgid "item.description.label"
-msgstr "Description"
+msgstr "Task description"
 
 #, elixir-autogen, elixir-format
 msgid "item.donate.description"
@@ -29,7 +29,7 @@ msgstr "Donate"
 
 #, elixir-autogen, elixir-format
 msgid "item.download.description"
-msgstr "Instructs participants on how to download digital trace data."
+msgstr "Instructions for participants on how to download digital trace data."
 
 #, elixir-autogen, elixir-format
 msgid "item.download.title"
@@ -37,11 +37,11 @@ msgstr "Download manual"
 
 #, elixir-autogen, elixir-format
 msgid "item.group.label"
-msgstr "Group"
+msgstr "Data source"
 
 #, elixir-autogen, elixir-format
 msgid "item.library.description"
-msgstr "Choose which items to add to your workflow."
+msgstr "Choose which tasks to add to the workflow."
 
 #, elixir-autogen, elixir-format
 msgid "item.library.title"
@@ -49,11 +49,11 @@ msgstr "Library"
 
 #, elixir-autogen, elixir-format
 msgid "item.list.description"
-msgstr "Add items from the library to build a custom workflow for your participants."
+msgstr "Add tasks from the library to build a custom workflow for participants in your study."
 
 #, elixir-autogen, elixir-format
 msgid "item.list.hint"
-msgstr "Use the arrows to order the items"
+msgstr "Use the arrows to order the tasks"
 
 #, elixir-autogen, elixir-format
 msgid "item.list.title"
@@ -61,7 +61,7 @@ msgstr "Workflow"
 
 #, elixir-autogen, elixir-format
 msgid "item.request.description"
-msgstr "Instructs participants on how to request digital trace data."
+msgstr "Instructions for participants on how to request digital trace data."
 
 #, elixir-autogen, elixir-format
 msgid "item.request.title"
@@ -69,7 +69,7 @@ msgstr "Request manual"
 
 #, elixir-autogen, elixir-format
 msgid "item.title.label"
-msgstr "Title"
+msgstr "Task title"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.workflow"
@@ -77,7 +77,7 @@ msgstr "Workflow"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.workflow.forward"
-msgstr "Go to Workflow"
+msgstr "Workflow"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "item.questionnaire.description"
