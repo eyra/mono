@@ -100,7 +100,7 @@ defmodule Systems.Project.ItemModel do
            {Project.NodePage, :item_card},
            _user
          ) do
-      image_info = ImageHelpers.get_image_info(image_id, 120, 115)
+      image_info = ImageHelpers.get_image_info(image_id, 400, 200)
       tags = get_card_tags(assignment)
       path = ~p"/assignment/#{assignment_id}/content"
 
