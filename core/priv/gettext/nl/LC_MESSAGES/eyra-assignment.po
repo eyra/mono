@@ -96,43 +96,43 @@ msgstr "Data opslag"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "connect.button"
-msgstr "Koppeling maken"
+msgstr "Koppel"
 
 #, elixir-autogen, elixir-format
 msgid "connector.cancel.button"
-msgstr ""
+msgstr "Annuleren"
 
 #, elixir-autogen, elixir-format
 msgid "connector.connect.button"
-msgstr ""
+msgstr "Koppel"
 
 #, elixir-autogen, elixir-format
 msgid "connector.panel.text"
-msgstr ""
+msgstr "Kies het panel dat je wilt gebruiken. Nadat je gekozen hebt worden instructies gegeven over hoe de koppeling in zijn werk gaat."
 
 #, elixir-autogen, elixir-format
 msgid "connector.panel.title"
-msgstr ""
+msgstr "Koppel panel"
 
 #, elixir-autogen, elixir-format
 msgid "connector.storage.text"
-msgstr ""
+msgstr "Kies het type data opslag dat je wilt gebruiken om de data van de deelnemers op te slaan."
 
 #, elixir-autogen, elixir-format
 msgid "connector.storage.title"
-msgstr ""
+msgstr "Koppel data opslag"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.data_storage.body"
-msgstr "Opslag van deelnemers data"
+msgstr "Koppel het soort opslag dat je wilt gebruiken voor het opslaan van de data die door deelnemers aan je studie wordt gedoneerd."
 
 #, elixir-autogen, elixir-format
 msgid "settings.panel.body"
-msgstr ""
+msgstr "Koppel het panel dat je wilt gebruiken voor het werven van deelnemers voor jouw studie. Maak je geen gebruik van een panel? Kies dan 'anders'."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.panel.title"
-msgstr "Instellingen"
+msgstr "Panel"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "disconnect.button"
@@ -140,7 +140,7 @@ msgstr "Ontkoppel"
 
 #, elixir-autogen, elixir-format
 msgid "panel_form.type.label"
-msgstr "Kies jouw panel"
+msgstr "Panels"
 
 #, elixir-autogen, elixir-format
 msgid "panel.liss.connector.annotation"
