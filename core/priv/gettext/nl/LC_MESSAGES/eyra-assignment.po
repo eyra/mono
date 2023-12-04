@@ -212,7 +212,7 @@ msgstr "Jouw organisatie logo"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.text"
-msgstr "Gebruik de velden hieronder om de omslag van jouw data donatie workflow voor respondenten aan te passen. Benieuwd hoe dit eruit komt te zien voor respondenten\? Klik op \'Voorbeeld\' rechtsboven."
+msgstr "Gebruik de velden hieronder om de omslag van jouw data donatie workflow voor respondenten aan te passen."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.title"
