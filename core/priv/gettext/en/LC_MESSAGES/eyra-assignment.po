@@ -120,7 +120,7 @@ msgstr "Select the storage type that you would like to use to store the particip
 
 #, elixir-autogen, elixir-format
 msgid "connector.storage.title"
-msgstr "Connect Storage"
+msgstr "Connect data storage"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.data_storage.body"
