@@ -156,15 +156,15 @@ msgstr "<div>For more information about I&O research visit <a href=\"https://www
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.generic.connection.annotation"
-msgstr "<div>Copy the url below and hand it over to your contact person at the panel agency. They use this url to send participants to this assignment.<br><br>The url contains the following parameters:<ul><li>participant: identifier from the panel agency</li><li>language: 'nl' or 'en'</li></ul></div>"
+msgstr "<div>Copy the url below and provide it to your contact person at the panel agency. With this url participants can visit your data donation workflow.<br><br>The url contains the following parameters:<ul><li>participant: a unique identifier for a participant</li><li>language: 'nl' for Dutch or 'en' for English</li></ul></div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.ioresearch.connection.annotation"
-msgstr "<div>Copy the url below and hand it over to your contact person at I&O Research. They use this url to send participants to this assignment.<br><br>The url contains the following parameters:<ul><li>participant: identifier from I&O Research</li><li>language: 'nl' or 'en'</li></ul></div>"
+msgstr "<div>Copy the url below and provide it to your contact person at I&O Research. With this url participants can visit your data donation workflow.<br><br>The url contains the following parameters:<ul><li>participant: an identifier from I&O Research</li><li>language: 'nl' for Dutch or 'en' for English</li></ul></div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.liss.connection.annotation"
-msgstr "<div>Copy the url below and hand it over to your contact person at LISS. They use this url to send participants to this assignment.</div>"
+msgstr "<div>Copy the url below and provide it to your contact person at Centerdata. With this url participants can visit your data donation workflow. For the LISS panel, make sure to only add the donate task to your workflow. The other tasks are performed by Centerdata.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.off.label"
