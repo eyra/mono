@@ -168,19 +168,19 @@ msgstr "<h3>LISS</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing eli
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.off.label"
-msgstr "Consent overslaan"
+msgstr "Niet tonen"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.on.label"
-msgstr "Consent tonen"
+msgstr "Tonen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.body"
-msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+msgstr "Gebruik het tekstvak hieronder om een toestemmingsformulier op te stellen voor de deelnemers aan je studie. Als de deelnemers al op een andere manier toestemming hebben gegeven, dan kun je de pagina overslaan."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.title"
-msgstr "Toestemming"
+msgstr "Toestemmingsformulier"
 
 #, elixir-autogen, elixir-format
 msgid "settings.subtitle.label"
