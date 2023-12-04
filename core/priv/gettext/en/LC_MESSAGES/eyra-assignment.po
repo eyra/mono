@@ -116,15 +116,15 @@ msgstr "Connect panel"
 
 #, elixir-autogen, elixir-format
 msgid "connector.storage.text"
-msgstr "Connect your participant database"
+msgstr "Select the storage type that you would like to use to store the participant data."
 
 #, elixir-autogen, elixir-format
 msgid "connector.storage.title"
-msgstr "Set up connection"
+msgstr "Connect Storage"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.data_storage.body"
-msgstr "Connection to the database that will be used to store the participant data."
+msgstr "Connect the storage that you would like to use to store the data that will be donated by participants."
 
 #, elixir-autogen, elixir-format
 msgid "settings.panel.body"
