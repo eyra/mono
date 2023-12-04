@@ -156,15 +156,15 @@ msgstr "<div>Voor meer informatie over I&O Research, ga naar <a href=\"https://w
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.generic.connection.annotation"
-msgstr "<div>Copy the url below and hand it over to your contact person at the panel agency. They use this url to send participants to this assignment.<br><br>The url contains the following parameters:<ul><li>participant: identifier from the panel agency</li><li>language: 'nl' or 'en'</li></ul></div>"
+msgstr "<div>Kopieer de url hieronder en geef deze aan jouw contactpersoon bij het panel bureau of direct aan je deelnemers. Met deze url kunnen deelnemers jouw data donatie takenlijst bezoeken.<br><br>The url bevat de volgende parameters:<ul><li>participant: uniek nummer voor een deelnemer</li><li>language: 'nl' voor Nederlands of 'en' voor Engels</li></ul></div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.ioresearch.connection.annotation"
-msgstr "<div>Copy the url below and hand it over to your contact person at I&O Research. They use this url to send participants to this assignment.<br><br>The url contains the following parameters:<ul><li>participant: identifier from I&O Research</li><li>language: 'nl' or 'en'</li></ul></div>"
+msgstr "<div>Kopieer de url hieronder en geef deze aan jouw contactpersoon bij I&O Research. Met deze url kunnen deelnemers jouw data donatie takenlijst bezoeken.<br><br>The url bevat de volgende parameters:<ul><li>participant: uniek nummer voor een deelnemer vanuit I&O Research</li><li>language: 'nl' voor Nederlands of 'en' voor Engels</li></ul></div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.liss.connection.annotation"
-msgstr "<div>Copy the url below and hand it over to your contact person at LISS. They use this url to send participants to this assignment.</div>"
+msgstr "<div>Kopieer de url hieronder en geef deze aan jouw contactpersoon bij Centerdata. Met deze url kunnen LISS panelleden jouw data donatie takenlijst bezoeken. Zorg ervoor dat je alleen de data donatie taak toevoegt aan je takenlijst voor LISS panelleden. De andere taken worden bij Centerdata uitgevoerd.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.off.label"
