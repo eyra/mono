@@ -247,6 +247,14 @@ defmodule Systems.Assignment.Public do
     Core.Persister.save(assignment, changeset)
   end
 
+  def update_storage_endpoint(assignment, storage_endpoint) do
+    changeset =
+      Assignment.Model.changeset(assignment, %{})
+      |> Ecto.Changeset.put_assoc(:storage_endpoint, storage_endpoint)
+
+    Core.Persister.save(assignment, changeset)
+  end
+
   def is_owner?(assignment, user) do
     Core.Authorization.user_has_role?(user, assignment, :owner)
   end

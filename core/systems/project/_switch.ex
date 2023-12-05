@@ -38,8 +38,15 @@ defmodule Systems.Project.Switch do
   end
 
   @impl true
-  def intercept({:project_item, _}, %{project_item: project_item}) do
-    update_pages(project_item)
+  def intercept({:project_node, _} = signal, %{project_node: project_node} = message) do
+    update_pages(project_node)
+
+    if project = Project.Public.get_by_root(project_node) do
+      dispatch!(
+        {:project, signal},
+        Map.merge(message, %{project: project})
+      )
+    end
   end
 
   @impl true
@@ -52,9 +59,9 @@ defmodule Systems.Project.Switch do
     |> then(&dispatch!({:tool_ref, signal}, Map.merge(message, %{tool_ref: &1})))
   end
 
-  defp update_pages(%Project.ItemModel{} = item) do
+  defp update_pages(%Project.NodeModel{} = node) do
     [Project.NodePage]
-    |> Enum.each(&update_page(&1, item))
+    |> Enum.each(&update_page(&1, node))
   end
 
   defp update_pages(%Project.Model{} = project) do

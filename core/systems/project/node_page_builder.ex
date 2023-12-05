@@ -6,13 +6,11 @@ defmodule Systems.Project.NodePageBuilder do
   }
 
   def view_model(
-        %{
+        %Project.NodeModel{
           id: id
-        },
+        } = node,
         assigns
       ) do
-    node = Project.Public.get_node!(id, Project.NodeModel.preload_graph(:down))
-
     item_cards = to_item_cards(node, assigns)
     node_cards = to_node_cards(node, assigns)
 

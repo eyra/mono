@@ -323,16 +323,12 @@ msgid "organisation_types.team"
 msgstr "Department"
 
 #, elixir-autogen, elixir-format
-msgid "project_templates.benchmark"
+msgid "project_item_templates.benchmark"
 msgstr "Benchmark"
 
 #, elixir-autogen, elixir-format
-msgid "project_templates.data_donation"
+msgid "project_item_templates.data_donation"
 msgstr "Data Donation"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "project_templates.empty"
-msgstr "Empty"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "templates.data_donation"
@@ -373,3 +369,7 @@ msgstr "I&O Research"
 #, elixir-autogen, elixir-format
 msgid "external_panel_ids.liss"
 msgstr "LISS"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "templates.benchmark"
+msgstr "Benchmark"

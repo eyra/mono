@@ -42,7 +42,7 @@ defmodule Frameworks.Signal.Public do
   def multi_dispatch(multi, signal, message \\ %{}) when is_map(message) do
     Ecto.Multi.run(multi, :dispatch_signal, fn _, updates ->
       :ok = dispatch(signal, Map.merge(updates, message))
-      {:ok, nil}
+      {:ok, message}
     end)
   end
 

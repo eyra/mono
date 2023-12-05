@@ -1,7 +1,7 @@
 defmodule Fabric.LiveComponent do
   defmodule RefModel do
-    @type t :: %__MODULE__{id: atom() | binary(), module: atom()}
-    defstruct [:id, :module]
+    @type t :: %__MODULE__{id: atom() | binary(), name: atom() | binary(), module: atom()}
+    defstruct [:id, :name, :module]
   end
 
   defmodule Model do

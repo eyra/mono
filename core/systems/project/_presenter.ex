@@ -4,7 +4,7 @@ defmodule Systems.Project.Presenter do
   alias Systems.Project
 
   @impl true
-  def view_model(Project.NodePage, %Project.NodeModel{} = node, assigns) do
+  def view_model(Project.NodePage, node, assigns) do
     Project.NodePageBuilder.view_model(node, assigns)
   end
 

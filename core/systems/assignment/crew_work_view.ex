@@ -191,17 +191,17 @@ defmodule Systems.Assignment.CrewWorkView do
     ~H"""
       <div class="w-full h-full flex flex-row">
         <%= if exists?(@fabric, :tool_ref_view) do %>
-          <.child id={:tool_ref_view} fabric={@fabric} />
+          <.child name={:tool_ref_view} fabric={@fabric} />
         <% else %>
           <%= if exists?(@fabric, :work_list_view) do %>
             <div class="w-left-column">
-              <.child id={:work_list_view} fabric={@fabric} />
+              <.child name={:work_list_view} fabric={@fabric} />
             </div>
             <div class="border-l border-grey4">
             </div>
           <% end %>
           <div class="h-full w-full">
-            <.child id={:start_view} fabric={@fabric} />
+            <.child name={:start_view} fabric={@fabric} />
           </div>
         <% end %>
       </div>

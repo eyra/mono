@@ -123,13 +123,19 @@ if config_env() == :prod do
     dsn: System.get_env("SENTRY_DSN"),
     environment_name: System.get_env("RELEASE_ENV") || "prod"
 
+  config :core, :content,
+    backend: Systems.Content.S3,
+    bucket: System.get_env("PUBLIC_S3_BUCKET"),
+    public_url: System.get_env("PUBLIC_S3_URL"),
+    prefix: System.get_env("CONTENT_S3_PREFIX", nil)
+
   config :core, :feldspar,
     backend: Systems.Feldspar.S3,
-    bucket: System.get_env("FELDSPAR_S3_BUCKET"),
-    prefix: System.get_env("FELDSPAR_S3_PREFIX", nil),
+    bucket: System.get_env("PUBLIC_S3_BUCKET"),
     # The public URL must point to the root's (bucket) publicly accessible URL.
     # It should have a policy that allows anonymous users to read all files.
-    public_url: System.get_env("FELDSPAR_S3_PUBLIC_URL")
+    public_url: System.get_env("PUBLIC_S3_URL"),
+    prefix: System.get_env("FELDSPAR_S3_PREFIX", nil)
 
   config :core,
          :dist_hosts,

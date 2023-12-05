@@ -24,8 +24,8 @@ defmodule Fabric.LiveViewMock do
   @impl true
   def render(assigns) do
     ~H"""
-      <.child id={:child_a} fabric={@fabric} />
-      <.child id={:child_b} fabric={@fabric} />
+      <.child name={:child_a} fabric={@fabric} />
+      <.child name={:child_b} fabric={@fabric} />
     """
   end
 end

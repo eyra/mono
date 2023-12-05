@@ -257,7 +257,3 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "submit.button"
 msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "save.button"
-msgstr ""

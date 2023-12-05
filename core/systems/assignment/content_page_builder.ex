@@ -11,9 +11,10 @@ defmodule Systems.Assignment.ContentPageBuilder do
   }
 
   def view_model(
-        %{id: id} = assignment,
+        %{id: id, special: special} = assignment,
         assigns
       ) do
+    title = get_title(special)
     show_errors = show_errors(assignment, assigns)
     tabs = create_tabs(assignment, show_errors, assigns)
     action_map = action_map(assignment)
@@ -21,11 +22,19 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
     %{
       id: id,
-      title: dgettext("eyra-assignment", "content.title"),
+      title: title,
       tabs: tabs,
       actions: actions,
       show_errors: show_errors
     }
+  end
+
+  defp get_title(nil) do
+    dgettext("eyra-assignment", "content.title")
+  end
+
+  defp get_title(special) do
+    Assignment.Templates.translate(special)
   end
 
   defp show_errors(_, _) do

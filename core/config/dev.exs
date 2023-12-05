@@ -85,6 +85,15 @@ config :core,
 #   access_key_id: "my_access_key",
 #   secret_access_key: "a_super_secret"
 
+config :core, :content,
+  backend: Systems.Content.LocalFS,
+  local_fs_root_path:
+    File.cwd!()
+    |> Path.join("priv")
+    |> Path.join("static")
+    |> Path.join("content")
+    |> tap(&File.mkdir_p!/1)
+
 config :core, :feldspar,
   backend: Systems.Feldspar.LocalFS,
   local_fs_root_path:

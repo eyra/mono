@@ -8,6 +8,7 @@ module.exports = {
     "./js/**/*.js",
   ],
   safelist: [
+    "drop-shadow-lg",
     "drop-shadow-2xl",
     "text-bold",
     "text-pre",

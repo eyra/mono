@@ -35,7 +35,11 @@ defmodule Fabric.Test do
         |> Fabric.prepare_child(:child, Fabric.LiveComponentMock, %{})
 
       assert %Fabric.LiveComponent.Model{
-               ref: %Fabric.LiveComponent.RefModel{id: :child, module: Fabric.LiveComponentMock},
+               ref: %Fabric.LiveComponent.RefModel{
+                 id: :child,
+                 name: :child,
+                 module: Fabric.LiveComponentMock
+               },
                params: %{
                  fabric: %Fabric.Model{
                    parent: nil,
@@ -55,7 +59,11 @@ defmodule Fabric.Test do
       child = Fabric.prepare_child(fabric, :child, Fabric.LiveComponentMock, %{})
 
       assert %Fabric.LiveComponent.Model{
-               ref: %Fabric.LiveComponent.RefModel{id: :child, module: Fabric.LiveComponentMock},
+               ref: %Fabric.LiveComponent.RefModel{
+                 id: :child,
+                 name: :child,
+                 module: Fabric.LiveComponentMock
+               },
                params: %{
                  fabric: %Fabric.Model{
                    parent: nil,
@@ -81,7 +89,11 @@ defmodule Fabric.Test do
         |> Fabric.get_child(:child)
 
       assert %Fabric.LiveComponent.Model{
-               ref: %Fabric.LiveComponent.RefModel{id: :child, module: Fabric.LiveComponentMock},
+               ref: %Fabric.LiveComponent.RefModel{
+                 id: :child,
+                 name: :child,
+                 module: Fabric.LiveComponentMock
+               },
                params: %{
                  fabric: %Fabric.Model{
                    parent: nil,
@@ -101,7 +113,11 @@ defmodule Fabric.Test do
         |> Fabric.get_child(:child)
 
       assert %Fabric.LiveComponent.Model{
-               ref: %Fabric.LiveComponent.RefModel{id: :child, module: Fabric.LiveComponentMock},
+               ref: %Fabric.LiveComponent.RefModel{
+                 id: :child,
+                 name: :child,
+                 module: Fabric.LiveComponentMock
+               },
                params: %{
                  fabric: %Fabric.Model{
                    parent: nil,
@@ -311,11 +327,19 @@ defmodule Fabric.Test do
             params: %{
               fabric: %Fabric.Model{
                 parent: nil,
-                self: %Fabric.LiveComponent.RefModel{id: :child, module: Fabric.LiveComponentMock},
+                self: %Fabric.LiveComponent.RefModel{
+                  id: :child,
+                  name: :child,
+                  module: Fabric.LiveComponentMock
+                },
                 children: nil
               }
             },
-            ref: %Fabric.LiveComponent.RefModel{id: :child, module: Fabric.LiveComponentMock}
+            ref: %Fabric.LiveComponent.RefModel{
+              id: :child,
+              name: :child,
+              module: Fabric.LiveComponentMock
+            }
           }
         }
       }
