@@ -133,7 +133,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "create.item.title"
-msgstr "Kies item sjabloon"
+msgstr "Kies type"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "item.form.name.label"
@@ -141,7 +141,7 @@ msgstr "Naam"
 
 #, elixir-autogen, elixir-format
 msgid "item.form.title"
-msgstr "Item instellingen"
+msgstr "Instellingen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.support"

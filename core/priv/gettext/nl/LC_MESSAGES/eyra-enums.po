@@ -328,7 +328,7 @@ msgstr "Benchmark"
 
 #, elixir-autogen, elixir-format
 msgid "project_item_templates.data_donation"
-msgstr "DData Donatie"
+msgstr "Data Donatie"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "templates.data_donation"
@@ -360,7 +360,7 @@ msgstr "Amazon S3"
 
 #, elixir-autogen, elixir-format
 msgid "external_panel_ids.generic"
-msgstr "Andere"
+msgstr "Anders"
 
 #, elixir-autogen, elixir-format
 msgid "external_panel_ids.ioresearch"

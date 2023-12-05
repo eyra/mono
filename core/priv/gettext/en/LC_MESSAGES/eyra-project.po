@@ -133,7 +133,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "create.item.title"
-msgstr "Select item template"
+msgstr "Select type"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "item.form.name.label"
@@ -141,7 +141,7 @@ msgstr "Name"
 
 #, elixir-autogen, elixir-format
 msgid "item.form.title"
-msgstr "Item settings"
+msgstr "Settings"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.support"

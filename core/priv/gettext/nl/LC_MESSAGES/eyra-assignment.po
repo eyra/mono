@@ -96,7 +96,7 @@ msgstr "Data opslag"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "connect.button"
-msgstr "Koppel"
+msgstr "Instellen"
 
 #, elixir-autogen, elixir-format
 msgid "connector.cancel.button"
@@ -108,27 +108,27 @@ msgstr "Koppel"
 
 #, elixir-autogen, elixir-format
 msgid "connector.panel.text"
-msgstr "Kies het panel dat je wilt gebruiken. Nadat je gekozen hebt worden instructies gegeven over hoe de koppeling in zijn werk gaat."
+msgstr "Koppel het panel dat je wilt gebruiken. Staat het panel dat je gebruikt er niet tussen of maak je geen gebruik van een panel? Kies dan 'Anders'."
 
 #, elixir-autogen, elixir-format
 msgid "connector.panel.title"
-msgstr "Koppel panel"
+msgstr "Panel instellen"
 
 #, elixir-autogen, elixir-format
 msgid "connector.storage.text"
-msgstr "Kies het type data opslag dat je wilt gebruiken om de data van de deelnemers op te slaan."
+msgstr "Koppel de data opslag die je wilt gebruiken om de data van de deelnemers op te slaan."
 
 #, elixir-autogen, elixir-format
 msgid "connector.storage.title"
-msgstr "Koppel data opslag"
+msgstr "Data opslag instellen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.data_storage.body"
-msgstr "Koppel het soort opslag dat je wilt gebruiken voor het opslaan van de data die door deelnemers aan je studie wordt gedoneerd."
+msgstr "Stel het soort opslag in dat je wilt gebruiken voor het opslaan van de data die door jouw deelnemers wordt gedoneerd."
 
 #, elixir-autogen, elixir-format
 msgid "settings.panel.body"
-msgstr "Koppel het panel dat je wilt gebruiken voor het werven van deelnemers voor jouw studie. Maak je geen gebruik van een panel? Kies dan 'anders'."
+msgstr "Stel het panel in dat je wilt gebruiken voor het werven van deelnemers."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.panel.title"
@@ -148,7 +148,7 @@ msgstr "<div>Het LISS panel is een panel van hoge kwaliteit dat in het bijzonder
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.generic.connector.annotation"
-msgstr "<div>Kies deze optie als je geen panel gebruikt of als het panel dat je gebruikt niet voorkomt in de opties. Er wordt dan een link getoont die je kunt gebruiken om aan de participanten of het panel te geven voor deelname aan je studie.</div>"
+msgstr "<div>Kies deze optie als je geen panel gebruikt of als het panel dat je gebruikt niet voorkomt in de opties. Er wordt dan een link getoont die je kunt gebruiken om aan de participanten of het panel te geven voor deelname.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "panel.ioresearch.connector.annotation"
@@ -176,7 +176,7 @@ msgstr "Tonen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.body"
-msgstr "Gebruik het tekstvak hieronder om een toestemmingsformulier op te stellen voor de deelnemers aan je studie. Als de deelnemers al op een andere manier toestemming hebben gegeven, dan kun je de pagina overslaan."
+msgstr "Gebruik het tekstvak hieronder om een toestemmingsformulier op te stellen voor jouw deelnemers. Hebben de deelnemers al op een andere manier toestemming gegeven? Kies er dan voor om het toestemmingsformulier niet te tonen."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.title"
@@ -184,11 +184,11 @@ msgstr "Toestemmingsformulier"
 
 #, elixir-autogen, elixir-format
 msgid "settings.subtitle.label"
-msgstr "Jouw organisatie naam"
+msgstr "Organisatie naam"
 
 #, elixir-autogen, elixir-format
 msgid "settings.title.label"
-msgstr "Studie titel"
+msgstr "Titel"
 
 #, elixir-autogen, elixir-format
 msgid "settings.image.title"
@@ -208,11 +208,11 @@ msgstr "Verander logo"
 
 #, elixir-autogen, elixir-format
 msgid "settings.logo.title"
-msgstr "Jouw organisatie logo"
+msgstr "Organisatie logo"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.text"
-msgstr "Gebruik de velden hieronder om de omslag van jouw data donatie workflow voor respondenten aan te passen. Benieuwd hoe dit eruit komt te zien voor respondenten? Klik op 'Voorbeeld' rechtsboven."
+msgstr "Gebruik de velden hieronder om de omslag van jouw data donatie workflow voor respondenten aan te passen. Voeg de naam en het logo toe van de organisatie die verantwoordelijk is voor de data donatie workflow. Benieuwd hoe dit eruit komt te zien voor respondenten? Klik op 'Voorbeeld' rechtsboven."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.title"
