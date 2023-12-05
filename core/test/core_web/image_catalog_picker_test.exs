@@ -29,7 +29,7 @@ defmodule CoreWeb.UI.ImageCatalogPicker.Test.View do
   def render(assigns) do
     ~H"""
     <div>
-      <.child id={:image_picker} fabric={@fabric} />
+      <.child name={:image_picker} fabric={@fabric} />
     </div>
     """
   end

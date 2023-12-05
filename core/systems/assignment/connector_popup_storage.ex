@@ -5,10 +5,9 @@ defmodule Systems.Assignment.ConnectorPopupStorage do
   import CoreWeb.UI.Dialog
 
   alias Systems.{
+    Assignment,
     Storage
   }
-
-  @endpoint_form_key :endpoint_form
 
   @impl true
   def update(%{id: id, entity: assignment}, socket) do
@@ -23,7 +22,7 @@ defmodule Systems.Assignment.ConnectorPopupStorage do
       |> update_text()
       |> update_buttons()
       |> update_storage_endpoint()
-      |> update_storage_endpoint_form()
+      |> compose_child(:storage_endpoint_form)
     }
   end
 
@@ -62,62 +61,57 @@ defmodule Systems.Assignment.ConnectorPopupStorage do
     assign(socket, storage_endpoint: storage_endpoint)
   end
 
-  defp update_storage_endpoint_form(%{assigns: %{storage_endpoint: storage_endpoint}} = socket) do
-    child =
-      prepare_child(socket, @endpoint_form_key, Storage.EndpointForm, %{
+  @impl true
+  def compose(:storage_endpoint_form, %{storage_endpoint: storage_endpoint}) do
+    %{
+      module: Storage.EndpointForm,
+      params: %{
         endpoint: storage_endpoint
-      })
-
-    show_child(socket, child)
-  end
-
-  @impl true
-  def handle_event("connect_storage", _payload, socket) do
-    {
-      :noreply,
-      socket |> commit_form()
+      }
     }
   end
 
   @impl true
-  def handle_event("cancel", _payload, socket) do
-    {
-      :noreply,
-      socket |> cancel_popup()
-    }
-  end
-
-  @impl true
-  def handle_event("update", %{source: %{id: @endpoint_form_key}, changeset: changeset}, socket) do
+  def handle_event(
+        "update",
+        %{source: %{name: :storage_endpoint_form}, changeset: changeset},
+        socket
+      ) do
     {
       :noreply,
       socket |> assign(endpoint_changeset: changeset)
     }
   end
 
-  defp commit_form(%{assigns: %{endpoint_changeset: nil}} = socket) do
-    socket
+  @impl true
+  def handle_event("connect_storage", _payload, socket) do
+    {:noreply, socket |> connect()}
   end
 
-  defp commit_form(%{assigns: %{endpoint_changeset: endpoint_changeset}} = socket) do
-    case Ecto.Changeset.apply_action(endpoint_changeset, :update) do
-      {:ok, endpoint} ->
-        socket
-        |> assign(endpoint: endpoint)
-        |> finish()
-
-      {:error, _} ->
-        socket
-        |> send_event(@endpoint_form_key, "show_errors")
-    end
+  @impl true
+  def handle_event("cancel", _payload, socket) do
+    {:noreply, socket |> cancel_popup()}
   end
 
   defp cancel_popup(socket) do
     socket |> send_event(:parent, "cancel")
   end
 
-  defp finish(%{assigns: %{endpoint: endpoint}} = socket) do
-    socket |> send_event(:parent, "finish", %{connection: endpoint})
+  defp connect(%{assigns: %{endpoint_changeset: nil}} = socket) do
+    socket
+  end
+
+  defp connect(%{assigns: %{endpoint_changeset: endpoint_changeset, entity: entity}} = socket) do
+    case Assignment.Public.update_storage_endpoint(entity, endpoint_changeset) do
+      {:ok, assignment} ->
+        socket
+        |> assign(entity: assignment)
+        |> send_event(:parent, "finish", %{connection: %{endpoint: assignment.storage_endpoint}})
+
+      {:error, _changeset} ->
+        socket
+        |> send_event(:storage_endpoint_form, "show_errors")
+    end
   end
 
   @impl true
@@ -125,7 +119,7 @@ defmodule Systems.Assignment.ConnectorPopupStorage do
     ~H"""
     <div>
       <.dialog {%{title: @title, text: @text, buttons: @buttons}}>
-        <.child id={:endpoint_form} fabric={@fabric}/>
+        <.child name={:storage_endpoint_form} fabric={@fabric}/>
       </.dialog>
     </div>
     """

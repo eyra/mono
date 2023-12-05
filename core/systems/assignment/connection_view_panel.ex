@@ -74,6 +74,7 @@ defmodule Systems.Assignment.ConnectionViewPanel do
   def render(assigns) do
     ~H"""
     <div>
+      <.spacing value="S" />
       <%= if @annotation do %>
         <Annotation.view annotation={@annotation} />
       <% end %>

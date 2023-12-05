@@ -4,8 +4,14 @@ defmodule Frameworks.Pixel.RadioGroup do
 
   @impl true
   def update(%{items: items}, socket) do
-    active_item = items |> Enum.find(& &1.active)
-    form = to_form(%{"radio-group" => "#{active_item.id}"})
+    value =
+      if active_item = items |> Enum.find(& &1.active) do
+        "#{active_item.id}"
+      else
+        ""
+      end
+
+    form = to_form(%{"radio-group" => value})
 
     {
       :ok,

@@ -36,15 +36,24 @@ defmodule Systems.Storage.EndpointForm.Helper do
       end
 
       @impl true
-      def handle_event("show_errors", _payload, socket) do
-        {:noreply, socket |> assign(show_errors: true)}
+      def handle_event("show_errors", _payload, %{assigns: %{changeset: changeset}} = socket) do
+        {
+          :noreply,
+          socket |> assign(show_errors: true)
+        }
       end
 
       defp update_changeset(%{assigns: %{id: id, model: model, attrs: attrs}} = socket) do
         changeset =
           Model.changeset(model, attrs)
           |> Model.validate()
-          |> Map.put(:action, :update)
+
+        changeset =
+          if model.id do
+            Map.put(changeset, :action, :update)
+          else
+            Map.put(changeset, :action, :insert)
+          end
 
         socket
         |> assign(:changeset, changeset)
