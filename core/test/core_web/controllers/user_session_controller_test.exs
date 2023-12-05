@@ -25,7 +25,7 @@ defmodule CoreWeb.UserSessionControllerTest do
 
     test "redirects if already logged in", %{conn: conn} do
       conn = get(conn, ~p"/user/signin")
-      assert redirected_to(conn) == "/console"
+      assert redirected_to(conn) == "/project"
     end
   end
 

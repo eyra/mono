@@ -5,6 +5,7 @@ if config_env() == :prod do
   app_domain = System.fetch_env!("APP_DOMAIN")
   app_mail_domain = System.fetch_env!("APP_MAIL_DOMAIN")
   app_mail_noreply = "no-reply@#{app_mail_domain}"
+  static_path = System.fetch_env!("STATIC_PATH")
 
   # Allow enabling of features from an environment variable
   config :core,
@@ -18,7 +19,7 @@ if config_env() == :prod do
          :admins,
          System.get_env("APP_ADMINS", "") |> String.split() |> Systems.Admin.Public.compile()
 
-  config :core, :static_path, System.fetch_env!("STATIC_PATH")
+  config :core, :static_path, static_path
 
   config :core, CoreWeb.Endpoint,
     cache_static_manifest: "priv/static/cache_manifest.json",
@@ -119,23 +120,37 @@ if config_env() == :prod do
 
   config :logger, level: System.get_env("LOG_LEVEL", "info") |> String.to_existing_atom()
 
-  config :sentry,
-    dsn: System.get_env("SENTRY_DSN"),
-    environment_name: System.get_env("RELEASE_ENV") || "prod"
+  if sentry_dsn = System.get_env("SENTRY_DSN") do
+    config :sentry,
+      dsn: sentry_dsn,
+      environment_name: System.get_env("RELEASE_ENV") || "prod"
+  end
 
-  config :core, :content,
-    backend: Systems.Content.S3,
-    bucket: System.get_env("PUBLIC_S3_BUCKET"),
-    public_url: System.get_env("PUBLIC_S3_URL"),
-    prefix: System.get_env("CONTENT_S3_PREFIX", nil)
+  if content_s3_prefix = System.get_env("CONTENT_S3_PREFIX") do
+    config :core, :content,
+      backend: Systems.Content.S3,
+      bucket: System.get_env("PUBLIC_S3_BUCKET"),
+      public_url: System.get_env("PUBLIC_S3_URL"),
+      prefix: content_s3_prefix
+  else
+    config :core, :content,
+      backend: Systems.Content.LocalFS,
+      local_fs_root_path: static_path
+  end
 
-  config :core, :feldspar,
-    backend: Systems.Feldspar.S3,
-    bucket: System.get_env("PUBLIC_S3_BUCKET"),
-    # The public URL must point to the root's (bucket) publicly accessible URL.
-    # It should have a policy that allows anonymous users to read all files.
-    public_url: System.get_env("PUBLIC_S3_URL"),
-    prefix: System.get_env("FELDSPAR_S3_PREFIX", nil)
+  if feldspar_s3_prefix = System.get_env("FELDSPAR_S3_PREFIX") do
+    config :core, :feldspar,
+      backend: Systems.Feldspar.S3,
+      bucket: System.get_env("PUBLIC_S3_BUCKET"),
+      # The public URL must point to the root's (bucket) publicly accessible URL.
+      # It should have a policy that allows anonymous users to read all files.
+      public_url: System.get_env("PUBLIC_S3_URL"),
+      prefix: feldspar_s3_prefix
+  else
+    config :core, :feldspar,
+      backend: Systems.Feldspar.LocalFS,
+      local_fs_root_path: static_path
+  end
 
   config :core,
          :dist_hosts,

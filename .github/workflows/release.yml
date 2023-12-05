@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       bundle:
-        description: "Bundle ID (link / next etc.)"
+        description: "Bundle ID (next)"
         required: true
-        default: "link"
+        default: "next"
 jobs:
   tagged-release:
     runs-on: ubuntu-20.04

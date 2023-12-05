@@ -42,7 +42,7 @@ defmodule Systems.Admin.LoginPage do
                 <div class="h-11 focus:outline-none">
                   <div class="flex flex-col justify-center h-full items-center rounded">
                     <div class="text-white text-button font-button">
-                      Sign in with Eyra account
+                      Sign in with Google account
                     </div>
                   </div>
                 </div>

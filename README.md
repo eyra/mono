@@ -21,20 +21,19 @@ Project implementing a SaaS platform based on interlinked modules called Systems
 * Lab
 * Questionnaire
 * Pool
-* Data Donation
 * ..
 
 ### Bundles
 
 * Next
 
-Primary bundle with all features available except Link specific features.
-Next is hosted on: https://eyra.co
+Primary bundle with all features available. Next is configured and maintained by Eyra and hosted on: https://eyra.co
 
-* Link
+* Self
 
-Secundary bundle with only Panl specific features.
-Link is hosted on: https://researchpanl.eu
+Customizable bundle that can be used to run Core on one of your own servers.
+See [SELFHOSTING.md](SELFHOSTING.md) for detailed instructions.
+
 
 ## Banking Proxy
 
