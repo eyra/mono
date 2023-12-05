@@ -8,8 +8,8 @@ config :core,
   stripped_menu_builder: Next.Layouts.Stripped.MenuBuilder
 
 config :core, CoreWeb.UserAuth,
-  researcher_signed_in_page: "/console",
-  participant_signed_in_page: "/console"
+  researcher_signed_in_page: "/project",
+  participant_signed_in_page: "/project"
 
 config :core, :features,
   sign_in_with_apple: false,
