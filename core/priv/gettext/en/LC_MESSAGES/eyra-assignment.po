@@ -128,7 +128,7 @@ msgstr "Connect the storage that you would like to use to store the data that wi
 
 #, elixir-autogen, elixir-format
 msgid "settings.panel.body"
-msgstr "Connect the panel that you will use for recruiting participants for your study. If you do not use an existing panel, choose other."
+msgstr "Connect the panel that you will use for recruiting participants. If you do not use an existing panel, choose other."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.panel.title"
@@ -148,7 +148,7 @@ msgstr "<div>The LISS panel is a high-quality panel that is especially suited fo
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.generic.connector.annotation"
-msgstr "<div>Select this option if you do not use a panel or if the panel that you use is not available in the options. A link will be provided that you can use to give to participants or to the panel that you use to enable participation in your study.</div>"
+msgstr "<div>Select this option if you do not use a panel or if the panel that you use is not available in the options. A link will be provided that you can use to give to participants or to the panel that you use to enable participation.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "panel.ioresearch.connector.annotation"
@@ -176,7 +176,7 @@ msgstr "Show"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.body"
-msgstr "Use the text field below to write a consent form for the participants in your study. If consent is already provided before participants enter the workflow, you can choose to skip the consent page."
+msgstr "Use the text field below to write a consent form for your participants. Did your participants already provide consent in some other way? Then choose not to show the consent form."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.title"
@@ -184,11 +184,11 @@ msgstr "Consent form"
 
 #, elixir-autogen, elixir-format
 msgid "settings.subtitle.label"
-msgstr "Your organization name"
+msgstr "Organization name"
 
 #, elixir-autogen, elixir-format
 msgid "settings.title.label"
-msgstr "Study title"
+msgstr "Title"
 
 #, elixir-autogen, elixir-format
 msgid "settings.image.title"
@@ -208,11 +208,11 @@ msgstr "Change logo"
 
 #, elixir-autogen, elixir-format
 msgid "settings.logo.title"
-msgstr "Your organization logo"
+msgstr "Organization logo"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.text"
-msgstr "Use the fields below to customize the header of your data donation participant workflow. Curious to see what this will look like for participants? Click 'Preview' at the top right to check it out."
+msgstr "Use the fields below to customize the header of your data donation participant workflow. Add the name and logo of the organisation that is responsible for the data donation workflow. Curious to see what this will look like for participants? Click 'Preview' at the top right to check it out."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.title"
