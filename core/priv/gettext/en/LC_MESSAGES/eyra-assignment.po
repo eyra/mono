@@ -60,7 +60,7 @@ msgstr "Finish up"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "content.title"
-msgstr "Assignment"
+msgstr "Data donation"
 
 #, elixir-autogen, elixir-format
 msgid "open.button"
@@ -92,11 +92,11 @@ msgstr "Settings"
 
 #, elixir-autogen, elixir-format
 msgid "settings.data_storage.title"
-msgstr "Storage"
+msgstr "Data storage"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "connect.button"
-msgstr "Set up connection"
+msgstr "Connect"
 
 #, elixir-autogen, elixir-format
 msgid "connector.cancel.button"
@@ -108,27 +108,27 @@ msgstr "Connect"
 
 #, elixir-autogen, elixir-format
 msgid "connector.panel.text"
-msgstr "Connect your panel"
+msgstr "Select the panel that you would like to use. After selection instructions are provided on how to connect this panel."
 
 #, elixir-autogen, elixir-format
 msgid "connector.panel.title"
-msgstr "Set up connection"
+msgstr "Connect panel"
 
 #, elixir-autogen, elixir-format
 msgid "connector.storage.text"
-msgstr "Connect your participant database"
+msgstr "Select the storage type that you would like to use to store the participant data."
 
 #, elixir-autogen, elixir-format
 msgid "connector.storage.title"
-msgstr "Set up connection"
+msgstr "Connect data storage"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.data_storage.body"
-msgstr "Connection to the database that will be used to store the participant data."
+msgstr "Connect the storage that you would like to use to store the data that will be donated by participants."
 
 #, elixir-autogen, elixir-format
 msgid "settings.panel.body"
-msgstr "Connection to the panel that will provide for the participants."
+msgstr "Connect the panel that you will use for recruiting participants for your study. If you do not use an existing panel, choose other."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.panel.title"
@@ -140,59 +140,59 @@ msgstr "Disconnect"
 
 #, elixir-autogen, elixir-format
 msgid "panel_form.type.label"
-msgstr "Select your panel"
+msgstr "Panels"
 
 #, elixir-autogen, elixir-format
 msgid "panel.liss.connector.annotation"
-msgstr "<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.<br><br>For more information see <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a></div>"
+msgstr "<div>The LISS panel is a high-quality panel that is especially suited for research for which a correct representation of the Dutch population is of great importance. It is based on a true probability sample of households, drawn from the population register by Statistics Netherlands.<br>More information: <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a></div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.generic.connector.annotation"
-msgstr "<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div>"
+msgstr "<div>Select this option if you do not use a panel or if the panel that you use is not available in the options. A link will be provided that you can use to give to participants or to the panel that you use to enable participation in your study.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "panel.ioresearch.connector.annotation"
-msgstr "<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.<br><br>For more information see <a href=\"https://www.ioresearch.nl/\">www.ioresearch.nl</a></div>"
+msgstr "<div>For more information about I&O research visit <a href=\"https://www.ioresearch.nl/\">www.ioresearch.nl</a>.</div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.generic.connection.annotation"
-msgstr "<div>Copy the url below and hand it over to your contact person at the panel agency. They use this url to send participants to this assignment.<br><br>The url contains the following parameters:<ul><li>participant: identifier from the panel agency</li><li>language: 'nl' or 'en'</li></ul></div>"
+msgstr "<div>Copy the url below and provide it to your contact person at the panel agency. With this url participants can visit your data donation workflow.<br><br>The url contains the following parameters:<ul><li>participant: a unique identifier for a participant</li><li>language: 'nl' for Dutch or 'en' for English</li></ul></div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.ioresearch.connection.annotation"
-msgstr "<div>Copy the url below and hand it over to your contact person at I&O Research. They use this url to send participants to this assignment.<br><br>The url contains the following parameters:<ul><li>participant: identifier from I&O Research</li><li>language: 'nl' or 'en'</li></ul></div>"
+msgstr "<div>Copy the url below and provide it to your contact person at I&O Research. With this url participants can visit your data donation workflow.<br><br>The url contains the following parameters:<ul><li>participant: an identifier from I&O Research</li><li>language: 'nl' for Dutch or 'en' for English</li></ul></div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.liss.connection.annotation"
-msgstr "<div>Copy the url below and hand it over to your contact person at LISS. They use this url to send participants to this assignment.</div>"
+msgstr "<div>Copy the url below and provide it to your contact person at Centerdata. With this url participants can visit your data donation workflow. For the LISS panel, make sure to only add the donate task to your workflow. The other tasks are performed by Centerdata.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.off.label"
-msgstr "Skip consent"
+msgstr "Don't show"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.on.label"
-msgstr "Show consent"
+msgstr "Show"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.body"
-msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+msgstr "Use the text field below to write a consent form for the participants in your study. If consent is already provided before participants enter the workflow, you can choose to skip the consent page."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.title"
-msgstr "Consent"
+msgstr "Consent form"
 
 #, elixir-autogen, elixir-format
 msgid "settings.subtitle.label"
-msgstr "Subtitle"
+msgstr "Your organization name"
 
 #, elixir-autogen, elixir-format
 msgid "settings.title.label"
-msgstr "Title"
+msgstr "Study title"
 
 #, elixir-autogen, elixir-format
 msgid "settings.image.title"
-msgstr "Cover"
+msgstr "Header image"
 
 #, elixir-autogen, elixir-format
 msgid "search.different.image.button"
@@ -200,19 +200,19 @@ msgstr "Change image"
 
 #, elixir-autogen, elixir-format
 msgid "choose.logo.file"
-msgstr "Select image"
+msgstr "Upload logo"
 
 #, elixir-autogen, elixir-format
 msgid "choose.other.logo.file"
-msgstr "Change image"
+msgstr "Change logo"
 
 #, elixir-autogen, elixir-format
 msgid "settings.logo.title"
-msgstr "Logo"
+msgstr "Your organization logo"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.text"
-msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+msgstr "Use the fields below to customize the header of your data donation participant workflow. Curious to see what this will look like for participants? Click 'Preview' at the top right to check it out."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.title"

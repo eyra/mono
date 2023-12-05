@@ -33,11 +33,11 @@ msgstr "Go to Monitor"
 
 #, elixir-autogen, elixir-format
 msgid "add.first.button"
-msgstr "Start your first project"
+msgstr "My first project"
 
 #, elixir-autogen, elixir-format
 msgid "add.new.button"
-msgstr "Start new project"
+msgstr "New project"
 
 #, elixir-autogen, elixir-format
 msgid "add.new.button.short"
@@ -45,11 +45,11 @@ msgstr "Start"
 
 #, elixir-autogen, elixir-format
 msgid "overview.empty.description"
-msgstr "Here you will find an overview of all your projects. There are no projects yet available. You can start your own project or someone can share theirs with you."
+msgstr "Here you will find an overview of all your projects. Start your first project and add as many items as you want."
 
 #, elixir-autogen, elixir-format
 msgid "overview.empty.title"
-msgstr "Your journey starts here"
+msgstr "Start your first project"
 
 #, elixir-autogen, elixir-format
 msgid "overview.title"
@@ -93,7 +93,7 @@ msgstr "Groups"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "add.new.item.button"
-msgstr "Add new item"
+msgstr "New item"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "add.new.item.button.short"
@@ -165,15 +165,15 @@ msgstr "New project"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "add.first.item.button"
-msgstr "Add first item"
+msgstr "My first item"
 
 #, elixir-autogen, elixir-format
 msgid "node.empty.description"
-msgstr "Here you will find an overview your items. There are no items yet available. You can now add your first item."
+msgstr "Start by adding an item to your project. You can add as many items as you want."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "node.empty.title"
-msgstr "Blank canvas"
+msgstr "A fresh start"
 
 #, elixir-autogen, elixir-format
 msgid "tool_ref.tag.benchmark"

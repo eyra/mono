@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "endpoint_form.type.label"
-msgstr "Kies een van de opslag diensten"
+msgstr "Opslag type"
 
 #, elixir-autogen, elixir-format
 msgid "aws.access_key_id.label"

@@ -60,7 +60,7 @@ msgstr "Afronden"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "content.title"
-msgstr "Jouw Next ID"
+msgstr "Data donatie"
 
 #, elixir-autogen, elixir-format
 msgid "open.button"
@@ -68,7 +68,7 @@ msgstr "Open"
 
 #, elixir-autogen, elixir-format
 msgid "preview.button"
-msgstr ""
+msgstr "Voorbeeld"
 
 #, elixir-autogen, elixir-format
 msgid "publish.button"
@@ -80,11 +80,11 @@ msgstr "Offline halen"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.consent.continue.button"
-msgstr "Continue"
+msgstr "Verder"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.consent.title"
-msgstr "Consent"
+msgstr "Toestemming"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.title"
@@ -92,47 +92,47 @@ msgstr "Instellingen"
 
 #, elixir-autogen, elixir-format
 msgid "settings.data_storage.title"
-msgstr "Opslag van deelnemers data"
+msgstr "Data opslag"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "connect.button"
-msgstr "Koppeling maken"
+msgstr "Koppel"
 
 #, elixir-autogen, elixir-format
 msgid "connector.cancel.button"
-msgstr ""
+msgstr "Annuleren"
 
 #, elixir-autogen, elixir-format
 msgid "connector.connect.button"
-msgstr ""
+msgstr "Koppel"
 
 #, elixir-autogen, elixir-format
 msgid "connector.panel.text"
-msgstr ""
+msgstr "Kies het panel dat je wilt gebruiken. Nadat je gekozen hebt worden instructies gegeven over hoe de koppeling in zijn werk gaat."
 
 #, elixir-autogen, elixir-format
 msgid "connector.panel.title"
-msgstr ""
+msgstr "Koppel panel"
 
 #, elixir-autogen, elixir-format
 msgid "connector.storage.text"
-msgstr ""
+msgstr "Kies het type data opslag dat je wilt gebruiken om de data van de deelnemers op te slaan."
 
 #, elixir-autogen, elixir-format
 msgid "connector.storage.title"
-msgstr ""
+msgstr "Koppel data opslag"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.data_storage.body"
-msgstr "Opslag van deelnemers data"
+msgstr "Koppel het soort opslag dat je wilt gebruiken voor het opslaan van de data die door deelnemers aan je studie wordt gedoneerd."
 
 #, elixir-autogen, elixir-format
 msgid "settings.panel.body"
-msgstr ""
+msgstr "Koppel het panel dat je wilt gebruiken voor het werven van deelnemers voor jouw studie. Maak je geen gebruik van een panel? Kies dan 'anders'."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.panel.title"
-msgstr "Instellingen"
+msgstr "Panel"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "disconnect.button"
@@ -140,55 +140,55 @@ msgstr "Ontkoppel"
 
 #, elixir-autogen, elixir-format
 msgid "panel_form.type.label"
-msgstr "Kies jouw panel"
+msgstr "Panels"
 
 #, elixir-autogen, elixir-format
 msgid "panel.liss.connector.annotation"
-msgstr "<h3>LISS</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div><div>Ga naar <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a> voor meer informatie.</div>"
+msgstr "<div>Het LISS panel is een panel van hoge kwaliteit dat in het bijzonder geschikt is voor onderzoek waarbij een correcte representatie van de Nederlandse bevolking van belang is. Het is gebaseerd op een waarschijnlijkheidssteekproef van huishoudens die getrokken is vanuit het CBS bevolkingsregister.</div><div>Ga naar <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a> voor meer informatie.</div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.generic.connector.annotation"
-msgstr "<h3>Other</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div>"
+msgstr "<div>Kies deze optie als je geen panel gebruikt of als het panel dat je gebruikt niet voorkomt in de opties. Er wordt dan een link getoont die je kunt gebruiken om aan de participanten of het panel te geven voor deelname aan je studie.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "panel.ioresearch.connector.annotation"
-msgstr "<h3>I&O Research</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div><div>Ga naar <a href=\"https://www.ioresearch.nl/\">www.ioresearch.nl</a> voor meer informatie.</div>"
+msgstr "<div>Voor meer informatie over I&O Research, ga naar <a href=\"https://www.ioresearch.nl/\">www.ioresearch.nl</a>.</div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.generic.connection.annotation"
-msgstr "<h3>Other</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div>"
+msgstr "<div>Kopieer de url hieronder en geef deze aan jouw contactpersoon bij het panel bureau of direct aan je deelnemers. Met deze url kunnen deelnemers jouw data donatie takenlijst bezoeken.<br><br>The url bevat de volgende parameters:<ul><li>participant: uniek nummer voor een deelnemer</li><li>language: 'nl' voor Nederlands of 'en' voor Engels</li></ul></div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.ioresearch.connection.annotation"
-msgstr "<h3>I&O Research</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div><div>Ga naar <a href=\"https://www.ioresearch.nl/\">www.ioresearch.nl</a> voor meer informatie.</div>"
+msgstr "<div>Kopieer de url hieronder en geef deze aan jouw contactpersoon bij I&O Research. Met deze url kunnen deelnemers jouw data donatie takenlijst bezoeken.<br><br>The url bevat de volgende parameters:<ul><li>participant: uniek nummer voor een deelnemer vanuit I&O Research</li><li>language: 'nl' voor Nederlands of 'en' voor Engels</li></ul></div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.liss.connection.annotation"
-msgstr "<h3>LISS</h3><div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div><div>Ga naar <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a> voor meer informatie.</div>"
+msgstr "<div>Kopieer de url hieronder en geef deze aan jouw contactpersoon bij Centerdata. Met deze url kunnen LISS panelleden jouw data donatie takenlijst bezoeken. Zorg ervoor dat je alleen de data donatie taak toevoegt aan je takenlijst voor LISS panelleden. De andere taken worden bij Centerdata uitgevoerd.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.off.label"
-msgstr "Consent overslaan"
+msgstr "Niet tonen"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.on.label"
-msgstr "Consent tonen"
+msgstr "Tonen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.body"
-msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+msgstr "Gebruik het tekstvak hieronder om een toestemmingsformulier op te stellen voor de deelnemers aan je studie. Als de deelnemers al op een andere manier toestemming hebben gegeven, dan kun je de pagina overslaan."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.title"
-msgstr "Toestemming"
+msgstr "Toestemmingsformulier"
 
 #, elixir-autogen, elixir-format
 msgid "settings.subtitle.label"
-msgstr "Ondertitel"
+msgstr "Jouw organisatie naam"
 
 #, elixir-autogen, elixir-format
 msgid "settings.title.label"
-msgstr "Titel"
+msgstr "Studie titel"
 
 #, elixir-autogen, elixir-format
 msgid "settings.image.title"
@@ -200,19 +200,19 @@ msgstr "Verander afbeelding"
 
 #, elixir-autogen, elixir-format
 msgid "choose.logo.file"
-msgstr "Kies afbeelding"
+msgstr "Upload logo"
 
 #, elixir-autogen, elixir-format
 msgid "choose.other.logo.file"
-msgstr "Kies andere afbeelding"
+msgstr "Verander logo"
 
 #, elixir-autogen, elixir-format
 msgid "settings.logo.title"
-msgstr "Logo"
+msgstr "Jouw organisatie logo"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.text"
-msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+msgstr "Gebruik de velden hieronder om de omslag van jouw data donatie workflow voor respondenten aan te passen. Benieuwd hoe dit eruit komt te zien voor respondenten? Klik op 'Voorbeeld' rechtsboven."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.title"

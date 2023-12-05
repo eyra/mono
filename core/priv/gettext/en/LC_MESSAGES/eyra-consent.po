@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "default.consent.text"
-msgstr "<div>Write here your custom consent terms and conditions..</div>"
+msgstr "<div>Add the text for the consent form here and preview the workflow to check out what it will look like for participants.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.consent.checkbox"
@@ -21,8 +21,8 @@ msgstr "I have read and agree with the above terms"
 
 #, elixir-autogen, elixir-format
 msgid "locked.error.message"
-msgstr "This version of the consent text has already been signed by participants. Please refresh the page to continue changing the text."
+msgstr "Please not that this version of the consent text has already been signed by participants. Refresh the page if you would like to continue changing the text."
 
 #, elixir-autogen, elixir-format
 msgid "out_of_sync.error.message"
-msgstr "Someone made changes to the consent text. Please refresh the page to continue."
+msgstr "The consent text has been changed. Please refresh the page to continue."

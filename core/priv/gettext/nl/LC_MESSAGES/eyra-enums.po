@@ -328,7 +328,7 @@ msgstr "Benchmark"
 
 #, elixir-autogen, elixir-format
 msgid "project_item_templates.data_donation"
-msgstr "Data Donatie Studie"
+msgstr "DData Donatie"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "templates.data_donation"
