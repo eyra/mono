@@ -110,6 +110,7 @@ defmodule Systems.Storage.EndpointForm do
         special: special
       )
       |> update_special_title()
+      |> compose_child(:type_selector)
       |> compose_child(:special_form)
     }
   end

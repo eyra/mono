@@ -34,7 +34,7 @@ defmodule Frameworks.Pixel.RadioGroup do
   end
 
   @impl true
-  def handle_event("change", _, socket) do
+  def handle_event("change", _payload, socket) do
     # ignore change, this happens always the first time rendering
     {:noreply, socket}
   end
