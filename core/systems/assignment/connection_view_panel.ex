@@ -63,8 +63,8 @@ defmodule Systems.Assignment.ConnectionViewPanel do
     relative_url =
       case external_panel do
         :liss -> "/assignment/#{id}/liss"
-        :ioresearch -> "/assignment/#{id}/ioresearch?participant=<id>&language=nl"
-        :generic -> "/assignment/#{id}/participate?participant=<id>&language=nl"
+        :ioresearch -> "/assignment/#{id}/ioresearch?participant={id}&language=nl"
+        :generic -> "/assignment/#{id}/participate?participant={id}&language=nl"
       end
 
     assign(socket, url: uri_origin <> relative_url)

@@ -87,7 +87,7 @@ defmodule Systems.Alliance.ToolModel do
   end
 
   variable =
-    string("<")
+    string("{")
     |> ignore()
     |> utf8_string(
       [?a..?z, ?A..?Z],
@@ -95,13 +95,13 @@ defmodule Systems.Alliance.ToolModel do
     )
     |> tag(:variable)
     |> concat(
-      string(">")
+      string("}")
       |> ignore()
     )
-    |> label("variable (ex. <participantId>)")
+    |> label("variable (ex. {participantId}")
 
   non_variable =
-    repeat(ascii_char([{:not, ?<}, {:not, ?>}]))
+    repeat(ascii_char([{:not, 0x007B}, {:not, 0x007D}]))
     |> tag(:plain)
     |> label("plain")
 

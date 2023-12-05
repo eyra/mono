@@ -9,8 +9,8 @@ defmodule Systems.Alliance.ToolModelTest do
     for url <-
           [
             Faker.Internet.url(),
-            "https://example.org/test?a=<var>",
-            "https://example.org/test?a=<first>&b=<second>",
+            "https://example.org/test?a={var}",
+            "https://example.org/test?a={first}&b={second}",
             "https://example.org/test?a=some-NoN-v4r1a8l3"
           ] do
       test "allow #{url}" do
@@ -24,10 +24,10 @@ defmodule Systems.Alliance.ToolModelTest do
     end
 
     for url <- [
-          "http://example.org/alliance?a=<param",
-          "http://example.org/alliance?b=<var with space>",
-          "http://example.org/alliance?c=<var-with-dash>",
-          "http://example.org/alliance?d=<unclosed&other=<var>"
+          "http://example.org/alliance?a={param",
+          "http://example.org/alliance?b={var with space}",
+          "http://example.org/alliance?c={var-with-dash}",
+          "http://example.org/alliance?d={unclosed&other={var}"
         ] do
       test "disallow URL: #{url}" do
         changeset =
@@ -48,7 +48,7 @@ defmodule Systems.Alliance.ToolModelTest do
 
     test "URL with param has replacement" do
       assert Alliance.ToolModel.prepare_url(
-               "http://example.org/test?participant=<participantId>",
+               "http://example.org/test?participant={participantId}",
                %{
                  "participantId" => 123
                }
