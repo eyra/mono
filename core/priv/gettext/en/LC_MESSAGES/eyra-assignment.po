@@ -96,7 +96,7 @@ msgstr "Data storage"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "connect.button"
-msgstr "Connect"
+msgstr "Set up"
 
 #, elixir-autogen, elixir-format
 msgid "connector.cancel.button"
@@ -108,11 +108,11 @@ msgstr "Connect"
 
 #, elixir-autogen, elixir-format
 msgid "connector.panel.text"
-msgstr "Select the panel that you would like to use. After selection instructions are provided on how to connect this panel."
+msgstr "Connect the panel that you would like to use. Choose 'Other' if the panel that you use is not mentioned or if you are not using a panel."
 
 #, elixir-autogen, elixir-format
 msgid "connector.panel.title"
-msgstr "Connect panel"
+msgstr "Set up Panel"
 
 #, elixir-autogen, elixir-format
 msgid "connector.storage.text"
@@ -120,7 +120,7 @@ msgstr "Select the storage type that you would like to use to store the particip
 
 #, elixir-autogen, elixir-format
 msgid "connector.storage.title"
-msgstr "Connect data storage"
+msgstr "Set up data storage"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.data_storage.body"
@@ -128,7 +128,7 @@ msgstr "Connect the storage that you would like to use to store the data that wi
 
 #, elixir-autogen, elixir-format
 msgid "settings.panel.body"
-msgstr "Connect the panel that you will use for recruiting participants. If you do not use an existing panel, choose other."
+msgstr "Connect the panel that you will use for recruiting participants."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.panel.title"
