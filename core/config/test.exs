@@ -55,10 +55,8 @@ config :core, :bundle, :next
 
 config :core, :banking_backend, Systems.Banking.Dummy
 
-config :core, :content,
-  backend: Systems.Content.LocalFS,
-  local_fs_root_path: "/tmp"
+config :core, :upload_path, "/tmp"
 
-config :core, :feldspar,
-  backend: Systems.Feldspar.LocalFS,
-  local_fs_root_path: "/tmp"
+config :core, :content, backend: Systems.Content.LocalFS
+
+config :core, :feldspar, backend: Systems.Feldspar.LocalFS

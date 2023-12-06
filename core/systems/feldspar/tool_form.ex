@@ -1,6 +1,6 @@
 defmodule Systems.Feldspar.ToolForm do
   use CoreWeb.LiveForm
-  use CoreWeb.FileUploader, ~w(.zip)
+  use CoreWeb.FileUploader, store: Systems.Feldspar.Public, accept: ~w(.zip)
 
   alias Systems.{
     Feldspar
@@ -9,14 +9,10 @@ defmodule Systems.Feldspar.ToolForm do
   @impl true
   def process_file(
         %{assigns: %{entity: entity}} = socket,
-        {_local_relative_path, local_full_path, remote_file}
+        {_path, url, original_filename}
       ) do
-    archive_ref =
-      Feldspar.Public.store(local_full_path)
-      |> Feldspar.Public.get_public_url()
-
     socket
-    |> save(entity, %{archive_ref: archive_ref, archive_name: remote_file})
+    |> save(entity, %{archive_ref: url, archive_name: original_filename})
   end
 
   @impl true

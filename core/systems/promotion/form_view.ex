@@ -1,6 +1,6 @@
 defmodule Systems.Promotion.FormView do
   use CoreWeb.LiveForm
-  use CoreWeb.FileUploader, ~w(.png .jpg .jpeg)
+  use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg)
 
   alias Systems.{
     Promotion
@@ -18,10 +18,10 @@ defmodule Systems.Promotion.FormView do
   @impl true
   def process_file(
         %{assigns: %{entity: entity}} = socket,
-        {local_relative_path, _local_full_path, _remote_file}
+        {_path, url, _original_filename}
       ) do
     socket
-    |> save(entity, %{banner_photo_url: local_relative_path})
+    |> save(entity, %{banner_photo_url: url})
   end
 
   @impl true

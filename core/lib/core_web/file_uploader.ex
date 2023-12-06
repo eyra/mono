@@ -2,20 +2,23 @@ defmodule CoreWeb.FileUploader do
   @moduledoc """
   """
 
-  @allowed_filename_pattern ~r"^[a-z0-9][a-z0-9\-]+[a-z0-9]\.[a-z]{3,4}$"
+  @allowed_filename_pattern ~r"^[a-z0-9][a-z0-9\-]+[a-z0-9](\.[a-z]{3,4})?$"
 
   @callback process_file(socket :: Socket.t(), uploaded_file :: any()) :: Socket.t()
 
-  def get_static_path(filename) do
+  def get_upload_path(filename) do
     unless Regex.match?(@allowed_filename_pattern, filename) do
       throw(:invalid_filename)
     end
 
-    root = Application.get_env(:core, :static_path, "priv/static/uploads")
+    root = Application.get_env(:core, :upload_path, "priv/static/uploads")
     Path.join(root, filename)
   end
 
-  defmacro __using__(accept) do
+  defmacro __using__(opts) do
+    store = Keyword.get(opts, :store, Systems.Content.Public)
+    accept = Keyword.get(opts, :accept, ~w"*.*")
+
     quote do
       @behaviour CoreWeb.FileUploader
 
@@ -43,11 +46,9 @@ defmodule CoreWeb.FileUploader do
 
       def consume_file(socket, entry) do
         consume_uploaded_entry(socket, entry, fn %{path: tmp_path} ->
-          file = "#{entry.uuid}.#{ext(entry)}"
-          local_full_path = CoreWeb.FileUploader.get_static_path(file)
-          File.cp!(tmp_path, local_full_path)
-          local_relative_path = CoreWeb.Endpoint.static_path("/uploads/#{file}")
-          {:ok, {local_relative_path, local_full_path, entry.client_name}}
+          path = apply(unquote(store), :store, [tmp_path, entry.client_name])
+          public_url = apply(unquote(store), :get_public_url, [path])
+          {:ok, {path, public_url, entry.client_name}}
         end)
       end
 

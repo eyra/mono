@@ -35,7 +35,7 @@ defmodule Systems.Content.S3Test do
                } = args
       end)
 
-      id = S3.store(Path.join(__DIR__, "hello.svg"))
+      id = S3.store(Path.join(__DIR__, "hello.svg"), "original_file.svg")
       assert is_binary(id)
       refute id == ""
     end

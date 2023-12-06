@@ -1,8 +1,6 @@
 defmodule Systems.Document.ToolForm do
   use CoreWeb.LiveForm
-  use CoreWeb.FileUploader, ~w(.pdf)
-
-  alias CoreWeb.Endpoint
+  use CoreWeb.FileUploader, accept: ~w(.pdf)
 
   alias Systems.{
     Document
@@ -11,12 +9,10 @@ defmodule Systems.Document.ToolForm do
   @impl true
   def process_file(
         %{assigns: %{entity: entity}} = socket,
-        {local_relative_path, _local_full_path, remote_file}
+        {_path, url, original_filename}
       ) do
-    ref = "#{Endpoint.url()}#{local_relative_path}"
-
     socket
-    |> save(entity, %{ref: ref, name: remote_file})
+    |> save(entity, %{ref: url, name: original_filename})
   end
 
   @impl true

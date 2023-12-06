@@ -1,38 +1,28 @@
 defmodule Systems.Content.LocalFS do
-  alias CoreWeb.Endpoint
+  use CoreWeb, :verified_routes
 
-  def store(tmp_path) do
+  def public_path, do: "/uploads"
+
+  def get_public_url(path) do
+    filename = Path.basename(path)
+    ~p"/uploads/#{filename}"
+  end
+
+  def store(path, original_filename) do
     uuid = Ecto.UUID.generate()
-    extname = Path.extname(tmp_path)
-    id = "#{uuid}#{extname}"
-    path = get_path(id)
-    File.cp!(tmp_path, path)
-    id
-  end
-
-  def storage_path(id) do
-    get_path(id)
-  end
-
-  def get_public_url(id) do
-    "#{Endpoint.url()}/#{public_path()}/#{id}"
-  end
-
-  def remove(id) do
-    with {:ok, _} <- File.rm_rf(get_path(id)) do
-      :ok
-    end
-  end
-
-  defp get_path(id) do
-    Path.join(get_root_path(), id)
+    root_path = get_root_path()
+    new_path = "#{root_path}/#{uuid}_#{original_filename}"
+    File.cp!(path, new_path)
+    new_path
   end
 
   def get_root_path do
-    :core
-    |> Application.get_env(:content, [])
-    |> Access.fetch!(:local_fs_root_path)
+    Application.get_env(:core, :upload_path)
   end
 
-  def public_path, do: "/content"
+  def remove(path) do
+    with {:ok, _} <- File.rm_rf(path) do
+      :ok
+    end
+  end
 end

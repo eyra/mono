@@ -134,7 +134,7 @@ Required environment variables:
 | DB_HOST | Hostname | "domain.where.database.lives" |
 | DB_NAME | Name of the database in the PostgreSQL| "self_prod" |
 | SECRET_KEY_BASE | 64-bit sequence of random characters | \<long-sequence-of-characters\> |
-| STATIC_PATH | Path to folder where uploaded files can be stored | "/home/self/uploads" |
+| STATIC_PATH | Path to folder where uploaded files can be stored | "/tmp" |
 | UNSPLASH_ACCESS_KEY | Application access key registered on [Unsplash](https://unsplash.com/) (Image Catalog) | "hcejpnHRuFWL-fKXLYqhGBt1Dz0_tTjeNifgD01VkGE" |
 | UNSPLASH_APP_NAME | Application name registered on [Unsplash](https://unsplash.com/) (Image Catalog) | "Self" |
 

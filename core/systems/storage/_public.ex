@@ -12,17 +12,18 @@ defmodule Systems.Storage.Public do
       ) do
     packet_size = String.length(data)
 
-    with :granted <- Rate.Public.request_permission(key, remote_ip, packet_size) do
-      %{
-        backend: backend,
-        endpoint: endpoint,
-        panel_info: panel_info,
-        data: data,
-        meta_data: meta_data
-      }
-      |> Storage.Delivery.new()
-      |> Oban.insert()
-    end
+    # raises error when request is denied
+    Rate.Public.request_permission(key, remote_ip, packet_size)
+
+    %{
+      backend: backend,
+      endpoint: endpoint,
+      panel_info: panel_info,
+      data: data,
+      meta_data: meta_data
+    }
+    |> Storage.Delivery.new()
+    |> Oban.insert()
   end
 end
 

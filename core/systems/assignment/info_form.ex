@@ -1,7 +1,7 @@
 defmodule Systems.Assignment.InfoForm do
   use CoreWeb.LiveForm, :fabric
   use Fabric.LiveComponent
-  use CoreWeb.FileUploader, ~w(.png .jpg .jpeg .svg)
+  use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg .svg)
 
   import Core.ImageCatalog, only: [image_catalog: 0]
   import Frameworks.Pixel.Form
@@ -11,17 +11,12 @@ defmodule Systems.Assignment.InfoForm do
   alias CoreWeb.UI.ImageCatalogPicker
 
   alias Systems.Assignment
-  alias Systems.Content
 
   @impl true
   def process_file(
         %{assigns: %{entity: entity}} = socket,
-        {_local_relative_path, local_full_path, _remote_file}
+        {_path, logo_url, _original_filename}
       ) do
-    logo_url =
-      Content.Public.store(local_full_path)
-      |> Content.Public.get_public_url()
-
     socket
     |> save(entity, :auto_save, %{logo_url: logo_url})
   end

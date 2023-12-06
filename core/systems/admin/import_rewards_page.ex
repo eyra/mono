@@ -1,7 +1,7 @@
 defmodule Systems.Admin.ImportRewardsPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :import_rewards
-  use CoreWeb.FileUploader, ~w(.csv)
+  use CoreWeb.FileUploader, accept: ~w(.csv)
 
   import CoreWeb.Layouts.Workspace.Component
 
@@ -19,10 +19,11 @@ defmodule Systems.Admin.ImportRewardsPage do
   @impl true
   def process_file(
         %{assigns: %{entity: entity}} = socket,
-        {_local_relative_path, local_full_path, remote_file}
+        {path, _url, original_filename}
       ) do
     changeset =
-      entity |> Admin.ImportRewardsModel.changeset(%{session_key: Path.rootname(remote_file)})
+      entity
+      |> Admin.ImportRewardsModel.changeset(%{session_key: Path.rootname(original_filename)})
 
     socket
     |> assign(
@@ -30,8 +31,8 @@ defmodule Systems.Admin.ImportRewardsPage do
       lines_error: [],
       lines_unknown: [],
       lines_valid: [],
-      local_file: local_full_path,
-      uploaded_file: remote_file
+      local_file: path,
+      uploaded_file: original_filename
     )
   end
 

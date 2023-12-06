@@ -1,7 +1,7 @@
 defmodule Systems.Feldspar.S3 do
   alias ExAws.S3
 
-  def store(zip_file) do
+  def store(zip_file, _original_filename) do
     id = Ecto.UUID.generate()
     :ok = upload_zip_content(zip_file, id)
     id

@@ -5,8 +5,7 @@ defmodule Systems.Content.LocalFSTest do
 
   describe "store/1" do
     test "extracts stores file on disk" do
-      id = LocalFS.store(Path.join(__DIR__, "hello.svg"))
-      path = LocalFS.storage_path(id)
+      path = LocalFS.store(Path.join(__DIR__, "hello.svg"), "original_file.svg")
       assert File.exists?(path)
     end
   end
@@ -22,9 +21,8 @@ defmodule Systems.Content.LocalFSTest do
 
   describe "remove/1" do
     test "removes folder" do
-      id = LocalFS.store(Path.join(__DIR__, "hello.svg"))
-      path = LocalFS.storage_path(id)
-      assert :ok == LocalFS.remove(id)
+      path = LocalFS.store(Path.join(__DIR__, "hello.svg"), "original_file.svg")
+      assert :ok == LocalFS.remove(path)
       refute File.exists?(path)
     end
   end
