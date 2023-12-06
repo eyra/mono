@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-E894DC64.js"></script>
+    <script src="dist/sidebar_items-42909794.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -151,7 +151,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#current_user/1" translate="no">current_user(arg1)</a>
+        <a href="#compose_child/2" translate="no">compose_child(socket, child_name)</a>
 
       </div>
 
@@ -159,11 +159,17 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#handle_info/2" translate="no">handle_info(params, socket)</a>
+        <a href="#compose_element/2" translate="no">compose_element(socket, element_id)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix_live_view/0.20.1/Phoenix.LiveView.html#c:handle_info/2"><code class="inline">Phoenix.LiveView.handle_info/2</code></a>.</p></div>
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#current_user/1" translate="no">current_user(arg1)</a>
+
+      </div>
 
     </div>
 
@@ -184,6 +190,24 @@ core
       </div>
 
         <div class="summary-synopsis"><p>Callback implementation for <a href="CoreWeb.LiveUri.html#c:handle_uri/1"><code class="inline">CoreWeb.LiveUri.handle_uri/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#mount/3" translate="no">mount(params, session, socket)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Automatically assigns Fabric to the socket on mount</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_child/2" translate="no">update_child(context, child_name)</a>
+
+      </div>
 
     </div>
 
@@ -283,14 +307,14 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="current_user/1">
+<section class="detail" id="compose_child/2">
 
   <div class="detail-header">
-    <a href="#current_user/1" class="detail-link" title="Link to this function">
+    <a href="#compose_child/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">current_user(arg1)</h1>
+    <h1 class="signature" translate="no">compose_child(socket, child_name)</h1>
 
       <a href="https://github.com/eyra/mono/blob/main/systems/feldspar/app_page.ex#L3" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
@@ -305,14 +329,14 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="handle_info/2">
+<section class="detail" id="compose_element/2">
 
   <div class="detail-header">
-    <a href="#handle_info/2" class="detail-link" title="Link to this function">
+    <a href="#compose_element/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">handle_info(params, socket)</h1>
+    <h1 class="signature" translate="no">compose_element(socket, element_id)</h1>
 
       <a href="https://github.com/eyra/mono/blob/main/systems/feldspar/app_page.ex#L3" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
@@ -324,7 +348,29 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix_live_view/0.20.1/Phoenix.LiveView.html#c:handle_info/2"><code class="inline">Phoenix.LiveView.handle_info/2</code></a>.</p>
+
+  </section>
+</section>
+<section class="detail" id="current_user/1">
+
+  <div class="detail-header">
+    <a href="#current_user/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">current_user(arg1)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/feldspar/app_page.ex#L2" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
   </section>
 </section>
 <section class="detail" id="handle_params/3">
@@ -336,7 +382,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">handle_params(unsigned_params, uri, socket)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/feldspar/app_page.ex#L3" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/feldspar/app_page.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -371,6 +417,50 @@ Functions
 <p>Callback implementation for <a href="CoreWeb.LiveUri.html#c:handle_uri/1"><code class="inline">CoreWeb.LiveUri.handle_uri/1</code></a>.</p>
   </section>
 </section>
+<section class="detail" id="mount/3">
+
+  <div class="detail-header">
+    <a href="#mount/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">mount(params, session, socket)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/feldspar/app_page.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Automatically assigns Fabric to the socket on mount</p>
+  </section>
+</section>
+<section class="detail" id="update_child/2">
+
+  <div class="detail-header">
+    <a href="#update_child/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_child(context, child_name)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/feldspar/app_page.ex#L3" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="update_menus/1">
 
   <div class="detail-header">
@@ -402,7 +492,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">version()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/feldspar/app_page.ex#L3" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/feldspar/app_page.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
