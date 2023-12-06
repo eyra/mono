@@ -97,6 +97,13 @@ defmodule Systems.Assignment.ConnectionView do
   end
 
   @impl true
+  def handle_event("change", _payload, socket) do
+    # TODO
+    Logger.error("Ghost event?!!")
+    {:noreply, socket}
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <div>

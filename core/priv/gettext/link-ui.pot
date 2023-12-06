@@ -11,22 +11,6 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "menu.item.recruitment"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "onboarding.welcome.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "onboarding.welcome.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "debug.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "delete.confirm.campaign"
 msgstr ""
 
@@ -52,8 +36,4 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "complete.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "menu.item.pools"
 msgstr ""

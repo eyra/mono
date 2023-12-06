@@ -217,3 +217,7 @@ msgstr "Use the fields below to customize the header of your data donation parti
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.title"
 msgstr "Branding"
+
+#, elixir-autogen, elixir-format
+msgid "work.list.title"
+msgstr "Tasks"

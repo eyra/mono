@@ -25,11 +25,13 @@ defmodule Systems.Workflow.WorkListView do
   @impl true
   def render(assigns) do
     ~H"""
-      <div class="flex flex-col gap-2 w-full h-full p-6">
+    <div class="w-full h-full">
+      <div class="flex flex-col gap-2">
         <%= for {item, index} <- Enum.with_index(@items) do %>
           <.work_item {item} index={index} selected?={item.id == @selected_item_id} target={@myself} />
         <% end %>
       </div>
+    </div>
     """
   end
 end

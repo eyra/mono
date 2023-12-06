@@ -50,10 +50,6 @@ defmodule Systems.Assignment.StartView do
     |> start_action(item)
   end
 
-  defp start_action(%{function: _, props: _}, _) do
-    %{type: :send, event: "start"}
-  end
-
   defp start_action(%{url: url}, _) do
     %{type: :http_get, to: url, target: "_blank"}
   end

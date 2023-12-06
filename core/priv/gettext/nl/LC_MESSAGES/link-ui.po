@@ -11,22 +11,6 @@ msgstr ""
 "Language: nl\n"
 
 #, elixir-autogen, elixir-format
-msgid "menu.item.recruitment"
-msgstr "Werving"
-
-#, elixir-autogen, elixir-format
-msgid "onboarding.welcome.description"
-msgstr "Doorloop de volgende stappen om mee te kunnen doen aan onderzoeksstudies."
-
-#, elixir-autogen, elixir-format
-msgid "onboarding.welcome.title"
-msgstr "Welkom %{member}"
-
-#, elixir-autogen, elixir-format
-msgid "debug.title"
-msgstr "Debug"
-
-#, elixir-autogen, elixir-format
 msgid "delete.confirm.campaign"
 msgstr "campagne"
 
@@ -53,7 +37,3 @@ msgstr "Publiceren"
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "complete.button"
 msgstr "Afronden"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "menu.item.pools"
-msgstr "Pools"

@@ -11,10 +11,6 @@ msgstr ""
 "Language: nl\n"
 
 #, elixir-autogen, elixir-format
-msgid "campaign.all.title"
-msgstr "Beschikbare studies"
-
-#, elixir-autogen, elixir-format
 msgid "campaign.subject.title"
 msgstr "Bijdragen"
 

@@ -23,10 +23,6 @@ msgid "menu.item.console"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "menu.item.marketplace"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "menu.item.profile"
 msgstr ""
 
@@ -55,10 +51,6 @@ msgid "dashboard.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "marketplace.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "todo.title"
 msgstr ""
 
@@ -84,22 +76,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.student.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "onboarding.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "menu.item.debug"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.welcome"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.welcome.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -159,10 +135,6 @@ msgid "start.page.console"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "start.page.marketplace"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "duplicate.button"
 msgstr ""
 
@@ -192,10 +164,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "menu.item.admin"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "menu.item.funding"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -256,4 +224,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "submit.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "close.button"
 msgstr ""

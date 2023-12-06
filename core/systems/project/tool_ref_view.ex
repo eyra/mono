@@ -17,7 +17,7 @@ defmodule Systems.Project.ToolRefView do
         tool_ref: tool_ref,
         task: task
       )
-      |> compose_element(:launcher)
+      |> compose_child(:launcher)
     }
   end
 
@@ -28,11 +28,16 @@ defmodule Systems.Project.ToolRefView do
   end
 
   @impl true
+  def handle_event("complete_task", _payload, socket) do
+    {:noreply, socket |> send_event(:parent, "complete_task")}
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <div class="w-full h-full">
-      <%= if @launcher do %>
-        <.function_component {@launcher} />
+      <%= if Fabric.get_child(@fabric, :launcher) do %>
+        <.child name={:launcher} fabric={@fabric} />
       <% end %>
     </div>
     """

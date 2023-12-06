@@ -1,11 +1,11 @@
 defmodule Systems.Feldspar.AppPage do
-  alias Systems.Feldspar
-  use CoreWeb, :live_view
+  use CoreWeb, :live_view_fabric
+  use Fabric.LiveView, CoreWeb.Layouts
   use CoreWeb.Layouts.Stripped.Component, :projects
 
   require Logger
 
-  import Feldspar.AppView
+  alias Systems.Feldspar
 
   @impl true
   def mount(%{"id" => app_id}, _session, socket) do
@@ -16,17 +16,23 @@ defmodule Systems.Feldspar.AppPage do
       :ok,
       socket
       |> update_menus()
-      |> assign(app_url: app_url, error: nil)
+      |> assign(
+        app_url: app_url,
+        error: nil
+      )
+      |> compose_child(:app_view)
     }
   end
 
   @impl true
-  def render(assigns) do
-    ~H"""
-    <.stripped menus={@menus} footer?={false}>
-      <.app_view url={@app_url} locale={Gettext.get_locale()} />
-    </.stripped>
-    """
+  def compose(:app_view, %{app_url: app_url}) do
+    %{
+      module: Feldspar.AppView,
+      params: %{
+        url: app_url,
+        locale: Gettext.get_locale()
+      }
+    }
   end
 
   @impl true
@@ -57,5 +63,14 @@ defmodule Systems.Feldspar.AppPage do
 
   defp handle(socket, _, event) do
     Frameworks.Pixel.Flash.put_error(socket, "Unsupported " <> event)
+  end
+
+  @impl true
+  def render(assigns) do
+    ~H"""
+    <.stripped menus={@menus} footer?={false}>
+      <.stack fabric={@fabric} />
+    </.stripped>
+    """
   end
 end

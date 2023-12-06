@@ -17,11 +17,3 @@ msgstr "Nieuwe studie"
 #, elixir-autogen, elixir-format
 msgid "recent-items.title"
 msgstr "Recente items"
-
-#, elixir-autogen, elixir-format
-msgid "empty.description"
-msgstr "Zodra je aan de slag gaat met Next, vind je op deze plek een overzicht van je activiteiten. Bezoek je console om snel weer verder te gaan waar je bij je vorige bezoek was gestopt."
-
-#, elixir-autogen, elixir-format
-msgid "empty.title"
-msgstr "Nog niet actief?"

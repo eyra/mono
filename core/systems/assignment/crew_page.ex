@@ -119,6 +119,7 @@ defmodule Systems.Assignment.CrewPage do
 
     if storage_info = Storage.Private.storage_info(assignment) do
       Storage.Public.store(storage_info, panel_info, data, meta_data)
+      socket
     else
       message = "Please setup connection to a data storage"
       Logger.error(message)

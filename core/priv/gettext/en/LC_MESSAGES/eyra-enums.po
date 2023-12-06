@@ -373,3 +373,7 @@ msgstr "LISS"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "templates.benchmark"
 msgstr "Benchmark"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "platforms.netflix"
+msgstr "Netflix"

@@ -23,10 +23,6 @@ msgid "menu.item.console"
 msgstr "My console"
 
 #, elixir-autogen, elixir-format
-msgid "menu.item.marketplace"
-msgstr "Marketplace"
-
-#, elixir-autogen, elixir-format
 msgid "menu.item.profile"
 msgstr "My profile"
 
@@ -55,10 +51,6 @@ msgid "dashboard.title"
 msgstr "My console"
 
 #, elixir-autogen, elixir-format
-msgid "marketplace.title"
-msgstr "Marketplace"
-
-#, elixir-autogen, elixir-format
 msgid "todo.title"
 msgstr "To-do"
 
@@ -85,22 +77,6 @@ msgstr "Update profile"
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.student.forward"
 msgstr "Select study program"
-
-#, elixir-autogen, elixir-format
-msgid "onboarding.forward"
-msgstr "Continue"
-
-#, elixir-autogen, elixir-format
-msgid "menu.item.debug"
-msgstr "Debug"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.welcome"
-msgstr "Welcome"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.welcome.forward"
-msgstr "Welcome"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.helpdesk"
@@ -159,10 +135,6 @@ msgid "start.page.console"
 msgstr "Go to console"
 
 #, elixir-autogen, elixir-format
-msgid "start.page.marketplace"
-msgstr "Go to marketplace"
-
-#, elixir-autogen, elixir-format
 msgid "duplicate.button"
 msgstr "Duplicate"
 
@@ -193,10 +165,6 @@ msgstr "Send notification"
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "menu.item.admin"
 msgstr "Admin"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "menu.item.funding"
-msgstr "Funding"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "share.dialog.title"
@@ -257,3 +225,7 @@ msgstr "Copy"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submit.button"
 msgstr "Save"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "close.button"
+msgstr "Close"

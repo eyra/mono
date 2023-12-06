@@ -11,14 +11,6 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "empty.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "empty.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "assignment.status.complete.label"
 msgstr ""
 
