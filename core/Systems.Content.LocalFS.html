@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-B263FBD6.js"></script>
+    <script src="dist/sidebar_items-E894DC64.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -127,7 +127,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_public_url/1" translate="no">get_public_url(id)</a>
+        <a href="#get_public_url/1" translate="no">get_public_url(path)</a>
 
       </div>
 
@@ -151,7 +151,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#remove/1" translate="no">remove(id)</a>
+        <a href="#remove/1" translate="no">remove(path)</a>
 
       </div>
 
@@ -159,15 +159,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#storage_path/1" translate="no">storage_path(id)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#store/1" translate="no">store(tmp_path)</a>
+        <a href="#store/2" translate="no">store(path, original_filename)</a>
 
       </div>
 
@@ -194,9 +186,9 @@ Functions
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">get_public_url(id)</h1>
+    <h1 class="signature" translate="no">get_public_url(path)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/content/local_fs.ex#L17" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/content/local_fs.ex#L6" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -218,7 +210,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_root_path()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/content/local_fs.ex#L31" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/content/local_fs.ex#L19" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -240,7 +232,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">public_path()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/content/local_fs.ex#L37" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/content/local_fs.ex#L4" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -260,9 +252,9 @@ Functions
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">remove(id)</h1>
+    <h1 class="signature" translate="no">remove(path)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/content/local_fs.ex#L21" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/content/local_fs.ex#L23" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -275,38 +267,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="storage_path/1">
+<section class="detail" id="store/2">
 
   <div class="detail-header">
-    <a href="#storage_path/1" class="detail-link" title="Link to this function">
+    <a href="#store/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">storage_path(id)</h1>
+    <h1 class="signature" translate="no">store(path, original_filename)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/content/local_fs.ex#L13" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="store/1">
-
-  <div class="detail-header">
-    <a href="#store/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">store(tmp_path)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/content/local_fs.ex#L4" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/content/local_fs.ex#L11" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
