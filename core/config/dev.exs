@@ -1,5 +1,12 @@
 import Config
 
+upload_path =
+  File.cwd!()
+  |> Path.join("priv")
+  |> Path.join("static")
+  |> Path.join("uploads")
+  |> tap(&File.mkdir_p!/1)
+
 # Only in tests, remove the complexity from the password hashing algorithm
 config :bcrypt_elixir, :log_rounds, 1
 
@@ -65,13 +72,7 @@ config :core, Systems.Email.Mailer,
 
 config :core, :apns_backend, Core.APNS.LoggingBackend
 
-config :core,
-       :static_path,
-       File.cwd!()
-       |> Path.join("priv")
-       |> Path.join("static")
-       |> Path.join("uploads")
-       |> tap(&File.mkdir_p!/1)
+config :core, :upload_path, upload_path
 
 config :core,
        :admins,
@@ -85,23 +86,9 @@ config :core,
 #   access_key_id: "my_access_key",
 #   secret_access_key: "a_super_secret"
 
-config :core, :content,
-  backend: Systems.Content.LocalFS,
-  local_fs_root_path:
-    File.cwd!()
-    |> Path.join("priv")
-    |> Path.join("static")
-    |> Path.join("content")
-    |> tap(&File.mkdir_p!/1)
+config :core, :content, backend: Systems.Content.LocalFS
 
-config :core, :feldspar,
-  backend: Systems.Feldspar.LocalFS,
-  local_fs_root_path:
-    File.cwd!()
-    |> Path.join("priv")
-    |> Path.join("static")
-    |> Path.join("feldspar_apps")
-    |> tap(&File.mkdir_p!/1)
+config :core, :feldspar, backend: Systems.Feldspar.LocalFS
 
 try do
   import_config "dev.secret.exs"

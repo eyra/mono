@@ -5,7 +5,7 @@ if config_env() == :prod do
   app_domain = System.fetch_env!("APP_DOMAIN")
   app_mail_domain = System.fetch_env!("APP_MAIL_DOMAIN")
   app_mail_noreply = "no-reply@#{app_mail_domain}"
-  static_path = System.fetch_env!("STATIC_PATH")
+  upload_path = System.fetch_env!("STATIC_PATH")
 
   # Allow enabling of features from an environment variable
   config :core,
@@ -19,7 +19,7 @@ if config_env() == :prod do
          :admins,
          System.get_env("APP_ADMINS", "") |> String.split() |> Systems.Admin.Public.compile()
 
-  config :core, :static_path, static_path
+  config :core, :upload_path, upload_path
 
   config :core, CoreWeb.Endpoint,
     cache_static_manifest: "priv/static/cache_manifest.json",
@@ -133,9 +133,7 @@ if config_env() == :prod do
       public_url: System.get_env("PUBLIC_S3_URL"),
       prefix: content_s3_prefix
   else
-    config :core, :content,
-      backend: Systems.Content.LocalFS,
-      local_fs_root_path: static_path
+    config :core, :content, backend: Systems.Content.LocalFS
   end
 
   if feldspar_s3_prefix = System.get_env("FELDSPAR_S3_PREFIX") do
@@ -147,9 +145,7 @@ if config_env() == :prod do
       public_url: System.get_env("PUBLIC_S3_URL"),
       prefix: feldspar_s3_prefix
   else
-    config :core, :feldspar,
-      backend: Systems.Feldspar.LocalFS,
-      local_fs_root_path: static_path
+    config :core, :feldspar, backend: Systems.Feldspar.LocalFS
   end
 
   config :core,

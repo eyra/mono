@@ -5,7 +5,7 @@ defmodule Systems.Feldspar.LocalFSTest do
 
   describe "store/1" do
     test "extracts zip and stores files on disk" do
-      id = LocalFS.store(Path.join(__DIR__, "hello.zip"))
+      id = LocalFS.store(Path.join(__DIR__, "hello.zip"), "original_file.zip")
       path = LocalFS.storage_path(id)
       assert ["index.html"] == File.ls!(path)
     end
@@ -26,7 +26,7 @@ defmodule Systems.Feldspar.LocalFSTest do
 
   describe "remove/1" do
     test "removes folder" do
-      id = LocalFS.store(Path.join(__DIR__, "hello.zip"))
+      id = LocalFS.store(Path.join(__DIR__, "hello.zip"), "original_file.zip")
       path = LocalFS.storage_path(id)
       assert :ok == LocalFS.remove(id)
       refute File.exists?(path)

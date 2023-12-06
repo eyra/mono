@@ -11,8 +11,8 @@ defmodule Systems.Content.Public do
   alias Systems.Content.TextItemModel, as: TextItem
   alias Systems.Content.TextBundleModel, as: TextBundle
 
-  def store(file) do
-    Content.Private.get_backend().store(file)
+  def store(path, original_filename) do
+    Content.Private.get_backend().store(path, original_filename)
   end
 
   def get_public_url(id) do

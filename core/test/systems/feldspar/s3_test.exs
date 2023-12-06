@@ -32,7 +32,7 @@ defmodule Systems.Feldspar.S3Test do
                } = args
       end)
 
-      id = S3.store(Path.join(__DIR__, "hello.zip"))
+      id = S3.store(Path.join(__DIR__, "hello.zip"), "original_file.zip")
       assert is_binary(id)
       refute id == ""
     end

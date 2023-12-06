@@ -6,10 +6,12 @@ defmodule Systems.Content.PlugTest do
   alias Systems.Content.Plug
 
   setup do
-    conf = Application.get_env(:core, :content, [])
+    upload_path = Application.get_env(:core, :upload_path)
+    backend = Application.fetch_env!(:core, :content) |> Access.fetch!(:backend)
 
     on_exit(fn ->
-      Application.put_env(:core, :content, conf)
+      Application.put_env(:core, :upload_path, upload_path)
+      Application.put_env(:core, :content, backend: backend)
     end)
 
     folder_name = "temp_#{:crypto.strong_rand_bytes(16) |> Base.encode16()}"
@@ -24,18 +26,19 @@ defmodule Systems.Content.PlugTest do
       File.rm_rf!(tmp_dir)
     end)
 
-    conf =
-      conf
-      |> Keyword.put(:backend, Systems.Content.LocalFS)
-      |> Keyword.put(:local_fs_root_path, tmp_dir)
+    Application.put_env(
+      :core,
+      :upload_path,
+      tmp_dir
+    )
 
     Application.put_env(
       :core,
       :content,
-      conf
+      backend: Systems.Content.LocalFS
     )
 
-    {:ok, tmp_dir: tmp_dir, app_conf: conf}
+    {:ok, tmp_dir: tmp_dir}
   end
 
   test "call with LocalFS backend serves static content", %{tmp_dir: tmp_dir} do
@@ -43,20 +46,16 @@ defmodule Systems.Content.PlugTest do
     |> Path.join("plug_test.txt")
     |> File.write("hello world!")
 
-    opts = Plug.init(at: "/content")
-    conn = Plug.call(conn(:get, "/content/plug_test.txt"), opts)
+    opts = Plug.init(at: "/uploads")
+    conn = Plug.call(conn(:get, "/uploads/plug_test.txt"), opts)
     assert "hello world!" == conn.resp_body
   end
 
-  test "call with other backends doesn't serve static content", %{app_conf: conf} do
-    Application.put_env(
-      :core,
-      :feldspar,
-      Keyword.put(conf, :backend, Systems.Content.FakeBackend)
-    )
+  test "call with other backends doesn't serve static content" do
+    Application.put_env(:core, :content, backend: Systems.Content.FakeBackend)
 
-    opts = Plug.init(at: "/txt")
-    conn = Plug.call(conn(:get, "/txt/plug_test.txt"), opts)
+    opts = Plug.init(at: "/uploads")
+    conn = Plug.call(conn(:get, "/uploads/plug_test.txt"), opts)
     assert nil == conn.resp_body
   end
 end

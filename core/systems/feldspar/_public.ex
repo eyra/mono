@@ -19,8 +19,8 @@ defmodule Systems.Feldspar.Public do
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
 
-  def store(zip_file) do
-    get_backend().store(zip_file)
+  def store(zip_file, original_filename) do
+    get_backend().store(zip_file, original_filename)
   end
 
   def get_public_url(id) do

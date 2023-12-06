@@ -117,11 +117,13 @@ defmodule Systems.Assignment.CrewPage do
       key: key
     }
 
-    assignment
-    |> Storage.Private.storage_info()
-    |> Storage.Public.store(panel_info, data, meta_data)
-
-    socket
+    if storage_info = Storage.Private.storage_info(assignment) do
+      Storage.Public.store(storage_info, panel_info, data, meta_data)
+    else
+      message = "Please setup connection to a data storage"
+      Logger.error(message)
+      socket |> put_flash(:error, message)
+    end
   end
 
   @impl true

@@ -1,7 +1,7 @@
 defmodule Systems.Content.S3 do
   alias ExAws.S3
 
-  def store(file) do
+  def store(file, _original_filename) do
     bucket = Access.fetch!(s3_settings(), :bucket)
     uuid = Ecto.UUID.generate()
     extname = Path.extname(file)

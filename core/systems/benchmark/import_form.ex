@@ -1,12 +1,12 @@
 defmodule Systems.Benchmark.ImportForm do
   use CoreWeb, :live_component
-  use CoreWeb.FileUploader, ~w(.csv)
+  use CoreWeb.FileUploader, accept: ~w(.csv)
 
   @impl true
-  def process_file(socket, {_local_relative_path, local_full_path, remote_file}) do
+  def process_file(socket, {path, _url, original_filename}) do
     socket
-    |> assign(csv_local_path: local_full_path)
-    |> assign(csv_remote_file: remote_file)
+    |> assign(csv_local_path: path)
+    |> assign(csv_remote_file: original_filename)
   end
 
   @impl true

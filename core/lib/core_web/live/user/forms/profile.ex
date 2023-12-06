@@ -1,6 +1,6 @@
 defmodule CoreWeb.User.Forms.Profile do
   use CoreWeb.LiveForm
-  use CoreWeb.FileUploader, ~w(.png .jpg .jpeg)
+  use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg)
 
   alias Core.Accounts
   alias Core.Accounts.UserProfileEdit
@@ -11,9 +11,9 @@ defmodule CoreWeb.User.Forms.Profile do
   @impl true
   def process_file(
         %{assigns: %{entity: entity}} = socket,
-        {local_relative_path, _local_full_path, _remote_file}
+        {_path, photo_url, _original_filename}
       ) do
-    save(socket, entity, :auto_save, %{photo_url: local_relative_path})
+    save(socket, entity, :auto_save, %{photo_url: photo_url})
   end
 
   # Handle Selector Update
