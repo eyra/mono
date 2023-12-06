@@ -48,8 +48,11 @@ defmodule Systems.Document.ToolModel do
 
     def launcher(%{ref: ref}),
       do: %{
-        function: &Document.PDFView.pdf_view/1,
-        props: %{url: ref, title: dgettext("eyra-document", "component.title")}
+        module: Document.PDFView,
+        params: %{
+          url: ref,
+          title: dgettext("eyra-document", "component.title")
+        }
       }
 
     def task_labels(_) do

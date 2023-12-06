@@ -15,10 +15,6 @@ msgid "welcome.title"
 msgstr "Panl"
 
 #, elixir-autogen, elixir-format
-msgid "console-button"
-msgstr "Go to console"
-
-#, elixir-autogen, elixir-format
 msgid "link.message"
 msgstr "Panl is a marketplace for research. Researchers can set up campaigns to recruit participants for research studies. Participants can apply to participate in these studies. Currently Panl is only available for student participation in research studies of the VU Amsterdam School of Business and Economics (SBE). In 2022 Panl will be released to a broader audience."
 
@@ -69,11 +65,3 @@ msgstr "For and by researchers"
 #, elixir-autogen, elixir-format
 msgid "welcome.subtitle"
 msgstr "For research"
-
-#, elixir-autogen, elixir-format
-msgid "marketplace.button"
-msgstr "Go to marketplace"
-
-#, elixir-autogen, elixir-format
-msgid "link.message.interested"
-msgstr "Interested? Send an email to "

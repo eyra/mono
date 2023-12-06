@@ -11,14 +11,6 @@ msgstr ""
 "Language: en\n"
 
 #, elixir-autogen, elixir-format
-msgid "empty.description"
-msgstr "There are currently no research studies available to participate in. As soon as one becomes available, it will be added here and you will be notified by email (make sure to check your spam or junk mail folder, just in case)."
-
-#, elixir-autogen, elixir-format
-msgid "empty.title"
-msgstr "Looking for a study?"
-
-#, elixir-autogen, elixir-format
 msgid "assignment.status.complete.label"
 msgstr "Closed"
 

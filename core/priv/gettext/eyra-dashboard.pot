@@ -17,11 +17,3 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "recent-items.title"
 msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "empty.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "empty.title"
-msgstr ""

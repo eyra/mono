@@ -2,6 +2,8 @@ defmodule Systems.Assignment.CrewWorkView do
   use CoreWeb, :live_component_fabric
   use Fabric.LiveComponent
 
+  import Frameworks.Pixel.Line
+
   alias Systems.{
     Assignment,
     Crew,
@@ -116,7 +118,7 @@ defmodule Systems.Assignment.CrewWorkView do
 
     Crew.Public.activate_task(task)
 
-    {:noreply, socket}
+    {:noreply, socket |> hide_child(:tool_ref_view)}
   end
 
   @impl true
@@ -162,7 +164,7 @@ defmodule Systems.Assignment.CrewWorkView do
        }) do
     if code == 0 do
       Crew.Public.activate_task(task)
-      socket
+      socket |> hide_child(:tool_ref_view)
     else
       Frameworks.Pixel.Flash.put_info(socket, "Application stopped")
     end
@@ -194,8 +196,18 @@ defmodule Systems.Assignment.CrewWorkView do
           <.child name={:tool_ref_view} fabric={@fabric} />
         <% else %>
           <%= if exists?(@fabric, :work_list_view) do %>
-            <div class="w-left-column">
-              <.child name={:work_list_view} fabric={@fabric} />
+            <div class="w-left-column flex flex-col py-6 gap-6">
+              <div class="px-6">
+                <Text.title2 margin=""><%= dgettext("eyra-assignment", "work.list.title") %></Text.title2>
+              </div>
+              <div>
+                <.line />
+              </div>
+              <div class="flex-grow">
+                <div class="px-6 h-full overflow-y-scroll">
+                  <.child name={:work_list_view} fabric={@fabric} />
+                </div>
+              </div>
             </div>
             <div class="border-l border-grey4">
             </div>

@@ -15,10 +15,6 @@ msgid "welcome.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "console-button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "link.message"
 msgstr ""
 
@@ -68,12 +64,4 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "welcome.subtitle"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "marketplace.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "link.message.interested"
 msgstr ""

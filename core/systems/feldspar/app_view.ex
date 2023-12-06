@@ -1,10 +1,14 @@
 defmodule Systems.Feldspar.AppView do
-  use CoreWeb, :html
+  use CoreWeb, :live_component_fabric
+  use Fabric.LiveComponent
 
-  attr(:url, :string, required: true)
-  attr(:locale, :string, required: true)
+  @impl true
+  def update(%{url: url, locale: locale}, socket) do
+    {:ok, socket |> assign(url: url, locale: locale)}
+  end
 
-  def app_view(assigns) do
+  @impl true
+  def render(assigns) do
     ~H"""
       <div class="flex flex-col w-full h-full">
         <%!-- Ensure that updates don't alter the hierarchy in front of the iframe.

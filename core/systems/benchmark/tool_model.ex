@@ -78,7 +78,7 @@ defmodule Systems.Benchmark.ToolModel do
     def open_label(_), do: dgettext("eyra-benchmark", "open.cta.title")
     def ready?(tool), do: Benchmark.ToolModel.ready?(tool)
     def form(_), do: Benchmark.Form
-    def launcher(_), do: %{function: fn _ -> nil end, props: %{}}
+    def launcher(_), do: nil
 
     def task_labels(_) do
       %{

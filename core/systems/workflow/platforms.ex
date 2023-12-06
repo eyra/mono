@@ -5,14 +5,15 @@ defmodule Systems.Workflow.Platforms do
   use Core.Enums.Base,
       {:platforms,
        [
-         :facebook,
-         :instagram,
-         :tiktok,
-         :x,
-         :google,
-         :youtube,
-         :whatsapp,
          :apple,
-         :samsung
+         :facebook,
+         :google,
+         :instagram,
+         :netflix,
+         :samsung,
+         :tiktok,
+         :whatsapp,
+         :x,
+         :youtube
        ]}
 end

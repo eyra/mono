@@ -49,8 +49,8 @@ defmodule Systems.Feldspar.ToolModel do
 
     def launcher(%{archive_ref: archive_ref}) when is_binary(archive_ref) do
       %{
-        function: &Feldspar.AppView.app_view/1,
-        props: %{
+        module: Feldspar.AppView,
+        params: %{
           url: archive_ref <> "/index.html",
           locale: Gettext.get_locale(CoreWeb.Gettext)
         }

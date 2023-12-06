@@ -11,10 +11,6 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "campaign.all.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "campaign.subject.title"
 msgstr ""
 

@@ -11,14 +11,6 @@ msgstr ""
 "Language: nl\n"
 
 #, elixir-autogen, elixir-format
-msgid "empty.description"
-msgstr "Op dit moment zijn er geen onderzoeksstudies beschikbaar. Zodra er een studie beschikbaar komt, wordt deze hier toegevoegd en word je op de hoogte gesteld via e-mail (vergeet niet je spam of junk mail map te checken, voor het geval dat)."
-
-#, elixir-autogen, elixir-format
-msgid "empty.title"
-msgstr "Op zoek naar een studie?"
-
-#, elixir-autogen, elixir-format
 msgid "assignment.status.complete.label"
 msgstr "Gesloten"
 
