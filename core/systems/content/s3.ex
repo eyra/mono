@@ -1,49 +1,49 @@
 defmodule Systems.Content.S3 do
   alias ExAws.S3
 
-  def store(file, _original_filename) do
+  def store(file, original_filename) do
     bucket = Access.fetch!(s3_settings(), :bucket)
     uuid = Ecto.UUID.generate()
-    extname = Path.extname(file)
-    id = "#{uuid}#{extname}"
+    extname = Path.extname(original_filename)
+    filename = "#{uuid}#{extname}"
 
-    upload_file(file, id, bucket)
-    id
+    upload_file(file, filename, bucket)
+    filename
   end
 
-  def remove(id) do
+  def remove(filename) do
     bucket = Access.fetch!(s3_settings(), :bucket)
-    object_key = "#{object_key(id)}"
+    object_key = "#{object_key(filename)}"
 
     S3.delete_object(bucket, object_key)
     |> backend().request!()
   end
 
-  def get_public_url(id) do
+  def get_public_url(filename) do
     settings = s3_settings()
     public_url = Access.get(settings, :public_url)
-    "#{public_url}/#{object_key(id)}"
+    "#{public_url}/#{object_key(filename)}"
   end
 
-  defp upload_file(file, id, bucket) do
+  defp upload_file(file, filename, bucket) do
     {:ok, data} = File.read(file)
-    object_key = "#{object_key(id)}"
+    object_key = "#{object_key(filename)}"
 
     S3.put_object(
       bucket,
       object_key,
       data,
-      content_type: content_type(file)
+      content_type: content_type(filename)
     )
     |> backend().request!()
   end
 
   defp content_type(name), do: MIME.from_path(name)
 
-  defp object_key(id) do
+  defp object_key(filename) do
     prefix = Access.get(s3_settings(), :prefix, nil)
 
-    [prefix, id]
+    [prefix, filename]
     |> Enum.filter(&(&1 != nil))
     |> Enum.join("/")
   end
