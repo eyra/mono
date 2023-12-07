@@ -139,9 +139,7 @@ defmodule Systems.Assignment.CrewPage do
           </div>
         </:header>
         <div id={:crew_page} class="w-full h-full flex flex-col" phx-hook="ViewportResize">
-          <div class="flex-1">
-            <.flow fabric={@fabric} />
-          </div>
+          <.flow fabric={@fabric} />
         </div>
       </.stripped>
     """
