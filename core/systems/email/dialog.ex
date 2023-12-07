@@ -51,7 +51,7 @@ defmodule Systems.Email.Dialog do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="min-w-1/2 max-w-9/10 sm:max-w-3/4 p-8 bg-white shadow-2xl rounded">
+    <div class="min-w-1/2 max-w-9/10 sm:max-w-3/4 p-8 bg-white shadow-floating rounded">
       <div class="">
         <div class="flex flex-row">
           <div class="flex-grow" />

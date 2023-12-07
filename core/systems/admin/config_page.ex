@@ -99,7 +99,7 @@ defmodule Systems.Admin.ConfigPage do
     <.workspace title={dgettext("eyra-admin", "config.title")} menus={@menus}>
       <%= if @popup do %>
         <.popup>
-          <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
+          <div class="p-8 w-popup-md bg-white shadow-floating rounded">
             <.live_component id={:config_page_popup} module={@popup.module} {@popup} />
           </div>
         </.popup>

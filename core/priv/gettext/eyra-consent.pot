@@ -26,3 +26,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "out_of_sync.error.message"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "signature.view.title"
+msgstr ""

@@ -42,7 +42,7 @@ defmodule Frameworks.Pixel.RadioGroup do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <div class="ml-[6px]">
       <.form id={"#{@id}_form"} for={@form} phx-change="change" phx-target={@myself}>
         <div class="flex flex-row gap-8">
           <%= for item <- @items do %>

@@ -96,7 +96,8 @@ defmodule Systems.Consent.Public do
       join: r in Consent.RevisionModel,
       on: r.id == s.revision_id,
       where: s.user_id == ^user_id,
-      where: r.agreement_id == ^agreement_id
+      where: r.agreement_id == ^agreement_id,
+      preload: [:revision]
     )
     |> Repo.all()
     |> List.first()

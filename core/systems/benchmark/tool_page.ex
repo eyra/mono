@@ -69,7 +69,7 @@ defmodule Systems.Benchmark.ToolPage do
       <.stripped title={@vm.hero_title} menus={@menus}>
         <%= if @popup do %>
           <.popup>
-            <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
+            <div class="p-8 w-popup-md bg-white shadow-floating rounded">
               <.live_component {@popup} />
             </div>
           </.popup>

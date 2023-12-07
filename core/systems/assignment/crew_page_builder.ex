@@ -61,12 +61,33 @@ defmodule Systems.Assignment.CrewPageBuilder do
     end
   end
 
-  defp work_view(assignment, %{fabric: fabric} = assigns, _) do
+  defp work_view(
+         %{consent_agreement: consent_agreement} = assignment,
+         %{fabric: fabric, current_user: user} = assigns,
+         _
+       ) do
     work_items = work_items(assignment, assigns)
+    context_menu_items = context_menu_items(assignment, assigns)
 
     Fabric.prepare_child(fabric, :work_view, Assignment.CrewWorkView, %{
-      work_items: work_items
+      work_items: work_items,
+      consent_agreement: consent_agreement,
+      context_menu_items: context_menu_items,
+      user: user
     })
+  end
+
+  defp context_menu_items(%{consent_agreement: consent_agreement}, _assigns) do
+    items = []
+
+    items =
+      if consent_agreement do
+        items ++ [%{id: :consent, label: "Consent"}]
+      else
+        items
+      end
+
+    items
   end
 
   defp work_items(%{status: status, crew: crew} = assignment, %{current_user: user} = assigns) do

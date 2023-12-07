@@ -125,7 +125,7 @@ defmodule Systems.Crew.RejectView do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="p-8 bg-white shadow-2xl rounded">
+    <div class="p-8 bg-white shadow-floating rounded">
       <div class="flex flex-col gap-4 gap-8">
         <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
           <%= @title %>

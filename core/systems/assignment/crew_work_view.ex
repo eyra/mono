@@ -8,18 +8,34 @@ defmodule Systems.Assignment.CrewWorkView do
     Assignment,
     Crew,
     Workflow,
-    Project
+    Project,
+    Content,
+    Consent
   }
 
-  def update(%{work_items: work_items}, socket) do
+  def update(
+        %{
+          work_items: work_items,
+          consent_agreement: consent_agreement,
+          context_menu_items: context_menu_items,
+          user: user
+        },
+        socket
+      ) do
     {
       :ok,
       socket
-      |> assign(work_items: work_items)
+      |> assign(
+        work_items: work_items,
+        consent_agreement: consent_agreement,
+        context_menu_items: context_menu_items,
+        user: user
+      )
       |> update_selected_item_id()
       |> update_selected_item()
       |> compose_child(:work_list_view)
       |> compose_child(:start_view)
+      |> compose_child(:context_menu)
       |> update_child(:tool_ref_view)
     }
   end
@@ -62,6 +78,8 @@ defmodule Systems.Assignment.CrewWorkView do
     socket |> assign(selected_item: selected_item)
   end
 
+  # Compose
+
   @impl true
   def compose(:start_view, %{selected_item: selected_item}) when not is_nil(selected_item) do
     %{module: Assignment.StartView, params: %{work_item: selected_item}}
@@ -95,17 +113,29 @@ defmodule Systems.Assignment.CrewWorkView do
   @impl true
   def compose(:tool_ref_view, _assigns), do: nil
 
-  defp map_item({%{id: id, title: title, group: group}, task}) do
-    %{id: id, title: title, icon: group, status: task_status(task)}
+  def compose(:context_menu, %{context_menu_items: []}) do
+    nil
   end
 
-  defp task_status(%{status: status}), do: status
-  defp task_status(_), do: :pending
-
-  defp lock_task(socket, task) do
-    Crew.Public.lock_task(task)
-    socket
+  def compose(:context_menu, %{context_menu_items: context_menu_items}) do
+    %{
+      module: Content.ContextMenu,
+      params: %{
+        items: context_menu_items
+      }
+    }
   end
+
+  def compose(:consent_page, %{consent_agreement: consent_agreement, user: user}) do
+    %{
+      module: Consent.SignatureView,
+      params: %{
+        signature: Consent.Public.get_signature(consent_agreement, user)
+      }
+    }
+  end
+
+  # Events
 
   @impl true
   def handle_event(
@@ -157,6 +187,23 @@ defmodule Systems.Assignment.CrewWorkView do
     }
   end
 
+  @impl true
+  def handle_event("show", %{page: :consent}, socket) do
+    {
+      :noreply,
+      socket
+      |> compose_child(:consent_page)
+      |> show_popup(:consent_page)
+    }
+  end
+
+  @impl true
+  def handle_event("close", %{source: %{name: :consent_page}}, socket) do
+    {:noreply, socket |> hide_popup(:consent_page)}
+  end
+
+  # Private
+
   defp handle_feldspar_event(%{assigns: %{selected_item: {_, task}}} = socket, %{
          "__type__" => "CommandSystemExit",
          "code" => code,
@@ -188,6 +235,18 @@ defmodule Systems.Assignment.CrewWorkView do
     socket |> Frameworks.Pixel.Flash.put_error("Unsupported event")
   end
 
+  defp map_item({%{id: id, title: title, group: group}, task}) do
+    %{id: id, title: title, icon: group, status: task_status(task)}
+  end
+
+  defp task_status(%{status: status}), do: status
+  defp task_status(_), do: :pending
+
+  defp lock_task(socket, task) do
+    Crew.Public.lock_task(task)
+    socket
+  end
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -216,6 +275,8 @@ defmodule Systems.Assignment.CrewWorkView do
             <.child name={:start_view} fabric={@fabric} />
           </div>
         <% end %>
+        <%!-- floating button --%>
+        <.child name={:context_menu} fabric={@fabric} />
       </div>
     """
   end
