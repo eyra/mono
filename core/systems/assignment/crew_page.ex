@@ -153,7 +153,7 @@ defmodule Systems.Assignment.CrewPage do
 
         <%= if @popup do %>
           <.popup>
-            <div class="w-3/4 h-4/5 overflow-y-scroll">
+            <div class="w-3/5 h-4/5 overflow-y-scroll">
               <.live_component id={:page_popup} module={@popup.module} {@popup.params} />
             </div>
           </.popup>
