@@ -18,11 +18,6 @@ module.exports = {
     { pattern: /border-./ },
   ],
   theme: {
-    boxShadow: {
-      top4px: "inset 0 4px 0 0 rgba(0, 0, 0, 0.15)",
-      top2px: "inset 0 2px 0 0 rgba(0, 0, 0, 0.15)",
-      "2xl": "0 5px 20px 0px rgba(0, 0, 0, 0.08)",
-    },
     colors: {
       primary: "#4272EF",
       primarylight: "#E3EAFD",
@@ -49,6 +44,11 @@ module.exports = {
       surfconext: "#4DB2CF",
     },
     extend: {
+      boxShadow: {
+        top4px: "inset 0 4px 0 0 rgba(0, 0, 0, 0.15);",
+        top2px: "inset 0 2px 0 0 rgba(0, 0, 0, 0.15;);",
+        floating: "0px 5px 20px 0px rgba(0, 0, 0, 0.10);",
+      },
       transitionDuration: {
         2000: "2000ms",
       },

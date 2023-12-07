@@ -99,7 +99,7 @@ defmodule Systems.Pool.OverviewPage do
     <.workspace title={dgettext("eyra-pool", "overview.title")} menus={@menus}>
       <%= if @popup do %>
         <.popup>
-          <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
+          <div class="p-8 w-popup-md bg-white shadow-floating rounded">
             <.live_component id={:pool_overview_popup} module={@popup.module} {@popup} />
           </div>
         </.popup>

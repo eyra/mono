@@ -280,7 +280,7 @@ defmodule Systems.Lab.DayView do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
+    <div class="p-8 w-popup-md bg-white shadow-floating rounded">
       <div>
         <%= if @error do %>
           <div class="text-button font-button text-warning leading-6">

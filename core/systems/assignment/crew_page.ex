@@ -34,7 +34,8 @@ defmodule Systems.Assignment.CrewPage do
       |> assign(
         id: id,
         model: model,
-        image_info: nil
+        image_info: nil,
+        popup: nil
       )
       |> update_panel_info(session)
       |> observe_view_model()
@@ -106,6 +107,17 @@ defmodule Systems.Assignment.CrewPage do
     {:noreply, socket |> store(key, data)}
   end
 
+  @impl true
+  def handle_event("show_popup", %{ref: %{id: id, module: module}, params: params}, socket) do
+    popup = %{module: module, params: Map.put(params, :id, id)}
+    {:noreply, socket |> assign(popup: popup)}
+  end
+
+  @impl true
+  def handle_event("hide_popup", _, socket) do
+    {:noreply, socket |> assign(popup: nil)}
+  end
+
   def store(
         %{assigns: %{panel_info: panel_info, model: assignment, remote_ip: remote_ip}} = socket,
         key,
@@ -138,6 +150,15 @@ defmodule Systems.Assignment.CrewPage do
           <% end %>
           </div>
         </:header>
+
+        <%= if @popup do %>
+          <.popup>
+            <div class="w-3/4 h-4/5 overflow-y-scroll">
+              <.live_component id={:page_popup} module={@popup.module} {@popup.params} />
+            </div>
+          </.popup>
+        <% end %>
+
         <div id={:crew_page} class="w-full h-full flex flex-col" phx-hook="ViewportResize">
           <.flow fabric={@fabric} />
         </div>

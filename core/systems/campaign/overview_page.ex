@@ -217,7 +217,7 @@ defmodule Systems.Campaign.OverviewPage do
 
       <%= if @popup do %>
         <.popup>
-          <div class="p-8 w-popup-md bg-white shadow-2xl rounded">
+          <div class="p-8 w-popup-md bg-white shadow-floating rounded">
             <.live_component id={:campaign_overview_popup} module={@popup.module} {@popup} />
           </div>
         </.popup>

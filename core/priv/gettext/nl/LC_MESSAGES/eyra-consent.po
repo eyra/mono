@@ -26,3 +26,7 @@ msgstr "Deze versie van de tekst voor toestemming is al ondertekend door partici
 #, elixir-autogen, elixir-format
 msgid "out_of_sync.error.message"
 msgstr "De toestemmingstekst is aangepast. Ververs de pagina om verder te gaan."
+
+#, elixir-autogen, elixir-format
+msgid "signature.view.title"
+msgstr "Toestemming"

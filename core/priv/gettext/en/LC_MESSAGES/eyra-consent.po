@@ -26,3 +26,7 @@ msgstr "Please not that this version of the consent text has already been signed
 #, elixir-autogen, elixir-format
 msgid "out_of_sync.error.message"
 msgstr "The consent text has been changed. Please refresh the page to continue."
+
+#, elixir-autogen, elixir-format
+msgid "signature.view.title"
+msgstr "Consent"
