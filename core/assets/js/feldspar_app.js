@@ -9,6 +9,13 @@ export const FeldsparApp = {
       this.onFrameLoaded();
     });
     iframe.setAttribute("src", this.el.dataset.src);
+
+    window.addEventListener("message", function(event) {
+      if (event.data.action === "resize") {
+        console.log("[FeldsparApp] resize event:", event.data.height)
+        iframe.setAttribute("style", `height:${event.data.height}px`);
+      }
+    })
   },
 
   getIframe() {
@@ -30,13 +37,6 @@ export const FeldsparApp = {
     iframe.contentWindow.postMessage({ action, locale }, "*", [
       this.channel.port2,
     ]);
-
-    const observer = new ResizeObserver(() => {
-      const height = iframe.contentWindow.document.body.scrollHeight;
-      iframe.setAttribute("style", `height:${height}px`);
-    });
-
-    observer.observe(iframe.contentWindow.document.body);
   },
 
   handleMessage(e) {
