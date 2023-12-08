@@ -4,35 +4,18 @@ export const Toggle = {
     this.target = document.getElementById(this.targetId);
     this.target.style.display = "none";
 
-    this.el.addEventListener("click", (event) => {
-      event.stopPropagation();
-      if (this.target.style.display !== "block") {
-        this.onshow();
+    document.addEventListener("click", (event) => {
+      if (event.target === this.el) {
+        if (this.target.style.display !== "block") {
+          this.target.style.display = "block";
+        } else {
+          this.target.style.display = "none";
+        }
+      } else if (event.target === this.target) {
+        // nothing
       } else {
-        this.onhide();
+        this.target.style.display = "none";
       }
     });
-
-    this.onshow = () => {
-      console.log("onshow", this.target.style.display);
-      this.target.style.display = "block";
-      this.startListening();
-    };
-
-    this.onhide = () => {
-      console.log("onhide");
-      this.target.style.display = "none";
-      this.stopListening();
-    };
-
-    this.startListening = () => {
-      document.addEventListener("click", this.onhide);
-      document.addEventListener("focus", this.onhide, true);
-    };
-
-    this.stopListening = () => {
-      document.removeEventListener("click", this.onhide);
-      document.removeEventListener("focus", this.onhide);
-    };
   },
 };
