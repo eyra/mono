@@ -47,7 +47,7 @@ defmodule Systems.Content.ContextMenu do
             target="context-menu-items"
             class="w-10 h-10 flex flex-col items-center justify-center text-primary bg-white rounded-full shadow-floating active:shadow-none cursor-pointer"
           >
-            <div class="text-title5 font-title5 text-primary text-grey1">i</div>
+            <div class="text-title5 font-title5 text-primary text-grey1 pointer-events-none">i</div>
           </div>
         </div>
       </div>
