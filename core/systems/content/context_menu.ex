@@ -20,10 +20,10 @@ defmodule Systems.Content.ContextMenu do
   def render(assigns) do
     ~H"""
      <div class="relative">
-      <div class="absolute z-10 -right-10 bottom-6 flex flex-col gap-4">
+      <div class="absolute z-100 -right-10 bottom-6 flex flex-col gap-4">
         <div
           id="context-menu-items"
-          class="rounded-lg shadow-floating p-6 w-[240px] hidden"
+          class="rounded-lg shadow-floating p-6 w-[240px] bg-white hidden"
         >
           <div class="flex flex-col gap-6 items-left">
             <%= for item <- @items do %>

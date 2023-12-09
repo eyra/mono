@@ -10,9 +10,9 @@ defmodule Systems.Assignment.CrewPage do
   require Logger
 
   alias CoreWeb.UI.Timestamp
-  alias CoreWeb.UI.Popup
   alias Core.ImageHelpers
   alias Frameworks.Pixel.Hero
+  alias Frameworks.Pixel.ModalView
 
   alias Systems.{
     Assignment,
@@ -36,7 +36,7 @@ defmodule Systems.Assignment.CrewPage do
         id: id,
         model: model,
         image_info: nil,
-        popup: nil
+        modal: nil
       )
       |> update_panel_info(session)
       |> observe_view_model()
@@ -109,14 +109,14 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def handle_event("show_popup", %{ref: %{id: id, module: module}, params: params}, socket) do
-    popup = %{module: module, params: Map.put(params, :id, id)}
-    {:noreply, socket |> assign(popup: popup)}
+  def handle_event("show_modal", modal, socket) do
+    # popup = %{module: module, params: Map.put(params, :id, id)}
+    {:noreply, socket |> assign(modal: modal)}
   end
 
   @impl true
-  def handle_event("hide_popup", _, socket) do
-    {:noreply, socket |> assign(popup: nil)}
+  def handle_event("hide_modal", _, socket) do
+    {:noreply, socket |> assign(modal: nil)}
   end
 
   def store(
@@ -152,7 +152,7 @@ defmodule Systems.Assignment.CrewPage do
           </div>
         </:header>
 
-        <Popup.takeover popup={@popup}/>
+        <ModalView.dynamic modal={@modal} />
 
         <div id={:crew_page} class="w-full h-full flex flex-col" phx-hook="ViewportResize">
           <.flow fabric={@fabric} />
