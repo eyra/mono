@@ -130,6 +130,7 @@ defmodule Systems.Assignment.CrewWorkView do
     %{
       module: Consent.SignatureView,
       params: %{
+        title: dgettext("eyra-consent", "signature.view.title"),
         signature: Consent.Public.get_signature(consent_agreement, user)
       }
     }
@@ -193,7 +194,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> compose_child(:consent_page)
-      |> show_popup(:consent_page)
+      |> show_modal(:consent_page, :sheet)
     }
   end
 

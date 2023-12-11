@@ -184,11 +184,44 @@ defmodule Fabric do
     Phoenix.Component.assign(assigns, fabric: remove_child(fabric, child_name))
   end
 
+  def show_modal(context, child_name, modal_style) when is_atom(child_name) do
+    child = get_child(context, child_name)
+    show_modal(context, child, modal_style)
+  end
+
+  # MODAL
+
+  def show_modal(
+        %Phoenix.LiveView.Socket{assigns: assigns} = socket,
+        %Fabric.LiveComponent.Model{} = child,
+        modal_style
+      ) do
+    %Phoenix.LiveView.Socket{socket | assigns: show_modal(assigns, child, modal_style)}
+  end
+
+  def show_modal(%{fabric: fabric} = assigns, %Fabric.LiveComponent.Model{} = child, modal_style) do
+    send_event(fabric, :root, "show_modal", %{live_component: child, style: modal_style})
+    Phoenix.Component.assign(assigns, fabric: add_child(fabric, child))
+  end
+
+  def hide_modal(%Phoenix.LiveView.Socket{assigns: assigns} = socket, child_name) do
+    %Phoenix.LiveView.Socket{socket | assigns: hide_modal(assigns, child_name)}
+  end
+
+  def hide_modal(%{fabric: fabric} = assigns, child_name) do
+    send_event(fabric, :root, "hide_modal")
+    Phoenix.Component.assign(assigns, fabric: remove_child(fabric, child_name))
+  end
+
+  # POPUP
+
+  # deprecated "Use show_modal/3 instead"
   def show_popup(context, child_name) when is_atom(child_name) do
     child = get_child(context, child_name)
     show_popup(context, child)
   end
 
+  # deprecated "Use show_modal/3 instead"
   def show_popup(
         %Phoenix.LiveView.Socket{assigns: assigns} = socket,
         %Fabric.LiveComponent.Model{} = child
@@ -196,19 +229,37 @@ defmodule Fabric do
     %Phoenix.LiveView.Socket{socket | assigns: show_popup(assigns, child)}
   end
 
+  # deprecated "Use show_modal/3 instead"
   def show_popup(%{fabric: fabric} = assigns, %Fabric.LiveComponent.Model{} = child) do
     send_event(fabric, :root, "show_popup", child)
     Phoenix.Component.assign(assigns, fabric: add_child(fabric, child))
   end
 
+  # deprecated "Use hide_modal/2 instead"
   def hide_popup(%Phoenix.LiveView.Socket{assigns: assigns} = socket, child_name) do
     %Phoenix.LiveView.Socket{socket | assigns: hide_popup(assigns, child_name)}
   end
 
+  # deprecated "Use hide_modal/2 instead"
   def hide_popup(%{fabric: fabric} = assigns, child_name) do
     send_event(fabric, :root, "hide_popup")
     Phoenix.Component.assign(assigns, fabric: remove_child(fabric, child_name))
   end
+
+  # Flow
+  def show_next(%Phoenix.LiveView.Socket{assigns: %{fabric: fabric}} = socket) do
+    Phoenix.Component.assign(socket, fabric: show_next(fabric))
+  end
+
+  def show_next(%Fabric.Model{children: children} = fabric) do
+    %Fabric.Model{fabric | children: List.wrap(children) |> List.delete_at(0)}
+  end
+
+  def get_current_child(%Fabric.Model{children: children}) do
+    List.wrap(children) |> List.first()
+  end
+
+  # BASICS
 
   def add_child(%Fabric.Model{children: nil} = fabric, %Fabric.LiveComponent.Model{} = child) do
     %Fabric.Model{fabric | children: [child]}
@@ -232,19 +283,6 @@ defmodule Fabric do
       fabric
       | children: Enum.filter(List.wrap(children), &(&1.ref.name != child_name))
     }
-  end
-
-  # Flow
-  def show_next(%Phoenix.LiveView.Socket{assigns: %{fabric: fabric}} = socket) do
-    Phoenix.Component.assign(socket, fabric: show_next(fabric))
-  end
-
-  def show_next(%Fabric.Model{children: children} = fabric) do
-    %Fabric.Model{fabric | children: List.wrap(children) |> List.delete_at(0)}
-  end
-
-  def get_current_child(%Fabric.Model{children: children}) do
-    List.wrap(children) |> List.first()
   end
 
   # Events

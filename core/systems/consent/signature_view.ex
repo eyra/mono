@@ -2,24 +2,17 @@ defmodule Systems.Consent.SignatureView do
   use CoreWeb, :live_component_fabric
   use Fabric.LiveComponent
 
-  import Frameworks.Pixel.Takeover
-
   @impl true
   def update(%{signature: signature}, %{assigns: %{}} = socket) do
     {
       :ok,
       socket
       |> assign(signature: signature)
-      |> compose_element(:title)
       |> compose_element(:source)
     }
   end
 
   @impl true
-  def compose(:title, _) do
-    dgettext("eyra-consent", "signature.view.title")
-  end
-
   def compose(:source, %{signature: %{revision: %{source: source}}}), do: source
   def compose(:source, _), do: ""
 
@@ -33,13 +26,11 @@ defmodule Systems.Consent.SignatureView do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
-      <.takeover title={@title} target={@myself} >
+      <div class="w-full h-full">
         <div class="wysiwig">
           <%= raw @source %>
         </div>
-      </.takeover>
-    </div>
+      </div>
     """
   end
 end
