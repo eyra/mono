@@ -40,7 +40,7 @@ defmodule Systems.Consent.ClickWrapView do
       action: %{type: :send, event: "continue", target: myself},
       face: %{
         type: :primary,
-        label: dgettext("eyra-assignment", "onboarding.consent.continue.button")
+        label: dgettext("eyra-assignment", "onboarding.continue.button")
       },
       enabled?: selected?
     }

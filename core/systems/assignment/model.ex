@@ -28,6 +28,8 @@ defmodule Systems.Assignment.Model do
     belongs_to(:budget, Budget.Model, on_replace: :update)
     belongs_to(:auth_node, Core.Authorization.Node)
 
+    has_many(:page_refs, Assignment.PageRefModel, foreign_key: :assignment_id)
+
     many_to_many(
       :excluded,
       Assignment.Model,
@@ -72,6 +74,7 @@ defmodule Systems.Assignment.Model do
       :id,
       :consent_agreement,
       :info,
+      :page_refs,
       :storage_endpoint,
       :workflow,
       :crew,
@@ -96,8 +99,9 @@ defmodule Systems.Assignment.Model do
   def preload_graph(:down) do
     [
       :excluded,
-      consent_agreement: [:revisions],
       info: [],
+      page_refs: [:page],
+      consent_agreement: [:revisions],
       storage_endpoint: Storage.EndpointModel.preload_graph(:down),
       crew: [:tasks, :members, :auth_node],
       workflow: Workflow.Model.preload_graph(:down),

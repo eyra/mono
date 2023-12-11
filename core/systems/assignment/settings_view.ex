@@ -28,6 +28,7 @@ defmodule Systems.Assignment.SettingsView do
         breakpoint: breakpoint
       )
       |> compose_child(:info)
+      |> compose_child(:intro)
       |> compose_child(:consent)
       |> compose_child(:panel_connector)
       |> compose_child(:storage_connector)
@@ -42,6 +43,16 @@ defmodule Systems.Assignment.SettingsView do
         entity: info,
         viewport: viewport,
         breakpoint: breakpoint
+      }
+    }
+  end
+
+  @impl true
+  def compose(:intro, %{entity: assignment}) do
+    %{
+      module: Assignment.IntroForm,
+      params: %{
+        assignment: assignment
       }
     }
   end
@@ -97,6 +108,17 @@ defmodule Systems.Assignment.SettingsView do
         <.spacing value="L" />
 
         <.child name={:info} fabric={@fabric} >
+          <:footer>
+            <.spacing value="L" />
+          </:footer>
+        </.child>
+
+        <.child name={:intro} fabric={@fabric} >
+          <:header>
+            <Text.title3><%= dgettext("eyra-assignment", "settings.intro.title") %></Text.title3>
+            <Text.body><%= dgettext("eyra-assignment", "settings.intro.body") %></Text.body>
+            <.spacing value="M" />
+          </:header>
           <:footer>
             <.spacing value="L" />
           </:footer>

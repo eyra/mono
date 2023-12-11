@@ -79,7 +79,7 @@ msgid "retract.button"
 msgstr "Take offline"
 
 #, elixir-autogen, elixir-format
-msgid "onboarding.consent.continue.button"
+msgid "onboarding.continue.button"
 msgstr "Continue"
 
 #, elixir-autogen, elixir-format, fuzzy
@@ -221,3 +221,27 @@ msgstr "Branding"
 #, elixir-autogen, elixir-format
 msgid "work.list.title"
 msgstr "Tasks"
+
+#, elixir-autogen, elixir-format
+msgid "intro.page.title"
+msgstr "Introduction"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "intro_form.off.label"
+msgstr "Skip introduction"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "intro_form.on.label"
+msgstr "Show introduction"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.intro.body"
+msgstr "Use the text field below to write an introduction text for your participants about this assignment."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.intro.title"
+msgstr "Introduction"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "onboarding.intro.title"
+msgstr "Introduction"

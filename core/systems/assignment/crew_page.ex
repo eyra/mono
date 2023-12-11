@@ -110,7 +110,6 @@ defmodule Systems.Assignment.CrewPage do
 
   @impl true
   def handle_event("show_modal", modal, socket) do
-    # popup = %{module: module, params: Map.put(params, :id, id)}
     {:noreply, socket |> assign(modal: modal)}
   end
 
