@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-BC3C8373.js"></script>
+    <script src="dist/sidebar_items-B0DDBCBE.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -235,6 +235,14 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#hide_modal/2" translate="no">hide_modal(socket, child_name)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#hide_popup/2" translate="no">hide_popup(socket, child_name)</a>
 
       </div>
@@ -316,6 +324,14 @@ core
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#show_child/2" translate="no">show_child(socket, child)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#show_modal/3" translate="no">show_modal(context, child_name, modal_style)</a>
 
       </div>
 
@@ -554,7 +570,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">add_child(fabric, child)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L213" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L264" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -642,7 +658,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_current_child(model)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L246" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L258" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -677,6 +693,28 @@ Functions
 
   </section>
 </section>
+<section class="detail" id="hide_modal/2">
+
+  <div class="detail-header">
+    <a href="#hide_modal/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">hide_modal(socket, child_name)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L207" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="hide_popup/2">
 
   <div class="detail-header">
@@ -686,7 +724,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">hide_popup(socket, child_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L204" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L239" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -818,7 +856,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">remove_child(fabric, child_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L228" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L279" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -862,7 +900,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">send_event(pid, event)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L295" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L333" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -886,7 +924,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">send_event(socket, target, name, payload \\ %{})</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L252" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L290" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -921,6 +959,28 @@ Functions
 
   </section>
 </section>
+<section class="detail" id="show_modal/3">
+
+  <div class="detail-header">
+    <a href="#show_modal/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">show_modal(context, child_name, modal_style)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L187" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="show_next/1">
 
   <div class="detail-header">
@@ -930,7 +990,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">show_next(socket)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L238" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L250" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -952,7 +1012,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">show_popup(context, child_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L187" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L219" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

@@ -225,6 +225,7 @@ Frameworks.Pixel.Icon.html
 Frameworks.Pixel.Image.html
 Frameworks.Pixel.Line.html
 Frameworks.Pixel.Menu.html
+Frameworks.Pixel.ModalView.html
 Frameworks.Pixel.Panel.html
 Frameworks.Pixel.RadioGroup.html
 Frameworks.Pixel.ShareView.html
@@ -233,7 +234,6 @@ Frameworks.Pixel.Square.html
 Frameworks.Pixel.Status.html
 Frameworks.Pixel.Switch.html
 Frameworks.Pixel.Tag.html
-Frameworks.Pixel.Takeover.html
 Frameworks.Pixel.Text.html
 Frameworks.Pixel.ViewModel.html
 Frameworks.Pixel.Widget.html
@@ -703,8 +703,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-383615AA.js
-dist/sidebar_items-BC3C8373.js
+dist/search_items-61DDCB7C.js
+dist/sidebar_items-B0DDBCBE.js
 index.html
 readme.html
 search.html
