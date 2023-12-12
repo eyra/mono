@@ -249,14 +249,22 @@ defmodule Systems.Assignment.CrewWorkView do
 
   # Private
 
-  defp handle_feldspar_event(%{assigns: %{selected_item: {_, task}}} = socket, %{
-         "__type__" => "CommandSystemExit",
-         "code" => code,
-         "info" => _info
-       }) do
+  defp handle_feldspar_event(
+         %{assigns: %{selected_item: {_, task}, work_items: work_items}} = socket,
+         %{
+           "__type__" => "CommandSystemExit",
+           "code" => code,
+           "info" => _info
+         }
+       ) do
     if code == 0 do
       Crew.Public.activate_task(task)
-      socket |> hide_child(:tool_ref_view)
+
+      if Enum.count(work_items) > 1 do
+        socket |> hide_child(:tool_ref_view)
+      else
+        socket
+      end
     else
       Frameworks.Pixel.Flash.put_info(socket, "Application stopped")
     end
