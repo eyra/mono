@@ -333,10 +333,13 @@ Systems.Assignment.ExternalPanelIds.html
 Systems.Assignment.GdprForm.html
 Systems.Assignment.InfoForm.html
 Systems.Assignment.InfoModel.html
+Systems.Assignment.IntroForm.html
 Systems.Assignment.LandingPage.html
 Systems.Assignment.Model.html
 Systems.Assignment.OnboardingConsentView.html
+Systems.Assignment.OnboardingView.html
 Systems.Assignment.OnlineStudyLanguages.html
+Systems.Assignment.PageRefModel.html
 Systems.Assignment.PanelViews.html
 Systems.Assignment.Presenter.html
 Systems.Assignment.Private.html
@@ -447,6 +450,9 @@ Systems.Consent.WysiwygTestForm.html
 Systems.Content.ContextMenu.html
 Systems.Content.LocalFS.html
 Systems.Content.Page.html
+Systems.Content.PageForm.html
+Systems.Content.PageModel.html
+Systems.Content.PageView.html
 Systems.Content.Plug.html
 Systems.Content.Private.html
 Systems.Content.Public.html
@@ -703,8 +709,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-61DDCB7C.js
-dist/sidebar_items-B0DDBCBE.js
+dist/search_items-731FD1F1.js
+dist/sidebar_items-E254473D.js
 index.html
 readme.html
 search.html
