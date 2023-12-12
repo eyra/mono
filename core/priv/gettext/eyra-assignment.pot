@@ -79,7 +79,7 @@ msgid "retract.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "onboarding.consent.continue.button"
+msgid "onboarding.continue.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -220,4 +220,28 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "work.list.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "intro.page.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "intro_form.off.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "intro_form.on.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.intro.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.intro.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.intro.title"
 msgstr ""

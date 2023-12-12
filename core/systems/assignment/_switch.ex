@@ -47,6 +47,16 @@ defmodule Systems.Assignment.Switch do
   end
 
   @impl true
+  def intercept({:assignment_page_ref, _} = signal, %{assignment_page_ref: page_ref} = message) do
+    assignment = Assignment.Public.get_by(page_ref, Assignment.Model.preload_graph(:down))
+
+    dispatch!(
+      {:assignment, signal},
+      Map.merge(message, %{assignment: assignment})
+    )
+  end
+
+  @impl true
   def intercept({:assignment, _} = signal, message) do
     handle(signal, message)
   end

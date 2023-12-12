@@ -12,10 +12,12 @@ defmodule Systems.Assignment.Public do
   alias Core.Authorization
   alias Core.Accounts.User
   alias Frameworks.Concept
+  alias Frameworks.Signal
 
   alias Systems.{
     Project,
     Assignment,
+    Content,
     Consent,
     Budget,
     Workflow,
@@ -45,6 +47,8 @@ defmodule Systems.Assignment.Public do
   end
 
   def get_by(association, preload \\ [])
+  def get_by(%Assignment.PageRefModel{assignment_id: id}, preload), do: get!(id, preload)
+
   def get_by(%Assignment.InfoModel{id: id}, preload), do: get_by(:info_id, id, preload)
 
   def get_by(%Storage.EndpointModel{id: id}, preload),
@@ -115,10 +119,11 @@ defmodule Systems.Assignment.Public do
     |> Repo.all()
   end
 
-  def prepare(%{} = attrs, crew, info, workflow, budget, consent_agreement, auth_node) do
+  def prepare(%{} = attrs, crew, info, page_refs, workflow, budget, consent_agreement, auth_node) do
     %Assignment.Model{}
     |> Assignment.Model.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:info, info)
+    |> Ecto.Changeset.put_assoc(:page_refs, page_refs)
     |> Ecto.Changeset.put_assoc(:workflow, workflow)
     |> Ecto.Changeset.put_assoc(:crew, crew)
     |> Ecto.Changeset.put_assoc(:budget, budget)
@@ -141,6 +146,51 @@ defmodule Systems.Assignment.Public do
     %Workflow.ItemModel{}
     |> Workflow.ItemModel.changeset(%{})
     |> Ecto.Changeset.put_assoc(:tool_ref, tool_ref)
+  end
+
+  def prepare_page_refs(_template, auth_node) do
+    [
+      prepare_page_ref(auth_node, :assignment_intro)
+    ]
+  end
+
+  def prepare_page_ref(auth_node, key) when is_atom(key) do
+    page_title = Assignment.Private.page_title_default(key)
+    page_body = Assignment.Private.page_body_default(key)
+    page_auth_node = Authorization.prepare_node(auth_node)
+    page = Content.Public.prepare_page(page_title, page_body, page_auth_node)
+
+    %Assignment.PageRefModel{}
+    |> Assignment.PageRefModel.changeset(%{key: key})
+    |> Ecto.Changeset.put_assoc(:page, page)
+  end
+
+  def create_page_ref(%Assignment.Model{auth_node: auth_node} = assignment, key) do
+    page_ref =
+      prepare_page_ref(auth_node, key)
+      |> Ecto.Changeset.put_assoc(:assignment, assignment)
+
+    Multi.new()
+    |> Multi.insert(:assignment_page_ref, page_ref)
+    |> Signal.Public.multi_dispatch({:assignment_page_ref, :inserted})
+    |> Repo.transaction()
+  end
+
+  def delete_page_ref(
+        %Assignment.PageRefModel{assignment_id: assignment_id, page_id: page_id} = page_ref
+      ) do
+    page_refs =
+      from(pr in Assignment.PageRefModel,
+        where: pr.assignment_id == ^assignment_id,
+        where: pr.page_id == ^page_id
+      )
+
+    Multi.new()
+    |> Multi.delete_all(:assignment_page_refs, page_refs)
+    |> Signal.Public.multi_dispatch({:assignment_page_ref, :deleted}, %{
+      assignment_page_ref: page_ref
+    })
+    |> Repo.transaction()
   end
 
   def delete_storage_endpoint!(%{storage_endpoint_id: nil} = assignment) do

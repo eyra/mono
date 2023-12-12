@@ -20,6 +20,7 @@ defmodule Systems.Assignment.Assembly do
     crew_auth_node = Authorization.prepare_node(auth_node)
     crew = Crew.Public.prepare(crew_auth_node)
     info = Assignment.Public.prepare_info(info_attrs(template, director))
+    page_refs = Assignment.Public.prepare_page_refs(template, auth_node)
     workflow = prepare_workflow(template, auth_node)
     consent_agreement = prepare_consent_agreement(auth_node)
 
@@ -27,6 +28,7 @@ defmodule Systems.Assignment.Assembly do
       %{special: template},
       crew,
       info,
+      page_refs,
       workflow,
       budget,
       consent_agreement,

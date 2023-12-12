@@ -1,4 +1,6 @@
 defmodule Systems.Assignment.CrewPageBuilder do
+  import CoreWeb.Gettext
+
   alias Systems.{
     Assignment,
     Crew,
@@ -34,6 +36,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
 
   defp full_flow(assignment, assigns, is_tester?) do
     [
+      intro_view(assignment, assigns),
       consent_view(assignment, assigns, is_tester?),
       work_view(assignment, assigns, is_tester?)
     ]
@@ -41,6 +44,20 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp current_flow(%{fabric: %{children: children}}), do: children
+
+  defp intro_view(
+         %{page_refs: page_refs},
+         %{fabric: fabric}
+       ) do
+    if intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_intro)) do
+      Fabric.prepare_child(fabric, :onboarding_view_intro, Assignment.OnboardingView, %{
+        page_ref: intro_page_ref,
+        title: dgettext("eyra-assignment", "onboarding.intro.title")
+      })
+    else
+      nil
+    end
+  end
 
   defp consent_view(%{consent_agreement: nil}, _, _), do: nil
 
@@ -54,7 +71,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
     else
       revision = Consent.Public.latest_revision(consent_agreement, [:signatures])
 
-      Fabric.prepare_child(fabric, :onboarding_view, Assignment.OnboardingConsentView, %{
+      Fabric.prepare_child(fabric, :onboarding_view_consent, Assignment.OnboardingConsentView, %{
         revision: revision,
         user: user
       })
@@ -62,23 +79,33 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp work_view(
-         %{consent_agreement: consent_agreement} = assignment,
+         %{consent_agreement: consent_agreement, page_refs: page_refs} = assignment,
          %{fabric: fabric, current_user: user} = assigns,
          _
        ) do
     work_items = work_items(assignment, assigns)
     context_menu_items = context_menu_items(assignment, assigns)
 
+    intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_intro))
+
     Fabric.prepare_child(fabric, :work_view, Assignment.CrewWorkView, %{
       work_items: work_items,
       consent_agreement: consent_agreement,
       context_menu_items: context_menu_items,
+      intro_page_ref: intro_page_ref,
       user: user
     })
   end
 
-  defp context_menu_items(%{consent_agreement: consent_agreement}, _assigns) do
+  defp context_menu_items(%{consent_agreement: consent_agreement, page_refs: page_refs}, _assigns) do
     items = []
+
+    items =
+      if Enum.find(page_refs, &(&1.key == :assignment_intro)) != nil do
+        items ++ [%{id: :intro, label: dgettext("eyra-assignment", "onboarding.intro.title")}]
+      else
+        items
+      end
 
     items =
       if consent_agreement do

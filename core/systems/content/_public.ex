@@ -11,6 +11,12 @@ defmodule Systems.Content.Public do
   alias Systems.Content.TextItemModel, as: TextItem
   alias Systems.Content.TextBundleModel, as: TextBundle
 
+  def prepare_page(title, body, auth_node) do
+    %Content.PageModel{}
+    |> Content.PageModel.changeset(%{title: title, body: body})
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+  end
+
   def store(path, original_filename) do
     Content.Private.get_backend().store(path, original_filename)
   end
@@ -65,4 +71,13 @@ defmodule Systems.Content.Public do
 
   defp translate_item({locale, single, plural}),
     do: %{locale: Atom.to_string(locale), text: single, text_plural: plural}
+end
+
+defimpl Core.Persister, for: Systems.Content.PageModel do
+  def save(_page, changeset) do
+    case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :consent_page) do
+      {:ok, %{consent_page: consent_page}} -> {:ok, consent_page}
+      _ -> {:error, changeset}
+    end
+  end
 end

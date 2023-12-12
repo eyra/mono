@@ -1,6 +1,8 @@
 defmodule Systems.Assignment.Private do
   use CoreWeb, :verified_routes
 
+  import CoreWeb.Gettext
+
   require Logger
 
   alias Systems.{
@@ -9,6 +11,9 @@ defmodule Systems.Assignment.Private do
     Crew,
     Storage
   }
+
+  def page_title_default(:assignment_intro), do: dgettext("eyra-assignment", "intro.page.title")
+  def page_body_default(:assignment_intro), do: ""
 
   def allowed_external_panel_ids() do
     Keyword.get(config(), :external_panels, [])
