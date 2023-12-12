@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       bundle:
-        description: "Bundle ID (next)"
+        description: "Bundle ID (next, self)"
         required: true
         default: "next"
 jobs:
