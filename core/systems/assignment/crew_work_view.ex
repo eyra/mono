@@ -19,6 +19,7 @@ defmodule Systems.Assignment.CrewWorkView do
           consent_agreement: consent_agreement,
           context_menu_items: context_menu_items,
           intro_page_ref: intro_page_ref,
+          support_page_ref: support_page_ref,
           user: user
         },
         socket
@@ -31,6 +32,7 @@ defmodule Systems.Assignment.CrewWorkView do
         consent_agreement: consent_agreement,
         context_menu_items: context_menu_items,
         intro_page_ref: intro_page_ref,
+        support_page_ref: support_page_ref,
         user: user
       )
       |> update_selected_item_id()
@@ -142,7 +144,17 @@ defmodule Systems.Assignment.CrewWorkView do
     %{
       module: Content.PageView,
       params: %{
-        title: dgettext("eyra-assignment", "onboarding.intro.title"),
+        title: dgettext("eyra-assignment", "intro.page.title"),
+        page: page
+      }
+    }
+  end
+
+  def compose(:support_page, %{support_page_ref: %{page: page}}) do
+    %{
+      module: Content.PageView,
+      params: %{
+        title: dgettext("eyra-assignment", "support.page.title"),
         page: page
       }
     }
@@ -211,12 +223,22 @@ defmodule Systems.Assignment.CrewWorkView do
   end
 
   @impl true
-  def handle_event("show", %{page: :intro}, socket) do
+  def handle_event("show", %{page: :assignment_intro}, socket) do
     {
       :noreply,
       socket
       |> compose_child(:intro_page)
       |> show_modal(:intro_page, :sheet)
+    }
+  end
+
+  @impl true
+  def handle_event("show", %{page: :assignment_support}, socket) do
+    {
+      :noreply,
+      socket
+      |> compose_child(:support_page)
+      |> show_modal(:support_page, :sheet)
     }
   end
 

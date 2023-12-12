@@ -1,4 +1,4 @@
-defmodule Systems.Assignment.IntroForm do
+defmodule Systems.Assignment.ContentPageForm do
   use CoreWeb, :live_component_fabric
   use Fabric.LiveComponent
 
@@ -7,13 +7,27 @@ defmodule Systems.Assignment.IntroForm do
   alias Systems.Content
 
   @impl true
-  def update(%{id: id, assignment: assignment}, socket) do
+  def update(
+        %{
+          id: id,
+          assignment: assignment,
+          page_key: page_key,
+          opt_in?: opt_in?,
+          on_text: on_text,
+          off_text: off_text
+        },
+        socket
+      ) do
     {
       :ok,
       socket
       |> assign(
         id: id,
-        assignment: assignment
+        assignment: assignment,
+        page_key: page_key,
+        opt_in?: opt_in?,
+        on_text: on_text,
+        off_text: off_text
       )
       |> update_page_ref()
       |> compose_child(:switch)
@@ -21,19 +35,26 @@ defmodule Systems.Assignment.IntroForm do
     }
   end
 
-  def update_page_ref(%{assigns: %{assignment: %{page_refs: page_refs}}} = socket) do
-    page_ref = Enum.find(page_refs, &(&1.key == :assignment_intro))
+  def update_page_ref(
+        %{assigns: %{assignment: %{page_refs: page_refs}, page_key: page_key}} = socket
+      ) do
+    page_ref = Enum.find(page_refs, &(&1.key == page_key))
     socket |> assign(page_ref: page_ref)
   end
 
   @impl true
-  def compose(:switch, %{page_ref: page_ref}) do
+  def compose(:switch, %{
+        page_ref: page_ref,
+        opt_in?: opt_in?,
+        on_text: on_text,
+        off_text: off_text
+      }) do
     %{
       module: Pixel.Switch,
       params: %{
-        opt_in?: false,
-        on_text: dgettext("eyra-assignment", "intro_form.on.label"),
-        off_text: dgettext("eyra-assignment", "intro_form.off.label"),
+        opt_in?: opt_in?,
+        on_text: on_text,
+        off_text: off_text,
         status:
           if page_ref do
             :on
@@ -68,9 +89,9 @@ defmodule Systems.Assignment.IntroForm do
   def handle_event(
         "update",
         %{status: :on},
-        %{assigns: %{assignment: assignment}} = socket
+        %{assigns: %{assignment: assignment, page_key: page_key}} = socket
       ) do
-    page_ref = Assignment.Public.create_page_ref(assignment, :assignment_intro)
+    page_ref = Assignment.Public.create_page_ref(assignment, page_key)
 
     {
       :noreply,

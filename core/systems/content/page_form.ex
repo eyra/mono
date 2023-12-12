@@ -13,14 +13,14 @@ defmodule Systems.Content.PageForm do
         id: id,
         entity: nil,
         visible: false,
-        changeset: nil
+        form: nil
       )
     }
   end
 
   @impl true
-  def update(%{id: id, entity: entity}, socket) do
-    changeset = Content.PageModel.changeset(entity, %{})
+  def update(%{id: id, entity: %{body: body} = entity}, socket) do
+    form = to_form(%{"body" => body})
 
     {
       :ok,
@@ -29,7 +29,7 @@ defmodule Systems.Content.PageForm do
         id: id,
         entity: entity,
         visible: true,
-        changeset: changeset
+        form: form
       )
     }
   end
@@ -37,7 +37,7 @@ defmodule Systems.Content.PageForm do
   @impl true
   def handle_event(
         "save",
-        %{"page_model[body]_input" => body},
+        %{"body_input" => body},
         %{assigns: %{entity: entity}} = socket
       ) do
     {
@@ -48,6 +48,10 @@ defmodule Systems.Content.PageForm do
   end
 
   # Saving
+
+  def save(socket, nil, _attrs) do
+    socket
+  end
 
   def save(socket, entity, attrs) do
     changeset = Content.PageModel.changeset(entity, attrs)
@@ -60,7 +64,7 @@ defmodule Systems.Content.PageForm do
   def render(assigns) do
     ~H"""
       <div>
-        <.form id={"#{@id}_agreement_form"} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
+        <.form id={"#{@id}_agreement_form"} :let={form} for={@form} phx-change="save" phx-target={@myself} >
           <%!-- <%= if @visible do %>
             <.text_input form={form} field={:title} label_text={dgettext("eyra-content", "page_form.title.label")} visible={@visible} />
             <Text.form_field_label id={:template_label}>

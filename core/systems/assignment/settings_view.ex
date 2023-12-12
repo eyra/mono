@@ -30,6 +30,7 @@ defmodule Systems.Assignment.SettingsView do
       |> compose_child(:info)
       |> compose_child(:intro)
       |> compose_child(:consent)
+      |> compose_child(:support)
       |> compose_child(:panel_connector)
       |> compose_child(:storage_connector)
     }
@@ -50,9 +51,13 @@ defmodule Systems.Assignment.SettingsView do
   @impl true
   def compose(:intro, %{entity: assignment}) do
     %{
-      module: Assignment.IntroForm,
+      module: Assignment.ContentPageForm,
       params: %{
-        assignment: assignment
+        assignment: assignment,
+        page_key: :assignment_intro,
+        opt_in?: false,
+        on_text: dgettext("eyra-assignment", "intro_form.on.label"),
+        off_text: dgettext("eyra-assignment", "intro_form.off.label")
       }
     }
   end
@@ -63,6 +68,20 @@ defmodule Systems.Assignment.SettingsView do
       module: Assignment.GdprForm,
       params: %{
         entity: assignment
+      }
+    }
+  end
+
+  @impl true
+  def compose(:support, %{entity: assignment}) do
+    %{
+      module: Assignment.ContentPageForm,
+      params: %{
+        assignment: assignment,
+        page_key: :assignment_support,
+        opt_in?: false,
+        on_text: dgettext("eyra-assignment", "support_form.on.label"),
+        off_text: dgettext("eyra-assignment", "support_form.off.label")
       }
     }
   end
@@ -128,6 +147,17 @@ defmodule Systems.Assignment.SettingsView do
           <:header>
             <Text.title3><%= dgettext("eyra-assignment", "settings.consent.title") %></Text.title3>
             <Text.body><%= dgettext("eyra-assignment", "settings.consent.body") %></Text.body>
+            <.spacing value="M" />
+          </:header>
+          <:footer>
+            <.spacing value="L" />
+          </:footer>
+        </.child>
+
+        <.child name={:support} fabric={@fabric} >
+          <:header>
+            <Text.title3><%= dgettext("eyra-assignment", "settings.support.title") %></Text.title3>
+            <Text.body><%= dgettext("eyra-assignment", "settings.support.body") %></Text.body>
             <.spacing value="M" />
           </:header>
           <:footer>

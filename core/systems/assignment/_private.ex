@@ -13,7 +13,12 @@ defmodule Systems.Assignment.Private do
   }
 
   def page_title_default(:assignment_intro), do: dgettext("eyra-assignment", "intro.page.title")
+
+  def page_title_default(:assignment_support),
+    do: dgettext("eyra-assignment", "support.page.title")
+
   def page_body_default(:assignment_intro), do: ""
+  def page_body_default(:assignment_support), do: ""
 
   def allowed_external_panel_ids() do
     Keyword.get(config(), :external_panels, [])

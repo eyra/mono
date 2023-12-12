@@ -245,3 +245,23 @@ msgstr "Introductie"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.intro.title"
 msgstr "Introductie"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.support.body"
+msgstr "Gebruik het tekstvak hieronder om ondersteuning te bieden voor jouw deelnemers over deze opdracht."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.support.title"
+msgstr "Ondersteuning"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "support.page.title"
+msgstr "Ondersteuning"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "support_form.off.label"
+msgstr "Geen ondersteuning bieden"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "support_form.on.label"
+msgstr "Bied ondersteuning"
