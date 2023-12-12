@@ -19,7 +19,7 @@ defmodule Systems.Assignment.Routes do
         get("/:id/:panel", ExternalPanelController, :create)
       end
 
-      scope "/assignment/centerdata", Systems.Assignment do
+      scope "/assignment", Systems.Assignment do
         pipe_through([:browser_unprotected])
         post("/:id/:panel", ExternalPanelController, :create)
       end
