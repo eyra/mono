@@ -32,9 +32,9 @@ defmodule Systems.Storage.Centerdata.Backend do
   end
 
   defp post(url, body) do
-    Logger.info("Centerdata post: #{url} => #{body}")
+    Logger.warn("Centerdata post: #{url} => #{body}")
     response = http_request(:post, url, body, [{"Content-type", "application/json"}])
-    Logger.info("Centerdata post response status: #{response.status_code}")
+    Logger.warn("Centerdata post response status: #{response.status_code}")
 
     response
   end

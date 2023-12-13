@@ -25,13 +25,17 @@ defmodule Systems.Storage.Delivery do
     end
   end
 
-  defp deliver(%{
-         "backend" => backend,
-         "endpoint" => endpoint,
-         "panel_info" => panel_info,
-         "data" => data,
-         "meta_data" => meta_data
-       }) do
+  defp deliver(
+         %{
+           "backend" => backend,
+           "endpoint" => endpoint,
+           "panel_info" => panel_info,
+           "data" => data,
+           "meta_data" => meta_data
+         } = job
+       ) do
+    Logger.warn("[Storage.Delivery] deliver: #{inspect(job)}")
+
     String.to_existing_atom(backend).store(endpoint, panel_info, data, meta_data)
   end
 end
