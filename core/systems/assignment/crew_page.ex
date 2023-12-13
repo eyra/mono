@@ -90,6 +90,13 @@ defmodule Systems.Assignment.CrewPage do
     {:noreply, socket |> send_event(:flow, "complete_task")}
   end
 
+  def handle_info(%{panel: :centerdata, request: request}, socket) do
+    form =
+      prepare_child(socket, :centerdata_form, Systems.Storage.Centerdata.Form, %{request: request})
+
+    {:noreply, socket |> show_child(form)}
+  end
+
   @impl true
   def handle_event("continue", _payload, socket) do
     {:noreply, socket |> show_next()}
@@ -126,7 +133,8 @@ defmodule Systems.Assignment.CrewPage do
     meta_data = %{
       remote_ip: remote_ip,
       timestamp: Timestamp.now() |> DateTime.to_unix(),
-      key: key
+      key: key,
+      pid: self() |> :erlang.pid_to_list()
     }
 
     if storage_info = Storage.Private.storage_info(assignment) do
