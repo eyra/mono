@@ -17,6 +17,8 @@ defmodule Systems.Storage.Centerdata.Backend do
         data,
         _meta_data
       ) do
+    Logger.warn("Centerdata store")
+
     body =
       %{
         "#{varname1}" => Jason.decode!(data),
@@ -27,6 +29,8 @@ defmodule Systems.Storage.Centerdata.Backend do
         quest: quest
       }
       |> Jason.encode!()
+
+    Logger.warn("Centerdata store: #{body}")
 
     post(url, body)
   end
