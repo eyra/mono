@@ -38,8 +38,13 @@ defmodule Systems.Storage.Centerdata.Backend do
       }
     }
 
-    Phoenix.PubSub.broadcast(Core.PubSub, pubsub_key, %{
-      storage_event: %{panel: :centerdata, form: form}
-    })
+    Logger.warn("Broadcasting on topic: #{pubsub_key}")
+
+    result =
+      Phoenix.PubSub.broadcast(Core.PubSub, pubsub_key, %{
+        storage_event: %{panel: :centerdata, form: form}
+      })
+
+    Logger.warn("Broadcast result: #{inspect(result)}")
   end
 end

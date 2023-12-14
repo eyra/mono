@@ -50,6 +50,7 @@ defmodule Systems.Assignment.CrewPage do
 
     if Phoenix.LiveView.connected?(socket) do
       :ok = Phoenix.PubSub.subscribe(Core.PubSub, storage_pubsub_key)
+      Logger.warn("Subscribing on topic: #{storage_pubsub_key}")
     end
 
     assign(socket, storage_pubsub_key: storage_pubsub_key)
