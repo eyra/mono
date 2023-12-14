@@ -164,6 +164,16 @@ defmodule Systems.Assignment.CrewWorkView do
 
   @impl true
   def handle_event(
+        "show_panel_form",
+        %{panel: _, form: %{module: module, params: params}},
+        socket
+      ) do
+    child = prepare_child(socket, :panel_form, module, params)
+    {:noreply, socket |> show_child(child)}
+  end
+
+  @impl true
+  def handle_event(
         "complete_task",
         _,
         %{assigns: %{work_items: work_items, selected_item: {%{id: selected_item_id}, _}}} =
@@ -328,6 +338,16 @@ defmodule Systems.Assignment.CrewWorkView do
             <.child name={:start_view} fabric={@fabric} />
           </div>
         <% end %>
+
+        <%!-- hidden auto submit form --%>
+        <%= if exists?(@fabric, :panel_form) do %>
+          <div class="relative">
+            <div class="absolute hidden">
+              <.child name={:panel_form} fabric={@fabric} />
+            </div>
+          </div>
+        <% end %>
+
         <%!-- floating button --%>
         <.child name={:context_menu} fabric={@fabric} />
       </div>

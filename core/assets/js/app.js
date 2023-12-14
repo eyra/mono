@@ -32,6 +32,7 @@ import { Tabbar, TabbarItem, TabbarFooterItem } from "./tabbar";
 import { Clipboard } from "./clipboard";
 import { FeldsparApp } from "./feldspar_app";
 import { Wysiwyg } from "./wysiwyg";
+import { AutoSubmit } from "./auto_submit";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -105,6 +106,7 @@ let Hooks = {
   NativeWrapper,
   FeldsparApp,
   Wysiwyg,
+  AutoSubmit,
 };
 
 let liveSocket = new LiveSocket("/live", Socket, {

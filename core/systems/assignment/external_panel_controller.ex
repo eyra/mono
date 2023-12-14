@@ -4,8 +4,12 @@ defmodule Systems.Assignment.ExternalPanelController do
   alias Systems.Assignment
   alias Systems.Crew
 
+  require Logger
+
   def create(conn, %{"id" => id, "panel" => _} = params) do
     assignment = Assignment.Public.get!(id, [:crew, :auth_node])
+
+    Logger.warn("[ExternalPanelController] create: #{inspect(params)}")
 
     cond do
       has_no_access?(assignment, params) -> forbidden(conn)

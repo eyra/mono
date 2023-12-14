@@ -90,6 +90,14 @@ defmodule Systems.Assignment.CrewPage do
     {:noreply, socket |> send_event(:flow, "complete_task")}
   end
 
+  #
+  # Used in Systems.Storage.Centerdata.Backend to post data to Centerdata and handle the response in-browser.
+  # This is een temp solution before better integrating the donation protocol with Centerdata
+  #
+  def handle_info(%{panel: _, form: _} = event, socket) do
+    {:noreply, socket |> send_event(:flow, "show_panel_form", event)}
+  end
+
   @impl true
   def handle_event("continue", _payload, socket) do
     {:noreply, socket |> show_next()}
@@ -126,7 +134,8 @@ defmodule Systems.Assignment.CrewPage do
     meta_data = %{
       remote_ip: remote_ip,
       timestamp: Timestamp.now() |> DateTime.to_unix(),
-      key: key
+      key: key,
+      pid: self() |> :erlang.pid_to_list()
     }
 
     if storage_info = Storage.Private.storage_info(assignment) do
