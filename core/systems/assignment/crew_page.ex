@@ -29,6 +29,9 @@ defmodule Systems.Assignment.CrewPage do
   def mount(%{"id" => id}, session, socket) do
     model = Assignment.Public.get!(id, Assignment.Model.preload_graph(:down))
 
+    pid = :erlang.list_to_pid(pid)
+    Logger.warn("Start on PID #{pid}")
+
     {
       :ok,
       socket

@@ -38,7 +38,10 @@ defmodule Systems.Storage.Centerdata.Backend do
       }
     }
 
+    Logger.warn("Send to PID #{pid}")
+
     pid = :erlang.list_to_pid(pid)
+
     send(pid, %{panel: :centerdata, form: form})
   end
 end
