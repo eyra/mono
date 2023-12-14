@@ -90,11 +90,12 @@ defmodule Systems.Assignment.CrewPage do
     {:noreply, socket |> send_event(:flow, "complete_task")}
   end
 
-  def handle_info(%{panel: :centerdata, request: request}, socket) do
-    form =
-      prepare_child(socket, :centerdata_form, Systems.Storage.Centerdata.Form, %{request: request})
-
-    {:noreply, socket |> show_child(form)}
+  #
+  # Used in Systems.Storage.Centerdata.Backend to post data to Centerdata and handle the response in-browser.
+  # This is een temp solution before better integrating the donation protocol with Centerdata
+  #
+  def handle_info(%{panel: _, form: _} = event, socket) do
+    {:noreply, socket |> send_event(:flow, "show_panel_form", event)}
   end
 
   @impl true

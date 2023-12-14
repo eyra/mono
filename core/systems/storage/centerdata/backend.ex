@@ -17,7 +17,7 @@ defmodule Systems.Storage.Centerdata.Backend do
         data,
         %{"pid" => pid} = _meta_data
       ) do
-    Logger.warn("Centerdata store")
+    Logger.warn("Centerdata store: respondent=#{respondent}")
 
     request = %{
       url: url,
@@ -30,26 +30,15 @@ defmodule Systems.Storage.Centerdata.Backend do
       quest: quest
     }
 
+    form = %{
+      id: :centerdata_form,
+      module: Systems.Storage.Centerdata.Form,
+      params: %{
+        request: request
+      }
+    }
+
     pid = :erlang.list_to_pid(pid)
-    send(pid, %{panel: :centerdata, request: request})
+    send(pid, %{panel: :centerdata, form: form})
   end
-
-  # defp post(url, body) do
-  #   Logger.warn("Centerdata post: #{url} => #{body}")
-  #   response = http_request(:post, url, body, [{"Content-type", "application/json"}])
-  #   Logger.warn("Centerdata post response status: #{response.status_code}")
-  #   response
-  # end
-
-  # defp http_request(method, url, body, headers, options \\ []) do
-  #   http_client().request!(method, url, body, headers, options)
-  # end
-
-  # defp http_client() do
-  #   Application.get_env(
-  #     :core,
-  #     :data_donation_http_client,
-  #     Frameworks.Utility.HTTPClient
-  #   )
-  # end
 end
