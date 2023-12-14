@@ -4,6 +4,8 @@ defmodule Systems.Assignment.CrewWorkView do
 
   import Frameworks.Pixel.Line
 
+  require Logger
+
   alias Systems.{
     Assignment,
     Crew,

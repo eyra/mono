@@ -5,7 +5,7 @@ defmodule Systems.Storage.Delivery do
   end
 
   use Oban.Worker,
-    queue: :data_donation_delivery,
+    queue: :storage_delivery,
     priority: 1,
     max_attempts: 3,
     unique: [period: 30]
@@ -25,17 +25,20 @@ defmodule Systems.Storage.Delivery do
     end
   end
 
-  defp deliver(
-         %{
-           "backend" => backend,
-           "endpoint" => endpoint,
-           "panel_info" => panel_info,
-           "data" => data,
-           "meta_data" => meta_data
-         } = job
-       ) do
-    Logger.warn("[Storage.Delivery] deliver: #{inspect(job)}")
+  def deliver(backend, endpoint, panel_info, data, meta_data) do
+    Logger.warn("[Storage.Delivery] deliver")
+    backend.store(endpoint, panel_info, data, meta_data)
+  end
 
-    String.to_existing_atom(backend).store(endpoint, panel_info, data, meta_data)
+  def deliver(
+        %{
+          "backend" => backend,
+          "endpoint" => endpoint,
+          "panel_info" => panel_info,
+          "data" => data,
+          "meta_data" => meta_data
+        } = _job
+      ) do
+    deliver(String.to_existing_atom(backend), endpoint, panel_info, data, meta_data)
   end
 end

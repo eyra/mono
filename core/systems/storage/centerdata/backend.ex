@@ -4,9 +4,9 @@ defmodule Systems.Storage.Centerdata.Backend do
   require Logger
 
   def store(
-        %{"url" => url} = _endpoint,
+        %{url: url} = _endpoint,
         %{
-          "query_string" => %{
+          query_string: %{
             "quest" => quest,
             "varname1" => varname1,
             "respondent" => respondent,
@@ -15,7 +15,7 @@ defmodule Systems.Storage.Centerdata.Backend do
           }
         } = _panel_info,
         data,
-        %{"pid" => pid} = _meta_data
+        _meta_data
       ) do
     Logger.warn("Centerdata store: respondent=#{respondent}")
 
@@ -38,7 +38,6 @@ defmodule Systems.Storage.Centerdata.Backend do
       }
     }
 
-    pid = :erlang.list_to_pid(pid)
-    send(pid, %{panel: :centerdata, form: form})
+    send(self(), %{storage_event: %{panel: :centerdata, form: form}})
   end
 end

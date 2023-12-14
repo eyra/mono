@@ -85,6 +85,12 @@ defmodule Systems.Observatory.Public do
         |> Public.update_view_model(__MODULE__, model, @presenter)
       end
 
+      def observe_event(%{assigns: %{model: %{id: id} = model}} = socket) do
+        socket
+        |> Public.observe([{__MODULE__, [id]}])
+        |> Public.update_view_model(__MODULE__, model, @presenter)
+      end
+
       def update_view_model(%{assigns: %{model: model}} = socket) do
         socket
         |> Public.update_view_model(__MODULE__, model, @presenter)

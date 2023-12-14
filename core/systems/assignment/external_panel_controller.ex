@@ -61,6 +61,7 @@ defmodule Systems.Assignment.ExternalPanelController do
 
   defp add_panel_info(conn, params) do
     panel_info = %{
+      embedded?: is_embedded(params),
       participant: get_participant(params),
       query_string: params
     }
@@ -96,4 +97,7 @@ defmodule Systems.Assignment.ExternalPanelController do
   defp get_locale(%{"language" => language}), do: language
   defp get_locale(%{"locale" => locale}), do: locale
   defp get_locale(_), do: nil
+
+  defp is_embedded(%{"panel" => "liss"}), do: true
+  defp is_embedded(_), do: false
 end
