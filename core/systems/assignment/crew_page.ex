@@ -107,12 +107,8 @@ defmodule Systems.Assignment.CrewPage do
   # This is een temp solution before better integrating the donation protocol with Centerdata
   #
   def handle_info(%{storage_event: %{panel: _, form: _} = event}, socket) do
-    {:noreply, socket |> send_event(:flow, "show_panel_form", event)}
-  end
-
-  def handle_info(event, socket) do
     Logger.warn("handle_info: #{inspect(event)}")
-    {:noreply, socket}
+    {:noreply, socket |> send_event(:flow, "show_panel_form", event)}
   end
 
   @impl true
