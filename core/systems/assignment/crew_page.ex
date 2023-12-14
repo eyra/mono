@@ -29,13 +29,6 @@ defmodule Systems.Assignment.CrewPage do
   def mount(%{"id" => id}, session, socket) do
     model = Assignment.Public.get!(id, Assignment.Model.preload_graph(:down))
 
-    pid = :erlang.list_to_pid(self())
-    Logger.warn("Start on PID #{pid}")
-
-    if Phoenix.LiveView.connected?(socket) do
-      :ok = Phoenix.PubSub.subscribe(:my_pubsub, "user:123")
-    end
-
     {
       :ok,
       socket
@@ -46,9 +39,20 @@ defmodule Systems.Assignment.CrewPage do
         modal: nil
       )
       |> update_panel_info(session)
+      |> observe_storage_events()
       |> observe_view_model()
       |> update_flow()
     }
+  end
+
+  def observe_storage_events(%{assigns: %{id: id, current_user: %{id: user_id}}} = socket) do
+    storage_pubsub_key = "crewpage:#{id}:user:#{user_id}"
+
+    if Phoenix.LiveView.connected?(socket) do
+      :ok = Phoenix.PubSub.subscribe(Core.PubSub, storage_pubsub_key)
+    end
+
+    assign(socket, storage_pubsub_key: storage_pubsub_key)
   end
 
   def handle_view_model_updated(socket) do
@@ -101,8 +105,7 @@ defmodule Systems.Assignment.CrewPage do
   # Used in Systems.Storage.Centerdata.Backend to post data to Centerdata and handle the response in-browser.
   # This is een temp solution before better integrating the donation protocol with Centerdata
   #
-  def handle_info(%{panel: _, form: _} = event, socket) do
-    Logger.warn("show_panel_form: #{inspect(event)}")
+  def handle_info(%{storage_event: %{panel: _, form: _} = event}, socket) do
     {:noreply, socket |> send_event(:flow, "show_panel_form", event)}
   end
 
@@ -140,7 +143,14 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   def store(
-        %{assigns: %{panel_info: panel_info, model: assignment, remote_ip: remote_ip}} = socket,
+        %{
+          assigns: %{
+            panel_info: panel_info,
+            model: assignment,
+            remote_ip: remote_ip,
+            storage_pubsub_key: storage_pubsub_key
+          }
+        } = socket,
         key,
         data
       ) do
@@ -148,7 +158,7 @@ defmodule Systems.Assignment.CrewPage do
       remote_ip: remote_ip,
       timestamp: Timestamp.now() |> DateTime.to_unix(),
       key: key,
-      pid: self() |> :erlang.pid_to_list()
+      pubsub_key: storage_pubsub_key
     }
 
     if storage_info = Storage.Private.storage_info(assignment) do

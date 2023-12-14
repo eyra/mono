@@ -15,7 +15,7 @@ defmodule Systems.Storage.Centerdata.Backend do
           }
         } = _panel_info,
         data,
-        %{"pid" => pid} = _meta_data
+        %{"pubsub_key" => pubsub_key} = _meta_data
       ) do
     Logger.warn("Centerdata store: respondent=#{respondent}")
 
@@ -38,10 +38,8 @@ defmodule Systems.Storage.Centerdata.Backend do
       }
     }
 
-    Logger.warn("Send to PID #{pid}")
-
-    pid = :erlang.list_to_pid(pid)
-
-    send(pid, %{panel: :centerdata, form: form})
+    Phoenix.PubSub.broadcast(Core.PubSub, pubsub_key, %{
+      storage_event: %{panel: :centerdata, form: form}
+    })
   end
 end
