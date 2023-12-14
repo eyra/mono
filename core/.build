@@ -625,6 +625,7 @@ Systems.Storage.Backend.html
 Systems.Storage.Centerdata.Backend.html
 Systems.Storage.Centerdata.EndpointForm.html
 Systems.Storage.Centerdata.EndpointModel.html
+Systems.Storage.Centerdata.Form.html
 Systems.Storage.Delivery.html
 Systems.Storage.EndpointForm.Helper.html
 Systems.Storage.EndpointForm.html
@@ -709,8 +710,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-24BF53B0.js
-dist/sidebar_items-B1FFE52A.js
+dist/search_items-8E0E2207.js
+dist/sidebar_items-30C73D64.js
 index.html
 readme.html
 search.html
