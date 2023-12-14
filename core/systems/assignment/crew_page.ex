@@ -29,8 +29,12 @@ defmodule Systems.Assignment.CrewPage do
   def mount(%{"id" => id}, session, socket) do
     model = Assignment.Public.get!(id, Assignment.Model.preload_graph(:down))
 
-    pid = :erlang.list_to_pid(pid)
+    pid = :erlang.list_to_pid(self())
     Logger.warn("Start on PID #{pid}")
+
+    if Phoenix.LiveView.connected?(socket) do
+      :ok = Phoenix.PubSub.subscribe(:my_pubsub, "user:123")
+    end
 
     {
       :ok,
@@ -100,6 +104,11 @@ defmodule Systems.Assignment.CrewPage do
   def handle_info(%{panel: _, form: _} = event, socket) do
     Logger.warn("show_panel_form: #{inspect(event)}")
     {:noreply, socket |> send_event(:flow, "show_panel_form", event)}
+  end
+
+  def handle_info(event, socket) do
+    Logger.warn("handle_info: #{inspect(event)}")
+    {:noreply, socket}
   end
 
   @impl true
