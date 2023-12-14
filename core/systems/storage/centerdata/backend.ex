@@ -4,9 +4,9 @@ defmodule Systems.Storage.Centerdata.Backend do
   require Logger
 
   def store(
-        %{"url" => url} = _endpoint,
+        %{url: url} = _endpoint,
         %{
-          "query_string" => %{
+          query_string: %{
             "quest" => quest,
             "varname1" => varname1,
             "respondent" => respondent,
@@ -15,7 +15,7 @@ defmodule Systems.Storage.Centerdata.Backend do
           }
         } = _panel_info,
         data,
-        %{"pubsub_key" => pubsub_key} = _meta_data
+        _meta_data
       ) do
     Logger.warn("Centerdata store: respondent=#{respondent}")
 
@@ -38,13 +38,6 @@ defmodule Systems.Storage.Centerdata.Backend do
       }
     }
 
-    Logger.warn("Broadcasting on topic: #{pubsub_key}")
-
-    result =
-      Phoenix.PubSub.broadcast(Core.PubSub, pubsub_key, %{
-        storage_event: %{panel: :centerdata, form: form}
-      })
-
-    Logger.warn("Broadcast result: #{inspect(result)}")
+    send(self(), %{storage_event: %{panel: :centerdata, form: form}})
   end
 end

@@ -171,7 +171,6 @@ defmodule Systems.Assignment.CrewWorkView do
         socket
       ) do
     child = prepare_child(socket, :panel_form, module, params)
-    Logger.warn("show_child: #{inspect(child)}")
     {:noreply, socket |> show_child(child)}
   end
 
