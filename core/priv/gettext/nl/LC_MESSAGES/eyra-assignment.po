@@ -276,7 +276,7 @@ msgstr "Geen toestemming"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Je heb de opdracht afgerond. Je kan nu het tablad van de browser sluiten."
+msgstr "Bedankt voor je deelname. Je bent klaar en kunt de browser afsluiten."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
