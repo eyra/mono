@@ -117,13 +117,15 @@ defmodule Systems.Assignment.CrewPage do
       |> store("onboarding", "{\"status\":\"consent declined\"}")
 
     socket =
-      if not embedded? do
+      if embedded? do
+        socket
+      else
         title = dgettext("eyra-assignment", "decline_view.title")
         child = prepare_child(socket, :decline_view, Assignment.DeclineView, %{title: title})
         modal = %{live_component: child, style: :info}
         assign(socket, modal: modal)
       else
-        socket
+
       end
 
     {:noreply, socket}
