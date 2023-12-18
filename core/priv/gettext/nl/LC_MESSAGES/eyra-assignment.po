@@ -268,7 +268,7 @@ msgstr "Bied ondersteuning"
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.body"
-msgstr "Jammer genoeg heb je voor gekozen geen toestemming te geven, maar we stellen je eerlijkheid op prijs. Je kan nu het tablad van de browser sluiten."
+msgstr "We hebben de onderzoeker op de hoogte gesteld dat je geen toestemming geeft voor deelname. Je kunt de browser afsluiten. Wil je alsnog toestemming geven? Sluit dan dit venster om verder te gaan."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "declined_view.title"
