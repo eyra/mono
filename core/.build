@@ -326,11 +326,13 @@ Systems.Assignment.Controller.html
 Systems.Assignment.CrewPage.html
 Systems.Assignment.CrewPageBuilder.html
 Systems.Assignment.CrewWorkView.html
+Systems.Assignment.DeclinedView.html
 Systems.Assignment.Director.html
 Systems.Assignment.EthicalForm.html
 Systems.Assignment.ExcludeModel.html
 Systems.Assignment.ExternalPanelController.html
 Systems.Assignment.ExternalPanelIds.html
+Systems.Assignment.FinishedView.html
 Systems.Assignment.GdprForm.html
 Systems.Assignment.InfoForm.html
 Systems.Assignment.InfoModel.html
@@ -465,6 +467,7 @@ Systems.Crew.Public.html
 Systems.Crew.RejectCategories.html
 Systems.Crew.RejectModel.html
 Systems.Crew.RejectView.html
+Systems.Crew.Switch.html
 Systems.Crew.TaskItemView.html
 Systems.Crew.TaskModel.html
 Systems.Crew.TaskStatus.html
@@ -710,8 +713,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-A12ECAB4.js
-dist/sidebar_items-E70DAAD6.js
+dist/search_items-98C204A1.js
+dist/sidebar_items-15196045.js
 index.html
 readme.html
 search.html
