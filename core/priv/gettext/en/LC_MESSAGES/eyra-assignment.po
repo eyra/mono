@@ -224,7 +224,7 @@ msgstr "Tasks"
 
 #, elixir-autogen, elixir-format
 msgid "intro.page.title"
-msgstr "Introduction"
+msgstr "Information"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "intro_form.off.label"
@@ -240,7 +240,7 @@ msgstr "Use the text field below to inform your participants about your research
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.title"
-msgstr "Information"
+msgstr "Information page"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.intro.title"
@@ -248,15 +248,15 @@ msgstr "Information"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.support.body"
-msgstr "Use the text field below to give support to your participants about this assignment."
+msgstr "This page will be shown when participants click the 'i' at the right bottom and choose 'Need help?'. Check out 'Preview' to see what this will look like. Use the text field below to inform participants about how to get support when needed. Choose 'Skip' if you are not planning to provide support."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.support.title"
-msgstr "Support"
+msgstr "Helpdesk page"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support.page.title"
-msgstr "Support"
+msgstr "Need help?"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support_form.off.label"
