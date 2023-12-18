@@ -17,11 +17,11 @@ msgstr "<div>Add the text for the consent form here and preview the workflow to 
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.consent.validation"
-msgstr "I accept the above terms by clicking the button below"
+msgstr "Do you agree to the above terms and conditions?"
 
 #, elixir-autogen, elixir-format
 msgid "locked.error.message"
-msgstr "Please not that this version of the consent text has already been signed by participants. Refresh the page if you would like to continue changing the text."
+msgstr "Please note that this version of the consent text has already been signed by participants. Refresh the page if you would like to continue changing the text."
 
 #, elixir-autogen, elixir-format
 msgid "out_of_sync.error.message"
@@ -33,8 +33,8 @@ msgstr "Consent"
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.accept.button"
-msgstr "I accept"
+msgstr "Yes, I agree"
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.decline.button"
-msgstr "Decline"
+msgstr "No"
