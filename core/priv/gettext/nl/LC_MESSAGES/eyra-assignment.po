@@ -176,7 +176,7 @@ msgstr "Tonen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.body"
-msgstr "Gebruik het tekstvak hieronder om een toestemmingsformulier op te stellen voor jouw deelnemers. Hebben de deelnemers al op een andere manier toestemming gegeven? Kies er dan voor om het toestemmingsformulier niet te tonen."
+msgstr "Gebruik het tekstvak hieronder om een toestemmingsformulier op te stellen voor jouw deelnemers. Hebben de deelnemers al op een andere manier toestemming gegeven? Kies dan voor 'Overslaan'."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.title"
