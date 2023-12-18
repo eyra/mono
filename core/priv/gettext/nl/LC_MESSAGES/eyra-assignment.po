@@ -236,15 +236,15 @@ msgstr "Tonen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.body"
-msgstr "Gebruik het tekstvak hieronder om een introductie te schrijven voor jouw deelnemers over deze opdracht."
+msgstr "Gebruik het tekstvak hieronder om jouw deelnemers te informeren over jouw onderzoek. Zijn jouw deelnemers al op een andere manier op de hoogte gesteld? Kies dan 'Overslaan'."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.title"
-msgstr "Introductie"
+msgstr "Informatie"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.intro.title"
-msgstr "Introductie"
+msgstr "Informatie"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.support.body"
