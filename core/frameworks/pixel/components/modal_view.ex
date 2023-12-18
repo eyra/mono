@@ -23,6 +23,9 @@ defmodule Frameworks.Pixel.ModalView do
     <%= if @style == :sheet do %>
       <.sheet live_component={@live_component} />
     <% end %>
+    <%= if @style == :info do %>
+      <.info live_component={@live_component} />
+    <% end %>
     """
   end
 
@@ -32,13 +35,14 @@ defmodule Frameworks.Pixel.ModalView do
     ~H"""
     <div class={"fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-30"}>
       <div class="flex flex-row items-center justify-center w-full h-full">
-        <div class="w-[960px] h-full rounded p-4 sm:px-10 sm:py-20">
-          <div class="flex flex-col h-full w-full bg-white pt-8 pb-8 shadow-floating">
+        <div class="w-[960px] h-full p-4 sm:px-10 sm:py-20">
+          <div class="flex flex-col h-full w-full bg-white pt-8 pb-8 rounded shadow-floating">
             <%!-- HEADER --%>
             <div class="shrink-0 px-8">
               <div class="flex flex-row">
-                <.title live_component={@live_component} />
-                <div class="flex-grow" />
+                <div class="flex-grow">
+                  <.title live_component={@live_component} centered?={@centered?}/>
+                </div>
                 <.close_button />
               </div>
             </div>
@@ -53,11 +57,40 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
+  attr(:live_component, :string, required: true)
+
+  def info(assigns) do
+    ~H"""
+    <div class={"fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-30"}>
+      <div class="flex flex-row items-center justify-center w-full h-full">
+        <div class="w-[700px] px-4 sm:px-10">
+          <div class="flex flex-col h-full w-full bg-white pt-8 pb-8 rounded shadow-floating">
+            <%!-- HEADER --%>
+            <div class="shrink-0 px-8">
+              <div class="flex flex-row">
+                <div class="flex-grow">
+                  <.title live_component={@live_component} centered?={true}/>
+                </div>
+                <.close_button />
+              </div>
+            </div>
+            <%!-- BODY --%>
+            <div class="h-full overflow-y-scroll px-8 pb-4">
+              <.body live_component={@live_component} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
   attr(:live_component, :map, required: true)
+  attr(:centered?, :boolean, default: false)
 
   def title(assigns) do
     ~H"""
-      <Text.title2>
+      <Text.title2 align="text-center">
         <%= Map.get(@live_component.params, :title) %>
       </Text.title2>
     """

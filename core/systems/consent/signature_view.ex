@@ -27,7 +27,7 @@ defmodule Systems.Consent.SignatureView do
   def render(assigns) do
     ~H"""
       <div class="w-full h-full">
-        <div class="wysiwig">
+        <div class="wysiwyg">
           <%= raw @source %>
         </div>
       </div>

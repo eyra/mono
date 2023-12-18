@@ -12,7 +12,6 @@ defmodule Systems.Consent.ClickWrapView do
   @impl true
   def update(%{id: id, revision: revision, user: user}, socket) do
     signature = Consent.Public.get_signature(revision, user)
-    selected? = signature != nil
 
     {
       :ok,
@@ -21,91 +20,85 @@ defmodule Systems.Consent.ClickWrapView do
         id: id,
         revision: revision,
         user: user,
-        signature: signature,
-        selected?: selected?
+        signature: signature
       )
-      |> update_form()
-      |> update_continue_button()
-      |> update_checkbox()
+      |> update_validation()
+      |> update_buttons()
     }
   end
 
-  defp update_form(%{assigns: %{selected?: selected?}} = socket) do
-    form = to_form(%{"signature_check" => selected?})
-    assign(socket, form: form)
-  end
-
-  defp update_continue_button(%{assigns: %{selected?: selected?, myself: myself}} = socket) do
-    continue_button = %{
-      action: %{type: :send, event: "continue", target: myself},
+  defp update_buttons(%{assigns: %{myself: myself}} = socket) do
+    accept_button = %{
+      action: %{type: :send, event: "accept", target: myself},
       face: %{
         type: :primary,
-        label: dgettext("eyra-assignment", "onboarding.continue.button")
-      },
-      enabled?: selected?
+        label: dgettext("eyra-consent", "click_wrap.accept.button")
+      }
     }
 
-    assign(socket, continue_button: continue_button)
+    decline_button = %{
+      action: %{type: :send, event: "decline", target: myself},
+      face: %{
+        type: :label,
+        label: dgettext("eyra-consent", "click_wrap.decline.button")
+      }
+    }
+
+    assign(socket, buttons: [accept_button, decline_button])
   end
 
-  defp update_checkbox(socket) do
-    checkbox = %{
-      field: :signature_check,
-      label_text: dgettext("eyra-consent", "onboarding.consent.checkbox")
-    }
-
-    assign(socket, checkbox: checkbox)
+  defp update_validation(socket) do
+    validation = dgettext("eyra-consent", "click_wrap.consent.validation")
+    assign(socket, validation: validation)
   end
 
   @impl true
-  def handle_event(
-        "toggle",
-        %{"checkbox" => _checkbox},
-        %{assigns: %{selected?: selected?}} = socket
-      ) do
+  def handle_event("accept", _payload, socket) do
     {
       :noreply,
-      socket
-      |> assign(selected?: not selected?)
-      |> update_form()
-      |> update_continue_button()
+      socket |> handle_accept()
     }
   end
 
   @impl true
-  def handle_event("continue", _payload, socket) do
+  def handle_event("decline", _payload, socket) do
     {
       :noreply,
-      socket |> handle_continue()
+      socket |> handle_decline()
     }
   end
 
-  def handle_continue(%{assigns: %{signature: nil, revision: revision, user: user}} = socket) do
+  def handle_accept(%{assigns: %{signature: nil, revision: revision, user: user}} = socket) do
     {:ok, signature} = Consent.Public.create_signature(revision, user)
 
     socket
     |> assign(signature: signature)
-    |> handle_continue()
+    |> handle_accept()
   end
 
-  def handle_continue(%{assigns: %{signature: %{id: _}}} = socket) do
+  def handle_accept(%{assigns: %{signature: %{id: _}}} = socket) do
     socket |> send_event(:parent, "continue")
+  end
+
+  def handle_decline(socket) do
+    socket |> send_event(:parent, "decline")
   end
 
   @impl true
   def render(assigns) do
     ~H"""
       <div>
-          <div class="wysiwig">
-            <%= raw @revision.source %>
-          </div>
-          <.spacing value="M" />
-          <.form id={@id} :let={form} for={@form} phx-target={@myself} >
-            <.checkbox {@checkbox} form={form} />
-          </.form>
-          <.wrap>
-            <Button.dynamic {@continue_button} />
-          </.wrap>
+        <div class="wysiwyg">
+          <%= raw @revision.source %>
+        </div>
+        <.spacing value="L" />
+        <Text.title6><%= @validation %></Text.title6>
+        <.spacing value="XS" />
+        <div class="flex flex-row gap-4">
+          <%= for button <- @buttons do %>
+            <Button.dynamic {button} />
+          <% end %>
+        </div>
       </div>
     """
   end

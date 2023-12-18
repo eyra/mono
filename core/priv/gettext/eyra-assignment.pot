@@ -265,3 +265,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "support_form.on.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "decline_view.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "decline_view.title"
+msgstr ""

@@ -56,7 +56,7 @@ defmodule Frameworks.Pixel.Button.Face do
   end
 
   def padding(%{wrap: true}), do: "pt-1px pb-1px active:pt-2px active:pb-0"
-  def padding(_), do: "pt-13px pb-13px active:pt-14px active:pb-3 pr-4 pl-4"
+  def padding(_), do: "pt-15px pb-15px active:pt-4 active:pb-14px pr-4 pl-4"
 
   attr(:label, :string, required: true)
   attr(:wrap, :boolean, default: false)

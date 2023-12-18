@@ -8,10 +8,11 @@ defmodule Systems.Assignment.CrewPageBuilder do
     Consent
   }
 
-  def view_model(assignment, assigns) do
+  def view_model(%{crew: crew} = assignment, assigns) do
     %{
       flow: flow(assignment, assigns),
-      info: assignment.info
+      info: assignment.info,
+      crew: crew
     }
   end
 

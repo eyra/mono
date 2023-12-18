@@ -265,3 +265,11 @@ msgstr "Withhold support"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support_form.on.label"
 msgstr "Give support"
+
+#, elixir-autogen, elixir-format
+msgid "decline_view.body"
+msgstr "Sadly you chose to decline the but we thank you for your honesty. You can now close this browser tab."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "decline_view.title"
+msgstr "Consent declined"
