@@ -16,7 +16,8 @@ defmodule Systems.Assignment.CrewPage do
 
   alias Systems.{
     Assignment,
-    Storage
+    Storage,
+    Crew
   }
 
   @impl true
@@ -36,7 +37,8 @@ defmodule Systems.Assignment.CrewPage do
         id: id,
         model: model,
         image_info: nil,
-        modal: nil
+        modal: nil,
+        panel_form: nil
       )
       |> update_panel_info(session)
       |> observe_view_model()
@@ -94,13 +96,37 @@ defmodule Systems.Assignment.CrewPage do
   # Used in Systems.Storage.Centerdata.Backend to post data to Centerdata and handle the response in-browser.
   # This is een temp solution before better integrating the donation protocol with Centerdata
   #
-  def handle_info(%{storage_event: %{panel: _, form: _} = event}, socket) do
-    {:noreply, socket |> send_event(:flow, "show_panel_form", event)}
+  def handle_info(%{storage_event: %{panel: _, form: form}}, socket) do
+    {:noreply, socket |> show_panel_form(form)}
   end
 
   @impl true
   def handle_event("continue", _payload, socket) do
     {:noreply, socket |> show_next()}
+  end
+
+  @impl true
+  def handle_event(
+        "decline",
+        _payload,
+        %{assigns: %{panel_info: %{embedded?: embedded?}}} = socket
+      ) do
+    socket =
+      socket
+      |> decline_member()
+      |> store("onboarding", "{\"status\":\"consent declined\"}")
+
+    socket =
+      if embedded? do
+        socket
+      else
+        title = dgettext("eyra-assignment", "declined_view.title")
+        child = prepare_child(socket, :declined_view, Assignment.DeclinedView, %{title: title})
+        modal = %{live_component: child, style: :notification}
+        assign(socket, modal: modal)
+      end
+
+    {:noreply, socket}
   end
 
   @impl true
@@ -153,6 +179,16 @@ defmodule Systems.Assignment.CrewPage do
     end
   end
 
+  defp show_panel_form(socket, %{module: module, params: params}) do
+    panel_form = prepare_child(socket, :panel_form, module, params)
+    socket |> assign(panel_form: Map.from_struct(panel_form))
+  end
+
+  defp decline_member(%{assigns: %{vm: %{crew: crew}, current_user: user}} = socket) do
+    Crew.Public.decline_member(crew, user)
+    socket
+  end
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -166,6 +202,15 @@ defmodule Systems.Assignment.CrewPage do
         </:header>
 
         <ModalView.dynamic modal={@modal} />
+
+        <%!-- hidden auto submit form --%>
+        <%= if @panel_form do %>
+          <div class="relative">
+            <div class="absolute hidden">
+              <.live_child {@panel_form} />
+            </div>
+          </div>
+        <% end %>
 
         <div id={:crew_page} class="w-full h-full flex flex-col" phx-hook="ViewportResize">
           <.flow fabric={@fabric} />

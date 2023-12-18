@@ -16,7 +16,8 @@ defmodule Frameworks.Signal.Public do
     "Systems.Pool.Switch",
     "Systems.Student.Switch",
     "Systems.Campaign.Switch",
-    "Systems.NextAction.Switch"
+    "Systems.NextAction.Switch",
+    "Systems.Crew.Switch"
   ]
 
   def dispatch(signal, message) do

@@ -30,13 +30,6 @@ repos:
         pass_filenames: false
         files: \.ex$
 
-      - id: mix-dialyzer
-        name: "elixir: mix dialyzer"
-        entry: make dialyzer
-        language: system
-        pass_filenames: false
-        files: \.exs?$
-
       - id: mix-test
         name: "elixir: mix test"
         entry: make test
@@ -50,3 +43,11 @@ repos:
         language: system
         pass_filenames: false
         files: \.exs*$
+
+      - id: mix-dialyzer
+        name: "elixir: mix dialyzer"
+        entry: make dialyzer
+        language: system
+        pass_filenames: false
+        files: \.exs?$
+

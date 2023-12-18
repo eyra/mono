@@ -233,6 +233,26 @@ defmodule Systems.Crew.PublicTest do
       assert not Crew.Public.member?(crew, user)
       assert [] = Crew.Public.list_members(crew)
     end
+
+    test "decline_member/2 does decline member and tasks" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+
+      {:ok, %{member: %{id: member_id} = member, crew_task: task}} =
+        Crew.Public.apply_member(crew, user, ["task1"], expire_at(-1))
+
+      assert Crew.Public.member?(crew, user)
+      assert [%{id: ^member_id}] = Crew.Public.list_members(crew)
+
+      assert Crew.Public.decline_member(crew, user)
+
+      assert %{declined: true} = Crew.Public.get_member!(member.id)
+      assert %{status: :declined, declined_at: declined_at} = Crew.Public.get_task!(task.id)
+      assert declined_at != nil
+
+      assert Crew.Public.member?(crew, user)
+      assert [%{id: ^member_id}] = Crew.Public.list_members(crew)
+    end
   end
 
   describe "tasks" do

@@ -16,6 +16,8 @@ defmodule ExternalSignIn do
     |> Plug.Conn.assign(:current_user, user)
   end
 
+  def get_user_by_external_id(nil), do: nil
+
   def get_user_by_external_id(external_id) do
     external_user_query =
       from(ex in ExternalSignIn.User,

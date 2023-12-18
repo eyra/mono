@@ -107,6 +107,14 @@ defmodule Systems.Crew.Public do
     |> Repo.all()
   end
 
+  def task_query(crew, status_list) when is_list(status_list) do
+    from(t in Crew.TaskModel,
+      where:
+        t.crew_id == ^crew.id and
+          t.status in ^status_list
+    )
+  end
+
   def task_query(crew, status_list, expired) when is_list(status_list) do
     from(t in Crew.TaskModel,
       where:
@@ -128,14 +136,6 @@ defmodule Systems.Crew.Public do
       where: role.role == :owner,
       where: task.crew_id == ^crew.id,
       where: task.expired == ^expired
-    )
-  end
-
-  def task_query(crew, status_list) when is_list(status_list) do
-    from(t in Crew.TaskModel,
-      where:
-        t.crew_id == ^crew.id and
-          t.status in ^status_list
     )
   end
 
@@ -194,7 +194,7 @@ defmodule Systems.Crew.Public do
   end
 
   def count_participated_tasks(crew) do
-    count_tasks(crew, [:completed, :rejected, :accepted])
+    count_tasks(crew, [:declined, :completed, :rejected, :accepted])
   end
 
   def cancel_task(%Crew.TaskModel{} = task) do
@@ -326,6 +326,7 @@ defmodule Systems.Crew.Public do
   end
 
   def count_members(crew) do
+    # including declined members
     from(m in Crew.MemberModel,
       where: m.crew_id == ^crew.id and m.expired == false,
       select: count(m.id)
@@ -335,7 +336,7 @@ defmodule Systems.Crew.Public do
 
   def public_id(crew, user_ref) do
     crew
-    |> member_query(user_ref)
+    |> member_query(user_ref, false)
     |> select([m], m.public_id)
     |> Repo.one()
   end
@@ -387,6 +388,29 @@ defmodule Systems.Crew.Public do
     end
   end
 
+  def decline_member(crew, user_ref) do
+    member = get_member(crew, user_ref)
+    task_query = task_query(crew, user_ref, false)
+    timestamp = Timestamp.naive_now()
+
+    Multi.new()
+    |> Multi.update(
+      :crew_member,
+      Crew.MemberModel.changeset(member, %{declined: true, declined_at: timestamp})
+    )
+    |> Multi.update_all(:crew_tasks, task_query, set: [status: :declined, declined_at: timestamp])
+    |> Signal.Public.multi_dispatch({:crew_member, :declined})
+    |> Repo.transaction()
+  end
+
+  def member_finised?(crew, user_ref) do
+    pending_tasks =
+      list_tasks_for_user(crew, user_ref)
+      |> Enum.filter(&(&1.status == :pending))
+
+    Enum.empty?(pending_tasks)
+  end
+
   defp insert(multi, :member = name, crew, %User{} = user, attrs) do
     Multi.insert(
       multi,
@@ -427,6 +451,7 @@ defmodule Systems.Crew.Public do
   end
 
   def list_members(%Crew.Model{} = crew) do
+    # including declined members
     from(m in Crew.MemberModel,
       where: m.crew_id == ^crew.id and m.expired == false,
       preload: [:user]
@@ -452,7 +477,7 @@ defmodule Systems.Crew.Public do
 
   def member?(crew, user_ref) do
     crew
-    |> member_query(user_ref)
+    |> member_query(user_ref, false)
     |> Repo.exists?()
   end
 
@@ -471,7 +496,7 @@ defmodule Systems.Crew.Public do
     |> Repo.one()
   end
 
-  def member_query(crew, user_ref, expired \\ false) do
+  def member_query(crew, user_ref, expired) do
     user_id = user_id(user_ref)
 
     from(m in Crew.MemberModel,

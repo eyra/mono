@@ -17,7 +17,7 @@ defmodule Frameworks.Pixel.Annotation do
 
   def view(assigns) do
     ~H"""
-      <div class="wysiwig wysiwig-dark">
+      <div class="wysiwyg wysiwyg-dark">
         <%= raw @annotation %>
       </div>
     """

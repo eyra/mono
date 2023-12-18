@@ -76,6 +76,6 @@ module.exports = (env, options) => {
       new MiniCssExtractPlugin({ filename: "../css/app.css" }),
       new CopyWebpackPlugin([{ from: "static/", to: "../" }]),
       new InjectManifest({ swSrc: "./js/sw.js", swDest: "../sw.js" }),
-    ].concat(devMode ? [new HardSourceWebpackPlugin()] : []),
+    ],
   };
 };

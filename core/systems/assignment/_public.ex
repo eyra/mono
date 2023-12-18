@@ -59,6 +59,8 @@ defmodule Systems.Assignment.Public do
 
   def get_by(%Workflow.Model{id: id}, preload), do: get_by(:workflow_id, id, preload)
 
+  def get_by(%Crew.Model{id: id}, preload), do: get_by(:crew_id, id, preload)
+
   def get_by(field_name, id, preload) when is_atom(field_name) do
     Repo.get_by(Assignment.Model, [{field_name, id}])
     |> Repo.preload(preload)

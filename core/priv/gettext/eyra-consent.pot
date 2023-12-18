@@ -16,7 +16,7 @@ msgid "default.consent.text"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "onboarding.consent.checkbox"
+msgid "click_wrap.consent.validation"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -29,4 +29,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "signature.view.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "click_wrap.accept.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "click_wrap.decline.button"
 msgstr ""

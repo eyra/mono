@@ -8,10 +8,11 @@ defmodule Systems.Assignment.CrewPageBuilder do
     Consent
   }
 
-  def view_model(assignment, assigns) do
+  def view_model(%{crew: crew} = assignment, assigns) do
     %{
       flow: flow(assignment, assigns),
-      info: assignment.info
+      info: assignment.info,
+      crew: crew
     }
   end
 
@@ -79,8 +80,8 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp work_view(
-         %{consent_agreement: consent_agreement, page_refs: page_refs} = assignment,
-         %{fabric: fabric, current_user: user} = assigns,
+         %{consent_agreement: consent_agreement, page_refs: page_refs, crew: crew} = assignment,
+         %{fabric: fabric, current_user: user, panel_info: panel_info} = assigns,
          _
        ) do
     work_items = work_items(assignment, assigns)
@@ -95,7 +96,9 @@ defmodule Systems.Assignment.CrewPageBuilder do
       context_menu_items: context_menu_items,
       intro_page_ref: intro_page_ref,
       support_page_ref: support_page_ref,
-      user: user
+      crew: crew,
+      user: user,
+      panel_info: panel_info
     })
   end
 

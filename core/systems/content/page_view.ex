@@ -16,7 +16,7 @@ defmodule Systems.Content.PageView do
   def render(assigns) do
     ~H"""
       <div>
-        <div class="wysiwig">
+        <div class="wysiwyg">
           <%= raw @body %>
         </div>
       </div>

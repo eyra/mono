@@ -16,8 +16,8 @@ msgid "default.consent.text"
 msgstr "<div>Add the text for the consent form here and preview the workflow to check out what it will look like for participants.</div>"
 
 #, elixir-autogen, elixir-format
-msgid "onboarding.consent.checkbox"
-msgstr "I have read and agree with the above terms"
+msgid "click_wrap.consent.validation"
+msgstr "I accept the above terms by clicking the button below"
 
 #, elixir-autogen, elixir-format
 msgid "locked.error.message"
@@ -30,3 +30,11 @@ msgstr "The consent text has been changed. Please refresh the page to continue."
 #, elixir-autogen, elixir-format
 msgid "signature.view.title"
 msgstr "Consent"
+
+#, elixir-autogen, elixir-format
+msgid "click_wrap.accept.button"
+msgstr "I accept"
+
+#, elixir-autogen, elixir-format
+msgid "click_wrap.decline.button"
+msgstr "Decline"

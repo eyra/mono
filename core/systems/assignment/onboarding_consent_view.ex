@@ -36,6 +36,11 @@ defmodule Systems.Assignment.OnboardingConsentView do
   end
 
   @impl true
+  def handle_event("decline", _payload, socket) do
+    {:noreply, socket |> send_event(:parent, "decline")}
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
       <div>

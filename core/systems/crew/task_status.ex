@@ -1,3 +1,3 @@
 defmodule Systems.Crew.TaskStatus do
-  def values, do: [:pending, :completed, :accepted, :rejected]
+  def values, do: [:pending, :declined, :completed, :accepted, :rejected]
 end

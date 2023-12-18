@@ -193,11 +193,12 @@ defmodule Frameworks.Pixel.Text do
 
   attr(:color, :string, default: "text-grey1")
   attr(:margin, :string, default: "mb-5 md:mb-6 lg:mb-8")
+  attr(:align, :string, default: "text-left")
   slot(:inner_block, required: true)
 
   def title2(assigns) do
     ~H"""
-    <div class={"text-title4 font-title4 sm:text-title3 sm:font-title3 lg:text-title2 lg:font-title2 #{@margin} #{@color}"}>
+    <div class={"text-title4 font-title4 sm:text-title3 sm:font-title3 lg:text-title2 lg:font-title2 #{@align} #{@margin} #{@color}"}>
       <%= render_slot(@inner_block) %>
     </div>
     """
