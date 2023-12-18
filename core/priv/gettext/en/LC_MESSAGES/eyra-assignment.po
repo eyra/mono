@@ -176,7 +176,7 @@ msgstr "Show"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.body"
-msgstr "Use the text field below to write a consent form for your participants. Did your participants already provide consent in some other way? Then choose not to show the consent form."
+msgstr "Use the text field below to write a consent form for your participants. Did your participants already provide consent in some other way? Choose 'Skip'."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.title"
