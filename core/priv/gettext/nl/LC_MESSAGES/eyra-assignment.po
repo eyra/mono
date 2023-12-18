@@ -248,15 +248,15 @@ msgstr "Informatie"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.support.body"
-msgstr "Gebruik het tekstvak hieronder om ondersteuning te bieden voor jouw deelnemers over deze opdracht."
+msgstr "Deze pagina wordt getoond als deelnemers op de 'i' rechtsonder klikken en 'Hulp nodig?' kiezen. Bekijk het 'Voorbeeld' om te zien hoe dit eruit komt te zien. Gebruik het tekstvak hieronder om jouw deelnemers te informeren over de manier waarop ze ondersteuning kunnen krijgen. Kies 'Overslaan' als je niet van plan bent om ondersteuning te bieden."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.support.title"
-msgstr "Ondersteuning"
+msgstr "Helpdesk pagina"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support.page.title"
-msgstr "Ondersteuning"
+msgstr "Hulp nodig?"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support_form.off.label"
