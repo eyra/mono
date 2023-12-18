@@ -168,7 +168,7 @@ msgstr "<div>Copy the url below and provide it to your contact person at Centerd
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.off.label"
-msgstr "Don't show"
+msgstr "Skip"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.on.label"
@@ -184,7 +184,7 @@ msgstr "Consent form"
 
 #, elixir-autogen, elixir-format
 msgid "settings.subtitle.label"
-msgstr "Organization name"
+msgstr "Subtitle"
 
 #, elixir-autogen, elixir-format
 msgid "settings.title.label"
@@ -228,11 +228,11 @@ msgstr "Introduction"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "intro_form.off.label"
-msgstr "Skip introduction"
+msgstr "Skip"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "intro_form.on.label"
-msgstr "Show introduction"
+msgstr "Show"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.body"
@@ -260,11 +260,11 @@ msgstr "Support"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support_form.off.label"
-msgstr "Withhold support"
+msgstr "Skip"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support_form.on.label"
-msgstr "Give support"
+msgstr "Show"
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.body"
