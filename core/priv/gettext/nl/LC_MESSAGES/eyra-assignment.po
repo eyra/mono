@@ -168,7 +168,7 @@ msgstr "<div>Kopieer de url hieronder en geef deze aan jouw contactpersoon bij C
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.off.label"
-msgstr "Niet tonen"
+msgstr "Overslaan"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.on.label"
@@ -184,7 +184,7 @@ msgstr "Toestemmingsformulier"
 
 #, elixir-autogen, elixir-format
 msgid "settings.subtitle.label"
-msgstr "Organisatie naam"
+msgstr "Ondertitel"
 
 #, elixir-autogen, elixir-format
 msgid "settings.title.label"
@@ -228,11 +228,11 @@ msgstr "Introductie"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "intro_form.off.label"
-msgstr "Introductie overslaan"
+msgstr "Overslaan"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "intro_form.on.label"
-msgstr "Introductie tonen"
+msgstr "Tonen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.body"
@@ -260,11 +260,11 @@ msgstr "Ondersteuning"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support_form.off.label"
-msgstr "Geen ondersteuning bieden"
+msgstr "Overslaan"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support_form.on.label"
-msgstr "Bied ondersteuning"
+msgstr "Tonen"
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.body"
