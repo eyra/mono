@@ -268,11 +268,11 @@ msgstr "Give support"
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.body"
-msgstr "Sadly you chose to decline the but we thank you for your honesty. You can now close this browser tab."
+msgstr "We informed the researcher that you declined to participate. You can close the browser. If you wish to reconsider participation, close this popup to continue."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "declined_view.title"
-msgstr "Consent declined"
+msgstr "No consent"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
