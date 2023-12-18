@@ -1,0 +1,34 @@
+<svg width="896" height="253" viewBox="0 0 896 253" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_553_54822)">
+<rect width="145" height="62.6667" transform="translate(338 0.5)" fill="#F6F6F6"/>
+<rect opacity="0.4" width="103.556" height="8" rx="4" transform="matrix(-1 0 0 1 457.555 19.8335)" fill="#CCCCCC"/>
+<rect opacity="0.4" x="354" y="35.8335" width="71.8333" height="8" rx="4" fill="#CCCCCC"/>
+<rect x="483" y="0.5" width="75.4445" height="62.6667" fill="#6FCA37"/>
+<path d="M510 27.3983L520.396 39.5L535 22.5" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<g clip-path="url(#clip1_553_54822)">
+<rect width="145" height="62.6667" transform="translate(338 79.1665)" fill="#F6F6F6"/>
+<rect opacity="0.4" width="103.556" height="8" rx="4" transform="matrix(-1 0 0 1 457.555 98.5)" fill="#CCCCCC"/>
+<rect opacity="0.4" x="354" y="114.5" width="71.8333" height="8" rx="4" fill="#CCCCCC"/>
+<rect x="483" y="79.1665" width="75.4445" height="62.6667" fill="#6FCA37"/>
+<path d="M510 106.065L520.396 118.167L535 101.167" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<g clip-path="url(#clip2_553_54822)">
+<rect width="145" height="62.6667" transform="translate(338 157.833)" fill="#F6F6F6"/>
+<rect opacity="0.4" width="103.556" height="8" rx="4" transform="matrix(-1 0 0 1 457.555 177.167)" fill="#CCCCCC"/>
+<rect opacity="0.4" x="354" y="193.167" width="71.8333" height="8" rx="4" fill="#CCCCCC"/>
+<rect x="483" y="157.833" width="75.4445" height="62.6667" fill="#6FCA37"/>
+<path d="M510 184.732L520.396 196.833L535 179.833" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_553_54822">
+<rect x="338" y="0.5" width="220" height="62.6667" rx="8" fill="white"/>
+</clipPath>
+<clipPath id="clip1_553_54822">
+<rect x="338" y="79.1665" width="220" height="62.6667" rx="8" fill="white"/>
+</clipPath>
+<clipPath id="clip2_553_54822">
+<rect x="338" y="157.833" width="220" height="62.6667" rx="8" fill="white"/>
+</clipPath>
+</defs>
+</svg>

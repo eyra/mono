@@ -22,7 +22,9 @@ defmodule Systems.Assignment.CrewWorkView do
           context_menu_items: context_menu_items,
           intro_page_ref: intro_page_ref,
           support_page_ref: support_page_ref,
-          user: user
+          crew: crew,
+          user: user,
+          panel_info: panel_info
         },
         socket
       ) do
@@ -35,7 +37,9 @@ defmodule Systems.Assignment.CrewWorkView do
         context_menu_items: context_menu_items,
         intro_page_ref: intro_page_ref,
         support_page_ref: support_page_ref,
-        user: user
+        crew: crew,
+        user: user,
+        panel_info: panel_info
       )
       |> update_selected_item_id()
       |> update_selected_item()
@@ -43,6 +47,7 @@ defmodule Systems.Assignment.CrewWorkView do
       |> compose_child(:start_view)
       |> compose_child(:context_menu)
       |> update_child(:tool_ref_view)
+      |> update_child(:finished_view)
     }
   end
 
@@ -162,6 +167,15 @@ defmodule Systems.Assignment.CrewWorkView do
     }
   end
 
+  def compose(:finished_view, _) do
+    %{
+      module: Assignment.FinishedView,
+      params: %{
+        title: dgettext("eyra-assignment", "finished_view.title")
+      }
+    }
+  end
+
   # Events
 
   @impl true
@@ -175,7 +189,12 @@ defmodule Systems.Assignment.CrewWorkView do
 
     Crew.Public.activate_task(task)
 
-    {:noreply, socket |> hide_child(:tool_ref_view)}
+    {
+      :noreply,
+      socket
+      |> hide_child(:tool_ref_view)
+      |> handle_finished_state()
+    }
   end
 
   @impl true
@@ -220,7 +239,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> compose_child(:consent_page)
-      |> show_modal(:consent_page, :sheet)
+      |> show_modal(:consent_page, :page)
     }
   end
 
@@ -230,7 +249,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> compose_child(:intro_page)
-      |> show_modal(:intro_page, :sheet)
+      |> show_modal(:intro_page, :page)
     }
   end
 
@@ -240,7 +259,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> compose_child(:support_page)
-      |> show_modal(:support_page, :sheet)
+      |> show_modal(:support_page, :page)
     }
   end
 
@@ -251,8 +270,24 @@ defmodule Systems.Assignment.CrewWorkView do
 
   # Private
 
+  defp handle_finished_state(%{assigns: %{crew: crew, user: user}} = socket) do
+    if Crew.Public.member_finised?(crew, user) do
+      socket
+      |> compose_child(:finished_view)
+      |> show_modal(:finished_view, :sheet)
+    else
+      socket
+    end
+  end
+
   defp handle_feldspar_event(
-         %{assigns: %{selected_item: {_, task}, work_items: work_items}} = socket,
+         %{
+           assigns: %{
+             selected_item: {_, task},
+             work_items: work_items,
+             panel_info: %{embedded?: embedded?}
+           }
+         } = socket,
          %{
            "__type__" => "CommandSystemExit",
            "code" => code,
@@ -262,10 +297,17 @@ defmodule Systems.Assignment.CrewWorkView do
     if code == 0 do
       Crew.Public.activate_task(task)
 
-      if Enum.count(work_items) > 1 do
-        socket |> hide_child(:tool_ref_view)
-      else
+      socket =
+        if Enum.count(work_items) > 1 do
+          hide_child(socket, :tool_ref_view)
+        else
+          socket
+        end
+
+      if embedded? do
         socket
+      else
+        handle_finished_state(socket)
       end
     else
       Frameworks.Pixel.Flash.put_info(socket, "Application stopped")

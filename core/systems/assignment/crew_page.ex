@@ -120,12 +120,10 @@ defmodule Systems.Assignment.CrewPage do
       if embedded? do
         socket
       else
-        title = dgettext("eyra-assignment", "decline_view.title")
-        child = prepare_child(socket, :decline_view, Assignment.DeclineView, %{title: title})
-        modal = %{live_component: child, style: :info}
+        title = dgettext("eyra-assignment", "declined_view.title")
+        child = prepare_child(socket, :declined_view, Assignment.DeclinedView, %{title: title})
+        modal = %{live_component: child, style: :notification}
         assign(socket, modal: modal)
-      else
-
       end
 
     {:noreply, socket}

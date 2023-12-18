@@ -20,28 +20,31 @@ defmodule Frameworks.Pixel.ModalView do
 
   def container(assigns) do
     ~H"""
+    <%= if @style == :page do %>
+      <.page live_component={@live_component} />
+    <% end %>
     <%= if @style == :sheet do %>
       <.sheet live_component={@live_component} />
     <% end %>
-    <%= if @style == :info do %>
-      <.info live_component={@live_component} />
+    <%= if @style == :notification do %>
+      <.notification live_component={@live_component} />
     <% end %>
     """
   end
 
   attr(:live_component, :string, required: true)
 
-  def sheet(assigns) do
+  def page(assigns) do
     ~H"""
     <div class={"fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-30"}>
       <div class="flex flex-row items-center justify-center w-full h-full">
-        <div class="w-[960px] h-full p-4 sm:px-10 sm:py-20">
-          <div class="flex flex-col h-full w-full bg-white pt-8 pb-8 rounded shadow-floating">
+        <div class={"w-[960px] p-4 sm:px-10 sm:py-20 h-full"}>
+          <div class={"flex flex-col w-full bg-white rounded shadow-floating h-full pt-8 pb-8"}>
             <%!-- HEADER --%>
             <div class="shrink-0 px-8">
               <div class="flex flex-row">
                 <div class="flex-grow">
-                  <.title live_component={@live_component} centered?={@centered?}/>
+                  <.title live_component={@live_component} />
                 </div>
                 <.close_button />
               </div>
@@ -59,7 +62,35 @@ defmodule Frameworks.Pixel.ModalView do
 
   attr(:live_component, :string, required: true)
 
-  def info(assigns) do
+  def sheet(assigns) do
+    ~H"""
+    <div class={"fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-30"}>
+      <div class="flex flex-row items-center justify-center w-full h-full">
+        <div class={"w-[960px] p-4 sm:px-10 sm:py-20"}>
+          <div class={"flex flex-col w-full bg-white rounded shadow-floating pt-8 pb-8"}>
+            <%!-- HEADER --%>
+            <div class="shrink-0 px-8">
+              <div class="flex flex-row">
+                <div class="flex-grow">
+                  <.title live_component={@live_component} centered?={true}/>
+                </div>
+                <.close_button />
+              </div>
+            </div>
+            <%!-- BODY --%>
+            <div class="h-full overflow-y-scroll px-8">
+              <.body live_component={@live_component} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  attr(:live_component, :string, required: true)
+
+  def notification(assigns) do
     ~H"""
     <div class={"fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-30"}>
       <div class="flex flex-row items-center justify-center w-full h-full">
@@ -90,7 +121,7 @@ defmodule Frameworks.Pixel.ModalView do
 
   def title(assigns) do
     ~H"""
-      <Text.title2 align="text-center">
+      <Text.title2 align={"#{if @centered? do "text-center" else "text-left" end}"}>
         <%= Map.get(@live_component.params, :title) %>
       </Text.title2>
     """

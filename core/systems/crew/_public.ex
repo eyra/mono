@@ -205,21 +205,6 @@ defmodule Systems.Crew.Public do
     update_task(task, %{started_at: Timestamp.naive_now()}, :locked)
   end
 
-  def decline_member(crew, user_ref) do
-    member = get_member(crew, user_ref)
-    task_query = task_query(crew, user_ref, false)
-    timestamp = Timestamp.naive_now()
-
-    Multi.new()
-    |> Multi.update(
-      :crew_member,
-      Crew.MemberModel.changeset(member, %{declined: true, declined_at: timestamp})
-    )
-    |> Multi.update_all(:crew_tasks, task_query, set: [status: :declined, declined_at: timestamp])
-    |> Signal.Public.multi_dispatch({:crew_member, :declined})
-    |> Repo.transaction()
-  end
-
   def activate_task(%Crew.TaskModel{status: status, started_at: started_at} = task) do
     timestamp = Timestamp.naive_now()
 
@@ -401,6 +386,29 @@ defmodule Systems.Crew.Public do
       |> insert(:role_assignment, crew, user, role)
       |> Repo.transaction()
     end
+  end
+
+  def decline_member(crew, user_ref) do
+    member = get_member(crew, user_ref)
+    task_query = task_query(crew, user_ref, false)
+    timestamp = Timestamp.naive_now()
+
+    Multi.new()
+    |> Multi.update(
+      :crew_member,
+      Crew.MemberModel.changeset(member, %{declined: true, declined_at: timestamp})
+    )
+    |> Multi.update_all(:crew_tasks, task_query, set: [status: :declined, declined_at: timestamp])
+    |> Signal.Public.multi_dispatch({:crew_member, :declined})
+    |> Repo.transaction()
+  end
+
+  def member_finised?(crew, user_ref) do
+    pending_tasks =
+      list_tasks_for_user(crew, user_ref)
+      |> Enum.filter(&(&1.status == :pending))
+
+    Enum.empty?(pending_tasks)
   end
 
   defp insert(multi, :member = name, crew, %User{} = user, attrs) do

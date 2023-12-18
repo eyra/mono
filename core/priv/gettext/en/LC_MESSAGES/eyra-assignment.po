@@ -267,9 +267,17 @@ msgid "support_form.on.label"
 msgstr "Give support"
 
 #, elixir-autogen, elixir-format
-msgid "decline_view.body"
+msgid "declined_view.body"
 msgstr "Sadly you chose to decline the but we thank you for your honesty. You can now close this browser tab."
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "decline_view.title"
+msgid "declined_view.title"
 msgstr "Consent declined"
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body"
+msgstr "You finished the assignment. You can now close this browser tab."
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.title"
+msgstr "Thank you"

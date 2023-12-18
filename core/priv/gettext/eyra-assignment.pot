@@ -267,9 +267,17 @@ msgid "support_form.on.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "decline_view.body"
+msgid "declined_view.body"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "decline_view.title"
+msgid "declined_view.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.title"
 msgstr ""

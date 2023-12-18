@@ -267,9 +267,17 @@ msgid "support_form.on.label"
 msgstr "Bied ondersteuning"
 
 #, elixir-autogen, elixir-format
-msgid "decline_view.body"
+msgid "declined_view.body"
 msgstr "Jammer genoeg heb je voor gekozen geen toestemming te geven, maar we stellen je eerlijkheid op prijs. Je kan nu het tablad van de browser sluiten."
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "decline_view.title"
+msgid "declined_view.title"
 msgstr "Geen toestemming"
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body"
+msgstr "Bedankt"
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.title"
+msgstr "Je heb de opdracht afgerond. Je kan nu het tablad van de browser sluiten."

@@ -1,4 +1,4 @@
-defmodule Systems.Assignment.DeclineView do
+defmodule Systems.Assignment.DeclinedView do
   use CoreWeb, :live_component_fabric
   use Fabric.LiveComponent
 
@@ -6,7 +6,7 @@ defmodule Systems.Assignment.DeclineView do
 
   @impl true
   def update(_, socket) do
-    body = dgettext("eyra-assignment", "decline_view.body")
+    body = dgettext("eyra-assignment", "declined_view.body")
 
     {
       :ok,
