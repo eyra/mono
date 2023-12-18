@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "default.consent.text"
-msgstr "<div>Voeg hier de tekst toe die nodig is voor het toestemmingsformulier.</div>"
+msgstr "<div>Beschrijf hier de consent voorwaarden</div>"
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.consent.validation"
