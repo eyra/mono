@@ -276,7 +276,7 @@ msgstr "No consent"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "You finished the assignment. You can now close this browser tab."
+msgstr "Thank you for your participation. You are now finished and can close your browser."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
