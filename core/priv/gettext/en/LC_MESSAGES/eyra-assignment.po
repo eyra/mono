@@ -236,15 +236,15 @@ msgstr "Show"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.body"
-msgstr "Use the text field below to write an introduction text for your participants about this assignment."
+msgstr "Use the text field below to inform your participants about your research. Were your participants already informed in some other way? Choose 'Skip'."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.title"
-msgstr "Introduction"
+msgstr "Information"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.intro.title"
-msgstr "Introduction"
+msgstr "Information"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.support.body"
