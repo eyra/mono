@@ -125,7 +125,6 @@ defmodule Systems.Assignment.CrewPage do
         modal = %{live_component: child, style: :info}
         assign(socket, modal: modal)
       else
-
       end
 
     {:noreply, socket}
