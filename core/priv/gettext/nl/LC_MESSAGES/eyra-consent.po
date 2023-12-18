@@ -13,11 +13,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "default.consent.text"
-msgstr "<div>Beschrijf hier de consent voorwaarden</div>"
+msgstr "<div>Voeg hier de tekst toe die nodig is voor het toestemmingsformulier.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.consent.validation"
-msgstr "Door op onderstaande knop te klikken, ga je akkoord met de voorwaarden"
+msgstr "Gaat u akkoord met de bovenstaande voorwaarden?"
 
 #, elixir-autogen, elixir-format
 msgid "locked.error.message"
@@ -33,8 +33,8 @@ msgstr "Toestemming"
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.accept.button"
-msgstr "Ik ga akoord"
+msgstr "Ja, akkoord"
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.decline.button"
-msgstr "Weigeren"
+msgstr "Nee"
