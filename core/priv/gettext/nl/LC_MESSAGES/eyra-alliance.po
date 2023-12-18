@@ -112,7 +112,7 @@ msgstr "Kopieer"
 
 #, elixir-autogen, elixir-format
 msgid "ethical.description"
-msgstr "Zorg ervoor dat je de %{link} doorlopen hebt en dat je goedkeuring hebt van de SBE Ethics Review Board (ERB), wanneer dat vereist is voor jouw studie. Vul de ERB code in die je ontvangen hebt."
+msgstr "Zorg ervoor dat je goedkeuring hebt van de ethische commissie van jouw instelling, wanneer dat vereist is voor jouw studie. Vul de code in die je ontvangen hebt van de ethische commissie."
 
 #, elixir-autogen, elixir-format
 msgid "link.description"
