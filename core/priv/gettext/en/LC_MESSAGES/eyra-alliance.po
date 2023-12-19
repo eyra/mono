@@ -112,7 +112,7 @@ msgstr "Copy"
 
 #, elixir-autogen, elixir-format
 msgid "ethical.description"
-msgstr "Make sure that you completed the %{link} and that you have approval from the SBE Ethics Review Board (ERB), if required for your study. Provide your received ERB code."
+msgstr "Make sure that you have approval from the Ethical Review Board of your institution, if required for your study. Provide your received ERB code."
 
 #, elixir-autogen, elixir-format
 msgid "link.description"

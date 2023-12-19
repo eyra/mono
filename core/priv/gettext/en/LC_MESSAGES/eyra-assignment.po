@@ -168,7 +168,7 @@ msgstr "<div>Copy the url below and provide it to your contact person at Centerd
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.off.label"
-msgstr "Don't show"
+msgstr "Skip"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.on.label"
@@ -176,7 +176,7 @@ msgstr "Show"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.body"
-msgstr "Use the text field below to write a consent form for your participants. Did your participants already provide consent in some other way? Then choose not to show the consent form."
+msgstr "Use the text field below to write a consent form for your participants. Did your participants already provide consent in some other way? Choose 'Skip'."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.title"
@@ -184,7 +184,7 @@ msgstr "Consent form"
 
 #, elixir-autogen, elixir-format
 msgid "settings.subtitle.label"
-msgstr "Organization name"
+msgstr "Subtitle"
 
 #, elixir-autogen, elixir-format
 msgid "settings.title.label"
@@ -224,59 +224,59 @@ msgstr "Tasks"
 
 #, elixir-autogen, elixir-format
 msgid "intro.page.title"
-msgstr "Introduction"
+msgstr "Information"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "intro_form.off.label"
-msgstr "Skip introduction"
+msgstr "Skip"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "intro_form.on.label"
-msgstr "Show introduction"
+msgstr "Show"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.body"
-msgstr "Use the text field below to write an introduction text for your participants about this assignment."
+msgstr "Use the text field below to inform your participants about your research. Were your participants already informed in some other way? Choose 'Skip'."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.title"
-msgstr "Introduction"
+msgstr "Information page"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.intro.title"
-msgstr "Introduction"
+msgstr "Information"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.support.body"
-msgstr "Use the text field below to give support to your participants about this assignment."
+msgstr "This page will be shown when participants click the 'i' at the right bottom and choose 'Need help?'. Check out 'Preview' to see what this will look like. Use the text field below to inform participants about how to get support when needed. Choose 'Skip' if you are not planning to provide support."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.support.title"
-msgstr "Support"
+msgstr "Helpdesk page"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support.page.title"
-msgstr "Support"
+msgstr "Need help?"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support_form.off.label"
-msgstr "Withhold support"
+msgstr "Skip"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support_form.on.label"
-msgstr "Give support"
+msgstr "Show"
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.body"
-msgstr "Sadly you chose to decline the but we thank you for your honesty. You can now close this browser tab."
+msgstr "We informed the researcher that you declined to participate. You can close the browser. If you wish to reconsider participation, close this popup to continue."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "declined_view.title"
-msgstr "Consent declined"
+msgstr "No consent"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "You finished the assignment. You can now close this browser tab."
+msgstr "Thank you for your participation. You are now finished and can close your browser."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"

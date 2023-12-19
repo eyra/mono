@@ -168,7 +168,7 @@ msgstr "<div>Kopieer de url hieronder en geef deze aan jouw contactpersoon bij C
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.off.label"
-msgstr "Niet tonen"
+msgstr "Overslaan"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.on.label"
@@ -176,7 +176,7 @@ msgstr "Tonen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.body"
-msgstr "Gebruik het tekstvak hieronder om een toestemmingsformulier op te stellen voor jouw deelnemers. Hebben de deelnemers al op een andere manier toestemming gegeven? Kies er dan voor om het toestemmingsformulier niet te tonen."
+msgstr "Gebruik het tekstvak hieronder om een toestemmingsformulier op te stellen voor jouw deelnemers. Hebben de deelnemers al op een andere manier toestemming gegeven? Kies dan voor 'Overslaan'."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.title"
@@ -184,7 +184,7 @@ msgstr "Toestemmingsformulier"
 
 #, elixir-autogen, elixir-format
 msgid "settings.subtitle.label"
-msgstr "Organisatie naam"
+msgstr "Ondertitel"
 
 #, elixir-autogen, elixir-format
 msgid "settings.title.label"
@@ -228,47 +228,47 @@ msgstr "Introductie"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "intro_form.off.label"
-msgstr "Introductie overslaan"
+msgstr "Overslaan"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "intro_form.on.label"
-msgstr "Introductie tonen"
+msgstr "Tonen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.body"
-msgstr "Gebruik het tekstvak hieronder om een introductie te schrijven voor jouw deelnemers over deze opdracht."
+msgstr "Gebruik het tekstvak hieronder om jouw deelnemers te informeren over jouw onderzoek. Zijn jouw deelnemers al op een andere manier op de hoogte gesteld? Kies dan 'Overslaan'."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.title"
-msgstr "Introductie"
+msgstr "Informatie"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.intro.title"
-msgstr "Introductie"
+msgstr "Informatie"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.support.body"
-msgstr "Gebruik het tekstvak hieronder om ondersteuning te bieden voor jouw deelnemers over deze opdracht."
+msgstr "Deze pagina wordt getoond als deelnemers op de 'i' rechtsonder klikken en 'Hulp nodig?' kiezen. Bekijk het 'Voorbeeld' om te zien hoe dit eruit komt te zien. Gebruik het tekstvak hieronder om jouw deelnemers te informeren over de manier waarop ze ondersteuning kunnen krijgen. Kies 'Overslaan' als je niet van plan bent om ondersteuning te bieden."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.support.title"
-msgstr "Ondersteuning"
+msgstr "Helpdesk pagina"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support.page.title"
-msgstr "Ondersteuning"
+msgstr "Hulp nodig?"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support_form.off.label"
-msgstr "Geen ondersteuning bieden"
+msgstr "Overslaan"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support_form.on.label"
-msgstr "Bied ondersteuning"
+msgstr "Tonen"
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.body"
-msgstr "Jammer genoeg heb je voor gekozen geen toestemming te geven, maar we stellen je eerlijkheid op prijs. Je kan nu het tablad van de browser sluiten."
+msgstr "We hebben de onderzoeker op de hoogte gesteld dat je geen toestemming geeft voor deelname. Je kunt de browser afsluiten. Wil je alsnog toestemming geven? Sluit dan dit venster om verder te gaan."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "declined_view.title"
@@ -276,7 +276,7 @@ msgstr "Geen toestemming"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Je heb de opdracht afgerond. Je kan nu het tablad van de browser sluiten."
+msgstr "Bedankt voor je deelname. Je bent klaar en kunt de browser afsluiten."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
