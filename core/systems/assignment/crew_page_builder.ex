@@ -103,7 +103,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp context_menu_items(assignment, _assigns) do
-    [:consent, :assignment_intro, :assignment_support]
+    [:assignment_intro, :consent, :assignment_support]
     |> Enum.map(&context_menu_item(&1, assignment))
     |> Enum.filter(&(not is_nil(&1)))
   end
