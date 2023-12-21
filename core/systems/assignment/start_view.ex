@@ -9,13 +9,14 @@ defmodule Systems.Assignment.StartView do
 
   alias Systems.Project
 
-  def update(%{id: id, work_item: work_item}, socket) do
+  def update(%{id: id, work_item: work_item, loading: loading}, socket) do
     {
       :ok,
       socket
       |> assign(
         id: id,
-        work_item: work_item
+        work_item: work_item,
+        loading: loading
       )
       |> compose_element(:title)
       |> compose_element(:description)
@@ -25,10 +26,10 @@ defmodule Systems.Assignment.StartView do
   end
 
   @impl true
-  def compose(:button, %{work_item: work_item}) do
+  def compose(:button, %{work_item: work_item, loading: loading}) do
     %{
       action: start_action(work_item),
-      face: %{type: :primary, label: "Start"}
+      face: %{type: :primary, label: "Start", loading: loading}
     }
   end
 
@@ -60,7 +61,13 @@ defmodule Systems.Assignment.StartView do
 
   @impl true
   def handle_event("start", _, socket) do
-    {:noreply, socket |> send_event(:parent, "start")}
+    {
+      :noreply,
+      socket
+      |> assign(loading: true)
+      |> compose_element(:button)
+      |> send_event(:parent, "start")
+    }
   end
 
   @impl true

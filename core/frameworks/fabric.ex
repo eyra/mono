@@ -16,6 +16,10 @@ defmodule Fabric do
 
       require Logger
 
+      def reset_fabric(%Phoenix.LiveView.Socket{} = socket) do
+        reset_children(socket)
+      end
+
       def compose_element(%Phoenix.LiveView.Socket{assigns: assigns} = socket, element_id)
           when is_atom(element_id) do
         %Phoenix.LiveView.Socket{socket | assigns: compose_element(assigns, element_id)}
@@ -75,6 +79,7 @@ defmodule Fabric do
 
   def child_id(%{id: id}, child_name), do: child_id(id, child_name)
   def child_id(context, child_name), do: "#{child_name}->#{context}"
+
   # Prepare
 
   def prepare_child(context, child_name, %{module: module, params: params}) do
@@ -117,6 +122,15 @@ defmodule Fabric do
 
   def install_children(%Fabric.Model{} = fabric, children) when is_list(children) do
     %Fabric.Model{fabric | children: children}
+  end
+
+  # Reset
+  def reset_children(%Phoenix.LiveView.Socket{assigns: %{fabric: fabric}} = socket) do
+    Phoenix.Component.assign(socket, fabric: reset_children(fabric))
+  end
+
+  def reset_children(%Fabric.Model{} = fabric) do
+    %Fabric.Model{fabric | children: []}
   end
 
   # CRUD

@@ -224,7 +224,7 @@ msgstr "Taken"
 
 #, elixir-autogen, elixir-format
 msgid "intro.page.title"
-msgstr "Introductie"
+msgstr "Informatie"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "intro_form.off.label"

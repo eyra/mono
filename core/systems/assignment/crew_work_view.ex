@@ -28,6 +28,9 @@ defmodule Systems.Assignment.CrewWorkView do
         },
         socket
       ) do
+    tool_started = Map.get(socket.assigns, :tool_started, false)
+    tool_initialized = Map.get(socket.assigns, :tool_initialized, false)
+
     {
       :ok,
       socket
@@ -39,16 +42,28 @@ defmodule Systems.Assignment.CrewWorkView do
         support_page_ref: support_page_ref,
         crew: crew,
         user: user,
-        panel_info: panel_info
+        panel_info: panel_info,
+        tool_started: tool_started,
+        tool_initialized: tool_initialized
       )
       |> update_selected_item_id()
       |> update_selected_item()
       |> compose_child(:work_list_view)
       |> compose_child(:start_view)
       |> compose_child(:context_menu)
-      |> update_child(:tool_ref_view)
+      |> update_tool_ref_view()
       |> update_child(:finished_view)
     }
+  end
+
+  defp update_tool_ref_view(%{assigns: %{selected_item_id: selected_item_id}} = socket) do
+    case Fabric.get_child(socket, :tool_ref_view) do
+      %{params: %{work_item: {%{id: id}, _}}} when id == selected_item_id ->
+        socket
+
+      _ ->
+        compose_child(socket, :tool_ref_view)
+    end
   end
 
   defp update_selected_item_id(
@@ -92,8 +107,19 @@ defmodule Systems.Assignment.CrewWorkView do
   # Compose
 
   @impl true
-  def compose(:start_view, %{selected_item: selected_item}) when not is_nil(selected_item) do
-    %{module: Assignment.StartView, params: %{work_item: selected_item}}
+  def compose(:start_view, %{
+        selected_item: selected_item,
+        tool_started: tool_started,
+        tool_initialized: tool_initialized
+      })
+      when not is_nil(selected_item) do
+    %{
+      module: Assignment.StartView,
+      params: %{
+        work_item: selected_item,
+        loading: tool_started and not tool_initialized
+      }
+    }
   end
 
   @impl true
@@ -178,6 +204,18 @@ defmodule Systems.Assignment.CrewWorkView do
 
   # Events
 
+  def handle_event("tool_initialized", _, %{assign: %{tool_started: true}} = socket) do
+    {
+      :noreply,
+      socket
+      |> assign(tool_initialized: true)
+    }
+  end
+
+  def handle_event("tool_initialized", _, socket) do
+    {:noreply, socket}
+  end
+
   @impl true
   def handle_event(
         "complete_task",
@@ -192,7 +230,11 @@ defmodule Systems.Assignment.CrewWorkView do
     {
       :noreply,
       socket
-      |> hide_child(:tool_ref_view)
+      |> assign(
+        tool_started: false,
+        tool_initialized: false
+      )
+      |> compose_child(:tool_ref_view)
       |> handle_finished_state()
     }
   end
@@ -208,10 +250,15 @@ defmodule Systems.Assignment.CrewWorkView do
     {
       :noreply,
       socket
-      |> assign(selected_item_id: item_id)
+      |> assign(
+        tool_initialized: false,
+        tool_started: false,
+        selected_item_id: item_id
+      )
       |> update_selected_item()
-      |> update_child(:start_view)
+      |> compose_child(:start_view)
       |> update_child(:work_list_view)
+      |> compose_child(:tool_ref_view)
     }
   end
 
@@ -220,7 +267,7 @@ defmodule Systems.Assignment.CrewWorkView do
     {
       :noreply,
       socket
-      |> compose_child(:tool_ref_view)
+      |> assign(tool_started: true)
       |> lock_task(task)
     }
   end
@@ -299,7 +346,9 @@ defmodule Systems.Assignment.CrewWorkView do
 
       socket =
         if Enum.count(work_items) > 1 do
-          hide_child(socket, :tool_ref_view)
+          socket
+          |> assign(tool_started: false, tool_initialized: false)
+          |> hide_child(:tool_ref_view)
         else
           socket
         end
@@ -322,6 +371,14 @@ defmodule Systems.Assignment.CrewWorkView do
     socket
     |> send_event(:parent, "store", %{key: key, data: json_string})
     |> Frameworks.Pixel.Flash.put_info("Donated")
+  end
+
+  defp handle_feldspar_event(socket, %{
+         "__type__" => "CommandSystemEvent",
+         "name" => "initialized"
+       }) do
+    socket
+    |> assign(tool_initialized: true)
   end
 
   defp handle_feldspar_event(socket, %{"__type__" => type}) do
@@ -349,8 +406,11 @@ defmodule Systems.Assignment.CrewWorkView do
     ~H"""
       <div class="w-full h-full flex flex-row">
         <%= if exists?(@fabric, :tool_ref_view) do %>
-          <.child name={:tool_ref_view} fabric={@fabric} />
-        <% else %>
+          <div class={"w-full h-full #{ if @tool_initialized and @tool_started do "block" else "hidden" end }"}>
+            <.child name={:tool_ref_view} fabric={@fabric} />
+          </div>
+        <% end %>
+        <%= if not (@tool_initialized and @tool_started) do %>
           <%= if exists?(@fabric, :work_list_view) do %>
             <div class="w-left-column flex flex-col py-6 gap-6">
               <div class="px-6">
