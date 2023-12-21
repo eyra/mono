@@ -18,8 +18,16 @@ defmodule Systems.Workflow.WorkListView do
   end
 
   @impl true
-  def handle_event("work_item_selected", payload, socket) do
-    {:noreply, socket |> send_event(:parent, "work_item_selected", payload)}
+  def handle_event(
+        "work_item_selected",
+        %{"item" => item_id} = payload,
+        %{assigns: %{selected_item_id: selected_item_id}} = socket
+      ) do
+    if String.to_integer(item_id) == selected_item_id do
+      {:noreply, socket}
+    else
+      {:noreply, socket |> send_event(:parent, "work_item_selected", payload)}
+    end
   end
 
   @impl true

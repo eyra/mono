@@ -47,10 +47,11 @@ defmodule Systems.Feldspar.ToolModel do
     def ready?(tool), do: Feldspar.ToolModel.ready?(tool)
     def form(_), do: Feldspar.ToolForm
 
-    def launcher(%{archive_ref: archive_ref}) when is_binary(archive_ref) do
+    def launcher(%{id: id, archive_ref: archive_ref}) when is_binary(archive_ref) do
       %{
         module: Feldspar.AppView,
         params: %{
+          key: "feldspar_tool_#{id}",
           url: archive_ref <> "/index.html",
           locale: Gettext.get_locale(CoreWeb.Gettext)
         }

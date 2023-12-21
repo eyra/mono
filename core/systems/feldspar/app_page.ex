@@ -17,6 +17,7 @@ defmodule Systems.Feldspar.AppPage do
       socket
       |> update_menus()
       |> assign(
+        app_id: app_id,
         app_url: app_url,
         error: nil
       )
@@ -25,10 +26,11 @@ defmodule Systems.Feldspar.AppPage do
   end
 
   @impl true
-  def compose(:app_view, %{app_url: app_url}) do
+  def compose(:app_view, %{app_id: app_id, app_url: app_url}) do
     %{
       module: Feldspar.AppView,
       params: %{
+        key: "app_#{app_id}",
         url: app_url,
         locale: Gettext.get_locale()
       }

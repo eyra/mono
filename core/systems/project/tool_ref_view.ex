@@ -17,14 +17,18 @@ defmodule Systems.Project.ToolRefView do
         tool_ref: tool_ref,
         task: task
       )
-      |> compose_child(:launcher)
+      |> reset_fabric()
+      |> update_launcher()
     }
   end
 
-  @impl true
-  def compose(:launcher, %{tool_ref: tool_ref}) do
-    Project.ToolRefModel.tool(tool_ref)
-    |> Concept.ToolModel.launcher()
+  def update_launcher(%{assigns: %{tool_ref: %{id: id} = tool_ref}} = socket) do
+    %{module: module, params: params} =
+      Project.ToolRefModel.tool(tool_ref)
+      |> Concept.ToolModel.launcher()
+
+    child = Fabric.prepare_child(socket, "tool_ref_#{id}", module, params)
+    socket |> show_child(child)
   end
 
   @impl true
@@ -41,9 +45,7 @@ defmodule Systems.Project.ToolRefView do
   def render(assigns) do
     ~H"""
     <div class="w-full h-full">
-      <%= if Fabric.get_child(@fabric, :launcher) do %>
-        <.child name={:launcher} fabric={@fabric} />
-      <% end %>
+      <.stack fabric={@fabric} />
     </div>
     """
   end
