@@ -140,11 +140,21 @@ defmodule Frameworks.Pixel.Button.Face do
   attr(:label, :string, required: true)
   attr(:bg_color, :string, default: "bg-primary")
   attr(:text_color, :string, default: "text-white")
+  attr(:loading, :boolean, default: false)
 
   def primary(assigns) do
     ~H"""
-    <div class={"pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px leading-none font-button text-button rounded pr-4 pl-4 #{@bg_color} #{@text_color}"}>
-      <%= @label %>
+    <div class="relative">
+      <div class={"flex flex-col items-center leading-none font-button text-button rounded cursor-pointer active:shadow-top4px #{@bg_color} #{@text_color}"}>
+        <div class={"pt-15px pb-15px pr-4 pl-4 active:pt-4 active:pb-14px #{if @loading do "opacity-0" else "" end}"}>
+          <%= @label %>
+        </div>
+      </div>
+      <div class={"absolute z-100 top-0 h-full w-full flex flex-col justify-center items-center #{if @loading do "block" else "hidden" end}"}>
+          <div class="w-6 h-6 animate-spin">
+            <img src={~p"/images/icons/loading@3x.png"} alt={"Loading"}>
+          </div>
+        </div>
     </div>
     """
   end

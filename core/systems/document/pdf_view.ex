@@ -11,6 +11,7 @@ defmodule Systems.Document.PDFView do
       socket
       |> assign(title: title, url: url)
       |> compose_element(:close_button)
+      |> send_event(:parent, "tool_initialized")
     }
   end
 

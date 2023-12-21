@@ -33,6 +33,11 @@ defmodule Systems.Project.ToolRefView do
   end
 
   @impl true
+  def handle_event("tool_initialized", _payload, socket) do
+    {:noreply, socket |> send_event(:parent, "tool_initialized")}
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <div class="w-full h-full">
