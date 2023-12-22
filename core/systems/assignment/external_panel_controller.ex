@@ -11,12 +11,24 @@ defmodule Systems.Assignment.ExternalPanelController do
 
     Logger.warn("[ExternalPanelController] create: #{inspect(params)}")
 
-    cond do
-      has_no_access?(assignment, params) -> forbidden(conn)
-      is_offline?(assignment) -> service_unavailable(conn)
-      true -> start(assignment, conn, params)
+    if is_tester?(assignment, conn) do
+      conn
+      |> add_panel_info(params)
+      |> redirect(to: path(params))
+    else
+      cond do
+        has_no_access?(assignment, params) -> forbidden(conn)
+        is_offline?(assignment) -> service_unavailable(conn)
+        true -> start(assignment, conn, params)
+      end
     end
   end
+
+  defp is_tester?(%{crew: crew}, %{assigns: %{current_user: user}}) do
+    Core.Authorization.user_has_role?(user, crew, :tester)
+  end
+
+  defp is_tester?(_, _), do: false
 
   defp is_offline?(%{status: status}) do
     status != :online

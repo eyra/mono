@@ -55,18 +55,12 @@ defmodule Systems.Assignment.ConnectionViewPanel do
   defp update_url(
          %{
            assigns: %{
-             assignment: %{id: id, external_panel: external_panel},
+             assignment: assignment,
              uri_origin: uri_origin
            }
          } = socket
        ) do
-    relative_url =
-      case external_panel do
-        :liss -> "/assignment/#{id}/liss"
-        :ioresearch -> "/assignment/#{id}/ioresearch?participant={id}&language=nl"
-        :generic -> "/assignment/#{id}/participate?participant={id}&language=nl"
-      end
-
+    relative_url = Assignment.Private.get_panel_url(assignment)
     assign(socket, url: uri_origin <> relative_url)
   end
 

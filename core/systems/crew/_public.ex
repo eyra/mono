@@ -403,10 +403,13 @@ defmodule Systems.Crew.Public do
     |> Repo.transaction()
   end
 
-  def member_finised?(crew, user_ref) do
+  def tasks_finised?(task_ids) when is_list(task_ids) do
     pending_tasks =
-      list_tasks_for_user(crew, user_ref)
-      |> Enum.filter(&(&1.status == :pending))
+      from(t in Crew.TaskModel,
+        where: t.id in ^task_ids,
+        where: t.status == :pending
+      )
+      |> Repo.all()
 
     Enum.empty?(pending_tasks)
   end
