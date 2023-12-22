@@ -83,10 +83,6 @@ defmodule Systems.Assignment.CrewWorkView do
     socket |> assign(selected_item_id: nil)
   end
 
-  defp update_selected_item_id(%{assigns: %{work_items: [{%{id: id}, _}]}} = socket) do
-    socket |> assign(selected_item_id: id)
-  end
-
   defp update_selected_item_id(%{assigns: %{work_items: work_items}} = socket) do
     {%{id: selected_item_id}, _} =
       Enum.find(work_items, List.first(work_items), fn {_, %{status: status}} ->
@@ -343,18 +339,26 @@ defmodule Systems.Assignment.CrewWorkView do
     socket |> Frameworks.Pixel.Flash.put_error("Unsupported event")
   end
 
-  defp handle_complete_task(
-         %{
-           assigns: %{
-             selected_item: {_, task}
-           }
-         } = socket
-       ) do
-    Crew.Public.activate_task(task)
+  defp handle_complete_task(%{assigns: %{selected_item: {_, task}}} = socket) do
+    {:ok, %{crew_task: updated_task}} = Crew.Public.activate_task(task)
 
     socket
+    |> update_task(updated_task)
     |> reset_selection()
     |> handle_finished_state()
+  end
+
+  defp update_task(%{assigns: %{work_items: work_items}} = socket, updated_task) do
+    work_items =
+      Enum.map(work_items, fn {item, task} ->
+        if task.id == updated_task.id do
+          {item, updated_task}
+        else
+          {item, task}
+        end
+      end)
+
+    assign(socket, work_items: work_items)
   end
 
   defp reset_selection(%{assigns: %{work_items: work_items}} = socket)
