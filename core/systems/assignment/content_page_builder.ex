@@ -17,7 +17,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
     title = get_title(special)
     show_errors = show_errors(assignment, assigns)
     tabs = create_tabs(assignment, show_errors, assigns)
-    action_map = action_map(assignment)
+    action_map = action_map(assignment, assigns)
     actions = actions(assignment, action_map)
 
     %{
@@ -43,8 +43,10 @@ defmodule Systems.Assignment.ContentPageBuilder do
     false
   end
 
-  defp action_map(%{id: id}) do
-    preview_action = %{type: :http_get, to: ~p"/assignment/#{id}", target: "_blank"}
+  defp action_map(assignment, %{current_user: %{id: user_id}}) do
+    preview_url = Assignment.Private.get_preview_url(assignment, user_id)
+
+    preview_action = %{type: :http_get, to: preview_url, target: "_blank"}
     publish_action = %{type: :send, event: "action_click", item: :publish}
     retract_action = %{type: :send, event: "action_click", item: :retract}
     close_action = %{type: :send, event: "action_click", item: :close}

@@ -12,6 +12,27 @@ defmodule Systems.Assignment.Private do
     Storage
   }
 
+  def get_panel_url(%Assignment.Model{id: id, external_panel: external_panel}) do
+    case external_panel do
+      :liss -> ~p"/assignment/#{id}/liss"
+      :ioresearch -> ~p"/assignment/#{id}/ioresearch?participant={id}&language=nl"
+      :generic -> ~p"/assignment/#{id}/participate?participant={id}&language=nl"
+    end
+  end
+
+  def get_preview_url(%Assignment.Model{id: id, external_panel: external_panel}, participant) do
+    case external_panel do
+      :liss ->
+        ~p"/assignment/#{id}/liss?respondent=#{participant}&quest=quest&varname1=varname1&token=token&page=page"
+
+      :ioresearch ->
+        ~p"/assignment/#{id}/ioresearch?participant=#{participant}"
+
+      _ ->
+        ~p"/assignment/#{id}/participate?participant=#{participant}"
+    end
+  end
+
   def page_title_default(:assignment_intro), do: dgettext("eyra-assignment", "intro.page.title")
 
   def page_title_default(:assignment_support),
@@ -27,14 +48,6 @@ defmodule Systems.Assignment.Private do
   defp config() do
     Application.get_env(:core, :assignment)
   end
-
-  def panel_function_component(%Assignment.Model{external_panel: nil}), do: nil
-
-  def panel_function_component(%Assignment.Model{external_panel: :liss}),
-    do: &Assignment.PanelViews.liss/1
-
-  def panel_function_component(%Assignment.Model{external_panel: _}),
-    do: &Assignment.PanelViews.default/1
 
   def connector_popup_module(:storage), do: Assignment.ConnectorPopupStorage
   def connector_popup_module(:panel), do: Assignment.ConnectorPopupPanel

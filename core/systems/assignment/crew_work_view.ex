@@ -83,10 +83,6 @@ defmodule Systems.Assignment.CrewWorkView do
     socket |> assign(selected_item_id: nil)
   end
 
-  defp update_selected_item_id(%{assigns: %{work_items: [{%{id: id}, _}]}} = socket) do
-    socket |> assign(selected_item_id: id)
-  end
-
   defp update_selected_item_id(%{assigns: %{work_items: work_items}} = socket) do
     {%{id: selected_item_id}, _} =
       Enum.find(work_items, List.first(work_items), fn {_, %{status: status}} ->
@@ -204,7 +200,7 @@ defmodule Systems.Assignment.CrewWorkView do
 
   # Events
 
-  def handle_event("tool_initialized", _, %{assign: %{tool_started: true}} = socket) do
+  def handle_event("tool_initialized", _, socket) do
     {
       :noreply,
       socket
@@ -212,30 +208,12 @@ defmodule Systems.Assignment.CrewWorkView do
     }
   end
 
-  def handle_event("tool_initialized", _, socket) do
-    {:noreply, socket}
-  end
-
   @impl true
-  def handle_event(
-        "complete_task",
-        _,
-        %{assigns: %{work_items: work_items, selected_item: {%{id: selected_item_id}, _}}} =
-          socket
-      ) do
-    {_, task} = Enum.find(work_items, fn {%{id: id}, _} -> id == selected_item_id end)
-
-    Crew.Public.activate_task(task)
-
+  def handle_event("complete_task", _, socket) do
     {
       :noreply,
       socket
-      |> assign(
-        tool_started: false,
-        tool_initialized: false
-      )
-      |> compose_child(:tool_ref_view)
-      |> handle_finished_state()
+      |> handle_complete_task()
     }
   end
 
@@ -317,49 +295,21 @@ defmodule Systems.Assignment.CrewWorkView do
 
   # Private
 
-  defp handle_finished_state(%{assigns: %{crew: crew, user: user}} = socket) do
-    if Crew.Public.member_finised?(crew, user) do
-      socket
-      |> compose_child(:finished_view)
-      |> show_modal(:finished_view, :sheet)
-    else
-      socket
-    end
-  end
-
   defp handle_feldspar_event(
-         %{
-           assigns: %{
-             selected_item: {_, task},
-             work_items: work_items,
-             panel_info: %{embedded?: embedded?}
-           }
-         } = socket,
+         socket,
          %{
            "__type__" => "CommandSystemExit",
            "code" => code,
-           "info" => _info
+           "info" => info
          }
        ) do
     if code == 0 do
-      Crew.Public.activate_task(task)
-
-      socket =
-        if Enum.count(work_items) > 1 do
-          socket
-          |> assign(tool_started: false, tool_initialized: false)
-          |> hide_child(:tool_ref_view)
-        else
-          socket
-        end
-
-      if embedded? do
-        socket
-      else
-        handle_finished_state(socket)
-      end
+      handle_complete_task(socket)
     else
-      Frameworks.Pixel.Flash.put_info(socket, "Application stopped")
+      Frameworks.Pixel.Flash.put_info(
+        socket,
+        "Application stopped unexpectedly [#{code}]: #{info}"
+      )
     end
   end
 
@@ -387,6 +337,64 @@ defmodule Systems.Assignment.CrewWorkView do
 
   defp handle_feldspar_event(socket, _) do
     socket |> Frameworks.Pixel.Flash.put_error("Unsupported event")
+  end
+
+  defp handle_complete_task(%{assigns: %{selected_item: {_, task}}} = socket) do
+    {:ok, %{crew_task: updated_task}} = Crew.Public.activate_task(task)
+
+    socket
+    |> update_task(updated_task)
+    |> reset_selection()
+    |> handle_finished_state()
+  end
+
+  defp update_task(%{assigns: %{work_items: work_items}} = socket, updated_task) do
+    work_items =
+      Enum.map(work_items, fn {item, task} ->
+        if task.id == updated_task.id do
+          {item, updated_task}
+        else
+          {item, task}
+        end
+      end)
+
+    assign(socket, work_items: work_items)
+  end
+
+  defp reset_selection(%{assigns: %{work_items: work_items}} = socket)
+       when length(work_items) <= 1 do
+    socket
+  end
+
+  defp reset_selection(socket) do
+    socket
+    |> assign(
+      tool_started: false,
+      tool_initialized: false,
+      selected_item_id: nil
+    )
+    |> update_selected_item_id()
+    |> update_selected_item()
+    |> compose_child(:work_list_view)
+    |> compose_child(:start_view)
+    |> hide_child(:tool_ref_view)
+  end
+
+  defp handle_finished_state(%{assigns: %{panel_info: %{embedded?: true}}} = socket) do
+    # Dont show finished view when embedded in external panel UI
+    socket
+  end
+
+  defp handle_finished_state(%{assigns: %{work_items: work_items}} = socket) do
+    task_ids = Enum.map(work_items, fn {_, task} -> task.id end)
+
+    if Crew.Public.tasks_finised?(task_ids) do
+      socket
+      |> compose_child(:finished_view)
+      |> show_modal(:finished_view, :sheet)
+    else
+      socket
+    end
   end
 
   defp map_item({%{id: id, title: title, group: group}, task}) do
