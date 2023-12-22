@@ -204,16 +204,12 @@ defmodule Systems.Assignment.CrewWorkView do
 
   # Events
 
-  def handle_event("tool_initialized", _, %{assign: %{tool_started: true}} = socket) do
+  def handle_event("tool_initialized", _, socket) do
     {
       :noreply,
       socket
       |> assign(tool_initialized: true)
     }
-  end
-
-  def handle_event("tool_initialized", _, socket) do
-    {:noreply, socket}
   end
 
   @impl true

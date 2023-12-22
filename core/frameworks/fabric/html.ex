@@ -31,7 +31,7 @@ defmodule Fabric.Html do
 
   def stack(assigns) do
     ~H"""
-      <div class={"flex flex-col #{@gap}"}>
+      <div class={"w-full h-full flex flex-col #{@gap}"}>
         <%= for child <- @fabric.children do %>
           <.live_child {Map.from_struct(child)} />
         <% end %>
