@@ -342,7 +342,6 @@ Systems.Assignment.OnboardingConsentView.html
 Systems.Assignment.OnboardingView.html
 Systems.Assignment.OnlineStudyLanguages.html
 Systems.Assignment.PageRefModel.html
-Systems.Assignment.PanelViews.html
 Systems.Assignment.Presenter.html
 Systems.Assignment.Private.html
 Systems.Assignment.Public.html
@@ -713,8 +712,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-5321DFDF.js
-dist/sidebar_items-6D0A2E19.js
+dist/search_items-49055B7A.js
+dist/sidebar_items-1488F52F.js
 index.html
 readme.html
 search.html
