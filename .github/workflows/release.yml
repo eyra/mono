@@ -18,7 +18,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '16.17'
+          node-version: '18.19'
 
       - name: Tag name
         id: tag

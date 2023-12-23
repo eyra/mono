@@ -33,18 +33,17 @@ config :core, CoreWeb.Endpoint,
       ~r"priv/gettext/.*(po)$",
       ~r"lib/core_web/(live|views|components)/.*(ex|sface|js)$",
       ~r"lib/core_web/templates/*/.*(eex)$",
+      ~r"systems/*/.*(ex)$",
+      ~r"systems/*/templates/.*(eex)$",
+      ~r"frameworks/*/.*(ex)$",
+      ~r"frameworks/*/templates/.*(eex)$",
       ~r"bundles/*/.*(ex)$",
       ~r"bundles/*/templates/.*(eex)$"
     ]
   ],
   watchers: [
-    node: [
-      "node_modules/webpack/bin/webpack.js",
-      "--mode",
-      "development",
-      "--watch",
-      cd: Path.expand("../assets", __DIR__)
-    ]
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
 config :core,

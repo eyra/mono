@@ -2,8 +2,8 @@ FROM elixir:1.14.0 as builder
 
 WORKDIR /workspace
 
-ENV NODE_MAJOR 16
-ENV MIX_ENV prod 
+ENV NODE_MAJOR 18
+ENV MIX_ENV prod
 ENV SSL_PROXIED true
 
 RUN set -x &&\
@@ -31,7 +31,7 @@ RUN scripts/build-release
 FROM debian:bullseye-slim
 ARG VERSION
 ENV VERSION $VERSION
-ENV MIX_ENV prod 
+ENV MIX_ENV prod
 
 EXPOSE 8000
 

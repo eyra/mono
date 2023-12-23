@@ -10,12 +10,14 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/index.min.js"></script>
     <link
+      phx-track-static
       rel="stylesheet"
-      href="/css/app.css"
+      href="/assets/app.css"
     />
-    <script src="/js/app.js" defer></script>
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
+    </script>
   </head>
-  <body class="font-body bg-grey5 scrollbar-hidden" x-data="{ overlay: false}" >
+  <body class="font-body bg-grey5 scrollbar-hidden antialiased" x-data="{ overlay: false}" >
     <div class="fixed z-10 w-full h-full bg-black bg-opacity-30" x-show="overlay"></div>
     <div class="flex flex-row">
       <div class="flex flex-col w-full">
