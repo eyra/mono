@@ -14,10 +14,8 @@ fi
 
 cd $(dirname "$0")/..
 
+mix deps.get
 mix assets.setup
 mix assets.deploy
-
-mix deps.get
-mix phx.digest
 
 MIX_ENV=prod mix release --overwrite --path "${VERSION}"
