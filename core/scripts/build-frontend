@@ -8,8 +8,3 @@ cd $(dirname "$0")/../assets
 npm install
 npx -y -i browserslist@latest
 npx browserslist --update-db
-
-cd $(dirname "$0")/..
-
-mix assets.setup
-mix assets.deploy
