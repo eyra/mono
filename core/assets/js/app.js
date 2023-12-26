@@ -1,8 +1,3 @@
-// We need to import the CSS so that webpack will load it.
-// The MiniCssExtractPlugin is used to separate it out into
-// its own CSS file.
-import "../css/app.css";
-
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
 // in "webpack.config.js".
@@ -13,6 +8,7 @@ import "../css/app.css";
 //     import socket from "./socket"
 //
 
+import { PDFViewer } from "./pdf_viewer";
 import "@ryangjchandler/spruce";
 import "alpine-magic-helpers/dist/component";
 import Alpine from "alpinejs";
@@ -93,18 +89,19 @@ const NativeWrapper = {
 };
 
 let Hooks = {
-  Clipboard,
-  ViewportResize,
-  SidePanel,
-  Toggle,
   Cell,
+  Clipboard,
+  FeldsparApp,
   LiveContent,
   LiveField,
+  NativeWrapper,
+  PDFViewer,
+  SidePanel,
+  Toggle,
   Tabbar,
   TabbarItem,
   TabbarFooterItem,
-  NativeWrapper,
-  FeldsparApp,
+  ViewportResize,
   Wysiwyg,
   AutoSubmit,
 };

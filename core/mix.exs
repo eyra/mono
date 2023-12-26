@@ -65,6 +65,8 @@ defmodule Core.MixProject do
       # Workaround for conflicting versions in ex_aws & ex_phone_number
       {:sweet_xml, "~> 0.7", override: true},
       # Deps
+      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
       {:assent, "~> 0.2.3"},
       {:bcrypt_elixir, "~> 2.0"},
       {:ex_aws_s3, "~> 2.5"},
@@ -133,9 +135,9 @@ defmodule Core.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup"],
+      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.install", "assets.build"],
       test: ["ecto.create --quiet", "ecto.migrate", "test"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       "ecto.reset.link": [
         "ecto.drop",
@@ -148,7 +150,13 @@ defmodule Core.MixProject do
       ],
       makedocs: ["deps.get", "docs -o doc/output"],
       prettier: "cmd ./assets/node_modules/.bin/prettier --color --check ./assets/js",
-      "prettier.fix": "cmd ./assets/node_modules/.bin/prettier --color -w ./assets/js"
+      clean: ["cmd rm -rf deps", "cmd rm -rf _build", "cmd rm -rf priv/cldr"],
+      "prettier.fix": "cmd ./assets/node_modules/.bin/prettier --color -w ./assets/js",
+      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
+      "assets.install": "cmd cd ./assets && npm install",
+      "assets.build": ["tailwind default", "esbuild default"],
+      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"],
+      run: "phx.server"
     ]
   end
 end

@@ -41,7 +41,7 @@ defmodule Systems.Document.PDFView do
         </div>
         <div class="flex-grow w-full" >
           <.line />
-          <iframe class="w-full h-full" src={"#{@url}#view=FitH&toolbar=0"} />
+          <div id="pdf-viewer" phx-hook="PDFViewer" phx-update="ignore" data-src={"#{@url}"} />
         </div>
       </div>
     """

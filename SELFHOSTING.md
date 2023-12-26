@@ -33,31 +33,25 @@
 
     See `.tool-versions` for the exact versions that will be installed
 
-3. Install dependencies:
+3. Setup:
     ```sh
     $ cd core
-    $ make install
+    $ mix setup
     ```
 
 4. Build Core (from core folder):
 
     ```sh
-    $ BUNDLE=self make build
+    $ BUNDLE=self mix compile
     ```
 
-5. Run database migrations  (from core folder)
+5. Run Core locally (from core folder):
 
     ```sh
-    $ mix ecto.migrate
+    $ BUNDLE=self mix phx.server
     ```
 
-6. Run Core locally (from core folder):
-
-    ```sh
-    $ BUNDLE=self make run
-    ```
-
-8. Go to browser
+6. Go to browser
 
     The Core app is running at: http://localhost:4000
 
