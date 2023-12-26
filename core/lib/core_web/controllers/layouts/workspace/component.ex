@@ -90,7 +90,7 @@ defmodule CoreWeb.Layouts.Workspace.Component do
                           <%= render_slot(@top_bar) %>
                         </div>
                       <% end %>
-                      <div class="flex-1">
+                      <div id="layout-inner-block" class="flex-1">
                         <%= render_slot(@inner_block) %>
                         <Margin.y id={:page_footer_top} />
                       </div>

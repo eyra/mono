@@ -29,6 +29,7 @@ import { Clipboard } from "./clipboard";
 import { FeldsparApp } from "./feldspar_app";
 import { Wysiwyg } from "./wysiwyg";
 import { AutoSubmit } from "./auto_submit";
+import { Sticky } from "./sticky";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -104,6 +105,7 @@ let Hooks = {
   ViewportResize,
   Wysiwyg,
   AutoSubmit,
+  Sticky,
 };
 
 let liveSocket = new LiveSocket("/live", Socket, {

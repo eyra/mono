@@ -71,7 +71,7 @@ defmodule CoreWeb.Layouts.Website.Component do
           >
             <Navigation.mobile_menu {@menus.mobile_menu} />
           </div>
-          <div class="flex flex-col w-full h-viewport">
+          <div id="main-content" class="flex flex-col w-full h-viewport">
             <div class="flex-wrap md:hidden">
               <Navigation.mobile_navbar {@menus.mobile_navbar} />
             </div>
@@ -85,7 +85,7 @@ defmodule CoreWeb.Layouts.Website.Component do
                 </div>
                 <div class="flex-1 bg-white">
                   <div class="flex flex-row">
-                    <div class="flex-1">
+                    <div id="layout-inner-block" class="flex-1">
                       <%= render_slot(@inner_block) %>
                       <Margin.y id={:page_footer_top} />
                     </div>

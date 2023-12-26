@@ -56,6 +56,14 @@ defmodule Systems.Assignment.CrewWorkView do
     }
   end
 
+  defp tool_visible?(%{assigns: assigns} = _socket) do
+    tool_visible?(assigns)
+  end
+
+  defp tool_visible?(%{tool_started: tool_started, tool_initialized: tool_initialized}) do
+    tool_started and tool_initialized
+  end
+
   defp update_tool_ref_view(%{assigns: %{selected_item_id: selected_item_id}} = socket) do
     case Fabric.get_child(socket, :tool_ref_view) do
       %{params: %{work_item: {%{id: id}, _}}} when id == selected_item_id ->
@@ -139,8 +147,14 @@ defmodule Systems.Assignment.CrewWorkView do
   def compose(:work_list_view, _assigns), do: nil
 
   @impl true
-  def compose(:tool_ref_view, %{selected_item: {%{tool_ref: tool_ref}, task}}) do
-    %{module: Project.ToolRefView, params: %{tool_ref: tool_ref, task: task}}
+  def compose(
+        :tool_ref_view,
+        %{selected_item: {%{title: title, tool_ref: tool_ref}, task}} = assigns
+      ) do
+    %{
+      module: Project.ToolRefView,
+      params: %{title: title, tool_ref: tool_ref, task: task, visible: tool_visible?(assigns)}
+    }
   end
 
   @impl true
@@ -246,6 +260,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> assign(tool_started: true)
+      |> update_child(:tool_ref_view)
       |> lock_task(task)
     }
   end
@@ -414,11 +429,11 @@ defmodule Systems.Assignment.CrewWorkView do
     ~H"""
       <div class="w-full h-full flex flex-row">
         <%= if exists?(@fabric, :tool_ref_view) do %>
-          <div class={"w-full h-full #{ if @tool_initialized and @tool_started do "block" else "hidden" end }"}>
+          <div class={"w-full h-full #{ if tool_visible?(assigns) do "block" else "hidden" end }"}>
             <.child name={:tool_ref_view} fabric={@fabric} />
           </div>
         <% end %>
-        <%= if not (@tool_initialized and @tool_started) do %>
+        <%= if not tool_visible?(assigns) do %>
           <%= if exists?(@fabric, :work_list_view) do %>
             <div class="w-left-column flex flex-col py-6 gap-6">
               <div class="px-6">
