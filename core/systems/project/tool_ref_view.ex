@@ -8,24 +8,30 @@ defmodule Systems.Project.ToolRefView do
     Project
   }
 
-  def update(%{id: id, tool_ref: tool_ref, task: task}, socket) do
+  def update(%{id: id, title: title, tool_ref: tool_ref, task: task, visible: visible}, socket) do
     {
       :ok,
       socket
       |> assign(
         id: id,
+        title: title,
         tool_ref: tool_ref,
-        task: task
+        task: task,
+        visible: visible
       )
       |> reset_fabric()
       |> update_launcher()
     }
   end
 
-  def update_launcher(%{assigns: %{tool_ref: %{id: id} = tool_ref}} = socket) do
+  def update_launcher(
+        %{assigns: %{title: title, tool_ref: %{id: id} = tool_ref, visible: visible}} = socket
+      ) do
     %{module: module, params: params} =
       Project.ToolRefModel.tool(tool_ref)
       |> Concept.ToolModel.launcher()
+
+    params = Map.merge(params, %{title: title, visible: visible})
 
     child = Fabric.prepare_child(socket, "tool_ref_#{id}", module, params)
     socket |> show_child(child)

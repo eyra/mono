@@ -130,14 +130,6 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def handle_event("feldspar_event", event, socket) do
-    {
-      :noreply,
-      socket |> send_event(:flow, "feldspar_event", event)
-    }
-  end
-
-  @impl true
   def handle_event("store", %{key: key, data: data}, socket) do
     {:noreply, socket |> store(key, data)}
   end
@@ -150,6 +142,14 @@ defmodule Systems.Assignment.CrewPage do
   @impl true
   def handle_event("hide_modal", _, socket) do
     {:noreply, socket |> assign(modal: nil)}
+  end
+
+  @impl true
+  def handle_event(name, event, socket) do
+    {
+      :noreply,
+      socket |> send_event(:flow, name, event)
+    }
   end
 
   def store(

@@ -58,7 +58,7 @@ defmodule CoreWeb.Layouts.Stripped.Component do
       <div class="w-0 md:w-sidepadding flex-shrink-0">
       </div>
       <div class="flex-1">
-        <div class="flex flex-col w-full h-viewport">
+        <div id="main-content" class="flex flex-col w-full h-viewport">
             <div class="flex-wrap md:hidden">
               <Navigation.mobile_navbar {@menus.mobile_navbar} />
             </div>
@@ -75,7 +75,7 @@ defmodule CoreWeb.Layouts.Stripped.Component do
               <% end %>
               <div class="flex-1 bg-white">
                 <div class="flex flex-row w-full h-full">
-                  <div class="flex-1">
+                  <div id="layout-inner-block" class="flex-1">
                     <%= render_slot(@inner_block) %>
                     <Margin.y id={:page_footer_top} />
                   </div>
