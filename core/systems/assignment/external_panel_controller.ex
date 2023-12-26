@@ -24,7 +24,7 @@ defmodule Systems.Assignment.ExternalPanelController do
     end
   end
 
-  defp is_tester?(%{crew: crew}, %{assigns: %{current_user: user}}) do
+  defp is_tester?(%{crew: crew}, %{assigns: %{current_user: %{} = user}}) do
     Core.Authorization.user_has_role?(user, crew, :tester)
   end
 
