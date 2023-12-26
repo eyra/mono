@@ -63,7 +63,7 @@ defmodule Systems.Document.PDFView do
             <Button.dynamic {@close_button} />
           </div>
         </div>
-        <div class="flex flex-col w-full h-full pt-4 pb-sidepadding">
+        <div class="flex flex-col w-full h-full pt-[48px] pb-sidepadding">
           <div class="flex-grow w-full h-full" >
             <div
               id="pdf-viewer"
