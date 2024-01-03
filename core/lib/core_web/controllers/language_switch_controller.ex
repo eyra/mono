@@ -6,7 +6,11 @@ defmodule CoreWeb.LanguageSwitchController do
 
   def index(conn, %{"locale" => locale, "redir" => redir}) do
     conn
-    |> Plug.Conn.put_resp_cookie("locale", locale, max_age: @cookie_age)
+    |> switch_to(locale)
     |> redirect(to: redir)
+  end
+
+  def switch_to(conn, locale) do
+    Plug.Conn.put_resp_cookie(conn, "locale", locale, max_age: @cookie_age)
   end
 end

@@ -13,13 +13,14 @@ defmodule CoreWeb.Routes do
 
         plug(Cldr.Plug.PutLocale,
           apps: [cldr: CoreWeb.Cldr, gettext: :global],
-          from: [:query, :cookie, :accept_language],
+          from: [:session, :query, :cookie, :accept_language],
           param: "locale"
         )
 
+        plug(CoreWeb.Plug.LiveLocale)
+
         plug(RemoteIp)
         plug(CoreWeb.Plug.LiveRemoteIp)
-        plug(CoreWeb.Plug.LiveLocale)
 
         plug(:fetch_live_flash)
         plug(:fetch_meta_info)
