@@ -37,6 +37,7 @@ defmodule Core.AuthTestHelpers do
     conn =
       conn
       |> Phoenix.ConnTest.init_test_session(%{})
+      |> Plug.Conn.put_session(:locale, "nl")
       |> Plug.Conn.put_session(:user_token, token)
       |> Plug.Conn.assign(:current_user, user)
 

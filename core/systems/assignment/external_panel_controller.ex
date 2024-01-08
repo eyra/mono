@@ -46,7 +46,10 @@ defmodule Systems.Assignment.ExternalPanelController do
     |> ExternalSignIn.sign_in(panel, participant_id)
     |> authorize_user(assignment)
     |> add_panel_info(params)
-    |> redirect(to: path(params))
+    |> CoreWeb.LanguageSwitchController.index(%{
+      "locale" => get_locale(params),
+      "redir" => path(params)
+    })
   end
 
   defp forbidden(conn) do
@@ -86,18 +89,14 @@ defmodule Systems.Assignment.ExternalPanelController do
     "/assignment/#{id}#{query_string}"
   end
 
-  defp query_string(params) do
-    if locale = get_locale(params) do
-      "?locale=#{locale}"
-    else
-      ""
-    end
+  defp query_string(_params) do
+    ""
+    # if locale = get_locale(params) do
+    #   "?locale=#{locale}"
+    # else
+    #   ""
+    # end
   end
-
-  # @supported_locales ~w(nl en)
-  # defp is_supported?(locale) when is_binary(locale) do
-  #   locale in @supported_locales
-  # end
 
   # Param Mappings
 
@@ -105,6 +104,8 @@ defmodule Systems.Assignment.ExternalPanelController do
   defp get_participant(%{"participant" => participant}), do: participant
   defp get_participant(_), do: nil
 
+  # Liss should always be in dutch
+  defp get_locale(%{"panel" => "liss"}), do: "nl"
   defp get_locale(%{"lang" => lang}), do: lang
   defp get_locale(%{"language" => language}), do: language
   defp get_locale(%{"locale" => locale}), do: locale

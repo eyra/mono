@@ -1,5 +1,5 @@
 defmodule CoreWeb.Plug.LiveLocale do
-  @moduledoc "A Plug that sets a session variable to the current locale."
+  @moduledoc "A Plug that sets the cldr resolved locale (Cldr.Plug.PutLocale) as session variable."
   import Plug.Conn, only: [put_session: 3]
 
   def init(options) do
@@ -8,12 +8,12 @@ defmodule CoreWeb.Plug.LiveLocale do
 
   def call(conn, _opts) do
     locale = Gettext.get_locale()
-    put_session(conn, :locale, locale)
+    put_session(conn, :resolved_locale, locale)
   end
 end
 
 defmodule CoreWeb.LiveLocale do
-  @moduledoc "A LiveView helper that automatically sets the current locale from a session variable."
+  @moduledoc "A LiveView helper that applies the cldr resolved locale in the current process."
 
   defmacro __using__(_opts \\ nil) do
     quote do
@@ -25,7 +25,7 @@ defmodule CoreWeb.LiveLocale do
     quote do
       defoverridable mount: 3
 
-      def mount(params, %{"locale" => locale} = session, socket) do
+      def mount(params, %{"resolved_locale" => locale} = session, socket) do
         Gettext.put_locale(CoreWeb.Gettext, locale)
         Gettext.put_locale(Timex.Gettext, locale)
         super(params, session, socket)
