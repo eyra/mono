@@ -160,7 +160,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp set_status(%{assigns: %{model: assignment}} = socket, status) do
-    assignment = Assignment.Public.update!(assignment, %{status: status})
+    {:ok, assignment} = Assignment.Public.update(assignment, %{status: status})
     socket |> Phoenix.Component.assign(model: assignment)
   end
 

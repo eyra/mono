@@ -73,7 +73,8 @@ defmodule Systems.Observatory.Public do
         {
           :noreply,
           socket
-          |> Public.update_view_model(__MODULE__, model, @presenter)
+          |> assign(model: model)
+          |> update_view_model()
           |> handle_view_model_updated()
           |> put_updated_info_flash()
         }
