@@ -93,7 +93,7 @@
 <!-- ScrollToTop Button END-->
 
 
-<!-- projects -->
+<!-- programs -->
 <div class="bloc content-bloc-style tc-4033" id="projects">
 	<div class="container ">
 		<div class="row">
@@ -103,7 +103,7 @@
 						<div class="image-container image-link ">
 							<div class="card-label">
 								<h3 class="mg-md h3-1-style ">
-									Project
+									Program
 								</h3><img src="./landing_page/img/Rectangle%2023.svg" class="img-fluid mx-auto d-block card-label-arrow" alt="Rectangle%2023" />
 							</div>
 						</div>
@@ -132,7 +132,7 @@
 						<div class="image-container image-port">
 							<div class="card-label">
 								<h3 class="mg-md h3-1-style ">
-									Project
+									Program
 								</h3><img src="./landing_page/img/Rectangle%2023.svg" class="img-fluid mx-auto d-block card-label-arrow" alt="Rectangle%2023" />
 							</div>
 						</div>
@@ -160,7 +160,7 @@
 						<div class="image-container image-next">
 							<div class="card-label">
 								<h3 class="mg-md h3-1-style ">
-									Project
+									Program
 								</h3><img src="./landing_page/img/Rectangle%2023.svg" class="img-fluid mx-auto d-block card-label-arrow" alt="Rectangle%2023" />
 							</div>
 						</div>
