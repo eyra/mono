@@ -12,7 +12,9 @@ defmodule Systems.Benchmark.ContentPage do
   end
 
   @impl true
-  def mount(%{"id" => id, "tab" => initial_tab}, %{"locale" => locale}, socket) do
+  def mount(%{"id" => id} = params, %{"resolved_locale" => locale}, socket) do
+    initial_tab = Map.get(params, "tab")
+
     model =
       Benchmark.Public.get_tool!(String.to_integer(id), Benchmark.ToolModel.preload_graph(:down))
 
@@ -22,11 +24,6 @@ defmodule Systems.Benchmark.ContentPage do
       :ok,
       socket |> initialize(id, model, tabbar_id, initial_tab, locale)
     }
-  end
-
-  @impl true
-  def mount(params, session, socket) do
-    mount(Map.put(params, "tab", nil), session, socket)
   end
 
   @impl true

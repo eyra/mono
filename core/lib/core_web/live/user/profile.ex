@@ -19,7 +19,8 @@ defmodule CoreWeb.User.Profile do
   alias CoreWeb.UI.Navigation
 
   @impl true
-  def mount(%{"tab" => initial_tab}, _session, socket) do
+  def mount(params, _session, socket) do
+    initial_tab = Map.get(params, "tab")
     tabs = create_tabs(socket)
     tabbar_id = "user_profile"
 
@@ -37,11 +38,6 @@ defmodule CoreWeb.User.Profile do
       |> update_tabbar()
       |> update_menus()
     }
-  end
-
-  @impl true
-  def mount(_params, session, socket) do
-    mount(%{"tab" => nil}, session, socket)
   end
 
   @impl true

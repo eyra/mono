@@ -108,7 +108,7 @@ defmodule Systems.Assignment.ExternalPanelController do
   defp get_locale(%{"panel" => "liss"}), do: "nl"
   defp get_locale(%{"lang" => lang}), do: lang
   defp get_locale(%{"language" => language}), do: language
-  defp get_locale(%{"locale" => locale}), do: locale
+  defp get_locale(%{"resolved_locale" => locale}), do: locale
   defp get_locale(_), do: nil
 
   defp is_embedded(%{"panel" => "liss"}), do: true

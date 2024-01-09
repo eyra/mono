@@ -11,7 +11,7 @@ defmodule Systems.Org.ContentPage do
   }
 
   @impl true
-  def mount(%{"id" => id}, %{"locale" => locale}, socket) do
+  def mount(%{"id" => id}, %{"resolved_locale" => locale}, socket) do
     node = Org.Public.get_node!(id, Org.NodeModel.preload_graph(:full))
     tabbar_id = "org_content/#{id}"
 
