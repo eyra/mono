@@ -74,7 +74,7 @@ defmodule CoreWeb.UI.Tabbar do
         <div class="flex-grow">
         </div>
         <div>
-          <img src="/images/icons/dropdown.svg" alt="Show tabbar dropdown">
+          <img src={~p"/images/icons/dropdown.svg"} alt="Show tabbar dropdown">
         </div>
       </div>
     </div>

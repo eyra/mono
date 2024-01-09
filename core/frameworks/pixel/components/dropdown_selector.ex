@@ -194,7 +194,7 @@ defmodule Frameworks.Pixel.DropdownSelector do
         <div class="flex flex-row items-center h-full w-full cursor-pointer">
           <Text.body_medium><span class="whitespace-pre-wrap"><%= @selector_text %></span></Text.body_medium>
           <div class="flex-grow" />
-          <img class="mr-3" src={"/images/icons/#{icon(assigns)}.svg"} alt="Dropdown">
+          <img class="mr-3" src={~p"/images/icons" <> "/#{icon(assigns)}.svg"} alt="Dropdown">
         </div>
       </div>
       <%= if @warning do %>

@@ -16,7 +16,7 @@ defmodule CoreWeb.Devices do
           </div>
           <%= for device <- @devices do %>
             <div >
-              <img src={"/images/#{device}.svg"} alt={"Select #{device}"}>
+              <img src={~p"/images/" <> "#{device}.svg"} alt={"Select #{device}"}>
             </div>
           <% end %>
         </div>

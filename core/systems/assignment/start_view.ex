@@ -79,7 +79,7 @@ defmodule Systems.Assignment.StartView do
           <div class="flex flex-col gap-8 items-center">
               <div>
               <%= if @icon do %>
-                <img class="w-24 h-24" src={"/images/icons/#{@icon}_square.svg"} onerror="this.src='/images/icons/placeholder_square.svg';" alt={@icon}>
+                <img class="w-24 h-24" src={~p"/images/icons" <> "/#{@icon}_square.svg"} onerror="this.src='/images/icons/placeholder_square.svg';" alt={@icon}>
               <% end %>
             </div>
             <Text.title2 margin=""><%= @title %></Text.title2>

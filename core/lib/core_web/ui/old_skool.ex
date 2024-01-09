@@ -80,25 +80,6 @@ defmodule CoreWeb.UI.OldSkool do
     """
   end
 
-  def hero_small(%{assigns: assigns}, title), do: hero_small(assigns, title)
-
-  def hero_small(assigns, title) do
-    assigns = assign(assigns, :title, title)
-
-    ~H"""
-    <div class="flex h-header2 items-center sm:h-header2-sm lg:h-header2-lg text-white bg-primary overflow-hidden" data-native-title={@title}>
-      <div class="flex-grow flex-shrink-0">
-          <p class="text-title5 sm:text-title2 lg:text-title1 font-title1 ml-6 mr-6 lg:ml-14">
-            <%= @title %>
-          </p>
-      </div>
-      <div class="flex-none h-header2 sm:h-header2-sm lg:h-header2-lg w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
-          <img src="/images/illustration.svg" alt=""/>
-      </div>
-    </div>
-    """
-  end
-
   def page_footer(%{assigns: assigns}), do: page_footer(assigns)
 
   def page_footer(assigns) do

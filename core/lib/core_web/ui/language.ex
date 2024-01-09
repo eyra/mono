@@ -10,10 +10,11 @@ defmodule CoreWeb.UI.Language do
       assigns
       |> assign(:locale_id, locale.id)
       |> assign(:locale_name, locale.name)
+      |> assign(:icon, "#{locale.id}.svg")
 
     ~H"""
     <a href={~p"/switch-language/#{@locale_id}?redir=#{@redir}"}>
-      <img src={"/images/icons/#{@locale_id}.svg"} alt={"Switch language to #{@locale_name}"}/>
+      <img src={~p"/images/icons" <> "/#{@icon}"} alt={"Switch language to #{@locale_name}"}/>
     </a>
     """
   end

@@ -539,7 +539,7 @@ defmodule Frameworks.Pixel.Form do
         >
           <img
             x-show="active"
-            src={"/images/icons/#{@check_icon}.svg"}
+            src={~p"/images/icons" <> "/#{@check_icon}.svg"}
             alt={"#{@field} is selected"}
           />
         </div>
@@ -649,10 +649,10 @@ defmodule Frameworks.Pixel.Form do
         />
         <div class="absolute z-20 right-0 top-0 h-44px flex flex-col justify-center">
           <div id={"#{@options_id}-dropdown-img"}>
-            <img class="mr-3" src="/images/icons/dropdown.svg" alt="Dropdown" phx-click={@js_click}>
+            <img class="mr-3" src={~p"/images/icons/dropdown.svg"} alt="Dropdown" phx-click={@js_click}>
           </div>
           <div id={"#{@options_id}-dropup-img"} class="hidden">
-            <img class="mr-3" src="/images/icons/dropup.svg" alt="Dropup" phx-click={@js_click}>
+            <img class="mr-3" src={~p"/images/icons/dropup.svg"} alt="Dropup" phx-click={@js_click}>
           </div>
         </div>
         <div id={@options_id} class="absolute z-20 left-0 top-48px bg-black bg-opacity-20 w-full hidden">
