@@ -10,7 +10,7 @@ defmodule Frameworks.Pixel.Hero do
   import Frameworks.Pixel.ImagePreview
 
   attr(:title, :string, required: true)
-  attr(:illustration, :string, default: "/images/illustration.svg")
+  attr(:illustration, :any, default: "illustration.svg")
   attr(:text_color, :string, default: "text-white")
   attr(:bg_color, :string, default: "bg-primary")
 
@@ -26,7 +26,7 @@ defmodule Frameworks.Pixel.Hero do
         </p>
       </div>
       <div class="flex-none h-header2 sm:h-header2-sm lg:h-header2-lg w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
-        <img src={@illustration} alt="">
+        <img src={~p"/images/#{@illustration}"} alt="">
       </div>
     </div>
     """
@@ -113,7 +113,7 @@ defmodule Frameworks.Pixel.Hero do
 
   attr(:title, :string, required: true)
   attr(:subtitle, :string, required: true)
-  attr(:illustration, :string, default: "/images/illustration.svg")
+  attr(:illustration, :any, default: "illustration.svg")
   attr(:size, :string, default: "large")
   attr(:text_color, :string, default: "text-white")
   attr(:bg_color, :string, default: "bg-primary")
@@ -132,7 +132,7 @@ defmodule Frameworks.Pixel.Hero do
         </p>
       </div>
       <div class="flex-none w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
-        <img src={@illustration} alt="">
+        <img src={ ~p"/images/#{@illustration}"} alt="">
       </div>
     </div>
     """
