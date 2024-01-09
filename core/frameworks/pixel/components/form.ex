@@ -438,7 +438,7 @@ defmodule Frameworks.Pixel.Form do
         __eyra_field_static_class={@input_static_class}
         __eyra_field_active_color={@active_color}
       >
-        <div id={:wysiwyg}
+        <div id={"#{@field_id}_wysiwyg"}
           phx-update="ignore"
           phx-hook="Wysiwyg"
           data-id={"#{@field_id}_input"}
