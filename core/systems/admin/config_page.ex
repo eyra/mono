@@ -7,7 +7,7 @@ defmodule Systems.Admin.ConfigPage do
   alias CoreWeb.UI.Navigation
 
   @impl true
-  def mount(_params, %{"locale" => locale} = _session, socket) do
+  def mount(_params, %{"resolved_locale" => locale} = _session, socket) do
     {
       :ok,
       socket

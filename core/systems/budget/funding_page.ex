@@ -16,7 +16,7 @@ defmodule Systems.Budget.FundingPage do
   import Budget.BalanceView
 
   @impl true
-  def mount(_params, %{"locale" => locale} = _session, socket) do
+  def mount(_params, %{"resolved_locale" => locale} = _session, socket) do
     create_budget = %{
       state: :transparent,
       title: dgettext("eyra-budget", "funding.budgets.new.title"),

@@ -12,7 +12,9 @@ defmodule Systems.Document.ContentPage do
   end
 
   @impl true
-  def mount(%{"id" => id, "tab" => initial_tab}, %{"locale" => locale}, socket) do
+  def mount(%{"id" => id} = params, %{"resolved_locale" => locale}, socket) do
+    initial_tab = Map.get(params, "tab")
+
     model =
       Document.Public.get_tool!(String.to_integer(id), Document.ToolModel.preload_graph(:down))
 

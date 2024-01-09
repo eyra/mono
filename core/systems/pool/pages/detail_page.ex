@@ -17,7 +17,8 @@ defmodule Systems.Pool.DetailPage do
   }
 
   @impl true
-  def mount(%{"id" => pool_id, "tab" => initial_tab}, _session, socket) do
+  def mount(%{"id" => pool_id} = params, _session, socket) do
+    initial_tab = Map.get(params, "tab")
     pool_id = String.to_integer(pool_id)
     model = Pool.Public.get!(pool_id, Pool.Model.preload_graph([:org, :currency, :participants]))
     tabbar_id = "pool_detail/#{pool_id}"
@@ -37,11 +38,6 @@ defmodule Systems.Pool.DetailPage do
       |> observe_view_model()
       |> update_menus()
     }
-  end
-
-  @impl true
-  def mount(%{"id" => pool_id}, session, socket) do
-    mount(%{"id" => pool_id, "tab" => nil}, session, socket)
   end
 
   def handle_view_model_updated(socket) do

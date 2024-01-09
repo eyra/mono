@@ -29,7 +29,8 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   @impl true
-  def mount(%{"id" => id, "tab" => initial_tab}, %{"locale" => locale}, socket) do
+  def mount(%{"id" => id} = params, %{"resolved_locale" => locale}, socket) do
+    initial_tab = Map.get(params, "tab")
     model = Campaign.Public.get!(String.to_integer(id), Campaign.Model.preload_graph(:down))
     tabbar_id = "campaign_content/#{id}"
 
@@ -52,11 +53,6 @@ defmodule Systems.Campaign.ContentPage do
       |> update_tabbar_size()
       |> update_menus()
     }
-  end
-
-  @impl true
-  def mount(params, session, socket) do
-    mount(Map.put(params, "tab", nil), session, socket)
   end
 
   defoverridable handle_uri: 1

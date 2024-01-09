@@ -10,7 +10,7 @@ upload_path =
 # Only in tests, remove the complexity from the password hashing algorithm
 config :bcrypt_elixir, :log_rounds, 1
 
-config :logger, level: :info
+config :logger, level: :debug
 
 # Configure your database
 config :core, Core.Repo,
