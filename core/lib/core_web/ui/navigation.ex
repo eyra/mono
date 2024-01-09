@@ -198,7 +198,7 @@ defmodule CoreWeb.UI.Navigation do
     <div class="pr-4 flex flex-row gap-4 items-center w-full">
       <%= if @logo do %>
         <div>
-          <img src={~p"/images/icons" <> "/#{@logo}.svg"} alt={@logo} />
+          <img src={~p"/images/icons/#{"#{@logo}.svg"}"} alt={@logo} />
         </div>
       <% end %>
       <div class="flex-grow">

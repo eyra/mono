@@ -508,7 +508,7 @@ defmodule Frameworks.Pixel.Form do
     assigns =
       assign(assigns, %{
         check_value: check_value,
-        check_icon: "check_#{background}",
+        check_icon: "check_#{background}.svg",
         active_bg_color: "bg-#{accent}",
         inactive_bg_color: "bg-opacity-0",
         error?: error?,
@@ -539,7 +539,7 @@ defmodule Frameworks.Pixel.Form do
         >
           <img
             x-show="active"
-            src={~p"/images/icons" <> "/#{@check_icon}.svg"}
+            src={~p"/images/icons/#{@check_icon}"}
             alt={"#{@field} is selected"}
           />
         </div>

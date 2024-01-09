@@ -39,7 +39,7 @@ defmodule Frameworks.Pixel.Icon do
   def generic_body(%{type: :static} = assigns) do
     ~H"""
     <div class="flex flex-col items-center justify-center h-full">
-      <img class="object-scale-down h-full" src={~p"/images/icons" <> "/#{@src}.svg"} alt={@src}>
+      <img class="object-scale-down h-full" src={~p"/images/icons/#{"#{@src}.svg"}"} alt={@src}>
     </div>
     """
   end

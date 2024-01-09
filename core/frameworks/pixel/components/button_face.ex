@@ -26,7 +26,7 @@ defmodule Frameworks.Pixel.Button.Face do
   def icon(assigns) do
     ~H"""
     <div class={"active:opacity-80 cursor-pointer #{@size}"}>
-      <img src={~p"/images/icons" <> "/#{icon_name(assigns)}"} alt={@alt}>
+      <img src={~p"/images/icons/#{icon_name(assigns)}"} alt={@alt}>
     </div>
     """
   end
@@ -87,7 +87,7 @@ defmodule Frameworks.Pixel.Button.Face do
           </div>
         </div>
         <div>
-          <img class="ml-4 -mt-2px" src={~p"/images/icons" <> "/#{@icon}.svg"} alt={@label}>
+          <img class="ml-4 -mt-2px" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
         </div>
       </div>
     </div>
@@ -123,7 +123,7 @@ defmodule Frameworks.Pixel.Button.Face do
     <div class={"pt-1 pb-1 active:pt-5px active:pb-3px active:shadow-top4px w-full rounded pl-4 pr-4 #{@bg_color}"}>
       <div class="flex justify-center items-center w-full">
         <div>
-          <img class="mr-3 -mt-1" src={~p"/images/icons" <> "/#{@icon}.svg"} alt={@label}>
+          <img class="mr-3 -mt-1" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
         </div>
         <div class="h-10">
           <div class="flex flex-col justify-center h-full items-center">

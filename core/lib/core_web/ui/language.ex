@@ -14,7 +14,7 @@ defmodule CoreWeb.UI.Language do
 
     ~H"""
     <a href={~p"/switch-language/#{@locale_id}?redir=#{@redir}"}>
-      <img src={~p"/images/icons" <> "/#{@icon}"} alt={"Switch language to #{@locale_name}"}/>
+      <img src={~p"/images/icons/#{@icon}"} alt={"Switch language to #{@locale_name}"}/>
     </a>
     """
   end
