@@ -682,8 +682,14 @@ end
 defimpl Core.Persister, for: Systems.Assignment.Model do
   def save(_assignment, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :assignment) do
-      {:ok, %{assignment: assignment}} -> {:ok, assignment}
-      _ -> {:error, changeset}
+      {:ok, %{assignment: assignment}} ->
+        {:ok, assignment}
+
+      {:error, new_changeset} ->
+        {:error, new_changeset}
+
+      _ ->
+        {:error, changeset}
     end
   end
 end
