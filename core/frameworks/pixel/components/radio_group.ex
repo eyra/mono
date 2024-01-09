@@ -48,7 +48,7 @@ defmodule Frameworks.Pixel.RadioGroup do
           <%= for item <- @items do %>
             <label class="cursor-pointer flex flex-row gap-[18px] items-center">
               <input
-                id={item.id}
+                id={"#{@id}_#{item.id}"}
                 value={item.id}
                 type="radio"
                 name="radio-group"
