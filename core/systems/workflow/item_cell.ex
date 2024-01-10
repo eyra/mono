@@ -161,7 +161,7 @@ defmodule Systems.Workflow.ItemCell do
         <Text.title3 margin=""><%= @type %></Text.title3>
         <%= if @ready? do %>
           <div>
-            <img class="h-6 w-6" src="/images/icons/ready.svg" alt="ready">
+            <img class="h-6 w-6" src={~p"/images/icons/ready.svg"} alt="ready">
           </div>
         <% end %>
         <div class="flex-grow" />

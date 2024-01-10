@@ -16,7 +16,7 @@ defmodule CoreWeb.Languages do
           </div>
           <%= for language <- @languages do %>
             <div>
-              <img src={"/images/icons/#{language}.svg"} alt={"#{language}"}>
+              <img src={~p"/images/icons/#{"#{language}.svg"}"} alt={"#{language}"}>
             </div>
           <% end %>
         </div>

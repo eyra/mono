@@ -82,7 +82,7 @@ defmodule Frameworks.Pixel.Image do
       <div
         class={"absolute z-20 w-full h-full #{if @selected do "visible" else "invisible" end}"}
       >
-        <img class="w-full h-full object-none" src="/images/checkmark.svg" alt="">
+        <img class="w-full h-full object-none" src={~p"/images/checkmark.svg"} alt="">
       </div>
       <div class="w-full h-full">
         <img id={@id} class="object-cover w-full h-full image" src={@url} srcset={@srcset}>

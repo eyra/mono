@@ -76,14 +76,14 @@ defmodule Systems.Workflow.ItemViews do
               <.step_indicator bg_color="bg-grey4" text={@index+1} />
             <% else %>
               <div class="h-6 w-6">
-                <img class="h-6 w-6" src="/images/icons/ready.svg" alt="ready">
+                <img class="h-6 w-6" src={~p"/images/icons/ready.svg"} alt="ready">
               </div>
             <% end %>
             <Text.title5 align="text-left"><%= @title %></Text.title5>
             <div class="flex-grow"></div>
             <%= if @icon do %>
               <div class="w-8 h-8">
-                <img src={"/images/icons/#{String.downcase(@icon)}.svg"} onerror="this.src='/images/icons/placeholder.svg';" alt={@icon}>
+                <img src={~p"/images/icons/#{"#{String.downcase(@icon)}.svg"}"} onerror="this.src='/images/icons/placeholder.svg';" alt={@icon}>
               </div>
             <% end %>
           </div>

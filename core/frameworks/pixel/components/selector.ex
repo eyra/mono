@@ -226,12 +226,12 @@ defmodule Frameworks.Pixel.Selector.Item do
       <div>
         <img
           x-show="active"
-          src={"/images/icons/#{@active_icon}.svg"}
+          src={~p"/images/icons/#{"#{@active_icon}.svg"}"}
           alt={"#{@value} is selected"}
         />
         <img
           x-show="!active"
-          src={"/images/icons/#{@inactive_icon}.svg"}
+          src={~p"/images/icons/#{"#{@inactive_icon}.svg"}"}
           alt={"Select #{@value}"}
         />
       </div>
@@ -321,12 +321,12 @@ defmodule Frameworks.Pixel.Selector.Item do
       <div class="flex-shrink-0">
         <img
           x-show="active"
-          src={"/images/icons/#{@active_icon}.svg"}
+          src={~p"/images/icons/#{"#{@active_icon}.svg"}"}
           alt={"#{@value} is selected"}
         />
         <img
           x-show="!active"
-          src={"/images/icons/#{@inactive_icon}.svg"}
+          src={~p"/images/icons/#{"#{@inactive_icon}.svg"}"}
           alt={"Select #{@value}"}
         />
       </div>

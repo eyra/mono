@@ -74,7 +74,7 @@ defmodule Systems.Support.OverviewTab do
           <div class="flex flex-col items-center w-full h-full">
             <div class="flex-grow" />
             <div class="flex-none">
-              <img src="/images/illustrations/zero-todo.svg" id="zero-todos" alt="All done">
+              <img src={~p"/images/illustrations/zero-todo.svg"} id="zero-todos" alt="All done">
             </div>
             <div class="flex-grow" />
           </div>

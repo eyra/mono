@@ -25,7 +25,7 @@ defmodule Systems.Assignment.FinishedView do
           <div class="flex flex-col items-center w-full h-full">
             <div class="flex-grow" />
             <div class="flex-none">
-              <img src="/images/illustrations/finished.svg" id="zero-todos" alt="All tasks done">
+              <img src={~p"/images/illustrations/finished.svg"} id="zero-todos" alt="All tasks done">
             </div>
             <div class="flex-grow" />
           </div>

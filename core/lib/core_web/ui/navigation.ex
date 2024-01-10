@@ -83,7 +83,7 @@ defmodule CoreWeb.UI.Navigation do
               <%= if @has_right_bar_buttons do %>
                 <%= if not @hide_seperator do %>
                   <div class="flex-wrap px-4">
-                    <img src="/images/icons/bar_seperator.svg" alt="">
+                    <img src={~p"/images/icons/bar_seperator.svg"} alt="">
                   </div>
                 <% end %>
                 <div class="flex-wrap h-full">
@@ -198,7 +198,7 @@ defmodule CoreWeb.UI.Navigation do
     <div class="pr-4 flex flex-row gap-4 items-center w-full">
       <%= if @logo do %>
         <div>
-          <img src={"/images/icons/#{@logo}.svg"} alt={@logo} />
+          <img src={~p"/images/icons/#{"#{@logo}.svg"}"} alt={@logo} />
         </div>
       <% end %>
       <div class="flex-grow">

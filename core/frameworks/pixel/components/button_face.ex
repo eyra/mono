@@ -14,9 +14,9 @@ defmodule Frameworks.Pixel.Button.Face do
     """
   end
 
-  def icon_name(%{icon: icon, color: nil}), do: "#{icon}"
-  def icon_name(%{icon: icon, color: color}), do: "#{icon}_#{color}"
-  def icon_name(%{icon: icon}), do: "#{icon}"
+  def icon_name(%{icon: icon, color: nil}), do: "#{icon}.svg"
+  def icon_name(%{icon: icon, color: color}), do: "#{icon}_#{color}.svg"
+  def icon_name(%{icon: icon}), do: "#{icon}.svg"
 
   attr(:icon, :atom, required: true)
   attr(:color, :string, default: nil)
@@ -26,7 +26,7 @@ defmodule Frameworks.Pixel.Button.Face do
   def icon(assigns) do
     ~H"""
     <div class={"active:opacity-80 cursor-pointer #{@size}"}>
-      <img src={"/images/icons/#{icon_name(assigns)}.svg"} alt={@alt}>
+      <img src={~p"/images/icons/#{icon_name(assigns)}"} alt={@alt}>
     </div>
     """
   end
@@ -41,7 +41,7 @@ defmodule Frameworks.Pixel.Button.Face do
     <div class="pt-0 pb-1px active:pt-1px active:pb-0 font-button text-button rounded bg-opacity-0">
       <div class="flex justify-left items-center w-full">
         <div>
-          <img class="mr-2 -mt-2px" src={"/images/icons/#{@icon}.svg"} alt={@label}>
+          <img class="mr-2 -mt-2px" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
         </div>
         <div class={"#{@height}"}>
           <div class="flex flex-col justify-center h-full items-center">
@@ -87,7 +87,7 @@ defmodule Frameworks.Pixel.Button.Face do
           </div>
         </div>
         <div>
-          <img class="ml-4 -mt-2px" src={"/images/icons/#{@icon}.svg"} alt={@label}>
+          <img class="ml-4 -mt-2px" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
         </div>
       </div>
     </div>
@@ -123,7 +123,7 @@ defmodule Frameworks.Pixel.Button.Face do
     <div class={"pt-1 pb-1 active:pt-5px active:pb-3px active:shadow-top4px w-full rounded pl-4 pr-4 #{@bg_color}"}>
       <div class="flex justify-center items-center w-full">
         <div>
-          <img class="mr-3 -mt-1" src={"/images/icons/#{@icon}.svg"} alt={@label}>
+          <img class="mr-3 -mt-1" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
         </div>
         <div class="h-10">
           <div class="flex flex-col justify-center h-full items-center">
