@@ -144,7 +144,7 @@ msgstr "Panels"
 
 #, elixir-autogen, elixir-format
 msgid "panel.liss.connector.annotation"
-msgstr "<div>Het LISS panel is een panel van hoge kwaliteit dat in het bijzonder geschikt is voor onderzoek waarbij een correcte representatie van de Nederlandse bevolking van belang is. Het is gebaseerd op een waarschijnlijkheidssteekproef van huishoudens die getrokken is vanuit het CBS bevolkingsregister.</div><div>Ga naar <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a> voor meer informatie.</div>"
+msgstr "<div>Het LISS panel is van hoge kwaliteit en in het bijzonder geschikt voor onderzoek waarbij een correcte afspiegeling van de Nederlandse bevolking van belang is. Het panel is probability-based, wat betekent dat het gebaseerd is op een kanssteekproef van huishoudens uit het bevolkingsregister, getrokken door het CBS.</div><div>Ga naar <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a> voor meer informatie.</div>"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panel.generic.connector.annotation"
