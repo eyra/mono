@@ -3,7 +3,9 @@ deps
 _build
 Dockerfile
 tmp
-priv/static
 priv/cldr
+priv/static/cache_manifest.json
+priv/static/uploads
+priv/static/content
 .bundle
 assets/js/_hooks/

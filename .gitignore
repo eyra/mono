@@ -50,3 +50,4 @@ logfile
 .DS_Store
 /mix_home/
 /core/config/dev.secret.exs
+/core/docker.env
