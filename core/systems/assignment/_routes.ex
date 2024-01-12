@@ -16,12 +16,12 @@ defmodule Systems.Assignment.Routes do
 
       scope "/assignment", Systems.Assignment do
         pipe_through([:browser])
-        get("/:id/:panel", ExternalPanelController, :create)
+        get("/:id/:entry", ExternalPanelController, :create)
       end
 
       scope "/assignment", Systems.Assignment do
         pipe_through([:browser_unprotected])
-        post("/:id/:panel", ExternalPanelController, :create)
+        post("/:id/:entry", ExternalPanelController, :create)
       end
     end
   end
