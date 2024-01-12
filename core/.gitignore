@@ -1,6 +1,7 @@
 _build/
 tmp/
-priv/static
+priv/static/content
+priv/static/uploads
 priv/cldr
 .bundle
 deps/
