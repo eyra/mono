@@ -6,7 +6,7 @@ defmodule Systems.Assignment.ExternalPanelController do
 
   require Logger
 
-  def create(conn, %{"id" => id, "panel" => _} = params) do
+  def create(conn, %{"id" => id, "entry" => _} = params) do
     assignment = Assignment.Public.get!(id, [:crew, :auth_node])
 
     Logger.warn("[ExternalPanelController] create: #{inspect(params)}")
@@ -34,16 +34,16 @@ defmodule Systems.Assignment.ExternalPanelController do
     status != :online
   end
 
-  defp has_no_access?(%{external_panel: external_panel}, %{"panel" => panel}) do
+  defp has_no_access?(%{external_panel: external_panel}, params) do
     external_panel = Atom.to_string(external_panel)
-    external_panel != panel
+    external_panel != get_panel(params)
   end
 
-  defp start(%{external_panel: panel} = assignment, conn, params) do
+  defp start(%{external_panel: external_panel} = assignment, conn, params) do
     participant_id = get_participant(params)
 
     conn
-    |> ExternalSignIn.sign_in(panel, participant_id)
+    |> ExternalSignIn.sign_in(external_panel, participant_id)
     |> authorize_user(assignment)
     |> add_panel_info(params)
     |> CoreWeb.LanguageSwitchController.index(%{
@@ -76,6 +76,7 @@ defmodule Systems.Assignment.ExternalPanelController do
 
   defp add_panel_info(conn, params) do
     panel_info = %{
+      panel: get_panel(params),
       embedded?: is_embedded(params),
       participant: get_participant(params),
       query_string: params
@@ -100,17 +101,20 @@ defmodule Systems.Assignment.ExternalPanelController do
 
   # Param Mappings
 
+  defp get_panel(%{"entry" => "participate"}), do: "generic"
+  defp get_panel(%{"entry" => entry}), do: entry
+
   defp get_participant(%{"respondent" => respondent}), do: respondent
   defp get_participant(%{"participant" => participant}), do: participant
   defp get_participant(_), do: nil
 
   # Liss should always be in dutch
-  defp get_locale(%{"panel" => "liss"}), do: "nl"
+  defp get_locale(%{"entry" => "liss"}), do: "nl"
   defp get_locale(%{"lang" => lang}), do: lang
   defp get_locale(%{"language" => language}), do: language
   defp get_locale(%{"resolved_locale" => locale}), do: locale
   defp get_locale(_), do: nil
 
-  defp is_embedded(%{"panel" => "liss"}), do: true
+  defp is_embedded(%{"entry" => "liss"}), do: true
   defp is_embedded(_), do: false
 end
