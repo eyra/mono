@@ -21,6 +21,10 @@ defmodule GoogleSignIn do
 
     display_name = Map.get(attrs, "given_name", fullname)
 
+    # See:
+    # Apply temp: https://github.com/eyra/mono/issues/558
+    # Revert: https://github.com/eyra/mono/issues/563
+
     sso_info = %{
       researcher: true,
       student: false,
