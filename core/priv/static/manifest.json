@@ -1,0 +1,27 @@
+{
+  "short_name": "Eyra",
+  "name": "Eyra",
+  "description": "Eyra Next Platform",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/logo-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/?source=pwa",
+  "background_color": "#F6F6F6",
+  "display": "standalone",
+  "display_override": ["window-control-overlay", "minimal-ui"],
+  "scope": "/",
+  "theme_color": "#F6F6F6",
+  "shortcuts": [
+  ],
+  "screenshots": [
+  ]
+}
