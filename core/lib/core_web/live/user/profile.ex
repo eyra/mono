@@ -12,7 +12,6 @@ defmodule CoreWeb.User.Profile do
   import CoreWeb.Layouts.Workspace.Component
   alias CoreWeb.User.Forms.Profile, as: ProfileForm
   alias CoreWeb.User.Forms.Student, as: StudentForm
-  alias CoreWeb.User.Forms.Features, as: FeaturesForm
 
   alias CoreWeb.UI.Tabbar
   alias CoreWeb.UI.Navigation
@@ -85,15 +84,6 @@ defmodule CoreWeb.User.Profile do
       },
       current_user.student
     )
-    |> append(%{
-      id: :features,
-      action: nil,
-      title: dgettext("eyra-ui", "tabbar.item.features"),
-      forward_title: dgettext("eyra-ui", "tabbar.item.features.forward"),
-      type: :form,
-      live_component: FeaturesForm,
-      props: %{user: current_user}
-    })
   end
 
   defp bar_size({:unknown, _}), do: :unknown
