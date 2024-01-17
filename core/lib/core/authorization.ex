@@ -54,7 +54,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Pool.SubmissionPage, [:researcher])
   grant_access(Systems.Pool.ParticipantPage, [:researcher])
   grant_access(Systems.Test.Page, [:visitor, :member])
-  grant_access(Systems.Project.OverviewPage, [:researcher])
+  grant_access(Systems.Project.OverviewPage, [:admin, :researcher])
   grant_access(Systems.Project.NodePage, [:researcher, :owner])
   grant_access(Systems.Benchmark.ContentPage, [:researcher, :owner])
   grant_access(Systems.Benchmark.ToolPage, [:owner])
