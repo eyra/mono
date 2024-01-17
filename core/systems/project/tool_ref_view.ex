@@ -44,6 +44,7 @@ defmodule Systems.Project.ToolRefView do
 
   @impl true
   def handle_event("tool_initialized", _payload, socket) do
+    Logger.warning("[ToolRefView] Received 'tool_initialized' from tool, forward to parent")
     {:noreply, socket |> send_event(:parent, "tool_initialized")}
   end
 

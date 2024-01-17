@@ -215,6 +215,8 @@ defmodule Systems.Assignment.CrewWorkView do
   # Events
 
   def handle_event("tool_initialized", _, socket) do
+    Logger.warning("[CrewWorkView] Received 'tool_initialized' from child")
+
     {
       :noreply,
       socket
@@ -342,6 +344,8 @@ defmodule Systems.Assignment.CrewWorkView do
          "__type__" => "CommandSystemEvent",
          "name" => "initialized"
        }) do
+    Logger.warning("[CrewWorkView] Received 'tool_initialized' from Feldspar app")
+
     socket
     |> assign(tool_initialized: true)
   end
