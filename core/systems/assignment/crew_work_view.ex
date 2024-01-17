@@ -215,8 +215,6 @@ defmodule Systems.Assignment.CrewWorkView do
   # Events
 
   def handle_event("tool_initialized", _, socket) do
-    Logger.warning("[CrewWorkView] Received 'tool_initialized' from child")
-
     {
       :noreply,
       socket
@@ -344,8 +342,6 @@ defmodule Systems.Assignment.CrewWorkView do
          "__type__" => "CommandSystemEvent",
          "name" => "initialized"
        }) do
-    Logger.warning("[CrewWorkView] Received 'tool_initialized' from Feldspar app")
-
     socket
     |> assign(tool_initialized: true)
   end
@@ -363,7 +359,7 @@ defmodule Systems.Assignment.CrewWorkView do
 
     socket
     |> update_task(updated_task)
-    |> reset_selection()
+    |> select_next_item()
     |> handle_finished_state()
   end
 
@@ -380,23 +376,37 @@ defmodule Systems.Assignment.CrewWorkView do
     assign(socket, work_items: work_items)
   end
 
-  defp reset_selection(%{assigns: %{work_items: work_items}} = socket)
+  defp select_next_item(%{assigns: %{work_items: work_items}} = socket)
        when length(work_items) <= 1 do
     socket
   end
 
-  defp reset_selection(socket) do
+  defp select_next_item(socket) do
     socket
     |> assign(
       tool_started: false,
-      tool_initialized: false,
-      selected_item_id: nil
+      tool_initialized: false
     )
-    |> update_selected_item_id()
+    |> select_next_item_id()
     |> update_selected_item()
     |> compose_child(:work_list_view)
     |> compose_child(:start_view)
-    |> hide_child(:tool_ref_view)
+    |> update_child(:tool_ref_view)
+  end
+
+  defp select_next_item_id(
+         %{assigns: %{work_items: work_items, selected_item_id: selected_item_id}} = socket
+       ) do
+    next_index =
+      if index = Enum.find_index(work_items, fn {%{id: id}, _} -> id == selected_item_id end) do
+        rem(index + 1, Enum.count(work_items))
+      else
+        0
+      end
+
+    {%{id: selected_item_id}, _} = Enum.at(work_items, next_index)
+
+    socket |> assign(selected_item_id: selected_item_id)
   end
 
   defp handle_finished_state(%{assigns: %{panel_info: %{embedded?: true}}} = socket) do

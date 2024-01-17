@@ -3,7 +3,7 @@ defmodule Systems.Document.PDFView do
   use Fabric.LiveComponent
 
   @impl true
-  def update(%{title: title, url: url} = params, socket) do
+  def update(%{key: key, title: title, url: url} = params, socket) do
     visible = Map.get(params, :visible, true)
 
     state =
@@ -13,10 +13,12 @@ defmodule Systems.Document.PDFView do
         "hidden"
       end
 
+    Logger.warning("[PDFView] state: #{state}")
+
     {
       :ok,
       socket
-      |> assign(title: title, url: url, state: state)
+      |> assign(key: key, title: title, url: url, state: state)
       |> compose_element(:close_button)
       |> compose_element(:ready_button)
     }
@@ -66,7 +68,7 @@ defmodule Systems.Document.PDFView do
         <div class="flex flex-col w-full h-full pt-[48px] pb-sidepadding">
           <div class="flex-grow w-full h-full" >
             <div
-              id="pdf-viewer"
+              id={@key}
               class="flex flex-col w-full h-full overflow-x-scroll"
               phx-hook="PDFViewer"
               phx-update="ignore"
