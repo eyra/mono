@@ -78,7 +78,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
         },
         icon: %{
           action: publish_action,
-          face: %{type: :icon, icon: :preview, alt: dgettext("eyra-assignment", "preview.button")}
+          face: %{type: :icon, icon: :publish, alt: dgettext("eyra-assignment", "preview.button")}
         },
         handle_click: &handle_publish/1
       },
