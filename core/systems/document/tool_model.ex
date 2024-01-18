@@ -46,10 +46,11 @@ defmodule Systems.Document.ToolModel do
     def ready?(tool), do: Document.ToolModel.ready?(tool)
     def form(_), do: Document.ToolForm
 
-    def launcher(%{ref: ref}),
+    def launcher(%{id: id, ref: ref}),
       do: %{
         module: Document.PDFView,
         params: %{
+          key: "pdf_view_#{id}",
           url: ref,
           title: dgettext("eyra-document", "component.title")
         }

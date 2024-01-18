@@ -15,7 +15,7 @@ export const PDFViewer = {
 
     this.loadDocument().then((pdf) => {
       this.pdf = pdf;
-      console.log("[PDFViewer] Document loaded");
+      console.log("[PDFViewer] Document loaded, push event 'tool_initialized'");
       this.pushEvent("tool_initialized");
       this.renderPagesIfNeed();
       var throttledRenderPages = _.throttle(_.partial(renderPages, this), 10, {
