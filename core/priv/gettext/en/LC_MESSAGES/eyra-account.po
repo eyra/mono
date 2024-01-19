@@ -128,7 +128,7 @@ msgstr "Sign in"
 
 #, elixir-autogen, elixir-format
 msgid "login.surf.message.part1"
-msgstr "You can use your VU Amsterdam credentials to sign in on Next, through "
+msgstr "You can use your organisation credentials to sign in on Next, through "
 
 #, elixir-autogen, elixir-format
 msgid "login.surf.message.part2"
