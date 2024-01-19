@@ -36,7 +36,7 @@ msgstr "Registreer"
 
 #, elixir-autogen, elixir-format
 msgid "signup.title"
-msgstr "Nieuw account"
+msgstr "Maak een account aan"
 
 #, elixir-autogen, elixir-format
 msgid "await.confirmation.title"
