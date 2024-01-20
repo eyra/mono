@@ -48,7 +48,7 @@ msgstr "Register"
 
 #, elixir-autogen, elixir-format
 msgid "reset.link"
-msgstr "Reset password"
+msgstr "Change password"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "user.password_reset.flash"
