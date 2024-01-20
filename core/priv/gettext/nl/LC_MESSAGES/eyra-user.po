@@ -28,7 +28,7 @@ msgstr "Bevestig wachtwoord"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.reset_button"
-msgstr "Verstuur verzoek"
+msgstr "Stuur instructies"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.reset_password_button"
@@ -36,7 +36,7 @@ msgstr "Wijzig"
 
 #, elixir-autogen, elixir-format
 msgid "user.password_reset.title"
-msgstr "Wachtwoord wijzigen"
+msgstr "Wijzig wachtwoord"
 
 #, elixir-autogen, elixir-format
 msgid "Invalid email or password"
