@@ -60,7 +60,7 @@ msgstr "Invalid email address"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "confirm.token.flash"
-msgstr "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+msgstr "If your email address is registered, but not yet confirmed, you will receive email instructions shortly."
 
 #, elixir-autogen, elixir-format
 msgid "Signed out successfully"
