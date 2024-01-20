@@ -20,11 +20,11 @@ msgstr "Email"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.password.label"
-msgstr "New password"
+msgstr "New"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.password_confirmation.label"
-msgstr "Confirm password"
+msgstr "Confirm"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.reset_button"
