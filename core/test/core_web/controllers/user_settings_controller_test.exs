@@ -44,7 +44,7 @@ defmodule CoreWeb.UserSettingsControllerTest do
       assert get_session(new_password_conn, :user_token) != get_session(conn, :user_token)
 
       assert Phoenix.Flash.get(new_password_conn.assigns.flash, :info) =~
-               "Wachtwoord succesvol aangepast"
+               "Wachtwoord aangepast"
 
       assert Accounts.get_user_by_email_and_password(user.email, password)
     end
@@ -115,7 +115,7 @@ defmodule CoreWeb.UserSettingsControllerTest do
     test "updates the user email once", %{conn: conn, user: user, token: token, email: email} do
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
       assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
-      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "E-mail succesvol aangepast"
+      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "E-mail aangepast"
       refute Accounts.get_user_by_email(user.email)
       assert Accounts.get_user_by_email(email)
 
