@@ -38,7 +38,7 @@ jobs:
         run: make deps
 
       # Setup caching (mostly for Dialyzer)
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         id: cache
         with:
           path: core/priv/plts

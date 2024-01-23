@@ -2,6 +2,8 @@ defmodule Systems.Project.ToolRefView do
   use CoreWeb, :live_component_fabric
   use Fabric.LiveComponent
 
+  require Logger
+
   alias Frameworks.Concept
 
   alias Systems.{
