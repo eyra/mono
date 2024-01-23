@@ -22,6 +22,12 @@ defmodule CoreWeb.User.Signup do
 
   @impl true
   def handle_event("signup", %{"user" => user_params}, socket) do
+    # See:
+    # Apply temp: https://github.com/eyra/mono/issues/558
+    # Revert: https://github.com/eyra/mono/issues/563
+
+    user_params = Map.put(user_params, "researcher", true)
+
     case Accounts.register_user(user_params) do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, socket |> assign(changeset: changeset)}

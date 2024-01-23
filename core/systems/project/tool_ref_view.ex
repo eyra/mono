@@ -26,17 +26,29 @@ defmodule Systems.Project.ToolRefView do
     }
   end
 
-  def update_launcher(
-        %{assigns: %{title: title, tool_ref: %{id: id} = tool_ref, visible: visible}} = socket
-      ) do
-    %{module: module, params: params} =
-      Project.ToolRefModel.tool(tool_ref)
+  def update_launcher(%{assigns: %{tool_ref: tool_ref}} = socket) do
+    launcher =
+      tool_ref
+      |> Project.ToolRefModel.tool()
       |> Concept.ToolModel.launcher()
 
-    params = Map.merge(params, %{title: title, visible: visible})
+    socket |> update_launcher(launcher)
+  end
 
+  def update_launcher(
+        %{assigns: %{tool_ref: %{id: id}, title: title, visible: visible}} = socket,
+        %{module: module, params: params}
+      ) do
+    params = Map.merge(params, %{title: title, visible: visible})
     child = Fabric.prepare_child(socket, "tool_ref_#{id}", module, params)
     socket |> show_child(child)
+  end
+
+  def update_launcher(socket, nil) do
+    # This use case is supported for preview mode
+    tool_ref = Map.get(socket.assigns, :tool_ref)
+    Logger.warning("No launcher found for #{inspect(tool_ref)}")
+    socket
   end
 
   @impl true

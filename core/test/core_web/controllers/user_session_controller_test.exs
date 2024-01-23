@@ -93,7 +93,7 @@ defmodule CoreWeb.UserSessionControllerTest do
       conn = delete(conn, Routes.session_path(conn, :delete))
       assert redirected_to(conn) == "/user/signin"
       refute get_session(conn, :user_token)
-      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Succesvol uitgelogd"
+      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Uitgelogd"
     end
   end
 
@@ -102,7 +102,7 @@ defmodule CoreWeb.UserSessionControllerTest do
       conn = delete(conn, Routes.session_path(conn, :delete))
       assert redirected_to(conn) == "/user/signin"
       refute get_session(conn, :user_token)
-      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Succesvol uitgelogd"
+      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Uitgelogd"
     end
   end
 end

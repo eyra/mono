@@ -27,7 +27,7 @@ defmodule CoreWeb.Live.User.ResetPassword.Test do
         |> element("form")
         |> render_submit(%{user: %{email: Faker.Internet.email()}})
 
-      assert html =~ "krijg je spoedig een e-mail met instructies"
+      assert html =~ "e-mail instructies"
       assert Repo.all(Accounts.UserToken) == []
     end
 
@@ -40,7 +40,7 @@ defmodule CoreWeb.Live.User.ResetPassword.Test do
         |> element("form")
         |> render_submit(%{user: %{email: user.email}})
 
-      assert html =~ "krijg je spoedig een e-mail met instructies"
+      assert html =~ "e-mail instructies"
       assert Repo.get_by!(Accounts.UserToken, user_id: user.id).context == "reset_password"
     end
   end

@@ -47,8 +47,12 @@ defmodule Core.Accounts.User do
       Defaults to `true`.
   """
   def registration_changeset(user, attrs, opts \\ []) do
+    # See:
+    # Apply temp: https://github.com/eyra/mono/issues/558
+    # Revert: https://github.com/eyra/mono/issues/563
+
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :researcher])
     |> validate_email()
     |> validate_password(opts)
   end
