@@ -56,12 +56,16 @@ defmodule CoreWeb.User.ResetPasswordToken do
               form={form}
               field={:password}
               label_text={dgettext("eyra-user", "password_reset.password.label")}
+              reserve_error_space={false}
             />
+            <.spacing value="S" />
             <.password_input
               form={form}
               field={:password_confirmation}
               label_text={dgettext("eyra-user", "password_reset.password_confirmation.label")}
+              reserve_error_space={false}
             />
+            <.spacing value="S" />
             <Button.submit_wide label={dgettext("eyra-user", "password_reset.reset_password_button")} bg_color="bg-grey1" />
           </.form>
         </Area.form>
