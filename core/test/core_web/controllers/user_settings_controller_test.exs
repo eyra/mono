@@ -62,7 +62,7 @@ defmodule CoreWeb.UserSettingsControllerTest do
 
       response = html_response(old_password_conn, 200)
       assert response =~ "<h1>Settings</h1>"
-      assert response =~ "at least one digit or punctuation character"
+      assert response =~ "minimaal 1"
       assert response =~ "does not match password"
       assert response =~ "is not valid"
 

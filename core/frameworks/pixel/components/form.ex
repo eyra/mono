@@ -9,6 +9,7 @@ defmodule Frameworks.Pixel.Form do
   import Phoenix.HTML.Form
 
   import Frameworks.Pixel.FormHelpers
+  import Frameworks.Pixel.ErrorHelpers, only: [translate_error: 1]
 
   alias Phoenix.LiveView.JS
 
@@ -88,13 +89,13 @@ defmodule Frameworks.Pixel.Form do
         <.spacing value="XXS" />
       <% end %>
       <div id={@error_space_id} class={ if @reserve_error_space do "h-18px" end} >
-        <%= for {msg, _opts} <- @errors do %>
+        <%= for error <- @errors do %>
             <div
               id={@error_message_id}
               class={@error_static_class}
               __eyra_field_id={@field}
             >
-              <%= msg %>
+              <%= translate_error(error) %>
             </div>
         <% end %>
       </div>
