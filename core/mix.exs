@@ -15,8 +15,9 @@ defmodule Core.MixProject do
       # The main page in the docs
       docs: [
         main: "readme",
-        logo: "assets/static/images/icons/next.svg",
+        logo: "priv/static/images/icons/next.svg",
         extras: [
+          "../SELFHOSTING.md",
           "../README.md",
           "../guides/development_setup.md",
           "../guides/authorization.md"

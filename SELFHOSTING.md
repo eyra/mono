@@ -34,6 +34,7 @@
     See `.tool-versions` for the exact versions that will be installed
 
 3. Setup:
+
     ```sh
     $ cd core
     $ mix setup

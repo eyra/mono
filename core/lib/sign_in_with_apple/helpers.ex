@@ -1,9 +1,3 @@
-defmodule SignInWithApple.Backend do
-  defdelegate callback(config, id_token), to: Assent.Strategy.Apple
-
-  defdelegate authorize_url(config), to: Assent.Strategy.Apple
-end
-
 defmodule SignInWithApple.Helpers do
   import Plug.Conn, only: [put_session: 3, get_session: 2]
 
