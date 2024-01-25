@@ -158,7 +158,6 @@ CoreWeb.User.Form.html
 CoreWeb.User.Forms.Debug.html
 CoreWeb.User.Forms.Features.html
 CoreWeb.User.Forms.Profile.html
-CoreWeb.User.Forms.Settings.html
 CoreWeb.User.Forms.Student.html
 CoreWeb.User.Profile.html
 CoreWeb.User.ResetPassword.html
@@ -282,6 +281,7 @@ Self.StartPageTranslations.html
 Self.StartPages.html
 Self.User.SessionController.html
 Self.User.SessionHTML.html
+Self.User.Signin.html
 SignInWithApple.Backend.html
 SignInWithApple.CallbackPlug.html
 SignInWithApple.Helpers.html
@@ -712,8 +712,9 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-49055B7A.js
-dist/sidebar_items-1488F52F.js
+dist/search_items-0AFDAF9F.js
+dist/sidebar_items-D1AC65D0.js
 index.html
 readme.html
 search.html
+selfhosting.html
