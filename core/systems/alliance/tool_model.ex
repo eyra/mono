@@ -21,10 +21,14 @@ defmodule Systems.Alliance.ToolModel do
     timestamps()
   end
 
+  @fallback_url "https://unknown.url"
+
+  def safe_uri(%{url: nil}), do: URI.new(@fallback_url)
+
   def safe_uri(%{url: url}) do
     case URI.new(url) do
       {:ok, uri} -> uri
-      {:error, _} -> URI.new("https://unknown.url")
+      {:error, _} -> URI.new(@fallback_url)
     end
   end
 
