@@ -15,7 +15,7 @@ defmodule Systems.Alliance.ToolModel do
   schema "alliance_tools" do
     belongs_to(:auth_node, Core.Authorization.Node)
 
-    field(:url, :string)
+    field(:url, :string, default: "https://unknown.url")
     field(:director, Ecto.Enum, values: [:assignment])
 
     timestamps()
