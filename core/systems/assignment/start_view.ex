@@ -52,9 +52,9 @@ defmodule Systems.Assignment.StartView do
     |> start_action(item, participant)
   end
 
-  defp start_action(%{url: url}, _, participant) do
+  defp start_action(%{url: %URI{} = url}, _, participant) do
     participant_url =
-      URI.new!(url)
+      url
       |> URI.append_query(URI.encode_query(participant: participant))
       |> URI.to_string()
 

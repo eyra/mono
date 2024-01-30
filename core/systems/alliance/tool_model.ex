@@ -15,10 +15,17 @@ defmodule Systems.Alliance.ToolModel do
   schema "alliance_tools" do
     belongs_to(:auth_node, Core.Authorization.Node)
 
-    field(:url, :string, default: "https://unknown.url")
+    field(:url, :string)
     field(:director, Ecto.Enum, values: [:assignment])
 
     timestamps()
+  end
+
+  def safe_uri(%{url: url}) do
+    case URI.new(url) do
+      {:ok, uri} -> uri
+      {:error, _} -> URI.new("https://unknown.url")
+    end
   end
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
@@ -176,7 +183,7 @@ defmodule Systems.Alliance.ToolModel do
     def open_label(_), do: dgettext("eyra-alliance", "open.cta.title")
     def ready?(tool), do: Alliance.ToolModel.ready?(tool)
     def form(_), do: Alliance.ToolForm
-    def launcher(%{url: url}), do: %{url: url}
+    def launcher(tool), do: %{url: Systems.Alliance.ToolModel.safe_uri(tool)}
 
     def task_labels(_) do
       %{

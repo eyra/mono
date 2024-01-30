@@ -122,7 +122,7 @@ defmodule Systems.Campaign.AssemblyTest do
                        auth_node: %Core.Authorization.Node{
                          parent_id: ^assignment_auth_node_id
                        },
-                       url: "https://unknown.url",
+                       url: nil,
                        director: :assignment
                      },
                      feldspar_tool_id: nil,
