@@ -20,7 +20,7 @@ defmodule CoreWeb.UI.UserListItem do
         />
       </div>
       <div class="flex-grow font-label text-label text-grey1 mt-2px">
-        <%= @user.profile.fullname %>
+        <%= Core.Accounts.User.label(@user) %>
       </div>
       <div class="flex-wrap flex-shrink-0">
         <Button.dynamic {@action_button} />
