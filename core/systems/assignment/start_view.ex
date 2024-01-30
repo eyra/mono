@@ -9,12 +9,13 @@ defmodule Systems.Assignment.StartView do
 
   alias Systems.Project
 
-  def update(%{id: id, work_item: work_item, loading: loading}, socket) do
+  def update(%{id: id, participant: participant, work_item: work_item, loading: loading}, socket) do
     {
       :ok,
       socket
       |> assign(
         id: id,
+        participant: participant,
         work_item: work_item,
         loading: loading
       )
@@ -26,9 +27,9 @@ defmodule Systems.Assignment.StartView do
   end
 
   @impl true
-  def compose(:button, %{work_item: work_item, loading: loading}) do
+  def compose(:button, %{participant: participant, work_item: work_item, loading: loading}) do
     %{
-      action: start_action(work_item),
+      action: start_action(work_item, participant),
       face: %{type: :primary, label: "Start", loading: loading}
     }
   end
@@ -45,17 +46,22 @@ defmodule Systems.Assignment.StartView do
   @impl true
   def compose(:icon, %{work_item: {%{group: group}, _}}), do: String.downcase(group)
 
-  defp start_action({%{tool_ref: tool_ref}, _task} = item) do
+  defp start_action({%{tool_ref: tool_ref}, _task} = item, participant) do
     Project.ToolRefModel.tool(tool_ref)
     |> Concept.ToolModel.launcher()
-    |> start_action(item)
+    |> start_action(item, participant)
   end
 
-  defp start_action(%{url: url}, _) do
-    %{type: :http_get, to: url, target: "_blank"}
+  defp start_action(%{url: url}, _, participant) do
+    participant_url =
+      URI.new!(url)
+      |> URI.append_query(URI.encode_query(participant: participant))
+      |> URI.to_string()
+
+    %{type: :http_get, to: participant_url, target: "_blank"}
   end
 
-  defp start_action(_, _) do
+  defp start_action(_, _, _) do
     %{type: :send, event: "start"}
   end
 
