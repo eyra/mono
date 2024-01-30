@@ -211,4 +211,12 @@ defmodule Core.Accounts.User do
 
   def get_gender(%{features: nil}), do: nil
   def get_gender(%{features: %{gender: gender}}), do: gender
+
+  def label(%{profile: %{fullname: fullname}}) when is_binary(fullname) and fullname != "",
+    do: fullname
+
+  def label(%{displayname: displayname}) when is_binary(displayname) and displayname != "",
+    do: displayname
+
+  def label(%{email: email}), do: email
 end
