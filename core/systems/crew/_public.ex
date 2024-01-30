@@ -478,6 +478,12 @@ defmodule Systems.Crew.Public do
     |> Repo.one()
   end
 
+  def member(crew, user_ref) do
+    crew
+    |> member_query(user_ref, false)
+    |> Repo.one()
+  end
+
   def member?(crew, user_ref) do
     crew
     |> member_query(user_ref, false)

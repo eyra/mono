@@ -44,10 +44,10 @@ defmodule Systems.Project.ToolRefView do
     socket |> show_child(child)
   end
 
-  def update_launcher(socket, nil) do
+  def update_launcher(socket, _) do
     # This use case is supported for preview mode
     tool_ref = Map.get(socket.assigns, :tool_ref)
-    Logger.warning("No launcher found for #{inspect(tool_ref)}")
+    Logger.warning("No module launcher found for #{inspect(tool_ref)}")
     socket
   end
 
