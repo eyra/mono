@@ -51,23 +51,25 @@ defmodule CoreWeb.User.ResetPasswordToken do
         <Margin.y id={:page_top} />
         <Area.form>
           <Text.title2><%= dgettext("eyra-user", "user.password_reset.title") %></Text.title2>
-          <.form id="reset_password_token" :let={form} for={@changeset} phx-submit="reset-password" data-show-errors={true} >
-            <.password_input
-              form={form}
-              field={:password}
-              label_text={dgettext("eyra-user", "password_reset.password.label")}
-              reserve_error_space={false}
-            />
-            <.spacing value="S" />
-            <.password_input
-              form={form}
-              field={:password_confirmation}
-              label_text={dgettext("eyra-user", "password_reset.password_confirmation.label")}
-              reserve_error_space={false}
-            />
-            <.spacing value="S" />
-            <Button.submit_wide label={dgettext("eyra-user", "password_reset.reset_password_button")} bg_color="bg-grey1" />
-          </.form>
+          <div id="reset_password_token_content" phx-hook="LiveContent" data-show-errors={true}>
+            <.form id="reset_password_token" :let={form} for={@changeset} phx-submit="reset-password" >
+              <.password_input
+                form={form}
+                field={:password}
+                label_text={dgettext("eyra-user", "password_reset.password.label")}
+                reserve_error_space={false}
+              />
+              <.spacing value="S" />
+              <.password_input
+                form={form}
+                field={:password_confirmation}
+                label_text={dgettext("eyra-user", "password_reset.password_confirmation.label")}
+                reserve_error_space={false}
+              />
+              <.spacing value="S" />
+              <Button.submit_wide label={dgettext("eyra-user", "password_reset.reset_password_button")} bg_color="bg-grey1" />
+            </.form>
+          </div>
         </Area.form>
       </Area.content>
     </.stripped>
