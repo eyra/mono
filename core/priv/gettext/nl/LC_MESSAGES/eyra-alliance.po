@@ -96,11 +96,11 @@ msgstr "Ethische toetsing"
 
 #, elixir-autogen, elixir-format
 msgid "nextid.description"
-msgstr "Next voegt automatisch een ID van de deelnemer toe aan de URL van je Qualtrics vragenlijst. Om deze ID in Qualtrics te kunnen gebruiken, voeg je een \"embedded data element field\" toe met de naam \"next_id\". Instructies hiervoor %{link} in \"PART 2\"."
+msgstr "Next voegt automatisch een ID van de deelnemer toe aan de URL van je Qualtrics vragenlijst. Om deze ID in Qualtrics te kunnen gebruiken, voeg je een \"embedded data element field\" toe met de naam \"participant\". Instructies hiervoor %{link} in \"PART 2\"."
 
 #, elixir-autogen, elixir-format
 msgid "nextid.title"
-msgstr "Next ID"
+msgstr "Deelnemer ID"
 
 #, elixir-autogen, elixir-format
 msgid "setup.title"
