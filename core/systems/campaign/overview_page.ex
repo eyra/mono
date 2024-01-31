@@ -224,11 +224,11 @@ defmodule Systems.Campaign.OverviewPage do
       <% end %>
 
       <%= if @dialog do %>
-        <div class="fixed z-40 left-0 top-0 w-full h-full bg-black bg-opacity-20">
-          <div class="flex flex-row items-center justify-center w-full h-full">
+        <.popup>
+          <div class="flex-wrap">
             <.plain_dialog {@dialog} />
           </div>
-        </div>
+        </.popup>
       <% end %>
 
       <%= if @selector_dialog do %>
