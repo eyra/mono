@@ -114,9 +114,17 @@ defmodule CoreWeb.User.Forms.Profile do
           <%= if @user.researcher do %>
             <.text_input form={form} field={:title} label_text={dgettext("eyra-account", "professionaltitle.label")} />
           <% end %>
+
+          <Text.form_field_label id={:user_email_label}>
+            <%= dgettext("eyra-account", "email.label") %>
+          </Text.form_field_label>
+          <div class="text-grey1 text-bodymedium font-body">
+            <%= @user.email %>
+          </div>
+
         </.form>
 
-        <.spacing value="S" />
+        <.spacing value="M" />
         <.wrap>
           <Button.dynamic {@signout_button} />
         </.wrap>
