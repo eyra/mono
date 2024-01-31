@@ -76,7 +76,7 @@ defmodule Systems.Assignment.StartView do
       <div class="w-full h-full">
         <Align.horizontal_center>
         <Area.sheet>
-          <div class="flex flex-col gap-8 items-center">
+          <div class="flex flex-col gap-8 items-center px-8">
               <div>
               <%= if @icon do %>
                 <img class="w-24 h-24" src={~p"/images/icons/#{"#{@icon}_square.svg"}"} onerror="this.src='/images/icons/placeholder_square.svg';" alt={@icon}>

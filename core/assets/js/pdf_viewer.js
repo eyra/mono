@@ -48,18 +48,19 @@ export const PDFViewer = {
     console.log("[PDFViewer] Render page", pageNum);
     this.pdf.getPage(pageNum).then(
       (page) => {
-        var scale = window.devicePixelRatio;
-        var viewport = page.getViewport({ scale: scale });
-        if (width < viewport.width) {
-          scale = (width / viewport.width) * scale;
-        }
-
-        //This gives us the page's dimensions at full scale
-        viewport = page.getViewport({ scale: scale });
-
-        //We'll create a canvas for each page to draw it on
-        const canvas = this.createCanvas(viewport);
+        var canvas = this.createCanvas();
         const context = canvas.getContext("2d");
+
+        const pdfWidth = page.getViewport({ scale: 1 }).width;
+        const viewport = page.getViewport({ scale: width / pdfWidth });
+
+        console.log("[PDFViewer] width", width);
+        console.log("[PDFViewer] pdfWidth", pdfWidth);
+        console.log("[PDFViewer] viewport.width", viewport.width);
+
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
         page.render({ canvasContext: context, viewport: viewport });
 
         this.renderPage(width, pageNum + 1);
@@ -78,11 +79,9 @@ export const PDFViewer = {
     this.container.style.display = "block";
     this.el.appendChild(this.container);
   },
-  createCanvas(viewport) {
+  createCanvas() {
     var canvas = document.createElement("canvas");
     canvas.style.display = "block";
-    canvas.height = viewport.height;
-    canvas.width = viewport.width;
     this.container.appendChild(canvas);
     return canvas;
   },
