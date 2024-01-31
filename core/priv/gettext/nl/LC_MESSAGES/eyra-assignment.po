@@ -36,7 +36,7 @@ msgstr "Opdracht"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "ticket.title"
-msgstr "Jouw Next ID"
+msgstr "Jouw deelnemer ID"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "earned.label"

@@ -111,7 +111,7 @@ defmodule Systems.Alliance.ToolForm do
   defp nextid_instructions_link() do
     link_as_string(
       dgettext("eyra-alliance", "nextid.instructions.link"),
-      "https://www.qualtrics.com/support/survey-platform/survey-module/survey-flow/standard-elements/passing-information-through-query-strings/?parent=p001135#PassingInformationIntoAQuestionnaire"
+      "https://www.qualtrics.com/support/survey-platform/survey-module/survey-flow/standard-elements/passing-information-through-query-strings/?parent=p001135#PassingInformationIntoASurvey"
     )
   end
 
