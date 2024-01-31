@@ -55,8 +55,10 @@ defmodule Systems.Document.PDFView do
       <div class="relative w-full h-full">
         <div
           id="pdf-viewer-navbar"
-          class="flex flex-row items-center justify-center pl-sidepadding w-full h-[96px] bg-white absolute"
-          phx-hook="Sticky",
+          phx-hook="Sticky"
+          class="flex flex-row items-center justify-center h-[96px] px-8 w-full bg-white absolute lg:pl-sidepadding"
+          data-class-default="md:pr-0 absolute"
+          data-class-sticky="md:pr-[129px] fixed top-0"
           data-state={@state}
         >
           <Text.title2 margin=""><%= @title %></Text.title2>
@@ -65,7 +67,7 @@ defmodule Systems.Document.PDFView do
             <Button.dynamic {@close_button} />
           </div>
         </div>
-        <div class="flex flex-col w-full h-full pt-[48px] pb-sidepadding">
+        <div class="flex flex-col w-full h-full pt-[72px] sm:pt-[48px] pb-sidepadding">
           <div class="flex-grow w-full h-full" >
             <div
               id={@key}

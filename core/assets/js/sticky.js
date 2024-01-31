@@ -1,3 +1,9 @@
+import _ from "lodash";
+
+function handleResize(hook) {
+  hook.handleResize();
+}
+
 export const Sticky = {
   mounted() {
     this.initializeIfNeeded();
@@ -11,9 +17,12 @@ export const Sticky = {
     }
   },
   initialize() {
-    this.originalTop = this.el.getBoundingClientRect().top;
-    this.originalRight = this.el.getBoundingClientRect().right;
-    this.originalHeight = this.el.getBoundingClientRect().height;
+    this.defaultClasslist = this.el.dataset.classDefault.split(" ");
+    this.stickyClasslist = this.el.dataset.classSticky.split(" ");
+
+    this.makeScrolling();
+    this.updateOriginalPosition();
+
     window.addEventListener("scroll", (event) => {
       var scrollY = 0;
       // Currently support for website and stripped layouts, not for workspace.
@@ -23,24 +32,47 @@ export const Sticky = {
       }
       this.updateRect(scrollY);
     });
+
+    var throttledHandleResize = _.throttle(_.partial(handleResize, this), 10, {
+      trailing: true,
+    });
+    window.addEventListener("resize", throttledHandleResize);
+  },
+  handleResize() {
+    console.log("RESIZE");
+    this.makeScrolling();
+    this.updateOriginalPosition();
+  },
+  updateOriginalPosition() {
+    this.originalTop = this.el.getBoundingClientRect().top;
+    this.originalRight = this.el.getBoundingClientRect().right;
+    this.originalHeight = this.el.getBoundingClientRect().height;
   },
   updateRect(scrollY) {
     if (scrollY >= this.originalTop) {
       if (this.el.classList.contains("absolute")) {
-        console.log("fixed");
-        this.el.classList.remove("absolute");
-        this.el.classList.add("fixed");
-        this.el.classList.add("top-0");
-        this.el.classList.add("pr-[129px]");
+        this.makeSticky();
       }
     } else {
       if (this.el.classList.contains("fixed")) {
-        console.log("absolute");
-        this.el.classList.remove("fixed");
-        this.el.classList.remove("top-0");
-        this.el.classList.remove("pr-[129px]");
-        this.el.classList.add("absolute");
+        this.makeScrolling();
       }
     }
+  },
+  makeScrolling() {
+    this.stickyClasslist.forEach((clazz) => {
+      this.el.classList.remove(clazz);
+    });
+    this.defaultClasslist.forEach((clazz) => {
+      this.el.classList.add(clazz);
+    });
+  },
+  makeSticky() {
+    this.defaultClasslist.forEach((clazz) => {
+      this.el.classList.remove(clazz);
+    });
+    this.stickyClasslist.forEach((clazz) => {
+      this.el.classList.add(clazz);
+    });
   },
 };
