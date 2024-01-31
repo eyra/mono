@@ -89,15 +89,17 @@ defmodule Frameworks.Pixel.Form do
         <.spacing value="XXS" />
       <% end %>
       <div id={@error_space_id} class={ if @reserve_error_space do "h-18px" end} >
-        <%= for error <- @errors do %>
-            <div
-              id={@error_message_id}
-              class={@error_static_class}
-              __eyra_field_id={@field}
-            >
+        <div
+          id={"#{@error_message_id}"}
+          class={@error_static_class}
+          __eyra_field_id={@field}
+        >
+          <%= for error <- @errors do %>
+            <div>
               <%= translate_error(error) %>
             </div>
-        <% end %>
+          <% end %>
+        </div>
       </div>
     </div>
     """
