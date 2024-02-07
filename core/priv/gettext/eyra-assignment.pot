@@ -281,3 +281,23 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "monitor.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "finished.participants"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "started.participants"
+msgstr ""

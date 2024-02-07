@@ -211,4 +211,8 @@ defmodule Core.Accounts.User do
 
   def get_gender(%{features: nil}), do: nil
   def get_gender(%{features: %{gender: gender}}), do: gender
+
+  def user_id(%__MODULE__{id: id}), do: id
+  def user_id(%{user_id: id}), do: id
+  def user_id(id) when is_integer(id), do: id
 end

@@ -170,7 +170,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp get_tab_keys() do
-    [:config, :items]
+    [:config, :items, :monitor]
   end
 
   defp create_tab(
@@ -262,6 +262,30 @@ defmodule Systems.Assignment.ContentPageBuilder do
           }
         }
       }
+    }
+  end
+
+  defp create_tab(
+         :monitor,
+         assignment,
+         show_errors,
+         %{fabric: fabric} = _assigns
+       ) do
+    ready? = false
+
+    child =
+      Fabric.prepare_child(fabric, :monitor, Assignment.MonitorView, %{
+        assignment: assignment
+      })
+
+    %{
+      id: :monitor,
+      ready: ready?,
+      show_errors: show_errors,
+      title: dgettext("eyra-assignment", "tabbar.item.monitor"),
+      forward_title: dgettext("eyra-assignment", "tabbar.item.monitor.forward"),
+      type: :fullpage,
+      child: child
     }
   end
 
