@@ -47,7 +47,9 @@ defmodule Systems.Content.Page do
 
           <%= if @dialog do %>
             <.popup>
-              <.plain_dialog {@dialog} />
+              <div class="flex-wrap">
+                <.plain_dialog {@dialog} />
+              </div>
             </.popup>
           <% end %>
 

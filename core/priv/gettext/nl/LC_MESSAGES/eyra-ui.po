@@ -88,7 +88,7 @@ msgstr "Annuleren"
 
 #, elixir-autogen, elixir-format
 msgid "delete.confirm.text"
-msgstr "De %{item} wordt permanent verwijderd."
+msgstr "Dit %{item} wordt permanent verwijderd."
 
 #, elixir-autogen, elixir-format
 msgid "delete.confirm.title"

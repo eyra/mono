@@ -47,7 +47,8 @@ defmodule CoreWeb.User.Forms.Profile do
         id: id,
         user: user,
         entity: entity,
-        signout_button: signout_button
+        signout_button: signout_button,
+        show_errors: false
       )
       |> init_file_uploader(:photo)
       |> update_ui()
@@ -98,25 +99,34 @@ defmodule CoreWeb.User.Forms.Profile do
       <Margin.y id={:page_top} />
       <Area.form>
         <Text.title2><%= dgettext("eyra-account", "profile.title")  %></Text.title2>
-        <.form id="main_form" :let={form} for={@changeset} phx-submit="signup" phx-change="save" phx-target={@myself} >
-          <.photo_input
-            static_path={&CoreWeb.Endpoint.static_path/1}
-            photo_url={@entity.photo_url}
-            uploads={@uploads}
-            primary_button_text={dgettext("eyra-account", "choose.profile.photo.file")}
-            secondary_button_text={dgettext("eyra-account", "choose.other.profile.photo.file")}
-          />
-          <.spacing value="M" />
+        <div id="user_profile_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
+          <.form id="main_form" :let={form} for={@changeset} phx-submit="signup" phx-change="save" phx-target={@myself} >
+            <.photo_input
+              static_path={&CoreWeb.Endpoint.static_path/1}
+              photo_url={@entity.photo_url}
+              uploads={@uploads}
+              primary_button_text={dgettext("eyra-account", "choose.profile.photo.file")}
+              secondary_button_text={dgettext("eyra-account", "choose.other.profile.photo.file")}
+            />
+            <.spacing value="M" />
 
-          <.text_input form={form} field={:fullname} label_text={dgettext("eyra-account", "fullname.label")} />
-          <.text_input form={form} field={:displayname} label_text={dgettext("eyra-account", "displayname.label")} />
+            <.text_input form={form} field={:fullname} label_text={dgettext("eyra-account", "fullname.label")} />
+            <.text_input form={form} field={:displayname} label_text={dgettext("eyra-account", "displayname.label")} />
 
-          <%= if @user.researcher do %>
-            <.text_input form={form} field={:title} label_text={dgettext("eyra-account", "professionaltitle.label")} />
-          <% end %>
-        </.form>
+            <%= if @user.researcher do %>
+              <.text_input form={form} field={:title} label_text={dgettext("eyra-account", "professionaltitle.label")} />
+            <% end %>
 
-        <.spacing value="S" />
+            <Text.form_field_label id={:user_email_label}>
+              <%= dgettext("eyra-account", "email.label") %>
+            </Text.form_field_label>
+            <div class="text-grey1 text-bodymedium font-body">
+              <%= @user.email %>
+            </div>
+
+          </.form>
+        </div>
+        <.spacing value="M" />
         <.wrap>
           <Button.dynamic {@signout_button} />
         </.wrap>

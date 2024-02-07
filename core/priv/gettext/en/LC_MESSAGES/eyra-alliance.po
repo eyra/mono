@@ -96,11 +96,11 @@ msgstr "Ethical review"
 
 #, elixir-autogen, elixir-format
 msgid "nextid.description"
-msgstr "Next automatically adds the participant ID to your Qualtrics URL. To use this ID in Qualtrics, add an embedded data element field with the name \"next_id\", as %{link} in \"PART 2\"."
+msgstr "Next automatically adds the participant ID to your Qualtrics URL. To use this ID in Qualtrics, add an embedded data element field with the name \"participant\", as %{link} in \"PART 2\"."
 
 #, elixir-autogen, elixir-format
 msgid "nextid.title"
-msgstr "Next ID"
+msgstr "Participant ID"
 
 #, elixir-autogen, elixir-format
 msgid "setup.title"

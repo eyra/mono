@@ -413,6 +413,11 @@ defmodule Systems.Crew.Public do
     |> Repo.one()
   end
 
+  def member(crew, user_ref) do
+    member_not_expired_query(crew, user_ref)
+    |> Repo.one()
+  end
+
   def member?(%Crew.Model{} = crew, user_ref) do
     member_not_expired_query(crew, user_ref)
     |> Repo.exists?()

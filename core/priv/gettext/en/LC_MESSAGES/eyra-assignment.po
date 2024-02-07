@@ -36,7 +36,7 @@ msgstr "Settings"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "ticket.title"
-msgstr "Your Next ID"
+msgstr "Your participant ID"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "earned.label"

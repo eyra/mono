@@ -6,6 +6,8 @@ defmodule Systems.Assignment.CrewWorkView do
 
   require Logger
 
+  alias Frameworks.Concept
+
   alias Systems.{
     Assignment,
     Crew,
@@ -114,12 +116,17 @@ defmodule Systems.Assignment.CrewWorkView do
   def compose(:start_view, %{
         selected_item: selected_item,
         tool_started: tool_started,
-        tool_initialized: tool_initialized
+        tool_initialized: tool_initialized,
+        crew: crew,
+        user: user
       })
       when not is_nil(selected_item) do
+    %{public_id: participant} = Crew.Public.member(crew, user)
+
     %{
       module: Assignment.StartView,
       params: %{
+        participant: participant,
         work_item: selected_item,
         loading: tool_started and not tool_initialized
       }
@@ -149,12 +156,31 @@ defmodule Systems.Assignment.CrewWorkView do
   @impl true
   def compose(
         :tool_ref_view,
-        %{selected_item: {%{title: title, tool_ref: tool_ref}, task}} = assigns
+        %{
+          launcher: %{module: _, params: _},
+          selected_item: {%{title: title, tool_ref: tool_ref}, task}
+        } = assigns
       ) do
     %{
       module: Project.ToolRefView,
       params: %{title: title, tool_ref: tool_ref, task: task, visible: tool_visible?(assigns)}
     }
+  end
+
+  @impl true
+  def compose(:tool_ref_view, %{launcher: _}), do: nil
+
+  @impl true
+  def compose(
+        :tool_ref_view,
+        %{selected_item: {%{tool_ref: tool_ref}, _task}} = assigns
+      ) do
+    launcher =
+      tool_ref
+      |> Project.ToolRefModel.tool()
+      |> Concept.ToolModel.launcher()
+
+    compose(:tool_ref_view, Map.put(assigns, :launcher, launcher))
   end
 
   @impl true

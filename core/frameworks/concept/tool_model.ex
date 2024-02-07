@@ -17,7 +17,7 @@ defprotocol Frameworks.Concept.ToolModel do
   @spec form(t) :: atom()
   def form(_t)
 
-  @spec launcher(t) :: %{url: binary()} | %{module: atom(), params: map()} | nil
+  @spec launcher(t) :: %{url: URI.t()} | %{module: atom(), params: map()} | nil
   def launcher(_t)
 
   @spec task_labels(t) :: map()

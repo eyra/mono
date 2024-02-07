@@ -21,6 +21,18 @@ defmodule Systems.Alliance.ToolModel do
     timestamps()
   end
 
+  # fallback needed in preview mode
+  @fallback_url "https://unknown.url"
+
+  def safe_uri(%{url: nil}), do: URI.new!(@fallback_url)
+
+  def safe_uri(%{url: url}) do
+    case URI.new(url) do
+      {:ok, uri} -> uri
+      {:error, _} -> URI.new!(@fallback_url)
+    end
+  end
+
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(tool), do: tool.auth_node_id
   end
@@ -176,7 +188,7 @@ defmodule Systems.Alliance.ToolModel do
     def open_label(_), do: dgettext("eyra-alliance", "open.cta.title")
     def ready?(tool), do: Alliance.ToolModel.ready?(tool)
     def form(_), do: Alliance.ToolForm
-    def launcher(%{url: url}), do: %{url: url}
+    def launcher(tool), do: %{url: Systems.Alliance.ToolModel.safe_uri(tool)}
 
     def task_labels(_) do
       %{
