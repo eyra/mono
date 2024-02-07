@@ -57,7 +57,7 @@ defmodule Systems.Assignment.PublicTest do
       assert not Assignment.Public.has_open_spots?(assignment)
     end
 
-    test "mark_expired?/1 force=false, marked 1 expired task" do
+    test "mark_expired_debug?/1 force=false, marked 1 expired task" do
       %{crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
 
       user1 = Factories.insert!(:member)
@@ -85,7 +85,7 @@ defmodule Systems.Assignment.PublicTest do
       assert %{expired: false} = Crew.Public.get_task!(task3.id)
     end
 
-    test "apply_expired?/1 force=true, marked all pending tasks" do
+    test "mark_expired_debug?/1 force=true, marked all pending tasks" do
       %{crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
 
       user1 = Factories.insert!(:member)

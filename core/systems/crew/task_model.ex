@@ -19,7 +19,7 @@ defmodule Systems.Crew.TaskModel do
     field(:rejected_at, :naive_datetime)
 
     field(:expire_at, :naive_datetime)
-    field(:expired, :boolean)
+    field(:expired, :boolean, default: false)
 
     field(:rejected_category, Ecto.Enum, values: Crew.RejectCategories.schema_values())
     field(:rejected_message, :string)

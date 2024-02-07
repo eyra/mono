@@ -10,7 +10,7 @@ defmodule Systems.Crew.MemberModel do
   schema "crew_members" do
     field(:public_id, :integer)
     field(:expire_at, :naive_datetime)
-    field(:expired, :boolean)
+    field(:expired, :boolean, default: false)
     field(:declined_at, :naive_datetime)
     field(:declined, :boolean)
 
