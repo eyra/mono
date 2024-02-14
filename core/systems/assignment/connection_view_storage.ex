@@ -1,9 +1,7 @@
 defmodule Systems.Assignment.ConnectionViewStorage do
   use CoreWeb, :live_component
 
-  alias Systems.{
-    Assignment
-  }
+  alias Systems.Assignment
 
   @impl true
   def update(%{event: :disconnect}, %{assigns: %{assignment: assignment}} = socket) do
@@ -28,8 +26,7 @@ defmodule Systems.Assignment.ConnectionViewStorage do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
-    </div>
+    <div/>
     """
   end
 end

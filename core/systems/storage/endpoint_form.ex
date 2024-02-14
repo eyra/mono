@@ -3,7 +3,9 @@ defmodule Systems.Storage.EndpointForm do
   use Fabric.LiveComponent
 
   alias Frameworks.Concept
-  alias Frameworks.Pixel
+  alias Frameworks.Pixel.RadioGroup
+  alias Frameworks.Pixel.Annotation
+  alias Frameworks.Pixel.Panel
 
   alias Systems.{
     Storage
@@ -11,7 +13,7 @@ defmodule Systems.Storage.EndpointForm do
 
   @impl true
   def update(
-        %{id: id, endpoint: endpoint},
+        %{id: id, endpoint: endpoint, key: key},
         socket
       ) do
     {
@@ -19,11 +21,12 @@ defmodule Systems.Storage.EndpointForm do
       socket
       |> assign(
         id: id,
-        endpoint: endpoint
+        endpoint: endpoint,
+        key: key
       )
       |> update_special_type()
       |> update_special()
-      |> update_special_title()
+      |> update_special_annotation()
       |> compose_child(:type_selector)
       |> compose_child(:special_form)
     }
@@ -39,16 +42,25 @@ defmodule Systems.Storage.EndpointForm do
     assign(socket, special: special)
   end
 
-  defp update_special_title(%{assigns: %{special_type: nil}} = socket) do
-    socket
-    |> assign(special_title: nil)
+  defp update_special_annotation(%{assigns: %{special_type: nil}} = socket) do
+    assign(socket, annotation: nil)
   end
 
-  defp update_special_title(%{assigns: %{special_type: special_type}} = socket) do
-    special_title = Storage.ServiceIds.translate(special_type)
+  defp update_special_annotation(%{assigns: %{special_type: special_type}} = socket) do
+    annotation =
+      case special_type do
+        :builtin -> dgettext("eyra-storage", "builtin.annotation")
+        :yoda -> dgettext("eyra-storage", "yoda.annotation")
+        :centerdata -> dgettext("eyra-storage", "centerdata.annotation")
+        :aws -> dgettext("eyra-storage", "aws.annotation")
+        :azure -> dgettext("eyra-storage", "azure.annotation")
+      end
+
+    annotation_title = Storage.ServiceIds.translate(special_type)
 
     socket
-    |> assign(special_title: special_title)
+    |> assign(annotation: annotation)
+    |> assign(annotation_title: annotation_title)
   end
 
   @impl true
@@ -56,7 +68,7 @@ defmodule Systems.Storage.EndpointForm do
     items = Storage.ServiceIds.labels(special_type, Storage.Private.allowed_service_ids())
 
     %{
-      module: Pixel.RadioGroup,
+      module: RadioGroup,
       params: %{
         items: items
       }
@@ -69,11 +81,12 @@ defmodule Systems.Storage.EndpointForm do
   end
 
   @impl true
-  def compose(:special_form, %{special: special}) do
+  def compose(:special_form, %{special: special, key: key}) do
     %{
       module: Concept.ContentModel.form(special),
       params: %{
-        model: special
+        model: special,
+        key: key
       }
     }
   end
@@ -109,7 +122,7 @@ defmodule Systems.Storage.EndpointForm do
         special_changeset: nil,
         special: special
       )
-      |> update_special_title()
+      |> update_special_annotation()
       |> compose_child(:type_selector)
       |> compose_child(:special_form)
     }
@@ -139,10 +152,20 @@ defmodule Systems.Storage.EndpointForm do
       <div class="w-full">
         <.child name={:type_selector} fabric={@fabric} />
       </div>
+      <%= if @annotation do %>
+        <.spacing value="M" />
+        <Panel.flat bg_color="bg-grey1">
+          <:title>
+            <div class="text-title5 font-title5 text-white">
+              <%= @annotation_title %>
+            </div>
+          </:title>
+          <.spacing value="XS" />
+          <Annotation.view annotation={@annotation} />
+        </Panel.flat>
+      <% end %>
       <%= if get_child(@fabric, :special_form) do %>
-        <.spacing value="L" />
-        <Text.title4><%= @special_title %> </Text.title4>
-        <.spacing value="XS" />
+        <.spacing value="M" />
         <.child name={:special_form} fabric={@fabric} />
       <% end %>
     </div>

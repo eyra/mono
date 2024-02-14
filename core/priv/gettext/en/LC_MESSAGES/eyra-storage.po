@@ -58,3 +58,23 @@ msgstr "Folder url"
 #, elixir-autogen, elixir-format
 msgid "yoda.user.label"
 msgstr "Email"
+
+#, elixir-autogen, elixir-format
+msgid "aws.annotation"
+msgstr "<div>More information: <a href=\"https://aws.amazon.com/s3\">https://aws.amazon.com/s3</a></div>"
+
+#, elixir-autogen, elixir-format
+msgid "azure.annotation"
+msgstr "<div>More information: <a href=\"https://azure.microsoft.com/en-us/products/storage/blobs\">https://azure.microsoft.com/en-us/products/storage/blobs</a></div>"
+
+#, elixir-autogen, elixir-format
+msgid "builtin.annotation"
+msgstr "<div>Secure turn-key solution for storing data without the need of hosting your own database. <br> We take care of privacy and backups.</div>"
+
+#, elixir-autogen, elixir-format
+msgid "centerdata.annotation"
+msgstr "<div>More information: <a href=\"https://www.centerdata.nl\">https://www.centerdata.nl</a></div>"
+
+#, elixir-autogen, elixir-format
+msgid "yoda.annotation"
+msgstr "<div>More information: <a href=\"https://www.uu.nl/en/research/yoda\">https://www.uu.nl/en/research/yoda</a></div>"

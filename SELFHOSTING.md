@@ -132,6 +132,7 @@ Required environment variables:
 | STATIC_PATH | Path to folder where uploaded files can be stored | "/tmp" |
 | UNSPLASH_ACCESS_KEY | Application access key registered on [Unsplash](https://unsplash.com/) (Image Catalog) | "hcejpnHRuFWL-fKXLYqhGBt1Dz0_tTjeNifgD01VkGE" |
 | UNSPLASH_APP_NAME | Application name registered on [Unsplash](https://unsplash.com/) (Image Catalog) | "Self" |
+| STORAGE_SERVICES | Comma seperated list of storage services | "builtin yoda aws azure" |
 
 Optional environment variables:
 
@@ -144,8 +145,9 @@ Optional environment variables:
 | SURFCONEXT_SITE | SURFconext site | "https://connect.test.surfconext.nl" |
 | SURFCONEXT_CLIENT_ID | SURFconext client ID | "self.com" |
 | SURFCONEXT_CLIENT_SECRET | SURFconext client secret | "12343HieOjb1234hcBpL" |
-| CONTENT_S3_PREFIX | Prefix for S3 content storage | "content" |
-| FELDSPAR_S3_PREFIX | Prefix for S3 feldspar storage | "feldspar" |
+| STORAGE_S3_PREFIX | Prefix for S3 builtin storage objects. Without this variable "builtin" storage service will default to local filesystem | "storage" |
+| CONTENT_S3_PREFIX | Prefix for S3 content objects | "content" |
+| FELDSPAR_S3_PREFIX | Prefix for S3 feldspar objects | "feldspar" |
 | PUBLIC_S3_URL | Public accessable url of an S3 service | "https://self-public.s3.eu-central-1.amazonaws.com" |
 | PUBLIC_S3_BUCKET | Name of the bucket on the S3 service | "self-prod" |
 | DIST_HOSTS | Comma seperated list of hosts in the cluster, see: [OTP Distribution](https://elixirschool.com/en/lessons/advanced/otp_distribution) | "one, two" |

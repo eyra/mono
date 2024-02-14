@@ -3,5 +3,5 @@ defmodule Systems.Storage.ServiceIds do
   Defines list of supported storage services
   """
   use Core.Enums.Base,
-      {:storage_service_ids, [:aws, :azure, :yoda]}
+      {:storage_service_ids, [:builtin, :yoda, :aws, :azure]}
 end

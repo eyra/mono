@@ -42,28 +42,17 @@ if config_env() == :prod do
       hackney_opts: [recv_timeout: :timer.minutes(1)]
   end
 
-  # AWS
+  # EX AWS
+  config :ex_aws,
+    access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
+    secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
+    region: System.get_env("AWS_REGION")
 
-  if bucket = System.get_env("AWS_S3_BUCKET") do
-    config :core, :s3, bucket: bucket
-  end
-
-  if aws_access_key_id = System.get_env("AWS_ACCESS_KEY_ID") do
-    config :ex_aws, access_key_id: aws_access_key_id
-
-    config :core, Systems.Email.Mailer,
-      adapter: Bamboo.SesAdapter,
-      domain: app_domain,
-      default_from_email: {app_name, app_mail_noreply}
-  end
-
-  if secret_access_key = System.get_env("AWS_SECRET_ACCESS_KEY") do
-    config :ex_aws, secret_access_key: secret_access_key
-  end
-
-  if aws_region = System.get_env("AWS_REGION") do
-    config :ex_aws, region: aws_region
-  end
+  # AWS SES
+  config :core, Systems.Email.Mailer,
+    adapter: Bamboo.SesAdapter,
+    domain: app_domain,
+    default_from_email: {app_name, app_mail_noreply}
 
   # AZURE BLOB
 
@@ -124,6 +113,23 @@ if config_env() == :prod do
     config :sentry,
       dsn: sentry_dsn,
       environment_name: System.get_env("RELEASE_ENV") || "prod"
+  end
+
+  config :core, :storage,
+    services:
+      System.get_env("STORAGE_SERVICES", "builtin, yoda")
+      |> String.split(",", trim: true)
+      |> Enum.reject(&(&1 == ""))
+      |> Enum.map(&String.to_existing_atom/1)
+
+  if storage_s3_prefix = System.get_env("STORAGE_S3_PREFIX") do
+    config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.S3
+
+    config :core, Systems.Storage.BuiltIn.S3,
+      bucket: System.get_env("AWS_S3_BUCKET"),
+      prefix: storage_s3_prefix
+  else
+    config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
   end
 
   if content_s3_prefix = System.get_env("CONTENT_S3_PREFIX") do

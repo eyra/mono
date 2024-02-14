@@ -20,7 +20,7 @@ defmodule Systems.Storage.Delivery do
         {:error, error}
 
       _ ->
-        Logger.debug("Data delivery succeeded")
+        Logger.info("Data delivery succeeded")
         :ok
     end
   end

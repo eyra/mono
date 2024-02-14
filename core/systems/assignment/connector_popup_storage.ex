@@ -62,11 +62,12 @@ defmodule Systems.Assignment.ConnectorPopupStorage do
   end
 
   @impl true
-  def compose(:storage_endpoint_form, %{storage_endpoint: storage_endpoint}) do
+  def compose(:storage_endpoint_form, %{storage_endpoint: storage_endpoint, entity: entity}) do
     %{
       module: Storage.EndpointForm,
       params: %{
-        endpoint: storage_endpoint
+        endpoint: storage_endpoint,
+        key: Assignment.Private.storage_endpoint_key(entity)
       }
     }
   end
