@@ -34,8 +34,7 @@ defmodule Systems.Storage.BuiltIn.EndpointForm do
   end
 
   @impl true
-  def handle_event(event, payload, socket) do
-    Logger.warn("Unexpected event #{event}: #{inspect(payload)}")
+  def handle_event(_, _payload, socket) do
     {:noreply, socket}
   end
 

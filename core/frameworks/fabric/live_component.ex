@@ -38,7 +38,7 @@ defmodule Fabric.LiveComponent do
 
       @impl true
       def handle_event(_name, _payload, socket) do
-        Logger.error("handle_event/3 not implemented")
+        Logger.error("[#{__MODULE__}] handle_event/3 not implemented")
         {:noreply, socket}
       end
 

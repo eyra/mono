@@ -111,9 +111,7 @@ defmodule Systems.Assignment.ConnectorPopupStorage do
         |> assign(entity: assignment)
         |> send_event(:parent, "finish", %{connection: %{endpoint: assignment.storage_endpoint}})
 
-      {:error, changeset} ->
-        Logger.error("update_storage_endpoint changeset: #{inspect(changeset)}")
-
+      {:error, _changeset} ->
         socket
         |> send_event(:storage_endpoint_form, "show_errors")
     end

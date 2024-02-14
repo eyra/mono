@@ -21,16 +21,16 @@ defmodule Frameworks.Utility.EctoHelper do
     Repo.insert(changeset)
   end
 
-  def update_and_dispatch(changeset, key) do
-    result =
-      Multi.new()
-      |> Repo.multi_update(key, changeset)
-      |> Signal.Public.multi_dispatch({key, :update_and_dispatch}, %{changeset: changeset})
-      |> Repo.transaction()
+  def update_and_dispatch(%Changeset{} = changeset, key) do
+    Multi.new()
+    |> update_and_dispatch(changeset, key)
+    |> Repo.transaction()
+  end
 
-    Logger.warn("update_and_dispatch: #{inspect(result)}")
-
-    result
+  def update_and_dispatch(%Multi{} = multi, %Changeset{} = changeset, key) do
+    multi
+    |> Repo.multi_update(key, changeset)
+    |> Signal.Public.multi_dispatch({key, :update_and_dispatch}, %{changeset: changeset})
   end
 
   def delete(multi, name, %table{id: id}) do
