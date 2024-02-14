@@ -16,7 +16,7 @@ defmodule Systems.Storage.EndpointModel do
   @required_fields @fields
   @special_fields ~w(builtin yoda centerdata aws azure)a
 
-  @derive {Jason.Encoder, only: @special_fields}
+  @derive {Jason.Encoder, only: [:builtin_id]}
   schema "storage_endpoints" do
     belongs_to(:builtin, Storage.BuiltIn.EndpointModel, on_replace: :delete)
     belongs_to(:yoda, Storage.Yoda.EndpointModel, on_replace: :delete)
