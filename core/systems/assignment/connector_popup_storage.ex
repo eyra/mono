@@ -4,6 +4,8 @@ defmodule Systems.Assignment.ConnectorPopupStorage do
 
   import CoreWeb.UI.Dialog
 
+  require Logger
+
   alias Systems.{
     Assignment,
     Storage
