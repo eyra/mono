@@ -36,8 +36,8 @@ defmodule Systems.Storage.Azure.Backend do
     end
   end
 
-  defp path(%{"participant" => participant}, %{"key" => key, "timestamp" => timestamp}) do
-    "#{participant}/#{key}/#{timestamp}.json"
+  defp path(%{"participant" => participant}, %{"key" => key, "timestamp" => _}) do
+    "#{participant}/#{key}.json"
   end
 
   defp path(%{"participant" => participant}, %{"key" => key}) do
@@ -46,7 +46,7 @@ defmodule Systems.Storage.Azure.Backend do
 
   defp url(
          %{
-           "storage_account_name" => storage_account_name,
+           "account_name" => storage_account_name,
            "container" => container,
            "sas_token" => sas_token
          },
