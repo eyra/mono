@@ -12,6 +12,11 @@ defmodule Systems.Storage.EndpointModel do
 
   require Storage.ServiceIds
 
+  @fields ~w()a
+  @required_fields @fields
+  @special_fields ~w(builtin yoda centerdata aws azure)a
+
+  @derive {Jason.Encoder, only: @special_fields}
   schema "storage_endpoints" do
     belongs_to(:builtin, Storage.BuiltIn.EndpointModel, on_replace: :delete)
     belongs_to(:yoda, Storage.Yoda.EndpointModel, on_replace: :delete)
@@ -21,10 +26,6 @@ defmodule Systems.Storage.EndpointModel do
 
     timestamps()
   end
-
-  @fields ~w()a
-  @required_fields @fields
-  @special_fields ~w(builtin yoda centerdata aws azure)a
 
   def changeset(endpoint, params) do
     endpoint
