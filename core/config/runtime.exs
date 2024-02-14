@@ -120,7 +120,7 @@ if config_env() == :prod do
       System.get_env("STORAGE_SERVICES", "builtin, yoda")
       |> String.split(",", trim: true)
       |> Enum.reject(&(&1 == ""))
-      |> Enum.map(&String.to_existing_atom/1)
+      |> Enum.map(&String.to_atom/1)
 
   if storage_s3_prefix = System.get_env("STORAGE_S3_PREFIX") do
     config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.S3
