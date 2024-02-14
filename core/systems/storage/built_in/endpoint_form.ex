@@ -2,6 +2,8 @@ defmodule Systems.Storage.BuiltIn.EndpointForm do
   use CoreWeb.LiveForm, :fabric
   use Fabric.LiveComponent
 
+  require Logger
+
   alias Systems.Storage.BuiltIn.EndpointModel, as: Model
 
   @impl true
@@ -29,6 +31,12 @@ defmodule Systems.Storage.BuiltIn.EndpointForm do
       socket
       |> send_event(:parent, "update", %{changeset: changeset})
     }
+  end
+
+  @impl true
+  def handle_event(event, payload, socket) do
+    Logger.warn("Unexpected event #{event}: #{inspect(payload)}")
+    {:noreply, socket}
   end
 
   @impl true
