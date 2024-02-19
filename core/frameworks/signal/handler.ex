@@ -17,8 +17,12 @@ defmodule Frameworks.Signal.Handler do
 
   defmacro __before_compile__(_env) do
     quote do
+      require Logger
+
       @impl true
-      def intercept(_signal, _message), do: :ok
+      def intercept(signal, _message) do
+        {:ok, :ignored}
+      end
     end
   end
 end

@@ -5,12 +5,36 @@ defmodule Systems.Assignment.Private do
 
   require Logger
 
-  alias Systems.{
-    Assignment,
-    Workflow,
-    Crew,
-    Storage
-  }
+  alias Systems.Assignment
+  alias Systems.Workflow
+  alias Systems.Crew
+  alias Systems.Storage
+  alias Systems.Monitor
+
+  def log_event(%Assignment.Model{} = assignment, topic, user) do
+    if not Assignment.Public.tester?(assignment, user) do
+      monitor_event(assignment, topic, user)
+      |> Monitor.Public.log()
+    end
+  end
+
+  def clear_event(%Assignment.Model{} = assignment, topic, user) do
+    monitor_event(assignment, topic, user)
+    |> Monitor.Public.clear()
+  end
+
+  def monitor_event(%Assignment.Model{id: assignment_id}, topic) when is_atom(topic) do
+    ["assignment=#{assignment_id}", "topic=#{topic}"]
+  end
+
+  def monitor_event(assignment, topic, user_ref) do
+    user_id = Core.Accounts.User.user_id(user_ref)
+    monitor_event(assignment, topic) ++ ["user=#{user_id}"]
+  end
+
+  def storage_endpoint_key(%Assignment.Model{id: id}) do
+    "assignment=#{id}"
+  end
 
   def get_panel_url(%Assignment.Model{id: id, external_panel: external_panel}) do
     case external_panel do

@@ -59,30 +59,6 @@ msgid "professionaltitle.label"
 msgstr "Functietitel"
 
 #, elixir-autogen, elixir-format
-msgid "push.registration.button"
-msgstr "Activeren"
-
-#, elixir-autogen, elixir-format
-msgid "push.registration.title"
-msgstr "Push notificaties"
-
-#, elixir-autogen, elixir-format
-msgid "push.registration.activated"
-msgstr "Push notificaties staan ingeschakeld op deze browser."
-
-#, elixir-autogen, elixir-format
-msgid "push.registration.denied"
-msgstr "Push notificaties zijn gedeactiveerd op deze browser"
-
-#, elixir-autogen, elixir-format
-msgid "push.registration.label"
-msgstr "Activeer om meldingen van het platform in je browser te ontvangen. Na het activeren kan het zijn dat je browser vraagt om toestemming voor het tonen van notificaties."
-
-#, elixir-autogen, elixir-format
-msgid "push.registration.pending"
-msgstr "Push notificaties zijn gedeactiveerd op deze browser"
-
-#, elixir-autogen, elixir-format
 msgid "feature.study.description"
 msgstr "Om credits te kunnen behalen voor onderzoeksparticipatie (OP / RPR) voor bedrijfskunde (BK) of international business administration (IBA), selecteer je één of meerdere cursussen hieronder. Als je een cursus vorig jaar niet hebt afgerond, zorg dan dat je die cursus ook selecteert."
 
@@ -109,10 +85,6 @@ msgstr "Inclusie"
 #, elixir-autogen, elixir-format
 msgid "features.content.description"
 msgstr "Selecteer hieronder de inclusiecriteria voor je studie. Geen selectie betekend dat iedereen in de pool mee mag doen."
-
-#, elixir-autogen, elixir-format
-msgid "push.unavailable.label"
-msgstr "Registereren voor push notificaties is op dit moment alleen beschikbaar op Chrome en Firefox browsers. Open deze website in een van deze browser om gebruik te maken van push notificaties."
 
 #, elixir-autogen, elixir-format
 msgid "login.google.button"
@@ -157,7 +129,3 @@ msgstr "Inloggen"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "await.confirmation.description"
 msgstr "Je account is aangemaakt. We hebben je een e-mail gestuurd ter bevestiging. Klik op de link in de e-mail om je account te activeren."
-
-#, elixir-autogen, elixir-format
-msgid "account.created.info.flash"
-msgstr "Account succesvol aangemaakt"

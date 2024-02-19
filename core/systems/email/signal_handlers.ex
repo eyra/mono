@@ -15,6 +15,8 @@ defmodule Core.Mailer.SignalHandlers do
         |> Email.Public.deliver_later()
       end
     end
+
+    :ok
   end
 
   defp base_emails(%Box{} = box) do

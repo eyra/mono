@@ -8,6 +8,8 @@ defmodule Core.WebPush.SignalHandlers do
     for user <- users(box) do
       :ok = WebPush.send(user, title)
     end
+
+    :ok
   end
 
   defp users(%Box{} = box) do

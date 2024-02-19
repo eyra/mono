@@ -28,7 +28,7 @@ defmodule Frameworks.Utility.LiveCommand do
     actions
     |> Enum.reduce(
       nil,
-      &if is_action(event, &1) do
+      &if action?(event, &1) do
         &1
       else
         &2
@@ -36,11 +36,11 @@ defmodule Frameworks.Utility.LiveCommand do
     )
   end
 
-  defp is_action(event1, %{button: %{action: %{event: event2}}} = _action) do
+  defp action?(event1, %{button: %{action: %{event: event2}}} = _action) do
     event1 == event2
   end
 
-  defp is_action(_event, _action) do
+  defp action?(_event, _action) do
     false
   end
 

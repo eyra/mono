@@ -307,7 +307,7 @@ defmodule Systems.Assignment.Public do
     Core.Persister.save(assignment, changeset)
   end
 
-  def is_owner?(assignment, user) do
+  def owner?(assignment, user) do
     Core.Authorization.user_has_role?(user, assignment, :owner)
   end
 
@@ -382,6 +382,12 @@ defmodule Systems.Assignment.Public do
     Crew.Public.count_participants_finished(crew)
   end
 
+  def tester?(%{crew: crew}, user) do
+    Core.Authorization.user_has_role?(user, crew, :tester)
+  end
+
+  def tester?(_, _), do: false
+
   def apply_member(id, user, identifier, reward_amount) when is_number(id) do
     get!(id, [:crew])
     |> apply_member(user, identifier, reward_amount)
@@ -404,6 +410,17 @@ defmodule Systems.Assignment.Public do
     end
   end
 
+  def decline_member(%Assignment.Model{crew: crew}, user) do
+    if member = Crew.Public.get_member(crew, user) do
+      Multi.new()
+      |> Crew.Public.expire_member(member)
+      |> Signal.Public.multi_dispatch({:crew_member, :declined}, %{crew_member: member})
+      |> Repo.transaction()
+    else
+      Logger.warning("Unable to decline member, probably expired already")
+    end
+  end
+
   defp run_create_reward(%Assignment.Model{budget: budget} = assignment, %User{} = user, amount) do
     idempotence_key = idempotence_key(assignment, user)
 
@@ -420,14 +437,13 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  def reset_member(%{crew: crew} = assignment, user) do
-    if Crew.Public.member?(crew, user) do
+  def reset_member(%{crew: crew} = assignment, user, opts \\ []) do
+    # get member regardless expired state
+    if member = Crew.Public.get_member_unsafe(crew, user, [:crew]) do
       expire_at = expiration_timestamp(assignment)
-
-      Crew.Public.get_member(crew, user)
-      |> Crew.Public.reset_member(expire_at)
+      Crew.Public.reset_member!(member, expire_at, opts)
     else
-      Logger.warn("Unable to reset, user #{user.id} is not a member on crew #{crew.id}")
+      Logger.warn("Can not reset member for unknown user=#{user.id} in crew=#{crew.id}")
     end
   end
 

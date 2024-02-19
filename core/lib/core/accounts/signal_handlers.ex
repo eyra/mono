@@ -31,6 +31,8 @@ defmodule Core.Accounts.SignalHandlers do
     else
       NextAction.Public.create_next_action(user, CompleteProfile)
     end
+
+    :ok
   end
 
   @impl true
@@ -49,6 +51,8 @@ defmodule Core.Accounts.SignalHandlers do
         NextAction.Public.create_next_action(user, SelectStudyStudent)
       end
     end
+
+    :ok
   end
 
   @impl true
@@ -58,6 +62,8 @@ defmodule Core.Accounts.SignalHandlers do
     if visited_settings? do
       NextAction.Public.clear_next_action(user, PromotePushStudent)
     end
+
+    :ok
   end
 
   @impl true
@@ -69,5 +75,7 @@ defmodule Core.Accounts.SignalHandlers do
 
     Email.Factory.account_created(user)
     |> Email.Public.deliver_later()
+
+    :ok
   end
 end

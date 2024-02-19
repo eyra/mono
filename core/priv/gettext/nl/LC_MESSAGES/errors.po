@@ -84,9 +84,3 @@ msgstr "moet groter of gelijk aan %{number} zijn"
 
 msgid "must be equal to %{number}"
 msgstr "moet gelijk aan %{number} zijn"
-
-msgid "at least one digit or punctuation character"
-msgstr "gebruik minimaal 1 cijfer of interpunctie teken"
-
-msgid "at least one upper case character"
-msgstr "gebruik minimaal 1 hoofdletter"

@@ -59,30 +59,6 @@ msgid "professionaltitle.label"
 msgstr "Professional title"
 
 #, elixir-autogen, elixir-format
-msgid "push.registration.button"
-msgstr "Activate"
-
-#, elixir-autogen, elixir-format
-msgid "push.registration.title"
-msgstr "Push notifications"
-
-#, elixir-autogen, elixir-format
-msgid "push.registration.activated"
-msgstr "Push notifications are activated on this browser."
-
-#, elixir-autogen, elixir-format
-msgid "push.registration.denied"
-msgstr "Push notifications are deactivated on this browser"
-
-#, elixir-autogen, elixir-format
-msgid "push.registration.label"
-msgstr "Activate to receive notifications from the platform in your browser. After activation, your browser might ask for permission to show notifications."
-
-#, elixir-autogen, elixir-format
-msgid "push.registration.pending"
-msgstr "Determining state.."
-
-#, elixir-autogen, elixir-format
 msgid "feature.study.description"
 msgstr "To earn credits for research participation (OP / RPR) for bedrijfskunde (BK) or international business administration (IBA), select one or more courses below. If you did not finish a course last year, make sure to select that course as well."
 
@@ -109,10 +85,6 @@ msgstr "Inclusion"
 #, elixir-autogen, elixir-format
 msgid "features.content.description"
 msgstr "Select the inclusion criteria for your study. If nothing is selected, everyone in the pool is eligible to participate."
-
-#, elixir-autogen, elixir-format
-msgid "push.unavailable.label"
-msgstr "Registering for push notifications is currently available on Chrome and Firefox browsers. Please open the website on one of these browsers to make use of push notifications."
 
 #, elixir-autogen, elixir-format
 msgid "login.google.button"
@@ -157,7 +129,3 @@ msgstr "Sign in"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "await.confirmation.description"
 msgstr "Your account has been created. We send you an activation email. Please click the link in the email to activate your account."
-
-#, elixir-autogen, elixir-format
-msgid "account.created.info.flash"
-msgstr "Account created successfully"

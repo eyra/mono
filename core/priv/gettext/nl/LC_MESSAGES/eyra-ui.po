@@ -27,10 +27,6 @@ msgid "menu.item.profile"
 msgstr "Mijn profiel"
 
 #, elixir-autogen, elixir-format
-msgid "menu.item.settings"
-msgstr "Instellingen"
-
-#, elixir-autogen, elixir-format
 msgid "menu.item.signin"
 msgstr "Inloggen"
 
@@ -59,24 +55,8 @@ msgid "tabbar.item.features"
 msgstr "Kenmerken"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.profile"
-msgstr "Mijn profiel"
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.student"
 msgstr "Opleiding"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.features.forward"
-msgstr "Pas kenmerken aan"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.profile.forward"
-msgstr "Pas profiel aan"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.student.forward"
-msgstr "Selecteer opleiding"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.helpdesk"
@@ -193,14 +173,6 @@ msgstr "Inklappen"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "expand.button"
 msgstr "Uitklappen"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.settings"
-msgstr "Instellingen"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.settings.forward"
-msgstr "Instellingen"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.link"
