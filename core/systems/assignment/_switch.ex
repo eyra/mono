@@ -8,12 +8,10 @@ defmodule Systems.Assignment.Switch do
     Signal
   }
 
-  alias Systems.{
-    Assignment,
-    Workflow,
-    Crew,
-    NextAction
-  }
+  alias Systems.Assignment
+  alias Systems.Workflow
+  alias Systems.Crew
+  alias Systems.NextAction
 
   @impl true
   def intercept({:workflow, _} = signal, %{workflow: workflow} = message) do
@@ -23,6 +21,8 @@ defmodule Systems.Assignment.Switch do
         Map.merge(message, %{assignment: assignment})
       )
     end
+
+    :ok
   end
 
   @impl true
@@ -33,6 +33,8 @@ defmodule Systems.Assignment.Switch do
         Map.merge(message, %{assignment: assignment})
       )
     end
+
+    :ok
   end
 
   @impl true
@@ -43,6 +45,8 @@ defmodule Systems.Assignment.Switch do
         Map.merge(message, %{assignment: assignment})
       )
     end
+
+    :ok
   end
 
   @impl true
@@ -54,6 +58,8 @@ defmodule Systems.Assignment.Switch do
         Map.merge(message, %{assignment: assignment})
       )
     end
+
+    :ok
   end
 
   @impl true
@@ -64,11 +70,14 @@ defmodule Systems.Assignment.Switch do
       {:assignment, signal},
       Map.merge(message, %{assignment: assignment})
     )
+
+    :ok
   end
 
   @impl true
   def intercept({:assignment, _} = signal, message) do
     handle(signal, message)
+    :ok
   end
 
   def intercept(
@@ -85,6 +94,8 @@ defmodule Systems.Assignment.Switch do
         Map.merge(message, %{assignment: assignment})
       )
     end
+
+    :ok
   end
 
   def intercept({:crew_task, _} = signal, %{crew_task: %{crew_id: crew_id}} = message) do
@@ -95,39 +106,67 @@ defmodule Systems.Assignment.Switch do
         Map.merge(message, %{assignment: &1})
       )
     )
+
+    :ok
   end
 
   def intercept({:lab_tool, :reservations_cancelled}, %{tool: tool, user: user}) do
     # reset the membership (with new expiration time), so user has time to reserve a spot on a different time slot
     if assignment = Assignment.Public.get_by_tool(tool, [:crew]) do
-      Assignment.Public.reset_member(assignment, user)
+      Assignment.Public.reset_member(assignment, user, dispatch: true)
     end
+
+    :ok
   end
 
   def intercept({:lab_tool, :reservation_created}, %{tool: tool, user: user}) do
     if Assignment.Public.get_by_tool(tool) do
       Assignment.Public.lock_task(tool, user)
     end
+
+    :ok
   end
 
   def intercept(signal, %{director: :assignment} = object) do
     handle(signal, object)
+    :ok
   end
 
-  defp handle({:assignment, event}, %{assignment: assignment} = message) do
-    with {:workflow_item, :deleted} <- event do
-      delete_crew_tasks(message)
+  defp handle({:assignment, event}, %{assignment: assignment, from_pid: from_pid} = message) do
+    case event do
+      {:workflow_item, :deleted} ->
+        delete_crew_tasks(message)
+
+      {:crew_task, :accepted} ->
+        payout_participants(message)
+
+      {:crew_task, _} ->
+        update_crew_task_next_action(message)
+
+      {:crew, {:crew_member, :started}} ->
+        %{crew_member: crew_member} = message
+        Assignment.Private.log_event(assignment, :started, crew_member)
+
+      {:crew, {:crew_member, :declined}} ->
+        %{crew_member: crew_member} = message
+        Assignment.Private.log_event(assignment, :declined, crew_member)
+
+      {:crew, {:crew_member, :finished_tasks}} ->
+        %{crew_member: crew_member} = message
+        Assignment.Private.log_event(assignment, :finished, crew_member)
+
+      {:consent_agreement, {:consent_signature, :created}} ->
+        %{consent_signature: %{user: user}} = message
+        Assignment.Private.clear_event(assignment, :declined, user)
+        Assignment.Private.log_event(assignment, :accepted, user)
+
+        Assignment.Public.reset_member(assignment, user, dispatch: false)
+
+      _ ->
+        :ok
     end
 
-    with {:crew_task, :accepted} <- event do
-      payout_participants(message)
-    end
-
-    with {:crew_task, _} <- event do
-      update_crew_task_next_action(message)
-    end
-
-    update_pages(assignment)
+    update_pages(assignment, from_pid)
   end
 
   defp delete_crew_tasks(%{
@@ -145,16 +184,16 @@ defmodule Systems.Assignment.Switch do
 
   defp delete_crew_tasks(_), do: nil
 
-  defp update_pages(%Assignment.Model{} = assignment) do
+  defp update_pages(%Assignment.Model{} = assignment, from_pid) do
     [
       Assignment.CrewPage,
       Assignment.ContentPage
     ]
-    |> Enum.each(&update_page(&1, assignment))
+    |> Enum.each(&update_page(&1, assignment, from_pid))
   end
 
-  defp update_page(page, model) do
-    dispatch!({:page, page}, %{id: model.id, model: model})
+  defp update_page(page, model, from_pid) do
+    dispatch!({:page, page}, %{id: model.id, model: model, from_pid: from_pid})
   end
 
   defp update_crew_task_next_action(%{

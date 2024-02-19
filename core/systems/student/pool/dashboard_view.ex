@@ -30,7 +30,7 @@ defmodule Systems.Student.Pool.DashboardView do
       <Margin.y id={:page_top} />
       <div class="grid grid-cols-2 md:grid-cols-3 gap-8 h-full">
         <%= for metric <- @metrics do %>
-          <Widget.metric {metric} />
+          <Widget.number {metric} />
         <% end %>
         <div class="col-span-3">
           <Widget.value_distribution {@credits} />

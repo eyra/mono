@@ -31,11 +31,11 @@ defmodule Systems.Student.Codes do
   def parse_year("2nd"), do: "2"
   def parse_year(year) when is_binary(year), do: year
 
-  def is_year?(value, year) when is_atom(value) and is_atom(year) do
-    is_year?(value, year_to_string(year))
+  def year?(value, year) when is_atom(value) and is_atom(year) do
+    year?(value, year_to_string(year))
   end
 
-  def is_year?(value, year) when is_atom(value) and is_binary(year) do
+  def year?(value, year) when is_atom(value) and is_binary(year) do
     Atom.to_string(value) |> String.contains?(parse_year(year))
   end
 
@@ -53,9 +53,9 @@ defmodule Systems.Student.Codes do
     |> String.contains?(study_program)
   end
 
-  def is_first_year_active?(nil), do: false
+  def first_year_active?(nil), do: false
 
-  def is_first_year_active?(active_values) do
+  def first_year_active?(active_values) do
     # first year is active when no 2nd year value is selected
     not contains_year?(active_values, :second)
   end
@@ -71,12 +71,12 @@ defmodule Systems.Student.Codes do
 
   def contains_year?(values, year) do
     values
-    |> Enum.find(&is_year?(&1, year)) != nil
+    |> Enum.find(&year?(&1, year)) != nil
   end
 
   def values_by_year(year) do
     values()
-    |> Enum.filter(&is_year?(&1, year))
+    |> Enum.filter(&year?(&1, year))
   end
 
   def labels_by_year(year, nil) do

@@ -323,24 +323,22 @@ defmodule Systems.Crew.PublicTest do
       assert [] = Crew.Public.list_members(crew)
     end
 
-    test "decline_member/2 does decline member and tasks" do
+    test "expire_member/2 does expire member and tasks" do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
-      {:ok, %{member: %{id: member_id} = member, crew_task: task}} =
-        Crew.Public.apply_member(crew, user, ["task1"], expire_at(-1))
+      {:ok, %{member: member, crew_task: task}} =
+        Crew.Public.apply_member(crew, user, ["task1"], expire_at(60))
 
-      assert Crew.Public.member?(crew, user)
-      assert [%{id: ^member_id}] = Crew.Public.list_members(crew)
+      assert %{expired: false} = Crew.Public.get_member!(member.id)
+      assert %{expired: false} = Crew.Public.get_task!(task.id)
 
-      assert Crew.Public.decline_member(crew, user)
+      Ecto.Multi.new()
+      |> Crew.Public.expire_member(member)
+      |> Core.Repo.transaction()
 
-      assert %{declined: true} = Crew.Public.get_member!(member.id)
-      assert %{status: :declined, declined_at: declined_at} = Crew.Public.get_task!(task.id)
-      assert declined_at != nil
-
-      assert Crew.Public.member?(crew, user)
-      assert [%{id: ^member_id}] = Crew.Public.list_members(crew)
+      assert %{expired: true} = Crew.Public.get_member!(member.id)
+      assert %{expired: true} = Crew.Public.get_task!(task.id)
     end
   end
 

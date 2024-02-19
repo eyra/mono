@@ -301,3 +301,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "started.participants"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "declined.participants"
+msgstr ""

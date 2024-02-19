@@ -13,7 +13,6 @@ defmodule Systems.Crew.TaskModel do
     field(:identifier, {:array, :string})
     field(:status, Ecto.Enum, values: Crew.TaskStatus.values())
     field(:started_at, :naive_datetime)
-    field(:declined_at, :naive_datetime)
     field(:completed_at, :naive_datetime)
     field(:accepted_at, :naive_datetime)
     field(:rejected_at, :naive_datetime)
@@ -30,7 +29,7 @@ defmodule Systems.Crew.TaskModel do
     timestamps()
   end
 
-  @fields ~w(identifier status started_at declined_at completed_at expire_at expired accepted_at rejected_at rejected_category rejected_message)a
+  @fields ~w(identifier status started_at completed_at expire_at expired accepted_at rejected_at rejected_category rejected_message)a
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(task), do: task.auth_node_id

@@ -11,26 +11,26 @@ defmodule Systems.Assignment.ExternalPanelController do
 
     Logger.warn("[ExternalPanelController] create: #{inspect(params)}")
 
-    if is_tester?(assignment, conn) do
+    if tester?(assignment, conn) do
       conn
       |> add_panel_info(params)
       |> redirect(to: path(params))
     else
       cond do
         has_no_access?(assignment, params) -> forbidden(conn)
-        is_offline?(assignment) -> service_unavailable(conn)
+        offline?(assignment) -> service_unavailable(conn)
         true -> start(assignment, conn, params)
       end
     end
   end
 
-  defp is_tester?(%{crew: crew}, %{assigns: %{current_user: %{} = user}}) do
-    Core.Authorization.user_has_role?(user, crew, :tester)
+  defp tester?(assignment, %{assigns: %{current_user: %{} = user}}) do
+    Assignment.Public.tester?(assignment, user)
   end
 
-  defp is_tester?(_, _), do: false
+  defp tester?(_, _), do: false
 
-  defp is_offline?(%{status: status}) do
+  defp offline?(%{status: status}) do
     status != :online
   end
 
@@ -77,7 +77,7 @@ defmodule Systems.Assignment.ExternalPanelController do
   defp add_panel_info(conn, params) do
     panel_info = %{
       panel: get_panel(params),
-      embedded?: is_embedded(params),
+      embedded?: embedded?(params),
       participant: get_participant(params),
       query_string: params
     }
@@ -115,6 +115,6 @@ defmodule Systems.Assignment.ExternalPanelController do
   defp get_locale(%{"resolved_locale" => locale}), do: locale
   defp get_locale(_), do: nil
 
-  defp is_embedded(%{"entry" => "liss"}), do: true
-  defp is_embedded(_), do: false
+  defp embedded?(%{"entry" => "liss"}), do: true
+  defp embedded?(_), do: false
 end

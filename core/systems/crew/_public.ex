@@ -137,7 +137,7 @@ defmodule Systems.Crew.Public do
   end
 
   def count_participated_tasks(crew) do
-    count_tasks(crew, [:declined, :completed, :rejected, :accepted])
+    count_tasks(crew, [:completed, :rejected, :accepted])
   end
 
   def cancel_task(%Crew.TaskModel{} = task) do
@@ -295,18 +295,26 @@ defmodule Systems.Crew.Public do
     public_id
   end
 
-  def get_member(crew, user_ref) do
-    build(member_query(crew, user_ref), :member, [expired == false])
-    |> Repo.one()
-  end
-
   def get_member!(id, preload \\ []) when is_integer(id) do
     Repo.get!(Crew.MemberModel, id) |> Repo.preload(preload)
   end
 
+  def get_member(crew, user_ref, preload \\ []) do
+    build(member_query(crew, user_ref), :member, [expired == false])
+    |> Repo.one()
+    |> Repo.preload(preload)
+  end
+
+  def get_member_unsafe(crew, user_ref, preload \\ []) do
+    # method is unsafe since it returns members regardless their expired status
+    member_query(crew, user_ref)
+    |> Repo.one()
+    |> Repo.preload(preload)
+  end
+
   def apply_member(%Crew.Model{} = crew, %User{} = user, [_ | _] = identifier, expire_at \\ nil) do
     if member = get_expired_member(crew, user, [:crew]) do
-      member = reset_member(member, expire_at)
+      member = reset_member!(member, expire_at, dispatch: true)
       {:ok, %{member: member}}
     else
       Multi.new()
@@ -328,7 +336,7 @@ defmodule Systems.Crew.Public do
         expire_at \\ nil
       ) do
     if member = get_expired_member(crew, user, [:crew]) do
-      member = reset_member(member, expire_at)
+      member = reset_member!(member, expire_at, dispatch: true)
       {:ok, %{member: member}}
     else
       Multi.new()
@@ -338,22 +346,25 @@ defmodule Systems.Crew.Public do
     end
   end
 
-  def decline_member(crew, user_ref) do
-    member = get_member(crew, user_ref)
-    task_query = task_query(crew, user_ref, false)
-    timestamp = Timestamp.naive_now()
-
-    Multi.new()
-    |> Multi.update(
-      :crew_member,
-      Crew.MemberModel.changeset(member, %{declined: true, declined_at: timestamp})
-    )
-    |> Multi.update_all(:crew_tasks, task_query, set: [status: :declined, declined_at: timestamp])
-    |> Signal.Public.multi_dispatch({:crew_member, :declined})
-    |> Repo.transaction()
+  def expire_member(
+        %Multi{} = multi,
+        %Crew.MemberModel{crew: %Ecto.Association.NotLoaded{}} = member
+      ) do
+    expire_member(multi, Repo.preload(member, [:crew]))
   end
 
-  def tasks_finised?(task_ids) when is_list(task_ids) do
+  def expire_member(%Multi{} = multi, %Crew.MemberModel{crew: crew} = member) do
+    task_query = task_query(crew, member, false)
+
+    multi
+    |> Multi.update(
+      :crew_member,
+      Crew.MemberModel.changeset(member, %{expired: true})
+    )
+    |> Multi.update_all(:tasks, task_query, set: [expired: true])
+  end
+
+  def tasks_finished?(task_ids) when is_list(task_ids) do
     tasks_pending(task_ids)
     |> Repo.all()
     |> Enum.empty?()
@@ -397,20 +408,41 @@ defmodule Systems.Crew.Public do
     |> Repo.preload([:user])
   end
 
-  def reset_member(%Crew.MemberModel{crew: crew} = member, expire_at) do
-    member_query = member_query(member)
+  def reset_member!(%Crew.MemberModel{} = member, expire_at, opts) do
+    {:ok, %{member: member}} = reset_member(member, expire_at, opts)
+    member
+  end
+
+  def reset_member(%Crew.MemberModel{} = member, expire_at, opts) do
+    Multi.new()
+    |> reset_member(Repo.preload(member, [:crew]), expire_at, opts)
+    |> Repo.transaction()
+  end
+
+  def reset_member(
+        %Multi{} = multi,
+        %Crew.MemberModel{crew: %Ecto.Association.NotLoaded{}} = member,
+        expire_at,
+        opts
+      ) do
+    reset_member(multi, Repo.preload(member, [:crew]), expire_at, opts)
+  end
+
+  def reset_member(%Multi{} = multi, %Crew.MemberModel{crew: crew} = member, expire_at, opts) do
+    member_changeset = Crew.MemberModel.reset(member, expire_at)
+    task_attrs = Crew.TaskModel.reset_attrs(expire_at)
     task_query = task_query(crew, member, true)
 
-    member_attrs = Crew.MemberModel.reset_attrs(expire_at)
-    task_attrs = Crew.TaskModel.reset_attrs(expire_at)
+    multi =
+      multi
+      |> Multi.update(:member, member_changeset)
+      |> Multi.update_all(:tasks, task_query, set: task_attrs)
 
-    Multi.new()
-    |> Multi.update_all(:member, member_query, set: member_attrs)
-    |> Multi.update_all(:tasks, task_query, set: task_attrs)
-    |> Repo.transaction()
-
-    from(m in Crew.MemberModel, where: m.id == ^member.id)
-    |> Repo.one()
+    if opts[:signal] do
+      Signal.Public.multi_dispatch(multi, {:crew_member, :reset}, %{crew_member: member})
+    else
+      multi
+    end
   end
 
   def member(crew, user_ref) do

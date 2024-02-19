@@ -14,5 +14,7 @@ defmodule Systems.Student.Switch do
       user = Accounts.get_user!(user_id)
       Student.Public.handle_features_updated(user, old_codes, new_codes)
     end
+
+    :ok
   end
 end

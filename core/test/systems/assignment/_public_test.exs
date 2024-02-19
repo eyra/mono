@@ -3,11 +3,10 @@ defmodule Systems.Assignment.PublicTest do
   import Systems.NextAction.TestHelper
 
   describe "assignments" do
-    alias Systems.{
-      Assignment,
-      Crew,
-      Budget
-    }
+    alias Systems.Assignment
+    alias Systems.Crew
+    alias Systems.Budget
+    alias Systems.Monitor
 
     alias Core.Factories
 
@@ -162,6 +161,24 @@ defmodule Systems.Assignment.PublicTest do
 
       assert %{expired: false} = Crew.Public.get_member(crew, user)
       assert %{expired: false} = Crew.Public.get_task!(task.id)
+    end
+
+    test "decline_member/2 does expire member and tasks and updates metric" do
+      %{crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
+      user = Factories.insert!(:member)
+      member = Crew.Factories.create_member(crew, user)
+      task = Crew.Factories.create_task(crew, member, ["task1"])
+      metric = ["assignment=#{assignment.id}", "topic=declined", "user=#{user.id}"]
+
+      assert %{expired: false} = Crew.Public.get_member(crew, user)
+      assert %{expired: false} = Crew.Public.get_task!(task.id)
+      assert 0 = Monitor.Public.count(metric)
+
+      Assignment.Public.decline_member(assignment, user)
+
+      assert %{expired: true} = Crew.Public.get_member!(member.id)
+      assert %{expired: true} = Crew.Public.get_task!(task.id)
+      assert 1 = Monitor.Public.count(metric)
     end
 
     test "rollback_expired_deposits/0 resets reward" do

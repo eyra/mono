@@ -15,5 +15,7 @@ defmodule Systems.Crew.Switch do
       {:crew, signal},
       Map.merge(message, %{crew: crew})
     )
+
+    :ok
   end
 end

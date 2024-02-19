@@ -3,12 +3,11 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   import CoreWeb.Gettext
 
-  alias Systems.{
-    Assignment,
-    Project,
-    Workflow,
-    Support
-  }
+  alias Systems.Assignment
+  alias Systems.Project
+  alias Systems.Workflow
+  alias Systems.Support
+  alias Systems.Monitor
 
   def view_model(
         %{id: id, special: special} = assignment,
@@ -275,7 +274,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
     child =
       Fabric.prepare_child(fabric, :monitor, Assignment.MonitorView, %{
-        assignment: assignment
+        number_widgets: number_widgets(assignment)
       })
 
     %{
@@ -322,6 +321,54 @@ defmodule Systems.Assignment.ContentPageBuilder do
       props: %{
         entity: assignment
       }
+    }
+  end
+
+  defp number_widgets(assignment) do
+    [:started, :finished, :declined]
+    |> Enum.map(&widget(&1, assignment))
+  end
+
+  defp widget(:started, assignment) do
+    metric =
+      Assignment.Private.monitor_event(assignment, :started)
+      |> Monitor.Public.unique()
+
+    %{
+      label: dgettext("eyra-assignment", "started.participants"),
+      metric: metric,
+      color: :primary
+    }
+  end
+
+  defp widget(:finished, assignment) do
+    metric =
+      Assignment.Private.monitor_event(assignment, :finished)
+      |> Monitor.Public.unique()
+
+    %{
+      label: dgettext("eyra-assignment", "finished.participants"),
+      metric: metric,
+      color: :positive
+    }
+  end
+
+  defp widget(:declined, assignment) do
+    metric =
+      Assignment.Private.monitor_event(assignment, :declined)
+      |> Monitor.Public.unique()
+
+    color =
+      if metric > 0 do
+        :negative
+      else
+        :primary
+      end
+
+    %{
+      label: dgettext("eyra-assignment", "declined.participants"),
+      metric: metric,
+      color: color
     }
   end
 end

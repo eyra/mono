@@ -22,5 +22,6 @@ defmodule Frameworks.Signal.TestHelper do
 
   def intercept(signal, message) do
     send(self(), {:signal_test, {signal, message}})
+    :ok
   end
 end
