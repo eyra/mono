@@ -624,6 +624,12 @@ Systems.Storage.Azure.Backend.html
 Systems.Storage.Azure.EndpointForm.html
 Systems.Storage.Azure.EndpointModel.html
 Systems.Storage.Backend.html
+Systems.Storage.BuiltIn.Backend.html
+Systems.Storage.BuiltIn.EndpointForm.html
+Systems.Storage.BuiltIn.EndpointModel.html
+Systems.Storage.BuiltIn.LocalFS.html
+Systems.Storage.BuiltIn.S3.html
+Systems.Storage.BuiltIn.Special.html
 Systems.Storage.Centerdata.Backend.html
 Systems.Storage.Centerdata.EndpointForm.html
 Systems.Storage.Centerdata.EndpointModel.html
@@ -712,8 +718,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-6A8F2CCA.js
-dist/sidebar_items-5256E2BE.js
+dist/search_items-4E7DA7CB.js
+dist/sidebar_items-E495B5AB.js
 index.html
 readme.html
 search.html
