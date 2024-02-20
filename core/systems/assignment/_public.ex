@@ -11,6 +11,7 @@ defmodule Systems.Assignment.Public do
   alias CoreWeb.UI.Timestamp
   alias Core.Authorization
   alias Core.Accounts.User
+  alias Frameworks.Utility.EctoHelper
   alias Frameworks.Concept
   alias Frameworks.Signal
 
@@ -199,31 +200,26 @@ defmodule Systems.Assignment.Public do
     assignment
   end
 
-  def delete_storage_endpoint!(assignment) do
+  def delete_storage_endpoint!(%{storage_endpoint: %Ecto.Association.NotLoaded{}} = assignment) do
+    Repo.preload(assignment, :storage_endpoint, Storage.EndpointModel.preload_graph(:down))
+    |> delete_storage_endpoint!()
+  end
+
+  def delete_storage_endpoint!(%{storage_endpoint: storage_endpoint} = assignment) do
     changeset =
       Assignment.Model.changeset(assignment, %{})
       |> Ecto.Changeset.put_assoc(:storage_endpoint, nil)
 
-    {:ok, assignment} = Core.Persister.save(changeset.data, changeset)
+    storage_endpoint_special = Storage.EndpointModel.special(storage_endpoint)
+
+    {:ok, %{assignment: assignment}} =
+      Multi.new()
+      |> EctoHelper.update_and_dispatch(changeset, :assignment)
+      |> Multi.delete(:storage_endpoint_special, storage_endpoint_special)
+      |> Repo.transaction()
 
     assignment
   end
-
-  def create_storage_endpoint!(%{storage_endpoint_id: nil} = assignment) do
-    storage_endpoint =
-      %Storage.EndpointModel{}
-      |> Storage.EndpointModel.changeset(%{})
-
-    {:ok, assignment} =
-      Assignment.Model.changeset(assignment, %{})
-      |> Ecto.Changeset.put_assoc(:storage_endpoint, storage_endpoint)
-      |> Repo.update()
-
-    assignment
-    |> Repo.preload(Assignment.Model.preload_graph(:down))
-  end
-
-  def create_storage_endpoint!(assignment), do: assignment
 
   def copy(
         %Assignment.Model{} = assignment,

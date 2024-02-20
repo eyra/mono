@@ -13,13 +13,15 @@ defmodule Systems.Storage.Private do
     Application.get_env(:core, :storage)
   end
 
+  def build_special(:builtin), do: %Storage.BuiltIn.EndpointModel{}
+  def build_special(:yoda), do: %Storage.Yoda.EndpointModel{}
   def build_special(:aws), do: %Storage.AWS.EndpointModel{}
   def build_special(:azure), do: %Storage.Azure.EndpointModel{}
-  def build_special(:yoda), do: %Storage.Yoda.EndpointModel{}
 
+  def backend_info(%Storage.BuiltIn.EndpointModel{}), do: {:builtin, Storage.BuiltIn.Backend}
+  def backend_info(%Storage.Yoda.EndpointModel{}), do: {:yoda, Storage.Yoda.Backend}
   def backend_info(%Storage.AWS.EndpointModel{}), do: {:aws, Storage.AWS.Backend}
   def backend_info(%Storage.Azure.EndpointModel{}), do: {:azure, Storage.Azure.Backend}
-  def backend_info(%Storage.Yoda.EndpointModel{}), do: {:yoda, Storage.Yoda.Backend}
 
   def storage_info(%{storage_endpoint: %{} = storage_endpoint, external_panel: external_panel}) do
     if endpoint = Storage.EndpointModel.special(storage_endpoint) do

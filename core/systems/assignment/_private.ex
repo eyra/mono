@@ -12,6 +12,10 @@ defmodule Systems.Assignment.Private do
     Storage
   }
 
+  def storage_endpoint_key(%Assignment.Model{id: id}) do
+    "assignment=#{id}"
+  end
+
   def get_panel_url(%Assignment.Model{id: id, external_panel: external_panel}) do
     case external_panel do
       :liss -> ~p"/assignment/#{id}/liss"

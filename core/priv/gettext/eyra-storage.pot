@@ -58,3 +58,23 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "yoda.user.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "aws.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "azure.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "builtin.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "centerdata.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "yoda.annotation"
+msgstr ""

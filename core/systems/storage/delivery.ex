@@ -20,14 +20,21 @@ defmodule Systems.Storage.Delivery do
         {:error, error}
 
       _ ->
-        Logger.debug("Data delivery succeeded")
+        Logger.info("Data delivery succeeded")
         :ok
     end
   end
 
   def deliver(backend, endpoint, panel_info, data, meta_data) do
     Logger.warn("[Storage.Delivery] deliver")
-    backend.store(endpoint, panel_info, data, meta_data)
+
+    try do
+      backend.store(endpoint, panel_info, data, meta_data)
+    rescue
+      e ->
+        Logger.error(Exception.format(:error, e, __STACKTRACE__))
+        reraise e, __STACKTRACE__
+    end
   end
 
   def deliver(

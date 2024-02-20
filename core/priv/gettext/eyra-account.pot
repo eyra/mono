@@ -59,30 +59,6 @@ msgid "professionaltitle.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "push.registration.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "push.registration.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "push.registration.activated"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "push.registration.denied"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "push.registration.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "push.registration.pending"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "feature.study.description"
 msgstr ""
 
@@ -108,10 +84,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "features.content.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "push.unavailable.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -156,8 +128,4 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "await.confirmation.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "account.created.info.flash"
 msgstr ""

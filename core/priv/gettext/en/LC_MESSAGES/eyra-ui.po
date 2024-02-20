@@ -27,10 +27,6 @@ msgid "menu.item.profile"
 msgstr "My profile"
 
 #, elixir-autogen, elixir-format
-msgid "menu.item.settings"
-msgstr "Settings"
-
-#, elixir-autogen, elixir-format
 msgid "menu.item.signin"
 msgstr "Sign in"
 
@@ -59,24 +55,8 @@ msgid "tabbar.item.features"
 msgstr "Characteristics"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.profile"
-msgstr "My profile"
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.student"
 msgstr "Study program"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.features.forward"
-msgstr "Update characteristics"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.profile.forward"
-msgstr "Update profile"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.student.forward"
-msgstr "Select study program"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.helpdesk"
@@ -193,14 +173,6 @@ msgstr "Collapse"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "expand.button"
 msgstr "Expand"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.settings"
-msgstr "Settings"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.settings.forward"
-msgstr "Settings"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.link"

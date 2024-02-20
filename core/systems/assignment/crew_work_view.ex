@@ -354,13 +354,13 @@ defmodule Systems.Assignment.CrewWorkView do
     end
   end
 
-  defp handle_feldspar_event(socket, %{
+  defp handle_feldspar_event(%{assigns: %{selected_item: {%{group: group}, _}}} = socket, %{
          "__type__" => "CommandSystemDonate",
          "key" => key,
          "json_string" => json_string
        }) do
     socket
-    |> send_event(:parent, "store", %{key: key, data: json_string})
+    |> send_event(:parent, "store", %{key: key, group: group, data: json_string})
     |> Frameworks.Pixel.Flash.put_info("Donated")
   end
 

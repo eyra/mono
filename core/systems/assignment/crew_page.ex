@@ -114,7 +114,7 @@ defmodule Systems.Assignment.CrewPage do
     socket =
       socket
       |> decline_member()
-      |> store("onboarding", "{\"status\":\"consent declined\"}")
+      |> store("onboarding", nil, "{\"status\":\"consent declined\"}")
 
     socket =
       if embedded? do
@@ -130,8 +130,8 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def handle_event("store", %{key: key, data: data}, socket) do
-    {:noreply, socket |> store(key, data)}
+  def handle_event("store", %{key: key, group: group, data: data}, socket) do
+    {:noreply, socket |> store(key, group, data)}
   end
 
   @impl true
@@ -161,12 +161,14 @@ defmodule Systems.Assignment.CrewPage do
           }
         } = socket,
         key,
+        group,
         data
       ) do
     meta_data = %{
       remote_ip: remote_ip,
       timestamp: Timestamp.now() |> DateTime.to_unix(),
-      key: key
+      key: key,
+      group: group
     }
 
     if storage_info = Storage.Private.storage_info(assignment) do
