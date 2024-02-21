@@ -44,7 +44,7 @@ defmodule Frameworks.Pixel.Widget do
   attr(:pending_amount, :integer, required: true)
   attr(:done_label, :string, required: true)
   attr(:pending_label, :string, required: true)
-  attr(:left_over_label, :string, required: true)
+  attr(:target_label, :string, required: true)
 
   def progress(
         %{target_amount: target_amount, done_amount: done_amount, pending_amount: pending_amount} =
@@ -76,19 +76,19 @@ defmodule Frameworks.Pixel.Widget do
         <%= if @done_amount > 0 do %>
           <div class="flex flex-row items-center gap-3">
             <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-success" />
-            <Text.label><%= @done_amount %> <%= @done_label %></Text.label>
+            <Text.label><%= @done_amount %> <%= String.downcase(@done_label) %></Text.label>
           </div>
         <% end %>
         <%= if @pending_amount > 0 do %>
           <div class="flex flex-row items-center gap-3">
               <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-warning" />
-              <Text.label><%= @pending_amount %> <%= @pending_label %></Text.label>
+              <Text.label><%= @pending_amount %> <%= String.downcase(@pending_label) %></Text.label>
             </div>
         <% end %>
         <%= if @left_over_amount > 0 do %>
           <div class="flex flex-row items-center gap-3">
             <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-grey3" />
-            <Text.label><%= @left_over_amount %> <%= @left_over_label %></Text.label>
+            <Text.label><%= @left_over_amount %> <%= String.downcase(@target_label) %></Text.label>
           </div>
         <% end %>
       </div>

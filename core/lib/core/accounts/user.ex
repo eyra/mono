@@ -220,7 +220,10 @@ defmodule Core.Accounts.User do
 
   def label(%{email: email}), do: email
 
-  def user_id(%__MODULE__{id: id}), do: id
+  def user_id(%{assigns: assigns}), do: user_id(assigns)
+  def user_id(%{current_user: user}), do: user_id(user)
   def user_id(%{user_id: id}), do: id
+  def user_id(%{user: user}), do: user_id(user)
+  def user_id(%__MODULE__{id: id}), do: id
   def user_id(id) when is_integer(id), do: id
 end

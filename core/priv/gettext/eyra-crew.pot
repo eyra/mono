@@ -37,3 +37,15 @@ msgstr ""
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "tester.completed.text"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.finished.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.remaining.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.started.label"
+msgstr ""
