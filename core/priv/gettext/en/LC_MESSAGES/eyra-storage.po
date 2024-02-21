@@ -57,4 +57,24 @@ msgstr "Folder url"
 
 #, elixir-autogen, elixir-format
 msgid "yoda.user.label"
-msgstr "Email"
+msgstr "E-mail"
+
+#, elixir-autogen, elixir-format
+msgid "aws.annotation"
+msgstr "<div>Use Amazon S3 storage. More information: <a href=\"https://aws.amazon.com/s3\">https://aws.amazon.com/s3</a></div>"
+
+#, elixir-autogen, elixir-format
+msgid "azure.annotation"
+msgstr "<div>Use Microsoft Azure blob storage. More information: <a href=\"https://azure.microsoft.com/en-us/products/storage/blobs\">https://azure.microsoft.com/en-us/products/storage/blobs</a></div>"
+
+#, elixir-autogen, elixir-format
+msgid "builtin.annotation"
+msgstr "<div>Use the internal data storage if you do not wish to connect to a third-party data storage service. <br> Once your data donation flow is published, a data tab will appear with instructions on how to download the donated data.</div>"
+
+#, elixir-autogen, elixir-format
+msgid "centerdata.annotation"
+msgstr "<div>More information: <a href=\"https://www.centerdata.nl\">https://www.centerdata.nl</a></div>"
+
+#, elixir-autogen, elixir-format
+msgid "yoda.annotation"
+msgstr "<div>Use Yoda, a research data management service developed at Utrecht University. <br> More information: <a href=\"https://www.uu.nl/en/research/yoda\">https://www.uu.nl/en/research/yoda</a></div>"

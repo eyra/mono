@@ -27,7 +27,14 @@ defmodule Systems.Storage.Delivery do
 
   def deliver(backend, endpoint, panel_info, data, meta_data) do
     Logger.notice("[Storage.Delivery] deliver", ansi_color: :light_magenta)
-    backend.store(endpoint, panel_info, data, meta_data)
+
+    try do
+      backend.store(endpoint, panel_info, data, meta_data)
+    rescue
+      e ->
+        Logger.error(Exception.format(:error, e, __STACKTRACE__))
+        reraise e, __STACKTRACE__
+    end
   end
 
   def deliver(

@@ -13,17 +13,18 @@ defmodule Systems.Storage.EndpointModel do
   require Storage.ServiceIds
 
   schema "storage_endpoints" do
+    belongs_to(:builtin, Storage.BuiltIn.EndpointModel, on_replace: :delete)
+    belongs_to(:yoda, Storage.Yoda.EndpointModel, on_replace: :delete)
+    belongs_to(:centerdata, Storage.Centerdata.EndpointModel, on_replace: :delete)
     belongs_to(:aws, Storage.AWS.EndpointModel, on_replace: :delete)
     belongs_to(:azure, Storage.Azure.EndpointModel, on_replace: :delete)
-    belongs_to(:centerdata, Storage.Centerdata.EndpointModel, on_replace: :delete)
-    belongs_to(:yoda, Storage.Yoda.EndpointModel, on_replace: :delete)
 
     timestamps()
   end
 
   @fields ~w()a
   @required_fields @fields
-  @special_fields ~w(aws azure centerdata yoda)a
+  @special_fields ~w(builtin yoda centerdata aws azure)a
 
   def changeset(endpoint, params) do
     endpoint

@@ -51,6 +51,8 @@ config :core,
     "*@eyra.co"
   ]
 
+config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
+
 config :core, :rate,
   prune_interval: 5 * 60 * 1000,
   quotas: [

@@ -377,3 +377,7 @@ msgstr "Benchmark"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "platforms.netflix"
 msgstr "Netflix"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "storage_service_ids.builtin"
+msgstr "Internal"

@@ -67,11 +67,18 @@ defmodule Systems.Assignment.ConnectionView do
   end
 
   defp update_special_view(
-         %{assigns: %{type: type, assignment: assignment, myself: myself, uri_origin: uri_origin}} =
-           socket
+         %{
+           assigns: %{
+             id: id,
+             type: type,
+             assignment: assignment,
+             myself: myself,
+             uri_origin: uri_origin
+           }
+         } = socket
        ) do
     special_view = %{
-      id: "connection_view_#{type}",
+      id: "#{id}_connection_#{type}",
       module: Assignment.Private.connection_view_module(type),
       assignment: assignment,
       uri_origin: uri_origin,
@@ -98,15 +105,13 @@ defmodule Systems.Assignment.ConnectionView do
 
   @impl true
   def handle_event("change", _payload, socket) do
-    # TODO
-    Logger.error("Ghost event?!!")
     {:noreply, socket}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <div id={"#{@id}_connection"}>
       <Panel.flat bg_color="bg-grey1">
         <:title>
           <div class="flex flex-row gap-4 items-center">

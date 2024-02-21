@@ -1,5 +1,6 @@
 defmodule Frameworks.Utility.EctoHelper do
   import Ecto.Query, only: [from: 2]
+  require Logger
   alias Ecto.{Multi, Changeset}
   alias Core.Repo
   alias Frameworks.Signal
@@ -20,11 +21,16 @@ defmodule Frameworks.Utility.EctoHelper do
     Repo.insert(changeset)
   end
 
-  def update_and_dispatch(changeset, key) do
+  def update_and_dispatch(%Changeset{} = changeset, key) do
     Multi.new()
+    |> update_and_dispatch(changeset, key)
+    |> Repo.transaction()
+  end
+
+  def update_and_dispatch(%Multi{} = multi, %Changeset{} = changeset, key) do
+    multi
     |> Repo.multi_update(key, changeset)
     |> Signal.Public.multi_dispatch({key, :update_and_dispatch}, %{changeset: changeset})
-    |> Repo.transaction()
   end
 
   def delete(multi, name, %table{id: id}) do

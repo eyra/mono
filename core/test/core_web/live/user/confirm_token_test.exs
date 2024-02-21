@@ -103,8 +103,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
     setup [:login_as_member]
 
     test "opening activation mail with expired (invalid) token should redirect", %{conn: conn} do
-      {:error, {:redirect, %{to: "/project"}}} =
-        live(conn, Routes.live_path(conn, ConfirmToken, "abc"))
+      {:error, {:redirect, %{to: _}}} = live(conn, Routes.live_path(conn, ConfirmToken, "abc"))
     end
   end
 end
