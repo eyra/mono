@@ -15,7 +15,7 @@ msgid "progress.done.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "progress.leftover.label"
+msgid "progress.target.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen

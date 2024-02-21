@@ -382,8 +382,9 @@ defmodule Systems.Assignment.Public do
     Crew.Public.count_participants_finished(crew)
   end
 
-  def tester?(%{crew: crew}, user) do
-    Core.Authorization.user_has_role?(user, crew, :tester)
+  def tester?(%{crew: crew}, user_ref) do
+    user_id = User.user_id(user_ref)
+    Core.Authorization.user_has_role?(user_id, crew, :tester)
   end
 
   def tester?(_, _), do: false

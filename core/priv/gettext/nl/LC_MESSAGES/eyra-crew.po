@@ -37,3 +37,15 @@ msgstr "✅ Round trip bevestigd"
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "tester.completed.text"
 msgstr "Als de titel van deze pagina overeenkomt met de titel van jouw campagne, dan is de \"round trip\" van Next naar Qualtrics en terug geslaagd."
+
+#, elixir-autogen, elixir-format
+msgid "progress.finished.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.remaining.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.started.label"
+msgstr ""

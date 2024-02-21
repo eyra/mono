@@ -5,11 +5,14 @@ defmodule Systems.Assignment.MonitorView do
   alias Frameworks.Pixel.Widget
 
   @impl true
-  def update(%{number_widgets: number_widgets}, socket) do
+  def update(%{number_widgets: number_widgets, progress_widgets: progress_widgets}, socket) do
     {
       :ok,
       socket
-      |> assign(number_widgets: number_widgets)
+      |> assign(
+        number_widgets: number_widgets,
+        progress_widgets: progress_widgets
+      )
     }
   end
 
@@ -24,6 +27,11 @@ defmodule Systems.Assignment.MonitorView do
           <div class="grid grid-cols-3 gap-8 h-full">
             <%= for widget <- @number_widgets do %>
               <Widget.number {widget} />
+            <% end %>
+            <%= for widget <- @progress_widgets do %>
+              <div class="col-span-3">
+                <Widget.progress {widget} />
+              </div>
             <% end %>
           </div>
         </Area.content>

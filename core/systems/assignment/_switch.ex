@@ -133,37 +133,49 @@ defmodule Systems.Assignment.Switch do
   end
 
   defp handle({:assignment, event}, %{assignment: assignment, from_pid: from_pid} = message) do
-    case event do
-      {:workflow_item, :deleted} ->
-        delete_crew_tasks(message)
+    with {:workflow_item, :deleted} <- event do
+      delete_crew_tasks(message)
+    end
 
-      {:crew_task, :accepted} ->
-        payout_participants(message)
+    with {:crew_task, :locked} <- event do
+      %{crew_task: crew_task} = message
+      Assignment.Private.log_performance_event(assignment, crew_task, :started)
+    end
 
-      {:crew_task, _} ->
-        update_crew_task_next_action(message)
+    with {:crew_task, :completed} <- event do
+      %{crew_task: crew_task} = message
+      Assignment.Private.log_performance_event(assignment, crew_task, :finished)
+    end
 
-      {:crew, {:crew_member, :started}} ->
-        %{crew_member: crew_member} = message
-        Assignment.Private.log_event(assignment, :started, crew_member)
+    with {:crew_task, :accepted} <- event do
+      payout_participants(message)
+    end
 
-      {:crew, {:crew_member, :declined}} ->
-        %{crew_member: crew_member} = message
-        Assignment.Private.log_event(assignment, :declined, crew_member)
+    with {:crew_task, _} <- event do
+      update_crew_task_next_action(message)
+    end
 
-      {:crew, {:crew_member, :finished_tasks}} ->
-        %{crew_member: crew_member} = message
-        Assignment.Private.log_event(assignment, :finished, crew_member)
+    with {:crew, {:crew_member, :started}} <- event do
+      %{crew_member: crew_member} = message
+      Assignment.Private.log_performance_event(assignment, :started, crew_member)
+    end
 
-      {:consent_agreement, {:consent_signature, :created}} ->
-        %{consent_signature: %{user: user}} = message
-        Assignment.Private.clear_event(assignment, :declined, user)
-        Assignment.Private.log_event(assignment, :accepted, user)
+    with {:crew, {:crew_member, :declined}} <- event do
+      %{crew_member: crew_member} = message
+      Assignment.Private.log_performance_event(assignment, :declined, crew_member)
+    end
 
-        Assignment.Public.reset_member(assignment, user, dispatch: false)
+    with {:crew, {:crew_member, :finished_tasks}} <- event do
+      %{crew_member: crew_member} = message
+      Assignment.Private.log_performance_event(assignment, :finished, crew_member)
+    end
 
-      _ ->
-        :ok
+    with {:consent_agreement, {:consent_signature, :created}} <- event do
+      %{consent_signature: %{user: user}} = message
+      Assignment.Private.clear_performance_event(assignment, :declined, user)
+      Assignment.Private.log_performance_event(assignment, :accepted, user)
+
+      Assignment.Public.reset_member(assignment, user, dispatch: false)
     end
 
     update_pages(assignment, from_pid)

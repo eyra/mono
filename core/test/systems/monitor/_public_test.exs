@@ -8,7 +8,7 @@ defmodule Systems.Monitor.PublicTest do
   alias Systems.Monitor
 
   describe "Monitor events" do
-    test "log_event/2 single log" do
+    test "log_performance_event/2 single log" do
       identifier = ["assignment=1", "topic=declined", "user=1"]
       Monitor.Public.log(identifier)
 
@@ -20,7 +20,7 @@ defmodule Systems.Monitor.PublicTest do
              ] = from(Monitor.EventModel) |> Repo.all()
     end
 
-    test "log_event/2 multiple logs" do
+    test "log_performance_event/2 multiple logs" do
       Monitor.Public.log(["assignment=1", "topic=declined", "user=1"])
       Monitor.Public.log(["assignment=1", "topic=declined", "user=2"])
       Monitor.Public.log(["assignment=1", "topic=declined", "user=1"])

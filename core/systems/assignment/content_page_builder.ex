@@ -274,7 +274,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
     child =
       Fabric.prepare_child(fabric, :monitor, Assignment.MonitorView, %{
-        number_widgets: number_widgets(assignment)
+        number_widgets: number_widgets(assignment),
+        progress_widgets: progress_widgets(assignment)
       })
 
     %{
@@ -326,12 +327,12 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp number_widgets(assignment) do
     [:started, :finished, :declined]
-    |> Enum.map(&widget(&1, assignment))
+    |> Enum.map(&number_widget(&1, assignment))
   end
 
-  defp widget(:started, assignment) do
+  defp number_widget(:started, assignment) do
     metric =
-      Assignment.Private.monitor_event(assignment, :started)
+      Monitor.Public.event(assignment, :started)
       |> Monitor.Public.unique()
 
     %{
@@ -341,9 +342,9 @@ defmodule Systems.Assignment.ContentPageBuilder do
     }
   end
 
-  defp widget(:finished, assignment) do
+  defp number_widget(:finished, assignment) do
     metric =
-      Assignment.Private.monitor_event(assignment, :finished)
+      Monitor.Public.event(assignment, :finished)
       |> Monitor.Public.unique()
 
     %{
@@ -353,9 +354,9 @@ defmodule Systems.Assignment.ContentPageBuilder do
     }
   end
 
-  defp widget(:declined, assignment) do
+  defp number_widget(:declined, assignment) do
     metric =
-      Assignment.Private.monitor_event(assignment, :declined)
+      Monitor.Public.event(assignment, :declined)
       |> Monitor.Public.unique()
 
     color =
@@ -369,6 +370,30 @@ defmodule Systems.Assignment.ContentPageBuilder do
       label: dgettext("eyra-assignment", "declined.participants"),
       metric: metric,
       color: color
+    }
+  end
+
+  defp progress_widgets(%{workflow: workflow} = assignment) do
+    Workflow.Public.list_items(workflow)
+    |> Enum.map(&progress_widget(&1, assignment))
+  end
+
+  defp progress_widget(%Workflow.ItemModel{title: title, group: group} = item, assignment) do
+    started = Monitor.Public.unique(Monitor.Public.event(item, :started))
+    finished = Monitor.Public.unique(Monitor.Public.event(item, :finished))
+
+    total =
+      Monitor.Public.unique(Monitor.Public.event(assignment, :started)) -
+        Monitor.Public.unique(Monitor.Public.event(assignment, :declined))
+
+    %{
+      label: "#{title} #{group}",
+      target_amount: total,
+      done_amount: finished,
+      pending_amount: started - finished,
+      done_label: dgettext("eyra-crew", "progress.finished.label"),
+      pending_label: dgettext("eyra-crew", "progress.started.label"),
+      target_label: dgettext("eyra-crew", "progress.remaining.label")
     }
   end
 end

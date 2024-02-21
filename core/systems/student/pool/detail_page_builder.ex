@@ -112,7 +112,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
         pending_amount: pending_credits,
         done_label: dgettext("eyra-pool", "progress.done.label"),
         pending_label: dgettext("eyra-pool", "progress.pending.label"),
-        left_over_label: dgettext("eyra-pool", "progress.leftover.label")
+        target_label: dgettext("eyra-pool", "progress.target.label")
       },
       metrics: [
         %{
