@@ -30,7 +30,7 @@ defmodule Frameworks.Pixel.Widget do
 
     ~H"""
     <div class="h-full">
-      <div class="flex flex-col gap-2 rounded-lg shadow-2xl p-6 h-full">
+      <div class="flex flex-col gap-2 rounded-lg shadow-floating p-6 h-full">
         <div class={"font-title0 text-title0 #{@number_color}"}><%= @metric %></div>
         <Text.label><%= @label %></Text.label>
       </div>
@@ -60,7 +60,7 @@ defmodule Frameworks.Pixel.Widget do
       })
 
     ~H"""
-    <div class="rounded-lg shadow-2xl p-6 h-full">
+    <div class="rounded-lg shadow-floating p-6 h-full">
       <Text.title5><%= @label %></Text.title5>
       <div class="mt-6" />
       <.progress_bar
@@ -144,7 +144,7 @@ defmodule Frameworks.Pixel.Widget do
       })
 
     ~H"""
-    <div class="rounded-lg shadow-2xl p-6 h-full">
+    <div class="rounded-lg shadow-floating p-6 h-full">
       <Text.title5><%= @label %></Text.title5>
       <div class="mt-4" />
       <div class="flex flex-col">

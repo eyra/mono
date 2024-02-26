@@ -24,7 +24,7 @@ defmodule Systems.Assignment.MonitorView do
           <Margin.y id={:page_top} />
           <Text.title2><%= dgettext("eyra-assignment", "monitor.title") %></Text.title2>
           <.spacing value="L" />
-          <div class="grid grid-cols-3 gap-8 h-full">
+          <div class="grid grid-cols-3 gap-12 h-full">
             <%= for widget <- @number_widgets do %>
               <Widget.number {widget} />
             <% end %>
