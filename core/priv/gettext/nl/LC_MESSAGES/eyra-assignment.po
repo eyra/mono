@@ -305,3 +305,11 @@ msgstr "Gestart"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "declined.participants"
 msgstr "Geweigerd"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.general.title"
+msgstr "Panel"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.subject_count.label"
+msgstr "Ondertitel"

@@ -378,17 +378,29 @@ defmodule Systems.Assignment.ContentPageBuilder do
     |> Enum.map(&progress_widget(&1, assignment))
   end
 
-  defp progress_widget(%Workflow.ItemModel{title: title, group: group} = item, assignment) do
+  defp progress_widget(
+         %Workflow.ItemModel{title: title, group: group} = item,
+         %{info: %{subject_count: subject_count}} = assignment
+       ) do
     started = Monitor.Public.unique(Monitor.Public.event(item, :started))
     finished = Monitor.Public.unique(Monitor.Public.event(item, :finished))
 
-    total =
+    subject_count =
+      if subject_count do
+        subject_count
+      else
+        0
+      end
+
+    current_amount =
       Monitor.Public.unique(Monitor.Public.event(assignment, :started)) -
         Monitor.Public.unique(Monitor.Public.event(assignment, :declined))
 
+    expected_amount = max(subject_count, current_amount)
+
     %{
       label: "#{title} #{group}",
-      target_amount: total,
+      target_amount: expected_amount,
       done_amount: finished,
       pending_amount: started - finished,
       done_label: dgettext("eyra-crew", "progress.finished.label"),

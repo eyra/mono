@@ -305,3 +305,11 @@ msgstr "Started assignment"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "declined.participants"
 msgstr "Declined consent"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.general.title"
+msgstr "General"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.subject_count.label"
+msgstr "How many participants do you expect?"

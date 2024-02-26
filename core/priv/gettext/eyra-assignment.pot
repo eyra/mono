@@ -305,3 +305,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "declined.participants"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.general.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.subject_count.label"
+msgstr ""
