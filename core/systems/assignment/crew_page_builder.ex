@@ -80,7 +80,12 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp work_view(
-         %{consent_agreement: consent_agreement, page_refs: page_refs, crew: crew} = assignment,
+         %{
+           privacy_doc: privacy_doc,
+           consent_agreement: consent_agreement,
+           page_refs: page_refs,
+           crew: crew
+         } = assignment,
          %{fabric: fabric, current_user: user, panel_info: panel_info} = assigns,
          _
        ) do
@@ -92,6 +97,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
 
     Fabric.prepare_child(fabric, :work_view, Assignment.CrewWorkView, %{
       work_items: work_items,
+      privacy_doc: privacy_doc,
       consent_agreement: consent_agreement,
       context_menu_items: context_menu_items,
       intro_page_ref: intro_page_ref,
@@ -103,9 +109,17 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp context_menu_items(assignment, _assigns) do
-    [:assignment_intro, :consent, :assignment_support]
+    [:assignment_intro, :privacy, :consent, :assignment_support]
     |> Enum.map(&context_menu_item(&1, assignment))
     |> Enum.filter(&(not is_nil(&1)))
+  end
+
+  defp context_menu_item(:privacy = key, %{privacy_doc: privacy_doc}) do
+    if privacy_doc do
+      %{id: key, label: "Privacy", url: privacy_doc.ref}
+    else
+      nil
+    end
   end
 
   defp context_menu_item(:consent = key, %{consent_agreement: consent_agreement}) do

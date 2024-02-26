@@ -8,18 +8,18 @@ defmodule Systems.Assignment.CrewWorkView do
 
   alias Frameworks.Concept
 
-  alias Systems.{
-    Assignment,
-    Crew,
-    Workflow,
-    Project,
-    Content,
-    Consent
-  }
+  alias Systems.Assignment
+  alias Systems.Crew
+  alias Systems.Workflow
+  alias Systems.Project
+  alias Systems.Content
+  alias Systems.Consent
+  alias Systems.Document
 
   def update(
         %{
           work_items: work_items,
+          privacy_doc: privacy_doc,
           consent_agreement: consent_agreement,
           context_menu_items: context_menu_items,
           intro_page_ref: intro_page_ref,
@@ -38,6 +38,7 @@ defmodule Systems.Assignment.CrewWorkView do
       socket
       |> assign(
         work_items: work_items,
+        privacy_doc: privacy_doc,
         consent_agreement: consent_agreement,
         context_menu_items: context_menu_items,
         intro_page_ref: intro_page_ref,
@@ -199,22 +200,33 @@ defmodule Systems.Assignment.CrewWorkView do
     }
   end
 
-  def compose(:consent_page, %{consent_agreement: consent_agreement, user: user}) do
-    %{
-      module: Consent.SignatureView,
-      params: %{
-        title: dgettext("eyra-consent", "signature.view.title"),
-        signature: Consent.Public.get_signature(consent_agreement, user)
-      }
-    }
-  end
-
   def compose(:intro_page, %{intro_page_ref: %{page: page}}) do
     %{
       module: Content.PageView,
       params: %{
         title: dgettext("eyra-assignment", "intro.page.title"),
         page: page
+      }
+    }
+  end
+
+  def compose(:privacy_page, %{privacy_doc: %{ref: ref}}) do
+    %{
+      module: Document.PDFView,
+      params: %{
+        key: "privacy_doc_view",
+        url: ref,
+        title: dgettext("eyra-assignment", "privacy.title")
+      }
+    }
+  end
+
+  def compose(:consent_page, %{consent_agreement: consent_agreement, user: user}) do
+    %{
+      module: Consent.SignatureView,
+      params: %{
+        title: dgettext("eyra-consent", "signature.view.title"),
+        signature: Consent.Public.get_signature(consent_agreement, user)
       }
     }
   end
@@ -296,6 +308,16 @@ defmodule Systems.Assignment.CrewWorkView do
     {
       :noreply,
       socket |> handle_feldspar_event(event)
+    }
+  end
+
+  @impl true
+  def handle_event("show", %{page: :privacy}, socket) do
+    {
+      :noreply,
+      socket
+      |> compose_child(:privacy_page)
+      |> show_modal(:privacy_page, :page)
     }
   end
 

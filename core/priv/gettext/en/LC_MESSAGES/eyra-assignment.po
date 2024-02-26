@@ -281,3 +281,31 @@ msgstr "Thank you for your participation. You are now finished and can close you
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
 msgstr "Thank you"
+
+#, elixir-autogen, elixir-format
+msgid "privacy_doc.placeholder"
+msgstr "Select a privacy statement"
+
+#, elixir-autogen, elixir-format
+msgid "privacy_doc.replace.button"
+msgstr "Replace PDF"
+
+#, elixir-autogen, elixir-format
+msgid "privacy_doc.select.button"
+msgstr "Select PDF"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.privacy.body"
+msgstr "Upload your privacy statement here"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.privacy.title"
+msgstr "Privacy"
+
+#, elixir-autogen, elixir-format
+msgid "privacy_doc.annotation"
+msgstr "<h1>Generated URL</h1> The generated url below can be used wherever you want to refer to the privacy terms."
+
+#, elixir-autogen, elixir-format
+msgid "privacy.title"
+msgstr "Privacy"
