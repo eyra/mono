@@ -40,12 +40,12 @@ msgstr "Als de titel van deze pagina overeenkomt met de titel van jouw campagne,
 
 #, elixir-autogen, elixir-format
 msgid "progress.finished.label"
-msgstr ""
+msgstr "Afgerond"
 
 #, elixir-autogen, elixir-format
 msgid "progress.remaining.label"
-msgstr ""
+msgstr "Verwacht"
 
 #, elixir-autogen, elixir-format
 msgid "progress.started.label"
-msgstr ""
+msgstr "Gestart"
