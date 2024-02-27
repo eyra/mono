@@ -6,6 +6,9 @@ defmodule Systems.Assignment.ExternalPanelController do
 
   require Logger
 
+  @id_valid_regex ~r/^[A-Za-z0-9_-]+$/
+  @id_max_lenght 64
+
   def create(conn, %{"id" => id, "entry" => _} = params) do
     assignment = Assignment.Public.get!(id, [:crew, :auth_node])
 
@@ -17,6 +20,7 @@ defmodule Systems.Assignment.ExternalPanelController do
       |> redirect(to: path(params))
     else
       cond do
+        invalid_id?(params) -> forbidden(conn)
         has_no_access?(assignment, params) -> forbidden(conn)
         is_offline?(assignment) -> service_unavailable(conn)
         true -> start(assignment, conn, params)
@@ -32,6 +36,19 @@ defmodule Systems.Assignment.ExternalPanelController do
 
   defp is_offline?(%{status: status}) do
     status != :online
+  end
+
+  defp invalid_id?(%{} = params) do
+    id = get_participant(params)
+    invalid_id?(id)
+  end
+
+  defp invalid_id?(id) do
+    not valid_id?(id)
+  end
+
+  def valid_id?(id) do
+    String.length(id) <= @id_max_lenght and Regex.match?(@id_valid_regex, id)
   end
 
   defp has_no_access?(%{external_panel: external_panel}, params) do
