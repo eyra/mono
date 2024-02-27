@@ -88,8 +88,8 @@ defmodule Systems.Project.ItemForm do
     <div>
       <.dialog {%{title: @title, buttons: @buttons}}>
         <div id={"#{@id}_project_item_content"} phx-hook="LiveContent" data-show-errors={@show_errors}>
-          <.form id={@id} :let={form} for={@changeset} phx-change="change" phx-target={@myself} >
-            <.text_input form={form} field={:name} label_text={dgettext("eyra-project", "item.form.name.label")} />
+          <.form id={@id} :let={form} for={@changeset} phx-submit="submit" phx-change="change" phx-target={@myself} >
+            <.text_input form={form} field={:name} label_text={dgettext("eyra-project", "item.form.name.label")} debounce="0" />
           </.form>
         </div>
       </.dialog>
