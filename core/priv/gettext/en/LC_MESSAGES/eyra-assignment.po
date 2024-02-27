@@ -296,11 +296,11 @@ msgstr "Monitor"
 
 #, elixir-autogen, elixir-format
 msgid "finished.participants"
-msgstr "Finished assignment"
+msgstr "Finished"
 
 #, elixir-autogen, elixir-format
 msgid "started.participants"
-msgstr "Started assignment"
+msgstr "Started"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "declined.participants"
