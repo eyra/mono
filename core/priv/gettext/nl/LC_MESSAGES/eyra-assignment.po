@@ -296,7 +296,7 @@ msgstr "Monitor"
 
 #, elixir-autogen, elixir-format
 msgid "finished.participants"
-msgstr "Klaar"
+msgstr "Afgerond"
 
 #, elixir-autogen, elixir-format
 msgid "started.participants"
@@ -304,12 +304,12 @@ msgstr "Gestart"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "declined.participants"
-msgstr "Geweigerd"
+msgstr "Toestemming geweigerd"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.general.title"
-msgstr "Panel"
+msgstr "Monitor"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.subject_count.label"
-msgstr "Ondertitel"
+msgstr "Verwachtte aantal deelnemers"

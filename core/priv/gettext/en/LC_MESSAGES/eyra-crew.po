@@ -44,7 +44,7 @@ msgstr "Finished"
 
 #, elixir-autogen, elixir-format
 msgid "progress.remaining.label"
-msgstr "Remaining"
+msgstr "Expected"
 
 #, elixir-autogen, elixir-format
 msgid "progress.started.label"
