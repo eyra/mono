@@ -124,7 +124,7 @@ defmodule Frameworks.Pixel.Selector do
     multiselect? = multiselect?(type)
     active_count = active_count(items)
 
-    if is_same_id?(item.id, item_id) do
+    if same_id?(item.id, item_id) do
       if not item.active or optional? or (multiselect? and active_count > 1) do
         %{item | active: !item.active}
       else
@@ -142,15 +142,15 @@ defmodule Frameworks.Pixel.Selector do
 
   defp toggle(socket, item, item_id), do: toggle(socket, item, String.to_atom(item_id))
 
-  defp is_same_id?(left, right) when is_number(left) and is_atom(right) do
+  defp same_id?(left, right) when is_number(left) and is_atom(right) do
     "#{left}" == Atom.to_string(right)
   end
 
-  defp is_same_id?(left, right) when is_binary(left) and is_atom(right) do
+  defp same_id?(left, right) when is_binary(left) and is_atom(right) do
     left == Atom.to_string(right)
   end
 
-  defp is_same_id?(left, right) do
+  defp same_id?(left, right) do
     left == right
   end
 

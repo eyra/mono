@@ -303,7 +303,7 @@ defmodule Systems.Assignment.Public do
     Core.Persister.save(assignment, changeset)
   end
 
-  def is_owner?(assignment, user) do
+  def owner?(assignment, user) do
     Core.Authorization.user_has_role?(user, assignment, :owner)
   end
 
@@ -370,6 +370,21 @@ defmodule Systems.Assignment.Public do
     Crew.Public.member?(crew, user)
   end
 
+  def count_participants(%{crew: crew} = _assignment) do
+    Crew.Public.count_participants(crew)
+  end
+
+  def count_participants_finished(%{crew: crew} = _assignment) do
+    Crew.Public.count_participants_finished(crew)
+  end
+
+  def tester?(%{crew: crew}, user_ref) do
+    user_id = User.user_id(user_ref)
+    Core.Authorization.user_has_role?(user_id, crew, :tester)
+  end
+
+  def tester?(_, _), do: false
+
   def apply_member(id, user, identifier, reward_amount) when is_number(id) do
     get!(id, [:crew])
     |> apply_member(user, identifier, reward_amount)
@@ -392,6 +407,17 @@ defmodule Systems.Assignment.Public do
     end
   end
 
+  def decline_member(%Assignment.Model{crew: crew}, user) do
+    if member = Crew.Public.get_member(crew, user) do
+      Multi.new()
+      |> Crew.Public.expire_member(member)
+      |> Signal.Public.multi_dispatch({:crew_member, :declined}, %{crew_member: member})
+      |> Repo.transaction()
+    else
+      Logger.warning("Unable to decline member, probably expired already")
+    end
+  end
+
   defp run_create_reward(%Assignment.Model{budget: budget} = assignment, %User{} = user, amount) do
     idempotence_key = idempotence_key(assignment, user)
 
@@ -408,14 +434,13 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  def reset_member(%{crew: crew} = assignment, user) do
-    if Crew.Public.member?(crew, user) do
+  def reset_member(%{crew: crew} = assignment, user, opts \\ []) do
+    # get member regardless expired state
+    if member = Crew.Public.get_member_unsafe(crew, user, [:crew]) do
       expire_at = expiration_timestamp(assignment)
-
-      Crew.Public.get_member(crew, user)
-      |> Crew.Public.reset_member(expire_at)
+      Crew.Public.reset_member!(member, expire_at, opts)
     else
-      Logger.warn("Unable to reset, user #{user.id} is not a member on crew #{crew.id}")
+      Logger.warn("Can not reset member for unknown user=#{user.id} in crew=#{crew.id}")
     end
   end
 
@@ -531,56 +556,9 @@ defmodule Systems.Assignment.Public do
 
   defp assignment_type(%{workflow: %{type: type}}), do: type
 
-  def mark_expired_debug(%{info: %{duration: duration}} = assignment, force) do
-    mark_expired_debug(assignment, duration, force)
-  end
-
-  def mark_expired_debug(%{crew_id: crew_id}, duration, force) do
+  def mark_expired_debug(%{info: %{duration: duration}, crew: crew} = _assignment, force) do
     expiration_timeout = max(@min_expiration_timeout, duration)
-
-    task_query =
-      if force do
-        pending_tasks_query(crew_id)
-      else
-        expired_pending_tasks_query(crew_id, expiration_timeout)
-      end
-
-    task_ids = from(t in task_query, select: t.id)
-    member_query = Crew.Public.member_query(task_ids)
-
-    Multi.new()
-    |> Multi.update_all(:members, member_query, set: [expired: true])
-    |> Multi.update_all(:tasks, task_query, set: [expired: true])
-    |> Repo.transaction()
-  end
-
-  def pending_tasks_query(crew_id) do
-    from(t in Crew.TaskModel,
-      where:
-        t.crew_id == ^crew_id and
-          t.status == :pending and
-          t.expired == false
-    )
-  end
-
-  def expired_pending_tasks_query(crew_id, expiration_timeout)
-      when is_binary(expiration_timeout) do
-    expired_pending_tasks_query(crew_id, String.to_integer(expiration_timeout))
-  end
-
-  def expired_pending_tasks_query(crew_id, expiration_timeout) do
-    expiration_timestamp =
-      Timestamp.now()
-      |> Timestamp.shift_minutes(expiration_timeout * -1)
-
-    from(t in Crew.TaskModel,
-      where:
-        t.crew_id == ^crew_id and
-          t.status == :pending and
-          t.expired == false and
-          (t.started_at <= ^expiration_timestamp or
-             (is_nil(t.started_at) and t.updated_at <= ^expiration_timestamp))
-    )
+    Crew.Public.mark_expired_debug(crew, expiration_timeout, force)
   end
 
   # Crew

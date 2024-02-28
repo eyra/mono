@@ -10,16 +10,16 @@ defmodule Frameworks.Pixel.Widget do
   attr(:target, :any, default: nil)
   attr(:target_direction, :atom, default: nil)
 
-  def metric(
-        %{number: number, target: target, target_direction: target_direction, color: color} =
+  def number(
+        %{metric: metric, target: target, target_direction: target_direction, color: color} =
           assigns
       ) do
     number_color =
-      case {number, target, target_direction, color} do
-        {number, target, :up, _} when number < target -> "text-warning"
-        {number, target, :up, _} when number >= target -> "text-success"
-        {number, target, :down, _} when number > target -> "text-delete"
-        {number, target, :down, _} when number <= target -> "text-success"
+      case {metric, target, target_direction, color} do
+        {metric, target, :up, _} when metric < target -> "text-warning"
+        {metric, target, :up, _} when metric >= target -> "text-success"
+        {metric, target, :down, _} when metric > target -> "text-delete"
+        {metric, target, :down, _} when metric <= target -> "text-success"
         {_, _, _, :positive} -> "text-success"
         {_, _, _, :negative} -> "text-delete"
         {_, _, _, :warning} -> "text-warning"
@@ -30,8 +30,8 @@ defmodule Frameworks.Pixel.Widget do
 
     ~H"""
     <div class="h-full">
-      <div class="flex flex-col gap-2 rounded-lg shadow-2xl p-6 h-full">
-        <div class={"font-title0 text-title0 #{@number_color}"}><%= @number %></div>
+      <div class="flex flex-col gap-2 rounded-lg shadow-floating p-6 h-full">
+        <div class={"font-title0 text-title0 #{@number_color}"}><%= @metric %></div>
         <Text.label><%= @label %></Text.label>
       </div>
     </div>
@@ -44,7 +44,7 @@ defmodule Frameworks.Pixel.Widget do
   attr(:pending_amount, :integer, required: true)
   attr(:done_label, :string, required: true)
   attr(:pending_label, :string, required: true)
-  attr(:left_over_label, :string, required: true)
+  attr(:target_label, :string, required: true)
 
   def progress(
         %{target_amount: target_amount, done_amount: done_amount, pending_amount: pending_amount} =
@@ -60,7 +60,7 @@ defmodule Frameworks.Pixel.Widget do
       })
 
     ~H"""
-    <div class="rounded-lg shadow-2xl p-6 h-full">
+    <div class="rounded-lg shadow-floating p-6 h-full">
       <Text.title5><%= @label %></Text.title5>
       <div class="mt-6" />
       <.progress_bar
@@ -76,19 +76,19 @@ defmodule Frameworks.Pixel.Widget do
         <%= if @done_amount > 0 do %>
           <div class="flex flex-row items-center gap-3">
             <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-success" />
-            <Text.label><%= @done_amount %> <%= @done_label %></Text.label>
+            <Text.label><%= @done_amount %> <%= String.downcase(@done_label) %></Text.label>
           </div>
         <% end %>
         <%= if @pending_amount > 0 do %>
           <div class="flex flex-row items-center gap-3">
               <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-warning" />
-              <Text.label><%= @pending_amount %> <%= @pending_label %></Text.label>
+              <Text.label><%= @pending_amount %> <%= String.downcase(@pending_label) %></Text.label>
             </div>
         <% end %>
         <%= if @left_over_amount > 0 do %>
           <div class="flex flex-row items-center gap-3">
             <div class="flex-shrink-0 w-6 h-6 -mt-2px rounded-full bg-grey3" />
-            <Text.label><%= @left_over_amount %> <%= @left_over_label %></Text.label>
+            <Text.label><%= @left_over_amount %> <%= String.downcase(@target_label) %></Text.label>
           </div>
         <% end %>
       </div>
@@ -144,7 +144,7 @@ defmodule Frameworks.Pixel.Widget do
       })
 
     ~H"""
-    <div class="rounded-lg shadow-2xl p-6 h-full">
+    <div class="rounded-lg shadow-floating p-6 h-full">
       <Text.title5><%= @label %></Text.title5>
       <div class="mt-4" />
       <div class="flex flex-col">

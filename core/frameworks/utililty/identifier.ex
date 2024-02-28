@@ -18,6 +18,31 @@ defmodule Frameworks.Utility.Identifier do
     |> Enum.map(&atomify(&1, include_year?))
   end
 
+  def get_attribute!(identifier, attribute) do
+    if value = get_attribute(identifier, attribute) do
+      value
+    else
+      raise ArgumentError, "Attribute #{inspect(attribute)} not found in #{inspect(identifier)}"
+    end
+  end
+
+  def get_attribute(%{identifier: identifier}, attribute) do
+    get_attribute(identifier, attribute)
+  end
+
+  def get_attribute(identifier, attribute) when is_atom(attribute) do
+    get_attribute(identifier, Atom.to_string(attribute))
+  end
+
+  def get_attribute([], _attribute), do: nil
+
+  def get_attribute([h | t], attribute) when is_binary(h) and is_binary(attribute) do
+    case String.split(h, "=") do
+      [^attribute, value] -> value
+      _ -> get_attribute(t, attribute)
+    end
+  end
+
   defp atomify("year" <> year, true), do: ":year#{year}"
   defp atomify("20" <> year, true), do: ":20#{year}"
   defp atomify("resit", true), do: ":resit"

@@ -68,8 +68,10 @@ defmodule Systems.Consent.Public do
   end
 
   def create_signature(revision, user) do
-    prepare_signature(revision, user)
-    |> Repo.insert()
+    Multi.new()
+    |> Multi.insert(:consent_signature, prepare_signature(revision, user))
+    |> Signal.Public.multi_dispatch({:consent_signature, :created})
+    |> Repo.transaction()
   end
 
   def prepare_signature(revision, user) do

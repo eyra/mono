@@ -11,20 +11,20 @@ defmodule CoreWeb.UI.OldSkool do
   Conveniences for reusable UI components
   """
 
-  def is_native_web?(conn) do
+  def native_web?(conn) do
     user_agent = Browser.Ua.to_ua(conn)
     String.match?(user_agent, ~r/NativeWrapper/i)
   end
 
-  def is_mobile_web?(conn) do
-    Browser.mobile?(conn) && !is_native_web?(conn)
+  def mobile_web?(conn) do
+    Browser.mobile?(conn) && !native_web?(conn)
   end
 
-  def is_desktop_web?(conn) do
-    !is_native_web?(conn) && !is_mobile_web?(conn)
+  def desktop_web?(conn) do
+    !native_web?(conn) && !mobile_web?(conn)
   end
 
-  def is_push_supported?(conn) do
+  def push_supported?(conn) do
     Browser.chrome?(conn) || Browser.firefox?(conn)
   end
 

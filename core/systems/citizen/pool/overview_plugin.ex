@@ -29,7 +29,7 @@ defmodule Systems.Citizen.Pool.OverviewPlugin do
         "citizen",
         Pool.Model.preload_graph([:org, :participants, :submissions])
       )
-      |> Enum.filter(&is_owner?(&1, user))
+      |> Enum.filter(&owner?(&1, user))
 
     pool_items = Enum.map(pools, &to_view_model(&1, myself))
 
@@ -44,7 +44,7 @@ defmodule Systems.Citizen.Pool.OverviewPlugin do
     Enum.find(pools, &(&1.id == pool_id))
   end
 
-  defp is_owner?(entity, user) do
+  defp owner?(entity, user) do
     Core.Authorization.user_has_role?(user, entity, :owner)
   end
 

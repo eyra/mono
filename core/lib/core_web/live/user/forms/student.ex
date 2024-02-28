@@ -58,7 +58,7 @@ defmodule CoreWeb.User.Forms.Student do
     user
     |> Budget.Public.list_wallets()
     |> Enum.filter(
-      &(is_year?(&1, year) and
+      &(year?(&1, year) and
           finished?(&1))
     )
     |> Enum.map(&Student.Course.get_by_wallet(&1))
@@ -90,9 +90,9 @@ defmodule CoreWeb.User.Forms.Student do
     balance_credit >= Student.Public.get_target(wallet)
   end
 
-  defp is_year?(%{identifier: identifier}, year), do: is_year?(identifier, year)
+  defp year?(%{identifier: identifier}, year), do: year?(identifier, year)
 
-  defp is_year?(["wallet", currency_name, _], year),
+  defp year?(["wallet", currency_name, _], year),
     do: String.ends_with?(currency_name, "_#{year}")
 
   defp classes(academic_year) do

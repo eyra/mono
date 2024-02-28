@@ -248,9 +248,13 @@ defmodule Core.Authorization do
     |> Core.Repo.all()
   end
 
-  def user_has_role?(user, entity, role) do
+  def user_has_role?(%{id: user_id}, entity, role) do
+    user_has_role?(user_id, entity, role)
+  end
+
+  def user_has_role?(user_id, entity, role) do
     users_with_role(entity, role)
-    |> Enum.any?(&(&1.id == user.id))
+    |> Enum.any?(&(&1.id == user_id))
   end
 
   def first_user_with_role(entity, role, preload) do

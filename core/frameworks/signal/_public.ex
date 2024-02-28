@@ -21,10 +21,19 @@ defmodule Frameworks.Signal.Public do
   ]
 
   def dispatch(signal, message) do
-    Logger.warn("SIGNAL: " <> pretty_print(signal) <> " => " <> pretty_print(Map.keys(message)))
+    message = Map.put_new(message, :from_pid, self())
 
-    for handler <- signal_handlers() do
-      handler.intercept(signal, message)
+    Logger.notice(
+      "SIGNAL: #{pretty_print(signal)} => #{pretty_print(Map.keys(message))}, FROM: #{inspect(Map.get(message, :from_pid))}",
+      ansi_color: :light_magenta
+    )
+
+    results = Enum.map(signal_handlers(), & &1.intercept(signal, message))
+
+    if not Enum.member?(results, :ok) do
+      Logger.error(
+        "Unhandeld signal: #{pretty_print(signal)} => #{pretty_print(Map.keys(message))}, FROM: #{inspect(Map.get(message, :from_pid))}"
+      )
     end
 
     :ok
@@ -36,7 +45,6 @@ defmodule Frameworks.Signal.Public do
 
   @doc """
   Send a signal as part of an Ecto Multi.
-
   It automatically merges the message with the multi
   changes.
   """

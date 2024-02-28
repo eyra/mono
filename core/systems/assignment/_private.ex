@@ -5,12 +5,36 @@ defmodule Systems.Assignment.Private do
 
   require Logger
 
-  alias Systems.{
-    Assignment,
-    Workflow,
-    Crew,
-    Storage
-  }
+  alias Frameworks.Utility.Identifier
+
+  alias Systems.Assignment
+  alias Systems.Workflow
+  alias Systems.Crew
+  alias Systems.Storage
+  alias Systems.Monitor
+
+  def log_performance_event(
+        %Assignment.Model{} = assignment,
+        %Crew.TaskModel{} = crew_task,
+        topic
+      ) do
+    with {:ok, workflow_item} <- get_workflow_item(crew_task),
+         {:ok, user_ref} <- get_crew_member(crew_task),
+         false <- Assignment.Public.tester?(assignment, user_ref) do
+      Monitor.Public.log(workflow_item, topic, user_ref)
+    end
+  end
+
+  def log_performance_event(%Assignment.Model{} = assignment, topic, user_ref) do
+    if not Assignment.Public.tester?(assignment, user_ref) do
+      Monitor.Public.log(assignment, topic, user_ref)
+    end
+  end
+
+  def clear_performance_event(%Assignment.Model{} = assignment, topic, user_ref) do
+    Monitor.Public.event(assignment, topic, user_ref)
+    |> Monitor.Public.clear()
+  end
 
   def storage_endpoint_key(%Assignment.Model{id: id}) do
     "assignment=#{id}"
@@ -68,6 +92,36 @@ defmodule Systems.Assignment.Private do
   def connection_title(:panel, %{external_panel: external_panel}),
     do: Assignment.ExternalPanelIds.translate(external_panel)
 
+  # Crew Task & Workflow Item mapping
+
+  def get_workflow_item(%Crew.TaskModel{} = task, preload \\ []) do
+    if item_id = workflow_item_id(task) do
+      {:ok,
+       item_id
+       |> String.to_integer()
+       |> Workflow.Public.get_item!(preload)}
+    else
+      {:error, nil}
+    end
+  end
+
+  def get_crew_member(%Crew.TaskModel{} = task, preload \\ []) do
+    if member_id = member_id(task) do
+      {:ok,
+       member_id
+       |> String.to_integer()
+       |> Crew.Public.get_member!(preload)}
+    else
+      {:error, nil}
+    end
+  end
+
+  def member_id(%Crew.TaskModel{identifier: identifier}),
+    do: Identifier.get_attribute(identifier, "member")
+
+  def workflow_item_id(%Crew.TaskModel{identifier: identifier}),
+    do: Identifier.get_attribute(identifier, "item")
+
   def task_template(%{special: :data_donation}, %Workflow.ItemModel{id: item_id}) do
     ["item=#{item_id}"]
   end
@@ -80,16 +134,9 @@ defmodule Systems.Assignment.Private do
     ["item=#{item_id}", "member=#{member_id}"]
   end
 
-  # Depricated
-  def task_identifier(tool, user) do
-    Logger.warn(
-      "`Systems.Assignment.Private.task_identifier/2` is deprecated; call `task_identifier/3` instead."
-    )
-
-    [
-      Atom.to_string(Frameworks.Concept.ToolModel.key(tool)),
-      Integer.to_string(tool.id),
-      Integer.to_string(user.id)
-    ]
+  # Deprecated
+  def task_identifier(_tool, _user) do
+    raise RuntimeError,
+          "`Systems.Assignment.Private.task_identifier/2` is deprecated; call `task_identifier/3` instead."
   end
 end

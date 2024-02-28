@@ -3,11 +3,10 @@ defmodule Systems.Assignment.PublicTest do
   import Systems.NextAction.TestHelper
 
   describe "assignments" do
-    alias Systems.{
-      Assignment,
-      Crew,
-      Budget
-    }
+    alias Systems.Assignment
+    alias Systems.Crew
+    alias Systems.Budget
+    alias Systems.Monitor
 
     alias Core.Factories
 
@@ -57,7 +56,7 @@ defmodule Systems.Assignment.PublicTest do
       assert not Assignment.Public.has_open_spots?(assignment)
     end
 
-    test "mark_expired?/1 force=false, marked 1 expired task" do
+    test "mark_expired_debug?/1 force=false, marked 1 expired task" do
       %{crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
 
       user1 = Factories.insert!(:member)
@@ -85,7 +84,7 @@ defmodule Systems.Assignment.PublicTest do
       assert %{expired: false} = Crew.Public.get_task!(task3.id)
     end
 
-    test "apply_expired?/1 force=true, marked all pending tasks" do
+    test "mark_expired_debug?/1 force=true, marked all pending tasks" do
       %{crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
 
       user1 = Factories.insert!(:member)
@@ -162,6 +161,24 @@ defmodule Systems.Assignment.PublicTest do
 
       assert %{expired: false} = Crew.Public.get_member(crew, user)
       assert %{expired: false} = Crew.Public.get_task!(task.id)
+    end
+
+    test "decline_member/2 does expire member and tasks and updates metric" do
+      %{crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
+      user = Factories.insert!(:member)
+      member = Crew.Factories.create_member(crew, user)
+      task = Crew.Factories.create_task(crew, member, ["task1"])
+      metric = ["assignment=#{assignment.id}", "topic=declined", "user=#{user.id}"]
+
+      assert %{expired: false} = Crew.Public.get_member(crew, user)
+      assert %{expired: false} = Crew.Public.get_task!(task.id)
+      assert 0 = Monitor.Public.count(metric)
+
+      Assignment.Public.decline_member(assignment, user)
+
+      assert %{expired: true} = Crew.Public.get_member!(member.id)
+      assert %{expired: true} = Crew.Public.get_task!(task.id)
+      assert 1 = Monitor.Public.count(metric)
     end
 
     test "rollback_expired_deposits/0 resets reward" do

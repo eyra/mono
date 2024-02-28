@@ -71,19 +71,14 @@ defmodule Systems.Consent.RevisionForm do
   def save(socket, entity, attrs) do
     changeset = Consent.RevisionModel.changeset(entity, attrs)
 
-    auto_save_begin(socket)
-
     case Core.Persister.save(entity, changeset) do
       {:ok, entity} ->
         socket
         |> assign(entity: entity)
-        |> flash_persister_saved()
-        |> auto_save_end()
 
       {:error, changeset} ->
         socket
         |> handle_save_errors(changeset)
-        |> auto_save_end()
     end
   end
 

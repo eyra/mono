@@ -184,7 +184,7 @@ defmodule Systems.Pool.Public do
     |> Repo.one!()
   end
 
-  def is_participant?(%Pool.Model{} = pool, %Accounts.User{} = user) do
+  def participant?(%Pool.Model{} = pool, %Accounts.User{} = user) do
     from(participant in Pool.ParticipantModel,
       where: participant.pool_id == ^pool.id,
       where: participant.user_id == ^user.id
@@ -290,7 +290,7 @@ defmodule Systems.Pool.Public do
     Multi.new()
     |> Multi.update(:submission, changeset)
     |> Multi.run(:dispatch, fn _, %{submission: submission} ->
-      Signal.Public.dispatch!({:submission, :updated}, submission)
+      Signal.Public.dispatch!({:submission, :updated}, %{submission: submission})
       {:ok, true}
     end)
     |> Multi.run(:notify, fn _, %{submission: submission} ->
@@ -309,7 +309,7 @@ defmodule Systems.Pool.Public do
     Multi.new()
     |> Multi.update(:criteria, changeset)
     |> Multi.run(:dispatch, fn _, %{criteria: criteria} ->
-      Signal.Public.dispatch!({:criteria, :updated}, criteria)
+      Signal.Public.dispatch!({:criteria, :updated}, %{criteria: criteria})
     end)
     |> Repo.transaction()
   end
@@ -371,23 +371,23 @@ defmodule Systems.Pool.Public do
     where(query, [user, features], field(features, ^field_name) in ^values)
   end
 
-  def is_target_achieved?(
+  def target_achieved?(
         %Pool.Model{target: target},
         %{balance_credit: balance_credit}
       ) do
     balance_credit >= target
   end
 
-  def is_target_achieved?(_, _), do: false
+  def target_achieved?(_, _), do: false
 
-  def is_wallet_related?(
+  def wallet_related?(
         %Pool.Model{currency: %{name: currency_name}},
         %Bookkeeping.AccountModel{identifier: ["wallet", wallet_name, _]}
       ) do
     wallet_name == currency_name
   end
 
-  def is_wallet_related?(_, _), do: false
+  def wallet_related?(_, _), do: false
 
   defp notify_when_submitted(
          %Pool.SubmissionModel{pool_id: pool_id} = submission,

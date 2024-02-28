@@ -69,15 +69,23 @@ defmodule Systems.Observatory.Public do
         }
       end
 
-      def handle_info(%{topic: _topic, payload: {signal, %{model: model}}} = payload, socket) do
+      def handle_info(
+            %{topic: _topic, payload: {signal, %{model: model, from_pid: from_pid}}} = payload,
+            socket
+          ) do
         {
           :noreply,
           socket
           |> assign(model: model)
           |> update_view_model()
           |> handle_view_model_updated()
-          |> put_updated_info_flash()
+          |> put_info_flash(from_pid)
         }
+      end
+
+      def handle_info(%{topic: topic, payload: {signal, %{model: model}}} = payload, socket) do
+        Logger.warn("Unknown sender, no from_pid provided")
+        handle_info(%{topic: topic, payload: {signal, %{model: model, from_pid: nil}}}, socket)
       end
 
       def observe_view_model(%{assigns: %{model: %{id: id} = model}} = socket) do
@@ -104,12 +112,20 @@ defmodule Systems.Observatory.Public do
 
       defoverridable handle_view_model_updated: 1
 
-      def put_updated_info_flash(%{assigns: %{auto_save_status: :active}} = socket) do
-        socket
+      def put_info_flash(socket, from_pid) do
+        if from_pid == self() do
+          socket |> put_saved_info_flash()
+        else
+          socket |> put_updated_info_flash()
+        end
       end
 
       def put_updated_info_flash(socket) do
         socket |> Frameworks.Pixel.Flash.put_info("Updated")
+      end
+
+      def put_saved_info_flash(socket) do
+        socket |> Frameworks.Pixel.Flash.put_info("Saved")
       end
     end
   end

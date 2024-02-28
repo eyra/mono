@@ -64,10 +64,8 @@ defmodule CoreWeb.LiveForm do
 
       def save_closure(socket, closure) do
         socket
-        |> auto_save_begin()
         |> hide_flash()
         |> closure.()
-        |> auto_save_end()
       end
 
       defp handle_validation_error(socket, changeset) do
@@ -98,16 +96,6 @@ defmodule CoreWeb.LiveForm do
 
       defp handle_auto_save_done(%{assigns: %{id: id}} = socket) do
         send(self(), {:handle_auto_save_done, id})
-        socket
-      end
-
-      def auto_save_begin(socket) do
-        send(self(), %{auto_save: :active})
-        socket
-      end
-
-      def auto_save_end(socket) do
-        send(self(), %{auto_save: :idle})
         socket
       end
     end

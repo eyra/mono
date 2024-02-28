@@ -281,3 +281,35 @@ msgstr "Thank you for your participation. You are now finished and can close you
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
 msgstr "Thank you"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor"
+msgstr "Monitor"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor.forward"
+msgstr "Go to Monitor"
+
+#, elixir-autogen, elixir-format
+msgid "monitor.title"
+msgstr "Monitor"
+
+#, elixir-autogen, elixir-format
+msgid "finished.participants"
+msgstr "Finished"
+
+#, elixir-autogen, elixir-format
+msgid "started.participants"
+msgstr "Started"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "declined.participants"
+msgstr "Declined consent"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.general.title"
+msgstr "Monitor"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.subject_count.label"
+msgstr "Expected number of participants"

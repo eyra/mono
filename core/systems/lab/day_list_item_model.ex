@@ -93,6 +93,7 @@ defmodule Systems.Lab.DayListItemModel do
     days |> Enum.find_value(&is_day?(&1, date, location))
   end
 
+  # credo:disable-for-next-line
   defp is_day?(day, date, location) do
     Date.compare(day.date, date) == :eq and day.location == location
   end
