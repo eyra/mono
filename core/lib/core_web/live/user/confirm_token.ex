@@ -3,6 +3,7 @@ defmodule CoreWeb.User.ConfirmToken do
   The home screen.
   """
   use CoreWeb, :live_view
+  use CoreWeb.Layouts.Stripped.Component, :confirm_token
 
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Button
@@ -12,29 +13,50 @@ defmodule CoreWeb.User.ConfirmToken do
 
   def mount(%{"token" => token}, _session, socket) do
     require_feature(:password_sign_in)
+    connected? = Phoenix.LiveView.connected?(socket)
 
+    {:ok,
+     socket
+     |> assign(
+       failed: false,
+       token: token
+     )
+     |> confirm_user(connected?)}
+  end
+
+  defp confirm_user(socket, false) do
+    # Only confirm user when socket is connected to prevent early invalidation of token.
+    # https://github.com/eyra/mono/issues/615
+    socket
+  end
+
+  defp confirm_user(%{assigns: %{token: token}} = socket, true) do
     case Accounts.confirm_user(token) do
-      {:ok, _} ->
-        {:ok,
-         socket
-         |> put_flash(:info, dgettext("eyra-user", "account.activated.successfully"))
-         |> redirect(to: ~p"/user/signin")}
+      {:ok, user} ->
+        handle_succeeded(socket, user)
 
       _ ->
-        {:ok,
-         assign(socket,
-           status: :invalid,
-           changeset: User.valid_email_changeset()
-         )}
+        handle_failed(socket)
     end
+  end
+
+  defp handle_succeeded(socket, %{email: email}) do
+    socket
+    |> put_flash(:info, dgettext("eyra-user", "account.activated.successfully"))
+    |> redirect(to: ~p"/user/signin?email=#{email}")
+  end
+
+  defp handle_failed(socket) do
+    assign(socket,
+      failed: true,
+      status: :invalid,
+      changeset: User.valid_email_changeset()
+    )
   end
 
   def handle_info({:delivered_email, _email}, socket) do
     {:noreply, socket}
   end
-
-  @impl true
-  def handle_uri(socket), do: socket
 
   @impl true
   def handle_event("resend-token", %{"user" => %{"email" => email}}, socket) do
@@ -76,22 +98,23 @@ defmodule CoreWeb.User.ConfirmToken do
     end
   end
 
-  # data(status, :any)
-  # data(changeset, :any)
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
-      <Area.content>
-      <Margin.y id={:page_top} />
-      <p>Your account activation link is invalid or it has expired.</p>
-      <p>Enter your email address and click resend to receive a new account activation link.</p>
-      <.form id="confirm_token" :let={form} for={%{}} phx-submit="resend-token" >
-        <.email_input form={form} field={:email} label_text={dgettext("eyra-user", "confirm.token.email.label")} />
-        <Button.submit label={dgettext("eyra-account", "confirm.token.resend_button")} />
-      </.form>
-      </Area.content>
-    </div>
+      <.stripped menus={@menus}>
+        <Area.sheet>
+        <Margin.y id={:page_top} />
+        <%= if @failed do %>
+          <Text.title1><%= dgettext("eyra-account", "activation.failed.title") %></Text.title1>
+          <Text.body><%= dgettext("eyra-account", "activation.failed.body") %></Text.body>
+          <.spacing value="M" />
+          <.form id="confirm_token" :let={form} for={%{}} phx-submit="resend-token" >
+            <.email_input form={form} field={:email} label_text={dgettext("eyra-user", "confirm.token.email.label")} />
+            <Button.submit label={dgettext("eyra-account", "confirm.token.resend_button")} />
+          </.form>
+        <% end %>
+        </Area.sheet>
+      </.stripped>
     """
   end
 end

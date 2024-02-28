@@ -2,43 +2,33 @@ defmodule Next.User.Signin do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Stripped.Component, :signin
 
-  alias Core.Accounts
   alias Core.Accounts.User
   alias CoreWeb.User.Form
 
-  def mount(_params, _session, socket) do
+  def mount(params, _session, socket) do
     require_feature(:password_sign_in)
-    changeset = Accounts.change_user_registration(%User{})
 
-    {:ok,
-     socket
-     |> assign(changeset: changeset)}
+    {
+      :ok,
+      socket
+      |> assign(email: Map.get(params, "email"))
+      |> update_form()
+    }
   end
 
-  @impl true
-  def handle_event(
-        "toggle",
-        %{"checkbox" => checkbox},
-        %{assigns: %{changeset: changeset}} = socket
-      ) do
-    field = String.to_atom(checkbox)
+  defp update_form(%{assigns: %{email: nil}} = socket) do
+    assign(socket, :form, to_form(%{}))
+  end
 
-    new_value =
-      case Ecto.Changeset.fetch_field(changeset, field) do
-        :error -> true
-        {:changes, value} -> not value
-        {:data, value} -> not value
+  defp update_form(%{assigns: %{email: email}} = socket) when is_binary(email) do
+    attrs =
+      if User.valid_email?(email) do
+        %{"email" => email}
+      else
+        %{}
       end
 
-    changeset = Ecto.Changeset.cast(changeset, %{field => new_value}, [field])
-
-    {:noreply, socket |> assign(changeset: changeset)}
-  end
-
-  @impl true
-  def handle_event("form_change", %{"user" => attrs}, socket) do
-    changeset = Accounts.change_user_registration(%User{}, attrs)
-    {:noreply, socket |> assign(changeset: changeset)}
+    assign(socket, :form, to_form(attrs))
   end
 
   @impl true
@@ -51,7 +41,7 @@ defmodule Next.User.Signin do
         <Area.form>
           <Text.title2><%= dgettext("eyra-account", "signin.title") %></Text.title2>
           <div>
-            <Form.password_signin />
+            <Form.password_signin for={@form} />
           </div>
           <.spacing value="M" />
         </Area.form>
