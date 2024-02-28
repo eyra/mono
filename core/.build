@@ -250,6 +250,7 @@ Frameworks.Utility.List.html
 Frameworks.Utility.LiveCommand.html
 Frameworks.Utility.Model.html
 Frameworks.Utility.Module.html
+Frameworks.Utility.Query.html
 Frameworks.Utility.Schema.html
 Frameworks.Utility.ViewModel.html
 Frameworks.Utility.ViewModelBuilder.html
@@ -338,6 +339,7 @@ Systems.Assignment.InfoForm.html
 Systems.Assignment.InfoModel.html
 Systems.Assignment.LandingPage.html
 Systems.Assignment.Model.html
+Systems.Assignment.MonitorView.html
 Systems.Assignment.OnboardingConsentView.html
 Systems.Assignment.OnboardingView.html
 Systems.Assignment.OnlineStudyLanguages.html
@@ -463,9 +465,11 @@ Systems.Content.TextItemModel.html
 Systems.Crew.MemberModel.html
 Systems.Crew.Model.html
 Systems.Crew.Public.html
+Systems.Crew.Queries.html
 Systems.Crew.RejectCategories.html
 Systems.Crew.RejectModel.html
 Systems.Crew.RejectView.html
+Systems.Crew.Selector.html
 Systems.Crew.Switch.html
 Systems.Crew.TaskItemView.html
 Systems.Crew.TaskModel.html
@@ -524,6 +528,9 @@ Systems.Lab.TimeSlotModel.html
 Systems.Lab.ToolForm.html
 Systems.Lab.ToolModel.html
 Systems.Lab.VUDaySchedule.html
+Systems.Monitor.EventModel.html
+Systems.Monitor.Public.html
+Systems.Monitor.Queries.html
 Systems.NextAction.Model.html
 Systems.NextAction.OverviewPage.html
 Systems.NextAction.Presenter.html
@@ -718,8 +725,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-4E7DA7CB.js
-dist/sidebar_items-E495B5AB.js
+dist/search_items-1B22910F.js
+dist/sidebar_items-76A79EA5.js
 index.html
 readme.html
 search.html
