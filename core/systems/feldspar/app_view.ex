@@ -16,7 +16,7 @@ defmodule Systems.Feldspar.AppView do
         due to Morphdom (https://github.com/patrick-steele-idem/morphdom/issues/200).
           --%>
         <div phx-update="ignore" id={@key} phx-hook="FeldsparApp" data-locale={@locale} data-src={@url}>
-          <iframe class="w-full"></iframe>
+          <iframe class="w-full outline-none"></iframe>
         </div>
       </div>
     """
