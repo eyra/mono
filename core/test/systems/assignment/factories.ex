@@ -60,7 +60,8 @@ defmodule Systems.Assignment.Factories do
       info: info,
       workflow: workflow,
       crew: crew,
-      auth_node: auth_node
+      auth_node: auth_node,
+      special: :data_donation
     })
   end
 

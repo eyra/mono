@@ -11,14 +11,12 @@ defmodule Systems.Assignment.CrewPage do
 
   alias CoreWeb.UI.Timestamp
   alias Core.ImageHelpers
+  alias Frameworks.Signal
   alias Frameworks.Pixel.Hero
   alias Frameworks.Pixel.ModalView
 
-  alias Systems.{
-    Assignment,
-    Storage,
-    Crew
-  }
+  alias Systems.Assignment
+  alias Systems.Storage
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
@@ -42,8 +40,14 @@ defmodule Systems.Assignment.CrewPage do
       )
       |> update_panel_info(session)
       |> observe_view_model()
+      |> signal_started()
       |> update_flow()
     }
+  end
+
+  def signal_started(%{assigns: %{vm: %{crew_member: crew_member}}} = socket) do
+    Signal.Public.dispatch!({:crew_member, :started}, %{crew_member: crew_member})
+    socket
   end
 
   def handle_view_model_updated(socket) do
@@ -101,20 +105,24 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def handle_event("continue", _payload, socket) do
-    {:noreply, socket |> show_next()}
+  def handle_event("continue", %{source: source}, socket) do
+    {:noreply, socket |> show_next(source)}
+  end
+
+  @impl true
+  def handle_event("accept", %{source: source}, socket) do
+    {:noreply, socket |> show_next(source)}
   end
 
   @impl true
   def handle_event(
         "decline",
         _payload,
-        %{assigns: %{panel_info: %{embedded?: embedded?}}} = socket
+        %{assigns: %{model: model, current_user: user, panel_info: %{embedded?: embedded?}}} =
+          socket
       ) do
-    socket =
-      socket
-      |> decline_member()
-      |> store("onboarding", nil, "{\"status\":\"consent declined\"}")
+    Assignment.Public.decline_member(model, user)
+    socket = store(socket, nil, "onboarding", "{\"status\":\"consent declined\"}")
 
     socket =
       if embedded? do
@@ -184,11 +192,6 @@ defmodule Systems.Assignment.CrewPage do
   defp show_panel_form(socket, %{module: module, params: params}) do
     panel_form = prepare_child(socket, :panel_form, module, params)
     socket |> assign(panel_form: Map.from_struct(panel_form))
-  end
-
-  defp decline_member(%{assigns: %{vm: %{crew: crew}, current_user: user}} = socket) do
-    Crew.Public.decline_member(crew, user)
-    socket
   end
 
   @impl true

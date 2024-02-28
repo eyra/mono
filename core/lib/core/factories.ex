@@ -33,7 +33,8 @@ defmodule Core.Factories do
     Content,
     Org,
     Project,
-    Consent
+    Consent,
+    Monitor
   }
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
@@ -101,6 +102,10 @@ defmodule Core.Factories do
 
   def build(:org_link) do
     build(:org_link, %{})
+  end
+
+  def build(:monitor_event) do
+    build(:monitor_event, %{})
   end
 
   def build(:web_push_subscription) do
@@ -294,6 +299,17 @@ defmodule Core.Factories do
 
   def build(:auth_node, %{} = attributes) do
     %Authorization.Node{}
+    |> struct!(attributes)
+  end
+
+  def build(:monitor_event, %{} = attributes) do
+    {identifier, attributes} = Map.pop(attributes, :identifier, ["monitor", "event"])
+    {value, attributes} = Map.pop(attributes, :value, 1)
+
+    %Monitor.EventModel{
+      identifier: identifier,
+      value: value
+    }
     |> struct!(attributes)
   end
 

@@ -7,15 +7,14 @@ defmodule Systems.Assignment.CrewWorkView do
   require Logger
 
   alias Frameworks.Concept
+  alias Frameworks.Signal
 
-  alias Systems.{
-    Assignment,
-    Crew,
-    Workflow,
-    Project,
-    Content,
-    Consent
-  }
+  alias Systems.Assignment
+  alias Systems.Crew
+  alias Systems.Workflow
+  alias Systems.Project
+  alias Systems.Content
+  alias Systems.Consent
 
   def update(
         %{
@@ -26,7 +25,8 @@ defmodule Systems.Assignment.CrewWorkView do
           support_page_ref: support_page_ref,
           crew: crew,
           user: user,
-          panel_info: panel_info
+          panel_info: panel_info,
+          tester?: tester?
         },
         socket
       ) do
@@ -44,6 +44,7 @@ defmodule Systems.Assignment.CrewWorkView do
         support_page_ref: support_page_ref,
         crew: crew,
         user: user,
+        tester?: tester?,
         panel_info: panel_info,
         tool_started: tool_started,
         tool_initialized: tool_initialized
@@ -443,13 +444,24 @@ defmodule Systems.Assignment.CrewWorkView do
   defp handle_finished_state(%{assigns: %{work_items: work_items}} = socket) do
     task_ids = Enum.map(work_items, fn {_, task} -> task.id end)
 
-    if Crew.Public.tasks_finised?(task_ids) do
+    if Crew.Public.tasks_finished?(task_ids) do
       socket
+      |> signal_tasks_finished()
       |> compose_child(:finished_view)
       |> show_modal(:finished_view, :sheet)
     else
       socket
     end
+  end
+
+  defp signal_tasks_finished(%{assigns: %{tester?: true}} = socket) do
+    socket
+  end
+
+  defp signal_tasks_finished(%{assigns: %{crew: crew, user: user}} = socket) do
+    %Crew.MemberModel{} = crew_member = Crew.Public.get_member(crew, user)
+    Signal.Public.dispatch!({:crew_member, :finished_tasks}, %{crew_member: crew_member})
+    socket
   end
 
   defp map_item({%{id: id, title: title, group: group}, task}) do

@@ -46,3 +46,9 @@ defmodule Fabric.LiveComponent do
     end
   end
 end
+
+defimpl String.Chars, for: Fabric.LiveComponent.RefModel do
+  def to_string(term) do
+    "#{term.id}"
+  end
+end

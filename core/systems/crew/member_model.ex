@@ -10,9 +10,7 @@ defmodule Systems.Crew.MemberModel do
   schema "crew_members" do
     field(:public_id, :integer)
     field(:expire_at, :naive_datetime)
-    field(:expired, :boolean)
-    field(:declined_at, :naive_datetime)
-    field(:declined, :boolean)
+    field(:expired, :boolean, default: false)
 
     belongs_to(:crew, Crew.Model)
     belongs_to(:user, User)
@@ -20,7 +18,7 @@ defmodule Systems.Crew.MemberModel do
     timestamps()
   end
 
-  @fields ~w(public_id expire_at expired declined_at declined)a
+  @fields ~w(public_id expire_at expired)a
 
   @doc false
   def changeset(member, attrs \\ %{}) do
@@ -28,10 +26,10 @@ defmodule Systems.Crew.MemberModel do
     |> cast(attrs, @fields)
   end
 
-  def reset_attrs(expire_at) do
-    [
+  def reset(member, expire_at) do
+    changeset(member, %{
       expired: false,
       expire_at: expire_at
-    ]
+    })
   end
 end

@@ -8,24 +8,34 @@ defmodule Systems.Project.Switch do
   }
 
   @impl true
-  def intercept({:alliance_tool, _} = signal, %{alliance_tool: tool} = message),
-    do: handle({:tool, signal}, Map.merge(message, %{tool: tool}))
+  def intercept({:alliance_tool, _} = signal, %{alliance_tool: tool} = message) do
+    handle({:tool, signal}, Map.merge(message, %{tool: tool}))
+    :ok
+  end
 
   @impl true
-  def intercept({:lab_tool, _} = signal, %{lab_tool: tool} = message),
-    do: handle({:tool, signal}, Map.merge(message, %{tool: tool}))
+  def intercept({:lab_tool, _} = signal, %{lab_tool: tool} = message) do
+    handle({:tool, signal}, Map.merge(message, %{tool: tool}))
+    :ok
+  end
 
   @impl true
-  def intercept({:feldspar_tool, _} = signal, %{feldspar_tool: tool} = message),
-    do: handle({:tool, signal}, Map.merge(message, %{tool: tool}))
+  def intercept({:feldspar_tool, _} = signal, %{feldspar_tool: tool} = message) do
+    handle({:tool, signal}, Map.merge(message, %{tool: tool}))
+    :ok
+  end
 
   @impl true
-  def intercept({:document_tool, _} = signal, %{document_tool: tool} = message),
-    do: handle({:tool, signal}, Map.merge(message, %{tool: tool}))
+  def intercept({:document_tool, _} = signal, %{document_tool: tool} = message) do
+    handle({:tool, signal}, Map.merge(message, %{tool: tool}))
+    :ok
+  end
 
   @impl true
-  def intercept({:benchmark_tool, _} = signal, %{benchmark_tool: tool} = message),
-    do: handle({:tool, signal}, Map.merge(message, %{tool: tool}))
+  def intercept({:benchmark_tool, _} = signal, %{benchmark_tool: tool} = message) do
+    handle({:tool, signal}, Map.merge(message, %{tool: tool}))
+    :ok
+  end
 
   @impl true
   def intercept({:tool_ref, _} = signal, %{tool_ref: tool_ref} = message) do
@@ -35,11 +45,14 @@ defmodule Systems.Project.Switch do
         Map.merge(message, %{project_item: project_item})
       )
     end
+
+    :ok
   end
 
   @impl true
   def intercept({:project_node, _} = signal, %{project_node: project_node} = message) do
-    update_pages(project_node)
+    from_pid = Map.get(message, :from_pid, self())
+    update_pages(project_node, from_pid)
 
     if project = Project.Public.get_by_root(project_node) do
       dispatch!(
@@ -47,31 +60,36 @@ defmodule Systems.Project.Switch do
         Map.merge(message, %{project: project})
       )
     end
+
+    :ok
   end
 
   @impl true
-  def intercept({:project, _}, %{project: project}) do
-    update_pages(project)
+  def intercept({:project, _}, %{project: project} = message) do
+    from_pid = Map.get(message, :from_pid, self())
+    update_pages(project, from_pid)
+    :ok
   end
 
   defp handle({:tool, signal}, %{tool: tool} = message) do
-    Project.Public.get_tool_ref_by_tool(tool)
-    |> then(&dispatch!({:tool_ref, signal}, Map.merge(message, %{tool_ref: &1})))
+    if tool_ref = Project.Public.get_tool_ref_by_tool(tool) do
+      dispatch!({:tool_ref, signal}, Map.merge(message, %{tool_ref: tool_ref}))
+    end
   end
 
-  defp update_pages(%Project.NodeModel{} = node) do
+  defp update_pages(%Project.NodeModel{} = node, from_pid) do
     [Project.NodePage]
-    |> Enum.each(&update_page(&1, node))
+    |> Enum.each(&update_page(&1, node, from_pid))
   end
 
-  defp update_pages(%Project.Model{} = project) do
+  defp update_pages(%Project.Model{} = project, from_pid) do
     Project.Public.list_owners(project)
     |> Enum.each(fn user ->
-      update_page(Project.OverviewPage, user)
+      update_page(Project.OverviewPage, user, from_pid)
     end)
   end
 
-  defp update_page(page, %{id: id} = model) when is_atom(page) do
-    dispatch!({:page, page}, %{id: id, model: model})
+  defp update_page(page, %{id: id} = model, from_pid) when is_atom(page) do
+    dispatch!({:page, page}, %{id: id, model: model, from_pid: from_pid})
   end
 end

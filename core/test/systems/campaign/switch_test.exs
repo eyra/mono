@@ -21,7 +21,8 @@ defmodule Systems.Campaign.SwitchTest do
       coordinator: coordinator
     } do
       Switch.intercept({:campaign, :created}, %{
-        campaign: campaign
+        campaign: campaign,
+        from_pid: self()
       })
 
       assert Authorization.users_with_role(campaign, :coordinator, [:profile, :features]) == [

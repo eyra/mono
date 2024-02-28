@@ -69,7 +69,7 @@ defmodule Systems.Consent.ClickWrapView do
   end
 
   def handle_accept(%{assigns: %{signature: nil, revision: revision, user: user}} = socket) do
-    {:ok, signature} = Consent.Public.create_signature(revision, user)
+    {:ok, %{consent_signature: signature}} = Consent.Public.create_signature(revision, user)
 
     socket
     |> assign(signature: signature)
@@ -77,7 +77,7 @@ defmodule Systems.Consent.ClickWrapView do
   end
 
   def handle_accept(%{assigns: %{signature: %{id: _}}} = socket) do
-    socket |> send_event(:parent, "continue")
+    socket |> send_event(:parent, "accept")
   end
 
   def handle_decline(socket) do

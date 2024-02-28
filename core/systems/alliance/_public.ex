@@ -84,7 +84,7 @@ defmodule Systems.Alliance.Public do
       |> Repo.transaction()
 
     with {:ok, %{tool: tool}} <- result do
-      Signal.Public.dispatch!(:alliance_tool, %{tool: tool})
+      Signal.Public.dispatch!({:alliance_tool, :updated}, %{alliance_tool: tool})
     end
 
     result

@@ -27,14 +27,14 @@ defmodule Systems.Student.Filters do
 
   defp state(%Core.Accounts.User{} = student, pool) do
     Budget.Public.list_wallets(student)
-    |> Enum.filter(&Pool.Public.is_wallet_related?(pool, &1))
+    |> Enum.filter(&Pool.Public.wallet_related?(pool, &1))
     |> state(pool)
   end
 
   defp state([] = _wallets, _pool), do: :inactive
 
   defp state(%Bookkeeping.AccountModel{} = wallet, pool) do
-    if Pool.Public.is_target_achieved?(pool, wallet) do
+    if Pool.Public.target_achieved?(pool, wallet) do
       :passed
     else
       :active

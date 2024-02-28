@@ -147,6 +147,10 @@ defmodule Systems.Assignment.InfoForm do
     ~H"""
     <div>
         <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
+          <Text.title3><%= dgettext("eyra-assignment", "settings.general.title") %></Text.title3>
+          <.number_input form={form} field={:subject_count} label_text={dgettext("eyra-assignment", "settings.subject_count.label")} />
+          <.spacing value="M" />
+
           <Text.title3><%= dgettext("eyra-assignment", "settings.branding.title") %></Text.title3>
           <Text.body><%= dgettext("eyra-assignment", "settings.branding.text") %></Text.body>
           <.spacing value="M" />

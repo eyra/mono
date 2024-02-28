@@ -43,7 +43,7 @@ defmodule Systems.Feldspar.S3 do
   end
 
   defp upload_file({name, info}, zip_handle, target, settings) do
-    if is_regular_file(info) do
+    if regular_file?(info) do
       {:ok, {_, data}} = :zip.zip_get(name, zip_handle)
 
       S3.put_object(
@@ -63,8 +63,8 @@ defmodule Systems.Feldspar.S3 do
     Files types: device | directory | other | regular | symlink | undefined
     Only real files (aka :regular) can/should be uploaded.
   """
-  def is_regular_file({:file_info, _, :regular, _, _, _, _, _, _, _, _, _, _, _}), do: true
-  def is_regular_file(_), do: false
+  def regular_file?({:file_info, _, :regular, _, _, _, _, _, _, _, _, _, _, _}), do: true
+  def regular_file?(_), do: false
 
   defp object_key(id) do
     prefix = Access.get(s3_settings(), :prefix, nil)

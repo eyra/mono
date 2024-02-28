@@ -10,7 +10,7 @@ defmodule Systems.Feldspar.LocalFSTest do
       assert ["index.html"] == File.ls!(path)
     end
 
-    # TODO:
+    # TODO
     # filters files? .exe etc.?
     # runs virus scanner? clamav
   end
