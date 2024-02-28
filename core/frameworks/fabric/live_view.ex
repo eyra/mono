@@ -54,3 +54,9 @@ defmodule Fabric.LiveView do
     end
   end
 end
+
+defimpl String.Chars, for: Fabric.LiveView.RefModel do
+  def to_string(term) do
+    "#{inspect(term.pid)}"
+  end
+end

@@ -346,8 +346,8 @@ defmodule Systems.Campaign.MonitorView do
     end
   end
 
-  defp is_lab_tool(%Lab.ToolModel{}), do: true
-  defp is_lab_tool(_), do: false
+  defp lab_tool?(%Lab.ToolModel{}), do: true
+  defp lab_tool?(_), do: false
 
   defp reservation(%{lab_tool_id: lab_tool_id} = _tool, user_id) when lab_tool_id != nil do
     tool = Lab.Public.get_tool!(lab_tool_id)
@@ -380,7 +380,7 @@ defmodule Systems.Campaign.MonitorView do
 
   defp to_view_model(tasks, :completed_tasks, target, crew, tool) do
     columns =
-      if is_lab_tool(tool) do
+      if lab_tool?(tool) do
         [
           dgettext("link-monitor", "column.participant"),
           dgettext("link-monitor", "column.reservation"),
@@ -459,7 +459,7 @@ defmodule Systems.Campaign.MonitorView do
          %{user_id: user_id, public_id: public_id}
        ) do
     description =
-      if is_lab_tool(tool) do
+      if lab_tool?(tool) do
         if reservation = reservation(tool, user_id) do
           time_slot(reservation)
           |> time_slot_message()

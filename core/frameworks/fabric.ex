@@ -7,6 +7,8 @@ defmodule Fabric do
 
   @callback compose(id :: composition_id(), a :: assigns()) :: composition() | nil
 
+  require Logger
+
   defmacro __using__(_opts) do
     quote do
       @behaviour Fabric
@@ -68,12 +70,7 @@ defmodule Fabric do
   def child_id(%Fabric.Model{self: self}, child_name), do: child_id(self, child_name)
 
   def child_id(%{pid: pid}, child_name) do
-    pid_string =
-      pid
-      |> :erlang.pid_to_list()
-      |> to_string()
-      |> then(&("PID" <> &1))
-
+    pid_string = inspect(pid)
     child_id(pid_string, child_name)
   end
 
@@ -261,12 +258,36 @@ defmodule Fabric do
   end
 
   # Flow
-  def show_next(%Phoenix.LiveView.Socket{assigns: %{fabric: fabric}} = socket) do
-    Phoenix.Component.assign(socket, fabric: show_next(fabric))
+  def show_next(%Phoenix.LiveView.Socket{assigns: %{fabric: fabric}} = socket, current) do
+    Phoenix.Component.assign(socket, fabric: show_next(fabric, current))
   end
 
-  def show_next(%Fabric.Model{children: children} = fabric) do
-    %Fabric.Model{fabric | children: List.wrap(children) |> List.delete_at(0)}
+  def show_next(%Fabric.Model{children: nil} = fabric, _current_ref) do
+    # Possible race condition with live updates from server
+    Logger.warn("Can not show next child, no childs in flow")
+    fabric
+  end
+
+  def show_next(%Fabric.Model{children: []} = fabric, _current_ref) do
+    # Possible race condition with live updates from server
+    Logger.warn("Can not show next child, no childs in flow")
+    fabric
+  end
+
+  def show_next(%Fabric.Model{children: [_child]} = fabric, _current_ref) do
+    # Possible race condition with live updates from server
+    Logger.warn("Can not show next child, only one child in flow")
+    fabric
+  end
+
+  def show_next(%Fabric.Model{children: [head | tail]} = fabric, current_ref) do
+    if head.ref == current_ref do
+      %Fabric.Model{fabric | children: tail}
+    else
+      # Possible race condition with live updates from server
+      Logger.warn("Can not show next child, current child is not the first child in flow")
+      fabric
+    end
   end
 
   def get_current_child(%Fabric.Model{children: children}) do

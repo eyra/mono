@@ -309,3 +309,33 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "privacy.title"
 msgstr ""
+msgid "tabbar.item.monitor"
+msgstr "Monitor"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor.forward"
+msgstr "Ga naar Monitor"
+
+#, elixir-autogen, elixir-format
+msgid "monitor.title"
+msgstr "Monitor"
+
+#, elixir-autogen, elixir-format
+msgid "finished.participants"
+msgstr "Afgerond"
+
+#, elixir-autogen, elixir-format
+msgid "started.participants"
+msgstr "Gestart"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "declined.participants"
+msgstr "Toestemming geweigerd"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.general.title"
+msgstr "Monitor"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.subject_count.label"
+msgstr "Verwachtte aantal deelnemers"

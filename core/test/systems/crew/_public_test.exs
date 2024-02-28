@@ -71,7 +71,7 @@ defmodule Systems.Crew.PublicTest do
 
       assert %{
                status: :pending,
-               expired: nil,
+               expired: false,
                started_at: nil,
                completed_at: nil,
                auth_node: %Core.Authorization.Node{
@@ -133,6 +133,90 @@ defmodule Systems.Crew.PublicTest do
 
       assert Crew.Public.public_id(crew1, user) == 1
       assert Crew.Public.public_id(crew2, user) == 1
+    end
+
+    test "member_query/0 valid query" do
+      assert %{
+               aliases: %{member: 0},
+               from: %Ecto.Query.FromExpr{
+                 source: {"crew_members", Systems.Crew.MemberModel},
+                 as: :member
+               }
+             } = Map.from_struct(Crew.Queries.member_query())
+    end
+
+    test "member_query/0 single member" do
+      %{id: user_id} = user = Factories.insert!(:member)
+      %{id: crew_id} = crew = Factories.insert!(:crew)
+      {:ok, %{member: %{id: member_id}}} = Crew.Public.apply_member(crew, user, ["task"])
+
+      assert [
+               %Systems.Crew.MemberModel{
+                 id: ^member_id,
+                 crew_id: ^crew_id,
+                 user_id: ^user_id
+               }
+             ] = Repo.all(Crew.Queries.member_query())
+    end
+
+    test "member_query/0 multi member single crew" do
+      %{id: user_a_id} = user_a = Factories.insert!(:member)
+      %{id: user_b_id} = user_b = Factories.insert!(:member)
+      %{id: crew_id} = crew = Factories.insert!(:crew)
+      {:ok, %{member: %{id: member_a_id}}} = Crew.Public.apply_member(crew, user_a, ["task_a"])
+      {:ok, %{member: %{id: member_b_id}}} = Crew.Public.apply_member(crew, user_b, ["task_b"])
+
+      assert [
+               %Systems.Crew.MemberModel{
+                 id: ^member_a_id,
+                 crew_id: ^crew_id,
+                 user_id: ^user_a_id
+               },
+               %Systems.Crew.MemberModel{
+                 id: ^member_b_id,
+                 crew_id: ^crew_id,
+                 user_id: ^user_b_id
+               }
+             ] = Repo.all(Crew.Queries.member_query())
+    end
+
+    test "member_query/0 multi member multi crew" do
+      %{id: user_a_id} = user_a = Factories.insert!(:member)
+      %{id: user_b_id} = user_b = Factories.insert!(:member)
+      %{id: crew_a_id} = crew_a = Factories.insert!(:crew)
+      %{id: crew_b_id} = crew_b = Factories.insert!(:crew)
+      {:ok, %{member: %{id: member_a_id}}} = Crew.Public.apply_member(crew_a, user_a, ["task_a"])
+      {:ok, %{member: %{id: member_b_id}}} = Crew.Public.apply_member(crew_b, user_b, ["task_b"])
+
+      assert [
+               %Systems.Crew.MemberModel{
+                 id: ^member_a_id,
+                 crew_id: ^crew_a_id,
+                 user_id: ^user_a_id
+               },
+               %Systems.Crew.MemberModel{
+                 id: ^member_b_id,
+                 crew_id: ^crew_b_id,
+                 user_id: ^user_b_id
+               }
+             ] = Repo.all(Crew.Queries.member_query())
+    end
+
+    test "member_query/2 multi member multi crew" do
+      %{id: user_a_id} = user_a = Factories.insert!(:member)
+      %{id: _user_b_id} = user_b = Factories.insert!(:member)
+      %{id: crew_a_id} = crew_a = Factories.insert!(:crew)
+      %{id: _crew_b_id} = crew_b = Factories.insert!(:crew)
+      {:ok, %{member: %{id: member_a_id}}} = Crew.Public.apply_member(crew_a, user_a, ["task_a"])
+      {:ok, %{member: %{id: _member_b_id}}} = Crew.Public.apply_member(crew_b, user_b, ["task_b"])
+
+      assert [
+               %Systems.Crew.MemberModel{
+                 id: ^member_a_id,
+                 crew_id: ^crew_a_id,
+                 user_id: ^user_a_id
+               }
+             ] = Repo.all(Crew.Queries.members_by_task_role_query(crew_a, [:owner]))
     end
 
     test "mark_expired/0 does not expire member: expire_at is nil" do
@@ -204,6 +288,11 @@ defmodule Systems.Crew.PublicTest do
       {:ok, %{member: member2, crew_task: task2}} =
         Crew.Public.apply_member(crew, user2, ["task2"], expire_at(1))
 
+      assert %{expired: false} = Crew.Public.get_member!(member1.id)
+      assert %{expired: false} = Crew.Public.get_task!(task1.id)
+      assert %{expired: false} = Crew.Public.get_member!(member2.id)
+      assert %{expired: false} = Crew.Public.get_task!(task2.id)
+
       assert Crew.Public.mark_expired()
 
       assert %{expired: true} = Crew.Public.get_member!(member1.id)
@@ -234,24 +323,22 @@ defmodule Systems.Crew.PublicTest do
       assert [] = Crew.Public.list_members(crew)
     end
 
-    test "decline_member/2 does decline member and tasks" do
+    test "expire_member/2 does expire member and tasks" do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
 
-      {:ok, %{member: %{id: member_id} = member, crew_task: task}} =
-        Crew.Public.apply_member(crew, user, ["task1"], expire_at(-1))
+      {:ok, %{member: member, crew_task: task}} =
+        Crew.Public.apply_member(crew, user, ["task1"], expire_at(60))
 
-      assert Crew.Public.member?(crew, user)
-      assert [%{id: ^member_id}] = Crew.Public.list_members(crew)
+      assert %{expired: false} = Crew.Public.get_member!(member.id)
+      assert %{expired: false} = Crew.Public.get_task!(task.id)
 
-      assert Crew.Public.decline_member(crew, user)
+      Ecto.Multi.new()
+      |> Crew.Public.expire_member(member)
+      |> Core.Repo.transaction()
 
-      assert %{declined: true} = Crew.Public.get_member!(member.id)
-      assert %{status: :declined, declined_at: declined_at} = Crew.Public.get_task!(task.id)
-      assert declined_at != nil
-
-      assert Crew.Public.member?(crew, user)
-      assert [%{id: ^member_id}] = Crew.Public.list_members(crew)
+      assert %{expired: true} = Crew.Public.get_member!(member.id)
+      assert %{expired: true} = Crew.Public.get_task!(task.id)
     end
   end
 

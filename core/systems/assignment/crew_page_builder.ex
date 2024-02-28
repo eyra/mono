@@ -8,38 +8,39 @@ defmodule Systems.Assignment.CrewPageBuilder do
     Consent
   }
 
-  def view_model(%{crew: crew} = assignment, assigns) do
+  def view_model(%{crew: crew} = assignment, %{current_user: user} = assigns) do
     %{
       flow: flow(assignment, assigns),
       info: assignment.info,
-      crew: crew
+      crew: crew,
+      crew_member: Crew.Public.get_member_unsafe(crew, user)
     }
   end
 
-  defp flow(%{status: status} = assignment, assigns) do
-    is_tester? = is_tester?(assignment, assigns)
+  defp flow(%{status: status} = assignment, %{current_user: user} = assigns) do
+    tester? = Assignment.Public.tester?(assignment, user)
 
-    if is_tester? or status == :online do
-      flow(assignment, assigns, current_flow(assigns), is_tester?)
+    if tester? or status == :online do
+      flow(assignment, assigns, current_flow(assigns), tester?)
     else
       []
     end
   end
 
-  defp flow(assignment, assigns, nil, is_tester?), do: full_flow(assignment, assigns, is_tester?)
+  defp flow(assignment, assigns, nil, tester?), do: full_flow(assignment, assigns, tester?)
 
-  defp flow(assignment, assigns, current_flow, is_tester?) do
-    full_flow(assignment, assigns, is_tester?)
+  defp flow(assignment, assigns, current_flow, tester?) do
+    full_flow(assignment, assigns, tester?)
     |> Enum.filter(fn %{ref: %{id: id}} ->
       Enum.find(current_flow, &(&1.ref.id == id)) != nil
     end)
   end
 
-  defp full_flow(assignment, assigns, is_tester?) do
+  defp full_flow(assignment, assigns, tester?) do
     [
       intro_view(assignment, assigns),
-      consent_view(assignment, assigns, is_tester?),
-      work_view(assignment, assigns, is_tester?)
+      consent_view(assignment, assigns, tester?),
+      work_view(assignment, assigns, tester?)
     ]
     |> Enum.filter(&(not is_nil(&1)))
   end
@@ -65,9 +66,9 @@ defmodule Systems.Assignment.CrewPageBuilder do
   defp consent_view(
          %{consent_agreement: consent_agreement},
          %{current_user: user, fabric: fabric},
-         is_tester?
+         tester?
        ) do
-    if Consent.Public.has_signature(consent_agreement, user) and not is_tester? do
+    if Consent.Public.has_signature(consent_agreement, user) and not tester? do
       nil
     else
       revision = Consent.Public.latest_revision(consent_agreement, [:signatures])
@@ -87,7 +88,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
            crew: crew
          } = assignment,
          %{fabric: fabric, current_user: user, panel_info: panel_info} = assigns,
-         _
+         tester?
        ) do
     work_items = work_items(assignment, assigns)
     context_menu_items = context_menu_items(assignment, assigns)
@@ -104,7 +105,8 @@ defmodule Systems.Assignment.CrewPageBuilder do
       support_page_ref: support_page_ref,
       crew: crew,
       user: user,
-      panel_info: panel_info
+      panel_info: panel_info,
+      tester?: tester?
     })
   end
 
@@ -146,8 +148,8 @@ defmodule Systems.Assignment.CrewPageBuilder do
     end
   end
 
-  defp work_items(%{status: status, crew: crew} = assignment, %{current_user: user} = assigns) do
-    if is_tester?(assignment, assigns) or status == :online do
+  defp work_items(%{status: status, crew: crew} = assignment, %{current_user: user}) do
+    if Assignment.Public.tester?(assignment, user) or status == :online do
       member = Crew.Public.get_member(crew, user)
       work_items(assignment, member)
     else
@@ -161,10 +163,6 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp work_items(_assignment, nil), do: []
-
-  defp is_tester?(%{crew: crew}, %{current_user: user}) do
-    Core.Authorization.user_has_role?(user, crew, :tester)
-  end
 
   defp get_or_create_task(item, %{crew: crew} = assignment, member) do
     identifier = Assignment.Private.task_identifier(assignment, item, member)

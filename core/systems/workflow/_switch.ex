@@ -19,6 +19,8 @@ defmodule Systems.Workflow.Switch do
       {:workflow_item, signal},
       Map.merge(message, %{workflow_item: workflow_item})
     )
+
+    :ok
   end
 
   @impl true
@@ -32,6 +34,8 @@ defmodule Systems.Workflow.Switch do
       {:workflow, signal},
       Map.merge(message, %{workflow: workflow})
     )
+
+    :ok
   end
 
   @impl true
@@ -42,5 +46,7 @@ defmodule Systems.Workflow.Switch do
       {:workflow, signal},
       Map.merge(message, %{workflow: workflow})
     )
+
+    :ok
   end
 end

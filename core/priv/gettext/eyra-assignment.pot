@@ -308,4 +308,33 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "privacy.title"
+msgid "tabbar.item.monitor"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "monitor.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "finished.participants"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "started.participants"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "declined.participants"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.general.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.subject_count.label"
 msgstr ""

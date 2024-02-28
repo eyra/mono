@@ -31,8 +31,8 @@ defmodule Systems.Assignment.OnboardingConsentView do
   end
 
   @impl true
-  def handle_event("continue", _payload, socket) do
-    {:noreply, socket |> send_event(:parent, "continue")}
+  def handle_event("accept", _payload, socket) do
+    {:noreply, socket |> send_event(:parent, "accept")}
   end
 
   @impl true

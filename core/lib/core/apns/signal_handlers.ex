@@ -8,5 +8,7 @@ defmodule Core.APNS.SignalHandlers do
     for user <- Core.Authorization.users_with_role(box, :owner) do
       send_notification(user, title)
     end
+
+    :ok
   end
 end

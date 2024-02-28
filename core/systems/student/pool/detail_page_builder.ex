@@ -112,12 +112,12 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
         pending_amount: pending_credits,
         done_label: dgettext("eyra-pool", "progress.done.label"),
         pending_label: dgettext("eyra-pool", "progress.pending.label"),
-        left_over_label: dgettext("eyra-pool", "progress.leftover.label")
+        target_label: dgettext("eyra-pool", "progress.target.label")
       },
       metrics: [
         %{
           label: dgettext("link-studentpool", "inactive.students"),
-          number: inactive_count,
+          metric: inactive_count,
           color:
             if inactive_count == 0 do
               :positive
@@ -127,7 +127,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
         },
         %{
           label: dgettext("link-studentpool", "active.students"),
-          number: active_count,
+          metric: active_count,
           color:
             if active_count == 0 do
               :negative
@@ -137,7 +137,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
         },
         %{
           label: dgettext("link-studentpool", "passed.students"),
-          number: passed_count,
+          metric: passed_count,
           color:
             if passed_count == 0 do
               :negative

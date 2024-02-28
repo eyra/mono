@@ -3,12 +3,11 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   import CoreWeb.Gettext
 
-  alias Systems.{
-    Assignment,
-    Project,
-    Workflow,
-    Support
-  }
+  alias Systems.Assignment
+  alias Systems.Project
+  alias Systems.Workflow
+  alias Systems.Support
+  alias Systems.Monitor
 
   def view_model(
         %{id: id, special: special} = assignment,
@@ -78,7 +77,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
         },
         icon: %{
           action: publish_action,
-          face: %{type: :icon, icon: :preview, alt: dgettext("eyra-assignment", "preview.button")}
+          face: %{type: :icon, icon: :publish, alt: dgettext("eyra-assignment", "preview.button")}
         },
         handle_click: &handle_publish/1
       },
@@ -170,7 +169,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp get_tab_keys() do
-    [:config, :items]
+    [:config, :items, :monitor]
   end
 
   defp create_tab(
@@ -266,6 +265,31 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp create_tab(
+         :monitor,
+         assignment,
+         show_errors,
+         %{fabric: fabric} = _assigns
+       ) do
+    ready? = false
+
+    child =
+      Fabric.prepare_child(fabric, :monitor, Assignment.MonitorView, %{
+        number_widgets: number_widgets(assignment),
+        progress_widgets: progress_widgets(assignment)
+      })
+
+    %{
+      id: :monitor,
+      ready: ready?,
+      show_errors: show_errors,
+      title: dgettext("eyra-assignment", "tabbar.item.monitor"),
+      forward_title: dgettext("eyra-assignment", "tabbar.item.monitor.forward"),
+      type: :fullpage,
+      child: child
+    }
+  end
+
+  defp create_tab(
          :support,
          assignment,
          _show_errors,
@@ -298,6 +322,90 @@ defmodule Systems.Assignment.ContentPageBuilder do
       props: %{
         entity: assignment
       }
+    }
+  end
+
+  defp number_widgets(assignment) do
+    [:started, :finished, :declined]
+    |> Enum.map(&number_widget(&1, assignment))
+  end
+
+  defp number_widget(:started, assignment) do
+    metric =
+      Monitor.Public.event(assignment, :started)
+      |> Monitor.Public.unique()
+
+    %{
+      label: dgettext("eyra-assignment", "started.participants"),
+      metric: metric,
+      color: :primary
+    }
+  end
+
+  defp number_widget(:finished, assignment) do
+    metric =
+      Monitor.Public.event(assignment, :finished)
+      |> Monitor.Public.unique()
+
+    %{
+      label: dgettext("eyra-assignment", "finished.participants"),
+      metric: metric,
+      color: :positive
+    }
+  end
+
+  defp number_widget(:declined, assignment) do
+    metric =
+      Monitor.Public.event(assignment, :declined)
+      |> Monitor.Public.unique()
+
+    color =
+      if metric > 0 do
+        :negative
+      else
+        :primary
+      end
+
+    %{
+      label: dgettext("eyra-assignment", "declined.participants"),
+      metric: metric,
+      color: color
+    }
+  end
+
+  defp progress_widgets(%{workflow: workflow} = assignment) do
+    Workflow.Public.list_items(workflow)
+    |> Enum.map(&progress_widget(&1, assignment))
+  end
+
+  defp progress_widget(
+         %Workflow.ItemModel{title: title, group: group} = item,
+         %{info: %{subject_count: subject_count}} = assignment
+       ) do
+    started = Monitor.Public.unique(Monitor.Public.event(item, :started))
+    finished = Monitor.Public.unique(Monitor.Public.event(item, :finished))
+
+    subject_count =
+      if subject_count do
+        subject_count
+      else
+        0
+      end
+
+    current_amount =
+      Monitor.Public.unique(Monitor.Public.event(assignment, :started)) -
+        Monitor.Public.unique(Monitor.Public.event(assignment, :declined))
+
+    expected_amount = max(subject_count, current_amount)
+
+    %{
+      label: "#{title} #{group}",
+      target_amount: expected_amount,
+      done_amount: finished,
+      pending_amount: started - finished,
+      done_label: dgettext("eyra-crew", "progress.finished.label"),
+      pending_label: dgettext("eyra-crew", "progress.started.label"),
+      target_label: dgettext("eyra-crew", "progress.remaining.label")
     }
   end
 end

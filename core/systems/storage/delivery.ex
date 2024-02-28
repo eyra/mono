@@ -16,17 +16,17 @@ defmodule Systems.Storage.Delivery do
   def perform(%Oban.Job{args: args}) do
     case deliver(args) do
       {:error, error} ->
-        Logger.error("Data delivery error: #{error}")
+        Logger.error("[Storage.Delivery] delivery error: #{error}")
         {:error, error}
 
       _ ->
-        Logger.info("Data delivery succeeded")
+        Logger.notice("[Storage.Delivery] delivery succeeded", ansi_color: :light_magenta)
         :ok
     end
   end
 
   def deliver(backend, endpoint, panel_info, data, meta_data) do
-    Logger.warn("[Storage.Delivery] deliver")
+    Logger.notice("[Storage.Delivery] deliver", ansi_color: :light_magenta)
 
     try do
       backend.store(endpoint, panel_info, data, meta_data)

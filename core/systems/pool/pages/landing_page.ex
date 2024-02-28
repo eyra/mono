@@ -34,7 +34,7 @@ defmodule Systems.Pool.LandingPage do
   end
 
   defp update_membership(%{assigns: %{pool: pool, current_user: user}} = socket) do
-    socket |> assign(participant?: Pool.Public.is_participant?(pool, user))
+    socket |> assign(participant?: Pool.Public.participant?(pool, user))
   end
 
   defp update_description(%{assigns: %{participant?: participant?}} = socket) do
