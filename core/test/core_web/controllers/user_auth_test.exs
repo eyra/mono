@@ -176,7 +176,7 @@ defmodule CoreWeb.UserAuthTest do
       assert redirected_to(conn) == ~p"/user/signin"
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
-               "Log in om deze pagina te bekijken"
+               "Sign in to view this page"
     end
 
     test "stores the path to redirect to on GET", %{conn: conn} do

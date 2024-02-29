@@ -5,12 +5,12 @@ defmodule Next.Layouts.Stripped.MenuBuilder do
   ]
 
   @item_flags [
-    desktop_navbar: [default: [:title], language: [:icon]],
-    mobile_navbar: [default: [:title], language: [:icon]]
+    desktop_navbar: [default: [:title]],
+    mobile_navbar: [default: [:title]]
   ]
 
   @primary []
-  @secondary [:signin, :profile, :language]
+  @secondary [:signin, :profile]
 
   use CoreWeb.Menu.Builder, home: :next
 

@@ -151,8 +151,7 @@ defmodule CoreWeb.Menu.Helpers do
     current_locale = Gettext.get_locale(CoreWeb.Gettext)
 
     [
-      %{id: "en", name: CoreWeb.Gettext.gettext("English")},
-      %{id: "nl", name: CoreWeb.Gettext.gettext("Dutch")}
+      %{id: "en", name: CoreWeb.Gettext.gettext("English")}
     ]
     |> Enum.reject(fn %{id: locale} -> current_locale == locale end)
   end

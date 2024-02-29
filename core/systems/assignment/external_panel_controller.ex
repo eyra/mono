@@ -10,7 +10,7 @@ defmodule Systems.Assignment.ExternalPanelController do
   @id_max_lenght 64
 
   def create(conn, %{"id" => id, "entry" => _} = params) do
-    assignment = Assignment.Public.get!(id, [:crew, :auth_node])
+    assignment = Assignment.Public.get!(id, [:info, :crew, :auth_node])
 
     Logger.warn("[ExternalPanelController] create: #{inspect(params)}")
 
@@ -64,10 +64,13 @@ defmodule Systems.Assignment.ExternalPanelController do
     |> authorize_user(assignment)
     |> add_panel_info(params)
     |> CoreWeb.LanguageSwitchController.index(%{
-      "locale" => get_locale(params),
+      "locale" => locale(assignment),
       "redir" => path(params)
     })
   end
+
+  defp path(%{"id" => id}), do: "/assignment/#{id}"
+  defp locale(assignment), do: Atom.to_string(Assignment.Model.language(assignment))
 
   defp forbidden(conn) do
     conn
@@ -102,20 +105,6 @@ defmodule Systems.Assignment.ExternalPanelController do
     conn |> put_session(:panel_info, panel_info)
   end
 
-  defp path(%{"id" => id} = params) do
-    query_string = query_string(params)
-    "/assignment/#{id}#{query_string}"
-  end
-
-  defp query_string(_params) do
-    ""
-    # if locale = get_locale(params) do
-    #   "?locale=#{locale}"
-    # else
-    #   ""
-    # end
-  end
-
   # Param Mappings
 
   defp get_panel(%{"entry" => "participate"}), do: "generic"
@@ -124,13 +113,6 @@ defmodule Systems.Assignment.ExternalPanelController do
   defp get_participant(%{"respondent" => respondent}), do: respondent
   defp get_participant(%{"participant" => participant}), do: participant
   defp get_participant(_), do: nil
-
-  # Liss should always be in dutch
-  defp get_locale(%{"entry" => "liss"}), do: "nl"
-  defp get_locale(%{"lang" => lang}), do: lang
-  defp get_locale(%{"language" => language}), do: language
-  defp get_locale(%{"resolved_locale" => locale}), do: locale
-  defp get_locale(_), do: nil
 
   defp embedded?(%{"entry" => "liss"}), do: true
   defp embedded?(_), do: false

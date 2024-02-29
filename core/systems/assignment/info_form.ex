@@ -7,8 +7,9 @@ defmodule Systems.Assignment.InfoForm do
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Text
   alias Core.ImageHelpers
-  alias Frameworks.Pixel.Image
   alias CoreWeb.UI.ImageCatalogPicker
+  alias Frameworks.Pixel.Image
+  alias Frameworks.Pixel.RadioGroup
 
   alias Systems.Assignment
 
@@ -38,10 +39,30 @@ defmodule Systems.Assignment.InfoForm do
         viewport: viewport,
         breakpoint: breakpoint
       )
+      |> compose_child(:language_selector)
       |> update_image_picker_state()
       |> update_image_info()
       |> update_image_picker_button()
       |> init_file_uploader(:photo)
+    }
+  end
+
+  @impl true
+  def compose(:language_selector, %{entity: %{language: language}}) do
+    language =
+      if language do
+        language
+      else
+        Assignment.Languages.default()
+      end
+
+    items = Assignment.Languages.labels(language)
+
+    %{
+      module: RadioGroup,
+      params: %{
+        items: items
+      }
     }
   end
 
@@ -94,6 +115,19 @@ defmodule Systems.Assignment.InfoForm do
   # Handle Events
 
   @impl true
+  def handle_event(
+        "update",
+        %{source: %{name: :language_selector}, status: language},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    {
+      :noreply,
+      socket
+      |> save(entity, :auto_save, %{language: language})
+    }
+  end
+
+  @impl true
   def handle_event("open_image_picker", _, socket) do
     {
       :noreply,
@@ -125,6 +159,15 @@ defmodule Systems.Assignment.InfoForm do
   end
 
   @impl true
+  def handle_event("save", %{"radio-group" => language}, %{assigns: %{entity: entity}} = socket) do
+    {
+      :noreply,
+      socket
+      |> save(entity, :auto_save, %{language: language})
+    }
+  end
+
+  @impl true
   def handle_event("save", %{"info_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
@@ -149,7 +192,10 @@ defmodule Systems.Assignment.InfoForm do
         <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
           <Text.title3><%= dgettext("eyra-assignment", "settings.general.title") %></Text.title3>
           <.number_input form={form} field={:subject_count} label_text={dgettext("eyra-assignment", "settings.subject_count.label")} />
-          <.spacing value="M" />
+          <Text.form_field_label id={:language}><%= dgettext("eyra-assignment", "settings.language.label") %></Text.form_field_label>
+          <.spacing value="XS" />
+          <.child name={:language_selector} fabric={@fabric} />
+          <.spacing value="L" />
 
           <Text.title3><%= dgettext("eyra-assignment", "settings.branding.title") %></Text.title3>
           <Text.body><%= dgettext("eyra-assignment", "settings.branding.text") %></Text.body>

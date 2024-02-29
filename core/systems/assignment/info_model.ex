@@ -6,9 +6,9 @@ defmodule Systems.Assignment.InfoModel do
   require Core.Enums.Devices
   import Ecto.Changeset
 
-  alias Systems.{
-    Assignment
-  }
+  alias Systems.Assignment
+
+  require Assignment.Languages
 
   schema "assignment_info" do
     field(:title, :string)
@@ -18,7 +18,12 @@ defmodule Systems.Assignment.InfoModel do
 
     field(:subject_count, :integer)
     field(:duration, :string)
-    field(:language, :string)
+
+    field(:language, Ecto.Enum,
+      default: Assignment.Languages.default(),
+      values: Assignment.Languages.schema_values()
+    )
+
     field(:devices, {:array, Ecto.Enum}, values: Core.Enums.Devices.schema_values())
     field(:ethical_approval, :boolean)
     field(:ethical_code, :string)

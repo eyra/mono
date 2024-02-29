@@ -10,7 +10,7 @@ defmodule Self.Layouts.Stripped.MenuBuilder do
   ]
 
   @primary []
-  @secondary [:language]
+  @secondary []
 
   use CoreWeb.Menu.Builder, home: :self
 

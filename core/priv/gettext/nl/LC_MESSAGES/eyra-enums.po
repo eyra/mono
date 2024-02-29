@@ -381,3 +381,11 @@ msgstr "Netflix"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "storage_service_ids.builtin"
 msgstr "Built-in"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_languages.en"
+msgstr "Engels"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_languages.nl"
+msgstr "Nederlands"

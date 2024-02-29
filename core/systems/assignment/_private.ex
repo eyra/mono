@@ -43,8 +43,8 @@ defmodule Systems.Assignment.Private do
   def get_panel_url(%Assignment.Model{id: id, external_panel: external_panel}) do
     case external_panel do
       :liss -> ~p"/assignment/#{id}/liss"
-      :ioresearch -> ~p"/assignment/#{id}/ioresearch?participant={id}&language=nl"
-      :generic -> ~p"/assignment/#{id}/participate?participant={id}&language=nl"
+      :ioresearch -> ~p"/assignment/#{id}/ioresearch?participant={id}"
+      :generic -> ~p"/assignment/#{id}/participate?participant={id}"
     end
   end
 

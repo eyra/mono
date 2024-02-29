@@ -16,7 +16,7 @@ defmodule CoreWeb.Live.User.ResetPassword.Test do
         |> element("form")
         |> render_submit(%{user: %{email: "a b c d"}})
 
-      assert html =~ "Inloggen"
+      assert html =~ "Sign in"
     end
 
     test "reset form fakes sending mail when user does not exist", %{conn: conn} do
@@ -27,7 +27,7 @@ defmodule CoreWeb.Live.User.ResetPassword.Test do
         |> element("form")
         |> render_submit(%{user: %{email: Faker.Internet.email()}})
 
-      assert html =~ "e-mail instructies"
+      assert html =~ "you will receive instructions shortly"
       assert Repo.all(Accounts.UserToken) == []
     end
 
@@ -40,7 +40,7 @@ defmodule CoreWeb.Live.User.ResetPassword.Test do
         |> element("form")
         |> render_submit(%{user: %{email: user.email}})
 
-      assert html =~ "e-mail instructies"
+      assert html =~ "you will receive instructions shortly"
       assert Repo.get_by!(Accounts.UserToken, user_id: user.id).context == "reset_password"
     end
   end

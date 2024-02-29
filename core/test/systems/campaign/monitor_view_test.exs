@@ -20,9 +20,9 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Deelgenomen: 0"
-      assert html =~ "Bezig: 0"
-      assert html =~ "Vrij: 1"
+      assert html =~ "Participated: 0"
+      assert html =~ "Pending: 0"
+      assert html =~ "Open: 1"
     end
 
     test "Member applied but expired and not completed", %{
@@ -44,12 +44,12 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Deelgenomen: 0"
-      assert html =~ "Bezig: 1"
-      assert html =~ "Vrij: 0"
-      assert html =~ "Let op<span class=\"text-primary\">\n            1"
+      assert html =~ "Participated: 0"
+      assert html =~ "Pending: 1"
+      assert html =~ "Open: 0"
+      assert html =~ "Attention<span class=\"text-primary\">\n            1"
       assert html =~ "Subject 1"
-      assert html =~ "Gestart vandaag om"
+      assert html =~ "Started today at"
       assert html =~ "accept"
       assert html =~ "reject"
     end
@@ -78,8 +78,8 @@ defmodule Systems.Campaign.MonitorViewTest do
         |> element("[phx-click=\"reject\"]")
         |> render_click()
 
-      assert html =~ "Bijdrage afkeuren"
-      assert html =~ "Bericht aan de deelnemer (in het Engels)"
+      assert html =~ "Reject contribution"
+      assert html =~ "Message to participant"
     end
 
     test "Member applied but expired and not completed: accept ", %{
@@ -202,9 +202,9 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Deelgenomen: 1"
-      assert html =~ "Bezig: 0"
-      assert html =~ "Vrij: 0"
+      assert html =~ "Participated: 1"
+      assert html =~ "Pending: 0"
+      assert html =~ "Open: 0"
     end
 
     test "Member applied", %{conn: %{assigns: %{current_user: user}} = conn} do
@@ -215,9 +215,9 @@ defmodule Systems.Campaign.MonitorViewTest do
 
       {:ok, _view, html} = live(conn, Routes.live_path(conn, Campaign.ContentPage, id))
 
-      assert html =~ "Deelgenomen: 0"
-      assert html =~ "Bezig: 1"
-      assert html =~ "Vrij: 0"
+      assert html =~ "Participated: 0"
+      assert html =~ "Pending: 1"
+      assert html =~ "Open: 0"
     end
   end
 end

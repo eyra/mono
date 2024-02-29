@@ -308,8 +308,12 @@ msgstr "Toestemming geweigerd"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.general.title"
-msgstr "Monitor"
+msgstr "General"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.subject_count.label"
 msgstr "Verwachtte aantal deelnemers"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.language.label"
+msgstr ""

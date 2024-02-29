@@ -44,7 +44,7 @@ config :core,
   image_catalog: Core.ImageCatalog.Unsplash,
   banking_backend: Systems.Banking.Dummy
 
-config :gettext, default_locale: "nl"
+config :gettext, default_locale: "en"
 
 config :core, CoreWeb.Gettext, locales: ~w(en nl)
 

@@ -9,7 +9,7 @@ defmodule Systems.Assignment.Factories do
       %{
         subject_count: subject_count,
         duration: duration,
-        language: "en",
+        language: :en,
         devices: [:desktop]
       }
     )

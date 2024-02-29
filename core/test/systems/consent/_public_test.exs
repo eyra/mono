@@ -131,7 +131,8 @@ defmodule Systems.Consent.PublicTest do
     agreement = Factories.insert!(:consent_agreement)
 
     assert %Systems.Consent.RevisionModel{
-             source: "<div>Beschrijf hier de consent voorwaarden</div>"
+             source:
+               "<div>Add the text for the consent form here and preview the workflow to check out what it will look like for participants.</div>"
            } = Consent.Public.bump_revision_if_needed!(agreement)
   end
 
