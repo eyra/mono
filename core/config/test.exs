@@ -1,5 +1,10 @@
 import Config
 
+config :core,
+  name: "Next [test]",
+  base_url: "http://localhost:4000",
+  upload_path: "/tmp"
+
 # Print only errors during test
 config :logger, level: :error
 
@@ -54,8 +59,6 @@ config :core, Core.SurfConext, oidc_module: Core.SurfConext.FakeOIDC
 config :core, :bundle, :next
 
 config :core, :banking_backend, Systems.Banking.Dummy
-
-config :core, :upload_path, "/tmp"
 
 config :core, :content, backend: Systems.Content.LocalFS
 

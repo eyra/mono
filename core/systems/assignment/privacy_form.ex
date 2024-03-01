@@ -24,7 +24,7 @@ defmodule Systems.Assignment.PrivacyForm do
 
   @impl true
   def update(
-        %{id: id, entity: %{privacy_doc: privacy_doc} = entity, uri_origin: uri_origin},
+        %{id: id, entity: %{privacy_doc: privacy_doc} = entity},
         socket
       ) do
     {
@@ -33,8 +33,7 @@ defmodule Systems.Assignment.PrivacyForm do
       |> assign(
         id: id,
         entity: entity,
-        privacy_doc: privacy_doc,
-        uri_origin: uri_origin
+        privacy_doc: privacy_doc
       )
       |> update_filename()
       |> compose_child(:file_copy_view)
@@ -56,12 +55,11 @@ defmodule Systems.Assignment.PrivacyForm do
   end
 
   @impl true
-  def compose(:file_copy_view, %{privacy_doc: privacy_doc, uri_origin: uri_origin}) do
+  def compose(:file_copy_view, %{privacy_doc: privacy_doc}) do
     %{
       module: Content.FileCopyView,
       params: %{
         file: privacy_doc,
-        uri_origin: uri_origin,
         annotation: dgettext("eyra-assignment", "privacy_doc.annotation")
       }
     }

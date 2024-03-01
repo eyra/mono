@@ -8,14 +8,13 @@ defmodule Systems.Content.FileCopyView do
   alias Systems.Content
 
   @impl true
-  def update(%{id: id, file: file, uri_origin: uri_origin, annotation: annotation}, socket) do
+  def update(%{id: id, file: file, annotation: annotation}, socket) do
     {
       :ok,
       socket
       |> assign(
         id: id,
         file: file,
-        uri_origin: uri_origin,
         annotation: annotation
       )
       |> update_url()
@@ -29,12 +28,11 @@ defmodule Systems.Content.FileCopyView do
   defp update_url(
          %{
            assigns: %{
-             file: %Content.FileModel{ref: relative_url},
-             uri_origin: uri_origin
+             file: %Content.FileModel{ref: ref}
            }
          } = socket
        ) do
-    assign(socket, url: uri_origin <> relative_url)
+    assign(socket, url: ref)
   end
 
   @impl true

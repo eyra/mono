@@ -5,7 +5,8 @@ defmodule Systems.Content.LocalFS do
 
   def get_public_url(path) do
     filename = Path.basename(path)
-    ~p"/uploads/#{filename}"
+    base_url = get_base_url()
+    "#{base_url}/uploads/#{filename}"
   end
 
   def store(path, original_filename) do
@@ -18,6 +19,10 @@ defmodule Systems.Content.LocalFS do
 
   def get_root_path do
     Application.get_env(:core, :upload_path)
+  end
+
+  def get_base_url do
+    Application.get_env(:core, :base_url)
   end
 
   def remove(path) do
