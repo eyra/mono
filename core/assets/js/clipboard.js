@@ -15,4 +15,7 @@ export const Clipboard = {
       document.body.removeChild(textArea);
     });
   },
+  updated() {
+    this.textToCopy = this.el.getAttribute("data-text");
+  },
 };

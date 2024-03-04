@@ -7,6 +7,14 @@ if config_env() == :prod do
   app_mail_noreply = "no-reply@#{app_mail_domain}"
   upload_path = System.fetch_env!("STATIC_PATH")
 
+  scheme = "https"
+  base_url = "#{scheme}://#{app_domain}"
+
+  config :core,
+    name: app_name,
+    base_url: base_url,
+    upload_path: upload_path
+
   # Allow enabling of features from an environment variable
   config :core,
          :features,
@@ -19,13 +27,11 @@ if config_env() == :prod do
          :admins,
          System.get_env("APP_ADMINS", "") |> String.split() |> Systems.Admin.Public.compile()
 
-  config :core, :upload_path, upload_path
-
   config :core, CoreWeb.Endpoint,
     cache_static_manifest: "priv/static/cache_manifest.json",
     server: true,
     secret_key_base: System.fetch_env!("SECRET_KEY_BASE"),
-    url: [host: app_domain, scheme: "https", port: 443],
+    url: [host: app_domain, scheme: scheme, port: 443],
     http: [
       port: String.to_integer(System.get_env("HTTP_PORT", "8000"))
     ]
@@ -81,18 +87,18 @@ if config_env() == :prod do
   end
 
   config :core, GoogleSignIn,
-    redirect_uri: "https://#{app_domain}/google-sign-in/auth",
+    redirect_uri: "#{base_url}/google-sign-in/auth",
     client_id: System.get_env("GOOGLE_SIGN_IN_CLIENT_ID"),
     client_secret: System.get_env("GOOGLE_SIGN_IN_CLIENT_SECRET")
 
   config :core, Core.SurfConext,
-    redirect_uri: "https://#{app_domain}/surfconext/auth",
+    redirect_uri: "#{base_url}/surfconext/auth",
     site: System.get_env("SURFCONEXT_SITE"),
     client_id: System.get_env("SURFCONEXT_CLIENT_ID"),
     client_secret: System.get_env("SURFCONEXT_CLIENT_SECRET")
 
   config :core, SignInWithApple,
-    redirect_uri: "https://#{app_domain}/apple/auth",
+    redirect_uri: "#{base_url}/apple/auth",
     client_id: System.get_env("SIGN_IN_WITH_APPLE_CLIENT_ID"),
     team_id: System.get_env("SIGN_IN_WITH_APPLE_TEAM_ID"),
     private_key_id: System.get_env("SIGN_IN_WITH_APPLE_PRIVATE_KEY_ID"),

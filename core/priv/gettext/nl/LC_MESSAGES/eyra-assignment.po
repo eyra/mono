@@ -283,6 +283,33 @@ msgid "finished_view.title"
 msgstr "Bedankt"
 
 #, elixir-autogen, elixir-format
+msgid "privacy_doc.placeholder"
+msgstr "Upload een privacyverklaring"
+
+#, elixir-autogen, elixir-format
+msgid "privacy_doc.replace.button"
+msgstr "Vervang PDF"
+
+#, elixir-autogen, elixir-format
+msgid "privacy_doc.select.button"
+msgstr "Kies PDF"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.privacy.body"
+msgstr "Het toevoegen van een privacyverklaring is optioneel. Als een pdf geüpload wordt, dan zal deze als een aparte privacy pagina weergegeven worden. Je kunt privacy informatie toevoegen in de tekstvelden van de informatie pagina of het toestemmingsformulier zonder een pdf te uploaden, of de privacyverklaring URL gebruiken die beschikbaar is na de pdf upload."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.privacy.title"
+msgstr "Privacy pagina"
+
+#, elixir-autogen, elixir-format
+msgid "privacy_doc.annotation"
+msgstr "<h1>Privacyverklaring URL</h1> Gebruik de URL hieronder om naar de geüploade privacy verklaring te verwijzen. Let op, de URL ververst als er een nieuwe pdf geüpload wordt.<br>"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.title"
+msgstr "Privacy"
+
 msgid "tabbar.item.monitor"
 msgstr "Monitor"
 

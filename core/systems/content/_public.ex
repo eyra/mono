@@ -1,15 +1,17 @@
 defmodule Systems.Content.Public do
   import Ecto.Query, warn: false
 
-  alias Systems.{
-    Content
-  }
-
   alias Core.Repo
   alias Ecto.Multi
 
+  alias Systems.Content
   alias Systems.Content.TextItemModel, as: TextItem
   alias Systems.Content.TextBundleModel, as: TextBundle
+
+  def prepare_file(name, ref) do
+    %Content.FileModel{}
+    |> Content.FileModel.changeset(%{name: name, ref: ref})
+  end
 
   def prepare_page(title, body, auth_node) do
     %Content.PageModel{}

@@ -48,7 +48,7 @@ defmodule Systems.Document.ToolModel do
 
     def launcher(%{id: id, ref: ref}),
       do: %{
-        module: Document.PDFView,
+        module: Document.PDFNavView,
         params: %{
           key: "pdf_view_#{id}",
           url: ref,

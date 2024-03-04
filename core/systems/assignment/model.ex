@@ -7,21 +7,21 @@ defmodule Systems.Assignment.Model do
 
   import Ecto.Changeset
 
-  alias Systems.{
-    Assignment,
-    Workflow,
-    Budget,
-    Consent,
-    Storage
-  }
+  alias Systems.Assignment
+  alias Systems.Workflow
+  alias Systems.Budget
+  alias Systems.Content
+  alias Systems.Consent
+  alias Systems.Storage
 
   schema "assignments" do
     field(:special, Ecto.Atom)
     field(:status, Ecto.Enum, values: Assignment.Status.values(), default: :concept)
     field(:external_panel, Ecto.Enum, values: Assignment.ExternalPanelIds.values())
 
-    belongs_to(:consent_agreement, Consent.AgreementModel, on_replace: :update)
     belongs_to(:info, Assignment.InfoModel)
+    belongs_to(:privacy_doc, Content.FileModel, on_replace: :nilify)
+    belongs_to(:consent_agreement, Consent.AgreementModel, on_replace: :update)
     belongs_to(:storage_endpoint, Storage.EndpointModel, on_replace: :delete)
     belongs_to(:workflow, Workflow.Model)
     belongs_to(:crew, Systems.Crew.Model)
@@ -101,6 +101,7 @@ defmodule Systems.Assignment.Model do
       :excluded,
       info: [],
       page_refs: [:page],
+      privacy_doc: [],
       consent_agreement: [:revisions],
       storage_endpoint: Storage.EndpointModel.preload_graph(:down),
       crew: [:tasks, :members, :auth_node],
