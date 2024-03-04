@@ -296,7 +296,7 @@ msgstr "Select PDF"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.privacy.body"
-msgstr "Adding a privacy statement is optional. When a pdf is uploaded, it will be shown as a separate privacy page. You can add privacy information to the text fields of the information or consent page without uploading a pdf or use the url of the uploaded pdf to refer to the uploaded privacy statement."
+msgstr "Adding a privacy statement is optional. When a pdf is uploaded, it will be shown as a separate privacy page. You can add privacy information to the text fields of the information page or the consent form without uploading a pdf or use the Privacy Statement URL available after upload to refer to the uploaded privacy statement."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.privacy.title"
@@ -304,7 +304,7 @@ msgstr "Privacy page"
 
 #, elixir-autogen, elixir-format
 msgid "privacy_doc.annotation"
-msgstr "<h1>Generated URL</h1> The generated url below can be used wherever you want to refer to the privacy terms."
+msgstr "<h1>Privacy statement URL</h1> Use the URL below to refer to the uploaded privacy statement. Please note that when a new pdf is uploaded, the URL will be updated.<br>"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.title"
