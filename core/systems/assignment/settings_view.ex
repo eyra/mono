@@ -2,9 +2,7 @@ defmodule Systems.Assignment.SettingsView do
   use CoreWeb, :live_component_fabric
   use Fabric.LiveComponent
 
-  alias Systems.{
-    Assignment
-  }
+  alias Systems.Assignment
 
   @impl true
   def update(
@@ -29,6 +27,7 @@ defmodule Systems.Assignment.SettingsView do
       )
       |> compose_child(:info)
       |> compose_child(:intro)
+      |> compose_child(:privacy)
       |> compose_child(:consent)
       |> compose_child(:support)
       |> compose_child(:panel_connector)
@@ -58,6 +57,17 @@ defmodule Systems.Assignment.SettingsView do
         opt_in?: false,
         on_text: dgettext("eyra-assignment", "intro_form.on.label"),
         off_text: dgettext("eyra-assignment", "intro_form.off.label")
+      }
+    }
+  end
+
+  @impl true
+  def compose(:privacy, %{entity: assignment, uri_origin: uri_origin}) do
+    %{
+      module: Assignment.PrivacyForm,
+      params: %{
+        entity: assignment,
+        uri_origin: uri_origin
       }
     }
   end
@@ -136,6 +146,17 @@ defmodule Systems.Assignment.SettingsView do
           <:header>
             <Text.title3><%= dgettext("eyra-assignment", "settings.intro.title") %></Text.title3>
             <Text.body><%= dgettext("eyra-assignment", "settings.intro.body") %></Text.body>
+            <.spacing value="M" />
+          </:header>
+          <:footer>
+            <.spacing value="L" />
+          </:footer>
+        </.child>
+
+        <.child name={:privacy} fabric={@fabric} >
+          <:header>
+            <Text.title3><%= dgettext("eyra-assignment", "settings.privacy.title") %></Text.title3>
+            <Text.body><%= dgettext("eyra-assignment", "settings.privacy.body") %></Text.body>
             <.spacing value="M" />
           </:header>
           <:footer>

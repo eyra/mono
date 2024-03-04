@@ -283,6 +283,31 @@ msgid "finished_view.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "privacy_doc.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy_doc.replace.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy_doc.select.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.privacy.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.privacy.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy_doc.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.title"
 msgid "tabbar.item.monitor"
 msgstr ""
 

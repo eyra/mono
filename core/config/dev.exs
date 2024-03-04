@@ -7,6 +7,11 @@ upload_path =
   |> Path.join("uploads")
   |> tap(&File.mkdir_p!/1)
 
+config :core,
+  name: "Next [local]",
+  base_url: "http://localhost:4000",
+  upload_path: upload_path
+
 # Only in tests, remove the complexity from the password hashing algorithm
 config :bcrypt_elixir, :log_rounds, 1
 
@@ -72,8 +77,6 @@ config :core, Systems.Email.Mailer,
   default_from_email: "no-reply@example.com"
 
 config :core, :apns_backend, Core.APNS.LoggingBackend
-
-config :core, :upload_path, upload_path
 
 config :core,
        :admins,

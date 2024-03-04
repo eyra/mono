@@ -192,11 +192,11 @@ trix-toolbar .trix-button--dialog {
 }
 
 trix-toolbar .trix-dialog__link-fields .trix-button-group {
-  @apply pl-4;
+  @apply h-8;
 }
 
 trix-toolbar .trix-dialog__link-fields .trix-button {
-  border-left: 0px;
+  @apply px-4;
 }
 
 trix-toolbar .trix-dialog--link {
@@ -209,10 +209,6 @@ trix-toolbar .trix-dialog__link-fields {
 }
 trix-toolbar .trix-dialog__link-fields .trix-input {
   flex: 1;
-}
-trix-toolbar .trix-dialog__link-fields .trix-button-group {
-  flex: 0 0 content;
-  margin: 0;
 }
 
 trix-editor,
