@@ -284,7 +284,7 @@ msgstr "Thank you"
 
 #, elixir-autogen, elixir-format
 msgid "privacy_doc.placeholder"
-msgstr "Select a privacy statement"
+msgstr "Upload a privacy statement"
 
 #, elixir-autogen, elixir-format
 msgid "privacy_doc.replace.button"
@@ -296,11 +296,11 @@ msgstr "Select PDF"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.privacy.body"
-msgstr "Upload your privacy statement here"
+msgstr "Adding a privacy statement is optional. When a pdf is uploaded, it will be shown as a separate privacy page. You can add privacy information to the text fields of the information or consent page without uploading a pdf or use the url of the uploaded pdf to refer to the uploaded privacy statement."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.privacy.title"
-msgstr "Privacy"
+msgstr "Privacy page"
 
 #, elixir-autogen, elixir-format
 msgid "privacy_doc.annotation"
