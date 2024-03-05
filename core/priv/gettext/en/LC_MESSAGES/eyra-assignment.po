@@ -342,4 +342,4 @@ msgstr "Expected number of participants"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.language.label"
-msgstr "Language used in this assignment"
+msgstr "Language setting for participants"
