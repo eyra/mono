@@ -76,10 +76,6 @@ defmodule Core.Authorization do
     index: [:visitor, :member]
   })
 
-  grant_actions(CoreWeb.LanguageSwitchController, %{
-    index: [:visitor, :member]
-  })
-
   def get_node!(id), do: Repo.get!(Core.Authorization.Node, id)
 
   def prepare_node() do

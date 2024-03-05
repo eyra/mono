@@ -89,19 +89,20 @@ defmodule Systems.Content.Page do
       use CoreWeb.UI.Responsive.Viewport
       use Systems.Observatory.Public
 
+      alias CoreWeb.LiveLocale
       alias Frameworks.Pixel.Flash
 
       import CoreWeb.Gettext
       import Systems.Content.Page, except: [helpers: 0]
 
-      defp initialize(socket, id, model, tabbar_id, initial_tab, locale) do
+      defp initialize(socket, id, model, tabbar_id, initial_tab) do
         socket
         |> assign(
           id: id,
           model: model,
           tabbar_id: tabbar_id,
           initial_tab: initial_tab,
-          locale: locale,
+          locale: LiveLocale.get_locale(),
           changesets: %{},
           publish_clicked: false,
           dialog: nil,

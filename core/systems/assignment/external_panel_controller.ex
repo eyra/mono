@@ -63,14 +63,10 @@ defmodule Systems.Assignment.ExternalPanelController do
     |> ExternalSignIn.sign_in(external_panel, participant_id)
     |> authorize_user(assignment)
     |> add_panel_info(params)
-    |> CoreWeb.LanguageSwitchController.index(%{
-      "locale" => locale(assignment),
-      "redir" => path(params)
-    })
+    |> redirect(to: path(params))
   end
 
   defp path(%{"id" => id}), do: "/assignment/#{id}"
-  defp locale(assignment), do: Atom.to_string(Assignment.Model.language(assignment))
 
   defp forbidden(conn) do
     conn

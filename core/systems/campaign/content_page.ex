@@ -29,7 +29,7 @@ defmodule Systems.Campaign.ContentPage do
   end
 
   @impl true
-  def mount(%{"id" => id} = params, %{"resolved_locale" => locale}, socket) do
+  def mount(%{"id" => id} = params, _, socket) do
     initial_tab = Map.get(params, "tab")
     model = Campaign.Public.get!(String.to_integer(id), Campaign.Model.preload_graph(:down))
     tabbar_id = "campaign_content/#{id}"
@@ -42,7 +42,7 @@ defmodule Systems.Campaign.ContentPage do
         model: model,
         tabbar_id: tabbar_id,
         initial_tab: initial_tab,
-        locale: locale,
+        locale: LiveLocale.get_locale(),
         changesets: %{},
         submit_clicked: false,
         dialog: nil,

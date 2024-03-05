@@ -12,7 +12,7 @@ defmodule Systems.Document.ContentPage do
   end
 
   @impl true
-  def mount(%{"id" => id} = params, %{"resolved_locale" => locale}, socket) do
+  def mount(%{"id" => id} = params, _, socket) do
     initial_tab = Map.get(params, "tab")
 
     model =
@@ -22,7 +22,7 @@ defmodule Systems.Document.ContentPage do
 
     {
       :ok,
-      socket |> initialize(id, model, tabbar_id, initial_tab, locale)
+      socket |> initialize(id, model, tabbar_id, initial_tab)
     }
   end
 

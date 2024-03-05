@@ -6,18 +6,22 @@ defmodule CoreWeb.Routes do
       require CoreWeb.Cldr
       import CoreWeb.UserAuth
       import CoreWeb.Meta
+      alias Systems.Assignment
 
       pipeline :browser_base do
         plug(:accepts, ["html"])
         plug(:fetch_session)
 
         plug(Cldr.Plug.PutLocale,
-          apps: [cldr: CoreWeb.Cldr, gettext: :global],
-          from: [:session, :query, :cookie, :accept_language],
-          param: "locale"
+          apps: [
+            cldr: CoreWeb.Cldr,
+            gettext: :global,
+            gettext: CoreWeb.Gettext,
+            gettext: Timex.Gettext
+          ],
+          from: [:session],
+          default: "en"
         )
-
-        plug(CoreWeb.Plug.LiveLocale)
 
         plug(RemoteIp)
         plug(CoreWeb.Plug.LiveRemoteIp)

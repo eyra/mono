@@ -32,7 +32,7 @@ defmodule Systems.Feldspar.AppPage do
       params: %{
         key: "app_#{app_id}",
         url: app_url,
-        locale: Gettext.get_locale()
+        locale: LiveLocale.get_locale()
       }
     }
   end

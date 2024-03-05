@@ -11,7 +11,7 @@ defmodule Systems.Org.ContentPage do
   }
 
   @impl true
-  def mount(%{"id" => id}, %{"resolved_locale" => locale}, socket) do
+  def mount(%{"id" => id}, _, socket) do
     node = Org.Public.get_node!(id, Org.NodeModel.preload_graph(:full))
     tabbar_id = "org_content/#{id}"
 
@@ -21,7 +21,7 @@ defmodule Systems.Org.ContentPage do
       |> assign(
         tabbar_id: tabbar_id,
         node: node,
-        locale: locale
+        locale: LiveLocale.get_locale()
       )
       |> assign_breakpoint()
       |> create_tabs()
@@ -82,10 +82,6 @@ defmodule Systems.Org.ContentPage do
   defp tabbar_size({:unknown, _}), do: :unknown
   defp tabbar_size(bp), do: value(bp, :narrow, sm: %{30 => :wide})
 
-  # data(tabbar_id, :string)
-  # data(node, :map)
-  # data(tabs, :list)
-  # data(bar_size, :number)
   @impl true
   def render(assigns) do
     ~H"""
