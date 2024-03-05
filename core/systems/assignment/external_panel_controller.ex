@@ -15,15 +15,17 @@ defmodule Systems.Assignment.ExternalPanelController do
     Logger.warn("[ExternalPanelController] create: #{inspect(params)}")
 
     if tester?(assignment, conn) do
-      conn
-      |> add_panel_info(params)
-      |> redirect(to: path(params))
+      if invalid_id?(params) do
+        forbidden(conn)
+      else
+        start_tester(conn, params)
+      end
     else
       cond do
         invalid_id?(params) -> forbidden(conn)
         has_no_access?(assignment, params) -> forbidden(conn)
         offline?(assignment) -> service_unavailable(conn)
-        true -> start(assignment, conn, params)
+        true -> start_participant(assignment, conn, params)
       end
     end
   end
@@ -56,7 +58,13 @@ defmodule Systems.Assignment.ExternalPanelController do
     external_panel != get_panel(params)
   end
 
-  defp start(%{external_panel: external_panel} = assignment, conn, params) do
+  defp start_tester(conn, params) do
+    conn
+    |> add_panel_info(params)
+    |> redirect(to: path(params))
+  end
+
+  defp start_participant(%{external_panel: external_panel} = assignment, conn, params) do
     participant_id = get_participant(params)
 
     conn
