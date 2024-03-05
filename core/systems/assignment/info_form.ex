@@ -9,7 +9,6 @@ defmodule Systems.Assignment.InfoForm do
   alias Core.ImageHelpers
   alias CoreWeb.UI.ImageCatalogPicker
   alias Frameworks.Pixel.Image
-  alias Frameworks.Pixel.RadioGroup
 
   alias Systems.Assignment
 
@@ -39,7 +38,7 @@ defmodule Systems.Assignment.InfoForm do
         viewport: viewport,
         breakpoint: breakpoint
       )
-      |> compose_child(:language_selector)
+      |> update_language_items()
       |> update_image_picker_state()
       |> update_image_info()
       |> update_image_picker_button()
@@ -47,8 +46,7 @@ defmodule Systems.Assignment.InfoForm do
     }
   end
 
-  @impl true
-  def compose(:language_selector, %{entity: %{language: language}}) do
+  def update_language_items(%{assigns: %{entity: %{language: language}}} = socket) do
     language =
       if language do
         language
@@ -58,12 +56,7 @@ defmodule Systems.Assignment.InfoForm do
 
     items = Assignment.Languages.labels(language)
 
-    %{
-      module: RadioGroup,
-      params: %{
-        items: items
-      }
-    }
+    assign(socket, language_items: items)
   end
 
   @impl true
@@ -159,15 +152,6 @@ defmodule Systems.Assignment.InfoForm do
   end
 
   @impl true
-  def handle_event("save", %{"radio-group" => language}, %{assigns: %{entity: entity}} = socket) do
-    {
-      :noreply,
-      socket
-      |> save(entity, :auto_save, %{language: language})
-    }
-  end
-
-  @impl true
   def handle_event("save", %{"info_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
@@ -189,12 +173,10 @@ defmodule Systems.Assignment.InfoForm do
   def render(assigns) do
     ~H"""
     <div>
-        <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
+        <.form id={"#{@id}_general"} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
           <Text.title3><%= dgettext("eyra-assignment", "settings.general.title") %></Text.title3>
           <.number_input form={form} field={:subject_count} label_text={dgettext("eyra-assignment", "settings.subject_count.label")} />
-          <Text.form_field_label id={:language}><%= dgettext("eyra-assignment", "settings.language.label") %></Text.form_field_label>
-          <.spacing value="XS" />
-          <.child name={:language_selector} fabric={@fabric} />
+          <.radio_group form={form} field={:language} label_text={dgettext("eyra-assignment", "settings.language.label")} items={@language_items}/>
           <.spacing value="L" />
 
           <Text.title3><%= dgettext("eyra-assignment", "settings.branding.title") %></Text.title3>
@@ -213,6 +195,7 @@ defmodule Systems.Assignment.InfoForm do
             secondary_button_text={dgettext("eyra-assignment", "choose.other.logo.file")}
             placeholder="logo_placeholder"
           />
+
           <.spacing value="L" />
           <Text.title5 align="text-left"><%= dgettext("eyra-assignment", "settings.image.title") %></Text.title5>
           <.spacing value="XS" />
