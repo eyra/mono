@@ -132,8 +132,8 @@ msgstr "Your account has been created. We send you an activation email. Please c
 
 #, elixir-autogen, elixir-format
 msgid "activation.failed.body"
-msgstr "Your account activation link is invalid or it has expired. Enter your email address and click resend to receive a new account activation link."
+msgstr "Your account might already have been activated or the activation link is expired. Click 'Sign in' at the top right to try to sign in with your account information. If your account is not activated, enter your email address below to receive a new activation link."
 
 #, elixir-autogen, elixir-format
 msgid "activation.failed.title"
-msgstr "Activation failed"
+msgstr "Account activation"
