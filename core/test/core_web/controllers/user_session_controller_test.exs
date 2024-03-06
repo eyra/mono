@@ -16,7 +16,7 @@ defmodule CoreWeb.UserSessionControllerTest do
     test "renders log in page", %{conn: conn} do
       conn = get(conn, ~p"/user/signin")
       response = html_response(conn, 200)
-      assert response =~ "Log in"
+      assert response =~ "Sign in"
     end
   end
 
@@ -93,7 +93,7 @@ defmodule CoreWeb.UserSessionControllerTest do
       conn = delete(conn, Routes.session_path(conn, :delete))
       assert redirected_to(conn) == "/user/signin"
       refute get_session(conn, :user_token)
-      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Uitgelogd"
+      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Signed out"
     end
   end
 
@@ -102,7 +102,7 @@ defmodule CoreWeb.UserSessionControllerTest do
       conn = delete(conn, Routes.session_path(conn, :delete))
       assert redirected_to(conn) == "/user/signin"
       refute get_session(conn, :user_token)
-      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Uitgelogd"
+      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Signed out"
     end
   end
 end

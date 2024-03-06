@@ -336,5 +336,9 @@ msgid "settings.general.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "settings.language.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "settings.subject_count.label"
 msgstr ""

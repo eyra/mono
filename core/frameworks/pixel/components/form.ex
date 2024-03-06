@@ -496,6 +496,46 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
+  attr(:label_text, :string, default: nil)
+  attr(:label_color, :string, default: "text-grey1")
+  attr(:background, :atom, default: :light)
+  attr(:items, :list, required: true)
+
+  def radio_group(%{form: form, field: field} = assigns) do
+    field_id = String.to_atom(input_id(form, field))
+    field_name = input_name(form, field)
+
+    assigns = assign(assigns, %{field_id: field_id, field_name: field_name})
+
+    ~H"""
+    <.field
+      field={@field_id}
+      label_text={@label_text}
+      label_color={@label_color}
+      background={@background}
+      extra_space={false}
+    >
+      <div class="flex flex-row gap-8 ml-[6px] mt-3">
+        <%= for item <- @items do %>
+          <label class="cursor-pointer flex flex-row gap-[18px] items-center">
+            <input
+              id={"#{@field_id}_#{item.id}"}
+              value={item.id}
+              type="radio"
+              name={@field_name}
+              checked={item.active}
+              class="cursor-pointer appearance-none w-3 h-3 rounded-full outline outline-2 outline-offset-4 outline-grey3 checked:bg-primary checked:outline-primary"
+            />
+            <div class="text-label font-label text-grey1 select-none mt-1"><%= item.value %></div>
+          </label>
+        <% end %>
+      </div>
+    </.field>
+    """
+  end
+
+  attr(:form, :any, required: true)
+  attr(:field, :atom, required: true)
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
   attr(:accent, :atom, default: :primary)

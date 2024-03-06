@@ -129,3 +129,11 @@ msgstr "Inloggen"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "await.confirmation.description"
 msgstr "Je account is aangemaakt. We hebben je een e-mail gestuurd ter bevestiging. Klik op de link in de e-mail om je account te activeren."
+
+#, elixir-autogen, elixir-format
+msgid "activation.failed.body"
+msgstr "Jouw account activatie link is ongeldig of verlopen. Voer je e-mailadres in en klik op de button om een nieuwe activatie link te ontvangen."
+
+#, elixir-autogen, elixir-format
+msgid "activation.failed.title"
+msgstr "Activatie mislukt"

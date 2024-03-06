@@ -25,7 +25,6 @@ defmodule Next.Layouts.Workspace.MenuBuilder do
 
   @secondary [
     default: [
-      :language,
       :helpdesk,
       :profile,
       :signin

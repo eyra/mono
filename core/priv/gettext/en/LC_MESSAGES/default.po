@@ -11,9 +11,5 @@ msgstr ""
 "Language: en\n"
 
 #, elixir-autogen, elixir-format
-msgid "Dutch"
-msgstr "Nederlands"
-
-#, elixir-autogen, elixir-format
 msgid "English"
 msgstr ""

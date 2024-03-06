@@ -77,7 +77,7 @@ defmodule CoreWeb do
       import Phoenix.Controller,
         only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
 
-      use CoreWeb.LiveLocale
+      alias CoreWeb.LiveLocale
       use CoreWeb.LiveUri
       import Core.Authorization, only: [can_access?: 2]
       use Frameworks.GreenLight.Live, Core.Authorization
@@ -108,7 +108,7 @@ defmodule CoreWeb do
       import Phoenix.Controller,
         only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
 
-      use CoreWeb.LiveLocale
+      alias CoreWeb.LiveLocale
       use CoreWeb.LiveUri
       import Core.Authorization, only: [can_access?: 2]
       use Frameworks.GreenLight.Live, Core.Authorization

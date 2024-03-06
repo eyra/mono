@@ -1,7 +1,7 @@
 export const GetText = (function () {
   "use strict";
 
-  const defaultLocale = "nl";
+  const defaultLocale = "en";
 
   /* PUBLIC */
 

@@ -279,13 +279,11 @@ module.exports = {
           paddingBottom: "env(safe-area-inset-bottom)",
         },
         ".scrollbar-hidden": {
-          /* Firefox */
-          "scrollbar-width": "thin",
-
-          /* Safari and Chrome */
-          "&::-webkit-scrollbar": {
-            display: "none",
-          },
+          "-ms-overflow-style": "none" /* IE and Edge */,
+          "scrollbar-width": "none" /* Firefox */,
+        },
+        ".scrollbar-hidden::-webkit-scrollbar": {
+          display: "none" /* Chrome, Safari and Opera */,
         },
       };
       addUtilities(newUtilities);

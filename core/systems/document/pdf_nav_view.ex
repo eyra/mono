@@ -2,6 +2,8 @@ defmodule Systems.Document.PDFNavView do
   use CoreWeb, :live_component_fabric
   use Fabric.LiveComponent
 
+  alias Systems.Document
+
   @impl true
   def update(%{key: key, title: title, url: url} = params, socket) do
     visible = Map.get(params, :visible, true)

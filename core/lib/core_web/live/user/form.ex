@@ -17,9 +17,11 @@ defmodule CoreWeb.User.Form do
     """
   end
 
+  attr(:for, :any, default: %{})
+
   def password_signin(assigns) do
     ~H"""
-    <.form id="signin_form" :let={form} for={%{}} action={~p"/user/session"} >
+    <.form id="signin_form" :let={form} for={@for} action={~p"/user/session"} >
       <.email_input form={form} field={:email} label_text={dgettext("eyra-account", "email.label")} reserve_error_space={false} />
       <.spacing value="S" />
       <.password_input form={form} field={:password} label_text={dgettext("eyra-account", "password.label")} reserve_error_space={false} />

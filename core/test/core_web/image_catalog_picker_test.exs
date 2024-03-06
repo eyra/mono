@@ -59,7 +59,7 @@ defmodule CoreWeb.UI.ImageCatalogPicker.Test do
     test "searching for non-existent images shows no results", %{view: view} do
       assert view
              |> element("form")
-             |> render_submit(%{q: "somethingwhichdoesnotexist"}) =~ "Geen afbeeldingen gevonden"
+             |> render_submit(%{q: "somethingwhichdoesnotexist"}) =~ "No images found"
     end
 
     test "searching existing images shows results", %{view: view} do

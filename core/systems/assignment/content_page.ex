@@ -14,7 +14,7 @@ defmodule Systems.Assignment.ContentPage do
   end
 
   @impl true
-  def mount(%{"id" => id} = params, %{"resolved_locale" => locale}, socket) do
+  def mount(%{"id" => id} = params, _, socket) do
     initial_tab = Map.get(params, "tab")
     model = Assignment.Public.get!(String.to_integer(id), Assignment.Model.preload_graph(:down))
     tabbar_id = "assignment_content/#{id}"
@@ -22,7 +22,7 @@ defmodule Systems.Assignment.ContentPage do
     {
       :ok,
       socket
-      |> initialize(id, model, tabbar_id, initial_tab, locale)
+      |> initialize(id, model, tabbar_id, initial_tab)
       |> ensure_tester_role()
     }
   end

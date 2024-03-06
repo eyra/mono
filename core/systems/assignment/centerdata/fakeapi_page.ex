@@ -1,6 +1,5 @@
 defmodule Systems.Assignment.Centerdata.FakeApiPage do
   use CoreWeb, :live_view
-  use CoreWeb.LiveLocale
   use CoreWeb.LiveAssignHelper
   use CoreWeb.Layouts.Stripped.Component, :data_donation
 

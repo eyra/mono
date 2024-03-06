@@ -26,6 +26,11 @@ defmodule Systems.Assignment.CrewPage do
 
   @impl true
   def mount(%{"id" => id}, session, socket) do
+    String.to_integer(id)
+    |> Assignment.Public.get!([:info])
+    |> Assignment.Model.language()
+    |> CoreWeb.LiveLocale.put_locale()
+
     model = Assignment.Public.get!(id, Assignment.Model.preload_graph(:down))
 
     {

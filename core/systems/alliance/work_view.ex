@@ -7,7 +7,7 @@ defmodule Systems.Alliance.WorkView do
     ~H"""
       <div class="flex flex-col w-full h-full pl-sidepadding pt-sidepadding">
         <div class="flex-grow w-full bg-grey6" >
-          <iframe class="w-full h-full" src={"#{@url}#view=FitH&toolbar=0"} />
+          <iframe class="w-full h-full outline-none" src={"#{@url}#view=FitH&toolbar=0"} />
         </div>
       </div>
     """

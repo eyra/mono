@@ -85,12 +85,12 @@ defmodule Systems.Assignment.LandingPageTest do
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
 
       assert html =~ "This is a test title"
-      assert html =~ "Instructies"
+      assert html =~ "Instructions"
       assert html =~ "These are the expectations for the participants"
-      assert html =~ "Beloning"
-      assert html =~ "Duur"
-      assert html =~ "Taal"
-      assert html =~ "Doorgaan"
+      assert html =~ "Reward"
+      assert html =~ "Duration"
+      assert html =~ "Language"
+      assert html =~ "Proceed"
     end
 
     test "Member starting assignment", %{
@@ -133,12 +133,12 @@ defmodule Systems.Assignment.LandingPageTest do
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
 
       assert html =~ "This is a test title"
-      assert html =~ "Instructies"
+      assert html =~ "Instructions"
       assert html =~ "These are the expectations for the participants"
-      assert html =~ "Beloning"
-      assert html =~ "Duur"
-      assert html =~ "Taal"
-      assert html =~ "Doorgaan"
+      assert html =~ "Reward"
+      assert html =~ "Duration"
+      assert html =~ "Language"
+      assert html =~ "Proceed"
     end
 
     test "Member completed assignment", %{
@@ -157,12 +157,12 @@ defmodule Systems.Assignment.LandingPageTest do
         live(conn, Routes.live_path(conn, Assignment.LandingPage, assignment.id))
 
       assert html =~ "This is a test title"
-      assert html =~ "Je hebt bijgedragen aan deze studie"
-      assert html =~ "Jouw bijdrage wordt door de auteur van deze studie beoordeeld"
-      assert html =~ "Beloning"
-      assert html =~ "Duur"
-      assert html =~ "Taal"
-      assert html =~ "Ga naar console"
+      assert html =~ "You have contributed to this study"
+      assert html =~ "Your contribution will be reviewed by the author"
+      assert html =~ "Reward"
+      assert html =~ "Duration"
+      assert html =~ "Language"
+      assert html =~ "Go to console"
     end
   end
 end

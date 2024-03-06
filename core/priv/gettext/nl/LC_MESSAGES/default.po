@@ -20,9 +20,5 @@ msgstr ""
 "X-Generator: Poedit 2.4.2\n"
 
 #, elixir-autogen, elixir-format
-msgid "Dutch"
-msgstr "Nederlands"
-
-#, elixir-autogen, elixir-format
 msgid "English"
 msgstr ""

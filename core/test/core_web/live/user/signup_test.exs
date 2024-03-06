@@ -14,7 +14,7 @@ defmodule CoreWeb.Live.User.Signup.Test do
         |> element("form")
         |> render_submit(%{user: %{email: Faker.Internet.email(), password: "abc"}})
 
-      assert html =~ "minimaal"
+      assert html =~ "at least"
     end
 
     test "signup redirects to confirmation view", %{conn: conn} do

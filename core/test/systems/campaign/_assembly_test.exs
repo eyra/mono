@@ -62,7 +62,7 @@ defmodule Systems.Campaign.AssemblyTest do
                    info: %Systems.Assignment.InfoModel{
                      subject_count: nil,
                      duration: nil,
-                     language: nil,
+                     language: :en,
                      devices: [:phone, :tablet, :desktop],
                      ethical_approval: nil,
                      ethical_code: nil
@@ -203,7 +203,7 @@ defmodule Systems.Campaign.AssemblyTest do
                  info: %Systems.Assignment.InfoModel{
                    subject_count: nil,
                    duration: nil,
-                   language: nil,
+                   language: :en,
                    devices: [],
                    ethical_approval: nil,
                    ethical_code: nil
@@ -354,7 +354,7 @@ defmodule Systems.Campaign.AssemblyTest do
       # Update Inquiry
       subject_count = 2
       duration = "10"
-      language = "en"
+      language = :en
       ethical_approval = true
       ethical_code = "RERB"
       devices = [:desktop, :tablet]

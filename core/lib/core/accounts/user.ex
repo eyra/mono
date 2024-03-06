@@ -10,6 +10,9 @@ defmodule Core.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  def email_max_length, do: 160
+  def email_format, do: ~r/^[^\s]+@[^\s]+$/
+
   @derive {Inspect, except: [:password]}
   schema "users" do
     field(:email, :string)
@@ -65,16 +68,21 @@ defmodule Core.Accounts.User do
     |> cast(attrs, [:researcher, :student, :coordinator, :displayname])
   end
 
-  defp validate_email(changeset) do
+  def valid_email?(email) when is_binary(email) do
+    String.length(email) <= email_max_length() and
+      String.match?(email, email_format())
+  end
+
+  def validate_email(changeset) do
     changeset
     |> validate_required([:email])
-    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
-    |> validate_length(:email, max: 160)
+    |> validate_format(:email, email_format(), message: "must have the @ sign and no spaces")
+    |> validate_length(:email, max: email_max_length())
     |> unsafe_validate_unique(:email, Core.Repo)
     |> unique_constraint(:email)
   end
 
-  defp validate_password(changeset, opts) do
+  def validate_password(changeset, opts) do
     changeset
     |> validate_required([:password])
     |> validate_length(:password, min: 12, max: 80)
@@ -105,8 +113,8 @@ defmodule Core.Accounts.User do
     %Core.Accounts.User{}
     |> cast(%{email: email}, [:email])
     |> validate_required([:email])
-    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
-    |> validate_length(:email, max: 160)
+    |> validate_format(:email, email_format(), message: "must have the @ sign and no spaces")
+    |> validate_length(:email, max: email_max_length())
   end
 
   def visited_changeset(user, attrs) do

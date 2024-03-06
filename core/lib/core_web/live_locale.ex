@@ -1,35 +1,16 @@
-defmodule CoreWeb.Plug.LiveLocale do
-  @moduledoc "A Plug that sets the cldr resolved locale (Cldr.Plug.PutLocale) as session variable."
-  import Plug.Conn, only: [put_session: 3]
-
-  def init(options) do
-    options
-  end
-
-  def call(conn, _opts) do
-    locale = Gettext.get_locale()
-    put_session(conn, :resolved_locale, locale)
-  end
-end
-
 defmodule CoreWeb.LiveLocale do
-  @moduledoc "A LiveView helper that applies the cldr resolved locale in the current process."
+  @moduledoc "A LiveView helper that changes the locale of the current process"
 
-  defmacro __using__(_opts \\ nil) do
-    quote do
-      @before_compile CoreWeb.LiveLocale
-    end
+  def put_locale(locale) when is_atom(locale), do: put_locale(Atom.to_string(locale))
+
+  def put_locale(locale) do
+    CoreWeb.Cldr.put_locale(locale)
+    Gettext.put_locale(locale)
+    Gettext.put_locale(CoreWeb.Gettext, locale)
+    Gettext.put_locale(Timex.Gettext, locale)
   end
 
-  defmacro __before_compile__(_env) do
-    quote do
-      defoverridable mount: 3
-
-      def mount(params, %{"resolved_locale" => locale} = session, socket) do
-        Gettext.put_locale(CoreWeb.Gettext, locale)
-        Gettext.put_locale(Timex.Gettext, locale)
-        super(params, session, socket)
-      end
-    end
+  def get_locale() do
+    Gettext.get_locale()
   end
 end

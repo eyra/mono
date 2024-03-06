@@ -85,6 +85,11 @@ defmodule Systems.Assignment.Model do
     |> Map.put(:tool, tool(assignment))
   end
 
+  def language(%Assignment.Model{info: info}), do: language(info)
+  def language(%Assignment.InfoModel{language: language}), do: language(language)
+  def language(language) when is_atom(language), do: language
+  def language(_), do: Assignment.Languages.default()
+
   def tool(%{workflow: workflow}) when not is_nil(workflow) do
     [tool | _] = Workflow.Model.flatten(workflow)
     tool

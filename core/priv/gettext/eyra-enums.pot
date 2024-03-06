@@ -381,3 +381,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "storage_service_ids.builtin"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_languages.en"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_languages.nl"
+msgstr ""

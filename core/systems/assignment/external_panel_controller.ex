@@ -6,20 +6,26 @@ defmodule Systems.Assignment.ExternalPanelController do
 
   require Logger
 
+  @id_valid_regex ~r/^[A-Za-z0-9_-]+$/
+  @id_max_lenght 64
+
   def create(conn, %{"id" => id, "entry" => _} = params) do
-    assignment = Assignment.Public.get!(id, [:crew, :auth_node])
+    assignment = Assignment.Public.get!(id, [:info, :crew, :auth_node])
 
     Logger.warn("[ExternalPanelController] create: #{inspect(params)}")
 
     if tester?(assignment, conn) do
-      conn
-      |> add_panel_info(params)
-      |> redirect(to: path(params))
+      if invalid_id?(params) do
+        forbidden(conn)
+      else
+        start_tester(conn, params)
+      end
     else
       cond do
+        invalid_id?(params) -> forbidden(conn)
         has_no_access?(assignment, params) -> forbidden(conn)
         offline?(assignment) -> service_unavailable(conn)
-        true -> start(assignment, conn, params)
+        true -> start_participant(assignment, conn, params)
       end
     end
   end
@@ -34,23 +40,41 @@ defmodule Systems.Assignment.ExternalPanelController do
     status != :online
   end
 
+  defp invalid_id?(%{} = params) do
+    id = get_participant(params)
+    invalid_id?(id)
+  end
+
+  defp invalid_id?(id) do
+    not valid_id?(id)
+  end
+
+  def valid_id?(id) do
+    String.length(id) <= @id_max_lenght and Regex.match?(@id_valid_regex, id)
+  end
+
   defp has_no_access?(%{external_panel: external_panel}, params) do
     external_panel = Atom.to_string(external_panel)
     external_panel != get_panel(params)
   end
 
-  defp start(%{external_panel: external_panel} = assignment, conn, params) do
+  defp start_tester(conn, params) do
+    conn
+    |> add_panel_info(params)
+    |> redirect(to: path(params))
+  end
+
+  defp start_participant(%{external_panel: external_panel} = assignment, conn, params) do
     participant_id = get_participant(params)
 
     conn
     |> ExternalSignIn.sign_in(external_panel, participant_id)
     |> authorize_user(assignment)
     |> add_panel_info(params)
-    |> CoreWeb.LanguageSwitchController.index(%{
-      "locale" => get_locale(params),
-      "redir" => path(params)
-    })
+    |> redirect(to: path(params))
   end
+
+  defp path(%{"id" => id}), do: "/assignment/#{id}"
 
   defp forbidden(conn) do
     conn
@@ -85,20 +109,6 @@ defmodule Systems.Assignment.ExternalPanelController do
     conn |> put_session(:panel_info, panel_info)
   end
 
-  defp path(%{"id" => id} = params) do
-    query_string = query_string(params)
-    "/assignment/#{id}#{query_string}"
-  end
-
-  defp query_string(_params) do
-    ""
-    # if locale = get_locale(params) do
-    #   "?locale=#{locale}"
-    # else
-    #   ""
-    # end
-  end
-
   # Param Mappings
 
   defp get_panel(%{"entry" => "participate"}), do: "generic"
@@ -107,13 +117,6 @@ defmodule Systems.Assignment.ExternalPanelController do
   defp get_participant(%{"respondent" => respondent}), do: respondent
   defp get_participant(%{"participant" => participant}), do: participant
   defp get_participant(_), do: nil
-
-  # Liss should always be in dutch
-  defp get_locale(%{"entry" => "liss"}), do: "nl"
-  defp get_locale(%{"lang" => lang}), do: lang
-  defp get_locale(%{"language" => language}), do: language
-  defp get_locale(%{"resolved_locale" => locale}), do: locale
-  defp get_locale(_), do: nil
 
   defp embedded?(%{"entry" => "liss"}), do: true
   defp embedded?(_), do: false
