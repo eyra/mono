@@ -101,7 +101,6 @@ CoreWeb.FallbackHTML.html
 CoreWeb.FileUploader.html
 CoreWeb.Gettext.html
 CoreWeb.HealthController.html
-CoreWeb.LanguageSwitchController.html
 CoreWeb.Languages.html
 CoreWeb.Layouts.App.Component.html
 CoreWeb.Layouts.Stripped.Component.html
@@ -122,7 +121,6 @@ CoreWeb.Menu.Builder.html
 CoreWeb.Menu.Helpers.html
 CoreWeb.Menu.ItemsProvider.html
 CoreWeb.Meta.html
-CoreWeb.Plug.LiveLocale.html
 CoreWeb.Plug.LiveRemoteIp.html
 CoreWeb.PushSubscriptionController.html
 CoreWeb.PushSubscriptionHTML.html
@@ -339,6 +337,7 @@ Systems.Assignment.GdprForm.html
 Systems.Assignment.InfoForm.html
 Systems.Assignment.InfoModel.html
 Systems.Assignment.LandingPage.html
+Systems.Assignment.Languages.html
 Systems.Assignment.Model.html
 Systems.Assignment.MonitorView.html
 Systems.Assignment.OnboardingConsentView.html
@@ -730,8 +729,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-2AB7BE62.js
-dist/sidebar_items-4B6F46F0.js
+dist/search_items-3F2A50C5.js
+dist/sidebar_items-1A6C1906.js
 index.html
 readme.html
 search.html
