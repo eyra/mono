@@ -87,8 +87,15 @@ defmodule Systems.Assignment.Model do
 
   def language(%Assignment.Model{info: info}), do: language(info)
   def language(%Assignment.InfoModel{language: language}), do: language(language)
-  def language(language) when is_atom(language), do: language
-  def language(_), do: Assignment.Languages.default()
+  def language(nil), do: Assignment.Languages.default()
+
+  def language(language) do
+    if Enum.member?(Assignment.Languages.values(), language) do
+      language
+    else
+      Assignment.Languages.default()
+    end
+  end
 
   def tool(%{workflow: workflow}) when not is_nil(workflow) do
     [tool | _] = Workflow.Model.flatten(workflow)
