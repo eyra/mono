@@ -11,6 +11,8 @@ defmodule CoreWeb.User.ConfirmToken do
   alias Core.Accounts
   alias Core.Accounts.User
 
+  require Logger
+
   def mount(%{"token" => token}, _session, socket) do
     require_feature(:password_sign_in)
     connected? = Phoenix.LiveView.connected?(socket)
@@ -25,12 +27,15 @@ defmodule CoreWeb.User.ConfirmToken do
   end
 
   defp confirm_user(socket, false) do
+    Logger.notice("Skip confirm user: socket not connected")
     # Only confirm user when socket is connected to prevent early invalidation of token.
     # https://github.com/eyra/mono/issues/615
     socket
   end
 
   defp confirm_user(%{assigns: %{token: token}} = socket, true) do
+    Logger.notice("Confirm user: socket connected")
+
     case Accounts.confirm_user(token) do
       {:ok, user} ->
         handle_succeeded(socket, user)
@@ -41,12 +46,16 @@ defmodule CoreWeb.User.ConfirmToken do
   end
 
   defp handle_succeeded(socket, %{email: email}) do
+    Logger.notice("Confirm user: handle_succeeded #{email}")
+
     socket
     |> put_flash(:info, dgettext("eyra-user", "account.activated.successfully"))
     |> redirect(to: ~p"/user/signin?email=#{email}")
   end
 
   defp handle_failed(socket) do
+    Logger.notice("Confirm user: handle_failed")
+
     assign(socket,
       failed: true,
       status: :invalid,
