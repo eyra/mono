@@ -12,15 +12,16 @@ defmodule Systems.Benchmark.ToolPage do
     Benchmark
   }
 
-  @impl true
-  def get_authorization_context(%{"id" => id, "spot" => spot_id}, _session, %{
-        assigns: %{current_user: _user}
-      }) do
-    Benchmark.Public.get_spot_for_tool(String.to_integer(id), String.to_integer(spot_id))
-  end
+  # @impl true
+  # def get_authorization_context(%{"id" => _id}, _session, %{
+  #       assigns: %{current_user: _user}
+  #     }) do
+  #   # TODO: PreFer use task as authorization context
+  #   nil
+  # end
 
   @impl true
-  def mount(%{"id" => id, "spot" => spot_id}, _session, socket) do
+  def mount(%{"id" => id}, _session, socket) do
     model =
       Benchmark.Public.get_tool!(String.to_integer(id), Benchmark.ToolModel.preload_graph(:down))
 
@@ -29,7 +30,6 @@ defmodule Systems.Benchmark.ToolPage do
       socket
       |> assign(
         model: model,
-        spot_id: spot_id,
         popup: nil
       )
       |> observe_view_model()
@@ -116,8 +116,8 @@ defmodule Systems.Benchmark.ToolPage do
           <Text.title5 align="ml-6 text-left"><Button.dynamic {@vm.template_button} /></Text.title5>
           <.spacing value="XL" />
 
-          <.live_component {@vm.spot_form} />
-          <.spacing value="L" />
+          <%!-- <.live_component {@vm.spot_form} />
+          <.spacing value="L" /> --%>
 
           <.live_component {@vm.submission_list_form} />
           <.spacing value="XL" />

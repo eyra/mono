@@ -8,26 +8,17 @@ defmodule Systems.Benchmark.ToolModel do
   import Ecto.Changeset
   import CoreWeb.Gettext
 
-  alias Systems.{
-    Benchmark
-  }
+  alias Systems.Benchmark
 
   schema "benchmark_tools" do
-    field(:status, Ecto.Enum, values: Benchmark.ToolStatus.values())
-    field(:title, :string)
-    field(:expectations, :string)
-    field(:data_set, :string)
-    field(:template_repo, :string)
-    field(:deadline, :string)
-    field(:director, Ecto.Enum, values: [:project, :assignment])
+    field(:max_submissions, :integer)
     belongs_to(:auth_node, Core.Authorization.Node)
-    has_many(:spots, Benchmark.SpotModel, foreign_key: :tool_id)
-    has_many(:leaderboards, Benchmark.LeaderboardModel, foreign_key: :tool_id)
+    has_many(:submissions, Benchmark.SubmissionModel, foreign_key: :tool_id)
 
     timestamps()
   end
 
-  @fields ~w(status title expectations data_set template_repo deadline director)a
+  @fields ~w(max_submissions)a
   @required_fields @fields
 
   def changeset(tool, params) do
@@ -43,13 +34,14 @@ defmodule Systems.Benchmark.ToolModel do
   def preload_graph(:down),
     do:
       preload_graph([
-        :auth_node,
-        :spots,
-        :leaderboards
+        :submissions,
+        :auth_node
       ])
 
   def preload_graph(:auth_node), do: [auth_node: []]
-  def preload_graph(:spots), do: [spots: Benchmark.SpotModel.preload_graph(:down)]
+
+  def preload_graph(:submissions),
+    do: [submissions: Benchmark.SubmissionModel.preload_graph(:down)]
 
   def preload_graph(:leaderboards),
     do: [leaderboards: Benchmark.LeaderboardModel.preload_graph(:down)]

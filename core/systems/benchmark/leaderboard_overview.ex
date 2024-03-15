@@ -6,8 +6,8 @@ defmodule Systems.Benchmark.LeaderboardOverview do
   }
 
   @impl true
-  def update(%{csv_lines: csv_lines}, %{assigns: %{entity: %{id: tool_id}}} = socket) do
-    Benchmark.Public.import_csv_lines(csv_lines, tool_id)
+  def update(%{csv_lines: csv_lines}, socket) do
+    Benchmark.Public.import_csv_lines(csv_lines)
 
     {
       :ok,

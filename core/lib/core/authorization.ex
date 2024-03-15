@@ -27,7 +27,6 @@ defmodule Core.Authorization do
   grant_access(Systems.Campaign.Model, [:visitor, :member])
   grant_access(Systems.Questionnaire.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.Lab.ToolModel, [:owner, :coordinator, :participant])
-  grant_access(Systems.Benchmark.SpotModel, [:owner])
 
   # Pages
   grant_access(Systems.Org.ContentPage, [:admin])

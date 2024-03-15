@@ -32,8 +32,11 @@ defmodule Systems.Benchmark.ExportController do
         id: submission_id,
         description: description,
         github_commit_url: github_commit_url,
-        spot: %{name: name}
+        auth_node: _auth_node
       }) do
+    # TODO: fetch name of collab out of auth_node
+    name = "Team-Unknown"
+
     id = "#{submission_id}:#{name}:#{description}"
 
     case Regex.run(@extract_owner_repo_and_ref, github_commit_url) do

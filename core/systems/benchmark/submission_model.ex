@@ -5,14 +5,13 @@ defmodule Systems.Benchmark.SubmissionModel do
   import CoreWeb.Gettext
   import Ecto.Changeset
 
-  alias Systems.{
-    Benchmark
-  }
+  alias Systems.Benchmark
 
   schema "benchmark_submissions" do
     field(:description, :string)
     field(:github_commit_url, :string)
-    belongs_to(:spot, Benchmark.SpotModel)
+    belongs_to(:tool, Benchmark.ToolModel)
+    belongs_to(:auth_node, Core.Authorization.Node)
 
     timestamps()
   end

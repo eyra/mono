@@ -6,19 +6,18 @@ defmodule Systems.Benchmark.ExportControllerTest do
   }
 
   test "export/1 with valid submission" do
-    tool = Factories.insert!(:benchmark_tool, %{status: :concept, director: :project})
-    spot = Factories.insert!(:benchmark_spot, %{tool: tool, name: "Team Eyra"})
+    tool = Factories.insert!(:benchmark_tool, %{max_submissions: 3})
 
     %{id: id} =
       submission =
       Factories.insert!(:benchmark_submission, %{
-        spot: spot,
+        tool: tool,
         description: "description",
         github_commit_url:
           "https://github.com/eyra/mono/commit/5405deccef0aa1a594cc09da99185860bc3e0cd2"
       })
 
-    expected_id = "#{id}:#{spot.name}:#{submission.description}"
+    expected_id = "#{id}:Team-Unknown:#{submission.description}"
 
     assert %{
              id: ^expected_id,
@@ -28,19 +27,18 @@ defmodule Systems.Benchmark.ExportControllerTest do
   end
 
   test "export/1 with invalid submission" do
-    tool = Factories.insert!(:benchmark_tool, %{status: :concept, director: :project})
-    spot = Factories.insert!(:benchmark_spot, %{tool: tool, name: "Team Eyra"})
+    tool = Factories.insert!(:benchmark_tool, %{max_submissions: 3})
 
     %{id: id} =
       submission =
       Factories.insert!(:benchmark_submission, %{
-        spot: spot,
+        tool: tool,
         description: "description",
         github_commit_url:
           "https://github.com/eyra/mono/commit/5405deccef0aa1a594cc09da99185860bc3e0cd"
       })
 
-    expected_id = "#{id}:#{spot.name}:#{submission.description}"
+    expected_id = "#{id}:Team-Unknown:#{submission.description}"
 
     assert %{
              id: ^expected_id,

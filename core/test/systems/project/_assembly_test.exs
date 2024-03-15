@@ -23,16 +23,8 @@ defmodule Systems.Project.AssemblyTest do
                lab_tool: nil,
                feldspar_tool: nil,
                benchmark_tool: %Systems.Benchmark.ToolModel{
-                 status: :concept,
-                 title: nil,
-                 expectations: nil,
-                 data_set: nil,
-                 template_repo: nil,
-                 deadline: nil,
-                 director: :project,
                  auth_node: %Core.Authorization.Node{},
-                 spots: [],
-                 leaderboards: []
+                 submissions: []
                }
              },
              assignment: nil

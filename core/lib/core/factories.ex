@@ -245,10 +245,6 @@ defmodule Core.Factories do
     build(:benchmark_submission, %{description: "description"})
   end
 
-  def build(:benchmark_spot) do
-    build(:benchmark_spot, %{})
-  end
-
   def build(:benchmark_tool) do
     build(:benchmark_tool, %{})
   end
@@ -613,22 +609,13 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
-  def build(:benchmark_spot, %{} = attributes) do
+  def build(:benchmark_submission, %{} = attributes) do
     {tool, attributes} = Map.pop(attributes, :tool, build(:benchmark_tool))
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
 
-    %Benchmark.SpotModel{
+    %Benchmark.SubmissionModel{
       tool: tool,
       auth_node: auth_node
-    }
-    |> struct!(attributes)
-  end
-
-  def build(:benchmark_submission, %{} = attributes) do
-    {spot, attributes} = Map.pop(attributes, :spot, build(:benchmark_spot))
-
-    %Benchmark.SubmissionModel{
-      spot: spot
     }
     |> struct!(attributes)
   end

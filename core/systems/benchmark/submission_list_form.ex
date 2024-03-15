@@ -1,11 +1,7 @@
 defmodule Systems.Benchmark.SubmissionListForm do
   use CoreWeb, :live_component
 
-  alias Frameworks.Utility.ViewModelBuilder
-
-  alias Systems.{
-    Benchmark
-  }
+  alias Systems.Benchmark
 
   @impl true
   def update(%{action: :close}, socket) do
@@ -14,52 +10,39 @@ defmodule Systems.Benchmark.SubmissionListForm do
     {
       :ok,
       socket
-      |> update_spot()
       |> update_vm()
     }
   end
 
   @impl true
-  def update(%{id: id, spot_id: spot_id, active?: active?}, socket) do
+  def update(%{id: id, active?: active?}, socket) do
     {
       :ok,
       socket
       |> assign(
         id: id,
-        spot_id: spot_id,
         active?: active?
       )
-      |> update_spot()
       |> update_vm()
     }
   end
 
-  defp update_spot(%{assigns: %{spot_id: spot_id}} = socket) do
-    spot =
-      Benchmark.Public.get_spot!(
-        String.to_integer(spot_id),
-        Benchmark.SpotModel.preload_graph(:down)
-      )
-
-    socket |> assign(spot: spot)
-  end
-
-  defp update_vm(%{assigns: %{spot: spot}} = socket) do
-    vm = ViewModelBuilder.view_model(spot, __MODULE__, socket.assigns)
-    socket |> assign(vm: vm)
+  defp update_vm(socket) do
+    # TODO: PreRef
+    socket
   end
 
   @impl true
-  def handle_event("add", _params, %{assigns: %{spot: spot, id: id}} = socket) do
-    popup = %{
-      id: :submission_form,
-      module: Benchmark.SubmissionForm,
-      spot: spot,
-      submission: %Benchmark.SubmissionModel{},
-      parent: %{type: __MODULE__, id: id}
-    }
+  def handle_event("add", _params, socket) do
+    # popup = %{
+    #   id: :submission_form,
+    #   module: Benchmark.SubmissionForm,
+    #   spot: spot,
+    #   submission: %Benchmark.SubmissionModel{},
+    #   parent: %{type: __MODULE__, id: id}
+    # }
 
-    send(self(), {:show_popup, popup})
+    # send(self(), {:show_popup, popup})
 
     {
       :noreply,
@@ -70,20 +53,20 @@ defmodule Systems.Benchmark.SubmissionListForm do
   @impl true
   def handle_event(
         "edit",
-        %{"item" => item_id},
-        %{assigns: %{id: id, spot: %{submissions: submissions} = spot}} = socket
+        %{"item" => _item_id},
+        socket
       ) do
-    if submission = Enum.find(submissions, &(&1.id == String.to_integer(item_id))) do
-      popup = %{
-        id: :submission_form,
-        module: Benchmark.SubmissionForm,
-        spot: spot,
-        submission: submission,
-        parent: %{type: __MODULE__, id: id}
-      }
+    # if submission = Enum.find(submissions, &(&1.id == String.to_integer(item_id))) do
+    #   popup = %{
+    #     id: :submission_form,
+    #     module: Benchmark.SubmissionForm,
+    #     spot: spot,
+    #     submission: submission,
+    #     parent: %{type: __MODULE__, id: id}
+    #   }
 
-      send(self(), {:show_popup, popup})
-    end
+    #   send(self(), {:show_popup, popup})
+    # end
 
     {
       :noreply,
@@ -94,17 +77,16 @@ defmodule Systems.Benchmark.SubmissionListForm do
   @impl true
   def handle_event(
         "remove",
-        %{"item" => item_id},
-        %{assigns: %{spot: %{submissions: submissions}}} = socket
+        %{"item" => _item_id},
+        socket
       ) do
-    if submission = Enum.find(submissions, &(&1.id == String.to_integer(item_id))) do
-      Benchmark.Public.delete(submission)
-    end
+    # if submission = Enum.find(submissions, &(&1.id == String.to_integer(item_id))) do
+    #   Benchmark.Public.delete(submission)
+    # end
 
     {
       :noreply,
       socket
-      |> update_spot()
       |> update_vm()
     }
   end

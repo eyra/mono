@@ -11,7 +11,6 @@ defmodule Systems.Benchmark.LeaderboardModel do
   schema "benchmark_leaderboards" do
     field(:name, :string)
     field(:version, :string)
-    belongs_to(:tool, Benchmark.ToolModel)
     has_many(:scores, Benchmark.ScoreModel, foreign_key: :leaderboard_id)
 
     timestamps()
