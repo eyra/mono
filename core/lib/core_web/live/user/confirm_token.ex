@@ -15,27 +15,28 @@ defmodule CoreWeb.User.ConfirmToken do
 
   def mount(%{"token" => token}, _session, socket) do
     require_feature(:password_sign_in)
-    connected? = Phoenix.LiveView.connected?(socket)
 
-    {:ok,
-     socket
-     |> assign(
-       failed: false,
-       token: token
-     )
-     |> confirm_user(connected?)}
+    {
+      :ok,
+      socket
+      |> assign(
+        failed: false,
+        token: token
+      )
+      |> update_confirm_button()
+    }
   end
 
-  defp confirm_user(socket, false) do
-    Logger.notice("Skip confirm user: socket not connected")
-    # Only confirm user when socket is connected to prevent early invalidation of token.
-    # https://github.com/eyra/mono/issues/615
-    socket
+  defp update_confirm_button(socket) do
+    confirm_button = %{
+      action: %{type: :send, event: "confirm"},
+      face: %{type: :primary, label: dgettext("eyra-account", "confirm.button")}
+    }
+
+    assign(socket, confirm_button: confirm_button)
   end
 
-  defp confirm_user(%{assigns: %{token: token}} = socket, true) do
-    Logger.notice("Confirm user: socket connected")
-
+  defp confirm_user(%{assigns: %{token: token}} = socket) do
     case Accounts.confirm_user(token) do
       {:ok, user} ->
         handle_succeeded(socket, user)
@@ -65,6 +66,11 @@ defmodule CoreWeb.User.ConfirmToken do
 
   def handle_info({:delivered_email, _email}, socket) do
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("confirm", _, socket) do
+    {:noreply, confirm_user(socket)}
   end
 
   @impl true
@@ -121,6 +127,13 @@ defmodule CoreWeb.User.ConfirmToken do
             <.email_input form={form} field={:email} label_text={dgettext("eyra-user", "confirm.token.email.label")} />
             <Button.submit label={dgettext("eyra-account", "confirm.token.resend_button")} />
           </.form>
+        <% else %>
+          <Text.title1><%= dgettext("eyra-account", "activation.confirm.title") %></Text.title1>
+          <Text.body><%= dgettext("eyra-account", "activation.confirm.body") %></Text.body>
+          <.spacing value="M" />
+          <.wrap>
+            <Button.dynamic {@confirm_button} />
+          </.wrap>
         <% end %>
         </Area.sheet>
       </.stripped>

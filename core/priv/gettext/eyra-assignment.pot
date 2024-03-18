@@ -308,6 +308,9 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "privacy.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"
 msgstr ""
 

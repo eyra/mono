@@ -137,3 +137,15 @@ msgstr "Your account might already have been activated or the activation link is
 #, elixir-autogen, elixir-format
 msgid "activation.failed.title"
 msgstr "Account activation"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "activation.confirm.body"
+msgstr "Please click the button below to activate your account..."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "activation.confirm.title"
+msgstr "Account activation"
+
+#, elixir-autogen, elixir-format
+msgid "confirm.button"
+msgstr "Activate"

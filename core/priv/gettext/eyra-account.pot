@@ -137,3 +137,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "activation.failed.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activation.confirm.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activation.confirm.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "confirm.button"
+msgstr ""
