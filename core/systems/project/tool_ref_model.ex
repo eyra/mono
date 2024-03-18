@@ -13,7 +13,7 @@ defmodule Systems.Project.ToolRefModel do
     Alliance,
     Lab,
     Feldspar,
-    Benchmark
+    Graphite
   }
 
   schema "tool_refs" do
@@ -22,7 +22,7 @@ defmodule Systems.Project.ToolRefModel do
     belongs_to(:alliance_tool, Alliance.ToolModel)
     belongs_to(:lab_tool, Lab.ToolModel)
     belongs_to(:feldspar_tool, Feldspar.ToolModel)
-    belongs_to(:benchmark_tool, Benchmark.ToolModel)
+    belongs_to(:graphite_tool, Graphite.ToolModel)
     belongs_to(:document_tool, Document.ToolModel)
 
     has_one(:item, Project.ItemModel, foreign_key: :tool_ref_id)
@@ -47,7 +47,7 @@ defmodule Systems.Project.ToolRefModel do
         :document_tool,
         :lab_tool,
         :feldspar_tool,
-        :benchmark_tool
+        :graphite_tool
       ])
 
   def preload_graph(:alliance_tool),
@@ -61,8 +61,8 @@ defmodule Systems.Project.ToolRefModel do
   def preload_graph(:feldspar_tool),
     do: [feldspar_tool: Feldspar.ToolModel.preload_graph(:down)]
 
-  def preload_graph(:benchmark_tool),
-    do: [benchmark_tool: Benchmark.ToolModel.preload_graph(:down)]
+  def preload_graph(:graphite_tool),
+    do: [graphite_tool: Graphite.ToolModel.preload_graph(:down)]
 
   def auth_tree(%Project.ToolRefModel{} = tool_ref) do
     Concept.ToolModel.auth_tree(tool(tool_ref))
@@ -83,12 +83,12 @@ defmodule Systems.Project.ToolRefModel do
   def tool(%{feldspar_tool: %{id: _id} = tool}), do: tool
   def tool(%{document_tool: %{id: _id} = tool}), do: tool
   def tool(%{lab_tool: %{id: _id} = tool}), do: tool
-  def tool(%{benchmark_tool: %{id: _id} = tool}), do: tool
+  def tool(%{graphite_tool: %{id: _id} = tool}), do: tool
 
   def tag(%Project.ToolRefModel{special: :questionnaire}),
     do: dgettext("eyra-project", "tool_ref.tag.questionnaire")
 
-  def tag(%Project.ToolRefModel{special: :benchmark}),
+  def tag(%Project.ToolRefModel{special: :graphite}),
     do: dgettext("eyra-project", "tool_ref.tag.benchmark")
 
   def tag(%Project.ToolRefModel{special: _special}) do

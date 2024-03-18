@@ -1,4 +1,4 @@
-defmodule Systems.Benchmark.ToolPage do
+defmodule Systems.Graphite.ToolPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Stripped.Component, :projects
   use Systems.Observatory.Public
@@ -9,7 +9,7 @@ defmodule Systems.Benchmark.ToolPage do
   }
 
   alias Systems.{
-    Benchmark
+    Graphite
   }
 
   # @impl true
@@ -23,7 +23,7 @@ defmodule Systems.Benchmark.ToolPage do
   @impl true
   def mount(%{"id" => id}, _session, socket) do
     model =
-      Benchmark.Public.get_tool!(String.to_integer(id), Benchmark.ToolModel.preload_graph(:down))
+      Graphite.Public.get_tool!(String.to_integer(id), Graphite.ToolModel.preload_graph(:down))
 
     {
       :ok,

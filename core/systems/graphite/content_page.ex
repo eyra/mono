@@ -1,14 +1,14 @@
-defmodule Systems.Benchmark.ContentPage do
+defmodule Systems.Graphite.ContentPage do
   use CoreWeb, :live_view
   use Systems.Content.Page
 
   alias Systems.{
-    Benchmark
+    Graphite
   }
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
-    Benchmark.Public.get_tool!(id)
+    Graphite.Public.get_tool!(id)
   end
 
   @impl true
@@ -16,7 +16,7 @@ defmodule Systems.Benchmark.ContentPage do
     initial_tab = Map.get(params, "tab")
 
     model =
-      Benchmark.Public.get_tool!(String.to_integer(id), Benchmark.ToolModel.preload_graph(:down))
+      Graphite.Public.get_tool!(String.to_integer(id), Graphite.ToolModel.preload_graph(:down))
 
     tabbar_id = "benchmark_content/#{id}"
 

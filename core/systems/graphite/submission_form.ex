@@ -1,8 +1,8 @@
-defmodule Systems.Benchmark.SubmissionForm do
+defmodule Systems.Graphite.SubmissionForm do
   use CoreWeb.LiveForm
 
   alias Systems.{
-    Benchmark
+    Graphite
   }
 
   # Handle initial update
@@ -18,7 +18,7 @@ defmodule Systems.Benchmark.SubmissionForm do
       face: %{type: :primary, label: dgettext("eyra-benchmark", "submission.form.submit.button")}
     }
 
-    changeset = Benchmark.SubmissionModel.prepare(submission, %{})
+    changeset = Graphite.SubmissionModel.prepare(submission, %{})
 
     {
       :ok,
@@ -60,8 +60,8 @@ defmodule Systems.Benchmark.SubmissionForm do
        ) do
     changeset =
       submission
-      |> Benchmark.SubmissionModel.change(attrs)
-      |> Benchmark.SubmissionModel.validate()
+      |> Graphite.SubmissionModel.change(attrs)
+      |> Graphite.SubmissionModel.validate()
       |> Ecto.Changeset.put_assoc(:spot, spot)
 
     socket |> upsert(changeset)
@@ -70,14 +70,14 @@ defmodule Systems.Benchmark.SubmissionForm do
   defp handle_submit(%{assigns: %{submission: submission}} = socket, attrs) do
     changeset =
       submission
-      |> Benchmark.SubmissionModel.change(attrs)
-      |> Benchmark.SubmissionModel.validate()
+      |> Graphite.SubmissionModel.change(attrs)
+      |> Graphite.SubmissionModel.validate()
 
     socket |> upsert(changeset)
   end
 
   defp upsert(socket, changeset) do
-    case Benchmark.Public.create_submission(changeset) do
+    case Graphite.Public.create_submission(changeset) do
       {:ok, _submission} ->
         socket |> close()
 

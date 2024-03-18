@@ -1,8 +1,8 @@
-defmodule Systems.Benchmark.ToolForm do
+defmodule Systems.Graphite.ToolForm do
   use CoreWeb.LiveForm
 
   alias Systems.{
-    Benchmark
+    Graphite
   }
 
   # Handle initial update
@@ -11,7 +11,7 @@ defmodule Systems.Benchmark.ToolForm do
         %{id: id, entity: benchmark},
         socket
       ) do
-    changeset = Benchmark.ToolModel.changeset(benchmark, %{})
+    changeset = Graphite.ToolModel.changeset(benchmark, %{})
 
     {
       :ok,
@@ -37,7 +37,7 @@ defmodule Systems.Benchmark.ToolForm do
   # Saving
 
   def save(socket, entity, attrs) do
-    changeset = Benchmark.ToolModel.changeset(entity, attrs)
+    changeset = Graphite.ToolModel.changeset(entity, attrs)
 
     socket
     |> save(changeset)
@@ -45,7 +45,7 @@ defmodule Systems.Benchmark.ToolForm do
   end
 
   def validate(socket, changeset) do
-    changeset = Benchmark.ToolModel.validate(changeset)
+    changeset = Graphite.ToolModel.validate(changeset)
 
     socket
     |> assign(changeset: changeset)
@@ -55,7 +55,7 @@ defmodule Systems.Benchmark.ToolForm do
   def render(assigns) do
     ~H"""
     <div>
-      <.form id={"#{@id}_benchmark_tool_form"} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
+      <.form id={"#{@id}_graphite_tool_form"} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
         <.text_input form={form} field={:title} label_text={dgettext("eyra-benchmark", "form.title.label")} />
         <.text_area form={form} field={:expectations} label_text={dgettext("eyra-benchmark", "form.expectations.label")} />
         <.url_input form={form} field={:data_set} label_text={dgettext("eyra-benchmark", "form.data_set.label")} />

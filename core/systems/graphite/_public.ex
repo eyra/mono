@@ -1,4 +1,4 @@
-defmodule Systems.Benchmark.Public do
+defmodule Systems.Graphite.Public do
   import Ecto.Query, warn: false
 
   alias CoreWeb.UI.Timestamp
@@ -6,24 +6,24 @@ defmodule Systems.Benchmark.Public do
   alias Ecto.Changeset
   alias Core.Repo
 
-  alias Systems.Benchmark
+  alias Systems.Graphite
 
   # FIXME: should come from CMS
   @main_category "f1_score"
 
   def get_tool!(id, preload \\ []) do
-    from(tool in Benchmark.ToolModel, preload: ^preload)
+    from(tool in Graphite.ToolModel, preload: ^preload)
     |> Repo.get!(id)
   end
 
   def get_submission!(id, preload \\ []) do
-    from(submission in Benchmark.SubmissionModel, preload: ^preload)
+    from(submission in Graphite.SubmissionModel, preload: ^preload)
     |> Repo.get!(id)
   end
 
-  def set_tool_status(%Benchmark.ToolModel{} = tool, status) do
+  def set_tool_status(%Graphite.ToolModel{} = tool, status) do
     tool
-    |> Benchmark.ToolModel.changeset(%{status: status})
+    |> Graphite.ToolModel.changeset(%{status: status})
     |> Repo.update!()
   end
 
@@ -35,8 +35,8 @@ defmodule Systems.Benchmark.Public do
   def prepare_tool(%{} = attrs, auth_node \\ Core.Authorization.prepare_node()) do
     attrs = Map.put(attrs, :status, :concept)
 
-    %Benchmark.ToolModel{}
-    |> Benchmark.ToolModel.changeset(attrs)
+    %Graphite.ToolModel{}
+    |> Graphite.ToolModel.changeset(attrs)
     |> Changeset.put_assoc(:auth_node, auth_node)
   end
 
@@ -86,7 +86,7 @@ defmodule Systems.Benchmark.Public do
     csv_lines
     |> Enum.filter(&(Map.get(&1, "status") == "success"))
     |> Enum.map(&parse_entry/1)
-    |> Benchmark.Public.import_entries()
+    |> Graphite.Public.import_entries()
   end
 
   def import_entries(entries) when is_list(entries) do
@@ -109,7 +109,7 @@ defmodule Systems.Benchmark.Public do
 
     multi =
       Multi.run(multi, :version, fn _, _ ->
-        count = Benchmark.Public.count_leaderboard_versions()
+        count = Graphite.Public.count_leaderboard_versions()
         {:ok, "#{date}_#{count + 1}"}
       end)
 
@@ -118,8 +118,8 @@ defmodule Systems.Benchmark.Public do
 
   defp prepare_leaderboard(multi, name) when is_binary(name) do
     Multi.insert(multi, {:leaderboard, name}, fn %{version: version} ->
-      %Benchmark.LeaderboardModel{}
-      |> Benchmark.LeaderboardModel.changeset(%{name: name, version: version})
+      %Graphite.LeaderboardModel{}
+      |> Graphite.LeaderboardModel.changeset(%{name: name, version: version})
     end)
   end
 
@@ -143,15 +143,15 @@ defmodule Systems.Benchmark.Public do
                                                                  } ->
       submission = get_submission!(submission_id)
 
-      %Benchmark.ScoreModel{}
-      |> Benchmark.ScoreModel.changeset(%{score: score})
+      %Graphite.ScoreModel{}
+      |> Graphite.ScoreModel.changeset(%{score: score})
       |> Ecto.Changeset.put_assoc(:leaderboard, leaderboard)
       |> Ecto.Changeset.put_assoc(:submission, submission)
     end)
   end
 
   def list_submissions(tool_id, preload \\ []) do
-    from(submission in Benchmark.SubmissionModel,
+    from(submission in Graphite.SubmissionModel,
       where: submission.tool_id == ^tool_id,
       preload: ^preload
     )
@@ -160,14 +160,14 @@ defmodule Systems.Benchmark.Public do
 
   def list_leaderboard_categories(tool_id, preload \\ []) do
     max_version =
-      from(leaderboard in Benchmark.LeaderboardModel,
+      from(leaderboard in Graphite.LeaderboardModel,
         where: leaderboard.tool_id == ^tool_id,
         select: max(leaderboard.version)
       )
       |> Repo.one()
 
     if max_version do
-      from(leaderboard in Benchmark.LeaderboardModel,
+      from(leaderboard in Graphite.LeaderboardModel,
         where: leaderboard.tool_id == ^tool_id,
         where: leaderboard.version == ^max_version,
         preload: ^preload
@@ -184,7 +184,7 @@ defmodule Systems.Benchmark.Public do
 
   def count_leaderboard_versions() do
     list =
-      from(leaderboard in Benchmark.LeaderboardModel,
+      from(leaderboard in Graphite.LeaderboardModel,
         group_by: leaderboard.version,
         distinct: leaderboard.version,
         select: count("*")
@@ -194,7 +194,7 @@ defmodule Systems.Benchmark.Public do
     Enum.count(list)
   end
 
-  def delete(%Benchmark.SubmissionModel{} = submission) do
+  def delete(%Graphite.SubmissionModel{} = submission) do
     Repo.delete(submission)
   end
 end

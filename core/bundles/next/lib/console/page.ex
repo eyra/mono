@@ -94,7 +94,7 @@ defmodule Next.Console.Page do
       |> Macro.camelize()
 
     %{
-      path: ~p"/benchmark/#{tool_id}/#{spot_id}",
+      path: ~p"/graphite/#{tool_id}/#{spot_id}",
       title: title,
       subtitle: "#{name}",
       tag: tag,

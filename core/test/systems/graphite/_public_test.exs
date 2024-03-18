@@ -1,8 +1,8 @@
-defmodule Systems.Benchmark.PublicTest do
+defmodule Systems.Graphite.PublicTest do
   use Core.DataCase
 
   alias Systems.{
-    Benchmark
+    Graphite
   }
 
   test "import_csv_lines/1 one line" do
@@ -27,7 +27,7 @@ defmodule Systems.Benchmark.PublicTest do
       cat3 => "#{cat3_score}"
     }
 
-    {:ok, result} = Benchmark.Public.import_csv_lines([csv_line])
+    {:ok, result} = Graphite.Public.import_csv_lines([csv_line])
 
     cat1_score_key = "#{cat1}-#{submission_id}"
     cat2_score_key = "#{cat2}-#{submission_id}"
@@ -39,24 +39,24 @@ defmodule Systems.Benchmark.PublicTest do
     assert count_scores() == 3
 
     assert %{
-             {:leaderboard, ^cat1} => %Systems.Benchmark.LeaderboardModel{
+             {:leaderboard, ^cat1} => %Systems.Graphite.LeaderboardModel{
                name: ^cat1
              },
-             {:leaderboard, ^cat2} => %Systems.Benchmark.LeaderboardModel{
+             {:leaderboard, ^cat2} => %Systems.Graphite.LeaderboardModel{
                name: ^cat2
              },
-             {:leaderboard, ^cat3} => %Systems.Benchmark.LeaderboardModel{
+             {:leaderboard, ^cat3} => %Systems.Graphite.LeaderboardModel{
                name: ^cat3
              },
-             {:score, ^cat1_score_key} => %Systems.Benchmark.ScoreModel{
+             {:score, ^cat1_score_key} => %Systems.Graphite.ScoreModel{
                score: ^cat1_score,
                submission_id: ^submission_id
              },
-             {:score, ^cat2_score_key} => %Systems.Benchmark.ScoreModel{
+             {:score, ^cat2_score_key} => %Systems.Graphite.ScoreModel{
                score: ^cat2_score,
                submission_id: ^submission_id
              },
-             {:score, ^cat3_score_key} => %Systems.Benchmark.ScoreModel{
+             {:score, ^cat3_score_key} => %Systems.Graphite.ScoreModel{
                score: ^cat3_score,
                submission_id: ^submission_id
              }
@@ -77,7 +77,7 @@ defmodule Systems.Benchmark.PublicTest do
       cat1 => "0"
     }
 
-    {:ok, result} = Benchmark.Public.import_csv_lines([csv_line])
+    {:ok, result} = Graphite.Public.import_csv_lines([csv_line])
 
     cat1_score_key = "#{cat1}-#{submission_id}"
 
@@ -87,10 +87,10 @@ defmodule Systems.Benchmark.PublicTest do
     assert count_scores() == 1
 
     assert %{
-             {:leaderboard, ^cat1} => %Systems.Benchmark.LeaderboardModel{
+             {:leaderboard, ^cat1} => %Systems.Graphite.LeaderboardModel{
                name: ^cat1
              },
-             {:score, ^cat1_score_key} => %Systems.Benchmark.ScoreModel{
+             {:score, ^cat1_score_key} => %Systems.Graphite.ScoreModel{
                score: 0.0,
                submission_id: ^submission_id
              }
@@ -111,7 +111,7 @@ defmodule Systems.Benchmark.PublicTest do
       cat1 => ""
     }
 
-    {:ok, result} = Benchmark.Public.import_csv_lines([csv_line])
+    {:ok, result} = Graphite.Public.import_csv_lines([csv_line])
 
     cat1_score_key = "#{cat1}-#{submission_id}"
 
@@ -121,10 +121,10 @@ defmodule Systems.Benchmark.PublicTest do
     assert count_scores() == 1
 
     assert %{
-             {:leaderboard, ^cat1} => %Systems.Benchmark.LeaderboardModel{
+             {:leaderboard, ^cat1} => %Systems.Graphite.LeaderboardModel{
                name: ^cat1
              },
-             {:score, ^cat1_score_key} => %Systems.Benchmark.ScoreModel{
+             {:score, ^cat1_score_key} => %Systems.Graphite.ScoreModel{
                score: 0.0,
                submission_id: ^submission_id
              }
@@ -151,7 +151,7 @@ defmodule Systems.Benchmark.PublicTest do
       "cat1" => "0.2"
     }
 
-    {:ok, result} = Benchmark.Public.import_csv_lines([csv_line1, csv_line2])
+    {:ok, result} = Graphite.Public.import_csv_lines([csv_line1, csv_line2])
 
     assert Enum.count(Map.keys(result)) == 4
 
@@ -179,7 +179,7 @@ defmodule Systems.Benchmark.PublicTest do
     }
 
     assert_raise RuntimeError, fn ->
-      Benchmark.Public.import_csv_lines([csv_line1, csv_line2])
+      Graphite.Public.import_csv_lines([csv_line1, csv_line2])
     end
   end
 
@@ -203,7 +203,7 @@ defmodule Systems.Benchmark.PublicTest do
       "cat1" => ""
     }
 
-    {:ok, result} = Benchmark.Public.import_csv_lines([csv_line1, csv_line2])
+    {:ok, result} = Graphite.Public.import_csv_lines([csv_line1, csv_line2])
 
     assert Enum.count(Map.keys(result)) == 3
   end
@@ -222,8 +222,8 @@ defmodule Systems.Benchmark.PublicTest do
       cat1 => ""
     }
 
-    {:ok, %{version: version1}} = Benchmark.Public.import_csv_lines([csv_line])
-    {:ok, %{version: version2}} = Benchmark.Public.import_csv_lines([csv_line])
+    {:ok, %{version: version1}} = Graphite.Public.import_csv_lines([csv_line])
+    {:ok, %{version: version2}} = Graphite.Public.import_csv_lines([csv_line])
 
     assert version1 < version2
 
@@ -232,7 +232,7 @@ defmodule Systems.Benchmark.PublicTest do
   end
 
   defp create_tool() do
-    Factories.insert!(:benchmark_tool, %{max_submissions: 3})
+    Factories.insert!(:graphite_tool, %{max_submissions: 3})
   end
 
   defp create_submission(tool, description \\ "Method X") do
@@ -243,13 +243,13 @@ defmodule Systems.Benchmark.PublicTest do
         "https://github.com/eyra/mono/commit/9d10bd2907dda135ebe86511489570dbf8c067c0"
     }
 
-    Factories.insert!(:benchmark_submission, submission_attr)
+    Factories.insert!(:graphite_submission, submission_attr)
   end
 
   defp count_scores() do
     Repo.one(
       Ecto.Query.from(
-        score in Benchmark.ScoreModel,
+        score in Graphite.ScoreModel,
         select: count(score.id)
       )
     )
@@ -258,7 +258,7 @@ defmodule Systems.Benchmark.PublicTest do
   defp count_leaderboards() do
     Repo.one(
       Ecto.Query.from(
-        leaderboard in Benchmark.LeaderboardModel,
+        leaderboard in Graphite.LeaderboardModel,
         select: count(leaderboard.id)
       )
     )

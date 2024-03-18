@@ -1,16 +1,16 @@
-defmodule Systems.Benchmark.SubmissionModel do
+defmodule Systems.Graphite.SubmissionModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import CoreWeb.Gettext
   import Ecto.Changeset
 
-  alias Systems.Benchmark
+  alias Systems.Graphite
 
-  schema "benchmark_submissions" do
+  schema "graphite_submissions" do
     field(:description, :string)
     field(:github_commit_url, :string)
-    belongs_to(:tool, Benchmark.ToolModel)
+    belongs_to(:tool, Graphite.ToolModel)
     belongs_to(:auth_node, Core.Authorization.Node)
 
     timestamps()

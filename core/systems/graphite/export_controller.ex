@@ -1,23 +1,25 @@
-defmodule Systems.Benchmark.ExportController do
+defmodule Systems.Graphite.ExportController do
   use CoreWeb, :controller
 
   alias Systems.{
-    Benchmark
+    Graphite
   }
 
   @extract_owner_repo_and_ref ~r/https:\/\/github\.com\/(.*)\/commit\/([0-9a-f]{40})/
   @github_url_template "git@github.com:${owner_repo}.git"
 
   def submissions(conn, %{"id" => id}) do
-    submissions = Benchmark.Public.list_submissions(id, [:spot])
+    submissions = Graphite.Public.list_submissions(id, [])
     csv_data = export(submissions)
 
-    filename = "benchmark-#{id}-submissions.csv"
+    filename = "graphite-#{id}-submissions.csv"
 
     conn
     |> put_resp_content_type("text/csv")
     |> put_resp_header("content-disposition", "attachment; filename=\"#{filename}\"")
-    |> put_root_layout(false)
+    # FIXME: Figure out why this breaks
+    # Settings root layout breaks giving a return value
+    # |> put_root_layout(false)
     |> send_resp(200, csv_data)
   end
 
@@ -28,7 +30,7 @@ defmodule Systems.Benchmark.ExportController do
     |> Enum.to_list()
   end
 
-  def export(%Benchmark.SubmissionModel{
+  def export(%Graphite.SubmissionModel{
         id: submission_id,
         description: description,
         github_commit_url: github_commit_url,
