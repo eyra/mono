@@ -1,7 +1,7 @@
-defmodule Systems.Benchmark.SubmissionListForm do
+defmodule Systems.Graphite.SubmissionListForm do
   use CoreWeb, :live_component
 
-  alias Systems.Benchmark
+  alias Systems.Graphite
 
   @impl true
   def update(%{action: :close}, socket) do
@@ -36,9 +36,9 @@ defmodule Systems.Benchmark.SubmissionListForm do
   def handle_event("add", _params, socket) do
     # popup = %{
     #   id: :submission_form,
-    #   module: Benchmark.SubmissionForm,
+    #   module: Graphite.SubmissionForm,
     #   spot: spot,
-    #   submission: %Benchmark.SubmissionModel{},
+    #   submission: %Graphite.SubmissionModel{},
     #   parent: %{type: __MODULE__, id: id}
     # }
 
@@ -59,7 +59,7 @@ defmodule Systems.Benchmark.SubmissionListForm do
     # if submission = Enum.find(submissions, &(&1.id == String.to_integer(item_id))) do
     #   popup = %{
     #     id: :submission_form,
-    #     module: Benchmark.SubmissionForm,
+    #     module: Graphite.SubmissionForm,
     #     spot: spot,
     #     submission: submission,
     #     parent: %{type: __MODULE__, id: id}
@@ -81,7 +81,7 @@ defmodule Systems.Benchmark.SubmissionListForm do
         socket
       ) do
     # if submission = Enum.find(submissions, &(&1.id == String.to_integer(item_id))) do
-    #   Benchmark.Public.delete(submission)
+    #   Graphite.Public.delete(submission)
     # end
 
     {
@@ -100,7 +100,7 @@ defmodule Systems.Benchmark.SubmissionListForm do
       <Text.sub_head><%= @vm.subhead %></Text.sub_head>
       <.spacing value="M" />
 
-      <Benchmark.SubmissionView.list items={@vm.items} />
+      <Graphite.SubmissionView.list items={@vm.items} />
 
       <%= if @vm.add_button do %>
         <.spacing value="M" />

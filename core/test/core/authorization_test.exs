@@ -91,19 +91,19 @@ defmodule Core.AuthorizationTest do
   end
 
   test "can_access?/3 fail for entity == nil" do
-    assert Authorization.can_access?(%User{id: 1}, nil, Systems.Benchmark.ToolPage) == false
+    assert Authorization.can_access?(%User{id: 1}, nil, Systems.Graphite.ToolPage) == false
   end
 
   test "can_access?/3 fail for entity without roles" do
     {:ok, node_id} = Authorization.create_node()
-    assert Authorization.can_access?(%User{id: 1}, node_id, Systems.Benchmark.ToolPage) == false
+    assert Authorization.can_access?(%User{id: 1}, node_id, Systems.Graphite.ToolPage) == false
   end
 
   test "can_access?/3 succeeds for entity with suffient rights" do
     principal = %User{id: 1}
     {:ok, node_id} = Authorization.create_node()
     Authorization.assign_role(principal, node_id, :owner)
-    assert Authorization.can_access?(principal, node_id, Systems.Benchmark.ToolPage) == true
+    assert Authorization.can_access?(principal, node_id, Systems.Graphite.ToolPage) == true
   end
 
   test "link/1 succeeds tuple with parent/child" do

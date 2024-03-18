@@ -1,3 +1,3 @@
-defmodule Systems.Benchmark.ToolStatus do
+defmodule Systems.Graphite.ToolStatus do
   def values, do: [:concept, :online, :offline, :idle]
 end

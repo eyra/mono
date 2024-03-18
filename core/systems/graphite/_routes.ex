@@ -1,7 +1,7 @@
-defmodule Systems.Benchmark.Routes do
+defmodule Systems.Graphite.Routes do
   defmacro routes() do
     quote do
-      scope "/benchmark", Systems.Benchmark do
+      scope "/graphite", Systems.Graphite do
         pipe_through([:browser, :require_authenticated_user])
 
         live("/:id/content", ContentPage)
@@ -11,7 +11,7 @@ defmodule Systems.Benchmark.Routes do
         get("/:id/export/submissions", ExportController, :submissions)
       end
 
-      scope "/benchmark", Systems.Benchmark do
+      scope "/graphite", Systems.Graphite do
         pipe_through([:browser])
         live("/:id/public/leaderboard", LeaderboardPage)
       end

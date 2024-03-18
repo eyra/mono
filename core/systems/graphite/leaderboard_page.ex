@@ -1,11 +1,11 @@
-defmodule Systems.Benchmark.LeaderboardPage do
+defmodule Systems.Graphite.LeaderboardPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Stripped.Component, :onboarding
 
   alias Frameworks.Pixel.Align
 
   alias Systems.{
-    Benchmark
+    Graphite
   }
 
   @impl true
@@ -21,13 +21,13 @@ defmodule Systems.Benchmark.LeaderboardPage do
   end
 
   defp update_title(%{assigns: %{id: tool_id}} = socket) do
-    %{title: title} = Benchmark.Public.get_tool!(tool_id)
+    %{title: title} = Graphite.Public.get_tool!(tool_id)
     assign(socket, title: title)
   end
 
   defp update_forward_button(%{assigns: %{id: tool_id}} = socket) do
     forward_button = %{
-      action: %{type: :http_get, to: ~p"/benchmark/#{tool_id}"},
+      action: %{type: :http_get, to: ~p"/graphite/#{tool_id}"},
       face: %{
         type: :plain,
         label: dgettext("eyra-benchmark", "challenge.forward.button"),
@@ -40,11 +40,11 @@ defmodule Systems.Benchmark.LeaderboardPage do
 
   defp update_leaderboard(%{assigns: %{id: tool_id}} = socket) do
     categories =
-      Benchmark.Public.list_leaderboard_categories(tool_id, scores: [submission: [:spot]])
+      Graphite.Public.list_leaderboard_categories(tool_id, scores: [submission: [:spot]])
 
     leaderboard = %{
       id: :leaderboard,
-      module: Benchmark.LeaderboardView,
+      module: Graphite.LeaderboardView,
       categories: categories
     }
 

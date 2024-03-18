@@ -1,13 +1,13 @@
-defmodule Systems.Benchmark.LeaderboardOverview do
+defmodule Systems.Graphite.LeaderboardOverview do
   use CoreWeb, :live_component
 
   alias Systems.{
-    Benchmark
+    Graphite
   }
 
   @impl true
   def update(%{csv_lines: csv_lines}, socket) do
-    Benchmark.Public.import_csv_lines(csv_lines)
+    Graphite.Public.import_csv_lines(csv_lines)
 
     {
       :ok,
@@ -20,7 +20,7 @@ defmodule Systems.Benchmark.LeaderboardOverview do
   def update(%{id: id, entity: entity}, socket) do
     import_form = %{
       id: :import_form,
-      module: Benchmark.ImportForm,
+      module: Graphite.ImportForm,
       parent: %{type: __MODULE__, id: id},
       placeholder: dgettext("eyra-benchmark", "csv-select-placeholder"),
       select_button: dgettext("eyra-benchmark", "csv-select-file-button"),
@@ -43,11 +43,11 @@ defmodule Systems.Benchmark.LeaderboardOverview do
 
   defp update_leaderboard(%{assigns: %{entity: %{id: tool_id}}} = socket) do
     categories =
-      Benchmark.Public.list_leaderboard_categories(tool_id, scores: [submission: [:spot]])
+      Graphite.Public.list_leaderboard_categories(tool_id, scores: [submission: [:spot]])
 
     leaderboard = %{
       id: :leaderboard,
-      module: Benchmark.LeaderboardView,
+      module: Graphite.LeaderboardView,
       categories: categories
     }
 
@@ -58,7 +58,7 @@ defmodule Systems.Benchmark.LeaderboardOverview do
     forward_button = %{
       action: %{
         type: :http_get,
-        to: ~p"/benchmark/#{tool_id}/public/leaderboard",
+        to: ~p"/graphite/#{tool_id}/public/leaderboard",
         target: "_blank"
       },
       face: %{

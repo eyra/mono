@@ -10,7 +10,7 @@ defmodule Systems.Workflow.Public do
   alias Systems.Alliance
   alias Systems.Feldspar
   alias Systems.Lab
-  alias Systems.Benchmark
+  alias Systems.Graphite
   alias Systems.Project
 
   def list_items(workflow, preload \\ [])
@@ -115,7 +115,7 @@ defmodule Systems.Workflow.Public do
   defp prepare_tool(:document_tool, %{} = attrs), do: Document.Public.prepare_tool(attrs)
   defp prepare_tool(:feldspar_tool, %{} = attrs), do: Feldspar.Public.prepare_tool(attrs)
   defp prepare_tool(:lab_tool, %{} = attrs), do: Lab.Public.prepare_tool(attrs)
-  defp prepare_tool(:benchmark_tool, %{} = attrs), do: Benchmark.Public.prepare_tool(attrs)
+  defp prepare_tool(:graphite_tool, %{} = attrs), do: Graphite.Public.prepare_tool(attrs)
 
   def delete(%Workflow.ItemModel{workflow_id: workflow_id} = item) do
     Multi.new()

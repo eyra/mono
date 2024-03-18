@@ -1,4 +1,4 @@
-defmodule Systems.Benchmark.ImportForm do
+defmodule Systems.Graphite.ImportForm do
   use CoreWeb, :live_component
   use CoreWeb.FileUploader, accept: ~w(.csv)
 
