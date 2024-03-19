@@ -11,6 +11,7 @@ defmodule Systems.Graphite.LeaderboardModel do
   schema "graphite_leaderboards" do
     field(:name, :string)
     field(:version, :string)
+    field(:metrics, {:array, :string})
     has_many(:scores, Graphite.ScoreModel, foreign_key: :leaderboard_id)
 
     timestamps()
