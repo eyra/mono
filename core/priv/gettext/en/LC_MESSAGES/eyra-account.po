@@ -128,7 +128,7 @@ msgstr "Sign in"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "await.confirmation.description"
-msgstr "Your account has been created. We send you an activation email. Please click the link in the email to activate your account."
+msgstr "Your account has been created. We have sent you an activation email. Please click the link in the email to activate your account."
 
 #, elixir-autogen, elixir-format
 msgid "activation.failed.body"
@@ -140,7 +140,7 @@ msgstr "Account activation"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "activation.confirm.body"
-msgstr "Please click the button below to activate your account..."
+msgstr "Click the button below to activate your account. You will be forwarded to the sign in page."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "activation.confirm.title"
