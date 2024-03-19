@@ -140,12 +140,12 @@ msgstr "Activatie mislukt"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "activation.confirm.body"
-msgstr ""
+msgstr "Klik op de knop hieronder om uw account te activeren. U wordt doorgestuurd naar het inlogscherm."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "activation.confirm.title"
-msgstr ""
+msgstr "Account activatie"
 
 #, elixir-autogen, elixir-format
 msgid "confirm.button"
-msgstr ""
+msgstr "Activeer"
