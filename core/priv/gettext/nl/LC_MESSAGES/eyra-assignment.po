@@ -310,9 +310,6 @@ msgstr "<h1>Privacyverklaring URL</h1> Gebruik de URL hieronder om naar de geüp
 msgid "privacy.title"
 msgstr "Privacy"
 
-msgid "tabbar.item.monitor"
-msgstr "Monitor"
-
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor.forward"
 msgstr "Ga naar Monitor"
@@ -338,9 +335,13 @@ msgid "settings.general.title"
 msgstr "General"
 
 #, elixir-autogen, elixir-format, fuzzy
+msgid "settings.language.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.subject_count.label"
 msgstr "Verwachtte aantal deelnemers"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "settings.language.label"
-msgstr ""
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor"
+msgstr "Monitor"

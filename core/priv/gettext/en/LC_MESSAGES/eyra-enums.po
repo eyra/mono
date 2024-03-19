@@ -389,3 +389,15 @@ msgstr "English"
 #, elixir-autogen, elixir-format
 msgid "assignment_languages.nl"
 msgstr "Dutch"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "project_item_templates.graphite"
+msgstr "Benchmark"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "templates.graphite"
+msgstr "Benchmark"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "project_item_templates.leaderboard"
+msgstr "Leaderboard"

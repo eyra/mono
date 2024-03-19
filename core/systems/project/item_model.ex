@@ -19,6 +19,7 @@ defmodule Systems.Project.ItemModel do
     belongs_to(:node, Project.NodeModel)
     belongs_to(:tool_ref, Project.ToolRefModel)
     belongs_to(:assignment, Assignment.Model)
+    belongs_to(:leaderboard, Graphite.LeaderboardModel)
     timestamps()
   end
 

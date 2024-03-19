@@ -389,3 +389,14 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "assignment_languages.nl"
 msgstr ""
+#, elixir-autogen, elixir-format
+msgid "project_item_templates.graphite"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "templates.graphite"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "project_item_templates.leaderboard"
+msgstr ""
