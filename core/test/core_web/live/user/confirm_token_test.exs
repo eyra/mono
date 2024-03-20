@@ -103,7 +103,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
         |> element("form")
         |> render_submit(%{user: %{email: Faker.Internet.email()}})
 
-      assert html =~ "email instructions"
+      assert html =~ "receive instructions"
       assert Repo.all(Accounts.UserToken) == []
     end
 
@@ -120,7 +120,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
         |> element("form")
         |> render_submit(%{user: %{email: user.email}})
 
-      assert html =~ "email instructions"
+      assert html =~ "receive instructions"
       assert Repo.get_by!(Accounts.UserToken, user_id: user.id).context == "confirm"
     end
 
@@ -137,7 +137,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
         |> element("form")
         |> render_submit(%{user: %{email: user.email}})
 
-      assert html =~ "email instructions"
+      assert html =~ "receive instructions"
     end
   end
 

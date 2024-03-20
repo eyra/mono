@@ -32,11 +32,11 @@ msgstr "Send instructions"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.reset_password_button"
-msgstr "Change password"
+msgstr "Create"
 
 #, elixir-autogen, elixir-format
 msgid "user.password_reset.title"
-msgstr "Change password"
+msgstr "New password"
 
 #, elixir-autogen, elixir-format
 msgid "Invalid email or password"
@@ -48,11 +48,11 @@ msgstr "Register"
 
 #, elixir-autogen, elixir-format
 msgid "reset.link"
-msgstr "Change password"
+msgstr "Forgot password?"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "user.password_reset.flash"
-msgstr "Password change requested. If your email address is registered, you will receive instructions shortly."
+msgstr "New password requested. If your email address is registered, you will receive instructions shortly."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Invalid email"
@@ -60,7 +60,7 @@ msgstr "Invalid email address"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "confirm.token.flash"
-msgstr "If your email address is registered, but not yet confirmed, you will receive email instructions shortly."
+msgstr "If your email address is registered, but not yet confirmed, you will receive instructions shortly."
 
 #, elixir-autogen, elixir-format
 msgid "Signed out successfully"
