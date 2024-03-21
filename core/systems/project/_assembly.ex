@@ -7,11 +7,8 @@ defmodule Systems.Project.Assembly do
   alias Frameworks.Signal
   alias Core.Authorization
 
-  alias Systems.{
-    Project,
-    Assignment,
-    Graphite
-  }
+  alias Systems.Project
+  alias Systems.Assignment
 
   def delete(%Project.Model{auth_node: %{id: node_id}}) do
     from(ra in Authorization.RoleAssignment,
@@ -85,23 +82,18 @@ defmodule Systems.Project.Assembly do
     [prepare_item(:data_donation, "Data Donation Assignment")]
   end
 
-  defp prepare_items(:graphite) do
+  defp prepare_items(:benchmark) do
     [
-      prepare_item(:graphite, "Challenge Round 1"),
-      prepare_item(:graphite, "Challenge Round 2")
+      prepare_item(:benchmark_challenge, "Benchmark Challenge")
     ]
   end
 
-  defp prepare_item(:graphite, name) do
-    {:ok, tool} =
-      Graphite.Public.prepare_tool(%{title: "", director: :project})
+  defp prepare_item(:benchmark_challenge, name) do
+    {:ok, assignment} =
+      Assignment.Assembly.prepare(:benchmark_challenge, :project, nil)
       |> Changeset.apply_action(:prepare)
 
-    {:ok, tool_ref} =
-      Project.Public.prepare_tool_ref(:graphite, :graphite_tool, tool)
-      |> Changeset.apply_action(:prepare)
-
-    Project.Public.prepare_item(%{name: name, project_path: []}, tool_ref)
+    Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
   end
 
   defp prepare_item(:data_donation, name) do

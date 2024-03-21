@@ -52,18 +52,6 @@ msgid "expectations.title"
 msgstr "Description"
 
 #, elixir-autogen, elixir-format
-msgid "submissions.intro"
-msgstr "When the challenge is open, you can add submissions below. They will be run on the holdout data and added to the leaderboard. "
-
-#, elixir-autogen, elixir-format
-msgid "submissions.subhead.active"
-msgstr "Please note that you are allowed to submit up to three methods."
-
-#, elixir-autogen, elixir-format
-msgid "submissions.title"
-msgstr "Submissions"
-
-#, elixir-autogen, elixir-format
 msgid "highlight.deadline.title"
 msgstr "Days untill deadline"
 
@@ -89,10 +77,6 @@ msgstr "Github commit url"
 msgid "submission.form.description.label"
 msgstr "Description"
 
-#, elixir-autogen, elixir-format
-msgid "add.submission.button"
-msgstr "Add submission"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.form.submit.button"
 msgstr "Submit"
@@ -100,10 +84,6 @@ msgstr "Submit"
 #, elixir-autogen, elixir-format
 msgid "invalid.github.commit.url.message"
 msgstr "Please enter a valid Github commit url"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "submissions.subhead.inactive"
-msgstr "Closed: You can no longer add or edit submissions."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "1 submission"
@@ -116,10 +96,6 @@ msgid "1 team"
 msgid_plural "%{count} teams"
 msgstr[0] ""
 msgstr[1] ""
-
-#, elixir-autogen, elixir-format
-msgid "spot.form.title"
-msgstr "Team"
 
 #, elixir-autogen, elixir-format
 msgid "form.template_repo.label"
@@ -148,14 +124,6 @@ msgstr "Download data"
 #, elixir-autogen, elixir-format
 msgid "template.button"
 msgstr "Github example repository"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "spot.form.description"
-msgstr "Provide a team name that will be posted with your submissions on the leaderboard. "
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "spot.form.name"
-msgstr "Name"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.submissions"

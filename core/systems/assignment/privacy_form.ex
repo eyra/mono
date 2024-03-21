@@ -91,8 +91,10 @@ defmodule Systems.Assignment.PrivacyForm do
           select_button={dgettext("eyra-assignment", "privacy_doc.select.button")}
           replace_button={dgettext("eyra-assignment", "privacy_doc.replace.button")}
         />
-        <.spacing value="S" />
-        <.stack fabric={@fabric} />
+        <%= if get_child(@fabric, :file_copy_view) do %>
+          <.spacing value="S" />
+          <.child name={:file_copy_view} fabric={@fabric} />
+        <% end %>
       </div>
     """
   end

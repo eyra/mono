@@ -10,24 +10,24 @@ defmodule Systems.Project.AssemblyTest do
 
     item_name = "Item"
 
-    {:ok, %{project_item: %{id: id}}} = Project.Assembly.create_item(:graphite, item_name, root)
+    {:ok, %{project_item: %{id: id}}} =
+      Project.Assembly.create_item(:benchmark_challenge, item_name, root)
+
     item = Project.Public.get_item!(id, Project.ItemModel.preload_graph(:down))
 
     assert %Systems.Project.ItemModel{
              name: ^item_name,
              project_path: [^root_id],
-             tool_ref: %Systems.Project.ToolRefModel{
-               special: :graphite,
-               alliance_tool: nil,
-               document_tool: nil,
-               lab_tool: nil,
-               feldspar_tool: nil,
-               graphite_tool: %Systems.Graphite.ToolModel{
-                 auth_node: %Core.Authorization.Node{},
-                 submissions: []
+             assignment: %Systems.Assignment.Model{
+               special: :benchmark_challenge,
+               status: :concept,
+               external_panel: nil,
+               storage_endpoint_id: nil,
+               workflow: %Systems.Workflow.Model{
+                 type: :many_mandatory,
+                 items: []
                }
-             },
-             assignment: nil
+             }
            } = item
   end
 
@@ -48,7 +48,7 @@ defmodule Systems.Project.AssemblyTest do
              assignment: %Systems.Assignment.Model{
                info: %Systems.Assignment.InfoModel{},
                workflow: %Systems.Workflow.Model{
-                 type: :single_task,
+                 type: :many_optional,
                  items: []
                },
                crew: %Systems.Crew.Model{

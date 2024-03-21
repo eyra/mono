@@ -110,7 +110,7 @@ defmodule Systems.Campaign.AssemblyTest do
       # WORKFLOW
 
       assert %Systems.Workflow.Model{
-               type: :single_task,
+               type: :one,
                items: [
                  %Systems.Workflow.ItemModel{
                    group: nil,
@@ -229,7 +229,7 @@ defmodule Systems.Campaign.AssemblyTest do
       # WORKFLOW
 
       assert %Systems.Workflow.Model{
-               type: :single_task,
+               type: :one,
                items: [
                  %Systems.Workflow.ItemModel{
                    group: nil,

@@ -308,6 +308,9 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "privacy.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"
 msgstr ""
 
@@ -341,4 +344,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "settings.subject_count.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participants.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.participants"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.participants.forward"
 msgstr ""

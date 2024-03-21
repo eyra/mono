@@ -14,7 +14,7 @@ defmodule Systems.Workflow.Factories do
     })
   end
 
-  def create_workflow(type \\ :single_task) do
+  def create_workflow(type) do
     Factories.insert!(:workflow, %{type: type})
   end
 

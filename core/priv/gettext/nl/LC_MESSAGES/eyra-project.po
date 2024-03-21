@@ -24,14 +24,6 @@ msgid "tabbar.item.config.forward"
 msgstr "Ga naar Instellingen"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.monitor"
-msgstr "Monitor"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.monitor.forward"
-msgstr "Ga naar Monitor"
-
-#, elixir-autogen, elixir-format
 msgid "add.first.button"
 msgstr "Mijn eerste project"
 
@@ -142,14 +134,6 @@ msgstr "Naam"
 #, elixir-autogen, elixir-format
 msgid "item.form.title"
 msgstr "Instellingen"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.support"
-msgstr "Support"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.support.forward"
-msgstr "Ga naar Support"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.settings"
