@@ -1,8 +1,8 @@
-defmodule Systems.Benchmark.SubmissionOverview do
+defmodule Systems.Graphite.SubmissionOverview do
   use CoreWeb, :live_component
 
   alias Systems.{
-    Benchmark
+    Graphite
   }
 
   @impl true
@@ -24,7 +24,7 @@ defmodule Systems.Benchmark.SubmissionOverview do
     export_button = %{
       action: %{
         type: :http_get,
-        to: ~p"/benchmark/#{tool_id}/export/submissions",
+        to: ~p"/graphite/#{tool_id}/export/submissions",
         target: "_blank"
       },
       face: %{type: :label, label: "Export", icon: :export}
@@ -34,7 +34,7 @@ defmodule Systems.Benchmark.SubmissionOverview do
   end
 
   defp update_submissions(%{assigns: %{tool_id: tool_id}} = socket) do
-    submissions = Benchmark.Public.list_submissions(tool_id, [:spot])
+    submissions = Graphite.Public.list_submissions(tool_id, [:spot])
     assign(socket, submissions: submissions)
   end
 
@@ -77,7 +77,7 @@ defmodule Systems.Benchmark.SubmissionOverview do
           <div class="flex-grow" />
           <Button.dynamic {@export_button} />
         </div>
-        <Benchmark.SubmissionView.list items={@submission_items} />
+        <Graphite.SubmissionView.list items={@submission_items} />
       </Area.content>
     </div>
     """

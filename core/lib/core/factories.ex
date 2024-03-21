@@ -26,7 +26,7 @@ defmodule Core.Factories do
     Feldspar,
     Document,
     Lab,
-    Benchmark,
+    Graphite,
     Pool,
     Budget,
     Bookkeeping,
@@ -241,16 +241,12 @@ defmodule Core.Factories do
     build(:submission, %{})
   end
 
-  def build(:benchmark_submission) do
-    build(:benchmark_submission, %{description: "description"})
+  def build(:graphite_submission) do
+    build(:graphite_submission, %{description: "description"})
   end
 
-  def build(:benchmark_spot) do
-    build(:benchmark_spot, %{})
-  end
-
-  def build(:benchmark_tool) do
-    build(:benchmark_tool, %{})
+  def build(:graphite_tool) do
+    build(:graphite_tool, %{})
   end
 
   def build(:workflow) do
@@ -453,14 +449,14 @@ defmodule Core.Factories do
     {feldspar_tool, attributes} = get_optional(:feldspar_tool, attributes)
     {document_tool, attributes} = get_optional(:document_tool, attributes)
     {lab_tool, attributes} = get_optional(:lab_tool, attributes)
-    {benchmark_tool, attributes} = get_optional(:benchmark_tool, attributes)
+    {graphite_tool, attributes} = get_optional(:graphite_tool, attributes)
 
     %Project.ToolRefModel{
       alliance_tool: alliance_tool,
       document_tool: document_tool,
       lab_tool: lab_tool,
       feldspar_tool: feldspar_tool,
-      benchmark_tool: benchmark_tool
+      graphite_tool: graphite_tool
     }
     |> struct!(attributes)
   end
@@ -604,31 +600,22 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
-  def build(:benchmark_tool, %{} = attributes) do
+  def build(:graphite_tool, %{} = attributes) do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
 
-    %Benchmark.ToolModel{
+    %Graphite.ToolModel{
       auth_node: auth_node
     }
     |> struct!(attributes)
   end
 
-  def build(:benchmark_spot, %{} = attributes) do
-    {tool, attributes} = Map.pop(attributes, :tool, build(:benchmark_tool))
+  def build(:graphite_submission, %{} = attributes) do
+    {tool, attributes} = Map.pop(attributes, :tool, build(:graphite_tool))
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
 
-    %Benchmark.SpotModel{
+    %Graphite.SubmissionModel{
       tool: tool,
       auth_node: auth_node
-    }
-    |> struct!(attributes)
-  end
-
-  def build(:benchmark_submission, %{} = attributes) do
-    {spot, attributes} = Map.pop(attributes, :spot, build(:benchmark_spot))
-
-    %Benchmark.SubmissionModel{
-      spot: spot
     }
     |> struct!(attributes)
   end

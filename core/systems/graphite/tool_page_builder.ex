@@ -1,11 +1,11 @@
-defmodule Systems.Benchmark.ToolPageBuilder do
+defmodule Systems.Graphite.ToolPageBuilder do
   use CoreWeb, :verified_routes
   import CoreWeb.Gettext
   alias CoreWeb.UI.Timestamp
   alias ExAws.S3
 
   alias Systems.{
-    Benchmark
+    Graphite
   }
 
   def view_model(
@@ -49,26 +49,26 @@ defmodule Systems.Benchmark.ToolPageBuilder do
 
     spot_form = %{
       id: :spot_form,
-      module: Benchmark.SpotForm,
+      module: Graphite.SpotForm,
       spot_id: spot_id
     }
 
     submission_list_form = %{
       id: :submission_list_form,
-      module: Benchmark.SubmissionListForm,
+      module: Graphite.SubmissionListForm,
       spot_id: spot_id,
       active?: active?
     }
 
     categories =
-      Benchmark.Public.list_leaderboard_categories(tool.id, scores: [submission: [:spot]])
+      Graphite.Public.list_leaderboard_categories(tool.id, scores: [submission: [:spot]])
 
     leaderboard =
       if Enum.count(categories) > 0 do
         forward_button = %{
           action: %{
             type: :http_get,
-            to: ~p"/benchmark/#{tool.id}/public/leaderboard",
+            to: ~p"/graphite/#{tool.id}/public/leaderboard",
             target: "_blank"
           },
           face: %{
@@ -83,7 +83,7 @@ defmodule Systems.Benchmark.ToolPageBuilder do
           forward_button: forward_button,
           component: %{
             id: :leaderboard,
-            module: Benchmark.LeaderboardView,
+            module: Graphite.LeaderboardView,
             categories: categories
           }
         }

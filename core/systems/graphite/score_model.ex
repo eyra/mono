@@ -1,17 +1,17 @@
-defmodule Systems.Benchmark.ScoreModel do
+defmodule Systems.Graphite.ScoreModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
 
   alias Systems.{
-    Benchmark
+    Graphite
   }
 
-  schema "benchmark_scores" do
+  schema "graphite_scores" do
     field(:score, :float)
-    belongs_to(:leaderboard, Benchmark.LeaderboardModel)
-    belongs_to(:submission, Benchmark.SubmissionModel)
+    belongs_to(:leaderboard, Graphite.LeaderboardModel)
+    belongs_to(:submission, Graphite.SubmissionModel)
 
     timestamps()
   end
@@ -31,5 +31,5 @@ defmodule Systems.Benchmark.ScoreModel do
         :submission
       ])
 
-  def preload_graph(:submission), do: [submission: Benchmark.SubmissionModel.preload_graph(:down)]
+  def preload_graph(:submission), do: [submission: Graphite.SubmissionModel.preload_graph(:down)]
 end

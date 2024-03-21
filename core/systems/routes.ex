@@ -13,7 +13,7 @@ defmodule Systems.Routes do
         :promotion,
         :pool,
         :lab,
-        :benchmark,
+        :graphite,
         :feldspar,
         :document,
         :alliance,

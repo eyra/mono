@@ -1,14 +1,14 @@
-defmodule Systems.Benchmark.LeaderboardView do
+defmodule Systems.Graphite.LeaderboardView do
   use CoreWeb, :live_component
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Align
 
   alias Systems.{
-    Benchmark
+    Graphite
   }
 
-  import Benchmark.LeaderboardCategoryView
+  import Graphite.LeaderboardCategoryView
 
   @impl true
   def update(%{active_item_id: active_item_id, selector_id: :leaderboard_category}, socket) do

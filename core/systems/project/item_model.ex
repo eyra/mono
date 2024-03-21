@@ -10,7 +10,7 @@ defmodule Systems.Project.ItemModel do
   alias Systems.{
     Project,
     Assignment,
-    Benchmark
+    Graphite
   }
 
   schema "project_items" do
@@ -134,9 +134,9 @@ defmodule Systems.Project.ItemModel do
              id: id,
              name: name,
              tool_ref: %{
-               benchmark_tool:
+               graphite_tool:
                  %{
-                   id: benchmark_id,
+                   id: graphite_id,
                    status: status,
                    director: _director,
                    spots: spots,
@@ -148,7 +148,7 @@ defmodule Systems.Project.ItemModel do
            _user
          ) do
       tags = get_card_tags(tool)
-      path = ~p"/benchmark/#{benchmark_id}/content"
+      path = ~p"/graphite/#{graphite_id}/content"
       label = get_label(status)
 
       edit = %{
@@ -208,7 +208,7 @@ defmodule Systems.Project.ItemModel do
       ["Assignment"]
     end
 
-    defp get_card_tags(%Benchmark.ToolModel{}), do: ["Challenge"]
+    defp get_card_tags(%Graphite.ToolModel{}), do: ["Challenge"]
     defp get_card_tags(_), do: []
   end
 end

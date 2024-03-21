@@ -1,4 +1,4 @@
-defmodule Systems.Benchmark.ToolModel do
+defmodule Systems.Graphite.ToolModel do
   @moduledoc """
   The benchmark tool schema.
   """
@@ -8,26 +8,17 @@ defmodule Systems.Benchmark.ToolModel do
   import Ecto.Changeset
   import CoreWeb.Gettext
 
-  alias Systems.{
-    Benchmark
-  }
+  alias Systems.Graphite
 
-  schema "benchmark_tools" do
-    field(:status, Ecto.Enum, values: Benchmark.ToolStatus.values())
-    field(:title, :string)
-    field(:expectations, :string)
-    field(:data_set, :string)
-    field(:template_repo, :string)
-    field(:deadline, :string)
-    field(:director, Ecto.Enum, values: [:project, :assignment])
+  schema "graphite_tools" do
+    field(:max_submissions, :integer)
     belongs_to(:auth_node, Core.Authorization.Node)
-    has_many(:spots, Benchmark.SpotModel, foreign_key: :tool_id)
-    has_many(:leaderboards, Benchmark.LeaderboardModel, foreign_key: :tool_id)
+    has_many(:submissions, Graphite.SubmissionModel, foreign_key: :tool_id)
 
     timestamps()
   end
 
-  @fields ~w(status title expectations data_set template_repo deadline director)a
+  @fields ~w(max_submissions)a
   @required_fields @fields
 
   def changeset(tool, params) do
@@ -43,16 +34,17 @@ defmodule Systems.Benchmark.ToolModel do
   def preload_graph(:down),
     do:
       preload_graph([
-        :auth_node,
-        :spots,
-        :leaderboards
+        :submissions,
+        :auth_node
       ])
 
   def preload_graph(:auth_node), do: [auth_node: []]
-  def preload_graph(:spots), do: [spots: Benchmark.SpotModel.preload_graph(:down)]
+
+  def preload_graph(:submissions),
+    do: [submissions: Graphite.SubmissionModel.preload_graph(:down)]
 
   def preload_graph(:leaderboards),
-    do: [leaderboards: Benchmark.LeaderboardModel.preload_graph(:down)]
+    do: [leaderboards: Graphite.LeaderboardModel.preload_graph(:down)]
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(tool), do: tool.auth_node_id
@@ -71,13 +63,13 @@ defmodule Systems.Benchmark.ToolModel do
   end
 
   defimpl Frameworks.Concept.ToolModel do
-    alias Systems.Benchmark
-    def key(_), do: :benchmark
+    alias Systems.Graphite
+    def key(_), do: :graphite
     def auth_tree(%{auth_node: auth_node}), do: auth_node
     def apply_label(_), do: dgettext("eyra-benchmark", "apply.cta.title")
     def open_label(_), do: dgettext("eyra-benchmark", "open.cta.title")
-    def ready?(tool), do: Benchmark.ToolModel.ready?(tool)
-    def form(_), do: Benchmark.Form
+    def ready?(tool), do: Graphite.ToolModel.ready?(tool)
+    def form(_), do: Graphite.Form
     def launcher(_), do: nil
 
     def task_labels(_) do

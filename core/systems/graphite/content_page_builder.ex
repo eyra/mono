@@ -1,8 +1,8 @@
-defmodule Systems.Benchmark.ContentPageBuilder do
+defmodule Systems.Graphite.ContentPageBuilder do
   import CoreWeb.Gettext
 
   alias Systems.{
-    Benchmark
+    Graphite
   }
 
   @tabs [:config, :invite, :submissions, :leaderboard]
@@ -32,7 +32,7 @@ defmodule Systems.Benchmark.ContentPageBuilder do
   end
 
   defp action_map(%{id: id}) do
-    preview_action = %{type: :http_get, to: "/benchmark/#{id}", target: "_blank"}
+    preview_action = %{type: :http_get, to: "/graphite/#{id}", target: "_blank"}
     publish_action = %{type: :send, event: "action_click", item: :publish}
     retract_action = %{type: :send, event: "action_click", item: :retract}
     close_action = %{type: :send, event: "action_click", item: :close}
@@ -142,7 +142,7 @@ defmodule Systems.Benchmark.ContentPageBuilder do
   end
 
   defp set_tool_status(%{assigns: %{vm: %{id: id}}} = socket, status) do
-    Benchmark.Public.set_tool_status(id, status)
+    Graphite.Public.set_tool_status(id, status)
     socket
   end
 
@@ -165,7 +165,7 @@ defmodule Systems.Benchmark.ContentPageBuilder do
       title: dgettext("eyra-project", "tabbar.item.config"),
       forward_title: dgettext("eyra-project", "tabbar.item.config.forward"),
       type: :fullpage,
-      live_component: Benchmark.ToolForm,
+      live_component: Graphite.ToolForm,
       props: %{
         entity: tool
       }
@@ -187,7 +187,7 @@ defmodule Systems.Benchmark.ContentPageBuilder do
       title: dgettext("eyra-benchmark", "tabbar.item.submissions"),
       forward_title: dgettext("eyra-benchmark", "tabbar.item.submissions.forward"),
       type: :fullpage,
-      live_component: Benchmark.SubmissionOverview,
+      live_component: Graphite.SubmissionOverview,
       props: %{
         entity: tool
       }
@@ -209,7 +209,7 @@ defmodule Systems.Benchmark.ContentPageBuilder do
       title: dgettext("eyra-benchmark", "tabbar.item.leaderboard"),
       forward_title: dgettext("eyra-benchmark", "tabbar.item.leaderboard.forward"),
       type: :fullpage,
-      live_component: Benchmark.LeaderboardOverview,
+      live_component: Graphite.LeaderboardOverview,
       props: %{
         entity: tool
       }

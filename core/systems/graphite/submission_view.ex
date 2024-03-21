@@ -1,4 +1,4 @@
-defmodule Systems.Benchmark.SubmissionView do
+defmodule Systems.Graphite.SubmissionView do
   use CoreWeb, :html
 
   attr(:items, :list, required: true)

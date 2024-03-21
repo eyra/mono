@@ -10,7 +10,7 @@ defmodule Systems.Project.Assembly do
   alias Systems.{
     Project,
     Assignment,
-    Benchmark
+    Graphite
   }
 
   def delete(%Project.Model{auth_node: %{id: node_id}}) do
@@ -85,20 +85,20 @@ defmodule Systems.Project.Assembly do
     [prepare_item(:data_donation, "Data Donation Assignment")]
   end
 
-  defp prepare_items(:benchmark) do
+  defp prepare_items(:graphite) do
     [
-      prepare_item(:benchmark, "Challenge Round 1"),
-      prepare_item(:benchmark, "Challenge Round 2")
+      prepare_item(:graphite, "Challenge Round 1"),
+      prepare_item(:graphite, "Challenge Round 2")
     ]
   end
 
-  defp prepare_item(:benchmark, name) do
+  defp prepare_item(:graphite, name) do
     {:ok, tool} =
-      Benchmark.Public.prepare_tool(%{title: "", director: :project})
+      Graphite.Public.prepare_tool(%{title: "", director: :project})
       |> Changeset.apply_action(:prepare)
 
     {:ok, tool_ref} =
-      Project.Public.prepare_tool_ref(:benchmark, :benchmark_tool, tool)
+      Project.Public.prepare_tool_ref(:graphite, :graphite_tool, tool)
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, tool_ref)

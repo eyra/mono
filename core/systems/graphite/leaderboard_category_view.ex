@@ -1,4 +1,4 @@
-defmodule Systems.Benchmark.LeaderboardCategoryView do
+defmodule Systems.Graphite.LeaderboardCategoryView do
   use CoreWeb, :html
 
   defp to_item(%{

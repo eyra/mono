@@ -10,29 +10,21 @@ defmodule Systems.Project.AssemblyTest do
 
     item_name = "Item"
 
-    {:ok, %{project_item: %{id: id}}} = Project.Assembly.create_item(:benchmark, item_name, root)
+    {:ok, %{project_item: %{id: id}}} = Project.Assembly.create_item(:graphite, item_name, root)
     item = Project.Public.get_item!(id, Project.ItemModel.preload_graph(:down))
 
     assert %Systems.Project.ItemModel{
              name: ^item_name,
              project_path: [^root_id],
              tool_ref: %Systems.Project.ToolRefModel{
-               special: :benchmark,
+               special: :graphite,
                alliance_tool: nil,
                document_tool: nil,
                lab_tool: nil,
                feldspar_tool: nil,
-               benchmark_tool: %Systems.Benchmark.ToolModel{
-                 status: :concept,
-                 title: nil,
-                 expectations: nil,
-                 data_set: nil,
-                 template_repo: nil,
-                 deadline: nil,
-                 director: :project,
+               graphite_tool: %Systems.Graphite.ToolModel{
                  auth_node: %Core.Authorization.Node{},
-                 spots: [],
-                 leaderboards: []
+                 submissions: []
                }
              },
              assignment: nil
