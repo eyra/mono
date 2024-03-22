@@ -29,7 +29,7 @@ defmodule Systems.Assignment.Factories do
     })
   end
 
-  def create_workflow(type \\ :single_task) do
+  def create_workflow(type \\ :many_optional) do
     Factories.insert!(:workflow, %{type: type})
   end
 

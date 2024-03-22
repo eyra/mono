@@ -110,12 +110,14 @@ defmodule Systems.Workflow.BuilderView do
             <.list items={@ordered_items} types={@item_types} ordering_enabled?={@ordering_enabled?} user={@user} uri_origin={@uri_origin} parent={%{type: __MODULE__, id: @id}} />
           </Area.content>
         </div>
-        <div class="flex-shrink-0 w-side-panel">
-          <.side_panel id={:library} parent={:item_builder}>
-            <Margin.y id={:page_top} />
-            <.library {@config.library} />
-          </.side_panel>
-        </div>
+        <%= if @config.library do %>
+          <div class="flex-shrink-0 w-side-panel">
+            <.side_panel id={:library} parent={:item_builder}>
+              <Margin.y id={:page_top} />
+              <.library {@config.library} />
+            </.side_panel>
+          </div>
+        <% end %>
       </div>
     </div>
     """

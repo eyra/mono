@@ -139,7 +139,7 @@ defmodule Systems.Assignment.Public do
     |> Assignment.InfoModel.changeset(:create, attrs)
   end
 
-  def prepare_workflow(special, items, type \\ :single_task) do
+  def prepare_workflow(special, items, type) do
     %Workflow.Model{}
     |> Workflow.Model.changeset(%{type: type, special: special})
     |> Ecto.Changeset.put_assoc(:items, items)
@@ -153,7 +153,7 @@ defmodule Systems.Assignment.Public do
 
   def prepare_page_refs(_template, auth_node) do
     [
-      prepare_page_ref(auth_node, :assignment_intro)
+      prepare_page_ref(auth_node, :assignment_information)
     ]
   end
 
@@ -549,7 +549,7 @@ defmodule Systems.Assignment.Public do
     open_spot_count(assignment, type)
   end
 
-  defp open_spot_count(%{crew: crew, info: %{subject_count: subject_count}}, :single_task) do
+  defp open_spot_count(%{crew: crew, info: %{subject_count: subject_count}}, :many_optional) do
     all_non_expired_tasks = Crew.Public.count_tasks(crew, Crew.TaskStatus.values())
     max(0, subject_count - all_non_expired_tasks)
   end

@@ -9,7 +9,7 @@ defmodule Systems.Workflow.PublicTest do
   test "rearrange/2 move last to first succeed" do
     tool = Factories.create_tool()
     tool_ref = Factories.create_tool_ref(tool)
-    workflow = Factories.create_workflow()
+    workflow = Factories.create_workflow(:many_optional)
 
     %{id: id_a} = item_a = Factories.create_item(workflow, tool_ref, 0)
     %{id: id_b} = item_b = Factories.create_item(workflow, tool_ref, 1)
@@ -43,7 +43,7 @@ defmodule Systems.Workflow.PublicTest do
   test "rearrange/2 move first to last succeed" do
     tool = Factories.create_tool()
     tool_ref = Factories.create_tool_ref(tool)
-    workflow = Factories.create_workflow()
+    workflow = Factories.create_workflow(:many_optional)
 
     %{id: id_a} = item_a = Factories.create_item(workflow, tool_ref, 0)
     %{id: id_b} = item_b = Factories.create_item(workflow, tool_ref, 1)
@@ -77,7 +77,7 @@ defmodule Systems.Workflow.PublicTest do
   test "update_position/2 move first to last succeed" do
     tool = Factories.create_tool()
     tool_ref = Factories.create_tool_ref(tool)
-    workflow = Factories.create_workflow()
+    workflow = Factories.create_workflow(:many_optional)
 
     %{id: id_a} = item_a = Factories.create_item(workflow, tool_ref, 0)
     %{id: id_b} = Factories.create_item(workflow, tool_ref, 1)
@@ -131,7 +131,7 @@ defmodule Systems.Workflow.PublicTest do
   test "update_position/2 move last to second succeed" do
     tool = Factories.create_tool()
     tool_ref = Factories.create_tool_ref(tool)
-    workflow = Factories.create_workflow()
+    workflow = Factories.create_workflow(:many_optional)
 
     %{id: id_a} = Factories.create_item(workflow, tool_ref, 0)
     %{id: id_b} = Factories.create_item(workflow, tool_ref, 1)
@@ -185,7 +185,7 @@ defmodule Systems.Workflow.PublicTest do
   test "update_position/2 move to same position succeeded" do
     tool = Factories.create_tool()
     tool_ref = Factories.create_tool_ref(tool)
-    workflow = Factories.create_workflow()
+    workflow = Factories.create_workflow(:many_optional)
 
     %{id: id_a} = Factories.create_item(workflow, tool_ref, 0)
     %{id: id_b} = Factories.create_item(workflow, tool_ref, 1)
@@ -219,7 +219,7 @@ defmodule Systems.Workflow.PublicTest do
   test "update_position/2 out of upper bounds failure" do
     tool = Factories.create_tool()
     tool_ref = Factories.create_tool_ref(tool)
-    workflow = Factories.create_workflow()
+    workflow = Factories.create_workflow(:many_optional)
 
     Factories.create_item(workflow, tool_ref, 0)
     Factories.create_item(workflow, tool_ref, 1)
@@ -233,7 +233,7 @@ defmodule Systems.Workflow.PublicTest do
   test "update_position/2 out of lower bounds failure" do
     tool = Factories.create_tool()
     tool_ref = Factories.create_tool_ref(tool)
-    workflow = Factories.create_workflow()
+    workflow = Factories.create_workflow(:many_optional)
 
     Factories.create_item(workflow, tool_ref, 0)
     Factories.create_item(workflow, tool_ref, 1)
@@ -247,7 +247,7 @@ defmodule Systems.Workflow.PublicTest do
   test "update_position/2 position out of sync failure" do
     tool = Factories.create_tool()
     tool_ref = Factories.create_tool_ref(tool)
-    workflow = Factories.create_workflow()
+    workflow = Factories.create_workflow(:many_optional)
 
     Factories.create_item(workflow, tool_ref, 0)
     Factories.create_item(workflow, tool_ref, 1)
@@ -265,7 +265,7 @@ defmodule Systems.Workflow.PublicTest do
   test "update_position/2 item deleted underwater success" do
     tool = Factories.create_tool()
     tool_ref = Factories.create_tool_ref(tool)
-    workflow = Factories.create_workflow()
+    workflow = Factories.create_workflow(:many_optional)
 
     Factories.create_item(workflow, tool_ref, 0)
     Factories.create_item(workflow, tool_ref, 1)
@@ -283,7 +283,7 @@ defmodule Systems.Workflow.PublicTest do
   test "delete/1 succeed" do
     tool = Factories.create_tool()
     tool_ref = Factories.create_tool_ref(tool)
-    workflow = Factories.create_workflow()
+    workflow = Factories.create_workflow(:many_optional)
 
     %{id: id_a} = Factories.create_item(workflow, tool_ref, 0)
     %{id: id_b} = Factories.create_item(workflow, tool_ref, 1)

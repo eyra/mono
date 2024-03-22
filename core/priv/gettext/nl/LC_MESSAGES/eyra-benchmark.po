@@ -52,18 +52,6 @@ msgid "expectations.title"
 msgstr "Beschrijving"
 
 #, elixir-autogen, elixir-format
-msgid "submissions.intro"
-msgstr "Als de challenge open is, kun je hieronder methodes indienen. Deze worden toegepast op de holdout data en toegevoegd aan het scoreboard."
-
-#, elixir-autogen, elixir-format
-msgid "submissions.subhead.active"
-msgstr "Let op, je kan maximaal drie methodes indienen."
-
-#, elixir-autogen, elixir-format
-msgid "submissions.title"
-msgstr "Indienen"
-
-#, elixir-autogen, elixir-format
 msgid "highlight.deadline.title"
 msgstr "Dagen tot deadline"
 
@@ -89,10 +77,6 @@ msgstr "Github commit url"
 msgid "submission.form.description.label"
 msgstr "Omschrijving"
 
-#, elixir-autogen, elixir-format
-msgid "add.submission.button"
-msgstr "Voeg methode toe"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.form.submit.button"
 msgstr "Dien methode in"
@@ -100,10 +84,6 @@ msgstr "Dien methode in"
 #, elixir-autogen, elixir-format
 msgid "invalid.github.commit.url.message"
 msgstr "Voer een geldige Github commit url in"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "submissions.subhead.inactive"
-msgstr "Gesloten: Het is niet meer mogelijk om methodes in te dienen of aan te passen."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "1 submission"
@@ -116,10 +96,6 @@ msgid "1 team"
 msgid_plural "%{count} teams"
 msgstr[0] "1 team"
 msgstr[1] "%{count} teams"
-
-#, elixir-autogen, elixir-format
-msgid "spot.form.title"
-msgstr "Team"
 
 #, elixir-autogen, elixir-format
 msgid "form.template_repo.label"
@@ -148,14 +124,6 @@ msgstr "Download data"
 #, elixir-autogen, elixir-format
 msgid "template.button"
 msgstr "Github voorbeeld repository"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "spot.form.description"
-msgstr "Geef een team naam op die op het scoreboard bij jouw ingediende methodes komt te staan."
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "spot.form.name"
-msgstr "Naam"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.submissions"

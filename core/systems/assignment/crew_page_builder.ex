@@ -51,7 +51,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
          %{page_refs: page_refs},
          %{fabric: fabric}
        ) do
-    if intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_intro)) do
+    if intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_information)) do
       Fabric.prepare_child(fabric, :onboarding_view_intro, Assignment.OnboardingView, %{
         page_ref: intro_page_ref,
         title: dgettext("eyra-assignment", "onboarding.intro.title")
@@ -93,8 +93,8 @@ defmodule Systems.Assignment.CrewPageBuilder do
     work_items = work_items(assignment, assigns)
     context_menu_items = context_menu_items(assignment, assigns)
 
-    intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_intro))
-    support_page_ref = Enum.find(page_refs, &(&1.key == :assignment_support))
+    intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_information))
+    support_page_ref = Enum.find(page_refs, &(&1.key == :assignment_helpdesk))
 
     Fabric.prepare_child(fabric, :work_view, Assignment.CrewWorkView, %{
       work_items: work_items,
@@ -111,7 +111,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp context_menu_items(assignment, _assigns) do
-    [:assignment_intro, :privacy, :consent, :assignment_support]
+    [:assignment_information, :privacy, :consent, :assignment_helpdesk]
     |> Enum.map(&context_menu_item(&1, assignment))
     |> Enum.filter(&(not is_nil(&1)))
   end
@@ -132,15 +132,15 @@ defmodule Systems.Assignment.CrewPageBuilder do
     end
   end
 
-  defp context_menu_item(:assignment_intro = key, %{page_refs: page_refs}) do
-    if Enum.find(page_refs, &(&1.key == :assignment_intro)) != nil do
+  defp context_menu_item(:assignment_information = key, %{page_refs: page_refs}) do
+    if Enum.find(page_refs, &(&1.key == :assignment_information)) != nil do
       %{id: key, label: dgettext("eyra-assignment", "onboarding.intro.title")}
     else
       nil
     end
   end
 
-  defp context_menu_item(:assignment_support = key, %{page_refs: page_refs}) do
+  defp context_menu_item(:assignment_helpdesk = key, %{page_refs: page_refs}) do
     if Enum.find(page_refs, &(&1.key == key)) != nil do
       %{id: key, label: dgettext("eyra-assignment", "support.page.title")}
     else

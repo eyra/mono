@@ -52,18 +52,6 @@ msgid "expectations.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "submissions.intro"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "submissions.subhead.active"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "submissions.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "highlight.deadline.title"
 msgstr ""
 
@@ -90,19 +78,11 @@ msgid "submission.form.description.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "add.submission.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "submission.form.submit.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "invalid.github.commit.url.message"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "submissions.subhead.inactive"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -116,10 +96,6 @@ msgid "1 team"
 msgid_plural "%{count} teams"
 msgstr[0] ""
 msgstr[1] ""
-
-#, elixir-autogen, elixir-format
-msgid "spot.form.title"
-msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "form.template_repo.label"
@@ -147,14 +123,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "template.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "spot.form.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "spot.form.name"
 msgstr ""
 
 #, elixir-autogen, elixir-format

@@ -335,7 +335,7 @@ defmodule Systems.Assignment.CrewWorkView do
   end
 
   @impl true
-  def handle_event("show", %{page: :assignment_intro}, socket) do
+  def handle_event("show", %{page: :assignment_information}, socket) do
     {
       :noreply,
       socket
@@ -345,7 +345,7 @@ defmodule Systems.Assignment.CrewWorkView do
   end
 
   @impl true
-  def handle_event("show", %{page: :assignment_support}, socket) do
+  def handle_event("show", %{page: :assignment_helpdesk}, socket) do
     {
       :noreply,
       socket

@@ -309,6 +309,8 @@ msgstr "<h1>Privacy statement URL</h1> Use the URL below to refer to the uploade
 #, elixir-autogen, elixir-format
 msgid "privacy.title"
 msgstr "Privacy"
+
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"
 msgstr "Monitor"
 
@@ -337,9 +339,21 @@ msgid "settings.general.title"
 msgstr "General"
 
 #, elixir-autogen, elixir-format, fuzzy
+msgid "settings.language.label"
+msgstr "Language setting for participants"
+
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.subject_count.label"
 msgstr "Expected number of participants"
 
+#, elixir-autogen, elixir-format
+msgid "participants.title"
+msgstr "Participants"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.participants"
+msgstr "Participants"
+
 #, elixir-autogen, elixir-format, fuzzy
-msgid "settings.language.label"
-msgstr "Language setting for participants"
+msgid "tabbar.item.participants.forward"
+msgstr "Go to Participants"

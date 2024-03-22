@@ -3,19 +3,43 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   import CoreWeb.Gettext
 
+  alias Frameworks.Utility.List
+
   alias Systems.Assignment
-  alias Systems.Project
   alias Systems.Workflow
-  alias Systems.Support
   alias Systems.Monitor
 
+  @moduledoc """
+    Assignment is a generic concept with a template pattern. The content page is therefor rendered with optional components.
+    This builder module supports several specials with each a specific View Model.
+  """
+
+  @doc """
+    Returns a view model based on the template table below:
+
+      | Option                | Benchmark Challenge  | Data Donation |
+      | :-------------------- | :------------------: | :-----------: |
+      | General settings      | No                   | Yes           |
+      | Branding settings     | Yes                  | Yes           |
+      | Information page      | Yes                  | Yes           |
+      | Privacy page          | Yes                  | Yes           |
+      | Consent form          | Yes                  | Yes           |
+      | Helpdesk page form    | Yes                  | Yes           |
+      | Panel settings        | No                   | Yes           |
+      | Storage settings      | No                   | Yes           |
+      | Invite participants   | Yes                  | No            |
+      | Worklow initial items | Yes, 3               | No, 0         |
+      | Workflow Library      | No                   | Yes           |
+      | Monitor               | Yes                  | Yes           |
+  """
   def view_model(
         %{id: id, special: special} = assignment,
         assigns
       ) do
+    config = get_config(special)
     title = get_title(special)
     show_errors = show_errors(assignment, assigns)
-    tabs = create_tabs(assignment, show_errors, assigns)
+    tabs = create_tabs(assignment, config, show_errors, assigns)
     action_map = action_map(assignment, assigns)
     actions = actions(assignment, action_map)
 
@@ -28,8 +52,38 @@ defmodule Systems.Assignment.ContentPageBuilder do
     }
   end
 
-  defp get_title(nil) do
-    dgettext("eyra-assignment", "content.title")
+  defp get_config() do
+    %{
+      general: true,
+      branding: true,
+      information: true,
+      privacy: true,
+      consent: true,
+      helpdesk: true,
+      panel: true,
+      storage: true,
+      participants: true,
+      workflow: true,
+      workflow_initial_items: true,
+      workflow_library: true,
+      monitor: true
+    }
+  end
+
+  defp get_config(:benchmark_challenge) do
+    Map.merge(get_config(), %{
+      general: false,
+      panel: false,
+      storage: false,
+      workflow_library: false
+    })
+  end
+
+  defp get_config(:data_donation) do
+    Map.merge(get_config(), %{
+      participants: false,
+      workflow_initial_items: false
+    })
   end
 
   defp get_title(special) do
@@ -163,18 +217,22 @@ defmodule Systems.Assignment.ContentPageBuilder do
     socket |> Phoenix.Component.assign(model: assignment)
   end
 
-  defp create_tabs(assignment, show_errors, assigns) do
-    get_tab_keys()
-    |> Enum.map(&create_tab(&1, assignment, show_errors, assigns))
+  defp create_tabs(assignment, config, show_errors, assigns) do
+    get_tab_keys(config)
+    |> Enum.map(&create_tab(&1, assignment, config, show_errors, assigns))
   end
 
-  defp get_tab_keys() do
-    [:config, :items, :monitor]
+  defp get_tab_keys(%{workflow: workflow, monitor: monitor, participants: participants} = _config) do
+    [:settings]
+    |> List.append_if(workflow, :workflow)
+    |> List.append_if(participants, :participants)
+    |> List.append_if(monitor, :monitor)
   end
 
   defp create_tab(
-         :config,
+         :settings,
          assignment,
+         config,
          show_errors,
          %{fabric: fabric, uri_origin: uri_origin, viewport: viewport, breakpoint: breakpoint} =
            _assigns
@@ -186,7 +244,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
         entity: assignment,
         uri_origin: uri_origin,
         viewport: viewport,
-        breakpoint: breakpoint
+        breakpoint: breakpoint,
+        config: config
       })
 
     %{
@@ -201,8 +260,9 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp create_tab(
-         :items,
-         %{workflow: workflow},
+         :workflow,
+         %{workflow: workflow, special: special},
+         config,
          show_errors,
          %{
            current_user: user,
@@ -229,44 +289,35 @@ defmodule Systems.Assignment.ContentPageBuilder do
             title: dgettext("eyra-workflow", "item.list.title"),
             description: dgettext("eyra-workflow", "item.list.description")
           },
-          library: %{
-            title: dgettext("eyra-workflow", "item.library.title"),
-            description: dgettext("eyra-workflow", "item.library.description"),
-            items: [
-              %{
-                id: :donate,
-                type: :feldspar_tool,
-                title: dgettext("eyra-workflow", "item.donate.title"),
-                description: dgettext("eyra-workflow", "item.donate.description")
-              },
-              %{
-                id: :questionnaire,
-                type: :alliance_tool,
-                title: dgettext("eyra-workflow", "item.questionnaire.title"),
-                description: dgettext("eyra-workflow", "item.questionnaire.description")
-              },
-              %{
-                id: :request,
-                type: :document_tool,
-                title: dgettext("eyra-workflow", "item.request.title"),
-                description: dgettext("eyra-workflow", "item.request.description")
-              },
-              %{
-                id: :download,
-                type: :document_tool,
-                title: dgettext("eyra-workflow", "item.download.title"),
-                description: dgettext("eyra-workflow", "item.download.description")
-              }
-            ]
-          }
+          library: get_workflow_library(config, special)
         }
       }
     }
   end
 
   defp create_tab(
+         :participants,
+         _assignment,
+         _config,
+         show_errors,
+         _assigns
+       ) do
+    %{
+      id: :participants,
+      ready: false,
+      show_errors: show_errors,
+      title: dgettext("eyra-assignment", "tabbar.item.participants"),
+      forward_title: dgettext("eyra-assignment", "tabbar.item.participants.forward"),
+      type: :fullpage,
+      live_component: Assignment.ParticipantsView,
+      props: %{}
+    }
+  end
+
+  defp create_tab(
          :monitor,
          assignment,
+         _config,
          show_errors,
          %{fabric: fabric} = _assigns
        ) do
@@ -289,39 +340,38 @@ defmodule Systems.Assignment.ContentPageBuilder do
     }
   end
 
-  defp create_tab(
-         :support,
-         assignment,
-         _show_errors,
-         _assigns
-       ) do
-    %{
-      id: :support,
-      title: dgettext("eyra-project", "tabbar.item.support"),
-      forward_title: dgettext("eyra-project", "tabbar.item.support.forward"),
-      type: :fullpage,
-      live_component: Support.Form,
-      props: %{
-        entity: assignment
-      }
-    }
-  end
+  defp get_workflow_library(%{workflow_library: false}, _), do: nil
 
-  defp create_tab(
-         :monitor,
-         assignment,
-         _show_errors,
-         _assigns
-       ) do
+  defp get_workflow_library(%{workflow_library: true}, :data_donation) do
     %{
-      id: :monitor,
-      title: dgettext("eyra-project", "tabbar.item.monitor"),
-      forward_title: dgettext("eyra-project", "tabbar.item.monitor.forward"),
-      type: :fullpage,
-      live_component: Project.ItemMonitorView,
-      props: %{
-        entity: assignment
-      }
+      title: dgettext("eyra-workflow", "item.library.title"),
+      description: dgettext("eyra-workflow", "item.library.description"),
+      items: [
+        %{
+          id: :donate,
+          type: :feldspar_tool,
+          title: dgettext("eyra-workflow", "item.donate.title"),
+          description: dgettext("eyra-workflow", "item.donate.description")
+        },
+        %{
+          id: :questionnaire,
+          type: :alliance_tool,
+          title: dgettext("eyra-workflow", "item.questionnaire.title"),
+          description: dgettext("eyra-workflow", "item.questionnaire.description")
+        },
+        %{
+          id: :request,
+          type: :document_tool,
+          title: dgettext("eyra-workflow", "item.request.title"),
+          description: dgettext("eyra-workflow", "item.request.description")
+        },
+        %{
+          id: :download,
+          type: :document_tool,
+          title: dgettext("eyra-workflow", "item.download.title"),
+          description: dgettext("eyra-workflow", "item.download.description")
+        }
+      ]
     }
   end
 

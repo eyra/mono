@@ -37,7 +37,11 @@ defmodule Systems.Assignment.Assembly do
   end
 
   defp prepare_workflow(:data_donation, _) do
-    Assignment.Public.prepare_workflow(:data_donation, [])
+    Assignment.Public.prepare_workflow(:data_donation, [], :many_optional)
+  end
+
+  defp prepare_workflow(:benchmark_challenge, _) do
+    Assignment.Public.prepare_workflow(:benchmark_challenge, [], :many_mandatory)
   end
 
   defp prepare_workflow(:online = template, %Authorization.Node{} = auth_node) do
@@ -55,7 +59,7 @@ defmodule Systems.Assignment.Assembly do
   defp prepare_workflow(template, %{} = tool) do
     tool_ref = prepare_tool_ref(template, tool)
     item = Assignment.Public.prepare_workflow_item(tool_ref)
-    Assignment.Public.prepare_workflow(template, [item])
+    Assignment.Public.prepare_workflow(template, [item], :one)
   end
 
   defp prepare_tool_ref(special, tool) do

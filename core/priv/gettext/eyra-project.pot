@@ -24,14 +24,6 @@ msgid "tabbar.item.config.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.monitor"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.monitor.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "add.first.button"
 msgstr ""
 
@@ -141,14 +133,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "item.form.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.support"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.support.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
