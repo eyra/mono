@@ -232,7 +232,7 @@ msgstr "Show"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.body"
-msgstr "Use the text field below to inform your participants about your research. Were your participants already informed in some other way? Choose 'Skip'."
+msgstr "Add an information page to onboard and inform your participants. Were your participants already informed in some other way? Choose 'Skip'."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.title"
