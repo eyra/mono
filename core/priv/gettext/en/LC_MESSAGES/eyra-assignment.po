@@ -208,7 +208,7 @@ msgstr "Organization logo"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.text"
-msgstr "Use the fields below to customize the header of your data donation participant workflow. Add the name and logo of the organisation that is responsible for the data donation workflow. Curious to see what this will look like for participants? Click 'Preview' at the top right to check it out."
+msgstr "Use the fields below to customize the header of your participant workflow. Add the name and logo of the organisation that is responsible for the workflow. Curious to see what this will look like for participants? Click 'Preview' at the top right to check it out."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.title"
