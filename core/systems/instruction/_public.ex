@@ -61,4 +61,26 @@ defmodule Systems.Instruction.Public do
     |> Signal.Public.multi_dispatch({:instruction_tool, :update}, %{instruction_tool: tool})
     |> Repo.transaction()
   end
+
+  def add_file_and_page(tool, file, page) do
+    Multi.new()
+    |> Multi.insert(:content_file, file)
+    |> Multi.insert(:instruction_asset, fn %{content_file: content_file} ->
+      prepare_asset(tool, :file, content_file)
+    end)
+    |> Multi.insert(:content_page, page)
+    |> Multi.insert(:instruction_page, fn %{content_page: content_page} ->
+      prepare_page(tool, content_page)
+    end)
+    |> Signal.Public.multi_dispatch({:instruction_tool, :update}, %{instruction_tool: tool})
+    |> Repo.transaction()
+  end
+
+  def update_file_and_page(tool, file, page) do
+    Multi.new()
+    |> Multi.update(:content_file, file)
+    |> Multi.update(:content_page, page)
+    |> Signal.Public.multi_dispatch({:instruction_tool, :update}, %{instruction_tool: tool})
+    |> Repo.transaction()
+  end
 end

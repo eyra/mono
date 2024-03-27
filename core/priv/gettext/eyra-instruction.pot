@@ -42,3 +42,23 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "page.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "download_form.file.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "download_form.file.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "download_form.file.replace.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "download_form.file.select.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "download_page.body"
+msgstr ""
