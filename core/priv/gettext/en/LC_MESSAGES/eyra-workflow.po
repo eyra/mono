@@ -33,7 +33,7 @@ msgstr "Library"
 
 #, elixir-autogen, elixir-format
 msgid "item.list.description"
-msgstr "Add tasks from the library to build a custom workflow for participants in your study."
+msgstr "Add tasks from the library to build a custom workflow for participants."
 
 #, elixir-autogen, elixir-format
 msgid "item.list.hint"
