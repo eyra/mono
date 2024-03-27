@@ -1,0 +1,64 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new messages manually only if they're dynamic
+## messages that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+#
+msgid ""
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "apply.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "repository_url.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "repository_url.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fork_page.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "page.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "download_form.file.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "download_form.file.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "download_form.file.replace.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "download_form.file.select.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "download_page.body"
+msgstr ""

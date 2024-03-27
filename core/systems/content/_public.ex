@@ -4,6 +4,7 @@ defmodule Systems.Content.Public do
   alias Core.Repo
   alias Ecto.Multi
 
+  alias Frameworks.Signal
   alias Systems.Content
   alias Systems.Content.TextItemModel, as: TextItem
   alias Systems.Content.TextBundleModel, as: TextBundle
@@ -13,10 +14,27 @@ defmodule Systems.Content.Public do
     |> Content.FileModel.changeset(%{name: name, ref: ref})
   end
 
-  def prepare_page(title, body, auth_node) do
+  def prepare_page(body, auth_node) do
     %Content.PageModel{}
-    |> Content.PageModel.changeset(%{title: title, body: body})
+    |> Content.PageModel.changeset(%{body: body})
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+  end
+
+  def prepare_repository(attrs) do
+    %Content.RepositoryModel{}
+    |> Content.RepositoryModel.changeset(attrs)
+    |> Content.RepositoryModel.validate()
+  end
+
+  def update_repository(repository, attrs) do
+    repository =
+      Content.RepositoryModel.changeset(repository, attrs)
+      |> Content.RepositoryModel.validate()
+
+    Multi.new()
+    |> Multi.update(:content_repository, repository)
+    |> Signal.Public.multi_dispatch({:content_repository, :update})
+    |> Repo.transaction()
   end
 
   def store(path, original_filename) do

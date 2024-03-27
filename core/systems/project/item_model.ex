@@ -161,11 +161,11 @@ defmodule Systems.Project.ItemModel do
         face: %{type: :icon, icon: :delete}
       }
 
-      team_info = dngettext("eyra-benchmark", "1 team", "%{count} teams", Enum.count(spots))
+      team_info = dngettext("eyra-graphite", "1 team", "%{count} teams", Enum.count(spots))
 
       submission_info =
         dngettext(
-          "eyra-benchmark",
+          "eyra-graphite",
           "1 submission",
           "%{count} submissions",
           count_submissions(spots)

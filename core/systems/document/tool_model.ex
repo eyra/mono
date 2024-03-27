@@ -44,7 +44,7 @@ defmodule Systems.Document.ToolModel do
     def apply_label(_), do: dgettext("eyra-document", "apply.cta.title")
     def open_label(_), do: dgettext("eyra-document", "open.cta.title")
     def ready?(tool), do: Document.ToolModel.ready?(tool)
-    def form(_), do: Document.ToolForm
+    def form(_, _), do: Document.ToolForm
 
     def launcher(%{id: id, ref: ref}),
       do: %{

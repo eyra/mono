@@ -18,7 +18,7 @@ defmodule Systems.Assignment.AssignmentForm do
         socket
       ) do
     [tool | _] = Workflow.Model.flatten(workflow)
-    tool_form = Frameworks.Concept.ToolModel.form(tool)
+    tool_form = Frameworks.Concept.ToolModel.form(tool, nil)
 
     {
       :ok,

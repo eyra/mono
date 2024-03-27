@@ -45,7 +45,7 @@ defmodule Systems.Feldspar.ToolModel do
     def apply_label(_), do: dgettext("eyra-feldspar", "apply.cta.title")
     def open_label(_), do: dgettext("eyra-feldspar", "open.cta.title")
     def ready?(tool), do: Feldspar.ToolModel.ready?(tool)
-    def form(_), do: Feldspar.ToolForm
+    def form(_, _), do: Feldspar.ToolForm
 
     def launcher(%{id: id, archive_ref: archive_ref}) when is_binary(archive_ref) do
       %{

@@ -16,14 +16,6 @@ msgid "delete.confirm"
 msgstr "project"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.config"
-msgstr "Instellingen"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.config.forward"
-msgstr "Ga naar Instellingen"
-
-#, elixir-autogen, elixir-format
 msgid "add.first.button"
 msgstr "Mijn eerste project"
 
@@ -160,7 +152,7 @@ msgid "node.empty.title"
 msgstr "Een frisse start"
 
 #, elixir-autogen, elixir-format
-msgid "tool_ref.tag.benchmark"
+msgid "tool_ref.tag.graphite"
 msgstr "Benchmark"
 
 #, elixir-autogen, elixir-format

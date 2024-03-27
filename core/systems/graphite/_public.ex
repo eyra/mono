@@ -1,11 +1,13 @@
 defmodule Systems.Graphite.Public do
   import Ecto.Query, warn: false
+  import Systems.Graphite.Queries
 
   alias CoreWeb.UI.Timestamp
   alias Ecto.Multi
   alias Ecto.Changeset
   alias Core.Repo
 
+  alias Frameworks.Signal
   alias Systems.Graphite
 
   # FIXME: should come from CMS
@@ -21,6 +23,15 @@ defmodule Systems.Graphite.Public do
     |> Repo.get!(id)
   end
 
+  def get_submission(tool, user, role, preload \\ []) do
+    submissions =
+      submission_query(tool, user, role)
+      |> Repo.all()
+      |> Repo.preload(preload)
+
+    List.first(submissions)
+  end
+
   def set_tool_status(%Graphite.ToolModel{} = tool, status) do
     tool
     |> Graphite.ToolModel.changeset(%{status: status})
@@ -33,19 +44,38 @@ defmodule Systems.Graphite.Public do
   end
 
   def prepare_tool(%{} = attrs, auth_node \\ Core.Authorization.prepare_node()) do
-    attrs = Map.put(attrs, :status, :concept)
-
     %Graphite.ToolModel{}
     |> Graphite.ToolModel.changeset(attrs)
     |> Changeset.put_assoc(:auth_node, auth_node)
   end
 
-  def create_submission(%Changeset{} = changeset) do
-    changeset
-    |> Repo.insert(
-      conflict_target: [:id],
-      on_conflict: :replace_all
-    )
+  def prepare_submission(%{} = attrs, user, tool) do
+    auth_node = Core.Authorization.prepare_node(user, :owner)
+
+    %Graphite.SubmissionModel{}
+    |> Graphite.SubmissionModel.change(attrs)
+    |> Graphite.SubmissionModel.validate()
+    |> Changeset.put_assoc(:tool, tool)
+    |> Changeset.put_assoc(:auth_node, auth_node)
+  end
+
+  def add_submission(tool, user, attrs) do
+    submission = prepare_submission(attrs, user, tool)
+
+    Multi.new()
+    |> Multi.insert(:graphite_submission, submission)
+    |> Signal.Public.multi_dispatch({:graphite_submission, :inserted})
+    |> Repo.transaction()
+  end
+
+  def update_submission(submission, attrs) do
+    Multi.new()
+    |> Multi.update(:graphite_submission, fn _ ->
+      Graphite.SubmissionModel.change(submission, attrs)
+      |> Graphite.SubmissionModel.validate()
+    end)
+    |> Signal.Public.multi_dispatch({:graphite_submission, :updated})
+    |> Repo.transaction()
   end
 
   defp parse_entry(line) do

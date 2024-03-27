@@ -34,7 +34,7 @@ defmodule Systems.Graphite.SubmissionModel do
     changeset
     |> validate_required(@required_fields)
     |> validate_format(:github_commit_url, @valid_github_commit_url,
-      message: dgettext("eyra-benchmark", "invalid.github.commit.url.message")
+      message: dgettext("eyra-graphite", "invalid.github.commit.url.message")
     )
   end
 

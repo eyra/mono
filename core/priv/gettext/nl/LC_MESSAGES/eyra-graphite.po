@@ -12,32 +12,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, elixir-autogen, elixir-format
-msgid "content.title"
-msgstr "Challenge"
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.leaderboard"
 msgstr "Ranglijst"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.leaderboard.forward"
-msgstr "Ranglijst"
-
-#, elixir-autogen, elixir-format
-msgid "form.data_set.label"
-msgstr "Data set (url)"
-
-#, elixir-autogen, elixir-format
-msgid "form.deadline.label"
-msgstr "Streefdatum"
-
-#, elixir-autogen, elixir-format
-msgid "form.expectations.label"
-msgstr "Verwachtingen"
-
-#, elixir-autogen, elixir-format
-msgid "form.title.label"
-msgstr "Titel"
 
 #, elixir-autogen, elixir-format
 msgid "tool.page.title"
@@ -98,10 +74,6 @@ msgstr[0] "1 team"
 msgstr[1] "%{count} teams"
 
 #, elixir-autogen, elixir-format
-msgid "form.template_repo.label"
-msgstr "Github repository"
-
-#, elixir-autogen, elixir-format
 msgid "preparation.dataset.title"
 msgstr "Download de voorbeeld data om jouw methode te trainen"
 
@@ -127,10 +99,6 @@ msgstr "Github voorbeeld repository"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.submissions"
-msgstr "Methodes"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.submissions.forward"
 msgstr "Methodes"
 
 #, elixir-autogen, elixir-format
@@ -182,24 +150,8 @@ msgid "leaderboard.team.label"
 msgstr "Team"
 
 #, elixir-autogen, elixir-format
-msgid "apply.cta.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "assignment.button"
 msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "close.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "open.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "open.cta.title"
-msgstr "Challenge"
 
 #, elixir-autogen, elixir-format
 msgid "participated.label"
@@ -209,14 +161,10 @@ msgstr ""
 msgid "pending.label"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "preview.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "publish.button"
-msgstr ""
-
 #, elixir-autogen, elixir-format, fuzzy
-msgid "retract.button"
-msgstr "Github voorbeeld repository"
+msgid "submission.form.update.button"
+msgstr "Dien methode in"
+
+#, elixir-autogen, elixir-format
+msgid "submit.failed.message"
+msgstr ""

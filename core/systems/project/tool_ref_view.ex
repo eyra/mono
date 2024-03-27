@@ -10,7 +10,10 @@ defmodule Systems.Project.ToolRefView do
     Project
   }
 
-  def update(%{id: id, title: title, tool_ref: tool_ref, task: task, visible: visible}, socket) do
+  def update(
+        %{id: id, title: title, tool_ref: tool_ref, task: task, visible: visible, user: user},
+        socket
+      ) do
     {
       :ok,
       socket
@@ -19,7 +22,8 @@ defmodule Systems.Project.ToolRefView do
         title: title,
         tool_ref: tool_ref,
         task: task,
-        visible: visible
+        visible: visible,
+        user: user
       )
       |> reset_fabric()
       |> update_launcher()
@@ -36,10 +40,10 @@ defmodule Systems.Project.ToolRefView do
   end
 
   def update_launcher(
-        %{assigns: %{tool_ref: %{id: id}, title: title, visible: visible}} = socket,
+        %{assigns: %{tool_ref: %{id: id}, user: user, title: title, visible: visible}} = socket,
         %{module: module, params: params}
       ) do
-    params = Map.merge(params, %{title: title, visible: visible})
+    params = Map.merge(params, %{user: user, title: title, visible: visible})
     child = Fabric.prepare_child(socket, "tool_ref_#{id}", module, params)
     socket |> show_child(child)
   end
@@ -54,6 +58,11 @@ defmodule Systems.Project.ToolRefView do
   @impl true
   def handle_event("complete_task", _payload, socket) do
     {:noreply, socket |> send_event(:parent, "complete_task")}
+  end
+
+  @impl true
+  def handle_event("cancel_task", _payload, socket) do
+    {:noreply, socket |> send_event(:parent, "cancel_task")}
   end
 
   @impl true

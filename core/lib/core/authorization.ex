@@ -107,7 +107,7 @@ defmodule Core.Authorization do
 
     %Core.Authorization.RoleAssignment{
       principal_id: principal_id,
-      role: :owner
+      role: role
     }
   end
 

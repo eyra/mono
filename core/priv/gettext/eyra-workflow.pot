@@ -20,22 +20,6 @@ msgid "item.description.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "item.donate.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "item.donate.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "item.download.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "item.download.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "item.group.label"
 msgstr ""
 
@@ -60,14 +44,6 @@ msgid "item.list.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "item.request.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "item.request.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "item.title.label"
 msgstr ""
 
@@ -77,12 +53,4 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.workflow.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "item.questionnaire.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "item.questionnaire.title"
 msgstr ""

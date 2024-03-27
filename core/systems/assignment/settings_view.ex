@@ -9,25 +9,28 @@ defmodule Systems.Assignment.SettingsView do
         %{
           id: id,
           entity: assignment,
-          config: config,
+          template: template,
           uri_origin: uri_origin,
           viewport: viewport,
           breakpoint: breakpoint
         },
         socket
       ) do
+    content_flags = Assignment.Template.content_flags(template)
+
     {
       :ok,
       socket
       |> assign(
         id: id,
         entity: assignment,
-        config: config,
+        content_flags: content_flags,
         uri_origin: uri_origin,
         viewport: viewport,
         breakpoint: breakpoint
       )
       |> compose_child(:general)
+      |> compose_child(:branding)
       |> compose_child(:information)
       |> compose_child(:privacy)
       |> compose_child(:consent)
@@ -38,12 +41,12 @@ defmodule Systems.Assignment.SettingsView do
   end
 
   @impl true
-  def compose(:general, %{config: %{general: false}}), do: nil
+  def compose(:general, %{content_flags: %{general: false}}), do: nil
 
   @impl true
   def compose(:general, %{entity: %{info: info}, viewport: viewport, breakpoint: breakpoint}) do
     %{
-      module: Assignment.InfoForm,
+      module: Assignment.GeneralForm,
       params: %{
         entity: info,
         viewport: viewport,
@@ -53,7 +56,22 @@ defmodule Systems.Assignment.SettingsView do
   end
 
   @impl true
-  def compose(:information, %{config: %{information: false}}), do: nil
+  def compose(:branding, %{content_flags: %{branding: false}}), do: nil
+
+  @impl true
+  def compose(:branding, %{entity: %{info: info}, viewport: viewport, breakpoint: breakpoint}) do
+    %{
+      module: Assignment.BrandingForm,
+      params: %{
+        entity: info,
+        viewport: viewport,
+        breakpoint: breakpoint
+      }
+    }
+  end
+
+  @impl true
+  def compose(:information, %{content_flags: %{information: false}}), do: nil
 
   @impl true
   def compose(:information, %{entity: assignment}) do
@@ -70,7 +88,7 @@ defmodule Systems.Assignment.SettingsView do
   end
 
   @impl true
-  def compose(:privacy, %{config: %{privacy: false}}), do: nil
+  def compose(:privacy, %{content_flags: %{privacy: false}}), do: nil
 
   @impl true
   def compose(:privacy, %{entity: assignment, uri_origin: uri_origin}) do
@@ -84,7 +102,7 @@ defmodule Systems.Assignment.SettingsView do
   end
 
   @impl true
-  def compose(:consent, %{config: %{consent: false}}), do: nil
+  def compose(:consent, %{content_flags: %{consent: false}}), do: nil
 
   @impl true
   def compose(:consent, %{entity: assignment}) do
@@ -97,7 +115,7 @@ defmodule Systems.Assignment.SettingsView do
   end
 
   @impl true
-  def compose(:helpdesk, %{config: %{helpdesk: false}}), do: nil
+  def compose(:helpdesk, %{content_flags: %{helpdesk: false}}), do: nil
 
   @impl true
   def compose(:helpdesk, %{entity: assignment}) do
@@ -114,7 +132,7 @@ defmodule Systems.Assignment.SettingsView do
   end
 
   @impl true
-  def compose(:panel, %{config: %{panel: false}}), do: nil
+  def compose(:panel, %{content_flags: %{panel: false}}), do: nil
 
   @impl true
   def compose(:panel, %{entity: assignment, uri_origin: uri_origin}) do
@@ -130,7 +148,7 @@ defmodule Systems.Assignment.SettingsView do
   end
 
   @impl true
-  def compose(:storage, %{config: %{storage: false}}), do: nil
+  def compose(:storage, %{content_flags: %{storage: false}}), do: nil
 
   @impl true
   def compose(:storage, %{entity: assignment, uri_origin: uri_origin}) do
@@ -160,6 +178,12 @@ defmodule Systems.Assignment.SettingsView do
         <.spacing value="L" />
 
         <.child name={:general} fabric={@fabric} >
+          <:footer>
+            <.spacing value="L" />
+          </:footer>
+        </.child>
+
+        <.child name={:branding} fabric={@fabric} >
           <:footer>
             <.spacing value="L" />
           </:footer>

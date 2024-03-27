@@ -30,7 +30,7 @@ defmodule Systems.Graphite.LeaderboardPage do
       action: %{type: :http_get, to: ~p"/graphite/#{tool_id}"},
       face: %{
         type: :plain,
-        label: dgettext("eyra-benchmark", "challenge.forward.button"),
+        label: dgettext("eyra-graphite", "challenge.forward.button"),
         icon: :forward
       }
     }

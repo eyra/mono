@@ -82,7 +82,7 @@ defmodule Systems.Lab.ToolModel do
     def apply_label(_), do: dgettext("link-lab", "apply.cta.title")
     def open_label(_), do: dgettext("link-lab", "open.cta.title")
     def ready?(tool), do: Lab.ToolModel.ready?(tool)
-    def form(_), do: Lab.Form
+    def form(_, _), do: Lab.Form
     def launcher(_), do: nil
 
     def task_labels(_) do

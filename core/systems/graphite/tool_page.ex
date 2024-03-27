@@ -91,16 +91,16 @@ defmodule Systems.Graphite.ToolPage do
           </div>
           <.spacing value="XL" />
 
-          <Text.title2><%= dgettext("eyra-benchmark", "expectations.title") %></Text.title2>
+          <Text.title2><%= dgettext("eyra-graphite", "expectations.title") %></Text.title2>
           <Text.body><%= raw(@vm.expectations) %></Text.body>
           <%!-- <.spacing value="XS" />
-          <Text.sub_head><%= dgettext("eyra-benchmark", "expectations.subhead") %></Text.sub_head> --%>
+          <Text.sub_head><%= dgettext("eyra-graphite", "expectations.subhead") %></Text.sub_head> --%>
           <.spacing value="XL" />
 
-          <Text.title2><%= dgettext("eyra-benchmark", "preparation.title") %></Text.title2>
-          <Text.body><%= dgettext("eyra-benchmark", "preparation.description") %></Text.body>
+          <Text.title2><%= dgettext("eyra-graphite", "preparation.title") %></Text.title2>
+          <Text.body><%= dgettext("eyra-graphite", "preparation.description") %></Text.body>
           <.spacing value="XS" />
-          <Text.title5 align="text-left">1. <%= dgettext("eyra-benchmark", "preparation.dataset.title") %></Text.title5>
+          <Text.title5 align="text-left">1. <%= dgettext("eyra-graphite", "preparation.dataset.title") %></Text.title5>
           <.spacing value="M" />
           <%= if @vm.dataset_button do %>
             <div class="ml-6">
@@ -111,7 +111,7 @@ defmodule Systems.Graphite.ToolPage do
           <% end %>
           <.spacing value="M" />
 
-          <Text.title5 align="text-left">2. <%= dgettext("eyra-benchmark", "preparation.template.title") %></Text.title5>
+          <Text.title5 align="text-left">2. <%= dgettext("eyra-graphite", "preparation.template.title") %></Text.title5>
           <.spacing value="XS" />
           <Text.title5 align="ml-6 text-left"><Button.dynamic {@vm.template_button} /></Text.title5>
           <.spacing value="XL" />

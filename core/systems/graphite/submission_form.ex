@@ -1,47 +1,70 @@
 defmodule Systems.Graphite.SubmissionForm do
-  use CoreWeb.LiveForm
+  use CoreWeb.LiveForm, :fabric
+  use Fabric.LiveComponent
 
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Graphite
 
   # Handle initial update
   @impl true
-  def update(%{id: id, spot: spot, submission: submission, parent: parent}, socket) do
-    close_button = %{
-      action: %{type: :send, event: "close"},
-      face: %{type: :icon, icon: :close}
-    }
-
-    submit_button = %{
-      action: %{type: :submit, form_id: id},
-      face: %{type: :primary, label: dgettext("eyra-benchmark", "submission.form.submit.button")}
-    }
-
-    changeset = Graphite.SubmissionModel.prepare(submission, %{})
-
+  def update(%{id: id, tool: tool, user: user}, socket) do
     {
       :ok,
       socket
       |> assign(
         id: id,
-        spot: spot,
-        submission: submission,
-        parent: parent,
-        close_button: close_button,
-        submit_button: submit_button,
-        changeset: changeset,
+        tool: tool,
+        user: user,
         show_errors: false
       )
+      |> update_submission()
+      |> update_changeset()
+      |> update_submit_button()
+      |> update_cancel_button()
     }
   end
 
-  # Handle Events
-
-  @impl true
-  def handle_event("close", _params, socket) do
-    {:noreply, socket |> close()}
+  defp update_submission(%{assigns: %{tool: tool, user: user}} = socket) do
+    submission = Graphite.Public.get_submission(tool, user, :owner)
+    socket |> assign(submission: submission)
   end
+
+  defp update_changeset(%{assigns: %{submission: submission}} = socket) do
+    changeset =
+      if submission do
+        Graphite.SubmissionModel.prepare(submission, %{})
+      else
+        Graphite.SubmissionModel.prepare(%Graphite.SubmissionModel{}, %{})
+      end
+
+    socket |> assign(changeset: changeset)
+  end
+
+  defp update_submit_button(%{assigns: %{id: id, submission: submission}} = socket) do
+    submit_button_face =
+      if submission do
+        %{type: :primary, label: dgettext("eyra-graphite", "submission.form.update.button")}
+      else
+        %{type: :primary, label: dgettext("eyra-graphite", "submission.form.submit.button")}
+      end
+
+    submit_button = %{
+      action: %{type: :submit, form_id: id},
+      face: submit_button_face
+    }
+
+    socket |> assign(submit_button: submit_button)
+  end
+
+  defp update_cancel_button(%{assigns: %{myself: myself}} = socket) do
+    cancel_button = %{
+      action: %{type: :send, event: "cancel", target: myself},
+      face: %{type: :label, label: dgettext("eyra-ui", "cancel.button")}
+    }
+
+    socket |> assign(cancel_button: cancel_button)
+  end
+
+  # Handle Events
 
   @impl true
   def handle_event("submit", %{"submission_model" => attrs}, socket) do
@@ -52,63 +75,51 @@ defmodule Systems.Graphite.SubmissionForm do
     }
   end
 
+  @impl true
+  def handle_event("cancel", _payload, socket) do
+    {:noreply, socket |> send_event(:parent, "cancel")}
+  end
+
   # Submit
 
-  defp handle_submit(
-         %{assigns: %{spot: spot, submission: %{spot_id: nil} = submission}} = socket,
-         attrs
-       ) do
-    changeset =
-      submission
-      |> Graphite.SubmissionModel.change(attrs)
-      |> Graphite.SubmissionModel.validate()
-      |> Ecto.Changeset.put_assoc(:spot, spot)
+  defp handle_submit(%{assigns: %{submission: nil, tool: tool, user: user}} = socket, attrs) do
+    case Graphite.Public.add_submission(tool, user, attrs) do
+      {:ok, %{graphite_submission: submission}} ->
+        socket
+        |> assign(submission: submission)
+        |> send_event(:parent, "submitted")
 
-    socket |> upsert(changeset)
-  end
-
-  defp handle_submit(%{assigns: %{submission: submission}} = socket, attrs) do
-    changeset =
-      submission
-      |> Graphite.SubmissionModel.change(attrs)
-      |> Graphite.SubmissionModel.validate()
-
-    socket |> upsert(changeset)
-  end
-
-  defp upsert(socket, changeset) do
-    case Graphite.Public.create_submission(changeset) do
-      {:ok, _submission} ->
-        socket |> close()
-
-      {:error, changeset} ->
+      {:error, :graphite_submission, changeset, _} ->
         socket |> assign(show_errors: true, changeset: changeset)
+
+      {:error, :graphite_tool, _changeset, _} ->
+        socket |> put_flash(:error, dgettext("eyra-graphite", "submit.failed.message"))
     end
   end
 
-  defp close(%{assigns: %{parent: parent}} = socket) do
-    update_target(parent, %{module: __MODULE__, action: :close})
-    socket
+  defp handle_submit(%{assigns: %{submission: submission}} = socket, attrs) do
+    case Graphite.Public.update_submission(submission, attrs) do
+      {:ok, %{graphite_submission: _submission}} ->
+        socket |> send_event(:parent, "submitted")
+
+      {:error, :graphite_submission, changeset, _} ->
+        socket |> assign(show_errors: true, changeset: changeset)
+    end
   end
 
   @impl true
   def render(assigns) do
     ~H"""
     <div id="submission_content" phx-hook="LiveContent" data-show-errors={true}>
-      <div class="flex flex-row">
-          <div>
-            <Text.title3><%= dgettext("eyra-benchmark", "submission.form.title") %></Text.title3>
-          </div>
-          <div class="flex-grow" />
-          <Button.dynamic {@close_button} />
-      </div>
-
       <.spacing value="XS" />
       <.form id={@id} :let={form} for={@changeset} phx-submit="submit" phx-target={@myself} >
-        <.text_input form={form} field={:description} label_text={dgettext("eyra-benchmark", "submission.form.description.label")} />
-        <.text_input form={form} field={:github_commit_url} placeholder="http://github/<owner>/<repo>/commit/<sha>" label_text={dgettext("eyra-benchmark", "submission.form.url.label")} />
+        <.text_input form={form} field={:description} label_text={dgettext("eyra-graphite", "submission.form.description.label")} />
+        <.text_input form={form} field={:github_commit_url} placeholder="https://github/<owner>/<repo>/commit/<sha>" label_text={dgettext("eyra-graphite", "submission.form.url.label")} />
         <.spacing value="XS" />
-        <Button.dynamic {@submit_button} />
+        <div class="flex flex-row gap-4">
+          <Button.dynamic {@submit_button} />
+          <Button.dynamic {@cancel_button} />
+        </div>
       </.form>
     </div>
     """

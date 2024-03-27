@@ -2,11 +2,11 @@ defmodule Core.Repo.Migrations.RenameWorkflowType do
   use Ecto.Migration
 
   def up do
-    update(:workflows, :type, "single_task", "many_optional")
+    update(:workflows, :type, "many_optional", "single_task")
   end
 
   def down do
-    update(:workflows, :type, "many_optional", "single_task")
+    update(:workflows, :type, "single_task", "many_optional")
   end
 
   def update(table, field, new_value, old_value) do

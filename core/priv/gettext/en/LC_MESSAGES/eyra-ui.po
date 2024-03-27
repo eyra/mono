@@ -197,3 +197,7 @@ msgstr "Save"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "close.button"
 msgstr "Close"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "done.button"
+msgstr "Done"
