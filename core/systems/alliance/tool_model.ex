@@ -187,7 +187,7 @@ defmodule Systems.Alliance.ToolModel do
     def apply_label(_), do: dgettext("eyra-alliance", "apply.cta.title")
     def open_label(_), do: dgettext("eyra-alliance", "open.cta.title")
     def ready?(tool), do: Alliance.ToolModel.ready?(tool)
-    def form(_), do: Alliance.ToolForm
+    def form(_, _), do: Alliance.ToolForm
     def launcher(tool), do: %{url: Systems.Alliance.ToolModel.safe_uri(tool)}
 
     def task_labels(_) do

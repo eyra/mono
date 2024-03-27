@@ -29,7 +29,7 @@ defmodule Systems.Graphite.ToolPageBuilder do
       if active? do
         %{
           action: %{type: :http_get, to: presigned_data_set, target: "_blank"},
-          face: %{type: :primary, label: dgettext("eyra-benchmark", "dataset.button")}
+          face: %{type: :primary, label: dgettext("eyra-graphite", "dataset.button")}
         }
       else
         nil
@@ -37,7 +37,7 @@ defmodule Systems.Graphite.ToolPageBuilder do
 
     template_button = %{
       action: %{type: :http_get, to: template_repo, target: "_blank"},
-      face: %{type: :link, text: dgettext("eyra-benchmark", "template.button"), font: ""}
+      face: %{type: :link, text: dgettext("eyra-graphite", "template.button"), font: ""}
     }
 
     title =
@@ -73,13 +73,13 @@ defmodule Systems.Graphite.ToolPageBuilder do
           },
           face: %{
             type: :plain,
-            label: dgettext("eyra-benchmark", "leaderboard.forward.button"),
+            label: dgettext("eyra-graphite", "leaderboard.forward.button"),
             icon: :forward
           }
         }
 
         %{
-          title: dgettext("eyra-benchmark", "tabbar.item.leaderboard"),
+          title: dgettext("eyra-graphite", "tabbar.item.leaderboard"),
           forward_button: forward_button,
           component: %{
             id: :leaderboard,
@@ -92,7 +92,7 @@ defmodule Systems.Graphite.ToolPageBuilder do
       end
 
     %{
-      hero_title: dgettext("eyra-benchmark", "tool.page.title"),
+      hero_title: dgettext("eyra-graphite", "tool.page.title"),
       title: title,
       highlights: highlights,
       expectations: expectations,
@@ -125,13 +125,13 @@ defmodule Systems.Graphite.ToolPageBuilder do
       |> Enum.reduce(0, fn count, acc -> acc + count end)
 
     %{
-      title: dgettext("eyra-benchmark", "highlight.submissions.title"),
+      title: dgettext("eyra-graphite", "highlight.submissions.title"),
       text: "#{submission_count}"
     }
   end
 
   def highlight(%{spots: spots}, :spot_count) do
-    %{title: dgettext("eyra-benchmark", "highlight.spots.title"), text: "#{Enum.count(spots)}"}
+    %{title: dgettext("eyra-graphite", "highlight.spots.title"), text: "#{Enum.count(spots)}"}
   end
 
   def highlight(%{deadline: nil}, :deadline) do
@@ -146,8 +146,8 @@ defmodule Systems.Graphite.ToolPageBuilder do
   end
 
   def highlight(days_to_go, :deadline) when is_integer(days_to_go) do
-    title = dgettext("eyra-benchmark", "highlight.deadline.title")
-    text = dngettext("eyra-benchmark", "1 day", "%{count} days", max(0, days_to_go))
+    title = dgettext("eyra-graphite", "highlight.deadline.title")
+    text = dngettext("eyra-graphite", "1 day", "%{count} days", max(0, days_to_go))
 
     %{title: title, text: text}
   end

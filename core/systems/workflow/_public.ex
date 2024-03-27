@@ -3,6 +3,7 @@ defmodule Systems.Workflow.Public do
   alias Ecto.Multi
   alias Core.Repo
 
+  alias Core.Authorization
   alias Frameworks.Signal
 
   alias Systems.Workflow
@@ -12,6 +13,7 @@ defmodule Systems.Workflow.Public do
   alias Systems.Lab
   alias Systems.Graphite
   alias Systems.Project
+  alias Systems.Instruction
 
   def list_items(workflow, preload \\ [])
   def list_items(%Workflow.Model{id: id}, preload), do: list_items(id, preload)
@@ -75,15 +77,19 @@ defmodule Systems.Workflow.Public do
     |> add_item(item, director)
   end
 
-  def add_item(%Workflow.Model{} = workflow, %{id: id, type: type} = _item, director)
+  def add_item(
+        %Workflow.Model{} = workflow,
+        %{special: special, tool: tool_type} = _item,
+        director
+      )
       when is_atom(director) do
     Multi.new()
     |> Multi.run(:position, fn _, _ ->
       {:ok, item_count(workflow)}
     end)
-    |> Multi.insert(:tool, prepare_tool(type, %{director: director}))
+    |> Multi.insert(:tool, prepare_tool(tool_type, %{director: director}))
     |> Multi.insert(:workflow_item, fn %{position: position, tool: tool} ->
-      tool_ref = prepare_tool_ref(id, type, tool)
+      tool_ref = prepare_tool_ref(special, tool_type, tool)
       prepare_item(workflow, position, tool_ref)
     end)
     |> Signal.Public.multi_dispatch({:workflow_item, :added})
@@ -111,11 +117,25 @@ defmodule Systems.Workflow.Public do
     |> Ecto.Changeset.put_assoc(tool_type, tool)
   end
 
-  defp prepare_tool(:alliance_tool, %{} = attrs), do: Alliance.Public.prepare_tool(attrs)
-  defp prepare_tool(:document_tool, %{} = attrs), do: Document.Public.prepare_tool(attrs)
-  defp prepare_tool(:feldspar_tool, %{} = attrs), do: Feldspar.Public.prepare_tool(attrs)
-  defp prepare_tool(:lab_tool, %{} = attrs), do: Lab.Public.prepare_tool(attrs)
-  defp prepare_tool(:graphite_tool, %{} = attrs), do: Graphite.Public.prepare_tool(attrs)
+  def prepare_tool(_, _, auth_node \\ Authorization.prepare_node())
+
+  def prepare_tool(:alliance_tool, %{} = attrs, auth_node),
+    do: Alliance.Public.prepare_tool(attrs, auth_node)
+
+  def prepare_tool(:document_tool, %{} = attrs, auth_node),
+    do: Document.Public.prepare_tool(attrs, auth_node)
+
+  def prepare_tool(:feldspar_tool, %{} = attrs, auth_node),
+    do: Feldspar.Public.prepare_tool(attrs, auth_node)
+
+  def prepare_tool(:lab_tool, %{} = attrs, auth_node),
+    do: Lab.Public.prepare_tool(attrs, auth_node)
+
+  def prepare_tool(:graphite_tool, %{} = attrs, auth_node),
+    do: Graphite.Public.prepare_tool(attrs, auth_node)
+
+  def prepare_tool(:instruction_tool, %{} = attrs, auth_node),
+    do: Instruction.Public.prepare_tool(attrs, auth_node)
 
   def delete(%Workflow.ItemModel{workflow_id: workflow_id} = item) do
     Multi.new()

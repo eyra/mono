@@ -232,7 +232,7 @@ defmodule Systems.Graphite.PublicTest do
   end
 
   defp create_tool() do
-    Factories.insert!(:graphite_tool, %{max_submissions: 3})
+    Factories.insert!(:graphite_tool, %{})
   end
 
   defp create_submission(tool, description \\ "Method X") do

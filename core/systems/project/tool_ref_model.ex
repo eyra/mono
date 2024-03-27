@@ -7,14 +7,13 @@ defmodule Systems.Project.ToolRefModel do
 
   alias Frameworks.Concept
 
-  alias Systems.{
-    Project,
-    Document,
-    Alliance,
-    Lab,
-    Feldspar,
-    Graphite
-  }
+  alias Systems.Project
+  alias Systems.Document
+  alias Systems.Alliance
+  alias Systems.Lab
+  alias Systems.Feldspar
+  alias Systems.Graphite
+  alias Systems.Instruction
 
   schema "tool_refs" do
     field(:special, Ecto.Atom)
@@ -24,6 +23,7 @@ defmodule Systems.Project.ToolRefModel do
     belongs_to(:feldspar_tool, Feldspar.ToolModel)
     belongs_to(:graphite_tool, Graphite.ToolModel)
     belongs_to(:document_tool, Document.ToolModel)
+    belongs_to(:instruction_tool, Instruction.ToolModel)
 
     has_one(:item, Project.ItemModel, foreign_key: :tool_ref_id)
 
@@ -47,7 +47,8 @@ defmodule Systems.Project.ToolRefModel do
         :document_tool,
         :lab_tool,
         :feldspar_tool,
-        :graphite_tool
+        :graphite_tool,
+        :instruction_tool
       ])
 
   def preload_graph(:alliance_tool),
@@ -64,11 +65,16 @@ defmodule Systems.Project.ToolRefModel do
   def preload_graph(:graphite_tool),
     do: [graphite_tool: Graphite.ToolModel.preload_graph(:down)]
 
+  def preload_graph(:instruction_tool),
+    do: [instruction_tool: Instruction.ToolModel.preload_graph(:down)]
+
   def auth_tree(%Project.ToolRefModel{} = tool_ref) do
     Concept.ToolModel.auth_tree(tool(tool_ref))
   end
 
-  def flatten(item), do: tool(item)
+  def flatten(tool_ref), do: tool(tool_ref)
+
+  def form(%{special: special} = tool_ref), do: Concept.ToolModel.form(tool(tool_ref), special)
 
   def external_path(%{alliance_tool: alliance_tool}, next_id) do
     Alliance.ToolModel.external_path(alliance_tool, next_id)
@@ -84,12 +90,13 @@ defmodule Systems.Project.ToolRefModel do
   def tool(%{document_tool: %{id: _id} = tool}), do: tool
   def tool(%{lab_tool: %{id: _id} = tool}), do: tool
   def tool(%{graphite_tool: %{id: _id} = tool}), do: tool
+  def tool(%{instruction_tool: %{id: _id} = tool}), do: tool
 
   def tag(%Project.ToolRefModel{special: :questionnaire}),
     do: dgettext("eyra-project", "tool_ref.tag.questionnaire")
 
   def tag(%Project.ToolRefModel{special: :graphite}),
-    do: dgettext("eyra-project", "tool_ref.tag.benchmark")
+    do: dgettext("eyra-project", "tool_ref.tag.graphite")
 
   def tag(%Project.ToolRefModel{special: _special}) do
     dgettext("eyra-project", "tool_ref.tag.default")

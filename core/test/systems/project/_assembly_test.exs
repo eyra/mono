@@ -25,7 +25,11 @@ defmodule Systems.Project.AssemblyTest do
                storage_endpoint_id: nil,
                workflow: %Systems.Workflow.Model{
                  type: :many_mandatory,
-                 items: []
+                 items: [
+                   %Systems.Workflow.ItemModel{},
+                   %Systems.Workflow.ItemModel{},
+                   %Systems.Workflow.ItemModel{}
+                 ]
                }
              }
            } = item
