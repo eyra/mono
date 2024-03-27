@@ -232,15 +232,15 @@ msgstr "Show"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.body"
-msgstr "Add an information page to onboard and inform your participants. Were your participants already informed in some other way? Choose 'Skip'."
+msgstr "Add an about page to onboard and inform your participants. Were your participants already informed in some other way? Choose 'Skip'."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.title"
-msgstr "Information page"
+msgstr "About page"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.intro.title"
-msgstr "Information"
+msgstr "About"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.support.body"
