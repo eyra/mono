@@ -20,22 +20,6 @@ msgid "item.description.label"
 msgstr "Taak beschrijving"
 
 #, elixir-autogen, elixir-format
-msgid "item.donate.description"
-msgstr "Biedt deelnemers de mogelijkheid om data te doneren."
-
-#, elixir-autogen, elixir-format
-msgid "item.donate.title"
-msgstr "Donatie"
-
-#, elixir-autogen, elixir-format
-msgid "item.download.description"
-msgstr "Instructies voor deelnemers over hoe ze de data kunnen downloaden."
-
-#, elixir-autogen, elixir-format
-msgid "item.download.title"
-msgstr "Download handleiding"
-
-#, elixir-autogen, elixir-format
 msgid "item.group.label"
 msgstr "Databron"
 
@@ -60,14 +44,6 @@ msgid "item.list.title"
 msgstr "Takenlijst"
 
 #, elixir-autogen, elixir-format
-msgid "item.request.description"
-msgstr "Instructies voor deelnemers over hoe ze de data aan moeten vragen."
-
-#, elixir-autogen, elixir-format
-msgid "item.request.title"
-msgstr "Aanvraag handleiding"
-
-#, elixir-autogen, elixir-format
 msgid "item.title.label"
 msgstr "Taak titel"
 
@@ -78,11 +54,3 @@ msgstr "Takenlijst"
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.workflow.forward"
 msgstr "Takenlijst"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "item.questionnaire.description"
-msgstr "Stuurt deelnemers naar een online vragenlijst."
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "item.questionnaire.title"
-msgstr "Vragenlijst"

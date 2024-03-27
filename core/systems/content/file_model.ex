@@ -22,4 +22,6 @@ defmodule Systems.Content.FileModel do
     changeset
     |> validate_required(@required_fields)
   end
+
+  def preload_graph(:down), do: preload_graph([])
 end

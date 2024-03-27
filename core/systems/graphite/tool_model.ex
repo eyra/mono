@@ -11,14 +11,13 @@ defmodule Systems.Graphite.ToolModel do
   alias Systems.Graphite
 
   schema "graphite_tools" do
-    field(:max_submissions, :integer)
     belongs_to(:auth_node, Core.Authorization.Node)
     has_many(:submissions, Graphite.SubmissionModel, foreign_key: :tool_id)
 
     timestamps()
   end
 
-  @fields ~w(max_submissions)a
+  @fields ~w()a
   @required_fields @fields
 
   def changeset(tool, params) do
@@ -43,15 +42,8 @@ defmodule Systems.Graphite.ToolModel do
   def preload_graph(:submissions),
     do: [submissions: Graphite.SubmissionModel.preload_graph(:down)]
 
-  def preload_graph(:leaderboards),
-    do: [leaderboards: Graphite.LeaderboardModel.preload_graph(:down)]
-
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(tool), do: tool.auth_node_id
-  end
-
-  defimpl Frameworks.Concept.Directable do
-    def director(%{director: director}), do: Frameworks.Concept.System.director(director)
   end
 
   def ready?(tool) do
@@ -66,20 +58,28 @@ defmodule Systems.Graphite.ToolModel do
     alias Systems.Graphite
     def key(_), do: :graphite
     def auth_tree(%{auth_node: auth_node}), do: auth_node
-    def apply_label(_), do: dgettext("eyra-benchmark", "apply.cta.title")
-    def open_label(_), do: dgettext("eyra-benchmark", "open.cta.title")
-    def ready?(tool), do: Graphite.ToolModel.ready?(tool)
-    def form(_), do: Graphite.Form
-    def launcher(_), do: nil
+    def apply_label(_), do: ""
+    def open_label(_), do: ""
+    def ready?(_), do: true
+    def form(_, _), do: Graphite.ToolForm
+
+    def launcher(tool) do
+      %{
+        module: Graphite.ToolView,
+        params: %{
+          tool: tool
+        }
+      }
+    end
 
     def task_labels(_) do
       %{
-        pending: dgettext("eyra-benchmark", "pending.label"),
-        participated: dgettext("eyra-benchmark", "participated.label")
+        pending: dgettext("eyra-graphite", "pending.label"),
+        participated: dgettext("eyra-graphite", "participated.label")
       }
     end
 
     def attention_list_enabled?(_t), do: false
-    def group_enabled?(_t), do: true
+    def group_enabled?(_t), do: false
   end
 end

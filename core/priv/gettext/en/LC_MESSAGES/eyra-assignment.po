@@ -58,10 +58,6 @@ msgstr "%{target} credits required"
 msgid "close.button"
 msgstr "Finish up"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "content.title"
-msgstr "Data donation"
-
 #, elixir-autogen, elixir-format
 msgid "open.button"
 msgstr "Open"
@@ -357,3 +353,31 @@ msgstr "Participants"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.participants.forward"
 msgstr "Go to Participants"
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.donate.description"
+msgstr "Enables participants to donate data."
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.download.description"
+msgstr "Instructions for participants on how to download digital trace data."
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.questionnaire.description"
+msgstr "Redirects participants to an online questionnaire."
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.request.description"
+msgstr "Instructions for participants on how to request digital trace data."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "workflow_item.download_instruction.description"
+msgstr "Instructions for participants on how to download the data set."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "workflow_item.fork_instruction.description"
+msgstr "Instructions for participants on how to fork the repository."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "workflow_item.submit.description"
+msgstr "Enables participants to submit an algorithm."

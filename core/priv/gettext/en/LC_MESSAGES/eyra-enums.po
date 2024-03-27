@@ -389,3 +389,31 @@ msgstr "Benchmark Challenge"
 #, elixir-autogen, elixir-format
 msgid "templates.benchmark_challenge"
 msgstr "Benchmark Challenge"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.donate"
+msgstr "Donate"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.questionnaire"
+msgstr "Questionnaire"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.download_manual"
+msgstr "Download manual"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.request_manual"
+msgstr "Request manual"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.submit"
+msgstr "Submit"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.download_instruction"
+msgstr "Download"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.fork_instruction"
+msgstr "Fork"

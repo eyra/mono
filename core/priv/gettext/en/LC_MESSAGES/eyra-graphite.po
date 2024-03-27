@@ -1,67 +1,43 @@
-## This file is a PO Template file.
-##
-## "msgid"s here are often extracted from source code.
-## Add new messages manually only if they're dynamic
-## messages that can't be statically extracted.
-##
-## Run "mix gettext.extract" to bring this file up to
-## date. Leave "msgstr"s empty as changing them here has no
-## effect: edit them in PO (.po) files instead.
-#
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
 msgid ""
 msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "content.title"
-msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.leaderboard"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.leaderboard.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "form.data_set.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "form.deadline.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "form.expectations.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "form.title.label"
-msgstr ""
+msgstr "Leaderboard"
 
 #, elixir-autogen, elixir-format
 msgid "tool.page.title"
-msgstr ""
+msgstr "Challenge"
 
 #, elixir-autogen, elixir-format
 msgid "submission.form.title"
-msgstr ""
+msgstr "Submission"
 
 #, elixir-autogen, elixir-format
 msgid "expectations.title"
-msgstr ""
+msgstr "Description"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.deadline.title"
-msgstr ""
+msgstr "Days untill deadline"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.spots.title"
-msgstr ""
+msgstr "Number of teams"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.submissions.title"
-msgstr ""
+msgstr "Number of submissions"
 
 #, elixir-autogen, elixir-format
 msgid "1 day"
@@ -69,23 +45,23 @@ msgid_plural "%{count} days"
 msgstr[0] ""
 msgstr[1] ""
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "submission.form.url.label"
-msgstr ""
+msgstr "Github commit url"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "submission.form.description.label"
-msgstr ""
+msgstr "Description"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "submission.form.submit.button"
-msgstr ""
+msgstr "Submit"
 
 #, elixir-autogen, elixir-format
 msgid "invalid.github.commit.url.message"
-msgstr ""
+msgstr "Please enter a valid Github commit url"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "1 submission"
 msgid_plural "%{count} submissions"
 msgstr[0] ""
@@ -98,107 +74,83 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-autogen, elixir-format
-msgid "form.template_repo.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "preparation.dataset.title"
-msgstr ""
+msgstr "Download the example data to tune your method"
 
 #, elixir-autogen, elixir-format
 msgid "preparation.description"
-msgstr ""
+msgstr "To prepare your submission, follow the steps below."
 
 #, elixir-autogen, elixir-format
 msgid "preparation.template.title"
-msgstr ""
+msgstr "Fork and clone the example repository and follow the instructions to prepare your submission"
 
 #, elixir-autogen, elixir-format
 msgid "preparation.title"
-msgstr ""
+msgstr "Preparation"
 
 #, elixir-autogen, elixir-format
 msgid "dataset.button"
-msgstr ""
+msgstr "Download data"
 
 #, elixir-autogen, elixir-format
 msgid "template.button"
-msgstr ""
+msgstr "Github example repository"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.submissions"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.submissions.forward"
-msgstr ""
+msgstr "Submissions"
 
 #, elixir-autogen, elixir-format
 msgid "import.leaderboard.title"
-msgstr ""
+msgstr "Import"
 
 #, elixir-autogen, elixir-format
 msgid "csv-import-button"
-msgstr ""
+msgstr "Import selected file"
 
 #, elixir-autogen, elixir-format
 msgid "csv-replace-file-button"
-msgstr ""
+msgstr "Replace file"
 
 #, elixir-autogen, elixir-format
 msgid "csv-select-file-button"
-msgstr ""
+msgstr "Select file"
 
 #, elixir-autogen, elixir-format
 msgid "csv-select-placeholder"
-msgstr ""
+msgstr "Select a leaderboard csv file"
 
 #, elixir-autogen, elixir-format
 msgid "challenge.forward.button"
-msgstr ""
+msgstr "Go to challenge"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.forward.button"
-msgstr ""
+msgstr "Public"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.github.label"
-msgstr ""
+msgstr "Github"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.method.label"
-msgstr ""
+msgstr "Method"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.position.label"
-msgstr ""
+msgstr "Position"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.score.label"
-msgstr ""
+msgstr "Score"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.team.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "apply.cta.title"
-msgstr ""
+msgstr "Team"
 
 #, elixir-autogen, elixir-format
 msgid "assignment.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "close.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "open.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "open.cta.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -209,14 +161,10 @@ msgstr ""
 msgid "pending.label"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "preview.button"
-msgstr ""
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.form.update.button"
+msgstr "Update"
 
 #, elixir-autogen, elixir-format
-msgid "publish.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "retract.button"
+msgid "submit.failed.message"
 msgstr ""

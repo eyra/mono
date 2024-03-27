@@ -72,7 +72,7 @@ defmodule Systems.Graphite.SubmissionOverview do
         <Margin.y id={:page_top} />
         <div class="flex flex-row">
           <Text.title2>
-            <%= dgettext("eyra-benchmark", "tabbar.item.submissions")%> <span class="text-primary"> <%= Enum.count(@submission_items) %></span>
+            <%= dgettext("eyra-graphite", "tabbar.item.submissions")%> <span class="text-primary"> <%= Enum.count(@submission_items) %></span>
           </Text.title2>
           <div class="flex-grow" />
           <Button.dynamic {@export_button} />

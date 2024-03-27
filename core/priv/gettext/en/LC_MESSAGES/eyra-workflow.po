@@ -20,22 +20,6 @@ msgid "item.description.label"
 msgstr "Task description"
 
 #, elixir-autogen, elixir-format
-msgid "item.donate.description"
-msgstr "Enables participants to donate data."
-
-#, elixir-autogen, elixir-format
-msgid "item.donate.title"
-msgstr "Donate"
-
-#, elixir-autogen, elixir-format
-msgid "item.download.description"
-msgstr "Instructions for participants on how to download digital trace data."
-
-#, elixir-autogen, elixir-format
-msgid "item.download.title"
-msgstr "Download manual"
-
-#, elixir-autogen, elixir-format
 msgid "item.group.label"
 msgstr "Data source"
 
@@ -60,14 +44,6 @@ msgid "item.list.title"
 msgstr "Workflow"
 
 #, elixir-autogen, elixir-format
-msgid "item.request.description"
-msgstr "Instructions for participants on how to request digital trace data."
-
-#, elixir-autogen, elixir-format
-msgid "item.request.title"
-msgstr "Request manual"
-
-#, elixir-autogen, elixir-format
 msgid "item.title.label"
 msgstr "Task title"
 
@@ -78,11 +54,3 @@ msgstr "Workflow"
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.workflow.forward"
 msgstr "Workflow"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "item.questionnaire.description"
-msgstr "Redirects participants to an online questionnaire."
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "item.questionnaire.title"
-msgstr "Questionnaire"

@@ -58,10 +58,6 @@ msgstr "%{target} credits vereist"
 msgid "close.button"
 msgstr "Afronden"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "content.title"
-msgstr "Data donatie"
-
 #, elixir-autogen, elixir-format
 msgid "open.button"
 msgstr "Open"
@@ -357,3 +353,31 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.participants.forward"
 msgstr "Ga naar Monitor"
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.donate.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.download.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.questionnaire.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.request.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "workflow_item.download_instruction.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "workflow_item.fork_instruction.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "workflow_item.submit.description"
+msgstr ""
