@@ -2,7 +2,7 @@
 
 Thank you for creating an account on Next. You are only one step removed from being able to use the platform.
 <br /><br />
-Click <a href="<%= @url %>">here</a> to sign in. Your account will be activated and ready to use. 
+Click <a href="<%= @url %>">here</a> to activate your account. 
 <br /><br />
 If you did not register an account on Next, you can discard this email.
 <br /><br />
