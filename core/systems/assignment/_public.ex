@@ -33,6 +33,11 @@ defmodule Systems.Assignment.Public do
     |> Repo.get!(id)
   end
 
+  def get(id, preload \\ []) do
+    from(a in Assignment.Model, preload: ^preload)
+    |> Repo.get(id)
+  end
+
   def get_workflow!(id, preload \\ []) do
     from(a in Workflow.Model, preload: ^preload)
     |> Repo.get!(id)
@@ -318,8 +323,10 @@ defmodule Systems.Assignment.Public do
     Core.Persister.save(assignment, changeset)
   end
 
-  def owner?(assignment, user) do
-    Core.Authorization.user_has_role?(user, assignment, :owner)
+  def add_participant!(%Assignment.Model{crew: crew}, user) do
+    if not Crew.Public.member?(crew, user) do
+      {:ok, _} = Crew.Public.apply_member_with_role(crew, user, :participant)
+    end
   end
 
   def add_owner!(assignment, user) do

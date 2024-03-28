@@ -147,7 +147,7 @@ defmodule CoreWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, dgettext("eyra-ui", "authentication.required.error"))
+      |> put_flash(:info, dgettext("eyra-ui", "authentication.required.message"))
       |> maybe_store_return_to()
       |> redirect(to: ~p"/user/signin")
       |> halt()
