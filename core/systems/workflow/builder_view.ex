@@ -1,6 +1,8 @@
 defmodule Systems.Workflow.BuilderView do
   use CoreWeb, :live_component
 
+  require Logger
+
   import Frameworks.Pixel.SidePanel
 
   alias Systems.{
@@ -84,8 +86,18 @@ defmodule Systems.Workflow.BuilderView do
   defp get_title(%{tool_ref: %{special: special}}, %{
          assigns: %{config: %{library: %{items: library_items}}}
        }) do
-    %{title: title} = Enum.find(library_items, &(&1.special == special))
-    title
+    case Enum.find(library_items, &(&1.special == special)) do
+      %{title: title} ->
+        title
+
+      nil ->
+        Logger.error("No library item found for workflow item with special: #{special}")
+
+        special
+        |> Atom.to_string()
+        |> String.replace("_", " ")
+        |> String.capitalize()
+    end
   end
 
   defp get_library_item(socket, item_id) when is_binary(item_id) do
