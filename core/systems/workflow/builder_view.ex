@@ -91,7 +91,7 @@ defmodule Systems.Workflow.BuilderView do
         title
 
       nil ->
-        Logger.notice("No match found for: #{special}")
+        Logger.error("No library item found for workflow item with special: #{special}")
 
         special
         |> Atom.to_string()
