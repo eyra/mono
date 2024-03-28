@@ -381,3 +381,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "workflow_item.submit.description"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invite.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invite.panel.title"
+msgstr ""

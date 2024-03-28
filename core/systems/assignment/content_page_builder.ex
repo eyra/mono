@@ -258,7 +258,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp create_tab(
          :participants,
-         _assignment,
+         assignment,
          _template,
          show_errors,
          _assigns
@@ -271,7 +271,9 @@ defmodule Systems.Assignment.ContentPageBuilder do
       forward_title: dgettext("eyra-assignment", "tabbar.item.participants.forward"),
       type: :fullpage,
       live_component: Assignment.ParticipantsView,
-      props: %{}
+      props: %{
+        assignment: assignment
+      }
     }
   end
 

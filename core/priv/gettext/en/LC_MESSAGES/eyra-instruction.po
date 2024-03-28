@@ -40,10 +40,6 @@ msgid "fork_page.body"
 msgstr "Fork the following <a href=\"%{url}\">repository</a> to start working on your algorithm."
 
 #, elixir-autogen, elixir-format
-msgid "download_page.body"
-msgstr "Download <a href=\"%{url}\">%{name}</a> to start working on your algorithm."
-
-#, elixir-autogen, elixir-format
 msgid "page.title"
 msgstr "Instructions"
 
@@ -63,3 +59,6 @@ msgstr "Replace file"
 msgid "download_form.file.select.button"
 msgstr "Select file"
 
+#, elixir-autogen, elixir-format
+msgid "download_page.body"
+msgstr "Download <a href=\"%{url}\">%{name}</a> to start working on your algorithm."

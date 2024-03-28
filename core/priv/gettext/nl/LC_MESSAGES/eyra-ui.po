@@ -107,7 +107,7 @@ msgid "timestamp.yesterday"
 msgstr "gisteren"
 
 #, elixir-autogen, elixir-format
-msgid "authentication.required.error"
+msgid "authentication.required.message"
 msgstr "Log in om deze pagina te bekijken"
 
 #, elixir-autogen, elixir-format

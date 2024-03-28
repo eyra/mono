@@ -381,3 +381,11 @@ msgstr "Instructions for participants on how to fork the repository."
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.submit.description"
 msgstr "Enables participants to submit an algorithm."
+
+#, elixir-autogen, elixir-format
+msgid "invite.panel.annotation"
+msgstr "The url below can be used to invite users to participate on this assignment. When users click on this link they will be asked to log in, registered as participant and forwarded to start on the assignment."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "invite.panel.title"
+msgstr "Invite your participants"

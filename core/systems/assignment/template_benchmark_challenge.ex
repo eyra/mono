@@ -11,7 +11,6 @@ defmodule Systems.Assignment.TemplateBenchmarkChallenge do
 
     def content_flags(_t) do
       Map.merge(Assignment.ContentFlags.new(), %{
-        general: false,
         panel: false,
         storage: false
       })
