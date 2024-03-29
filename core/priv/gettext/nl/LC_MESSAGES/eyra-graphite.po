@@ -47,19 +47,19 @@ msgstr[1] "%{count} dagen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.form.url.label"
-msgstr "Github commit url"
+msgstr "Jouw GitHub commit URL"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.form.description.label"
-msgstr "Omschrijving"
+msgstr "Methode omschrijving voor leaderboard"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.form.submit.button"
-msgstr "Dien methode in"
+msgstr "Indienen"
 
 #, elixir-autogen, elixir-format
 msgid "invalid.github.commit.url.message"
-msgstr "Voer een geldige Github commit url in"
+msgstr "Ongeldige GitHub commit URL (zie challenge repo instructies)"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "1 submission"

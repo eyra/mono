@@ -408,12 +408,12 @@ msgstr "Request manual"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_workflow_item_types.submit"
-msgstr "Submit"
+msgstr "Submit method"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_workflow_item_types.download_instruction"
-msgstr "Download"
+msgstr "Download data"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_workflow_item_types.fork_instruction"
-msgstr "Fork"
+msgstr "Prepare method"
