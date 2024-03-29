@@ -37,7 +37,7 @@ msgstr "https://github/<owner>/<repo>"
 
 #, elixir-autogen, elixir-format
 msgid "fork_page.body"
-msgstr "Fork the following <a href=\"%{url}\">repository</a> to start working on your algorithm."
+msgstr "Fork the following <a href=\"%{url}\" target=\"_blank\">repository</a> to start working on your algorithm."
 
 #, elixir-autogen, elixir-format
 msgid "page.title"
@@ -61,4 +61,4 @@ msgstr "Select file"
 
 #, elixir-autogen, elixir-format
 msgid "download_page.body"
-msgstr "Download <a href=\"%{url}\">%{name}</a> to start working on your algorithm."
+msgstr "Download <a href=\"%{url}\" download>%{name}</a> to start working on your algorithm."
