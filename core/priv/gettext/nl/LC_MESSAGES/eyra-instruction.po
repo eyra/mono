@@ -37,7 +37,7 @@ msgstr "https://github/<owner>/<repo>"
 
 #, elixir-autogen, elixir-format
 msgid "fork_page.body"
-msgstr "Fork de volgende <a href=\"%{url}\" target=\"blank\">repository</a> om aan de slag te gaan met je algoritme."
+msgstr "Gebruik de template GitHub repository om je methode voor te bereiden voor submissie. Volg de instructies in de GitHub repository over hoe je een kopie maakt van de repository en deze kan gebruiken om je submissie voor te bereiden. Bezoek de <a href=\"%{url}\" target=\"blank\">template GitHub repository</a>."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "page.title"
