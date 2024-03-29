@@ -37,11 +37,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "fork_page.body"
-msgstr ""
+msgstr "Fork de volgende <a href=\"%{url}\">repository</a> om aan de slag te gaan met je algoritme."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "page.title"
-msgstr ""
+msgstr "Instructies"
 
 #, elixir-autogen, elixir-format
 msgid "download_form.file.label"
@@ -61,4 +61,4 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "download_page.body"
-msgstr ""
+msgstr "Download <a href=\"%{url}\">%{name}</a> om aan de slag te gaan met je algoritme."
