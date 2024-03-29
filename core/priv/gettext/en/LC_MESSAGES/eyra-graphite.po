@@ -59,7 +59,7 @@ msgstr "Submit"
 
 #, elixir-autogen, elixir-format
 msgid "invalid.github.commit.url.message"
-msgstr "Invalid GitHub commit URL (see challenge repo for instructions)"
+msgstr "Invalid GitHub commit URL (see challenge repo instructions)"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "1 submission"
