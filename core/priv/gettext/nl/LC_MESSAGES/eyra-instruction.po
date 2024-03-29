@@ -45,11 +45,11 @@ msgstr "Instructies"
 
 #, elixir-autogen, elixir-format
 msgid "download_form.file.label"
-msgstr "Bestand"
+msgstr "Data voor participanten"
 
 #, elixir-autogen, elixir-format
 msgid "download_form.file.placeholder"
-msgstr "Selecteer een zip bestand"
+msgstr "Voeg een zip bestand toe"
 
 #, elixir-autogen, elixir-format
 msgid "download_form.file.replace.button"
