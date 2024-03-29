@@ -29,11 +29,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "repository_url.label"
-msgstr ""
+msgstr "Repository"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "repository_url.placeholder"
-msgstr ""
+msgstr "https://github/<owner>/<repo>"
 
 #, elixir-autogen, elixir-format
 msgid "fork_page.body"
@@ -45,19 +45,19 @@ msgstr "Instructies"
 
 #, elixir-autogen, elixir-format
 msgid "download_form.file.label"
-msgstr ""
+msgstr "Bestand"
 
 #, elixir-autogen, elixir-format
 msgid "download_form.file.placeholder"
-msgstr ""
+msgstr "Selecteer een zip bestand"
 
 #, elixir-autogen, elixir-format
 msgid "download_form.file.replace.button"
-msgstr ""
+msgstr "Vervang bestand"
 
 #, elixir-autogen, elixir-format
 msgid "download_form.file.select.button"
-msgstr ""
+msgstr "Selecteer bestand"
 
 #, elixir-autogen, elixir-format
 msgid "download_page.body"
