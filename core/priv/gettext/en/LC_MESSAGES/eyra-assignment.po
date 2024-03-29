@@ -372,20 +372,20 @@ msgstr "Instructions for participants on how to request digital trace data."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.download_instruction.description"
-msgstr "Instructions for participants on how to download the data set."
+msgstr "Enables participants to download your participant data zip file."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.fork_instruction.description"
-msgstr "Instructions for participants on how to fork the repository."
+msgstr "Provides participants with your template GitHub repository link that they need to prepare their method for submission."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.submit.description"
-msgstr "Enables participants to submit an algorithm."
+msgstr "Enables participants to submit their method to the challenge with a GitHub repository commit link."
 
 #, elixir-autogen, elixir-format
 msgid "invite.panel.annotation"
-msgstr "The url below can be used to invite users to participate on this assignment. When users click on this link they will be asked to log in, registered as participant and forwarded to start on the assignment."
+msgstr "Participants first need to create an account. After this, the url below can be used to invite participants. When participants click on this link they will be asked to sign in. After sign in, they are forwarded to your challenge."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "invite.panel.title"
-msgstr "Invite your participants"
+msgstr "Invite participants"
