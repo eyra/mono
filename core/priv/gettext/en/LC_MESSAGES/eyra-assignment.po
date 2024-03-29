@@ -264,7 +264,7 @@ msgstr "Show"
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.body"
-msgstr "We informed the researcher that you declined to participate. You can close the browser. If you wish to reconsider participation, close this popup to continue."
+msgstr "You declined to participate. You can close the browser. If you wish to reconsider participation, close this popup to continue."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "declined_view.title"
@@ -272,11 +272,11 @@ msgstr "No consent"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Thank you for your participation. You are now finished and can close your browser."
+msgstr "We are grateful for your contribution. You finished all tasks on the list. You can close your browser to quite or close this popup to revisit the task list."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
-msgstr "Thank you"
+msgstr "Thank you for your participation"
 
 #, elixir-autogen, elixir-format
 msgid "privacy_doc.placeholder"
