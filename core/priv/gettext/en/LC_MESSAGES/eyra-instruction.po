@@ -61,4 +61,4 @@ msgstr "Select file"
 
 #, elixir-autogen, elixir-format
 msgid "download_page.body"
-msgstr "Download <a href=\"%{url}\" download>%{name}</a> to start working on your algorithm."
+msgstr "You can use the training data uploaded by the challenge organizers to test and tune your method. <br><br>Click on the following link to download the data: <a href=\"%{url}\" download>%{name}</a>."
