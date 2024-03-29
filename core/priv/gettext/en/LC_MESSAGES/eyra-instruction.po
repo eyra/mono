@@ -37,7 +37,7 @@ msgstr "https://github/<owner>/<repo>"
 
 #, elixir-autogen, elixir-format
 msgid "fork_page.body"
-msgstr "Fork the following <a href=\"%{url}\" target=\"_blank\">repository</a> to start working on your algorithm."
+msgstr "Prepare your method for submission by using the template GitHub repository. Follow the instructions in the GitHub repository on how to copy the repository and prepare your submission. <br><br>Visit the <a href=\"%{url}\" target=\"_blank\">template GitHub repository</a>."
 
 #, elixir-autogen, elixir-format
 msgid "page.title"
@@ -61,4 +61,4 @@ msgstr "Select file"
 
 #, elixir-autogen, elixir-format
 msgid "download_page.body"
-msgstr "You can use the training data uploaded by the challenge organizers to test and tune your method. <br><br>Click on the following link to download the data: <a href=\"%{url}\" download>%{name}</a>."
+msgstr "You can use the participant data uploaded by the challenge organizers to test and tune your method. <br><br>Click on the following link to download the data: <a href=\"%{url}\" download>%{name}</a>."
