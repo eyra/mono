@@ -48,6 +48,8 @@ defmodule Systems.Assignment.ExternalPanelController do
     not valid_id?(id)
   end
 
+  def valid_id?(nil), do: false
+
   def valid_id?(id) do
     String.length(id) <= @id_max_lenght and Regex.match?(@id_valid_regex, id)
   end
