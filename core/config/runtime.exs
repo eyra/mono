@@ -39,7 +39,7 @@ if config_env() == :prod do
   # PHOENIX LIVE UPLOAD
 
   config :core, CoreWeb.FileUploader,
-    max_file_size: System.get_env("STORAGE_UPLOAD_MAX_SIZE", 100_000_000)
+    max_file_size: System.get_env("STORAGE_UPLOAD_MAX_SIZE", "100000000") |> String.to_integer()
 
   # MAILGUN
 
