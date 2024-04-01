@@ -47,11 +47,11 @@ msgstr[1] ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.form.url.label"
-msgstr "Github commit url"
+msgstr "Your GitHub commit URL"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.form.description.label"
-msgstr "Description"
+msgstr "Short method description on leaderboard"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.form.submit.button"
@@ -59,7 +59,7 @@ msgstr "Submit"
 
 #, elixir-autogen, elixir-format
 msgid "invalid.github.commit.url.message"
-msgstr "Please enter a valid Github commit url"
+msgstr "Invalid GitHub commit URL (see challenge repo instructions)"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "1 submission"
