@@ -25,14 +25,19 @@ defmodule CoreWeb.FileUploader do
       # Skip init if it already has been called
       def init_file_uploader(%{assigns: %{uploads: _uploads}} = socket, _key), do: socket
 
-      def init_file_uploader(socket, key, max_file_size \\ 20_000_000) do
+      def init_file_uploader(socket, key) do
         socket
         |> allow_upload(key,
           accept: unquote(accept),
           progress: &handle_progress/3,
-          max_file_size: max_file_size,
+          max_file_size: get_max_file_size(),
           auto_upload: true
         )
+      end
+
+      def get_max_file_size() do
+        config = Application.fetch_env!(:core, CoreWeb.FileUploader)
+        Keyword.fetch!(config, :max_file_size)
       end
 
       def handle_progress(_key, entry, socket) do
