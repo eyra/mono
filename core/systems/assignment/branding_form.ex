@@ -1,4 +1,4 @@
-defmodule Systems.Assignment.InfoForm do
+defmodule Systems.Assignment.BrandingForm do
   use CoreWeb.LiveForm, :fabric
   use Fabric.LiveComponent
   use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg .svg)
@@ -38,25 +38,11 @@ defmodule Systems.Assignment.InfoForm do
         viewport: viewport,
         breakpoint: breakpoint
       )
-      |> update_language_items()
       |> update_image_picker_state()
       |> update_image_info()
       |> update_image_picker_button()
       |> init_file_uploader(:photo)
     }
-  end
-
-  def update_language_items(%{assigns: %{entity: %{language: language}}} = socket) do
-    language =
-      if language do
-        language
-      else
-        Assignment.Languages.default()
-      end
-
-    items = Assignment.Languages.labels(language)
-
-    assign(socket, language_items: items)
   end
 
   @impl true
@@ -174,11 +160,6 @@ defmodule Systems.Assignment.InfoForm do
     ~H"""
     <div>
         <.form id={"#{@id}_general"} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
-          <Text.title3><%= dgettext("eyra-assignment", "settings.general.title") %></Text.title3>
-          <.number_input form={form} field={:subject_count} label_text={dgettext("eyra-assignment", "settings.subject_count.label")} />
-          <.radio_group form={form} field={:language} label_text={dgettext("eyra-assignment", "settings.language.label")} items={@language_items}/>
-          <.spacing value="L" />
-
           <Text.title3><%= dgettext("eyra-assignment", "settings.branding.title") %></Text.title3>
           <Text.body><%= dgettext("eyra-assignment", "settings.branding.text") %></Text.body>
           <.spacing value="M" />

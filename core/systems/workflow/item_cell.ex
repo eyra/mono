@@ -87,7 +87,7 @@ defmodule Systems.Workflow.ItemCell do
          } = socket
        ) do
     tool = Project.ToolRefModel.flatten(tool_ref)
-    tool_form_module = Concept.ToolModel.form(tool)
+    tool_form_module = Project.ToolRefModel.form(tool_ref)
 
     callback_path = ~p"/assignment/callback/#{item_id}"
     callback_url = uri_origin <> callback_path

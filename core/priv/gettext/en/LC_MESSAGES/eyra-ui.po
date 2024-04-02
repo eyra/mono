@@ -107,8 +107,8 @@ msgid "timestamp.yesterday"
 msgstr "yesterday"
 
 #, elixir-autogen, elixir-format
-msgid "authentication.required.error"
-msgstr "Sign in to view this page"
+msgid "authentication.required.message"
+msgstr "Please sign in first"
 
 #, elixir-autogen, elixir-format
 msgid "start.page.console"
@@ -197,3 +197,7 @@ msgstr "Save"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "close.button"
 msgstr "Close"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "done.button"
+msgstr "Done"

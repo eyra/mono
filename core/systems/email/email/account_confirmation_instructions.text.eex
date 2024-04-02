@@ -2,7 +2,7 @@ Activate your account
 
 Thank you for creating an account on Next. You are only one step removed from being able to use the platform.
 
-To sign in, click on this link <%= @url %>. Your account will be activated and ready to use. 
+To activate your account, click on this link <%= @url %>.
 
 If you did not register an account on Next, you can discard this email.
 

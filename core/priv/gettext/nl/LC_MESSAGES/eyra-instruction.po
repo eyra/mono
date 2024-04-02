@@ -1,0 +1,65 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "apply.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "repository_url.label"
+msgstr "Repository"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "repository_url.placeholder"
+msgstr "https://github/<owner>/<repo>"
+
+#, elixir-autogen, elixir-format
+msgid "fork_page.body"
+msgstr "Gebruik de template GitHub repository om je methode voor te bereiden voor submissie. Volg de instructies in de GitHub repository over hoe je een kopie maakt van de repository en deze kan gebruiken om je submissie voor te bereiden. Bezoek de <a href=\"%{url}\" target=\"blank\">template GitHub repository</a>."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "page.title"
+msgstr "Instructies"
+
+#, elixir-autogen, elixir-format
+msgid "download_form.file.label"
+msgstr "Data voor participanten"
+
+#, elixir-autogen, elixir-format
+msgid "download_form.file.placeholder"
+msgstr "Voeg een zip bestand toe"
+
+#, elixir-autogen, elixir-format
+msgid "download_form.file.replace.button"
+msgstr "Vervang bestand"
+
+#, elixir-autogen, elixir-format
+msgid "download_form.file.select.button"
+msgstr "Selecteer bestand"
+
+#, elixir-autogen, elixir-format
+msgid "download_page.body"
+msgstr "Gebruik de training data die beschikbaar is gesteld door de challenge organizers om je methode te testen en te tunen. <br><br>Klik op de volgende link om de data te downloaden: <a href=\"%{url}\" download>%{name}</a>."
+

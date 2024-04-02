@@ -107,7 +107,7 @@ msgid "timestamp.yesterday"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "authentication.required.error"
+msgid "authentication.required.message"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -196,4 +196,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "close.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "done.button"
 msgstr ""

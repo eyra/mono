@@ -40,6 +40,8 @@ config :plug, :statuses, %{
   404 => "Page not found"
 }
 
+config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
+
 config :core,
   image_catalog: Core.ImageCatalog.Unsplash,
   banking_backend: Systems.Banking.Dummy

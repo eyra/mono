@@ -22,10 +22,10 @@ defmodule Systems.Graphite.LeaderboardOverview do
       id: :import_form,
       module: Graphite.ImportForm,
       parent: %{type: __MODULE__, id: id},
-      placeholder: dgettext("eyra-benchmark", "csv-select-placeholder"),
-      select_button: dgettext("eyra-benchmark", "csv-select-file-button"),
-      replace_button: dgettext("eyra-benchmark", "csv-replace-file-button"),
-      process_button: dgettext("eyra-benchmark", "csv-import-button")
+      placeholder: dgettext("eyra-graphite", "csv-select-placeholder"),
+      select_button: dgettext("eyra-graphite", "csv-select-file-button"),
+      replace_button: dgettext("eyra-graphite", "csv-replace-file-button"),
+      process_button: dgettext("eyra-graphite", "csv-import-button")
     }
 
     {
@@ -63,7 +63,7 @@ defmodule Systems.Graphite.LeaderboardOverview do
       },
       face: %{
         type: :plain,
-        label: dgettext("eyra-benchmark", "leaderboard.forward.button"),
+        label: dgettext("eyra-graphite", "leaderboard.forward.button"),
         icon: :forward
       }
     }
@@ -78,14 +78,14 @@ defmodule Systems.Graphite.LeaderboardOverview do
       <Area.content>
         <Margin.y id={:page_top} />
         <div class="flex flex-row items-center justify-center">
-          <Text.title2 margin=""><%= dgettext("eyra-benchmark", "tabbar.item.leaderboard")%></Text.title2>
+          <Text.title2 margin=""><%= dgettext("eyra-graphite", "tabbar.item.leaderboard")%></Text.title2>
           <div class="flex-grow" />
           <Button.dynamic {@forward_button} />
         </div>
         <.spacing value="M" />
         <.live_component {@leaderboard} />
         <.spacing value="XL" />
-        <Text.title4><%= dgettext("eyra-benchmark", "import.leaderboard.title")%></Text.title4>
+        <Text.title4><%= dgettext("eyra-graphite", "import.leaderboard.title")%></Text.title4>
         <.spacing value="S" />
         <.live_component {@import_form} />
       </Area.content>

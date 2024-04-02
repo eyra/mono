@@ -33,11 +33,11 @@ defmodule Systems.Graphite.LeaderboardCategoryView do
       |> Enum.sort_by(& &1.score, :desc)
 
     head_cells = [
-      dgettext("eyra-benchmark", "leaderboard.position.label"),
-      dgettext("eyra-benchmark", "leaderboard.team.label"),
-      dgettext("eyra-benchmark", "leaderboard.method.label"),
-      dgettext("eyra-benchmark", "leaderboard.github.label"),
-      dgettext("eyra-benchmark", "leaderboard.score.label")
+      dgettext("eyra-graphite", "leaderboard.position.label"),
+      dgettext("eyra-graphite", "leaderboard.team.label"),
+      dgettext("eyra-graphite", "leaderboard.method.label"),
+      dgettext("eyra-graphite", "leaderboard.github.label"),
+      dgettext("eyra-graphite", "leaderboard.score.label")
     ]
 
     layout = [

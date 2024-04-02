@@ -11,7 +11,7 @@ msgstr ""
 "Language: en\n"
 
 msgid "can't be blank"
-msgstr ""
+msgstr "Please fill out this field"
 
 msgid "has already been taken"
 msgstr ""

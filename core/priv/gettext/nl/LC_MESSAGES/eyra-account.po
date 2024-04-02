@@ -137,3 +137,15 @@ msgstr "Jouw account activatie link is ongeldig of verlopen. Voer je e-mailadres
 #, elixir-autogen, elixir-format
 msgid "activation.failed.title"
 msgstr "Activatie mislukt"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "activation.confirm.body"
+msgstr "Klik op de knop hieronder om uw account te activeren. U wordt doorgestuurd naar het inlogscherm."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "activation.confirm.title"
+msgstr "Account activatie"
+
+#, elixir-autogen, elixir-format
+msgid "confirm.button"
+msgstr "Activeer"

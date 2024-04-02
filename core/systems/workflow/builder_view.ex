@@ -1,6 +1,8 @@
 defmodule Systems.Workflow.BuilderView do
   use CoreWeb, :live_component
 
+  require Logger
+
   import Frameworks.Pixel.SidePanel
 
   alias Systems.{
@@ -63,6 +65,7 @@ defmodule Systems.Workflow.BuilderView do
         %{assigns: %{workflow: %{id: id}, config: %{director: director}}} = socket
       ) do
     item = get_library_item(socket, item_id)
+
     {:ok, _} = Workflow.Public.add_item(id, item, director)
 
     {
@@ -83,8 +86,18 @@ defmodule Systems.Workflow.BuilderView do
   defp get_title(%{tool_ref: %{special: special}}, %{
          assigns: %{config: %{library: %{items: library_items}}}
        }) do
-    %{title: title} = Enum.find(library_items, &(&1.id == special))
-    title
+    case Enum.find(library_items, &(&1.special == special)) do
+      %{title: title} ->
+        title
+
+      nil ->
+        Logger.error("No library item found for workflow item with special: #{special}")
+
+        special
+        |> Atom.to_string()
+        |> String.replace("_", " ")
+        |> String.capitalize()
+    end
   end
 
   defp get_library_item(socket, item_id) when is_binary(item_id) do
@@ -93,7 +106,7 @@ defmodule Systems.Workflow.BuilderView do
 
   defp get_library_item(%{assigns: %{config: %{library: %{items: items}}}}, item_id)
        when is_atom(item_id) do
-    Enum.find(items, &(&1.id == item_id))
+    Enum.find(items, &(&1.special == item_id))
   end
 
   @impl true
@@ -110,11 +123,15 @@ defmodule Systems.Workflow.BuilderView do
             <.list items={@ordered_items} types={@item_types} ordering_enabled?={@ordering_enabled?} user={@user} uri_origin={@uri_origin} parent={%{type: __MODULE__, id: @id}} />
           </Area.content>
         </div>
-        <%= if @config.library do %>
+        <%= if @config.library.render? do %>
           <div class="flex-shrink-0 w-side-panel">
             <.side_panel id={:library} parent={:item_builder}>
               <Margin.y id={:page_top} />
-              <.library {@config.library} />
+              <.library
+                title={dgettext("eyra-workflow", "item.library.title")}
+                description={dgettext("eyra-workflow", "item.library.description")}
+                items={Enum.map(@config.library.items, &Map.from_struct/1)}
+              />
             </.side_panel>
           </div>
         <% end %>

@@ -6,7 +6,7 @@ defmodule Systems.Graphite.ExportControllerTest do
   }
 
   test "export/1 with valid submission" do
-    tool = Factories.insert!(:graphite_tool, %{max_submissions: 3})
+    tool = Factories.insert!(:graphite_tool, %{})
 
     %{id: id} =
       submission =
@@ -27,7 +27,7 @@ defmodule Systems.Graphite.ExportControllerTest do
   end
 
   test "export/1 with invalid submission" do
-    tool = Factories.insert!(:graphite_tool, %{max_submissions: 3})
+    tool = Factories.insert!(:graphite_tool, %{})
 
     %{id: id} =
       submission =

@@ -23,7 +23,7 @@ defmodule Systems.Workflow.ItemModel do
   end
 
   @fields ~w(group position title description)a
-  @required_fields @fields
+  @required_fields ~w(position title description)a
 
   def changeset(item, params) do
     item

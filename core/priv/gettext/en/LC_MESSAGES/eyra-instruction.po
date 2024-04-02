@@ -1,0 +1,64 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "apply.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "repository_url.label"
+msgstr "Repository"
+
+#, elixir-autogen, elixir-format
+msgid "repository_url.placeholder"
+msgstr "https://github/<owner>/<repo>"
+
+#, elixir-autogen, elixir-format
+msgid "fork_page.body"
+msgstr "Prepare your method for submission by using the template GitHub repository. Follow the instructions in the GitHub repository on how to copy the repository and prepare your submission. <br><br>Visit the <a href=\"%{url}\" target=\"_blank\">template GitHub repository</a>."
+
+#, elixir-autogen, elixir-format
+msgid "page.title"
+msgstr "Instructions"
+
+#, elixir-autogen, elixir-format
+msgid "download_form.file.label"
+msgstr "Participant data"
+
+#, elixir-autogen, elixir-format
+msgid "download_form.file.placeholder"
+msgstr "Add a zip file"
+
+#, elixir-autogen, elixir-format
+msgid "download_form.file.replace.button"
+msgstr "Replace file"
+
+#, elixir-autogen, elixir-format
+msgid "download_form.file.select.button"
+msgstr "Select file"
+
+#, elixir-autogen, elixir-format
+msgid "download_page.body"
+msgstr "You can use the participant data uploaded by the challenge organizers to test and tune your method. <br><br>Click on the following link to download the data: <a href=\"%{url}\" download>%{name}</a>."
