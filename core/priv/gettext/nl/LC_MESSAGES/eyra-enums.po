@@ -417,3 +417,7 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "assignment_workflow_item_types.fork_instruction"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "project_item_templates.leaderboard"
+msgstr "Benchmark Leaderboard"

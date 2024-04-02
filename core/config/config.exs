@@ -142,6 +142,8 @@ config :core, BankingClient,
   certfile: "../banking_proxy/certs/client_certificate.pem",
   keyfile: "../banking_proxy/certs/client_key.pem"
 
+config :core, :leaderboard_enabled, false
+
 config :sentry,
   included_environments: ~w(prod test),
   environment_name: Mix.env(),
