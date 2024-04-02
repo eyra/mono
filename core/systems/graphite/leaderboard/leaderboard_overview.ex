@@ -1,4 +1,4 @@
-defmodule Systems.Graphite.LeaderboardOverview do
+defmodule Systems.Graphite.Leaderboard.Overview do
   use CoreWeb, :live_component
 
   alias Systems.{

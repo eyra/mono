@@ -209,7 +209,7 @@ defmodule Systems.Graphite.ContentPageBuilder do
       title: dgettext("eyra-benchmark", "tabbar.item.leaderboard"),
       forward_title: dgettext("eyra-benchmark", "tabbar.item.leaderboard.forward"),
       type: :fullpage,
-      live_component: Graphite.LeaderboardOverview,
+      live_component: Graphite.Leaderboard.Overview,
       props: %{
         entity: tool
       }

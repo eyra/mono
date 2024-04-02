@@ -63,6 +63,7 @@ defmodule Systems.Campaign.CardView do
   attr(:title, :string, required: true)
   attr(:tags, :list, default: nil)
   attr(:label, :map, default: nil)
+  # FIXME: info lists with more than one item do not get displayed properly (?)
   attr(:info, :list, default: [])
 
   attr(:bg_color, :string, default: "grey1")

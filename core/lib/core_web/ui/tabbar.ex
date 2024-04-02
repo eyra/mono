@@ -148,6 +148,8 @@ defmodule CoreWeb.UI.Tabbar do
   slot(:inner_block, default: nil)
 
   def footer(assigns) do
+    # FIXME: should this also have a backward button (now it only
+    # has the forward one)?
     ~H"""
     <Area.content class="mb-8">
       <Margin.y id={:page_top} />

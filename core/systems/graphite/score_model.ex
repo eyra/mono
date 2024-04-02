@@ -17,7 +17,7 @@ defmodule Systems.Graphite.ScoreModel do
     timestamps()
   end
 
-  @fields ~w(score)a
+  @fields ~w(metric score leaderboard_id submission_id)a
   @required_fields ~w()a
 
   def changeset(tool, params) do

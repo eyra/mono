@@ -8,27 +8,33 @@ defmodule Systems.Graphite.LeaderboardView do
     Graphite
   }
 
-  import Graphite.LeaderboardCategoryView
+  import Graphite.Leaderboard.CategoryView
 
   @impl true
-  def update(%{active_item_id: active_item_id, selector_id: :leaderboard_category}, socket) do
+  def update(
+        %{open: open, active_item_id: active_item_id, selector_id: :leaderboard_category},
+        socket
+      ) do
     {
       :ok,
       socket
-      |> assign(active_category_name: active_item_id)
+      |> assign(active_category_name: active_item_id, open: open)
       |> update_category()
     }
   end
 
   @impl true
-  def update(%{id: id, categories: categories}, socket) do
+  def update(%{open: open, id: id, categories: categories}, socket) do
+    first_category = List.first(categories)
+
     {
       :ok,
       socket
       |> assign(
         id: id,
         categories: categories,
-        active_category_name: "f1_score"
+        active_category_name: first_category.name,
+        open: open
       )
       |> prepare_selector()
       |> update_category()
@@ -77,7 +83,7 @@ defmodule Systems.Graphite.LeaderboardView do
       </Align.horizontal_center>
       <.spacing value="M" />
       <%= if @active_category do %>
-        <.category name={@active_category.name} scores={@active_category.scores} />
+        <.category name={@active_category.name} scores={@active_category.scores} open={@open} />
       <% end %>
     </div>
     """

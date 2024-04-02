@@ -756,6 +756,11 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
+  def build(:graphite_leaderboard, %{} = attributes) do
+    %Graphite.LeaderboardModel{}
+    |> Graphite.LeaderboardModel.changeset(attributes)
+  end
+
   def build(factory_name, %{} = attributes) do
     factory_name |> build() |> struct!(attributes)
   end

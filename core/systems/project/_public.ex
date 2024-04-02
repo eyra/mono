@@ -8,7 +8,8 @@ defmodule Systems.Project.Public do
 
   alias Systems.{
     Project,
-    Assignment
+    Assignment,
+    Graphite
   }
 
   def get!(id, preload \\ []) do
@@ -183,6 +184,19 @@ defmodule Systems.Project.Public do
 
   def prepare_item(attrs, %Assignment.Model{} = assignment) do
     prepare_item(attrs, :assignment, assignment)
+  end
+
+  def prepare_item(
+        attrs,
+        %Graphite.LeaderboardModel{} = leaderboard,
+        auth_node \\ Authorization.prepare_node()
+      ) do
+    leaderboard =
+      leaderboard
+      |> Graphite.LeaderboardModel.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+
+    prepare_item(attrs, :leaderboard, leaderboard)
   end
 
   def prepare_item(

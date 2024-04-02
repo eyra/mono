@@ -14,6 +14,7 @@ defmodule Systems.Graphite.ToolModel do
     field(:max_submissions, :integer)
     belongs_to(:auth_node, Core.Authorization.Node)
     has_many(:submissions, Graphite.SubmissionModel, foreign_key: :tool_id)
+    has_many(:leaderboards, Graphite.LeaderboardModel, foreign_key: :tool_id)
 
     timestamps()
   end

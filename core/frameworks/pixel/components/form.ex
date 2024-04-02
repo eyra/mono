@@ -244,6 +244,37 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
+  attr(:label_text, :string, default: nil)
+  attr(:label_color, :string, default: "text-grey1")
+  attr(:background, :atom, default: :light)
+  attr(:placeholder, :string, default: "")
+  attr(:reserve_error_space, :boolean, default: true)
+  attr(:debounce, :string, default: "1000")
+  attr(:maxlength, :string, default: "1000")
+  attr(:value, :string, default: "")
+
+  # FIXME: discuss how to make this neater. Now I just force the display of the
+  # provided value
+  def list_input(assigns) do
+    ~H"""
+    <.input
+      form={@form}
+      field={@field}
+      label_text={@label_text}
+      label_color={@label_color}
+      background={@background}
+      placeholder={@placeholder}
+      reserve_error_space={@reserve_error_space}
+      debounce={@debounce}
+      maxlength={@maxlength}
+      type="text"
+      value={@value}
+    />
+    """
+  end
+
+  attr(:form, :any, required: true)
+  attr(:field, :atom, required: true)
   attr(:placeholder, :string, default: "")
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")

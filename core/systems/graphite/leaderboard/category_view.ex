@@ -1,34 +1,46 @@
-defmodule Systems.Graphite.LeaderboardCategoryView do
+defmodule Systems.Graphite.Leaderboard.CategoryView do
   use CoreWeb, :html
 
-  defp to_item(%{
-         score: score,
-         submission: %{
-           updated_at: updated_at,
-           github_commit_url: github_commit_url,
-           description: description,
-           spot: %{name: name}
-         }
-       }) do
+  defp to_item(
+         %{
+           score: score,
+           submission: %{
+             updated_at: updated_at,
+             github_commit_url: github_commit_url,
+             description: description
+           }
+         },
+         open
+       ) do
     # max 6 decimal precision
     score = trunc(score * 1_000_000) / 1_000_000
 
-    %{
-      name: name,
-      description: description,
-      score: score,
-      link: github_commit_url,
-      updated_at: updated_at
-    }
+    if open do
+      %{
+        name: description,
+        description: description,
+        score: score,
+        link: github_commit_url,
+        updated_at: updated_at
+      }
+    else
+      %{
+        name: "Anonymous",
+        description: "Anonymous",
+        score: score,
+        link: "Anonymous",
+        updated_at: updated_at
+      }
+    end
   end
 
   attr(:name, :string, required: true)
   attr(:scores, :list, required: true)
 
-  def category(%{scores: scores} = assigns) do
+  def category(%{scores: scores, open: open} = assigns) do
     items =
       scores
-      |> Enum.map(&to_item/1)
+      |> Enum.map(fn score -> to_item(score, open) end)
       |> Enum.sort_by(& &1.updated_at, {:asc, NaiveDateTime})
       |> Enum.sort_by(& &1.score, :desc)
 
@@ -75,7 +87,7 @@ defmodule Systems.Graphite.LeaderboardCategoryView do
 
   def row(assigns) do
     ~H"""
-    <div class="h-12 flex flex-row ">
+    <div class="border-grey4 h-12 flex flex-row ">
       <%= for {cell, index} <- Enum.with_index(@cells) do %>
         <.cell
           content={cell}
@@ -108,8 +120,7 @@ defmodule Systems.Graphite.LeaderboardCategoryView do
     <div class={@layout.width}>
       <div class="flex flex-col h-full">
         <%= if not @top do %>
-          <div class="h-border bg-grey4 w-full" />
-        <% end %>
+          <div class="rounded-lg border-grey4 bg-white bg-grey4 w-full" /> <% end %>
         <div class="flex-grow">
           <div class="flex flex-row w-full h-full">
             <%= if not @left do %>

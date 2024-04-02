@@ -43,12 +43,16 @@ defmodule Systems.Project.ItemModel do
     do:
       preload_graph([
         :tool_ref,
-        :assignment
+        :assignment,
+        :leaderboard
       ])
 
   def preload_graph(:node), do: [node: [:parent, :children, :items, :auth_node]]
   def preload_graph(:tool_ref), do: [tool_ref: Project.ToolRefModel.preload_graph(:down)]
   def preload_graph(:assignment), do: [assignment: Assignment.Model.preload_graph(:down)]
+
+  def preload_graph(:leaderboard),
+    do: [leaderboard: Graphite.LeaderboardModel.preload_graph(:down)]
 
   def special(%{tool_ref: %{id: _id} = special}), do: special
   def special(%{assignment: %{id: _id} = special}), do: special
@@ -69,6 +73,14 @@ defmodule Systems.Project.ItemModel do
     Assignment.Model.auth_tree(assignment)
   end
 
+  def auth_tree(%Project.ItemModel{leaderboard: %Ecto.Association.NotLoaded{}} = item) do
+    auth_tree(Repo.preload(item, :leaderboard))
+  end
+
+  def auth_tree(%Project.ItemModel{leaderboard: leaderboard}) when not is_nil(leaderboard) do
+    Systems.Graphite.LeaderboardModel.auth_tree(leaderboard)
+  end
+
   def auth_tree(items) when is_list(items) do
     Enum.map(items, &auth_tree/1)
   end
@@ -83,6 +95,7 @@ defmodule Systems.Project.ItemModel do
       vm(item, page, user)
     end
 
+    # Entry for assignments
     defp vm(
            %{
              id: id,
@@ -130,6 +143,65 @@ defmodule Systems.Project.ItemModel do
       }
     end
 
+    # Entry for leaderboards
+    defp vm(
+           %{
+             id: id,
+             # FIXME: why are we tracking a name both in project_items and in graphite_leaderboards?
+             # Should `name` for project_items actually be `type`?
+             name: name,
+             leaderboard:
+               %{
+                 id: leaderboard_id,
+                 name: leaderboard_name,
+                 status: status
+               } = leaderboard
+           },
+           {Project.NodePage, :item_card},
+           _user
+         ) do
+      # FIXME: better way to generate the icon
+      # image_info = ImageHelpers.get_image_info(image_id, 400, 200)
+      image_info = %{
+        height: 200,
+        width: 200,
+        blur_hash: nil,
+        url: "https://eyra.co/landing_page/img/top-logo.svg",
+        srcset: ""
+      }
+
+      # tags = get_card_tags(assignment)
+      tags = [leaderboard_name, leaderboard.version]
+      path = ~p"/graphite/leaderboard/#{leaderboard_id}/content"
+
+      edit = %{
+        action: %{type: :send, event: "edit", item: id},
+        face: %{type: :label, label: "Edit", wrap: true}
+      }
+
+      delete = %{
+        action: %{type: :send, event: "delete", item: id},
+        face: %{type: :icon, icon: :delete}
+      }
+
+      # FIXME: Create a struct to pass this info?
+      %{
+        type: :secondary,
+        id: id,
+        path: path,
+        image_info: image_info,
+        # icon_url: logo_url,
+        icon_url: "https://eyra.co/landing_page/img/top-logo.svg",
+        label: get_label(status),
+        title: name,
+        tags: tags,
+        info: ["A useful leaderboard metric here"],
+        left_actions: [edit],
+        right_actions: [delete]
+      }
+    end
+
+    # Entry for benchmark / graphite
     defp vm(
            %{
              id: id,
@@ -138,10 +210,10 @@ defmodule Systems.Project.ItemModel do
                graphite_tool:
                  %{
                    id: graphite_id,
-                   status: status,
-                   director: _director,
-                   spots: spots,
-                   leaderboards: _leaderboards
+                   status: status
+                   # director: _director,
+                   # spots: spots,
+                   # leaderboards: _leaderboards
                  } = tool
              }
            },
@@ -162,14 +234,18 @@ defmodule Systems.Project.ItemModel do
         face: %{type: :icon, icon: :delete}
       }
 
-      team_info = dngettext("eyra-benchmark", "1 team", "%{count} teams", Enum.count(spots))
+      # Spots no longer exist
+      # team_info = dngettext("eyra-benchmark", "1 team", "%{count} teams", Enum.count(spots))
+      team_info = dngettext("eyra-benchmark", "1 team", "%{count} teams", 0)
 
       submission_info =
         dngettext(
           "eyra-benchmark",
           "1 submission",
           "%{count} submissions",
-          count_submissions(spots)
+          # Spots no londer exist
+          # count_submissions(spots)
+          0
         )
 
       info_line_1 = "#{team_info}  |  #{submission_info}"
@@ -204,6 +280,8 @@ defmodule Systems.Project.ItemModel do
       do: %{type: :delete, text: dgettext("eyra-project", "label.offline")}
 
     defp get_label(:idle), do: %{type: :idle, text: dgettext("eyra-project", "label.idle")}
+
+    defp get_label(_), do: %{type: :idle, text: "Unknown Status"}
 
     defp get_card_tags(%Assignment.Model{}) do
       ["Assignment"]

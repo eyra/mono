@@ -112,6 +112,14 @@ defmodule Systems.Project.Assembly do
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
   end
 
+  defp prepare_item(:leaderboard, name) do
+    {:ok, leaderboard} =
+      Graphite.Public.prepare_leaderboard(%{name: name, metrics: []})
+      |> Changeset.apply_action(:prepare)
+
+    Project.Public.prepare_item(%{name: name, project_path: []}, leaderboard)
+  end
+
   # PROJECT PATH
   def update_path(multi, %{project: project}), do: update_path(multi, project)
 
