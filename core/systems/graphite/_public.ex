@@ -15,6 +15,11 @@ defmodule Systems.Graphite.Public do
   # FIXME: should come from CMS
   @main_category "f1_score"
 
+  def get_leaderboard!(id, preload \\ []) do
+    from(leaderboard in Graphite.LeaderboardModel, preload: ^preload)
+    |> Repo.get!(id)
+  end
+
   def get_tool!(id, preload \\ []) do
     from(tool in Graphite.ToolModel, preload: ^preload)
     |> Repo.get!(id)
@@ -43,6 +48,12 @@ defmodule Systems.Graphite.Public do
   def set_tool_status(id, status) do
     get_tool!(id)
     |> set_tool_status(status)
+  end
+
+  def prepare_leaderboard(attrs, auth_node \\ Core.Authorization.prepare_node()) do
+    %Graphite.LeaderboardModel{}
+    |> Graphite.LeaderboardModel.changeset(attrs)
+    |> Changeset.put_assoc(:auth_node, auth_node)
   end
 
   def prepare_tool(%{} = attrs, auth_node \\ Core.Authorization.prepare_node()) do
@@ -136,14 +147,14 @@ defmodule Systems.Graphite.Public do
       |> Enum.map(& &1.name)
 
     Multi.new()
-    |> prepare_leaderboards(names)
+    |> prepare_leaderboard_import(names)
     |> prepare_leaderboard_entries(entries)
     |> Repo.transaction()
   end
 
-  defp prepare_leaderboards(multi, []), do: multi
+  defp prepare_leaderboard_import(multi, []), do: multi
 
-  defp prepare_leaderboards(multi, names) when is_list(names) do
+  defp prepare_leaderboard_import(multi, names) when is_list(names) do
     date = Timestamp.format_user_input_date(Timestamp.now())
 
     multi =
@@ -152,10 +163,10 @@ defmodule Systems.Graphite.Public do
         {:ok, "#{date}_#{count + 1}"}
       end)
 
-    Enum.reduce(names, multi, &prepare_leaderboard(&2, &1))
+    Enum.reduce(names, multi, &prepare_leaderboard_import(&2, &1))
   end
 
-  defp prepare_leaderboard(multi, name) when is_binary(name) do
+  defp prepare_leaderboard_import(multi, name) when is_binary(name) do
     Multi.insert(multi, {:leaderboard, name}, fn %{version: version} ->
       %Graphite.LeaderboardModel{}
       |> Graphite.LeaderboardModel.changeset(%{name: name, version: version})

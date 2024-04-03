@@ -8,8 +8,9 @@ defmodule Systems.Project.Public do
   alias Core.Authorization
 
   alias Systems.{
-    Project,
-    Assignment
+    Assignment,
+    Graphite,
+    Project
   }
 
   def get!(id, preload \\ []) do
@@ -190,6 +191,10 @@ defmodule Systems.Project.Public do
 
   def prepare_item(attrs, %Assignment.Model{} = assignment) do
     prepare_item(attrs, :assignment, assignment)
+  end
+
+  def prepare_item(attrs, %Graphite.LeaderboardModel{} = leaderboard) do
+    prepare_item(attrs, :leaderboard, leaderboard)
   end
 
   def prepare_item(
