@@ -41,7 +41,15 @@ defmodule Systems.Project.CreateItemPopup do
 
   defp init_templates(socket) do
     selected_template = :empty
-    template_labels = Project.ItemTemplates.labels(selected_template)
+
+    filter =
+      if feature_enabled?(:leaderboard) do
+        Systems.Project.ItemTemplates.values()
+      else
+        Systems.Project.ItemTemplates.values() |> Enum.reject(&(&1 == :leaderboard))
+      end
+
+    template_labels = Project.ItemTemplates.labels(selected_template, filter)
     socket |> assign(template_labels: template_labels, selected_template: selected_template)
   end
 
