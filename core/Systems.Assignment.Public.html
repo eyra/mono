@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-1A6C1906.js"></script>
+    <script src="dist/sidebar_items-22CB7CCF.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -140,6 +140,14 @@ core
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#add_owner!/2" translate="no">add_owner!(assignment, user)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#add_participant!/2" translate="no">add_participant!(model, user)</a>
 
       </div>
 
@@ -286,6 +294,14 @@ core
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#expired_user_assignments/1" translate="no">expired_user_assignments(from)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get/2" translate="no">get(id, preload \\ [])</a>
 
       </div>
 
@@ -441,14 +457,6 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#owner?/2" translate="no">owner?(assignment, user)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
         <a href="#payout_participant/2" translate="no">payout_participant(model, user)</a>
 
       </div>
@@ -489,7 +497,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_workflow/3" translate="no">prepare_workflow(special, items, type \\ :single_task)</a>
+        <a href="#prepare_tool_ref/2" translate="no">prepare_tool_ref(special, tool)</a>
 
       </div>
 
@@ -497,7 +505,23 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_workflow_item/1" translate="no">prepare_workflow_item(tool_ref)</a>
+        <a href="#prepare_workflow/3" translate="no">prepare_workflow(special, items, type)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#prepare_workflow_item/2" translate="no">prepare_workflow_item(tool_ref, attrs \\ %{})</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#prepare_workflow_items/1" translate="no">prepare_workflow_items(tool_refs)</a>
 
       </div>
 
@@ -694,7 +718,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">activate_task(crew, identifier)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L498" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L520" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -716,7 +740,29 @@ Functions
     </a>
     <h1 class="signature" translate="no">add_owner!(assignment, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L310" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L332" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="add_participant!/2">
+
+  <div class="detail-header">
+    <a href="#add_participant!/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">add_participant!(model, user)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L326" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -738,7 +784,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">apply_member(id, user, identifier, reward_amount)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L388" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L410" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -760,7 +806,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">apply_member_and_activate_task(assignment, user, identifier, reward_amount)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L484" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L506" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -782,7 +828,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">assign_tester_role(tool, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L318" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L340" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -804,7 +850,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">attention_list_enabled?(map)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L525" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L547" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -826,7 +872,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">cancel(assignment, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L460" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L482" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -848,7 +894,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">copy(assignment, info, workflow, budget, auth_node)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L224" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L244" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -870,7 +916,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">copy_info(info)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L244" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L264" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -892,7 +938,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">copy_workflow(workflow)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L250" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L270" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -914,7 +960,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">count_participants(assignment)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L373" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L395" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -936,7 +982,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">count_participants_finished(assignment)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L377" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L399" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -958,7 +1004,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">create_page_ref(assignment, key)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L171" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L191" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -980,7 +1026,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">decline_member(model, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L410" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L432" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1002,7 +1048,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">delete_page_ref(page_ref)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L182" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L202" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1024,7 +1070,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">delete_storage_endpoint!(assignment)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L199" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L219" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1046,7 +1092,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">exclude(assignment1, assignment2)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L256" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L276" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1068,7 +1114,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">excluded?(assignment, map)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L509" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L531" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1090,7 +1136,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">expiration_timestamp(map)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L339" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L361" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1112,7 +1158,31 @@ Functions
     </a>
     <h1 class="signature" translate="no">expired_user_assignments(from)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L597" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L619" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get/2">
+
+    <span id="get/1"></span>
+
+  <div class="detail-header">
+    <a href="#get/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get(id, preload \\ [])</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L36" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1160,7 +1230,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_by(association, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L50" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L55" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1182,7 +1252,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_by(field_name, id, preload)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L65" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L70" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1206,7 +1276,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_by_tool(tool, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L79" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L84" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1230,7 +1300,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_by_tool_ref(workflow, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L70" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L75" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1252,7 +1322,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_crew(assignment)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L565" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L587" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1274,7 +1344,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_task(tool, identifier)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L471" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L493" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1298,7 +1368,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_workflow!(id, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L36" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L41" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1320,7 +1390,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">has_open_spots?(assignment)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L538" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L560" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1342,7 +1412,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">idempotence_key(assignment_id, user_id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L636" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L658" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1364,7 +1434,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">include(assignment1, assignment2)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L263" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L283" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1388,7 +1458,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">list_by_crew(crew, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L41" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L46" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1410,7 +1480,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">list_user_ids(assignment_ids)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L113" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L118" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1432,7 +1502,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">lock_task(tool, identifier)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L476" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L498" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1454,7 +1524,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">mark_expired_debug(assignment, force)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L559" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L581" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1476,7 +1546,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">member?(map, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L369" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L391" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1498,7 +1568,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">open_spot_count(assignment)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L547" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L569" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1520,29 +1590,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">owner!(assignment)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L314" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="owner?/2">
-
-  <div class="detail-header">
-    <a href="#owner?/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">owner?(assignment, user)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L306" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L336" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1564,7 +1612,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">payout_participant(model, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L645" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L667" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1586,7 +1634,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">prepare(attrs, crew, info, page_refs, workflow, budget, consent_agreement, auth_node)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L125" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L130" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1608,7 +1656,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">prepare_info(attrs)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L137" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L142" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1630,7 +1678,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">prepare_page_ref(auth_node, key)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L160" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L181" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1652,7 +1700,29 @@ Functions
     </a>
     <h1 class="signature" translate="no">prepare_page_refs(template, auth_node)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L154" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L175" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="prepare_tool_ref/2">
+
+  <div class="detail-header">
+    <a href="#prepare_tool_ref/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">prepare_tool_ref(special, tool)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L170" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1667,16 +1737,14 @@ Functions
 </section>
 <section class="detail" id="prepare_workflow/3">
 
-    <span id="prepare_workflow/2"></span>
-
   <div class="detail-header">
     <a href="#prepare_workflow/3" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">prepare_workflow(special, items, type \\ :single_task)</h1>
+    <h1 class="signature" translate="no">prepare_workflow(special, items, type)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L142" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L147" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1689,16 +1757,40 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="prepare_workflow_item/1">
+<section class="detail" id="prepare_workflow_item/2">
+
+    <span id="prepare_workflow_item/1"></span>
 
   <div class="detail-header">
-    <a href="#prepare_workflow_item/1" class="detail-link" title="Link to this function">
+    <a href="#prepare_workflow_item/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">prepare_workflow_item(tool_ref)</h1>
+    <h1 class="signature" translate="no">prepare_workflow_item(tool_ref, attrs \\ %{})</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L148" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L164" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="prepare_workflow_items/1">
+
+  <div class="detail-header">
+    <a href="#prepare_workflow_items/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">prepare_workflow_items(tool_refs)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L158" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1720,7 +1812,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">query_by_tool(field_name, id, preload)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L88" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L93" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1742,7 +1834,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">query_by_tool_ref(tool_ref_id, preload)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L101" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L106" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1764,7 +1856,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">ready?(map)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L575" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L597" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1786,7 +1878,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">reject_task(assignment, task, rejection)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L447" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L469" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1810,7 +1902,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">reset_member(assignment, user, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L437" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L459" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1832,7 +1924,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">rewarded_amount(model, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L650" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L672" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1854,7 +1946,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">rollback_deposit(multi, assignment, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L629" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L651" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1876,7 +1968,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">rollback_expired_deposits()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L608" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L630" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1898,7 +1990,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">rollback_expired_deposits(from)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L614" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L636" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1920,7 +2012,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">run_apply_member(crew, user, identifier, expire_at)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L430" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L452" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1942,7 +2034,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">search_subject(tool, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L579" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L601" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1964,7 +2056,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">status(map, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L346" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L368" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1986,7 +2078,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">task_labels(map)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L530" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L552" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2008,7 +2100,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">tester?(arg1, user_ref)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L381" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L403" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2030,7 +2122,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">timestamp(arg1)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L366" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L388" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2052,7 +2144,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">timestamp(map, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L359" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L381" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2074,7 +2166,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update(assignment, attrs)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L270" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L290" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2096,7 +2188,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update!(assignment, attrs)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L275" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L295" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2118,7 +2210,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update_budget(assignment, budget)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L282" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L302" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2140,7 +2232,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update_consent_agreement(assignment, consent_agreement)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L290" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L310" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2162,7 +2254,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update_storage_endpoint(assignment, storage_endpoint)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L298" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_public.ex#L318" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
