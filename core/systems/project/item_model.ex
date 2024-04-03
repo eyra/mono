@@ -19,6 +19,7 @@ defmodule Systems.Project.ItemModel do
     belongs_to(:node, Project.NodeModel)
     belongs_to(:tool_ref, Project.ToolRefModel)
     belongs_to(:assignment, Assignment.Model)
+    belongs_to(:leaderboard, Graphite.LeaderboardModel)
     timestamps()
   end
 
@@ -42,12 +43,16 @@ defmodule Systems.Project.ItemModel do
     do:
       preload_graph([
         :tool_ref,
-        :assignment
+        :assignment,
+        :leaderboard
       ])
 
   def preload_graph(:node), do: [node: [:parent, :children, :items, :auth_node]]
   def preload_graph(:tool_ref), do: [tool_ref: Project.ToolRefModel.preload_graph(:down)]
   def preload_graph(:assignment), do: [assignment: Assignment.Model.preload_graph(:down)]
+
+  def preload_graph(:leaderboard),
+    do: [leaderboard: Graphite.LeaderboardModel.preload_graph(:down)]
 
   def special(%{tool_ref: %{id: _id} = special}), do: special
   def special(%{assignment: %{id: _id} = special}), do: special
@@ -66,6 +71,14 @@ defmodule Systems.Project.ItemModel do
 
   def auth_tree(%Project.ItemModel{assignment: assignment}) when not is_nil(assignment) do
     Assignment.Model.auth_tree(assignment)
+  end
+
+  def auth_tree(%Project.ItemModel{leaderboard: %Ecto.Association.NotLoaded{}} = item) do
+    auth_tree(Repo.preload(item, :leaderboard))
+  end
+
+  def auth_tree(%Project.ItemModel{leaderboard: leaderboard}) when not is_nil(leaderboard) do
+    Graphite.LeaderboardModel.auth_tree(leaderboard)
   end
 
   def auth_tree(items) when is_list(items) do
@@ -186,6 +199,38 @@ defmodule Systems.Project.ItemModel do
       }
     end
 
+    defp vm(
+           %{
+             id: id,
+             name: name,
+             leaderboard: %{id: _leaderboard_id, status: status} = leaderboard
+           },
+           {Project.NodePage, :item_card},
+           _user
+         ) do
+      edit = %{
+        action: %{type: :send, event: "edit", item: id},
+        face: %{type: :label, label: "Edit", wrap: true}
+      }
+
+      delete = %{
+        action: %{type: :send, event: "delete", item: id},
+        face: %{type: :icon, icon: :delete}
+      }
+
+      %{
+        type: :secondary,
+        id: id,
+        path: ~p"/",
+        label: get_label(status),
+        title: name,
+        tags: get_card_tags(leaderboard),
+        info: ["Something more meaningful here"],
+        left_actions: [edit],
+        right_actions: [delete]
+      }
+    end
+
     defp count_submissions(spots) when is_list(spots) do
       Enum.reduce(spots, 0, fn spot, acc -> acc + count_submissions(spot) end)
     end
@@ -204,10 +249,13 @@ defmodule Systems.Project.ItemModel do
 
     defp get_label(:idle), do: %{type: :idle, text: dgettext("eyra-project", "label.idle")}
 
+    defp get_label(nil), do: %{type: :idle, text: "Improper label"}
+
     defp get_card_tags(%Assignment.Model{}) do
       ["Assignment"]
     end
 
+    defp get_card_tags(%Graphite.LeaderboardModel{}), do: ["Leaderboard"]
     defp get_card_tags(%Graphite.ToolModel{}), do: ["Challenge"]
     defp get_card_tags(_), do: []
   end
