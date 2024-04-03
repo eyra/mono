@@ -33,9 +33,9 @@ defmodule Systems.Graphite.LeaderboardModel do
   schema "graphite_leaderboards" do
     field(:name, :string)
     field(:version, :string)
-    field(:status, Ecto.Enum, values: Graphite.LeaderboardEnums.status())
+    field(:status, Ecto.Enum, values: Graphite.LeaderboardStatus.values())
     field(:metrics, {:array, :string})
-    field(:visibility, Ecto.Enum, values: Graphite.LeaderboardEnums.visibility())
+    field(:visibility, Ecto.Enum, values: Graphite.LeaderboardVisibility.values())
     field(:open_date, :naive_datetime)
     field(:generation_date, :naive_datetime)
     field(:allow_anonymous, :boolean)
@@ -54,6 +54,10 @@ defmodule Systems.Graphite.LeaderboardModel do
     tool
     |> cast(params, @fields)
     |> validate_required(@required_fields)
+  end
+
+  def tag(%Graphite.LeaderboardModel{} = _leaderboard) do
+    "Leaderboard"
   end
 
   def preload_graph(:down),

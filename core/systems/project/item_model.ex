@@ -87,6 +87,7 @@ defmodule Systems.Project.ItemModel do
 
   def tag(%{tool_ref: %{id: _} = tool_ref}), do: Project.ToolRefModel.tag(tool_ref)
   def tag(%{assignment: %{id: _} = assignment}), do: Assignment.Model.tag(assignment)
+  def tag(%{leaderboard: %{id: _} = leaderboard}), do: Graphite.LeaderboardModel.tag(leaderboard)
 
   defimpl Frameworks.Utility.ViewModelBuilder do
     use CoreWeb, :verified_routes

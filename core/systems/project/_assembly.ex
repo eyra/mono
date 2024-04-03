@@ -107,7 +107,13 @@ defmodule Systems.Project.Assembly do
 
   defp prepare_item(:leaderboard, name) do
     {:ok, leaderboard} =
-      Graphite.Public.prepare_leaderboard(%{name: name, status: :concept, metrics: []})
+      Graphite.Public.prepare_leaderboard(%{
+        name: name,
+        status: :concept,
+        visibility: :private,
+        allow_anonymous: false,
+        metrics: []
+      })
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, leaderboard)
