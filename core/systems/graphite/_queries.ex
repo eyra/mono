@@ -25,4 +25,11 @@ defmodule Systems.Graphite.Queries do
       ]
     ])
   end
+
+  def submission_query(tool_ids) when is_list(tool_ids) do
+    # TODO: add check for locked flag when implementing https://github.com/eyra/mono/issues/706
+    build(submission_query(), :submission, [
+      tool_id in ^tool_ids
+    ])
+  end
 end

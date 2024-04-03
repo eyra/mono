@@ -250,7 +250,7 @@ defmodule Core.Factories do
   end
 
   def build(:workflow) do
-    build(:workflow, %{})
+    build(:workflow, %{type: :many_optional})
   end
 
   def build(:workflow_item) do

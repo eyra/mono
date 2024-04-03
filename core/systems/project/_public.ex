@@ -1,6 +1,7 @@
 defmodule Systems.Project.Public do
   import Ecto.Query, warn: false
   import CoreWeb.Gettext
+  import Systems.Project.Queries
 
   alias Core.Repo
   alias Core.Accounts.User
@@ -104,6 +105,12 @@ defmodule Systems.Project.Public do
       preload: ^preload
     )
     |> Repo.all()
+  end
+
+  def list_items(node, {:assignment, template}, preload \\ []) do
+    item_query_by_assignment(node, template)
+    |> Repo.all()
+    |> Repo.preload(preload)
   end
 
   def exists?(user, name) do

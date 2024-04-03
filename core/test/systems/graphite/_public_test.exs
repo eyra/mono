@@ -1,14 +1,62 @@
 defmodule Systems.Graphite.PublicTest do
   use Core.DataCase
 
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Graphite
+  alias Systems.Graphite.Factories
+
+  describe "list_submissions/1" do
+    test "no submissions" do
+      challenge = Factories.create_challenge()
+      assert [] = Graphite.Public.list_submissions(challenge)
+    end
+
+    test "one submission" do
+      challenge = Factories.create_challenge()
+      tool = %{id: tool_id} = Factories.add_tool(challenge)
+      %{id: submission_id} = Factories.add_submission(tool)
+
+      assert [
+               %Systems.Graphite.SubmissionModel{id: ^submission_id, tool_id: ^tool_id}
+             ] = Graphite.Public.list_submissions(challenge)
+    end
+
+    test "multiple submissions" do
+      challenge = Factories.create_challenge()
+      tool = %{id: tool_id} = Factories.add_tool(challenge)
+      %{id: submission1_id} = Factories.add_submission(tool)
+      %{id: submission2_id} = Factories.add_submission(tool)
+      %{id: submission3_id} = Factories.add_submission(tool)
+
+      assert [
+               %Systems.Graphite.SubmissionModel{id: ^submission1_id, tool_id: ^tool_id},
+               %Systems.Graphite.SubmissionModel{id: ^submission2_id, tool_id: ^tool_id},
+               %Systems.Graphite.SubmissionModel{id: ^submission3_id, tool_id: ^tool_id}
+             ] = Graphite.Public.list_submissions(challenge)
+    end
+
+    test "multiple tools and submissions" do
+      challenge = Factories.create_challenge()
+      tool1 = %{id: tool1_id} = Factories.add_tool(challenge)
+      tool2 = %{id: tool2_id} = Factories.add_tool(challenge)
+
+      %{id: submission1_id} = Factories.add_submission(tool1)
+      %{id: submission2_id} = Factories.add_submission(tool1)
+      %{id: submission3_id} = Factories.add_submission(tool2)
+      %{id: submission4_id} = Factories.add_submission(tool2)
+
+      assert [
+               %Systems.Graphite.SubmissionModel{id: ^submission1_id, tool_id: ^tool1_id},
+               %Systems.Graphite.SubmissionModel{id: ^submission2_id, tool_id: ^tool1_id},
+               %Systems.Graphite.SubmissionModel{id: ^submission3_id, tool_id: ^tool2_id},
+               %Systems.Graphite.SubmissionModel{id: ^submission4_id, tool_id: ^tool2_id}
+             ] = Graphite.Public.list_submissions(challenge)
+    end
+  end
 
   test "import_csv_lines/1 one line" do
     name = "Team1"
-    tool = create_tool()
-    %{id: submission_id, description: description} = create_submission(tool)
+    tool = Factories.create_tool()
+    %{id: submission_id, description: description} = Factories.create_submission(tool)
 
     cat1 = "aap"
     cat2 = "noot"
@@ -65,8 +113,8 @@ defmodule Systems.Graphite.PublicTest do
 
   test "import_csv_lines/1 one line with score `0`" do
     name = "Team1"
-    tool = create_tool()
-    %{id: submission_id, description: description} = create_submission(tool)
+    tool = Factories.create_tool()
+    %{id: submission_id, description: description} = Factories.create_submission(tool)
 
     cat1 = "aap"
 
@@ -99,8 +147,8 @@ defmodule Systems.Graphite.PublicTest do
 
   test "import_csv_lines/1 one line with empty score" do
     name = "Team1"
-    tool = create_tool()
-    %{id: submission_id, description: description} = create_submission(tool)
+    tool = Factories.create_tool()
+    %{id: submission_id, description: description} = Factories.create_submission(tool)
 
     cat1 = "aap"
 
@@ -133,9 +181,13 @@ defmodule Systems.Graphite.PublicTest do
 
   test "import_csv_lines/1 two lines two submissions" do
     name = "Team1"
-    tool = create_tool()
-    %{id: submission_id1, description: description1} = create_submission(tool, "Method X")
-    %{id: submission_id2, description: description2} = create_submission(tool, "Method Y")
+    tool = Factories.create_tool()
+
+    %{id: submission_id1, description: description1} =
+      Factories.create_submission(tool, "Method X")
+
+    %{id: submission_id2, description: description2} =
+      Factories.create_submission(tool, "Method Y")
 
     csv_line1 = %{
       "id" => "#{submission_id1}:#{name}:#{description1}",
@@ -161,8 +213,8 @@ defmodule Systems.Graphite.PublicTest do
 
   test "import_csv_lines/1 two lines one submission should fail" do
     name = "Team1"
-    tool = create_tool()
-    %{id: submission_id, description: description} = create_submission(tool, "Method X")
+    tool = Factories.create_tool()
+    %{id: submission_id, description: description} = Factories.create_submission(tool, "Method X")
 
     csv_line1 = %{
       "id" => "#{submission_id}:#{name}:#{description}",
@@ -185,9 +237,13 @@ defmodule Systems.Graphite.PublicTest do
 
   test "import_csv_lines/1 ignore errors" do
     name = "Team1"
-    tool = create_tool()
-    %{id: submission_id1, description: description1} = create_submission(tool, "Method X")
-    %{id: submission_id2, description: description2} = create_submission(tool, "Method Y")
+    tool = Factories.create_tool()
+
+    %{id: submission_id1, description: description1} =
+      Factories.create_submission(tool, "Method X")
+
+    %{id: submission_id2, description: description2} =
+      Factories.create_submission(tool, "Method Y")
 
     csv_line1 = %{
       "id" => "#{submission_id1}:#{name}:#{description1}",
@@ -210,8 +266,8 @@ defmodule Systems.Graphite.PublicTest do
 
   test "import_csv_lines/1 two version after two imports" do
     name = "Team1"
-    tool = create_tool()
-    %{id: submission_id, description: description} = create_submission(tool)
+    tool = Factories.create_tool()
+    %{id: submission_id, description: description} = Factories.create_submission(tool)
 
     cat1 = "aap"
 
@@ -229,21 +285,6 @@ defmodule Systems.Graphite.PublicTest do
 
     assert count_leaderboards() == 2
     assert count_scores() == 2
-  end
-
-  defp create_tool() do
-    Factories.insert!(:graphite_tool, %{})
-  end
-
-  defp create_submission(tool, description \\ "Method X") do
-    submission_attr = %{
-      tool: tool,
-      description: description,
-      github_commit_url:
-        "https://github.com/eyra/mono/commit/9d10bd2907dda135ebe86511489570dbf8c067c0"
-    }
-
-    Factories.insert!(:graphite_submission, submission_attr)
   end
 
   defp count_scores() do

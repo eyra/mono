@@ -9,6 +9,8 @@ defmodule Systems.Graphite.Public do
 
   alias Frameworks.Signal
   alias Systems.Graphite
+  alias Systems.Assignment
+  alias Systems.Workflow
 
   # FIXME: should come from CMS
   @main_category "f1_score"
@@ -76,6 +78,13 @@ defmodule Systems.Graphite.Public do
     end)
     |> Signal.Public.multi_dispatch({:graphite_submission, :updated})
     |> Repo.transaction()
+  end
+
+  def list_submissions(%Assignment.Model{workflow: workflow}) do
+    Workflow.Public.list_tools(workflow, :submit)
+    |> Enum.map(& &1.id)
+    |> submission_query()
+    |> Repo.all()
   end
 
   defp parse_entry(line) do

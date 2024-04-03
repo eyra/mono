@@ -1,9 +1,11 @@
 defmodule Systems.Workflow.Public do
   import Ecto.Query, warn: false
+  import Systems.Workflow.Queries
+
   alias Ecto.Multi
   alias Core.Repo
-
   alias Core.Authorization
+
   alias Frameworks.Signal
 
   alias Systems.Workflow
@@ -94,6 +96,16 @@ defmodule Systems.Workflow.Public do
     end)
     |> Signal.Public.multi_dispatch({:workflow_item, :added})
     |> Repo.transaction()
+  end
+
+  def list_tools(%Workflow.Model{} = workflow, special) do
+    preload = Workflow.ItemModel.preload_graph(:down)
+
+    item_query(workflow, special)
+    |> Repo.all()
+    |> Repo.preload(preload)
+    |> Enum.map(& &1.tool_ref)
+    |> Enum.map(&Project.ToolRefModel.tool/1)
   end
 
   def item_count(%Workflow.Model{id: workflow_id}) do
