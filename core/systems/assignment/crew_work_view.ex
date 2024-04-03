@@ -52,6 +52,7 @@ defmodule Systems.Assignment.CrewWorkView do
         tool_started: tool_started,
         tool_initialized: tool_initialized
       )
+      |> update_tasks_finished()
       |> update_selected_item_id()
       |> update_selected_item()
       |> compose_child(:work_list_view)
@@ -60,6 +61,15 @@ defmodule Systems.Assignment.CrewWorkView do
       |> update_tool_ref_view()
       |> update_child(:finished_view)
     }
+  end
+
+  defp update_tasks_finished(%{assigns: %{work_items: work_items}} = socket) do
+    socket |> assign(tasks_finished: tasks_finished?(work_items))
+  end
+
+  defp tasks_finished?(work_items) do
+    task_ids = Enum.map(work_items, fn {_, task} -> task.id end)
+    Crew.Public.tasks_finished?(task_ids)
   end
 
   defp tool_visible?(%{assigns: assigns} = _socket) do
@@ -161,13 +171,20 @@ defmodule Systems.Assignment.CrewWorkView do
   def compose(
         :tool_ref_view,
         %{
+          user: user,
           launcher: %{module: _, params: _},
           selected_item: {%{title: title, tool_ref: tool_ref}, task}
         } = assigns
       ) do
     %{
       module: Project.ToolRefView,
-      params: %{title: title, tool_ref: tool_ref, task: task, visible: tool_visible?(assigns)}
+      params: %{
+        title: title,
+        tool_ref: tool_ref,
+        task: task,
+        visible: tool_visible?(assigns),
+        user: user
+      }
     }
   end
 
@@ -264,6 +281,20 @@ defmodule Systems.Assignment.CrewWorkView do
   end
 
   @impl true
+  def handle_event("cancel_task", _payload, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(
+        tool_started: false,
+        tool_initialized: false
+      )
+      |> compose_child(:start_view)
+      |> compose_child(:tool_ref_view)
+    }
+  end
+
+  @impl true
   def handle_event("complete_task", _, socket) do
     {
       :noreply,
@@ -335,7 +366,7 @@ defmodule Systems.Assignment.CrewWorkView do
   end
 
   @impl true
-  def handle_event("show", %{page: :assignment_intro}, socket) do
+  def handle_event("show", %{page: :assignment_information}, socket) do
     {
       :noreply,
       socket
@@ -345,7 +376,7 @@ defmodule Systems.Assignment.CrewWorkView do
   end
 
   @impl true
-  def handle_event("show", %{page: :assignment_support}, socket) do
+  def handle_event("show", %{page: :assignment_helpdesk}, socket) do
     {
       :noreply,
       socket
@@ -465,10 +496,13 @@ defmodule Systems.Assignment.CrewWorkView do
     socket
   end
 
-  defp handle_finished_state(%{assigns: %{work_items: work_items}} = socket) do
-    task_ids = Enum.map(work_items, fn {_, task} -> task.id end)
+  defp handle_finished_state(%{assigns: %{tasks_finished: true}} = socket) do
+    # Dont show finished view when task are already finished
+    socket
+  end
 
-    if Crew.Public.tasks_finished?(task_ids) do
+  defp handle_finished_state(%{assigns: %{work_items: work_items}} = socket) do
+    if tasks_finished?(work_items) do
       socket
       |> signal_tasks_finished()
       |> compose_child(:finished_view)

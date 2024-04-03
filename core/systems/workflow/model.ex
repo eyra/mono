@@ -9,7 +9,7 @@ defmodule Systems.Workflow.Model do
   }
 
   schema "workflows" do
-    field(:type, Ecto.Enum, values: [:single_task, :multi_task])
+    field(:type, Ecto.Enum, values: [:one, :many_optional, :many_mandatory])
     has_many(:items, Workflow.ItemModel, foreign_key: :workflow_id)
     timestamps()
   end

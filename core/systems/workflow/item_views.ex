@@ -29,7 +29,7 @@ defmodule Systems.Workflow.ItemViews do
     """
   end
 
-  attr(:id, :string, required: true)
+  attr(:special, :string, required: true)
   attr(:title, :string, required: true)
   attr(:description, :string, required: true)
 
@@ -44,7 +44,7 @@ defmodule Systems.Workflow.ItemViews do
         <.wrap>
           <Button.dynamic
             face={%{type: :primary, bg_color: "bg-success", label: dgettext("eyra-workflow", "add.to.button") }}
-            action={%{type: :send, event: "add", item: @id}}
+            action={%{type: :send, event: "add", item: @special}}
           />
         </.wrap>
       </Panel.flat>

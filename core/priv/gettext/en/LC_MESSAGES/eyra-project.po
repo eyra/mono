@@ -16,22 +16,6 @@ msgid "delete.confirm"
 msgstr "project"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.config"
-msgstr "Settings"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.config.forward"
-msgstr "Go to Settings"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.monitor"
-msgstr "Monitor"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.monitor.forward"
-msgstr "Go to Monitor"
-
-#, elixir-autogen, elixir-format
 msgid "add.first.button"
 msgstr "My first project"
 
@@ -144,14 +128,6 @@ msgid "item.form.title"
 msgstr "Settings"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.support"
-msgstr "Support"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.support.forward"
-msgstr "Go to Support"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.settings"
 msgstr "Settings"
 
@@ -176,8 +152,8 @@ msgid "node.empty.title"
 msgstr "A fresh start"
 
 #, elixir-autogen, elixir-format
-msgid "tool_ref.tag.benchmark"
-msgstr "Benchmark"
+msgid "tool_ref.tag.graphite"
+msgstr "Benchmark Challenge"
 
 #, elixir-autogen, elixir-format
 msgid "tool_ref.tag.default"

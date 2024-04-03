@@ -29,7 +29,7 @@ defmodule Systems.Assignment.Factories do
     })
   end
 
-  def create_workflow(type \\ :single_task) do
+  def create_workflow(type \\ :many_optional) do
     Factories.insert!(:workflow, %{type: type})
   end
 
@@ -53,7 +53,7 @@ defmodule Systems.Assignment.Factories do
     })
   end
 
-  def create_assignment(info, workflow, auth_node) do
+  def create_assignment(info, workflow, auth_node, status) do
     crew = Factories.insert!(:crew)
 
     Factories.insert!(:assignment, %{
@@ -61,11 +61,12 @@ defmodule Systems.Assignment.Factories do
       workflow: workflow,
       crew: crew,
       auth_node: auth_node,
-      special: :data_donation
+      special: :data_donation,
+      status: status
     })
   end
 
-  def create_assignment(duration, subject_count) when is_integer(duration) do
+  def create_assignment(duration, subject_count, status \\ :online) when is_integer(duration) do
     assignment_auth_node = Factories.build(:auth_node)
     tool_auth_node = Factories.build(:auth_node, %{parent: assignment_auth_node})
 
@@ -75,6 +76,6 @@ defmodule Systems.Assignment.Factories do
     workflow = create_workflow()
     _workflow_item = create_workflow_item(workflow, tool_ref)
 
-    create_assignment(info, workflow, assignment_auth_node)
+    create_assignment(info, workflow, assignment_auth_node, status)
   end
 end

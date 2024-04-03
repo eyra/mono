@@ -1,11 +1,9 @@
 defmodule Systems.Assignment.Controller do
   use CoreWeb, :controller
 
-  alias Systems.{
-    Assignment,
-    Workflow,
-    Crew
-  }
+  alias Systems.Assignment
+  alias Systems.Workflow
+  alias Systems.Crew
 
   def callback(%{assigns: %{current_user: user}} = conn, %{"item" => item_id}) do
     %{workflow_id: workflow_id} = item = Workflow.Public.get_item!(String.to_integer(item_id))
@@ -20,5 +18,39 @@ defmodule Systems.Assignment.Controller do
 
     conn
     |> redirect(to: ~p"/assignment/#{id}")
+  end
+
+  def invite(conn, %{"id" => id}) do
+    if assignment = Assignment.Public.get(String.to_integer(id), [:crew]) do
+      if offline?(assignment) do
+        service_unavailable(conn)
+      else
+        start_participant(conn, assignment)
+      end
+    else
+      service_unavailable(conn)
+    end
+  end
+
+  defp offline?(%{status: status}) do
+    status != :online
+  end
+
+  defp service_unavailable(conn) do
+    conn
+    |> put_status(:service_unavailable)
+    |> put_view(html: CoreWeb.ErrorHTML)
+    |> render(:"503")
+  end
+
+  defp start_participant(conn, %{id: id} = assignment) do
+    conn
+    |> authorize_user(assignment)
+    |> redirect(to: ~p"/assignment/#{id}")
+  end
+
+  defp authorize_user(%{assigns: %{current_user: user}} = conn, %Assignment.Model{} = assignment) do
+    Assignment.Public.add_participant!(assignment, user)
+    conn
   end
 end

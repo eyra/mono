@@ -7,29 +7,19 @@ defmodule Next.Console.Page do
 
   alias Frameworks.Pixel.Text
 
-  alias Systems.{
-    Project,
-    NextAction,
-    Benchmark
-  }
+  alias Systems.Project
+  alias Systems.NextAction
 
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    spot_items =
-      user
-      |> Benchmark.Public.list_spots(Benchmark.SpotModel.preload_graph([:tool]))
-      |> Enum.map(&convert_to_vm(socket, &1))
-
     project_items =
       user
       |> Project.Public.list_owned_projects(preload: Project.Model.preload_graph(:down))
       |> Enum.map(&convert_to_vm(socket, &1))
 
-    content_items = spot_items ++ project_items
-
     socket =
       socket
       |> update_menus()
-      |> assign(content_items: content_items)
+      |> assign(content_items: project_items)
       |> assign(next_best_action: NextAction.Public.next_best_action(user))
 
     {:ok, socket}
@@ -104,7 +94,7 @@ defmodule Next.Console.Page do
       |> Macro.camelize()
 
     %{
-      path: ~p"/benchmark/#{tool_id}/#{spot_id}",
+      path: ~p"/graphite/#{tool_id}/#{spot_id}",
       title: title,
       subtitle: "#{name}",
       tag: tag,

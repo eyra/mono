@@ -36,6 +36,11 @@ if config_env() == :prod do
       port: String.to_integer(System.get_env("HTTP_PORT", "8000"))
     ]
 
+  # PHOENIX LIVE UPLOAD
+
+  config :core, CoreWeb.FileUploader,
+    max_file_size: System.get_env("STORAGE_UPLOAD_MAX_SIZE", "100000000") |> String.to_integer()
+
   # MAILGUN
 
   if mailgun_api_key = System.get_env("MAILGUN_API_KEY") do

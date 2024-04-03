@@ -13,6 +13,13 @@ defmodule Systems.Assignment.Private do
   alias Systems.Storage
   alias Systems.Monitor
 
+  def get_template(%Assignment.Model{special: special}), do: get_template(special)
+
+  def get_template(:data_donation), do: %Assignment.TemplateDataDonation{id: :data_donation}
+
+  def get_template(:benchmark_challenge),
+    do: %Assignment.TemplateBenchmarkChallenge{id: :benchmark_challenge}
+
   def log_performance_event(
         %Assignment.Model{} = assignment,
         %Crew.TaskModel{} = crew_task,
@@ -61,13 +68,14 @@ defmodule Systems.Assignment.Private do
     end
   end
 
-  def page_title_default(:assignment_intro), do: dgettext("eyra-assignment", "intro.page.title")
+  def page_title_default(:assignment_information),
+    do: dgettext("eyra-assignment", "intro.page.title")
 
-  def page_title_default(:assignment_support),
+  def page_title_default(:assignment_helpdesk),
     do: dgettext("eyra-assignment", "support.page.title")
 
-  def page_body_default(:assignment_intro), do: ""
-  def page_body_default(:assignment_support), do: ""
+  def page_body_default(:assignment_information), do: ""
+  def page_body_default(:assignment_helpdesk), do: ""
 
   def allowed_external_panel_ids() do
     Keyword.get(config(), :external_panels, [])
@@ -128,6 +136,14 @@ defmodule Systems.Assignment.Private do
 
   def task_identifier(
         %{special: :data_donation},
+        %Workflow.ItemModel{id: item_id},
+        %Crew.MemberModel{id: member_id}
+      ) do
+    ["item=#{item_id}", "member=#{member_id}"]
+  end
+
+  def task_identifier(
+        %{special: :benchmark_challenge},
         %Workflow.ItemModel{id: item_id},
         %Crew.MemberModel{id: member_id}
       ) do

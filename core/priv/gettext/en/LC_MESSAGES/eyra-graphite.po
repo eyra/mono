@@ -1,0 +1,170 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.leaderboard"
+msgstr "Leaderboard"
+
+#, elixir-autogen, elixir-format
+msgid "tool.page.title"
+msgstr "Challenge"
+
+#, elixir-autogen, elixir-format
+msgid "submission.form.title"
+msgstr "Submission"
+
+#, elixir-autogen, elixir-format
+msgid "expectations.title"
+msgstr "Description"
+
+#, elixir-autogen, elixir-format
+msgid "highlight.deadline.title"
+msgstr "Days untill deadline"
+
+#, elixir-autogen, elixir-format
+msgid "highlight.spots.title"
+msgstr "Number of teams"
+
+#, elixir-autogen, elixir-format
+msgid "highlight.submissions.title"
+msgstr "Number of submissions"
+
+#, elixir-autogen, elixir-format
+msgid "1 day"
+msgid_plural "%{count} days"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.form.url.label"
+msgstr "Your GitHub commit URL"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.form.description.label"
+msgstr "Short method description on leaderboard"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.form.submit.button"
+msgstr "Submit"
+
+#, elixir-autogen, elixir-format
+msgid "invalid.github.commit.url.message"
+msgstr "Invalid GitHub commit URL (see challenge repo instructions)"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "1 submission"
+msgid_plural "%{count} submissions"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "1 team"
+msgid_plural "%{count} teams"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "preparation.dataset.title"
+msgstr "Download the example data to tune your method"
+
+#, elixir-autogen, elixir-format
+msgid "preparation.description"
+msgstr "To prepare your submission, follow the steps below."
+
+#, elixir-autogen, elixir-format
+msgid "preparation.template.title"
+msgstr "Fork and clone the example repository and follow the instructions to prepare your submission"
+
+#, elixir-autogen, elixir-format
+msgid "preparation.title"
+msgstr "Preparation"
+
+#, elixir-autogen, elixir-format
+msgid "dataset.button"
+msgstr "Download data"
+
+#, elixir-autogen, elixir-format
+msgid "template.button"
+msgstr "Github example repository"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.submissions"
+msgstr "Submissions"
+
+#, elixir-autogen, elixir-format
+msgid "import.leaderboard.title"
+msgstr "Import"
+
+#, elixir-autogen, elixir-format
+msgid "csv-import-button"
+msgstr "Import selected file"
+
+#, elixir-autogen, elixir-format
+msgid "csv-replace-file-button"
+msgstr "Replace file"
+
+#, elixir-autogen, elixir-format
+msgid "csv-select-file-button"
+msgstr "Select file"
+
+#, elixir-autogen, elixir-format
+msgid "csv-select-placeholder"
+msgstr "Select a leaderboard csv file"
+
+#, elixir-autogen, elixir-format
+msgid "challenge.forward.button"
+msgstr "Go to challenge"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.forward.button"
+msgstr "Public"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.github.label"
+msgstr "Github"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.method.label"
+msgstr "Method"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.position.label"
+msgstr "Position"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.score.label"
+msgstr "Score"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.team.label"
+msgstr "Team"
+
+#, elixir-autogen, elixir-format
+msgid "assignment.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.form.update.button"
+msgstr "Update"
+
+#, elixir-autogen, elixir-format
+msgid "submit.failed.message"
+msgstr ""

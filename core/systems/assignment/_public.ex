@@ -33,6 +33,11 @@ defmodule Systems.Assignment.Public do
     |> Repo.get!(id)
   end
 
+  def get(id, preload \\ []) do
+    from(a in Assignment.Model, preload: ^preload)
+    |> Repo.get(id)
+  end
+
   def get_workflow!(id, preload \\ []) do
     from(a in Workflow.Model, preload: ^preload)
     |> Repo.get!(id)
@@ -139,29 +144,44 @@ defmodule Systems.Assignment.Public do
     |> Assignment.InfoModel.changeset(:create, attrs)
   end
 
-  def prepare_workflow(special, items, type \\ :single_task) do
+  def prepare_workflow(special, [_ | _] = items, type) do
     %Workflow.Model{}
     |> Workflow.Model.changeset(%{type: type, special: special})
     |> Ecto.Changeset.put_assoc(:items, items)
   end
 
-  def prepare_workflow_item(tool_ref) do
+  def prepare_workflow(special, _, type) do
+    %Workflow.Model{}
+    |> Workflow.Model.changeset(%{type: type, special: special})
+  end
+
+  def prepare_workflow_items(tool_refs) when is_list(tool_refs) do
+    tool_refs
+    |> Enum.with_index()
+    |> Enum.map(fn {tool_ref, index} -> prepare_workflow_item(tool_ref, %{position: index}) end)
+  end
+
+  def prepare_workflow_item(tool_ref, attrs \\ %{}) do
     %Workflow.ItemModel{}
-    |> Workflow.ItemModel.changeset(%{})
+    |> Workflow.ItemModel.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:tool_ref, tool_ref)
+  end
+
+  def prepare_tool_ref(special, tool) do
+    field_name = Project.ToolRefModel.tool_field(tool)
+    Project.Public.prepare_tool_ref(special, field_name, tool)
   end
 
   def prepare_page_refs(_template, auth_node) do
     [
-      prepare_page_ref(auth_node, :assignment_intro)
+      prepare_page_ref(auth_node, :assignment_information)
     ]
   end
 
   def prepare_page_ref(auth_node, key) when is_atom(key) do
-    page_title = Assignment.Private.page_title_default(key)
     page_body = Assignment.Private.page_body_default(key)
     page_auth_node = Authorization.prepare_node(auth_node)
-    page = Content.Public.prepare_page(page_title, page_body, page_auth_node)
+    page = Content.Public.prepare_page(page_body, page_auth_node)
 
     %Assignment.PageRefModel{}
     |> Assignment.PageRefModel.changeset(%{key: key})
@@ -303,8 +323,10 @@ defmodule Systems.Assignment.Public do
     Core.Persister.save(assignment, changeset)
   end
 
-  def owner?(assignment, user) do
-    Core.Authorization.user_has_role?(user, assignment, :owner)
+  def add_participant!(%Assignment.Model{crew: crew}, user) do
+    if not Crew.Public.member?(crew, user) do
+      {:ok, _} = Crew.Public.apply_member_with_role(crew, user, :participant)
+    end
   end
 
   def add_owner!(assignment, user) do
@@ -549,7 +571,7 @@ defmodule Systems.Assignment.Public do
     open_spot_count(assignment, type)
   end
 
-  defp open_spot_count(%{crew: crew, info: %{subject_count: subject_count}}, :single_task) do
+  defp open_spot_count(%{crew: crew, info: %{subject_count: subject_count}}, :many_optional) do
     all_non_expired_tasks = Crew.Public.count_tasks(crew, Crew.TaskStatus.values())
     max(0, subject_count - all_non_expired_tasks)
   end

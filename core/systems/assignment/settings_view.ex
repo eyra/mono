@@ -9,36 +9,44 @@ defmodule Systems.Assignment.SettingsView do
         %{
           id: id,
           entity: assignment,
+          template: template,
           uri_origin: uri_origin,
           viewport: viewport,
           breakpoint: breakpoint
         },
         socket
       ) do
+    content_flags = Assignment.Template.content_flags(template)
+
     {
       :ok,
       socket
       |> assign(
         id: id,
         entity: assignment,
+        content_flags: content_flags,
         uri_origin: uri_origin,
         viewport: viewport,
         breakpoint: breakpoint
       )
-      |> compose_child(:info)
-      |> compose_child(:intro)
+      |> compose_child(:general)
+      |> compose_child(:branding)
+      |> compose_child(:information)
       |> compose_child(:privacy)
       |> compose_child(:consent)
-      |> compose_child(:support)
-      |> compose_child(:panel_connector)
-      |> compose_child(:storage_connector)
+      |> compose_child(:helpdesk)
+      |> compose_child(:panel)
+      |> compose_child(:storage)
     }
   end
 
   @impl true
-  def compose(:info, %{entity: %{info: info}, viewport: viewport, breakpoint: breakpoint}) do
+  def compose(:general, %{content_flags: %{general: false}}), do: nil
+
+  @impl true
+  def compose(:general, %{entity: %{info: info}, viewport: viewport, breakpoint: breakpoint}) do
     %{
-      module: Assignment.InfoForm,
+      module: Assignment.GeneralForm,
       params: %{
         entity: info,
         viewport: viewport,
@@ -48,18 +56,39 @@ defmodule Systems.Assignment.SettingsView do
   end
 
   @impl true
-  def compose(:intro, %{entity: assignment}) do
+  def compose(:branding, %{content_flags: %{branding: false}}), do: nil
+
+  @impl true
+  def compose(:branding, %{entity: %{info: info}, viewport: viewport, breakpoint: breakpoint}) do
+    %{
+      module: Assignment.BrandingForm,
+      params: %{
+        entity: info,
+        viewport: viewport,
+        breakpoint: breakpoint
+      }
+    }
+  end
+
+  @impl true
+  def compose(:information, %{content_flags: %{information: false}}), do: nil
+
+  @impl true
+  def compose(:information, %{entity: assignment}) do
     %{
       module: Assignment.ContentPageForm,
       params: %{
         assignment: assignment,
-        page_key: :assignment_intro,
+        page_key: :assignment_information,
         opt_in?: false,
         on_text: dgettext("eyra-assignment", "intro_form.on.label"),
         off_text: dgettext("eyra-assignment", "intro_form.off.label")
       }
     }
   end
+
+  @impl true
+  def compose(:privacy, %{content_flags: %{privacy: false}}), do: nil
 
   @impl true
   def compose(:privacy, %{entity: assignment, uri_origin: uri_origin}) do
@@ -73,6 +102,9 @@ defmodule Systems.Assignment.SettingsView do
   end
 
   @impl true
+  def compose(:consent, %{content_flags: %{consent: false}}), do: nil
+
+  @impl true
   def compose(:consent, %{entity: assignment}) do
     %{
       module: Assignment.GdprForm,
@@ -83,12 +115,15 @@ defmodule Systems.Assignment.SettingsView do
   end
 
   @impl true
-  def compose(:support, %{entity: assignment}) do
+  def compose(:helpdesk, %{content_flags: %{helpdesk: false}}), do: nil
+
+  @impl true
+  def compose(:helpdesk, %{entity: assignment}) do
     %{
       module: Assignment.ContentPageForm,
       params: %{
         assignment: assignment,
-        page_key: :assignment_support,
+        page_key: :assignment_helpdesk,
         opt_in?: false,
         on_text: dgettext("eyra-assignment", "support_form.on.label"),
         off_text: dgettext("eyra-assignment", "support_form.off.label")
@@ -97,7 +132,10 @@ defmodule Systems.Assignment.SettingsView do
   end
 
   @impl true
-  def compose(:panel_connector, %{entity: assignment, uri_origin: uri_origin}) do
+  def compose(:panel, %{content_flags: %{panel: false}}), do: nil
+
+  @impl true
+  def compose(:panel, %{entity: assignment, uri_origin: uri_origin}) do
     %{
       module: Assignment.ConnectorView,
       params: %{
@@ -110,7 +148,10 @@ defmodule Systems.Assignment.SettingsView do
   end
 
   @impl true
-  def compose(:storage_connector, %{entity: assignment, uri_origin: uri_origin}) do
+  def compose(:storage, %{content_flags: %{storage: false}}), do: nil
+
+  @impl true
+  def compose(:storage, %{entity: assignment, uri_origin: uri_origin}) do
     %{
       module: Assignment.ConnectorView,
       params: %{
@@ -136,13 +177,19 @@ defmodule Systems.Assignment.SettingsView do
         <Text.title2><%= dgettext("eyra-assignment", "settings.title") %></Text.title2>
         <.spacing value="L" />
 
-        <.child name={:info} fabric={@fabric} >
+        <.child name={:general} fabric={@fabric} >
           <:footer>
             <.spacing value="L" />
           </:footer>
         </.child>
 
-        <.child name={:intro} fabric={@fabric} >
+        <.child name={:branding} fabric={@fabric} >
+          <:footer>
+            <.spacing value="L" />
+          </:footer>
+        </.child>
+
+        <.child name={:information} fabric={@fabric} >
           <:header>
             <Text.title3><%= dgettext("eyra-assignment", "settings.intro.title") %></Text.title3>
             <Text.body><%= dgettext("eyra-assignment", "settings.intro.body") %></Text.body>
@@ -175,7 +222,7 @@ defmodule Systems.Assignment.SettingsView do
           </:footer>
         </.child>
 
-        <.child name={:support} fabric={@fabric} >
+        <.child name={:helpdesk} fabric={@fabric} >
           <:header>
             <Text.title3><%= dgettext("eyra-assignment", "settings.support.title") %></Text.title3>
             <Text.body><%= dgettext("eyra-assignment", "settings.support.body") %></Text.body>
@@ -186,7 +233,7 @@ defmodule Systems.Assignment.SettingsView do
           </:footer>
         </.child>
 
-        <.child name={:panel_connector} fabric={@fabric}>
+        <.child name={:panel} fabric={@fabric}>
           <:header>
             <Text.title3><%= dgettext("eyra-assignment", "settings.panel.title") %></Text.title3>
             <Text.body><%= dgettext("eyra-assignment", "settings.panel.body") %></Text.body>
@@ -197,7 +244,7 @@ defmodule Systems.Assignment.SettingsView do
           </:footer>
         </.child>
 
-        <.child name={:storage_connector} fabric={@fabric}>
+        <.child name={:storage} fabric={@fabric}>
           <:header>
             <Text.title3><%= dgettext("eyra-assignment", "settings.data_storage.title") %></Text.title3>
             <Text.body><%= dgettext("eyra-assignment", "settings.data_storage.body") %></Text.body>

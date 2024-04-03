@@ -323,10 +323,6 @@ msgid "organisation_types.team"
 msgstr "Department"
 
 #, elixir-autogen, elixir-format
-msgid "project_item_templates.benchmark"
-msgstr "Benchmark"
-
-#, elixir-autogen, elixir-format
 msgid "project_item_templates.data_donation"
 msgstr "Data Donation"
 
@@ -371,10 +367,6 @@ msgid "external_panel_ids.liss"
 msgstr "LISS"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "templates.benchmark"
-msgstr "Benchmark"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "platforms.netflix"
 msgstr "Netflix"
 
@@ -389,3 +381,39 @@ msgstr "English"
 #, elixir-autogen, elixir-format
 msgid "assignment_languages.nl"
 msgstr "Dutch"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "project_item_templates.benchmark_challenge"
+msgstr "Benchmark Challenge"
+
+#, elixir-autogen, elixir-format
+msgid "templates.benchmark_challenge"
+msgstr "Benchmark Challenge"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.donate"
+msgstr "Donate"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.questionnaire"
+msgstr "Questionnaire"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.download_manual"
+msgstr "Download manual"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.request_manual"
+msgstr "Request manual"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.submit"
+msgstr "Submit method"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.download_instruction"
+msgstr "Download data"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.fork_instruction"
+msgstr "Prepare method"

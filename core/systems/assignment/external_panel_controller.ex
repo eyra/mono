@@ -2,7 +2,6 @@ defmodule Systems.Assignment.ExternalPanelController do
   use CoreWeb, :controller
 
   alias Systems.Assignment
-  alias Systems.Crew
 
   require Logger
 
@@ -49,6 +48,8 @@ defmodule Systems.Assignment.ExternalPanelController do
     not valid_id?(id)
   end
 
+  def valid_id?(nil), do: false
+
   def valid_id?(id) do
     String.length(id) <= @id_max_lenght and Regex.match?(@id_valid_regex, id)
   end
@@ -90,11 +91,8 @@ defmodule Systems.Assignment.ExternalPanelController do
     |> render(:"503")
   end
 
-  defp authorize_user(%{assigns: %{current_user: user}} = conn, %{crew: crew}) do
-    if not Crew.Public.member?(crew, user) do
-      Crew.Public.apply_member_with_role(crew, user, :participant)
-    end
-
+  defp authorize_user(%{assigns: %{current_user: user}} = conn, assignment) do
+    Assignment.Public.add_participant!(assignment, user)
     conn
   end
 

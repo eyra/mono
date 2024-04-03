@@ -16,22 +16,6 @@ msgid "delete.confirm"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.config"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.config.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.monitor"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.monitor.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "add.first.button"
 msgstr ""
 
@@ -144,14 +128,6 @@ msgid "item.form.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.support"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.support.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.settings"
 msgstr ""
 
@@ -176,7 +152,7 @@ msgid "node.empty.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tool_ref.tag.benchmark"
+msgid "tool_ref.tag.graphite"
 msgstr ""
 
 #, elixir-autogen, elixir-format

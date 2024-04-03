@@ -10,32 +10,28 @@ defmodule Systems.Project.AssemblyTest do
 
     item_name = "Item"
 
-    {:ok, %{project_item: %{id: id}}} = Project.Assembly.create_item(:benchmark, item_name, root)
+    {:ok, %{project_item: %{id: id}}} =
+      Project.Assembly.create_item(:benchmark_challenge, item_name, root)
+
     item = Project.Public.get_item!(id, Project.ItemModel.preload_graph(:down))
 
     assert %Systems.Project.ItemModel{
              name: ^item_name,
              project_path: [^root_id],
-             tool_ref: %Systems.Project.ToolRefModel{
-               special: :benchmark,
-               alliance_tool: nil,
-               document_tool: nil,
-               lab_tool: nil,
-               feldspar_tool: nil,
-               benchmark_tool: %Systems.Benchmark.ToolModel{
-                 status: :concept,
-                 title: nil,
-                 expectations: nil,
-                 data_set: nil,
-                 template_repo: nil,
-                 deadline: nil,
-                 director: :project,
-                 auth_node: %Core.Authorization.Node{},
-                 spots: [],
-                 leaderboards: []
+             assignment: %Systems.Assignment.Model{
+               special: :benchmark_challenge,
+               status: :concept,
+               external_panel: nil,
+               storage_endpoint_id: nil,
+               workflow: %Systems.Workflow.Model{
+                 type: :many_mandatory,
+                 items: [
+                   %Systems.Workflow.ItemModel{},
+                   %Systems.Workflow.ItemModel{},
+                   %Systems.Workflow.ItemModel{}
+                 ]
                }
-             },
-             assignment: nil
+             }
            } = item
   end
 
@@ -56,7 +52,7 @@ defmodule Systems.Project.AssemblyTest do
              assignment: %Systems.Assignment.Model{
                info: %Systems.Assignment.InfoModel{},
                workflow: %Systems.Workflow.Model{
-                 type: :single_task,
+                 type: :many_optional,
                  items: []
                },
                crew: %Systems.Crew.Model{

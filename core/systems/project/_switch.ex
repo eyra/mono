@@ -32,7 +32,13 @@ defmodule Systems.Project.Switch do
   end
 
   @impl true
-  def intercept({:benchmark_tool, _} = signal, %{benchmark_tool: tool} = message) do
+  def intercept({:graphite_tool, _} = signal, %{graphite_tool: tool} = message) do
+    handle({:tool, signal}, Map.merge(message, %{tool: tool}))
+    :ok
+  end
+
+  @impl true
+  def intercept({:instruction_tool, _} = signal, %{instruction_tool: tool} = message) do
     handle({:tool, signal}, Map.merge(message, %{tool: tool}))
     :ok
   end

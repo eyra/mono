@@ -59,10 +59,6 @@ msgid "close.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "content.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "open.button"
 msgstr ""
 
@@ -344,4 +340,52 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "settings.subject_count.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participants.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.participants"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.participants.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.donate.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.download.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.questionnaire.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.request.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.download_instruction.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.fork_instruction.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.submit.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invite.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invite.panel.title"
 msgstr ""

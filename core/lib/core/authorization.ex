@@ -27,7 +27,6 @@ defmodule Core.Authorization do
   grant_access(Systems.Campaign.Model, [:visitor, :member])
   grant_access(Systems.Questionnaire.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.Lab.ToolModel, [:owner, :coordinator, :participant])
-  grant_access(Systems.Benchmark.SpotModel, [:owner])
 
   # Pages
   grant_access(Systems.Org.ContentPage, [:admin])
@@ -56,9 +55,9 @@ defmodule Core.Authorization do
   grant_access(Systems.Test.Page, [:visitor, :member])
   grant_access(Systems.Project.OverviewPage, [:admin, :researcher])
   grant_access(Systems.Project.NodePage, [:researcher, :owner])
-  grant_access(Systems.Benchmark.ContentPage, [:researcher, :owner])
-  grant_access(Systems.Benchmark.ToolPage, [:owner])
-  grant_access(Systems.Benchmark.LeaderboardPage, [:visitor, :member])
+  grant_access(Systems.Graphite.ContentPage, [:researcher, :owner])
+  grant_access(Systems.Graphite.ToolPage, [:owner])
+  grant_access(Systems.Graphite.LeaderboardPage, [:visitor, :member])
   grant_access(Systems.Feldspar.AppPage, [:visitor, :member])
 
   grant_access(CoreWeb.User.Signin, [:visitor])
@@ -108,7 +107,7 @@ defmodule Core.Authorization do
 
     %Core.Authorization.RoleAssignment{
       principal_id: principal_id,
-      role: :owner
+      role: role
     }
   end
 
