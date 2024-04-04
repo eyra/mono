@@ -79,6 +79,14 @@ defmodule Systems.Graphite.Public do
     |> Repo.transaction()
   end
 
+  def update_leaderboard(leaderboard, attrs) do
+    Multi.new()
+    |> Multi.update(:graphite_leaderboard, fn _ ->
+      Graphite.LeaderboardModel.changeset(leaderboard, attrs)
+    end)
+    |> Repo.transaction()
+  end
+
   def update_submission(submission, attrs) do
     Multi.new()
     |> Multi.update(:graphite_submission, fn _ ->
