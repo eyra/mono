@@ -17,7 +17,8 @@ defmodule Systems.Graphite.LeaderboardContentPage do
     leaderboard =
       Graphite.Public.get_leaderboard!(id, Graphite.LeaderboardModel.preload_graph(:down))
 
-    {:ok, socket |> initialize(id, leaderboard, "leaderboard_content/#{id}", "none")}
+    # Question: who should normally pass in the "default tab", which is now hard coded to "settings_form"
+    {:ok, socket |> initialize(id, leaderboard, "leaderboard_content/#{id}", "settings_form")}
   end
 
   @impl true

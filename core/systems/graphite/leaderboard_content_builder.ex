@@ -17,8 +17,7 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
       title: name,
       tabs: tabs,
       actions: actions(leaderboard, action_map),
-      show_errors: false,
-      default_tab: :settings
+      show_errors: false
     }
   end
 
